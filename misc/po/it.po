@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Massimo Antonio Carofano <real.massimo@hotmail.it>, 2014
+# Massimo Antonio Carofano <real.massimo@hotmail.it>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-21 11:42+0800\n"
-"PO-Revision-Date: 2014-10-27 21:13+0000\n"
+"POT-Creation-Date: 2014-11-10 17:02+0800\n"
+"PO-Revision-Date: 2014-11-10 16:52+0000\n"
 "Last-Translator: Massimo Antonio Carofano <real.massimo@hotmail.it>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/dde-daemon/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +19,11 @@ msgstr ""
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../../accounts/account_ifc.go:185
+#: ../../accounts/account_ifc.go:206
 msgid "The username is invalid."
 msgstr "L'username è invalida."
 
-#: ../../accounts/account_ifc.go:189
+#: ../../accounts/account_ifc.go:210
 msgid "The username exists."
 msgstr "L'username esiste già."
 
@@ -74,17 +75,17 @@ msgstr "Messaggio d'accesso"
 msgid "Message notification"
 msgstr "Messaggio di notifica"
 
-#: ../../datetime/datetime.go:127 ../../langselect/ifc.go:39
+#: ../../datetime/datetime.go:127
 msgid "Language is changing, please wait"
 msgstr "Cambio della lingua in corso, attendi.."
 
-#: ../../datetime/set_locale.go:58 ../../langselect/locale.go:245
+#: ../../datetime/set_locale.go:59
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
 msgstr "La lingua è stata impostata con successo e sarà attivata dopo il logout."
 
-#: ../../datetime/set_locale.go:60 ../../langselect/locale.go:247
+#: ../../datetime/set_locale.go:61
 msgid "Language failed to change, please try later."
 msgstr "Cambio lingua fallito, riprova."
 
@@ -2080,19 +2081,19 @@ msgstr "Fakaofo"
 msgid "Tongatapu"
 msgstr "Tongatapu"
 
-#: ../../dock/normal_apps.go:80
+#: ../../dock/normal_apps.go:73
 msgid "_Run"
 msgstr "_Avvia"
 
-#: ../../dock/normal_apps.go:112 ../../dock/runtime_apps.go:297
+#: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:291
 msgid "_Undock"
 msgstr "_Sblocca"
 
-#: ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:260
 msgid "_Close All"
 msgstr "_Chiudi Tutti"
 
-#: ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:303
 msgid "_Dock"
 msgstr "_Dock"
 
@@ -2325,101 +2326,133 @@ msgstr "Muoviti sullo spazio di lavoro superiore"
 msgid "Move to lower workspace"
 msgstr "Muoviti sullo spazio di lavoro inferiore"
 
-#: ../../mime/default_media.go:72 ../../mime/default_media.go:89
+#: ../../langselector/handle_event.go:36
+msgid "System language failed to change, please try later."
+msgstr "Cambio lingua di sistema non riuscito, prova più tardi."
+
+#: ../../langselector/handle_event.go:42
+msgid ""
+"System language has been changed, please log in again after logged out."
+msgstr "La lingua di sistema è stata modificata, riesegui il login per verificare le modifiche."
+
+#: ../../langselector/locale_ifc.go:55
+msgid "System language is being changed, please wait..."
+msgstr "Sto modificando la lingua di sistema, attendi.."
+
+#: ../../langselector/locale_ifc.go:60
+msgid ""
+"System language is being changed with an installation of lacked language "
+"packages, please wait..."
+msgstr "La lingua di sistema verrà modificata installando un pacchetto mancante, attendi.."
+
+#: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
 msgstr "Niente"
 
-#: ../../mime/default_media.go:75 ../../mime/default_media.go:90
+#: ../../mime/default_media.go:76 ../../mime/default_media.go:91
 msgid "Open Folder"
 msgstr "Apri cartella"
 
-#: ../../mime/default_media.go:79
+#: ../../mime/default_media.go:80
 msgid "Run Software"
 msgstr "Esegui software"
 
-#: ../../network/manager_connections.go:203
+#: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
+#: ../../network/state_handler.go:157 ../../network/utils_notify.go:86
+msgid "Connected"
+msgstr "Connesso"
+
+#: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
+#: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
+#: ../../network/state_handler.go:191 ../../network/utils_notify.go:61
+#: ../../network/utils_notify.go:65 ../../network/utils_notify.go:69
+#: ../../network/utils_notify.go:89 ../../network/utils_notify.go:92
+msgid "Disconnected"
+msgstr "Disconnected"
+
+#: ../../network/manager_connections.go:250
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
 msgstr "Connessione cablata"
 
-#: ../../network/manager_connections.go:281
-#: ../../network/manager_connections.go:286
+#: ../../network/manager_connections.go:330
+#: ../../network/manager_connections.go:335
 #: ../../network/nm_setting_virtual_key.go:141
 #: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:178
-#: ../../network/nm_setting_vpn_openvpn.go:398
-#: ../../network/nm_setting_vpn_vpnc.go:272
+#: ../../network/nm_setting_vpn_openvpn.go:395
+#: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
 msgstr "No"
 
-#: ../../network/manager_connections.go:288
+#: ../../network/manager_connections.go:337
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_connections.go:290
+#: ../../network/manager_connections.go:339
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_connections.go:298
+#: ../../network/manager_connections.go:347
 #: ../../network/nm_setting_802_1x.go:81
 #: ../../network/nm_setting_802_1x.go:162
 #: ../../network/nm_setting_802_1x.go:170
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_connections.go:300
+#: ../../network/manager_connections.go:349
 #: ../../network/nm_setting_802_1x.go:80
 #: ../../network/nm_setting_802_1x.go:163
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_connections.go:302
+#: ../../network/manager_connections.go:351
 #: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_connections.go:304
+#: ../../network/manager_connections.go:353
 #: ../../network/nm_setting_802_1x.go:164
 #: ../../network/nm_setting_802_1x.go:172
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_connections.go:306
+#: ../../network/manager_connections.go:355
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
-#: ../../network/manager_connections.go:308
+#: ../../network/manager_connections.go:357
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
 msgstr "Protected EAP"
 
-#: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:116
-#: ../../network/nm_setting_vpn_openvpn.go:171
-#: ../../network/nm_setting_vpn_pptp.go:106
-#: ../../network/nm_setting_vpn_vpnc.go:145
+#: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:114
+#: ../../network/nm_setting_vpn_openvpn.go:168
+#: ../../network/nm_setting_vpn_pptp.go:104
+#: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Saved"
 msgstr "Salvato"
 
-#: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:117
-#: ../../network/nm_setting_vpn_openvpn.go:172
-#: ../../network/nm_setting_vpn_pptp.go:107
-#: ../../network/nm_setting_vpn_vpnc.go:147
+#: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:115
+#: ../../network/nm_setting_vpn_openvpn.go:169
+#: ../../network/nm_setting_vpn_pptp.go:105
+#: ../../network/nm_setting_vpn_vpnc.go:144
 msgid "Always Ask"
 msgstr "Chiedi sempre"
 
-#: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:118
-#: ../../network/nm_setting_vpn_openvpn.go:173
-#: ../../network/nm_setting_vpn_openvpn.go:479
-#: ../../network/nm_setting_vpn_pptp.go:108
-#: ../../network/nm_setting_vpn_vpnc.go:148
+#: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_setting_vpn_openvpn.go:170
+#: ../../network/nm_setting_vpn_openvpn.go:476
+#: ../../network/nm_setting_vpn_pptp.go:106
+#: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Not Required"
 msgstr "Non richiesto"
 
@@ -2505,7 +2538,7 @@ msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:179
 #: ../../network/nm_setting_ip4_config.go:178
-#: ../../network/nm_setting_vpn_vpnc.go:261
+#: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
 msgstr "Disabilitato"
 
@@ -2522,7 +2555,7 @@ msgid "Both"
 msgstr "Entrambi"
 
 #: ../../network/nm_setting_802_1x.go:186
-#: ../../network/nm_setting_wireless.go:297
+#: ../../network/nm_setting_wireless.go:296
 msgid "Automatic"
 msgstr "Automatico"
 
@@ -2661,211 +2694,211 @@ msgstr "Sicura (default)"
 msgid "Weak"
 msgstr "Scarsa"
 
-#: ../../network/nm_setting_vpn_openvpn.go:251
+#: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
 msgstr "Certificato (TLS)"
 
-#: ../../network/nm_setting_vpn_openvpn.go:252
+#: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password"
 msgstr "Password"
 
-#: ../../network/nm_setting_vpn_openvpn.go:253
+#: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
 msgstr "Certificazione con password (TLS)"
 
-#: ../../network/nm_setting_vpn_openvpn.go:254
+#: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
 msgstr "Chiave statica"
 
-#: ../../network/nm_setting_vpn_openvpn.go:258
-#: ../../network/nm_setting_vpn_openvpn.go:434
+#: ../../network/nm_setting_vpn_openvpn.go:255
+#: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "0"
 msgstr "0"
 
-#: ../../network/nm_setting_vpn_openvpn.go:259
-#: ../../network/nm_setting_vpn_openvpn.go:435
+#: ../../network/nm_setting_vpn_openvpn.go:256
+#: ../../network/nm_setting_vpn_openvpn.go:432
 msgid "1"
 msgstr "1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:377
-#: ../../network/nm_setting_vpn_openvpn.go:397
-#: ../../network/nm_setting_vpn_openvpn.go:428
+#: ../../network/nm_setting_vpn_openvpn.go:374
+#: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_openvpn.go:425
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
 msgstr "Default"
 
-#: ../../network/nm_setting_vpn_openvpn.go:378
+#: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
 msgstr "DES-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:379
+#: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "RC2-CBC"
 msgstr "RC2-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:380
+#: ../../network/nm_setting_vpn_openvpn.go:377
 msgid "DES-EDE-CBC"
 msgstr "DES-EDE-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:381
+#: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-EDE3-CBC"
 msgstr "DES-EDE3-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:382
+#: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "DESX-CBC"
 msgstr "DESX-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:383
+#: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "BF-CBC"
 msgstr "BF-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:384
+#: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "RC2-40-CBC"
 msgstr "RC2-40-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:385
+#: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "CAST5-CBC"
 msgstr "CAST5-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:386
+#: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "RC2-64-CBC"
 msgstr "RC2-64-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:387
+#: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "AES-128-CBC"
 msgstr "AES-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:388
+#: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "AES-192-CBC"
 msgstr "AES-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:389
+#: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "AES-256-CBC"
 msgstr "AES-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:390
+#: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-128-CBC"
 msgstr "CAMELLIA-128-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:391
+#: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-192-CBC"
 msgstr "CAMELLIA-192-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:392
+#: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "CAMELLIA-256-CBC"
 msgstr "CAMELLIA-256-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:393
+#: ../../network/nm_setting_vpn_openvpn.go:390
 msgid "SEED-CBC"
 msgstr "SEED-CBC"
 
-#: ../../network/nm_setting_vpn_openvpn.go:399
+#: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
-#: ../../network/nm_setting_vpn_openvpn.go:400
+#: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "MD-5"
 msgstr "MD-5"
 
-#: ../../network/nm_setting_vpn_openvpn.go:401
+#: ../../network/nm_setting_vpn_openvpn.go:398
 msgid "SHA-1"
 msgstr "SHA-1"
 
-#: ../../network/nm_setting_vpn_openvpn.go:402
+#: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "SHA-224"
 msgstr "SHA-224"
 
-#: ../../network/nm_setting_vpn_openvpn.go:403
+#: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "SHA-256"
 msgstr "SHA-256"
 
-#: ../../network/nm_setting_vpn_openvpn.go:404
+#: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-384"
 msgstr "SHA-384"
 
-#: ../../network/nm_setting_vpn_openvpn.go:405
+#: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "SHA-512"
 msgstr "SHA-512"
 
-#: ../../network/nm_setting_vpn_openvpn.go:406
+#: ../../network/nm_setting_vpn_openvpn.go:403
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
-#: ../../network/nm_setting_vpn_openvpn.go:429
+#: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
 msgstr "Client"
 
-#: ../../network/nm_setting_vpn_openvpn.go:430
+#: ../../network/nm_setting_vpn_openvpn.go:427
 msgid "Server"
 msgstr "Server"
 
-#: ../../network/nm_setting_vpn_openvpn.go:480
+#: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../../network/nm_setting_vpn_openvpn.go:481
+#: ../../network/nm_setting_vpn_openvpn.go:478
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../../network/nm_setting_vpn_vpnc.go:253
+#: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
 msgstr "Cisco (default)"
 
-#: ../../network/nm_setting_vpn_vpnc.go:254
+#: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
 msgstr "Netscreen"
 
-#: ../../network/nm_setting_vpn_vpnc.go:258
+#: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
 msgstr "NAT-T quando disponibile (default)"
 
-#: ../../network/nm_setting_vpn_vpnc.go:259
+#: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
 msgstr "NAT-T Always"
 
-#: ../../network/nm_setting_vpn_vpnc.go:260
+#: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
 msgstr "Cisco UDP"
 
-#: ../../network/nm_setting_vpn_vpnc.go:265
-#: ../../network/nm_setting_vpn_vpnc.go:273
+#: ../../network/nm_setting_vpn_vpnc.go:262
+#: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
 msgstr "DH Group 1"
 
-#: ../../network/nm_setting_vpn_vpnc.go:266
+#: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
 msgstr "DH Group 2 (default)"
 
-#: ../../network/nm_setting_vpn_vpnc.go:267
-#: ../../network/nm_setting_vpn_vpnc.go:275
+#: ../../network/nm_setting_vpn_vpnc.go:264
+#: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
 msgstr "DH Group 5"
 
-#: ../../network/nm_setting_vpn_vpnc.go:271
+#: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
 msgstr "Server (default)"
 
-#: ../../network/nm_setting_vpn_vpnc.go:274
+#: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
 msgstr "DH Group 2"
 
-#: ../../network/nm_setting_wireless.go:291
+#: ../../network/nm_setting_wireless.go:290
 msgid "Infrastructure"
 msgstr "Infrastruttura"
 
-#: ../../network/nm_setting_wireless.go:292
+#: ../../network/nm_setting_wireless.go:291
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:293
+#: ../../network/nm_setting_wireless.go:292
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:298
+#: ../../network/nm_setting_wireless.go:297
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:299
+#: ../../network/nm_setting_wireless.go:298
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -3184,75 +3217,66 @@ msgstr "Autentificazione server VPN fallita. "
 msgid "The connection was deleted from settings."
 msgstr "La connessione è stata eliminata dalle impostazioni."
 
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:89
-#: ../../network/utils_test.go:616 ../../network/utils_test.go:623
-msgid "Connected"
-msgstr "Connesso"
+#: ../../network/utils_nm.go:175
+msgid "Unknown"
+msgstr "Sconosciuto"
 
-#: ../../network/state_handler.go:191 ../../network/utils_notify.go:64
-#: ../../network/utils_notify.go:68 ../../network/utils_notify.go:72
-#: ../../network/utils_notify.go:92 ../../network/utils_notify.go:95
-#: ../../network/utils_test.go:619 ../../network/utils_test.go:621
-#: ../../network/utils_test.go:625 ../../network/utils_test.go:627
-msgid "Disconnected"
-msgstr "Disconnected"
-
-#: ../../network/utils_notify.go:64
+#: ../../network/utils_notify.go:61
 msgid "Airplan mode enabled."
 msgstr "Modalità aeroplano attivata."
 
-#: ../../network/utils_notify.go:68
+#: ../../network/utils_notify.go:65
 msgid "You are now offline."
 msgstr "Sei ora offline."
 
-#: ../../network/utils_notify.go:72
+#: ../../network/utils_notify.go:69
 msgid "Access Point mode is not supported by this device."
 msgstr "Modalità Access Point non è supportata da questo dispositivo."
 
-#: ../../network/utils_notify.go:76 ../../network/utils_notify.go:81
-#: ../../network/utils_notify.go:85
+#: ../../network/utils_notify.go:73 ../../network/utils_notify.go:78
+#: ../../network/utils_notify.go:82
 msgid "Network"
 msgstr "Rete"
 
-#: ../../network/utils_notify.go:76
+#: ../../network/utils_notify.go:73
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Lo switch hardware della scheda WLAN è spento, attivalo se necessario."
 
-#: ../../network/utils_notify.go:81
+#: ../../network/utils_notify.go:78
 msgid "System proxy is set successfully."
 msgstr "Il proxy di sistema è stato impostato con successo."
 
-#: ../../network/utils_notify.go:85
+#: ../../network/utils_notify.go:82
 msgid "System proxy has been cancelled."
 msgstr "Il proxy di sistema è stato eliminato."
 
-#: ../../power/upower.go:90
+#: ../../power/upower.go:81
 msgid "Abnormal battery power"
 msgstr "Potenza della batteria anomala."
 
-#: ../../power/upower.go:90
+#: ../../power/upower.go:81
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
 msgstr "L'autonomia della batteria non può esser individuata, ti consigliamo di salvare i tuoi documenti e non eseguire operazioni delicate."
 
-#: ../../power/upower.go:95 ../../power/upower.go:110
+#: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"
 msgstr "Livello di carica della batteria critico"
 
-#: ../../power/upower.go:95
+#: ../../power/upower.go:86
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "Il computer è stato in modalità di sospensione, connettilo all'alimentatore."
 
-#: ../../power/upower.go:110
+#: ../../power/upower.go:101
 msgid "Please plug in, or computer will be in suspend mode."
 msgstr "Collega il PC all'alimentatore, altrimenti il PC entrerà in modalità sospensione."
 
-#: ../../power/upower.go:123
+#: ../../power/upower.go:114
 msgid "Battery Low"
 msgstr "Batteria scarica"
 
-#: ../../power/upower.go:123
+#: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Il computer entrerà in modalità sospensione, collegalo al caricabatteria."
