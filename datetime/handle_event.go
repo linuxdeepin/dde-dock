@@ -22,22 +22,11 @@
 package datetime
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
-}
-
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
-		return
-	}
-
-	*handler = value
-	dbus.NotifyChange(date, prop)
+func (date *DateTime) listenGSettings() {
+	date.settings.Connect("changed::is-auto-set", func(s *gio.Settings, key string) {
+		date.enableNTP(date.settings.GetBoolean(key))
+	})
 }

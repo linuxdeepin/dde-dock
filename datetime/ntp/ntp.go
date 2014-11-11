@@ -19,26 +19,69 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package ntp
 
 import (
+	"fmt"
 	"net"
-	"strconv"
+	. "pkg.linuxdeepin.com/dde-daemon/datetime/utils"
+	"sync"
 	"time"
 )
 
 const (
-	_NTP_HOST = "0.pool.ntp.org"
+	ntpHost = "0.pool.ntp.org"
 )
 
-func (obj *Manager) syncNtpTime() bool {
+const (
+	NTPStateDisabled int32 = 0
+	NTPStateEnabled  int32 = 1
+)
+
+// update time when timezone changed
+var Timezone string
+
+var (
+	stateLock sync.Mutex
+	ntpState  int32
+)
+
+func InitNtpModule() error {
+	ntpState = NTPStateDisabled
+	return InitSetDateTime()
+}
+
+func FiniNtpModule() {
+	DestroySetDateTime()
+}
+
+func Enabled(enable bool, zone string) {
+	Timezone = zone
+	if enable {
+		if ntpState == NTPStateEnabled {
+			go SyncNetworkTime()
+			return
+		}
+
+		stateLock.Lock()
+		ntpState = NTPStateEnabled
+		stateLock.Unlock()
+		go syncThread()
+	} else {
+		stateLock.Lock()
+		ntpState = NTPStateDisabled
+		stateLock.Unlock()
+	}
+
+	return
+}
+
+func SyncNetworkTime() bool {
 	for i := 0; i < 10; i++ {
-		t, err := getNtpTime(obj.CurrentTimezone)
-		if err == nil && t != nil {
-			dStr, tStr := getDateTimeAny(t)
-			logger.Infof("Date: %s, Time: %s", dStr, tStr)
-			setDate.SetCurrentDate(dStr)
-			setDate.SetCurrentTime(tStr)
+		dStr, tStr, err := getDateTime()
+		if err == nil {
+			SetDate(dStr)
+			SetTime(tStr)
 			return true
 		}
 	}
@@ -46,60 +89,39 @@ func (obj *Manager) syncNtpTime() bool {
 	return false
 }
 
-func (obj *Manager) syncNtpThread() {
+func syncThread() {
 	for {
-		obj.syncNtpTime()
+		SyncNetworkTime()
 		timer := time.NewTimer(time.Minute * 10)
 		select {
 		case <-timer.C:
-		case <-obj.quitChan:
-			obj.ntpRunning = false
-			return
+			if ntpState == NTPStateDisabled {
+				return
+			}
 		}
 	}
 }
 
-func (obj *Manager) enableNtp(enable bool) bool {
-	if enable {
-		if obj.ntpRunning {
-			go obj.syncNtpTime()
-			logger.Debug("Ntp is running")
-			return true
-		}
-
-		obj.ntpRunning = true
-		go obj.syncNtpThread()
-	} else {
-		if obj.ntpRunning {
-			logger.Debug("Ntp will quit....")
-			obj.quitChan <- true
-		}
-
-		obj.ntpRunning = false
+func getDateTime() (string, string, error) {
+	t, err := getNetworkTime()
+	if err != nil {
+		return "", "", err
 	}
 
-	return true
+	dStr := fmt.Sprintf("%d-%d-%d", t.Year(), t.Month(), t.Day())
+	tStr := fmt.Sprintf("%d:%d:%d", t.Hour(), t.Minute(), t.Second())
+
+	return dStr, tStr, nil
 }
 
-func getDateTimeAny(t *time.Time) (dStr, tStr string) {
-	dStr += strconv.FormatInt(int64(t.Year()), 10) + "-" + strconv.FormatInt(int64(t.Month()), 10) + "-" + strconv.FormatInt(int64(t.Day()), 10)
-	tStr += strconv.FormatInt(int64(t.Hour()), 10) + ":" + strconv.FormatInt(int64(t.Minute()), 10) + ":" + strconv.FormatInt(int64(t.Second()), 10)
-
-	return dStr, tStr
-}
-
-func getNtpTime(locale string) (*time.Time, error) {
-	if len(locale) < 1 {
-		locale = "UTC"
+func getNetworkTime() (*time.Time, error) {
+	loc, err := time.LoadLocation(Timezone)
+	if err != nil {
+		return nil, err
 	}
+	time.Local = loc
 
-	if !timezoneIsValid(locale) {
-		logger.Warningf("'%s': invalid locale", locale)
-		locale = "UTC"
-	}
-
-	logger.Info("Locale:", locale)
-	raddr, err := net.ResolveUDPAddr("udp", _NTP_HOST+":123")
+	raddr, err := net.ResolveUDPAddr("udp", ntpHost+":123")
 	if err != nil {
 		return nil, err
 	}
@@ -135,12 +157,7 @@ func getNtpTime(locale string) (*time.Time, error) {
 	nsec := sec * 1e9
 	nsec += (frac * 1e9) >> 32
 
-	l := time.FixedZone(locale, 0)
-	if l == nil {
-		return nil, err
-	}
-
-	t := time.Date(1900, 1, 1, 0, 0, 0, 0, l).Add(time.Duration(nsec)).Local()
+	t := time.Date(1900, 1, 1, 0, 0, 0, 0, time.UTC).Add(time.Duration(nsec)).Local()
 
 	return &t, nil
 }

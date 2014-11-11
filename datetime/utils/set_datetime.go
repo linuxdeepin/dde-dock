@@ -19,25 +19,67 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package utils
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"dbus/com/deepin/api/setdatetime"
+	"fmt"
 )
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+var (
+	errUninitialized = fmt.Errorf("SetDateTime Uninitialized")
+)
+
+var _setDate *setdatetime.SetDateTime
+
+func InitSetDateTime() error {
+	if _setDate != nil {
+		return nil
 	}
+
+	var err error
+	_setDate, err = setdatetime.NewSetDateTime(
+		"com.deepin.api.SetDateTime",
+		"/com/deepin/api/SetDateTime",
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
+func DestroySetDateTime() {
+	if _setDate == nil {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(date, prop)
+	setdatetime.DestroySetDateTime(_setDate)
+	_setDate = nil
+}
+
+func SetDate(value string) error {
+	if _setDate == nil {
+		return errUninitialized
+	}
+
+	_, err := _setDate.SetCurrentDate(value)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func SetTime(value string) error {
+	if _setDate == nil {
+		return errUninitialized
+	}
+
+	_, err := _setDate.SetCurrentTime(value)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -1,213 +1,122 @@
+/**
+ * Copyright (c) 2011 ~ 2014 Deepin, Inc.
+ *               2013 ~ 2014 jouyouyun
+ *
+ * Author:      jouyouyun <jouyouwen717@gmail.com>
+ * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
+ **/
+
 package datetime
 
 import (
-	"dbus/com/deepin/api/setdatetime"
-	"github.com/howeyc/fsnotify"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"io/ioutil"
+	"pkg.linuxdeepin.com/dde-daemon/datetime/ntp"
+	"pkg.linuxdeepin.com/dde-daemon/datetime/timezone"
+	. "pkg.linuxdeepin.com/dde-daemon/datetime/utils"
 	"pkg.linuxdeepin.com/lib/dbus/property"
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
+	"strings"
 )
 
 const (
-	_DATE_TIME_DEST = "com.deepin.daemon.DateAndTime"
-	_DATE_TIME_PATH = "/com/deepin/daemon/DateAndTime"
-	_DATA_TIME_IFC  = "com.deepin.daemon.DateAndTime"
+	dbusSender = "com.deepin.daemon.DateAndTime"
+	dbusPath   = "/com/deepin/daemon/DateAndTime"
+	dbusIFC    = "com.deepin.daemon.DateAndTime"
 
-	_DATE_TIME_SCHEMA = "com.deepin.dde.datetime"
-	_TIME_ZONE_FILE   = "/etc/timezone"
+	gsKeyAutoSetTime  = "is-auto-set"
+	gsKey24Hour       = "is-24hour"
+	gsKeyUTCOffset    = "utc-offset"
+	gsKeyTimezoneList = "user-timezone-list"
+	gsKeyDSTOffset    = "dst-offset"
+
+	defaultTimezone     = "UTC"
+	defaultTimezoneFile = "/etc/timezone"
+	defaultUTCOffset    = "+00:00"
 )
 
-var (
-	busConn      *dbus.Conn
-	dateSettings = gio.NewSettings(_DATE_TIME_SCHEMA)
-
-	setDate          *setdatetime.SetDateTime
-	zoneWatcher      *fsnotify.Watcher
-	logger           = log.NewLogger(_DATE_TIME_DEST)
-	changeLocaleFlag = false
-)
-
-type Manager struct {
-	AutoSetTime      *property.GSettingsBoolProperty `access:"readwrite"`
+type DateTime struct {
+	NTPEnabled       *property.GSettingsBoolProperty `access:"readwrite"`
 	Use24HourDisplay *property.GSettingsBoolProperty `access:"readwrite"`
-	CurrentTimezone  string
-	UserTimezoneList []string
-	CurrentLocale    string
+	DSTOffset        *property.GSettingsIntProperty  `access:"readwrite"`
 
-	LocaleStatus func(bool, string)
+	UserTimezones *property.GSettingsStrvProperty
 
-	ntpRunning bool
-	quitChan   chan bool
+	CurrentTimezone string
+
+	settings *gio.Settings
+	logger   *log.Logger
 }
 
-func (op *Manager) SetDate(d string) (bool, error) {
-	ret, err := setDate.SetCurrentDate(d)
+func NewDateTime(l *log.Logger) *DateTime {
+	date := &DateTime{}
+
+	err := InitSetDateTime()
 	if err != nil {
-		logger.Warning("Set Date - '%s' Failed: %s\n",
-			d, err)
-		return false, err
+		return nil
 	}
-	return ret, nil
-}
 
-func (op *Manager) SetTime(t string) (bool, error) {
-	ret, err := setDate.SetCurrentTime(t)
+	err = ntp.InitNtpModule()
 	if err != nil {
-		logger.Warning("Set Time - '%s' Failed: %s\n",
-			t, err)
-		return false, err
+		return nil
 	}
-	return ret, nil
+
+	date.logger = l
+	date.settings = gio.NewSettings("com.deepin.dde.datetime")
+	date.NTPEnabled = property.NewGSettingsBoolProperty(
+		date, "NTPEnabled",
+		date.settings, gsKeyAutoSetTime)
+	date.Use24HourDisplay = property.NewGSettingsBoolProperty(
+		date, "Use24HourDisplay",
+		date.settings, gsKey24Hour)
+	date.UserTimezones = property.NewGSettingsStrvProperty(
+		date, "UserTimezones",
+		date.settings, gsKeyTimezoneList)
+	date.DSTOffset = property.NewGSettingsIntProperty(
+		date, "DSTOffset",
+		date.settings, gsKeyDSTOffset)
+
+	date.setPropString(&date.CurrentTimezone,
+		"CurrentTimezone", getDefaultTimezone(defaultTimezoneFile))
+
+	date.AddUserTimezone(date.CurrentTimezone)
+	date.enableNTP(date.NTPEnabled.Get())
+
+	return date
 }
 
-func (op *Manager) TimezoneCityList() []zoneCityInfo {
-	return zoneInfos
+func (date *DateTime) enableNTP(value bool) {
+	ntp.Enabled(value, date.CurrentTimezone)
 }
 
-func (op *Manager) SetTimeZone(zone string) bool {
-	_, err := setDate.SetTimezone(zone)
+func getDefaultTimezone(config string) string {
+	zone, err := getTimezoneFromFile(config)
+	if err != nil || !timezone.IsZoneValid(zone) {
+		return defaultTimezone
+	}
+
+	return zone
+}
+
+func getTimezoneFromFile(filename string) (string, error) {
+	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
-		logger.Warning("Set TimeZone - '%s' Failed: %s\n",
-			zone, err)
-		return false
-	}
-	op.setPropName("CurrentTimezone")
-	return true
-}
-
-func (op *Manager) SyncNtpTime() bool {
-	return op.syncNtpTime()
-}
-
-func (op *Manager) AddUserTimezoneList(tz string) {
-	if !timezoneIsValid(tz) {
-		return
+		return "", err
 	}
 
-	list := dateSettings.GetStrv("user-timezone-list")
-	if isElementExist(tz, list) {
-		return
-	}
-
-	list = append(list, tz)
-	dateSettings.SetStrv("user-timezone-list", list)
-}
-
-func (op *Manager) DeleteTimezoneList(tz string) {
-	if !timezoneIsValid(tz) {
-		return
-	}
-
-	list := dateSettings.GetStrv("user-timezone-list")
-	if !isElementExist(tz, list) {
-		return
-	}
-
-	tmp := []string{}
-	for _, v := range list {
-		if v == tz {
-			continue
-		}
-		tmp = append(tmp, v)
-	}
-	dateSettings.SetStrv("user-timezone-list", tmp)
-}
-
-func (op *Manager) SetLocale(locale string) {
-	if len(locale) < 1 {
-		return
-	}
-
-	if op.CurrentLocale == locale {
-		return
-	}
-
-	sendNotify("", "", Tr("Language is changing, please wait"))
-	setDate.GenLocale(locale)
-	changeLocaleFlag = true
-	op.CurrentLocale = locale
-	dbus.NotifyChange(op, "CurrentLocale")
-}
-
-func (m *Manager) GetLocaleList() []localeInfo {
-	return getLocaleInfoList()
-}
-
-func NewDateAndTime() *Manager {
-	m := &Manager{}
-
-	m.AutoSetTime = property.NewGSettingsBoolProperty(
-		m, "AutoSetTime",
-		dateSettings, "is-auto-set")
-	m.Use24HourDisplay = property.NewGSettingsBoolProperty(
-		m, "Use24HourDisplay",
-		dateSettings, "is-24hour")
-
-	m.setPropName("CurrentTimezone")
-	m.setPropName("UserTimezoneList")
-	m.setPropName("CurrentLocale")
-	m.listenSettings()
-	m.listenZone()
-	m.AddUserTimezoneList(m.CurrentTimezone)
-
-	m.ntpRunning = false
-	m.quitChan = make(chan bool)
-
-	return m
-}
-
-func Init() {
-	var err error
-
-	setDate, err = setdatetime.NewSetDateTime("com.deepin.api.SetDateTime", "/com/deepin/api/SetDateTime")
-	if err != nil {
-		logger.Error("New SetDateTime Failed:", err)
-		panic(err)
-	}
-
-	zoneWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logger.Error("New FS Watcher Failed:", err)
-		panic(err)
-	}
-}
-
-var _manager *Manager
-
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = NewDateAndTime()
-	}
-
-	return _manager
-}
-
-func Start() {
-	logger.BeginTracing()
-
-	var err error
-
-	Init()
-
-	initZoneInfos()
-
-	date := GetManager()
-	err = dbus.InstallOnSession(date)
-	if err != nil {
-		logger.Fatal("Install Session DBus Failed:", err)
-	}
-
-	if date.AutoSetTime.Get() {
-		date.setAutoSetTime(true)
-	}
-	date.listenLocaleChange()
-}
-
-func Stop() {
-	zoneWatcher.Close()
-	dbus.UnInstallObject(GetManager())
-
-	logger.EndTracing()
+	lines := strings.Split(string(contents), "\n")
+	return lines[0], nil
 }

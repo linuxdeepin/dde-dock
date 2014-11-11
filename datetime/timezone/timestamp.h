@@ -19,25 +19,11 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+#ifndef __TIMESTAMP_H__
+#define __TIMESTAMP_H__
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-)
+long long get_year_begin_time(const char *zone, int year);
+long getoffset (const char *zone, long long t);
+long long * get_dst_time(const char *zone, int year);
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
-}
-
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
-		return
-	}
-
-	*handler = value
-	dbus.NotifyChange(date, prop)
-}
+#endif

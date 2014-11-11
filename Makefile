@@ -74,8 +74,7 @@ install: build translate
 	cp misc/schemas/* ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
-	cp -r misc/lang     ${DESTDIR}${PREFIX}/share/dde-daemon/
-	cp -r misc/template ${DESTDIR}${PREFIX}/share/dde-daemon/
+	cp -r misc/usr/share/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/bin
 	cp misc/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script

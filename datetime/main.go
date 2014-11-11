@@ -23,21 +23,34 @@ package datetime
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
+var _date *DateTime
+
+func Start() {
+	var logger = log.NewLogger(dbusSender)
+
+	logger.BeginTracing()
+
+	_date = NewDateTime(logger)
+	if _date == nil {
+		logger.Error("Create DateTime Failed")
+		return
+	}
+	err := dbus.InstallOnSession(_date)
+	if err != nil {
+		logger.Error("Install DBus For DateTime Failed")
+		return
 	}
 }
 
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
+func Stop() {
+	if _date == nil {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(date, prop)
+	_date.Destroy()
+	dbus.UnInstallObject(_date)
+	_date = nil
 }

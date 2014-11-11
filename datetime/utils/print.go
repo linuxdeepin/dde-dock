@@ -19,25 +19,56 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package utils
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
-}
-
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
+func Printf(logger *log.Logger, format string, v ...interface{}) {
+	if logger == nil {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(date, prop)
+	logger.Infof(format, v...)
+}
+
+func Println(logger *log.Logger, v ...interface{}) {
+	if logger == nil {
+		return
+	}
+
+	logger.Info(v...)
+}
+
+func Warningf(logger *log.Logger, format string, v ...interface{}) {
+	if logger == nil {
+		return
+	}
+
+	logger.Warningf(format, v...)
+}
+
+func Warning(logger *log.Logger, v ...interface{}) {
+	if logger == nil {
+		return
+	}
+
+	logger.Warning(v...)
+}
+
+func Errorf(logger *log.Logger, format string, v ...interface{}) {
+	if logger == nil {
+		return
+	}
+
+	logger.Errorf(format, v...)
+}
+
+func Error(logger *log.Logger, v ...interface{}) {
+	if logger == nil {
+		return
+	}
+
+	logger.Error(v...)
 }

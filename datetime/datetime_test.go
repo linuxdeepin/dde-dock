@@ -22,25 +22,23 @@
 package datetime
 
 import (
-	"os/user"
+	C "launchpad.net/gocheck"
+	"testing"
 )
 
-func getHomeDir() (string, bool) {
-	info, err := user.Current()
-	if err != nil {
-		logger.Error("Get current user info failed:", err)
-		return "", false
-	}
+type testWrapper struct{}
 
-	return info.HomeDir, true
+func init() {
+	C.Suite(&testWrapper{})
 }
 
-func isElementExistString(ele string, list []string) bool {
-	for _, v := range list {
-		if v == ele {
-			return true
-		}
-	}
+func Test(t *testing.T) {
+	C.TestingT(t)
+}
 
-	return false
+func (*testWrapper) TestGetDefaultZone(c *C.C) {
+	c.Check(getDefaultTimezone("testdata/timezone"),
+		C.Equals, "Asia/Shanghai")
+	c.Check(getDefaultTimezone("testdata/xxx"),
+		C.Equals, "UTC")
 }

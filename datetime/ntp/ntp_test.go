@@ -19,25 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package ntp
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	C "launchpad.net/gocheck"
+	"testing"
 )
 
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
+type testWrapper struct{}
+
+func init() {
+	C.Suite(&testWrapper{})
 }
 
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
-		return
-	}
+func Test(t *testing.T) {
+	C.TestingT(t)
+}
 
-	*handler = value
-	dbus.NotifyChange(date, prop)
+func (*testWrapper) TestGetDateTime(c *C.C) {
+	_, _, err := getDateTime()
+	//c.Check(err, C.Not(C.NotNil))
+	if err != nil {
+		c.Skip(err.Error())
+	}
 }
