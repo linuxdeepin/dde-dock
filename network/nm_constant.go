@@ -292,6 +292,13 @@ func isConnectionStateActivated(state uint32) bool {
 	}
 	return false
 }
+func isConnectionStateInDeactivating(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATING ||
+		state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATE {
+		return true
+	}
+	return false
+}
 func isConnectionStateDeactivate(state uint32) bool {
 	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATE {
 		return true

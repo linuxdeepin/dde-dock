@@ -44,11 +44,7 @@ type Manager struct {
 	config *config
 
 	// update by manager.go
-	State uint32 // networking state
-
-	activeConnectionsLocker sync.Mutex
-	activeConnections       []*activeConnection
-	ActiveConnections       string // array of connections that activated and marshaled by json
+	State uint32 // global networking state
 
 	NetworkingEnabled bool `access:"readwrite"` // airplane mode for NetworkManager
 	WirelessEnabled   bool `access:"readwrite"`
@@ -72,6 +68,11 @@ type Manager struct {
 	connectionSessionsLocker sync.Mutex
 	connectionSessions       []*ConnectionSession
 
+	// update by manager_active.go
+	activeConnectionsLocker sync.Mutex
+	activeConnections       map[dbus.ObjectPath]*activeConnection
+	ActiveConnections       string // array of connections that activated and marshaled by json
+
 	// signals
 	NeedSecrets                  func(string, string, string)
 	DeviceStateChanged           func(devPath string, newState uint32) // TODO remove
@@ -82,6 +83,7 @@ type Manager struct {
 
 	agent         *agent
 	stateNotifier *stateNotifier
+	dbusWatcher   *dbusWatcher
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -115,13 +117,16 @@ func NewManager() (m *Manager) {
 }
 
 func DestroyManager(m *Manager) {
-	destroyStateNotifier(m.stateNotifier)
 	destroyAgent(m.agent)
+	destroyStateNotifier(m.stateNotifier)
+	destroyDbusWatcher(m.dbusWatcher)
 	m.clearConnectionSessions()
 	dbus.UnInstallObject(m)
 }
 
 func (m *Manager) initManager() {
+	m.dbusWatcher = newDbusWatcher(true)
+
 	// setup global switches
 	m.initPropNetworkingEnabled()
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
@@ -140,15 +145,10 @@ func (m *Manager) initManager() {
 	m.initPropWiredEnabled()
 	m.initPropVpnEnabled()
 
-	// initialize device and connection managers
+	// initialize device and connection handlers
 	m.initDeviceManage()
 	m.initConnectionManage()
-
-	// update property "ActiveConnections" after devices initialized
-	nmManager.ActiveConnections.ConnectChanged(func() {
-		m.updateActiveConnections()
-	})
-	m.updateActiveConnections()
+	m.initActiveConnectionManage()
 
 	// update property "State"
 	nmManager.State.ConnectChanged(func() {
@@ -156,69 +156,6 @@ func (m *Manager) initManager() {
 	})
 	m.setPropState()
 
-	m.agent = newAgent()
 	m.stateNotifier = newStateNotifier()
-}
-
-func (m *Manager) updateActiveConnections() {
-	m.activeConnectionsLocker.Lock()
-	defer m.activeConnectionsLocker.Unlock()
-
-	// reset all exists active connection objects
-	for i, _ := range m.activeConnections {
-		// destroy object to reset all property connects
-		if m.activeConnections[i].nmVpnConn != nil {
-			nmDestroyVpnConnection(m.activeConnections[i].nmVpnConn)
-		}
-		nmDestroyActiveConnection(m.activeConnections[i].nmAConn)
-		m.activeConnections[i] = nil
-	}
-	m.activeConnections = make([]*activeConnection, 0)
-	for _, acPath := range nmGetActiveConnections() {
-		if nmAConn, err := nmNewActiveConnection(acPath); err == nil {
-			aconn := &activeConnection{
-				nmAConn: nmAConn,
-				path:    acPath,
-				Devices: nmAConn.Devices.Get(),
-				Uuid:    nmAConn.Uuid.Get(),
-				State:   nmAConn.State.Get(),
-				Vpn:     nmAConn.Vpn.Get(),
-			}
-			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
-				aconn.Id = nmGetConnectionId(cpath)
-			}
-
-			nmAConn.State.ConnectChanged(func() {
-				m.activeConnectionsLocker.Lock()
-				defer m.activeConnectionsLocker.Unlock()
-
-				aconn.State = nmAConn.State.Get()
-				m.setPropActiveConnections()
-			})
-			aconn.State = nmAConn.State.Get()
-
-			// dispatch vpn connection
-			if aconn.Vpn {
-				if nmVpnConn, err := nmNewVpnConnection(acPath); err == nil {
-					aconn.nmVpnConn = nmVpnConn
-					nmVpnConn.ConnectVpnStateChanged(func(state, reason uint32) {
-						// update vpn config
-						m.config.setVpnConnectionActivated(aconn.Uuid, isVpnConnectionStateInActivating(state))
-
-						// notification for vpn
-						if isVpnConnectionStateActivated(state) {
-							notifyVpnConnected(aconn.Id)
-						} else if isVpnConnectionStateDeactivate(state) {
-							notifyVpnDisconnected(aconn.Id)
-						} else if isVpnConnectionStateFailed(state) {
-							notifyVpnFailed(aconn.Id, reason)
-						}
-					})
-				}
-			}
-
-			m.activeConnections = append(m.activeConnections, aconn)
-		}
-	}
-	m.setPropActiveConnections()
+	m.agent = newAgent()
 }

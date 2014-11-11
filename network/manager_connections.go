@@ -22,7 +22,6 @@
 package network
 
 import (
-	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
@@ -40,18 +39,6 @@ type connection struct {
 
 	// works for wireless, olpc-mesh connections
 	Ssid string
-}
-
-type activeConnection struct {
-	nmAConn   *nm.ActiveConnection
-	nmVpnConn *nm.VPNConnection
-	path      dbus.ObjectPath
-
-	Devices []dbus.ObjectPath
-	Id      string
-	Uuid    string
-	State   uint32
-	Vpn     bool
 }
 
 type activeConnectionInfo struct {
