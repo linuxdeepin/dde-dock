@@ -44,7 +44,7 @@ func NewNormalApp(id string) *NormalApp {
 	defer core.Unref()
 	app.path = core.GetFilename()
 	app.Icon = getAppIcon(core.DesktopAppInfo)
-	logger.Debug("app icon:", app.Icon)
+	logger.Debug(app.Id, "::app icon:", app.Icon)
 	app.Name = core.GetDisplayName()
 	logger.Debug("Name", app.Name)
 	app.buildMenu(core)

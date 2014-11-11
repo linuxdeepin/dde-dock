@@ -44,22 +44,33 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 		return ""
 	}
 
+	icon := gioIcon.ToString()
 	logger.Debug("GetIcon:", gioIcon.ToString())
-	icon := get_theme_icon(gioIcon.ToString(), 48)
 	if icon == "" {
-		logger.Debug("get icon from theme failed")
+		logger.Warning("get icon from theme failed")
+		return ""
+	}
+
+	iconPath := get_theme_icon(icon, 48)
+	if iconPath == "" {
+		logger.Warning("get icon from theme failed")
 		return ""
 	}
 
 	logger.Debug("get_theme_icon:", icon)
+	ext := filepath.Ext(iconPath)
+	if ext == "" {
+		return icon
+	}
 	// the filepath.Ext return ".xxx"
-	ext := filepath.Ext(icon)[1:]
+	ext = ext[1:]
 	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
 		logger.Debug("change xpm to data uri")
 		return xpm_to_dataurl(icon)
 	}
 
+	logger.Debug("get_theme_icon:", icon)
 	return icon
 }
 
