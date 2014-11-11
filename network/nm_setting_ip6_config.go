@@ -22,11 +22,9 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
 )
-
-// TODO doc
 
 const NM_SETTING_IP6_CONFIG_SETTING_NAME = "ipv6"
 

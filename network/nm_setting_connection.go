@@ -25,8 +25,6 @@ import (
 	"os/user"
 )
 
-// TODO doc
-
 const NM_SETTING_CONNECTION_SETTING_NAME = "connection"
 
 const (
@@ -110,10 +108,11 @@ func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
 	// auto-connect only available for target connection types
-	switch getCustomConnectionType(data) {
-	case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot, connectionPppoe, connectionMobileGsm, connectionMobileCdma:
+	switch getSettingConnectionType(data) {
+	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
 		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case connectionVpn: // TODO
+	case NM_SETTING_VPN_SETTING_NAME:
+		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_VK_VPN_AUTOCONNECT)
 	}
 	return
 }

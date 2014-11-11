@@ -24,7 +24,6 @@ package main
 import (
 	"bytes"
 	"flag"
-	"os"
 	"path"
 	"text/template"
 )
@@ -53,7 +52,6 @@ var funcMap = template.FuncMap{
 }
 
 const (
-	backEndDir                = ".."
 	nmSettingsJSONFile        = "./nm_settings.json"
 	nmSettingVkeyJSONFile     = "./nm_setting_vkey.json"
 	nmSettingVsectionJSONFile = "./nm_setting_vsection.json"
@@ -63,11 +61,12 @@ var (
 	argWriteOutput        bool
 	argBackEnd            bool
 	argFrontEnd           bool
-	frontEndDir           = os.Getenv("HOME") + "/workspace/deepin/dde-control-center/modules/network/edit_autogen/"
-	nmSettingUtilsFile    = path.Join(backEndDir, "nm_setting_general_autogen.go")
-	nmSettingVkeyFile     = path.Join(backEndDir, "nm_setting_virtual_key_autogen.go")
-	nmSettingVsectionFile = path.Join(backEndDir, "nm_setting_virtual_section_autogen.go")
-	frontEndConnPropFile  = path.Join(frontEndDir, "BaseConnectionEdit.qml")
+	argBackEndDir         string
+	argFrontEndDir        string
+	nmSettingUtilsFile    string
+	nmSettingVkeyFile     string
+	nmSettingVsectionFile string
+	frontEndConnPropFile  string
 	nmSections            []NMSectionStruct
 	nmVkeys               []NMVkeyStruct
 	nmVsections           []NMVsectionStruct
@@ -113,6 +112,13 @@ type NMVkeyStruct struct {
 	DisplayName    string
 	FrontEndWidget string            // such as "EditLinePasswordInput"
 	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
+}
+
+func setupDirs() {
+	nmSettingUtilsFile = path.Join(argBackEndDir, "nm_setting_general_autogen.go")
+	nmSettingVkeyFile = path.Join(argBackEndDir, "nm_setting_virtual_key_autogen.go")
+	nmSettingVsectionFile = path.Join(argBackEndDir, "nm_setting_virtual_section_autogen.go")
+	frontEndConnPropFile = path.Join(argFrontEndDir, "BaseConnectionEdit.qml")
 }
 
 func genNMSettingCode(nmSection NMSectionStruct) (content string) {
@@ -213,7 +219,11 @@ func main() {
 	flag.BoolVar(&argWriteOutput, "w", false, "write to file")
 	flag.BoolVar(&argBackEnd, "b", false, "generate back-end code")
 	flag.BoolVar(&argFrontEnd, "f", false, "generate front-end code")
+	flag.StringVar(&argBackEndDir, "back-end-dir", "..", "back-end directory")
+	flag.StringVar(&argFrontEndDir, "front-end-dir", "./front_end_autogen", "front-end directory")
 	flag.Parse()
+
+	setupDirs()
 
 	unmarshalJSONFile(nmSettingsJSONFile, &nmSections)
 	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmVkeys)

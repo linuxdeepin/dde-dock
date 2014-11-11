@@ -26,13 +26,6 @@ import (
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
-// https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
-// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
-
-// The setting's name; these names are defined by the specification
-// and cannot be changed after the object has been created. Each
-// setting class has a name, and all objects of that class share the
-// same name.
 const NM_SETTING_WIRED_SETTING_NAME = "802-3-ethernet"
 
 const (
@@ -110,6 +103,7 @@ func newWiredConnectionForDevice(id, uuid, hwAddr string) (cpath dbus.ObjectPath
 	logger.Debugf("new wired connection, id=%s, uuid=%s, hwAddr=%s", id, uuid, hwAddr)
 	data := newWiredConnectionData(id, uuid)
 	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
+	setSettingConnectionAutoconnect(data, true)
 	cpath, err = nmAddConnection(data)
 	return
 }

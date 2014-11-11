@@ -49,5 +49,6 @@ func Start() {
 
 func Stop() {
 	DestroyManager(manager)
+	dbus.UnInstallObject(manager)
 	logger.EndTracing()
 }

@@ -51,6 +51,10 @@ func newAgent() (a *agent) {
 }
 
 func destroyAgent(a *agent) {
+	for key, ch := range a.pendingKeys {
+		close(ch)
+		delete(a.pendingKeys, key)
+	}
 	nmAgentUnregister()
 	dbus.UnInstallObject(a)
 }
@@ -137,10 +141,10 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 
 	if _, ok := a.pendingKeys[keyId]; ok {
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
-		a.CancelGetSecrtes(connectionPath, settingName)
+		a.CancelGetSecrets(connectionPath, settingName)
 	}
 	select {
-	case key, ok := <-a.createPendingKey(keyId, getSettingConnectionId(connectionData)):
+	case key, ok := <-a.createPendingKey(connectionData, keyId):
 		if ok {
 			keyData = fillSecret(connectionData, settingName, key)
 			a.SaveSecrets(keyData, connectionPath)
@@ -148,27 +152,30 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 			logger.Info("failed to get secretes", keyId)
 		}
 	case <-time.After(120 * time.Second):
-		a.CancelGetSecrtes(connectionPath, settingName)
+		a.CancelGetSecrets(connectionPath, settingName)
 		logger.Info("get secrets timeout", keyId)
 	}
 	return
 }
-func (a *agent) createPendingKey(keyId mapKey, connectionId string) chan string {
-	logger.Debug("createPendingKey:", keyId, connectionId) // TODO test
+func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Variant, keyId mapKey) chan string {
+	autoConnect := nmGeneralGetConnectionAutoconnect(keyId.path)
+	connectionId := getSettingConnectionId(connectionData)
+	logger.Debug("createPendingKey:", keyId, connectionId, autoConnect)
+
 	a.pendingKeys[keyId] = make(chan string)
-	dbus.Emit(manager, "NeedSecrets", string(keyId.path), keyId.name, connectionId)
+	dbus.Emit(manager, "NeedSecrets", string(keyId.path), keyId.name, connectionId, autoConnect)
 	return a.pendingKeys[keyId]
 }
 
-func (a *agent) CancelGetSecrtes(connectionPath dbus.ObjectPath, settingName string) {
-	logger.Debug("CancelGetSecrtes:", connectionPath, settingName)
+func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string) {
+	logger.Debug("CancelGetSecrets:", connectionPath, settingName)
 	keyId := mapKey{connectionPath, settingName}
 
 	if pendingChan, ok := a.pendingKeys[keyId]; ok {
 		close(pendingChan)
 		delete(a.pendingKeys, keyId)
 	} else {
-		logger.Warning("CancelGetSecrtes unknown PendingKey", keyId)
+		logger.Warning("CancelGetSecrets unknown PendingKey", keyId)
 	}
 }
 
@@ -183,8 +190,8 @@ func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, con
 	}
 }
 
-func (a *agent) feedSecret(path string, name string, key string) {
-	keyId := mapKey{dbus.ObjectPath(path), name}
+func (a *agent) feedSecret(path dbus.ObjectPath, name string, key string) {
+	keyId := mapKey{path, name}
 	if ch, ok := a.pendingKeys[keyId]; ok {
 		ch <- key
 		delete(a.pendingKeys, keyId)
@@ -193,11 +200,14 @@ func (a *agent) feedSecret(path string, name string, key string) {
 	}
 }
 
-func (m *Manager) FeedSecret(path string, name, key string) {
+func (m *Manager) FeedSecret(path string, name, key string, autoConnect bool) {
 	logger.Debug("FeedSecret:", path, name, "xxx")
-	m.agent.feedSecret(path, name, key)
+
+	opath := dbus.ObjectPath(path)
+	m.agent.feedSecret(opath, name, key)
+	nmGeneralSetConnectionAutoconnect(opath, autoConnect)
 }
 func (m *Manager) CancelSecret(path string, name string) {
 	logger.Debug("CancelSecret:", path, name)
-	m.agent.CancelGetSecrtes(dbus.ObjectPath(path), name)
+	m.agent.CancelGetSecrets(dbus.ObjectPath(path), name)
 }

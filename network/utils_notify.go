@@ -24,6 +24,7 @@ package network
 import (
 	"dbus/org/freedesktop/notifications"
 	. "pkg.linuxdeepin.com/lib/gettext"
+	"time"
 )
 
 const (
@@ -43,9 +44,25 @@ const (
 	notifyIconVpnDisconnected      = "notification-network-vpn-disconnected"
 )
 
-var notifier, _ = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+var (
+	notifier, _   = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+	notifyEnabled = true
+)
+
+func enableNotify() {
+	go func() {
+		time.Sleep(5 * time.Second)
+		notifyEnabled = true
+	}()
+}
+func disableNotify() {
+	notifyEnabled = false
+}
 
 func notify(icon, summary, body string) {
+	if !notifyEnabled {
+		return
+	}
 	if notifier == nil {
 		logger.Error("connect to org.freedesktop.Notifications failed")
 		return

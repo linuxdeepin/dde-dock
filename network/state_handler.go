@@ -105,7 +105,7 @@ func initNmStateReasons() {
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED] = Tr("The connection was deleted from settings.")
 }
 
-type stateNotifier struct {
+type stateHandler struct {
 	devices map[dbus.ObjectPath]*deviceStateStruct
 	locker  sync.Mutex
 }
@@ -114,18 +114,18 @@ type deviceStateStruct struct {
 	aconnId string
 }
 
-func newStateNotifier() (sn *stateNotifier) {
-	sn = &stateNotifier{}
-	sn.devices = make(map[dbus.ObjectPath]*deviceStateStruct)
+func newStateHandler() (sh *stateHandler) {
+	sh = &stateHandler{}
+	sh.devices = make(map[dbus.ObjectPath]*deviceStateStruct)
 
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
-		sn.remove(path)
+		sh.remove(path)
 	})
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
-		sn.watch(path)
+		sh.watch(path)
 	})
 	for _, path := range nmGetDevices() {
-		sn.watch(path)
+		sh.watch(path)
 	}
 
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
@@ -142,36 +142,36 @@ func newStateNotifier() (sn *stateNotifier) {
 	return
 }
 
-func destroyStateNotifier(sn *stateNotifier) {
-	for path, _ := range sn.devices {
-		sn.remove(path)
+func destroyStateHandler(sh *stateHandler) {
+	for path, _ := range sh.devices {
+		sh.remove(path)
 	}
-	sn.devices = nil
+	sh.devices = nil
 }
 
-func (sn *stateNotifier) watch(path dbus.ObjectPath) {
+func (sh *stateHandler) watch(path dbus.ObjectPath) {
 	defer func() {
 		if err := recover(); err != nil {
-			sn.locker.Lock()
-			defer sn.locker.Unlock()
-			delete(sn.devices, path)
+			sh.locker.Lock()
+			defer sh.locker.Unlock()
+			delete(sh.devices, path)
 			logger.Error(err)
 		}
 	}()
 	if dev, err := nmNewDevice(path); err == nil {
-		sn.locker.Lock()
-		defer sn.locker.Unlock()
-		sn.devices[path] = &deviceStateStruct{nmDev: dev}
+		sh.locker.Lock()
+		defer sh.locker.Unlock()
+		sh.devices[path] = &deviceStateStruct{nmDev: dev}
 		if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 			// remember active connection id if exists
-			sn.devices[path].aconnId = getSettingConnectionId(data)
+			sh.devices[path].aconnId = getSettingConnectionId(data)
 		}
 		// connect signals
 		dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 			switch newState {
 			case NM_DEVICE_STATE_PREPARE:
 				if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-					sn.devices[path].aconnId = getSettingConnectionId(data)
+					sh.devices[path].aconnId = getSettingConnectionId(data)
 				}
 			case NM_DEVICE_STATE_ACTIVATED:
 				if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
@@ -184,7 +184,7 @@ func (sn *stateNotifier) watch(path dbus.ObjectPath) {
 					default:
 						icon = notifyIconNetworkConnected
 					}
-					msg = sn.devices[path].aconnId
+					msg = sh.devices[path].aconnId
 					notify(icon, Tr("Connected"), msg)
 				}
 			case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
@@ -214,7 +214,7 @@ func (sn *stateNotifier) watch(path dbus.ObjectPath) {
 				}
 				if len(msg) == 0 {
 					if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
-						msg = sn.devices[path].aconnId
+						msg = sh.devices[path].aconnId
 					} else {
 						msg = deviceErrorTable[reason]
 					}
@@ -225,11 +225,11 @@ func (sn *stateNotifier) watch(path dbus.ObjectPath) {
 	}
 }
 
-func (sn *stateNotifier) remove(path dbus.ObjectPath) {
-	sn.locker.Lock()
-	defer sn.locker.Unlock()
-	if dev, ok := sn.devices[path]; ok {
+func (sh *stateHandler) remove(path dbus.ObjectPath) {
+	sh.locker.Lock()
+	defer sh.locker.Unlock()
+	if dev, ok := sh.devices[path]; ok {
 		nmDestroyDevice(dev.nmDev)
-		delete(sn.devices, path)
+		delete(sh.devices, path)
 	}
 }

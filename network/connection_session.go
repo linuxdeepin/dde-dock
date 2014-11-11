@@ -250,7 +250,6 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		// update connection data and activate it
 		nmConn, err := nmNewSettingsConnection(s.ConnectionPath)
 		if err != nil {
-			logger.Error(err)
 			return false, err
 		}
 		err = nmConn.Update(s.data)
@@ -331,6 +330,42 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err 
 		}
 		sectionErrorsData[key] = err.Error()
 	}
+}
+
+func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, error) {
+	switch s.Type {
+	case connectionWired:
+		switch vsection {
+		case vsectionIpv4:
+			return true, nil
+		}
+	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		switch vsection {
+		case vsectionSecurity:
+			return true, nil
+		}
+	case connectionPppoe:
+		switch vsection {
+		case vsectionPppoe:
+			return true, nil
+		}
+	case connectionMobileGsm, connectionMobileCdma:
+		switch vsection {
+		case vsectionMobile:
+			return true, nil
+		}
+	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
+		switch vsection {
+		case vsectionVpn:
+			return true, nil
+		}
+	default:
+		switch vsection {
+		case vsectionIpv4:
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 // Debug functions

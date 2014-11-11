@@ -24,6 +24,7 @@ package network
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"sync"
+	"time"
 )
 
 const (
@@ -47,10 +48,12 @@ type Manager struct {
 	State uint32 // global networking state
 
 	NetworkingEnabled bool `access:"readwrite"` // airplane mode for NetworkManager
-	WirelessEnabled   bool `access:"readwrite"`
-	WwanEnabled       bool `access:"readwrite"`
-	WiredEnabled      bool `access:"readwrite"`
 	VpnEnabled        bool `access:"readwrite"`
+
+	// hidden properties
+	wirelessEnabled bool `access:"readwrite"`
+	wwanEnabled     bool `access:"readwrite"`
+	wiredEnabled    bool `access:"readwrite"`
 
 	// update by manager_devices.go
 	devicesLocker sync.Mutex
@@ -74,16 +77,16 @@ type Manager struct {
 	ActiveConnections       string // array of connections that activated and marshaled by json
 
 	// signals
-	NeedSecrets                  func(string, string, string)
-	DeviceStateChanged           func(devPath string, newState uint32) // TODO remove
+	NeedSecrets                  func(connPath, settingName, connectionId string, autoConnect bool)
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
 	DeviceEnabled                func(devPath string, enabled bool)
 
 	agent         *agent
-	stateNotifier *stateNotifier
+	stateHandler  *stateHandler
 	dbusWatcher   *dbusWatcher
+	switchHandler *switchHandler
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -96,7 +99,6 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 
 // initialize slice code
 func initSlices() {
-	initNmDbusObjects()
 	initProxyGsettings()
 	initAvailableValuesSecretFlags()
 	initAvailableValuesNmPptpSecretFlags()
@@ -112,38 +114,24 @@ func initSlices() {
 
 func NewManager() (m *Manager) {
 	m = &Manager{}
-	m.config = newConfig()
+	initDbusDaemon()
+	m.watchNetworkManagerRestart()
 	return
 }
-
 func DestroyManager(m *Manager) {
-	destroyAgent(m.agent)
-	destroyStateNotifier(m.stateNotifier)
-	destroyDbusWatcher(m.dbusWatcher)
-	m.clearConnectionSessions()
-	dbus.UnInstallObject(m)
+	destroyDbusDaemon()
+	m.destroyManager()
 }
 
 func (m *Manager) initManager() {
+	logger.Info("initialize manager")
+	initDbusObjects()
+	disableNotify()
+	m.config = newConfig()
+	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
-
-	// setup global switches
-	m.initPropNetworkingEnabled()
-	nmManager.NetworkingEnabled.ConnectChanged(func() {
-		m.setPropNetworkingEnabled()
-	})
-	m.initPropWirelessEnabled()
-	nmManager.WirelessEnabled.ConnectChanged(func() {
-		m.setPropWirelessEnabled()
-	})
-	m.initPropWwanEnabled()
-	nmManager.WwanEnabled.ConnectChanged(func() {
-		m.setPropWwanEnabled()
-	})
-
-	// load virtual global switches information from configuration file
-	m.initPropWiredEnabled()
-	m.initPropVpnEnabled()
+	m.stateHandler = newStateHandler()
+	m.agent = newAgent()
 
 	// initialize device and connection handlers
 	m.initDeviceManage()
@@ -156,6 +144,54 @@ func (m *Manager) initManager() {
 	})
 	m.setPropState()
 
-	m.stateNotifier = newStateNotifier()
-	m.agent = newAgent()
+	// connect computer suspend signal
+	loginManager.ConnectPrepareForSleep(func(active bool) {
+		if active {
+			// suspend
+			disableNotify()
+		} else {
+			// restore
+			m.switchHandler.init()
+			enableNotify()
+		}
+	})
+
+	enableNotify()
+}
+
+func (m *Manager) destroyManager() {
+	logger.Info("destroy manager")
+	destroyDbusObjects()
+	destroyAgent(m.agent)
+	destroyStateHandler(m.stateHandler)
+	destroyDbusWatcher(m.dbusWatcher)
+	destroySwitchHandler(m.switchHandler)
+	m.clearDevices()
+	m.clearAccessPoints()
+	m.clearConnections()
+	m.clearConnectionSessions()
+	m.clearActiveConnections()
+}
+
+func (m *Manager) watchNetworkManagerRestart() {
+	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
+		if name == "org.freedesktop.NetworkManager" {
+			// if a new dbus session was installed, the name and newOwner
+			// will be not empty, if a dbus session was uninstalled, the
+			// name and oldOwner will be not empty
+			if len(newOwner) != 0 {
+				// network-manager is starting
+				logger.Info("network-manager is starting")
+				time.Sleep(1 * time.Second)
+				m.initConnections()
+				m.initActiveConnections()
+				m.switchHandler.init()
+			} else {
+				// network-manager stopped
+				logger.Info("network-manager stopped")
+				m.clearConnections()
+				m.clearActiveConnections()
+			}
+		}
+	})
 }

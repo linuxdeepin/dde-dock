@@ -27,8 +27,13 @@ import (
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
-// TODO doc
+// https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
+// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
 
+// The setting's name; these names are defined by the specification
+// and cannot be changed after the object has been created. Each
+// setting class has a name, and all objects of that class share the
+// same name.
 const NM_SETTING_802_1X_SETTING_NAME = "802-1x"
 
 const (

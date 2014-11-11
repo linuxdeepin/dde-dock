@@ -65,6 +65,16 @@ BaseEditPage {
         key: "autoconnect"
         text: dsTr("Automatically connect")
     }
+    EditLineSwitchButton {
+        id: lineConnectionVkVpnAutoconnect
+        connectionSession: editPage.connectionSession
+        availableSections: editPage.availableSections
+        availableKeys: editPage.availableKeys
+        errors: editPage.errors
+        section: "connection"
+        key: "vk-vpn-autoconnect"
+        text: dsTr("Automatically connect")
+    }
     {{range $i, $vsection := .}}{{if .Ignore}}{{else}}{{$id := $vsection.Name | ToVsClassName | printf "section%s"}}
     EditSection{{$vsection.Name | ToVsClassName}} {
         myIndex: {{$i}}

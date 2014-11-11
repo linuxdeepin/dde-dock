@@ -26,24 +26,9 @@ import (
 	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
+	"sort"
 	"strings"
 )
-
-const (
-	dbusNmDest        = "org.freedesktop.NetworkManager"
-	dbusNmPath        = "/org/freedesktop/NetworkManager"
-	dbusNmSettingPath = "/org/freedesktop/NetworkManager/Settings"
-)
-
-var (
-	nmManager  *nm.Manager
-	nmSettings *nm.Settings
-)
-
-func initNmDbusObjects() {
-	nmManager, _ = nm.NewManager(dbusNmDest, dbusNmPath)
-	nmSettings, _ = nm.NewSettings(dbusNmDest, dbusNmSettingPath)
-}
 
 // Helper function
 func isNmObjectPathValid(p dbus.ObjectPath) bool {
@@ -169,6 +154,14 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 	return
 }
 
+func nmGeneralGetDeviceRelatedUuid(devPath dbus.ObjectPath) (uuid string) {
+	devId, err := nmGeneralGetDeviceIdentifier(devPath)
+	if err != nil {
+		return
+	}
+	return strToUuid(devId)
+}
+
 // get device network speed (Mb/s)
 func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
 	speed := uint32(0)
@@ -241,6 +234,26 @@ func nmGeneralIsUsbDevice(devPath dbus.ObjectPath) bool {
 		return false
 	}
 	return udevIsUsbDevice(sysPath)
+}
+
+func nmGeneralGetConnectionAutoconnect(cpath dbus.ObjectPath) (autoConnect bool) {
+	switch nmGetConnectionType(cpath) {
+	case NM_SETTING_VPN_SETTING_NAME:
+		uuid, _ := nmGetConnectionUuid(cpath)
+		autoConnect = manager.config.isVpnConnectionAutoConnect(uuid)
+	default:
+		autoConnect = nmGetConnectionAutoconnect(cpath)
+	}
+	return
+}
+func nmGeneralSetConnectionAutoconnect(cpath dbus.ObjectPath, autoConnect bool) {
+	switch nmGetConnectionType(cpath) {
+	case NM_SETTING_VPN_SETTING_NAME:
+		uuid, _ := nmGetConnectionUuid(cpath)
+		manager.config.setVpnConnectionAutoConnect(uuid, autoConnect)
+	default:
+		nmSetConnectionAutoconnect(cpath, autoConnect)
+	}
 }
 
 // New network manager objects
@@ -454,22 +467,22 @@ func nmDestroyVpnConnection(vpnConn *nm.VPNConnection) {
 
 // Operate wrapper for network manager
 func nmAgentRegister(identifier string) {
-	manager, err := nmNewAgentManager()
+	am, err := nmNewAgentManager()
 	if err != nil {
 		return
 	}
-	err = manager.Register(identifier)
+	err = am.Register(identifier)
 	if err != nil {
 		logger.Error(err)
 	}
 }
 
 func nmAgentUnregister() {
-	manager, err := nmNewAgentManager()
+	am, err := nmNewAgentManager()
 	if err != nil {
 		return
 	}
-	err = manager.Unregister()
+	err = am.Unregister()
 	if err != nil {
 		logger.Error(err)
 	}
@@ -483,7 +496,7 @@ func nmGetDevices() (devPaths []dbus.ObjectPath) {
 	return
 }
 
-func nmGetSpecialDevices(devType uint32) (specDevPaths []dbus.ObjectPath) {
+func nmGetDevicesByType(devType uint32) (specDevPaths []dbus.ObjectPath) {
 	for _, p := range nmGetDevices() {
 		if dev, err := nmNewDevice(p); err == nil {
 			if dev.DeviceType.Get() == devType {
@@ -589,15 +602,16 @@ func nmGetManagerState() (state uint32) {
 	return
 }
 
-func nmGetActiveConnectionByUuid(uuid string) (apath dbus.ObjectPath, err error) {
-	for _, apath = range nmGetActiveConnections() {
+func nmGetActiveConnectionByUuid(uuid string) (apaths []dbus.ObjectPath, err error) {
+	for _, apath := range nmGetActiveConnections() {
 		if ac, tmperr := nmNewActiveConnection(apath); tmperr == nil {
 			if ac.Uuid.Get() == uuid {
+				apaths = append(apaths, apath)
 				return
 			}
 		}
 	}
-	err = fmt.Errorf("active connection with uuid %s not found", uuid)
+	err = fmt.Errorf("not found active connection with uuid %s", uuid)
 	return
 }
 
@@ -607,6 +621,15 @@ func nmGetActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
 		return
 	}
 	state = aconn.State.Get()
+	return
+}
+
+func nmGetActiveConnectionVpn(apath dbus.ObjectPath) (isVpn bool) {
+	aconn, err := nmNewActiveConnection(apath)
+	if err != nil {
+		return
+	}
+	isVpn = aconn.Vpn.Get()
 	return
 }
 
@@ -620,6 +643,18 @@ func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error)
 	if err != nil {
 		logger.Error(err)
 		return
+	}
+	return
+}
+
+func nmUpdateConnectionData(cpath dbus.ObjectPath, data connectionData) (err error) {
+	nmConn, err := nmNewSettingsConnection(cpath)
+	if err != nil {
+		return
+	}
+	err = nmConn.Update(data)
+	if err != nil {
+		logger.Error(err)
 	}
 	return
 }
@@ -638,6 +673,23 @@ func nmGetConnectionSecrets(cpath dbus.ObjectPath, secretField string) (secrets 
 	return
 }
 
+func nmSetConnectionAutoconnect(cpath dbus.ObjectPath, autoConnect bool) (err error) {
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	setSettingConnectionAutoconnect(data, autoConnect)
+	return nmUpdateConnectionData(cpath, data)
+}
+func nmGetConnectionAutoconnect(cpath dbus.ObjectPath) (autoConnect bool) {
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	autoConnect = getSettingConnectionAutoconnect(data)
+	return
+}
+
 func nmGetConnectionId(cpath dbus.ObjectPath) (id string) {
 	data, err := nmGetConnectionData(cpath)
 	if err != nil {
@@ -648,6 +700,14 @@ func nmGetConnectionId(cpath dbus.ObjectPath) (id string) {
 		logger.Error("get Id of connection failed, id is empty")
 	}
 	return
+}
+func nmSetConnectionId(cpath dbus.ObjectPath, id string) (err error) {
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	setSettingConnectionId(data, id)
+	return nmUpdateConnectionData(cpath, data)
 }
 
 func nmGetConnectionUuid(cpath dbus.ObjectPath) (uuid string, err error) {
@@ -689,7 +749,7 @@ func nmGetConnectionUuids() (uuids []string) {
 	return
 }
 
-func nmGetSpecialConnectionUuids(connType string) (uuids []string) {
+func nmGetConnectionUuidsByType(connType string) (uuids []string) {
 	for _, cpath := range nmGetConnectionList() {
 		if nmGetConnectionType(cpath) == connType {
 			if uuid, err := nmGetConnectionUuid(cpath); err == nil {
@@ -860,6 +920,15 @@ func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPat
 	return
 }
 
+func nmGetDeviceAvailableConnections(devPath dbus.ObjectPath) (paths []dbus.ObjectPath) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	paths = dev.AvailableConnections.Get()
+	return
+}
+
 func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err error) {
 	acPath := nmGetDeviceActiveConnection(devPath)
 	aconn, err := nmNewActiveConnection(acPath)
@@ -952,6 +1021,64 @@ func nmSetWwanEnabled(enabled bool) {
 	}
 }
 
+type autoConnectConn struct {
+	id        string
+	uuid      string
+	timestamp uint64
+}
+type autoConnectConns []autoConnectConn
+
+func (acs autoConnectConns) Len() int {
+	return len(acs)
+}
+func (acs autoConnectConns) Swap(i, j int) {
+	acs[i], acs[j] = acs[j], acs[i]
+}
+func (acs autoConnectConns) Less(i, j int) bool {
+	return acs[i].timestamp < acs[j].timestamp
+}
+func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionUuid string) (uuids []string) {
+	acs := make(autoConnectConns, 0)
+	devRelatedUuid := nmGeneralGetDeviceRelatedUuid(devPath)
+	for _, cpath := range nmGetDeviceAvailableConnections(devPath) {
+		if cdata, err := nmGetConnectionData(cpath); err == nil {
+			uuid := getSettingConnectionUuid(cdata)
+			switch getCustomConnectionType(cdata) {
+			case connectionWired, connectionMobileGsm, connectionMobileCdma:
+				if devRelatedUuid != uuid {
+					// ignore connections that not matching the
+					// device, etc other wired connections that create
+					// in other ways
+					continue
+				}
+			}
+			if uuid == lastConnectionUuid {
+				continue
+			}
+			if getSettingConnectionAutoconnect(cdata) {
+				ac := autoConnectConn{
+					id:        getSettingConnectionId(cdata),
+					uuid:      uuid,
+					timestamp: getSettingConnectionTimestamp(cdata),
+				}
+				acs = append(acs, ac)
+			}
+		}
+	}
+	sort.Sort(sort.Reverse(acs))
+	logger.Debugf("device type: %s, auto connect connections: %v",
+		getCustomDeviceType(nmGetDeviceType(devPath)), acs)
+	if len(lastConnectionUuid) > 0 {
+		// the last activated connection has the highest priority if
+		// exists
+		uuids = []string{lastConnectionUuid}
+	}
+	for _, ac := range acs {
+		uuids = append(uuids, ac.uuid)
+	}
+	return
+}
+
 func nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -973,19 +1100,19 @@ func nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
 }
 
 func nmRunOnceUtilNetworkAvailable(cb func()) {
-	manager, err := nmNewManager()
+	nm, err := nmNewManager()
 	if err != nil {
 		return
 	}
-	state := manager.State.Get()
+	state := nm.State.Get()
 	if state >= NM_STATE_CONNECTED_LOCAL {
 		cb()
 	} else {
 		hasRun := false
-		manager.ConnectStateChanged(func(state uint32) {
+		nm.ConnectStateChanged(func(state uint32) {
 			if !hasRun && state >= NM_STATE_CONNECTED_LOCAL {
 				cb()
-				nmDestroyManager(manager)
+				nmDestroyManager(nm)
 				hasRun = true
 			}
 		})

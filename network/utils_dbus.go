@@ -22,12 +22,60 @@
 package network
 
 import (
+	dbusmgr "dbus/org/freedesktop/dbus/system"
+	"dbus/org/freedesktop/login1"
 	"dbus/org/freedesktop/modemmanager1"
+	nm "dbus/org/freedesktop/networkmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-const dbusMmDest = "org.freedesktop.ModemManager1"
+const (
+	dbusMmDest        = "org.freedesktop.ModemManager1"
+	dbusNmDest        = "org.freedesktop.NetworkManager"
+	dbusNmPath        = "/org/freedesktop/NetworkManager"
+	dbusNmSettingPath = "/org/freedesktop/NetworkManager/Settings"
+	dbusLoginDest     = "org.freedesktop.login1"
+	dbusLoginPath     = "/org/freedesktop/login1"
+)
 
+var (
+	nmManager    *nm.Manager
+	nmSettings   *nm.Settings
+	loginManager *login1.Manager
+	dbusDaemon   *dbusmgr.DBusDaemon
+)
+
+func initDbusObjects() {
+	var err error
+	if nmManager, err = nm.NewManager(dbusNmDest, dbusNmPath); err != nil {
+		logger.Error(err)
+	}
+	if nmSettings, err = nm.NewSettings(dbusNmDest, dbusNmSettingPath); err != nil {
+		logger.Error(err)
+	}
+	if loginManager, err = login1.NewManager(dbusLoginDest, dbusLoginPath); err != nil {
+		logger.Error(err)
+	}
+}
+func destroyDbusObjects() {
+	// destroy global dbus objects manually when stopping service is
+	// required for that there are multiple signal connected with
+	// theme which need to be removed
+	login1.DestroyManager(loginManager)
+	nm.DestroyManager(nmManager)
+	nm.DestroySettings(nmSettings)
+	dbusmgr.DestroyDBusDaemon(dbusDaemon)
+}
+
+func initDbusDaemon() {
+	var err error
+	if dbusDaemon, err = dbusmgr.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus"); err != nil {
+		logger.Error(err)
+	}
+}
+func destroyDbusDaemon() {
+	dbusmgr.DestroyDBusDaemon(dbusDaemon)
+}
 func mmNewModem(modemPath dbus.ObjectPath) (modem *modemmanager1.Modem, err error) {
 	modem, err = modemmanager1.NewModem(dbusMmDest, modemPath)
 	if err != nil {

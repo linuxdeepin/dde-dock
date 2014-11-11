@@ -54,13 +54,14 @@ func (m *Manager) initDeviceManage() {
 }
 
 func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
-	m.devicesLocker.Lock()
-	defer m.devicesLocker.Unlock()
-
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
+
+	m.config.addDeviceConfig(devPath)
+	m.switchHandler.initDeviceState(devPath)
+
 	dev = &device{
 		nmDev:     nmDev,
 		nmDevType: nmDev.DeviceType.Get(),
@@ -71,9 +72,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	dev.Vendor = nmGeneralGetDeviceVendor(devPath)
 	dev.UsbDevice = nmGeneralIsUsbDevice(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
-
-	// add device config
-	m.config.addDeviceConfig(devPath)
 
 	// connect signal
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
@@ -86,7 +84,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 		dev.State = newState
 		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
 		m.setPropDevices()
-		dbus.Emit(m, "DeviceStateChanged", string(dev.Path), dev.State)
 
 		m.config.updateDeviceConfig(dev.Path)
 		m.config.syncDeviceState(dev.Path)
@@ -101,7 +98,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 			m.ensureWiredConnectionExists(dev.Path)
 		}
 	case NM_DEVICE_TYPE_WIFI:
-		logger.Debug("add wireless device:", dev.Path)
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
 			dev.nmDevWireless = nmDevWireless
@@ -132,9 +128,6 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	return
 }
 func (m *Manager) destroyDevice(dev *device) {
-	// remove device config
-	m.config.removeDeviceConfig(dev.id)
-
 	// destroy object to reset all property connects
 	if dev.nmDevWireless != nil {
 		// nmDevWireless is optional, so check if is nil before
@@ -144,12 +137,23 @@ func (m *Manager) destroyDevice(dev *device) {
 	nmDestroyDevice(dev.nmDev)
 }
 
-func (m *Manager) addDevice(devPath dbus.ObjectPath) {
-	dev := m.newDevice(devPath)
-
+func (m *Manager) clearDevices() {
 	m.devicesLocker.Lock()
 	defer m.devicesLocker.Unlock()
 
+	for _, devs := range m.devices {
+		for _, dev := range devs {
+			m.destroyDevice(dev)
+		}
+	}
+	m.devices = nil
+	m.setPropDevices()
+}
+func (m *Manager) addDevice(devPath dbus.ObjectPath) {
+	m.devicesLocker.Lock()
+	defer m.devicesLocker.Unlock()
+
+	dev := m.newDevice(devPath)
 	devType := getCustomDeviceType(dev.nmDevType)
 	m.devices[devType] = m.doAddDevice(m.devices[devType], dev)
 	m.setPropDevices()
@@ -200,4 +204,13 @@ func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 		}
 	}
 	return -1
+}
+
+func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
+	enabled = m.switchHandler.isDeviceEnabled(devPath)
+	return
+}
+
+func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
+	return m.switchHandler.enableDevice(devPath, enabled)
 }

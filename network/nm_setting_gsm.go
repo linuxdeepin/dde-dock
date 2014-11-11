@@ -25,7 +25,6 @@ import (
 	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
-// TODO doc
 const NM_SETTING_GSM_SETTING_NAME = "gsm"
 
 const (

@@ -28,6 +28,7 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP                   = "vk-routes-nexthop"
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC                    = "vk-routes-metric"
 	NM_SETTING_VK_PPP_ENABLE_LCP_ECHO                         = "vk-enable-lcp-echo"
+	NM_SETTING_VK_VPN_AUTOCONNECT                             = "vk-vpn-autoconnect"
 	NM_SETTING_VK_VPN_TYPE                                    = "vk-vpn-type"
 	NM_SETTING_VK_VPN_MISSING_PLUGIN                          = "vk-vpn-missing-plugin"
 	NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE                       = "vk-require-mppe"
@@ -77,6 +78,7 @@ var virtualKeys = []vkeyInfo{
 	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
 	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
 	{Value: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_SETTING_PPP_LCP_ECHO_INTERVAL}, Available: true, ChildKey: false, Optional: false},
+	{Value: NM_SETTING_VK_VPN_AUTOCONNECT, Type: ktypeBoolean, VkType: vkTypeController, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_VPN_TYPE, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_VPN, RelatedKeys: []string{}, Available: false, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_VPN_MISSING_PLUGIN, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_VPN, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE}, Available: true, ChildKey: false, Optional: false},
@@ -124,6 +126,8 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			return getSettingVkConnectionNoPermissionJSON(data)
+		case NM_SETTING_VK_VPN_AUTOCONNECT:
+			return getSettingVkVpnAutoconnectJSON(data)
 		}
 	case NM_SETTING_VS_MOBILE:
 		switch key {
@@ -288,6 +292,9 @@ func generalSetVkeyJSON(data connectionData, section, key string, valueJSON stri
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			err = logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_VPN_AUTOCONNECT:
+			err = logicSetSettingVkVpnAutoconnectJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VS_MOBILE:
@@ -555,6 +562,10 @@ func getSettingVkPppEnableLcpEchoJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkPppEnableLcpEcho(data))
 	return
 }
+func getSettingVkVpnAutoconnectJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkVpnAutoconnect(data))
+	return
+}
 func getSettingVkVpnTypeJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkVpnType(data))
 	return
@@ -736,6 +747,10 @@ func logicSetSettingVkIp6ConfigRoutesMetricJSON(data connectionData, valueJSON s
 func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkPppEnableLcpEcho(data, value)
+}
+func logicSetSettingVkVpnAutoconnectJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueBoolean(valueJSON)
+	return logicSetSettingVkVpnAutoconnect(data, value)
 }
 func logicSetSettingVkVpnTypeJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)

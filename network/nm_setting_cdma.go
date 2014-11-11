@@ -21,8 +21,6 @@
 
 package network
 
-// TODO doc
-
 const NM_SETTING_CDMA_SETTING_NAME = "cdma"
 
 const (

@@ -119,6 +119,14 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	return r
 }
 
+func (m *Manager) clearAccessPoints() {
+	for devPath, aps := range m.accessPoints {
+		for _, ap := range aps {
+			m.removeAccessPoint(devPath, ap.Path)
+		}
+	}
+	m.accessPoints = nil
+}
 func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	m.accessPointsLocker.Lock()
 	defer m.accessPointsLocker.Unlock()
@@ -161,8 +169,8 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 	} else {
 		apJSON, _ = marshalJSON(accessPoint{Path: apPath})
 	}
-	m.doRemoveAccessPoint(devPath, apPath)
 	dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
+	m.doRemoveAccessPoint(devPath, apPath)
 }
 func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
 	i := m.getAccessPointIndex(devPath, apPath)

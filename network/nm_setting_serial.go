@@ -21,8 +21,6 @@
 
 package network
 
-// TODO doc
-
 const NM_SETTING_SERIAL_SETTING_NAME = "serial"
 
 const (

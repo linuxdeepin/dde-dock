@@ -39,14 +39,14 @@ func getBackEndFilePath(sectionName string) (filePath string) {
 	sectionName = strings.Replace(sectionName, "NM_SETTING_ALIAS_", "NM_SETTING_", -1) // remove virtual section tag
 	fileName := strings.TrimSuffix(sectionName, "_SETTING_NAME")
 	fileName = strings.ToLower(fileName) + "_autogen.go"
-	filePath = path.Join(backEndDir, fileName)
+	filePath = path.Join(argBackEndDir, fileName)
 	return
 }
 
 // "NM_SETTING_VS_GENERAL" -> "../../../dss/modules/network/edit_autogen/EditSectionGeneral.qml"
 func getFrontEndFilePath(vsectionName string) (filePath string) {
 	fileName := "EditSection" + ToVsClassName(vsectionName) + ".qml"
-	filePath = path.Join(frontEndDir, fileName)
+	filePath = path.Join(argFrontEndDir, fileName)
 	return
 }
 
