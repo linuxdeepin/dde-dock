@@ -32,7 +32,7 @@ var deviceErrorTable = make(map[uint32]string)
 func initNmStateReasons() {
 	// device error table
 	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.") // TODO
+	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration.")
@@ -68,7 +68,7 @@ func initNmStateReasons() {
 	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED] = Tr("PIN check failed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_FIRMWARE_MISSING] = Tr("Necessary firmware for the device may be missed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED] = Tr("The device was removed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.") // TODO
+	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
@@ -92,7 +92,7 @@ func initNmStateReasons() {
 
 	// vpn error table
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.") // TODO
+	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.")
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from users.")
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from devices.")
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED] = Tr("VPN service stopped.")
@@ -118,98 +118,14 @@ func newStateNotifier() (sn *stateNotifier) {
 	sn = &stateNotifier{}
 	sn.devices = make(map[dbus.ObjectPath]*deviceStateStruct)
 
-	var watch = func(path dbus.ObjectPath) {
-		defer func() {
-			if err := recover(); err != nil {
-				sn.locker.Lock()
-				defer sn.locker.Unlock()
-				delete(sn.devices, path)
-				logger.Error(err)
-			}
-		}()
-		if dev, err := nmNewDevice(path); err == nil {
-			sn.locker.Lock()
-			defer sn.locker.Unlock()
-			sn.devices[path] = &deviceStateStruct{nmDev: dev}
-			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-				// remember active connection id if exists
-				sn.devices[path].aconnId = getSettingConnectionId(data)
-			}
-			// connect signals
-			dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
-				switch newState {
-				case NM_DEVICE_STATE_PREPARE:
-					if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-						sn.devices[path].aconnId = getSettingConnectionId(data)
-					}
-				case NM_DEVICE_STATE_ACTIVATED:
-					if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-						var icon, msg string
-						switch getCustomConnectionType(data) {
-						case connectionWired:
-							icon = notifyIconEthernetConnected
-						case connectionWireless:
-							icon = notifyIconWirelessConnected
-						default:
-							icon = notifyIconNetworkConnected
-						}
-						msg = sn.devices[path].aconnId
-						notify(icon, Tr("Connected"), msg)
-					}
-				case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
-					NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
-					logger.Info("device state", oldState, newState, reason, deviceErrorTable[reason])
-					// notify only when network enabled and the device activated before
-					if !nmGetNetworkEnabled() || !isDeviceStateInActivating(oldState) || isDeviceStateReasonInvalid(reason) {
-						return
-					}
-					if nmIsNetworkOffline() {
-						notifyNetworkOffline()
-						return
-					}
-
-					var icon, msg string
-					devType := dev.DeviceType.Get()
-					switch devType {
-					case NM_DEVICE_TYPE_ETHERNET:
-						icon = notifyIconEthernetDisconnected
-						if reason == NM_DEVICE_STATE_REASON_CARRIER {
-							reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
-						}
-					case NM_DEVICE_TYPE_WIFI:
-						icon = notifyIconWirelessDisconnected
-					default:
-						icon = notifyIconNetworkDisconnected
-					}
-					if len(msg) == 0 {
-						if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
-							msg = sn.devices[path].aconnId
-						} else {
-							msg = deviceErrorTable[reason]
-						}
-					}
-					notify(icon, Tr("Disconnected"), msg)
-				}
-			})
-		}
-	}
-	var remove = func(path dbus.ObjectPath) {
-		sn.locker.Lock()
-		defer sn.locker.Unlock()
-		if dev, ok := sn.devices[path]; ok {
-			nmDestroyDevice(dev.nmDev)
-			delete(sn.devices, path)
-		}
-	}
-
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
-		remove(path)
+		sn.remove(path)
 	})
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
-		watch(path)
+		sn.watch(path)
 	})
 	for _, path := range nmGetDevices() {
-		watch(path)
+		sn.watch(path)
 	}
 
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
@@ -226,11 +142,94 @@ func newStateNotifier() (sn *stateNotifier) {
 	return
 }
 
-func destroyStateNotifier(n *stateNotifier) {
-	n.locker.Lock()
-	defer n.locker.Unlock()
-	for _, dev := range n.devices {
-		nmDestroyDevice(dev.nmDev)
+func destroyStateNotifier(sn *stateNotifier) {
+	for path, _ := range sn.devices {
+		sn.remove(path)
 	}
-	n.devices = nil
+	sn.devices = nil
+}
+
+func (sn *stateNotifier) watch(path dbus.ObjectPath) {
+	defer func() {
+		if err := recover(); err != nil {
+			sn.locker.Lock()
+			defer sn.locker.Unlock()
+			delete(sn.devices, path)
+			logger.Error(err)
+		}
+	}()
+	if dev, err := nmNewDevice(path); err == nil {
+		sn.locker.Lock()
+		defer sn.locker.Unlock()
+		sn.devices[path] = &deviceStateStruct{nmDev: dev}
+		if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+			// remember active connection id if exists
+			sn.devices[path].aconnId = getSettingConnectionId(data)
+		}
+		// connect signals
+		dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+			switch newState {
+			case NM_DEVICE_STATE_PREPARE:
+				if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+					sn.devices[path].aconnId = getSettingConnectionId(data)
+				}
+			case NM_DEVICE_STATE_ACTIVATED:
+				if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+					var icon, msg string
+					switch getCustomConnectionType(data) {
+					case connectionWired:
+						icon = notifyIconEthernetConnected
+					case connectionWireless:
+						icon = notifyIconWirelessConnected
+					default:
+						icon = notifyIconNetworkConnected
+					}
+					msg = sn.devices[path].aconnId
+					notify(icon, Tr("Connected"), msg)
+				}
+			case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
+				NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
+				logger.Info("device state", oldState, newState, reason, deviceErrorTable[reason])
+				// notify only when network enabled and the device activated before
+				if !nmGetNetworkEnabled() || !isDeviceStateInActivating(oldState) || isDeviceStateReasonInvalid(reason) {
+					return
+				}
+				if nmIsNetworkOffline() {
+					notifyNetworkOffline()
+					return
+				}
+
+				var icon, msg string
+				devType := dev.DeviceType.Get()
+				switch devType {
+				case NM_DEVICE_TYPE_ETHERNET:
+					icon = notifyIconEthernetDisconnected
+					if reason == NM_DEVICE_STATE_REASON_CARRIER {
+						reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
+					}
+				case NM_DEVICE_TYPE_WIFI:
+					icon = notifyIconWirelessDisconnected
+				default:
+					icon = notifyIconNetworkDisconnected
+				}
+				if len(msg) == 0 {
+					if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
+						msg = sn.devices[path].aconnId
+					} else {
+						msg = deviceErrorTable[reason]
+					}
+				}
+				notify(icon, Tr("Disconnected"), msg)
+			}
+		})
+	}
+}
+
+func (sn *stateNotifier) remove(path dbus.ObjectPath) {
+	sn.locker.Lock()
+	defer sn.locker.Unlock()
+	if dev, ok := sn.devices[path]; ok {
+		nmDestroyDevice(dev.nmDev)
+		delete(sn.devices, path)
+	}
 }
