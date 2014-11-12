@@ -24,6 +24,7 @@ package libwacom
 import (
 	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
 	"pkg.linuxdeepin.com/lib/dbus/property"
+	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -37,6 +38,19 @@ const (
 	wacomKeyPressureSensitive = "pressure-sensitive"
 )
 
+type KeyActionInfo struct {
+	Id   string
+	Desc string
+}
+
+var descActionMap = map[string]string{
+	"LeftClick":   "1",
+	"MiddleClick": "2",
+	"RightClick":  "3",
+	"PageUp":      "key KP_Page_Up",
+	"PageDown":    "key KP_Page_Down",
+}
+
 type Wacom struct {
 	LeftHanded *property.GSettingsBoolProperty `access:"readwrite"`
 	CursorMode *property.GSettingsBoolProperty `access:"readwrite"`
@@ -47,12 +61,12 @@ type Wacom struct {
 	DoubleDelta       *property.GSettingsUintProperty `access:"readwrite"`
 	PressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
 
-	DeviceList []libwrapper.XIDeviceInfo
-	Exist      bool
+	DeviceList  []libwrapper.XIDeviceInfo
+	ActionInfos []KeyActionInfo
+	Exist       bool
 
-	logger         *log.Logger
-	settings       *gio.Settings
-	_descActionMap map[string]string
+	logger   *log.Logger
+	settings *gio.Settings
 }
 
 func (wacom *Wacom) Reset() {
@@ -99,8 +113,7 @@ func NewWacom(l *log.Logger) *Wacom {
 	}
 
 	wacom.logger = l
-	wacom._descActionMap = make(map[string]string)
-	wacom.initDescActionMap()
+	wacom.ActionInfos = generateActionInfos()
 
 	_wacom = wacom
 	wacom.init()
@@ -132,17 +145,28 @@ func HandleDeviceChanged(devList []libwrapper.XIDeviceInfo) {
 /**
  * KeyAction: PageUp/PageDown/LeftClick/RightClick/MiddleClick
  */
-func (wacom *Wacom) initDescActionMap() {
-	if wacom._descActionMap == nil {
-		wacom._descActionMap = make(map[string]string)
-	}
-
-	wacom._descActionMap = map[string]string{
-		"LeftClick":   "1",
-		"MiddleClick": "2",
-		"RightClick":  "3",
-		"PageUp":      "key KP_Page_Up",
-		"PageDown":    "key KP_Page_Down",
+func generateActionInfos() []KeyActionInfo {
+	return []KeyActionInfo{
+		{
+			Id:   "LeftClick",
+			Desc: Tr("Left Click"),
+		},
+		{
+			Id:   "MiddleClick",
+			Desc: Tr("Middle Click"),
+		},
+		{
+			Id:   "RightClick",
+			Desc: Tr("Right Click"),
+		},
+		{
+			Id:   "PageUp",
+			Desc: Tr("Page Up"),
+		},
+		{
+			Id:   "PageDown",
+			Desc: Tr("Page Down"),
+		},
 	}
 }
 

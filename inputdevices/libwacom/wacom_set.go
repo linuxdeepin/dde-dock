@@ -72,7 +72,7 @@ func (wacom *Wacom) cursorMode(cursorMode bool) {
  * default: 3
  */
 func (wacom *Wacom) keyUpAction(action string) {
-	value, ok := wacom._descActionMap[action]
+	value, ok := descActionMap[action]
 	if !ok {
 		return
 	}
@@ -91,7 +91,7 @@ func (wacom *Wacom) keyUpAction(action string) {
  * default: 2
  */
 func (wacom *Wacom) keyDownAction(action string) {
-	value, ok := wacom._descActionMap[action]
+	value, ok := descActionMap[action]
 	if !ok {
 		return
 	}
