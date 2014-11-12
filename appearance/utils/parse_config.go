@@ -85,7 +85,7 @@ func WriteUserGtk2Config(filename, key, value string) error {
 	var line string
 	switch key {
 	case "gtk-theme-name", "gtk-icon-theme-name",
-		"gtk-font-theme-name", "gtk-cursor-theme-name",
+		"gtk-font-name", "gtk-cursor-theme-name",
 		"gtk-xft-hintstyle", "gtk-xft-rgba":
 		line = key + "=\"" + value + "\""
 	default:

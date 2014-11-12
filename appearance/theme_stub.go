@@ -24,8 +24,6 @@ package appearance
 import (
 	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
@@ -83,77 +81,56 @@ func (t *Theme) setPropPreview(list []string) {
 	dbus.NotifyChange(t, "Preview")
 }
 
-func (t *Theme) readFromFile() {
-	kFile := glib.NewKeyFile()
-	defer kFile.Free()
-
-	_, err := kFile.LoadFromFile(path.Join(t.filePath, "theme.ini"),
-		glib.KeyFileFlagsKeepComments|
-			glib.KeyFileFlagsKeepTranslations)
+func (t *Theme) setPropsFromFile() {
+	filename := path.Join(t.filePath, "theme.ini")
+	info, err := getThemeInfoFromFile(filename)
 	if err != nil {
-		logger.Warningf("Load KeyFile '%s' Failed: %v",
-			t.filePath, err)
 		return
 	}
 
-	str, err := kFile.GetString(groupKeyTheme, themeKeyId)
-	if err == nil {
-		t.setPropString(&t.Name, "Name", str)
+	t.setPropString(&t.Name, "Name", info.Name)
+	if len(info.DisplayName) == 0 {
+		info.DisplayName = info.Name
 	}
+	t.setPropString(&t.DisplayName, "DisplayName", info.DisplayName)
 
-	str, err = kFile.GetLocaleString(groupKeyTheme,
-		themeKeyName, "\x00")
-	if err == nil {
-		t.setPropString(&t.DisplayName, "DisplayName", str)
+	if len(info.GtkTheme) == 0 {
+		info.GtkTheme = "Deepin"
 	}
+	t.setPropString(&t.GtkTheme, "GtkTheme", info.GtkTheme)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyGtk)
-	if len(str) == 0 {
-		str = "Deepin"
+	if len(info.IconTheme) == 0 {
+		info.IconTheme = "Deepin"
 	}
-	t.setPropString(&t.GtkTheme, "GtkTheme", str)
+	t.setPropString(&t.IconTheme, "IconTheme", info.IconTheme)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyIcon)
-	if len(str) == 0 {
-		str = "Deepin"
+	if len(info.SoundTheme) == 0 {
+		info.SoundTheme = "LinuxDeepin"
 	}
-	t.setPropString(&t.IconTheme, "IconTheme", str)
+	t.setPropString(&t.SoundTheme, "SoundTheme", info.SoundTheme)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeySound)
-	if len(str) == 0 {
-		str = "LinuxDeepin"
+	if len(info.CursorTheme) == 0 {
+		info.CursorTheme = "Deepin-Cursor"
 	}
-	t.setPropString(&t.SoundTheme, "SoundTheme", str)
+	t.setPropString(&t.CursorTheme, "CursorTheme", info.CursorTheme)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyCursor)
-	if len(str) == 0 {
-		str = "Deepin-Cursor"
+	if len(info.FontName) == 0 {
+		info.FontName = "WenQuanYi Micro Hei"
 	}
-	t.setPropString(&t.CursorTheme, "CursorTheme", str)
+	t.setPropString(&t.FontName, "FontName", info.FontName)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyFontName)
-	if len(str) == 0 {
-		str = "WenQuanYi Micro Hei"
+	if len(info.FontMono) == 0 {
+		info.FontMono = "WenQuanYi Micro Hei Mono"
 	}
-	t.setPropString(&t.FontName, "FontName", str)
+	t.setPropString(&t.FontMono, "FontMono", info.FontMono)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyFontMono)
-	if len(str) == 0 {
-		str = "WenQuanYi Micro Hei Mono"
+	if len(info.Background) == 0 {
+		info.Background = "file:///usr/share/backgrounds/default_background.jpg"
 	}
-	t.setPropString(&t.FontMono, "FontMono", str)
+	t.setPropString(&t.Background, "Background", info.Background)
 
-	str, _ = kFile.GetString(groupKeyComponent, themeKeyBackground)
-	if len(str) == 0 {
-		str = "/usr/share/backgrounds/default_background.jpg"
+	if info.FontSize == 0 {
+		info.FontSize = 10
 	}
-	str = dutils.EncodeURI(str, dutils.SCHEME_FILE)
-	t.setPropString(&t.Background, "Background", str)
-
-	var interval int
-	interval, _ = kFile.GetInteger(groupKeyComponent, themeKeyFontSize)
-	if interval == 0 {
-		interval = 10
-	}
-	t.setPropFontSize(int32(interval))
+	t.setPropFontSize(int32(info.FontSize))
 }

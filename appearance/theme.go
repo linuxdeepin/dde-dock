@@ -26,6 +26,7 @@ import (
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -67,7 +68,7 @@ func NewTheme(info PathInfo, handler func(string)) *Theme {
 	t.Type = info.FileFlag
 	t.filePath = info.FilePath
 
-	t.readFromFile()
+	t.setPropsFromFile()
 	t.setPropPreview(t.getPreviewList())
 	t.objectPath = themeDBusPath + t.Name
 
@@ -137,4 +138,62 @@ func (t *Theme) getPreviewList() []string {
 
 func (t *Theme) getDirList() []string {
 	return []string{path.Join(t.filePath, "theme.ini")}
+}
+
+func isThemeInfoSame(info1, info2 *Theme) bool {
+	if info1 == nil || info2 == nil {
+		return false
+	}
+
+	if info1.GtkTheme != info2.GtkTheme ||
+		info1.IconTheme != info2.IconTheme ||
+		info1.CursorTheme != info2.CursorTheme ||
+		info1.SoundTheme != info2.SoundTheme ||
+		info1.FontName != info2.FontName ||
+		info1.FontMono != info2.FontMono ||
+		info1.FontSize != info2.FontSize ||
+		info1.Background != info2.Background {
+		return false
+	}
+
+	return true
+}
+
+func getThemeInfoFromFile(config string) (Theme, error) {
+	var info Theme
+	kFile := glib.NewKeyFile()
+	defer kFile.Free()
+
+	_, err := kFile.LoadFromFile(config,
+		glib.KeyFileFlagsKeepComments|
+			glib.KeyFileFlagsKeepTranslations)
+	if err != nil {
+		return info, err
+	}
+
+	info.Name, err = kFile.GetString(groupKeyTheme, themeKeyId)
+	if err != nil {
+		return info, err
+	}
+	info.DisplayName, _ = kFile.GetLocaleString(groupKeyTheme,
+		themeKeyName, "\x00")
+	info.GtkTheme, _ = kFile.GetString(groupKeyComponent,
+		themeKeyGtk)
+	info.IconTheme, _ = kFile.GetString(groupKeyComponent,
+		themeKeyIcon)
+	info.SoundTheme, _ = kFile.GetString(groupKeyComponent,
+		themeKeySound)
+	info.CursorTheme, _ = kFile.GetString(groupKeyComponent,
+		themeKeyCursor)
+	info.FontName, _ = kFile.GetString(groupKeyComponent,
+		themeKeyFontName)
+	info.FontMono, _ = kFile.GetString(groupKeyComponent,
+		themeKeyFontMono)
+	info.Background, _ = kFile.GetString(groupKeyComponent,
+		themeKeyBackground)
+	interval, _ := kFile.GetInteger(groupKeyComponent,
+		themeKeyFontSize)
+	info.FontSize = int32(interval)
+
+	return info, nil
 }

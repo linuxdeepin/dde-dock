@@ -23,6 +23,7 @@ package appearance
 
 import (
 	"github.com/howeyc/fsnotify"
+	"path"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"regexp"
 )
@@ -67,7 +68,15 @@ func (t *Theme) handleEvent(ev *fsnotify.FileEvent) {
 		return
 	}
 
-	t.readFromFile()
+	info, err := getThemeInfoFromFile(path.Join(t.filePath, "theme.ini"))
+	if err != nil {
+		return
+	}
+	if isThemeInfoSame(t, &info) {
+		return
+	}
+
+	t.setPropsFromFile()
 	t.setPropPreview(t.getPreviewList())
 	if t.eventHandler != nil {
 		//apply the change

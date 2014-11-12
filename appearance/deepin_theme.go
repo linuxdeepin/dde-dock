@@ -38,19 +38,8 @@ const (
 	tempDThemeCustom = "/usr/share/dde-daemon/template/theme_custom"
 )
 
-type deepinThemeInfo struct {
-	GtkTheme    string
-	IconTheme   string
-	CursorTheme string
-	SoundTheme  string
-	Background  string
-	FontName    string
-	FontMono    string
-	FontSize    int32
-}
-
 func (m *Manager) setTheme(themeType string, value interface{}) {
-	dinfo := m.newDeepinThemeInfo(themeType, value)
+	dinfo := m.newThemeInfo(themeType, value)
 	if dinfo == nil {
 		return
 	}
@@ -83,11 +72,12 @@ func (m *Manager) applyTheme(name string) {
 	m.greeter.Set(m.settings.GetString(deepinGSKeyGreeter))
 }
 
-func (m *Manager) modifyCustomTheme(info *deepinThemeInfo) bool {
+func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	homeDir := dutils.GetHomeDir()
 	dir := path.Join(homeDir, userThemePath, "Custom")
 	if !dutils.IsFileExist(dir) {
-		if err := os.MkdirAll(dir, 0755); err != nil {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
 			logger.Debug(err)
 			return false
 		}
@@ -95,7 +85,8 @@ func (m *Manager) modifyCustomTheme(info *deepinThemeInfo) bool {
 
 	filename := path.Join(dir, "theme.ini")
 	if !dutils.IsFileExist(filename) {
-		if err := dutils.CopyFile(tempDThemeCustom, filename); err != nil {
+		err := dutils.CopyFile(tempDThemeCustom, filename)
+		if err != nil {
 			logger.Debug(err)
 			return false
 		}
@@ -103,8 +94,10 @@ func (m *Manager) modifyCustomTheme(info *deepinThemeInfo) bool {
 
 	kFile := glib.NewKeyFile()
 	defer kFile.Free()
-	if _, err := kFile.LoadFromFile(filename, glib.KeyFileFlagsKeepComments|
-		glib.KeyFileFlagsKeepTranslations); err != nil {
+	_, err := kFile.LoadFromFile(filename,
+		glib.KeyFileFlagsKeepComments|
+			glib.KeyFileFlagsKeepTranslations)
+	if err != nil {
 		return false
 	}
 
@@ -124,16 +117,9 @@ func (m *Manager) modifyCustomTheme(info *deepinThemeInfo) bool {
 	return dutils.WriteStringToKeyFile(filename, contents)
 }
 
-func (m *Manager) isThemeExist(info *deepinThemeInfo) (string, bool) {
+func (m *Manager) isThemeExist(info *Theme) (string, bool) {
 	for n, t := range m.themeObjMap {
-		if t.GtkTheme == info.GtkTheme &&
-			t.IconTheme == info.IconTheme &&
-			t.CursorTheme == info.CursorTheme &&
-			t.SoundTheme == info.SoundTheme &&
-			t.Background == info.Background &&
-			t.FontName == info.FontName &&
-			t.FontMono == info.FontMono &&
-			t.FontSize == info.FontSize {
+		if isThemeInfoSame(info, t) {
 			return n, true
 		}
 	}
@@ -141,7 +127,7 @@ func (m *Manager) isThemeExist(info *deepinThemeInfo) (string, bool) {
 	return "", false
 }
 
-func (m *Manager) newDeepinThemeInfo(themeType string, value interface{}) *deepinThemeInfo {
+func (m *Manager) newThemeInfo(themeType string, value interface{}) *Theme {
 	t, ok := m.themeObjMap[m.CurrentTheme.Get()]
 	if !ok {
 		logger.Debug("Get Current Theme Object Failed")
@@ -150,92 +136,92 @@ func (m *Manager) newDeepinThemeInfo(themeType string, value interface{}) *deepi
 
 	switch themeType {
 	case "gtk":
-		return &deepinThemeInfo{
-			value.(string),
-			t.IconTheme,
-			t.CursorTheme,
-			t.SoundTheme,
-			t.Background,
-			t.FontName,
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    value.(string),
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "icon":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			value.(string),
-			t.CursorTheme,
-			t.SoundTheme,
-			t.Background,
-			t.FontName,
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   value.(string),
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "cursor":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			value.(string),
-			t.SoundTheme,
-			t.Background,
-			t.FontName,
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: value.(string),
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "sound":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			t.CursorTheme,
-			value.(string),
-			t.Background,
-			t.FontName,
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  value.(string),
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "background":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			t.CursorTheme,
-			t.SoundTheme,
-			value.(string),
-			t.FontName,
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  value.(string),
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "font-name":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			t.CursorTheme,
-			t.SoundTheme,
-			t.Background,
-			value.(string),
-			t.FontMono,
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    value.(string),
+			FontMono:    t.FontMono,
+			FontSize:    t.FontSize,
 		}
 	case "font-mono":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			t.CursorTheme,
-			t.SoundTheme,
-			t.Background,
-			t.FontName,
-			value.(string),
-			t.FontSize,
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    value.(string),
+			FontSize:    t.FontSize,
 		}
 	case "font-size":
-		return &deepinThemeInfo{
-			t.GtkTheme,
-			t.IconTheme,
-			t.CursorTheme,
-			t.SoundTheme,
-			t.Background,
-			t.FontName,
-			t.FontMono,
-			value.(int32),
+		return &Theme{
+			GtkTheme:    t.GtkTheme,
+			IconTheme:   t.IconTheme,
+			CursorTheme: t.CursorTheme,
+			SoundTheme:  t.SoundTheme,
+			Background:  t.Background,
+			FontName:    t.FontName,
+			FontMono:    t.FontMono,
+			FontSize:    value.(int32),
 		}
 	}
 
