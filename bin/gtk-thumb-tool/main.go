@@ -21,7 +21,7 @@
 
 package main
 
-// #cgo pkg-config: gtk+-2.0 libmetacity-private
+// #cgo pkg-config: libmetacity-private
 // #cgo CFLAGS: -Wall -g
 // #include <stdlib.h>
 // #include "common.h"
