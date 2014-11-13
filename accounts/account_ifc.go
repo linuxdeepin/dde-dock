@@ -22,8 +22,8 @@
 package accounts
 
 import (
+	. "pkg.linuxdeepin.com/dde-daemon/accounts/username_checker"
 	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
@@ -201,20 +201,17 @@ func (obj *Manager) RandUserIcon() (string, bool) {
 	return "", false
 }
 
-func (m *Manager) IsUsernameValid(username string) (bool, string) {
-	if !isUsernameValid(username) {
-		return false, Tr("The username is invalid.")
+func (m *Manager) IsUsernameValid(username string) (bool, string, int32) {
+	err := CheckUsernameValid(username)
+	if err != nil {
+		return false, err.Message.Error(), err.Code
 	}
 
-	if isUserExist(username) {
-		return false, Tr("The username exists.")
-	}
-
-	return true, ""
+	return true, "", -1
 }
 
 func (m *Manager) IsPasswordValid(passwd string) bool {
-	return isPasswordValid(passwd)
+	return true
 }
 
 func (m *Manager) rmAllIconFileByName(username string) {
