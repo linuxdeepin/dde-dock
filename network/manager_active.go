@@ -128,8 +128,10 @@ func (m *Manager) initActiveConnectionManage() {
 				notifyVpnConnected(aconn.Id)
 			} else if isVpnConnectionStateDeactivate(state) {
 				notifyVpnDisconnected(aconn.Id)
+				delete(m.activeConnections, s.Path)
 			} else if isVpnConnectionStateFailed(state) {
 				notifyVpnFailed(aconn.Id, reason)
+				delete(m.activeConnections, s.Path)
 			}
 		}
 	})
