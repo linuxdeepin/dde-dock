@@ -96,16 +96,21 @@ func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) b
 			}
 			dbus.Emit(obj, "CapsLockOn", press)
 		}
-	case "XF86TouchPadOn":
+	case "XF86TouchpadToggle":
 		if press {
-			go doAction(CMD_DDE_OSD + "--TouchPadOn")
+			go doAction(CMD_DDE_OSD + "--TouchpadToggle")
 		}
-		dbus.Emit(obj, "TouchPadOn", press)
-	case "XF86TouchPadOff":
+		dbus.Emit(obj, "TouchpadToggle", press)
+	case "XF86TouchpadOn":
 		if press {
-			go doAction(CMD_DDE_OSD + "--TouchPadOff")
+			go doAction(CMD_DDE_OSD + "--TouchpadOn")
 		}
-		dbus.Emit(obj, "TouchPadOff", press)
+		dbus.Emit(obj, "TouchpadOn", press)
+	case "XF86TouchpadOff":
+		if press {
+			go doAction(CMD_DDE_OSD + "--TouchpadOff")
+		}
+		dbus.Emit(obj, "TouchpadOff", press)
 	case "XF86Display":
 		dbus.Emit(obj, "SwitchMonitors", press)
 	case "XF86PowerOff":
