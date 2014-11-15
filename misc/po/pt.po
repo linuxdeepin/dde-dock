@@ -3,9 +3,8 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# tejeskifly <batta.daniel91@gmail.com>, 2014
-# kdavid97 <kdavid97@gmail.hu>, 2014
-# SlazO <blum1866@gmail.com>, 2014
+# Jesse Wayde Brandao <www.jwb@gmail.com>, 2014
+# Ricardo Simões <xmcorporation@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
@@ -13,82 +12,82 @@ msgstr ""
 "POT-Creation-Date: 2014-11-18 09:39+0800\n"
 "PO-Revision-Date: 2014-11-18 02:30+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/dde-daemon/language/hu/)\n"
+"Language-Team: Portuguese (http://www.transifex.com/projects/p/dde-daemon/language/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu\n"
+"Language: pt\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/account_ifc.go:206
 msgid "The username is invalid."
-msgstr "Érvénytelen felhasználónév"
+msgstr "O nome de utilizador é inválido."
 
 #: ../../accounts/account_ifc.go:210
 msgid "The username exists."
-msgstr "A felhasználónév létezik."
+msgstr "O nome de utilizador existe."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Soros port"
+msgstr "Porto Serial"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Betárcsázós hálózat"
+msgstr "Rede Dial-Up"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Kihangosító"
+msgstr "Dispositivo Mãos-Livres"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Kihangosító hang átjáró"
+msgstr "Gateway de voz Mãos-Livres"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset hang átjáró"
+msgstr "Gateway Auscultadores voz"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Elem küldés"
+msgstr "Objeto carregado"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "Fájlátvitel"
+msgstr "Transferência de ficheiros"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr "Szinkronizálás "
+msgstr "Sincronização"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "Telefonkönyv hozzáférés"
+msgstr "Acesso de lista telefónica"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Telefonkönyv-kliens"
+msgstr "Cliente de acesso de lista telefónica"
 
 #: ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr "Üzenet hozzáférés"
+msgstr "Acesso de Mensagem"
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Üzenetet értesítés"
+msgstr "Notificação de mensagem"
 
 #: ../../datetime/datetime.go:127
 msgid "Language is changing, please wait"
-msgstr "Nyelv beállítása, kérem várjon"
+msgstr "Idioma em alteração, por favor espere"
 
 #: ../../datetime/set_locale.go:59
 msgid ""
 "Language has been changed successfully and will be effective after logged "
 "out."
-msgstr "A nyelv sikeresen megváltoztatva, újbóli bejelentkezés esetén életbe lép."
+msgstr "O idioma foi alterado com sucesso e será efetivo após terminar a sessão."
 
 #: ../../datetime/set_locale.go:61
 msgid "Language failed to change, please try later."
-msgstr "A nyelv megváltoztatása sikertelen, próbálja meg később."
+msgstr "Falha na alteração de idioma, por favor tente mais tarde."
 
 #: ../../datetime/zone_utc_list.go:24
 msgid "Midway"
@@ -128,7 +127,7 @@ msgstr "Tahiti"
 
 #: ../../datetime/zone_utc_list.go:36
 msgid "Aleutian"
-msgstr "Aleut"
+msgstr "Aleutian"
 
 #: ../../datetime/zone_utc_list.go:37
 msgid "Hawaii"
@@ -164,7 +163,7 @@ msgstr "Gambier"
 
 #: ../../datetime/zone_utc_list.go:47
 msgid "Alaska"
-msgstr "Alaszka"
+msgstr "Alaska"
 
 #: ../../datetime/zone_utc_list.go:49
 msgid "Dawson"
@@ -204,7 +203,7 @@ msgstr "Yukon"
 
 #: ../../datetime/zone_utc_list.go:59
 msgid "BajaNorte"
-msgstr "Alsó-Kalifornia"
+msgstr "BajaNorte"
 
 #: ../../datetime/zone_utc_list.go:60
 msgid "Pitcairn"
@@ -296,7 +295,7 @@ msgstr "Belize"
 
 #: ../../datetime/zone_utc_list.go:86
 msgid "Cancun"
-msgstr "Cancún"
+msgstr "Cancun"
 
 #: ../../datetime/zone_utc_list.go:87
 msgid "Chicago"
@@ -320,7 +319,7 @@ msgstr "Tell City"
 
 #: ../../datetime/zone_utc_list.go:94
 msgid "Valparaiso"
-msgstr "Valparaíso"
+msgstr "Valparaiso"
 
 #: ../../datetime/zone_utc_list.go:96
 msgid "Knox IN"
@@ -344,7 +343,7 @@ msgstr "Merida"
 
 #: ../../datetime/zone_utc_list.go:101
 msgid "Mexico City"
-msgstr "Mexico város"
+msgstr "Mexico City"
 
 #: ../../datetime/zone_utc_list.go:102
 msgid "Monterrey"
@@ -356,11 +355,11 @@ msgstr "Beulah"
 
 #: ../../datetime/zone_utc_list.go:104
 msgid "North Dakota/Center"
-msgstr "Észak Dakota/Központ"
+msgstr "North Dakota/Center"
 
 #: ../../datetime/zone_utc_list.go:105
 msgid "North Dakota/New Salem"
-msgstr "Észak-Dakota/ New Salem"
+msgstr "North Dakota/New Salem"
 
 #: ../../datetime/zone_utc_list.go:106
 msgid "Rainy River"
@@ -392,7 +391,7 @@ msgstr "Winnipeg"
 
 #: ../../datetime/zone_utc_list.go:114
 msgid "East-Saskatchewan"
-msgstr "Kelet-Saskatchewan"
+msgstr "East-Saskatchewan"
 
 #: ../../datetime/zone_utc_list.go:115
 msgid "Saskatchewan"
@@ -400,15 +399,15 @@ msgstr "Saskatchewan"
 
 #: ../../datetime/zone_utc_list.go:117
 msgid "General"
-msgstr "Általános"
+msgstr "Geral"
 
 #: ../../datetime/zone_utc_list.go:118
 msgid "Easter Island"
-msgstr "Húsvét-sziget"
+msgstr "Easter Island"
 
 #: ../../datetime/zone_utc_list.go:119
 msgid "Galapagos"
-msgstr "Galápagos-szigetek"
+msgstr "Galapagos"
 
 #: ../../datetime/zone_utc_list.go:121
 msgid "Indiana-Starke"
@@ -452,11 +451,11 @@ msgstr "Guayaquil"
 
 #: ../../datetime/zone_utc_list.go:132
 msgid "Havana"
-msgstr "Havanna"
+msgstr "Havana"
 
 #: ../../datetime/zone_utc_list.go:134
 msgid "Marengo"
-msgstr "Marengói csata"
+msgstr "Marengo"
 
 #: ../../datetime/zone_utc_list.go:135
 msgid "Petersburg"
@@ -544,23 +543,23 @@ msgstr "Toronto"
 
 #: ../../datetime/zone_utc_list.go:157
 msgid "Acre"
-msgstr "Akko"
+msgstr "Acre"
 
 #: ../../datetime/zone_utc_list.go:158
 msgid "Canada/Eastern"
-msgstr "Kanada/Keleti"
+msgstr "Canada/Eastern"
 
 #: ../../datetime/zone_utc_list.go:159
 msgid "Cuba"
-msgstr "Kuba"
+msgstr "Cuba"
 
 #: ../../datetime/zone_utc_list.go:161
 msgid "US/Eastern"
-msgstr "US/Keleti"
+msgstr "US/Eastern"
 
 #: ../../datetime/zone_utc_list.go:162
 msgid "East-Indiana"
-msgstr "Kelet-Indiana"
+msgstr "East-Indiana"
 
 #: ../../datetime/zone_utc_list.go:163
 msgid "Michigan"
@@ -612,7 +611,7 @@ msgstr "Curacao"
 
 #: ../../datetime/zone_utc_list.go:177
 msgid "Dominica"
-msgstr "Dominika"
+msgstr "Dominica"
 
 #: ../../datetime/zone_utc_list.go:178
 msgid "Glace Bay"
@@ -696,7 +695,7 @@ msgstr "St Barthelemy"
 
 #: ../../datetime/zone_utc_list.go:198
 msgid "St Kitts"
-msgstr "Saint Kitts"
+msgstr "St Kitts"
 
 #: ../../datetime/zone_utc_list.go:199
 msgid "St Lucia"
@@ -732,7 +731,7 @@ msgstr "Bermuda"
 
 #: ../../datetime/zone_utc_list.go:207
 msgid "Brazil/West"
-msgstr "Brazil/Nyugat"
+msgstr "Brazil/West"
 
 #: ../../datetime/zone_utc_list.go:208
 msgid "Atlantic"
@@ -740,7 +739,7 @@ msgstr "Atlantic"
 
 #: ../../datetime/zone_utc_list.go:209
 msgid "Continental"
-msgstr "Kontinentális"
+msgstr "Continental"
 
 #: ../../datetime/zone_utc_list.go:211
 msgid "St Johns"
@@ -748,7 +747,7 @@ msgstr "St Johns"
 
 #: ../../datetime/zone_utc_list.go:212
 msgid "Newfoundland"
-msgstr "Új-Fundland"
+msgstr "Newfoundland"
 
 #: ../../datetime/zone_utc_list.go:214
 msgid "Araguaina"
@@ -764,7 +763,7 @@ msgstr "La Rioja"
 
 #: ../../datetime/zone_utc_list.go:222
 msgid "Rio Gallegos"
-msgstr "Río Gallegos"
+msgstr "Rio Gallegos"
 
 #: ../../datetime/zone_utc_list.go:223
 msgid "Salta"
@@ -780,7 +779,7 @@ msgstr "San Luis"
 
 #: ../../datetime/zone_utc_list.go:226
 msgid "Tucuman"
-msgstr "Tucumán"
+msgstr "Tucuman"
 
 #: ../../datetime/zone_utc_list.go:227
 msgid "Ushuaia"
@@ -868,15 +867,15 @@ msgstr "Stanley"
 
 #: ../../datetime/zone_utc_list.go:248
 msgid "Brazil East"
-msgstr "Kelet Brazília"
+msgstr "Brazil East"
 
 #: ../../datetime/zone_utc_list.go:251
 msgid "South Georgia"
-msgstr "Déli-Georgia szigetek"
+msgstr "South Georgia"
 
 #: ../../datetime/zone_utc_list.go:252
 msgid "DeNoronha"
-msgstr "Fernando de Noronha-szigetcsoport"
+msgstr "DeNoronha"
 
 #: ../../datetime/zone_utc_list.go:254
 msgid "Scoresbysund"
@@ -884,11 +883,11 @@ msgstr "Scoresbysund"
 
 #: ../../datetime/zone_utc_list.go:255
 msgid "Azores"
-msgstr "Azori-szigetek"
+msgstr "Açores"
 
 #: ../../datetime/zone_utc_list.go:256
 msgid "Cape Verde"
-msgstr "Zöld-foki Köztársaság"
+msgstr "Cabo Verde"
 
 #: ../../datetime/zone_utc_list.go:258
 msgid "Abidjan"
@@ -948,7 +947,7 @@ msgstr "Ouagadougou"
 
 #: ../../datetime/zone_utc_list.go:272
 msgid "Sao Tome"
-msgstr "Sao Tome"
+msgstr "São Tomé"
 
 #: ../../datetime/zone_utc_list.go:273
 msgid "Timbuktu"
@@ -968,7 +967,7 @@ msgstr "Canary"
 
 #: ../../datetime/zone_utc_list.go:278
 msgid "Faroe"
-msgstr "Feröer"
+msgstr "Faroe"
 
 #: ../../datetime/zone_utc_list.go:279
 msgid "Madeira"
@@ -1000,7 +999,7 @@ msgstr "Guernsey"
 
 #: ../../datetime/zone_utc_list.go:292
 msgid "Isle of Man"
-msgstr "Man"
+msgstr "Isle of Man"
 
 #: ../../datetime/zone_utc_list.go:293
 msgid "Jersey"
@@ -1008,11 +1007,11 @@ msgstr "Jersey"
 
 #: ../../datetime/zone_utc_list.go:294
 msgid "Lisbon"
-msgstr "Lisszabon"
+msgstr "Lisboa"
 
 #: ../../datetime/zone_utc_list.go:295
 msgid "GB"
-msgstr "Egyesült Királyság"
+msgstr "GB"
 
 #: ../../datetime/zone_utc_list.go:296
 msgid "GB-Eire"
@@ -1028,11 +1027,11 @@ msgstr "Greenwich"
 
 #: ../../datetime/zone_utc_list.go:302
 msgid "Iceland"
-msgstr "Izland"
+msgstr "Islândia"
 
 #: ../../datetime/zone_utc_list.go:303
 msgid "Portugal"
-msgstr "Portugália"
+msgstr "Portugal"
 
 #: ../../datetime/zone_utc_list.go:304
 msgid "UCT"
@@ -1040,7 +1039,7 @@ msgstr "UCT"
 
 #: ../../datetime/zone_utc_list.go:305
 msgid "Universal"
-msgstr "Univerzális"
+msgstr "Universal"
 
 #: ../../datetime/zone_utc_list.go:306
 msgid "UTC"
@@ -1052,7 +1051,7 @@ msgstr "Zulu"
 
 #: ../../datetime/zone_utc_list.go:309
 msgid "Algiers"
-msgstr "Algír"
+msgstr "Algiers"
 
 #: ../../datetime/zone_utc_list.go:310
 msgid "Bangui"
@@ -1100,11 +1099,11 @@ msgstr "Niamey"
 
 #: ../../datetime/zone_utc_list.go:321
 msgid "Porto-Novo"
-msgstr "Porto Novo"
+msgstr "Porto-Novo"
 
 #: ../../datetime/zone_utc_list.go:322
 msgid "Tunis"
-msgstr "Tunisz"
+msgstr "Tunis"
 
 #: ../../datetime/zone_utc_list.go:323
 msgid "Windhoek"
@@ -1116,11 +1115,11 @@ msgstr "Longyearbyen"
 
 #: ../../datetime/zone_utc_list.go:325
 msgid "Jan Mayen"
-msgstr "Jan Mayen-sziget"
+msgstr "Jan Mayen"
 
 #: ../../datetime/zone_utc_list.go:326
 msgid "Amsterdam"
-msgstr "Amszterdam"
+msgstr "Amsterdão"
 
 #: ../../datetime/zone_utc_list.go:327
 msgid "Andorra"
@@ -1128,7 +1127,7 @@ msgstr "Andorra"
 
 #: ../../datetime/zone_utc_list.go:328
 msgid "Belgrade"
-msgstr "Belgrád"
+msgstr "Belgrado"
 
 #: ../../datetime/zone_utc_list.go:329
 msgid "Berlin"
@@ -1136,11 +1135,11 @@ msgstr "Berlin"
 
 #: ../../datetime/zone_utc_list.go:330
 msgid "Bratislava"
-msgstr "Pozsony"
+msgstr "Bratislava"
 
 #: ../../datetime/zone_utc_list.go:331
 msgid "Brussels"
-msgstr "Brüsszel"
+msgstr "Bruxelas"
 
 #: ../../datetime/zone_utc_list.go:332
 msgid "Budapest"
@@ -1148,15 +1147,15 @@ msgstr "Budapest"
 
 #: ../../datetime/zone_utc_list.go:333
 msgid "Busingen"
-msgstr "Büsingen"
+msgstr "Busingen"
 
 #: ../../datetime/zone_utc_list.go:334
 msgid "Copenhagen"
-msgstr "Koppenhága"
+msgstr "Copenhagen"
 
 #: ../../datetime/zone_utc_list.go:335
 msgid "Gibraltar"
-msgstr "Gibraltár"
+msgstr "Gibraltar"
 
 #: ../../datetime/zone_utc_list.go:336
 msgid "Ljubljana"
@@ -1164,7 +1163,7 @@ msgstr "Ljubljana"
 
 #: ../../datetime/zone_utc_list.go:337
 msgid "Luxembourg"
-msgstr "Luxemburg"
+msgstr "Luxemburgo"
 
 #: ../../datetime/zone_utc_list.go:338
 msgid "Madrid"
@@ -1172,11 +1171,11 @@ msgstr "Madrid"
 
 #: ../../datetime/zone_utc_list.go:339
 msgid "Malta"
-msgstr "Málta"
+msgstr "Malta"
 
 #: ../../datetime/zone_utc_list.go:340
 msgid "Monaco"
-msgstr "Monaco"
+msgstr "Mónaco"
 
 #: ../../datetime/zone_utc_list.go:341
 msgid "Oslo"
@@ -1184,7 +1183,7 @@ msgstr "Oslo"
 
 #: ../../datetime/zone_utc_list.go:342
 msgid "Paris"
-msgstr "Párizs"
+msgstr "Paris"
 
 #: ../../datetime/zone_utc_list.go:343
 msgid "Podgorica"
@@ -1192,11 +1191,11 @@ msgstr "Podgorica"
 
 #: ../../datetime/zone_utc_list.go:344
 msgid "Prague"
-msgstr "Prága"
+msgstr "Prague"
 
 #: ../../datetime/zone_utc_list.go:345
 msgid "Rome"
-msgstr "Róma"
+msgstr "Roma"
 
 #: ../../datetime/zone_utc_list.go:346
 msgid "San Marino"
@@ -1204,7 +1203,7 @@ msgstr "San Marino"
 
 #: ../../datetime/zone_utc_list.go:347
 msgid "Sarajevo"
-msgstr "Szarajevó"
+msgstr "Sarajevo"
 
 #: ../../datetime/zone_utc_list.go:348
 msgid "Skopje"
@@ -1224,27 +1223,27 @@ msgstr "Vaduz"
 
 #: ../../datetime/zone_utc_list.go:352
 msgid "Vatican"
-msgstr "Vatikán"
+msgstr "Vaticano"
 
 #: ../../datetime/zone_utc_list.go:353
 msgid "Vienna"
-msgstr "Bécs"
+msgstr "Vienna"
 
 #: ../../datetime/zone_utc_list.go:354
 msgid "Warsaw"
-msgstr "Varsó"
+msgstr "Warsaw"
 
 #: ../../datetime/zone_utc_list.go:355
 msgid "Zagreb"
-msgstr "Zágráb"
+msgstr "Zagreb"
 
 #: ../../datetime/zone_utc_list.go:356
 msgid "Zurich"
-msgstr "Zürich"
+msgstr "Zurique"
 
 #: ../../datetime/zone_utc_list.go:357
 msgid "Poland"
-msgstr "Lengyelország"
+msgstr "Polónia"
 
 #: ../../datetime/zone_utc_list.go:359
 msgid "Blantyre"
@@ -1256,7 +1255,7 @@ msgstr "Bujumbura"
 
 #: ../../datetime/zone_utc_list.go:361
 msgid "Cairo"
-msgstr "Kairó"
+msgstr "Cairo"
 
 #: ../../datetime/zone_utc_list.go:362
 msgid "Gaborone"
@@ -1304,15 +1303,15 @@ msgstr "Amman"
 
 #: ../../datetime/zone_utc_list.go:373
 msgid "Beirut"
-msgstr "Bejrút"
+msgstr "Beirute"
 
 #: ../../datetime/zone_utc_list.go:374
 msgid "Damascus"
-msgstr "Damaszkusz"
+msgstr "Damascus"
 
 #: ../../datetime/zone_utc_list.go:375
 msgid "Gaza"
-msgstr "Gáza"
+msgstr "Gaza"
 
 #: ../../datetime/zone_utc_list.go:376
 msgid "Hebron"
@@ -1320,31 +1319,31 @@ msgstr "Hebron"
 
 #: ../../datetime/zone_utc_list.go:377
 msgid "Istanbul"
-msgstr "Iszanbul"
+msgstr "Istanbul"
 
 #: ../../datetime/zone_utc_list.go:378
 msgid "Jerusalem"
-msgstr "Jeruzsálem"
+msgstr "Jerusalém"
 
 #: ../../datetime/zone_utc_list.go:379
 msgid "Nicosia"
-msgstr "Nicosia"
+msgstr "Nicósia"
 
 #: ../../datetime/zone_utc_list.go:380
 msgid "Tel Aviv"
-msgstr "Tel-Aviv"
+msgstr "Tel Aviv"
 
 #: ../../datetime/zone_utc_list.go:381
 msgid "Egypt"
-msgstr "Egyiptom"
+msgstr "Egito"
 
 #: ../../datetime/zone_utc_list.go:382
 msgid "Athens"
-msgstr "Athén"
+msgstr "Atenas"
 
 #: ../../datetime/zone_utc_list.go:383
 msgid "Bucharest"
-msgstr "Bukarest"
+msgstr "Bucareste"
 
 #: ../../datetime/zone_utc_list.go:384
 msgid "Chisinau"
@@ -1356,7 +1355,7 @@ msgstr "Helsinki"
 
 #: ../../datetime/zone_utc_list.go:387
 msgid "Kiev"
-msgstr "Kijev"
+msgstr "Kiev"
 
 #: ../../datetime/zone_utc_list.go:388
 msgid "Mariehamn"
@@ -1368,7 +1367,7 @@ msgstr "Riga"
 
 #: ../../datetime/zone_utc_list.go:391
 msgid "Sofia"
-msgstr "Szófia"
+msgstr "Sofia"
 
 #: ../../datetime/zone_utc_list.go:392
 msgid "Tallinn"
@@ -1392,7 +1391,7 @@ msgstr "Zaporozhye"
 
 #: ../../datetime/zone_utc_list.go:397
 msgid "Israel"
-msgstr "Izrael"
+msgstr "Israel"
 
 #: ../../datetime/zone_utc_list.go:398
 msgid "Libya"
@@ -1400,11 +1399,11 @@ msgstr "Líbia"
 
 #: ../../datetime/zone_utc_list.go:399
 msgid "Turkey"
-msgstr "Törökország"
+msgstr "Turquia"
 
 #: ../../datetime/zone_utc_list.go:401
 msgid "Addis Ababa"
-msgstr "Addisz-Abeba"
+msgstr "Addis Ababa"
 
 #: ../../datetime/zone_utc_list.go:402
 msgid "Asmara"
@@ -1452,11 +1451,11 @@ msgstr "Baghdad"
 
 #: ../../datetime/zone_utc_list.go:414
 msgid "Bahrain"
-msgstr "Bahrein"
+msgstr "Bahrain"
 
 #: ../../datetime/zone_utc_list.go:415
 msgid "Kuwait"
-msgstr "Kuvait"
+msgstr "Kuwait"
 
 #: ../../datetime/zone_utc_list.go:416
 msgid "Qatar"
@@ -1464,15 +1463,15 @@ msgstr "Qatar"
 
 #: ../../datetime/zone_utc_list.go:417
 msgid "Riyadh"
-msgstr "Rijád"
+msgstr "Riyadh"
 
 #: ../../datetime/zone_utc_list.go:418
 msgid "Kaliningrad"
-msgstr "Kalinyingrád"
+msgstr "Kaliningrad"
 
 #: ../../datetime/zone_utc_list.go:419
 msgid "Minsk"
-msgstr "Minszk"
+msgstr "Minsk"
 
 #: ../../datetime/zone_utc_list.go:420
 msgid "Antananarivo"
@@ -1480,7 +1479,7 @@ msgstr "Antananarivo"
 
 #: ../../datetime/zone_utc_list.go:421
 msgid "Comoro"
-msgstr "Comore-szigetek"
+msgstr "Comoro"
 
 #: ../../datetime/zone_utc_list.go:422
 msgid "Mayotte"
@@ -1488,11 +1487,11 @@ msgstr "Mayotte"
 
 #: ../../datetime/zone_utc_list.go:424
 msgid "Tehran"
-msgstr "Teherán"
+msgstr "Tehran"
 
 #: ../../datetime/zone_utc_list.go:425
 msgid "Iran"
-msgstr "Irán"
+msgstr "Irão"
 
 #: ../../datetime/zone_utc_list.go:427
 msgid "Baku"
@@ -1500,7 +1499,7 @@ msgstr "Baku"
 
 #: ../../datetime/zone_utc_list.go:428
 msgid "Dubai"
-msgstr "Dubaj"
+msgstr "Dubai"
 
 #: ../../datetime/zone_utc_list.go:429
 msgid "Muscat"
@@ -1508,15 +1507,15 @@ msgstr "Muscat"
 
 #: ../../datetime/zone_utc_list.go:430
 msgid "Tbilisi"
-msgstr "Tbiliszi"
+msgstr "Tbilisi"
 
 #: ../../datetime/zone_utc_list.go:431
 msgid "Yerevan"
-msgstr "Jereván"
+msgstr "Yerevan"
 
 #: ../../datetime/zone_utc_list.go:432
 msgid "Moscow"
-msgstr "Moszkva"
+msgstr "Moscovo"
 
 #: ../../datetime/zone_utc_list.go:433
 msgid "Samara"
@@ -1528,7 +1527,7 @@ msgstr "Simferopol"
 
 #: ../../datetime/zone_utc_list.go:435
 msgid "Volgograd"
-msgstr "Volgográd"
+msgstr "Volgograd"
 
 #: ../../datetime/zone_utc_list.go:436
 msgid "Mahe"
@@ -1572,7 +1571,7 @@ msgstr "Aqtobe"
 
 #: ../../datetime/zone_utc_list.go:449
 msgid "Ashgabat"
-msgstr "Asgabat"
+msgstr "Ashgabat"
 
 #: ../../datetime/zone_utc_list.go:451
 msgid "Dushanbe"
@@ -1600,11 +1599,11 @@ msgstr "Kerguelen"
 
 #: ../../datetime/zone_utc_list.go:457
 msgid "Maldives"
-msgstr "Maldív-szigetek"
+msgstr "Maldivas"
 
 #: ../../datetime/zone_utc_list.go:459
 msgid "Calcutta"
-msgstr "Kalkutta"
+msgstr "Calcutta"
 
 #: ../../datetime/zone_utc_list.go:460
 msgid "Colombo"
@@ -1612,7 +1611,7 @@ msgstr "Colombo"
 
 #: ../../datetime/zone_utc_list.go:461
 msgid "Kolkata"
-msgstr "Kalkutta"
+msgstr "Kolkata"
 
 #: ../../datetime/zone_utc_list.go:463
 msgid "Kathmandu"
@@ -1644,7 +1643,7 @@ msgstr "Thimphu"
 
 #: ../../datetime/zone_utc_list.go:474
 msgid "Yekaterinburg"
-msgstr "Jekatyerinburg"
+msgstr "Yekaterinburg"
 
 #: ../../datetime/zone_utc_list.go:475
 msgid "Chagos"
@@ -1656,7 +1655,7 @@ msgstr "Rangoon"
 
 #: ../../datetime/zone_utc_list.go:478
 msgid "Cocos"
-msgstr "Kókusz-szigetek"
+msgstr "Cocos"
 
 #: ../../datetime/zone_utc_list.go:480
 msgid "Bangkok"
@@ -1676,11 +1675,11 @@ msgstr "Jakarta"
 
 #: ../../datetime/zone_utc_list.go:484
 msgid "Novokuznetsk"
-msgstr "Novokuznyeck"
+msgstr "Novokuznetsk"
 
 #: ../../datetime/zone_utc_list.go:485
 msgid "Novosibirsk"
-msgstr "Novoszibirszk"
+msgstr "Novosibirsk"
 
 #: ../../datetime/zone_utc_list.go:486
 msgid "Omsk"
@@ -1696,15 +1695,15 @@ msgstr "Pontianak"
 
 #: ../../datetime/zone_utc_list.go:489
 msgid "Saigon"
-msgstr "Saigon"
+msgstr "Saigão"
 
 #: ../../datetime/zone_utc_list.go:490
 msgid "Vientiane"
-msgstr "Vientián"
+msgstr "Vientiane"
 
 #: ../../datetime/zone_utc_list.go:491
 msgid "Christmas"
-msgstr "Karácsony-sziget"
+msgstr "Christmas"
 
 #: ../../datetime/zone_utc_list.go:493
 msgid "Brunei"
@@ -1712,7 +1711,7 @@ msgstr "Brunei"
 
 #: ../../datetime/zone_utc_list.go:494
 msgid "Choibalsan"
-msgstr "Csojbalszan"
+msgstr "Choibalsan"
 
 #: ../../datetime/zone_utc_list.go:495
 msgid "Chongqing"
@@ -1732,7 +1731,7 @@ msgstr "Kashgar"
 
 #: ../../datetime/zone_utc_list.go:500
 msgid "Krasnoyarsk"
-msgstr "Krasznojarszk"
+msgstr "Krasnoyarsk"
 
 #: ../../datetime/zone_utc_list.go:501
 msgid "Kuala Lumpur"
@@ -1744,7 +1743,7 @@ msgstr "Kuching"
 
 #: ../../datetime/zone_utc_list.go:503
 msgid "Macao"
-msgstr "Makaó"
+msgstr "Macau"
 
 #: ../../datetime/zone_utc_list.go:505
 msgid "Makassar"
@@ -1756,7 +1755,7 @@ msgstr "Manila"
 
 #: ../../datetime/zone_utc_list.go:507
 msgid "Shanghai"
-msgstr "Sanghaj"
+msgstr "Shanghai"
 
 #: ../../datetime/zone_utc_list.go:508
 msgid "Beijing"
@@ -1764,11 +1763,11 @@ msgstr "Beijing"
 
 #: ../../datetime/zone_utc_list.go:509
 msgid "Singapore"
-msgstr "Szingapúr"
+msgstr "Singapura"
 
 #: ../../datetime/zone_utc_list.go:510
 msgid "Taipei"
-msgstr "Tajpej"
+msgstr "Taipei"
 
 #: ../../datetime/zone_utc_list.go:511
 msgid "Ujung Pandang"
@@ -1780,7 +1779,7 @@ msgstr "Ulan Bator"
 
 #: ../../datetime/zone_utc_list.go:514
 msgid "Urumqi"
-msgstr "Ürümcsi"
+msgstr "Urumqi"
 
 #: ../../datetime/zone_utc_list.go:515
 msgid "Perth"
@@ -1788,7 +1787,7 @@ msgstr "Perth"
 
 #: ../../datetime/zone_utc_list.go:516
 msgid "Australia/West"
-msgstr "Ausztrália/Nyugat"
+msgstr "Australia/West"
 
 #: ../../datetime/zone_utc_list.go:518
 msgid "PRC"
@@ -1824,11 +1823,11 @@ msgstr "Seoul"
 
 #: ../../datetime/zone_utc_list.go:529
 msgid "Tokyo"
-msgstr "Tokió"
+msgstr "Tóquio"
 
 #: ../../datetime/zone_utc_list.go:530
 msgid "Japan"
-msgstr "Japán"
+msgstr "Japão"
 
 #: ../../datetime/zone_utc_list.go:531
 msgid "Palau"
@@ -1844,7 +1843,7 @@ msgstr "Adelaide"
 
 #: ../../datetime/zone_utc_list.go:535
 msgid "Broke Hill"
-msgstr "Broken Hill"
+msgstr "Broke Hill"
 
 #: ../../datetime/zone_utc_list.go:536
 msgid "Darwin"
@@ -1852,11 +1851,11 @@ msgstr "Darwin"
 
 #: ../../datetime/zone_utc_list.go:537
 msgid "Australia/North"
-msgstr "Ausztrália/Észak"
+msgstr "Australia/North"
 
 #: ../../datetime/zone_utc_list.go:538
 msgid "Australia/South"
-msgstr "Ausztrália/Dél"
+msgstr "Australia/South"
 
 #: ../../datetime/zone_utc_list.go:539
 msgid "Yancowinna"
@@ -1916,7 +1915,7 @@ msgstr "Sydney"
 
 #: ../../datetime/zone_utc_list.go:554
 msgid "Tasmania"
-msgstr "Tasmánia"
+msgstr "Tasmania"
 
 #: ../../datetime/zone_utc_list.go:555
 msgid "Victoria"
@@ -2004,7 +2003,7 @@ msgstr "McMurdo"
 
 #: ../../datetime/zone_utc_list.go:581
 msgid "South Pole"
-msgstr "Déli sark"
+msgstr "South Pole"
 
 #: ../../datetime/zone_utc_list.go:582
 msgid "Anadyr"
@@ -2012,7 +2011,7 @@ msgstr "Anadyr"
 
 #: ../../datetime/zone_utc_list.go:583
 msgid "Kamchatka"
-msgstr "Kamcsatka"
+msgstr "Kamchatka"
 
 #: ../../datetime/zone_utc_list.go:584
 msgid "Magadan"
@@ -2028,7 +2027,7 @@ msgstr "Auckland"
 
 #: ../../datetime/zone_utc_list.go:588
 msgid "Fiji"
-msgstr "Fidzsi"
+msgstr "Fiji"
 
 #: ../../datetime/zone_utc_list.go:589
 msgid "Funafuti"
@@ -2084,304 +2083,304 @@ msgstr "Tongatapu"
 
 #: ../../dock/normal_apps.go:73
 msgid "_Run"
-msgstr "_Indítás"
+msgstr "_Executar"
 
 #: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:291
 msgid "_Undock"
-msgstr "_Rögzítés feloldása"
+msgstr "_Remover do Dock"
 
 #: ../../dock/runtime_apps.go:260
 msgid "_Close All"
-msgstr "_Összes bezárása"
+msgstr "_Fechar Todos"
 
 #: ../../dock/runtime_apps.go:303
 msgid "_Dock"
-msgstr "_Dokk"
+msgstr "_Dock"
 
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Auto"
-msgstr "Automatikus"
+msgstr "Auto"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 msgid "Left Click"
-msgstr "Bal kattintás"
+msgstr "Clique Esquerdo"
 
 #: ../../inputdevices/libwacom/wacom.go:156
 msgid "Middle Click"
-msgstr "Középső kattintás"
+msgstr "Clique Botão do Meio"
 
 #: ../../inputdevices/libwacom/wacom.go:160
 msgid "Right Click"
-msgstr "Jobb kattintás"
+msgstr "Clique Direito"
 
 #: ../../inputdevices/libwacom/wacom.go:164
 msgid "Page Up"
-msgstr ""
+msgstr "Página Acima"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 msgid "Page Down"
-msgstr ""
+msgstr "Página Abaixo"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
-msgstr "Indító"
+msgstr "Iniciador de Aplicações"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Asztal mutatása"
+msgstr "Mostrar Ambiente de Trabalho"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Képernyő zárolása "
+msgstr "Bloquear Ecrã"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "Fájlkezelő"
+msgstr "Gestor de Ficheiros"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Váltás a programok közt"
+msgstr "Alternar Aplicações"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Váltás a programok közt fordítva"
+msgstr "Reverter Aplicações"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Váltás a 3D alkalmazások között"
+msgstr "Aplicações de alteração 3D"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Váltás a 3D alkalmazások között visszafelé"
+msgstr "Aplicações de alteração reversa de 3D"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Dokk mutatása / elrejtése"
+msgstr "Mostrar/Esconder o dock"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Képernyőkép"
+msgstr "Captura de Ecrã"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Teljes képernyőkép"
+msgstr "Captura de Ecrã Inteiro"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Képernyőkép - Aktív ablak"
+msgstr "Captura de ecrã de janela"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Késleltetett képernyőkép "
+msgstr "Atrasar captura de ecrã"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
-msgstr "Terminál"
+msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Terminál teljes képernyős mód "
+msgstr "Janela de Terminal Quake"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Kijelentkezés"
+msgstr "Terminar Sessão"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Tapipad kikapcsolása"
+msgstr "Desativar Painel Táctil"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Deepin Fordító"
+msgstr "Tradutor Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr "Más billentyűzetkiosztás"
+msgstr "Alterar Disposição"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
-msgstr "Számológép"
+msgstr "Calculadora"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Email kliens"
+msgstr "Aplicação de Gestão de e-mail"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
-msgstr "Webböngésző"
+msgstr "Navegador web"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Média lejátszó"
+msgstr "Reprodutor de Media"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Lejátszás/Szünet"
+msgstr "Reproduzir/Pausa"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
-msgstr "Szünet"
+msgstr "Pausa"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "Állj"
+msgstr "Parar"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
-msgstr "Némít"
+msgstr "Sem Som"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "Hangerő csökkentése"
+msgstr "Baixar Volume"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "Hangerő növelése "
+msgstr "Aumentar Volume"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
-msgstr "Előző"
+msgstr "Anterior"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
-msgstr "Következő"
+msgstr "Seguinte"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "Kiadás"
+msgstr "Ejectar"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Ablak bezárása"
+msgstr "Fechar Janela"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
-msgstr "Ablak maximalizálása"
+msgstr "Maximizar Janela"
 
 #: ../../keybinding/id_desc_list.go:95
 msgid "Restore window"
-msgstr "Ablak visszaállatása "
+msgstr "Restaurar Janela"
 
 #: ../../keybinding/id_desc_list.go:96
 msgid "Minimize window"
-msgstr "Ablak kicsinyítése "
+msgstr "Minimizar Janela"
 
 #: ../../keybinding/id_desc_list.go:97
 msgid "Move window"
-msgstr "Ablak mozgatása"
+msgstr "Mover Janela"
 
 #: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
-msgstr "Ablak méretezése "
+msgstr "Redimensionar Janela"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Feltekert állapotba"
+msgstr "Alterar estado furl"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Ablak menü"
+msgstr "Ativar menu da janela"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Munkaterület 1"
+msgstr "Mudar para Área de Trabalho 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Munkaterület 2"
+msgstr "Mudar para Área de Trabalho 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Munkaterület 3"
+msgstr "Mudar para Área de Trabalho 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Munkaterület 4"
+msgstr "Mudar para Área de Trabalho 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Váltás a baloldali munkafelületre"
+msgstr "Mudar para área de trabalho esquerda"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Váltás a jobboldali munkafelületre"
+msgstr "Mudar para área de trabalho direita"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Váltás a felső munkafelületre"
+msgstr "Mudar para área de trabalho superior"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Váltás az alsó munkafelületre"
+msgstr "Mudar para área de trabalho abaixo"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Áthelyezés a munkaterület 1-re"
+msgstr "Mover para área de trabalho 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Áthelyezés a munkaterület 2-re"
+msgstr "Mudar para área de trabalho 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Áthelyezés a munkaterület 3-ra"
+msgstr "Mover para área de trabalho 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Áthelyezés a munkaterület 4-re"
+msgstr "Mover para área de trabalho 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Áthelyezés a baloldali munkaterületre"
+msgstr "Mover para área de trabalho esquerda"
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Áthelyezés a jobboldali munkaterületre"
+msgstr "Mover para área de trabalho direita"
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
-msgstr "Áthelyezés a felső munkaterületre "
+msgstr "Mover para área de trabalho superior"
 
 #: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
-msgstr "Áthelyezés az alsó munkaterületre"
+msgstr "Mover para área de trabalho abaixo"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr ""
+msgstr "Falhar de alteração no idioma do sistema, por favor tente novamente."
 
 #: ../../langselector/handle_event.go:42
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr ""
+msgstr "O idioma do sistema foi alterado, por favor inicie sessão novamente depois de terminar sessão."
 
 #: ../../langselector/locale_ifc.go:55
 msgid "System language is being changed, please wait..."
-msgstr ""
+msgstr "Idioma do sistema em alteração, por favor espere..."
 
 #: ../../langselector/locale_ifc.go:60
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "O idioma do sistema está a ser alterado com uma instalação de pacotes de idioma incompletos. por favor espere..."
 
 #: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
-msgstr "Semmi"
+msgstr "Nada"
 
 #: ../../mime/default_media.go:76 ../../mime/default_media.go:91
 msgid "Open Folder"
-msgstr "Könytár megnyitása"
+msgstr "Abrir Pasta"
 
 #: ../../mime/default_media.go:80
 msgid "Run Software"
-msgstr "Szoftver futtatása"
+msgstr "Correr Programa"
 
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
 #: ../../network/state_handler.go:188 ../../network/utils_notify.go:86
 msgid "Connected"
-msgstr "Kapcsolódva"
+msgstr "Ligado"
 
 #: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
 #: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
@@ -2389,12 +2388,12 @@ msgstr "Kapcsolódva"
 #: ../../network/utils_notify.go:65 ../../network/utils_notify.go:69
 #: ../../network/utils_notify.go:89 ../../network/utils_notify.go:92
 msgid "Disconnected"
-msgstr "Szétkapcsolva"
+msgstr "Desligado"
 
 #: ../../network/manager_connections.go:232
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
-msgstr "Vezetékes kapcsolat"
+msgstr "Conexão com cabo"
 
 #: ../../network/manager_connections.go:312
 #: ../../network/manager_connections.go:317
@@ -2404,19 +2403,19 @@ msgstr "Vezetékes kapcsolat"
 #: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
-msgstr "Nincs"
+msgstr "Nenhum"
 
 #: ../../network/manager_connections.go:319
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128 kulcs"
+msgstr "Chave WEP 40/128-bit"
 
 #: ../../network/manager_connections.go:321
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 személyi"
+msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_connections.go:329
 #: ../../network/nm_setting_802_1x.go:81
@@ -2447,27 +2446,27 @@ msgstr "FAST"
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
-msgstr "TLS"
+msgstr "Tunneled TLS"
 
 #: ../../network/manager_connections.go:339
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
-msgstr "Védett EAP"
+msgstr "Protected EAP"
 
 #: ../../network/nm_constant.go:321 ../../network/nm_setting_vpn_l2tp.go:114
 #: ../../network/nm_setting_vpn_openvpn.go:168
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Saved"
-msgstr "Elmentve"
+msgstr "Guardado"
 
 #: ../../network/nm_constant.go:323 ../../network/nm_setting_vpn_l2tp.go:115
 #: ../../network/nm_setting_vpn_openvpn.go:169
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:144
 msgid "Always Ask"
-msgstr "Mindig kérdezze"
+msgstr "Perguntar Sempre"
 
 #: ../../network/nm_constant.go:324 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:170
@@ -2475,43 +2474,43 @@ msgstr "Mindig kérdezze"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Not Required"
-msgstr "Nem szükséges"
+msgstr "Desnecessário"
 
 #: ../../network/nm_custom_type.go:176
 msgid "Connection"
-msgstr "Kapcsolat"
+msgstr "Ligação"
 
 #: ../../network/nm_custom_type.go:180
 msgid "Wireless Connection"
-msgstr "Vezeték-nélküli kapcsolat"
+msgstr "Ligação Sem-fios"
 
 #: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
-msgstr "Központi vezérlés nélküli vezeték nélküli hálózat"
+msgstr "Sem-fios Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
-msgstr "Vezeték nélküli Ap-Hotspot"
+msgstr "Ap-Hotspot Sem-fios"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
-msgstr "PPPoE kapcsolat"
+msgstr "Ligação PPPoE"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
-msgstr "Mobil kapcsolat"
+msgstr "Ligação Móvel"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Mobil GSM kapcsolat"
+msgstr "Ligação Móvel GSM"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Mobil CDMA Kapcsolat"
+msgstr "Ligação Móvel CDMA"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
-msgstr "VPN Kapcsolat"
+msgstr "Ligação VPN"
 
 #: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
@@ -2561,56 +2560,56 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
-msgstr "Letiltva"
+msgstr "Desativado"
 
 #: ../../network/nm_setting_802_1x.go:180
 msgid "Anonymous"
-msgstr "Anoním"
+msgstr "Anónimo"
 
 #: ../../network/nm_setting_802_1x.go:181
 msgid "Authenticated"
-msgstr "Hitelesített"
+msgstr "Autenticado"
 
 #: ../../network/nm_setting_802_1x.go:182
 msgid "Both"
-msgstr "Mindkettő"
+msgstr "Ambos"
 
 #: ../../network/nm_setting_802_1x.go:186
 #: ../../network/nm_setting_wireless.go:296
 msgid "Automatic"
-msgstr "Automatikus"
+msgstr "Automático"
 
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Version 0"
-msgstr "0-ás verzió"
+msgstr "Versão 0"
 
 #: ../../network/nm_setting_802_1x.go:188
 msgid "Version 1"
-msgstr "1-es verzió"
+msgstr "Versão 1"
 
 #: ../../network/nm_setting_gsm.go:125
 msgid "China Unicom Internet"
-msgstr "Kína Unicom internet"
+msgstr "China Unicom Internet"
 
 #: ../../network/nm_setting_gsm.go:126
 msgid "China Unicom MMS"
-msgstr "Kína Unicom MMS"
+msgstr "China Unicom MMS"
 
 #: ../../network/nm_setting_gsm.go:127
 msgid "China Mobile WAP"
-msgstr "Kína Mobil WAP"
+msgstr "China Mobile WAP"
 
 #: ../../network/nm_setting_gsm.go:128
 msgid "China Mobile Internet"
-msgstr "Kína Unicom mobilinternet"
+msgstr "China Mobile Internet"
 
 #: ../../network/nm_setting_gsm.go:129
 msgid "China Mobile MMS"
-msgstr "Kína Mobil MMS"
+msgstr "China Mobile MMS"
 
 #: ../../network/nm_setting_gsm.go:133
 msgid "Any"
-msgstr "Mindegy"
+msgstr "Qualquer"
 
 #: ../../network/nm_setting_gsm.go:134
 msgid "3G (UMTS/HSPA)"
@@ -2622,39 +2621,39 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:136
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "3G előnyben részesítése (UMTS/HSPA)"
+msgstr "Preferir 3G (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:137
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "2G előnyben részesítése (GPRS/EDGE)"
+msgstr "Preferir 2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:138
 msgid "Prefer 4G (LTE)"
-msgstr "Preferálja a 4G (LTE)-et"
+msgstr "Preferir 4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:139
 msgid "Use Only 4G (LTE)"
-msgstr "Csak 4G (LTE) használjon"
+msgstr "Usar só 4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:68
 msgid "Link-Local Only"
-msgstr "Csak Helyi Link"
+msgstr "Apenas Ligação Local"
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:69
 msgid "Manual"
-msgstr "Manuális"
+msgstr "Manual"
 
 #: ../../network/nm_setting_ip4_config.go:177
 #: ../../network/nm_setting_ip6_config.go:70
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
-msgstr "Megosztott"
+msgstr "Partilhado"
 
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "Ignore"
-msgstr "Figyelmen kívül hagyás"
+msgstr "Ignorar"
 
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "DHCP"
@@ -2690,46 +2689,46 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 vállalati"
+msgstr "WPA/WPA2 Enterprise"
 
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "Minden elérhető (alap)"
+msgstr "Todas Disponíveis (padrão⁾"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-bit (Legbiztonságosabb)"
+msgstr "128-bit (o mais seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-bit (Kevésbé biztonságos)"
+msgstr "40-bit (menos seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "Biztonságos (alap)"
+msgstr "Seguro (predefinido)"
 
 #: ../../network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "Gyenge"
+msgstr "Fraco"
 
 #: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
-msgstr "Tanúsítványok (TLS)"
+msgstr "Certificados (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password"
-msgstr "Jelszó"
+msgstr "Palavra-passe"
 
 #: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
-msgstr "Tanúsítványok jelszóval (TLS)"
+msgstr "Certificados com Palavra-passe (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
-msgstr "Statikus kulcs"
+msgstr "Chave Estática"
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 #: ../../network/nm_setting_vpn_openvpn.go:431
@@ -2747,7 +2746,7 @@ msgstr "1"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "Alapértelmezett"
+msgstr "Predefinido"
 
 #: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
@@ -2847,11 +2846,11 @@ msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
-msgstr "Szolgáltatás"
+msgstr "Cliente"
 
 #: ../../network/nm_setting_vpn_openvpn.go:427
 msgid "Server"
-msgstr "Szerver"
+msgstr "Servidor"
 
 #: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "HTTP"
@@ -2863,7 +2862,7 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
-msgstr "Cisco (alapértelmezett)"
+msgstr "Cisco (predefinido)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
@@ -2871,11 +2870,11 @@ msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T Amikor Elérhető (alapértelmezett)"
+msgstr "NAT-T Quando Disponível (predefinido)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
-msgstr "NAT-T Mindig"
+msgstr "NAT-T Sempre"
 
 #: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
@@ -2884,28 +2883,28 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:262
 #: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
-msgstr "DH csoport 1"
+msgstr "DH Group 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
-msgstr "DH csoport 2 (alapértelmezett)"
+msgstr "DH Group 2 (predefinido)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:264
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
-msgstr "DH Csoport 5"
+msgstr "DH Group 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
-msgstr "Szerver (alapértelmezett)"
+msgstr "Servidor (predefinido)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
-msgstr "DH csoport 2"
+msgstr "DH Group 2"
 
 #: ../../network/nm_setting_wireless.go:290
 msgid "Infrastructure"
-msgstr "Infrastruktúra"
+msgstr "Infra-estrutura"
 
 #: ../../network/nm_setting_wireless.go:291
 msgid "Ad-Hoc"
@@ -2929,7 +2928,7 @@ msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
-msgstr "Dinamikus WEP"
+msgstr "WEP Dinâmico"
 
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
@@ -2937,11 +2936,11 @@ msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastruktúra "
+msgstr "Infra-estrutura WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA vállalati"
+msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
@@ -2961,343 +2960,343 @@ msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
-msgstr "Megnyitás"
+msgstr "Abrir"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Eszköz állapota megváltozott, ismeretlen okok miatt."
+msgstr "Estado do dispositivo alterado, razão desconhecida."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Eszköz állapota megváltozott."
+msgstr "Estado do dispositivo alterado."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "Az eszköz kezelve lesz."
+msgstr "O dispositivo é agora gerido."
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Az eszköz kezelése megszűnt"
+msgstr "O dispositivo deixou de ser gerido."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr "Az eszköz nem áll készen a konfiguráláshoz."
+msgstr "O dispositivo não tem estado preparado para configuração."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "Nincs fenntartott IP konfiguráció (nem elérhető a cím, nem válaszol, stb)."
+msgstr "A configuração IP não pode ser reservada (endereço indisponível, tempo esgotado, etc)."
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "Az IP konfiguráció többé nem érvényes."
+msgstr "A configuração IP deixou de ser válida."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Jelszó szükséges, de nincs megadva"
+msgstr "Eram requeridas palavras-passe mas não foram fornecidas."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "A 802.1X kiszolgáló megszakadt a hitelesítőnél vagy a kiszolgálónál."
+msgstr "O requerente 802.1X desligou-se do ponto de acesso ou servidor de autenticação."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "A 802.1X kiszolgáló konfigurálása sikertelen."
+msgstr "Falha na configuração do requerente 802.1X."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "A 802.1X kapcsolat le lett állítva vagy váratlanul leállt."
+msgstr "O requerente 802.1X desistiu ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "A 802.1X kiszolgáló hitelesítése túl sok időbe telt."
+msgstr "O requerente 802.1X demorou demasiado tempo para autenticar-se."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "A PPP szolgáltatás nem tudod elindulni a meghatározott időben."
+msgstr "O serviço PPP falhou a iniciação dentro do tempo permitido."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
-msgstr "A PPP szolgáltatás váratlanul leállt."
+msgstr "O serviço PPP desligou-se inesperadamente."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "A PPP szolgáltatás le lett állítva vagy megszakadt."
+msgstr "O serviço PPP desistiu ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "A DHCP szolgáltatás nem tudod a megadott időben elindulni."
+msgstr "O serviço DHCP falhou a iniciação dentro do tempo permitido."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "A DHCP szolgáltatás egy váratlan hibát jelez."
+msgstr "O serviço DHCP reportou um erro inesperado."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "A DHCP szolgáltatás le lett állítva vagy váratlanul leállt."
+msgstr "O serviço DHCP desistiu ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr "A megosztott csatlakozás szolgáltatás elindulása sikertelen."
+msgstr "O serviço de ligação partilhada falhou a iniciação."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "A megosztott kapcsolat szolgáltatás le lett állítva vagy váratlanul leállt."
+msgstr "O serviço de ligação partilhada desistiu ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "Az AutoIP szolgáltatás indítása sikertelen."
+msgstr "O Serviço de AutoIP falhou a iniciação."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "Az AutoIP egy váratlan hibát jelentett."
+msgstr "O serviço de AutoIP reportou um erro inesperado."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "Az AutoIP szolgáltatás le lett állítva vagy váratlanul leállt."
+msgstr "O serviço de AutoIP desistiu ou falhou inesperadamente."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "A hívás nem sikerült, mert a vonalak foglaltak."
+msgstr "A ligação falhou devido a linha ocupadas."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "A hívás sikertelen, mert nincs tárcsázási hang."
+msgstr "A ligação falhou devido a não ter sinal de linha."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "A hívás sikertelen átviteli hiba miatt."
+msgstr "A ligação falhou devido ao transportador."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Tárcsázási időtúllépés."
+msgstr "A ligação excedeu o tempo limite."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Hívás sikertelen"
+msgstr "Falha de ligação."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Modem telepítése sikertelen"
+msgstr "Falha na inicialização do Modem."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "A meghatározott GSM APN kiválasztása sikertelen."
+msgstr "Falha ao selecionar o GSM APN especificado."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "Nem találtunk hálózatot."
+msgstr "Nenhuma busca de redes"
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr "Hálózati regisztráció megtagadva."
+msgstr "O registo de rede foi negado."
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "A hálózati regisztráció időtullépés miatt meghiúsult."
+msgstr "O tempo de registo da Rede expirou."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "A regisztráció a megadott GSM hálózatnál sikertelen."
+msgstr "Falha de registo na rede GSM solicitada."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "PIN elellenőrzés sikertelen"
+msgstr "A verificação de PIN falhou."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr "A szükséges firmware talán hiányzik az eszközhöz."
+msgstr "Firmware necessário para o dispositivo pode estar em falta."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "Az eszköz el lett távolítva."
+msgstr "O dispositivo foi removido"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "Hálózat kezelő alvó állapotba került"
+msgstr "O Gestor de Rede foi dormir."
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "Az aktív kapcsolat az eszközzel megszakadt vagy eltűnt"
+msgstr "A ligação ativa do dispositivo foi removida ou desapareceu."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "Egy felhasználó vagy egy kliens felkérést tett, hogy bontsa a kapcsolatot."
+msgstr "Um utilizador ou cliente pediu para se desligar."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "A szolgáltató / az eszköz csatlakozása megváltozott."
+msgstr ""
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr "Az eszköz létezik, kapcsolat feltételezett."
+msgstr ""
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr "A 802.1x kiszolgáló mostmár elérhető."
+msgstr ""
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "A modem nem található."
+msgstr ""
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "A Bluetooth kapcsolat létrehozása túl hosszú ideig tartott vagy sikertelen volt."
+msgstr ""
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "A GSM modem SIM kártyája nincs behelyezve. "
+msgstr ""
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr "GSM modem PIN-je szükséges."
+msgstr ""
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr "A SIM PUK szükséges a GSM modemhez"
+msgstr ""
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "Helytelen a GSM modem SIM-je"
+msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "InfiniBand eszköz nem támogatja a kapcsolódott módot."
+msgstr ""
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr "Egy kapcsolatfüggőség sikertelen."
+msgstr ""
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Probléma az RFC 2684 ethernet ADSL híddal."
+msgstr ""
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "A modem menedzser nem fut vagy váratlanul leállt."
+msgstr ""
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "A 802.11 Wi-Fi hálózatot nem található."
+msgstr ""
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "Az alapkapcsolat egy másodlagos kapcsolata sikertelen."
+msgstr ""
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Hálózati kábel nincs bedugva."
+msgstr ""
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "VPN kapcsolat aktiválása sikertelen, ismeretlen ok miatt."
+msgstr ""
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "VPN kapcsolat aktiválása sikertelen."
+msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "A VPN kapcsolat státusza megváltozott mert azt egy másik felhasználó lecsatlakoztatta."
+msgstr ""
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "A VPN kapcsolat státusza megváltozott mert azt egy eszköz lecsatlakoztatta."
+msgstr ""
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr "VPN szolgáltatás leállt."
+msgstr ""
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr "A VPN kapcsolat IP konfigurációja érvénytelen."
+msgstr ""
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr "A VPN szolgáltatáshoz való csatlakozási próbálkozás idő túllépést jelez."
+msgstr ""
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
-msgstr "A VPN szolgáltatás indítása időtúllépést jelent."
+msgstr ""
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
-msgstr "VPN szolgáltatás indítása sikertelen."
+msgstr ""
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "A szükséges jelszó a VPN csatlakozáshoz nem lett megadva."
+msgstr ""
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "A VPN szerver hitelesítése sikertelen."
+msgstr ""
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr "A kapcsolat eltávolításra került a beállításokból."
+msgstr ""
 
 #: ../../network/utils_nm.go:175
 msgid "Unknown"
-msgstr "Ismeretlen"
+msgstr "Desconhecido"
 
 #: ../../network/utils_notify.go:61
 msgid "Airplan mode enabled."
-msgstr "Repülőgép üzemmód engedélyezve."
+msgstr ""
 
 #: ../../network/utils_notify.go:65
 msgid "You are now offline."
-msgstr "Kapcsolat bontva."
+msgstr ""
 
 #: ../../network/utils_notify.go:69
 msgid "Access Point mode is not supported by this device."
-msgstr "Az Access Point módot nem támogatja az eszköz. "
+msgstr ""
 
 #: ../../network/utils_notify.go:73 ../../network/utils_notify.go:78
 #: ../../network/utils_notify.go:82
 msgid "Network"
-msgstr "Hálózat"
+msgstr "Rede"
 
 #: ../../network/utils_notify.go:73
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "A számítógépen ki van kapcsolva a vezeték nélküli adapter, kérem kapcsolja be ha szükséges."
+msgstr ""
 
 #: ../../network/utils_notify.go:78
 msgid "System proxy is set successfully."
-msgstr "Rendszer Proxy sikeresen beállítva."
+msgstr ""
 
 #: ../../network/utils_notify.go:82
 msgid "System proxy has been cancelled."
-msgstr "Rendszer Proxy leállítva."
+msgstr ""
 
 #: ../../power/upower.go:81
 msgid "Abnormal battery power"
-msgstr "Rendellenes akkumulátor töltöttség"
+msgstr ""
 
 #: ../../power/upower.go:81
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "Akkumulátor töltöttsége nem megjósolható, kérem mentsen minden fontos dokumentumot biztos helyre és ne kezdjen el semmi fontosat."
+msgstr ""
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"
-msgstr "Az akkumulátor töltöttségi szintje kritikusan alacsony"
+msgstr ""
 
 #: ../../power/upower.go:86
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "A számítógép felfüggesztett állapotban volt, kérjük csatlakoztassa a töltőt."
+msgstr ""
 
 #: ../../power/upower.go:101
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Kérjük csatlakoztassa a töltőt, vagy számítógép fel lesz függesztve"
+msgstr ""
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
-msgstr "Alacsony akkumulátor töltöttség"
+msgstr ""
 
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "A számítógép felfüggesztésre kerül, kérjük csatlakoztassa a töltőt most."
+msgstr ""

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-10 17:02+0800\n"
-"PO-Revision-Date: 2014-11-10 13:46+0000\n"
+"POT-Creation-Date: 2014-11-18 09:39+0800\n"
+"PO-Revision-Date: 2014-11-18 02:14+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/dde-daemon/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -2101,6 +2101,26 @@ msgstr "駐留(_D)"
 msgid "Auto"
 msgstr "自動"
 
+#: ../../inputdevices/libwacom/wacom.go:152
+msgid "Left Click"
+msgstr ""
+
+#: ../../inputdevices/libwacom/wacom.go:156
+msgid "Middle Click"
+msgstr ""
+
+#: ../../inputdevices/libwacom/wacom.go:160
+msgid "Right Click"
+msgstr ""
+
+#: ../../inputdevices/libwacom/wacom.go:164
+msgid "Page Up"
+msgstr ""
+
+#: ../../inputdevices/libwacom/wacom.go:168
+msgid "Page Down"
+msgstr ""
+
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
 msgstr "啟動器"
@@ -2357,25 +2377,25 @@ msgid "Run Software"
 msgstr ""
 
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
-#: ../../network/state_handler.go:157 ../../network/utils_notify.go:86
+#: ../../network/state_handler.go:188 ../../network/utils_notify.go:86
 msgid "Connected"
 msgstr "已連接"
 
 #: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
 #: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
-#: ../../network/state_handler.go:191 ../../network/utils_notify.go:61
+#: ../../network/state_handler.go:222 ../../network/utils_notify.go:61
 #: ../../network/utils_notify.go:65 ../../network/utils_notify.go:69
 #: ../../network/utils_notify.go:89 ../../network/utils_notify.go:92
 msgid "Disconnected"
 msgstr ""
 
-#: ../../network/manager_connections.go:250
+#: ../../network/manager_connections.go:232
 #: ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
 msgstr "有線連接"
 
-#: ../../network/manager_connections.go:330
-#: ../../network/manager_connections.go:335
+#: ../../network/manager_connections.go:312
+#: ../../network/manager_connections.go:317
 #: ../../network/nm_setting_virtual_key.go:141
 #: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:178
@@ -2384,70 +2404,70 @@ msgstr "有線連接"
 msgid "None"
 msgstr "無"
 
-#: ../../network/manager_connections.go:337
+#: ../../network/manager_connections.go:319
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128位 密鑰"
 
-#: ../../network/manager_connections.go:339
+#: ../../network/manager_connections.go:321
 #: ../../network/nm_setting_virtual_key.go:143
 #: ../../network/nm_setting_virtual_key.go:150
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 個人版"
 
-#: ../../network/manager_connections.go:347
+#: ../../network/manager_connections.go:329
 #: ../../network/nm_setting_802_1x.go:81
 #: ../../network/nm_setting_802_1x.go:162
 #: ../../network/nm_setting_802_1x.go:170
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_connections.go:349
+#: ../../network/manager_connections.go:331
 #: ../../network/nm_setting_802_1x.go:80
 #: ../../network/nm_setting_802_1x.go:163
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_connections.go:351
+#: ../../network/manager_connections.go:333
 #: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_connections.go:353
+#: ../../network/manager_connections.go:335
 #: ../../network/nm_setting_802_1x.go:164
 #: ../../network/nm_setting_802_1x.go:172
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_connections.go:355
+#: ../../network/manager_connections.go:337
 #: ../../network/nm_setting_802_1x.go:165
 #: ../../network/nm_setting_802_1x.go:173
 msgid "Tunneled TLS"
 msgstr "隧道TLS"
 
-#: ../../network/manager_connections.go:357
+#: ../../network/manager_connections.go:339
 #: ../../network/nm_setting_802_1x.go:166
 #: ../../network/nm_setting_802_1x.go:174
 msgid "Protected EAP"
 msgstr "受保護的EAP"
 
-#: ../../network/nm_constant.go:314 ../../network/nm_setting_vpn_l2tp.go:114
+#: ../../network/nm_constant.go:321 ../../network/nm_setting_vpn_l2tp.go:114
 #: ../../network/nm_setting_vpn_openvpn.go:168
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Saved"
 msgstr "已保存的"
 
-#: ../../network/nm_constant.go:316 ../../network/nm_setting_vpn_l2tp.go:115
+#: ../../network/nm_constant.go:323 ../../network/nm_setting_vpn_l2tp.go:115
 #: ../../network/nm_setting_vpn_openvpn.go:169
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:144
 msgid "Always Ask"
 msgstr "總是詢問"
 
-#: ../../network/nm_constant.go:317 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:324 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:170
 #: ../../network/nm_setting_vpn_openvpn.go:476
 #: ../../network/nm_setting_vpn_pptp.go:106
