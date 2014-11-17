@@ -129,15 +129,16 @@ func NewKeyboard(l *log.Logger) *Keyboard {
 		kbd.xsettings = nil
 	}
 
-	kbd.init()
 	kbd.handleGSettings()
+	kbd.init()
 
 	return kbd
 }
 
 func (kbd *Keyboard) setLayout() {
 	if len(kbd.CurrentLayout.Get()) == 0 {
-		kbd.CurrentLayout.Set(getLayoutFromFile(kbdDefaultConfig))
+		kbd.settings.SetString(kbdKeyLayout,
+			getLayoutFromFile(kbdDefaultConfig))
 		return
 	}
 
@@ -145,7 +146,8 @@ func (kbd *Keyboard) setLayout() {
 	if err != nil {
 		kbd.debugInfo("Set Layout '%s' Failed: %v",
 			kbd.CurrentLayout.Get(), err)
-		kbd.CurrentLayout.Set(getLayoutFromFile(kbdDefaultConfig))
+		kbd.settings.SetString(kbdKeyLayout,
+			getLayoutFromFile(kbdDefaultConfig))
 		return
 	}
 	//kbd.setLayoutOptions()

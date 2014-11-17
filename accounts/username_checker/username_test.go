@@ -52,7 +52,7 @@ func (*testWrapper) TestUsernameValid(c *C.C) {
 		},
 		{
 			name: "Asdf",
-			code: ErrCodeFirstUpper,
+			code: ErrCodeFirstNotLower,
 			ret:  true,
 		},
 		{
@@ -62,7 +62,27 @@ func (*testWrapper) TestUsernameValid(c *C.C) {
 		},
 		{
 			name: "xx12$%",
-			code: ErrCodeInvalid,
+			code: ErrCodeInvalidChar,
+			ret:  true,
+		},
+		{
+			name: "0",
+			code: ErrCodeFirstNotLower,
+			ret:  true,
+		},
+		{
+			name: "A",
+			code: ErrCodeFirstNotLower,
+			ret:  true,
+		},
+		{
+			name: "-",
+			code: ErrCodeFirstNotLower,
+			ret:  true,
+		},
+		{
+			name: "_",
+			code: ErrCodeFirstNotLower,
 			ret:  true,
 		},
 		{

@@ -132,7 +132,7 @@ func getLocale() string {
 	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
 	locale, err := getLocaleFromFile(filename)
 	if err != nil {
-		locale, err := getLocaleFromFile(systemLocaleFile)
+		locale, err = getLocaleFromFile(systemLocaleFile)
 		if err != nil {
 			locale = defaultLocale
 		}
@@ -236,7 +236,7 @@ func getLocaleFromFile(filename string) (string, error) {
 			continue
 		}
 
-		locale = strs[1]
+		locale = strings.Trim(strs[1], "\"")
 		break
 	}
 

@@ -46,27 +46,27 @@ type ErrorInfo struct {
 }
 
 var (
-	ErrCodeEmpty      int32 = 1
-	ErrCodeInvalid    int32 = 2
-	ErrCodeFirstUpper int32 = 3
-	ErrCodeExist      int32 = 4
-	ErrCodeSystemUsed int32 = 5
+	ErrCodeEmpty         int32 = 1
+	ErrCodeInvalidChar   int32 = 2
+	ErrCodeFirstNotLower int32 = 3
+	ErrCodeExist         int32 = 4
+	ErrCodeSystemUsed    int32 = 5
 )
 
 var (
-	ErrMSGEmpty      error
-	ErrMSGInvalid    error
-	ErrMSGFirstUpper error
-	ErrMSGExist      error
-	ErrMSGSystemUsed error
+	ErrMSGEmpty         error
+	ErrMSGInvalidChar   error
+	ErrMSGFirstNotLower error
+	ErrMSGExist         error
+	ErrMSGSystemUsed    error
 )
 
 func initErrorInfo() {
 	ErrMSGEmpty = fmt.Errorf(Tr("Username can not be empty."))
-	ErrMSGInvalid = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _"))
-	ErrMSGFirstUpper = fmt.Errorf(Tr("The first character must be in lower case."))
-	ErrMSGExist = fmt.Errorf(Tr("The username exist"))
-	ErrMSGSystemUsed = fmt.Errorf(Tr("The username has been used by system"))
+	ErrMSGInvalidChar = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _"))
+	ErrMSGFirstNotLower = fmt.Errorf(Tr("The first character must be in lower case."))
+	ErrMSGExist = fmt.Errorf(Tr("The username exist."))
+	ErrMSGSystemUsed = fmt.Errorf(Tr("The username has been used by system."))
 }
 
 func CheckUsernameValid(username string) *ErrorInfo {
@@ -90,19 +90,19 @@ func CheckUsernameValid(username string) *ErrorInfo {
 	 * The username is allowed only started with a letter,
 	 * and is composed of letters and numbers
 	 */
-	match := regexp.MustCompile(`^[A-Z]`)
-	if match.MatchString(username) {
+	match := regexp.MustCompile(`^[a-z]`)
+	if !match.MatchString(username) {
 		return &ErrorInfo{
-			Message: ErrMSGFirstUpper,
-			Code:    ErrCodeFirstUpper,
+			Message: ErrMSGFirstNotLower,
+			Code:    ErrCodeFirstNotLower,
 		}
 	}
 
-	match = regexp.MustCompile(`^[a-z][a-z0-9_-]{0,}$`)
+	match = regexp.MustCompile(`^[a-z][a-z0-9_-]*$`)
 	if !match.MatchString(username) {
 		return &ErrorInfo{
-			Message: ErrMSGInvalid,
-			Code:    ErrCodeInvalid,
+			Message: ErrMSGInvalidChar,
+			Code:    ErrCodeInvalidChar,
 		}
 	}
 
