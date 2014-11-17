@@ -22,9 +22,22 @@ const (
 	SystemID
 	UtilitiesID
 
-	AllID   = -1
-	OtherID = -2
-	FavorID = -3
+	AllID    = -1
+	OthersID = -2
+	FavorID  = -3
+
+	_AllCategoryName          = "all"
+	_OthersCategoryName       = "others"
+	_InternetCategoryName     = "internet"
+	_MultimediaCategoryName   = "multimedia"
+	_GamesCategoryName        = "games"
+	_GraphicsCategoryName     = "graphics"
+	_ProductivityCategoryName = "productivity"
+	_IndustryCategoryName     = "industry"
+	_EducationCategoryName    = "education"
+	_DevelopmentCategoryName  = "development"
+	_SystemCategoryName       = "system"
+	_UtilitiesCategoryName    = "utilities"
 
 	DataDir      = "/usr/share/deepin-software-center/data"
 	DataNewestId = DataDir + "/data_newest_id.ini"
@@ -41,32 +54,32 @@ type CategoryInfo struct {
 
 var (
 	nameIdMap = map[string]CategoryId{
-		"all":          AllID,
-		"other":        OtherID,
-		"internet":     NetworkID,
-		"multimedia":   MultimediaID,
-		"games":        GamesID,
-		"graphics":     GraphicsID,
-		"productivity": ProductivityID,
-		"industry":     IndustryID,
-		"education":    EducationID,
-		"development":  DevelopmentID,
-		"system":       SystemID,
-		"utilities":    UtilitiesID,
+		_AllCategoryName:          AllID,
+		_OthersCategoryName:       OthersID,
+		_InternetCategoryName:     NetworkID,
+		_MultimediaCategoryName:   MultimediaID,
+		_GamesCategoryName:        GamesID,
+		_GraphicsCategoryName:     GraphicsID,
+		_ProductivityCategoryName: ProductivityID,
+		_IndustryCategoryName:     IndustryID,
+		_EducationCategoryName:    EducationID,
+		_DevelopmentCategoryName:  DevelopmentID,
+		_SystemCategoryName:       SystemID,
+		_UtilitiesCategoryName:    UtilitiesID,
 	}
 	categoryTable = map[CategoryId]*CategoryInfo{
-		AllID:          &CategoryInfo{AllID, "all", map[ItemId]bool{}},
-		OtherID:        &CategoryInfo{OtherID, "other", map[ItemId]bool{}},
-		NetworkID:      &CategoryInfo{NetworkID, "internet", map[ItemId]bool{}},
-		MultimediaID:   &CategoryInfo{MultimediaID, "multimedia", map[ItemId]bool{}},
-		GamesID:        &CategoryInfo{GamesID, "games", map[ItemId]bool{}},
-		GraphicsID:     &CategoryInfo{GraphicsID, "graphics", map[ItemId]bool{}},
-		ProductivityID: &CategoryInfo{ProductivityID, "productivity", map[ItemId]bool{}},
-		IndustryID:     &CategoryInfo{IndustryID, "industry", map[ItemId]bool{}},
-		EducationID:    &CategoryInfo{EducationID, "education", map[ItemId]bool{}},
-		DevelopmentID:  &CategoryInfo{DevelopmentID, "development", map[ItemId]bool{}},
-		SystemID:       &CategoryInfo{SystemID, "system", map[ItemId]bool{}},
-		UtilitiesID:    &CategoryInfo{UtilitiesID, "utilities", map[ItemId]bool{}},
+		AllID:          &CategoryInfo{AllID, _AllCategoryName, map[ItemId]bool{}},
+		OthersID:       &CategoryInfo{OthersID, _OthersCategoryName, map[ItemId]bool{}},
+		NetworkID:      &CategoryInfo{NetworkID, _InternetCategoryName, map[ItemId]bool{}},
+		MultimediaID:   &CategoryInfo{MultimediaID, _MultimediaCategoryName, map[ItemId]bool{}},
+		GamesID:        &CategoryInfo{GamesID, _GamesCategoryName, map[ItemId]bool{}},
+		GraphicsID:     &CategoryInfo{GraphicsID, _GraphicsCategoryName, map[ItemId]bool{}},
+		ProductivityID: &CategoryInfo{ProductivityID, _ProductivityCategoryName, map[ItemId]bool{}},
+		IndustryID:     &CategoryInfo{IndustryID, _IndustryCategoryName, map[ItemId]bool{}},
+		EducationID:    &CategoryInfo{EducationID, _EducationCategoryName, map[ItemId]bool{}},
+		DevelopmentID:  &CategoryInfo{DevelopmentID, _DevelopmentCategoryName, map[ItemId]bool{}},
+		SystemID:       &CategoryInfo{SystemID, _SystemCategoryName, map[ItemId]bool{}},
+		UtilitiesID:    &CategoryInfo{UtilitiesID, _UtilitiesCategoryName, map[ItemId]bool{}},
 	}
 )
 
@@ -104,7 +117,7 @@ func findCategoryId(categoryName string) CategoryId {
 	if !ok {
 		id, ok = extraXCategoryNameIdMap[lowerCategoryName]
 		if !ok {
-			return OtherID
+			return OthersID
 		}
 	}
 	return id

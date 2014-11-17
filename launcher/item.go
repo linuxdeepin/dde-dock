@@ -80,7 +80,7 @@ func (i *ItemInfo) destroy() {
 	// fmt.Printf("delete id from category#%d\n", cid)
 	delete(categoryTable[i.getCategoryId()].items, i.Id)
 	// logger.Info("delete id from category#-1")
-	delete(categoryTable[OtherID].items, i.Id)
+	delete(categoryTable[OthersID].items, i.Id)
 }
 
 func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
@@ -88,12 +88,12 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 	basename := path.Base(filename)
 	dbPath, err := getDBPath(CategoryNameDBPath)
 	if err != nil {
-		return OtherID, err
+		return OthersID, err
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		return OtherID, err
+		return OthersID, err
 	}
 	defer db.Close()
 
@@ -105,11 +105,11 @@ func getDeepinCategory(app *gio.DesktopAppInfo) (CategoryId, error) {
 		basename,
 	).Scan(&categoryName)
 	if err != nil {
-		return OtherID, err
+		return OthersID, err
 	}
 
 	if categoryName == "" {
-		return OtherID, errors.New("get empty category")
+		return OthersID, errors.New("get empty category")
 	}
 
 	logger.Debug("get category name for", basename, "is", categoryName)
@@ -135,8 +135,8 @@ func getXCategory(app *gio.DesktopAppInfo) CategoryId {
 		}
 	}
 
-	if len(candidateIds) > 1 && candidateIds[OtherID] {
-		delete(candidateIds, OtherID)
+	if len(candidateIds) > 1 && candidateIds[OthersID] {
+		delete(candidateIds, OthersID)
 	}
 
 	ids := make([]CategoryId, 0)
