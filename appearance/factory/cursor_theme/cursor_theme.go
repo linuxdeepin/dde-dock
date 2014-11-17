@@ -21,6 +21,11 @@
 
 package cursor_theme
 
+// #cgo pkg-config: gtk+-3.0
+// #cgo CFLAGS: -Wall -g
+// #include "cursor.h"
+import "C"
+
 import (
 	"fmt"
 	"os"
@@ -41,7 +46,7 @@ const (
 )
 
 var (
-	themeConditions = []string{"cursors", "cursor.theme"}
+	themeConditions = []string{"cursors"}
 
 	errWriteCursor  = fmt.Errorf("Write cursor theme failed")
 	errInvalidTheme = fmt.Errorf("Invalid Theme")
@@ -72,6 +77,8 @@ func NewCursorTheme(handler func([]string)) *CursorTheme {
 		go cursor.watcher.StartWatch()
 	}
 	xsettings.InitXSettings()
+	// handle cursor changed by gtk+
+	C.handle_cursor_changed()
 
 	return cursor
 }
