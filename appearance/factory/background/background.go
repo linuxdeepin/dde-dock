@@ -22,6 +22,7 @@
 package background
 
 import (
+	"fmt"
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
@@ -36,6 +37,12 @@ import (
 const (
 	settingsKeyPictureURI = "picture-uri"
 	defaultBgFile         = "/usr/share/backgrounds/default_background.jpg"
+
+	dirModePerm = 0755
+)
+
+var (
+	errUserPict = fmt.Errorf("Get User Picture Failed")
 )
 
 type Background struct {
@@ -99,6 +106,10 @@ func (bg *Background) Set(uri string) error {
 		src = defaultBgFile
 	}
 	dir := getUserWallpaper()
+	if len(dir) == 0 {
+		return errUserPict
+	}
+
 	filename := path.Join(dir, path.Base(src))
 	err := dutils.CopyFile(src, filename)
 	if err != nil {
@@ -257,7 +268,15 @@ func getDirInfoList() ([]PathInfo, []PathInfo) {
 func getUserWallpaper() string {
 	pict := glib.GetUserSpecialDir(
 		glib.UserDirectoryDirectoryPictures)
-	return path.Join(pict, "Wallpapers")
+	dir := path.Join(pict, "Wallpapers")
+	if !dutils.IsFileExist(dir) {
+		err := os.MkdirAll(dir, dirModePerm)
+		if err != nil {
+			return ""
+		}
+	}
+
+	return dir
 }
 
 func getImageList(dir string) []string {
