@@ -491,9 +491,9 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return conn.Delete()
 }
 
-func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (err error) {
+func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
-	cpath, err := nmGetConnectionByUuid(uuid)
+	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
