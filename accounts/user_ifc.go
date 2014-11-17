@@ -292,3 +292,15 @@ func (u *User) IsIconDeletable(icon string) bool {
 
 	return false
 }
+
+func (u *User) GetLargeIcon() string {
+	baseName := path.Base(u.IconFile)
+	dir := path.Dir(u.IconFile)
+
+	filename := path.Join(dir, "bigger", baseName)
+	if !dutils.IsFileExist(filename) {
+		return ""
+	}
+
+	return filename
+}
