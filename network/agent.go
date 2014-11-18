@@ -71,9 +71,13 @@ func (a *agent) GetDBusInfo() dbus.DBusInfo {
 func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, key string) (keyData map[string]map[string]dbus.Variant) {
 	keyData = make(map[string]map[string]dbus.Variant)
 	keyData[settingName] = make(map[string]dbus.Variant)
+	doFillSecret(connectionData, keyData, settingName, key)
+	return keyData
+}
+func doFillSecret(refData, keyData map[string]map[string]dbus.Variant, settingName, key string) {
 	switch settingName {
 	case sectionWirelessSecurity:
-		switch getSettingVkWirelessSecurityKeyMgmt(connectionData) {
+		switch getSettingVkWirelessSecurityKeyMgmt(refData) {
 		case "none": // ignore
 		case "wep":
 			setSettingWirelessSecurityWepKey0(keyData, key)
@@ -83,16 +87,16 @@ func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, 
 			// If the user chose an 802.1x-based auth method, return
 			// 802.1x secrets together.
 			keyData[section8021x] = make(map[string]dbus.Variant)
-			doFillSecret8021x(connectionData, keyData, key)
+			doFillSecret8021x(refData, keyData, key)
 		}
 	case section8021x:
 		// wired 8021x
-		doFillSecret8021x(connectionData, keyData, key)
+		doFillSecret8021x(refData, keyData, key)
 	case sectionPppoe:
 		setSettingPppoePassword(keyData, key)
 	case sectionVpn:
 		setSettingVpnSecrets(keyData, make(map[string]string))
-		switch getCustomConnectionType(connectionData) {
+		switch getCustomConnectionType(refData) {
 		case connectionVpnL2tp:
 			setSettingVpnL2tpKeyPassword(keyData, key)
 		case connectionVpnOpenconnect: // ignore
@@ -109,10 +113,9 @@ func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, 
 	default:
 		logger.Error("Unknown secretly setting name", settingName, ", please report it to linuxdeepin")
 	}
-	return keyData
 }
-func doFillSecret8021x(connectionData, keyData map[string]map[string]dbus.Variant, key string) {
-	switch getSettingVk8021xEap(connectionData) {
+func doFillSecret8021x(refData, keyData map[string]map[string]dbus.Variant, key string) {
+	switch getSettingVk8021xEap(refData) {
 	case "tls":
 		setSetting8021xPrivateKeyPassword(keyData, key)
 	case "md5":
@@ -201,11 +204,20 @@ func (a *agent) feedSecret(path dbus.ObjectPath, name string, key string) {
 }
 
 func (m *Manager) FeedSecret(path string, name, key string, autoConnect bool) {
-	logger.Debug("FeedSecret:", path, name, "xxx")
+	logger.Debug("FeedSecret:", path, name, "xxxx")
 
 	opath := dbus.ObjectPath(path)
 	m.agent.feedSecret(opath, name, key)
-	nmGeneralSetConnectionAutoconnect(opath, autoConnect)
+
+	// FIXME: update secret data in connection settings manually to fix
+	// password popup issue when editing such connections
+	data, err := nmGetConnectionData(opath)
+	if err != nil {
+		return
+	}
+	generalSetSettingAutoconnect(data, autoConnect)
+	doFillSecret(data, data, name, key)
+	nmUpdateConnectionData(opath, data)
 }
 func (m *Manager) CancelSecret(path string, name string) {
 	logger.Debug("CancelSecret:", path, name)

@@ -251,3 +251,13 @@ func isSettingSectionExists(data connectionData, section string) bool {
 	_, ok := data[realSection]
 	return ok
 }
+
+func generalSetSettingAutoconnect(data connectionData, autoConnect bool) {
+	switch getSettingConnectionType(data) {
+	case NM_SETTING_VPN_SETTING_NAME:
+		uuid := getSettingConnectionUuid(data)
+		manager.config.setVpnConnectionAutoConnect(uuid, autoConnect)
+	default:
+		setSettingConnectionAutoconnect(data, autoConnect)
+	}
+}
