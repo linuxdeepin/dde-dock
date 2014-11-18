@@ -7,7 +7,7 @@ package dock
 // char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
 // char* get_exec(int pid);
 // char* get_exe(int pid);
-//char* icon_name_to_path(const char* name, int size);
+// char* icon_name_to_path(const char* name, int size);
 // void init_deepin();
 // char* get_data_uri_by_path(const char* path);
 import "C"

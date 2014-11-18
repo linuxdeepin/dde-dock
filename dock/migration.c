@@ -691,13 +691,6 @@ char* check_absolute_path_icon(char const* app_id, char const* icon_path)
 }
 
 
-void set_default_theme(const char* theme)
-{
-    GtkSettings* setting = gtk_settings_get_default();
-    g_object_set(setting, "gtk-icon-theme-name", theme, NULL);
-}
-
-
 static char DE_NAME[100] = "DEEPIN";
 
 void set_desktop_env_name(const char* name)
@@ -712,7 +705,6 @@ void init_deepin()
 {
     gtk_init(NULL, NULL);
     set_desktop_env_name("Deepin");
-    set_default_theme("Deepin");
 }
 
 
