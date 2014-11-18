@@ -45,7 +45,7 @@ const (
 )
 
 var (
-	notifier, _   = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+	notifier      *notifications.Notifier
 	notifyEnabled = true
 )
 
