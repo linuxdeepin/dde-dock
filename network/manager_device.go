@@ -40,12 +40,16 @@ type device struct {
 	// front-end code.
 	Vendor string
 
-	// unique connection uuid for this device, works for wired and
-	// modem device
+	// Unique connection uuid for this device, works for wired,
+	// wireless and modem devices, for wireless device the unique uuid
+	// will be the connection uuid of hotspot mode.
 	UniqueUuid string
 
-	UsbDevice bool            // not works for mobile device(modem)
-	ActiveAp  dbus.ObjectPath // used for wireless device
+	UsbDevice bool // not works for mobile device(modem)
+
+	// used for wireless device
+	ActiveAp       dbus.ObjectPath
+	SupportHotspot bool
 
 	// used for mobile device
 	MobileNetworkType   string
@@ -148,6 +152,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				m.setPropDevices()
 			})
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
+			dev.SupportHotspot = isWirelessDeviceSuportHotspot(nmDev.Interface.Get())
 
 			// connect signals AccessPointAdded() and AccessPointRemoved()
 			dev.nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {

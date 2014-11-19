@@ -1103,7 +1103,7 @@ func nmGetWirelessConnectionListBySsid(ssid []byte) (cpaths []dbus.ObjectPath) {
 	return
 }
 
-func nmGetConnectionSsidByUuid(uuid string) (ssid []byte) {
+func nmGetWirelessConnectionSsidByUuid(uuid string) (ssid []byte) {
 	cpath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return

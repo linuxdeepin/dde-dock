@@ -327,9 +327,15 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 			ssids := nmGetAccessPointSsids(devPath)
 			logger.Debug("available ssids", ssids)
 			for _, uuid := range uuids {
+				// ignore the hotspot/adhoc connections
+				switch getCustomConnectionTypeForUuid(uuid) {
+				case connectionWirelessHotspot, connectionWirelessAdhoc:
+					continue
+				}
+
 				// if is wireless connection, check if the access
 				// point exists around, if not, ignore it
-				ssid := string(nmGetConnectionSsidByUuid(uuid))
+				ssid := string(nmGetWirelessConnectionSsidByUuid(uuid))
 				logger.Debug("check ssid", ssid, uuid)
 				if !isStringInArray(ssid, ssids) {
 					continue

@@ -30,12 +30,14 @@ DDE Daemon is a daemon for handling  the deepin session settings
 
 ### Optional Dependencies
 
-* network-manager-vpnc
-* network-manager-pptp
-* network-manager-l2tp
-* network-manager-openvpn
-* network-manager-openconnect
+* network-manager-vpnc-gnome
+* network-manager-pptp-gnome
+* network-manager-l2tp-gnome
+* network-manager-strongswan-gnome
+* network-manager-openvpn-gnome
+* network-manager-openconnect-gnome
 * iso-codes
+* iw (check if wireless device support hotspot mode)
 * mobile-broadband-provider-info
 
 ## Installation

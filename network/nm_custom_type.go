@@ -123,6 +123,19 @@ var supportedConnectionTypes = []string{
 	connectionVpnVpnc,
 }
 
+func getCustomConnectionTypeForUuid(uuid string) (connType string) {
+	connType = connectionUnknown
+	cpath, err := nmGetConnectionByUuid(uuid)
+	if err != nil {
+		return
+	}
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	return getCustomConnectionType(data)
+}
+
 // return custom connection type, and the wrapper types will be ignored, e.g. connectionMobile.
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)

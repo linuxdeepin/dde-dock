@@ -145,7 +145,7 @@ func (m *Manager) isAccessPointActivated(devPath dbus.ObjectPath, ssid string) b
 	for _, path := range nmGetActiveConnections() {
 		aconn := m.newActiveConnection(path)
 		if aconn.typ == nm.NM_SETTING_WIRELESS_SETTING_NAME && isDBusPathInArray(devPath, aconn.Devices) {
-			if ssid == string(nmGetConnectionSsidByUuid(aconn.Uuid)) {
+			if ssid == string(nmGetWirelessConnectionSsidByUuid(aconn.Uuid)) {
 				return true
 			}
 		}

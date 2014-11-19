@@ -11,6 +11,7 @@ package network
 
 import (
 	"pkg.deepin.io/dde/daemon/network/nm"
+	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/utils"
 )
@@ -88,7 +89,20 @@ func initAvailableValuesWirelessChannel() {
 	}
 }
 
-// new connection data
+func newWirelessHotspotConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
+	logger.Infof("new wireless hotspot connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
+	data := newWirelessHotspotConnectionData(id, uuid)
+	hwAddr, _ := nmGeneralGetDeviceHwAddr(devPath)
+	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
+	setSettingConnectionAutoconnect(data, false)
+	if active {
+		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+	} else {
+		cpath, err = nmAddConnection(data)
+	}
+	return
+}
+
 func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid string) {
 	logger.Debugf("new wireless connection, id=%s, ssid=%s, secType=%d", id, ssid, secType)
 	uuid = utils.GenUuid()
@@ -97,6 +111,7 @@ func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid stri
 	return
 }
 
+// new connection data
 func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) (data connectionData) {
 	data = make(connectionData)
 

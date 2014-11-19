@@ -11,6 +11,7 @@ package network
 
 import (
 	nmdbus "dbus/org/freedesktop/networkmanager"
+	"fmt"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
@@ -256,7 +257,9 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 	} else {
 		id = Tr("Wired Connection")
 	}
-	if cpath, err := nmGetConnectionByUuid(uuid); err != nil {
+
+	cpath, err = nmGetConnectionByUuid(uuid)
+	if err != nil {
 		// connection not exists, create one
 		exists = false
 		cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
@@ -273,7 +276,7 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 // target device exists, if not, create one.
 func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
 	uuid := nmGeneralGetDeviceUniqueUuid(modemDevPath)
-	_, err = nmGetConnectionByUuid(uuid)
+	cpath, err = nmGetConnectionByUuid(uuid)
 	if err == nil {
 		// connection already exists
 		exists = true
@@ -282,6 +285,22 @@ func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, act
 	// connection id will be reset when setting up plans, so here just give
 	// an optional name like "mobile"
 	cpath, err = newMobileConnectionForDevice("mobile", uuid, modemDevPath, active)
+	return
+}
+
+// ensureWirelessHotspotConnectionExists will check if wireless hotspot connection for
+// target device exists, if not, create one.
+func (m *Manager) ensureWirelessHotspotConnectionExists(wirelessDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+	uuid := nmGeneralGetDeviceUniqueUuid(wirelessDevPath)
+	cpath, err = nmGetConnectionByUuid(uuid)
+	if err == nil {
+		// connection already exists
+		exists = true
+		return
+	}
+
+	// connection not exists, create one
+	cpath, err = newWirelessHotspotConnectionForDevice("hotspot", uuid, wirelessDevPath, active)
 	return
 }
 
@@ -373,6 +392,7 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return nmConn.Delete()
 }
 
+// TODO looks ActivateConnection should return apath instead cpath
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
 	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
@@ -405,6 +425,45 @@ func (m *Manager) DeactivateConnection(uuid string) (err error) {
 				err = tmpErr
 			}
 		}
+	}
+	return
+}
+
+// EnableWirelessHotspotMode activate the device related hotspot
+// connection, if the connection not exists will create one.
+func (m *Manager) EnableWirelessHotspotMode(devPath dbus.ObjectPath) (err error) {
+	devType := nmGetDeviceType(devPath)
+	if devType != nm.NM_DEVICE_TYPE_WIFI {
+		err = fmt.Errorf("not a wireless device %s %d", devPath, devType)
+		logger.Error(err)
+		return
+	}
+
+	cpath, exists, err := m.ensureWirelessHotspotConnectionExists(devPath, true)
+	if exists {
+		// if the connection not exists, it will be activated when
+		// creating, but if already exists, we should activate it
+		// manually
+		_, err = nmActivateConnection(devPath, cpath)
+	}
+	return
+}
+
+// DisableWirelessHotspotMode will disconnect the device related hotspot connection.
+func (m *Manager) DisableWirelessHotspotMode(devPath dbus.ObjectPath) (err error) {
+	uuid := nmGeneralGetDeviceUniqueUuid(devPath)
+	err = m.DeactivateConnection(uuid)
+	return
+}
+
+// IsWirelessHotspotModeEnabled check if the device related hotspot
+// connection activated.
+func (m *Manager) IsWirelessHotspotModeEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
+	uuid := nmGeneralGetDeviceUniqueUuid(devPath)
+	apaths, _ := nmGetActiveConnectionByUuid(uuid)
+	if len(apaths) > 0 {
+		// the target hotspot connection is activated
+		enabled = true
 	}
 	return
 }
