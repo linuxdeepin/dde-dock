@@ -89,6 +89,10 @@ func (s *Setting) init() bool {
 
 	s.displayMode = DisplayModeType(s.core.GetEnum(DisplayModeKey))
 	s.hideMode = HideModeType(s.core.GetEnum(HideModeKey))
+	if s.hideMode == HideModeAutoHide {
+		s.hideMode = HideModeSmartHide
+		s.core.SetEnum(HideModeKey, int(HideModeSmartHide))
+	}
 
 	s.listenSettingChange(HideModeKey, func(g *gio.Settings, key string) {
 		s.hideModeLock.Lock()
