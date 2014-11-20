@@ -60,8 +60,9 @@ func NewManager(l *log.Logger) *Manager {
 	}
 
 	m.logger = l
-	m.mouse = libmouse.NewMouse(l)
+	// Touchpad must be created after Mouse
 	m.touchpad = libtouchpad.NewTouchpad(l)
+	m.mouse = libmouse.NewMouse(l)
 	m.kbd = libkeyboard.NewKeyboard(l)
 	m.wacom = libwacom.NewWacom(l)
 	m.versionRight = m.isVersionRight()
