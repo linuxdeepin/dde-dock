@@ -23,38 +23,50 @@ package bluetooth
 
 import (
 	"dbus/org/bluez"
+	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"time"
 )
 
 const deviceRssiNotInRange = -1000 // -1000db means device not in range
 
+const (
+	deviceStateDisconnected = 0
+	deviceStateConnecting   = 1
+	deviceStateConnected    = 2
+)
+
 type device struct {
 	bluezDevice *bluez.Device1
-	adapter     dbus.ObjectPath
 
-	Path dbus.ObjectPath
+	Path        dbus.ObjectPath
+	AdapterPath dbus.ObjectPath
 
-	Alias     string
-	Trusted   bool
-	Paired    bool
-	Connected bool
+	Alias   string
+	Trusted bool
+	Paired  bool
+
+	connected  bool
+	connecting bool
+	State      uint32
 
 	// optinal
 	Icon string
 	RSSI int16
 }
 
-func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
+func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
-	d.adapter = d.bluezDevice.Adapter.Get()
+	d.AdapterPath = d.bluezDevice.Adapter.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
-	d.Connected = d.bluezDevice.Connected.Get()
+	d.connected = d.bluezDevice.Connected.Get()
+	d.notifyStateChanged()
 
-	// optional properties, read from dbus object data in order to check if property is exists
+	// optional properties, read from dbus object data in order to
+	// check if property is exists
 	d.Icon = getDBusObjectValueString(data, "Icon")
 	if isDBusObjectKeyExists(data, "RSSI") {
 		d.RSSI = getDBusObjectValueInt16(data, "RSSI")
@@ -64,34 +76,7 @@ func (b *Bluetooth) newDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d.connectProeprties()
 	return
 }
-func (d *device) connectProeprties() {
-	d.bluezDevice.Connected.ConnectChanged(func() {
-		d.Connected = d.bluezDevice.Connected.Get()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Alias.ConnectChanged(func() {
-		d.Alias = d.bluezDevice.Alias.Get()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Trusted.ConnectChanged(func() {
-		d.Trusted = d.bluezDevice.Trusted.Get()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Paired.ConnectChanged(func() {
-		d.Paired = d.bluezDevice.Paired.Get()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Icon.ConnectChanged(func() {
-		d.Icon = d.bluezDevice.Icon.Get()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.RSSI.ConnectChanged(func() {
-		d.RSSI = d.bluezDevice.RSSI.Get()
-		d.fixRssi()
-		bluetooth.setPropDevices()
-	})
-}
-func (d *device) resetConnect() {
+func destroyDevice(d *device) {
 	d.bluezDevice.Connected.Reset()
 	d.bluezDevice.Alias.Reset()
 	d.bluezDevice.Trusted.Reset()
@@ -99,6 +84,66 @@ func (d *device) resetConnect() {
 	d.bluezDevice.Icon.Reset()
 	d.bluezDevice.RSSI.Reset()
 }
+
+func (d *device) notifyDeviceAdded() {
+	logger.Debug("DeviceAdded", marshalJSON(d))
+	dbus.Emit(bluetooth, "DeviceAdded", marshalJSON(d))
+}
+func (d *device) notifyDeviceRemoved() {
+	logger.Debug("DeviceRemoved", marshalJSON(d))
+	dbus.Emit(bluetooth, "DeviceRemoved", marshalJSON(d))
+}
+func (d *device) notifyDevicePropertiesChanged() {
+	logger.Debug("DevicePropertiesChanged", marshalJSON(d))
+	dbus.Emit(bluetooth, "DevicePropertiesChanged", marshalJSON(d))
+}
+
+func (d *device) connectProeprties() {
+	d.bluezDevice.Connected.ConnectChanged(func() {
+		d.connected = d.bluezDevice.Connected.Get()
+		d.notifyStateChanged()
+	})
+	d.bluezDevice.Alias.ConnectChanged(func() {
+		d.Alias = d.bluezDevice.Alias.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+	d.bluezDevice.Trusted.ConnectChanged(func() {
+		d.Trusted = d.bluezDevice.Trusted.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+	d.bluezDevice.Paired.ConnectChanged(func() {
+		d.Paired = d.bluezDevice.Paired.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+	d.bluezDevice.Icon.ConnectChanged(func() {
+		d.Icon = d.bluezDevice.Icon.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+	d.bluezDevice.RSSI.ConnectChanged(func() {
+		d.RSSI = d.bluezDevice.RSSI.Get()
+		d.fixRssi()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+}
+func (d *device) notifyStateChanged() {
+	if d.connected {
+		d.connecting = false
+		d.State = deviceStateConnected
+	} else if d.connecting {
+		d.State = deviceStateConnecting
+	} else {
+		d.State = deviceStateDisconnected
+	}
+	logger.Debugf("notifyStateChanged: %#v", d) // TODO test
+	d.notifyDevicePropertiesChanged()
+	bluetooth.setPropDevices()
+}
+
 func (d *device) fixRssi() {
 	if d.RSSI == 0 {
 		if d.Trusted {
@@ -110,31 +155,24 @@ func (d *device) fixRssi() {
 }
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
-	d := b.newDevice(dpath, data)
-	if b.isDeviceExists(b.devices[d.adapter], dpath) {
+	d := newDevice(dpath, data)
+	if b.isDeviceExists(b.devices[d.AdapterPath], dpath) {
 		logger.Warning("repeat add device:", dpath)
 		return
 	}
-	b.devices[d.adapter] = append(b.devices[d.adapter], d)
+	d.notifyDeviceAdded()
+	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	b.setPropDevices()
-
-	// send signal DeviceAdded() if device is managed by primary adapter
-	if dbus.ObjectPath(b.PrimaryAdapter) == d.adapter {
-		dbus.Emit(b, "DeviceAdded", marshalJSON(d))
-	}
 }
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	// find adapter of the device
 	for apath, devices := range b.devices {
 		if b.isDeviceExists(devices, dpath) {
+			d, _ := b.getDevice(dpath)
+			d.notifyDeviceRemoved()
+
 			b.devices[apath] = b.doRemoveDevice(devices, dpath)
 			b.setPropDevices()
-
-			// send signal DeviceRemoved() if device is managed by primary adapter
-			if dbus.ObjectPath(b.PrimaryAdapter) == apath {
-				d := &device{Path: dpath}
-				dbus.Emit(b, "DeviceRemoved", marshalJSON(d))
-			}
 			return
 		}
 	}
@@ -145,11 +183,22 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*
 		logger.Warning("repeat remove device:", dpath)
 		return devices
 	}
-	devices[i].resetConnect()
+	destroyDevice(devices[i])
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
 	devices = devices[:len(devices)-1]
 	return devices
+}
+func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (d *device, err error) {
+	for _, devices := range b.devices {
+		if i := b.getDeviceIndex(devices, dpath); i >= 0 {
+			d = devices[i]
+			return
+		}
+	}
+	err = fmt.Errorf("device not exists %s", dpath)
+	logger.Error(err)
+	return
 }
 func (b *Bluetooth) isDeviceExists(devices []*device, dpath dbus.ObjectPath) bool {
 	if b.getDeviceIndex(devices, dpath) >= 0 {
@@ -166,33 +215,54 @@ func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int
 	return -1
 }
 
-// GetDevices return all devices object that marshaled by json.
-func (b *Bluetooth) GetDevices() (devicesJSON string) {
-	devices := b.devices[dbus.ObjectPath(b.PrimaryAdapter)]
+// GetDevices return all device objects that marshaled by json.
+func (b *Bluetooth) GetDevices(apath dbus.ObjectPath) (devicesJSON string, err error) {
+	devices := b.devices[apath]
 	devicesJSON = marshalJSON(devices)
 	return
 }
 
 func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
+	// mark device is connecting
+	d, err := b.getDevice(dpath)
+	if err != nil {
+		return
+	}
+	d.connecting = true
+	d.notifyStateChanged()
+
 	go func() {
 		bluezSetDeviceTrusted(dpath, true)
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
 		}
-		bluezConnectDevice(dpath)
+		err = bluezConnectDevice(dpath)
+
+		if d.connecting {
+			d.connecting = false
+			d.notifyStateChanged()
+		}
 	}()
 	return
 }
 
 func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) (err error) {
+	// mark disconnected in time
+	d, err := b.getDevice(dpath)
+	if err != nil {
+		return
+	}
+	d.connected = false
+	d.notifyStateChanged()
+
 	go bluezDisconnectDevice(dpath)
 	return
 }
 
-func (b *Bluetooth) RemoveDevice(dpath dbus.ObjectPath) (err error) {
+func (b *Bluetooth) RemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
 	// TODO
-	go bluezRemoveDevice(dbus.ObjectPath(b.PrimaryAdapter), dpath)
+	go bluezRemoveDevice(apath, dpath)
 	return
 }
 

@@ -23,7 +23,6 @@ package bluetooth
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/dbus/property"
 )
 
 func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
@@ -33,86 +32,16 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 		}
 	}()
 	logger.Debug("OnPropertiesChanged()", name)
-	switch name {
-	case "PrimaryAdapter":
-		oldPrimaryAdapter, _ := oldv.(string)
-		if b.PrimaryAdapter != oldPrimaryAdapter {
-			b.setPropPrimaryAdapter(dbus.ObjectPath(b.PrimaryAdapter))
-			b.syncConfigPowered()
-		}
-	case "Powered":
-		if b.isPrimaryAdapterExists() {
-			b.updateAdapterScanState(dbus.ObjectPath(b.PrimaryAdapter))
-		}
-		// else {
-		// 	b.Powered.SetValue(false)
-		// 	b.setPropPowered()
-		// }
-	}
 }
 
-func (b *Bluetooth) setPropPrimaryAdapter(apath dbus.ObjectPath) {
-	b.PrimaryAdapter = string(apath)
-
-	// power on primary adapter and power off other adapters
-	for _, a := range b.adapters {
-		if a.Path == apath {
-			bluezSetAdapterPowered(a.Path, true)
-		} else {
-			bluezSetAdapterPowered(a.Path, false)
-		}
-		b.updateAdapterScanState(a.Path)
-	}
-
-	// update alias properties
-	if b.isAdapterExists(apath) {
-		bluezAdapter, _ := bluezNewAdapter(apath)
-		b.Alias = property.NewWrapProperty(b, "Alias", bluezAdapter.Alias)
-		b.Powered = property.NewWrapProperty(b, "Powered", bluezAdapter.Powered)
-		b.Discoverable = property.NewWrapProperty(b, "Discoverable", bluezAdapter.Discoverable)
-		b.DiscoverableTimeout = property.NewWrapProperty(b, "DiscoverableTimeout", bluezAdapter.DiscoverableTimeout)
-	}
-
-	dbus.NotifyChange(b, "PrimaryAdapter")
-}
-
-func (b *Bluetooth) updateAdapterScanState(apath dbus.ObjectPath) {
-	// if adapter is power on, just start discovery
-	powered := bluezGetAdapterPowered(apath)
-	if powered {
-		if !bluezGetAdapterDiscovering(apath) {
-			bluezStartDiscovery(apath)
-		}
-	}
-}
-
+// TODO: remove
 func (b *Bluetooth) setPropAdapters() {
 	b.Adapters = marshalJSON(b.adapters)
 	dbus.NotifyChange(b, "Adapters")
-	logger.Debug(b.Adapters) // TODO test
-
-	// TODO update alias properties for primary adapter
 }
 
+// TODO: remove
 func (b *Bluetooth) setPropDevices() {
-	devices := b.devices[dbus.ObjectPath(b.PrimaryAdapter)]
-	b.Devices = marshalJSON(devices)
+	b.Devices = marshalJSON(b.devices)
 	dbus.NotifyChange(b, "Devices")
-	logger.Debug(b.Devices) // TODO test
-}
-
-func (b *Bluetooth) setPropAlias() {
-	dbus.NotifyChange(b, "Alias")
-}
-
-func (b *Bluetooth) setPropPowered() {
-	dbus.NotifyChange(b, "Powered")
-}
-
-func (b *Bluetooth) setPropDiscoverable() {
-	dbus.NotifyChange(b, "Discoverable")
-}
-
-func (b *Bluetooth) setPropDiscoverableTimeout() {
-	dbus.NotifyChange(b, "DiscoverableTimeout")
 }

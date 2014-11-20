@@ -23,8 +23,35 @@ package bluetooth
 
 import (
 	"dbus/org/bluez"
+	sysdbus "dbus/org/freedesktop/dbus/system"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
+
+func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
+	objectManager, err = sysdbus.NewObjectManager(dbusBluezDest, "/")
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+
+func bluezGetAdapters() (apathes []dbus.ObjectPath) {
+	objectManager, err := bluezNewObjectManager()
+	if err != nil {
+		return
+	}
+	objects, err := objectManager.GetManagedObjects()
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	for path, data := range objects {
+		if _, ok := data[dbusBluezIfsAdapter]; ok {
+			apathes = append(apathes, path)
+		}
+	}
+	return
+}
 
 func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {
 	bluezAdapter, err = bluez.NewAdapter1(dbusBluezDest, apath)
@@ -48,6 +75,9 @@ func bluezStartDiscovery(apath dbus.ObjectPath) (err error) {
 		return
 	}
 	err = bluezAdapter.StartDiscovery()
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 
@@ -57,6 +87,9 @@ func bluezStopDiscovery(apath dbus.ObjectPath) (err error) {
 		return
 	}
 	err = bluezAdapter.StopDiscovery()
+	if err != nil {
+		logger.Error(err)
+	}
 	return
 }
 
