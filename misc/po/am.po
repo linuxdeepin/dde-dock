@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-18 09:39+0800\n"
-"PO-Revision-Date: 2014-11-18 02:14+0000\n"
+"PO-Revision-Date: 2014-11-27 15:17+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Amharic (http://www.transifex.com/projects/p/dde-daemon/language/am/)\n"
 "MIME-Version: 1.0\n"
@@ -2115,11 +2115,11 @@ msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:164
 msgid "Page Up"
-msgstr ""
+msgstr "ገጽ ወደ ላይ"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 msgid "Page Down"
-msgstr ""
+msgstr "ገጽ ወደ ታች"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
