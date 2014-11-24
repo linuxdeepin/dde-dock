@@ -251,17 +251,17 @@ func (sh *switchHandler) setPropWiredEnabled(enabled bool) {
 }
 
 func (sh *switchHandler) initPropVpnEnabled() {
-	sh.doEnableVpn(sh.config.getVpnEnabled())
+	sh.enableVpn(sh.config.getVpnEnabled())
 }
 func (sh *switchHandler) setPropVpnEnabled(enabled bool) {
 	if sh.config.getVpnEnabled() == enabled {
 		return
 	}
-	sh.doEnableVpn(enabled)
+	sh.enableVpn(enabled)
 }
-func (sh *switchHandler) doEnableVpn(enabled bool) {
-	sh.VpnEnabled = enabled
-	sh.config.setVpnEnabled(enabled)
+func (sh *switchHandler) enableVpn(enabled bool) {
+	sh.doEnableVpn(enabled)
+
 	// setup vpn connections
 	for _, uuid := range nmGetConnectionUuidsByType(NM_SETTING_VPN_SETTING_NAME) {
 		if enabled {
@@ -271,6 +271,10 @@ func (sh *switchHandler) doEnableVpn(enabled bool) {
 			sh.deactivateVpnConnection(uuid)
 		}
 	}
+}
+func (sh *switchHandler) doEnableVpn(enabled bool) {
+	sh.VpnEnabled = enabled
+	sh.config.setVpnEnabled(enabled)
 	manager.setPropVpnEnabled(sh.VpnEnabled)
 }
 

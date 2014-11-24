@@ -163,7 +163,9 @@ func (m *Manager) initActiveConnectionManage() {
 				notifyVpnFailed(aconn.Id, reason)
 			}
 
-			if !isVpnConnectionStateInActivating(state) {
+			if isVpnConnectionStateInActivating(state) {
+				m.switchHandler.doEnableVpn(true)
+			} else {
 				delete(m.activeConnections, s.Path)
 				m.switchHandler.turnOffVpnSwitchIfNeed(autoConnectTimeout)
 			}
