@@ -13,6 +13,9 @@ import (
 const (
 	HideModeKey    string = "hide-mode"
 	DisplayModeKey string = "display-mode"
+	ClockTypeKey   string = "clock-type"
+	DisplayDateKey string = "display-date"
+	DisplayWeekKey string = "display-week"
 )
 
 type HideModeType int32
@@ -60,6 +63,24 @@ func (t DisplayModeType) String() string {
 	}
 }
 
+type ClockType int32
+
+const (
+	ClockTypeDigit ClockType = iota
+	ClockTypeAnalog
+)
+
+func (self ClockType) String() string {
+	switch self {
+	case ClockTypeDigit:
+		return "digit clock"
+	case ClockTypeAnalog:
+		return "analog clock"
+	default:
+		return "unknown type clock"
+	}
+}
+
 type Setting struct {
 	core *gio.Settings
 
@@ -69,8 +90,20 @@ type Setting struct {
 	displayModeLock sync.RWMutex
 	displayMode     DisplayModeType
 
+	clockTypeLock sync.RWMutex
+	clockType     ClockType
+
+	displayDateLock sync.RWMutex
+	displayDate     bool
+
+	displayWeekLock sync.RWMutex
+	displayWeek     bool
+
 	HideModeChanged    func(mode int32)
 	DisplayModeChanged func(mode int32)
+	ClockTypeChanged   func(mode int32)
+	DisplayDateChanged func(bool)
+	DisplayWeekChanged func(bool)
 }
 
 func NewSetting() *Setting {
@@ -93,6 +126,7 @@ func (s *Setting) init() bool {
 		s.hideMode = HideModeSmartHide
 		s.core.SetEnum(HideModeKey, int(HideModeSmartHide))
 	}
+	s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
 
 	s.listenSettingChange(HideModeKey, func(g *gio.Settings, key string) {
 		s.hideModeLock.Lock()
@@ -165,6 +199,25 @@ func (s *Setting) init() bool {
 		dockProperty.updateDockHeight(value)
 		dbus.Emit(s, "DisplayModeChanged", int32(value))
 	})
+	s.listenSettingChange(ClockTypeKey, func(*gio.Settings, string) {
+		s.clockTypeLock.Lock()
+		defer s.clockTypeLock.Unlock()
+		s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
+		dbus.Emit(s, "ClockTypeChanged", int32(s.clockType))
+	})
+
+	s.listenSettingChange(DisplayDateKey, func(*gio.Settings, string) {
+		s.displayDateLock.Lock()
+		defer s.displayDateLock.Unlock()
+		s.displayDate = s.core.GetBoolean(DisplayDateKey)
+		dbus.Emit(s, "DisplayDateChanged", s.displayDate)
+	})
+	s.listenSettingChange(DisplayWeekKey, func(*gio.Settings, string) {
+		s.displayWeekLock.Lock()
+		defer s.displayWeekLock.Unlock()
+		s.displayWeek = s.core.GetBoolean(DisplayWeekKey)
+		dbus.Emit(s, "DisplayWeekChanged", s.displayWeek)
+	})
 	return true
 }
 
@@ -182,9 +235,6 @@ func (s *Setting) SetHideMode(_mode int32) bool {
 	mode := HideModeType(_mode)
 	logger.Debug("[Setting.SetHideMode]:", mode)
 	ok := s.core.SetEnum(HideModeKey, int(mode))
-	if ok {
-		dbus.Emit(s, "HideModeChanged", _mode)
-	}
 	return ok
 }
 
@@ -196,10 +246,34 @@ func (s *Setting) SetDisplayMode(_mode int32) bool {
 	mode := DisplayModeType(_mode)
 	logger.Info("[Setting.SetDisplayMode]:", mode)
 	ok := s.core.SetEnum(DisplayModeKey, int(mode))
-	if ok {
-		dbus.Emit(s, "DisplayModeChanged", _mode)
-	}
 	return ok
+}
+
+func (s *Setting) GetClockType() int32 {
+	return int32(s.clockType)
+}
+
+func (s *Setting) SetClockType(_clockType int32) bool {
+	clockType := ClockType(_clockType)
+	logger.Info("clock type changed to:", clockType)
+	ok := s.core.SetEnum(ClockTypeKey, int(clockType))
+	return ok
+}
+
+func (s *Setting) GetDisplayDate() bool {
+	return s.displayDate
+}
+
+func (s *Setting) SetDisplayDate(d bool) bool {
+	return s.core.SetBoolean(DisplayDateKey, d)
+}
+
+func (s *Setting) GetDisplayWeek() bool {
+	return s.displayWeek
+}
+
+func (s *Setting) SetDisplayWeek(d bool) bool {
+	return s.core.SetBoolean(DisplayWeekKey, d)
 }
 
 func (s *Setting) destroy() {

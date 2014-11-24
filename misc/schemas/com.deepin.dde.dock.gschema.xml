@@ -37,5 +37,15 @@
             <summary>The display mode.</summary>
             <description>The dock gets different display mode, for instance, dock looks like win7 taskbar on classic mode.</description>
         </key>
+        <key name="display-date" type="b">
+            <default>false</default>
+            <summary>Display date on dock.</summary>
+            <description>Display date on dock for classic/efficient mode.</description>
+        </key>
+        <key name="display-week" type="b">
+            <default>false</default>
+            <summary>Display week on dock.</summary>
+            <description>Display week on dock for classic/efficient mode.</description>
+        </key>
     </schema>
 </schemalist>
