@@ -829,6 +829,19 @@ func nmGetWirelessConnectionListBySsid(ssid []byte) (cpaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetConnectionSsidByUuid(uuid string) (ssid []byte) {
+	cpath, err := nmGetConnectionByUuid(uuid)
+	if err != nil {
+		return
+	}
+	data, err := nmGetConnectionData(cpath)
+	if err != nil {
+		return
+	}
+	ssid = getSettingWirelessSsid(data)
+	return
+}
+
 func nmAddConnection(data connectionData) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmSettings.AddConnection(data)
 	if err != nil {

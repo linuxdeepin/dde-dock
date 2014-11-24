@@ -211,6 +211,14 @@ func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
 	}
 	return -1
 }
+func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
+	for _, ap := range m.accessPoints[devPath] {
+		if ap.Ssid == ssid {
+			return true
+		}
+	}
+	return false
+}
 
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {

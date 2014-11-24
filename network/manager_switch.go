@@ -331,18 +331,26 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 
 	sh.config.setDeviceEnabled(devPath, enabled)
 	if enabled {
-		// active last connection if device is disconnected
-		if len(devConfig.LastConnectionUuid) > 0 {
+		// try to active last connection
+		var uuidToActive string
+		for _, uuidToActive = range nmGetConnectionUuidsForAutoConnect(devPath, devConfig.LastConnectionUuid) {
+			// if is wireless connection, check if the access point
+			// exists around, if not, ignore it
+			if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
+				ssid := string(nmGetConnectionSsidByUuid(uuidToActive))
+				if !manager.isSsidExists(devPath, ssid) {
+					continue
+				}
+			}
+			break
+		}
+		if len(uuidToActive) > 0 {
 			activeUuid, _ := nmGetDeviceActiveConnectionUuid(devPath)
-			if devConfig.LastConnectionUuid != activeUuid {
+			if uuidToActive != activeUuid {
 				nmRunOnceUntilDeviceAvailable(devPath, func() {
-					manager.ActivateConnection(devConfig.LastConnectionUuid, devPath)
+					manager.ActivateConnection(uuidToActive, devPath)
 				})
 			}
-		}
-		uuids := nmGetConnectionUuidsForAutoConnect(devPath, devConfig.LastConnectionUuid)
-		if len(uuids) > 0 {
-			// TODO:
 		}
 	} else {
 		err = manager.doDisconnectDevice(devPath)
