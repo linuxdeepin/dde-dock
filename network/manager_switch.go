@@ -336,18 +336,28 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 	sh.config.setDeviceEnabled(devPath, enabled)
 	if enabled {
 		// try to active last connection
+		uuids := nmGetConnectionUuidsForAutoConnect(devPath, devConfig.LastConnectionUuid)
 		var uuidToActive string
-		for _, uuidToActive = range nmGetConnectionUuidsForAutoConnect(devPath, devConfig.LastConnectionUuid) {
-			// if is wireless connection, check if the access point
-			// exists around, if not, ignore it
-			if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
+
+		switch nmGetDeviceType(devPath) {
+		case NM_DEVICE_TYPE_WIFI:
+			ssids := nmGetAccessPointSsids(devPath)
+			for _, uuidToActive = range uuids {
+				// if is wireless connection, check if the access
+				// point exists around, if not, ignore it
 				ssid := string(nmGetConnectionSsidByUuid(uuidToActive))
-				if !manager.isSsidExists(devPath, ssid) {
+				if !isStringInArray(ssid, ssids) {
 					continue
+				} else {
+					break
 				}
 			}
-			break
+		default:
+			if len(uuids) > 0 {
+				uuidToActive = uuids[0]
+			}
 		}
+
 		if len(uuidToActive) > 0 {
 			activeUuid, _ := nmGetDeviceActiveConnectionUuid(devPath)
 			if uuidToActive != activeUuid {

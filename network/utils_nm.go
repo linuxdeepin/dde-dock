@@ -597,6 +597,15 @@ func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetAccessPointSsids(devPath dbus.ObjectPath) (ssids []string) {
+	for _, apPath := range nmGetAccessPoints(devPath) {
+		if ap, err := nmNewAccessPoint(apPath); err == nil {
+			ssids = append(ssids, string(ap.Ssid.Get()))
+		}
+	}
+	return
+}
+
 func nmGetManagerState() (state uint32) {
 	state = nmManager.State.Get()
 	return
