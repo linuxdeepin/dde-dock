@@ -21,8 +21,9 @@
 
 package cursor_theme
 
-// #cgo pkg-config: gtk+-3.0
+// #cgo pkg-config: x11 xcursor xfixes gtk+-3.0
 // #cgo CFLAGS: -Wall -g
+// #include <stdlib.h>
 // #include "cursor.h"
 import "C"
 
@@ -33,6 +34,7 @@ import (
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
 	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
 	dutils "pkg.linuxdeepin.com/lib/utils"
+	"unsafe"
 )
 
 const (
@@ -48,8 +50,9 @@ const (
 var (
 	themeConditions = []string{"cursors"}
 
-	errWriteCursor  = fmt.Errorf("Write cursor theme failed")
-	errInvalidTheme = fmt.Errorf("Invalid Theme")
+	errWriteCursor   = fmt.Errorf("Write cursor theme failed")
+	errInvalidTheme  = fmt.Errorf("Invalid Theme")
+	errFixedQtCursor = fmt.Errorf("Fixed Qt cursor failed")
 )
 
 type CursorTheme struct {
@@ -104,6 +107,7 @@ func (cursor *CursorTheme) Set(theme string) error {
 	setThemeViaXSettings(theme)
 	setGtk2Theme(GetUserGtk2Config(), theme)
 	setGtk3Theme(GetUserGtk3Config(), theme)
+	fixedQtCursor(theme)
 
 	dir := path.Join(os.Getenv("HOME"), ".icons/default")
 	if !dutils.IsFileExist(dir) {
@@ -187,6 +191,17 @@ func setGtk2Theme(config, theme string) error {
 
 func setGtk3Theme(config, theme string) error {
 	return WriteUserGtk3Config(config, "gtk-cursor-theme-name", theme)
+}
+
+func fixedQtCursor(theme string) error {
+	ctheme := C.CString(theme)
+	ret := C.apply_qt_cursor(ctheme)
+	C.free(unsafe.Pointer(ctheme))
+	if ret != 0 {
+		return errFixedQtCursor
+	}
+
+	return nil
 }
 
 func getDirInfoList() ([]PathInfo, []PathInfo) {

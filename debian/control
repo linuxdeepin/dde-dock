@@ -20,6 +20,8 @@ Build-Depends: debhelper (>= 9),
  libx11-dev,
  libxkbfile-dev,
  libxtst-dev,
+ libxfixes-dev,
+ libxcursor-dev,
  upower,
  libfontconfig1-dev,
 Standards-Version: 3.9.5
@@ -34,7 +36,6 @@ Depends: ${shlibs:Depends},
  grub-themes-deepin,
  xcur2png,
  xserver-xorg-input-wacom,
- libfontconfig1,
 Conflicts: dde-workspace ( < 2.1+20141028122406 )
 Description: daemon handling the DDE session settings
     This package contains the daemon which is responsible for setting the

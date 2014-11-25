@@ -23,5 +23,6 @@
 #define __CURSOR_H__
 
 void handle_cursor_changed();
+int apply_qt_cursor(const char *theme);
 
 #endif
