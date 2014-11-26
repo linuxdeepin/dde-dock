@@ -175,11 +175,20 @@ func getDirInfoList() ([]PathInfo, []PathInfo) {
 }
 
 func getThemeList(sysDirs, userDirs []PathInfo) []PathInfo {
-	iconList := GetInfoListFromDirs(userDirs, themeConditions)
+	localList := GetInfoListFromDirs(userDirs, themeConditions)
 	sysList := GetInfoListFromDirs(sysDirs, themeConditions)
 
 	for _, info := range sysList {
-		if IsNameInInfoList(info.BaseName, iconList) {
+		if IsNameInInfoList(info.BaseName, localList) {
+			continue
+		}
+
+		localList = append(localList, info)
+	}
+
+	var iconList []PathInfo
+	for _, info := range localList {
+		if isIconHidden(path.Join(info.FilePath, "index.theme")) {
 			continue
 		}
 
@@ -208,4 +217,18 @@ func getDirList() []string {
 	list = append(list, path.Join(os.Getenv("HOME"), userThemePath))
 
 	return list
+}
+
+func isIconHidden(filename string) bool {
+	if !dutils.IsFileExist(filename) {
+		return true
+	}
+
+	v, ok := dutils.ReadKeyFromKeyFile(filename,
+		"Icon Theme", "Hidden", false)
+	if !ok {
+		return false
+	}
+
+	return v.(bool)
 }

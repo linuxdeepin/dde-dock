@@ -54,3 +54,33 @@ func (*testWrapper) TestWriteConfig(c *C.C) {
 	c.Check(setGtk2Theme("testdata/gtkrc-2.0", "Deepin"), C.Not(C.NotNil))
 	c.Check(setGtk3Theme("testdata/settings.ini", "Deepin"), C.Not(C.NotNil))
 }
+
+func (*testWrapper) TestIconHidden(c *C.C) {
+	type testEnable struct {
+		filename string
+		ret      bool
+	}
+
+	var infos = []testEnable{
+		{
+			filename: "testdata/index.theme",
+			ret:      true,
+		},
+		{
+			filename: "testdata/index2.theme",
+			ret:      false,
+		},
+		{
+			filename: "testdata/index3.theme",
+			ret:      false,
+		},
+		{
+			filename: "testdata/xxxxxxx.theme",
+			ret:      true,
+		},
+	}
+
+	for _, info := range infos {
+		c.Check(isIconHidden(info.filename), C.Equals, info.ret)
+	}
+}
