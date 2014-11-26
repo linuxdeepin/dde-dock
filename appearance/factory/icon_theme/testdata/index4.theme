@@ -1,5 +1,5 @@
 [Icon Theme]
 Name=Hicolor
 Comment=Fallback icon theme
-Hidden=true
-Directories=aa/bb,cc/dd
+Hidden=test
+Directories=

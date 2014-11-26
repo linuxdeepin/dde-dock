@@ -75,12 +75,14 @@ func (*testWrapper) TestIconHidden(c *C.C) {
 			ret:      false,
 		},
 		{
-			filename: "testdata/xxxxxxx.theme",
-			ret:      true,
+			filename: "testdata/index4.theme",
+			ret:      false,
 		},
 	}
 
 	for _, info := range infos {
 		c.Check(isIconHidden(info.filename), C.Equals, info.ret)
+		c.Check(hasDirectories(info.filename),
+			C.Equals, info.ret)
 	}
 }

@@ -188,7 +188,8 @@ func getThemeList(sysDirs, userDirs []PathInfo) []PathInfo {
 
 	var iconList []PathInfo
 	for _, info := range localList {
-		if isIconHidden(path.Join(info.FilePath, "index.theme")) {
+		filename := path.Join(info.FilePath, "index.theme")
+		if isIconHidden(filename) || !hasDirectories(filename) {
 			continue
 		}
 
@@ -231,4 +232,21 @@ func isIconHidden(filename string) bool {
 	}
 
 	return v.(bool)
+}
+
+/**
+ * If icon theme index.theme has 'Directories', it's valid.
+ **/
+func hasDirectories(filename string) bool {
+	if !dutils.IsFileExist(filename) {
+		return false
+	}
+
+	v, ok := dutils.ReadKeyFromKeyFile(filename,
+		"Icon Theme", "Directories", "")
+	if !ok || len(v.(string)) == 0 {
+		return false
+	}
+
+	return true
 }
