@@ -196,12 +196,12 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 	// this interface will be called by front-end always if user try
 	// to connect or edit the wired connection, so ensure the
 	// connection exists here is a good choice
-	m.ensureWiredConnectionExists(wiredDevPath)
+	m.ensureWiredConnectionExists(wiredDevPath, false)
 	uuid = nmGeneralGetDeviceRelatedUuid(wiredDevPath)
 	return
 }
 
-func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath) {
+func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, active bool) {
 	// check if wired connection for target device exists, if not, create one
 	uuid := nmGeneralGetDeviceRelatedUuid(wiredDevPath)
 	var id string
@@ -212,8 +212,7 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath) {
 	}
 	if cpath, err := nmGetConnectionByUuid(uuid); err != nil {
 		// connection not exists, create one
-		hwAddr, _ := nmGeneralGetDeviceHwAddr(wiredDevPath)
-		newWiredConnectionForDevice(id, uuid, hwAddr)
+		newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
 	} else {
 		// connection already exists, reset its name to keep
 		// consistent with current system's language

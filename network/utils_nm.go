@@ -154,6 +154,8 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 	return
 }
 
+// return special unique connection uuid for device, etc wired device
+// connection
 func nmGeneralGetDeviceRelatedUuid(devPath dbus.ObjectPath) (uuid string) {
 	devId, err := nmGeneralGetDeviceIdentifier(devPath)
 	if err != nil {
@@ -1069,26 +1071,33 @@ func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionU
 			case connectionWired, connectionMobileGsm, connectionMobileCdma:
 				if devRelatedUuid != uuid {
 					// ignore connections that not matching the
-					// device, etc other wired connections that create
-					// in other ways
+					// device, etc wired connections that create in
+					// other ways
 					continue
 				}
 			}
 			if uuid == lastConnectionUuid {
+				// the last activated connection will be dispatch
+				// specially
 				continue
 			}
 			if getSettingConnectionAutoconnect(cdata) {
-				ac := autoConnectConn{
-					id:        getSettingConnectionId(cdata),
-					uuid:      uuid,
-					timestamp: getSettingConnectionTimestamp(cdata),
+				id := getSettingConnectionId(cdata)
+				timestamp := getSettingConnectionTimestamp(cdata)
+				if timestamp > 0 {
+					// only collect connections that connected
+					ac := autoConnectConn{
+						id:        id,
+						uuid:      uuid,
+						timestamp: timestamp,
+					}
+					acs = append(acs, ac)
 				}
-				acs = append(acs, ac)
 			}
 		}
 	}
 	sort.Sort(sort.Reverse(acs))
-	logger.Debugf("device type: %s, auto connect connections: %v",
+	logger.Debugf("autoconnect connections for device type %s, %v",
 		getCustomDeviceType(nmGetDeviceType(devPath)), acs)
 	if len(lastConnectionUuid) > 0 {
 		// the last activated connection has the highest priority if

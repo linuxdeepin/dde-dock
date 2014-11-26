@@ -95,7 +95,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
 			dev.HwAddress = nmDevWired.HwAddress.Get()
-			m.ensureWiredConnectionExists(dev.Path)
+			m.ensureWiredConnectionExists(dev.Path, true)
 		}
 	case NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {

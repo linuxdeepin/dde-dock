@@ -99,12 +99,17 @@ func newWiredConnection(id string) (uuid string, cpath dbus.ObjectPath, err erro
 	return
 }
 
-func newWiredConnectionForDevice(id, uuid, hwAddr string) (cpath dbus.ObjectPath, err error) {
-	logger.Debugf("new wired connection, id=%s, uuid=%s, hwAddr=%s", id, uuid, hwAddr)
+func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
+	logger.Debugf("new wired connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
 	data := newWiredConnectionData(id, uuid)
+	hwAddr, _ := nmGeneralGetDeviceHwAddr(devPath)
 	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
 	setSettingConnectionAutoconnect(data, true)
-	cpath, err = nmAddConnection(data)
+	if active {
+		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+	} else {
+		cpath, err = nmAddConnection(data)
+	}
 	return
 }
 
