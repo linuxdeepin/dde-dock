@@ -80,8 +80,8 @@ install: build translate
 	mkdir -pv ${DESTDIR}${PREFIX}/bin
 	cp misc/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
 
-	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
-	cp -r misc/thumb_bg ${DESTDIR}${PREFIX}/share/personalization/thumbnail/autogen
+	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail
+	cp -r misc/thumbnail/* ${DESTDIR}${PREFIX}/share/personalization/thumbnail/
 
 clean:
 	rm -rf ${GOPATH_DIR}
