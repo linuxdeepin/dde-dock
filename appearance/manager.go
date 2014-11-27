@@ -40,6 +40,8 @@ const (
 	deepinGSKeyPicture = "picture-uri"
 	deepinGSKeySound   = "current-sound-theme"
 	deepinGSKeyGreeter = "greeter-theme"
+
+	defaultDThemeId = "Deepin"
 )
 
 type Manager struct {
@@ -75,7 +77,7 @@ type Manager struct {
 func NewManager() *Manager {
 	m := &Manager{}
 
-	m.dtheme = NewFactory(ObjectTypeDeepinTheme, m.setPropThemeList)
+	m.dtheme = NewFactory(ObjectTypeDeepinTheme, m.handleDThemeChanged)
 	m.gtk = NewFactory(ObjectTypeGtk, m.setPropGtkThemeList)
 	m.icon = NewFactory(ObjectTypeIcon, m.setPropIconThemeList)
 	m.cursor = NewFactory(ObjectTypeCursor, m.setPropSoundThemeList)
@@ -117,6 +119,7 @@ func (m *Manager) rebuildThemes() {
 	defer m.lock.Unlock()
 	m.destroyThemes()
 
+	var curThemeValid bool
 	for _, name := range m.ThemeList {
 		info, err := m.dtheme.GetInfoByName(path.Base(name))
 		if err != nil {
@@ -131,8 +134,13 @@ func (m *Manager) rebuildThemes() {
 
 		m.themeObjMap[info.BaseName] = t
 		if info.BaseName == m.CurrentTheme.Get() {
+			curThemeValid = true
 			m.applyTheme(info.BaseName)
 		}
+	}
+
+	if !curThemeValid {
+		m.applyTheme(defaultDThemeId)
 	}
 }
 

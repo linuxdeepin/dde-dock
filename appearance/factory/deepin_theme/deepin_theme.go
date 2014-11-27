@@ -180,7 +180,11 @@ func getDirList() []string {
 	var list []string
 
 	list = append(list, systemThemePath)
-	list = append(list, path.Join(os.Getenv("HOME"), userThemePath))
+	userDir := path.Join(os.Getenv("HOME"), userThemePath)
+	if !dutils.IsFileExist(userDir) {
+		os.MkdirAll(userDir, 0755)
+	}
+	list = append(list, userDir)
 
 	return list
 }

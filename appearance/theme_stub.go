@@ -115,12 +115,12 @@ func (t *Theme) setPropsFromFile() {
 	t.setPropString(&t.CursorTheme, "CursorTheme", info.CursorTheme)
 
 	if len(info.FontName) == 0 {
-		info.FontName = "WenQuanYi Micro Hei"
+		info.FontName = "Source Han Sans SC"
 	}
 	t.setPropString(&t.FontName, "FontName", info.FontName)
 
 	if len(info.FontMono) == 0 {
-		info.FontMono = "WenQuanYi Micro Hei Mono"
+		info.FontMono = "DejaVu Sans Mono"
 	}
 	t.setPropString(&t.FontMono, "FontMono", info.FontMono)
 

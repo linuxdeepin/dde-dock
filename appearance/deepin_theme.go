@@ -36,6 +36,7 @@ const (
 	customDThemeId = "Custom"
 
 	tempDThemeCustom = "/usr/share/dde-daemon/template/theme_custom"
+	dirPermMode      = 0755
 )
 
 func (m *Manager) setTheme(themeType string, value interface{}) {
@@ -48,8 +49,9 @@ func (m *Manager) setTheme(themeType string, value interface{}) {
 		return
 	}
 
-	m.modifyCustomTheme(dinfo)
-	m.Set("theme", customDThemeId)
+	if m.modifyCustomTheme(dinfo) {
+		m.settings.SetString(deepinGSKeyTheme, customDThemeId)
+	}
 }
 
 func (m *Manager) applyTheme(name string) {
@@ -76,7 +78,7 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	homeDir := dutils.GetHomeDir()
 	dir := path.Join(homeDir, userThemePath, "Custom")
 	if !dutils.IsFileExist(dir) {
-		err := os.MkdirAll(dir, 0755)
+		err := os.MkdirAll(dir, dirPermMode)
 		if err != nil {
 			logger.Debug(err)
 			return false
@@ -84,12 +86,14 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	}
 
 	filename := path.Join(dir, "theme.ini")
+	var newFile bool
 	if !dutils.IsFileExist(filename) {
 		err := dutils.CopyFile(tempDThemeCustom, filename)
 		if err != nil {
 			logger.Debug(err)
 			return false
 		}
+		newFile = true
 	}
 
 	kFile := glib.NewKeyFile()
@@ -114,7 +118,12 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	if err != nil {
 		return false
 	}
-	return dutils.WriteStringToKeyFile(filename, contents)
+	ok := dutils.WriteStringToKeyFile(filename, contents)
+	if newFile && ok {
+		touchFile()
+	}
+
+	return ok
 }
 
 func (m *Manager) isThemeExist(info *Theme) (string, bool) {
@@ -232,8 +241,20 @@ func getThemeObjectList(list []string) []string {
 	list = sortNameByDeepin(list)
 	var tmp []string
 	for _, name := range list {
+		name = path.Base(name)
 		tmp = append(tmp, themeDBusPath+name)
 	}
 
 	return tmp
+}
+
+func touchFile() {
+	dir := path.Join(os.Getenv("HOME"), userThemePath)
+	filename := path.Join(dir, "__emit-signal__")
+
+	if !dutils.IsFileExist(filename) {
+		os.MkdirAll(filename, dirPermMode)
+	} else {
+		os.RemoveAll(filename)
+	}
 }

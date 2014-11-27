@@ -28,6 +28,15 @@ import (
 	"regexp"
 )
 
+func (m *Manager) handleDThemeChanged(list []string) {
+	tmp := getThemeObjectList(list)
+	if !m.isStrListEqual(tmp, m.ThemeList) {
+		m.ThemeList = tmp
+		m.rebuildThemes()
+		m.setPropThemeList(tmp)
+	}
+}
+
 func (m *Manager) listenGSettings() {
 	m.settings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {

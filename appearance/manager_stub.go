@@ -39,8 +39,8 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 func (m *Manager) setPropThemeList(list []string) {
 	if !m.isStrListEqual(m.ThemeList, list) {
 		m.ThemeList = list
-		dbus.NotifyChange(m, "ThemeList")
 	}
+	dbus.NotifyChange(m, "ThemeList")
 }
 
 func (m *Manager) setPropGtkThemeList(list []string) {
