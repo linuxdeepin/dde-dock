@@ -70,10 +70,12 @@ func (date *DateTime) SetTimezone(zone string) error {
 
 	if date.NTPEnabled.Get() {
 		ntp.Timezone = zone
-		ok := ntp.SyncNetworkTime()
-		if !ok {
-			Warning(date.logger, "Sync Network Time Failed")
-		}
+		go func() {
+			ok := ntp.SyncNetworkTime()
+			if !ok {
+				Warning(date.logger, "Sync Network Time Failed")
+			}
+		}()
 	}
 
 	return nil
