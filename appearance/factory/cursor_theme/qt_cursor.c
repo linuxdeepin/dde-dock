@@ -26,9 +26,9 @@
 #include <X11/extensions/Xfixes.h>
 
 static char* findAlternative(const char *name);
-static XcursorImages* xcLoadImages(const char *theme, 
+static XcursorImages* xcLoadImages(const char *theme,
 		const char *image, int size);
-static unsigned long loadCursorHandle(Display *disp, 
+static unsigned long loadCursorHandle(Display *disp,
 		const char *theme, const char *name, int size);
 
 static char*
@@ -119,12 +119,6 @@ apply_qt_cursor(const char *theme)
 		return -1;
 	}
 
-	Display *disp = XOpenDisplay(0);
-	if (!disp) {
-		fprintf(stderr, "Open display failed\n");
-		return -1;
-	}
-
 	/**
 	 *  Only running once
 	 *  Setting it by startdde is not effective, need to set again, why?
@@ -186,6 +180,12 @@ apply_qt_cursor(const char *theme)
 		"question_arrow",
 		"pirate",
 		NULL};
+
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Open display failed\n");
+		return -1;
+	}
 
 	int i;
 	for (i = 0; list[i] != NULL; i++) {
