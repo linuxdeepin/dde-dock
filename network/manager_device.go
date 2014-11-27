@@ -146,7 +146,7 @@ func (m *Manager) clearDevices() {
 			m.destroyDevice(dev)
 		}
 	}
-	m.devices = nil
+	m.devices = make(map[string][]*device)
 	m.setPropDevices()
 }
 func (m *Manager) addDevice(devPath dbus.ObjectPath) {

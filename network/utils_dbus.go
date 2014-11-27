@@ -68,7 +68,6 @@ func destroyDbusObjects() {
 	login1.DestroyManager(loginManager)
 	nm.DestroyManager(nmManager)
 	nm.DestroySettings(nmSettings)
-	dbusmgr.DestroyDBusDaemon(dbusDaemon)
 	notifications.DestroyNotifier(notifier)
 }
 

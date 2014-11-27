@@ -114,17 +114,14 @@ func initSlices() {
 
 func NewManager() (m *Manager) {
 	m = &Manager{}
-	initDbusDaemon()
-	m.watchNetworkManagerRestart()
 	return
 }
 func DestroyManager(m *Manager) {
-	destroyDbusDaemon()
 	m.destroyManager()
 }
 
 func (m *Manager) initManager() {
-	logger.Info("initialize manager")
+	logger.Info("initialize network")
 	initDbusObjects()
 	disableNotify()
 	m.config = newConfig()
@@ -160,7 +157,7 @@ func (m *Manager) initManager() {
 }
 
 func (m *Manager) destroyManager() {
-	logger.Info("destroy manager")
+	logger.Info("destroy network")
 	destroyDbusObjects()
 	destroyAgent(m.agent)
 	destroyStateHandler(m.stateHandler)
@@ -171,9 +168,13 @@ func (m *Manager) destroyManager() {
 	m.clearConnections()
 	m.clearConnectionSessions()
 	m.clearActiveConnections()
+
+	// reset dbus properties
+	m.setPropNetworkingEnabled(false)
+	m.setPropState()
 }
 
-func (m *Manager) watchNetworkManagerRestart() {
+func watchNetworkManagerRestart(m *Manager) {
 	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
 		if name == "org.freedesktop.NetworkManager" {
 			// if a new dbus session was installed, the name and newOwner
@@ -183,14 +184,11 @@ func (m *Manager) watchNetworkManagerRestart() {
 				// network-manager is starting
 				logger.Info("network-manager is starting")
 				time.Sleep(1 * time.Second)
-				m.initConnections()
-				m.initActiveConnections()
-				m.switchHandler.init()
+				m.initManager()
 			} else {
 				// network-manager stopped
 				logger.Info("network-manager stopped")
-				m.clearConnections()
-				m.clearActiveConnections()
+				m.destroyManager()
 			}
 		}
 	})

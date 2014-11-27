@@ -45,9 +45,13 @@ func Start() {
 
 	// initialize manager after dbus installed
 	manager.initManager()
+
+	initDbusDaemon()
+	watchNetworkManagerRestart(manager)
 }
 
 func Stop() {
+	destroyDbusDaemon()
 	DestroyManager(manager)
 	dbus.UnInstallObject(manager)
 	logger.EndTracing()
