@@ -34,6 +34,31 @@ func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
 	}
 	return
 }
+func bluezDestroyObjectManager(objectManager *sysdbus.ObjectManager) {
+	sysdbus.DestroyObjectManager(objectManager)
+}
+
+func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {
+	bluezAdapter, err = bluez.NewAdapter1(dbusBluezDest, apath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func bluezDestroyAdapter(bluezAdapter *bluez.Adapter1) {
+	bluez.DestroyAdapter1(bluezAdapter)
+}
+
+func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device1, err error) {
+	bluezDevice, err = bluez.NewDevice1(dbusBluezDest, dpath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func bluezDestroyDevice(bluezDevice *bluez.Device1) {
+	bluez.DestroyDevice1(bluezDevice)
+}
 
 func bluezGetAdapters() (apathes []dbus.ObjectPath) {
 	objectManager, err := bluezNewObjectManager()
@@ -49,22 +74,6 @@ func bluezGetAdapters() (apathes []dbus.ObjectPath) {
 		if _, ok := data[dbusBluezIfsAdapter]; ok {
 			apathes = append(apathes, path)
 		}
-	}
-	return
-}
-
-func bluezNewAdapter(apath dbus.ObjectPath) (bluezAdapter *bluez.Adapter1, err error) {
-	bluezAdapter, err = bluez.NewAdapter1(dbusBluezDest, apath)
-	if err != nil {
-		logger.Error(err)
-	}
-	return
-}
-
-func bluezNewDevice(dpath dbus.ObjectPath) (bluezDevice *bluez.Device1, err error) {
-	bluezDevice, err = bluez.NewDevice1(dbusBluezDest, dpath)
-	if err != nil {
-		logger.Error(err)
 	}
 	return
 }

@@ -73,32 +73,30 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	}
 	d.fixRssi()
 
-	d.connectProeprties()
+	d.connectProperties()
 	return
 }
 func destroyDevice(d *device) {
-	d.bluezDevice.Connected.Reset()
-	d.bluezDevice.Alias.Reset()
-	d.bluezDevice.Trusted.Reset()
-	d.bluezDevice.Paired.Reset()
-	d.bluezDevice.Icon.Reset()
-	d.bluezDevice.RSSI.Reset()
+	bluezDestroyDevice(d.bluezDevice)
 }
 
 func (d *device) notifyDeviceAdded() {
 	logger.Debug("DeviceAdded", marshalJSON(d))
 	dbus.Emit(bluetooth, "DeviceAdded", marshalJSON(d))
+	bluetooth.setPropState()
 }
 func (d *device) notifyDeviceRemoved() {
 	logger.Debug("DeviceRemoved", marshalJSON(d))
 	dbus.Emit(bluetooth, "DeviceRemoved", marshalJSON(d))
+	bluetooth.setPropState()
 }
 func (d *device) notifyDevicePropertiesChanged() {
 	logger.Debug("DevicePropertiesChanged", marshalJSON(d))
 	dbus.Emit(bluetooth, "DevicePropertiesChanged", marshalJSON(d))
+	bluetooth.setPropState()
 }
 
-func (d *device) connectProeprties() {
+func (d *device) connectProperties() {
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.connected = d.bluezDevice.Connected.Get()
 		d.notifyStateChanged()

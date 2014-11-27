@@ -37,6 +37,12 @@ const (
 	dbusBluetoothIfs  = "com.deepin.daemon.Bluetooth"
 )
 
+const (
+	stateUnavailable = 0
+	stateAvailable   = 1
+	stateConnected   = 2
+)
+
 type dbusObjectData map[string]dbus.Variant
 type dbusInterfaceData map[string]map[string]dbus.Variant
 type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
@@ -52,6 +58,8 @@ type Bluetooth struct {
 	// device
 	devices map[dbus.ObjectPath][]*device
 	Devices string // device objects that marshaled by json
+
+	State uint32
 
 	// signals
 	AdapterAdded             func(adapterJSON string)
@@ -71,7 +79,7 @@ func NewBluetooth() (b *Bluetooth) {
 }
 
 func DestroyBluetooth(b *Bluetooth) {
-	sysdbus.DestroyObjectManager(b.objectManager)
+	bluezDestroyObjectManager(b.objectManager)
 	dbus.UnInstallObject(bluetooth)
 }
 

@@ -53,23 +53,23 @@ func newAdapter(apath dbus.ObjectPath) (a *adapter) {
 	return
 }
 func destroyAdapter(a *adapter) {
-	a.bluezAdapter.Alias.Reset()
-	a.bluezAdapter.Powered.Reset()
-	a.bluezAdapter.Discoverable.Reset()
-	a.bluezAdapter.DiscoverableTimeout.Reset()
+	bluezDestroyAdapter(a.bluezAdapter)
 }
 
 func (a *adapter) notifyAdapterAdded() {
 	logger.Info("AdapterAdded", marshalJSON(a))
 	dbus.Emit(bluetooth, "AdapterAdded", marshalJSON(a))
+	bluetooth.setPropState()
 }
 func (a *adapter) notifyAdapterRemoved() {
 	logger.Info("AdapterRemoved", marshalJSON(a))
 	dbus.Emit(bluetooth, "AdapterRemoved", marshalJSON(a))
+	bluetooth.setPropState()
 }
 func (a *adapter) notifyProeprtiesChanged() {
 	logger.Debug("AdapterPropertiesChanged", marshalJSON(a))
 	dbus.Emit(bluetooth, "AdapterPropertiesChanged", marshalJSON(a))
+	bluetooth.setPropState()
 }
 func (a *adapter) connectProeprties() {
 	a.bluezAdapter.Alias.ConnectChanged(func() {

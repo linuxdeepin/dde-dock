@@ -45,3 +45,19 @@ func (b *Bluetooth) setPropDevices() {
 	b.Devices = marshalJSON(b.devices)
 	dbus.NotifyChange(b, "Devices")
 }
+
+func (b *Bluetooth) setPropState() {
+	b.State = stateUnavailable
+	if len(b.adapters) > 0 {
+		b.State = stateAvailable
+	}
+	for _, devs := range b.devices {
+		for _, d := range devs {
+			if d.connected {
+				b.State = stateConnected
+				break
+			}
+		}
+	}
+	dbus.NotifyChange(b, "State")
+}
