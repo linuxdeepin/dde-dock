@@ -43,19 +43,16 @@ var (
 	mediaGSettings *gio.Settings
 )
 
-
 func initGSettings() {
-	bindGSettings  = gio.NewSettings("com.deepin.dde.keybinding")
-	sysGSettings   = gio.NewSettings("com.deepin.dde.keybinding.system")
+	bindGSettings = gio.NewSettings("com.deepin.dde.keybinding")
+	sysGSettings = gio.NewSettings("com.deepin.dde.keybinding.system")
 	mediaGSettings = gio.NewSettings("com.deepin.dde.keybinding.mediakey")
 }
 
-func StartKeyBinding() {
-	var err error
-
-	if X, err = xgbutil.NewConn(); err != nil {
-		logger.Warning("New XGB Util Failed:", err)
-		panic(err)
+func StartKeyBinding() error {
+	X, err := xgbutil.NewConn()
+	if err != nil {
+		return err
 	}
 	keybind.Initialize(X)
 	initXRecord()
@@ -68,22 +65,30 @@ func StartKeyBinding() {
 	grabKeyPairs(getSystemKeyPairs(), true)
 	grabKeyPairs(getCustomKeyPairs(), true)
 	grabMediaKeys()
+
+	return nil
 }
 
 func Start() {
 	logger.BeginTracing()
 	initGSettings()
 
-	StartKeyBinding()
-
-	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		logger.Error("Install DBus Failed:", err)
-		panic(err)
+	err := StartKeyBinding()
+	if err != nil {
+		logger.Error("failed start keybinding:", err)
+		return
 	}
 
-	if err := dbus.InstallOnSession(GetMediaManager()); err != nil {
+	err = dbus.InstallOnSession(GetManager())
+	if err != nil {
 		logger.Error("Install DBus Failed:", err)
-		panic(err)
+		return
+	}
+
+	err = dbus.InstallOnSession(GetMediaManager())
+	if err != nil {
+		logger.Error("Install DBus Failed:", err)
+		return
 	}
 
 	go xevent.Main(X)
@@ -93,6 +98,8 @@ func Stop() {
 	logger.EndTracing()
 
 	stopXRecord()
-	xevent.Quit(X)
+	if X != nil {
+		xevent.Quit(X)
+	}
 	dbus.UnInstallObject(GetManager())
 }
