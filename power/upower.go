@@ -78,12 +78,12 @@ func (p *Power) handleBatteryPercentage() {
 		//Battery state abnormal
 		if p.OnBattery && p.lowBatteryStatus != lowBatteryStatusAbnormal {
 			p.lowBatteryStatus = lowBatteryStatusAbnormal
-			sendNotify("battery-0", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
+			sendNotify("battery_empty", Tr("Abnormal battery power"), Tr("Battery power can not be predicted, please save important documents properly and  not do important operations."))
 		}
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			sendNotify("battery-0", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
+			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
 			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -98,7 +98,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
-			sendNotify("battery-10", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
+			sendNotify("battery_low", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
 
 			playSound("power-caution")
 			go func() {
@@ -111,7 +111,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			sendNotify("battery-25", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
+			sendNotify("battery_caution", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
 			playSound("power-low")
 		}
 	default:
