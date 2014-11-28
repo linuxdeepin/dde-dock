@@ -63,9 +63,9 @@ var (
 
 func initErrorInfo() {
 	ErrMSGEmpty = fmt.Errorf(Tr("Username can not be empty."))
-	ErrMSGInvalidChar = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _"))
+	ErrMSGInvalidChar = fmt.Errorf(Tr("Username must comprise a~z, 0~9, - or _."))
 	ErrMSGFirstNotLower = fmt.Errorf(Tr("The first character must be in lower case."))
-	ErrMSGExist = fmt.Errorf(Tr("The username exist."))
+	ErrMSGExist = fmt.Errorf(Tr("The username exists."))
 	ErrMSGSystemUsed = fmt.Errorf(Tr("The username has been used by system."))
 }
 

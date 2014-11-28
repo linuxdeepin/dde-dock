@@ -52,6 +52,10 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Vancouver"),
 	},
 	zoneDesc{
+		zone: "America/Metlakatla",
+		desc: Tr("Metlakatla"),
+	},
+	zoneDesc{
 		zone: "America/Chihuahua",
 		desc: Tr("Chihuahua"),
 	},
@@ -116,6 +120,10 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Newfoundland"),
 	},
 	zoneDesc{
+		zone: "America/St_Johns",
+		desc: Tr("St Johns"),
+	},
+	zoneDesc{
 		zone: "America/Buenos_Aires",
 		desc: Tr("Buenos Aires"),
 	},
@@ -156,16 +164,16 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Paris"),
 	},
 	zoneDesc{
-		zone: "Europe/Berlin",
-		desc: Tr("Berlin"),
-	},
-	zoneDesc{
 		zone: "Europe/Rome",
 		desc: Tr("Rome"),
 	},
 	zoneDesc{
 		zone: "Europe/Vienna",
 		desc: Tr("Vienna"),
+	},
+	zoneDesc{
+		zone: "Africa/Algiers",
+		desc: Tr("Algiers"),
 	},
 	zoneDesc{
 		zone: "Africa/Cairo",
@@ -176,12 +184,12 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Athens"),
 	},
 	zoneDesc{
-		zone: "Europe/Bucharest",
-		desc: Tr("Bucharest"),
-	},
-	zoneDesc{
 		zone: "Europe/Istanbul",
 		desc: Tr("Istanbul"),
+	},
+	zoneDesc{
+		zone: "Africa/Blantyre",
+		desc: Tr("Blantyre"),
 	},
 	zoneDesc{
 		zone: "Europe/Moscow",
