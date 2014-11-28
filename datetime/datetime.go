@@ -94,6 +94,7 @@ func NewDateTime(l *log.Logger) *DateTime {
 
 	date.AddUserTimezone(date.CurrentTimezone)
 	date.enableNTP(date.NTPEnabled.Get())
+	date.listenGSettings()
 
 	return date
 }
