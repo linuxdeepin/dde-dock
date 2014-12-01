@@ -7,8 +7,16 @@ import (
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
+	"pkg.linuxdeepin.com/lib/glib-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"sync"
 	"time"
+)
+
+const (
+	_NewSoftwareRecordFile = "launcher/new_software.ini"
+	_NewSoftwareGroupName  = "NewInstalledApps"
+	_NewSoftwareKeyName    = "Ids"
 )
 
 type ItemManager struct {
@@ -187,4 +195,80 @@ func (m *ItemManager) GetAllTimeInstalled() (infos map[ItemId]int64) {
 	}
 
 	return
+}
+
+func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
+	ids := []ItemId{}
+	f := glib.NewKeyFile()
+	defer f.Free()
+
+	configFile := ConfigFilePath(_NewSoftwareRecordFile)
+	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
+	if err != nil {
+		return ids, err
+	}
+
+	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
+	for _, id := range newApps {
+		ids = append(ids, ItemId(id))
+	}
+
+	return ids, nil
+}
+
+func (self *ItemManager) MarkNew(_id ItemId) error {
+	id := string(_id)
+	configFile := ConfigFilePath(_NewSoftwareRecordFile)
+	if !dutils.IsFileExist(configFile) {
+		f, err := os.Create(configFile)
+		if err != nil {
+			return err
+		}
+		f.Close()
+	}
+
+	f := glib.NewKeyFile()
+	defer f.Free()
+	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
+	if err != nil {
+		return err
+	}
+
+	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
+	if dutils.IsElementInList(id, newApps) {
+		return fmt.Errorf("%q is already the new installed application", id)
+	}
+
+	newApps = append(newApps, id)
+	f.SetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName, newApps)
+	return SaveKeyFile(f, configFile)
+}
+
+func (self *ItemManager) MarkLaunched(_id ItemId) error {
+	id := string(_id)
+	configFile := ConfigFilePath(_NewSoftwareRecordFile)
+
+	f := glib.NewKeyFile()
+	defer f.Free()
+	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
+	if err != nil {
+		return err
+	}
+
+	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
+
+	if !dutils.IsElementInList(id, newApps) {
+		return fmt.Errorf("%q is already not the new installed application", id)
+	}
+
+	newIds := []string{}
+	for _, newAppId := range newApps {
+		if newAppId == id {
+			continue
+		}
+		newIds = append(newIds, newAppId)
+	}
+
+	f.SetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName, newIds)
+	return SaveKeyFile(f, configFile)
 }

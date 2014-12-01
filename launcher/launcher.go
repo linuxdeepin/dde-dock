@@ -57,6 +57,8 @@ type Launcher struct {
 	RemoveFromDesktopFailed  func(ItemId, string)
 
 	SearchDone func([]ItemId)
+
+	NewAppLaunched func(ItemId)
 }
 
 func NewLauncher() *Launcher {
@@ -177,6 +179,13 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	id := GenId(name)
 
 	logger.Info(name, "Status:", status)
+	if status == SoftwareStatusCreated {
+		err := self.itemManager.MarkNew(id)
+		if err != nil {
+			logger.Infof("Mark %q as new installed software failed: %s", id, err.Error())
+		}
+	}
+
 	if status != SoftwareStatusDeleted {
 		logger.Info(name)
 		<-time.After(time.Second * 10)
@@ -209,6 +218,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 
 	cid := self.itemManager.GetItem(id).GetCategoryId()
 	if status == SoftwareStatusDeleted {
+		self.itemManager.MarkLaunched(id)
 		self.categoryManager.RemoveItem(id, cid)
 		self.itemManager.RemoveItem(id)
 	} else {
@@ -238,7 +248,9 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 				return
 			case <-time.After(time.Second):
 				<-info[name].renamed
-				self.emitItemChanged(name, SoftwareStatusDeleted, info)
+				if true {
+					self.emitItemChanged(name, SoftwareStatusDeleted, info)
+				}
 			}
 		}()
 		info[name].renamed <- true
@@ -286,7 +298,9 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			}
 		}()
 	} else if ev.IsDelete() {
-		self.emitItemChanged(name, SoftwareStatusDeleted, info)
+		if true {
+			self.emitItemChanged(name, SoftwareStatusDeleted, info)
+		}
 	}
 }
 
@@ -429,6 +443,31 @@ func (self *Launcher) Search(key string) {
 			dbus.Emit(self, "SearchDone", itemIds)
 		}
 	}()
+}
+
+func (self *Launcher) MarkLaunched(id string) {
+	err := self.itemManager.MarkLaunched(ItemId(id))
+	if err != nil {
+		logger.Info(err)
+		return
+	}
+
+	dbus.Emit(self, "NewAppLaunched", ItemId(id))
+}
+
+func (self *Launcher) MarkNew(id string) {
+	err := self.itemManager.MarkNew(ItemId(id))
+	if err != nil {
+		logger.Info(err)
+	}
+}
+
+func (self *Launcher) GetAllNewInstalledApps() []ItemId {
+	ids, err := self.itemManager.GetAllNewInstalledApps()
+	if err != nil {
+		logger.Info("GetAllNewInstalledApps", err)
+	}
+	return ids
 }
 
 func (self *Launcher) destroy() {

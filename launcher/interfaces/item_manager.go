@@ -18,4 +18,7 @@ type ItemManagerInterface interface {
 	RemoveItemFromDesktop(ItemId) error
 	GetRate(ItemId, RateConfigFileInterface) uint64
 	SetRate(ItemId, uint64, RateConfigFileInterface)
+	GetAllNewInstalledApps() ([]ItemId, error)
+	MarkLaunched(ItemId) error
+	MarkNew(ItemId) error
 }
