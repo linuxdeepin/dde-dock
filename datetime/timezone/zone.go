@@ -34,25 +34,22 @@ type DSTInfo struct {
 	DSTOffset int32
 }
 
-type ZoneSummary struct {
+type ZoneInfo struct {
 	Name      string
 	Desc      string
 	RawOffset int32
-}
-
-type ZoneInfo struct {
-	Summary ZoneSummary
-	DST     DSTInfo
+	DST       DSTInfo
 }
 
 var (
 	ErrInvalidZone = fmt.Errorf("Invalid Timezone")
+
+	errNoDST = fmt.Errorf("The zone has not dst info")
 )
 
 const (
-	zoneInfoDir  = "/usr/share/zoneinfo"
-	zoneInfoFile = "/usr/share/dde-daemon/zone_info.json"
-	zoneDSTFile  = "/usr/share/dde-daemon/zone_dst"
+	zoneInfoDir = "/usr/share/zoneinfo"
+	dstDataFile = "/usr/share/dde-daemon/dst_data"
 )
 
 func IsZoneValid(zone string) bool {
@@ -79,26 +76,26 @@ func SetTimezone(zone string) error {
 	if err != nil {
 		return err
 	}
+	defer setdatetime.DestroySetDateTime(datetime)
 
 	_, err = datetime.SetTimezone(zone)
 	if err != nil {
 		return err
 	}
-	setdatetime.DestroySetDateTime(datetime)
 
 	return nil
 }
 
-var _infos []ZoneSummary
+var _infos []ZoneInfo
 
-func GetZoneSummaryList() []ZoneSummary {
+func GetZoneInfoList() []ZoneInfo {
 	if _infos != nil {
 		return _infos
 	}
 
 	for _, tmp := range zoneWhiteList {
-		summary := newZoneSummary(tmp.zone)
-		_infos = append(_infos, *summary)
+		info := newZoneInfo(tmp.zone)
+		_infos = append(_infos, *info)
 	}
 
 	return _infos
@@ -109,17 +106,9 @@ func GetZoneInfo(zone string) (*ZoneInfo, error) {
 		return nil, ErrInvalidZone
 	}
 
-	var info ZoneInfo
+	info := newZoneInfo(zone)
 
-	summary := newZoneSummary(zone)
-	info.Summary = *summary
-
-	dst := newDSTInfo(zone)
-	if dst != nil {
-		info.DST = *dst
-	}
-
-	return &info, nil
+	return info, nil
 }
 
 func getZoneDesc(zone string) string {

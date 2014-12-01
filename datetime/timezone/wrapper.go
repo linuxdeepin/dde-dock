@@ -31,40 +31,35 @@ import (
 	"unsafe"
 )
 
-func sumDSTTime(zone string, year int32) (int64, int64, bool) {
+func getDSTTime(zone string, year int32) (int64, int64, bool) {
 	czone := C.CString(zone)
+	defer C.free(unsafe.Pointer(czone))
 	ret := C.get_dst_time(czone, C.int(year))
-	tmp := uintptr(unsafe.Pointer(ret))
-	l := unsafe.Sizeof(*ret)
 
-	first := int64(*ret)
-	second := int64(*(*C.longlong)(unsafe.Pointer(tmp + uintptr(l))))
-	third := int64(*(*C.longlong)(unsafe.Pointer(tmp + uintptr(l)*2)))
+	t1 := int64(ret.enter)
+	t2 := int64(ret.leave)
 
-	C.free(unsafe.Pointer(czone))
-	C.free(unsafe.Pointer(ret))
-
-	if third != 2 {
+	if t1 == 0 || t2 == 0 {
 		return 0, 0, false
 	}
 
-	return first, second, true
+	return t1, t2, true
 }
 
 func getOffsetByTimestamp(zone string, timestamp int64) int32 {
 	czone := C.CString(zone)
+	defer C.free(unsafe.Pointer(czone))
 	off := C.getoffset(czone, C.longlong(timestamp))
-	C.free(unsafe.Pointer(czone))
 
 	return int32(off)
 }
 
-func getYearBeginTime(zone string, year int32) int64 {
+func getRawTimestamp(zone string, timestamp int64) int64 {
 	czone := C.CString(zone)
-	timestamp := C.get_year_begin_time(czone, C.int(year))
-	C.free(unsafe.Pointer(czone))
+	defer C.free(unsafe.Pointer(czone))
+	ret := C.get_rawoffset_time(czone, C.longlong(timestamp))
 
-	return int64(timestamp)
+	return int64(ret)
 }
 
 func newDSTInfo(zone string) *DSTInfo {
@@ -75,7 +70,7 @@ func newDSTInfo(zone string) *DSTInfo {
 
 	year := time.Now().Year()
 
-	first, second, ok := sumDSTTime(zone, int32(year))
+	first, second, ok := getDSTTime(zone, int32(year))
 	if !ok {
 		return nil
 	}
@@ -88,17 +83,19 @@ func newDSTInfo(zone string) *DSTInfo {
 	}
 }
 
-func newZoneSummary(zone string) *ZoneSummary {
-	var info ZoneSummary
-	year := time.Now().Year()
+func newZoneInfo(zone string) *ZoneInfo {
+	var info ZoneInfo
 
 	info.Name = zone
 	info.Desc = getZoneDesc(zone)
-	//info.DST = newDSTInfo(zone, year)
-
-	off := getOffsetByTimestamp(zone,
-		getYearBeginTime(zone, int32(year)))
-	info.RawOffset = off
+	dst := newDSTInfo(zone)
+	if dst == nil {
+		info.RawOffset = getOffsetByTimestamp(zone, 0)
+	} else {
+		info.RawOffset = getOffsetByTimestamp(zone,
+			getRawTimestamp(zone, dst.Enter))
+		info.DST = *dst
+	}
 
 	return &info
 }

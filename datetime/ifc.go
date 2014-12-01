@@ -69,13 +69,11 @@ func (date *DateTime) SetTimezone(zone string) error {
 	date.AddUserTimezone(zone)
 
 	if date.NTPEnabled.Get() {
+		/**
+		 * Only need to change the timezone,
+		 * do not require immediate synchronization network time
+		 **/
 		ntp.Timezone = zone
-		go func() {
-			ok := ntp.SyncNetworkTime()
-			if !ok {
-				Warning(date.logger, "Sync Network Time Failed")
-			}
-		}()
 	}
 
 	return nil
@@ -128,8 +126,8 @@ func (date *DateTime) GetZoneInfo(zone string) (timezone.ZoneInfo, error) {
 	return *info, nil
 }
 
-func (date *DateTime) GetAllZoneSummary() []timezone.ZoneSummary {
-	return timezone.GetZoneSummaryList()
+func (date *DateTime) GetAllZoneInfo() []timezone.ZoneInfo {
+	return timezone.GetZoneInfoList()
 }
 
 func (date *DateTime) Destroy() {

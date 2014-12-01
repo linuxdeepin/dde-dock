@@ -38,7 +38,7 @@ func init() {
 }
 
 func (*testWrapper) TestGetZoneList(c *C.C) {
-	zoneList := GetZoneSummaryList()
+	zoneList := GetZoneInfoList()
 	c.Check(len(zoneList), C.Equals, len(zoneWhiteList))
 }
 
@@ -96,14 +96,14 @@ func (*testWrapper) TestNewDSTInfo(c *C.C) {
 			zone: "America/New_York",
 			dst: DSTInfo{
 				Enter:     1394348400,
-				Leave:     1414908000,
+				Leave:     1414907999,
 				DSTOffset: -14400,
 			},
 		},
 	}
 
 	for _, info := range infos {
-		e, l, ok := sumDSTTime(info.zone, 2014)
+		e, l, ok := getDSTTime(info.zone, 2014)
 		c.Check(e, C.Equals, info.dst.Enter)
 		c.Check(l, C.Equals, info.dst.Leave)
 
@@ -148,7 +148,7 @@ func (*testWrapper) TestFindDSTInfo(c *C.C) {
 				zone: "US/Alaska",
 				dst: DSTInfo{
 					Enter:     1394362800,
-					Leave:     1414922400,
+					Leave:     1414922399,
 					DSTOffset: -28800,
 				},
 			},
@@ -159,7 +159,7 @@ func (*testWrapper) TestFindDSTInfo(c *C.C) {
 				zone: "Atlantic/Azores",
 				dst: DSTInfo{
 					Enter:     1396141200,
-					Leave:     1414285200,
+					Leave:     1414285199,
 					DSTOffset: 0,
 				},
 			},
@@ -169,9 +169,9 @@ func (*testWrapper) TestFindDSTInfo(c *C.C) {
 			data: dstData{
 				zone: "Pacific/Apia",
 				dst: DSTInfo{
-					Enter:     1396706400,
+					Enter:     1396706399,
 					Leave:     1411826400,
-					DSTOffset: 46800,
+					DSTOffset: 50400,
 				},
 			},
 			ret: true,

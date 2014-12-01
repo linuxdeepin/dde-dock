@@ -140,6 +140,10 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Azores"),
 	},
 	zoneDesc{
+		zone: "Atlantic/Cape_Verde",
+		desc: Tr("Cape Verde"),
+	},
+	zoneDesc{
 		zone: "Europe/London",
 		desc: Tr("London"),
 	},
@@ -156,8 +160,8 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Monrovia"),
 	},
 	zoneDesc{
-		zone: "Atlantic/Madeira",
-		desc: Tr("Madeira"),
+		zone: "Europe/Madrid",
+		desc: Tr("Madrid"),
 	},
 	zoneDesc{
 		zone: "Europe/Paris",
@@ -192,10 +196,6 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Blantyre"),
 	},
 	zoneDesc{
-		zone: "Europe/Moscow",
-		desc: Tr("Moscow"),
-	},
-	zoneDesc{
 		zone: "Africa/Nairobi",
 		desc: Tr("Nairobi"),
 	},
@@ -212,12 +212,12 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Baku"),
 	},
 	zoneDesc{
-		zone: "Asia/Kabul",
-		desc: Tr("Kabul"),
+		zone: "Europe/Moscow",
+		desc: Tr("Moscow"),
 	},
 	zoneDesc{
-		zone: "Asia/Yekaterinburg",
-		desc: Tr("Yekaterinburg"),
+		zone: "Asia/Kabul",
+		desc: Tr("Kabul"),
 	},
 	zoneDesc{
 		zone: "Asia/Karachi",
@@ -234,6 +234,10 @@ var zoneWhiteList = []zoneDesc{
 	zoneDesc{
 		zone: "Asia/Dhaka",
 		desc: Tr("Dhaka"),
+	},
+	zoneDesc{
+		zone: "Asia/Yekaterinburg",
+		desc: Tr("Yekaterinburg"),
 	},
 	zoneDesc{
 		zone: "Asia/Rangoon",
@@ -280,10 +284,6 @@ var zoneWhiteList = []zoneDesc{
 		desc: Tr("Seoul"),
 	},
 	zoneDesc{
-		zone: "Asia/Anadyr",
-		desc: Tr("Anadyr"),
-	},
-	zoneDesc{
 		zone: "Australia/Darwin",
 		desc: Tr("Darwin"),
 	},
@@ -318,6 +318,10 @@ var zoneWhiteList = []zoneDesc{
 	zoneDesc{
 		zone: "Pacific/Auckland",
 		desc: Tr("Auckland"),
+	},
+	zoneDesc{
+		zone: "Asia/Anadyr",
+		desc: Tr("Anadyr"),
 	},
 	zoneDesc{
 		zone: "Pacific/Chatham",

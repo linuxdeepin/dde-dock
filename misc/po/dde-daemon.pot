@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-28 17:46+0800\n"
+"POT-Creation-Date: 2014-12-08 14:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,59 +214,59 @@ msgid "Azores"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:144
-msgid "London"
+msgid "Cape Verde"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:148
-msgid "Dublin"
+msgid "London"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:152
-msgid "Casablanca"
+msgid "Dublin"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:156
-msgid "Monrovia"
+msgid "Casablanca"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:160
-msgid "Madeira"
+msgid "Monrovia"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:164
-msgid "Paris"
+msgid "Madrid"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:168
-msgid "Rome"
+msgid "Paris"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:172
-msgid "Vienna"
+msgid "Rome"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:176
-msgid "Algiers"
+msgid "Vienna"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:180
-msgid "Cairo"
+msgid "Algiers"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:184
-msgid "Athens"
+msgid "Cairo"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:188
-msgid "Istanbul"
+msgid "Athens"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:192
-msgid "Blantyre"
+msgid "Istanbul"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:196
-msgid "Moscow"
+msgid "Blantyre"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:200
@@ -286,11 +286,11 @@ msgid "Baku"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:216
-msgid "Kabul"
+msgid "Moscow"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:220
-msgid "Yekaterinburg"
+msgid "Kabul"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:224
@@ -310,51 +310,51 @@ msgid "Dhaka"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:240
-msgid "Rangoon"
+msgid "Yekaterinburg"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:244
-msgid "Bangkok"
+msgid "Rangoon"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:248
-msgid "Jakarta"
+msgid "Bangkok"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:252
-msgid "Beijing"
+msgid "Jakarta"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:256
-msgid "Hong Kong"
+msgid "Beijing"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:260
-msgid "Taipei"
+msgid "Hong Kong"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:264
-msgid "Kuala Lumpur"
+msgid "Taipei"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:268
-msgid "Perth"
+msgid "Kuala Lumpur"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:272
-msgid "Eucla"
+msgid "Perth"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:276
-msgid "Tokyo"
+msgid "Eucla"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:280
-msgid "Seoul"
+msgid "Tokyo"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:284
-msgid "Anadyr"
+msgid "Seoul"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:288
@@ -394,14 +394,18 @@ msgid "Auckland"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:324
-msgid "Chatham"
+msgid "Anadyr"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:328
-msgid "Apia"
+msgid "Chatham"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:332
+msgid "Apia"
+msgstr ""
+
+#: ../../datetime/timezone/deepin_list.go:336
 msgid "Fakaofo"
 msgstr ""
 

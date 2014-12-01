@@ -22,7 +22,6 @@
 package timezone
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -32,10 +31,6 @@ type dstData struct {
 	zone string
 	dst  DSTInfo
 }
-
-var errNoDST = fmt.Errorf("The zone has not dst info")
-
-const dstDataFile = "/usr/share/dde-daemon/dst_data"
 
 func parseDSTDataFile(filename string) ([]dstData, error) {
 	contents, err := ioutil.ReadFile(filename)

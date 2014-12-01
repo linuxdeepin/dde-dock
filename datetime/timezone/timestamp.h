@@ -22,8 +22,13 @@
 #ifndef __TIMESTAMP_H__
 #define __TIMESTAMP_H__
 
-long long get_year_begin_time(const char *zone, int year);
+typedef struct _DSTTime {
+	long long enter;
+	long long leave;
+} DSTTime;
+
+long long get_rawoffset_time (const char *zone, long long t);
 long getoffset (const char *zone, long long t);
-long long * get_dst_time(const char *zone, int year);
+DSTTime get_dst_time(const char *zone, int year);
 
 #endif
