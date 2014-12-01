@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"database/sql"
 	"os"
 	"path"
 	"path/filepath"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/howeyc/fsnotify"
 
+	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
@@ -204,6 +206,18 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 			return
 		}
 		itemInfo := NewItem(app)
+
+		dbPath, _ := GetDBPath(SoftwareCenterDataDir, CategoryNameDBPath)
+		db, err := sql.Open("sqlite3", dbPath)
+		if err == nil {
+			defer db.Close()
+			cid, err := QueryCategoryId(app, db)
+			if err != nil {
+				itemInfo.SetCategoryId(OtherID)
+			}
+			itemInfo.SetCategoryId(cid)
+		}
+
 		self.itemManager.AddItem(itemInfo)
 		self.categoryManager.AddItem(itemInfo.Id(), itemInfo.GetCategoryId())
 	}
