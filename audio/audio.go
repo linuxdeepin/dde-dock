@@ -18,6 +18,9 @@ type Audio struct {
 	DefaultSource string
 
 	MaxUIVolume float64
+
+	siEventChan  chan func()
+	siPollerExit chan struct{}
 }
 
 func (a *Audio) Reset() {
@@ -68,9 +71,20 @@ func NewSinkInput(core *pulse.SinkInput) *SinkInput {
 func NewAudio(core *pulse.Context) *Audio {
 	a := &Audio{core: core}
 	a.MaxUIVolume = pulse.VolumeUIMax
+	a.siEventChan = make(chan func(), 10)
+	a.siPollerExit = make(chan struct{})
 	a.update()
 	a.initEventHandlers()
+
+	a.setupMediaKeyMonitor()
+	go a.sinkInputPoller()
+
 	return a
+}
+
+func (a *Audio) destroy() {
+	close(a.siPollerExit)
+	dbus.UnInstallObject(a)
 }
 
 func (a *Audio) SetDefaultSink(name string) {
@@ -223,21 +237,28 @@ func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
 }
 
+var _audio *Audio
+
 func Start() {
 	logger.BeginTracing()
 
 	ctx := pulse.GetContext()
-	audio := NewAudio(ctx)
+	_audio = NewAudio(ctx)
 
-	if err := dbus.InstallOnSession(audio); err != nil {
+	if err := dbus.InstallOnSession(_audio); err != nil {
 		logger.Error("Failed InstallOnSession:", err)
 		return
 	}
-
-	audio.setupMediaKeyMonitor()
 }
 
 func Stop() {
+	if _audio == nil {
+		return
+	}
+
+	_audio.destroy()
+	_audio = nil
+
 	logger.EndTracing()
 }
 

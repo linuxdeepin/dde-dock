@@ -89,6 +89,7 @@ func (a *Audio) rebuildSinkInputList() {
 	}
 	a.setPropSinkInputs(sinkinputs)
 }
+
 func (a *Audio) addSinkInput(idx uint32) {
 	for _, si := range a.SinkInputs {
 		if si.core.Index == idx {
@@ -116,6 +117,7 @@ func (a *Audio) removeSinkInput(idx uint32) {
 			newSinkInputList = append(newSinkInputList, si)
 		}
 	}
+
 	if tryRemoveSinkInput != nil {
 		dbus.UnInstallObject(tryRemoveSinkInput)
 		a.SinkInputs = newSinkInputList
@@ -364,7 +366,6 @@ func (s *SinkInput) setPropVolume(v float64) {
 	if s.Volume != v {
 		s.Volume = v
 		dbus.NotifyChange(s, "Volume")
-		fmt.Println("VV:", s.Name, s.Volume)
 	}
 }
 func (s *SinkInput) setPropMute(v bool) {

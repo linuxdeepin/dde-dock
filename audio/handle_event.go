@@ -35,12 +35,33 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		}
 	}
 }
+
+func (a *Audio) sinkInputPoller() {
+	for {
+		select {
+		case handler, ok := <-a.siEventChan:
+			if !ok {
+				logger.Error("SinkInput event channel has been abnormally closed!")
+				return
+			}
+
+			handler()
+		case <-a.siPollerExit:
+			return
+		}
+	}
+}
+
 func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew:
-		a.addSinkInput(idx)
+		a.siEventChan <- func() {
+			a.addSinkInput(idx)
+		}
 	case pulse.EventTypeRemove:
-		a.removeSinkInput(idx)
+		a.siEventChan <- func() {
+			a.removeSinkInput(idx)
+		}
 
 	case pulse.EventTypeChange:
 		for _, s := range a.SinkInputs {
