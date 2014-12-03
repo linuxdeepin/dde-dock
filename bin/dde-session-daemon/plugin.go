@@ -28,7 +28,7 @@ import (
 
 var (
 	_pluginList = []string{
-		"keybinding",
+		"inputdevices",
 		"screensaver",
 		"power",
 		"audio",
@@ -40,9 +40,9 @@ var (
 		"bluetooth",
 		"network",
 		"mounts",
-		"inputdevices",
 		"dock",
 		"launcher",
+		"keybinding",
 		"dsc",
 		"mpris",
 		"systeminfo",

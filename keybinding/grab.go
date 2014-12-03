@@ -205,6 +205,11 @@ func getSystemKeyPairs() map[string]string {
 			if isInvalidConflict(info.Id) {
 				continue
 			}
+
+			if !isKeySupported(info.Name) {
+				continue
+			}
+
 			shortcut := getSystemKeyValue(info.Name, false)
 			action := getSystemKeyValue(info.Name, true)
 			systemPairs[shortcut] = action

@@ -22,6 +22,7 @@
 package keybinding
 
 import (
+	"dbus/com/deepin/daemon/inputdevices"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"strconv"
 	"strings"
@@ -126,7 +127,7 @@ func conflictChecked(id int32, shortcut string) (bool, []int32) {
 		ok   bool
 	)
 
-	logger.Info("Check Conflict:", shortcut)
+	logger.Debug("Check Conflict:", shortcut)
 	if tmpKey == "super-super_l" || tmpKey == "super-super_r" ||
 		tmpKey == "super" {
 		info, ok = newKeycodeInfo("Super_L")
@@ -170,6 +171,10 @@ func getSystemListInfo() []ShortcutInfo {
 	list := []ShortcutInfo{}
 
 	for _, info := range systemIdDescList {
+		if !isKeySupported(info.Name) {
+			continue
+		}
+
 		shortcut := getSystemKeyValue(info.Name, false)
 		tmp := newShortcutInfo(info.Id, info.Desc,
 			formatShortcut(shortcut))
@@ -295,13 +300,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range systemIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Debugf("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			logger.Infof("Set Value: %v", info.Name, list)
+			logger.Debugf("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -310,13 +315,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range windowIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Debugf("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			logger.Infof("Set Value: %v", info.Name, list)
+			logger.Debugf("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -325,13 +330,13 @@ func setSystemValue(id int32, value string, action bool) {
 	for _, info := range workspaceIdDescList {
 		if info.Id == id {
 			list := sysGSettings.GetStrv(info.Name)
-			logger.Infof("Key: %v, Value: %v", info.Name, list)
+			logger.Debugf("Key: %v, Value: %v", info.Name, list)
 			if len(list) > 1 && action {
 				list[1] = value
 			} else if len(list) > 0 && !action {
 				list[0] = value
 			}
-			logger.Infof("Set Value: %v", info.Name, list)
+			logger.Debugf("Set Value: %v", info.Name, list)
 			sysGSettings.SetStrv(info.Name, list)
 			return
 		}
@@ -339,9 +344,9 @@ func setSystemValue(id int32, value string, action bool) {
 }
 
 func modifyShortcutById(id int32, shortcut string) {
-	logger.Infof("Id: %d, shortcut: %s", id, shortcut)
+	logger.Debugf("Id: %d, shortcut: %s", id, shortcut)
 	if id >= CUSTOM_KEY_ID_BASE {
-		logger.Info("---Set Custom key")
+		logger.Debug("---Set Custom key")
 		setCustomValue(id, CUSTOM_KEY_SHORTCUT, shortcut)
 		return
 	}
@@ -382,8 +387,8 @@ func isKeycodeInfoEqual(info1, info2 *KeycodeInfo) bool {
 	}
 
 	if (info1.Detail == info2.Detail) && (info1.State == info2.State) {
-		logger.Infof("Info1: %v -- %v", info1.Detail, info1.State)
-		logger.Infof("Info2: %v -- %v", info2.Detail, info2.State)
+		logger.Debugf("Info1: %v -- %v", info1.Detail, info1.State)
+		logger.Debugf("Info2: %v -- %v", info2.Detail, info2.State)
 		return true
 	}
 
@@ -553,6 +558,33 @@ func isIdInWorkspaceList(id int32) bool {
 			return true
 		}
 	}
+
+	return false
+}
+
+func isKeySupported(key string) bool {
+	switch key {
+	case "disable-touchpad":
+		return isTouchpadExist()
+	}
+
+	return true
+}
+
+func isTouchpadExist() bool {
+	tpad, err := inputdevices.NewTouchPad(
+		"com.deepin.daemon.InputDevices",
+		"/com/deepin/daemon/InputDevice/TouchPad")
+	if err != nil {
+		logger.Debug("~~~~~~~~NewTouchPad Failed:", err)
+		return false
+	}
+
+	logger.Debug("~~~~~~~~~~TouchPad Exist:", tpad.Exist.Get())
+	if tpad.Exist.Get() {
+		return true
+	}
+	inputdevices.DestroyTouchPad(tpad)
 
 	return false
 }

@@ -1,6 +1,6 @@
 package main
 
-import _ "pkg.linuxdeepin.com/dde-daemon/keybinding"
+import _ "pkg.linuxdeepin.com/dde-daemon/inputdevices"
 import _ "pkg.linuxdeepin.com/dde-daemon/screensaver"
 import _ "pkg.linuxdeepin.com/dde-daemon/power"
 import "pkg.linuxdeepin.com/lib/proxy"
@@ -19,10 +19,10 @@ import _ "pkg.linuxdeepin.com/dde-daemon/bluetooth"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/network"
 import _ "pkg.linuxdeepin.com/dde-daemon/mounts"
-import _ "pkg.linuxdeepin.com/dde-daemon/inputdevices"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/dock"
 import _ "pkg.linuxdeepin.com/dde-daemon/launcher"
+import _ "pkg.linuxdeepin.com/dde-daemon/keybinding"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/dsc"
 import _ "pkg.linuxdeepin.com/dde-daemon/mpris"
