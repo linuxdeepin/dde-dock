@@ -525,11 +525,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (c
 	spath := dbus.ObjectPath("/")
 	cpath, apath, err = nmManager.AddAndActivateConnection(data, devPath, spath)
 	if err != nil {
-		// if connection type is wireless hotspot, give a notification
-		switch getCustomConnectionType(data) {
-		case connectionWirelessAdhoc, connectionWirelessHotspot:
-			notifyApModeNotSupport()
-		}
+		nmHandleActivatingError(data, devPath)
 		logger.Error(err, "devPath:", devPath)
 		return
 	}
@@ -540,17 +536,28 @@ func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath
 	spath := dbus.ObjectPath("/")
 	apath, err = nmManager.ActivateConnection(cpath, devPath, spath)
 	if err != nil {
-		// if connection type is wireless hotspot, give a notification
 		if data, err := nmGetConnectionData(cpath); err == nil {
-			switch getCustomConnectionType(data) {
-			case connectionWirelessAdhoc, connectionWirelessHotspot:
-				notifyApModeNotSupport()
-			}
+			nmHandleActivatingError(data, devPath)
 		}
 		logger.Error(err)
 		return
 	}
 	return
+}
+
+func nmHandleActivatingError(data connectionData, devPath dbus.ObjectPath) {
+	switch nmGetDeviceType(devPath) {
+	case NM_DEVICE_TYPE_ETHERNET:
+		// if wired cable unplugged, give a notification
+		if !isDeviceStateAvailable(nmGetDeviceState(devPath)) {
+			notifyWiredCableUnplugged()
+		}
+	}
+	switch getCustomConnectionType(data) {
+	case connectionWirelessAdhoc, connectionWirelessHotspot:
+		// if connection type is wireless hotspot, give a notification
+		notifyApModeNotSupport()
+	}
 }
 
 func nmDeactivateConnection(apath dbus.ObjectPath) (err error) {

@@ -46,9 +46,10 @@ type device struct {
 	Trusted bool
 	Paired  bool
 
-	connected  bool
-	connecting bool
-	State      uint32
+	oldConnected bool
+	connected    bool
+	connecting   bool
+	State        uint32
 
 	// optinal
 	Icon string
@@ -63,6 +64,7 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.connected = d.bluezDevice.Connected.Get()
+	d.oldConnected = d.connected
 	d.notifyStateChanged()
 
 	// optional properties, read from dbus object data in order to
@@ -99,6 +101,14 @@ func (d *device) notifyDevicePropertiesChanged() {
 func (d *device) connectProperties() {
 	d.bluezDevice.Connected.ConnectChanged(func() {
 		d.connected = d.bluezDevice.Connected.Get()
+		if d.oldConnected != d.connected {
+			d.oldConnected = d.connected
+			if d.connected {
+				notifyBluetoothConnected(d.Alias)
+			} else {
+				notifyBluetoothDisconnected(d.Alias)
+			}
+		}
 		d.notifyStateChanged()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {

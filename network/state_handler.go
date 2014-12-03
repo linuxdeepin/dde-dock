@@ -178,7 +178,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 					var icon, msg string
 					switch getCustomConnectionType(data) {
 					case connectionWired:
-						icon = notifyIconEthernetConnected
+						icon = notifyIconWiredConnected
 					case connectionWireless:
 						icon = notifyIconWirelessConnected
 					default:
@@ -194,16 +194,12 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				if !nmGetNetworkEnabled() || !isDeviceStateInActivating(oldState) || isDeviceStateReasonInvalid(reason) {
 					return
 				}
-				if nmIsNetworkOffline() {
-					notifyNetworkOffline()
-					return
-				}
 
 				var icon, msg string
 				devType := dev.DeviceType.Get()
 				switch devType {
 				case NM_DEVICE_TYPE_ETHERNET:
-					icon = notifyIconEthernetDisconnected
+					icon = notifyIconWiredDisconnected
 					if reason == NM_DEVICE_STATE_REASON_CARRIER {
 						reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
 					}

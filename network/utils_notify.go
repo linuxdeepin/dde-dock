@@ -33,19 +33,25 @@ const (
 )
 
 const (
-	notifyIconNetworkConnected     = "network-transmit-receive"
-	notifyIconNetworkDisconnected  = "network-error"
-	notifyIconNetworkOffline       = "network-error"
-	notifyIconEthernetConnected    = "notification-network-ethernet-connected"
-	notifyIconEthernetDisconnected = "notification-network-ethernet-disconnected"
+	notifyIconNetworkOffline       = "notification-network-offline"
+	notifyIconWiredConnected       = "notification-network-wired-connected"
+	notifyIconWiredDisconnected    = "notification-network-wired-disconnected"
+	notifyIconWiredLocal           = "notification-network-wired-local"
+	notifyIconWiredError           = notifyIconWiredDisconnected
 	notifyIconWirelessConnected    = "notification-network-wireless-full"
 	notifyIconWirelessDisconnected = "notification-network-wireless-disconnected"
+	notifyIconWirelessDisabled     = "notification-network-wireless-disabled"
+	notifyIconWirelessLocal        = "notification-network-wireless-local"
+	notifyIconWirelessError        = notifyIconWirelessDisconnected
 	notifyIconVpnConnected         = "notification-network-vpn-connected"
 	notifyIconVpnDisconnected      = "notification-network-vpn-disconnected"
+	notifyIconProxyEnabled         = "notification-network-proxy-enabled"
+	notifyIconProxyDisabled        = "notification-network-proxy-disabled"
+	notifyIconNetworkConnected     = notifyIconWiredConnected
+	notifyIconNetworkDisconnected  = notifyIconWiredDisconnected
 )
 
 var (
-	notifier      *notifications.Notifier
 	notifyEnabled = true
 )
 
@@ -60,43 +66,46 @@ func disableNotify() {
 }
 
 func notify(icon, summary, body string) {
-	if !notifyEnabled {
-		return
-	}
-	if notifier == nil {
-		logger.Error("connect to org.freedesktop.Notifications failed")
+	notifier, err := notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+	if err != nil {
+		logger.Error(err)
 		return
 	}
 	logger.Info("notify", icon, summary, body)
 	// use goroutine to fix dbus cycle call issue
-	go notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
+	go func() {
+		notifier.Notify("Network", 0, icon, summary, body, nil, nil, 0)
+		notifications.DestroyNotifier(notifier)
+	}()
 	return
-}
-
-func notifyAirplanModeEnabled() {
-	// TODO: icon
-	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("Airplan mode enabled."))
 }
 
 func notifyNetworkOffline() {
 	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("You are now offline."))
 }
 
+func notifyAirplanModeEnabled() {
+	// TODO: airplan icon
+	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("Airplan mode enabled."))
+}
+
+func notifyWiredCableUnplugged() {
+	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+}
+
 func notifyApModeNotSupport() {
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
+	notify(notifyIconWirelessError, Tr("Disconnected"), Tr("Access Point mode is not supported by this device."))
 }
 
 func notifyWirelessHardSwitchOff() {
-	notify(notifyIconWirelessDisconnected, Tr("Network"), Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
+	notify(notifyIconWirelessDisabled, Tr("Network"), Tr("The hardware switch of WLAN Card is off, please switch on as necessary."))
 }
 
 func notifyProxyEnabled() {
-	// TODO: icon
-	notify(notifyIconNetworkConnected, Tr("Network"), Tr("System proxy is set successfully."))
+	notify(notifyIconProxyEnabled, Tr("Network"), Tr("System proxy is set successfully."))
 }
 func notifyProxyDisabled() {
-	// TODO: icon
-	notify(notifyIconNetworkConnected, Tr("Network"), Tr("System proxy has been cancelled."))
+	notify(notifyIconProxyDisabled, Tr("Network"), Tr("System proxy has been cancelled."))
 }
 
 func notifyVpnConnected(id string) {

@@ -26,7 +26,6 @@ import (
 	"dbus/org/freedesktop/login1"
 	"dbus/org/freedesktop/modemmanager1"
 	nm "dbus/org/freedesktop/networkmanager"
-	"dbus/org/freedesktop/notifications"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
@@ -57,9 +56,6 @@ func initDbusObjects() {
 	if loginManager, err = login1.NewManager(dbusLoginDest, dbusLoginPath); err != nil {
 		logger.Error(err)
 	}
-	if notifier, err = notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath); err != nil {
-		logger.Error(err)
-	}
 }
 func destroyDbusObjects() {
 	// destroy global dbus objects manually when stopping service is
@@ -68,7 +64,6 @@ func destroyDbusObjects() {
 	login1.DestroyManager(loginManager)
 	nm.DestroyManager(nmManager)
 	nm.DestroySettings(nmSettings)
-	notifications.DestroyNotifier(notifier)
 }
 
 func initDbusDaemon() {

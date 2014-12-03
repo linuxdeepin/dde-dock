@@ -39,43 +39,63 @@ func (*testWrapper) TestNotify(c *C.C) {
 	Textdomain("dde-daemon")
 	initNmStateReasons()
 
-	notify(notifyIconEthernetConnected, Tr("Connected"), "有线网络")
+	notify(notifyIconWiredConnected, Tr("Connected"), "Wired network")
 	time.Sleep(1 * time.Second) // more time to wait for the first notification
 	snapshotNotify("wired_connected")
-	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), "有线网络")
+
+	notify(notifyIconWiredDisconnected, Tr("Disconnected"), "Wired network")
 	snapshotNotify("wired_disconnected")
-	notify(notifyIconEthernetDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
+
+	notify(notifyIconWiredLocal, Tr("Disconnected"), "Wired network local only")
+	snapshotNotify("wired_local")
+
+	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
 	snapshotNotify("wired_error")
-	notify(notifyIconWirelessConnected, Tr("Connected"), "linuxdeepin-1")
+
+	notifyWiredCableUnplugged()
+	snapshotNotify("wired_unplugged")
+
+	notify(notifyIconWirelessConnected, Tr("Connected"), "wireless-ssid")
 	snapshotNotify("wireless_connected")
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "linuxdeepin-1")
+
+	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "wireless-ssid")
 	snapshotNotify("wireless_disconnected")
-	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS])
+
+	notify(notifyIconWirelessError, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS])
 	snapshotNotify("wireless_error")
-	notifyVpnConnected("vpn-pptp")
-	snapshotNotify("vpn_connected")
-	notifyVpnDisconnected("vpn-pptp")
-	snapshotNotify("vpn_disconnected")
-	notifyVpnFailed("vpn-pptp", NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
-	snapshotNotify("vpn_error")
-	notifyAirplanModeEnabled()
-	snapshotNotify("airplanmode")
-	notifyNetworkOffline()
-	snapshotNotify("offline")
+
 	notifyApModeNotSupport()
 	snapshotNotify("apmode_error")
+
 	notifyWirelessHardSwitchOff()
 	snapshotNotify("wireless_hard_switch_off")
+
+	notifyVpnConnected("vpn-pptp")
+	snapshotNotify("vpn_connected")
+
+	notifyVpnDisconnected("vpn-pptp")
+	snapshotNotify("vpn_disconnected")
+
+	notifyVpnFailed("vpn-pptp", NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
+	snapshotNotify("vpn_error")
+
+	notifyNetworkOffline()
+	snapshotNotify("offline")
+
+	notifyAirplanModeEnabled()
+	snapshotNotify("airplanmode")
+
 	notifyProxyEnabled()
 	snapshotNotify("proxy_enabled")
+
 	notifyProxyDisabled()
 	snapshotNotify("proxy_disabled")
 }
 func snapshotNotify(suffix string) {
 	time.Sleep(1 * time.Second)
 	os.MkdirAll("testresult", 0755)
-	resultScreenFile := "testdata/test_network_screen.png"
-	resultClipFile := "testdata/test_network_" + suffix + ".png"
+	resultScreenFile := "testresult/test_network_screen.png"
+	resultClipFile := "testresult/test_network_" + suffix + ".png"
 	gdkpixbuf.ScreenshotImage(resultScreenFile, gdkpixbuf.FormatPng)
 	sw, _, _ := gdkpixbuf.GetImageSize(resultScreenFile)
 	pading := 35
