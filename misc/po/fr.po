@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-11-28 17:46+0800\n"
-"PO-Revision-Date: 2014-12-01 02:01+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2014-12-07 12:31+0000\n"
+"Last-Translator: lexross <its4moi@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/dde-daemon/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,11 +22,11 @@ msgstr ""
 
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr ""
+msgstr "Le nom d'utilisateur ne peut être vide."
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "Le nom d'utilisateur doit comporter a~z, 0~9, - ou _. "
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
@@ -218,7 +218,7 @@ msgstr "Azores"
 
 #: ../../datetime/timezone/deepin_list.go:144
 msgid "London"
-msgstr ""
+msgstr "Londres"
 
 #: ../../datetime/timezone/deepin_list.go:148
 msgid "Dublin"
@@ -471,15 +471,15 @@ msgstr "Changer d'application"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Applications de selecteur d'inversion"
+msgstr "Annuler changement d'application"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Basculement 3D des applications"
+msgstr "Changer d'application 3D"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Basculement inversé 3D des applications"
+msgstr "Annuler changement d'application 3D"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
@@ -511,11 +511,11 @@ msgstr "Fenêtre Terminal Quake"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Se déconnecter"
+msgstr "Déconnexion"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Désactiver le Touchpad"
+msgstr "Désactiver le pavé tactile"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -531,7 +531,7 @@ msgstr "Calculatrice"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Client mail"
+msgstr "Courrier"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
@@ -539,7 +539,7 @@ msgstr "Navigateur Web"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Lecture média"
+msgstr "Lecteur multimédia"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
@@ -611,51 +611,51 @@ msgstr "Activer le menu de la fenêtre"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Passer à l'espace de travail 1"
+msgstr "Aller à l'espace de travail 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Passer à l'espace de travail 2"
+msgstr "Aller à l'espace de travail 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Passer à l'espace de travail 3"
+msgstr "Aller à l'espace de travail 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Basculer vers l'espace de travail 4"
+msgstr "Aller à l'espace de travail 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Basculer à l'espace de travail de gauche"
+msgstr "Aller à l'espace de travail de gauche"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Basculer à l'espace de travail de droite"
+msgstr "Aller à l'espace de travail de droite"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Basculer à l'espace de travail supérieur"
+msgstr "Aller à l'espace de travail supérieur"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Basculer à l'espace de travail inférieur"
+msgstr "Aller à l'espace de travail inférieur"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Aller à l'espace de travail 1"
+msgstr "Déplacer à l'espace de travail 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Aller à l'espace de travail 2"
+msgstr "Déplacer à l'espace de travail 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Aller à l'espace de travail 3"
+msgstr "Déplacer à l'espace de travail 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Aller à l'espace de travail 4"
+msgstr "Déplacer à l'espace de travail 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
@@ -675,7 +675,7 @@ msgstr "Aller à l'espace de travail inférieur"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "Le changement du language de système a échoué,veuillez essayer plus tard."
+msgstr "Le changement de language du système a échoué,veuillez essayer plus tard."
 
 #: ../../langselector/handle_event.go:42
 msgid ""
@@ -1506,7 +1506,7 @@ msgstr "Une seconde connexion sur la connexion principale a échoué."
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Le cable réseau n'est pas branché."
+msgstr "Le cable réseau est débranché."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
