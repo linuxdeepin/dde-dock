@@ -22,8 +22,8 @@
 package accounts
 
 import (
+	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"sync"
 )
 
 func (obj *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -55,45 +55,76 @@ func (m *Manager) setPropGuestIcon(icon string) {
 	}
 }
 
-func (obj *Manager) updateUserInfo(path string) {
-	if len(path) < 1 {
-		return
+func (obj *Manager) newUserByPath(path string) error {
+	if len(path) == 0 {
+		return fmt.Errorf("Invalid ObjectPath")
 	}
 
 	u := newUser(path)
 	if u == nil {
-		return
+		return fmt.Errorf("Create User Object Failed")
 	}
 	if err := dbus.InstallOnSystem(u); err != nil {
-		logger.Errorf("Install DBus For %s Failed: %v", path, err)
-		panic(err)
+		return fmt.Errorf("Install DBus For %s Failed: %v", path, err)
 	}
 	u.setProps()
 
 	obj.pathUserMap[path] = u
+
+	return nil
 }
 
-func (obj *Manager) destroyAllUser() {
-	var mutex sync.Mutex
-	mutex.Lock()
-	if len(obj.pathUserMap) > 0 {
-		for _, v := range obj.pathUserMap {
-			v.quitFlag <- true
-			v.watcher.Close()
-			dbus.UnInstallObject(v)
-		}
-
-		obj.pathUserMap = make(map[string]*User)
+func (m *Manager) destroyUser(path string) {
+	u, ok := m.pathUserMap[path]
+	if !ok {
+		return
 	}
-	mutex.Unlock()
+
+	u.quitFlag <- true
+	u.watcher.Close()
+	dbus.UnInstallObject(u)
+	u = nil
+	delete(m.pathUserMap, path)
+}
+
+func (m *Manager) destroyAllUser() {
+	for _, path := range m.UserList {
+		m.destroyUser(path)
+	}
+	m.pathUserMap = make(map[string]*User)
 }
 
 func (obj *Manager) updateAllUserInfo() {
 	obj.destroyAllUser()
 
 	for _, path := range obj.UserList {
-		obj.updateUserInfo(path)
+		err := obj.newUserByPath(path)
+		if err != nil {
+			logger.Error(err)
+		}
 	}
+}
+
+func (m *Manager) handleuserAdded(list []string) {
+	for _, path := range list {
+		err := m.newUserByPath(path)
+		if err != nil {
+			logger.Error(err)
+			continue
+		}
+		dbus.Emit(m, "UserAdded", path)
+	}
+
+	m.setPropUserList(getUserList())
+}
+
+func (m *Manager) handleUserRemoved(list []string) {
+	for _, path := range list {
+		m.destroyUser(path)
+		dbus.Emit(m, "UserDeleted", path)
+	}
+
+	m.setPropUserList(getUserList())
 }
 
 func (obj *Manager) destroy() {

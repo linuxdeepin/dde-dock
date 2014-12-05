@@ -24,7 +24,6 @@ package accounts
 import (
 	"github.com/howeyc/fsnotify"
 	"path"
-	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
 	"sync"
@@ -100,6 +99,8 @@ func (obj *Manager) removeUserInfoFileWatch() {
 	}
 }
 
+var uLock sync.Mutex
+
 func (obj *Manager) handleUserListChanged() {
 	for {
 		select {
@@ -135,26 +136,17 @@ func (obj *Manager) handleUserListChanged() {
 				break
 			}
 			if !_handleFlag {
-				var mutex sync.Mutex
-				mutex.Lock()
+				uLock.Lock()
 				_handleFlag = true
 				list, ret := compareStrList(obj.UserList, getUserList())
 				switch ret {
 				case 1:
-					obj.setPropUserList(getUserList())
-					obj.updateAllUserInfo()
-					for _, v := range list {
-						dbus.Emit(obj, "UserAdded", v)
-					}
+					obj.handleuserAdded(list)
 				case -1:
-					obj.setPropUserList(getUserList())
-					obj.updateAllUserInfo()
-					for _, v := range list {
-						dbus.Emit(obj, "UserDeleted", v)
-					}
+					obj.handleUserRemoved(list)
 				}
 				_handleFlag = false
-				mutex.Unlock()
+				uLock.Unlock()
 			}
 		case err, ok := <-obj.listWatcher.Error:
 			if !ok || err != nil {
