@@ -1,7 +1,6 @@
 package item
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
@@ -74,7 +73,7 @@ func (m *ItemManager) UninstallItem(id ItemId, purge bool, timeout time.Duration
 	}
 
 	if pkgName == "" {
-		return errors.New("get package name failed")
+		return fmt.Errorf("get package name of %q failed", string(id))
 	}
 
 	transaction := NewUninstallTransaction(m.soft, pkgName, purge, timeout)
@@ -91,7 +90,7 @@ func (m *ItemManager) IsItemOnDesktop(id ItemId) bool {
 
 func (m *ItemManager) SendItemToDesktop(id ItemId) error {
 	if !m.HasItem(id) {
-		return errors.New(fmt.Sprintf("No such a item %q", id))
+		return fmt.Errorf("No such a item %q", id)
 	}
 
 	if err := sendToDesktop(m.GetItem(id).Path()); err != nil {
@@ -103,7 +102,7 @@ func (m *ItemManager) SendItemToDesktop(id ItemId) error {
 
 func (m *ItemManager) RemoveItemFromDesktop(id ItemId) error {
 	if !m.HasItem(id) {
-		return errors.New(fmt.Sprintf("No such a item %q", id))
+		return fmt.Errorf("No such a item %q", id)
 	}
 
 	if err := removeFromDesktop(m.GetItem(id).Path()); err != nil {

@@ -97,7 +97,7 @@ func (s *ItemManagerTestSuite) TestUnistallItemNoOnSoftCenter(c *C.C) {
 
 	err := s.m.UninstallItem(softcenter.Id(), false, s.timeout)
 	c.Assert(err, C.NotNil)
-	c.Assert(err.Error(), C.Equals, "get package name failed")
+	c.Assert(err.Error(), C.Equals, fmt.Sprintf("get package name of %q failed", softcenter.Id()))
 
 }
 

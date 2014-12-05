@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	"strings"
 	"time"
 )
 
@@ -39,7 +40,7 @@ func (t *UninstallTransaction) run() {
 			for _, action := range msgs {
 				if action.Name == ActionFailed {
 					detail := action.Detail.Value().(ActionFailedDetail)
-					if detail.PkgName == t.pkgName {
+					if strings.TrimRight(detail.PkgName, ":i386") == t.pkgName {
 						err := fmt.Errorf("uninstall %q failed: %s", detail.PkgName, detail.Description)
 						t.failed <- err
 						t.disconnect()
@@ -52,7 +53,7 @@ func (t *UninstallTransaction) run() {
 						}
 					}()
 					detail := action.Detail.Value().(ActionFinishDetail)
-					if detail.PkgName == t.pkgName {
+					if strings.TrimRight(detail.PkgName, ":i386") == t.pkgName {
 						close(t.done)
 						t.disconnect()
 						return
