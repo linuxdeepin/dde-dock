@@ -305,7 +305,7 @@ func checkSetting8021xClientCert(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
-	ensureByteArrayUriPathExists(errs, section8021x, NM_SETTING_802_1X_CLIENT_CERT, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_CLIENT_CERT, value,
 		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xCaCert(data connectionData, errs sectionErrors) {
@@ -313,7 +313,7 @@ func checkSetting8021xCaCert(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
-	ensureByteArrayUriPathExists(errs, section8021x, NM_SETTING_802_1X_CA_CERT, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_CA_CERT, value,
 		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xPrivateKey(data connectionData, errs sectionErrors) {
@@ -321,7 +321,7 @@ func checkSetting8021xPrivateKey(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xPrivateKey(data)
-	ensureByteArrayUriPathExists(errs, section8021x, NM_SETTING_802_1X_PRIVATE_KEY, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_PRIVATE_KEY, value,
 		".der", ".pem", ".p12", ".key")
 }
 
@@ -429,25 +429,22 @@ func getSettingVk8021xEap(data connectionData) (eap string) {
 	return
 }
 func getSettingVk8021xPacFile(data connectionData) (value string) {
-	pacFile := getSetting8021xPacFile(data)
-	if len(pacFile) > 0 {
-		value = toUriPath(pacFile)
-	}
+	value = getSetting8021xPacFile(data)
 	return
 }
 func getSettingVk8021xCaCert(data connectionData) (value string) {
 	caCert := getSetting8021xCaCert(data)
-	value = byteArrayToStrPath(caCert)
+	value = toLocalPathFor8021x(byteArrayToStrPath(caCert))
 	return
 }
 func getSettingVk8021xClientCert(data connectionData) (value string) {
 	clientCert := getSetting8021xClientCert(data)
-	value = byteArrayToStrPath(clientCert)
+	value = toLocalPathFor8021x(byteArrayToStrPath(clientCert))
 	return
 }
 func getSettingVk8021xPrivateKey(data connectionData) (value string) {
 	privateKey := getSetting8021xPrivateKey(data)
-	value = byteArrayToStrPath(privateKey)
+	value = toLocalPathFor8021x(byteArrayToStrPath(privateKey))
 	return
 }
 
@@ -457,14 +454,14 @@ func logicSetSettingVk8021xPacFile(data connectionData, value string) (err error
 	return
 }
 func logicSetSettingVk8021xCaCert(data connectionData, value string) (err error) {
-	setSetting8021xCaCert(data, strToByteArrayPath(toUriPath(value)))
+	setSetting8021xCaCert(data, strToByteArrayPath(toUriPathFor8021x(value)))
 	return
 }
 func logicSetSettingVk8021xClientCert(data connectionData, value string) (err error) {
-	setSetting8021xClientCert(data, strToByteArrayPath(toUriPath(value)))
+	setSetting8021xClientCert(data, strToByteArrayPath(toUriPathFor8021x(value)))
 	return
 }
 func logicSetSettingVk8021xPrivateKey(data connectionData, value string) (err error) {
-	setSetting8021xPrivateKey(data, strToByteArrayPath(toUriPath(value)))
+	setSetting8021xPrivateKey(data, strToByteArrayPath(toUriPathFor8021x(value)))
 	return
 }

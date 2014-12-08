@@ -183,6 +183,7 @@ func getSettingVpnPluginKey(data connectionData, section, key string) (value int
 		return
 	}
 	value = unmarshalVpnPluginKey(valueStr, generalGetSettingKeyType(section, key))
+	logger.Debugf("getSettingVpnPluginKey: data[%s][%s]=%v", section, key, value)
 	return
 }
 func setSettingVpnPluginKey(data connectionData, section, key string, value interface{}) {
@@ -193,6 +194,7 @@ func setSettingVpnPluginKey(data connectionData, section, key string, value inte
 	}
 	valueStr := marshalVpnPluginKey(value, generalGetSettingKeyType(section, key))
 	vpnData[key] = valueStr
+	logger.Debugf("setSettingVpnPluginKey data[%s][%s]=%#v, valueStr=%s", section, key, value, valueStr)
 }
 func isSettingVpnPluginKeyExists(data connectionData, section, key string) (ok bool) {
 	vpnData, ok := getSettingVpnPluginData(data, section, key)

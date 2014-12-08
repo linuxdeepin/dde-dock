@@ -119,7 +119,7 @@ func jsonToKeyValue(jsonStr string, t ktype) (v interface{}, err error) {
 	return
 }
 
-// Convert sepcial key type which wrapped by json to dbus variant'jsonStr value
+// Convert sepcial key type which wrapped by json to dbus variant value
 func jsonToKeyValueString(jsonStr string) (v string, err error) {
 	err = json.Unmarshal([]byte(jsonStr), &v)
 	return

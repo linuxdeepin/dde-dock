@@ -104,14 +104,38 @@ func isUint32ArrayEmpty(a []uint32) (empty bool) {
 	return
 }
 
-// "/the/path" -> "file:///the/path", "file:///the/path" -> "file:///the/path"
+// convert local path to uri, etc "/the/path" -> "file:///the/path"
 func toUriPath(path string) (uriPath string) {
 	return utils.EncodeURI(path, utils.SCHEME_FILE)
 }
 
-// "/the/path" -> "/the/path", "file:///the/path" -> "/the/path"
+// convert uri to local path, etc "file:///the/path" -> "/the/path"
 func toLocalPath(path string) (localPath string) {
 	return utils.DecodeURI(path)
+}
+
+// convert local path to uri, etc "/the/path" -> "file:///the/path"
+func toUriPathFor8021x(path string) (uriPath string) {
+	// the uri for 8021x cert files is specially, we just need append
+	// suffix "file://" for it
+	if !utils.IsURI(path) {
+		uriPath = "file://" + path
+	} else {
+		uriPath = path
+	}
+	return
+}
+
+// convert uri to local path, etc "file:///the/path" -> "/the/path"
+func toLocalPathFor8021x(path string) (uriPath string) {
+	// the uri for 8021x cert files is specially, we just need remove
+	// suffix "file://" from it
+	if utils.IsURI(path) {
+		uriPath = strings.TrimPrefix(path, "file://")
+	} else {
+		uriPath = path
+	}
+	return
 }
 
 // byte array should end with null byte

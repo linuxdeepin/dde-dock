@@ -67,13 +67,13 @@ func doRememberError(errs sectionErrors, key, errMsg string) {
 }
 
 // start with "file://", end with null byte
-func ensureByteArrayUriPathExists(errs sectionErrors, section, key string, bytePath []byte, limitedExts ...string) {
+func ensureByteArrayUriPathExistsFor8021x(errs sectionErrors, section, key string, bytePath []byte, limitedExts ...string) {
 	path := byteArrayToStrPath(bytePath)
 	if !utils.IsURI(path) {
 		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	ensureFileExists(errs, section, key, path, limitedExts...)
+	ensureFileExists(errs, section, key, toLocalPathFor8021x(path), limitedExts...)
 }
 
 func ensureFileExists(errs sectionErrors, section, key, file string, limitedExts ...string) {

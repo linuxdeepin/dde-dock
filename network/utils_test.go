@@ -23,6 +23,7 @@ package network
 
 import (
 	C "launchpad.net/gocheck"
+	"os"
 	"testing"
 )
 
@@ -34,43 +35,11 @@ func init() {
 	C.Suite(&testWrapper{})
 }
 
-const (
-	testConnectionId       = "idname"
-	testConnectionUuid     = "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
-	testConnectionType     = "802-3-ethernet"
-	testConnectionIdJSON   = `"idname"`
-	testConnectionUuidJSON = `"8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"`
-	testConnectionTypeJSON = `"802-3-ethernet"`
-)
-
-const (
-	testJSONKtypeString           = `"test string"`
-	testJSONKtypeByte             = `97` // character 'a'
-	testJSONKtypeInt32            = `-32`
-	testJSONKtypeUint32           = `32`
-	testJSONKtypeUint64           = `64`
-	testJSONKtypeBoolean          = `true`
-	testJSONKtypeArrayByte        = `"YXJyYXkgYnl0ZQ=="` // characters "array byte"
-	testJSONKtypeArrayString      = `["str1","str2"]`
-	testJSONKtypeArrayUint32      = `[32,32]`
-	testJSONKtypeArrayArrayByte   = `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
-	testJSONKtypeArrayArrayUint32 = `[[32,32],[32,32]]`
-	testJSONKtypeDictStringString = `{"key1":"value1","key2":"value2"}`
-	testJSONKtypeIpv6Addresses    = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
-	testJSONKtypeIpv6Routes       = `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]`
-
-	// key value wrapper
-	testJSONKtypeWrapperString        = `"test wrapper string"`
-	testJSONKtypeWrapperMacAddress    = `"00:12:34:56:78:AB"`
-	testJSONKtypeWrapperIpv4Dns       = `["192.168.1.1","192.168.1.2"]`
-	testJSONKtypeWrapperIpv4Addresses = `[{"Address":"192.168.1.100","Mask":"255.255.255.0","Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Mask":"128.0.0.0","Gateway":"192.168.1.1"}]`
-	testJSONKtypeWrapperIpv4Routes    = `[{"Address":"192.168.1.100","Mask":"255.255.192.0","NextHop":"192.168.1.1","Metric":100}]`
-	testJSONKtypeWrapperIpv6Dns       = `["1234:2345:3456:4444:5555:6666:AAAA:FFFF"]`
-	testJSONKtypeWrapperIpv6Addresses = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111"}]`
-	testJSONKtypeWrapperIpv6Routes    = `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"NextHop":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
-)
-
 func (*testWrapper) TestGetSetConnectionData(c *C.C) {
+	testConnectionId := "idname"
+	testConnectionUuid := "8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"
+	testConnectionType := "802-3-ethernet"
+
 	data := make(connectionData)
 
 	addSettingSection(data, sectionConnection)
@@ -84,6 +53,10 @@ func (*testWrapper) TestGetSetConnectionData(c *C.C) {
 }
 
 func (*testWrapper) TestGetSetConnectionDataJSON(c *C.C) {
+	testConnectionIdJSON := `"idname"`
+	testConnectionUuidJSON := `"8e2f9aa2-42b8-47d5-b040-ae82c53fa1f2"`
+	testConnectionTypeJSON := `"802-3-ethernet"`
+
 	data := make(connectionData)
 	addSettingSection(data, sectionConnection)
 	setSettingConnectionIdJSON(data, testConnectionIdJSON)
@@ -180,6 +153,33 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	c.Check(getSettingIp6ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp6ConfigRoutesJSON(data, setValueJSON)
 	c.Check(isSettingIp6ConfigRoutesExists(data), C.Equals, false)
+}
+
+func (*testWrapper) TestKeyError(c *C.C) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		c.Skip(err.Error())
+	}
+
+	var errs sectionErrors
+	data := make(connectionData)
+	addSettingSection(data, section8021x)
+
+	// check 8021x cert file
+	errs = make(sectionErrors)
+	logicSetSettingVk8021xCaCert(data, cwd+"/testdata/ca.crt")
+	checkSetting8021xCaCert(data, errs)
+	c.Check(len(errs), C.Equals, 0)
+
+	errs = make(sectionErrors)
+	logicSetSettingVk8021xCaCert(data, cwd+"/testdata/ca.crt.notexists")
+	checkSetting8021xCaCert(data, errs)
+	c.Check(len(errs), C.Equals, 1)
+
+	errs = make(sectionErrors)
+	logicSetSettingVk8021xCaCert(data, "abc"+cwd+"/testdata/ca.crt")
+	checkSetting8021xCaCert(data, errs)
+	c.Check(len(errs), C.Equals, 1)
 }
 
 func (*testWrapper) TestConvertMacAddressToString(c *C.C) {
@@ -399,6 +399,33 @@ func (*testWrapper) TestExpandIpv6Address(c *C.C) {
 }
 
 func (*testWrapper) TestJSONWrapper(c *C.C) {
+	// test json values
+	testJSONKtypeString := `"test string"`
+	testJSONKtypeByte := `97` // character 'a'
+	testJSONKtypeInt32 := `-32`
+	testJSONKtypeUint32 := `32`
+	testJSONKtypeUint64 := `64`
+	testJSONKtypeBoolean := `true`
+	testJSONKtypeArrayByte := `"YXJyYXkgYnl0ZQ=="` // characters "array byte"
+	testJSONKtypeArrayString := `["str1","str2"]`
+	testJSONKtypeArrayUint32 := `[32,32]`
+	testJSONKtypeArrayArrayByte := `["YXJyYXkgYnl0ZQ==","YXJyYXkgYnl0ZQ=="]`
+	testJSONKtypeArrayArrayUint32 := `[[32,32],[32,32]]`
+	testJSONKtypeDictStringString := `{"key1":"value1","key2":"value2"}`
+	testJSONKtypeIpv6Addresses := `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"Gateway":"/oAAAAAAAAACImj//g9NCQ=="}]`
+	testJSONKtypeIpv6Routes := `[{"Address":"/oAAAAAAAAACImj//g9NCQ==","Prefix":32,"NextHop":"/oAAAAAAAAACImj//g9NCQ==","Metric":32}]`
+
+	// test json values for wrapper
+	testJSONKtypeWrapperString := `"123四五六"`
+	testJSONKtypeWrapperStringRuneValues := []byte{0x31, 0x32, 0x33, 0xe5, 0x9b, 0x9b, 0xe4, 0xba, 0x94, 0xe5, 0x85, 0xad}
+	testJSONKtypeWrapperMacAddress := `"00:12:34:56:78:AB"`
+	testJSONKtypeWrapperIpv4Dns := `["192.168.1.1","192.168.1.2"]`
+	testJSONKtypeWrapperIpv4Addresses := `[{"Address":"192.168.1.100","Mask":"255.255.255.0","Gateway":"192.168.1.1"},{"Address":"192.168.1.150","Mask":"128.0.0.0","Gateway":"192.168.1.1"}]`
+	testJSONKtypeWrapperIpv4Routes := `[{"Address":"192.168.1.100","Mask":"255.255.192.0","NextHop":"192.168.1.1","Metric":100}]`
+	testJSONKtypeWrapperIpv6Dns := `["1234:2345:3456:4444:5555:6666:AAAA:FFFF"]`
+	testJSONKtypeWrapperIpv6Addresses := `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"Gateway":"1111:2222:3333:4444:5555:6666:AAAA:1111"}]`
+	testJSONKtypeWrapperIpv6Routes := `[{"Address":"1111:2222:3333:4444:5555:6666:AAAA:FFFF","Prefix":64,"NextHop":"1111:2222:3333:4444:5555:6666:AAAA:1111","Metric":32}]`
+
 	var v interface{}
 	var s string
 
@@ -460,6 +487,7 @@ func (*testWrapper) TestJSONWrapper(c *C.C) {
 
 	// key value wrapper
 	v, _ = jsonToKeyValue(testJSONKtypeWrapperString, ktypeWrapperString)
+	c.Check(v, C.DeepEquals, testJSONKtypeWrapperStringRuneValues)
 	s, _ = keyValueToJSON(v, ktypeWrapperString)
 	c.Check(s, C.Equals, testJSONKtypeWrapperString)
 
@@ -508,6 +536,64 @@ func (*testWrapper) TestGetterAndSetterForVirtualKey(c *C.C) {
 	c.Check("wpa-eap", C.Equals, getSettingVkWirelessSecurityKeyMgmt(data))
 }
 
+func (*testWrapper) Test8021xCertPath(c *C.C) {
+	data := newWirelessConnectionData("", "", nil, apSecEap)
+	logicSetSettingVk8021xEap(data, "tls")
+
+	tests := []struct {
+		test, result string
+	}{
+		{"/the/path", "/the/path"},
+		{"file:///the/path", "/the/path"},
+		{"/the/path/中文", "/the/path/中文"},
+		{"file:///the/path/中文", "/the/path/中文"},
+		{"/the/path/%E4%B8%AD%E6%96%87", "/the/path/%E4%B8%AD%E6%96%87"},
+		{"file:///the/path/%E4%B8%AD%E6%96%87", "/the/path/%E4%B8%AD%E6%96%87"},
+	}
+	for _, t := range tests {
+		logicSetSettingVk8021xCaCert(data, t.test)
+		c.Check(getSettingVk8021xCaCert(data), C.Equals, t.result)
+
+		logicSetSettingVk8021xClientCert(data, t.test)
+		c.Check(getSettingVk8021xClientCert(data), C.Equals, t.result)
+
+		logicSetSettingVk8021xPrivateKey(data, t.test)
+		c.Check(getSettingVk8021xPrivateKey(data), C.Equals, t.result)
+	}
+}
+
+func (*testWrapper) TestToUriPathFor8021x(c *C.C) {
+	tests := []struct {
+		test   string
+		result string
+	}{
+		{"/the/path", "file:///the/path"},
+		{"file:///the/path", "file:///the/path"},
+		{"/the/path/中文", "file:///the/path/中文"},
+		{"file:///the/path/中文", "file:///the/path/中文"},
+		{"/the/path/%E4%B8%AD%E6%96%87", "file:///the/path/%E4%B8%AD%E6%96%87"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, C.Equals, toUriPathFor8021x(t.test))
+	}
+}
+func (*testWrapper) TestToLocalPathFor8021x(c *C.C) {
+	tests := []struct {
+		test   string
+		result string
+	}{
+		{"/the/path", "/the/path"},
+		{"file:///the/path", "/the/path"},
+		{"file:///the/path/%E4%B8%AD%E6%96%87", "/the/path/%E4%B8%AD%E6%96%87"},
+		{"/the/path/中文", "/the/path/中文"},
+		{"file:///the/path/中文", "/the/path/中文"},
+		{"/the/path/%E4%B8%AD%E6%96%87", "/the/path/%E4%B8%AD%E6%96%87"},
+	}
+	for _, t := range tests {
+		c.Check(t.result, C.Equals, toLocalPathFor8021x(t.test))
+	}
+}
+
 func (*testWrapper) TestToUriPath(c *C.C) {
 	tests := []struct {
 		test   string
@@ -515,6 +601,8 @@ func (*testWrapper) TestToUriPath(c *C.C) {
 	}{
 		{"/the/path", "file:///the/path"},
 		{"file:///the/path", "file:///the/path"},
+		{"/the/path/中文", "file:///the/path/%E4%B8%AD%E6%96%87"},
+		{"file:///the/path/中文", "file:///the/path/%E4%B8%AD%E6%96%87"},
 	}
 	for _, t := range tests {
 		c.Check(t.result, C.Equals, toUriPath(t.test))
@@ -527,6 +615,10 @@ func (*testWrapper) TestToLocalPath(c *C.C) {
 	}{
 		{"/the/path", "/the/path"},
 		{"file:///the/path", "/the/path"},
+		{"file:///the/path/%E4%B8%AD%E6%96%87", "/the/path/中文"},
+		{"/the/path/中文", "/the/path/中文"},
+		{"file:///the/path/中文", "/the/path/中文"},
+		{"/the/path/%E4%B8%AD%E6%96%87", "/the/path/%E4%B8%AD%E6%96%87"},
 	}
 	for _, t := range tests {
 		c.Check(t.result, C.Equals, toLocalPath(t.test))
@@ -539,19 +631,21 @@ func (*testWrapper) TestStrToByteArrayPath(c *C.C) {
 		result []byte
 	}{
 		{"/the/path", []byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}},
+		{"/the/path/中文", []byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x2f, 0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87, 0x0}},
 	}
 	for _, t := range tests {
 		c.Check(t.result, C.DeepEquals, strToByteArrayPath(t.test))
 	}
 }
-func (*testWrapper) TestbyteArrayToStrPath(c *C.C) {
+func (*testWrapper) TestByteArrayToStrPath(c *C.C) {
 	tests := []struct {
 		test   []byte
 		result string
 	}{
-		{[]byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}, "/the/path"},
-		{[]byte{0x0}, ""},
 		{[]byte{}, ""},
+		{[]byte{0x0}, ""},
+		{[]byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x0}, "/the/path"},
+		{[]byte{0x2f, 0x74, 0x68, 0x65, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x2f, 0xe4, 0xb8, 0xad, 0xe6, 0x96, 0x87, 0x0}, "/the/path/中文"},
 	}
 	for _, t := range tests {
 		c.Check(t.result, C.Equals, byteArrayToStrPath(t.test))

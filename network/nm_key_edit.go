@@ -21,8 +21,10 @@
 
 package network
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "fmt"
+import (
+	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
+)
 
 func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
 	if valueJSON == jsonNull || valueJSON == jsonEmptyString || valueJSON == jsonEmptyArray {
@@ -106,7 +108,7 @@ func getSettingKey(data connectionData, section, key string) (value interface{})
 
 	value = variant.Value()
 
-	// logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value) // TODO test
+	logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
 	if isInterfaceNil(value) {
 		logger.Errorf("getSettingKey: data[%s][%s] is nil", section, key)
 	}
@@ -130,13 +132,12 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		// TODO test
-		// logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
-		// valueJSON, getKtypeDescription(t), err)
+		logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+			valueJSON, getKtypeDescription(t), err)
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	// logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON) // TODO test
+	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON)
 	if isInterfaceNil(value) {
 		removeSettingKey(data, section, key)
 	} else {
@@ -162,7 +163,7 @@ func setSettingKey(data connectionData, section, key string, value interface{}) 
 
 	sectionData[key] = dbus.MakeVariant(value)
 
-	logger.Debugf("setSettingKey: data[%s][%s]=%#v", section, key, value) // TODO test
+	logger.Debugf("setSettingKey: data[%s][%s]=%#v", section, key, value)
 	return
 }
 

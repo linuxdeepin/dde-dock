@@ -376,19 +376,25 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
-	// TODO
-	for _, vsection := range getAvailableVsections(s.data) {
-		vsectionData, ok := s.AvailableKeys[vsection]
-		if !ok {
-			logger.Warning("no available keys for vsection", vsection)
-			continue
-		}
-		for _, key := range vsectionData {
-			section := getSectionOfKeyInVsection(s.data, vsection, key)
-			t := generalGetSettingKeyType(section, key)
-			values := generalGetSettingAvailableValues(s.data, section, key)
-			valuesJSON, _ := marshalJSON(values)
-			info += fmt.Sprintf("%s->%s[%s]: %s (%s)\n", vsection, key, getKtypeDescription(t), s.GetKey(vsection, key), valuesJSON)
+	for _, vsection := range s.AvailableVirtualSections {
+		for _, section := range getRelatedSectionsOfVsection(s.data, vsection) {
+			sectionKeys, ok := s.AvailableKeys[section]
+			if !ok {
+				logger.Warning("no available keys for section", section)
+				continue
+			}
+			for _, key := range sectionKeys {
+				// section := getSectionOfKeyInVsection(s.data, vsection, key)
+				t := generalGetSettingKeyType(section, key)
+				if values := generalGetSettingAvailableValues(s.data, section, key); len(values) > 0 {
+					valuesJSON, _ := marshalJSON(values)
+					info += fmt.Sprintf("%s: %s[%s](%s): %s (%s)\n", vsection, section, key,
+						getKtypeDescription(t), s.GetKey(section, key), valuesJSON)
+				} else {
+					info += fmt.Sprintf("%s: %s[%s](%s): %s\n", vsection, section, key,
+						getKtypeDescription(t), s.GetKey(section, key))
+				}
+			}
 		}
 	}
 	return
