@@ -4,103 +4,86 @@
 			"Category": "tr",
 			"PkgInfos":[
 				{
-					"LangCode": "", 
 					"FormatType": 1, 
 					"DependentPkg": "", 
 					"PkgPull": "language-pack-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 1, 
 					"DependentPkg": "gvfs", 
 					"PkgPull": "language-pack-gnome-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "libreoffice-common", 
 					"PkgPull": "libreoffice-l10n-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "libreoffice-common", 
 					"PkgPull": "libreoffice-help-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "firefox", 
 					"PkgPull": "firefox-locale-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "thunderbird", 
 					"PkgPull": "thunderbird-locale-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "lightning-extension", 
 					"PkgPull": "lightning-extension-locale-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "sunbird", 
 					"PkgPull": "sunbird-locale-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "sword-text-gerlut1545", 
 					"PkgPull": "sword-language-pack-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "gimp", 
 					"PkgPull": "gimp-help-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "evolution", 
 					"PkgPull": "evolution-documentation-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "chromium-browser", 
 					"PkgPull": "chromium-browser-l10n"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "sylpheed", 
 					"PkgPull": "sylpheed-i18n-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "amarok", 
 					"PkgPull": "amarok-help-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 3, 
 					"DependentPkg": "kdelibs5-data", 
 					"PkgPull": "kde-l10n-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 3, 
 					"DependentPkg": "calligra-libs", 
 					"PkgPull": "calligra-l10n-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 3, 
 					"DependentPkg": "gcompris", 
 					"PkgPull": "gcompris-sound-"
@@ -525,19 +508,16 @@
 					"PkgPull": "openoffice.org-hyphenation"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "sylpheed", 
 					"PkgPull": "hunspell-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "abiword", 
 					"PkgPull": "aspell-"
 				},
 				{
-					"LangCode": "", 
 					"FormatType": 2, 
 					"DependentPkg": "gedit", 
 					"PkgPull": "hunspell-"
@@ -954,6 +934,30 @@
 					"FormatType": 0, 
 					"DependentPkg": "", 
 					"PkgPull": "fonts-arphic-ukai"
+				},
+				{
+					"LangCode":"zh-hans",
+					"FormatType": 0, 
+					"DependentPkg": "", 
+					"PkgPull": "fonts-adobe-source-han-sans-cn"
+				},
+				{
+					"LangCode":"zh-hant",
+					"FormatType": 0, 
+					"DependentPkg": "", 
+					"PkgPull": "fonts-adobe-source-han-sans-tw"
+				},
+				{
+					"LangCode":"ja",
+					"FormatType": 0, 
+					"DependentPkg": "", 
+					"PkgPull": "fonts-adobe-source-han-sans-jp"
+				},
+				{
+					"LangCode":"ko",
+					"FormatType": 0, 
+					"DependentPkg": "", 
+					"PkgPull": "fonts-adobe-source-han-sans-kr"
 				},
 				{
 					"LangCode": "ja", 

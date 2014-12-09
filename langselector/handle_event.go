@@ -34,12 +34,14 @@ func (lang *LangSelector) onGenLocaleStatus() {
 			lang.logger.Warning(err)
 			lang.setPropCurrentLocale(getLocale())
 			e := sendNotify("", "", Tr("System language failed to change, please try later."))
+			lang.LocaleState = LocaleStateChanged
 			if e != nil {
 				lang.logger.Warning("sendNotify failed:", e)
 			}
 			return
 		}
 		e := sendNotify("", "", Tr("System language has been changed, please log in again after logged out."))
+		lang.LocaleState = LocaleStateChanged
 		if e != nil {
 			lang.logger.Warning("sendNotify failed:", e)
 		}
@@ -51,16 +53,12 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, state string) error {
 		return ErrLocaleChangeFailed
 	}
 
-	lang.LocaleState = LocaleStateChanged
 	err := writeUserLocale(lang.CurrentLocale)
 	if err != nil {
 		return err
 	}
 
-	err = i18n_dependency.InstallDependentPackages(
-		lang.CurrentLocale,
-		i18n_dependency.I18nDependencyFilename,
-		i18n_dependency.LanguageListFile)
+	err = i18n_dependency.InstallDependentPackages(lang.CurrentLocale)
 	if err != nil {
 		lang.logger.Warning(err)
 	}
