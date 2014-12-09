@@ -240,6 +240,7 @@ func (m *ClientManager) listenRootWindow() {
 			update()
 		case _NET_ACTIVE_WINDOW:
 			var err error
+			isLauncherShown = false
 			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
 				appId := find_app_id_by_xid(activeWindow,
 					DisplayModeType(setting.GetDisplayMode()))
@@ -261,14 +262,16 @@ func (m *ClientManager) listenRootWindow() {
 					} else {
 						LAUNCHER.Hide()
 					}
+				} else {
+					isLauncherShown = true
 				}
 
 				lastActive = appId
 				dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
-				hideModemanager.UpdateState()
 			}
 
-			if HideModeType(setting.GetHideMode()) == HideModeSmartHide {
+			hideMode := HideModeType(setting.GetHideMode())
+			if hideMode == HideModeSmartHide || hideMode == HideModeKeepHidden {
 				hideModemanager.UpdateState()
 			}
 		case _NET_SHOWING_DESKTOP:

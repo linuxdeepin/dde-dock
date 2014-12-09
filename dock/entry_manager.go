@@ -71,7 +71,7 @@ func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 			appId := find_app_id_by_xid(xid,
 				DisplayModeType(setting.GetDisplayMode()))
 			if rApp, ok := m.runtimeApps[appId]; ok {
-				logger.Debugf("%s is alread existed, attach xid: 0x%x", appId, xid)
+				logger.Debugf("%s is already existed, attach xid: 0x%x", appId, xid)
 				willBeDestroied[appId] = nil
 				rApp.attachXid(xid)
 			} else {
