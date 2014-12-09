@@ -121,7 +121,7 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 		if gioApp.GetId() == appID {
 			_, err := gioApp.SetAsDefaultForType(typeName)
 			if err != nil {
-				logger.Debug("%v", err)
+				logger.Debug(err)
 				return false
 			}
 			break
@@ -184,14 +184,14 @@ func (dapp *DefaultApps) listenMimeCacheFile() {
 					break
 				}
 
-				logger.Debug("Watch Event: %v", ev)
+				logger.Debug("Watch Event:", ev)
 				if ev.IsDelete() {
 					mimeWatcher.Watch(mimeFile)
 				} else {
 					dbus.Emit(dapp, "DefaultAppChanged")
 				}
 			case err, ok := <-mimeWatcher.Error:
-				logger.Debug("Watch Error: %v", err)
+				logger.Debug("Watch Error:", err)
 				if !ok || err != nil {
 					if mimeWatcher != nil {
 						mimeWatcher.RemoveWatch(mimeFile)
@@ -218,7 +218,7 @@ func NewDefaultApps() *DefaultApps {
 	var err error
 	mimeWatcher, err = fsnotify.NewWatcher()
 	if err != nil {
-		logger.Debug("Create mime file watcher failed: %v", err)
+		logger.Debug("Create mime file watcher failed:", err)
 		panic(err)
 	}
 
@@ -235,7 +235,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
 	_, err1 := keyFile.LoadFromFile(_DESKTOP_PATH+id, glib.KeyFileFlagsNone)
 	if err1 != nil {
-		logger.Debug("Load File Failed: %v", err1)
+		logger.Debug("Load File Failed:", err1)
 		return AppInfo{}, false
 	}
 
@@ -246,7 +246,7 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 
 	exec, err2 := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
 	if err2 != nil {
-		logger.Debug("Get Exec Failed: %v", err2)
+		logger.Debug("Get Exec Failed:", err2)
 		return AppInfo{}, false
 	}
 
@@ -285,21 +285,18 @@ func IsTerminalEmulator(fileName string) bool {
 	defer keyFile.Free()
 	_, err := keyFile.LoadFromFile(fileName, glib.KeyFileFlagsNone)
 	if err != nil {
-		logger.Debug("KeyFile Load File Failed: %v", err)
+		logger.Debug("KeyFile Load File Failed:", err)
 		return false
 	}
 
 	categories, err := keyFile.GetString(_DESKTOP_ENTRY, _CATEGORY)
 	if err != nil {
-		logger.Debug("KeyFile Get String Failed: %v", err)
 		return false
 	}
 
 	if strings.Contains(categories, _TERMINAL_EMULATOR) {
 		execName, err := keyFile.GetString(_DESKTOP_ENTRY, _EXEC)
 		if err != nil {
-			logger.Debug("KeyFile Get String Failed: %v",
-				err)
 			return false
 		}
 
@@ -324,7 +321,7 @@ func GetDesktopEntryList() ([]string, error) {
 
 	desktops, err := ioutil.ReadDir(_DESKTOP_PATH)
 	if err != nil {
-		logger.Debug("Read Dir Failed: %v", err)
+		logger.Debug("Read Dir Failed:", err)
 		return nil, err
 	}
 

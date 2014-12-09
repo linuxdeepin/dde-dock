@@ -130,14 +130,14 @@ func setActionByMime(mime, appID string) {
 
 		list, ok := delMimeFromList(mime, ignoreList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
 		}
 
 		list, ok = delMimeFromList(mime, runSoftList)
 		if ok {
 			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
 		}
-	case "Run Soft":
+	case "Run Soft", "nautilus-autorun-software.desktop":
 		if !isMimeExist(mime, runSoftList) {
 			runSoftList = append(runSoftList, mime)
 			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, runSoftList)
@@ -145,7 +145,7 @@ func setActionByMime(mime, appID string) {
 
 		list, ok := delMimeFromList(mime, ignoreList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
 		}
 
 		list, ok = delMimeFromList(mime, openFolderList)
@@ -155,6 +155,21 @@ func setActionByMime(mime, appID string) {
 	default:
 		m := DefaultApps{}
 		m.SetDefaultAppViaType(mime, appID)
+
+		list, ok := delMimeFromList(mime, ignoreList)
+		if ok {
+			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
+		}
+
+		list, ok = delMimeFromList(mime, openFolderList)
+		if ok {
+			mediaGSettings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
+		}
+
+		list, ok = delMimeFromList(mime, runSoftList)
+		if ok {
+			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+		}
 	}
 }
 
