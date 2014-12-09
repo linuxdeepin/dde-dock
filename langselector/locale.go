@@ -193,8 +193,12 @@ func constructPamFile(locale, filename string) string {
 		}
 
 		strs := strings.Split(line, "=")
-		if strs[0] == "LANG" || strs[0] == "LANGUAGE" {
+		if strs[0] == "LANG" {
 			tmp += strs[0] + "=" + locale
+			continue
+		} else if strs[0] == "LANGUAGE" {
+			lcode := strings.Split(locale, ".")[0]
+			tmp += strs[0] + "=" + lcode
 			continue
 		}
 
@@ -208,7 +212,8 @@ func generatePamContents(locale string) string {
 	contents := ""
 	str := "LANG=" + locale + "\n"
 	contents += str
-	str = "LANGUAGE=" + locale + "\n"
+	tmp := strings.Split(locale, ".")
+	str = "LANGUAGE=" + tmp[0] + "\n"
 	contents += str
 
 	return contents

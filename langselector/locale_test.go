@@ -44,7 +44,7 @@ type localeDescTest struct {
 
 func (t *TestWrapper) TestConstructPamFile(c *C.C) {
 	example := `LANG=en_US.UTF-8
-LANGUAGE=en_US.UTF-8
+LANGUAGE=en_US
 LC_TIME="zh_CN.UTF-8"
 `
 
