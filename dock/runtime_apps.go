@@ -26,7 +26,6 @@ import (
 
 var DOCKED_APP_MANAGER *dock.DockedAppManager
 var updateConfigureTimer *time.Timer
-var updateSmartHideTimer *time.Timer
 
 type WindowInfo struct {
 	Xid         xproto.Window
@@ -698,6 +697,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 
 func (app *RuntimeApp) updateOverlap(xid xproto.Window) {
 	if _, ok := app.xids[xid]; ok {
+		logger.Debug(app.Id, "isHidden:", isHiddenPre(xid), "isOnCurrentWorkspace:", onCurrentWorkspacePre(xid), "isOverDock:", isWindowOverlapDock(xid))
 		overlap := !isHiddenPre(xid) && onCurrentWorkspacePre(xid) && isWindowOverlapDock(xid)
 		if overlap != app.xids[xid].OverlapDock {
 			app.xids[xid].OverlapDock = overlap
@@ -745,13 +745,8 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 				break
 			}
 
-			if updateSmartHideTimer != nil {
-				updateSmartHideTimer.Stop()
-				updateSmartHideTimer = nil
-			}
-			updateSmartHideTimer = time.AfterFunc(time.Millisecond*20, func() {
+			time.AfterFunc(time.Millisecond*20, func() {
 				app.updateOverlap(xid)
-				updateSmartHideTimer = nil
 			})
 		// case ATOM_DEEPIN_WINDOW_VIEWPORTS:
 		// 	app.updateViewports(xid)

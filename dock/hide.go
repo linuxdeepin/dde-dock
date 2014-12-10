@@ -140,7 +140,7 @@ func (m *HideStateManager) UpdateState() {
 		for _, app := range ENTRY_MANAGER.runtimeApps {
 			for _, winInfo := range app.xids {
 				if winInfo.OverlapDock {
-					logger.Warning("overlap dock")
+					logger.Warning(app.Id, "overlap dock")
 					trigger = TriggerHide
 					break
 				}
