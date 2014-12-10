@@ -140,7 +140,7 @@ func getDeepinCategory(basename string, db *sql.DB) (CategoryId, error) {
 
 	var categoryName string
 	err := db.QueryRow(`
-	select firest_category_name
+	select first_category_name
 	from desktop
 	where desktop_name = ?`,
 		basename,
