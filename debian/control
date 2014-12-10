@@ -34,6 +34,7 @@ Depends: ${shlibs:Depends},
  acpid,
  bluez5 | bluez (>=5.4),
  grub-themes-deepin,
+ network-manager,
  xcur2png,
  xserver-xorg-input-wacom,
 Conflicts: dde-workspace ( < 2.1+20141028122406 )
