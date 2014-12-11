@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/com/deepin/dde/datetime/" id="com.deepin.dde.datetime" gettext-domain="DDE">
+    <key type="b" name="is-24hour">
+      <default>true</default>
+      <summary>Is 24 Hour Display</summary>
+      <description>Is 24 Hour Display</description>
+    </key>
+    <key type="b" name="is-auto-set">
+      <default>false</default>
+      <summary>Is Auto Set DateTime</summary>
+      <description>Is Auto Set DateTime</description>
+    </key>
+    <key type="as" name="user-timezone-list">
+        <default>[]</default>
+        <summary>User Timezone List</summary>
+        <description>Timezone List By User Selected</description>
+    </key>
+    <key type="i" name="dst-offset">
+        <default>0</default>
+        <summary>DST Offset</summary>
+        <description>Current DST Offset</description>
+    </key>
+  </schema>
+</schemalist>
