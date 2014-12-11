@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-28 17:46+0800\n"
-"PO-Revision-Date: 2014-12-03 11:46+0000\n"
-"Last-Translator: SlazO <blum1866@gmail.com>\n"
+"POT-Creation-Date: 2014-12-08 14:49+0800\n"
+"PO-Revision-Date: 2014-12-12 01:13+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/dde-daemon/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -217,60 +217,60 @@ msgid "Azores"
 msgstr "Azori-szigetek"
 
 #: ../../datetime/timezone/deepin_list.go:144
+msgid "Cape Verde"
+msgstr "Zöld-foki Köztársaság"
+
+#: ../../datetime/timezone/deepin_list.go:148
 msgid "London"
 msgstr "London"
 
-#: ../../datetime/timezone/deepin_list.go:148
+#: ../../datetime/timezone/deepin_list.go:152
 msgid "Dublin"
 msgstr "Dublin"
 
-#: ../../datetime/timezone/deepin_list.go:152
+#: ../../datetime/timezone/deepin_list.go:156
 msgid "Casablanca"
 msgstr "Casablanca"
 
-#: ../../datetime/timezone/deepin_list.go:156
+#: ../../datetime/timezone/deepin_list.go:160
 msgid "Monrovia"
 msgstr "Monrovia"
 
-#: ../../datetime/timezone/deepin_list.go:160
-msgid "Madeira"
-msgstr "Madeira"
-
 #: ../../datetime/timezone/deepin_list.go:164
+msgid "Madrid"
+msgstr "Madrid"
+
+#: ../../datetime/timezone/deepin_list.go:168
 msgid "Paris"
 msgstr "Párizs"
 
-#: ../../datetime/timezone/deepin_list.go:168
+#: ../../datetime/timezone/deepin_list.go:172
 msgid "Rome"
 msgstr "Róma"
 
-#: ../../datetime/timezone/deepin_list.go:172
+#: ../../datetime/timezone/deepin_list.go:176
 msgid "Vienna"
 msgstr "Bécs"
 
-#: ../../datetime/timezone/deepin_list.go:176
+#: ../../datetime/timezone/deepin_list.go:180
 msgid "Algiers"
 msgstr "Algír"
 
-#: ../../datetime/timezone/deepin_list.go:180
+#: ../../datetime/timezone/deepin_list.go:184
 msgid "Cairo"
 msgstr "Kairó"
 
-#: ../../datetime/timezone/deepin_list.go:184
+#: ../../datetime/timezone/deepin_list.go:188
 msgid "Athens"
 msgstr "Athén"
 
-#: ../../datetime/timezone/deepin_list.go:188
+#: ../../datetime/timezone/deepin_list.go:192
 msgid "Istanbul"
 msgstr "Iszanbul"
 
-#: ../../datetime/timezone/deepin_list.go:192
+#: ../../datetime/timezone/deepin_list.go:196
 msgid "Blantyre"
 msgstr "Blantyre"
-
-#: ../../datetime/timezone/deepin_list.go:196
-msgid "Moscow"
-msgstr "Moszkva"
 
 #: ../../datetime/timezone/deepin_list.go:200
 msgid "Nairobi"
@@ -289,12 +289,12 @@ msgid "Baku"
 msgstr "Baku"
 
 #: ../../datetime/timezone/deepin_list.go:216
-msgid "Kabul"
-msgstr "Kabul"
+msgid "Moscow"
+msgstr "Moszkva"
 
 #: ../../datetime/timezone/deepin_list.go:220
-msgid "Yekaterinburg"
-msgstr "Jekatyerinburg"
+msgid "Kabul"
+msgstr "Kabul"
 
 #: ../../datetime/timezone/deepin_list.go:224
 msgid "Karachi"
@@ -313,52 +313,52 @@ msgid "Dhaka"
 msgstr "Dhaka"
 
 #: ../../datetime/timezone/deepin_list.go:240
+msgid "Yekaterinburg"
+msgstr "Jekatyerinburg"
+
+#: ../../datetime/timezone/deepin_list.go:244
 msgid "Rangoon"
 msgstr "Rangoon"
 
-#: ../../datetime/timezone/deepin_list.go:244
+#: ../../datetime/timezone/deepin_list.go:248
 msgid "Bangkok"
 msgstr "Bangkok"
 
-#: ../../datetime/timezone/deepin_list.go:248
+#: ../../datetime/timezone/deepin_list.go:252
 msgid "Jakarta"
 msgstr "Jakarta"
 
-#: ../../datetime/timezone/deepin_list.go:252
+#: ../../datetime/timezone/deepin_list.go:256
 msgid "Beijing"
 msgstr "Beijing"
 
-#: ../../datetime/timezone/deepin_list.go:256
+#: ../../datetime/timezone/deepin_list.go:260
 msgid "Hong Kong"
 msgstr "Hong Kong"
 
-#: ../../datetime/timezone/deepin_list.go:260
+#: ../../datetime/timezone/deepin_list.go:264
 msgid "Taipei"
 msgstr "Tajpej"
 
-#: ../../datetime/timezone/deepin_list.go:264
+#: ../../datetime/timezone/deepin_list.go:268
 msgid "Kuala Lumpur"
 msgstr "Kuala Lumpur"
 
-#: ../../datetime/timezone/deepin_list.go:268
+#: ../../datetime/timezone/deepin_list.go:272
 msgid "Perth"
 msgstr "Perth"
 
-#: ../../datetime/timezone/deepin_list.go:272
+#: ../../datetime/timezone/deepin_list.go:276
 msgid "Eucla"
 msgstr "Eucla"
 
-#: ../../datetime/timezone/deepin_list.go:276
+#: ../../datetime/timezone/deepin_list.go:280
 msgid "Tokyo"
 msgstr "Tokió"
 
-#: ../../datetime/timezone/deepin_list.go:280
+#: ../../datetime/timezone/deepin_list.go:284
 msgid "Seoul"
 msgstr "Seoul"
-
-#: ../../datetime/timezone/deepin_list.go:284
-msgid "Anadyr"
-msgstr "Anadyr"
 
 #: ../../datetime/timezone/deepin_list.go:288
 msgid "Darwin"
@@ -397,14 +397,18 @@ msgid "Auckland"
 msgstr "Auckland"
 
 #: ../../datetime/timezone/deepin_list.go:324
+msgid "Anadyr"
+msgstr "Anadyr"
+
+#: ../../datetime/timezone/deepin_list.go:328
 msgid "Chatham"
 msgstr "Chatham"
 
-#: ../../datetime/timezone/deepin_list.go:328
+#: ../../datetime/timezone/deepin_list.go:332
 msgid "Apia"
 msgstr "Apia"
 
-#: ../../datetime/timezone/deepin_list.go:332
+#: ../../datetime/timezone/deepin_list.go:336
 msgid "Fakaofo"
 msgstr "Fakaofo"
 
