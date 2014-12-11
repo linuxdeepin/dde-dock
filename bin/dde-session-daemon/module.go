@@ -27,7 +27,8 @@ import (
 )
 
 var (
-	_pluginList = []string{
+	// modules should be loaded in following order
+	orderedModules = []string{
 		"inputdevices",
 		"screensaver",
 		"power",
@@ -48,28 +49,24 @@ var (
 		"systeminfo",
 		"sessionwatcher",
 	}
-
-	_daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
+	daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
 )
 
-func initPlugins() {
-	for _, plugin := range _pluginList {
-		enable := _daemonSettings.GetBoolean(plugin)
-		if !enable {
-			loader.Enable(plugin, false)
-		}
+func initModules() {
+	for _, name := range orderedModules {
+		loader.Enable(name, daemonSettings.GetBoolean(name))
 	}
 }
 
 func listenDaemonSettings() {
-	_daemonSettings.Connect("changed", func(s *gio.Settings, key string) {
-		enable := _daemonSettings.GetBoolean(key)
+	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
+		// gsettings key names must keep consistent with module names
+		enable := daemonSettings.GetBoolean(name)
+		loader.Enable(name, enable)
 		if enable {
-			logger.Info("-------------Enable plugin:", key)
-			loader.StartPlugin(key)
+			loader.Start(name)
 		} else {
-			logger.Info("+++++++++++++Disable plugin:", key)
-			loader.StopPlugin(key)
+			loader.Stop(name)
 		}
 	})
 }

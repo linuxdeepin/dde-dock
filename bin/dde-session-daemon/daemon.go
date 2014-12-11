@@ -46,8 +46,11 @@ import "pkg.linuxdeepin.com/dde-daemon"
 var logger = log.NewLogger("com.deepin.daemon")
 
 func main() {
+	InitI18n()
+	Textdomain("dde-daemon")
+
 	if !lib.UniqueOnSession("com.deepin.daemon") {
-		logger.Warning("There already has an dde-daemon running.")
+		logger.Warning("There already has a dde-daemon running.")
 		return
 	}
 	if len(os.Args) >= 2 {
@@ -55,17 +58,15 @@ func main() {
 			loader.Enable(disabledModuleName, false)
 		}
 	}
-	logger.BeginTracing()
-	defer logger.EndTracing()
-
-	InitI18n()
-	Textdomain("dde-daemon")
 
 	C.init()
 	proxy.SetupProxy()
 
-	initPlugins()
+	initModules()
 	listenDaemonSettings()
+
+	loader.StartAll()
+	defer loader.StopAll()
 
 	go func() {
 		if err := dbus.Wait(); err != nil {
@@ -76,9 +77,6 @@ func main() {
 			os.Exit(0)
 		}
 	}()
-
-	loader.Start()
-	defer loader.Stop()
 
 	ddeSessionRegister()
 	dbus.DealWithUnhandledMessage()

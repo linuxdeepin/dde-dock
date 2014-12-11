@@ -15,70 +15,94 @@ type Module struct {
 
 var modules = make([]*Module, 0)
 
-func StartPlugin(plugin string) {
+func getModule(name string) (module *Module) {
 	for _, m := range modules {
-		if m.Name == plugin {
-			m.Start()
-			return
+		if m.Name == name {
+			module = m
+			break
 		}
 	}
+	if module == nil {
+		logger.Warning("target module not found:", name)
+	}
+	return
+}
+func isModuleExist(name string) (ok bool) {
+	for _, m := range modules {
+		if m.Name == name {
+			ok = true
+			break
+		}
+	}
+	return
 }
 
-func StopPlugin(plugin string) {
-	for _, m := range modules {
-		if m.Name == plugin {
-			m.Stop()
-			return
-		}
+func Start(name string) {
+	m := getModule(name)
+	if m != nil {
+		doStart(m)
 	}
+}
+func doStart(m *Module) {
+	logger.Info("Start module:", m.Name)
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Error("Start module", m.Name, "failed:", err)
+		}
+	}()
+	m.Start()
+}
+
+func Stop(name string) {
+	m := getModule(name)
+	if m != nil {
+		doStop(m)
+	}
+}
+func doStop(m *Module) {
+	logger.Info("Stop module:", m.Name)
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Error("Stop module", m.Name, "failed:", err)
+		}
+	}()
+	m.Stop()
 }
 
 func Enable(name string, enable bool) {
-	for _, m := range modules {
-		if m.Name == name {
-			m.Enable = enable
-		}
+	m := getModule(name)
+	if m != nil {
+		m.Enable = enable
 	}
 }
 
 func Register(newModule *Module) {
-	for _, m := range modules {
-		if m.Name == newModule.Name {
-			return
-		}
+	logger.Info("Register module:", newModule.Name)
+	if isModuleExist(newModule.Name) {
+		logger.Warning("module already registered:", newModule.Name)
+		return
 	}
 	if newModule.Start == nil || newModule.Stop == nil {
-		logger.Error("can't register an incomplete module " + newModule.Name)
+		logger.Error("can't register an incomplete module:", newModule.Name)
 		return
 	}
 	modules = append([]*Module{newModule}, modules...)
 }
 
-func Start() {
+func StartAll() {
+	logger.Info("Start all modules")
 	for _, m := range modules {
 		if !m.Enable {
+			logger.Info("skip disabled module:", m.Name)
 			continue
 		}
-
-		func() {
-			defer func() {
-				if err := recover(); err != nil {
-					logger.Error("Start module", m.Name, "failed:", err)
-				}
-			}()
-			m.Start()
-		}()
+		doStart(m)
 	}
 }
-func Stop() {
+
+func StopAll() {
+	logger.Info("Stop all modules")
 	for _, m := range modules {
-		func() {
-			defer func() {
-				if err := recover(); err != nil {
-					logger.Error("Stop module", m.Name, "failed:", err)
-				}
-			}()
-			m.Stop()
-		}()
+		doStop(m)
 	}
 }
