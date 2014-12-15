@@ -180,13 +180,17 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	defer delete(info, name)
 	id := GenId(name)
 
-	logger.Info(name, "Status:", status)
 	if status == SoftwareStatusCreated {
-		err := self.itemManager.MarkNew(id)
-		if err != nil {
-			logger.Infof("Mark %q as new installed software failed: %s", id, err.Error())
+		if !self.itemManager.HasItem(id) {
+			err := self.itemManager.MarkNew(id)
+			if err != nil {
+				logger.Infof("Mark %q as new installed software failed: %s", id, err.Error())
+			}
+		} else {
+			status = SoftwareStatusModified
 		}
 	}
+	logger.Info(name, "Status:", status)
 
 	if status != SoftwareStatusDeleted {
 		logger.Info(name)
@@ -325,7 +329,6 @@ func (self *Launcher) eventHandler(watcher *fsnotify.Watcher) {
 		case ev := <-watcher.Event:
 			name := path.Clean(ev.Name)
 			basename := path.Base(name)
-			matched, _ := path.Match(`[^#.]*.desktop`, basename)
 			if basename == "kde4" {
 				if ev.IsCreate() {
 					watcher.Watch(name)
@@ -333,8 +336,9 @@ func (self *Launcher) eventHandler(watcher *fsnotify.Watcher) {
 					watcher.RemoveWatch(name)
 				}
 			}
+			matched, _ := path.Match(`[^#.]*.desktop`, basename)
 			if matched {
-				self.itemChangedHandler(ev, name, info)
+				go self.itemChangedHandler(ev, name, info)
 			}
 		case <-watcher.Error:
 		}
