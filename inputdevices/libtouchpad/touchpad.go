@@ -153,10 +153,16 @@ func DeviceEnabled(enable bool) {
 		return
 	}
 
-	if _tpad.TPadEnable.Get() == enable {
+	if !enable {
+		_tpad.enable(false)
 		return
 	}
-	_tpad.settings.SetBoolean(tpadKeyEnabled, enable)
+
+	// enable == true
+	if !_tpad.TPadEnable.Get() {
+		return
+	}
+	_tpad.enable(true)
 }
 
 func HandleDeviceChanged(devList []libwrapper.XIDeviceInfo) {

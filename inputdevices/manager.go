@@ -60,7 +60,7 @@ func NewManager(l *log.Logger) *Manager {
 	}
 
 	m.logger = l
-	// Touchpad must be created after Mouse
+	// Touchpad must be created Before Mouse
 	m.touchpad = libtouchpad.NewTouchpad(l)
 	m.mouse = libmouse.NewMouse(l)
 	m.kbd = libkeyboard.NewKeyboard(l)

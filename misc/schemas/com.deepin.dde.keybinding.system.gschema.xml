@@ -212,7 +212,7 @@
 		<description>system shortcut</description>
 	</key>
 	<key type="as" name="disable-touchpad">
-        <default>['','/usr/bin/synclient TouchpadOff=1']</default>
+		<default>['','/usr/bin/gsettings set com.deepin.dde.touchpad touchpad-enabled false']</default>
 		<summary>shortcut</summary>
 		<description>system shortcut</description>
 	</key>

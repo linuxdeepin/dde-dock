@@ -51,8 +51,8 @@ func endDeviceListenThread() {
 func handleDeviceAdded(deviceid C.int) {
 	mouseList, tpadList, wacomList := libwrapper.GetDevicesList()
 
-	libmouse.HandleDeviceChanged(mouseList)
 	libtouchpad.HandleDeviceChanged(tpadList)
+	libmouse.HandleDeviceChanged(mouseList)
 	libwacom.HandleDeviceChanged(wacomList)
 }
 
@@ -60,7 +60,7 @@ func handleDeviceAdded(deviceid C.int) {
 func handleDeviceRemoved(deviceid C.int) {
 	mouseList, tpadList, wacomList := libwrapper.GetDevicesList()
 
-	libmouse.HandleDeviceChanged(mouseList)
 	libtouchpad.HandleDeviceChanged(tpadList)
+	libmouse.HandleDeviceChanged(mouseList)
 	libwacom.HandleDeviceChanged(wacomList)
 }

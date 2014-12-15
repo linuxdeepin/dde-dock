@@ -182,7 +182,12 @@ func (mouse *Mouse) dragThreshold(value uint32) {
 }
 
 func (mouse *Mouse) disableTouchpad(enabled bool) {
-	if enabled && mouse.Exist {
+	if !enabled {
+		libtouchpad.DeviceEnabled(true)
+		return
+	}
+
+	if mouse.Exist {
 		libtouchpad.DeviceEnabled(false)
 	} else {
 		libtouchpad.DeviceEnabled(true)
