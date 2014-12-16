@@ -98,6 +98,9 @@ func (a *Audio) addSinkInput(idx uint32) {
 	}
 
 	core := a.core.GetSinkInput(idx)
+	if core == nil {
+		return
+	}
 	if filterSinkInput(core) {
 		return
 	}
