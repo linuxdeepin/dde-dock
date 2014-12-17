@@ -22,21 +22,19 @@
 package fonts
 
 import (
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 )
 
 type FontManager struct {
-	//standardList  []StyleInfo
-	//monospaceList []StyleInfo
+	standardList  []StyleInfo
+	monospaceList []StyleInfo
 }
 
 func NewFontManager() *FontManager {
 	font := &FontManager{}
 
-	//font.standardList, font.monospaceList = getStyleInfoList()
+	font.standardList, font.monospaceList = getStyleInfoList()
 	xsettings.InitXSettings()
-	InitWMSettings()
 
 	return font
 }

@@ -25,39 +25,33 @@ import (
 	"os/exec"
 )
 
-type DockApplet_T struct{}
+type DockApplet struct{}
 
 const (
 	_DOCK_APPLET_SENDER = "dde.dock.entry.AppletManager"
 	_DOCK_APPLET_CMD    = "/usr/bin/dde-dock-applets"
 )
 
-var _da *DockApplet_T
+func NewDockApplet() *DockApplet {
+	applet := &DockApplet{}
 
-func GetDockApplet_T() *DockApplet_T {
-	if _da == nil {
-		da := &DockApplet_T{}
-
-		_da = da
-	}
-
-	return _da
+	return applet
 }
 
 //TODO:
 // Through the dock applet xid to determine whether dde-dock-applet normal
 // handle when no dock applet plugin show
-func (da *DockApplet_T) restartDockApplet() {
+func (applet *DockApplet) restartDockApplet() {
 	if isDBusSenderExist(_DOCK_APPLET_SENDER) {
 		return
 	}
 
 	if _, err := exec.Command("/usr/bin/killall", _DOCK_APPLET_CMD).Output(); err != nil {
-		Logger.Warning("killall dde-dock-applets failed:", err)
+		logger.Warning("killall dde-dock-applets failed:", err)
 	}
 
 	if err := exec.Command(_DOCK_APPLET_CMD, "").Run(); err != nil {
-		Logger.Warning("launch dde-dock-applets failed:", err)
+		logger.Warning("launch dde-dock-applets failed:", err)
 		return
 	}
 }

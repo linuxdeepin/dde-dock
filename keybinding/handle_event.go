@@ -31,19 +31,9 @@ import (
 	"strings"
 )
 
-var _mediaManager *MediaKeyManager
-
 const (
 	CMD_DDE_OSD = "/usr/lib/deepin-daemon/dde-osd "
 )
-
-func GetMediaManager() *MediaKeyManager {
-	if _mediaManager == nil {
-		_mediaManager = &MediaKeyManager{}
-	}
-
-	return _mediaManager
-}
 
 func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) bool {
 	switch keyStr {
@@ -209,7 +199,7 @@ func doAction(action string) {
 	}
 }
 
-func (obj *Manager) listenKeyEvents() {
+func (m *Manager) listenKeyEvents() {
 	xevent.KeyPressFun(
 		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			modStr := keybind.ModifierString(e.State)
@@ -218,7 +208,7 @@ func (obj *Manager) listenKeyEvents() {
 				keyStr = "space"
 			}
 			logger.Infof("KeyStr: %s, modStr: %s", keyStr, modStr)
-			if !GetMediaManager().emitMediaSignal(modStr, keyStr, true) {
+			if !m.mediaKey.emitMediaSignal(modStr, keyStr, true) {
 				modStr = deleteSpecialMod(modStr)
 				value := ""
 				if len(modStr) < 1 {
@@ -247,7 +237,7 @@ func (obj *Manager) listenKeyEvents() {
 				keyStr = "space"
 			}
 			//modStr = deleteSpecialMod(modStr)
-			GetMediaManager().emitMediaSignal(modStr, keyStr, false)
+			m.mediaKey.emitMediaSignal(modStr, keyStr, false)
 		}).Connect(X, X.RootWin())
 }
 

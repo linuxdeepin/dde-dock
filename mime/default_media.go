@@ -5,6 +5,7 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
@@ -16,58 +17,71 @@ const (
 	MEDIA_KEY_START_SOFT    = "autorun-x-content-start-app"
 )
 
-var (
-	mediaGSettings = gio.NewSettings("org.gnome.desktop.media-handling")
+const (
+	mediaSchema = "org.gnome.desktop.media-handling"
 )
 
 type MediaMount struct {
 	AutoMountOpen      *property.GSettingsBoolProperty `access:"readwrite"`
 	MediaActionChanged func()
+
+	settings *gio.Settings
 }
 
 func NewMediaMount() *MediaMount {
+	if !dutils.IsGSchemaExist(mediaSchema) {
+		return nil
+	}
+
 	media := &MediaMount{}
+
+	media.settings = gio.NewSettings(mediaSchema)
 	media.AutoMountOpen = property.NewGSettingsBoolProperty(
 		media, "AutoMountOpen",
-		mediaGSettings, MEDIA_KEY_AUTOMOUNT)
+		media.settings, MEDIA_KEY_AUTOMOUNT)
 	media.listenGSettings()
 
 	return media
 }
 
-func (op *MediaMount) SetMediaAppByMime(mime, appID string) {
-	setActionByMime(mime, appID)
+func (media *MediaMount) destroy() {
+	dbus.UnInstallObject(media)
+	media.settings.Unref()
 }
 
-func (op *MediaMount) DefaultMediaAppByMime(mime string) AppInfo {
-	return getActionByMime(mime)
+func (media *MediaMount) SetMediaAppByMime(mime, appID string) {
+	media.setActionByMime(mime, appID)
 }
 
-func (op *MediaMount) MediaAppListByMime(mime string) []AppInfo {
-	return getActionsByMime(mime)
+func (media *MediaMount) DefaultMediaAppByMime(mime string) AppInfo {
+	return media.getActionByMime(mime)
 }
 
-func (op *MediaMount) listenGSettings() {
-	mediaGSettings.Connect("changed::autorun-x-content-ignore",
+func (media *MediaMount) MediaAppListByMime(mime string) []AppInfo {
+	return media.getActionsByMime(mime)
+}
+
+func (media *MediaMount) listenGSettings() {
+	media.settings.Connect("changed::autorun-x-content-ignore",
 		func(s *gio.Settings, key string) {
-			dbus.Emit(op, "MediaActionChanged")
+			dbus.Emit(media, "MediaActionChanged")
 		})
 
-	mediaGSettings.Connect("changed::autorun-x-content-open-folder",
+	media.settings.Connect("changed::autorun-x-content-open-folder",
 		func(s *gio.Settings, key string) {
-			dbus.Emit(op, "MediaActionChanged")
+			dbus.Emit(media, "MediaActionChanged")
 		})
 
-	mediaGSettings.Connect("changed::autorun-x-content-start-app",
+	media.settings.Connect("changed::autorun-x-content-start-app",
 		func(s *gio.Settings, key string) {
-			dbus.Emit(op, "MediaActionChanged")
+			dbus.Emit(media, "MediaActionChanged")
 		})
 }
 
-func getActionByMime(mime string) AppInfo {
-	ignoreList := mediaGSettings.GetStrv(MEDIA_KEY_IGNORE)
-	openFolderList := mediaGSettings.GetStrv(MEDIA_KEY_OPEN_FOLDER)
-	runSoftList := mediaGSettings.GetStrv(MEDIA_KEY_START_SOFT)
+func (media *MediaMount) getActionByMime(mime string) AppInfo {
+	ignoreList := media.settings.GetStrv(MEDIA_KEY_IGNORE)
+	openFolderList := media.settings.GetStrv(MEDIA_KEY_OPEN_FOLDER)
+	runSoftList := media.settings.GetStrv(MEDIA_KEY_START_SOFT)
 
 	if isMimeExist(mime, ignoreList) {
 		return AppInfo{ID: "Nothing", Name: Tr("Nothing"), Exec: ""}
@@ -84,7 +98,7 @@ func getActionByMime(mime string) AppInfo {
 	return m.DefaultAppViaType(mime)
 }
 
-func getActionsByMime(mime string) []AppInfo {
+func (media *MediaMount) getActionsByMime(mime string) []AppInfo {
 	apps := []AppInfo{}
 	defaultApps := []AppInfo{
 		AppInfo{ID: "Nothing", Name: Tr("Nothing"), Exec: ""},
@@ -101,56 +115,56 @@ func getActionsByMime(mime string) []AppInfo {
 	return apps
 }
 
-func setActionByMime(mime, appID string) {
-	ignoreList := mediaGSettings.GetStrv(MEDIA_KEY_IGNORE)
-	openFolderList := mediaGSettings.GetStrv(MEDIA_KEY_OPEN_FOLDER)
-	runSoftList := mediaGSettings.GetStrv(MEDIA_KEY_START_SOFT)
+func (media *MediaMount) setActionByMime(mime, appID string) {
+	ignoreList := media.settings.GetStrv(MEDIA_KEY_IGNORE)
+	openFolderList := media.settings.GetStrv(MEDIA_KEY_OPEN_FOLDER)
+	runSoftList := media.settings.GetStrv(MEDIA_KEY_START_SOFT)
 
 	switch appID {
 	case "Nothing":
 		if !isMimeExist(mime, ignoreList) {
 			ignoreList = append(ignoreList, mime)
-			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, ignoreList)
+			media.settings.SetStrv(MEDIA_KEY_IGNORE, ignoreList)
 		}
 
 		list, ok := delMimeFromList(mime, openFolderList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
+			media.settings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
 		}
 
 		list, ok = delMimeFromList(mime, runSoftList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+			media.settings.SetStrv(MEDIA_KEY_START_SOFT, list)
 		}
 	case "Open Folder":
 		if !isMimeExist(mime, openFolderList) {
 			openFolderList = append(openFolderList, mime)
-			mediaGSettings.SetStrv(MEDIA_KEY_OPEN_FOLDER, openFolderList)
+			media.settings.SetStrv(MEDIA_KEY_OPEN_FOLDER, openFolderList)
 		}
 
 		list, ok := delMimeFromList(mime, ignoreList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
+			media.settings.SetStrv(MEDIA_KEY_IGNORE, list)
 		}
 
 		list, ok = delMimeFromList(mime, runSoftList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+			media.settings.SetStrv(MEDIA_KEY_START_SOFT, list)
 		}
 	case "Run Soft", "nautilus-autorun-software.desktop":
 		if !isMimeExist(mime, runSoftList) {
 			runSoftList = append(runSoftList, mime)
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, runSoftList)
+			media.settings.SetStrv(MEDIA_KEY_START_SOFT, runSoftList)
 		}
 
 		list, ok := delMimeFromList(mime, ignoreList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
+			media.settings.SetStrv(MEDIA_KEY_IGNORE, list)
 		}
 
 		list, ok = delMimeFromList(mime, openFolderList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
+			media.settings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
 		}
 	default:
 		m := DefaultApps{}
@@ -158,17 +172,17 @@ func setActionByMime(mime, appID string) {
 
 		list, ok := delMimeFromList(mime, ignoreList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_IGNORE, list)
+			media.settings.SetStrv(MEDIA_KEY_IGNORE, list)
 		}
 
 		list, ok = delMimeFromList(mime, openFolderList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
+			media.settings.SetStrv(MEDIA_KEY_OPEN_FOLDER, list)
 		}
 
 		list, ok = delMimeFromList(mime, runSoftList)
 		if ok {
-			mediaGSettings.SetStrv(MEDIA_KEY_START_SOFT, list)
+			media.settings.SetStrv(MEDIA_KEY_START_SOFT, list)
 		}
 	}
 }

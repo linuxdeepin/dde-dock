@@ -118,6 +118,9 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	if err != nil {
 		return false
 	}
+
+	m.wLocker.Lock()
+	defer m.wLocker.Unlock()
 	ok := dutils.WriteStringToKeyFile(filename, contents)
 	if newFile && ok {
 		touchFile()

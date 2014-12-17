@@ -65,10 +65,10 @@ func listenDaemonSettings() {
 	_daemonSettings.Connect("changed", func(s *gio.Settings, key string) {
 		enable := _daemonSettings.GetBoolean(key)
 		if enable {
-			logger.Info("Enable plugin:", key)
+			logger.Info("-------------Enable plugin:", key)
 			loader.StartPlugin(key)
 		} else {
-			logger.Info("Disable plugin:", key)
+			logger.Info("+++++++++++++Disable plugin:", key)
 			loader.StopPlugin(key)
 		}
 	})

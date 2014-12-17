@@ -30,37 +30,33 @@ const (
 	_DDE_DOCK_CMD    = "/usr/bin/dde-dock"
 )
 
-type DDEDock_T struct{}
+type Dock struct{}
 
-var _dock *DDEDock_T
+func NewDock() *Dock {
+	dock := &Dock{}
 
-func GetDDeDock_T() *DDEDock_T {
-	if _dock == nil {
-		_dock = &DDEDock_T{}
-	}
-
-	return _dock
+	return dock
 }
 
-func (dock *DDEDock_T) fixSwitchMode() {
+func (dock *Dock) fixSwitchMode() {
 	_, err := exec.Command("/usr/bin/xdotool", "search", "--onlyvisible", "dde-dock", "windowmove", "%1", "x", "y").Output()
 	if err != nil {
-		Logger.Warning("fixSwitchMode failed:", err)
+		logger.Warning("fixSwitchMode failed:", err)
 	}
 }
 
-func (dock *DDEDock_T) restartDock() {
+func (dock *Dock) restartDock() {
 	if isDBusSenderExist(_DDE_DOCK_SENDER) {
 		dock.fixSwitchMode()
 		return
 	}
 
 	if _, err := exec.Command("/usr/bin/killall", _DDE_DOCK_CMD).Output(); err != nil {
-		Logger.Warning("killall dde-dock failed:", err)
+		logger.Warning("killall dde-dock failed:", err)
 	}
 
 	if err := exec.Command(_DDE_DOCK_CMD, "").Run(); err != nil {
-		Logger.Warning("launch dde-dock failed:", err)
+		logger.Warning("launch dde-dock failed:", err)
 		return
 	}
 }

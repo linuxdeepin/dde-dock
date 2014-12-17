@@ -32,6 +32,10 @@ var (
 )
 
 func Start() {
+	if bluetooth != nil {
+		return
+	}
+
 	logger.BeginTracing()
 
 	bluetooth = NewBluetooth()
@@ -39,6 +43,7 @@ func Start() {
 	if err != nil {
 		// don't panic or fatal here
 		logger.Error("register dbus interface failed: ", err)
+		bluetooth = nil
 		return
 	}
 
@@ -47,6 +52,11 @@ func Start() {
 }
 
 func Stop() {
+	if bluetooth == nil {
+		return
+	}
+
 	DestroyBluetooth(bluetooth)
+	bluetooth = nil
 	logger.EndTracing()
 }

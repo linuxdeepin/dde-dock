@@ -123,6 +123,10 @@ func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (ss *ScreenSaver) destroy() {
+	dbus.UnInstallObject(ss)
+}
+
 func NewScreenSaver() *ScreenSaver {
 	s := &ScreenSaver{inhibitors: make(map[uint32]inhibitor)}
 	s.xu, _ = xgbutil.NewConn()
@@ -134,14 +138,30 @@ func NewScreenSaver() *ScreenSaver {
 	go s.loop()
 	return s
 }
-func Start() {
-	ssaver := NewScreenSaver()
 
-	if err := dbus.InstallOnSession(ssaver); err != nil {
+var _ssaver *ScreenSaver
+
+func Start() {
+	if _ssaver != nil {
+		return
+	}
+
+	_ssaver = NewScreenSaver()
+
+	err := dbus.InstallOnSession(_ssaver)
+	if err != nil {
+		_ssaver.destroy()
+		_ssaver = nil
 		return
 	}
 }
 func Stop() {
+	if _ssaver == nil {
+		return
+	}
+
+	_ssaver.destroy()
+	_ssaver = nil
 }
 
 func (ss *ScreenSaver) loop() {

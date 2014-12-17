@@ -99,6 +99,10 @@ func initAtom() {
 }
 
 func Start() {
+	if dockProperty != nil {
+		return
+	}
+
 	logger.BeginTracing()
 
 	initDeepin()

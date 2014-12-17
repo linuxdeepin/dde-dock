@@ -23,7 +23,6 @@ package utils
 
 import (
 	C "launchpad.net/gocheck"
-	"os"
 	"testing"
 )
 
@@ -83,31 +82,4 @@ func (*testWrapper) TestSeedValid(c *C.C) {
 	c.Check(isThumbSeedValid("--icon"), C.Equals, true)
 	c.Check(isThumbSeedValid("--cursor"), C.Equals, true)
 	c.Check(isThumbSeedValid("--font"), C.Equals, false)
-}
-
-func (*testWrapper) TestGetConfig(c *C.C) {
-	homeDir := os.Getenv("HOME")
-	os.Setenv("HOME", "testdata")
-	c.Check(GetUserGtk2Config(), C.Equals, "testdata/.gtkrc-2.0")
-	os.Setenv("HOME", homeDir)
-}
-
-func (*testWrapper) TestWriteConfig(c *C.C) {
-	c.Check(
-		WriteUserGtk3Config("testdata/settings.ini",
-			"gtk-theme-name", "Deepin"),
-		C.Not(C.NotNil))
-	c.Check(
-		WriteUserGtk3Config("testdata/settings.ini",
-			"", ""),
-		C.NotNil)
-
-	c.Check(
-		WriteUserGtk2Config("testdata/gtkrc-2.0",
-			"gtk-theme-name", "Deepin"),
-		C.Not(C.NotNil))
-	c.Check(
-		WriteUserGtk3Config("testdata/gtkrc-2.0",
-			"", ""),
-		C.NotNil)
 }

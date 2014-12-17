@@ -239,7 +239,17 @@ func (s *Source) SetPort(name string) {
 
 var _audio *Audio
 
+func finalize() {
+	_audio.destroy()
+	_audio = nil
+	logger.EndTracing()
+}
+
 func Start() {
+	if _audio != nil {
+		return
+	}
+
 	logger.BeginTracing()
 
 	ctx := pulse.GetContext()
@@ -247,6 +257,7 @@ func Start() {
 
 	if err := dbus.InstallOnSession(_audio); err != nil {
 		logger.Error("Failed InstallOnSession:", err)
+		finalize()
 		return
 	}
 }
@@ -256,10 +267,7 @@ func Stop() {
 		return
 	}
 
-	_audio.destroy()
-	_audio = nil
-
-	logger.EndTracing()
+	finalize()
 }
 
 var playFeedback = func() func() {

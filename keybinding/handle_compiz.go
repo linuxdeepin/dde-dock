@@ -92,107 +92,122 @@ func (m *Manager) setCompizSettings(id int32, key, value string) {
 
 func (m *Manager) listenCompizSettings() {
 	coreSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := coreSettings.GetString(key)
 		switch key {
 		case "show-desktop-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("show-desktop", shortcut)
 		case "close-window-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("close", shortcut)
 		case "maximize-window-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("maximize", shortcut)
 		case "unmaximize-window-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("unmaximize", shortcut)
 		case "minimize-window-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("minimize", shortcut)
 		case "toggle-window-shaded-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("toggle-shaded", shortcut)
 		case "window-menu-key":
+			shortcut := coreSettings.GetString(key)
 			updateSystemSettings("activate-window-menu", shortcut)
 		}
 	})
 
-	moveSettings.Connect("changed", func(s *gio.Settings, key string) {
+	moveSettings.Connect("changed::initiate-key", func(s *gio.Settings, key string) {
 		shortcut := moveSettings.GetString(key)
-		switch key {
-		case "initiate-key":
-			updateSystemSettings("begin-move", shortcut)
-		}
+		updateSystemSettings("begin-move", shortcut)
 	})
 
-	resizeSettings.Connect("changed", func(s *gio.Settings, key string) {
+	resizeSettings.Connect("changed::initiate-key", func(s *gio.Settings, key string) {
 		shortcut := resizeSettings.GetString(key)
-		switch key {
-		case "initiate-key":
-			updateSystemSettings("begin-resize", shortcut)
-		}
+		updateSystemSettings("begin-resize", shortcut)
 	})
 
 	vpswitchSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := vpswitchSettings.GetString(key)
 		switch key {
 		case "switch-to-1-key":
+			shortcut := vpswitchSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-1", shortcut)
 		case "switch-to-2-key":
+			shortcut := vpswitchSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-2", shortcut)
 		case "switch-to-3-key":
+			shortcut := vpswitchSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-3", shortcut)
 		case "switch-to-4-key":
+			shortcut := vpswitchSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-4", shortcut)
 		}
 	})
 
 	putSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := putSettings.GetString(key)
 		switch key {
 		case "put-viewport-1-key":
+			shortcut := putSettings.GetString(key)
 			updateSystemSettings("put-viewport-1-key", shortcut)
 		case "put-viewport-2-key":
+			shortcut := putSettings.GetString(key)
 			updateSystemSettings("put-viewport-2-key", shortcut)
 		case "put-viewport-3-key":
+			shortcut := putSettings.GetString(key)
 			updateSystemSettings("put-viewport-3-key", shortcut)
 		case "put-viewport-4-key":
+			shortcut := putSettings.GetString(key)
 			updateSystemSettings("put-viewport-4-key", shortcut)
 		}
 	})
 
 	wallSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := wallSettings.GetString(key)
 		switch key {
 		case "left-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-left", shortcut)
 		case "right-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-right", shortcut)
 		case "up-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-up", shortcut)
 		case "down-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("switch-to-workspace-down", shortcut)
 		case "left-window-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("move-to-workspace-left", shortcut)
 		case "right-window-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("move-to-workspace-right", shortcut)
 		case "up-window-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("move-to-workspace-up", shortcut)
 		case "down-window-key":
+			shortcut := wallSettings.GetString(key)
 			updateSystemSettings("move-to-workspace-down", shortcut)
 		}
 	})
 
 	shiftSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := shiftSettings.GetString(key)
 		switch key {
 		case "next-key":
+			shortcut := shiftSettings.GetString(key)
 			updateSystemSettings("next-key", shortcut)
 		case "prev-key":
+			shortcut := shiftSettings.GetString(key)
 			updateSystemSettings("prev-key", shortcut)
 		}
 	})
 
 	switcherSettings.Connect("changed", func(s *gio.Settings, key string) {
-		shortcut := switcherSettings.GetString(key)
 		switch key {
 		case "next-key":
+			shortcut := switcherSettings.GetString(key)
 			updateSystemSettings("switch-applications", shortcut)
 		case "prev-key":
+			shortcut := switcherSettings.GetString(key)
 			updateSystemSettings("switch-applications-backward", shortcut)
 		}
 	})

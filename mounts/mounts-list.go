@@ -51,7 +51,7 @@ type Manager struct {
 	DiskList []DiskInfo
 	Error    func(string, string)
 
-	quitFlag chan bool
+	quitFlag chan struct{}
 }
 
 const (
@@ -300,38 +300,50 @@ func destroyObjectMap() {
 	objectMap = make(map[string]*ObjectInfo)
 }
 
+func (m *Manager) destroy() {
+	m.endDiskrefrash()
+	dbus.UnInstallObject(m)
+}
+
 func NewManager() *Manager {
 	m := &Manager{}
 	m.setPropName("DiskList")
 	m.listenSignalChanged()
-	m.quitFlag = make(chan bool)
+	m.quitFlag = make(chan struct{})
+
+	go m.refrashDiskInfoList()
 
 	return m
 }
 
 var _manager *Manager
 
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = NewManager()
-	}
-
-	return _manager
+func finalize() {
+	_manager.destroy()
+	_manager = nil
+	logger.EndTracing()
 }
 
 func Start() {
-	logger.BeginTracing()
-
-	m := GetManager()
-	err := dbus.InstallOnSession(m)
-	if err != nil {
-		logger.Fatal("Install DBus Session Failed:", err)
+	if _manager != nil {
+		return
 	}
 
-	go m.refrashDiskInfoList()
+	logger.BeginTracing()
+
+	_manager = NewManager()
+	err := dbus.InstallOnSession(_manager)
+	if err != nil {
+		logger.Error("Install DBus Session Failed:", err)
+		finalize()
+		return
+	}
 }
 
 func Stop() {
-	GetManager().quitFlag <- true
-	logger.EndTracing()
+	if _manager == nil {
+		return
+	}
+
+	finalize()
 }

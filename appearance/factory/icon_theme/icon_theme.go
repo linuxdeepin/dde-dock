@@ -26,7 +26,7 @@ import (
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -93,8 +93,6 @@ func (icon *IconTheme) Set(theme string) error {
 	if err != nil {
 		return err
 	}
-	setGtk2Theme(GetUserGtk2Config(), theme)
-	setGtk3Theme(GetUserGtk3Config(), theme)
 
 	return nil
 }
@@ -118,6 +116,7 @@ func (icon *IconTheme) Destroy() {
 
 	icon.watcher.EndWatch()
 	icon.watcher = nil
+	xsettings.Unref()
 }
 
 func (icon *IconTheme) GetNameStrList() []string {
@@ -201,14 +200,6 @@ func getThemeList(sysDirs, userDirs []PathInfo) []PathInfo {
 
 func setThemeViaXSettings(theme string) error {
 	return xsettings.SetString(xsettings.NetStringIconTheme, theme)
-}
-
-func setGtk2Theme(config, theme string) error {
-	return WriteUserGtk2Config(config, "gtk-icon-theme-name", theme)
-}
-
-func setGtk3Theme(config, theme string) error {
-	return WriteUserGtk3Config(config, "gtk-icon-theme-name", theme)
 }
 
 func getDirList() []string {

@@ -32,7 +32,7 @@ import (
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"unsafe"
 )
@@ -105,8 +105,6 @@ func (cursor *CursorTheme) Set(theme string) error {
 
 	// Ignore xsettings error
 	setThemeViaXSettings(theme)
-	setGtk2Theme(GetUserGtk2Config(), theme)
-	setGtk3Theme(GetUserGtk3Config(), theme)
 	fixedQtCursor(theme)
 
 	dir := path.Join(os.Getenv("HOME"), ".icons/default")
@@ -145,6 +143,8 @@ func (cursor *CursorTheme) Destroy() {
 
 	cursor.watcher.EndWatch()
 	cursor.watcher = nil
+	xsettings.Unref()
+
 }
 
 func (cursor *CursorTheme) GetNameStrList() []string {
@@ -183,14 +183,6 @@ func (cursor *CursorTheme) GetThumbnail(theme string) string {
 
 func setThemeViaXSettings(theme string) error {
 	return xsettings.SetString(xsettings.GtkStringCursorTheme, theme)
-}
-
-func setGtk2Theme(config, theme string) error {
-	return WriteUserGtk2Config(config, "gtk-cursor-theme-name", theme)
-}
-
-func setGtk3Theme(config, theme string) error {
-	return WriteUserGtk3Config(config, "gtk-cursor-theme-name", theme)
 }
 
 func fixedQtCursor(theme string) error {

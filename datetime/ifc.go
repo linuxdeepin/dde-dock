@@ -26,6 +26,7 @@ import (
 	"pkg.linuxdeepin.com/dde-daemon/datetime/ntp"
 	"pkg.linuxdeepin.com/dde-daemon/datetime/timezone"
 	. "pkg.linuxdeepin.com/dde-daemon/datetime/utils"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 var (
@@ -130,8 +131,13 @@ func (date *DateTime) GetAllZoneInfo() []timezone.ZoneInfo {
 	return timezone.GetZoneInfoList()
 }
 
-func (date *DateTime) Destroy() {
+func (date *DateTime) destroy() {
 	DestroySetDateTime()
 	ntp.FiniNtpModule()
 	date.settings.Unref()
+	dbus.UnInstallObject(date)
+
+	if date.logger != nil {
+		date.logger.EndTracing()
+	}
 }

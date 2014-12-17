@@ -82,7 +82,13 @@ func getDscConfInfo() (isUpdate bool, duration int32) {
 
 }
 
+var running bool
+
 func Start() {
+	if running {
+		return
+	}
+
 	go setDSCAutoUpdate(time.Duration(time.Minute * 5))
 
 	go func() {
@@ -95,8 +101,15 @@ func Start() {
 			}
 		}
 	}()
+
+	running = true
 }
 
 func Stop() {
+	if !running {
+		return
+	}
+
 	quitFlag <- true
+	running = false
 }
