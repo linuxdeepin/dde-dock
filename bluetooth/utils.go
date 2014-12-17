@@ -22,6 +22,7 @@
 package bluetooth
 
 import (
+	apidevice "dbus/com/deepin/api/device"
 	"encoding/json"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
@@ -91,4 +92,16 @@ func interfaceToString(v interface{}) (r string) {
 func interfaceToInt16(v interface{}) (r int16) {
 	r, _ = v.(int16)
 	return
+}
+
+func requestUnblockBluetoothDevice() {
+	d, err := apidevice.NewDevice("com.deepin.api.Device", "/com/deepin/api/Device")
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	err = d.UnblockDevice("bluetooth")
+	if err != nil {
+		logger.Error(err)
+	}
 }
