@@ -186,6 +186,7 @@ func isWindowOverlapDock(xid xproto.Window) bool {
 	rect, err := win.DecorGeometry()
 	if err != nil {
 		logger.Warning(err)
+		return false
 	}
 
 	winX := int32(rect.X())
