@@ -244,7 +244,7 @@ func (s *Setting) GetDisplayMode() int32 {
 
 func (s *Setting) SetDisplayMode(_mode int32) bool {
 	mode := DisplayModeType(_mode)
-	logger.Info("[Setting.SetDisplayMode]:", mode)
+	logger.Debug("[Setting.SetDisplayMode]:", mode)
 	ok := s.core.SetEnum(DisplayModeKey, int(mode))
 	return ok
 }
@@ -255,7 +255,7 @@ func (s *Setting) GetClockType() int32 {
 
 func (s *Setting) SetClockType(_clockType int32) bool {
 	clockType := ClockType(_clockType)
-	logger.Info("clock type changed to:", clockType)
+	logger.Debug("clock type changed to:", clockType)
 	ok := s.core.SetEnum(ClockTypeKey, int(clockType))
 	return ok
 }

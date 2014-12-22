@@ -45,7 +45,7 @@ func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
 	return e
 }
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
-	logger.Info("NewAppEntryWithNormalApp:", nApp.Id)
+	logger.Debug("NewAppEntryWithNormalApp:", nApp.Id)
 	e := &AppEntry{
 		Id:   nApp.Id,
 		Type: "App",
@@ -84,7 +84,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 	paths := strings.Split(data, ",")
 	logger.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
-		logger.Info("Launch from runtime app")
+		logger.Debug("Launch from runtime app")
 		core := e.rApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
@@ -107,7 +107,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 			}
 		}
 	} else if e.nApp != nil {
-		logger.Info("Launch from runtime app")
+		logger.Debug("Launch from normal app")
 		core := e.nApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
@@ -176,7 +176,7 @@ func (e *AppEntry) attachNormalApp(nApp *NormalApp) {
 		return
 	}
 	e.nApp = nApp
-	logger.Info("AttachNormalApp:", e.nApp.Id)
+	logger.Debug("AttachNormalApp:", e.nApp.Id)
 	e.nApp.setChangedCB(e.update)
 	e.update()
 }
@@ -184,7 +184,7 @@ func (e *AppEntry) detachNormalApp() {
 	e.nAppLock.Lock()
 	defer e.nAppLock.Unlock()
 	if e.nApp != nil {
-		logger.Info("DetachNormalApp", e.nApp.Id)
+		logger.Debug("DetachNormalApp", e.nApp.Id)
 		e.nApp.setChangedCB(nil)
 		e.nApp = nil
 		if e.rApp != nil {

@@ -118,7 +118,7 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 		if md5 := icon2md5(xid); !md5Equal(m.md5Info[xid], md5) {
 			m.md5Info[xid] = md5
 			dbus.Emit(m, "Changed", uint32(xid))
-			logger.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
+			logger.Debugf("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
 		}
 	}
 }
@@ -278,11 +278,11 @@ func (m *TrayManager) tryOwner() bool {
 func (m *TrayManager) Unmanage() bool {
 	reply, err := m.getSelectionOwner()
 	if err != nil {
-		logger.Info("get selection owner failed:", err)
+		logger.Warning("get selection owner failed:", err)
 		return false
 	}
 	if reply.Owner != m.owner {
-		logger.Info("not selection owner")
+		logger.Warning("not selection owner")
 		return false
 	}
 

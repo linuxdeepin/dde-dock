@@ -51,7 +51,7 @@ func (a *XMouseAreaProxyer) connectHandler(callback func(int32, int32, string)) 
 			if !a.idValid {
 				dbus.Emit(a, "InvalidId")
 			}
-			logger.Warningf("valid: %v, event id: %v, areaId: %v", a.idValid, id, a.areaId)
+			logger.Debugf("valid: %v, event id: %v, areaId: %v", a.idValid, id, a.areaId)
 			a.lock.Unlock()
 			return
 		}
