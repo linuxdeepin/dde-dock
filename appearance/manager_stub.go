@@ -85,20 +85,6 @@ func (m *Manager) setPropBackgroundList(list []string) {
 	}
 }
 
-func (m *Manager) setPropFontNameList(list []string) {
-	if !m.isStrListEqual(m.FontNameList, list) {
-		m.FontNameList = list
-		dbus.NotifyChange(m, "FontNameList")
-	}
-}
-
-func (m *Manager) setPropFontMonoList(list []string) {
-	if !m.isStrListEqual(m.FontMonoList, list) {
-		m.FontMonoList = list
-		dbus.NotifyChange(m, "FontMonoList")
-	}
-}
-
 func (m *Manager) isStrListEqual(list1, list2 []string) bool {
 	len1 := len(list1)
 	len2 := len(list2)

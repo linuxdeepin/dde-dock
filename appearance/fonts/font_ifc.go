@@ -30,12 +30,12 @@ import (
 )
 
 const (
-	FontTypeStandard   int32 = 0
-	FontTypeMonospaced       = 1
+	FontTypeStandard   = "font-standard"
+	FontTypeMonospaced = "font-mono"
 )
 
 func (font *FontManager) IsStandardFontValid(name string) bool {
-	for _, info := range font.standardList {
+	for _, info := range getStandardFonts() {
 		if name == info.Id {
 			return true
 		}
@@ -45,7 +45,7 @@ func (font *FontManager) IsStandardFontValid(name string) bool {
 }
 
 func (font *FontManager) IsMonospacedFontValid(name string) bool {
-	for _, info := range font.monospaceList {
+	for _, info := range getMonospaceFonts() {
 		if name == info.Id {
 			return true
 		}
@@ -63,7 +63,7 @@ func (font *FontManager) IsFontSizeValid(size int32) bool {
 	return true
 }
 
-func (font *FontManager) Set(fontType int32, name string, size int32) {
+func (font *FontManager) Set(fontType, name string, size int32) {
 	value := fmt.Sprintf("%s %v", name, size)
 	switch fontType {
 	case FontTypeStandard:
@@ -122,18 +122,18 @@ func (font *FontManager) SetXft(anti, hinting uint32, hintstyle, rgba string) {
 }
 
 func (font *FontManager) GetStyleListByName(name string) []string {
-	infos := font.standardList
-	infos = append(infos, font.monospaceList...)
+	infos := getStandardFonts()
+	infos = append(infos, getMonospaceFonts()...)
 
 	return getStyleList(name, infos)
 }
 
-func (font *FontManager) GetNameList(fontType int32) []string {
+func (font *FontManager) GetNameList(fontType string) []string {
 	switch fontType {
 	case FontTypeStandard:
-		return getNameStrList(font.standardList)
+		return getNameStrList(getStandardFonts())
 	case FontTypeMonospaced:
-		return getNameStrList(font.monospaceList)
+		return getNameStrList(getMonospaceFonts())
 	}
 
 	return nil

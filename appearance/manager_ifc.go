@@ -111,7 +111,7 @@ func (m *Manager) Set(t, value string) error {
 		}
 
 		m.setTheme(t, value)
-	case "font-name":
+	case "font-standard":
 		if !m.font.IsStandardFontValid(value) {
 			logger.Debug("Invalid font name:", value)
 			return errInvalidValue
@@ -166,6 +166,10 @@ func (m *Manager) GetThumbnail(t, name string) string {
 	}
 
 	return ""
+}
+
+func (m *Manager) GetFontList(t string) []string {
+	return m.font.GetNameList(t)
 }
 
 func (m *Manager) GetFontStyles(name string) []string {

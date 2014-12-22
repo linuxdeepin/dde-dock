@@ -52,8 +52,6 @@ type Manager struct {
 	SoundThemeList   []string
 	BackgroundList   []string
 	GreeterThemeList []string
-	FontNameList     []string
-	FontMonoList     []string
 	CurrentTheme     *property.GSettingsStringProperty `access:"readwrite"`
 	GreeterTheme     *property.GSettingsStringProperty `access:"readwrite"`
 
@@ -93,8 +91,6 @@ func NewManager() *Manager {
 	m.setPropSoundThemeList(m.sound.GetNameStrList())
 	m.setPropGreeterThemeList(m.greeter.GetNameStrList())
 	m.setPropBackgroundList(m.bg.GetNameStrList())
-	m.setPropFontNameList(m.font.GetNameList(fonts.FontTypeStandard))
-	m.setPropFontMonoList(m.font.GetNameList(fonts.FontTypeMonospaced))
 
 	m.settings = gio.NewSettings("com.deepin.dde.personalization")
 	m.CurrentTheme = property.NewGSettingsStringProperty(

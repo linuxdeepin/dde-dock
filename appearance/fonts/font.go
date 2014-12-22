@@ -27,18 +27,30 @@ import (
 )
 
 type FontManager struct {
-	standardList  []StyleInfo
-	monospaceList []StyleInfo
+	//standardList  []StyleInfo
+	//monospaceList []StyleInfo
 }
 
 func NewFontManager() *FontManager {
 	font := &FontManager{}
 
-	font.standardList, font.monospaceList = getStyleInfoList()
+	//font.standardList, font.monospaceList = getStyleInfoList()
 	xsettings.InitXSettings()
 	InitWMSettings()
 
 	return font
+}
+
+func getStandardFonts() []StyleInfo {
+	standardList, _ := getStyleInfoList()
+
+	return standardList
+}
+
+func getMonospaceFonts() []StyleInfo {
+	_, monoList := getStyleInfoList()
+
+	return monoList
 }
 
 func getNameStrList(infos []StyleInfo) []string {
