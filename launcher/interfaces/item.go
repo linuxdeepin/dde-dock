@@ -14,4 +14,6 @@ type ItemInfoInterface interface {
 	Keywords() []string
 	GetCategoryId() CategoryId
 	SetCategoryId(CategoryId)
+	GetTimeInstalled() int64
+	SetTimeInstalled(int64)
 }

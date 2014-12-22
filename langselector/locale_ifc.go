@@ -33,9 +33,6 @@ type localeInfo struct {
 }
 
 func (lang *LangSelector) SetLocale(locale string) error {
-	lang.lock.Lock()
-	defer lang.lock.Unlock()
-
 	if len(locale) == 0 || !language_info.IsLocaleValid(locale,
 		language_info.LanguageListFile) {
 		return fmt.Errorf("Invalid locale: %v", locale)

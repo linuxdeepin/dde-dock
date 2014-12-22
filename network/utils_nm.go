@@ -1108,8 +1108,12 @@ func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionU
 		getCustomDeviceType(nmGetDeviceType(devPath)), acs)
 	if len(lastConnectionUuid) > 0 {
 		// the last activated connection has the highest priority if
-		// exists
-		uuids = []string{lastConnectionUuid}
+		// exists and autoconnect enabled
+		if cpath, err := nmGetConnectionByUuid(lastConnectionUuid); err == nil {
+			if nmGetConnectionAutoconnect(cpath) {
+				uuids = []string{lastConnectionUuid}
+			}
+		}
 	}
 	for _, ac := range acs {
 		uuids = append(uuids, ac.uuid)

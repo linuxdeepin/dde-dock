@@ -232,62 +232,83 @@ func main() {
 	}
 
 	switch op {
+	case "-a":
+		doGenGtkThumb(forceFlag, outDir)
+		doGenIconThumb(forceFlag, outDir)
+		doGenCursorThumb(forceFlag, outDir)
+		doGenBgThumb(forceFlag, outDir)
 	case "--gtk":
-		list := getGtkList()
-		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
-				continue
-			}
-
-			name := path.Base(l.Path)
-			bg := getThumbBg()
-			out, err := exec.Command(_GTK_THUMB_CMD_, name, dest, bg).Output()
-			if err != nil || strings.Contains(string(out), "ERROR") {
-				logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
-			}
-		}
+		doGenGtkThumb(forceFlag, outDir)
 	case "--icon":
-		list := getIconList()
-		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
-				continue
-			}
-			bg := getThumbBg()
-			if !genIconThumbnail(l, dest, bg) {
-				logger.Debugf("ERROR: Generate Icon Thumbnail\n")
-			}
-		}
+		doGenIconThumb(forceFlag, outDir)
 	case "--cursor":
-		list := getCursorList()
-		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
-				continue
-			}
-			bg := getThumbBg()
-			if !genCursorThumbnail(l, dest, bg) {
-				logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
-			}
-		}
-		if dutils.IsFileExist(XCUR2PNG_OUTDIR) {
-			os.RemoveAll(XCUR2PNG_OUTDIR)
-		}
+		doGenCursorThumb(forceFlag, outDir)
 	case "--background":
-		list := getBgList()
-		for _, l := range list {
-			dest := getThumbCachePath(op, l.Path, outDir)
-			if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
-				continue
-			}
-			err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.FormatPng)
-			if err != nil {
-				logger.Debug("ERROR:", err)
-			}
-		}
+		doGenBgThumb(forceFlag, outDir)
 	default:
 		logger.Debugf("Invalid option: %s\n\n", op)
 		printHelper()
+	}
+}
+
+func doGenGtkThumb(forceFlag bool, outDir string) {
+	list := getGtkList()
+	for _, l := range list {
+		dest := getThumbCachePath("--gtk", l.Path, outDir)
+		if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
+			continue
+		}
+
+		name := path.Base(l.Path)
+		bg := getThumbBg()
+		out, err := exec.Command(_GTK_THUMB_CMD_, name, dest, bg).Output()
+		if err != nil || strings.Contains(string(out), "ERROR") {
+			logger.Debugf("ERROR: Generate Gtk Thumbnail\n")
+		}
+	}
+}
+
+func doGenIconThumb(forceFlag bool, outDir string) {
+	list := getIconList()
+	for _, l := range list {
+		dest := getThumbCachePath("--icon", l.Path, outDir)
+		if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
+			continue
+		}
+		bg := getThumbBg()
+		if !genIconThumbnail(l, dest, bg) {
+			logger.Debugf("ERROR: Generate Icon Thumbnail\n")
+		}
+	}
+}
+
+func doGenCursorThumb(forceFlag bool, outDir string) {
+	list := getCursorList()
+	for _, l := range list {
+		dest := getThumbCachePath("--cursor", l.Path, outDir)
+		if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
+			continue
+		}
+		bg := getThumbBg()
+		if !genCursorThumbnail(l, dest, bg) {
+			logger.Debugf("ERROR: Generate Cursor Thumbnail\n")
+		}
+	}
+	if dutils.IsFileExist(XCUR2PNG_OUTDIR) {
+		os.RemoveAll(XCUR2PNG_OUTDIR)
+	}
+}
+
+func doGenBgThumb(forceFlag bool, outDir string) {
+	list := getBgList()
+	for _, l := range list {
+		dest := getThumbCachePath("--background", l.Path, outDir)
+		if len(dest) < 1 || (!forceFlag && dutils.IsFileExist(dest)) {
+			continue
+		}
+		err := graphic.ThumbnailImage(l.Path, dest, 128, 72, graphic.FormatPng)
+		if err != nil {
+			logger.Debug("ERROR:", err)
+		}
 	}
 }

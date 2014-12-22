@@ -2,6 +2,7 @@ package launcher
 
 import (
 	"database/sql"
+	storeApi "dbus/com/deepin/store/api"
 	"errors"
 	"sync"
 	// . "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
@@ -51,6 +52,8 @@ func Start() {
 	im := NewItemManager(soft)
 	cm := NewCategoryManager()
 
+	timeInfo, _ := im.GetAllTimeInstalled()
+
 	appChan := make(chan *gio.AppInfo)
 	go func() {
 		allApps := gio.AppInfoGetAll()
@@ -81,6 +84,7 @@ func Start() {
 					item.SetCategoryId(OtherID)
 				}
 				item.SetCategoryId(cid)
+				item.SetTimeInstalled(timeInfo[item.Id()])
 
 				im.AddItem(item)
 				cm.AddItem(item.Id(), item.GetCategoryId())
@@ -98,6 +102,11 @@ func Start() {
 	launcher = NewLauncher()
 	launcher.setItemManager(im)
 	launcher.setCategoryManager(cm)
+
+	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+	if err == nil {
+		launcher.setStoreApi(store)
+	}
 
 	names := []string{}
 	for _, item := range im.GetAllItems() {

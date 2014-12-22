@@ -200,15 +200,12 @@ func setThemeViaXSettings(theme string) error {
 }
 
 func setQt4Theme(config string) error {
-	value, ok := dutils.ReadKeyFromKeyFile(config, "Qt", "style", "")
-	if !ok {
-		return errReadKey
-	}
+	value, _ := dutils.ReadKeyFromKeyFile(config, "Qt", "style", "")
 
 	if value == "GTK+" {
 		return nil
 	}
-	ok = dutils.WriteKeyToKeyFile(config, "Qt", "style", "GTK+")
+	ok := dutils.WriteKeyToKeyFile(config, "Qt", "style", "GTK+")
 	if !ok {
 		return errWriteValue
 	}

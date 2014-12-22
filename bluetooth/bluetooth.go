@@ -125,6 +125,7 @@ func (b *Bluetooth) initBluetooth() {
 }
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {
+		requestUnblockBluetoothDevice()
 		b.addAdapter(path)
 	}
 	if _, ok := data[dbusBluezIfsDevice]; ok {

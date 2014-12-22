@@ -29,7 +29,9 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		for _, s := range a.Sinks {
 			if s.core.Index == idx {
 				s.core = a.core.GetSink(idx)
-				s.update()
+				if s.core != nil {
+					s.update()
+				}
 				break
 			}
 		}
@@ -67,7 +69,9 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 		for _, s := range a.SinkInputs {
 			if s.core.Index == idx {
 				s.core = a.core.GetSinkInput(idx)
-				s.update()
+				if s.core != nil {
+					s.update()
+				}
 				break
 			}
 		}
@@ -82,7 +86,9 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 		for _, s := range a.Sources {
 			if s.core.Index == idx {
 				s.core = a.core.GetSource(idx)
-				s.update()
+				if s.core != nil {
+					s.update()
+				}
 				break
 			}
 		}
@@ -91,6 +97,8 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 
 func (a *Audio) handleServerEvent() {
 	sinfo := a.core.GetServer()
-	a.setPropDefaultSink(sinfo.DefaultSinkName)
-	a.setPropDefaultSource(sinfo.DefaultSourceName)
+	if sinfo != nil {
+		a.setPropDefaultSink(sinfo.DefaultSinkName)
+		a.setPropDefaultSource(sinfo.DefaultSourceName)
+	}
 }
