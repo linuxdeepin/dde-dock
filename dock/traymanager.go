@@ -95,7 +95,6 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.nameInfo, xid)
 	delete(m.notifyInfo, xid)
 	delete(m.md5Info, xid)
-	dbus.Emit(m, "Removed", uint32(xid))
 	var newIcons []uint32
 	for _, id := range m.TrayIcons {
 		if id != uint32(xid) {
@@ -103,6 +102,7 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 		}
 	}
 	m.TrayIcons = newIcons
+	dbus.Emit(m, "Removed", uint32(xid))
 }
 
 func (m *TrayManager) GetName(xid uint32) string {
@@ -287,6 +287,10 @@ func (m *TrayManager) Unmanage() bool {
 	}
 
 	m.destroyOwnerWindow()
+	trayicons := m.TrayIcons
+	for _, icon := range trayicons {
+		m.removeTrayIcon(xproto.Window(icon))
+	}
 	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
 	return xproto.SetSelectionOwnerChecked(
 		TrayXU.Conn(),
