@@ -204,8 +204,8 @@ func Start() {
 		return
 	}
 
+	dbus.Emit(mouseArea, "InvalidId")
 	mouseArea.connectMotionInto(func(_, _ int32, id string) {
-		logger.Info("MouseIn:", id)
 		if mouseAreaTimer != nil {
 			mouseAreaTimer.Stop()
 			mouseAreaTimer = nil
