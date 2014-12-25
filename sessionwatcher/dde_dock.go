@@ -38,16 +38,8 @@ func NewDock() *Dock {
 	return dock
 }
 
-func (dock *Dock) fixSwitchMode() {
-	_, err := exec.Command("/usr/bin/xdotool", "search", "--onlyvisible", "dde-dock", "windowmove", "%1", "x", "y").Output()
-	if err != nil {
-		logger.Warning("fixSwitchMode failed:", err)
-	}
-}
-
 func (dock *Dock) restartDock() {
 	if isDBusSenderExist(_DDE_DOCK_SENDER) {
-		dock.fixSwitchMode()
 		return
 	}
 
