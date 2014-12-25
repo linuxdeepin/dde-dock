@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-23 07:00+0000\n"
+"PO-Revision-Date: 2014-12-26 08:41+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/dde-daemon/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -21,15 +21,15 @@ msgstr ""
 
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr ""
+msgstr "Câmpul utilizator nu poate fi gol."
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "Numele de utilizator trebuie să cuprindă litere de la a la z, cifre de la 0 la 9, semnele - sau _."
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "Prima literă trebuie să fie minusculă."
 
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
@@ -37,7 +37,7 @@ msgstr "Acest nume utilizator există"
 
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr ""
+msgstr "Numele de utilizator a fost folosit de sistem."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -221,7 +221,7 @@ msgstr "Cabo Verde"
 
 #: ../../datetime/timezone/deepin_list.go:148
 msgid "London"
-msgstr ""
+msgstr "Londra"
 
 #: ../../datetime/timezone/deepin_list.go:152
 msgid "Dublin"
@@ -434,23 +434,23 @@ msgstr "Auto"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 msgid "Left Click"
-msgstr ""
+msgstr "Clic stânga"
 
 #: ../../inputdevices/libwacom/wacom.go:156
 msgid "Middle Click"
-msgstr ""
+msgstr "Clic mijloc"
 
 #: ../../inputdevices/libwacom/wacom.go:160
 msgid "Right Click"
-msgstr ""
+msgstr "Clic dreapta"
 
 #: ../../inputdevices/libwacom/wacom.go:164
 msgid "Page Up"
-msgstr ""
+msgstr "Pagină în sus"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 msgid "Page Down"
-msgstr ""
+msgstr "Pagină în jos"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
@@ -678,12 +678,12 @@ msgstr "Mutare pe spațiul de lucru de dedesubt"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr ""
+msgstr "A eşuat modificarea limbii sistemului, te rog încearcă mai târziu."
 
 #: ../../langselector/handle_event.go:42
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr ""
+msgstr "Limba sistemului a fost modificată, te rog reconectează-te după deconectare."
 
 #: ../../langselector/locale_ifc.go:55
 msgid "System language is being changed, please wait..."
@@ -693,7 +693,7 @@ msgstr "Se modifică limba sistemului, te rog aşteaptă..."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "Limba sistemului este modificată prin instalarea pachetelor de limbă lipsă, te rog aşteaptă..."
 
 #: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
@@ -710,7 +710,7 @@ msgstr "Rulare program"
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
 #: ../../network/state_handler.go:188 ../../network/utils_notify.go:103
 msgid "Connected"
-msgstr ""
+msgstr "Conectat"
 
 #: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
 #: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
@@ -718,7 +718,7 @@ msgstr ""
 #: ../../network/utils_notify.go:82 ../../network/utils_notify.go:86
 #: ../../network/utils_notify.go:106 ../../network/utils_notify.go:109
 msgid "Disconnected"
-msgstr ""
+msgstr "Deconectat"
 
 #: ../../network/manager_active.go:283 ../../network/manager_active.go:288
 #: ../../network/nm_setting_virtual_key.go:141
@@ -1196,7 +1196,7 @@ msgstr "NAT-T Cînd este disponibil (implicit)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
-msgstr ""
+msgstr "Întotdeauna NAT-T"
 
 #: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
@@ -1321,23 +1321,23 @@ msgstr "Parolă este necesară,  nu a fost introdusă"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
+msgstr "Solicitarea 802.1X s-a deconectat de la punctul de acces sau de la serverul de autentificare."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr ""
+msgstr "Configurarea solicitării 802.1X a eşuat."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr ""
+msgstr "Solicitarea 802.1X s-a întrerupt sau a eşuat neaşteptat."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr ""
+msgstr "Autentificarea solicitării 802.1X a durat prea mult."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr ""
+msgstr "Serviciul PPP a eșuat să pornească în timpul alocat."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
@@ -1345,19 +1345,19 @@ msgstr "Serviciul PPP s-a deconectat din motive neaşteptate"
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr ""
+msgstr "Serviciul PPP s-a întrerupt sau a eșuat neașteptat."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr ""
+msgstr "Serviciul DHCP a eşuat să pornească în timpul alocat."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr ""
+msgstr "Serviciul DHCP a raportat o eroare neaşteptată."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr ""
+msgstr "Serviciul DHCP s-a întrerupt sau a eşuat neaşteptat."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
@@ -1365,7 +1365,7 @@ msgstr "Serviciul conexiunii de partajare: start eşuat"
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr ""
+msgstr "Serviciul conexiune distribuită s-a întrerupt sau a eşuat neaşteptat."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
@@ -1373,11 +1373,11 @@ msgstr "Serviciul AutoIP: start eşuat"
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr ""
+msgstr "Serviciul auto IP a raportat o eroare neaşteptată."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr ""
+msgstr "Serviciul auto IP s-a întrerupt sau a eşuat neaşteptat."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
@@ -1389,15 +1389,15 @@ msgstr "Apel eşuat - lipseşte tonul de apel"
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr ""
+msgstr "Apelarea a eşuat din cauza furnizorului."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr ""
+msgstr "Apelarea s-a întrerupt."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr ""
+msgstr "Apelarea a eşuat."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
@@ -1421,7 +1421,7 @@ msgstr "Registrare reţea: timp a expirat"
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr ""
+msgstr "Înregistrarea în rețeaua GSM solicitată a eşuat."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
@@ -1429,7 +1429,7 @@ msgstr "Verificarea PIN eşuată"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr ""
+msgstr "Lipsește programul necesar pentru dispozitiv."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
@@ -1437,83 +1437,83 @@ msgstr "Dispozitivul eliminat"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr ""
+msgstr "Administratorul de rețea s-a culcat."
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr ""
+msgstr "Conexiunea activă a dispozitivului a fost ştearsă sau a dispărut."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr ""
+msgstr "Un utilizator sau client a solicitat să se deconecteze."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr ""
+msgstr "Furnizorul/link-ul dispozitivului s-a modificat."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr ""
+msgstr "Conexiunea existentă a dispozitivului a fost acceptată."
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr ""
+msgstr "Solicitarea 802.1X este disponibilă acum."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr ""
+msgstr "Nu s-a găsit modemul"
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr ""
+msgstr "Conexiunea Bluetooth s-a întrerupt sau a eşuat."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr ""
+msgstr "Cartela SIM a modemului GSM nu a fost introdusă."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr ""
+msgstr "Introdu codul PIN al SIM-ului modemului GSM."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr ""
+msgstr "Introdu codul PUK al SIM-ului modemului GSM"
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr ""
+msgstr "SIM modem GSM eronat"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr ""
+msgstr "Dispozitivul bandă infinit nu suportă modul conectat."
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr ""
+msgstr "O dependență de conexiune a eşuat."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr ""
+msgstr "Problemă la RFC 2684\nSuprapunere ethernet peste puntea ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "Managerul modemului nu a funcționat sau s-a oprit în mod neaşteptat."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr ""
+msgstr "Rețeaua Wi-Fi 802.11 nu a fost găsită."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr ""
+msgstr "O conexiune secundară a conexiunii de bază a eşuat."
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr ""
+msgstr "Cablul de rețea este deconectat."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr ""
+msgstr "Activarea conexiunii VPN a eşuat, cauză necunoscută."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
@@ -1521,23 +1521,23 @@ msgstr "Activarea conexiunii VPN a eşuat."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr ""
+msgstr "Conexiunea VPN şi-a schimbat starea din cauza deconectării de la utilizatori."
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr ""
+msgstr "Conexiunea VPN şi-a modificat starea din cauza deconectării de la dispozitive."
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr ""
+msgstr "Serviciul VPN s-a oprit."
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr ""
+msgstr "Configurarea IP a conexiunii VPN nu a fost validă."
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr ""
+msgstr "Încercarea de conectare la serviciul VPN s-a întrerupt."
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
@@ -1549,15 +1549,15 @@ msgstr "Serviciul VPN nu a reuşit să pornească."
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr ""
+msgstr "Parola necesară pentru conexiunea VPN nu a fost furnizată."
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr ""
+msgstr "Autentificarea la serverul VPN a eşuat."
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr ""
+msgstr "Conexiunea a fost ștearsă din setări."
 
 #: ../../network/utils_nm.go:170
 msgid "Unknown"
@@ -1565,15 +1565,15 @@ msgstr "Necunoscut"
 
 #: ../../network/utils_notify.go:78
 msgid "Airplan mode enabled."
-msgstr ""
+msgstr "Modul avion activat."
 
 #: ../../network/utils_notify.go:82
 msgid "You are now offline."
-msgstr ""
+msgstr "Acum eşti deconectat."
 
 #: ../../network/utils_notify.go:86
 msgid "Access Point mode is not supported by this device."
-msgstr ""
+msgstr "Modul punct de acces nu este suportat de acest dispozitiv."
 
 #: ../../network/utils_notify.go:90 ../../network/utils_notify.go:95
 #: ../../network/utils_notify.go:99
@@ -1583,37 +1583,37 @@ msgstr "Reţea"
 #: ../../network/utils_notify.go:90
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "Butonul pentru cartela WLAN este în poziția oprit, te rog să-l porneşti aşa cum trebuie."
 
 #: ../../network/utils_notify.go:95
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "Proxy sistem este setat cu succes."
 
 #: ../../network/utils_notify.go:99
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "Proxy-ul sistemului a fost anulat."
 
 #: ../../power/upower.go:81
 msgid "Abnormal battery power"
-msgstr ""
+msgstr "Energie anormală baterie"
 
 #: ../../power/upower.go:81
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "Energia bateriei nu poate fi prevăzută, te rog salvează documentele corect şi nu efectua operațiuni importante."
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"
-msgstr ""
+msgstr "Nivel critic baterie"
 
 #: ../../power/upower.go:86
 msgid "Computer has been in suspend mode, please plug in."
-msgstr ""
+msgstr "Calculatorul s-a aflat în modul suspendare, te rog conectează-l."
 
 #: ../../power/upower.go:101
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Te rog conectează-l sau calculatorul se va afla în modul suspendare."
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
@@ -1621,4 +1621,4 @@ msgstr "Baterie  descărcată"
 
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr ""
+msgstr "Calculatorul se va afla în modul suspendare, te rog conectează-l acum."
