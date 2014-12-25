@@ -83,7 +83,7 @@ func getIconList(dir string) []string {
 	if err != nil {
 		logger.Warningf("Open '%s' failed: %v",
 			dir, err)
-		return []string{}
+		return nil
 	}
 
 	names, _ := iconfd.Readdirnames(0)
@@ -109,8 +109,8 @@ func getIconList(dir string) []string {
 func getAdministratorList() []string {
 	contents, err := ioutil.ReadFile(ETC_GROUP)
 	if err != nil {
-		logger.Warningf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
-		panic(err)
+		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
+		return nil
 	}
 
 	list := ""
@@ -132,7 +132,7 @@ func getAdministratorList() []string {
 
 func setAutomaticLogin(name string) {
 	dsp := getDefaultDisplayManager()
-	logger.Infof("Set %s Auto For: %s", name, dsp)
+	logger.Debugf("Set %s Auto For: %s", name, dsp)
 	switch dsp {
 	case "lightdm":
 		if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
@@ -226,9 +226,9 @@ func isAutoLogin(username string) bool {
 func getDefaultDisplayManager() string {
 	contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
 	if err != nil {
-		logger.Warningf("ReadFile '%s' failed: %s",
+		logger.Errorf("ReadFile '%s' failed: %s",
 			ETC_DISPLAY_MANAGER, err)
-		panic(err)
+		return ""
 	}
 
 	tmp := ""
@@ -269,13 +269,16 @@ func newUser(path string) *User {
 	obj.Gid = info.Gid
 
 	var err error
-	if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
+	obj.watcher, err = fsnotify.NewWatcher()
+	if err != nil {
 		logger.Warning("New watcher in newUser failed:", err)
-		panic(err)
 	}
-	obj.quitFlag = make(chan bool)
-	obj.watchUserConfig()
-	go obj.handUserConfigChanged()
+
+	if obj.watcher != nil {
+		obj.quitFlag = make(chan bool)
+		obj.watchUserConfig()
+		go obj.handUserConfigChanged()
+	}
 
 	return obj
 }
