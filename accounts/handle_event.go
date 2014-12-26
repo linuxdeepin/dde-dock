@@ -127,7 +127,7 @@ func (obj *Manager) handleUserListChanged() {
 			if ev.IsDelete() {
 				obj.removeUserListFileWatch()
 				obj.watchUserListFile()
-				break
+				//break
 			}
 
 			ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
@@ -193,7 +193,7 @@ func (obj *Manager) handleUserInfoChanged() {
 			if ev.IsDelete() {
 				obj.removeUserInfoFileWatch()
 				obj.watchUserInfoFile()
-				break
+				//break
 			}
 
 			ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)

@@ -51,20 +51,20 @@ type User struct {
 	quitFlag       chan bool
 }
 
-func addUserToAdmList(name string) {
+func addUserToAdmList(name string) bool {
 	tmps := []string{}
 	tmps = append(tmps, "-a")
 	tmps = append(tmps, name)
 	tmps = append(tmps, "sudo")
-	go execCommand(CMD_GPASSWD, tmps)
+	return execCommand(CMD_GPASSWD, tmps)
 }
 
-func deleteUserFromAdmList(name string) {
+func deleteUserFromAdmList(name string) bool {
 	tmps := []string{}
 	tmps = append(tmps, "-d")
 	tmps = append(tmps, name)
 	tmps = append(tmps, "sudo")
-	go execCommand(CMD_GPASSWD, tmps)
+	return execCommand(CMD_GPASSWD, tmps)
 }
 
 func getRandUserIcon() string {

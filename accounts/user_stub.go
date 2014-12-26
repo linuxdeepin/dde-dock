@@ -348,11 +348,17 @@ func (obj *User) setAccountType(acctype int32) {
 	switch acctype {
 	case ACCOUNT_TYPE_ADMINISTACTOR:
 		if t != ACCOUNT_TYPE_ADMINISTACTOR {
-			addUserToAdmList(obj.UserName)
+			ok := addUserToAdmList(obj.UserName)
+			if ok {
+				obj.setPropAccountType(acctype)
+			}
 		}
 	case ACCOUNT_TYPE_STANDARD:
 		if t == ACCOUNT_TYPE_ADMINISTACTOR {
-			deleteUserFromAdmList(obj.UserName)
+			ok := deleteUserFromAdmList(obj.UserName)
+			if ok {
+				obj.setPropAccountType(acctype)
+			}
 		}
 	}
 }
@@ -367,5 +373,8 @@ func (obj *User) setLocked(locked bool) {
 		args = append(args, "-U")
 		args = append(args, obj.UserName)
 	}
-	execCommand(CMD_USERMOD, args)
+	ok := execCommand(CMD_USERMOD, args)
+	if ok {
+		obj.setPropLocked(locked)
+	}
 }
