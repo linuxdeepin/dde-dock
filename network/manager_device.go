@@ -207,7 +207,7 @@ func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
 }
 
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {
-	enabled = m.switchHandler.isDeviceEnabled(devPath)
+	enabled = m.config.getDeviceEnabled(devPath)
 	return
 }
 

@@ -67,17 +67,18 @@ func main() {
 	initPlugins()
 	listenDaemonSettings()
 
-	loader.Start()
-	defer loader.Stop()
-
 	go func() {
 		if err := dbus.Wait(); err != nil {
 			logger.Errorf("Lost dbus: %v", err)
 			os.Exit(-1)
 		} else {
+			logger.Info("dbus connection is closed by user")
 			os.Exit(0)
 		}
 	}()
+
+	loader.Start()
+	defer loader.Stop()
 
 	ddeSessionRegister()
 	dbus.DealWithUnhandledMessage()

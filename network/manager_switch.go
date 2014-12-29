@@ -310,10 +310,6 @@ func (sh *switchHandler) saveAndDisconnectDevice(devPath dbus.ObjectPath) (err e
 	return
 }
 
-func (sh *switchHandler) isDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
-	return sh.config.getDeviceEnabled(devPath)
-}
-
 func (sh *switchHandler) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
 		if !nmGetWirelessHardwareEnabled() {
