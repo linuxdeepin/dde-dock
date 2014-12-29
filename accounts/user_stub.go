@@ -181,7 +181,7 @@ func (obj *User) getPropAutomaticLogin() bool {
 func (obj *User) getPropAccountType() int32 {
 	list := getAdministratorList()
 	if strIsInList(obj.UserName, list) {
-		return ACCOUNT_TYPE_ADMINISTACTOR
+		return ACCOUNT_TYPE_ADMINISTRATOR
 	}
 
 	return ACCOUNT_TYPE_STANDARD
@@ -346,15 +346,15 @@ func (obj *User) setAutomaticLogin(auto bool) {
 func (obj *User) setAccountType(acctype int32) {
 	t := obj.getPropAccountType()
 	switch acctype {
-	case ACCOUNT_TYPE_ADMINISTACTOR:
-		if t != ACCOUNT_TYPE_ADMINISTACTOR {
+	case ACCOUNT_TYPE_ADMINISTRATOR:
+		if t != ACCOUNT_TYPE_ADMINISTRATOR {
 			ok := addUserToAdmList(obj.UserName)
 			if ok {
 				obj.setPropAccountType(acctype)
 			}
 		}
 	case ACCOUNT_TYPE_STANDARD:
-		if t == ACCOUNT_TYPE_ADMINISTACTOR {
+		if t == ACCOUNT_TYPE_ADMINISTRATOR {
 			ok := deleteUserFromAdmList(obj.UserName)
 			if ok {
 				obj.setPropAccountType(acctype)
