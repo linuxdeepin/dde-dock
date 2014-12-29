@@ -22,7 +22,6 @@
 package grub2
 
 import (
-	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -39,12 +38,12 @@ func Start() {
 	err := dbus.InstallOnSession(grub)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		return
 	}
 	err = dbus.InstallOnSession(grub.theme)
 	if err != nil {
 		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		return
 	}
 
 	// initialize grub2 after dbus service installed to ensure
