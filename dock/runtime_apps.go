@@ -25,7 +25,6 @@ import (
 )
 
 var DOCKED_APP_MANAGER *dock.DockedAppManager
-var updateConfigureTimer *time.Timer
 
 type WindowInfo struct {
 	Xid         xproto.Window
@@ -53,6 +52,9 @@ type RuntimeApp struct {
 	// workspaces  [][]uint
 
 	changedCB func()
+
+	updateConfigureTimer *time.Timer
+	updateWMNameTimer    *time.Timer
 }
 
 func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
@@ -554,6 +556,7 @@ func (app *RuntimeApp) updateWmName(xid xproto.Window) {
 		app.xids[xid].Title = name
 	}
 }
+
 func (app *RuntimeApp) updateState(xid xproto.Window) {
 	logger.Debugf("get state of %s(0x%x)", app.Id, xid)
 	//TODO: handle state
@@ -738,9 +741,16 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
-			app.updateWmName(xid)
-			app.updateAppid(xid)
-			app.notifyChanged()
+			if app.updateWMNameTimer != nil {
+				app.updateWMNameTimer.Stop()
+				app.updateWMNameTimer = nil
+			}
+			app.updateWMNameTimer = time.AfterFunc(time.Millisecond*20, func() {
+				app.updateWmName(xid)
+				app.updateAppid(xid)
+				app.notifyChanged()
+				app.updateWMNameTimer = nil
+			})
 		case ATOM_WINDOW_STATE:
 			logger.Debugf("%s(0x%x) WM_STATE is changed", app.Id, xid)
 			if app.CurrentInfo.Xid == xid {
@@ -775,12 +785,13 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	xevent.ConfigureNotifyFun(func(XU *xgbutil.XUtil, ev xevent.ConfigureNotifyEvent) {
 		app.lock.Lock()
 		defer app.lock.Unlock()
-		if updateConfigureTimer != nil {
-			updateConfigureTimer.Stop()
-			updateConfigureTimer = nil
+		if app.updateConfigureTimer != nil {
+			app.updateConfigureTimer.Stop()
+			app.updateConfigureTimer = nil
 		}
-		updateConfigureTimer = time.AfterFunc(time.Millisecond*20, func() {
+		app.updateConfigureTimer = time.AfterFunc(time.Millisecond*20, func() {
 			update(ev.Window)
+			app.updateConfigureTimer = nil
 		})
 	}).Connect(XU, xid)
 	app.xids[xid] = winfo
