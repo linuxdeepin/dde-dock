@@ -32,13 +32,14 @@ type Xinfo struct {
 }
 
 type ItemInfo struct {
-	path       string
-	name       string
-	enName     string
-	id         ItemId
-	icon       string
-	categoryId CategoryId
-	xinfo      Xinfo
+	path          string
+	name          string
+	enName        string
+	id            ItemId
+	icon          string
+	categoryId    CategoryId
+	timeInstalled int64
+	xinfo         Xinfo
 }
 
 func (i *ItemInfo) Path() string {
@@ -115,6 +116,14 @@ func (i *ItemInfo) GetCategoryId() CategoryId {
 
 func (i *ItemInfo) SetCategoryId(id CategoryId) {
 	i.categoryId = id
+}
+
+func (i *ItemInfo) GetTimeInstalled() int64 {
+	return i.timeInstalled
+}
+
+func (i *ItemInfo) SetTimeInstalled(timeInstalled int64) {
+	i.timeInstalled = timeInstalled
 }
 
 func GenId(filename string) ItemId {

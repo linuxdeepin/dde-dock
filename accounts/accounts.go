@@ -61,27 +61,32 @@ func GetManager() *Manager {
 func newManager() *Manager {
 	obj := &Manager{}
 
-	var err error
-	if obj.listWatcher, err = fsnotify.NewWatcher(); err != nil {
-		logger.Error("New User List Watcher Failed:", err)
-		panic(err)
-	}
-	if obj.infoWatcher, err = fsnotify.NewWatcher(); err != nil {
-		logger.Error("New User Info Watcher Failed:", err)
-		panic(err)
-	}
-
-	obj.listQuit = make(chan bool)
-	obj.infoQuit = make(chan bool)
 	obj.pathUserMap = make(map[string]*User)
 	obj.setPropUserList(getUserList())
 	obj.setPropAllowGuest(isAllowGuest())
 	obj.setPropGuestIcon(GUEST_USER_ICON)
 
-	obj.watchUserListFile()
-	obj.watchUserInfoFile()
-	go obj.handleUserListChanged()
-	go obj.handleUserInfoChanged()
+	var err error
+	obj.listWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		logger.Error("New User List Watcher Failed:", err)
+	}
+	obj.infoWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		logger.Error("New User Info Watcher Failed:", err)
+	}
+
+	if obj.listWatcher != nil {
+		obj.listQuit = make(chan bool)
+		obj.watchUserListFile()
+		go obj.handleUserListChanged()
+	}
+
+	if obj.infoWatcher != nil {
+		obj.infoQuit = make(chan bool)
+		obj.watchUserInfoFile()
+		go obj.handleUserInfoChanged()
+	}
 
 	return obj
 }
@@ -90,7 +95,7 @@ func getUserInfoList() []UserInfo {
 	contents, err := ioutil.ReadFile(ETC_PASSWD)
 	if err != nil {
 		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
-		panic(err)
+		return nil
 	}
 
 	infos := []UserInfo{}
@@ -152,7 +157,7 @@ func detectedViaShadowFile(info *UserInfo) bool {
 	contents, err := ioutil.ReadFile(ETC_SHADOW)
 	if err != nil {
 		logger.Errorf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
-		panic(err)
+		return false
 	}
 
 	isHuman := false
@@ -216,9 +221,7 @@ func isAllowGuest() bool {
 }
 
 func getUserInfoByPath(path string) (UserInfo, bool) {
-	infos := getUserInfoList()
-
-	for _, info := range infos {
+	for _, info := range getUserInfoList() {
 		if path == info.Path {
 			return info, true
 		}
@@ -228,9 +231,7 @@ func getUserInfoByPath(path string) (UserInfo, bool) {
 }
 
 func getUserInfoByName(name string) (UserInfo, bool) {
-	infos := getUserInfoList()
-
-	for _, info := range infos {
+	for _, info := range getUserInfoList() {
 		if name == info.Name {
 			return info, true
 		}

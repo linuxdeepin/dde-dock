@@ -245,6 +245,15 @@ func bluezSetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
 	return
 }
 
+func bluezGetDeviceTrusted(dpath dbus.ObjectPath) (trusted bool) {
+	bluezDevice, err := bluezNewDevice(dpath)
+	if err != nil {
+		return
+	}
+	trusted = bluezDevice.Trusted.Get()
+	return
+}
+
 func bluezGetDevicePaired(dpath dbus.ObjectPath) (paired bool) {
 	bluezDevice, err := bluezNewDevice(dpath)
 	if err != nil {

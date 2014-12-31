@@ -33,7 +33,6 @@ import (
 	"pkg.linuxdeepin.com/lib/log"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
-	"sync"
 )
 
 const (
@@ -61,7 +60,6 @@ type LangSelector struct {
 	LocaleState int32
 	logger      *log.Logger
 	setDate     *setdatetime.SetDateTime
-	lock        sync.Mutex
 }
 
 func newLangSelector(l *log.Logger) *LangSelector {

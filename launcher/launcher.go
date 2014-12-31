@@ -10,13 +10,13 @@ import (
 
 	"github.com/howeyc/fsnotify"
 
+	storeApi "dbus/com/deepin/store/api"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
 	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"pkg.linuxdeepin.com/lib/utils"
 )
@@ -35,6 +35,7 @@ const (
 
 type ItemChangedStatus struct {
 	renamed, created, notRenamed, notCreated chan bool
+	timeInstalled                            int64
 }
 
 type Launcher struct {
@@ -43,6 +44,7 @@ type Launcher struct {
 	categoryManager     CategoryManagerInterface
 	cancelSearchingChan chan struct{}
 	pinyinObj           PinYinInterface
+	store               *storeApi.DStoreDesktop
 
 	ItemChanged func(
 		status string,
@@ -84,6 +86,10 @@ func (self *Launcher) setItemManager(im ItemManagerInterface) {
 
 func (self *Launcher) setPinYinObject(pinyinObj PinYinInterface) {
 	self.pinyinObj = pinyinObj
+}
+
+func (self *Launcher) setStoreApi(s *storeApi.DStoreDesktop) {
+	self.store = s
 }
 
 func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
@@ -177,32 +183,33 @@ func (self *Launcher) GetAllItemInfos() []ItemInfoExport {
 }
 
 func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemChangedStatus) {
-	defer delete(info, name)
+	if info != nil {
+		defer delete(info, name)
+	}
+
 	id := GenId(name)
 
-	if status == SoftwareStatusCreated {
-		if !self.itemManager.HasItem(id) {
-			err := self.itemManager.MarkNew(id)
-			if err != nil {
-				logger.Infof("Mark %q as new installed software failed: %s", id, err.Error())
-			}
-		} else {
-			status = SoftwareStatusModified
-		}
+	if status == SoftwareStatusCreated && self.itemManager.HasItem(id) {
+		status = SoftwareStatusModified
 	}
 	logger.Info(name, "Status:", status)
 
 	if status != SoftwareStatusDeleted {
-		logger.Info(name)
-		<-time.After(time.Second * 10)
-		app := gio.NewDesktopAppInfoFromFilename(name)
-		for count := 0; app == nil; count++ {
-			<-time.After(time.Millisecond * 200)
-			app = gio.NewDesktopAppInfoFromFilename(name)
-			if app == nil && count == 20 {
-				logger.Info("create DesktopAppInfo failed")
-				return
-			}
+		// cannot use float number here. the total wait time is about 12s.
+		maxDuration := time.Second + time.Second/2
+		waitDuration := time.Millisecond * 0
+		deltaDuration := time.Millisecond * 100
+
+		app := CreateDesktopAppInfo(name)
+		for app == nil && waitDuration < maxDuration {
+			<-time.After(waitDuration)
+			app = CreateDesktopAppInfo(name)
+			waitDuration += deltaDuration
+		}
+
+		if app == nil {
+			logger.Infof("create DesktopAppInfo for %q failed", name)
+			return
 		}
 		defer app.Unref()
 		if !app.ShouldShow() {
@@ -210,6 +217,9 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 			return
 		}
 		itemInfo := NewItem(app)
+		if info[name].timeInstalled != 0 {
+			itemInfo.SetTimeInstalled(info[name].timeInstalled)
+		}
 
 		dbPath, _ := GetDBPath(SoftwareCenterDataDir, CategoryNameDBPath)
 		db, err := sql.Open("sqlite3", dbPath)
@@ -225,6 +235,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		self.itemManager.AddItem(itemInfo)
 		self.categoryManager.AddItem(itemInfo.Id(), itemInfo.GetCategoryId())
 	}
+
 	if !self.itemManager.HasItem(id) {
 		logger.Info("get item failed")
 		return
@@ -252,6 +263,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			make(chan bool),
 			make(chan bool),
 			make(chan bool),
+			0,
 		}
 	}
 	if ev.IsRename() {
@@ -287,8 +299,6 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 				return
 			case <-time.After(time.Second):
 				<-info[name].created
-				logger.Info("create")
-				self.emitItemChanged(name, SoftwareStatusCreated, info)
 			}
 		}()
 		info[name].created <- true
@@ -302,8 +312,6 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			case <-info[name].renamed:
 				self.emitItemChanged(name, SoftwareStatusModified, info)
 			default:
-				logger.Info("modify created")
-				self.emitItemChanged(name, SoftwareStatusCreated, info)
 			}
 		}()
 	} else if ev.IsAttrib() {
@@ -384,6 +392,16 @@ func (self *Launcher) listenItemChanged() {
 	}
 
 	go self.eventHandler(watcher)
+
+	if self.store != nil {
+		self.store.ConnectNewDesktopAdded(func(desktopId string, timeInstalled int32) {
+			self.emitItemChanged(desktopId, SoftwareStatusCreated, map[string]ItemChangedStatus{
+				desktopId: ItemChangedStatus{
+					timeInstalled: int64(timeInstalled),
+				},
+			})
+		})
+	}
 }
 
 func (self *Launcher) RecordRate(id string) {
@@ -415,7 +433,12 @@ func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
 
 func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	infos := []TimeInstalledExport{}
-	for id, t := range self.itemManager.GetAllTimeInstalled() {
+	times, err := self.itemManager.GetAllTimeInstalled()
+	if err != nil {
+		logger.Info(err)
+	}
+
+	for id, t := range times {
 		infos = append(infos, TimeInstalledExport{Time: t, Id: id})
 	}
 
@@ -473,13 +496,6 @@ func (self *Launcher) MarkLaunched(id string) {
 	dbus.Emit(self, "NewAppLaunched", ItemId(id))
 }
 
-func (self *Launcher) MarkNew(id string) {
-	err := self.itemManager.MarkNew(ItemId(id))
-	if err != nil {
-		logger.Info(err)
-	}
-}
-
 func (self *Launcher) GetAllNewInstalledApps() []ItemId {
 	ids, err := self.itemManager.GetAllNewInstalledApps()
 	if err != nil {
@@ -492,6 +508,10 @@ func (self *Launcher) destroy() {
 	if self.setting != nil {
 		self.setting.destroy()
 		launcher.setting = nil
+	}
+	if self.store != nil {
+		storeApi.DestroyDStoreDesktop(self.store)
+		self.store = nil
 	}
 	dbus.UnInstallObject(self)
 }

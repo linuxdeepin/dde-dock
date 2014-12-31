@@ -11,7 +11,7 @@ type ItemManagerInterface interface {
 	GetItem(ItemId) ItemInfoInterface
 	GetAllItems() []ItemInfoInterface
 	GetAllFrequency(RateConfigFileInterface) map[ItemId]uint64
-	GetAllTimeInstalled() map[ItemId]int64
+	GetAllTimeInstalled() (map[ItemId]int64, error)
 	UninstallItem(ItemId, bool, time.Duration) error
 	IsItemOnDesktop(ItemId) bool
 	SendItemToDesktop(ItemId) error
@@ -20,5 +20,4 @@ type ItemManagerInterface interface {
 	SetRate(ItemId, uint64, RateConfigFileInterface)
 	GetAllNewInstalledApps() ([]ItemId, error)
 	MarkLaunched(ItemId) error
-	MarkNew(ItemId) error
 }

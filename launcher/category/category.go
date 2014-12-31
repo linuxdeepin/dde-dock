@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	lerrors "pkg.linuxdeepin.com/dde-daemon/launcher/errors"
@@ -156,6 +157,20 @@ func getDeepinCategory(basename string, db *sql.DB) (CategoryId, error) {
 	return getCategoryId(categoryName)
 }
 
+type CategoryIdList []CategoryId
+
+func (self CategoryIdList) Less(i, j int) bool {
+	return self[i] < self[j]
+}
+
+func (self CategoryIdList) Swap(i, j int) {
+	self[i], self[j] = self[j], self[i]
+}
+
+func (self CategoryIdList) Len() int {
+	return len(self)
+}
+
 func getXCategory(categories []string) CategoryId {
 	candidateIds := map[CategoryId]bool{OtherID: true}
 	for _, category := range categories {
@@ -172,6 +187,8 @@ func getXCategory(categories []string) CategoryId {
 	for id := range candidateIds {
 		ids = append(ids, id)
 	}
+
+	sort.Sort(CategoryIdList(ids))
 
 	return ids[0]
 }

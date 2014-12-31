@@ -37,7 +37,7 @@ func (obj *Manager) watchUserListFile() {
 	if obj.listWatcher == nil {
 		if obj.listWatcher, err = fsnotify.NewWatcher(); err != nil {
 			logger.Error("New User List Watcher Failed:", err)
-			panic(err)
+			return
 		}
 	}
 
@@ -60,7 +60,7 @@ func (obj *Manager) watchUserInfoFile() {
 	if obj.infoWatcher == nil {
 		if obj.infoWatcher, err = fsnotify.NewWatcher(); err != nil {
 			logger.Error("New User Info Watcher Failed:", err)
-			panic(err)
+			return
 		}
 	}
 
@@ -122,12 +122,12 @@ func (obj *Manager) handleUserListChanged() {
 				break
 			}
 
-			logger.Info("User List Event:", ev)
+			logger.Debug("User List Event:", ev)
 
 			if ev.IsDelete() {
 				obj.removeUserListFileWatch()
 				obj.watchUserListFile()
-				break
+				//break
 			}
 
 			ok1, _ := regexp.MatchString(ACCOUNT_CONFIG_FILE, ev.Name)
@@ -181,7 +181,7 @@ func (obj *Manager) handleUserInfoChanged() {
 				break
 			}
 
-			logger.Info("User Info Event:", ev)
+			logger.Debug("User Info Event:", ev)
 			ok3, _ := regexp.MatchString(ICON_SYSTEM_DIR, ev.Name)
 			ok4, _ := regexp.MatchString(ICON_LOCAL_DIR, ev.Name)
 			if ok3 || ok4 {
@@ -193,7 +193,7 @@ func (obj *Manager) handleUserInfoChanged() {
 			if ev.IsDelete() {
 				obj.removeUserInfoFileWatch()
 				obj.watchUserInfoFile()
-				break
+				//break
 			}
 
 			ok1, _ := regexp.MatchString(ETC_GROUP, ev.Name)
@@ -206,8 +206,7 @@ func (obj *Manager) handleUserInfoChanged() {
 
 			ok2, _ := regexp.MatchString(ETC_SHADOW, ev.Name)
 			if ok2 {
-				infos := getUserInfoList()
-				for _, info := range infos {
+				for _, info := range getUserInfoList() {
 					u, ok := obj.pathUserMap[obj.FindUserByName(info.Name)]
 					if !ok {
 						continue
@@ -243,7 +242,7 @@ func (obj *User) watchUserConfig() {
 		var err error
 		if obj.watcher, err = fsnotify.NewWatcher(); err != nil {
 			logger.Error("New watcher in newUser failed:", err)
-			panic(err)
+			return
 		}
 	}
 
@@ -279,7 +278,7 @@ func (obj *User) handUserConfigChanged() {
 				break
 			}
 
-			logger.Info("User Config Event:", ev)
+			logger.Debug("User Config Event:", ev)
 			if ev.IsDelete() {
 				obj.removeUserConfigWatch()
 				obj.watchUserConfig()

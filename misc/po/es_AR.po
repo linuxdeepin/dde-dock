@@ -3,69 +3,70 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# John Fabio Giraldo <codigojohn@gmail.com>, 2014
-# John Fabio Giraldo <codigojohn@gmail.com>, 2014
+# Adrian Paesani <adrian.paesani@gmail.com>, 2014
+# Mariano Agüero <nero1000000@gmail.com>, 2014
+# efedezeta <pocodance@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-26 04:47+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
-"Language-Team: Spanish (Latin America) (http://www.transifex.com/projects/p/dde-daemon/language/es_419/)\n"
+"PO-Revision-Date: 2014-12-26 08:41+0000\n"
+"Last-Translator: Mariano Agüero <nero1000000@gmail.com>\n"
+"Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/dde-daemon/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es_419\n"
+"Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr ""
+msgstr "El nombre de usuario no puede estar vacío."
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "El nombre de usuario debe estar compuesto de caracteres a~z, 0~9, - ó _."
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "El primer caracter debe estar en minúsculas."
 
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
-msgstr ""
+msgstr "El nombre de usuario ya existe."
 
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr ""
+msgstr "El nombre de usuario está utilizado por el sistema."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Puerto Serial"
+msgstr "Puerto serial"
 
 #: ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Conexión de Red Telefonica"
+msgstr "Red Dial-Up"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Dispositivo Manos Libres"
+msgstr "Dispositivo manos libres"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Acceso por voz con manos libres"
+msgstr "Gateway de voz manos libres"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Acceso por voz con audífonos"
+msgstr "Gateway de voz de auricular."
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Envió de objeto"
+msgstr "Object push"
 
 #: ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "Transferencia de Archivo"
+msgstr "Transferencia de archivos"
 
 #: ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
@@ -73,11 +74,11 @@ msgstr "Sincronización"
 
 #: ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "Acceso a la libreta de contactos"
+msgstr "Acceso a la agenda telefónica"
 
 #: ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Cliente de acceso a la libreta de contactos"
+msgstr "Cliente de acceso a la agenda telefónica"
 
 #: ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
@@ -85,7 +86,7 @@ msgstr "Mensaje de acceso"
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Mensaje de notificación"
+msgstr "Notificación de mensaje"
 
 #: ../../datetime/timezone/deepin_list.go:16
 msgid "Niue"
@@ -97,7 +98,7 @@ msgstr "Hawaii"
 
 #: ../../datetime/timezone/deepin_list.go:24
 msgid "Tahiti"
-msgstr "Tahiti"
+msgstr "Tahití"
 
 #: ../../datetime/timezone/deepin_list.go:28
 msgid "Honolulu"
@@ -117,11 +118,11 @@ msgstr "Juneau"
 
 #: ../../datetime/timezone/deepin_list.go:44
 msgid "Gambier"
-msgstr "Islas Gambier"
+msgstr "Gambier"
 
 #: ../../datetime/timezone/deepin_list.go:48
 msgid "BajaNorte"
-msgstr "BajaNorte"
+msgstr "Baja Norte"
 
 #: ../../datetime/timezone/deepin_list.go:52
 msgid "Vancouver"
@@ -157,7 +158,7 @@ msgstr "Managua"
 
 #: ../../datetime/timezone/deepin_list.go:84
 msgid "Monterrey"
-msgstr "Monterrey"
+msgstr "Monterry"
 
 #: ../../datetime/timezone/deepin_list.go:88
 msgid "New York"
@@ -197,7 +198,7 @@ msgstr "Newfoundland"
 
 #: ../../datetime/timezone/deepin_list.go:124
 msgid "St Johns"
-msgstr "Saint John"
+msgstr "St. Johns"
 
 #: ../../datetime/timezone/deepin_list.go:128
 msgid "Buenos Aires"
@@ -205,11 +206,11 @@ msgstr "Buenos Aires"
 
 #: ../../datetime/timezone/deepin_list.go:132
 msgid "Cayenne"
-msgstr "Cayena"
+msgstr "Cayenne"
 
 #: ../../datetime/timezone/deepin_list.go:136
 msgid "DeNoronha"
-msgstr "Fernando de Noronha"
+msgstr "DeNoronha"
 
 #: ../../datetime/timezone/deepin_list.go:140
 msgid "Azores"
@@ -217,11 +218,11 @@ msgstr "Azores"
 
 #: ../../datetime/timezone/deepin_list.go:144
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Cabo Verde"
 
 #: ../../datetime/timezone/deepin_list.go:148
 msgid "London"
-msgstr ""
+msgstr "Londres"
 
 #: ../../datetime/timezone/deepin_list.go:152
 msgid "Dublin"
@@ -253,11 +254,11 @@ msgstr "Viena"
 
 #: ../../datetime/timezone/deepin_list.go:180
 msgid "Algiers"
-msgstr "Argel"
+msgstr "Algiers"
 
 #: ../../datetime/timezone/deepin_list.go:184
 msgid "Cairo"
-msgstr "El Cairo"
+msgstr "Cairo"
 
 #: ../../datetime/timezone/deepin_list.go:188
 msgid "Athens"
@@ -265,7 +266,7 @@ msgstr "Atenas"
 
 #: ../../datetime/timezone/deepin_list.go:192
 msgid "Istanbul"
-msgstr "Estambul"
+msgstr "Estambúl"
 
 #: ../../datetime/timezone/deepin_list.go:196
 msgid "Blantyre"
@@ -277,15 +278,15 @@ msgstr "Nairobi"
 
 #: ../../datetime/timezone/deepin_list.go:204
 msgid "Tehran"
-msgstr "Teherán"
+msgstr "Tehrán"
 
 #: ../../datetime/timezone/deepin_list.go:208
 msgid "Muscat"
-msgstr "Mascate"
+msgstr "Muscat"
 
 #: ../../datetime/timezone/deepin_list.go:212
 msgid "Baku"
-msgstr "Bakú"
+msgstr "Baku"
 
 #: ../../datetime/timezone/deepin_list.go:216
 msgid "Moscow"
@@ -309,15 +310,15 @@ msgstr "Katmandú"
 
 #: ../../datetime/timezone/deepin_list.go:236
 msgid "Dhaka"
-msgstr "Daca"
+msgstr "Dhaka"
 
 #: ../../datetime/timezone/deepin_list.go:240
 msgid "Yekaterinburg"
-msgstr "Ekaterimburgo"
+msgstr "Yekaterinburg"
 
 #: ../../datetime/timezone/deepin_list.go:244
 msgid "Rangoon"
-msgstr "Rangún"
+msgstr "Rangoon"
 
 #: ../../datetime/timezone/deepin_list.go:248
 msgid "Bangkok"
@@ -325,11 +326,11 @@ msgstr "Bangkok"
 
 #: ../../datetime/timezone/deepin_list.go:252
 msgid "Jakarta"
-msgstr "Yakarta"
+msgstr "Jakarta"
 
 #: ../../datetime/timezone/deepin_list.go:256
 msgid "Beijing"
-msgstr "Pekín"
+msgstr "Beijing"
 
 #: ../../datetime/timezone/deepin_list.go:260
 msgid "Hong Kong"
@@ -337,7 +338,7 @@ msgstr "Hong Kong"
 
 #: ../../datetime/timezone/deepin_list.go:264
 msgid "Taipei"
-msgstr "Taipéi"
+msgstr "Taipei"
 
 #: ../../datetime/timezone/deepin_list.go:268
 msgid "Kuala Lumpur"
@@ -353,7 +354,7 @@ msgstr "Eucla"
 
 #: ../../datetime/timezone/deepin_list.go:280
 msgid "Tokyo"
-msgstr "Tokio"
+msgstr "Tokyo"
 
 #: ../../datetime/timezone/deepin_list.go:284
 msgid "Seoul"
@@ -365,7 +366,7 @@ msgstr "Darwin"
 
 #: ../../datetime/timezone/deepin_list.go:292
 msgid "Sydney"
-msgstr "Sídney"
+msgstr "Sydney"
 
 #: ../../datetime/timezone/deepin_list.go:296
 msgid "Guam"
@@ -381,7 +382,7 @@ msgstr "Hobart"
 
 #: ../../datetime/timezone/deepin_list.go:308
 msgid "Lord Howe"
-msgstr "Isla de Lord Howe"
+msgstr "Lord Howe"
 
 #: ../../datetime/timezone/deepin_list.go:312
 msgid "Pohnpei"
@@ -397,7 +398,7 @@ msgstr "Auckland"
 
 #: ../../datetime/timezone/deepin_list.go:324
 msgid "Anadyr"
-msgstr "Anádyr"
+msgstr "Anadyr"
 
 #: ../../datetime/timezone/deepin_list.go:328
 msgid "Chatham"
@@ -417,40 +418,40 @@ msgstr "_Ejecutar"
 
 #: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:291
 msgid "_Undock"
-msgstr "_Desacoplar"
+msgstr "_Desanclar"
 
 #: ../../dock/runtime_apps.go:260
 msgid "_Close All"
-msgstr "_Cerrar todo"
+msgstr "_Cerrar Todo"
 
 #: ../../dock/runtime_apps.go:303
 msgid "_Dock"
-msgstr "_Acoplar"
+msgstr "_Anclar"
 
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
-msgstr "Automático"
+msgstr "Auto"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 msgid "Left Click"
-msgstr ""
+msgstr "Clic izquierdo"
 
 #: ../../inputdevices/libwacom/wacom.go:156
 msgid "Middle Click"
-msgstr ""
+msgstr "Clic central"
 
 #: ../../inputdevices/libwacom/wacom.go:160
 msgid "Right Click"
-msgstr ""
+msgstr "Clic derecho"
 
 #: ../../inputdevices/libwacom/wacom.go:164
 msgid "Page Up"
-msgstr ""
+msgstr "Retroceso de Página"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 msgid "Page Down"
-msgstr ""
+msgstr "Avance de Página"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
@@ -458,51 +459,51 @@ msgstr "Lanzador"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Mostrar el escritorio"
+msgstr "Mostrar escritorio"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Bloquear la pantalla"
+msgstr "Bloquear Pantalla"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "Administrador de Archivos"
+msgstr "Gestor de archivos"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Cambiar entre aplicaciones"
+msgstr "Cambio de aplicaciones"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Retroceder cambio de aplicaciones"
+msgstr "Cambio invertido de aplicaciones"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Cambiar entre aplicaciones en 3D"
+msgstr "Cambio 3D de aplicaciones"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Cambiar regresando entre aplicaciones en 3D"
+msgstr "Cambio invertido 3D de aplicaciones"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Mostrar/Ocultar el acoplador"
+msgstr "Mostrar/Ocultar el dock"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Captura de Pantalla"
+msgstr "Captura de pantalla"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Captura de Pantalla Completa"
+msgstr "Captura de pantalla completa"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Captura de Ventana"
+msgstr "Captura de ventana"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Retrasar la captura de pantalla"
+msgstr "Retrasar captura"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
@@ -510,15 +511,15 @@ msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Mover la Ventana de la Terminal"
+msgstr "Ventana de Terminal Quake"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Cerrar Sesión"
+msgstr "Cerrar sesión"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Desactivar el Touchpad"
+msgstr "Deshabilitar Touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -526,7 +527,7 @@ msgstr "Traductor Deepin"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
-msgstr ""
+msgstr "Cambiar layout"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -534,7 +535,7 @@ msgstr "Calculadora"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Cliente de Correo Electrónico"
+msgstr "Cliente de correo electrónico"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
@@ -542,11 +543,11 @@ msgstr "Navegador Web"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Reproductor de Medios"
+msgstr "Reproductor Multimedia"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Reproducir/Pausar"
+msgstr "Iniciar/Pausar"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
@@ -554,7 +555,7 @@ msgstr "Pausar"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "Parar"
+msgstr "Detener"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
@@ -582,7 +583,7 @@ msgstr "Expulsar"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Cerrar ventana"
+msgstr "Cerrar Ventana"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
@@ -602,47 +603,47 @@ msgstr "Mover ventana"
 
 #: ../../keybinding/id_desc_list.go:98
 msgid "Resize window"
-msgstr "Ajustar ventana"
+msgstr "Modificar el tamaño de la ventana"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Cambiar estado de plegado"
+msgstr "Cambiar estado de aferración"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Activar Ventana de Menú"
+msgstr "Activar menú de ventana"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Cambiar al espacio de trabajo 1"
+msgstr "Cambiar a espacio de trabajo 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Cambiar al espacio de trabajo 2"
+msgstr "Cambiar a espacio de trabajo 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Cambiar al espacio de trabajo 3"
+msgstr "Cambiar a espacio de trabajo 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Cambiar al espacio de trabajo 4"
+msgstr "Cambiar a espacio de trabajo 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "Cambiar al espacio de trabajo de la izquierda"
+msgstr "Cambiar a espacio de trabajo izquierdo"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "Cambiar al espacio de trabajo de la derecha"
+msgstr "Cambiar a espacio de trabajo derecho"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "Cambiar al espacio de trabajo superior"
+msgstr "Cambiar a espacio de trabajo superior"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "Cambiar al espacio de trabajo inferior"
+msgstr "Cambiar a espacio de trabajo inferior"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
@@ -662,11 +663,11 @@ msgstr "Mover al espacio de trabajo 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Mover al espacio de trabajo de la izquierda"
+msgstr "Mover al espacio de trabajo izquierdo"
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Mover al espacio de trabajo de la derecha"
+msgstr "Mover al espacio de trabajo derecho"
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
@@ -678,22 +679,22 @@ msgstr "Mover al espacio de trabajo inferior"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr ""
+msgstr "El idioma del sistema no se pudo cambiar, por favor intente más tarde."
 
 #: ../../langselector/handle_event.go:42
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr ""
+msgstr "El idioma del sistema se cambió, por favor inicie sesión nuevamente."
 
 #: ../../langselector/locale_ifc.go:55
 msgid "System language is being changed, please wait..."
-msgstr ""
+msgstr "El idioma del sistema está siendo cambiado, por favor espere..."
 
 #: ../../langselector/locale_ifc.go:60
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "El idioma del sistema está siendo modificado por una instalación de paquetes de idioma incompletos, por favor espere..."
 
 #: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
@@ -701,11 +702,11 @@ msgstr "Nada"
 
 #: ../../mime/default_media.go:76 ../../mime/default_media.go:91
 msgid "Open Folder"
-msgstr "Abrir Carpeta"
+msgstr "Abrir carpeta"
 
 #: ../../mime/default_media.go:80
 msgid "Run Software"
-msgstr ""
+msgstr "Ejecutar programa"
 
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
 #: ../../network/state_handler.go:188 ../../network/utils_notify.go:103
@@ -765,7 +766,7 @@ msgstr "FAST"
 #: ../../network/manager_active.go:308 ../../network/nm_setting_802_1x.go:170
 #: ../../network/nm_setting_802_1x.go:178
 msgid "Tunneled TLS"
-msgstr "TLS por Túneles"
+msgstr "Tunneled TLS"
 
 #: ../../network/manager_active.go:310 ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_802_1x.go:179
@@ -774,7 +775,7 @@ msgstr "EAP Protegido"
 
 #: ../../network/manager_connection.go:211 ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
-msgstr "Conexión Alámbrica"
+msgstr "Conexión cableada"
 
 #: ../../network/nm_constant.go:321 ../../network/nm_setting_vpn_l2tp.go:114
 #: ../../network/nm_setting_vpn_openvpn.go:168
@@ -796,7 +797,7 @@ msgstr "Preguntar Siempre"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
 msgid "Not Required"
-msgstr "No es Requerido"
+msgstr "No Requerido"
 
 #: ../../network/nm_custom_type.go:176
 msgid "Connection"
@@ -808,11 +809,11 @@ msgstr "Conexión Inalámbrica"
 
 #: ../../network/nm_custom_type.go:182
 msgid "Wireless Ad-Hoc"
-msgstr "Red Inalámbrica Ad-Hoc"
+msgstr "Ad-Hoc Inalámbrica"
 
 #: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
-msgstr "Red Inalámbrica con Zonas de Punto de Acceso"
+msgstr "Ap-Hotspot Inalámbrico"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
@@ -820,15 +821,15 @@ msgstr "Conexión PPPoE"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
-msgstr "Conexión Móvil"
+msgstr "Conexión móvil"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Conexión Móvil GSM"
+msgstr "Conexión GSM Móvil"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Conexión Móvil CDMA"
+msgstr "Conexión CDMA Móvil"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
@@ -840,19 +841,19 @@ msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:198
 msgid "VPN OpenConnect"
-msgstr "OpenConnect VPN"
+msgstr "VPN OpenConnect"
 
 #: ../../network/nm_custom_type.go:200
 msgid "VPN OpenVPN"
-msgstr "OpenVPN VPN"
+msgstr "VPN OpenVPN"
 
 #: ../../network/nm_custom_type.go:202
 msgid "VPN PPTP"
-msgstr "PPTP VPN"
+msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:204
 msgid "VPN VPNC"
-msgstr "VPNC VPN"
+msgstr "VPN VPNC"
 
 #: ../../network/nm_setting_802_1x.go:79
 msgid "PAP"
@@ -868,7 +869,7 @@ msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:82
 msgid "MSCHAPV2"
-msgstr "MSCHAPv2"
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:83
 msgid "GTC"
@@ -882,11 +883,11 @@ msgstr "OTP"
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
-msgstr "Inactivo"
+msgstr "Deshabilitado"
 
 #: ../../network/nm_setting_802_1x.go:185
 msgid "Anonymous"
-msgstr "Anonimo"
+msgstr "Anónimo"
 
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
@@ -899,7 +900,7 @@ msgstr "Ambos"
 #: ../../network/nm_setting_802_1x.go:191
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
-msgstr "Automatico"
+msgstr "Automático"
 
 #: ../../network/nm_setting_802_1x.go:192
 msgid "Version 0"
@@ -919,15 +920,15 @@ msgstr "China Unicom MMS"
 
 #: ../../network/nm_setting_gsm.go:126
 msgid "China Mobile WAP"
-msgstr "China Mobile WAP"
+msgstr "China WAP móvil"
 
 #: ../../network/nm_setting_gsm.go:127
 msgid "China Mobile Internet"
-msgstr "China Mobile Internet"
+msgstr "China Internet Móvil"
 
 #: ../../network/nm_setting_gsm.go:128
 msgid "China Mobile MMS"
-msgstr "China Mobile MMS"
+msgstr "China MMS Móvil"
 
 #: ../../network/nm_setting_gsm.go:132
 msgid "Any"
@@ -955,12 +956,12 @@ msgstr "Preferir 4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:138
 msgid "Use Only 4G (LTE)"
-msgstr "Usar sólo 4G (LTE)"
+msgstr "Solo usar 4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
-msgstr "Sólo Conexión Local"
+msgstr "Solo enlace local"
 
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:67
@@ -1011,30 +1012,30 @@ msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:144
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Empresarial"
+msgstr "WPA/WPA2 Empresa"
 
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:167
 msgid "All Available (default)"
-msgstr "Todo Disponible (Predeterminado)"
+msgstr "Todos Disponibles (por defecto)"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "128-bit (most secure)"
-msgstr "128-bit (más segura)"
+msgstr "128-bit (más seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "40-bit (less secure)"
-msgstr "40-bit (menos segura)"
+msgstr "40-bit (menos seguro)"
 
 #: ../../network/nm_setting_virtual_key.go:176
 msgid "Secure (default)"
-msgstr "Segura (Predeterminada)"
+msgstr "Asegurar (por defecto)"
 
 #: ../../network/nm_setting_virtual_key.go:177
 msgid "Weak"
-msgstr "Debil"
+msgstr "Débil"
 
 #: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
@@ -1046,11 +1047,11 @@ msgstr "Contraseña"
 
 #: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
-msgstr ""
+msgstr "Certificados con contraseña (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
-msgstr "Clave Estatica"
+msgstr "Clave Estática"
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
 #: ../../network/nm_setting_vpn_openvpn.go:431
@@ -1068,7 +1069,7 @@ msgstr "1"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "Predeterminado"
+msgstr "Por defecto"
 
 #: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
@@ -1184,7 +1185,7 @@ msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
-msgstr "Cisco (Predeterminado)"
+msgstr "Cisco (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
@@ -1192,11 +1193,11 @@ msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T Cuando este Disponible (Predeterminado)"
+msgstr "NAT-T cuando esté disponible (por defecto) "
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
-msgstr "NAT-T Siempre"
+msgstr "NAT-T siempre"
 
 #: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
@@ -1209,7 +1210,7 @@ msgstr "Grupo DH 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
-msgstr "Grupo DH 2 (Predeterminado)"
+msgstr "Grupo DH 2 (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:264
 #: ../../network/nm_setting_vpn_vpnc.go:272
@@ -1218,7 +1219,7 @@ msgstr "Grupo DH 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
-msgstr "Servidor (Predeterminado)"
+msgstr "Servidor (por defecto)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
@@ -1234,15 +1235,15 @@ msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
-msgstr "AP-Hotspot"
+msgstr "Hotspot-AP"
 
 #: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
-msgstr "A (5 Ghz)"
+msgstr "A (5 GHz)"
 
 #: ../../network/nm_setting_wireless.go:299
 msgid "BG (2.4 GHz)"
-msgstr "BG (2.4 Ghz)"
+msgstr "BG (2.4 GHz)"
 
 #: ../../network/nm_setting_wireless_security.go:189
 msgid "WEP"
@@ -1254,15 +1255,15 @@ msgstr "WEP Dinámica"
 
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
-msgstr "Ad-Hoc WPA-PSK"
+msgstr "WPA-PSK Ad-Hoc"
 
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infraestructura"
+msgstr "Infraestructura WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA Empresarial"
+msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
@@ -1286,130 +1287,130 @@ msgstr "Abrir"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr ""
+msgstr "Estado del dispositivo modificado por motivo desconocido."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr ""
+msgstr "Estado del dispositivo modificado."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "El dispositivo actualmente esta gestionado."
+msgstr "El dispositivo ahora está administrado."
 
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "El dispositivo ya no esta gestionado."
+msgstr "El dispositivo ya no está administrado."
 
 #: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
-msgstr ""
+msgstr "El dispositivo no ha sido preparado para la configuración."
 
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr ""
+msgstr "La configuración de IP no puede reservarse (dirección no disponible, tiempo de espera superado, etc.)"
 
 #: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "La configuración IP ya no es valida."
+msgstr "La configuración IP ya no es válida."
 
 #: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Las contraseñas son requeridas, pero no previstas."
+msgstr "Las contraseñas se solicitaron pero no fueron proporcionadas."
 
 #: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr ""
+msgstr "El suplicante 802.1X fue desconectado del punto de acceso o del servidor de autenticación."
 
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr ""
+msgstr "La configuración del suplicante 802.1X falló."
 
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "La peticion 802.1X se detuvo o falló inesperadamente."
+msgstr "El suplicante 802.1X se cerró o falló inesperadamente."
 
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr ""
+msgstr "El suplicante 802.1X tomó demasiado tiempo para autenticarse."
 
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "El inicio del servicio PPP a fallado por superar el tiempo permitido."
+msgstr "El servicio PPP falló al iniciar dentro del tiempo permitido."
 
 #: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
-msgstr "El servicio PPP a sido desconectado inesperadamente."
+msgstr "El servicio PPP se desconectó inesperadamente."
 
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "El servicio PPP se detuvo o falló inesperadamente."
+msgstr "El servicio PPP se cerró o falló inesperadamente."
 
 #: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "El inicio del servicio DHCP a fallado por superar el tiempo permitido."
+msgstr "El servicio DHCP falló al iniciar dentro del tiempo permitido."
 
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "El servicio DHCP a reportado un error inesperado."
+msgstr "El servicio DHCP reportó un error inesperado."
 
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "El servicio DHCP se detuvo o falló inesperadamente."
+msgstr "El servicio DHCP se cerró o falló inesperadamente."
 
 #: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr "El servicio de conexión compartida fallo al iniciar."
+msgstr "El servicio de conexión compartida falló al iniciar."
 
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "El servicio de conexión compartida se detuvo o falló inesperadamente."
+msgstr "El servicio de conexión compartida se cerró o falló inesperadamente."
 
 #: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "El servicio de IP Automática fallo al iniciar."
+msgstr "El servicio AutoIP falló al iniciar."
 
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "El servicio de IP Automática a reportado un error inesperado."
+msgstr "El servicio AutoIP reportó un error inesperado."
 
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "El servicio de IP Automatica se detuvo o falló inesperadamente."
+msgstr "El servicio AutoIP ser cerró o falló inesperadamente."
 
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Marcando falló, las lineas están ocupadas."
+msgstr "El marcado falló debido a que las líneas están ocupadas."
 
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Marcando falló, sin tono de marcado."
+msgstr "El marcado falló porque no hay tono."
 
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Marcando falló, problemas con el operador."
+msgstr "El marcado falló debido a un problema con el operador."
 
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Marcado interrumpido."
+msgstr "El marcado superó el tiempo de espera."
 
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Marcado fallo."
+msgstr "El marcado falló."
 
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "El inicio del módem fallo."
+msgstr "Inicialización del módem fallida."
 
 #: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "Fallo al seleccionar el APN GSM especificado."
+msgstr "Falla al seleccionar el APN GSM seleccionado."
 
 #: ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "No se encontraron redes."
+msgstr "No se buscaron redes."
 
 #: ../../network/state_handler.go:65
 msgid "Network registration was denied."
@@ -1417,75 +1418,75 @@ msgstr "El registro de red fue denegado."
 
 #: ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "El registro de red fue interrumpido."
+msgstr "El registro en la red superó el tiempo de espera."
 
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr ""
+msgstr "El registro en la red GSM seleccionada falló."
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "Comprobación del PIN fallo."
+msgstr "Comprobación de PIN fallida."
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr ""
+msgstr "El firmware del dispositivo no está disponible."
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "El dispositivo fue removido."
+msgstr "El dispositivo fue desconectado."
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "El Gestor de Red fue suspendido."
+msgstr "NetworkManager entró en modo suspendido."
 
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "La conexión activa del dispositivo fue removida o desapareció."
+msgstr "La conexión activa del dispositivo fue eliminada o desapareció."
 
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr ""
+msgstr "Un usuario o cliente solicitó la desconexión."
 
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "El operador/conexión del dispositivo a cambiado."
+msgstr "El operador/enlace del dispositivo cambió."
 
 #: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr "La conexión existente del dispositivo fue usurpada."
+msgstr "La conexión existente del dispositivo fue asumida."
 
 #: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
-msgstr ""
+msgstr "El suplicante 802.1x está disponible."
 
 #: ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "El módem no pudo ser encontrado."
+msgstr "El módem no fue encontrado."
 
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "La conexión Bluetooth fue interrumpida o fallo."
+msgstr "La conexión Bluetooth tomó demasiado tiempo o falló."
 
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr ""
+msgstr "La tarjeta SIM del módem GSM no fue insertada."
 
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr ""
+msgstr "PIN SIM solicitado por el Módem GSM."
 
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr ""
+msgstr "PUK SIM solicitado por el Módem GSM."
 
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr ""
+msgstr "Tarjeta SIM incorrecta para el Módem GSM"
 
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "El dispositivo InfiniBand no soporta el modo al que fue conectado."
+msgstr "El dispositivo InifiBand no soporta el estado conectado."
 
 #: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
@@ -1493,39 +1494,39 @@ msgstr "Una dependencia de la conexión falló."
 
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problema con la Ethernet RFC 2684 sobre el puente ADSL."
+msgstr "Problema con RFC 2684 Ethernet sobre el puente ADSL."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "ModemManager no se ejecutó o se cerró inesperadamente."
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "La red Wi-Fi 802.11 no pudo ser encontrada."
+msgstr "La red 802.11 Wi-Fi no fue encontrada."
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "Una conexión secundaria de la conexión principal a fallado."
+msgstr "Una conexión secundara de la conexión base falló."
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr ""
+msgstr "El cable de red está desconectado."
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr ""
+msgstr "La activación de la conexión VPN falló por motivo desconocido."
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr ""
+msgstr "Activar la conexión VPN falló."
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr ""
+msgstr "La conexión VPN cambió su estado debido a la desconexión de usuarios."
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr ""
+msgstr "La conexión VPN cambió de estado debido a la desconexión de dispositivos."
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
@@ -1533,15 +1534,15 @@ msgstr "Servicio VPN detenido."
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
-msgstr "La configuración IP de la conexión VPN no fue valida."
+msgstr "La configuración IP de la conexión VPN es inválida."
 
 #: ../../network/state_handler.go:100
 msgid "The connection attempt to VPN service timed out."
-msgstr "El intento de conexión del servicio VPN se ha interrumpido."
+msgstr "El intento de conexión al servicio VPN superó el tiempo de espera."
 
 #: ../../network/state_handler.go:101
 msgid "The VPN service start timed out."
-msgstr "El servicio VPN interrumpio el inicio."
+msgstr "El inicio del servicio VPN superó el tiempo de espera."
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service failed to start."
@@ -1549,15 +1550,15 @@ msgstr "El servicio VPN falló al iniciar."
 
 #: ../../network/state_handler.go:103
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "La contraseña necesaria para la conexión VPN no fue prevista."
+msgstr "La contraseña necesaria para la conexión VPN no fue ingresada."
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "Falló la autenticación en el servidor VPN."
+msgstr "La autenticación al servidor VPN falló."
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
-msgstr "La conexión fue eliminada desde la configuración."
+msgstr "La conexión fue eliminada de la configuración."
 
 #: ../../network/utils_nm.go:170
 msgid "Unknown"
@@ -1565,60 +1566,60 @@ msgstr "Desconocido"
 
 #: ../../network/utils_notify.go:78
 msgid "Airplan mode enabled."
-msgstr ""
+msgstr "Modo Avión activado."
 
 #: ../../network/utils_notify.go:82
 msgid "You are now offline."
-msgstr ""
+msgstr "Ahora estás desconectado."
 
 #: ../../network/utils_notify.go:86
 msgid "Access Point mode is not supported by this device."
-msgstr "El modo de Punto de Acceso no es soportado por este dispositivo."
+msgstr "El modo Access Point no está soportado por este dispositivo."
 
 #: ../../network/utils_notify.go:90 ../../network/utils_notify.go:95
 #: ../../network/utils_notify.go:99
 msgid "Network"
-msgstr "Red"
+msgstr "Redes"
 
 #: ../../network/utils_notify.go:90
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "El interruptor de la tarjeta WLAN está apagado, por favor enciéndalo cuando lo necesite."
 
 #: ../../network/utils_notify.go:95
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "El proxy del sistema se estableció de correctamente."
 
 #: ../../network/utils_notify.go:99
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "El proxy del sistema fue cancelado."
 
 #: ../../power/upower.go:81
 msgid "Abnormal battery power"
-msgstr ""
+msgstr "Carga de la batería anormal."
 
 #: ../../power/upower.go:81
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "La carga de la batería no puede ser calculada, por favor guarde los documentos importantes y no realice operaciones importantes."
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"
-msgstr "Nivel de Bateria Critico"
+msgstr "Carga de Batería muy Baja"
 
 #: ../../power/upower.go:86
 msgid "Computer has been in suspend mode, please plug in."
-msgstr ""
+msgstr "La computadora estaba en modo suspendido, por favor conéctela."
 
 #: ../../power/upower.go:101
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Por favor conecte la corriente, o el equipo entrará en modo suspendido."
 
 #: ../../power/upower.go:114
 msgid "Battery Low"
-msgstr "Bateria Baja"
+msgstr "Batería baja"
 
 #: ../../power/upower.go:114
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr ""
+msgstr "El equipo entrará en modo suspendido, por favor conéctelo a la corriente ahora."

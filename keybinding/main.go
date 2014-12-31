@@ -43,19 +43,31 @@ var (
 	mediaGSettings *gio.Settings
 )
 
-
 func initGSettings() {
-	bindGSettings  = gio.NewSettings("com.deepin.dde.keybinding")
-	sysGSettings   = gio.NewSettings("com.deepin.dde.keybinding.system")
+	bindGSettings = gio.NewSettings("com.deepin.dde.keybinding")
+	sysGSettings = gio.NewSettings("com.deepin.dde.keybinding.system")
 	mediaGSettings = gio.NewSettings("com.deepin.dde.keybinding.mediakey")
 }
 
-func StartKeyBinding() {
-	var err error
+func finiGSettings() {
+	if bindGSettings != nil {
+		bindGSettings.Unref()
+	}
 
-	if X, err = xgbutil.NewConn(); err != nil {
-		logger.Warning("New XGB Util Failed:", err)
-		panic(err)
+	if sysGSettings != nil {
+		sysGSettings.Unref()
+	}
+
+	if mediaGSettings != nil {
+		mediaGSettings.Unref()
+	}
+}
+
+func StartKeyBinding() error {
+	var err error
+	X, err = xgbutil.NewConn()
+	if err != nil {
+		return err
 	}
 	keybind.Initialize(X)
 	initXRecord()
@@ -67,32 +79,82 @@ func StartKeyBinding() {
 
 	grabKeyPairs(getSystemKeyPairs(), true)
 	grabKeyPairs(getCustomKeyPairs(), true)
-	grabMediaKeys()
+	grabMediaKeys(true)
+
+	return nil
+}
+
+func endKeyBinding() {
+	if X == nil {
+		return
+	}
+
+	stopXRecord()
+	grabMediaKeys(false)
+	grabKeyPairs(getSystemKeyPairs(), false)
+	grabKeyPairs(getCustomKeyPairs(), false)
+	xevent.Quit(X)
+	X = nil
+}
+
+var (
+	_manager *Manager
+)
+
+func finalize() {
+	finiGSettings()
+	endKeyBinding()
+
+	dbus.UnInstallObject(_manager)
+	_manager = nil
+	logger.EndTracing()
 }
 
 func Start() {
+	if _manager != nil {
+		return
+	}
+
 	logger.BeginTracing()
 	initGSettings()
 
-	StartKeyBinding()
-
-	if err := dbus.InstallOnSession(GetManager()); err != nil {
-		logger.Error("Install DBus Failed:", err)
-		panic(err)
+	err := StartKeyBinding()
+	if err != nil {
+		logger.Error("failed start keybinding:", err)
+		logger.EndTracing()
+		finiGSettings()
+		return
 	}
 
-	if err := dbus.InstallOnSession(GetMediaManager()); err != nil {
+	_manager = newManager()
+	if _manager == nil {
+		logger.Error("Create keybinding manager failed")
+		finiGSettings()
+		endKeyBinding()
+		return
+	}
+
+	err = dbus.InstallOnSession(_manager)
+	if err != nil {
 		logger.Error("Install DBus Failed:", err)
-		panic(err)
+		finalize()
+		return
+	}
+
+	err = dbus.InstallOnSession(_manager.mediaKey)
+	if err != nil {
+		logger.Error("Install DBus Failed:", err)
+		finalize()
+		return
 	}
 
 	go xevent.Main(X)
 }
 
 func Stop() {
-	logger.EndTracing()
+	if _manager == nil {
+		return
+	}
 
-	stopXRecord()
-	xevent.Quit(X)
-	dbus.UnInstallObject(GetManager())
+	finalize()
 }

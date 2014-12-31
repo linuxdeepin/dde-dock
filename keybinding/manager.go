@@ -26,8 +26,6 @@ import (
 	"strings"
 )
 
-var _manager *Manager
-
 func (obj *Manager) Reset() bool {
 	list := sysGSettings.ListKeys()
 	for _, key := range list {
@@ -150,26 +148,20 @@ func (obj *Manager) GrabSignalShortcut(shortcut, action string, isGrab bool) {
 }
 
 func (obj *Manager) GrabKbdAndMouse() {
-	go grabKeyboardAndMouse()
+	go grabKeyboardAndMouse(obj)
 }
 
 func newManager() *Manager {
-	obj := &Manager{}
-	obj.idSettingsMap = make(map[int32]*gio.Settings)
+	m := &Manager{}
 
-	obj.listenKeyEvents()
-	obj.listenSettings()
-	obj.listenCompizSettings()
-	obj.listenAllCustomSettings()
-	obj.updateProps()
+	m.mediaKey = &MediaKeyManager{}
+	m.idSettingsMap = make(map[int32]*gio.Settings)
 
-	return obj
-}
+	m.listenKeyEvents()
+	m.listenSettings()
+	m.listenCompizSettings()
+	m.listenAllCustomSettings()
+	m.updateProps()
 
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = newManager()
-	}
-
-	return _manager
+	return m
 }

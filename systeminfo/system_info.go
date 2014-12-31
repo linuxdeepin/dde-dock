@@ -214,8 +214,6 @@ func getDiskCap() (uint64, error) {
 	return diskCap, nil
 }
 
-var _sys *SystemInfo
-
 func NewSystemInfo(l *log.Logger) *SystemInfo {
 	sys := &SystemInfo{}
 
@@ -262,21 +260,31 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 	return sys
 }
 
-func Start() {
-	logger := log.NewLogger("com.deepin.daemon.SystemInfo")
-	logger.BeginTracing()
+var _sysInfo *SystemInfo
 
-	sys := NewSystemInfo(logger)
-	err := dbus.InstallOnSession(sys)
-	if err != nil {
-		logger.Error(err)
-	}
-}
-func Stop() {
-	if _sys == nil {
+func Start() {
+	if _sysInfo != nil {
 		return
 	}
 
-	_sys.logger.EndTracing()
-	_sys = nil
+	logger := log.NewLogger("com.deepin.daemon.SystemInfo")
+	logger.BeginTracing()
+
+	_sysInfo = NewSystemInfo(logger)
+	err := dbus.InstallOnSession(_sysInfo)
+	if err != nil {
+		logger.Error(err)
+		_sysInfo = nil
+		logger.EndTracing()
+		return
+	}
+}
+func Stop() {
+	if _sysInfo == nil {
+		return
+	}
+
+	_sysInfo.logger.EndTracing()
+	dbus.UnInstallObject(_sysInfo)
+	_sysInfo = nil
 }

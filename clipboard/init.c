@@ -27,16 +27,14 @@ static GsdClipboardManager *clip_manager = NULL;
 int
 start_clip_manager()
 {
-	if (clip_manager != NULL) {
-		gsd_clipboard_manager_stop(clip_manager);
-		g_object_unref(G_OBJECT(clip_manager));
-		clip_manager = NULL;
+	if (clip_manager) {
+		return 0;
 	}
 
 	clip_manager = gsd_clipboard_manager_new();
 	if ( clip_manager == NULL ) {
 		g_warning("New Clipboard Manager Failed");
-		return 1;
+		return -1;
 	}
 
 	GError *err = NULL;
@@ -44,7 +42,7 @@ start_clip_manager()
 		g_warning("Start Clipboard Manager Failed: %s", err->message);
 		g_object_unref(G_OBJECT(clip_manager));
 		clip_manager = NULL;
-		return 1;
+		return -1;
 	}
 	/*gtk_main();*/
 

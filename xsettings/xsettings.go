@@ -19,11 +19,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package xsettings_wrapper
+package xsettings
 
 import (
 	"dbus/com/deepin/sessionmanager"
 	"fmt"
+	"sync"
 )
 
 const (
@@ -76,6 +77,25 @@ var (
 
 var _xsettings *sessionmanager.XSettings
 
+var refXSettings, unrefXSetting = func() (func(), func()) {
+	var cnt int = 0
+	var locker sync.Mutex
+
+	return func() {
+			locker.Lock()
+			cnt++
+			locker.Unlock()
+		}, func() {
+			locker.Lock()
+			cnt--
+			if cnt == 0 {
+				sessionmanager.DestroyXSettings(_xsettings)
+				_xsettings = nil
+			}
+			locker.Unlock()
+		}
+}()
+
 // Must be called before using other methods
 func InitXSettings() error {
 	if _xsettings != nil {
@@ -90,8 +110,13 @@ func InitXSettings() error {
 		return err
 	}
 	_xsettings = xsettings
+	refXSettings()
 
 	return nil
+}
+
+func Unref() {
+	unrefXSetting()
 }
 
 func SetString(name string, value string) error {

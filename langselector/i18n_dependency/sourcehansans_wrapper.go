@@ -19,46 +19,34 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package utils
-
-import (
-	"fmt"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
-)
-
-const (
-	WMThemeName    = "theme"
-	WMTitlebarFont = "titlebar-font"
-)
-
-const (
-	wmGSettingsSchema = "org.gnome.desktop.wm.preferences"
-)
+package i18n_dependency
 
 var (
-	errSchemaNotExist = fmt.Errorf("GSettings schema not exist")
+	purgePkgMap = map[string][]string{
+		"zh_CN.UTF-8": []string{
+			"fonts-adobe-source-han-sans-tw",
+			"fonts-adobe-source-han-sans-jp",
+			"fonts-adobe-source-han-sans-kr",
+		},
+		"zh_TW.UTF-8": []string{
+			"fonts-adobe-source-han-sans-cn",
+			"fonts-adobe-source-han-sans-jp",
+			"fonts-adobe-source-han-sans-kr",
+		},
+		"zh_HK.UTF-8": []string{
+			"fonts-adobe-source-han-sans-cn",
+			"fonts-adobe-source-han-sans-jp",
+			"fonts-adobe-source-han-sans-kr",
+		},
+		"ja_JP.UTF-8": []string{
+			"fonts-adobe-source-han-sans-cn",
+			"fonts-adobe-source-han-sans-tw",
+			"fonts-adobe-source-han-sans-kr",
+		},
+		"ko_KR.UTF-8": []string{
+			"fonts-adobe-source-han-sans-cn",
+			"fonts-adobe-source-han-sans-tw",
+			"fonts-adobe-source-han-sans-jp",
+		},
+	}
 )
-
-var _wmSettings *gio.Settings
-
-func InitWMSettings() error {
-	if _wmSettings != nil {
-		return nil
-	}
-
-	if !dutils.IsGSchemaExist(wmGSettingsSchema) {
-		return errSchemaNotExist
-	}
-
-	_wmSettings = gio.NewSettings(wmGSettingsSchema)
-	return nil
-}
-
-func WMSetString(key, value string) bool {
-	if _wmSettings == nil {
-		return false
-	}
-
-	return _wmSettings.SetString(key, value)
-}

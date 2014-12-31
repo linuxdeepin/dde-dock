@@ -25,10 +25,11 @@ import (
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/factory"
 	"pkg.linuxdeepin.com/dde-daemon/appearance/fonts"
+	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"sort"
 	"strings"
 	"sync"
 )
@@ -52,8 +53,6 @@ type Manager struct {
 	SoundThemeList   []string
 	BackgroundList   []string
 	GreeterThemeList []string
-	FontNameList     []string
-	FontMonoList     []string
 	CurrentTheme     *property.GSettingsStringProperty `access:"readwrite"`
 	GreeterTheme     *property.GSettingsStringProperty `access:"readwrite"`
 
@@ -71,7 +70,8 @@ type Manager struct {
 	settings      *gio.Settings
 	gnomeSettings *gio.Settings
 
-	lock sync.Mutex
+	lock    sync.Mutex
+	wLocker sync.Mutex
 }
 
 func NewManager() *Manager {
@@ -93,10 +93,8 @@ func NewManager() *Manager {
 	m.setPropSoundThemeList(m.sound.GetNameStrList())
 	m.setPropGreeterThemeList(m.greeter.GetNameStrList())
 	m.setPropBackgroundList(m.bg.GetNameStrList())
-	m.setPropFontNameList(m.font.GetNameList(fonts.FontTypeStandard))
-	m.setPropFontMonoList(m.font.GetNameList(fonts.FontTypeMonospaced))
 
-	m.settings = gio.NewSettings("com.deepin.dde.personalization")
+	m.settings = NewGSettings("com.deepin.dde.personalization")
 	m.CurrentTheme = property.NewGSettingsStringProperty(
 		m, "CurrentTheme",
 		m.settings, deepinGSKeyTheme)
@@ -104,9 +102,8 @@ func NewManager() *Manager {
 		m, "GreeterTheme",
 		m.settings, deepinGSKeyGreeter)
 
-	if dutils.IsGSchemaExist("org.gnome.desktop.background") {
-		m.gnomeSettings = gio.NewSettings("org.gnome.desktop.background")
-	}
+	m.gnomeSettings = CheckAndNewGSettings("org.gnome.desktop.background")
+
 	m.themeObjMap = make(map[string]*Theme)
 	m.listenGSettings()
 	m.rebuildThemes()
@@ -171,16 +168,18 @@ func (m *Manager) destroy() {
 	m.sound.Destroy()
 	m.bg.Destroy()
 	m.greeter.Destroy()
+	m.font.Destroy()
 
-	m.settings.Unref()
-	if m.gnomeSettings != nil {
-		m.gnomeSettings.Unref()
-	}
+	Unref(m.settings)
+	Unref(m.gnomeSettings)
 
+	// if dbus.InstallOnSession() not called, what will happen?
+	// Now(2014.14.18) it is ok.
 	dbus.UnInstallObject(m)
 }
 
 func sortNameByDeepin(list []string) []string {
+	sort.Strings(list)
 	deepinList := []string{}
 	tmpList := []string{}
 

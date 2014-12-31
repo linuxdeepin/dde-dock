@@ -53,6 +53,10 @@ func (m *Manager) refrashDiskInfoList() {
 	}
 }
 
+func (m *Manager) endDiskrefrash() {
+	close(m.quitFlag)
+}
+
 func (m *Manager) listenSignalChanged() {
 	monitor.Connect("mount-added", func(volumeMonitor *gio.VolumeMonitor, mount *gio.Mount) {
 		// Judge whether the property 'mount_and_open' set true

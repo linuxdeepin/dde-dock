@@ -36,16 +36,6 @@ func init() {
 	C.Suite(&testWrapper{})
 }
 
-func (*testWrapper) TestInstallPkg(c *C.C) {
-	err := InstallDependentPackages("en_US.UTF-8",
-		"testdata/pkg_depends.json",
-		"testdata/support_languages.json")
-	//c.Check(err, C.Not(C.NotNil))
-	if err != nil {
-		c.Skip(err.Error())
-	}
-}
-
 func (*testWrapper) TestGetPkgList(c *C.C) {
 	list, err := getPkgDependList("testdata/pkg_depends.json")
 	c.Check(err, C.Not(C.NotNil))
@@ -72,39 +62,57 @@ type pkgDependInfoTest struct {
 func (*testWrapper) TestParsePkgInfo(c *C.C) {
 	//zh_CN.UTF-8: zh-hans, CN, ""
 	infos := []pkgDependInfoTest{
-		pkgDependInfoTest{
+		{
+			&dependentPkgInfo{"zh-hans", 0,
+				"", "fonts-adobe-source-han-sans-cn"},
+			"zh_CN.UTF-8",
+			[]string{"fonts-adobe-source-han-sans-cn"},
+		},
+		{
+			&dependentPkgInfo{"zh-hant", 0,
+				"", "fonts-adobe-source-han-sans-tw"},
+			"zh_TW.UTF-8",
+			[]string{"fonts-adobe-source-han-sans-tw"},
+		},
+		{
+			&dependentPkgInfo{"ja", 0,
+				"", "fonts-adobe-source-han-sans-jp"},
+			"ja_JP.UTF-8",
+			[]string{"fonts-adobe-source-han-sans-jp"},
+		},
+		{
 			&dependentPkgInfo{"", 1,
 				"", "language-pack-"},
 			"zh_CN.UTF-8",
 			[]string{"language-pack-zh-hans"},
 		},
-		pkgDependInfoTest{
+		{
 			&dependentPkgInfo{"", 2,
 				"firefox", "firefox-locale-"},
 			"zh_CN.UTF-8",
 			[]string{"firefox-locale-zh-hans",
 				"firefox-locale-zh-hans-cn"},
 		},
-		pkgDependInfoTest{
+		{
 			&dependentPkgInfo{"", 3,
 				"calligra-libs", "calligra-l10n-"},
 			"zh_CN.UTF-8",
 			[]string{"calligra-l10n-zh-hans",
 				"calligra-l10n-zh-hanscn"},
 		},
-		pkgDependInfoTest{
+		{
 			&dependentPkgInfo{"fi", 0,
 				"epiphany", "xul-ext-mozvoikko"},
 			"zh_CN.UTF-8",
 			[]string{"xul-ext-mozvoikko"},
 		},
-		pkgDependInfoTest{
+		{
 			&dependentPkgInfo{"", 5,
 				"xxxx", "xxxxxxxxxxxxx"},
 			"zh_CN.UTF-8",
 			nil,
 		},
-		pkgDependInfoTest{
+		{
 			nil,
 			"zh_CN.UTF-8",
 			nil,

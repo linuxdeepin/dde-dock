@@ -48,7 +48,7 @@ func Start() {
 	obj := GetManager()
 	if err := dbus.InstallOnSystem(obj); err != nil {
 		logger.Error("Install DBus Failed:", err)
-		panic(err)
+		return
 	}
 
 	obj.updateAllUserInfo()

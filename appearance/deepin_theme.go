@@ -118,6 +118,9 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	if err != nil {
 		return false
 	}
+
+	m.wLocker.Lock()
+	defer m.wLocker.Unlock()
 	ok := dutils.WriteStringToKeyFile(filename, contents)
 	if newFile && ok {
 		touchFile()
@@ -199,7 +202,7 @@ func (m *Manager) newThemeInfo(themeType string, value interface{}) *Theme {
 			FontMono:    t.FontMono,
 			FontSize:    t.FontSize,
 		}
-	case "font-name":
+	case "font-standard":
 		return &Theme{
 			GtkTheme:    t.GtkTheme,
 			IconTheme:   t.IconTheme,

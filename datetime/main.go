@@ -28,7 +28,16 @@ import (
 
 var _date *DateTime
 
+func finalize() {
+	_date.destroy()
+	_date = nil
+}
+
 func Start() {
+	if _date != nil {
+		return
+	}
+
 	var logger = log.NewLogger(dbusSender)
 
 	logger.BeginTracing()
@@ -36,11 +45,13 @@ func Start() {
 	_date = NewDateTime(logger)
 	if _date == nil {
 		logger.Error("Create DateTime Failed")
+		logger.EndTracing()
 		return
 	}
 	err := dbus.InstallOnSession(_date)
 	if err != nil {
 		logger.Error("Install DBus For DateTime Failed")
+		finalize()
 		return
 	}
 }
@@ -50,7 +61,5 @@ func Stop() {
 		return
 	}
 
-	_date.Destroy()
-	dbus.UnInstallObject(_date)
-	_date = nil
+	finalize()
 }

@@ -95,7 +95,6 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.nameInfo, xid)
 	delete(m.notifyInfo, xid)
 	delete(m.md5Info, xid)
-	dbus.Emit(m, "Removed", uint32(xid))
 	var newIcons []uint32
 	for _, id := range m.TrayIcons {
 		if id != uint32(xid) {
@@ -103,6 +102,7 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 		}
 	}
 	m.TrayIcons = newIcons
+	dbus.Emit(m, "Removed", uint32(xid))
 }
 
 func (m *TrayManager) GetName(xid uint32) string {
@@ -118,7 +118,7 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 		if md5 := icon2md5(xid); !md5Equal(m.md5Info[xid], md5) {
 			m.md5Info[xid] = md5
 			dbus.Emit(m, "Changed", uint32(xid))
-			logger.Infof("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
+			logger.Debugf("handleTrayDamage: %s(%d) changed (%v)", m.nameInfo[xid], xid, md5)
 		}
 	}
 }
@@ -278,15 +278,19 @@ func (m *TrayManager) tryOwner() bool {
 func (m *TrayManager) Unmanage() bool {
 	reply, err := m.getSelectionOwner()
 	if err != nil {
-		logger.Info("get selection owner failed:", err)
+		logger.Warning("get selection owner failed:", err)
 		return false
 	}
 	if reply.Owner != m.owner {
-		logger.Info("not selection owner")
+		logger.Warning("not selection owner")
 		return false
 	}
 
 	m.destroyOwnerWindow()
+	trayicons := m.TrayIcons
+	for _, icon := range trayicons {
+		m.removeTrayIcon(xproto.Window(icon))
+	}
 	timeStamp, _ := ewmh.WmUserTimeGet(TrayXU, m.owner)
 	return xproto.SetSelectionOwnerChecked(
 		TrayXU.Conn(),

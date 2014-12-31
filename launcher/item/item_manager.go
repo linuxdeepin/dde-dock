@@ -1,13 +1,12 @@
 package item
 
 import (
+	storeApi "dbus/com/deepin/store/api"
+	"encoding/json"
 	"fmt"
-	"os"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"sync"
 	"time"
 )
@@ -138,136 +137,76 @@ func (m *ItemManager) GetAllFrequency(f RateConfigFileInterface) (infos map[Item
 	return
 }
 
-type _Time struct {
-	Time int64
-	Id   ItemId
-}
-
-func (m *ItemManager) GetAllTimeInstalled() (infos map[ItemId]int64) {
-	infos = map[ItemId]int64{}
-	dataChan := make(chan ItemInfoInterface)
-	go func() {
-		for _, item := range m.itemTable {
-			dataChan <- item
-		}
-		close(dataChan)
-	}()
-
-	const N = 20
-	var wg sync.WaitGroup
-	wg.Add(N)
-	timeChan := make(chan _Time)
-	for i := 0; i < N; i++ {
-		go func() {
-			for item := range dataChan {
-				// NOTE:
-				// the real installation time is hard to get.
-				// using modification time as install time for now.
-
-				// pkgName, err := GetPkgName(m.soft, item.Path())
-				// if err != nil {
-				// 	timeChan <- _Time{Id: item.Id(), Time: 0}
-				// 	continue
-				// }
-				// t := GetTimeInstalled(pkgName)
-
-				fi, err := os.Stat(item.Path())
-				if err != nil {
-					timeChan <- _Time{Id: item.Id(), Time: 0}
-					continue
-				}
-				fi.ModTime()
-				t := fi.ModTime().Unix()
-				timeChan <- _Time{Id: item.Id(), Time: t}
-			}
-			wg.Done()
-		}()
+func (m *ItemManager) GetAllTimeInstalled() (map[ItemId]int64, error) {
+	infos := map[ItemId]int64{}
+	var err error
+	for id, _ := range m.itemTable {
+		infos[id] = 0
 	}
 
-	go func() {
-		wg.Wait()
-		close(timeChan)
-	}()
+	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+	if err != nil {
+		return infos, fmt.Errorf("create store api failed: %v", err)
+	}
+	defer storeApi.DestroyDStoreDesktop(store)
 
-	for t := range timeChan {
-		infos[t.Id] = t.Time
+	datasStr, err := store.GetAllDesktops()
+	if err != nil {
+		return infos, fmt.Errorf("get all desktops' info failed: %v", err)
 	}
 
-	return
+	datas := [][]interface{}{}
+	err = json.Unmarshal([]byte(datasStr), &datas)
+	if err != nil {
+		return infos, err
+	}
+
+	for _, data := range datas {
+		id := GenId(data[0].(string))
+		t := int64(data[1].(float64))
+		infos[id] = t
+	}
+
+	return infos, err
 }
 
 func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
 	ids := []ItemId{}
-	f := glib.NewKeyFile()
-	defer f.Free()
+	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+	if err != nil {
+		return ids, fmt.Errorf("create store api failed: %v", err)
+	}
+	defer storeApi.DestroyDStoreDesktop(store)
 
-	configFile := ConfigFilePath(_NewSoftwareRecordFile)
-	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
+	dataStr, err := store.GetNewDesktops()
 	if err != nil {
 		return ids, err
 	}
 
-	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
-	for _, id := range newApps {
-		ids = append(ids, ItemId(id))
+	datas := [][]interface{}{}
+	err = json.Unmarshal([]byte(dataStr), &datas)
+	if err != nil {
+		return ids, err
 	}
 
+	for _, data := range datas {
+		id := GenId(data[0].(string))
+		ids = append(ids, id)
+	}
 	return ids, nil
 }
 
 func (self *ItemManager) MarkNew(_id ItemId) error {
-	id := string(_id)
-	configFile := ConfigFilePath(_NewSoftwareRecordFile)
-	if !dutils.IsFileExist(configFile) {
-		f, err := os.Create(configFile)
-		if err != nil {
-			return err
-		}
-		f.Close()
-	}
-
-	f := glib.NewKeyFile()
-	defer f.Free()
-	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
-	if err != nil {
-		return err
-	}
-
-	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
-	if dutils.IsElementInList(id, newApps) {
-		return fmt.Errorf("%q is already the new installed application", id)
-	}
-
-	newApps = append(newApps, id)
-	f.SetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName, newApps)
-	return SaveKeyFile(f, configFile)
+	return nil
 }
 
 func (self *ItemManager) MarkLaunched(_id ItemId) error {
-	id := string(_id)
-	configFile := ConfigFilePath(_NewSoftwareRecordFile)
-
-	f := glib.NewKeyFile()
-	defer f.Free()
-	_, err := f.LoadFromFile(configFile, glib.KeyFileFlagsNone)
+	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {
-		return err
+		return fmt.Errorf("create store api failed: %v", err)
 	}
+	defer storeApi.DestroyDStoreDesktop(store)
 
-	_, newApps, _ := f.GetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName)
-
-	if !dutils.IsElementInList(id, newApps) {
-		return fmt.Errorf("%q is already not the new installed application", id)
-	}
-
-	newIds := []string{}
-	for _, newAppId := range newApps {
-		if newAppId == id {
-			continue
-		}
-		newIds = append(newIds, newAppId)
-	}
-
-	f.SetStringList(_NewSoftwareGroupName, _NewSoftwareKeyName, newIds)
-	return SaveKeyFile(f, configFile)
+	_, ok := store.MarkLaunched(string(_id))
+	return ok
 }

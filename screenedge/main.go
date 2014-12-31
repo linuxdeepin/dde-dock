@@ -91,39 +91,90 @@ func (op *Manager) BottomRightAction() string {
 	return zoneSettings.GetString("right-down")
 }
 
-func Stop() {
-	logger.EndTracing()
-}
-func Start() {
-	logger.BeginTracing()
-
+func initDBusIFC() error {
 	var err error
 	dspObj, err = libdsp.NewDisplay("com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display")
 	if err != nil {
-		logger.Fatal("New Display Failed: ", err)
+		finalizeDBusIFC()
+		return err
 	}
 
 	areaObj, err = libarea.NewXMouseArea("com.deepin.api.XMouseArea",
 		"/com/deepin/api/XMouseArea")
 	if err != nil {
-		logger.Fatal("New XMouseArea Failed: ", err)
+		finalizeDBusIFC()
+		return err
 	}
 
 	launchObj, err = launcher.NewLauncher("com.deepin.dde.launcher",
 		"/com/deepin/dde/launcher")
 	if err != nil {
-		logger.Fatal("New DDE Launcher Failed: ", err)
+		finalizeDBusIFC()
+		return err
 	}
 
-	m := newManager()
-	err = dbus.InstallOnSession(m)
+	return nil
+}
+
+func finalizeDBusIFC() {
+	if dspObj != nil {
+		libdsp.DestroyDisplay(dspObj)
+		dspObj = nil
+	}
+
+	if areaObj != nil {
+		libarea.DestroyXMouseArea(areaObj)
+		areaObj = nil
+	}
+
+	if launchObj != nil {
+		launcher.DestroyLauncher(launchObj)
+		launchObj = nil
+	}
+}
+
+var _m *Manager
+
+func finalize() {
+	finalizeDBusIFC()
+	_m.destroy()
+	_m = nil
+}
+
+func Stop() {
+	if _m == nil {
+		return
+	}
+
+	finalize()
+	logger.EndTracing()
+}
+
+func Start() {
+	if _m != nil {
+		return
+	}
+
+	logger.BeginTracing()
+
+	err := initDBusIFC()
 	if err != nil {
-		logger.Fatal("Install Zone Session Failed: ", err)
+		logger.Error("Create dbus interface failed:", err)
+		logger.EndTracing()
+		return
 	}
 
-	m.SetTopLeft(m.TopLeftAction())
-	m.SetBottomLeft(m.BottomLeftAction())
-	m.SetTopRight(m.TopRightAction())
-	m.SetBottomRight(m.BottomRightAction())
+	_m = newManager()
+	err = dbus.InstallOnSession(_m)
+	if err != nil {
+		logger.Error("Install Zone Session Failed: ", err)
+		finalize()
+		return
+	}
+
+	_m.SetTopLeft(_m.TopLeftAction())
+	_m.SetBottomLeft(_m.BottomLeftAction())
+	_m.SetTopRight(_m.TopRightAction())
+	_m.SetBottomRight(_m.BottomRightAction())
 }

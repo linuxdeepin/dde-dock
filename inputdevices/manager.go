@@ -70,6 +70,18 @@ func NewManager(l *log.Logger) *Manager {
 	return m
 }
 
+func (m *Manager) destroy() {
+	dbus.UnInstallObject(_m.mouse)
+	dbus.UnInstallObject(_m.touchpad)
+	dbus.UnInstallObject(_m.kbd)
+	dbus.UnInstallObject(_m.wacom)
+	dbus.UnInstallObject(_m)
+
+	if _m.logger != nil {
+		_m.logger.EndTracing()
+	}
+}
+
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       dbusSender,

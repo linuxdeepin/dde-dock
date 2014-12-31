@@ -22,9 +22,10 @@
 package i18n_dependency
 
 import (
-	libsoft "dbus/com/linuxdeepin/softwarecenter"
+	"pkg.linuxdeepin.com/dde-daemon/langselector/i18n_dependency/software_proxy"
 	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
 	"strings"
+	"sync"
 )
 
 const (
@@ -42,82 +43,108 @@ const (
 	LanguageListFile       = "/usr/share/dde-daemon/lang/support_languages.json"
 )
 
+var (
+	installLock sync.Mutex
+)
+
 type packagesDepend struct {
 	depend   string
 	packages []string
 }
 
-func InstallDependentPackages(locale, pkgConfig, i18nConfig string) error {
-	softCenter, err := libsoft.NewSoftwareCenter(
-		"com.linuxdeepin.softwarecenter",
-		"/com/linuxdeepin/softwarecenter")
+func InstallDependentPackages(locale string) error {
+	softProxy, err := software_proxy.NewSoftwareProxy()
+	if err != nil {
+		return err
+	}
+	defer softProxy.Destroy()
+
+	packages, err := getAllPackagesToInstall(locale,
+		LanguageListFile, I18nDependencyFilename, softProxy)
+	if err != nil {
+		return err
+	}
+	if len(packages) == 0 {
+		return nil
+	}
+
+	installLock.Lock()
+	defer installLock.Unlock()
+	for _, pkg := range packages {
+		softProxy.SetListenPackages([]string{pkg})
+		err = softProxy.InstallPackage([]string{pkg})
+		if err != nil {
+			softProxy.EndAction()
+			break
+		}
+		softProxy.WaitActionEnd()
+	}
 	if err != nil {
 		return err
 	}
 
+	purgePkgs := purgePkgMap[locale]
+	for _, pkg := range purgePkgs {
+		if !softProxy.IsPackageInstalled(pkg) {
+			continue
+		}
+
+		softProxy.SetListenPackages([]string{pkg})
+		err = softProxy.UninstallPackage([]string{pkg})
+		if err != nil {
+			softProxy.EndAction()
+			break
+		}
+		softProxy.WaitActionEnd()
+	}
+
+	return err
+}
+
+func getAllPackagesToInstall(locale, i18nConfig, pkgConfig string,
+	softProxy *software_proxy.SoftwareProxy) ([]string, error) {
 	dependsList, err := getPkgDependList(pkgConfig)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var packages []string
 	trList := getDependentPkgListByKey("tr", locale,
 		i18nConfig, dependsList)
-	list := getPkgListFromPackagesDependList(trList, softCenter)
+	list := getPkgListFromPackagesDependList(trList, softProxy)
+	packages = append(packages, list...)
+
 	waList := getDependentPkgListByKey("wa", locale,
 		i18nConfig, dependsList)
+	list = getPkgListFromPackagesDependList(waList, softProxy)
 	packages = append(packages, list...)
-	list = getPkgListFromPackagesDependList(waList, softCenter)
+
+	// font
+	fnList := getDependentPkgListByKey("fn", locale,
+		i18nConfig, dependsList)
+	list = getPkgListFromPackagesDependList(fnList, softProxy)
 	packages = append(packages, list...)
 
-	err = softCenter.InstallPkg(packages)
-	return err
-}
-
-func isPkgInstalled(pkg string, softCenter *libsoft.SoftwareCenter) bool {
-	if len(pkg) == 0 {
-		return true
-	}
-
-	ret, _ := softCenter.GetPkgInstalled(pkg)
-	if ret == 1 {
-		return true
-	}
-
-	return false
-}
-
-func isPkgExist(pkg string, softCenter *libsoft.SoftwareCenter) bool {
-	if len(pkg) == 0 {
-		return false
-	}
-
-	list, err := softCenter.IsPkgInCache(pkg)
-	if err != nil {
-		return false
-	}
-
-	for _, p := range list {
-		if pkg == p {
-			return true
-		}
-	}
-
-	return false
+	return packages, nil
 }
 
 func getPkgListFromPackagesDependList(infoList []packagesDepend,
-	softCenter *libsoft.SoftwareCenter) []string {
+	softProxy *software_proxy.SoftwareProxy) []string {
 	var packages []string
 	for _, info := range infoList {
-		if !isPkgInstalled(info.depend, softCenter) {
+		if !softProxy.IsPackageInstalled(info.depend) {
 			continue
 		}
 
 		for _, pkg := range info.packages {
-			if !isPkgExist(pkg, softCenter) {
+			if !softProxy.IsPackageExist(pkg) {
 				continue
 			}
+
+			if softProxy.IsPackageInstalled(pkg) {
+				continue
+			}
+
 			packages = append(packages, pkg)
 		}
 	}

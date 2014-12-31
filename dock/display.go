@@ -19,7 +19,7 @@ func initDisplay() bool {
 	// to avoid get PrimaryRect failed
 	defer func() {
 		if r := recover(); r != nil {
-			logger.Warning("Recovered in initDisplay", r)
+			logger.Warning("Recovered in initDisplay:", r)
 		}
 	}()
 	setDisplayRect(dpy.PrimaryRect.Get())

@@ -26,7 +26,7 @@ import (
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -36,6 +36,8 @@ const (
 
 	systemThumbPath = "/usr/share/personalization/thumbnail/WindowThemes"
 	userThumbPath   = ".local/share/personalization/thumbnail/WindowThemes"
+
+	wmGSettingsSchema = "org.gnome.desktop.wm.preferences"
 )
 
 var (
@@ -70,7 +72,6 @@ func NewGtkTheme(handler func([]string)) *GtkTheme {
 		go gtk.watcher.StartWatch()
 	}
 	xsettings.InitXSettings()
-	InitWMSettings()
 
 	return gtk
 }
@@ -99,8 +100,6 @@ func (gtk *GtkTheme) Set(theme string) error {
 
 	setCompizTheme(theme)
 	setQt4Theme(GetUserQt4Config())
-	setGtk2Theme(GetUserGtk2Config(), theme)
-	setGtk3Theme(GetUserGtk3Config(), theme)
 
 	return nil
 }
@@ -124,6 +123,7 @@ func (gtk *GtkTheme) Destroy() {
 
 	gtk.watcher.EndWatch()
 	gtk.watcher = nil
+	xsettings.Unref()
 }
 
 func (gtk *GtkTheme) GetNameStrList() []string {
@@ -200,15 +200,12 @@ func setThemeViaXSettings(theme string) error {
 }
 
 func setQt4Theme(config string) error {
-	value, ok := dutils.ReadKeyFromKeyFile(config, "Qt", "style", "")
-	if !ok {
-		return errReadKey
-	}
+	value, _ := dutils.ReadKeyFromKeyFile(config, "Qt", "style", "")
 
 	if value == "GTK+" {
 		return nil
 	}
-	ok = dutils.WriteKeyToKeyFile(config, "Qt", "style", "GTK+")
+	ok := dutils.WriteKeyToKeyFile(config, "Qt", "style", "GTK+")
 	if !ok {
 		return errWriteValue
 	}
@@ -217,15 +214,13 @@ func setQt4Theme(config string) error {
 }
 
 func setCompizTheme(theme string) {
-	WMSetString(WMThemeName, theme)
-}
+	settings := CheckAndNewGSettings(wmGSettingsSchema)
+	if settings == nil {
+		return
+	}
 
-func setGtk2Theme(config, theme string) error {
-	return WriteUserGtk2Config(config, "gtk-theme-name", theme)
-}
-
-func setGtk3Theme(config, theme string) error {
-	return WriteUserGtk3Config(config, "gtk-theme-name", theme)
+	settings.SetString("theme", theme)
+	//Unref(settings)
 }
 
 func getDirList() []string {

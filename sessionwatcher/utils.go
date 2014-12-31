@@ -21,7 +21,18 @@
 
 package sessionwatcher
 
+import (
+	"dbus/org/freedesktop/dbus"
+)
+
 func isDBusSenderExist(sender string) bool {
+	dbusDaemon, err := dbus.NewDBusDaemon("org.freedesktop.DBus", "/")
+	if err != nil {
+		logger.Error("Create freedesktop DBus failed:", err)
+		return false
+	}
+	defer dbus.DestroyDBusDaemon(dbusDaemon)
+
 	names, _ := dbusDaemon.ListNames()
 	for _, name := range names {
 		if name == sender {

@@ -74,7 +74,7 @@ const (
 	KEY_TYPE_STRING_LIST = 3
 
 	ACCOUNT_TYPE_STANDARD      = 0
-	ACCOUNT_TYPE_ADMINISTACTOR = 1
+	ACCOUNT_TYPE_ADMINISTRATOR = 1
 
 	GUEST_USER_ICON     = "/var/lib/AccountsService/icons/guest.png"
 	ACCOUNT_CONFIG_FILE = "/var/lib/AccountsService/accounts.ini"

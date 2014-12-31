@@ -81,7 +81,7 @@ func filterSinkInput(c *pulse.SinkInput) bool {
 func (a *Audio) rebuildSinkInputList() {
 	var sinkinputs []*SinkInput
 	for _, s := range a.core.GetSinkInputList() {
-		if filterSinkInput(s) {
+		if s == nil || filterSinkInput(s) {
 			continue
 		}
 		si := NewSinkInput(s)
@@ -98,6 +98,9 @@ func (a *Audio) addSinkInput(idx uint32) {
 	}
 
 	core := a.core.GetSinkInput(idx)
+	if core == nil {
+		return
+	}
 	if filterSinkInput(core) {
 		return
 	}
@@ -128,6 +131,9 @@ func (a *Audio) removeSinkInput(idx uint32) {
 func (a *Audio) rebuildSinkList() {
 	var sinks []*Sink
 	for _, s := range a.core.GetSinkList() {
+		if s == nil {
+			continue
+		}
 		sinks = append(sinks, NewSink(s))
 	}
 	a.setPropSinks(sinks)
@@ -136,6 +142,9 @@ func (a *Audio) rebuildSinkList() {
 func (a *Audio) rebuildSourceList() {
 	var sources []*Source
 	for _, s := range a.core.GetSourceList() {
+		if s == nil {
+			continue
+		}
 		obj := NewSource(s)
 		if len(obj.Ports) > 0 {
 			sources = append(sources, obj)
@@ -145,8 +154,10 @@ func (a *Audio) rebuildSourceList() {
 }
 func (a *Audio) update() {
 	sinfo := a.core.GetServer()
-	a.setPropDefaultSink(sinfo.DefaultSinkName)
-	a.setPropDefaultSource(sinfo.DefaultSourceName)
+	if sinfo != nil {
+		a.setPropDefaultSink(sinfo.DefaultSinkName)
+		a.setPropDefaultSource(sinfo.DefaultSourceName)
+	}
 
 	a.rebuildSinkList()
 	a.rebuildSourceList()

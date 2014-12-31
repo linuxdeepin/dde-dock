@@ -52,6 +52,4 @@ func (*testWrapper) TestInfoList(c *C.C) {
 
 func (*testWrapper) TestWriteConfig(c *C.C) {
 	c.Check(setQt4Theme("testdata/Trolltech.conf"), C.Not(C.NotNil))
-	c.Check(setGtk2Theme("testdata/gtkrc-2.0", "Deepin"), C.Not(C.NotNil))
-	c.Check(setGtk3Theme("testdata/settings.ini", "Deepin"), C.Not(C.NotNil))
 }

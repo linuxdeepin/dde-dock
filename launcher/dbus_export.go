@@ -5,11 +5,12 @@ import (
 )
 
 type ItemInfoExport struct {
-	Path       string
-	Name       string
-	Id         ItemId
-	Icon       string
-	CategoryId CategoryId
+	Path          string
+	Name          string
+	Id            ItemId
+	Icon          string
+	CategoryId    CategoryId
+	TimeInstalled int64
 }
 
 func NewItemInfoExport(item ItemInfoInterface) ItemInfoExport {
@@ -17,11 +18,12 @@ func NewItemInfoExport(item ItemInfoInterface) ItemInfoExport {
 		return ItemInfoExport{}
 	}
 	return ItemInfoExport{
-		Path:       item.Path(),
-		Name:       item.Name(),
-		Id:         item.Id(),
-		Icon:       item.Icon(),
-		CategoryId: item.GetCategoryId(),
+		Path:          item.Path(),
+		Name:          item.Name(),
+		Id:            item.Id(),
+		Icon:          item.Icon(),
+		CategoryId:    item.GetCategoryId(),
+		TimeInstalled: item.GetTimeInstalled(),
 	}
 }
 

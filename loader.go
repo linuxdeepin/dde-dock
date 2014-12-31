@@ -48,7 +48,8 @@ func Register(newModule *Module) {
 		}
 	}
 	if newModule.Start == nil || newModule.Stop == nil {
-		logger.Fatal("can't register an incomplete module " + newModule.Name)
+		logger.Error("can't register an incomplete module " + newModule.Name)
+		return
 	}
 	modules = append([]*Module{newModule}, modules...)
 }
