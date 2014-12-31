@@ -295,32 +295,66 @@ func listenAudioSignal() {
 	})
 }
 
-func Start() {
-	logger.BeginTracing()
+func initDBusIFC() error {
 	var err error
 
 	dbusObj, err = libdbus.NewDBusDaemon("org.freedesktop.DBus",
 		"/")
 	if err != nil {
-		logger.Fatal("New DBusDaemon Failed: ", err)
+		logger.Error("New DBusDaemon Failed: ", err)
+		return err
 	}
 
 	mediaKeyObj, err = libkeybind.NewMediaKey(
 		"com.deepin.daemon.KeyBinding",
 		"/com/deepin/daemon/MediaKey")
 	if err != nil {
-		logger.Fatal("New MediaKey Object Failed: ", err)
+		logger.Error("New MediaKey Object Failed: ", err)
+		return err
 	}
 
 	loginObj, err = liblogin1.NewManager("org.freedesktop.login1",
 		"/org/freedesktop/login1")
 	if err != nil {
-		logger.Fatal("New Login1 Manager Failed: ", err)
+		logger.Error("New Login1 Manager Failed: ", err)
+		return err
+	}
+
+	return nil
+}
+
+func finalizeDBusIFC() {
+	if dbusObj != nil {
+		libdbus.DestroyDBusDaemon(dbusObj)
+		dbusObj = nil
+	}
+
+	if mediaKeyObj != nil {
+		libkeybind.DestroyMediaKey(mediaKeyObj)
+		mediaKeyObj = nil
+	}
+
+	if loginObj != nil {
+		liblogin1.DestroyManager(loginObj)
+		loginObj = nil
+	}
+}
+
+func Start() {
+	finalizeDBusIFC()
+
+	logger.BeginTracing()
+	err := initDBusIFC()
+	if err != nil {
+		logger.Error(err)
+		logger.EndTracing()
+		return
 	}
 
 	listenAudioSignal()
 }
 
 func Stop() {
+	finalizeDBusIFC()
 	logger.EndTracing()
 }

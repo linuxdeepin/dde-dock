@@ -318,17 +318,25 @@ func grabKeyPairs(pairs map[string]string, isGrab bool) {
 	}
 }
 
-func grabMediaKeys() {
+func grabMediaKeys(grab bool) {
 	keyList := mediaGSettings.ListKeys()
 	for _, key := range keyList {
 		value := mediaGSettings.GetString(key)
-		grabKeyPress(X.RootWin(), convertKeysToMods(value))
+		if grab {
+			grabKeyPress(X.RootWin(), convertKeysToMods(value))
+		} else {
+			ungrabKey(X.RootWin(), convertKeysToMods(value))
+		}
 	}
 }
 
 var pressKeyStr string
 
-func grabKeyboardAndMouse() {
+func grabKeyboardAndMouse(m *Manager) {
+	if m == nil {
+		return
+	}
+
 	//go func() {
 	X, err := xgbutil.NewConn()
 	if err != nil {
@@ -348,7 +356,7 @@ func grabKeyboardAndMouse() {
 
 	xevent.ButtonPressFun(
 		func(X *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-			dbus.Emit(GetManager(), "KeyReleaseEvent", "")
+			dbus.Emit(m, "KeyReleaseEvent", "")
 			ungrabAllMouseButton(X)
 			keybind.UngrabKeyboard(X)
 			logger.Info("Button Press Event")
@@ -359,7 +367,7 @@ func grabKeyboardAndMouse() {
 		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			value := parseKeyEnvent(X, e.State, e.Detail)
 			pressKeyStr = value
-			dbus.Emit(GetManager(), "KeyPressEvent", value)
+			dbus.Emit(m, "KeyPressEvent", value)
 		}).Connect(X, X.RootWin())
 
 	xevent.KeyReleaseFun(
@@ -369,7 +377,7 @@ func grabKeyboardAndMouse() {
 				pressKeyStr = "Super"
 			}
 
-			dbus.Emit(GetManager(), "KeyReleaseEvent", pressKeyStr)
+			dbus.Emit(m, "KeyReleaseEvent", pressKeyStr)
 			pressKeyStr = ""
 			ungrabAllMouseButton(X)
 			keybind.UngrabKeyboard(X)

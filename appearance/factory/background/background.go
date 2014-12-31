@@ -26,7 +26,6 @@ import (
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"pkg.linuxdeepin.com/lib/graphic"
 	dutils "pkg.linuxdeepin.com/lib/utils"
@@ -88,8 +87,9 @@ func (bg *Background) GetInfoByName(name string) (PathInfo, error) {
 }
 
 func (bg *Background) Set(uri string) error {
-	settings := gio.NewSettings("com.deepin.dde.personalization")
-	defer settings.Unref()
+	settings := NewGSettings("com.deepin.dde.personalization")
+	defer Unref(settings)
+
 	value := settings.GetString(settingsKeyPictureURI)
 	if isBackgroundSame(uri, value) {
 		return nil

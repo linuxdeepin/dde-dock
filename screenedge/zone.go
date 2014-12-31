@@ -23,6 +23,7 @@ package screenedge
 
 import (
 	"os/exec"
+	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
 )
 
@@ -140,9 +141,12 @@ func getEdgeForCommand(cmd string) string {
 	keys := zoneSettings.ListKeys()
 
 	for _, key := range keys {
-		v := zoneSettings.GetString(key)
-		if v == cmd {
-			return key
+		switch key {
+		case "left-up", "left-down", "right-up", "right-down":
+			v := zoneSettings.GetString(key)
+			if v == cmd {
+				return key
+			}
 		}
 	}
 
@@ -168,6 +172,12 @@ func enableOneEdge(edge string) {
 		edgeActionMap["BottomLeft"] = ""
 		edgeActionMap["TopRight"] = ""
 	}
+}
+
+func (m *Manager) destroy() {
+	unregisterZoneArea()
+	finalizeDBusIFC()
+	dbus.UnInstallObject(m)
 }
 
 func newManager() *Manager {

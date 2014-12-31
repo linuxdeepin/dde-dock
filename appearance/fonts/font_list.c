@@ -112,7 +112,7 @@ get_font_info_list (int *num)
 		cnt++;
 	}
 	FcFontSetDestroy(fs);
-	FcFini();
+	FcFini(); // Error: FcCacheFini
 
 	*num = cnt;
 

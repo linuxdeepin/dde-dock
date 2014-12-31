@@ -4,7 +4,7 @@ import (
 	"github.com/howeyc/fsnotify"
 	"io/ioutil"
 	"os"
-	"os/user"
+	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
@@ -14,6 +14,8 @@ import (
 
 type DefaultApps struct {
 	DefaultAppChanged func()
+
+	watcher *dutils.WatchProxy
 }
 
 type AppInfo struct {
@@ -131,78 +133,25 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 	return true
 }
 
-func (dapp *DefaultApps) listenMimeCacheFile() {
-	var (
-		err      error
-		userInfo *user.User
-	)
-
-	mimeWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logger.Error("New Watcher Failed:", err)
-		panic(err)
+func (dapp *DefaultApps) handleMimeFileChanged(ev *fsnotify.FileEvent) {
+	if ev == nil {
+		return
 	}
 
-	userInfo, err = user.Current()
-	if err != nil {
-		logger.Error("Get current user failed:", err)
-		panic(err)
-	}
-
-	mimeFile := userInfo.HomeDir + "/" + MIME_CACHE_FILE
-	if ok := dutils.IsFileExist(mimeFile); !ok {
-		f, err := os.Create(mimeFile)
-		if err != nil {
-			logger.Debugf("Create '%s' failed: %v",
-				mimeFile, err)
-			return
+	if ev.IsDelete() {
+		if dapp.watcher != nil {
+			dapp.watcher.ResetFileListWatch()
 		}
-		f.Close()
+	} else {
+		dbus.Emit(dapp, "DefaultAppChanged")
 	}
-	err = mimeWatcher.Watch(mimeFile)
-	if err != nil {
-		logger.Debug("Watch '%s' Failed: %s",
-			MIME_CACHE_FILE, err)
-		panic(err)
+}
+
+func (dapp *DefaultApps) destroy() {
+	dbus.UnInstallObject(dapp)
+	if dapp.watcher != nil {
+		dapp.watcher.EndWatch()
 	}
-
-	go func() {
-		defer mimeWatcher.Close()
-		for {
-			select {
-			case ev, ok := <-mimeWatcher.Event:
-				if !ok {
-					if mimeWatcher != nil {
-						mimeWatcher.RemoveWatch(mimeFile)
-					}
-					mimeWatcher, _ = fsnotify.NewWatcher()
-					mimeWatcher.Watch(mimeFile)
-					break
-				}
-
-				if ev == nil {
-					break
-				}
-
-				logger.Debug("Watch Event:", ev)
-				if ev.IsDelete() {
-					mimeWatcher.Watch(mimeFile)
-				} else {
-					dbus.Emit(dapp, "DefaultAppChanged")
-				}
-			case err, ok := <-mimeWatcher.Error:
-				logger.Debug("Watch Error:", err)
-				if !ok || err != nil {
-					if mimeWatcher != nil {
-						mimeWatcher.RemoveWatch(mimeFile)
-					}
-					mimeWatcher, _ = fsnotify.NewWatcher()
-					mimeWatcher.Watch(mimeFile)
-					break
-				}
-			}
-		}
-	}()
 }
 
 func NewDefaultApps() *DefaultApps {
@@ -215,14 +164,12 @@ func NewDefaultApps() *DefaultApps {
 
 	dapp := &DefaultApps{}
 
-	var err error
-	mimeWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logger.Debug("Create mime file watcher failed:", err)
-		panic(err)
+	dapp.watcher = dutils.NewWatchProxy()
+	if dapp.watcher != nil {
+		dapp.watcher.SetFileList(getWatchFiles())
+		dapp.watcher.SetEventHandler(dapp.handleMimeFileChanged)
+		go dapp.watcher.StartWatch()
 	}
-
-	dapp.listenMimeCacheFile()
 
 	return dapp
 }
@@ -255,6 +202,26 @@ func NewAppInfoByID(id string) (AppInfo, bool) {
 	appInfo.Exec = exec
 
 	return appInfo, true
+}
+
+func getWatchFiles() []string {
+	homeDir := os.Getenv("HOME")
+	if len(homeDir) == 0 {
+		return nil
+	}
+
+	mimeFile := path.Join(homeDir, MIME_CACHE_FILE)
+	if dutils.IsFileExist(mimeFile) {
+		return []string{mimeFile}
+	}
+
+	fp, err := os.Create(mimeFile)
+	if err != nil {
+		return nil
+	}
+	fp.Close()
+
+	return []string{mimeFile}
 }
 
 func GetLocalLang() string {

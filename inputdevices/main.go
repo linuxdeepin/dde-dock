@@ -32,39 +32,61 @@ const (
 
 var _m *Manager
 
+func finalize() {
+	endDeviceListenThread()
+
+	_m.destroy()
+	_m = nil
+}
+
 func Start() {
+	if _m != nil {
+		return
+	}
+
 	var logger = log.NewLogger("com.deepin.daemon.InputDevices")
 	logger.BeginTracing()
 
 	if !initDeviceChangedWatcher() {
-		logger.Fatal("Init device changed wacher failed")
+		logger.Error("Init device changed wacher failed")
+		logger.EndTracing()
 		return
 	}
 
 	_m := NewManager(logger)
 	err := dbus.InstallOnSession(_m)
 	if err != nil {
-		logger.Fatal("Install Manager DBus Failed:", err)
+		logger.Error("Install Manager DBus Failed:", err)
+		finalize()
+		return
 	}
 
 	err = dbus.InstallOnSession(_m.mouse)
 	if err != nil {
-		logger.Fatal("Install Mouse DBus Failed:", err)
+		logger.Error("Install Mouse DBus Failed:", err)
+		finalize()
+		return
 	}
 
 	err = dbus.InstallOnSession(_m.touchpad)
 	if err != nil {
-		logger.Fatal("Install Touchpad DBus Failed:", err)
+		logger.Error("Install Touchpad DBus Failed:", err)
+		finalize()
+		return
 	}
 
 	err = dbus.InstallOnSession(_m.kbd)
 	if err != nil {
-		logger.Fatal("Install Keyboard DBus Failed:", err)
+		logger.Error("Install Keyboard DBus Failed:", err)
+		finalize()
+		return
 	}
 
 	err = dbus.InstallOnSession(_m.wacom)
 	if err != nil {
-		logger.Fatal("Install Wacom DBus Failed:", err)
+		logger.Error("Install Wacom DBus Failed:", err)
+		finalize()
+		return
 	}
 }
 
@@ -73,16 +95,5 @@ func Stop() {
 		return
 	}
 
-	if _m.logger != nil {
-		_m.logger.EndTracing()
-	}
-
-	endDeviceListenThread()
-
-	dbus.UnInstallObject(_m.mouse)
-	dbus.UnInstallObject(_m.touchpad)
-	dbus.UnInstallObject(_m.kbd)
-	dbus.UnInstallObject(_m.wacom)
-	dbus.UnInstallObject(_m)
-	_m = nil
+	finalize()
 }

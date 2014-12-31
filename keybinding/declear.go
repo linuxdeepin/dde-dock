@@ -104,6 +104,8 @@ type Manager struct {
 
 	KeyReleaseEvent func(string)
 	KeyPressEvent   func(string)
+
+	mediaKey *MediaKeyManager
 }
 
 type MediaKeyManager struct {

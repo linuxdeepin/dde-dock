@@ -25,13 +25,15 @@ import (
 	"fmt"
 	"os/exec"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
 const (
-	FontTypeStandard   int32 = 0
-	FontTypeMonospaced       = 1
+	FontTypeStandard   = "font-standard"
+	FontTypeMonospaced = "font-mono"
+
+	wmGSettingsSchema = "org.gnome.desktop.wm.preferences"
 )
 
 func (font *FontManager) IsStandardFontValid(name string) bool {
@@ -63,7 +65,7 @@ func (font *FontManager) IsFontSizeValid(size int32) bool {
 	return true
 }
 
-func (font *FontManager) Set(fontType int32, name string, size int32) {
+func (font *FontManager) Set(fontType, name string, size int32) {
 	value := fmt.Sprintf("%s %v", name, size)
 	switch fontType {
 	case FontTypeStandard:
@@ -73,12 +75,12 @@ func (font *FontManager) Set(fontType int32, name string, size int32) {
 		}
 
 		xsettings.SetString(xsettings.GtkStringFontName, value)
-		WMSetString(WMTitlebarFont, value)
+		settings := CheckAndNewGSettings(wmGSettingsSchema)
+		if settings != nil {
+			settings.SetString("titlebar-font", value)
+			//Unref(settings)
+		}
 		setQt4Font(GetUserQt4Config(), name, size)
-		WriteUserGtk3Config(GetUserGtk3Config(),
-			"gtk-font-name", value)
-		WriteUserGtk2Config(GetUserGtk2Config(),
-			"gtk-font-name", value)
 	case FontTypeMonospaced:
 		if !font.IsMonospacedFontValid(name) ||
 			!font.IsFontSizeValid(size) {
@@ -101,24 +103,6 @@ func (font *FontManager) SetXft(anti, hinting uint32, hintstyle, rgba string) {
 	xsettings.SetInteger(xsettings.XftBoolHinting, hinting)
 	xsettings.SetString(xsettings.XftStringHintStyle, hintstyle)
 	xsettings.SetString(xsettings.XftStringRgba, rgba)
-
-	WriteUserGtk2Config(GetUserGtk2Config(),
-		"gtk-xft-antialias", fmt.Sprintf("%v", anti))
-	WriteUserGtk2Config(GetUserGtk2Config(),
-		"gtk-xft-hinting", fmt.Sprintf("%v", hinting))
-	WriteUserGtk2Config(GetUserGtk2Config(),
-		"gtk-xft-hintstyle", hintstyle)
-	WriteUserGtk2Config(GetUserGtk2Config(),
-		"gtk-xft-rgba", rgba)
-
-	WriteUserGtk3Config(GetUserGtk3Config(),
-		"gtk-xft-antialias", fmt.Sprintf("%v", anti))
-	WriteUserGtk3Config(GetUserGtk3Config(),
-		"gtk-xft-hinting", fmt.Sprintf("%v", hinting))
-	WriteUserGtk3Config(GetUserGtk3Config(),
-		"gtk-xft-hintstyle", hintstyle)
-	WriteUserGtk3Config(GetUserGtk3Config(),
-		"gtk-xft-rgba", rgba)
 }
 
 func (font *FontManager) GetStyleListByName(name string) []string {
@@ -128,15 +112,21 @@ func (font *FontManager) GetStyleListByName(name string) []string {
 	return getStyleList(name, infos)
 }
 
-func (font *FontManager) GetNameList(fontType int32) []string {
+func (font *FontManager) GetNameList(fontType string) []string {
 	switch fontType {
 	case FontTypeStandard:
+		font.standardList = getStandardFonts()
 		return getNameStrList(font.standardList)
 	case FontTypeMonospaced:
+		font.monospaceList = getMonospaceFonts()
 		return getNameStrList(font.monospaceList)
 	}
 
 	return nil
+}
+
+func (font *FontManager) Destroy() {
+	xsettings.Unref()
 }
 
 func setQt4Font(config, name string, size int32) {

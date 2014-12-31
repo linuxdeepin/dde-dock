@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-12 00:56+0000\n"
+"PO-Revision-Date: 2014-12-26 08:41+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Greek (http://www.transifex.com/projects/p/dde-daemon/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -217,7 +217,7 @@ msgstr "Αζόρες"
 
 #: ../../datetime/timezone/deepin_list.go:144
 msgid "Cape Verde"
-msgstr ""
+msgstr "Πράσινο Ακρωτήριο"
 
 #: ../../datetime/timezone/deepin_list.go:148
 msgid "London"
@@ -237,7 +237,7 @@ msgstr "Μονρόβια"
 
 #: ../../datetime/timezone/deepin_list.go:164
 msgid "Madrid"
-msgstr ""
+msgstr "Μαδρίτη"
 
 #: ../../datetime/timezone/deepin_list.go:168
 msgid "Paris"

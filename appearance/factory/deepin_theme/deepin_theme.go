@@ -26,7 +26,6 @@ import (
 	"os"
 	"path"
 	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 )
 
@@ -86,7 +85,9 @@ func (dtheme *DeepinTheme) Set(name string) error {
 		return errInvalidTheme
 	}
 
-	settings := gio.NewSettings("com.deepin.dde.personalization")
+	settings := NewGSettings("com.deepin.dde.personalization")
+	defer Unref(settings)
+
 	value := settings.GetString("current-theme")
 	if value == name {
 		return nil

@@ -113,7 +113,7 @@ func deleteStrFromList(ele string, list []string) []string {
 
 func compareStrList(list1, list2 []string) ([]string, int) {
 	if isStrListEqual(list1, list2) {
-		return []string{}, 0
+		return nil, 0
 	}
 
 	l1 := len(list1)
@@ -175,7 +175,7 @@ func encodePasswd(words string) string {
 func changePasswd(username, password string) {
 	data, err := ioutil.ReadFile(ETC_SHADOW)
 	if err != nil {
-		panic(err)
+		return
 	}
 	lines := strings.Split(string(data), "\n")
 	index := 0

@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-16 01:51+0000\n"
-"Last-Translator: Adrian Paesani <adrian.paesani@gmail.com>\n"
+"PO-Revision-Date: 2014-12-26 08:41+0000\n"
+"Last-Translator: Mariano Agüero <nero1000000@gmail.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/dde-daemon/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "El nombre de usuario no puede estar vacío."
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "El nombre de usuario debe estar compuesto de caracteres a~z, 0~9, - o _."
+msgstr "El nombre de usuario debe estar compuesto de caracteres a~z, 0~9, - ó _."
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
@@ -278,7 +278,7 @@ msgstr "Nairobi"
 
 #: ../../datetime/timezone/deepin_list.go:204
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "Tehrán"
 
 #: ../../datetime/timezone/deepin_list.go:208
 msgid "Muscat"
@@ -511,7 +511,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Ventana Quake de Terminal"
+msgstr "Ventana de Terminal Quake"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
@@ -519,7 +519,7 @@ msgstr "Cerrar sesión"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
-msgstr "Deshabilitar Panel Táctil"
+msgstr "Deshabilitar Touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -1596,13 +1596,13 @@ msgstr "El proxy del sistema fue cancelado."
 
 #: ../../power/upower.go:81
 msgid "Abnormal battery power"
-msgstr "Energía de la batería anormal."
+msgstr "Carga de la batería anormal."
 
 #: ../../power/upower.go:81
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "La energía de la batería no puede ser calculada, por favor guarde los documentos importantes y no realice operaciones importantes."
+msgstr "La carga de la batería no puede ser calculada, por favor guarde los documentos importantes y no realice operaciones importantes."
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"

@@ -51,7 +51,7 @@ func (m *ClientManager) ActiveWindow(xid uint32) bool {
 func (m *ClientManager) CloseWindow(xid uint32) bool {
 	err := ewmh.CloseWindow(XU, xproto.Window(xid))
 	if err != nil {
-		logger.Warning("Actice window failed:", err)
+		logger.Warning("Close window failed:", err)
 		return false
 	}
 	return true
@@ -186,6 +186,7 @@ func isWindowOverlapDock(xid xproto.Window) bool {
 	rect, err := win.DecorGeometry()
 	if err != nil {
 		logger.Warning(err)
+		return false
 	}
 
 	winX := int32(rect.X())

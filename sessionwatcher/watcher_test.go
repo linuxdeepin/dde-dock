@@ -20,32 +20,3 @@
  **/
 
 package sessionwatcher
-
-/*
-import (
-	"dbus/org/freedesktop/dbus"
-	C "launchpad.net/gocheck"
-	"testing"
-)
-
-type testWrap struct{}
-
-func Test(t *testing.T) {
-	C.TestingT(t)
-}
-
-func init() {
-	var err error
-	if dbusDaemon, err = dbus.NewDBusDaemon("org.freedesktop.DBus", "/"); err != nil {
-		dbusDaemon = nil
-		return
-	}
-
-	C.Suite(&testWrap{})
-}
-
-func (t *testWrap) TestDBusExist(c *C.C) {
-	c.Check(isDBusSenderExist("org.freedesktop.DBus"), C.Equals, true)
-	c.Check(isDBusSenderExist("1234235425346464564/32"), C.Equals, false)
-}
-*/

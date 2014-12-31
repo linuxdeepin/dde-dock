@@ -25,6 +25,8 @@ type XMouseAreaProxyer struct {
 	area    XMouseAreaInterface
 	areaId  string
 	idValid bool
+
+	InvalidId func()
 }
 
 func (a *XMouseAreaProxyer) GetDBusInfo() dbus.DBusInfo {
@@ -42,28 +44,28 @@ func NewXMouseAreaProxyer(area XMouseAreaInterface, err error) (*XMouseAreaProxy
 	return &XMouseAreaProxyer{area: area, idValid: false}, nil
 }
 
-func (a *XMouseAreaProxyer) connectMotionInto(callback func(int32, int32, string)) func() {
-	return a.area.ConnectCursorInto(func(x, y int32, id string) {
+func (a *XMouseAreaProxyer) connectHandler(callback func(int32, int32, string)) func(x, y int32, id string) {
+	return func(x, y int32, id string) {
 		a.lock.Lock()
-		defer a.lock.Unlock()
 		if !a.idValid || id != a.areaId {
-			logger.Warningf("valid: %v, event id: %v, areaId: %v", a.idValid, id, a.areaId)
+			if !a.idValid {
+				dbus.Emit(a, "InvalidId")
+			}
+			logger.Debugf("valid: %v, event id: %v, areaId: %v", a.idValid, id, a.areaId)
+			a.lock.Unlock()
 			return
 		}
+		a.lock.Unlock()
 		callback(x, y, id)
-	})
+	}
+}
+
+func (a *XMouseAreaProxyer) connectMotionInto(callback func(int32, int32, string)) func() {
+	return a.area.ConnectCursorInto(a.connectHandler(callback))
 }
 
 func (a *XMouseAreaProxyer) connectMotionOut(callback func(int32, int32, string)) func() {
-	return a.area.ConnectCursorOut(func(x, y int32, id string) {
-		a.lock.Lock()
-		defer a.lock.Unlock()
-		if !a.idValid || id != a.areaId {
-			logger.Warningf("valid: %v, event id: %v, areaId: %v", a.idValid, id, a.areaId)
-			return
-		}
-		callback(x, y, id)
-	})
+	return a.area.ConnectCursorOut(a.connectHandler(callback))
 }
 
 func (a *XMouseAreaProxyer) unregister() {

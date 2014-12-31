@@ -50,11 +50,6 @@ func (*testWrapper) TestInfoList(c *C.C) {
 	c.Check(len(list), C.Equals, 1)
 }
 
-func (*testWrapper) TestWriteConfig(c *C.C) {
-	c.Check(setGtk2Theme("testdata/gtkrc-2.0", "Deepin"), C.Not(C.NotNil))
-	c.Check(setGtk3Theme("testdata/settings.ini", "Deepin"), C.Not(C.NotNil))
-}
-
 func (*testWrapper) TestIconHidden(c *C.C) {
 	type testEnable struct {
 		filename string

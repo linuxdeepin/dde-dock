@@ -22,50 +22,66 @@
 package sessionwatcher
 
 import (
-	"dbus/org/freedesktop/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 	"time"
 )
 
 var (
-	Logger     = log.NewLogger("dde-daemon/sessionwatcher")
-	dbusDaemon *dbus.DBusDaemon
-
-	exitTimer chan bool
+	logger = log.NewLogger("dde-daemon/sessionwatcher")
 )
 
-func startTimer() {
+type Manager struct {
+	dock      *Dock
+	appelt    *DockApplet
+	exitTimer chan struct{}
+}
+
+func NewManager() *Manager {
+	m := &Manager{}
+
+	m.dock = NewDock()
+	m.appelt = NewDockApplet()
+	m.exitTimer = make(chan struct{})
+
+	return m
+}
+
+func (m *Manager) destroy() {
+	close(m.exitTimer)
+}
+
+func (m *Manager) startTimer() {
 	for {
 		timer := time.NewTimer(time.Second * 5)
 		select {
 		case <-timer.C:
-			go GetDockApplet_T().restartDockApplet()
-			go GetDDeDock_T().restartDock()
-		case <-exitTimer:
-			close(exitTimer)
+			go m.appelt.restartDockApplet()
+			go m.dock.restartDock()
+		case <-m.exitTimer:
 			return
 		}
 	}
 }
 
-func Start() {
-	Logger.BeginTracing()
+var _m *Manager
 
-	var err error
-	if dbusDaemon, err = dbus.NewDBusDaemon("org.freedesktop.DBus", "/"); err != nil {
-		Logger.Fatal("New DBusDaemon Failed:", err)
+func Start() {
+	if _m != nil {
 		return
 	}
 
-	exitTimer = make(chan bool)
-	go startTimer()
+	logger.BeginTracing()
+
+	_m = NewManager()
+	go _m.startTimer()
 }
 
 func Stop() {
-	Logger.EndTracing()
-	if exitTimer != nil {
-		exitTimer <- true
+	if _m == nil {
+		return
 	}
-	dbus.DestroyDBusDaemon(dbusDaemon)
-	Logger.Debug("Exit sessionwatcher...")
+
+	logger.EndTracing()
+	_m.destroy()
+	_m = nil
 }

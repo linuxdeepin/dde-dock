@@ -45,12 +45,15 @@ func Start() *LangSelector {
 
 	_lang = newLangSelector(logger)
 	if _lang == nil {
-		logger.Fatal("Create LangSelector Failed")
+		logger.Error("Create LangSelector Failed")
+		return nil
 	}
 
 	err := dbus.InstallOnSession(_lang)
 	if err != nil {
-		logger.Fatal("Install Session DBus Failed:", err)
+		logger.Error("Install Session DBus Failed:", err)
+		Stop()
+		return nil
 	}
 
 	_lang.onGenLocaleStatus()

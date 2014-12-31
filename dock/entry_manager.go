@@ -174,7 +174,7 @@ func (m *EntryManager) destroyRuntimeApp(rApp *RuntimeApp) {
 func (m *EntryManager) createNormalApp(id string) {
 	logger.Info("createNormalApp for", id)
 	if _, ok := m.normalApps[id]; ok {
-		logger.Info("normal app for", id, "is exist")
+		logger.Debug("normal app for", id, "is exist")
 		return
 	}
 

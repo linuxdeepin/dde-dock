@@ -310,10 +310,6 @@ func (sh *switchHandler) saveAndDisconnectDevice(devPath dbus.ObjectPath) (err e
 	return
 }
 
-func (sh *switchHandler) isDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
-	return sh.config.getDeviceEnabled(devPath)
-}
-
 func (sh *switchHandler) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
 		if !nmGetWirelessHardwareEnabled() {
@@ -342,13 +338,16 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 		switch nmGetDeviceType(devPath) {
 		case NM_DEVICE_TYPE_WIFI:
 			ssids := nmGetAccessPointSsids(devPath)
-			for _, uuidToActive = range uuids {
+			logger.Debug("available ssids", ssids)
+			for _, uuid := range uuids {
 				// if is wireless connection, check if the access
 				// point exists around, if not, ignore it
-				ssid := string(nmGetConnectionSsidByUuid(uuidToActive))
+				ssid := string(nmGetConnectionSsidByUuid(uuid))
+				logger.Debug("check ssid", ssid, uuid)
 				if !isStringInArray(ssid, ssids) {
 					continue
 				} else {
+					uuidToActive = uuid
 					break
 				}
 			}

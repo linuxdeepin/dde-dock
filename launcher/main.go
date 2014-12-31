@@ -20,10 +20,12 @@ var logger = log.NewLogger("dde-daemon/launcher-daemon")
 var launcher *Launcher = nil
 
 func Stop() {
-	if launcher != nil {
-		launcher.destroy()
-		launcher = nil
+	if launcher == nil {
+		return
 	}
+
+	launcher.destroy()
+	launcher = nil
 
 	logger.EndTracing()
 }
@@ -34,6 +36,10 @@ func startFailed(err error) {
 }
 
 func Start() {
+	if launcher != nil {
+		return
+	}
+
 	var err error
 
 	logger.BeginTracing()

@@ -80,8 +80,10 @@ func (m *Manager) destroyUser(path string) {
 		return
 	}
 
-	u.quitFlag <- true
-	u.watcher.Close()
+	if u.watcher != nil {
+		u.quitFlag <- true
+		u.watcher.Close()
+	}
 	dbus.UnInstallObject(u)
 	u = nil
 	delete(m.pathUserMap, path)
@@ -128,9 +130,15 @@ func (m *Manager) handleUserRemoved(list []string) {
 }
 
 func (obj *Manager) destroy() {
-	obj.infoQuit <- true
-	obj.listQuit <- true
-	obj.infoWatcher.Close()
-	obj.listWatcher.Close()
+	if obj.listWatcher != nil {
+		obj.listQuit <- true
+		obj.listWatcher.Close()
+	}
+
+	if obj.infoWatcher != nil {
+		obj.infoQuit <- true
+		obj.infoWatcher.Close()
+	}
+
 	obj.destroyAllUser()
 }

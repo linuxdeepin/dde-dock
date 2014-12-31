@@ -28,30 +28,40 @@ var (
 	power *Power
 )
 
-func initializeLibs() {
+func initializeLibs() error {
 	var err error
 	upower, err = libupower.NewUpower(UPOWER_BUS_NAME, "/org/freedesktop/UPower")
 	if err != nil {
 		logger.Warning("create dbus upower failed:", err)
+		return err
 	}
 	login1, err = liblogin1.NewManager("org.freedesktop.login1", "/org/freedesktop/login1")
 	if err != nil {
 		logger.Warning("create dbus login1 failed:", err)
+		finalizeLibs()
+		return err
 	}
 	mediaKey, err = libkeybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
 	if err != nil {
 		logger.Warning("create dbus mediaKey failed:", err)
+		finalizeLibs()
+		return err
 	}
 	notifier, err = libnotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	if err != nil {
 		logger.Warning("Can't build org.freedesktop.Notficaations:", err)
+		finalizeLibs()
+		return err
 	}
 	player, err = libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
 	if err != nil {
 		logger.Warning("Can't build com.deepin.api.Sound:", err)
+		finalizeLibs()
+		return err
 	}
 
 	power = NewPower()
+	return nil
 }
 
 func finalizeLibs() {
@@ -84,12 +94,25 @@ func finalizeLibs() {
 var workaround *fullScreenWorkaround
 
 func Start() {
+	if power != nil {
+		return
+	}
+
 	logger.BeginTracing()
 
-	initializeLibs()
+	err := initializeLibs()
+	if err != nil {
+		logger.Error(err)
+		logger.EndTracing()
+		return
+	}
 
-	if err := dbus.InstallOnSession(power); err != nil {
+	err = dbus.InstallOnSession(power)
+	if err != nil {
 		logger.Error("Failed InstallOnSession:", err)
+		finalizeLibs()
+		logger.EndTracing()
+		return
 	}
 
 	workaround = newFullScreenWorkaround()
@@ -97,8 +120,13 @@ func Start() {
 }
 
 func Stop() {
+	if power == nil {
+		return
+	}
+
 	if workaround != nil {
 		workaround.stop()
+		workaround = nil
 	}
 	finalizeLibs()
 	logger.EndTracing()

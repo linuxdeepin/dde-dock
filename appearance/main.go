@@ -32,15 +32,28 @@ var (
 
 var _manager *Manager
 
+func finalize() {
+	logger.EndTracing()
+	_manager.destroy()
+	_manager = nil
+}
+
 func Start() {
+	if _manager != nil {
+		return
+	}
+
+	logger.BeginTracing()
 	_manager = NewManager()
 	if _manager == nil {
 		logger.Error("New Manager Failed")
+		logger.EndTracing()
 		return
 	}
 	err := dbus.InstallOnSession(_manager)
 	if err != nil {
 		logger.Error(err)
+		finalize()
 		return
 	}
 }
@@ -50,7 +63,5 @@ func Stop() {
 		return
 	}
 
-	logger.EndTracing()
-	_manager.destroy()
-	_manager = nil
+	finalize()
 }

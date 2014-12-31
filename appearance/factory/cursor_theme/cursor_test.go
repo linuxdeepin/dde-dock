@@ -49,8 +49,3 @@ func (*testWrapper) TestInfoList(c *C.C) {
 	list := getThemeList(nil, userDirs)
 	c.Check(len(list), C.Equals, 1)
 }
-
-func (*testWrapper) TestWriteConfig(c *C.C) {
-	c.Check(setGtk2Theme("testdata/gtkrc-2.0", "Deepin"), C.Not(C.NotNil))
-	c.Check(setGtk3Theme("testdata/settings.ini", "Deepin"), C.Not(C.NotNil))
-}

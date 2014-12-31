@@ -32,6 +32,10 @@ var (
 )
 
 func Start() {
+	if manager != nil {
+		return
+	}
+
 	logger.BeginTracing()
 
 	initSlices() // initialize slice code
@@ -40,6 +44,7 @@ func Start() {
 	err := dbus.InstallOnSession(manager)
 	if err != nil {
 		logger.Error("register dbus interface failed: ", err)
+		manager = nil
 		return
 	}
 
@@ -51,8 +56,13 @@ func Start() {
 }
 
 func Stop() {
+	if manager == nil {
+		return
+	}
+
 	destroyDbusDaemon()
 	DestroyManager(manager)
 	dbus.UnInstallObject(manager)
+	manager = nil
 	logger.EndTracing()
 }

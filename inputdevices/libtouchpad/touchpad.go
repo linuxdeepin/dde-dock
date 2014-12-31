@@ -312,6 +312,9 @@ func (touchpad *Touchpad) init() {
 	touchpad.leftHanded(touchpad.LeftHanded.Get())
 	touchpad.tapToClick(touchpad.TapClick.Get(),
 		touchpad.LeftHanded.Get())
+	if touchpad.DisableIfTyping.Get() {
+		exec.Command("/bin/sh", "-c", "killall syndaemon").Run()
+	}
 	touchpad.disableTpadWhileTyping(touchpad.DisableIfTyping.Get())
 	touchpad.naturalScroll(touchpad.NaturalScroll.Get(),
 		touchpad.DeltaScroll.Get())

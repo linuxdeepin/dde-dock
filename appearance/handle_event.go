@@ -55,11 +55,8 @@ func (m *Manager) listenGSettings() {
 		return
 	}
 
-	m.gnomeSettings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case "picture-uri":
-			m.bg.Set(m.gnomeSettings.GetString(key))
-		}
+	m.gnomeSettings.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		m.bg.Set(m.gnomeSettings.GetString(key))
 	})
 }
 

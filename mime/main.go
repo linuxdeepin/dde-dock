@@ -1,6 +1,7 @@
 package mime
 
 import (
+	"fmt"
 	"os"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
@@ -60,37 +61,98 @@ func (dapp *DefaultApps) Reset() bool {
 }
 
 func (media *MediaMount) Reset() bool {
-	mediaGSettings.Reset(MEDIA_KEY_AUTOMOUNT)
-	mediaGSettings.Reset(MEDIA_KEY_AUTOOPEN)
-	mediaGSettings.Reset(MEDIA_KEY_AUTORUN_NEVER)
-	mediaGSettings.Reset(MEDIA_KEY_IGNORE)
-	mediaGSettings.Reset(MEDIA_KEY_OPEN_FOLDER)
-	mediaGSettings.Reset(MEDIA_KEY_START_SOFT)
+	media.settings.Reset(MEDIA_KEY_AUTOMOUNT)
+	media.settings.Reset(MEDIA_KEY_AUTOOPEN)
+	media.settings.Reset(MEDIA_KEY_AUTORUN_NEVER)
+	media.settings.Reset(MEDIA_KEY_IGNORE)
+	media.settings.Reset(MEDIA_KEY_OPEN_FOLDER)
+	media.settings.Reset(MEDIA_KEY_START_SOFT)
 
 	return true
 }
 
-func Stop() {
+var (
+	_dapp  *DefaultApps
+	_media *MediaMount
+)
+
+func startDefaultApps() error {
+	_dapp = NewDefaultApps()
+	if _dapp == nil {
+		return fmt.Errorf("Create DefaultApps Failed")
+	}
+
+	err := dbus.InstallOnSession(_dapp)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func endDefaultApps() {
+	if _dapp == nil {
+		return
+	}
+
+	_dapp.destroy()
+	_dapp = nil
+}
+
+func startMediaMount() error {
+	_media = NewMediaMount()
+	if _media == nil {
+		return fmt.Errorf("Create MediaMount Failed")
+	}
+	err := dbus.InstallOnSession(_media)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func endMediaMount() {
+	if _media == nil {
+		return
+	}
+
+	_media.destroy()
+	_media = nil
+}
+
+func finalize() {
+	endDefaultApps()
+	endMediaMount()
 	logger.EndTracing()
 }
 
-func Start() {
-	logger.BeginTracing()
-
-	var err error
-
-	dapp := NewDefaultApps()
-	if dapp == nil {
+func Stop() {
+	if _dapp == nil {
 		return
 	}
-	err = dbus.InstallOnSession(dapp)
-	if err != nil {
-		logger.Fatal("Install Session Failed:", err)
+
+	finalize()
+}
+
+func Start() {
+	if _dapp != nil {
+		return
 	}
 
-	media := NewMediaMount()
-	err = dbus.InstallOnSession(media)
+	logger.BeginTracing()
+	err := startDefaultApps()
 	if err != nil {
-		logger.Fatal("Install Session Failed:", err)
+		logger.Error(err)
+		logger.EndTracing()
+		endDefaultApps()
+		return
+	}
+
+	err = startMediaMount()
+	if err != nil {
+		logger.Error(err)
+		finalize()
+		return
 	}
 }

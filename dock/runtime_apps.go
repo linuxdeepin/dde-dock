@@ -124,7 +124,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 	}
 	logger.Debug(app.Id, "Get Exec from pid")
 	app.exec = find_exec_by_xid(xid)
-	logger.Warning("app get exec:", app.exec)
+	logger.Debug("app get exec:", app.exec)
 }
 
 func actionGenarator(id string) func() {
@@ -133,8 +133,8 @@ func actionGenarator(id string) func() {
 		if !ok {
 			return
 		}
-		logger.Warning("dock item")
-		logger.Info("appid:", app.Id)
+		logger.Debug("dock item")
+		logger.Debug("appid:", app.Id)
 
 		var title, icon, exec string
 		core := app.createDesktopAppInfo()
@@ -176,7 +176,7 @@ func actionGenarator(id string) func() {
 			exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
 		}
 
-		logger.Info("id", app.Id, "title", title, "icon", icon,
+		logger.Debug("id", app.Id, "title", title, "icon", icon,
 			"exec", exec)
 		_, err := DOCKED_APP_MANAGER.Dock(
 			app.Id,
@@ -202,14 +202,14 @@ func (app *RuntimeApp) buildMenu() {
 		itemName,
 		func() {
 			var a *gio.AppInfo
-			logger.Info(itemName)
+			logger.Debug(itemName)
 			core := app.createDesktopAppInfo()
 			if core != nil {
-				logger.Info("DesktopAppInfo")
+				logger.Debug("DesktopAppInfo")
 				a = (*gio.AppInfo)(core.DesktopAppInfo)
 				defer core.Unref()
 			} else {
-				logger.Info("Non-DesktopAppInfo", app.exec)
+				logger.Debug("Non-DesktopAppInfo", app.exec)
 				var err error = nil
 				a, err = gio.AppInfoCreateFromCommandline(
 					app.exec,
@@ -258,7 +258,7 @@ func (app *RuntimeApp) buildMenu() {
 	closeItem := NewMenuItem(
 		Tr("_Close All"),
 		func() {
-			logger.Warning("Close All")
+			logger.Debug("Close All")
 			for xid := range app.xids {
 				ewmh.CloseWindow(XU, xid)
 			}
@@ -303,7 +303,7 @@ func (app *RuntimeApp) buildMenu() {
 		action = actionGenarator(app.Id)
 	}
 
-	logger.Info(app.Id, "New Menu Item:", message)
+	logger.Debug(app.Id, "New Menu Item:", message)
 	dockItem := NewMenuItem(message, action, true)
 	app.coreMenu.AppendItem(dockItem)
 
@@ -328,6 +328,8 @@ func (app *RuntimeApp) HandleMenuItem(id string) {
 
 //func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string { return "" }
 
+// FIXME:
+// to fix mine craft, however, IDLE will get problem.
 func lookthroughProc(name string) uint {
 	name = strings.ToLower(strings.Split(name, " ")[0])
 
@@ -349,7 +351,6 @@ func lookthroughProc(name string) uint {
 		}
 
 		if strings.Contains(strings.ToLower(string(content)), name) {
-			logger.Info("get it")
 			pid, err := strconv.Atoi(dir.Name())
 			if err != nil {
 				logger.Debug("change string to int failed:",

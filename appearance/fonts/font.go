@@ -22,8 +22,7 @@
 package fonts
 
 import (
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	xsettings "pkg.linuxdeepin.com/dde-daemon/xsettings_wrapper"
+	"pkg.linuxdeepin.com/dde-daemon/xsettings"
 )
 
 type FontManager struct {
@@ -36,9 +35,20 @@ func NewFontManager() *FontManager {
 
 	font.standardList, font.monospaceList = getStyleInfoList()
 	xsettings.InitXSettings()
-	InitWMSettings()
 
 	return font
+}
+
+func getStandardFonts() []StyleInfo {
+	standardList, _ := getStyleInfoList()
+
+	return standardList
+}
+
+func getMonospaceFonts() []StyleInfo {
+	_, monoList := getStyleInfoList()
+
+	return monoList
 }
 
 func getNameStrList(infos []StyleInfo) []string {

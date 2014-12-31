@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	"fmt"
 	. "pkg.linuxdeepin.com/dde-daemon/accounts/username_checker"
 	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
@@ -35,7 +36,7 @@ func (obj *Manager) CreateGuestAccount() string {
 
 	shell, err := getNewUserDefaultShell(newUserConfigFile)
 	if err != nil {
-		logger.Warning(err)
+		logger.Debug(err)
 	}
 
 	username := getGuestName()
@@ -66,7 +67,6 @@ func (obj *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
 		return false
 	}
 
-	logger.Infof("Allow guest: %v", allow)
 	if ok := dutils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
 		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, allow); !ok {
 		logger.Error("AllowGuest Failed")
@@ -76,7 +76,7 @@ func (obj *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) bool {
 	return true
 }
 
-func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, accountTyte int32) (string, bool) {
+func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, accountTyte int32) error {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Recover Error In CreateUser:%v",
@@ -85,36 +85,39 @@ func (obj *Manager) CreateUser(dbusMsg dbus.DMessage, name, fullname string, acc
 	}()
 	if ok := polkitAuthWithPid(POLKIT_MANAGER_USER,
 		dbusMsg.GetSenderPID()); !ok {
-		return "", false
+		return fmt.Errorf("Authentication failed")
 	}
 
-	args := []string{}
+	go func() {
+		args := []string{}
 
-	shell, err := getNewUserDefaultShell(newUserConfigFile)
-	if err != nil {
-		logger.Warning(err)
-	}
+		shell, err := getNewUserDefaultShell(newUserConfigFile)
+		if err != nil {
+			logger.Debug(err)
+		}
 
-	args = append(args, "-m")
-	if len(shell) != 0 {
-		args = append(args, "-s")
-		args = append(args, shell)
-	}
-	args = append(args, "-c")
-	args = append(args, fullname)
-	args = append(args, name)
-	if !execCommand(CMD_USERADD, args) {
-		return "", false
-	}
+		args = append(args, "-m")
+		if len(shell) != 0 {
+			args = append(args, "-s")
+			args = append(args, shell)
+		}
+		args = append(args, "-c")
+		args = append(args, fullname)
+		args = append(args, name)
+		if !execCommand(CMD_USERADD, args) {
+			return
+		}
 
-	info, _ := getUserInfoByName(name)
-	if u, ok := obj.pathUserMap[info.Path]; ok {
-		u.setAccountType(accountTyte)
-	}
+		info, _ := getUserInfoByName(name)
+		u, ok := obj.pathUserMap[info.Path]
+		if ok {
+			u.setAccountType(accountTyte)
+		}
 
-	changeFileOwner(name, name, "/home/"+name)
+		changeFileOwner(name, name, "/home/"+name)
+	}()
 
-	return info.Path, true
+	return nil
 }
 
 func (obj *Manager) DeleteUser(dbusMsg dbus.DMessage, name string, removeFiles bool) bool {

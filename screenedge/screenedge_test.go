@@ -39,19 +39,22 @@ func init() {
 	dspObj, err = libdsp.NewDisplay("com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display")
 	if err != nil {
-		logger.Fatal("New Display Failed: ", err)
+		logger.Error("New Display Failed: ", err)
+		return
 	}
 
 	areaObj, err = libarea.NewXMouseArea("com.deepin.api.XMouseArea",
 		"/com/deepin/api/XMouseArea")
 	if err != nil {
-		logger.Fatal("New XMouseArea Failed: ", err)
+		logger.Error("New XMouseArea Failed: ", err)
+		return
 	}
 
 	launchObj, err = launcher.NewLauncher("com.deepin.dde.launcher",
 		"/com/deepin/dde/launcher")
 	if err != nil {
-		logger.Fatal("New DDE Launcher Failed: ", err)
+		logger.Error("New DDE Launcher Failed: ", err)
+		return
 	}
 
 	C.Suite(newManager())

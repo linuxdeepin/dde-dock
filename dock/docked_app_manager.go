@@ -147,14 +147,14 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 		return false
 	}
 
-	logger.Info("id", id, "title", title, "cmd", cmd)
+	logger.Debug("id", id, "title", title, "cmd", cmd)
 	m.items.PushBack(id)
 	if guess_desktop_id(id) == "" {
 		// if app := NewDesktopAppInfo(id + ".desktop"); app != nil {
 		// 	app.Unref()
 		// } else {
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
-			logger.Warning(e)
+			logger.Warning("create scratch file failed:", e)
 			return false
 		}
 	}
@@ -169,7 +169,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 func (m *DockedAppManager) doUndock(id string) bool {
 	removeItem := m.findItem(id)
 	if removeItem == nil {
-		logger.Info("not find docked app:", id)
+		logger.Warning("not find docked app:", id)
 		return false
 	}
 
@@ -254,7 +254,7 @@ func createScratchFile(id, title, icon, cmd string) error {
 		return err
 	}
 	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
-	logger.Info(title, ",", icon, ",", cmd)
+	logger.Debug(title, ",", icon, ",", cmd)
 	e := temp.Execute(f, dockedItemInfo{title, icon, cmd})
 	if e != nil {
 		return e
