@@ -489,17 +489,24 @@ func isNormalWindow(xid xproto.Window) bool {
 			return false
 		}
 	}
+
 	mayBeDocked := false
 	cannotBeDoced := false
 	for _, wmType := range types {
-		if wmType == "_NET_WM_WINDOW_TYPE_NORMAL" ||
-			(wmType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
-				canBeMinimized(xid)) {
+		if wmType == "_NET_WM_WINDOW_TYPE_NORMAL" {
 			mayBeDocked = true
+		} else if wmType == "_NET_WM_WINDOW_TYPE_DIALOG" {
+			if !canBeMinimized(xid) {
+				mayBeDocked = false
+				break
+			} else {
+				mayBeDocked = true
+			}
 		} else if contains(cannotBeDockedType, wmType) {
 			cannotBeDoced = true
 		}
 	}
+
 	isNormal := mayBeDocked && !cannotBeDoced
 	return isNormal
 }
