@@ -42,9 +42,10 @@ const (
 )
 
 type Mouse struct {
-	LeftHanded    *property.GSettingsBoolProperty `access:"readwrite"`
-	DisableTpad   *property.GSettingsBoolProperty `access:"readwrite"`
-	NaturalScroll *property.GSettingsBoolProperty `access:"readwrite"`
+	LeftHanded            *property.GSettingsBoolProperty `access:"readwrite"`
+	DisableTpad           *property.GSettingsBoolProperty `access:"readwrite"`
+	NaturalScroll         *property.GSettingsBoolProperty `access:"readwrite"`
+	MiddleButtonEmulation *property.GSettingsBoolProperty `access:"readwrite"`
 
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
@@ -75,6 +76,9 @@ func NewMouse(l *log.Logger) *Mouse {
 	mouse.NaturalScroll = property.NewGSettingsBoolProperty(
 		mouse, "NaturalScroll",
 		mouse.settings, mouseKeyNaturalScroll)
+	mouse.MiddleButtonEmulation = property.NewGSettingsBoolProperty(
+		mouse, "MiddleButtonEmulation",
+		mouse.settings, mouseKeyMiddleButton)
 
 	mouse.MotionAcceleration = property.NewGSettingsFloatProperty(
 		mouse, "MotionAcceleration",
@@ -169,6 +173,12 @@ func (mouse *Mouse) naturalScroll(enabled bool) {
 	}
 }
 
+func (mouse *Mouse) middleButtonEmulation(enabled bool) {
+	for _, info := range mouse.DeviceList {
+		libwrapper.SetMiddleButtonEmulation(info.Deviceid, enabled)
+	}
+}
+
 func (mouse *Mouse) doubleClick(value uint32) {
 	if mouse.settings != nil {
 		mouse.xsettings.SetInteger("Net/DoubleClickTime", value)
@@ -203,6 +213,7 @@ func (mouse *Mouse) init() {
 	}
 
 	mouse.leftHanded(mouse.LeftHanded.Get())
+	mouse.middleButtonEmulation(mouse.MiddleButtonEmulation.Get())
 
 	mouse.motionAcceleration(mouse.MotionAcceleration.Get())
 	mouse.motionThreshold(mouse.MotionThreshold.Get())

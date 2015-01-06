@@ -21,13 +21,14 @@
 
 #include <stdio.h>
 #include <X11/Xlib.h>
+#include <X11/Xatom.h>
 #include <X11/extensions/XInput2.h>
 
 #include "utils.h"
 #include "devices.h"
 
-static int set_prop_float (Display *disp, int deviceid, 
-		const char *prop_name, double value);
+static int set_prop_float (Display *disp, int deviceid,
+                           const char *prop_name, double value);
 
 int
 is_mouse_device(int deviceid)
@@ -49,8 +50,8 @@ set_motion_acceleration (int deviceid, double acceleration)
 		return -1;
 	}
 
-	int ret = set_prop_float(disp, deviceid, 
-			"Device Accel Constant Deceleration", acceleration);
+	int ret = set_prop_float(disp, deviceid,
+	                         "Device Accel Constant Deceleration", acceleration);
 	XCloseDisplay(disp);
 
 	return ret;
@@ -65,16 +66,52 @@ set_motion_threshold(int deviceid, double threshold)
 		return -1;
 	}
 
-	int ret = set_prop_float(disp, deviceid, 
-			"Device Accel Adaptive Deceleration", threshold);
+	int ret = set_prop_float(disp, deviceid,
+	                         "Device Accel Adaptive Deceleration", threshold);
 	XCloseDisplay(disp);
 
 	return ret;
 }
 
+/*
+ * Evdev Middle Button Emulation
+ *     1 boolean value (8 bit, 0 or 1).
+ */
+int
+set_middle_button_emulation(int deviceid, int enabled)
+{
+	Display *disp = XOpenDisplay(0);
+	if (!disp) {
+		fprintf(stderr, "Args error in set_middle_button_emulation\n");
+		return -1;
+	}
+
+	char *prop_name = "Evdev Middle Button Emulation";
+	Atom prop = XInternAtom(
+	                disp,
+	                prop_name,
+	                True);
+	if (prop == None) {
+		fprintf(stderr, "Get '%s' Atom Failed\n", prop_name);
+		XCloseDisplay(disp);
+		return -1;
+	}
+
+	unsigned char data = 0;
+	if (enabled == 1) {
+		data = 1;
+	}
+
+	XIChangeProperty(disp, deviceid, prop, XA_INTEGER, 8,
+	                 XIPropModeReplace, &data, 1);
+	XCloseDisplay(disp);
+
+	return 0;
+}
+
 static int
-set_prop_float (Display *disp, int deviceid, 
-		const char *prop_name, double value)
+set_prop_float (Display *disp, int deviceid,
+                const char *prop_name, double value)
 {
 	if (!disp || !prop_name) {
 		fprintf(stderr, "Args error in set_prop_float\n");
@@ -82,9 +119,9 @@ set_prop_float (Display *disp, int deviceid,
 	}
 
 	Atom prop = XInternAtom(
-			disp,
-			prop_name, 
-			True);
+	                disp,
+	                prop_name,
+	                True);
 	if (prop == None) {
 		fprintf(stderr, "Get '%s' Atom Failed\n", prop_name);
 		return -1;
@@ -95,9 +132,9 @@ set_prop_float (Display *disp, int deviceid,
 	unsigned long nitems, bytes_after;
 	unsigned char *data;
 
-	int rc = XIGetProperty(disp, deviceid, prop, 0, 1, False, 
-			AnyPropertyType, &act_type, &act_format,
-			&nitems, &bytes_after, &data);
+	int rc = XIGetProperty(disp, deviceid, prop, 0, 1, False,
+	                       AnyPropertyType, &act_type, &act_format,
+	                       &nitems, &bytes_after, &data);
 	if (rc != Success) {
 		fprintf(stderr, "Get '%ld' property failed\n", prop);
 		return -1;
@@ -107,7 +144,7 @@ set_prop_float (Display *disp, int deviceid,
 	if (float_atom != None && act_type == float_atom && nitems == 1) {
 		*(float*)data = (float)value;
 		XIChangeProperty(disp, deviceid, prop, act_type, act_format,
-				XIPropModeReplace, data, nitems);
+		                 XIPropModeReplace, data, nitems);
 	}
 	XFree(data);
 
