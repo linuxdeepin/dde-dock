@@ -27,11 +27,15 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sinks {
-			if s.core.Index == idx {
-				s.core = a.core.GetSink(idx)
-				if s.core != nil {
-					s.update()
+			if s.index == idx {
+				info, err := a.core.GetSink(idx)
+				if err != nil {
+					logger.Error(err)
+					break
 				}
+
+				s.core = info
+				s.update()
 				break
 			}
 		}
@@ -66,13 +70,19 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 		}
 
 	case pulse.EventTypeChange:
-		for _, s := range a.SinkInputs {
-			if s.core.Index == idx {
-				s.core = a.core.GetSinkInput(idx)
-				if s.core != nil {
+		a.siEventChan <- func() {
+			for _, s := range a.SinkInputs {
+				if s.index == idx {
+					info, err := a.core.GetSinkInput(idx)
+					if err != nil {
+						logger.Warning(err)
+						break
+					}
+
+					s.core = info
 					s.update()
+					break
 				}
-				break
 			}
 		}
 	}
@@ -84,11 +94,15 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sources {
-			if s.core.Index == idx {
-				s.core = a.core.GetSource(idx)
-				if s.core != nil {
-					s.update()
+			if s.index == idx {
+				info, err := a.core.GetSource(idx)
+				if err != nil {
+					logger.Error(err)
+					break
 				}
+
+				s.core = info
+				s.update()
 				break
 			}
 		}
@@ -96,9 +110,12 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 }
 
 func (a *Audio) handleServerEvent() {
-	sinfo := a.core.GetServer()
-	if sinfo != nil {
-		a.setPropDefaultSink(sinfo.DefaultSinkName)
-		a.setPropDefaultSource(sinfo.DefaultSourceName)
+	sinfo, err := a.core.GetServer()
+	if err != nil {
+		logger.Error(err)
+		return
 	}
+
+	a.setPropDefaultSink(sinfo.DefaultSinkName)
+	a.setPropDefaultSource(sinfo.DefaultSourceName)
 }
