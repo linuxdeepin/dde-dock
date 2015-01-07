@@ -562,7 +562,7 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 	if err != nil {
 		logger.Warningf("get state of %s(0x%x) failed: %s", app.Id, xid, err)
 	}
-	logger.Infof("state of %s(0x%x) is %v", app.Id, xid, app.state)
+	logger.Debugf("state of %s(0x%x) is %v", app.Id, xid, app.state)
 	app.isHidden = contains(app.state, "_NET_WM_STATE_HIDDEN")
 	app.isMaximized = contains(app.state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }

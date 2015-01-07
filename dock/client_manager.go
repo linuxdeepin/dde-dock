@@ -252,7 +252,7 @@ func (m *ClientManager) listenRootWindow() {
 					rApp.updateState(activeWindow)
 				}
 
-				logger.Info("active window is", appId)
+				logger.Debug("active window is", appId)
 				if appId != DDELauncher {
 					LAUNCHER, err := launcher.NewLauncher(
 						"com.deepin.dde.launcher",
