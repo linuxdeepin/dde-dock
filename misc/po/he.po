@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-26 04:47+0000\n"
+"PO-Revision-Date: 2015-01-07 15:31+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hebrew (http://www.transifex.com/projects/p/dde-daemon/language/he/)\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "האות הראשונה חייבת להיות אות קטנה"
 
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
@@ -36,7 +36,7 @@ msgstr "שם המשתמש קיים"
 
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr ""
+msgstr "שם המשתמש כבר בשימוש במערכת"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
