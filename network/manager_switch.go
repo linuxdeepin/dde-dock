@@ -23,7 +23,6 @@ package network
 
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
-	"time"
 )
 
 type switchHandler struct {
@@ -35,10 +34,6 @@ type switchHandler struct {
 	WiredEnabled      bool
 	VpnEnabled        bool
 }
-
-const (
-	autoConnectTimeout = 20
-)
 
 func newSwitchHandler(c *config) (sh *switchHandler) {
 	sh = &switchHandler{config: c}
@@ -266,7 +261,6 @@ func (sh *switchHandler) enableVpn(enabled bool) {
 	for _, uuid := range nmGetConnectionUuidsByType(NM_SETTING_VPN_SETTING_NAME) {
 		if enabled {
 			sh.restoreVpnConnectionState(uuid)
-			sh.turnOffVpnSwitchIfNeed(autoConnectTimeout * 2)
 		} else {
 			sh.deactivateVpnConnection(uuid)
 		}
@@ -276,23 +270,6 @@ func (sh *switchHandler) doEnableVpn(enabled bool) {
 	sh.VpnEnabled = enabled
 	sh.config.setVpnEnabled(enabled)
 	manager.setPropVpnEnabled(sh.VpnEnabled)
-}
-
-func (sh *switchHandler) turnOffVpnSwitchIfNeed(timeout int) {
-	// turn off vpn switch if all connections disconnected
-	go func() {
-		time.Sleep(time.Duration(timeout) * time.Second)
-		vpnConnected := false
-		for _, apath := range nmGetActiveConnections() {
-			if nmGetActiveConnectionVpn(apath) {
-				vpnConnected = true
-				break
-			}
-		}
-		if !vpnConnected {
-			sh.setPropVpnEnabled(false)
-		}
-	}()
 }
 
 func (sh *switchHandler) initDeviceState(devPath dbus.ObjectPath) (err error) {
