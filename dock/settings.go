@@ -127,6 +127,8 @@ func (s *Setting) init() bool {
 		s.core.SetEnum(HideModeKey, int(HideModeSmartHide))
 	}
 	s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
+	s.displayDate = s.core.GetBoolean(DisplayDateKey)
+	s.displayWeek = s.core.GetBoolean(DisplayWeekKey)
 
 	s.listenSettingChange(HideModeKey, func(g *gio.Settings, key string) {
 		s.hideModeLock.Lock()
