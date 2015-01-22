@@ -35,32 +35,26 @@ func initSettingSectionCdma(data connectionData) {
 	addSettingSection(data, sectionCdma)
 	setSettingCdmaNumber(data, "#777")
 	setSettingCdmaPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
-	// TODO: for easy test
-	setSettingCdmaUsername(data, "ctnet@mycdma.cn")
-	setSettingCdmaPassword(data, "vnet.mobi")
 }
 
 // Get available keys
 func getSettingCdmaAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_NUMBER)
-	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_USERNAME)
-	keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_PASSWORD)
+	if getSettingVkMobileProvider(data) == mobileProviderValueCustom {
+		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_NUMBER)
+		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_USERNAME)
+		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_PASSWORD)
+	}
 	return
 }
 
 // Get available values
 func getSettingCdmaAvailableValues(data connectionData, key string) (values []kvalue) {
-	// TODO
 	return
 }
 
 // Check whether the values are correct
 func checkSettingCdmaValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
-	// TODO
 	ensureSettingCdmaNumberNoEmpty(data, errs)
-	if isSettingRequireSecret(getSettingCdmaPasswordFlags(data)) {
-		ensureSettingCdmaPasswordNoEmpty(data, errs)
-	}
 	return
 }

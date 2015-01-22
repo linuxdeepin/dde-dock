@@ -256,11 +256,11 @@ func getOrNewSettingIp6ConfigAddresses(data connectionData) (addresses ipv6Addre
 
 // Virtual key getter
 func getSettingVkIp6ConfigDns(data connectionData) (value string) {
-	dns := getSettingIp6ConfigDns(data)
-	if len(dns) == 0 {
+	dnses := getSettingIp6ConfigDns(data)
+	if len(dnses) == 0 {
 		return
 	}
-	value = convertIpv6AddressToString(dns[0])
+	value = convertIpv6AddressToString(dnses[0])
 	return
 }
 func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
@@ -317,18 +317,18 @@ func logicSetSettingVkIp6ConfigDns(data connectionData, value string) (err error
 		removeSettingIp6ConfigDns(data)
 		return
 	}
-	dns := getSettingIp6ConfigDns(data)
-	if len(dns) == 0 {
-		dns = make([][]byte, 1)
+	dnses := getSettingIp6ConfigDns(data)
+	if len(dnses) == 0 {
+		dnses = make([][]byte, 1)
 	}
 	tmp, err := convertIpv6AddressToArrayByteCheck(value)
-	dns[0] = tmp
+	dnses[0] = tmp
 	if err != nil {
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	if !isIpv6AddressZero(dns[0]) {
-		setSettingIp6ConfigDns(data, dns)
+	if !isIpv6AddressZero(dnses[0]) {
+		setSettingIp6ConfigDns(data, dnses)
 	} else {
 		removeSettingIp6ConfigDns(data)
 	}

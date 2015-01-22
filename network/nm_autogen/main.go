@@ -217,8 +217,11 @@ func genFrontEndCode() {
 
 func main() {
 	flag.BoolVar(&argWriteOutput, "w", false, "write to file")
+	flag.BoolVar(&argWriteOutput, "write", false, "write to file")
 	flag.BoolVar(&argBackEnd, "b", false, "generate back-end code")
+	flag.BoolVar(&argBackEnd, "back-end", false, "generate back-end code")
 	flag.BoolVar(&argFrontEnd, "f", false, "generate front-end code")
+	flag.BoolVar(&argFrontEnd, "front-end", false, "generate front-end code")
 	flag.StringVar(&argBackEndDir, "back-end-dir", "..", "back-end directory")
 	flag.StringVar(&argFrontEndDir, "front-end-dir", "./front_end_autogen", "front-end directory")
 	flag.Parse()

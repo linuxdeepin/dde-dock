@@ -91,15 +91,20 @@ func getSettingKey(data connectionData, section, key string) (value interface{})
 		return getSettingVpnPluginKey(data, section, key)
 	}
 
-	value = generalGetSettingDefaultValue(section, key) // get default value firstly
-
-	realSection := getRealSectionName(section) // get real name of virtual sections
-	sectionData, ok := data[realSection]
-	if !ok {
-		logger.Errorf("invalid section: data[%s]", realSection)
-		return
+	if !isSettingKeyExists(data, section, key) {
+		// if key not exists, return the default value
+		return generalGetSettingDefaultValue(section, key)
 	}
 
+	realSection := getRealSectionName(section) // get virtual section's real name
+	return doGetSettingKey(data, realSection, key)
+}
+func doGetSettingKey(data connectionData, section, key string) (value interface{}) {
+	sectionData, ok := data[section]
+	if !ok {
+		logger.Errorf("invalid section: data[%s]", section)
+		return
+	}
 	variant, ok := sectionData[key]
 	if !ok {
 		// not exists, just return nil
@@ -107,9 +112,10 @@ func getSettingKey(data connectionData, section, key string) (value interface{})
 	}
 
 	value = variant.Value()
-
 	logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
 	if isInterfaceNil(value) {
+		// variant exists, but the value is nil, so we give an error
+		// message
 		logger.Errorf("getSettingKey: data[%s][%s] is nil", section, key)
 	}
 
@@ -152,19 +158,18 @@ func setSettingKey(data connectionData, section, key string, value interface{}) 
 		setSettingVpnPluginKey(data, section, key, value)
 		return
 	}
-
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
+	doSetSettingKey(data, realSection, key, value)
+}
+func doSetSettingKey(data connectionData, section, key string, value interface{}) {
 	var sectionData map[string]dbus.Variant
-	sectionData, ok := data[realSection]
+	sectionData, ok := data[section]
 	if !ok {
-		logger.Errorf(`set connection data failed, section "%s" is not exits yet`, realSection)
+		logger.Errorf(`set connection data failed, section "%s" is not exits yet`, section)
 		return
 	}
-
 	sectionData[key] = dbus.MakeVariant(value)
-
 	logger.Debugf("setSettingKey: data[%s][%s]=%#v", section, key, value)
-	return
 }
 
 func removeSettingKey(data connectionData, section string, keys ...string) {
@@ -176,7 +181,7 @@ func removeSettingKey(data connectionData, section string, keys ...string) {
 		return
 	}
 
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	sectionData, ok := data[realSection]
 	if !ok {
 		return
@@ -194,7 +199,7 @@ func removeSettingKeyBut(data connectionData, section string, keys ...string) {
 		return
 	}
 
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	sectionData, ok := data[realSection]
 	if !ok {
 		return
@@ -213,7 +218,7 @@ func isSettingKeyExists(data connectionData, section, key string) bool {
 		return isSettingVpnPluginKeyExists(data, section, key)
 	}
 
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	sectionData, ok := data[realSection]
 	if !ok {
 		return false
@@ -228,7 +233,7 @@ func isSettingKeyExists(data connectionData, section, key string) bool {
 }
 
 func addSettingSection(data connectionData, section string) {
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	var sectionData map[string]dbus.Variant
 	sectionData, ok := data[realSection]
 	if !ok {
@@ -239,7 +244,7 @@ func addSettingSection(data connectionData, section string) {
 }
 
 func removeSettingSection(data connectionData, section string) {
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	_, ok := data[realSection]
 	if ok {
 		// remove section if exists
@@ -248,7 +253,7 @@ func removeSettingSection(data connectionData, section string) {
 }
 
 func isSettingSectionExists(data connectionData, section string) bool {
-	realSection := getRealSectionName(section) // get real name of virtual sections
+	realSection := getRealSectionName(section) // get virtual section's real name
 	_, ok := data[realSection]
 	return ok
 }
@@ -261,4 +266,34 @@ func generalSetSettingAutoconnect(data connectionData, autoConnect bool) {
 	default:
 		setSettingConnectionAutoconnect(data, autoConnect)
 	}
+}
+
+// operator for cache section
+func getSettingCacheKey(data connectionData, key string) (value interface{}) {
+	return doGetSettingKey(data, sectionCache, key)
+}
+func setSettingCacheKey(data connectionData, key string, value interface{}) {
+	doSetSettingKey(data, sectionCache, key, value)
+}
+func fillSectionCache(data connectionData) {
+	addSettingSection(data, sectionCache)
+	uuid := getSettingConnectionUuid(data)
+	manager.config.ensureMobileConfigExists(uuid)
+	switch getCustomConnectionType(data) {
+	case connectionMobileGsm, connectionMobileCdma:
+		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY, manager.config.getMobileConnectionCountry(uuid))
+		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER, manager.config.getMobileConnectionProvider(uuid))
+		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN, manager.config.getMobileConnectionPlan(uuid))
+	}
+}
+func refileSectionCache(data connectionData) {
+	uuid := getSettingConnectionUuid(data)
+	manager.config.ensureMobileConfigExists(uuid)
+	switch getCustomConnectionType(data) {
+	case connectionMobileGsm, connectionMobileCdma:
+		manager.config.setMobileConnectionCountry(uuid, getSettingVkMobileCountry(data))
+		manager.config.setMobileConnectionProvider(uuid, getSettingVkMobileProvider(data))
+		manager.config.setMobileConnectionPlan(uuid, getSettingVkMobilePlan(data))
+	}
+	removeSettingSection(data, sectionCache)
 }

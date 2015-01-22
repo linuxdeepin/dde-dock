@@ -38,7 +38,10 @@ type ConnectionSession struct {
 
 	ConnectionPath dbus.ObjectPath
 	Uuid           string
-	Type           string
+	Type           string // customized connection types, e.g. connectionMobileGsm
+
+	AllowDelete           bool
+	AllowEditConnectionId bool
 
 	AvailableVirtualSections []string
 	AvailableSections        []string
@@ -110,8 +113,9 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
+	fillSectionCache(s.data)
 	s.setProps()
-	logger.Infof("newConnectionSessionByCreate(): %#v", s.data)
+	logger.Debugf("newConnectionSessionByCreate(): %#v", s.data)
 	return
 }
 
@@ -133,7 +137,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	s.fixValues()
 
 	// execute asynchronous to avoid front-end block if
-	// NeedSecrets() signal emit
+	// NeedSecrets() signal emitted
 	chSecret := make(chan int)
 	go func() {
 		s.getSecrets()
@@ -144,8 +148,9 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
+	fillSectionCache(s.data)
 	s.setProps()
-	logger.Infof("NewConnectionSessionByOpen(): %#v", s.data)
+	logger.Debugf("NewConnectionSessionByOpen(): %#v", s.data)
 	return
 }
 
@@ -173,11 +178,16 @@ func (s *ConnectionSession) fixValues() {
 		}
 	}
 
-	// append missing sectionWired for pppoe
-	if getCustomConnectionType(s.data) == connectionPppoe {
+	// do not use s.Type here for that it may be not initialized
+	switch getCustomConnectionType(s.data) {
+	case connectionPppoe:
+		// append missing sectionWired for pppoe
 		if !isSettingSectionExists(s.data, sectionWired) {
 			initSettingSectionWired(s.data)
 		}
+	case connectionMobileGsm, connectionMobileCdma:
+		addSettingSection(s.data, sectionPpp)
+		logicSetSettingVkPppEnableLcpEcho(s.data, true)
 	}
 
 	// TODO fix secret flags
@@ -204,9 +214,12 @@ func (s *ConnectionSession) getSecrets() {
 	case connectionPppoe:
 		s.doGetSecrets(sectionPppoe)
 	case connectionMobileGsm:
-		s.doGetSecrets(sectionGsm)
+		// FIXME: if the connection owns no secret key, such as "US -> AT&T -> MEdia Net (phones)"
+		// it will popup password dialog when editing the connection.
+		// s.doGetSecrets(sectionGsm)
 	case connectionMobileCdma:
-		s.doGetSecrets(sectionCdma)
+		// FIXME: same with connectionMobileGsm
+		// s.doGetSecrets(sectionCdma)
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
 		// TODO
 	}
@@ -232,7 +245,7 @@ func (s *ConnectionSession) doGetSecrets(secretField string) {
 func (s *ConnectionSession) Save() (ok bool, err error) {
 	// TODO what about the connection has been deleted?
 
-	logger.Infof("Save connection: %#v", s.data)
+	logger.Debugf("Save connection: %#v", s.data)
 
 	if s.isErrorOccured() {
 		logger.Debug("Errors:", s.Errors)
@@ -245,6 +258,8 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		logger.Debug(err)
 		return false, err
 	}
+
+	refileSectionCache(s.data)
 
 	if len(s.ConnectionPath) > 0 {
 		// update connection data and activate it
@@ -297,14 +312,12 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 }
 
 func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
-	// logger.Debugf("GetKey(), section=%s, key=%s", section, key) // TODO test
 	valueJSON = generalGetSettingKeyJSON(s.data, section, key)
-	// logger.Debugf("GetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
 	return
 }
 
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
-	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON) // TODO test
+	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON)
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
 	s.updateErrorsWhenSettingKey(section, key, err)
 	s.setProps()

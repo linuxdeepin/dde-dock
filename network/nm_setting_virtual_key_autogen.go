@@ -10,7 +10,11 @@ const (
 	NM_SETTING_VK_802_1X_CLIENT_CERT                          = "vk-client-cert"
 	NM_SETTING_VK_802_1X_PRIVATE_KEY                          = "vk-private-key"
 	NM_SETTING_VK_CONNECTION_NO_PERMISSION                    = "vk-no-permission"
+	NM_SETTING_VK_MOBILE_COUNTRY                              = "vk-mobile-country"
+	NM_SETTING_VK_MOBILE_PROVIDER                             = "vk-mobile-provider"
+	NM_SETTING_VK_MOBILE_PLAN                                 = "vk-mobile-plan"
 	NM_SETTING_VK_MOBILE_SERVICE_TYPE                         = "vk-mobile-service-type"
+	NM_SETTING_VK_MOBILE_APN_READONLY                         = "vk-gsm-apn-readonly"
 	NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS                = "vk-addresses-address"
 	NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK                   = "vk-addresses-mask"
 	NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY                = "vk-addresses-gateway"
@@ -60,7 +64,11 @@ var virtualKeys = []vkeyInfo{
 	{Value: NM_SETTING_VK_802_1X_CLIENT_CERT, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_CLIENT_CERT}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_802_1X_PRIVATE_KEY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_PRIVATE_KEY}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_CONNECTION_NO_PERMISSION, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKeys: []string{NM_SETTING_CONNECTION_PERMISSIONS}, Available: true, ChildKey: false, Optional: false},
+	{Value: NM_SETTING_VK_MOBILE_COUNTRY, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
+	{Value: NM_SETTING_VK_MOBILE_PROVIDER, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
+	{Value: NM_SETTING_VK_MOBILE_PLAN, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_MOBILE_SERVICE_TYPE, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
+	{Value: NM_SETTING_VK_MOBILE_APN_READONLY, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
 	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
 	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
 	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: true},
@@ -131,8 +139,16 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 		}
 	case NM_SETTING_VS_MOBILE:
 		switch key {
+		case NM_SETTING_VK_MOBILE_COUNTRY:
+			return getSettingVkMobileCountryJSON(data)
+		case NM_SETTING_VK_MOBILE_PROVIDER:
+			return getSettingVkMobileProviderJSON(data)
+		case NM_SETTING_VK_MOBILE_PLAN:
+			return getSettingVkMobilePlanJSON(data)
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
 			return getSettingVkMobileServiceTypeJSON(data)
+		case NM_SETTING_VK_MOBILE_APN_READONLY:
+			return getSettingVkMobileApnReadonlyJSON(data)
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
 		switch key {
@@ -299,8 +315,20 @@ func generalSetVkeyJSON(data connectionData, section, key string, valueJSON stri
 		}
 	case NM_SETTING_VS_MOBILE:
 		switch key {
+		case NM_SETTING_VK_MOBILE_COUNTRY:
+			err = logicSetSettingVkMobileCountryJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_MOBILE_PROVIDER:
+			err = logicSetSettingVkMobileProviderJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_MOBILE_PLAN:
+			err = logicSetSettingVkMobilePlanJSON(data, valueJSON)
+			return
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
 			err = logicSetSettingVkMobileServiceTypeJSON(data, valueJSON)
+			return
+		case NM_SETTING_VK_MOBILE_APN_READONLY:
+			err = logicSetSettingVkMobileApnReadonlyJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
@@ -490,8 +518,24 @@ func getSettingVkConnectionNoPermissionJSON(data connectionData) (valueJSON stri
 	valueJSON, _ = marshalJSON(getSettingVkConnectionNoPermission(data))
 	return
 }
+func getSettingVkMobileCountryJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkMobileCountry(data))
+	return
+}
+func getSettingVkMobileProviderJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkMobileProvider(data))
+	return
+}
+func getSettingVkMobilePlanJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkMobilePlan(data))
+	return
+}
 func getSettingVkMobileServiceTypeJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkMobileServiceType(data))
+	return
+}
+func getSettingVkMobileApnReadonlyJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkMobileApnReadonly(data))
 	return
 }
 func getSettingVkIp4ConfigAddressesAddressJSON(data connectionData) (valueJSON string) {
@@ -676,9 +720,25 @@ func logicSetSettingVkConnectionNoPermissionJSON(data connectionData, valueJSON 
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkConnectionNoPermission(data, value)
 }
+func logicSetSettingVkMobileCountryJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkMobileCountry(data, value)
+}
+func logicSetSettingVkMobileProviderJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkMobileProvider(data, value)
+}
+func logicSetSettingVkMobilePlanJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkMobilePlan(data, value)
+}
 func logicSetSettingVkMobileServiceTypeJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVkMobileServiceType(data, value)
+}
+func logicSetSettingVkMobileApnReadonlyJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVkMobileApnReadonly(data, value)
 }
 func logicSetSettingVkIp4ConfigAddressesAddressJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)

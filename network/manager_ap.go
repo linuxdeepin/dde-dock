@@ -23,6 +23,7 @@ package network
 
 import (
 	nm "dbus/org/freedesktop/networkmanager"
+	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/utils"
 )
@@ -36,7 +37,7 @@ const (
 	apSecEap
 )
 
-// TODO refactor code, use accesspoint's secret types defined in network-manager
+// TODO refactor code, use accesspoint's secret types that defined in network-manager
 const (
 	NMU_SEC_INVALID apSecType = 0
 	NMU_SEC_NONE
@@ -50,7 +51,8 @@ const (
 )
 
 type accessPoint struct {
-	nmAp *nm.AccessPoint
+	nmAp    *nm.AccessPoint
+	devPath dbus.ObjectPath
 
 	Ssid         string
 	Secured      bool
@@ -59,48 +61,55 @@ type accessPoint struct {
 	Path         dbus.ObjectPath
 }
 
-func newAccessPoint(apPath dbus.ObjectPath) (ap accessPoint, err error) {
+func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoint, err error) {
 	nmAp, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
 	}
-
-	ap = accessPoint{
-		nmAp: nmAp,
-		Path: apPath,
+	ap = &accessPoint{
+		nmAp:    nmAp,
+		devPath: devPath,
+		Path:    apPath,
 	}
-	ap.updateProperties()
+	ap.updateProps()
+	if len(ap.Ssid) == 0 {
+		err = fmt.Errorf("ignore hidden access point")
+		return
+	}
+
+	// connect properties changed signals
+	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
+		if !m.isAccessPointExists(apPath) {
+			return
+		}
+
+		m.accessPointsLock.Lock()
+		defer m.accessPointsLock.Unlock()
+		ap.updateProps()
+		apJSON, _ := marshalJSON(ap)
+		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
+	})
+
+	apJSON, _ := marshalJSON(ap)
+	dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+
 	return
 }
-
-func (a *accessPoint) updateProperties() {
+func (m *Manager) destroyAccessPoint(ap *accessPoint) {
+	// emit AccessPointRemoved signal
+	apJSON, _ := marshalJSON(ap)
+	dbus.Emit(m, "AccessPointRemoved", string(ap.devPath), apJSON)
+	nmDestroyAccessPoint(ap.nmAp)
+}
+func (a *accessPoint) updateProps() {
 	a.Ssid = string(a.nmAp.Ssid.Get())
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
 	a.Strength = a.nmAp.Strength.Get()
 }
-
-// TODO: remove
-func calcApStrength(s uint8) uint8 {
-	switch {
-	case s <= 10:
-		return 0
-	case s <= 25:
-		return 25
-	case s <= 50:
-		return 50
-	case s <= 75:
-		return 75
-	case s <= 100:
-		return 100
-	}
-	return 0
-}
-
 func getApSecType(ap *nm.AccessPoint) apSecType {
 	return doParseApSecType(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
 }
-
 func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	r := apSecNone
 
@@ -120,97 +129,80 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 }
 
 func (m *Manager) clearAccessPoints() {
-	for devPath, aps := range m.accessPoints {
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
+	for _, aps := range m.accessPoints {
 		for _, ap := range aps {
-			m.removeAccessPoint(devPath, ap.Path)
+			m.destroyAccessPoint(ap)
 		}
 	}
-	m.accessPoints = nil
+	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
 }
-func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
-	m.accessPointsLocker.Lock()
-	defer m.accessPointsLocker.Unlock()
 
-	if m.isAccessPointExists(devPath, apPath) {
+func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
+	if m.isAccessPointExists(apPath) {
 		return
 	}
-	ap, err := newAccessPoint(apPath)
+
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
+	ap, err := m.newAccessPoint(devPath, apPath)
 	if err != nil {
 		return
 	}
-	if len(ap.Ssid) == 0 {
-		// ignore hidden access point
-		return
-	}
-
-	// connect properties changed
-	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
-		m.accessPointsLocker.Lock()
-		defer m.accessPointsLocker.Unlock()
-
-		ap.updateProperties()
-		apJSON, _ := marshalJSON(ap)
-		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
-	})
-
-	apJSON, _ := marshalJSON(ap)
-	dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
-
-	m.accessPoints[devPath] = append(m.accessPoints[devPath], &ap)
+	m.accessPoints[devPath] = append(m.accessPoints[devPath], ap)
 }
+
 func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
-	m.accessPointsLocker.Lock()
-	defer m.accessPointsLocker.Unlock()
-
-	// get access point information
-	var apJSON string
-	if ap := m.getAccessPoint(devPath, apPath); ap != nil {
-		apJSON, _ = marshalJSON(ap)
-	} else {
-		apJSON, _ = marshalJSON(accessPoint{Path: apPath})
-	}
-	dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
-	m.doRemoveAccessPoint(devPath, apPath)
-}
-func (m *Manager) doRemoveAccessPoint(devPath, apPath dbus.ObjectPath) {
-	i := m.getAccessPointIndex(devPath, apPath)
-	if i < 0 {
+	if !m.isAccessPointExists(apPath) {
 		return
 	}
+	devPath, i := m.getAccessPointIndex(apPath)
 
-	// destroy object to reset all property connects
-	aps := m.accessPoints[devPath]
-	ap := aps[i]
-	nmDestroyAccessPoint(ap.nmAp)
-
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
+	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
+}
+func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint {
+	m.destroyAccessPoint(aps[i])
 	copy(aps[i:], aps[i+1:])
 	aps[len(aps)-1] = nil
 	aps = aps[:len(aps)-1]
-	m.accessPoints[devPath] = aps
+	return aps
 }
-func (m *Manager) getAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoint) {
-	i := m.getAccessPointIndex(devPath, apPath)
+
+func (m *Manager) getAccessPoint(apPath dbus.ObjectPath) (ap *accessPoint) {
+	devPath, i := m.getAccessPointIndex(apPath)
 	if i < 0 {
-		logger.Warning("could not found access point:", devPath, apPath)
+		logger.Warning("access point not found", apPath)
 		return
 	}
+
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
 	ap = m.accessPoints[devPath][i]
 	return
 }
-func (m *Manager) isAccessPointExists(devPath, apPath dbus.ObjectPath) bool {
-	if m.getAccessPointIndex(devPath, apPath) >= 0 {
+func (m *Manager) isAccessPointExists(apPath dbus.ObjectPath) bool {
+	_, i := m.getAccessPointIndex(apPath)
+	if i >= 0 {
 		return true
 	}
 	return false
 }
-func (m *Manager) getAccessPointIndex(devPath, apPath dbus.ObjectPath) int {
-	for i, ap := range m.accessPoints[devPath] {
-		if ap.Path == apPath {
-			return i
+func (m *Manager) getAccessPointIndex(apPath dbus.ObjectPath) (devPath dbus.ObjectPath, index int) {
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
+	for d, aps := range m.accessPoints {
+		for i, ap := range aps {
+			if ap.Path == apPath {
+				return d, i
+			}
 		}
 	}
-	return -1
+	return "", -1
 }
+
 func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
 	for _, ap := range m.accessPoints[devPath] {
 		if ap.Ssid == ssid {
@@ -222,25 +214,9 @@ func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
 
 // GetAccessPoints return all access points object which marshaled by json.
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
-	m.accessPointsLocker.Lock()
-	defer m.accessPointsLocker.Unlock()
-
+	m.accessPointsLock.Lock()
+	defer m.accessPointsLock.Unlock()
 	apsJSON, err = marshalJSON(m.accessPoints[path])
-	return
-}
-func (m *Manager) doGetAccessPoints(devPath dbus.ObjectPath) (aps []accessPoint, err error) {
-	apPaths := nmGetAccessPoints(devPath)
-	for _, path := range apPaths {
-		ap, err := newAccessPoint(path)
-		if err != nil {
-			continue
-		}
-		if len(ap.Ssid) == 0 {
-			// ignore hidden access point
-			continue
-		}
-		aps = append(aps, ap)
-	}
 	return
 }
 

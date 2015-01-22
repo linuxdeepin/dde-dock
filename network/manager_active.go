@@ -22,7 +22,6 @@
 package network
 
 import (
-	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
 )
@@ -41,6 +40,7 @@ type activeConnectionInfo struct {
 	IsPrimaryConnection bool
 	ConnectionType      string
 	ConnectionName      string
+	MobileNetworkType   string
 	Security            string
 	DeviceType          string
 	DeviceInterface     string
@@ -50,20 +50,16 @@ type activeConnectionInfo struct {
 	Ip6                 ip6ConnectionInfo
 }
 type ip4ConnectionInfo struct {
-	Address string
-	Mask    string
-	Route   string
-	Dns1    string
-	Dns2    string
-	Dns3    string
+	Address  string
+	Mask     string
+	Gateways []string
+	Dnses    []string
 }
 type ip6ConnectionInfo struct {
-	Address string
-	Prefix  string
-	Route   string
-	Dns1    string
-	Dns2    string
-	Dns3    string
+	Address  string
+	Prefix   string
+	Gateways []string
+	Dnses    []string
 }
 
 func (m *Manager) initActiveConnectionManage() {
@@ -83,9 +79,6 @@ func (m *Manager) initActiveConnectionManage() {
 
 	// update active connection properties
 	m.dbusWatcher.connect(func(s *dbus.Signal) {
-		m.activeConnectionsLocker.Lock()
-		defer m.activeConnectionsLocker.Unlock()
-
 		var props map[string]dbus.Variant
 		if s.Name == interfaceDbusProperties+"."+memberProperties && len(s.Body) >= 2 {
 			// compatible with old dbus signal
@@ -97,96 +90,104 @@ func (m *Manager) initActiveConnectionManage() {
 			props, _ = s.Body[0].(map[string]dbus.Variant)
 		}
 		if props != nil {
-			aconn, ok := m.activeConnections[s.Path]
-			if !ok {
-				aconn = m.newActiveConnection(s.Path)
-			}
-
-			// query each properties that changed
-			for k, vv := range props {
-				if k == "State" {
-					aconn.State, _ = vv.Value().(uint32)
-				} else if k == "Devices" {
-					aconn.Devices, _ = vv.Value().([]dbus.ObjectPath)
-				} else if k == "Uuid" {
-					aconn.Uuid, _ = vv.Value().(string)
-					if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
-						aconn.Id = nmGetConnectionId(cpath)
-					}
-				} else if k == "Vpn" {
-					aconn.Vpn, _ = vv.Value().(bool)
-				} else if k == "Connection" { // ignore
-				} else if k == "SpecificObject" { // ignore
-				} else if k == "Default" { // ignore
-				} else if k == "Default6" { // ignore
-				} else if k == "Master" { // ignore
-				}
-			}
-
-			// use "State" to determine if the active connection is
-			// adding or removing, if "State" property is not changed
-			// is current sequence, it also means that the active
-			// connection already exits
-			if isConnectionStateInDeactivating(aconn.State) {
-				delete(m.activeConnections, s.Path)
-			} else {
-				m.activeConnections[s.Path] = aconn
-			}
-			m.setPropActiveConnections()
+			m.doUpdateActiveConnection(s.Path, props)
 		}
 	})
 
 	// handle notifications for vpn connection
 	m.dbusWatcher.connect(func(s *dbus.Signal) {
-		m.activeConnectionsLocker.Lock()
-		defer m.activeConnectionsLocker.Unlock()
-
 		if s.Name == interfaceVpn+"."+memberVpnState && len(s.Body) >= 2 {
 			state, _ := s.Body[0].(uint32)
 			reason, _ := s.Body[1].(uint32)
-
-			// get the corresponding active connection
-			aconn, ok := m.activeConnections[s.Path]
-			if !ok {
-				return
-			}
-
-			// update vpn config
-			m.config.setVpnConnectionActivated(aconn.Uuid, isVpnConnectionStateInActivating(state))
-
-			// notification for vpn
-			if isVpnConnectionStateActivated(state) {
-				notifyVpnConnected(aconn.Id)
-			} else if isVpnConnectionStateDeactivate(state) {
-				notifyVpnDisconnected(aconn.Id)
-			} else if isVpnConnectionStateFailed(state) {
-				notifyVpnFailed(aconn.Id, reason)
-			}
-
-			if isVpnConnectionStateInActivating(state) {
-				m.switchHandler.doEnableVpn(true)
-			} else {
-				delete(m.activeConnections, s.Path)
-			}
+			m.doHandleVpnNotification(s.Path, state, reason)
 		}
 	})
 }
 
 func (m *Manager) initActiveConnections() {
-	m.activeConnectionsLocker.Lock()
-	defer m.activeConnectionsLocker.Unlock()
-
+	m.activeConnectionsLock.Lock()
+	defer m.activeConnectionsLock.Unlock()
 	m.activeConnections = make(map[dbus.ObjectPath]*activeConnection)
 	for _, path := range nmGetActiveConnections() {
 		m.activeConnections[path] = m.newActiveConnection(path)
 	}
+	m.setPropActiveConnections()
+}
 
+func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason uint32) {
+	m.activeConnectionsLock.Lock()
+	defer m.activeConnectionsLock.Unlock()
+
+	// get the corresponding active connection
+	aconn, ok := m.activeConnections[apath]
+	if !ok {
+		return
+	}
+
+	// update vpn config
+	m.config.setVpnConnectionActivated(aconn.Uuid, isVpnConnectionStateInActivating(state))
+
+	// notification for vpn
+	if isVpnConnectionStateActivated(state) {
+		notifyVpnConnected(aconn.Id)
+	} else if isVpnConnectionStateDeactivate(state) {
+		notifyVpnDisconnected(aconn.Id)
+	} else if isVpnConnectionStateFailed(state) {
+		notifyVpnFailed(aconn.Id, reason)
+	}
+
+	if isVpnConnectionStateInActivating(state) {
+		m.switchHandler.doEnableVpn(true)
+	} else {
+		delete(m.activeConnections, apath)
+	}
+}
+func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[string]dbus.Variant) {
+	m.activeConnectionsLock.Lock()
+	defer m.activeConnectionsLock.Unlock()
+
+	aconn, ok := m.activeConnections[apath]
+	if !ok {
+		aconn = m.newActiveConnection(apath)
+	}
+
+	// query each properties that changed
+	for k, vv := range props {
+		if k == "State" {
+			aconn.State, _ = vv.Value().(uint32)
+		} else if k == "Devices" {
+			aconn.Devices, _ = vv.Value().([]dbus.ObjectPath)
+		} else if k == "Uuid" {
+			aconn.Uuid, _ = vv.Value().(string)
+			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
+				aconn.Id = nmGetConnectionId(cpath)
+			}
+		} else if k == "Vpn" {
+			aconn.Vpn, _ = vv.Value().(bool)
+		} else if k == "Connection" { // ignore
+		} else if k == "SpecificObject" { // ignore
+		} else if k == "Default" { // ignore
+		} else if k == "Default6" { // ignore
+		} else if k == "Master" { // ignore
+		}
+	}
+
+	// use "State" to determine if the active connection is
+	// adding or removing, if "State" property is not changed
+	// is current sequence, it also means that the active
+	// connection already exits
+	if isConnectionStateInDeactivating(aconn.State) {
+		logger.Infof("remove active connection %#v", aconn)
+		delete(m.activeConnections, apath)
+	} else {
+		logger.Infof("add active connection %#v", aconn)
+		m.activeConnections[apath] = aconn
+	}
 	m.setPropActiveConnections()
 }
 
 func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnection) {
 	aconn = &activeConnection{path: path}
-
 	nmAConn, err := nmNewActiveConnection(path)
 	if err != nil {
 		return
@@ -196,7 +197,6 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 	aconn.Devices = nmAConn.Devices.Get()
 	aconn.Uuid = nmAConn.Uuid.Get()
 	aconn.Vpn = nmAConn.Vpn.Get()
-
 	if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
 		aconn.Id = nmGetConnectionId(cpath)
 	}
@@ -205,9 +205,8 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 }
 
 func (m *Manager) clearActiveConnections() {
-	m.activeConnectionsLocker.Lock()
-	defer m.activeConnectionsLocker.Unlock()
-
+	m.activeConnectionsLock.Lock()
+	defer m.activeConnectionsLock.Unlock()
 	m.activeConnections = make(map[dbus.ObjectPath]*activeConnection)
 	m.setPropActiveConnections()
 }
@@ -237,9 +236,11 @@ func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 	return
 }
 func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (acinfo activeConnectionInfo, err error) {
-	var connType, connName, security, devType, devIfc, hwAddress, speed string
-	var ip4Address, ip4Mask, ip4Route, ip4Dns1, ip4Dns2, ip4Dns3 string
-	var ip6Address, ip6Route, ip6Dns1, ip6Dns2, ip6Dns3 string
+	var connType, connName, mobileNetworkType, security, devType, devIfc, hwAddress, speed string
+	var ip4Address, ip4Mask string
+	var ip4Gateways, ip4Dnses []string
+	var ip6Address, ip6Prefix string
+	var ip6Gateways, ip6Dnses []string
 	var ip4Info ip4ConnectionInfo
 	var ip6Info ip6ConnectionInfo
 
@@ -260,9 +261,15 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 	devType = getCustomDeviceType(nmDev.DeviceType.Get())
 	devIfc = nmDev.Interface.Get()
+	if devType == deviceModem {
+		mobileNetworkType = mmGetModemMobileNetworkType(dbus.ObjectPath(nmDev.Udi.Get()))
+	}
 
 	// connection data
-	hwAddress, _ = nmGeneralGetDeviceHwAddr(devPath)
+	hwAddress, err = nmGeneralGetDeviceHwAddr(devPath)
+	if err != nil {
+		hwAddress = ""
+	}
 	speed = nmGeneralGetDeviceSpeed(devPath)
 
 	cdata, err := nmConn.GetSettings()
@@ -311,61 +318,32 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// ipv4
-	switch getSettingIp4ConfigMethod(cdata) {
-	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-		ip4Address, ip4Mask, ip4Route, ip4Dns1 = nmGetDhcp4Info(nmDev.Dhcp4Config.Get())
-		ip4Dns2 = getSettingVkIp4ConfigDns(cdata)
-		// ip4Dns2 = getSettingVkIp4ConfigDns2(cdata)
-	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		ip4Address = getSettingVkIp4ConfigAddressesAddress(cdata)
-		ip4Mask = getSettingVkIp4ConfigAddressesMask(cdata)
-		ip4Route = getSettingVkIp4ConfigAddressesGateway(cdata)
-		ip4Dns1 = getSettingVkIp4ConfigDns(cdata)
+	if ip4Path := nmDev.Ip4Config.Get(); isNmObjectPathValid(ip4Path) {
+		ip4Address, ip4Mask, ip4Gateways, ip4Dnses = nmGetIp4ConfigInfo(ip4Path)
 	}
 	ip4Info = ip4ConnectionInfo{
-		Address: ip4Address,
-		Mask:    ip4Mask,
-		Route:   ip4Route,
-		Dns1:    ip4Dns1,
-		Dns2:    ip4Dns2,
-		Dns3:    ip4Dns3,
+		Address:  ip4Address,
+		Mask:     ip4Mask,
+		Gateways: ip4Gateways,
+		Dnses:    ip4Dnses,
 	}
 
 	// ipv6
-	if isSettingSectionExists(cdata, sectionIpv6) {
-		switch getSettingIp6ConfigMethod(cdata) {
-		case NM_SETTING_IP6_CONFIG_METHOD_AUTO, NM_SETTING_IP6_CONFIG_METHOD_DHCP:
-			dhcp6Path := nmDev.Dhcp6Config.Get()
-			if len(dhcp6Path) > 0 && string(dhcp6Path) != "/" {
-				ip6Address, ip6Route, ip6Dns1 = nmGetDhcp6Info(dhcp6Path)
-				ip6Dns2 = getSettingVkIp6ConfigDns(cdata)
-				ip6Info = ip6ConnectionInfo{
-					Address: ip6Address,
-					Route:   ip6Route,
-					Dns1:    ip6Dns1,
-					Dns2:    ip6Dns2,
-					Dns3:    ip6Dns3,
-				}
-			}
-		case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-			ip6Address = getSettingVkIp6ConfigAddressesAddress(cdata)
-			ip6Prefix := getSettingVkIp6ConfigAddressesPrefix(cdata)
-			ip6Route = getSettingVkIp6ConfigAddressesGateway(cdata)
-			ip6Dns1 = getSettingVkIp6ConfigDns(cdata)
-			ip6Info = ip6ConnectionInfo{
-				Address: fmt.Sprintf("%s/%d", ip6Address, ip6Prefix),
-				Route:   ip6Route,
-				Dns1:    ip6Dns1,
-				Dns2:    ip6Dns2,
-				Dns3:    ip6Dns3,
-			}
-		}
+	if ip6Path := nmDev.Ip6Config.Get(); isNmObjectPathValid(ip6Path) {
+		ip6Address, ip6Prefix, ip6Gateways, ip6Dnses = nmGetIp6ConfigInfo(ip6Path)
+	}
+	ip6Info = ip6ConnectionInfo{
+		Address:  ip6Address,
+		Prefix:   ip6Prefix,
+		Gateways: ip6Gateways,
+		Dnses:    ip6Dnses,
 	}
 
 	acinfo = activeConnectionInfo{
 		IsPrimaryConnection: nmGetPrimaryConnection() == apath,
 		ConnectionType:      connType,
 		ConnectionName:      connName,
+		MobileNetworkType:   mobileNetworkType,
 		Security:            security,
 		DeviceType:          devType,
 		DeviceInterface:     devIfc,

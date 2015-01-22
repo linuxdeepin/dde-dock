@@ -21,11 +21,31 @@
 
 package network
 
+import (
+	"sort"
+)
+
 // available values structure
 type availableValues map[string]kvalue
 type kvalue struct {
 	Value interface{}
 	Text  string // used for internationalization
+}
+
+type kvalues []kvalue
+
+func (ks kvalues) Len() int {
+	return len(ks)
+}
+func (ks kvalues) Swap(i, j int) {
+	ks[i], ks[j] = ks[j], ks[i]
+}
+func (ks kvalues) Less(i, j int) bool {
+	return ks[i].Text < ks[j].Text
+}
+
+func sortKvalues(ks []kvalue) {
+	sort.Sort(kvalues(ks))
 }
 
 // define key type

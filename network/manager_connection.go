@@ -22,12 +22,17 @@
 package network
 
 import (
+	nm "dbus/org/freedesktop/networkmanager"
 	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
-// TODO different connection structures for different types
+// TODO refactor code, different connection structures for different
+// types
 type connection struct {
+	nmConn   *nm.SettingsConnection
+	connType string
+
 	Path dbus.ObjectPath
 	Uuid string
 	Id   string
@@ -41,87 +46,59 @@ type connection struct {
 }
 
 func (m *Manager) initConnectionManage() {
-	m.initConnections()
-	nmSettings.ConnectNewConnection(func(path dbus.ObjectPath) {
-		m.handleConnectionChanged(opAdded, path)
+	m.connectionsLock.Lock()
+	m.connections = make(map[string][]*connection)
+	m.connectionsLock.Unlock()
+
+	for _, cpath := range nmGetConnectionList() {
+		m.addConnection(cpath)
+	}
+	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
+		m.addConnection(cpath)
 	})
 }
-func (m *Manager) initConnections() {
-	m.connectionsLocker.Lock()
-	m.connections = make(map[string][]*connection)
-	m.connectionsLocker.Unlock()
-	for _, c := range nmGetConnectionList() {
-		m.handleConnectionChanged(opAdded, c)
-	}
-}
 
-func (m *Manager) handleConnectionChanged(operation int32, path dbus.ObjectPath) {
-	m.connectionsLocker.Lock()
-	defer m.connectionsLocker.Unlock()
-
-	switch operation {
-	case opAdded:
-		nmConn, _ := nmNewSettingsConnection(path)
-		nmConn.ConnectRemoved(func() {
-			m.handleConnectionChanged(opRemoved, path)
-			nmDestroySettingsConnection(nmConn)
-		})
-		nmConn.ConnectUpdated(func() {
-			m.handleConnectionChanged(opUpdated, path)
-		})
-
-		conn := m.newConnection(path)
-		cdata, err := nmConn.GetSettings()
-		if err != nil {
-			return
-		}
-		switch getSettingConnectionType(cdata) {
-		case NM_SETTING_WIRED_SETTING_NAME:
-			// wired connection will be treatment specially
-		case NM_SETTING_WIRELESS_SETTING_NAME:
-			switch getCustomConnectionType(cdata) {
-			case connectionWireless:
-				m.connections[connectionWireless] = m.addConnection(m.connections[connectionWireless], conn)
-			case connectionWirelessAdhoc:
-				m.connections[connectionWirelessAdhoc] = m.addConnection(m.connections[connectionWirelessAdhoc], conn)
-			case connectionWirelessHotspot:
-				m.connections[connectionWirelessHotspot] = m.addConnection(m.connections[connectionWirelessHotspot], conn)
-			}
-		case NM_SETTING_PPPOE_SETTING_NAME:
-			m.connections[connectionPppoe] = m.addConnection(m.connections[connectionPppoe], conn)
-		case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
-			m.connections[connectionMobile] = m.addConnection(m.connections[connectionMobile], conn)
-		case NM_SETTING_VPN_SETTING_NAME:
-			m.connections[connectionVpn] = m.addConnection(m.connections[connectionVpn], conn)
-		}
-	case opRemoved:
-		conn := &connection{Path: path}
-		for k, conns := range m.connections {
-			if m.isConnectionExists(conns, conn) {
-				m.connections[k] = m.removeConnection(conns, conn)
-			}
-		}
-	case opUpdated:
-		conn := m.newConnection(path)
-		for k, conns := range m.connections {
-			if m.isConnectionExists(conns, conn) {
-				m.connections[k] = m.updateConnection(conns, conn)
-			}
-		}
-	}
-	m.setPropConnections()
-}
-
-func (m *Manager) newConnection(path dbus.ObjectPath) (conn *connection) {
-	conn = &connection{Path: path}
-
-	cdata, err := nmGetConnectionData(path)
+func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err error) {
+	conn = &connection{Path: cpath}
+	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
+		return
+	}
+	conn.nmConn = nmConn
+	conn.updateProps()
+
+	if conn.connType == connectionVpn {
+		m.config.addVpnConfig(conn.Uuid)
+	}
+
+	// connect signals
+	nmConn.ConnectRemoved(func() {
+		m.removeConnection(cpath)
+	})
+	nmConn.ConnectUpdated(func() {
+		m.updateConnection(cpath)
+	})
+
+	return
+}
+func (conn *connection) updateProps() {
+	cdata, err := conn.nmConn.GetSettings()
+	if err != nil {
+		logger.Error(err)
 		return
 	}
 
 	conn.Uuid = getSettingConnectionUuid(cdata)
 	conn.Id = getSettingConnectionId(cdata)
+
+	switch getSettingConnectionType(cdata) {
+	case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
+		conn.connType = connectionMobile
+	case NM_SETTING_VPN_SETTING_NAME:
+		conn.connType = connectionVpn
+	default:
+		conn.connType = getCustomConnectionType(cdata)
+	}
 
 	switch getSettingConnectionType(cdata) {
 	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME:
@@ -134,56 +111,112 @@ func (m *Manager) newConnection(path dbus.ObjectPath) (conn *connection) {
 			conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 		}
 	}
-	return
+}
+
+func (m *Manager) destroyConnection(conn *connection) {
+	m.config.removeConnection(conn.Uuid)
+	nmDestroySettingsConnection(conn.nmConn)
 }
 
 func (m *Manager) clearConnections() {
-	m.connectionsLocker.Lock()
-	defer m.connectionsLocker.Unlock()
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	for _, conns := range m.connections {
+		for _, conn := range conns {
+			m.destroyConnection(conn)
+		}
+	}
 	m.connections = make(map[string][]*connection)
 	m.setPropConnections()
 }
-func (m *Manager) addConnection(conns []*connection, conn *connection) []*connection {
-	if m.isConnectionExists(conns, conn) {
-		return conns
+
+func (m *Manager) addConnection(cpath dbus.ObjectPath) {
+	if m.isConnectionExists(cpath) {
+		logger.Warning("connection already exists", cpath)
+		return
 	}
-	if nmGetConnectionType(conn.Path) == NM_SETTING_VPN_SETTING_NAME {
-		m.config.addVpnConfig(conn.Uuid)
+
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	conn, err := m.newConnection(cpath)
+	if err != nil {
+		return
 	}
-	conns = append(conns, conn)
-	return conns
+	logger.Infof("add connection %#v", conn)
+	switch conn.connType {
+	case connectionWired:
+		// wired connections will be special treatment, do not shown
+		// for front-end here
+	default:
+		m.connections[conn.connType] = append(m.connections[conn.connType], conn)
+	}
+	m.setPropConnections()
 }
-func (m *Manager) removeConnection(conns []*connection, conn *connection) []*connection {
-	i := m.getConnectionIndex(conns, conn)
-	if i < 0 {
-		return conns
+
+func (m *Manager) removeConnection(cpath dbus.ObjectPath) {
+	if !m.isConnectionExists(cpath) {
+		logger.Warning("connection not found", cpath)
+		return
 	}
-	m.config.removeConnection(conns[i].Uuid)
+	connType, i := m.getConnectionIndex(cpath)
+
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	m.connections[connType] = m.doRemoveConnection(m.connections[connType], i)
+	m.setPropConnections()
+}
+func (m *Manager) doRemoveConnection(conns []*connection, i int) []*connection {
+	logger.Infof("remove connection %#v", conns[i])
+	m.destroyConnection(conns[i])
 	copy(conns[i:], conns[i+1:])
 	conns = conns[:len(conns)-1]
 	return conns
 }
-func (m *Manager) updateConnection(conns []*connection, conn *connection) []*connection {
-	i := m.getConnectionIndex(conns, conn)
-	if i < 0 {
-		return conns
+
+func (m *Manager) updateConnection(cpath dbus.ObjectPath) {
+	if !m.isConnectionExists(cpath) {
+		logger.Warning("connection not found", cpath)
+		return
 	}
-	conns[i] = conn
-	return conns
+	conn := m.getConnection(cpath)
+
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	conn.updateProps()
+	logger.Infof("update connection %#v", conn)
+	m.setPropConnections()
 }
-func (m *Manager) isConnectionExists(conns []*connection, conn *connection) bool {
-	if m.getConnectionIndex(conns, conn) >= 0 {
+
+func (m *Manager) getConnection(cpath dbus.ObjectPath) (conn *connection) {
+	connType, i := m.getConnectionIndex(cpath)
+	if i < 0 {
+		logger.Warning("connection not found", cpath)
+		return
+	}
+
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	conn = m.connections[connType][i]
+	return
+}
+func (m *Manager) isConnectionExists(cpath dbus.ObjectPath) bool {
+	_, i := m.getConnectionIndex(cpath)
+	if i >= 0 {
 		return true
 	}
 	return false
 }
-func (m *Manager) getConnectionIndex(conns []*connection, conn *connection) int {
-	for i, c := range conns {
-		if c.Path == conn.Path {
-			return i
+func (m *Manager) getConnectionIndex(cpath dbus.ObjectPath) (connType string, index int) {
+	m.connectionsLock.Lock()
+	defer m.connectionsLock.Unlock()
+	for t, conns := range m.connections {
+		for i, c := range conns {
+			if c.Path == cpath {
+				return t, i
+			}
 		}
 	}
-	return -1
+	return "", -1
 }
 
 // GetSupportedConnectionTypes return all supported connection types
@@ -191,19 +224,32 @@ func (m *Manager) GetSupportedConnectionTypes() (types []string) {
 	return supportedConnectionTypes
 }
 
+// TODO: remove, use device.UniqueUuid instead
 // GetWiredConnectionUuid return connection uuid for target wired device.
 func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid string) {
 	// this interface will be called by front-end always if user try
 	// to connect or edit the wired connection, so ensure the
 	// connection exists here is a good choice
 	m.ensureWiredConnectionExists(wiredDevPath, false)
-	uuid = nmGeneralGetDeviceRelatedUuid(wiredDevPath)
+	uuid = nmGeneralGetDeviceUniqueUuid(wiredDevPath)
 	return
 }
 
-func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, active bool) {
-	// check if wired connection for target device exists, if not, create one
-	uuid := nmGeneralGetDeviceRelatedUuid(wiredDevPath)
+func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+	switch nmGetDeviceType(devPath) {
+	case NM_DEVICE_TYPE_ETHERNET:
+		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
+	case NM_DEVICE_TYPE_WIFI:
+	case NM_DEVICE_TYPE_MODEM:
+		cpath, exists, err = m.ensureMobileConnectionExists(devPath, active)
+	}
+	return
+}
+
+// ensureWiredConnectionExists will check if wired connection for
+// target device exists, if not, create one.
+func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+	uuid := nmGeneralGetDeviceUniqueUuid(wiredDevPath)
 	var id string
 	if nmGeneralIsUsbDevice(wiredDevPath) {
 		id = nmGeneralGetDeviceVendor(wiredDevPath)
@@ -212,12 +258,30 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 	}
 	if cpath, err := nmGetConnectionByUuid(uuid); err != nil {
 		// connection not exists, create one
-		newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
+		exists = false
+		cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
 	} else {
 		// connection already exists, reset its name to keep
 		// consistent with current system's language
+		exists = true
 		nmSetConnectionId(cpath, id)
 	}
+	return
+}
+
+// ensureMobileConnectionExists will check if mobile connection for
+// target device exists, if not, create one.
+func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+	uuid := nmGeneralGetDeviceUniqueUuid(modemDevPath)
+	_, err = nmGetConnectionByUuid(uuid)
+	if err == nil {
+		// connection already exists
+		exists = true
+		return
+	}
+	// connection id will be reset when setup plan, so here just give
+	// an optional name like "mobile"
+	cpath, err = newMobileConnectionForDevice("mobile", uuid, modemDevPath, active)
 	return
 }
 
@@ -235,6 +299,9 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 
 // EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
+		m.generalEnsureUniqueConnectionExists(devPath, false)
+	}
 	session, err = newConnectionSessionByOpen(uuid, devPath)
 	if err != nil {
 		logger.Error(err)
@@ -245,8 +312,8 @@ func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session 
 }
 
 func (m *Manager) addConnectionSession(session *ConnectionSession) {
-	m.connectionSessionsLocker.Lock()
-	defer m.connectionSessionsLocker.Unlock()
+	m.connectionSessionsLock.Lock()
+	defer m.connectionSessionsLock.Unlock()
 
 	// install dbus session
 	err := dbus.InstallOnSession(session)
@@ -257,8 +324,8 @@ func (m *Manager) addConnectionSession(session *ConnectionSession) {
 	m.connectionSessions = append(m.connectionSessions, session)
 }
 func (m *Manager) removeConnectionSession(session *ConnectionSession) {
-	m.connectionSessionsLocker.Lock()
-	defer m.connectionSessionsLocker.Unlock()
+	m.connectionSessionsLock.Lock()
+	defer m.connectionSessionsLock.Unlock()
 
 	dbus.UnInstallObject(session)
 
@@ -282,9 +349,8 @@ func (m *Manager) getConnectionSessionIndex(session *ConnectionSession) int {
 	return -1
 }
 func (m *Manager) clearConnectionSessions() {
-	m.connectionSessionsLocker.Lock()
-	defer m.connectionSessionsLocker.Unlock()
-
+	m.connectionSessionsLock.Lock()
+	defer m.connectionSessionsLock.Unlock()
 	for _, session := range m.connectionSessions {
 		dbus.UnInstallObject(session)
 	}
@@ -293,20 +359,29 @@ func (m *Manager) clearConnectionSessions() {
 
 // DeleteConnection delete a connection through uuid.
 func (m *Manager) DeleteConnection(uuid string) (err error) {
-	//TODO: remove(uninstall dbus) editing connection_session object
+	// FIXME: uninstall ConnectionSession dbus object if under editing
 	cpath, err := nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return
 	}
 	conn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
-		return err
+		return
 	}
 	return conn.Delete()
 }
 
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
+	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
+		var exists bool
+		cpath, exists, err = m.generalEnsureUniqueConnectionExists(devPath, true)
+		if !exists {
+			// connection will be activated in
+			// generalEnsureUniqueConnectionExists() if not exists
+			return
+		}
+	}
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
 		return

@@ -36,6 +36,7 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 
 func (s *ConnectionSession) setProps() {
 	s.setPropType()
+	s.setPropAllowDelete()
 	s.setPropAvailableVirtualSections()
 	s.setPropAvailableSections()
 	s.setPropAvailableKeys()
@@ -51,6 +52,15 @@ func (s *ConnectionSession) setProps() {
 func (s *ConnectionSession) setPropType() {
 	s.Type = getCustomConnectionType(s.data)
 	dbus.NotifyChange(s, "Type")
+}
+
+func (s *ConnectionSession) setPropAllowDelete() {
+	if isNmObjectPathValid(s.devPath) && nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid {
+		s.AllowDelete = false
+	} else {
+		s.AllowDelete = true
+	}
+	dbus.NotifyChange(s, "AllowDelete")
 }
 
 func (s *ConnectionSession) setPropAvailableVirtualSections() {

@@ -22,7 +22,10 @@
 package network
 
 import (
+	"pkg.linuxdeepin.com/lib/dbus"
 	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/iso"
+	"pkg.linuxdeepin.com/lib/mobileprovider"
 )
 
 const NM_SETTING_GSM_SETTING_NAME = "gsm"
@@ -69,13 +72,66 @@ const (
 	NM_SETTING_GSM_BAND_U2600   = 0x00002000 /* WCDMA 3GPP UMTS 2600 MHz     (Class VII, internal) */
 )
 
+const mobileProviderValueCustom = "<custom>"
+
+func newMobileConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, err error) {
+	logger.Infof("new mobile connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
+
+	// guess default plan for mobile device
+	countryCode, _ := iso.GetLocaleCountryCode()
+	serviceType := getMobileDeviceServicType(devPath)
+	plan, err := getDefaultPlanForMobileDevice(countryCode, serviceType)
+	if err != nil {
+		return
+	}
+
+	data := newMobileConnectionData("mobile", uuid, serviceType)
+	addSettingSection(data, sectionCache)
+	logicSetSettingVkMobileCountry(data, countryCode)
+	logicSetSettingVkMobileProvider(data, plan.ProviderName)
+	logicSetSettingVkMobilePlan(data, mobileprovider.MarshalPlan(plan))
+	refileSectionCache(data)
+
+	if active {
+		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+	} else {
+		cpath, err = nmAddConnection(data)
+	}
+	return
+}
+func getDefaultPlanForMobileDevice(countryCode, serviceType string) (plan mobileprovider.Plan, err error) {
+	if serviceType == connectionMobileGsm {
+		plan, err = mobileprovider.GetDefaultGSMPlanForCountry(countryCode)
+	} else {
+		plan, err = mobileprovider.GetDefaultCDMAPlanForCountry(countryCode)
+	}
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func getMobileDeviceServicType(devPath dbus.ObjectPath) (serviceType string) {
+	capabilities := nmGetDeviceModemCapabilities(devPath)
+	if (capabilities & NM_DEVICE_MODEM_CAPABILITY_LTE) == capabilities {
+		// all LTE modems treated as GSM/UMTS
+		serviceType = connectionMobileGsm
+	} else if (capabilities & NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS) == capabilities {
+		serviceType = connectionMobileGsm
+	} else if (capabilities & NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO) == capabilities {
+		serviceType = connectionMobileCdma
+	} else {
+		logger.Errorf("Unknown modem capabilities (0x%x)", capabilities)
+	}
+	return
+}
+
 func newMobileConnectionData(id, uuid, serviceType string) (data connectionData) {
 	data = make(connectionData)
 
 	addSettingSection(data, sectionConnection)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionAutoconnect(data, false)
+	setSettingConnectionAutoconnect(data, true)
 
 	logicSetSettingVkMobileServiceType(data, serviceType)
 
@@ -100,16 +156,18 @@ func initSettingSectionGsm(data connectionData) {
 
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
-	if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
+	if getSettingVkMobileProvider(data) == mobileProviderValueCustom {
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
+		if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
+			keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
+		}
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_ID)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_TYPE)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
+		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
 	}
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_ID)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_TYPE)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
-	keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
 	return
 }
 
@@ -119,14 +177,6 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
 	case NM_SETTING_GSM_APN:
-		// TODO just for test
-		values = []kvalue{
-			kvalue{"3gnet", Tr("China Unicom Internet")},
-			kvalue{"3gwap", Tr("China Unicom MMS")},
-			kvalue{"cmwap", Tr("China Mobile WAP")},
-			kvalue{"cmnet", Tr("China Mobile Internet")},
-			kvalue{"cmwap", Tr("China Mobile MMS")},
-		}
 	case NM_SETTING_GSM_NETWORK_TYPE:
 		values = []kvalue{
 			kvalue{NM_SETTING_GSM_NETWORK_TYPE_ANY, Tr("Any")},
@@ -144,8 +194,35 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 // Check whether the values are correct
 func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
-	// TODO
 	ensureSettingGsmApnNoEmpty(data, errs)
 	ensureSettingGsmNumberNoEmpty(data, errs)
 	return
+}
+
+func syncMoibleConnectionId(data connectionData) {
+	// sync connection name
+	if !isSettingSectionExists(data, sectionCache) {
+		return
+	}
+	providerName := getSettingVkMobileProvider(data)
+	if providerName == mobileProviderValueCustom {
+		switch getSettingVkMobileServiceType(data) {
+		case connectionMobileGsm:
+			setSettingConnectionId(data, Tr("Custom")+" GSM")
+		case connectionMobileCdma:
+			setSettingConnectionId(data, Tr("Custom")+" CDMA")
+		}
+	} else {
+		if plan, err := mobileprovider.UnmarshalPlan(getSettingVkMobilePlan(data)); err == nil {
+			if plan.IsGSM {
+				if len(plan.Name) > 0 {
+					setSettingConnectionId(data, providerName+" "+plan.Name)
+				} else {
+					setSettingConnectionId(data, providerName+" "+Tr("Default"))
+				}
+			} else {
+				setSettingConnectionId(data, providerName)
+			}
+		}
+	}
 }
