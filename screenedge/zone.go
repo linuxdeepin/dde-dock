@@ -25,6 +25,7 @@ import (
 	"os/exec"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"strings"
+	"time"
 )
 
 type areaRange struct {
@@ -35,12 +36,21 @@ type areaRange struct {
 }
 
 const (
-	DISTANCE         = int32(10)
-	EDGE_TOPLEFT     = "TopLeft"
-	EDGE_BOTTOMLEFT  = "BottomLeft"
-	EDGE_TOPRIGHT    = "TopRight"
-	EDGE_BOTTOMRIGHT = "BottomRight"
-	ACTION_WORKSPACE = "workspace"
+	edgeDistance int32 = 5
+
+	leftTopEdge     = "TopLeft"
+	leftBottomEdge  = "BottomLeft"
+	rightTopEdge    = "TopRight"
+	rightBottomEdge = "BottomRight"
+
+	edgeActionWorkspace = "workspace"
+)
+
+const (
+	leftTopDelay     int32 = 0
+	leftBottomDelay        = 0
+	rightTopDelay          = 0
+	rightBottomDelay       = 500
 )
 
 var (
@@ -79,13 +89,13 @@ func registerZoneArea() {
 		return
 	}
 
-	topLeftArea = areaRange{startX, startY, startX + DISTANCE, startY + DISTANCE}
+	topLeftArea = areaRange{startX, startY, startX + edgeDistance, startY + edgeDistance}
 	logger.Debug("TopLeft: ", topLeftArea)
-	bottomLeftArea = areaRange{startX, endY - DISTANCE, startX + DISTANCE, endY}
+	bottomLeftArea = areaRange{startX, endY - edgeDistance, startX + edgeDistance, endY}
 	logger.Debug("BottomLeft: ", bottomLeftArea)
-	topRightArea = areaRange{endX - DISTANCE, startY, endX, startY + DISTANCE}
+	topRightArea = areaRange{endX - edgeDistance, startY, endX, startY + edgeDistance}
 	logger.Debug("TopRight: ", topRightArea)
-	bottomRightArea = areaRange{endX - DISTANCE, endY - DISTANCE, endX, endY}
+	bottomRightArea = areaRange{endX - edgeDistance, endY - edgeDistance, endX, endY}
 	logger.Debug("BottomRight: ", bottomRightArea)
 
 	logger.Debug("topLeft: ", topLeftArea)
@@ -183,8 +193,41 @@ func (m *Manager) destroy() {
 func newManager() *Manager {
 	m := &Manager{}
 
+	m.lTopTimer = &edgeTimer{}
+	m.lBottomTimer = &edgeTimer{}
+	m.rTopTimer = &edgeTimer{}
+	m.rBottomTimer = &edgeTimer{}
+
 	registerZoneArea()
 	m.listenSignal()
 
 	return m
+}
+
+type edgeTimer struct {
+	timer *time.Timer
+}
+
+func (eTimer *edgeTimer) DoAction(edge string, timeout int32) {
+	if timeout == 0 {
+		execEdgeAction(edge)
+		return
+	}
+
+	eTimer.timer = time.NewTimer(time.Millisecond *
+		time.Duration(timeout))
+	go func() {
+		<-eTimer.timer.C
+		execEdgeAction(edge)
+		eTimer.timer = nil
+	}()
+}
+
+func (eTimer *edgeTimer) StopTimer() {
+	if eTimer.timer == nil {
+		return
+	}
+
+	eTimer.timer.Stop()
+	eTimer.timer = nil
 }

@@ -25,7 +25,12 @@ import (
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-type Manager struct{}
+type Manager struct {
+	lTopTimer    *edgeTimer
+	lBottomTimer *edgeTimer
+	rTopTimer    *edgeTimer
+	rBottomTimer *edgeTimer
+}
 
 const (
 	ZONE_DEST = "com.deepin.daemon.Zone"
@@ -33,7 +38,7 @@ const (
 	ZONE_IFC  = "com.deepin.daemon.Zone"
 )
 
-func (op *Manager) GetDBusInfo() dbus.DBusInfo {
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       ZONE_DEST,
 		ObjectPath: ZONE_PATH,
@@ -41,36 +46,18 @@ func (op *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (op *Manager) listenSignal() {
+func (m *Manager) listenSignal() {
 	dspObj.ConnectPrimaryChanged(func(argv []interface{}) {
 		unregisterZoneArea()
 		registerZoneArea()
 	})
 
 	areaObj.ConnectCursorInto(func(x, y int32, id string) {
-		if id != areaId {
-			return
-		}
+		m.handleCursorSignal(x, y, id, true)
+	})
 
-		if isAppInBlackList() {
-			return
-		}
-
-		if pid, ok := isActiveWindowFullscreen(); ok {
-			if !isAppInWhiteList(pid) {
-				return
-			}
-		}
-
-		if isInArea(x, y, topLeftArea) {
-			execEdgeAction(EDGE_TOPLEFT)
-		} else if isInArea(x, y, bottomLeftArea) {
-			execEdgeAction(EDGE_BOTTOMLEFT)
-		} else if isInArea(x, y, topRightArea) {
-			execEdgeAction(EDGE_TOPRIGHT)
-		} else if isInArea(x, y, bottomRightArea) {
-			execEdgeAction(EDGE_BOTTOMRIGHT)
-		}
+	areaObj.ConnectCursorOut(func(x, y int32, id string) {
+		m.handleCursorSignal(x, y, id, false)
 	})
 
 	areaObj.ConnectCancelAllArea(func() {
@@ -83,13 +70,55 @@ func (op *Manager) listenSignal() {
 	})
 
 	launchObj.ConnectClosed(func() {
-		op.enableAllEdge()
+		m.enableAllEdge()
 	})
 }
 
-func (op *Manager) enableAllEdge() {
-	op.SetTopLeft(op.TopLeftAction())
-	op.SetBottomLeft(op.BottomLeftAction())
-	op.SetTopRight(op.TopRightAction())
-	op.SetBottomRight(op.BottomRightAction())
+func (m *Manager) enableAllEdge() {
+	m.SetTopLeft(m.TopLeftAction())
+	m.SetBottomLeft(m.BottomLeftAction())
+	m.SetTopRight(m.TopRightAction())
+	m.SetBottomRight(m.BottomRightAction())
+}
+
+func (m *Manager) filterCursorSignal(id string) bool {
+	if id != areaId {
+		return true
+	}
+
+	if isAppInBlackList() {
+		return true
+	}
+
+	if pid, ok := isActiveWindowFullscreen(); ok {
+		if !isAppInWhiteList(pid) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (m *Manager) handleCursorSignal(x, y int32, id string, into bool) {
+	if m.filterCursorSignal(id) {
+		return
+	}
+
+	if !into {
+		m.lTopTimer.StopTimer()
+		m.lBottomTimer.StopTimer()
+		m.rTopTimer.StopTimer()
+		m.rBottomTimer.StopTimer()
+		return
+	}
+
+	if isInArea(x, y, topLeftArea) {
+		m.lTopTimer.DoAction(leftTopEdge, leftTopDelay)
+	} else if isInArea(x, y, bottomLeftArea) {
+		m.lBottomTimer.DoAction(leftBottomEdge, leftBottomDelay)
+	} else if isInArea(x, y, topRightArea) {
+		m.rTopTimer.DoAction(rightTopEdge, rightTopDelay)
+	} else if isInArea(x, y, bottomRightArea) {
+		m.rBottomTimer.DoAction(rightBottomEdge, rightBottomDelay)
+	}
 }
