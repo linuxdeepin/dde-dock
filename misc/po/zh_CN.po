@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# szd_liufei <liufei@linuxdeepin.com>, 2014
+# szd_liufei <liufei@linuxdeepin.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-26 08:41+0000\n"
+"PO-Revision-Date: 2015-03-25 06:11+0000\n"
 "Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/dde-daemon/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr "首字符必须为小写字母"
 
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
-msgstr "此用户名已存在。"
+msgstr "此用户名已存在"
 
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
