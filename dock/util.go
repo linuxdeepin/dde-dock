@@ -67,7 +67,7 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
 		logger.Debug("change xpm to data uri")
-		return xpm_to_dataurl(icon)
+		return xpm_to_dataurl(iconPath)
 	}
 
 	logger.Debug("get_theme_icon:", icon)

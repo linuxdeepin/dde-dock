@@ -281,9 +281,11 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
             }
         }
 
-        if (g_str_has_prefix(exec_name, "google-chrome-") || g_strcmp0(exec_name, "chrome") == 0) {
+        if (g_strcmp0(exec_name, "chrome") == 0) {
             g_free(exec_name);
-            exec_name = g_strdup("google-chrome");
+            exec_name = g_strstr_len(exec_fullname, -1, "unstable") == NULL ?
+                g_strdup("google-chrome") :
+                g_strdup("google-chrome-unstable");
         }
 
         if (app_id == NULL) {

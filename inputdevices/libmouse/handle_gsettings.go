@@ -34,6 +34,8 @@ func (mouse *Mouse) handleGSettings() {
 			mouse.disableTouchpad(mouse.DisableTpad.Get())
 		case mouseKeyNaturalScroll:
 			mouse.naturalScroll(mouse.NaturalScroll.Get())
+		case mouseKeyMiddleButton:
+			mouse.middleButtonEmulation(mouse.MiddleButtonEmulation.Get())
 		case mouseKeyAcceleration:
 			mouse.motionAcceleration(mouse.MotionAcceleration.Get())
 		case mouseKeyThreshold:

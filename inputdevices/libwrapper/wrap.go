@@ -168,6 +168,20 @@ func SetMouseNaturalScroll(deviceid int32, name string, enabled bool) bool {
 	return true
 }
 
+func SetMiddleButtonEmulation(deviceid int32, enabled bool) bool {
+	em := C.int(0)
+	if enabled {
+		em = 1
+	}
+
+	ret := C.set_middle_button_emulation(C.int(deviceid), em)
+	if ret == -1 {
+		return false
+	}
+
+	return true
+}
+
 func SetTouchpadEnabled(deviceid int32, enabled bool) bool {
 	tmp := C.int(0)
 	if enabled {
