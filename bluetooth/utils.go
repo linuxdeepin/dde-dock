@@ -24,21 +24,11 @@ package bluetooth
 import (
 	apidevice "dbus/com/deepin/api/device"
 	"encoding/json"
-	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 func isStringInArray(str string, list []string) bool {
 	for _, tmp := range list {
 		if tmp == str {
-			return true
-		}
-	}
-	return false
-}
-
-func isDBusPathInArray(path dbus.ObjectPath, pathes []dbus.ObjectPath) bool {
-	for _, tmp := range pathes {
-		if tmp == path {
 			return true
 		}
 	}

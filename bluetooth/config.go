@@ -22,14 +22,13 @@
 package bluetooth
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/utils"
 )
 
 type config struct {
 	core utils.Config
 
-	Adapters map[dbus.ObjectPath]*adapterConfig // use adapter dbus path as key
+	Adapters map[string]*adapterConfig // use adapter hardware address as key
 }
 type adapterConfig struct {
 	Powered bool
@@ -39,7 +38,7 @@ func newConfig() (c *config) {
 	c = &config{}
 	c.core.SetConfigName("bluetooth")
 	logger.Info("config file:", c.core.GetConfigFile())
-	c.Adapters = make(map[dbus.ObjectPath]*adapterConfig)
+	c.Adapters = make(map[string]*adapterConfig)
 	c.load()
 	c.clearSpareConfig()
 	return
@@ -59,48 +58,52 @@ func newAdapterConfig() (ac *adapterConfig) {
 func (c *config) clearSpareConfig() {
 	c.core.Lock()
 	defer c.core.Unlock()
+	var addresses []string
 	apathes := bluezGetAdapters()
-	for apath, _ := range c.Adapters {
-		if !isDBusPathInArray(apath, apathes) {
-			delete(c.Adapters, apath)
+	for _, apath := range apathes {
+		addresses = append(addresses, bluezGetAdapterAddress(apath))
+	}
+	for address, _ := range c.Adapters {
+		if !isStringInArray(address, addresses) {
+			delete(c.Adapters, address)
 		}
 	}
 }
 
-func (c *config) addAdapterConfig(apath dbus.ObjectPath) {
-	if c.isAdapterConfigExists(apath) {
+func (c *config) addAdapterConfig(address string) {
+	if c.isAdapterConfigExists(address) {
 		return
 	}
 
 	c.core.Lock()
 	defer c.core.Unlock()
-	c.Adapters[apath] = newAdapterConfig()
+	c.Adapters[address] = newAdapterConfig()
 }
-func (c *config) removeAdapterConfig(apath dbus.ObjectPath) {
-	if !c.isAdapterConfigExists(apath) {
-		logger.Errorf("config for adapter %s not exists", apath)
+func (c *config) removeAdapterConfig(address string) {
+	if !c.isAdapterConfigExists(address) {
+		logger.Errorf("config for adapter %s not exists", address)
 		return
 	}
 
 	c.core.Lock()
 	defer c.core.Unlock()
-	delete(c.Adapters, apath)
+	delete(c.Adapters, address)
 }
-func (c *config) getAdapterConfig(apath dbus.ObjectPath) (ac *adapterConfig, ok bool) {
+func (c *config) getAdapterConfig(address string) (ac *adapterConfig, ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
-	ac, ok = c.Adapters[apath]
+	ac, ok = c.Adapters[address]
 	return
 }
-func (c *config) isAdapterConfigExists(apath dbus.ObjectPath) (ok bool) {
+func (c *config) isAdapterConfigExists(address string) (ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
-	_, ok = c.Adapters[apath]
+	_, ok = c.Adapters[address]
 	return
 
 }
-func (c *config) getAdapterConfigPowered(apath dbus.ObjectPath) (powered bool) {
-	ac, ok := c.getAdapterConfig(apath)
+func (c *config) getAdapterConfigPowered(address string) (powered bool) {
+	ac, ok := c.getAdapterConfig(address)
 	if !ok {
 		return
 	}
@@ -110,8 +113,8 @@ func (c *config) getAdapterConfigPowered(apath dbus.ObjectPath) (powered bool) {
 	c.core.Unlock()
 	return
 }
-func (c *config) setAdapterConfigPowered(apath dbus.ObjectPath, powered bool) {
-	ac, ok := c.getAdapterConfig(apath)
+func (c *config) setAdapterConfigPowered(address string, powered bool) {
+	ac, ok := c.getAdapterConfig(address)
 	if !ok {
 		return
 	}

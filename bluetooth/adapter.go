@@ -107,8 +107,8 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	}
 
 	// initialize adapter power state
-	b.config.addAdapterConfig(apath)
-	oldPowered := b.config.getAdapterConfigPowered(apath)
+	b.config.addAdapterConfig(bluezGetAdapterAddress(apath))
+	oldPowered := b.config.getAdapterConfigPowered(bluezGetAdapterAddress(apath))
 	b.SetAdapterPowered(apath, oldPowered)
 	if oldPowered {
 		b.RequestDiscovery(apath)
@@ -197,7 +197,7 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err 
 	err = bluezSetAdapterPowered(apath, powered)
 	if err == nil {
 		// save the powered state
-		b.config.setAdapterConfigPowered(apath, powered)
+		b.config.setAdapterConfigPowered(bluezGetAdapterAddress(apath), powered)
 	}
 	return
 }

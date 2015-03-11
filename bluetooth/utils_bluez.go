@@ -102,6 +102,15 @@ func bluezStopDiscovery(apath dbus.ObjectPath) (err error) {
 	return
 }
 
+func bluezGetAdapterAddress(apath dbus.ObjectPath) (address string) {
+	bluezAdapter, err := bluezNewAdapter(apath)
+	if err != nil {
+		return
+	}
+	address = bluezAdapter.Address.Get()
+	return
+}
+
 func bluezGetAdapterAlias(apath dbus.ObjectPath) (alias string) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
