@@ -24,17 +24,14 @@ package bluetooth
 import (
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/utils"
-	"sync"
 )
 
 type config struct {
 	core utils.Config
 
-	lock     sync.Mutex
 	Adapters map[dbus.ObjectPath]*adapterConfig // use adapter dbus path as key
 }
 type adapterConfig struct {
-	lock    sync.Mutex
 	Powered bool
 }
 
@@ -60,8 +57,8 @@ func newAdapterConfig() (ac *adapterConfig) {
 }
 
 func (c *config) clearSpareConfig() {
-	c.lock.Lock()
-	defer c.lock.Unlock()
+	c.core.Lock()
+	defer c.core.Unlock()
 	apathes := bluezGetAdapters()
 	for apath, _ := range c.Adapters {
 		if !isDBusPathInArray(apath, apathes) {
@@ -74,8 +71,9 @@ func (c *config) addAdapterConfig(apath dbus.ObjectPath) {
 	if c.isAdapterConfigExists(apath) {
 		return
 	}
-	c.lock.Lock()
-	defer c.lock.Unlock()
+
+	c.core.Lock()
+	defer c.core.Unlock()
 	c.Adapters[apath] = newAdapterConfig()
 }
 func (c *config) removeAdapterConfig(apath dbus.ObjectPath) {
@@ -83,46 +81,45 @@ func (c *config) removeAdapterConfig(apath dbus.ObjectPath) {
 		logger.Errorf("config for adapter %s not exists", apath)
 		return
 	}
-	c.lock.Lock()
-	defer c.lock.Unlock()
+
+	c.core.Lock()
+	defer c.core.Unlock()
 	delete(c.Adapters, apath)
 }
+func (c *config) getAdapterConfig(apath dbus.ObjectPath) (ac *adapterConfig, ok bool) {
+	c.core.Lock()
+	defer c.core.Unlock()
+	ac, ok = c.Adapters[apath]
+	return
+}
 func (c *config) isAdapterConfigExists(apath dbus.ObjectPath) (ok bool) {
-	c.lock.Lock()
-	defer c.lock.Unlock()
+	c.core.Lock()
+	defer c.core.Unlock()
 	_, ok = c.Adapters[apath]
 	return
 
 }
-func (c *config) getAdapterPowered(apath dbus.ObjectPath) (powered bool) {
-	c.lock.Lock()
-	defer c.lock.Unlock()
-	ac, ok := c.Adapters[apath]
+func (c *config) getAdapterConfigPowered(apath dbus.ObjectPath) (powered bool) {
+	ac, ok := c.getAdapterConfig(apath)
 	if !ok {
 		return
 	}
-	powered = ac.getAdapterPowered()
-	return
-}
-func (c *config) setAdapterPowered(apath dbus.ObjectPath, powered bool) {
-	ac, ok := c.Adapters[apath]
-	if !ok {
-		return
-	}
-	ac.setAdapterPowered(powered)
-	c.save()
-	return
-}
 
-func (ac *adapterConfig) getAdapterPowered() (powered bool) {
-	ac.lock.Lock()
-	defer ac.lock.Unlock()
+	c.core.Lock()
 	powered = ac.Powered
+	c.core.Unlock()
 	return
 }
-func (ac *adapterConfig) setAdapterPowered(powered bool) {
-	ac.lock.Lock()
-	defer ac.lock.Unlock()
+func (c *config) setAdapterConfigPowered(apath dbus.ObjectPath, powered bool) {
+	ac, ok := c.getAdapterConfig(apath)
+	if !ok {
+		return
+	}
+
+	c.core.Lock()
 	ac.Powered = powered
+	c.core.Unlock()
+
+	c.save()
 	return
 }

@@ -51,7 +51,7 @@ type device struct {
 	connecting   bool
 	State        uint32
 
-	// optinal
+	// optional
 	Icon string
 	RSSI int16
 }
@@ -168,6 +168,9 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 		logger.Warning("repeat add device:", dpath)
 		return
 	}
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
 	d.notifyDeviceAdded()
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	b.setPropDevices()
@@ -191,6 +194,9 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*
 		logger.Warning("repeat remove device:", dpath)
 		return devices
 	}
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
 	destroyDevice(devices[i])
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
@@ -215,6 +221,8 @@ func (b *Bluetooth) isDeviceExists(devices []*device, dpath dbus.ObjectPath) boo
 	return false
 }
 func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
 	for i, d := range devices {
 		if d.Path == dpath {
 			return i

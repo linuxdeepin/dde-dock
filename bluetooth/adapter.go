@@ -108,12 +108,14 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 
 	// initialize adapter power state
 	b.config.addAdapterConfig(apath)
-	oldPowered := b.config.getAdapterPowered(apath)
+	oldPowered := b.config.getAdapterConfigPowered(apath)
 	b.SetAdapterPowered(apath, oldPowered)
 	if oldPowered {
 		b.RequestDiscovery(apath)
 	}
 
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
 	a := newAdapter(apath)
 	b.adapters = append(b.adapters, a)
 	a.notifyAdapterAdded()
@@ -125,6 +127,9 @@ func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 		logger.Warning("repeat remove adapter:", apath)
 		return
 	}
+
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
 	b.adapters[i].notifyAdapterRemoved()
 	destroyAdapter(b.adapters[i])
 	copy(b.adapters[i:], b.adapters[i+1:])
@@ -145,10 +150,15 @@ func (b *Bluetooth) getAdapter(apath dbus.ObjectPath) (a *adapter, err error) {
 		logger.Error(err)
 		return
 	}
+
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
 	a = b.adapters[i]
 	return
 }
 func (b *Bluetooth) getAdapterIndex(apath dbus.ObjectPath) int {
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
 	for i, a := range b.adapters {
 		if a.Path == apath {
 			return i
@@ -169,10 +179,16 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
 		return
 	}
 
-	err = bluezStartDiscovery(apath)
 	go func() {
-		time.Sleep(20 * time.Second)
-		bluezStopDiscovery(apath)
+		time.Sleep(3 * time.Second) // waiting for adapter ready
+		err = bluezStartDiscovery(apath)
+
+		if err == nil {
+			time.Sleep(20 * time.Second)
+			if b.isAdapterExists(apath) {
+				bluezStopDiscovery(apath)
+			}
+		}
 	}()
 	return
 }
@@ -181,7 +197,7 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err 
 	err = bluezSetAdapterPowered(apath, powered)
 	if err == nil {
 		// save the powered state
-		b.config.setAdapterPowered(apath, powered)
+		b.config.setAdapterConfigPowered(apath, powered)
 	}
 	return
 }
