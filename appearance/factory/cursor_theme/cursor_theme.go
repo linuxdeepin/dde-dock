@@ -79,7 +79,6 @@ func NewCursorTheme(handler func([]string)) *CursorTheme {
 		cursor.watcher.SetEventHandler(cursor.handleEvent)
 		go cursor.watcher.StartWatch()
 	}
-	xsettings.InitXSettings()
 	// handle cursor changed by gtk+
 	C.handle_cursor_changed()
 
@@ -143,7 +142,6 @@ func (cursor *CursorTheme) Destroy() {
 
 	cursor.watcher.EndWatch()
 	cursor.watcher = nil
-	xsettings.Unref()
 
 }
 
@@ -182,7 +180,12 @@ func (cursor *CursorTheme) GetThumbnail(theme string) string {
 }
 
 func setThemeViaXSettings(theme string) error {
-	return xsettings.SetString(xsettings.GtkStringCursorTheme, theme)
+	proxy, err := xsettings.NewXSProxy()
+	if err != nil {
+		return err
+	}
+	defer proxy.Free()
+	return proxy.SetString(xsettings.GtkCursorTheme, theme)
 }
 
 func fixedQtCursor(theme string) error {

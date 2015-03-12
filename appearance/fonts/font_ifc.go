@@ -74,7 +74,11 @@ func (font *FontManager) Set(fontType, name string, size int32) {
 			return
 		}
 
-		xsettings.SetString(xsettings.GtkStringFontName, value)
+		if font.xsProxy == nil {
+			return
+		}
+		font.xsProxy.SetString(xsettings.GtkFontName, value)
+
 		settings := CheckAndNewGSettings(wmGSettingsSchema)
 		if settings != nil {
 			settings.SetString("titlebar-font", value)
@@ -99,10 +103,13 @@ func (font *FontManager) Set(fontType, name string, size int32) {
  * lcdfilter default "lcddefault"
  */
 func (font *FontManager) SetXft(anti, hinting uint32, hintstyle, rgba string) {
-	xsettings.SetInteger(xsettings.XftBoolAntialias, anti)
-	xsettings.SetInteger(xsettings.XftBoolHinting, hinting)
-	xsettings.SetString(xsettings.XftStringHintStyle, hintstyle)
-	xsettings.SetString(xsettings.XftStringRgba, rgba)
+	if font.xsProxy == nil {
+		return
+	}
+	font.xsProxy.SetInteger(xsettings.XftAntialias, anti)
+	font.xsProxy.SetInteger(xsettings.XftHinting, hinting)
+	font.xsProxy.SetString(xsettings.XftHintStyle, hintstyle)
+	font.xsProxy.SetString(xsettings.XftRgba, rgba)
 }
 
 func (font *FontManager) GetStyleListByName(name string) []string {
@@ -126,7 +133,10 @@ func (font *FontManager) GetNameList(fontType string) []string {
 }
 
 func (font *FontManager) Destroy() {
-	xsettings.Unref()
+	if font.xsProxy != nil {
+		font.xsProxy.Free()
+		font.xsProxy = nil
+	}
 }
 
 func setQt4Font(config, name string, size int32) {

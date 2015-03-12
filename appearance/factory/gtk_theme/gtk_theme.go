@@ -71,7 +71,6 @@ func NewGtkTheme(handler func([]string)) *GtkTheme {
 		gtk.watcher.SetEventHandler(gtk.handleEvent)
 		go gtk.watcher.StartWatch()
 	}
-	xsettings.InitXSettings()
 
 	return gtk
 }
@@ -123,7 +122,6 @@ func (gtk *GtkTheme) Destroy() {
 
 	gtk.watcher.EndWatch()
 	gtk.watcher = nil
-	xsettings.Unref()
 }
 
 func (gtk *GtkTheme) GetNameStrList() []string {
@@ -196,7 +194,12 @@ func getThemeList(sysDirs, userDirs []PathInfo) []PathInfo {
 }
 
 func setThemeViaXSettings(theme string) error {
-	return xsettings.SetString(xsettings.NetStringThemeName, theme)
+	proxy, err := xsettings.NewXSProxy()
+	if err != nil {
+		return err
+	}
+	defer proxy.Free()
+	return proxy.SetString(xsettings.NetThemeName, theme)
 }
 
 func setQt4Theme(config string) error {

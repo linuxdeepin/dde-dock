@@ -28,13 +28,15 @@ import (
 type FontManager struct {
 	standardList  []StyleInfo
 	monospaceList []StyleInfo
+
+	xsProxy *xsettings.XSProxy
 }
 
 func NewFontManager() *FontManager {
 	font := &FontManager{}
 
+	font.xsProxy, _ = xsettings.NewXSProxy()
 	font.standardList, font.monospaceList = getStyleInfoList()
-	xsettings.InitXSettings()
 
 	return font
 }
