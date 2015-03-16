@@ -90,7 +90,7 @@ func initNmStateReasons() {
 	// device error table for custom state reasons
 	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
 	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL] = Tr("Please make sure SIM card has been inserted with mobile network signal.")
-	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage of SIM card.")
+	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage.")
 
 	// vpn error table
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")

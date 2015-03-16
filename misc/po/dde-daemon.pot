@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-13 18:34+0800\n"
+"POT-Creation-Date: 2015-03-16 17:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1503,8 +1503,7 @@ msgid "Please make sure SIM card has been inserted with mobile network signal."
 msgstr ""
 
 #: ../../network/state_handler.go:93
-msgid ""
-"Please make sure a correct plan was selected without arrearage of SIM card."
+msgid "Please make sure a correct plan was selected without arrearage."
 msgstr ""
 
 #: ../../network/state_handler.go:96
