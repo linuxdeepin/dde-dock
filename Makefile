@@ -48,6 +48,9 @@ out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 
 translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LANGUAGES}))
 
+pot:
+	deepin-update-pot misc/po/locale_config.ini
+
 build: prepare $(addprefix out/bin/, ${BINARIES})
 
 test: prepare
