@@ -5,8 +5,6 @@ test-*
 test_*
 _*
 *.*~
-*.cfg
-*.ini
 .#*
 .test
 */*.test
