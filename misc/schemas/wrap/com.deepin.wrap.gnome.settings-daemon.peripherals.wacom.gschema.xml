@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/gsdwacom/" id="com.deepin.wrap.gnome.settings-daemon.plugins.gsdwacom" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+  </schema>
+  <schema id="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom" gettext-domain="gnome-settings-daemon">
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom.stylus" name="stylus"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom.eraser" name="eraser"/>
+
+    
+    <key type="b" name="is-absolute">
+      <default>true</default>
+      <summary>Wacom stylus absolute mode</summary>
+      <description>Enable this to set the tablet to absolute mode.</description>
+    </key>
+    <key type="ai" name="area">
+      <default>[-1, -1, -1, -1]</default>
+      <summary>Wacom tablet area</summary>
+      <description>Set this to x1, y1 and x2, y2 of the area usable by the tools.</description>
+    </key>
+    <key type="b" name="keep-aspect">
+      <default>false</default>
+      <summary>Wacom tablet aspect ratio</summary>
+      <description>Enable this to restrict the Wacom tablet area to match the aspect ratio of the output.</description>
+    </key>
+    <key name="rotation" enum="com.deepin.wrap.gnome.settings-daemon.GsdWacomRotation">
+      <default>'none'</default>
+      <summary>Wacom tablet rotation</summary>
+      <description>Set this to 'none', 'cw' for 90 degree clockwise, 'half' for 180 degree, and 'ccw' for 90 degree counterclockwise.</description>
+    </key>
+    <key type="b" name="touch">
+      <default>true</default>
+      <summary>Wacom touch feature</summary>
+      <description>Enable this to move the cursor when the user touches the tablet.</description>
+    </key>
+    <key type="(ii)" name="last-calibrated-resolution">
+      <default>(-1, -1)</default>
+      <summary>Wacom last calibrated resolution</summary>
+      <description>Holds the last calibrated resolution to help check if calibration is needed.</description>
+    </key>
+    <key type="as" name="display">
+      <default>["", "", ""]</default>
+      <summary>Wacom display mapping</summary>
+      <description>EDID information of monitor to map tablet to. Must be in the format [vendor, product, serial]. ["","",""] disables mapping.</description>
+    </key>
+  </schema>
+  <schema id="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom.stylus" gettext-domain="gnome-settings-daemon">
+    <key type="ai" name="pressurecurve">
+      <default>[0, 0, 100, 100]</default>
+      <summary>Wacom stylus pressure curve</summary>
+      <description>Set this to x1, y1 and x2, y2 of the pressure curve applied to the stylus.</description>
+    </key>
+    <key type="ai" name="buttonmapping">
+      <default>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]</default>
+      <summary>Wacom stylus button mapping</summary>
+      <description>Set this to the logical button mapping.</description>
+    </key>
+    <key type="i" name="pressurethreshold">
+      <default>-1</default>
+      <summary>Wacom stylus pressure threshold</summary>
+      <description>Set this to the pressure value at which a stylus click event is generated.</description>
+    </key>
+  </schema>
+  <schema id="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom.eraser" gettext-domain="gnome-settings-daemon">
+    <key type="ai" name="pressurecurve">
+      <default>[0, 0, 100, 100]</default>
+      <summary>Wacom eraser pressure curve</summary>
+      <description>Set this to x1, y1 and x2, y2 of the pressure curve applied to the eraser.</description>
+    </key>
+    <key type="ai" name="buttonmapping">
+      <default>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]</default>
+      <summary>Wacom eraser button mapping</summary>
+      <description>Set this to the logical button mapping.</description>
+    </key>
+    <key type="i" name="pressurethreshold">
+      <default>-1</default>
+      <summary>Wacom eraser pressure threshold</summary>
+      <description>Set this to the pressure value at which an eraser click event is generated.</description>
+    </key>
+  </schema>
+  <schema id="com.deepin.wrap.gnome.settings-daemon.peripherals.wacom.tablet-button" gettext-domain="gnome-settings-daemon">
+    <key name="action-type" enum="com.deepin.wrap.gnome.settings-daemon.GsdWacomActionType">
+      <default>'none'</default>
+      <summary>Wacom button action type</summary>
+      <description>The type of action triggered by the button being pressed.</description>
+    </key>
+    <key type="s" name="custom-action">
+      <default>''</default>
+      <summary>Key combination for the custom action</summary>
+      <description>The keyboard shortcut generated when the button is pressed for custom actions.</description>
+    </key>
+    <key type="as" name="custom-elevator-action">
+      <default>['', '']</default>
+      <summary>Key combinations for a touchring or touchstrip custom action</summary>
+      <description>The keyboard shortcuts generated when a touchring or touchstrip is used for custom actions (up followed by down).</description>
+    </key>
+    <key type="s" name="oled-label">
+      <default>''</default>
+      
+      <summary>Button label for OLED display.</summary>
+      <description>Label will be rendered to OLED display belonging to the button</description>
+    </key>
+  </schema>
+</schemalist>

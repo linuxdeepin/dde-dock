@@ -1,0 +1,91 @@
+[com.deepin.wrap.gnome.settings-daemon.peripherals.smartcard]
+removal-action = /desktop/gnome/peripherals/smartcard/removal_action
+
+[com.deepin.wrap.gnome.settings-daemon.peripherals.touchpad]
+disable-while-typing = /desktop/gnome/peripherals/touchpad/disable_while_typing
+horiz-scroll-enabled = /desktop/gnome/peripherals/touchpad/horiz_scroll_enabled
+scroll-method = /desktop/gnome/peripherals/touchpad/scroll_method
+tap-to-click = /desktop/gnome/peripherals/touchpad/tap_to_click
+touchpad-enabled = /desktop/gnome/peripherals/touchpad/touchpad_enabled
+motion-acceleration = /desktop/gnome/peripherals/mouse/motion_acceleration
+motion-threshold = /desktop/gnome/peripherals/mouse/motion_threshold
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.a11y-keyboard]
+active = /apps/gnome_settings_daemon/plugins/a11y-keyboard/active
+priority = /apps/gnome_settings_daemon/plugins/a11y-keyboard/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.clipboard]
+active = /apps/gnome_settings_daemon/plugins/clipboard/active
+priority = /apps/gnome_settings_daemon/plugins/clipboard/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.font]
+active = /apps/gnome_settings_daemon/plugins/font/active
+priority = /apps/gnome_settings_daemon/plugins/font/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.housekeeping]
+active = /apps/gnome_settings_daemon/plugins/housekeeping/active
+free-percent-notify = /apps/gnome_settings_daemon/plugins/housekeeping/free_percent_notify
+free-percent-notify-again = /apps/gnome_settings_daemon/plugins/housekeeping/free_percent_notify_again
+free-size-gb-no-notify = /apps/gnome_settings_daemon/plugins/housekeeping/free_size_gb_no_notify
+ignore-paths = /apps/gnome_settings_daemon/plugins/housekeeping/ignore_paths
+min-notify-period = /apps/gnome_settings_daemon/plugins/housekeeping/min_notify_period
+priority = /apps/gnome_settings_daemon/plugins/housekeeping/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.keyboard]
+active = /apps/gnome_settings_daemon/plugins/keyboard/active
+priority = /apps/gnome_settings_daemon/plugins/keyboard/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.media-keys]
+active = /apps/gnome_settings_daemon/plugins/keybindings/active
+calculator = /apps/gnome_settings_daemon/keybindings/calculator
+email = /apps/gnome_settings_daemon/keybindings/email
+eject = /apps/gnome_settings_daemon/keybindings/eject
+help = /apps/gnome_settings_daemon/keybindings/help
+home = /apps/gnome_settings_daemon/keybindings/home
+logout = /apps/gnome_settings_daemon/keybindings/power
+media = /apps/gnome_settings_daemon/keybindings/media
+next = /apps/gnome_settings_daemon/keybindings/next
+pause = /apps/gnome_settings_daemon/keybindings/pause
+play = /apps/gnome_settings_daemon/keybindings/play
+previous = /apps/gnome_settings_daemon/keybindings/previous
+priority = /apps/gnome_settings_daemon/plugins/keybindings/priority
+screensaver = /apps/gnome_settings_daemon/keybindings/screensaver
+search = /apps/gnome_settings_daemon/keybindings/search
+stop = /apps/gnome_settings_daemon/keybindings/stop
+touchpad = /apps/gnome_settings_daemon/keybindings/touchpad
+volume-down = /apps/gnome_settings_daemon/keybindings/volume_down
+volume-mute = /apps/gnome_settings_daemon/keybindings/volume_mute
+volume-up = /apps/gnome_settings_daemon/keybindings/volume_up
+www = /apps/gnome_settings_daemon/keybindings/www
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.mouse]
+active = /apps/gnome_settings_daemon/plugins/mouse/active
+priority = /apps/gnome_settings_daemon/plugins/mouse/priority
+
+[com.deepin.wrap.gnome.settings-daemon.peripherals.mouse]
+locate-pointer = /desktop/gnome/peripherals/mouse/locate_pointer
+double-click = /desktop/gnome/peripherals/mouse/double_click
+drag-threshold = /desktop/gnome/peripherals/mouse/drag_threshold
+left-handed = /desktop/gnome/peripherals/mouse/left_handed
+motion-acceleration = /desktop/gnome/peripherals/mouse/motion_acceleration
+motion-threshold = /desktop/gnome/peripherals/mouse/motion_threshold
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.smartcard]
+active = /apps/gnome_settings_daemon/plugins/smartcard/active
+priority = /apps/gnome_settings_daemon/plugins/smartcard/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.sound]
+active = /apps/gnome_settings_daemon/plugins/sound/active
+priority = /apps/gnome_settings_daemon/plugins/sound/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.xrandr]
+active = /apps/gnome_settings_daemon/plugins/xrandr/active
+default-configuration-file = /apps/gnome_settings_daemon/xrandr/default_configuration_file
+priority = /apps/gnome_settings_daemon/plugins/xrandr/priority
+
+[com.deepin.wrap.gnome.settings-daemon.plugins.xsettings]
+active = /apps/gnome_settings_daemon/plugins/xsettings/active
+antialiasing = /desktop/gnome/font_rendering/antialiasing
+hinting = /desktop/gnome/font_rendering/hinting
+priority = /apps/gnome_settings_daemon/plugins/xsettings/priority
+rgba-order = /desktop/gnome/font_rendering/rgba_order

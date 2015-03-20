@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/thumbnail-cache/" id="com.deepin.wrap.gnome.desktop.thumbnail-cache">
+    <key type="i" name="maximum-age">
+      <default>180</default>
+      <description>Maximum age for thumbnails in the cache, in days. Set to -1 to disable cleaning.</description>
+    </key>
+    <key type="i" name="maximum-size">
+      <default>512</default>
+      <description>Maximum size of the thumbnail cache, in megabytes. Set to -1 to disable cleaning.</description>
+    </key>
+  </schema>
+</schemalist>

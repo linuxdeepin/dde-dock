@@ -74,7 +74,9 @@ install: build translate
 	cp misc/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
-	cp misc/schemas/* ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
+	cp misc/schemas/*.xml ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
+	cp misc/schemas/wrap/*.xml ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
+	cp misc/schemas/wrap/*.convert ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/usr/share/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/datetime/" id="com.deepin.wrap.gnome.desktop.datetime">
+    <key type="b" name="automatic-timezone">
+      <default>false</default>
+      <summary>Automatically update timezone</summary>
+      <description>Whether to automatically update the timezone using geolocation.</description>
+    </key>
+  </schema>
+</schemalist>

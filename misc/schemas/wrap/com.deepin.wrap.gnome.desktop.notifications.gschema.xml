@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/notifications/" id="com.deepin.wrap.gnome.desktop.notifications" gettext-domain="gsettings-desktop-schemas">
+    <key type="b" name="show-banners">
+      <default>true</default>
+      <summary>Show notification banners</summary>
+      <description>Whether notification banners are visible for application notifications.</description>
+    </key>
+
+    <key type="b" name="show-in-lock-screen">
+      <default>true</default>
+      <summary>Show notifications in the lock screen</summary>
+      <description>Whether notifications are shown in the lock screen or not.</description>
+    </key>
+
+    
+    <key type="as" name="application-children">
+      <default>[]</default>
+      <summary/>
+      <description/>
+    </key>
+  </schema>
+
+  <schema id="com.deepin.wrap.gnome.desktop.notifications.application" gettext-domain="gsettings-desktop-schemas">
+    <key type="s" name="application-id">
+      <default>''</default>
+      <summary>Application ID</summary>
+      <description>The application that this policy is for.</description>
+    </key>
+
+    <key type="b" name="enable">
+      <default>true</default>
+      <summary>Enable notifications</summary>
+      <description>Whether notifications are globally enabled for this application.</description>
+    </key>
+
+    <key type="b" name="enable-sound-alerts">
+      <default>true</default>
+      <summary>Enable sound alerts</summary>
+      <description>Whether notifications should be accompanied by sound alerts.</description>
+    </key>
+
+    <key type="b" name="show-banners">
+      <default>true</default>
+      <summary>Show notification banners</summary>
+      <description>Whether notification banners for this application are shown or not. Does not affect clicking on message tray buttons.</description>
+    </key>
+
+    <key type="b" name="force-expanded">
+      <default>false</default>
+      <summary>Force automatic expanding of banners</summary>
+      <description>Whether notifications from this application are expanded automatically when in banner mode.</description>
+    </key>
+
+    <key type="b" name="show-in-lock-screen">
+      <default>true</default>
+      <summary>Show in the lock screen</summary>
+      <description>Whether notifications from this application are shown when the screen is locked.</description>
+    </key>
+
+    <key type="b" name="details-in-lock-screen">
+      <default>false</default>
+      <summary>Show details in the lock screen</summary>
+      <description>Whether the summary and body of notifications from this application will be visible in the locked screen.</description>
+    </key>
+
+  </schema>
+</schemalist>
