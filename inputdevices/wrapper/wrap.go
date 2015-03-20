@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwrapper
+package wrapper
 
 // #cgo pkg-config: x11 xi
 // #cgo CFLAGS: -Wall -g

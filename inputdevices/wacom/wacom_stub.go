@@ -19,22 +19,37 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package wacom
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const (
-	DBUS_SENDER   = "com.deepin.daemon.InputDevices"
-	DBUS_PATH_KBD = "/com/deepin/daemon/InputDevice/Keyboard"
-	DBUS_IFC_KBD  = "com.deepin.daemon.InputDevice.Keyboard"
+	DBUS_SENDER     = "com.deepin.daemon.InputDevices"
+	DBUS_PATH_WACOM = "/com/deepin/daemon/InputDevice/Wacom"
+	DBUS_IFC_WACOM  = "com.deepin.daemon.InputDevice.Wacom"
 )
 
-func (kbd *Keyboard) GetDBusInfo() dbus.DBusInfo {
+func (w *Wacom) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       DBUS_SENDER,
-		ObjectPath: DBUS_PATH_KBD,
-		Interface:  DBUS_IFC_KBD,
+		ObjectPath: DBUS_PATH_WACOM,
+		Interface:  DBUS_IFC_WACOM,
+	}
+}
+
+func (w *Wacom) setPropDeviceList(list []wrapper.XIDeviceInfo) {
+	if len(w.DeviceList) != len(list) {
+		w.DeviceList = list
+		dbus.NotifyChange(w, "DeviceList")
+	}
+}
+
+func (w *Wacom) setPropExist(exist bool) {
+	if w.Exist != exist {
+		w.Exist = exist
+		dbus.NotifyChange(w, "Exist")
 	}
 }

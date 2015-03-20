@@ -19,36 +19,42 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package keyboard
 
-func (wacom *Wacom) printInfo(format string, v ...interface{}) {
-	if wacom.logger == nil {
-		return
-	}
+import (
+	C "launchpad.net/gocheck"
+	"testing"
+)
 
-	wacom.logger.Infof(format, v...)
+type testWrapper struct{}
+
+func Test(t *testing.T) {
+	C.TestingT(t)
 }
 
-func (wacom *Wacom) debugInfo(format string, v ...interface{}) {
-	if wacom.logger == nil {
-		return
-	}
-
-	wacom.logger.Debugf(format, v...)
+func init() {
+	C.Suite(&testWrapper{})
 }
 
-func (wacom *Wacom) warningInfo(format string, v ...interface{}) {
-	if wacom.logger == nil {
-		return
-	}
+func (*testWrapper) TestGetLayout(c *C.C) {
+	layout := getLayoutFromFile("testdata/keyboard")
+	c.Check(layout, C.Equals, "us;")
 
-	wacom.logger.Warningf(format, v...)
+	layout = getLayoutFromFile("testdata/xxxxxx")
+	c.Check(layout, C.Equals, "us;")
 }
 
-func (wacom *Wacom) errorInfo(format string, v ...interface{}) {
-	if wacom.logger == nil {
-		return
-	}
+func (*testWrapper) TestQTCursorBlink(c *C.C) {
+	c.Check(setQtCursorBlink(1200, "testdata/Trolltech.conf"),
+		C.Not(C.NotNil))
+}
 
-	wacom.logger.Errorf(format, v...)
+func (*testWrapper) TestLayoutList(c *C.C) {
+	v, err := getLayoutListByFile("testdata/base.xml")
+	c.Check(err, C.Not(C.NotNil))
+	c.Check(v, C.NotNil)
+
+	v, err = getLayoutListByFile("testdata/xxxxxx.xml")
+	c.Check(err, C.NotNil)
+	c.Check(v, C.Not(C.NotNil))
 }

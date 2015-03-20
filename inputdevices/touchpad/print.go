@@ -19,36 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package touchpad
 
-func (kbd *Keyboard) printInfo(format string, v ...interface{}) {
-	if kbd.logger == nil {
+func (tpad *Touchpad) printInfo(format string, v ...interface{}) {
+	if tpad.logger == nil {
 		return
 	}
 
-	kbd.logger.Infof(format, v...)
+	tpad.logger.Infof(format, v...)
 }
 
-func (kbd *Keyboard) debugInfo(format string, v ...interface{}) {
-	if kbd.logger == nil {
+func (tpad *Touchpad) debugInfo(format string, v ...interface{}) {
+	if tpad.logger == nil {
 		return
 	}
 
-	kbd.logger.Debugf(format, v...)
+	tpad.logger.Debugf(format, v...)
 }
 
-func (kbd *Keyboard) warningInfo(format string, v ...interface{}) {
-	if kbd.logger == nil {
+func (tpad *Touchpad) warningInfo(format string, v ...interface{}) {
+	if tpad.logger == nil {
 		return
 	}
 
-	kbd.logger.Warningf(format, v...)
+	tpad.logger.Warningf(format, v...)
 }
 
-func (kbd *Keyboard) errorInfo(format string, v ...interface{}) {
-	if kbd.logger == nil {
+func (tpad *Touchpad) errorInfo(format string, v ...interface{}) {
+	if tpad.logger == nil {
 		return
 	}
 
-	kbd.logger.Errorf(format, v...)
+	tpad.logger.Errorf(format, v...)
 }

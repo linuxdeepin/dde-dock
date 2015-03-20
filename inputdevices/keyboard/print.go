@@ -19,27 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package keyboard
 
-import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-)
+func (kbd *Keyboard) printInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
+	}
 
-func (wacom *Wacom) handleGSettings() {
-	wacom.settings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case wacomKeyLeftHanded:
-			wacom.rotationAngle(wacom.LeftHanded.Get())
-		case wacomKeyCursorMode:
-			wacom.cursorMode(wacom.CursorMode.Get())
-		case wacomKeyUpAction:
-			wacom.keyUpAction(wacom.KeyUpAction.Get())
-		case wacomKeyDownAction:
-			wacom.keyDownAction(wacom.KeyDownAction.Get())
-		case wacomKeyDoubleDelta:
-			wacom.doubleDelta(wacom.DoubleDelta.Get())
-		case wacomKeyPressureSensitive:
-			wacom.pressureSensitive(wacom.PressureSensitive.Get())
-		}
-	})
+	kbd.logger.Infof(format, v...)
+}
+
+func (kbd *Keyboard) debugInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
+	}
+
+	kbd.logger.Debugf(format, v...)
+}
+
+func (kbd *Keyboard) warningInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
+	}
+
+	kbd.logger.Warningf(format, v...)
+}
+
+func (kbd *Keyboard) errorInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
+	}
+
+	kbd.logger.Errorf(format, v...)
 }

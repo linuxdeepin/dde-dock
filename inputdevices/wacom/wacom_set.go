@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package wacom
 
 import (
 	"fmt"
@@ -30,8 +30,8 @@ import (
  * xsetwacom set deviceName Rotate half/none
  * default: none
  */
-func (wacom *Wacom) rotationAngle(leftHanded bool) {
-	for _, info := range wacom.DeviceList {
+func (w *Wacom) rotationAngle(leftHanded bool) {
+	for _, info := range w.DeviceList {
 		cmdline := "xsetwacom set \"" + info.Name + "\" Rotate "
 		if leftHanded {
 			cmdline += "half"
@@ -41,7 +41,7 @@ func (wacom *Wacom) rotationAngle(leftHanded bool) {
 
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }
@@ -51,8 +51,8 @@ func (wacom *Wacom) rotationAngle(leftHanded bool) {
  * default: Absolute for  stylus,  eraser  and  tablet  PC  touch;
  *          Relative for cursor and tablet touch.
  */
-func (wacom *Wacom) cursorMode(cursorMode bool) {
-	for _, info := range wacom.DeviceList {
+func (w *Wacom) cursorMode(cursorMode bool) {
+	for _, info := range w.DeviceList {
 		cmdline := "xsetwacom set \"" + info.Name + "\" mode "
 		if cursorMode {
 			cmdline += "Relative"
@@ -62,7 +62,7 @@ func (wacom *Wacom) cursorMode(cursorMode bool) {
 
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }
@@ -71,17 +71,17 @@ func (wacom *Wacom) cursorMode(cursorMode bool) {
  * xsetwacom set deviceName Button 3 3/"KP_Page_Up"
  * default: 3
  */
-func (wacom *Wacom) keyUpAction(action string) {
+func (w *Wacom) keyUpAction(action string) {
 	value, ok := descActionMap[action]
 	if !ok {
 		return
 	}
 
-	for _, info := range wacom.DeviceList {
+	for _, info := range w.DeviceList {
 		cmdline := "xsetwacom set \"" + info.Name + "\" Button 3 " + value
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }
@@ -90,17 +90,17 @@ func (wacom *Wacom) keyUpAction(action string) {
  * xsetwacom set deviceName Button 2 2/"KP_Page_Down"
  * default: 2
  */
-func (wacom *Wacom) keyDownAction(action string) {
+func (w *Wacom) keyDownAction(action string) {
 	value, ok := descActionMap[action]
 	if !ok {
 		return
 	}
 
-	for _, info := range wacom.DeviceList {
+	for _, info := range w.DeviceList {
 		cmdline := "xsetwacom set \"" + info.Name + "\" Button 2 " + value
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }
@@ -109,12 +109,12 @@ func (wacom *Wacom) keyDownAction(action string) {
  * xsetwacom set deviceName Suppress 0-100
  * default: 2
  */
-func (wacom *Wacom) doubleDelta(delta uint32) {
-	for _, info := range wacom.DeviceList {
+func (w *Wacom) doubleDelta(delta uint32) {
+	for _, info := range w.DeviceList {
 		cmdline := fmt.Sprintf("xsetwacom set \"%s\" Suppress %v", info.Name, delta)
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }
@@ -123,16 +123,16 @@ func (wacom *Wacom) doubleDelta(delta uint32) {
  * xsetwacom set deviceName Threshold 0-2047
  * default: 27
  */
-func (wacom *Wacom) pressureSensitive(pressure uint32) {
+func (w *Wacom) pressureSensitive(pressure uint32) {
 	if pressure > 2047 {
 		return
 	}
 
-	for _, info := range wacom.DeviceList {
+	for _, info := range w.DeviceList {
 		cmdline := fmt.Sprintf("xsetwacom set \"%s\" Threshold %v", info.Name, pressure)
 		err := doCommand(cmdline)
 		if err != nil {
-			wacom.debugInfo("Exec '%s' failed: %v", cmdline, err)
+			w.debugInfo("Exec '%s' failed: %v", cmdline, err)
 		}
 	}
 }

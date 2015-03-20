@@ -19,42 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package mouse
 
-import (
-	C "launchpad.net/gocheck"
-	"testing"
-)
+func (m *Mouse) printInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
 
-type testWrapper struct{}
-
-func Test(t *testing.T) {
-	C.TestingT(t)
+	m.logger.Infof(format, v...)
 }
 
-func init() {
-	C.Suite(&testWrapper{})
+func (m *Mouse) debugInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
+
+	m.logger.Debugf(format, v...)
 }
 
-func (*testWrapper) TestGetLayout(c *C.C) {
-	layout := getLayoutFromFile("testdata/keyboard")
-	c.Check(layout, C.Equals, "us;")
+func (m *Mouse) warningInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
 
-	layout = getLayoutFromFile("testdata/xxxxxx")
-	c.Check(layout, C.Equals, "us;")
+	m.logger.Warningf(format, v...)
 }
 
-func (*testWrapper) TestQTCursorBlink(c *C.C) {
-	c.Check(setQtCursorBlink(1200, "testdata/Trolltech.conf"),
-		C.Not(C.NotNil))
-}
+func (m *Mouse) errorInfo(format string, v ...interface{}) {
+	if m.logger == nil {
+		return
+	}
 
-func (*testWrapper) TestLayoutList(c *C.C) {
-	v, err := getLayoutListByFile("testdata/base.xml")
-	c.Check(err, C.Not(C.NotNil))
-	c.Check(v, C.NotNil)
-
-	v, err = getLayoutListByFile("testdata/xxxxxx.xml")
-	c.Check(err, C.NotNil)
-	c.Check(v, C.Not(C.NotNil))
+	m.logger.Errorf(format, v...)
 }

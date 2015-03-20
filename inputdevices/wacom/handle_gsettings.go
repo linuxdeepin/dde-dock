@@ -19,31 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libmouse
+package wacom
 
 import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-func (mouse *Mouse) handleGSettings() {
-	mouse.settings.Connect("changed", func(s *gio.Settings, key string) {
+func (w *Wacom) handleGSettings() {
+	w.settings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
-		case mouseKeyLeftHanded:
-			mouse.leftHanded(mouse.LeftHanded.Get())
-		case mouseKeyDisableTouchpad:
-			mouse.disableTouchpad(mouse.DisableTpad.Get())
-		case mouseKeyNaturalScroll:
-			mouse.naturalScroll(mouse.NaturalScroll.Get())
-		case mouseKeyMiddleButton:
-			mouse.middleButtonEmulation(mouse.MiddleButtonEmulation.Get())
-		case mouseKeyAcceleration:
-			mouse.motionAcceleration(mouse.MotionAcceleration.Get())
-		case mouseKeyThreshold:
-			mouse.motionThreshold(mouse.MotionThreshold.Get())
-		case mouseKeyDoubleClick:
-			mouse.doubleClick(uint32(mouse.DoubleClick.Get()))
-		case mouseKeyDragThreshold:
-			mouse.dragThreshold(uint32(mouse.DragThreshold.Get()))
+		case wacomKeyLeftHanded:
+			w.rotationAngle(w.LeftHanded.Get())
+		case wacomKeyCursorMode:
+			w.cursorMode(w.CursorMode.Get())
+		case wacomKeyUpAction:
+			w.keyUpAction(w.KeyUpAction.Get())
+		case wacomKeyDownAction:
+			w.keyDownAction(w.KeyDownAction.Get())
+		case wacomKeyDoubleDelta:
+			w.doubleDelta(w.DoubleDelta.Get())
+		case wacomKeyPressureSensitive:
+			w.pressureSensitive(w.PressureSensitive.Get())
 		}
 	})
 }

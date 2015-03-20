@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package keyboard
 
 import (
 	"bufio"
@@ -29,7 +29,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
@@ -227,7 +227,7 @@ func (kbd *Keyboard) init() {
 }
 
 func setKbdRepeat(enable bool, delay, interval uint32) {
-	libwrapper.SetKeyboardRepeat(enable, delay, interval)
+	wrapper.SetKeyboardRepeat(enable, delay, interval)
 }
 
 func getLayoutFromFile(config string) string {
