@@ -55,7 +55,11 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 	length := unsafe.Sizeof(*devices)
 	for i := C.int(0); i < n_devices; i++ {
 		devInfo := (*C.DeviceInfo)(unsafe.Pointer(tmpList + uintptr(i)*length))
-		if C.is_mouse_device(devInfo.deviceid) == 1 {
+		switch {
+		// Touch screen
+		case (devInfo.is_touchscreen == 1):
+			continue
+		case (C.is_mouse_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),
@@ -67,7 +71,7 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 			}
 
 			mouseList = append(mouseList, info)
-		} else if C.is_tpad_device(devInfo.deviceid) == 1 {
+		case (C.is_tpad_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),
@@ -79,7 +83,7 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 			}
 
 			tpadList = append(tpadList, info)
-		} else if C.is_wacom_device(devInfo.deviceid) == 1 {
+		case (C.is_wacom_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),

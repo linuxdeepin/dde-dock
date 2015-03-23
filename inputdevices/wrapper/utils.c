@@ -29,6 +29,49 @@
 #include "utils.h"
 #include "devices.h"
 
+#define AXIS_MODE_REL 1 //relative
+#define AXIS_MODE_ABS 2 //absolte --> touchscreen
+
+#define TOUCH_MODE_DEPENDENT 1 //touchpad
+#define TOUCH_MODE_DIRECT 2 // touchscreen
+
+static int is_touchscreen_device(const XIDeviceInfo* info);
+
+static int
+is_touchscreen_device(const XIDeviceInfo* info)
+{
+	if (info->num_classes <= 0) {
+		return 0;
+	}
+
+	int i = 0;
+	for (; i < info->num_classes; i++) {
+		XIAnyClassInfo* any = info->classes[i];
+		switch (any->type) {
+		case XIValuatorClass: {
+			XIValuatorClassInfo *v = (XIValuatorClassInfo*)any;
+			if (v->mode == XIModeAbsolute) {
+				//dev is touchscreen
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		case XITouchClass: {
+			XITouchClassInfo* t = (XITouchClassInfo*)any;
+			if (t->mode == XIDirectTouch) {
+				//dev is touchscreen
+				return 1;
+			} else {
+				return 0;
+			}
+		}
+		}
+	}
+
+	return 0;
+}
+
 DeviceInfo*
 get_device_info_list(int *n_devices)
 {
@@ -79,6 +122,7 @@ get_device_info_list(int *n_devices)
 		/*tmp[j].name = infos[i].name;*/
 		tmp[j].deviceid = infos[i].deviceid;
 		tmp[j].enabled = (int)infos[i].enabled;
+		tmp[j].is_touchscreen = is_touchscreen_device(&infos[i]);
 
 		if (j != 0) {
 			free(list);
