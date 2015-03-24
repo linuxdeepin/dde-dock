@@ -253,6 +253,7 @@ func createScratchFile(id, title, icon, cmd string) error {
 		logger.Warning(err)
 		return err
 	}
+	defer f.Close()
 	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
 	logger.Debug(title, ",", icon, ",", cmd)
 	e := temp.Execute(f, dockedItemInfo{title, icon, cmd})

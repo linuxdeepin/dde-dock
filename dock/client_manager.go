@@ -262,6 +262,7 @@ func (m *ClientManager) listenRootWindow() {
 						logger.Debug(err)
 					} else {
 						LAUNCHER.Hide()
+						launcher.DestroyLauncher(LAUNCHER)
 					}
 				} else {
 					isLauncherShown = true

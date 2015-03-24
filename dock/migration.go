@@ -31,11 +31,15 @@ func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) strin
 }
 
 func find_exec_by_pid(pid uint) string {
-	e := C.GoString(C.get_exec(C.int(pid)))
+	cExec := C.get_exec(C.int(pid))
+	defer C.free(unsafe.Pointer(cExec))
+	e := C.GoString(cExec)
 	if e != "" {
 		return e
 	}
-	return C.GoString(C.get_exe(C.int(pid)))
+	cExe := C.get_exe(C.int(pid))
+	defer C.free(unsafe.Pointer(cExe))
+	return C.GoString(cExe)
 }
 
 func get_theme_icon(name string, size int) string {
@@ -43,7 +47,9 @@ func get_theme_icon(name string, size int) string {
 	defer func() {
 		C.free(unsafe.Pointer(iconName))
 	}()
-	return C.GoString(C.icon_name_to_path(iconName, C.int(size)))
+	cPath := C.icon_name_to_path(iconName, C.int(size))
+	defer C.free(unsafe.Pointer(cPath))
+	return C.GoString(cPath)
 }
 
 func initDeepin() {
@@ -55,6 +61,8 @@ func xpm_to_dataurl(icon string) string {
 	defer func() {
 		C.free(unsafe.Pointer(iconName))
 	}()
-	return C.GoString(C.get_data_uri_by_path(iconName))
+	cDataUri := C.get_data_uri_by_path(iconName)
+	defer C.free(unsafe.Pointer(cDataUri))
+	return C.GoString(cDataUri)
 
 }
