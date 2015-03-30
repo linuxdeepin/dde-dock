@@ -19,9 +19,45 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __MKPASSWD_H__
-#define __MKPASSWD_H__
+package users
 
-char* mkpasswd(const char *words);
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
-#endif
+func CreateGuestUser() (string, error) {
+	shell, _ := getDefaultShell(defaultConfigShell)
+	if len(shell) == 0 {
+		shell = "/bin/bash"
+	}
+
+	username := getGuestUserName()
+	var cmd = fmt.Sprintf("%s -m -d /tmp/%s -s %s -l -p %s %s",
+		userCmdAdd, username, shell, EncodePasswd(""), username)
+	err := doAction(cmd)
+	if err != nil {
+		return "", err
+	}
+
+	CopyUserDatas(username)
+	return username, nil
+}
+
+func getGuestUserName() string {
+	var (
+		seedStr = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+		l    = len(seedStr)
+		name = "guest-"
+	)
+
+	for i := 0; i < 6; i++ {
+		rand.Seed(time.Now().UnixNano())
+		index := rand.Intn(l)
+		name += string(seedStr[index])
+	}
+
+	return name
+}

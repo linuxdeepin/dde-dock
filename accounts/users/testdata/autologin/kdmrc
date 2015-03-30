@@ -1,0 +1,5 @@
+[X-:0-Core]
+AutoLoginEnable=false
+AutoLoginLocked=false
+AutoLoginUser=
+ClientLogFile=.xsession-errors

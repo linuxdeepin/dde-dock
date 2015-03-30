@@ -19,17 +19,14 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package accounts
+package checkers
 
-import (
-	"pkg.linuxdeepin.com/dde-daemon"
-)
+func isStrInArray(str string, array []string) bool {
+	for _, v := range array {
+		if v == str {
+			return true
+		}
+	}
 
-func init() {
-	loader.Register(&loader.Module{
-		Name:   "accounts",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	return false
 }

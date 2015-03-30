@@ -1,0 +1,9 @@
+voice:x:22:
+cdrom:x:24:wen
+floppy:x:25:wen
+tape:x:26:
+sudo:x:27:wen,test1
+audio:x:29:pulse,wen
+wen:x:1000:
+test1:x:1001:
+test2:x:1002:

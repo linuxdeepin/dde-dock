@@ -22,242 +22,48 @@
 package accounts
 
 import (
-	"bufio"
-	"github.com/howeyc/fsnotify"
-	"io/ioutil"
-	"os"
-	dutils "pkg.linuxdeepin.com/lib/utils"
-	"regexp"
-	"strconv"
-	"strings"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-type Manager struct {
-	UserList    []string
-	AllowGuest  bool
-	GuestIcon   string
-	pathUserMap map[string]*User
+var (
+	_m     *Manager
+	logger = log.NewLogger(dbusSender)
+)
 
-	listWatcher *fsnotify.Watcher
-	infoWatcher *fsnotify.Watcher
-	listQuit    chan bool
-	infoQuit    chan bool
-
-	UserAdded   func(string)
-	UserDeleted func(string)
-	Error       func(string)
-}
-
-var _manager *Manager
-
-func GetManager() *Manager {
-	if _manager == nil {
-		_manager = newManager()
+func Start() {
+	if _m != nil {
+		return
 	}
 
-	return _manager
-}
-
-func newManager() *Manager {
-	obj := &Manager{}
-
-	obj.pathUserMap = make(map[string]*User)
-	obj.setPropUserList(getUserList())
-	obj.setPropAllowGuest(isAllowGuest())
-	obj.setPropGuestIcon(GUEST_USER_ICON)
-
-	var err error
-	obj.listWatcher, err = fsnotify.NewWatcher()
+	logger.BeginTracing()
+	_m = NewManager()
+	err := dbus.InstallOnSystem(_m)
 	if err != nil {
-		logger.Error("New User List Watcher Failed:", err)
-	}
-	obj.infoWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		logger.Error("New User Info Watcher Failed:", err)
-	}
-
-	if obj.listWatcher != nil {
-		obj.listQuit = make(chan bool)
-		obj.watchUserListFile()
-		go obj.handleUserListChanged()
+		logger.Error("Install manager dbus failed:", err)
+		if _m.watcher != nil {
+			_m.watcher.EndWatch()
+			_m.watcher = nil
+		}
+		return
 	}
 
-	if obj.infoWatcher != nil {
-		obj.infoQuit = make(chan bool)
-		obj.watchUserInfoFile()
-		go obj.handleUserInfoChanged()
-	}
-
-	return obj
+	_m.installUsers(getUserPaths())
 }
 
-func getUserInfoList() []UserInfo {
-	contents, err := ioutil.ReadFile(ETC_PASSWD)
-	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
-		return nil
+func Stop() {
+	if _m == nil {
+		return
 	}
 
-	infos := []UserInfo{}
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		strs := strings.Split(line, ":")
-
-		/* len of each line in /etc/passwd by spliting ':' is 7 */
-		if len(strs) != PASSWD_SPLIT_LEN {
-			continue
-		}
-
-		info := newUserInfo(strs[0], strs[2], strs[3],
-			strs[5], strs[6])
-		if checkUserIsHuman(&info) {
-			infos = append(infos, info)
-		}
-	}
-
-	return infos
+	_m.destroy()
+	_m = nil
 }
 
-func newUserInfo(name, uid, gid, home, shell string) UserInfo {
-	info := UserInfo{}
-
-	info.Name = name
-	info.Uid = uid
-	info.Gid = gid
-	info.Home = home
-	info.Shell = shell
-	info.Path = USER_MANAGER_PATH + uid
-
-	return info
-}
-
-func checkUserIsHuman(info *UserInfo) bool {
-	if info.Name == "root" {
-		return false
+func triggerSigErr(pid uint32, action, reason string) {
+	if _m == nil {
+		return
 	}
 
-	shells := strings.Split(info.Shell, "/")
-	tmpShell := shells[len(shells)-1]
-	if SHELL_END_FALSE == tmpShell ||
-		SHELL_END_NOLOGIN == tmpShell {
-		return false
-	}
-
-	if !detectedViaShadowFile(info) {
-		id, _ := strconv.ParseInt(info.Uid, 10, 64)
-		if id < 1000 {
-			return false
-		}
-	}
-
-	return true
-}
-
-func detectedViaShadowFile(info *UserInfo) bool {
-	contents, err := ioutil.ReadFile(ETC_SHADOW)
-	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s", ETC_SHADOW, err)
-		return false
-	}
-
-	isHuman := false
-	info.Locked = false
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		strs := strings.Split(line, ":")
-		if len(strs) != SHADOW_SPLIT_LEN {
-			continue
-		}
-
-		if strs[0] != info.Name {
-			continue
-		}
-		pw := strs[1]
-
-		if pw[0] == '*' {
-			break
-		}
-
-		if pw[0] == '!' {
-			info.Locked = true
-		}
-
-		//加盐密码最短为13
-		if len(pw) < 13 {
-			break
-		}
-
-		isHuman = true
-	}
-
-	return isHuman
-}
-
-func getUserList() []string {
-	infos := getUserInfoList()
-	list := []string{}
-
-	for _, info := range infos {
-		list = append(list, info.Path)
-	}
-
-	return list
-}
-
-func isAllowGuest() bool {
-	if v, ok := dutils.ReadKeyFromKeyFile(ACCOUNT_CONFIG_FILE,
-		ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, true); !ok {
-		dutils.WriteKeyToKeyFile(ACCOUNT_CONFIG_FILE,
-			ACCOUNT_GROUP_KEY, ACCOUNT_KEY_GUEST, false)
-
-		return false
-	} else {
-		if ret, ok := v.(bool); ok {
-			return ret
-		}
-	}
-
-	return false
-}
-
-func getUserInfoByPath(path string) (UserInfo, bool) {
-	for _, info := range getUserInfoList() {
-		if path == info.Path {
-			return info, true
-		}
-	}
-
-	return UserInfo{}, false
-}
-
-func getUserInfoByName(name string) (UserInfo, bool) {
-	for _, info := range getUserInfoList() {
-		if name == info.Name {
-			return info, true
-		}
-	}
-
-	return UserInfo{}, false
-}
-
-func getNewUserDefaultShell(filename string) (string, error) {
-	fp, err := os.Open(filename)
-	if err != nil {
-		return "", err
-	}
-
-	var shell string
-	match := regexp.MustCompile(`^DSHELL=(.*)`)
-	scanner := bufio.NewScanner(fp)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fields := match.FindStringSubmatch(line)
-		if len(fields) > 1 {
-			shell = fields[1]
-			break
-		}
-	}
-	fp.Close()
-
-	return shell, nil
+	dbus.Emit(_m, "Error", pid, action, reason)
 }

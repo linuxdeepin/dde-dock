@@ -66,6 +66,11 @@ install: build translate
 	mkdir -pv ${DESTDIR}/etc/dbus-1/system.d
 	cp misc/conf/*.conf ${DESTDIR}/etc/dbus-1/system.d/
 
+	mkdir -pv ${DESTDIR}/etc/systemd/system
+	cp -rf misc/etc/systemd/system/* ${DESTDIR}/etc/systemd/system/
+	mkdir -pv ${DESTDIR}/etc/systemd/system/graphical.target.wants
+	ln -sv ${DESTDIR}/etc/systemd/system/dbus-com.deepin.daemon.Accounts.service ${DESTDIR}/etc/systemd/system/graphical.target.wants/dbus-com.deepin.daemon.Accounts.service
+
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dbus-1
 	cp -r misc/services ${DESTDIR}${PREFIX}/share/dbus-1/
 	cp -r misc/system-services ${DESTDIR}${PREFIX}/share/dbus-1/

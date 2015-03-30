@@ -26,46 +26,38 @@ import (
 )
 
 const (
-	userDBusPath = "/com/deepin/daemon/Accounts/User"
-	userDBusIFC  = "com.deepin.daemon.Accounts.User"
+	dbusSender = "com.deepin.daemon.Accounts"
+	dbusPath   = "/com/deepin/daemon/Accounts"
+	dbusIFC    = "com.deepin.daemon.Accounts"
 )
 
-func (u *User) GetDBusInfo() dbus.DBusInfo {
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       dbusSender,
-		ObjectPath: userDBusPath + u.Uid,
-		Interface:  userDBusIFC,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }
 
-func (u *User) setPropBool(handler *bool, prop string, value bool) {
-	if *handler == value {
+func (m *Manager) setPropUserList(list []string) {
+	m.UserList = list
+	dbus.NotifyChange(m, "UserList")
+}
+
+func (m *Manager) setPropGuestIcon(icon string) {
+	if icon == m.GuestIcon {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(u, prop)
+	m.GuestIcon = icon
+	dbus.NotifyChange(m, "GuestIcon")
 }
 
-func (u *User) setPropInt32(handler *int32, prop string, value int32) {
-	if *handler == value {
+func (m *Manager) setPropAllowGuest(allow bool) {
+	if m.AllowGuest == allow {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(u, prop)
-}
-
-func (u *User) setPropString(handler *string, prop string, value string) {
-	if *handler == value {
-		return
-	}
-
-	*handler = value
-	dbus.NotifyChange(u, prop)
-}
-
-func (u *User) setPropStrv(handler *[]string, prop string, value []string) {
-	*handler = value
-	dbus.NotifyChange(u, prop)
+	m.AllowGuest = allow
+	dbus.NotifyChange(m, "AllowGuest")
 }

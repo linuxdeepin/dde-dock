@@ -19,11 +19,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-/*#include <stdio.h>*/
 #include <time.h>
 #include <unistd.h>
 #include <crypt.h>
-#include "mkpasswd.h"
+#include <shadow.h>
+
+#include "passwd.h"
 
 char *
 mkpasswd (const char *words)
@@ -36,12 +37,11 @@ mkpasswd (const char *words)
     char *password;
     int i;
 
-    /* Generate a (not very) random seed.
-       You should do it better than this... */
+    // Generate a (not very) random seed. You should do it better than this...
     seed[0] = time(NULL);
     seed[1] = getpid() ^ (seed[0] >> 14 & 0x30000);
 
-    /* Turn it into printable characters from `seedchars'. */
+    // Turn it into printable characters from `seedchars'.
     for (i = 0; i < 8; i++) {
         salt[3 + i] = seedchars[(seed[i / 5] >> (i % 5) * 6) & 0x3f];
     }
@@ -52,18 +52,14 @@ mkpasswd (const char *words)
     return password;
 }
 
-/*
 int
-main(int argc, char *argv[])
+lock_shadow_file()
 {
-    if (argc != 2 ) {
-        printf("args error\n");
-        return -1;
-    }
-
-    char *passwd = mkpasswd(argv[1]);
-    printf("mkpasswd: %s\n", passwd);
-
-    return 0;
+	return lckpwdf();
 }
-*/
+
+int
+unlock_shadow_file()
+{
+	return ulckpwdf();
+}

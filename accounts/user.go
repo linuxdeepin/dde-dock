@@ -22,263 +22,219 @@
 package accounts
 
 import (
-	"github.com/howeyc/fsnotify"
-	"io/ioutil"
-	"math/rand"
+	"fmt"
 	"os"
 	"path"
+	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
+	"pkg.linuxdeepin.com/lib/dbus"
 	dutils "pkg.linuxdeepin.com/lib/utils"
-	"regexp"
 	"strings"
 )
 
+const (
+	UserTypeStandard int32 = iota
+	UserTypeAdmin
+)
+
+const (
+	defaultUserIcon       = "/var/lib/AccountsService/icons/1.png"
+	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
+)
+
 type User struct {
+	UserName       string
 	Uid            string
 	Gid            string
-	UserName       string
 	HomeDir        string
 	Shell          string
 	IconFile       string
 	BackgroundFile string
-	AutomaticLogin bool
-	AccountType    int32
+
 	Locked         bool
-	LoginTime      uint64
-	HistoryIcons   []string
-	IconList       []string
-	objectPath     string
-	watcher        *fsnotify.Watcher
-	quitFlag       chan bool
+	AutomaticLogin bool
+
+	AccountType int32
+	LoginTime   uint64
+
+	IconList     []string
+	HistoryIcons []string
 }
 
-func addUserToAdmList(name string) bool {
-	tmps := []string{}
-	tmps = append(tmps, "-a")
-	tmps = append(tmps, name)
-	tmps = append(tmps, "sudo")
-	return execCommand(CMD_GPASSWD, tmps)
-}
-
-func deleteUserFromAdmList(name string) bool {
-	tmps := []string{}
-	tmps = append(tmps, "-d")
-	tmps = append(tmps, name)
-	tmps = append(tmps, "sudo")
-	return execCommand(CMD_GPASSWD, tmps)
-}
-
-func getRandUserIcon() string {
-	list := getIconList(ICON_SYSTEM_DIR)
-	l := len(list)
-	if l <= 0 {
-		return ""
-	}
-
-	index := rand.Int31n(int32(l))
-	return list[index]
-}
-
-func getIconList(dir string) []string {
-	iconfd, err := os.Open(dir)
+func NewUser(userPath string) (*User, error) {
+	info, err := users.GetUserInfoByUid(getUidFromUserPath(userPath))
 	if err != nil {
-		logger.Warningf("Open '%s' failed: %v",
-			dir, err)
-		return nil
+		return nil, err
 	}
 
-	names, _ := iconfd.Readdirnames(0)
-	list := []string{}
-	for _, v := range names {
-		if strings.Contains(v, "guest") {
-			continue
-		}
+	var u = &User{}
+	u.setPropString(&u.UserName, "UserName", info.Name)
+	u.setPropString(&u.Uid, "Uid", info.Uid)
+	u.setPropString(&u.Gid, "Gid", info.Gid)
+	u.setPropString(&u.HomeDir, "HomeDir", info.Home)
+	u.setPropString(&u.Shell, "Shell", info.Shell)
+	u.setPropString(&u.IconFile, "IconFile", "")
+	u.setPropString(&u.BackgroundFile, "BackgroundFile", "")
 
-		tmp := strings.ToLower(v)
-		//ok, _ := regexp.MatchString(`jpe?g$||png$||gif$`, tmp)
-		ok1, _ := regexp.MatchString(`\.jpe?g$`, tmp)
-		ok2, _ := regexp.MatchString(`\.png$`, tmp)
-		ok3, _ := regexp.MatchString(`\.gif$`, tmp)
-		if ok1 || ok2 || ok3 {
-			list = append(list, path.Join(dir, v))
-		}
+	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
+		users.IsAutoLoginUser(info.Name))
+
+	u.updatePropLocked()
+	u.updatePropAccountType()
+
+	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+
+	kFile, err := dutils.NewKeyFileFromFile(
+		path.Join(userConfigDir, info.Name))
+	if err != nil {
+		//Create user config file
+		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
+		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
+		u.writeUserConfig()
+		return u, nil
 	}
+	defer kFile.Free()
 
-	return list
+	icon, _ := kFile.GetString("User", "Icon")
+	u.setPropString(&u.IconFile, "IconFile", icon)
+	bg, _ := kFile.GetString("User", "Background")
+	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
+
+	_, hisIcons, _ := kFile.GetStringList("User", "HistoryIcons")
+	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", hisIcons)
+
+	return u, nil
 }
 
-func getAdministratorList() []string {
-	contents, err := ioutil.ReadFile(ETC_GROUP)
-	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s", ETC_PASSWD, err)
-		return nil
+func (u *User) destroy() {
+	u.writeUserConfig()
+	dbus.UnInstallObject(u)
+}
+
+func (u *User) getAllIcons() []string {
+	icons := getUserStandardIcons()
+	cusIcons := getUserCustomIcons(u.UserName)
+
+	icons = append(icons, cusIcons...)
+	return icons
+}
+
+func (u *User) addIconFile(icon string) (string, bool, error) {
+	if isStrInArray(icon, u.IconList) {
+		return icon, false, nil
 	}
 
-	list := ""
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		strs := strings.Split(line, ":")
-		if len(strs) != GROUP_SPLIT_LEN {
-			continue
-		}
+	md5, ok := dutils.SumFileMd5(icon)
+	if !ok {
+		return "", false, fmt.Errorf("Sum file '%s' md5 failed", icon)
+	}
 
-		if strs[0] == "sudo" {
-			list = strs[3]
+	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
+	err := os.MkdirAll(path.Dir(dest), 0755)
+	if err != nil {
+		return "", false, err
+	}
+	err = dutils.CopyFile(icon, dest)
+	if err != nil {
+		return "", false, err
+	}
+
+	return dest, true, nil
+}
+
+func (u *User) addHistoryIcon(icon string) {
+	icons := u.HistoryIcons
+	if isStrInArray(icon, icons) {
+		return
+	}
+
+	var list = []string{icon}
+	for _, v := range icons {
+		if len(list) >= 9 {
 			break
 		}
-	}
 
-	return strings.Split(list, ",")
+		list = append(list, v)
+	}
+	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", list)
 }
 
-func setAutomaticLogin(name string) {
-	dsp := getDefaultDisplayManager()
-	logger.Debugf("Set %s Auto For: %s", name, dsp)
-	switch dsp {
-	case "lightdm":
-		if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
-			dutils.WriteKeyToKeyFile(ETC_LIGHTDM_CONFIG,
-				LIGHTDM_AUTOLOGIN_GROUP,
-				LIGHTDM_AUTOLOGIN_USER,
-				name)
-		}
-	case "gdm":
-		if dutils.IsFileExist(ETC_GDM_CONFIG) {
-			dutils.WriteKeyToKeyFile(ETC_GDM_CONFIG,
-				GDM_AUTOLOGIN_GROUP,
-				GDM_AUTOLOGIN_USER,
-				name)
-		}
-	case "kdm":
-		if dutils.IsFileExist(ETC_KDM_CONFIG) {
-			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_ENABLE,
-				true)
-			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_USER,
-				name)
-		} else if dutils.IsFileExist(USER_KDM_CONFIG) {
-			dutils.WriteKeyToKeyFile(ETC_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_ENABLE,
-				true)
-			dutils.WriteKeyToKeyFile(USER_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_USER,
-				name)
-		}
-	default:
-		logger.Warning("No support display manager")
-	}
-}
-
-func isAutoLogin(username string) bool {
-	dsp := getDefaultDisplayManager()
-	//logger.Info("Display: ", dsp)
-
-	switch dsp {
-	case "lightdm":
-		if dutils.IsFileExist(ETC_LIGHTDM_CONFIG) {
-			v, ok := dutils.ReadKeyFromKeyFile(ETC_LIGHTDM_CONFIG,
-				LIGHTDM_AUTOLOGIN_GROUP,
-				LIGHTDM_AUTOLOGIN_USER,
-				"")
-			//logger.Info("AutoUser: ", v.(string))
-			//logger.Info("UserName: ", username)
-			if ok && v.(string) == username {
-				return true
-			}
-		}
-	case "gdm":
-		if dutils.IsFileExist(ETC_GDM_CONFIG) {
-			v, ok := dutils.ReadKeyFromKeyFile(ETC_GDM_CONFIG,
-				GDM_AUTOLOGIN_GROUP,
-				GDM_AUTOLOGIN_USER,
-				"")
-			if ok && v.(string) == username {
-				return true
-			}
-		}
-	case "kdm":
-		if dutils.IsFileExist(ETC_KDM_CONFIG) {
-			v, ok := dutils.ReadKeyFromKeyFile(ETC_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_USER,
-				"")
-			if ok && v.(string) == username {
-				return true
-			}
-		} else if dutils.IsFileExist(USER_KDM_CONFIG) {
-			v, ok := dutils.ReadKeyFromKeyFile(USER_KDM_CONFIG,
-				KDM_AUTOLOGIN_GROUP,
-				KDM_AUTOLOGIN_USER,
-				"")
-			if ok && v.(string) == username {
-				return true
-			}
-		}
-	}
-
-	return false
-}
-
-func getDefaultDisplayManager() string {
-	contents, err := ioutil.ReadFile(ETC_DISPLAY_MANAGER)
-	if err != nil {
-		logger.Errorf("ReadFile '%s' failed: %s",
-			ETC_DISPLAY_MANAGER, err)
-		return ""
-	}
-
-	tmp := ""
-	for _, b := range contents {
-		if b == '\n' {
-			tmp += ""
+func (u *User) deleteHistoryIcon(icon string) {
+	icons := u.HistoryIcons
+	var list []string
+	for _, v := range icons {
+		if v == icon {
 			continue
 		}
-		tmp += string(b)
+		list = append(list, v)
 	}
-
-	return path.Base(tmp)
+	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", list)
 }
 
-func (user *User) setProps() {
-	info, _ := getUserInfoByPath(user.objectPath)
-	user.setPropUserName(info.Name)
-	user.setPropHomeDir(info.Home)
-	user.setPropShell(info.Shell)
-	user.setPropLocked(info.Locked)
-	user.setPropAutomaticLogin(user.getPropAutomaticLogin())
-	user.setPropAccountType(user.getPropAccountType())
-	user.setPropIconList(user.getPropIconList())
-	user.setPropIconFile(user.getPropIconFile())
-	user.setPropBackgroundFile(user.getPropBackgroundFile())
-	user.setPropHistoryIcons(user.getPropHistoryIcons())
+func (u *User) writeUserConfig() error {
+	return doWriteUserConfig(path.Join(userConfigDir, u.UserName),
+		u.IconFile, u.BackgroundFile, u.HistoryIcons)
 }
 
-func newUser(path string) *User {
-	info, ok := getUserInfoByPath(path)
-	if !ok {
-		return nil
-	}
+func (u *User) updatePropLocked() {
+	u.setPropBool(&u.Locked, "Locked", users.IsUserLocked(u.UserName))
+}
 
-	obj := &User{}
-	obj.objectPath = info.Path
-	obj.Uid = info.Uid
-	obj.Gid = info.Gid
+func (u *User) updatePropAccountType() {
+	if users.IsAdminUser(u.UserName) {
+		u.setPropInt32(&u.AccountType, "AccountType", UserTypeAdmin)
+	} else {
+		u.setPropInt32(&u.AccountType, "AccountType", UserTypeStandard)
+	}
+}
+
+func (u *User) accessAuthentication(pid uint32, check bool, action string) error {
+	var self bool
+	if check {
+		uid, _ := getUidByPid(pid)
+		if u.Uid == uid {
+			self = true
+		}
+	}
 
 	var err error
-	obj.watcher, err = fsnotify.NewWatcher()
+	if self {
+		err = polkitAuthChangeOwnData(pid)
+	} else {
+		err = polkitAuthManagerUser(pid)
+	}
 	if err != nil {
-		logger.Warning("New watcher in newUser failed:", err)
+		triggerSigErr(pid, action, err.Error())
+		return err
 	}
 
-	if obj.watcher != nil {
-		obj.quitFlag = make(chan bool)
-		obj.watchUserConfig()
-		go obj.handUserConfigChanged()
+	return nil
+}
+
+func doWriteUserConfig(config, icon, bg string, hisIcons []string) error {
+	if !dutils.IsFileExist(config) {
+		err := dutils.CreateFile(config)
+		if err != nil {
+			return err
+		}
 	}
 
-	return obj
+	kFile, err := dutils.NewKeyFileFromFile(config)
+	if err != nil {
+		return err
+	}
+	defer kFile.Free()
+
+	kFile.SetString("User", "Icon", icon)
+	kFile.SetString("User", "Background", bg)
+	kFile.SetStringList("User", "HistoryIcons", hisIcons)
+	_, content, err := kFile.ToData()
+
+	return dutils.WriteStringToFile(config, content)
+}
+
+// userPath must be composed with 'userDBusPath + uid'
+func getUidFromUserPath(userPath string) string {
+	items := strings.Split(userPath, userDBusPath)
+
+	return items[1]
 }

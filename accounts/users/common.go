@@ -19,17 +19,22 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package accounts
+package users
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon"
+	"os/exec"
 )
 
-func init() {
-	loader.Register(&loader.Module{
-		Name:   "accounts",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+func isStrInArray(str string, array []string) bool {
+	for _, v := range array {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}
+
+func doAction(cmd string) error {
+	return exec.Command("/bin/sh", "-c", cmd).Run()
 }

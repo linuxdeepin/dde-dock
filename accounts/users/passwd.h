@@ -19,33 +19,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package accounts
+#ifndef __PASSWORD_H__
+#define __PASSWORD_H__
 
-import (
-	C "launchpad.net/gocheck"
-	"testing"
-)
+char *mkpasswd(const char *words);
 
-type testWrap struct{}
+int lock_shadow_file();
+int unlock_shadow_file();
 
-func Test(t *testing.T) {
-	C.TestingT(t)
-}
-
-func init() {
-	C.Suite(&testWrap{})
-}
-
-func (*testWrap) TestNewUserShell(c *C.C) {
-	shell, err := getNewUserDefaultShell("testdata/adduser.conf")
-	c.Check(err, C.Not(C.NotNil))
-	c.Check(shell, C.Equals, "/bin/zsh")
-
-	shell, err = getNewUserDefaultShell("testdata/adduser1.conf")
-	c.Check(err, C.Not(C.NotNil))
-	c.Check(shell, C.Equals, "")
-
-	shell, err = getNewUserDefaultShell("testdata/xxxxxxx")
-	c.Check(err, C.NotNil)
-	c.Check(shell, C.Equals, "")
-}
+#endif
