@@ -10,8 +10,14 @@
 
     <key type="as" name="disabled">
       <default>[]</default>
-      <summary>List of desktop file IDs for which search provider should be disabled</summary>
+      <summary>List of desktop file IDs for which the associated default-enabled search provider should be disabled</summary>
       <description>Results for applications contained in this list will not be displayed when searching.</description>
+    </key>
+
+    <key type="as" name="enabled">
+      <default>[]</default>
+      <summary>List of desktop file IDs for which the associated default-disabled search provider should be enabled</summary>
+      <description>Results for applications contained in this list will be displayed when searching.</description>
     </key>
 
     <key type="as" name="sort-order">

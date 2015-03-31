@@ -21,9 +21,9 @@
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.power" name="power"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.print-notifications" name="print-notifications"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.screensaver-proxy" name="screensaver-proxy"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.sharing" name="sharing"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.smartcard" name="smartcard"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.sound" name="sound"/>
-    <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.updates" name="updates"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.xrandr" name="xrandr"/>
     <child schema="com.deepin.wrap.gnome.settings-daemon.plugins.xsettings" name="xsettings"/>
   </schema>

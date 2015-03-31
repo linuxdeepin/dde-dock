@@ -99,6 +99,13 @@
     <value nick='fullscreen-flash' value='0'/>
     <value nick='frame-flash' value='1'/>
   </enum>
+  <enum id='com.deepin.wrap.gnome.desktop.GDesktopLocationAccuracyLevel'>
+    <value nick='country' value='0'/>
+    <value nick='city' value='1'/>
+    <value nick='neighborhood' value='2'/>
+    <value nick='street' value='3'/>
+    <value nick='exact' value='4'/>
+  </enum>
 </schemalist>
 
 <!-- Generated data ends here -->

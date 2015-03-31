@@ -16,6 +16,11 @@
       <summary>Launch calculator</summary>
       <description>Binding to launch the calculator.</description>
     </key>
+    <key type="s" name="control-center">
+      <default>'XF86Tools'</default>
+      <summary>Launch settings</summary>
+      <description>Binding to launch GNOME settings.</description>
+    </key>
     <key type="s" name="email">
       <default>'XF86Mail'</default>
       <summary>Launch email client</summary>

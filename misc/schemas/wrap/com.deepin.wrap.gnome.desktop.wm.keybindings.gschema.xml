@@ -3,7 +3,7 @@
 
   <schema path="/com/deepin/wrap/gnome/desktop/wm/keybindings/" id="com.deepin.wrap.gnome.desktop.wm.keybindings" gettext-domain="gsettings-desktop-schemas">
     <key type="as" name="switch-to-workspace-1">
-      <default>[]</default>
+      <default><![CDATA[['<Super>Home']]]></default>
       <summary>Switch to workspace 1</summary>
     </key>
     <key type="as" name="switch-to-workspace-2">
@@ -66,12 +66,16 @@
       <default><![CDATA[['<Super>Page_Down','<Control><Alt>Down']]]></default>
       <summary>Switch to workspace below</summary>
     </key>
+    <key type="as" name="switch-to-workspace-last">
+      <default><![CDATA[['<Super>End']]]></default>
+      <summary>Switch to last workspace</summary>
+    </key>
     <key type="as" name="switch-group">
       <default><![CDATA[['<Super>Above_Tab','<Alt>Above_Tab']]]></default>
       <summary>Switch windows of an application</summary>
     </key>
     <key type="as" name="switch-group-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Super>Above_Tab','<Shift><Alt>Above_Tab']]]></default>
       <summary>Reverse switch windows of an application</summary>
     </key>
     <key type="as" name="switch-applications">
@@ -79,7 +83,7 @@
       <summary>Switch applications</summary>
     </key>
     <key type="as" name="switch-applications-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Super>Tab','<Shift><Alt>Tab']]]></default>
       <summary>Reverse switch applications</summary>
     </key>
     <key type="as" name="switch-windows">
@@ -95,7 +99,7 @@
       <summary>Switch system controls</summary>
     </key>
     <key type="as" name="switch-panels-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Control><Alt>Tab']]]></default>
       <summary>Reverse switch system controls</summary>
     </key>
     <key type="as" name="cycle-group">
@@ -103,7 +107,7 @@
       <summary>Switch windows of an app directly</summary>
     </key>
     <key type="as" name="cycle-group-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Alt>F6']]]></default>
       <summary>Reverse switch windows of an app directly</summary>
     </key>
     <key type="as" name="cycle-windows">
@@ -111,7 +115,7 @@
       <summary>Switch windows directly</summary>
     </key>
     <key type="as" name="cycle-windows-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Alt>Escape']]]></default>
       <summary>Reverse switch windows directly</summary>
     </key>
     <key type="as" name="cycle-panels">
@@ -119,7 +123,7 @@
       <summary>Switch system controls directly</summary>
     </key>
     <key type="as" name="cycle-panels-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Control><Alt>Escape']]]></default>
       <summary>Reverse switch system controls directly</summary>
     </key>
     <key type="as" name="show-desktop">
@@ -187,7 +191,7 @@
       <summary>Toggle window on all workspaces or one</summary>
     </key>
     <key type="as" name="move-to-workspace-1">
-      <default>[]</default>
+      <default><![CDATA[['<Super><Shift>Home']]]></default>
       <summary>Move window to workspace 1</summary>
     </key>
     <key type="as" name="move-to-workspace-2">
@@ -233,6 +237,10 @@
     <key type="as" name="move-to-workspace-12">
       <default>[]</default>
       <summary>Move window to workspace 12</summary>
+    </key>
+    <key type="as" name="move-to-workspace-last">
+      <default><![CDATA[['<Super><Shift>End']]]></default>
+      <summary>Move window to last workspace</summary>
     </key>
     <key type="as" name="move-to-workspace-left">
       <default><![CDATA[['<Control><Shift><Alt>Left']]]></default>
@@ -323,12 +331,12 @@
       <summary>Move window to center of screen</summary>
     </key>
     <key type="as" name="switch-input-source">
-      <default>["&lt;Super&gt;space"]</default>
+      <default><![CDATA[['<Super>space']]]></default>
       <summary>Switch input source</summary>
       <description>Binding to select the next input source</description>
     </key>
     <key type="as" name="switch-input-source-backward">
-      <default>[]</default>
+      <default><![CDATA[['<Shift><Super>space']]]></default>
       <summary>Switch input source backward</summary>
       <description>Binding to select the previous input source</description>
     </key>

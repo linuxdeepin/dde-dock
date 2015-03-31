@@ -7,7 +7,7 @@
       <description>Determines how the image set by wallpaper_filename is rendered. Possible values are "none", "wallpaper", "centered", "scaled", "stretched", "zoom", "spanned".</description>
     </key>
     <key type="s" name="picture-uri">
-      <default>'file:///usr/local/share/themes/Adwaita/backgrounds/adwaita-timed.xml'</default>
+      <default>'file:///usr/local/share/backgrounds/gnome/adwaita-timed.xml'</default>
       <summary>Picture URI</summary>
       <description>URI to use for the background image. Note that the backend only supports local (file://) URIs.</description>
     </key>

@@ -59,7 +59,7 @@
       <description>Time after which the cursor stops blinking, in seconds.</description>
     </key>
     <key type="s" name="icon-theme">
-      <default>'gnome'</default>
+      <default>'Adwaita'</default>
       <summary>Icon Theme</summary>
       <description>Icon theme to use for the panel, nautilus etc.</description>
     </key>
