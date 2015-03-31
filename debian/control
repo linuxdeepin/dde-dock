@@ -22,7 +22,6 @@ Build-Depends: debhelper (>= 9),
  libxtst-dev,
  libxfixes-dev,
  libxcursor-dev,
- upower,
  libfontconfig1-dev,
 Standards-Version: 3.9.5
 Homepage: http://www.linuxdeepin.com
@@ -32,6 +31,7 @@ Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends},
  acpid,
+ upower,
  bluez5 | bluez (>=5.4),
  rfkill,
  grub-themes-deepin,
