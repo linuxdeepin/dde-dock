@@ -43,6 +43,7 @@ Depends: ${shlibs:Depends},
  network-manager-vpnc,
  xcur2png,
  xserver-xorg-input-wacom,
+ policykit-1-gnome,
 Conflicts: dde-workspace ( < 2.1+20141028122406 )
 Description: daemon handling the DDE session settings
     This package contains the daemon which is responsible for setting the
