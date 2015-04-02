@@ -124,7 +124,7 @@ func (s *Setting) init() bool {
 	s.hideMode = HideModeType(s.core.GetEnum(HideModeKey))
 	if s.hideMode == HideModeAutoHide {
 		s.hideMode = HideModeSmartHide
-		s.core.SetEnum(HideModeKey, int(HideModeSmartHide))
+		s.core.SetEnum(HideModeKey, int32(HideModeSmartHide))
 	}
 	s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
 	s.displayDate = s.core.GetBoolean(DisplayDateKey)
@@ -236,7 +236,7 @@ func (s *Setting) GetHideMode() int32 {
 func (s *Setting) SetHideMode(_mode int32) bool {
 	mode := HideModeType(_mode)
 	logger.Debug("[Setting.SetHideMode]:", mode)
-	ok := s.core.SetEnum(HideModeKey, int(mode))
+	ok := s.core.SetEnum(HideModeKey, int32(mode))
 	return ok
 }
 
@@ -247,7 +247,7 @@ func (s *Setting) GetDisplayMode() int32 {
 func (s *Setting) SetDisplayMode(_mode int32) bool {
 	mode := DisplayModeType(_mode)
 	logger.Debug("[Setting.SetDisplayMode]:", mode)
-	ok := s.core.SetEnum(DisplayModeKey, int(mode))
+	ok := s.core.SetEnum(DisplayModeKey, int32(mode))
 	return ok
 }
 
@@ -258,7 +258,7 @@ func (s *Setting) GetClockType() int32 {
 func (s *Setting) SetClockType(_clockType int32) bool {
 	clockType := ClockType(_clockType)
 	logger.Debug("clock type changed to:", clockType)
-	ok := s.core.SetEnum(ClockTypeKey, int(clockType))
+	ok := s.core.SetEnum(ClockTypeKey, int32(clockType))
 	return ok
 }
 

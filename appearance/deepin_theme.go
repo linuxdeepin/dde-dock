@@ -112,7 +112,7 @@ func (m *Manager) modifyCustomTheme(info *Theme) bool {
 	kFile.SetString(groupKeyComponent, themeKeyBackground, info.Background)
 	kFile.SetString(groupKeyComponent, themeKeyFontName, info.FontName)
 	kFile.SetString(groupKeyComponent, themeKeyFontMono, info.FontMono)
-	kFile.SetInteger(groupKeyComponent, themeKeyFontSize, int(info.FontSize))
+	kFile.SetInteger(groupKeyComponent, themeKeyFontSize, info.FontSize)
 
 	_, contents, err := kFile.ToData()
 	if err != nil {

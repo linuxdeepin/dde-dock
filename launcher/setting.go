@@ -76,7 +76,7 @@ func (s *Setting) GetCategoryDisplayMode() int64 {
 
 func (s *Setting) SetCategoryDisplayMode(newMode int64) {
 	if CategoryDisplayMode(newMode) != s.categoryDisplayMode {
-		s.core.SetEnum(CategoryDisplayModeKey, int(newMode))
+		s.core.SetEnum(CategoryDisplayModeKey, int32(newMode))
 	}
 }
 
@@ -89,7 +89,7 @@ func (s *Setting) GetSortMethod() int64 {
 
 func (s *Setting) SetSortMethod(newMethod int64) {
 	if SortMethod(newMethod) != s.sortMethod {
-		s.core.SetEnum(SortMethodkey, int(newMethod))
+		s.core.SetEnum(SortMethodkey, int32(newMethod))
 	}
 }
 

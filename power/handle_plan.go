@@ -29,7 +29,7 @@ func (p *Power) setBatteryIdleDelay(delay int32) {
 	p.setPropBatteryIdleDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-idle-delay")) != delay {
-		p.coreSettings.SetInt("battery-idle-delay", int(delay))
+		p.coreSettings.SetInt("battery-idle-delay", delay)
 	}
 	p.updateIdletimer()
 	p.updatePlanInfo()
@@ -39,7 +39,7 @@ func (p *Power) setBatterySuspendDelay(delay int32) {
 	p.setPropBatterySuspendDelay(delay)
 
 	if p.BatteryPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("battery-suspend-delay")) != delay {
-		p.coreSettings.SetInt("battery-suspend-delay", int(delay))
+		p.coreSettings.SetInt("battery-suspend-delay", delay)
 	}
 	p.updateIdletimer()
 	p.updatePlanInfo()
@@ -57,8 +57,8 @@ func (p *Power) setBatteryPlan(plan int32) {
 		p.setBatteryIdleDelay(PowerSaverIdleTime)
 		p.setBatterySuspendDelay(PowerSaverSuspendTime)
 	case PowerPlanCustom:
-		p.setBatteryIdleDelay(int32(p.coreSettings.GetInt("battery-idle-delay")))
-		p.setBatterySuspendDelay(int32(p.coreSettings.GetInt("battery-suspend-delay")))
+		p.setBatteryIdleDelay(p.coreSettings.GetInt("battery-idle-delay"))
+		p.setBatterySuspendDelay(p.coreSettings.GetInt("battery-suspend-delay"))
 	}
 }
 
@@ -66,7 +66,7 @@ func (p *Power) setLinePowerIdleDelay(delay int32) {
 	p.setPropLinePowerIdleDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-idle-delay")) != delay {
-		p.coreSettings.SetInt("ac-idle-delay", int(delay))
+		p.coreSettings.SetInt("ac-idle-delay", delay)
 	}
 	p.updateIdletimer()
 	p.updatePlanInfo()
@@ -76,7 +76,7 @@ func (p *Power) setLinePowerSuspendDelay(delay int32) {
 	p.setPropLinePowerSuspendDelay(delay)
 
 	if p.LinePowerPlan.Get() == PowerPlanCustom && int32(p.coreSettings.GetInt("ac-suspend-delay")) != delay {
-		p.coreSettings.SetInt("ac-suspend-delay", int(delay))
+		p.coreSettings.SetInt("ac-suspend-delay", delay)
 	}
 	p.updateIdletimer()
 	p.updatePlanInfo()

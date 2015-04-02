@@ -1,8 +1,8 @@
 package interfaces
 
 type SettingCoreInterface interface {
-	GetEnum(string) int
-	SetEnum(string, int) bool
+	GetEnum(string) int32
+	SetEnum(string, int32) bool
 	Connect(string, interface{})
 	Unref()
 }
