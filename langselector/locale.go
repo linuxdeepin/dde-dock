@@ -22,7 +22,7 @@
 package langselector
 
 import (
-	"dbus/com/deepin/api/setdatetime"
+	"dbus/com/deepin/api/localehelper"
 	libnetwork "dbus/com/deepin/daemon/network"
 	"dbus/org/freedesktop/notifications"
 	"fmt"
@@ -31,7 +31,6 @@ import (
 	"path"
 	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
 	"pkg.linuxdeepin.com/lib/log"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
 )
 
@@ -59,11 +58,17 @@ type LangSelector struct {
 
 	LocaleState int32
 	logger      *log.Logger
-	setDate     *setdatetime.SetDateTime
+	lhelper     *localehelper.LocaleHelper
 }
 
+type envInfo struct {
+	key   string
+	value string
+}
+type envInfos []envInfo
+
 func newLangSelector(l *log.Logger) *LangSelector {
-	lang := LangSelector{}
+	lang := LangSelector{LocaleState: LocaleStateChanged}
 
 	if l != nil {
 		lang.logger = l
@@ -72,11 +77,11 @@ func newLangSelector(l *log.Logger) *LangSelector {
 	}
 
 	var err error
-	lang.setDate, err = setdatetime.NewSetDateTime(
-		"com.deepin.api.SetDateTime",
-		"/com/deepin/api/SetDateTime")
+	lang.lhelper, err = localehelper.NewLocaleHelper(
+		"com.deepin.api.LocaleHelper",
+		"/com/deepin/api/LocaleHelper")
 	if err != nil {
-		lang.logger.Warning("New SetDateTime Failed:", err)
+		lang.logger.Warning("New LocaleHelper Failed:", err)
 		return nil
 	}
 
@@ -86,12 +91,12 @@ func newLangSelector(l *log.Logger) *LangSelector {
 }
 
 func (lang *LangSelector) Destroy() {
-	if lang.setDate == nil {
+	if lang.lhelper == nil {
 		return
 	}
 
-	setdatetime.DestroySetDateTime(lang.setDate)
-	lang.setDate = nil
+	localehelper.DestroyLocaleHelper(lang.lhelper)
+	lang.lhelper = nil
 }
 
 func sendNotify(icon, summary, body string) error {
@@ -129,9 +134,9 @@ func isNetworkEnable() (bool, error) {
 func getLocale() string {
 	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
 	locale, err := getLocaleFromFile(filename)
-	if err != nil {
+	if err != nil || len(locale) == 0 {
 		locale, err = getLocaleFromFile(systemLocaleFile)
-		if err != nil {
+		if err != nil || len(locale) == 0 {
 			locale = defaultLocale
 		}
 
@@ -149,7 +154,6 @@ func getLocale() string {
 
 func writeUserLocale(locale string) error {
 	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
-
 	return writeUserLocalePam(locale, filename)
 }
 
@@ -157,95 +161,83 @@ func writeUserLocale(locale string) error {
  * gnome locale config
  **/
 func writeUserLocalePam(locale, filename string) error {
-	fp, err := os.Create(filename + "~")
-	if err != nil {
-		return err
-	}
-	defer fp.Close()
-
-	contents := constructPamFile(locale, filename)
-	if _, err = fp.WriteString(contents); err != nil {
-		return err
-	}
-	fp.Sync()
-	os.Rename(filename+"~", filename)
-
-	return nil
+	var content = generatePamEnvFile(locale, filename)
+	return ioutil.WriteFile(filename, []byte(content), 0644)
 }
 
-func constructPamFile(locale, filename string) string {
-	if !dutils.IsFileExist(filename) {
-		return generatePamContents(locale)
-	}
-
-	contents, err := ioutil.ReadFile(filename)
-	if err != nil {
-		return generatePamContents(locale)
-	}
-
-	lines := strings.Split(string(contents), "\n")
-	var tmp string
-	for i, line := range lines {
-		if i != 0 {
-			tmp += "\n"
+func generatePamEnvFile(locale, filename string) string {
+	var (
+		lFound   bool //LANG
+		lgFound  bool //LANGUAGE
+		content  string
+		infos, _ = readEnvFile(filename)
+		length   = len(infos)
+		lang     = strings.Split(locale, ".")[0]
+	)
+	for i, info := range infos {
+		if info.key == "LANG" {
+			lFound = true
+			info.value = locale
+		} else if info.key == "LANGUAGE" {
+			lgFound = true
+			info.value = lang
 		}
-
-		strs := strings.Split(line, "=")
-		if strs[0] == "LANG" {
-			tmp += strs[0] + "=" + locale
-			continue
-		} else if strs[0] == "LANGUAGE" {
-			lcode := strings.Split(locale, ".")[0]
-			tmp += strs[0] + "=" + lcode
-			continue
+		content += fmt.Sprintf("%s=%s", info.key, info.value)
+		if i != length-1 {
+			content += "\n"
 		}
-
-		tmp += line
+	}
+	if !lFound {
+		content += fmt.Sprintf("LANG=%s", locale)
+		if !lgFound {
+			content += "\n"
+		}
+	}
+	if !lgFound {
+		content += fmt.Sprintf("LANGUAGE=%s", lang)
 	}
 
-	return tmp
-}
-
-func generatePamContents(locale string) string {
-	contents := ""
-	str := "LANG=" + locale + "\n"
-	contents += str
-	tmp := strings.Split(locale, ".")
-	str = "LANGUAGE=" + tmp[0] + "\n"
-	contents += str
-
-	return contents
+	return content
 }
 
 func getLocaleFromFile(filename string) (string, error) {
-	if !dutils.IsFileExist(filename) {
-		return "", ErrFileNotExist
-	}
-
-	contents, err := ioutil.ReadFile(filename)
+	infos, err := readEnvFile(filename)
 	if err != nil {
 		return "", err
 	}
 
 	var locale string
-	lines := strings.Split(string(contents), "\n")
-	for _, line := range lines {
-		strs := strings.Split(line, "=")
-		if len(strs) != 2 {
+	for _, info := range infos {
+		if info.key != "LANG" {
 			continue
 		}
-
-		if strs[0] != "LANG" {
-			continue
-		}
-
-		locale = strings.Trim(strs[1], "\"")
-		break
-	}
-
-	if len(locale) == 0 {
-		return "", ErrLocaleNotFound
+		locale = info.value
 	}
 
 	return locale, nil
+}
+
+func readEnvFile(file string) (envInfos, error) {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	var (
+		infos envInfos
+		lines = strings.Split(string(content), "\n")
+	)
+	for _, line := range lines {
+		var array = strings.Split(line, "=")
+		if len(array) != 2 {
+			continue
+		}
+
+		infos = append(infos, envInfo{
+			key:   array[0],
+			value: array[1],
+		})
+	}
+
+	return infos, nil
 }
