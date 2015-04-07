@@ -49,7 +49,8 @@ func get_theme_icon(name string, size int) string {
 	}()
 	cPath := C.icon_name_to_path(iconName, C.int(size))
 	defer C.free(unsafe.Pointer(cPath))
-	return C.GoString(cPath)
+	path := C.GoString(cPath)
+	return path
 }
 
 func initDeepin() {

@@ -640,7 +640,8 @@ char* icon_name_to_path(const char* name, int size)
     char* pic_name = g_strndup(name, pic_name_len);
     GtkIconTheme* them = gtk_icon_theme_get_default(); //do not ref or unref it
     if (them == NULL) {
-        g_debug("get theme failed");
+        // NOTE: the g_message won't be recorded on log,
+        g_message("error get default icon theme failed");
         return NULL;
     }
 

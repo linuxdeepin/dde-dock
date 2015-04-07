@@ -47,30 +47,36 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	icon := gioIcon.ToString()
 	logger.Debug("GetIcon:", icon)
 	if icon == "" {
-		logger.Warning("get icon from theme failed")
+		logger.Warning("gioIcon to string failed")
 		return ""
 	}
 
 	iconPath := get_theme_icon(icon, 48)
 	if iconPath == "" {
 		logger.Warning("get icon from theme failed")
-		return ""
+		// return a empty string might be a better idea here.
+		// However, gtk will get theme icon failed sometimes for unknown reason.
+		// frontend must make a validity check for icon.
+		iconPath = icon
 	}
 
 	logger.Debug("get_theme_icon:", icon)
 	ext := filepath.Ext(iconPath)
 	if ext == "" {
+		logger.Info("get app icon:", icon)
 		return icon
 	}
-	// the filepath.Ext return ".xxx"
+
+	// strip the '.' before extension name,
+	// filepath.Ext function will return ".xxx"
 	ext = ext[1:]
 	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
-		logger.Debug("change xpm to data uri")
+		logger.Info("change xpm to data uri")
 		return xpm_to_dataurl(iconPath)
 	}
 
-	logger.Debug("get_theme_icon:", icon)
+	logger.Info("get app icon:", icon)
 	return icon
 }
 
