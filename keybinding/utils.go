@@ -24,6 +24,7 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/inputdevices"
 	"github.com/BurntSushi/xgbutil/keybind"
+	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strconv"
 	"strings"
 )
@@ -566,6 +567,8 @@ func isKeySupported(key string) bool {
 	switch key {
 	case "disable-touchpad":
 		return isTouchpadExist()
+	case "deepin-translator":
+		return dutils.IsFileExist("/usr/bin/deepin-translator")
 	}
 
 	return true
