@@ -19,37 +19,35 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package mouse
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const (
 	DBUS_SENDER     = "com.deepin.daemon.InputDevices"
-	DBUS_PATH_WACOM = "/com/deepin/daemon/InputDevice/Wacom"
-	DBUS_IFC_WACOM  = "com.deepin.daemon.InputDevice.Wacom"
+	DBUS_PATH_MOUSE = "/com/deepin/daemon/InputDevice/Mouse"
+	DBUS_IFC_MOUSE  = "com.deepin.daemon.InputDevice.Mouse"
 )
 
-func (wacom *Wacom) GetDBusInfo() dbus.DBusInfo {
+func (m *Mouse) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       DBUS_SENDER,
-		ObjectPath: DBUS_PATH_WACOM,
-		Interface:  DBUS_IFC_WACOM,
+		ObjectPath: DBUS_PATH_MOUSE,
+		Interface:  DBUS_IFC_MOUSE,
 	}
 }
 
-func (wacom *Wacom) setPropDeviceList(list []libwrapper.XIDeviceInfo) {
-	if len(wacom.DeviceList) != len(list) {
-		wacom.DeviceList = list
-		dbus.NotifyChange(wacom, "DeviceList")
-	}
+func (m *Mouse) setPropDeviceList(devList []wrapper.XIDeviceInfo) {
+	m.DeviceList = devList
+	dbus.NotifyChange(m, "DeviceList")
 }
 
-func (wacom *Wacom) setPropExist(exist bool) {
-	if wacom.Exist != exist {
-		wacom.Exist = exist
-		dbus.NotifyChange(wacom, "Exist")
+func (m *Mouse) setPropExist(exist bool) {
+	if m.Exist != exist {
+		m.Exist = exist
+		dbus.NotifyChange(m, "Exist")
 	}
 }

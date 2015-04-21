@@ -54,7 +54,7 @@ func (op *Manager) EnableZoneDetected(enable bool) {
 func (op *Manager) SetTopLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[EDGE_TOPLEFT] = value
+	edgeActionMap[leftTopEdge] = value
 }
 
 func (op *Manager) TopLeftAction() string {
@@ -64,7 +64,7 @@ func (op *Manager) TopLeftAction() string {
 func (op *Manager) SetBottomLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[EDGE_BOTTOMLEFT] = value
+	edgeActionMap[leftBottomEdge] = value
 }
 
 func (op *Manager) BottomLeftAction() string {
@@ -74,7 +74,7 @@ func (op *Manager) BottomLeftAction() string {
 func (op *Manager) SetTopRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[EDGE_TOPRIGHT] = value
+	edgeActionMap[rightTopEdge] = value
 }
 
 func (op *Manager) TopRightAction() string {
@@ -84,7 +84,7 @@ func (op *Manager) TopRightAction() string {
 func (op *Manager) SetBottomRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[EDGE_BOTTOMRIGHT] = value
+	edgeActionMap[rightBottomEdge] = value
 }
 
 func (op *Manager) BottomRightAction() string {

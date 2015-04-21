@@ -19,42 +19,42 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libtouchpad
+package touchpad
 
 import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-func (touchpad *Touchpad) handleGSettings() {
-	touchpad.settings.Connect("changed", func(s *gio.Settings, key string) {
+func (tpad *Touchpad) handleGSettings() {
+	tpad.settings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
 		case tpadKeyEnabled:
-			touchpad.enable(touchpad.TPadEnable.Get())
+			tpad.enable(tpad.TPadEnable.Get())
 		case tpadKeyLeftHanded:
-			touchpad.leftHanded(touchpad.LeftHanded.Get())
-			touchpad.tapToClick(touchpad.TapClick.Get(),
-				touchpad.LeftHanded.Get())
+			tpad.leftHanded(tpad.LeftHanded.Get())
+			tpad.tapToClick(tpad.TapClick.Get(),
+				tpad.LeftHanded.Get())
 		case tpadKeyTapClick:
-			touchpad.tapToClick(touchpad.TapClick.Get(),
-				touchpad.LeftHanded.Get())
+			tpad.tapToClick(tpad.TapClick.Get(),
+				tpad.LeftHanded.Get())
 		case tpadKeyNaturalScroll, tpadKeyScrollDelta:
-			touchpad.naturalScroll(touchpad.NaturalScroll.Get(),
-				touchpad.DeltaScroll.Get())
+			tpad.naturalScroll(tpad.NaturalScroll.Get(),
+				tpad.DeltaScroll.Get())
 		case tpadKeyEdgeScroll:
-			touchpad.edgeScroll(touchpad.EdgeScroll.Get())
+			tpad.edgeScroll(tpad.EdgeScroll.Get())
 		case tpadKeyVertScroll, tpadKeyHorizScroll:
-			touchpad.twoFingerScroll(touchpad.VertScroll.Get(),
-				touchpad.HorizScroll.Get())
+			tpad.twoFingerScroll(tpad.VertScroll.Get(),
+				tpad.HorizScroll.Get())
 		case tpadKeyWhileTyping:
-			touchpad.disableTpadWhileTyping(touchpad.DisableIfTyping.Get())
+			tpad.disableTpadWhileTyping(tpad.DisableIfTyping.Get())
 		case tpadKeyDoubleClick:
-			touchpad.doubleClick(touchpad.DoubleClick.Get())
+			tpad.doubleClick(tpad.DoubleClick.Get())
 		case tpadKeyDragThreshold:
-			touchpad.dragThreshold(touchpad.DragThreshold.Get())
+			tpad.dragThreshold(tpad.DragThreshold.Get())
 		case tpadKeyAcceleration:
-			touchpad.motionAcceleration(touchpad.MotionAcceleration.Get())
+			tpad.motionAcceleration(tpad.MotionAcceleration.Get())
 		case tpadKeyThreshold:
-			touchpad.motionThreshold(touchpad.MotionThreshold.Get())
+			tpad.motionThreshold(tpad.MotionThreshold.Get())
 		}
 	})
 }

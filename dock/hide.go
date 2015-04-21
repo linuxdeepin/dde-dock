@@ -58,6 +58,7 @@ func NewHideStateManager(mode HideModeType) *HideStateManager {
 }
 
 func (e *HideStateManager) destroy() {
+	close(e.cleanToggleShowChan)
 	dbus.UnInstallObject(e)
 }
 

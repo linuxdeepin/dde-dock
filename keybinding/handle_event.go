@@ -187,15 +187,9 @@ func doAction(action string) {
 		return
 	}
 
-	strs := strings.Split(action, " ")
-	cmd := strs[0]
-	args := []string{}
-
-	if len(strs) > 1 {
-		args = append(args, strs[1:]...)
-	}
-	if err := exec.Command(cmd, args...).Run(); err != nil {
-		logger.Errorf("Exec '%s' failed: %v", action, err)
+	err := exec.Command("/bin/sh", "-c", action).Run()
+	if err != nil {
+		logger.Debugf("Exec '%s' failed: %v", action, err)
 	}
 }
 

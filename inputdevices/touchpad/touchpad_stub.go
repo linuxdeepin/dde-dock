@@ -19,27 +19,35 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package touchpad
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-func (kbd *Keyboard) handleGSettings() {
-	kbd.settings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case kbdKeyRepeatEnable,
-			kbdKeyRepeatInterval,
-			kbdKeyRepeatDelay:
-			setKbdRepeat(kbd.RepeatEnabled.Get(),
-				kbd.RepeatDelay.Get(),
-				kbd.RepeatInterval.Get())
-		case kbdKeyLayout:
-			kbd.setLayout()
-		case kbdKeyCursorBlink:
-			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
-		case kbdKeyLayoutOptions:
-			kbd.setLayoutOptions()
-		}
-	})
+const (
+	DBUS_SENDER    = "com.deepin.daemon.InputDevices"
+	DBUS_PATH_TPAD = "/com/deepin/daemon/InputDevice/TouchPad"
+	DBUS_IFC_TPAD  = "com.deepin.daemon.InputDevice.TouchPad"
+)
+
+func (tpad *Touchpad) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_TPAD,
+		Interface:  DBUS_IFC_TPAD,
+	}
+}
+
+func (tpad *Touchpad) setPropDeviceList(devList []wrapper.XIDeviceInfo) {
+	tpad.DeviceList = devList
+	dbus.NotifyChange(tpad, "DeviceList")
+}
+
+func (tpad *Touchpad) setPropExist(exist bool) {
+	if tpad.Exist != exist {
+		tpad.Exist = exist
+		dbus.NotifyChange(tpad, "Exist")
+	}
 }

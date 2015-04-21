@@ -78,6 +78,10 @@ func (dai *DesktopAppInfo) ListActions() []string {
 	return actions
 }
 
+func getGroupName(actionGropuName string) string {
+	return actionGropuName + " Shortcut Group"
+}
+
 func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 	if dai.gioSupported {
 		logger.Debug("[GetActionName]", dai.GetFilename(), "gio support")
@@ -88,16 +92,14 @@ func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 	langs := GetLanguageNames()
 	str := ""
 	for _, lang := range langs {
-		str, _ = dai.KeyFile.GetLocaleString(actionGroup+" Shortcut Group",
-			"Name", lang)
+		str, _ = dai.KeyFile.GetLocaleString(getGroupName(actionGroup), "Name", lang)
 		if str != "" {
 			return str
 		}
 	}
 
 	if str == "" {
-		str, _ = dai.KeyFile.GetString(actionGroup+" Shortcut Group",
-			"Name")
+		str, _ = dai.KeyFile.GetString(getGroupName(actionGroup), "Name")
 	}
 
 	return str
@@ -112,7 +114,7 @@ func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchCon
 	}
 
 	logger.Debug("LaunchAction")
-	exec, _ := dai.KeyFile.GetString(actionGroup+" Shortcut Group", glib.KeyFileDesktopKeyExec)
+	exec, _ := dai.KeyFile.GetString(getGroupName(actionGroup), glib.KeyFileDesktopKeyExec)
 	logger.Debug("exec:", exec)
 	a, err := gio.AppInfoCreateFromCommandline(
 		exec,

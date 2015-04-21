@@ -19,35 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libmouse
+package keyboard
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-const (
-	DBUS_SENDER     = "com.deepin.daemon.InputDevices"
-	DBUS_PATH_MOUSE = "/com/deepin/daemon/InputDevice/Mouse"
-	DBUS_IFC_MOUSE  = "com.deepin.daemon.InputDevice.Mouse"
-)
-
-func (mouse *Mouse) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DBUS_SENDER,
-		ObjectPath: DBUS_PATH_MOUSE,
-		Interface:  DBUS_IFC_MOUSE,
-	}
-}
-
-func (mouse *Mouse) setPropDeviceList(devList []libwrapper.XIDeviceInfo) {
-	mouse.DeviceList = devList
-	dbus.NotifyChange(mouse, "DeviceList")
-}
-
-func (mouse *Mouse) setPropExist(exist bool) {
-	if mouse.Exist != exist {
-		mouse.Exist = exist
-		dbus.NotifyChange(mouse, "Exist")
-	}
+func (kbd *Keyboard) handleGSettings() {
+	kbd.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case kbdKeyRepeatEnable,
+			kbdKeyRepeatInterval,
+			kbdKeyRepeatDelay:
+			setKbdRepeat(kbd.RepeatEnabled.Get(),
+				kbd.RepeatDelay.Get(),
+				kbd.RepeatInterval.Get())
+		case kbdKeyLayout:
+			kbd.setLayout()
+		case kbdKeyCursorBlink:
+			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
+		case kbdKeyLayoutOptions:
+			kbd.setLayoutOptions()
+		}
+	})
 }

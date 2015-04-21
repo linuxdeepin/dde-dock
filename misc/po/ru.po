@@ -5,15 +5,15 @@
 # Translators:
 # Анатолий Валерианович <ffox909@mail.ru>, 2014
 # jvjey <justVolodya@gmail.com>, 2014
-# Serge Kukharski, 2014
+# Serge Kukharski, 2014-2015
 # Анатолий Валерианович <ffox909@mail.ru>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-26 08:41+0000\n"
-"Last-Translator: Анатолий Валерианович <ffox909@mail.ru>\n"
+"PO-Revision-Date: 2015-03-26 07:40+0000\n"
+"Last-Translator: Serge Kukharski\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/dde-daemon/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,23 +23,23 @@ msgstr ""
 
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr "Имя пользователя не может быть пустым."
+msgstr "Имя пользователя не может быть пустым!"
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Имя пользователя должно содержать a~z, 0~9, - или _."
+msgstr "Имя пользователя должно содержать только буквы латиницы в нижнем регистре, цифры, дефис или нижнее подчеркивание!"
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr "Первый символ должен быть в нижнем регистре."
+msgstr "Первый символ должен быть в нижнем регистре!"
 
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
-msgstr "Имя пользователя существует."
+msgstr "Имя пользователя уже существует!"
 
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr "Это имя пользователя используется системой."
+msgstr "Это имя пользователя используется системой!"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -51,7 +51,7 @@ msgstr "Коммутируемые сети"
 
 #: ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Hands-Free устройство"
+msgstr "Устройство громкой связи"
 
 #: ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
@@ -59,7 +59,7 @@ msgstr "Hands-Free голосовой шлюз"
 
 #: ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset голосовой шлюз"
+msgstr "Голосовой шлюз наушников"
 
 #: ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
@@ -91,147 +91,147 @@ msgstr "Уведомления о сообщении"
 
 #: ../../datetime/timezone/deepin_list.go:16
 msgid "Niue"
-msgstr "Niue"
+msgstr "Ниуэ"
 
 #: ../../datetime/timezone/deepin_list.go:20
 msgid "Hawaii"
-msgstr "Hawaii"
+msgstr "Гавайи"
 
 #: ../../datetime/timezone/deepin_list.go:24
 msgid "Tahiti"
-msgstr "Tahiti"
+msgstr "Таити"
 
 #: ../../datetime/timezone/deepin_list.go:28
 msgid "Honolulu"
-msgstr "Honolulu"
+msgstr "Гонолулу"
 
 #: ../../datetime/timezone/deepin_list.go:32
 msgid "Marquesas"
-msgstr "Marquesas"
+msgstr "Маркизские острова"
 
 #: ../../datetime/timezone/deepin_list.go:36
 msgid "Alaska"
-msgstr "Alaska"
+msgstr "Аляска"
 
 #: ../../datetime/timezone/deepin_list.go:40
 msgid "Juneau"
-msgstr "Juneau"
+msgstr "Джуно"
 
 #: ../../datetime/timezone/deepin_list.go:44
 msgid "Gambier"
-msgstr "Gambier"
+msgstr "Острова Гамбье"
 
 #: ../../datetime/timezone/deepin_list.go:48
 msgid "BajaNorte"
-msgstr "BajaNorte"
+msgstr "Нижняя Калифорния"
 
 #: ../../datetime/timezone/deepin_list.go:52
 msgid "Vancouver"
-msgstr "Vancouver"
+msgstr "Ванкувер"
 
 #: ../../datetime/timezone/deepin_list.go:56
 msgid "Metlakatla"
-msgstr "Metlakatla"
+msgstr "Метлакатла"
 
 #: ../../datetime/timezone/deepin_list.go:60
 msgid "Chihuahua"
-msgstr "Chihuahua"
+msgstr "Чиуауа"
 
 #: ../../datetime/timezone/deepin_list.go:64
 msgid "Arizona"
-msgstr "Arizona"
+msgstr "Аризона"
 
 #: ../../datetime/timezone/deepin_list.go:68
 msgid "BajaSur"
-msgstr "BajaSur"
+msgstr "Южная Баха"
 
 #: ../../datetime/timezone/deepin_list.go:72
 msgid "Mexico City"
-msgstr "Mexico City"
+msgstr "Мехико"
 
 #: ../../datetime/timezone/deepin_list.go:76
 msgid "Chicago"
-msgstr "Chicago"
+msgstr "Чикаго"
 
 #: ../../datetime/timezone/deepin_list.go:80
 msgid "Managua"
-msgstr "Managua"
+msgstr "Манагуа"
 
 #: ../../datetime/timezone/deepin_list.go:84
 msgid "Monterrey"
-msgstr "Monterrey"
+msgstr "Монтеррей"
 
 #: ../../datetime/timezone/deepin_list.go:88
 msgid "New York"
-msgstr "New York"
+msgstr "Нью Йорк"
 
 #: ../../datetime/timezone/deepin_list.go:92
 msgid "Lima"
-msgstr "Lima"
+msgstr "Лима"
 
 #: ../../datetime/timezone/deepin_list.go:96
 msgid "Bogota"
-msgstr "Bogota"
+msgstr "Богота"
 
 #: ../../datetime/timezone/deepin_list.go:100
 msgid "Caracas"
-msgstr "Caracas"
+msgstr "Каракас"
 
 #: ../../datetime/timezone/deepin_list.go:104
 msgid "Cuiaba"
-msgstr "Cuiaba"
+msgstr "Куяба"
 
 #: ../../datetime/timezone/deepin_list.go:108
 msgid "Santiago"
-msgstr "Santiago"
+msgstr "Сантьяго"
 
 #: ../../datetime/timezone/deepin_list.go:112
 msgid "La Paz"
-msgstr "La Paz"
+msgstr "Ла-Пас"
 
 #: ../../datetime/timezone/deepin_list.go:116
 msgid "Asuncion"
-msgstr "Asuncion"
+msgstr "Асунсьон"
 
 #: ../../datetime/timezone/deepin_list.go:120
 msgid "Newfoundland"
-msgstr "Newfoundland"
+msgstr "Ньюфаундленд"
 
 #: ../../datetime/timezone/deepin_list.go:124
 msgid "St Johns"
-msgstr "St Johns"
+msgstr "Сент-Джонс"
 
 #: ../../datetime/timezone/deepin_list.go:128
 msgid "Buenos Aires"
-msgstr "Buenos Aires"
+msgstr "Буэнос-Айрес"
 
 #: ../../datetime/timezone/deepin_list.go:132
 msgid "Cayenne"
-msgstr "Cayenne"
+msgstr "Кайенна"
 
 #: ../../datetime/timezone/deepin_list.go:136
 msgid "DeNoronha"
-msgstr "DeNoronha"
+msgstr "Фернанду-ди-Норонья"
 
 #: ../../datetime/timezone/deepin_list.go:140
 msgid "Azores"
-msgstr "Azores"
+msgstr "Азорские острова"
 
 #: ../../datetime/timezone/deepin_list.go:144
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Капе Верде"
 
 #: ../../datetime/timezone/deepin_list.go:148
 msgid "London"
-msgstr "London"
+msgstr "Лондон"
 
 #: ../../datetime/timezone/deepin_list.go:152
 msgid "Dublin"
-msgstr "Dublin"
+msgstr "Дублин"
 
 #: ../../datetime/timezone/deepin_list.go:156
 msgid "Casablanca"
-msgstr "Casablanca"
+msgstr "Касабланка"
 
 #: ../../datetime/timezone/deepin_list.go:160
 msgid "Monrovia"
@@ -239,51 +239,51 @@ msgstr "Monrovia"
 
 #: ../../datetime/timezone/deepin_list.go:164
 msgid "Madrid"
-msgstr "Madrid"
+msgstr "Мадрид"
 
 #: ../../datetime/timezone/deepin_list.go:168
 msgid "Paris"
-msgstr "Paris"
+msgstr "Париж"
 
 #: ../../datetime/timezone/deepin_list.go:172
 msgid "Rome"
-msgstr "Rome"
+msgstr "Рим"
 
 #: ../../datetime/timezone/deepin_list.go:176
 msgid "Vienna"
-msgstr "Vienna"
+msgstr "Вена"
 
 #: ../../datetime/timezone/deepin_list.go:180
 msgid "Algiers"
-msgstr "Algiers"
+msgstr "Алжир"
 
 #: ../../datetime/timezone/deepin_list.go:184
 msgid "Cairo"
-msgstr "Cairo"
+msgstr "Каир"
 
 #: ../../datetime/timezone/deepin_list.go:188
 msgid "Athens"
-msgstr "Athens"
+msgstr "Афины"
 
 #: ../../datetime/timezone/deepin_list.go:192
 msgid "Istanbul"
-msgstr "Istanbul"
+msgstr "Стамбул"
 
 #: ../../datetime/timezone/deepin_list.go:196
 msgid "Blantyre"
-msgstr "Blantyre"
+msgstr "Блантайр"
 
 #: ../../datetime/timezone/deepin_list.go:200
 msgid "Nairobi"
-msgstr "Nairobi"
+msgstr "Найроби"
 
 #: ../../datetime/timezone/deepin_list.go:204
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "Тегеран"
 
 #: ../../datetime/timezone/deepin_list.go:208
 msgid "Muscat"
-msgstr "Muscat"
+msgstr "Маскат"
 
 #: ../../datetime/timezone/deepin_list.go:212
 msgid "Baku"
@@ -295,7 +295,7 @@ msgstr "Москва"
 
 #: ../../datetime/timezone/deepin_list.go:220
 msgid "Kabul"
-msgstr "Kabul"
+msgstr "Кабул"
 
 #: ../../datetime/timezone/deepin_list.go:224
 msgid "Karachi"
@@ -303,15 +303,15 @@ msgstr "Карачи"
 
 #: ../../datetime/timezone/deepin_list.go:228
 msgid "Calcutta"
-msgstr "Calcutta"
+msgstr "Калькутта"
 
 #: ../../datetime/timezone/deepin_list.go:232
 msgid "Kathmandu"
-msgstr "Kathmandu"
+msgstr "Катманду"
 
 #: ../../datetime/timezone/deepin_list.go:236
 msgid "Dhaka"
-msgstr "Dhaka"
+msgstr "Дакка"
 
 #: ../../datetime/timezone/deepin_list.go:240
 msgid "Yekaterinburg"
@@ -319,83 +319,83 @@ msgstr "Екатеринбург"
 
 #: ../../datetime/timezone/deepin_list.go:244
 msgid "Rangoon"
-msgstr "Rangoon"
+msgstr "Янгон"
 
 #: ../../datetime/timezone/deepin_list.go:248
 msgid "Bangkok"
-msgstr "Bangkok"
+msgstr "Бангкок"
 
 #: ../../datetime/timezone/deepin_list.go:252
 msgid "Jakarta"
-msgstr "Jakarta"
+msgstr "Джакарта"
 
 #: ../../datetime/timezone/deepin_list.go:256
 msgid "Beijing"
-msgstr "Beijing"
+msgstr "Пекин"
 
 #: ../../datetime/timezone/deepin_list.go:260
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Гонконг"
 
 #: ../../datetime/timezone/deepin_list.go:264
 msgid "Taipei"
-msgstr "Taipei"
+msgstr "Тайпей"
 
 #: ../../datetime/timezone/deepin_list.go:268
 msgid "Kuala Lumpur"
-msgstr "Kuala Lumpur"
+msgstr "Куала-Лумпур"
 
 #: ../../datetime/timezone/deepin_list.go:272
 msgid "Perth"
-msgstr "Perth"
+msgstr "Перт"
 
 #: ../../datetime/timezone/deepin_list.go:276
 msgid "Eucla"
-msgstr "Eucla"
+msgstr "Евкла"
 
 #: ../../datetime/timezone/deepin_list.go:280
 msgid "Tokyo"
-msgstr "Tokyo"
+msgstr "Токио"
 
 #: ../../datetime/timezone/deepin_list.go:284
 msgid "Seoul"
-msgstr "Seoul"
+msgstr "Сеул"
 
 #: ../../datetime/timezone/deepin_list.go:288
 msgid "Darwin"
-msgstr "Darwin"
+msgstr "Дарвин"
 
 #: ../../datetime/timezone/deepin_list.go:292
 msgid "Sydney"
-msgstr "Sydney"
+msgstr "Сидней"
 
 #: ../../datetime/timezone/deepin_list.go:296
 msgid "Guam"
-msgstr "Guam"
+msgstr "Гуам"
 
 #: ../../datetime/timezone/deepin_list.go:300
 msgid "Melbourne"
-msgstr "Melbourne"
+msgstr "Мельбурн"
 
 #: ../../datetime/timezone/deepin_list.go:304
 msgid "Hobart"
-msgstr "Hobart"
+msgstr "Хобарт"
 
 #: ../../datetime/timezone/deepin_list.go:308
 msgid "Lord Howe"
-msgstr "Lord Howe"
+msgstr "Лорд-Хау"
 
 #: ../../datetime/timezone/deepin_list.go:312
 msgid "Pohnpei"
-msgstr "Pohnpei"
+msgstr "Понпеи"
 
 #: ../../datetime/timezone/deepin_list.go:316
 msgid "Norfolk"
-msgstr "Norfolk"
+msgstr "Норфолк"
 
 #: ../../datetime/timezone/deepin_list.go:320
 msgid "Auckland"
-msgstr "Auckland"
+msgstr "Окленд"
 
 #: ../../datetime/timezone/deepin_list.go:324
 msgid "Anadyr"
@@ -403,31 +403,31 @@ msgstr "Анадырь"
 
 #: ../../datetime/timezone/deepin_list.go:328
 msgid "Chatham"
-msgstr "Chatham"
+msgstr "Чатэм"
 
 #: ../../datetime/timezone/deepin_list.go:332
 msgid "Apia"
-msgstr "Apia"
+msgstr "Апиа"
 
 #: ../../datetime/timezone/deepin_list.go:336
 msgid "Fakaofo"
-msgstr "Fakaofo"
+msgstr "Факаофо"
 
 #: ../../dock/normal_apps.go:73
 msgid "_Run"
-msgstr "_Запуск"
+msgstr "Запуск"
 
 #: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:291
 msgid "_Undock"
-msgstr "_Разблокировать"
+msgstr "Убрать из дока"
 
 #: ../../dock/runtime_apps.go:260
 msgid "_Close All"
-msgstr "_Закрыть всё"
+msgstr "Закрыть все"
 
 #: ../../dock/runtime_apps.go:303
 msgid "_Dock"
-msgstr "_Док"
+msgstr "Закрепить в доке"
 
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:64
@@ -456,67 +456,67 @@ msgstr "Страницу вниз"
 
 #: ../../keybinding/id_desc_list.go:47
 msgid "Launcher"
-msgstr "Лаунчер"
+msgstr "Показать лаунчер"
 
 #: ../../keybinding/id_desc_list.go:48
 msgid "Show desktop"
-msgstr "Показать на рабочем столе"
+msgstr "Показать рабочий стол"
 
 #: ../../keybinding/id_desc_list.go:49
 msgid "Lock screen"
-msgstr "Экран блокировки"
+msgstr "Заблокировать сеанс"
 
 #: ../../keybinding/id_desc_list.go:50
 msgid "File manager"
-msgstr "Файловый менеджер"
+msgstr "Запустить менеджер файлов"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Переключить приложения"
+msgstr "Перекл. между приложениями"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Реверс переключения приложений"
+msgstr "Обратное перекл. между приложениями"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "3D переключение приложений"
+msgstr "3D перекл. между приложениями"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Реверс 3D переключения приложений"
+msgstr "Обратное 3D перекл. между приложениями"
 
 #: ../../keybinding/id_desc_list.go:55
 msgid "Show/Hide the dock"
-msgstr "Показать/Скрыть док"
+msgstr "Показать/скрыть док"
 
 #: ../../keybinding/id_desc_list.go:56
 msgid "Screenshot"
-msgstr "Снимок экрана"
+msgstr "Сделать скриншот"
 
 #: ../../keybinding/id_desc_list.go:57
 msgid "Full screenshot"
-msgstr "Полный скриншот"
+msgstr "Сделать полный скриншот"
 
 #: ../../keybinding/id_desc_list.go:58
 msgid "Window screenshot"
-msgstr "Скриншот окна"
+msgstr "Сделать скриншот окна"
 
 #: ../../keybinding/id_desc_list.go:59
 msgid "Delay screenshot"
-msgstr "Задержка скриншота"
+msgstr "Сделать скриншот с задержкой"
 
 #: ../../keybinding/id_desc_list.go:60
 msgid "Terminal"
-msgstr "Терминал"
+msgstr "Запустить терминал"
 
 #: ../../keybinding/id_desc_list.go:61
 msgid "Terminal Quake Window"
-msgstr "Окно  Quake терминала"
+msgstr "Запустить полноэкранный терминал"
 
 #: ../../keybinding/id_desc_list.go:62
 msgid "Logout"
-msgstr "Выход"
+msgstr "Выйти из системы"
 
 #: ../../keybinding/id_desc_list.go:63
 msgid "Disable Touchpad"
@@ -524,7 +524,7 @@ msgstr "Отключить тачпад"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Переводчик Deepin"
+msgstr "Запустить переводчик"
 
 #: ../../keybinding/id_desc_list.go:65
 msgid "Switch Layout"
@@ -584,7 +584,7 @@ msgstr "Извлечь"
 
 #: ../../keybinding/id_desc_list.go:93
 msgid "Close window"
-msgstr "Закрыть окна"
+msgstr "Закрыть окно"
 
 #: ../../keybinding/id_desc_list.go:94
 msgid "Maximize window"
@@ -616,86 +616,86 @@ msgstr "Активировать меню окна"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Переключится на рабочий стол 1 "
+msgstr "Переключится на раб. стол 1 "
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Переключится на рабочий стол 2"
+msgstr "Переключится на раб. стол 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Переключится на рабочий стол 3"
+msgstr "Переключится на раб. стол 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Переключится на рабочий стол 4"
+msgstr "Переключится на раб. стол 4"
 
 #: ../../keybinding/id_desc_list.go:112
 msgid "Switch to left workspace"
-msgstr "На левый рабочий стол"
+msgstr "На левый раб. стол"
 
 #: ../../keybinding/id_desc_list.go:113
 msgid "Switch to right workspace"
-msgstr "На правый рабочий стол"
+msgstr "На правый раб. стол"
 
 #: ../../keybinding/id_desc_list.go:114
 msgid "Switch to upper workspace"
-msgstr "На верхний рабочий стол"
+msgstr "На верхний раб. стол"
 
 #: ../../keybinding/id_desc_list.go:115
 msgid "Switch to lower workspace"
-msgstr "На нижний рабочий стол"
+msgstr "На нижний раб. стол"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Переместить на рабочий стол 1"
+msgstr "Переместить на раб. стол 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Переместить на рабочий стол 2"
+msgstr "Переместить на раб. стол 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Переместить на рабочий стол 3"
+msgstr "Переместить на раб. стол 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Переместить на рабочий стол 4"
+msgstr "Переместить на раб. стол 4"
 
 #: ../../keybinding/id_desc_list.go:120
 msgid "Move to left workspace"
-msgstr "Переместит на левый рабочий стол"
+msgstr "Переместить на левый раб. стол"
 
 #: ../../keybinding/id_desc_list.go:121
 msgid "Move to right workspace"
-msgstr "Переместить на правый рабочий стол"
+msgstr "Переместить на правый раб. стол"
 
 #: ../../keybinding/id_desc_list.go:122
 msgid "Move to upper workspace"
-msgstr "Переместить на верхний рабочий стол"
+msgstr "Переместить на верхний раб. стол"
 
 #: ../../keybinding/id_desc_list.go:123
 msgid "Move to lower workspace"
-msgstr "Переместить на нижний рабочий стол"
+msgstr "Переместить на нижний раб. стол"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "Неудача смены языка системы, попробуйте позже."
+msgstr "Не удалось сменить язык системы, попробуйте позже!"
 
 #: ../../langselector/handle_event.go:42
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "Был изменён язык системы, перезайдите."
+msgstr "Был изменен язык системы, выйдите из системы и войдите вновь…"
 
 #: ../../langselector/locale_ifc.go:55
 msgid "System language is being changed, please wait..."
-msgstr "Меняется язык системы, подождите..."
+msgstr "Меняется язык системы, подождите…"
 
 #: ../../langselector/locale_ifc.go:60
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Язык системы меняется с установкой недостающих языковых пакетов, подождите..."
+msgstr "Меняется язык системы с установкой недостающих языковых пакетов, подождите…"
 
 #: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
@@ -707,12 +707,12 @@ msgstr "Открыть папку"
 
 #: ../../mime/default_media.go:80
 msgid "Run Software"
-msgstr "Пуск программы"
+msgstr "Запуск программы"
 
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
 #: ../../network/state_handler.go:188 ../../network/utils_notify.go:103
 msgid "Connected"
-msgstr "Подключён"
+msgstr "Подключен"
 
 #: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
 #: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
@@ -735,7 +735,7 @@ msgstr "Ничего"
 #: ../../network/nm_setting_virtual_key.go:142
 #: ../../network/nm_setting_virtual_key.go:149
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Key"
+msgstr "WEP 40/128-бит. ключ"
 
 #: ../../network/manager_active.go:292
 #: ../../network/nm_setting_virtual_key.go:143
@@ -772,7 +772,7 @@ msgstr "Туннельный LTS "
 #: ../../network/manager_active.go:310 ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_802_1x.go:179
 msgid "Protected EAP"
-msgstr "Защищённый EAP"
+msgstr "Защищенный EAP"
 
 #: ../../network/manager_connection.go:211 ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
@@ -818,7 +818,7 @@ msgstr "Беспроводный Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
-msgstr "PPPoE подключение"
+msgstr "PPPoE-подключение"
 
 #: ../../network/nm_custom_type.go:188
 msgid "Mobile Connection"
@@ -826,15 +826,15 @@ msgstr "Мобильное подключение"
 
 #: ../../network/nm_custom_type.go:190
 msgid "Mobile GSM Connection"
-msgstr "Мобильное GSM подключение"
+msgstr "Мобильное GSM-подключение"
 
 #: ../../network/nm_custom_type.go:192
 msgid "Mobile CDMA Connection"
-msgstr "Мобильное CDMA подключение"
+msgstr "Мобильное CDMA-подключение"
 
 #: ../../network/nm_custom_type.go:194
 msgid "VPN Connection"
-msgstr "VPN подключение"
+msgstr "VPN-подключение"
 
 #: ../../network/nm_custom_type.go:196
 msgid "VPN L2TP"
@@ -1288,11 +1288,11 @@ msgstr "Открыть"
 
 #: ../../network/state_handler.go:34
 msgid "Device state changed, unknown reason."
-msgstr "Статус устройства изменён по неизвестной причине."
+msgstr "Состояние устройства изменено по неизвестной причине."
 
 #: ../../network/state_handler.go:35
 msgid "Device state changed."
-msgstr "Статус устройства изменён."
+msgstr "Состояние устройства изменено."
 
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
@@ -1427,7 +1427,7 @@ msgstr "Регистрация для запрашиваемой GSM сети н
 
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "Проверка PIN неудачна."
+msgstr "Проверка PIN не удалась!"
 
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
@@ -1435,7 +1435,7 @@ msgstr "Необходимая микропрограмма для устрой�
 
 #: ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "Устройство было удалено."
+msgstr "Устройство было удалено!"
 
 #: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
@@ -1499,11 +1499,11 @@ msgstr "Проблема с RFC 2684 Ethernet по ADSL мосту."
 
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager не запущен или неожиданно отключён."
+msgstr "ModemManager не запущен или неожиданно отключен!"
 
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "802.11 Wi-Fi сеть не может быть найдена."
+msgstr "Wi-Fi-сеть не может быть найдена!"
 
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
@@ -1511,27 +1511,27 @@ msgstr "Вторичное подключение базового соедин�
 
 #: ../../network/state_handler.go:91
 msgid "Network cable is unplugged."
-msgstr "Сетевой кабель отключён."
+msgstr "Сетевой кабель отключен!"
 
 #: ../../network/state_handler.go:94
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Активация VPN-соединения неудачна, причина неизвестна."
+msgstr "Активация VPN-соединения не удалась по неизвестной причине…"
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed."
-msgstr "Активация VPN-соединения неудачна."
+msgstr "Активация VPN-соединения не удалась!"
 
 #: ../../network/state_handler.go:96
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "VPN соединение изменено состояние из-за отключения пользователей."
+msgstr "Изменено состояние VPN-соединения из-за отключения пользователей!"
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "VPN соединение изменило состояние из-за отключения устройств."
+msgstr "Изменено состояние VPN-соединения из-за отключения устройств!"
 
 #: ../../network/state_handler.go:98
 msgid "VPN service stopped."
-msgstr "VPN-сервис остановлен."
+msgstr "VPN-сервис остановлен!"
 
 #: ../../network/state_handler.go:99
 msgid "The IP config of VPN connection was invalid."
@@ -1555,7 +1555,7 @@ msgstr "Необходимый пароль для подключения VPN н
 
 #: ../../network/state_handler.go:104
 msgid "Authentication to VPN server failed."
-msgstr "Аутентификация на сервере VPN не удалась."
+msgstr "Аутентификация на VPN-сервере не удалась!"
 
 #: ../../network/state_handler.go:105
 msgid "The connection was deleted from settings."
@@ -1607,7 +1607,7 @@ msgstr "Заряд батареи не предсказуем, правильн�
 
 #: ../../power/upower.go:86 ../../power/upower.go:101
 msgid "Battery Critical Low"
-msgstr "Батарей полностью разряжена"
+msgstr "Слишком слабый заряд батареи"
 
 #: ../../power/upower.go:86
 msgid "Computer has been in suspend mode, please plug in."

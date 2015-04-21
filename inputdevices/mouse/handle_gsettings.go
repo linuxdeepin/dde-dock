@@ -19,36 +19,31 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libtouchpad
+package mouse
 
-func (touchpad *Touchpad) printInfo(format string, v ...interface{}) {
-	if touchpad.logger == nil {
-		return
-	}
+import (
+	"pkg.linuxdeepin.com/lib/gio-2.0"
+)
 
-	touchpad.logger.Infof(format, v...)
-}
-
-func (touchpad *Touchpad) debugInfo(format string, v ...interface{}) {
-	if touchpad.logger == nil {
-		return
-	}
-
-	touchpad.logger.Debugf(format, v...)
-}
-
-func (touchpad *Touchpad) warningInfo(format string, v ...interface{}) {
-	if touchpad.logger == nil {
-		return
-	}
-
-	touchpad.logger.Warningf(format, v...)
-}
-
-func (touchpad *Touchpad) errorInfo(format string, v ...interface{}) {
-	if touchpad.logger == nil {
-		return
-	}
-
-	touchpad.logger.Errorf(format, v...)
+func (m *Mouse) handleGSettings() {
+	m.settings.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case mouseKeyLeftHanded:
+			m.leftHanded(m.LeftHanded.Get())
+		case mouseKeyDisableTouchpad:
+			m.disableTouchpad(m.DisableTpad.Get())
+		case mouseKeyNaturalScroll:
+			m.naturalScroll(m.NaturalScroll.Get())
+		case mouseKeyMiddleButton:
+			m.middleButtonEmulation(m.MiddleButtonEmulation.Get())
+		case mouseKeyAcceleration:
+			m.motionAcceleration(m.MotionAcceleration.Get())
+		case mouseKeyThreshold:
+			m.motionThreshold(m.MotionThreshold.Get())
+		case mouseKeyDoubleClick:
+			m.doubleClick(uint32(m.DoubleClick.Get()))
+		case mouseKeyDragThreshold:
+			m.dragThreshold(uint32(m.DragThreshold.Get()))
+		}
+	})
 }

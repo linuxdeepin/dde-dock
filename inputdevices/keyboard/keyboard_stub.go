@@ -19,36 +19,22 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libmouse
+package keyboard
 
-func (mouse *Mouse) printInfo(format string, v ...interface{}) {
-	if mouse.logger == nil {
-		return
+import (
+	"pkg.linuxdeepin.com/lib/dbus"
+)
+
+const (
+	DBUS_SENDER   = "com.deepin.daemon.InputDevices"
+	DBUS_PATH_KBD = "/com/deepin/daemon/InputDevice/Keyboard"
+	DBUS_IFC_KBD  = "com.deepin.daemon.InputDevice.Keyboard"
+)
+
+func (kbd *Keyboard) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       DBUS_SENDER,
+		ObjectPath: DBUS_PATH_KBD,
+		Interface:  DBUS_IFC_KBD,
 	}
-
-	mouse.logger.Infof(format, v...)
-}
-
-func (mouse *Mouse) debugInfo(format string, v ...interface{}) {
-	if mouse.logger == nil {
-		return
-	}
-
-	mouse.logger.Debugf(format, v...)
-}
-
-func (mouse *Mouse) warningInfo(format string, v ...interface{}) {
-	if mouse.logger == nil {
-		return
-	}
-
-	mouse.logger.Warningf(format, v...)
-}
-
-func (mouse *Mouse) errorInfo(format string, v ...interface{}) {
-	if mouse.logger == nil {
-		return
-	}
-
-	mouse.logger.Errorf(format, v...)
 }

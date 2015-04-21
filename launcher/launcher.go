@@ -45,6 +45,7 @@ type Launcher struct {
 	cancelSearchingChan chan struct{}
 	pinyinObj           PinYinInterface
 	store               *storeApi.DStoreDesktop
+	appMonitor          *fsnotify.Watcher
 
 	ItemChanged func(
 		status string,
@@ -285,6 +286,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}()
 		info[name].renamed <- true
 	} else if ev.IsCreate() {
+		self.emitItemChanged(name, SoftwareStatusCreated, info)
 		go func() {
 			select {
 			case <-info[name].renamed:
@@ -385,7 +387,8 @@ func (self *Launcher) listenItemChanged() {
 	if err != nil {
 		return
 	}
-	// FIXME: close watcher.
+
+	self.appMonitor = watcher
 	for _, dir := range dirs {
 		logger.Info("monitor:", dir)
 		watcher.Watch(dir)
@@ -512,6 +515,10 @@ func (self *Launcher) destroy() {
 	if self.store != nil {
 		storeApi.DestroyDStoreDesktop(self.store)
 		self.store = nil
+	}
+	if self.appMonitor != nil {
+		self.appMonitor.Close()
+		self.appMonitor = nil
 	}
 	dbus.UnInstallObject(self)
 }

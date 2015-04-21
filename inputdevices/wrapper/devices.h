@@ -26,6 +26,7 @@ typedef struct _DeviceInfo {
 	char *name;
 	int deviceid;
 	int enabled;
+	int is_touchscreen;
 } DeviceInfo;
 
 DeviceInfo *get_device_info_list(int *n_devices);
