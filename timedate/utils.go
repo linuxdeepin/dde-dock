@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,47 +19,40 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package timedate
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/log"
-)
+func isItemInList(item string, list []string) bool {
+	for _, v := range list {
+		if v == item {
+			return true
+		}
+	}
 
-var _date *DateTime
-
-func finalize() {
-	_date.destroy()
-	_date = nil
+	return false
 }
 
-func Start() {
-	if _date != nil {
-		return
+func addItemToList(item string, list []string) ([]string, bool) {
+	if isItemInList(item, list) {
+		return list, false
 	}
 
-	var logger = log.NewLogger(dbusSender)
-
-	logger.BeginTracing()
-
-	_date = NewDateTime(logger)
-	if _date == nil {
-		logger.Error("Create DateTime Failed")
-		logger.EndTracing()
-		return
-	}
-	err := dbus.InstallOnSession(_date)
-	if err != nil {
-		logger.Error("Install DBus For DateTime Failed")
-		finalize()
-		return
-	}
+	list = append(list, item)
+	return list, true
 }
 
-func Stop() {
-	if _date == nil {
-		return
+func deleteItemFromList(item string, list []string) ([]string, bool) {
+	var (
+		ret   []string
+		found bool
+	)
+	for _, v := range list {
+		if v == item {
+			found = true
+			continue
+		}
+
+		ret = append(ret, v)
 	}
 
-	finalize()
+	return ret, found
 }

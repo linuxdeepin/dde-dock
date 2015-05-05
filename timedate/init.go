@@ -1,10 +1,10 @@
-package datetime
+package timedate
 
 import "pkg.linuxdeepin.com/dde-daemon"
 
 func init() {
 	loader.Register(&loader.Module{
-		Name:   "datetime",
+		Name:   "timedate",
 		Start:  Start,
 		Stop:   Stop,
 		Enable: true,

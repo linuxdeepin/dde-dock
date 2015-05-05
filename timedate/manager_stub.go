@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,27 +19,40 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package ntp
+package timedate
 
 import (
-	C "launchpad.net/gocheck"
-	"testing"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-type testWrapper struct{}
+const (
+	dbusSender = "com.deepin.daemon.Timedate"
+	dbusPath   = "/com/deepin/daemon/Timedate"
+	dbusIFC    = "com.deepin.daemon.Timedate"
+)
 
-func init() {
-	C.Suite(&testWrapper{})
-}
-
-func Test(t *testing.T) {
-	C.TestingT(t)
-}
-
-func (*testWrapper) TestGetDateTime(c *C.C) {
-	_, _, err := getDateTime()
-	//c.Check(err, C.Not(C.NotNil))
-	if err != nil {
-		c.Skip(err.Error())
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusSender,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
+}
+
+func (m *Manager) setPropBool(handler *bool, prop string, value bool) {
+	if *handler == value {
+		return
+	}
+
+	*handler = value
+	dbus.NotifyChange(m, prop)
+}
+
+func (m *Manager) setPropString(handler *string, prop, value string) {
+	if *handler == value {
+		return
+	}
+
+	*handler = value
+	dbus.NotifyChange(m, prop)
 }

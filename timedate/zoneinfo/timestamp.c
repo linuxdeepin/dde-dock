@@ -28,7 +28,7 @@
 #include "zdump.h"
 #include "timestamp.h"
 
-static int isdst_timestamp(time_t t);
+static int is_usec_has_dst(time_t t);
 
 DSTTime
 get_dst_time(const char *zone, int year)
@@ -110,19 +110,19 @@ get_dst_time(const char *zone, int year)
 }
 
 long long
-get_rawoffset_time (const char *zone, long long t)
+get_rawoffset_usec (const char *zone, long long t)
 {
 	char *tz = getenv("TZ");
 	setenv("TZ", zone, 1);
 
 	time_t newt = t-1;
-	if (!isdst_timestamp(newt)) {
+	if (!is_usec_has_dst(newt)) {
 		setenv("TZ", tz, 1);
 		return newt;
 	}
 
 	newt = t+1;
-	if (!isdst_timestamp(newt)) {
+	if (!is_usec_has_dst(newt)) {
 		setenv("TZ", tz, 1);
 		return newt;
 	}
@@ -132,7 +132,7 @@ get_rawoffset_time (const char *zone, long long t)
 }
 
 long
-getoffset (const char *zone, long long t)
+get_offset_by_usec (const char *zone, long long t)
 {
 	char *tz = getenv("TZ");
 	setenv("TZ", zone, 1);
@@ -157,7 +157,7 @@ getoffset (const char *zone, long long t)
 }
 
 static int
-isdst_timestamp(time_t t)
+is_usec_has_dst(time_t t)
 {
 	struct tm *tmp = NULL;
 	tmp = localtime(&t);

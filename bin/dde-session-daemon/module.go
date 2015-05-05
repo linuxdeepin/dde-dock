@@ -35,7 +35,7 @@ var (
 		"audio",
 		"appearance",
 		"clipboard",
-		"datetime",
+		"timedate",
 		"mime",
 		"screenedge",
 		"bluetooth",

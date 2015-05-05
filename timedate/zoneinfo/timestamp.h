@@ -19,14 +19,16 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+#ifndef __TIMESTAMP_H__
+#define __TIMESTAMP_H__
 
-import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-)
+typedef struct _DSTTime {
+	long long enter;
+	long long leave;
+} DSTTime;
 
-func (date *DateTime) listenGSettings() {
-	date.settings.Connect("changed::is-auto-set", func(s *gio.Settings, key string) {
-		date.enableNTP(date.settings.GetBoolean(key))
-	})
-}
+long long get_rawoffset_usec (const char *zone, long long t);
+long get_offset_by_usec (const char *zone, long long t);
+DSTTime get_dst_time(const char *zone, int year);
+
+#endif

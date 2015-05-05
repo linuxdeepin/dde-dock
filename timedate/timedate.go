@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,56 +19,51 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package utils
+package timedate
 
 import (
+	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-func Printf(logger *log.Logger, format string, v ...interface{}) {
-	if logger == nil {
+var (
+	_manager *Manager
+
+	logger = log.NewLogger(dbusSender)
+)
+
+func Start() {
+	if _manager != nil {
 		return
 	}
 
-	logger.Infof(format, v...)
+	logger.BeginTracing()
+
+	var err error
+	_manager, err = NewManager()
+	if err != nil {
+		logger.Error("Create Manager failed:", err)
+		logger.EndTracing()
+		return
+	}
+
+	err = dbus.InstallOnSession(_manager)
+	if err != nil {
+		logger.Error("Install DBus failed:", err)
+		_manager.destroy()
+		_manager = nil
+		logger.EndTracing()
+		return
+	}
+	_manager.handlePropChanged()
 }
 
-func Println(logger *log.Logger, v ...interface{}) {
-	if logger == nil {
+func Stop() {
+	if _manager == nil {
 		return
 	}
 
-	logger.Info(v...)
-}
-
-func Warningf(logger *log.Logger, format string, v ...interface{}) {
-	if logger == nil {
-		return
-	}
-
-	logger.Warningf(format, v...)
-}
-
-func Warning(logger *log.Logger, v ...interface{}) {
-	if logger == nil {
-		return
-	}
-
-	logger.Warning(v...)
-}
-
-func Errorf(logger *log.Logger, format string, v ...interface{}) {
-	if logger == nil {
-		return
-	}
-
-	logger.Errorf(format, v...)
-}
-
-func Error(logger *log.Logger, v ...interface{}) {
-	if logger == nil {
-		return
-	}
-
-	logger.Error(v...)
+	logger.EndTracing()
+	_manager.destroy()
+	_manager = nil
 }

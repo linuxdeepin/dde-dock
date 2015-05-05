@@ -10,7 +10,7 @@ import _ "pkg.linuxdeepin.com/dde-daemon/audio"
 import _ "pkg.linuxdeepin.com/dde-daemon/appearance"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/clipboard"
-import _ "pkg.linuxdeepin.com/dde-daemon/datetime"
+import _ "pkg.linuxdeepin.com/dde-daemon/timedate"
 import _ "pkg.linuxdeepin.com/dde-daemon/mime"
 
 import _ "pkg.linuxdeepin.com/dde-daemon/screenedge"

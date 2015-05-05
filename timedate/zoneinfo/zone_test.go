@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package zoneinfo
 
 import (
 	C "launchpad.net/gocheck"
@@ -36,9 +36,42 @@ func Test(t *testing.T) {
 	C.TestingT(t)
 }
 
-func (*testWrapper) TestGetDefaultZone(c *C.C) {
-	c.Check(getDefaultTimezone("testdata/timezone"),
-		C.Equals, "Asia/Shanghai")
-	c.Check(getDefaultTimezone("testdata/xxx"),
-		C.Equals, "UTC")
+func (*testWrapper) TestGetZoneList(c *C.C) {
+	var ret = []string{
+		"Europe/Andorra",
+		"Asia/Dubai",
+		"Asia/Kabul",
+		"Europe/Tirane",
+		"Asia/Yerevan",
+	}
+
+	list, err := getZoneListFromFile("testdata/zone1970.tab")
+	c.Check(err, C.Equals, nil)
+	for i, _ := range list {
+		c.Check(list[i], C.Equals, ret[i])
+	}
+}
+
+func (*testWrapper) TestZoneValid(c *C.C) {
+	var infos = []struct {
+		zone  string
+		valid bool
+	}{
+		{
+			zone:  "Asia/Shanghai",
+			valid: true,
+		},
+		//{
+		//zone:  "Asia/Beijing",
+		//valid: true,
+		//},
+		{
+			zone:  "Asia/xxxx",
+			valid: false,
+		},
+	}
+
+	for _, info := range infos {
+		c.Check(IsZoneValid(info.zone), C.Equals, info.valid)
+	}
 }

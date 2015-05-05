@@ -1,4 +1,4 @@
-package timezone
+package timedate
 
 import (
 	. "pkg.linuxdeepin.com/lib/gettext"
@@ -335,4 +335,14 @@ var zoneWhiteList = []zoneDesc{
 		zone: "Pacific/Fakaofo",
 		desc: Tr("Fakaofo"),
 	},
+}
+
+func getZoneDesc(zone string) string {
+	for _, zdesc := range zoneWhiteList {
+		if zdesc.zone == zone {
+			return zdesc.desc
+		}
+	}
+
+	return zone
 }

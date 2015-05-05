@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,25 +19,23 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package datetime
+package timedate
 
-import (
-	"pkg.linuxdeepin.com/lib/dbus"
-)
-
-func (date *DateTime) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusSender,
-		ObjectPath: dbusPath,
-		Interface:  dbusIFC,
-	}
-}
-
-func (date *DateTime) setPropString(handler *string, prop, value string) {
-	if *handler == value {
+func (m *Manager) handlePropChanged() {
+	if m.td1 == nil {
 		return
 	}
 
-	*handler = value
-	dbus.NotifyChange(date, prop)
+	m.td1.CanNTP.ConnectChanged(func() {
+		m.setPropBool(&m.CanNTP, "CanNTP", m.td1.CanNTP.Get())
+	})
+	m.td1.NTP.ConnectChanged(func() {
+		m.setPropBool(&m.NTP, "NTP", m.td1.NTP.Get())
+	})
+	m.td1.LocalRTC.ConnectChanged(func() {
+		m.setPropBool(&m.LocalRTC, "LocalRTC", m.td1.LocalRTC.Get())
+	})
+	m.td1.Timezone.ConnectChanged(func() {
+		m.setPropString(&m.Timezone, "Timezone", m.td1.Timezone.Get())
+	})
 }

@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package timezone
+package zoneinfo
 
 // #cgo CFLAGS: -Wall -g
 // #include <stdlib.h>
@@ -46,40 +46,34 @@ func getDSTTime(zone string, year int32) (int64, int64, bool) {
 	return t1, t2, true
 }
 
-func getOffsetByTimestamp(zone string, timestamp int64) int32 {
+func getOffsetByUSec(zone string, timestamp int64) int32 {
 	czone := C.CString(zone)
 	defer C.free(unsafe.Pointer(czone))
-	off := C.getoffset(czone, C.longlong(timestamp))
+	offset := C.get_offset_by_usec(czone, C.longlong(timestamp))
 
-	return int32(off)
+	return int32(offset)
 }
 
-func getRawTimestamp(zone string, timestamp int64) int64 {
+func getRawUSec(zone string, timestamp int64) int64 {
 	czone := C.CString(zone)
 	defer C.free(unsafe.Pointer(czone))
-	ret := C.get_rawoffset_time(czone, C.longlong(timestamp))
+	ret := C.get_rawoffset_usec(czone, C.longlong(timestamp))
 
 	return int64(ret)
 }
 
 func newDSTInfo(zone string) *DSTInfo {
-	dst, err := findDSTInfo(zone, dstDataFile)
-	if err == errNoDST || err == nil {
-		return dst
-	}
-
 	year := time.Now().Year()
-
 	first, second, ok := getDSTTime(zone, int32(year))
 	if !ok {
 		return nil
 	}
-	off := getOffsetByTimestamp(zone, first)
+	offset := getOffsetByUSec(zone, first)
 
 	return &DSTInfo{
-		Enter:     first,
-		Leave:     second,
-		DSTOffset: off,
+		Enter:  first,
+		Leave:  second,
+		Offset: offset,
 	}
 }
 
@@ -87,13 +81,12 @@ func newZoneInfo(zone string) *ZoneInfo {
 	var info ZoneInfo
 
 	info.Name = zone
-	info.Desc = getZoneDesc(zone)
 	dst := newDSTInfo(zone)
 	if dst == nil {
-		info.RawOffset = getOffsetByTimestamp(zone, 0)
+		info.Offset = getOffsetByUSec(zone, 0)
 	} else {
-		info.RawOffset = getOffsetByTimestamp(zone,
-			getRawTimestamp(zone, dst.Enter))
+		info.Offset = getOffsetByUSec(zone,
+			getRawUSec(zone, dst.Enter))
 		info.DST = *dst
 	}
 
