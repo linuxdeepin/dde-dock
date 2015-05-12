@@ -269,20 +269,16 @@ func (obj *Manager) listenSettings() {
 
 	sysGSettings.Connect("changed", func(s *gio.Settings, key string) {
 		if id, ok := getAccelIdByName(key); ok {
-			invalidFlag := false
+			//invalidFlag := false
 			if isInvalidConflict(id) {
-				invalidFlag = true
+				//invalidFlag = true
 			}
 
-			shortcut := getSystemKeyValue(key, false)
+			//shortcut := getSystemKeyValue(key, false)
 
 			if id >= 0 && id < 300 {
 				grabKeyPairs(PrevSystemPairs, false)
 				grabKeyPairs(getSystemKeyPairs(), true)
-			} else if id >= 600 && id < 1000 {
-				if !invalidFlag {
-					obj.setCompizSettings(id, key, shortcut)
-				}
 			}
 
 			if isIdInSystemList(id) {

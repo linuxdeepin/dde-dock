@@ -159,7 +159,6 @@ func newManager() *Manager {
 
 	m.listenKeyEvents()
 	m.listenSettings()
-	m.listenCompizSettings()
 	m.listenAllCustomSettings()
 	m.updateProps()
 
