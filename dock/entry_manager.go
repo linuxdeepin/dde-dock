@@ -7,7 +7,6 @@ import "pkg.linuxdeepin.com/lib/dbus"
 import "github.com/BurntSushi/xgb/xproto"
 import "os"
 import "path/filepath"
-import "strings"
 
 var (
 	ENTRY_MANAGER = NewEntryManager()
@@ -68,8 +67,7 @@ func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
 		if isNormalWindow(xid) {
-			appId := find_app_id_by_xid(xid,
-				DisplayModeType(setting.GetDisplayMode()))
+			appId := find_app_id_by_xid(xid, DisplayModeType(setting.GetDisplayMode()))
 			if rApp, ok := m.runtimeApps[appId]; ok {
 				logger.Debugf("%s is already existed, attach xid: 0x%x", appId, xid)
 				willBeDestroied[appId] = nil
@@ -147,8 +145,7 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 }
 
 func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
-	appId := find_app_id_by_xid(xid,
-		DisplayModeType(setting.GetDisplayMode()))
+	appId := find_app_id_by_xid(xid, DisplayModeType(setting.GetDisplayMode()))
 	if appId == "" {
 		logger.Debug("get appid for", xid, "failed")
 		return nil
@@ -181,7 +178,7 @@ func (m *EntryManager) createNormalApp(id string) {
 	desktopId := id + ".desktop"
 	nApp := NewNormalApp(desktopId)
 	if nApp == nil {
-		logger.Info("create from scratch file")
+		logger.Info("get desktop file failed, create", id, "from scratch file")
 		newId := filepath.Join(
 			os.Getenv("HOME"),
 			".config/dock/scratch",
@@ -190,6 +187,7 @@ func (m *EntryManager) createNormalApp(id string) {
 		nApp = NewNormalApp(newId)
 		if nApp == nil {
 			logger.Warning("create normal app failed:", id)
+			DOCKED_APP_MANAGER.Undock(id)
 			return
 		}
 	}
@@ -205,7 +203,7 @@ func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 func initialize() {
 	ENTRY_MANAGER.listenDockedApp()
 	for _, id := range loadAll() {
-		id = strings.ToLower(strings.Replace(id, "_", "-", -1))
+		id = normalizeAppID(id)
 		logger.Debug("load", id)
 		ENTRY_MANAGER.createNormalApp(id)
 	}

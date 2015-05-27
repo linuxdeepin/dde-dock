@@ -2,6 +2,7 @@ package dock
 
 import (
 	"errors"
+	"fmt"
 	"path/filepath"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
@@ -10,10 +11,11 @@ import (
 )
 
 type NormalApp struct {
-	Id   string
-	Icon string
-	Name string
-	Menu string
+	Id        string
+	DesktopID string
+	Icon      string
+	Name      string
+	Menu      string
 
 	changedCB func()
 
@@ -22,19 +24,20 @@ type NormalApp struct {
 	dockItem *MenuItem
 }
 
-func NewNormalApp(id string) *NormalApp {
-	basename := strings.ToLower(filepath.Base(id[:len(id)-8]))
-	app := &NormalApp{Id: strings.Replace(basename, "_", "-", -1)}
-	logger.Debug("NewNormalApp:", id)
+func NewNormalApp(desktopID string) *NormalApp {
+	app := &NormalApp{Id: normalizeAppID(trimDesktop(desktopID)), DesktopID: desktopID}
+	logger.Info("NewNormalApp:", desktopID)
 	var core *DesktopAppInfo
-	if strings.ContainsRune(id, filepath.Separator) {
-		core = NewDesktopAppInfoFromFilename(id)
+	if strings.ContainsRune(desktopID, filepath.Separator) {
+		core = NewDesktopAppInfoFromFilename(desktopID)
 	} else {
-		core = NewDesktopAppInfo(id)
+		core = NewDesktopAppInfo(desktopID)
 		if core == nil {
-			logger.Debug("guess desktop")
-			if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+			newId := guess_desktop_id(app.Id)
+			logger.Info(fmt.Sprintf("guess desktop: %q", newId))
+			if newId != "" {
 				core = NewDesktopAppInfo(newId)
+				app.DesktopID = newId
 			}
 		}
 	}
@@ -52,13 +55,13 @@ func NewNormalApp(id string) *NormalApp {
 }
 
 func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
-	core := NewDesktopAppInfo(app.Id)
+	core := NewDesktopAppInfo(app.DesktopID)
 
 	if core != nil {
 		return core
 	}
 
-	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+	if newId := guess_desktop_id(app.Id); newId != "" {
 		core = NewDesktopAppInfo(newId)
 		if core != nil {
 			return core

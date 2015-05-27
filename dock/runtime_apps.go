@@ -34,8 +34,9 @@ type WindowInfo struct {
 }
 
 type RuntimeApp struct {
-	Id   string
-	lock sync.RWMutex
+	Id        string
+	DesktopID string
+	lock      sync.RWMutex
 	//TODO: multiple xid window
 	xids map[xproto.Window]*WindowInfo
 
@@ -58,13 +59,13 @@ type RuntimeApp struct {
 }
 
 func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
-	core := NewDesktopAppInfo(app.Id)
+	core := NewDesktopAppInfo(app.DesktopID)
 
 	if core != nil {
 		return core
 	}
 
-	if newId := guess_desktop_id(app.Id + ".desktop"); newId != "" {
+	if newId := guess_desktop_id(app.Id); newId != "" {
 		core = NewDesktopAppInfo(newId)
 		if core != nil {
 			return core
@@ -79,13 +80,17 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 		return nil
 	}
 	app := &RuntimeApp{
-		Id:   strings.ToLower(appId),
-		xids: make(map[xproto.Window]*WindowInfo),
+		Id:        strings.ToLower(appId),
+		DesktopID: appId + ".desktop",
+		xids:      make(map[xproto.Window]*WindowInfo),
 	}
-	core := NewDesktopAppInfo(appId + ".desktop")
+	core := NewDesktopAppInfo(app.DesktopID)
 	if core == nil {
-		if newId := guess_desktop_id(appId + ".desktop"); newId != "" {
+		if newId := guess_desktop_id(app.Id); newId != "" {
 			core = NewDesktopAppInfo(newId)
+			if core != nil {
+				app.DesktopID = newId
+			}
 		}
 	}
 	if core != nil {
@@ -370,7 +375,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	var appId string
 	if displayMode == DisplayModeModernMode {
 		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-			appId = strings.Replace(strings.ToLower(id), "_", "-", -1)
+			appId = getAppIDFromDesktopID(normalizeAppID(id))
 			logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
 			return appId
 		}
@@ -388,23 +393,21 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 		if name != "" {
 			pid = lookthroughProc(name)
 		} else {
-			appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
-				-1)
+			appId = getAppIDFromDesktopID(normalizeAppID(wmClassName))
 			logger.Debug("get Pid failed, using wm class name as app id", appId)
 			return appId
 		}
 	}
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	if pid == 0 {
-		appId = strings.Replace(strings.ToLower(wmClassName), "_", "-",
-			-1)
+		appId = normalizeAppID(wmClassName)
 		logger.Debug("get window name failed, using wm class name as app id", appId)
 		return appId
 	} else {
 	}
 	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	appId = strings.Replace(strings.ToLower(appId), "_", "-", -1)
-	logger.Debug("get appid", appId)
+	appId = getAppIDFromDesktopID(normalizeAppID(appId))
+	logger.Debug(fmt.Sprintf("get appid %q", appId))
 	return appId
 }
 
