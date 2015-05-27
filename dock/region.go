@@ -7,13 +7,21 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"sync"
 )
 
 type Region struct {
 }
 
+var initShapeOnce sync.Once
+
+func initShape() {
+	initShapeOnce.Do(func() {
+		shape.Init(XU.Conn())
+	})
+}
+
 func NewRegion() *Region {
-	shape.Init(XU.Conn())
 	r := Region{}
 
 	return &r
@@ -43,6 +51,7 @@ func (r *Region) getDockWindow() (xproto.Window, error) {
 }
 
 func (r *Region) GetDockRegion() xproto.Rectangle {
+	initShape()
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Warning("Region::GetDockRegion", err)
