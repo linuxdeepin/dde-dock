@@ -1,5 +1,8 @@
 package item
 
+// #cgo pkg-config: glib-2.0
+// #include <glib.h>
+import "C"
 import (
 	"os"
 	p "path"
@@ -10,6 +13,7 @@ import (
 )
 
 func getDesktopPath(name string) string {
+	C.g_reload_user_special_dirs_cache()
 	return p.Join(glib.GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop), p.Base(name))
 }
 
