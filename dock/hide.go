@@ -131,9 +131,12 @@ func (m *HideStateManager) UpdateState() {
 			break
 		}
 
-		if isWindowOnPrimaryScreen(activeWindow) &&
-			hasMaximizeClientPre(activeWindow) {
-			logger.Debug("active window is maximized client")
+		isOnPrimary := isWindowOnPrimaryScreen(activeWindow)
+		hasMax := hasMaximizeClientPre(activeWindow)
+		logger.Debug("isOnPrimary:", isOnPrimary, "hasMaxClient:", hasMax)
+
+		if isOnPrimary && hasMax {
+			logger.Info("active window is maximized client")
 			trigger = TriggerHide
 			break
 		}

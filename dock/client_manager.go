@@ -109,12 +109,12 @@ func updateCurrentViewport() {
 		))
 }
 
-func onCurrentWorkspacePre(xid xproto.Window) bool {
+// works for old deepin wm.
+func checkDeepinWindowViewports(xid xproto.Window) (bool, error) {
 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
 		"DEEPIN_WINDOW_VIEWPORTS"))
 	if err != nil {
-		logger.Warning("get DEEPIN_WINDOW_VIEWPORTS failed", err)
-		return false
+		return false, err
 	}
 
 	workspaces := make([][]uint, 0)
@@ -127,7 +127,34 @@ func onCurrentWorkspacePre(xid xproto.Window) bool {
 	if currentViewport == nil {
 		updateCurrentViewport()
 	}
-	return isCoverWorkspace(workspaces, currentViewport)
+	return isCoverWorkspace(workspaces, currentViewport), nil
+}
+
+// works for new deepin wm.
+func checkCurrentDesktop(xid xproto.Window) (bool, error) {
+	num, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
+	if err != nil {
+		return false, err
+	}
+
+	currentDesktop, err := xprop.PropValNum(xprop.GetProperty(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP"))
+	if err != nil {
+		return false, err
+	}
+
+	return num == currentDesktop, nil
+}
+
+func onCurrentWorkspacePre(xid xproto.Window) bool {
+	isOnCurrentWorkspace, err := checkDeepinWindowViewports(xid)
+	if err != nil {
+		isOnCurrentWorkspace, err = checkCurrentDesktop(xid)
+		if err != nil {
+			return false
+		}
+		return isOnCurrentWorkspace
+	}
+	return isOnCurrentWorkspace
 }
 
 func hasMaximizeClientPre(xid xproto.Window) bool {
@@ -159,6 +186,7 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	// include shadow
 	gemo, err := win.DecorGeometry()
 	if err != nil {
+		logger.Debug(err)
 		return false
 	}
 
