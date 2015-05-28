@@ -74,6 +74,7 @@ func NewManager() (*Manager, error) {
 	m.UserTimezones = property.NewGSettingsStrvProperty(
 		m, "UserTimezones",
 		m.settings, settingsKeyTimezoneList)
+	m.AddUserTimezone(m.Timezone)
 
 	return m, nil
 }

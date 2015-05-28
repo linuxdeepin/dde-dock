@@ -95,9 +95,10 @@ func (m *Manager) SetTimezone(zone string) error {
 	err := m.td1.SetTimezone(zone, true)
 	if err != nil {
 		logger.Debug("SetTimezone failed:", err)
+		return err
 	}
 
-	return err
+	return m.AddUserTimezone(zone)
 }
 
 /**
