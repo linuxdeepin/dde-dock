@@ -61,6 +61,7 @@ func NewManager() *Manager {
 
 	m.setPropGuestIcon(userIconGuest)
 	m.setPropAllowGuest(isGuestUserEnabled())
+	m.newUsers(getUserPaths())
 
 	m.watcher = dutils.NewWatchProxy()
 	if m.watcher != nil {
@@ -82,18 +83,35 @@ func (m *Manager) destroy() {
 	dbus.UnInstallObject(m)
 }
 
-func (m *Manager) installUsers(list []string) {
+func (m *Manager) newUsers(list []string) {
 	var paths []string
-	for _, v := range list {
-		err := m.installUser(v)
+	for _, p := range list {
+		u, err := NewUser(p)
 		if err != nil {
-			logger.Errorf("Install user '%s' failed: %v", v, err)
+			logger.Errorf("New user '%s' failed: %v", p, err)
 			continue
 		}
 
-		paths = append(paths, v)
+		paths = append(paths, p)
+
+		m.mapLocker.Lock()
+		m.usersMap[p] = u
+		m.mapLocker.Unlock()
 	}
 	m.setPropUserList(paths)
+}
+
+func (m *Manager) installUsers() {
+	m.mapLocker.Lock()
+	defer m.mapLocker.Unlock()
+	for _, u := range m.usersMap {
+		err := dbus.InstallOnSystem(u)
+		if err != nil {
+			logger.Errorf("Install user '%s' failed: %v",
+				u.Uid, err)
+			continue
+		}
+	}
 }
 
 func (m *Manager) uninstallUsers(list []string) {
@@ -102,7 +120,7 @@ func (m *Manager) uninstallUsers(list []string) {
 	}
 }
 
-func (m *Manager) installUser(userPath string) error {
+func (m *Manager) installUserByPath(userPath string) error {
 	u, err := NewUser(userPath)
 	if err != nil {
 		return err

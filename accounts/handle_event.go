@@ -101,7 +101,7 @@ func (m *Manager) handleFileShadowChanged() {
 func (m *Manager) handleUserAdded(list []string) {
 	var paths = m.UserList
 	for _, p := range list {
-		err := m.installUser(p)
+		err := m.installUserByPath(p)
 		if err != nil {
 			logger.Errorf("Install user '%s' failed: %v", p, err)
 			continue

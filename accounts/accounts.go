@@ -48,7 +48,7 @@ func Start() {
 		return
 	}
 
-	_m.installUsers(getUserPaths())
+	_m.installUsers()
 }
 
 func Stop() {
