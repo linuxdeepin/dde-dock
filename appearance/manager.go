@@ -68,6 +68,7 @@ type Manager struct {
 	themeObjMap map[string]*Theme
 
 	settings      *gio.Settings
+	wrapSetting   *gio.Settings
 	gnomeSettings *gio.Settings
 
 	lock    sync.Mutex
@@ -102,6 +103,7 @@ func NewManager() *Manager {
 		m, "GreeterTheme",
 		m.settings, deepinGSKeyGreeter)
 
+	m.wrapSetting = NewGSettings("com.deepin.wrap.gnome.desktop.background")
 	m.gnomeSettings = CheckAndNewGSettings("org.gnome.desktop.background")
 
 	m.themeObjMap = make(map[string]*Theme)

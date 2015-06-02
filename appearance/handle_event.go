@@ -42,13 +42,15 @@ func (m *Manager) listenGSettings() {
 		switch key {
 		case deepinGSKeyTheme:
 			m.applyTheme(m.settings.GetString(key))
-		case deepinGSKeyPicture:
-			m.Set("background", m.settings.GetString(key))
 		case deepinGSKeySound:
 			m.Set("sound", m.settings.GetString(key))
 		case deepinGSKeyGreeter:
 			m.greeter.Set(m.settings.GetString(key))
 		}
+	})
+
+	m.wrapSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		m.Set("background", m.wrapSetting.GetString(key))
 	})
 
 	if m.gnomeSettings == nil {

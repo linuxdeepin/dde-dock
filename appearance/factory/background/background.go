@@ -87,7 +87,7 @@ func (bg *Background) GetInfoByName(name string) (PathInfo, error) {
 }
 
 func (bg *Background) Set(uri string) error {
-	settings := NewGSettings("com.deepin.dde.personalization")
+	settings := NewGSettings("com.deepin.wrap.gnome.desktop.background")
 	defer Unref(settings)
 
 	value := settings.GetString(settingsKeyPictureURI)

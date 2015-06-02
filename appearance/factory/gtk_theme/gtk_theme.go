@@ -37,7 +37,7 @@ const (
 	systemThumbPath = "/usr/share/personalization/thumbnail/WindowThemes"
 	userThumbPath   = ".local/share/personalization/thumbnail/WindowThemes"
 
-	wmGSettingsSchema = "org.gnome.desktop.wm.preferences"
+	wmGSettingsSchema = "com.deepin.wrap.gnome.desktop.wm.preferences"
 )
 
 var (
