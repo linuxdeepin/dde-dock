@@ -32,15 +32,25 @@ import (
 )
 
 var (
-	dspObj       *libdsp.Display
-	areaObj      *libarea.XMouseArea
-	launchObj    *launcher.Launcher
-	logger       = log.NewLogger(ZONE_DEST)
-	zoneSettings = gio.NewSettings("com.deepin.dde.zone")
+	dspObj    *libdsp.Display
+	areaObj   *libarea.XMouseArea
+	launchObj *launcher.Launcher
+	logger    = log.NewLogger(ZONE_DEST)
 
 	mutex         = new(sync.Mutex)
 	edgeActionMap = make(map[string]string)
 )
+var zoneSettings = func() func() *gio.Settings {
+	var initZoneSettings sync.Once
+	var _zoneSettings *gio.Settings
+
+	return func() *gio.Settings {
+		initZoneSettings.Do(func() {
+			_zoneSettings = gio.NewSettings("com.deepin.dde.zone")
+		})
+		return _zoneSettings
+	}
+}()
 
 func (op *Manager) EnableZoneDetected(enable bool) {
 	if enable {
@@ -58,7 +68,7 @@ func (op *Manager) SetTopLeft(value string) {
 }
 
 func (op *Manager) TopLeftAction() string {
-	return zoneSettings.GetString("left-up")
+	return zoneSettings().GetString("left-up")
 }
 
 func (op *Manager) SetBottomLeft(value string) {
@@ -68,7 +78,7 @@ func (op *Manager) SetBottomLeft(value string) {
 }
 
 func (op *Manager) BottomLeftAction() string {
-	return zoneSettings.GetString("left-down")
+	return zoneSettings().GetString("left-down")
 }
 
 func (op *Manager) SetTopRight(value string) {
@@ -78,7 +88,7 @@ func (op *Manager) SetTopRight(value string) {
 }
 
 func (op *Manager) TopRightAction() string {
-	return zoneSettings.GetString("right-up")
+	return zoneSettings().GetString("right-up")
 }
 
 func (op *Manager) SetBottomRight(value string) {
@@ -88,7 +98,7 @@ func (op *Manager) SetBottomRight(value string) {
 }
 
 func (op *Manager) BottomRightAction() string {
-	return zoneSettings.GetString("right-down")
+	return zoneSettings().GetString("right-down")
 }
 
 func initDBusIFC() error {

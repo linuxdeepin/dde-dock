@@ -10,6 +10,7 @@ import (
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"strings"
+	"sync"
 )
 
 type DefaultApps struct {
@@ -39,10 +40,20 @@ const (
 
 var (
 	_TerminalBlacklist = []string{"guake"}
-
-	_TerminalGSettings = gio.NewSettings(_TERMINAL_SCHEMA)
 	mimeWatcher        *fsnotify.Watcher
 )
+
+var _TerminalGSettings = func() func() *gio.Settings {
+	var terminalGSettings *gio.Settings
+	var initTerminalGSettings sync.Once
+
+	return func() *gio.Settings {
+		initTerminalGSettings.Do(func() {
+			terminalGSettings = gio.NewSettings(_TERMINAL_SCHEMA)
+		})
+		return terminalGSettings
+	}
+}()
 
 func NewDAppInfo(gioApp *gio.AppInfo) AppInfo {
 	dappInfo := AppInfo{}
@@ -87,7 +98,7 @@ func (dapp *DefaultApps) AppsListViaType(typeName string) []AppInfo {
 
 func (dapp *DefaultApps) DefaultAppViaType(typeName string) AppInfo {
 	if typeName == "terminal" {
-		exec := _TerminalGSettings.GetString("exec")
+		exec := _TerminalGSettings().GetString("exec")
 		terminalApps := dapp.AppsListViaType(typeName)
 
 		for _, v := range terminalApps {
@@ -110,7 +121,7 @@ func (dapp *DefaultApps) SetDefaultAppViaType(typeName, appID string) bool {
 			return false
 		}
 
-		if _TerminalGSettings.SetString("exec", appInfo.Exec) {
+		if _TerminalGSettings().SetString("exec", appInfo.Exec) {
 			gio.SettingsSync()
 			return true
 		}

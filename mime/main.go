@@ -55,7 +55,7 @@ func (dapp *DefaultApps) Reset() bool {
 			homeDir+"/"+MIME_CACHE_FILE, err)
 		return false
 	}
-	_TerminalGSettings.Reset("exec")
+	_TerminalGSettings().Reset("exec")
 
 	return true
 }
