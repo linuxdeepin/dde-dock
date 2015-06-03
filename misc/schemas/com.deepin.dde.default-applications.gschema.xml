@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="DDE">
+  <schema path="/com/deepin/desktop/default-applications/terminal/" id="com.deepin.desktop.default-applications.terminal">
+    <key type="s" name="exec">
+      <default>'deepin-terminal'</default>
+      <summary>Terminal application</summary>
+      <description>Terminal program to use when starting applications that require one.</description>
+    </key>
+    <key type="s" name="exec-arg">
+      <default>'-x'</default>
+      <summary>Exec Arguments</summary>
+      <description>Argument used to execute programs in the terminal defined by the 'exec' key.</description>
+    </key>
+  </schema>
+</schemalist>
