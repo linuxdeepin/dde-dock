@@ -611,7 +611,7 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 	//TODO: handle multiple xids
 	switch {
 	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
-		ewmh.ActiveWindowReq(XU, app.CurrentInfo.Xid)
+		activateWindow(app.CurrentInfo.Xid)
 	case contains(app.state, "_NET_WM_STATE_FOCUSED"):
 		s, err := icccm.WmStateGet(XU, app.CurrentInfo.Xid)
 		if err != nil {
