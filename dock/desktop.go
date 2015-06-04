@@ -78,7 +78,10 @@ func (dai *DesktopAppInfo) ListActions() []string {
 	return actions
 }
 
-func getGroupName(actionGropuName string) string {
+func getGroupName(gioSupported bool, actionGropuName string) string {
+	if gioSupported {
+		return "Desktop Action " + actionGropuName
+	}
 	return actionGropuName + " Shortcut Group"
 }
 
@@ -92,30 +95,31 @@ func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 	langs := GetLanguageNames()
 	str := ""
 	for _, lang := range langs {
-		str, _ = dai.KeyFile.GetLocaleString(getGroupName(actionGroup), "Name", lang)
+		str, _ = dai.KeyFile.GetLocaleString(getGroupName(dai.gioSupported, actionGroup), "Name", lang)
 		if str != "" {
 			return str
 		}
 	}
 
 	if str == "" {
-		str, _ = dai.KeyFile.GetString(getGroupName(actionGroup), "Name")
+		str, _ = dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), "Name")
 	}
 
 	return str
 }
 
 func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchContextLike) {
-	logger.Debug(dai.GetFilename())
-	if dai.gioSupported {
-		logger.Debug("[LaunchAction]", dai.GetFilename(), "gio support")
-		dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
-		return
-	}
+	logger.Info(dai.GetFilename())
+	// LaunchAction won't work for new style desktop, fuck gio.
+	// if dai.gioSupported {
+	// 	logger.Info("[LaunchAction]", dai.GetFilename(), "gio support")
+	// 	dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
+	// 	return
+	// }
 
-	logger.Debug("LaunchAction")
-	exec, _ := dai.KeyFile.GetString(getGroupName(actionGroup), glib.KeyFileDesktopKeyExec)
-	logger.Debug("exec:", exec)
+	logger.Info("LaunchAction")
+	exec, _ := dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), glib.KeyFileDesktopKeyExec)
+	logger.Infof("exec: %q", exec)
 	a, err := gio.AppInfoCreateFromCommandline(
 		exec,
 		"",
