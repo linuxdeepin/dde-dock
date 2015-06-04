@@ -94,10 +94,24 @@ func NewUser(userPath string) (*User, error) {
 	}
 	defer kFile.Free()
 
+	var write bool = false
 	icon, _ := kFile.GetString("User", "Icon")
 	u.setPropString(&u.IconFile, "IconFile", icon)
+	if len(u.IconFile) == 0 {
+		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
+		write = true
+	}
+
 	bg, _ := kFile.GetString("User", "Background")
 	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
+	if len(u.BackgroundFile) == 0 {
+		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
+		write = true
+	}
+
+	if write {
+		u.writeUserConfig()
+	}
 
 	_, hisIcons, _ := kFile.GetStringList("User", "HistoryIcons")
 	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", hisIcons)
