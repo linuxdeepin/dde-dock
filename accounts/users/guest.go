@@ -41,7 +41,6 @@ func CreateGuestUser() (string, error) {
 		return "", err
 	}
 
-	CopyUserDatas(username)
 	return username, nil
 }
 

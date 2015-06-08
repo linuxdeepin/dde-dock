@@ -19,13 +19,15 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package users
+package main
 
 import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
+	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
 	"pkg.linuxdeepin.com/lib/archive"
 	dutils "pkg.linuxdeepin.com/lib/utils"
 	"regexp"
@@ -41,18 +43,41 @@ const (
  * Copy user resource datas to their home directory
  **/
 func CopyUserDatas(user string) {
-	info, err := GetUserInfoByName(user)
+	info, err := users.GetUserInfoByName(user)
 	if err != nil {
+		fmt.Printf("Get '%s' info failed: %v\n", user, err)
 		return
 	}
-	lang := getDefaultLang()
 
-	copyXDGDirConfig(info.Home, lang)
+	lang := getDefaultLang()
+	fmt.Println("Current LANG is :", lang)
+
+	err = copyXDGDirConfig(info.Home, lang)
+	if err != nil {
+		fmt.Printf("Copy xdg config for '%s' failed: %v\n", user, err)
+	}
+
 	renameXDGDirs(info.Home, lang)
-	copyDeepinManuals(info.Home, lang)
-	copySoundThemeData(info.Home, lang)
-	copyBroswerConfig(info.Home, lang)
-	changeDirOwner(user, info.Home)
+
+	err = copyDeepinManuals(info.Home, lang)
+	if err != nil {
+		fmt.Printf("Copy deepin manuals for '%s' failed: %v\n", user, err)
+	}
+
+	err = copySoundThemeData(info.Home, lang)
+	if err != nil {
+		fmt.Printf("Copy sound theme for '%s' failed: %v\n", user, err)
+	}
+
+	err = copyBroswerConfig(info.Home, lang)
+	if err != nil {
+		fmt.Printf("Copy broswer config for '%s' failed: %v\n", user, err)
+	}
+
+	err = changeDirOwner(user, info.Home)
+	if err != nil {
+		fmt.Printf("Change '%s' ower to '%s' failed: %v\n", info.Home, user, err)
+	}
 }
 
 func copyDeepinManuals(home, lang string) error {
@@ -222,4 +247,13 @@ func getDefaultLang() string {
 	}
 
 	return strings.Split(locale, ".")[0]
+}
+
+func doAction(cmd string) error {
+	out, err := exec.Command("/bin/sh", "-c", cmd).CombinedOutput()
+	if err != nil {
+		return fmt.Errorf(string(out))
+	}
+
+	return nil
 }

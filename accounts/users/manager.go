@@ -69,12 +69,7 @@ func CreateUser(username, fullname, shell string, ty int32) error {
 	}
 
 	cmd = fmt.Sprintf("%s %s", cmd, username)
-	err := doAction(cmd)
-	if err != nil {
-		return err
-	}
-	CopyUserDatas(username)
-	return nil
+	return doAction(cmd)
 }
 
 func DeleteUser(rmFiles bool, username string) error {
