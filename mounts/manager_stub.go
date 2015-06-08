@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,23 +22,24 @@
 package mounts
 
 import (
-	C "launchpad.net/gocheck"
-	"testing"
+	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-type TestWrapper struct{}
+const (
+	dbusSender = "com.deepin.daemon.DiskMount"
+	dbusPath   = "/com/deepin/daemon/DiskMount"
+	dbusIFC    = "com.deepin.daemon.DiskMount"
+)
 
-func Test(t *testing.T) {
-	C.TestingT(t)
-}
-
-func init() {
-	C.Suite(&TestWrapper{})
-}
-
-func (t *TestWrapper) TestUUidGenerate(c *C.C) {
-	uuid := generateUUID()
-	if uuid == "" {
-		c.Errorf("Generate UUID Failed")
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusSender,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
+}
+
+func (m *Manager) setPropDiskList(infos DiskInfos) {
+	m.DiskList = infos
+	dbus.NotifyChange(m, "DiskList")
 }

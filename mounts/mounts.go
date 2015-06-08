@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2013 Deepin, Inc.
- *               2011 ~ 2013 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,29 +22,46 @@
 package mounts
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
-const (
-	DISK_INFO_DEST = "com.deepin.daemon.DiskMount"
-	DISK_INFO_PATH = "/com/deepin/daemon/DiskMount"
-	DISK_INFO_IFC  = "com.deepin.daemon.DiskMount"
+var (
+	_manager *Manager
 )
 
-func (m *Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DISK_INFO_DEST,
-		ObjectPath: DISK_INFO_PATH,
-		Interface:  DISK_INFO_IFC,
-	}
+func init() {
+	loader.Register(&loader.Module{
+		Name:   "mounts",
+		Start:  Start,
+		Stop:   Stop,
+		Enable: true,
+	})
 }
 
-func (m *Manager) setPropName(name string) {
-	switch name {
-	case "DiskList":
-		m.DiskList = getDiskInfoList()
-		dbus.NotifyChange(m, name)
-	default:
-		logger.Warningf("'%s': invalid mount property")
+func Start() {
+	if _manager != nil {
+		return
 	}
+
+	_manager = NewManager()
+	_manager.logger.BeginTracing()
+	err := dbus.InstallOnSession(_manager)
+	if err != nil {
+		_manager.logger.Error("Install mounts dbus failed:", err)
+		_manager.destroy()
+		_manager = nil
+		return
+	}
+	_manager.listenDiskChanged()
+	go _manager.refrashDiskInfos()
+}
+
+func Stop() {
+	if _manager == nil {
+		return
+	}
+
+	_manager.destroy()
+	_manager = nil
 }
