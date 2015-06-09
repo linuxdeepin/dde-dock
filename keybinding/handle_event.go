@@ -266,6 +266,7 @@ func (obj *Manager) listenSettings() {
 			obj.setPropCustomList(getCustomListInfo())
 		}
 	})
+	bindGSettings.GetStrv(BIND_KEY_VALID_LIST)
 
 	sysGSettings.Connect("changed", func(s *gio.Settings, key string) {
 		if id, ok := getAccelIdByName(key); ok {
@@ -290,6 +291,7 @@ func (obj *Manager) listenSettings() {
 			}
 		}
 	})
+	sysGSettings.GetStrv("file-manager")
 }
 
 func (obj *Manager) listenAllCustomSettings() {
@@ -318,4 +320,5 @@ func (obj *Manager) listenCustomSettings(id int32) {
 
 		obj.setPropCustomList(getCustomListInfo())
 	})
+	gs.GetString("name")
 }

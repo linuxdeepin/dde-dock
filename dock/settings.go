@@ -120,16 +120,6 @@ func (s *Setting) init() bool {
 		return false
 	}
 
-	s.displayMode = DisplayModeType(s.core.GetEnum(DisplayModeKey))
-	s.hideMode = HideModeType(s.core.GetEnum(HideModeKey))
-	if s.hideMode == HideModeAutoHide {
-		s.hideMode = HideModeSmartHide
-		s.core.SetEnum(HideModeKey, int32(HideModeSmartHide))
-	}
-	s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
-	s.displayDate = s.core.GetBoolean(DisplayDateKey)
-	s.displayWeek = s.core.GetBoolean(DisplayWeekKey)
-
 	s.listenSettingChange(HideModeKey, func(g *gio.Settings, key string) {
 		s.hideModeLock.Lock()
 		defer s.hideModeLock.Unlock()
@@ -220,6 +210,20 @@ func (s *Setting) init() bool {
 		s.displayWeek = s.core.GetBoolean(DisplayWeekKey)
 		dbus.Emit(s, "DisplayWeekChanged", s.displayWeek)
 	})
+
+	// at least one read operation must be called after signal connected, otherwise,
+	// the signal connection won't work from glib 2.43.
+	// NB: https://github.com/GNOME/glib/commit/8ff5668a458344da22d30491e3ce726d861b3619
+	s.displayMode = DisplayModeType(s.core.GetEnum(DisplayModeKey))
+	s.hideMode = HideModeType(s.core.GetEnum(HideModeKey))
+	if s.hideMode == HideModeAutoHide {
+		s.hideMode = HideModeSmartHide
+		s.core.SetEnum(HideModeKey, int32(HideModeSmartHide))
+	}
+	s.clockType = ClockType(s.core.GetEnum(ClockTypeKey))
+	s.displayDate = s.core.GetBoolean(DisplayDateKey)
+	s.displayWeek = s.core.GetBoolean(DisplayWeekKey)
+
 	return true
 }
 

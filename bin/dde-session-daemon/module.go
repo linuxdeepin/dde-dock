@@ -69,4 +69,5 @@ func listenDaemonSettings() {
 			loader.Stop(name)
 		}
 	})
+	daemonSettings.GetBoolean("mounts")
 }

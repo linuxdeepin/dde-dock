@@ -48,10 +48,12 @@ func (m *Manager) listenGSettings() {
 			m.greeter.Set(m.settings.GetString(key))
 		}
 	})
+	m.settings.GetString(deepinGSKeyTheme)
 
 	m.wrapSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		m.Set("background", m.wrapSetting.GetString(key))
 	})
+	m.wrapSetting.GetString("picture-uri")
 
 	if m.gnomeSettings == nil {
 		return
@@ -60,6 +62,7 @@ func (m *Manager) listenGSettings() {
 	m.gnomeSettings.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		m.bg.Set(m.gnomeSettings.GetString(key))
 	})
+	m.gnomeSettings.GetString("picture-uri")
 }
 
 func (t *Theme) handleEvent(ev *fsnotify.FileEvent) {
