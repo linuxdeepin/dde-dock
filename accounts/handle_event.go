@@ -29,7 +29,6 @@ import (
 )
 
 const (
-	userFilePasswd = "/etc/passwd"
 	userFileGroup  = "/etc/group"
 	userFileShadow = "/etc/shadow"
 
@@ -43,7 +42,7 @@ const (
 )
 
 func (m *Manager) getWatchFiles() []string {
-	return []string{userFilePasswd, userFileGroup, userFileShadow}
+	return []string{userFileGroup, userFileShadow}
 }
 
 func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
@@ -52,8 +51,6 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 	}
 
 	switch {
-	case strings.Contains(ev.Name, userFilePasswd):
-		m.handleUserFileChanged(ev, m.handleFilePasswdChanged)
 	case strings.Contains(ev.Name, userFileGroup):
 		m.handleUserFileChanged(ev, m.handleFileGroupChanged)
 	case strings.Contains(ev.Name, userFileShadow):
@@ -71,17 +68,6 @@ func (m *Manager) handleUserFileChanged(ev *fsnotify.FileEvent, handler func()) 
 	handler()
 }
 
-func (m *Manager) handleFilePasswdChanged() {
-	newList := getUserPaths()
-	ret, status := compareUserList(m.UserList, newList)
-	switch status {
-	case userListAdded:
-		m.handleUserAdded(ret)
-	case userListDeleted:
-		m.handleUserDeleted(ret)
-	}
-}
-
 func (m *Manager) handleFileGroupChanged() {
 	m.mapLocker.Lock()
 	defer m.mapLocker.Unlock()
@@ -91,10 +77,24 @@ func (m *Manager) handleFileGroupChanged() {
 }
 
 func (m *Manager) handleFileShadowChanged() {
+	m.refreshUserList()
+
+	//Update the property 'Locked'
 	m.mapLocker.Lock()
 	defer m.mapLocker.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropLocked()
+	}
+}
+
+func (m *Manager) refreshUserList() {
+	newList := getUserPaths()
+	ret, status := compareUserList(m.UserList, newList)
+	switch status {
+	case userListAdded:
+		m.handleUserAdded(ret)
+	case userListDeleted:
+		m.handleUserDeleted(ret)
 	}
 }
 
