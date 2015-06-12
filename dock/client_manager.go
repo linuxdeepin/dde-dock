@@ -55,7 +55,7 @@ func changeWorkspaceIfNeeded(xid xproto.Window) error {
 
 	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)
 	if err != nil {
-		return fmt.Errorf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
+		logger.Warningf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
 	}
 
 	err = ewmh.ClientEvent(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP", int(desktopNum), int(timeStamp))
