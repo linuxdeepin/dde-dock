@@ -46,6 +46,10 @@ func (m *EntryProxyerManager) destroy() {
 		dbus.UnInstallObject(entry)
 	}
 	dbus.UnInstallObject(m)
+	if busdaemon != nil {
+		pkgbus.DestroyDBusDaemon(busdaemon)
+		busdaemon = nil
+	}
 }
 
 func (m *EntryProxyerManager) watchEntries() {

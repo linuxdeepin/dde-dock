@@ -19,10 +19,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package wacom
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 	"pkg.linuxdeepin.com/lib/dbus/property"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
@@ -61,7 +61,7 @@ type Wacom struct {
 	DoubleDelta       *property.GSettingsUintProperty `access:"readwrite"`
 	PressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
 
-	DeviceList  []libwrapper.XIDeviceInfo
+	DeviceList  []wrapper.XIDeviceInfo
 	ActionInfos []KeyActionInfo
 	Exist       bool
 
@@ -69,60 +69,60 @@ type Wacom struct {
 	settings *gio.Settings
 }
 
-func (wacom *Wacom) Reset() {
-	keys := wacom.settings.ListKeys()
+func (w *Wacom) Reset() {
+	keys := w.settings.ListKeys()
 	for _, key := range keys {
-		wacom.settings.Reset(key)
+		w.settings.Reset(key)
 	}
 }
 
 var _wacom *Wacom
 
 func NewWacom(l *log.Logger) *Wacom {
-	wacom := &Wacom{}
+	w := &Wacom{}
 
-	wacom.settings = gio.NewSettings("com.deepin.dde.wacom")
+	w.settings = gio.NewSettings("com.deepin.dde.wacom")
 
-	wacom.LeftHanded = property.NewGSettingsBoolProperty(
-		wacom, "LeftHanded",
-		wacom.settings, wacomKeyLeftHanded)
-	wacom.CursorMode = property.NewGSettingsBoolProperty(
-		wacom, "CursorMode",
-		wacom.settings, wacomKeyCursorMode)
+	w.LeftHanded = property.NewGSettingsBoolProperty(
+		w, "LeftHanded",
+		w.settings, wacomKeyLeftHanded)
+	w.CursorMode = property.NewGSettingsBoolProperty(
+		w, "CursorMode",
+		w.settings, wacomKeyCursorMode)
 
-	wacom.KeyUpAction = property.NewGSettingsStringProperty(
-		wacom, "KeyUpAction",
-		wacom.settings, wacomKeyUpAction)
-	wacom.KeyDownAction = property.NewGSettingsStringProperty(
-		wacom, "KeyDownAction",
-		wacom.settings, wacomKeyDownAction)
+	w.KeyUpAction = property.NewGSettingsStringProperty(
+		w, "KeyUpAction",
+		w.settings, wacomKeyUpAction)
+	w.KeyDownAction = property.NewGSettingsStringProperty(
+		w, "KeyDownAction",
+		w.settings, wacomKeyDownAction)
 
-	wacom.DoubleDelta = property.NewGSettingsUintProperty(
-		wacom, "DoubleDelta",
-		wacom.settings, wacomKeyDoubleDelta)
-	wacom.PressureSensitive = property.NewGSettingsUintProperty(
-		wacom, "PressureSensitive",
-		wacom.settings, wacomKeyPressureSensitive)
+	w.DoubleDelta = property.NewGSettingsUintProperty(
+		w, "DoubleDelta",
+		w.settings, wacomKeyDoubleDelta)
+	w.PressureSensitive = property.NewGSettingsUintProperty(
+		w, "PressureSensitive",
+		w.settings, wacomKeyPressureSensitive)
 
-	_, _, wacomList := libwrapper.GetDevicesList()
-	wacom.setPropDeviceList(wacomList)
-	if len(wacom.DeviceList) > 0 {
-		wacom.setPropExist(true)
+	_, _, wacomList := wrapper.GetDevicesList()
+	w.setPropDeviceList(wacomList)
+	if len(w.DeviceList) > 0 {
+		w.setPropExist(true)
 	} else {
-		wacom.setPropExist(false)
+		w.setPropExist(false)
 	}
 
-	wacom.logger = l
-	wacom.ActionInfos = generateActionInfos()
+	w.logger = l
+	w.ActionInfos = generateActionInfos()
 
-	_wacom = wacom
-	wacom.init()
-	wacom.handleGSettings()
+	_wacom = w
+	w.init()
+	w.handleGSettings()
 
-	return wacom
+	return w
 }
 
-func HandleDeviceChanged(devList []libwrapper.XIDeviceInfo) {
+func HandleDeviceChanged(devList []wrapper.XIDeviceInfo) {
 	if _wacom == nil {
 		return
 	}
@@ -170,17 +170,17 @@ func generateActionInfos() []KeyActionInfo {
 	}
 }
 
-func (wacom *Wacom) init() {
-	if !wacom.Exist {
+func (w *Wacom) init() {
+	if !w.Exist {
 		return
 	}
 
-	wacom.rotationAngle(wacom.LeftHanded.Get())
-	wacom.cursorMode(wacom.CursorMode.Get())
+	w.rotationAngle(w.LeftHanded.Get())
+	w.cursorMode(w.CursorMode.Get())
 
-	wacom.keyUpAction(wacom.KeyUpAction.Get())
-	wacom.keyDownAction(wacom.KeyDownAction.Get())
+	w.keyUpAction(w.KeyUpAction.Get())
+	w.keyDownAction(w.KeyDownAction.Get())
 
-	wacom.pressureSensitive(wacom.PressureSensitive.Get())
-	wacom.doubleDelta(wacom.DoubleDelta.Get())
+	w.pressureSensitive(w.PressureSensitive.Get())
+	w.doubleDelta(w.DoubleDelta.Get())
 }

@@ -167,7 +167,6 @@ func (m *Manager) initActiveConnectionManage() {
 				m.switchHandler.doEnableVpn(true)
 			} else {
 				delete(m.activeConnections, s.Path)
-				m.switchHandler.turnOffVpnSwitchIfNeed(autoConnectTimeout)
 			}
 		}
 	})

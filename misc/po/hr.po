@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Adam Klarić <dabomedasamja@gmail.com>, 2015
 # Ivica  Kolić <ikoli@yahoo.com>, 2014
 # gogo <trebelnik2@gmail.com>, 2014
 msgid ""
@@ -10,8 +11,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-08 14:49+0800\n"
-"PO-Revision-Date: 2014-12-26 08:41+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2015-03-25 06:11+0000\n"
+"Last-Translator: Adam Klarić <dabomedasamja@gmail.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/projects/p/dde-daemon/language/hr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgstr "Korisničko ime ne može biti prazno."
 
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "Korisničko ime mora sadržavati a~z, 0~9, - ili _."
 
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
@@ -693,7 +694,7 @@ msgstr "Jezik sustava se promjenio, molim pričekajte..."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "Jezik sustava se mijenja instalacijom nedostajućih jezičnih paketa, molim pričekajte..."
 
 #: ../../mime/default_media.go:73 ../../mime/default_media.go:90
 msgid "Nothing"
@@ -812,7 +813,7 @@ msgstr "Bežično ad-hoc"
 
 #: ../../network/nm_custom_type.go:184
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr "Bežični Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:186
 msgid "PPPoE Connection"
@@ -1565,7 +1566,7 @@ msgstr "Nepoznato"
 
 #: ../../network/utils_notify.go:78
 msgid "Airplan mode enabled."
-msgstr ""
+msgstr "Zrakoplovni način rada uključen."
 
 #: ../../network/utils_notify.go:82
 msgid "You are now offline."

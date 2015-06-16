@@ -55,16 +55,19 @@ func (s *Audio) GetDefaultSource() *Source {
 
 func NewSink(core *pulse.Sink) *Sink {
 	s := &Sink{core: core}
+	s.index = s.core.Index
 	s.update()
 	return s
 }
 func NewSource(core *pulse.Source) *Source {
 	s := &Source{core: core}
+	s.index = s.core.Index
 	s.update()
 	return s
 }
 func NewSinkInput(core *pulse.SinkInput) *SinkInput {
 	s := &SinkInput{core: core}
+	s.index = s.core.Index
 	s.update()
 	return s
 }
@@ -102,7 +105,8 @@ type Port struct {
 	Available   byte // Unknow:0, No:1, Yes:2
 }
 type Sink struct {
-	core *pulse.Sink
+	core  *pulse.Sink
+	index uint32
 
 	Name        string
 	Description string
@@ -151,7 +155,9 @@ func (s *Sink) SetPort(name string) {
 }
 
 type SinkInput struct {
-	core *pulse.SinkInput
+	core  *pulse.SinkInput
+	index uint32
+
 	Name string
 	Icon string
 	Mute bool
@@ -190,7 +196,9 @@ func (s *SinkInput) SetMute(v bool) {
 }
 
 type Source struct {
-	core        *pulse.Source
+	core  *pulse.Source
+	index uint32
+
 	Name        string
 	Description string
 

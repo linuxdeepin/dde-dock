@@ -40,6 +40,9 @@ func (grub *Grub2) Setup(gfxmode string) {
 
 	// write settings
 	grub.writeSettings()
+	// reset NeedUpdate flag for that will run update-grub always
+	// after setup grub
+	grub.config.NeedUpdate = false
 	grub.config.save()
 
 	// setup theme and generate theme background

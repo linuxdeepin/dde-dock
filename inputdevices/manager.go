@@ -22,10 +22,10 @@
 package inputdevices
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libkeyboard"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libmouse"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libtouchpad"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwacom"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/keyboard"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/mouse"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/touchpad"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wacom"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -34,10 +34,10 @@ import (
 type Manager struct {
 	Infos []devicePathInfo
 
-	mouse        *libmouse.Mouse
-	touchpad     *libtouchpad.Touchpad
-	kbd          *libkeyboard.Keyboard
-	wacom        *libwacom.Wacom
+	mouse        *mouse.Mouse
+	touchpad     *touchpad.Touchpad
+	kbd          *keyboard.Keyboard
+	wacom        *wacom.Wacom
 	logger       *log.Logger
 	versionRight bool
 }
@@ -61,10 +61,10 @@ func NewManager(l *log.Logger) *Manager {
 
 	m.logger = l
 	// Touchpad must be created Before Mouse
-	m.touchpad = libtouchpad.NewTouchpad(l)
-	m.mouse = libmouse.NewMouse(l)
-	m.kbd = libkeyboard.NewKeyboard(l)
-	m.wacom = libwacom.NewWacom(l)
+	m.touchpad = touchpad.NewTouchpad(l)
+	m.mouse = mouse.NewMouse(l)
+	m.kbd = keyboard.NewKeyboard(l)
+	m.wacom = wacom.NewWacom(l)
 	m.versionRight = m.isVersionRight()
 
 	return m

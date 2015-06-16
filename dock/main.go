@@ -63,6 +63,7 @@ func Stop() {
 
 	if dpy != nil {
 		display.DestroyDisplay(dpy)
+		dpy = nil
 	}
 
 	if XU != nil {

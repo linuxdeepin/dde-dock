@@ -32,7 +32,7 @@ func (s *SinkInput) correctAppName() {
 	filePath := path.Join("/proc", pid, "cmdline")
 	contents, err := ioutil.ReadFile(filePath)
 	if err != nil {
-		logger.Debugf("ReadFile '%s' failed: %v", filePath, err)
+		logger.Warningf("ReadFile '%s' failed: %v", filePath, err)
 		return
 	}
 

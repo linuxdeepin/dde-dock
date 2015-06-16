@@ -19,29 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libmouse
+package keyboard
 
 import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-func (mouse *Mouse) handleGSettings() {
-	mouse.settings.Connect("changed", func(s *gio.Settings, key string) {
+func (kbd *Keyboard) handleGSettings() {
+	kbd.settings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
-		case mouseKeyLeftHanded:
-			mouse.leftHanded(mouse.LeftHanded.Get())
-		case mouseKeyDisableTouchpad:
-			mouse.disableTouchpad(mouse.DisableTpad.Get())
-		case mouseKeyNaturalScroll:
-			mouse.naturalScroll(mouse.NaturalScroll.Get())
-		case mouseKeyAcceleration:
-			mouse.motionAcceleration(mouse.MotionAcceleration.Get())
-		case mouseKeyThreshold:
-			mouse.motionThreshold(mouse.MotionThreshold.Get())
-		case mouseKeyDoubleClick:
-			mouse.doubleClick(uint32(mouse.DoubleClick.Get()))
-		case mouseKeyDragThreshold:
-			mouse.dragThreshold(uint32(mouse.DragThreshold.Get()))
+		case kbdKeyRepeatEnable,
+			kbdKeyRepeatInterval,
+			kbdKeyRepeatDelay:
+			setKbdRepeat(kbd.RepeatEnabled.Get(),
+				kbd.RepeatDelay.Get(),
+				kbd.RepeatInterval.Get())
+		case kbdKeyLayout:
+			kbd.setLayout()
+		case kbdKeyCursorBlink:
+			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
+		case kbdKeyLayoutOptions:
+			kbd.setLayoutOptions()
 		}
 	})
 }

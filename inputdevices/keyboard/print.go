@@ -19,37 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package keyboard
 
-import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
-	"pkg.linuxdeepin.com/lib/dbus"
-)
-
-const (
-	DBUS_SENDER     = "com.deepin.daemon.InputDevices"
-	DBUS_PATH_WACOM = "/com/deepin/daemon/InputDevice/Wacom"
-	DBUS_IFC_WACOM  = "com.deepin.daemon.InputDevice.Wacom"
-)
-
-func (wacom *Wacom) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       DBUS_SENDER,
-		ObjectPath: DBUS_PATH_WACOM,
-		Interface:  DBUS_IFC_WACOM,
+func (kbd *Keyboard) printInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
 	}
+
+	kbd.logger.Infof(format, v...)
 }
 
-func (wacom *Wacom) setPropDeviceList(list []libwrapper.XIDeviceInfo) {
-	if len(wacom.DeviceList) != len(list) {
-		wacom.DeviceList = list
-		dbus.NotifyChange(wacom, "DeviceList")
+func (kbd *Keyboard) debugInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
 	}
+
+	kbd.logger.Debugf(format, v...)
 }
 
-func (wacom *Wacom) setPropExist(exist bool) {
-	if wacom.Exist != exist {
-		wacom.Exist = exist
-		dbus.NotifyChange(wacom, "Exist")
+func (kbd *Keyboard) warningInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
 	}
+
+	kbd.logger.Warningf(format, v...)
+}
+
+func (kbd *Keyboard) errorInfo(format string, v ...interface{}) {
+	if kbd.logger == nil {
+		return
+	}
+
+	kbd.logger.Errorf(format, v...)
 }

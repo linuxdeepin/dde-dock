@@ -28,10 +28,10 @@ package inputdevices
 import "C"
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libmouse"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libtouchpad"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwacom"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/mouse"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/touchpad"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wacom"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 )
 
 func initDeviceChangedWatcher() bool {
@@ -49,18 +49,18 @@ func endDeviceListenThread() {
 
 //export handleDeviceAdded
 func handleDeviceAdded(deviceid C.int) {
-	mouseList, tpadList, wacomList := libwrapper.GetDevicesList()
+	mouseList, tpadList, wacomList := wrapper.GetDevicesList()
 
-	libtouchpad.HandleDeviceChanged(tpadList)
-	libmouse.HandleDeviceChanged(mouseList)
-	libwacom.HandleDeviceChanged(wacomList)
+	touchpad.HandleDeviceChanged(tpadList)
+	mouse.HandleDeviceChanged(mouseList)
+	wacom.HandleDeviceChanged(wacomList)
 }
 
 //export handleDeviceRemoved
 func handleDeviceRemoved(deviceid C.int) {
-	mouseList, tpadList, wacomList := libwrapper.GetDevicesList()
+	mouseList, tpadList, wacomList := wrapper.GetDevicesList()
 
-	libtouchpad.HandleDeviceChanged(tpadList)
-	libmouse.HandleDeviceChanged(mouseList)
-	libwacom.HandleDeviceChanged(wacomList)
+	touchpad.HandleDeviceChanged(tpadList)
+	mouse.HandleDeviceChanged(mouseList)
+	wacom.HandleDeviceChanged(wacomList)
 }

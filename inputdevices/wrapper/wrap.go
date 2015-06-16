@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwrapper
+package wrapper
 
 // #cgo pkg-config: x11 xi
 // #cgo CFLAGS: -Wall -g
@@ -55,7 +55,11 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 	length := unsafe.Sizeof(*devices)
 	for i := C.int(0); i < n_devices; i++ {
 		devInfo := (*C.DeviceInfo)(unsafe.Pointer(tmpList + uintptr(i)*length))
-		if C.is_mouse_device(devInfo.deviceid) == 1 {
+		switch {
+		// Touch screen
+		case (devInfo.is_touchscreen == 1):
+			continue
+		case (C.is_mouse_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),
@@ -67,7 +71,7 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 			}
 
 			mouseList = append(mouseList, info)
-		} else if C.is_tpad_device(devInfo.deviceid) == 1 {
+		case (C.is_tpad_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),
@@ -79,7 +83,7 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 			}
 
 			tpadList = append(tpadList, info)
-		} else if C.is_wacom_device(devInfo.deviceid) == 1 {
+		case (C.is_wacom_device(devInfo.deviceid) == 1):
 			info := XIDeviceInfo{
 				C.GoString(devInfo.name),
 				int32(devInfo.deviceid),
@@ -161,6 +165,20 @@ func SetMouseNaturalScroll(deviceid int32, name string, enabled bool) bool {
 
 	ret := C.set_mouse_natural_scroll(C.ulong(deviceid), cName, scroll)
 	C.free(unsafe.Pointer(cName))
+	if ret == -1 {
+		return false
+	}
+
+	return true
+}
+
+func SetMiddleButtonEmulation(deviceid int32, enabled bool) bool {
+	em := C.int(0)
+	if enabled {
+		em = 1
+	}
+
+	ret := C.set_middle_button_emulation(C.int(deviceid), em)
 	if ret == -1 {
 		return false
 	}

@@ -234,18 +234,21 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 	// reset properties, return default value for the missing property
 	// default entry
 	if grub.config.DefaultEntry != grub.doGetSettingDefaultEntry() {
+		logger.Infof("fix setting DefaultEntry %s->%s", grub.doGetSettingDefaultEntry(), grub.config.DefaultEntry)
 		needUpdate = true
 	}
 	grub.doSetSettingDefaultEntry(grub.config.DefaultEntry)
 
 	// timeout
 	if grub.config.Timeout != grub.doGetSettingTimeout() {
+		logger.Infof("fix setting Timeout %s->%s", grub.doGetSettingTimeout(), grub.config.Timeout)
 		needUpdate = true
 	}
 	grub.doSetSettingTimeout(grub.config.Timeout)
 
 	// gfxmode
 	if grub.config.Resolution != grub.doGetSettingGfxmode() {
+		logger.Infof("fix setting Resolution %s->%s", grub.doGetSettingGfxmode(), grub.config.Resolution)
 		needUpdate = true
 	}
 	grub.doSetSettingGfxmode(grub.config.Resolution)
@@ -253,6 +256,7 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 	// disable GRUB_HIDDEN_TIMEOUT and GRUB_HIDDEN_TIMEOUT_QUIET which will conflicts with GRUB_TIMEOUT
 	if len(grub.settings["GRUB_HIDDEN_TIMEOUT"]) != 0 ||
 		len(grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"]) != 0 {
+		logger.Info("fix setting GRUB_HIDDEN_TIMEOUT")
 		grub.settings["GRUB_HIDDEN_TIMEOUT"] = ""
 		grub.settings["GRUB_HIDDEN_TIMEOUT_QUIET"] = ""
 		needUpdate = true
@@ -260,6 +264,7 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 
 	// disable GRUB_BACKGROUND
 	if grub.settings["GRUB_BACKGROUND"] != "<none>" {
+		logger.Info("fix setting GRUB_BACKGROUND")
 		grub.settings["GRUB_BACKGROUND"] = "<none>"
 		needUpdate = true
 	}
@@ -267,11 +272,13 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 	// setup deepin grub2 theme
 	if grub.config.EnableTheme {
 		if grub.doGetSettingTheme() != themeMainFile {
+			logger.Infof("fix setting theme %s->%s", grub.doGetSettingTheme(), themeMainFile)
 			grub.doSetSettingTheme(themeMainFile)
 			needUpdate = true
 		}
 	} else {
 		if grub.doGetSettingTheme() != "" {
+			logger.Infof("fix setting theme %s->%s", grub.doGetSettingTheme(), "<disabled>")
 			grub.doSetSettingTheme("")
 			needUpdate = true
 		}

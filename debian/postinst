@@ -29,5 +29,11 @@ if [ -x $command ];then
 	$command --cursor $target_dir 2> /dev/null || echo "Error handling --cursor"
 	$command --background $target_dir 2> /dev/null || echo "Error handling --background"
 fi
-
+if [ ! -e /var/cache/deepin/mark-setup-network-services ]; then
+    update-rc.d ipsec disable
+    update-rc.d xl2tpd disable
+    update-rc.d openvpn disable
+    mkdir -p /var/cache/deepin 
+    touch /var/cache/deepin/mark-setup-network-services
+fi
 #DEBHELPER#

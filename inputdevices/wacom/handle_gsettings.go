@@ -19,27 +19,27 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libkeyboard
+package wacom
 
 import (
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
-func (kbd *Keyboard) handleGSettings() {
-	kbd.settings.Connect("changed", func(s *gio.Settings, key string) {
+func (w *Wacom) handleGSettings() {
+	w.settings.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {
-		case kbdKeyRepeatEnable,
-			kbdKeyRepeatInterval,
-			kbdKeyRepeatDelay:
-			setKbdRepeat(kbd.RepeatEnabled.Get(),
-				kbd.RepeatDelay.Get(),
-				kbd.RepeatInterval.Get())
-		case kbdKeyLayout:
-			kbd.setLayout()
-		case kbdKeyCursorBlink:
-			kbd.setCursorBlink(uint32(kbd.CursorBlink.Get()))
-		case kbdKeyLayoutOptions:
-			kbd.setLayoutOptions()
+		case wacomKeyLeftHanded:
+			w.rotationAngle(w.LeftHanded.Get())
+		case wacomKeyCursorMode:
+			w.cursorMode(w.CursorMode.Get())
+		case wacomKeyUpAction:
+			w.keyUpAction(w.KeyUpAction.Get())
+		case wacomKeyDownAction:
+			w.keyDownAction(w.KeyDownAction.Get())
+		case wacomKeyDoubleDelta:
+			w.doubleDelta(w.DoubleDelta.Get())
+		case wacomKeyPressureSensitive:
+			w.pressureSensitive(w.PressureSensitive.Get())
 		}
 	})
 }

@@ -26,6 +26,7 @@ typedef struct _DeviceInfo {
 	char *name;
 	int deviceid;
 	int enabled;
+	int is_touchscreen;
 } DeviceInfo;
 
 DeviceInfo *get_device_info_list(int *n_devices);
@@ -37,6 +38,7 @@ int set_motion_threshold(int deviceid, double threshold);
 int set_left_handed(unsigned long xid, const char *name, int enabled);
 
 int set_mouse_natural_scroll(unsigned long xid, const char *name, int enabled);
+int set_middle_button_emulation(int deviceid, int enabled);
 
 int is_tpad_device(int deviceid);
 int enabled_touchpad(int deviceid, int enabled);

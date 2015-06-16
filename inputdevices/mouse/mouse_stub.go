@@ -19,10 +19,10 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libmouse
+package mouse
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/libwrapper"
+	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
@@ -32,7 +32,7 @@ const (
 	DBUS_IFC_MOUSE  = "com.deepin.daemon.InputDevice.Mouse"
 )
 
-func (mouse *Mouse) GetDBusInfo() dbus.DBusInfo {
+func (m *Mouse) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       DBUS_SENDER,
 		ObjectPath: DBUS_PATH_MOUSE,
@@ -40,14 +40,14 @@ func (mouse *Mouse) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (mouse *Mouse) setPropDeviceList(devList []libwrapper.XIDeviceInfo) {
-	mouse.DeviceList = devList
-	dbus.NotifyChange(mouse, "DeviceList")
+func (m *Mouse) setPropDeviceList(devList []wrapper.XIDeviceInfo) {
+	m.DeviceList = devList
+	dbus.NotifyChange(m, "DeviceList")
 }
 
-func (mouse *Mouse) setPropExist(exist bool) {
-	if mouse.Exist != exist {
-		mouse.Exist = exist
-		dbus.NotifyChange(mouse, "Exist")
+func (m *Mouse) setPropExist(exist bool) {
+	if m.Exist != exist {
+		m.Exist = exist
+		dbus.NotifyChange(m, "Exist")
 	}
 }

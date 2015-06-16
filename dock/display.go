@@ -8,7 +8,8 @@ import (
 var displayRect xproto.Rectangle
 
 func initDisplay() bool {
-	dpy, err := display.NewDisplay(
+	var err error
+	dpy, err = display.NewDisplay(
 		"com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display",
 	)

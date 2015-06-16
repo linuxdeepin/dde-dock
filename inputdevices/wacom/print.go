@@ -19,27 +19,36 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package libwacom
+package wacom
 
-import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-)
+func (w *Wacom) printInfo(format string, v ...interface{}) {
+	if w.logger == nil {
+		return
+	}
 
-func (wacom *Wacom) handleGSettings() {
-	wacom.settings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case wacomKeyLeftHanded:
-			wacom.rotationAngle(wacom.LeftHanded.Get())
-		case wacomKeyCursorMode:
-			wacom.cursorMode(wacom.CursorMode.Get())
-		case wacomKeyUpAction:
-			wacom.keyUpAction(wacom.KeyUpAction.Get())
-		case wacomKeyDownAction:
-			wacom.keyDownAction(wacom.KeyDownAction.Get())
-		case wacomKeyDoubleDelta:
-			wacom.doubleDelta(wacom.DoubleDelta.Get())
-		case wacomKeyPressureSensitive:
-			wacom.pressureSensitive(wacom.PressureSensitive.Get())
-		}
-	})
+	w.logger.Infof(format, v...)
+}
+
+func (w *Wacom) debugInfo(format string, v ...interface{}) {
+	if w.logger == nil {
+		return
+	}
+
+	w.logger.Debugf(format, v...)
+}
+
+func (w *Wacom) warningInfo(format string, v ...interface{}) {
+	if w.logger == nil {
+		return
+	}
+
+	w.logger.Warningf(format, v...)
+}
+
+func (w *Wacom) errorInfo(format string, v ...interface{}) {
+	if w.logger == nil {
+		return
+	}
+
+	w.logger.Errorf(format, v...)
 }

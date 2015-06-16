@@ -281,9 +281,11 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
             }
         }
 
-        if (g_str_has_prefix(exec_name, "google-chrome-") || g_strcmp0(exec_name, "chrome") == 0) {
+        if (g_strcmp0(exec_name, "chrome") == 0) {
             g_free(exec_name);
-            exec_name = g_strdup("google-chrome");
+            exec_name = g_strstr_len(exec_fullname, -1, "unstable") == NULL ?
+                g_strdup("google-chrome") :
+                g_strdup("google-chrome-unstable");
         }
 
         if (app_id == NULL) {
@@ -638,7 +640,8 @@ char* icon_name_to_path(const char* name, int size)
     char* pic_name = g_strndup(name, pic_name_len);
     GtkIconTheme* them = gtk_icon_theme_get_default(); //do not ref or unref it
     if (them == NULL) {
-        g_debug("get theme failed");
+        // NOTE: the g_message won't be recorded on log,
+        g_message("error get default icon theme failed");
         return NULL;
     }
 

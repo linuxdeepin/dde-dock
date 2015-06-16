@@ -41,7 +41,7 @@ func (m *Meter) setPropVolume(v float64) {
 func (s *Sink) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       baseBusName,
-		ObjectPath: fmt.Sprintf("%s/Sink%d", baseBusPath, s.core.Index),
+		ObjectPath: fmt.Sprintf("%s/Sink%d", baseBusPath, s.index),
 		Interface:  baseBusIfc + ".Sink",
 	}
 }
@@ -49,7 +49,7 @@ func (s *Sink) GetDBusInfo() dbus.DBusInfo {
 func (s *Source) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       baseBusName,
-		ObjectPath: fmt.Sprintf("%s/Source%d", baseBusPath, s.core.Index),
+		ObjectPath: fmt.Sprintf("%s/Source%d", baseBusPath, s.index),
 		Interface:  baseBusIfc + ".Source",
 	}
 }
@@ -57,7 +57,7 @@ func (s *Source) GetDBusInfo() dbus.DBusInfo {
 func (s *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       baseBusName,
-		ObjectPath: fmt.Sprintf("%s/SinkInput%d", baseBusPath, s.core.Index),
+		ObjectPath: fmt.Sprintf("%s/SinkInput%d", baseBusPath, s.index),
 		Interface:  baseBusIfc + ".SinkInput",
 	}
 }
@@ -92,13 +92,14 @@ func (a *Audio) rebuildSinkInputList() {
 
 func (a *Audio) addSinkInput(idx uint32) {
 	for _, si := range a.SinkInputs {
-		if si.core.Index == idx {
+		if si.index == idx {
 			return
 		}
 	}
 
-	core := a.core.GetSinkInput(idx)
-	if core == nil {
+	core, err := a.core.GetSinkInput(idx)
+	if err != nil {
+		logger.Warning(err)
 		return
 	}
 	if filterSinkInput(core) {
@@ -106,7 +107,12 @@ func (a *Audio) addSinkInput(idx uint32) {
 	}
 
 	si := NewSinkInput(core)
-	dbus.InstallOnSession(si)
+	err = dbus.InstallOnSession(si)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
 	a.SinkInputs = append(a.SinkInputs, si)
 	dbus.NotifyChange(a, "SinkInputs")
 }
@@ -114,7 +120,7 @@ func (a *Audio) removeSinkInput(idx uint32) {
 	var tryRemoveSinkInput *SinkInput
 	var newSinkInputList []*SinkInput
 	for _, si := range a.SinkInputs {
-		if si.core.Index == idx {
+		if si.index == idx {
 			tryRemoveSinkInput = si
 		} else {
 			newSinkInputList = append(newSinkInputList, si)
@@ -153,7 +159,7 @@ func (a *Audio) rebuildSourceList() {
 	a.setPropSources(sources)
 }
 func (a *Audio) update() {
-	sinfo := a.core.GetServer()
+	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
 		a.setPropDefaultSink(sinfo.DefaultSinkName)
 		a.setPropDefaultSource(sinfo.DefaultSourceName)
