@@ -51,7 +51,7 @@
     "Name":"NM_SETTING_CONNECTION_SETTING_NAME",
     "Value":"connection",
     "Keys":[
-	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Name", "FrontEndWidget":"EditLineConnectionId"},
+	    {"Name":"NM_SETTING_CONNECTION_ID", "Value":"id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Name", "FrontEndWidget":"EditLineConnectionId", "WidgetProp":{"alwaysUpdate":"true"}},
 	    {"Name":"NM_SETTING_CONNECTION_UUID", "Value":"uuid", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_TYPE", "Value":"type", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_CONNECTION_AUTOCONNECT", "Value":"autoconnect", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Automatically connect", "FrontEndWidget":"<default>"},
@@ -68,7 +68,7 @@
     "Name":"NM_SETTING_GSM_SETTING_NAME",
     "Value":"gsm",
     "Keys":[
-	    {"Name":"NM_SETTING_GSM_APN", "Value":"apn", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"APN", "FrontEndWidget":"EditLineEditComboBox"},
+	    {"Name":"NM_SETTING_GSM_APN", "Value":"apn", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"APN", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_GSM_NUMBER", "Value":"number", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Number", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_GSM_USERNAME", "Value":"username", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Username", "FrontEndWidget":"<default>"},
 	    {"Name":"NM_SETTING_GSM_PASSWORD_FLAGS", "Value":"password-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"Ask for Pwd", "FrontEndWidget":"EditLineComboBox"},

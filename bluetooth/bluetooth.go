@@ -24,6 +24,7 @@ package bluetooth
 import (
 	sysdbus "dbus/org/freedesktop/dbus/system"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"sync"
 )
 
 const (
@@ -52,12 +53,14 @@ type Bluetooth struct {
 	objectManager *sysdbus.ObjectManager
 
 	// adapter
-	adapters []*adapter
-	Adapters string // array of adapters that marshaled by json
+	adaptersLock sync.Mutex
+	adapters     []*adapter
+	Adapters     string // array of adapters that marshaled by json
 
 	// device
-	devices map[dbus.ObjectPath][]*device
-	Devices string // device objects that marshaled by json
+	devicesLock sync.Mutex
+	devices     map[dbus.ObjectPath][]*device
+	Devices     string // device objects that marshaled by json
 
 	State uint32
 

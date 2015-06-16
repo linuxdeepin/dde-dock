@@ -7,15 +7,15 @@ import (
 )
 
 type MockSettingCore struct {
-	values   map[string]int
+	values   map[string]int32
 	handlers map[string]func(SettingCoreInterface, string)
 }
 
-func (m *MockSettingCore) GetEnum(k string) int {
+func (m *MockSettingCore) GetEnum(k string) int32 {
 	return m.values[k]
 }
 
-func (m *MockSettingCore) SetEnum(key string, v int) bool {
+func (m *MockSettingCore) SetEnum(key string, v int32) bool {
 	m.values[key] = v
 
 	detailSignal := fmt.Sprintf("changed::%s", key)
@@ -35,9 +35,9 @@ func (m *MockSettingCore) Unref() {
 
 func NewMockSettingCore() *MockSettingCore {
 	s := &MockSettingCore{
-		values: map[string]int{
-			CategoryDisplayModeKey: int(CategoryDisplayModeIcon),
-			SortMethodkey:          int(SortMethodByName),
+		values: map[string]int32{
+			CategoryDisplayModeKey: int32(CategoryDisplayModeIcon),
+			SortMethodkey:          int32(SortMethodByName),
 		},
 		handlers: map[string]func(SettingCoreInterface, string){},
 	}

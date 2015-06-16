@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/sound/" id="com.deepin.wrap.gnome.desktop.sound">
+    <key type="b" name="event-sounds">
+      <default>true</default>
+      <summary>Sounds for events</summary>
+      <description>Whether to play sounds on user events.</description>
+    </key>
+    <key type="s" name="theme-name">
+      <default>'freedesktop'</default>
+      <summary>Sound theme name</summary>
+      <description>The XDG sound theme to use for event sounds.</description>
+    </key>
+    <key type="b" name="input-feedback-sounds">
+      <default>false</default>
+      <summary>Input feedback sounds</summary>
+      <description>Whether to play sounds on input events.</description>
+    </key>
+  </schema>
+</schemalist>

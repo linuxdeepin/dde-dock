@@ -24,9 +24,7 @@ package network
 import (
 	dbusmgr "dbus/org/freedesktop/dbus/system"
 	"dbus/org/freedesktop/login1"
-	"dbus/org/freedesktop/modemmanager1"
 	nm "dbus/org/freedesktop/networkmanager"
-	"pkg.linuxdeepin.com/lib/dbus"
 )
 
 const (
@@ -74,29 +72,4 @@ func initDbusDaemon() {
 }
 func destroyDbusDaemon() {
 	dbusmgr.DestroyDBusDaemon(dbusDaemon)
-}
-func mmNewModem(modemPath dbus.ObjectPath) (modem *modemmanager1.Modem, err error) {
-	modem, err = modemmanager1.NewModem(dbusMmDest, modemPath)
-	if err != nil {
-		logger.Error(err)
-	}
-	return
-}
-
-func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err error) {
-	modem, err := mmNewModem(modemPath)
-	if err != nil {
-		return
-	}
-	devId = modem.DeviceIdentifier.Get()
-	return
-}
-
-func mmGetModemDeviceSysPath(modemPath dbus.ObjectPath) (sysPath string, err error) {
-	modem, err := mmNewModem(modemPath)
-	if err != nil {
-		return
-	}
-	sysPath = modem.Device.Get()
-	return
 }

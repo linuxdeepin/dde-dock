@@ -33,12 +33,6 @@ const (
 	dbusNetworkIfs  = "com.deepin.daemon.Network"
 )
 
-const (
-	opAdded = iota
-	opRemoved
-	opUpdated
-)
-
 type connectionData map[string]map[string]dbus.Variant
 
 type Manager struct {
@@ -56,25 +50,25 @@ type Manager struct {
 	wiredEnabled    bool `access:"readwrite"`
 
 	// update by manager_devices.go
-	devicesLocker sync.Mutex
-	devices       map[string][]*device
-	Devices       string // array of device objects and marshaled by json
+	devicesLock sync.Mutex
+	devices     map[string][]*device
+	Devices     string // array of device objects and marshaled by json
 
-	accessPointsLocker sync.Mutex
-	accessPoints       map[dbus.ObjectPath][]*accessPoint
+	accessPointsLock sync.Mutex
+	accessPoints     map[dbus.ObjectPath][]*accessPoint
 
 	// update by manager_connections.go
-	connectionsLocker sync.Mutex
-	connections       map[string][]*connection
-	Connections       string // array of connection information and marshaled by json
+	connectionsLock sync.Mutex
+	connections     map[string][]*connection
+	Connections     string // array of connection information and marshaled by json
 
-	connectionSessionsLocker sync.Mutex
-	connectionSessions       []*ConnectionSession
+	connectionSessionsLock sync.Mutex
+	connectionSessions     []*ConnectionSession
 
 	// update by manager_active.go
-	activeConnectionsLocker sync.Mutex
-	activeConnections       map[dbus.ObjectPath]*activeConnection
-	ActiveConnections       string // array of connections that activated and marshaled by json
+	activeConnectionsLock sync.Mutex
+	activeConnections     map[dbus.ObjectPath]*activeConnection
+	ActiveConnections     string // array of connections that activated and marshaled by json
 
 	// signals
 	NeedSecrets                  func(connPath, settingName, connectionId string, autoConnect bool)

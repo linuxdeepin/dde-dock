@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/power/" id="com.deepin.wrap.gnome.settings-daemon.plugins.power" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key type="i" name="idle-brightness">
+      <default>30</default>
+      <summary>The brightness of the screen when idle</summary>
+      <description>This is the laptop panel screen brightness used when the session is idle.</description>
+    </key>
+    <key type="b" name="idle-dim">
+      <default>true</default>
+      <summary>Dim the screen after a period of inactivity</summary>
+      <description>If the screen should be dimmed to save power when the computer is idle.</description>
+    </key>
+    <key type="i" name="sleep-inactive-ac-timeout">
+      <default>0</default>
+      <summary>Sleep timeout computer when on AC</summary>
+      <description>The amount of time in seconds the computer on AC power needs to be inactive before it goes to sleep. A value of 0 means never.</description>
+    </key>
+    <key name="sleep-inactive-ac-type" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'suspend'</default>
+      <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
+      <description>The type of sleeping that should be performed when the computer is inactive.</description>
+    </key>
+    <key type="i" name="sleep-inactive-battery-timeout">
+      <default>0</default>
+      <summary>Sleep timeout computer when on battery</summary>
+      <description>The amount of time in seconds the computer on battery power needs to be inactive before it goes to sleep. A value of 0 means never.</description>
+    </key>
+    <key name="sleep-inactive-battery-type" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'suspend'</default>
+      <summary>Whether to hibernate, suspend or do nothing when inactive</summary>
+      <description>The type of sleeping that should be performed when the computer is inactive.</description>
+    </key>
+    <key name="button-suspend" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'suspend'</default>
+      <summary>Suspend button action</summary>
+      <description>The action to take when the system suspend button is pressed.</description>
+    </key>
+    <key name="button-hibernate" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'hibernate'</default>
+      <summary>Hibernate button action</summary>
+      <description>The action to take when the system hibernate button is pressed.</description>
+    </key>
+    <key name="button-sleep" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'hibernate'</default>
+      <summary>Sleep button action</summary>
+      <description>The action to take when the system sleep (non-specific type) button is pressed.</description>
+    </key>
+    
+    <key name="button-power" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'suspend'</default>
+      <summary>Power button action</summary>
+      <description>The action to take when the system power button is pressed.</description>
+    </key>
+    <key name="critical-battery-action" enum="com.deepin.wrap.gnome.settings-daemon.GsdPowerActionType">
+      <default>'hibernate'</default>
+      <summary>Battery critical low action</summary>
+      <description>The action to take when the battery is critically low.</description>
+    </key>
+  </schema>
+</schemalist>

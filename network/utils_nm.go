@@ -118,7 +118,6 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
 		// there is no hardware address for such devices
 		err = fmt.Errorf("there is no hardware address for device modem and adsl")
-		logger.Error(err)
 	default:
 		err = fmt.Errorf("unknown device type %d", devType)
 		logger.Error(err)
@@ -156,7 +155,7 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 
 // return special unique connection uuid for device, etc wired device
 // connection
-func nmGeneralGetDeviceRelatedUuid(devPath dbus.ObjectPath) (uuid string) {
+func nmGeneralGetDeviceUniqueUuid(devPath dbus.ObjectPath) (uuid string) {
 	devId, err := nmGeneralGetDeviceIdentifier(devPath)
 	if err != nil {
 		return
@@ -179,6 +178,8 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
 	case NM_DEVICE_TYPE_WIFI:
 		devWireless, _ := nmNewDeviceWireless(devPath)
 		speed = devWireless.Bitrate.Get() / 1024
+	case NM_DEVICE_TYPE_MODEM:
+		// TODO: getting device speed for modem device
 	default:
 		err = fmt.Errorf("not support to get device speedStr for device type %d", t)
 		logger.Error(err)
@@ -392,6 +393,22 @@ func nmNewDHCP6Config(path dbus.ObjectPath) (dhcp6 *nm.DHCP6Config, err error) {
 	}
 	return
 }
+func nmNewIP4Config(path dbus.ObjectPath) (ip4config *nm.IP4Config, err error) {
+	ip4config, err = nm.NewIP4Config(dbusNmDest, path)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
+func nmNewIP6Config(path dbus.ObjectPath) (ip6config *nm.IP6Config, err error) {
+	ip6config, err = nm.NewIP6Config(dbusNmDest, path)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+	return
+}
 func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection, err error) {
 	conn, err = nm.NewSettingsConnection(dbusNmDest, cpath)
 	if err != nil {
@@ -515,6 +532,15 @@ func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 		return
 	}
 	devInterface = dev.Interface.Get()
+	return
+}
+
+func nmGetDeviceModemCapabilities(devPath dbus.ObjectPath) (capabilities uint32) {
+	dev, err := nmNewDeviceModem(devPath)
+	if err != nil {
+		return
+	}
+	capabilities = dev.CurrentCapabilities.Get()
 	return
 }
 
@@ -767,9 +793,9 @@ func nmGetConnectionUuids() (uuids []string) {
 	return
 }
 
-func nmGetConnectionUuidsByType(connType string) (uuids []string) {
+func nmGetConnectionUuidsByType(connTypes ...string) (uuids []string) {
 	for _, cpath := range nmGetConnectionList() {
-		if nmGetConnectionType(cpath) == connType {
+		if isStringInArray(nmGetConnectionType(cpath), connTypes) {
 			if uuid, err := nmGetConnectionUuid(cpath); err == nil {
 				uuids = append(uuids, uuid)
 			}
@@ -868,11 +894,12 @@ func nmAddConnection(data connectionData) (cpath dbus.ObjectPath, err error) {
 	return
 }
 
-func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
+// TODO: remove, use nmGetIp4ConfigInfo instead
+func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask string, routers, nameServers []string) {
 	ip = "0.0.0.0"
 	mask = "0.0.0.0"
-	route = "0.0.0.0"
-	dns = "0.0.0.0"
+	routers = make([]string, 0)
+	nameServers = make([]string, 0)
 	dhcp4, err := nmNewDHCP4Config(path)
 	if err != nil {
 		return
@@ -884,19 +911,26 @@ func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask, route, dns string) {
 	if maskData, ok := options["subnet_mask"]; ok {
 		mask, _ = maskData.Value().(string)
 	}
-	if routeData, ok := options["routers"]; ok {
-		route, _ = routeData.Value().(string)
+	if routersData, ok := options["routers"]; ok {
+		routersStr, _ := routersData.Value().(string)
+		if len(routersStr) > 0 {
+			routers = strings.Split(routersStr, " ")
+		}
 	}
-	if dnsData, ok := options["domain_name_servers"]; ok {
-		dns, _ = dnsData.Value().(string)
+	if nameServersData, ok := options["domain_name_servers"]; ok {
+		nameServersStr, _ := nameServersData.Value().(string)
+		if len(nameServersStr) > 0 {
+			nameServers = strings.Split(nameServersStr, " ")
+		}
 	}
 	return
 }
 
-func nmGetDhcp6Info(path dbus.ObjectPath) (ip, route, dns string) {
+// TODO: remove, use nmGetIp6ConfigInfo instead
+func nmGetDhcp6Info(path dbus.ObjectPath) (ip string, routers, nameServers []string) {
 	ip = "0::0"
-	route = ""
-	dns = "0::0"
+	routers = make([]string, 0)
+	nameServers = make([]string, 0)
 	dhcp6, err := nmNewDHCP6Config(path)
 	if err != nil {
 		return
@@ -905,13 +939,60 @@ func nmGetDhcp6Info(path dbus.ObjectPath) (ip, route, dns string) {
 	if ipData, ok := options["ip6_address"]; ok {
 		ip, _ = ipData.Value().(string)
 	}
-	// FIXME how
-	if routeData, ok := options["routers"]; ok {
-		route, _ = routeData.Value().(string)
+	if routersData, ok := options["routers"]; ok {
+		routersStr, _ := routersData.Value().(string)
+		if len(routersStr) > 0 {
+			routers = strings.Split(routersStr, " ")
+		}
 	}
-	if dnsData, ok := options["dhcp6_name_servers"]; ok {
-		dns, _ = dnsData.Value().(string)
+	if nameServersData, ok := options["dhcp6_name_servers"]; ok {
+		nameServersStr, _ := nameServersData.Value().(string)
+		if len(nameServersStr) > 0 {
+			nameServers = strings.Split(nameServersStr, " ")
+		}
 	}
+	return
+}
+
+func nmGetIp4ConfigInfo(path dbus.ObjectPath) (address, mask string, gateways, nameServers []string) {
+	address = "0.0.0.0"
+	mask = "0.0.0.0"
+	ip4config, err := nmNewIP4Config(path)
+	if err != nil {
+		return
+	}
+
+	ipv4Addresses := wrapIpv4Addresses(ip4config.Addresses.Get())
+	if len(ipv4Addresses) > 0 {
+		address = ipv4Addresses[0].Address
+		mask = ipv4Addresses[0].Mask
+	}
+	for _, address := range ipv4Addresses {
+		gateways = append(gateways, address.Gateway)
+	}
+
+	nameServers = wrapIpv4Dns(ip4config.Nameservers.Get())
+	return
+}
+
+func nmGetIp6ConfigInfo(path dbus.ObjectPath) (address, prefix string, gateways, nameServers []string) {
+	address = "0::0"
+	prefix = "0"
+	ip6config, err := nmNewIP6Config(path)
+	if err != nil {
+		return
+	}
+
+	ipv6Addresses := wrapIpv6Addresses(interfaceToIpv6Addresses(ip6config.Addresses.Get()))
+	if len(ipv6Addresses) > 0 {
+		address = ipv6Addresses[0].Address
+		prefix = fmt.Sprintf("%d", ipv6Addresses[0].Prefix)
+	}
+	for _, address := range ipv6Addresses {
+		gateways = append(gateways, address.Gateway)
+	}
+
+	nameServers = wrapIpv6Dns(ip6config.Nameservers.Get())
 	return
 }
 
@@ -921,6 +1002,23 @@ func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32) {
 		return NM_DEVICE_STATE_UNKNOWN
 	}
 	state = dev.State.Get()
+	return
+}
+
+func nmGetDeviceAutoconnect(devPath dbus.ObjectPath) (autoconnect bool) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	autoconnect = dev.Autoconnect.Get()
+	return
+}
+func nmSetDeviceAutoconnect(devPath dbus.ObjectPath, autoconnect bool) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	dev.Autoconnect.Set(autoconnect)
 	return
 }
 
@@ -1070,7 +1168,7 @@ func (acs autoConnectConns) Less(i, j int) bool {
 }
 func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionUuid string) (uuids []string) {
 	acs := make(autoConnectConns, 0)
-	devRelatedUuid := nmGeneralGetDeviceRelatedUuid(devPath)
+	devRelatedUuid := nmGeneralGetDeviceUniqueUuid(devPath)
 	for _, cpath := range nmGetDeviceAvailableConnections(devPath) {
 		if cdata, err := nmGetConnectionData(cpath); err == nil {
 			uuid := getSettingConnectionUuid(cdata)

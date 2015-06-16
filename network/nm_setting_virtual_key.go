@@ -21,8 +21,12 @@
 
 package network
 
-import . "pkg.linuxdeepin.com/lib/gettext"
-import "fmt"
+import (
+	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.linuxdeepin.com/lib/iso"
+	"pkg.linuxdeepin.com/lib/mobileprovider"
+)
 
 // virtual key types
 const (
@@ -73,7 +77,6 @@ func getVkeysOfSection(section string) (vks []string) {
 			vks = append(vks, vk.Value)
 		}
 	}
-	// logger.Debug("getVkeysOfSection: filed:", section, vks) // TODO test
 	return
 }
 
@@ -97,7 +100,19 @@ func generalGetSettingVsectionAvailableKeys(data connectionData, vsection string
 			keys = []string{NM_SETTING_VK_802_1X_ENABLE}
 		}
 	case NM_SETTING_VS_MOBILE:
-		keys = []string{NM_SETTING_VK_MOBILE_SERVICE_TYPE}
+		keys = []string{
+			NM_SETTING_VK_MOBILE_COUNTRY,
+			NM_SETTING_VK_MOBILE_PROVIDER,
+		}
+		if getSettingVkMobileProvider(data) == mobileProviderValueCustom {
+			keys = append(keys, NM_SETTING_VK_MOBILE_SERVICE_TYPE)
+		} else {
+			keys = append(keys, NM_SETTING_VK_MOBILE_PLAN)
+			// TODO: is apn-readonly widget necessary?
+			// if getSettingVkMobileServiceType(data) == connectionMobileGsm {
+			// keys = append(keys, NM_SETTING_VK_MOBILE_APN_READONLY)
+			// }
+		}
 	case NM_SETTING_VS_VPN:
 		keys = []string{NM_SETTING_VK_VPN_TYPE}
 		if !isStringInArray(getSettingVkVpnType(data), getLocalSupportedVpnTypes()) {
@@ -111,9 +126,38 @@ func generalGetSettingVkeyAvailableValues(data connectionData, section, key stri
 	switch section {
 	case NM_SETTING_VS_MOBILE:
 		switch key {
+		case NM_SETTING_VK_MOBILE_COUNTRY:
+			codeList, _ := mobileprovider.GetAllCountryCode()
+			for _, code := range codeList {
+				if name, err := iso.GetCountryNameForCode(code); err == nil {
+					values = append(values, kvalue{code, name})
+				} else {
+					logger.Error(err, code)
+				}
+			}
+			// sort country list
+			sortKvalues(values)
+		case NM_SETTING_VK_MOBILE_PROVIDER:
+			countryCode := getSettingVkMobileCountry(data)
+			names, _ := mobileprovider.GetProviderNames(countryCode)
+			for _, name := range names {
+				values = append(values, kvalue{name, name})
+			}
+			values = append(values, kvalue{mobileProviderValueCustom, Tr("Custom")})
+		case NM_SETTING_VK_MOBILE_PLAN:
+			countryCode := getSettingVkMobileCountry(data)
+			providerName := getSettingVkMobileProvider(data)
+			plans, _ := mobileprovider.GetPlans(countryCode, providerName)
+			for _, p := range plans {
+				if len(p.Name) > 0 {
+					values = append(values, kvalue{mobileprovider.MarshalPlan(p), p.Name})
+				} else {
+					values = append(values, kvalue{mobileprovider.MarshalPlan(p), Tr("Default")})
+				}
+			}
 		case NM_SETTING_VK_MOBILE_SERVICE_TYPE:
 			values = []kvalue{
-				kvalue{connectionMobileGsm, Tr("GSM (GPRS, EDGE, UMTS, HSPA)")},
+				kvalue{connectionMobileGsm, Tr("GSM (GPRS, UMTS)")},
 				kvalue{connectionMobileCdma, Tr("CDMA (1xRTT, EVDO)")},
 			}
 		}
@@ -296,7 +340,7 @@ func isOptionalVkey(section, vkey string) (optional bool) {
 	return
 }
 
-// Controller virtual key, which with no real related section
+// Controller virtual keys, that without really related section
 func logicSetSettingVk8021xEnable(data connectionData, value bool) (err error) {
 	if value {
 		addSettingSection(data, section8021x)
@@ -310,27 +354,113 @@ func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
 	return logicSetSetting8021xEap(data, []string{value})
 }
 
+func getSettingVkMobileCountry(data connectionData) (countryCode string) {
+	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY)
+	countryCode = interfaceToString(ivalue)
+	return
+}
+func logicSetSettingVkMobileCountry(data connectionData, countryCode string) (err error) {
+	logger.Info("set", NM_SETTING_VK_MOBILE_COUNTRY, countryCode)
+	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY, countryCode)
+	defaultProvider, err := mobileprovider.GetDefaultProvider(countryCode)
+	if err == nil {
+		err = logicSetSettingVkMobileProvider(data, defaultProvider)
+	}
+	return
+}
+
+func getSettingVkMobileProvider(data connectionData) (provider string) {
+	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER)
+	provider = interfaceToString(ivalue)
+	return
+}
+func logicSetSettingVkMobileProvider(data connectionData, provider string) (err error) {
+	logger.Info("set", NM_SETTING_VK_MOBILE_PROVIDER, provider)
+	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER, provider)
+	if provider != mobileProviderValueCustom {
+		defaultPlan, err := mobileprovider.GetDefaultPlan(getSettingVkMobileCountry(data), provider)
+		if err == nil {
+			err = logicSetSettingVkMobilePlan(data, mobileprovider.MarshalPlan(defaultPlan))
+		}
+	} else {
+		syncMoibleConnectionId(data)
+	}
+	return
+}
+
+func getSettingVkMobilePlan(data connectionData) (planValue string) {
+	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN)
+	planValue = interfaceToString(ivalue)
+	return
+}
+func logicSetSettingVkMobilePlan(data connectionData, planValue string) (err error) {
+	logger.Info("set", NM_SETTING_VK_MOBILE_PLAN, planValue)
+	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN, planValue)
+	p, err := mobileprovider.UnmarshalPlan(planValue)
+	if err != nil {
+		logger.Error(err)
+		return
+	}
+
+	countryCode := getSettingVkMobileCountry(data)
+	providerName := getSettingVkMobileProvider(data)
+	if p.IsGSM {
+		logicSetSettingVkMobileServiceType(data, connectionMobileGsm)
+		apn, err := mobileprovider.GetAPN(countryCode, providerName, p.APNValue, p.APNUsageType)
+		if err == nil {
+			setSettingGsmApn(data, apn.Value)
+			if len(apn.Username) > 0 {
+				setSettingGsmUsername(data, apn.Username)
+			}
+			if len(apn.Password) > 0 {
+				setSettingGsmPassword(data, apn.Password)
+			}
+		}
+	} else {
+		logicSetSettingVkMobileServiceType(data, connectionMobileCdma)
+		cdma, err := mobileprovider.GetCDMA(countryCode, providerName)
+		if err == nil {
+			if len(cdma.Username) > 0 {
+				setSettingCdmaUsername(data, cdma.Username)
+			}
+			if len(cdma.Password) > 0 {
+				setSettingCdmaPassword(data, cdma.Password)
+			}
+		}
+	}
+	return
+}
+
 func getSettingVkMobileServiceType(data connectionData) (serviceType string) {
 	if isSettingSectionExists(data, sectionGsm) {
 		serviceType = connectionMobileGsm
 	} else if isSettingSectionExists(data, sectionCdma) {
 		serviceType = connectionMobileCdma
 	} else {
-		logger.Error("get mobile service type failed, neither gsm section nor cdma section")
+		logger.Error("get mobile service type failed, neither gsm nor cdma")
 	}
 	return
 }
 func logicSetSettingVkMobileServiceType(data connectionData, serviceType string) (err error) {
+	// always reset mobile settings
+	removeSettingSection(data, sectionGsm)
+	removeSettingSection(data, sectionCdma)
 	switch serviceType {
 	case connectionMobileGsm:
-		removeSettingSection(data, sectionCdma)
 		initSettingSectionGsm(data)
 	case connectionMobileCdma:
-		removeSettingSection(data, sectionGsm)
 		initSettingSectionCdma(data)
 	default:
 		err = fmt.Errorf("invalid mobile service type %s", serviceType)
 	}
+	syncMoibleConnectionId(data)
+	return
+}
+
+func getSettingVkMobileApnReadonly(data connectionData) (value string) {
+	return getSettingGsmApn(data)
+}
+func logicSetSettingVkMobileApnReadonly(data connectionData, value string) (err error) {
 	return
 }
 
@@ -361,6 +491,7 @@ func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 }
 
 func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
+	// FIXME: the package names only works for debian and ubuntu
 	vpnType := getCustomConnectionType(data)
 	if !isStringInArray(vpnType, getLocalSupportedVpnTypes()) {
 		switch vpnType {

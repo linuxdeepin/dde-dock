@@ -2,9 +2,11 @@ package dock
 
 import (
 	"encoding/base64"
+	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"regexp"
 	"strings"
 )
 
@@ -23,13 +25,63 @@ func getEntryId(name string) (string, bool) {
 	return "", false
 }
 
+func trimDesktop(desktopID string) string {
+	desktopIDLen := len(desktopID)
+	if desktopIDLen == 0 {
+		return ""
+	}
+
+	if desktopIDLen > 8 {
+		return strings.TrimSuffix(desktopID, ".desktop")
+	}
+
+	panic(fmt.Sprintf("%q is not a desktop id", desktopID))
+}
+
+func normalizeAppID(candidateID string) string {
+	normalizedAppID := strings.Replace(strings.ToLower(candidateID), "_", "-", -1)
+	return normalizedAppID
+}
+
+var _DesktopAppIdReg = regexp.MustCompile(`(?:[^.]+\.)*(?P<desktopID>[^.]+)\.desktop`)
+
+func getAppIDFromDesktopID(candidateID string) string {
+	desktopID := guess_desktop_id(candidateID)
+	logger.Debug(fmt.Sprintf("get desktop id: %q", desktopID))
+	if desktopID == "" {
+		return candidateID
+	}
+
+	appID := normalizeAppID(trimDesktop(desktopID))
+	return appID
+}
+
+// the key is appID
+// the value is desktopID
+var _appIDCache map[string]string = make(map[string]string)
+
 func guess_desktop_id(appId string) string {
+	logger.Debug(fmt.Sprintf("guess_desktop_id for %q", appId))
+	if desktopID, ok := _appIDCache[appId]; ok {
+		logger.Debug(appId, "is in cache")
+		return desktopID
+	}
+
+	desktopID := appId + ".desktop"
 	allApp := gio.AppInfoGetAll()
 	for _, app := range allApp {
 		baseName := filepath.Base(gio.ToDesktopAppInfo(app).GetFilename())
-		lowerBaseName := strings.ToLower(baseName)
-		if appId == lowerBaseName ||
-			appId == strings.Replace(lowerBaseName, "_", "-", -1) {
+		normalizedDesktopID := normalizeAppID(baseName)
+
+		if normalizedDesktopID == desktopID {
+			_appIDCache[appId] = baseName
+			return baseName
+		}
+
+		// TODO: this is not a silver bullet, fix it later.
+		appIDs := _DesktopAppIdReg.FindStringSubmatch(normalizedDesktopID)
+		if len(appIDs) == 2 && appIDs[1] == appId {
+			_appIDCache[appId] = baseName
 			return baseName
 		}
 	}

@@ -56,7 +56,7 @@ func Start() *LangSelector {
 		return nil
 	}
 
-	_lang.onGenLocaleStatus()
+	_lang.onLocaleSuccess()
 
 	return _lang
 }

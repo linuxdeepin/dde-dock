@@ -67,7 +67,6 @@ func NewIconTheme(handler func([]string)) *IconTheme {
 		icon.watcher.SetEventHandler(icon.handleEvent)
 		go icon.watcher.StartWatch()
 	}
-	xsettings.InitXSettings()
 
 	return icon
 }
@@ -116,7 +115,6 @@ func (icon *IconTheme) Destroy() {
 
 	icon.watcher.EndWatch()
 	icon.watcher = nil
-	xsettings.Unref()
 }
 
 func (icon *IconTheme) GetNameStrList() []string {
@@ -199,7 +197,12 @@ func getThemeList(sysDirs, userDirs []PathInfo) []PathInfo {
 }
 
 func setThemeViaXSettings(theme string) error {
-	return xsettings.SetString(xsettings.NetStringIconTheme, theme)
+	proxy, err := xsettings.NewXSProxy()
+	if err != nil {
+		return err
+	}
+	defer proxy.Free()
+	return proxy.SetString(xsettings.NetIconTheme, theme)
 }
 
 func getDirList() []string {

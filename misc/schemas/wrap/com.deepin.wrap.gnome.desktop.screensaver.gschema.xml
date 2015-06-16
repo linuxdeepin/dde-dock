@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/screensaver/" id="com.deepin.wrap.gnome.desktop.screensaver" gettext-domain="gsettings-desktop-schemas">
+    <key type="b" name="idle-activation-enabled">
+      <default>true</default>
+      <summary>Activate when idle</summary>
+      <description>Set this to TRUE to activate the screensaver when the session is idle. DEPRECATED: This key is deprecated and ignored. Set com.deepin.wrap.gnome.desktop.session idle-delay to 0 if you do not want to activate the screensaver.</description>
+    </key>
+    <key type="b" name="lock-enabled">
+      <default>true</default>
+      <summary>Lock on activation</summary>
+      <description>Set this to TRUE to lock the screen when the screensaver goes active.</description>
+    </key>
+    <key type="u" name="lock-delay">
+      <default>0</default>
+      <summary>Time before locking</summary>
+      <description>The number of seconds after screensaver activation before locking the screen.</description>
+    </key>
+    <key type="b" name="show-full-name-in-top-bar">
+      <default>true</default>
+      <summary>Show full name in the lock screen</summary>
+      <description>Whether the user's full name is shown in the lock screen or not. This only affects the screen shield, the name is always shown in the unlock dialog.</description>
+    </key>
+    <key type="b" name="embedded-keyboard-enabled">
+      <default>false</default>
+      <summary>Allow embedding a keyboard into the window</summary>
+      <description>Set this to TRUE to allow embedding a keyboard into the window when trying to unlock. The "keyboard_command" key must be set with the appropriate command. DEPRECATED: This key is deprecated and ignored.</description>
+    </key>
+    <key type="s" name="embedded-keyboard-command">
+      <default>''</default>
+      <summary>Embedded keyboard command</summary>
+      <description>The command that will be run, if the "embedded_keyboard_enabled" key is set to TRUE, to embed a keyboard widget into the window. This command should implement an XEMBED plug interface and output a window XID on the standard output. DEPRECATED: This key is deprecated and ignored.</description>
+    </key>
+    <key type="b" name="logout-enabled">
+      <default>false</default>
+      <summary>Allow logout</summary>
+      <description>Set this to TRUE to offer an option in the unlock dialog to allow logging out after a delay. The delay is specified in the "logout_delay" key. DEPRECATED: This key is deprecated and ignored.</description>
+    </key>
+    <key type="u" name="logout-delay">
+      <default>7200</default>
+      <summary>Time before logout option</summary>
+      <description>The number of seconds after the screensaver activation before a logout option will appear in the unlock dialog. This key has effect only if the "logout_enable" key is set to TRUE. DEPRECATED: This key is deprecated and ignored</description>
+    </key>
+    <key type="s" name="logout-command">
+      <default>''</default>
+      <summary>Logout command</summary>
+      <description>The command to invoke when the logout button is clicked. This command should simply log the user out without any interaction. This key has effect only if the "logout_enable" key is set to TRUE. DEPRECATED: This key is deprecated and ignored.</description>
+    </key>
+    <key type="b" name="user-switch-enabled">
+      <default>true</default>
+      <summary>Allow user switching</summary>
+      <description>Set this to TRUE to offer an option in the unlock dialog to switch to a different user account.</description>
+    </key>
+    <key type="b" name="status-message-enabled">
+      <default>true</default>
+      <summary>Allow the session status message to be displayed</summary>
+      <description>Allow the session status message to be displayed when the screen is locked. DEPRECATED: This key is deprecated and ignored.</description>
+    </key>
+    <key name="picture-options" enum="com.deepin.wrap.gnome.desktop.GDesktopBackgroundStyle">
+      <default>'zoom'</default>
+      <summary>Picture Options</summary>
+      <description>Determines how the image set by wallpaper_filename is rendered. Possible values are "none", "wallpaper", "centered", "scaled", "stretched", "zoom", "spanned".</description>
+    </key>
+    <key type="s" name="picture-uri">
+      <default>'file:///usr/local/share/backgrounds/gnome/adwaita-lock.jpg'</default>
+      <summary>Picture URI</summary>
+      <description>URI to use for the background image. Not that the backend only supports local (file://) URIs.</description>
+    </key>
+    <key type="i" name="picture-opacity">
+      <range min="0" max="100"/>
+      <default>100</default>
+      <summary>Picture Opacity</summary>
+      <description>Opacity with which to draw the background picture.</description>
+    </key>
+    <key type="s" name="primary-color">
+      <default>'#023c88'</default>
+      <summary>Primary Color</summary>
+      <description>Left or Top color when drawing gradients, or the solid color.</description>
+    </key>
+    <key type="s" name="secondary-color">
+      <default>'#5789ca'</default>
+      <summary>Secondary Color</summary>
+      <description>Right or Bottom color when drawing gradients, not used for solid color.</description>
+    </key>
+    <key name="color-shading-type" enum="com.deepin.wrap.gnome.desktop.GDesktopBackgroundShading">
+      <default>'solid'</default>
+      <summary>Color Shading Type</summary>
+      <description>How to shade the background color. Possible values are "horizontal", "vertical", and "solid".</description>
+    </key>
+  </schema>
+</schemalist>

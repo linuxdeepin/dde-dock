@@ -1,0 +1,40 @@
+# tz zone descriptions
+#
+# This file is in the public domain.
+#
+# From Paul Eggert (2014-07-31):
+# This file contains a table where each row stands for a zone where
+# civil time stamps have agreed since 1970.  Columns are separated by
+# a single tab.  Lines beginning with '#' are comments.  All text uses
+# UTF-8 encoding.  The columns of the table are as follows:
+#
+# 1.  The countries that overlap the zone, as a comma-separated list
+#     of ISO 3166 2-character country codes.  See the file 'iso3166.tab'.
+# 2.  Latitude and longitude of the zone's principal location
+#     in ISO 6709 sign-degrees-minutes-seconds format,
+#     either +-DDMM+-DDDMM or +-DDMMSS+-DDDMMSS,
+#     first latitude (+ is north), then longitude (+ is east).
+# 3.  Zone name used in value of TZ environment variable.
+#     Please see the 'Theory' file for how zone names are chosen.
+#     If multiple zones overlap a country, each has a row in the
+#     table, with each column 1 containing the country code.
+# 4.  Comments; present if and only if a country has multiple zones.
+#
+# If a zone covers multiple countries, the most-populous city is used,
+# and that country is listed first in column 1; any other countries
+# are listed alphabetically by country code.  The table is sorted
+# first by country code, then (if possible) by an order within the
+# country that (1) makes some geographical sense, and (2) puts the
+# most populous zones first, where that does not contradict (1).
+#
+# This table is intended as an aid for users, to help them select time
+# zone data entries appropriate for their practical needs.  It is not
+# intended to take or endorse any position on legal or territorial claims.
+#
+#country-
+#codes	coordinates	TZ	comments
+AD	+4230+00131	Europe/Andorra
+AE,OM	+2518+05518	Asia/Dubai
+AF	+3431+06912	Asia/Kabul
+AL	+4120+01950	Europe/Tirane
+AM	+4011+04430	Asia/Yerevan

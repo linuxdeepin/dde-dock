@@ -123,7 +123,7 @@ var supportedConnectionTypes = []string{
 	connectionVpnVpnc,
 }
 
-// return custom connection type, and the wrapper type will be ignored
+// return custom connection type, and the wrapper types will be ignored, e.g. connectionMobile.
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {

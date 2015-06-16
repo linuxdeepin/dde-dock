@@ -148,12 +148,12 @@ func isInArea(x, y int32, area areaRange) bool {
 }
 
 func getEdgeForCommand(cmd string) string {
-	keys := zoneSettings.ListKeys()
+	keys := zoneSettings().ListKeys()
 
 	for _, key := range keys {
 		switch key {
 		case "left-up", "left-down", "right-up", "right-down":
-			v := zoneSettings.GetString(key)
+			v := zoneSettings().GetString(key)
 			if v == cmd {
 				return key
 			}

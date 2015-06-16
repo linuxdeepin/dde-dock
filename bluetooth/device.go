@@ -51,7 +51,7 @@ type device struct {
 	connecting   bool
 	State        uint32
 
-	// optinal
+	// optional
 	Icon string
 	RSSI int16
 }
@@ -163,34 +163,33 @@ func (d *device) fixRssi() {
 }
 
 func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) {
-	d := newDevice(dpath, data)
-	if b.isDeviceExists(b.devices[d.AdapterPath], dpath) {
-		logger.Warning("repeat add device:", dpath)
+	if b.isDeviceExists(dpath) {
+		logger.Error("repeat add device", dpath)
 		return
 	}
-	d.notifyDeviceAdded()
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	d := newDevice(dpath, data)
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
+	d.notifyDeviceAdded()
 	b.setPropDevices()
 }
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
-	// find adapter of the device
-	for apath, devices := range b.devices {
-		if b.isDeviceExists(devices, dpath) {
-			d, _ := b.getDevice(dpath)
-			d.notifyDeviceRemoved()
-
-			b.devices[apath] = b.doRemoveDevice(devices, dpath)
-			b.setPropDevices()
-			return
-		}
-	}
-}
-func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*device {
-	i := b.getDeviceIndex(devices, dpath)
+	apath, i := b.getDeviceIndex(dpath)
 	if i < 0 {
-		logger.Warning("repeat remove device:", dpath)
-		return devices
+		logger.Error("repeat remove device", dpath)
+		return
 	}
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	b.devices[apath] = b.doRemoveDevice(b.devices[apath], i)
+	b.setPropDevices()
+	return
+}
+func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
+	devices[i].notifyDeviceRemoved()
 	destroyDevice(devices[i])
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
@@ -198,29 +197,36 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, dpath dbus.ObjectPath) []*
 	return devices
 }
 func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (d *device, err error) {
-	for _, devices := range b.devices {
-		if i := b.getDeviceIndex(devices, dpath); i >= 0 {
-			d = devices[i]
-			return
-		}
+	apath, i := b.getDeviceIndex(dpath)
+	if i < 0 {
+		err = fmt.Errorf("device not found %s", dpath)
+		logger.Error(err)
+		return
 	}
-	err = fmt.Errorf("device not exists %s", dpath)
-	logger.Error(err)
+
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	d = b.devices[apath][i]
 	return
 }
-func (b *Bluetooth) isDeviceExists(devices []*device, dpath dbus.ObjectPath) bool {
-	if b.getDeviceIndex(devices, dpath) >= 0 {
+func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
+	_, i := b.getDeviceIndex(dpath)
+	if i >= 0 {
 		return true
 	}
 	return false
 }
-func (b *Bluetooth) getDeviceIndex(devices []*device, dpath dbus.ObjectPath) int {
-	for i, d := range devices {
-		if d.Path == dpath {
-			return i
+func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	for p, devices := range b.devices {
+		for i, d := range devices {
+			if d.Path == dpath {
+				return p, i
+			}
 		}
 	}
-	return -1
+	return "", -1
 }
 
 // GetDevices return all device objects that marshaled by json.

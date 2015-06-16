@@ -156,6 +156,7 @@ func (p *Power) initUpower() {
 	p.coreSettings.Connect("changed::percentage-critical", func(s *gio.Settings, name string) {
 		p.handleBatteryPercentage()
 	})
+	p.coreSettings.GetInt("percentage-action")
 }
 
 func (p *Power) updateBatteryInfo() {

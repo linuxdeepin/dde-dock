@@ -266,23 +266,20 @@ func (obj *Manager) listenSettings() {
 			obj.setPropCustomList(getCustomListInfo())
 		}
 	})
+	bindGSettings.GetStrv(BIND_KEY_VALID_LIST)
 
 	sysGSettings.Connect("changed", func(s *gio.Settings, key string) {
 		if id, ok := getAccelIdByName(key); ok {
-			invalidFlag := false
+			//invalidFlag := false
 			if isInvalidConflict(id) {
-				invalidFlag = true
+				//invalidFlag = true
 			}
 
-			shortcut := getSystemKeyValue(key, false)
+			//shortcut := getSystemKeyValue(key, false)
 
 			if id >= 0 && id < 300 {
 				grabKeyPairs(PrevSystemPairs, false)
 				grabKeyPairs(getSystemKeyPairs(), true)
-			} else if id >= 600 && id < 1000 {
-				if !invalidFlag {
-					obj.setCompizSettings(id, key, shortcut)
-				}
 			}
 
 			if isIdInSystemList(id) {
@@ -294,6 +291,7 @@ func (obj *Manager) listenSettings() {
 			}
 		}
 	})
+	sysGSettings.GetStrv("file-manager")
 }
 
 func (obj *Manager) listenAllCustomSettings() {
@@ -322,4 +320,5 @@ func (obj *Manager) listenCustomSettings(id int32) {
 
 		obj.setPropCustomList(getCustomListInfo())
 	})
+	gs.GetString("name")
 }

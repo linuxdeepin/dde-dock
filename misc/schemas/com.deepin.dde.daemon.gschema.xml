@@ -16,7 +16,7 @@
       <summary></summary>
       <description></description>
     </key>
-    <key type="b"  name="datetime">
+    <key type="b"  name="timedate">
       <default>true</default>
       <summary></summary>
       <description></description>

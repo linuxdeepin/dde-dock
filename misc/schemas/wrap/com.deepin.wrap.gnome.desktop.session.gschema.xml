@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/session/" id="com.deepin.wrap.gnome.desktop.session">
+    <key type="u" name="idle-delay">
+      <default>300</default>
+      <summary>Time before session is considered idle</summary>
+      <description>The number of seconds of inactivity before the session is considered idle.</description>
+    </key>
+    <key type="s" name="session-name">
+      <default>"gnome"</default>
+      <summary>Session type</summary>
+      <description>The name of the session to use.  Known values are
+      "gnome" and "gnome-fallback".</description>
+    </key>
+  </schema>
+</schemalist>

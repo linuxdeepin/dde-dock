@@ -68,6 +68,10 @@ const (
 	NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME    = "alias-vpn-vpnc-advanced"
 )
 
+// Cache section, used for connection session when editing some
+// special virtual keys, e.g. NM_SETTING_VK_MOBILE_COUNTRYREGION
+const sectionCache = "cache"
+
 func getRealSectionName(name string) (realName string) {
 	realName = name
 	switch name {
@@ -340,7 +344,7 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 	return
 }
 
-// getAvailableSections return all virtual section related real sections
+// getAvailableSections return all related virtual sections
 func getAvailableSections(data connectionData) (sections []string) {
 	for _, vsection := range getAvailableVsections(data) {
 		sections = appendStrArrayUnique(sections, getRelatedSectionsOfVsection(data, vsection)...)

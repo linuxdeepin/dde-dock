@@ -21,11 +21,8 @@
 
 package accounts
 
-import "pkg.linuxdeepin.com/dde-daemon"
-
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.linuxdeepin.com/dde-daemon"
 )
 
 func init() {
@@ -35,27 +32,4 @@ func init() {
 		Stop:   Stop,
 		Enable: true,
 	})
-}
-
-var (
-	logger = log.NewLogger(ACCOUNT_DEST)
-)
-
-func Start() {
-	logger.BeginTracing()
-	defer logger.EndTracing()
-
-	obj := GetManager()
-	if err := dbus.InstallOnSystem(obj); err != nil {
-		logger.Error("Install DBus Failed:", err)
-		return
-	}
-
-	obj.updateAllUserInfo()
-}
-
-func Stop() {
-	obj := GetManager()
-	obj.destroy()
-	dbus.UnInstallObject(obj)
 }

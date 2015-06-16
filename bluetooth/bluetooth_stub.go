@@ -22,6 +22,7 @@
 package bluetooth
 
 import (
+	"fmt"
 	"pkg.linuxdeepin.com/lib/dbus"
 )
 
@@ -34,13 +35,16 @@ func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
 	logger.Debug("OnPropertiesChanged()", name)
 }
 
-// TODO: remove
+func (b *Bluetooth) DebugInfo() (info string) {
+	info = fmt.Sprintf("adapters: %s\ndevices: %s", marshalJSON(b.adapters), marshalJSON(b.devices))
+	return
+}
+
 func (b *Bluetooth) setPropAdapters() {
 	b.Adapters = marshalJSON(b.adapters)
 	dbus.NotifyChange(b, "Adapters")
 }
 
-// TODO: remove
 func (b *Bluetooth) setPropDevices() {
 	b.Devices = marshalJSON(b.devices)
 	dbus.NotifyChange(b, "Devices")

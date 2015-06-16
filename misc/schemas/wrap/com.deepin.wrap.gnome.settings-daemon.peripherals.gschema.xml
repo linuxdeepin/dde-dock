@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/" id="com.deepin.wrap.gnome.settings-daemon.peripherals" gettext-domain="gnome-settings-daemon">
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.smartcard" name="smartcard"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.touchpad" name="touchpad"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.keyboard" name="keyboard"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.mouse" name="mouse"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.touchscreen" name="touchscreen"/>
+    <child schema="com.deepin.wrap.gnome.settings-daemon.peripherals.input-devices" name="input-devices"/>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/smartcard/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.smartcard" gettext-domain="gnome-settings-daemon">
+    <key name="removal-action" enum="com.deepin.wrap.gnome.settings-daemon.GsdSmartcardRemovalAction">
+      <default>'none'</default>
+      <summary>Smartcard removal action</summary>
+      <description>Set this to one of "none", "lock-screen", or "force-logout". The action will get performed when the smartcard used for log in is removed.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/touchpad/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.touchpad" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="disable-while-typing">
+      <default>false</default>
+      <summary>Disable touchpad while typing</summary>
+      <description>Set this to TRUE if you have problems with accidentally hitting the touchpad while typing.</description>
+    </key>
+    <key type="b" name="horiz-scroll-enabled">
+      <default>true</default>
+      <summary>Enable horizontal scrolling</summary>
+      <description>Set this to TRUE to allow horizontal scrolling by the same method selected with the scroll_method key.</description>
+    </key>
+    <key name="scroll-method" enum="com.deepin.wrap.gnome.settings-daemon.GsdTouchpadScrollMethod">
+      <default>'two-finger-scrolling'</default>
+      <summary>Select the touchpad scroll method</summary>
+      <description>Select the touchpad scroll method. Supported values are: "disabled", "edge-scrolling", "two-finger-scrolling".</description>
+    </key>
+    <key type="b" name="tap-to-click">
+      <default>false</default>
+      <summary>Enable mouse clicks with touchpad</summary>
+      <description>Set this to TRUE to be able to send mouse clicks by tapping on the touchpad.</description>
+    </key>
+    <key type="b" name="touchpad-enabled">
+      <default>true</default>
+      <summary>Enable touchpad</summary>
+      <description>Set this to TRUE to enable all touchpads.</description>
+    </key>
+    <key name="left-handed" enum="com.deepin.wrap.gnome.settings-daemon.GsdTouchpadHandedness">
+      <default>'mouse'</default>
+      <summary>Touchpad button orientation</summary>
+      <description>Swap left and right mouse buttons for left-handed mice with 'left', 'right' for right-handed, 'mouse' to follow the mouse setting.</description>
+    </key>
+    <key type="d" name="motion-acceleration">
+      <default>-1</default>
+      <summary>Single Click</summary>
+      <description>Acceleration multiplier for mouse motion. A value of -1 is the system default.</description>
+    </key>
+    <key type="i" name="motion-threshold">
+      <default>-1</default>
+      <summary>Motion Threshold</summary>
+      <description>Distance in pixels the pointer must move before accelerated mouse motion is activated. A value of -1 is the system default.</description>
+    </key>
+    <key type="b" name="natural-scroll">
+      <default>false</default>
+      <summary>Natural scrolling</summary>
+      <description>Set this to TRUE to enable natural (reverse) scrolling for touchpads.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/keyboard/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.keyboard" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="repeat">
+      <default>true</default>
+    </key>
+    <key type="b" name="click">
+      <default>true</default>
+    </key>
+    <key type="u" name="repeat-interval">
+      <default>30</default>
+      <summary>Key Repeat Interval</summary>
+      <description>Delay between repeats in milliseconds.</description>
+    </key>
+    <key type="u" name="delay">
+      <default>500</default>
+      <summary>Initial Key Repeat Delay</summary>
+      <description>Initial key repeat delay in milliseconds.</description>
+    </key>
+    <key type="i" name="click-volume">
+      <default>0</default>
+    </key>
+    <key name="bell-mode" enum="com.deepin.wrap.gnome.settings-daemon.GsdBellMode">
+      <default>'on'</default>
+      <description>Possible values are "on", "off", and "custom".</description>
+    </key>
+    <key type="i" name="bell-pitch">
+      <default>400</default>
+    </key>
+    <key type="i" name="bell-duration">
+      <default>100</default>
+    </key>
+    <key type="s" name="bell-custom-file">
+      <default>''</default>
+      <summary>Keyboard Bell Custom Filename</summary>
+      <description>File name of the bell sound to be played.</description>
+    </key>
+    <key type="b" name="remember-numlock-state">
+      <default>true</default>
+      <summary>Remember NumLock state</summary>
+      <description>When set to true, GNOME will remember the state of the NumLock LED between sessions.</description>
+    </key>
+    <key name="numlock-state" enum="com.deepin.wrap.gnome.settings-daemon.GsdNumLockState">
+      <default>'unknown'</default>
+      <summary>NumLock state</summary>
+      <description>The remembered state of the NumLock LED.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/mouse/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.mouse" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="locate-pointer">
+      <default>false</default>
+      <summary>Highlights the current location of the pointer when the Control key is pressed and released.</summary>
+    </key>
+    <key type="b" name="left-handed">
+      <default>false</default>
+      <summary>Mouse button orientation</summary>
+      <description>Swap left and right mouse buttons for left-handed mice.</description>
+    </key>
+    <key type="d" name="motion-acceleration">
+      <default>-1</default>
+      <summary>Single Click</summary>
+      <description>Acceleration multiplier for mouse motion. A value of -1 is the system default.</description>
+    </key>
+    <key type="i" name="motion-threshold">
+      <default>-1</default>
+      <summary>Motion Threshold</summary>
+      <description>Distance in pixels the pointer must move before accelerated mouse motion is activated. A value of -1 is the system default.</description>
+    </key>
+    <key type="i" name="double-click">
+      <default>400</default>
+      <summary>Double click time</summary>
+      <description>Length of a double click in milliseconds.</description>
+    </key>
+    <key type="i" name="drag-threshold">
+      <default>8</default>
+      <summary>Drag threshold</summary>
+      <description>Distance before a drag is started.</description>
+    </key>
+    <key type="b" name="middle-button-enabled">
+      <default>false</default>
+      <summary>Middle button emulation</summary>
+      <description>Enables middle mouse button emulation through simultaneous left and right button click.</description>
+    </key>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/touchscreen/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.touchscreen" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="orientation-lock">
+      <default>false</default>
+      <summary>Whether the tablet's orientation is locked, or rotated automatically.</summary>
+    </key>
+  </schema>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/peripherals/input-devices/" id="com.deepin.wrap.gnome.settings-daemon.peripherals.input-devices" gettext-domain="gnome-settings-daemon">
+    <key type="s" name="hotplug-command">
+      <default>''</default>
+      <summary>Device hotplug custom command</summary>
+      <description>Command to be run when a device is added or removed. An exit value of 1 means that the device will not be handled further by gnome-settings-daemon.</description>
+    </key>
+  </schema>
+</schemalist>

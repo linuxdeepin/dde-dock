@@ -2,6 +2,7 @@ package dock
 
 import (
 	"dbus/com/deepin/dde/launcher"
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -37,9 +38,45 @@ func (m *ClientManager) CurrentActiveWindow() uint32 {
 	return uint32(activeWindow)
 }
 
+func changeWorkspaceIfNeeded(xid xproto.Window) error {
+	desktopNum, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
+	if err != nil {
+		return fmt.Errorf("Get _NET_WM_DESKTOP failed: %s", err)
+	}
+
+	currentDesktop, err := ewmh.CurrentDesktopGet(XU)
+	if err != nil {
+		return fmt.Errorf("Get _NET_CURRENT_DESKTOP failed: %v", err)
+	}
+
+	if currentDesktop == desktopNum {
+		return fmt.Errorf("No need to change workspace, the current desktop is already %v", currentDesktop)
+	}
+
+	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)
+	if err != nil {
+		logger.Warningf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
+	}
+
+	err = ewmh.ClientEvent(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP", int(desktopNum), int(timeStamp))
+	if err != nil {
+		return fmt.Errorf("Send ClientMessage Failed: %v", err)
+	}
+
+	return nil
+}
+
+func activateWindow(xid xproto.Window) error {
+	err := changeWorkspaceIfNeeded(xid)
+	if err != nil {
+		logger.Warning(err)
+	}
+	return ewmh.ActiveWindowReq(XU, xid)
+}
+
 // maybe move to apps-builder
 func (m *ClientManager) ActiveWindow(xid uint32) bool {
-	err := ewmh.ActiveWindowReq(XU, xproto.Window(xid))
+	err := activateWindow(xproto.Window(xid))
 	if err != nil {
 		logger.Warning("Actice window failed:", err)
 		return false
@@ -109,12 +146,12 @@ func updateCurrentViewport() {
 		))
 }
 
-func onCurrentWorkspacePre(xid xproto.Window) bool {
+// works for old deepin wm.
+func checkDeepinWindowViewports(xid xproto.Window) (bool, error) {
 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
 		"DEEPIN_WINDOW_VIEWPORTS"))
 	if err != nil {
-		logger.Warning("get DEEPIN_WINDOW_VIEWPORTS failed", err)
-		return false
+		return false, err
 	}
 
 	workspaces := make([][]uint, 0)
@@ -127,7 +164,34 @@ func onCurrentWorkspacePre(xid xproto.Window) bool {
 	if currentViewport == nil {
 		updateCurrentViewport()
 	}
-	return isCoverWorkspace(workspaces, currentViewport)
+	return isCoverWorkspace(workspaces, currentViewport), nil
+}
+
+// works for new deepin wm.
+func checkCurrentDesktop(xid xproto.Window) (bool, error) {
+	num, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
+	if err != nil {
+		return false, err
+	}
+
+	currentDesktop, err := xprop.PropValNum(xprop.GetProperty(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP"))
+	if err != nil {
+		return false, err
+	}
+
+	return num == currentDesktop, nil
+}
+
+func onCurrentWorkspacePre(xid xproto.Window) bool {
+	isOnCurrentWorkspace, err := checkDeepinWindowViewports(xid)
+	if err != nil {
+		isOnCurrentWorkspace, err = checkCurrentDesktop(xid)
+		if err != nil {
+			return false
+		}
+		return isOnCurrentWorkspace
+	}
+	return isOnCurrentWorkspace
 }
 
 func hasMaximizeClientPre(xid xproto.Window) bool {
@@ -159,6 +223,7 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	// include shadow
 	gemo, err := win.DecorGeometry()
 	if err != nil {
+		logger.Debug(err)
 		return false
 	}
 

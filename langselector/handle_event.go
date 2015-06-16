@@ -27,9 +27,9 @@ import (
 	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
-func (lang *LangSelector) onGenLocaleStatus() {
-	lang.setDate.ConnectGenLocaleStatus(func(ok bool, state string) {
-		err := lang.handleLocaleChanged(ok, state)
+func (lang *LangSelector) onLocaleSuccess() {
+	lang.lhelper.ConnectSuccess(func(ok bool, reason string) {
+		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
 			lang.logger.Warning(err)
 			lang.setPropCurrentLocale(getLocale())
@@ -48,7 +48,7 @@ func (lang *LangSelector) onGenLocaleStatus() {
 	})
 }
 
-func (lang *LangSelector) handleLocaleChanged(ok bool, state string) error {
+func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 	if !ok || lang.LocaleState != LocaleStateChanging {
 		return ErrLocaleChangeFailed
 	}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/a11y/mouse/" id="com.deepin.wrap.gnome.desktop.a11y.mouse">
+    <key type="d" name="dwell-time">
+      <default>1.20</default>
+      <summary>Dwell click time</summary>
+      <description>Time in seconds before a click is triggered.</description>
+    </key>
+    <key type="i" name="dwell-threshold">
+      <default>10</default>
+      <summary>Movement threshold</summary>
+      <description>Distance in pixels before movement will be recognized.</description>
+    </key>
+    <key name="dwell-gesture-single" enum="com.deepin.wrap.gnome.desktop.GDesktopMouseDwellDirection">
+      <default>'left'</default>
+      <summary>Gesture single click</summary>
+      <description>Direction to perform a single click ('left', 'right', 'up', 'down).</description>
+    </key>
+    <key name="dwell-gesture-double" enum="com.deepin.wrap.gnome.desktop.GDesktopMouseDwellDirection">
+      <default>'up'</default>
+      <summary>Gesture double click</summary>
+      <description>Direction to perform a double click ('left', 'right', 'up', 'down).</description>
+    </key>
+    <key name="dwell-gesture-drag" enum="com.deepin.wrap.gnome.desktop.GDesktopMouseDwellDirection">
+      <default>'down'</default>
+      <summary>Gesture drag click</summary>
+      <description>Direction to perform dragging ('left', 'right', 'up', 'down).</description>
+    </key>
+    <key name="dwell-gesture-secondary" enum="com.deepin.wrap.gnome.desktop.GDesktopMouseDwellDirection">
+      <default>'right'</default>
+      <summary>Gesture secondary click</summary>
+      <description>Direction to perform a secondary click ('left', 'right', 'up', 'down).</description>
+    </key>
+    <key name="dwell-mode" enum="com.deepin.wrap.gnome.desktop.GDesktopMouseDwellMode">
+      <default>'window'</default>
+      <summary>Dwell click mode</summary>
+      <description>The active dwell click mode. Possible values are 'window' and 'gesture'.</description>
+    </key>
+    <key type="b" name="click-type-window-visible">
+      <default>true</default>
+      <summary>Show click type window</summary>
+      <description>Show click type window.</description>
+    </key>
+    <key type="b" name="dwell-click-enabled">
+      <default>false</default>
+      <summary>Enable dwell clicks</summary>
+      <description>Enable dwell clicks.</description>
+    </key>
+    <key type="b" name="secondary-click-enabled">
+      <default>false</default>
+      <summary>Secondary click enabled</summary>
+      <description>Enable simulated secondary clicks</description>
+    </key>
+    <key type="d" name="secondary-click-time">
+      <default>1.20</default>
+      <summary>Secondary click time</summary>
+      <description>Time in seconds before a simulated secondary click is triggered.</description>
+    </key>
+  </schema>
+</schemalist>

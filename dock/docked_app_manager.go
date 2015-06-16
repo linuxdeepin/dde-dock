@@ -52,7 +52,7 @@ func (m *DockedAppManager) init() {
 	// listen changed.
 	appList := m.core.GetStrv(DockedApps)
 	for _, id := range appList {
-		m.items.PushBack(strings.ToLower(strings.Replace(id, "_", "-", -1)))
+		m.items.PushBack(normalizeAppID(id))
 	}
 
 	conf := glib.NewKeyFile()
@@ -148,15 +148,16 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	}
 
 	logger.Debug("id", id, "title", title, "cmd", cmd)
-	m.items.PushBack(id)
-	if guess_desktop_id(id) == "" {
-		// if app := NewDesktopAppInfo(id + ".desktop"); app != nil {
-		// 	app.Unref()
-		// } else {
+	desktopID := guess_desktop_id(id)
+	if desktopID == "" {
+		m.items.PushBack(id)
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
 			logger.Warning("create scratch file failed:", e)
 			return false
 		}
+	} else {
+		id = trimDesktop(desktopID)
+		m.items.PushBack(id)
 	}
 	dbus.Emit(m, "Docked", id)
 	app := ENTRY_MANAGER.runtimeApps[id]
@@ -203,7 +204,7 @@ func (m *DockedAppManager) Undock(id string) bool {
 		return true
 	}
 
-	tmpId = strings.Replace(id, "-", "_", -1)
+	tmpId = normalizeAppID(id)
 	if m.doUndock(tmpId) {
 		logger.Debug("undock replace - to _:", tmpId)
 		return true
@@ -213,8 +214,9 @@ func (m *DockedAppManager) Undock(id string) bool {
 }
 
 func (m *DockedAppManager) findItem(id string) *list.Element {
+	lowerID := strings.ToLower(id)
 	for e := m.items.Front(); e != nil; e = e.Next() {
-		if strings.ToLower(e.Value.(string)) == strings.ToLower(id) {
+		if strings.ToLower(e.Value.(string)) == lowerID {
 			return e
 		}
 	}

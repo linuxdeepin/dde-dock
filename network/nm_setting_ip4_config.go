@@ -22,8 +22,8 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
 	"fmt"
+	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
 const NM_SETTING_IP4_CONFIG_SETTING_NAME = "ipv4"
@@ -362,11 +362,11 @@ func getOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint3
 
 // Virtual key getter
 func getSettingVkIp4ConfigDns(data connectionData) (value string) {
-	dns := getSettingIp4ConfigDns(data)
-	if len(dns) == 0 {
+	dnses := getSettingIp4ConfigDns(data)
+	if len(dnses) == 0 {
 		return
 	}
-	value = convertIpv4AddressToString(dns[0])
+	value = convertIpv4AddressToString(dnses[0])
 	return
 }
 func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
@@ -420,18 +420,18 @@ func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (err error
 		removeSettingIp4ConfigDns(data)
 		return
 	}
-	dns := getSettingIp4ConfigDns(data)
-	if len(dns) == 0 {
-		dns = make([]uint32, 1)
+	dnses := getSettingIp4ConfigDns(data)
+	if len(dnses) == 0 {
+		dnses = make([]uint32, 1)
 	}
 	tmpn, err := convertIpv4AddressToUint32Check(value)
-	dns[0] = tmpn
+	dnses[0] = tmpn
 	if err != nil {
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
-	if dns[0] != 0 {
-		setSettingIp4ConfigDns(data, dns)
+	if dnses[0] != 0 {
+		setSettingIp4ConfigDns(data, dnses)
 	} else {
 		removeSettingIp4ConfigDns(data)
 	}

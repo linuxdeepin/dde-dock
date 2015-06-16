@@ -48,6 +48,9 @@ out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 
 translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LANGUAGES}))
 
+pot:
+	deepin-update-pot misc/po/locale_config.ini
+
 build: prepare $(addprefix out/bin/, ${BINARIES})
 
 test: prepare
@@ -71,13 +74,12 @@ install: build translate
 	cp misc/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
-	cp misc/schemas/* ${DESTDIR}${PREFIX}/share/glib-2.0/schemas
+	cp misc/schemas/*.xml ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
+	cp misc/schemas/wrap/*.xml ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
+	cp misc/schemas/wrap/*.convert ${DESTDIR}${PREFIX}/share/glib-2.0/schemas/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/usr/share/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
-
-	mkdir -pv ${DESTDIR}${PREFIX}/bin
-	cp misc/tool/wireless_script*.sh ${DESTDIR}${PREFIX}/bin/wireless-script
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail
 	cp -r misc/thumbnail/* ${DESTDIR}${PREFIX}/share/personalization/thumbnail/

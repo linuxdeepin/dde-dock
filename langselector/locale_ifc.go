@@ -33,33 +33,43 @@ type localeInfo struct {
 }
 
 func (lang *LangSelector) SetLocale(locale string) error {
+	if lang.LocaleState == LocaleStateChanging {
+		return nil
+	}
+
 	if len(locale) == 0 || !language_info.IsLocaleValid(locale,
 		language_info.LanguageListFile) {
 		return fmt.Errorf("Invalid locale: %v", locale)
 	}
-	if lang.setDate == nil {
-		return fmt.Errorf("SetDateTime object is nil")
+	if lang.lhelper == nil {
+		return fmt.Errorf("LocaleHelper object is nil")
 	}
 
 	if lang.CurrentLocale == locale {
 		return nil
 	}
 
-	lang.LocaleState = LocaleStateChanging
-	lang.setPropCurrentLocale(locale)
 	go func() {
+		lang.LocaleState = LocaleStateChanging
+		lang.setPropCurrentLocale(locale)
 		if ok, _ := isNetworkEnable(); !ok {
-			err := sendNotify("", "", Tr("System language is being changed, please wait..."))
+			err := sendNotify("", "",
+				Tr("System language is being changed, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		} else {
-			err := sendNotify("", "", Tr("System language is being changed with an installation of lacked language packages, please wait..."))
+			err := sendNotify("", "",
+				Tr("System language is being changed with an installation of lacked language packages, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		}
-		lang.setDate.GenLocale(locale)
+		err := lang.lhelper.GenerateLocale(locale)
+		if err != nil {
+			lang.logger.Warning("GenerateLocale failed:", err)
+			lang.LocaleState = LocaleStateChanged
+		}
 	}()
 
 	return nil

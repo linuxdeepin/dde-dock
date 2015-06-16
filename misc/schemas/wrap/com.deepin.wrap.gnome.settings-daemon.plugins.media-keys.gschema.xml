@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/media-keys/" id="com.deepin.wrap.gnome.settings-daemon.plugins.media-keys" gettext-domain="gnome-settings-daemon">
+     <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="as" name="custom-keybindings">
+      <default>[]</default>
+      <summary>Custom keybindings</summary>
+      <description>List of custom keybindings</description>
+    </key>
+    <key type="s" name="calculator">
+      <default>'XF86Calculator'</default>
+      <summary>Launch calculator</summary>
+      <description>Binding to launch the calculator.</description>
+    </key>
+    <key type="s" name="control-center">
+      <default>'XF86Tools'</default>
+      <summary>Launch settings</summary>
+      <description>Binding to launch GNOME settings.</description>
+    </key>
+    <key type="s" name="email">
+      <default>'XF86Mail'</default>
+      <summary>Launch email client</summary>
+      <description>Binding to launch the email client.</description>
+    </key>
+    <key type="s" name="eject">
+      <default>'XF86Eject'</default>
+      <summary>Eject</summary>
+      <description>Binding to eject an optical disc.</description>
+    </key>
+    <key type="s" name="help">
+      <default>''</default>
+      <summary>Launch help browser</summary>
+      <description>Binding to launch the help browser.</description>
+    </key>
+    <key type="s" name="home">
+      <default>'XF86Explorer'</default>
+      <summary>Home folder</summary>
+      <description>Binding to open the Home folder.</description>
+    </key>
+    <key type="s" name="media">
+      <default>'XF86AudioMedia'</default>
+      <summary>Launch media player</summary>
+      <description>Binding to launch the media player.</description>
+    </key>
+    <key type="s" name="next">
+      <default>'XF86AudioNext'</default>
+      <summary>Next track</summary>
+      <description>Binding to skip to next track.</description>
+    </key>
+    <key type="s" name="pause">
+      <default>'XF86AudioPause'</default>
+      <summary>Pause playback</summary>
+      <description>Binding to pause playback.</description>
+    </key>
+    <key type="s" name="play">
+      <default>'XF86AudioPlay'</default>
+      <summary>Play (or play/pause)</summary>
+      <description>Binding to start playback (or toggle play/pause).</description>
+    </key>
+    <key type="s" name="logout">
+      <default>'&lt;Control&gt;&lt;Alt&gt;Delete'</default>
+      <summary>Log out</summary>
+      <description>Binding to log out.</description>
+    </key>
+    <key type="s" name="previous">
+      <default>'XF86AudioPrev'</default>
+      <summary>Previous track</summary>
+      <description>Binding to skip to previous track.</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key type="s" name="screensaver">
+      <default>'&lt;Super&gt;l'</default>
+      <summary>Lock screen</summary>
+      <description>Binding to lock the screen.</description>
+    </key>
+    <key type="s" name="search">
+      <default>'XF86Search'</default>
+      <summary>Search</summary>
+      <description>Binding to launch the search tool.</description>
+    </key>
+    <key type="s" name="stop">
+      <default>'XF86AudioStop'</default>
+      <summary>Stop playback</summary>
+      <description>Binding to stop playback.</description>
+    </key>
+    <key type="s" name="volume-down">
+      <default>'XF86AudioLowerVolume'</default>
+      <summary>Volume down</summary>
+      <description>Binding to lower the system volume.</description>
+    </key>
+    <key type="s" name="volume-mute">
+      <default>'XF86AudioMute'</default>
+      <summary>Volume mute</summary>
+      <description>Binding to mute the system volume.</description>
+    </key>
+    <key type="s" name="volume-up">
+      <default>'XF86AudioRaiseVolume'</default>
+      <summary>Volume up</summary>
+      <description>Binding to raise the system volume.</description>
+    </key>
+    <key type="s" name="screenshot">
+      <default>'Print'</default>
+      <summary>Take a screenshot</summary>
+      <description>Binding to take a screenshot.</description>
+    </key>
+    <key type="s" name="window-screenshot">
+      <default>'&lt;Alt&gt;Print'</default>
+      <summary>Take a screenshot of a window</summary>
+      <description>Binding to take a screenshot of a window.</description>
+    </key>
+    <key type="s" name="area-screenshot">
+      <default>'&lt;Shift&gt;Print'</default>
+      <summary>Take a screenshot of an area</summary>
+      <description>Binding to take a screenshot of an area.</description>
+    </key>
+    <key type="s" name="screenshot-clip">
+      <default>'&lt;Ctrl&gt;Print'</default>
+      <summary>Copy a screenshot to clipboard</summary>
+      <description>Binding to copy a screenshot to clipboard.</description>
+    </key>
+    <key type="s" name="window-screenshot-clip">
+      <default>'&lt;Ctrl&gt;&lt;Alt&gt;Print'</default>
+      <summary>Copy a screenshot of a window to clipboard</summary>
+      <description>Binding to copy a screenshot of a window to clipboard.</description>
+    </key>
+    <key type="s" name="area-screenshot-clip">
+      <default>'&lt;Ctrl&gt;&lt;Shift&gt;Print'</default>
+      <summary>Copy a screenshot of an area to clipboard</summary>
+      <description>Binding to copy a screenshot of an area to clipboard.</description>
+    </key>
+    <key type="s" name="screencast">
+      <default>'&lt;Ctrl&gt;&lt;Shift&gt;&lt;Alt&gt;R'</default>
+      <summary>Record a short video of the screen</summary>
+      <description>Binding to record a short video of the screen</description>
+    </key>
+    <key type="s" name="www">
+      <default>'XF86WWW'</default>
+      <summary>Launch web browser</summary>
+      <description>Binding to launch the web browser.</description>
+    </key>
+    <key type="s" name="magnifier">
+      <default>'&lt;Alt&gt;&lt;Super&gt;8'</default>
+      <summary>Toggle magnifier</summary>
+      <description>Binding to show the screen magnifier</description>
+    </key>
+    <key type="s" name="screenreader">
+      <default>'&lt;Alt&gt;&lt;Super&gt;s'</default>
+      <summary>Toggle screen reader</summary>
+      <description>Binding to start the screen reader</description>
+    </key>
+    <key type="s" name="on-screen-keyboard">
+      <default>''</default>
+      <summary>Toggle on-screen keyboard</summary>
+      <description>Binding to show the on-screen keyboard</description>
+    </key>
+    <key type="s" name="increase-text-size">
+      <default>''</default>
+      <summary>Increase text size</summary>
+      <description>Binding to increase the text size</description>
+    </key>
+    <key type="s" name="decrease-text-size">
+      <default>''</default>
+      <summary>Decrease text size</summary>
+      <description>Binding to decrease the text size</description>
+    </key>
+    <key type="s" name="toggle-contrast">
+      <default>''</default>
+      <summary>Toggle contrast</summary>
+      <description>Binding to toggle the interface contrast</description>
+    </key>
+    <key type="s" name="magnifier-zoom-in">
+      <default>'&lt;Alt&gt;&lt;Super&gt;equal'</default>
+      <summary>Magnifier zoom in</summary>
+      <description>Binding for the magnifier to zoom in</description>
+    </key>
+    <key type="s" name="magnifier-zoom-out">
+      <default>'&lt;Alt&gt;&lt;Super&gt;minus'</default>
+      <summary>Magnifier zoom out</summary>
+      <description>Binding for the magnifier to zoom out</description>
+    </key>
+    <key type="u" name="max-screencast-length">
+      <default>30</default>
+      <summary>Maximum length of screen recordings</summary>
+      <description>The maximum length of single screen cast recordings in seconds or 0 for unlimited</description>
+    </key>
+  </schema>
+
+  <schema id="com.deepin.wrap.gnome.settings-daemon.plugins.media-keys.custom-keybinding" gettext-domain="gnome-settings-daemon">
+    <key type="s" name="name">
+      <default>''</default>
+      <summary>Name</summary>
+      <description>Name of the custom binding</description>
+    </key>
+    <key type="s" name="binding">
+      <default>''</default>
+      <summary>Binding</summary>
+      <description>Binding for the custom binding</description>
+    </key>
+    <key type="s" name="command">
+      <default>''</default>
+      <summary>Command</summary>
+      <description>Command to run when the binding is invoked</description>
+    </key>
+  </schema>
+</schemalist>

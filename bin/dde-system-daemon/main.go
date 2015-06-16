@@ -25,12 +25,8 @@ func main() {
 
 	logger.SetRestartCommand("/usr/lib/deepin-daemon/dde-system-daemon")
 
-	// for some laptops such as ideapad, the wireless devices may be
-	// blocked at startup, so we try to unblock them here.
-	requestUnblockAllDevice()
-
-	loader.Start()
-	defer loader.Stop()
+	loader.StartAll()
+	defer loader.StopAll()
 
 	dbus.DealWithUnhandledMessage()
 

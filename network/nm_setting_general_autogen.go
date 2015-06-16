@@ -7,7 +7,7 @@ func generalIsKeyInSettingSection(section, key string) bool {
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section)
+		logger.Error("invalid section name", section)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		return isKeyInSetting8021x(key)
 	case NM_SETTING_CDMA_SETTING_NAME:
@@ -71,7 +71,7 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section)
+		logger.Error("invalid section name", section)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		t = getSetting8021xKeyType(key)
 	case NM_SETTING_CDMA_SETTING_NAME:
@@ -322,7 +322,7 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section)
+		logger.Error("invalid section name", section)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		valueJSON = generalGetSetting8021xKeyJSON(data, key)
 	case NM_SETTING_CDMA_SETTING_NAME:
@@ -386,7 +386,7 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section)
+		logger.Error("invalid section name", section)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
 	case NM_SETTING_CDMA_SETTING_NAME:
@@ -446,7 +446,7 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 func generalGetSettingDefaultValue(section, key string) (value interface{}) {
 	switch section {
 	default:
-		logger.Warning("invalid section name", section)
+		logger.Error("invalid section name", section)
 	case NM_SETTING_802_1X_SETTING_NAME:
 		value = getSetting8021xDefaultValue(key)
 	case NM_SETTING_CDMA_SETTING_NAME:

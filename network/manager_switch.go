@@ -47,6 +47,13 @@ func newSwitchHandler(c *config) (sh *switchHandler) {
 		sh.setPropWirelessEnabled()
 	})
 	nmManager.WwanEnabled.ConnectChanged(func() {
+		// FIXME: when mobile adapter plugin, dbus property
+		// WwanEnabled will be set to false automatically, don't known
+		// why, so we force it to true here
+		if nmManager.WwanEnabled.Get() == false {
+			nmManager.WwanEnabled.Set(true)
+			return
+		}
 		sh.setPropWwanEnabled()
 	})
 

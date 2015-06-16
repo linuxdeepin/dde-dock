@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include "backlight.h"
 
-struct udev* udev = NULL;
 static struct udev_device* cached_dev = NULL;
+struct udev_enumerate* cached_enumerate = NULL;
 
 struct udev_device* filter_by_type(struct udev* udev, struct udev_list_entry* entries, const char* type)
 {
@@ -31,36 +31,38 @@ void set_cached_dev(struct udev_device* dev)
 
 void init_backlight_device()
 {
-    udev = udev_new();
-    struct udev_enumerate* enumerate = udev_enumerate_new(udev);
+    struct udev* udev = udev_new();
+    if (cached_enumerate != NULL) {
+        udev_enumerate_unref(cached_enumerate);
+        cached_enumerate = NULL;
+    }
+    cached_enumerate = udev_enumerate_new(udev);
 
-    udev_enumerate_add_match_subsystem(enumerate, "backlight");
+    udev_enumerate_add_match_subsystem(cached_enumerate, "backlight");
 
-    udev_enumerate_scan_devices(enumerate);
-    struct udev_list_entry* entries = udev_enumerate_get_list_entry(enumerate);
+    udev_enumerate_scan_devices(cached_enumerate);
 
-    struct udev_device* dev = filter_by_type(udev, entries, "firmware");
+    struct udev_list_entry* entries = udev_enumerate_get_list_entry(cached_enumerate);
 
-    if (dev == NULL){
-	dev = filter_by_type(udev, entries, "platform");
-    } else {
-	set_cached_dev(dev);
+    struct udev_device* dev = NULL;
 
-        udev_enumerate_unref(enumerate);
-	return;
+    dev = filter_by_type(udev, entries, "firmware");
+    if (dev != NULL) {
+        set_cached_dev(dev);
+        return;
     }
 
-    if (dev == NULL){
-	dev = filter_by_type(udev, entries, "raw");
-    } else {
-	set_cached_dev(dev);
-
-        udev_enumerate_unref(enumerate);
-	return;
+    dev = filter_by_type(udev, entries, "raw");
+    if (dev != NULL) {
+        set_cached_dev(dev);
+        return;
     }
 
-    set_cached_dev(dev);
-    udev_enumerate_unref(enumerate);
+    dev = filter_by_type(udev, entries, "platform");
+    if (dev != NULL) {
+        set_cached_dev(dev);
+        return;
+    }
 }
 
 double get_backlight()
@@ -91,15 +93,31 @@ void set_backlight(double v)
 	fprintf(stderr, "set_backlight(%lf) failed\n", v);
 	return;
     }
-    const char* str_max  = udev_device_get_sysattr_value(cached_dev, "max_brightness");
-    if (str_max == NULL) {
-	fprintf(stderr, "set_backlight(%lf) failed\n", v);
-	return;
-    }
-    char str_v[1000] = {0};
-    sprintf(str_v, "%d", (int)(v * atoi(str_max)));
-    int r = udev_device_set_sysattr_value(cached_dev, "brightness", str_v);
-    if (r == -1) {
-	fprintf(stderr, "set_backlight(%lf) failed\n", v);
+
+    struct udev* udev = udev_device_get_udev(cached_dev);
+    struct udev_list_entry* entries = udev_enumerate_get_list_entry(cached_enumerate);
+
+    struct udev_list_entry* current;
+    udev_list_entry_foreach(current, entries) {
+	const char* name = udev_list_entry_get_name(current);
+	struct udev_device* dev = udev_device_new_from_syspath(udev, name);
+
+        const char* str_max = udev_device_get_sysattr_value(dev, "max_brightness");
+        if (str_max == NULL) {
+            fprintf(stderr, "get max_brightness failed(driver:%s)\n", name);
+            udev_device_unref(dev);
+            continue;
+        }
+        char str_v[1000] = {0};
+        sprintf(str_v, "%d", (int)(v * atoi(str_max)));
+        int r = udev_device_set_sysattr_value(dev, "brightness", str_v);
+        if (r != 0) {
+            fprintf(stderr, "set_backlight to %lf(%s/%s) %d failed(driver:%s)\n", v, str_v, str_max, r, name);
+            udev_device_unref(dev);
+            continue;
+        }
+
+        fprintf(stdout, "set_backlight to %lf(%s) (driver:%s)\n", v, str_v, name);
+	udev_device_unref(dev);
     }
 }

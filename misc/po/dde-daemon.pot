@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-08 14:49+0800\n"
+"POT-Creation-Date: 2015-03-19 16:52+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,6 +83,22 @@ msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:55 ../../network/_dev_test.go:42
+#: ../../network/_dev_test.go:58 ../../network/state_handler.go:193
+#: ../../network/utils_notify.go:121
+msgid "Connected"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:58 ../../network/_dev_test.go:46
+#: ../../network/_dev_test.go:49 ../../network/_dev_test.go:52
+#: ../../network/_dev_test.go:61 ../../network/_dev_test.go:64
+#: ../../network/state_handler.go:241 ../../network/utils_notify.go:93
+#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
+#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:124
+#: ../../network/utils_notify.go:127 ../../network/utils_notify.go:212
+msgid "Disconnected"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:16
@@ -413,15 +429,15 @@ msgstr ""
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:291
+#: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:292
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:260
+#: ../../dock/runtime_apps.go:261
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:303
+#: ../../dock/runtime_apps.go:304
 msgid "_Dock"
 msgstr ""
 
@@ -678,116 +694,103 @@ msgstr ""
 msgid "System language failed to change, please try later."
 msgstr ""
 
-#: ../../langselector/handle_event.go:42
+#: ../../langselector/handle_event.go:43
 msgid "System language has been changed, please log in again after logged out."
 msgstr ""
 
-#: ../../langselector/locale_ifc.go:55
+#: ../../langselector/locale_ifc.go:52
 msgid "System language is being changed, please wait..."
 msgstr ""
 
-#: ../../langselector/locale_ifc.go:60
+#: ../../langselector/locale_ifc.go:57
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
 msgstr ""
 
-#: ../../mime/default_media.go:73 ../../mime/default_media.go:90
+#: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 msgid "Nothing"
 msgstr ""
 
-#: ../../mime/default_media.go:76 ../../mime/default_media.go:91
+#: ../../mime/default_media.go:90 ../../mime/default_media.go:105
 msgid "Open Folder"
 msgstr ""
 
-#: ../../mime/default_media.go:80
+#: ../../mime/default_media.go:94
 msgid "Run Software"
 msgstr ""
 
-#: ../../network/_dev_test.go:42 ../../network/_dev_test.go:49
-#: ../../network/state_handler.go:188 ../../network/utils_notify.go:103
-msgid "Connected"
-msgstr ""
-
-#: ../../network/_dev_test.go:45 ../../network/_dev_test.go:47
-#: ../../network/_dev_test.go:51 ../../network/_dev_test.go:53
-#: ../../network/state_handler.go:222 ../../network/utils_notify.go:78
-#: ../../network/utils_notify.go:82 ../../network/utils_notify.go:86
-#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:109
-msgid "Disconnected"
-msgstr ""
-
-#: ../../network/manager_active.go:283 ../../network/manager_active.go:288
-#: ../../network/nm_setting_virtual_key.go:141
-#: ../../network/nm_setting_virtual_key.go:148
-#: ../../network/nm_setting_virtual_key.go:178
+#: ../../network/manager_active.go:289 ../../network/manager_active.go:294
+#: ../../network/nm_setting_virtual_key.go:185
+#: ../../network/nm_setting_virtual_key.go:192
+#: ../../network/nm_setting_virtual_key.go:222
 #: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
 msgstr ""
 
-#: ../../network/manager_active.go:290
-#: ../../network/nm_setting_virtual_key.go:142
-#: ../../network/nm_setting_virtual_key.go:149
+#: ../../network/manager_active.go:296
+#: ../../network/nm_setting_virtual_key.go:186
+#: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/manager_active.go:292
-#: ../../network/nm_setting_virtual_key.go:143
-#: ../../network/nm_setting_virtual_key.go:150
+#: ../../network/manager_active.go:298
+#: ../../network/nm_setting_virtual_key.go:187
+#: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
-#: ../../network/manager_active.go:300 ../../network/nm_setting_802_1x.go:86
+#: ../../network/manager_active.go:306 ../../network/nm_setting_802_1x.go:86
 #: ../../network/nm_setting_802_1x.go:167
 #: ../../network/nm_setting_802_1x.go:175
 msgid "TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:302 ../../network/nm_setting_802_1x.go:85
+#: ../../network/manager_active.go:308 ../../network/nm_setting_802_1x.go:85
 #: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
 msgstr ""
 
-#: ../../network/manager_active.go:304 ../../network/nm_setting_802_1x.go:176
+#: ../../network/manager_active.go:310 ../../network/nm_setting_802_1x.go:176
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr ""
 
-#: ../../network/manager_active.go:306 ../../network/nm_setting_802_1x.go:169
+#: ../../network/manager_active.go:312 ../../network/nm_setting_802_1x.go:169
 #: ../../network/nm_setting_802_1x.go:177
 msgid "FAST"
 msgstr ""
 
-#: ../../network/manager_active.go:308 ../../network/nm_setting_802_1x.go:170
+#: ../../network/manager_active.go:314 ../../network/nm_setting_802_1x.go:170
 #: ../../network/nm_setting_802_1x.go:178
 msgid "Tunneled TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:310 ../../network/nm_setting_802_1x.go:171
+#: ../../network/manager_active.go:316 ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_802_1x.go:179
 msgid "Protected EAP"
 msgstr ""
 
-#: ../../network/manager_connection.go:211 ../../network/nm_custom_type.go:178
+#: ../../network/manager_connection.go:257 ../../network/nm_custom_type.go:178
 msgid "Wired Connection"
 msgstr ""
 
-#: ../../network/nm_constant.go:321 ../../network/nm_setting_vpn_l2tp.go:114
+#: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:114
 #: ../../network/nm_setting_vpn_openvpn.go:168
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:142
 msgid "Saved"
 msgstr ""
 
-#: ../../network/nm_constant.go:323 ../../network/nm_setting_vpn_l2tp.go:115
+#: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:115
 #: ../../network/nm_setting_vpn_openvpn.go:169
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:144
 msgid "Always Ask"
 msgstr ""
 
-#: ../../network/nm_constant.go:324 ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:170
 #: ../../network/nm_setting_vpn_openvpn.go:476
 #: ../../network/nm_setting_vpn_pptp.go:106
@@ -906,52 +909,47 @@ msgstr ""
 msgid "Version 1"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:124
-msgid "China Unicom Internet"
-msgstr ""
-
-#: ../../network/nm_setting_gsm.go:125
-msgid "China Unicom MMS"
-msgstr ""
-
-#: ../../network/nm_setting_gsm.go:126
-msgid "China Mobile WAP"
-msgstr ""
-
-#: ../../network/nm_setting_gsm.go:127
-msgid "China Mobile Internet"
-msgstr ""
-
-#: ../../network/nm_setting_gsm.go:128
-msgid "China Mobile MMS"
-msgstr ""
-
-#: ../../network/nm_setting_gsm.go:132
+#: ../../network/nm_setting_gsm.go:182
 msgid "Any"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:133
+#: ../../network/nm_setting_gsm.go:183
 msgid "3G (UMTS/HSPA)"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:134
+#: ../../network/nm_setting_gsm.go:184
 msgid "2G (GPRS/EDGE)"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:135
+#: ../../network/nm_setting_gsm.go:185
 msgid "Prefer 3G (UMTS/HSPA)"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:136
+#: ../../network/nm_setting_gsm.go:186
 msgid "Prefer 2G (GPRS/EDGE)"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:137
+#: ../../network/nm_setting_gsm.go:187
 msgid "Prefer 4G (LTE)"
 msgstr ""
 
-#: ../../network/nm_setting_gsm.go:138
+#: ../../network/nm_setting_gsm.go:188
 msgid "Use Only 4G (LTE)"
+msgstr ""
+
+#: ../../network/nm_setting_gsm.go:211 ../../network/nm_setting_gsm.go:213
+#: ../../network/nm_setting_virtual_key.go:146
+msgid "Custom"
+msgstr ""
+
+#: ../../network/nm_setting_gsm.go:221
+#: ../../network/nm_setting_virtual_key.go:155
+#: ../../network/nm_setting_vpn_openvpn.go:374
+#: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_openvpn.go:425
+#: ../../network/nm_setting_wireless.go:140
+#: ../../network/nm_setting_wireless.go:189
+msgid "Default"
 msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:175
@@ -978,58 +976,58 @@ msgstr ""
 msgid "DHCP"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:116
-msgid "GSM (GPRS, EDGE, UMTS, HSPA)"
+#: ../../network/nm_setting_virtual_key.go:160
+msgid "GSM (GPRS, UMTS)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:117
+#: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:124
+#: ../../network/nm_setting_virtual_key.go:168
 msgid "L2TP"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:125
+#: ../../network/nm_setting_virtual_key.go:169
 msgid "PPTP"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:126
+#: ../../network/nm_setting_virtual_key.go:170
 msgid "OpenConnect"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:127
+#: ../../network/nm_setting_virtual_key.go:171
 msgid "OpenVPN"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:128
+#: ../../network/nm_setting_virtual_key.go:172
 msgid "VPNC"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:144
+#: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:158
-#: ../../network/nm_setting_virtual_key.go:167
+#: ../../network/nm_setting_virtual_key.go:202
+#: ../../network/nm_setting_virtual_key.go:211
 msgid "All Available (default)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:159
-#: ../../network/nm_setting_virtual_key.go:168
+#: ../../network/nm_setting_virtual_key.go:203
+#: ../../network/nm_setting_virtual_key.go:212
 msgid "128-bit (most secure)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:160
-#: ../../network/nm_setting_virtual_key.go:169
+#: ../../network/nm_setting_virtual_key.go:204
+#: ../../network/nm_setting_virtual_key.go:213
 msgid "40-bit (less secure)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:176
+#: ../../network/nm_setting_virtual_key.go:220
 msgid "Secure (default)"
 msgstr ""
 
-#: ../../network/nm_setting_virtual_key.go:177
+#: ../../network/nm_setting_virtual_key.go:221
 msgid "Weak"
 msgstr ""
 
@@ -1057,14 +1055,6 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:256
 #: ../../network/nm_setting_vpn_openvpn.go:432
 msgid "1"
-msgstr ""
-
-#: ../../network/nm_setting_vpn_openvpn.go:374
-#: ../../network/nm_setting_vpn_openvpn.go:394
-#: ../../network/nm_setting_vpn_openvpn.go:425
-#: ../../network/nm_setting_wireless.go:140
-#: ../../network/nm_setting_wireless.go:189
-msgid "Default"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:375
@@ -1508,84 +1498,92 @@ msgstr ""
 msgid "Network cable is unplugged."
 msgstr ""
 
-#: ../../network/state_handler.go:94
-msgid "Activate VPN connection failed, unknown reason."
+#: ../../network/state_handler.go:92
+msgid "Please make sure SIM card has been inserted with mobile network signal."
 msgstr ""
 
-#: ../../network/state_handler.go:95
-msgid "Activate VPN connection failed."
+#: ../../network/state_handler.go:93
+msgid "Please make sure a correct plan was selected without arrearage."
 msgstr ""
 
 #: ../../network/state_handler.go:96
-msgid "The VPN connection changed state due to disconnection from users."
+msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
 #: ../../network/state_handler.go:97
-msgid "The VPN connection changed state due to disconnection from devices."
+msgid "Activate VPN connection failed."
 msgstr ""
 
 #: ../../network/state_handler.go:98
-msgid "VPN service stopped."
+msgid "The VPN connection changed state due to disconnection from users."
 msgstr ""
 
 #: ../../network/state_handler.go:99
-msgid "The IP config of VPN connection was invalid."
+msgid "The VPN connection changed state due to disconnection from devices."
 msgstr ""
 
 #: ../../network/state_handler.go:100
-msgid "The connection attempt to VPN service timed out."
+msgid "VPN service stopped."
 msgstr ""
 
 #: ../../network/state_handler.go:101
-msgid "The VPN service start timed out."
+msgid "The IP config of VPN connection was invalid."
 msgstr ""
 
 #: ../../network/state_handler.go:102
-msgid "The VPN service failed to start."
+msgid "The connection attempt to VPN service timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:103
-msgid "Necessary password for the VPN connection was not provided."
+msgid "The VPN service start timed out."
 msgstr ""
 
 #: ../../network/state_handler.go:104
-msgid "Authentication to VPN server failed."
+msgid "The VPN service failed to start."
 msgstr ""
 
 #: ../../network/state_handler.go:105
+msgid "Necessary password for the VPN connection was not provided."
+msgstr ""
+
+#: ../../network/state_handler.go:106
+msgid "Authentication to VPN server failed."
+msgstr ""
+
+#: ../../network/state_handler.go:107
 msgid "The connection was deleted from settings."
 msgstr ""
 
-#: ../../network/utils_nm.go:170
+#: ../../network/utils_nm.go:169
 msgid "Unknown"
 msgstr ""
 
-#: ../../network/utils_notify.go:78
-msgid "Airplan mode enabled."
-msgstr ""
-
-#: ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:93
 msgid "You are now offline."
 msgstr ""
 
-#: ../../network/utils_notify.go:86
+#: ../../network/utils_notify.go:98
+msgid "Airplane mode enabled."
+msgstr ""
+
+#: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
 msgstr ""
 
-#: ../../network/utils_notify.go:90 ../../network/utils_notify.go:95
-#: ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:110 ../../network/utils_notify.go:114
+#: ../../network/utils_notify.go:117
 msgid "Network"
 msgstr ""
 
-#: ../../network/utils_notify.go:90
+#: ../../network/utils_notify.go:110
 msgid "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr ""
 
-#: ../../network/utils_notify.go:95
+#: ../../network/utils_notify.go:114
 msgid "System proxy is set successfully."
 msgstr ""
 
-#: ../../network/utils_notify.go:99
+#: ../../network/utils_notify.go:117
 msgid "System proxy has been cancelled."
 msgstr ""
 

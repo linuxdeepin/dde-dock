@@ -23,122 +23,134 @@ package xsettings
 
 import (
 	"dbus/com/deepin/sessionmanager"
-	"fmt"
 	"sync"
 )
 
 const (
-	NetStringThemeName               = "Net/ThemeName"
-	NetStringIconTheme               = "Net/IconThemeName"
-	NetStringFallbackIconTheme       = "Net/FallbackIconTheme"
-	NetBoolCursorBlink               = "Net/CursorBlink"
-	NetIntCursorBlinkTime            = "Net/CursorBlinkTime"
-	NetIntCursorBlinkTimeout         = "Net/CursorBlinkTimeout"
-	NetIntDoubleClick                = "Net/DoubleClickTime"
-	NetIntDragThreshold              = "Net/DndDragThreshold"
-	NetStringSoundTheme              = "Net/SoundThemeName"
-	NetBoolEnableEventSounds         = "Net/EnableEventSounds"
-	NetBoolEnableInputFeedbackSounds = "Net/EnableInputFeedbackSounds"
+	//string
+	NetThemeName         = "Net/ThemeName"
+	NetIconTheme         = "Net/IconThemeName"
+	NetFallbackIconTheme = "Net/FallbackIconTheme"
+	NetSoundTheme        = "Net/SoundThemeName"
 
-	GtkStringThemeName         = "Gtk/GtkThemeName"
-	GtkStringCursorTheme       = "Gtk/CursorThemeName"
-	GtkIntCursorThemeSize      = "Gtk/CursorThemeSize"
-	GtkStringFontName          = "Gtk/FontName"
-	GtkStringKeyTheme          = "Gtk/KeyThemeName"
-	GtkStringToolbarStyle      = "Gtk/ToolbarStyle"
-	GtkStringToolbarIconSize   = "Gtk/ToolbarIconSize"
-	GtkBoolCanChangeAccels     = "Gtk/CanChangeAccels"
-	GtkStringColorPalette      = "Gtk/ColorPalette"
-	GtkIntTimeoutInitial       = "Gtk/TimeoutInitial"
-	GtkIntTimeoutRepeat        = "Gtk/TimeoutRepeat"
-	GtkStringColorScheme       = "Gtk/ColorScheme"
-	GtkStringIMPreeditStyle    = "Gtk/IMPreeditStyle"
-	GtkStringIMStatusStyle     = "Gtk/IMStatusStyle"
-	GtkStringIMModule          = "Gtk/IMModule"
-	GtkBoolMenuImages          = "Gtk/MenuImages"
-	GtkBoolButtonImages        = "Gtk/ButtonImages"
-	GtkStringMenuBarAccel      = "Gtk/MenuBarAccel"
-	GtkBoolEnableAnimations    = "Gtk/EnableAnimations"
-	GtkBoolShowInputMethodMenu = "Gtk/ShowInputMethodMenu"
-	GtkBoolShowUnicodeMenu     = "Gtk/ShowUnicodeMenu"
-	GtkBoolAutoMnemonics       = "Gtk/AutoMnemonics"
-	GtkIntRecentFilesMaxAge    = "Gtk/RecentFilesMaxAge"
-	GtkBoolEnableRecentFiles   = "Gtk/RecentFilesEnabled"
+	GtkThemeName       = "Gtk/GtkThemeName"
+	GtkCursorTheme     = "Gtk/CursorThemeName"
+	GtkFontName        = "Gtk/FontName"
+	GtkKeyTheme        = "Gtk/KeyThemeName"
+	GtkColorPalette    = "Gtk/ColorPalette"
+	GtkToolbarStyle    = "Gtk/ToolbarStyle"
+	GtkToolbarIconSize = "Gtk/ToolbarIconSize"
+	GtkColorScheme     = "Gtk/ColorScheme"
+	GtkIMPreeditStyle  = "Gtk/IMPreeditStyle"
+	GtkIMStatusStyle   = "Gtk/IMStatusStyle"
+	GtkIMModule        = "Gtk/IMModule"
+	GtkMenuBarAccel    = "Gtk/MenuBarAccel"
 
-	XftBoolAntialias   = "xft/Antialias"
-	XftBoolHinting     = "xft/HintStyle"
-	XftStringHintStyle = "xft/HintStyle"
-	XftStringRgba      = "xft/RGBA"
+	XftHintStyle = "xft/HintStyle"
+	XftRgba      = "xft/RGBA"
+
+	//integer
+	NetCursorBlinkTime    = "Net/CursorBlinkTime"
+	NetCursorBlinkTimeout = "Net/CursorBlinkTimeout"
+	NetDoubleClick        = "Net/DoubleClickTime"
+	NetDragThreshold      = "Net/DndDragThreshold"
+
+	GtkCursorThemeSize   = "Gtk/CursorThemeSize"
+	GtkTimeoutInitial    = "Gtk/TimeoutInitial"
+	GtkTimeoutRepeat     = "Gtk/TimeoutRepeat"
+	GtkRecentFilesMaxAge = "Gtk/RecentFilesMaxAge"
+
+	//bool
+	NetCursorBlink               = "Net/CursorBlink"
+	NetEnableEventSounds         = "Net/EnableEventSounds"
+	NetEnableInputFeedbackSounds = "Net/EnableInputFeedbackSounds"
+
+	GtkCanChangeAccels     = "Gtk/CanChangeAccels"
+	GtkMenuImages          = "Gtk/MenuImages"
+	GtkButtonImages        = "Gtk/ButtonImages"
+	GtkEnableAnimations    = "Gtk/EnableAnimations"
+	GtkShowInputMethodMenu = "Gtk/ShowInputMethodMenu"
+	GtkShowUnicodeMenu     = "Gtk/ShowUnicodeMenu"
+	GtkAutoMnemonics       = "Gtk/AutoMnemonics"
+	GtkEnableRecentFiles   = "Gtk/RecentFilesEnabled"
+
+	XftAntialias = "xft/Antialias"
+	XftHinting   = "xft/HintStyle"
 )
 
-var (
-	errUninitialized = fmt.Errorf("XSettings uninitialized")
-)
+type XSProxy struct {
+	xs     *sessionmanager.XSettings
+	cnt    uint32
+	locker sync.Mutex
+}
 
-var _xsettings *sessionmanager.XSettings
+var _proxy *XSProxy
 
-var refXSettings, unrefXSetting = func() (func(), func()) {
-	var cnt int = 0
-	var locker sync.Mutex
-
-	return func() {
-			locker.Lock()
-			cnt++
-			locker.Unlock()
-		}, func() {
-			locker.Lock()
-			cnt--
-			if cnt == 0 {
-				sessionmanager.DestroyXSettings(_xsettings)
-				_xsettings = nil
-			}
-			locker.Unlock()
-		}
-}()
-
-// Must be called before using other methods
-func InitXSettings() error {
-	if _xsettings != nil {
-		return nil
+func NewXSProxy() (*XSProxy, error) {
+	if _proxy != nil {
+		_proxy.refer()
+		return _proxy, nil
 	}
 
-	xsettings, err := sessionmanager.NewXSettings(
+	xs, err := sessionmanager.NewXSettings(
 		"com.deepin.SessionManager",
 		"/com/deepin/XSettings",
 	)
 	if err != nil {
-		return err
-	}
-	_xsettings = xsettings
-	refXSettings()
-
-	return nil
-}
-
-func Unref() {
-	unrefXSetting()
-}
-
-func SetString(name string, value string) error {
-	if _xsettings == nil {
-		return errUninitialized
+		return nil, err
 	}
 
-	return _xsettings.SetString(name, value)
+	_proxy = &XSProxy{xs: xs}
+	_proxy.refer()
+
+	return _proxy, nil
 }
 
-func SetInteger(name string, value uint32) error {
-	if _xsettings == nil {
-		return errUninitialized
-	}
-
-	return _xsettings.SetInteger(name, value)
+func (proxy *XSProxy) Free() {
+	proxy.unref()
 }
 
-func SetColor(name string, value []byte) error {
-	if _xsettings == nil {
-		return errUninitialized
-	}
+func (proxy *XSProxy) SetString(name, value string) error {
+	return proxy.xs.SetString(name, value)
+}
 
-	return _xsettings.SetColor(name, value)
+func (proxy *XSProxy) SetInteger(name string, value uint32) error {
+	return proxy.xs.SetInteger(name, value)
+}
+
+func (proxy *XSProxy) SetColor(name string, value []byte) error {
+	return proxy.xs.SetColor(name, value)
+}
+
+func (proxy *XSProxy) GetString(name string) (string, error) {
+	v, _, err := proxy.xs.GetString(name)
+	return v, err
+}
+
+func (proxy *XSProxy) GetInteger(name string) (uint32, error) {
+	v, _, err := proxy.xs.GetInteger(name)
+	return v, err
+}
+
+func (proxy *XSProxy) GetColor(name string) ([]byte, error) {
+	v, _, err := proxy.xs.GetColor(name)
+	return v, err
+}
+
+func (proxy *XSProxy) refer() {
+	proxy.locker.Lock()
+	defer proxy.locker.Unlock()
+
+	proxy.cnt++
+}
+
+func (proxy *XSProxy) unref() {
+	proxy.locker.Lock()
+	defer proxy.locker.Unlock()
+
+	proxy.cnt--
+	if proxy.cnt == 0 {
+		sessionmanager.DestroyXSettings(proxy.xs)
+		proxy = nil
+	}
 }

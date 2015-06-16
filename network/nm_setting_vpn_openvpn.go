@@ -271,7 +271,6 @@ func checkSettingVpnOpenvpnValues(data connectionData) (errs sectionErrors) {
 		ensureSettingVpnOpenvpnKeyCertNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCaNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyKeyNoEmpty(data, errs)
-		ensureSettingVpnOpenvpnKeyCertpassNoEmpty(data, errs)
 	case NM_OPENVPN_CONTYPE_PASSWORD:
 		ensureSettingVpnOpenvpnKeyUsernameNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCaNoEmpty(data, errs)
@@ -283,9 +282,6 @@ func checkSettingVpnOpenvpnValues(data connectionData) (errs sectionErrors) {
 		ensureSettingVpnOpenvpnKeyCertNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyCaNoEmpty(data, errs)
 		ensureSettingVpnOpenvpnKeyKeyNoEmpty(data, errs)
-		if isVpnOpenvpnNeedShowCertpass(data) {
-			ensureSettingVpnOpenvpnKeyCertpassNoEmpty(data, errs)
-		}
 		if isVpnOpenvpnNeedShowPassword(data) {
 			ensureSettingVpnOpenvpnKeyPasswordNoEmpty(data, errs)
 		}

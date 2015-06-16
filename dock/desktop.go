@@ -20,9 +20,9 @@ type DesktopAppInfo struct {
 	gioSupported bool
 }
 
-func NewDesktopAppInfo(appId string) *DesktopAppInfo {
+func NewDesktopAppInfo(desktopID string) *DesktopAppInfo {
 	dai := &DesktopAppInfo{nil, nil, false}
-	dai.DesktopAppInfo = gio.NewDesktopAppInfo(appId)
+	dai.DesktopAppInfo = gio.NewDesktopAppInfo(desktopID)
 	if dai.DesktopAppInfo == nil {
 		return nil
 	}

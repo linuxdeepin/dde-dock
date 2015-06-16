@@ -26,9 +26,7 @@ func NewSetting(core SettingCoreInterface) (*Setting, error) {
 		return nil, errors.New("get failed")
 	}
 	s := &Setting{
-		core:                core,
-		categoryDisplayMode: CategoryDisplayMode(core.GetEnum(CategoryDisplayModeKey)),
-		sortMethod:          SortMethod(core.GetEnum(SortMethodkey)),
+		core: core,
 	}
 
 	s.listenSettingChange(CategoryDisplayModeKey, func(setting *gio.Settings, key string) {
@@ -51,6 +49,12 @@ func NewSetting(core SettingCoreInterface) (*Setting, error) {
 			dbus.Emit(s, "SortMethodChanged", _newValue)
 		}
 	})
+
+	// at least one read operation must be called after signal connected, otherwise,
+	// the signal connection won't work from glib 2.43.
+	// NB: https://github.com/GNOME/glib/commit/8ff5668a458344da22d30491e3ce726d861b3619
+	s.categoryDisplayMode = CategoryDisplayMode(core.GetEnum(CategoryDisplayModeKey))
+	s.sortMethod = SortMethod(core.GetEnum(SortMethodkey))
 
 	return s, nil
 }
@@ -76,7 +80,7 @@ func (s *Setting) GetCategoryDisplayMode() int64 {
 
 func (s *Setting) SetCategoryDisplayMode(newMode int64) {
 	if CategoryDisplayMode(newMode) != s.categoryDisplayMode {
-		s.core.SetEnum(CategoryDisplayModeKey, int(newMode))
+		s.core.SetEnum(CategoryDisplayModeKey, int32(newMode))
 	}
 }
 
@@ -89,7 +93,7 @@ func (s *Setting) GetSortMethod() int64 {
 
 func (s *Setting) SetSortMethod(newMethod int64) {
 	if SortMethod(newMethod) != s.sortMethod {
-		s.core.SetEnum(SortMethodkey, int(newMethod))
+		s.core.SetEnum(SortMethodkey, int32(newMethod))
 	}
 }
 

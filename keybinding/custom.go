@@ -169,7 +169,7 @@ func (obj *Manager) createCustomShortcut(id int32, name, action, shortcut string
 		return false
 	}
 
-	gs.SetInt(CUSTOM_KEY_ID, int(id))
+	gs.SetInt(CUSTOM_KEY_ID, id)
 	gs.SetString(CUSTOM_KEY_NAME, name)
 	gs.SetString(CUSTOM_KEY_ACTION, action)
 	gs.SetString(CUSTOM_KEY_SHORTCUT, shortcut)

@@ -21,31 +21,54 @@
 
 package network
 
-import nm "dbus/org/freedesktop/networkmanager"
-import "pkg.linuxdeepin.com/lib/dbus"
+import (
+	mm "dbus/org/freedesktop/modemmanager1"
+	nm "dbus/org/freedesktop/networkmanager"
+	"fmt"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"time"
+)
 
 type device struct {
 	nmDev         *nm.Device
 	nmDevWireless *nm.DeviceWireless
+	mmDevModem    *mm.Modem
 	nmDevType     uint32
 	id            string
+	udi           string
 
 	Path      dbus.ObjectPath
 	State     uint32
 	HwAddress string
 	Managed   bool
 	Vendor    string
-	UsbDevice bool            // not works for modem
+
+	// unique connection uuid for this device, works for wired and
+	// modem device
+	UniqueUuid string
+
+	UsbDevice bool            // not works for mobile device(modem)
 	ActiveAp  dbus.ObjectPath // used for wireless device
+
+	// used for mobile device
+	MobileNetworkType   string
+	MobileSignalQuality uint32
 }
 
 func (m *Manager) initDeviceManage() {
+	m.devicesLock.Lock()
 	m.devices = make(map[string][]*device)
+	m.devicesLock.Unlock()
+
+	m.accessPointsLock.Lock()
 	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
+	m.accessPointsLock.Unlock()
+
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		m.addDevice(path)
 	})
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
+		notifyDeviceRemoved(path)
 		m.removeDevice(path)
 	})
 	for _, path := range nmGetDevices() {
@@ -53,14 +76,11 @@ func (m *Manager) initDeviceManage() {
 	}
 }
 
-func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
+func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-
-	m.config.addDeviceConfig(devPath)
-	m.switchHandler.initDeviceState(devPath)
 
 	dev = &device{
 		nmDev:     nmDev,
@@ -72,31 +92,16 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 	dev.Vendor = nmGeneralGetDeviceVendor(devPath)
 	dev.UsbDevice = nmGeneralIsUsbDevice(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
-
-	// connect signal
-	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
-		m.devicesLocker.Lock()
-		defer m.devicesLocker.Unlock()
-
-		if reason == NM_DEVICE_STATE_REASON_REMOVED {
-			return
-		}
-		dev.State = newState
-		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
-		m.setPropDevices()
-
-		m.config.updateDeviceConfig(dev.Path)
-		m.config.syncDeviceState(dev.Path)
-	})
-	dev.State = dev.nmDev.State.Get()
+	dev.udi = dev.nmDev.Udi.Get()
+	dev.UniqueUuid = nmGeneralGetDeviceUniqueUuid(devPath)
 
 	// dispatch for different device types
 	switch dev.nmDevType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
 			dev.HwAddress = nmDevWired.HwAddress.Get()
-			m.ensureWiredConnectionExists(dev.Path, true)
 		}
+		m.ensureWiredConnectionExists(dev.Path, true)
 	case NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
@@ -104,9 +109,11 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 
 			// connect property, about wireless active access point
 			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
-				m.devicesLocker.Lock()
-				defer m.devicesLocker.Unlock()
-
+				if !m.isDeviceExists(devPath) {
+					return
+				}
+				m.devicesLock.Lock()
+				defer m.devicesLock.Unlock()
 				dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
 				m.setPropDevices()
 			})
@@ -123,24 +130,90 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device) {
 				m.addAccessPoint(dev.Path, apPath)
 			}
 		}
+	case NM_DEVICE_TYPE_MODEM:
+		if len(dev.id) == 0 {
+			// some times, modem device will not be identified
+			// successful for battery issue, so check and ignore it
+			// here
+			err = fmt.Errorf("modem device is not properly identified, please re-plugin it")
+			return
+		}
+		m.ensureMobileConnectionExists(dev.Path, false)
+		go func() {
+			// disable autoconnect property for mobile devices
+			// notice: sleep is necessary seconds before setting dbus values
+			// FIXME: seems network-manager will restore Autoconnect's value some times
+			time.Sleep(3 * time.Second)
+			nmSetDeviceAutoconnect(dev.Path, false)
+		}()
+		if mmDevModem, err := mmNewModem(dbus.ObjectPath(dev.udi)); err == nil {
+			dev.mmDevModem = mmDevModem
+
+			// connect properties
+			dev.mmDevModem.AccessTechnologies.ConnectChanged(func() {
+				if !m.isDeviceExists(devPath) {
+					return
+				}
+				m.devicesLock.Lock()
+				defer m.devicesLock.Unlock()
+				dev.MobileNetworkType = mmDoGetModemMobileNetworkType(mmDevModem.AccessTechnologies.Get())
+				m.setPropDevices()
+			})
+			dev.MobileNetworkType = mmDoGetModemMobileNetworkType(mmDevModem.AccessTechnologies.Get())
+
+			dev.mmDevModem.SignalQuality.ConnectChanged(func() {
+				if !m.isDeviceExists(devPath) {
+					return
+				}
+				m.devicesLock.Lock()
+				defer m.devicesLock.Unlock()
+				dev.MobileSignalQuality = mmDoGetModemDeviceSignalQuality(mmDevModem.SignalQuality.Get())
+				m.setPropDevices()
+			})
+			dev.MobileSignalQuality = mmDoGetModemDeviceSignalQuality(mmDevModem.SignalQuality.Get())
+		}
 	}
+
+	// connect signal
+	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		logger.Infof("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
+		if !m.isDeviceExists(devPath) {
+			return
+		}
+
+		m.devicesLock.Lock()
+		defer m.devicesLock.Unlock()
+		if reason == NM_DEVICE_STATE_REASON_REMOVED {
+			return
+		}
+		dev.State = newState
+		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
+		m.setPropDevices()
+
+		m.config.updateDeviceConfig(dev.Path)
+		m.config.syncDeviceState(dev.Path)
+	})
+	dev.State = dev.nmDev.State.Get()
+
+	m.config.addDeviceConfig(devPath)
+	m.switchHandler.initDeviceState(devPath)
 
 	return
 }
 func (m *Manager) destroyDevice(dev *device) {
 	// destroy object to reset all property connects
 	if dev.nmDevWireless != nil {
-		// nmDevWireless is optional, so check if is nil before
-		// destroy it
 		nmDestroyDeviceWireless(dev.nmDevWireless)
+	}
+	if dev.mmDevModem != nil {
+		mmDestroyModem(dev.mmDevModem)
 	}
 	nmDestroyDevice(dev.nmDev)
 }
 
 func (m *Manager) clearDevices() {
-	m.devicesLocker.Lock()
-	defer m.devicesLocker.Unlock()
-
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
 	for _, devs := range m.devices {
 		for _, dev := range devs {
 			m.destroyDevice(dev)
@@ -149,61 +222,75 @@ func (m *Manager) clearDevices() {
 	m.devices = make(map[string][]*device)
 	m.setPropDevices()
 }
+
 func (m *Manager) addDevice(devPath dbus.ObjectPath) {
-	m.devicesLocker.Lock()
-	defer m.devicesLocker.Unlock()
+	if m.isDeviceExists(devPath) {
+		logger.Warning("device already exists", devPath)
+		return
+	}
 
-	dev := m.newDevice(devPath)
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
+	dev, err := m.newDevice(devPath)
+	if err != nil {
+		return
+	}
+	logger.Infof("add device %#v", dev)
 	devType := getCustomDeviceType(dev.nmDevType)
-	m.devices[devType] = m.doAddDevice(m.devices[devType], dev)
+	m.devices[devType] = append(m.devices[devType], dev)
 	m.setPropDevices()
 }
-func (m *Manager) doAddDevice(devs []*device, dev *device) []*device {
-	if m.isDeviceExists(devs, dev.Path) {
-		// maybe device repeat added
-		return devs
-	}
-	devs = append(devs, dev)
-	return devs
-}
 
-func (m *Manager) removeDevice(path dbus.ObjectPath) {
-	m.devicesLocker.Lock()
-	defer m.devicesLocker.Unlock()
-
-	for devType, devs := range m.devices {
-		if m.isDeviceExists(devs, path) {
-			m.devices[devType] = m.doRemoveDevice(devs, path)
-			break
-		}
+func (m *Manager) removeDevice(devPath dbus.ObjectPath) {
+	if !m.isDeviceExists(devPath) {
+		logger.Warning("device not found", devPath)
+		return
 	}
+	devType, i := m.getDeviceIndex(devPath)
+
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
+	m.devices[devType] = m.doRemoveDevice(m.devices[devType], i)
 	m.setPropDevices()
 }
-func (m *Manager) doRemoveDevice(devs []*device, path dbus.ObjectPath) []*device {
-	i := m.getDeviceIndex(devs, path)
-	if i < 0 {
-		return devs
-	}
-
+func (m *Manager) doRemoveDevice(devs []*device, i int) []*device {
+	logger.Infof("remove device %#v", devs[i])
 	m.destroyDevice(devs[i])
 	copy(devs[i:], devs[i+1:])
 	devs[len(devs)-1] = nil
 	devs = devs[:len(devs)-1]
 	return devs
 }
-func (m *Manager) isDeviceExists(devs []*device, path dbus.ObjectPath) bool {
-	if m.getDeviceIndex(devs, path) >= 0 {
+
+func (m *Manager) getDevice(devPath dbus.ObjectPath) (dev *device) {
+	devType, i := m.getDeviceIndex(devPath)
+	if i < 0 {
+		logger.Warning("device not found", devPath)
+		return
+	}
+
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
+	return m.devices[devType][i]
+}
+func (m *Manager) isDeviceExists(devPath dbus.ObjectPath) bool {
+	_, i := m.getDeviceIndex(devPath)
+	if i >= 0 {
 		return true
 	}
 	return false
 }
-func (m *Manager) getDeviceIndex(devs []*device, path dbus.ObjectPath) int {
-	for i, d := range devs {
-		if d.Path == path {
-			return i
+func (m *Manager) getDeviceIndex(devPath dbus.ObjectPath) (devType string, index int) {
+	m.devicesLock.Lock()
+	defer m.devicesLock.Unlock()
+	for t, devs := range m.devices {
+		for i, dev := range devs {
+			if dev.Path == devPath {
+				return t, i
+			}
 		}
 	}
-	return -1
+	return "", -1
 }
 
 func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err error) {

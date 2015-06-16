@@ -38,8 +38,9 @@ type config struct {
 	LastWiredEnabled    bool
 	LastVpnEnabled      bool
 
-	Devices        map[string]*deviceConfig // config for each device
-	VpnConnections map[string]*vpnConfig    // config for each vpn connection
+	Devices           map[string]*deviceConfig // config for each device
+	VpnConnections    map[string]*vpnConfig    // config for each vpn connection
+	MobileConnections map[string]*mobileConfig // config for each mobile connection
 }
 
 type deviceConfig struct {
@@ -51,9 +52,16 @@ type deviceConfig struct {
 type vpnConfig struct {
 	AutoConnect bool
 
-	// don't need to save activated state
+	// don't need to save activated state, so the variable names are
+	// lowercase
 	activated     bool
 	lastActivated bool
+}
+
+type mobileConfig struct {
+	Country  string
+	Provider string
+	Plan     string
 }
 
 func newConfig() (c *config) {
@@ -62,6 +70,7 @@ func newConfig() (c *config) {
 	logger.Info("config file:", c.core.GetConfigFile())
 	c.Devices = make(map[string]*deviceConfig)
 	c.VpnConnections = make(map[string]*vpnConfig)
+	c.MobileConnections = make(map[string]*mobileConfig)
 	c.WiredEnabled = true
 	c.VpnEnabled = false
 	c.LastWirelessEnabled = true
@@ -94,6 +103,11 @@ func newVpnConfig() (v *vpnConfig) {
 	return
 }
 
+func newMobileConfig() (m *mobileConfig) {
+	m = &mobileConfig{}
+	return
+}
+
 func (c *config) clearSpareConfig() {
 	// remove spare device and vpn config
 	devIds := nmGetDeviceIdentifiers()
@@ -106,6 +120,12 @@ func (c *config) clearSpareConfig() {
 	for uuid, _ := range c.VpnConnections {
 		if !isStringInArray(uuid, vpnUuids) {
 			c.removeVpnConfig(uuid)
+		}
+	}
+	mobileUuids := nmGetConnectionUuidsByType(NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME)
+	for uuid, _ := range c.MobileConnections {
+		if !isStringInArray(uuid, mobileUuids) {
+			c.removeMobileConfig(uuid)
 		}
 	}
 }
@@ -178,6 +198,7 @@ func (c *config) setVpnEnabled(enabled bool) {
 	}
 }
 
+// remove all configurations that related to target connection
 func (c *config) removeConnection(uuid string) {
 	for _, devConfig := range c.Devices {
 		if devConfig.LastConnectionUuid == uuid {
@@ -320,7 +341,7 @@ func (c *config) restoreDeviceState(devPath dbus.ObjectPath) {
 	}
 }
 
-// vpnConfig related functions
+// vpnConfig
 func (c *config) isVpnConfigExists(uuid string) (ok bool) {
 	_, ok = c.VpnConnections[uuid]
 	return
@@ -373,4 +394,88 @@ func (c *config) setVpnConnectionAutoConnect(uuid string, autoConnect bool) {
 		vpnConfig.AutoConnect = autoConnect
 		c.save()
 	}
+}
+
+// mobileConfig
+func (c *config) ensureMobileConfigExists(uuid string) {
+	if !c.isMobileConfigExists(uuid) {
+		c.addMobileConfig(uuid)
+	}
+}
+func (c *config) isMobileConfigExists(uuid string) (ok bool) {
+	_, ok = c.MobileConnections[uuid]
+	return
+}
+func (c *config) getMobileConfig(uuid string) (m *mobileConfig, err error) {
+	if !c.isMobileConfigExists(uuid) {
+		err = fmt.Errorf("mobile config for %s not exists", uuid)
+		logger.Warning(err)
+		return
+	}
+	m, _ = c.MobileConnections[uuid]
+	return
+}
+func (c *config) addMobileConfig(uuid string) {
+	if !c.isMobileConfigExists(uuid) {
+		mobileConfig := newMobileConfig()
+		c.MobileConnections[uuid] = mobileConfig
+		c.save()
+	}
+}
+func (c *config) removeMobileConfig(uuid string) {
+	if c.isMobileConfigExists(uuid) {
+		delete(c.MobileConnections, uuid)
+		c.save()
+	}
+}
+func (c *config) setMobileConnectionCountry(uuid, code string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	if mobileConfig.Country != code {
+		mobileConfig.Country = code
+		c.save()
+	}
+}
+func (c *config) getMobileConnectionCountry(uuid string) (code string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	return mobileConfig.Country
+}
+func (c *config) setMobileConnectionProvider(uuid, name string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	if mobileConfig.Provider != name {
+		mobileConfig.Provider = name
+		c.save()
+	}
+}
+func (c *config) getMobileConnectionProvider(uuid string) (name string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	return mobileConfig.Provider
+}
+func (c *config) setMobileConnectionPlan(uuid, value string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	if mobileConfig.Plan != value {
+		mobileConfig.Plan = value
+		c.save()
+	}
+}
+func (c *config) getMobileConnectionPlan(uuid string) (value string) {
+	mobileConfig, err := c.getMobileConfig(uuid)
+	if err != nil {
+		return
+	}
+	return mobileConfig.Plan
 }

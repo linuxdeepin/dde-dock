@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/xrandr/" id="com.deepin.wrap.gnome.settings-daemon.plugins.xrandr" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="s" name="default-configuration-file">
+      <default>'/etc/gnome-settings-daemon/xrandr/monitors.xml'</default>
+      <summary>File for default configuration for RandR</summary>
+      <description>The XRandR plugin will look for a default configuration in the file specified by this key. This is similar to the ~/.config/monitors.xml that normally gets stored in users' home directories. If a user does not have such a file, or has one that does not match the user's setup of monitors, then the file specified by this key will be used instead.</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key name="default-monitors-setup" enum="com.deepin.wrap.gnome.settings-daemon.GsdXrandrBootBehaviour">
+      <default>'follow-lid'</default>
+      <summary>Whether to turn off specific monitors after boot</summary>
+      <description>'clone' will display the same thing on all monitors, 'dock' will switch off the internal monitor, 'do-nothing' will use the default Xorg behaviour (extend the desktop in recent versions). The default, 'follow-lid', will choose between 'do-nothing' and 'dock' depending on whether the lid is (respectively) open or closed.</description>
+    </key>
+  </schema>
+</schemalist>

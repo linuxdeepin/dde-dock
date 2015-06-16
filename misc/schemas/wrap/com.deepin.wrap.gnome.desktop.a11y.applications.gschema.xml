@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/a11y/applications/" id="com.deepin.wrap.gnome.desktop.a11y.applications">
+    <key type="b" name="screen-keyboard-enabled">
+      <default>false</default>
+      <summary>On-screen keyboard</summary>
+      <description>Whether the on-screen keyboard is turned on.</description>
+    </key>
+    <key type="b" name="screen-magnifier-enabled">
+      <default>false</default>
+      <summary>Screen magnifier</summary>
+      <description>Whether the screen magnifier is turned on.</description>
+    </key>
+    <key type="b" name="screen-reader-enabled">
+      <default>false</default>
+      <summary>Screen reader</summary>
+      <description>Whether the screen reader is turned on.</description>
+    </key>
+  </schema>
+</schemalist>

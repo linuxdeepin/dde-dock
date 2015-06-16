@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/color/" id="com.deepin.wrap.gnome.settings-daemon.plugins.color" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key type="u" name="recalibrate-display-threshold">
+      <default>0</default>
+      <summary>The duration a display profile is valid</summary>
+      <description>This is the number of days after which the display color profile is considered invalid.</description>
+    </key>
+    <key type="u" name="recalibrate-printer-threshold">
+      <default>0</default>
+      <summary>The duration a printer profile is valid</summary>
+      <description>This is the number of days after which the printer color profile is considered invalid.</description>
+    </key>
+  </schema>
+</schemalist>

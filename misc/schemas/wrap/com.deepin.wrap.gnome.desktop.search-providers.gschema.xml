@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/desktop/search-providers/" id="com.deepin.wrap.gnome.desktop.search-providers">
+
+    <key type="b" name="disable-external">
+      <default>false</default>
+      <summary>Disable all external search providers</summary>
+      <description>Set to true to disable all external search provider programs, whether or not they are independently disabled or enabled. External search providers are installed by applications in $XDG_DATA_DIR/gnome-shell/search-providers.</description>
+    </key>
+
+    <key type="as" name="disabled">
+      <default>[]</default>
+      <summary>List of desktop file IDs for which the associated default-enabled search provider should be disabled</summary>
+      <description>Results for applications contained in this list will not be displayed when searching.</description>
+    </key>
+
+    <key type="as" name="enabled">
+      <default>[]</default>
+      <summary>List of desktop file IDs for which the associated default-disabled search provider should be enabled</summary>
+      <description>Results for applications contained in this list will be displayed when searching.</description>
+    </key>
+
+    <key type="as" name="sort-order">
+      <default>['gnome-contacts.desktop', 'gnome-documents.desktop', 'nautilus.desktop']</default>
+      <summary>List of desktop file IDs for search providers sort order</summary>
+      <description>Results for applications contained in this list will be displayed in the specified order. Results for applications not specified in this list will be displayed last, sorted alphabetically.</description>
+    </key>
+
+  </schema>
+</schemalist>

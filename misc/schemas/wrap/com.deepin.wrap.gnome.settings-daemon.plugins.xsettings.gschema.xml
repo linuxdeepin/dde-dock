@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/wrap/gnome/settings-daemon/plugins/xsettings/" id="com.deepin.wrap.gnome.settings-daemon.plugins.xsettings" gettext-domain="gnome-settings-daemon">
+    <key type="b" name="active">
+      <default>true</default>
+      <summary>Activation of this plugin</summary>
+      <description>Whether this plugin would be activated by gnome-settings-daemon or not</description>
+    </key>
+    <key name="antialiasing" enum="com.deepin.wrap.gnome.settings-daemon.GsdFontAntialiasingMode">
+      <default>'grayscale'</default>
+      <summary>Antialiasing</summary>
+      <description>The type of antialiasing to use when rendering fonts. Possible values are: "none" for no antialiasing, "grayscale" for standard grayscale antialiasing, and "rgba" for subpixel antialiasing (LCD screens only).</description>
+    </key>
+    <key name="hinting" enum="com.deepin.wrap.gnome.settings-daemon.GsdFontHinting">
+      <default>'medium'</default>
+      <summary>Hinting</summary>
+      <description>The type of hinting to use when rendering fonts. Possible values are: "none" for no hinting, "slight" for basic, "medium" for moderate, and "full" for maximum hinting (may cause distortion of letter forms).</description>
+    </key>
+    <key type="i" name="priority">
+      <default>0</default>
+      <summary>Priority to use for this plugin</summary>
+      <description>Priority to use for this plugin in gnome-settings-daemon startup queue</description>
+    </key>
+    <key name="rgba-order" enum="com.deepin.wrap.gnome.settings-daemon.GsdFontRgbaOrder">
+      <default>'rgb'</default>
+      <summary>RGBA order</summary>
+      <description>The order of subpixel elements on an LCD screen; only used when antialiasing is set to "rgba". Possible values are: "rgb" for red on left (most common), "bgr" for blue on left, "vrgb" for red on top, "vbgr" for red on bottom.</description>
+    </key>
+    <key type="as" name="disabled-gtk-modules">
+      <default>[]</default>
+      <summary>List of explicitly disabled GTK+ modules</summary>
+      <description>A list of strings representing the GTK+ modules that will not be loaded, even if enabled by default in their configuration.</description>
+    </key>
+    <key type="as" name="enabled-gtk-modules">
+      <default>[]</default>
+      <summary>List of explicitly enabled GTK+ modules</summary>
+      <description>A list of strings representing the GTK+ modules that will be loaded, usually in addition to conditional and forcibly disabled ones.</description>
+    </key>
+    <key type="a{sv}" name="overrides">
+      <default>{}</default>
+      <summary>A dictionary of XSETTINGS to override</summary>
+      <description>This dictionary maps XSETTINGS names to overrides values. The values must be either strings, signed int32s or (in the case of colors), 4-tuples of uint16 (red, green, blue, alpha; 65535 is fully opaque).</description>
+    </key>
+  </schema>
+</schemalist>

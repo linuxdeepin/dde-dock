@@ -22,359 +22,50 @@
 package accounts
 
 import (
-	"path"
 	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
-	"strings"
 )
 
-func (obj *User) GetDBusInfo() dbus.DBusInfo {
+const (
+	userDBusPath = "/com/deepin/daemon/Accounts/User"
+	userDBusIFC  = "com.deepin.daemon.Accounts.User"
+)
+
+func (u *User) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       ACCOUNT_DEST,
-		ObjectPath: obj.objectPath,
-		Interface:  USER_MANAGER_IFC,
+		Dest:       dbusSender,
+		ObjectPath: userDBusPath + u.Uid,
+		Interface:  userDBusIFC,
 	}
 }
 
-func (obj *User) setPropUserName(name string) {
-	if len(name) < 1 {
+func (u *User) setPropBool(handler *bool, prop string, value bool) {
+	if *handler == value {
 		return
 	}
 
-	if obj.UserName != name {
-		obj.UserName = name
-		dbus.NotifyChange(obj, "UserName")
-	}
+	*handler = value
+	dbus.NotifyChange(u, prop)
 }
 
-func (obj *User) setPropHomeDir(homeDir string) {
-	if len(homeDir) < 1 {
+func (u *User) setPropInt32(handler *int32, prop string, value int32) {
+	if *handler == value {
 		return
 	}
 
-	if obj.HomeDir != homeDir {
-		obj.HomeDir = homeDir
-		dbus.NotifyChange(obj, "HomeDir")
-	}
+	*handler = value
+	dbus.NotifyChange(u, prop)
 }
 
-func (obj *User) setPropShell(shell string) {
-	if len(shell) < 1 {
+func (u *User) setPropString(handler *string, prop string, value string) {
+	if *handler == value {
 		return
 	}
 
-	if obj.Shell != shell {
-		obj.Shell = shell
-		dbus.NotifyChange(obj, "Shell")
-	}
+	*handler = value
+	dbus.NotifyChange(u, prop)
 }
 
-func (obj *User) setPropIconFile(icon string) {
-	if len(icon) < 1 {
-		return
-	}
-
-	if obj.IconFile != icon {
-		obj.IconFile = icon
-		dbus.NotifyChange(obj, "IconFile")
-	}
-}
-
-func (obj *User) setPropBackgroundFile(bg string) {
-	if len(bg) < 1 {
-		return
-	}
-
-	if obj.BackgroundFile != bg {
-		obj.BackgroundFile = bg
-		dbus.NotifyChange(obj, "BackgroundFile")
-	}
-}
-
-func (obj *User) setPropAutomaticLogin(enable bool) {
-	//if obj.AutomaticLogin != enable {
-	obj.AutomaticLogin = enable
-	dbus.NotifyChange(obj, "AutomaticLogin")
-	//}
-}
-
-func (obj *User) setPropAccountType(acctype int32) {
-	//if obj.AccountType != acctype {
-	obj.AccountType = acctype
-	dbus.NotifyChange(obj, "AccountType")
-	//}
-}
-
-func (obj *User) setPropLocked(locked bool) {
-	//if obj.Locked != locked {
-	obj.Locked = locked
-	dbus.NotifyChange(obj, "Locked")
-	//}
-}
-
-func (obj *User) setPropHistoryIcons(iconList []string) {
-	if !isStrListEqual(obj.HistoryIcons, iconList) {
-		obj.HistoryIcons = iconList
-		dbus.NotifyChange(obj, "HistoryIcons")
-	}
-}
-
-func (obj *User) setPropIconList(iconList []string) {
-	if !isStrListEqual(obj.IconList, iconList) {
-		obj.IconList = iconList
-		dbus.NotifyChange(obj, "IconList")
-	}
-}
-
-func (obj *User) getPropIconFile() string {
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	icon := ""
-	wFlag := false
-	if !dutils.IsFileExist(file) {
-		icon = getRandUserIcon()
-		wFlag = true
-	} else {
-		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
-			"Icon", ""); !ok {
-			icon = getRandUserIcon()
-			wFlag = true
-		} else {
-			icon = v.(string)
-		}
-	}
-
-	if wFlag {
-		dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
-	}
-
-	return icon
-}
-
-func (obj *User) getPropBackgroundFile() string {
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	bg := ""
-	wFlag := false
-	if !dutils.IsFileExist(file) {
-		bg = USER_DEFAULT_BG
-		wFlag = true
-	} else {
-		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
-			"Background", ""); !ok {
-			bg = USER_DEFAULT_BG
-			wFlag = true
-		} else {
-			bg = v.(string)
-		}
-	}
-
-	if wFlag {
-		dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
-	}
-
-	return bg
-}
-
-func (obj *User) getPropAutomaticLogin() bool {
-	return isAutoLogin(obj.UserName)
-}
-
-func (obj *User) getPropAccountType() int32 {
-	list := getAdministratorList()
-	if strIsInList(obj.UserName, list) {
-		return ACCOUNT_TYPE_ADMINISTRATOR
-	}
-
-	return ACCOUNT_TYPE_STANDARD
-}
-
-func (obj *User) getPropHistoryIcons() []string {
-	list := []string{}
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-
-	if !dutils.IsFileExist(file) {
-		list = append(list, obj.IconFile)
-	} else {
-		if v, ok := dutils.ReadKeyFromKeyFile(file, "User",
-			"HistoryIcons", []string{}); !ok {
-			list = append(list, obj.IconFile)
-		} else {
-			list = append(list, v.([]string)...)
-		}
-	}
-
-	tmp := []string{}
-	for _, v := range list {
-		if v == obj.IconFile {
-			continue
-		}
-		tmp = append(tmp, v)
-	}
-	list = tmp
-
-	return list
-}
-
-func (obj *User) getPropIconList() []string {
-	list := []string{}
-
-	sysList := getIconList(ICON_SYSTEM_DIR)
-	list = append(list, sysList...)
-	localList := getIconList(ICON_LOCAL_DIR)
-	for _, l := range localList {
-		if strings.Contains(l, obj.UserName+"-") {
-			list = append(list, l)
-		}
-	}
-
-	return list
-}
-
-func (obj *User) addHistoryIcon(iconPath string) {
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	if !dutils.IsFileExist(file) || !dutils.IsFileExist(iconPath) {
-		return
-	}
-
-	list, _ := dutils.ReadKeyFromKeyFile(file, "User",
-		"HistoryIcons", []string{})
-
-	ret := []string{}
-	ret = append(ret, iconPath)
-	cnt := 1
-	if list != nil {
-		strs := list.([]string)
-		as := deleteStrFromList(iconPath, strs)
-		for _, l := range as {
-			if cnt >= 10 {
-				break
-			}
-
-			if ok := dutils.IsFileExist(l); !ok {
-				continue
-			}
-			ret = append(ret, l)
-			cnt++
-		}
-	}
-	dutils.WriteKeyToKeyFile(file, "User", "HistoryIcons", ret)
-
-	return
-}
-
-func (obj *User) deleteHistoryIcon(iconPath string) {
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	if !dutils.IsFileExist(file) {
-		return
-	}
-
-	list, ok := dutils.ReadKeyFromKeyFile(file, "User",
-		"HistoryIcons", []string{})
-	if !ok || list == nil {
-		return
-	}
-
-	tmp := deleteStrFromList(iconPath, list.([]string))
-	dutils.WriteKeyToKeyFile(file, "User", "HistoryIcons", tmp)
-
-	return
-}
-
-func (obj *User) setUserName(name string) {
-	if len(name) < 1 {
-		return
-	}
-
-	args := []string{}
-	args = append(args, "-l")
-	args = append(args, name)
-	args = append(args, obj.UserName)
-	execCommand(CMD_USERMOD, args)
-}
-
-func (obj *User) setHomeDir(homeDir string) {
-	if len(homeDir) < 1 {
-		return
-	}
-
-	args := []string{}
-	args = append(args, "-m")
-	args = append(args, "-d")
-	args = append(args, homeDir)
-	args = append(args, obj.UserName)
-	execCommand(CMD_USERMOD, args)
-}
-
-func (obj *User) setShell(shell string) {
-	if len(shell) < 1 {
-		return
-	}
-
-	args := []string{}
-	args = append(args, "-s")
-	args = append(args, shell)
-	args = append(args, obj.UserName)
-	execCommand(CMD_USERMOD, args)
-}
-
-func (obj *User) setIconFile(icon string) {
-	if len(icon) < 1 {
-		return
-	}
-
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	dutils.WriteKeyToKeyFile(file, "User", "Icon", icon)
-	obj.addHistoryIcon(icon)
-}
-
-func (obj *User) setBackgroundFile(bg string) {
-	if len(bg) < 1 {
-		return
-	}
-
-	file := path.Join(USER_CONFIG_DIR, obj.UserName)
-	dutils.WriteKeyToKeyFile(file, "User", "Background", bg)
-}
-
-func (obj *User) setAutomaticLogin(auto bool) {
-	if auto {
-		setAutomaticLogin(obj.UserName)
-	} else {
-		setAutomaticLogin("")
-	}
-}
-
-func (obj *User) setAccountType(acctype int32) {
-	t := obj.getPropAccountType()
-	switch acctype {
-	case ACCOUNT_TYPE_ADMINISTRATOR:
-		if t != ACCOUNT_TYPE_ADMINISTRATOR {
-			ok := addUserToAdmList(obj.UserName)
-			if ok {
-				obj.setPropAccountType(acctype)
-			}
-		}
-	case ACCOUNT_TYPE_STANDARD:
-		if t == ACCOUNT_TYPE_ADMINISTRATOR {
-			ok := deleteUserFromAdmList(obj.UserName)
-			if ok {
-				obj.setPropAccountType(acctype)
-			}
-		}
-	}
-}
-
-func (obj *User) setLocked(locked bool) {
-	args := []string{}
-
-	if locked {
-		args = append(args, "-L")
-		args = append(args, obj.UserName)
-	} else {
-		args = append(args, "-U")
-		args = append(args, obj.UserName)
-	}
-	ok := execCommand(CMD_USERMOD, args)
-	if ok {
-		obj.setPropLocked(locked)
-	}
+func (u *User) setPropStrv(handler *[]string, prop string, value []string) {
+	*handler = value
+	dbus.NotifyChange(u, prop)
 }

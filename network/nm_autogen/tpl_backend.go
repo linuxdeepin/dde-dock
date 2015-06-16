@@ -198,7 +198,7 @@ func generalIsKeyInSettingSection(section, key string) bool {
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section){{range .}}
+		logger.Error("invalid section name", section){{range .}}
 	case {{.Name}}:
 		return isKeyIn{{.Name | ToSectionFuncBaseName}}(key){{end}}
 	}
@@ -212,7 +212,7 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section){{range .}}
+		logger.Error("invalid section name", section){{range .}}
 	case {{.Name}}:
 		t = get{{.Name | ToSectionFuncBaseName}}KeyType(key){{end}}
 	}
@@ -263,7 +263,7 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section){{range.}}
+		logger.Error("invalid section name", section){{range.}}
 	case {{.Name}}:
 		valueJSON = generalGet{{.Name | ToSectionFuncBaseName}}KeyJSON(data, key){{end}}
 	}
@@ -277,7 +277,7 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 	}
 	switch section {
 	default:
-		logger.Warning("invalid section name", section){{range .}}
+		logger.Error("invalid section name", section){{range .}}
 	case {{.Name}}:
 		err = generalSet{{.Name | ToSectionFuncBaseName}}KeyJSON(data, key, valueJSON){{end}}
 	}
@@ -287,7 +287,7 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 func generalGetSettingDefaultValue(section, key string) (value interface{}) {
 	switch section {
 	default:
-		logger.Warning("invalid section name", section){{range .}}
+		logger.Error("invalid section name", section){{range .}}
 	case {{.Name}}:
 		value = get{{.Name | ToSectionFuncBaseName}}DefaultValue(key){{end}}
 	}

@@ -43,7 +43,7 @@ func isAppInWhiteList(pid uint32) bool {
 		return false
 	}
 
-	whiteList := zoneSettings.GetStrv("white-list")
+	whiteList := zoneSettings().GetStrv("white-list")
 	for _, v := range whiteList {
 		if strings.Contains(string(contents), v) {
 			return true
@@ -73,7 +73,7 @@ func isAppInBlackList() bool {
 		return false
 	}
 
-	blackList := zoneSettings.GetStrv("black-list")
+	blackList := zoneSettings().GetStrv("black-list")
 	for _, target := range blackList {
 		if strings.Contains(string(contents), target) {
 			return true
