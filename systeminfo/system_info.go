@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/exec"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/glib-2.0"
 	"pkg.linuxdeepin.com/lib/log"
@@ -265,13 +266,27 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 }
 
 var _sysInfo *SystemInfo
+var logger = log.NewLogger("dde-daemon/systeminfo")
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("systeminfo", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if _sysInfo != nil {
-		return
+		return nil
 	}
 
-	logger := log.NewLogger("dde-daemon/systeminfo")
 	logger.BeginTracing()
 
 	_sysInfo = NewSystemInfo(logger)
@@ -280,15 +295,18 @@ func Start() {
 		logger.Error(err)
 		_sysInfo = nil
 		logger.EndTracing()
-		return
+		return err
 	}
+	return nil
 }
-func Stop() {
+
+func (d *Daemon) Stop() error {
 	if _sysInfo == nil {
-		return
+		return nil
 	}
 
 	_sysInfo.logger.EndTracing()
 	dbus.UnInstallObject(_sysInfo)
 	_sysInfo = nil
+	return nil
 }

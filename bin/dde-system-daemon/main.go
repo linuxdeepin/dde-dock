@@ -6,7 +6,7 @@ import "pkg.linuxdeepin.com/lib"
 import "pkg.linuxdeepin.com/lib/dbus"
 import "os"
 import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
-import "pkg.linuxdeepin.com/dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon/loader"
 import . "pkg.linuxdeepin.com/lib/gettext"
 
 var logger = log.NewLogger("dde-daemon/dde-system-daemon")

@@ -27,6 +27,7 @@ import (
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
 	"os/exec"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
 	"strings"
@@ -340,7 +341,21 @@ func finalizeDBusIFC() {
 	}
 }
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(log *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("mpris", daemon, log)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	finalizeDBusIFC()
 
 	logger.BeginTracing()
@@ -348,13 +363,15 @@ func Start() {
 	if err != nil {
 		logger.Error(err)
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	listenAudioSignal()
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	finalizeDBusIFC()
 	logger.EndTracing()
+	return nil
 }

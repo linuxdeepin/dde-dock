@@ -29,6 +29,8 @@ import (
 	"time"
 )
 
+var logger = log.NewLogger("dde-daemon/mounts")
+
 const (
 	mediaHandlerSchema = "org.gnome.desktop.media-handling"
 
@@ -61,7 +63,7 @@ type Manager struct {
 func NewManager() *Manager {
 	var m = Manager{}
 
-	m.logger = log.NewLogger("dde-daemon/mounts")
+	m.logger = logger
 	m.monitor = gio.VolumeMonitorGet()
 	m.setting, _ = dutils.CheckAndNewGSettings(mediaHandlerSchema)
 	m.diskCache = make(map[string]*diskObjectInfo)

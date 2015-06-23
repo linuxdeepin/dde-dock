@@ -22,6 +22,7 @@
 package accounts
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -31,9 +32,23 @@ var (
 	logger = log.NewLogger("dde-daemon/accounts")
 )
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon() *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("accounts", daemon, logger)
+	return daemon
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (*Daemon) Start() error {
 	if _m != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -45,19 +60,22 @@ func Start() {
 			_m.watcher.EndWatch()
 			_m.watcher = nil
 		}
-		return
+		return err
 	}
 
 	_m.installUsers()
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _m == nil {
-		return
+		return nil
 	}
 
 	_m.destroy()
 	_m = nil
+
+	return nil
 }
 
 func triggerSigErr(pid uint32, action, reason string) {

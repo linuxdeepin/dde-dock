@@ -3,6 +3,7 @@ package mime
 import (
 	"fmt"
 	"os"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 	dutils "pkg.linuxdeepin.com/lib/utils"
@@ -127,17 +128,32 @@ func finalize() {
 	logger.EndTracing()
 }
 
-func Stop() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon() *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("mime", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Stop() error {
 	if _dapp == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }
 
-func Start() {
+func (d *Daemon) Start() error {
 	if _dapp != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -146,13 +162,14 @@ func Start() {
 		logger.Error(err)
 		logger.EndTracing()
 		endDefaultApps()
-		return
+		return err
 	}
 
 	err = startMediaMount()
 	if err != nil {
 		logger.Error(err)
 		finalize()
-		return
+		return err
 	}
+	return nil
 }

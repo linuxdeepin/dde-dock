@@ -22,6 +22,7 @@
 package timedate
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -32,9 +33,23 @@ var (
 	logger = log.NewLogger("dde-daemon/timedate")
 )
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("timedate", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if _manager != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -44,7 +59,7 @@ func Start() {
 	if err != nil {
 		logger.Error("Create Manager failed:", err)
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_manager)
@@ -53,17 +68,19 @@ func Start() {
 		_manager.destroy()
 		_manager = nil
 		logger.EndTracing()
-		return
+		return err
 	}
 	_manager.handlePropChanged()
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if _manager == nil {
-		return
+		return nil
 	}
 
 	logger.EndTracing()
 	_manager.destroy()
 	_manager = nil
+	return nil
 }

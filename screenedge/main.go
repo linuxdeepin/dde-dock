@@ -25,6 +25,7 @@ import (
 	libarea "dbus/com/deepin/api/xmousearea"
 	libdsp "dbus/com/deepin/daemon/display"
 	"dbus/com/deepin/dde/launcher"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
@@ -152,18 +153,33 @@ func finalize() {
 	_m = nil
 }
 
-func Stop() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("screenedge", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Stop() error {
 	if _m == nil {
-		return
+		return nil
 	}
 
 	finalize()
 	logger.EndTracing()
+	return nil
 }
 
-func Start() {
+func (d *Daemon) Start() error {
 	if _m != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -172,7 +188,7 @@ func Start() {
 	if err != nil {
 		logger.Error("Create dbus interface failed:", err)
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	_m = newManager()
@@ -180,11 +196,12 @@ func Start() {
 	if err != nil {
 		logger.Error("Install Zone Session Failed: ", err)
 		finalize()
-		return
+		return err
 	}
 
 	_m.SetTopLeft(_m.TopLeftAction())
 	_m.SetBottomLeft(_m.BottomLeftAction())
 	_m.SetTopRight(_m.TopRightAction())
 	_m.SetBottomRight(_m.BottomRightAction())
+	return nil
 }

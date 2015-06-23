@@ -22,52 +22,44 @@
 package main
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon"
+	_ "pkg.linuxdeepin.com/dde-daemon/appearance"
+	_ "pkg.linuxdeepin.com/dde-daemon/audio"
+	_ "pkg.linuxdeepin.com/dde-daemon/bluetooth"
+	_ "pkg.linuxdeepin.com/dde-daemon/clipboard"
+	_ "pkg.linuxdeepin.com/dde-daemon/dock"
+	_ "pkg.linuxdeepin.com/dde-daemon/dsc"
+	_ "pkg.linuxdeepin.com/dde-daemon/inputdevices"
+	_ "pkg.linuxdeepin.com/dde-daemon/keybinding"
+	_ "pkg.linuxdeepin.com/dde-daemon/launcher"
+	_ "pkg.linuxdeepin.com/dde-daemon/mime"
+	_ "pkg.linuxdeepin.com/dde-daemon/mounts"
+	_ "pkg.linuxdeepin.com/dde-daemon/mpris"
+	_ "pkg.linuxdeepin.com/dde-daemon/network"
+	_ "pkg.linuxdeepin.com/dde-daemon/power"
+	_ "pkg.linuxdeepin.com/dde-daemon/screenedge"
+	_ "pkg.linuxdeepin.com/dde-daemon/screensaver"
+	_ "pkg.linuxdeepin.com/dde-daemon/sessionwatcher"
+	_ "pkg.linuxdeepin.com/dde-daemon/systeminfo"
+	_ "pkg.linuxdeepin.com/dde-daemon/timedate"
+	_ "pkg.linuxdeepin.com/dde-daemon/xsettings"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 )
 
 var (
-	// modules should be loaded in following order
-	orderedModules = []string{
-		"inputdevices",
-		"screensaver",
-		"power",
-		"audio",
-		"appearance",
-		"clipboard",
-		"timedate",
-		"mime",
-		"screenedge",
-		"bluetooth",
-		"network",
-		"mounts",
-		"dock",
-		"launcher",
-		"keybinding",
-		"dsc",
-		"mpris",
-		"systeminfo",
-		"sessionwatcher",
-	}
 	daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
 )
 
-func initModules() {
-	for _, name := range orderedModules {
-		loader.Enable(name, daemonSettings.GetBoolean(name))
-	}
-}
-
-func listenDaemonSettings() {
-	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
-		// gsettings key names must keep consistent with module names
-		enable := daemonSettings.GetBoolean(name)
-		loader.Enable(name, enable)
-		if enable {
-			loader.Start(name)
-		} else {
-			loader.Stop(name)
-		}
-	})
-	daemonSettings.GetBoolean("mounts")
-}
+// TODO:
+// func listenDaemonSettings() {
+// 	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
+// 		// gsettings key names must keep consistent with module names
+// 		enable := daemonSettings.GetBoolean(name)
+// 		loader.Enable(name, enable)
+// 		if enable {
+// 			loader.Start(name)
+// 		} else {
+// 			loader.Stop(name)
+// 		}
+// 	})
+// 	daemonSettings.GetBoolean("mounts")
+// }

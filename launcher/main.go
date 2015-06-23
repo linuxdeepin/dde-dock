@@ -3,61 +3,48 @@ package launcher
 import (
 	"database/sql"
 	storeApi "dbus/com/deepin/store/api"
-	"errors"
-	"sync"
-	// . "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
+	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
 	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
-	"pkg.linuxdeepin.com/lib/dbus"
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
 	. "pkg.linuxdeepin.com/lib/gettext"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
+	. "pkg.linuxdeepin.com/lib/initializer"
 	"pkg.linuxdeepin.com/lib/log"
+	"sync"
 )
 
-var logger = log.NewLogger("dde-daemon/launcher")
-var launcher *Launcher = nil
+type Daemon struct {
+	*ModuleBase
+	launcher *Launcher
+}
 
-func Stop() {
-	if launcher == nil {
-		return
+func NewLauncherDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = NewModuleBase("launcher", daemon, logger)
+	return daemon
+}
+
+//TODO
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Stop() error {
+	if d.launcher == nil {
+		return nil
 	}
 
-	launcher.destroy()
-	launcher = nil
+	d.launcher.destroy()
+	d.launcher = nil
 
 	logger.EndTracing()
+	return nil
 }
 
-func startFailed(err error) {
-	logger.Error(err)
-	Stop()
-}
-
-func Start() {
-	if launcher != nil {
-		return
-	}
-
-	var err error
-
-	logger.BeginTracing()
-
-	InitI18n()
-
-	// DesktopAppInfo.ShouldShow does not know deepin.
-	gio.DesktopAppInfoSetDesktopEnv("Deepin")
-
-	soft, err := NewSoftwareCenter()
-	if err != nil {
-		startFailed(err)
-		return
-	}
-
-	im := NewItemManager(soft)
-	cm := NewCategoryManager()
-
+func loadItemsInfo(im *ItemManager, cm *CategoryManager) {
 	timeInfo, _ := im.GetAllTimeInstalled()
 
 	appChan := make(chan *gio.AppInfo)
@@ -104,45 +91,59 @@ func Start() {
 	if err == nil {
 		db.Close()
 	}
+}
 
-	launcher = NewLauncher()
-	launcher.setItemManager(im)
-	launcher.setCategoryManager(cm)
-
-	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
-	if err == nil {
-		launcher.setStoreApi(store)
+func (d *Daemon) Start() error {
+	if d.launcher != nil {
+		return nil
 	}
 
-	names := []string{}
-	for _, item := range im.GetAllItems() {
-		names = append(names, item.Name())
-	}
-	pinyinObj, err := NewPinYinSearchAdapter(names)
-	launcher.setPinYinObject(pinyinObj)
+	logger.BeginTracing()
 
-	launcher.listenItemChanged()
+	InitI18n()
 
-	err = dbus.InstallOnSession(launcher)
+	// DesktopAppInfo.ShouldShow does not know deepin.
+	gio.DesktopAppInfoSetDesktopEnv("Deepin")
+
+	err := NewInitializer().Init(func(interface{}) (interface{}, error) {
+		return NewSoftwareCenter()
+	}).InitOnSessionBus(func(soft interface{}) (interface{}, error) {
+		d.launcher = NewLauncher()
+
+		im := NewItemManager(soft.(SoftwareCenterInterface))
+		cm := NewCategoryManager()
+
+		d.launcher.setItemManager(im)
+		d.launcher.setCategoryManager(cm)
+
+		loadItemsInfo(im, cm)
+
+		store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+		if err == nil {
+			d.launcher.setStoreApi(store)
+		}
+
+		names := []string{}
+		for _, item := range im.GetAllItems() {
+			names = append(names, item.Name())
+		}
+
+		pinyinObj, err := NewPinYinSearchAdapter(names)
+		d.launcher.setPinYinObject(pinyinObj)
+
+		d.launcher.listenItemChanged()
+
+		return d.launcher, nil
+	}).InitOnSessionBus(func(interface{}) (interface{}, error) {
+		coreSetting := gio.NewSettings("com.deepin.dde.launcher")
+		setting, err := NewSetting(coreSetting)
+		d.launcher.setSetting(setting)
+		return setting, err
+	}).GetError()
+
 	if err != nil {
-		startFailed(err)
-		return
+		d.Stop()
 	}
 
-	coreSetting := gio.NewSettings("com.deepin.dde.launcher")
-	if coreSetting == nil {
-		startFailed(errors.New("get schema failed"))
-		return
-	}
-	setting, err := NewSetting(coreSetting)
-	if err != nil {
-		startFailed(err)
-		return
-	}
-	err = dbus.InstallOnSession(setting)
-	if err != nil {
-		startFailed(err)
-		return
-	}
-	launcher.setSetting(setting)
+	return err
 }

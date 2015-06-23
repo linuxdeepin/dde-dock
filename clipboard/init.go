@@ -26,21 +26,41 @@ package clipboard
 // #include "gsd-clipboard-manager.h"
 import "C"
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import . "pkg.linuxdeepin.com/dde-daemon/loader"
+import "pkg.linuxdeepin.com/lib/log"
+
+var logger = log.NewLogger("dde-daemon/clipboard")
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "clipboard",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	Register(NewClipboardDaemon(logger))
+	//loader.Register(&loader.Module{
+	//Name:   "clipboard",
+	//Start:  Start,
+	//Stop:   Stop,
+	//Enable: true,
+	//})
 }
 
-func Start() {
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewClipboardDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("clipboard", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (*Daemon) Start() error {
 	C.start_clip_manager()
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	C.stop_clip_manager()
+	return nil
 }

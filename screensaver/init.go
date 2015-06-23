@@ -1,12 +1,7 @@
 package screensaver
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon/loader"
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "screensaver",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }

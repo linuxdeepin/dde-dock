@@ -5,6 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/screensaver"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 	"sync"
@@ -141,9 +142,23 @@ func NewScreenSaver() *ScreenSaver {
 
 var _ssaver *ScreenSaver
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("screensaver", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if _ssaver != nil {
-		return
+		return nil
 	}
 
 	_ssaver = NewScreenSaver()
@@ -152,16 +167,19 @@ func Start() {
 	if err != nil {
 		_ssaver.destroy()
 		_ssaver = nil
-		return
+		return err
 	}
+	return nil
 }
-func Stop() {
+
+func (d *Daemon) Stop() error {
 	if _ssaver == nil {
-		return
+		return nil
 	}
 
 	_ssaver.destroy()
 	_ssaver = nil
+	return nil
 }
 
 func (ss *ScreenSaver) loop() {

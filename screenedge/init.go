@@ -1,12 +1,7 @@
 package screenedge
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon/loader"
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "screenedge",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }

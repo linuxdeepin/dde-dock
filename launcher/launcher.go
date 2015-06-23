@@ -67,7 +67,7 @@ type Launcher struct {
 }
 
 func NewLauncher() *Launcher {
-	launcher = &Launcher{
+	launcher := &Launcher{
 		cancelSearchingChan: make(chan struct{}),
 	}
 	return launcher
@@ -510,7 +510,7 @@ func (self *Launcher) GetAllNewInstalledApps() []ItemId {
 func (self *Launcher) destroy() {
 	if self.setting != nil {
 		self.setting.destroy()
-		launcher.setting = nil
+		self.setting = nil
 	}
 	if self.store != nil {
 		storeApi.DestroyDStoreDesktop(self.store)

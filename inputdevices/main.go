@@ -22,6 +22,8 @@
 package inputdevices
 
 import (
+	"fmt"
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -29,6 +31,20 @@ import (
 const (
 	dbusSender = "com.deepin.daemon.InputDevices"
 )
+
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewInputdevicesDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("inputdevices", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
 
 var _m *Manager
 
@@ -39,9 +55,9 @@ func finalize() {
 	_m = nil
 }
 
-func Start() {
+func (*Daemon) Start() error {
 	if _m != nil {
-		return
+		return nil
 	}
 
 	var logger = log.NewLogger("dde-daemon/inputdevices")
@@ -50,7 +66,7 @@ func Start() {
 	if !initDeviceChangedWatcher() {
 		logger.Error("Init device changed wacher failed")
 		logger.EndTracing()
-		return
+		return fmt.Errorf("Init device changed wacher failed")
 	}
 
 	_m := NewManager(logger)
@@ -58,42 +74,44 @@ func Start() {
 	if err != nil {
 		logger.Error("Install Manager DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_m.mouse)
 	if err != nil {
 		logger.Error("Install Mouse DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_m.touchpad)
 	if err != nil {
 		logger.Error("Install Touchpad DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_m.kbd)
 	if err != nil {
 		logger.Error("Install Keyboard DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_m.wacom)
 	if err != nil {
 		logger.Error("Install Wacom DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _m == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }

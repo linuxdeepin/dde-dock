@@ -22,18 +22,30 @@
 package bluetooth
 
 import (
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-var (
-	logger    = log.NewLogger("dde-daemon/bluetooth")
-	bluetooth *Bluetooth
-)
+type Daemon struct {
+	*ModuleBase
+}
 
-func Start() {
+func NewBluetoothDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("bluetooth", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+var bluetooth *Bluetooth
+
+func (*Daemon) Start() error {
 	if bluetooth != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -44,19 +56,21 @@ func Start() {
 		// don't panic or fatal here
 		logger.Error("register dbus interface failed: ", err)
 		bluetooth = nil
-		return
+		return err
 	}
 
 	// initialize bluetooth after dbus interface installed
 	bluetooth.initBluetooth()
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if bluetooth == nil {
-		return
+		return nil
 	}
 
 	DestroyBluetooth(bluetooth)
 	bluetooth = nil
 	logger.EndTracing()
+	return nil
 }

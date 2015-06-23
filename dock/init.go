@@ -3,17 +3,12 @@ package dock
 import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"pkg.linuxdeepin.com/dde-daemon"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"time"
 )
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "dock",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }
 
 var (

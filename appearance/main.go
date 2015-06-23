@@ -22,13 +22,24 @@
 package appearance
 
 import (
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-var (
-	logger = log.NewLogger("dde-daemon/appearance")
-)
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewAppearanceDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("appearance", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
 
 var _manager *Manager
 
@@ -38,30 +49,27 @@ func finalize() {
 	_manager = nil
 }
 
-func Start() {
+func (*Daemon) Start() error {
 	if _manager != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
 	_manager = NewManager()
-	if _manager == nil {
-		logger.Error("New Manager Failed")
-		logger.EndTracing()
-		return
-	}
 	err := dbus.InstallOnSession(_manager)
 	if err != nil {
 		logger.Error(err)
 		finalize()
-		return
+		return err
 	}
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _manager == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }

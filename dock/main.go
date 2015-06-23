@@ -6,6 +6,7 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"os"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 	"time"
@@ -24,7 +25,17 @@ var (
 	mouseArea           *XMouseAreaProxyer     = nil
 )
 
-func Stop() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("dock", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) Stop() error {
 	if dockProperty != nil {
 		dockProperty.destroy()
 		dockProperty = nil
@@ -77,11 +88,12 @@ func Stop() {
 	}
 
 	logger.EndTracing()
+	return nil
 }
 
-func startFailed(args ...interface{}) {
+func (d *Daemon) startFailed(args ...interface{}) {
 	logger.Error(args...)
-	Stop()
+	d.Stop()
 }
 
 func initAtom() {
@@ -99,9 +111,9 @@ func initAtom() {
 	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 }
 
-func Start() {
+func (d *Daemon) Start() error {
 	if dockProperty != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -113,22 +125,22 @@ func Start() {
 	}
 
 	if !initDisplay() {
-		Stop()
-		return
+		d.Stop()
+		return nil
 	}
 
 	var err error
 
 	XU, err = xgbutil.NewConn()
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	TrayXU, err = xgbutil.NewConn()
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	initAtom()
@@ -136,15 +148,15 @@ func Start() {
 	dockProperty = NewDockProperty()
 	err = dbus.InstallOnSession(dockProperty)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	entryProxyerManager = NewEntryProxyerManager()
 	err = dbus.InstallOnSession(entryProxyerManager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	entryProxyerManager.watchEntries()
@@ -152,18 +164,18 @@ func Start() {
 	dockedAppManager = NewDockedAppManager()
 	err = dbus.InstallOnSession(dockedAppManager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	setting = NewSetting()
 	if setting == nil {
-		startFailed("get setting failed")
+		d.startFailed("get setting failed")
 	}
 	err = dbus.InstallOnSession(setting)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	dockProperty.updateDockHeight(DisplayModeType(setting.GetDisplayMode()))
@@ -172,24 +184,24 @@ func Start() {
 		NewHideStateManager(HideModeType(setting.GetHideMode()))
 	err = dbus.InstallOnSession(hideModemanager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 	hideModemanager.UpdateState()
 
 	clientManager := NewClientManager()
 	err = dbus.InstallOnSession(clientManager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 	go clientManager.listenRootWindow()
 
 	region = NewRegion()
 	err = dbus.InstallOnSession(region)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	areaImp, err = xmousearea.NewXMouseArea(
@@ -199,14 +211,14 @@ func Start() {
 	mouseArea, err = NewXMouseAreaProxyer(areaImp, err)
 
 	if err != nil {
-		startFailed("register xmouse area failed:", err)
-		return
+		d.startFailed("register xmouse area failed:", err)
+		return err
 	}
 
 	err = dbus.InstallOnSession(mouseArea)
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	dbus.Emit(mouseArea, "InvalidId")
@@ -232,4 +244,13 @@ func Start() {
 	})
 
 	initialize()
+	return nil
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Name() string {
+	return "dock"
 }

@@ -22,17 +22,18 @@
 package keybinding
 
 import (
+	"fmt"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
-	logger = log.NewLogger("dde-daemon/keybinding")
-	X      *xgbutil.XUtil
+	X *xgbutil.XUtil
 
 	grabKeyBindsMap = make(map[KeycodeInfo]string)
 	PrevSystemPairs = make(map[string]string)
@@ -101,6 +102,20 @@ var (
 	_manager *Manager
 )
 
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewKeybindingDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("keybinding", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
 func finalize() {
 	finiGSettings()
 	endKeyBinding()
@@ -110,9 +125,9 @@ func finalize() {
 	logger.EndTracing()
 }
 
-func Start() {
+func (*Daemon) Start() error {
 	if _manager != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -123,38 +138,33 @@ func Start() {
 		logger.Error("failed start keybinding:", err)
 		logger.EndTracing()
 		finiGSettings()
-		return
+		return fmt.Errorf("failed start keybinding: %v", err)
 	}
 
 	_manager = newManager()
-	if _manager == nil {
-		logger.Error("Create keybinding manager failed")
-		finiGSettings()
-		endKeyBinding()
-		return
-	}
-
 	err = dbus.InstallOnSession(_manager)
 	if err != nil {
 		logger.Error("Install DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(_manager.mediaKey)
 	if err != nil {
 		logger.Error("Install DBus Failed:", err)
 		finalize()
-		return
+		return err
 	}
 
 	go xevent.Main(X)
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _manager == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }

@@ -22,14 +22,9 @@
 package accounts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 )
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "accounts",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon())
 }

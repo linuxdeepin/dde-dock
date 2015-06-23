@@ -22,6 +22,7 @@
 package sessionwatcher
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/log"
 	"time"
 )
@@ -65,23 +66,39 @@ func (m *Manager) startTimer() {
 
 var _m *Manager
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("sessionwatcher", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if _m != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
 
 	_m = NewManager()
 	go _m.startTimer()
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if _m == nil {
-		return
+		return nil
 	}
 
 	logger.EndTracing()
 	_m.destroy()
 	_m = nil
+	return nil
 }

@@ -1,7 +1,8 @@
 package power
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import "pkg.linuxdeepin.com/dde-daemon/loader"
 import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.linuxdeepin.com/lib/log"
 
 import libupower "dbus/org/freedesktop/upower"
 import liblogin1 "dbus/org/freedesktop/login1"
@@ -10,12 +11,7 @@ import libnotifications "dbus/org/freedesktop/notifications"
 import libsound "dbus/com/deepin/api/sound"
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "power",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }
 
 var (
@@ -93,9 +89,23 @@ func finalizeLibs() {
 
 var workaround *fullScreenWorkaround
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("power", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if power != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -104,7 +114,7 @@ func Start() {
 	if err != nil {
 		logger.Error(err)
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(power)
@@ -112,16 +122,17 @@ func Start() {
 		logger.Error("Failed InstallOnSession:", err)
 		finalizeLibs()
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	workaround = newFullScreenWorkaround()
 	go workaround.start()
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if power == nil {
-		return
+		return nil
 	}
 
 	if workaround != nil {
@@ -130,4 +141,5 @@ func Stop() {
 	}
 	finalizeLibs()
 	logger.EndTracing()
+	return nil
 }

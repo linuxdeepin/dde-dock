@@ -1,11 +1,12 @@
 package audio
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/log"
-import "pkg.linuxdeepin.com/lib/pulse"
-import libsound "dbus/com/deepin/api/sound"
-
-var logger = log.NewLogger("dde-daemon/audio")
+import (
+	libsound "dbus/com/deepin/api/sound"
+	. "pkg.linuxdeepin.com/dde-daemon/loader"
+	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
+	"pkg.linuxdeepin.com/lib/pulse"
+)
 
 type Audio struct {
 	init bool
@@ -245,6 +246,20 @@ func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
 }
 
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewAudioDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("audio", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
 var _audio *Audio
 
 func finalize() {
@@ -253,9 +268,9 @@ func finalize() {
 	logger.EndTracing()
 }
 
-func Start() {
+func (*Daemon) Start() error {
 	if _audio != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -266,16 +281,18 @@ func Start() {
 	if err := dbus.InstallOnSession(_audio); err != nil {
 		logger.Error("Failed InstallOnSession:", err)
 		finalize()
-		return
+		return err
 	}
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _audio == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }
 
 var playFeedback = func() func() {

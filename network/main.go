@@ -22,6 +22,7 @@
 package network
 
 import (
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
 	"pkg.linuxdeepin.com/lib/log"
 )
@@ -31,9 +32,23 @@ var (
 	manager *Manager
 )
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("network", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if manager != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -45,7 +60,7 @@ func Start() {
 	if err != nil {
 		logger.Error("register dbus interface failed: ", err)
 		manager = nil
-		return
+		return err
 	}
 
 	// initialize manager after dbus installed
@@ -53,11 +68,12 @@ func Start() {
 
 	initDbusDaemon()
 	watchNetworkManagerRestart(manager)
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if manager == nil {
-		return
+		return nil
 	}
 
 	destroyDbusDaemon()
@@ -65,4 +81,5 @@ func Stop() {
 	dbus.UnInstallObject(manager)
 	manager = nil
 	logger.EndTracing()
+	return nil
 }

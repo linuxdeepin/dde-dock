@@ -22,8 +22,9 @@
 package mounts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
 	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
 var (
@@ -31,17 +32,26 @@ var (
 )
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "mounts",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("mounts", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
 	if _manager != nil {
-		return
+		return nil
 	}
 
 	_manager = NewManager()
@@ -51,17 +61,19 @@ func Start() {
 		_manager.logger.Error("Install mounts dbus failed:", err)
 		_manager.destroy()
 		_manager = nil
-		return
+		return err
 	}
 	_manager.listenDiskChanged()
 	go _manager.refrashDiskInfos()
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if _manager == nil {
-		return
+		return nil
 	}
 
 	_manager.destroy()
 	_manager = nil
+	return nil
 }
