@@ -5,7 +5,7 @@ import "pkg.linuxdeepin.com/lib/log"
 import "pkg.linuxdeepin.com/lib/pulse"
 import libsound "dbus/com/deepin/api/sound"
 
-var logger = log.NewLogger("com.deepin.daemon.Audio")
+var logger = log.NewLogger("dde-daemon/audio")
 
 type Audio struct {
 	init bool

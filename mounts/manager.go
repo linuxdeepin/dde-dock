@@ -61,7 +61,7 @@ type Manager struct {
 func NewManager() *Manager {
 	var m = Manager{}
 
-	m.logger = log.NewLogger(dbusSender)
+	m.logger = log.NewLogger("dde-daemon/mounts")
 	m.monitor = gio.VolumeMonitorGet()
 	m.setting, _ = dutils.CheckAndNewGSettings(mediaHandlerSchema)
 	m.diskCache = make(map[string]*diskObjectInfo)

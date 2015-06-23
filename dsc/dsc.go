@@ -29,7 +29,7 @@ import (
 	"time"
 )
 
-var logger = log.NewLogger("dde-session-daemon/dsc")
+var logger = log.NewLogger("dde-daemon/dsc")
 
 var quitFlag = make(chan bool)
 

@@ -34,7 +34,7 @@ const (
 )
 
 var (
-	Logger = log.NewLogger(DEST)
+	Logger = log.NewLogger("dde-daemon/personalization")
 )
 
 func main() {

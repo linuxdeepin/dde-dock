@@ -9,7 +9,7 @@ import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
 import "pkg.linuxdeepin.com/dde-daemon"
 import . "pkg.linuxdeepin.com/lib/gettext"
 
-var logger = log.NewLogger("com.deepin.daemon")
+var logger = log.NewLogger("dde-daemon/dde-system-daemon")
 
 func main() {
 	logger.BeginTracing()

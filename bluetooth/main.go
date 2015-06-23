@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	logger    = log.NewLogger(dbusBluetoothDest)
+	logger    = log.NewLogger("dde-daemon/bluetooth")
 	bluetooth *Bluetooth
 )
 

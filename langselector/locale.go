@@ -73,7 +73,7 @@ func newLangSelector(l *log.Logger) *LangSelector {
 	if l != nil {
 		lang.logger = l
 	} else {
-		lang.logger = log.NewLogger(dbusSender)
+		lang.logger = log.NewLogger("dde-daemon/langselector")
 	}
 
 	var err error

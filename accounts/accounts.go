@@ -28,7 +28,7 @@ import (
 
 var (
 	_m     *Manager
-	logger = log.NewLogger(dbusSender)
+	logger = log.NewLogger("dde-daemon/accounts")
 )
 
 func Start() {

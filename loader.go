@@ -4,7 +4,7 @@ import (
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-var logger = log.NewLogger("dde.daemon.loader")
+var logger = log.NewLogger("dde-daemon/loader")
 
 type Module struct {
 	Name   string

@@ -10,7 +10,7 @@ import (
 	"sync"
 )
 
-var logger = log.NewLogger("org.freedesktop.ScreenSaver")
+var logger = log.NewLogger("dde-daemon/screensaver")
 
 type inhibitor struct {
 	cookie uint32

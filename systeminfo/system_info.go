@@ -218,7 +218,7 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 	sys := &SystemInfo{}
 
 	if l == nil {
-		l = log.NewLogger("com.deepin.daemon.SystemInfo")
+		l = log.NewLogger("dde-daemon/systeminfo")
 	}
 	sys.logger = l
 
@@ -267,7 +267,7 @@ func Start() {
 		return
 	}
 
-	logger := log.NewLogger("com.deepin.daemon.SystemInfo")
+	logger := log.NewLogger("dde-daemon/systeminfo")
 	logger.BeginTracing()
 
 	_sysInfo = NewSystemInfo(logger)

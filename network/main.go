@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	logger  = log.NewLogger(dbusNetworkDest)
+	logger  = log.NewLogger("dde-daemon/network")
 	manager *Manager
 )
 

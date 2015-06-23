@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	logger = log.NewLogger("com.deepin.daemon.Themes")
+	logger = log.NewLogger("dde-daemon/appearance")
 )
 
 var _manager *Manager

@@ -16,7 +16,7 @@ import (
 	"pkg.linuxdeepin.com/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/launcher-daemon")
+var logger = log.NewLogger("dde-daemon/launcher")
 var launcher *Launcher = nil
 
 func Stop() {

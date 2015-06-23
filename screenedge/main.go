@@ -35,7 +35,7 @@ var (
 	dspObj    *libdsp.Display
 	areaObj   *libarea.XMouseArea
 	launchObj *launcher.Launcher
-	logger    = log.NewLogger(ZONE_DEST)
+	logger    = log.NewLogger("dde-daemon/screenedge")
 
 	mutex         = new(sync.Mutex)
 	edgeActionMap = make(map[string]string)

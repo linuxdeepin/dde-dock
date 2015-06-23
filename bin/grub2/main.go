@@ -81,7 +81,7 @@ func main() {
 }
 
 func runAsDaemon() {
-	logger := log.NewLogger(grub2.DbusGrubDest + ".Runner")
+	logger := log.NewLogger("dde-daemon/grub2-runner")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 

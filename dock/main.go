@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	logger                                     = log.NewLogger("com.deepin.daemon.Dock")
+	logger                                     = log.NewLogger("dde-daemon/dock")
 	region              *Region                = nil
 	setting             *Setting               = nil
 	hideModemanager     *HideStateManager      = nil

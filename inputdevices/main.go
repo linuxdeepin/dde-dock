@@ -44,7 +44,7 @@ func Start() {
 		return
 	}
 
-	var logger = log.NewLogger("com.deepin.daemon.InputDevices")
+	var logger = log.NewLogger("dde-daemon/inputdevices")
 	logger.BeginTracing()
 
 	if !initDeviceChangedWatcher() {

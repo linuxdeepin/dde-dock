@@ -31,7 +31,7 @@ import (
 	"time"
 )
 
-var logger = log.NewLogger(grub2.DbusGrub2ExtDest + ".Runner")
+var logger = log.NewLogger("dde-daemon/grub2ext-runner")
 var argDebug bool
 
 func main() {

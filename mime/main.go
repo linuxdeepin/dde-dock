@@ -25,7 +25,7 @@ const (
 )
 
 var (
-	logger = log.NewLogger(_DEFAULT_APPS_DEST)
+	logger = log.NewLogger("dde-daemon/mime")
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {

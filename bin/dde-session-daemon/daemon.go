@@ -43,7 +43,7 @@ import "os"
 import "pkg.linuxdeepin.com/lib/dbus"
 import "pkg.linuxdeepin.com/dde-daemon"
 
-var logger = log.NewLogger("com.deepin.daemon")
+var logger = log.NewLogger("dde-daemon/dde-session-daemon")
 
 func main() {
 	InitI18n()

@@ -5,7 +5,7 @@ import "pkg.linuxdeepin.com/lib/dbus/property"
 import "pkg.linuxdeepin.com/lib/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
 
-var logger = log.NewLogger("com.deepin.daemon.Power")
+var logger = log.NewLogger("dde-daemon/power")
 
 type Power struct {
 	coreSettings     *gio.Settings

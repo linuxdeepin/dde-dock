@@ -31,7 +31,7 @@ import (
 )
 
 var (
-	logger = log.NewLogger("daemon/keybinding")
+	logger = log.NewLogger("dde-daemon/keybinding")
 	X      *xgbutil.XUtil
 
 	grabKeyBindsMap = make(map[KeycodeInfo]string)

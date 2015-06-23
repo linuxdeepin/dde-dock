@@ -29,7 +29,7 @@ import (
 var (
 	_manager *Manager
 
-	logger = log.NewLogger(dbusSender)
+	logger = log.NewLogger("dde-daemon/timedate")
 )
 
 func Start() {
