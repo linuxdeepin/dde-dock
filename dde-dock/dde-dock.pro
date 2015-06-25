@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     Widgets/dockview.cpp \
     Widgets/dockitemdelegate.cpp \
     Widgets/appitem.cpp \
-    Widgets/docklayout.cpp
+    Widgets/docklayout.cpp \
+    Widgets/windowpreview.cpp
 
 HEADERS  += mainwidget.h \
     Panel/panel.h \
@@ -33,10 +34,11 @@ HEADERS  += mainwidget.h \
     Widgets/dockview.h \
     Widgets/dockitemdelegate.h \
     Widgets/appitem.h \
-    Widgets/docklayout.h
+    Widgets/docklayout.h \
+    Widgets/windowpreview.h
 
 RESOURCES += \
     images.qrc
 
-PKGCONFIG += gtk+-2.0
+PKGCONFIG += gtk+-2.0 x11
 CONFIG += c++11 link_pkgconfig
