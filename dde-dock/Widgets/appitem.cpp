@@ -3,9 +3,10 @@
 AppItem::AppItem(QWidget *parent) :
     QFrame(parent)
 {
-    this->setParent(parent);
+    setParent(parent);
 
-    this->initBackground();
+    initBackground();
+    setAcceptDrops(true);
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
@@ -112,7 +113,7 @@ void AppItem::initBackground()
 
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
-//    qWarning() << "mouse press...";
+    //qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY(),this);
 }
 
@@ -122,14 +123,30 @@ void AppItem::mouseReleaseEvent(QMouseEvent * event)
     emit mouseRelease(event->globalX(), event->globalY(),this);
 }
 
-void AppItem::mouseMoveEvent(QMouseEvent * event)
-{
-    emit mouseMove(event->globalX(), event->globalY(),this);
-}
-
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit mouseDoubleClick(this);
+}
+
+void AppItem::mouseMoveEvent(QMouseEvent *event)
+{
+    //this event will only execp onec then handle by Drag
+    emit dragStart(this);
+
+    Qt::MouseButtons btn = event->buttons();
+    if(btn == Qt::LeftButton)
+    {
+        QDrag* drag = new QDrag(this);
+        QMimeData* data = new QMimeData();
+        drag->setMimeData(data);
+
+        QPixmap pixmap(this->itemIconPath);
+        drag->setPixmap(pixmap);
+
+        drag->setHotSpot(QPoint(15,15));
+
+        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    }
 }
 
 void AppItem::enterEvent(QEvent *event)
@@ -140,6 +157,35 @@ void AppItem::enterEvent(QEvent *event)
 void AppItem::leaveEvent(QEvent *event)
 {
     emit mouseExited(this);
+}
+
+void AppItem::dragEnterEvent(QDragEnterEvent *event)
+{
+    emit dragEntered(event,this);
+//    event->setDropAction(Qt::MoveAction);
+//    event->accept();
+
+//    if (event->mimeData()->hasFormat("application/x-dnditemdata")){
+//        if (event->source() == this){
+//            event->setDropAction(Qt::MoveAction);
+//            event->accept();
+//        }else{
+//            event->ignore();
+//        }
+//    }else{
+//        event->ignore();
+//    }
+}
+
+void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    emit dragExited(event,this);
+}
+
+void AppItem::dropEvent(QDropEvent *event)
+{
+    qWarning() << "Item get drop:" << event->pos();
+    emit drop(event,this);
 }
 
 AppItem::~AppItem()

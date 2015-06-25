@@ -3,6 +3,7 @@
 DockLayout::DockLayout(QWidget *parent) :
     QWidget(parent)
 {
+    this->setAcceptDrops(true);
 }
 
 void DockLayout::setParent(QWidget *parent)
@@ -22,10 +23,10 @@ void DockLayout::insertItem(AppItem *item, int index)
     index = index > appCount ? appCount : (index < 0 ? 0 : index);
 
     appList.insert(index,item);
-    connect(item, SIGNAL(mouseMove(int,int,AppItem*)),this,SLOT(slotItemDrag(int,int,AppItem*)));
     connect(item,SIGNAL(mouseRelease(int,int,AppItem*)),this,SLOT(slotItemRelease(int,int,AppItem*)));
-    connect(item,SIGNAL(mouseEntered(AppItem*)),this,SLOT(slotItemEntered(AppItem*)));
-    connect(item, SIGNAL(mouseExited(AppItem*)),this,SLOT(slotItemExited(AppItem*)));
+    connect(item, SIGNAL(dragStart(AppItem*)),this,SLOT(slotItemDrag(AppItem*)));
+    connect(item,SIGNAL(dragEntered(QDragEnterEvent*,AppItem*)),this,SLOT(slotItemEntered(QDragEnterEvent*,AppItem*)));
+    connect(item,SIGNAL(dragExited(QDragLeaveEvent*,AppItem*)),this,SLOT(slotItemExited(QDragLeaveEvent*,AppItem*)));
 
     relayout();
 }
@@ -110,10 +111,11 @@ void DockLayout::dragoutFromLayout(int index)
 {
     AppItem * tmpItem = appList.takeAt(index);
     tmpItem->setVisible(false);
+    tmpAppMap.insert(tmpItem,index);
 
     if (index == appList.count())//note,target hast been remove before
     {
-        qWarning() << "out of range...";
+//        qWarning() << "end of list...";
         return;//at the end of list
     }
 
@@ -182,7 +184,24 @@ int DockLayout::indexOf(int x, int y)
     return 0;
 }
 
-void DockLayout::slotItemDrag(int x, int y, AppItem *item)
+void DockLayout::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+}
+
+void DockLayout::dropEvent(QDropEvent *event)
+{
+    AppItem * tmpItem = tmpAppMap.firstKey();
+    tmpAppMap.remove(tmpItem);
+    tmpItem->setVisible(true);
+    if (indexOf(tmpItem) == -1)
+    {
+        insertItem(tmpItem,lastHoverIndex);
+    }
+}
+
+void DockLayout::slotItemDrag(AppItem *item)
 {
 //    qWarning() << "Item draging..."<<x<<y<<item;
     int tmpIndex = indexOf(item);
@@ -199,17 +218,16 @@ void DockLayout::slotItemRelease(int x, int y, AppItem *item)
     item->setVisible(true);
     if (indexOf(item) == -1)
     {
-        qWarning() << "---------" << lastHoverIndex;
         insertItem(item,lastHoverIndex);
     }
 }
 
-void DockLayout::slotItemEntered(AppItem *item)
+void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
 {
     this->lastHoverIndex = indexOf(item);
 }
 
-void DockLayout::slotItemExited(AppItem *item)
+void DockLayout::slotItemExited(QDragLeaveEvent *event,AppItem *item)
 {
 
 }

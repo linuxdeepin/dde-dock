@@ -7,11 +7,16 @@
 #include <QMouseEvent>
 #include <QDrag>
 #include <QRectF>
+#include <QDrag>
+#include <QMimeData>
+#include <QPixmap>
 #include "dockconstants.h"
 #include "appicon.h"
 #include "appbackground.h"
 #include "QDebug"
 
+class QDragEnterEvent;
+class QDropEvent;
 class AppItem : public QFrame
 {
     Q_OBJECT
@@ -37,17 +42,23 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-    void mouseMoveEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
     void enterEvent(QEvent * event);
     void leaveEvent(QEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event);
+    void dragLeaveEvent(QDragLeaveEvent * event);
+    void dropEvent(QDropEvent * event);
 
 signals:
+    void dragStart(AppItem *item);
+    void dragEntered(QDragEnterEvent * event,AppItem *item);
+    void dragExited(QDragLeaveEvent * event,AppItem *item);
+    void drop(QDropEvent * event,AppItem *item);
     void mouseEntered(AppItem *item);
     void mouseExited(AppItem *item);
     void mousePress(int x, int y, AppItem *item);
     void mouseRelease(int x, int y, AppItem *item);
-    void mouseMove(int x, int y, AppItem *item);
     void mouseDoubleClick( AppItem *item);
 
 private:

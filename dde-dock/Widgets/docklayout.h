@@ -42,15 +42,15 @@ public:
     int indexOf(AppItem * item);
     int indexOf(int x,int y);
 
-signals:
-
-public slots:
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
 
 private slots:
-    void slotItemDrag(int x,int y,AppItem *item);
+    void slotItemDrag(AppItem *item);
     void slotItemRelease(int x, int y, AppItem *item);
-    void slotItemEntered(AppItem *item);
-    void slotItemExited(AppItem *item);
+    void slotItemEntered(QDragEnterEvent * event,AppItem *item);
+    void slotItemExited(QDragLeaveEvent *event,AppItem *item);
 
 private:
     void sortLeftToRight();
