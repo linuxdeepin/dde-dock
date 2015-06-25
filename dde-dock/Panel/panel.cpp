@@ -6,13 +6,17 @@ Panel::Panel(QWidget *parent) : QWidget(parent)
     leftLayout->resize(1024,50);
     leftLayout->move(0,0);
 
-    for (int i = 0; i < 5; i ++)
-    {
-        AppItem * tmpButton = new AppItem("App" + QString::number(i),":/test/Resources/images/google-chrome.png");
-        tmpButton->resize(50,50);
+    AppItem * b1 = new AppItem("App",":/test/Resources/images/brasero.png");b1->resize(50,50);
+    AppItem * b2 = new AppItem("App",":/test/Resources/images/crossover.png");b2->resize(50,50);
+    AppItem * b3 = new AppItem("App",":/test/Resources/images/gcr-gnupg.png");b3->resize(50,50);
+    AppItem * b4 = new AppItem("App",":/test/Resources/images/display-im6.q16.png");b4->resize(50,50);
+    AppItem * b5 = new AppItem("App",":/test/Resources/images/eog.png");b5->resize(50,50);
 
-        leftLayout->addItem(tmpButton);
-    }
+    leftLayout->addItem(b1);
+    leftLayout->addItem(b2);
+    leftLayout->addItem(b3);
+    leftLayout->addItem(b4);
+    leftLayout->addItem(b5);
 }
 
 void Panel::resize(const QSize &size)

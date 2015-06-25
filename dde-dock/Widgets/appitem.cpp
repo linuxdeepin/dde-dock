@@ -37,7 +37,6 @@ void AppItem::setIcon(const QString &iconPath, int size)
 {
     appIcon = new AppIcon(iconPath,this);
     appIcon->resize(size,size);
-//    appIcon->setIcon(iconPath);
     appIcon->move(this->width() / 2, this->height() / 2);
 }
 
@@ -73,6 +72,22 @@ int AppItem::getIndex()
     return this->itemIndex;
 }
 
+QPoint AppItem::getNextPos()
+{
+    return this->nextPos;
+}
+
+void AppItem::setNextPos(const QPoint &value)
+{
+    this->nextPos = value;
+}
+
+void AppItem::setNextPos(int x, int y)
+{
+    this->nextPos.setX(x);
+    this->nextPos.setY(y);
+}
+
 void AppItem::resizeResources()
 {
     if (appIcon != NULL)
@@ -97,12 +112,13 @@ void AppItem::initBackground()
 
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
-    qWarning() << "press...";
+//    qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY(),this);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
 {
+//    qWarning() << "mouse release...";
     emit mouseRelease(event->globalX(), event->globalY(),this);
 }
 
@@ -114,6 +130,16 @@ void AppItem::mouseMoveEvent(QMouseEvent * event)
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit mouseDoubleClick(this);
+}
+
+void AppItem::enterEvent(QEvent *event)
+{
+    emit mouseEntered(this);
+}
+
+void AppItem::leaveEvent(QEvent *event)
+{
+    emit mouseExited(this);
 }
 
 AppItem::~AppItem()

@@ -15,6 +15,7 @@
 class AppItem : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(QPoint pos READ pos WRITE move)
 public:
     AppItem(QWidget *parent = 0);
     AppItem(QString title, QWidget *parent = 0);
@@ -29,14 +30,21 @@ public:
     bool getMoveable();
     void setIndex(int value);
     int getIndex();
+    QPoint getNextPos();
+    void setNextPos(const QPoint &value);
+    void setNextPos(int x, int y);
 
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
+    void enterEvent(QEvent * event);
+    void leaveEvent(QEvent * event);
 
 signals:
+    void mouseEntered(AppItem *item);
+    void mouseExited(AppItem *item);
     void mousePress(int x, int y, AppItem *item);
     void mouseRelease(int x, int y, AppItem *item);
     void mouseMove(int x, int y, AppItem *item);
@@ -49,6 +57,7 @@ private:
 private:
     AppBackground * appBackground = NULL;
     AppIcon * appIcon = NULL;
+    QPoint nextPos;
     int itemIndex;
 
     bool itemMoveable = true;

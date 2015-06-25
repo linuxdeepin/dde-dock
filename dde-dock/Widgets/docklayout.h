@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include <QList>
+#include <QMap>
+#include <QPropertyAnimation>
 #include "appitem.h"
 
 class DockLayout : public QWidget
@@ -36,6 +38,7 @@ public:
     void setSpacing(qreal spacing);
     void setSortDirection(DockLayout::Direction value);
     void relayout();
+    void dragoutFromLayout(int index);
     int indexOf(AppItem * item);
     int indexOf(int x,int y);
 
@@ -45,6 +48,9 @@ public slots:
 
 private slots:
     void slotItemDrag(int x,int y,AppItem *item);
+    void slotItemRelease(int x, int y, AppItem *item);
+    void slotItemEntered(AppItem *item);
+    void slotItemExited(AppItem *item);
 
 private:
     void sortLeftToRight();
@@ -54,6 +60,7 @@ private:
 
 private:
     QList<AppItem *> appList;
+    QMap<AppItem *,int> tmpAppMap;//only one item inside
 
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;
@@ -61,6 +68,8 @@ private:
     qreal rightMargin = 0;
     qreal topMargin = 0;
     qreal bottomMargin = 0;
+
+    int lastHoverIndex = 0;
 };
 
 #endif // DOCKLAYOUT_H

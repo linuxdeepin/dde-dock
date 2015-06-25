@@ -23,6 +23,9 @@ void DockLayout::insertItem(AppItem *item, int index)
 
     appList.insert(index,item);
     connect(item, SIGNAL(mouseMove(int,int,AppItem*)),this,SLOT(slotItemDrag(int,int,AppItem*)));
+    connect(item,SIGNAL(mouseRelease(int,int,AppItem*)),this,SLOT(slotItemRelease(int,int,AppItem*)));
+    connect(item,SIGNAL(mouseEntered(AppItem*)),this,SLOT(slotItemEntered(AppItem*)));
+    connect(item, SIGNAL(mouseExited(AppItem*)),this,SLOT(slotItemExited(AppItem*)));
 
     relayout();
 }
@@ -103,6 +106,42 @@ void DockLayout::relayout()
     }
 }
 
+void DockLayout::dragoutFromLayout(int index)
+{
+    AppItem * tmpItem = appList.takeAt(index);
+    tmpItem->setVisible(false);
+
+    if (index == appList.count())//note,target hast been remove before
+    {
+        qWarning() << "out of range...";
+        return;//at the end of list
+    }
+
+    //move follow item,note,target hast been remove before
+    AppItem * followItem = appList.at(index);
+    followItem->setNextPos(followItem->x() - tmpItem->width() - itemSpacing,0);
+    //move last item
+    for (int i = index + 1; i < appList.count(); i ++)
+    {
+        AppItem * frontItem = appList.at(i - 1);
+        AppItem * targetItem = appList.at(i);
+        targetItem->setNextPos(frontItem->getNextPos().x() + frontItem->width() + itemSpacing,0);
+    }
+
+    for (int i = index; i < appList.count(); i ++)
+    {
+        AppItem *button= appList.at(i);
+        QPropertyAnimation *animation = new QPropertyAnimation(button, "pos");
+        animation->setStartValue(button->pos());
+        animation->setEndValue(button->getNextPos());
+        animation->setDuration(500 + i * 100);
+        animation->setEasingCurve(QEasingCurve::InOutBack);
+
+        animation->start();
+    }
+
+}
+
 void DockLayout::sortLeftToRight()
 {
     if (appList.count() <= 0)
@@ -134,7 +173,7 @@ void DockLayout::sortBottomToTop()
 
 int DockLayout::indexOf(AppItem *item)
 {
-    return    appList.indexOf(item);
+    return appList.indexOf(item);
 }
 
 int DockLayout::indexOf(int x, int y)
@@ -145,5 +184,32 @@ int DockLayout::indexOf(int x, int y)
 
 void DockLayout::slotItemDrag(int x, int y, AppItem *item)
 {
-    qWarning() << "Item draging..."<<x<<y<<item;
+//    qWarning() << "Item draging..."<<x<<y<<item;
+    int tmpIndex = indexOf(item);
+    if (tmpIndex != -1)
+    {
+        dragoutFromLayout(tmpIndex);
+    }
+}
+
+void DockLayout::slotItemRelease(int x, int y, AppItem *item)
+{
+    //outside frame,destroy it
+    //inside frame,insert it
+    item->setVisible(true);
+    if (indexOf(item) == -1)
+    {
+        qWarning() << "---------" << lastHoverIndex;
+        insertItem(item,lastHoverIndex);
+    }
+}
+
+void DockLayout::slotItemEntered(AppItem *item)
+{
+    this->lastHoverIndex = indexOf(item);
+}
+
+void DockLayout::slotItemExited(AppItem *item)
+{
+
 }
