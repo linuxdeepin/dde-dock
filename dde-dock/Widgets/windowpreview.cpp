@@ -72,10 +72,11 @@ void WindowPreview::updateCache()
                     cache.setPixel(x, y, pixel);
                 }
             }
+            
+            XDestroyImage(image);
 
-            cache = cache.scaledToWidth(width(), Qt::SmoothTransformation);
-
-            m_cache = new QImage(cache);
+            QImage cacheScaled = cache.scaledToWidth(width(), Qt::SmoothTransformation);
+            m_cache = new QImage(cacheScaled);
         }
     }
 }
