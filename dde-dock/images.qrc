@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/test">
+        <file>Resources/images/google-chrome.png</file>
+    </qresource>
+</RCC>
