@@ -13,4 +13,4 @@
 *.a
 
 build/
-*.pro.user
+*.pro.user*
