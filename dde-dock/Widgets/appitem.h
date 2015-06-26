@@ -10,14 +10,13 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QPixmap>
+#include <QDebug>
+#include "dockitem.h"
 #include "dockconstants.h"
 #include "appicon.h"
 #include "appbackground.h"
-#include "QDebug"
 
-class QDragEnterEvent;
-class QDropEvent;
-class AppItem : public QFrame
+class AppItem : public DockItem
 {
     Q_OBJECT
     Q_PROPERTY(QPoint pos READ pos WRITE move)
@@ -27,14 +26,8 @@ public:
     AppItem(QString title, QString iconPath, QWidget *parent = 0);
     ~AppItem();
 
-    void setTitle(const QString &title);
-    void setIcon(const QString &iconPath, int size = 42);
     void resize(const QSize &size);
     void resize(int width, int height);
-    void setMoveable(bool value);
-    bool getMoveable();
-    void setIndex(int value);
-    int getIndex();
     QPoint getNextPos();
     void setNextPos(const QPoint &value);
     void setNextPos(int x, int y);
@@ -67,17 +60,7 @@ private:
 
 private:
     AppBackground * appBackground = NULL;
-    AppIcon * appIcon = NULL;
     QPoint nextPos;
-    int itemIndex;
-
-    bool itemMoveable = true;
-    bool itemHover = false;
-    bool itemActived = false;
-    bool itemDraged = false;
-
-    QString itemTitle = "";
-    QString itemIconPath = "";
 };
 
 #endif // APPITEM_H

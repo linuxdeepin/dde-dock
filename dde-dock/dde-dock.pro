@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Widgets/dockitemdelegate.cpp \
     Widgets/appitem.cpp \
     Widgets/docklayout.cpp \
-    Widgets/windowpreview.cpp
+    Widgets/windowpreview.cpp \
+    Widgets/dockitem.cpp
 
 HEADERS  += mainwidget.h \
     Panel/panel.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwidget.h \
     Widgets/dockitemdelegate.h \
     Widgets/appitem.h \
     Widgets/docklayout.h \
-    Widgets/windowpreview.h
+    Widgets/windowpreview.h \
+    Widgets/dockitem.h
 
 RESOURCES += \
     images.qrc

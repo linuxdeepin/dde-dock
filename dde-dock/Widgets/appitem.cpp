@@ -1,7 +1,7 @@
 #include "appitem.h"
 
 AppItem::AppItem(QWidget *parent) :
-    QFrame(parent)
+    DockItem(parent)
 {
     setParent(parent);
 
@@ -10,7 +10,7 @@ AppItem::AppItem(QWidget *parent) :
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
-    QFrame(parent)
+    DockItem(parent)
 {
     this->setParent(parent);
     this->itemTitle = title;
@@ -19,7 +19,7 @@ AppItem::AppItem(QString title, QWidget *parent):
 }
 
 AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
-    QFrame(parent)
+    DockItem(parent)
 {
     this->setParent(parent);
     this->itemTitle = title;
@@ -27,18 +27,6 @@ AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
 
     this->initBackground();
     this->setIcon(itemIconPath);
-}
-
-void AppItem::setTitle(const QString &title)
-{
-    this->itemTitle = title;
-}
-
-void AppItem::setIcon(const QString &iconPath, int size)
-{
-    appIcon = new AppIcon(iconPath,this);
-    appIcon->resize(size,size);
-    appIcon->move(this->width() / 2, this->height() / 2);
 }
 
 void AppItem::resize(const QSize &size)
@@ -51,26 +39,6 @@ void AppItem::resize(int width, int height)
 {
     QFrame::resize(width,height);
     resizeResources();
-}
-
-void AppItem::setMoveable(bool value)
-{
-    this->itemMoveable = value;
-}
-
-bool AppItem::getMoveable()
-{
-    return this->itemMoveable;
-}
-
-void AppItem::setIndex(int value)
-{
-    this->itemIndex = value;
-}
-
-int AppItem::getIndex()
-{
-    return this->itemIndex;
 }
 
 QPoint AppItem::getNextPos()
