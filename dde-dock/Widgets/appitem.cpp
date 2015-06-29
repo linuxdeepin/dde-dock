@@ -106,6 +106,8 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
     {
         QDrag* drag = new QDrag(this);
         QMimeData* data = new QMimeData();
+        QImage dataImg(this->itemIconPath);
+        data->setImageData(QVariant(dataImg));
         drag->setMimeData(data);
 
         QPixmap pixmap(this->itemIconPath);
@@ -130,8 +132,18 @@ void AppItem::leaveEvent(QEvent *event)
 void AppItem::dragEnterEvent(QDragEnterEvent *event)
 {
     emit dragEntered(event,this);
-//    event->setDropAction(Qt::MoveAction);
-//    event->accept();
+
+    AppItem *tmpItem = NULL;
+    tmpItem = dynamic_cast<AppItem *>(event->source());
+    if (tmpItem)
+    {
+//        qWarning()<< "[Info:]" << "Brother Item.";
+    }
+    else
+    {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
 
 //    if (event->mimeData()->hasFormat("application/x-dnditemdata")){
 //        if (event->source() == this){

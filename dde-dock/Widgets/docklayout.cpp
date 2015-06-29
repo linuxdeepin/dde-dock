@@ -199,6 +199,8 @@ void DockLayout::dropEvent(QDropEvent *event)
     {
         insertItem(tmpItem,lastHoverIndex);
     }
+
+    emit itemDropped();
 }
 
 void DockLayout::slotItemDrag(AppItem *item)
@@ -208,6 +210,8 @@ void DockLayout::slotItemDrag(AppItem *item)
     if (tmpIndex != -1)
     {
         dragoutFromLayout(tmpIndex);
+
+        emit dragStarted();
     }
 }
 

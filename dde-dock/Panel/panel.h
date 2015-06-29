@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "Widgets/appitem.h"
 #include "Widgets/docklayout.h"
+#include "Widgets/screenmask.h"
 
 class Panel : public QWidget
 {
@@ -17,11 +18,19 @@ public:
     void resize(const QSize &size);
     void resize(int width,int height);
 
+    void showScreenMask();
+    void hideScreenMask();
+
 signals:
 
 public slots:
+    void slotDragStarted();
+    void slotItemDropped();
+
 private:
     DockLayout * leftLayout;
+    QWidget * parentWidget = NULL;
+    ScreenMask * maskWidget = NULL;
 };
 
 #endif // PANEL_H

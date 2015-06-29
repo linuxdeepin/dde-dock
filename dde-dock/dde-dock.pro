@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     Widgets/appitem.cpp \
     Widgets/docklayout.cpp \
     Widgets/windowpreview.cpp \
-    Widgets/dockitem.cpp
+    Widgets/dockitem.cpp \
+    Widgets/screenmask.cpp
 
 HEADERS  += mainwidget.h \
     Panel/panel.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwidget.h \
     Widgets/appitem.h \
     Widgets/docklayout.h \
     Widgets/windowpreview.h \
-    Widgets/dockitem.h
+    Widgets/dockitem.h \
+    Widgets/screenmask.h
 
 RESOURCES += \
     images.qrc

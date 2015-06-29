@@ -1,6 +1,7 @@
 #include "panel.h"
 
-Panel::Panel(QWidget *parent) : QWidget(parent)
+Panel::Panel(QWidget *parent)
+    : QWidget(parent),parentWidget(parent)
 {
     leftLayout = new DockLayout(this);
     leftLayout->resize(1024,50);
@@ -17,6 +18,9 @@ Panel::Panel(QWidget *parent) : QWidget(parent)
     leftLayout->addItem(b3);
     leftLayout->addItem(b4);
     leftLayout->addItem(b5);
+
+    connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
+    connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 }
 
 void Panel::resize(const QSize &size)
@@ -29,6 +33,36 @@ void Panel::resize(int width, int height)
 {
     QWidget::resize(width,height);
     leftLayout->resize(this->width() * 2 / 3,this->height());
+}
+
+void Panel::showScreenMask()
+{
+    qWarning() << "[Info:]" << "Show Screen Mask.";
+    maskWidget = new ScreenMask();
+    connect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
+
+    //TODO change to Other ways to do this,it will hide the drag icon
+    parentWidget->hide();
+    parentWidget->show();
+}
+
+void Panel::hideScreenMask()
+{
+    qWarning() << "[Info:]" << "Hide Screen Mask.";
+    disconnect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
+    maskWidget->hide();
+    maskWidget->deleteLater();
+    maskWidget = NULL;
+}
+
+void Panel::slotDragStarted()
+{
+    showScreenMask();
+}
+
+void Panel::slotItemDropped()
+{
+    hideScreenMask();
 }
 
 Panel::~Panel()

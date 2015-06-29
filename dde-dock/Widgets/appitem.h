@@ -10,6 +10,7 @@
 #include <QDrag>
 #include <QMimeData>
 #include <QPixmap>
+#include <QImage>
 #include <QDebug>
 #include "dockitem.h"
 #include "dockconstants.h"

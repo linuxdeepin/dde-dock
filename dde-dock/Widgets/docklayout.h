@@ -42,6 +42,10 @@ public:
     int indexOf(AppItem * item);
     int indexOf(int x,int y);
 
+signals:
+    void dragStarted();
+    void itemDropped();
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
