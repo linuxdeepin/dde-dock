@@ -16,6 +16,13 @@ void ScreenMask::dragEnterEvent(QDragEnterEvent *event)
 {
     event->setDropAction(Qt::MoveAction);
     event->accept();
+
+    emit itemEntered();
+}
+
+void ScreenMask::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    emit itemExited();
 }
 
 void ScreenMask::dropEvent(QDropEvent *event)

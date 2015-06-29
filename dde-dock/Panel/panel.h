@@ -26,6 +26,8 @@ signals:
 public slots:
     void slotDragStarted();
     void slotItemDropped();
+    void slotEnteredMask();
+    void slotExitedMask();
 
 private:
     DockLayout * leftLayout;

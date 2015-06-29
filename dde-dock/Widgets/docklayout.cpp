@@ -157,40 +157,32 @@ void DockLayout::relayout()
     }
 }
 
+void DockLayout::addSpacingItem()
+{
+    if (tmpAppMap.isEmpty())
+        return;
+
+    AppItem *tmpItem = tmpAppMap.firstKey();
+    for (int i = appList.count() -1;i > lastHoverIndex; i-- )
+    {
+        AppItem *targetItem = appList.at(i);
+        targetItem->setNextPos(targetItem->x() + tmpItem->width() + itemSpacing,0);
+
+        QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
+        animation->setStartValue(targetItem->pos());
+        animation->setEndValue(targetItem->getNextPos());
+        animation->setDuration(150 + i * 10);
+        animation->setEasingCurve(QEasingCurve::InOutBack);
+
+        animation->start();
+    }
+}
+
 void DockLayout::dragoutFromLayout(int index)
 {
     AppItem * tmpItem = appList.takeAt(index);
     tmpItem->setVisible(false);
     tmpAppMap.insert(tmpItem,index);
-
-    if (index == appList.count())//note,target hast been remove before
-    {
-        return;//at the end of list
-    }
-
-    //move follow item,note,target hast been remove before
-    AppItem * followItem = appList.at(index);
-    followItem->setNextPos(followItem->x() - tmpItem->width() - itemSpacing,0);
-    //move last item
-    for (int i = index + 1; i < appList.count(); i ++)
-    {
-        AppItem * frontItem = appList.at(i - 1);
-        AppItem * targetItem = appList.at(i);
-        targetItem->setNextPos(frontItem->getNextPos().x() + frontItem->width() + itemSpacing,0);
-    }
-
-    for (int i = index; i < appList.count(); i ++)
-    {
-        AppItem *button= appList.at(i);
-        QPropertyAnimation *animation = new QPropertyAnimation(button, "pos");
-        animation->setStartValue(button->pos());
-        animation->setEndValue(button->getNextPos());
-        animation->setDuration(500 + i * 100);
-        animation->setEasingCurve(QEasingCurve::InOutBack);
-
-        animation->start();
-    }
-
 }
 
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)
@@ -206,7 +198,10 @@ void DockLayout::dropEvent(QDropEvent *event)
     tmpItem->setVisible(true);
     if (indexOf(tmpItem) == -1)
     {
-        insertItem(tmpItem,lastHoverIndex);
+        if (movingForward)
+            insertItem(tmpItem,lastHoverIndex);
+        else
+            insertItem(tmpItem,lastHoverIndex + 1);
     }
 
     emit itemDropped();
@@ -218,6 +213,8 @@ void DockLayout::slotItemDrag(AppItem *item)
     int tmpIndex = indexOf(item);
     if (tmpIndex != -1)
     {
+        lastHoverIndex = tmpIndex;
+        m_lastPost = QCursor::pos();
         dragoutFromLayout(tmpIndex);
 
         emit dragStarted();
@@ -237,7 +234,47 @@ void DockLayout::slotItemRelease(int x, int y, AppItem *item)
 
 void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
 {
-    this->lastHoverIndex = indexOf(item);
+    int tmpIndex = indexOf(item);
+    QPoint tmpPos = QCursor::pos();
+
+    if (tmpPos.x() - m_lastPost.x() == 0)
+        return;
+
+    switch (sortDirection)
+    {
+    case LeftToRight:
+        movingForward = tmpPos.x() - m_lastPost.x() < 0;
+        break;
+    case RightToLeft:
+        movingForward = tmpPos.x() - m_lastPost.x() > 0;
+        break;
+    case TopToBottom:
+        break;
+    case BottomToTop:
+        break;
+    }
+
+    m_lastPost = tmpPos;
+    lastHoverIndex = tmpIndex;
+
+    if (!tmpAppMap.isEmpty())
+    {
+        AppItem *targetItem = appList.at(tmpIndex);
+        if (movingForward)
+        {
+            targetItem->setNextPos(QPoint(targetItem->x() + tmpAppMap.firstKey()->width() + itemSpacing,0));
+        }
+        else
+        {
+            targetItem->setNextPos(QPoint(targetItem->x() - tmpAppMap.firstKey()->width() - itemSpacing,0));
+        }
+        QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
+        animation->setStartValue(targetItem->pos());
+        animation->setEndValue(targetItem->getNextPos());
+        animation->setDuration(200);
+        animation->setEasingCurve(QEasingCurve::InOutBack);
+        animation->start();
+    }
 }
 
 void DockLayout::slotItemExited(QDragLeaveEvent *event,AppItem *item)

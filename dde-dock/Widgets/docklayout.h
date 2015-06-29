@@ -5,6 +5,7 @@
 #include <QList>
 #include <QMap>
 #include <QPropertyAnimation>
+#include <QCursor>
 #include "appitem.h"
 
 class DockLayout : public QWidget
@@ -40,6 +41,7 @@ public:
     int indexOf(AppItem * item);
     int indexOf(int x,int y);
     void relayout();
+    void addSpacingItem();
     void dragoutFromLayout(int index);
 
 signals:
@@ -73,7 +75,9 @@ private:
     qreal topMargin = 0;
     qreal bottomMargin = 0;
 
+    bool movingForward = false;
     int lastHoverIndex = 0;
+    QPoint m_lastPost = QPoint(0,0);
 };
 
 #endif // DOCKLAYOUT_H

@@ -144,17 +144,6 @@ void AppItem::dragEnterEvent(QDragEnterEvent *event)
         event->setDropAction(Qt::MoveAction);
         event->accept();
     }
-
-//    if (event->mimeData()->hasFormat("application/x-dnditemdata")){
-//        if (event->source() == this){
-//            event->setDropAction(Qt::MoveAction);
-//            event->accept();
-//        }else{
-//            event->ignore();
-//        }
-//    }else{
-//        event->ignore();
-//    }
 }
 
 void AppItem::dragLeaveEvent(QDragLeaveEvent *event)

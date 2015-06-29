@@ -36,7 +36,6 @@ void Panel::resize(const QSize &size)
 {
     QWidget::resize(size);
     leftLayout->resize(this->width() * 2 / 3,this->height());
-    qWarning() << "=========++++++++++";
     rightLayout->move(this->width() - rightLayout->width(),0);
 }
 
@@ -44,15 +43,16 @@ void Panel::resize(int width, int height)
 {
     QWidget::resize(width,height);
     leftLayout->resize(this->width() * 2 / 3,this->height());
-    qWarning() << "=========++++++++++";
     rightLayout->move(this->width() - rightLayout->width(),0);
 }
 
 void Panel::showScreenMask()
 {
-    qWarning() << "[Info:]" << "Show Screen Mask.";
+//    qWarning() << "[Info:]" << "Show Screen Mask.";
     maskWidget = new ScreenMask();
     connect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
+    connect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
+    connect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
 
     //TODO change to Other ways to do this,it will hide the drag icon
     parentWidget->hide();
@@ -61,8 +61,10 @@ void Panel::showScreenMask()
 
 void Panel::hideScreenMask()
 {
-    qWarning() << "[Info:]" << "Hide Screen Mask.";
+//    qWarning() << "[Info:]" << "Hide Screen Mask.";
     disconnect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
+    disconnect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
+    disconnect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
     maskWidget->hide();
     maskWidget->deleteLater();
     maskWidget = NULL;
@@ -76,6 +78,18 @@ void Panel::slotDragStarted()
 void Panel::slotItemDropped()
 {
     hideScreenMask();
+    leftLayout->relayout();
+}
+
+void Panel::slotEnteredMask()
+{
+    leftLayout->relayout();
+}
+
+void Panel::slotExitedMask()
+{
+    leftLayout->addSpacingItem();
+//    leftLayout->relayout();
 }
 
 Panel::~Panel()
