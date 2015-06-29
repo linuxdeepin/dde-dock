@@ -9,7 +9,7 @@ class DockPluginInterface : public QObject
     Q_OBJECT
 public:
     virtual ~DockPluginInterface() {}
-    virtual QList<AbstractDockItem*> items();
+    virtual QList<AbstractDockItem*> items(){}
 };
 
 QT_BEGIN_NAMESPACE
