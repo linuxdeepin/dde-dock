@@ -39,7 +39,9 @@ HEADERS  += mainwidget.h \
     Widgets/docklayout.h \
     Widgets/windowpreview.h \
     Widgets/dockitem.h \
-    Widgets/screenmask.h
+    Widgets/screenmask.h \
+    dockplugininterface.h \
+    abstractdockitem.h
 
 RESOURCES += \
     images.qrc
