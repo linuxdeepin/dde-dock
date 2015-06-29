@@ -86,6 +86,56 @@ void DockLayout::setSortDirection(DockLayout::Direction value)
     this->sortDirection = value;
 }
 
+void DockLayout::sortLeftToRight()
+{
+    if (appList.count() <= 0)
+        return;
+
+    appList.at(0)->move(0,0);
+
+    for (int i = 1; i < appList.count(); i ++)
+    {
+        AppItem * frontItem = appList.at(i - 1);
+        appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
+    }
+}
+
+void DockLayout::sortRightToLeft()
+{
+    if (appList.count()<=0)
+        return;
+
+    appList.at(0)->move(this->width() - itemSpacing - appList.at(0)->width(),0);
+
+    for (int i = 1; i < appList.count(); i++)
+    {
+        AppItem *fromItem = appList.at(i - 1);
+        AppItem *toItem = appList.at(i);
+        toItem->move(fromItem->x() - itemSpacing - toItem->width(),0);
+    }
+}
+
+void DockLayout::sortTopToBottom()
+{
+
+}
+
+void DockLayout::sortBottomToTop()
+{
+
+}
+
+int DockLayout::indexOf(AppItem *item)
+{
+    return appList.indexOf(item);
+}
+
+int DockLayout::indexOf(int x, int y)
+{
+    //TODO
+    return 0;
+}
+
 void DockLayout::relayout()
 {
     switch (sortDirection)
@@ -115,7 +165,6 @@ void DockLayout::dragoutFromLayout(int index)
 
     if (index == appList.count())//note,target hast been remove before
     {
-//        qWarning() << "end of list...";
         return;//at the end of list
     }
 
@@ -142,46 +191,6 @@ void DockLayout::dragoutFromLayout(int index)
         animation->start();
     }
 
-}
-
-void DockLayout::sortLeftToRight()
-{
-    if (appList.count() <= 0)
-        return;
-
-    appList.at(0)->move(0,0);
-
-    for (int i = 1; i < appList.count(); i ++)
-    {
-        AppItem * frontItem = appList.at(i - 1);
-        appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
-    }
-}
-
-void DockLayout::sortRightToLeft()
-{
-
-}
-
-void DockLayout::sortTopToBottom()
-{
-
-}
-
-void DockLayout::sortBottomToTop()
-{
-
-}
-
-int DockLayout::indexOf(AppItem *item)
-{
-    return appList.indexOf(item);
-}
-
-int DockLayout::indexOf(int x, int y)
-{
-    //TODO
-    return 0;
 }
 
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)

@@ -37,10 +37,10 @@ public:
     void setMargin(DockLayout::MarginEdge edge, qreal margin);
     void setSpacing(qreal spacing);
     void setSortDirection(DockLayout::Direction value);
-    void relayout();
-    void dragoutFromLayout(int index);
     int indexOf(AppItem * item);
     int indexOf(int x,int y);
+    void relayout();
+    void dragoutFromLayout(int index);
 
 signals:
     void dragStarted();

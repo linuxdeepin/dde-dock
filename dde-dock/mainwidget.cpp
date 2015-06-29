@@ -7,6 +7,7 @@ MainWidget::MainWidget(QWidget *parent)
     this->resize(rec.width(),50);
     Panel * mainPanel = new Panel(this);
     mainPanel->setMinimumSize(this->width(),this->height());
+    mainPanel->resize(this->width(),this->height());
     mainPanel->move(0,0);
     this->setWindowFlags(Qt::ToolTip);
 }

@@ -29,6 +29,7 @@ public slots:
 
 private:
     DockLayout * leftLayout;
+    DockLayout *rightLayout;
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
 };

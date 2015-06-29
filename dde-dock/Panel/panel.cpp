@@ -21,18 +21,31 @@ Panel::Panel(QWidget *parent)
 
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
+
+    AppItem * b6 = new AppItem("App",":/test/Resources/images/display-im6.q16.png");b6->resize(50,50);b6->setAcceptDrops(true);
+    AppItem * b7 = new AppItem("App",":/test/Resources/images/eog.png");b7->resize(50,50);b7->setAcceptDrops(true);
+    rightLayout = new DockLayout(this);
+    rightLayout->setSortDirection(DockLayout::RightToLeft);
+    rightLayout->resize(300,50);
+    rightLayout->move(0,0);
+    rightLayout->addItem(b6);
+    rightLayout->addItem(b7);
 }
 
 void Panel::resize(const QSize &size)
 {
     QWidget::resize(size);
     leftLayout->resize(this->width() * 2 / 3,this->height());
+    qWarning() << "=========++++++++++";
+    rightLayout->move(this->width() - rightLayout->width(),0);
 }
 
 void Panel::resize(int width, int height)
 {
     QWidget::resize(width,height);
     leftLayout->resize(this->width() * 2 / 3,this->height());
+    qWarning() << "=========++++++++++";
+    rightLayout->move(this->width() - rightLayout->width(),0);
 }
 
 void Panel::showScreenMask()
