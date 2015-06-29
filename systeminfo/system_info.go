@@ -82,10 +82,13 @@ func getVersionFromDeepin(config string) (string, error) {
 		return "", err
 	}
 	t, err := kFile.GetLocaleString("Release", "Type", "\x00")
-	if err != nil {
-		return "", err
+	if err == nil {
+		version = version + " " + t
 	}
-	version = version + " " + t
+	milestone, err := kFile.GetString("Addition", "Milestone")
+	if err == nil {
+		version = version + " " + milestone
+	}
 	return version, nil
 }
 
@@ -225,10 +228,11 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 	var err error
 	sys.Version, err = getVersionFromDeepin("/etc/deepin-version")
 	if err != nil {
-		sys.logger.Warning(err)
+		sys.logger.Debug(err)
 		sys.Version, err = getVersionFromLsb("/etc/lsb-release")
 		if err != nil {
-			sys.logger.Error(err)
+			sys.logger.Debug(err)
+			sys.Version = "Unkown"
 			return nil
 		}
 	}
