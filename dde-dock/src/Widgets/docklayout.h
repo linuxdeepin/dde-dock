@@ -41,7 +41,6 @@ public:
     int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
     void relayout();
-    void addSpacingItem();
     void dragoutFromLayout(int index);
 
 signals:
@@ -63,6 +62,9 @@ private:
     void sortRightToLeft();
     void sortTopToBottom();
     void sortBottomToTop();
+
+    void addSpacingItem();
+    bool hasSpacingItemInList();
 
 private:
     QList<AbstractDockItem *> appList;

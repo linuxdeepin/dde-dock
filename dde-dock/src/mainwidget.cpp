@@ -12,7 +12,7 @@ MainWidget::MainWidget(QWidget *parent)
 
     this->setWindowFlags(Qt::ToolTip);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->move(0,800);
+    this->move(0,rec.height()  - 100);
 }
 
 MainWidget::~MainWidget()

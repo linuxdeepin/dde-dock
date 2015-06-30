@@ -126,6 +126,23 @@ void DockLayout::sortBottomToTop()
 
 }
 
+bool DockLayout::hasSpacingItemInList()
+{
+    if (appList.count() <= 1)
+        return false;
+    if (appList.at(0)->x() > itemSpacing)
+        return true;
+
+    for (int i = 1; i < appList.count(); i ++)
+    {
+        if (appList.at(i)->x() - itemSpacing != appList.at(i - 1)->x() + appList.at(i - 1)->width())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 int DockLayout::indexOf(AbstractDockItem *item)
 {
     return appList.indexOf(item);
@@ -164,7 +181,7 @@ void DockLayout::addSpacingItem()
         return;
 
     AbstractDockItem *tmpItem = tmpAppMap.firstKey();
-    for (int i = appList.count() -1;i > lastHoverIndex; i-- )
+    for (int i = appList.count() -1;i >= lastHoverIndex; i-- )
     {
         AbstractDockItem *targetItem = appList.at(i);
         targetItem->setNextPos(targetItem->x() + tmpItem->width() + itemSpacing,0);
@@ -242,6 +259,14 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
     AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
 
     int tmpIndex = indexOf(item);
+    lastHoverIndex = tmpIndex;
+    qWarning() << "========" << lastHoverIndex;
+    if (!hasSpacingItemInList())
+    {
+        addSpacingItem();
+        return;
+    }
+
     QPoint tmpPos = QCursor::pos();
 
     if (tmpPos.x() - m_lastPost.x() == 0)
@@ -262,7 +287,6 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
     }
 
     m_lastPost = tmpPos;
-    lastHoverIndex = tmpIndex;
 
     if (!tmpAppMap.isEmpty())
     {
@@ -275,6 +299,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
         {
             targetItem->setNextPos(QPoint(targetItem->x() - tmpAppMap.firstKey()->width() - itemSpacing,0));
         }
+
         QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
         animation->setStartValue(targetItem->pos());
         animation->setEndValue(targetItem->getNextPos());

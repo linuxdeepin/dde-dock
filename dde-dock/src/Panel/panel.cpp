@@ -90,7 +90,6 @@ void Panel::slotEnteredMask()
 
 void Panel::slotExitedMask()
 {
-    leftLayout->addSpacingItem();
 //    leftLayout->relayout();
 }
 
