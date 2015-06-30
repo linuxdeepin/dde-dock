@@ -91,7 +91,7 @@ void DockLayout::sortLeftToRight()
     if (appList.count() <= 0)
         return;
 
-    appList.at(0)->move(0,0);
+    appList.at(0)->move(itemSpacing,0);
 
     for (int i = 1; i < appList.count(); i ++)
     {
@@ -172,7 +172,7 @@ void DockLayout::addSpacingItem()
         animation->setStartValue(targetItem->pos());
         animation->setEndValue(targetItem->getNextPos());
         animation->setDuration(150 + i * 10);
-        animation->setEasingCurve(QEasingCurve::InOutBack);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
 
         animation->start();
     }
@@ -272,7 +272,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
         animation->setStartValue(targetItem->pos());
         animation->setEndValue(targetItem->getNextPos());
         animation->setDuration(200);
-        animation->setEasingCurve(QEasingCurve::InOutBack);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
         animation->start();
     }
 }

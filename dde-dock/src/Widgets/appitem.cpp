@@ -5,8 +5,9 @@ AppItem::AppItem(QWidget *parent) :
 {
     setParent(parent);
 
-    initBackground();
     setAcceptDrops(true);
+    resize(itemWidth,itemHeight);
+    initBackground();
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
@@ -15,7 +16,9 @@ AppItem::AppItem(QString title, QWidget *parent):
     this->setParent(parent);
     this->itemTitle = title;
 
-    this->initBackground();
+    setAcceptDrops(true);
+    resize(itemWidth,itemHeight);
+    initBackground();
 }
 
 AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
@@ -25,20 +28,10 @@ AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
     this->itemTitle = title;
     this->itemIconPath = iconPath;
 
-    this->initBackground();
-    this->setIcon(itemIconPath);
-}
-
-void AppItem::resize(const QSize &size)
-{
-    QFrame::resize(size);
-    resizeResources();
-}
-
-void AppItem::resize(int width, int height)
-{
-    QFrame::resize(width,height);
-    resizeResources();
+    setAcceptDrops(true);
+    resize(itemWidth,itemHeight);
+    initBackground();
+    setIcon(itemIconPath);
 }
 
 QPoint AppItem::getNextPos()

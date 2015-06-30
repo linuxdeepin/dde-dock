@@ -2,13 +2,14 @@
 #define PANEL_H
 
 #include <QWidget>
+#include <QLabel>
 #include <QPushButton>
 #include <QDebug>
 #include "Widgets/appitem.h"
 #include "Widgets/docklayout.h"
 #include "Widgets/screenmask.h"
 
-class Panel : public QWidget
+class Panel : public QLabel
 {
     Q_OBJECT
 public:

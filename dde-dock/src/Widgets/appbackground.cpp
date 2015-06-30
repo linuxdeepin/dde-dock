@@ -3,5 +3,5 @@
 AppBackground::AppBackground(QWidget *parent) :
     QLabel(parent)
 {
-    this->setStyleSheet("background:#121922;border-radius: 4px;");
+    this->setStyleSheet("QLabel#AppBackground{background: rgba(255,255,255,0.3);border-radius: 4px;}");
 }

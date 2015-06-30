@@ -11,6 +11,8 @@ AppIcon::AppIcon(QWidget *parent,Qt::WindowFlags f) :
 {
     this->setParent(parent);
     this->setWindowFlags(f);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setAlignment(Qt::AlignCenter);
 }
 
 AppIcon::AppIcon(QString iconPath, QWidget *parent, Qt::WindowFlags f) :
@@ -18,9 +20,11 @@ AppIcon::AppIcon(QString iconPath, QWidget *parent, Qt::WindowFlags f) :
 {
     this->setParent(parent);
     this->setWindowFlags(f);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+    this->setAlignment(Qt::AlignCenter);
 
     QString sysIconPath = getSysIcon(iconPath);
-    QPixmap iconPixmap(this->width(),this->height());
+    QPixmap iconPixmap;
     if (sysIconPath != "")
     {
         iconPixmap.load(sysIconPath);

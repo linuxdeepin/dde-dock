@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
+#include <QDebug>
 
 class AppIcon : public QLabel
 {

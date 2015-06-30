@@ -27,8 +27,6 @@ public:
     AppItem(QString title, QString iconPath, QWidget *parent = 0);
     ~AppItem();
 
-    void resize(const QSize &size);
-    void resize(int width, int height);
     QPoint getNextPos();
     void setNextPos(const QPoint &value);
     void setNextPos(int x, int y);
@@ -62,6 +60,8 @@ private:
 private:
     AppBackground * appBackground = NULL;
     QPoint nextPos;
+    const int itemWidth = 60;
+    const int itemHeight = 50;
 };
 
 #endif // APPITEM_H

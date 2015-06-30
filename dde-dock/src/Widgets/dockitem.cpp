@@ -19,7 +19,7 @@ void DockItem::setIcon(const QString &iconPath, int size)
 {
     appIcon = new AppIcon(iconPath,this);
     appIcon->resize(size,size);
-    appIcon->move(this->width() / 2, this->height() / 2);
+    appIcon->move((this->height() - appIcon->height()) / 2, (this->height() - appIcon->height()) / 2);
 }
 
 void DockItem::setActived(bool value)

@@ -1,17 +1,19 @@
 #include "panel.h"
 
 Panel::Panel(QWidget *parent)
-    : QWidget(parent),parentWidget(parent)
+    : QLabel(parent),parentWidget(parent)
 {
+    this->setStyleSheet("QWidget{background-color: rgba(0,0,0,0.3);}");
+
     leftLayout = new DockLayout(this);
     leftLayout->resize(1024,50);
     leftLayout->move(0,0);
 
-    AppItem * b1 = new AppItem("App","../Resources/images/brasero.png");b1->resize(50,50);b1->setAcceptDrops(true);
-    AppItem * b2 = new AppItem("App","../Resources/images/crossover.png");b2->resize(50,50);b2->setAcceptDrops(true);
-    AppItem * b3 = new AppItem("App","../Resources/images/gcr-gnupg.png");b3->resize(50,50);b3->setAcceptDrops(true);
-    AppItem * b4 = new AppItem("App","../Resources/images/display-im6.q16.png");b4->resize(50,50);b4->setAcceptDrops(true);
-    AppItem * b5 = new AppItem("App","../Resources/images/eog.png");b5->resize(50,50);b5->setAcceptDrops(true);
+    AppItem * b1 = new AppItem("App",":/test/Resources/images/brasero.png");
+    AppItem * b2 = new AppItem("App",":/test/Resources/images/crossover.png");
+    AppItem * b3 = new AppItem("App",":/test/Resources/images/vim.png");
+    AppItem * b4 = new AppItem("App",":/test/Resources/images/google-chrome.png");
+    AppItem * b5 = new AppItem("App",":/test/Resources/images/QtProject-qtcreator.png");
 
     leftLayout->addItem(b1);
     leftLayout->addItem(b2);
@@ -22,8 +24,8 @@ Panel::Panel(QWidget *parent)
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
-    AppItem * b6 = new AppItem("App","../Resources/images/display-im6.q16.png");b6->resize(50,50);b6->setAcceptDrops(true);
-    AppItem * b7 = new AppItem("App","../Resources/images/eog.png");b7->resize(50,50);b7->setAcceptDrops(true);
+    AppItem * b6 = new AppItem("App","../Resources/images/display-im6.q16.png");
+    AppItem * b7 = new AppItem("App","../Resources/images/eog.png");
     rightLayout = new DockLayout(this);
     rightLayout->setSortDirection(DockLayout::RightToLeft);
     rightLayout->resize(300,50);
