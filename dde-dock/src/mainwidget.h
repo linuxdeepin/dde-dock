@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QScreen>
 #include <QDebug>
-#include <Panel/panel.h>
+#include "Panel/panel.h"
 
 class MainWidget : public QWidget
 {
