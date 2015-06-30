@@ -11,7 +11,7 @@ class AbstractDockItem : public QFrame
     Q_OBJECT
 public:
     explicit AbstractDockItem(QWidget *parent = 0);
-    virtual ~AbstractDockItem() = 0;
+    virtual ~AbstractDockItem(){}
 
     virtual QWidget * getContents() = 0;
 

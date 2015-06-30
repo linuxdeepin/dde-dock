@@ -4,12 +4,11 @@
 #include <QObject>
 #include "abstractdockitem.h"
 
-class DockPluginInterface : public QObject
+class DockPluginInterface
 {
-    Q_OBJECT
 public:
     virtual ~DockPluginInterface() {}
-    virtual QList<AbstractDockItem*> items(){}
+    virtual QList<AbstractDockItem*> items() = 0;
 };
 
 QT_BEGIN_NAMESPACE
