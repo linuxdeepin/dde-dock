@@ -2,7 +2,7 @@
 
 #include "docktrayitem.h"
 
-static DockTrayItem * fromWinId(WId winId, QWidget *parent)
+DockTrayItem * DockTrayItem::fromWinId(WId winId, QWidget *parent)
 {
     DockTrayItem *item = new DockTrayItem(parent);
 
@@ -19,7 +19,7 @@ static DockTrayItem * fromWinId(WId winId, QWidget *parent)
 DockTrayItem::DockTrayItem(QWidget *parent)
     : AbstractDockItem(parent)
 {
-
+    setFixedSize(32, 32);
 }
 
 DockTrayItem::~DockTrayItem()

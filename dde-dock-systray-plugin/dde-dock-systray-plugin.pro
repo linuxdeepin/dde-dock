@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,7 +15,10 @@ TARGET = $$qtLibraryTarget(dock-systray-plugin)
 TEMPLATE = lib
 
 SOURCES += systrayplugin.cpp \
-    docktrayitem.cpp
+    docktrayitem.cpp \
+    dbustraymanager.cpp
 
 HEADERS  += systrayplugin.h \
-    docktrayitem.h
+    docktrayitem.h \
+    ../dde-dock/src/abstractdockitem.h \
+    dbustraymanager.h

@@ -1,8 +1,12 @@
 #ifndef SYSTRAYPLUGIN_H
 #define SYSTRAYPLUGIN_H
 
+#include <QtPlugin>
+
 #include "docktrayitem.h"
 #include "dockplugininterface.h"
+#include "abstractdockitem.h"
+#include "dbustraymanager.h"
 
 class SystrayPlugin : public QObject, DockPluginInterface
 {
@@ -17,6 +21,7 @@ public:
 
 private:
     QList<AbstractDockItem*> m_items;
+    com::deepin::dde::TrayManager *m_dbusTrayManager = 0;
 
     void clearItems();
 };

@@ -1,4 +1,5 @@
 #include "panel.h"
+#include "systraymanager.h"
 
 Panel::Panel(QWidget *parent)
     : QLabel(parent),parentWidget(parent)
@@ -23,14 +24,15 @@ Panel::Panel(QWidget *parent)
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
-    AppItem * b6 = new AppItem("App","../Resources/images/display-im6.q16.png");
-    AppItem * b7 = new AppItem("App","../Resources/images/eog.png");
     rightLayout = new DockLayout(this);
     rightLayout->setSortDirection(DockLayout::RightToLeft);
     rightLayout->resize(300,50);
     rightLayout->move(0,0);
-    rightLayout->addItem(b6);
-    rightLayout->addItem(b7);
+
+    SystrayManager *manager = new SystrayManager();
+    foreach (AbstractDockItem *item, manager->trayIcons()) {
+        rightLayout->addItem(item);
+    }
 }
 
 void Panel::resize(const QSize &size)

@@ -24,7 +24,8 @@ SOURCES += \
     src/Widgets/screenmask.cpp \
     src/Widgets/windowpreview.cpp \
     src/Panel/panel.cpp \
-    src/Widgets/appitem.cpp
+    src/Widgets/appitem.cpp \
+    src/systraymanager.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -39,7 +40,8 @@ HEADERS  += \
     src/Widgets/screenmask.h \
     src/Widgets/windowpreview.h \
     src/Panel/panel.h \
-    src/Widgets/appitem.h
+    src/Widgets/appitem.h \
+    src/systraymanager.h
 
 RESOURCES += \
     images.qrc \
