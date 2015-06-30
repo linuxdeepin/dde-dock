@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+    <schema path="/com/deepin/filemanager/desktop/" id="com.deepin.filemanager.desktop">
+        <key name="manual-position" type="b">
+            <default>false</default>
+            <summary>Whether enable manual position.</summary>
+            <description>If true, the items on desktop can be placed on anywhere.</description>
+        </key>
+
+        <key name="auto-arrangement" type="b">
+            <default>false</default>
+            <summary>Auto-arrangement items on desktop.</summary>
+            <description>Items on desktop will always be placed one by one, and order doesn't mater.</description>
+        </key>
+
+        <key name="stickup-grid" type="b">
+            <default>true</default>
+            <summary>Whether enable stickup grid.</summary>
+            <description>If true, the items on desktop will get the position stickup to grid.</description>
+        </key>
+
+        <key name="show-computer-icon" type="b">
+            <default>false</default>
+            <summary>Whether show computer icon on desktop.</summary>
+            <description>If true, show it.</description>
+        </key>
+
+        <!-- <key name="show&#45;home&#45;icon" type="b"> -->
+        <!--     <default>false</default> -->
+        <!--     <summary>Whether show home icon on desktop.</summary> -->
+        <!--     <description>If true, show it.</description> -->
+        <!-- </key> -->
+
+        <key name="show-trash-icon" type="b">
+            <default>false</default>
+            <summary>Whether show trash icon on desktop.</summary>
+            <description>If true, show it.</description>
+        </key>
+
+        <key name="show-trashed-item-number" type="b">
+            <default>true</default>
+            <summary>Whether show trashed item number on contextmenu.</summary>
+            <description>If true, show it.</description>
+        </key>
+    </schema>
+</schemalist>

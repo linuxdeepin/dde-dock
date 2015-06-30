@@ -96,5 +96,10 @@
       <summary></summary>
       <description></description>
     </key>
+    <key type="b"  name="desktop">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
     </schema>
 </schemalist>
