@@ -12,36 +12,38 @@ TARGET = dde-dock
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwidget.cpp \
-    Panel/panel.cpp \
-    Widgets/appicon.cpp \
+SOURCES += \
+    main.cpp \
+    mainwidget.cpp \
     Widgets/appbackground.cpp \
+    Widgets/appicon.cpp \
+    Widgets/appitem.cpp \
     Widgets/dockconstants.cpp \
+    Widgets/dockitem.cpp \
+    Widgets/dockitemdelegate.cpp \
+    Widgets/docklayout.cpp \
     Widgets/dockmodel.cpp \
     Widgets/dockview.cpp \
-    Widgets/dockitemdelegate.cpp \
-    Widgets/appitem.cpp \
-    Widgets/docklayout.cpp \
+    Widgets/screenmask.cpp \
     Widgets/windowpreview.cpp \
-    Widgets/dockitem.cpp \
-    Widgets/screenmask.cpp
+    Panel/panel.cpp
 
-HEADERS  += mainwidget.h \
-    Panel/panel.h \
-    Widgets/appicon.h \
+HEADERS  += \
+    abstractdockitem.h \
+    dockplugininterface.h \
+    mainwidget.h \
     Widgets/appbackground.h \
+    Widgets/appicon.h \
+    Widgets/appitem.h \
     Widgets/dockconstants.h \
+    Widgets/dockitem.h \
+    Widgets/dockitemdelegate.h \
+    Widgets/docklayout.h \
     Widgets/dockmodel.h \
     Widgets/dockview.h \
-    Widgets/dockitemdelegate.h \
-    Widgets/appitem.h \
-    Widgets/docklayout.h \
-    Widgets/windowpreview.h \
-    Widgets/dockitem.h \
     Widgets/screenmask.h \
-    dockplugininterface.h \
-    abstractdockitem.h
+    Widgets/windowpreview.h \
+    Panel/panel.h
 
 RESOURCES += \
     images.qrc
