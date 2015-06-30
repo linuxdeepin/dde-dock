@@ -12,12 +12,12 @@
 #include <QPixmap>
 #include <QImage>
 #include <QDebug>
-#include "dockitem.h"
+#include "abstractdockitem.h"
 #include "dockconstants.h"
 #include "appicon.h"
 #include "appbackground.h"
 
-class AppItem : public DockItem
+class AppItem : public AbstractDockItem
 {
     Q_OBJECT
     Q_PROPERTY(QPoint pos READ pos WRITE move)

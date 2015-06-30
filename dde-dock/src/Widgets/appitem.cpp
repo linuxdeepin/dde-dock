@@ -1,37 +1,33 @@
 #include "appitem.h"
 
 AppItem::AppItem(QWidget *parent) :
-    DockItem(parent)
+    AbstractDockItem(parent)
 {
-    setParent(parent);
-
     setAcceptDrops(true);
-    resize(itemWidth,itemHeight);
+    resize(itemWidth, itemHeight);
     initBackground();
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
-    DockItem(parent)
+    AbstractDockItem(parent)
 {
-    this->setParent(parent);
-    this->itemTitle = title;
+    m_itemTitle = title;
 
     setAcceptDrops(true);
-    resize(itemWidth,itemHeight);
+    resize(itemWidth, itemHeight);
     initBackground();
 }
 
 AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
-    DockItem(parent)
+    AbstractDockItem(parent)
 {
-    this->setParent(parent);
-    this->itemTitle = title;
-    this->itemIconPath = iconPath;
+    m_itemTitle = title;
+    m_itemIconPath = iconPath;
 
     setAcceptDrops(true);
-    resize(itemWidth,itemHeight);
+    resize(itemWidth, itemHeight);
     initBackground();
-    setIcon(itemIconPath);
+    setIcon(m_itemIconPath);
 }
 
 QPoint AppItem::getNextPos()
@@ -52,15 +48,17 @@ void AppItem::setNextPos(int x, int y)
 
 void AppItem::resizeResources()
 {
-    if (appIcon != NULL)
+    if (m_appIcon != NULL)
     {
-        appIcon->resize(DockConstants::getInstants()->getIconSize(),DockConstants::getInstants()->getIconSize());
-        appIcon->move(this->width() / 2 - appIcon->width() / 2, this->height() / 2 - appIcon->height() / 2);
+        m_appIcon->resize(DockConstants::getInstants()->getIconSize(),
+                          DockConstants::getInstants()->getIconSize());
+        m_appIcon->move(width() / 2 - m_appIcon->width() / 2,
+                        height() / 2 - m_appIcon->height() / 2);
     }
 
     if (appBackground != NULL)
     {
-        appBackground->resize(this->width(),this->height());
+        appBackground->resize(width(), height());
         appBackground->move(0,0);
     }
 }
@@ -68,7 +66,7 @@ void AppItem::resizeResources()
 void AppItem::initBackground()
 {
     appBackground = new AppBackground(this);
-    appBackground->resize(this->width(),this->height());
+    appBackground->resize(width(), height());
     appBackground->move(0,0);
 }
 
@@ -99,11 +97,11 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
     {
         QDrag* drag = new QDrag(this);
         QMimeData* data = new QMimeData();
-        QImage dataImg(this->itemIconPath);
+        QImage dataImg(m_itemIconPath);
         data->setImageData(QVariant(dataImg));
         drag->setMimeData(data);
 
-        QPixmap pixmap(this->itemIconPath);
+        QPixmap pixmap(m_itemIconPath);
         drag->setPixmap(pixmap);
 
         drag->setHotSpot(QPoint(15,15));

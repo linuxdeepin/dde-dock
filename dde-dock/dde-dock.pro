@@ -17,16 +17,14 @@ SOURCES += \
     src/mainwidget.cpp \
     src/Widgets/appbackground.cpp \
     src/Widgets/appicon.cpp \
-    src/Widgets/appitem.cpp \
     src/Widgets/dockconstants.cpp \
-    src/Widgets/dockitem.cpp \
-    src/Widgets/dockitemdelegate.cpp \
     src/Widgets/docklayout.cpp \
     src/Widgets/dockmodel.cpp \
     src/Widgets/dockview.cpp \
     src/Widgets/screenmask.cpp \
     src/Widgets/windowpreview.cpp \
-    src/Panel/panel.cpp
+    src/Panel/panel.cpp \
+    src/Widgets/appitem.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -34,16 +32,14 @@ HEADERS  += \
     src/mainwidget.h \
     src/Widgets/appbackground.h \
     src/Widgets/appicon.h \
-    src/Widgets/appitem.h \
     src/Widgets/dockconstants.h \
-    src/Widgets/dockitem.h \
-    src/Widgets/dockitemdelegate.h \
     src/Widgets/docklayout.h \
     src/Widgets/dockmodel.h \
     src/Widgets/dockview.h \
     src/Widgets/screenmask.h \
     src/Widgets/windowpreview.h \
-    src/Panel/panel.h
+    src/Panel/panel.h \
+    src/Widgets/appitem.h
 
 RESOURCES += \
     images.qrc
