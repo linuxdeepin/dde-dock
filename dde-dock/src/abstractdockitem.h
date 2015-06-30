@@ -31,6 +31,21 @@ public:
     virtual void setIndex(int value) { m_itemIndex = value; }
     virtual int index() { return m_itemIndex; }
 
+    QPoint getNextPos() { return m_itemNextPos; }
+    void setNextPos(const QPoint &value) { m_itemNextPos = value; }
+    void setNextPos(int x, int y) { m_itemNextPos.setX(x); m_itemNextPos.setY(y); }
+
+signals:
+    void dragStart();
+    void dragEntered(QDragEnterEvent * event);
+    void dragExited(QDragLeaveEvent * event);
+    void drop(QDropEvent * event);
+    void mouseEntered();
+    void mouseExited();
+    void mousePress(int x, int y);
+    void mouseRelease(int x, int y);
+    void mouseDoubleClick();
+
 protected:
     QLabel * m_appIcon = NULL;
 
@@ -39,6 +54,7 @@ protected:
 
     QString m_itemTitle = "";
     QString m_itemIconPath = "";
+    QPoint m_itemNextPos;
 
     int m_itemIndex = 0;
 

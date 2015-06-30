@@ -1,4 +1,5 @@
 #include "docklayout.h"
+#include "abstractdockitem.h"
 
 DockLayout::DockLayout(QWidget *parent) :
     QWidget(parent)
@@ -11,22 +12,22 @@ void DockLayout::setParent(QWidget *parent)
     this->setParent(parent);
 }
 
-void DockLayout::addItem(AppItem *item)
+void DockLayout::addItem(AbstractDockItem *item)
 {
     insertItem(item,appList.count());
 }
 
-void DockLayout::insertItem(AppItem *item, int index)
+void DockLayout::insertItem(AbstractDockItem *item, int index)
 {
     item->setParent(this);
     int appCount = appList.count();
     index = index > appCount ? appCount : (index < 0 ? 0 : index);
 
     appList.insert(index,item);
-    connect(item,SIGNAL(mouseRelease(int,int,AppItem*)),this,SLOT(slotItemRelease(int,int,AppItem*)));
-    connect(item, SIGNAL(dragStart(AppItem*)),this,SLOT(slotItemDrag(AppItem*)));
-    connect(item,SIGNAL(dragEntered(QDragEnterEvent*,AppItem*)),this,SLOT(slotItemEntered(QDragEnterEvent*,AppItem*)));
-    connect(item,SIGNAL(dragExited(QDragLeaveEvent*,AppItem*)),this,SLOT(slotItemExited(QDragLeaveEvent*,AppItem*)));
+    connect(item, &AbstractDockItem::mouseRelease, this, &DockLayout::slotItemRelease);
+    connect(item, &AbstractDockItem::dragStart, this, &DockLayout::slotItemDrag);
+    connect(item, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
+    connect(item, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
 
     relayout();
 }
@@ -95,7 +96,7 @@ void DockLayout::sortLeftToRight()
 
     for (int i = 1; i < appList.count(); i ++)
     {
-        AppItem * frontItem = appList.at(i - 1);
+        AbstractDockItem * frontItem = appList.at(i - 1);
         appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
     }
 }
@@ -109,8 +110,8 @@ void DockLayout::sortRightToLeft()
 
     for (int i = 1; i < appList.count(); i++)
     {
-        AppItem *fromItem = appList.at(i - 1);
-        AppItem *toItem = appList.at(i);
+        AbstractDockItem *fromItem = appList.at(i - 1);
+        AbstractDockItem *toItem = appList.at(i);
         toItem->move(fromItem->x() - itemSpacing - toItem->width(),0);
     }
 }
@@ -125,7 +126,7 @@ void DockLayout::sortBottomToTop()
 
 }
 
-int DockLayout::indexOf(AppItem *item)
+int DockLayout::indexOf(AbstractDockItem *item)
 {
     return appList.indexOf(item);
 }
@@ -162,10 +163,10 @@ void DockLayout::addSpacingItem()
     if (tmpAppMap.isEmpty())
         return;
 
-    AppItem *tmpItem = tmpAppMap.firstKey();
+    AbstractDockItem *tmpItem = tmpAppMap.firstKey();
     for (int i = appList.count() -1;i > lastHoverIndex; i-- )
     {
-        AppItem *targetItem = appList.at(i);
+        AbstractDockItem *targetItem = appList.at(i);
         targetItem->setNextPos(targetItem->x() + tmpItem->width() + itemSpacing,0);
 
         QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
@@ -180,7 +181,7 @@ void DockLayout::addSpacingItem()
 
 void DockLayout::dragoutFromLayout(int index)
 {
-    AppItem * tmpItem = appList.takeAt(index);
+    AbstractDockItem * tmpItem = appList.takeAt(index);
     tmpItem->setVisible(false);
     tmpAppMap.insert(tmpItem,index);
 }
@@ -193,7 +194,7 @@ void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 
 void DockLayout::dropEvent(QDropEvent *event)
 {
-    AppItem * tmpItem = tmpAppMap.firstKey();
+    AbstractDockItem * tmpItem = tmpAppMap.firstKey();
     tmpAppMap.remove(tmpItem);
     tmpItem->setVisible(true);
     if (indexOf(tmpItem) == -1)
@@ -207,9 +208,11 @@ void DockLayout::dropEvent(QDropEvent *event)
     emit itemDropped();
 }
 
-void DockLayout::slotItemDrag(AppItem *item)
+void DockLayout::slotItemDrag()
 {
 //    qWarning() << "Item draging..."<<x<<y<<item;
+    AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
+
     int tmpIndex = indexOf(item);
     if (tmpIndex != -1)
     {
@@ -221,10 +224,12 @@ void DockLayout::slotItemDrag(AppItem *item)
     }
 }
 
-void DockLayout::slotItemRelease(int x, int y, AppItem *item)
+void DockLayout::slotItemRelease(int, int)
 {
     //outside frame,destroy it
     //inside frame,insert it
+    AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
+
     item->setVisible(true);
     if (indexOf(item) == -1)
     {
@@ -232,8 +237,10 @@ void DockLayout::slotItemRelease(int x, int y, AppItem *item)
     }
 }
 
-void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
+void DockLayout::slotItemEntered(QDragEnterEvent *)
 {
+    AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
+
     int tmpIndex = indexOf(item);
     QPoint tmpPos = QCursor::pos();
 
@@ -259,7 +266,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
 
     if (!tmpAppMap.isEmpty())
     {
-        AppItem *targetItem = appList.at(tmpIndex);
+        AbstractDockItem *targetItem = appList.at(tmpIndex);
         if (movingForward)
         {
             targetItem->setNextPos(QPoint(targetItem->x() + tmpAppMap.firstKey()->width() + itemSpacing,0));
@@ -277,7 +284,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent * event,AppItem *item)
     }
 }
 
-void DockLayout::slotItemExited(QDragLeaveEvent *event,AppItem *item)
+void DockLayout::slotItemExited(QDragLeaveEvent *)
 {
 
 }

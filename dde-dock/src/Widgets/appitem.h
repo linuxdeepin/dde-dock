@@ -27,10 +27,6 @@ public:
     AppItem(QString title, QString iconPath, QWidget *parent = 0);
     ~AppItem();
 
-    QPoint getNextPos();
-    void setNextPos(const QPoint &value);
-    void setNextPos(int x, int y);
-
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
@@ -41,17 +37,6 @@ protected:
     void dragEnterEvent(QDragEnterEvent * event);
     void dragLeaveEvent(QDragLeaveEvent * event);
     void dropEvent(QDropEvent * event);
-
-signals:
-    void dragStart(AppItem *item);
-    void dragEntered(QDragEnterEvent * event,AppItem *item);
-    void dragExited(QDragLeaveEvent * event,AppItem *item);
-    void drop(QDropEvent * event,AppItem *item);
-    void mouseEntered(AppItem *item);
-    void mouseExited(AppItem *item);
-    void mousePress(int x, int y, AppItem *item);
-    void mouseRelease(int x, int y, AppItem *item);
-    void mouseDoubleClick( AppItem *item);
 
 private:
     void resizeResources();

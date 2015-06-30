@@ -29,8 +29,8 @@ public:
     explicit DockLayout(QWidget *parent = 0);
 
     void setParent(QWidget *parent);
-    void addItem(AppItem * item);
-    void insertItem(AppItem *item, int index);
+    void addItem(AbstractDockItem * item);
+    void insertItem(AbstractDockItem *item, int index);
     void removeItem(int index);
     void moveItem(int from, int to);
     void setItemMoveable(int index, bool moveable);
@@ -38,7 +38,7 @@ public:
     void setMargin(DockLayout::MarginEdge edge, qreal margin);
     void setSpacing(qreal spacing);
     void setSortDirection(DockLayout::Direction value);
-    int indexOf(AppItem * item);
+    int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
     void relayout();
     void addSpacingItem();
@@ -53,10 +53,10 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private slots:
-    void slotItemDrag(AppItem *item);
-    void slotItemRelease(int x, int y, AppItem *item);
-    void slotItemEntered(QDragEnterEvent * event,AppItem *item);
-    void slotItemExited(QDragLeaveEvent *event,AppItem *item);
+    void slotItemDrag();
+    void slotItemRelease(int x, int y);
+    void slotItemEntered(QDragEnterEvent * event);
+    void slotItemExited(QDragLeaveEvent *event);
 
 private:
     void sortLeftToRight();
@@ -65,8 +65,8 @@ private:
     void sortBottomToTop();
 
 private:
-    QList<AppItem *> appList;
-    QMap<AppItem *,int> tmpAppMap;//only one item inside
+    QList<AbstractDockItem *> appList;
+    QMap<AbstractDockItem *,int> tmpAppMap;//only one item inside
 
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;

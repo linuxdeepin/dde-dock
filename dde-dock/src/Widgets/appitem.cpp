@@ -30,22 +30,6 @@ AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
     setIcon(m_itemIconPath);
 }
 
-QPoint AppItem::getNextPos()
-{
-    return this->nextPos;
-}
-
-void AppItem::setNextPos(const QPoint &value)
-{
-    this->nextPos = value;
-}
-
-void AppItem::setNextPos(int x, int y)
-{
-    this->nextPos.setX(x);
-    this->nextPos.setY(y);
-}
-
 void AppItem::resizeResources()
 {
     if (m_appIcon != NULL)
@@ -73,24 +57,24 @@ void AppItem::initBackground()
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
     //qWarning() << "mouse press...";
-    emit mousePress(event->globalX(), event->globalY(),this);
+    emit mousePress(event->globalX(), event->globalY());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
 {
 //    qWarning() << "mouse release...";
-    emit mouseRelease(event->globalX(), event->globalY(),this);
+    emit mouseRelease(event->globalX(), event->globalY());
 }
 
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
 {
-    emit mouseDoubleClick(this);
+    emit mouseDoubleClick();
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *event)
 {
     //this event will only execp onec then handle by Drag
-    emit dragStart(this);
+    emit dragStart();
 
     Qt::MouseButtons btn = event->buttons();
     if(btn == Qt::LeftButton)
@@ -112,17 +96,17 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
 
 void AppItem::enterEvent(QEvent *event)
 {
-    emit mouseEntered(this);
+    emit mouseEntered();
 }
 
 void AppItem::leaveEvent(QEvent *event)
 {
-    emit mouseExited(this);
+    emit mouseExited();
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *event)
 {
-    emit dragEntered(event,this);
+    emit dragEntered(event);
 
     AppItem *tmpItem = NULL;
     tmpItem = dynamic_cast<AppItem *>(event->source());
@@ -139,13 +123,13 @@ void AppItem::dragEnterEvent(QDragEnterEvent *event)
 
 void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    emit dragExited(event,this);
+    emit dragExited(event);
 }
 
 void AppItem::dropEvent(QDropEvent *event)
 {
     qWarning() << "Item get drop:" << event->pos();
-    emit drop(event,this);
+    emit drop(event);
 }
 
 AppItem::~AppItem()
