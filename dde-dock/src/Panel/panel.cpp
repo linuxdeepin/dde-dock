@@ -5,8 +5,15 @@ Panel::Panel(QWidget *parent)
     : QLabel(parent),parentWidget(parent)
 {
     this->setObjectName("Panel");
+
+    rightLayout = new DockLayout(this);
+    rightLayout->setSortDirection(DockLayout::RightToLeft);
+    rightLayout->setSpacing(dockCons->getAppletsItemSpacing());
+    rightLayout->resize(80,dockCons->getAppletsItemHeight());
+
     leftLayout = new DockLayout(this);
-    leftLayout->resize(1024,50);
+    rightLayout->setSpacing(dockCons->getAppItemSpacing());
+    leftLayout->resize(this->width() - rightLayout->width(),dockCons->getDockHeight());
     leftLayout->move(0,0);
 
     AppItem * b1 = new AppItem("App",":/test/Resources/images/brasero.png");
@@ -24,29 +31,29 @@ Panel::Panel(QWidget *parent)
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
-    rightLayout = new DockLayout(this);
-    rightLayout->setSortDirection(DockLayout::RightToLeft);
-    rightLayout->resize(300,50);
-    rightLayout->move(0,0);
+    connect(dockCons, SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
+            this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
 
     SystrayManager *manager = new SystrayManager();
     foreach (AbstractDockItem *item, manager->trayIcons()) {
         rightLayout->addItem(item);
     }
+
+    panelMenu = new PanelMenu();
 }
 
 void Panel::resize(const QSize &size)
 {
     QWidget::resize(size);
-    leftLayout->resize(this->width() * 2 / 3,this->height());
-    rightLayout->move(this->width() - rightLayout->width(),0);
+
+    reanchorsLayout(dockCons->getDockMode());
 }
 
 void Panel::resize(int width, int height)
 {
     QWidget::resize(width,height);
-    leftLayout->resize(this->width() * 2 / 3,this->height());
-    rightLayout->move(this->width() - rightLayout->width(),0);
+
+    reanchorsLayout(dockCons->getDockMode());
 }
 
 void Panel::showScreenMask()
@@ -92,6 +99,58 @@ void Panel::slotEnteredMask()
 void Panel::slotExitedMask()
 {
 //    leftLayout->relayout();
+}
+
+void Panel::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
+{
+    reanchorsLayout(newMode);
+
+    this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
+    this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
+}
+
+void Panel::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::RightButton)
+        showMenu();
+}
+
+void Panel::mouseReleaseEvent(QMouseEvent *event)
+{
+
+}
+
+void Panel::reanchorsLayout(DockConstants::DockMode mode)
+{
+    if (mode == DockConstants::FashionMode)
+    {
+        leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getDockHeight());
+
+        rightLayout->setSortDirection(DockLayout::LeftToRight);
+        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),0);
+    }
+    else
+    {
+        rightLayout->setSortDirection(DockLayout::RightToLeft);
+        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        rightLayout->move(parentWidget->width() - rightLayout->width(),0);
+
+        leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getDockHeight());
+    }
+}
+
+void Panel::showMenu()
+{
+    QPoint tmpPos = QCursor::pos();
+
+    panelMenu->move(tmpPos.x(),tmpPos.y() - panelMenu->height());
+    panelMenu->show();
+}
+
+void Panel::hideMenu()
+{
+
 }
 
 Panel::~Panel()

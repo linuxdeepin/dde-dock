@@ -7,11 +7,6 @@ DockLayout::DockLayout(QWidget *parent) :
     this->setAcceptDrops(true);
 }
 
-void DockLayout::setParent(QWidget *parent)
-{
-    this->setParent(parent);
-}
-
 void DockLayout::addItem(AbstractDockItem *item)
 {
     insertItem(item,appList.count());
@@ -35,6 +30,7 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
 void DockLayout::removeItem(int index)
 {
     delete appList.takeAt(index);
+    relayout();
 }
 
 void DockLayout::moveItem(int from, int to)
@@ -46,35 +42,6 @@ void DockLayout::moveItem(int from, int to)
 void DockLayout::setItemMoveable(int index, bool moveable)
 {
     appList.at(index)->setMoveable(moveable);
-}
-
-void DockLayout::setMargin(qreal margin)
-{
-    this->leftMargin = margin;
-    this->rightMargin = margin;
-    this->topMargin = margin;
-    this->bottomMargin = margin;
-}
-
-void DockLayout::setMargin(DockLayout::MarginEdge edge, qreal margin)
-{
-    switch(edge)
-    {
-    case DockLayout::LeftMargin:
-        this->leftMargin = margin;
-        break;
-    case DockLayout::RightMargin:
-        this->rightMargin = margin;
-        break;
-    case DockLayout::TopMargin:
-        this->topMargin = margin;
-        break;
-    case DockLayout::BottomMargin:
-        this->bottomMargin = margin;
-        break;
-    default:
-        break;
-    }
 }
 
 void DockLayout::setSpacing(qreal spacing)
@@ -116,16 +83,6 @@ void DockLayout::sortRightToLeft()
     }
 }
 
-void DockLayout::sortTopToBottom()
-{
-
-}
-
-void DockLayout::sortBottomToTop()
-{
-
-}
-
 bool DockLayout::hasSpacingItemInList()
 {
     if (appList.count() <= 1)
@@ -164,12 +121,6 @@ void DockLayout::relayout()
     case RightToLeft:
         sortRightToLeft();
         break;
-    case TopToBottom:
-        sortTopToBottom();
-        break;
-    case BottomToTop:
-        sortBottomToTop();
-        break;
     default:
         break;
     }
@@ -201,6 +152,21 @@ void DockLayout::dragoutFromLayout(int index)
     AbstractDockItem * tmpItem = appList.takeAt(index);
     tmpItem->setVisible(false);
     tmpAppMap.insert(tmpItem,index);
+}
+
+int DockLayout::getContentsWidth()
+{
+    int tmpWidth = appList.count() * itemSpacing;
+    for (int i = 0; i < appList.count(); i ++)
+    {
+        tmpWidth += appList.at(i)->width();
+    }
+    return tmpWidth;
+}
+
+int DockLayout::getItemCount()
+{
+    return appList.count();
 }
 
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)
@@ -260,7 +226,6 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
 
     int tmpIndex = indexOf(item);
     lastHoverIndex = tmpIndex;
-    qWarning() << "========" << lastHoverIndex;
     if (!hasSpacingItemInList())
     {
         addSpacingItem();
@@ -279,10 +244,6 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
         break;
     case RightToLeft:
         movingForward = tmpPos.x() - m_lastPost.x() > 0;
-        break;
-    case TopToBottom:
-        break;
-    case BottomToTop:
         break;
     }
 

@@ -27,3 +27,13 @@ QLabel#AppBackground[isActived="true"][isHovered="false"][isCurrentOpened="false
     border-style: solid;
     border-color: rgba(255,255,255,0.3);
 }
+
+QLabel#panelMenuContent {
+    background: rgba(255,255,255,0.8);
+    border-radius: 5px;
+}
+
+PanelMenuItem:hover {
+    background: gray;
+    color: #ffffff
+}

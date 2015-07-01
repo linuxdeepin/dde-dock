@@ -7,6 +7,7 @@
 #include <QPropertyAnimation>
 #include <QCursor>
 #include "appitem.h"
+#include "dockconstants.h"
 
 class DockLayout : public QWidget
 {
@@ -14,38 +15,29 @@ class DockLayout : public QWidget
 public:
     enum Direction{
         LeftToRight,
-        RightToLeft,
-        TopToBottom,
-        BottomToTop
-    };
-
-    enum MarginEdge{
-        LeftMargin,
-        RightMargin,
-        TopMargin,
-        BottomMargin
+        RightToLeft
     };
 
     explicit DockLayout(QWidget *parent = 0);
 
-    void setParent(QWidget *parent);
     void addItem(AbstractDockItem * item);
     void insertItem(AbstractDockItem *item, int index);
     void removeItem(int index);
     void moveItem(int from, int to);
     void setItemMoveable(int index, bool moveable);
-    void setMargin(qreal margin);
-    void setMargin(DockLayout::MarginEdge edge, qreal margin);
     void setSpacing(qreal spacing);
     void setSortDirection(DockLayout::Direction value);
     int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
     void relayout();
     void dragoutFromLayout(int index);
+    int getContentsWidth();
+    int getItemCount();
 
 signals:
     void dragStarted();
     void itemDropped();
+    void widthChange(int width);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
@@ -60,8 +52,6 @@ private slots:
 private:
     void sortLeftToRight();
     void sortRightToLeft();
-    void sortTopToBottom();
-    void sortBottomToTop();
 
     void addSpacingItem();
     bool hasSpacingItemInList();
@@ -72,10 +62,6 @@ private:
 
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;
-    qreal leftMargin = 0;
-    qreal rightMargin = 0;
-    qreal topMargin = 0;
-    qreal bottomMargin = 0;
 
     bool movingForward = false;
     int lastHoverIndex = 0;

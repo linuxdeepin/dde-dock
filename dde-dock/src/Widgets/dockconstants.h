@@ -39,7 +39,7 @@ private:
 private:
     static DockConstants * dockConstants;
 
-    DockMode m_currentMode = DockConstants::FashionMode;
+    DockMode m_currentMode = DockConstants::EfficientMode;
 
 };
 

@@ -25,7 +25,8 @@ SOURCES += \
     src/Widgets/windowpreview.cpp \
     src/Panel/panel.cpp \
     src/Widgets/appitem.cpp \
-    src/systraymanager.cpp
+    src/systraymanager.cpp \
+    src/Panel/panelmenu.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -41,7 +42,8 @@ HEADERS  += \
     src/Widgets/windowpreview.h \
     src/Panel/panel.h \
     src/Widgets/appitem.h \
-    src/systraymanager.h
+    src/systraymanager.h \
+    src/Panel/panelmenu.h
 
 RESOURCES += \
     images.qrc \

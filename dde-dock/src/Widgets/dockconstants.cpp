@@ -139,11 +139,11 @@ int DockConstants::getAppletsItemWidth()
     case DockConstants::FashionMode:
         return 60;
     case DockConstants::EfficientMode:
-        return 40;
+        return 50;
     case DockConstants::ClassicMode:
-        return 40;
+        return 50;
     default:
-        return 40;
+        return 50;
     }
 }
 
@@ -154,11 +154,11 @@ int DockConstants::getAppletsItemSpacing()
     case DockConstants::FashionMode:
         return 10;
     case DockConstants::EfficientMode:
-        return 6;
+        return 10;
     case DockConstants::ClassicMode:
-        return 6;
+        return 10;
     default:
-        return 6;
+        return 10;
     }
 }
 
