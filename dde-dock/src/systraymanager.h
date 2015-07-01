@@ -16,6 +16,7 @@ private:
     DockPluginInterface *m_plugin;
 
     void loadPlugin();
+    void unloadPlugin();
 };
 
 #endif // SYSTRAYMANAGER_H

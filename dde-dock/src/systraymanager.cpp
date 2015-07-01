@@ -4,6 +4,8 @@
 
 #include "systraymanager.h"
 
+static QString SystrayPluginPath = "/usr/share/dde-dock/plugins/libdock-systray-plugin.so";
+
 SystrayManager::SystrayManager(QObject *parent)
     : QObject(parent),
       m_plugin(0)
@@ -13,17 +15,25 @@ SystrayManager::SystrayManager(QObject *parent)
 
 QList<AbstractDockItem*> SystrayManager::trayIcons()
 {
-    return m_plugin->items();
+    if (m_plugin) {
+        return m_plugin->items();
+    } else {
+        return QList<AbstractDockItem*>();
+    }
 }
 
 void SystrayManager::loadPlugin()
 {
-    QPluginLoader loader("/home/hualet/project/linuxdeepin/dde-workspace-2015/dde-dock-systray-plugin/build/libdock-systray-plugin.so");
-    QObject *plugin = loader.instance();
-    if (plugin) {
-        m_plugin = qobject_cast<DockPluginInterface*>(plugin);
+    if (QFile::exists(SystrayPluginPath)) {
+        QPluginLoader loader(SystrayPluginPath);
+        QObject *plugin = loader.instance();
+        if (plugin) {
+            m_plugin = qobject_cast<DockPluginInterface*>(plugin);
+        } else {
+            qWarning() << "Failed to load systray plugin.";
+            qWarning() << loader.errorString();
+        }
     } else {
-        qWarning() << "Failed to load systray plugin.";
-        qWarning() << loader.errorString();
+        qWarning() << "libdock-systray-plugin.so file not found!";
     }
 }
