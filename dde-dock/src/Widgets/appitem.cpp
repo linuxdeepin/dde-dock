@@ -50,6 +50,7 @@ void AppItem::resizeResources()
 void AppItem::initBackground()
 {
     appBackground = new AppBackground(this);
+//    appBackground->setObjectName("appBackground");
     appBackground->resize(width(), height());
     appBackground->move(0,0);
 }
@@ -58,6 +59,8 @@ void AppItem::mousePressEvent(QMouseEvent * event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY());
+    ////////////FOR TEST ONLY/////////////////////
+    appBackground->setIsActived(!appBackground->getIsActived());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
@@ -69,6 +72,8 @@ void AppItem::mouseReleaseEvent(QMouseEvent * event)
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit mouseDoubleClick();
+    ////////////FOR TEST ONLY/////////////////////
+    appBackground->setIsCurrentOpened(!appBackground->getIsCurrentOpened());
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *event)
@@ -97,11 +102,13 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
 void AppItem::enterEvent(QEvent *event)
 {
     emit mouseEntered();
+    appBackground->setIsHovered(true);
 }
 
 void AppItem::leaveEvent(QEvent *event)
 {
     emit mouseExited();
+    appBackground->setIsHovered(false);
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *event)

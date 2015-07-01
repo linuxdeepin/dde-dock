@@ -42,7 +42,8 @@ HEADERS  += \
     src/Widgets/appitem.h
 
 RESOURCES += \
-    images.qrc
+    images.qrc \
+    qss.qrc
 
 PKGCONFIG += gtk+-2.0 x11
 CONFIG += c++11 link_pkgconfig

@@ -1,0 +1,29 @@
+QLabel#Panel {
+    background-color: rgba(0,0,0,0.3);
+}
+
+QLabel#AppBackground[isCurrentOpened="true"][isHovered="true"] {/*item is current opened and is hovered*/
+    background: rgba(0,255,255,0.5);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.3);
+}
+QLabel#AppBackground[isCurrentOpened="true"][isHovered="false"] {/*item is current opened but not hovered*/
+    background: rgba(0,255,255,0.4);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.3);
+}
+
+QLabel#AppBackground[isActived="true"][isHovered="true"][isCurrentOpened="false"] {/*item is actived and hovered*/
+    background: rgba(255,255,255,0.3);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.3);
+}
+QLabel#AppBackground[isActived="true"][isHovered="false"][isCurrentOpened="false"] {/*item is actived but not hovered*/
+    background: rgba(255,255,255,0.15);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.3);
+}

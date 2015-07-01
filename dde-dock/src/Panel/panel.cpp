@@ -3,8 +3,7 @@
 Panel::Panel(QWidget *parent)
     : QLabel(parent),parentWidget(parent)
 {
-    this->setStyleSheet("QWidget{background-color: rgba(0,0,0,0.3);}");
-
+    this->setObjectName("Panel");
     leftLayout = new DockLayout(this);
     leftLayout->resize(1024,50);
     leftLayout->move(0,0);
