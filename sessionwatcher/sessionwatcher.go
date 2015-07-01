@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,33 +22,44 @@
 package sessionwatcher
 
 import (
-	"os/exec"
+	"pkg.linuxdeepin.com/dde-daemon/loader"
+	"pkg.linuxdeepin.com/lib/log"
 )
 
-const (
-	_DDE_DOCK_SENDER = "com.deepin.dde.dock"
-	_DDE_DOCK_CMD    = "/usr/bin/dde-dock"
-)
+var _m *Manager
 
-type Dock struct{}
-
-func NewDock() *Dock {
-	dock := &Dock{}
-
-	return dock
+type Daemon struct {
+	*loader.ModuleBase
 }
 
-func (dock *Dock) restartDock() {
-	if isDBusSenderExist(_DDE_DOCK_SENDER) {
-		return
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("sessionwatcher", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Start() error {
+	if _m != nil {
+		return nil
 	}
 
-	if _, err := exec.Command("/usr/bin/killall", _DDE_DOCK_CMD).Output(); err != nil {
-		logger.Warning("killall dde-dock failed:", err)
+	logger.BeginTracing()
+	_m = NewManager()
+	go _m.StartLoop()
+	return nil
+}
+
+func (d *Daemon) Stop() error {
+	if _m == nil {
+		return nil
 	}
 
-	if err := exec.Command(_DDE_DOCK_CMD, "").Run(); err != nil {
-		logger.Warning("launch dde-dock failed:", err)
-		return
-	}
+	_m.QuitLoop()
+	_m = nil
+	logger.EndTracing()
+	return nil
 }
