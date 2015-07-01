@@ -4,18 +4,9 @@
 #include <QObject>
 #include <QStringList>
 
-struct DockItemData {
-    QString appTitle;
-    QString appIconPath;
-    QString appExePath;
-    bool appActived;
-    QStringList appPreviews;
-};
-
 class DockConstants : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(int iconSize READ getIconSize WRITE setIconSize)
 public:
     static DockConstants * getInstants();
 
@@ -25,8 +16,22 @@ public:
         ClassicMode
     };
 
-    int getIconSize();
-    void setIconSize(int value);
+    DockMode getDockMode();
+    void setDockMode(DockMode value);
+
+    int getDockHeight();
+    int getItemHeight();
+    int getNormalItemWidth();
+    int getActivedItemWidth();
+    int getAppItemSpacing();
+    int getAppIconSize();
+    int getAppletsItemHeight();
+    int getAppletsItemWidth();
+    int getAppletsItemSpacing();
+    int getAppletsIconSize();
+
+signals:
+    void dockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
 
 private:
     explicit DockConstants(QObject *parent = 0);
@@ -34,8 +39,8 @@ private:
 private:
     static DockConstants * dockConstants;
 
-    DockMode currentMode = DockConstants::FashionMode;
-    int iconSize = 42;
+    DockMode m_currentMode = DockConstants::FashionMode;
+
 };
 
 #endif // DOCKCONSTANTS_H

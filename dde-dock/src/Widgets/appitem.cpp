@@ -34,8 +34,8 @@ void AppItem::resizeResources()
 {
     if (m_appIcon != NULL)
     {
-        m_appIcon->resize(DockConstants::getInstants()->getIconSize(),
-                          DockConstants::getInstants()->getIconSize());
+        m_appIcon->resize(DockConstants::getInstants()->getAppIconSize(),
+                          DockConstants::getInstants()->getAppIconSize());
         m_appIcon->move(width() / 2 - m_appIcon->width() / 2,
                         height() / 2 - m_appIcon->height() / 2);
     }
