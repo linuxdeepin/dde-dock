@@ -23,7 +23,6 @@ public:
     void insertItem(AbstractDockItem *item, int index);
     void removeItem(int index);
     void moveItem(int from, int to);
-    void setItemMoveable(int index, bool moveable);
     void setSpacing(qreal spacing);
     void setSortDirection(DockLayout::Direction value);
     int indexOf(AbstractDockItem * item);

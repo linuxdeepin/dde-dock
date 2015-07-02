@@ -40,11 +40,6 @@ void DockLayout::moveItem(int from, int to)
     relayout();
 }
 
-void DockLayout::setItemMoveable(int index, bool moveable)
-{
-    appList.at(index)->setMoveable(moveable);
-}
-
 void DockLayout::setSpacing(qreal spacing)
 {
     this->itemSpacing = spacing;

@@ -55,9 +55,11 @@ private:
 private:
     DockModeData *dockCons = DockModeData::getInstants();
     AppBackground * appBackground = NULL;
-    QPoint nextPos;
 
+    QLabel * m_appIcon = NULL;
     bool m_isCurrentOpened = false;
+    QString m_itemTitle = "";
+    QString m_itemIconPath = "";
 };
 
 #endif // APPITEM_H
