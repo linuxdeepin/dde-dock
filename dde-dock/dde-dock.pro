@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras
+QT       += core gui x11extras dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,7 +25,14 @@ SOURCES += \
     src/systraymanager.cpp \
     src/Panel/panelmenu.cpp \
     src/Controller/dockmodedata.cpp \
-    src/Controller/dockconstants.cpp
+    src/Controller/dockconstants.cpp \
+    src/Controller/appmanager.cpp \
+    src/DBus/dbusentrymanager.cpp \
+    src/DBus/dbusentryproxyer.cpp \
+    src/DBus/dbuspanelmanager.cpp \
+    src/DBus/dbusclientmanager.cpp \
+    src/DBus/dbusdockedappmanager.cpp \
+    src/DBus/dbusdocksetting.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -41,7 +48,14 @@ HEADERS  += \
     src/systraymanager.h \
     src/Panel/panelmenu.h \
     src/Controller/dockmodedata.h \
-    src/Controller/dockconstants.h
+    src/Controller/dockconstants.h \
+    src/Controller/appmanager.h \
+    src/DBus/dbusentrymanager.h \
+    src/DBus/dbusentryproxyer.h \
+    src/DBus/dbuspanelmanager.h \
+    src/DBus/dbusclientmanager.h \
+    src/DBus/dbusdockedappmanager.h \
+    src/DBus/dbusdocksetting.h
 
 RESOURCES += \
     images.qrc \

@@ -10,6 +10,7 @@
 #include "Widgets/docklayout.h"
 #include "Widgets/screenmask.h"
 #include "panelmenu.h"
+#include "Controller/appmanager.h"
 
 class Panel : public QLabel
 {

@@ -45,6 +45,14 @@ Panel::Panel(QWidget *parent)
     panelMenu = new PanelMenu();
 
     slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
+
+
+
+
+
+
+    ///////////////////////////
+    AppManager *appManager = new AppManager(this);
 }
 
 void Panel::resize(const QSize &size)
