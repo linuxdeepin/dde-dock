@@ -4,6 +4,7 @@
 #include <QObject>
 #include "dockplugininterface.h"
 
+class AbstractDockItem;
 class SystrayManager : public QObject
 {
     Q_OBJECT
@@ -16,7 +17,6 @@ private:
     DockPluginInterface *m_plugin;
 
     void loadPlugin();
-    void unloadPlugin();
 };
 
 #endif // SYSTRAYMANAGER_H

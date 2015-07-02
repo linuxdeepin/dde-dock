@@ -25,7 +25,8 @@ SOURCES += \
     src/systraymanager.cpp \
     src/Panel/panelmenu.cpp \
     src/Controller/dockmodedata.cpp \
-    src/Controller/dockconstants.cpp
+    src/Controller/dockconstants.cpp \
+    src/pluginitemwrapper.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -41,7 +42,8 @@ HEADERS  += \
     src/systraymanager.h \
     src/Panel/panelmenu.h \
     src/Controller/dockmodedata.h \
-    src/Controller/dockconstants.h
+    src/Controller/dockconstants.h \
+    src/pluginitemwrapper.h
 
 RESOURCES += \
     images.qrc \

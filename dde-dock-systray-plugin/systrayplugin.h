@@ -2,10 +2,10 @@
 #define SYSTRAYPLUGIN_H
 
 #include <QtPlugin>
+#include <QStringList>
 
 #include "docktrayitem.h"
 #include "dockplugininterface.h"
-#include "abstractdockitem.h"
 #include "dbustraymanager.h"
 
 class SystrayPlugin : public QObject, DockPluginInterface
@@ -17,10 +17,12 @@ class SystrayPlugin : public QObject, DockPluginInterface
 public:
     ~SystrayPlugin();
 
-    QList<AbstractDockItem*> items() Q_DECL_OVERRIDE;
+    void init() Q_DECL_OVERRIDE;
+    QStringList uuids() Q_DECL_OVERRIDE;
+    QWidget * getItem(QString uuid) Q_DECL_OVERRIDE;
 
 private:
-    QList<AbstractDockItem*> m_items;
+    QMap<QString, QWidget*> m_items;
     com::deepin::dde::TrayManager *m_dbusTrayManager = 0;
 
     void clearItems();

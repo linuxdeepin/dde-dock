@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include "systraymanager.h"
+#include "pluginitemwrapper.h"
 
 static QString SystrayPluginPath = "/usr/share/dde-dock/plugins/libdock-systray-plugin.so";
 
@@ -15,11 +16,17 @@ SystrayManager::SystrayManager(QObject *parent)
 
 QList<AbstractDockItem*> SystrayManager::trayIcons()
 {
+    QList<AbstractDockItem*> result;
+
     if (m_plugin) {
-        return m_plugin->items();
-    } else {
-        return QList<AbstractDockItem*>();
+        QStringList uuids = m_plugin->uuids();
+
+        foreach (QString uuid, uuids) {
+            result << new PluginItemWrapper(m_plugin, uuid);
+        }
     }
+
+    return result;
 }
 
 void SystrayManager::loadPlugin()
@@ -29,6 +36,7 @@ void SystrayManager::loadPlugin()
         QObject *plugin = loader.instance();
         if (plugin) {
             m_plugin = qobject_cast<DockPluginInterface*>(plugin);
+            m_plugin->init();
         } else {
             qWarning() << "Failed to load systray plugin.";
             qWarning() << loader.errorString();

@@ -2,13 +2,15 @@
 #define DOCKPLUGININTERFACE_H
 
 #include <QObject>
-#include "abstractdockitem.h"
+#include <QStringList>
 
 class DockPluginInterface
 {
 public:
     virtual ~DockPluginInterface() {}
-    virtual QList<AbstractDockItem*> items() = 0;
+    virtual void init() = 0;
+    virtual QStringList uuids() = 0;
+    virtual QWidget* getItem(QString uuid) = 0;
 };
 
 QT_BEGIN_NAMESPACE

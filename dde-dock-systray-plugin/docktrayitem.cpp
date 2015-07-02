@@ -2,9 +2,9 @@
 
 #include "docktrayitem.h"
 
-DockTrayItem * DockTrayItem::fromWinId(WId winId, QWidget *parent)
+DockTrayItem * DockTrayItem::fromWinId(WId winId)
 {
-    DockTrayItem *item = new DockTrayItem(parent);
+    DockTrayItem *item = new DockTrayItem;
 
     QWindow *win = QWindow::fromWinId(winId);
     QWidget *child = QWidget::createWindowContainer(win, item);
@@ -17,57 +17,12 @@ DockTrayItem * DockTrayItem::fromWinId(WId winId, QWidget *parent)
 }
 
 DockTrayItem::DockTrayItem(QWidget *parent)
-    : AbstractDockItem(parent)
+    : QWidget(parent)
 {
-    setFixedSize(32, 32);
+    setFixedSize(16, 16);
 }
 
 DockTrayItem::~DockTrayItem()
 {
 
-}
-
-void DockTrayItem::setTitle(const QString &)
-{
-
-}
-
-void DockTrayItem::setIcon(const QString &, int)
-{
-
-}
-
-void DockTrayItem::setMoveable(bool)
-{
-
-}
-
-bool DockTrayItem::moveable()
-{
-    return false;
-}
-
-void DockTrayItem::setActived(bool)
-{
-
-}
-
-bool DockTrayItem::actived()
-{
-    return false;
-}
-
-void DockTrayItem::setIndex(int value)
-{
-    m_itemIndex = value;
-}
-
-int DockTrayItem::index()
-{
-    return m_itemIndex;
-}
-
-QWidget * DockTrayItem::getContents()
-{
-    return NULL;
 }
