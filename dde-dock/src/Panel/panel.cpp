@@ -40,6 +40,7 @@ Panel::Panel(QWidget *parent)
     SystrayManager *manager = new SystrayManager();
     foreach (AbstractDockItem *item, manager->trayIcons()) {
         rightLayout->addItem(item);
+        qDebug() << item->geometry();
     }
 
     panelMenu = new PanelMenu();

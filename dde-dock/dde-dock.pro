@@ -33,6 +33,7 @@ SOURCES += \
     src/DBus/dbusclientmanager.cpp \
     src/DBus/dbusdockedappmanager.cpp \
     src/DBus/dbusdocksetting.cpp
+    src/pluginitemwrapper.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -56,6 +57,7 @@ HEADERS  += \
     src/DBus/dbusclientmanager.h \
     src/DBus/dbusdockedappmanager.h \
     src/DBus/dbusdocksetting.h
+    src/pluginitemwrapper.h
 
 RESOURCES += \
     images.qrc \

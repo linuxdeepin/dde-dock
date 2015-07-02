@@ -20,7 +20,6 @@ SOURCES += systrayplugin.cpp \
 
 HEADERS  += systrayplugin.h \
     docktrayitem.h \
-    ../dde-dock/src/abstractdockitem.h \
     dbustraymanager.h
 
 target.path = /usr/share/dde-dock/plugins/

@@ -3,17 +3,14 @@
 #include "systrayplugin.h"
 #include "abstractdockitem.h"
 
+
 SystrayPlugin::~SystrayPlugin()
 {
     this->clearItems();
 }
 
-QList<AbstractDockItem*> SystrayPlugin::items()
+void SystrayPlugin::init()
 {
-    //clear m_items.
-    this->clearItems();
-
-    // get xids of trayicons.
     if (!m_dbusTrayManager) {
         m_dbusTrayManager = new com::deepin::dde::TrayManager("com.deepin.dde.TrayManager",
                                                               "/com/deepin/dde/TrayManager",
@@ -24,22 +21,24 @@ QList<AbstractDockItem*> SystrayPlugin::items()
     QList<uint> trayIcons = m_dbusTrayManager->trayIcons();
     qDebug() << "Found trayicons: " << trayIcons;
 
-    QList<WId> winIds;
-    foreach (QVariant trayIcon, trayIcons) {
-        winIds << trayIcon.toUInt();
+    foreach (uint trayIcon, trayIcons) {
+        m_items[QString::number(trayIcon)] = DockTrayItem::fromWinId(trayIcon);
     }
+}
 
-    // generate items.
-    foreach (WId winId, winIds) {
-        m_items << DockTrayItem::fromWinId(winId);
-    }
+QStringList SystrayPlugin::uuids()
+{
+    return m_items.keys();
+}
 
-    return m_items;
+QWidget * SystrayPlugin::getItem(QString uuid)
+{
+    return m_items.value(uuid);
 }
 
 void SystrayPlugin::clearItems()
 {
-    foreach (AbstractDockItem * item, m_items) {
+    foreach (QWidget * item, m_items) {
         item->deleteLater();
     }
     m_items.clear();
