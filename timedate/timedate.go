@@ -47,6 +47,7 @@ func (d *Daemon) GetDependencies() []string {
 	return []string{}
 }
 
+// Start to run timedate manager
 func (d *Daemon) Start() error {
 	if _manager != nil {
 		return nil
@@ -74,6 +75,7 @@ func (d *Daemon) Start() error {
 	return nil
 }
 
+// Stop the timedate manager
 func (d *Daemon) Stop() error {
 	if _manager == nil {
 		return nil

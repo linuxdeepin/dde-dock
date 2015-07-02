@@ -26,10 +26,9 @@ import (
 	"time"
 )
 
-/**
- * SetDate Set the system clock to the specified.
- * The time may be specified in the format '2015' '1' '1' '18' '18' '18' '8'.
- **/
+// SetDate Set the system clock to the specified.
+//
+// The time may be specified in the format '2015' '1' '1' '18' '18' '18' '8'.
 func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) error {
 	loc, err := time.LoadLocation(m.Timezone)
 	if err != nil {
@@ -41,12 +40,11 @@ func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) error {
 	return m.SetTime(ns/1000, false)
 }
 
-/**
- * SetTime Set the system clock to the specified.
- *
- * usec: pass a value of microseconds since 1 Jan 1970 UTC.
- * relative: if true, the passed usec value will be added to the current system time; if false, the current system time will be set to the passed usec value.
- **/
+// Set the system clock to the specified.
+//
+// usec: pass a value of microseconds since 1 Jan 1970 UTC.
+//
+// relative: if true, the passed usec value will be added to the current system time; if false, the current system time will be set to the passed usec value.
 func (m *Manager) SetTime(usec int64, relative bool) error {
 	err := m.td1.SetTime(usec, relative, true)
 	if err != nil {
@@ -56,9 +54,9 @@ func (m *Manager) SetTime(usec int64, relative bool) error {
 	return err
 }
 
-/**
- * SetNTP To control whether the system clock is synchronized with the network.
- **/
+// To control whether the system clock is synchronized with the network.
+//
+// useNTP: if true, enable ntp; else disable
 func (m *Manager) SetNTP(useNTP bool) error {
 	err := m.td1.SetNTP(useNTP, true)
 	if err != nil {
@@ -68,14 +66,13 @@ func (m *Manager) SetNTP(useNTP bool) error {
 	return err
 }
 
-/**
- * SetLocalRTC To control whether the RTC is the local time or UTC.
- * Time standards are divided into: localtime and UTC.
- * UTC standard will automatically adjust the daylight saving time.
- *
- * localRTC: whether to use local time.
- * fixSystem: if true, will use the RTC time to adjust the system clock; if false, the system time is written to the RTC taking the new setting into account.
- **/
+// To control whether the RTC is the local time or UTC.
+// Standards are divided into: localtime and UTC.
+// UTC standard will automatically adjust the daylight saving time.
+//
+// localRTC: whether to use local time.
+//
+// fixSystem: if true, will use the RTC time to adjust the system clock; if false, the system time is written to the RTC taking the new setting into account.
 func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) error {
 	err := m.td1.SetLocalRTC(localRTC, fixSystem, true)
 	if err != nil {
@@ -85,12 +82,10 @@ func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) error {
 	return err
 }
 
-/**
- * SetTimezone Set the system time zone to the specified value.
- * Valid timezones you may parse from /usr/share/zoneinfo/zone.tab.
- *
- * zone: pass a value like "Asia/Shanghai" to set the timezone.
- **/
+// Set the system time zone to the specified value.
+// timezones you may parse from /usr/share/zoneinfo/zone.tab.
+//
+// zone: pass a value like "Asia/Shanghai" to set the timezone.
 func (m *Manager) SetTimezone(zone string) error {
 	err := m.td1.SetTimezone(zone, true)
 	if err != nil {
@@ -101,9 +96,7 @@ func (m *Manager) SetTimezone(zone string) error {
 	return m.AddUserTimezone(zone)
 }
 
-/**
- * AddUserTimezone Add the specified time zone to user time zone list.
- **/
+// Add the specified time zone to user time zone list.
 func (m *Manager) AddUserTimezone(zone string) error {
 	if !zoneinfo.IsZoneValid(zone) {
 		logger.Debug("Invalid zone:", zone)
@@ -118,9 +111,7 @@ func (m *Manager) AddUserTimezone(zone string) error {
 	return nil
 }
 
-/**
- * DeleteUserTimezone Delete the specified time zone from user time zone list.
- **/
+// Delete the specified time zone from user time zone list.
 func (m *Manager) DeleteUserTimezone(zone string) error {
 	if !zoneinfo.IsZoneValid(zone) {
 		logger.Debug("Invalid zone:", zone)
@@ -135,9 +126,7 @@ func (m *Manager) DeleteUserTimezone(zone string) error {
 	return nil
 }
 
-/**
- * GetZoneInfo Get ZoneInfo of the specified time zone.
- **/
+// Get ZoneInfo of the specified time zone.
 func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, error) {
 	info, err := zoneinfo.GetZoneInfo(zone)
 	if err != nil {
@@ -149,9 +138,7 @@ func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, error) {
 	return *info, nil
 }
 
-/**
- * GetZoneInfo Get all ZoneInfo in the specified list.
- **/
+// Get all ZoneInfo in the specified list.
 func (m *Manager) GetZoneList() []string {
 	var list []string
 	for _, zdesc := range zoneWhiteList {

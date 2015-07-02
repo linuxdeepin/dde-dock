@@ -35,21 +35,30 @@ const (
 	settingsKeyDSTOffset    = "dst-offset"
 )
 
+// Manage time settings
 type Manager struct {
-	CanNTP   bool
-	NTP      bool
+	// Whether can use NTP service
+	CanNTP bool
+	// Whether enable NTP service
+	NTP bool
+	// Whether set RTC to Local standard
 	LocalRTC bool
 
+	// Current timezone
 	Timezone string
 
+	// Use 24 hour format to display time
 	Use24HourFormat *property.GSettingsBoolProperty `access:"readwrite"`
-	DSTOffset       *property.GSettingsIntProperty  `access:"readwrite"`
-	UserTimezones   *property.GSettingsStrvProperty
+	// DST offset
+	DSTOffset *property.GSettingsIntProperty `access:"readwrite"`
+	// User added timezone list
+	UserTimezones *property.GSettingsStrvProperty
 
 	settings *gio.Settings
 	td1      *timedate1.Timedate1
 }
 
+// Create Manager, if create freedesktop timedate1 failed return error
 func NewManager() (*Manager, error) {
 	var m = &Manager{}
 

@@ -35,16 +35,22 @@ const (
 )
 
 type DSTInfo struct {
+	// The timestamp of entering DST every year
 	Enter int64
+	// The timestamp of leaving DST every year
 	Leave int64
 
+	// The DST offset
 	Offset int32
 }
 
 type ZoneInfo struct {
+	// Timezone name, ex: "Asia/Shanghai"
 	Name string
+	// Timezone description, ex: "China Shanghai"
 	Desc string
 
+	// Timezone offset
 	Offset int32
 
 	DST DSTInfo
@@ -53,6 +59,7 @@ type ZoneInfo struct {
 var (
 	//_zoneList []string
 
+	// Error, invalid timezone
 	ErrZoneInvalid = fmt.Errorf("Invalid time zone")
 	errZoneNoDST   = fmt.Errorf("The time zone has no DST info")
 
@@ -70,6 +77,7 @@ func init() {
 }
 */
 
+// Check timezone validity
 func IsZoneValid(zone string) bool {
 	file := path.Join(defaultZoneDir, zone)
 	return dutils.IsFileExist(file)
@@ -86,6 +94,7 @@ func GetAllZones() []string {
 }
 */
 
+// Query timezone detail info by timezone
 func GetZoneInfo(zone string) (*ZoneInfo, error) {
 	if !IsZoneValid(zone) {
 		return nil, ErrZoneInvalid
