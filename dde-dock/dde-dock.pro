@@ -19,8 +19,6 @@ SOURCES += \
     src/Widgets/appicon.cpp \
     src/Widgets/dockconstants.cpp \
     src/Widgets/docklayout.cpp \
-    src/Widgets/dockmodel.cpp \
-    src/Widgets/dockview.cpp \
     src/Widgets/screenmask.cpp \
     src/Widgets/windowpreview.cpp \
     src/Panel/panel.cpp \
@@ -36,8 +34,6 @@ HEADERS  += \
     src/Widgets/appicon.h \
     src/Widgets/dockconstants.h \
     src/Widgets/docklayout.h \
-    src/Widgets/dockmodel.h \
-    src/Widgets/dockview.h \
     src/Widgets/screenmask.h \
     src/Widgets/windowpreview.h \
     src/Panel/panel.h \

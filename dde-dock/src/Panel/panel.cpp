@@ -9,10 +9,10 @@ Panel::Panel(QWidget *parent)
     rightLayout = new DockLayout(this);
     rightLayout->setSortDirection(DockLayout::RightToLeft);
     rightLayout->setSpacing(dockCons->getAppletsItemSpacing());
-    rightLayout->resize(80,dockCons->getAppletsItemHeight());
+    rightLayout->resize(80,dockCons->getDockHeight());
 
     leftLayout = new DockLayout(this);
-    rightLayout->setSpacing(dockCons->getAppItemSpacing());
+    leftLayout->setSpacing(dockCons->getAppItemSpacing());
     leftLayout->resize(this->width() - rightLayout->width(),dockCons->getDockHeight());
     leftLayout->move(0,0);
 
@@ -31,6 +31,9 @@ Panel::Panel(QWidget *parent)
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
+    connect(leftLayout, SIGNAL(contentsWidthChange()),this, SLOT(slotLayoutContentsWidthChanged()));
+    connect(rightLayout, SIGNAL(contentsWidthChange()), this, SLOT(slotLayoutContentsWidthChanged()));
+
     connect(dockCons, SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
             this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
 
@@ -40,6 +43,8 @@ Panel::Panel(QWidget *parent)
     }
 
     panelMenu = new PanelMenu();
+
+    slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
 }
 
 void Panel::resize(const QSize &size)
@@ -103,10 +108,30 @@ void Panel::slotExitedMask()
 
 void Panel::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
 {
+    leftLayout->relayout();
+    rightLayout->relayout();
+
     reanchorsLayout(newMode);
 
     this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
     this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
+}
+
+void Panel::slotLayoutContentsWidthChanged()
+{
+    reanchorsLayout(dockCons->getDockMode());
+
+    if (dockCons->getDockMode() == DockConstants::FashionMode)
+    {
+        this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
+    }
+    else
+    {
+        this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
+        this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
+    }
+
 }
 
 void Panel::mousePressEvent(QMouseEvent *event)

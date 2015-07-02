@@ -30,7 +30,9 @@ public slots:
     void slotEnteredMask();
     void slotExitedMask();
 
+private slots:
     void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void slotLayoutContentsWidthChanged();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

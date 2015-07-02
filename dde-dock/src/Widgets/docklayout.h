@@ -29,15 +29,16 @@ public:
     void setSortDirection(DockLayout::Direction value);
     int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
-    void relayout();
-    void dragoutFromLayout(int index);
     int getContentsWidth();
     int getItemCount();
+
+public slots:
+    void relayout();
 
 signals:
     void dragStarted();
     void itemDropped();
-    void widthChange(int width);
+    void contentsWidthChange();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
@@ -54,6 +55,7 @@ private:
     void sortRightToLeft();
 
     void addSpacingItem();
+    void dragoutFromLayout(int index);
     bool hasSpacingItemInList();
 
 private:

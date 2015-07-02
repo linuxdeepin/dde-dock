@@ -26,10 +26,21 @@ public:
 
     virtual void setMoveable(bool value) { m_itemMoveable = value; }
     virtual bool moveable() { return m_itemMoveable; }
-    virtual void setActived(bool value) { m_itemActived = value; }
-    virtual bool actived() { return m_itemActived; }
+    virtual void setActived(bool value) { m_isActived = value; }
+    virtual bool actived() { return m_isActived; }
+    virtual void setHovered(bool value) { m_isHovered = value; }
+    virtual bool hovered() { return m_isHovered; }
     virtual void setIndex(int value) { m_itemIndex = value; }
     virtual int index() { return m_itemIndex; }
+
+    void resize(int width,int height){
+        QFrame::resize(width,height);
+        emit widthChanged();
+    }
+    void resize(const QSize &size){
+        QFrame::resize(size);
+        emit widthChanged();
+    }
 
     QPoint getNextPos() { return m_itemNextPos; }
     void setNextPos(const QPoint &value) { m_itemNextPos = value; }
@@ -45,12 +56,14 @@ signals:
     void mousePress(int x, int y);
     void mouseRelease(int x, int y);
     void mouseDoubleClick();
+    void widthChanged();
 
 protected:
     QLabel * m_appIcon = NULL;
 
     bool m_itemMoveable = true;
-    bool m_itemActived = false;
+    bool m_isActived = false;
+    bool m_isHovered = false;
 
     QString m_itemTitle = "";
     QString m_itemIconPath = "";

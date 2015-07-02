@@ -23,6 +23,7 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     connect(item, &AbstractDockItem::dragStart, this, &DockLayout::slotItemDrag);
     connect(item, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
     connect(item, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
+    connect(item, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
 
     relayout();
 }
@@ -59,12 +60,12 @@ void DockLayout::sortLeftToRight()
     if (appList.count() <= 0)
         return;
 
-    appList.at(0)->move(itemSpacing,0);
+    appList.at(0)->move(itemSpacing,(height() - appList.at(0)->height()) / 2);
 
     for (int i = 1; i < appList.count(); i ++)
     {
         AbstractDockItem * frontItem = appList.at(i - 1);
-        appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
+        appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,height() - appList.at(i)->height());
     }
 }
 
@@ -124,6 +125,8 @@ void DockLayout::relayout()
     default:
         break;
     }
+
+    emit contentsWidthChange();
 }
 
 void DockLayout::addSpacingItem()
@@ -144,7 +147,10 @@ void DockLayout::addSpacingItem()
         animation->setEasingCurve(QEasingCurve::OutCubic);
 
         animation->start();
+        connect(animation, SIGNAL(finished()),this, SIGNAL(contentsWidthChange()));
     }
+
+//    emit contentsWidthChange();
 }
 
 void DockLayout::dragoutFromLayout(int index)
@@ -152,6 +158,8 @@ void DockLayout::dragoutFromLayout(int index)
     AbstractDockItem * tmpItem = appList.takeAt(index);
     tmpItem->setVisible(false);
     tmpAppMap.insert(tmpItem,index);
+
+    emit contentsWidthChange();
 }
 
 int DockLayout::getContentsWidth()
@@ -161,6 +169,10 @@ int DockLayout::getContentsWidth()
     {
         tmpWidth += appList.at(i)->width();
     }
+
+    if (hasSpacingItemInList())
+        tmpWidth += tmpAppMap.firstKey()->width() + itemSpacing;
+
     return tmpWidth;
 }
 

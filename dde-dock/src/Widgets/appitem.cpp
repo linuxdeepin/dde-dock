@@ -4,8 +4,9 @@ AppItem::AppItem(QWidget *parent) :
     AbstractDockItem(parent)
 {
     setAcceptDrops(true);
-    resize(itemWidth, itemHeight);
+    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
+    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
@@ -14,8 +15,9 @@ AppItem::AppItem(QString title, QWidget *parent):
     m_itemTitle = title;
 
     setAcceptDrops(true);
-    resize(itemWidth, itemHeight);
+    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
+    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
 AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
@@ -25,24 +27,86 @@ AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
     m_itemIconPath = iconPath;
 
     setAcceptDrops(true);
-    resize(itemWidth, itemHeight);
+    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
-    setIcon(m_itemIconPath);
+    setIcon(m_itemIconPath,dockCons->getAppIconSize());
+    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
+}
+
+void AppItem::setIcon(const QString &iconPath, int size)
+{
+    m_appIcon = new AppIcon(iconPath, this);
+    m_appIcon->resize(size, size);
+
+    reanchorIcon();
+}
+
+void AppItem::setActived(bool value)
+{
+    m_isActived = value;
+    if (!value)
+        resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+    else
+        resize(dockCons->getActivedItemWidth(), dockCons->getItemHeight());
+}
+
+void AppItem::setCurrentOpened(bool value)
+{
+    m_isCurrentOpened = value;
+}
+
+bool AppItem::currentOpened()
+{
+    return m_isCurrentOpened;
+}
+
+void AppItem::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
+{
+    if (newMode == DockConstants::FashionMode)
+    {
+        appBackground->setVisible(false);
+    }
+    else
+    {
+        appBackground->setVisible(true);
+    }
+
+    setActived(actived());
+    resizeResources();
+}
+
+void AppItem::reanchorIcon()
+{
+    switch (dockCons->getDockMode()) {
+    case DockConstants::FashionMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
+        break;
+    case DockConstants::EfficientMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
+        break;
+    case DockConstants::ClassicMode:
+        m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
+    default:
+        break;
+    }
+}
+
+void AppItem::resizeBackground()
+{
+    appBackground->resize(width(),height());
 }
 
 void AppItem::resizeResources()
 {
     if (m_appIcon != NULL)
     {
-        m_appIcon->resize(DockConstants::getInstants()->getAppIconSize(),
-                          DockConstants::getInstants()->getAppIconSize());
-        m_appIcon->move(width() / 2 - m_appIcon->width() / 2,
-                        height() / 2 - m_appIcon->height() / 2);
+        m_appIcon->resize(dockCons->getAppIconSize(),dockCons->getAppIconSize());
+        reanchorIcon();
     }
 
     if (appBackground != NULL)
     {
-        appBackground->resize(width(), height());
+        resizeBackground();
         appBackground->move(0,0);
     }
 }
@@ -50,9 +114,8 @@ void AppItem::resizeResources()
 void AppItem::initBackground()
 {
     appBackground = new AppBackground(this);
-//    appBackground->setObjectName("appBackground");
-    appBackground->resize(width(), height());
     appBackground->move(0,0);
+    connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
 }
 
 void AppItem::mousePressEvent(QMouseEvent * event)
@@ -61,6 +124,7 @@ void AppItem::mousePressEvent(QMouseEvent * event)
     emit mousePress(event->globalX(), event->globalY());
     ////////////FOR TEST ONLY/////////////////////
     appBackground->setIsActived(!appBackground->getIsActived());
+    setActived(!actived());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)

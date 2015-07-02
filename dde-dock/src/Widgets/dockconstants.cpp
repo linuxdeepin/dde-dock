@@ -64,7 +64,7 @@ int DockConstants::getNormalItemWidth()
     case DockConstants::FashionMode:
         return 60;
     case DockConstants::EfficientMode:
-        return 50;
+        return 60;
     case DockConstants::ClassicMode:
         return 40;
     default:
@@ -79,11 +79,11 @@ int DockConstants::getActivedItemWidth()
     case DockConstants::FashionMode:
         return 60;
     case DockConstants::EfficientMode:
-        return 50;
+        return 60;
     case DockConstants::ClassicMode:
-        return 80;
+        return 150;
     default:
-        return 50;
+        return 60;
     }
 }
 
@@ -109,7 +109,7 @@ int DockConstants::getAppIconSize()
     case DockConstants::FashionMode:
         return 48;
     case DockConstants::EfficientMode:
-        return 32;
+        return 42;
     case DockConstants::ClassicMode:
         return 24;
     default:

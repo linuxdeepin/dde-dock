@@ -27,6 +27,11 @@ public:
     AppItem(QString title, QString iconPath, QWidget *parent = 0);
     ~AppItem();
 
+    void setIcon(const QString &iconPath, int size = 42);
+    void setActived(bool value);
+    void setCurrentOpened(bool value);
+    bool currentOpened();
+
 protected:
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
@@ -38,15 +43,21 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent * event);
     void dropEvent(QDropEvent * event);
 
+private slots:
+    void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void reanchorIcon();
+    void resizeBackground();
+
 private:
     void resizeResources();
     void initBackground();
 
 private:
+    DockConstants *dockCons = DockConstants::getInstants();
     AppBackground * appBackground = NULL;
     QPoint nextPos;
-    const int itemWidth = 60;
-    const int itemHeight = 50;
+
+    bool m_isCurrentOpened = false;
 };
 
 #endif // APPITEM_H
