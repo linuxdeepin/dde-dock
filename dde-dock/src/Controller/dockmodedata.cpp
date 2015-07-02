@@ -1,33 +1,33 @@
-#include "dockconstants.h"
+#include "dockmodedata.h"
 
-DockConstants::DockConstants(QObject *parent) :
+DockModeData::DockModeData(QObject *parent) :
     QObject(parent)
 {
 }
 
-DockConstants * DockConstants::dockConstants = NULL;
-DockConstants * DockConstants::getInstants()
+DockModeData * DockModeData::dockModeData = NULL;
+DockModeData * DockModeData::getInstants()
 {
-    if (dockConstants == NULL)
-        dockConstants = new DockConstants();
+    if (dockModeData == NULL)
+        dockModeData = new DockModeData();
 
-    return dockConstants;
+    return dockModeData;
 }
 
-DockConstants::DockMode DockConstants::getDockMode()
+DockConstants::DockMode DockModeData::getDockMode()
 {
   return m_currentMode;
 }
 
-void DockConstants::setDockMode(DockMode value)
+void DockModeData::setDockMode(DockConstants::DockMode value)
 {
-    DockMode tmpValue = m_currentMode;
+    DockConstants::DockMode tmpValue = m_currentMode;
     m_currentMode = value;
 
     emit dockModeChanged(value, tmpValue);
 }
 
-int DockConstants::getDockHeight()
+int DockModeData::getDockHeight()
 {
     switch (m_currentMode)
     {
@@ -42,7 +42,7 @@ int DockConstants::getDockHeight()
     }
 }
 
-int DockConstants::getItemHeight()
+int DockModeData::getItemHeight()
 {
     switch (m_currentMode)
     {
@@ -57,7 +57,7 @@ int DockConstants::getItemHeight()
     }
 }
 
-int DockConstants::getNormalItemWidth()
+int DockModeData::getNormalItemWidth()
 {
     switch (m_currentMode)
     {
@@ -72,7 +72,7 @@ int DockConstants::getNormalItemWidth()
     }
 }
 
-int DockConstants::getActivedItemWidth()
+int DockModeData::getActivedItemWidth()
 {
     switch (m_currentMode)
     {
@@ -87,7 +87,7 @@ int DockConstants::getActivedItemWidth()
     }
 }
 
-int DockConstants::getAppItemSpacing()
+int DockModeData::getAppItemSpacing()
 {
     switch (m_currentMode)
     {
@@ -102,7 +102,7 @@ int DockConstants::getAppItemSpacing()
     }
 }
 
-int DockConstants::getAppIconSize()
+int DockModeData::getAppIconSize()
 {
     switch (m_currentMode)
     {
@@ -117,7 +117,7 @@ int DockConstants::getAppIconSize()
     }
 }
 
-int DockConstants::getAppletsItemHeight()
+int DockModeData::getAppletsItemHeight()
 {
     switch (m_currentMode)
     {
@@ -132,7 +132,7 @@ int DockConstants::getAppletsItemHeight()
     }
 }
 
-int DockConstants::getAppletsItemWidth()
+int DockModeData::getAppletsItemWidth()
 {
     switch (m_currentMode)
     {
@@ -147,7 +147,7 @@ int DockConstants::getAppletsItemWidth()
     }
 }
 
-int DockConstants::getAppletsItemSpacing()
+int DockModeData::getAppletsItemSpacing()
 {
     switch (m_currentMode)
     {
@@ -162,7 +162,7 @@ int DockConstants::getAppletsItemSpacing()
     }
 }
 
-int DockConstants::getAppletsIconSize()
+int DockModeData::getAppletsIconSize()
 {
     switch (m_currentMode)
     {

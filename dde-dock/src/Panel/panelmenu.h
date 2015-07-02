@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QDebug>
-#include "Widgets/dockconstants.h"
+#include "Controller/dockmodedata.h"
 
 class PanelMenuItem : public QLabel
 {
@@ -35,7 +35,7 @@ private slots:
     void changeToClassicMode();
 
 private:
-    DockConstants *dockCons = DockConstants::getInstants();
+    DockModeData *dockCons = DockModeData::getInstants();
 
     const int MENU_ITEM_HEIGHT = 30;
     const int MENU_ITEM_SPACING = 3;

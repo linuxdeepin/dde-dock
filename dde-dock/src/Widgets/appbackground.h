@@ -5,7 +5,6 @@
 #include <QLabel>
 #include <QStyle>
 #include <QDebug>
-#include "dockconstants.h"
 
 class AppBackground : public QLabel
 {

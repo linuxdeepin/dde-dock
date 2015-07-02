@@ -7,7 +7,6 @@
 #include <QPropertyAnimation>
 #include <QCursor>
 #include "appitem.h"
-#include "dockconstants.h"
 
 class DockLayout : public QWidget
 {

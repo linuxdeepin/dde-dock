@@ -13,7 +13,7 @@
 #include <QImage>
 #include <QDebug>
 #include "abstractdockitem.h"
-#include "dockconstants.h"
+#include "Controller/dockmodedata.h"
 #include "appicon.h"
 #include "appbackground.h"
 
@@ -53,7 +53,7 @@ private:
     void initBackground();
 
 private:
-    DockConstants *dockCons = DockConstants::getInstants();
+    DockModeData *dockCons = DockModeData::getInstants();
     AppBackground * appBackground = NULL;
     QPoint nextPos;
 

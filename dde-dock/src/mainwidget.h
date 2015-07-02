@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QScreen>
 #include <QDebug>
-#include "Widgets/dockconstants.h"
+#include "Controller/dockmodedata.h"
 #include "Panel/panel.h"
 
 class MainWidget : public QWidget

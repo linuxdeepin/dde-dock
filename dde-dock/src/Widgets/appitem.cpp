@@ -6,7 +6,7 @@ AppItem::AppItem(QWidget *parent) :
     setAcceptDrops(true);
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
-    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
 AppItem::AppItem(QString title, QWidget *parent):
@@ -17,7 +17,7 @@ AppItem::AppItem(QString title, QWidget *parent):
     setAcceptDrops(true);
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
-    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
 AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
@@ -30,7 +30,7 @@ AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
     setIcon(m_itemIconPath,dockCons->getAppIconSize());
-    connect(dockCons, &DockConstants::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
 void AppItem::setIcon(const QString &iconPath, int size)

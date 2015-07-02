@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDebug>
-#include "Widgets/dockconstants.h"
+#include "Controller/dockmodedata.h"
 #include "Widgets/appitem.h"
 #include "Widgets/docklayout.h"
 #include "Widgets/screenmask.h"
@@ -49,7 +49,7 @@ private:
     DockLayout *rightLayout;
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
-    DockConstants *dockCons = DockConstants::getInstants();
+    DockModeData *dockCons = DockModeData::getInstants();
     PanelMenu *panelMenu = NULL;
 };
 

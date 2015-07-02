@@ -1,23 +1,18 @@
-#ifndef DOCKCONSTANTS_H
-#define DOCKCONSTANTS_H
+#ifndef DOCKMODEDATA_H
+#define DOCKMODEDATA_H
 
 #include <QObject>
 #include <QStringList>
+#include "dockconstants.h"
 
-class DockConstants : public QObject
+class DockModeData : public QObject
 {
     Q_OBJECT
 public:
-    static DockConstants * getInstants();
+    static DockModeData * getInstants();
 
-    enum DockMode {
-        FashionMode,
-        EfficientMode,
-        ClassicMode
-    };
-
-    DockMode getDockMode();
-    void setDockMode(DockMode value);
+    DockConstants::DockMode getDockMode();
+    void setDockMode(DockConstants::DockMode value);
 
     int getDockHeight();
     int getItemHeight();
@@ -34,13 +29,13 @@ signals:
     void dockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
 
 private:
-    explicit DockConstants(QObject *parent = 0);
+    explicit DockModeData(QObject *parent = 0);
 
 private:
-    static DockConstants * dockConstants;
+    static DockModeData * dockModeData;
 
-    DockMode m_currentMode = DockConstants::EfficientMode;
+    DockConstants::DockMode m_currentMode = DockConstants::EfficientMode;
 
 };
 
-#endif // DOCKCONSTANTS_H
+#endif // DOCKMODEDATA_H
