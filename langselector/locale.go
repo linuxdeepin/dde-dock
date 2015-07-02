@@ -42,23 +42,42 @@ const (
 )
 
 const (
-	LocaleStateChanged  = 0
+	// Locale changed state: has been done
+	//
+	// Locale 更改状态：已经修改完成
+	LocaleStateChanged = 0
+	// Locale changed state: changing
+	//
+	// Locale 更改状态：正在修改中
 	LocaleStateChanging = 1
 )
 
 var (
-	ErrFileNotExist       = fmt.Errorf("File not exist")
-	ErrLocaleNotFound     = fmt.Errorf("Locale not found")
+	// Error: not found the file
+	//
+	// 错误：没有此文件
+	ErrFileNotExist = fmt.Errorf("File not exist")
+	// Error: not found the locale
+	//
+	// 错误：无效的 Locale
+	ErrLocaleNotFound = fmt.Errorf("Locale not found")
+	// Error: changing locale failure
+	//
+	// 错误：修改 locale 失败
 	ErrLocaleChangeFailed = fmt.Errorf("Changing locale failed")
 )
 
 type LangSelector struct {
+	// The current locale
 	CurrentLocale string
-	Changed       func(locale string)
+	// Signal: will be emited if locale changed
+	Changed func(locale string)
 
+	// Store locale changed state
 	LocaleState int32
-	logger      *log.Logger
-	lhelper     *localehelper.LocaleHelper
+
+	logger  *log.Logger
+	lhelper *localehelper.LocaleHelper
 }
 
 type envInfo struct {

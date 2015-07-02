@@ -14,29 +14,43 @@ type Power struct {
 	lidIsClosed      bool
 	lowBatteryStatus uint32
 
+	// 按下电源键执行的操作
 	PowerButtonAction *property.GSettingsEnumProperty `access:"readwrite"`
-	LidClosedAction   *property.GSettingsEnumProperty `access:"readwrite"`
-	LockWhenActive    *property.GSettingsBoolProperty `access:"readwrite"`
+	// 合上笔记本盖时执行的操作
+	LidClosedAction *property.GSettingsEnumProperty `access:"readwrite"`
+	// 屏幕唤醒时是否锁屏
+	LockWhenActive *property.GSettingsBoolProperty `access:"readwrite"`
 
+	// 是否有显示器
 	LidIsPresent bool
 
-	LinePowerPlan         *property.GSettingsEnumProperty `access:"readwrite"`
-	LinePowerSuspendDelay int32                           `access:"readwrite"`
-	LinePowerIdleDelay    int32                           `access:"readwrite"`
+	// 接通电源时的电源计划
+	LinePowerPlan *property.GSettingsEnumProperty `access:"readwrite"`
+	// 接通电源时的挂起超时
+	LinePowerSuspendDelay int32 `access:"readwrite"`
+	// 接通电源时的空闲检测超时
+	LinePowerIdleDelay int32 `access:"readwrite"`
 
-	BatteryPlan         *property.GSettingsEnumProperty `access:"readwrite"`
-	BatterySuspendDelay int32                           `access:"readwrite"`
-	BatteryIdleDelay    int32                           `access:"readwrite"`
+	// 使用电池时的电源计划
+	BatteryPlan *property.GSettingsEnumProperty `access:"readwrite"`
+	// 使用电池时的挂起超时
+	BatterySuspendDelay int32 `access:"readwrite"`
+	// 使用电池时的空闲检测超时
+	BatteryIdleDelay int32 `access:"readwrite"`
 
+	// 剩余电量
 	BatteryPercentage float64
 
 	//Not in Charging, Charging, Full
 	BatteryState uint32
 
+	// 是否有电池设备
 	BatteryIsPresent bool
 
+	// 是否使用电池
 	OnBattery bool
 
+	// 电源计划列表
 	PlanInfo string
 }
 

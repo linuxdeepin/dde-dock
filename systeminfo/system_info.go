@@ -17,10 +17,15 @@ import (
 // TODO: as a separate program, nonresident memory
 
 type SystemInfo struct {
-	Version    string
-	Processor  string
-	DiskCap    uint64
-	MemoryCap  uint64
+	// Current version, ex: "2015 Desktop"
+	Version string
+	// CPU information
+	Processor string
+	// Disk capacity
+	DiskCap uint64
+	// Memory size
+	MemoryCap uint64
+	// System architecture
 	SystemType int64
 
 	logger *log.Logger

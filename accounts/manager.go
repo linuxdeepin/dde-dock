@@ -40,6 +40,7 @@ const (
 )
 
 type Manager struct {
+	// 用户 ObjectPath 列表
 	UserList   []string
 	GuestIcon  string
 	AllowGuest bool
@@ -47,6 +48,8 @@ type Manager struct {
 	UserAdded   func(string)
 	UserDeleted func(string)
 	// Error(pid, action, reason)
+	//
+	// 操作失败的信号，参数包括调用者的 pid，被调用的接口和错误信息
 	Error func(uint32, string, string)
 
 	watcher   *dutils.WatchProxy

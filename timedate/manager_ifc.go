@@ -70,6 +70,9 @@ func (m *Manager) SetNTP(useNTP bool) error {
 // Standards are divided into: localtime and UTC.
 // UTC standard will automatically adjust the daylight saving time.
 //
+// 实时时间(RTC)是否使用 local 时间标准。时间标准分为 local 和 UTC。
+// UTC 时间标准会自动根据夏令时而调整系统时间。
+//
 // localRTC: whether to use local time.
 //
 // fixSystem: if true, will use the RTC time to adjust the system clock; if false, the system time is written to the RTC taking the new setting into account.

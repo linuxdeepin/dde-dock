@@ -31,6 +31,15 @@ import (
 	"time"
 )
 
+// Create new user.
+//
+// 如果收到 Error 信号，则创建失败。
+//
+// name: 用户名
+//
+// fullname: 全名，可以为空
+//
+// ty: 用户类型，0 为普通用户，1 为管理员
 func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 	name, fullname string, ty int32) error {
 	pid := dbusMsg.GetSenderPID()
@@ -59,6 +68,11 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 	return nil
 }
 
+// Delete a exist user.
+//
+// name: 用户名
+//
+// rmFiles: 是否删除用户数据
 func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 	name string, rmFiles bool) (bool, error) {
 	pid := dbusMsg.GetSenderPID()
@@ -106,6 +120,11 @@ func (m *Manager) FindUserByName(name string) (string, error) {
 	return m.FindUserById(info.Uid)
 }
 
+// 随机得到一个用户头像
+//
+// ret0：头像路径，为空则表示获取失败
+//
+// ret1: 是否获取成功
 func (m *Manager) RandUserIcon() (string, bool, error) {
 	icons := getUserStandardIcons()
 	if len(icons) == 0 {
@@ -117,6 +136,13 @@ func (m *Manager) RandUserIcon() (string, bool, error) {
 	return icons[idx], true, nil
 }
 
+// 检查用户名是否有效
+//
+// ret0: 是否合法
+//
+// ret1: 不合法原因
+//
+// ret2: 不合法代码
 func (m *Manager) IsUsernameValid(name string) (bool, string, int32) {
 	info := checkers.CheckUsernameValid(name)
 	if info == nil {

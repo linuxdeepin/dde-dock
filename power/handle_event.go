@@ -9,13 +9,23 @@ import "syscall"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
-	ActionBlank       int32 = 0
-	ActionSuspend           = 1
-	ActionShutdown          = 2
-	ActionHibernate         = 3
-	ActionInteractive       = 4
-	ActionNothing           = 5
-	ActionLogout            = 6
+	//
+	// 按下电源键和合上笔记本盖时支持的操作
+	//
+	// 关闭显示器
+	ActionBlank int32 = 0
+	// 挂起
+	ActionSuspend = 1
+	// 关机
+	ActionShutdown = 2
+	// 休眠
+	ActionHibernate = 3
+	// 询问
+	ActionInteractive = 4
+	// 无
+	ActionNothing = 5
+	// 注销
+	ActionLogout = 6
 )
 
 func doLock() {

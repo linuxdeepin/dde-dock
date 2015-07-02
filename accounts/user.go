@@ -50,7 +50,9 @@ type User struct {
 	IconFile       string
 	BackgroundFile string
 
-	Locked         bool
+	// 用户是否被禁用
+	Locked bool
+	// 是否允许此用户自动登录
 	AutomaticLogin bool
 
 	AccountType int32

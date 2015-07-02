@@ -12,12 +12,19 @@ type Audio struct {
 	init bool
 	core *pulse.Context
 
-	Sinks         []*Sink
-	Sources       []*Source
-	SinkInputs    []*SinkInput
-	DefaultSink   string
+	// 输出设备 ObjectPath 列表
+	Sinks []*Sink
+	// 输入设备ObjectPath 列表
+	Sources []*Source
+	// 正常输出声音的程序列表
+	SinkInputs []*SinkInput
+
+	// 默认的输出设备名称
+	DefaultSink string
+	// 默认的输入设备名称
 	DefaultSource string
 
+	// 最大音量
 	MaxUIVolume float64
 
 	siEventChan  chan func()
@@ -112,20 +119,34 @@ type Sink struct {
 	Name        string
 	Description string
 
+	// 默认音量值
 	BaseVolume float64
 
+	// 是否静音
 	Mute bool
 
-	Volume         float64
-	Balance        float64
+	// 当前音量
+	Volume float64
+	// 左右声道平衡值
+	Balance float64
+	// 是否支持左右声道调整
 	SupportBalance bool
-	Fade           float64
-	SupportFade    bool
+	// 前后声道平衡值
+	Fade float64
+	// 是否支持前后声道调整
+	SupportFade bool
 
-	Ports      []Port
+	// 支持的输出端口
+	Ports []Port
+	// 当前使用的输出端口
 	ActivePort Port
 }
 
+// 设置音量大小
+//
+// v: 音量大小
+//
+// isPlay: 是否播放声音反馈
 func (s *Sink) SetVolume(v float64, isPlay bool) {
 	if v == 0 {
 		v = 0.001
@@ -135,22 +156,38 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 		playFeedbackWithDevice(s.Name)
 	}
 }
+
+// 设置左右声道平衡值
+//
+// v: 声道平衡值
+//
+// isPlay: 是否播放声音反馈
 func (s *Sink) SetBalance(v float64, isPlay bool) {
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedbackWithDevice(s.Name)
 	}
 }
+
+// 设置前后声道平衡值
+//
+// v: 声道平衡值
+//
+// isPlay: 是否播放声音反馈
 func (s *Sink) SetFade(v float64) {
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedbackWithDevice(s.Name)
 }
+
+// 是否静音
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
 	if !v {
 		playFeedbackWithDevice(s.Name)
 	}
 }
+
+// 设置此设备的当前使用端口
 func (s *Sink) SetPort(name string) {
 	s.core.SetPort(name)
 }
@@ -159,6 +196,7 @@ type SinkInput struct {
 	core  *pulse.SinkInput
 	index uint32
 
+	// process name
 	Name string
 	Icon string
 	Mute bool
@@ -203,6 +241,7 @@ type Source struct {
 	Name        string
 	Description string
 
+	// 默认的输入音量
 	BaseVolume float64
 
 	Mute bool
@@ -217,6 +256,7 @@ type Source struct {
 	ActivePort Port
 }
 
+// 如何反馈输入音量？
 func (s *Source) SetVolume(v float64, isPlay bool) {
 	if v == 0 {
 		v = 0.001

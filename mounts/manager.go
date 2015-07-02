@@ -46,9 +46,13 @@ type diskObjectInfo struct {
 }
 
 type Manager struct {
+	// All disk info list in system
 	DiskList DiskInfos
 
-	//Error(uuid, reason)
+	// Error(uuid, reason) signal. It will be emited if operation failure
+	//
+	// uuid: the disk uuid
+	// reason: detail info about the failure
 	Error func(string, string)
 
 	monitor *gio.VolumeMonitor

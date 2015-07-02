@@ -27,11 +27,19 @@ import (
 	. "pkg.linuxdeepin.com/lib/gettext"
 )
 
-type localeInfo struct {
+type LocaleInfo struct {
+	// Locale name
 	Locale string
-	Desc   string
+	// Locale description
+	Desc string
 }
 
+// Set user desktop environment locale, the new locale will work after relogin.
+// (Notice: this locale is only for the current user.)
+//
+// 设置用户会话的 locale，注销后生效，此改变只对当前用户生效。
+//
+// locale: see '/etc/locale.gen'
 func (lang *LangSelector) SetLocale(locale string) error {
 	if lang.LocaleState == LocaleStateChanging {
 		return nil
@@ -75,7 +83,10 @@ func (lang *LangSelector) SetLocale(locale string) error {
 	return nil
 }
 
-func (lang *LangSelector) GetLocaleList() []localeInfo {
+// Get locale info list that deepin supported
+//
+// 得到系统支持的 locale 信息列表
+func (lang *LangSelector) GetLocaleList() []LocaleInfo {
 	list, err := getLocaleInfoList(language_info.LanguageListFile)
 	if err != nil {
 		lang.logger.Warning(err)
@@ -85,15 +96,15 @@ func (lang *LangSelector) GetLocaleList() []localeInfo {
 	return list
 }
 
-func getLocaleInfoList(filename string) ([]localeInfo, error) {
+func getLocaleInfoList(filename string) ([]LocaleInfo, error) {
 	infoList, err := language_info.GetLanguageInfoList(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	var list []localeInfo
+	var list []LocaleInfo
 	for _, info := range infoList {
-		tmp := localeInfo{info.Locale, info.Description}
+		tmp := LocaleInfo{info.Locale, info.Description}
 		list = append(list, tmp)
 	}
 

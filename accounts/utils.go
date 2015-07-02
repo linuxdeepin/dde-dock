@@ -39,9 +39,13 @@ const (
 type ErrCodeType int32
 
 const (
+	// 未知错误
 	ErrCodeUnkown ErrCodeType = iota
+	// 权限认证失败
 	ErrCodeAuthFailed
+	// 执行命令失败
 	ErrCodeExecFailed
+	// 传入的参数不合法
 	ErrCodeParamInvalid
 )
 

@@ -53,6 +53,9 @@ var zoneSettings = func() func() *gio.Settings {
 	}
 }()
 
+// Enable desktop edge zone detected
+//
+// 是否启用桌面边缘热区功能
 func (op *Manager) EnableZoneDetected(enable bool) {
 	if enable {
 		unregisterZoneArea()
@@ -62,42 +65,50 @@ func (op *Manager) EnableZoneDetected(enable bool) {
 	}
 }
 
+// Set left-top edge action
 func (op *Manager) SetTopLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	edgeActionMap[leftTopEdge] = value
 }
 
+// Get left-top edge action
 func (op *Manager) TopLeftAction() string {
 	return zoneSettings().GetString("left-up")
 }
 
+// Set left-bottom edge action
 func (op *Manager) SetBottomLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	edgeActionMap[leftBottomEdge] = value
 }
 
+// Get left-bottom edge action
 func (op *Manager) BottomLeftAction() string {
 	return zoneSettings().GetString("left-down")
 }
 
+// Set right-top edge action
 func (op *Manager) SetTopRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	edgeActionMap[rightTopEdge] = value
 }
 
+// Get right-top edge action
 func (op *Manager) TopRightAction() string {
 	return zoneSettings().GetString("right-up")
 }
 
+// Set right-bottom edge action
 func (op *Manager) SetBottomRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
 	edgeActionMap[rightBottomEdge] = value
 }
 
+// Get right-bottom edge action
 func (op *Manager) BottomRightAction() string {
 	return zoneSettings().GetString("right-down")
 }

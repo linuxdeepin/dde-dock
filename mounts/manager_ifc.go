@@ -28,6 +28,9 @@ import (
 	"pkg.linuxdeepin.com/lib/gobject-2.0"
 )
 
+// Eject disk.
+//
+// uuid: get from DiskList
 func (m *Manager) DeviceEject(uuid string) (bool, error) {
 	value := m.getDiskCache(uuid)
 	if value == nil {
@@ -48,6 +51,7 @@ func (m *Manager) DeviceEject(uuid string) (bool, error) {
 	return true, nil
 }
 
+// Mount disk.
 func (m *Manager) DeviceMount(uuid string) (bool, error) {
 	value := m.getDiskCache(uuid)
 	if value == nil {
@@ -68,6 +72,7 @@ func (m *Manager) DeviceMount(uuid string) (bool, error) {
 	return true, nil
 }
 
+// Unmount disk.
 func (m *Manager) DeviceUnmount(uuid string) (bool, error) {
 	value := m.getDiskCache(uuid)
 	if value == nil {

@@ -315,6 +315,7 @@ func (u *User) IsIconDeletable(icon string) bool {
 	return true
 }
 
+// 获取当前头像的大图标
 func (u *User) GetLargeIcon() string {
 	baseName := path.Base(u.IconFile)
 	dir := path.Dir(u.IconFile)

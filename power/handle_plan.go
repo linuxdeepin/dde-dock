@@ -9,19 +9,29 @@ import (
 )
 
 const (
-	HighPerformanceIdleTime    = 15 * 60
+	// 高性能模式下空闲检测超时
+	HighPerformanceIdleTime = 15 * 60
+	// 高性能模式下挂起超时
 	HighPerformanceSuspendTime = 0
-	BlancedIdleTime            = 10 * 60
-	BlancedSuspendTime         = 0
-	PowerSaverIdleTime         = 5 * 60
-	PowerSaverSuspendTime      = 15 * 60
+	// 均衡模式下空闲检测超时
+	BlancedIdleTime = 10 * 60
+	// 均衡模式下挂起超时
+	BlancedSuspendTime = 0
+	// 节能模式下空闲检测超时
+	PowerSaverIdleTime = 5 * 60
+	// 节能模式下挂起超时
+	PowerSaverSuspendTime = 15 * 60
 )
 
 const (
 	//sync with com.deepin.daemon.power.schema
-	PowerPlanCustom          = 0
-	PowerPlanPowerSaver      = 1
-	PowerPlanBalanced        = 2
+	// 电源计划：自定义
+	PowerPlanCustom = 0
+	// 电源计划：节能模式
+	PowerPlanPowerSaver = 1
+	// 电源计划：均衡模式
+	PowerPlanBalanced = 2
+	// 电源计划：高性能模式
 	PowerPlanHighPerformance = 3
 )
 

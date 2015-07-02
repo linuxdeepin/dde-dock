@@ -44,17 +44,22 @@ const (
 )
 
 type DiskInfo struct {
+	// Disk description
 	Name string
+	// Disk type, ex: native, removable, network...
 	Type string
 
 	CanUnmount bool
 	CanEject   bool
 
+	// The size of disk used
 	Used uint64
+	// The capacity of disk
 	Size uint64
 
-	Path       string
-	UUID       string
+	Path string
+	UUID string
+	// The mounted path
 	MountPoint string
 	Icon       string
 }

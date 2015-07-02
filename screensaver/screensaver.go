@@ -21,9 +21,12 @@ type inhibitor struct {
 type ScreenSaver struct {
 	xu *xgbutil.XUtil
 
-	IdleOn      func()
+	// Idle 定时器超时信号，当系统在给定时间内未被使用时发送
+	IdleOn func()
+	// Idle 超时时，如果设置了壁纸切换，则发送此信号
 	CycleActive func()
-	IdleOff     func()
+	// Idle 超时后，如果系统被使用就发送此信号，重新开始 Idle 计时器
+	IdleOff func()
 
 	blank        byte
 	idleTime     uint32
@@ -43,6 +46,13 @@ type timeoutVals struct {
 	blank             bool
 }
 
+// 抑制 Idle 计时器，不再检测系统是否空闲，然后返回一个 id，用来取消此操作。
+//
+// name: 抑制 Idle 计时器的程序名称
+//
+// reason: 抑制原因
+//
+// ret0: 此次操作对应的 id，用来取消抑制
 func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
 	ss.counterLock.Lock()
 	defer ss.counterLock.Unlock()
@@ -59,10 +69,12 @@ func (ss *ScreenSaver) Inhibit(name, reason string) uint32 {
 	return ss.counter
 }
 
+// 模拟用户操作，让系统处于使用状态，重新开始 Idle 定时器
 func (ss *ScreenSaver) SimulateUserActivity() {
 	xproto.ForceScreenSaver(ss.xu.Conn(), 0)
 }
 
+// 根据 id 取消对应的抑制操作
 func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 	ss.counterLock.Lock()
 	defer ss.counterLock.Unlock()
@@ -88,6 +100,13 @@ func (ss *ScreenSaver) UnInhibit(cookie uint32) {
 	}
 }
 
+// 设置 Idle 的定时器超时时间
+//
+// seconds: 超时时间，以秒为单位
+//
+// interval: 屏保模式下，背景更换的间隔时间
+//
+// blank: 是否黑屏，此参数暂时无效
 func (ss *ScreenSaver) SetTimeout(seconds, interval uint32, blank bool) {
 	if len(ss.inhibitors) > 0 {
 		ss.lastVals = &timeoutVals{seconds, interval, blank}
