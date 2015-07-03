@@ -1,5 +1,6 @@
 #include "panel.h"
-#include "systraymanager.h"
+#include "dockpluginproxy.h"
+#include "dockpluginmanager.h"
 
 Panel::Panel(QWidget *parent)
     : QLabel(parent),parentWidget(parent)
@@ -25,11 +26,16 @@ Panel::Panel(QWidget *parent)
     connect(dockCons, SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
             this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
 
+    DockPluginManager *pluginManager = new DockPluginManager(this);
+    QList<DockPluginProxy*> proxies = pluginManager->getAll();
+    foreach (DockPluginProxy* proxy, proxies) {
+        connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem* item) { rightLayout->addItem(item); });
+        connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) { rightLayout->removeItem(rightLayout->indexOf(item)); });
+    }
 
     panelMenu = new PanelMenu();
 
     initAppManager();
-    initSystrayManager();
 
     slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
 }
@@ -191,15 +197,6 @@ void Panel::initAppManager()
     connect(m_appManager,SIGNAL(entryAdded(AppItem*)),this, SLOT(slotAddAppItem(AppItem*)));
     connect(m_appManager, SIGNAL(entryRemoved(QString)),this, SLOT(slotRemoveAppItem(QString)));
     m_appManager->updateEntries();
-}
-
-void Panel::initSystrayManager()
-{
-    SystrayManager *manager = new SystrayManager();
-    foreach (AbstractDockItem *item, manager->trayIcons()) {
-        rightLayout->addItem(item);
-        qDebug() << item->geometry()<<"=====++++++++";
-    }
 }
 
 Panel::~Panel()

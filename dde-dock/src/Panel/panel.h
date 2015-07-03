@@ -49,7 +49,6 @@ private:
     void hideMenu();
 
     void initAppManager();
-    void initSystrayManager();
 private:
     DockLayout * leftLayout;
     DockLayout *rightLayout;

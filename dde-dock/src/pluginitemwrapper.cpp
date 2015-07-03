@@ -2,10 +2,11 @@
 
 PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
                                      QString uuid, QWidget * parent) :
-    AbstractDockItem(parent),
-    m_plugin(plugin),
-    m_uuid(uuid)
+    AbstractDockItem(parent)
 {
+    m_plugin = plugin;
+    m_uuid = uuid;
+
     if (m_plugin) {
         QWidget * item = m_plugin->getItem(uuid);
 
@@ -13,7 +14,12 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
             setFixedSize(item->size());
 
             item->setParent(this);
-            item->move(this->rect().center() - item->rect().center());
         }
     }
 }
+
+QString PluginItemWrapper::uuid() const
+{
+    return m_uuid;
+}
+

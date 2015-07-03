@@ -4,13 +4,18 @@
 #include <QObject>
 #include <QStringList>
 
+#include "dockpluginproxyinterface.h"
+
 class DockPluginInterface
 {
 public:
     virtual ~DockPluginInterface() {}
-    virtual void init() = 0;
+    virtual void init(DockPluginProxyInterface *proxy) = 0;
+
     virtual QStringList uuids() = 0;
     virtual QWidget* getItem(QString uuid) = 0;
+
+    virtual QString name() = 0;
 };
 
 QT_BEGIN_NAMESPACE

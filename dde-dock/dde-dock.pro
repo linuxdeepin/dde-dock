@@ -22,7 +22,6 @@ SOURCES += \
     src/Widgets/windowpreview.cpp \
     src/Panel/panel.cpp \
     src/Widgets/appitem.cpp \
-    src/systraymanager.cpp \
     src/Panel/panelmenu.cpp \
     src/Controller/dockmodedata.cpp \
     src/Controller/dockconstants.cpp \
@@ -34,8 +33,9 @@ SOURCES += \
     src/DBus/dbusdockedappmanager.cpp \
     src/DBus/dbusdocksetting.cpp \
     src/pluginitemwrapper.cpp \
-    src/Widgets/arrowrectangle.cpp
-
+    src/Widgets/arrowrectangle.cpp \
+    src/dockpluginproxy.cpp \
+    src/dockpluginmanager.cpp
 HEADERS  += \
     src/abstractdockitem.h \
     src/dockplugininterface.h \
@@ -47,7 +47,6 @@ HEADERS  += \
     src/Widgets/windowpreview.h \
     src/Panel/panel.h \
     src/Widgets/appitem.h \
-    src/systraymanager.h \
     src/Panel/panelmenu.h \
     src/Controller/dockmodedata.h \
     src/Controller/dockconstants.h \
@@ -59,7 +58,10 @@ HEADERS  += \
     src/DBus/dbusdockedappmanager.h \
     src/DBus/dbusdocksetting.h \
     src/pluginitemwrapper.h \
-    src/Widgets/arrowrectangle.h
+    src/Widgets/arrowrectangle.h\
+    src/dockpluginproxyinterface.h \
+    src/dockpluginproxy.h \
+    src/dockpluginmanager.h
 
 RESOURCES += \
     images.qrc \

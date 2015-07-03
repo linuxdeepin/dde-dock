@@ -8,10 +8,8 @@ DockTrayItem * DockTrayItem::fromWinId(WId winId)
 
     QWindow *win = QWindow::fromWinId(winId);
     QWidget *child = QWidget::createWindowContainer(win, item);
-
-    QHBoxLayout *layout = new QHBoxLayout(item);
-    layout->addWidget(child);
-    item->setLayout(layout);
+    child->setFixedSize(item->size());
+    child->setParent(item);
 
     return item;
 }
