@@ -28,28 +28,37 @@ import (
 )
 
 func main() {
-	logger := log.NewLogger("dde-daemon/desktop-toggle")
+	logger := log.NewLogger("desktop-toggle")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
 	X, err := xgbutil.NewConn()
 	if err != nil {
 		logger.Error("New xgbutil connection failed: ", err)
-		panic(err)
+		return
 	}
 
-	if ret, err := ewmh.ShowingDesktopGet(X); err == nil {
-		// !!! NOT using ewmh.ShowingDesktopReq
-		// because ewmh.ShowingDesktopReq passes a uint argument,
-		// and int is used on xevent.NewClientMessage.
-		logger.Info("Show Desktop Status: ", ret)
-		var showInt int
-		if ret {
-			showInt = 0
-		} else {
-			showInt = 1
-		}
-		ewmh.ClientEvent(X, X.RootWin(), "_NET_SHOWING_DESKTOP", showInt)
+	ret, err := ewmh.ShowingDesktopGet(X)
+	if err != nil {
+		logger.Warning("Get showing desktop state failed:", err)
+		return
+	}
+	logger.Info("Desktop showing state:", ret)
+
+	var showInt int
+	if ret {
+		showInt = 0
+	} else {
+		showInt = 1
+	}
+
+	// !!! NOT using ewmh.ShowingDesktopReq
+	// because ewmh.ShowingDesktopReq passes a uint argument,
+	// and int is used on xevent.NewClientMessage.
+	err = ewmh.ClientEvent(X, X.RootWin(), "_NET_SHOWING_DESKTOP", showInt)
+	if err != nil {
+		logger.Warning("Send showing desktop client event failed: ", err)
+		return
 	}
 	X.Sync()
 }
