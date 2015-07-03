@@ -35,6 +35,9 @@ private slots:
     void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
     void slotLayoutContentsWidthChanged();
 
+    void slotAddAppItem(AppItem *item);
+    void slotRemoveAppItem(const QString &id);
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -45,9 +48,12 @@ private:
     void showMenu();
     void hideMenu();
 
+    void initAppManager();
+    void initSystrayManager();
 private:
     DockLayout * leftLayout;
     DockLayout *rightLayout;
+    AppManager *m_appManager = NULL;
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
     DockModeData *dockCons = DockModeData::getInstants();

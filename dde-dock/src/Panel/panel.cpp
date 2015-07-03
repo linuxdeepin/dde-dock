@@ -16,18 +16,6 @@ Panel::Panel(QWidget *parent)
     leftLayout->resize(this->width() - rightLayout->width(),dockCons->getDockHeight());
     leftLayout->move(0,0);
 
-    AppItem * b1 = new AppItem("App",":/test/Resources/images/brasero.png");
-    AppItem * b2 = new AppItem("App",":/test/Resources/images/crossover.png");
-    AppItem * b3 = new AppItem("App",":/test/Resources/images/vim.png");
-    AppItem * b4 = new AppItem("App",":/test/Resources/images/google-chrome.png");
-    AppItem * b5 = new AppItem("App",":/test/Resources/images/QtProject-qtcreator.png");
-
-    leftLayout->addItem(b1);
-    leftLayout->addItem(b2);
-    leftLayout->addItem(b3);
-    leftLayout->addItem(b4);
-    leftLayout->addItem(b5);
-
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
@@ -37,23 +25,13 @@ Panel::Panel(QWidget *parent)
     connect(dockCons, SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
             this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
 
-    SystrayManager *manager = new SystrayManager();
-    foreach (AbstractDockItem *item, manager->trayIcons()) {
-        rightLayout->addItem(item);
-        qDebug() << item->geometry();
-    }
 
     panelMenu = new PanelMenu();
 
+    initAppManager();
+    initSystrayManager();
+
     slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
-
-
-
-
-
-
-    ///////////////////////////
-    AppManager *appManager = new AppManager(this);
 }
 
 void Panel::resize(const QSize &size)
@@ -124,6 +102,7 @@ void Panel::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::
 
     this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
     this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
+    qWarning() << "AppCount:********" << leftLayout->getItemCount();
 }
 
 void Panel::slotLayoutContentsWidthChanged()
@@ -140,7 +119,26 @@ void Panel::slotLayoutContentsWidthChanged()
         this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
         this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
     }
+}
 
+void Panel::slotAddAppItem(AppItem *item)
+{
+    leftLayout->addItem(item);
+}
+
+void Panel::slotRemoveAppItem(const QString &id)
+{
+    QList<AbstractDockItem *> tmpList = leftLayout->getItemList();
+    for (int i = 0; i < tmpList.count(); i ++)
+    {
+        AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
+        if (tmpItem->itemId() == id)
+        {
+            //TODO,remove from layout
+            return;
+        }
+    }
+    qWarning() << "=====" << leftLayout->getItemCount();
 }
 
 void Panel::mousePressEvent(QMouseEvent *event)
@@ -185,6 +183,23 @@ void Panel::showMenu()
 void Panel::hideMenu()
 {
 
+}
+
+void Panel::initAppManager()
+{
+    m_appManager = new AppManager(this);
+    connect(m_appManager,SIGNAL(entryAdded(AppItem*)),this, SLOT(slotAddAppItem(AppItem*)));
+    connect(m_appManager, SIGNAL(entryRemoved(QString)),this, SLOT(slotRemoveAppItem(QString)));
+    m_appManager->updateEntries();
+}
+
+void Panel::initSystrayManager()
+{
+    SystrayManager *manager = new SystrayManager();
+    foreach (AbstractDockItem *item, manager->trayIcons()) {
+        rightLayout->addItem(item);
+        qDebug() << item->geometry()<<"=====++++++++";
+    }
 }
 
 Panel::~Panel()

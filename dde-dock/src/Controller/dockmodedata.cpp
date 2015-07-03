@@ -104,17 +104,18 @@ int DockModeData::getAppItemSpacing()
 
 int DockModeData::getAppIconSize()
 {
-    switch (m_currentMode)
-    {
-    case DockConstants::FashionMode:
-        return 48;
-    case DockConstants::EfficientMode:
-        return 42;
-    case DockConstants::ClassicMode:
-        return 24;
-    default:
-        return 32;
-    }
+//    switch (m_currentMode)
+//    {
+//    case DockConstants::FashionMode:
+//        return 48;
+//    case DockConstants::EfficientMode:
+//        return 48;
+//    case DockConstants::ClassicMode:
+//        return 24;
+//    default:
+//        return 32;
+//    }
+    return 48;
 }
 
 int DockModeData::getAppletsItemHeight()

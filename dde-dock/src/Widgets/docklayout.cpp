@@ -176,6 +176,11 @@ int DockLayout::getItemCount()
     return appList.count();
 }
 
+QList<AbstractDockItem *> DockLayout::getItemList() const
+{
+    return appList;
+}
+
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 {
     event->setDropAction(Qt::MoveAction);

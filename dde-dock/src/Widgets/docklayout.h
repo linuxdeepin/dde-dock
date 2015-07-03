@@ -29,6 +29,7 @@ public:
     int indexOf(int x,int y);
     int getContentsWidth();
     int getItemCount();
+    QList<AbstractDockItem *> getItemList() const;
 
 public slots:
     void relayout();

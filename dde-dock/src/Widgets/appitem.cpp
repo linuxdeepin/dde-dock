@@ -6,58 +6,34 @@ AppItem::AppItem(QWidget *parent) :
     setAcceptDrops(true);
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
     initBackground();
+    initClientManager();
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
+
+
 }
 
-AppItem::AppItem(QString title, QWidget *parent):
-    AbstractDockItem(parent)
+void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
 {
-    m_itemTitle = title;
+    m_entryProxyer = entryProxyer;
+    m_entryProxyer->setParent(this);
+    connect(m_entryProxyer, SIGNAL(DataChanged(QString,QString)),this, SLOT(dbusDataChanged(QString,QString)));
 
-    setAcceptDrops(true);
-    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
-    initBackground();
-    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    initData();
 }
 
-AppItem::AppItem(QString title, QString iconPath, QWidget *parent) :
-    AbstractDockItem(parent)
+void AppItem::destroyItem(const QString &id)
 {
-    m_itemTitle = title;
-    m_itemIconPath = iconPath;
 
-    setAcceptDrops(true);
-    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
-    initBackground();
-    setIcon(m_itemIconPath,dockCons->getAppIconSize());
-    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 }
 
-void AppItem::setIcon(const QString &iconPath, int size)
+QString AppItem::itemId() const
 {
-    m_appIcon = new AppIcon(iconPath, this);
-    m_appIcon->resize(size, size);
-
-    reanchorIcon();
+    return m_itemData.id;
 }
 
-void AppItem::setActived(bool value)
+AppItemData AppItem::itemData() const
 {
-    m_isActived = value;
-    if (!value)
-        resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
-    else
-        resize(dockCons->getActivedItemWidth(), dockCons->getItemHeight());
-}
-
-void AppItem::setCurrentOpened(bool value)
-{
-    m_isCurrentOpened = value;
-}
-
-bool AppItem::currentOpened()
-{
-    return m_isCurrentOpened;
+    return m_itemData;
 }
 
 void AppItem::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
@@ -96,6 +72,32 @@ void AppItem::resizeBackground()
     appBackground->resize(width(),height());
 }
 
+void AppItem::dbusDataChanged(const QString &key, const QString &value)
+{
+//    qWarning() << "key:" << key << "value:" << value;
+    if (key == "app-status")
+        qWarning() << "====+++++++++" << value;
+
+    updateTitle();
+    updateState();
+    updateXids();
+    updateMenuJsonString();
+}
+
+void AppItem::setCurrentOpened(uint value)
+{
+    if (m_itemData.xidsJsonString.indexOf(QString::number(value)) != -1)
+    {
+        m_itemData.currentOpened = true;
+        appBackground->setIsCurrentOpened(true);
+    }
+    else
+    {
+        m_itemData.currentOpened = false;
+        appBackground->setIsCurrentOpened(false);
+    }
+}
+
 void AppItem::resizeResources()
 {
     if (m_appIcon != NULL)
@@ -118,13 +120,81 @@ void AppItem::initBackground()
     connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
 }
 
+void AppItem::initClientManager()
+{
+    m_clientmanager = new DBusClientManager(this);
+    connect(m_clientmanager, SIGNAL(ActiveWindowChanged(uint)),this, SLOT(setCurrentOpened(uint)));
+}
+
+void AppItem::setActived(bool value)
+{
+    m_isActived = value;
+    if (!value)
+        resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+    else
+        resize(dockCons->getActivedItemWidth(), dockCons->getItemHeight());
+
+    appBackground->setIsActived(value);
+}
+
+void AppItem::initData()
+{
+    StringMap dataMap = m_entryProxyer->data();
+    m_itemData.title = dataMap.value("title");
+    m_itemData.iconPath = dataMap.value("icon");
+    m_itemData.menuJsonString = dataMap.value("menu");
+    m_itemData.xidsJsonString = dataMap.value("app-xids");
+    m_itemData.isActived = dataMap.value("app-status") == "active";
+    m_itemData.currentOpened = m_itemData.xidsJsonString.indexOf(QString::number(m_clientmanager->CurrentActiveWindow())) != -1;
+    m_itemData.id = m_entryProxyer->id();
+
+    setActived(m_itemData.isActived);
+    setCurrentOpened(m_clientmanager->CurrentActiveWindow());
+    updateIcon();
+}
+
+void AppItem::updateIcon()
+{
+    if (m_appIcon == NULL)
+    {
+        m_appIcon = new AppIcon(this);
+        m_appIcon->resize(height(), height());
+        m_appIcon->setIcon(m_itemData.iconPath,dockCons->getAppIconSize());
+    }
+
+    reanchorIcon();
+}
+
+void AppItem::updateTitle()
+{
+    m_itemData.title = m_entryProxyer->data().value("title");
+    //TODO,update view label
+}
+
+void AppItem::updateState()
+{
+    m_itemData.isActived = m_entryProxyer->data().value("app-status") == "active";
+    setActived(m_itemData.isActived);
+    appBackground->setIsActived(m_itemData.isActived);
+}
+
+void AppItem::updateXids()
+{
+    m_itemData.xidsJsonString = m_entryProxyer->data().value("app-xids");
+}
+
+void AppItem::updateMenuJsonString()
+{
+    m_itemData.menuJsonString = m_entryProxyer->data().value("menu");
+}
+
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY());
-    ////////////FOR TEST ONLY/////////////////////
-    appBackground->setIsActived(!appBackground->getIsActived());
-    setActived(!actived());
+
+    if (event->button() == Qt::LeftButton)
+        m_entryProxyer->Activate(0,0);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
@@ -150,11 +220,11 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
     {
         QDrag* drag = new QDrag(this);
         QMimeData* data = new QMimeData();
-        QImage dataImg(m_itemIconPath);
+        QImage dataImg(m_itemData.iconPath);
         data->setImageData(QVariant(dataImg));
         drag->setMimeData(data);
 
-        QPixmap pixmap(m_itemIconPath);
+        QPixmap pixmap(m_itemData.iconPath);
         drag->setPixmap(pixmap);
 
         drag->setHotSpot(QPoint(15,15));

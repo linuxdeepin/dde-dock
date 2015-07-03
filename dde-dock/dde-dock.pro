@@ -32,7 +32,7 @@ SOURCES += \
     src/DBus/dbuspanelmanager.cpp \
     src/DBus/dbusclientmanager.cpp \
     src/DBus/dbusdockedappmanager.cpp \
-    src/DBus/dbusdocksetting.cpp
+    src/DBus/dbusdocksetting.cpp \
     src/pluginitemwrapper.cpp
 
 HEADERS  += \
@@ -56,7 +56,7 @@ HEADERS  += \
     src/DBus/dbuspanelmanager.h \
     src/DBus/dbusclientmanager.h \
     src/DBus/dbusdockedappmanager.h \
-    src/DBus/dbusdocksetting.h
+    src/DBus/dbusdocksetting.h \
     src/pluginitemwrapper.h
 
 RESOURCES += \
