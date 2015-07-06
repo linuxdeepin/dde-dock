@@ -257,8 +257,8 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
 
 	if s.isErrorOccured() {
-		logger.Debug("Errors:", s.Errors)
-		logger.Debug("settingKeyErrors:", s.settingKeyErrors)
+		logger.Info("Save Errors:", s.Errors)
+		logger.Info("Save settingKeyErrors:", s.settingKeyErrors)
 		return false, nil
 	}
 
