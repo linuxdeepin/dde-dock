@@ -13,11 +13,11 @@ MainWidget::MainWidget(QWidget *parent)
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->move(0,rec.height());
 
-    connect(DockModeData::getInstants(), SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
-            this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
+    connect(DockModeData::getInstants(), SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
+            this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 }
 
-void MainWidget::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
+void MainWidget::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     QRect rec = QApplication::desktop()->screenGeometry();
     this->resize(rec.width(),DockModeData::getInstants()->getDockHeight());

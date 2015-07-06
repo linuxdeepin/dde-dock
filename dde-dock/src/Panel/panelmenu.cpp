@@ -44,20 +44,20 @@ PanelMenu::PanelMenu(QWidget *parent) : QWidget(parent)
 void PanelMenu::changeToFashionMode()
 {
     qWarning() << "Change to fashion mode...";
-    dockCons->setDockMode(DockConstants::FashionMode);
+    dockCons->setDockMode(Dock::FashionMode);
     this->hide();
 }
 
 void PanelMenu::changeToEfficientMode()
 {
     qWarning() << "Change to efficient mode...";
-    dockCons->setDockMode(DockConstants::EfficientMode);
+    dockCons->setDockMode(Dock::EfficientMode);
     this->hide();
 }
 
 void PanelMenu::changeToClassicMode()
 {
     qWarning() << "Change to classic mode...";
-    dockCons->setDockMode(DockConstants::ClassicMode);
+    dockCons->setDockMode(Dock::ClassicMode);
     this->hide();
 }

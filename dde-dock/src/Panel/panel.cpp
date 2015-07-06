@@ -23,8 +23,8 @@ Panel::Panel(QWidget *parent)
     connect(leftLayout, SIGNAL(contentsWidthChange()),this, SLOT(slotLayoutContentsWidthChanged()));
     connect(rightLayout, SIGNAL(contentsWidthChange()), this, SLOT(slotLayoutContentsWidthChanged()));
 
-    connect(dockCons, SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
-            this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));
+    connect(dockCons, SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
+            this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 
     DockPluginManager *pluginManager = new DockPluginManager(this);
     QList<DockPluginProxy*> proxies = pluginManager->getAll();
@@ -99,7 +99,7 @@ void Panel::slotExitedMask()
 //    leftLayout->relayout();
 }
 
-void Panel::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
+void Panel::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     leftLayout->relayout();
     rightLayout->relayout();
@@ -115,7 +115,7 @@ void Panel::slotLayoutContentsWidthChanged()
 {
     reanchorsLayout(dockCons->getDockMode());
 
-    if (dockCons->getDockMode() == DockConstants::FashionMode)
+    if (dockCons->getDockMode() == Dock::FashionMode)
     {
         this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
         this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
@@ -158,9 +158,9 @@ void Panel::mouseReleaseEvent(QMouseEvent *event)
 
 }
 
-void Panel::reanchorsLayout(DockConstants::DockMode mode)
+void Panel::reanchorsLayout(Dock::DockMode mode)
 {
-    if (mode == DockConstants::FashionMode)
+    if (mode == Dock::FashionMode)
     {
         leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getDockHeight());
 

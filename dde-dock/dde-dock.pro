@@ -24,7 +24,6 @@ SOURCES += \
     src/Widgets/appitem.cpp \
     src/Panel/panelmenu.cpp \
     src/Controller/dockmodedata.cpp \
-    src/Controller/dockconstants.cpp \
     src/Controller/appmanager.cpp \
     src/DBus/dbusentrymanager.cpp \
     src/DBus/dbusentryproxyer.cpp \
@@ -52,7 +51,6 @@ HEADERS  += \
     src/Widgets/appitem.h \
     src/Panel/panelmenu.h \
     src/Controller/dockmodedata.h \
-    src/Controller/dockconstants.h \
     src/Controller/appmanager.h \
     src/DBus/dbusentrymanager.h \
     src/DBus/dbusentryproxyer.h \
@@ -64,9 +62,10 @@ HEADERS  += \
     src/Widgets/arrowrectangle.h\
     src/dockpluginproxyinterface.h \
     src/dockpluginproxy.h \
-    src/dockpluginmanager.h\
     src/DBus/dbusmenumanager.h \
-    src/DBus/dbusmenu.h
+    src/DBus/dbusmenu.h \
+    src/dockpluginmanager.h \
+    src/dockconstants.h
 
 RESOURCES += \
     images.qrc \

@@ -32,7 +32,7 @@ public slots:
     void slotExitedMask();
 
 private slots:
-    void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
     void slotLayoutContentsWidthChanged();
 
     void slotAddAppItem(AppItem *item);
@@ -43,7 +43,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    void reanchorsLayout(DockConstants::DockMode mode);
+    void reanchorsLayout(Dock::DockMode mode);
 
     void showMenu();
     void hideMenu();

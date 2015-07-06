@@ -60,7 +60,7 @@ protected:
     void dropEvent(QDropEvent * event);
 
 private slots:
-    void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
     void reanchorIcon();
     void resizeBackground();
     void dbusDataChanged(const QString &key, const QString &value);

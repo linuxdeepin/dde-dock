@@ -36,9 +36,9 @@ AppItemData AppItem::itemData() const
     return m_itemData;
 }
 
-void AppItem::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants::DockMode oldMode)
+void AppItem::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
-    if (newMode == DockConstants::FashionMode)
+    if (newMode == Dock::FashionMode)
     {
         appBackground->setVisible(false);
     }
@@ -54,13 +54,13 @@ void AppItem::slotDockModeChanged(DockConstants::DockMode newMode, DockConstants
 void AppItem::reanchorIcon()
 {
     switch (dockCons->getDockMode()) {
-    case DockConstants::FashionMode:
+    case Dock::FashionMode:
         m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
         break;
-    case DockConstants::EfficientMode:
+    case Dock::EfficientMode:
         m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
         break;
-    case DockConstants::ClassicMode:
+    case Dock::ClassicMode:
         m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
     default:
         break;

@@ -18,7 +18,7 @@ public:
     ~MainWidget();
 
 public slots:
-    void slotDockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
 
 private:
     Panel *mainPanel = NULL;

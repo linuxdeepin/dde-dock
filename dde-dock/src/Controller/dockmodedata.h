@@ -11,8 +11,8 @@ class DockModeData : public QObject
 public:
     static DockModeData * getInstants();
 
-    DockConstants::DockMode getDockMode();
-    void setDockMode(DockConstants::DockMode value);
+    Dock::DockMode getDockMode();
+    void setDockMode(Dock::DockMode value);
 
     int getDockHeight();
     int getItemHeight();
@@ -26,7 +26,7 @@ public:
     int getAppletsIconSize();
 
 signals:
-    void dockModeChanged(DockConstants::DockMode newMode,DockConstants::DockMode oldMode);
+    void dockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
 
 private:
     explicit DockModeData(QObject *parent = 0);
@@ -34,7 +34,7 @@ private:
 private:
     static DockModeData * dockModeData;
 
-    DockConstants::DockMode m_currentMode = DockConstants::EfficientMode;
+    Dock::DockMode m_currentMode = Dock::EfficientMode;
 
 };
 
