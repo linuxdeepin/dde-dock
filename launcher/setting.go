@@ -10,14 +10,17 @@ import (
 	"sync"
 )
 
+// Setting存储launcher相关的设置。
 type Setting struct {
 	core SettingCoreInterface
 	lock sync.Mutex
 
-	categoryDisplayMode        CategoryDisplayMode
+	categoryDisplayMode CategoryDisplayMode
+	// CategoryDisplayModeChanged当分类的显示模式改变后触发。
 	CategoryDisplayModeChanged func(int64)
 
-	sortMethod        SortMethod
+	sortMethod SortMethod
+	// SortMethodChanged在排序方式改变后触发。
 	SortMethodChanged func(int64)
 }
 
@@ -72,18 +75,21 @@ func (s *Setting) listenSettingChange(signalName string, handler func(*gio.Setti
 	s.core.Connect(detailSignal, handler)
 }
 
+// GetCategoryDisplayMode获取launcher当前的分类显示模式。
 func (s *Setting) GetCategoryDisplayMode() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	return int64(s.categoryDisplayMode)
 }
 
+// SetCategoryDisplayMode设置launcher的分类显示模式。
 func (s *Setting) SetCategoryDisplayMode(newMode int64) {
 	if CategoryDisplayMode(newMode) != s.categoryDisplayMode {
 		s.core.SetEnum(CategoryDisplayModeKey, int32(newMode))
 	}
 }
 
+// GetSortMethod获取launcher当前的排序模式。
 func (s *Setting) GetSortMethod() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
@@ -91,6 +97,7 @@ func (s *Setting) GetSortMethod() int64 {
 	return int64(s.sortMethod)
 }
 
+// SetSortMethod设置launcher的排序方法。
 func (s *Setting) SetSortMethod(newMethod int64) {
 	if SortMethod(newMethod) != s.sortMethod {
 		s.core.SetEnum(SortMethodkey, int32(newMethod))

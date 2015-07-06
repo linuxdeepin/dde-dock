@@ -12,6 +12,7 @@ var (
 	ENTRY_MANAGER = NewEntryManager()
 )
 
+// EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
 	runtimeApps map[string]*RuntimeApp
 	normalApps  map[string]*NormalApp

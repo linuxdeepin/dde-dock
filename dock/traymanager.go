@@ -25,14 +25,19 @@ const (
 	OpCodeSystemTrayCancelMessage uint32 = 2
 )
 
+// TrayManager为系统托盘的管理器。
 type TrayManager struct {
 	owner  xproto.Window
 	visual xproto.Visualid
 
+	// 目前已有系统托盘窗口的id。
 	TrayIcons []uint32
 
+	// Removed信号会在系统过盘图标被移除时被触发。
 	Removed func(id uint32)
-	Added   func(id uint32)
+	// Added信号会在系统过盘图标增加时被触发。
+	Added func(id uint32)
+	// Changed信号会在系统托盘图标改变后被触发。
 	Changed func(id uint32)
 
 	nameInfo   map[xproto.Window]string
@@ -90,6 +95,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	dbus.Emit(m, "Added", uint32(xid))
 	logger.Infof("Added try icon: \"%s\"(%d)", name, uint32(xid))
 }
+
 func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	delete(m.dmageInfo, xid)
 	delete(m.nameInfo, xid)
@@ -105,10 +111,12 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 	dbus.Emit(m, "Removed", uint32(xid))
 }
 
+// GetName返回传入的系统图标的窗口id的窗口名。
 func (m *TrayManager) GetName(xid uint32) string {
 	return m.nameInfo[xproto.Window(xid)]
 }
 
+// EnableNotification设置对应id的窗口是否可以通知。
 func (m *TrayManager) EnableNotification(xid uint32, enable bool) {
 	m.notifyInfo[xproto.Window(xid)] = enable
 }
@@ -140,6 +148,8 @@ func (m *TrayManager) destroyOwnerWindow() {
 	}
 	m.owner = 0
 }
+
+// Manage方法获取系统托盘图标的管理权。
 func (m *TrayManager) Manage() bool {
 	m.destroyOwnerWindow()
 
@@ -152,6 +162,7 @@ func (m *TrayManager) Manage() bool {
 	return m.tryOwner()
 }
 
+// RetryManager方法尝试获取系统托盘图标的权利全，并出发Added信号。
 func (m *TrayManager) RetryManager() {
 	m.Unmanage()
 	m.Manage()
@@ -192,7 +203,7 @@ func initTrayManager() {
 	go TRAYMANAGER.startListener()
 }
 
-func (m *TrayManager) RequireManageTrayIcons() {
+func (m *TrayManager) requireManageTrayIcons() {
 	mstype, err := xprop.Atm(TrayXU, "MANAGER")
 	if err != nil {
 		logger.Warning("Get MANAGER Failed")
@@ -251,7 +262,7 @@ func (m *TrayManager) tryOwner() bool {
 	//owner the _NET_SYSTEM_TRAY_Sn
 	logger.Info("Required _NET_SYSTEM_TRAY_S0 successful")
 
-	m.RequireManageTrayIcons()
+	m.requireManageTrayIcons()
 
 	xprop.ChangeProp32(
 		TrayXU,
@@ -275,6 +286,7 @@ func (m *TrayManager) tryOwner() bool {
 	return reply.Owner != 0
 }
 
+// Unmanage移除系统托盘图标的管理权限。
 func (m *TrayManager) Unmanage() bool {
 	reply, err := m.getSelectionOwner()
 	if err != nil {

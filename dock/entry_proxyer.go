@@ -8,13 +8,18 @@ import (
 const entryDestPrefix = "dde.dock.entry."
 const entryPathPrefix = "/dde/dock/entry/v1/"
 
+// EntryProxyer为驻留程序以及打开程序的dbus接口。
 type EntryProxyer struct {
 	entryId string
 	core    *RemoteEntry
 
-	Id          string
-	Type        string
-	Data        map[string]string
+	// Id属性为程序id。
+	Id string
+	// Type属性为程序类型，包括app，applet两种。
+	Type string
+	// Data包含其他程序相关属性，如icon，title，status，menu，app-xids。
+	Data map[string]string
+	// DataChanged会在Data属性有改变是被触发。
 	DataChanged func(string, string)
 }
 
@@ -43,20 +48,39 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 	}
 }
 
-func (e *EntryProxyer) ContextMenu(x, y int32)   { e.core.ContextMenu(x, y) }
+// ContextMenu接受鼠标事件的位置信息，然后生成
+func (e *EntryProxyer) ContextMenu(x, y int32) { e.core.ContextMenu(x, y) }
+
+// HandleMenuItem对出入的id在右键菜单中对应的项做处理。
 func (e *EntryProxyer) HandleMenuItem(id string) { e.core.HandleMenuItem(id) }
+
+// Activate在程序被点击时作出响应，接受鼠标事件的位置信息。
 func (e *EntryProxyer) Activate(x, y int32) bool {
 	b, _ := e.core.Activate(x, y)
 	return b
 }
-func (e *EntryProxyer) SecondaryActivate(x, y int32)            { e.core.SecondaryActivate(x, y) }
+
+// SecondaryActivate与Activate作用相同，可用于其他鼠标点击事件，通常不会被使用。
+func (e *EntryProxyer) SecondaryActivate(x, y int32) { e.core.SecondaryActivate(x, y) }
+
+// HandleDragEnter在前端触发DragEnter事件时被调用。
 func (e *EntryProxyer) HandleDragEnter(x, y int32, data string) { e.core.HandleDragEnter(x, y, data) }
+
+// HandleDragLeave在前端触发DragLeave事件时被调用。
 func (e *EntryProxyer) HandleDragLeave(x, y int32, data string) { e.core.HandleDragLeave(x, y, data) }
-func (e *EntryProxyer) HandleDragOver(x, y int32, data string)  { e.core.HandleDragOver(x, y, data) }
-func (e *EntryProxyer) HandleDragDrop(x, y int32, data string)  { e.core.HandleDragDrop(x, y, data) }
+
+// HandleDragOver在前端触发DragOver事件时被调用。
+func (e *EntryProxyer) HandleDragOver(x, y int32, data string) { e.core.HandleDragOver(x, y, data) }
+
+// HandleDragDrop在前端触发Dropp事件时被调用。
+func (e *EntryProxyer) HandleDragDrop(x, y int32, data string) { e.core.HandleDragDrop(x, y, data) }
+
+// HandleMouseWheel在前端触发鼠标滚轮事件时被调用。
 func (e *EntryProxyer) HandleMouseWheel(x, y, delta int32) {
 	e.core.HandleMouseWheel(x, y, delta)
 }
+
+// ShowQuickWindow用于applet程序中，在需要显示时applet的窗口调用。
 func (e *EntryProxyer) ShowQuickWindow() { e.core.ShowQuickWindow() }
 
 func (e *EntryProxyer) GetDBusInfo() dbus.DBusInfo {

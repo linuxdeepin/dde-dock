@@ -81,6 +81,7 @@ func (self ClockType) String() string {
 	}
 }
 
+// Setting存储dock相关的设置。
 type Setting struct {
 	core *gio.Settings
 
@@ -99,10 +100,15 @@ type Setting struct {
 	displayWeekLock sync.RWMutex
 	displayWeek     bool
 
-	HideModeChanged    func(mode int32)
+	// HideModeChanged在dock的隐藏模式改变后触发，返回改变后的模式。
+	HideModeChanged func(mode int32)
+	// DisplayModeChanged在dock的显示模式改变后触发，返回改变后的模式。
 	DisplayModeChanged func(mode int32)
-	ClockTypeChanged   func(mode int32)
+	// ClockTypeChanged在dock的时钟模式改变后触发，返回改变后的模式。
+	ClockTypeChanged func(mode int32)
+	// DisplayDateChanged在dock的显示日期设置改变后触发，返回是否显示日期。
 	DisplayDateChanged func(bool)
+	// DisplayWeekChanged在dock的显示星期设置改变后触发，返回是否显示星期。
 	DisplayWeekChanged func(bool)
 }
 
@@ -233,10 +239,12 @@ func (s *Setting) listenSettingChange(key string, handler func(*gio.Settings, st
 	s.core.Connect(signalDetial, handler)
 }
 
+// GetHideMode返回当前的隐藏模式。
 func (s *Setting) GetHideMode() int32 {
 	return int32(s.hideMode)
 }
 
+// SetHideMode设置dock的隐藏模式。
 func (s *Setting) SetHideMode(_mode int32) bool {
 	mode := HideModeType(_mode)
 	logger.Debug("[Setting.SetHideMode]:", mode)
@@ -244,10 +252,12 @@ func (s *Setting) SetHideMode(_mode int32) bool {
 	return ok
 }
 
+// GetDisplayMode获取dock当前的显示模式。
 func (s *Setting) GetDisplayMode() int32 {
 	return int32(s.displayMode)
 }
 
+// SetDisplayMode设置dock的显示模式。
 func (s *Setting) SetDisplayMode(_mode int32) bool {
 	mode := DisplayModeType(_mode)
 	logger.Debug("[Setting.SetDisplayMode]:", mode)
@@ -255,10 +265,12 @@ func (s *Setting) SetDisplayMode(_mode int32) bool {
 	return ok
 }
 
+// GetClockType获取dock当前的始终模式。
 func (s *Setting) GetClockType() int32 {
 	return int32(s.clockType)
 }
 
+// SetClockType设置dock的时钟显示模式。
 func (s *Setting) SetClockType(_clockType int32) bool {
 	clockType := ClockType(_clockType)
 	logger.Debug("clock type changed to:", clockType)
@@ -266,18 +278,22 @@ func (s *Setting) SetClockType(_clockType int32) bool {
 	return ok
 }
 
+// GetDisplayDate获取是否显示日期。
 func (s *Setting) GetDisplayDate() bool {
 	return s.displayDate
 }
 
+// SetDisplayDate设置是否显示日期。
 func (s *Setting) SetDisplayDate(d bool) bool {
 	return s.core.SetBoolean(DisplayDateKey, d)
 }
 
+// GetDisplayWeek获取是否显示星期。
 func (s *Setting) GetDisplayWeek() bool {
 	return s.displayWeek
 }
 
+// SetDisplayWeek设置是否显示星期。
 func (s *Setting) SetDisplayWeek(d bool) bool {
 	return s.core.SetBoolean(DisplayWeekKey, d)
 }

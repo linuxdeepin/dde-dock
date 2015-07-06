@@ -27,11 +27,14 @@ StartupNotify=false
 
 var scratchDir string = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
 
+// DockedAppManager是管理已驻留程序的管理器。
 type DockedAppManager struct {
 	core  *gio.Settings
 	items *list.List
 
-	Docked   func(id string) // find indicator on front-end.
+	// Docked是信号，在某程序驻留成功后被触发，并将该程序的id发送给信号的接受者。
+	Docked func(id string) // find indicator on front-end.
+	// Undocked是信号，在某已驻留程序被移除驻留后被触发，将被移除程序id发送给信号接受者。
 	Undocked func(id string)
 }
 
@@ -108,6 +111,7 @@ func (m *DockedAppManager) init() {
 	}
 }
 
+// DockedAppList返回一个已排序的程序id列表。
 func (m *DockedAppManager) DockedAppList() []string {
 	if m.core != nil {
 		appList := m.core.GetStrv(DockedApps)
@@ -116,6 +120,7 @@ func (m *DockedAppManager) DockedAppList() []string {
 	return make([]string, 0)
 }
 
+// IsDocked通过传入的程序id判断一个程序是否已经驻留。
 func (m *DockedAppManager) IsDocked(id string) bool {
 	item := m.findItem(id)
 	if item != nil {
@@ -133,6 +138,10 @@ type dockedItemInfo struct {
 	Name, Icon, Exec string
 }
 
+// Dock驻留程序。通常情况下只需要传递程序id即可，在特殊情况下需要传入title，icon以及cmd。
+// title表示前端程序的tooltip内容，icon为程序图标，cmd为程序的启动命令。
+// 成功后会触发Docked信号。
+// （废弃，此接口名并不好，第一反映很难理解，请使用新接口RequestDock)
 func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	idElement := m.findItem(id)
 	if idElement != nil {
@@ -167,6 +176,13 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	return true
 }
 
+// RequestDock驻留程序。通常情况下只需要传递程序id即可，在特殊情况下需要传入title，icon以及cmd。
+// title表示前端程序的tooltip内容，icon为程序图标，cmd为程序的启动命令。
+// 成功后会触发Docked信号。
+func (m *DockedAppManager) ReqeustDock(id, title, icon, cmd string) bool {
+	return m.Dock(id, title, icon, cmd)
+}
+
 func (m *DockedAppManager) doUndock(id string) bool {
 	removeItem := m.findItem(id)
 	if removeItem == nil {
@@ -190,6 +206,7 @@ func (m *DockedAppManager) doUndock(id string) bool {
 	return true
 }
 
+// Undock通过程序id移除已驻留程序。成功后会触发Undocked信号。（废弃，请使用新接口RequestUndock）
 func (m *DockedAppManager) Undock(id string) bool {
 	id = strings.ToLower(id)
 	logger.Debug("undock lower id:", id)
@@ -213,6 +230,11 @@ func (m *DockedAppManager) Undock(id string) bool {
 	return false
 }
 
+// RequestUndock益处指定程序id的已驻留程序。成功后会出发Undocked信号。
+func (m *DockedAppManager) RequestUndock(id string) bool {
+	return m.Undock(id)
+}
+
 func (m *DockedAppManager) findItem(id string) *list.Element {
 	lowerID := strings.ToLower(id)
 	for e := m.items.Front(); e != nil; e = e.Next() {
@@ -223,6 +245,7 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 	return nil
 }
 
+// Sort将已驻留的程序按传入的程序id的顺序重新排序，并保存。
 func (m *DockedAppManager) Sort(items []string) {
 	logger.Info("sort:", items)
 	for _, item := range items {

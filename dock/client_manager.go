@@ -25,15 +25,21 @@ const (
 	DDELauncher string = "dde-launcher"
 )
 
+// ClientManager用来管理启动程序相关窗口。
 type ClientManager struct {
-	ActiveWindowChanged   func(xid uint32)
+	// ActiveWindowChanged会在焦点窗口被改变时触发，会将最新的焦点窗口id发送给监听者。
+	ActiveWindowChanged func(xid uint32)
+
+	// ShowingDesktopChanged会在_NET_SHOWING_DESKTOP改变时被触发。
 	ShowingDesktopChanged func()
 }
 
+// NewClientManager creates a new client manager.
 func NewClientManager() *ClientManager {
 	return &ClientManager{}
 }
 
+// CurrentActiveWindow会返回当前焦点窗口的窗口id。
 func (m *ClientManager) CurrentActiveWindow() uint32 {
 	return uint32(activeWindow)
 }
@@ -74,17 +80,27 @@ func activateWindow(xid xproto.Window) error {
 	return ewmh.ActiveWindowReq(XU, xid)
 }
 
-// maybe move to apps-builder
+// ActiveWindow会激活给定id的窗口，被激活的窗口将通常会程序焦点窗口。(废弃，名字应该是ActivateWindow，当时手残打错了，此接口会在之后被移除，请使用正确的接口)
 func (m *ClientManager) ActiveWindow(xid uint32) bool {
 	err := activateWindow(xproto.Window(xid))
 	if err != nil {
-		logger.Warning("Actice window failed:", err)
+		logger.Warning("Activate window failed:", err)
 		return false
 	}
 	return true
 }
 
-// maybe move to apps-builder
+// ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
+func (m *ClientManager) ActivateWindow(xid uint32) bool {
+	err := activateWindow(xproto.Window(xid))
+	if err != nil {
+		logger.Warning("Activate window failed:", err)
+		return false
+	}
+	return true
+}
+
+// CloseWindow会将传入id的窗口关闭。
 func (m *ClientManager) CloseWindow(xid uint32) bool {
 	err := ewmh.CloseWindow(XU, xproto.Window(xid))
 	if err != nil {
@@ -94,10 +110,12 @@ func (m *ClientManager) CloseWindow(xid uint32) bool {
 	return true
 }
 
+// ToggleShowDesktop会触发显示桌面，当桌面显示时，会将窗口恢复，当桌面未显示时，会隐藏窗口以显示桌面。
 func (m *ClientManager) ToggleShowDesktop() {
 	exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
 }
 
+// IsLauncherShown判断launcher是否已经显示。
 func (m *ClientManager) IsLauncherShown() bool {
 	return isLauncherShown
 }

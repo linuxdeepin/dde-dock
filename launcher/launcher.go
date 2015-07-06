@@ -38,6 +38,7 @@ type ItemChangedStatus struct {
 	timeInstalled                            int64
 }
 
+// Launcher为launcher的后端。
 type Launcher struct {
 	setting             SettingInterface
 	itemManager         ItemManagerInterface
@@ -47,23 +48,34 @@ type Launcher struct {
 	store               *storeApi.DStoreDesktop
 	appMonitor          *fsnotify.Watcher
 
+	// ItemChanged当launcher中的item有改变后触发。
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfoExport,
 		categoryId CategoryId,
 	)
+	// UninstallSuccess在卸载程序成功后触发。
 	UninstallSuccess func(ItemId)
-	UninstallFailed  func(ItemId, string)
+	// UninstallFailed在卸载程序失败后触发。
+	UninstallFailed func(ItemId, string)
 
+	// SendToDesktopSuccess在发送到桌面成功后触发。
 	SendToDesktopSuccess func(ItemId)
-	SendToDesktopFailed  func(ItemId, string)
+	// SendToDesktopFailed在发送到桌面失败后触发。
+	SendToDesktopFailed func(ItemId, string)
 
+	// RemoveFromDesktopSuccess在从桌面移除成功后触发。
 	RemoveFromDesktopSuccess func(ItemId)
-	RemoveFromDesktopFailed  func(ItemId, string)
+	// RemoveFromDesktopFailed在从桌面移除失败后触发。
+	RemoveFromDesktopFailed func(ItemId, string)
 
+	// SearchDone在搜索结束后触发。
 	SearchDone func([]ItemId)
 
+	// NewAppLaunched在新安装程序被标记为已启动后被触发。（废弃，不够直观，使用新信号NewAppMarkedAsLaunched）
 	NewAppLaunched func(ItemId)
+	// NewAppMarkedAsLaunched在新安装程序被标记为已启动后被触发。
+	NewAppMarkedAsLaunched func(ItemId)
 }
 
 func NewLauncher() *Launcher {
@@ -101,6 +113,7 @@ func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// RequestUninstall请求卸载程。
 func (self *Launcher) RequestUninstall(id string, purge bool) {
 	go func(id ItemId) {
 		logger.Warning("uninstall", id)
@@ -114,6 +127,7 @@ func (self *Launcher) RequestUninstall(id string, purge bool) {
 	}(ItemId(id))
 }
 
+// RequestSendToDesktop请求将程序发送到桌面。
 func (self *Launcher) RequestSendToDesktop(id string) bool {
 	itemId := ItemId(id)
 	if filepath.IsAbs(id) {
@@ -130,6 +144,7 @@ func (self *Launcher) RequestSendToDesktop(id string) bool {
 	return true
 }
 
+// RequestRemoveFromDesktop请求将程序从桌面移除。
 func (self *Launcher) RequestRemoveFromDesktop(id string) bool {
 	itemId := ItemId(id)
 	if filepath.IsAbs(id) {
@@ -146,6 +161,7 @@ func (self *Launcher) RequestRemoveFromDesktop(id string) bool {
 	return true
 }
 
+// IsItemOnDesktop判断程序是否已经在桌面上。
 func (self *Launcher) IsItemOnDesktop(id string) bool {
 	itemId := ItemId(id)
 	if filepath.IsAbs(id) {
@@ -155,10 +171,13 @@ func (self *Launcher) IsItemOnDesktop(id string) bool {
 	return self.itemManager.IsItemOnDesktop(itemId)
 }
 
+// GetCategoryInfo获取分类id对应的分类信息。
+// 包括：分类名，分类id，分类所包含的程序。
 func (self *Launcher) GetCategoryInfo(cid int64) CategoryInfoExport {
 	return NewCategoryInfoExport(self.categoryManager.GetCategory(CategoryId(cid)))
 }
 
+// GetAllCategoryInfosu获取所有分类的分类信息。
 func (self *Launcher) GetAllCategoryInfos() []CategoryInfoExport {
 	infos := []CategoryInfoExport{}
 	ids := self.categoryManager.GetAllCategory()
@@ -169,10 +188,13 @@ func (self *Launcher) GetAllCategoryInfos() []CategoryInfoExport {
 	return infos
 }
 
+// GetItemInfo获取id对应的item信息。
+// 包括：item的path，item的Name，item的id，item的icon，item的分类id，item的安装时间
 func (self *Launcher) GetItemInfo(id string) ItemInfoExport {
 	return NewItemInfoExport(self.itemManager.GetItem(ItemId(id)))
 }
 
+// GetAllItemInfos获取所有item的信息。
 func (self *Launcher) GetAllItemInfos() []ItemInfoExport {
 	items := self.itemManager.GetAllItems()
 	infos := []ItemInfoExport{}
@@ -407,6 +429,7 @@ func (self *Launcher) listenItemChanged() {
 	}
 }
 
+// RecordRate记录程序的使用频率。（废弃，统一用词，请使用新接口RecordFrequency）
 func (self *Launcher) RecordRate(id string) {
 	f, err := GetFrequencyRecordFile()
 	if err != nil {
@@ -417,6 +440,13 @@ func (self *Launcher) RecordRate(id string) {
 	self.itemManager.SetRate(ItemId(id), self.itemManager.GetRate(ItemId(id), f)+1, f)
 }
 
+// RecordFrequency记录程序的使用频率。
+func (self *Launcher) RecordFrequency(id string) {
+	self.RecordRate(id)
+}
+
+// GetAllFrequency获取所有的使用频率信息。
+// 包括：item的id与使用频率。
 func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
 	f, err := GetFrequencyRecordFile()
 	frequency := self.itemManager.GetAllFrequency(f)
@@ -434,6 +464,8 @@ func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
 	return
 }
 
+// GetAllTimeInstalled获取所有程序的安装时间。
+// 包括：item的id与安装时间。
 func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	infos := []TimeInstalledExport{}
 	times, err := self.itemManager.GetAllTimeInstalled()
@@ -448,6 +480,7 @@ func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	return infos
 }
 
+// Search搜索给定的关键字。
 func (self *Launcher) Search(key string) {
 	close(self.cancelSearchingChan)
 	self.cancelSearchingChan = make(chan struct{})
@@ -489,6 +522,7 @@ func (self *Launcher) Search(key string) {
 	}()
 }
 
+// MarkLaunched将程序标记为已启动过。
 func (self *Launcher) MarkLaunched(id string) {
 	err := self.itemManager.MarkLaunched(ItemId(id))
 	if err != nil {
@@ -499,6 +533,7 @@ func (self *Launcher) MarkLaunched(id string) {
 	dbus.Emit(self, "NewAppLaunched", ItemId(id))
 }
 
+// GetAllNewInstalledApps获取所有新安装的程序。
 func (self *Launcher) GetAllNewInstalledApps() []ItemId {
 	ids, err := self.itemManager.GetAllNewInstalledApps()
 	if err != nil {

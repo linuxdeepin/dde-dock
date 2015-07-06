@@ -10,6 +10,7 @@ import (
 	"sync"
 )
 
+// Region表示dock有效的可接受事件区域以及可显示区域。
 type Region struct {
 }
 
@@ -50,6 +51,7 @@ func (r *Region) getDockWindow() (xproto.Window, error) {
 	return 0, errors.New("find dock window failed, it's not existed.")
 }
 
+// GetDockRegion获取dock有效的可接受事件区域以及可显示区域。
 func (r *Region) GetDockRegion() xproto.Rectangle {
 	initShape()
 	defer func() {

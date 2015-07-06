@@ -19,12 +19,18 @@ const (
 // InvalidStatus = "invalid"
 )
 
+// EntryProxyerManager为驻留程序以及打开程序的dbus接口管理器。
+// 所有已驻留程序以及打开的程序都会生成对应的dbus接口。
 type EntryProxyerManager struct {
+	// Entries为目前所有打开程序与驻留程序列表。（此属性可能会被废弃掉，调用一个初始化的方法，然后在需要的情况下触发Added信号）。
 	Entries       []*EntryProxyer
 	entrireLocker sync.Mutex
 
-	Added      func(dbus.ObjectPath)
-	Removed    func(string)
+	// Added在程序需要在前端显示时被触发。
+	Added func(dbus.ObjectPath)
+	// Removed会在程序不再需要在dock前端显示时触发。
+	Removed func(string)
+	// TrayInited在trayicon相关内容初始化完成后触发。
 	TrayInited func()
 }
 
