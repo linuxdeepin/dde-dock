@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPixmap>
+#include <Controller/dockmodedata.h>
 #include <QDebug>
 
 class AppIcon : public QLabel
@@ -12,14 +13,16 @@ class AppIcon : public QLabel
     Q_OBJECT
 public:
     explicit AppIcon(QWidget *parent = 0,Qt::WindowFlags f = 0);
-    explicit AppIcon(QString iconPath, QWidget *parent = 0,Qt::WindowFlags f = 0);//default search system icon path
 
-    void setIcon(const QString &iconPath, int size = 42);
+    void setIcon(const QString &iconPath);
+
 signals:
 
 public slots:
 
-    QString getSysIcon(const QString &iconName, int size = 42);
+    QString getSysIcon(const QString &iconName, int size = 48);
+private:
+    DockModeData *m_modeData = DockModeData::getInstants();
 };
 
 #endif // APPICON_H

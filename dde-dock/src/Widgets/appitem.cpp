@@ -103,7 +103,7 @@ void AppItem::resizeResources()
     if (m_appIcon != NULL)
     {
         m_appIcon->resize(dockCons->getAppIconSize(),dockCons->getAppIconSize());
-        reanchorIcon();
+        updateIcon();
     }
 
     if (appBackground != NULL)
@@ -158,9 +158,9 @@ void AppItem::updateIcon()
     if (m_appIcon == NULL)
     {
         m_appIcon = new AppIcon(this);
-        m_appIcon->resize(height(), height());
-        m_appIcon->setIcon(m_itemData.iconPath,dockCons->getAppIconSize());
     }
+    m_appIcon->resize(height(), height());
+    m_appIcon->setIcon(m_itemData.iconPath);
 
     reanchorIcon();
 }

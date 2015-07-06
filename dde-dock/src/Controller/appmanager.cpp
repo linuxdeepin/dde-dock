@@ -28,12 +28,6 @@ void AppManager::slotEntryAdded(const QDBusObjectPath &path)
     DBusEntryProxyer *entryProxyer = new DBusEntryProxyer(path.path());
     if (entryProxyer->isValid())
     {
-//        qWarning() << "app-status" << entryProxyer->data().value("app-status");
-//        qWarning() << "app-xids" << entryProxyer->data().value("app-xids");
-//        qWarning() << "icon" << entryProxyer->data().value("icon");
-//        qWarning() << "menu" << entryProxyer->data().value("menu");
-//        qWarning() << "title" << entryProxyer->data().value("title");
-
         AppItem *item = new AppItem();
         item->setEntryProxyer(entryProxyer);
         emit entryAdded(item);

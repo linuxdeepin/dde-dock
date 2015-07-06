@@ -15,16 +15,10 @@ AppIcon::AppIcon(QWidget *parent,Qt::WindowFlags f) :
     this->setAlignment(Qt::AlignCenter);
 }
 
-AppIcon::AppIcon(QString iconPath, QWidget *parent, Qt::WindowFlags f) :
-    QLabel(parent)
+void AppIcon::setIcon(const QString &iconPath)
 {
-    this->setParent(parent);
-    this->setWindowFlags(f);
-    this->setAttribute(Qt::WA_TranslucentBackground);
-    this->setAlignment(Qt::AlignCenter);
-
-    QString sysIconPath = getSysIcon(iconPath);
-    QPixmap iconPixmap;
+    QString sysIconPath = getSysIcon(iconPath,m_modeData->getAppIconSize());
+    QPixmap iconPixmap(m_modeData->getAppIconSize(),m_modeData->getAppIconSize());
     if (sysIconPath != "")
     {
         iconPixmap.load(sysIconPath);
@@ -34,22 +28,8 @@ AppIcon::AppIcon(QString iconPath, QWidget *parent, Qt::WindowFlags f) :
         iconPixmap.load(iconPath);
     }
     this->setPixmap(iconPixmap);
-}
-
-void AppIcon::setIcon(const QString &iconPath, int size)
-{
-    QString sysIconPath = getSysIcon(iconPath,size);
-//    qWarning() << "--" << iconPath;
-    QPixmap iconPixmap(this->width(),this->height());
-    if (sysIconPath != "")
-    {
-        iconPixmap.load(sysIconPath);
-    }
-    else
-    {
-        iconPixmap.load(iconPath);
-    }
-    this->setPixmap(iconPixmap);
+    QLabel::setPixmap(this->pixmap()->scaled(m_modeData->getAppIconSize(),m_modeData->getAppIconSize(),
+                                     Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
 }
 
 QString AppIcon::getSysIcon(const QString &iconName, int size)
