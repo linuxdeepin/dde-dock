@@ -9,7 +9,7 @@ AppItem::AppItem(QWidget *parent) :
     initClientManager();
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
-
+    initMenu();
 }
 
 void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
@@ -74,10 +74,6 @@ void AppItem::resizeBackground()
 
 void AppItem::dbusDataChanged(const QString &key, const QString &value)
 {
-//    qWarning() << "key:" << key << "value:" << value;
-    if (key == "app-status")
-        qWarning() << "====+++++++++" << value;
-
     updateTitle();
     updateState();
     updateXids();
@@ -96,6 +92,12 @@ void AppItem::setCurrentOpened(uint value)
         m_itemData.currentOpened = false;
         appBackground->setIsCurrentOpened(false);
     }
+}
+
+void AppItem::menuItemInvoked(QString id, bool)
+{
+    m_entryProxyer->HandleMenuItem(id);
+    m_menuManager->UnregisterMenu(m_menuInterfacePath);
 }
 
 void AppItem::resizeResources()
@@ -188,6 +190,33 @@ void AppItem::updateMenuJsonString()
     m_itemData.menuJsonString = m_entryProxyer->data().value("menu");
 }
 
+void AppItem::initMenu()
+{
+    m_menuManager = new DBusMenuManager(this);
+}
+
+void AppItem::showMenu(int x,int y)
+{
+    if (m_menuManager->isValid()){
+        QDBusPendingReply<QDBusObjectPath> pr = m_menuManager->RegisterMenu();
+        if (pr.count() == 1){
+            QDBusObjectPath op = pr.argumentAt(0).value<QDBusObjectPath>();
+            m_menuInterfacePath = op.path();
+            DBusMenu *m_menu = new DBusMenu(m_menuInterfacePath,this);
+            connect(m_menu,SIGNAL(MenuUnregistered()),m_menu,SLOT(deleteLater()));
+            connect(m_menu,SIGNAL(ItemInvoked(QString,bool)),this,SLOT(menuItemInvoked(QString,bool)));
+
+            QJsonObject targetObj;
+            targetObj.insert("x",QJsonValue(x));
+            targetObj.insert("y",QJsonValue(y));
+            targetObj.insert("isDockMenu",QJsonValue(true));
+            targetObj.insert("menuJsonContent",QJsonValue(m_itemData.menuJsonString));
+
+            m_menu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
+        }
+    }
+}
+
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
     //qWarning() << "mouse press...";
@@ -195,6 +224,8 @@ void AppItem::mousePressEvent(QMouseEvent * event)
 
     if (event->button() == Qt::LeftButton)
         m_entryProxyer->Activate(0,0);
+    else if (event->button() == Qt::RightButton)
+        showMenu(event->globalX(),event->globalY());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
@@ -206,8 +237,6 @@ void AppItem::mouseReleaseEvent(QMouseEvent * event)
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
 {
     emit mouseDoubleClick();
-    ////////////FOR TEST ONLY/////////////////////
-    appBackground->setIsCurrentOpened(!appBackground->getIsCurrentOpened());
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *event)
