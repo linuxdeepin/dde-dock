@@ -9,9 +9,9 @@ MainWidget::MainWidget(QWidget *parent)
     mainPanel->resize(this->width(),this->height());
     mainPanel->move(0,0);
 
-    this->setWindowFlags(Qt::ToolTip);
+    this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->move(0,rec.height()  - 100);
+    this->move(0,rec.height());
 
     connect(DockModeData::getInstants(), SIGNAL(dockModeChanged(DockConstants::DockMode,DockConstants::DockMode)),
             this, SLOT(slotDockModeChanged(DockConstants::DockMode,DockConstants::DockMode)));

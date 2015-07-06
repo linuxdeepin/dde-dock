@@ -13,9 +13,12 @@
 #include <QImage>
 #include <QList>
 #include <QMap>
+#include <QJsonObject>
 #include <QDebug>
 #include "DBus/dbusentryproxyer.h"
 #include "DBus/dbusclientmanager.h"
+#include "DBus/dbusmenu.h"
+#include "DBus/dbusmenumanager.h"
 #include "Controller/dockmodedata.h"
 #include "abstractdockitem.h"
 #include "appicon.h"
@@ -62,6 +65,7 @@ private slots:
     void resizeBackground();
     void dbusDataChanged(const QString &key, const QString &value);
     void setCurrentOpened(uint);
+    void menuItemInvoked(QString id,bool);
 
 private:
     void resizeResources();
@@ -75,6 +79,9 @@ private:
     void updateState();
     void updateXids();
     void updateMenuJsonString();
+    void initMenu();
+
+    void showMenu(int x, int y);
 
 private:
     AppItemData m_itemData;
@@ -84,6 +91,8 @@ private:
     AppBackground * appBackground = NULL;
     AppIcon * m_appIcon = NULL;
 
+    QString m_menuInterfacePath = "";
+    DBusMenuManager *m_menuManager = NULL;
 };
 
 #endif // APPITEM_H

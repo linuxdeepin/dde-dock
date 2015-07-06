@@ -2,8 +2,6 @@
 #define APPMANAGER_H
 
 #include <QObject>
-#include <QJsonObject>
-#include <QJsonArray>
 #include <QDebug>
 #include "DBus/dbusentrymanager.h"
 #include "DBus/dbusentryproxyer.h"

@@ -35,7 +35,10 @@ SOURCES += \
     src/pluginitemwrapper.cpp \
     src/Widgets/arrowrectangle.cpp \
     src/dockpluginproxy.cpp \
-    src/dockpluginmanager.cpp
+    src/dockpluginmanager.cpp\
+    src/DBus/dbusmenumanager.cpp \
+    src/DBus/dbusmenu.cpp
+
 HEADERS  += \
     src/abstractdockitem.h \
     src/dockplugininterface.h \
@@ -61,7 +64,9 @@ HEADERS  += \
     src/Widgets/arrowrectangle.h\
     src/dockpluginproxyinterface.h \
     src/dockpluginproxy.h \
-    src/dockpluginmanager.h
+    src/dockpluginmanager.h\
+    src/DBus/dbusmenumanager.h \
+    src/DBus/dbusmenu.h
 
 RESOURCES += \
     images.qrc \
