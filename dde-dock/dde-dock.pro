@@ -33,7 +33,8 @@ SOURCES += \
     src/DBus/dbusclientmanager.cpp \
     src/DBus/dbusdockedappmanager.cpp \
     src/DBus/dbusdocksetting.cpp \
-    src/pluginitemwrapper.cpp
+    src/pluginitemwrapper.cpp \
+    src/Widgets/arrowrectangle.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -57,7 +58,8 @@ HEADERS  += \
     src/DBus/dbusclientmanager.h \
     src/DBus/dbusdockedappmanager.h \
     src/DBus/dbusdocksetting.h \
-    src/pluginitemwrapper.h
+    src/pluginitemwrapper.h \
+    src/Widgets/arrowrectangle.h
 
 RESOURCES += \
     images.qrc \
