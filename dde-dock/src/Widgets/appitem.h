@@ -85,7 +85,7 @@ private:
 
 private:
     AppItemData m_itemData;
-    DockModeData *dockCons = DockModeData::getInstants();
+    DockModeData *dockCons = DockModeData::instance();
     DBusEntryProxyer *m_entryProxyer = NULL;
     DBusClientManager *m_clientmanager = NULL;
     AppBackground * appBackground = NULL;

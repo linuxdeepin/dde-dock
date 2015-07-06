@@ -55,7 +55,7 @@ private:
     AppManager *m_appManager = NULL;
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
-    DockModeData *dockCons = DockModeData::getInstants();
+    DockModeData *dockCons = DockModeData::instance();
     PanelMenu *panelMenu = NULL;
 };
 

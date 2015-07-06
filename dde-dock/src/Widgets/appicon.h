@@ -22,7 +22,7 @@ public slots:
 
     QString getSysIcon(const QString &iconName, int size = 48);
 private:
-    DockModeData *m_modeData = DockModeData::getInstants();
+    DockModeData *m_modeData = DockModeData::instance();
 };
 
 #endif // APPICON_H

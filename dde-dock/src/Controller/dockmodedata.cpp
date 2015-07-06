@@ -6,7 +6,7 @@ DockModeData::DockModeData(QObject *parent) :
 }
 
 DockModeData * DockModeData::dockModeData = NULL;
-DockModeData * DockModeData::getInstants()
+DockModeData * DockModeData::instance()
 {
     if (dockModeData == NULL)
         dockModeData = new DockModeData();

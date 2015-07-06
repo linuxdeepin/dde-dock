@@ -9,7 +9,7 @@ class DockModeData : public QObject
 {
     Q_OBJECT
 public:
-    static DockModeData * getInstants();
+    static DockModeData * instance();
 
     Dock::DockMode getDockMode();
     void setDockMode(Dock::DockMode value);

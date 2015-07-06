@@ -35,7 +35,7 @@ private slots:
     void changeToClassicMode();
 
 private:
-    DockModeData *dockCons = DockModeData::getInstants();
+    DockModeData *dockCons = DockModeData::instance();
 
     const int MENU_ITEM_HEIGHT = 30;
     const int MENU_ITEM_SPACING = 3;
