@@ -81,6 +81,8 @@ void DockLayout::sortRightToLeft()
 
 bool DockLayout::hasSpacingItemInList()
 {
+    if (sortDirection == RightToLeft)
+        return false;
     if (appList.count() <= 1)
         return false;
     if (appList.at(0)->x() > itemSpacing)
@@ -165,7 +167,7 @@ int DockLayout::getContentsWidth()
         tmpWidth += appList.at(i)->width();
     }
 
-    if (hasSpacingItemInList())
+    if (hasSpacingItemInList() && tmpAppMap.firstKey())
         tmpWidth += tmpAppMap.firstKey()->width() + itemSpacing;
 
     return tmpWidth;
