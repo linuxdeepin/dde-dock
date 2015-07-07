@@ -217,6 +217,10 @@ func (eTimer *edgeTimer) DoAction(edge string, timeout int32) {
 	eTimer.timer = time.NewTimer(time.Millisecond *
 		time.Duration(timeout))
 	go func() {
+		if eTimer.timer == nil {
+			return
+		}
+
 		<-eTimer.timer.C
 		execEdgeAction(edge)
 		eTimer.timer = nil

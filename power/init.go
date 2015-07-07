@@ -100,7 +100,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (d *Daemon) GetDependencies() []string {
-	return []string{}
+	return []string{"screensaver"}
 }
 
 func (d *Daemon) Start() error {

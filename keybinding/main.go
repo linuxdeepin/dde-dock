@@ -113,7 +113,7 @@ func NewKeybindingDaemon(logger *log.Logger) *Daemon {
 }
 
 func (*Daemon) GetDependencies() []string {
-	return []string{}
+	return []string{"inputdevices"}
 }
 
 func finalize() {
