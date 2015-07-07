@@ -36,7 +36,8 @@ SOURCES += \
     src/dockpluginproxy.cpp \
     src/dockpluginmanager.cpp\
     src/DBus/dbusmenumanager.cpp \
-    src/DBus/dbusmenu.cpp
+    src/DBus/dbusmenu.cpp \
+    src/Widgets/apppreviews.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -65,7 +66,8 @@ HEADERS  += \
     src/DBus/dbusmenumanager.h \
     src/DBus/dbusmenu.h \
     src/dockpluginmanager.h \
-    src/dockconstants.h
+    src/dockconstants.h \
+    src/Widgets/apppreviews.h
 
 RESOURCES += \
     images.qrc \

@@ -7,11 +7,20 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QTimer>
+#include <QDebug>
 
 class ArrowRectangle : public QWidget
 {
     Q_OBJECT
 public:
+    enum ArrowDirection {
+        ArrowLeft,
+        ArrowRight,
+        ArrowTop,
+        ArrowBottom
+    };
+
     explicit ArrowRectangle(QWidget * parent = 0);
     ~ArrowRectangle();
 
@@ -20,6 +29,7 @@ public:
     int getArrowWidth();
     QString getBackgroundColor();
 
+    void setArrorDirection(ArrowDirection value);
     void setWidth(int value);
     void setHeight(int value);
     void setRadius(int value);
@@ -27,24 +37,24 @@ public:
     void setArrowWidth(int value);
     void setBackgroundColor(QString value);
 
+    void show(int x,int y);
     void showAtLeft(int x,int y);
     void showAtRight(int x,int y);
     void showAtTop(int x,int y);
     void showAtBottom(int x,int y);
 
+    void delayHide(int interval = 500);
     void setContent(QWidget *content);
+    void destroyContent();
     void move(int x,int y);
+
+public slots:
+    void slotHide();
+    void slotCancelHide();
 protected:
     virtual void paintEvent(QPaintEvent *);
 
 private:
-    enum ArrowDirection {
-        arrowLeft,
-        arrowRight,
-        arrowTop,
-        arrowBottom
-    };
-
     int radius = 3;
     int arrowHeight = 8;
     int arrowWidth = 20;
@@ -55,8 +65,10 @@ private:
     int shadowWidth = 2;
     QColor shadowColor = Qt::black;
 
-    ArrowDirection arrowDirection = ArrowRectangle::arrowRight;
+    ArrowDirection arrowDirection = ArrowRectangle::ArrowRight;
 
+    QWidget *m_content = NULL;
+    QTimer *m_destroyTimer = NULL;
 private:
     QPainterPath getLeftCornerPath();
     QPainterPath getRightCornerPath();

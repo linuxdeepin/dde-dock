@@ -10,6 +10,26 @@ AppItem::AppItem(QWidget *parent) :
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
     initMenu();
+    initPreviewAR();
+}
+
+QWidget *AppItem::getContents()
+{
+    AppPreviews *preview = new AppPreviews();
+    QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
+    if (m_itemData.isActived && !tmpArray.isEmpty())
+    {
+        foreach (QJsonValue v, tmpArray) {
+            QString title = v.toObject().value("Title").toString();
+            int xid = v.toObject().value("Xid").toInt();
+            preview->addItem(title,xid);
+        }
+    }
+    else
+    {
+        preview->setTitle(m_itemData.title);
+    }
+    return preview;
 }
 
 void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
@@ -195,7 +215,14 @@ void AppItem::initMenu()
     m_menuManager = new DBusMenuManager(this);
 }
 
-void AppItem::showMenu(int x,int y)
+void AppItem::initPreviewAR()
+{
+    m_previewAR = new ArrowRectangle();
+    m_previewAR->setHeight(130);
+    m_previewAR->setWidth(200);
+}
+
+void AppItem::showMenu()
 {
     if (m_menuManager->isValid()){
         QDBusPendingReply<QDBusObjectPath> pr = m_menuManager->RegisterMenu();
@@ -207,8 +234,8 @@ void AppItem::showMenu(int x,int y)
             connect(m_menu,SIGNAL(ItemInvoked(QString,bool)),this,SLOT(menuItemInvoked(QString,bool)));
 
             QJsonObject targetObj;
-            targetObj.insert("x",QJsonValue(x));
-            targetObj.insert("y",QJsonValue(y));
+            targetObj.insert("x",QJsonValue(globalX() + width() / 2));
+            targetObj.insert("y",QJsonValue(globalY() - 5));
             targetObj.insert("isDockMenu",QJsonValue(true));
             targetObj.insert("menuJsonContent",QJsonValue(m_itemData.menuJsonString));
 
@@ -217,11 +244,25 @@ void AppItem::showMenu(int x,int y)
     }
 }
 
+void AppItem::showPreview()
+{
+    QWidget *tmpContent = getContents();
+    m_previewAR->setMinimumSize(tmpContent->width() + Dock::APP_PREVIEW_MARGIN * 2,tmpContent->height() + Dock::APP_PREVIEW_MARGIN * 2);
+    m_previewAR->resize(tmpContent->width() + Dock::APP_PREVIEW_MARGIN * 2,tmpContent->height() + Dock::APP_PREVIEW_MARGIN * 2);
+    m_previewAR->setContent(getContents());
+    m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+}
+
+void AppItem::hidePreview()
+{
+    m_previewAR->delayHide();
+}
+
 void AppItem::mousePressEvent(QMouseEvent * event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY());
-
+    hidePreview();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
@@ -232,7 +273,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent * event)
     if (event->button() == Qt::LeftButton)
         m_entryProxyer->Activate(event->globalX(),event->globalY());
     else if (event->button() == Qt::RightButton)
-        showMenu(event->globalX(),event->globalY());
+        showMenu();
 }
 
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
@@ -267,12 +308,14 @@ void AppItem::enterEvent(QEvent *event)
 {
     emit mouseEntered();
     appBackground->setIsHovered(true);
+    showPreview();
 }
 
 void AppItem::leaveEvent(QEvent *event)
 {
     emit mouseExited();
     appBackground->setIsHovered(false);
+    hidePreview();
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *event)

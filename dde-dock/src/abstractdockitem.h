@@ -32,6 +32,9 @@ public:
     void setNextPos(const QPoint &value) { m_itemNextPos = value; }
     void setNextPos(int x, int y) { m_itemNextPos.setX(x); m_itemNextPos.setY(y); }
 
+    int globalX(){return mapToGlobal(QPoint(0,0)).x();}
+    int globalY(){return mapToGlobal(QPoint(0,0)).y();}
+    QPoint globalPos(){return mapToGlobal(QPoint(0,0));}
 signals:
     void dragStart();
     void dragEntered(QDragEnterEvent * event);

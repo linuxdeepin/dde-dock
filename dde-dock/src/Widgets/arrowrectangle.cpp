@@ -7,74 +7,119 @@ ArrowRectangle::ArrowRectangle(QWidget * parent) :
     this->setAttribute(Qt::WA_TranslucentBackground);
 }
 
-void ArrowRectangle::showAtLeft(int x, int y)
+void ArrowRectangle::show(int x, int y)
 {
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
     this->move(x,y);
     if (this->isHidden())
     {
-        this->show();
+        QWidget::show();
     }
 
-    this->arrowDirection = ArrowRectangle::arrowLeft;
+    this->repaint();
+}
+
+void ArrowRectangle::showAtLeft(int x, int y)
+{
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
+    this->arrowDirection = ArrowRectangle::ArrowLeft;
+    this->move(x,y);
+    if (this->isHidden())
+    {
+        QWidget::show();
+    }
+
     this->repaint();
 }
 
 void ArrowRectangle::showAtRight(int x, int y)
 {
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
+    this->arrowDirection = ArrowRectangle::ArrowRight;
     this->move(x,y);
     if (this->isHidden())
     {
-        this->show();
+        QWidget::show();
     }
 
-    this->arrowDirection = ArrowRectangle::arrowRight;
     this->repaint();
 }
 
 void ArrowRectangle::showAtTop(int x, int y)
 {
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
+    this->arrowDirection = ArrowRectangle::ArrowTop;
     this->move(x,y);
     if (this->isHidden())
     {
-        this->show();
+        QWidget::show();
     }
 
-    this->arrowDirection = ArrowRectangle::arrowTop;
     this->repaint();
 }
 
 void ArrowRectangle::showAtBottom(int x, int y)
 {
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
+    this->arrowDirection = ArrowRectangle::ArrowBottom;
     this->move(x,y);
     if (this->isHidden())
     {
-        this->show();
+        QWidget::show();
     }
 
-    this->arrowDirection = ArrowRectangle::arrowBottom;
     this->repaint();
+}
+
+void ArrowRectangle::delayHide(int interval)
+{
+    if (!m_destroyTimer)
+    {
+        m_destroyTimer = new QTimer(this);
+        connect(m_destroyTimer,&QTimer::timeout,this,&ArrowRectangle::slotHide);
+        connect(m_destroyTimer,&QTimer::timeout,m_destroyTimer,&QTimer::stop);
+    }
+    m_destroyTimer->stop();
+    m_destroyTimer->start(interval);
 }
 
 void ArrowRectangle::setContent(QWidget *content)
 {
+    if (!content)
+        return;
+    m_content = content;
     content->setParent(this);
     content->move((width() - content->width()) / 2,(height() - content->height()) / 2);
+}
+
+void ArrowRectangle::destroyContent()
+{
+    if (m_content)
+    {
+        delete m_content;
+        m_content = NULL;
+    }
 }
 
 void ArrowRectangle::move(int x, int y)
 {
     switch (arrowDirection)
     {
-    case arrowLeft:
+    case ArrowLeft:
         QWidget::move(x,y - height() / 2);
         break;
-    case arrowRight:
+    case ArrowRight:
         QWidget::move(x - width(),y - height() / 2);
         break;
-    case arrowTop:
+    case ArrowTop:
         QWidget::move(x - width() / 2,y);
         break;
-    case arrowBottom:
+    case ArrowBottom:
         QWidget::move(x - width() / 2,y - height());
         break;
     default:
@@ -95,19 +140,19 @@ void ArrowRectangle::paintEvent(QPaintEvent *)
 
     switch (arrowDirection)
     {
-    case ArrowRectangle::arrowLeft:
+    case ArrowRectangle::ArrowLeft:
         border = getLeftCornerPath();
         textRec = QRectF(arrowHeight,0,width() - arrowHeight, height());
         break;
-    case ArrowRectangle::arrowRight:
+    case ArrowRectangle::ArrowRight:
         border = getRightCornerPath();
         textRec = QRectF(0,0,width() - arrowHeight, height());
         break;
-    case ArrowRectangle::arrowTop:
+    case ArrowRectangle::ArrowTop:
         border = getTopCornerPath();
         textRec = QRectF(0,arrowHeight,width(), height() - arrowHeight);
         break;
-    case ArrowRectangle::arrowBottom:
+    case ArrowRectangle::ArrowBottom:
         border = getBottomCornerPath();
         textRec = QRectF(0,0,width(), height() - arrowHeight);
         break;
@@ -121,6 +166,18 @@ void ArrowRectangle::paintEvent(QPaintEvent *)
     strokePen.setWidth(strokeWidth);
     painter.strokePath(border, strokePen);
     painter.fillPath(border, QBrush(backgroundColor == "" ? QColor(0,0,0,150) : QColor(backgroundColor)));
+}
+
+void ArrowRectangle::slotHide()
+{
+    destroyContent();
+    hide();
+}
+
+void ArrowRectangle::slotCancelHide()
+{
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
 }
 
 int ArrowRectangle::getRadius()
@@ -141,6 +198,11 @@ int ArrowRectangle::getArrowWidth()
 QString ArrowRectangle::getBackgroundColor()
 {
     return this->backgroundColor;
+}
+
+void ArrowRectangle::setArrorDirection(ArrowDirection value)
+{
+    arrowDirection = value;
 }
 
 void ArrowRectangle::setWidth(int value)

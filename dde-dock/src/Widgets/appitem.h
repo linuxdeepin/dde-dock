@@ -13,6 +13,7 @@
 #include <QImage>
 #include <QList>
 #include <QMap>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
 #include "DBus/dbusentryproxyer.h"
@@ -23,6 +24,9 @@
 #include "abstractdockitem.h"
 #include "appicon.h"
 #include "appbackground.h"
+#include "apppreviews.h"
+#include "arrowrectangle.h"
+#include "../dockconstants.h"
 
 struct AppItemData {
     QString id;
@@ -43,6 +47,7 @@ public:
     AppItem(QWidget *parent = 0);
     ~AppItem();
 
+    QWidget *getContents();
     void setEntryProxyer(DBusEntryProxyer *entryProxyer);
     void destroyItem(const QString &id);
     QString itemId() const;
@@ -80,17 +85,21 @@ private:
     void updateXids();
     void updateMenuJsonString();
     void initMenu();
+    void initPreviewAR();
 
-    void showMenu(int x, int y);
+    void showMenu();
+    void showPreview();
+    void hidePreview();
 
 private:
     AppItemData m_itemData;
     DockModeData *dockCons = DockModeData::instance();
-    DBusEntryProxyer *m_entryProxyer = NULL;
-    DBusClientManager *m_clientmanager = NULL;
     AppBackground * appBackground = NULL;
     AppIcon * m_appIcon = NULL;
+    ArrowRectangle *m_previewAR = NULL;
 
+    DBusEntryProxyer *m_entryProxyer = NULL;
+    DBusClientManager *m_clientmanager = NULL;
     QString m_menuInterfacePath = "";
     DBusMenuManager *m_menuManager = NULL;
 };

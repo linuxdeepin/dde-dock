@@ -33,6 +33,10 @@ QLabel#panelMenuContent {
     border-radius: 5px;
 }
 
+QLabel#DockAppTitle {
+    color: rgba(255,255,255,0.8);
+}
+
 PanelMenuItem:hover {
     background: gray;
     color: #ffffff
