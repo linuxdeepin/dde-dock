@@ -11,6 +11,8 @@ class DockPluginProxy : public QObject, public DockPluginProxyInterface
 public:
     DockPluginProxy(DockPluginInterface * plugin, QObject * parent = 0);
 
+    DockPluginInterface * plugin();
+
     void itemAddedEvent(QString uuid) Q_DECL_OVERRIDE;
     void itemRemovedEvent(QString uuid) Q_DECL_OVERRIDE;
 

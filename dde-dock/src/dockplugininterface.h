@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 
+#include "dockconstants.h"
 #include "dockpluginproxyinterface.h"
 
 class DockPluginInterface
@@ -14,6 +15,7 @@ public:
 
     virtual QStringList uuids() = 0;
     virtual QWidget* getItem(QString uuid) = 0;
+    virtual void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode) = 0;
 
     virtual QString name() = 0;
 };

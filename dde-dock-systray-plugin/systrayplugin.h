@@ -3,8 +3,10 @@
 
 #include <QtPlugin>
 #include <QStringList>
+#include <QWindow>
+#include <QWidget>
 
-#include "docktrayitem.h"
+#include "dockconstants.h"
 #include "dockplugininterface.h"
 #include "dockpluginproxyinterface.h"
 #include "dbustraymanager.h"
@@ -19,8 +21,10 @@ public:
     ~SystrayPlugin();
 
     void init(DockPluginProxyInterface * proxier) Q_DECL_OVERRIDE;
+
     QStringList uuids() Q_DECL_OVERRIDE;
     QWidget * getItem(QString uuid) Q_DECL_OVERRIDE;
+    void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode);
 
     QString name() Q_DECL_OVERRIDE;
 
@@ -28,8 +32,11 @@ private:
     QMap<QString, QWidget*> m_items;
     DockPluginProxyInterface * m_proxier = 0;
     com::deepin::dde::TrayManager *m_dbusTrayManager = 0;
+    Dock::DockMode m_mode;
 
     void clearItems();
+    void addItem(QString uuid, QWidget * item);
+    void removeItem(QString uuid);
 
 private slots:
     void onAdded(WId winId);

@@ -3,7 +3,9 @@
 
 #include <QObject>
 #include <QMap>
-#include <qstringlist.h>
+#include <QStringList>
+
+#include "dockconstants.h"
 
 class DockPluginProxy;
 class DockPluginManager : public QObject
@@ -13,6 +15,10 @@ public:
     explicit DockPluginManager(QObject *parent = 0);
 
     QList<DockPluginProxy*> getAll();
+
+public slots:
+    void onDockModeChanged(Dock::DockMode newMode,
+                           Dock::DockMode oldMode);
 
 private:
     QStringList m_searchPaths;

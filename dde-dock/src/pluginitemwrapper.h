@@ -9,7 +9,7 @@ class PluginItemWrapper : public AbstractDockItem
     Q_OBJECT
 public:
     PluginItemWrapper(DockPluginInterface *plugin, QString uuid, QWidget * parent = 0);
-
+    virtual ~PluginItemWrapper();
 
     QString uuid() const;
 

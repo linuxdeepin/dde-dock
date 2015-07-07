@@ -26,6 +26,18 @@ QList<DockPluginProxy*> DockPluginManager::getAll()
     return m_proxies.values();
 }
 
+// public slots
+void DockPluginManager::onDockModeChanged(Dock::DockMode newMode,
+                                          Dock::DockMode oldMode)
+{
+    qDebug() << "DockPluginManager::onDockModeChanged " << newMode << oldMode;
+
+    foreach (DockPluginProxy * proxy, m_proxies) {
+        DockPluginInterface * plugin = proxy->plugin();
+        plugin->changeMode(newMode, oldMode);
+    }
+}
+
 // private methods
 DockPluginProxy* DockPluginManager::loadPlugin(QString &path)
 {
@@ -35,9 +47,11 @@ DockPluginProxy* DockPluginManager::loadPlugin(QString &path)
     if (plugin) {
         DockPluginInterface * interface = qobject_cast<DockPluginInterface*>(plugin);
         if (interface) {
+            qDebug() << "Plugin loaded: " << path;
+
             DockPluginProxy *proxy = new DockPluginProxy(interface);
             interface->init(proxy);
-            qDebug() << "Plugin loaded: " << path;
+
             return proxy;
         } else {
             qWarning() << "Load plugin failed(failed to convert) " << path;

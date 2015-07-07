@@ -1,6 +1,8 @@
 #include "panel.h"
 #include "dockpluginproxy.h"
 #include "dockpluginmanager.h"
+#include "Controller/dockmodedata.h"
+#include <QHBoxLayout>
 
 Panel::Panel(QWidget *parent)
     : QLabel(parent),parentWidget(parent)
@@ -26,11 +28,27 @@ Panel::Panel(QWidget *parent)
     connect(dockCons, SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
             this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 
+
+    QHBoxLayout * testLayout = new QHBoxLayout;
+    testLayout->addStretch();
+    this->setLayout(testLayout);
+
     DockPluginManager *pluginManager = new DockPluginManager(this);
+    connect(DockModeData::instance(), &DockModeData::dockModeChanged,
+            pluginManager, &DockPluginManager::onDockModeChanged);
+
     QList<DockPluginProxy*> proxies = pluginManager->getAll();
     foreach (DockPluginProxy* proxy, proxies) {
-        connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem* item) { rightLayout->addItem(item); });
-        connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) { rightLayout->removeItem(rightLayout->indexOf(item)); });
+        connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem* item) {
+            testLayout->addWidget(item);
+        });
+        connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) {
+            int index = testLayout->indexOf(item);
+            if (index != -1) {
+                testLayout->removeWidget(item);
+                item->deleteLater();
+            }
+        });
     }
 
     panelMenu = new PanelMenu();

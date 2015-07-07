@@ -15,12 +15,14 @@ TARGET = $$qtLibraryTarget(dock-systray-plugin)
 TEMPLATE = lib
 
 SOURCES += systrayplugin.cpp \
-    docktrayitem.cpp \
-    dbustraymanager.cpp
+    dbustraymanager.cpp \
+    compositetrayitem.cpp
 
 HEADERS  += systrayplugin.h \
-    docktrayitem.h \
-    dbustraymanager.h
+    dbustraymanager.h \
+    compositetrayitem.h
+
+RESOURCES += images.qrc
 
 target.path = /usr/share/dde-dock/plugins/
 INSTALLS += target
