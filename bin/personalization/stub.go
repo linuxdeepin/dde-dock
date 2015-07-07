@@ -22,7 +22,7 @@
 package main
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (fs *FontSettings) GetDBusInfo() dbus.DBusInfo {

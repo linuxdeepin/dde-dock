@@ -28,10 +28,10 @@ package inputdevices
 import "C"
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/mouse"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/touchpad"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wacom"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/dde-daemon/inputdevices/mouse"
+	"pkg.deepin.io/dde-daemon/inputdevices/touchpad"
+	"pkg.deepin.io/dde-daemon/inputdevices/wacom"
+	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
 )
 
 func initDeviceChangedWatcher() bool {

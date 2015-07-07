@@ -21,7 +21,7 @@
 
 package network
 
-import . "pkg.linuxdeepin.com/lib/gettext"
+import . "pkg.deepin.io/lib/gettext"
 
 const (
 	NM_DBUS_SERVICE_VPNC   = "org.freedesktop.NetworkManager.vpnc"

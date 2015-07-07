@@ -23,7 +23,7 @@ package keybinding
 
 import (
 	"github.com/BurntSushi/xgb/xproto"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 const (

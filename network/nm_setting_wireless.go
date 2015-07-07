@@ -23,8 +23,8 @@ package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/utils"
 )
 
 const NM_SETTING_WIRELESS_SETTING_NAME = "802-11-wireless"

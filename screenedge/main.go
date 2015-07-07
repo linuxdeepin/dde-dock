@@ -25,10 +25,10 @@ import (
 	libarea "dbus/com/deepin/api/xmousearea"
 	libdsp "dbus/com/deepin/daemon/display"
 	"dbus/com/deepin/dde/launcher"
-	"pkg.linuxdeepin.com/dde-daemon/loader"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/log"
 	"sync"
 )
 

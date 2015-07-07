@@ -24,9 +24,9 @@ package dsc
 import (
 	"os/exec"
 	"path"
-	. "pkg.linuxdeepin.com/dde-daemon/loader"
-	"pkg.linuxdeepin.com/lib/log"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/lib/log"
+	dutils "pkg.deepin.io/lib/utils"
 	"time"
 )
 

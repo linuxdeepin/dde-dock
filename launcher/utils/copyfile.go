@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
 type CopyFlag int

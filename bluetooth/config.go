@@ -22,7 +22,7 @@
 package bluetooth
 
 import (
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
 type config struct {

@@ -27,7 +27,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 )
 

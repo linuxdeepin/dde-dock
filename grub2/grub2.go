@@ -25,7 +25,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"regexp"
 	"sort"
 	"strconv"

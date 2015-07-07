@@ -23,7 +23,7 @@ package accounts
 
 import (
 	"github.com/howeyc/fsnotify"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
 )

@@ -25,7 +25,7 @@ import (
 	mm "dbus/org/freedesktop/modemmanager1"
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 

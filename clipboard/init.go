@@ -26,8 +26,8 @@ package clipboard
 // #include "gsd-clipboard-manager.h"
 import "C"
 
-import . "pkg.linuxdeepin.com/dde-daemon/loader"
-import "pkg.linuxdeepin.com/lib/log"
+import . "pkg.deepin.io/dde-daemon/loader"
+import "pkg.deepin.io/lib/log"
 
 var logger = log.NewLogger("dde-daemon/clipboard")
 

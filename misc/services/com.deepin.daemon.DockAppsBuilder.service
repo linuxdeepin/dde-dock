@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.DockAppsBuilder
-Exec=/usr/lib/deepin-daemon/dde-session-daemon
-

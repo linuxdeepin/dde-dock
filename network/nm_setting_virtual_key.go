@@ -23,9 +23,9 @@ package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/iso"
-	"pkg.linuxdeepin.com/lib/mobileprovider"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/iso"
+	"pkg.deepin.io/lib/mobileprovider"
 )
 
 // virtual key types

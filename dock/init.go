@@ -3,7 +3,7 @@ package dock
 import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"pkg.linuxdeepin.com/dde-daemon/loader"
+	"pkg.deepin.io/dde-daemon/loader"
 	"time"
 )
 

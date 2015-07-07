@@ -23,8 +23,8 @@ package langselector
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/dde-daemon/langselector/language_info"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 type LocaleInfo struct {

@@ -23,7 +23,7 @@ package users
 
 import (
 	C "launchpad.net/gocheck"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"testing"
 )
 

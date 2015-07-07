@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {

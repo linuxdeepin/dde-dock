@@ -1,8 +1,8 @@
 package power
 
-import "pkg.linuxdeepin.com/dde-daemon/loader"
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/log"
+import "pkg.deepin.io/dde-daemon/loader"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/log"
 
 import libupower "dbus/org/freedesktop/upower"
 import liblogin1 "dbus/org/freedesktop/login1"

@@ -1,6 +1,6 @@
 package power
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 
 func (*Power) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{

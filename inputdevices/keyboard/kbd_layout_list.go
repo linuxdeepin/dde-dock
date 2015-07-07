@@ -24,7 +24,7 @@ package keyboard
 import (
 	"encoding/xml"
 	"io/ioutil"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 const (

@@ -1,7 +1,7 @@
 package category
 
 import (
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
 )
 
 // AudioVideo/Audio/Video -> multimedia

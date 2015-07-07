@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 	"sync"
 )
 

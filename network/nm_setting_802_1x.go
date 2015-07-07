@@ -23,8 +23,8 @@ package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/utils"
 )
 
 // https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html

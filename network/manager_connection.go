@@ -23,8 +23,8 @@ package network
 
 import (
 	nm "dbus/org/freedesktop/networkmanager"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 // TODO refactor code, different connection structures for different

@@ -24,7 +24,7 @@ package inputdevices
 import (
 	"os"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (

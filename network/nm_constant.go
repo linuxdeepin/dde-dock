@@ -21,7 +21,7 @@
 
 package network
 
-import . "pkg.linuxdeepin.com/lib/gettext"
+import . "pkg.deepin.io/lib/gettext"
 
 // Device types
 const (

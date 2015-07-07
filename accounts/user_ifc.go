@@ -25,10 +25,10 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/graphic"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/dde-daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/graphic"
+	dutils "pkg.deepin.io/lib/utils"
 	"strings"
 )
 

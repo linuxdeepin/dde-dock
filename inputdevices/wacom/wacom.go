@@ -22,11 +22,11 @@
 package wacom
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
-	"pkg.linuxdeepin.com/lib/dbus/property"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/lib/dbus/property"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/log"
 )
 
 const (

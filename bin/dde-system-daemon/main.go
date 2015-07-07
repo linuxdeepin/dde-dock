@@ -1,13 +1,13 @@
 package main
 
-import "pkg.linuxdeepin.com/lib/log"
+import "pkg.deepin.io/lib/log"
 
-import "pkg.linuxdeepin.com/lib"
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib"
+import "pkg.deepin.io/lib/dbus"
 import "os"
-import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
-import "pkg.linuxdeepin.com/dde-daemon/loader"
-import . "pkg.linuxdeepin.com/lib/gettext"
+import _ "pkg.deepin.io/dde-daemon/accounts"
+import "pkg.deepin.io/dde-daemon/loader"
+import . "pkg.deepin.io/lib/gettext"
 
 var logger = log.NewLogger("dde-daemon/dde-system-daemon")
 

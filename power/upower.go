@@ -1,9 +1,9 @@
 package power
 
-import "pkg.linuxdeepin.com/lib/gio-2.0"
+import "pkg.deepin.io/lib/gio-2.0"
 import "time"
-import . "pkg.linuxdeepin.com/lib/gettext"
-import "pkg.linuxdeepin.com/lib/dbus"
+import . "pkg.deepin.io/lib/gettext"
+import "pkg.deepin.io/lib/dbus"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"

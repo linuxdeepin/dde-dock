@@ -24,7 +24,7 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 

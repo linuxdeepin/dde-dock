@@ -25,7 +25,7 @@ import (
 	"errors"
 	"os/exec"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 )
 

@@ -21,7 +21,7 @@
 
 package network
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 import "time"
 
 var invalidKeyData = make(map[string]map[string]dbus.Variant)

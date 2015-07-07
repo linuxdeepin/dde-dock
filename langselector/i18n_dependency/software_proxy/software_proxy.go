@@ -23,7 +23,7 @@ package software_proxy
 
 import (
 	"dbus/com/linuxdeepin/softwarecenter"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 

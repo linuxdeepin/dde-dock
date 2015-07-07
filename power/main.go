@@ -1,8 +1,8 @@
 package power
 
-import "pkg.linuxdeepin.com/lib/log"
-import "pkg.linuxdeepin.com/lib/dbus/property"
-import "pkg.linuxdeepin.com/lib/gio-2.0"
+import "pkg.deepin.io/lib/log"
+import "pkg.deepin.io/lib/dbus/property"
+import "pkg.deepin.io/lib/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
 
 var logger = log.NewLogger("dde-daemon/power")

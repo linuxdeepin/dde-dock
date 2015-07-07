@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
-	"pkg.linuxdeepin.com/dde-daemon/loader"
-	"pkg.linuxdeepin.com/lib"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/glib-2.0"
+	"pkg.deepin.io/lib/log"
 	"strings"
 )
 

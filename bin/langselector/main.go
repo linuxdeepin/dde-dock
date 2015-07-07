@@ -22,9 +22,9 @@
 package main
 
 import "os"
-import . "pkg.linuxdeepin.com/dde-daemon/langselector"
-import "pkg.linuxdeepin.com/lib/gettext"
-import "pkg.linuxdeepin.com/lib/dbus"
+import . "pkg.deepin.io/dde-daemon/langselector"
+import "pkg.deepin.io/lib/gettext"
+import "pkg.deepin.io/lib/dbus"
 import "time"
 
 func main() {

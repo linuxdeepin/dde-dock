@@ -22,12 +22,12 @@
 package inputdevices
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/keyboard"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/mouse"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/touchpad"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wacom"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/inputdevices/keyboard"
+	"pkg.deepin.io/dde-daemon/inputdevices/mouse"
+	"pkg.deepin.io/dde-daemon/inputdevices/touchpad"
+	"pkg.deepin.io/dde-daemon/inputdevices/wacom"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 )
 
 // TODO: delete this struct && rm this file

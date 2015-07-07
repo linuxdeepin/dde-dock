@@ -1,6 +1,6 @@
 PREFIX = /usr
 GOPATH_DIR = gopath
-GOPKG_PREFIX = pkg.linuxdeepin.com/dde-daemon
+GOPKG_PREFIX = pkg.deepin.io/dde-daemon
 
 ifndef USE_GCCGO
     GOBUILD = go build

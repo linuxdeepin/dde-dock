@@ -25,8 +25,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
-	"pkg.linuxdeepin.com/lib/utils"
+	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/utils"
 	"sync"
 	"text/template"
 )

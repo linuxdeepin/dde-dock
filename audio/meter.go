@@ -1,7 +1,7 @@
 package audio
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/pulse"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/pulse"
 import "fmt"
 import "time"
 

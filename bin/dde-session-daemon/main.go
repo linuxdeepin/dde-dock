@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
-	"pkg.linuxdeepin.com/dde-daemon/loader"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/log"
-	"pkg.linuxdeepin.com/lib/proxy"
+	"pkg.deepin.io/dde-daemon/loader"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/proxy"
 )
 
 // using go build -ldflags "-X main.__VERSION__ version" to set version.

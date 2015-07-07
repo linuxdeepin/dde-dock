@@ -22,7 +22,7 @@
 package screenedge
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 type Manager struct {

@@ -2,7 +2,7 @@ package dock
 
 import (
 	"errors"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const entryDestPrefix = "dde.dock.entry."

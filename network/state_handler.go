@@ -21,9 +21,9 @@
 
 package network
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 import "sync"
-import . "pkg.linuxdeepin.com/lib/gettext"
+import . "pkg.deepin.io/lib/gettext"
 import nm "dbus/org/freedesktop/networkmanager"
 
 var vpnErrorTable = make(map[uint32]string)

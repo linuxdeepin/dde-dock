@@ -24,7 +24,7 @@ package power
 import (
 	libupower "dbus/org/freedesktop/upower"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 

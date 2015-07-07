@@ -2,7 +2,7 @@ package main
 
 import "dbus/com/deepin/sessionmanager"
 import "os"
-import "pkg.linuxdeepin.com/lib/utils"
+import "pkg.deepin.io/lib/utils"
 
 func ddeSessionRegister() {
 	cookie := os.ExpandEnv("$DDE_SESSION_PROCESS_COOKIE_ID")

@@ -23,7 +23,7 @@ package network
 
 import "strings"
 import "fmt"
-import "pkg.linuxdeepin.com/lib/gio-2.0"
+import "pkg.deepin.io/lib/gio-2.0"
 import "regexp"
 
 // example of /etc/environment

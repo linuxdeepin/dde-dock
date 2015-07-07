@@ -21,7 +21,7 @@
 
 package appearance
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 
 const (
 	managerDBusPath = "/com/deepin/daemon/ThemeManager"

@@ -24,7 +24,7 @@ package sessionwatcher
 import (
 	"dbus/org/freedesktop/dbus"
 	"os/exec"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 	"time"
 )
 

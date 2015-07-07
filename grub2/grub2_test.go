@@ -2,7 +2,7 @@ package grub2
 
 import (
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 	"testing"
 )
 

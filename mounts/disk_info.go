@@ -24,7 +24,7 @@ package mounts
 import (
 	"fmt"
 	"os"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.deepin.io/lib/gio-2.0"
 	"regexp"
 	"strings"
 )

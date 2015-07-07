@@ -26,7 +26,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/lib/graphic"
+	"pkg.deepin.io/lib/graphic"
 	"strings"
 )
 

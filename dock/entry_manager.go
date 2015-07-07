@@ -1,7 +1,7 @@
 package dock
 
 import "dbus/com/deepin/daemon/dock"
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 
 // import "flag"
 import "github.com/BurntSushi/xgb/xproto"

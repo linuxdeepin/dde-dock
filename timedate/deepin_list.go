@@ -1,7 +1,7 @@
 package timedate
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 type zoneDesc struct {

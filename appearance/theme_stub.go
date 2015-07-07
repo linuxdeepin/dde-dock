@@ -23,7 +23,7 @@ package appearance
 
 import (
 	"path"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (

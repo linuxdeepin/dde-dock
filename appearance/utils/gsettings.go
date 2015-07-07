@@ -22,8 +22,8 @@
 package utils
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/gio-2.0"
+	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
 

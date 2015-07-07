@@ -29,8 +29,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/langselector/language_info"
+	"pkg.deepin.io/lib/log"
 	"strings"
 )
 

@@ -22,7 +22,7 @@
 package timedate
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/timedate/zoneinfo"
+	"pkg.deepin.io/dde-daemon/timedate/zoneinfo"
 	"time"
 )
 

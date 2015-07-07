@@ -3,9 +3,9 @@ package grub2
 import (
 	"io/ioutil"
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/graphic"
-	"pkg.linuxdeepin.com/lib/log"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (

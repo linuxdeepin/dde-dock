@@ -3,7 +3,7 @@ package dock
 import "crypto/md5"
 import "encoding/hex"
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 
 func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 	hasher := md5.New()

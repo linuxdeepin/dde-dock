@@ -26,8 +26,8 @@ import (
 	"fmt"
 	"os"
 	"path"
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (

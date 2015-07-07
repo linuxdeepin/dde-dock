@@ -23,7 +23,7 @@ package background
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
+	. "pkg.deepin.io/dde-daemon/appearance/utils"
 	"testing"
 )
 

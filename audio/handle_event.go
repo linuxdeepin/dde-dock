@@ -1,6 +1,6 @@
 package audio
 
-import "pkg.linuxdeepin.com/lib/pulse"
+import "pkg.deepin.io/lib/pulse"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {

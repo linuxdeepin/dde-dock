@@ -22,7 +22,7 @@
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 	"strconv"
 )
 

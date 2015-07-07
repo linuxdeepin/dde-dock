@@ -22,9 +22,9 @@
 package langselector
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/langselector/i18n_dependency"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/dde-daemon/langselector/i18n_dependency"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 func (lang *LangSelector) onLocaleSuccess() {

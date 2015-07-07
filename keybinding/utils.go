@@ -24,7 +24,7 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/inputdevices"
 	"github.com/BurntSushi/xgbutil/keybind"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"
 )

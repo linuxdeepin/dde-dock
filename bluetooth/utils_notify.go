@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	"dbus/org/freedesktop/notifications"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 const (

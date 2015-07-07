@@ -25,8 +25,8 @@ import (
 	"fmt"
 	C "launchpad.net/gocheck"
 	"os"
-	"pkg.linuxdeepin.com/lib/gdkpixbuf"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/gdkpixbuf"
+	. "pkg.deepin.io/lib/gettext"
 	"time"
 )
 

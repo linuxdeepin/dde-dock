@@ -22,7 +22,7 @@
 package keybinding
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (obj *Manager) GetDBusInfo() dbus.DBusInfo {

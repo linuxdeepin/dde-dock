@@ -22,7 +22,7 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 // OnPropertiesChanged implements interface of dbus.DBusObject.

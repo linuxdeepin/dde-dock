@@ -4,9 +4,9 @@ import (
 	storeApi "dbus/com/deepin/store/api"
 	"encoding/json"
 	"fmt"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/item/softwarecenter"
+	. "pkg.deepin.io/dde-daemon/launcher/utils"
 	"sync"
 	"time"
 )

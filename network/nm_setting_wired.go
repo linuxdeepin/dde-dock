@@ -22,7 +22,7 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const NM_SETTING_WIRED_SETTING_NAME = "802-3-ethernet"

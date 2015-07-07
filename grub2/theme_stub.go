@@ -22,9 +22,9 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/utils"
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.

@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/user"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 	"regexp"
 	"strconv"
 	"strings"

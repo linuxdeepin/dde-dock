@@ -22,7 +22,7 @@
 package systeminfo
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (sys *SystemInfo) GetDBusInfo() dbus.DBusInfo {

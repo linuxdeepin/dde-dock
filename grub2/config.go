@@ -22,7 +22,7 @@
 package grub2
 
 import (
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
 const ConfigFileDefault = "/var/cache/deepin/grub2.json"

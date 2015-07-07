@@ -1,6 +1,6 @@
 package dock
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 import pkgbus "dbus/org/freedesktop/dbus"
 import "time"
 import "sync"

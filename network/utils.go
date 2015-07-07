@@ -24,7 +24,7 @@ package network
 import (
 	"encoding/json"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 

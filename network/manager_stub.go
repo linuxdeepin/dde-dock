@@ -22,7 +22,7 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {

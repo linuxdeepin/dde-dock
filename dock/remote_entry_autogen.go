@@ -1,8 +1,8 @@
-/*This file is auto generate by pkg.linuxdeepin.com/dbus-generator. Don't edit it*/
+/*This file is auto generate by pkg.deepin.io/dbus-generator. Don't edit it*/
 package dock
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/dbus/property"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/dbus/property"
 import "reflect"
 import "sync"
 import "runtime"

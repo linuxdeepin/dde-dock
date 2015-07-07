@@ -24,8 +24,8 @@ package network
 import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/utils"
 )
 
 type apSecType uint32

@@ -1,8 +1,8 @@
 package loader
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/graph"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/graph"
+	"pkg.deepin.io/lib/log"
 )
 
 type DAGBuilder struct {

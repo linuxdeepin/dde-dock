@@ -22,8 +22,8 @@
 package wacom
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (

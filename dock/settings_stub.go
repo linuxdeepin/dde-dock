@@ -1,7 +1,7 @@
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (s *Setting) GetDBusInfo() dbus.DBusInfo {

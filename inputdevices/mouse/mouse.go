@@ -23,11 +23,11 @@ package mouse
 
 import (
 	"dbus/com/deepin/sessionmanager"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/touchpad"
-	"pkg.linuxdeepin.com/dde-daemon/inputdevices/wrapper"
-	"pkg.linuxdeepin.com/lib/dbus/property"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/inputdevices/touchpad"
+	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/log"
 )
 
 const (

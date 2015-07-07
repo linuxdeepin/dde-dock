@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"sync"
 
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
 )
 
 type SearchInstalledItemTransaction struct {

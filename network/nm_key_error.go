@@ -22,7 +22,7 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 

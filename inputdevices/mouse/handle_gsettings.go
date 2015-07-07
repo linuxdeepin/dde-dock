@@ -22,7 +22,7 @@
 package mouse
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 func (m *Mouse) handleGSettings() {

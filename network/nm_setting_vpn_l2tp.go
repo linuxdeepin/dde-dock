@@ -23,7 +23,7 @@ package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 // For the NM <-> VPN plugin service

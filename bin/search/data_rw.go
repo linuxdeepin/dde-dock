@@ -26,7 +26,7 @@ import (
 	"encoding/gob"
 	"io/ioutil"
 	"os"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 func writeDatasToFile(datas interface{}, filename string) {

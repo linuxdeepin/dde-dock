@@ -23,7 +23,7 @@ package network
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {

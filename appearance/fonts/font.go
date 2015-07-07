@@ -22,7 +22,7 @@
 package fonts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/xsettings"
+	"pkg.deepin.io/dde-daemon/xsettings"
 )
 
 type FontManager struct {

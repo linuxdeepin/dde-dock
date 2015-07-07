@@ -22,9 +22,9 @@
 package accounts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
-	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/dde-daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
 

@@ -1,7 +1,7 @@
 package main
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/log"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/log"
 
 //#cgo pkg-config: libudev
 //#include "backlight.h"

@@ -23,8 +23,8 @@ package main
 
 import (
 	"path"
-	"pkg.linuxdeepin.com/lib/pinyin"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/pinyin"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 func (m *Manager) NewSearchWithStrList(list []string) (string, bool) {

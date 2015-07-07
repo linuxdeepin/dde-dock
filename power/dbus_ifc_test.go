@@ -25,9 +25,9 @@ import (
 	libupower "dbus/org/freedesktop/upower"
 	"encoding/xml"
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/dbus/introspect"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/introspect"
+	"pkg.deepin.io/lib/log"
 	"testing"
 )
 

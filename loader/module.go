@@ -2,7 +2,7 @@ package loader
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 )
 
 type Module interface {

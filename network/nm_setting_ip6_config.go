@@ -23,7 +23,7 @@ package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 const NM_SETTING_IP6_CONFIG_SETTING_NAME = "ipv6"

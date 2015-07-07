@@ -22,10 +22,10 @@
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/iso"
-	"pkg.linuxdeepin.com/lib/mobileprovider"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/iso"
+	"pkg.deepin.io/lib/mobileprovider"
 )
 
 const NM_SETTING_GSM_SETTING_NAME = "gsm"

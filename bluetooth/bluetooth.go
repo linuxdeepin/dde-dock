@@ -23,7 +23,7 @@ package bluetooth
 
 import (
 	sysdbus "dbus/org/freedesktop/dbus/system"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 

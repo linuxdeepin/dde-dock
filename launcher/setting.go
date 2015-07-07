@@ -3,10 +3,10 @@ package launcher
 import (
 	"errors"
 	"fmt"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/setting"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/setting"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
 	"sync"
 )
 

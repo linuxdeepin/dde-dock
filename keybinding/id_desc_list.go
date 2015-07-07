@@ -21,7 +21,7 @@
 
 package keybinding
 
-import . "pkg.linuxdeepin.com/lib/gettext"
+import . "pkg.deepin.io/lib/gettext"
 
 type idDescInfo struct {
 	Id   int32

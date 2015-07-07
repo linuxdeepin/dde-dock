@@ -11,14 +11,14 @@ import (
 	"github.com/howeyc/fsnotify"
 
 	storeApi "dbus/com/deepin/store/api"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/dde-daemon/launcher/category"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/item"
+	. "pkg.deepin.io/dde-daemon/launcher/item/search"
+	. "pkg.deepin.io/dde-daemon/launcher/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/glib-2.0"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (

@@ -2,7 +2,7 @@ package launcher
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
 )
 
 type CategoryInfoExportTestSuite struct {

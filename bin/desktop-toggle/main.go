@@ -24,7 +24,7 @@ package main
 import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 )
 
 func main() {

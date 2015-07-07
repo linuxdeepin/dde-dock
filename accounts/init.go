@@ -22,7 +22,7 @@
 package accounts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/loader"
+	"pkg.deepin.io/dde-daemon/loader"
 )
 
 func init() {

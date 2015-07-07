@@ -22,8 +22,8 @@
 package i18n_dependency
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/langselector/i18n_dependency/software_proxy"
-	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
+	"pkg.deepin.io/dde-daemon/langselector/i18n_dependency/software_proxy"
+	"pkg.deepin.io/dde-daemon/langselector/language_info"
 	"strings"
 	"sync"
 )

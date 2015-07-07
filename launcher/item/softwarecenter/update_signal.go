@@ -3,7 +3,7 @@ package softwarecenter
 import (
 	"dbus/com/linuxdeepin/softwarecenter"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (

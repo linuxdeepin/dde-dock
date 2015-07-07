@@ -24,7 +24,7 @@ package utils
 import (
 	"fmt"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (

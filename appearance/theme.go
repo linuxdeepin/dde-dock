@@ -24,10 +24,10 @@ package appearance
 import (
 	"os"
 	"path"
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/glib-2.0"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (

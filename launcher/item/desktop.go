@@ -7,9 +7,9 @@ import (
 	"os"
 	p "path"
 
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
+	. "pkg.deepin.io/dde-daemon/launcher/utils"
+	"pkg.deepin.io/lib/glib-2.0"
+	"pkg.deepin.io/lib/utils"
 )
 
 func getDesktopPath(name string) string {

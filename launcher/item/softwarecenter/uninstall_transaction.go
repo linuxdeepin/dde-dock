@@ -3,7 +3,7 @@ package softwarecenter
 import (
 	"errors"
 	"fmt"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
 	"strings"
 	"time"
 )

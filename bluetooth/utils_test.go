@@ -2,7 +2,7 @@ package bluetooth
 
 import (
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"testing"
 )
 

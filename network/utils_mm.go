@@ -23,7 +23,7 @@ package network
 
 import (
 	mm "dbus/org/freedesktop/modemmanager1"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 // modem capabilities

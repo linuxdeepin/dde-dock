@@ -22,14 +22,14 @@
 package factory
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/background"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/cursor_theme"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/deepin_theme"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/greeter_theme"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/gtk_theme"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/icon_theme"
-	"pkg.linuxdeepin.com/dde-daemon/appearance/factory/sound_theme"
-	. "pkg.linuxdeepin.com/dde-daemon/appearance/utils"
+	"pkg.deepin.io/dde-daemon/appearance/factory/background"
+	"pkg.deepin.io/dde-daemon/appearance/factory/cursor_theme"
+	"pkg.deepin.io/dde-daemon/appearance/factory/deepin_theme"
+	"pkg.deepin.io/dde-daemon/appearance/factory/greeter_theme"
+	"pkg.deepin.io/dde-daemon/appearance/factory/gtk_theme"
+	"pkg.deepin.io/dde-daemon/appearance/factory/icon_theme"
+	"pkg.deepin.io/dde-daemon/appearance/factory/sound_theme"
+	. "pkg.deepin.io/dde-daemon/appearance/utils"
 )
 
 type FactoryInterface interface {

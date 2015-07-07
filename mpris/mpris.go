@@ -27,9 +27,9 @@ import (
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
 	"os/exec"
-	"pkg.linuxdeepin.com/dde-daemon/loader"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/log"
 	"strings"
 )
 

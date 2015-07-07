@@ -24,7 +24,7 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	sysdbus "dbus/org/freedesktop/dbus/system"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
