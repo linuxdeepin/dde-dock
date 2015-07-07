@@ -141,10 +141,11 @@ void Panel::slotRemoveAppItem(const QString &id)
         if (tmpItem->itemId() == id)
         {
             //TODO,remove from layout
+            leftLayout->removeItem(i);
+            qWarning() << "=====" << leftLayout->getItemCount();
             return;
         }
     }
-    qWarning() << "=====" << leftLayout->getItemCount();
 }
 
 void Panel::mousePressEvent(QMouseEvent *event)

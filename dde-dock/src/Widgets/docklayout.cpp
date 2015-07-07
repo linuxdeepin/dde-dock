@@ -15,6 +15,7 @@ void DockLayout::addItem(AbstractDockItem *item)
 void DockLayout::insertItem(AbstractDockItem *item, int index)
 {
     item->setParent(this);
+    item->show();
     int appCount = appList.count();
     index = index > appCount ? appCount : (index < 0 ? 0 : index);
 

@@ -28,6 +28,8 @@ void AppManager::slotEntryAdded(const QDBusObjectPath &path)
     DBusEntryProxyer *entryProxyer = new DBusEntryProxyer(path.path());
     if (entryProxyer->isValid())
     {
+        if (entryProxyer->data().value("title") == "dde-dock")
+            return;
         AppItem *item = new AppItem();
         item->setEntryProxyer(entryProxyer);
         emit entryAdded(item);
