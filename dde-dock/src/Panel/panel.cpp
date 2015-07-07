@@ -61,10 +61,6 @@ void Panel::showScreenMask()
     connect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
     connect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
     connect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
-
-    //TODO change to Other ways to do this,it will hide the drag icon
-    parentWidget->hide();
-    parentWidget->show();
 }
 
 void Panel::hideScreenMask()

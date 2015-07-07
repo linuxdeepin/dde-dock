@@ -4,7 +4,7 @@ ScreenMask::ScreenMask(QWidget *parent) : QWidget(parent)
 {
     QRect rec = QApplication::desktop()->screenGeometry();
     this->resize(rec.width(),rec.height());
-    this->setWindowFlags(Qt::ToolTip);
+    this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowOpacity(0);
 
     setAcceptDrops(true);
@@ -43,5 +43,11 @@ void ScreenMask::dropEvent(QDropEvent *event)
 
         emit itemDropped(event->pos());
     }
+    else
+    {
+        qWarning() << "Image is NULL!";
+    }
+
+    this->close();
 
 }

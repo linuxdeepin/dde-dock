@@ -222,16 +222,17 @@ void AppItem::mousePressEvent(QMouseEvent * event)
     //qWarning() << "mouse press...";
     emit mousePress(event->globalX(), event->globalY());
 
-    if (event->button() == Qt::LeftButton)
-        m_entryProxyer->Activate(0,0);
-    else if (event->button() == Qt::RightButton)
-        showMenu(event->globalX(),event->globalY());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent * event)
 {
 //    qWarning() << "mouse release...";
     emit mouseRelease(event->globalX(), event->globalY());
+
+    if (event->button() == Qt::LeftButton)
+        m_entryProxyer->Activate(event->globalX(),event->globalY());
+    else if (event->button() == Qt::RightButton)
+        showMenu(event->globalX(),event->globalY());
 }
 
 void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
@@ -249,11 +250,11 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
     {
         QDrag* drag = new QDrag(this);
         QMimeData* data = new QMimeData();
-        QImage dataImg(m_itemData.iconPath);
+        QImage dataImg(m_appIcon->getIconPath());
         data->setImageData(QVariant(dataImg));
         drag->setMimeData(data);
 
-        QPixmap pixmap(m_itemData.iconPath);
+        QPixmap pixmap(m_appIcon->getIconPath());
         drag->setPixmap(pixmap);
 
         drag->setHotSpot(QPoint(15,15));

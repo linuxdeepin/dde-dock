@@ -22,14 +22,21 @@ void AppIcon::setIcon(const QString &iconPath)
     if (sysIconPath != "")
     {
         iconPixmap.load(sysIconPath);
+        m_iconPath = sysIconPath;
     }
     else
     {
         iconPixmap.load(iconPath);
+        m_iconPath = iconPath;
     }
     this->setPixmap(iconPixmap);
     QLabel::setPixmap(this->pixmap()->scaled(m_modeData->getAppIconSize(),m_modeData->getAppIconSize(),
                                      Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation));
+}
+
+QString AppIcon::getIconPath() const
+{
+    return m_iconPath;
 }
 
 QString AppIcon::getSysIcon(const QString &iconName, int size)

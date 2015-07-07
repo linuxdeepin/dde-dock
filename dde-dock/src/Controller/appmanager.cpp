@@ -13,7 +13,7 @@ void AppManager::updateEntries()
     for (int i = 0; i < entryList.count(); i ++)
     {
         DBusEntryProxyer *dep = new DBusEntryProxyer(entryList.at(i).path());
-        if (dep->isValid() && dep->type() == "App")
+        if (dep->isValid() && dep->type() == "App" && dep->data().value("title") != "dde-dock")
         {
             AppItem *item = new AppItem();
             item->setEntryProxyer(dep);
