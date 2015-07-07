@@ -2,10 +2,9 @@
 #define WINDOWPREVIEW_H
 
 #include <QWidget>
-#include <QWindow>
 
-class QImage;
-class QTimer;
+#include <cairo/cairo.h>
+#include <cairo/cairo-xlib.h>
 
 class WindowPreview : public QWidget
 {
@@ -15,16 +14,12 @@ public:
     WindowPreview(WId sourceWindow, QWidget *parent = 0);
     ~WindowPreview();
 
-protected:
-    void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;
+    void onTimeout();
 
 private:
     WId m_sourceWindow;
-    QImage *m_cache;
-    QTimer *m_timer;
-
-    void clearCache();
-    void updateCache();
+    cairo_t *m_cairo;
+    cairo_surface_t *m_surface;
 };
 
 #endif // WINDOWPREVIEW_H

@@ -1,4 +1,5 @@
 #include "appitem.h"
+#include "apppreviews.h"
 
 AppItem::AppItem(QWidget *parent) :
     AbstractDockItem(parent)

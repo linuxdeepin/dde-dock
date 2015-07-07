@@ -24,7 +24,6 @@
 #include "abstractdockitem.h"
 #include "appicon.h"
 #include "appbackground.h"
-#include "apppreviews.h"
 #include "arrowrectangle.h"
 #include "../dockconstants.h"
 

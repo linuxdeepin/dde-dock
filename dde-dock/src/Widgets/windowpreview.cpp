@@ -1,82 +1,83 @@
-#include <QImage>
 #include <QApplication>
-#include <QtX11Extras/QX11Info>
-#include <QPaintEvent>
-#include <QPainter>
 #include <QTimer>
+#include <QtX11Extras/QX11Info>
 #include <QDebug>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 #include "windowpreview.h"
 
 WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
     : QWidget(parent),
-      m_sourceWindow(sourceWindow),
-      m_cache(NULL),
-      m_timer(new QTimer(this))
+      m_sourceWindow(sourceWindow)
 {
-    m_timer->setInterval(500);
-    m_timer->setSingleShot(false);
-    m_timer->start();
-    connect(m_timer, &QTimer::timeout, [=]{ this->updateCache(); this->repaint(); });
+    Display *dsp = QX11Info::display();
+
+    XWindowAttributes t_atts;
+    XGetWindowAttributes(dsp, winId(), &t_atts);
+
+    m_surface = cairo_xlib_surface_create(dsp,
+                                          winId(),
+                                          t_atts.visual,
+                                          t_atts.width,
+                                          t_atts.height);
+    m_cairo = cairo_create(m_surface);
+
+    QTimer *timer = new QTimer(this);
+    timer->setInterval(60);
+    timer->start();
+    connect(timer, &QTimer::timeout, this, &WindowPreview::onTimeout);
 }
 
 WindowPreview::~WindowPreview()
 {
-    clearCache();
+    cairo_surface_destroy(m_surface);
+    cairo_destroy(m_cairo);
 }
 
-void WindowPreview::paintEvent(QPaintEvent * event)
+void WindowPreview::onTimeout()
 {
-    if (m_cache) {
-        QPainter painter(this);
+    Display *dsp = QX11Info::display();
 
-        QRect rect = m_cache->rect();
-        rect.moveCenter(event->rect().center());
+    XWindowAttributes s_atts;
+    Status ss = XGetWindowAttributes(dsp, m_sourceWindow, &s_atts);
 
-        painter.drawImage(rect, *m_cache);
-        painter.end();
-    }
-}
+    XWindowAttributes t_atts;
+    Status ts = XGetWindowAttributes(dsp, winId(), &t_atts);
 
-void WindowPreview::clearCache()
-{
-    if (m_cache) {
-        delete m_cache;
-        m_cache = NULL;
-    }
-}
+    if (ss != 0 && ts != 0) {
+        cairo_surface_t *source = cairo_xlib_surface_create(dsp,
+                                                            m_sourceWindow,
+                                                            s_atts.visual,
+                                                            s_atts.width,
+                                                            s_atts.height);
+        cairo_xlib_surface_set_size(source, s_atts.width, s_atts.height);
+        cairo_xlib_surface_set_size(m_surface, t_atts.width, t_atts.height);
 
-void WindowPreview::updateCache()
-{
-    clearCache();
+        // clear the target surface.
+        cairo_set_source_rgb(m_cairo, 1, 1, 1);
+        cairo_set_operator(m_cairo, CAIRO_OPERATOR_CLEAR);
+        cairo_paint(m_cairo);
+        cairo_set_operator(m_cairo, CAIRO_OPERATOR_OVER);
 
-    Display *dpy = QX11Info::display();
-
-    XWindowAttributes watts;
-    Status status = XGetWindowAttributes(dpy, m_sourceWindow, &watts);
-
-    if (status != 0) {
-        XImage *image = XGetImage(dpy, m_sourceWindow,
-                                  watts.x, watts.y, watts.width, watts.height,
-                                  AllPlanes, ZPixmap);
-        if (image) {
-            QImage cache(watts.width, watts.height, QImage::Format_RGB32);
-
-            for (int y = 0; y < watts.height; y++) {
-                for (int x = 0; x < watts.width; x++) {
-                    u_long pixel = XGetPixel(image, x, y);
-
-                    cache.setPixel(x, y, pixel);
-                }
-            }
-            
-            XDestroyImage(image);
-
-            QImage cacheScaled = cache.scaledToWidth(width(), Qt::SmoothTransformation);
-            m_cache = new QImage(cacheScaled);
+        // calculate the scale ratio
+        float ratio = 0.0f;
+        if (s_atts.width > s_atts.height) {
+            ratio = t_atts.width * 1.0 / s_atts.width;
+        } else {
+            ratio = t_atts.height * 1.0 / s_atts.height;
         }
+        int x = (t_atts.width - s_atts.width * ratio) / 2.0;
+        int y = (t_atts.height - s_atts.height * ratio) / 2.0;
+
+        cairo_save(m_cairo);
+        cairo_scale(m_cairo, ratio, ratio);
+        cairo_set_source_surface(m_cairo, source, x / ratio, y / ratio);
+        cairo_paint(m_cairo);
+        cairo_restore(m_cairo);
+
+        cairo_surface_destroy(source);
     }
 }

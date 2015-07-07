@@ -73,5 +73,5 @@ RESOURCES += \
     images.qrc \
     qss.qrc
 
-PKGCONFIG += gtk+-2.0 x11
+PKGCONFIG += gtk+-2.0 x11 cairo
 CONFIG += c++11 link_pkgconfig
