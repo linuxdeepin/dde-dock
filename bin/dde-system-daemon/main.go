@@ -5,18 +5,18 @@ import "pkg.deepin.io/lib/log"
 import "pkg.deepin.io/lib"
 import "pkg.deepin.io/lib/dbus"
 import "os"
-import _ "pkg.deepin.io/dde-daemon/accounts"
-import "pkg.deepin.io/dde-daemon/loader"
+import _ "pkg.deepin.io/dde/daemon/accounts"
+import "pkg.deepin.io/dde/daemon/loader"
 import . "pkg.deepin.io/lib/gettext"
 
-var logger = log.NewLogger("dde-daemon/dde-system-daemon")
+var logger = log.NewLogger("daemon/dde-system-daemon")
 
 func main() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
 	if !lib.UniqueOnSystem("com.deepin.daemon") {
-		logger.Warning("There already has an dde-daemon running.")
+		logger.Warning("There already has an dde daemon running.")
 		return
 	}
 

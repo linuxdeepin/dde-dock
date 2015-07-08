@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"pkg.deepin.io/dde-daemon/accounts/users"
+	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
 	"strings"

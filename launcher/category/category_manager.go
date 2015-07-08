@@ -1,7 +1,7 @@
 package category
 
 import (
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 type CategoryManager struct {

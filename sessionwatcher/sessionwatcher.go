@@ -22,7 +22,7 @@
 package sessionwatcher
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 

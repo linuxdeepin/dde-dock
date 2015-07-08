@@ -3,7 +3,7 @@ package utils
 import (
 	"io/ioutil"
 	"os"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 func SaveKeyFile(file RateConfigFileInterface, path string) error {

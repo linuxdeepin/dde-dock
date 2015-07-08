@@ -23,7 +23,7 @@ package inputdevices
 
 import (
 	"fmt"
-	. "pkg.deepin.io/dde-daemon/loader"
+	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
@@ -60,7 +60,7 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	var logger = log.NewLogger("dde-daemon/inputdevices")
+	var logger = log.NewLogger("daemon/inputdevices")
 	logger.BeginTracing()
 
 	if !initDeviceChangedWatcher() {

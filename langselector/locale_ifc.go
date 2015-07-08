@@ -23,7 +23,7 @@ package langselector
 
 import (
 	"fmt"
-	"pkg.deepin.io/dde-daemon/langselector/language_info"
+	"pkg.deepin.io/dde/daemon/langselector/language_info"
 	. "pkg.deepin.io/lib/gettext"
 )
 

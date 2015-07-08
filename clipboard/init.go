@@ -26,10 +26,10 @@ package clipboard
 // #include "gsd-clipboard-manager.h"
 import "C"
 
-import . "pkg.deepin.io/dde-daemon/loader"
+import . "pkg.deepin.io/dde/daemon/loader"
 import "pkg.deepin.io/lib/log"
 
-var logger = log.NewLogger("dde-daemon/clipboard")
+var logger = log.NewLogger("daemon/clipboard")
 
 func init() {
 	Register(NewClipboardDaemon(logger))

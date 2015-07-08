@@ -44,6 +44,9 @@ typedef struct _UserData {
 #define THUMB_HEIGHT 72
 GtkWidget *get_meta_theme (const char* theme_name)
 {
+	// Init meta_current_theme, otherwise segmentation in metacity
+	meta_theme_set_current("", TRUE);
+
 	GError *error = NULL;
 	MetaTheme *meta = meta_theme_load(theme_name, &error);
 	if (!meta) {

@@ -3,7 +3,7 @@ package item
 import (
 	"math/rand"
 	"path/filepath"
-	. "pkg.deepin.io/dde-daemon/launcher/item/softwarecenter"
+	. "pkg.deepin.io/dde/daemon/launcher/item/softwarecenter"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )

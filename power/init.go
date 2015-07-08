@@ -1,6 +1,6 @@
 package power
 
-import "pkg.deepin.io/dde-daemon/loader"
+import "pkg.deepin.io/dde/daemon/loader"
 import "pkg.deepin.io/lib/dbus"
 import "pkg.deepin.io/lib/log"
 

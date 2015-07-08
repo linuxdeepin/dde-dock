@@ -35,7 +35,7 @@ type DBusInterfaceTest struct{}
 
 func init() {
 	if logger == nil {
-		logger = log.NewLogger("dde-daemon/power")
+		logger = log.NewLogger("daemon/power")
 	}
 
 	C.Suite(&DBusInterfaceTest{})

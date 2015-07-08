@@ -42,7 +42,7 @@ import (
 
 var (
 	forceFlag = false
-	logger    = log.NewLogger("dde-daemon/theme-thumb-tool")
+	logger    = log.NewLogger("daemon/theme-thumb-tool")
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gio-2.0"
@@ -96,7 +96,7 @@ func NewSessionDaemon(cmd *kingpin.Application, flags *Flags, settings *gio.Sett
 
 func (s *SessionDaemon) exitIfNotSingleton() {
 	if !lib.UniqueOnSession("com.deepin.daemon") {
-		s.log.Warning("There already has a dde-daemon running.")
+		s.log.Warning("There already has a dde daemon running.")
 		os.Exit(0)
 	}
 

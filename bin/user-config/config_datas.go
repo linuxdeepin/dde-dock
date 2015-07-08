@@ -27,7 +27,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"pkg.deepin.io/dde-daemon/accounts/users"
+	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/archive"
 	dutils "pkg.deepin.io/lib/utils"
 	"regexp"

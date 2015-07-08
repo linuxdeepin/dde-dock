@@ -1,7 +1,7 @@
 package launcher
 
 import (
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 type ItemInfoExport struct {

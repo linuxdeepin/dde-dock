@@ -1,11 +1,11 @@
 package keybinding
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/keybinding")
+var logger = log.NewLogger("daemon/keybinding")
 
 func init() {
 	loader.Register(NewKeybindingDaemon(logger))

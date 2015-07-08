@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	. "pkg.deepin.io/dde/daemon/appearance/utils"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"

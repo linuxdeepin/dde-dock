@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/exec"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/log"
@@ -227,7 +227,7 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 	sys := &SystemInfo{}
 
 	if l == nil {
-		l = log.NewLogger("dde-daemon/systeminfo")
+		l = log.NewLogger("daemon/systeminfo")
 	}
 	sys.logger = l
 
@@ -271,7 +271,7 @@ func NewSystemInfo(l *log.Logger) *SystemInfo {
 }
 
 var _sysInfo *SystemInfo
-var logger = log.NewLogger("dde-daemon/systeminfo")
+var logger = log.NewLogger("daemon/systeminfo")
 
 type Daemon struct {
 	*loader.ModuleBase

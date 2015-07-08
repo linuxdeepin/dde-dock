@@ -22,14 +22,14 @@
 package accounts
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
 var (
 	_m     *Manager
-	logger = log.NewLogger("dde-daemon/accounts")
+	logger = log.NewLogger("daemon/accounts")
 )
 
 type Daemon struct {

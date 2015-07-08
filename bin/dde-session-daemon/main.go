@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
@@ -17,7 +17,7 @@ import (
 // using go build -ldflags "-X main.__VERSION__ version" to set version.
 var __VERSION__ = "unknown"
 
-var logger = log.NewLogger("dde-daemon/dde-session-daemon")
+var logger = log.NewLogger("daemon/dde-session-daemon")
 
 func main() {
 	InitI18n()

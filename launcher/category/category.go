@@ -9,8 +9,8 @@ import (
 	"sort"
 	"strings"
 
-	lerrors "pkg.deepin.io/dde-daemon/launcher/errors"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	lerrors "pkg.deepin.io/dde/daemon/launcher/errors"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
 )

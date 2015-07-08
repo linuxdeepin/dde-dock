@@ -22,10 +22,10 @@
 package inputdevices
 
 import (
-	"pkg.deepin.io/dde-daemon/inputdevices/keyboard"
-	"pkg.deepin.io/dde-daemon/inputdevices/mouse"
-	"pkg.deepin.io/dde-daemon/inputdevices/touchpad"
-	"pkg.deepin.io/dde-daemon/inputdevices/wacom"
+	"pkg.deepin.io/dde/daemon/inputdevices/keyboard"
+	"pkg.deepin.io/dde/daemon/inputdevices/mouse"
+	"pkg.deepin.io/dde/daemon/inputdevices/touchpad"
+	"pkg.deepin.io/dde/daemon/inputdevices/wacom"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )

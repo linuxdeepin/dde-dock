@@ -29,7 +29,7 @@ import (
 
 const (
 	_VERSION     = "0.1"
-	_VERSION_DIR = ".config/dde-daemon/inputdevices"
+	_VERSION_DIR = ".config/dde/daemon/inputdevices"
 )
 
 func (m *Manager) isVersionRight() bool {

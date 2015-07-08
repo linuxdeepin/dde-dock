@@ -13,7 +13,7 @@ var getLoader = func() func() *Loader {
 		loaderInitializer.Do(func() {
 			loader = &Loader{
 				modules: map[string]Module{},
-				log:     log.NewLogger("dde-daemon/loader"),
+				log:     log.NewLogger("daemon/loader"),
 			}
 		})
 		return loader

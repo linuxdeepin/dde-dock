@@ -2,7 +2,7 @@ package search
 
 import (
 	pinyin "dbus/com/deepin/daemon/search"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 type PinYinSearchAdapter struct {

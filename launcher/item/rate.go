@@ -1,8 +1,8 @@
 package item
 
 import (
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde-daemon/launcher/utils"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
 )
 
 const (

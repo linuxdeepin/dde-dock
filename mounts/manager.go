@@ -29,7 +29,7 @@ import (
 	"time"
 )
 
-var logger = log.NewLogger("dde-daemon/mounts")
+var logger = log.NewLogger("daemon/mounts")
 
 const (
 	mediaHandlerSchema = "org.gnome.desktop.media-handling"

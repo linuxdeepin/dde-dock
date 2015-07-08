@@ -6,14 +6,14 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"os"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"time"
 )
 
 var (
-	logger                                     = log.NewLogger("dde-daemon/dock")
+	logger                                     = log.NewLogger("daemon/dock")
 	region              *Region                = nil
 	setting             *Setting               = nil
 	hideModemanager     *HideStateManager      = nil

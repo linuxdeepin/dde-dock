@@ -3,7 +3,7 @@ package mime
 import (
 	"fmt"
 	"os"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	dutils "pkg.deepin.io/lib/utils"
@@ -26,7 +26,7 @@ const (
 )
 
 var (
-	logger = log.NewLogger("dde-daemon/mime")
+	logger = log.NewLogger("daemon/mime")
 )
 
 func (dapp *DefaultApps) GetDBusInfo() dbus.DBusInfo {

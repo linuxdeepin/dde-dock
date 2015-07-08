@@ -22,7 +22,7 @@
 package touchpad
 
 import (
-	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/dde/daemon/inputdevices/wrapper"
 	"pkg.deepin.io/lib/dbus"
 )
 

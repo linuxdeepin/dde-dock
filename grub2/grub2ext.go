@@ -19,7 +19,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-// This module is split from dde-daemon/grub2 to fix launch issue
+// This module is split from dde/daemon/grub2 to fix launch issue
 // through dbus-daemon for that system bus in root couldn't access
 // session bus interface.
 
@@ -42,7 +42,7 @@ const (
 	DbusGrub2ExtIfs  = "com.deepin.daemon.Grub2Ext"
 )
 
-// Grub2Ext is a dbus object that split from dde-daemon/grub2 to fix
+// Grub2Ext is a dbus object that split from dde/daemon/grub2 to fix
 // issue that system bus in root permission couldn't access session
 // bus's interface.
 type Grub2Ext struct{}

@@ -22,7 +22,7 @@
 package timedate
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
@@ -30,7 +30,7 @@ import (
 var (
 	_manager *Manager
 
-	logger = log.NewLogger("dde-daemon/timedate")
+	logger = log.NewLogger("daemon/timedate")
 )
 
 type Daemon struct {

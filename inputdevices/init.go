@@ -1,11 +1,11 @@
 package inputdevices
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/inputdevices")
+var logger = log.NewLogger("daemon/inputdevices")
 
 func init() {
 	loader.Register(NewInputdevicesDaemon(logger))

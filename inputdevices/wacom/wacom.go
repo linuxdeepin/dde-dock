@@ -22,7 +22,7 @@
 package wacom
 
 import (
-	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/dde/daemon/inputdevices/wrapper"
 	"pkg.deepin.io/lib/dbus/property"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"

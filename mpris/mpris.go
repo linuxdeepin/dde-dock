@@ -27,7 +27,7 @@ import (
 	liblogin1 "dbus/org/freedesktop/login1"
 	libmpris "dbus/org/mpris/mediaplayer2"
 	"os/exec"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	"strings"
@@ -44,7 +44,7 @@ const (
 )
 
 var (
-	logger      = log.NewLogger("dde-daemon/mpris")
+	logger      = log.NewLogger("daemon/mpris")
 	dbusObj     *libdbus.DBusDaemon
 	mediaKeyObj *libkeybind.MediaKey
 	loginObj    *liblogin1.Manager

@@ -2,8 +2,8 @@ package launcher
 
 import (
 	"fmt"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde-daemon/launcher/setting"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/setting"
 )
 
 type MockSettingCore struct {

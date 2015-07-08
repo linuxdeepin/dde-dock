@@ -25,7 +25,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"pkg.deepin.io/dde-daemon/grub2"
+	"pkg.deepin.io/dde/daemon/grub2"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
@@ -81,7 +81,7 @@ func main() {
 }
 
 func runAsDaemon() {
-	logger := log.NewLogger("dde-daemon/grub2-runner")
+	logger := log.NewLogger("daemon/grub2-runner")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 

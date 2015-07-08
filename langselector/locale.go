@@ -29,7 +29,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.deepin.io/dde-daemon/langselector/language_info"
+	"pkg.deepin.io/dde/daemon/langselector/language_info"
 	"pkg.deepin.io/lib/log"
 	"strings"
 )
@@ -92,7 +92,7 @@ func newLangSelector(l *log.Logger) *LangSelector {
 	if l != nil {
 		lang.logger = l
 	} else {
-		lang.logger = log.NewLogger("dde-daemon/langselector")
+		lang.logger = log.NewLogger("daemon/langselector")
 	}
 
 	var err error

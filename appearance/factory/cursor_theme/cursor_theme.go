@@ -31,8 +31,8 @@ import (
 	"fmt"
 	"os"
 	"path"
-	. "pkg.deepin.io/dde-daemon/appearance/utils"
-	"pkg.deepin.io/dde-daemon/xsettings"
+	. "pkg.deepin.io/dde/daemon/appearance/utils"
+	"pkg.deepin.io/dde/daemon/xsettings"
 	dutils "pkg.deepin.io/lib/utils"
 	"unsafe"
 )

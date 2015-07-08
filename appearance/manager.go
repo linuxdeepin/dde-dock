@@ -23,9 +23,9 @@ package appearance
 
 import (
 	"path"
-	. "pkg.deepin.io/dde-daemon/appearance/factory"
-	"pkg.deepin.io/dde-daemon/appearance/fonts"
-	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	. "pkg.deepin.io/dde/daemon/appearance/factory"
+	"pkg.deepin.io/dde/daemon/appearance/fonts"
+	. "pkg.deepin.io/dde/daemon/appearance/utils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"

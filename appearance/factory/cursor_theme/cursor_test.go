@@ -23,7 +23,7 @@ package cursor_theme
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	. "pkg.deepin.io/dde/daemon/appearance/utils"
 	"testing"
 )
 

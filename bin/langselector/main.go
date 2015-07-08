@@ -22,7 +22,7 @@
 package main
 
 import "os"
-import . "pkg.deepin.io/dde-daemon/langselector"
+import . "pkg.deepin.io/dde/daemon/langselector"
 import "pkg.deepin.io/lib/gettext"
 import "pkg.deepin.io/lib/dbus"
 import "time"

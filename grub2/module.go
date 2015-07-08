@@ -27,7 +27,7 @@ import (
 )
 
 var (
-	logger = log.NewLogger("dde-daemon/grub2")
+	logger = log.NewLogger("daemon/grub2")
 	grub   *Grub2
 )
 

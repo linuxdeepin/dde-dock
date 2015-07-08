@@ -22,13 +22,13 @@
 package network
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
 var (
-	logger  = log.NewLogger("dde-daemon/network")
+	logger  = log.NewLogger("daemon/network")
 	manager *Manager
 )
 

@@ -7,7 +7,7 @@ import (
 	"os"
 	p "path"
 
-	. "pkg.deepin.io/dde-daemon/launcher/utils"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/utils"
 )

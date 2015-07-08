@@ -22,7 +22,7 @@
 package langselector
 
 import (
-	"pkg.deepin.io/dde-daemon/langselector/i18n_dependency"
+	"pkg.deepin.io/dde/daemon/langselector/i18n_dependency"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )

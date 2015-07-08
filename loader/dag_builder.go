@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"pkg.deepin.io/dde-daemon/graph"
+	"pkg.deepin.io/dde/daemon/graph"
 	"pkg.deepin.io/lib/log"
 )
 

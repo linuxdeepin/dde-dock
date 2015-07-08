@@ -2,7 +2,7 @@ package category
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"testing"
 )
 

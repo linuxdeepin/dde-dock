@@ -24,7 +24,7 @@ package appearance
 import (
 	"os"
 	"path"
-	"pkg.deepin.io/dde-daemon/appearance/fonts"
+	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/lib/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 )

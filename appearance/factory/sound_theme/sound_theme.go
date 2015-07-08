@@ -24,7 +24,7 @@ package sound_theme
 import (
 	"fmt"
 	"os"
-	. "pkg.deepin.io/dde-daemon/appearance/utils"
+	. "pkg.deepin.io/dde/daemon/appearance/utils"
 	dutils "pkg.deepin.io/lib/utils"
 )
 

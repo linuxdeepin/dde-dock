@@ -24,14 +24,14 @@ package main
 import (
 	"flag"
 	"os"
-	"pkg.deepin.io/dde-daemon/grub2"
+	"pkg.deepin.io/dde/daemon/grub2"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"time"
 )
 
-var logger = log.NewLogger("dde-daemon/grub2ext-runner")
+var logger = log.NewLogger("daemon/grub2ext-runner")
 var argDebug bool
 
 func main() {

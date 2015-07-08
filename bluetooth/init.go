@@ -1,11 +1,11 @@
 package bluetooth
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/bluetooth")
+var logger = log.NewLogger("daemon/bluetooth")
 
 func init() {
 	loader.Register(NewBluetoothDaemon(logger))

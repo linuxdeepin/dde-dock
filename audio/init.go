@@ -1,11 +1,11 @@
 package audio
 
 import (
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/audio")
+var logger = log.NewLogger("daemon/audio")
 
 func init() {
 	loader.Register(NewAudioDaemon(logger))

@@ -39,7 +39,7 @@ const (
 	deltaDuration = time.Second * 1
 )
 
-var logger = log.NewLogger("dde-daemon/sessionwatcher")
+var logger = log.NewLogger("daemon/sessionwatcher")
 
 type Manager struct {
 	quit chan struct{}

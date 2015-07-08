@@ -1,6 +1,6 @@
 PREFIX = /usr
 GOPATH_DIR = gopath
-GOPKG_PREFIX = pkg.deepin.io/dde-daemon
+GOPKG_PREFIX = pkg.deepin.io/dde/daemon
 
 ifndef USE_GCCGO
     GOBUILD = go build
@@ -28,7 +28,7 @@ all: build
 prepare:
 	@if [ ! -d ${GOPATH_DIR}/src/${GOPKG_PREFIX} ]; then \
 		mkdir -p ${GOPATH_DIR}/src/$(dir ${GOPKG_PREFIX}); \
-		ln -sf ../../.. ${GOPATH_DIR}/src/${GOPKG_PREFIX}; \
+		ln -sf ../../../.. ${GOPATH_DIR}/src/${GOPKG_PREFIX}; \
 	fi
 
 out/bin/%:

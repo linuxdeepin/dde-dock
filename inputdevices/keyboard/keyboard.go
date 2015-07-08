@@ -29,7 +29,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"pkg.deepin.io/dde-daemon/inputdevices/wrapper"
+	"pkg.deepin.io/dde/daemon/inputdevices/wrapper"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/log"

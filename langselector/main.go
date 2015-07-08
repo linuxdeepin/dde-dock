@@ -34,7 +34,7 @@ const (
 var _lang *LangSelector
 
 func Start() *LangSelector {
-	var logger = log.NewLogger("dde-daemon/langselector")
+	var logger = log.NewLogger("daemon/langselector")
 
 	if !lib.UniqueOnSession(dbusSender) {
 		logger.Warning("There is a LangSelector running...")

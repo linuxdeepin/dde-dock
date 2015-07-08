@@ -6,8 +6,8 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
-	. "pkg.deepin.io/dde-daemon/launcher/category"
-	. "pkg.deepin.io/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/category"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/utils"
 )

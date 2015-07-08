@@ -5,13 +5,13 @@ import (
 	"github.com/BurntSushi/xgb/screensaver"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"pkg.deepin.io/dde-daemon/loader"
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"sync"
 )
 
-var logger = log.NewLogger("dde-daemon/screensaver")
+var logger = log.NewLogger("daemon/screensaver")
 
 type inhibitor struct {
 	cookie uint32
