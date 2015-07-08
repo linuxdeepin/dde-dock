@@ -56,7 +56,9 @@ private:
     void addSpacingItem();
     void dragoutFromLayout(int index);
     bool hasSpacingItemInList();
+    int spacingItemIndex();
 
+    void moveWithSpacingItem(int hoverIndex);
 private:
     QList<AbstractDockItem *> appList;
     QMap<AbstractDockItem *,int> tmpAppMap;//only one item inside
@@ -66,6 +68,7 @@ private:
 
     bool movingForward = false;
     int lastHoverIndex = 0;
+    int m_animationItemCount = 0;
     QPoint m_lastPost = QPoint(0,0);
 };
 

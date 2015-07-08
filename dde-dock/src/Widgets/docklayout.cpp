@@ -57,11 +57,13 @@ void DockLayout::sortLeftToRight()
         return;
 
     appList.at(0)->move(itemSpacing,(height() - appList.at(0)->height()) / 2);
+    appList.at(0)->setNextPos(appList.at(0)->pos());
 
     for (int i = 1; i < appList.count(); i ++)
     {
         AbstractDockItem * frontItem = appList.at(i - 1);
         appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,height() - appList.at(i)->height());
+        appList.at(i)->setNextPos(appList.at(i)->pos());
     }
 }
 
@@ -97,6 +99,76 @@ bool DockLayout::hasSpacingItemInList()
         }
     }
     return false;
+}
+
+int DockLayout::spacingItemIndex()
+{
+    if (sortDirection == RightToLeft)
+        return -1;
+    if (appList.count() <= 1)
+        return -1;
+    if (appList.at(0)->getNextPos().x() > itemSpacing)
+        return 0;
+
+    for (int i = 1; i < appList.count(); i ++)
+    {
+        if (appList.at(i)->getNextPos().x() - itemSpacing != appList.at(i - 1)->getNextPos().x() + appList.at(i - 1)->width())
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void DockLayout::moveWithSpacingItem(int hoverIndex)
+{
+    if (sortDirection == LeftToRight)
+    {
+        int spacintIndex = spacingItemIndex();
+        if (spacintIndex == -1)
+            return;
+        if (spacintIndex > hoverIndex)
+        {
+            for (int i = hoverIndex; i < spacintIndex; i ++)
+            {
+                AbstractDockItem *targetItem = appList.at(i);
+
+                targetItem->setNextPos(QPoint(targetItem->x() + tmpAppMap.firstKey()->width() + itemSpacing,0));
+
+                QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
+                animation->setStartValue(targetItem->pos());
+                animation->setEndValue(targetItem->getNextPos());
+                animation->setDuration(200);
+                animation->setEasingCurve(QEasingCurve::OutCubic);
+                animation->start();
+                this->m_animationItemCount ++;
+                connect(animation,&QPropertyAnimation::finished,[=](){
+                    this->m_animationItemCount --;
+                });
+            }
+        }
+        else
+        {
+            for (int i = spacintIndex; i <= hoverIndex; i ++)
+            {
+                AbstractDockItem *targetItem = appList.at(i);
+
+                targetItem->setNextPos(QPoint(targetItem->x() - tmpAppMap.firstKey()->width() - itemSpacing,0));
+
+                QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
+                animation->setStartValue(targetItem->pos());
+                animation->setEndValue(targetItem->getNextPos());
+                animation->setDuration(200);
+                animation->setEasingCurve(QEasingCurve::OutCubic);
+                animation->start();
+                this->m_animationItemCount ++;
+                connect(animation,&QPropertyAnimation::finished,[=](){
+                    this->m_animationItemCount --;
+                });
+            }
+        }
+    }
+    //TODO RightToLeft
 }
 
 int DockLayout::indexOf(AbstractDockItem *item)
@@ -204,6 +276,7 @@ void DockLayout::dropEvent(QDropEvent *event)
     }
 
     emit itemDropped();
+    m_animationItemCount = 0;
 }
 
 void DockLayout::slotItemDrag()
@@ -252,13 +325,24 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
     if (tmpPos.x() - m_lastPost.x() == 0)
         return;
 
+    bool lastState = movingForward;
     switch (sortDirection)
     {
     case LeftToRight:
         movingForward = tmpPos.x() - m_lastPost.x() < 0;
+        if (movingForward != lastState && m_animationItemCount > 0)
+        {
+            movingForward = lastState;
+            return;
+        }
         break;
     case RightToLeft:
         movingForward = tmpPos.x() - m_lastPost.x() > 0;
+        if (movingForward != lastState && m_animationItemCount > 0)
+        {
+            movingForward = lastState;
+            return;
+        }
         break;
     }
 
@@ -266,22 +350,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
 
     if (!tmpAppMap.isEmpty())
     {
-        AbstractDockItem *targetItem = appList.at(tmpIndex);
-        if (movingForward)
-        {
-            targetItem->setNextPos(QPoint(targetItem->x() + tmpAppMap.firstKey()->width() + itemSpacing,0));
-        }
-        else
-        {
-            targetItem->setNextPos(QPoint(targetItem->x() - tmpAppMap.firstKey()->width() - itemSpacing,0));
-        }
-
-        QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
-        animation->setStartValue(targetItem->pos());
-        animation->setEndValue(targetItem->getNextPos());
-        animation->setDuration(200);
-        animation->setEasingCurve(QEasingCurve::OutCubic);
-        animation->start();
+        moveWithSpacingItem(tmpIndex);
     }
 }
 
