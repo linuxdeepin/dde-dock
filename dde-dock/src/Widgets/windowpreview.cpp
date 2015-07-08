@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QTimer>
-#include <QtX11Extras/QX11Info>
+#include <QX11Info>
 #include <QDebug>
 
 #include <X11/Xlib.h>
@@ -57,10 +57,14 @@ void WindowPreview::onTimeout()
         cairo_xlib_surface_set_size(m_surface, t_atts.width, t_atts.height);
 
         // clear the target surface.
+        /* Clear the surface will cause the whole surface blink,
+         * maybe cairo takes advantage of xdamage and just updates
+         * the dirty part.
         cairo_set_source_rgb(m_cairo, 1, 1, 1);
         cairo_set_operator(m_cairo, CAIRO_OPERATOR_CLEAR);
         cairo_paint(m_cairo);
         cairo_set_operator(m_cairo, CAIRO_OPERATOR_OVER);
+        */
 
         // calculate the scale ratio
         float ratio = 0.0f;
