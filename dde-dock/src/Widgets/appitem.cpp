@@ -11,7 +11,6 @@ AppItem::AppItem(QWidget *parent) :
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
     initMenu();
-    initPreviewAR();
 }
 
 QWidget *AppItem::getContents()
@@ -216,13 +215,6 @@ void AppItem::initMenu()
     m_menuManager = new DBusMenuManager(this);
 }
 
-void AppItem::initPreviewAR()
-{
-    m_previewAR = new ArrowRectangle();
-    m_previewAR->setHeight(130);
-    m_previewAR->setWidth(200);
-}
-
 void AppItem::showMenu()
 {
     if (m_menuManager->isValid()){
@@ -243,20 +235,6 @@ void AppItem::showMenu()
             m_menu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
         }
     }
-}
-
-void AppItem::showPreview()
-{
-    QWidget *tmpContent = getContents();
-    m_previewAR->setMinimumSize(tmpContent->width() + Dock::APP_PREVIEW_MARGIN * 2,tmpContent->height() + Dock::APP_PREVIEW_MARGIN * 2);
-    m_previewAR->resize(tmpContent->width() + Dock::APP_PREVIEW_MARGIN * 2,tmpContent->height() + Dock::APP_PREVIEW_MARGIN * 2);
-    m_previewAR->setContent(getContents());
-    m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
-}
-
-void AppItem::hidePreview()
-{
-    m_previewAR->delayHide();
 }
 
 void AppItem::mousePressEvent(QMouseEvent * event)

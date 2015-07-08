@@ -84,18 +84,14 @@ private:
     void updateXids();
     void updateMenuJsonString();
     void initMenu();
-    void initPreviewAR();
 
     void showMenu();
-    void showPreview();
-    void hidePreview();
 
 private:
     AppItemData m_itemData;
     DockModeData *dockCons = DockModeData::instance();
     AppBackground * appBackground = NULL;
     AppIcon * m_appIcon = NULL;
-    ArrowRectangle *m_previewAR = NULL;
 
     DBusEntryProxyer *m_entryProxyer = NULL;
     DBusClientManager *m_clientmanager = NULL;

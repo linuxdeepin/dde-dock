@@ -5,6 +5,7 @@
 #include <QFrame>
 #include <QLabel>
 #include "Widgets/appicon.h"
+#include "Widgets/arrowrectangle.h"
 
 class AbstractDockItem : public QFrame
 {
@@ -35,6 +36,20 @@ public:
     int globalX(){return mapToGlobal(QPoint(0,0)).x();}
     int globalY(){return mapToGlobal(QPoint(0,0)).y();}
     QPoint globalPos(){return mapToGlobal(QPoint(0,0));}
+
+    void showPreview(){
+        QWidget *tmpContent = getContents();
+        m_previewAR->setMinimumSize(tmpContent->width(),tmpContent->height());
+        m_previewAR->resize(tmpContent->width(),tmpContent->height());
+        m_previewAR->setContent(getContents());
+        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+    }
+
+    void hidePreview(int interval = 300){
+        m_previewAR->delayHide(interval);
+    }
+
+
 signals:
     void dragStart();
     void dragEntered(QDragEnterEvent * event);
@@ -51,6 +66,7 @@ protected:
 
     bool m_moveable = true;
     bool m_isActived = false;
+    ArrowRectangle *m_previewAR = new ArrowRectangle();
 
     QPoint m_itemNextPos;
 };
