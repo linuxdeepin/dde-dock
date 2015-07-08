@@ -41,7 +41,7 @@ public:
         QWidget *tmpContent = getContents();
         m_previewAR->setMinimumSize(tmpContent->width(),tmpContent->height());
         m_previewAR->resize(tmpContent->width(),tmpContent->height());
-        m_previewAR->setContent(getContents());
+        m_previewAR->setContent(tmpContent);
         m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
     }
 

@@ -26,7 +26,7 @@ WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
     m_cairo = cairo_create(m_surface);
 
     QTimer *timer = new QTimer(this);
-    timer->setInterval(60);
+    timer->setInterval(500);
     timer->start();
     connect(timer, &QTimer::timeout, this, &WindowPreview::onTimeout);
 }

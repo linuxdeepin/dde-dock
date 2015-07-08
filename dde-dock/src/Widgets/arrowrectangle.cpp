@@ -91,7 +91,14 @@ void ArrowRectangle::delayHide(int interval)
 void ArrowRectangle::setContent(QWidget *content)
 {
     if (!content)
+    {
         return;
+    }
+    if (m_content)
+    {
+        content->deleteLater();
+        return;
+    }
     m_content = content;
     content->setParent(this);
     content->move((width() - content->width()) / 2,(height() - content->height()) / 2);
