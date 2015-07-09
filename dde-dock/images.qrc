@@ -1,23 +1,7 @@
 <RCC>
-    <qresource prefix="/test">
-        <file>Resources/images/brasero.png</file>
-        <file>Resources/images/crossover.png</file>
-        <file>Resources/images/d-feet.png</file>
-        <file>Resources/images/deepin-multitasking-view.svg</file>
-        <file>Resources/images/display-im6.q16.png</file>
-        <file>Resources/images/eog.png</file>
-        <file>Resources/images/file-roller.png</file>
-        <file>Resources/images/gcr-gnupg.png</file>
-        <file>Resources/images/gcr-key-pair.png</file>
-        <file>Resources/images/gcr-key.png</file>
-        <file>Resources/images/gcr-password.png</file>
-        <file>Resources/images/gcr-smart-card.png</file>
-        <file>Resources/images/google-chrome.png</file>
-        <file>Resources/images/gparted.png</file>
-        <file>Resources/images/inkscape.png</file>
-        <file>Resources/images/QtProject-qtcreator.png</file>
-        <file>Resources/images/remmina.png</file>
-        <file>Resources/images/terminator.png</file>
-        <file>Resources/images/vim.png</file>
+    <qresource prefix="/">
+        <file>Resources/images/close_hover.png</file>
+        <file>Resources/images/close_press.png</file>
+        <file>Resources/images/close_normal.png</file>
     </qresource>
 </RCC>

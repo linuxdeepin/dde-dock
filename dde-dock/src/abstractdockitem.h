@@ -38,19 +38,24 @@ public:
     QPoint globalPos(){return mapToGlobal(QPoint(0,0));}
 
     void showPreview(){
+        if (!m_previewAR->isHidden())
+        {
+            m_previewAR->resizeWithContent();
+            return;
+        }
         QWidget *tmpContent = getContents();
-        QSize tmpSize(tmpContent->width() + m_previewAR->getMargin() * 2,
-                      tmpContent->height() + m_previewAR->getMargin() * 2 + m_previewAR->getArrowHeight());
-        m_previewAR->setMinimumSize(tmpSize);
-        m_previewAR->resize(tmpSize);
+        m_previewAR->setArrorDirection(ArrowRectangle::ArrowBottom);
         m_previewAR->setContent(tmpContent);
         m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
     }
-
-    void hidePreview(int interval = 100){
+    void hidePreview(int interval = 200){
         m_previewAR->delayHide(interval);
     }
-
+    void cancelHide(){m_previewAR->cancelHide();}
+    void resizePreview(){
+        m_previewAR->resizeWithContent();
+        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+    }
 
 signals:
     void dragStart();

@@ -5,8 +5,32 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QDebug>
+#include "DBus/dbusclientmanager.h"
 #include "windowpreview.h"
+#include "closebutton.h"
 #include "../dockconstants.h"
+
+class AppPreviewFrame : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit AppPreviewFrame(QWidget *preview, const QString &title,int xid, QWidget *parent=0);
+    void addPreview(QWidget *p);
+    void setTitle(const QString &t);
+
+protected:
+    void mousePressEvent(QMouseEvent *);
+
+signals:
+    void close(int xid);
+    void activate(int xid);
+
+private:
+    void addCloseButton();
+
+private:
+    int xidValue;
+};
 
 class AppPreviews : public QWidget
 {
@@ -16,13 +40,25 @@ public:
 
     void addItem(const QString &title,int xid);
     void setTitle(const QString &title);
+
+protected:
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
+
 signals:
+    void mouseEntered();
+    void mouseExited();
+    void sizeChanged();
 
 public slots:
+    void removePreview(int xid);
+    void activatePreview(int xid);
 
 private:
+    DBusClientManager *m_clientManager = new DBusClientManager(this);
     QHBoxLayout *m_mainLayout = NULL;
     QList<int> m_xidList;
+    bool isClosing = false;
 };
 
 #endif // APPPREVIEWS_H

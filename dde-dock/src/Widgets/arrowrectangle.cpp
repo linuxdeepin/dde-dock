@@ -88,6 +88,12 @@ void ArrowRectangle::delayHide(int interval)
     m_destroyTimer->start(interval);
 }
 
+void ArrowRectangle::cancelHide()
+{
+    if (m_destroyTimer)
+        m_destroyTimer->stop();
+}
+
 void ArrowRectangle::setContent(QWidget *content)
 {
     if (!content)
@@ -102,6 +108,7 @@ void ArrowRectangle::setContent(QWidget *content)
     m_content = content;
     m_content->setParent(this);
 
+    resizeWithContent();
     switch(arrowDirection)
     {
     case ArrowLeft:
@@ -117,6 +124,26 @@ void ArrowRectangle::setContent(QWidget *content)
         m_content->move(m_margin,m_margin);
         break;
     }
+}
+
+void ArrowRectangle::resizeWithContent()
+{
+    if (m_content)
+    {
+        switch(arrowDirection)
+        {
+        case ArrowLeft:
+        case ArrowRight:
+            resize(m_content->width() + m_margin * 2 + arrowHeight,m_content->height() + m_margin * 2);
+            break;
+        case ArrowTop:
+        case ArrowBottom:
+            resize(m_content->width() + m_margin * 2,m_content->height() + m_margin * 2 + arrowHeight);
+            break;
+        }
+    }
+
+    repaint();
 }
 
 void ArrowRectangle::destroyContent()

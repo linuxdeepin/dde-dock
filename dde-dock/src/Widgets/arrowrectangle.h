@@ -46,7 +46,9 @@ public:
     void showAtBottom(int x,int y);
 
     void delayHide(int interval = 500);
+    void cancelHide();
     void setContent(QWidget *content);
+    void resizeWithContent();
     void destroyContent();
     void move(int x,int y);
 

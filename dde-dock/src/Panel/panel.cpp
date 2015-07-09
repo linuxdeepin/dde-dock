@@ -154,9 +154,7 @@ void Panel::slotRemoveAppItem(const QString &id)
         AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
         if (tmpItem->itemId() == id)
         {
-            //TODO,remove from layout
             leftLayout->removeItem(i);
-            qWarning() << "=====" << leftLayout->getItemCount();
             return;
         }
     }

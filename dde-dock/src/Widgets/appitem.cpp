@@ -16,6 +16,10 @@ AppItem::AppItem(QWidget *parent) :
 QWidget *AppItem::getContents()
 {
     AppPreviews *preview = new AppPreviews();
+    connect(preview,&AppPreviews::mouseEntered,this,&AppItem::cancelHide);
+    connect(preview,&AppPreviews::mouseExited,[=](){hidePreview();});
+    connect(preview,&AppPreviews::sizeChanged,this,&AppItem::resizePreview);
+
     QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
     if (m_itemData.isActived && !tmpArray.isEmpty())
     {
