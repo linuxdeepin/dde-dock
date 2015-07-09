@@ -3,6 +3,7 @@
 AppPreviews::AppPreviews(QWidget *parent) : QWidget(parent)
 {
     m_mainLayout = new QHBoxLayout(this);
+    m_mainLayout->setMargin(0);
     setLayout(m_mainLayout);
     resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
 }
@@ -24,6 +25,7 @@ void AppPreviews::setTitle(const QString &title)
     titleLabel->setObjectName("DockAppTitle");
     titleLabel->setAlignment(Qt::AlignCenter);
     m_mainLayout->addWidget(titleLabel);
-    resize(100,35);
+    int textWidth = titleLabel->fontMetrics().boundingRect(titleLabel->text()).width();
+    resize(textWidth < 80 ? 80 : textWidth,20);
 }
 

@@ -240,8 +240,8 @@ int DockLayout::getContentsWidth()
         tmpWidth += appList.at(i)->width();
     }
 
-//    if (hasSpacingItemInList() && tmpAppMap.firstKey())
-//        tmpWidth += tmpAppMap.firstKey()->width() + itemSpacing;
+    if (spacingItemIndex() != -1 && tmpAppMap.firstKey())
+        tmpWidth += tmpAppMap.firstKey()->width() + itemSpacing;
 
     return tmpWidth;
 }

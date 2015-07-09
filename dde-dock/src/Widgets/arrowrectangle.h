@@ -27,6 +27,7 @@ public:
     int getRadius();
     int getArrowHeight();
     int getArrowWidth();
+    int getMargin();
     QString getBackgroundColor();
 
     void setArrorDirection(ArrowDirection value);
@@ -35,6 +36,7 @@ public:
     void setRadius(int value);
     void setArrowHeight(int value);
     void setArrowWidth(int value);
+    void setMargin(int value);
     void setBackgroundColor(QString value);
 
     void show(int x,int y);
@@ -58,6 +60,7 @@ private:
     int radius = 3;
     int arrowHeight = 8;
     int arrowWidth = 20;
+    int m_margin = 5;
     QString backgroundColor;
 
     int strokeWidth = 1;

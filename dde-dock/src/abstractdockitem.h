@@ -39,13 +39,15 @@ public:
 
     void showPreview(){
         QWidget *tmpContent = getContents();
-        m_previewAR->setMinimumSize(tmpContent->width(),tmpContent->height());
-        m_previewAR->resize(tmpContent->width(),tmpContent->height());
+        QSize tmpSize(tmpContent->width() + m_previewAR->getMargin() * 2,
+                      tmpContent->height() + m_previewAR->getMargin() * 2 + m_previewAR->getArrowHeight());
+        m_previewAR->setMinimumSize(tmpSize);
+        m_previewAR->resize(tmpSize);
         m_previewAR->setContent(tmpContent);
         m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
     }
 
-    void hidePreview(int interval = 300){
+    void hidePreview(int interval = 100){
         m_previewAR->delayHide(interval);
     }
 

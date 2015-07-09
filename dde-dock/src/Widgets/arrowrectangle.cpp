@@ -100,8 +100,23 @@ void ArrowRectangle::setContent(QWidget *content)
         return;
     }
     m_content = content;
-    content->setParent(this);
-    content->move((width() - content->width()) / 2,(height() - content->height()) / 2);
+    m_content->setParent(this);
+
+    switch(arrowDirection)
+    {
+    case ArrowLeft:
+        m_content->move(arrowHeight + m_margin,m_margin);
+        break;
+    case ArrowRight:
+        m_content->move(m_margin,m_margin);
+        break;
+    case ArrowTop:
+        m_content->move(m_margin,m_margin + arrowHeight);
+        break;
+    case ArrowBottom:
+        m_content->move(m_margin,m_margin);
+        break;
+    }
 }
 
 void ArrowRectangle::destroyContent()
@@ -172,7 +187,7 @@ void ArrowRectangle::paintEvent(QPaintEvent *)
     strokePen.setColor(strokeColor);
     strokePen.setWidth(strokeWidth);
     painter.strokePath(border, strokePen);
-    painter.fillPath(border, QBrush(backgroundColor == "" ? QColor(0,0,0,150) : QColor(backgroundColor)));
+    painter.fillPath(border, QBrush(backgroundColor == "" ? QColor(0,0,0,200) : QColor(backgroundColor)));
 }
 
 void ArrowRectangle::slotHide()
@@ -200,6 +215,11 @@ int ArrowRectangle::getArrowHeight()
 int ArrowRectangle::getArrowWidth()
 {
     return this->arrowWidth;
+}
+
+int ArrowRectangle::getMargin()
+{
+    return this->m_margin;
 }
 
 QString ArrowRectangle::getBackgroundColor()
@@ -237,6 +257,11 @@ void ArrowRectangle::setArrowHeight(int value)
 void ArrowRectangle::setArrowWidth(int value)
 {
     this->arrowWidth = value;
+}
+
+void ArrowRectangle::setMargin(int value)
+{
+    this->m_margin = value;
 }
 
 void ArrowRectangle::setBackgroundColor(QString value)
