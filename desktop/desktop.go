@@ -2,6 +2,7 @@ package desktop
 
 import (
 	"fmt"
+	"path/filepath"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/operations"
@@ -16,8 +17,7 @@ type Desktop struct {
 // NewDesktop creates new desktop.
 func NewDesktop(app *Application) *Desktop {
 	return &Desktop{
-		app:  app,
-		menu: NewMenu(),
+		app: app,
 	}
 }
 
@@ -26,6 +26,9 @@ func (desktop *Desktop) destroy() {
 
 // GenMenuContent generates json format menu content used in DeepinMenu for Desktop itself.
 func (desktop *Desktop) GenMenuContent() (*Menu, error) {
+	desktop.menu = NewMenu()
+	menu := desktop.menu
+
 	sortSubMenu := NewMenu().SetIDGenerator(desktop.menu.genID)
 
 	sortPolicies := desktop.app.settings.getSortPolicies()
@@ -40,7 +43,7 @@ func (desktop *Desktop) GenMenuContent() (*Menu, error) {
 	sortMenuItem := NewMenuItem(Tr("_Sort by"), func() {}, true)
 	sortMenuItem.subMenu = sortSubMenu
 
-	menu := desktop.menu.AppendItem(sortMenuItem)
+	menu.AppendItem(sortMenuItem)
 
 	newSubMenu := NewMenu().SetIDGenerator(menu.genID)
 	newSubMenu.AppendItem(NewMenuItem(Tr("_Folder"), func() {
@@ -56,7 +59,7 @@ func (desktop *Desktop) GenMenuContent() (*Menu, error) {
 		newSubMenu.AddSeparator()
 		for _, template := range templates {
 			templateURI := template
-			newSubMenu.AppendItem(NewMenuItem("", func() {
+			newSubMenu.AppendItem(NewMenuItem(filepath.Base(templateURI), func() {
 				desktop.app.emitRequestCreateFileFromTemplate(templateURI)
 			}, true))
 		}

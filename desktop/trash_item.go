@@ -18,6 +18,7 @@ func NewTrashItem(app *Application, uri string) *TrashItem {
 
 // GenMenuContent generates json format menu content used in DeepinMenu for TrashItem.
 func (item *TrashItem) GenMenuContent() (*Menu, error) {
+	item.menu = NewMenu()
 	clearMenuItemText := Tr("_Clear")
 
 	trash := gio.FileNewForUri("trash://")

@@ -31,13 +31,14 @@ func NewAppGroup(app *Application, uris []string) *AppGroup {
 
 // GenMenuContent generates json format menu content used in DeepinMenu for AppGroup.
 func (item *AppGroup) GenMenuContent() (*Menu, error) {
+	item.menu = NewMenu()
 	return item.menu.AppendItem(NewMenuItem(Tr("_Open"), func() {
 		item.app.emitRequestOpen(item.uris)
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Rename"), func() {
 		item.emitRequestRename()
 	}, !item.multiple)).AddSeparator().AppendItem(NewMenuItem(Tr("_Ungroup"), func() {
-		// TODO: send a signal ?
-		fmt.Println("dismiss group")
+		// TODO
+		// item.app.emitRequestDismissAppGroup(item.uri)
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Delete"), func() {
 		item.emitRequestDelete()
 	}, true)), nil

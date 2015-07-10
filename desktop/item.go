@@ -34,7 +34,6 @@ func NewItem(app *Application, uris []string) *Item {
 		uri:      uris[0],
 		uris:     uris,
 		multiple: len(uris) > 1,
-		menu:     NewMenu(),
 	}
 }
 
@@ -139,6 +138,7 @@ func (item *Item) destroy() {
 
 // GenMenuContent generates json format menu content used in DeepinMenu for normal itself.
 func (item *Item) GenMenuContent() (*Menu, error) {
+	item.menu = NewMenu()
 	item.files = make([]*gio.File, len(item.uris))
 	for i, uri := range item.uris {
 		item.files[i] = gio.FileNewForCommandlineArg(uri)
@@ -154,9 +154,12 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 
 	// same type?
 	if true {
-		menu.AppendItem(NewMenuItem(Tr("Open _with"), func() {}, true))
+		openWithMenuItem := NewMenuItem(Tr("Open _with"), func() {}, true)
+		menu.AppendItem(openWithMenuItem)
+
 		openWithSubMenu := NewMenu()
 		openWithSubMenu.SetIDGenerator(menu.genID)
+		openWithMenuItem.subMenu = openWithSubMenu
 
 		job := operations.NewGetRecommendedLaunchAppsJob(item.uri)
 		job.Execute()
@@ -184,7 +187,8 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 					}(app.GetId()), true))
 					app.Unref()
 				}
-				menu.AddSeparator()
+
+				openWithSubMenu.AddSeparator()
 			}
 		}
 
@@ -192,6 +196,7 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 			// TODO:
 			fmt.Println("chose open with")
 		}, true))
+
 	}
 
 	menu.AddSeparator()
