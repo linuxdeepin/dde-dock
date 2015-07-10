@@ -5,6 +5,7 @@ CloseButton::CloseButton(QWidget *parent) : QLabel(parent)
     QPixmap iconPixmap(28,28);
     iconPixmap.load(ICON_NORMAL_PATH);
     this->setPixmap(iconPixmap);
+    this->setAlignment(Qt::AlignCenter);
 }
 
 void CloseButton::mousePressEvent(QMouseEvent *ev)

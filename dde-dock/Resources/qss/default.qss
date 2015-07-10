@@ -41,6 +41,19 @@ QLabel#ClassicModeTitle {
     color: rgba(255,255,255,1);
 }
 
+QWidget#AppPreview:hover {
+    border-radius: 3px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.5);
+}
+
+QLabel#AppPreviewFrameTitle {
+    font-size: 10px;
+    color: #FFFFFF;
+    background-color: rgba(0,0,0,0.7);
+}
+
 PanelMenuItem:hover {
     background: gray;
     color: #ffffff

@@ -17,12 +17,12 @@ void AppPreviewFrame::addPreview(QWidget *p)
 void AppPreviewFrame::setTitle(const QString &t)
 {
     QLabel *titleLabel = new QLabel(this);
+    titleLabel->setObjectName("AppPreviewFrameTitle");
     QFontMetrics fm(titleLabel->font());
-    titleLabel->setText(fm.elidedText(t,Qt::ElideRight,width() * 4 / 5));
-    titleLabel->setStyleSheet("color:white");
-    titleLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    titleLabel->resize(width() * 4 / 5,20);
-    titleLabel->move(width() / 5 / 2,height() - titleLabel->height());
+    titleLabel->setText(fm.elidedText(t,Qt::ElideRight,width()));
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->resize(width(),25);
+    titleLabel->move(0,height() - titleLabel->height());
 }
 
 void AppPreviewFrame::mousePressEvent(QMouseEvent *)
@@ -30,12 +30,36 @@ void AppPreviewFrame::mousePressEvent(QMouseEvent *)
     emit activate(xidValue);
 }
 
+void AppPreviewFrame::enterEvent(QEvent *)
+{
+    emit mouseEntered();
+    showCloseButton();
+}
+
+void AppPreviewFrame::leaveEvent(QEvent *)
+{
+//    emit mouseExited();
+    hideCloseButton();
+}
+
 void AppPreviewFrame::addCloseButton()
 {
-    CloseButton *cb = new CloseButton(this);
-    connect(cb,&CloseButton::clicked,[=](){close(this->xidValue);});
-    cb->resize(28,28);
-    cb->move(width() - cb->width(),0);
+    m_cb = new CloseButton(this);
+    connect(m_cb,&CloseButton::hovered,this,&AppPreviewFrame::mouseEntered);
+    connect(m_cb,&CloseButton::clicked,[=](){close(this->xidValue);});
+    m_cb->resize(28,28);
+
+    m_cb->move(width() - m_cb->width()/* / 2*/,0/*- m_cb->width() / 2*/);
+}
+
+void AppPreviewFrame::showCloseButton()
+{
+    m_cb->show();
+}
+
+void AppPreviewFrame::hideCloseButton()
+{
+    m_cb->hide();
 }
 
 AppPreviews::AppPreviews(QWidget *parent) : QWidget(parent)
@@ -50,20 +74,29 @@ void AppPreviews::addItem(const QString &title, int xid)
 {
     if (m_xidList.indexOf(xid) != -1)
         return;
+    m_mainLayout->setMargin(Dock::APP_PREVIEW_MARGIN);
+    m_mainLayout->setSpacing(Dock::APP_PREVIEW_MARGIN);
     m_xidList.append(xid);
+
     WindowPreview * preview = new WindowPreview(xid);
 //    QWidget *preview = new QWidget();
+    preview->setObjectName("AppPreview");
     preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
     AppPreviewFrame *f = new AppPreviewFrame(preview,title,xid);
     connect(f,&AppPreviewFrame::close,this,&AppPreviews::removePreview);
     connect(f,&AppPreviewFrame::activate,this,&AppPreviews::activatePreview);
+    connect(f,&AppPreviewFrame::mouseEntered,this,&AppPreviews::mouseEntered);
+    connect(f,&AppPreviewFrame::mouseExited,this,&AppPreviews::mouseExited);
+
     m_mainLayout->addWidget(f);
 
-    resize(m_mainLayout->count() * Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
+    int contentWidth = m_mainLayout->count() * (f->width() + Dock::APP_PREVIEW_MARGIN) + Dock::APP_PREVIEW_MARGIN;
+    resize(contentWidth,f->height() + Dock::APP_PREVIEW_MARGIN*2);
 }
 
 void AppPreviews::setTitle(const QString &title)
 {
+    m_mainLayout->setMargin(0);
     QLabel *titleLabel = new QLabel(title);
     titleLabel->setObjectName("DockAppTitle");
     titleLabel->setAlignment(Qt::AlignCenter);
@@ -100,7 +133,8 @@ void AppPreviews::removePreview(int xid)
         return;
     }
 
-    resize(m_mainLayout->count() * Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
+    int contentWidth = m_mainLayout->count() * (Dock::APP_PREVIEW_WIDTH + Dock::APP_PREVIEW_MARGIN) + Dock::APP_PREVIEW_MARGIN;
+    resize(contentWidth,Dock::APP_PREVIEW_HEIGHT + Dock::APP_PREVIEW_MARGIN*2);
     emit sizeChanged();
 }
 

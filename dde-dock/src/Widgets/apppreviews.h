@@ -13,6 +13,7 @@
 class AppPreviewFrame : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit AppPreviewFrame(QWidget *preview, const QString &title,int xid, QWidget *parent=0);
     void addPreview(QWidget *p);
@@ -20,16 +21,23 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 signals:
     void close(int xid);
     void activate(int xid);
+    void mouseEntered();
+    void mouseExited();
 
 private:
     void addCloseButton();
+    void showCloseButton();
+    void hideCloseButton();
 
 private:
     int xidValue;
+    CloseButton *m_cb;
 };
 
 class AppPreviews : public QWidget
