@@ -417,8 +417,8 @@ type ItemInfo struct {
 	CanWrite    bool
 }
 
-func (app *Application) GetDesktopItems() ([]ItemInfo, error) {
-	infos := []ItemInfo{}
+func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
+	infos := map[string]ItemInfo{}
 	var err error
 
 	path := GetDesktopDir()
@@ -427,7 +427,7 @@ func (app *Application) GetDesktopItems() ([]ItemInfo, error) {
 	job.ListenProperty(func(p operations.ListProperty) {
 		size := app.settings.iconSize
 		icon := operations.GetThemeIcon(p.URI, size)
-		infos = append(infos, ItemInfo{
+		infos[p.URI] = ItemInfo{
 			DisplayName: p.DisplayName,
 			BaseName:    p.BaseName,
 			URI:         p.URI,
@@ -445,7 +445,7 @@ func (app *Application) GetDesktopItems() ([]ItemInfo, error) {
 			CanRename:   p.CanRename,
 			CanTrash:    p.CanTrash,
 			CanWrite:    p.CanWrite,
-		})
+		}
 	})
 
 	job.ListenDone(func(e error) {
