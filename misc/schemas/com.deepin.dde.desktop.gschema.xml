@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-    <schema path="/com/deepin/filemanager/desktop/" id="com.deepin.filemanager.desktop">
+    <schema path="/com/deepin/dde/desktop/" id="com.deepin.dde.desktop">
         <key name="manual-position" type="b">
             <default>false</default>
             <summary>Whether enable manual position.</summary>
@@ -25,11 +25,11 @@
             <description>If true, show it.</description>
         </key>
 
-        <!-- <key name="show&#45;home&#45;icon" type="b"> -->
-        <!--     <default>false</default> -->
-        <!--     <summary>Whether show home icon on desktop.</summary> -->
-        <!--     <description>If true, show it.</description> -->
-        <!-- </key> -->
+        <key name="show-home-icon" type="b">
+            <default>false</default>
+            <summary>Whether show home icon on desktop.</summary>
+            <description>If true, show it.</description>
+        </key>
 
         <key name="show-trash-icon" type="b">
             <default>false</default>
