@@ -92,6 +92,7 @@ private:
     DockModeData *dockCons = DockModeData::instance();
     AppBackground * appBackground = NULL;
     AppIcon * m_appIcon = NULL;
+    QLabel * m_appTitle = NULL;
 
     DBusEntryProxyer *m_entryProxyer = NULL;
     DBusClientManager *m_clientmanager = NULL;

@@ -137,6 +137,8 @@ void AppItem::resizeResources()
         resizeBackground();
         appBackground->move(0,0);
     }
+
+    updateTitle();
 }
 
 void AppItem::initBackground()
@@ -194,7 +196,33 @@ void AppItem::updateIcon()
 void AppItem::updateTitle()
 {
     m_itemData.title = m_entryProxyer->data().value("title");
-    //TODO,update view label
+
+    if (!m_appTitle)
+    {
+        m_appTitle = new QLabel(this);
+        m_appTitle->setObjectName("ClassicModeTitle");
+        m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    }
+
+    switch (dockCons->getDockMode()) {
+    case Dock::FashionMode:
+    case Dock::EfficientMode:
+        m_appTitle->resize(0,0);
+        m_appTitle->setVisible(false);
+        return;
+    case Dock::ClassicMode:
+        m_appIcon->setVisible(true);
+        m_appTitle->resize(width() - m_appIcon->width(),m_appIcon->height());
+        m_appTitle->move(m_appIcon->x() + m_appIcon->width(),m_appIcon->y());
+        m_appTitle->show();
+        break;
+    default:
+        break;
+    }
+
+    QFontMetrics fm(m_appTitle->font());
+    m_appTitle->setText(fm.elidedText(m_itemData.title,Qt::ElideRight,width() - m_appIcon->width() - 10));
+
 }
 
 void AppItem::updateState()
