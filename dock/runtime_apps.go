@@ -236,7 +236,7 @@ func (app *RuntimeApp) buildMenu() {
 				return
 			}
 
-			_, err := a.Launch(make([]*gio.File, 0), nil)
+			_, err := a.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext())
 			if err != nil {
 				logger.Warning("Launch App Failed: ", err)
 			}
@@ -255,7 +255,7 @@ func (app *RuntimeApp) buildMenu() {
 						return
 					}
 					defer core.Unref()
-					core.LaunchAction(name, nil)
+					core.LaunchAction(name, gio.GetGdkAppLaunchContext())
 				},
 				true,
 			))

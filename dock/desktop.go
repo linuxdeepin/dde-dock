@@ -131,7 +131,7 @@ func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchCon
 	}
 
 	defer a.Unref()
-	_, err = a.Launch(make([]*gio.File, 0), nil)
+	_, err = a.Launch(make([]*gio.File, 0), ctx)
 	if err != nil {
 		logger.Warning("Launch App Failed: ", err)
 	}

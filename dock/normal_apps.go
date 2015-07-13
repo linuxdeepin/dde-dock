@@ -80,7 +80,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 			return
 		}
 		defer core.Unref()
-		_, err := core.Launch(make([]*gio.File, 0), nil)
+		_, err := core.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext())
 		if err != nil {
 			logger.Warning("Launch App Failed: ", err)
 		}
@@ -98,7 +98,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 					return
 				}
 				defer core.Unref()
-				core.LaunchAction(name, nil)
+				core.LaunchAction(name, gio.GetGdkAppLaunchContext())
 			},
 			true,
 		))
@@ -149,7 +149,7 @@ func (app *NormalApp) Activate(x, y int32) error {
 		return errors.New("create desktop app info failed")
 	}
 	defer core.Unref()
-	_, err := core.Launch(nil, nil)
+	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext())
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)
 	}
