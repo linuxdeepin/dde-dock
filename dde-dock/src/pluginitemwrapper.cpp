@@ -12,7 +12,8 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
 
     if (m_plugin) {
         QWidget * item = m_plugin->getItem(uuid);
-        setFixedSize(item->size());
+        m_pluginItemContents = m_plugin->getContents(uuid);
+//        setFixedSize(item->size());
 
         if (item) {
             setFixedSize(item->size());
@@ -22,6 +23,14 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
             emit widthChanged();
         }
     }
+}
+
+QWidget * PluginItemWrapper::getContents()
+{
+    if (m_pluginItemContents)
+        return m_pluginItemContents;
+    else
+        return NULL;
 }
 
 PluginItemWrapper::~PluginItemWrapper()

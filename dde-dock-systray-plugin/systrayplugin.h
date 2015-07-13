@@ -24,6 +24,7 @@ public:
 
     QStringList uuids() Q_DECL_OVERRIDE;
     QWidget * getItem(QString uuid) Q_DECL_OVERRIDE;
+    QWidget * getContents(QString uuid){return NULL;}
     void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode);
 
     QString name() Q_DECL_OVERRIDE;
