@@ -157,19 +157,65 @@ void ArrowRectangle::destroyContent()
 
 void ArrowRectangle::move(int x, int y)
 {
+    QDesktopWidget dw;
+    QRect rec = dw.screenGeometry();
+    int xLeftValue = x - width() / 2;
+    int xRightValue = x + width() / 2 - rec.width();
+    int yTopValue = y - height() / 2;
+    int yBottomValue = y + height() / 2 - rec.height();
     switch (arrowDirection)
     {
     case ArrowLeft:
-        QWidget::move(x,y - height() / 2);
+        if (yTopValue < rec.y())
+        {
+            setArrowY(height() / 2 + yTopValue);
+            yTopValue = rec.y();
+        }
+        else if (yBottomValue > 0)
+        {
+            setArrowY(height() / 2 + yBottomValue);
+            yTopValue = rec.height() - height();
+        }
+        QWidget::move(x,yTopValue);
         break;
     case ArrowRight:
-        QWidget::move(x - width(),y - height() / 2);
+        if (yTopValue < rec.y())
+        {
+            setArrowY(height() / 2 + yTopValue);
+            yTopValue = rec.y();
+        }
+        else if (yBottomValue > 0)
+        {
+            setArrowY(height() / 2 + yBottomValue);
+            yTopValue = rec.height() - height();
+        }
+        QWidget::move(x - width(),yTopValue);
         break;
     case ArrowTop:
-        QWidget::move(x - width() / 2,y);
+        if (xLeftValue < rec.x())//out of screen in left side
+        {
+            setArrowX(width() / 2 + xLeftValue);
+            xLeftValue = rec.x();
+        }
+        else if(xRightValue > 0)//out of screen in right side
+        {
+            setArrowX(width() / 2 + xRightValue);
+            xLeftValue = rec.width() - width();
+        }
+        QWidget::move(xLeftValue,y);
         break;
     case ArrowBottom:
-        QWidget::move(x - width() / 2,y - height());
+        if (xLeftValue < rec.x())//out of screen in left side
+        {
+            setArrowX(width() / 2 + xLeftValue);
+            xLeftValue = rec.x();
+        }
+        else if(xRightValue > 0)//out of screen in right side
+        {
+            setArrowX(width() / 2 + xRightValue);
+            xLeftValue = rec.width() - width();
+        }
+        QWidget::move(xLeftValue,y - height());
         break;
     default:
         QWidget::move(x,y);
@@ -229,22 +275,32 @@ void ArrowRectangle::slotCancelHide()
         m_destroyTimer->stop();
 }
 
-int ArrowRectangle::getRadius()
+int ArrowRectangle::getRadius() const
 {
     return this->radius;
 }
 
-int ArrowRectangle::getArrowHeight()
+int ArrowRectangle::getArrowHeight() const
 {
     return this->arrowHeight;
 }
 
-int ArrowRectangle::getArrowWidth()
+int ArrowRectangle::getArrowWidth() const
 {
     return this->arrowWidth;
 }
 
-int ArrowRectangle::getMargin()
+int ArrowRectangle::getArrowX() const
+{
+    return this->m_arrowX;
+}
+
+int ArrowRectangle::getArrowY() const
+{
+    return this->m_arrowY;
+}
+
+int ArrowRectangle::getMargin() const
 {
     return this->m_margin;
 }
@@ -286,6 +342,27 @@ void ArrowRectangle::setArrowWidth(int value)
     this->arrowWidth = value;
 }
 
+void ArrowRectangle::setArrowX(int value)
+{
+    if (value < arrowWidth / 2)
+        this->m_arrowX = arrowWidth / 2;
+    else if (value > (width() - arrowWidth / 2))
+        this->m_arrowX = width() - arrowWidth / 2;
+    else
+        this->m_arrowX = value;
+}
+
+void ArrowRectangle::setArrowY(int value)
+{
+    if (value < arrowWidth / 2)
+        this->m_arrowY = arrowWidth / 2;
+    else if (value > (height() - arrowWidth / 2))
+        this->m_arrowY = height() - arrowWidth / 2;
+    else
+        this->m_arrowY = value;
+
+}
+
 void ArrowRectangle::setMargin(int value)
 {
     this->m_margin = value;
@@ -300,7 +377,7 @@ QPainterPath ArrowRectangle::getLeftCornerPath()
 {
     QRect rect = this->rect().marginsRemoved(QMargins(shadowWidth,shadowWidth,shadowWidth,shadowWidth));
 
-    QPoint cornerPoint(rect.x(), rect.y() + rect.height() / 2);
+    QPoint cornerPoint(rect.x(), rect.y() + (m_arrowY > 0 ? m_arrowY : rect.height() / 2));
     QPoint topLeft(rect.x() + arrowHeight, rect.y());
     QPoint topRight(rect.x() + rect.width(), rect.y());
     QPoint bottomRight(rect.x() + rect.width(), rect.y() + rect.height());
@@ -308,14 +385,19 @@ QPainterPath ArrowRectangle::getLeftCornerPath()
     int radius = this->radius > (rect.height() / 2) ? rect.height() / 2 : this->radius;
 
     QPainterPath border;
-    border.moveTo(topLeft);
+    border.moveTo(topLeft.x() - radius,topLeft.y());
     border.lineTo(topRight.x() - radius, topRight.y());
     border.arcTo(topRight.x() - 2 * radius, topRight.y(), 2 * radius, 2 * radius, 90, -90);
     border.lineTo(bottomRight.x(), bottomRight.y() - radius);
     border.arcTo(bottomRight.x() - 2 * radius, bottomRight.y() - 2 * radius, 2 * radius, 2 * radius, 0, -90);
-    border.lineTo(bottomLeft);
+    border.lineTo(bottomLeft.x() - radius,bottomLeft.y());
+    border.arcTo(bottomLeft.x(),bottomLeft.y() - 2 * radius,2 * radius,2 * radius,-90,-90);
+    border.lineTo(cornerPoint.x() + arrowHeight,cornerPoint.y() + arrowWidth / 2);
     border.lineTo(cornerPoint);
-    border.lineTo(topLeft);
+    border.lineTo(cornerPoint.x() + arrowHeight,cornerPoint.y() - arrowWidth / 2);
+    border.lineTo(topLeft.x(),topLeft.y() + radius);
+    border.arcTo(topLeft.x(),topLeft.y(),2 * radius,2 * radius,-180,-90);
+    border.lineTo(topLeft.x() - radius,topLeft.y());
 
     return border;
 }
@@ -324,7 +406,7 @@ QPainterPath ArrowRectangle::getRightCornerPath()
 {
     QRect rect = this->rect().marginsRemoved(QMargins(shadowWidth,shadowWidth,shadowWidth,shadowWidth));
 
-    QPoint cornerPoint(rect.x() + rect.width(), rect.y() + rect.height() / 2);
+    QPoint cornerPoint(rect.x() + rect.width(), rect.y() + (m_arrowY > 0 ? m_arrowY : rect.height() / 2));
     QPoint topLeft(rect.x(), rect.y());
     QPoint topRight(rect.x() + rect.width() - arrowHeight, rect.y());
     QPoint bottomRight(rect.x() + rect.width() - arrowHeight, rect.y() + rect.height());
@@ -333,9 +415,13 @@ QPainterPath ArrowRectangle::getRightCornerPath()
 
     QPainterPath border;
     border.moveTo(topLeft.x() + radius, topLeft.y());
-    border.lineTo(topRight);
+    border.lineTo(topRight.x() - radius,topRight.y());
+    border.arcTo(topRight.x() - 2 * radius,topRight.y(),2 * radius,2 * radius,90,-90);
+    border.lineTo(cornerPoint.x() - arrowHeight,cornerPoint.y() - arrowWidth / 2);
     border.lineTo(cornerPoint);
-    border.lineTo(bottomRight);
+    border.lineTo(cornerPoint.x() - arrowHeight,cornerPoint.y() + arrowWidth / 2);
+    border.lineTo(bottomRight.x(),bottomRight.y() - radius);
+    border.arcTo(bottomRight.x() - 2 * radius,bottomRight.y() - 2 * radius,2 * radius,2 * radius,0,-90);
     border.lineTo(bottomLeft.x() + radius, bottomLeft.y());
     border.arcTo(bottomLeft.x(), bottomLeft.y() - 2 * radius, 2 * radius, 2 * radius, -90, -90);
     border.lineTo(topLeft.x(), topLeft.y() + radius);
@@ -348,7 +434,7 @@ QPainterPath ArrowRectangle::getTopCornerPath()
 {
     QRect rect = this->rect().marginsRemoved(QMargins(shadowWidth,shadowWidth,shadowWidth,shadowWidth));
 
-    QPoint cornerPoint(rect.x() + rect.width() / 2, rect.y());
+    QPoint cornerPoint(rect.x() + (m_arrowX > 0 ? m_arrowX : rect.width() / 2), rect.y());
     QPoint topLeft(rect.x(), rect.y() + arrowHeight);
     QPoint topRight(rect.x() + rect.width(), rect.y() + arrowHeight);
     QPoint bottomRight(rect.x() + rect.width(), rect.y() + rect.height());
@@ -376,7 +462,7 @@ QPainterPath ArrowRectangle::getBottomCornerPath()
 {
     QRect rect = this->rect().marginsRemoved(QMargins(shadowWidth,shadowWidth,shadowWidth,shadowWidth));
 
-    QPoint cornerPoint(rect.x() + rect.width() / 2, rect.y()  + rect.height());
+    QPoint cornerPoint(rect.x() + (m_arrowX > 0 ? m_arrowX : rect.width() / 2), rect.y()  + rect.height());
     QPoint topLeft(rect.x(), rect.y());
     QPoint topRight(rect.x() + rect.width(), rect.y());
     QPoint bottomRight(rect.x() + rect.width(), rect.y() + rect.height() - arrowHeight);

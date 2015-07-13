@@ -78,8 +78,8 @@ void AppPreviews::addItem(const QString &title, int xid)
     m_mainLayout->setSpacing(Dock::APP_PREVIEW_MARGIN);
     m_xidList.append(xid);
 
-    WindowPreview * preview = new WindowPreview(xid);
-//    QWidget *preview = new QWidget();
+//    WindowPreview * preview = new WindowPreview(xid);
+    QWidget *preview = new QWidget();
     preview->setObjectName("AppPreview");
     preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
     AppPreviewFrame *f = new AppPreviewFrame(preview,title,xid);

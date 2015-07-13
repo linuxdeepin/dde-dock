@@ -1,6 +1,7 @@
 #ifndef ARROWRECTANGLE_H
 #define ARROWRECTANGLE_H
 
+#include <QDesktopWidget>
 #include <QWidget>
 #include <QLabel>
 #include <QTextLine>
@@ -24,10 +25,12 @@ public:
     explicit ArrowRectangle(QWidget * parent = 0);
     ~ArrowRectangle();
 
-    int getRadius();
-    int getArrowHeight();
-    int getArrowWidth();
-    int getMargin();
+    int getRadius() const;
+    int getArrowHeight() const;
+    int getArrowWidth() const;
+    int getArrowX() const;
+    int getArrowY() const;
+    int getMargin() const;
     QString getBackgroundColor();
 
     void setArrorDirection(ArrowDirection value);
@@ -36,6 +39,8 @@ public:
     void setRadius(int value);
     void setArrowHeight(int value);
     void setArrowWidth(int value);
+    void setArrowX(int value);
+    void setArrowY(int value);
     void setMargin(int value);
     void setBackgroundColor(QString value);
 
@@ -61,8 +66,10 @@ protected:
 private:
     int radius = 3;
     int arrowHeight = 8;
-    int arrowWidth = 20;
+    int arrowWidth = 12;
     int m_margin = 5;
+    int m_arrowX = 0;
+    int m_arrowY = 0;
     QString backgroundColor;
 
     int strokeWidth = 1;
