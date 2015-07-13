@@ -27,10 +27,19 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
 
 QWidget * PluginItemWrapper::getContents()
 {
-    if (m_pluginItemContents)
-        return m_pluginItemContents;
-    else
-        return NULL;
+    return m_plugin->getContents(m_uuid);
+}
+
+void PluginItemWrapper::enterEvent(QEvent *)
+{
+    emit mouseEntered();
+    showPreview();
+}
+
+void PluginItemWrapper::leaveEvent(QEvent *)
+{
+    emit mouseExited();
+    hidePreview();
 }
 
 PluginItemWrapper::~PluginItemWrapper()

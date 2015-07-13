@@ -14,6 +14,10 @@ public:
     QWidget * getContents();
     QString uuid() const;
 
+protected:
+    void enterEvent(QEvent * event);
+    void leaveEvent(QEvent * event);
+
 private:
     QWidget *m_pluginItemContents = NULL;
     DockPluginInterface * m_plugin;

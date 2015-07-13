@@ -29,9 +29,9 @@ Panel::Panel(QWidget *parent)
             this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 
 
-    QHBoxLayout * testLayout = new QHBoxLayout;
-    testLayout->addStretch();
-    this->setLayout(testLayout);
+//    QHBoxLayout * testLayout = new QHBoxLayout;
+//    testLayout->addStretch();
+//    this->setLayout(testLayout);
 
     DockPluginManager *pluginManager = new DockPluginManager(this);
     connect(DockModeData::instance(), &DockModeData::dockModeChanged,
@@ -40,14 +40,11 @@ Panel::Panel(QWidget *parent)
     QList<DockPluginProxy*> proxies = pluginManager->getAll();
     foreach (DockPluginProxy* proxy, proxies) {
         connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem* item) {
-            testLayout->addWidget(item);
+            rightLayout->addItem(item);
         });
         connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) {
-            int index = testLayout->indexOf(item);
-            if (index != -1) {
-                testLayout->removeWidget(item);
-                item->deleteLater();
-            }
+            int index = rightLayout->indexOf(item);
+            rightLayout->removeItem(index);
         });
     }
 
