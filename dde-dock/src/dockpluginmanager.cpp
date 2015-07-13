@@ -50,7 +50,6 @@ DockPluginProxy* DockPluginManager::loadPlugin(QString &path)
             qDebug() << "Plugin loaded: " << path;
 
             DockPluginProxy *proxy = new DockPluginProxy(interface);
-            interface->init(proxy);
 
             return proxy;
         } else {

@@ -28,11 +28,6 @@ Panel::Panel(QWidget *parent)
     connect(dockCons, SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
             this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 
-
-//    QHBoxLayout * testLayout = new QHBoxLayout;
-//    testLayout->addStretch();
-//    this->setLayout(testLayout);
-
     DockPluginManager *pluginManager = new DockPluginManager(this);
     connect(DockModeData::instance(), &DockModeData::dockModeChanged,
             pluginManager, &DockPluginManager::onDockModeChanged);
@@ -44,8 +39,12 @@ Panel::Panel(QWidget *parent)
         });
         connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) {
             int index = rightLayout->indexOf(item);
-            rightLayout->removeItem(index);
+            if (index != -1) {
+                rightLayout->removeItem(index);
+            }
         });
+
+        proxy->plugin()->init(proxy);
     }
 
     panelMenu = new PanelMenu();

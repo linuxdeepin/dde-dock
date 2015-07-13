@@ -19,8 +19,6 @@ void DockPluginProxy::itemAddedEvent(QString uuid)
     AbstractDockItem * item = new PluginItemWrapper(m_plugin, uuid);
     m_items << item;
 
-    qDebug() << item->geometry();
-
     emit itemAdded(item);
 }
 
@@ -33,6 +31,16 @@ void DockPluginProxy::itemRemovedEvent(QString uuid)
         m_items.takeAt(m_items.indexOf(item));
 
         emit itemRemoved(item);
+    }
+}
+
+void DockPluginProxy::itemSizeChangedEvent(QString uuid)
+{
+    qDebug() << "Item size changed on plugin " << m_plugin->name() << uuid;
+
+    AbstractDockItem * item = getItem(uuid);
+    if (item) {
+        emit item->widthChanged();
     }
 }
 

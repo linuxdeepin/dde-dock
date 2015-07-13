@@ -15,6 +15,7 @@ public:
 
     void itemAddedEvent(QString uuid) Q_DECL_OVERRIDE;
     void itemRemovedEvent(QString uuid) Q_DECL_OVERRIDE;
+    void itemSizeChangedEvent(QString uuid) Q_DECL_OVERRIDE;
 
 signals:
     void itemAdded(AbstractDockItem * item);
