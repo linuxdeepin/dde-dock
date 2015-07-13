@@ -46,7 +46,6 @@ private:
     void reanchorsLayout(Dock::DockMode mode);
 
     void showMenu();
-    void hideMenu();
 
     void initAppManager();
 private:
@@ -56,7 +55,6 @@ private:
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
     DockModeData *dockCons = DockModeData::instance();
-    PanelMenu *panelMenu = NULL;
 };
 
 #endif // PANEL_H

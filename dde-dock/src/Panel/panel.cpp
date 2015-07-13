@@ -47,8 +47,6 @@ Panel::Panel(QWidget *parent)
         proxy->plugin()->init(proxy);
     }
 
-    panelMenu = new PanelMenu();
-
     initAppManager();
 
     slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
@@ -191,13 +189,7 @@ void Panel::showMenu()
 {
     QPoint tmpPos = QCursor::pos();
 
-    panelMenu->move(tmpPos.x(),tmpPos.y() - panelMenu->height());
-    panelMenu->show();
-}
-
-void Panel::hideMenu()
-{
-
+    PanelMenu::instance()->showMenu(tmpPos.x(),tmpPos.y());
 }
 
 void Panel::initAppManager()

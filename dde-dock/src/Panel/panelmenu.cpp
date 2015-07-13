@@ -1,63 +1,101 @@
 #include "panelmenu.h"
 
-PanelMenuItem::PanelMenuItem(QString text, QWidget *parent) : QLabel(text,parent)
+
+PanelMenu * PanelMenu::m_panelMenu = NULL;
+PanelMenu * PanelMenu::instance()
 {
-    this->setAlignment(Qt::AlignCenter);
+    if (!m_panelMenu)
+        m_panelMenu = new PanelMenu();
+    return m_panelMenu;
 }
 
-void PanelMenuItem::mousePressEvent(QMouseEvent *event)
+PanelMenu::PanelMenu(QObject *parent) : QObject(parent)
 {
-//    emit itemClicked();
+    m_menuManager = new DBusMenuManager(this);
 }
 
-void PanelMenuItem::mouseReleaseEvent(QMouseEvent *event)
+void PanelMenu::showMenu(int x, int y)
 {
-    emit itemClicked();
+    if (m_menuManager && m_menuManager->isValid()){
+        QDBusPendingReply<QDBusObjectPath> pr = m_menuManager->RegisterMenu();
+        if (pr.count() == 1)
+        {
+            QDBusObjectPath op = pr.argumentAt(0).value<QDBusObjectPath>();
+            m_menuInterfacePath = op.path();
+            DBusMenu *m_menu = new DBusMenu(m_menuInterfacePath,this);
+            connect(m_menu,&DBusMenu::MenuUnregistered,m_menu,&DBusMenu::deleteLater);
+            connect(m_menu,&DBusMenu::ItemInvoked,this,&PanelMenu::slotItemInvoked);
+
+            QJsonObject targetObj;
+            targetObj.insert("x",QJsonValue(x));
+            targetObj.insert("y",QJsonValue(y));
+            targetObj.insert("isDockMenu",QJsonValue(false));
+
+            QJsonArray contentArry;
+            contentArry.append(createItemObj("Fashion Mode",ToFashionMode));
+            contentArry.append(createItemObj("Efficient Mode",ToEfficientMode));
+            contentArry.append(createItemObj("Classic Mode",ToClassicMode));
+
+            QJsonObject contentObj;
+            contentObj.insert("items",contentArry);
+            targetObj.insert("menuJsonContent",QString(QJsonDocument(contentObj).toJson()));
+
+            m_menu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
+        }
+    }
 }
 
-PanelMenu::PanelMenu(QWidget *parent) : QWidget(parent)
+void PanelMenu::slotItemInvoked(const QString &itemId, bool result)
 {
-    this->resize(150,100);
-    this->setWindowFlags(Qt::ToolTip);
+    OperationType tt = OperationType(itemId.toInt());
+    switch (tt)
+    {
+    case ToFashionMode:
+        changeToFashionMode();
+        break;
+    case ToEfficientMode:
+        changeToEfficientMode();
+        break;
+    case ToClassicMode:
+        changeToClassicMode();
+        break;
+    default:
+        break;
+    }
 
-    QLabel * menuContent = new QLabel(this);
-    menuContent->setObjectName("panelMenuContent");
-    menuContent->resize(this->width(),this->height());
-    menuContent->move(0,0);
-
-    PanelMenuItem *fashionItem = new PanelMenuItem("Fashion Mode",this);
-    fashionItem->resize(this->width(),MENU_ITEM_HEIGHT);
-    fashionItem->move(0,0);
-    connect(fashionItem, SIGNAL(itemClicked()),this, SLOT(changeToFashionMode()));
-
-    PanelMenuItem *efficientItem = new PanelMenuItem("Efficient Mode",this);
-    efficientItem->resize(this->width(),MENU_ITEM_HEIGHT);
-    efficientItem->move(0,MENU_ITEM_HEIGHT + MENU_ITEM_SPACING);
-    connect(efficientItem, SIGNAL(itemClicked()),this, SLOT(changeToEfficientMode()));
-
-    PanelMenuItem *classictItem = new PanelMenuItem("Classic Mode",this);
-    classictItem->resize(this->width(),MENU_ITEM_HEIGHT);
-    classictItem->move(0,MENU_ITEM_HEIGHT*2 + MENU_ITEM_SPACING*2);
-    connect(classictItem, SIGNAL(itemClicked()),this, SLOT(changeToClassicMode()));
+    qWarning() << itemId << result << tt;
 }
 
 void PanelMenu::changeToFashionMode()
 {
     qWarning() << "Change to fashion mode...";
     dockCons->setDockMode(Dock::FashionMode);
-    this->hide();
 }
 
 void PanelMenu::changeToEfficientMode()
 {
     qWarning() << "Change to efficient mode...";
     dockCons->setDockMode(Dock::EfficientMode);
-    this->hide();
 }
 
 void PanelMenu::changeToClassicMode()
 {
     qWarning() << "Change to classic mode...";
     dockCons->setDockMode(Dock::ClassicMode);
-    this->hide();
+}
+
+QJsonObject PanelMenu::createItemObj(const QString &itemName, OperationType type)
+{
+    QJsonObject itemObj;
+    itemObj.insert("itemId",QString::number(type));
+    itemObj.insert("itemText",itemName);
+    itemObj.insert("itemIcon","");
+    itemObj.insert("itemIconHover","");
+    itemObj.insert("itemIconInactive","");
+    itemObj.insert("itemExtra","");
+    itemObj.insert("isActive",true);
+    itemObj.insert("checked",false);
+    itemObj.insert("itemSubMenu",QJsonObject());
+
+    return itemObj;
 }

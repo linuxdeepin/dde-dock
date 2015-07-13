@@ -3,42 +3,46 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 #include <QDebug>
+#include "DBus/dbusmenumanager.h"
+#include "DBus/dbusmenu.h"
 #include "Controller/dockmodedata.h"
 
-class PanelMenuItem : public QLabel
+class PanelMenu : public QObject
 {
     Q_OBJECT
 public:
-    explicit PanelMenuItem(QString text, QWidget *parent = 0);
+    enum OperationType {
+        ToFashionMode,
+        ToEfficientMode,
+        ToClassicMode
+    };
+    static PanelMenu * instance();
 
-signals:
-    void itemClicked();
-
-protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-};
-
-class PanelMenu : public QWidget
-{
-    Q_OBJECT
-public:
-    explicit PanelMenu(QWidget *parent = 0);
-
+    void showMenu(int x,int y);
 signals:
 
-public slots:
 private slots:
+    void slotItemInvoked(const QString &itemId,bool result);
+
+private:
+    explicit PanelMenu(QObject *parent = 0);
+
     void changeToFashionMode();
     void changeToEfficientMode();
     void changeToClassicMode();
 
-private:
-    DockModeData *dockCons = DockModeData::instance();
+    QJsonObject createItemObj(const QString &itemName,OperationType type);
 
-    const int MENU_ITEM_HEIGHT = 30;
-    const int MENU_ITEM_SPACING = 3;
+private:
+    static PanelMenu * m_panelMenu;
+    DockModeData *dockCons = DockModeData::instance();
+    QString m_menuInterfacePath = "";
+    DBusMenuManager *m_menuManager = NULL;
+
 };
 
 #endif // PANELMENU_H
