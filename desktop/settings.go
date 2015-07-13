@@ -175,7 +175,7 @@ func NewSettings() (*Settings, error) {
 }
 
 func (s *Settings) updateIconSize() {
-	s.iconSize = int(s.desktop.GetInt(IconDefaultSize) * s.desktop.GetInt(IconZoomLevel) / 100)
+	s.iconSize = int(s.desktop.GetEnum(IconDefaultSize) * s.desktop.GetInt(IconZoomLevel) / 100)
 }
 
 func (s *Settings) emitIconZoomLevelChanged(level int32) {

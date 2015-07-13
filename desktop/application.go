@@ -397,6 +397,7 @@ func (app *Application) activateFile(file string, args []string, isExecutable bo
 	}
 }
 
+// TODO: move to filemanager.
 type ItemInfo struct {
 	DisplayName string
 	BaseName    string
@@ -417,6 +418,33 @@ type ItemInfo struct {
 	CanWrite    bool
 }
 
+func toItemInfo(p operations.ListProperty) ItemInfo {
+	return ItemInfo{
+		DisplayName: p.DisplayName,
+		BaseName:    p.BaseName,
+		URI:         p.URI,
+		MIME:        p.MIME,
+		Size:        p.Size,
+		FileType:    p.FileType,
+		IsBackup:    p.IsBackup,
+		IsHidden:    p.IsHidden,
+		IsReadOnly:  p.IsReadOnly,
+		IsSymlink:   p.IsSymlink,
+		CanDelete:   p.CanDelete,
+		CanExecute:  p.CanExecute,
+		CanRead:     p.CanRead,
+		CanRename:   p.CanRename,
+		CanTrash:    p.CanTrash,
+		CanWrite:    p.CanWrite,
+	}
+}
+
+func (app *Application) getItemInfo(p operations.ListProperty) ItemInfo {
+	info := toItemInfo(p)
+	info.Icon = operations.GetThemeIcon(p.URI, 48) //app.settings.iconSize)
+	return info
+}
+
 func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	infos := map[string]ItemInfo{}
 	var err error
@@ -425,27 +453,7 @@ func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	job := operations.NewListDirJob(path, operations.ListJobFlagIncludeHidden)
 
 	job.ListenProperty(func(p operations.ListProperty) {
-		size := app.settings.iconSize
-		icon := operations.GetThemeIcon(p.URI, size)
-		infos[p.URI] = ItemInfo{
-			DisplayName: p.DisplayName,
-			BaseName:    p.BaseName,
-			URI:         p.URI,
-			Icon:        icon,
-			MIME:        p.MIME,
-			Size:        p.Size,
-			FileType:    p.FileType,
-			IsBackup:    p.IsBackup,
-			IsHidden:    p.IsHidden,
-			IsReadOnly:  p.IsReadOnly,
-			IsSymlink:   p.IsSymlink,
-			CanDelete:   p.CanDelete,
-			CanExecute:  p.CanExecute,
-			CanRead:     p.CanRead,
-			CanRename:   p.CanRename,
-			CanTrash:    p.CanTrash,
-			CanWrite:    p.CanWrite,
-		}
+		infos[p.URI] = app.getItemInfo(p)
 	})
 
 	job.ListenDone(func(e error) {
@@ -458,4 +466,20 @@ func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	job.Execute()
 
 	return infos, err
+}
+
+func (app *Application) GetItemInfo(file string) (ItemInfo, error) {
+	info := ItemInfo{}
+	f := gio.FileNewForCommandlineArg(file)
+	if f == nil {
+		return info, fmt.Errorf("Invalid file: %q", file)
+	}
+	defer f.Unref()
+
+	listProperty, err := operations.GetListProperty(f, nil)
+	if err != nil {
+		return info, err
+	}
+
+	return app.getItemInfo(listProperty), nil
 }
