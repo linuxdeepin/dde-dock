@@ -70,7 +70,7 @@ const (
 	// FileManagerPerferenceSchemaID is filemanager's general preferences' schema id
 	FileManagerPerferenceSchemaID string = "com.deepin.filemanager.preferences"
 	// FileManagerDesktopSchemaID is desktop specific settings' schema id
-	FileManagerDesktopSchemaID string = "com.deepin.filemanager.desktop"
+	FileManagerDesktopSchemaID string = "com.deepin.dde.desktop"
 )
 
 // Settings is settings used by desktop.

@@ -1,7 +1,6 @@
 package desktop
 
 import (
-	// "fmt"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/initializer"
