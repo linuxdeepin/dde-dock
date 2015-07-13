@@ -425,7 +425,7 @@ func (app *Application) GetDesktopItems() ([]ItemInfo, error) {
 	job := operations.NewListDirJob(path, operations.ListJobFlagIncludeHidden)
 
 	job.ListenProperty(func(p operations.ListProperty) {
-		size := 48 //app.settings
+		size := app.settings.iconSize
 		icon := operations.GetThemeIcon(p.URI, size)
 		infos = append(infos, ItemInfo{
 			DisplayName: p.DisplayName,

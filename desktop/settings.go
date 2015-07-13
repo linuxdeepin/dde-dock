@@ -53,6 +53,12 @@ const (
 
 	// ManualPosition schema key.
 	ManualPosition = "manual-position"
+
+	// IconDefaultSize schema key
+	IconDefaultSize = "icon-default-size"
+
+	// IconZoomLevel schema key
+	IconZoomLevel = "icon-zoom-level"
 )
 
 // PoliciesName is a map to sort policies and the display name.
@@ -81,6 +87,9 @@ type Settings struct {
 	// desktop is desktop specific settings.
 	desktop *gio.Settings
 
+	iconSize int
+
+	IconZoomLevelChanged         func(int32)
 	ShowTrashIconChanged         func(bool)
 	ShowComputerIconChanged      func(bool)
 	StickupGridChanged           func(bool)
@@ -146,11 +155,16 @@ func NewSettings() (*Settings, error) {
 				s.emitStickupGridChanged(s.StickupGridIsEnable())
 			case ManualPosition:
 				s.emitManualPositionChanged(s.ManualPositionIsEnable())
-				// case ShowTrashedItemCount:
-				// case AutoArrangement:
+			// case ShowTrashedItemCount:
+			// case AutoArrangement:
+			case IconDefaultSize:
+				s.updateIconSize()
+			case IconZoomLevel:
+				s.updateIconSize()
+				s.emitIconZoomLevelChanged(s.IconZoomLevel())
 			}
 		})
-		s.desktop.GetBoolean(ShowTrashedItemCount) // enable connection.
+		s.updateIconSize()
 		return nil, nil
 	}).GetError()
 
@@ -158,6 +172,14 @@ func NewSettings() (*Settings, error) {
 		return nil, err
 	}
 	return s, nil
+}
+
+func (s *Settings) updateIconSize() {
+	s.iconSize = int(s.desktop.GetInt(IconDefaultSize) * s.desktop.GetInt(IconZoomLevel) / 100)
+}
+
+func (s *Settings) emitIconZoomLevelChanged(level int32) {
+	dbus.Emit(s, "IconZoomLevelChanged", level)
 }
 
 func (s *Settings) emitShowTrashIconChanged(enable bool) {
@@ -300,4 +322,19 @@ func (s *Settings) LabelPosition() string {
 // AllowDeleteImmediatlyIsEnable returns whether AllowDeleteImmediatly is enabled.
 func (s *Settings) AllowDeleteImmediatlyIsEnable() bool {
 	return s.preferences.GetBoolean(AllowDeleteImmediatly)
+}
+
+// IconDefaultSize returns the default icon size.
+func (s *Settings) IconDefaultSize() int32 {
+	return s.desktop.GetInt(IconDefaultSize)
+}
+
+// IconZoomLevel returns the zoom level of icons.
+func (s *Settings) IconZoomLevel() int32 {
+	return s.desktop.GetInt(IconZoomLevel)
+}
+
+// SetIconZoomLevel will change the zoom level of icons.
+func (s *Settings) SetIconZoomLevel(zoomLevel int32) bool {
+	return s.desktop.SetInt(IconZoomLevel, zoomLevel)
 }

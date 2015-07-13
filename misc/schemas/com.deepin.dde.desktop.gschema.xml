@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+    <enum id="com.deepin.dde.desktop.IconDefaultSize">
+        <value nick="16" value="16"/>
+        <value nick="24" value="24"/>
+        <value nick="32" value="32"/>
+        <value nick="48" value="48"/>
+        <value nick="64" value="64"/>
+        <value nick="96" value="96"/>
+        <value nick="128" value="128"/>
+    </enum>
+
     <schema path="/com/deepin/dde/desktop/" id="com.deepin.dde.desktop">
         <key name="manual-position" type="b">
             <default>false</default>
@@ -41,6 +51,19 @@
             <default>true</default>
             <summary>Whether show trashed item number on contextmenu.</summary>
             <description>If true, show it.</description>
+        </key>
+
+        <key name="icon-default-size" enum="com.deepin.dde.IconDefaultSize">
+            <default>'48'</default>
+            <summary>The default icon size on desktop.</summary>
+            <description>All Possible value are '16', '24', '32', '48', '64', '96', '128'</description>
+        </key>
+
+        <key name="icon-zoom-level" type="i">
+            <range min="50" max="500"/><!-- % -->
+            <default>100</default>
+            <summary>Default icon zoom level.</summary>
+            <description>Defaut icon zoom level used by the icon view.</description>
         </key>
     </schema>
 </schemalist>
