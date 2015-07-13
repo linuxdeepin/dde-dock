@@ -77,3 +77,11 @@ RESOURCES += \
 
 PKGCONFIG += gtk+-2.0 x11 cairo
 CONFIG += c++11 link_pkgconfig
+
+target.path = /usr/bin/
+
+headers.files += src/dockconstants.h \
+    src/dockplugininterface.h
+headers.path = /usr/include/dock
+
+INSTALLS += target headers
