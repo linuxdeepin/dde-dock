@@ -53,7 +53,7 @@
             <description>If true, show it.</description>
         </key>
 
-        <key name="icon-default-size" enum="com.deepin.dde.IconDefaultSize">
+        <key name="icon-default-size" enum="com.deepin.dde.desktop.IconDefaultSize">
             <default>'48'</default>
             <summary>The default icon size on desktop.</summary>
             <description>All Possible value are '16', '24', '32', '48', '64', '96', '128'</description>
