@@ -99,11 +99,26 @@ func (m *Menu) AppendItem(items ...*MenuItem) *Menu {
 	return m
 }
 
+func (m *Menu) handleAction(id string) bool {
+	if item, ok := m.ids[id]; ok {
+		if item.isActive {
+			item.Action()
+		}
+		return true
+	} else {
+		for _, item := range m.ids {
+			if item.subMenu != nil && item.subMenu.handleAction(id) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
 // HandleAction will call the action corresponding to the id.
 func (m *Menu) HandleAction(id string) {
-	if item, ok := m.ids[id]; ok && item.isActive {
-		item.Action()
-	}
+	m.handleAction(id)
 }
 
 // ToJSON generates json format menu content used in DeepinMenu.
