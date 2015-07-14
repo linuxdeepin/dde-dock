@@ -1,12 +1,33 @@
 package desktop
 
 import (
-	"fmt"
+	"os/exec"
 	"path/filepath"
+	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/operations"
+	"pkg.deepin.io/lib/utils"
+	"sort"
 )
+
+func getBaseName(uri string) string {
+	return filepath.Base(utils.DecodeURI(uri))
+}
+
+type byName []string
+
+func (s byName) Less(i, j int) bool {
+	return getBaseName(s[i]) < getBaseName(s[j])
+}
+
+func (s byName) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s byName) Len() int {
+	return len(s)
+}
 
 // Desktop is desktop itself.
 type Desktop struct {
@@ -57,9 +78,10 @@ func (desktop *Desktop) GenMenuContent() (*Menu, error) {
 	templates := job.Execute()
 	if len(templates) != 0 {
 		newSubMenu.AddSeparator()
+		sort.Sort(byName(templates))
 		for _, template := range templates {
 			templateURI := template
-			newSubMenu.AppendItem(NewMenuItem(filepath.Base(templateURI), func() {
+			newSubMenu.AppendItem(NewMenuItem(getBaseName(templateURI), func() {
 				desktop.app.emitRequestCreateFileFromTemplate(templateURI)
 			}, true))
 		}
@@ -76,15 +98,25 @@ func (desktop *Desktop) GenMenuContent() (*Menu, error) {
 
 	// TODO: plugin
 	if true {
+		ShowModule := func(module string) {
+			go func() {
+				conn, err := dbus.SessionBus()
+				if err != nil {
+					return
+				}
+
+				obj := conn.Object("com.deepin.dde.ControlCenter", "/com/deepin/dde/ControlCenter")
+				if obj != nil {
+					obj.Call("com.deepin.dde.ControlCenter.ShowModule", 0, module).Store()
+				}
+			}()
+		}
 		menu.AddSeparator().AppendItem(NewMenuItem(Tr("_Display settings"), func() {
-			// TODO
-			fmt.Println("show display settings")
+			ShowModule("display")
 		}, true)).AppendItem(NewMenuItem(Tr("_Corner navigation"), func() {
-			// TODO
-			fmt.Println("show corner navigation")
+			exec.Command("/usr/lib/deepin-daemon/dde-zone").Start()
 		}, true)).AppendItem(NewMenuItem(Tr("Pe_rsonalize"), func() {
-			// TODO
-			fmt.Println("show personalize settings")
+			ShowModule("personalization")
 		}, true))
 	}
 

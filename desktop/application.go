@@ -45,7 +45,7 @@ type Application struct {
 
 	RequestRename                 func(string)
 	RequestDelete                 func([]string)
-	RequestEmptyTrash             func(string)
+	RequestEmptyTrash             func()
 	RequestSort                   func(string)
 	RequestCleanup                func()
 	ReqeustAutoArrange            func()
@@ -54,15 +54,15 @@ type Application struct {
 	RequestCreateDirectory        func()
 	ItemCut                       func([]string)
 	RequestOpen                   func([]string)
+	RequestDismissAppGroup        func(string)
 
-	AvtivateFileFailed      func(string)
+	ActivateFileFailed      func(string)
 	CreateAppGroupFailed    func(string)
 	MergeIntoAppGroupFailed func(string)
-	MergedFiles             func([]string)
 
-	AppGroupCreated func(string, string)
-	AppGroupDeleted func(string, string)
-	AppGroupMerged  func(string, string)
+	AppGroupCreated func(string, []string)
+	AppGroupDeleted func(string)
+	AppGroupMerged  func(string, []string)
 
 	ItemDeleted  func(string)
 	ItemCreated  func(string)
@@ -103,7 +103,7 @@ func (app *Application) emitRequestDelete(uris []string) {
 }
 
 func (app *Application) emitRequestEmptyTrash() {
-	dbus.Emit(app, "emitRequestEmptyTrash")
+	dbus.Emit(app, "RequestEmptyTrash")
 }
 
 func (app *Application) emitRequestSort(sortPolicy string) {
@@ -150,11 +150,19 @@ func (app *Application) emitMergeIntoAppGroupFailed(reason string) {
 	dbus.Emit(app, "MergeIntoAppGroupFailed", reason)
 }
 
-func (app *Application) emitMergedFiles(files []string) {
-	dbus.Emit(app, "MergedFiles", files)
+func (app *Application) emitAppGroupCreated(group string) {
+	dbus.Emit(app, "AppGroupCreated", group)
 }
 
-func (app *Application) emitRequestPaste(file string) {
+func (app *Application) emitAppGroupMerged(group string, files []string) {
+	dbus.Emit(app, "AppGroupMerged", group, files)
+}
+
+func (app *Application) emitRequestDismissAppGroup(group string) {
+	dbus.Emit(app, "RequestDismissAppGroup", group)
+}
+
+func (app *Application) emitRequestPaste(dest string) {
 	conn, err := dbus.SessionBus()
 	if err != nil {
 		return
@@ -162,7 +170,7 @@ func (app *Application) emitRequestPaste(file string) {
 
 	obj := conn.Object("com.deepin.filemanager.Backend.Clipboard", "/com/deepin/filemanager/Backend/Clipboard")
 	if obj != nil {
-		obj.Call("com.deepin.filemanager.Backend.Clipboard.EmitPaste", 0, file).Store()
+		obj.Call("com.deepin.filemanager.Backend.Clipboard.EmitPaste", 0, dest).Store()
 	}
 }
 
@@ -270,8 +278,10 @@ func (app *Application) RequestCreatingAppGroup(files []string) {
 	// get group name
 	groupName := getGroupName(availableFiles)
 
+	dirName := AppGroupPrefix + groupName
+
 	// create app group.
-	createJob := operations.NewCreateDirectoryJob(desktopDir, AppGroupPrefix+groupName, nil)
+	createJob := operations.NewCreateDirectoryJob(desktopDir, dirName, nil)
 	createJob.Execute()
 
 	if err := createJob.GetError(); err != nil {
@@ -286,7 +296,7 @@ func (app *Application) RequestCreatingAppGroup(files []string) {
 		app.emitCreateAppGroupFailed(err.Error())
 	}
 
-	app.emitMergedFiles(availableFiles)
+	app.emitAppGroupCreated(dirName)
 }
 
 // RequestMergeIntoAppGroup will merge files into existed AppGroup, and emits AppGroupMerged signal when it's done.
@@ -300,7 +310,7 @@ func (app *Application) RequestMergeIntoAppGroup(files []string, appGroup string
 		return
 	}
 
-	app.emitMergedFiles(availableFiles)
+	app.emitAppGroupMerged(appGroup, availableFiles)
 }
 
 func (app *Application) doDisplayFile(file *gio.File, contentType string) {
