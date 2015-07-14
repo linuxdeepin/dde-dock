@@ -6,11 +6,11 @@
 #include <QPushButton>
 #include <QDebug>
 #include "Controller/dockmodedata.h"
+#include "Controller/appmanager.h"
 #include "Widgets/appitem.h"
 #include "Widgets/docklayout.h"
 #include "Widgets/screenmask.h"
 #include "panelmenu.h"
-#include "Controller/appmanager.h"
 
 class Panel : public QLabel
 {
@@ -18,9 +18,6 @@ class Panel : public QLabel
 public:
     explicit Panel(QWidget *parent = 0);
     ~Panel();
-
-    void resize(const QSize &size);
-    void resize(int width,int height);
 
     void showScreenMask();
     void hideScreenMask();

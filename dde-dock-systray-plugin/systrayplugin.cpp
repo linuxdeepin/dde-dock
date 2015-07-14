@@ -51,8 +51,21 @@ void SystrayPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     m_mode = newMode;
 
+    CompositeTrayItem * compositeItem = NULL;
+
+    QWidget * widget = m_items.value(CompositeItemKey);
+    if (!widget)
+    {
+        compositeItem = new CompositeTrayItem;
+        m_items[CompositeItemKey] = compositeItem;
+    }
+    else
+        compositeItem = qobject_cast<CompositeTrayItem*>(widget);
+
+    compositeItem->resize(Dock::APPLET_FASHION_ITEM_WIDTH,Dock::APPLET_FASHION_ITEM_HEIGHT);
+
     if (oldMode == Dock::FashionMode && newMode != Dock::FashionMode) {
-        CompositeTrayItem * compositeItem = qobject_cast<CompositeTrayItem*>(m_items.value(CompositeItemKey));
+
         compositeItem->setParent(NULL);
 
         qDebug() << "SystrayPlugin change mode to other mode.";
@@ -65,15 +78,6 @@ void SystrayPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 
         m_proxier->itemRemovedEvent(CompositeItemKey);
     } else if (newMode == Dock::FashionMode && oldMode != Dock::FashionMode) {
-        CompositeTrayItem * compositeItem = NULL;
-
-        QWidget * widget = m_items.value(CompositeItemKey);
-        if (!widget) {
-            compositeItem = new CompositeTrayItem;
-            m_items[CompositeItemKey] = compositeItem;
-        } else {
-            compositeItem = qobject_cast<CompositeTrayItem*>(widget);
-        }
 
         qDebug() << "SystrayPlugin change mode to fashion mode.";
         foreach (QWidget * widget, m_items) {

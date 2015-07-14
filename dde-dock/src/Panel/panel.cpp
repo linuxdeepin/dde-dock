@@ -48,22 +48,6 @@ Panel::Panel(QWidget *parent)
     }
 
     initAppManager();
-
-    slotDockModeChanged(dockCons->getDockMode(),dockCons->getDockMode());
-}
-
-void Panel::resize(const QSize &size)
-{
-    QWidget::resize(size);
-
-    reanchorsLayout(dockCons->getDockMode());
-}
-
-void Panel::resize(int width, int height)
-{
-    QWidget::resize(width,height);
-
-    reanchorsLayout(dockCons->getDockMode());
 }
 
 void Panel::showScreenMask()
@@ -114,25 +98,12 @@ void Panel::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 
     reanchorsLayout(newMode);
 
-    this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
-    this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
     qWarning() << "AppCount:********" << leftLayout->getItemCount();
 }
 
 void Panel::slotLayoutContentsWidthChanged()
 {
     reanchorsLayout(dockCons->getDockMode());
-
-    if (dockCons->getDockMode() == Dock::FashionMode)
-    {
-        this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
-        this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
-    }
-    else
-    {
-        this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
-        this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
-    }
 }
 
 void Panel::slotAddAppItem(AppItem *item)
@@ -170,10 +141,12 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     if (mode == Dock::FashionMode)
     {
         leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getDockHeight());
-
         rightLayout->setSortDirection(DockLayout::LeftToRight);
         rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getDockHeight());
         rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),0);
+
+        this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
     }
     else
     {
@@ -182,6 +155,9 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         rightLayout->move(parentWidget->width() - rightLayout->width(),0);
 
         leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getDockHeight());
+
+        this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
+        this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
     }
 }
 

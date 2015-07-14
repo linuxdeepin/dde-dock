@@ -146,6 +146,15 @@ void AppItem::initBackground()
     appBackground = new AppBackground(this);
     appBackground->move(0,0);
     connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
+
+    if (dockCons->getDockMode() == Dock::FashionMode)
+    {
+        appBackground->setVisible(false);
+    }
+    else
+    {
+        appBackground->setVisible(true);
+    }
 }
 
 void AppItem::initClientManager()

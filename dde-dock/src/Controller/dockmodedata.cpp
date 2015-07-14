@@ -3,6 +3,7 @@
 DockModeData::DockModeData(QObject *parent) :
     QObject(parent)
 {
+    initDDS();
 }
 
 DockModeData * DockModeData::dockModeData = NULL;
@@ -21,10 +22,17 @@ Dock::DockMode DockModeData::getDockMode()
 
 void DockModeData::setDockMode(Dock::DockMode value)
 {
-    Dock::DockMode tmpValue = m_currentMode;
-    m_currentMode = value;
+    m_dds->SetDisplayMode(value);
+}
 
-    emit dockModeChanged(value, tmpValue);
+Dock::HideMode DockModeData::getHideMode()
+{
+    return m_hideMode;
+}
+
+void DockModeData::setHideMode(Dock::HideMode value)
+{
+    m_dds->SetHideMode(value);
 }
 
 int DockModeData::getDockHeight()
@@ -177,3 +185,33 @@ int DockModeData::getAppletsIconSize()
     }
 }
 
+void DockModeData::slotDockModeChanged(int mode)
+{
+    Dock::DockMode tmpMode = Dock::DockMode(mode);
+    Dock::DockMode oldmode = m_currentMode;
+    m_currentMode = tmpMode;
+
+    emit dockModeChanged(tmpMode,oldmode);
+}
+
+void DockModeData::slotHideModeChanged(int mode)
+{
+    Dock::HideMode tmpMode = Dock::HideMode(mode);
+    Dock::HideMode oldMode = m_hideMode;
+    m_hideMode = tmpMode;
+
+    emit hideModeChanged(tmpMode,oldMode);
+}
+
+void DockModeData::initDDS()
+{
+    m_dds = new DBusDockSetting(this);
+    connect(m_dds,&DBusDockSetting::DisplayModeChanged,this,&DockModeData::slotDockModeChanged);
+    connect(m_dds,&DBusDockSetting::HideModeChanged,this,&DockModeData::slotHideModeChanged);
+
+    m_currentMode = Dock::DockMode(m_dds->GetDisplayMode().value());
+    m_hideMode = Dock::HideMode(m_dds->GetHideMode().value());
+
+    emit dockModeChanged(m_currentMode,m_currentMode);
+    emit hideModeChanged(m_hideMode,m_hideMode);
+}
