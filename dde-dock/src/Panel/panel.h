@@ -46,8 +46,8 @@ private:
 
     void initAppManager();
 private:
-    DockLayout * leftLayout;
-    DockLayout *rightLayout;
+    DockLayout * leftLayout = NULL;
+    DockLayout *rightLayout = NULL;
     AppManager *m_appManager = NULL;
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;

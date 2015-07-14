@@ -39,7 +39,8 @@ SOURCES += \
     src/DBus/dbusmenumanager.cpp \
     src/DBus/dbusmenu.cpp \
     src/Widgets/apppreviews.cpp \
-    src/Widgets/closebutton.cpp
+    src/Widgets/closebutton.cpp \
+    src/DBus/dbushidestatemanager.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -70,7 +71,8 @@ HEADERS  += \
     src/dockpluginmanager.h \
     src/dockconstants.h \
     src/Widgets/apppreviews.h \
-    src/Widgets/closebutton.h
+    src/Widgets/closebutton.h \
+    src/DBus/dbushidestatemanager.h
 
 RESOURCES += \
     images.qrc \
