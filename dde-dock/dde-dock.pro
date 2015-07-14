@@ -15,6 +15,7 @@ INCLUDEPATH += src/
 SOURCES += \
     src/main.cpp \
     src/mainwidget.cpp \
+    src/abstractdockitem.cpp \
     src/Widgets/appbackground.cpp \
     src/Widgets/appicon.cpp \
     src/Widgets/docklayout.cpp \

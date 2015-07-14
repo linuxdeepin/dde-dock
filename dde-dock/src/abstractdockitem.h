@@ -1,70 +1,36 @@
 #ifndef ABSTRACTDOCKITEM_H
 #define ABSTRACTDOCKITEM_H
 
-#include <QWidget>
-#include <QFrame>
-#include <QLabel>
-#include "Widgets/appicon.h"
 #include "Widgets/arrowrectangle.h"
 
 class AbstractDockItem : public QFrame
 {
     Q_OBJECT
 public:
-    explicit AbstractDockItem(QWidget *parent = 0) :
-        QFrame(parent) {}
-    virtual ~AbstractDockItem() {}
+    explicit AbstractDockItem(QWidget *parent = 0);
+    virtual ~AbstractDockItem();
 
-    virtual QString getTitle() { return ""; }
-    virtual QWidget * getApplet() { return NULL; }
+    virtual QString getTitle();
+    virtual QWidget * getApplet();
 
-    virtual bool moveable() { return m_moveable; }
-    virtual bool actived() { return m_isActived; }
+    virtual bool moveable();
+    virtual bool actived();
 
-    void resize(int width,int height){
-        QFrame::resize(width,height);
-        emit widthChanged();
-    }
-    void resize(const QSize &size){
-        QFrame::resize(size);
-        emit widthChanged();
-    }
+    void resize(int width,int height);
+    void resize(const QSize &size);
 
-    QPoint getNextPos() { return m_itemNextPos; }
-    void setNextPos(const QPoint &value) { m_itemNextPos = value; }
-    void setNextPos(int x, int y) { m_itemNextPos.setX(x); m_itemNextPos.setY(y); }
+    QPoint getNextPos();
+    void setNextPos(const QPoint &value);
+    void setNextPos(int x, int y);
 
-    int globalX(){return mapToGlobal(QPoint(0,0)).x();}
-    int globalY(){return mapToGlobal(QPoint(0,0)).y();}
-    QPoint globalPos(){return mapToGlobal(QPoint(0,0));}
+    int globalX();
+    int globalY();
+    QPoint globalPos();
 
-    void showPreview(){
-        if (!m_previewAR->isHidden())
-        {
-            m_previewAR->resizeWithContent();
-            return;
-        }
-        QWidget *tmpContent = getApplet();
-        if (tmpContent == NULL) {
-            QString title = getTitle();
-            // TODO: memory management
-            tmpContent = new QLabel(title);
-            tmpContent->setStyleSheet("QLabel { color: white }");
-            tmpContent->setFixedSize(100, 20);
-        }
-
-        m_previewAR->setArrorDirection(ArrowRectangle::ArrowBottom);
-        m_previewAR->setContent(tmpContent);
-        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
-    }
-    void hidePreview(int interval = 200){
-        m_previewAR->delayHide(interval);
-    }
-    void cancelHide(){m_previewAR->cancelHide();}
-    void resizePreview(){
-        m_previewAR->resizeWithContent();
-        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
-    }
+    void showPreview();
+    void hidePreview(int interval = 200);
+    void cancelHide();
+    void resizePreview();
 
 signals:
     void dragStart();
