@@ -12,8 +12,7 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
 
     if (m_plugin) {
         QWidget * item = m_plugin->getItem(uuid);
-        m_pluginItemContents = m_plugin->getContents(uuid);
-//        setFixedSize(item->size());
+        m_pluginItemContents = m_plugin->getApplets(uuid);
 
         if (item) {
             setFixedSize(item->size());
@@ -27,7 +26,7 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
 
 QWidget * PluginItemWrapper::getContents()
 {
-    return m_plugin->getContents(m_uuid);
+    return m_plugin->getApplets(m_uuid);
 }
 
 void PluginItemWrapper::enterEvent(QEvent *)

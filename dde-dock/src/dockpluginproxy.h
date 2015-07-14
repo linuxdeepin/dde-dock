@@ -13,6 +13,8 @@ public:
 
     DockPluginInterface * plugin();
 
+    Dock::DockMode dockMode() Q_DECL_OVERRIDE;
+
     void itemAddedEvent(QString uuid) Q_DECL_OVERRIDE;
     void itemRemovedEvent(QString uuid) Q_DECL_OVERRIDE;
     void itemSizeChangedEvent(QString uuid) Q_DECL_OVERRIDE;
