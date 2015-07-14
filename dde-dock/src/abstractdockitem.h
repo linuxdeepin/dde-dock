@@ -15,7 +15,8 @@ public:
         QFrame(parent) {}
     virtual ~AbstractDockItem() {}
 
-    virtual QWidget * getContents() { return NULL; }
+    virtual QString getTitle() { return ""; }
+    virtual QWidget * getApplet() { return NULL; }
 
     virtual bool moveable() { return m_moveable; }
     virtual bool actived() { return m_isActived; }
@@ -43,7 +44,15 @@ public:
             m_previewAR->resizeWithContent();
             return;
         }
-        QWidget *tmpContent = getContents();
+        QWidget *tmpContent = getApplet();
+        if (tmpContent == NULL) {
+            QString title = getTitle();
+            // TODO: memory management
+            tmpContent = new QLabel(title);
+            tmpContent->setStyleSheet("QLabel { color: white }");
+            tmpContent->setFixedSize(100, 20);
+        }
+
         m_previewAR->setArrorDirection(ArrowRectangle::ArrowBottom);
         m_previewAR->setContent(tmpContent);
         m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);

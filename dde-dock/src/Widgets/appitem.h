@@ -46,7 +46,7 @@ public:
     AppItem(QWidget *parent = 0);
     ~AppItem();
 
-    QWidget *getContents();
+    QWidget *getApplet();
     void setEntryProxyer(DBusEntryProxyer *entryProxyer);
     void destroyItem(const QString &id);
     QString itemId() const;

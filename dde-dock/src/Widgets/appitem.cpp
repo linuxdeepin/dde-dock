@@ -13,7 +13,7 @@ AppItem::AppItem(QWidget *parent) :
     initMenu();
 }
 
-QWidget *AppItem::getContents()
+QWidget *AppItem::getApplet()
 {
     AppPreviews *preview = new AppPreviews();
     connect(preview,&AppPreviews::mouseEntered,this,&AppItem::cancelHide);

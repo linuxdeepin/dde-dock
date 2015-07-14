@@ -13,12 +13,13 @@ public:
     virtual ~DockPluginInterface() {}
     virtual void init(DockPluginProxyInterface *proxy) = 0;
 
-    virtual QStringList uuids() = 0;
-    virtual QWidget * getItem(QString uuid) = 0;
-    virtual QWidget * getContents(QString uuid) = 0;
-    virtual void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode) = 0;
-
     virtual QString name() = 0;
+
+    virtual QStringList uuids() = 0;
+    virtual QString getTitle(QString uuid) = 0;
+    virtual QWidget * getItem(QString uuid) = 0;
+    virtual QWidget * getApplet(QString uuid) = 0;
+    virtual void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode) = 0;
 };
 
 QT_BEGIN_NAMESPACE

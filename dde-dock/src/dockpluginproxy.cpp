@@ -1,5 +1,6 @@
 #include "dockpluginproxy.h"
 #include "pluginitemwrapper.h"
+#include "Controller/dockmodedata.h"
 
 DockPluginProxy::DockPluginProxy(DockPluginInterface * plugin, QObject * parent) :
     QObject(parent),
@@ -10,6 +11,11 @@ DockPluginProxy::DockPluginProxy(DockPluginInterface * plugin, QObject * parent)
 DockPluginInterface * DockPluginProxy::plugin()
 {
     return m_plugin;
+}
+
+Dock::DockMode DockPluginProxy::dockMode()
+{
+    return DockModeData::instance()->getDockMode();
 }
 
 void DockPluginProxy::itemAddedEvent(QString uuid)

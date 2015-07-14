@@ -85,4 +85,4 @@ headers.files += src/dockconstants.h \
     src/dockpluginproxyinterface.h
 headers.path = /usr/include/dock
 
-INSTALLS += target headers
+INSTALLS += headers
