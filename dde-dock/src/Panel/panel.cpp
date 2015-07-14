@@ -12,12 +12,12 @@ Panel::Panel(QWidget *parent)
     rightLayout = new DockLayout(this);
     rightLayout->setSortDirection(DockLayout::RightToLeft);
     rightLayout->setSpacing(dockCons->getAppletsItemSpacing());
-    rightLayout->resize(80,dockCons->getDockHeight());
+    rightLayout->resize(80,dockCons->getItemHeight());
 
     leftLayout = new DockLayout(this);
     leftLayout->setSpacing(dockCons->getAppItemSpacing());
-    leftLayout->resize(this->width() - rightLayout->width(),dockCons->getDockHeight());
-    leftLayout->move(0,0);
+    leftLayout->resize(this->width() - rightLayout->width(),dockCons->getItemHeight());
+    leftLayout->move(0,1);
 
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
@@ -140,10 +140,10 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
 {
     if (mode == Dock::FashionMode)
     {
-        leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getDockHeight());
+        leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getItemHeight());
         rightLayout->setSortDirection(DockLayout::LeftToRight);
-        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getDockHeight());
-        rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),0);
+        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
+        rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),1);
 
         this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
         this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
@@ -151,10 +151,10 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     else
     {
         rightLayout->setSortDirection(DockLayout::RightToLeft);
-        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getDockHeight());
-        rightLayout->move(parentWidget->width() - rightLayout->width(),0);
+        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
+        rightLayout->move(parentWidget->width() - rightLayout->width(),1);
 
-        leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getDockHeight());
+        leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getItemHeight());
 
         this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
         this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);

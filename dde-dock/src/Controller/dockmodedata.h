@@ -24,6 +24,7 @@ public:
     int getActivedItemWidth();
     int getAppItemSpacing();
     int getAppIconSize();
+
     int getAppletsItemHeight();
     int getAppletsItemWidth();
     int getAppletsItemSpacing();
