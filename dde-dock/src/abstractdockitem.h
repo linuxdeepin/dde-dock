@@ -3,6 +3,8 @@
 
 #include "Widgets/arrowrectangle.h"
 
+class DBusMenu;
+class DBusMenuManager;
 class AbstractDockItem : public QFrame
 {
     Q_OBJECT
@@ -32,6 +34,10 @@ public:
     void cancelHide();
     void resizePreview();
 
+    void showMenu();
+    virtual QString getMenuContent();
+    virtual void invokeMenuItem(QString itemId, bool checked);
+
 signals:
     void dragStart();
     void dragEntered(QDragEnterEvent * event);
@@ -51,6 +57,9 @@ protected:
     ArrowRectangle *m_previewAR = new ArrowRectangle();
 
     QPoint m_itemNextPos;
+
+    DBusMenu * m_dbusMenu = NULL;
+    DBusMenuManager * m_dbusMenuManager = NULL;
 };
 
 #endif // ABSTRACTDOCKITEM_H

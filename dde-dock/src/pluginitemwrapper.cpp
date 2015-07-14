@@ -1,3 +1,5 @@
+#include <QMouseEvent>
+
 #include "pluginitemwrapper.h"
 
 PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
@@ -24,6 +26,12 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
     }
 }
 
+
+PluginItemWrapper::~PluginItemWrapper()
+{
+    qDebug() << "PluginItemWrapper destroyed " << m_plugin->name() << m_uuid;
+}
+
 QString PluginItemWrapper::getTitle()
 {
     return m_plugin->getTitle(m_uuid);
@@ -34,25 +42,39 @@ QWidget * PluginItemWrapper::getApplet()
     return m_plugin->getApplet(m_uuid);
 }
 
+QString PluginItemWrapper::uuid() const
+{
+    return m_uuid;
+}
+
 void PluginItemWrapper::enterEvent(QEvent *)
 {
     emit mouseEntered();
+
     showPreview();
 }
 
 void PluginItemWrapper::leaveEvent(QEvent *)
 {
     emit mouseExited();
+
     hidePreview();
 }
 
-PluginItemWrapper::~PluginItemWrapper()
+
+void PluginItemWrapper::mousePressEvent(QMouseEvent * event)
 {
-    qDebug() << "PluginItemWrapper destroyed " << m_plugin->name() << m_uuid;
+    if (event->button() == Qt::RightButton) {
+        this->showMenu();
+    }
 }
 
-QString PluginItemWrapper::uuid() const
+QString PluginItemWrapper::getMenuContent()
 {
-    return m_uuid;
+    return m_plugin->getMenuContent(m_uuid);
 }
 
+void PluginItemWrapper::invokeMenuItem(QString itemId, bool checked)
+{
+    m_plugin->invokeMenuItem(m_uuid, itemId, checked);
+}

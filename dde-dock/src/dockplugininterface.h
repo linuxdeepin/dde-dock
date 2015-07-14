@@ -20,6 +20,9 @@ public:
     virtual QWidget * getItem(QString uuid) = 0;
     virtual QWidget * getApplet(QString uuid) = 0;
     virtual void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode) = 0;
+
+    virtual QString getMenuContent(QString uuid) = 0;
+    virtual void invokeMenuItem(QString uuid, QString itemId, bool checked) = 0;
 };
 
 QT_BEGIN_NAMESPACE

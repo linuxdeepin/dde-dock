@@ -1,9 +1,14 @@
 #include <QWidget>
 #include <QFrame>
 #include <QLabel>
-#include "Widgets/arrowrectangle.h"
+#include <QtDBus>
+#include <QJsonObject>
+#include <QJsonValue>
 
 #include "abstractdockitem.h"
+#include "Widgets/arrowrectangle.h"
+#include "DBus/dbusmenu.h"
+#include "DBus/dbusmenumanager.h"
 
 AbstractDockItem::AbstractDockItem(QWidget * parent) :
     QFrame(parent)
@@ -113,4 +118,44 @@ void AbstractDockItem::resizePreview()
 {
     m_previewAR->resizeWithContent();
     m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+}
+
+void AbstractDockItem::showMenu()
+{
+    if (m_dbusMenuManager == NULL) {
+        m_dbusMenuManager = new DBusMenuManager(this);
+    }
+
+    QDBusPendingReply<QDBusObjectPath> pr = m_dbusMenuManager->RegisterMenu();
+    pr.waitForFinished();
+
+    if (pr.isValid()) {
+        QDBusObjectPath op = pr.value();
+
+        if (m_dbusMenu != NULL) {
+            m_dbusMenu->deleteLater();
+        }
+
+        m_dbusMenu = new DBusMenu(op.path(), this);
+
+        connect(m_dbusMenu, &DBusMenu::ItemInvoked, this, &AbstractDockItem::invokeMenuItem);
+
+        QJsonObject targetObj;
+        targetObj.insert("x", QJsonValue(globalX() + width() / 2));
+        targetObj.insert("y", QJsonValue(globalY() - 5));
+        targetObj.insert("isDockMenu", QJsonValue(true));
+        targetObj.insert("menuJsonContent", QJsonValue(getMenuContent()));
+
+        m_dbusMenu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
+    }
+}
+
+QString AbstractDockItem::getMenuContent()
+{
+    return "";
+}
+
+void AbstractDockItem::invokeMenuItem(QString, bool)
+{
+
 }
