@@ -11,8 +11,10 @@ public:
     PluginItemWrapper(DockPluginInterface *plugin, QString uuid, QWidget * parent = 0);
     virtual ~PluginItemWrapper();
 
-    QWidget * getContents();
     QString uuid() const;
+
+    QString getTitle();
+    QWidget * getApplet();
 
 protected:
     void enterEvent(QEvent * event);
