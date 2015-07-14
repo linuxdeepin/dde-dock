@@ -61,8 +61,19 @@ const (
 	IconZoomLevel = "icon-zoom-level"
 )
 
-// PoliciesName is a map to sort policies and the display name.
-var PoliciesName = map[string]string{
+const (
+	// ActivationPolicyAsk indicates ask for behaviours when activation.
+	ActivationPolicyAsk string = "ask"
+
+	// ActivationPolicyLaunch indicates launch files when activation.
+	ActivationPolicyLaunch string = "launch"
+
+	// ActivationPolicyDisplay indicates display files when activation.
+	ActivationPolicyDisplay string = "display"
+)
+
+// sortPoliciesName is a map to sort policies and the display name.
+var sortPoliciesName = map[string]string{
 	"name":      Tr("_Name"),
 	"size":      Tr("_Size"),
 	"filetype":  Tr("_Filetype"),

@@ -5,7 +5,33 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/operations"
+	"sort"
+	"strings"
 )
+
+type byDisplayName []*gio.AppInfo
+
+func (s byDisplayName) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s byDisplayName) Less(i, j int) bool {
+	return s[i].GetDisplayName() < s[j].GetDisplayName()
+}
+
+func (s byDisplayName) Len() int {
+	return len(s)
+}
+
+func containsSpecificItem(uris []string) bool {
+	for _, uri := range uris {
+		if isTrash(uri) || isComputer(uri) || isAppGroup(uri) {
+			return true
+		}
+	}
+
+	return false
+}
 
 func getDefaultOpenApp(uri string) (*gio.AppInfo, error) {
 	job := operations.NewGetDefaultLaunchAppJob(uri, false)
@@ -15,62 +41,6 @@ func getDefaultOpenApp(uri string) (*gio.AppInfo, error) {
 	}
 
 	return job.Result().(*gio.AppInfo), nil
-}
-
-// Item is Normal Item, like file/directory/link.
-type Item struct {
-	uri      string
-	uris     []string
-	files    []*gio.File
-	multiple bool
-	app      *Application
-	menu     *Menu
-}
-
-// NewItem creates new item.
-func NewItem(app *Application, uris []string) *Item {
-	return &Item{
-		app:      app,
-		uri:      uris[0],
-		uris:     uris,
-		multiple: len(uris) > 1,
-	}
-}
-
-func (item *Item) settings() *Settings {
-	return item.app.settings
-}
-
-// func (item *Item) App() *Application {
-// 	return item.app
-// }
-
-func (item *Item) emitRequestDelete() {
-	item.app.emitRequestDelete(item.uris)
-}
-
-func (item *Item) emitRequestRename() {
-	item.app.emitRequestRename(item.uri)
-}
-
-func (item *Item) emitRequestEmptyTrash() {
-	item.app.emitRequestEmptyTrash()
-}
-
-func (item *Item) emitRequestCreateFile() {
-	item.app.emitRequestCreateFile()
-}
-
-func (item *Item) emitRequestCreateFileFromTemplate(template string) {
-	item.app.emitRequestCreateFileFromTemplate(template)
-}
-
-func (item *Item) emitRequestCreateDirectory() {
-	item.app.emitRequestCreateDirectory()
-}
-
-func (item *Item) showProperties() {
-	item.app.showProperties(item.uris)
 }
 
 // ArchiveMimeTypes is a list of MIMEType for archive files.
@@ -130,14 +100,152 @@ func isArchived(f *gio.File) bool {
 	return false
 }
 
+func contains(a *gio.AppInfo, b []*gio.AppInfo) bool {
+	for _, app := range b {
+		if app.GetId() == a.GetId() {
+			return true
+		}
+	}
+
+	return false
+}
+
+func getIntersection(a []*gio.AppInfo, b []*gio.AppInfo) []*gio.AppInfo {
+	intersection := []*gio.AppInfo{}
+	for _, app := range a {
+		if contains(app, b) {
+			intersection = append(intersection, app)
+		}
+	}
+
+	return intersection
+}
+
+func getPossibleOpenProgramming(uris []string) []*gio.AppInfo {
+	openProgrammings := make([][]*gio.AppInfo, len(uris))
+	for i, uri := range uris {
+		job := operations.NewGetRecommendedLaunchAppsJob(uri)
+		job.Execute()
+		if job.HasError() {
+			break
+		}
+
+		openProgrammings[i] = job.Result().([]*gio.AppInfo)
+	}
+
+	intersection := openProgrammings[0]
+	for i, l := 1, len(openProgrammings); len(intersection) > 0 && i < l; i++ {
+		intersection = getIntersection(intersection, openProgrammings[i])
+	}
+
+	possibleOpenProgrammings := make([]*gio.AppInfo, len(openProgrammings))
+	for i, app := range intersection {
+		possibleOpenProgrammings[i] = app.Dup()
+	}
+
+	// destroy all apps.
+	for _, apps := range openProgrammings {
+		for _, app := range apps {
+			app.Unref()
+		}
+	}
+
+	sort.Sort(byDisplayName(possibleOpenProgrammings))
+
+	return possibleOpenProgrammings
+}
+
+// Item is Normal Item, like file/directory/link.
+type Item struct {
+	uri      string
+	uris     []string
+	files    []*gio.File
+	multiple bool
+	app      *Application
+	menu     *Menu
+}
+
+// NewItem creates new item.
+func NewItem(app *Application, uris []string) *Item {
+	return &Item{
+		app:      app,
+		uri:      uris[0],
+		uris:     uris,
+		multiple: len(uris) > 1,
+	}
+}
+
+func (item *Item) emitRequestDelete() {
+	item.app.emitRequestDelete(item.uris)
+}
+
+func (item *Item) emitRequestRename() {
+	item.app.emitRequestRename(item.uri)
+}
+
+func (item *Item) emitRequestEmptyTrash() {
+	item.app.emitRequestEmptyTrash()
+}
+
+func (item *Item) emitRequestCreateFile() {
+	item.app.emitRequestCreateFile()
+}
+
+func (item *Item) emitRequestCreateFileFromTemplate(template string) {
+	item.app.emitRequestCreateFileFromTemplate(template)
+}
+
+func (item *Item) emitRequestCreateDirectory() {
+	item.app.emitRequestCreateDirectory()
+}
+
+func (item *Item) showProperties() {
+	item.app.showProperties(item.uris)
+}
+
 func (item *Item) destroy() {
 	for _, file := range item.files {
 		file.Unref()
 	}
 }
 
-// GenMenuContent generates json format menu content used in DeepinMenu for normal itself.
-func (item *Item) GenMenuContent() (*Menu, error) {
+func (item *Item) addOpenWithMenu(possibleOpenProgrammings []*gio.AppInfo) {
+	openWithMenuItem := NewMenuItem(Tr("Open _with"), func() {}, true)
+	item.menu.AppendItem(openWithMenuItem)
+
+	openWithSubMenu := NewMenu()
+	openWithSubMenu.SetIDGenerator(item.menu.genID)
+	openWithMenuItem.subMenu = openWithSubMenu
+
+	for _, app := range possibleOpenProgrammings {
+		openWithSubMenu.AppendItem(NewMenuItem(app.GetDisplayName(), func(id string) func() {
+			return func() {
+				fmt.Println("open with", id)
+				app := gio.NewDesktopAppInfo(id)
+				if app == nil {
+					fmt.Println("get app failed:", id)
+					return
+				}
+				defer app.Unref()
+
+				app.Launch(item.files, gio.GetGdkAppLaunchContext())
+			}
+		}(app.GetId()), true))
+		app.Unref()
+	}
+
+	if len(possibleOpenProgrammings) > 0 {
+		openWithSubMenu.AddSeparator()
+	}
+
+	openWithSubMenu.AppendItem(NewMenuItem(Tr("_Chose"), func() {
+		// TODO: chose open with programming
+		fmt.Println("chose open with")
+	}, true))
+}
+
+// GenMenu generates json format menu content used in DeepinMenu for normal itself.
+func (item *Item) GenMenu() (*Menu, error) {
 	item.menu = NewMenu()
 	item.files = make([]*gio.File, len(item.uris))
 	for i, uri := range item.uris {
@@ -148,55 +256,71 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 	}
 
 	menu := item.menu.AppendItem(NewMenuItem(Tr("_Open"), func() {
-		// be care of different open app.
-		item.app.emitRequestOpen(item.uris)
-	}, true))
+		activationPolicy := item.app.settings.ActivationPolicy()
 
-	// same type?
-	if true {
-		openWithMenuItem := NewMenuItem(Tr("Open _with"), func() {}, true)
-		menu.AppendItem(openWithMenuItem)
+		askingFiles := []string{}
+		ops := []int32{}
 
-		openWithSubMenu := NewMenu()
-		openWithSubMenu.SetIDGenerator(menu.genID)
-		openWithMenuItem.subMenu = openWithSubMenu
-
-		job := operations.NewGetRecommendedLaunchAppsJob(item.uri)
-		job.Execute()
-		if !job.HasError() {
-			recommendedApps := job.Result().([]*gio.AppInfo)
-			if len(recommendedApps) > 0 {
-				for _, app := range recommendedApps {
-					openWithSubMenu.AppendItem(NewMenuItem(app.GetName(), func(id string) func() {
-						return func() {
-							fmt.Println("open with", id)
-							app := gio.NewDesktopAppInfo(id)
-							if app == nil {
-								fmt.Println("get app failed:", id)
-								return
-							}
-							defer app.Unref()
-							defer func() {
-								for _, file := range item.files {
-									file.Unref()
-								}
-							}()
-							// be care of different open app.
-							app.Launch(item.files, nil)
-						}
-					}(app.GetId()), true))
-					app.Unref()
-				}
-
-				openWithSubMenu.AddSeparator()
+		for _, itemURI := range item.uris {
+			// FIXME: how to handle these errors.
+			f := gio.FileNewForCommandlineArg(itemURI)
+			if f == nil {
+				continue
 			}
+
+			info, err := f.QueryInfo(strings.Join([]string{
+				gio.FileAttributeAccessCanExecute,
+				gio.FileAttributeStandardContentType,
+			}, "+"), gio.FileQueryInfoFlagsNone, nil)
+			if err != nil {
+				f.Unref()
+				continue
+			}
+
+			isExecutable := info.GetAttributeBoolean(gio.FileAttributeAccessCanExecute)
+			contentType := info.GetAttributeString(gio.FileAttributeStandardContentType)
+			info.Unref()
+
+			if isExecutable && isDesktopFile(itemURI) {
+				item.app.activateDesktopFile(itemURI, []string{})
+				continue
+			}
+
+			if activationPolicy == ActivationPolicyAsk && isExecutable && (contentTypeCanBeExecutable(contentType) || strings.HasSuffix(itemURI, ".bin")) {
+				askingFiles = append(askingFiles, itemURI)
+				ops = append(ops, OpOpen)
+				f.Unref()
+				continue
+			}
+
+			defaultApp, _ := getDefaultOpenApp(itemURI)
+			if defaultApp == nil {
+				askingFiles = append(askingFiles, itemURI)
+				ops = append(ops, OpSelect)
+				f.Unref()
+				continue
+			}
+			defaultApp.Unref()
+
+			item.app.doActivateFile(f, []string{}, isExecutable, contentType, ActivateFlagRun)
+
+			f.Unref()
 		}
 
-		openWithSubMenu.AppendItem(NewMenuItem(Tr("_Chose"), func() {
-			// TODO:
-			fmt.Println("chose open with")
-		}, true))
+		if len(askingFiles) > 0 {
+			item.app.emitRequestOpen(askingFiles, ops)
+		}
+	}, true))
 
+	if containsSpecificItem(item.uris) {
+		return menu, nil
+	}
+
+	// 1. multiple selection: not show "open with" if no possible open programmings.
+	// 1. signle selection: show "open with" with "chose".
+	possibleOpenProgrammings := getPossibleOpenProgramming(item.uris)
+	if len(possibleOpenProgrammings) > 0 || !item.multiple {
+		item.addOpenWithMenu(possibleOpenProgrammings)
 	}
 
 	menu.AddSeparator()
@@ -209,7 +333,7 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 				return err
 			}
 			defer app.Unref()
-			_, err = app.Launch(files, nil)
+			_, err = app.Launch(files, gio.GetGdkAppLaunchContext())
 			return err
 		}
 
@@ -229,12 +353,7 @@ func (item *Item) GenMenuContent() (*Menu, error) {
 		}
 
 		if allIsArchived {
-			menu.AppendItem(NewMenuItem(Tr("_Extract"), func() {
-				err := runFileRoller("file-roller -f", item.files)
-				if err != nil {
-					fmt.Println(err)
-				}
-			}, true)).AppendItem(NewMenuItem(Tr("Extract _Here"), func() {
+			menu.AppendItem(NewMenuItem(Tr("_Extract Here"), func() {
 				err := runFileRoller("file-roller -h", item.files)
 				if err != nil {
 					fmt.Println(err)

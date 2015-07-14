@@ -45,8 +45,8 @@ func NewDesktop(app *Application) *Desktop {
 func (desktop *Desktop) destroy() {
 }
 
-// GenMenuContent generates json format menu content used in DeepinMenu for Desktop itself.
-func (desktop *Desktop) GenMenuContent() (*Menu, error) {
+// GenMenu generates json format menu content used in DeepinMenu for Desktop itself.
+func (desktop *Desktop) GenMenu() (*Menu, error) {
 	desktop.menu = NewMenu()
 	menu := desktop.menu
 
@@ -54,7 +54,7 @@ func (desktop *Desktop) GenMenuContent() (*Menu, error) {
 
 	sortPolicies := desktop.app.settings.getSortPolicies()
 	for _, sortPolicy := range sortPolicies {
-		sortSubMenu.AppendItem(NewMenuItem(PoliciesName[sortPolicy], func(sortPolicy string) func() {
+		sortSubMenu.AppendItem(NewMenuItem(sortPoliciesName[sortPolicy], func(sortPolicy string) func() {
 			return func() {
 				desktop.app.emitRequestSort(sortPolicy)
 			}

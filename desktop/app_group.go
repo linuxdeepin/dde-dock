@@ -29,15 +29,19 @@ func NewAppGroup(app *Application, uris []string) *AppGroup {
 	return &AppGroup{NewItem(app, uris)}
 }
 
-// GenMenuContent generates json format menu content used in DeepinMenu for AppGroup.
-func (item *AppGroup) GenMenuContent() (*Menu, error) {
+// GenMenu generates json format menu content used in DeepinMenu for AppGroup.
+func (item *AppGroup) GenMenu() (*Menu, error) {
 	item.menu = NewMenu()
 	return item.menu.AppendItem(NewMenuItem(Tr("_Open"), func() {
-		item.app.emitRequestOpen(item.uris)
+		ops := make([]int32, len(item.uris))
+		for i := range item.uris {
+			ops[i] = OpOpen
+		}
+		item.app.emitRequestOpen(item.uris, ops)
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Rename"), func() {
 		item.emitRequestRename()
 	}, !item.multiple)).AddSeparator().AppendItem(NewMenuItem(Tr("_Ungroup"), func() {
-		// TODO
+		// TODO: just emit dismiss signal?
 		// item.app.emitRequestDismissAppGroup(item.uri)
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Delete"), func() {
 		item.emitRequestDelete()
@@ -103,12 +107,14 @@ func getCategoriesFromDesktop(file string, invalidCategories map[string]struct{}
 	return
 }
 
+// CategoryInfo includes simple information for software category.
 type CategoryInfo struct {
 	Name          string
 	LowerCaseName string
 	Count         int32
 }
 
+// CategoryInfos is an array of CategoryInfo, used by sort.Sort.
 type CategoryInfos []CategoryInfo
 
 func (info CategoryInfos) Less(i, j int) bool {

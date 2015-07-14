@@ -16,8 +16,8 @@ func NewTrashItem(app *Application, uri string) *TrashItem {
 	return &TrashItem{NewItem(app, []string{uri})}
 }
 
-// GenMenuContent generates json format menu content used in DeepinMenu for TrashItem.
-func (item *TrashItem) GenMenuContent() (*Menu, error) {
+// GenMenu generates json format menu content used in DeepinMenu for TrashItem.
+func (item *TrashItem) GenMenu() (*Menu, error) {
 	item.menu = NewMenu()
 	clearMenuItemText := Tr("_Clear")
 
@@ -29,7 +29,7 @@ func (item *TrashItem) GenMenuContent() (*Menu, error) {
 	defer info.Unref()
 
 	trashedItemCount := info.GetAttributeInt64(gio.FileAttributeTrashItemCount)
-	if item.settings().ShowTrashedItemCountIsEnable() {
+	if item.app.settings.ShowTrashedItemCountIsEnable() {
 		clearMenuItemText = fmt.Sprintf(NTr("_Clear %d Item", "_Clear %d Items", int(trashedItemCount)), trashedItemCount)
 	}
 

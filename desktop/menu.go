@@ -100,16 +100,17 @@ func (m *Menu) AppendItem(items ...*MenuItem) *Menu {
 }
 
 func (m *Menu) handleAction(id string) bool {
-	if item, ok := m.ids[id]; ok {
+	item, ok := m.ids[id]
+	if ok {
 		if item.isActive {
 			item.Action()
 		}
 		return true
-	} else {
-		for _, item := range m.ids {
-			if item.subMenu != nil && item.subMenu.handleAction(id) {
-				return true
-			}
+	}
+
+	for _, item := range m.ids {
+		if item.subMenu != nil && item.subMenu.handleAction(id) {
+			return true
 		}
 	}
 

@@ -8,7 +8,9 @@ package desktop
 import "C"
 import "unsafe"
 import (
+	"errors"
 	"fmt"
+	"net/url"
 	"os/exec"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
@@ -18,19 +20,29 @@ import (
 	"strings"
 )
 
+// GetUserSpecialDir returns user special dir, like music directory.
 func GetUserSpecialDir(dir glib.UserDirectory) string {
 	return glib.GetUserSpecialDir(dir)
 }
 
+// GetDesktopDir returns desktop's path.
 func GetDesktopDir() string {
 	return GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop)
 }
 
 // IMenuable is the interface for something can generate menu.
 type IMenuable interface {
-	GenMenuContent() (*Menu, error)
+	GenMenu() (*Menu, error)
 	destroy()
 }
+
+// used by RequestOpen signal
+const (
+	// OpOpen indicates opening files
+	OpOpen int32 = iota
+	// OpSelect indicates selecting open programming.
+	OpSelect
+)
 
 // Application for desktop daemon.
 type Application struct {
@@ -43,6 +55,9 @@ type Application struct {
 	ActivateFlagRunInTerminal int32
 	ActivateFlagRun           int32
 
+	RequestOpenPolicyOpen   int32
+	RequestOpenPolicySelect int32
+
 	RequestRename                 func(string)
 	RequestDelete                 func([]string)
 	RequestEmptyTrash             func()
@@ -53,12 +68,9 @@ type Application struct {
 	RequestCreateFileFromTemplate func(string)
 	RequestCreateDirectory        func()
 	ItemCut                       func([]string)
-	RequestOpen                   func([]string)
-	RequestDismissAppGroup        func(string)
 
-	ActivateFileFailed      func(string)
-	CreateAppGroupFailed    func(string)
-	MergeIntoAppGroupFailed func(string)
+	RequestOpen            func([]string, []int32)
+	RequestDismissAppGroup func(string)
 
 	AppGroupCreated func(string, []string)
 	AppGroupDeleted func(string)
@@ -78,12 +90,25 @@ func (app *Application) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+const (
+	// ActivateFlagNone do nothing.
+	ActivateFlagNone int32 = iota
+	// ActivateFlagRun run file directly.
+	ActivateFlagRun
+	// ActivateFlagRunInTerminal run files in terminal.
+	ActivateFlagRunInTerminal
+	// ActivateFlagDisplay display files.
+	ActivateFlagDisplay
+)
+
 // NewApplication creates a application, settings must not be nil.
 func NewApplication(s *Settings) *Application {
 	app := &Application{
-		ActivateFlagRun:           0,
-		ActivateFlagRunInTerminal: 1,
-		ActivateFlagDisplay:       2,
+		ActivateFlagRun:           ActivateFlagRun,
+		ActivateFlagRunInTerminal: ActivateFlagRunInTerminal,
+		ActivateFlagDisplay:       ActivateFlagDisplay,
+		RequestOpenPolicyOpen:     OpOpen,
+		RequestOpenPolicySelect:   OpSelect,
 	}
 	app.desktop = NewDesktop(app)
 	app.settings = s
@@ -134,20 +159,8 @@ func (app *Application) emitItemCut(uris []string) {
 	dbus.Emit(app, "ItemCut", uris)
 }
 
-func (app *Application) emitRequestOpen(uris []string) {
-	dbus.Emit(app, "RequestOpen", uris)
-}
-
-func (app *Application) emitActivateFileFailed(reason string) {
-	dbus.Emit(app, "ActivateFileFailed", reason)
-}
-
-func (app *Application) emitCreateAppGroupFailed(reason string) {
-	dbus.Emit(app, "CreateAppGroupFailed", reason)
-}
-
-func (app *Application) emitMergeIntoAppGroupFailed(reason string) {
-	dbus.Emit(app, "MergeIntoAppGroupFailed", reason)
+func (app *Application) emitRequestOpen(uris []string, op []int32) {
+	dbus.Emit(app, "RequestOpen", uris, op)
 }
 
 func (app *Application) emitAppGroupCreated(group string) {
@@ -196,12 +209,16 @@ func (app *Application) IsAppGroup(uri string) bool {
 	return isAppGroup(uri)
 }
 
-func isAllSpecificItemsAux(a, b string) bool {
-	return strings.HasPrefix(a, "trash:") && strings.HasPrefix(b, "computer:")
+func isTrash(uri string) bool {
+	return strings.HasPrefix(uri, "trash:")
 }
 
-func isAllSpecificItems(uris []string) bool {
-	return isAllSpecificItemsAux(uris[0], uris[1]) || isAllSpecificItemsAux(uris[1], uris[0])
+func isComputer(uri string) bool {
+	return strings.HasPrefix(uri, "computer:")
+}
+
+func isDesktopFile(uri string) bool {
+	return strings.HasSuffix(uri, ".desktop")
 }
 
 func (app *Application) getMenuable(uris []string) IMenuable {
@@ -211,16 +228,22 @@ func (app *Application) getMenuable(uris []string) IMenuable {
 
 	if len(uris) == 1 {
 		uri := uris[0]
-		if strings.HasPrefix(uri, "trash:") {
+		if isTrash(uri) {
 			return NewTrashItem(app, uri)
-		} else if strings.HasPrefix(uri, "computer:") {
+		} else if isComputer(uri) {
 			return NewComputerItem(app, uri)
 		}
 	}
 
-	if len(uris) == 2 && isAllSpecificItems(uris) {
-		// TODO
-	}
+	// multiple selection.
+	// 1. open each file.
+	// 2. if files whose open programming are unknown exist, notify front-end to select open programming,
+	//    and open others files with default open programming.
+	// 3. if files which should ask for behaviour exist, notify front-end to ask for behaviour one by one(desktop files shouldn't be asked),
+	//    and open others files with default open programming.
+	// 4. if all files are archived files, just 'extract here' for archived files.
+	// 5. if non-archived files exist, 'extract here' shouldn't be shown.
+	// 6. if specific item exists, just 'open' menu item exists.
 
 	if isAllAppGroup(uris) {
 		return NewAppGroup(app, uris)
@@ -232,7 +255,7 @@ func (app *Application) getMenuable(uris []string) IMenuable {
 // GenMenuContent returns the menu content in json format used in DeepinMenu.
 func (app *Application) GenMenuContent(uris []string) string {
 	app.menuable = app.getMenuable(uris)
-	menu, err := app.menuable.GenMenuContent()
+	menu, err := app.menuable.GenMenu()
 	if err != nil {
 		return ""
 	}
@@ -269,7 +292,7 @@ func filterDesktop(files []string) []string {
 }
 
 // RequestCreatingAppGroup creates app group according to the files, and emits AppGroupCreated signal when it's done.
-func (app *Application) RequestCreatingAppGroup(files []string) {
+func (app *Application) RequestCreatingAppGroup(files []string) error {
 	C.g_reload_user_special_dirs_cache()
 	desktopDir := GetDesktopDir()
 
@@ -285,129 +308,155 @@ func (app *Application) RequestCreatingAppGroup(files []string) {
 	createJob.Execute()
 
 	if err := createJob.GetError(); err != nil {
-		app.emitCreateAppGroupFailed(err.Error())
-		return
+		return err
 	}
 
 	// move files into app group.
 	moveJob := operations.NewMoveJob(availableFiles, desktopDir, "", 0, nil)
 	moveJob.Execute()
 	if err := moveJob.GetError(); err != nil {
-		app.emitCreateAppGroupFailed(err.Error())
+		return err
 	}
 
 	app.emitAppGroupCreated(dirName)
+	return nil
 }
 
 // RequestMergeIntoAppGroup will merge files into existed AppGroup, and emits AppGroupMerged signal when it's done.
-func (app *Application) RequestMergeIntoAppGroup(files []string, appGroup string) {
+func (app *Application) RequestMergeIntoAppGroup(files []string, appGroup string) error {
 	availableFiles := filterDesktop(files)
 
 	moveJob := operations.NewMoveJob(availableFiles, GetDesktopDir(), "", 0, nil)
 	moveJob.Execute()
 	if err := moveJob.GetError(); err != nil {
-		app.emitMergeIntoAppGroupFailed(err.Error())
-		return
+		return err
 	}
 
 	app.emitAppGroupMerged(appGroup, availableFiles)
+	return nil
 }
 
-func (app *Application) doDisplayFile(file *gio.File, contentType string) {
+func (app *Application) doDisplayFile(file *gio.File, contentType string) error {
 	defaultApp := gio.AppInfoGetDefaultForType(contentType, false)
 	if defaultApp == nil {
-		app.emitActivateFileFailed("unknown default application")
-		return
+		return errors.New("unknown default application")
 	}
 	defer defaultApp.Unref()
 
-	if _, err := defaultApp.Launch([]*gio.File{file}, nil); err != nil {
-		app.emitActivateFileFailed(err.Error())
-	}
+	_, err := defaultApp.Launch([]*gio.File{file}, gio.GetGdkAppLaunchContext())
+
+	return err
 }
 
 // displayFile will display file using default app.
-func (app *Application) displayFile(file string) {
+func (app *Application) displayFile(file string) error {
 	f := gio.FileNewForCommandlineArg(file)
 	if f == nil {
-		return
+		return errors.New("invalid file")
 	}
 	defer f.Unref()
 
 	info, err := f.QueryInfo(gio.FileAttributeStandardContentType, gio.FileQueryInfoFlagsNone, nil)
 	if err != nil {
-		app.emitActivateFileFailed(err.Error())
-		return
+		return err
 	}
 	defer info.Unref()
 
 	contentType := info.GetContentType()
-	app.doDisplayFile(f, contentType)
+	return app.doDisplayFile(f, contentType)
 }
 
 // ActivateFile will activate file.
-func (app *Application) ActivateFile(file string, args []string, isExecutable bool, flag int32) {
-	isDesktopFile := strings.HasSuffix(file, ".desktop")
-	if isDesktopFile && isExecutable {
-		app.activateDesktopFile(file, args)
-	} else {
-		app.activateFile(file, args, isExecutable, flag)
+func (app *Application) ActivateFile(file string, args []string, isExecutable bool, flag int32) error {
+	if isDesktopFile(file) && isExecutable {
+		return app.activateDesktopFile(file, args)
 	}
+
+	return app.activateFile(file, args, isExecutable, flag)
 }
 
-func (app *Application) activateDesktopFile(file string, args []string) {
-	a := gio.NewDesktopAppInfoFromFilename(file)
+func (app *Application) activateDesktopFile(file string, args []string) error {
+	uri, err := url.Parse(file)
+	if err != nil {
+		return err
+	}
+
+	// NewDesktopAppInfoFromFilename cannot use uri.
+	a := gio.NewDesktopAppInfoFromFilename(uri.Path)
 	if a == nil {
-		fmt.Println("XXXXX")
-		return
+		return errors.New("invalid desktop file")
 	}
 	defer a.Unref()
 
-	a.LaunchUris(args, nil)
+	_, err = a.LaunchUris(args, gio.GetGdkAppLaunchContext())
+	return err
 }
 
-func (app *Application) activateFile(file string, args []string, isExecutable bool, flag int32) {
+func contentTypeCanBeExecutable(contentType string) bool {
+	cContentType := C.CString(contentType)
+	defer C.free(unsafe.Pointer(cContentType))
+
+	return C.int(C.content_type_can_be_executable(cContentType)) == 1
+}
+
+func contentTypeIs(contentType, t string) bool {
+	cContentType := C.CString(contentType)
+	defer C.free(unsafe.Pointer(cContentType))
+
+	cT := C.CString(t)
+	defer C.free(unsafe.Pointer(cT))
+
+	return C.int(C.content_type_is(cContentType, cT)) == 1
+}
+
+func isExecutableScript() bool {
+	return false
+}
+
+func (app *Application) doActivateFile(f *gio.File, args []string, isExecutable bool, contentType string, flag int32) error {
+	plainType := "text/plain"
+	file := f.GetUri()
+
+	if isExecutable && (contentTypeCanBeExecutable(contentType) || strings.HasSuffix(file, ".bin")) {
+		if contentTypeIs(contentType, plainType) { // runable file
+			switch flag {
+			case app.ActivateFlagRunInTerminal:
+				runInTerminal("", file)
+				return nil
+			case app.ActivateFlagRun:
+				return exec.Command(file).Start()
+			case app.ActivateFlagDisplay:
+				return app.doDisplayFile(f, contentType)
+			}
+		} else { // binary file
+			// FIXME: strange logic from dde-workspace, why args is not used on the other places.
+			return exec.Command(file, args...).Start()
+		}
+	}
+
+	return app.doDisplayFile(f, contentType)
+}
+
+func (app *Application) activateFile(file string, args []string, isExecutable bool, flag int32) error {
 	f := gio.FileNewForCommandlineArg(file)
 	if f == nil {
-		app.emitActivateFileFailed("xxx")
-		return
+		return errors.New("invalid file")
 	}
 	defer f.Unref()
 
 	info, err := f.QueryInfo(gio.FileAttributeStandardContentType, gio.FileQueryInfoFlagsNone, nil)
 	if err != nil {
-		app.emitActivateFileFailed(err.Error())
-		return
+		return err
 	}
 	defer info.Unref()
 
 	contentType := info.GetContentType()
-	cContentType := C.CString(contentType)
-	defer C.free(unsafe.Pointer(cContentType))
-
-	cPlainType := C.CString("text/plain")
-	defer C.free(unsafe.Pointer(cPlainType))
-
-	if isExecutable && (C.int(C.content_type_can_be_executable(cContentType)) == 1 || strings.HasSuffix(file, ".bin")) {
-		if C.int(C.content_type_is(cContentType, cPlainType)) == 1 { // runable file
-			switch flag {
-			case app.ActivateFlagRunInTerminal:
-				runInTerminal("", file)
-			case app.ActivateFlagRun:
-				exec.Command(file).Run()
-			case app.ActivateFlagDisplay:
-				app.doDisplayFile(f, contentType)
-			}
-		} else { // binary file
-			// FIXME: strange logic from dde-workspace, why args is not used on the other places.
-			exec.Command(file, args...).Run()
-		}
-	} else {
-		app.doDisplayFile(f, contentType)
-	}
+	return app.doActivateFile(f, args, isExecutable, contentType, flag)
 }
 
 // TODO: move to filemanager.
+
+// ItemInfo includes some simple informations.
 type ItemInfo struct {
 	DisplayName string
 	BaseName    string
@@ -451,10 +500,15 @@ func toItemInfo(p operations.ListProperty) ItemInfo {
 
 func (app *Application) getItemInfo(p operations.ListProperty) ItemInfo {
 	info := toItemInfo(p)
-	info.Icon = operations.GetThemeIcon(p.URI, 48) //app.settings.iconSize)
+	info.Icon = operations.GetThemeIcon(p.URI, app.settings.iconSize)
 	return info
 }
 
+func isShouldNotShow(p operations.ListProperty) bool {
+	return p.IsBackup || (p.IsHidden && !filepath.HasPrefix(p.BaseName, AppGroupPrefix))
+}
+
+// GetDesktopItems returns all desktop files.
 func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	infos := map[string]ItemInfo{}
 	var err error
@@ -463,7 +517,9 @@ func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	job := operations.NewListDirJob(path, operations.ListJobFlagIncludeHidden)
 
 	job.ListenProperty(func(p operations.ListProperty) {
-		infos[p.URI] = app.getItemInfo(p)
+		if !isShouldNotShow(p) {
+			infos[p.URI] = app.getItemInfo(p)
+		}
 	})
 
 	job.ListenDone(func(e error) {
@@ -478,6 +534,7 @@ func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 	return infos, err
 }
 
+// GetItemInfo gets ItemInfo for file.
 func (app *Application) GetItemInfo(file string) (ItemInfo, error) {
 	info := ItemInfo{}
 	f := gio.FileNewForCommandlineArg(file)
