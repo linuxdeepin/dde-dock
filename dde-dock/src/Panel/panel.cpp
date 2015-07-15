@@ -47,6 +47,9 @@ Panel::Panel(QWidget *parent)
     }
 
     initAppManager();
+
+    initHSManager();
+    initState();
 }
 
 void Panel::showScreenMask()
@@ -173,6 +176,70 @@ void Panel::initAppManager()
     connect(m_appManager,SIGNAL(entryAdded(AppItem*)),this, SLOT(slotAddAppItem(AppItem*)));
     connect(m_appManager, SIGNAL(entryRemoved(QString)),this, SLOT(slotRemoveAppItem(QString)));
     m_appManager->updateEntries();
+}
+
+void Panel::hasShown()
+{
+    m_HSManager->SetState(1);
+    emit panelHasShown();
+}
+
+void Panel::hasHidden()
+{
+    m_HSManager->SetState(3);
+    emit panelHasHidden();
+}
+
+void Panel::hideStateChanged(int value)
+{
+    if (value == 0)
+    {
+        emit startShow();
+    }
+    else if (value == 1)
+    {
+        emit startHide();
+    }
+}
+
+void Panel::initHSManager()
+{
+    m_HSManager = new DBusHideStateManager(this);
+    connect(m_HSManager,&DBusHideStateManager::ChangeState,this,&Panel::hideStateChanged);
+}
+
+void Panel::initState()
+{
+    QStateMachine * machine = new QStateMachine(this);
+    QState * showState = new QState(machine);
+    showState->assignProperty(this,"pos",QPoint(0,0));
+    QState * hideState = new QState(machine);
+    hideState->assignProperty(this,"pos",QPoint(0,height()));
+
+    machine->setInitialState(showState);
+
+    QPropertyAnimation *sa = new QPropertyAnimation(this, "pos");
+    sa->setDuration(200);
+    sa->setEasingCurve(QEasingCurve::InSine);
+    connect(sa,&QPropertyAnimation::finished,this,&Panel::hasShown);
+
+    QPropertyAnimation *ha = new QPropertyAnimation(this, "pos");
+    ha->setDuration(200);
+    ha->setEasingCurve(QEasingCurve::InSine);
+    connect(ha,&QPropertyAnimation::finished,this,&Panel::hasHidden);
+
+    QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
+    ts1->addAnimation(ha);
+    connect(ts1,&QSignalTransition::triggered,[=](int value = 2){
+        m_HSManager->SetState(value);
+    });
+    QSignalTransition *ts2 = hideState->addTransition(this,SIGNAL(startShow()),showState);
+    ts2->addAnimation(sa);
+    connect(ts2,&QSignalTransition::triggered,[=](int value = 0){
+        m_HSManager->SetState(value);
+    });
+
+    machine->start();
 }
 
 Panel::~Panel()

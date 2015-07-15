@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QDebug>
+#include "DBus/dbushidestatemanager.h"
 #include "Controller/dockmodedata.h"
 #include "Controller/appmanager.h"
 #include "Widgets/appitem.h"
@@ -15,6 +16,8 @@
 class Panel : public QLabel
 {
     Q_OBJECT
+    Q_PROPERTY(QPoint pos READ pos WRITE move)
+
 public:
     explicit Panel(QWidget *parent = 0);
     ~Panel();
@@ -27,6 +30,11 @@ public slots:
     void slotItemDropped();
     void slotEnteredMask();
     void slotExitedMask();
+signals:
+    void startShow();
+    void startHide();
+    void panelHasShown();
+    void panelHasHidden();
 
 private slots:
     void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
@@ -45,7 +53,14 @@ private:
     void showMenu();
 
     void initAppManager();
+
+    void hasShown();
+    void hasHidden();
+    void hideStateChanged(int value);
+    void initHSManager();
+    void initState();
 private:
+    DBusHideStateManager * m_HSManager = NULL;
     DockLayout * leftLayout = NULL;
     DockLayout *rightLayout = NULL;
     AppManager *m_appManager = NULL;
