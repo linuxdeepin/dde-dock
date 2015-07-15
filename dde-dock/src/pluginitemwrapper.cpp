@@ -17,9 +17,9 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
         m_pluginItemContents = m_plugin->getApplet(uuid);
 
         if (item) {
-            setFixedSize(item->size());
             item->setParent(this);
             item->move(0, 0);
+            item->adjustSize();
 
             emit widthChanged();
         }

@@ -45,6 +45,7 @@ void DockPluginProxy::itemSizeChangedEvent(QString uuid)
     qDebug() << "Item size changed on plugin " << m_plugin->name() << uuid;
 
     AbstractDockItem * item = getItem(uuid);
+    item->adjustSize();
     if (item) {
         emit item->widthChanged();
     }
