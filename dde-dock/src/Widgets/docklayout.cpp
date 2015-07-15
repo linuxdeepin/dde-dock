@@ -46,6 +46,11 @@ void DockLayout::setSpacing(qreal spacing)
     this->itemSpacing = spacing;
 }
 
+void DockLayout::setVerticalAlignment(DockLayout::VerticalAlignment value)
+{
+    this->m_verticalAlignment = value;
+}
+
 void DockLayout::setSortDirection(DockLayout::Direction value)
 {
     this->sortDirection = value;
@@ -56,13 +61,37 @@ void DockLayout::sortLeftToRight()
     if (appList.count() <= 0)
         return;
 
-    appList.at(0)->move(itemSpacing,(height() - appList.at(0)->height()) / 2);
+    switch (m_verticalAlignment)
+    {
+    case DockLayout::AlignTop:
+        appList.at(0)->move(itemSpacing,0);
+        break;
+    case DockLayout::AlignVCenter:
+        appList.at(0)->move(itemSpacing,(height() - appList.at(0)->height()) / 2);
+        break;
+    case DockLayout::AlignBottom:
+        appList.at(0)->move(itemSpacing,height() - appList.at(0)->height());
+        break;
+    }
     appList.at(0)->setNextPos(appList.at(0)->pos());
 
     for (int i = 1; i < appList.count(); i ++)
     {
         AbstractDockItem * frontItem = appList.at(i - 1);
-        appList.at(i)->move(frontItem->pos().x() + frontItem->width() + itemSpacing,height() - appList.at(i)->height());
+        AbstractDockItem * toItem = appList.at(i);
+        switch (m_verticalAlignment)
+        {
+        case DockLayout::AlignTop:
+            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
+            break;
+        case DockLayout::AlignVCenter:
+            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,(height() - toItem->height()) / 2);
+            break;
+        case DockLayout::AlignBottom:
+            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,height() - toItem->height());
+            break;
+        }
+
         appList.at(i)->setNextPos(appList.at(i)->pos());
     }
 }
@@ -72,13 +101,35 @@ void DockLayout::sortRightToLeft()
     if (appList.count()<=0)
         return;
 
-    appList.at(0)->move(this->width() - itemSpacing - appList.at(0)->width(),0);
+    switch (m_verticalAlignment)
+    {
+    case DockLayout::AlignTop:
+        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),0);
+        break;
+    case DockLayout::AlignVCenter:
+        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),(height() - appList.at(0)->height()) / 2);
+        break;
+    case DockLayout::AlignBottom:
+        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),height() - appList.at(0)->height());
+        break;
+    }
 
     for (int i = 1; i < appList.count(); i++)
     {
         AbstractDockItem *fromItem = appList.at(i - 1);
         AbstractDockItem *toItem = appList.at(i);
-        toItem->move(fromItem->x() - itemSpacing - toItem->width(),0);
+        switch (m_verticalAlignment)
+        {
+        case DockLayout::AlignTop:
+            toItem->move(fromItem->x() - itemSpacing - toItem->width(),0);
+            break;
+        case DockLayout::AlignVCenter:
+            toItem->move(fromItem->x() - itemSpacing - toItem->width(),(height() - toItem->height()) / 2);
+            break;
+        case DockLayout::AlignBottom:
+            toItem->move(fromItem->x() - itemSpacing - toItem->width(),height() - toItem->height());
+            break;
+        }
     }
 }
 

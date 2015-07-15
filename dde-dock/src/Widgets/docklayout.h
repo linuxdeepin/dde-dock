@@ -21,6 +21,12 @@ public:
         RightToLeft
     };
 
+    enum VerticalAlignment {
+        AlignTop,
+        AlignVCenter,
+        AlignBottom
+    };
+
     explicit DockLayout(QWidget *parent = 0);
 
     void addItem(AbstractDockItem * item);
@@ -28,6 +34,7 @@ public:
     void removeItem(int index);
     void moveItem(int from, int to);
     void setSpacing(qreal spacing);
+    void setVerticalAlignment(DockLayout::VerticalAlignment value);
     void setSortDirection(DockLayout::Direction value);
     int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
@@ -68,6 +75,7 @@ private:
     QMap<AbstractDockItem *,int> tmpAppMap;//only one item inside
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
 
+    DockLayout::VerticalAlignment m_verticalAlignment = DockLayout::AlignVCenter;
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;
 

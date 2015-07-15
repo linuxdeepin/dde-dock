@@ -12,13 +12,12 @@ Panel::Panel(QWidget *parent)
     rightLayout = new DockLayout(this);
     rightLayout->setSortDirection(DockLayout::RightToLeft);
     rightLayout->setSpacing(dockCons->getAppletsItemSpacing());
-    rightLayout->resize(80,dockCons->getItemHeight());
+    rightLayout->resize(0,dockCons->getItemHeight());
 
     leftLayout = new DockLayout(this);
     leftLayout->setSpacing(dockCons->getAppItemSpacing());
     leftLayout->resize(this->width() - rightLayout->width(),dockCons->getItemHeight());
     leftLayout->move(0,1);
-
     connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
     connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
