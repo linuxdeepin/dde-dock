@@ -508,13 +508,10 @@ func isShouldNotShow(p operations.ListProperty) bool {
 	return p.IsBackup || (p.IsHidden && !filepath.HasPrefix(p.BaseName, AppGroupPrefix))
 }
 
-// GetDesktopItems returns all desktop files.
-func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
+func (app *Application) listDir(dir string, flag operations.ListJobFlag) (map[string]ItemInfo, error) {
 	infos := map[string]ItemInfo{}
-	var err error
 
-	path := GetDesktopDir()
-	job := operations.NewListDirJob(path, operations.ListJobFlagIncludeHidden)
+	job := operations.NewListDirJob(dir, flag)
 
 	job.ListenProperty(func(p operations.ListProperty) {
 		if !isShouldNotShow(p) {
@@ -522,16 +519,18 @@ func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
 		}
 	})
 
-	job.ListenDone(func(e error) {
-		if e != nil {
-			err = e
-			return
-		}
-	})
-
 	job.Execute()
 
-	return infos, err
+	if job.HasError() {
+		return map[string]ItemInfo{}, job.GetError()
+	}
+
+	return infos, nil
+}
+
+// GetDesktopItems returns all desktop files.
+func (app *Application) GetDesktopItems() (map[string]ItemInfo, error) {
+	return app.listDir(GetDesktopDir(), operations.ListJobFlagIncludeHidden)
 }
 
 // GetItemInfo gets ItemInfo for file.
@@ -549,4 +548,8 @@ func (app *Application) GetItemInfo(file string) (ItemInfo, error) {
 	}
 
 	return app.getItemInfo(listProperty), nil
+}
+
+func (app *Application) GetAppGroupItems(appGroup string) (map[string]ItemInfo, error) {
+	return app.listDir(appGroup, operations.ListJobFlagNone)
 }
