@@ -14,6 +14,8 @@
 #include <QMimeData>
 #include <QTimer>
 #include <QDebug>
+#include "DBus/dbusdockedappmanager.h"
+#include "appitem.h"
 
 class TransformLabel : public QLabel
 {

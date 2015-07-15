@@ -27,25 +27,34 @@ void ScreenMask::dragLeaveEvent(QDragLeaveEvent *event)
 
 void ScreenMask::dropEvent(QDropEvent *event)
 {
-    qWarning() << "Item drop here:" << event->pos() << event->mimeData()->hasImage();
-    QImage image = qvariant_cast<QImage>(event->mimeData()->imageData());
-    if (!image.isNull())
+    AppItem *sourceItem = NULL;
+    sourceItem = dynamic_cast<AppItem *>(event->source());
+    if (sourceItem)
     {
-        TransformLabel * imgLabel = new TransformLabel();
-        imgLabel->setAttribute(Qt::WA_TranslucentBackground);
-        imgLabel->setWindowFlags(Qt::ToolTip);
-        imgLabel->setPixmap(QPixmap::fromImage(image));
-        imgLabel->move(event->pos());
-        imgLabel->show();
+        DBusDockedAppManager dda;
+        if (dda.IsDocked(sourceItem->itemData().id))
+            dda.RequestUndock(sourceItem->itemData().id);
 
-        //TODO add animation here
-        QTimer::singleShot(1000,imgLabel,SLOT(deleteLater()));
+        qWarning() << "Item drop here:" << event->pos() << event->mimeData()->hasImage();
+        QImage image = qvariant_cast<QImage>(event->mimeData()->imageData());
+        if (!image.isNull())
+        {
+            TransformLabel * imgLabel = new TransformLabel();
+            imgLabel->setAttribute(Qt::WA_TranslucentBackground);
+            imgLabel->setWindowFlags(Qt::ToolTip);
+            imgLabel->setPixmap(QPixmap::fromImage(image));
+            imgLabel->move(event->pos());
+            imgLabel->show();
 
-        emit itemDropped(event->pos());
-    }
-    else
-    {
-        qWarning() << "Image is NULL!";
+            //TODO add animation here
+            QTimer::singleShot(1000,imgLabel,SLOT(deleteLater()));
+
+            emit itemDropped(event->pos());
+        }
+        else
+        {
+            qWarning() << "Image is NULL!";
+        }
     }
 
     this->close();

@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef DBUSDOCKEDAPPMANAGER_H_1435837249
-#define DBUSDOCKEDAPPMANAGER_H_1435837249
+#ifndef DBUSDOCKEDAPPMANAGER_H_1436925098
+#define DBUSDOCKEDAPPMANAGER_H_1436925098
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -58,6 +58,20 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(in0);
         return asyncCallWithArgumentList(QStringLiteral("IsDocked"), argumentList);
+    }
+
+    inline QDBusPendingReply<bool> ReqeustDock(const QString &in0, const QString &in1, const QString &in2, const QString &in3)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1) << QVariant::fromValue(in2) << QVariant::fromValue(in3);
+        return asyncCallWithArgumentList(QStringLiteral("ReqeustDock"), argumentList);
+    }
+
+    inline QDBusPendingReply<bool> RequestUndock(const QString &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("RequestUndock"), argumentList);
     }
 
     inline QDBusPendingReply<> Sort(const QStringList &in0)

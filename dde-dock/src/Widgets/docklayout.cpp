@@ -122,18 +122,25 @@ int DockLayout::spacingItemIndex()
 
 void DockLayout::moveWithSpacingItem(int hoverIndex)
 {
+    int itemWidth = 0;
+    if (tmpAppMap.isEmpty())
+        itemWidth = DockModeData::instance()->getNormalItemWidth();
+    else
+        itemWidth = tmpAppMap.firstKey()->width();
+
     if (sortDirection == LeftToRight)
     {
         int spacintIndex = spacingItemIndex();
         if (spacintIndex == -1)
             return;
+
         if (spacintIndex > hoverIndex)
         {
             for (int i = hoverIndex; i < spacintIndex; i ++)
             {
                 AbstractDockItem *targetItem = appList.at(i);
 
-                targetItem->setNextPos(QPoint(targetItem->x() + tmpAppMap.firstKey()->width() + itemSpacing,0));
+                targetItem->setNextPos(QPoint(targetItem->x() + itemWidth + itemSpacing,0));
 
                 QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
                 animation->setStartValue(targetItem->pos());
@@ -153,7 +160,7 @@ void DockLayout::moveWithSpacingItem(int hoverIndex)
             {
                 AbstractDockItem *targetItem = appList.at(i);
 
-                targetItem->setNextPos(QPoint(targetItem->x() - tmpAppMap.firstKey()->width() - itemSpacing,0));
+                targetItem->setNextPos(QPoint(targetItem->x() - itemWidth - itemSpacing,0));
 
                 QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
                 animation->setStartValue(targetItem->pos());
@@ -201,14 +208,19 @@ void DockLayout::relayout()
 
 void DockLayout::addSpacingItem()
 {
+    int spacingValue = 0;
     if (tmpAppMap.isEmpty())
-        return;
+        spacingValue = DockModeData::instance()->getNormalItemWidth();
+    else
+    {
+        AbstractDockItem *tmpItem = tmpAppMap.firstKey();
+        spacingValue = tmpItem->width();
+    }
 
-    AbstractDockItem *tmpItem = tmpAppMap.firstKey();
     for (int i = appList.count() -1;i >= lastHoverIndex; i-- )
     {
         AbstractDockItem *targetItem = appList.at(i);
-        targetItem->setNextPos(targetItem->x() + tmpItem->width() + itemSpacing,0);
+        targetItem->setNextPos(targetItem->x() + spacingValue + itemSpacing,0);
 
         QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
         animation->setStartValue(targetItem->pos());
@@ -264,19 +276,42 @@ void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 
 void DockLayout::dropEvent(QDropEvent *event)
 {
-    AbstractDockItem * tmpItem = tmpAppMap.firstKey();
-    tmpAppMap.remove(tmpItem);
-    tmpItem->setVisible(true);
-    if (indexOf(tmpItem) == -1)
-    {
-        if (movingForward)
-            insertItem(tmpItem,lastHoverIndex);
-        else
-            insertItem(tmpItem,lastHoverIndex + 1);
-    }
+    //("text/plain", "COMPOUND_TEXT", "text/plain;charset=utf-8", "_DEEPIN_DND", "text/uri-list")
+    AbstractDockItem *sourceItem = NULL;
+    sourceItem = dynamic_cast<AbstractDockItem *>(event->source());
 
-    emit itemDropped();
-    m_animationItemCount = 0;
+    if (event->mimeData()->formats().indexOf("_DEEPIN_DND") != -1 && !sourceItem)
+    {
+        QString jsonStr = QString(event->mimeData()->data("_DEEPIN_DND")).split("uninstall").last().trimmed();
+
+        //Tim at both ends of the string is added to a character SOH (start of heading)
+        jsonStr = jsonStr.mid(1,jsonStr.length() - 2);
+        QJsonObject dataObj = QJsonDocument::fromJson(jsonStr.trimmed().toUtf8()).object();
+        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("id").toString()))
+        {
+            relayout();
+            return;
+        }
+
+        m_ddam->ReqeustDock(dataObj.value("id").toString(),dataObj.value("name").toString(),dataObj.value("icon").toString(),"");
+
+    }
+    else if (event->mimeData()->formats().indexOf("_DEEPIN_DND") == -1 && sourceItem)
+    {
+        AbstractDockItem * tmpItem = tmpAppMap.firstKey();
+        tmpAppMap.remove(tmpItem);
+        tmpItem->setVisible(true);
+        if (indexOf(tmpItem) == -1)
+        {
+            if (movingForward)
+                insertItem(tmpItem,lastHoverIndex);
+            else
+                insertItem(tmpItem,lastHoverIndex + 1);
+        }
+
+        emit itemDropped();
+        m_animationItemCount = 0;
+    }
 }
 
 void DockLayout::slotItemDrag()
@@ -348,10 +383,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
 
     m_lastPost = tmpPos;
 
-    if (!tmpAppMap.isEmpty())
-    {
-        moveWithSpacingItem(tmpIndex);
-    }
+    moveWithSpacingItem(tmpIndex);
 }
 
 void DockLayout::slotItemExited(QDragLeaveEvent *)

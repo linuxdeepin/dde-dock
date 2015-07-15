@@ -6,6 +6,10 @@
 #include <QMap>
 #include <QPropertyAnimation>
 #include <QCursor>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include "Controller/dockmodedata.h"
+#include "DBus/dbusdockedappmanager.h"
 #include "appitem.h"
 
 class DockLayout : public QWidget
@@ -62,6 +66,7 @@ private:
 private:
     QList<AbstractDockItem *> appList;
     QMap<AbstractDockItem *,int> tmpAppMap;//only one item inside
+    DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
 
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;
