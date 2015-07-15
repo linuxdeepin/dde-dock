@@ -8,7 +8,6 @@ QT       += core gui dbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += ../dde-dock/src/
 CONFIG += plugin c++11
 
 TARGET = $$qtLibraryTarget(dock-systray-plugin)

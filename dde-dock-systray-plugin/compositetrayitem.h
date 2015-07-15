@@ -14,7 +14,9 @@ public:
     void removeWidget(QWidget * widget);
 
 private:
-    uint m_columnCount = 2;
+    uint m_columnCount;
+
+    void setBackground();
 };
 
 #endif // COMPOSITETRAYITEM_H

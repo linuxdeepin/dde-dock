@@ -6,9 +6,10 @@
 #include <QWindow>
 #include <QWidget>
 
-#include "dockconstants.h"
-#include "dockplugininterface.h"
-#include "dockpluginproxyinterface.h"
+#include <dock/dockconstants.h>
+#include <dock/dockplugininterface.h>
+#include <dock/dockpluginproxyinterface.h>
+
 #include "dbustraymanager.h"
 
 class SystrayPlugin : public QObject, public DockPluginInterface
@@ -18,20 +19,25 @@ class SystrayPlugin : public QObject, public DockPluginInterface
     Q_INTERFACES(DockPluginInterface)
 
 public:
+    SystrayPlugin();
     ~SystrayPlugin();
 
-    void init(DockPluginProxyInterface * proxier) Q_DECL_OVERRIDE;
-
-    QStringList uuids() Q_DECL_OVERRIDE;
-    QWidget * getItem(QString uuid) Q_DECL_OVERRIDE;
-    QWidget * getContents(QString uuid){return NULL;}
-    void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode);
+    void init(DockPluginProxyInterface * proxy) Q_DECL_OVERRIDE;
 
     QString name() Q_DECL_OVERRIDE;
 
+    QStringList uuids() Q_DECL_OVERRIDE;
+    QString getTitle(QString uuid) Q_DECL_OVERRIDE;
+    QWidget * getItem(QString uuid) Q_DECL_OVERRIDE;
+    QWidget * getApplet(QString uuid) Q_DECL_OVERRIDE;
+    void changeMode(Dock::DockMode newMode, Dock::DockMode oldMode);
+
+    QString getMenuContent(QString uuid);
+    void invokeMenuItem(QString uuid, QString itemId, bool checked);
+
 private:
     QMap<QString, QWidget*> m_items;
-    DockPluginProxyInterface * m_proxier = 0;
+    DockPluginProxyInterface * m_proxy = 0;
     com::deepin::dde::TrayManager *m_dbusTrayManager = 0;
     Dock::DockMode m_mode;
 

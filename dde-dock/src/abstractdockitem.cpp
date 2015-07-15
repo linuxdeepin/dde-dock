@@ -96,7 +96,7 @@ void AbstractDockItem::showPreview()
         // TODO: memory management
         tmpContent = new QLabel(title);
         tmpContent->setStyleSheet("QLabel { color: white }");
-        tmpContent->setFixedSize(100, 20);
+        tmpContent->adjustSize();
     }
 
     m_previewAR->setArrorDirection(ArrowRectangle::ArrowBottom);

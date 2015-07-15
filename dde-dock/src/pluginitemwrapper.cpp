@@ -19,7 +19,7 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
         if (item) {
             item->setParent(this);
             item->move(0, 0);
-            item->adjustSize();
+            this->adjustSize();
 
             emit widthChanged();
         }

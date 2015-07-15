@@ -1,6 +1,8 @@
 #include <QStyle>
 #include <QDebug>
 
+#include <dock/dockconstants.h>
+
 #include "compositetrayitem.h"
 
 static const int Margins = 4;
@@ -9,7 +11,9 @@ static const int ColumnWidth = 20;
 CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
     QFrame(parent)
 {
+    m_columnCount = 2;
 
+    setBackground();
 }
 
 CompositeTrayItem::~CompositeTrayItem()
@@ -35,9 +39,8 @@ void CompositeTrayItem::addWidget(QWidget * widget)
     } else if (childrenCount <= 12) {
         m_columnCount = 6;
     }
-    setFixedSize(Margins * 2 + ColumnWidth * m_columnCount, 48);
-    setStyleSheet("QFrame { background-image: url(':/images/darea_container_4.svg') }");
-    style()->polish(this);
+
+    setBackground();
 
     // move the widget to right position
     int x = (childrenCount - 1) % m_columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
@@ -47,7 +50,7 @@ void CompositeTrayItem::addWidget(QWidget * widget)
 
 void CompositeTrayItem::removeWidget(QWidget *widget)
 {
-    widget->setParent(NULL);
+//    widget->setParent(NULL);
 
     uint childrenCount = children().length();
 
@@ -63,7 +66,15 @@ void CompositeTrayItem::removeWidget(QWidget *widget)
     } else if (childrenCount <= 12) {
         m_columnCount = 6;
     }
-    setFixedSize(Margins * 2 + ColumnWidth * m_columnCount, 48);
+
+    setBackground();
+}
+
+
+void CompositeTrayItem::setBackground()
+{
+    resize(Margins * 2 + ColumnWidth * m_columnCount, 48);
     setStyleSheet("QFrame { background-image: url(':/images/darea_container_4.svg') }");
-    style()->polish(this);
+
+    qDebug() << "CompositeTrayItem::setBackground()" << this->geometry();
 }
