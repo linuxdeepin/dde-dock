@@ -329,7 +329,7 @@ func (app *Application) RequestCreatingAppGroup(files []string) error {
 		return err
 	}
 
-	return app.emitAppGroupCreated(dirName, availableFiles)
+	return app.emitAppGroupCreated(filepath.Join(desktopDir, dirName), availableFiles)
 }
 
 // RequestMergeIntoAppGroup will merge files into existed AppGroup, and emits AppGroupMerged signal when it's done.
