@@ -2,6 +2,7 @@ package desktop
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"path/filepath"
@@ -58,31 +59,29 @@ func getCategoryFromSoftwareCenter(db *sql.DB, file string) (string, error) {
 	return category, nil
 }
 
-func getGroupNameFromSoftwareCenter(files []string) string {
+func getGroupNameFromSoftwareCenter(files []string) (string, error) {
 	db, err := sql.Open("sqlite3", "dbPath")
 	if err != nil {
-		fmt.Println(err)
-		return ""
+		return "", err
 	}
 	defer db.Close()
 
 	category, err := getCategoryFromSoftwareCenter(db, files[0])
 	if err != nil {
-		fmt.Println(err)
-		return ""
+		return "", fmt.Errorf("get category failed from database: %s", err.Error())
 	}
 	if category == "" {
-		return ""
+		return "", errors.New("empty category from database")
 	}
 
 	for _, file := range files[1:] {
 		anotherCategory, err := getCategoryFromSoftwareCenter(db, file)
 		if err != nil || anotherCategory != category {
-			return ""
+			return "", errors.New("no same category from database")
 		}
 	}
 
-	return category
+	return category, nil
 }
 
 func containsWithCaseInsensitive(m map[string]struct{}, category string) bool {
@@ -93,7 +92,7 @@ func containsWithCaseInsensitive(m map[string]struct{}, category string) bool {
 
 func getCategoriesFromDesktop(file string, invalidCategories map[string]struct{}) (categories []string) {
 	app := gio.NewDesktopAppInfoFromFilename(file)
-	if app != nil {
+	if app == nil {
 		return
 	}
 	defer app.Unref()
@@ -168,14 +167,13 @@ func getFilter(f *glib.KeyFile, group string, keyname string) map[string]struct{
 	return keyMap
 }
 
-func getGroupNameFromDesktop(files []string) string {
+func getGroupNameFromDesktop(files []string) (string, error) {
 	f := glib.NewKeyFile()
 	defer f.Free()
 
 	ok, err := f.LoadFromFile("/usr/share/dde/data/category_filter.ini", glib.KeyFileFlagsNone)
 	if !ok {
-		fmt.Println(err)
-		return ""
+		return "", fmt.Errorf("load category filter failed: %s", err.Error())
 	}
 
 	invalidCategories := getFilter(f, "Main", "filter")
@@ -183,7 +181,7 @@ func getGroupNameFromDesktop(files []string) string {
 
 	categoryCounts := countCategories(files, invalidCategories)
 	if len(categoryCounts) == 0 {
-		return ""
+		return "", errors.New("get no category from desktop")
 	}
 
 	// remove generic categories.
@@ -201,18 +199,26 @@ func getGroupNameFromDesktop(files []string) string {
 
 	sort.Sort(CategoryInfos(candidateCategories))
 
-	return candidateCategories[0].Name
+	return candidateCategories[0].Name, nil
 }
 
 func getGroupName(files []string) string {
-	name := getGroupNameFromSoftwareCenter(files)
+	name, err := getGroupNameFromSoftwareCenter(files)
 	if name != "" {
 		return name
 	}
 
-	name = getGroupNameFromDesktop(files)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	name, err = getGroupNameFromDesktop(files)
 	if name != "" {
 		return name
+	}
+
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	return Tr("App Group")

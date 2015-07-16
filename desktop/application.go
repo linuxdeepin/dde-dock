@@ -313,13 +313,17 @@ func (app *Application) RequestCreatingAppGroup(files []string) error {
 	createJob.Execute()
 
 	if err := createJob.GetError(); err != nil {
+		fmt.Println("create appgroup failed:", err)
 		return err
 	}
 
+	appGroupURI := createJob.Result().(string)
+
 	// move files into app group.
-	moveJob := operations.NewMoveJob(availableFiles, desktopDir, "", 0, nil)
+	moveJob := operations.NewMoveJob(availableFiles, appGroupURI, "", 0, nil)
 	moveJob.Execute()
 	if err := moveJob.GetError(); err != nil {
+		fmt.Println("move apps to appgroup failed:", err)
 		return err
 	}
 
@@ -331,7 +335,7 @@ func (app *Application) RequestCreatingAppGroup(files []string) error {
 func (app *Application) RequestMergeIntoAppGroup(files []string, appGroup string) error {
 	availableFiles := filterDesktop(files)
 
-	moveJob := operations.NewMoveJob(availableFiles, GetDesktopDir(), "", 0, nil)
+	moveJob := operations.NewMoveJob(availableFiles, appGroup, "", 0, nil)
 	moveJob.Execute()
 	if err := moveJob.GetError(); err != nil {
 		return err
