@@ -189,54 +189,54 @@ func (s *Settings) updateIconSize() {
 	s.iconSize = int(s.desktop.GetEnum(IconDefaultSize) * s.desktop.GetInt(IconZoomLevel) / 100)
 }
 
-func (s *Settings) emitIconZoomLevelChanged(level int32) {
-	dbus.Emit(s, "IconZoomLevelChanged", level)
+func (s *Settings) emitIconZoomLevelChanged(level int32) error {
+	return dbus.Emit(s, "IconZoomLevelChanged", level)
 }
 
-func (s *Settings) emitShowTrashIconChanged(enable bool) {
-	dbus.Emit(s, "ShowTrashIconChanged", enable)
+func (s *Settings) emitShowTrashIconChanged(enable bool) error {
+	return dbus.Emit(s, "ShowTrashIconChanged", enable)
 }
 
-func (s *Settings) emitShowComputerIconChanged(enable bool) {
-	dbus.Emit(s, "ShowComputerIconChanged", enable)
+func (s *Settings) emitShowComputerIconChanged(enable bool) error {
+	return dbus.Emit(s, "ShowComputerIconChanged", enable)
 }
 
-func (s *Settings) emitConfirmEmptyTrashChanged(enable bool) {
-	dbus.Emit(s, "ConfirmEmptyTrashChanged", enable)
+func (s *Settings) emitConfirmEmptyTrashChanged(enable bool) error {
+	return dbus.Emit(s, "ConfirmEmptyTrashChanged", enable)
 }
-func (s *Settings) emitStickupGridChanged(enable bool) {
-	dbus.Emit(s, "StickupGridChanged", enable)
+func (s *Settings) emitStickupGridChanged(enable bool) error {
+	return dbus.Emit(s, "StickupGridChanged", enable)
 }
-func (s *Settings) emitManualPositionChanged(enable bool) {
-	dbus.Emit(s, "ManualPositionChanged", enable)
-}
-
-func (s *Settings) emitActivationPolicyChanged(activationPolicy string) {
-	dbus.Emit(s, "ActivationPolicyChanged", activationPolicy)
+func (s *Settings) emitManualPositionChanged(enable bool) error {
+	return dbus.Emit(s, "ManualPositionChanged", enable)
 }
 
-func (s *Settings) emitClickPolicyChanged(clickPolicy string) {
-	dbus.Emit(s, "ClickPolicyChanged", clickPolicy)
+func (s *Settings) emitActivationPolicyChanged(activationPolicy string) error {
+	return dbus.Emit(s, "ActivationPolicyChanged", activationPolicy)
 }
 
-func (s *Settings) emitShowThumbnailChanged(showPolicy string) {
-	dbus.Emit(s, "ShowThumbnailChanged", showPolicy)
+func (s *Settings) emitClickPolicyChanged(clickPolicy string) error {
+	return dbus.Emit(s, "ClickPolicyChanged", clickPolicy)
 }
 
-func (s *Settings) emitShowHiddenFilesChanged(enable bool) {
-	dbus.Emit(s, "ShowHiddenFilesChanged", enable)
+func (s *Settings) emitShowThumbnailChanged(showPolicy string) error {
+	return dbus.Emit(s, "ShowThumbnailChanged", showPolicy)
 }
 
-func (s *Settings) emitShowExtensionNameChanged(enable bool) {
-	dbus.Emit(s, "ShowExtensionNameChanged", enable)
+func (s *Settings) emitShowHiddenFilesChanged(enable bool) error {
+	return dbus.Emit(s, "ShowHiddenFilesChanged", enable)
 }
 
-func (s *Settings) emitLabelPositionChanged(position string) {
-	dbus.Emit(s, "LabelPositionChanged", position)
+func (s *Settings) emitShowExtensionNameChanged(enable bool) error {
+	return dbus.Emit(s, "ShowExtensionNameChanged", enable)
 }
 
-func (s *Settings) emitAllowDeleteImmediatlyChanged(enable bool) {
-	dbus.Emit(s, "AllowDeleteImmediatlyChanged", enable)
+func (s *Settings) emitLabelPositionChanged(position string) error {
+	return dbus.Emit(s, "LabelPositionChanged", position)
+}
+
+func (s *Settings) emitAllowDeleteImmediatlyChanged(enable bool) error {
+	return dbus.Emit(s, "AllowDeleteImmediatlyChanged", enable)
 }
 
 // ConfirmTrashIsEnable returns whether ConfirmTrash is enabled.

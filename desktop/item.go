@@ -175,28 +175,28 @@ func NewItem(app *Application, uris []string) *Item {
 	}
 }
 
-func (item *Item) emitRequestDelete() {
-	item.app.emitRequestDelete(item.uris)
+func (item *Item) emitRequestDelete() error {
+	return item.app.emitRequestDelete(item.uris)
 }
 
-func (item *Item) emitRequestRename() {
-	item.app.emitRequestRename(item.uri)
+func (item *Item) emitRequestRename() error {
+	return item.app.emitRequestRename(item.uri)
 }
 
-func (item *Item) emitRequestEmptyTrash() {
-	item.app.emitRequestEmptyTrash()
+func (item *Item) emitRequestEmptyTrash() error {
+	return item.app.emitRequestEmptyTrash()
 }
 
-func (item *Item) emitRequestCreateFile() {
-	item.app.emitRequestCreateFile()
+func (item *Item) emitRequestCreateFile() error {
+	return item.app.emitRequestCreateFile()
 }
 
-func (item *Item) emitRequestCreateFileFromTemplate(template string) {
-	item.app.emitRequestCreateFileFromTemplate(template)
+func (item *Item) emitRequestCreateFileFromTemplate(template string) error {
+	return item.app.emitRequestCreateFileFromTemplate(template)
 }
 
-func (item *Item) emitRequestCreateDirectory() {
-	item.app.emitRequestCreateDirectory()
+func (item *Item) emitRequestCreateDirectory() error {
+	return item.app.emitRequestCreateDirectory()
 }
 
 func (item *Item) showProperties() {

@@ -43,7 +43,7 @@ func (item *AppGroup) GenMenu() (*Menu, error) {
 		item.emitRequestRename()
 	}, !item.multiple)).AddSeparator().AppendItem(NewMenuItem(Tr("_Ungroup"), func() {
 		// TODO: just emit dismiss signal?
-		// item.app.emitRequestDismissAppGroup(item.uri)
+		item.app.emitRequestDismissAppGroup(item.uri)
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Delete"), func() {
 		item.emitRequestDelete()
 	}, true)), nil

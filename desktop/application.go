@@ -119,72 +119,74 @@ func (app *Application) setSettings(s *Settings) {
 	app.settings = s
 }
 
-func (app *Application) emitRequestRename(uri string) {
-	dbus.Emit(app, "RequestRename", uri)
+func (app *Application) emitRequestRename(uri string) error {
+	return dbus.Emit(app, "RequestRename", uri)
 }
 
-func (app *Application) emitRequestDelete(uris []string) {
-	dbus.Emit(app, "RequestDelete", uris)
+func (app *Application) emitRequestDelete(uris []string) error {
+	return dbus.Emit(app, "RequestDelete", uris)
 }
 
-func (app *Application) emitRequestEmptyTrash() {
-	dbus.Emit(app, "RequestEmptyTrash")
+func (app *Application) emitRequestEmptyTrash() error {
+	return dbus.Emit(app, "RequestEmptyTrash")
 }
 
-func (app *Application) emitRequestSort(sortPolicy string) {
-	dbus.Emit(app, "RequestSort", sortPolicy)
+func (app *Application) emitRequestSort(sortPolicy string) error {
+	return dbus.Emit(app, "RequestSort", sortPolicy)
 }
 
-func (app *Application) emitRequestCleanup() {
-	dbus.Emit(app, "RequestCleanup")
+func (app *Application) emitRequestCleanup() error {
+	return dbus.Emit(app, "RequestCleanup")
 }
 
-func (app *Application) emitRequestAutoArrange() {
-	dbus.Emit(app, "RequestAutoArrange")
+func (app *Application) emitRequestAutoArrange() error {
+	return dbus.Emit(app, "RequestAutoArrange")
 }
 
-func (app *Application) emitRequestCreateFile() {
-	dbus.Emit(app, "RequestCreateFile")
+func (app *Application) emitRequestCreateFile() error {
+	return dbus.Emit(app, "RequestCreateFile")
 }
 
-func (app *Application) emitRequestCreateFileFromTemplate(template string) {
-	dbus.Emit(app, "RequestCreateFileFromTemplate", template)
+func (app *Application) emitRequestCreateFileFromTemplate(template string) error {
+	return dbus.Emit(app, "RequestCreateFileFromTemplate", template)
 }
 
-func (app *Application) emitRequestCreateDirectory() {
-	dbus.Emit(app, "RequestCreateDirectory")
+func (app *Application) emitRequestCreateDirectory() error {
+	return dbus.Emit(app, "RequestCreateDirectory")
 }
 
-func (app *Application) emitItemCut(uris []string) {
-	dbus.Emit(app, "ItemCut", uris)
+func (app *Application) emitItemCut(uris []string) error {
+	return dbus.Emit(app, "ItemCut", uris)
 }
 
 func (app *Application) emitRequestOpen(uris []string, op []int32) {
 	dbus.Emit(app, "RequestOpen", uris, op)
 }
 
-func (app *Application) emitAppGroupCreated(group string) {
-	dbus.Emit(app, "AppGroupCreated", group)
+func (app *Application) emitAppGroupCreated(group string, files []string) error {
+	return dbus.Emit(app, "AppGroupCreated", group, files)
 }
 
-func (app *Application) emitAppGroupMerged(group string, files []string) {
-	dbus.Emit(app, "AppGroupMerged", group, files)
+func (app *Application) emitAppGroupMerged(group string, files []string) error {
+	return dbus.Emit(app, "AppGroupMerged", group, files)
 }
 
-func (app *Application) emitRequestDismissAppGroup(group string) {
-	dbus.Emit(app, "RequestDismissAppGroup", group)
+func (app *Application) emitRequestDismissAppGroup(group string) error {
+	return dbus.Emit(app, "RequestDismissAppGroup", group)
 }
 
-func (app *Application) emitRequestPaste(dest string) {
+func (app *Application) emitRequestPaste(dest string) error {
 	conn, err := dbus.SessionBus()
 	if err != nil {
-		return
+		return err
 	}
 
 	obj := conn.Object("com.deepin.filemanager.Backend.Clipboard", "/com/deepin/filemanager/Backend/Clipboard")
 	if obj != nil {
-		obj.Call("com.deepin.filemanager.Backend.Clipboard.EmitPaste", 0, dest).Store()
+		return obj.Call("com.deepin.filemanager.Backend.Clipboard.EmitPaste", 0, dest).Store()
 	}
+
+	return nil
 }
 
 func (app *Application) showProperties(uris []string) {
@@ -327,8 +329,7 @@ func (app *Application) RequestCreatingAppGroup(files []string) error {
 		return err
 	}
 
-	app.emitAppGroupCreated(dirName)
-	return nil
+	return app.emitAppGroupCreated(dirName, availableFiles)
 }
 
 // RequestMergeIntoAppGroup will merge files into existed AppGroup, and emits AppGroupMerged signal when it's done.
@@ -341,8 +342,7 @@ func (app *Application) RequestMergeIntoAppGroup(files []string, appGroup string
 		return err
 	}
 
-	app.emitAppGroupMerged(appGroup, availableFiles)
-	return nil
+	return app.emitAppGroupMerged(appGroup, availableFiles)
 }
 
 func (app *Application) doDisplayFile(file *gio.File, contentType string) error {
