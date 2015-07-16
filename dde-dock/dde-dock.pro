@@ -10,7 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = dde-dock
 TEMPLATE = app
-INCLUDEPATH += src/
+INCLUDEPATH += src/ ../libs/
+
 
 SOURCES += \
     src/main.cpp \
@@ -40,7 +41,8 @@ SOURCES += \
     src/DBus/dbusmenu.cpp \
     src/Widgets/apppreviews.cpp \
     src/Widgets/closebutton.cpp \
-    src/DBus/dbushidestatemanager.cpp
+    src/DBus/dbushidestatemanager.cpp \
+    ../libs/xcb_misc.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -72,13 +74,14 @@ HEADERS  += \
     src/dockconstants.h \
     src/Widgets/apppreviews.h \
     src/Widgets/closebutton.h \
-    src/DBus/dbushidestatemanager.h
+    src/DBus/dbushidestatemanager.h \
+    ../libs/xcb_misc.h
 
 RESOURCES += \
     images.qrc \
     qss.qrc
 
-PKGCONFIG += gtk+-2.0 x11 cairo
+PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh
 CONFIG += c++11 link_pkgconfig
 
 target.path = /usr/bin/
