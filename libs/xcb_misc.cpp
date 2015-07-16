@@ -30,7 +30,10 @@ XcbMisc * XcbMisc::instance()
 
 void XcbMisc::set_strut_partial(int winId, Orientation orientation, uint strut, uint start, uint end)
 {
-    xcb_ewmh_wm_strut_partial_t strut_partial;
+    // xcb_ewmh_wm_strut_partial_t strut_partial is very different from
+    // xcb_ewmh_wm_strut_partial_t strut_partial {};
+    // the latter one ensures all its member to be initialized to 0;
+    xcb_ewmh_wm_strut_partial_t strut_partial {};
 
     switch (orientation) {
     case OrientationLeft:
