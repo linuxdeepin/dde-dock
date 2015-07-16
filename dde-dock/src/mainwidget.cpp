@@ -13,7 +13,7 @@ MainWidget::MainWidget(QWidget *parent)
 
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->move(0,rec.height());
+    this->move(0, rec.height() - this->height());
 
     connect(DockModeData::instance(), SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
             this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));

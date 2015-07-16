@@ -24,7 +24,14 @@ int main(int argc, char *argv[])
     MainWidget w;
     w.show();
 
-    XcbMisc::instance()->set_strut_partial(w.winId(), XcbMisc::OrientationBottom, w.height(), w.x(), w.x() + w.width());
+    XcbMisc::instance()->set_window_type(w.winId(),
+                                         XcbMisc::Dock);
+
+    XcbMisc::instance()->set_strut_partial(w.winId(),
+                                           XcbMisc::OrientationBottom,
+                                           w.height(),
+                                           w.x(),
+                                           w.x() + w.width());
 
     return a.exec();
 }

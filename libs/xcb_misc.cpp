@@ -28,7 +28,25 @@ XcbMisc * XcbMisc::instance()
     return _xcb_misc_instance;
 }
 
-void XcbMisc::set_strut_partial(int winId, Orientation orientation, uint strut, uint start, uint end)
+void XcbMisc::set_window_type(xcb_window_t winId, WindowType winType)
+{
+    xcb_atom_t atoms[1];
+
+    switch (winType) {
+    case WindowType::Desktop:
+        atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
+        break;
+    case WindowType::Dock:
+        atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DOCK;
+        break;
+    default:
+        break;
+    }
+
+    xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId, 1, atoms);
+}
+
+void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uint strut, uint start, uint end)
 {
     // xcb_ewmh_wm_strut_partial_t strut_partial is very different from
     // xcb_ewmh_wm_strut_partial_t strut_partial {};
