@@ -244,6 +244,15 @@ func (item *Item) addOpenWithMenu(possibleOpenProgrammings []*gio.AppInfo) {
 	}, true))
 }
 
+func (item *Item) shouldHasOpenWith() bool {
+	for _, uri := range item.uris {
+		if isDesktopFile(uri) {
+			return false
+		}
+	}
+	return true
+}
+
 // GenMenu generates json format menu content used in DeepinMenu for normal itself.
 func (item *Item) GenMenu() (*Menu, error) {
 	item.menu = NewMenu()
@@ -317,10 +326,13 @@ func (item *Item) GenMenu() (*Menu, error) {
 	}
 
 	// 1. multiple selection: not show "open with" if no possible open programmings.
-	// 1. signle selection: show "open with" with "chose".
-	possibleOpenProgrammings := getPossibleOpenProgramming(item.uris)
-	if len(possibleOpenProgrammings) > 0 || !item.multiple {
-		item.addOpenWithMenu(possibleOpenProgrammings)
+	// 2. signle selection: show "open with" with "chose".
+	// 3. desktop file should not has 'open with'.
+	if item.shouldHasOpenWith() {
+		possibleOpenProgrammings := getPossibleOpenProgramming(item.uris)
+		if len(possibleOpenProgrammings) > 0 || !item.multiple {
+			item.addOpenWithMenu(possibleOpenProgrammings)
+		}
 	}
 
 	menu.AddSeparator()
