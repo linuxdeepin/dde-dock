@@ -255,8 +255,13 @@ func (app *Application) getMenuable(uris []string) IMenuable {
 // GenMenuContent returns the menu content in json format used in DeepinMenu.
 func (app *Application) GenMenuContent(uris []string) string {
 	app.menuable = app.getMenuable(uris)
+	if app.menuable == nil {
+		fmt.Println("get menuable item failed")
+		return ""
+	}
 	menu, err := app.menuable.GenMenu()
 	if err != nil {
+		fmt.Println("gen menu failed:", err)
 		return ""
 	}
 

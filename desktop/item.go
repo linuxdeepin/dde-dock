@@ -138,7 +138,7 @@ func getPossibleOpenProgramming(uris []string) []*gio.AppInfo {
 		intersection = getIntersection(intersection, openProgrammings[i])
 	}
 
-	possibleOpenProgrammings := make([]*gio.AppInfo, len(openProgrammings))
+	possibleOpenProgrammings := make([]*gio.AppInfo, len(intersection))
 	for i, app := range intersection {
 		possibleOpenProgrammings[i] = app.Dup()
 	}
@@ -390,7 +390,7 @@ func (item *Item) GenMenu() (*Menu, error) {
 
 	menu.AddSeparator()
 
-	return menu.AppendItem(NewMenuItem(Tr("_Properties"), func() {
+	return item.menu.AppendItem(NewMenuItem(Tr("_Properties"), func() {
 		item.showProperties()
 	}, true)), nil
 }
