@@ -6,7 +6,9 @@
 #include <QStringList>
 
 #include "dockconstants.h"
+#include "abstractdockitem.h"
 
+class QFileSystemWatcher;
 class DockPluginProxy;
 class DockPluginManager : public QObject
 {
@@ -14,7 +16,11 @@ class DockPluginManager : public QObject
 public:
     explicit DockPluginManager(QObject *parent = 0);
 
-    QList<DockPluginProxy*> getAll();
+    void initAll();
+
+signals:
+    void itemAdded(AbstractDockItem * item);
+    void itemRemoved(AbstractDockItem * item);
 
 public slots:
     void onDockModeChanged(Dock::DockMode newMode,
@@ -23,8 +29,14 @@ public slots:
 private:
     QStringList m_searchPaths;
     QMap<QString, DockPluginProxy*> m_proxies;
+    QFileSystemWatcher * m_watcher;
 
-    DockPluginProxy* loadPlugin(QString &path);
+    DockPluginProxy * loadPlugin(const QString & path);
+    void unloadPlugin(const QString & path);
+
+private slots:
+    void watchedFileChanged(const QString & file);
+    void watchedDirectoryChanged(const QString & directory);
 };
 
 #endif // DOCKPLUGINMANAGER_H

@@ -28,26 +28,22 @@ Panel::Panel(QWidget *parent)
             this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
 
     DockPluginManager *pluginManager = new DockPluginManager(this);
+
     connect(DockModeData::instance(), &DockModeData::dockModeChanged,
             pluginManager, &DockPluginManager::onDockModeChanged);
+    connect(pluginManager, &DockPluginManager::itemAdded, [=](AbstractDockItem* item) {
+        rightLayout->addItem(item);
+    });
+    connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
+        int index = rightLayout->indexOf(item);
+        if (index != -1) {
+            rightLayout->removeItem(index);
+        }
+    });
 
-    QList<DockPluginProxy*> proxies = pluginManager->getAll();
-    foreach (DockPluginProxy* proxy, proxies) {
-        connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem* item) {
-            rightLayout->addItem(item);
-        });
-        connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem* item) {
-            int index = rightLayout->indexOf(item);
-            if (index != -1) {
-                rightLayout->removeItem(index);
-            }
-        });
-
-        proxy->plugin()->init(proxy);
-    }
+    pluginManager->initAll();
 
     initAppManager();
-
     initHSManager();
     initState();
 }
