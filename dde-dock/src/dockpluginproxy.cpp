@@ -22,10 +22,12 @@ void DockPluginProxy::itemAddedEvent(QString uuid)
 {
     qDebug() << "Item added on plugin " << m_plugin->name() << uuid;
 
-    AbstractDockItem * item = new PluginItemWrapper(m_plugin, uuid);
-    m_items << item;
+    if (m_plugin->getItem(uuid)) {
+        AbstractDockItem * item = new PluginItemWrapper(m_plugin, uuid);
+        m_items << item;
 
-    emit itemAdded(item);
+        emit itemAdded(item);
+    }
 }
 
 void DockPluginProxy::itemRemovedEvent(QString uuid)
