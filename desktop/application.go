@@ -69,8 +69,7 @@ type Application struct {
 	RequestCreateDirectory        func()
 	ItemCut                       func([]string)
 
-	RequestOpen            func([]string, []int32)
-	RequestDismissAppGroup func(string)
+	RequestOpen func([]string, []int32)
 
 	AppGroupCreated func(string, []string)
 	AppGroupDeleted func(string)
@@ -169,10 +168,6 @@ func (app *Application) emitAppGroupCreated(group string, files []string) error 
 
 func (app *Application) emitAppGroupMerged(group string, files []string) error {
 	return dbus.Emit(app, "AppGroupMerged", group, files)
-}
-
-func (app *Application) emitRequestDismissAppGroup(group string) error {
-	return dbus.Emit(app, "RequestDismissAppGroup", group)
 }
 
 func (app *Application) emitRequestPaste(dest string) error {

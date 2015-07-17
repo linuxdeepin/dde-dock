@@ -9,6 +9,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
+	"pkg.deepin.io/lib/operations"
 	"sort"
 	"strings"
 )
@@ -42,8 +43,25 @@ func (item *AppGroup) GenMenu() (*Menu, error) {
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Rename"), func() {
 		item.emitRequestRename()
 	}, !item.multiple)).AddSeparator().AppendItem(NewMenuItem(Tr("_Ungroup"), func() {
-		// TODO: just emit dismiss signal?
-		item.app.emitRequestDismissAppGroup(item.uri)
+		for _, uri := range item.uris {
+			files := []string{}
+
+			listJob := operations.NewListDirJob(uri, operations.ListJobFlagIncludeHidden)
+			listJob.ListenProperty(func(p operations.ListProperty) {
+				files = append(files, p.URI)
+			})
+			listJob.Execute()
+			if err := listJob.GetError(); err != nil {
+				fmt.Printf("list appgroup %s failed: %s\n", uri, err)
+				continue
+			}
+
+			moveJob := operations.NewMoveJob(files, GetDesktopDir(), "", 0, nil)
+			moveJob.Execute()
+			if err := moveJob.GetError(); err != nil {
+				fmt.Printf("dismiss appgroup %s failed: %s\n", uri, err)
+			}
+		}
 	}, true)).AddSeparator().AppendItem(NewMenuItem(Tr("_Delete"), func() {
 		item.emitRequestDelete()
 	}, true)), nil
