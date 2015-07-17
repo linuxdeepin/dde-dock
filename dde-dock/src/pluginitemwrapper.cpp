@@ -10,8 +10,6 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
 {
     qDebug() << "PluginItemWrapper created " << m_plugin->name() << m_uuid;
 
-//    setStyleSheet("PluginItemWrapper { background-color: red } ");
-
     if (m_plugin) {
         QWidget * item = m_plugin->getItem(uuid);
         m_pluginItemContents = m_plugin->getApplet(uuid);

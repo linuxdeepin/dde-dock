@@ -1,11 +1,27 @@
+#include <QPluginLoader>
+
 #include "dockpluginproxy.h"
 #include "pluginitemwrapper.h"
 #include "Controller/dockmodedata.h"
 
-DockPluginProxy::DockPluginProxy(DockPluginInterface * plugin, QObject * parent) :
-    QObject(parent),
+DockPluginProxy::DockPluginProxy(QPluginLoader * loader, DockPluginInterface * plugin) :
+    QObject(),
+    m_loader(loader),
     m_plugin(plugin)
 {
+}
+
+DockPluginProxy::~DockPluginProxy()
+{
+    foreach (AbstractDockItem * item, m_items) {
+        emit itemRemoved(item);
+    }
+    m_items.clear();
+
+    m_loader->unload();
+    m_loader->deleteLater();
+
+    qDebug() << "Plugin unloaded: " << m_loader->fileName();
 }
 
 DockPluginInterface * DockPluginProxy::plugin()

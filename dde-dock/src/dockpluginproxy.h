@@ -5,11 +5,13 @@
 #include "dockpluginproxyinterface.h"
 #include "abstractdockitem.h"
 
+class QPluginLoader;
 class DockPluginProxy : public QObject, public DockPluginProxyInterface
 {
     Q_OBJECT
 public:
-    DockPluginProxy(DockPluginInterface * plugin, QObject * parent = 0);
+    DockPluginProxy(QPluginLoader * loader, DockPluginInterface * plugin);
+    ~DockPluginProxy();
 
     DockPluginInterface * plugin();
 
@@ -25,6 +27,8 @@ signals:
 
 private:
     QList<AbstractDockItem*> m_items;
+
+    QPluginLoader * m_loader;
     DockPluginInterface * m_plugin;
 
     AbstractDockItem * getItem(QString uuid);
