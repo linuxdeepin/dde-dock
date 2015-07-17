@@ -53,6 +53,17 @@ void DockPluginProxy::itemSizeChangedEvent(QString uuid)
     }
 }
 
+void DockPluginProxy::appletSizeChangedEvent(QString uuid)
+{
+    qWarning() << "Applet size changed on plugin " << m_plugin->name() << uuid;
+
+    AbstractDockItem * item = getItem(uuid);
+    if (item)
+    {
+        item->resizePreview();
+    }
+}
+
 AbstractDockItem * DockPluginProxy::getItem(QString uuid)
 {
     foreach (AbstractDockItem * item, m_items) {
