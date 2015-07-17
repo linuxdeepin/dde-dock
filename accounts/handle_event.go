@@ -29,10 +29,16 @@ import (
 )
 
 const (
+	userFilePasswd = "/etc/passwd"
 	userFileGroup  = "/etc/group"
 	userFileShadow = "/etc/shadow"
 
 	permModeDir = 0755
+)
+
+const (
+	maxDuration   = time.Second*2 + time.Second/2
+	deltaDuration = time.Millisecond * 500
 )
 
 const (
@@ -42,7 +48,7 @@ const (
 )
 
 func (m *Manager) getWatchFiles() []string {
-	return []string{userFileGroup, userFileShadow}
+	return []string{userFilePasswd, userFileGroup, userFileShadow}
 }
 
 func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
@@ -64,8 +70,20 @@ func (m *Manager) handleUserFileChanged(ev *fsnotify.FileEvent, handler func()) 
 	}
 
 	m.watcher.ResetFileListWatch()
-	<-time.After(time.Millisecond * 200)
+	<-time.After(time.Millisecond * 500)
 	handler()
+}
+
+func (m *Manager) handleFilePasswdChanged() {
+	waitDuration := time.Second * 0
+	for waitDuration < maxDuration {
+		if m.refreshUserList() {
+			break
+		}
+
+		waitDuration += deltaDuration
+		<-time.After(waitDuration)
+	}
 }
 
 func (m *Manager) handleFileGroupChanged() {
@@ -77,8 +95,6 @@ func (m *Manager) handleFileGroupChanged() {
 }
 
 func (m *Manager) handleFileShadowChanged() {
-	m.refreshUserList()
-
 	//Update the property 'Locked'
 	m.mapLocker.Lock()
 	defer m.mapLocker.Unlock()
@@ -87,15 +103,18 @@ func (m *Manager) handleFileShadowChanged() {
 	}
 }
 
-func (m *Manager) refreshUserList() {
-	newList := getUserPaths()
-	ret, status := compareUserList(m.UserList, newList)
+func (m *Manager) refreshUserList() bool {
+	var freshed bool
+	ret, status := compareUserList(m.UserList, getUserPaths())
 	switch status {
 	case userListAdded:
+		freshed = true
 		m.handleUserAdded(ret)
 	case userListDeleted:
+		freshed = true
 		m.handleUserDeleted(ret)
 	}
+	return freshed
 }
 
 func (m *Manager) handleUserAdded(list []string) {
@@ -109,6 +128,7 @@ func (m *Manager) handleUserAdded(list []string) {
 
 		paths = append(paths, p)
 		dbus.Emit(m, "UserAdded", p)
+		m.copyUserDatas(p)
 	}
 
 	m.setPropUserList(paths)
