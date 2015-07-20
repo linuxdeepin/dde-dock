@@ -13,7 +13,7 @@ DockPluginProxy::DockPluginProxy(QPluginLoader * loader, DockPluginInterface * p
 
 DockPluginProxy::~DockPluginProxy()
 {
-    foreach (AbstractDockItem * item, m_items) {
+    foreach (AbstractDockItem * item, m_items.values()) {
         emit itemRemoved(item);
     }
     m_items.clear();
@@ -38,11 +38,13 @@ void DockPluginProxy::itemAddedEvent(QString uuid)
 {
     qDebug() << "Item added on plugin " << m_plugin->name() << uuid;
 
-    if (m_plugin->getItem(uuid)) {
-        AbstractDockItem * item = new PluginItemWrapper(m_plugin, uuid);
-        m_items << item;
+    if (!m_items.contains(uuid)) {
+        if (m_plugin->getItem(uuid)) {
+            AbstractDockItem * item = new PluginItemWrapper(m_plugin, uuid);
+            m_items[uuid] = item;
 
-        emit itemAdded(item);
+            emit itemAdded(item);
+        }
     }
 }
 
@@ -50,9 +52,9 @@ void DockPluginProxy::itemRemovedEvent(QString uuid)
 {
     qDebug() << "Item removed on plugin " << m_plugin->name() << uuid;
 
-    AbstractDockItem * item = getItem(uuid);
+    AbstractDockItem * item = m_items.value(uuid);
     if (item) {
-        m_items.takeAt(m_items.indexOf(item));
+        m_items.take(uuid);
 
         emit itemRemoved(item);
     }
@@ -62,9 +64,10 @@ void DockPluginProxy::itemSizeChangedEvent(QString uuid)
 {
     qDebug() << "Item size changed on plugin " << m_plugin->name() << uuid;
 
-    AbstractDockItem * item = getItem(uuid);
-    item->adjustSize();
+    AbstractDockItem * item = m_items.value(uuid);
     if (item) {
+        item->adjustSize();
+
         emit item->widthChanged();
     }
 }
@@ -73,20 +76,8 @@ void DockPluginProxy::appletSizeChangedEvent(QString uuid)
 {
     qWarning() << "Applet size changed on plugin " << m_plugin->name() << uuid;
 
-    AbstractDockItem * item = getItem(uuid);
-    if (item)
-    {
+    AbstractDockItem * item = m_items.value(uuid);
+    if (item) {
         item->resizePreview();
     }
-}
-
-AbstractDockItem * DockPluginProxy::getItem(QString uuid)
-{
-    foreach (AbstractDockItem * item, m_items) {
-        PluginItemWrapper *wrapper = qobject_cast<PluginItemWrapper*>(item);
-        if (wrapper->uuid() == uuid) {
-            return item;
-        }
-    }
-    return NULL;
 }

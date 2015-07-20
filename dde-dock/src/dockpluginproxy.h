@@ -27,12 +27,10 @@ signals:
     void itemRemoved(AbstractDockItem * item);
 
 private:
-    QList<AbstractDockItem*> m_items;
+    QMap<QString, AbstractDockItem*> m_items;
 
     QPluginLoader * m_loader;
     DockPluginInterface * m_plugin;
-
-    AbstractDockItem * getItem(QString uuid);
 };
 
 #endif // DOCKPLUGINPROXY_H
