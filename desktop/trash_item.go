@@ -28,7 +28,7 @@ func (item *TrashItem) GenMenu() (*Menu, error) {
 	}
 	defer info.Unref()
 
-	trashedItemCount := info.GetAttributeInt64(gio.FileAttributeTrashItemCount)
+	trashedItemCount := info.GetAttributeUint32(gio.FileAttributeTrashItemCount)
 	if item.app.settings.ShowTrashedItemCountIsEnable() {
 		clearMenuItemText = fmt.Sprintf(NTr("_Clear %d Item", "_Clear %d Items", int(trashedItemCount)), trashedItemCount)
 	}
