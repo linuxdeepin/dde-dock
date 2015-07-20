@@ -51,11 +51,15 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode,
 // private methods
 DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
 {
+    // check the file type
     if (!QLibrary::isLibrary(path)) return NULL;
 
     QPluginLoader * pluginLoader = new QPluginLoader(path);
 
-    // TODO: API version check;
+    // check the apiVersion the plugin uses
+    double apiVersion = pluginLoader->metaData()["MetaData"].toObject()["api_version"].toDouble();
+    if (apiVersion != PLUGIN_API_VERSION) return NULL;
+
 
     QObject *plugin = pluginLoader->instance();
 

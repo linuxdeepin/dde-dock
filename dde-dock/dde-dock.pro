@@ -12,6 +12,7 @@ TARGET = dde-dock
 TEMPLATE = app
 INCLUDEPATH += src/ ../libs/
 
+DEFINES += PLUGIN_API_VERSION=1.0
 
 SOURCES += \
     src/main.cpp \
