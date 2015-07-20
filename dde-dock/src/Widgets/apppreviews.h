@@ -27,8 +27,6 @@ protected:
 signals:
     void close(int xid);
     void activate(int xid);
-    void mouseEntered();
-    void mouseExited();
 
 private:
     void addCloseButton();

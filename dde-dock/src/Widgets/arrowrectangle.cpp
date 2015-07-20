@@ -78,6 +78,7 @@ void ArrowRectangle::showAtBottom(int x, int y)
 
 void ArrowRectangle::delayHide(int interval)
 {
+    m_delayHideInterval = interval;
     if (!m_destroyTimer)
     {
         m_destroyTimer = new QTimer(this);
@@ -261,6 +262,16 @@ void ArrowRectangle::paintEvent(QPaintEvent *)
     strokePen.setWidth(strokeWidth);
     painter.strokePath(border, strokePen);
     painter.fillPath(border, QBrush(backgroundColor == "" ? QColor(0,0,0,200) : QColor(backgroundColor)));
+}
+
+void ArrowRectangle::enterEvent(QEvent *)
+{
+    cancelHide();
+}
+
+void ArrowRectangle::leaveEvent(QEvent *)
+{
+    delayHide(m_delayHideInterval);
 }
 
 void ArrowRectangle::slotHide()

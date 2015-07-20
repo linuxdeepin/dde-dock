@@ -32,20 +32,17 @@ void AppPreviewFrame::mousePressEvent(QMouseEvent *)
 
 void AppPreviewFrame::enterEvent(QEvent *)
 {
-    emit mouseEntered();
     showCloseButton();
 }
 
 void AppPreviewFrame::leaveEvent(QEvent *)
 {
-//    emit mouseExited();
     hideCloseButton();
 }
 
 void AppPreviewFrame::addCloseButton()
 {
     m_cb = new CloseButton(this);
-    connect(m_cb,&CloseButton::hovered,this,&AppPreviewFrame::mouseEntered);
     connect(m_cb,&CloseButton::clicked,[=](){close(this->xidValue);});
     m_cb->resize(28,28);
 
@@ -85,8 +82,6 @@ void AppPreviews::addItem(const QString &title, int xid)
     AppPreviewFrame *f = new AppPreviewFrame(preview,title,xid);
     connect(f,&AppPreviewFrame::close,this,&AppPreviews::removePreview);
     connect(f,&AppPreviewFrame::activate,this,&AppPreviews::activatePreview);
-    connect(f,&AppPreviewFrame::mouseEntered,this,&AppPreviews::mouseEntered);
-    connect(f,&AppPreviewFrame::mouseExited,this,&AppPreviews::mouseExited);
 
     m_mainLayout->addWidget(f);
 

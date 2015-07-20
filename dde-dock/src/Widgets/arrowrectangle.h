@@ -62,6 +62,8 @@ public slots:
     void slotCancelHide();
 protected:
     virtual void paintEvent(QPaintEvent *);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 private:
     int radius = 3;
@@ -77,6 +79,7 @@ private:
     int shadowWidth = 2;
     QColor shadowColor = Qt::black;
 
+    int m_delayHideInterval = 0;
     ArrowDirection arrowDirection = ArrowRectangle::ArrowRight;
 
     QWidget *m_content = NULL;
