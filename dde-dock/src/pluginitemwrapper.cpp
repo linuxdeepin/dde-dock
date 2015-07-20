@@ -56,7 +56,7 @@ void PluginItemWrapper::leaveEvent(QEvent *)
 {
     emit mouseExited();
 
-    hidePreview();
+//    hidePreview();
 }
 
 

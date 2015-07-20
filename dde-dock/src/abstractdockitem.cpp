@@ -117,7 +117,11 @@ void AbstractDockItem::cancelHide()
 void AbstractDockItem::resizePreview()
 {
     m_previewAR->resizeWithContent();
-    m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+    if (!m_previewAR->isHidden())
+    {
+        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+        return;
+    }
 }
 
 void AbstractDockItem::showMenu()
