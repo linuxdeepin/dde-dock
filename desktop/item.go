@@ -280,7 +280,7 @@ func (item *Item) GenMenu() (*Menu, error) {
 			info, err := f.QueryInfo(strings.Join([]string{
 				gio.FileAttributeAccessCanExecute,
 				gio.FileAttributeStandardContentType,
-			}, "+"), gio.FileQueryInfoFlagsNone, nil)
+			}, ","), gio.FileQueryInfoFlagsNone, nil)
 			if err != nil {
 				f.Unref()
 				continue
