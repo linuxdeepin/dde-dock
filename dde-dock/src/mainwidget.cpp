@@ -1,41 +1,50 @@
 #include "mainwidget.h"
+#include "xcb_misc.h"
 
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
     QRect rec = QApplication::desktop()->screenGeometry();
-    this->resize(rec.width(),DockModeData::instance()->getDockHeight());
+    this->setFixedSize(rec.width(),m_dmd->getDockHeight());
+    this->move(0, rec.height() - this->height());
+
     mainPanel = new Panel(this);
-    mainPanel->resize(this->width(),this->height());
-    mainPanel->move(0,0);
     connect(mainPanel,&Panel::startShow,this,&MainWidget::showDock);
     connect(mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
 
     this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
     this->setAttribute(Qt::WA_TranslucentBackground);
-    this->move(0, rec.height() - this->height());
 
-    connect(DockModeData::instance(), SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
-            this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
+    connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::changeDockMode);
+
+    //For init
+    changeDockMode(m_dmd->getDockMode(), m_dmd->getDockMode());
 }
 
-void MainWidget::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
+void MainWidget::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     if (hasHidden)
         return;
 
     QRect rec = QApplication::desktop()->screenGeometry();
-    this->resize(rec.width(),DockModeData::instance()->getDockHeight());
+    this->setFixedSize(rec.width(),m_dmd->getDockHeight());
+    this->move(0, rec.height() - this->height());
 
-//    mainPanel->resize(this->width(),this->height());
-//    mainPanel->move(0,0);
+    XcbMisc::instance()->set_window_type(winId(),
+                                         XcbMisc::Dock);
+
+    XcbMisc::instance()->set_strut_partial(winId(),
+                                           XcbMisc::OrientationBottom,
+                                           height(),
+                                           x(),
+                                           x() + width());
 }
 
 void MainWidget::showDock()
 {
     hasHidden = false;
     QRect rec = QApplication::desktop()->screenGeometry();
-    this->resize(rec.width(),DockModeData::instance()->getDockHeight());
+    this->setFixedSize(rec.width(),m_dmd->getDockHeight());
 }
 
 void MainWidget::hideDock()
@@ -43,7 +52,7 @@ void MainWidget::hideDock()
     hasHidden = true;
     QRect rec = QApplication::desktop()->screenGeometry();
     //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
-    this->resize(rec.width(),1);
+    this->setFixedSize(rec.width(),1);
 }
 
 MainWidget::~MainWidget()

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QPushButton>
+#include <QTimer>
 #include <QDebug>
 #include "DBus/dbushidestatemanager.h"
 #include "Controller/dockmodedata.h"
@@ -37,7 +38,6 @@ signals:
     void panelHasHidden();
 
 private slots:
-    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
     void slotLayoutContentsWidthChanged();
 
     void slotAddAppItem(AppItem *item);
@@ -48,6 +48,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
 
 private:
+    void changeDockMode(Dock::DockMode newMode,Dock::DockMode oldMode);
     void reanchorsLayout(Dock::DockMode mode);
 
     void showMenu();

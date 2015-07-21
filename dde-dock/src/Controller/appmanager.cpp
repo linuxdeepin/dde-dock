@@ -24,12 +24,10 @@ void AppManager::updateEntries()
 
 void AppManager::slotEntryAdded(const QDBusObjectPath &path)
 {
-    qWarning() << "entry add:" << path.path();
     DBusEntryProxyer *entryProxyer = new DBusEntryProxyer(path.path());
-    if (entryProxyer->isValid())
+    if (entryProxyer->isValid() && entryProxyer->type() == "App" && entryProxyer->data().value("title") != "dde-dock")
     {
-        if (entryProxyer->data().value("title") == "dde-dock")
-            return;
+        qWarning() << "entry add:" << path.path();
         AppItem *item = new AppItem();
         item->setEntryProxyer(entryProxyer);
         emit entryAdded(item);

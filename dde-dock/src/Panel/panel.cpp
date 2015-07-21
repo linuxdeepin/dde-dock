@@ -18,19 +18,17 @@ Panel::Panel(QWidget *parent)
     leftLayout->setSpacing(dockCons->getAppItemSpacing());
     leftLayout->resize(this->width() - rightLayout->width(),dockCons->getItemHeight());
     leftLayout->move(0,1);
-    connect(leftLayout,SIGNAL(dragStarted()),this,SLOT(slotDragStarted()));
-    connect(leftLayout,SIGNAL(itemDropped()),this,SLOT(slotItemDropped()));
 
-    connect(leftLayout, SIGNAL(contentsWidthChange()),this, SLOT(slotLayoutContentsWidthChanged()));
-    connect(rightLayout, SIGNAL(contentsWidthChange()), this, SLOT(slotLayoutContentsWidthChanged()));
+    connect(leftLayout, &DockLayout::dragStarted, this, &Panel::slotDragStarted);
+    connect(leftLayout, &DockLayout::itemDropped, this, &Panel::slotItemDropped);
+    connect(leftLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
+    connect(rightLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
 
-    connect(dockCons, SIGNAL(dockModeChanged(Dock::DockMode,Dock::DockMode)),
-            this, SLOT(slotDockModeChanged(Dock::DockMode,Dock::DockMode)));
+    connect(dockCons, &DockModeData::dockModeChanged, this, &Panel::changeDockMode);
 
     DockPluginManager *pluginManager = new DockPluginManager(this);
 
-    connect(DockModeData::instance(), &DockModeData::dockModeChanged,
-            pluginManager, &DockPluginManager::onDockModeChanged);
+    connect(dockCons, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
     connect(pluginManager, &DockPluginManager::itemAdded, [=](AbstractDockItem* item) {
         rightLayout->addItem(item);
     });
@@ -46,6 +44,11 @@ Panel::Panel(QWidget *parent)
     initAppManager();
     initHSManager();
     initState();
+
+    //TODO ,move panel to center on fashion mode
+    QTimer::singleShot(10, [=](){
+        reanchorsLayout(dockCons->getDockMode());
+    });
 }
 
 void Panel::showScreenMask()
@@ -89,7 +92,7 @@ void Panel::slotExitedMask()
 //    leftLayout->relayout();
 }
 
-void Panel::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
+void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     leftLayout->relayout();
     rightLayout->relayout();
@@ -143,8 +146,8 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
         rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),1);
 
-        this->resize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
-        this->move((parentWidget->width() - leftLayout->getContentsWidth() - rightLayout->getContentsWidth()) / 2,0);
+        this->setFixedSize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        this->move((parentWidget->width() - width()) / 2,0);
     }
     else
     {
@@ -154,7 +157,7 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
 
         leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getItemHeight());
 
-        this->resize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
+        this->setFixedSize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
         this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
     }
 }

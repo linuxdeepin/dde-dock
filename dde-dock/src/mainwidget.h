@@ -21,15 +21,16 @@ public:
     ~MainWidget();
 
 public slots:
-    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
 
 private:
     void showDock();
     void hideDock();
 
+    void changeDockMode(Dock::DockMode newMode,Dock::DockMode oldMode);
 private:
     Panel *mainPanel = NULL;
     bool hasHidden = false;
+    DockModeData * m_dmd = DockModeData::instance();
 };
 
 #endif // MAINWIDGET_H
