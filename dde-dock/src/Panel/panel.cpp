@@ -86,6 +86,7 @@ void Panel::slotDragStarted()
 void Panel::slotItemDropped()
 {
     hideScreenMask();
+    leftLayout->clearTmpItem();
     leftLayout->relayout();
 }
 
@@ -96,7 +97,7 @@ void Panel::slotEnteredMask()
 
 void Panel::slotExitedMask()
 {
-//    leftLayout->relayout();
+    leftLayout->relayout();
 }
 
 void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
@@ -116,7 +117,7 @@ void Panel::slotLayoutContentsWidthChanged()
     reanchorsLayout(dockCons->getDockMode());
 }
 
-void Panel::slotAddAppItem(AppItem *item)
+void Panel::slotAddAppItem(AbstractDockItem *item)
 {
     leftLayout->addItem(item);
 }
@@ -127,7 +128,7 @@ void Panel::slotRemoveAppItem(const QString &id)
     for (int i = 0; i < tmpList.count(); i ++)
     {
         AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
-        if (tmpItem->itemId() == id)
+        if (tmpItem && tmpItem->itemId() == id)
         {
             leftLayout->removeItem(i);
             return;
@@ -195,7 +196,7 @@ void Panel::updateBackground()
 void Panel::initAppManager()
 {
     m_appManager = new AppManager(this);
-    connect(m_appManager,SIGNAL(entryAdded(AppItem*)),this, SLOT(slotAddAppItem(AppItem*)));
+    connect(m_appManager,SIGNAL(entryAdded(AbstractDockItem*)),this, SLOT(slotAddAppItem(AbstractDockItem*)));
     connect(m_appManager, SIGNAL(entryRemoved(QString)),this, SLOT(slotRemoveAppItem(QString)));
     m_appManager->updateEntries();
 }

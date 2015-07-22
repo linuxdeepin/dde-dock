@@ -43,7 +43,7 @@ signals:
 private slots:
     void slotLayoutContentsWidthChanged();
 
-    void slotAddAppItem(AppItem *item);
+    void slotAddAppItem(AbstractDockItem *item);
     void slotRemoveAppItem(const QString &id);
 
 protected:

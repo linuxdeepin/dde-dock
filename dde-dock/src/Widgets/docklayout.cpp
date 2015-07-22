@@ -257,6 +257,16 @@ void DockLayout::relayout()
     emit contentsWidthChange();
 }
 
+void DockLayout::clearTmpItem()
+{
+    if (tmpAppMap.count() > 0)
+    {
+        AbstractDockItem * tmpItem = tmpAppMap.firstKey();
+        tmpAppMap.clear();
+        tmpItem->deleteLater();
+    }
+}
+
 void DockLayout::addSpacingItem()
 {
     int spacingValue = 0;
@@ -327,7 +337,6 @@ void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 
 void DockLayout::dropEvent(QDropEvent *event)
 {
-    //("text/plain", "COMPOUND_TEXT", "text/plain;charset=utf-8", "_DEEPIN_DND", "text/uri-list")
     AbstractDockItem *sourceItem = NULL;
     sourceItem = dynamic_cast<AbstractDockItem *>(event->source());
 

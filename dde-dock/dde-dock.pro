@@ -43,7 +43,8 @@ SOURCES += \
     src/Widgets/apppreviews.cpp \
     src/Widgets/closebutton.cpp \
     src/DBus/dbushidestatemanager.cpp \
-    ../libs/xcb_misc.cpp
+    ../libs/xcb_misc.cpp \
+    src/Widgets/launcheritem.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -76,7 +77,8 @@ HEADERS  += \
     src/Widgets/apppreviews.h \
     src/Widgets/closebutton.h \
     src/DBus/dbushidestatemanager.h \
-    ../libs/xcb_misc.h
+    ../libs/xcb_misc.h \
+    src/Widgets/launcheritem.h
 
 RESOURCES += \
     images.qrc \

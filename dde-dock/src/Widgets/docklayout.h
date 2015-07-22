@@ -44,6 +44,7 @@ public:
 
 public slots:
     void relayout();
+    void clearTmpItem();
 
 signals:
     void dragStarted();

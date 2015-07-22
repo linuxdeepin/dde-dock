@@ -9,6 +9,10 @@ AppManager::AppManager(QObject *parent) : QObject(parent)
 
 void AppManager::updateEntries()
 {
+
+    LauncherItem * lItem = new LauncherItem();
+    emit entryAdded(lItem);
+
     QList<QDBusObjectPath> entryList = m_entryManager->entries();
     for (int i = 0; i < entryList.count(); i ++)
     {

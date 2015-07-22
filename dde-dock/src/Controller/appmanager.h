@@ -6,6 +6,7 @@
 #include "DBus/dbusentrymanager.h"
 #include "DBus/dbusentryproxyer.h"
 #include "Widgets/appitem.h"
+#include "Widgets/launcheritem.h"
 
 class AppManager : public QObject
 {
@@ -15,7 +16,7 @@ public:
     void updateEntries();
 
 signals:
-    void entryAdded(AppItem *item);
+    void entryAdded(AbstractDockItem *item);
     void entryRemoved(const QString &id);
 
 private slots:
