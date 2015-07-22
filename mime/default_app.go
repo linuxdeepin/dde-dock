@@ -181,6 +181,7 @@ func NewDefaultApps() *DefaultApps {
 		dapp.watcher.SetEventHandler(dapp.handleMimeFileChanged)
 		go dapp.watcher.StartWatch()
 	}
+	dapp.initConfigData()
 
 	return dapp
 }

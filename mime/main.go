@@ -2,11 +2,9 @@ package mime
 
 import (
 	"fmt"
-	"os"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
-	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -46,17 +44,11 @@ func (media *MediaMount) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (dapp *DefaultApps) Reset() bool {
-	homeDir := dutils.GetHomeDir()
-	if len(homeDir) < 1 {
-		logger.Warning("Get homeDir failed")
-		return false
-	}
-	if err := os.Remove(homeDir + "/" + MIME_CACHE_FILE); err != nil {
-		logger.Warning("Delete '%s' failed: %v",
-			homeDir+"/"+MIME_CACHE_FILE, err)
-		return false
-	}
 	_TerminalGSettings().Reset("exec")
+	err := dapp.doInitConfigData()
+	if err != nil {
+		logger.Warning("Init mime config file failed", err)
+	}
 
 	return true
 }
