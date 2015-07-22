@@ -158,7 +158,8 @@ void AppItem::initBackground()
 
 void AppItem::initHighlight()
 {
-    m_highlight = new HighlightEffect(m_appIcon,this);
+    m_highlight = new HighlightEffect(m_appIcon, this);
+    m_highlight->setFixedSize(this->size());
     m_highlight->move(m_appIcon->pos());
     connect(this, &AppItem::mouseEntered, m_highlight, &HighlightEffect::showLighter);
     connect(this, &AppItem::mouseExited, m_highlight, &HighlightEffect::showNormal);

@@ -59,24 +59,21 @@ void HighlightEffect::paintEvent(QPaintEvent *)
     {
         QPixmap pixmap = m_source->grab();
 
-        switch (m_effectState)
-        {
-        case ESDarker:
-            pixmapDarker(&pixmap);
-            break;
-        case ESLighter:
-            pixmapLigher(&pixmap);
-        default:
-            break;
+        QPainter painter;
+        painter.begin(&pixmap);
+
+        painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+
+        if (m_effectState == ESLighter) {
+            painter.fillRect(pixmap.rect(), QColor::fromRgbF(1, 1, 1, 0.3));
+        } else if (m_effectState == ESDarker) {
+            painter.fillRect(pixmap.rect(), QColor::fromRgbF(0, 0, 0, 0.3));
         }
 
-        QPainter painter;
+        painter.end();
+
         painter.begin(this);
-
-        painter.setClipRect(rect());
-
         painter.drawPixmap(0, 0, pixmap);
-
         painter.end();
     }
 }
