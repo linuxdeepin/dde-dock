@@ -44,7 +44,9 @@ SOURCES += \
     src/Widgets/closebutton.cpp \
     src/DBus/dbushidestatemanager.cpp \
     ../libs/xcb_misc.cpp \
-    src/Widgets/launcheritem.cpp
+    src/Widgets/launcheritem.cpp \
+    src/Widgets/reflectioneffect.cpp \
+    src/Widgets/highlighteffect.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -78,7 +80,9 @@ HEADERS  += \
     src/Widgets/closebutton.h \
     src/DBus/dbushidestatemanager.h \
     ../libs/xcb_misc.h \
-    src/Widgets/launcheritem.h
+    src/Widgets/launcheritem.h \
+    src/Widgets/reflectioneffect.h \
+    src/Widgets/highlighteffect.h
 
 RESOURCES += \
     images.qrc \
