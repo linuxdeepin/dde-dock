@@ -2,10 +2,13 @@
 #define WINDOWPREVIEW_H
 
 #include <QWidget>
+#include <QImage>
+#include <QByteArray>
 
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
 
+class QPaintEvent;
 class WindowPreview : public QWidget
 {
     Q_OBJECT
@@ -16,10 +19,13 @@ public:
 
     void onTimeout();
 
+    QByteArray imageData;
+
+protected:
+    void paintEvent(QPaintEvent * event);
+
 private:
     WId m_sourceWindow;
-    cairo_t *m_cairo;
-    cairo_surface_t *m_surface;
 };
 
 #endif // WINDOWPREVIEW_H

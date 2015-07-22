@@ -1,17 +1,20 @@
 #include "apppreviews.h"
 
-AppPreviewFrame::AppPreviewFrame(QWidget *preview, const QString &title, int xid, QWidget *parent) : QWidget(parent),xidValue(xid)
+AppPreviewFrame::AppPreviewFrame(const QString &title, int xid, QWidget *parent) :
+    QWidget(parent),xidValue(xid)
 {
-    addPreview(preview);
+    addPreview(xid);
     setTitle(title);
     addCloseButton();
 }
 
-void AppPreviewFrame::addPreview(QWidget *p)
+void AppPreviewFrame::addPreview(int xid)
 {
-    this->resize(p->size());
-    p->setParent(this);
-    p->move(0,0);
+    WindowPreview * preview = new WindowPreview(xid, this);
+    preview->setObjectName("AppPreview");
+    preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
+
+    resize(preview->size());
 }
 
 void AppPreviewFrame::setTitle(const QString &t)
@@ -75,11 +78,7 @@ void AppPreviews::addItem(const QString &title, int xid)
     m_mainLayout->setSpacing(Dock::APP_PREVIEW_MARGIN);
     m_xidList.append(xid);
 
-//    WindowPreview * preview = new WindowPreview(xid);
-    QWidget *preview = new QWidget();
-    preview->setObjectName("AppPreview");
-    preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
-    AppPreviewFrame *f = new AppPreviewFrame(preview,title,xid);
+    AppPreviewFrame *f = new AppPreviewFrame(title, xid);
     connect(f,&AppPreviewFrame::close,this,&AppPreviews::removePreview);
     connect(f,&AppPreviewFrame::activate,this,&AppPreviews::activatePreview);
 

@@ -3,8 +3,8 @@
 ArrowRectangle::ArrowRectangle(QWidget * parent) :
     QWidget(parent)
 {
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::ToolTip | Qt::WindowStaysOnTopHint);
-    this->setAttribute(Qt::WA_TranslucentBackground);
+    setWindowFlags(Qt::Window | Qt::X11BypassWindowManagerHint);
+    setAttribute(Qt::WA_TranslucentBackground);
 }
 
 void ArrowRectangle::show(int x, int y)
