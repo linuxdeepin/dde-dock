@@ -104,6 +104,17 @@ void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     updateBackground();
 
+    if (dockCons->getDockMode() == Dock::FashionMode)
+    {
+        leftLayout->setVerticalAlignment(DockLayout::AlignTop);
+        rightLayout->setVerticalAlignment(DockLayout::AlignTop);
+    }
+    else
+    {
+        leftLayout->setVerticalAlignment(DockLayout::AlignVCenter);
+        rightLayout->setVerticalAlignment(DockLayout::AlignVCenter);
+    }
+
     leftLayout->relayout();
     rightLayout->relayout();
 

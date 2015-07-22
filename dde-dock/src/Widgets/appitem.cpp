@@ -6,7 +6,9 @@ AppItem::AppItem(QWidget *parent) :
 {
     setAcceptDrops(true);
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+    m_appIcon = new AppIcon(this);
     initBackground();
+    initHighlight();
     initClientManager();
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
@@ -126,7 +128,6 @@ void AppItem::resizeResources()
 {
     if (m_appIcon != NULL)
     {
-        m_appIcon->resize(dockCons->getAppIconSize(),dockCons->getAppIconSize());
         updateIcon();
     }
 
@@ -153,6 +154,16 @@ void AppItem::initBackground()
     {
         appBackground->setVisible(true);
     }
+}
+
+void AppItem::initHighlight()
+{
+    m_highlight = new HighlightEffect(m_appIcon,this);
+    m_highlight->move(m_appIcon->pos());
+    connect(this, &AppItem::mouseEntered, m_highlight, &HighlightEffect::showLighter);
+    connect(this, &AppItem::mouseExited, m_highlight, &HighlightEffect::showNormal);
+    connect(this, &AppItem::mousePress, m_highlight, &HighlightEffect::showDarker);
+    connect(this, &AppItem::mouseRelease, m_highlight, &HighlightEffect::showLighter);
 }
 
 void AppItem::initClientManager()
@@ -190,11 +201,7 @@ void AppItem::initData()
 
 void AppItem::updateIcon()
 {
-    if (m_appIcon == NULL)
-    {
-        m_appIcon = new AppIcon(this);
-    }
-    m_appIcon->resize(height(), height());
+    m_appIcon->resize(dockCons->getAppIconSize(),dockCons->getAppIconSize());
     m_appIcon->setIcon(m_itemData.iconPath);
 
     reanchorIcon();

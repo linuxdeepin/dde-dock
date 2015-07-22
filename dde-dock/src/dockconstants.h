@@ -20,7 +20,7 @@ const int APP_PREVIEW_WIDTH = 160;
 const int APP_PREVIEW_HEIGHT = 100;
 const int APP_PREVIEW_MARGIN = 18 ;
 
-const int APP_ITEM_FASHION_HEIGHT = 48;
+const int APP_ITEM_FASHION_HEIGHT = 70;
 const int APP_ITEM_FASHION_NORMAL_WIDTH = 48;
 const int APP_ITEM_FASHION_ACTIVE_WIDTH = 48;
 const int APP_ITEM_FASHION_SPACING = 3;
@@ -39,7 +39,7 @@ const int APP_ITEM_CLASSIC_SPACING = 4;
 const int APP_ITEM_CLASSIC_ICON_SIZE = 24;
 
 ////////////////  APpplet  ////////////////////////////
-const int APPLET_FASHION_ITEM_HEIGHT = 48;
+const int APPLET_FASHION_ITEM_HEIGHT = 70;
 const int APPLET_FASHION_ITEM_WIDTH = 48;
 const int APPLET_FASHION_ITEM_SPACING = 3;
 const int APPLET_FASHION_ICON_SIZE = 48;
