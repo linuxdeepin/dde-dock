@@ -18,6 +18,7 @@ class Panel : public QLabel
 {
     Q_OBJECT
     Q_PROPERTY(QPoint pos READ pos WRITE move)
+    Q_PROPERTY(bool isFashionMode READ isFashionMode)
 
 public:
     explicit Panel(QWidget *parent = 0);
@@ -25,6 +26,8 @@ public:
 
     void showScreenMask();
     void hideScreenMask();
+
+    bool isFashionMode();
 
 public slots:
     void slotDragStarted();
@@ -53,6 +56,8 @@ private:
 
     void showMenu();
 
+    void updateBackground();
+
     void initAppManager();
 
     void hasShown();
@@ -60,6 +65,7 @@ private:
     void hideStateChanged(int value);
     void initHSManager();
     void initState();
+
 private:
     DBusHideStateManager * m_HSManager = NULL;
     DockLayout * leftLayout = NULL;
@@ -68,6 +74,10 @@ private:
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
     DockModeData *dockCons = DockModeData::instance();
+
+    bool m_isFashionMode = false;
+    const int FASHION_PANEL_LPADDING = 21;
+    const int FASHION_PANEL_RPADDING = 21;
 };
 
 #endif // PANEL_H

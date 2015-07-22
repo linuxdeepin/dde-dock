@@ -1,5 +1,11 @@
-QLabel#Panel {
+QLabel#Panel[isFashionMode="false"] {
     background-color: rgba(0,0,0,0.7);
+}
+
+QLabel#Panel[isFashionMode="true"] {
+    border-width: 0px 21px 50px 21px;
+    border-image: url(://Resources/images/dark_dock.svg)  0 21 50 21 stretch;
+
 }
 
 QLabel#AppBackground[isCurrentOpened="true"][isHovered="true"] {/*item is current opened and is hovered*/

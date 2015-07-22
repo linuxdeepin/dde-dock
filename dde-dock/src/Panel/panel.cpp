@@ -49,6 +49,8 @@ Panel::Panel(QWidget *parent)
     QTimer::singleShot(10, [=](){
         reanchorsLayout(dockCons->getDockMode());
     });
+
+    updateBackground();
 }
 
 void Panel::showScreenMask()
@@ -58,6 +60,11 @@ void Panel::showScreenMask()
     connect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
     connect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
     connect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
+}
+
+bool Panel::isFashionMode()
+{
+    return m_isFashionMode;
 }
 
 void Panel::hideScreenMask()
@@ -94,6 +101,8 @@ void Panel::slotExitedMask()
 
 void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
+    updateBackground();
+
     leftLayout->relayout();
     rightLayout->relayout();
 
@@ -144,9 +153,14 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getItemHeight());
         rightLayout->setSortDirection(DockLayout::LeftToRight);
         rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
-        rightLayout->move(leftLayout->width() - dockCons->getAppItemSpacing(),1);
+        this->setFixedSize(FASHION_PANEL_LPADDING
+                           + FASHION_PANEL_RPADDING
+                           + leftLayout->getContentsWidth()
+                           + rightLayout->getContentsWidth()
+                           ,dockCons->getDockHeight());
+        leftLayout->move(FASHION_PANEL_LPADDING,1);
 
-        this->setFixedSize(leftLayout->getContentsWidth() + rightLayout->getContentsWidth(),dockCons->getDockHeight());
+        rightLayout->move(leftLayout->x() + leftLayout->width() - dockCons->getAppItemSpacing(),1);
         this->move((parentWidget->width() - width()) / 2,0);
     }
     else
@@ -155,6 +169,7 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
         rightLayout->move(parentWidget->width() - rightLayout->width(),1);
 
+        leftLayout->move(0,1);
         leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getItemHeight());
 
         this->setFixedSize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
@@ -167,6 +182,14 @@ void Panel::showMenu()
     QPoint tmpPos = QCursor::pos();
 
     PanelMenu::instance()->showMenu(tmpPos.x(),tmpPos.y());
+}
+
+void Panel::updateBackground()
+{
+    m_isFashionMode = dockCons->getDockMode() == Dock::FashionMode;
+
+    style()->unpolish(this);
+    style()->polish(this);// force a stylesheet recomputation
 }
 
 void Panel::initAppManager()

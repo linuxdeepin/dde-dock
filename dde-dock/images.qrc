@@ -3,5 +3,6 @@
         <file>Resources/images/close_hover.png</file>
         <file>Resources/images/close_press.png</file>
         <file>Resources/images/close_normal.png</file>
+        <file>Resources/images/dark_dock.svg</file>
     </qresource>
 </RCC>

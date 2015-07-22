@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="93px" height="50px" viewBox="0 0 93 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.2 (12043) - http://www.bohemiancoding.com/sketch -->
+    <title>dark_dock</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#000000" stop-opacity="0.498245018" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.802026721" offset="91.410236%"></stop>
+            <stop stop-color="#1E1E1E" stop-opacity="0.877240115" offset="92.1134107%"></stop>
+            <stop stop-color="#343434" stop-opacity="0.9" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FFFFFF" stop-opacity="0.05" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+        <radialGradient cx="50%" cy="-375.962707%" fx="50%" fy="-375.962707%" r="50%" id="radialGradient-3">
+            <stop stop-color="#FFFFFF" stop-opacity="0.25" offset="0%"></stop>
+            <stop stop-color="#FFFFFF" stop-opacity="0.2" offset="100%"></stop>
+        </radialGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="dark_dock" sketch:type="MSLayerGroup" transform="translate(1.000000, 1.000000)">
+            <path d="M0.704924594,43.6343891 C0.279936283,46.0454494 1.62330451,48 3.70079437,48 L87.5507183,48 C89.6299951,48 90.9720567,46.0439005 90.5482688,43.6343891 L83.5427251,4.3656109 C83.1065196,1.95455058 81.0957754,0 79.0561566,0 L12.2138355,0 C10.1724624,0 8.16243898,1.95609953 7.72558634,4.3656109 L0.704924594,43.6343891 Z" id="Mask" stroke="url(#linearGradient-2)" fill="url(#linearGradient-1)" sketch:type="MSShapeGroup"></path>
+            <path d="M1.50236742,43.5 L89.5023674,43.5" id="Line" stroke="url(#radialGradient-3)" stroke-linecap="square" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>
