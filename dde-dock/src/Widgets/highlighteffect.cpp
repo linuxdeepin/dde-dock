@@ -9,6 +9,7 @@ HighlightEffect::HighlightEffect(QWidget * source, QWidget *parent) :
     m_source(source)
 {
     setFixedSize(m_source->size());
+    setAttribute(Qt::WA_TransparentForMouseEvents);
 }
 
 
@@ -34,6 +35,8 @@ void HighlightEffect::setDarker(int darker)
 
 void HighlightEffect::showDarker()
 {
+    setVisible(true);
+
     m_effectState = ESDarker;
 
     this->repaint();
@@ -41,6 +44,8 @@ void HighlightEffect::showDarker()
 
 void HighlightEffect::showLighter()
 {
+    setVisible(true);
+
     m_effectState = ESLighter;
 
     this->repaint();
@@ -48,6 +53,8 @@ void HighlightEffect::showLighter()
 
 void HighlightEffect::showNormal()
 {
+    setVisible(true);
+
     m_effectState = ESNormal;
 
     this->repaint();
@@ -65,9 +72,9 @@ void HighlightEffect::paintEvent(QPaintEvent *)
         painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
 
         if (m_effectState == ESLighter) {
-            painter.fillRect(pixmap.rect(), QColor::fromRgbF(1, 1, 1, 0.3));
+            painter.fillRect(pixmap.rect(), QColor::fromRgbF(1, 1, 1, 0.2));
         } else if (m_effectState == ESDarker) {
-            painter.fillRect(pixmap.rect(), QColor::fromRgbF(0, 0, 0, 0.3));
+            painter.fillRect(pixmap.rect(), QColor::fromRgbF(0, 0, 0, 0.2));
         }
 
         painter.end();

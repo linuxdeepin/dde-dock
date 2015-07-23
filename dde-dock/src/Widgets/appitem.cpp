@@ -156,17 +156,6 @@ void AppItem::initBackground()
     }
 }
 
-void AppItem::initHighlight()
-{
-    m_highlight = new HighlightEffect(m_appIcon, this);
-    m_highlight->setFixedSize(this->size());
-    m_highlight->move(m_appIcon->pos());
-    connect(this, &AppItem::mouseEntered, m_highlight, &HighlightEffect::showLighter);
-    connect(this, &AppItem::mouseExited, m_highlight, &HighlightEffect::showNormal);
-    connect(this, &AppItem::mousePress, m_highlight, &HighlightEffect::showDarker);
-    connect(this, &AppItem::mouseRelease, m_highlight, &HighlightEffect::showLighter);
-}
-
 void AppItem::initClientManager()
 {
     m_clientmanager = new DBusClientManager(this);
@@ -227,8 +216,8 @@ void AppItem::updateTitle()
         return;
     case Dock::ClassicMode:
         m_appIcon->setVisible(true);
-        m_appTitle->resize(width() - m_appIcon->width(),m_appIcon->height());
-        m_appTitle->move(m_appIcon->x() + m_appIcon->width(),m_appIcon->y());
+        m_appTitle->resize(m_isActived ? (width() - m_appIcon->width()) : 0,m_appIcon->height());
+        m_appTitle->move(m_appIcon->x() + m_appIcon->width(), m_appIcon->y());
         m_appTitle->show();
         break;
     default:

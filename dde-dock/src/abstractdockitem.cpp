@@ -14,6 +14,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
     QFrame(parent)
 {
 
+    this->setAttribute(Qt::WA_TranslucentBackground);
 }
 
 AbstractDockItem::~AbstractDockItem()
@@ -44,11 +45,17 @@ bool AbstractDockItem::actived()
 void AbstractDockItem::resize(int width,int height){
     QFrame::resize(width,height);
 
+    if (m_highlight)
+        m_highlight->setFixedSize(size());
+
     emit widthChanged();
 }
 
 void AbstractDockItem::resize(const QSize &size){
     QFrame::resize(size);
+
+    if (m_highlight)
+        m_highlight->setFixedSize(size);
 
     emit widthChanged();
 }
@@ -66,6 +73,18 @@ void AbstractDockItem::setNextPos(const QPoint &value)
 void AbstractDockItem::setNextPos(int x, int y)
 {
     m_itemNextPos.setX(x); m_itemNextPos.setY(y);
+}
+
+void AbstractDockItem::move(const QPoint &value)
+{
+    QWidget::move(value);
+    m_highlight->move(pos());
+}
+
+void AbstractDockItem::move(int x, int y)
+{
+    QWidget::move(x,y);
+    m_highlight->move(pos());
 }
 
 int AbstractDockItem::globalX()
@@ -162,4 +181,40 @@ QString AbstractDockItem::getMenuContent()
 void AbstractDockItem::invokeMenuItem(QString, bool)
 {
 
+}
+
+void AbstractDockItem::setParent(QWidget *parent)
+{
+    QWidget::setParent(parent);
+    initHighlight();
+}
+
+void AbstractDockItem::initHighlight()
+{
+    //the size and position will update with move() and resize()
+    QWidget * lParent = qobject_cast<QWidget *>(parent());
+    if (lParent)
+    {
+        if (!m_highlight)
+        {
+            m_highlight = new HighlightEffect(this, lParent);
+            connect(this, &AbstractDockItem::dragStart, [=](){
+                m_highlight->setVisible(false);
+            });
+            connect(this, &AbstractDockItem::mousePress, [=](){
+                m_highlight->showDarker();
+            });
+            connect(this, &AbstractDockItem::mouseRelease, [=](){
+                m_highlight->showLighter();
+            });
+            connect(this, &AbstractDockItem::mouseEntered, [=](){
+                m_highlight->showLighter();
+            });
+            connect(this, &AbstractDockItem::mouseExited, [=](){
+                m_highlight->showNormal();
+            });
+        }
+        else
+            m_highlight->setParent(lParent);
+    }
 }

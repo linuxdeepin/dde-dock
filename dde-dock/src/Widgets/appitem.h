@@ -25,7 +25,6 @@
 #include "appicon.h"
 #include "appbackground.h"
 #include "arrowrectangle.h"
-#include "highlighteffect.h"
 #include "../dockconstants.h"
 
 struct AppItemData {
@@ -75,7 +74,6 @@ private slots:
 private:
     void resizeResources();
     void initBackground();
-    void initHighlight();
     void initClientManager();
     void setActived(bool value);
 
@@ -93,7 +91,6 @@ private:
     AppItemData m_itemData;
     DockModeData *dockCons = DockModeData::instance();
     AppBackground * appBackground = NULL;
-    HighlightEffect * m_highlight = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
 

@@ -16,21 +16,29 @@ LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 
 void LauncherItem::mousePressEvent(QMouseEvent *)
 {
+    emit mousePress(globalX(), globalY());
+
     hidePreview();
 }
 
 void LauncherItem::mouseReleaseEvent(QMouseEvent *)
 {
+    emit mouseRelease(globalX(), globalY());
+
     m_launcherProcess->start("dde-launcher",QStringList());
 }
 
 void LauncherItem::enterEvent(QEvent *)
 {
+    emit mouseEntered();
+
     showPreview();
 }
 
 void LauncherItem::leaveEvent(QEvent *)
 {
+    emit mouseExited();
+
     hidePreview();
 }
 

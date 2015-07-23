@@ -2,6 +2,8 @@
 #define ABSTRACTDOCKITEM_H
 
 #include "Widgets/arrowrectangle.h"
+#include "Widgets/highlighteffect.h"
+#include <QDebug>
 
 class DBusMenu;
 class DBusMenuManager;
@@ -24,6 +26,8 @@ public:
     QPoint getNextPos();
     void setNextPos(const QPoint &value);
     void setNextPos(int x, int y);
+    void move(const QPoint &value);
+    void move(int x, int y);
 
     int globalX();
     int globalY();
@@ -37,6 +41,8 @@ public:
     void showMenu();
     virtual QString getMenuContent();
     virtual void invokeMenuItem(QString itemId, bool checked);
+
+    void setParent(QWidget * parent);
 
 signals:
     void dragStart();
@@ -55,11 +61,14 @@ protected:
     bool m_moveable = true;
     bool m_isActived = false;
     ArrowRectangle *m_previewAR = new ArrowRectangle();
+    HighlightEffect * m_highlight = NULL;
 
     QPoint m_itemNextPos;
 
     DBusMenu * m_dbusMenu = NULL;
     DBusMenuManager * m_dbusMenuManager = NULL;
+
+    void initHighlight();
 };
 
 #endif // ABSTRACTDOCKITEM_H
