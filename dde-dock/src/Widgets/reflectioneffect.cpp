@@ -8,6 +8,7 @@ ReflectionEffect::ReflectionEffect(QWidget * source, QWidget *parent) :
     m_opacity(0.1)
 {
     this->setFixedWidth(m_source->width());
+    setAttribute(Qt::WA_TransparentForMouseEvents);
 }
 
 qreal ReflectionEffect::opacity() const
@@ -39,4 +40,9 @@ void ReflectionEffect::paintEvent(QPaintEvent *)
             painter.end();
         }
     }
+}
+
+void ReflectionEffect::updateReflection()
+{
+    this->repaint();
 }

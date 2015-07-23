@@ -12,6 +12,7 @@ public:
 
     qreal opacity() const;
     void setOpacity(const qreal &opacity);
+    void updateReflection();
 
 protected:
     void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;

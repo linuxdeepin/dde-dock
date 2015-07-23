@@ -5,6 +5,7 @@ DockLayout::DockLayout(QWidget *parent) :
     QWidget(parent)
 {
     this->setAcceptDrops(true);
+    this->setAttribute(Qt::WA_TranslucentBackground);
 }
 
 void DockLayout::addItem(AbstractDockItem *item)
@@ -25,6 +26,8 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     connect(item, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
     connect(item, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
     connect(item, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
+    connect(item, &AbstractDockItem::posChanged, this, &DockLayout::frameUpdate);
+    connect(item, &AbstractDockItem::frameUpdate, this, &DockLayout::frameUpdate);
 
     relayout();
 }

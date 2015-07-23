@@ -50,6 +50,7 @@ signals:
     void dragStarted();
     void itemDropped();
     void contentsWidthChange();
+    void frameUpdate();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

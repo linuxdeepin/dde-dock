@@ -55,6 +55,8 @@ signals:
     void mouseRelease(int x, int y);
     void mouseDoubleClick();
     void widthChanged();
+    void posChanged();
+    void frameUpdate();
 
 protected:
 

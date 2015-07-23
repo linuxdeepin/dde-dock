@@ -44,10 +44,13 @@ Panel::Panel(QWidget *parent)
     initAppManager();
     initHSManager();
     initState();
+    initReflection();
 
     //TODO ,move panel to center on fashion mode
     QTimer::singleShot(10, [=](){
         reanchorsLayout(dockCons->getDockMode());
+        updateLeftReflection();
+        updateRightReflection();
     });
 
     updateBackground();
@@ -263,6 +266,51 @@ void Panel::initState()
     });
 
     machine->start();
+}
+
+void Panel::initReflection()
+{
+    if (leftLayout)
+    {
+        m_leftReflection = new ReflectionEffect(leftLayout, this);
+        connect(leftLayout, &DockLayout::frameUpdate, [=](){
+            if (dockCons->getDockMode() == Dock::FashionMode)
+                updateLeftReflection();
+        });
+        connect(dockCons, &DockModeData::dockModeChanged, [=](){
+            if (dockCons->getDockMode() == Dock::FashionMode)
+                updateLeftReflection();
+            else
+                m_leftReflection->setFixedSize(leftLayout->width(), 0);
+        });
+    }
+
+    if (rightLayout)
+    {
+        m_rightReflection = new ReflectionEffect(rightLayout, this);
+        connect(leftLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
+        connect(rightLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
+        connect(dockCons, &DockModeData::dockModeChanged, this, &Panel::updateRightReflection);
+    }
+}
+
+void Panel::updateLeftReflection()
+{
+    m_leftReflection->setFixedSize(leftLayout->width(), REFLECTION_HEIGHT);
+    m_leftReflection->move(leftLayout->x(), leftLayout->y() + leftLayout->height());
+    m_leftReflection->updateReflection();
+}
+
+void Panel::updateRightReflection()
+{
+    if (dockCons->getDockMode() == Dock::FashionMode)
+    {
+        m_rightReflection->setFixedSize(rightLayout->width(), REFLECTION_HEIGHT);
+        m_rightReflection->move(rightLayout->x(), rightLayout->y() + rightLayout->height());
+        m_rightReflection->updateReflection();
+    }
+    else
+        m_rightReflection->setFixedSize(rightLayout->width(), 0);
 }
 
 Panel::~Panel()

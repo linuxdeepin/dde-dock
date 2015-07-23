@@ -12,6 +12,7 @@
 #include "Widgets/appitem.h"
 #include "Widgets/docklayout.h"
 #include "Widgets/screenmask.h"
+#include "Widgets/reflectioneffect.h"
 #include "panelmenu.h"
 
 class Panel : public QLabel
@@ -65,6 +66,9 @@ private:
     void hideStateChanged(int value);
     void initHSManager();
     void initState();
+    void initReflection();
+    void updateLeftReflection();
+    void updateRightReflection();
 
 private:
     DBusHideStateManager * m_HSManager = NULL;
@@ -74,10 +78,13 @@ private:
     QWidget * parentWidget = NULL;
     ScreenMask * maskWidget = NULL;
     DockModeData *dockCons = DockModeData::instance();
+    ReflectionEffect * m_leftReflection = NULL;
+    ReflectionEffect * m_rightReflection = NULL;
 
     bool m_isFashionMode = false;
     const int FASHION_PANEL_LPADDING = 21;
     const int FASHION_PANEL_RPADDING = 21;
+    const int REFLECTION_HEIGHT = 15;
 };
 
 #endif // PANEL_H

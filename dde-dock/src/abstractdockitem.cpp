@@ -79,12 +79,16 @@ void AbstractDockItem::move(const QPoint &value)
 {
     QWidget::move(value);
     m_highlight->move(pos());
+
+    emit posChanged();
 }
 
 void AbstractDockItem::move(int x, int y)
 {
     QWidget::move(x,y);
     m_highlight->move(pos());
+
+    emit posChanged();
 }
 
 int AbstractDockItem::globalX()
@@ -203,15 +207,19 @@ void AbstractDockItem::initHighlight()
             });
             connect(this, &AbstractDockItem::mousePress, [=](){
                 m_highlight->showDarker();
+                emit frameUpdate();
             });
             connect(this, &AbstractDockItem::mouseRelease, [=](){
                 m_highlight->showLighter();
+                emit frameUpdate();
             });
             connect(this, &AbstractDockItem::mouseEntered, [=](){
                 m_highlight->showLighter();
+                emit frameUpdate();
             });
             connect(this, &AbstractDockItem::mouseExited, [=](){
                 m_highlight->showNormal();
+                emit frameUpdate();
             });
         }
         else
