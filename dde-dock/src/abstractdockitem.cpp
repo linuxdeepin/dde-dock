@@ -19,7 +19,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 
 AbstractDockItem::~AbstractDockItem()
 {
-
+    delete m_highlight;
 }
 
 QString AbstractDockItem::getTitle()
@@ -218,6 +218,8 @@ void AbstractDockItem::initHighlight()
                 emit frameUpdate();
             });
             connect(this, &AbstractDockItem::mouseExited, [=](){
+                if (!m_highlight->isVisible())
+                    return;
                 m_highlight->showNormal();
                 emit frameUpdate();
             });
