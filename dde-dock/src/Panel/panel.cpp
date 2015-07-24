@@ -15,6 +15,7 @@ Panel::Panel(QWidget *parent)
     rightLayout->resize(0,dockCons->getItemHeight());
 
     leftLayout = new DockLayout(this);
+    leftLayout->setAcceptDrops(true);
     leftLayout->setSpacing(dockCons->getAppItemSpacing());
     leftLayout->resize(this->width() - rightLayout->width(),dockCons->getItemHeight());
     leftLayout->move(0,1);

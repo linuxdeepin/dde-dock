@@ -4,7 +4,6 @@
 DockLayout::DockLayout(QWidget *parent) :
     QWidget(parent)
 {
-    this->setAcceptDrops(true);
     this->setAttribute(Qt::WA_TranslucentBackground);
 }
 

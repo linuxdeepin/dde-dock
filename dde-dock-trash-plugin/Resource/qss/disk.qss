@@ -1,0 +1,21 @@
+QLabel {
+    color:white;
+    font-size:10px;
+}
+
+QLabel#DiskTitle {
+    font-size:12px;
+}
+
+QLabel#SplitLine {
+    background: rgba(255,255,255,0.3);
+}
+
+QProgressBar {
+    background: rgba(255,255,255,0.1);
+    border-radius: 0px;
+}
+
+QProgressBar::chunk {
+    background-color: rgba(255,255,255,0.8);
+}
