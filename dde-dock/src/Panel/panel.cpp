@@ -291,6 +291,7 @@ void Panel::initReflection()
 void Panel::initScreenMask()
 {
     m_maskWidget = new ScreenMask();
+    m_maskWidget->hide();
     connect(m_maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
     connect(m_maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
     connect(m_maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
