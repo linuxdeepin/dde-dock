@@ -67,6 +67,7 @@ private:
     void initHSManager();
     void initState();
     void initReflection();
+    void initScreenMask();
     void updateLeftReflection();
     void updateRightReflection();
 
@@ -76,7 +77,7 @@ private:
     DockLayout *rightLayout = NULL;
     AppManager *m_appManager = NULL;
     QWidget * parentWidget = NULL;
-    ScreenMask * maskWidget = NULL;
+    ScreenMask * m_maskWidget = NULL;
     DockModeData *dockCons = DockModeData::instance();
     ReflectionEffect * m_leftReflection = NULL;
     ReflectionEffect * m_rightReflection = NULL;

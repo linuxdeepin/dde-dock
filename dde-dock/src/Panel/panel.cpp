@@ -46,6 +46,7 @@ Panel::Panel(QWidget *parent)
     initHSManager();
     initState();
     initReflection();
+    initScreenMask();
 
     //TODO ,move panel to center on fashion mode
     QTimer::singleShot(10, [=](){
@@ -60,10 +61,7 @@ Panel::Panel(QWidget *parent)
 void Panel::showScreenMask()
 {
 //    qWarning() << "[Info:]" << "Show Screen Mask.";
-    maskWidget = new ScreenMask();
-    connect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
-    connect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
-    connect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
+    m_maskWidget->show();
 }
 
 bool Panel::isFashionMode()
@@ -74,12 +72,7 @@ bool Panel::isFashionMode()
 void Panel::hideScreenMask()
 {
 //    qWarning() << "[Info:]" << "Hide Screen Mask.";
-    disconnect(maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
-    disconnect(maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
-    disconnect(maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
-    maskWidget->hide();
-    maskWidget->deleteLater();
-    maskWidget = NULL;
+        m_maskWidget->hide();
 }
 
 void Panel::slotDragStarted()
@@ -293,6 +286,14 @@ void Panel::initReflection()
         connect(rightLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
         connect(dockCons, &DockModeData::dockModeChanged, this, &Panel::updateRightReflection);
     }
+}
+
+void Panel::initScreenMask()
+{
+    m_maskWidget = new ScreenMask();
+    connect(m_maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
+    connect(m_maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
+    connect(m_maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
 }
 
 void Panel::updateLeftReflection()
