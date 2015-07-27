@@ -11,12 +11,6 @@
     </enum>
 
     <schema path="/com/deepin/dde/desktop/" id="com.deepin.dde.desktop">
-        <key name="manual-position" type="b">
-            <default>false</default>
-            <summary>Whether enable manual position.</summary>
-            <description>If true, the items on desktop can be placed on anywhere.</description>
-        </key>
-
         <key name="auto-arrangement" type="b">
             <default>false</default>
             <summary>Auto-arrangement items on desktop.</summary>

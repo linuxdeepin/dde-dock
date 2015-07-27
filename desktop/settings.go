@@ -45,14 +45,14 @@ const (
 	// StickupGrid schema key.
 	StickupGrid = "stickup-grid"
 
+	// AutoArrangement schema key.
+	AutoArrangement = "auto-arrangement"
+
 	// ShowTrashedItemCount schema key.
 	ShowTrashedItemCount = "show-trashed-item-number"
 
 	// SortOrder schema key.
 	SortOrder = "sort-order"
-
-	// ManualPosition schema key.
-	ManualPosition = "manual-position"
 
 	// IconDefaultSize schema key
 	IconDefaultSize = "icon-default-size"
@@ -74,13 +74,14 @@ const (
 
 // sortPoliciesName is a map to sort policies and the display name.
 var sortPoliciesName = map[string]string{
-	"name":      Tr("_Name"),
-	"size":      Tr("_Size"),
-	"filetype":  Tr("_Filetype"),
-	"mtime":     Tr("_Modified time"),
-	"atime":     Tr("_Accessed time"),
-	"open-with": Tr("Open _with"),
-	"tag-info":  Tr("_Tag info"),
+	"name":      Tr("Name"),
+	"size":      Tr("Size"),
+	"filetype":  Tr("Filetype"),
+	"mtime":     Tr("Modified time"),
+	"atime":     Tr("Accessed time"),
+	"open-with": Tr("Open with"),
+	"tag-info":  Tr("Tag info"),
+	"tag-color": Tr("Tag Color"),
 }
 
 const (
@@ -104,7 +105,7 @@ type Settings struct {
 	ShowTrashIconChanged         func(bool)
 	ShowComputerIconChanged      func(bool)
 	StickupGridChanged           func(bool)
-	ManualPositionChanged        func(bool)
+	AutoArrangementChanged       func(bool)
 	ConfirmEmptyTrashChanged     func(bool)
 	ActivationPolicyChanged      func(string)
 	ClickPolicyChanged           func(string)
@@ -164,10 +165,9 @@ func NewSettings() (*Settings, error) {
 				s.emitShowTrashIconChanged(s.ShowTrashIconIsEnable())
 			case StickupGrid:
 				s.emitStickupGridChanged(s.StickupGridIsEnable())
-			case ManualPosition:
-				s.emitManualPositionChanged(s.ManualPositionIsEnable())
 			// case ShowTrashedItemCount:
-			// case AutoArrangement:
+			case AutoArrangement:
+				s.emitAutoArrangementChanged(s.AutoArrangement())
 			case IconDefaultSize:
 				s.updateIconSize()
 			case IconZoomLevel:
@@ -204,11 +204,13 @@ func (s *Settings) emitShowComputerIconChanged(enable bool) error {
 func (s *Settings) emitConfirmEmptyTrashChanged(enable bool) error {
 	return dbus.Emit(s, "ConfirmEmptyTrashChanged", enable)
 }
+
 func (s *Settings) emitStickupGridChanged(enable bool) error {
 	return dbus.Emit(s, "StickupGridChanged", enable)
 }
-func (s *Settings) emitManualPositionChanged(enable bool) error {
-	return dbus.Emit(s, "ManualPositionChanged", enable)
+
+func (s *Settings) emitAutoArrangementChanged(enable bool) error {
+	return dbus.Emit(s, "AutoArrangementChanged", enable)
 }
 
 func (s *Settings) emitActivationPolicyChanged(activationPolicy string) error {
@@ -290,14 +292,12 @@ func (s *Settings) EnableStickupGrid(enable bool) {
 	s.desktop.SetBoolean(StickupGrid, enable)
 }
 
-// ManualPositionIsEnable returns whether ManualPosition is enabled.
-func (s *Settings) ManualPositionIsEnable() bool {
-	return s.desktop.GetBoolean(ManualPosition)
+func (s *Settings) AutoArrangement() bool {
+	return s.desktop.GetBoolean(AutoArrangement)
 }
 
-// EnableManualPosition enables or disables ManualPosition.
-func (s *Settings) EnableManualPosition(enable bool) {
-	s.desktop.SetBoolean(ManualPosition, enable)
+func (s *Settings) EnableAutoArrangement(enable bool) {
+	s.desktop.SetBoolean(AutoArrangement, enable)
 }
 
 // ActivationPolicy returns activation policy.

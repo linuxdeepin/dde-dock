@@ -9,6 +9,7 @@ import (
 	"pkg.deepin.io/lib/operations"
 	"pkg.deepin.io/lib/utils"
 	"sort"
+	"strings"
 )
 
 func getBaseName(uri string) string {
@@ -50,26 +51,12 @@ func (desktop *Desktop) GenMenu() (*Menu, error) {
 	desktop.menu = NewMenu()
 	menu := desktop.menu
 
-	sortSubMenu := NewMenu().SetIDGenerator(desktop.menu.genID)
-
-	sortPolicies := desktop.app.settings.getSortPolicies()
-	for _, sortPolicy := range sortPolicies {
-		sortSubMenu.AppendItem(NewMenuItem(sortPoliciesName[sortPolicy], func(sortPolicy string) func() {
-			return func() {
-				desktop.app.emitRequestSort(sortPolicy)
-			}
-		}(sortPolicy), true))
-	}
-
-	sortMenuItem := NewMenuItem(Tr("_Sort by"), func() {}, true)
-	sortMenuItem.subMenu = sortSubMenu
-
-	menu.AppendItem(sortMenuItem)
+	menu.AppendItem(NewMenuItem(Tr("New _folder"), func() {
+		desktop.app.emitRequestCreateDirectory()
+	}, true))
 
 	newSubMenu := NewMenu().SetIDGenerator(menu.genID)
-	newSubMenu.AppendItem(NewMenuItem(Tr("_Folder"), func() {
-		desktop.app.emitRequestCreateDirectory()
-	}, true)).AppendItem(NewMenuItem(Tr("_Text document"), func() {
+	newSubMenu.AppendItem(NewMenuItem(Tr("_Text document"), func() {
 		desktop.app.emitRequestCreateFile()
 	}, true))
 
@@ -87,12 +74,32 @@ func (desktop *Desktop) GenMenu() (*Menu, error) {
 		}
 	}
 
-	newMenuItem := NewMenuItem(Tr("_New"), func() {}, true)
+	newMenuItem := NewMenuItem(Tr("_New document"), func() {}, true)
 	newMenuItem.subMenu = newSubMenu
+	menu.AppendItem(newMenuItem)
 
-	menu.AppendItem(newMenuItem).AppendItem(NewMenuItem(Tr("Open in _terminal"), func() {
-		runInTerminal(GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop), "")
-	}, true)).AppendItem(NewMenuItem(Tr("_Paste"), func() {
+	sortSubMenu := NewMenu().SetIDGenerator(desktop.menu.genID)
+	sortPolicies := desktop.app.settings.getSortPolicies()
+	for _, sortPolicy := range sortPolicies {
+		// TODO: not handle tag for now.
+		if strings.HasPrefix(sortPolicy, "tag") {
+			continue
+		}
+		sortSubMenu.AppendItem(NewMenuItem(sortPoliciesName[sortPolicy], func(sortPolicy string) func() {
+			return func() {
+				desktop.app.emitRequestSort(sortPolicy)
+			}
+		}(sortPolicy), true))
+	}
+	// TODO: not handle clean up for now.
+	// sortSubMenu.AddSeparator().AppendItem(NewMenuItem(Tr("Clean up"), func() {
+	// 	desktop.app.emitRequestCleanup()
+	// }, true))
+
+	sortMenuItem := NewMenuItem(Tr("_Sort by"), func() {}, true)
+	sortMenuItem.subMenu = sortSubMenu
+
+	menu.AppendItem(sortMenuItem).AppendItem(NewMenuItem(Tr("_Paste"), func() {
 		desktop.app.emitRequestPaste(GetDesktopDir())
 	}, operations.CanPaste(GetDesktopDir())))
 
@@ -111,9 +118,8 @@ func (desktop *Desktop) GenMenu() (*Menu, error) {
 				}
 			}()
 		}
-		menu.AddSeparator().AppendItem(NewMenuItem(Tr("_Display settings"), func() {
-			ShowModule("display")
-		}, true)).AppendItem(NewMenuItem(Tr("_Corner navigation"), func() {
+
+		menu.AddSeparator().AppendItem(NewMenuItem(Tr("_Corner navigation"), func() {
 			exec.Command("/usr/lib/deepin-daemon/dde-zone").Start()
 		}, true)).AppendItem(NewMenuItem(Tr("Pe_rsonalize"), func() {
 			ShowModule("personalization")
@@ -123,17 +129,3 @@ func (desktop *Desktop) GenMenu() (*Menu, error) {
 	return menu, nil
 
 }
-
-// DSS = "com.deepin.dde.ControlCenter"
-// DSS_MODULE =
-//     SYSTEM_INFO:"system_info"
-//     DISPLAY:"display"
-//     PERSON:"personalization"
-//
-// dss_dbus = null
-// dss_ShowModule = (module) ->
-//     try
-//         dss_dbus = DCore.DBus.session(DSS) if dss_dbus is null or dss_dbus is undefined
-//         dss_dbus?.ShowModule(module)
-//     catch e
-//         echo "dss_ShowModule #{module} error:#{e}"
