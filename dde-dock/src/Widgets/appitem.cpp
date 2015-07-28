@@ -9,6 +9,7 @@ AppItem::AppItem(QWidget *parent) :
     m_appIcon = new AppIcon(this);
     initBackground();
     initHighlight();
+    m_appIcon->raise();
     initClientManager();
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
