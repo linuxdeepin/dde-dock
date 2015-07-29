@@ -27,6 +27,9 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     connect(item, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
     connect(item, &AbstractDockItem::posChanged, this, &DockLayout::frameUpdate);
     connect(item, &AbstractDockItem::frameUpdate, this, &DockLayout::frameUpdate);
+    connect(item, &AbstractDockItem::moveAnimationFinished, [=]{
+        m_animationItemCount --;
+    });
 
     relayout();
 }
@@ -191,40 +194,18 @@ void DockLayout::moveWithSpacingItem(int hoverIndex)
         {
             for (int i = hoverIndex; i < spacintIndex; i ++)
             {
+                m_animationItemCount ++;
                 AbstractDockItem *targetItem = appList.at(i);
-
-                targetItem->setNextPos(QPoint(targetItem->x() + itemWidth + itemSpacing,0));
-
-                QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
-                animation->setStartValue(targetItem->pos());
-                animation->setEndValue(targetItem->getNextPos());
-                animation->setDuration(200);
-                animation->setEasingCurve(QEasingCurve::OutCubic);
-                animation->start();
-                this->m_animationItemCount ++;
-                connect(animation,&QPropertyAnimation::finished,[=](){
-                    this->m_animationItemCount --;
-                });
+                targetItem->moveWithAnimation(QPoint(targetItem->x() + itemWidth + itemSpacing,0));
             }
         }
         else
         {
             for (int i = spacintIndex; i <= hoverIndex; i ++)
             {
+                m_animationItemCount ++;
                 AbstractDockItem *targetItem = appList.at(i);
-
-                targetItem->setNextPos(QPoint(targetItem->x() - itemWidth - itemSpacing,0));
-
-                QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
-                animation->setStartValue(targetItem->pos());
-                animation->setEndValue(targetItem->getNextPos());
-                animation->setDuration(200);
-                animation->setEasingCurve(QEasingCurve::OutCubic);
-                animation->start();
-                this->m_animationItemCount ++;
-                connect(animation,&QPropertyAnimation::finished,[=](){
-                    this->m_animationItemCount --;
-                });
+                targetItem->moveWithAnimation(QPoint(targetItem->x() - itemWidth - itemSpacing,0));
             }
         }
     }

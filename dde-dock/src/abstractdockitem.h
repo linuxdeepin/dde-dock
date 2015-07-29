@@ -28,6 +28,7 @@ public:
     void setNextPos(int x, int y);
     void move(const QPoint &value);
     void move(int x, int y);
+    virtual void moveWithAnimation(QPoint targetPos){}
 
     int globalX();
     int globalY();
@@ -57,6 +58,7 @@ signals:
     void widthChanged();
     void posChanged();
     void frameUpdate();
+    void moveAnimationFinished();
 
 protected:
 

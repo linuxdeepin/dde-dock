@@ -46,6 +46,7 @@ public:
     AppItem(QWidget *parent = 0);
     ~AppItem();
 
+    void moveWithAnimation(QPoint targetPos);
     QWidget *getApplet();
     void setEntryProxyer(DBusEntryProxyer *entryProxyer);
     void destroyItem(const QString &id);

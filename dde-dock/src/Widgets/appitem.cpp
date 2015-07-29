@@ -16,6 +16,19 @@ AppItem::AppItem(QWidget *parent) :
     initMenu();
 }
 
+void AppItem::moveWithAnimation(QPoint targetPos)
+{
+    setNextPos(targetPos);
+
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "pos");
+    animation->setStartValue(pos());
+    animation->setEndValue(getNextPos());
+    animation->setDuration(200);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+    animation->start();
+    connect(animation, &QPropertyAnimation::finished, this, &AppItem::moveAnimationFinished);
+}
+
 QWidget *AppItem::getApplet()
 {
     AppPreviews *preview = new AppPreviews();
