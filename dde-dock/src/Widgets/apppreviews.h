@@ -15,8 +15,8 @@ class AppPreviewFrame : public QWidget
     Q_OBJECT
 
 public:
-    explicit AppPreviewFrame(QWidget *preview, const QString &title,int xid, QWidget *parent=0);
-    void addPreview(QWidget *p);
+    explicit AppPreviewFrame(const QString &title,int xid, QWidget *parent=0);
+    void addPreview(int xid);
     void setTitle(const QString &t);
 
 protected:
