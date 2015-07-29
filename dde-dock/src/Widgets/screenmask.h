@@ -45,11 +45,13 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *event);
     void dropEvent(QDropEvent *event);
+    void enterEvent(QEvent *);
 
 signals:
     void itemDropped(QPoint pos);
     void itemEntered();
     void itemExited();
+    void itemMissing();
 
 public slots:
 };

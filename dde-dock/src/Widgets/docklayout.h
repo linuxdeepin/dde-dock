@@ -43,6 +43,7 @@ public:
     QList<AbstractDockItem *> getItemList() const;
 
 public slots:
+    void restoreTmpItem();
     void relayout();
     void clearTmpItem();
 
@@ -55,6 +56,8 @@ signals:
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 private slots:
     void slotItemDrag();

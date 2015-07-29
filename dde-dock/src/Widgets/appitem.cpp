@@ -325,7 +325,7 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
         drag->setMimeData(data);
 
         QPixmap pixmap(m_appIcon->getIconPath());
-        drag->setPixmap(pixmap);
+        drag->setPixmap(pixmap.scaled(dockCons->getAppIconSize(), dockCons->getAppIconSize()));
 
         drag->setHotSpot(QPoint(15,15));
 

@@ -223,6 +223,26 @@ int DockLayout::indexOf(int x, int y)
     return 0;
 }
 
+void DockLayout::restoreTmpItem()
+{
+    if (tmpAppMap.isEmpty())
+        return;
+
+    AbstractDockItem * tmpItem = tmpAppMap.firstKey();
+    tmpAppMap.remove(tmpItem);
+    tmpItem->setVisible(true);
+    if (indexOf(tmpItem) == -1)
+    {
+        if (movingForward)
+            insertItem(tmpItem,lastHoverIndex);
+        else
+            insertItem(tmpItem,lastHoverIndex + 1);
+    }
+
+    emit itemDropped();
+    m_animationItemCount = 0;
+}
+
 void DockLayout::relayout()
 {
     switch (sortDirection)
@@ -340,21 +360,17 @@ void DockLayout::dropEvent(QDropEvent *event)
 
     }
     else if (event->mimeData()->formats().indexOf("_DEEPIN_DND") == -1 && sourceItem)
-    {
-        AbstractDockItem * tmpItem = tmpAppMap.firstKey();
-        tmpAppMap.remove(tmpItem);
-        tmpItem->setVisible(true);
-        if (indexOf(tmpItem) == -1)
-        {
-            if (movingForward)
-                insertItem(tmpItem,lastHoverIndex);
-            else
-                insertItem(tmpItem,lastHoverIndex + 1);
-        }
+        restoreTmpItem();
+}
 
-        emit itemDropped();
-        m_animationItemCount = 0;
-    }
+void DockLayout::enterEvent(QEvent *)
+{
+    restoreTmpItem();
+}
+
+void DockLayout::leaveEvent(QEvent *)
+{
+    restoreTmpItem();
 }
 
 void DockLayout::slotItemDrag()

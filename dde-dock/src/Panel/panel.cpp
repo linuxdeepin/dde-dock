@@ -295,6 +295,7 @@ void Panel::initScreenMask()
     connect(m_maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
     connect(m_maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
     connect(m_maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
+    connect(m_maskWidget, &ScreenMask::itemMissing, leftLayout, &DockLayout::restoreTmpItem);
 }
 
 void Panel::updateLeftReflection()

@@ -4,7 +4,7 @@ ScreenMask::ScreenMask(QWidget *parent) : QWidget(parent)
 {
     QRect rec = QApplication::desktop()->screenGeometry();
     this->resize(rec.width(),rec.height());
-    this->setWindowFlags(Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     this->setWindowOpacity(0);
 
     setAcceptDrops(true);
@@ -59,4 +59,13 @@ void ScreenMask::dropEvent(QDropEvent *event)
 
     this->close();
 
+}
+
+//Item drag to some place which not accept drop event will cause item missing
+//Need layout restore state actively
+void ScreenMask::enterEvent(QEvent *)
+{
+    emit itemMissing();
+
+    this->close();
 }
