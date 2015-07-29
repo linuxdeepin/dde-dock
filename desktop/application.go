@@ -13,6 +13,7 @@ import (
 	"net/url"
 	"os/exec"
 	"path/filepath"
+	"pkg.deepin.io/dde/api/thumbnails"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
@@ -467,6 +468,7 @@ type ItemInfo struct {
 	URI         string
 	MIME        string
 	Icon        string
+	Thumbnail   string
 	Size        int64
 	FileType    uint16
 	IsBackup    bool
@@ -504,12 +506,24 @@ func toItemInfo(p operations.ListProperty) ItemInfo {
 
 func (app *Application) getItemInfo(p operations.ListProperty) ItemInfo {
 	info := toItemInfo(p)
+
+	// TODO: filter MIME type
+	if app.settings.thumbnailSizeLimitation >= uint64(info.Size) {
+		thumbnail, err := thumbnails.GenThumbnailWithMime(p.URI, p.MIME, app.settings.iconSize)
+		info.Thumbnail = thumbnail
+
+		if err != nil {
+			fmt.Printf("Get thumbnail for %q failed: %s\n", p.URI, err)
+		}
+	}
+
 	info.Icon = operations.GetThemeIcon(p.URI, app.settings.iconSize)
+
 	return info
 }
 
-func isShouldNotShow(p operations.ListProperty) bool {
-	return p.IsBackup || (p.IsHidden && !filepath.HasPrefix(p.BaseName, AppGroupPrefix))
+func shouldNotShow(p operations.ListProperty) bool {
+	return p.IsBackup || (p.IsHidden && !isAppGroup(p.URI))
 }
 
 func (app *Application) listDir(dir string, flag operations.ListJobFlag) (map[string]ItemInfo, error) {
@@ -518,7 +532,7 @@ func (app *Application) listDir(dir string, flag operations.ListJobFlag) (map[st
 	job := operations.NewListDirJob(dir, flag)
 
 	job.ListenProperty(func(p operations.ListProperty) {
-		if !isShouldNotShow(p) {
+		if !shouldNotShow(p) {
 			infos[p.URI] = app.getItemInfo(p)
 		}
 	})

@@ -9,6 +9,14 @@ import (
 )
 
 const (
+	// FileManagerPerferenceSchemaID is filemanager's general preferences' schema id
+	FileManagerPerferenceSchemaID string = "com.deepin.filemanager.preferences"
+
+	// FileManagerDesktopSchemaID is desktop specific settings' schema id
+	FileManagerDesktopSchemaID string = "com.deepin.dde.desktop"
+)
+
+const (
 	// ConfirmTrash schema key.
 	ConfirmTrash = "confirm-trash"
 
@@ -59,6 +67,12 @@ const (
 
 	// IconZoomLevel schema key
 	IconZoomLevel = "icon-zoom-level"
+
+	// ThumbnailSizeLimitation schema key
+	ThumbnailSizeLimitation = "thumbnail-size-limitation"
+
+	// ThumbnailSizeUnit schema key
+	ThumbnailSizeUnit = "thumbnail-size-unit"
 )
 
 const (
@@ -85,35 +99,61 @@ var sortPoliciesName = map[string]string{
 }
 
 const (
-	// FileManagerPerferenceSchemaID is filemanager's general preferences' schema id
-	FileManagerPerferenceSchemaID string = "com.deepin.filemanager.preferences"
-	// FileManagerDesktopSchemaID is desktop specific settings' schema id
-	FileManagerDesktopSchemaID string = "com.deepin.dde.desktop"
+	SizeUnitByte int = iota
+	SizeUnitKiB
+	SizeUnitMB
+	SizeUnitGB
+	SizeUnitTB
+	SizeUnitPB
 )
+
+func toBytes(size uint64, unit int) uint64 {
+	switch unit {
+	case SizeUnitByte:
+		return size
+	case SizeUnitKiB:
+		return size * 1024
+	case SizeUnitMB:
+		return toBytes(size*1024, SizeUnitKiB)
+	case SizeUnitGB:
+		return toBytes(size*1024, SizeUnitMB)
+	case SizeUnitTB:
+		return toBytes(size*1024, SizeUnitGB)
+	case SizeUnitPB:
+		return toBytes(size*1024, SizeUnitTB)
+	}
+	panic("toBytes: invalid size unit, shouldn't reach here.")
+}
 
 // Settings is settings used by desktop.
 type Settings struct {
-	// preferences is filemanager's base preferences
-	preferences *gio.Settings
+	// filemanagerPreferences is filemanager's general preferences
+	filemanagerPreferences *gio.Settings
 
-	// desktop is desktop specific settings.
-	desktop *gio.Settings
+	// desktopPreferences is desktop specific settings.
+	desktopPreferences *gio.Settings
 
+	// iconSize is the real icon size which equals to default icon size muliplies zoom level.
 	iconSize int
 
-	IconZoomLevelChanged         func(int32)
-	ShowTrashIconChanged         func(bool)
-	ShowComputerIconChanged      func(bool)
-	StickupGridChanged           func(bool)
-	AutoArrangementChanged       func(bool)
-	ConfirmEmptyTrashChanged     func(bool)
-	ActivationPolicyChanged      func(string)
-	ClickPolicyChanged           func(string)
-	ShowThumbnailChanged         func(string)
-	ShowHiddenFilesChanged       func(bool)
-	ShowExtensionNameChanged     func(bool)
-	LabelPositionChanged         func(string)
-	AllowDeleteImmediatlyChanged func(bool)
+	// thumbnailSizeLimitation is size limitation in bytes.
+	thumbnailSizeLimitation uint64
+
+	// signals
+	IconZoomLevelChanged           func(int32)
+	ShowTrashIconChanged           func(bool)
+	ShowComputerIconChanged        func(bool)
+	StickupGridChanged             func(bool)
+	AutoArrangementChanged         func(bool)
+	ConfirmEmptyTrashChanged       func(bool)
+	ActivationPolicyChanged        func(string)
+	ClickPolicyChanged             func(string)
+	ShowThumbnailChanged           func(string)
+	ShowHiddenFilesChanged         func(bool)
+	ShowExtensionNameChanged       func(bool)
+	LabelPositionChanged           func(string)
+	AllowDeleteImmediatlyChanged   func(bool)
+	ThumbnailSizeLimitationChanged func(uint64)
 }
 
 // GetDBusInfo returns dbus info for Settings.
@@ -131,8 +171,8 @@ func NewSettings() (*Settings, error) {
 	err := initializer.NewInitializer().Init(func(interface{}) (interface{}, error) {
 		return utils.CheckAndNewGSettings(FileManagerPerferenceSchemaID)
 	}).Init(func(v interface{}) (interface{}, error) {
-		s.preferences = v.(*gio.Settings)
-		s.preferences.Connect("changed", func(_ *gio.Settings, key string) {
+		s.filemanagerPreferences = v.(*gio.Settings)
+		s.filemanagerPreferences.Connect("changed", func(_ *gio.Settings, key string) {
 			switch key {
 			case ConfirmEmptyTrash:
 				s.emitConfirmEmptyTrashChanged(s.ConfirmEmptyTrashIsEnable())
@@ -151,13 +191,19 @@ func NewSettings() (*Settings, error) {
 				s.emitLabelPositionChanged(s.LabelPosition())
 			case AllowDeleteImmediatly:
 				s.emitAllowDeleteImmediatlyChanged(s.AllowDeleteImmediatlyIsEnable())
+			case ThumbnailSizeLimitation:
+				fallthrough
+			case ThumbnailSizeUnit:
+				s.updateThumbnailSizeLimitation()
+				s.emitThunbnailSizeLimitationChanged(s.thumbnailSizeLimitation)
 			}
 		})
-		s.preferences.GetBoolean(ConfirmEmptyTrash) // enable connection.
+		s.filemanagerPreferences.GetBoolean(ConfirmEmptyTrash) // enable connection.
+		s.updateThumbnailSizeLimitation()
 		return utils.CheckAndNewGSettings(FileManagerDesktopSchemaID)
 	}).Init(func(v interface{}) (interface{}, error) {
-		s.desktop = v.(*gio.Settings)
-		s.desktop.Connect("changed", func(_ *gio.Settings, key string) {
+		s.desktopPreferences = v.(*gio.Settings)
+		s.desktopPreferences.Connect("changed", func(_ *gio.Settings, key string) {
 			switch key {
 			case ShowComputerIcon:
 				s.emitShowComputerIconChanged(s.ShowComputerIconIsEnable())
@@ -185,8 +231,18 @@ func NewSettings() (*Settings, error) {
 	return s, nil
 }
 
+func (s *Settings) updateThumbnailSizeLimitation() {
+	size := s.getThumbnailSizeLimitation()
+	unit := int(s.getThumbnailSizeUnit())
+	s.thumbnailSizeLimitation = toBytes(size, unit)
+}
+
 func (s *Settings) updateIconSize() {
-	s.iconSize = int(s.desktop.GetEnum(IconDefaultSize) * s.desktop.GetInt(IconZoomLevel) / 100)
+	s.iconSize = int(s.desktopPreferences.GetEnum(IconDefaultSize) * s.desktopPreferences.GetInt(IconZoomLevel) / 100)
+}
+
+func (s *Settings) emitThunbnailSizeLimitationChanged(size uint64) error {
+	return dbus.Emit(s, "ThumbnailSizeLimitationChanged", size)
 }
 
 func (s *Settings) emitIconZoomLevelChanged(level int32) error {
@@ -243,109 +299,122 @@ func (s *Settings) emitAllowDeleteImmediatlyChanged(enable bool) error {
 
 // ConfirmTrashIsEnable returns whether ConfirmTrash is enabled.
 func (s *Settings) ConfirmTrashIsEnable() bool {
-	return s.preferences.GetBoolean(ConfirmTrash)
+	return s.filemanagerPreferences.GetBoolean(ConfirmTrash)
 }
 
 // ShowTrashedItemCountIsEnable returns whether ShowTrashedItemCount is enabled.
 func (s *Settings) ShowTrashedItemCountIsEnable() bool {
-	return s.desktop.GetBoolean(ShowTrashedItemCount)
+	return s.desktopPreferences.GetBoolean(ShowTrashedItemCount)
 }
 
 // ConfirmEmptyTrashIsEnable returns whether ConfirmEmptyTrash is enabled.
 func (s *Settings) ConfirmEmptyTrashIsEnable() bool {
-	return s.desktop.GetBoolean(ConfirmEmptyTrash)
+	return s.desktopPreferences.GetBoolean(ConfirmEmptyTrash)
 }
 
 func (s *Settings) getSortPolicies() []string {
-	variantValue := s.preferences.GetRange(SortOrder)
+	variantValue := s.filemanagerPreferences.GetRange(SortOrder)
 	_, policies := variantValue.GetChildValue(1).GetVariant().GetStrv()
 	return policies
 }
 
 // ShowComputerIconIsEnable returns whether ShowComputerIcon is enabled.
 func (s *Settings) ShowComputerIconIsEnable() bool {
-	return s.desktop.GetBoolean(ShowComputerIcon)
+	return s.desktopPreferences.GetBoolean(ShowComputerIcon)
 }
 
 // EnableShowComputerIcon enables or disables ShowComputerIcon.
 func (s *Settings) EnableShowComputerIcon(enable bool) {
-	s.desktop.SetBoolean(ShowComputerIcon, enable)
+	s.desktopPreferences.SetBoolean(ShowComputerIcon, enable)
 }
 
 // ShowTrashIconIsEnable returns whether ShowTrashIcon is enabled.
 func (s *Settings) ShowTrashIconIsEnable() bool {
-	return s.desktop.GetBoolean(ShowTrashIcon)
+	return s.desktopPreferences.GetBoolean(ShowTrashIcon)
 }
 
 // EnableShowTrashIcon enables or disables ShowTrashIcon.
 func (s *Settings) EnableShowTrashIcon(enable bool) {
-	s.desktop.SetBoolean(ShowTrashIcon, enable)
+	s.desktopPreferences.SetBoolean(ShowTrashIcon, enable)
 }
 
 // StickupGridIsEnable returns whether StickupGrid is enabled.
 func (s *Settings) StickupGridIsEnable() bool {
-	return s.desktop.GetBoolean(StickupGrid)
+	return s.desktopPreferences.GetBoolean(StickupGrid)
 }
 
 // EnableStickupGrid enables or disables StickupGrid.
 func (s *Settings) EnableStickupGrid(enable bool) {
-	s.desktop.SetBoolean(StickupGrid, enable)
+	s.desktopPreferences.SetBoolean(StickupGrid, enable)
 }
 
 func (s *Settings) AutoArrangement() bool {
-	return s.desktop.GetBoolean(AutoArrangement)
+	return s.desktopPreferences.GetBoolean(AutoArrangement)
 }
 
 func (s *Settings) EnableAutoArrangement(enable bool) {
-	s.desktop.SetBoolean(AutoArrangement, enable)
+	s.desktopPreferences.SetBoolean(AutoArrangement, enable)
 }
 
 // ActivationPolicy returns activation policy.
 func (s *Settings) ActivationPolicy() string {
-	return s.preferences.GetString(ActivationPolicy)
+	return s.filemanagerPreferences.GetString(ActivationPolicy)
 }
 
 // ClickPolicy returns click policy.
 func (s *Settings) ClickPolicy() string {
-	return s.preferences.GetString(ClickPolicy)
+	return s.filemanagerPreferences.GetString(ClickPolicy)
 }
 
 // ShowThumbnail returns show thumbnail policy.
 func (s *Settings) ShowThumbnail() string {
-	return s.preferences.GetString(ShowThumbnail)
+	return s.filemanagerPreferences.GetString(ShowThumbnail)
 }
 
 // ShowHiddenFilesIsEnable returns whether ShowHiddenFiles is enabled.
 func (s *Settings) ShowHiddenFilesIsEnable() bool {
-	return s.preferences.GetBoolean(ShowHiddenFiles)
+	return s.filemanagerPreferences.GetBoolean(ShowHiddenFiles)
 }
 
 // ShowExtensionNameIsEnable returns whether ShowExtensionName is enabled.
 func (s *Settings) ShowExtensionNameIsEnable() bool {
-	return s.preferences.GetBoolean(ShowExtensionName)
+	return s.filemanagerPreferences.GetBoolean(ShowExtensionName)
 }
 
 // LabelPosition returns the label position of name.
 func (s *Settings) LabelPosition() string {
-	return s.preferences.GetString(LabelPosition)
+	return s.filemanagerPreferences.GetString(LabelPosition)
 }
 
 // AllowDeleteImmediatlyIsEnable returns whether AllowDeleteImmediatly is enabled.
 func (s *Settings) AllowDeleteImmediatlyIsEnable() bool {
-	return s.preferences.GetBoolean(AllowDeleteImmediatly)
+	return s.filemanagerPreferences.GetBoolean(AllowDeleteImmediatly)
 }
 
 // IconDefaultSize returns the default icon size.
 func (s *Settings) IconDefaultSize() int32 {
-	return s.desktop.GetInt(IconDefaultSize)
+	return s.desktopPreferences.GetInt(IconDefaultSize)
 }
 
 // IconZoomLevel returns the zoom level of icons.
 func (s *Settings) IconZoomLevel() int32 {
-	return s.desktop.GetInt(IconZoomLevel)
+	return s.desktopPreferences.GetInt(IconZoomLevel)
 }
 
 // SetIconZoomLevel will change the zoom level of icons.
 func (s *Settings) SetIconZoomLevel(zoomLevel int32) bool {
-	return s.desktop.SetInt(IconZoomLevel, zoomLevel)
+	return s.desktopPreferences.SetInt(IconZoomLevel, zoomLevel)
+}
+
+func (s *Settings) getThumbnailSizeUnit() int32 {
+	return s.filemanagerPreferences.GetEnum(ThumbnailSizeUnit)
+}
+
+func (s *Settings) getThumbnailSizeLimitation() uint64 {
+	size := s.filemanagerPreferences.GetValue(ThumbnailSizeLimitation)
+	return size.GetUint64()
+}
+
+func (s *Settings) ThumbnailSizeLimitation() uint64 {
+	return s.thumbnailSizeLimitation
 }
