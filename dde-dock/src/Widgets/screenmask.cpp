@@ -42,12 +42,32 @@ void ScreenMask::dropEvent(QDropEvent *event)
             TransformLabel * imgLabel = new TransformLabel();
             imgLabel->setAttribute(Qt::WA_TranslucentBackground);
             imgLabel->setWindowFlags(Qt::ToolTip);
-            imgLabel->setPixmap(QPixmap::fromImage(image));
+            imgLabel->setPixmap(QPixmap::fromImage(image).scaled(ICON_SIZE, ICON_SIZE));
+            imgLabel->setFixedSize(ICON_SIZE, ICON_SIZE);
             imgLabel->move(event->pos());
             imgLabel->show();
 
-            //TODO add animation here
-            QTimer::singleShot(1000,imgLabel,SLOT(deleteLater()));
+            QPropertyAnimation *scaleAnimation = new QPropertyAnimation(imgLabel, "sValue");
+            scaleAnimation->setDuration(1000);
+            scaleAnimation->setStartValue(1);
+            scaleAnimation->setEndValue(0.3);
+
+            QPropertyAnimation *rotationAnimation = new QPropertyAnimation(imgLabel, "rValue");
+            rotationAnimation->setDuration(1000);
+            rotationAnimation->setStartValue(0);
+            rotationAnimation->setEndValue(360);
+
+            QParallelAnimationGroup * group = new QParallelAnimationGroup();
+            group->addAnimation(scaleAnimation);
+//            group->addAnimation(rotationAnimation);
+
+            group->start();
+            connect(group, &QPropertyAnimation::finished, [=]{
+                imgLabel->deleteLater();
+                scaleAnimation->deleteLater();
+                rotationAnimation->deleteLater();
+                group->deleteLater();
+            });
 
             emit itemDropped(event->pos());
         }

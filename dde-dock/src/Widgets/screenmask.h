@@ -20,19 +20,39 @@
 class TransformLabel : public QLabel
 {
     Q_OBJECT
-    Q_PROPERTY(QTransform transform READ getTransform WRITE setTransform)
+    Q_PROPERTY(int rValue READ getRValue WRITE setRValue)
+    Q_PROPERTY(double sValue  READ getSValue WRITE setSValue)
 public:
     explicit TransformLabel(QWidget *parent=0) : QLabel(parent){}
 
-    QTransform getTransform(){return this->pixTransform;}
-    void setTransform(const QTransform &value)
+    int getRValue(){return m_rValue;}
+    double getSValue(){return m_sValue;}
+    void setRValue(int value)
     {
-        this->pixTransform = value;
-        this->setPixmap(this->pixmap()->transformed(value));
+        if (!pixmap())
+            return;
+        QTransform rt;
+        rt.translate(width() / 2, height() / 2);
+        rt.rotate(value);
+        rt.translate(-width() / 2, -height() / 2);
+        setPixmap(pixmap()->transformed(rt));
+        m_rValue = value;
+    }
+
+    void setSValue(double value)
+    {
+        if (!pixmap())
+            return;
+        QTransform st(1, 0, 0, 1, width()/2, height()/2);
+        st.scale(value, value);
+        st.rotate(90);//TODO work around here
+        setPixmap(pixmap()->transformed(st));
+        m_sValue = value;
     }
 
 private:
-    QTransform pixTransform;
+    int m_rValue = 0;
+    double m_sValue = 0;
 };
 
 class ScreenMask : public QWidget
@@ -53,7 +73,8 @@ signals:
     void itemExited();
     void itemMissing();
 
-public slots:
+private:
+    const int ICON_SIZE = 48;
 };
 
 #endif // SCREENMASK_H
