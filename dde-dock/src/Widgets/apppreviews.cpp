@@ -141,7 +141,10 @@ void AppPreviews::activatePreview(int xid)
     m_clientManager->ActiveWindow(xid);
 }
 
+AppPreviews::~AppPreviews()
+{
 
+}
 
 
 

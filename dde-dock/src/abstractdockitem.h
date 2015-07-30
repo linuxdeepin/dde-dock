@@ -1,7 +1,7 @@
 #ifndef ABSTRACTDOCKITEM_H
 #define ABSTRACTDOCKITEM_H
 
-#include "Widgets/arrowrectangle.h"
+#include "Widgets/previewarrowrectangle.h"
 #include "Widgets/highlighteffect.h"
 #include <QDebug>
 
@@ -35,7 +35,7 @@ public:
     QPoint globalPos();
 
     void showPreview();
-    void hidePreview(int interval = 200);
+    void hidePreview(int interval = 150);
     void cancelHide();
     void resizePreview();
 
@@ -64,10 +64,11 @@ protected:
 
     bool m_moveable = true;
     bool m_isActived = false;
-    ArrowRectangle *m_previewAR = new ArrowRectangle();
+    PreviewArrowRectangle *m_previewAR = NULL;
     HighlightEffect * m_highlight = NULL;
 
     QPoint m_itemNextPos;
+    QPoint m_previewPos;
 
     DBusMenu * m_dbusMenu = NULL;
     DBusMenuManager * m_dbusMenuManager = NULL;

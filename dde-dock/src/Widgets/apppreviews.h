@@ -45,6 +45,7 @@ class AppPreviews : public QWidget
     Q_OBJECT
 public:
     explicit AppPreviews(QWidget *parent = 0);
+    ~AppPreviews();
 
     void addItem(const QString &title,int xid);
     void setTitle(const QString &title);

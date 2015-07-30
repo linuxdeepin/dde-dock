@@ -46,7 +46,8 @@ SOURCES += \
     ../libs/xcb_misc.cpp \
     src/Widgets/launcheritem.cpp \
     src/Widgets/reflectioneffect.cpp \
-    src/Widgets/highlighteffect.cpp
+    src/Widgets/highlighteffect.cpp \
+    src/Widgets/previewarrowrectangle.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -82,7 +83,8 @@ HEADERS  += \
     ../libs/xcb_misc.h \
     src/Widgets/launcheritem.h \
     src/Widgets/reflectioneffect.h \
-    src/Widgets/highlighteffect.h
+    src/Widgets/highlighteffect.h \
+    src/Widgets/previewarrowrectangle.h
 
 RESOURCES += \
     images.qrc \

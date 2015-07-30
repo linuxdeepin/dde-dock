@@ -15,6 +15,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
+    m_previewAR = new PreviewArrowRectangle();
 }
 
 AbstractDockItem::~AbstractDockItem()
@@ -121,20 +122,19 @@ void AbstractDockItem::showPreview()
         tmpContent->setStyleSheet("QLabel { color: white }");
         tmpContent->adjustSize();
     }
-
-    m_previewAR->setArrorDirection(ArrowRectangle::ArrowBottom);
     m_previewAR->setContent(tmpContent);
-    m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+    m_previewAR->showPreview(ArrowRectangle::ArrowBottom, globalX() + width() / 2,globalY() - 5);
+    m_previewPos = QPoint(globalX() + width() / 2,globalY() - 5);
 }
 
 void AbstractDockItem::hidePreview(int interval)
 {
-    m_previewAR->delayHide(interval);
+    m_previewAR->hidePreview(interval);
 }
 
 void AbstractDockItem::cancelHide()
 {
-    m_previewAR->cancelHide();
+    m_previewAR->showPreview(ArrowRectangle::ArrowBottom, m_previewPos.x(), m_previewPos.y());
 }
 
 void AbstractDockItem::resizePreview()
@@ -142,7 +142,7 @@ void AbstractDockItem::resizePreview()
     m_previewAR->resizeWithContent();
     if (!m_previewAR->isHidden())
     {
-        m_previewAR->showAtBottom(globalX() + width() / 2,globalY() - 5);
+        m_previewAR->resizeWithContent();
         return;
     }
 }

@@ -44,26 +44,15 @@ public:
     void setMargin(int value);
     void setBackgroundColor(QString value);
 
-    void show(int x,int y);
-    void showAtLeft(int x,int y);
-    void showAtRight(int x,int y);
-    void showAtTop(int x,int y);
-    void showAtBottom(int x,int y);
+    virtual void show(ArrowDirection direction, int x,int y);
 
-    void delayHide(int interval = 500);
-    void cancelHide();
     void setContent(QWidget *content);
     void resizeWithContent();
-    void destroyContent();
+    QSize getFixedSize();
     void move(int x,int y);
 
-public slots:
-    void slotHide();
-    void slotCancelHide();
 protected:
-    virtual void paintEvent(QPaintEvent *);
-    void enterEvent(QEvent *);
-    void leaveEvent(QEvent *);
+    void paintEvent(QPaintEvent *);
 
 private:
     int radius = 3;
@@ -79,11 +68,11 @@ private:
     int shadowWidth = 2;
     QColor shadowColor = Qt::black;
 
-    int m_delayHideInterval = 0;
     ArrowDirection arrowDirection = ArrowRectangle::ArrowRight;
 
     QWidget *m_content = NULL;
-    QTimer *m_destroyTimer = NULL;
+
+    QPoint m_lastPos = QPoint(0, 0);
 private:
     QPainterPath getLeftCornerPath();
     QPainterPath getRightCornerPath();
