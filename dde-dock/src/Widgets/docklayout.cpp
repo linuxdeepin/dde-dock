@@ -363,16 +363,6 @@ void DockLayout::dropEvent(QDropEvent *event)
         restoreTmpItem();
 }
 
-void DockLayout::enterEvent(QEvent *)
-{
-    restoreTmpItem();
-}
-
-void DockLayout::leaveEvent(QEvent *)
-{
-    restoreTmpItem();
-}
-
 void DockLayout::slotItemDrag()
 {
 //    qWarning() << "Item draging..."<<x<<y<<item;

@@ -10,11 +10,13 @@ AppPreviewFrame::AppPreviewFrame(const QString &title, int xid, QWidget *parent)
 
 void AppPreviewFrame::addPreview(int xid)
 {
-    WindowPreview * preview = new WindowPreview(xid, this);
+//    WindowPreview * preview = new WindowPreview(xid, this);
+    QWidget * preview = new QWidget(this);
     preview->setObjectName("AppPreview");
     preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
 
-    resize(preview->size());
+    resize(preview->width() + BUTTON_SIZE, preview->height() + BUTTON_SIZE);
+    preview->move(BUTTON_SIZE / 2, BUTTON_SIZE / 2);
 }
 
 void AppPreviewFrame::setTitle(const QString &t)
@@ -24,8 +26,8 @@ void AppPreviewFrame::setTitle(const QString &t)
     QFontMetrics fm(titleLabel->font());
     titleLabel->setText(fm.elidedText(t,Qt::ElideRight,width()));
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->resize(width(),25);
-    titleLabel->move(0,height() - titleLabel->height());
+    titleLabel->resize(width() - BUTTON_SIZE, TITLE_HEIGHT);
+    titleLabel->move(BUTTON_SIZE / 2, height() - titleLabel->height() - BUTTON_SIZE / 2);
 }
 
 void AppPreviewFrame::mousePressEvent(QMouseEvent *)
@@ -47,7 +49,7 @@ void AppPreviewFrame::addCloseButton()
 {
     m_cb = new CloseButton(this);
     connect(m_cb,&CloseButton::clicked,[=](){close(this->xidValue);});
-    m_cb->resize(28,28);
+    m_cb->resize(BUTTON_SIZE, BUTTON_SIZE);
 
     m_cb->move(width() - m_cb->width()/* / 2*/,0/*- m_cb->width() / 2*/);
 }
@@ -75,7 +77,7 @@ void AppPreviews::addItem(const QString &title, int xid)
     if (m_xidList.indexOf(xid) != -1)
         return;
     m_mainLayout->setMargin(Dock::APP_PREVIEW_MARGIN);
-    m_mainLayout->setSpacing(Dock::APP_PREVIEW_MARGIN);
+    m_mainLayout->setSpacing(0);
     m_xidList.append(xid);
 
     AppPreviewFrame *f = new AppPreviewFrame(title, xid);
@@ -127,8 +129,10 @@ void AppPreviews::removePreview(int xid)
         return;
     }
 
-    int contentWidth = m_mainLayout->count() * (Dock::APP_PREVIEW_WIDTH + Dock::APP_PREVIEW_MARGIN) + Dock::APP_PREVIEW_MARGIN;
-    resize(contentWidth,Dock::APP_PREVIEW_HEIGHT + Dock::APP_PREVIEW_MARGIN*2);
+    int contentWidth = m_mainLayout->count()
+            * (Dock::APP_PREVIEW_WIDTH + Dock::APP_PREVIEW_MARGIN + Dock::APP_PREVIEW_CLOSEBUTTON_SIZE)
+            + Dock::APP_PREVIEW_MARGIN + Dock::APP_PREVIEW_CLOSEBUTTON_SIZE;
+    resize(contentWidth,Dock::APP_PREVIEW_HEIGHT + Dock::APP_PREVIEW_CLOSEBUTTON_SIZE + Dock::APP_PREVIEW_MARGIN*2);
     emit sizeChanged();
 }
 

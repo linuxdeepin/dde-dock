@@ -18,7 +18,8 @@ enum HideMode {
 ////////////////  App  ////////////////////////////////
 const int APP_PREVIEW_WIDTH = 160;
 const int APP_PREVIEW_HEIGHT = 100;
-const int APP_PREVIEW_MARGIN = 18 ;
+const int APP_PREVIEW_MARGIN = 6 ;  //20 - 28 / 2
+const int APP_PREVIEW_CLOSEBUTTON_SIZE = 28;
 
 const int APP_ITEM_FASHION_HEIGHT = 48;
 const int APP_ITEM_FASHION_NORMAL_WIDTH = 48;

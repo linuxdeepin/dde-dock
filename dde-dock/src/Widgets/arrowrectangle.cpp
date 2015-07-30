@@ -3,7 +3,7 @@
 ArrowRectangle::ArrowRectangle(QWidget * parent) :
     QWidget(parent)
 {
-    setWindowFlags(Qt::Window | Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::SplashScreen);
     setAttribute(Qt::WA_TranslucentBackground);
 }
 

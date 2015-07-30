@@ -72,7 +72,7 @@ bool Panel::isFashionMode()
 void Panel::hideScreenMask()
 {
 //    qWarning() << "[Info:]" << "Hide Screen Mask.";
-        m_maskWidget->hide();
+    m_maskWidget->hide();
 }
 
 void Panel::slotDragStarted()
