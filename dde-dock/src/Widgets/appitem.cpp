@@ -6,9 +6,11 @@ AppItem::AppItem(QWidget *parent) :
 {
     setAcceptDrops(true);
     resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+
     m_appIcon = new AppIcon(this);
     initBackground();
     initHighlight();
+    initTitle();
     m_appIcon->raise();
     initClientManager();
     connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
@@ -170,6 +172,13 @@ void AppItem::initBackground()
     }
 }
 
+void AppItem::initTitle()
+{
+    m_appTitle = new QLabel(this);
+    m_appTitle->setObjectName("ClassicModeTitle");
+    m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+}
+
 void AppItem::initClientManager()
 {
     m_clientmanager = new DBusClientManager(this);
@@ -201,6 +210,7 @@ void AppItem::initData()
     setActived(m_itemData.isActived);
     setCurrentOpened(m_clientmanager->CurrentActiveWindow());
     updateIcon();
+    updateTitle();
 }
 
 void AppItem::updateIcon()
@@ -214,13 +224,6 @@ void AppItem::updateIcon()
 void AppItem::updateTitle()
 {
     m_itemData.title = m_entryProxyer->data().value("title");
-
-    if (!m_appTitle)
-    {
-        m_appTitle = new QLabel(this);
-        m_appTitle->setObjectName("ClassicModeTitle");
-        m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    }
 
     switch (dockCons->getDockMode()) {
     case Dock::FashionMode:

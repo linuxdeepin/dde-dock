@@ -75,6 +75,7 @@ private slots:
 private:
     void resizeResources();
     void initBackground();
+    void initTitle();
     void initClientManager();
     void setActived(bool value);
 
