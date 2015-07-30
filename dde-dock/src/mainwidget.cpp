@@ -12,7 +12,7 @@ MainWidget::MainWidget(QWidget *parent)
     connect(mainPanel,&Panel::startShow,this,&MainWidget::showDock);
     connect(mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
 
-    this->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    this->setWindowFlags(Qt::Window);
     this->setAttribute(Qt::WA_TranslucentBackground);
 
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::changeDockMode);
