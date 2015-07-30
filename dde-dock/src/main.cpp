@@ -7,20 +7,26 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QFile file("://Resources/qss/default.qss");
-    if (file.open(QFile::ReadOnly))
-    {
-        QString styleSheet = QLatin1String(file.readAll());
-        qApp->setStyleSheet(styleSheet);
-        file.close();
-    }
-    else
-    {
-        qWarning() << "[Error:] Open  style file errr!";
-    }
+    if(QDBusConnection::sessionBus().registerService(DBUS_NAME)){
+        QFile file("://Resources/qss/default.qss");
+        if (file.open(QFile::ReadOnly))
+        {
+            QString styleSheet = QLatin1String(file.readAll());
+            qApp->setStyleSheet(styleSheet);
+            file.close();
+        }
+        else
+        {
+            qWarning() << "[Error:] Open  style file errr!";
+        }
 
-    MainWidget w;
-    w.show();
+        MainWidget w;
+        w.show();
 
-    return a.exec();
+        return a.exec();
+    }
+    else {
+        qWarning() << "dde dock is running...";
+        return 0;
+    }
 }

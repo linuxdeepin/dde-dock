@@ -19,6 +19,8 @@ MainWidget::MainWidget(QWidget *parent)
 
     //For init
     changeDockMode(m_dmd->getDockMode(), m_dmd->getDockMode());
+
+    DockUIDbus *dockUIDbus = new DockUIDbus(this);
 }
 
 void MainWidget::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
@@ -58,4 +60,21 @@ void MainWidget::hideDock()
 MainWidget::~MainWidget()
 {
 
+}
+
+DockUIDbus::DockUIDbus(MainWidget *parent):
+    QDBusAbstractAdaptor(parent),
+    m_parent(parent)
+{
+    QDBusConnection::sessionBus().registerObject(DBUS_PATH, parent);
+}
+
+DockUIDbus::~DockUIDbus()
+{
+
+}
+
+qulonglong DockUIDbus::Xid()
+{
+    return 0;
 }
