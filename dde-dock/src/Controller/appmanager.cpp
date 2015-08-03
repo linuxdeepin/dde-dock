@@ -21,9 +21,12 @@ void AppManager::updateEntries()
         {
             AppItem *item = new AppItem();
             item->setEntryProxyer(dep);
-            emit entryAdded(item);
+            m_initItemList.insert(item->getItemId(), item);
+//            emit entryAdded(item);
         }
     }
+
+    sortItemList();
 }
 
 void AppManager::slotEntryAdded(const QDBusObjectPath &path)
@@ -44,3 +47,17 @@ void AppManager::slotEntryRemoved(const QString &id)
     emit entryRemoved(id);
 }
 
+void AppManager::sortItemList()
+{
+    QStringList dockedList = m_ddam->DockedAppList().value();
+    QStringList ids = m_initItemList.keys();
+    foreach (QString id, dockedList) {  //For docked items
+        int index = ids.indexOf(id);
+        if (index != -1)
+            emit entryAdded(m_initItemList.take(ids.at(index)));
+    }
+    ids = m_initItemList.keys();
+    foreach (QString id, ids) { //For undocked items
+        emit entryAdded(m_initItemList.take(id));
+    }
+}

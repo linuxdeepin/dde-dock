@@ -123,7 +123,7 @@ void Panel::slotRemoveAppItem(const QString &id)
     for (int i = 0; i < tmpList.count(); i ++)
     {
         AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
-        if (tmpItem && tmpItem->itemId() == id)
+        if (tmpItem && tmpItem->getItemId() == id)
         {
             m_appLayout->removeItem(i);
             return;

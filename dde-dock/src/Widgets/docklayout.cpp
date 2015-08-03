@@ -9,17 +9,20 @@ DockLayout::DockLayout(QWidget *parent) :
 
 void DockLayout::addItem(AbstractDockItem *item)
 {
-    insertItem(item,appList.count());
+    if (m_lastHoverIndex == -1)
+        insertItem(item,m_appList.count());
+    else
+        insertItem(item, m_lastHoverIndex);
 }
 
 void DockLayout::insertItem(AbstractDockItem *item, int index)
 {
     item->setParent(this);
     item->show();
-    int appCount = appList.count();
+    int appCount = m_appList.count();
     index = index > appCount ? appCount : (index < 0 ? 0 : index);
 
-    appList.insert(index,item);
+    m_appList.insert(index,item);
     connect(item, &AbstractDockItem::mouseRelease, this, &DockLayout::slotItemRelease);
     connect(item, &AbstractDockItem::dragStart, this, &DockLayout::slotItemDrag);
     connect(item, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
@@ -31,18 +34,14 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
         m_animationItemCount --;
     });
 
+    m_ddam->Sort(itemsIdList());
+
     relayout();
 }
 
 void DockLayout::removeItem(int index)
 {
-    delete appList.takeAt(index);
-    relayout();
-}
-
-void DockLayout::moveItem(int from, int to)
-{
-    appList.move(from,to);
+    delete m_appList.takeAt(index);
     relayout();
 }
 
@@ -51,7 +50,7 @@ void DockLayout::setSpacing(qreal spacing)
     this->itemSpacing = spacing;
 }
 
-void DockLayout::setVerticalAlignment(DockLayout::VerticalAlignment value)
+void DockLayout::setVerticalAlignment(Qt::Alignment value)
 {
     this->m_verticalAlignment = value;
 }
@@ -63,112 +62,96 @@ void DockLayout::setSortDirection(DockLayout::Direction value)
 
 void DockLayout::sortLeftToRight()
 {
-    if (appList.count() <= 0)
+    if (m_appList.count() <= 0)
         return;
 
-    switch (m_verticalAlignment)
+    for (int i = 0; i < m_appList.count(); i ++)
     {
-    case DockLayout::AlignTop:
-        appList.at(0)->move(itemSpacing,0);
-        break;
-    case DockLayout::AlignVCenter:
-        appList.at(0)->move(itemSpacing,(height() - appList.at(0)->height()) / 2);
-        break;
-    case DockLayout::AlignBottom:
-        appList.at(0)->move(itemSpacing,height() - appList.at(0)->height());
-        break;
-    }
-    appList.at(0)->setNextPos(appList.at(0)->pos());
+        AbstractDockItem * toItem = m_appList.at(i);
 
-    for (int i = 1; i < appList.count(); i ++)
-    {
-        AbstractDockItem * frontItem = appList.at(i - 1);
-        AbstractDockItem * toItem = appList.at(i);
+        int nextX = 0;
+        int nextY = 0;
+        if (i > 0){
+            AbstractDockItem * frontItem = m_appList.at(i - 1);
+            nextX = frontItem->x() + frontItem->width() + itemSpacing;
+        }
+        else
+            nextX = itemSpacing;
+
         switch (m_verticalAlignment)
         {
-        case DockLayout::AlignTop:
-            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,0);
+        case Qt::AlignTop:
+            nextY = 0;
             break;
-        case DockLayout::AlignVCenter:
-            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,(height() - toItem->height()) / 2);
+        case Qt::AlignVCenter:
+            nextY = (height() - toItem->height()) / 2;
             break;
-        case DockLayout::AlignBottom:
-            toItem->move(frontItem->pos().x() + frontItem->width() + itemSpacing,height() - toItem->height());
+        case Qt::AlignBottom:
+            nextY = height() - toItem->height();
             break;
         }
 
-        appList.at(i)->setNextPos(appList.at(i)->pos());
+        toItem->move(QPoint(nextX, nextY));
+        toItem->setNextPos(toItem->pos());
     }
 }
 
 void DockLayout::sortRightToLeft()
 {
-    if (appList.count()<=0)
+    if (m_appList.count()<=0)
         return;
 
-    switch (m_verticalAlignment)
+    for (int i = 0; i < m_appList.count(); i++)
     {
-    case DockLayout::AlignTop:
-        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),0);
-        break;
-    case DockLayout::AlignVCenter:
-        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),(height() - appList.at(0)->height()) / 2);
-        break;
-    case DockLayout::AlignBottom:
-        appList.at(0)->move(getContentsWidth() - itemSpacing - appList.at(0)->width(),height() - appList.at(0)->height());
-        break;
-    }
+        AbstractDockItem *toItem = m_appList.at(i);
 
-    for (int i = 1; i < appList.count(); i++)
-    {
-        AbstractDockItem *fromItem = appList.at(i - 1);
-        AbstractDockItem *toItem = appList.at(i);
+        int nextX = 0;
+        int nextY = 0;
+        if (i > 0){
+            AbstractDockItem *frontItem = m_appList.at(i - 1);
+            nextX = frontItem->x() - itemSpacing - toItem->width();
+        }
+        else
+            nextX = getContentsWidth() - itemSpacing - m_appList.first()->width();
+
         switch (m_verticalAlignment)
         {
-        case DockLayout::AlignTop:
-            toItem->move(fromItem->x() - itemSpacing - toItem->width(),0);
+        case Qt::AlignTop:
+            nextY = 0;
             break;
-        case DockLayout::AlignVCenter:
-            toItem->move(fromItem->x() - itemSpacing - toItem->width(),(height() - toItem->height()) / 2);
+        case Qt::AlignVCenter:
+            nextY = (height() - toItem->height()) / 2;
             break;
-        case DockLayout::AlignBottom:
-            toItem->move(fromItem->x() - itemSpacing - toItem->width(),height() - toItem->height());
+        case Qt::AlignBottom:
+            nextY = height() - toItem->height();
             break;
         }
+
+        toItem->move(QPoint(nextX, nextY));
+        toItem->setNextPos(toItem->pos());
     }
 }
 
-bool DockLayout::hasSpacingItemInList()
+int DockLayout::spacingItemWidth()
 {
-    if (sortDirection == RightToLeft)
-        return false;
-    if (appList.count() <= 1)
-        return false;
-    if (appList.at(0)->x() > itemSpacing)
-        return true;
-
-    for (int i = 1; i < appList.count(); i ++)
-    {
-        if (appList.at(i)->x() - itemSpacing != appList.at(i - 1)->x() + appList.at(i - 1)->width())
-        {
-            return true;
-        }
-    }
-    return false;
+    if (m_dragItemMap.isEmpty())
+        return DockModeData::instance()->getNormalItemWidth();
+    else
+        return m_dragItemMap.firstKey()->width();
 }
 
 int DockLayout::spacingItemIndex()
 {
     if (sortDirection == RightToLeft)
         return -1;
-    if (appList.count() <= 1)
+    if (m_appList.count() <= 1)
         return -1;
-    if (appList.at(0)->getNextPos().x() > itemSpacing)
+    if (m_appList.at(0)->getNextPos().x() > itemSpacing)
         return 0;
 
-    for (int i = 1; i < appList.count(); i ++)
+    for (int i = 1; i < m_appList.count(); i ++)
     {
-        if (appList.at(i)->getNextPos().x() - itemSpacing != appList.at(i - 1)->getNextPos().x() + appList.at(i - 1)->width())
+        if (m_appList.at(i)->getNextPos().x() - itemSpacing != m_appList.at(i - 1)->getNextPos().x() + m_appList.at(i - 1)->width())
         {
             return i;
         }
@@ -176,45 +159,54 @@ int DockLayout::spacingItemIndex()
     return -1;
 }
 
-void DockLayout::moveWithSpacingItem(int hoverIndex)
+QStringList DockLayout::itemsIdList()
 {
-    int itemWidth = 0;
-    if (tmpAppMap.isEmpty())
-        itemWidth = DockModeData::instance()->getNormalItemWidth();
-    else
-        itemWidth = tmpAppMap.firstKey()->width();
+    QStringList dockedAppList = m_ddam->DockedAppList().value();
 
-    if (sortDirection == LeftToRight)
+    QStringList idList;
+    foreach (AbstractDockItem *item, m_appList) {
+        QString itemId = item->getItemId();
+        if (!itemId.isEmpty() && dockedAppList.indexOf(itemId) != -1)
+            idList << itemId;
+    }
+    return idList;
+}
+
+void DockLayout::moveLeftToRight(int hoverIndex)
+{
+    int itemWidth = spacingItemWidth();
+    int spacintIndex = spacingItemIndex();
+    if (spacintIndex == -1)
+        return;
+
+    if (spacintIndex > hoverIndex)
     {
-        int spacintIndex = spacingItemIndex();
-        if (spacintIndex == -1)
-            return;
-
-        if (spacintIndex > hoverIndex)
+        for (int i = hoverIndex; i < spacintIndex; i ++)
         {
-            for (int i = hoverIndex; i < spacintIndex; i ++)
-            {
-                m_animationItemCount ++;
-                AbstractDockItem *targetItem = appList.at(i);
-                targetItem->moveWithAnimation(QPoint(targetItem->x() + itemWidth + itemSpacing,0));
-            }
-        }
-        else
-        {
-            for (int i = spacintIndex; i <= hoverIndex; i ++)
-            {
-                m_animationItemCount ++;
-                AbstractDockItem *targetItem = appList.at(i);
-                targetItem->moveWithAnimation(QPoint(targetItem->x() - itemWidth - itemSpacing,0));
-            }
+            m_animationItemCount ++;
+            AbstractDockItem *targetItem = m_appList.at(i);
+            targetItem->moveWithAnimation(QPoint(targetItem->x() + itemWidth + itemSpacing,0));
         }
     }
-    //TODO RightToLeft
+    else
+    {
+        for (int i = spacintIndex; i <= hoverIndex; i ++)
+        {
+            m_animationItemCount ++;
+            AbstractDockItem *targetItem = m_appList.at(i);
+            targetItem->moveWithAnimation(QPoint(targetItem->x() - itemWidth - itemSpacing,0));
+        }
+    }
+}
+
+void DockLayout::moveRightToLeft(int hoverIndex)
+{
+
 }
 
 int DockLayout::indexOf(AbstractDockItem *item)
 {
-    return appList.indexOf(item);
+    return m_appList.indexOf(item);
 }
 
 int DockLayout::indexOf(int x, int y)
@@ -225,18 +217,18 @@ int DockLayout::indexOf(int x, int y)
 
 void DockLayout::restoreTmpItem()
 {
-    if (tmpAppMap.isEmpty())
+    if (m_dragItemMap.isEmpty())
         return;
 
-    AbstractDockItem * tmpItem = tmpAppMap.firstKey();
-    tmpAppMap.remove(tmpItem);
+    AbstractDockItem * tmpItem = m_dragItemMap.firstKey();
+    m_dragItemMap.remove(tmpItem);
     tmpItem->setVisible(true);
     if (indexOf(tmpItem) == -1)
     {
         if (movingForward)
-            insertItem(tmpItem,lastHoverIndex);
+            insertItem(tmpItem,m_lastHoverIndex);
         else
-            insertItem(tmpItem,lastHoverIndex + 1);
+            insertItem(tmpItem,m_lastHoverIndex + 1);
     }
 
     emit itemDropped();
@@ -262,10 +254,10 @@ void DockLayout::relayout()
 
 void DockLayout::clearTmpItem()
 {
-    if (tmpAppMap.count() > 0)
+    if (m_dragItemMap.count() > 0)
     {
-        AbstractDockItem * tmpItem = tmpAppMap.firstKey();
-        tmpAppMap.clear();
+        AbstractDockItem * tmpItem = m_dragItemMap.firstKey();
+        m_dragItemMap.clear();
         tmpItem->deleteLater();
     }
 }
@@ -273,17 +265,17 @@ void DockLayout::clearTmpItem()
 void DockLayout::addSpacingItem()
 {
     int spacingValue = 0;
-    if (tmpAppMap.isEmpty())
+    if (m_dragItemMap.isEmpty())
         spacingValue = DockModeData::instance()->getNormalItemWidth();
     else
     {
-        AbstractDockItem *tmpItem = tmpAppMap.firstKey();
+        AbstractDockItem *tmpItem = m_dragItemMap.firstKey();
         spacingValue = tmpItem->width();
     }
 
-    for (int i = appList.count() -1;i >= lastHoverIndex; i-- )
+    for (int i = m_appList.count() -1;i >= m_lastHoverIndex; i-- )
     {
-        AbstractDockItem *targetItem = appList.at(i);
+        AbstractDockItem *targetItem = m_appList.at(i);
         targetItem->setNextPos(targetItem->x() + spacingValue + itemSpacing,0);
 
         QPropertyAnimation *animation = new QPropertyAnimation(targetItem, "pos");
@@ -301,35 +293,35 @@ void DockLayout::addSpacingItem()
 
 void DockLayout::dragoutFromLayout(int index)
 {
-    AbstractDockItem * tmpItem = appList.takeAt(index);
+    AbstractDockItem * tmpItem = m_appList.takeAt(index);
     tmpItem->setVisible(false);
-    tmpAppMap.insert(tmpItem,index);
+    m_dragItemMap.insert(tmpItem,index);
 
     emit contentsWidthChange();
 }
 
 int DockLayout::getContentsWidth()
 {
-    int tmpWidth = appList.count() * itemSpacing;
-    for (int i = 0; i < appList.count(); i ++)
+    int tmpWidth = m_appList.count() * itemSpacing;
+    for (int i = 0; i < m_appList.count(); i ++)
     {
-        tmpWidth += appList.at(i)->width();
+        tmpWidth += m_appList.at(i)->width();
     }
 
-    if (spacingItemIndex() != -1 && !tmpAppMap.isEmpty() && tmpAppMap.firstKey())
-        tmpWidth += tmpAppMap.firstKey()->width() + itemSpacing;
+    if (spacingItemIndex() != -1 && !m_dragItemMap.isEmpty() && m_dragItemMap.firstKey())
+        tmpWidth += m_dragItemMap.firstKey()->width() + itemSpacing;
 
     return tmpWidth;
 }
 
 int DockLayout::getItemCount()
 {
-    return appList.count();
+    return m_appList.count();
 }
 
 QList<AbstractDockItem *> DockLayout::getItemList() const
 {
-    return appList;
+    return m_appList;
 }
 
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)
@@ -340,10 +332,9 @@ void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 
 void DockLayout::dropEvent(QDropEvent *event)
 {
-    AbstractDockItem *sourceItem = NULL;
-    sourceItem = dynamic_cast<AbstractDockItem *>(event->source());
+    AbstractDockItem *sourceItem = dynamic_cast<AbstractDockItem *>(event->source());
 
-    if (event->mimeData()->formats().indexOf("_DEEPIN_DND") != -1 && !sourceItem)
+    if (!sourceItem && event->mimeData()->formats().indexOf("_DEEPIN_DND") != -1)
     {
         QString jsonStr = QString(event->mimeData()->data("_DEEPIN_DND")).split("uninstall").last().trimmed();
 
@@ -359,7 +350,7 @@ void DockLayout::dropEvent(QDropEvent *event)
         m_ddam->ReqeustDock(dataObj.value("id").toString(),dataObj.value("name").toString(),dataObj.value("icon").toString(),"");
 
     }
-    else if (event->mimeData()->formats().indexOf("_DEEPIN_DND") == -1 && sourceItem)
+    else if (sourceItem && event->mimeData()->formats().indexOf("_DEEPIN_DND") == -1)
         restoreTmpItem();
 }
 
@@ -371,7 +362,7 @@ void DockLayout::slotItemDrag()
     int tmpIndex = indexOf(item);
     if (tmpIndex != -1)
     {
-        lastHoverIndex = tmpIndex;
+        m_lastHoverIndex = tmpIndex;
         m_lastPost = QCursor::pos();
         dragoutFromLayout(tmpIndex);
 
@@ -387,9 +378,7 @@ void DockLayout::slotItemRelease(int, int)
 
     item->setVisible(true);
     if (indexOf(item) == -1)
-    {
-        insertItem(item,lastHoverIndex);
-    }
+        insertItem(item,m_lastHoverIndex);
 }
 
 void DockLayout::slotItemEntered(QDragEnterEvent *)
@@ -397,9 +386,8 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
     AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
 
     int tmpIndex = indexOf(item);
-    lastHoverIndex = tmpIndex;
-    if (!hasSpacingItemInList())
-    {
+    m_lastHoverIndex = tmpIndex;
+    if (spacingItemIndex() == -1){
         addSpacingItem();
         return;
     }
@@ -419,6 +407,7 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
             movingForward = lastState;
             return;
         }
+        moveLeftToRight(tmpIndex);
         break;
     case RightToLeft:
         movingForward = tmpPos.x() - m_lastPost.x() > 0;
@@ -427,12 +416,12 @@ void DockLayout::slotItemEntered(QDragEnterEvent *)
             movingForward = lastState;
             return;
         }
+        moveRightToLeft(tmpIndex);
         break;
     }
 
     m_lastPost = tmpPos;
 
-    moveWithSpacingItem(tmpIndex);
 }
 
 void DockLayout::slotItemExited(QDragLeaveEvent *)

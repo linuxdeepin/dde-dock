@@ -66,7 +66,7 @@ void AppItem::destroyItem(const QString &id)
 
 }
 
-QString AppItem::itemId() const
+QString AppItem::getItemId()
 {
     return m_itemData.id;
 }

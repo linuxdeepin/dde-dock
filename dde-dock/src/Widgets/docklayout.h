@@ -21,20 +21,13 @@ public:
         RightToLeft
     };
 
-    enum VerticalAlignment {
-        AlignTop,
-        AlignVCenter,
-        AlignBottom
-    };
-
     explicit DockLayout(QWidget *parent = 0);
 
     void addItem(AbstractDockItem * item);
     void insertItem(AbstractDockItem *item, int index);
     void removeItem(int index);
-    void moveItem(int from, int to);
     void setSpacing(qreal spacing);
-    void setVerticalAlignment(DockLayout::VerticalAlignment value);
+    void setVerticalAlignment(Qt::Alignment value);
     void setSortDirection(DockLayout::Direction value);
     int indexOf(AbstractDockItem * item);
     int indexOf(int x,int y);
@@ -66,24 +59,25 @@ private slots:
 private:
     void sortLeftToRight();
     void sortRightToLeft();
+    void moveLeftToRight(int hoverIndex);
+    void moveRightToLeft(int hoverIndex);
 
     void addSpacingItem();
     void dragoutFromLayout(int index);
-    bool hasSpacingItemInList();
+    int spacingItemWidth();
     int spacingItemIndex();
-
-    void moveWithSpacingItem(int hoverIndex);
+    QStringList itemsIdList();
 private:
-    QList<AbstractDockItem *> appList;
-    QMap<AbstractDockItem *,int> tmpAppMap;//only one item inside
+    QList<AbstractDockItem *> m_appList;
+    QMap<AbstractDockItem *,int> m_dragItemMap;//only one item inside
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
 
-    DockLayout::VerticalAlignment m_verticalAlignment = DockLayout::AlignVCenter;
+    Qt::Alignment m_verticalAlignment = Qt::AlignVCenter;
     DockLayout::Direction sortDirection = DockLayout::LeftToRight;
     qreal itemSpacing = 10;
 
     bool movingForward = false;
-    int lastHoverIndex = 0;
+    int m_lastHoverIndex = -1;
     int m_animationItemCount = 0;
     QPoint m_lastPost = QPoint(0,0);
 };

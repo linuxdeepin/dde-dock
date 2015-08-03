@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "DBus/dbusentrymanager.h"
 #include "DBus/dbusentryproxyer.h"
+#include "DBus/dbusdockedappmanager.h"
 #include "Widgets/appitem.h"
 #include "Widgets/launcheritem.h"
 
@@ -24,10 +25,12 @@ private slots:
     void slotEntryRemoved(const QString &id);
 
 private:
-
+    void sortItemList();    //Sort and append item to dock
 
 private:
+    QMap<QString, AbstractDockItem *> m_initItemList; //Juse for initialization <id, item>
     DBusEntryManager *m_entryManager = NULL;
+    DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
 };
 
 #endif // APPMANAGER_H

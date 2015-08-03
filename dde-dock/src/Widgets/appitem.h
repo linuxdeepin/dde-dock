@@ -50,7 +50,7 @@ public:
     QWidget *getApplet();
     void setEntryProxyer(DBusEntryProxyer *entryProxyer);
     void destroyItem(const QString &id);
-    QString itemId() const;
+    QString getItemId();
     AppItemData itemData() const;
 
 protected:

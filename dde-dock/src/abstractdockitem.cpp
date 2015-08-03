@@ -24,6 +24,11 @@ AbstractDockItem::~AbstractDockItem()
     delete m_titleLabel;
 }
 
+QString AbstractDockItem::getItemId()
+{
+    return "";
+}
+
 QString AbstractDockItem::getTitle()
 {
     return "";
@@ -183,7 +188,7 @@ QString AbstractDockItem::getMenuContent()
     return "";
 }
 
-void AbstractDockItem::invokeMenuItem(QString, bool)
+void AbstractDockItem::invokeMenuItem(QString menuItemId, bool)
 {
 
 }

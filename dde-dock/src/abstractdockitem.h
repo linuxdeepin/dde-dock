@@ -15,6 +15,7 @@ public:
     explicit AbstractDockItem(QWidget *parent = 0);
     virtual ~AbstractDockItem();
 
+    virtual QString getItemId();
     virtual QString getTitle();
     virtual QWidget * getApplet();
 
@@ -42,7 +43,7 @@ public:
 
     void showMenu();
     virtual QString getMenuContent();
-    virtual void invokeMenuItem(QString itemId, bool checked);
+    virtual void invokeMenuItem(QString menuItemId, bool checked);
 
     void setParent(QWidget * parent);
 
