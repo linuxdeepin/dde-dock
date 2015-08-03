@@ -21,6 +21,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 AbstractDockItem::~AbstractDockItem()
 {
     delete m_highlight;
+    delete m_titleLabel;
 }
 
 QString AbstractDockItem::getTitle()
@@ -116,11 +117,11 @@ void AbstractDockItem::showPreview()
     }
     QWidget *tmpContent = getApplet();
     if (tmpContent == NULL) {
-        QString title = getTitle();
-        // TODO: memory management
-        tmpContent = new QLabel(title);
-        tmpContent->setStyleSheet("QLabel { color: white }");
-        tmpContent->adjustSize();
+        m_titleLabel->setText(getTitle());
+        QFontMetrics fm(m_titleLabel->font());
+        m_titleLabel->resize(fm.width(getTitle()), TITLE_HEIGHT);
+
+        tmpContent = m_titleLabel;
     }
     m_previewAR->setContent(tmpContent);
     m_previewAR->showPreview(ArrowRectangle::ArrowBottom, globalX() + width() / 2,globalY() - 5);
@@ -191,6 +192,7 @@ void AbstractDockItem::setParent(QWidget *parent)
 {
     QWidget::setParent(parent);
     initHighlight();
+    initTitleLabel();
 }
 
 void AbstractDockItem::initHighlight()
@@ -227,4 +229,11 @@ void AbstractDockItem::initHighlight()
         else
             m_highlight->setParent(lParent);
     }
+}
+
+void AbstractDockItem::initTitleLabel()
+{
+    m_titleLabel = new QLabel();
+    m_titleLabel->setObjectName("DockAppTitle");
+    m_titleLabel->setAlignment(Qt::AlignCenter);
 }

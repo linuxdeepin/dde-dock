@@ -3,6 +3,7 @@
 
 #include "Widgets/previewarrowrectangle.h"
 #include "Widgets/highlighteffect.h"
+#include "dockconstants.h"
 #include <QDebug>
 
 class DBusMenu;
@@ -66,6 +67,7 @@ protected:
     bool m_isActived = false;
     PreviewArrowRectangle *m_previewAR = NULL;
     HighlightEffect * m_highlight = NULL;
+    QLabel *m_titleLabel = NULL;
 
     QPoint m_itemNextPos;
     QPoint m_previewPos;
@@ -74,6 +76,9 @@ protected:
     DBusMenuManager * m_dbusMenuManager = NULL;
 
     void initHighlight();
+    void initTitleLabel();
+private:
+    const int TITLE_HEIGHT = 20;
 };
 
 #endif // ABSTRACTDOCKITEM_H
