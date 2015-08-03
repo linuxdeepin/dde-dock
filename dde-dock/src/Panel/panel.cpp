@@ -5,38 +5,38 @@
 #include <QHBoxLayout>
 
 Panel::Panel(QWidget *parent)
-    : QLabel(parent),parentWidget(parent)
+    : QLabel(parent),m_parentWidget(parent)
 {
     this->setObjectName("Panel");
 
-    rightLayout = new DockLayout(this);
-    rightLayout->setSortDirection(DockLayout::RightToLeft);
-    rightLayout->setSpacing(dockCons->getAppletsItemSpacing());
-    rightLayout->resize(0,dockCons->getItemHeight());
+    m_pluginLayout = new DockLayout(this);
+    m_pluginLayout->setSortDirection(DockLayout::RightToLeft);
+    m_pluginLayout->setSpacing(m_dockModeData->getAppletsItemSpacing());
+    m_pluginLayout->resize(0,m_dockModeData->getItemHeight());
 
-    leftLayout = new DockLayout(this);
-    leftLayout->setAcceptDrops(true);
-    leftLayout->setSpacing(dockCons->getAppItemSpacing());
-    leftLayout->resize(this->width() - rightLayout->width(),dockCons->getItemHeight());
-    leftLayout->move(0,1);
+    m_appLayout = new DockLayout(this);
+    m_appLayout->setAcceptDrops(true);
+    m_appLayout->setSpacing(m_dockModeData->getAppItemSpacing());
+    m_appLayout->resize(this->width() - m_pluginLayout->width(),m_dockModeData->getItemHeight());
+    m_appLayout->move(0,1);
 
-    connect(leftLayout, &DockLayout::dragStarted, this, &Panel::slotDragStarted);
-    connect(leftLayout, &DockLayout::itemDropped, this, &Panel::slotItemDropped);
-    connect(leftLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
-    connect(rightLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
+    connect(m_appLayout, &DockLayout::dragStarted, this, &Panel::slotDragStarted);
+    connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::slotItemDropped);
+    connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
+    connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
 
-    connect(dockCons, &DockModeData::dockModeChanged, this, &Panel::changeDockMode);
+    connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::changeDockMode);
 
     DockPluginManager *pluginManager = new DockPluginManager(this);
 
-    connect(dockCons, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
+    connect(m_dockModeData, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
     connect(pluginManager, &DockPluginManager::itemAdded, [=](AbstractDockItem* item) {
-        rightLayout->addItem(item);
+        m_pluginLayout->addItem(item);
     });
     connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
-        int index = rightLayout->indexOf(item);
+        int index = m_pluginLayout->indexOf(item);
         if (index != -1) {
-            rightLayout->removeItem(index);
+            m_pluginLayout->removeItem(index);
         }
     });
 
@@ -81,51 +81,51 @@ void Panel::slotDragStarted()
 void Panel::slotItemDropped()
 {
     hideScreenMask();
-    leftLayout->clearTmpItem();
-    leftLayout->relayout();
+    m_appLayout->clearTmpItem();
+    m_appLayout->relayout();
 }
 
 void Panel::slotEnteredMask()
 {
-    leftLayout->relayout();
+    m_appLayout->relayout();
 }
 
 void Panel::slotExitedMask()
 {
-    leftLayout->relayout();
+    m_appLayout->relayout();
 }
 
 void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     updateBackground();
 
-    leftLayout->relayout();
-    rightLayout->relayout();
+    m_appLayout->relayout();
+    m_pluginLayout->relayout();
 
     reanchorsLayout(newMode);
 
-    qWarning() << "AppCount:********" << leftLayout->getItemCount();
+    qWarning() << "AppCount:********" << m_appLayout->getItemCount();
 }
 
 void Panel::slotLayoutContentsWidthChanged()
 {
-    reanchorsLayout(dockCons->getDockMode());
+    reanchorsLayout(m_dockModeData->getDockMode());
 }
 
 void Panel::slotAddAppItem(AbstractDockItem *item)
 {
-    leftLayout->addItem(item);
+    m_appLayout->addItem(item);
 }
 
 void Panel::slotRemoveAppItem(const QString &id)
 {
-    QList<AbstractDockItem *> tmpList = leftLayout->getItemList();
+    QList<AbstractDockItem *> tmpList = m_appLayout->getItemList();
     for (int i = 0; i < tmpList.count(); i ++)
     {
         AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
         if (tmpItem && tmpItem->itemId() == id)
         {
-            leftLayout->removeItem(i);
+            m_appLayout->removeItem(i);
             return;
         }
     }
@@ -146,30 +146,30 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
 {
     if (mode == Dock::FashionMode)
     {
-        leftLayout->resize(leftLayout->getContentsWidth() + dockCons->getAppItemSpacing(),dockCons->getItemHeight());
-        rightLayout->setSortDirection(DockLayout::LeftToRight);
-        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
+        m_appLayout->resize(m_appLayout->getContentsWidth() + m_dockModeData->getAppItemSpacing(),m_dockModeData->getItemHeight());
+        m_pluginLayout->setSortDirection(DockLayout::LeftToRight);
+        m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
         this->setFixedSize(FASHION_PANEL_LPADDING
                            + FASHION_PANEL_RPADDING
-                           + leftLayout->getContentsWidth()
-                           + rightLayout->getContentsWidth()
-                           ,dockCons->getDockHeight());
-        leftLayout->move(FASHION_PANEL_LPADDING,1);
+                           + m_appLayout->getContentsWidth()
+                           + m_pluginLayout->getContentsWidth()
+                           ,m_dockModeData->getDockHeight());
+        m_appLayout->move(FASHION_PANEL_LPADDING,1);
 
-        rightLayout->move(leftLayout->x() + leftLayout->width() - dockCons->getAppItemSpacing(),1);
-        this->move((parentWidget->width() - width()) / 2,0);
+        m_pluginLayout->move(m_appLayout->x() + m_appLayout->width() - m_dockModeData->getAppItemSpacing(),1);
+        this->move((m_parentWidget->width() - width()) / 2,0);
     }
     else
     {
-        rightLayout->setSortDirection(DockLayout::RightToLeft);
-        rightLayout->resize(rightLayout->getContentsWidth(),dockCons->getItemHeight());
-        rightLayout->move(parentWidget->width() - rightLayout->width(),1);
+        m_pluginLayout->setSortDirection(DockLayout::RightToLeft);
+        m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
+        m_pluginLayout->move(m_parentWidget->width() - m_pluginLayout->width(),1);
 
-        leftLayout->move(0,1);
-        leftLayout->resize(parentWidget->width() - rightLayout->width() ,dockCons->getItemHeight());
+        m_appLayout->move(0,1);
+        m_appLayout->resize(m_parentWidget->width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
-        this->setFixedSize(leftLayout->width() + rightLayout->width(),dockCons->getDockHeight());
-        this->move((parentWidget->width() - leftLayout->width() - rightLayout->width()) / 2,0);
+        this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(),m_dockModeData->getDockHeight());
+        this->move((m_parentWidget->width() - m_appLayout->width() - m_pluginLayout->width()) / 2,0);
     }
 }
 
@@ -182,7 +182,7 @@ void Panel::showMenu()
 
 void Panel::updateBackground()
 {
-    m_isFashionMode = dockCons->getDockMode() == Dock::FashionMode;
+    m_isFashionMode = m_dockModeData->getDockMode() == Dock::FashionMode;
 
     style()->unpolish(this);
     style()->polish(this);// force a stylesheet recomputation
@@ -233,14 +233,12 @@ void Panel::initState()
     showState->assignProperty(this,"y", 0);
     QState * hideState = new QState(machine);
     hideState->assignProperty(this,"y", height());
-
     machine->setInitialState(showState);
 
     QPropertyAnimation *sa = new QPropertyAnimation(this, "y");
     sa->setDuration(SHOW_HIDE_DURATION);
     sa->setEasingCurve(SHOW_HIDE_EASINGCURVE);
     connect(sa,&QPropertyAnimation::finished,this,&Panel::hasShown);
-
     QPropertyAnimation *ha = new QPropertyAnimation(this, "y");
     ha->setDuration(SHOW_HIDE_DURATION);
     ha->setEasingCurve(SHOW_HIDE_EASINGCURVE);
@@ -262,27 +260,22 @@ void Panel::initState()
 
 void Panel::initReflection()
 {
-    if (leftLayout)
+    if (m_appLayout)
     {
-        m_leftReflection = new ReflectionEffect(leftLayout, this);
-        connect(leftLayout, &DockLayout::frameUpdate, [=](){
-            if (dockCons->getDockMode() == Dock::FashionMode)
-                updateLeftReflection();
-        });
-        connect(dockCons, &DockModeData::dockModeChanged, [=](){
-            if (dockCons->getDockMode() == Dock::FashionMode)
-                updateLeftReflection();
-            else
-                m_leftReflection->setFixedSize(leftLayout->width(), 0);
-        });
+        m_appReflection = new ReflectionEffect(m_appLayout, this);
+        connect(m_appLayout, &DockLayout::frameUpdate, this, &Panel::updateLeftReflection);
+        connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::updateLeftReflection);
+        connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::updateLeftReflection);
+        updateLeftReflection();
     }
 
-    if (rightLayout)
+    if (m_pluginLayout)
     {
-        m_rightReflection = new ReflectionEffect(rightLayout, this);
-        connect(leftLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
-        connect(rightLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
-        connect(dockCons, &DockModeData::dockModeChanged, this, &Panel::updateRightReflection);
+        m_pluginReflection = new ReflectionEffect(m_pluginLayout, this);
+        connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
+        connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::updateRightReflection);
+        connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::updateRightReflection);
+        updateRightReflection();
     }
 }
 
@@ -293,26 +286,30 @@ void Panel::initScreenMask()
     connect(m_maskWidget,SIGNAL(itemDropped(QPoint)),this,SLOT(slotItemDropped()));
     connect(m_maskWidget,SIGNAL(itemEntered()),this,SLOT(slotEnteredMask()));
     connect(m_maskWidget,SIGNAL(itemExited()),this,SLOT(slotExitedMask()));
-    connect(m_maskWidget, &ScreenMask::itemMissing, leftLayout, &DockLayout::restoreTmpItem);
+    connect(m_maskWidget, &ScreenMask::itemMissing, m_appLayout, &DockLayout::restoreTmpItem);
 }
 
 void Panel::updateLeftReflection()
 {
-    m_leftReflection->setFixedSize(leftLayout->width(), REFLECTION_HEIGHT);
-    m_leftReflection->move(leftLayout->x(), leftLayout->y() + leftLayout->height());
-    m_leftReflection->updateReflection();
+    if (m_dockModeData->getDockMode() == Dock::FashionMode){
+        m_appReflection->setFixedSize(m_appLayout->width(), REFLECTION_HEIGHT);
+        m_appReflection->move(m_appLayout->x(), m_appLayout->y() + m_appLayout->height());
+        m_appReflection->updateReflection();
+    }
+    else
+        m_appReflection->setFixedSize(m_appLayout->width(), 0);
 }
 
 void Panel::updateRightReflection()
 {
-    if (dockCons->getDockMode() == Dock::FashionMode)
+    if (m_dockModeData->getDockMode() == Dock::FashionMode)
     {
-        m_rightReflection->setFixedSize(rightLayout->width(), REFLECTION_HEIGHT);
-        m_rightReflection->move(rightLayout->x(), rightLayout->y() + rightLayout->height());
-        m_rightReflection->updateReflection();
+        m_pluginReflection->setFixedSize(m_pluginLayout->width(), REFLECTION_HEIGHT);
+        m_pluginReflection->move(m_pluginLayout->x(), m_pluginLayout->y() + m_pluginLayout->height());
+        m_pluginReflection->updateReflection();
     }
     else
-        m_rightReflection->setFixedSize(rightLayout->width(), 0);
+        m_pluginReflection->setFixedSize(m_pluginLayout->width(), 0);
 }
 
 void Panel::setY(int value)

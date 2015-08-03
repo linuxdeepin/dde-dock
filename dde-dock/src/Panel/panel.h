@@ -73,15 +73,15 @@ private:
     void setY(int value);
 
 private:
-    DBusHideStateManager * m_HSManager = NULL;
-    DockLayout * leftLayout = NULL;
-    DockLayout *rightLayout = NULL;
+    DBusHideStateManager *m_HSManager = NULL;
+    DockLayout *m_appLayout = NULL;
+    DockLayout *m_pluginLayout = NULL;
     AppManager *m_appManager = NULL;
-    QWidget * parentWidget = NULL;
+    QWidget *m_parentWidget = NULL;
     ScreenMask * m_maskWidget = NULL;
-    DockModeData *dockCons = DockModeData::instance();
-    ReflectionEffect * m_leftReflection = NULL;
-    ReflectionEffect * m_rightReflection = NULL;
+    DockModeData *m_dockModeData = DockModeData::instance();
+    ReflectionEffect *m_appReflection = NULL;
+    ReflectionEffect *m_pluginReflection = NULL;
 
     bool m_containMouse = false;
     bool m_isFashionMode = false;
