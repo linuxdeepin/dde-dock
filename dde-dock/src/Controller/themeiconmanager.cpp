@@ -6,7 +6,7 @@
 
 #include "themeiconmanager.h"
 
-static const QString KeyThemeName = "theme-name";
+static const QString KeyIconThemeName = "icon-theme-name";
 
 class ThemeIconManagerPrivate : public ThemeIconManager {
 
@@ -36,7 +36,7 @@ ThemeIconManager::ThemeIconManager(QObject *parent) :
     m_gsettings = new QGSettings("com.deepin.xsettings",
                                  "/com/deepin/xsettings/",
                                  this);
-    setTheme(m_gsettings->get(KeyThemeName).toString());
+    setTheme(m_gsettings->get(KeyIconThemeName).toString());
 
     connect(m_gsettings, &QGSettings::changed, this, &ThemeIconManager::settingsChanged);
 }
@@ -49,8 +49,8 @@ void ThemeIconManager::setTheme(const QString theme)
 
 void ThemeIconManager::settingsChanged(const QString & key)
 {
-    if (key == KeyThemeName) {
-        setTheme(m_gsettings->get(KeyThemeName).toString());
+    if (key == KeyIconThemeName) {
+        setTheme(m_gsettings->get(KeyIconThemeName).toString());
 
         emit themeChanged(m_theme);
     }
