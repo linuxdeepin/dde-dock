@@ -48,13 +48,6 @@ Panel::Panel(QWidget *parent)
     initReflection();
     initScreenMask();
 
-    //TODO ,move panel to center on fashion mode
-    QTimer::singleShot(10, [=](){
-        reanchorsLayout(dockCons->getDockMode());
-        updateLeftReflection();
-        updateRightReflection();
-    });
-
     updateBackground();
 }
 
@@ -237,20 +230,20 @@ void Panel::initState()
 {
     QStateMachine * machine = new QStateMachine(this);
     QState * showState = new QState(machine);
-    showState->assignProperty(this,"pos",QPoint(0,0));
+    showState->assignProperty(this,"y", 0);
     QState * hideState = new QState(machine);
-    hideState->assignProperty(this,"pos",QPoint(0,height()));
+    hideState->assignProperty(this,"y", height());
 
     machine->setInitialState(showState);
 
-    QPropertyAnimation *sa = new QPropertyAnimation(this, "pos");
-    sa->setDuration(200);
-    sa->setEasingCurve(QEasingCurve::InSine);
+    QPropertyAnimation *sa = new QPropertyAnimation(this, "y");
+    sa->setDuration(SHOW_HIDE_DURATION);
+    sa->setEasingCurve(SHOW_HIDE_EASINGCURVE);
     connect(sa,&QPropertyAnimation::finished,this,&Panel::hasShown);
 
-    QPropertyAnimation *ha = new QPropertyAnimation(this, "pos");
-    ha->setDuration(200);
-    ha->setEasingCurve(QEasingCurve::InSine);
+    QPropertyAnimation *ha = new QPropertyAnimation(this, "y");
+    ha->setDuration(SHOW_HIDE_DURATION);
+    ha->setEasingCurve(SHOW_HIDE_EASINGCURVE);
     connect(ha,&QPropertyAnimation::finished,this,&Panel::hasHidden);
 
     QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
@@ -320,6 +313,11 @@ void Panel::updateRightReflection()
     }
     else
         m_rightReflection->setFixedSize(rightLayout->width(), 0);
+}
+
+void Panel::setY(int value)
+{
+    move(x(), value);
 }
 
 Panel::~Panel()
