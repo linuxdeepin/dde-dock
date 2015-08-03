@@ -22,16 +22,20 @@
 #ifndef __FONT_LIST_H__
 #define __FONT_LIST_H__
 
-typedef struct _FontInfo {
+typedef struct _FcInfo {
 	char *family;
 	char *familylang;
+	char *fullname;
+	char *fullnamelang;
 	char *style;
 	char *lang;
 	char *spacing;
 	char *filename;
-} FontInfo;
+} FcInfo;
 
-FontInfo *get_font_info_list (int *num);
-void font_info_list_free(FontInfo *list, int num);
+FcInfo *get_font_info_list (int *num);
+void font_info_list_free(FcInfo *list, int num);
+
+char* font_match(char* family);
 
 #endif
