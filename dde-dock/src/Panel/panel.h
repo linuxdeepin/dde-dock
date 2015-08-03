@@ -27,7 +27,7 @@ public:
 
     void showScreenMask();
     void hideScreenMask();
-
+    void setContainMouse(bool value);
     bool isFashionMode();
 
 public slots:
@@ -82,6 +82,7 @@ private:
     ReflectionEffect * m_leftReflection = NULL;
     ReflectionEffect * m_rightReflection = NULL;
 
+    bool m_containMouse = false;
     bool m_isFashionMode = false;
     const int FASHION_PANEL_LPADDING = 21;
     const int FASHION_PANEL_RPADDING = 21;

@@ -33,6 +33,10 @@ Dock::HideMode DockModeData::getHideMode()
 void DockModeData::setHideMode(Dock::HideMode value)
 {
     m_dds->SetHideMode(value);
+    m_dhsm->UpdateState();
+    QTimer::singleShot(100, m_dhsm, [=]{
+       m_dhsm->UpdateState();
+    });
 }
 
 int DockModeData::getDockHeight()

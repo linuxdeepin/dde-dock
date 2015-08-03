@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QTimer>
 #include <QDebug>
 #include "DBus/dbusdocksetting.h"
+#include "DBus/dbushidestatemanager.h"
 #include "dockconstants.h"
 
 class DockModeData : public QObject
@@ -49,6 +51,7 @@ private:
     Dock::HideMode m_hideMode = Dock::KeepShowing;
 
     DBusDockSetting *m_dds = NULL;
+    DBusHideStateManager *m_dhsm = new DBusHideStateManager(this);
 };
 
 #endif // DOCKMODEDATA_H

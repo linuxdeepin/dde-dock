@@ -9,7 +9,8 @@
 #include <QState>
 #include <QPropertyAnimation>
 #include <QDBusConnection>
-#include <QDebug>
+#include "DBus/dbushidestatemanager.h"
+#include "DBus/dbusdocksetting.h"
 #include "Controller/dockmodedata.h"
 #include "Panel/panel.h"
 
@@ -25,17 +26,23 @@ public:
     MainWidget(QWidget *parent = 0);
     ~MainWidget();
 
-public slots:
+protected:
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *);
 
 private:
     void showDock();
     void hideDock();
-
     void changeDockMode(Dock::DockMode newMode,Dock::DockMode oldMode);
+    void updateXcbStructPartial();
+    void initHideStateManager();
+    void initDockSetting();
 private:
     Panel *mainPanel = NULL;
     bool hasHidden = false;
     DockModeData * m_dmd = DockModeData::instance();
+    DBusHideStateManager *m_dhsm = NULL;
+    DBusDockSetting *m_dds = NULL;
 };
 
 class DockUIDbus : public QDBusAbstractAdaptor {

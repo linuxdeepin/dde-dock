@@ -4,6 +4,9 @@
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
+    initHideStateManager();
+    initDockSetting();
+
     QRect rec = QApplication::desktop()->screenGeometry();
     this->setFixedSize(rec.width(),m_dmd->getDockHeight());
     this->move(0, rec.height() - this->height());
@@ -21,6 +24,9 @@ MainWidget::MainWidget(QWidget *parent)
     changeDockMode(m_dmd->getDockMode(), m_dmd->getDockMode());
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
+
+    XcbMisc::instance()->set_window_type(winId(),
+                                         XcbMisc::Dock);
 }
 
 void MainWidget::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
@@ -32,14 +38,45 @@ void MainWidget::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
     this->setFixedSize(rec.width(),m_dmd->getDockHeight());
     this->move(0, rec.height() - this->height());
 
-    XcbMisc::instance()->set_window_type(winId(),
-                                         XcbMisc::Dock);
+    updateXcbStructPartial();
+}
 
+void MainWidget::updateXcbStructPartial()
+{
+    int tmpHeight = 0;
+    if (m_dds->GetHideMode() == 0)
+        tmpHeight = this->height();
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
-                                           height(),
+                                           tmpHeight,
                                            x(),
                                            x() + width());
+}
+
+void MainWidget::initHideStateManager()
+{
+    m_dhsm = new DBusHideStateManager(this);
+    m_dhsm->SetState(1);
+}
+
+void MainWidget::initDockSetting()
+{
+    m_dds = new DBusDockSetting(this);
+    connect(m_dds, &DBusDockSetting::HideModeChanged, this, &MainWidget::updateXcbStructPartial);
+}
+
+void MainWidget::enterEvent(QEvent *event)
+{
+    if (height() == 1){
+        showDock();
+        mainPanel->setContainMouse(true);
+        mainPanel->startShow();
+    }
+}
+
+void MainWidget::leaveEvent(QEvent *)
+{
+    mainPanel->setContainMouse(false);
 }
 
 void MainWidget::showDock()
@@ -47,6 +84,8 @@ void MainWidget::showDock()
     hasHidden = false;
     QRect rec = QApplication::desktop()->screenGeometry();
     this->setFixedSize(rec.width(),m_dmd->getDockHeight());
+    this->move(0, rec.height() - this->height());
+    updateXcbStructPartial();
 }
 
 void MainWidget::hideDock()
@@ -55,6 +94,8 @@ void MainWidget::hideDock()
     QRect rec = QApplication::desktop()->screenGeometry();
     //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
     this->setFixedSize(rec.width(),1);
+    this->move(0, rec.height() - 1);//1 pixel for grab mouse enter event to show panel
+    updateXcbStructPartial();
 }
 
 MainWidget::~MainWidget()

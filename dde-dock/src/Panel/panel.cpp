@@ -75,6 +75,11 @@ void Panel::hideScreenMask()
     m_maskWidget->hide();
 }
 
+void Panel::setContainMouse(bool value)
+{
+    m_containMouse = value;
+}
+
 void Panel::slotDragStarted()
 {
     showScreenMask();
@@ -216,7 +221,7 @@ void Panel::hideStateChanged(int value)
     {
         emit startShow();
     }
-    else if (value == 1)
+    else if (value == 1 && !m_containMouse)
     {
         emit startHide();
     }
@@ -250,13 +255,13 @@ void Panel::initState()
 
     QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
     ts1->addAnimation(ha);
-    connect(ts1,&QSignalTransition::triggered,[=](int value = 2){
-        m_HSManager->SetState(value);
+    connect(ts1,&QSignalTransition::triggered,[=]{
+        m_HSManager->SetState(2);
     });
     QSignalTransition *ts2 = hideState->addTransition(this,SIGNAL(startShow()),showState);
     ts2->addAnimation(sa);
-    connect(ts2,&QSignalTransition::triggered,[=](int value = 0){
-        m_HSManager->SetState(value);
+    connect(ts2,&QSignalTransition::triggered,[=]{
+        m_HSManager->SetState(0);
     });
 
     machine->start();
