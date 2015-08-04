@@ -32,6 +32,7 @@ protected:
 private:
     void changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode);
     void updateIcon();
+    void reanchorIcon();
 
 private:
     DockModeData * m_dmd = DockModeData::instance();

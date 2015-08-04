@@ -4,5 +4,7 @@
         <file>Resources/images/close_press.png</file>
         <file>Resources/images/close_normal.png</file>
         <file>Resources/images/dark_dock.svg</file>
+        <file>Resources/images/opening-indicator.png</file>
+        <file>Resources/images/open-indicator.png</file>
     </qresource>
 </RCC>

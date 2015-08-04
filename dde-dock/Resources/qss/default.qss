@@ -8,24 +8,27 @@ QLabel#Panel[isFashionMode="true"] {
 
 }
 
-QLabel#AppBackground[isCurrentOpened="true"][isHovered="true"] {/*item is current opened and is hovered*/
+/*item is current opened and is hovered*/
+QLabel#AppBackground[isFashionMode="false"][isCurrentOpened="true"][isHovered="true"] {
     background: rgba(0,188,255,0.80);
     border: 1px solid rgba(79,174,249,0.50);
     /*box-shadow: inset 0px -4px 0px 0px #01BDFF, inset 0px 0px 1px 2px rgba(25,210,255,0.20);*/
     border-radius: 2px;
 }
-QLabel#AppBackground[isCurrentOpened="true"][isHovered="false"] {/*item is current opened but not hovered*/
+/*item is current opened but not hovered*/
+QLabel#AppBackground[isFashionMode="false"][isCurrentOpened="true"][isHovered="false"] {
     background: rgba(0,188,255,0.60);
     border: 1px solid rgba(79,174,249,0.50);
     /*box-shadow: inset 0px -4px 0px 0px #01BDFF, inset 0px 0px 1px 2px rgba(25,210,255,0.20);*/
     border-radius: 2px;
 }
-
-QLabel#AppBackground[isActived="true"][isHovered="true"][isCurrentOpened="false"] {/*item is actived and hovered*/
+/*item is actived and hovered*/
+QLabel#AppBackground[isFashionMode="false"][isActived="true"][isHovered="true"][isCurrentOpened="false"] {
     background: rgba(255,255,255,0.40);
     border-radius: 2px;
 }
-QLabel#AppBackground[isActived="true"][isHovered="false"][isCurrentOpened="false"] {/*item is actived but not hovered*/
+/*item is actived but not hovered*/
+QLabel#AppBackground[isFashionMode="false"][isActived="true"][isHovered="false"][isCurrentOpened="false"] {
     background: rgba(255,255,255,0.20);
     border-radius: 2px;
 }

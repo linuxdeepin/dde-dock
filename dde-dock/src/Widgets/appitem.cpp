@@ -5,15 +5,15 @@ AppItem::AppItem(QWidget *parent) :
     AbstractDockItem(parent)
 {
     setAcceptDrops(true);
-    resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+    resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
 
-    m_appIcon = new AppIcon(this);
+    initAppIcon();
     initBackground();
     initHighlight();
     initTitle();
     m_appIcon->raise();
     initClientManager();
-    connect(dockCons, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    connect(m_dockModeData, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
     initMenu();
 }
@@ -76,15 +76,47 @@ AppItemData AppItem::itemData() const
     return m_itemData;
 }
 
+void AppItem::slotMousePress(QMouseEvent *event)
+{
+    //qWarning() << "mouse press...";
+    emit mousePress(event->globalX(), event->globalY());
+    hidePreview();
+}
+
+void AppItem::slotMouseRelease(QMouseEvent *event)
+{
+    //qWarning() << "mouse release...";
+    emit mouseRelease(event->globalX(), event->globalY());
+
+    if (event->button() == Qt::LeftButton)
+        m_entryProxyer->Activate(event->globalX(),event->globalY());
+    else if (event->button() == Qt::RightButton)
+        showMenu();
+}
+
+void AppItem::slotMouseEnter()
+{
+    emit mouseEntered();
+    m_appBackground->setIsHovered(true);
+    showPreview();
+}
+
+void AppItem::slotMouseLeave()
+{
+    emit mouseExited();
+    m_appBackground->setIsHovered(false);
+    hidePreview();
+}
+
 void AppItem::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     if (newMode == Dock::FashionMode)
     {
-        appBackground->setVisible(false);
+//        m_appBackground->setVisible(false);
     }
     else
     {
-        appBackground->setVisible(true);
+        m_appBackground->setVisible(true);
     }
 
     setActived(actived());
@@ -93,7 +125,7 @@ void AppItem::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode
 
 void AppItem::reanchorIcon()
 {
-    switch (dockCons->getDockMode()) {
+    switch (m_dockModeData->getDockMode()) {
     case Dock::FashionMode:
         m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
         break;
@@ -109,7 +141,7 @@ void AppItem::reanchorIcon()
 
 void AppItem::resizeBackground()
 {
-    appBackground->resize(width(),height());
+    m_appBackground->resize(width(),height());
 }
 
 void AppItem::dbusDataChanged(const QString &key, const QString &value)
@@ -125,12 +157,12 @@ void AppItem::setCurrentOpened(uint value)
     if (m_itemData.xidsJsonString.indexOf(QString::number(value)) != -1)
     {
         m_itemData.currentOpened = true;
-        appBackground->setIsCurrentOpened(true);
+        m_appBackground->setIsCurrentOpened(true);
     }
     else
     {
         m_itemData.currentOpened = false;
-        appBackground->setIsCurrentOpened(false);
+        m_appBackground->setIsCurrentOpened(false);
     }
 }
 
@@ -147,10 +179,10 @@ void AppItem::resizeResources()
         updateIcon();
     }
 
-    if (appBackground != NULL)
+    if (m_appBackground != NULL)
     {
         resizeBackground();
-        appBackground->move(0,0);
+        m_appBackground->move(0,0);
     }
 
     updateTitle();
@@ -158,17 +190,18 @@ void AppItem::resizeResources()
 
 void AppItem::initBackground()
 {
-    appBackground = new AppBackground(this);
-    appBackground->move(0,0);
+    m_appBackground = new AppBackground(this);
+    m_appBackground->move(0,0);
+    connect(this, &AppItem::mousePress, m_appBackground, &AppBackground::slotMousePress);
     connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
 
-    if (dockCons->getDockMode() == Dock::FashionMode)
+    if (m_dockModeData->getDockMode() == Dock::FashionMode)
     {
-        appBackground->setVisible(false);
+//        m_appBackground->setVisible(false);
     }
     else
     {
-        appBackground->setVisible(true);
+        m_appBackground->setVisible(true);
     }
 }
 
@@ -177,6 +210,15 @@ void AppItem::initTitle()
     m_appTitle = new QLabel(this);
     m_appTitle->setObjectName("ClassicModeTitle");
     m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+}
+
+void AppItem::initAppIcon()
+{
+    m_appIcon = new AppIcon(this);
+    connect(m_appIcon, &AppIcon::mousePress, this, &AppItem::slotMousePress);
+    connect(m_appIcon, &AppIcon::mouseRelease, this, &AppItem::slotMouseRelease);
+    connect(m_appIcon, &AppIcon::mouseEnter, this, &AppItem::slotMouseEnter);
+    connect(m_appIcon, &AppIcon::mouseLeave, this, &AppItem::slotMouseLeave);
 }
 
 void AppItem::initClientManager()
@@ -189,11 +231,11 @@ void AppItem::setActived(bool value)
 {
     m_isActived = value;
     if (!value)
-        resize(dockCons->getNormalItemWidth(), dockCons->getItemHeight());
+        resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
     else
-        resize(dockCons->getActivedItemWidth(), dockCons->getItemHeight());
+        resize(m_dockModeData->getActivedItemWidth(), m_dockModeData->getItemHeight());
 
-    appBackground->setIsActived(value);
+    m_appBackground->setIsActived(value);
 }
 
 void AppItem::initData()
@@ -215,7 +257,7 @@ void AppItem::initData()
 
 void AppItem::updateIcon()
 {
-    m_appIcon->resize(dockCons->getAppIconSize(),dockCons->getAppIconSize());
+    m_appIcon->resize(m_dockModeData->getAppIconSize(),m_dockModeData->getAppIconSize());
     m_appIcon->setIcon(m_itemData.iconPath);
 
     reanchorIcon();
@@ -225,7 +267,7 @@ void AppItem::updateTitle()
 {
     m_itemData.title = m_entryProxyer->data().value("title");
 
-    switch (dockCons->getDockMode()) {
+    switch (m_dockModeData->getDockMode()) {
     case Dock::FashionMode:
     case Dock::EfficientMode:
         m_appTitle->resize(0,0);
@@ -250,7 +292,7 @@ void AppItem::updateState()
 {
     m_itemData.isActived = m_entryProxyer->data().value("app-status") == "active";
     setActived(m_itemData.isActived);
-    appBackground->setIsActived(m_itemData.isActived);
+    m_appBackground->setIsActived(m_itemData.isActived);
 }
 
 void AppItem::updateXids()
@@ -290,29 +332,6 @@ void AppItem::showMenu()
     }
 }
 
-void AppItem::mousePressEvent(QMouseEvent * event)
-{
-    //qWarning() << "mouse press...";
-    emit mousePress(event->globalX(), event->globalY());
-    hidePreview();
-}
-
-void AppItem::mouseReleaseEvent(QMouseEvent * event)
-{
-//    qWarning() << "mouse release...";
-    emit mouseRelease(event->globalX(), event->globalY());
-
-    if (event->button() == Qt::LeftButton)
-        m_entryProxyer->Activate(event->globalX(),event->globalY());
-    else if (event->button() == Qt::RightButton)
-        showMenu();
-}
-
-void AppItem::mouseDoubleClickEvent(QMouseEvent * event)
-{
-    emit mouseDoubleClick();
-}
-
 void AppItem::mouseMoveEvent(QMouseEvent *event)
 {
     //this event will only execp onec then handle by Drag
@@ -328,26 +347,12 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
         drag->setMimeData(data);
 
         QPixmap pixmap = m_appIcon->grab();
-        drag->setPixmap(pixmap.scaled(dockCons->getAppIconSize(), dockCons->getAppIconSize()));
+        drag->setPixmap(pixmap.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize()));
 
         drag->setHotSpot(QPoint(15,15));
 
         drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
     }
-}
-
-void AppItem::enterEvent(QEvent *event)
-{
-    emit mouseEntered();
-    appBackground->setIsHovered(true);
-    showPreview();
-}
-
-void AppItem::leaveEvent(QEvent *event)
-{
-    emit mouseExited();
-    appBackground->setIsHovered(false);
-    hidePreview();
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *event)

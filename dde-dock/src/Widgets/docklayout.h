@@ -52,7 +52,7 @@ protected:
 
 private slots:
     void slotItemDrag();
-    void slotItemRelease(int x, int y);
+    void slotItemRelease();
     void slotItemEntered(QDragEnterEvent * event);
     void slotItemExited(QDragLeaveEvent *event);
 

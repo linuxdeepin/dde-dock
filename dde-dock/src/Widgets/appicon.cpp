@@ -42,3 +42,23 @@ void AppIcon::setIcon(const QString &iconPath)
         setPixmap(pixmap);
     }
 }
+
+void AppIcon::mousePressEvent(QMouseEvent *ev)
+{
+    emit mousePress(ev);
+}
+
+void AppIcon::mouseReleaseEvent(QMouseEvent *ev)
+{
+    emit mouseRelease(ev);
+}
+
+void AppIcon::enterEvent(QEvent *)
+{
+    emit mouseEnter();
+}
+
+void AppIcon::leaveEvent(QEvent *)
+{
+    emit mouseLeave();
+}

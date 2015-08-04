@@ -35,6 +35,7 @@ public slots:
     void slotItemDropped();
     void slotEnteredMask();
     void slotExitedMask();
+
 signals:
     void startShow();
     void startHide();

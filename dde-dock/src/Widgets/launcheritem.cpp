@@ -51,7 +51,24 @@ void LauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
 void LauncherItem::updateIcon()
 {
     m_appIcon->setIcon("deepin-launcher");
-    m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
+    m_appIcon->resize(m_dmd->getAppIconSize(), m_dmd->getAppIconSize());
+    reanchorIcon();
+}
+
+void LauncherItem::reanchorIcon()
+{
+    switch (m_dmd->getDockMode()) {
+    case Dock::FashionMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
+        break;
+    case Dock::EfficientMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
+        break;
+    case Dock::ClassicMode:
+        m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
+    default:
+        break;
+    }
 }
 
 LauncherItem::~LauncherItem()

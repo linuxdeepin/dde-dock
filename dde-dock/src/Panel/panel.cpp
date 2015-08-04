@@ -148,7 +148,7 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     {
         m_appLayout->resize(m_appLayout->getContentsWidth() + m_dockModeData->getAppItemSpacing(),m_dockModeData->getItemHeight());
         m_pluginLayout->setSortDirection(DockLayout::LeftToRight);
-        m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
+        m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getAppletsItemHeight());
         this->setFixedSize(FASHION_PANEL_LPADDING
                            + FASHION_PANEL_RPADDING
                            + m_appLayout->getContentsWidth()
@@ -211,13 +211,9 @@ void Panel::hasHidden()
 void Panel::hideStateChanged(int value)
 {
     if (value == 0)
-    {
         emit startShow();
-    }
     else if (value == 1 && !m_containMouse)
-    {
         emit startHide();
-    }
 }
 
 void Panel::initHSManager()
@@ -263,7 +259,6 @@ void Panel::initReflection()
     if (m_appLayout)
     {
         m_appReflection = new ReflectionEffect(m_appLayout, this);
-        connect(m_appLayout, &DockLayout::frameUpdate, this, &Panel::updateLeftReflection);
         connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::updateLeftReflection);
         connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::updateLeftReflection);
         updateLeftReflection();
@@ -292,8 +287,8 @@ void Panel::initScreenMask()
 void Panel::updateLeftReflection()
 {
     if (m_dockModeData->getDockMode() == Dock::FashionMode){
-        m_appReflection->setFixedSize(m_appLayout->width(), REFLECTION_HEIGHT);
-        m_appReflection->move(m_appLayout->x(), m_appLayout->y() + m_appLayout->height());
+        m_appReflection->setFixedSize(m_appLayout->width(), 40);
+        m_appReflection->move(m_appLayout->x(), m_appLayout->y() + 25);
         m_appReflection->updateReflection();
     }
     else

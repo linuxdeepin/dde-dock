@@ -15,7 +15,6 @@
 #include <QMap>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QDebug>
 #include "DBus/dbusentryproxyer.h"
 #include "DBus/dbusclientmanager.h"
 #include "DBus/dbusmenu.h"
@@ -24,7 +23,6 @@
 #include "abstractdockitem.h"
 #include "appicon.h"
 #include "appbackground.h"
-#include "arrowrectangle.h"
 #include "../dockconstants.h"
 
 struct AppItemData {
@@ -54,17 +52,16 @@ public:
     AppItemData itemData() const;
 
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
-    void mouseDoubleClickEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
-    void enterEvent(QEvent * event);
-    void leaveEvent(QEvent * event);
     void dragEnterEvent(QDragEnterEvent * event);
     void dragLeaveEvent(QDragLeaveEvent * event);
     void dropEvent(QDropEvent * event);
 
 private slots:
+    void slotMousePress(QMouseEvent *event);
+    void slotMouseRelease(QMouseEvent *event);
+    void slotMouseEnter();
+    void slotMouseLeave();
     void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
     void reanchorIcon();
     void resizeBackground();
@@ -76,6 +73,7 @@ private:
     void resizeResources();
     void initBackground();
     void initTitle();
+    void initAppIcon();
     void initClientManager();
     void setActived(bool value);
 
@@ -91,8 +89,8 @@ private:
 
 private:
     AppItemData m_itemData;
-    DockModeData *dockCons = DockModeData::instance();
-    AppBackground * appBackground = NULL;
+    DockModeData *m_dockModeData = DockModeData::instance();
+    AppBackground * m_appBackground = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
 

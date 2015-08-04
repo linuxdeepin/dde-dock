@@ -252,7 +252,8 @@ void DockLayout::relayout()
     emit contentsWidthChange();
 }
 
-void DockLayout::clearTmpItem()
+void DockLayout::
+clearTmpItem()
 {
     if (m_dragItemMap.count() > 0)
     {
@@ -370,7 +371,7 @@ void DockLayout::slotItemDrag()
     }
 }
 
-void DockLayout::slotItemRelease(int, int)
+void DockLayout::slotItemRelease()
 {
     //outside frame,destroy it
     //inside frame,insert it
