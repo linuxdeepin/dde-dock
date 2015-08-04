@@ -70,7 +70,9 @@ void CompositeTrayItem::relayout()
     }
 
     if (m_mode == Dock::FashionMode) {
-        setStyleSheet("QFrame { background-image: url(':/images/darea_container_4.svg') }");
+        QString style = QString("QFrame { background-image: url(':/images/darea_container_%1.svg') }").arg(columnCount * 2);
+
+        setStyleSheet(style);
         resize(Margins * 2 + ColumnWidth * columnCount, 48);
 
         QList<TrayIcon*> items = m_icons.values();
