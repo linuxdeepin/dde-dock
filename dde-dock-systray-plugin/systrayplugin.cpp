@@ -3,6 +3,7 @@
 
 #include "systrayplugin.h"
 #include "compositetrayitem.h"
+#include "trayicon.h"
 
 static const QString CompositeItemKey = "composite_item_key";
 
@@ -86,15 +87,9 @@ void SystrayPlugin::onAdded(WId winId)
 {
     QString key = QString::number(winId);
 
-    QWidget *item = new QWidget;
-    item->resize(Dock::APPLET_CLASSIC_ICON_SIZE,
-                 Dock::APPLET_CLASSIC_ICON_SIZE);
+    TrayIcon * icon = new TrayIcon(winId);
 
-    QWindow * win = QWindow::fromWinId(winId);
-    QWidget * winItem = QWidget::createWindowContainer(win, item);
-    winItem->resize(item->size());
-
-    m_compositeItem->addItem(key, item);
+    m_compositeItem->addTrayIcon(key, icon);
 
     m_proxy->itemSizeChangedEvent(CompositeItemKey);
 }
@@ -103,7 +98,7 @@ void SystrayPlugin::onRemoved(WId winId)
 {
     QString key = QString::number(winId);
 
-    m_compositeItem->removeItem(key);
+    m_compositeItem->remove(key);
 
     m_proxy->itemSizeChangedEvent(CompositeItemKey);
 }

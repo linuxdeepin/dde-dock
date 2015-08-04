@@ -15,11 +15,13 @@ TEMPLATE = lib
 
 SOURCES += systrayplugin.cpp \
     dbustraymanager.cpp \
-    compositetrayitem.cpp
+    compositetrayitem.cpp \
+    trayicon.cpp
 
 HEADERS  += systrayplugin.h \
     dbustraymanager.h \
-    compositetrayitem.h
+    compositetrayitem.h \
+    trayicon.h
 
 RESOURCES += images.qrc
 DISTFILES += dde-dock-systray-plugin.json

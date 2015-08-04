@@ -2,6 +2,7 @@
 
 #include <dock/dockconstants.h>
 
+#include "trayicon.h"
 #include "compositetrayitem.h"
 
 // these two variables are decided by the picture background.
@@ -19,20 +20,20 @@ CompositeTrayItem::~CompositeTrayItem()
     qDebug() << "CompositeTrayItem destroyed.";
 }
 
-void CompositeTrayItem::addItem(QString key, QWidget * widget)
+void CompositeTrayItem::addTrayIcon(QString key, TrayIcon * icon)
 {
-    m_items[key] = widget;
+    m_icons[key] = icon;
 
-    widget->setParent(this);
+    icon->setParent(this);
 
     this->relayout();
 }
 
-void CompositeTrayItem::removeItem(QString key)
+void CompositeTrayItem::remove(QString key)
 {
-    QWidget * widget = m_items.take(key);
-    widget->setParent(NULL);
-    widget->deleteLater();
+    TrayIcon * icon = m_icons.take(key);
+    icon->setParent(NULL);
+    icon->deleteLater();
 
     this->relayout();
 }
@@ -53,7 +54,7 @@ void CompositeTrayItem::setMode(const Dock::DockMode &mode)
 
 void CompositeTrayItem::relayout()
 {
-    uint childrenCount = m_items.keys().length();
+    uint childrenCount = m_icons.keys().length();
     uint columnCount = 2;
 
     if (childrenCount <= 4) {
@@ -72,27 +73,29 @@ void CompositeTrayItem::relayout()
         setStyleSheet("QFrame { background-image: url(':/images/darea_container_4.svg') }");
         resize(Margins * 2 + ColumnWidth * columnCount, 48);
 
-        QList<QWidget*> items = m_items.values();
+        QList<TrayIcon*> items = m_icons.values();
         for (int i = 0; i < items.length(); i++) {
-            QWidget * widget = items.at(i);
+            TrayIcon * icon = items.at(i);
+            icon->maskOn();
 
             int x = i % columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
             int y = i / columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
 
-            widget->move(x, y);
-            widget->show();
+            icon->move(x, y);
+            icon->show();
         }
     } else {
         setStyleSheet("");
         resize(childrenCount * Dock::APPLET_CLASSIC_ICON_SIZE + (childrenCount - 1) * Dock::APPLET_CLASSIC_ITEM_SPACING,
                Dock::APPLET_CLASSIC_ICON_SIZE);
 
-        QList<QWidget*> items = m_items.values();
+        QList<TrayIcon*> items = m_icons.values();
         for (int i = 0; i < items.length(); i++) {
-            QWidget * widget = items.at(i);
+            TrayIcon * icon = items.at(i);
+            icon->maskOff();
 
-            widget->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
-            widget->show();
+            icon->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
+            icon->show();
         }
     }
 }
