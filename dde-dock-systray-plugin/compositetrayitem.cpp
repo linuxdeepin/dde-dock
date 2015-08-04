@@ -80,6 +80,7 @@ void CompositeTrayItem::relayout()
             int y = i / columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
 
             widget->move(x, y);
+            widget->show();
         }
     } else {
         setStyleSheet("");
@@ -89,7 +90,9 @@ void CompositeTrayItem::relayout()
         QList<QWidget*> items = m_items.values();
         for (int i = 0; i < items.length(); i++) {
             QWidget * widget = items.at(i);
+
             widget->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
+            widget->show();
         }
     }
 }
