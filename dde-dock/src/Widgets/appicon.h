@@ -32,6 +32,8 @@ protected:
 private:
     DockModeData *m_modeData = DockModeData::instance();
     QString m_iconPath;
+
+    QString getThemeIconPath(QString iconName);
 };
 
 #endif // APPICON_H

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus
+QT       += core gui x11extras dbus svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -47,8 +47,7 @@ SOURCES += \
     src/Widgets/launcheritem.cpp \
     src/Widgets/reflectioneffect.cpp \
     src/Widgets/highlighteffect.cpp \
-    src/Widgets/previewarrowrectangle.cpp \
-    src/Controller/themeiconmanager.cpp
+    src/Widgets/previewarrowrectangle.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -85,14 +84,13 @@ HEADERS  += \
     src/Widgets/launcheritem.h \
     src/Widgets/reflectioneffect.h \
     src/Widgets/highlighteffect.h \
-    src/Widgets/previewarrowrectangle.h \
-    src/Controller/themeiconmanager.h
+    src/Widgets/previewarrowrectangle.h
 
 RESOURCES += \
     images.qrc \
     qss.qrc
 
-PKGCONFIG += x11 cairo xcb xcb-ewmh gsettings-qt
+PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh
 CONFIG += c++11 link_pkgconfig
 
 target.path = /usr/bin/

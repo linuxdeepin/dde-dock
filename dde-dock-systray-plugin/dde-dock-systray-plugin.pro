@@ -22,6 +22,7 @@ HEADERS  += systrayplugin.h \
     compositetrayitem.h
 
 RESOURCES += images.qrc
+DISTFILES += dde-dock-systray-plugin.json
 
 target.path = /usr/share/dde-dock/plugins/
 INSTALLS += target
