@@ -2,6 +2,9 @@
 #define COMPOSITETRAYITEM_H
 
 #include <QFrame>
+#include <QMap>
+
+#include <dock/dockconstants.h>
 
 class CompositeTrayItem : public QFrame
 {
@@ -10,13 +13,17 @@ public:
     explicit CompositeTrayItem(QWidget *parent = 0);
     virtual ~CompositeTrayItem();
 
-    void addWidget(QWidget * widget);
-    void removeWidget(QWidget * widget);
+    void addItem(QString key, QWidget * widget);
+    void removeItem(QString key);
+
+    Dock::DockMode mode() const;
+    void setMode(const Dock::DockMode &mode);
 
 private:
-    uint m_columnCount;
+    Dock::DockMode m_mode;
+    QMap<QString, QWidget*> m_items;
 
-    void setBackground();
+    void relayout();
 };
 
 #endif // COMPOSITETRAYITEM_H
