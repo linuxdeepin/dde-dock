@@ -69,6 +69,8 @@ QSize ArrowRectangle::getFixedSize()
             return QSize(m_content->width() + m_margin * 2,m_content->height() + m_margin * 2 + arrowHeight);
         }
     }
+    else
+        return QSize(0, 0);
 }
 
 void ArrowRectangle::move(int x, int y)
