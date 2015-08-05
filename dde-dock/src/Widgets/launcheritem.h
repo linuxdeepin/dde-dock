@@ -24,10 +24,12 @@ public:
     bool moveable(){return false;}
 
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void mouseReleaseEvent(QMouseEvent *);
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+
+private slots:
+    void slotMousePress();
+    void slotMouseRelease();
 
 private:
     void changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode);

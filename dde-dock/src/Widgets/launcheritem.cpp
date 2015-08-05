@@ -7,25 +7,13 @@ LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 
     m_appIcon = new AppIcon(this);
     m_appIcon->resize(height(), height());
+    connect(m_appIcon, &AppIcon::mousePress, this, &LauncherItem::slotMousePress);
+    connect(m_appIcon, &AppIcon::mouseRelease, this, &LauncherItem::slotMouseRelease);
 
     m_launcherProcess = new QProcess();
 
     //TODO icon not show on init
     QTimer::singleShot(20, this, &LauncherItem::updateIcon);
-}
-
-void LauncherItem::mousePressEvent(QMouseEvent *)
-{
-    emit mousePress(globalX(), globalY());
-
-    hidePreview();
-}
-
-void LauncherItem::mouseReleaseEvent(QMouseEvent *)
-{
-    emit mouseRelease(globalX(), globalY());
-
-    m_launcherProcess->start("dde-launcher",QStringList());
 }
 
 void LauncherItem::enterEvent(QEvent *)
@@ -40,6 +28,20 @@ void LauncherItem::leaveEvent(QEvent *)
     emit mouseExited();
 
     hidePreview();
+}
+
+void LauncherItem::slotMousePress()
+{
+    emit mousePress(globalX(), globalY());
+
+    hidePreview();
+}
+
+void LauncherItem::slotMouseRelease()
+{
+    emit mouseRelease(globalX(), globalY());
+
+    m_launcherProcess->start("dde-launcher",QStringList());
 }
 
 void LauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
