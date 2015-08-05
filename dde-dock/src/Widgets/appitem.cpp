@@ -18,15 +18,15 @@ AppItem::AppItem(QWidget *parent) :
     initPreview();
 }
 
-void AppItem::moveWithAnimation(QPoint targetPos)
+void AppItem::moveWithAnimation(QPoint targetPos, int duration)
 {
     setNextPos(targetPos);
 
     QPropertyAnimation *animation = new QPropertyAnimation(this, "pos");
     animation->setStartValue(pos());
     animation->setEndValue(getNextPos());
-    animation->setDuration(200);
-    animation->setEasingCurve(QEasingCurve::OutCubic);
+    animation->setDuration(duration);
+    animation->setEasingCurve(MOVE_ANIMATION_CURVE);
     animation->start();
     connect(animation, &QPropertyAnimation::finished, this, &AppItem::moveAnimationFinished);
 }

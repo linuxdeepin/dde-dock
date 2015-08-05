@@ -57,11 +57,8 @@ private:
     void reanchorsLayout(Dock::DockMode mode);
 
     void showMenu();
-
     void updateBackground();
-
     void initAppManager();
-
     void hasShown();
     void hasHidden();
     void hideStateChanged(int value);

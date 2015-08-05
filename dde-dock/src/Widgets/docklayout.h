@@ -55,31 +55,35 @@ private slots:
     void slotItemRelease();
     void slotItemEntered(QDragEnterEvent * event);
     void slotItemExited(QDragLeaveEvent *event);
+    void slotAnimationFinish();
 
 private:
     void sortLeftToRight();
     void sortRightToLeft();
-    void moveLeftToRight(int hoverIndex);
-    void moveRightToLeft(int hoverIndex);
-
+    void leftToRightMove(int hoverIndex);
+    void rightToLeftMove(int hoverIndex);
     void addSpacingItem();
     void dragoutFromLayout(int index);
+
     int spacingItemWidth();
     int spacingItemIndex();
     QStringList itemsIdList();
+
 private:
     QList<AbstractDockItem *> m_appList;
     QMap<AbstractDockItem *,int> m_dragItemMap;//only one item inside
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
 
     Qt::Alignment m_verticalAlignment = Qt::AlignVCenter;
-    DockLayout::Direction sortDirection = DockLayout::LeftToRight;
-    qreal itemSpacing = 10;
+    DockLayout::Direction m_sortDirection = DockLayout::LeftToRight;
 
-    bool movingForward = false;
+    qreal m_itemSpacing = 10;
+    QPoint m_lastPost = QPoint(0,0);
     int m_lastHoverIndex = -1;
     int m_animationItemCount = 0;
-    QPoint m_lastPost = QPoint(0,0);
+    bool m_movingForward = false;
+
+    const int MOVE_ANIMATION_DURATION_BASE = 300;
 };
 
 #endif // DOCKLAYOUT_H

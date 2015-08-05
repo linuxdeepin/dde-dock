@@ -30,7 +30,7 @@ public:
     void setNextPos(int x, int y);
     void move(const QPoint &value);
     void move(int x, int y);
-    virtual void moveWithAnimation(QPoint targetPos){}
+    virtual void moveWithAnimation(QPoint targetPos, int duration = 200){}
 
     int globalX();
     int globalY();

@@ -45,7 +45,7 @@ public:
     AppItem(QWidget *parent = 0);
     ~AppItem();
 
-    void moveWithAnimation(QPoint targetPos);
+    void moveWithAnimation(QPoint targetPos, int duration = 200);
     QWidget *getApplet();
     void setEntryProxyer(DBusEntryProxyer *entryProxyer);
     void destroyItem(const QString &id);
@@ -101,6 +101,7 @@ private:
     DBusClientManager *m_clientmanager = NULL;
     QString m_menuInterfacePath = "";
     DBusMenuManager *m_menuManager = NULL;
+    const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCubic;
 };
 
 #endif // APPITEM_H
