@@ -5,9 +5,6 @@
 #include <QImage>
 #include <QByteArray>
 
-#include <cairo/cairo.h>
-#include <cairo/cairo-xlib.h>
-
 class QPaintEvent;
 class WindowPreview : public QWidget
 {

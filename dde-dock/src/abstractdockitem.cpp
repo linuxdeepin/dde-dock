@@ -16,6 +16,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 
     this->setAttribute(Qt::WA_TranslucentBackground);
     m_previewAR = new PreviewArrowRectangle();
+    connect(m_previewAR, &PreviewArrowRectangle::hideFinish, this, &AbstractDockItem::previewHidden);
 }
 
 AbstractDockItem::~AbstractDockItem()

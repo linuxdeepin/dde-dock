@@ -51,16 +51,15 @@ signals:
     void dragStart();
     void dragEntered(QDragEnterEvent * event);
     void dragExited(QDragLeaveEvent * event);
-    void drop(QDropEvent * event);
     void mouseEntered();
     void mouseExited();
     void mousePress(int x, int y);
     void mouseRelease(int x, int y);
-    void mouseDoubleClick();
     void widthChanged();
     void posChanged();
     void frameUpdate();
     void moveAnimationFinished();
+    void previewHidden();
 
 protected:
 

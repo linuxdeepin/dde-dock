@@ -55,6 +55,7 @@ public:
 
 signals:
     void needStopShow();
+    void hideFinish();
 
 protected:
     void enterEvent(QEvent *);

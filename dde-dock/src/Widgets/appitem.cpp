@@ -1,5 +1,4 @@
 #include "appitem.h"
-#include "apppreviews.h"
 
 AppItem::AppItem(QWidget *parent) :
     AbstractDockItem(parent)
@@ -16,6 +15,7 @@ AppItem::AppItem(QWidget *parent) :
     connect(m_dockModeData, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
 
     initMenu();
+    initPreview();
 }
 
 void AppItem::moveWithAnimation(QPoint targetPos)
@@ -33,8 +33,8 @@ void AppItem::moveWithAnimation(QPoint targetPos)
 
 QWidget *AppItem::getApplet()
 {
-    AppPreviews *preview = new AppPreviews();
-    connect(preview,&AppPreviews::sizeChanged,this,&AppItem::resizePreview);
+    if (!m_preview)
+        return NULL;
 
     QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
     if (m_itemData.isActived && !tmpArray.isEmpty())
@@ -42,14 +42,13 @@ QWidget *AppItem::getApplet()
         foreach (QJsonValue v, tmpArray) {
             QString title = v.toObject().value("Title").toString();
             int xid = v.toObject().value("Xid").toInt();
-            preview->addItem(title,xid);
+            m_preview->addItem(title,xid);
         }
     }
     else
-    {
-        preview->setTitle(m_itemData.title);
-    }
-    return preview;
+        m_preview->setTitle(m_itemData.title);
+
+    return m_preview;
 }
 
 void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
@@ -310,6 +309,13 @@ void AppItem::initMenu()
     m_menuManager = new DBusMenuManager(this);
 }
 
+void AppItem::initPreview()
+{
+    m_preview = new AppPreviews();
+    connect(m_preview,&AppPreviews::sizeChanged,this,&AppItem::resizePreview);
+    connect(this, &AppItem::previewHidden, m_preview, &AppPreviews::clearUpPreview);
+}
+
 void AppItem::showMenu()
 {
     if (m_menuManager->isValid()){
@@ -380,11 +386,11 @@ void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
 void AppItem::dropEvent(QDropEvent *event)
 {
     qWarning() << "Item get drop:" << event->pos();
-    emit drop(event);
 }
 
 AppItem::~AppItem()
 {
-
+    if (m_preview)
+        m_preview->deleteLater();
 }
 

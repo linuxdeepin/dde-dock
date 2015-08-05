@@ -164,6 +164,8 @@ void PreviewArrowRectangle::doHide()
 
     m_hideFrame->hideWithAnimation(widgetImg, geometry());
     ArrowRectangle::hide();
+
+    emit hideFinish();
 }
 
 void PreviewArrowRectangle::doShow()

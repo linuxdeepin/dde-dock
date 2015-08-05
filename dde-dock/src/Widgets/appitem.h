@@ -24,6 +24,7 @@
 #include "appicon.h"
 #include "appbackground.h"
 #include "../dockconstants.h"
+#include "apppreviews.h"
 
 struct AppItemData {
     QString id;
@@ -84,6 +85,7 @@ private:
     void updateXids();
     void updateMenuJsonString();
     void initMenu();
+    void initPreview();
 
     void showMenu();
 
@@ -93,6 +95,7 @@ private:
     AppBackground * m_appBackground = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
+    AppPreviews *m_preview = NULL;
 
     DBusEntryProxyer *m_entryProxyer = NULL;
     DBusClientManager *m_clientmanager = NULL;

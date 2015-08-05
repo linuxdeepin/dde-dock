@@ -8,6 +8,11 @@ AppPreviewFrame::AppPreviewFrame(const QString &title, int xid, QWidget *parent)
     addCloseButton();
 }
 
+AppPreviewFrame::~AppPreviewFrame()
+{
+
+}
+
 void AppPreviewFrame::addPreview(int xid)
 {
 //    WindowPreview * preview = new WindowPreview(xid, this);
@@ -109,9 +114,9 @@ void AppPreviews::enterEvent(QEvent *)
 
 void AppPreviews::leaveEvent(QEvent *)
 {
-    if (isClosing)
+    if (m_isClosing)
     {
-        isClosing = false;
+        m_isClosing = false;
         return;
     }
     emit mouseExited();
@@ -119,7 +124,7 @@ void AppPreviews::leaveEvent(QEvent *)
 
 void AppPreviews::removePreview(int xid)
 {
-    isClosing = true;
+    m_isClosing = true;
     m_mainLayout->removeWidget(qobject_cast<AppPreviewFrame *>(sender()));
     sender()->deleteLater();
     m_clientManager->CloseWindow(xid);
@@ -139,6 +144,17 @@ void AppPreviews::removePreview(int xid)
 void AppPreviews::activatePreview(int xid)
 {
     m_clientManager->ActiveWindow(xid);
+}
+
+void AppPreviews::clearUpPreview()
+{
+    QLayoutItem *child;
+    while ((child = m_mainLayout->takeAt(0)) != 0){
+        child->widget()->deleteLater();
+        delete child;
+    }
+
+    m_xidList.clear();
 }
 
 AppPreviews::~AppPreviews()

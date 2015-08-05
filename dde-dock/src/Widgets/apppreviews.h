@@ -16,6 +16,7 @@ class AppPreviewFrame : public QWidget
 
 public:
     explicit AppPreviewFrame(const QString &title,int xid, QWidget *parent=0);
+    ~AppPreviewFrame();
     void addPreview(int xid);
     void setTitle(const QString &t);
 
@@ -62,12 +63,13 @@ signals:
 public slots:
     void removePreview(int xid);
     void activatePreview(int xid);
+    void clearUpPreview();
 
 private:
     DBusClientManager *m_clientManager = new DBusClientManager(this);
     QHBoxLayout *m_mainLayout = NULL;
     QList<int> m_xidList;
-    bool isClosing = false;
+    bool m_isClosing = false;
 };
 
 #endif // APPPREVIEWS_H
