@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += plugin c++11
 
-TARGET = $$qtLibraryTarget(dock-systray-plugin)
+TARGET = $$qtLibraryTarget(dde-dock-systray-plugin)
 TEMPLATE = lib
 
 SOURCES += systrayplugin.cpp \
