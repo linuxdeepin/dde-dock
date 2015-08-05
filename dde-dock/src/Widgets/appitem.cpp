@@ -44,9 +44,12 @@ QWidget *AppItem::getApplet()
             int xid = v.toObject().value("Xid").toInt();
             m_preview->addItem(title,xid);
         }
+    } else {
+        m_titleLabel = new ItemTitleLabel;
+
+        m_titleLabel->setTitle(m_itemData.title);
+        m_preview->setTitleLabel(m_titleLabel);
     }
-    else
-        m_preview->setTitle(m_itemData.title);
 
     return m_preview;
 }

@@ -10,6 +10,26 @@
 #include "DBus/dbusmenu.h"
 #include "DBus/dbusmenumanager.h"
 
+ItemTitleLabel::ItemTitleLabel(QWidget *parent) :
+    QLabel(parent)
+{
+    setObjectName("DockAppTitle");
+    setAlignment(Qt::AlignCenter);
+}
+
+void ItemTitleLabel::setTitle(QString title)
+{
+    setText(title);
+
+    QFontMetrics fm(font());
+    int textWidth = fm.width(title);
+
+    int fitWidth = textWidth + 20;
+
+    resize(fitWidth < 80 ? 80 : fitWidth, 20);
+}
+
+
 AbstractDockItem::AbstractDockItem(QWidget * parent) :
     QFrame(parent)
 {
@@ -128,10 +148,7 @@ void AbstractDockItem::showPreview()
         QString title = getTitle();
 
         if (!title.isEmpty()) {
-            m_titleLabel->setText(title);
-
-            QFontMetrics fm(m_titleLabel->font());
-            m_titleLabel->resize(fm.width(getTitle()), TITLE_HEIGHT);
+            m_titleLabel->setTitle(title);
 
             tmpContent = m_titleLabel;
         }
@@ -201,7 +218,7 @@ QString AbstractDockItem::getMenuContent()
     return "";
 }
 
-void AbstractDockItem::invokeMenuItem(QString menuItemId, bool)
+void AbstractDockItem::invokeMenuItem(QString, bool)
 {
 
 }
@@ -251,7 +268,5 @@ void AbstractDockItem::initHighlight()
 
 void AbstractDockItem::initTitleLabel()
 {
-    m_titleLabel = new QLabel();
-    m_titleLabel->setObjectName("DockAppTitle");
-    m_titleLabel->setAlignment(Qt::AlignCenter);
+    m_titleLabel = new ItemTitleLabel;
 }
