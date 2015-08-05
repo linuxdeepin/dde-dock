@@ -121,17 +121,29 @@ void AbstractDockItem::showPreview()
         m_previewAR->resizeWithContent();
         return;
     }
-    QWidget *tmpContent = getApplet();
-    if (tmpContent == NULL) {
-        m_titleLabel->setText(getTitle());
-        QFontMetrics fm(m_titleLabel->font());
-        m_titleLabel->resize(fm.width(getTitle()), TITLE_HEIGHT);
 
-        tmpContent = m_titleLabel;
+    QWidget *tmpContent = getApplet();
+
+    if (tmpContent == NULL) {
+        QString title = getTitle();
+
+        if (!title.isEmpty()) {
+            m_titleLabel->setText(title);
+
+            QFontMetrics fm(m_titleLabel->font());
+            m_titleLabel->resize(fm.width(getTitle()), TITLE_HEIGHT);
+
+            tmpContent = m_titleLabel;
+        }
     }
-    m_previewAR->setContent(tmpContent);
-    m_previewAR->showPreview(ArrowRectangle::ArrowBottom, globalX() + width() / 2,globalY() - 5);
-    m_previewPos = QPoint(globalX() + width() / 2,globalY() - 5);
+
+    if (tmpContent) {
+        m_previewAR->setContent(tmpContent);
+        m_previewAR->showPreview(ArrowRectangle::ArrowBottom,
+                                 globalX() + width() / 2,
+                                 globalY() - 5);
+        m_previewPos = QPoint(globalX() + width() / 2,globalY() - 5);
+    }
 }
 
 void AbstractDockItem::hidePreview(int interval)
