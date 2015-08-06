@@ -49,7 +49,7 @@ public:
     ~AppPreviews();
 
     void addItem(const QString &title,int xid);
-    void setTitle(const QString &title);
+    void setTitleLabel(QLabel * label);
 
 protected:
     void enterEvent(QEvent *);

@@ -1,4 +1,5 @@
 #include "apppreviews.h"
+#include "abstractdockitem.h"
 
 AppPreviewFrame::AppPreviewFrame(const QString &title, int xid, QWidget *parent) :
     QWidget(parent),xidValue(xid)
@@ -95,16 +96,13 @@ void AppPreviews::addItem(const QString &title, int xid)
     resize(contentWidth,f->height() + Dock::APP_PREVIEW_MARGIN*2);
 }
 
-void AppPreviews::setTitle(const QString &title)
+void AppPreviews::setTitleLabel(QLabel * label)
 {
     m_mainLayout->setMargin(0);
-    QLabel *titleLabel = new QLabel(title);
-    titleLabel->setObjectName("DockAppTitle");
-    titleLabel->setAlignment(Qt::AlignCenter);
-    m_mainLayout->addWidget(titleLabel);
-    QFontMetrics fm(titleLabel->font());
-    int textWidth = fm.width(title);
-    resize(textWidth < 80 ? 80 : textWidth,20);
+
+    m_mainLayout->addWidget(label);
+
+    resize(label->size());
 }
 
 void AppPreviews::enterEvent(QEvent *)

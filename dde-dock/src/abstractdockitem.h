@@ -6,6 +6,14 @@
 #include "dockconstants.h"
 #include <QDebug>
 
+class ItemTitleLabel : public QLabel
+{
+public:
+    explicit ItemTitleLabel(QWidget * parent = 0);
+
+    void setTitle(QString title);
+};
+
 class DBusMenu;
 class DBusMenuManager;
 class AbstractDockItem : public QFrame
@@ -67,7 +75,7 @@ protected:
     bool m_isActived = false;
     PreviewArrowRectangle *m_previewAR = NULL;
     HighlightEffect * m_highlight = NULL;
-    QLabel *m_titleLabel = NULL;
+    ItemTitleLabel *m_titleLabel = NULL;
 
     QPoint m_itemNextPos;
     QPoint m_previewPos;
