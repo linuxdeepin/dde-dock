@@ -16,8 +16,7 @@ AppPreviewFrame::~AppPreviewFrame()
 
 void AppPreviewFrame::addPreview(int xid)
 {
-//    WindowPreview * preview = new WindowPreview(xid, this);
-    QWidget * preview = new QWidget(this);
+    WindowPreview * preview = new WindowPreview(xid, this);
     preview->setObjectName("AppPreview");
     preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
 

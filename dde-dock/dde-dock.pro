@@ -90,7 +90,7 @@ RESOURCES += \
     images.qrc \
     qss.qrc
 
-PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh
+PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage
 CONFIG += c++11 link_pkgconfig
 
 target.path = /usr/bin/

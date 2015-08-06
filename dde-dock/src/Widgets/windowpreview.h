@@ -5,16 +5,16 @@
 #include <QImage>
 #include <QByteArray>
 
+class Monitor;
 class QPaintEvent;
 class WindowPreview : public QWidget
 {
     Q_OBJECT
-
 public:
+    friend class Monitor;
+
     WindowPreview(WId sourceWindow, QWidget *parent = 0);
     ~WindowPreview();
-
-    void onTimeout();
 
     QByteArray imageData;
 
@@ -23,6 +23,13 @@ protected:
 
 private:
     WId m_sourceWindow;
+
+    Monitor * m_monitor;
+
+    void installMonitor();
+    void removeMonitor();
+
+    void prepareRepaint();
 };
 
 #endif // WINDOWPREVIEW_H

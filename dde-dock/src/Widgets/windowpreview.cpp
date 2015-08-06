@@ -1,15 +1,17 @@
 #include <QApplication>
-#include <QTimer>
 #include <QX11Info>
 #include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QFile>
 #include <QByteArray>
-
+#include <QAbstractNativeEventFilter>
 
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
+
+#include <xcb/xcb.h>
+#include <xcb/damage.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -26,27 +28,79 @@ static cairo_status_t cairo_write_func (void *widget, const unsigned char *data,
     return CAIRO_STATUS_SUCCESS;
 }
 
+class Monitor : public QAbstractNativeEventFilter
+{
+public:
+    Monitor(WindowPreview * wp) :
+        QAbstractNativeEventFilter(),
+        m_wp(wp)
+    {
+        xcb_connection_t *c = QX11Info::connection();
+        xcb_prefetch_extension_data(c, &xcb_damage_id);
+        const auto *reply = xcb_get_extension_data(c, &xcb_damage_id);
+        m_damageEventBase = reply->first_event;
+        if (reply->present) {
+            xcb_damage_query_version_unchecked(c, XCB_DAMAGE_MAJOR_VERSION, XCB_DAMAGE_MINOR_VERSION);
+        }
+
+        m_damage = xcb_generate_id(c);
+        xcb_damage_create(c, m_damage, wp->m_sourceWindow, XCB_DAMAGE_REPORT_LEVEL_RAW_RECTANGLES);
+    }
+
+    ~Monitor ()
+    {
+        xcb_connection_t *c = QX11Info::connection();
+        xcb_damage_destroy(c, m_damage);
+    }
+
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *)
+    {
+        if (eventType=="xcb_generic_event_t") {
+            xcb_generic_event_t *event = static_cast<xcb_generic_event_t*>(message);
+            const uint8_t responseType = event->response_type & ~0x80;
+
+            if (responseType == m_damageEventBase + XCB_DAMAGE_NOTIFY) {
+                auto *ev = reinterpret_cast<xcb_damage_notify_event_t*>(event);
+
+                if (m_wp && m_wp->m_sourceWindow == ev->drawable) {
+                    m_wp->prepareRepaint();
+                }
+            } else if (responseType == XCB_CONFIGURE_NOTIFY) {
+                auto *ev = reinterpret_cast<xcb_configure_notify_event_t*>(event);
+
+                if (m_wp && m_wp->m_sourceWindow == ev->window) {
+                    m_wp->prepareRepaint();
+                }
+            }
+        }
+        return false;
+    }
+
+private:
+    WindowPreview * m_wp;
+    int m_damageEventBase;
+    int m_damage;
+};
+
 WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
     : QWidget(parent),
-      m_sourceWindow(sourceWindow)
+      m_sourceWindow(sourceWindow),
+      m_monitor(NULL)
 {
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    QTimer *timer = new QTimer(this);
-    timer->setInterval(60);
-    timer->start();
-    connect(timer, &QTimer::timeout, this, &WindowPreview::onTimeout);
+    prepareRepaint();
+
+    installMonitor();
 }
 
 WindowPreview::~WindowPreview()
 {
-
+    removeMonitor();
 }
 
 void WindowPreview::paintEvent(QPaintEvent *)
 {
-    qDebug() << "paintEvent of WindowPreview.";
-
     QPainter painter;
     painter.begin(this);
 
@@ -58,7 +112,28 @@ void WindowPreview::paintEvent(QPaintEvent *)
     painter.end();
 }
 
-void WindowPreview::onTimeout()
+void WindowPreview::installMonitor()
+{
+    if (!m_monitor) {
+        m_monitor = new Monitor(this);
+
+        QCoreApplication * app = QApplication::instance();
+        if (app) app->installNativeEventFilter(m_monitor);
+    }
+}
+
+void WindowPreview::removeMonitor()
+{
+    if (m_monitor) {
+        QCoreApplication * app = QApplication::instance();
+        if (app) app->removeNativeEventFilter(m_monitor);
+
+        delete m_monitor;
+        m_monitor = NULL;
+    }
+}
+
+void WindowPreview::prepareRepaint()
 {
     Display *dsp = QX11Info::display();
 
