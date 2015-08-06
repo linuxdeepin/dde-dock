@@ -90,17 +90,17 @@ private:
     void showMenu();
 
 private:
+    QString m_menuInterfacePath = "";
     AppItemData m_itemData;
     DockModeData *m_dockModeData = DockModeData::instance();
+    DBusClientManager *m_clientmanager = NULL;
+    DBusEntryProxyer *m_entryProxyer = NULL;
+    DBusMenuManager *m_menuManager = NULL;
     AppBackground * m_appBackground = NULL;
+    AppPreviews *m_preview = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
-    AppPreviews *m_preview = NULL;
 
-    DBusEntryProxyer *m_entryProxyer = NULL;
-    DBusClientManager *m_clientmanager = NULL;
-    QString m_menuInterfacePath = "";
-    DBusMenuManager *m_menuManager = NULL;
     const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCubic;
 };
 

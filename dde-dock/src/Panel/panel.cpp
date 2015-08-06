@@ -7,7 +7,7 @@
 Panel::Panel(QWidget *parent)
     : QLabel(parent),m_parentWidget(parent)
 {
-    this->setObjectName("Panel");
+    setObjectName("Panel");
 
     m_pluginLayout = new DockLayout(this);
     m_pluginLayout->setSpacing(m_dockModeData->getAppletsItemSpacing());
@@ -22,26 +22,13 @@ Panel::Panel(QWidget *parent)
     connect(m_appLayout, &DockLayout::startDrag, this, &Panel::slotDragStarted);
     connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::slotItemDropped);
     connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
+
     connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::changeDockMode);
 
-    DockPluginManager *pluginManager = new DockPluginManager(this);
-
-    connect(m_dockModeData, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
-    connect(pluginManager, &DockPluginManager::itemAdded, [=](AbstractDockItem* item) {
-        m_pluginLayout->addItem(item);
-    });
-    connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
-        int index = m_pluginLayout->indexOf(item);
-        if (index != -1) {
-            m_pluginLayout->removeItem(index);
-        }
-    });
-
-    pluginManager->initAll();
-
     initAppManager();
+    initPluginManager();
     initHSManager();
     initState();
     initReflection();
@@ -52,7 +39,6 @@ Panel::Panel(QWidget *parent)
 
 void Panel::showScreenMask()
 {
-//    qWarning() << "[Info:]" << "Show Screen Mask.";
     m_maskWidget->show();
 }
 
@@ -63,7 +49,6 @@ bool Panel::isFashionMode()
 
 void Panel::hideScreenMask()
 {
-//    qWarning() << "[Info:]" << "Hide Screen Mask.";
     m_maskWidget->hide();
 }
 
@@ -181,6 +166,25 @@ void Panel::updateBackground()
 
     style()->unpolish(this);
     style()->polish(this);// force a stylesheet recomputation
+}
+
+void Panel::initPluginManager()
+{
+    DockPluginManager *pluginManager = new DockPluginManager(this);
+
+    connect(m_dockModeData, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
+    connect(pluginManager, &DockPluginManager::itemAppend, m_pluginLayout, &DockLayout::addItem);
+    connect(pluginManager, &DockPluginManager::itemMove, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
+        m_pluginLayout->moveItem(m_pluginLayout->indexOf(targetItem), m_pluginLayout->indexOf(baseItem));
+    });
+    connect(pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
+        m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
+    });
+    connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
+        m_pluginLayout->removeItem(item);
+    });
+
+    pluginManager->initAll();
 }
 
 void Panel::initAppManager()

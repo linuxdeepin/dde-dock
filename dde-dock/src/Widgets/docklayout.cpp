@@ -38,10 +38,26 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     relayout();
 }
 
+void DockLayout::moveItem(int from, int to)
+{
+    int toIndex = to < 0 ? 0 : to;
+    m_appList.move(from, toIndex);
+    relayout();
+}
+
 void DockLayout::removeItem(int index)
 {
-    delete m_appList.takeAt(index);
+    m_appList.takeAt(index)->deleteLater();
     relayout();
+}
+
+void DockLayout::removeItem(AbstractDockItem *item)
+{
+    int i = indexOf(item);
+    if (i != -1){
+        m_appList.takeAt(i)->deleteLater();
+        relayout();
+    }
 }
 
 void DockLayout::setSpacing(qreal spacing)
@@ -61,7 +77,10 @@ void DockLayout::setSortDirection(DockLayout::Direction value)
 
 int DockLayout::indexOf(AbstractDockItem *item) const
 {
-    return m_appList.indexOf(item);
+    if (item)
+        return m_appList.indexOf(item);
+    else
+        return -1;
 }
 
 //relative coordinates, not global

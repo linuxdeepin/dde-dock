@@ -28,6 +28,7 @@ public:
     void showScreenMask();
     void hideScreenMask();
     void setContainMouse(bool value);
+
     bool isFashionMode();
 
 public slots:
@@ -58,6 +59,7 @@ private:
 
     void showMenu();
     void updateBackground();
+    void initPluginManager();
     void initAppManager();
     void hasShown();
     void hasHidden();

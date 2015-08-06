@@ -23,7 +23,7 @@ public:
     void appletSizeChangedEvent(QString id) Q_DECL_OVERRIDE;
 
 signals:
-    void itemAdded(AbstractDockItem * item);
+    void itemAdded(AbstractDockItem * item, QString uuid);
     void itemRemoved(AbstractDockItem * item);
 
 private:

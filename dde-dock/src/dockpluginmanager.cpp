@@ -46,6 +46,8 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode,
         DockPluginInterface * plugin = proxy->plugin();
         plugin->changeMode(newMode, oldMode);
     }
+
+    updatePluginPos(newMode, oldMode);
 }
 
 // private methods
@@ -74,8 +76,17 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
                 m_proxies[path] = proxy;
                 m_watcher->addPath(path);
 
-                connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::itemAdded);
-                connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::itemRemoved);
+                connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem *item, QString uuid){
+                    if (pluginLoader->metaData()["MetaData"].toObject()["sys_plugin"].toBool())
+                        handleSysPluginAdd(item, uuid);
+                    else
+                        handleNormalPluginAdd(item);
+                });
+                connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem *item){
+                    m_sysPlugins.remove(item);
+                    m_normalPlugins.removeAt(m_normalPlugins.indexOf(item));
+                    emit itemRemoved(item);
+                });
 
                 return proxy;
             }
@@ -96,6 +107,20 @@ void DockPluginManager::unloadPlugin(const QString &path)
     if (m_proxies.contains(path)) {
         DockPluginProxy * proxy = m_proxies.take(path);
         delete proxy;
+    }
+}
+
+void DockPluginManager::updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode)
+{
+    if (newMode == Dock::FashionMode && oldMode != Dock::FashionMode){
+        foreach (AbstractDockItem *item, m_normalPlugins) {
+            emit itemMove(NULL, item);  //Move to the front of the list
+        }
+    }else if (oldMode == Dock::FashionMode){
+        AbstractDockItem * systrayItem = sysPluginItem(SYSTRAY_PLUGIN_ID);
+        foreach (AbstractDockItem *item, m_normalPlugins) {
+            emit itemMove(systrayItem, item);   //Move to the back of systray plugin
+        }
     }
 }
 
@@ -126,4 +151,38 @@ void DockPluginManager::watchedDirectoryChanged(const QString & directory)
             if (proxy) proxy->plugin()->init(proxy);
         }
     }
+}
+
+AbstractDockItem *DockPluginManager::sysPluginItem(QString id)
+{
+    int si = m_sysPlugins.values().indexOf(id);
+
+    if (si != -1)
+        return m_sysPlugins.keys().at(si);
+    else
+        return NULL;
+}
+
+void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
+{
+    m_sysPlugins.insert(item, uuid);
+
+    if (uuid == SYSTRAY_PLUGIN_ID){
+        if (m_dockModeData->getDockMode() == Dock::FashionMode)
+            emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+        else
+            emit itemInsert(NULL, item);
+    }
+    else
+        emit itemAppend(item);
+}
+
+void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item)
+{
+    m_normalPlugins.append(item);
+
+    if (m_dockModeData->getDockMode() == Dock::FashionMode)
+        emit itemInsert(NULL, item);
+    else
+        emit itemInsert(sysPluginItem(SYSTRAY_PLUGIN_ID), item);
 }

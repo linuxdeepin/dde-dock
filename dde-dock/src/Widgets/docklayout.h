@@ -24,14 +24,16 @@ public:
 
     explicit DockLayout(QWidget *parent = 0);
 
-    void addItem(AbstractDockItem * item);
+    void addItem(AbstractDockItem *item);
     void insertItem(AbstractDockItem *item, int index);
+    void moveItem(int from, int to);
     void removeItem(int index);
+    void removeItem(AbstractDockItem *item);
     void setSpacing(qreal spacing);
     void setVerticalAlignment(Qt::Alignment value);
     void setSortDirection(DockLayout::Direction value);
 
-    int indexOf(AbstractDockItem * item) const;
+    int indexOf(AbstractDockItem *item) const;
     int indexOf(int x,int y) const;
     int getContentsWidth();
     int getItemCount() const;
@@ -55,7 +57,7 @@ protected:
 private slots:
     void slotItemDrag();
     void slotItemRelease();
-    void slotItemEntered(QDragEnterEvent * event);
+    void slotItemEntered(QDragEnterEvent *event);
     void slotItemExited(QDragLeaveEvent *event);
     void slotAnimationFinish();
 

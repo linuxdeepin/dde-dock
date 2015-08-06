@@ -43,7 +43,7 @@ void DockPluginProxy::itemAddedEvent(QString id)
             AbstractDockItem * item = new PluginItemWrapper(m_plugin, id);
             m_items[id] = item;
 
-            emit itemAdded(item);
+            emit itemAdded(item, id);
         }
     }
 }
