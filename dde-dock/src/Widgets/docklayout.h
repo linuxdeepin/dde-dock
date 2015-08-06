@@ -18,7 +18,8 @@ class DockLayout : public QWidget
 public:
     enum Direction{
         LeftToRight,
-        RightToLeft
+        RightToLeft,
+        TopToBottom
     };
 
     explicit DockLayout(QWidget *parent = 0);
@@ -29,22 +30,23 @@ public:
     void setSpacing(qreal spacing);
     void setVerticalAlignment(Qt::Alignment value);
     void setSortDirection(DockLayout::Direction value);
-    int indexOf(AbstractDockItem * item);
-    int indexOf(int x,int y);
+
+    int indexOf(AbstractDockItem * item) const;
+    int indexOf(int x,int y) const;
     int getContentsWidth();
-    int getItemCount();
+    int getItemCount() const;
     QList<AbstractDockItem *> getItemList() const;
 
-public slots:
-    void restoreTmpItem();
-    void relayout();
-    void clearTmpItem();
-
 signals:
-    void dragStarted();
+    void startDrag();
     void itemDropped();
     void contentsWidthChange();
     void frameUpdate();
+
+public slots:
+    void restoreTmpItem();
+    void clearTmpItem();
+    void relayout();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
@@ -59,15 +61,15 @@ private slots:
 
 private:
     void sortLeftToRight();
-    void sortRightToLeft();
+    void sortTopToBottom();
     void leftToRightMove(int hoverIndex);
-    void rightToLeftMove(int hoverIndex);
+    void topToBottomMove(int hoverIndex);
     void addSpacingItem();
     void dragoutFromLayout(int index);
 
-    int spacingItemWidth();
-    int spacingItemIndex();
-    QStringList itemsIdList();
+    int spacingItemWidth() const;
+    int spacingItemIndex() const;
+    QStringList itemsIdList() const;
 
 private:
     QList<AbstractDockItem *> m_appList;
@@ -81,7 +83,7 @@ private:
     QPoint m_lastPost = QPoint(0,0);
     int m_lastHoverIndex = -1;
     int m_animationItemCount = 0;
-    bool m_movingForward = false;
+    bool m_movingLeftward = false;
 
     const int MOVE_ANIMATION_DURATION_BASE = 300;
 };

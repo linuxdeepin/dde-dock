@@ -10,7 +10,6 @@ Panel::Panel(QWidget *parent)
     this->setObjectName("Panel");
 
     m_pluginLayout = new DockLayout(this);
-    m_pluginLayout->setSortDirection(DockLayout::RightToLeft);
     m_pluginLayout->setSpacing(m_dockModeData->getAppletsItemSpacing());
     m_pluginLayout->resize(0,m_dockModeData->getItemHeight());
 
@@ -20,7 +19,7 @@ Panel::Panel(QWidget *parent)
     m_appLayout->resize(this->width() - m_pluginLayout->width(),m_dockModeData->getItemHeight());
     m_appLayout->move(0,1);
 
-    connect(m_appLayout, &DockLayout::dragStarted, this, &Panel::slotDragStarted);
+    connect(m_appLayout, &DockLayout::startDrag, this, &Panel::slotDragStarted);
     connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::slotItemDropped);
     connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
     connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::slotLayoutContentsWidthChanged);
@@ -103,8 +102,6 @@ void Panel::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
     m_pluginLayout->relayout();
 
     reanchorsLayout(newMode);
-
-    qWarning() << "AppCount:********" << m_appLayout->getItemCount();
 }
 
 void Panel::slotLayoutContentsWidthChanged()
@@ -147,7 +144,6 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     if (mode == Dock::FashionMode)
     {
         m_appLayout->resize(m_appLayout->getContentsWidth() + m_dockModeData->getAppItemSpacing(),m_dockModeData->getItemHeight());
-        m_pluginLayout->setSortDirection(DockLayout::LeftToRight);
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getAppletsItemHeight());
         this->setFixedSize(FASHION_PANEL_LPADDING
                            + FASHION_PANEL_RPADDING
@@ -161,7 +157,6 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     }
     else
     {
-        m_pluginLayout->setSortDirection(DockLayout::RightToLeft);
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
         m_pluginLayout->move(m_parentWidget->width() - m_pluginLayout->width(),1);
 
