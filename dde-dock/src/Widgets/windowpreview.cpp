@@ -147,13 +147,30 @@ void WindowPreview::prepareRepaint()
                                                             s_atts.width,
                                                             s_atts.height);
 
-        cairo_surface_t * image_surface = cairo_surface_map_to_image(source, NULL);
+        cairo_surface_t * image_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                                                     width(),
+                                                                     height());
+
+        float ratio = 0.0f;
+        if (s_atts.width > s_atts.height) {
+            ratio = width() * 1.0 / s_atts.width;
+        } else {
+            ratio = height() * 1.0 / s_atts.height;
+        }
+        int x = (width() - s_atts.width * ratio) / 2.0;
+        int y = (height() - s_atts.height * ratio) / 2.0;
+
+        cairo_t * cairo = cairo_create(image_surface);
+        cairo_scale(cairo, ratio, ratio);
+        cairo_set_source_surface(cairo, source, x / ratio, y / ratio);
+        cairo_paint(cairo);
 
         imageData.clear();
         cairo_surface_write_to_png_stream(image_surface, cairo_write_func, this);
 
-        cairo_surface_unmap_image(source, image_surface);
         cairo_surface_destroy(source);
+        cairo_surface_destroy(image_surface);
+        cairo_destroy(cairo);
 
         this->repaint();
     }
