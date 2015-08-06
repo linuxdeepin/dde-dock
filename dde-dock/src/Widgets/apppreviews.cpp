@@ -95,15 +95,6 @@ void AppPreviews::addItem(const QString &title, int xid)
     resize(contentWidth,f->height() + Dock::APP_PREVIEW_MARGIN*2);
 }
 
-void AppPreviews::setTitleLabel(QLabel * label)
-{
-    m_mainLayout->setMargin(0);
-
-    m_mainLayout->addWidget(label);
-
-    resize(label->size());
-}
-
 void AppPreviews::enterEvent(QEvent *)
 {
     emit mouseEntered();

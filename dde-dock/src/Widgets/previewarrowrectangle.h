@@ -48,7 +48,7 @@ class PreviewArrowRectangle : public ArrowRectangle
 public:
     PreviewArrowRectangle(QWidget *parent = 0);
 
-    void showPreview(ArrowDirection direction, int x, int y, int interval = 100);
+    void showPreview(ArrowDirection direction, int x, int y, int interval = 200);
     void hidePreview(int interval);
     void cancelHide();
     void cancelShow();

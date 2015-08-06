@@ -55,7 +55,7 @@ public:
     bool getIsFashionMode() const;
 
 public slots:
-    void slotMousePress();
+    void slotMouseRelease();
 
 private:
     void initActiveLabel();

@@ -142,7 +142,7 @@ bool AppBackground::getIsFashionMode() const
     return DockModeData::instance()->getDockMode() == Dock::FashionMode;
 }
 
-void AppBackground::slotMousePress()
+void AppBackground::slotMouseRelease()
 {
     m_bePress = true;
     if (!m_isActived && getIsFashionMode())

@@ -34,7 +34,7 @@ void AppItem::moveWithAnimation(QPoint targetPos, int duration)
 QWidget *AppItem::getApplet()
 {
     if (!m_preview)
-        return NULL;
+        initPreview();
 
     QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
     if (m_itemData.isActived && !tmpArray.isEmpty())
@@ -45,10 +45,7 @@ QWidget *AppItem::getApplet()
             m_preview->addItem(title,xid);
         }
     } else {
-        m_titleLabel = new ItemTitleLabel;
-
-        m_titleLabel->setTitle(m_itemData.title);
-        m_preview->setTitleLabel(m_titleLabel);
+        return NULL;    //use getTitle() to show title by abstractdockitem
     }
 
     return m_preview;
@@ -66,6 +63,11 @@ void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
 void AppItem::destroyItem(const QString &id)
 {
 
+}
+
+QString AppItem::getTitle()
+{
+    return m_itemData.title;
 }
 
 QString AppItem::getItemId()
@@ -112,15 +114,6 @@ void AppItem::slotMouseLeave()
 
 void AppItem::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
-    if (newMode == Dock::FashionMode)
-    {
-//        m_appBackground->setVisible(false);
-    }
-    else
-    {
-        m_appBackground->setVisible(true);
-    }
-
     setActived(actived());
     resizeResources();
 }
@@ -194,17 +187,8 @@ void AppItem::initBackground()
 {
     m_appBackground = new AppBackground(this);
     m_appBackground->move(0,0);
-    connect(this, &AppItem::mousePress, m_appBackground, &AppBackground::slotMousePress);
+    connect(this, &AppItem::mouseRelease, m_appBackground, &AppBackground::slotMouseRelease);
     connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
-
-    if (m_dockModeData->getDockMode() == Dock::FashionMode)
-    {
-//        m_appBackground->setVisible(false);
-    }
-    else
-    {
-        m_appBackground->setVisible(true);
-    }
 }
 
 void AppItem::initTitle()
