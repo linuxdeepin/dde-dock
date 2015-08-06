@@ -10,11 +10,11 @@ class DockPluginProxyInterface
 public:
     virtual Dock::DockMode dockMode() = 0;
 
-    virtual void itemAddedEvent(QString uuid) = 0;
-    virtual void itemRemovedEvent(QString uuid) = 0;
+    virtual void itemAddedEvent(QString id) = 0;
+    virtual void itemRemovedEvent(QString id) = 0;
 
-    virtual void itemSizeChangedEvent(QString uuid) = 0;
-    virtual void appletSizeChangedEvent(QString uuid) = 0;
+    virtual void itemSizeChangedEvent(QString id) = 0;
+    virtual void appletSizeChangedEvent(QString id) = 0;
 };
 
 #endif // DOCKPLUGINPROXYINTERFACE_H

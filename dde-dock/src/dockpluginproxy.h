@@ -17,10 +17,10 @@ public:
 
     Dock::DockMode dockMode() Q_DECL_OVERRIDE;
 
-    void itemAddedEvent(QString uuid) Q_DECL_OVERRIDE;
-    void itemRemovedEvent(QString uuid) Q_DECL_OVERRIDE;
-    void itemSizeChangedEvent(QString uuid) Q_DECL_OVERRIDE;
-    void appletSizeChangedEvent(QString uuid) Q_DECL_OVERRIDE;
+    void itemAddedEvent(QString id) Q_DECL_OVERRIDE;
+    void itemRemovedEvent(QString id) Q_DECL_OVERRIDE;
+    void itemSizeChangedEvent(QString id) Q_DECL_OVERRIDE;
+    void appletSizeChangedEvent(QString id) Q_DECL_OVERRIDE;
 
 signals:
     void itemAdded(AbstractDockItem * item);

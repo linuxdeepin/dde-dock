@@ -185,6 +185,8 @@ void AbstractDockItem::resizePreview()
 
 void AbstractDockItem::showMenu()
 {
+    if (getMenuContent().isEmpty()) return;
+
     if (m_dbusMenuManager == NULL) {
         m_dbusMenuManager = new DBusMenuManager(this);
     }

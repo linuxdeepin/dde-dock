@@ -6,6 +6,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setOrganizationName("deepin");
+    a.setApplicationName("dde-dock");
+    a.setApplicationDisplayName("Dock");
 
     if(QDBusConnection::sessionBus().registerService(DBUS_NAME)){
         QFile file("://Resources/qss/default.qss");

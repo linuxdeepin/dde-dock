@@ -1,11 +1,11 @@
-#include "trashplugin.h"
+#include <QIcon>
 
+#include "trashplugin.h"
 
 TrashPlugin::TrashPlugin()
 {
-
+    QIcon::setThemeName("Deepin");
 }
-
 
 void TrashPlugin::init(DockPluginProxyInterface *proxy)
 {
@@ -14,19 +14,44 @@ void TrashPlugin::init(DockPluginProxyInterface *proxy)
     setMode(proxy->dockMode());
 }
 
-QString TrashPlugin::name()
+QString TrashPlugin::getPluginName()
 {
     return "Trash plugin";
 }
 
-QStringList TrashPlugin::uuids()
+QStringList TrashPlugin::ids()
 {
-    return QStringList(m_uuid);
+    return QStringList(m_id);
+}
+
+QString TrashPlugin::getName(QString)
+{
+    return getPluginName();
 }
 
 QString TrashPlugin::getTitle(QString)
 {
-    return name();
+    return getPluginName();
+}
+
+QString TrashPlugin::getCommand(QString)
+{
+    return "";
+}
+
+bool TrashPlugin::canDisable(QString)
+{
+    return false;
+}
+
+bool TrashPlugin::isDisabled(QString)
+{
+    return false;
+}
+
+void TrashPlugin::setDisabled(QString, bool)
+{
+
 }
 
 QWidget * TrashPlugin::getItem(QString)
@@ -45,7 +70,7 @@ QWidget * TrashPlugin::getApplet(QString)
 }
 
 void TrashPlugin::changeMode(Dock::DockMode newMode,
-                                Dock::DockMode)
+                             Dock::DockMode)
 {
     setMode(newMode);
 }
@@ -75,11 +100,11 @@ void TrashPlugin::setMode(Dock::DockMode mode)
     m_mode = mode;
 
     if (mode == Dock::FashionMode)
-        m_proxy->itemAddedEvent(m_uuid);
+        m_proxy->itemAddedEvent(m_id);
     else
     {
         m_itemList.clear();
-        m_proxy->itemRemovedEvent(m_uuid);
+        m_proxy->itemRemovedEvent(m_id);
     }
 }
 

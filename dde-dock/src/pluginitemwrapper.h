@@ -1,6 +1,8 @@
 #ifndef PLUGINITEMWRAPPER_H
 #define PLUGINITEMWRAPPER_H
 
+#include <QJsonObject>
+
 #include "abstractdockitem.h"
 #include "dockplugininterface.h"
 
@@ -9,10 +11,10 @@ class PluginItemWrapper : public AbstractDockItem
 {
     Q_OBJECT
 public:
-    PluginItemWrapper(DockPluginInterface *plugin, QString uuid, QWidget * parent = 0);
+    PluginItemWrapper(DockPluginInterface *plugin, QString id, QWidget * parent = 0);
     virtual ~PluginItemWrapper();
 
-    QString uuid() const;
+    QString id() const;
 
     QString getTitle() Q_DECL_OVERRIDE;
     QWidget * getApplet() Q_DECL_OVERRIDE;
@@ -29,7 +31,9 @@ protected:
 private:
     QWidget *m_pluginItemContents = NULL;
     DockPluginInterface * m_plugin;
-    QString m_uuid;
+    QString m_id;
+
+    QJsonObject createMenuItem(QString itemId, QString itemName, bool checkable, bool checked);
 };
 
 #endif // PLUGINITEMWRAPPER_H

@@ -41,12 +41,12 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
     m_proxy->itemAddedEvent(CompositeItemKey);
 }
 
-QString SystrayPlugin::name()
+QString SystrayPlugin::getPluginName()
 {
-    return QString("System Tray");
+    return "System Tray";
 }
 
-QStringList SystrayPlugin::uuids()
+QStringList SystrayPlugin::ids()
 {
     return QStringList(CompositeItemKey);
 }
@@ -54,6 +54,31 @@ QStringList SystrayPlugin::uuids()
 QString SystrayPlugin::getTitle(QString)
 {
     return "";
+}
+
+QString SystrayPlugin::getName(QString)
+{
+    return getPluginName();
+}
+
+QString SystrayPlugin::getCommand(QString)
+{
+    return "";
+}
+
+bool SystrayPlugin::canDisable(QString)
+{
+    return false;
+}
+
+bool SystrayPlugin::isDisabled(QString)
+{
+    return false;
+}
+
+void SystrayPlugin::setDisabled(QString, bool)
+{
+
 }
 
 QWidget * SystrayPlugin::getItem(QString)
