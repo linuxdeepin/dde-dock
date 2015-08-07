@@ -28,8 +28,8 @@ protected:
     void leaveEvent(QEvent *);
 
 private slots:
-    void slotMousePress();
-    void slotMouseRelease();
+    void slotMousePress(QMouseEvent *event);
+    void slotMouseRelease(QMouseEvent *event);
 
 private:
     void changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode);

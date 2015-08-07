@@ -61,8 +61,8 @@ signals:
     void dragExited(QDragLeaveEvent * event);
     void mouseEntered();
     void mouseExited();
-    void mousePress(int x, int y);
-    void mouseRelease(int x, int y);
+    void mousePress(QMouseEvent *event);
+    void mouseRelease(QMouseEvent *event);
     void widthChanged();
     void posChanged();
     void frameUpdate();

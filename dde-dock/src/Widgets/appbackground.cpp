@@ -142,8 +142,11 @@ bool AppBackground::getIsFashionMode() const
     return DockModeData::instance()->getDockMode() == Dock::FashionMode;
 }
 
-void AppBackground::slotMouseRelease()
+void AppBackground::slotMouseRelease(QMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton)
+        return;
+
     m_bePress = true;
     if (!m_isActived && getIsFashionMode())
         m_activeLabel->showActiveWithAnimation();

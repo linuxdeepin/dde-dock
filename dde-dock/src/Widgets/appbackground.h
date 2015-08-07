@@ -6,6 +6,7 @@
 #include <QStyle>
 #include <QPropertyAnimation>
 #include <QPainter>
+#include <QMouseEvent>
 #include <QDebug>
 #include "Controller/dockmodedata.h"
 
@@ -55,7 +56,7 @@ public:
     bool getIsFashionMode() const;
 
 public slots:
-    void slotMouseRelease();
+    void slotMouseRelease(QMouseEvent *event);
 
 private:
     void initActiveLabel();

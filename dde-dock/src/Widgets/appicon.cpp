@@ -65,22 +65,30 @@ void AppIcon::setIcon(const QString &iconPath)
 
 void AppIcon::mousePressEvent(QMouseEvent *ev)
 {
-    emit mousePress(ev);
+    if (m_modeData->getDockMode() == Dock::FashionMode)
+        emit mousePress(ev);
+    else
+        QLabel::mousePressEvent(ev);
 }
 
 void AppIcon::mouseReleaseEvent(QMouseEvent *ev)
 {
-    emit mouseRelease(ev);
+    if (m_modeData->getDockMode() == Dock::FashionMode)
+        emit mouseRelease(ev);
+    else
+        QLabel::mousePressEvent(ev);
 }
 
 void AppIcon::enterEvent(QEvent *)
 {
-    emit mouseEnter();
+    if (m_modeData->getDockMode() == Dock::FashionMode)
+        emit mouseEnter();
 }
 
 void AppIcon::leaveEvent(QEvent *)
 {
-    emit mouseLeave();
+    if (m_modeData->getDockMode() == Dock::FashionMode)
+        emit mouseLeave();
 }
 
 // iconName should be a icon name constraints to the freeedesktop standard.

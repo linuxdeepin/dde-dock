@@ -30,16 +30,16 @@ void LauncherItem::leaveEvent(QEvent *)
     hidePreview();
 }
 
-void LauncherItem::slotMousePress()
+void LauncherItem::slotMousePress(QMouseEvent *event)
 {
-    emit mousePress(globalX(), globalY());
+    emit mousePress(event);
 
     hidePreview();
 }
 
-void LauncherItem::slotMouseRelease()
+void LauncherItem::slotMouseRelease(QMouseEvent *event)
 {
-    emit mouseRelease(globalX(), globalY());
+    emit mouseRelease(event);
 
     m_launcherProcess->start("dde-launcher",QStringList());
 }

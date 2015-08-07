@@ -83,14 +83,14 @@ AppItemData AppItem::itemData() const
 void AppItem::slotMousePress(QMouseEvent *event)
 {
     //qWarning() << "mouse press...";
-    emit mousePress(event->globalX(), event->globalY());
+    emit mousePress(event);
     hidePreview();
 }
 
 void AppItem::slotMouseRelease(QMouseEvent *event)
 {
     //qWarning() << "mouse release...";
-    emit mouseRelease(event->globalX(), event->globalY());
+    emit mouseRelease(event);
 
     if (event->button() == Qt::LeftButton)
         m_entryProxyer->Activate(event->globalX(),event->globalY());
@@ -373,6 +373,34 @@ void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
 void AppItem::dropEvent(QDropEvent *event)
 {
     qWarning() << "Item get drop:" << event->pos();
+}
+
+void AppItem::mousePressEvent(QMouseEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMousePress(event);
+    else
+        QFrame::mousePressEvent(event);
+}
+
+void AppItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMouseRelease(event);
+    else
+        QFrame::mouseReleaseEvent(event);
+}
+
+void AppItem::enterEvent(QEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMouseEnter();
+}
+
+void AppItem::leaveEvent(QEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMouseLeave();
 }
 
 AppItem::~AppItem()
