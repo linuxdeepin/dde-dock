@@ -120,6 +120,10 @@ void PreviewArrowRectangle::cancelShow()
     m_delayShowTImer->stop();
 
     emit needStopShow();
+
+    //show has been cancel but preview got content and need clear up
+    if (isHidden())
+        emit hideFinish();
 }
 
 void PreviewArrowRectangle::initDelayHideTimer()
