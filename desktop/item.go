@@ -2,6 +2,7 @@ package desktop
 
 import (
 	"fmt"
+	"path/filepath"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/operations"
@@ -338,7 +339,8 @@ func (item *Item) GenMenu() (*Menu, error) {
 	menu.AddSeparator()
 
 	// TODO: use plugin, remove useless function.
-	if true {
+	isAppGroupItem := isAppGroup(filepath.Dir(item.uri))
+	if !isAppGroupItem {
 		runFileRoller := func(cmd string, files []*gio.File) error {
 			app, err := gio.AppInfoCreateFromCommandline(cmd, "", gio.AppInfoCreateFlagsSupportsStartupNotification)
 			if err != nil {
@@ -394,9 +396,13 @@ func (item *Item) GenMenu() (*Menu, error) {
 
 	menu.AddSeparator()
 
-	menu.AppendItem(NewMenuItem(Tr("_Rename"), func() {
-		item.emitRequestRename()
-	}, !item.multiple)).AppendItem(NewMenuItem(Tr("_Delete"), func() {
+	if !isAppGroupItem {
+		menu.AppendItem(NewMenuItem(Tr("_Rename"), func() {
+			item.emitRequestRename()
+		}, !item.multiple))
+	}
+
+	menu.AppendItem(NewMenuItem(Tr("_Delete"), func() {
 		item.emitRequestDelete()
 	}, true))
 

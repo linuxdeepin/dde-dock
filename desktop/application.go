@@ -1,6 +1,6 @@
 package desktop
 
-// #cgo pkg-config: glib-2.0
+// #cgo pkg-config: gio-2.0
 // #include <glib.h>
 // #include <stdlib.h>
 // int content_type_can_be_executable(char* type);

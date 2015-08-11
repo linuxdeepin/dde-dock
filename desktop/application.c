@@ -1,4 +1,4 @@
-#include <glib.h>
+#include <gio/gio.h>
 
 int content_type_can_be_executable(char* type)
 {
