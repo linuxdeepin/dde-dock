@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = dde-dock
 TEMPLATE = app
-INCLUDEPATH += src/ ../libs/
+INCLUDEPATH += ./src ./libs
 
 DEFINES += PLUGIN_API_VERSION=1.0
 
@@ -43,7 +43,7 @@ SOURCES += \
     src/Widgets/apppreviews.cpp \
     src/Widgets/closebutton.cpp \
     src/DBus/dbushidestatemanager.cpp \
-    ../libs/xcb_misc.cpp \
+    libs/xcb_misc.cpp \
     src/Widgets/launcheritem.cpp \
     src/Widgets/reflectioneffect.cpp \
     src/Widgets/highlighteffect.cpp \
@@ -80,7 +80,7 @@ HEADERS  += \
     src/Widgets/apppreviews.h \
     src/Widgets/closebutton.h \
     src/DBus/dbushidestatemanager.h \
-    ../libs/xcb_misc.h \
+    libs/xcb_misc.h \
     src/Widgets/launcheritem.h \
     src/Widgets/reflectioneffect.h \
     src/Widgets/highlighteffect.h \
