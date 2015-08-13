@@ -1,7 +1,7 @@
 #include <QPainter>
 #include <QBitmap>
 
-#include <dock/dockconstants.h>
+#include "dockconstants.h"
 
 #include "trayicon.h"
 

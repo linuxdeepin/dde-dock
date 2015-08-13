@@ -9,9 +9,9 @@
 #include <QIcon>
 #include <QDebug>
 #include "mainitem.h"
-#include "dock/dockconstants.h"
-#include "dock/dockplugininterface.h"
-#include "dock/dockpluginproxyinterface.h"
+#include "dockconstants.h"
+#include "dockplugininterface.h"
+#include "dockpluginproxyinterface.h"
 
 class TrashPlugin : public QObject, public DockPluginInterface
 {

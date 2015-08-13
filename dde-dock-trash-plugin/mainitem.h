@@ -7,7 +7,7 @@
 #include <QDragEnterEvent>
 #include <QProcess>
 #include <QDebug>
-#include "dock/dockconstants.h"
+#include "dockconstants.h"
 #include "dbus/dbusfiletrashmonitor.h"
 #include "dbus/dbusfileoperations.h"
 #include "dbus/dbusemptytrashjob.h"

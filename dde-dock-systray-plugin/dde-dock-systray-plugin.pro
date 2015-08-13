@@ -12,6 +12,7 @@ CONFIG += plugin c++11
 
 TARGET = $$qtLibraryTarget(dde-dock-systray-plugin)
 TEMPLATE = lib
+INCLUDEPATH += ../dde-dock/src/
 
 SOURCES += systrayplugin.cpp \
     dbustraymanager.cpp \

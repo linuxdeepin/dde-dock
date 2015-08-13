@@ -10,6 +10,8 @@ TARGET = dde-dock-trash-plugin
 TEMPLATE = lib
 CONFIG += plugin c++11
 
+INCLUDEPATH += ../dde-dock/src
+
 SOURCES += \
     mainitem.cpp \
     trashplugin.cpp \
@@ -27,6 +29,7 @@ HEADERS += \
     dbus/dbustrashjob.h \
     dbus/dbusemptytrashjob.h \
     dbus/dbuslauncher.h
+
 DISTFILES += dde-dock-trash-plugin.json
 
 unix {

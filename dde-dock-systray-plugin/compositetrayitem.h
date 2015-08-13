@@ -4,7 +4,7 @@
 #include <QFrame>
 #include <QMap>
 
-#include <dock/dockconstants.h>
+#include "dockconstants.h"
 
 class TrayIcon;
 class CompositeTrayItem : public QFrame

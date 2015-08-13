@@ -1,6 +1,6 @@
 #include <QDebug>
 
-#include <dock/dockconstants.h>
+#include "dockconstants.h"
 
 #include "trayicon.h"
 #include "compositetrayitem.h"

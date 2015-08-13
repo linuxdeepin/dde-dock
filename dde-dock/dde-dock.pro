@@ -98,6 +98,6 @@ target.path = /usr/bin/
 headers.files += src/dockconstants.h \
     src/dockplugininterface.h \
     src/dockpluginproxyinterface.h
-headers.path = /usr/include/dock
+headers.path = /usr/include/dde-dock
 
 INSTALLS += headers target
