@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2013 Deepin, Inc.
+ *               2011 ~ 2013 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,26 +19,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-package keybinding
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-import (
-	"strings"
-)
+void xrecord_grab_init ();
+void xrecord_grab_finalize();
 
-func formatCompizShortcut(shortcut string) string {
-	logger.Info("formatCompizShortcut:", shortcut)
-	strs := strings.Split(shortcut, ACCEL_DELIM)
-	l := len(strs)
-	if l < 2 {
-		return shortcut
-	}
+int is_grabbed();
 
-	tmp := ""
-	for i := 0; i < l-1; i++ {
-		tmp += "<" + strs[i] + ">"
-	}
-	tmp += strs[l-1]
-	logger.Info("formatCompizShortcut RET:", tmp)
-
-	return tmp
-}
+#endif

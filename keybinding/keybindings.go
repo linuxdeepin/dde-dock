@@ -22,29 +22,64 @@
 package keybinding
 
 import (
+	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 )
 
-const (
-	dbusDest      = "com.deepin.daemon.Keybinding"
-	bindDBusPath  = "/com/deepin/daemon/Keybinding"
-	bindDBusIFC   = "com.deepin.daemon.Keybinding"
-	mediaDBusPath = "/com/deepin/daemon/Keybinding/Mediakey"
-	mediaDBusIFC  = "com.deepin.daemon.Keybinding.Mediakey"
-)
-
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: bindDBusPath,
-		Interface:  bindDBusIFC,
-	}
+type Daemon struct {
+	*loader.ModuleBase
 }
 
-func (*Mediakey) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: mediaDBusPath,
-		Interface:  mediaDBusIFC,
+var (
+	_m     *Manager
+	logger = log.NewLogger("daemon/keybinding")
+)
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = loader.NewModuleBase("keybinding", d, logger)
+	return d
+}
+
+// Check 'touchpad' whether exist
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (*Daemon) Start() error {
+	if _m != nil {
+		return nil
 	}
+	logger.BeginTracing()
+	var err error
+	_m, err = NewManager()
+	if err != nil {
+		logger.EndTracing()
+		return err
+	}
+
+	err = dbus.InstallOnSession(_m)
+	if err != nil {
+		_m.destroy()
+		_m = nil
+		logger.EndTracing()
+		return err
+	}
+
+	dbus.InstallOnSession(_m.media)
+
+	_m.initGrabedList()
+	go _m.startLoop()
+	return nil
+}
+
+func (*Daemon) Stop() error {
+	if _m == nil {
+		return nil
+	}
+
+	logger.EndTracing()
+	_m.destroy()
+	return nil
 }

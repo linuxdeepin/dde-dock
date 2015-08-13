@@ -74,7 +74,7 @@ install: build translate
 	cp misc/polkit-action/* ${DESTDIR}${PREFIX}/share/polkit-1/actions/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
-	cp -r misc/usr/share/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
+	cp -r misc/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/personalization/thumbnail
 	cp -r misc/thumbnail/* ${DESTDIR}${PREFIX}/share/personalization/thumbnail/
