@@ -26,6 +26,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/audio"
 	_ "pkg.deepin.io/dde/daemon/bluetooth"
 	_ "pkg.deepin.io/dde/daemon/clipboard"
+	_ "pkg.deepin.io/dde/daemon/desktop"
 	_ "pkg.deepin.io/dde/daemon/dock"
 	_ "pkg.deepin.io/dde/daemon/dsc"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
