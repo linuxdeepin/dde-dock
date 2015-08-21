@@ -65,15 +65,15 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) doSetDTheme(id string) error {
-	dt := m.getCurrentDTheme()
-	if dt.Id == id {
-		return nil
-	}
-
 	err := SetDTheme(id)
 	if err != nil {
 		return err
 	}
+
+	if m.Theme == id {
+		return nil
+	}
+
 	m.setting.SetString(gsKeyTheme, id)
 	m.Theme = m.setting.GetString(gsKeyTheme)
 
@@ -214,7 +214,7 @@ func (m *Manager) doSetFontSize(size int32) error {
 		return err
 	}
 
-	m.setting.SetInt(gsKeyFontSize, m.FontSize)
+	m.setting.SetInt(gsKeyFontSize, size)
 	m.FontSize = m.setting.GetInt(gsKeyFontSize)
 	return nil
 }
