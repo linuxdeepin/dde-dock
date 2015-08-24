@@ -68,7 +68,7 @@ func (code ErrorCode) Error() *ErrorInfo {
 	case ErrCodeSystemUsed:
 		err = fmt.Errorf(Tr("The username has been used by system."))
 	case ErrCodeLenMoreThen:
-		err = fmt.Errorf(Tr("The username' length exceeds the limit"))
+		err = fmt.Errorf(Tr("The username's length exceeds the limit"))
 	default:
 		return nil
 	}

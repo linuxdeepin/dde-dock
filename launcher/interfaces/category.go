@@ -5,6 +5,7 @@ type CategoryId int64
 type CategoryInfoInterface interface {
 	Id() CategoryId
 	Name() string
+	LocaleName() string
 	Items() []ItemId
 	AddItem(ItemId)
 	RemoveItem(ItemId)

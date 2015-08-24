@@ -38,7 +38,7 @@ func NewCategoryInfoExport(c CategoryInfoInterface) CategoryInfoExport {
 		return CategoryInfoExport{}
 	}
 	return CategoryInfoExport{
-		Name:  c.Name(),
+		Name:  c.LocaleName(),
 		Id:    c.Id(),
 		Items: c.Items(),
 	}

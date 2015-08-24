@@ -18,6 +18,11 @@ func (c *MockCategoryInfo) Name() string {
 	return c.name
 }
 
+func (c *MockCategoryInfo) LocaleName() string {
+	// TODO: locale name
+	return c.name
+}
+
 func (c *MockCategoryInfo) AddItem(itemId ItemId) {
 	c.items[itemId] = true
 }

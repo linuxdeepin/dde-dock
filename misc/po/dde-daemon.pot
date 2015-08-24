@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-19 16:52+0800\n"
+"POT-Creation-Date: 2015-08-24 10:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: ../../accounts/checkers/username.go:61
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
 msgstr ""
 
+#: ../../accounts/checkers/username.go:63
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
 msgstr ""
 
+#: ../../accounts/checkers/username.go:65
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
 msgstr ""
 
+#: ../../accounts/checkers/username.go:67
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
 msgstr ""
 
+#: ../../accounts/checkers/username.go:69
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
+msgstr ""
+
+#: ../../accounts/checkers/username.go:71
+msgid "The username's length exceeds the limit"
 msgstr ""
 
 #: ../../bluetooth/bluez_profile.go:31
@@ -101,343 +110,344 @@ msgstr ""
 msgid "Disconnected"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:16
+#: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:20
+#: ../../datetime/timezone/deepin_list.go:20 ../../timedate/deepin_list.go:20
 msgid "Hawaii"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:24
+#: ../../datetime/timezone/deepin_list.go:24 ../../timedate/deepin_list.go:24
 msgid "Tahiti"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:28
+#: ../../datetime/timezone/deepin_list.go:28 ../../timedate/deepin_list.go:28
 msgid "Honolulu"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:32
+#: ../../datetime/timezone/deepin_list.go:32 ../../timedate/deepin_list.go:32
 msgid "Marquesas"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:36
+#: ../../datetime/timezone/deepin_list.go:36 ../../timedate/deepin_list.go:36
 msgid "Alaska"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:40
+#: ../../datetime/timezone/deepin_list.go:40 ../../timedate/deepin_list.go:40
 msgid "Juneau"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:44
+#: ../../datetime/timezone/deepin_list.go:44 ../../timedate/deepin_list.go:44
 msgid "Gambier"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:48
+#: ../../datetime/timezone/deepin_list.go:48 ../../timedate/deepin_list.go:48
 msgid "BajaNorte"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:52
+#: ../../datetime/timezone/deepin_list.go:52 ../../timedate/deepin_list.go:52
 msgid "Vancouver"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:56
+#: ../../datetime/timezone/deepin_list.go:56 ../../timedate/deepin_list.go:56
 msgid "Metlakatla"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:60
+#: ../../datetime/timezone/deepin_list.go:60 ../../timedate/deepin_list.go:60
 msgid "Chihuahua"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:64
+#: ../../datetime/timezone/deepin_list.go:64 ../../timedate/deepin_list.go:64
 msgid "Arizona"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:68
+#: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
 msgid "BajaSur"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:72
+#: ../../datetime/timezone/deepin_list.go:72 ../../timedate/deepin_list.go:72
 msgid "Mexico City"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:76
+#: ../../datetime/timezone/deepin_list.go:76 ../../timedate/deepin_list.go:76
 msgid "Chicago"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:80
+#: ../../datetime/timezone/deepin_list.go:80 ../../timedate/deepin_list.go:80
 msgid "Managua"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:84
+#: ../../datetime/timezone/deepin_list.go:84 ../../timedate/deepin_list.go:84
 msgid "Monterrey"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:88
+#: ../../datetime/timezone/deepin_list.go:88 ../../timedate/deepin_list.go:88
 msgid "New York"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:92
+#: ../../datetime/timezone/deepin_list.go:92 ../../timedate/deepin_list.go:92
 msgid "Lima"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:96
+#: ../../datetime/timezone/deepin_list.go:96 ../../timedate/deepin_list.go:96
 msgid "Bogota"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:100
+#: ../../datetime/timezone/deepin_list.go:100 ../../timedate/deepin_list.go:100
 msgid "Caracas"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:104
+#: ../../datetime/timezone/deepin_list.go:104 ../../timedate/deepin_list.go:104
 msgid "Cuiaba"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:108
+#: ../../datetime/timezone/deepin_list.go:108 ../../timedate/deepin_list.go:108
 msgid "Santiago"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:112
+#: ../../datetime/timezone/deepin_list.go:112 ../../timedate/deepin_list.go:112
 msgid "La Paz"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:116
+#: ../../datetime/timezone/deepin_list.go:116 ../../timedate/deepin_list.go:116
 msgid "Asuncion"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:120
+#: ../../datetime/timezone/deepin_list.go:120 ../../timedate/deepin_list.go:120
 msgid "Newfoundland"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:124
+#: ../../datetime/timezone/deepin_list.go:124 ../../timedate/deepin_list.go:124
 msgid "St Johns"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:128
+#: ../../datetime/timezone/deepin_list.go:128 ../../timedate/deepin_list.go:128
 msgid "Buenos Aires"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:132
+#: ../../datetime/timezone/deepin_list.go:132 ../../timedate/deepin_list.go:132
 msgid "Cayenne"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:136
+#: ../../datetime/timezone/deepin_list.go:136 ../../timedate/deepin_list.go:136
 msgid "DeNoronha"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:140
+#: ../../datetime/timezone/deepin_list.go:140 ../../timedate/deepin_list.go:140
 msgid "Azores"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:144
+#: ../../datetime/timezone/deepin_list.go:144 ../../timedate/deepin_list.go:144
 msgid "Cape Verde"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:148
+#: ../../datetime/timezone/deepin_list.go:148 ../../timedate/deepin_list.go:148
 msgid "London"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:152
+#: ../../datetime/timezone/deepin_list.go:152 ../../timedate/deepin_list.go:152
 msgid "Dublin"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:156
+#: ../../datetime/timezone/deepin_list.go:156 ../../timedate/deepin_list.go:156
 msgid "Casablanca"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:160
+#: ../../datetime/timezone/deepin_list.go:160 ../../timedate/deepin_list.go:160
 msgid "Monrovia"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:164
+#: ../../datetime/timezone/deepin_list.go:164 ../../timedate/deepin_list.go:164
 msgid "Madrid"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:168
+#: ../../datetime/timezone/deepin_list.go:168 ../../timedate/deepin_list.go:168
 msgid "Paris"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:172
+#: ../../datetime/timezone/deepin_list.go:172 ../../timedate/deepin_list.go:172
 msgid "Rome"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:176
+#: ../../datetime/timezone/deepin_list.go:176 ../../timedate/deepin_list.go:176
 msgid "Vienna"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:180
+#: ../../datetime/timezone/deepin_list.go:180 ../../timedate/deepin_list.go:180
 msgid "Algiers"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:184
+#: ../../datetime/timezone/deepin_list.go:184 ../../timedate/deepin_list.go:184
 msgid "Cairo"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:188
+#: ../../datetime/timezone/deepin_list.go:188 ../../timedate/deepin_list.go:188
 msgid "Athens"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:192
+#: ../../datetime/timezone/deepin_list.go:192 ../../timedate/deepin_list.go:192
 msgid "Istanbul"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:196
+#: ../../datetime/timezone/deepin_list.go:196 ../../timedate/deepin_list.go:196
 msgid "Blantyre"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:200
+#: ../../datetime/timezone/deepin_list.go:200 ../../timedate/deepin_list.go:200
 msgid "Nairobi"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:204
+#: ../../datetime/timezone/deepin_list.go:204 ../../timedate/deepin_list.go:204
 msgid "Tehran"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:208
+#: ../../datetime/timezone/deepin_list.go:208 ../../timedate/deepin_list.go:208
 msgid "Muscat"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:212
+#: ../../datetime/timezone/deepin_list.go:212 ../../timedate/deepin_list.go:212
 msgid "Baku"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:216
+#: ../../datetime/timezone/deepin_list.go:216 ../../timedate/deepin_list.go:216
 msgid "Moscow"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:220
+#: ../../datetime/timezone/deepin_list.go:220 ../../timedate/deepin_list.go:220
 msgid "Kabul"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:224
+#: ../../datetime/timezone/deepin_list.go:224 ../../timedate/deepin_list.go:224
 msgid "Karachi"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:228
+#: ../../datetime/timezone/deepin_list.go:228 ../../timedate/deepin_list.go:228
 msgid "Calcutta"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:232
+#: ../../datetime/timezone/deepin_list.go:232 ../../timedate/deepin_list.go:232
 msgid "Kathmandu"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:236
+#: ../../datetime/timezone/deepin_list.go:236 ../../timedate/deepin_list.go:236
 msgid "Dhaka"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:240
+#: ../../datetime/timezone/deepin_list.go:240 ../../timedate/deepin_list.go:240
 msgid "Yekaterinburg"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:244
+#: ../../datetime/timezone/deepin_list.go:244 ../../timedate/deepin_list.go:244
 msgid "Rangoon"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:248
+#: ../../datetime/timezone/deepin_list.go:248 ../../timedate/deepin_list.go:248
 msgid "Bangkok"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:252
+#: ../../datetime/timezone/deepin_list.go:252 ../../timedate/deepin_list.go:252
 msgid "Jakarta"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:256
+#: ../../datetime/timezone/deepin_list.go:256 ../../timedate/deepin_list.go:256
 msgid "Beijing"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:260
+#: ../../datetime/timezone/deepin_list.go:260 ../../timedate/deepin_list.go:260
 msgid "Hong Kong"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:264
+#: ../../datetime/timezone/deepin_list.go:264 ../../timedate/deepin_list.go:264
 msgid "Taipei"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:268
+#: ../../datetime/timezone/deepin_list.go:268 ../../timedate/deepin_list.go:268
 msgid "Kuala Lumpur"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:272
+#: ../../datetime/timezone/deepin_list.go:272 ../../timedate/deepin_list.go:272
 msgid "Perth"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:276
+#: ../../datetime/timezone/deepin_list.go:276 ../../timedate/deepin_list.go:276
 msgid "Eucla"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:280
+#: ../../datetime/timezone/deepin_list.go:280 ../../timedate/deepin_list.go:280
 msgid "Tokyo"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:284
+#: ../../datetime/timezone/deepin_list.go:284 ../../timedate/deepin_list.go:284
 msgid "Seoul"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:288
+#: ../../datetime/timezone/deepin_list.go:288 ../../timedate/deepin_list.go:288
 msgid "Darwin"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:292
+#: ../../datetime/timezone/deepin_list.go:292 ../../timedate/deepin_list.go:292
 msgid "Sydney"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:296
+#: ../../datetime/timezone/deepin_list.go:296 ../../timedate/deepin_list.go:296
 msgid "Guam"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:300
+#: ../../datetime/timezone/deepin_list.go:300 ../../timedate/deepin_list.go:300
 msgid "Melbourne"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:304
+#: ../../datetime/timezone/deepin_list.go:304 ../../timedate/deepin_list.go:304
 msgid "Hobart"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:308
+#: ../../datetime/timezone/deepin_list.go:308 ../../timedate/deepin_list.go:308
 msgid "Lord Howe"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:312
+#: ../../datetime/timezone/deepin_list.go:312 ../../timedate/deepin_list.go:312
 msgid "Pohnpei"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:316
+#: ../../datetime/timezone/deepin_list.go:316 ../../timedate/deepin_list.go:316
 msgid "Norfolk"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:320
+#: ../../datetime/timezone/deepin_list.go:320 ../../timedate/deepin_list.go:320
 msgid "Auckland"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:324
+#: ../../datetime/timezone/deepin_list.go:324 ../../timedate/deepin_list.go:324
 msgid "Anadyr"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:328
+#: ../../datetime/timezone/deepin_list.go:328 ../../timedate/deepin_list.go:328
 msgid "Chatham"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:332
+#: ../../datetime/timezone/deepin_list.go:332 ../../timedate/deepin_list.go:332
 msgid "Apia"
 msgstr ""
 
-#: ../../datetime/timezone/deepin_list.go:336
+#: ../../datetime/timezone/deepin_list.go:336 ../../timedate/deepin_list.go:336
 msgid "Fakaofo"
 msgstr ""
 
-#: ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/normal_apps.go:105 ../../dock/runtime_apps.go:292
+#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:266
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
 msgid "_Dock"
 msgstr ""
 
@@ -447,22 +457,27 @@ msgid "Auto"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:152
+#: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:156
+#: ../../inputdevices/wacom/wacom.go:156
 msgid "Middle Click"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:160
+#: ../../inputdevices/wacom/wacom.go:160
 msgid "Right Click"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:164
+#: ../../inputdevices/wacom/wacom.go:164
 msgid "Page Up"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:168
+#: ../../inputdevices/wacom/wacom.go:168
 msgid "Page Down"
 msgstr ""
 
@@ -698,14 +713,62 @@ msgstr ""
 msgid "System language has been changed, please log in again after logged out."
 msgstr ""
 
-#: ../../langselector/locale_ifc.go:52
+#: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:65
 msgid "System language is being changed, please wait..."
 msgstr ""
 
-#: ../../langselector/locale_ifc.go:57
+#: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:71
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
+msgstr ""
+
+#: ../../launcher/category/translate.go:8
+msgid "all"
+msgstr ""
+
+#: ../../launcher/category/translate.go:9
+msgid "others"
+msgstr ""
+
+#: ../../launcher/category/translate.go:10
+msgid "internet"
+msgstr ""
+
+#: ../../launcher/category/translate.go:11
+msgid "multimedia"
+msgstr ""
+
+#: ../../launcher/category/translate.go:12
+msgid "games"
+msgstr ""
+
+#: ../../launcher/category/translate.go:13
+msgid "graphics"
+msgstr ""
+
+#: ../../launcher/category/translate.go:14
+msgid "productivity"
+msgstr ""
+
+#: ../../launcher/category/translate.go:15
+msgid "industry"
+msgstr ""
+
+#: ../../launcher/category/translate.go:16
+msgid "education"
+msgstr ""
+
+#: ../../launcher/category/translate.go:17
+msgid "development"
+msgstr ""
+
+#: ../../launcher/category/translate.go:18
+msgid "system"
+msgstr ""
+
+#: ../../launcher/category/translate.go:19
+msgid "utilities"
 msgstr ""
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
@@ -724,6 +787,7 @@ msgstr ""
 #: ../../network/nm_setting_virtual_key.go:185
 #: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:222
+#: ../../network/nm_setting_vpn_openvpn.go:391
 #: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
@@ -792,6 +856,7 @@ msgstr ""
 
 #: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:116
 #: ../../network/nm_setting_vpn_openvpn.go:170
+#: ../../network/nm_setting_vpn_openvpn.go:472
 #: ../../network/nm_setting_vpn_openvpn.go:476
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:145
@@ -944,8 +1009,11 @@ msgstr ""
 
 #: ../../network/nm_setting_gsm.go:221
 #: ../../network/nm_setting_virtual_key.go:155
+#: ../../network/nm_setting_vpn_openvpn.go:370
 #: ../../network/nm_setting_vpn_openvpn.go:374
+#: ../../network/nm_setting_vpn_openvpn.go:390
 #: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_openvpn.go:421
 #: ../../network/nm_setting_vpn_openvpn.go:425
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
@@ -1048,123 +1116,153 @@ msgid "Static Key"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:255
+#: ../../network/nm_setting_vpn_openvpn.go:427
 #: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "0"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_openvpn.go:256
+#: ../../network/nm_setting_vpn_openvpn.go:428
 #: ../../network/nm_setting_vpn_openvpn.go:432
 msgid "1"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:371
 #: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:372
 #: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "RC2-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:373
 #: ../../network/nm_setting_vpn_openvpn.go:377
 msgid "DES-EDE-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:374
 #: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-EDE3-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:375
 #: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "DESX-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:376
 #: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "BF-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:377
 #: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "RC2-40-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:378
 #: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "CAST5-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:379
 #: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "RC2-64-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:380
 #: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "AES-128-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:381
 #: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "AES-192-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:382
 #: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "AES-256-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:383
 #: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-128-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:384
 #: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-192-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:385
 #: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "CAMELLIA-256-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:386
 #: ../../network/nm_setting_vpn_openvpn.go:390
 msgid "SEED-CBC"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:392
 #: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "RSA MD-4"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:393
 #: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "MD-5"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:394
 #: ../../network/nm_setting_vpn_openvpn.go:398
 msgid "SHA-1"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "SHA-224"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:396
 #: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "SHA-256"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:397
 #: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-384"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:398
 #: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "SHA-512"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:399
 #: ../../network/nm_setting_vpn_openvpn.go:403
 msgid "RIPEMD-160"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:422
 #: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:423
 #: ../../network/nm_setting_vpn_openvpn.go:427
 msgid "Server"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:473
 #: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "HTTP"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:474
 #: ../../network/nm_setting_vpn_openvpn.go:478
 msgid "SOCKS"
 msgstr ""
