@@ -142,6 +142,10 @@ func marshalKeys(keys []string) string {
 
 // To format 'control-alt-t'
 func marshalKeysToXGB(keys []string) string {
+	if len(keys) == 1 {
+		return keys[0]
+	}
+
 	var (
 		accel  string
 		length = len(keys)

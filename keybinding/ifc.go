@@ -34,10 +34,9 @@ func (m *Manager) Reset() {
 }
 
 // List list all shortcut
-func (m *Manager) List() shortcuts.Shortcuts {
-	list := shortcuts.ListWMShortcuts()
-	list = append(list, m.grabedList...)
-	return list
+func (m *Manager) List() string {
+	ret, _ := doMarshal(m.listAll())
+	return ret
 }
 
 // Add add custom shortcut
@@ -114,7 +113,7 @@ func (m *Manager) Disable(id string, ty int32) error {
 // CheckAvaliable check the accel whether conflict
 func (m *Manager) CheckAvaliable(accel string) (bool, string) {
 	logger.Debug("Check accel:", accel)
-	list := m.List()
+	list := m.listAll()
 	s := list.GetByAccel(accel)
 	if s == nil {
 		return true, ""

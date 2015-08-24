@@ -22,6 +22,7 @@
 package keybinding
 
 import (
+	"encoding/json"
 	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
@@ -80,6 +81,12 @@ func (m *Manager) initGrabedList() {
 	m.grabShortcuts(mediaList)
 }
 
+func (m *Manager) listAll() shortcuts.Shortcuts {
+	list := shortcuts.ListWMShortcuts()
+	list = append(list, m.grabedList...)
+	return list
+}
+
 func (m *Manager) addToGrabedList(s *shortcuts.Shortcut) {
 	m.grabLocker.Lock()
 	defer m.grabLocker.Unlock()
@@ -130,4 +137,13 @@ func (m *Manager) grabAccels(accels []string, cb core.HandleType) error {
 
 func (m *Manager) ungrabAccels(accels []string) {
 	core.UngrabAccels(accels)
+}
+
+func doMarshal(v interface{}) (string, error) {
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
 }

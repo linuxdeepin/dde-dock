@@ -27,15 +27,10 @@ import (
 )
 
 const (
-	keybindSchema  = "com.deepin.dde.keybindings"
-	systemSchema   = "com.deepin.dde.keybindings.system"
-	mediakeySchema = "com.deepin.dde.keybindings.mediakey"
+	systemSchema   = "com.deepin.dde.keybinding.system"
+	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
 	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
 )
-
-func newKeybindGSetting() *gio.Settings {
-	return gio.NewSettings(keybindSchema)
-}
 
 func newSystemGSetting() *gio.Settings {
 	return gio.NewSettings(systemSchema)

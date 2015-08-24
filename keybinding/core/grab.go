@@ -114,6 +114,10 @@ func UngrabAccels(accels []string) {
 }
 
 func grabAccel(s string) error {
+	if len(s) == 0 {
+		return nil
+	}
+
 	news := formatAccelToXGB(s)
 	if isValidSingleKey(news) {
 		return doGrabSingleKey(news)
@@ -123,6 +127,10 @@ func grabAccel(s string) error {
 }
 
 func ungrabAccel(s string) {
+	if len(s) == 0 {
+		return
+	}
+
 	news := formatAccelToXGB(s)
 	if isValidSingleKey(news) {
 		doUngrabSingleKey(news)
