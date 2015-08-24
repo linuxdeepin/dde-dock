@@ -30,10 +30,10 @@ protected:
 private slots:
     void slotMousePress(QMouseEvent *event);
     void slotMouseRelease(QMouseEvent *event);
+    void updateIcon();
 
 private:
     void changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode);
-    void updateIcon();
     void reanchorIcon();
 
 private:

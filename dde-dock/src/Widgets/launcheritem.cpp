@@ -13,7 +13,7 @@ LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
     m_launcherProcess = new QProcess();
 
     //TODO icon not show on init
-    QTimer::singleShot(20, this, &LauncherItem::updateIcon);
+    QTimer::singleShot(20, this, SLOT(updateIcon()));
 }
 
 void LauncherItem::enterEvent(QEvent *)
