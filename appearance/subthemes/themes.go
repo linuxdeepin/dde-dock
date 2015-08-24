@@ -2,21 +2,26 @@ package subthemes
 
 import (
 	"fmt"
+	"io/ioutil"
+	"math/rand"
 	"os"
 	"path"
 	"pkg.deepin.io/dde/api/themes"
 	"pkg.deepin.io/dde/api/thumbnails/cursor"
 	"pkg.deepin.io/dde/api/thumbnails/gtk"
 	"pkg.deepin.io/dde/api/thumbnails/icon"
+	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
 	"strings"
+	"time"
 )
 
 const (
 	thumbWidth  int = 128
 	thumbHeight     = 72
 
-	thumbDir = "/usr/share/personalization/thumbnail"
+	thumbDir   = "/usr/share/personalization/thumbnail"
+	thumbBgDir = "/var/cache/appearance/thumbnail/background"
 )
 
 type Theme struct {
@@ -74,7 +79,7 @@ func GetGtkThumbnail(id string) (string, error) {
 		return thumb, nil
 	}
 
-	return gtk.GenThumbnail(path.Join(info.Path, "index.theme"), "",
+	return gtk.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
 		thumbWidth, thumbHeight)
 }
 
@@ -88,7 +93,7 @@ func GetIconThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return icon.GenThumbnail(path.Join(info.Path, "index.theme"), "",
+	return icon.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
 		thumbWidth, thumbHeight)
 }
 
@@ -102,7 +107,7 @@ func GetCursorThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return cursor.GenThumbnail(path.Join(info.Path, "cursor.theme"), "",
+	return cursor.GenThumbnail(path.Join(info.Path, "cursor.theme"), getThumbBg(),
 		thumbWidth, thumbHeight)
 }
 
@@ -155,4 +160,32 @@ func isDeletable(file string) bool {
 		return true
 	}
 	return false
+}
+
+func getThumbBg() string {
+	var imgs = getImagesInDir()
+	if len(imgs) == 0 {
+		return ""
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	idx := rand.Intn(len(imgs))
+	return imgs[idx]
+}
+
+func getImagesInDir() []string {
+	finfos, err := ioutil.ReadDir(thumbBgDir)
+	if err != nil {
+		return nil
+	}
+
+	var imgs []string
+	for _, finfo := range finfos {
+		tmp := path.Join(thumbBgDir, finfo.Name())
+		if !graphic.IsSupportedImage(tmp) {
+			continue
+		}
+		imgs = append(imgs, tmp)
+	}
+	return imgs
 }

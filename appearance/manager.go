@@ -57,7 +57,7 @@ func (m *Manager) init() {
 	dt := m.getCurrentDTheme()
 	subthemes.SetGtkTheme(dt.Gtk.Id)
 	subthemes.SetIconTheme(dt.Icon.Id)
-	subthemes.SetCursorTheme(dt.Cursor.Id)
+	go subthemes.SetCursorTheme(dt.Cursor.Id)
 }
 
 func (m *Manager) destroy() {
