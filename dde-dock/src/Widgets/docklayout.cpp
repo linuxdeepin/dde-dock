@@ -42,6 +42,10 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     m_ddam->Sort(itemsIdList());
 
     relayout();
+
+    //reset state
+    m_movingLeftward = true;
+    m_animationItemCount = 0;
 }
 
 void DockLayout::moveItem(int from, int to)
@@ -142,7 +146,6 @@ void DockLayout::restoreTmpItem()
     }
 
     emit itemDropped();
-    m_animationItemCount = 0;
 }
 
 void DockLayout::clearTmpItem()

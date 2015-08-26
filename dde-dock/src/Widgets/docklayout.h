@@ -85,7 +85,7 @@ private:
     QPoint m_lastPost = QPoint(0,0);
     int m_lastHoverIndex = -1;
     int m_animationItemCount = 0;
-    bool m_movingLeftward = false;
+    bool m_movingLeftward = true;
 
     const int MOVE_ANIMATION_DURATION_BASE = 300;
 };
