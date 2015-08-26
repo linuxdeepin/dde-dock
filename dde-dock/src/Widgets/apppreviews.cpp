@@ -53,7 +53,7 @@ void AppPreviewFrame::leaveEvent(QEvent *)
 void AppPreviewFrame::addCloseButton()
 {
     m_cb = new CloseButton(this);
-    connect(m_cb,&CloseButton::clicked,[=](){close(this->xidValue);});
+    connect(m_cb,&CloseButton::clicked,[=]{close(this->xidValue);});
     m_cb->resize(BUTTON_SIZE, BUTTON_SIZE);
 
     m_cb->move(width() - m_cb->width()/* / 2*/,0/*- m_cb->width() / 2*/);
@@ -95,19 +95,10 @@ void AppPreviews::addItem(const QString &title, int xid)
     resize(contentWidth,f->height() + Dock::APP_PREVIEW_MARGIN*2);
 }
 
-void AppPreviews::enterEvent(QEvent *)
-{
-    emit mouseEntered();
-}
-
 void AppPreviews::leaveEvent(QEvent *)
 {
     if (m_isClosing)
-    {
         m_isClosing = false;
-        return;
-    }
-    emit mouseExited();
 }
 
 void AppPreviews::removePreview(int xid)
@@ -118,7 +109,7 @@ void AppPreviews::removePreview(int xid)
     m_clientManager->CloseWindow(xid);
     if (m_mainLayout->count() <= 0)
     {
-        emit mouseExited();
+        emit requestHide();
         return;
     }
 

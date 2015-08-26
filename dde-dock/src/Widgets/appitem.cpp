@@ -84,7 +84,7 @@ void AppItem::slotMousePress(QMouseEvent *event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event);
-    hidePreview();
+    hidePreview(0);
 }
 
 void AppItem::slotMouseRelease(QMouseEvent *event)
@@ -299,7 +299,8 @@ void AppItem::initMenu()
 void AppItem::initPreview()
 {
     m_preview = new AppPreviews();
-    connect(m_preview,&AppPreviews::sizeChanged,this,&AppItem::resizePreview);
+    connect(m_preview,&AppPreviews::requestHide, [=]{hidePreview();});
+    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::resizePreview);
     connect(this, &AppItem::previewHidden, m_preview, &AppPreviews::clearUpPreview);
 }
 

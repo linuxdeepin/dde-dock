@@ -51,12 +51,10 @@ public:
     void addItem(const QString &title,int xid);
 
 protected:
-    void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
 
 signals:
-    void mouseEntered();
-    void mouseExited();
+    void requestHide();
     void sizeChanged();
 
 public slots:

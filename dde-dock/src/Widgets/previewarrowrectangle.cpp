@@ -107,7 +107,11 @@ void PreviewArrowRectangle::hidePreview(int interval)
     cancelShow();
     if (m_delayHideTimer->isActive() || isHidden())
         return;
-    m_delayHideTimer->start(interval);
+
+    if (interval <= 0)
+        ArrowRectangle::hide();
+    else
+        m_delayHideTimer->start(interval);
 }
 
 void PreviewArrowRectangle::cancelHide()
