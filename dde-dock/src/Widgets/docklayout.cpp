@@ -9,6 +9,9 @@ DockLayout::DockLayout(QWidget *parent) :
 
 void DockLayout::addItem(AbstractDockItem *item)
 {
+    if (!item)
+        return;
+
     if (m_lastHoverIndex == -1)
         insertItem(item,m_appList.count());
     else
@@ -17,6 +20,9 @@ void DockLayout::addItem(AbstractDockItem *item)
 
 void DockLayout::insertItem(AbstractDockItem *item, int index)
 {
+    if (!item)
+        return;
+
     item->setParent(this);
     item->show();
     int appCount = m_appList.count();
