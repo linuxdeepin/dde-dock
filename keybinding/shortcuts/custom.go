@@ -61,7 +61,7 @@ func AddCustomKey(name, action string, accels []string) (string, error) {
 		Core: &Shortcut{
 			Id:     id,
 			Name:   name,
-			Accels: accels,
+			Accels: filterNilStr(accels),
 			Type:   KeyTypeCustom,
 		},
 		Action: action,
@@ -123,6 +123,9 @@ func modifyCustomAction(id, value string) error {
 }
 
 func modifyCustomAccels(id, value string, deleted bool) error {
+	if len(value) == 0 {
+		return nil
+	}
 	return setCustomKey(id, kfKeyAccels, value, deleted)
 }
 

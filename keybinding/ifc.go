@@ -24,6 +24,7 @@ package keybinding
 import (
 	"fmt"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus"
 )
 
 // Reset reset all shortcut
@@ -51,7 +52,7 @@ func (m *Manager) Add(name, action, accel string) (string, bool, error) {
 	logger.Debugf("Add custom key: %s %s %s", name, action, accel)
 	avaliable, conflict := m.CheckAvaliable(accel)
 	if !avaliable {
-		return conflict, avaliable, nil
+		return conflict, true, nil
 	}
 
 	id, err := shortcuts.AddCustomKey(name, action, []string{accel})
@@ -64,6 +65,7 @@ func (m *Manager) Add(name, action, accel string) (string, bool, error) {
 	if info == nil {
 		return "", false, fmt.Errorf("Add custom accel failed")
 	}
+	dbus.Emit(m, "Added", id, shortcuts.KeyTypeCustom)
 
 	err = m.grabShortcut(info)
 	if err != nil {
@@ -94,6 +96,7 @@ func (m *Manager) Delete(id string, ty int32) error {
 	}
 
 	m.ungrabShortcut(s)
+	dbus.Emit(m, "Deleted", id, ty)
 	return nil
 }
 
@@ -107,6 +110,8 @@ func (m *Manager) Disable(id string, ty int32) error {
 
 	m.ungrabAccels(s.Accels)
 	s.Disable()
+	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+	dbus.Emit(m, "Changed", id, ty)
 	return nil
 }
 
@@ -135,6 +140,8 @@ func (m *Manager) ModifiedName(id string, ty int32, name string) error {
 	}
 
 	s.SetName(name)
+	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+	dbus.Emit(m, "Changed", id, ty)
 	return nil
 }
 
@@ -151,6 +158,8 @@ func (m *Manager) ModifiedAction(id string, ty int32, action string) error {
 	}
 
 	s.SetAction(action)
+	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+	dbus.Emit(m, "Changed", id, ty)
 	return nil
 }
 
@@ -171,21 +180,26 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) 
 	if !grabed {
 		m.ungrabAccels([]string{accel})
 		s.DeleteAccel(accel)
-		return true, "", nil
+		m.grabedList = m.grabedList.Add(id, ty)
+		dbus.Emit(m, "Changed", id, ty)
+		return false, "", nil
 	}
 
 	avaliable, conflict := m.CheckAvaliable(accel)
 	if !avaliable {
-		return avaliable, conflict, nil
+		return true, conflict, nil
 	}
 
-	s.AddAccel(accel)
 	err := m.grabAccels([]string{accel}, m.handleKeyEvent)
 	if err != nil {
 		return false, "", err
 	}
 
-	return true, "", nil
+	s.AddAccel(accel)
+	m.grabedList = m.grabedList.Add(id, ty)
+	dbus.Emit(m, "Changed", id, ty)
+
+	return false, "", nil
 }
 
 // GetAction get the special id action, only for custom id

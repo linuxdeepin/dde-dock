@@ -33,7 +33,7 @@ func ListMediaShortcuts() Shortcuts {
 			Id:     k,
 			Type:   KeyTypeMedia,
 			Name:   getNameFromMap(k, idMap),
-			Accels: gs.GetStrv(k),
+			Accels: filterNilStr(gs.GetStrv(k)),
 		}
 		list = append(list, &tmp)
 	}
@@ -65,7 +65,7 @@ func addMediaAccel(key, accel string) {
 	if !added {
 		return
 	}
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func delMediaAccel(key, accel string) {
@@ -78,7 +78,7 @@ func delMediaAccel(key, accel string) {
 		return
 	}
 
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func getMediaIdNameMap() map[string]string {

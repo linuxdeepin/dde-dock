@@ -37,7 +37,7 @@ func ListWMShortcuts() Shortcuts {
 			Id:     k,
 			Type:   KeyTypeWM,
 			Name:   getNameFromMap(k, idMap),
-			Accels: gs.GetStrv(k),
+			Accels: filterNilStr(gs.GetStrv(k)),
 		}
 
 		list = append(list, &tmp)
@@ -71,7 +71,7 @@ func addWMAccel(key, accel string) {
 	if !added {
 		return
 	}
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func delWMAccel(key, accel string) {
@@ -84,7 +84,7 @@ func delWMAccel(key, accel string) {
 		return
 	}
 
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func wmIdNameMap() map[string]string {

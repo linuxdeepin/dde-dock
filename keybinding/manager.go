@@ -26,19 +26,31 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
+	"sort"
 	"sync"
 )
 
+const (
+	systemSchema   = "com.deepin.dde.keybinding.system"
+	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
+)
+
 type Manager struct {
-	Added   func(string)
-	Deleted func(string)
-	Changed func(string)
-	Error   func(string, string)
+	Added   func(string, int32)
+	Deleted func(string, int32)
+	Changed func(string, int32)
+
 	// (pressed, accel)
 	KeyEvent func(bool, string)
 
+	xu *xgbutil.XUtil
+
+	sysSetting   *gio.Settings
+	mediaSetting *gio.Settings
+
 	media *Mediakey
-	xu    *xgbutil.XUtil
 
 	grabLocker sync.Mutex
 	grabedList shortcuts.Shortcuts
@@ -52,6 +64,10 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 	m.xu = xu
+
+	m.sysSetting = gio.NewSettings(systemSchema)
+	m.mediaSetting = gio.NewSettings(mediakeySchema)
+
 	m.media = &Mediakey{}
 
 	return &m, nil
@@ -61,6 +77,16 @@ func (m *Manager) destroy() {
 	m.ungrabShortcuts(m.grabedList)
 	m.grabedList = nil
 	m.stopLoop()
+
+	if m.sysSetting != nil {
+		m.sysSetting.Unref()
+		m.sysSetting = nil
+	}
+
+	if m.mediaSetting != nil {
+		m.mediaSetting.Unref()
+		m.mediaSetting = nil
+	}
 }
 
 func (m *Manager) startLoop() {
@@ -139,6 +165,26 @@ func (m *Manager) ungrabAccels(accels []string) {
 	core.UngrabAccels(accels)
 }
 
+func (m *Manager) updateShortcutById(id string, ty int32) {
+	old := m.grabedList.GetById(id, ty)
+	if old == nil {
+		return
+	}
+
+	new := shortcuts.ListAllShortcuts().GetById(id, ty)
+	if new == nil {
+		return
+	}
+
+	if isListEqual(old.Accels, new.Accels) {
+		return
+	}
+
+	m.ungrabShortcut(old)
+	m.grabShortcut(new)
+	dbus.Emit(m, "Changed", id, ty)
+}
+
 func doMarshal(v interface{}) (string, error) {
 	bytes, err := json.Marshal(v)
 	if err != nil {
@@ -146,4 +192,19 @@ func doMarshal(v interface{}) (string, error) {
 	}
 
 	return string(bytes), nil
+}
+
+func isListEqual(l1, l2 []string) bool {
+	if len(l1) != len(l2) {
+		return false
+	}
+
+	sort.Strings(l1)
+	sort.Strings(l2)
+	for i, v := range l1 {
+		if v != l2[i] {
+			return false
+		}
+	}
+	return true
 }

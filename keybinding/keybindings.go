@@ -70,6 +70,7 @@ func (*Daemon) Start() error {
 	dbus.InstallOnSession(_m.media)
 
 	_m.initGrabedList()
+	_m.listenGSettingChanged()
 	go _m.startLoop()
 	return nil
 }

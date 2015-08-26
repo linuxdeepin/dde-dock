@@ -62,6 +62,17 @@ func isAccelInList(accel string, list []string) bool {
 	return false
 }
 
+func filterNilStr(list []string) []string {
+	var ret []string
+	for _, k := range list {
+		if len(k) == 0 {
+			continue
+		}
+		ret = append(ret, k)
+	}
+	return ret
+}
+
 func addAccelToList(accel string, list []string) ([]string, bool) {
 	if isAccelInList(accel, list) {
 		return list, false

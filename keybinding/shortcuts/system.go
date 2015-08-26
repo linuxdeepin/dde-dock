@@ -46,7 +46,7 @@ func ListSystemShortcuts() Shortcuts {
 			Id:     k,
 			Type:   KeyTypeSystem,
 			Name:   getNameFromMap(k, idMap),
-			Accels: gs.GetStrv(k),
+			Accels: filterNilStr(gs.GetStrv(k)),
 		}
 
 		list = append(list, &tmp)
@@ -80,7 +80,7 @@ func addSystemAccel(key, accel string) {
 	if !added {
 		return
 	}
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func delSystemAccel(key, accel string) {
@@ -93,7 +93,7 @@ func delSystemAccel(key, accel string) {
 		return
 	}
 
-	gs.SetStrv(key, ret)
+	gs.SetStrv(key, filterNilStr(ret))
 }
 
 func systemIdNameMap() map[string]string {
