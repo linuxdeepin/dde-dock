@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
-#include <QDebug>
+
 #include "DBus/dbushidestatemanager.h"
 #include "Controller/dockmodedata.h"
 #include "Controller/appmanager.h"
@@ -20,22 +20,14 @@ class Panel : public QLabel
     Q_OBJECT
     Q_PROPERTY(int y READ y WRITE setY)
     Q_PROPERTY(bool isFashionMode READ isFashionMode)
+    Q_PROPERTY(int width READ width WRITE setFixedWidth)
 
 public:
     explicit Panel(QWidget *parent = 0);
     ~Panel();
 
-    void showScreenMask();
-    void hideScreenMask();
-    void setContainMouse(bool value);
-
-    bool isFashionMode();
-
-public slots:
-    void slotDragStarted();
-    void slotItemDropped();
-    void slotEnteredMask();
-    void slotExitedMask();
+    void setContainMouse(bool value);   //for smart-hide and keep-hide
+    bool isFashionMode();               //for qss setting background
 
 signals:
     void startShow();
@@ -43,52 +35,57 @@ signals:
     void panelHasShown();
     void panelHasHidden();
 
-private slots:
-    void slotLayoutContentsWidthChanged();
-
-    void slotAddAppItem(AbstractDockItem *item);
-    void slotRemoveAppItem(const QString &id);
-
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *);
 
 private:
-    void changeDockMode(Dock::DockMode newMode,Dock::DockMode oldMode);
-    void reanchorsLayout(Dock::DockMode mode);
-
-    void showMenu();
-    void updateBackground();
+    void initShowHideAnimation();
+    void initHideStateManager();
+    void initWidthAnimation();
     void initPluginManager();
+    void initPluginLayout();
+    void initAppLayout();
     void initAppManager();
-    void hasShown();
-    void hasHidden();
-    void hideStateChanged(int value);
-    void initHSManager();
-    void initState();
     void initReflection();
     void initScreenMask();
-    void updateLeftReflection();
+
+    void onItemDropped();
+    void onItemDragStarted();
+    void onLayoutContentsWidthChanged();
+    void onAppItemAdd(AbstractDockItem *item);
+    void onAppItemRemove(const QString &id);
+    void onDockModeChanged(Dock::DockMode newMode, Dock::DockMode);
+    void onHideStateChanged(int dockState);
+    void onShowPanelFinished();
+    void onHidePanelFinished();
+
+    void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
-    void setY(int value);
+    void updateLeftReflection();
+    void reloadStyleSheet();
+    void showPanelMenu();
+    void setY(int value);   //for hide and show animation
 
 private:
+    DockModeData *m_dockModeData = DockModeData::instance();
+    QPropertyAnimation *m_widthAnimation = NULL;
     DBusHideStateManager *m_HSManager = NULL;
-    DockLayout *m_appLayout = NULL;
+    ReflectionEffect *m_pluginReflection = NULL;
+    ReflectionEffect *m_appReflection = NULL;
     DockLayout *m_pluginLayout = NULL;
+    ScreenMask * m_maskWidget = NULL;
     AppManager *m_appManager = NULL;
     QWidget *m_parentWidget = NULL;
-    ScreenMask * m_maskWidget = NULL;
-    DockModeData *m_dockModeData = DockModeData::instance();
-    ReflectionEffect *m_appReflection = NULL;
-    ReflectionEffect *m_pluginReflection = NULL;
+    DockLayout *m_appLayout = NULL;
 
     bool m_containMouse = false;
     bool m_isFashionMode = false;
     const int FASHION_PANEL_LPADDING = 21;
     const int FASHION_PANEL_RPADDING = 21;
     const int REFLECTION_HEIGHT = 15;
-    const int SHOW_HIDE_DURATION = 200;
+    const int WIDTH_ANIMATION_DURATION = 200;
+    const int SHOW_HIDE_ANIMATION_DURATION = 200;
     const QEasingCurve SHOW_HIDE_EASINGCURVE = QEasingCurve::InSine;
 };
 

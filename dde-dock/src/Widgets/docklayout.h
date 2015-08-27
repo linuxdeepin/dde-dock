@@ -46,6 +46,7 @@ signals:
     void frameUpdate();
 
 public slots:
+    void removeSpacingItem();
     void restoreTmpItem();
     void clearTmpItem();
     void relayout();
@@ -72,6 +73,7 @@ private:
 
     int spacingItemWidth() const;
     int spacingItemIndex() const;
+    int animatingItemCount();
     QStringList itemsIdList() const;
 
 private:
@@ -85,7 +87,6 @@ private:
     qreal m_itemSpacing = 10;
     QPoint m_lastPost = QPoint(0,0);
     int m_lastHoverIndex = -1;
-    int m_animationItemCount = 0;
     bool m_movingLeftward = true;
 
     const int MOVE_ANIMATION_DURATION_BASE = 300;

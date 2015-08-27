@@ -29,6 +29,7 @@ void AppItem::moveWithAnimation(QPoint targetPos, int duration)
     animation->setEasingCurve(MOVE_ANIMATION_CURVE);
     animation->start();
     connect(animation, &QPropertyAnimation::finished, this, &AppItem::moveAnimationFinished);
+    connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 
 QWidget *AppItem::getApplet()
