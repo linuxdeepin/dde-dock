@@ -17,3 +17,21 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 		Interface:  dbusIFC,
 	}
 }
+
+func (m *Manager) setPropTheme(value string) {
+	if m.Theme == value {
+		return
+	}
+
+	m.Theme = value
+	dbus.NotifyChange(m, "Theme")
+}
+
+func (m *Manager) setPropFontSize(size int32) {
+	if m.FontSize == size {
+		return
+	}
+
+	m.FontSize = size
+	dbus.NotifyChange(m, "FontSize")
+}

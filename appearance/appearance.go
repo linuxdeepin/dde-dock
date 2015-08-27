@@ -44,6 +44,8 @@ func (*Daemon) Start() error {
 		logger.EndTracing()
 		return err
 	}
+	_m.listenGSettingChanged()
+
 	return nil
 }
 

@@ -45,8 +45,8 @@ type Manager struct {
 func NewManager() *Manager {
 	var m = new(Manager)
 	m.setting = gio.NewSettings(appearanceSchema)
-	m.Theme = m.setting.GetString(gsKeyTheme)
-	m.FontSize = m.setting.GetInt(gsKeyFontSize)
+	m.setPropTheme(m.setting.GetString(gsKeyTheme))
+	m.setPropFontSize(m.setting.GetInt(gsKeyFontSize))
 
 	m.init()
 
@@ -74,8 +74,8 @@ func (m *Manager) doSetDTheme(id string) error {
 		return nil
 	}
 
+	m.setPropTheme(id)
 	m.setting.SetString(gsKeyTheme, id)
-	m.Theme = m.setting.GetString(gsKeyTheme)
 
 	return m.doSetFontSize(ListDTheme().Get(id).FontSize)
 }
@@ -214,8 +214,8 @@ func (m *Manager) doSetFontSize(size int32) error {
 		return err
 	}
 
+	m.setPropFontSize(size)
 	m.setting.SetInt(gsKeyFontSize, size)
-	m.FontSize = m.setting.GetInt(gsKeyFontSize)
 	return nil
 }
 
