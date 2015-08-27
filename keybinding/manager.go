@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,145 +22,189 @@
 package keybinding
 
 import (
+	"encoding/json"
+	"github.com/BurntSushi/xgbutil"
+	"pkg.deepin.io/dde/daemon/keybinding/core"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gio-2.0"
-	"strings"
+	"sort"
+	"sync"
 )
 
-func (obj *Manager) Reset() bool {
-	list := sysGSettings.ListKeys()
-	for _, key := range list {
-		sysGSettings.Reset(key)
+const (
+	systemSchema   = "com.deepin.dde.keybinding.system"
+	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
+)
+
+type Manager struct {
+	Added   func(string, int32)
+	Deleted func(string, int32)
+	Changed func(string, int32)
+
+	// (pressed, accel)
+	KeyEvent func(bool, string)
+
+	xu *xgbutil.XUtil
+
+	sysSetting   *gio.Settings
+	mediaSetting *gio.Settings
+
+	media *Mediakey
+
+	grabLocker sync.Mutex
+	grabedList shortcuts.Shortcuts
+}
+
+func NewManager() (*Manager, error) {
+	var m = Manager{}
+
+	xu, err := core.Initialize()
+	if err != nil {
+		return nil, err
+	}
+	m.xu = xu
+
+	m.sysSetting = gio.NewSettings(systemSchema)
+	m.mediaSetting = gio.NewSettings(mediakeySchema)
+
+	m.media = &Mediakey{}
+
+	return &m, nil
+}
+
+func (m *Manager) destroy() {
+	m.ungrabShortcuts(m.grabedList)
+	m.grabedList = nil
+	m.stopLoop()
+
+	if m.sysSetting != nil {
+		m.sysSetting.Unref()
+		m.sysSetting = nil
 	}
 
-	for _, id := range obj.ConflictInvalid {
-		if id >= CUSTOM_KEY_ID_BASE {
+	if m.mediaSetting != nil {
+		m.mediaSetting.Unref()
+		m.mediaSetting = nil
+	}
+}
+
+func (m *Manager) startLoop() {
+	core.StartLoop()
+}
+
+func (m *Manager) stopLoop() {
+	core.Finalize()
+}
+
+func (m *Manager) initGrabedList() {
+	sysList := shortcuts.ListSystemShortcuts()
+	customList := shortcuts.ListCustomKey().GetShortcuts()
+	mediaList := shortcuts.ListMediaShortcuts()
+
+	m.grabShortcuts(sysList)
+	m.grabShortcuts(customList)
+	m.grabShortcuts(mediaList)
+}
+
+func (m *Manager) listAll() shortcuts.Shortcuts {
+	list := shortcuts.ListWMShortcuts()
+	list = append(list, m.grabedList...)
+	return list
+}
+
+func (m *Manager) addToGrabedList(s *shortcuts.Shortcut) {
+	m.grabLocker.Lock()
+	defer m.grabLocker.Unlock()
+	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+}
+
+func (m *Manager) deleteFromGrabedList(s *shortcuts.Shortcut) {
+	m.grabLocker.Lock()
+	defer m.grabLocker.Unlock()
+	m.grabedList = m.grabedList.Delete(s.Id, s.Type)
+}
+
+func (m *Manager) grabShortcuts(list shortcuts.Shortcuts) {
+	for _, s := range list {
+		err := m.grabShortcut(s)
+		if err != nil {
+			logger.Warningf("Grab '%s' %v failed: %v",
+				s.Id, s.Accels, err)
 			continue
 		}
-		obj.ModifyShortcut(id, "")
+	}
+}
+
+func (m *Manager) ungrabShortcuts(list shortcuts.Shortcuts) {
+	for _, s := range list {
+		m.ungrabShortcut(s)
+	}
+}
+
+func (m *Manager) grabShortcut(s *shortcuts.Shortcut) error {
+	err := m.grabAccels(s.Accels, m.handleKeyEvent)
+	if err != nil {
+		return err
 	}
 
+	m.addToGrabedList(s)
+	return nil
+}
+
+func (m *Manager) ungrabShortcut(s *shortcuts.Shortcut) {
+	m.ungrabAccels(s.Accels)
+	m.deleteFromGrabedList(s)
+}
+
+func (m *Manager) grabAccels(accels []string, cb core.HandleType) error {
+	return core.GrabAccels(accels, cb)
+}
+
+func (m *Manager) ungrabAccels(accels []string) {
+	core.UngrabAccels(accels)
+}
+
+func (m *Manager) updateShortcutById(id string, ty int32) {
+	old := m.grabedList.GetById(id, ty)
+	if old == nil {
+		return
+	}
+
+	new := shortcuts.ListAllShortcuts().GetById(id, ty)
+	if new == nil {
+		return
+	}
+
+	if isListEqual(old.Accels, new.Accels) {
+		return
+	}
+
+	m.ungrabShortcut(old)
+	m.grabShortcut(new)
+	dbus.Emit(m, "Changed", id, ty)
+}
+
+func doMarshal(v interface{}) (string, error) {
+	bytes, err := json.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bytes), nil
+}
+
+func isListEqual(l1, l2 []string) bool {
+	if len(l1) != len(l2) {
+		return false
+	}
+
+	sort.Strings(l1)
+	sort.Strings(l2)
+	for i, v := range l1 {
+		if v != l2[i] {
+			return false
+		}
+	}
 	return true
-}
-
-func (obj *Manager) AddCustomShortcut(name, action string) (int32, bool) {
-	id := getMaxCustomId() + 1
-
-	if !obj.createCustomShortcut(id, name, action, "") {
-		return -1, false
-	}
-
-	return id, true
-}
-
-func (obj *Manager) AddCustomShortcutCheck(name, action, shortcut string) (int32, string, []int32) {
-	id, ok := obj.AddCustomShortcut(name, action)
-	if !ok {
-		return -1, "failed", []int32{}
-	}
-
-	str, list := obj.CheckShortcutConflict(shortcut)
-
-	return id, str, list
-}
-
-func (obj *Manager) CheckShortcutConflict(shortcut string) (string, []int32) {
-	if !isValidShortcut(shortcut) {
-		return "Invalid", []int32{}
-	}
-
-	isConflict, idList := conflictChecked(-1, shortcut)
-	if isConflict {
-		return "Conflict", idList
-	}
-
-	return "Valid", []int32{}
-}
-
-func (obj *Manager) ModifyShortcut(id int32, shortcut string) (string, []int32) {
-	tmpStr := strings.ToLower(shortcut)
-	if tmpStr == "super" || tmpStr == "super_l" || tmpStr == "super_r" ||
-		tmpStr == "super-super_l" || tmpStr == "super-super_r" {
-		// Compiz 不支持单按键
-		if id >= 300 && id < 1000 {
-			return "Invalid", []int32{}
-		}
-	}
-
-	tmpAccel := getShortcutById(id)
-	tmpConflict, tmpList := conflictChecked(id, tmpAccel)
-	if tmpConflict {
-		for _, k := range tmpList {
-			deleteValidConflictId(k)
-			deleteInvalidConflictId(k)
-		}
-	}
-
-	retStr := ""
-	retList := []int32{}
-
-	if !isValidShortcut(shortcut) {
-		addInvalidConflictId(id)
-		retStr = "Invalid"
-	} else if len(shortcut) < 1 {
-		retStr = "Valid"
-	} else {
-		isConflict, idList := conflictChecked(id, shortcut)
-		logger.Infof("'%s' isConflict: %v, idList: %v", shortcut, isConflict, idList)
-		if isConflict {
-			addInvalidConflictId(id)
-			for _, k := range idList {
-				addValidConflictId(k)
-			}
-			retStr = "Conflict"
-			retList = idList
-		} else {
-			deleteValidConflictId(id)
-			deleteInvalidConflictId(id)
-			retStr = "Valid"
-		}
-	}
-
-	modifyShortcutById(id, shortcut)
-
-	return retStr, retList
-}
-
-func (obj *Manager) DeleteCustomShortcut(id int32) {
-	tmpKey := getShortcutById(id)
-	tmpConflict, tmpList := conflictChecked(id, tmpKey)
-	if tmpConflict {
-		for _, k := range tmpList {
-			if k == id {
-				continue
-			}
-			deleteValidConflictId(k)
-			deleteInvalidConflictId(k)
-		}
-	}
-	deleteValidConflictId(id)
-	deleteInvalidConflictId(id)
-
-	obj.deleteCustomShortcut(id)
-}
-
-func (obj *Manager) GrabSignalShortcut(shortcut, action string, isGrab bool) {
-	grabSignalShortcut(shortcut, action, isGrab)
-}
-
-func (obj *Manager) GrabKbdAndMouse() {
-	go grabKeyboardAndMouse(obj)
-}
-
-func newManager() *Manager {
-	m := &Manager{}
-
-	m.mediaKey = &MediaKeyManager{}
-	m.idSettingsMap = make(map[int32]*gio.Settings)
-
-	m.listenKeyEvents()
-	m.listenSettings()
-	m.listenAllCustomSettings()
-	m.updateProps()
-
-	return m
 }

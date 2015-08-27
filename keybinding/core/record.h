@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2013 Deepin, Inc.
+ *               2011 ~ 2013 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -19,23 +19,12 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-#ifndef __FONT_LIST_H__
-#define __FONT_LIST_H__
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-typedef struct _FcInfo {
-	char *family;
-	char *familylang;
-	char *fullname;
-	char *fullnamelang;
-	char *style;
-	char *lang;
-	char *spacing;
-	char *filename;
-} FcInfo;
+void xrecord_grab_init ();
+void xrecord_grab_finalize();
 
-FcInfo *get_font_info_list (int *num);
-void font_info_list_free(FcInfo *list, int num);
-
-char* font_match(char* family);
+int is_grabbed();
 
 #endif

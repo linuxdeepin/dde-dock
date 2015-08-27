@@ -21,30 +21,32 @@
 
 package keybinding
 
-import (
-	"pkg.deepin.io/lib/dbus"
-)
-
-const (
-	dbusDest      = "com.deepin.daemon.Keybinding"
-	bindDBusPath  = "/com/deepin/daemon/Keybinding"
-	bindDBusIFC   = "com.deepin.daemon.Keybinding"
-	mediaDBusPath = "/com/deepin/daemon/Keybinding/Mediakey"
-	mediaDBusIFC  = "com.deepin.daemon.Keybinding.Mediakey"
-)
-
-func (*Manager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: bindDBusPath,
-		Interface:  bindDBusIFC,
-	}
-}
-
-func (*Mediakey) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       dbusDest,
-		ObjectPath: mediaDBusPath,
-		Interface:  mediaDBusIFC,
-	}
+type Mediakey struct {
+	AudioMute        func(bool)
+	AudioUp          func(bool)
+	AudioDown        func(bool)
+	BrightnessUp     func(bool)
+	BrightnessDown   func(bool)
+	CapsLockOn       func(bool)
+	CapsLockOff      func(bool)
+	NumLockOn        func(bool)
+	NumLockOff       func(bool)
+	SwitchMonitors   func(bool)
+	TouchpadOn       func(bool)
+	TouchpadOff      func(bool)
+	TouchpadToggle   func(bool)
+	PowerOff         func(bool)
+	PowerSleep       func(bool)
+	SwitchLayout     func(bool)
+	AudioPlay        func(bool)
+	AudioPause       func(bool)
+	AudioStop        func(bool)
+	AudioPrevious    func(bool)
+	AudioNext        func(bool)
+	AudioRewind      func(bool)
+	AudioForward     func(bool)
+	AudioRepeat      func(bool)
+	LaunchEmail      func(bool)
+	LaunchBrowser    func(bool)
+	LaunchCalculator func(bool)
 }

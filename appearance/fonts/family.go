@@ -1,0 +1,207 @@
+package fonts
+
+import (
+	"fmt"
+	"io/ioutil"
+	"path"
+	"pkg.deepin.io/lib/glib-2.0"
+	dutils "pkg.deepin.io/lib/utils"
+	"strconv"
+	"strings"
+)
+
+const (
+	fallbackStandard  = "Droid Sans"
+	fallbackMonospace = "Droid Sans Mono"
+	defaultDPI        = 96
+
+	xsettingsSchema = "com.deepin.xsettings"
+	gsKeyFontName   = "gtk-font-name"
+)
+
+type Family struct {
+	Id   string
+	Name string
+
+	Styles []string
+	//Files  []string
+}
+type Families []*Family
+
+func ListStandardFamily() Families {
+	return ListFont().ListStandard().convertToFamilies()
+}
+
+func ListMonospaceFamily() Families {
+	return ListFont().ListMonospace().convertToFamilies()
+}
+
+func IsFontFamily(value string) bool {
+	standInfo := ListStandardFamily().Get(value)
+	if standInfo != nil {
+		return true
+	}
+	monoInfo := ListMonospaceFamily().Get(value)
+	if monoInfo != nil {
+		return true
+	}
+	return false
+}
+
+func IsFontSizeValid(size int32) bool {
+	if size >= 7 && size <= 22 {
+		return true
+	}
+	return false
+}
+
+func SetFamily(standard, monospace string) error {
+	standInfo := ListStandardFamily().Get(standard)
+	if standInfo == nil {
+		return fmt.Errorf("Invalid standard id '%s'", standard)
+	}
+	monoInfo := ListMonospaceFamily().Get(monospace)
+	if monoInfo == nil {
+		return fmt.Errorf("Invalid monospace id '%s'", monospace)
+	}
+
+	curStand := fcFontMatch("sans-serif")
+	curMono := fcFontMatch("monospace")
+	if (standInfo.Id == curStand || standInfo.Name == curStand) &&
+		(monoInfo.Id == curMono || monoInfo.Name == curMono) {
+		return nil
+	}
+
+	return ioutil.WriteFile(path.Join(glib.GetUserConfigDir(),
+		"fontconfig/fonts.conf"),
+		[]byte(configContent(standard, monospace)), 0644)
+}
+
+func SetSize(size int32) error {
+	if size == GetFontSize() {
+		return nil
+	}
+
+	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
+	defer setting.Unref()
+	setting.SetString(gsKeyFontName,
+		fmt.Sprintf("sans-serif %v", size))
+
+	return nil
+}
+
+func GetFontSize() int32 {
+	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
+	value := setting.GetString(gsKeyFontName)
+	if len(value) == 0 {
+		return 0
+	}
+	array := strings.Split(value, " ")
+	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
+	return int32(size)
+}
+
+func (infos Families) GetIds() []string {
+	var ids []string
+	for _, info := range infos {
+		ids = append(ids, info.Id)
+	}
+	return ids
+}
+
+func (infos Families) Get(id string) *Family {
+	for _, info := range infos {
+		if info.Id == id {
+			return info
+		}
+	}
+	return nil
+}
+
+func (infos Families) add(info *Family) Families {
+	v := infos.Get(info.Id)
+	if v == nil {
+		infos = append(infos, info)
+		return infos
+	}
+
+	v.Styles = compositeList(v.Styles, info.Styles)
+	//v.Files = compositeList(v.Files, info.Files)
+	return infos
+}
+
+func compositeList(l1, l2 []string) []string {
+	for _, v := range l2 {
+		if isItemInList(v, l1) {
+			continue
+		}
+		l1 = append(l1, v)
+	}
+	return l1
+}
+
+func isItemInList(item string, list []string) bool {
+	for _, v := range list {
+		if item == v {
+			return true
+		}
+	}
+	return false
+}
+
+// If set pixelsize, wps-office-wps will not show some text.
+//
+//func configContent(standard, mono string, pixel float64) string {
+func configContent(standard, mono string) string {
+	return fmt.Sprintf(`<?xml version="2.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <match target="pattern">
+        <test qual="any" name="family">
+            <string>serif</string>
+        </test>
+        <edit name="family" mode="assign" binding="strong">
+	    <string>%s</string>
+	    <string>%s</string>
+	</edit>
+    </match>
+ 
+    <match target="pattern">
+        <test qual="any" name="family">
+            <string>sans-serif</string>
+        </test>
+        <edit name="family" mode="assign" binding="strong">
+	    <string>%s</string>
+	    <string>%s</string>
+	</edit>
+    </match>
+
+    <match target="pattern">
+        <test qual="any" name="family">
+            <string>monospace</string>
+        </test>
+        <edit name="family" mode="assign" binding="strong">
+	    <string>%s</string>
+	    <string>%s</string>
+	</edit>
+    </match>
+
+    <match target="font">
+	<edit name="antialias" mode="assign">
+	    <bool>true</bool>
+	</edit>
+	<edit name="hinting" mode="assign">
+	    <bool>true</bool>
+	</edit>
+	<edit name="hintstyle" mode="assign">
+	    <const>hintfull</const>
+        </edit>
+	<edit name="rgba" mode="assign">
+	    <const>rgb</const>
+	</edit>
+    </match>
+
+</fontconfig>`, standard, fallbackStandard,
+		standard, fallbackStandard,
+		mono, fallbackMonospace)
+}

@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
+ * Copyright (c) 2011 ~ 2015 Deepin, Inc.
+ *               2013 ~ 2015 jouyouyun
  *
  * Author:      jouyouyun <jouyouwen717@gmail.com>
  * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
@@ -22,303 +22,136 @@
 package keybinding
 
 import (
-	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/keybind"
-	"github.com/BurntSushi/xgbutil/xevent"
 	"os/exec"
+	"pkg.deepin.io/dde/daemon/keybinding/core"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gio-2.0"
 	"strings"
 )
 
-const (
-	CMD_DDE_OSD = "/usr/lib/deepin-daemon/dde-osd "
-)
+func (m *Manager) handleKeyEvent(mod uint16, code int, pressed bool) {
+	modStr := keybind.ModifierString(mod)
+	codeStr := keybind.LookupString(m.xu, mod, xproto.Keycode(code))
+	if code == 65 {
+		codeStr = "space"
+	}
+	logger.Debug("Handle key event:", mod, modStr, code, codeStr, pressed)
 
-func (obj *MediaKeyManager) emitMediaSignal(modStr, keyStr string, press bool) bool {
-	switch keyStr {
+	var accel = codeStr
+	if len(modStr) != 0 {
+		accel = modStr + "-" + codeStr
+	}
+	s := m.grabedList.GetByAccel(accel)
+	if s == nil {
+		logger.Debugf("'%s' not in grabed list", accel)
+		return
+	}
+
+	switch s.Type {
+	case shortcuts.KeyTypeSystem, shortcuts.KeyTypeCustom:
+		if !pressed {
+			return
+		}
+		logger.Debug("Exec action:", s.GetAction())
+		go doAction(s.GetAction())
+	case shortcuts.KeyTypeMedia:
+		m.handleMediaEvent(modStr, codeStr, pressed)
+	}
+	return
+}
+
+func (m *Manager) handleMediaEvent(modStr, codeStr string, pressed bool) {
+	signal := getMediakeySignal(modStr, codeStr)
+	if len(signal) == 0 {
+		return
+	}
+
+	//TODO: emit signal
+	logger.Debug("Emit signal:", signal)
+	dbus.Emit(m.media, signal, pressed)
+}
+
+func getMediakeySignal(modStr, codeStr string) string {
+	switch codeStr {
 	case "XF86MonBrightnessUp":
-		if press {
-			go doAction(CMD_DDE_OSD + "--BrightnessUp")
-		}
-		dbus.Emit(obj, "BrightnessUp", press)
+		return "BrightnessUp"
 	case "XF86MonBrightnessDown":
-		if press {
-			go doAction(CMD_DDE_OSD + "--BrightnessDown")
-		}
-		dbus.Emit(obj, "BrightnessDown", press)
+		return "BrightnessDown"
 	case "XF86AudioMute":
-		if press {
-			go doAction(CMD_DDE_OSD + "--AudioMute")
-		}
-		dbus.Emit(obj, "AudioMute", press)
+		return "AudioMute"
 	case "XF86AudioLowerVolume":
-		if press {
-			go doAction(CMD_DDE_OSD + "--AudioDown")
-		}
-		dbus.Emit(obj, "AudioDown", press)
+		return "AudioDown"
 	case "XF86AudioRaiseVolume":
-		if press {
-			go doAction(CMD_DDE_OSD + "--AudioUp")
-		}
-		dbus.Emit(obj, "AudioUp", press)
+		return "AudioUp"
 	case "Num_Lock":
+		// num_lock --> mod2
 		if strings.Contains(modStr, "mod2") {
-			if press {
-				go doAction(CMD_DDE_OSD + "--NumLockOff")
-			}
-			dbus.Emit(obj, "NumLockOff", press)
-		} else {
-			if press {
-				go doAction(CMD_DDE_OSD + "--NumLockOn")
-			}
-			dbus.Emit(obj, "NumLockOn", press)
+			return "NumLockOff"
 		}
+		return "NumLockOn"
 	case "Caps_Lock":
+		// caps_lock --> lock
 		if strings.Contains(modStr, "lock") {
-			if press {
-				go doAction(CMD_DDE_OSD + "--CapsLockOff")
-			}
-			dbus.Emit(obj, "CapsLockOff", press)
-		} else {
-			if press {
-				go doAction(CMD_DDE_OSD + "--CapsLockOn")
-			}
-			dbus.Emit(obj, "CapsLockOn", press)
+			return "CapsLockOff"
 		}
+		return "CapsLockOn"
 	case "XF86TouchpadToggle":
-		if press {
-			go doAction(CMD_DDE_OSD + "--TouchpadToggle")
-		}
-		dbus.Emit(obj, "TouchpadToggle", press)
+		return "TouchpadToggle"
 	case "XF86TouchpadOn":
-		if press {
-			go doAction(CMD_DDE_OSD + "--TouchpadOn")
-		}
-		dbus.Emit(obj, "TouchpadOn", press)
+		return "TouchpadOn"
 	case "XF86TouchpadOff":
-		if press {
-			go doAction(CMD_DDE_OSD + "--TouchpadOff")
-		}
-		dbus.Emit(obj, "TouchpadOff", press)
+		return "TouchpadOff"
 	case "XF86Display":
-		dbus.Emit(obj, "SwitchMonitors", press)
+		return "SwitchMonitors"
 	case "XF86PowerOff":
-		dbus.Emit(obj, "PowerOff", press)
+		return "PowerOff"
 	case "XF86Sleep":
-		dbus.Emit(obj, "PowerSleep", press)
-	case "p", "P":
-		modStr = deleteSpecialMod(modStr)
-		if strings.Contains(modStr, "-") {
-			return false
-		}
-		if strings.Contains(modStr, "mod4") {
-			if press {
-				go doAction(CMD_DDE_OSD + "--SwitchMonitors")
-			}
-			dbus.Emit(obj, "SwitchMonitors", press)
-		} else {
-			return false
-		}
+		return "PowerSleep"
+	//case "p", "P":
 	case "XF86AudioPlay":
-		dbus.Emit(obj, "AudioPlay", press)
+		return "AudioPlay"
 	case "XF86AudioPause":
-		dbus.Emit(obj, "AudioPause", press)
+		return "AudioPause"
 	case "XF86AudioStop":
-		dbus.Emit(obj, "AudioStop", press)
+		return "AudioStop"
 	case "XF86AudioPrev":
-		dbus.Emit(obj, "AudioPrevious", press)
+		return "AudioPrevious"
 	case "XF86AudioNext":
-		dbus.Emit(obj, "AudioNext", press)
+		return "AudioNext"
 	case "XF86AudioRewind":
-		dbus.Emit(obj, "AudioRewind", press)
+		return "AudioRewind"
 	case "XF86AudioForward":
-		dbus.Emit(obj, "AudioForward", press)
+		return "AudioForward"
 	case "XF86AudioRepeat":
-		dbus.Emit(obj, "AudioRepeat", press)
+		return "AudioRepeat"
 	case "XF86WWW":
-		dbus.Emit(obj, "LaunchBrowser", press)
+		return "LaunchBrowser"
 	case "XF86Mail":
-		dbus.Emit(obj, "LaunchEmail", press)
+		return "LaunchEmail"
 	case "XF86Calculator":
-		dbus.Emit(obj, "LaunchCalculator", press)
-	default:
-		shortcut := ""
-		modStr = deleteSpecialMod(modStr)
-		if len(modStr) > 1 {
-			shortcut = modStr + "-" + keyStr
-		} else {
-			shortcut = keyStr
-		}
-		sLayoutList := sysGSettings.GetStrv("switch-layout")
-		if len(sLayoutList) < 1 {
-			return false
-		}
-		sLayout := sLayoutList[0]
-		sLayout = formatXGBShortcut(sLayout)
-		logger.Debugf("GSettings slayout: %v, input shortcut: %v",
-			sLayout, shortcut)
-		if strings.ToLower(shortcut) == sLayout {
-			if press {
-				go doAction(CMD_DDE_OSD + "--SwitchLayout")
-
-			}
-			dbus.Emit(obj, "SwitchLayout", press)
-			return true
-		}
-		return false
+		return "LaunchCalculator"
 	}
 
-	return true
-}
-
-func getExecCommand(info KeycodeInfo) (string, bool) {
-	for k, v := range grabKeyBindsMap {
-		if info.State == k.State && info.Detail == k.Detail {
-			return v, true
-		}
+	if len(modStr) != 0 {
+		codeStr = modStr + "-" + codeStr
+	}
+	switch {
+	case core.IsAccelEqual("mod4-p", codeStr):
+		return "SwitchMonitors"
+	case core.IsAccelEqual("mod4-space", codeStr):
+		// TODO: check can switch layout
+		return "SwitchLayout"
 	}
 
-	return "", false
+	return ""
 }
 
-func doAction(action string) {
-	if len(action) < 1 {
-		return
+func doAction(cmd string) error {
+	if len(cmd) == 0 {
+		return nil
 	}
 
-	err := exec.Command("/bin/sh", "-c", action).Run()
-	if err != nil {
-		logger.Debugf("Exec '%s' failed: %v", action, err)
-	}
-}
-
-func (m *Manager) listenKeyEvents() {
-	xevent.KeyPressFun(
-		func(X *xgbutil.XUtil, e xevent.KeyPressEvent) {
-			modStr := keybind.ModifierString(e.State)
-			keyStr := keybind.LookupString(X, e.State, e.Detail)
-			if e.Detail == 65 {
-				keyStr = "space"
-			}
-			logger.Infof("KeyStr: %s, modStr: %s", keyStr, modStr)
-			if !m.mediaKey.emitMediaSignal(modStr, keyStr, true) {
-				modStr = deleteSpecialMod(modStr)
-				value := ""
-				if len(modStr) < 1 {
-					value = keyStr
-				} else {
-					value = modStr + "-" + keyStr
-				}
-
-				info, ok := newKeycodeInfo(value)
-				if !ok {
-					return
-				}
-
-				if v, ok := getExecCommand(info); ok {
-					// 不然按键会阻塞，直到程序推出
-					go doAction(v)
-				}
-			}
-		}).Connect(X, X.RootWin())
-
-	xevent.KeyReleaseFun(
-		func(X *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-			modStr := keybind.ModifierString(e.State)
-			keyStr := keybind.LookupString(X, e.State, e.Detail)
-			if e.Detail == 65 {
-				keyStr = "space"
-			}
-			//modStr = deleteSpecialMod(modStr)
-			m.mediaKey.emitMediaSignal(modStr, keyStr, false)
-		}).Connect(X, X.RootWin())
-}
-
-func isKeyNameExist(name string) bool {
-	if _, ok := getAccelIdByName(name); ok {
-		return true
-	}
-
-	return false
-}
-
-func updateSystemSettings(key, shortcut string) {
-	values := sysGSettings.GetStrv(key)
-	if len(values) < 1 {
-		sysGSettings.SetStrv(key, []string{})
-	} else {
-		if values[0] != shortcut {
-			values[0] = shortcut
-			sysGSettings.SetStrv(key, values)
-		}
-	}
-}
-
-func (obj *Manager) listenSettings() {
-	bindGSettings.Connect("changed", func(s *gio.Settings, key string) {
-		switch key {
-		case BIND_KEY_VALID_LIST:
-			obj.setPropConflictValid(getValidConflictList())
-		case BIND_KEY_INVALID_LIST:
-			obj.setPropConflictInvalid(getInvalidConflictList())
-		case BIND_KEY_CUSTOM_LIST:
-			obj.setPropCustomList(getCustomListInfo())
-		}
-	})
-	bindGSettings.GetStrv(BIND_KEY_VALID_LIST)
-
-	sysGSettings.Connect("changed", func(s *gio.Settings, key string) {
-		if id, ok := getAccelIdByName(key); ok {
-			//invalidFlag := false
-			if isInvalidConflict(id) {
-				//invalidFlag = true
-			}
-
-			//shortcut := getSystemKeyValue(key, false)
-
-			if id >= 0 && id < 300 {
-				grabKeyPairs(PrevSystemPairs, false)
-				grabKeyPairs(getSystemKeyPairs(), true)
-			}
-
-			if isIdInSystemList(id) {
-				obj.setPropSystemList(getSystemListInfo())
-			} else if isIdInWindowList(id) {
-				obj.setPropWindowList(getWindowListInfo())
-			} else if isIdInWorkspaceList(id) {
-				obj.setPropWorkspaceList(getWorkspaceListInfo())
-			}
-		}
-	})
-	sysGSettings.GetStrv("file-manager")
-}
-
-func (obj *Manager) listenAllCustomSettings() {
-	idList := getCustomIdList()
-
-	for _, id := range idList {
-		obj.listenCustomSettings(id)
-	}
-}
-
-func (obj *Manager) listenCustomSettings(id int32) {
-	gs := getSettingsById(id)
-	if gs == nil {
-		return
-	}
-
-	// Prevent gs is released
-	obj.idSettingsMap[id] = gs
-
-	gs.Connect("changed", func(s *gio.Settings, key string) {
-		logger.Infof("'%s' changed", key)
-		if key != CUSTOM_KEY_NAME {
-			grabKeyPairs(PrevCustomPairs, false)
-			grabKeyPairs(getCustomKeyPairs(), true)
-		}
-
-		obj.setPropCustomList(getCustomListInfo())
-	})
-	gs.GetString("name")
+	return exec.Command("/bin/sh", "-c", cmd).Run()
 }

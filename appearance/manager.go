@@ -1,203 +1,252 @@
-/**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- **/
-
 package appearance
 
 import (
-	"path"
-	. "pkg.deepin.io/dde/daemon/appearance/factory"
+	"encoding/json"
+	"fmt"
+	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
-	. "pkg.deepin.io/dde/daemon/appearance/utils"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/gio-2.0"
-	"sort"
-	"strings"
-	"sync"
 )
 
 const (
-	dbusSender = "com.deepin.daemon.ThemeManager"
+	TypeDTheme        string = "dtheme"
+	TypeGtkTheme             = "gtk"
+	TypeIconTheme            = "icon"
+	TypeCursorTheme          = "cursor"
+	TypeBackground           = "background"
+	TypeStandardFont         = "standardfont"
+	TypeMonospaceFont        = "monospacefont"
+	TypeFontSize             = "fontsize"
+)
 
-	deepinGSKeyTheme   = "current-theme"
-	deepinGSKeyPicture = "picture-uri"
-	deepinGSKeySound   = "current-sound-theme"
-	deepinGSKeyGreeter = "greeter-theme"
+const (
+	dthemeDefaultId = "Deepin"
+	dthemeCustomId  = "Custom"
 
-	defaultDThemeId = "Deepin"
+	appearanceSchema = "com.deepin.dde.appearance"
+	gsKeyTheme       = "theme"
+	gsKeyFontSize    = "font-size"
 )
 
 type Manager struct {
-	ThemeList        []string
-	GtkThemeList     []string
-	IconThemeList    []string
-	CursorThemeList  []string
-	SoundThemeList   []string
-	BackgroundList   []string
-	GreeterThemeList []string
-	CurrentTheme     *property.GSettingsStringProperty `access:"readwrite"`
-	GreeterTheme     *property.GSettingsStringProperty `access:"readwrite"`
+	// Current desktop theme
+	Theme string
+	// Current desktop font size
+	FontSize int32
 
-	dtheme  FactoryInterface
-	gtk     FactoryInterface
-	icon    FactoryInterface
-	cursor  FactoryInterface
-	sound   FactoryInterface
-	bg      FactoryInterface
-	greeter FactoryInterface
-	font    *fonts.FontManager
+	// Theme changed signal
+	// ty, name
+	Changed func(string, string)
 
-	themeObjMap map[string]*Theme
-
-	settings      *gio.Settings
-	wrapSetting   *gio.Settings
-	gnomeSettings *gio.Settings
-
-	lock    sync.Mutex
-	wLocker sync.Mutex
+	setting *gio.Settings
 }
 
 func NewManager() *Manager {
-	m := &Manager{}
+	var m = new(Manager)
+	m.setting = gio.NewSettings(appearanceSchema)
+	m.setPropTheme(m.setting.GetString(gsKeyTheme))
+	m.setPropFontSize(m.setting.GetInt(gsKeyFontSize))
 
-	m.dtheme = NewFactory(ObjectTypeDeepinTheme, m.handleDThemeChanged)
-	m.gtk = NewFactory(ObjectTypeGtk, m.setPropGtkThemeList)
-	m.icon = NewFactory(ObjectTypeIcon, m.setPropIconThemeList)
-	m.cursor = NewFactory(ObjectTypeCursor, m.setPropSoundThemeList)
-	m.sound = NewFactory(ObjectTypeSound, m.setPropSoundThemeList)
-	m.greeter = NewFactory(ObjectTypeGreeter, m.setPropGreeterThemeList)
-	m.bg = NewFactory(ObjectTypeBackground, m.setPropBackgroundList)
-	m.font = fonts.NewFontManager()
-
-	m.setPropThemeList(getThemeObjectList(m.dtheme.GetNameStrList()))
-	m.setPropGtkThemeList(m.gtk.GetNameStrList())
-	m.setPropIconThemeList(m.icon.GetNameStrList())
-	m.setPropCursorThemeList(m.cursor.GetNameStrList())
-	m.setPropSoundThemeList(m.sound.GetNameStrList())
-	m.setPropGreeterThemeList(m.greeter.GetNameStrList())
-	m.setPropBackgroundList(m.bg.GetNameStrList())
-
-	m.settings = NewGSettings("com.deepin.dde.personalization")
-	m.CurrentTheme = property.NewGSettingsStringProperty(
-		m, "CurrentTheme",
-		m.settings, deepinGSKeyTheme)
-	m.GreeterTheme = property.NewGSettingsStringProperty(
-		m, "GreeterTheme",
-		m.settings, deepinGSKeyGreeter)
-
-	m.wrapSetting = NewGSettings("com.deepin.wrap.gnome.desktop.background")
-	m.gnomeSettings = CheckAndNewGSettings("org.gnome.desktop.background")
-
-	m.themeObjMap = make(map[string]*Theme)
-	m.listenGSettings()
-	m.rebuildThemes()
+	m.init()
 
 	return m
 }
 
-func (m *Manager) rebuildThemes() {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-	m.destroyThemes()
-
-	var curThemeValid bool
-	for _, name := range m.ThemeList {
-		info, err := m.dtheme.GetInfoByName(path.Base(name))
-		if err != nil {
-			continue
-		}
-		t := NewTheme(info, m.applyTheme)
-		err = dbus.InstallOnSession(t)
-		if err != nil {
-			logger.Warning("Install dbus failed:", info, err)
-			continue
-		}
-
-		m.themeObjMap[info.BaseName] = t
-		if info.BaseName == m.CurrentTheme.Get() {
-			curThemeValid = true
-			m.applyTheme(info.BaseName)
-		}
-	}
-
-	if !curThemeValid {
-		m.applyTheme(defaultDThemeId)
-	}
-}
-
-func (m *Manager) destroyTheme(name string) {
-	t, ok := m.themeObjMap[name]
-	if !ok {
-		return
-	}
-
-	t.Destroy()
-	delete(m.themeObjMap, name)
-}
-
-func (m *Manager) destroyThemes() {
-	for n, _ := range m.themeObjMap {
-		m.destroyTheme(n)
-	}
-
-	m.themeObjMap = make(map[string]*Theme)
+func (m *Manager) init() {
+	dt := m.getCurrentDTheme()
+	subthemes.SetGtkTheme(dt.Gtk.Id)
+	subthemes.SetIconTheme(dt.Icon.Id)
+	go subthemes.SetCursorTheme(dt.Cursor.Id)
 }
 
 func (m *Manager) destroy() {
-	m.destroyThemes()
-	m.dtheme.Destroy()
-	m.gtk.Destroy()
-	m.icon.Destroy()
-	m.cursor.Destroy()
-	m.sound.Destroy()
-	m.bg.Destroy()
-	m.greeter.Destroy()
-	m.font.Destroy()
-
-	Unref(m.settings)
-	Unref(m.gnomeSettings)
-
-	// if dbus.InstallOnSession() not called, what will happen?
-	// Now(2014.14.18) it is ok.
-	dbus.UnInstallObject(m)
+	m.setting.Unref()
 }
 
-func sortNameByDeepin(list []string) []string {
-	sort.Strings(list)
-	deepinList := []string{}
-	tmpList := []string{}
-
-	for _, n := range list {
-		t := strings.ToLower(n)
-		if strings.Contains(t, "deepin") {
-			deepinList = append(deepinList, n)
-			continue
-		}
-
-		tmpList = append(tmpList, n)
+func (m *Manager) doSetDTheme(id string) error {
+	err := SetDTheme(id)
+	if err != nil {
+		return err
 	}
 
-	if len(tmpList) > 0 {
-		deepinList = append(deepinList, tmpList...)
+	if m.Theme == id {
+		return nil
 	}
 
-	return deepinList
+	m.setPropTheme(id)
+	m.setting.SetString(gsKeyTheme, id)
+
+	return m.doSetFontSize(ListDTheme().Get(id).FontSize)
+}
+
+func (m *Manager) doSetGtkTheme(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.Gtk.Id == value {
+		return nil
+	}
+
+	if !subthemes.IsGtkTheme(value) {
+		return fmt.Errorf("Invalid gtk theme '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           value,
+		Icon:          dt.Icon.Id,
+		Cursor:        dt.Cursor.Id,
+		Background:    dt.Background.URI,
+		StandardFont:  dt.StandardFont.Id,
+		MonospaceFont: dt.MonospaceFont.Id,
+	})
+}
+
+func (m *Manager) doSetIconTheme(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.Icon.Id == value {
+		return nil
+	}
+
+	if !subthemes.IsIconTheme(value) {
+		return fmt.Errorf("Invalid icon theme '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           dt.Gtk.Id,
+		Icon:          value,
+		Cursor:        dt.Cursor.Id,
+		Background:    dt.Background.URI,
+		StandardFont:  dt.StandardFont.Id,
+		MonospaceFont: dt.MonospaceFont.Id,
+	})
+}
+
+func (m *Manager) doSetCursorTheme(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.Cursor.Id == value {
+		return nil
+	}
+
+	if !subthemes.IsCursorTheme(value) {
+		return fmt.Errorf("Invalid cursor theme '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           dt.Gtk.Id,
+		Icon:          dt.Icon.Id,
+		Cursor:        value,
+		Background:    dt.Background.URI,
+		StandardFont:  dt.StandardFont.Id,
+		MonospaceFont: dt.MonospaceFont.Id,
+	})
+}
+
+func (m *Manager) doSetBackground(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.Background.URI == value {
+		return nil
+	}
+
+	if !background.IsBackgroundFile(value) {
+		return fmt.Errorf("Invalid background file '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           dt.Gtk.Id,
+		Icon:          dt.Icon.Id,
+		Cursor:        dt.Cursor.Id,
+		Background:    value,
+		StandardFont:  dt.StandardFont.Id,
+		MonospaceFont: dt.MonospaceFont.Id,
+	})
+}
+
+func (m *Manager) doSetStandardFont(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.StandardFont.Id == value {
+		return nil
+	}
+
+	if !fonts.IsFontFamily(value) {
+		return fmt.Errorf("Invalid font family '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           dt.Gtk.Id,
+		Icon:          dt.Icon.Id,
+		Cursor:        dt.Cursor.Id,
+		Background:    dt.Background.URI,
+		StandardFont:  value,
+		MonospaceFont: dt.MonospaceFont.Id,
+	})
+}
+
+func (m *Manager) doSetMonnospaceFont(value string) error {
+	dt := m.getCurrentDTheme()
+	if dt.MonospaceFont.Id == value {
+		return nil
+	}
+
+	if !fonts.IsFontFamily(value) {
+		return fmt.Errorf("Invalid font family '%v'", value)
+	}
+
+	return m.setDThemeByComponent(&dthemeComponent{
+		Gtk:           dt.Gtk.Id,
+		Icon:          dt.Icon.Id,
+		Cursor:        dt.Cursor.Id,
+		Background:    dt.Background.URI,
+		StandardFont:  dt.StandardFont.Id,
+		MonospaceFont: value,
+	})
+}
+
+func (m *Manager) doSetFontSize(size int32) error {
+	if m.FontSize == size {
+		return nil
+	}
+
+	if !fonts.IsFontSizeValid(size) {
+		return fmt.Errorf("Invalid font size '%v'", size)
+	}
+
+	err := fonts.SetSize(size)
+	if err != nil {
+		return err
+	}
+
+	m.setPropFontSize(size)
+	m.setting.SetInt(gsKeyFontSize, size)
+	return nil
+}
+
+func (m *Manager) getCurrentDTheme() *DTheme {
+	id := m.setting.GetString(gsKeyTheme)
+	dt := ListDTheme().Get(id)
+	if dt != nil {
+		return dt
+	}
+
+	m.doSetDTheme(dthemeDefaultId)
+	return ListDTheme().Get(dthemeDefaultId)
+}
+
+func (m *Manager) setDThemeByComponent(component *dthemeComponent) error {
+	id := ListDTheme().findDThemeId(component)
+	if len(id) != 0 {
+		return m.doSetDTheme(id)
+	}
+
+	err := doWriteCustomDTheme(component)
+	if err != nil {
+		return err
+	}
+	return m.doSetDTheme(dthemeCustomId)
+}
+
+func (*Manager) doShow(ifc interface{}) (string, error) {
+	if ifc == nil {
+		return "", fmt.Errorf("Not found target")
+	}
+	content, err := json.Marshal(ifc)
+	return string(content), err
 }

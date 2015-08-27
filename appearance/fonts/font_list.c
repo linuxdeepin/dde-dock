@@ -27,9 +27,9 @@
 
 #include "font_list.h"
 
-void font_info_free(FontInfo *info);
+static void font_info_free(FcInfo *info);
 
-FontInfo *
+FcInfo *
 get_font_info_list (int *num)
 {
 	FcInit();
@@ -43,6 +43,8 @@ get_font_info_list (int *num)
 	FcObjectSet *os = FcObjectSetBuild(
 	                      FC_FAMILY,
 	                      FC_FAMILYLANG,
+	                      FC_FULLNAME,
+	                      FC_FULLNAMELANG,
 	                      FC_STYLE,
 	                      FC_FILE,
 	                      FC_LANG,
@@ -64,9 +66,9 @@ get_font_info_list (int *num)
 
 	int i;
 	int cnt = 0;
-	FontInfo *list = NULL;
+	FcInfo *list = NULL;
 	for (i = 0; i < fs->nfont; i++) {
-		FontInfo *info = calloc(1, sizeof(FontInfo));
+		FcInfo *info = calloc(1, sizeof(FcInfo));
 		if (!info) {
 			fprintf(stderr, "Alloc memory failed");
 			continue;
@@ -76,6 +78,10 @@ get_font_info_list (int *num)
 		                                      (FcChar8*)"%{family}");
 		info->familylang = (char*)FcPatternFormat(fs->fonts[i],
 		                   (FcChar8*)"%{familylang}");
+		info->fullname = (char*)FcPatternFormat(fs->fonts[i],
+		                                        (FcChar8*)"%{fullname}");
+		info->fullnamelang = (char*)FcPatternFormat(fs->fonts[i],
+		                     (FcChar8*)"%{fullnamelang}");
 		info->style = (char*)FcPatternFormat(fs->fonts[i],
 		                                     (FcChar8*)"%{style}");
 		info->filename = (char*)FcPatternFormat(fs->fonts[i],
@@ -91,17 +97,17 @@ get_font_info_list (int *num)
 			continue;
 		}
 
-		FontInfo *tmp = malloc((cnt+1) * sizeof(FontInfo));
+		FcInfo *tmp = malloc((cnt+1) * sizeof(FcInfo));
 		if (!tmp) {
 			fprintf(stderr, "Alloc memory failed\n");
 			font_info_free(info);
 			continue;
 		}
 
-		memcpy(tmp+cnt, info, sizeof(FontInfo));
+		memcpy(tmp+cnt, info, sizeof(FcInfo));
 		free(info);
 		if (cnt != 0 ) {
-			memcpy(tmp, list, cnt * sizeof(FontInfo));
+			memcpy(tmp, list, cnt * sizeof(FcInfo));
 			free(list);
 			list = NULL;
 		}
@@ -112,7 +118,7 @@ get_font_info_list (int *num)
 		cnt++;
 	}
 	FcFontSetDestroy(fs);
-	FcFini(); // Error: FcCacheFini
+	//FcFini(); // SIGABRT: FcCacheFini 'fcCacheFini[i] == NULL failed'
 
 	*num = cnt;
 
@@ -120,7 +126,7 @@ get_font_info_list (int *num)
 }
 
 void
-font_info_list_free(FontInfo *list, int num)
+font_info_list_free(FcInfo *list, int num)
 {
 	if (!list) {
 		return;
@@ -134,8 +140,49 @@ font_info_list_free(FontInfo *list, int num)
 	free(list);
 }
 
-void
-font_info_free(FontInfo *info)
+char*
+font_match(char* family)
+{
+	// configure the search pattern
+	FcPattern* pat = FcNameParse((FcChar8*)family);
+	if (!pat) {
+		return NULL;
+	}
+
+	FcConfigSubstitute(NULL, pat, FcMatchPattern);
+	FcDefaultSubstitute(pat);
+
+	FcResult result;
+	FcPattern* match = FcFontMatch(NULL, pat, &result);
+	FcPatternDestroy(pat);
+	if (!match) {
+		return NULL;
+	}
+
+	FcFontSet* fs = FcFontSetCreate();
+	if (!fs) {
+		FcPatternDestroy(match);
+		return NULL;
+	}
+
+	FcFontSetAdd(fs, match);
+	FcPattern* font = FcPatternFilter(fs->fonts[0], NULL);
+	FcChar8* ret = FcPatternFormat(font, (const FcChar8*)"%{=fcmatch}\n");
+
+	FcPatternDestroy(font);
+	FcFontSetDestroy(fs);
+	FcPatternDestroy(match);
+	FcFini();
+
+	if (!ret) {
+		return NULL;
+	}
+
+	return (char*)ret;
+}
+
+static void
+font_info_free(FcInfo *info)
 {
 	if (info == NULL) {
 		return;
@@ -148,3 +195,6 @@ font_info_free(FontInfo *info)
 	free(info->spacing);
 	free(info->filename);
 }
+
+
+

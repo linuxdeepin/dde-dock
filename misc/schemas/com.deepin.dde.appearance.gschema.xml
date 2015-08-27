@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema path="/com/deepin/dde/appearance/" id="com.deepin.dde.appearance" gettext-domain="DDE">
+    <key type="s" name="theme">
+      <default>'Deepin'</default>
+      <summary>Current Theme</summary>
+      <description>Current Desktop Theme</description>
+    </key>
+    <key type="s" name="sound-theme">
+      <default>'LinuxDeepin'</default>
+      <summary>Current Sound Theme</summary>
+      <description>Current System Sound Theme</description>
+    </key>
+    <key type="s" name="greeter-theme">
+      <default>'sky'</default>
+      <summary>theme of greeter and lock</summary>
+      <description>the theme of greeter and lock</description>
+    </key>
+    <key type="s" name="background">
+      <default>'file:///usr/share/backgrounds/default_background.jpg'</default>
+      <summary>Background</summary>
+      <description>URI to use for the background image. Note that the backend only supports local (file://) URIs.</description>
+    </key>
+    <key type="i" name="font-size">
+      <default>10</default>
+      <summary>Font size</summary>
+      <description>The desktop font size</description>
+    </key>
+  </schema>
+</schemalist>
