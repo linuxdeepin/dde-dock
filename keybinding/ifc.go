@@ -110,8 +110,13 @@ func (m *Manager) Disable(id string, ty int32) error {
 
 	m.ungrabAccels(s.Accels)
 	s.Disable()
-	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+
+	// system/media update by gsetting changed
+	if ty == shortcuts.KeyTypeCustom {
+		m.grabedList = m.grabedList.Add(id, ty)
+	}
 	dbus.Emit(m, "Changed", id, ty)
+
 	return nil
 }
 
@@ -171,18 +176,8 @@ func (m *Manager) ModifiedAction(id string, ty int32, action string) error {
 // grabed: if true, add accel for the special id; else delete it
 func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) (bool, string, error) {
 	logger.Debugf("Modify accel '%s' type '%v' value '%s' grabed: %v", id, ty, accel, grabed)
-	s := m.grabedList.GetById(id, ty)
-	if s == nil {
-		return false, "", fmt.Errorf("Invalid id '%s' or type '%v'",
-			id, ty)
-	}
-
 	if !grabed {
-		m.ungrabAccels([]string{accel})
-		s.DeleteAccel(accel)
-		m.grabedList = m.grabedList.Add(id, ty)
-		dbus.Emit(m, "Changed", id, ty)
-		return false, "", nil
+		return false, "", m.deleteAccel(id, ty, accel)
 	}
 
 	avaliable, conflict := m.CheckAvaliable(accel)
@@ -190,16 +185,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) 
 		return true, conflict, nil
 	}
 
-	err := m.grabAccels([]string{accel}, m.handleKeyEvent)
-	if err != nil {
-		return false, "", err
-	}
-
-	s.AddAccel(accel)
-	m.grabedList = m.grabedList.Add(id, ty)
-	dbus.Emit(m, "Changed", id, ty)
-
-	return false, "", nil
+	return false, "", m.addAccel(id, ty, accel)
 }
 
 // GetAction get the special id action, only for custom id
@@ -220,4 +206,44 @@ func (m *Manager) GetAction(id string, ty int32) (string, error) {
 // GrabScreen grab screen for getting the key pressed
 func (m *Manager) GrabScreen() error {
 	return m.doGrabScreen()
+}
+
+func (m *Manager) addAccel(id string, ty int32, accel string) error {
+	s := m.grabedList.GetById(id, ty)
+	if s == nil {
+		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
+	}
+
+	err := m.grabAccels([]string{accel}, m.handleKeyEvent)
+	if err != nil {
+		return err
+	}
+
+	s.AddAccel(accel)
+
+	// system/media update by gsetting changed
+	if ty == shortcuts.KeyTypeCustom {
+		m.grabedList = m.grabedList.Add(id, ty)
+	}
+	dbus.Emit(m, "Changed", id, ty)
+
+	return nil
+}
+
+func (m *Manager) deleteAccel(id string, ty int32, accel string) error {
+	s := m.grabedList.GetById(id, ty)
+	if s == nil {
+		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
+	}
+
+	m.ungrabAccels([]string{accel})
+	s.DeleteAccel(accel)
+
+	// system/media update by gsetting changed
+	if ty == shortcuts.KeyTypeCustom {
+		m.grabedList = m.grabedList.Add(id, ty)
+	}
+	dbus.Emit(m, "Changed", id, ty)
+
+	return nil
 }
