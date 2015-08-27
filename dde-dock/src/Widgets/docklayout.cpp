@@ -5,6 +5,9 @@ DockLayout::DockLayout(QWidget *parent) :
     QWidget(parent)
 {
     this->setAttribute(Qt::WA_TranslucentBackground);
+
+    this->installEventFilter(this);
+    this->setMouseTracking(true);
 }
 
 void DockLayout::addItem(AbstractDockItem *item)
@@ -173,6 +176,24 @@ void DockLayout::relayout()
     }
 
     emit contentsWidthChange();
+}
+
+//for handle item drop in some area which not accept drop event and respond nothing to the drop event
+bool DockLayout::eventFilter(QObject *obj, QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::MouseMove:
+    case QEvent::Enter:
+    case QEvent::Leave:
+        if (m_dragItemMap.isEmpty())
+            break;
+        restoreTmpItem();
+        emit itemDropped();
+        break;
+    default:
+        break;
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 void DockLayout::dragEnterEvent(QDragEnterEvent *event)
