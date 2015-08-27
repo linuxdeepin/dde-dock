@@ -80,7 +80,7 @@ func GetGtkThumbnail(id string) (string, error) {
 	}
 
 	return gtk.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
-		thumbWidth, thumbHeight)
+		thumbWidth, thumbHeight, false)
 }
 
 func GetIconThumbnail(id string) (string, error) {
@@ -94,7 +94,7 @@ func GetIconThumbnail(id string) (string, error) {
 		return thumb, nil
 	}
 	return icon.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
-		thumbWidth, thumbHeight)
+		thumbWidth, thumbHeight, false)
 }
 
 func GetCursorThumbnail(id string) (string, error) {
@@ -108,7 +108,7 @@ func GetCursorThumbnail(id string) (string, error) {
 		return thumb, nil
 	}
 	return cursor.GenThumbnail(path.Join(info.Path, "cursor.theme"), getThumbBg(),
-		thumbWidth, thumbHeight)
+		thumbWidth, thumbHeight, false)
 }
 
 func (infos Themes) GetIds() []string {

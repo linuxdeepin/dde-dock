@@ -106,7 +106,7 @@ func (info *Background) Delete() error {
 }
 
 func (info *Background) Thumbnail() (string, error) {
-	return images.GenThumbnail(info.URI, thumbWidth, thumbHeight)
+	return images.GenThumbnail(info.URI, thumbWidth, thumbHeight, false)
 }
 
 func doSetByURI(uri string) error {

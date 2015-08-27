@@ -16,7 +16,6 @@ BINARIES =  \
     desktop-toggle \
     grub2 \
     grub2ext \
-    gtk-thumb-tool \
     search \
     theme-thumb-tool \
     langselector
