@@ -7,6 +7,9 @@
 #include <QDragEnterEvent>
 #include <QProcess>
 #include <QDebug>
+
+#include "dialogs/confirmuninstalldialog.h"
+#include "dialogs/cleartrashdialog.h"
 #include "dockconstants.h"
 #include "dbus/dbusfiletrashmonitor.h"
 #include "dbus/dbusfileoperations.h"
@@ -31,6 +34,7 @@ protected:
     void dropEvent(QDropEvent * event);
 
 private:
+    QString getThemeIconPath(QString iconName);
     void updateIcon(bool isOpen);
 
     DBusFileOperations * m_dfo = new DBusFileOperations(this);

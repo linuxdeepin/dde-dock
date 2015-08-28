@@ -1,5 +1,11 @@
+#include <QSvgRenderer>
 #include "mainitem.h"
 
+#undef signals
+extern "C" {
+  #include <gtk/gtk.h>
+}
+#define signals public
 MainItem::MainItem(QWidget *parent) : QLabel(parent)
 {
     setAcceptDrops(true);
@@ -15,17 +21,25 @@ MainItem::~MainItem()
 
 void MainItem::emptyTrash()
 {
-    QDBusPendingReply<QString, QDBusObjectPath, QString> tmpReply = m_dfo->NewEmptyTrashJob(false, "", "", "");
-    QDBusObjectPath op = tmpReply.argumentAt(1).value<QDBusObjectPath>();
-    DBusEmptyTrashJob * detj = new DBusEmptyTrashJob(op.path(), this);
-    connect(detj, &DBusEmptyTrashJob::Done, detj, &DBusEmptyTrashJob::deleteLater);
-    connect(detj, &DBusEmptyTrashJob::Done, [=](){
-        updateIcon(false);
+    ClearTrashDialog *dialog = new ClearTrashDialog;
+    dialog->setIcon(getThemeIconPath("user-trash-full"));
+    connect(dialog, &ClearTrashDialog::buttonClicked, [=](int key){
+        dialog->deleteLater();
+        if (key == 1){
+            qWarning() << "Clear trash...";
+            QDBusPendingReply<QString, QDBusObjectPath, QString> tmpReply = m_dfo->NewEmptyTrashJob(false, "", "", "");
+            QDBusObjectPath op = tmpReply.argumentAt(1).value<QDBusObjectPath>();
+            DBusEmptyTrashJob * detj = new DBusEmptyTrashJob(op.path(), this);
+            connect(detj, &DBusEmptyTrashJob::Done, detj, &DBusEmptyTrashJob::deleteLater);
+            connect(detj, &DBusEmptyTrashJob::Done, [=](){
+                updateIcon(false);
+            });
+
+            if (detj->isValid())
+                detj->Execute();
+        }
     });
-
-    if (detj->isValid())
-        detj->Execute();
-
+    dialog->exec();
 }
 
 void MainItem::mousePressEvent(QMouseEvent *event)
@@ -74,8 +88,18 @@ void MainItem::dropEvent(QDropEvent *event)
         if (dataObj.isEmpty())
             return;
 
-        qWarning() << "Uninstall application:" << dataObj.value("id").toString();
-        m_launcher->RequestUninstall(dataObj.value("id").toString(), true);
+        ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
+        QString message = tr("Are you sure to uninstall \"%1\"").arg(dataObj.value("name").toString());
+        dialog->setMessage(message);
+        dialog->setIcon(getThemeIconPath(dataObj.value("icon").toString()));
+        connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
+            dialog->deleteLater();
+            if (key == 1){
+                qWarning() << "Uninstall application:" << dataObj.value("id").toString();
+                m_launcher->RequestUninstall(dataObj.value("id").toString(), true);
+            }
+        });
+        dialog->exec();
     }
     else//File or Dirctory
     {
@@ -118,4 +142,27 @@ void MainItem::updateIcon(bool isOpen)
 
     QPixmap pixmap = QIcon::fromTheme(iconName).pixmap(Dock::APPLET_FASHION_ICON_SIZE,Dock::APPLET_FASHION_ICON_SIZE);
     setPixmap(pixmap);
+}
+
+// iconName should be a icon name constraints to the freeedesktop standard.
+QString MainItem::getThemeIconPath(QString iconName)
+{
+    QByteArray bytes = iconName.toUtf8();
+    const char *name = bytes.constData();
+
+    GtkIconTheme* theme = gtk_icon_theme_get_default();
+
+    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+
+    if (info) {
+        char* path = g_strdup(gtk_icon_info_get_filename(info));
+#if GTK_MAJOR_VERSION >= 3
+        g_object_unref(info);
+#elif GTK_MAJOR_VERSION == 2
+        gtk_icon_info_free(info);
+#endif
+        return QString(path);
+    } else {
+        return "";
+    }
 }

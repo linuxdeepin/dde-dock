@@ -49,6 +49,7 @@ private:
     QList<MainItem *> m_itemList;
     QString m_id = "trash_plugin";
     DockPluginProxyInterface * m_proxy;
+    MainItem * m_item = NULL;
 
     Dock::DockMode m_mode = Dock::EfficientMode;
 

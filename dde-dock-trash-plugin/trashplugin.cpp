@@ -5,6 +5,9 @@
 TrashPlugin::TrashPlugin()
 {
     QIcon::setThemeName("Deepin");
+
+    m_item = new MainItem();
+    connect(this, &TrashPlugin::menuItemInvoked, m_item, &MainItem::emptyTrash);
 }
 
 void TrashPlugin::init(DockPluginProxyInterface *proxy)
@@ -56,12 +59,7 @@ void TrashPlugin::setDisabled(QString, bool)
 
 QWidget * TrashPlugin::getItem(QString)
 {
-    MainItem * item = new MainItem();
-    connect(this, &TrashPlugin::menuItemInvoked, item, &MainItem::emptyTrash);
-
-    m_itemList.append(item);
-
-    return item;
+    return m_item;
 }
 
 QWidget * TrashPlugin::getApplet(QString)

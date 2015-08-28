@@ -4,13 +4,15 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets dbus
+QT       += core gui widgets dbus svg
 
 TARGET = dde-dock-trash-plugin
 TEMPLATE = lib
-CONFIG += plugin c++11
+CONFIG += plugin c++11 link_pkgconfig
+PKGCONFIG += gtk+-2.0
 
 INCLUDEPATH += ../dde-dock/src
+include(./dialogs/dialogs.pri)
 
 SOURCES += \
     mainitem.cpp \
@@ -37,4 +39,6 @@ unix {
     INSTALLS += target
 }
 
-RESOURCES +=
+RESOURCES += \
+    light.qrc \
+    dark.qrc
