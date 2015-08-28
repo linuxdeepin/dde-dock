@@ -4,6 +4,7 @@ AppItem::AppItem(QWidget *parent) :
     AbstractDockItem(parent)
 {
     setAcceptDrops(true);
+
     resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
 
     initAppIcon();
@@ -12,7 +13,7 @@ AppItem::AppItem(QWidget *parent) :
     initTitle();
     m_appIcon->raise();
     initClientManager();
-    connect(m_dockModeData, &DockModeData::dockModeChanged,this, &AppItem::slotDockModeChanged);
+    connect(m_dockModeData, &DockModeData::dockModeChanged,this, &AppItem::onDockModeChanged);
 
     initMenu();
     initPreview();
@@ -30,6 +31,11 @@ void AppItem::moveWithAnimation(QPoint targetPos, int duration)
     animation->start();
     connect(animation, &QPropertyAnimation::finished, this, &AppItem::moveAnimationFinished);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
+}
+
+AppItemData AppItem::itemData() const
+{
+    return m_itemData;
 }
 
 QWidget *AppItem::getApplet()
@@ -52,18 +58,9 @@ QWidget *AppItem::getApplet()
     return m_preview;
 }
 
-void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
+QString AppItem::getItemId()
 {
-    m_entryProxyer = entryProxyer;
-    m_entryProxyer->setParent(this);
-    connect(m_entryProxyer, SIGNAL(DataChanged(QString,QString)),this, SLOT(dbusDataChanged(QString,QString)));
-
-    initData();
-}
-
-void AppItem::destroyItem(const QString &id)
-{
-
+    return m_itemData.id;
 }
 
 QString AppItem::getTitle()
@@ -71,117 +68,105 @@ QString AppItem::getTitle()
     return m_itemData.title;
 }
 
-QString AppItem::getItemId()
+void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
 {
-    return m_itemData.id;
+    m_entryProxyer = entryProxyer;
+    m_entryProxyer->setParent(this);
+    connect(m_entryProxyer, &DBusEntryProxyer::DataChanged, this, &AppItem::onDbusDataChanged);
+
+    initData();
 }
 
-AppItemData AppItem::itemData() const
+void AppItem::dragEnterEvent(QDragEnterEvent *event)
 {
-    return m_itemData;
-}
+    onMouseLeave(); //enterEvent may be active along with the dragEnterEvent, so hide preview here
 
-void AppItem::slotMousePress(QMouseEvent *event)
-{
-    //qWarning() << "mouse press...";
-    emit mousePress(event);
-    hidePreview(0);
-}
+    emit dragEntered(event);
 
-void AppItem::slotMouseRelease(QMouseEvent *event)
-{
-    //qWarning() << "mouse release...";
-    emit mouseRelease(event);
-
-    if (event->button() == Qt::LeftButton)
-        m_entryProxyer->Activate(event->globalX(),event->globalY());
-    else if (event->button() == Qt::RightButton)
-        showMenu();
-}
-
-void AppItem::slotMouseEnter()
-{
-    emit mouseEntered();
-    m_appBackground->setIsHovered(true);
-    showPreview();
-}
-
-void AppItem::slotMouseLeave()
-{
-    emit mouseExited();
-    m_appBackground->setIsHovered(false);
-    hidePreview();
-}
-
-void AppItem::slotDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
-{
-    setActived(actived());
-    resizeResources();
-}
-
-void AppItem::reanchorIcon()
-{
-    switch (m_dockModeData->getDockMode()) {
-    case Dock::FashionMode:
-        m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
-        break;
-    case Dock::EfficientMode:
-        m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
-        break;
-    case Dock::ClassicMode:
-        m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
-    default:
-        break;
-    }
-}
-
-void AppItem::resizeBackground()
-{
-    m_appBackground->resize(width(),height());
-}
-
-void AppItem::dbusDataChanged(const QString &key, const QString &value)
-{
-    updateTitle();
-    updateState();
-    updateXids();
-    updateMenuJsonString();
-}
-
-void AppItem::setCurrentOpened(uint value)
-{
-    if (m_itemData.xidsJsonString.indexOf(QString::number(value)) != -1)
+    AppItem *tmpItem = NULL;
+    tmpItem = dynamic_cast<AppItem *>(event->source());
+    if (tmpItem)
     {
-        m_itemData.currentOpened = true;
-        m_appBackground->setIsCurrentOpened(true);
+//        qWarning()<< "[Info:]" << "Brother Item.";
     }
     else
     {
-        m_itemData.currentOpened = false;
-        m_appBackground->setIsCurrentOpened(false);
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
     }
 }
 
-void AppItem::menuItemInvoked(QString id, bool)
+void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    m_entryProxyer->HandleMenuItem(id);
-    m_menuManager->UnregisterMenu(m_menuInterfacePath);
+    emit dragExited(event);
 }
 
-void AppItem::resizeResources()
+void AppItem::mousePressEvent(QMouseEvent *event)
 {
-    if (m_appIcon != NULL)
-    {
-        updateIcon();
-    }
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        onMousePress(event);
+    else
+        QFrame::mousePressEvent(event);
+}
 
-    if (m_appBackground != NULL)
-    {
-        resizeBackground();
-        m_appBackground->move(0,0);
-    }
+void AppItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        onMouseRelease(event);
+    else
+        QFrame::mouseReleaseEvent(event);
+}
 
-    updateTitle();
+void AppItem::mouseMoveEvent(QMouseEvent *event)
+{
+    //this event will only execp onec then handle by Drag
+    emit dragStart();
+
+    Qt::MouseButtons btn = event->buttons();
+    if(btn == Qt::LeftButton)
+    {
+        //drag and mimeData object will delete automatically
+        QDrag* drag = new QDrag(this);
+        QMimeData* mimeData = new QMimeData();
+        QImage dataImg = m_appIcon->grab().toImage();
+        mimeData->setImageData(QVariant(dataImg));
+        drag->setMimeData(mimeData);
+        drag->setHotSpot(QPoint(15,15));
+
+        if (m_dockModeData->getDockMode() == Dock::FashionMode){
+            QPixmap pixmap = m_appIcon->grab();
+            drag->setPixmap(pixmap.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize()));
+        }
+        else{
+            QPixmap pixmap = this->grab();
+            drag->setPixmap(pixmap.scaled(this->size()));
+        }
+
+        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    }
+}
+
+void AppItem::dropEvent(QDropEvent *event)
+{
+    qWarning() << "Item get drop:" << event->pos();
+}
+
+void AppItem::enterEvent(QEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        onMouseEnter();
+}
+
+void AppItem::leaveEvent(QEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        onMouseLeave();
+}
+
+void AppItem::initClientManager()
+{
+    m_clientmanager = new DBusClientManager(this);
+    connect(m_clientmanager, &DBusClientManager::ActiveWindowChanged, this, &AppItem::setCurrentOpened);
 }
 
 void AppItem::initBackground()
@@ -189,7 +174,24 @@ void AppItem::initBackground()
     m_appBackground = new AppBackground(this);
     m_appBackground->move(0,0);
     connect(this, &AppItem::mouseRelease, m_appBackground, &AppBackground::slotMouseRelease);
-    connect(this, SIGNAL(widthChanged()),this, SLOT(resizeBackground()));
+    connect(this, &AppItem::widthChanged, this, &AppItem::resizeBackground);
+}
+
+void AppItem::initPreview()
+{
+    m_preview = new AppPreviews();
+    connect(m_preview,&AppPreviews::requestHide, [=]{hidePreview();});
+    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::resizePreview);
+    connect(this, &AppItem::previewHidden, m_preview, &AppPreviews::clearUpPreview);
+}
+
+void AppItem::initAppIcon()
+{
+    m_appIcon = new AppIcon(this);
+    connect(m_appIcon, &AppIcon::mousePress, this, &AppItem::onMousePress);
+    connect(m_appIcon, &AppIcon::mouseRelease, this, &AppItem::onMouseRelease);
+    connect(m_appIcon, &AppIcon::mouseEnter, this, &AppItem::onMouseEnter);
+    connect(m_appIcon, &AppIcon::mouseLeave, this, &AppItem::onMouseLeave);
 }
 
 void AppItem::initTitle()
@@ -199,30 +201,9 @@ void AppItem::initTitle()
     m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 }
 
-void AppItem::initAppIcon()
+void AppItem::initMenu()
 {
-    m_appIcon = new AppIcon(this);
-    connect(m_appIcon, &AppIcon::mousePress, this, &AppItem::slotMousePress);
-    connect(m_appIcon, &AppIcon::mouseRelease, this, &AppItem::slotMouseRelease);
-    connect(m_appIcon, &AppIcon::mouseEnter, this, &AppItem::slotMouseEnter);
-    connect(m_appIcon, &AppIcon::mouseLeave, this, &AppItem::slotMouseLeave);
-}
-
-void AppItem::initClientManager()
-{
-    m_clientmanager = new DBusClientManager(this);
-    connect(m_clientmanager, SIGNAL(ActiveWindowChanged(uint)),this, SLOT(setCurrentOpened(uint)));
-}
-
-void AppItem::setActived(bool value)
-{
-    m_isActived = value;
-    if (!value)
-        resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
-    else
-        resize(m_dockModeData->getActivedItemWidth(), m_dockModeData->getItemHeight());
-
-    m_appBackground->setIsActived(value);
+    m_menuManager = new DBusMenuManager(this);
 }
 
 void AppItem::initData()
@@ -292,17 +273,116 @@ void AppItem::updateMenuJsonString()
     m_itemData.menuJsonString = m_entryProxyer->data().value("menu");
 }
 
-void AppItem::initMenu()
+void AppItem::onDbusDataChanged(const QString &, const QString &)
 {
-    m_menuManager = new DBusMenuManager(this);
+    updateTitle();
+    updateState();
+    updateXids();
+    updateMenuJsonString();
 }
 
-void AppItem::initPreview()
+void AppItem::onDockModeChanged(Dock::DockMode, Dock::DockMode)
 {
-    m_preview = new AppPreviews();
-    connect(m_preview,&AppPreviews::requestHide, [=]{hidePreview();});
-    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::resizePreview);
-    connect(this, &AppItem::previewHidden, m_preview, &AppPreviews::clearUpPreview);
+    setActived(actived());
+    resizeResources();
+}
+
+void AppItem::onMenuItemInvoked(QString id, bool)
+{
+    m_entryProxyer->HandleMenuItem(id);
+    m_menuManager->UnregisterMenu(m_menuInterfacePath);
+}
+
+void AppItem::onMousePress(QMouseEvent *event)
+{
+    //qWarning() << "mouse press...";
+    emit mousePress(event);
+    hidePreview(0);
+}
+
+void AppItem::onMouseRelease(QMouseEvent *event)
+{
+    //qWarning() << "mouse release...";
+    emit mouseRelease(event);
+
+    if (event->button() == Qt::LeftButton)
+        m_entryProxyer->Activate(event->globalX(),event->globalY());
+    else if (event->button() == Qt::RightButton)
+        showMenu();
+}
+
+void AppItem::onMouseEnter()
+{
+    emit mouseEntered();
+    m_appBackground->setIsHovered(true);
+    showPreview();
+}
+
+void AppItem::onMouseLeave()
+{
+    emit mouseExited();
+    m_appBackground->setIsHovered(false);
+    hidePreview();
+}
+
+void AppItem::resizeBackground()
+{
+    m_appBackground->resize(width(),height());
+}
+
+void AppItem::resizeResources()
+{
+    if (m_appIcon != NULL)
+        updateIcon();
+
+    if (m_appBackground != NULL)
+    {
+        resizeBackground();
+        m_appBackground->move(0,0);
+    }
+
+    updateTitle();
+}
+
+void AppItem::reanchorIcon()
+{
+    switch (m_dockModeData->getDockMode()) {
+    case Dock::FashionMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
+        break;
+    case Dock::EfficientMode:
+        m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
+        break;
+    case Dock::ClassicMode:
+        m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
+    default:
+        break;
+    }
+}
+
+void AppItem::setCurrentOpened(uint value)
+{
+    if (m_itemData.xidsJsonString.indexOf(QString::number(value)) != -1)
+    {
+        m_itemData.currentOpened = true;
+        m_appBackground->setIsCurrentOpened(true);
+    }
+    else
+    {
+        m_itemData.currentOpened = false;
+        m_appBackground->setIsCurrentOpened(false);
+    }
+}
+
+void AppItem::setActived(bool value)
+{
+    m_isActived = value;
+    if (!value)
+        resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
+    else
+        resize(m_dockModeData->getActivedItemWidth(), m_dockModeData->getItemHeight());
+
+    m_appBackground->setIsActived(value);
 }
 
 void AppItem::showMenu()
@@ -313,8 +393,8 @@ void AppItem::showMenu()
             QDBusObjectPath op = pr.argumentAt(0).value<QDBusObjectPath>();
             m_menuInterfacePath = op.path();
             DBusMenu *m_menu = new DBusMenu(m_menuInterfacePath,this);
-            connect(m_menu,SIGNAL(MenuUnregistered()),m_menu,SLOT(deleteLater()));
-            connect(m_menu,SIGNAL(ItemInvoked(QString,bool)),this,SLOT(menuItemInvoked(QString,bool)));
+            connect(m_menu, &DBusMenu::MenuUnregistered, m_menu, &DBusMenu::deleteLater);
+            connect(m_menu, &DBusMenu::ItemInvoked, this, &AppItem::onMenuItemInvoked);
 
             QJsonObject targetObj;
             targetObj.insert("x",QJsonValue(globalX() + width() / 2));
@@ -325,84 +405,6 @@ void AppItem::showMenu()
             m_menu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
         }
     }
-}
-
-void AppItem::mouseMoveEvent(QMouseEvent *event)
-{
-    //this event will only execp onec then handle by Drag
-    emit dragStart();
-
-    Qt::MouseButtons btn = event->buttons();
-    if(btn == Qt::LeftButton)
-    {
-        QDrag* drag = new QDrag(this);
-        QMimeData* data = new QMimeData();
-        QImage dataImg = m_appIcon->grab().toImage();
-        data->setImageData(QVariant(dataImg));
-        drag->setMimeData(data);
-
-        QPixmap pixmap = m_appIcon->grab();
-        drag->setPixmap(pixmap.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize()));
-
-        drag->setHotSpot(QPoint(15,15));
-
-        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
-    }
-}
-
-void AppItem::dragEnterEvent(QDragEnterEvent *event)
-{
-    emit dragEntered(event);
-
-    AppItem *tmpItem = NULL;
-    tmpItem = dynamic_cast<AppItem *>(event->source());
-    if (tmpItem)
-    {
-//        qWarning()<< "[Info:]" << "Brother Item.";
-    }
-    else
-    {
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
-    }
-}
-
-void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
-{
-    emit dragExited(event);
-}
-
-void AppItem::dropEvent(QDropEvent *event)
-{
-    qWarning() << "Item get drop:" << event->pos();
-}
-
-void AppItem::mousePressEvent(QMouseEvent *event)
-{
-    if (m_dockModeData->getDockMode() != Dock::FashionMode)
-        slotMousePress(event);
-    else
-        QFrame::mousePressEvent(event);
-}
-
-void AppItem::mouseReleaseEvent(QMouseEvent *event)
-{
-    if (m_dockModeData->getDockMode() != Dock::FashionMode)
-        slotMouseRelease(event);
-    else
-        QFrame::mouseReleaseEvent(event);
-}
-
-void AppItem::enterEvent(QEvent *event)
-{
-    if (m_dockModeData->getDockMode() != Dock::FashionMode)
-        slotMouseEnter();
-}
-
-void AppItem::leaveEvent(QEvent *event)
-{
-    if (m_dockModeData->getDockMode() != Dock::FashionMode)
-        slotMouseLeave();
 }
 
 AppItem::~AppItem()

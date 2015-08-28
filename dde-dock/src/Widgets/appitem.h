@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QMouseEvent>
+#include <QMimeData>
 #include <QDrag>
 #include <QRectF>
 #include <QDrag>
@@ -46,52 +47,50 @@ public:
     ~AppItem();
 
     void moveWithAnimation(QPoint targetPos, int duration = 200);
-    QWidget *getApplet();
-    void setEntryProxyer(DBusEntryProxyer *entryProxyer);
-    void destroyItem(const QString &id);
-    QString getTitle();
-    QString getItemId();
     AppItemData itemData() const;
+    QWidget *getApplet();
+    QString getItemId();
+    QString getTitle();
+    void setEntryProxyer(DBusEntryProxyer *entryProxyer);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *);
     void dragEnterEvent(QDragEnterEvent * event);
     void dragLeaveEvent(QDragLeaveEvent * event);
-    void dropEvent(QDropEvent * event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *);
+    void dropEvent(QDropEvent * event);
     void enterEvent(QEvent *event);
     void leaveEvent(QEvent *event);
 
-private slots:
-    void slotMousePress(QMouseEvent *event);
-    void slotMouseRelease(QMouseEvent *event);
-    void slotMouseEnter();
-    void slotMouseLeave();
-    void slotDockModeChanged(Dock::DockMode newMode,Dock::DockMode oldMode);
-    void reanchorIcon();
-    void resizeBackground();
-    void dbusDataChanged(const QString &key, const QString &value);
-    void setCurrentOpened(uint);
-    void menuItemInvoked(QString id,bool);
-
 private:
-    void resizeResources();
-    void initBackground();
-    void initTitle();
-    void initAppIcon();
     void initClientManager();
-    void setActived(bool value);
-
+    void initBackground();
+    void initPreview();
+    void initAppIcon();
+    void initTitle();
+    void initMenu();
     void initData();
+
     void updateIcon();
     void updateTitle();
     void updateState();
     void updateXids();
     void updateMenuJsonString();
-    void initMenu();
-    void initPreview();
 
+    void onDbusDataChanged(const QString &, const QString &);
+    void onDockModeChanged(Dock::DockMode, Dock::DockMode);
+    void onMenuItemInvoked(QString id,bool);
+    void onMousePress(QMouseEvent *event);
+    void onMouseRelease(QMouseEvent *event);
+    void onMouseEnter();
+    void onMouseLeave();
+
+    void resizeBackground();
+    void resizeResources();
+    void reanchorIcon();
+    void setCurrentOpened(uint);
+    void setActived(bool value);
     void showMenu();
 
 private:
