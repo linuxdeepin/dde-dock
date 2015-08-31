@@ -46,7 +46,7 @@ QLabel#ClassicModeTitle {
     color: rgba(255,255,255,1);
 }
 
-QWidget#AppPreview:hover {
+QFrame#WindowPreview[isHover="true"] {
     border-radius: 3px;
     border-width: 3px;
     border-style: solid;

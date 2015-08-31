@@ -16,12 +16,11 @@ AppPreviewFrame::~AppPreviewFrame()
 
 void AppPreviewFrame::addPreview(int xid)
 {
-    WindowPreview * preview = new WindowPreview(xid, this);
-    preview->setObjectName("AppPreview");
-    preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
+    m_preview = new WindowPreview(xid, this);
+    m_preview->resize(Dock::APP_PREVIEW_WIDTH,Dock::APP_PREVIEW_HEIGHT);
 
-    resize(preview->width() + BUTTON_SIZE, preview->height() + BUTTON_SIZE);
-    preview->move(BUTTON_SIZE / 2, BUTTON_SIZE / 2);
+    resize(m_preview->width() + BUTTON_SIZE, m_preview->height() + BUTTON_SIZE);
+    m_preview->move(BUTTON_SIZE / 2, BUTTON_SIZE / 2);
 }
 
 void AppPreviewFrame::setTitle(const QString &t)
@@ -31,8 +30,8 @@ void AppPreviewFrame::setTitle(const QString &t)
     QFontMetrics fm(titleLabel->font());
     titleLabel->setText(fm.elidedText(t,Qt::ElideRight,width()));
     titleLabel->setAlignment(Qt::AlignCenter);
-    titleLabel->resize(width() - BUTTON_SIZE, TITLE_HEIGHT);
-    titleLabel->move(BUTTON_SIZE / 2, height() - titleLabel->height() - BUTTON_SIZE / 2);
+    titleLabel->resize(width() - BUTTON_SIZE - PREVIEW_BORDER_WIDTH * 2, TITLE_HEIGHT);
+    titleLabel->move(BUTTON_SIZE / 2 + PREVIEW_BORDER_WIDTH, height() - titleLabel->height() - BUTTON_SIZE / 2 - PREVIEW_BORDER_WIDTH);
 }
 
 void AppPreviewFrame::mousePressEvent(QMouseEvent *)
@@ -42,17 +41,22 @@ void AppPreviewFrame::mousePressEvent(QMouseEvent *)
 
 void AppPreviewFrame::enterEvent(QEvent *)
 {
+    m_preview->setIsHover(true);
+
     showCloseButton();
 }
 
 void AppPreviewFrame::leaveEvent(QEvent *)
 {
+    m_preview->setIsHover(false);
+
     hideCloseButton();
 }
 
 void AppPreviewFrame::addCloseButton()
 {
     m_cb = new CloseButton(this);
+    m_cb->hide();
     connect(m_cb,&CloseButton::clicked,[=]{close(this->xidValue);});
     m_cb->resize(BUTTON_SIZE, BUTTON_SIZE);
 

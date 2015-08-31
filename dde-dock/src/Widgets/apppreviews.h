@@ -35,10 +35,12 @@ private:
     void hideCloseButton();
 
 private:
-    CloseButton *m_cb;
+    WindowPreview * m_preview = NULL;
+    CloseButton *m_cb = NULL;
     int xidValue;
     const int BUTTON_SIZE = Dock::APP_PREVIEW_CLOSEBUTTON_SIZE;
     const int TITLE_HEIGHT = 25;
+    const int PREVIEW_BORDER_WIDTH = 3;
 };
 
 class AppPreviews : public QWidget

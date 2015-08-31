@@ -83,10 +83,12 @@ private:
 };
 
 WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
-    : QWidget(parent),
+    : QFrame(parent),
       m_sourceWindow(sourceWindow),
       m_monitor(NULL)
 {
+    setObjectName("WindowPreview");
+
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
     prepareRepaint();
@@ -106,11 +108,28 @@ void WindowPreview::paintEvent(QPaintEvent *)
 
     QImage image = QImage::fromData(imageData, "PNG");
     QPixmap pixmap = QPixmap::fromImage(image);
-    pixmap = pixmap.scaled(this->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    painter.drawPixmap(0, 0, pixmap);
+    //ignore border
+    QRect rec(m_borderWidth, m_borderWidth, width() - m_borderWidth * 2, height() - m_borderWidth * 2);
+    pixmap = pixmap.scaled(rec.width(), rec.height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    painter.drawPixmap(rec.x(), rec.y(), pixmap);
 
     painter.end();
 }
+bool WindowPreview::isHover() const
+{
+    return m_isHover;
+}
+
+void WindowPreview::setIsHover(bool isHover)
+{
+    m_isHover = isHover;
+
+    style()->unpolish(this);
+    style()->polish(this);// force a stylesheet recomputation
+
+    repaint();
+}
+
 
 void WindowPreview::installMonitor()
 {
@@ -139,6 +158,7 @@ void WindowPreview::prepareRepaint()
 
     XWindowAttributes s_atts;
     Status ss = XGetWindowAttributes(dsp, m_sourceWindow, &s_atts);
+    QSize contentSize(width() - m_borderWidth * 2, height() - m_borderWidth * 2);
 
     if (ss != 0) {
         cairo_surface_t *source = cairo_xlib_surface_create(dsp,
@@ -148,17 +168,17 @@ void WindowPreview::prepareRepaint()
                                                             s_atts.height);
 
         cairo_surface_t * image_surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                                     width(),
-                                                                     height());
+                                                                     contentSize.width(),
+                                                                     contentSize.height());
 
         float ratio = 0.0f;
         if (s_atts.width > s_atts.height) {
-            ratio = width() * 1.0 / s_atts.width;
+            ratio = contentSize.width() * 1.0 / s_atts.width;
         } else {
-            ratio = height() * 1.0 / s_atts.height;
+            ratio = contentSize.height() * 1.0 / s_atts.height;
         }
-        int x = (width() - s_atts.width * ratio) / 2.0;
-        int y = (height() - s_atts.height * ratio) / 2.0;
+        int x = (contentSize.width() - s_atts.width * ratio) / 2.0;
+        int y = (contentSize.height() - s_atts.height * ratio) / 2.0;
 
         cairo_t * cairo = cairo_create(image_surface);
         cairo_scale(cairo, ratio, ratio);
@@ -175,3 +195,5 @@ void WindowPreview::prepareRepaint()
         this->repaint();
     }
 }
+
+
