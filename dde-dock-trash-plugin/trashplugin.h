@@ -46,10 +46,9 @@ signals:
     void menuItemInvoked();
 
 private:
-    QList<MainItem *> m_itemList;
+    MainItem * m_item = NULL;
     QString m_id = "trash_plugin";
     DockPluginProxyInterface * m_proxy;
-    MainItem * m_item = NULL;
 
     Dock::DockMode m_mode = Dock::EfficientMode;
 

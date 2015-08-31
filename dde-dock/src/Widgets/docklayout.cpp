@@ -59,7 +59,7 @@ void DockLayout::moveItem(int from, int to)
 
 void DockLayout::removeItem(int index)
 {
-    m_appList.takeAt(index)->deleteLater();
+    m_appList.removeAt(index);
     relayout();
 }
 
@@ -67,7 +67,7 @@ void DockLayout::removeItem(AbstractDockItem *item)
 {
     int i = indexOf(item);
     if (i != -1){
-        m_appList.takeAt(i)->deleteLater();
+        m_appList.removeAt(i);
         relayout();
     }
 }
@@ -152,12 +152,7 @@ void DockLayout::restoreTmpItem()
 
 void DockLayout::clearTmpItem()
 {
-    if (m_dragItemMap.count() > 0)
-    {
-        AbstractDockItem * tmpItem = m_dragItemMap.firstKey();
-        m_dragItemMap.clear();
-        tmpItem->deleteLater();
-    }
+    m_dragItemMap.clear();
 }
 
 void DockLayout::relayout()

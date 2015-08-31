@@ -100,10 +100,7 @@ void TrashPlugin::setMode(Dock::DockMode mode)
     if (mode == Dock::FashionMode)
         m_proxy->itemAddedEvent(m_id);
     else
-    {
-        m_itemList.clear();
         m_proxy->itemRemovedEvent(m_id);
-    }
 }
 
 QJsonObject TrashPlugin::createMenuItem(QString itemId, QString itemName, bool checkable, bool checked)

@@ -224,6 +224,7 @@ void Panel::onAppItemRemove(const QString &id)
         if (tmpItem && tmpItem->getItemId() == id)
         {
             m_appLayout->removeItem(i);
+            tmpItem->deleteLater();
             return;
         }
     }
