@@ -26,6 +26,8 @@ public:
 protected:
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 private slots:
     void slotMousePress(QMouseEvent *event);
@@ -37,7 +39,7 @@ private:
     void reanchorIcon();
 
 private:
-    DockModeData * m_dmd = DockModeData::instance();
+    DockModeData * m_dockModeData = DockModeData::instance();
     AppIcon * m_appIcon = NULL;
     QProcess * m_launcherProcess = NULL;
     QString m_menuInterfacePath = "";
