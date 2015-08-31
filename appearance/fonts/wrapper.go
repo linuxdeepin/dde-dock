@@ -7,6 +7,7 @@ import "C"
 
 import (
 	"os"
+	"regexp"
 	"strings"
 	"unsafe"
 )
@@ -127,17 +128,32 @@ func indexList(item string, list []string) int {
 }
 
 func getCurLang() string {
-	lang := os.Getenv("LANGUAGE")
+	locale := os.Getenv("LANGUAGE")
+	if len(locale) == 0 {
+		locale = os.Getenv("LANG")
+	}
+
+	lang := getLangFromLocale(locale)
 	if len(lang) == 0 {
 		return defaultLang
 	}
+	return lang
+}
 
-	switch lang {
-	case "zh_CN":
-		lang = "zh-cn"
-	case "zh_TW", "zh_HK":
-		lang = "zh-tw"
+func getLangFromLocale(locale string) string {
+	if len(locale) == 0 {
+		return ""
 	}
 
+	locale = strings.ToLower(strings.Split(locale, ".")[0])
+	var lang string
+	switch locale {
+	case "zh_hk":
+		lang = "zh-tw"
+	case "zh_cn", "zh_tw", "zh_sg", "ku_tr", "mn_mn", "pap_an", "pap_aw":
+		lang = regexp.MustCompile("_").ReplaceAllString(locale, "-")
+	default:
+		lang = strings.Split(locale, "_")[0]
+	}
 	return lang
 }

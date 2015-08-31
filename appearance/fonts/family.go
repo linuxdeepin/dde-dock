@@ -36,13 +36,13 @@ func ListMonospaceFamily() Families {
 	return ListFont().ListMonospace().convertToFamilies()
 }
 
+func ListAllFamily() Families {
+	return ListFont().convertToFamilies()
+}
+
 func IsFontFamily(value string) bool {
-	standInfo := ListStandardFamily().Get(value)
-	if standInfo != nil {
-		return true
-	}
-	monoInfo := ListMonospaceFamily().Get(value)
-	if monoInfo != nil {
+	info := ListAllFamily().Get(value)
+	if info != nil {
 		return true
 	}
 	return false

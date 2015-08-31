@@ -203,13 +203,13 @@ func newDThemeFromFile(file string) (*DTheme, error) {
 	}
 
 	tmp, _ = kfile.GetString(kfGroupComponent, kfKeyStandardFont)
-	dt.StandardFont = fonts.ListStandardFamily().Get(tmp)
+	dt.StandardFont = fonts.ListAllFamily().Get(tmp)
 	if dt.StandardFont == nil {
 		return nil, fmt.Errorf("Not found standard font: %v", tmp)
 	}
 
 	tmp, _ = kfile.GetString(kfGroupComponent, kfKeyMonospaceFont)
-	dt.MonospaceFont = fonts.ListMonospaceFamily().Get(tmp)
+	dt.MonospaceFont = fonts.ListAllFamily().Get(tmp)
 	if dt.MonospaceFont == nil {
 		return nil, fmt.Errorf("Not found monospace font: %v", tmp)
 	}

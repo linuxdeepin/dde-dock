@@ -33,3 +33,12 @@ func TestFontFamily(t *testing.T) {
 			"WenQuanYi Micro Hei")
 	})
 }
+
+func TestGetLangFromLocale(t *testing.T) {
+	Convey("Test get lang from locale", t, func() {
+		So(getLangFromLocale("zh_CN"), ShouldEqual, "zh-cn")
+		So(getLangFromLocale("pap_AW"), ShouldEqual, "pap-aw")
+		So(getLangFromLocale("zh_HK"), ShouldEqual, "zh-tw")
+		So(getLangFromLocale("en_US"), ShouldEqual, "en")
+	})
+}
