@@ -2,8 +2,8 @@
 
 LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 {
-    resize(m_dmd->getNormalItemWidth(), m_dmd->getItemHeight());
-    connect(m_dmd, &DockModeData::dockModeChanged, this, &LauncherItem::changeDockMode);
+    resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
+    connect(m_dockModeData, &DockModeData::dockModeChanged, this, &LauncherItem::changeDockMode);
 
     m_appIcon = new AppIcon(this);
     m_appIcon->resize(height(), height());
@@ -30,11 +30,27 @@ void LauncherItem::leaveEvent(QEvent *)
     hidePreview();
 }
 
+void LauncherItem::mousePressEvent(QMouseEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMousePress(event);
+    else
+        AbstractDockItem::mousePressEvent(event);
+}
+
+void LauncherItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        slotMouseRelease(event);
+    else
+        AbstractDockItem::mouseReleaseEvent(event);
+}
+
 void LauncherItem::slotMousePress(QMouseEvent *event)
 {
     emit mousePress(event);
 
-    hidePreview();
+    hidePreview(0);
 }
 
 void LauncherItem::slotMouseRelease(QMouseEvent *event)
@@ -46,20 +62,20 @@ void LauncherItem::slotMouseRelease(QMouseEvent *event)
 
 void LauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
 {
-    resize(m_dmd->getNormalItemWidth(), m_dmd->getItemHeight());
+    resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
     updateIcon();
 }
 
 void LauncherItem::updateIcon()
 {
     m_appIcon->setIcon("deepin-launcher");
-    m_appIcon->resize(m_dmd->getAppIconSize(), m_dmd->getAppIconSize());
+    m_appIcon->resize(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize());
     reanchorIcon();
 }
 
 void LauncherItem::reanchorIcon()
 {
-    switch (m_dmd->getDockMode()) {
+    switch (m_dockModeData->getDockMode()) {
     case Dock::FashionMode:
         m_appIcon->move((width() - m_appIcon->width()) / 2, 0);
         break;
