@@ -31,7 +31,6 @@ import (
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 	_ "pkg.deepin.io/dde/daemon/launcher"
-	_ "pkg.deepin.io/dde/daemon/mime"
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/mpris"
 	_ "pkg.deepin.io/dde/daemon/network"
@@ -41,7 +40,6 @@ import (
 	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
-	_ "pkg.deepin.io/dde/daemon/xsettings"
 	"pkg.deepin.io/lib/gio-2.0"
 )
 

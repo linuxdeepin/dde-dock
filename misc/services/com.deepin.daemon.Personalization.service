@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.Personalization
-Exec=/usr/lib/deepin-daemon/personalization
