@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"pkg.deepin.io/dde/daemon/appearance/background"
+	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/gio-2.0"
@@ -65,7 +66,7 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) doSetDTheme(id string) error {
-	err := SetDTheme(id)
+	err := dtheme.SetDTheme(id)
 	if err != nil {
 		return err
 	}
@@ -77,7 +78,7 @@ func (m *Manager) doSetDTheme(id string) error {
 	m.setPropTheme(id)
 	m.setting.SetString(gsKeyTheme, id)
 
-	return m.doSetFontSize(ListDTheme().Get(id).FontSize)
+	return m.doSetFontSize(dtheme.ListDTheme().Get(id).FontSize)
 }
 
 func (m *Manager) doSetGtkTheme(value string) error {
@@ -90,7 +91,7 @@ func (m *Manager) doSetGtkTheme(value string) error {
 		return fmt.Errorf("Invalid gtk theme '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           value,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
@@ -110,7 +111,7 @@ func (m *Manager) doSetIconTheme(value string) error {
 		return fmt.Errorf("Invalid icon theme '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          value,
 		Cursor:        dt.Cursor.Id,
@@ -130,7 +131,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 		return fmt.Errorf("Invalid cursor theme '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        value,
@@ -150,7 +151,7 @@ func (m *Manager) doSetBackground(value string) error {
 		return fmt.Errorf("Invalid background file '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
@@ -170,7 +171,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
@@ -190,7 +191,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	return m.setDThemeByComponent(&dthemeComponent{
+	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
@@ -219,24 +220,24 @@ func (m *Manager) doSetFontSize(size int32) error {
 	return nil
 }
 
-func (m *Manager) getCurrentDTheme() *DTheme {
+func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
 	id := m.setting.GetString(gsKeyTheme)
-	dt := ListDTheme().Get(id)
+	dt := dtheme.ListDTheme().Get(id)
 	if dt != nil {
 		return dt
 	}
 
 	m.doSetDTheme(dthemeDefaultId)
-	return ListDTheme().Get(dthemeDefaultId)
+	return dtheme.ListDTheme().Get(dthemeDefaultId)
 }
 
-func (m *Manager) setDThemeByComponent(component *dthemeComponent) error {
-	id := ListDTheme().findDThemeId(component)
+func (m *Manager) setDThemeByComponent(component *dtheme.ThemeComponent) error {
+	id := dtheme.ListDTheme().FindDThemeId(component)
 	if len(id) != 0 {
 		return m.doSetDTheme(id)
 	}
 
-	err := doWriteCustomDTheme(component)
+	err := dtheme.WriteCustomTheme(component)
 	if err != nil {
 		return err
 	}

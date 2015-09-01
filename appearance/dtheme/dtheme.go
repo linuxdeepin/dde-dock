@@ -1,4 +1,4 @@
-package appearance
+package dtheme
 
 import (
 	"fmt"
@@ -36,7 +36,7 @@ const (
 	kfKeyFontSize      = "FontSize"
 )
 
-type dthemeComponent struct {
+type ThemeComponent struct {
 	Gtk           string
 	Icon          string
 	Cursor        string
@@ -94,6 +94,16 @@ func SetDTheme(id string) error {
 	return nil
 }
 
+func WriteCustomTheme(component *ThemeComponent) error {
+	file := path.Join(os.Getenv("HOME"), customConfig)
+	err := os.MkdirAll(path.Dir(file), 0755)
+	if err != nil {
+		return err
+	}
+
+	return doWriteCustomDTheme(component, file)
+}
+
 func GetDThemeThumbnail(id string) (string, error) {
 	dt := ListDTheme().Get(id)
 	if dt == nil {
@@ -127,7 +137,14 @@ func (infos DThemes) Delete(id string) error {
 	return info.Delete()
 }
 
-func (infos DThemes) findDThemeId(component *dthemeComponent) string {
+func (info *DTheme) Delete() error {
+	if !info.Deletable {
+		return fmt.Errorf("Permission Denied")
+	}
+	return os.RemoveAll(info.Path)
+}
+
+func (infos DThemes) FindDThemeId(component *ThemeComponent) string {
 	for _, info := range infos {
 		if info.isComponentSame(component) {
 			return info.Id
@@ -136,14 +153,7 @@ func (infos DThemes) findDThemeId(component *dthemeComponent) string {
 	return ""
 }
 
-func (info *DTheme) Delete() error {
-	if !info.Deletable {
-		return fmt.Errorf("Permission Denied")
-	}
-	return os.RemoveAll(info.Path)
-}
-
-func (info *DTheme) isComponentSame(component *dthemeComponent) bool {
+func (info *DTheme) isComponentSame(component *ThemeComponent) bool {
 	if info.Gtk.Id != component.Gtk ||
 		info.Icon.Id != component.Icon ||
 		info.Cursor.Id != component.Cursor ||
@@ -297,13 +307,7 @@ func scanner(dir string) []string {
 	return ret
 }
 
-func doWriteCustomDTheme(component *dthemeComponent) error {
-	file := path.Join(os.Getenv("HOME"), customConfig)
-	err := os.MkdirAll(path.Dir(file), 0755)
-	if err != nil {
-		return err
-	}
-
+func doWriteCustomDTheme(component *ThemeComponent, file string) error {
 	var content string = fmt.Sprintf(`[%s]
 %s=Custom
 %s=Custom

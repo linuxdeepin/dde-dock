@@ -3,6 +3,7 @@ package appearance
 import (
 	"fmt"
 	"pkg.deepin.io/dde/daemon/appearance/background"
+	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/dbus"
@@ -15,7 +16,7 @@ func (m *Manager) List(ty string) ([]string, error) {
 	logger.Debug("List for type:", ty)
 	switch strings.ToLower(ty) {
 	case TypeDTheme:
-		return ListDTheme().GetIds(), nil
+		return dtheme.ListDTheme().GetIds(), nil
 	case TypeGtkTheme:
 		return subthemes.ListGtkTheme().GetIds(), nil
 	case TypeIconTheme:
@@ -38,7 +39,7 @@ func (m *Manager) Show(ty, name string) (string, error) {
 	logger.Debugf("Show '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeDTheme:
-		return m.doShow(ListDTheme().Get(name))
+		return m.doShow(dtheme.ListDTheme().Get(name))
 	case TypeGtkTheme:
 		return m.doShow(subthemes.ListGtkTheme().Get(name))
 	case TypeIconTheme:
@@ -98,7 +99,7 @@ func (m *Manager) Delete(ty, name string) error {
 	logger.Debugf("Delete '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeDTheme:
-		return ListDTheme().Delete(name)
+		return dtheme.ListDTheme().Delete(name)
 	case TypeGtkTheme:
 		return subthemes.ListGtkTheme().Delete(name)
 	case TypeIconTheme:
@@ -118,7 +119,7 @@ func (m *Manager) Thumbnail(ty, name string) (string, error) {
 	logger.Debugf("Get thumbnail for '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
 	case TypeDTheme:
-		return GetDThemeThumbnail(name)
+		return dtheme.GetDThemeThumbnail(name)
 	case TypeGtkTheme:
 		return subthemes.GetGtkThumbnail(name)
 	case TypeIconTheme:
