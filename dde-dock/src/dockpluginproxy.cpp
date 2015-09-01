@@ -13,8 +13,8 @@ DockPluginProxy::DockPluginProxy(QPluginLoader * loader, DockPluginInterface * p
 
 DockPluginProxy::~DockPluginProxy()
 {
-    foreach (AbstractDockItem * item, m_items.values()) {
-        emit itemRemoved(item);
+    foreach (QString id, m_items.keys()) {
+        emit itemRemoved(m_items.take(id), id);
     }
     m_items.clear();
 
@@ -34,17 +34,20 @@ Dock::DockMode DockPluginProxy::dockMode()
     return DockModeData::instance()->getDockMode();
 }
 
+bool DockPluginProxy::isSystemPlugin()
+{
+    return m_loader->metaData()["MetaData"].toObject()["sys_plugin"].toBool();
+}
+
 void DockPluginProxy::itemAddedEvent(QString id)
 {
-    qDebug() << "Item added on plugin " << m_plugin->getPluginName() << id;
+    if (m_plugin->getItem(id)) {
+        qDebug() << "Item added on plugin " << m_plugin->getPluginName() << id;
 
-    if (!m_items.contains(id)) {
-        if (m_plugin->getItem(id)) {
-            AbstractDockItem * item = new PluginItemWrapper(m_plugin, id);
-            m_items[id] = item;
+        AbstractDockItem * item = new PluginItemWrapper(m_plugin, id);
+        m_items[id] = item;
 
-            emit itemAdded(item, id);
-        }
+        emit itemAdded(item, id);
     }
 }
 
@@ -56,7 +59,7 @@ void DockPluginProxy::itemRemovedEvent(QString id)
     if (item) {
         m_items.take(id);
 
-        emit itemRemoved(item);
+        emit itemRemoved(item, id);
     }
 }
 

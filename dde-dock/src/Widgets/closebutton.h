@@ -21,7 +21,6 @@ signals:
     void pressed();
     void released();
 
-public slots:
 private:
     void setIcon(const QString &path);
 

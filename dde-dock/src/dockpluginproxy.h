@@ -13,6 +13,7 @@ public:
     DockPluginProxy(QPluginLoader * loader, DockPluginInterface * plugin);
     ~DockPluginProxy();
 
+    bool isSystemPlugin();
     DockPluginInterface * plugin();
 
     Dock::DockMode dockMode() Q_DECL_OVERRIDE;
@@ -24,7 +25,7 @@ public:
 
 signals:
     void itemAdded(AbstractDockItem * item, QString uuid);
-    void itemRemoved(AbstractDockItem * item);
+    void itemRemoved(AbstractDockItem * item, QString uuid);
 
 private:
     QMap<QString, AbstractDockItem*> m_items;

@@ -77,6 +77,9 @@ void PanelMenu::slotItemInvoked(const QString &itemId, bool result)
     case ToSmartHide:
         changeToSmartHide();
         break;
+    case ToPluginSetting:
+        emit settingPlugin();
+        break;
     default:
         break;
     }

@@ -10,6 +10,8 @@
 DockPluginManager::DockPluginManager(QObject *parent) :
     QObject(parent)
 {
+    m_settingFrame = new PluginsSettingFrame;
+
     m_searchPaths << "/usr/share/dde-dock/plugins/";
 
     m_watcher = new QFileSystemWatcher(this);
@@ -27,6 +29,8 @@ DockPluginManager::DockPluginManager(QObject *parent) :
 
     connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
     connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
+
+
 }
 
 void DockPluginManager::initAll()
@@ -34,12 +38,22 @@ void DockPluginManager::initAll()
     foreach (DockPluginProxy * proxy, m_proxies.values()) {
         proxy->plugin()->init(proxy);
     }
+
+    refreshSettingWindow();
+}
+
+void DockPluginManager::onPluginsSetting(int y)
+{
+    m_settingFrame->move(QCursor::pos().x(), y - m_settingFrame->height());
+    m_settingFrame->show();
 }
 
 // public slots
-void DockPluginManager::onDockModeChanged(Dock::DockMode newMode,
-                                          Dock::DockMode oldMode)
+void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
+    if (newMode == oldMode)
+        return;
+
     qDebug() << "DockPluginManager::onDockModeChanged " << newMode << oldMode;
 
     foreach (DockPluginProxy * proxy, m_proxies) {
@@ -48,6 +62,7 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode,
     }
 
     updatePluginPos(newMode, oldMode);
+    refreshSettingWindow();
 }
 
 // private methods
@@ -75,17 +90,10 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
             if (proxy) {
                 m_proxies[path] = proxy;
                 m_watcher->addPath(path);
-
-                connect(proxy, &DockPluginProxy::itemAdded, [=](AbstractDockItem *item, QString uuid){
-                    if (pluginLoader->metaData()["MetaData"].toObject()["sys_plugin"].toBool())
-                        handleSysPluginAdd(item, uuid);
-                    else
-                        handleNormalPluginAdd(item);
-                });
-                connect(proxy, &DockPluginProxy::itemRemoved, [=](AbstractDockItem *item){
-                    m_sysPlugins.remove(item);
-                    m_normalPlugins.removeAt(m_normalPlugins.indexOf(item));
-                    emit itemRemoved(item);
+                connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::onPluginItemAdded);
+                connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::onPluginItemRemoved);
+                connect(m_settingFrame, &PluginsSettingFrame::disableChanged, [=](QString uuid, bool disable){
+                    interface->setDisabled(uuid, disable);
                 });
 
                 return proxy;
@@ -113,15 +121,52 @@ void DockPluginManager::unloadPlugin(const QString &path)
 void DockPluginManager::updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     if (newMode == Dock::FashionMode && oldMode != Dock::FashionMode){
-        foreach (AbstractDockItem *item, m_normalPlugins) {
+        foreach (AbstractDockItem *item, m_normalPlugins.keys()) {
             emit itemMove(NULL, item);  //Move to the front of the list
         }
     }else if (oldMode == Dock::FashionMode){
         AbstractDockItem * systrayItem = sysPluginItem(SYSTRAY_PLUGIN_ID);
-        foreach (AbstractDockItem *item, m_normalPlugins) {
+        foreach (AbstractDockItem *item, m_normalPlugins.keys()) {
             emit itemMove(systrayItem, item);   //Move to the back of systray plugin
         }
     }
+}
+
+void DockPluginManager::refreshSettingWindow()
+{
+    m_settingFrame->clear();
+
+    foreach (DockPluginProxy *proxy, m_proxies.values()) {
+        QStringList ids = proxy->plugin()->ids();
+        foreach (QString uuid, ids) {
+            if (proxy->plugin()->canDisable(uuid)){
+                m_settingFrame->onPluginAdd(!proxy->plugin()->isDisabled(uuid),
+                                            uuid,
+                                            proxy->plugin()->getName(uuid),
+                                            proxy->plugin()->getIcon(uuid));
+            }
+        }
+    }
+}
+
+void DockPluginManager::onPluginItemAdded(AbstractDockItem *item, QString uuid)
+{
+    DockPluginProxy *proxy = qobject_cast<DockPluginProxy *>(sender());
+    if (!proxy)
+        return;
+
+    if (proxy->isSystemPlugin())
+        handleSysPluginAdd(item, uuid);
+    else
+        handleNormalPluginAdd(item, uuid);
+}
+
+void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString uuid)
+{
+    m_sysPlugins.remove(item);
+    m_normalPlugins.remove(item);
+
+    emit itemRemoved(item);
 }
 
 // private slots
@@ -165,6 +210,9 @@ AbstractDockItem *DockPluginManager::sysPluginItem(QString id)
 
 void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
 {
+    if (!item || m_sysPlugins.values().indexOf(uuid) != -1)
+        return;
+
     m_sysPlugins.insert(item, uuid);
 
     if (uuid == SYSTRAY_PLUGIN_ID){
@@ -177,9 +225,12 @@ void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
         emit itemAppend(item);
 }
 
-void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item)
+void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uuid)
 {
-    m_normalPlugins.append(item);
+    if (!item || m_normalPlugins.values().indexOf(uuid) != -1)
+        return;
+
+    m_normalPlugins.insert(item, uuid);
 
     if (m_dockModeData->getDockMode() == Dock::FashionMode)
         emit itemInsert(NULL, item);

@@ -67,10 +67,10 @@ QWidget * TrashPlugin::getApplet(QString)
     return NULL;
 }
 
-void TrashPlugin::changeMode(Dock::DockMode newMode,
-                             Dock::DockMode)
+void TrashPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
-    setMode(newMode);
+    if (newMode != oldMode)
+        setMode(newMode);
 }
 
 QString TrashPlugin::getMenuContent(QString)
@@ -99,8 +99,10 @@ void TrashPlugin::setMode(Dock::DockMode mode)
 
     if (mode == Dock::FashionMode)
         m_proxy->itemAddedEvent(m_id);
-    else
+    else{
         m_proxy->itemRemovedEvent(m_id);
+        m_item->setParent(NULL);
+    }
 }
 
 QJsonObject TrashPlugin::createMenuItem(QString itemId, QString itemName, bool checkable, bool checked)
@@ -120,7 +122,6 @@ QJsonObject TrashPlugin::createMenuItem(QString itemId, QString itemName, bool c
 
     return itemObj;
 }
-
 
 TrashPlugin::~TrashPlugin()
 {

@@ -34,6 +34,7 @@ public:
 
     void showMenu(int x,int y);
 signals:
+    void settingPlugin();
 
 private slots:
     void slotItemInvoked(const QString &itemId,bool result);

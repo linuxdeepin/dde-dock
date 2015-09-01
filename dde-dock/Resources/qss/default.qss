@@ -63,3 +63,32 @@ PanelMenuItem:hover {
     background: gray;
     color: #ffffff
 }
+
+/********************************Plugin Setting********************/
+QLabel#PluginSettingTitle {
+    color:#b4b4b4;
+}
+
+QLabel#PluginSettingLineTitle {
+    color:#b4b4b4;
+}
+
+QWidget#PluginsSettingFrame {
+    background-color: rgba(0,0,0,0.9);
+    border-radius: 3;
+}
+
+QPushButton#PluginSettingCloseButton{
+
+    border-image: url(":/images/Resource/dark/images/dark_close_small_normal.png");
+}
+
+QPushButton#PluginSettingCloseButton:hover{
+    border-image: url(":/images/Resource/dark/images/dark_close_small_hover.png");
+}
+
+
+QPushButton#PluginSettingCloseButton:pressed{
+    border-image: url(":/images/Resource/dark/images/dark_close_small_press.png");
+}
+

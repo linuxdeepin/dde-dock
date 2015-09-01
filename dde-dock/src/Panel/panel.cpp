@@ -107,6 +107,10 @@ void Panel::initPluginManager()
     connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         m_pluginLayout->removeItem(item);
     });
+    connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
+        QRect rec = QApplication::desktop()->screenGeometry();
+        pluginManager->onPluginsSetting(rec.height() - height());
+    });
 
     pluginManager->initAll();
 }

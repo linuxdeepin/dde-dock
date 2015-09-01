@@ -1,13 +1,14 @@
 #ifndef DOCKPLUGINMANAGER_H
 #define DOCKPLUGINMANAGER_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QStringList>
 
 #include "dockconstants.h"
 #include "abstractdockitem.h"
 #include "Controller/dockmodedata.h"
+#include "Panel/pluginssettingframe.h"
 
 class QFileSystemWatcher;
 class DockPluginProxy;
@@ -26,6 +27,7 @@ signals:
     void itemRemoved(AbstractDockItem * item);
 
 public slots:
+    void onPluginsSetting(int y);
     void onDockModeChanged(Dock::DockMode newMode,
                            Dock::DockMode oldMode);
 
@@ -37,14 +39,18 @@ private:
     AbstractDockItem * sysPluginItem(QString id);
     DockPluginProxy * loadPlugin(const QString & path);
     void handleSysPluginAdd(AbstractDockItem *item, QString uuid);
-    void handleNormalPluginAdd(AbstractDockItem *item);
+    void handleNormalPluginAdd(AbstractDockItem *item, QString uuid);
     void unloadPlugin(const QString & path);
     void updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode);
+    void refreshSettingWindow();
+    void onPluginItemAdded(AbstractDockItem *item, QString uuid);
+    void onPluginItemRemoved(AbstractDockItem *item, QString uuid);
 
 private:
+    PluginsSettingFrame *m_settingFrame = NULL;
     QMap<AbstractDockItem *, QString> m_sysPlugins;
+    QMap<AbstractDockItem *, QString> m_normalPlugins;
     QMap<QString, DockPluginProxy*> m_proxies;
-    QList<AbstractDockItem *> m_normalPlugins;
     QFileSystemWatcher * m_watcher = NULL;
     QStringList m_searchPaths;
     DockModeData *m_dockModeData = DockModeData::instance();

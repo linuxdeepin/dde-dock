@@ -1,6 +1,7 @@
 #ifndef DOCKPLUGININTERFACE_H
 #define DOCKPLUGININTERFACE_H
 
+#include <QPixmap>
 #include <QObject>
 #include <QStringList>
 
@@ -21,6 +22,7 @@ public:
     virtual QString getName(QString id) = 0;
     virtual QString getTitle(QString id) = 0;
     virtual QString getCommand(QString id) = 0;
+    virtual QPixmap getIcon(QString id) {Q_UNUSED(id); return QPixmap("");}
     virtual bool canDisable(QString id) = 0;
     virtual bool isDisabled(QString id) = 0;
     virtual void setDisabled(QString id, bool disabled) = 0;

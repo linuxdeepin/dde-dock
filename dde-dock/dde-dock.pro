@@ -47,7 +47,8 @@ SOURCES += \
     src/Widgets/launcheritem.cpp \
     src/Widgets/reflectioneffect.cpp \
     src/Widgets/highlighteffect.cpp \
-    src/Widgets/previewarrowrectangle.cpp
+    src/Widgets/previewarrowrectangle.cpp \
+    src/Panel/pluginssettingframe.cpp
 
 HEADERS  += \
     src/abstractdockitem.h \
@@ -84,13 +85,14 @@ HEADERS  += \
     src/Widgets/launcheritem.h \
     src/Widgets/reflectioneffect.h \
     src/Widgets/highlighteffect.h \
-    src/Widgets/previewarrowrectangle.h
+    src/Widgets/previewarrowrectangle.h \
+    src/Panel/pluginssettingframe.h
 
 RESOURCES += \
     images.qrc \
     qss.qrc
 
-PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage
+PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage dui
 CONFIG += c++11 link_pkgconfig
 
 target.path = /usr/bin/
