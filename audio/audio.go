@@ -355,9 +355,6 @@ var playFeedbackWithDevice = func() func(string) {
 	}
 
 	return func(device string) {
-		// ALSA unable to identify device,
-		// lib pcm.c: Unknown PCM alsa_output.pci-0000_00_1b.0.analog-stereo
-		//player.PlaySystemSoundWithDevice("audio-volume-change", device)
-		player.PlaySystemSound("audio-volume-change")
+		player.PlaySystemSoundWithDevice("audio-volume-change", device)
 	}
 }()
