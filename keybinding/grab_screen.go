@@ -31,6 +31,13 @@ func (m *Manager) doGrabScreen() error {
 			xevent.Quit(xu)
 		}).Connect(xu, xu.RootWin())
 
+	xevent.ButtonReleaseFun(
+		func(x *xgbutil.XUtil, e xevent.ButtonReleaseEvent) {
+			dbus.Emit(m, "KeyEvent", false, "")
+			ungrabKbdAndMouse(xu)
+			xevent.Quit(xu)
+		}).Connect(xu, xu.RootWin())
+
 	xevent.KeyPressFun(
 		func(x *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			pressedKey, _ = core.FormatKeyEvent(e.State,

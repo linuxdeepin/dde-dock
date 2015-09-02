@@ -32,7 +32,7 @@ static void font_info_free(FcInfo *info);
 FcInfo *
 get_font_info_list (int *num)
 {
-	FcInit();
+	/* FcInit(); */
 	*num = -1;
 	FcPattern *pat = FcPatternCreate();
 	if (!pat) {
@@ -118,7 +118,7 @@ get_font_info_list (int *num)
 		cnt++;
 	}
 	FcFontSetDestroy(fs);
-	//FcFini(); // SIGABRT: FcCacheFini 'fcCacheFini[i] == NULL failed'
+	//FcFini(); // SIGABRT: FcCacheFini 'assert fcCacheChains[i] == NULL failed'
 
 	*num = cnt;
 
@@ -172,7 +172,7 @@ font_match(char* family)
 	FcPatternDestroy(font);
 	FcFontSetDestroy(fs);
 	FcPatternDestroy(match);
-	FcFini();
+	//FcFini(); // SIGABRT: FcCacheFini 'assert fcCacheChains[i] == NULL failed'
 
 	if (!ret) {
 		return NULL;
