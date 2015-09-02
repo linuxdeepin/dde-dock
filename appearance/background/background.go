@@ -37,28 +37,31 @@ func ListBackground() Backgrounds {
 }
 
 func IsBackgroundFile(file string) bool {
-	return graphic.IsSupportedImage(file)
+	return graphic.IsSupportedImage(dutils.DecodeURI(file))
 }
 
-func (infos Backgrounds) Set(uri string) error {
+func (infos Backgrounds) Set(uri string) (string, error) {
+	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
 	info := infos.Get(uri)
 	if info != nil {
-		return doSetByURI(uri)
+		return uri, doSetByURI(uri)
 	}
 
-	dest, err := getBgDest(uri)
+	file := dutils.DecodeURI(uri)
+	dest, err := getBgDest(file)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if !dutils.IsFileExist(dest) {
-		err = dutils.CopyFile(uri, dest)
+		err = dutils.CopyFile(file, dest)
 		if err != nil {
-			return err
+			return "", err
 		}
 	}
+	uri = dutils.EncodeURI(dest, dutils.SCHEME_FILE)
 
-	return doSetByURI(dest)
+	return uri, doSetByURI(dest)
 }
 
 func (infos Backgrounds) GetURIs() []string {
@@ -116,16 +119,22 @@ func doSetByURI(uri string) error {
 		return err
 	}
 	defer setting.Unref()
+
+	old := setting.GetString(gsKeyBackground)
+	if old == uri {
+		return nil
+	}
+
 	setting.SetString(gsKeyBackground, uri)
 	return nil
 }
 
-func getBgDest(uri string) (string, error) {
-	id, ok := dutils.SumFileMd5(dutils.DecodeURI(uri))
+func getBgDest(file string) (string, error) {
+	id, ok := dutils.SumFileMd5(file)
 	if !ok {
-		return "", fmt.Errorf("Not found '%s'", uri)
+		return "", fmt.Errorf("Not found '%s'", file)
 	}
 	return path.Join(
 		glib.GetUserSpecialDir(glib.UserDirectoryDirectoryPictures),
-		id+".png"), nil
+		"Wallpapers", id+".png"), nil
 }

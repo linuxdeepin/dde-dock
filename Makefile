@@ -75,8 +75,8 @@ install: build translate
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde-daemon
 	cp -r misc/dde-daemon/*   ${DESTDIR}${PREFIX}/share/dde-daemon/
 
-	mkdir -pv ${DESTDIR}${PREFIX}/var/cache/appearance
-	cp -r misc/thumbnail ${DESTDIR}${PREFIX}/var/cache/appearance/
+	mkdir -pv ${DESTDIR}/var/cache/appearance
+	cp -r misc/thumbnail ${DESTDIR}/var/cache/appearance/
 
 clean:
 	rm -rf ${GOPATH_DIR}

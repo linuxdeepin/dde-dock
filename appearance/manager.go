@@ -8,6 +8,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/gio-2.0"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -25,6 +26,10 @@ const (
 	dthemeDefaultId = "Deepin"
 	dthemeCustomId  = "Custom"
 
+	wrapBgSchema    = "com.deepin.wrap.gnome.desktop.background"
+	gnomeBgSchema   = "org.gnome.desktop.background"
+	gsKeyBackground = "picture-uri"
+
 	appearanceSchema = "com.deepin.dde.appearance"
 	gsKeyTheme       = "theme"
 	gsKeyFontSize    = "font-size"
@@ -41,6 +46,9 @@ type Manager struct {
 	Changed func(string, string)
 
 	setting *gio.Settings
+
+	wrapBgSetting  *gio.Settings
+	gnomeBgSetting *gio.Settings
 }
 
 func NewManager() *Manager {
@@ -48,6 +56,9 @@ func NewManager() *Manager {
 	m.setting = gio.NewSettings(appearanceSchema)
 	m.setPropTheme(m.setting.GetString(gsKeyTheme))
 	m.setPropFontSize(m.setting.GetInt(gsKeyFontSize))
+
+	m.wrapBgSetting, _ = dutils.CheckAndNewGSettings(wrapBgSchema)
+	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
 	m.init()
 
@@ -91,6 +102,7 @@ func (m *Manager) doSetGtkTheme(value string) error {
 		return fmt.Errorf("Invalid gtk theme '%v'", value)
 	}
 
+	subthemes.SetGtkTheme(value)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           value,
 		Icon:          dt.Icon.Id,
@@ -111,6 +123,7 @@ func (m *Manager) doSetIconTheme(value string) error {
 		return fmt.Errorf("Invalid icon theme '%v'", value)
 	}
 
+	subthemes.SetIconTheme(value)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          value,
@@ -131,6 +144,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 		return fmt.Errorf("Invalid cursor theme '%v'", value)
 	}
 
+	go subthemes.SetCursorTheme(value)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
@@ -151,11 +165,15 @@ func (m *Manager) doSetBackground(value string) error {
 		return fmt.Errorf("Invalid background file '%v'", value)
 	}
 
+	uri, err := background.ListBackground().Set(value)
+	if err != nil {
+		return err
+	}
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
-		Background:    value,
+		Background:    uri,
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
@@ -171,6 +189,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
+	fonts.SetFamily(value, dt.MonospaceFont.Id)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
@@ -191,6 +210,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
+	fonts.SetFamily(dt.StandardFont.Id, value)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
