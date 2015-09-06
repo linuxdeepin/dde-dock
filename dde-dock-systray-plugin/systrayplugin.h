@@ -6,9 +6,9 @@
 #include <QWindow>
 #include <QWidget>
 
-#include "dockconstants.h"
-#include "dockplugininterface.h"
-#include "dockpluginproxyinterface.h"
+#include "interfaces/dockconstants.h"
+#include "interfaces/dockplugininterface.h"
+#include "interfaces/dockpluginproxyinterface.h"
 
 #include "dbustraymanager.h"
 

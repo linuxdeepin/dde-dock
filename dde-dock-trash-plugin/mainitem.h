@@ -10,7 +10,7 @@
 
 #include "dialogs/confirmuninstalldialog.h"
 #include "dialogs/cleartrashdialog.h"
-#include "dockconstants.h"
+#include "interfaces/dockconstants.h"
 #include "dbus/dbusfiletrashmonitor.h"
 #include "dbus/dbusfileoperations.h"
 #include "dbus/dbusemptytrashjob.h"

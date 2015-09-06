@@ -14,92 +14,92 @@ INCLUDEPATH += ./src ./libs
 
 DEFINES += PLUGIN_API_VERSION=1.0
 
-SOURCES += \
-    src/main.cpp \
-    src/mainwidget.cpp \
-    src/abstractdockitem.cpp \
-    src/Widgets/appbackground.cpp \
-    src/Widgets/appicon.cpp \
-    src/Widgets/docklayout.cpp \
-    src/Widgets/screenmask.cpp \
-    src/Widgets/windowpreview.cpp \
-    src/Panel/panel.cpp \
-    src/Widgets/appitem.cpp \
-    src/Panel/panelmenu.cpp \
-    src/Controller/dockmodedata.cpp \
-    src/Controller/appmanager.cpp \
-    src/DBus/dbusentrymanager.cpp \
-    src/DBus/dbusentryproxyer.cpp \
-    src/DBus/dbuspanelmanager.cpp \
-    src/DBus/dbusclientmanager.cpp \
-    src/DBus/dbusdockedappmanager.cpp \
-    src/DBus/dbusdocksetting.cpp \
-    src/pluginitemwrapper.cpp \
-    src/Widgets/arrowrectangle.cpp \
-    src/dockpluginproxy.cpp \
-    src/dockpluginmanager.cpp\
-    src/DBus/dbusmenumanager.cpp \
-    src/DBus/dbusmenu.cpp \
-    src/Widgets/apppreviews.cpp \
-    src/Widgets/closebutton.cpp \
-    src/DBus/dbushidestatemanager.cpp \
-    libs/xcb_misc.cpp \
-    src/Widgets/launcheritem.cpp \
-    src/Widgets/reflectioneffect.cpp \
-    src/Widgets/highlighteffect.cpp \
-    src/Widgets/previewarrowrectangle.cpp \
-    src/Panel/pluginssettingframe.cpp
-
-HEADERS  += \
-    src/abstractdockitem.h \
-    src/dockplugininterface.h \
-    src/mainwidget.h \
-    src/Widgets/appbackground.h \
-    src/Widgets/appicon.h \
-    src/Widgets/docklayout.h \
-    src/Widgets/screenmask.h \
-    src/Widgets/windowpreview.h \
-    src/Panel/panel.h \
-    src/Widgets/appitem.h \
-    src/Panel/panelmenu.h \
-    src/Controller/dockmodedata.h \
-    src/Controller/appmanager.h \
-    src/DBus/dbusentrymanager.h \
-    src/DBus/dbusentryproxyer.h \
-    src/DBus/dbuspanelmanager.h \
-    src/DBus/dbusclientmanager.h \
-    src/DBus/dbusdockedappmanager.h \
-    src/DBus/dbusdocksetting.h \
-    src/pluginitemwrapper.h \
-    src/Widgets/arrowrectangle.h\
-    src/dockpluginproxyinterface.h \
-    src/dockpluginproxy.h \
-    src/DBus/dbusmenumanager.h \
-    src/DBus/dbusmenu.h \
-    src/dockpluginmanager.h \
-    src/dockconstants.h \
-    src/Widgets/apppreviews.h \
-    src/Widgets/closebutton.h \
-    src/DBus/dbushidestatemanager.h \
-    libs/xcb_misc.h \
-    src/Widgets/launcheritem.h \
-    src/Widgets/reflectioneffect.h \
-    src/Widgets/highlighteffect.h \
-    src/Widgets/previewarrowrectangle.h \
-    src/Panel/pluginssettingframe.h
 
 RESOURCES += \
-    images.qrc \
-    qss.qrc
+    dark.qrc \
+    light.qrc
 
 PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage dui
 CONFIG += c++11 link_pkgconfig
 
 target.path = /usr/bin/
 
-headers.files += src/dockconstants.h \
-    src/dockplugininterface.h \
-    src/dockpluginproxyinterface.h
+headers.files += src/interfaces/dockconstants.h \
+    src/interfaces/dockplugininterface.h \
+    src/interfaces/dockpluginproxyinterface.h
 headers.path = /usr/include/dde-dock
 
 INSTALLS += headers target
+
+HEADERS += \
+    libs/xcb_misc.h \
+    src/controller/appmanager.h \
+    src/controller/dockmodedata.h \
+    src/controller/plugins/dockpluginmanager.h \
+    src/controller/plugins/dockpluginproxy.h \
+    src/controller/plugins/pluginitemwrapper.h \
+    src/controller/plugins/pluginssettingframe.h \
+    src/dbus/dbusclientmanager.h \
+    src/dbus/dbusdockedappmanager.h \
+    src/dbus/dbusdocksetting.h \
+    src/dbus/dbusentrymanager.h \
+    src/dbus/dbusentryproxyer.h \
+    src/dbus/dbushidestatemanager.h \
+    src/dbus/dbusmenu.h \
+    src/dbus/dbusmenumanager.h \
+    src/dbus/dbuspanelmanager.h \
+    src/panel/panel.h \
+    src/panel/panelmenu.h \
+    src/widgets/abstractdockitem.h \
+    src/widgets/appbackground.h \
+    src/widgets/appicon.h \
+    src/widgets/appitem.h \
+    src/widgets/apppreviews.h \
+    src/widgets/arrowrectangle.h \
+    src/widgets/docklayout.h \
+    src/widgets/dockmodel.h \
+    src/widgets/dockview.h \
+    src/widgets/highlighteffect.h \
+    src/widgets/launcheritem.h \
+    src/widgets/previewarrowrectangle.h \
+    src/widgets/reflectioneffect.h \
+    src/widgets/screenmask.h \
+    src/widgets/windowpreview.h \
+    src/mainwidget.h
+
+SOURCES += \
+    libs/xcb_misc.cpp \
+    src/controller/appmanager.cpp \
+    src/controller/dockmodedata.cpp \
+    src/controller/plugins/dockpluginmanager.cpp \
+    src/controller/plugins/dockpluginproxy.cpp \
+    src/controller/plugins/pluginitemwrapper.cpp \
+    src/controller/plugins/pluginssettingframe.cpp \
+    src/dbus/dbusclientmanager.cpp \
+    src/dbus/dbusdockedappmanager.cpp \
+    src/dbus/dbusdocksetting.cpp \
+    src/dbus/dbusentrymanager.cpp \
+    src/dbus/dbusentryproxyer.cpp \
+    src/dbus/dbushidestatemanager.cpp \
+    src/dbus/dbusmenu.cpp \
+    src/dbus/dbusmenumanager.cpp \
+    src/dbus/dbuspanelmanager.cpp \
+    src/panel/panel.cpp \
+    src/panel/panelmenu.cpp \
+    src/widgets/abstractdockitem.cpp \
+    src/widgets/appbackground.cpp \
+    src/widgets/appicon.cpp \
+    src/widgets/appitem.cpp \
+    src/widgets/apppreviews.cpp \
+    src/widgets/arrowrectangle.cpp \
+    src/widgets/docklayout.cpp \
+    src/widgets/dockmodel.cpp \
+    src/widgets/dockview.cpp \
+    src/widgets/highlighteffect.cpp \
+    src/widgets/launcheritem.cpp \
+    src/widgets/previewarrowrectangle.cpp \
+    src/widgets/reflectioneffect.cpp \
+    src/widgets/screenmask.cpp \
+    src/widgets/windowpreview.cpp \
+    src/main.cpp \
+    src/mainwidget.cpp

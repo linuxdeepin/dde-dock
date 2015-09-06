@@ -9,10 +9,10 @@
 #include <QState>
 #include <QPropertyAnimation>
 #include <QDBusConnection>
-#include "DBus/dbushidestatemanager.h"
-#include "DBus/dbusdocksetting.h"
-#include "Controller/dockmodedata.h"
-#include "Panel/panel.h"
+#include "dbus/dbushidestatemanager.h"
+#include "dbus/dbusdocksetting.h"
+#include "controller/dockmodedata.h"
+#include "panel/panel.h"
 
 const QString DBUS_PATH = "/com/deepin/dde/dock";
 const QString DBUS_NAME = "com.deepin.dde.dock";

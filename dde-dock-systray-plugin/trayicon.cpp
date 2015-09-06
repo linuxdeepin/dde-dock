@@ -5,7 +5,7 @@
 
 #include <QX11Info>
 
-#include "dockconstants.h"
+#include "interfaces/dockconstants.h"
 
 #include "trayicon.h"
 #include <X11/Xlib.h>

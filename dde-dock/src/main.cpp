@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     a.setApplicationDisplayName("Dock");
 
     if (QDBusConnection::sessionBus().registerService(DBUS_NAME)) {
-        QFile file("://Resources/qss/default.qss");
+        QFile file("://qss/resources/dark/qss/dde-dock.qss");
         if (file.open(QFile::ReadOnly)) {
             QString styleSheet = QLatin1String(file.readAll());
             qApp->setStyleSheet(styleSheet);
