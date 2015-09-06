@@ -8,10 +8,10 @@
 // let startdde know that we've already started.
 void RegisterDdeSession()
 {
-    char *envName = "DDE_SESSION_PROCESS_COOKIE_ID";
+    QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
 
-    QByteArray cookie = qgetenv(envName);
-    qunsetenv(envName);
+    QByteArray cookie = qgetenv(envName.toUtf8().data());
+    qunsetenv(envName.toUtf8().data());
 
     if (!cookie.isEmpty()) {
         QDBusInterface iface("com.deepin.SessionManager",

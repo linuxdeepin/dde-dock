@@ -161,7 +161,7 @@ void DockPluginManager::onPluginItemAdded(AbstractDockItem *item, QString uuid)
         handleNormalPluginAdd(item, uuid);
 }
 
-void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString uuid)
+void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString)
 {
     m_sysPlugins.remove(item);
     m_normalPlugins.remove(item);

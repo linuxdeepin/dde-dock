@@ -237,7 +237,9 @@ void Panel::onAppItemRemove(const QString &id)
 
 void Panel::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode)
 {
+    m_appLayout->setSpacing(m_dockModeData->getAppItemSpacing());
     m_appLayout->relayout();
+    m_pluginLayout->setSpacing(m_dockModeData->getAppletsItemSpacing());
     m_pluginLayout->relayout();
 
     reanchorsLayout(newMode);

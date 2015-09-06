@@ -24,12 +24,13 @@ MainWidget::MainWidget(QWidget *parent)
     changeDockMode(m_dmd->getDockMode(), m_dmd->getDockMode());
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
+    Q_UNUSED(dockUIDbus)
 
     XcbMisc::instance()->set_window_type(winId(),
                                          XcbMisc::Dock);
 }
 
-void MainWidget::changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode)
+void MainWidget::changeDockMode(Dock::DockMode, Dock::DockMode)
 {
     if (hasHidden)
         return;

@@ -32,6 +32,9 @@ headers.path = /usr/include/dde-dock
 INSTALLS += headers target
 
 HEADERS += \
+    src/interfaces/dockconstants.h \
+    src/interfaces/dockplugininterface.h \
+    src/interfaces/dockpluginproxyinterface.h \
     libs/xcb_misc.h \
     src/controller/appmanager.h \
     src/controller/dockmodedata.h \

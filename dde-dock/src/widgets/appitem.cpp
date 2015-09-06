@@ -151,13 +151,13 @@ void AppItem::dropEvent(QDropEvent *event)
     qWarning() << "Item get drop:" << event->pos();
 }
 
-void AppItem::enterEvent(QEvent *event)
+void AppItem::enterEvent(QEvent *)
 {
     if (m_dockModeData->getDockMode() != Dock::FashionMode)
         onMouseEnter();
 }
 
-void AppItem::leaveEvent(QEvent *event)
+void AppItem::leaveEvent(QEvent *)
 {
     if (m_dockModeData->getDockMode() != Dock::FashionMode)
         onMouseLeave();

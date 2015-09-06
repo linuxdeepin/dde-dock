@@ -19,7 +19,6 @@ class DockLayout : public QWidget
 public:
     enum Direction{
         LeftToRight,
-        RightToLeft,
         TopToBottom
     };
 

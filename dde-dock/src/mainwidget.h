@@ -33,7 +33,7 @@ protected:
 private:
     void showDock();
     void hideDock();
-    void changeDockMode(Dock::DockMode newMode,Dock::DockMode oldMode);
+    void changeDockMode(Dock::DockMode, Dock::DockMode);
     void updateXcbStructPartial();
     void initHideStateManager();
     void initDockSetting();

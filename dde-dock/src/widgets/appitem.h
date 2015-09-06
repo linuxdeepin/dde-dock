@@ -59,8 +59,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *);
     void dropEvent(QDropEvent * event);
-    void enterEvent(QEvent *event);
-    void leaveEvent(QEvent *event);
+    void enterEvent(QEvent *);
+    void leaveEvent(QEvent *);
 
 private:
     void initClientManager();

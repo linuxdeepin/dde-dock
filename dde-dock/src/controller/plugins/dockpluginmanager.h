@@ -44,7 +44,7 @@ private:
     void updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode);
     void refreshSettingWindow();
     void onPluginItemAdded(AbstractDockItem *item, QString uuid);
-    void onPluginItemRemoved(AbstractDockItem *item, QString uuid);
+    void onPluginItemRemoved(AbstractDockItem *item, QString);
 
 private:
     PluginsSettingFrame *m_settingFrame = NULL;

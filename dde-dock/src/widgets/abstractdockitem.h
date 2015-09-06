@@ -38,7 +38,7 @@ public:
     virtual bool moveable();
     virtual bool actived();
     virtual void invokeMenuItem(QString menuItemId, bool checked);
-    virtual void moveWithAnimation(QPoint targetPos, int duration = 100){}
+    virtual void moveWithAnimation(QPoint targetPos, int duration = 100){Q_UNUSED(targetPos) Q_UNUSED(duration)}
 
     void setNextPos(int x, int y);
     void setNextPos(const QPoint &value);

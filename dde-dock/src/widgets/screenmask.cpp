@@ -20,7 +20,7 @@ void ScreenMask::dragEnterEvent(QDragEnterEvent *event)
     emit itemEntered();
 }
 
-void ScreenMask::dragLeaveEvent(QDragLeaveEvent *event)
+void ScreenMask::dragLeaveEvent(QDragLeaveEvent *)
 {
     emit itemExited();
 }

@@ -376,7 +376,7 @@ void DockLayout::leftToRightMove(int hoverIndex)
 
 void DockLayout::topToBottomMove(int hoverIndex)
 {
-
+    Q_UNUSED(hoverIndex)
 }
 
 void DockLayout::addSpacingItem()

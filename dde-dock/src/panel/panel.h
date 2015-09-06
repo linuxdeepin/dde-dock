@@ -81,9 +81,9 @@ private:
 
     bool m_containMouse = false;
     bool m_isFashionMode = false;
+    const int REFLECTION_HEIGHT = 15;
     const int FASHION_PANEL_LPADDING = 21;
     const int FASHION_PANEL_RPADDING = 21;
-    const int REFLECTION_HEIGHT = 15;
     const int WIDTH_ANIMATION_DURATION = 200;
     const int SHOW_HIDE_ANIMATION_DURATION = 200;
     const QEasingCurve SHOW_HIDE_EASINGCURVE = QEasingCurve::InSine;

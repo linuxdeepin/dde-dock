@@ -64,7 +64,7 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *);
     void dropEvent(QDropEvent *event);
     void enterEvent(QEvent *);
 
