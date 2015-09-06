@@ -24,6 +24,10 @@ func (m *Manager) doGrabScreen() error {
 		return err
 	}
 
+	// Disable xrecord key event handler
+	core.XRecordEnable(false)
+	defer core.XRecordEnable(true)
+
 	xevent.ButtonPressFun(
 		func(x *xgbutil.XUtil, e xevent.ButtonPressEvent) {
 			dbus.Emit(m, "KeyEvent", true, "")

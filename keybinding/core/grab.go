@@ -32,6 +32,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"strings"
+	"sync"
 )
 
 type HandleType func(uint16, int, bool)
@@ -41,6 +42,9 @@ var (
 	handlers Handlers
 
 	loopRun bool
+
+	xrecordEnabled bool
+	xrecordLocker  sync.Mutex
 )
 
 /**
@@ -82,9 +86,18 @@ func StartLoop() {
 	}
 
 	C.xrecord_grab_init()
+	XRecordEnable(true)
+
 	listenKeyEvent()
 	loopRun = true
 	xevent.Main(_xu)
+}
+
+func XRecordEnable(enabled bool) {
+	xrecordLocker.Lock()
+	defer xrecordLocker.Unlock()
+
+	xrecordEnabled = enabled
 }
 
 func GrabAccels(accels []string, handler HandleType) error {

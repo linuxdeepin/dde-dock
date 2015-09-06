@@ -9,6 +9,10 @@ import (
 
 //export handleSingleKeyEvent
 func handleSingleKeyEvent(keycode, pressed int) {
+	if !xrecordEnabled {
+		return
+	}
+
 	//Don't anything if pressed
 	if pressed == 1 {
 		return
