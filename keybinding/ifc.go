@@ -188,19 +188,29 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) 
 	return false, "", m.addAccel(id, ty, accel)
 }
 
-// GetAction get the special id action, only for custom id
-func (m *Manager) GetAction(id string, ty int32) (string, error) {
-	logger.Debug("Get cmd for '%s' type '%v'", id, ty)
-	if ty != shortcuts.KeyTypeCustom && ty != shortcuts.KeyTypeSystem {
-		return "", fmt.Errorf("Invalid, shortcut type '%v'", ty)
+// Query query shortcut detail info by id and type
+func (m *Manager) Query(id string, ty int32) (string, error) {
+	logger.Debug("Query by:", id, ty)
+	var v interface{}
+	switch ty {
+	case shortcuts.KeyTypeSystem:
+		v = shortcuts.ListSystemShortcuts().GetById(id, ty)
+	case shortcuts.KeyTypeWM:
+		v = shortcuts.ListWMShortcuts().GetById(id, ty)
+	case shortcuts.KeyTypeMedia:
+		v = shortcuts.ListMediaShortcuts().GetById(id, ty)
+	case shortcuts.KeyTypeCustom:
+		v = shortcuts.ListCustomKey().Get(id)
+	default:
+		return "", fmt.Errorf("Invalid shortcut type:", ty)
 	}
 
-	info := m.grabedList.GetById(id, ty)
-	if info == nil {
-		return "", fmt.Errorf("Invalid shortcut id '%s'", id)
+	if v == nil {
+		return "", fmt.Errorf("Not found the id:", id, ty)
 	}
 
-	return info.GetAction(), nil
+	ret, _ := doMarshal(v)
+	return ret, nil
 }
 
 // GrabScreen grab screen for getting the key pressed

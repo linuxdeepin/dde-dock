@@ -41,7 +41,7 @@ const (
 )
 
 type customKeyInfo struct {
-	Core   *Shortcut
+	Shortcut
 	Action string
 }
 type customKeyInfos []*customKeyInfo
@@ -58,7 +58,7 @@ func ListCustomKey() customKeyInfos {
 func AddCustomKey(name, action string, accels []string) (string, error) {
 	id := dutils.GenUuid()
 	err := writeCustomKeyInfo(&customKeyInfo{
-		Core: &Shortcut{
+		Shortcut: Shortcut{
 			Id:     id,
 			Name:   name,
 			Accels: filterNilStr(accels),
@@ -85,14 +85,14 @@ func DeleteCustomKey(id string) error {
 func (infos customKeyInfos) GetShortcuts() Shortcuts {
 	var ss Shortcuts
 	for _, info := range infos {
-		ss = append(ss, info.Core)
+		ss = append(ss, &info.Shortcut)
 	}
 	return ss
 }
 
 func (infos customKeyInfos) Get(id string) *customKeyInfo {
 	for _, info := range infos {
-		if info.Core.Id == id {
+		if info.Id == id {
 			return info
 		}
 	}
@@ -109,7 +109,7 @@ func disableCustomKey(id string) error {
 	if info == nil {
 		return fmt.Errorf("Invalid custom id '%s'", id)
 	}
-	info.Core.Accels = nil
+	info.Accels = nil
 
 	return writeCustomKeyInfo(info)
 }
@@ -137,17 +137,17 @@ func setCustomKey(id, prop, value string, deleted bool) error {
 
 	switch prop {
 	case kfKeyName:
-		info.Core.Name = value
+		info.Name = value
 	case kfKeyAction:
 		info.Action = value
 	case kfKeyAccels:
 		var ret bool
 		if deleted {
-			info.Core.Accels, ret = delAccelFromList(value,
-				info.Core.Accels)
+			info.Accels, ret = delAccelFromList(value,
+				info.Accels)
 		} else {
-			info.Core.Accels, ret = addAccelToList(value,
-				info.Core.Accels)
+			info.Accels, ret = addAccelToList(value,
+				info.Accels)
 		}
 		if !ret {
 			return nil
@@ -196,9 +196,9 @@ func writeCustomKeyInfo(info *customKeyInfo) error {
 	}
 	defer kfile.Free()
 
-	kfile.SetString(info.Core.Id, kfKeyName, info.Core.Name)
-	kfile.SetString(info.Core.Id, kfKeyAction, info.Action)
-	kfile.SetStringList(info.Core.Id, kfKeyAccels, info.Core.Accels)
+	kfile.SetString(info.Id, kfKeyName, info.Name)
+	kfile.SetString(info.Id, kfKeyAction, info.Action)
+	kfile.SetStringList(info.Id, kfKeyAccels, info.Accels)
 
 	return saveKeyFile(kfile, file)
 }
@@ -240,7 +240,7 @@ func newKeyInfoByGroup(kfile *glib.KeyFile, group string) (*customKeyInfo, error
 	if err != nil {
 		return nil, err
 	}
-	info.Core = &core
+	info.Shortcut = core
 
 	return &info, nil
 }
