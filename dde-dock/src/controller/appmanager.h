@@ -14,7 +14,7 @@ class AppManager : public QObject
     Q_OBJECT
 public:
     explicit AppManager(QObject *parent = 0);
-    void updateEntries();
+    void initEntries();
 
 signals:
     void entryAdded(AbstractDockItem *item);
@@ -26,6 +26,7 @@ private:
     void onEntryAdded(const QDBusObjectPath &path);
 
 private:
+    QStringList m_ids;
     DBusEntryManager *m_entryManager = NULL;
     DBusDockedAppManager *m_dockAppManager = new DBusDockedAppManager(this);
     QMap<QString, AbstractDockItem *> m_initItemList; //Juse for initialization <id, item>

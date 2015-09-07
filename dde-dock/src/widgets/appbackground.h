@@ -73,6 +73,7 @@ public slots:
 private:
     void initActiveLabel();
     void updateActiveLabelPos();
+    void onDockModeChanged();
 
 private:
     bool m_isInit = true;

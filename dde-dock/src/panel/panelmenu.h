@@ -58,7 +58,7 @@ private:
     QString m_menuInterfacePath = "";
     DBusDockSetting m_dockSetting;
     DBusMenuManager *m_menuManager = NULL;
-    DockModeData *dockCons = DockModeData::instance();
+    DockModeData *m_dockModeData = DockModeData::instance();
 
 };
 

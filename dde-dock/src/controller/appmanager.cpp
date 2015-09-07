@@ -7,7 +7,7 @@ AppManager::AppManager(QObject *parent) : QObject(parent)
     connect(m_entryManager, &DBusEntryManager::Removed, this, &AppManager::onEntryRemoved);
 }
 
-void AppManager::updateEntries()
+void AppManager::initEntries()
 {
 
     LauncherItem * lItem = new LauncherItem();
@@ -33,30 +33,38 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
     DBusEntryProxyer *entryProxyer = new DBusEntryProxyer(path.path());
     if (entryProxyer->isValid() && entryProxyer->type() == "App")
     {
-        qWarning() << "entry add:" << path.path();
         AppItem *item = new AppItem();
         item->setEntryProxyer(entryProxyer);
-        emit entryAdded(item);
+        QString tmpId = item->getItemId();
+        if (m_ids.indexOf(tmpId) != -1){
+            item->deleteLater();
+        }else{
+            qWarning() << "entry add:" << tmpId;
+            m_ids.append(tmpId);
+            emit entryAdded(item);
+        }
     }
 }
 
 void AppManager::onEntryRemoved(const QString &id)
 {
     qWarning() << "entry remove:" << id;
+    m_ids.removeAll(id);
     emit entryRemoved(id);
 }
 
 void AppManager::sortItemList()
 {
     QStringList dockedList = m_dockAppManager->DockedAppList().value();
-    QStringList ids = m_initItemList.keys();
+    m_ids = m_initItemList.keys();
+    QStringList tmpIds = m_initItemList.keys();
     foreach (QString id, dockedList) {  //For docked items
-        int index = ids.indexOf(id);
+        int index = tmpIds.indexOf(id);
         if (index != -1)
-            emit entryAdded(m_initItemList.take(ids.at(index)));
+            emit entryAdded(m_initItemList.take(tmpIds.at(index)));
     }
-    ids = m_initItemList.keys();
-    foreach (QString id, ids) { //For undocked items
+    tmpIds = m_initItemList.keys();
+    foreach (QString id, tmpIds) { //For undocked items
         emit entryAdded(m_initItemList.take(id));
     }
 }

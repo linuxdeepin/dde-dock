@@ -32,13 +32,13 @@ void PanelMenu::showMenu(int x, int y)
             targetObj.insert("isDockMenu",QJsonValue(false));
 
             QJsonArray contentArry;
-            contentArry.append(createRadioItemObj("Fashion mode",ToFashionMode,DockModeGroup,dockCons->getDockMode() == Dock::FashionMode));
-            contentArry.append(createRadioItemObj("Efficient mode",ToEfficientMode,DockModeGroup,dockCons->getDockMode() == Dock::EfficientMode));
-            contentArry.append(createRadioItemObj("Classic mode",ToClassicMode,DockModeGroup,dockCons->getDockMode() == Dock::ClassicMode));
+            contentArry.append(createRadioItemObj("Fashion mode",ToFashionMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::FashionMode));
+            contentArry.append(createRadioItemObj("Efficient mode",ToEfficientMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::EfficientMode));
+            contentArry.append(createRadioItemObj("Classic mode",ToClassicMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::ClassicMode));
             contentArry.append(createItemObj("",OperationType(-1)));
-            contentArry.append(createRadioItemObj("Keep showing",ToKeepShowing,HideModeGroup,dockCons->getHideMode() == Dock::KeepShowing));
-            contentArry.append(createRadioItemObj("Keep hidden",ToKeepHidden,HideModeGroup,dockCons->getHideMode() == Dock::KeepHidden));
-            contentArry.append(createRadioItemObj("Smart hide",ToSmartHide,HideModeGroup,dockCons->getHideMode() == Dock::SmartHide));
+            contentArry.append(createRadioItemObj("Keep showing",ToKeepShowing,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepShowing));
+            contentArry.append(createRadioItemObj("Keep hidden",ToKeepHidden,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepHidden));
+            contentArry.append(createRadioItemObj("Smart hide",ToSmartHide,HideModeGroup,m_dockModeData->getHideMode() == Dock::SmartHide));
             contentArry.append(createItemObj("",OperationType(-1)));
             contentArry.append(createItemObj("Notification area setting",ToPluginSetting));
 
@@ -89,37 +89,37 @@ void PanelMenu::onItemInvoked(const QString &itemId, bool result)
 void PanelMenu::changeToFashionMode()
 {
     qWarning() << "Change to fashion mode...";
-    dockCons->setDockMode(Dock::FashionMode);
+    m_dockModeData->setDockMode(Dock::FashionMode);
 }
 
 void PanelMenu::changeToEfficientMode()
 {
     qWarning() << "Change to efficient mode...";
-    dockCons->setDockMode(Dock::EfficientMode);
+    m_dockModeData->setDockMode(Dock::EfficientMode);
 }
 
 void PanelMenu::changeToClassicMode()
 {
     qWarning() << "Change to classic mode...";
-    dockCons->setDockMode(Dock::ClassicMode);
+    m_dockModeData->setDockMode(Dock::ClassicMode);
 }
 
 void PanelMenu::changeToKeepShowing()
 {
     qWarning() << "Change to keep showing mode...";
-    dockCons->setHideMode(Dock::KeepShowing);
+    m_dockModeData->setHideMode(Dock::KeepShowing);
 }
 
 void PanelMenu::changeToKeepHidden()
 {
     qWarning() << "Change to keep hidden mode...";
-    dockCons->setHideMode(Dock::KeepHidden);
+    m_dockModeData->setHideMode(Dock::KeepHidden);
 }
 
 void PanelMenu::changeToSmartHide()
 {
     qWarning() << "Change to smart hide mode...";
-    dockCons->setHideMode(Dock::SmartHide);
+    m_dockModeData->setHideMode(Dock::SmartHide);
 }
 
 QJsonObject PanelMenu::createItemObj(const QString &itemName, OperationType type)

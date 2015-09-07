@@ -176,16 +176,11 @@ void AppBackground::initActiveLabel()
 {
     m_activeLabel = new ActiveLabel(this);
     connect(m_activeLabel, &ActiveLabel::sizeChange, this, &AppBackground::updateActiveLabelPos);
+    connect(DockModeData::instance(), &DockModeData::dockModeChanged, this, &AppBackground::onDockModeChanged);
     connect(m_activeLabel, &ActiveLabel::showAnimationFinish, [=]{
         if (m_isActived)
             m_activeLabel->show();
         m_bePress = false;
-    });
-    connect(DockModeData::instance(), &DockModeData::dockModeChanged, [=]{
-        if (!getIsFashionMode())
-            m_activeLabel->hide();
-        else if (m_isActived)
-            m_activeLabel->show();
     });
 }
 
@@ -193,5 +188,13 @@ void AppBackground::updateActiveLabelPos()
 {
     if (m_activeLabel)
         m_activeLabel->move((width() - m_activeLabel->width()) / 2, height() - m_activeLabel->height());
+}
+
+void AppBackground::onDockModeChanged()
+{
+    if (m_activeLabel && !getIsFashionMode())
+        m_activeLabel->hide();
+    else if (m_activeLabel && m_isActived)
+        m_activeLabel->show();
 }
 

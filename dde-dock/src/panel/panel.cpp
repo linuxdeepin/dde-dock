@@ -141,7 +141,7 @@ void Panel::initAppManager()
     m_appManager = new AppManager(this);
     connect(m_appManager, &AppManager::entryAdded, this, &Panel::onAppItemAdd);
     connect(m_appManager, &AppManager::entryRemoved, this, &Panel::onAppItemRemove);
-    m_appManager->updateEntries();
+    m_appManager->initEntries();
 }
 
 void Panel::initReflection()
