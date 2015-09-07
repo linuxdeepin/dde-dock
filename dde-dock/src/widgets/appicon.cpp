@@ -16,6 +16,7 @@ AppIcon::AppIcon(QWidget *parent, Qt::WindowFlags f) :
     // as far as I know, it's safe to call this method multiple times,
     // because it does some check work internally.
     gtk_init(NULL, NULL);
+    gdk_error_trap_push();
 
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setAlignment(Qt::AlignCenter);
