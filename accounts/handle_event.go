@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"github.com/howeyc/fsnotify"
+	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
@@ -32,6 +33,10 @@ const (
 	userFilePasswd = "/etc/passwd"
 	userFileGroup  = "/etc/group"
 	userFileShadow = "/etc/shadow"
+
+	lightdmConfig = "/etc/lightdm/lightdm.conf"
+	kdmConfig     = "/usr/share/config/kdm/kdmrc"
+	gdmConfig     = "/etc/gdm/custom.conf"
 
 	permModeDir = 0755
 )
@@ -48,7 +53,14 @@ const (
 )
 
 func (m *Manager) getWatchFiles() []string {
-	return []string{userFilePasswd, userFileGroup, userFileShadow}
+	var list []string
+	dmConfig, err := users.GetDMConfig()
+	if err == nil {
+		list = append(list, dmConfig)
+	}
+
+	list = append(list, []string{userFilePasswd, userFileGroup, userFileShadow}...)
+	return list
 }
 
 func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
@@ -56,11 +68,18 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 		return
 	}
 
+	logger.Debug("File changed:", ev)
 	switch {
+	case strings.Contains(ev.Name, userFilePasswd):
+		m.handleUserFileChanged(ev, m.handleFilePasswdChanged)
 	case strings.Contains(ev.Name, userFileGroup):
 		m.handleUserFileChanged(ev, m.handleFileGroupChanged)
 	case strings.Contains(ev.Name, userFileShadow):
 		m.handleUserFileChanged(ev, m.handleFileShadowChanged)
+	case strings.Contains(ev.Name, lightdmConfig),
+		strings.Contains(ev.Name, kdmConfig),
+		strings.Contains(ev.Name, gdmConfig):
+		m.handleUserFileChanged(ev, m.handleDMConfigChanged)
 	}
 }
 
@@ -100,6 +119,13 @@ func (m *Manager) handleFileShadowChanged() {
 	defer m.mapLocker.Unlock()
 	for _, u := range m.usersMap {
 		u.updatePropLocked()
+	}
+}
+
+func (m *Manager) handleDMConfigChanged() {
+	for _, u := range m.usersMap {
+		u.setPropBool(&u.AutomaticLogin, "AutomaticLogin",
+			users.IsAutoLoginUser(u.UserName))
 	}
 }
 

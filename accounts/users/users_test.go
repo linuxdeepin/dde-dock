@@ -157,10 +157,10 @@ func (*testWrapper) TestGetAutoLoginUser(c *C.C) {
 	_, err = getKDMAutoLoginUser("testdata/autologin/xxxxx")
 	c.Check(err, C.Not(C.Equals), nil)
 
-	m, err := getDefaultDisplayManager("testdata/autologin/default-display-manager")
+	m, err := getDefaultDM("testdata/autologin/default-display-manager")
 	c.Check(err, C.Equals, nil)
 	c.Check(m, C.Equals, "lightdm")
-	_, err = getDefaultDisplayManager("testdata/autologin/xxxxx")
+	_, err = getDefaultDM("testdata/autologin/xxxxx")
 	c.Check(err, C.Not(C.Equals), nil)
 }
 

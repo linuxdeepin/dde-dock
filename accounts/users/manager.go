@@ -44,10 +44,10 @@ const (
 
 	defaultConfigShell = "/etc/adduser.conf"
 
-	displayManagerDefaultConfig = "/etc/X11/default-display-manager"
-	lightdmDefaultConfig        = "/etc/lightdm/lightdm.conf"
-	kdmDefaultConfig            = "/usr/share/config/kdm/kdmrc"
-	gdmDefaultConfig            = "/etc/gdm/custom.conf"
+	defaultDMFile = "/etc/X11/default-display-manager"
+	lightdmConfig = "/etc/lightdm/lightdm.conf"
+	kdmConfig     = "/usr/share/config/kdm/kdmrc"
+	gdmConfig     = "/etc/gdm/custom.conf"
 )
 
 func CreateUser(username, fullname, shell string, ty int32) error {
@@ -117,7 +117,7 @@ func SetUserType(ty int32, username string) error {
 }
 
 func SetAutoLoginUser(username string) error {
-	dm, err := getDefaultDisplayManager(displayManagerDefaultConfig)
+	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
 		return err
 	}
@@ -129,11 +129,11 @@ func SetAutoLoginUser(username string) error {
 
 	switch dm {
 	case "lightdm":
-		return setLightdmAutoLoginUser(username, lightdmDefaultConfig)
+		return setLightdmAutoLoginUser(username, lightdmConfig)
 	case "kdm":
-		return setKDMAutoLoginUser(username, kdmDefaultConfig)
+		return setKDMAutoLoginUser(username, kdmConfig)
 	case "gdm":
-		return setGDMAutoLoginUser(username, gdmDefaultConfig)
+		return setGDMAutoLoginUser(username, gdmConfig)
 	default:
 		return fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
@@ -142,23 +142,40 @@ func SetAutoLoginUser(username string) error {
 }
 
 func GetAutoLoginUser() (string, error) {
-	dm, err := getDefaultDisplayManager(displayManagerDefaultConfig)
+	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
 		return "", err
 	}
 
 	switch dm {
 	case "lightdm":
-		return getLightdmAutoLoginUser(lightdmDefaultConfig)
+		return getLightdmAutoLoginUser(lightdmConfig)
 	case "kdm":
-		return getKDMAutoLoginUser(kdmDefaultConfig)
+		return getKDMAutoLoginUser(kdmConfig)
 	case "gdm":
-		return getGDMAutoLoginUser(gdmDefaultConfig)
+		return getGDMAutoLoginUser(gdmConfig)
 	default:
 		return "", fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
 
 	return "", nil
+}
+
+func GetDMConfig() (string, error) {
+	dm, err := getDefaultDM(defaultDMFile)
+	if err != nil {
+		return "", err
+	}
+
+	switch dm {
+	case "lightdm":
+		return lightdmConfig, nil
+	case "kdm":
+		return kdmConfig, nil
+	case "gdm":
+		return gdmConfig, nil
+	}
+	return "", fmt.Errorf("Not supported the display manager: %q", dm)
 }
 
 //Default config: /etc/lightdm/lightdm.conf
@@ -274,7 +291,7 @@ func setGDMAutoLoginUser(name, file string) error {
 }
 
 //Default config: /etc/X11/default-display-manager
-func getDefaultDisplayManager(file string) (string, error) {
+func getDefaultDM(file string) (string, error) {
 	if !dutils.IsFileExist(file) {
 		return "", fmt.Errorf("Not found this file: %s", file)
 	}
