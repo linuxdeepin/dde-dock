@@ -47,7 +47,7 @@ QString PluginsSettingLine::pluginId() const
     return m_pluginId;
 }
 
-bool PluginsSettingLine::checked(bool check)
+bool PluginsSettingLine::checked()
 {
     return m_switchButton->checked();
 }

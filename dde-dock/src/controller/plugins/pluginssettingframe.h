@@ -30,7 +30,7 @@ public:
     void setChecked(const bool checked);
 
     QString pluginId() const;
-    bool checked(bool check);
+    bool checked();
 
 signals:
     void disableChanged(QString id, bool check);
