@@ -1,7 +1,7 @@
 #include <QDir>
 #include <QLibrary>
 #include <QPluginLoader>
-#include <QFileSystemWatcher>
+//#include <QFileSystemWatcher>
 
 #include "dockpluginproxy.h"
 #include "dockpluginmanager.h"
@@ -14,8 +14,8 @@ DockPluginManager::DockPluginManager(QObject *parent) :
 
     m_searchPaths << "/usr/share/dde-dock/plugins/";
 
-    m_watcher = new QFileSystemWatcher(this);
-    m_watcher->addPaths(m_searchPaths);
+//    m_watcher = new QFileSystemWatcher(this);
+//    m_watcher->addPaths(m_searchPaths);
 
     foreach (QString path, m_searchPaths) {
         QDir pluginsDir(path);
@@ -27,10 +27,8 @@ DockPluginManager::DockPluginManager(QObject *parent) :
         }
     }
 
-    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
-    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
-
-
+//    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
+//    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
 }
 
 void DockPluginManager::initAll()
@@ -89,7 +87,7 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
             DockPluginProxy * proxy = new DockPluginProxy(pluginLoader, interface);
             if (proxy) {
                 m_proxies[path] = proxy;
-                m_watcher->addPath(path);
+//                m_watcher->addPath(path);
                 connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::onPluginItemAdded);
                 connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::onPluginItemRemoved);
                 connect(m_settingFrame, &PluginsSettingFrame::disableChanged, [=](QString uuid, bool disable){
