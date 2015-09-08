@@ -15,7 +15,6 @@ AppItem::AppItem(QWidget *parent) :
     initClientManager();
     connect(m_dockModeData, &DockModeData::dockModeChanged,this, &AppItem::onDockModeChanged);
 
-    initMenu();
     initPreview();
 }
 
@@ -201,11 +200,6 @@ void AppItem::initTitle()
     m_appTitle->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
 }
 
-void AppItem::initMenu()
-{
-    m_menuManager = new DBusMenuManager(this);
-}
-
 void AppItem::initData()
 {
     StringMap dataMap = m_entryProxyer->data();
@@ -285,12 +279,6 @@ void AppItem::onDockModeChanged(Dock::DockMode, Dock::DockMode)
 {
     setActived(actived());
     resizeResources();
-}
-
-void AppItem::onMenuItemInvoked(QString id, bool)
-{
-    m_entryProxyer->HandleMenuItem(id);
-    m_menuManager->UnregisterMenu(m_menuInterfacePath);
 }
 
 void AppItem::onMousePress(QMouseEvent *event)
@@ -385,26 +373,14 @@ void AppItem::setActived(bool value)
     m_appBackground->setIsActived(value);
 }
 
-void AppItem::showMenu()
+void AppItem::invokeMenuItem(QString id, bool)
 {
-    if (m_menuManager->isValid()){
-        QDBusPendingReply<QDBusObjectPath> pr = m_menuManager->RegisterMenu();
-        if (pr.count() == 1){
-            QDBusObjectPath op = pr.argumentAt(0).value<QDBusObjectPath>();
-            m_menuInterfacePath = op.path();
-            DBusMenu *m_menu = new DBusMenu(m_menuInterfacePath,this);
-            connect(m_menu, &DBusMenu::MenuUnregistered, m_menu, &DBusMenu::deleteLater);
-            connect(m_menu, &DBusMenu::ItemInvoked, this, &AppItem::onMenuItemInvoked);
+    m_entryProxyer->HandleMenuItem(id);
+}
 
-            QJsonObject targetObj;
-            targetObj.insert("x",QJsonValue(globalX() + width() / 2));
-            targetObj.insert("y",QJsonValue(globalY() - 5));
-            targetObj.insert("isDockMenu",QJsonValue(true));
-            targetObj.insert("menuJsonContent",QJsonValue(m_itemData.menuJsonString));
-
-            m_menu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
-        }
-    }
+QString AppItem::getMenuContent()
+{
+    return m_itemData.menuJsonString;
 }
 
 AppItem::~AppItem()

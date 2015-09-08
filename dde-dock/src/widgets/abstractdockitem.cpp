@@ -178,6 +178,8 @@ void AbstractDockItem::showMenu()
 {
     if (getMenuContent().isEmpty()) return;
 
+    hidePreview(0);
+
     if (m_dbusMenuManager == NULL) {
         m_dbusMenuManager = new DBusMenuManager(this);
     }

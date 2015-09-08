@@ -19,8 +19,6 @@
 #include "apppreviews.h"
 #include "appbackground.h"
 #include "abstractdockitem.h"
-#include "dbus/dbusmenu.h"
-#include "dbus/dbusmenumanager.h"
 #include "dbus/dbusentryproxyer.h"
 #include "dbus/dbusclientmanager.h"
 #include "controller/dockmodedata.h"
@@ -68,7 +66,6 @@ private:
     void initPreview();
     void initAppIcon();
     void initTitle();
-    void initMenu();
     void initData();
 
     void updateIcon();
@@ -79,7 +76,6 @@ private:
 
     void onDbusDataChanged(const QString &, const QString &);
     void onDockModeChanged(Dock::DockMode, Dock::DockMode);
-    void onMenuItemInvoked(QString id,bool);
     void onMousePress(QMouseEvent *event);
     void onMouseRelease(QMouseEvent *event);
     void onMouseEnter();
@@ -90,15 +86,14 @@ private:
     void reanchorIcon();
     void setCurrentOpened(uint);
     void setActived(bool value);
-    void showMenu();
+    void invokeMenuItem(QString id,bool);
+    QString getMenuContent();
 
 private:
-    QString m_menuInterfacePath = "";
     AppItemData m_itemData;
     DockModeData *m_dockModeData = DockModeData::instance();
     DBusClientManager *m_clientmanager = NULL;
     DBusEntryProxyer *m_entryProxyer = NULL;
-    DBusMenuManager *m_menuManager = NULL;
     AppBackground * m_appBackground = NULL;
     AppPreviews *m_preview = NULL;
     AppIcon * m_appIcon = NULL;

@@ -68,7 +68,7 @@ void PluginItemWrapper::leaveEvent(QEvent *)
 
 void PluginItemWrapper::mousePressEvent(QMouseEvent * event)
 {
-    hidePreview();
+    hidePreview(0);
 
     if (event->button() == Qt::RightButton) {
         this->showMenu();

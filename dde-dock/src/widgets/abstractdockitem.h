@@ -73,7 +73,6 @@ signals:
     void moveAnimationFinished();
 
 protected:
-
     bool m_moveable = true;
     bool m_isActived = false;
     PreviewArrowRectangle *m_previewAR = NULL;
