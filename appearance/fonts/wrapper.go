@@ -25,8 +25,9 @@ func fcFontMatch(family string) string {
 	cFamily := C.CString(family)
 	defer C.free(unsafe.Pointer(cFamily))
 	cRet := C.font_match(cFamily)
-	ret := C.GoString(cRet)
+	defer C.free(unsafe.Pointer(cRet))
 
+	ret := C.GoString(cRet)
 	if len(ret) == 0 {
 		return ""
 	}
@@ -41,11 +42,11 @@ func fcFontMatch(family string) string {
 
 func fcInfosToFonts() Fonts {
 	var num = C.int(0)
-	list := C.get_font_info_list(&num)
+	list := C.list_font_info(&num)
 	if num < 1 {
 		return nil
 	}
-	defer C.font_info_list_free(list, num)
+	defer C.free_font_info_list(list, num)
 
 	listPtr := uintptr(unsafe.Pointer(list))
 	itemLen := unsafe.Sizeof(*list)

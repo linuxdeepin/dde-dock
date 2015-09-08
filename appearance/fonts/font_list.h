@@ -33,8 +33,8 @@ typedef struct _FcInfo {
 	char *filename;
 } FcInfo;
 
-FcInfo *get_font_info_list (int *num);
-void font_info_list_free(FcInfo *list, int num);
+FcInfo *list_font_info (int *num);
+void free_font_info_list(FcInfo *list, int num);
 
 char* font_match(char* family);
 
