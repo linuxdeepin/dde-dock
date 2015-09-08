@@ -80,17 +80,21 @@ void AppItem::dragEnterEvent(QDragEnterEvent *event)
 {
     onMouseLeave(); //enterEvent may be active along with the dragEnterEvent, so hide preview here
 
-    emit dragEntered(event);
-
-    AppItem *tmpItem = NULL;
-    tmpItem = dynamic_cast<AppItem *>(event->source());
-    if (tmpItem)
-    {
-//        qWarning()<< "[Info:]" << "Brother Item.";
+    AppItem *tmpItem = qobject_cast<AppItem *>(event->source());
+    if (tmpItem){    //from brother item
+        event->ignore();
+        emit dragEntered(event);
     }
-    else
+    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from desktop or launcher
+        QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
+        if (!dataObj.isEmpty() && !m_ddam->IsDocked(dataObj.value("appKey").toString())){
+            event->ignore();
+            emit dragEntered(event);
+        }
+    }
+    else    //other files
     {
-        event->setDropAction(Qt::MoveAction);
+        event->setDropAction(Qt::CopyAction);
         event->accept();
     }
 }

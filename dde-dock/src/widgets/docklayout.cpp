@@ -112,8 +112,12 @@ int DockLayout::getContentsWidth()
     for (int i = 0; i < m_appList.count(); i ++)
         tmpWidth += m_appList.at(i)->width();
 
-    if (spacingItemIndex() != -1 && !m_dragItemMap.isEmpty() && m_dragItemMap.firstKey())
-        tmpWidth += m_dragItemMap.firstKey()->width() + m_itemSpacing;
+    if (spacingItemIndex() != -1){
+        if (!m_dragItemMap.isEmpty() && m_dragItemMap.firstKey())
+            tmpWidth += m_dragItemMap.firstKey()->width() + m_itemSpacing;
+        else    //spacing add by launcher or desktop item drag enter
+            tmpWidth += DockModeData::instance()->getNormalItemWidth() + m_itemSpacing;
+    }
 
     return tmpWidth;
 }
@@ -198,25 +202,17 @@ void DockLayout::dragEnterEvent(QDragEnterEvent *event)
 
 void DockLayout::dropEvent(QDropEvent *event)
 {
-    AbstractDockItem *sourceItem = dynamic_cast<AbstractDockItem *>(event->source());
+    AbstractDockItem *sourceItem = qobject_cast<AbstractDockItem *>(event->source());
 
-    if (!sourceItem && event->mimeData()->formats().indexOf("_DEEPIN_DND") != -1)
-    {
-        QString jsonStr = QString(event->mimeData()->data("_DEEPIN_DND")).split("uninstall").last().trimmed();
-
-        //Tim at both ends of the string is added to a character SOH (start of heading)
-        jsonStr = jsonStr.mid(1,jsonStr.length() - 2);
-        QJsonObject dataObj = QJsonDocument::fromJson(jsonStr.trimmed().toUtf8()).object();
-        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("id").toString()))
-        {
+    //from desktop or launcher
+    if (!sourceItem && event->mimeData()->formats().indexOf("RequestDock") != -1){
+        QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
+        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString()))
             relayout();
-            return;
-        }
-
-        m_ddam->ReqeustDock(dataObj.value("id").toString(),dataObj.value("name").toString(),dataObj.value("icon").toString(),"");
-
+        else
+            m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
     }
-    else if (sourceItem && event->mimeData()->formats().indexOf("_DEEPIN_DND") == -1)
+    else
         restoreTmpItem();
 }
 
@@ -249,6 +245,9 @@ void DockLayout::slotItemRelease()
 
 void DockLayout::slotItemEntered(QDragEnterEvent *)
 {
+    //for launcher or desktop item drag enter
+    emit startDrag();
+
     AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
 
     int tmpIndex = indexOf(item);

@@ -23,6 +23,7 @@
 #include "dbus/dbusclientmanager.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"
+#include "dbus/dbusdockedappmanager.h"
 
 struct AppItemData {
     QString id;
@@ -91,6 +92,7 @@ private:
 
 private:
     AppItemData m_itemData;
+    DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
     DBusClientManager *m_clientmanager = NULL;
     DBusEntryProxyer *m_entryProxyer = NULL;
