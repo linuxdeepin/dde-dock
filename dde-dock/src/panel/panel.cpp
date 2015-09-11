@@ -27,6 +27,8 @@ Panel::Panel(QWidget *parent)
 
 void Panel::setContainMouse(bool value)
 {
+    //mouse leave or enter need update state
+    m_HSManager->UpdateState();
     m_containMouse = value;
 }
 
@@ -78,6 +80,9 @@ void Panel::initHideStateManager()
 {
     m_HSManager = new DBusHideStateManager(this);
     connect(m_HSManager,&DBusHideStateManager::ChangeState,this,&Panel::onHideStateChanged);
+
+    //for initialization
+    m_HSManager->UpdateState();
 }
 
 void Panel::initWidthAnimation()
