@@ -49,6 +49,7 @@ private:
     MainItem * m_item = NULL;
     QString m_id = "trash_plugin";
     DockPluginProxyInterface * m_proxy;
+    DBusFileTrashMonitor * m_trashMonitor = new DBusFileTrashMonitor(this);
 
     Dock::DockMode m_mode = Dock::EfficientMode;
 

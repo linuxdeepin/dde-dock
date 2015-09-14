@@ -19,7 +19,7 @@ void TrashPlugin::init(DockPluginProxyInterface *proxy)
 
 QString TrashPlugin::getPluginName()
 {
-    return "Trash plugin";
+    return tr("Trash");
 }
 
 QStringList TrashPlugin::ids()
@@ -115,7 +115,7 @@ QJsonObject TrashPlugin::createMenuItem(QString itemId, QString itemName, bool c
     itemObj.insert("itemIconHover", "");
     itemObj.insert("itemIconInactive", "");
     itemObj.insert("itemExtra", "");
-    itemObj.insert("isActive", true);
+    itemObj.insert("isActive", m_trashMonitor->ItemCount() > 0);
     itemObj.insert("isCheckable", checkable);
     itemObj.insert("checked", checked);
     itemObj.insert("itemSubMenu", QJsonObject());

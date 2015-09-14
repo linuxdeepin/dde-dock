@@ -11,6 +11,10 @@ MainItem::MainItem(QWidget *parent) : QLabel(parent)
     setAcceptDrops(true);
     setFixedSize(Dock::APPLET_FASHION_ITEM_WIDTH, Dock::APPLET_FASHION_ITEM_HEIGHT);
 
+    m_dftm = new DBusFileTrashMonitor(this);
+    connect(m_dftm, &DBusFileTrashMonitor::ItemCountChanged, [=]{
+        updateIcon(false);
+    });
     updateIcon(false);
 }
 

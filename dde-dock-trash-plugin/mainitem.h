@@ -38,7 +38,7 @@ private:
     void updateIcon(bool isOpen);
 
     DBusFileOperations * m_dfo = new DBusFileOperations(this);
-    DBusFileTrashMonitor * m_dftm = new DBusFileTrashMonitor(this);
+    DBusFileTrashMonitor * m_dftm = NULL;
     DBusLauncher * m_launcher = new DBusLauncher(this);
 };
 
