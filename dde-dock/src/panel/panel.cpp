@@ -140,6 +140,10 @@ void Panel::initAppLayout()
     connect(m_appLayout, &DockLayout::startDrag, this, &Panel::onItemDragStarted);
     connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::onItemDropped);
     connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::onLayoutContentsWidthChanged);
+
+    //for plugin layout mask
+    connect(m_appLayout, &DockLayout::startDrag, this, &Panel::showPluginLayoutMask);
+    connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::hidePluginLayoutMask);
 }
 
 void Panel::initAppManager()
@@ -177,6 +181,10 @@ void Panel::initScreenMask()
     connect(m_maskWidget, &ScreenMask::itemDropped, this, &Panel::onItemDropped);
     connect(m_maskWidget, &ScreenMask::itemEntered, m_appLayout, &DockLayout::removeSpacingItem);
     connect(m_maskWidget, &ScreenMask::itemMissing, m_appLayout, &DockLayout::restoreTmpItem);
+
+    //for plugin layout mask
+    connect(m_maskWidget, &ScreenMask::itemDropped, this, &Panel::hidePluginLayoutMask);
+    connect(m_maskWidget, &ScreenMask::itemMissing, this, &Panel::hidePluginLayoutMask);
 }
 
 void Panel::onItemDropped()
@@ -329,6 +337,34 @@ void Panel::updateLeftReflection()
         m_appReflection->setFixedSize(m_appLayout->width(), 0);
 }
 
+void Panel::showPluginLayoutMask()
+{
+    if (!m_pluginLayoutMask){
+        m_pluginLayoutMask = new LayoutDropMask(this);
+        connect(m_pluginLayoutMask, &LayoutDropMask::itemDrop, [=]{
+            m_pluginLayoutMask->hide();
+            m_appLayout->restoreTmpItem();
+        });
+        connect(m_pluginLayoutMask, &LayoutDropMask::itemMove, [=]{
+            //readjust position and size
+            m_pluginLayoutMask->setFixedSize(m_pluginLayout->size());
+            m_pluginLayoutMask->move(m_pluginLayout->pos());
+        });
+        connect(m_pluginLayoutMask, &LayoutDropMask::itemEnter, m_appLayout, &DockLayout::removeSpacingItem);
+    }
+    m_pluginLayoutMask->setFixedSize(m_pluginLayout->size());
+    m_pluginLayoutMask->move(m_pluginLayout->pos());
+    m_pluginLayoutMask->raise();
+    m_pluginLayoutMask->show();
+}
+
+void Panel::hidePluginLayoutMask()
+{
+    if (m_pluginLayoutMask)
+        m_pluginLayoutMask->hide();
+}
+
+
 void Panel::reloadStyleSheet()
 {
     m_isFashionMode = m_dockModeData->getDockMode() == Dock::FashionMode;
@@ -354,3 +390,27 @@ Panel::~Panel()
 
 }
 
+
+
+LayoutDropMask::LayoutDropMask(QWidget *parent) : QFrame(parent)
+{
+    setAcceptDrops(true);
+}
+
+void LayoutDropMask::dragEnterEvent(QDragEnterEvent *event)
+{
+    emit itemEnter();
+    event->setDropAction(Qt::MoveAction);
+    event->accept();
+}
+
+void LayoutDropMask::dragMoveEvent(QDragMoveEvent *event)
+{
+    emit itemMove();
+}
+
+void LayoutDropMask::dropEvent(QDropEvent *event)
+{
+    emit itemDrop();
+    event->accept();
+}

@@ -15,6 +15,7 @@
 #include "widgets/reflectioneffect.h"
 #include "panelmenu.h"
 
+class LayoutDropMask;
 class Panel : public QLabel
 {
     Q_OBJECT
@@ -63,6 +64,8 @@ private:
     void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
     void updateLeftReflection();
+    void showPluginLayoutMask();
+    void hidePluginLayoutMask();
     void reloadStyleSheet();
     void showPanelMenu();
     void setY(int value);   //for hide and show animation
@@ -77,6 +80,7 @@ private:
     ScreenMask * m_maskWidget = NULL;
     AppManager *m_appManager = NULL;
     QWidget *m_parentWidget = NULL;
+    LayoutDropMask *m_pluginLayoutMask = NULL;
     DockLayout *m_appLayout = NULL;
 
     bool m_containMouse = false;
@@ -87,6 +91,24 @@ private:
     const int WIDTH_ANIMATION_DURATION = 200;
     const int SHOW_HIDE_ANIMATION_DURATION = 200;
     const QEasingCurve SHOW_HIDE_EASINGCURVE = QEasingCurve::InSine;
+};
+
+class LayoutDropMask : public  QFrame
+{
+    Q_OBJECT
+public:
+    LayoutDropMask(QWidget *parent = 0);
+
+signals:
+    void itemMove();
+    void itemEnter();
+    void itemDrop();
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
+
 };
 
 #endif // PANEL_H
