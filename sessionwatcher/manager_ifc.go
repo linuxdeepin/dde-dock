@@ -34,15 +34,13 @@ const (
 
 func (m *Manager) StartLoop() {
 	var (
-		dockTimes    int
-		appletsTimes int
-
-		prev = time.Now().Unix()
+		dockTimes int
+		prev      = time.Now().Unix()
 	)
 	for {
 		select {
 		case <-time.After(loopDuration):
-			if m.launchDockFailed && m.launchAppletsFailed {
+			if m.launchDockFailed {
 				logger.Debug("Launch all programs failed")
 				m.QuitLoop()
 				return
@@ -50,7 +48,6 @@ func (m *Manager) StartLoop() {
 
 			duration := time.Now().Unix() - prev
 			m.handleDockLaunch(&dockTimes, duration)
-			m.handleDockAppletsLaunch(&appletsTimes, duration)
 			logger.Debug("Handle programs launch end")
 		case <-m.quit:
 			m.quit = nil
@@ -84,25 +81,5 @@ func (m *Manager) handleDockLaunch(times *int, duration int64) {
 	logger.Debug("dde-dock launch times:", *times)
 	if *times == maxLaunchTimes {
 		m.launchDockFailed = true
-	}
-}
-
-func (m *Manager) handleDockAppletsLaunch(times *int, duration int64) {
-	if !m.canLaunchDockApplets() {
-		*times = 0
-		logger.Debug("No need to launch dde-dock-applets")
-		return
-	}
-	m.restartDockApplets()
-
-	if duration < int64(loopDuration+admissibleDuration) {
-		*times += 1
-	} else {
-		*times = 0
-	}
-
-	logger.Debug("dde-dock-applets launch times:", *times)
-	if *times == maxLaunchTimes {
-		m.launchAppletsFailed = true
 	}
 }

@@ -32,9 +32,6 @@ const (
 	dockDest   = "com.deepin.dde.dock"
 	dockLaunch = "dde-dock"
 
-	dockAppletsDest   = "dde.dock.entry.AppletManager"
-	dockAppletsLaunch = "dde-dock-applets"
-
 	maxDuration   = time.Second * 5
 	deltaDuration = time.Second * 1
 )
@@ -44,8 +41,7 @@ var logger = log.NewLogger("daemon/sessionwatcher")
 type Manager struct {
 	quit chan struct{}
 
-	launchDockFailed    bool
-	launchAppletsFailed bool
+	launchDockFailed bool
 }
 
 func NewManager() *Manager {
@@ -69,21 +65,6 @@ func (m *Manager) canLaunchDock() bool {
 	return true
 }
 
-func (m *Manager) canLaunchDockApplets() bool {
-	if m.launchAppletsFailed {
-		return false
-	}
-
-	exist, err := isDBusDestExist(dockAppletsDest)
-	if err != nil {
-		logger.Debugf("Check '%s' exist failed: %v", dockAppletsDest, err)
-	}
-	if exist {
-		return false
-	}
-	return true
-}
-
 func (m *Manager) restartDock() {
 	err := doAction("killall", []string{dockLaunch})
 	if err != nil {
@@ -98,22 +79,6 @@ func (m *Manager) restartDock() {
 	}
 	logger.Debug("Restart dde-dock over")
 
-	return
-}
-
-func (m *Manager) restartDockApplets() {
-	err := doAction("killall", []string{dockAppletsLaunch})
-	if err != nil {
-		logger.Debugf("killall '%s' failed: %v", dockAppletsLaunch, err)
-	}
-
-	err = doLaunchCommand(dockAppletsLaunch, nil)
-	if err != nil {
-		m.launchAppletsFailed = true
-		logger.Warningf("Launch '%s' failed: %v", dockAppletsLaunch, err)
-		return
-	}
-	logger.Debug("Restart dde-dock-applets over")
 	return
 }
 
