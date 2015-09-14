@@ -3,8 +3,8 @@ QLabel#Panel[isFashionMode="false"] {
 }
 
 QLabel#Panel[isFashionMode="true"] {
-    border-width: 0px 21px 50px 21px;
-    border-image: url(:/images/resources/dark/images/dark_dock.svg)  0 21 50 21 stretch;
+    border-width: 0px 21px 52px 21px;
+    border-image: url(:/images/resources/dark/images/dark_dock.svg)  0 21 52 21 stretch;
 
 }
 
