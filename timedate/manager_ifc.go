@@ -145,9 +145,7 @@ func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, error) {
 func (m *Manager) GetZoneList() []string {
 	var list []string
 	for _, zdesc := range zoneWhiteList {
-		if !zoneinfo.IsZoneValid(zdesc.zone) {
-			continue
-		}
+		// if zone in white list, do not check validity
 		list = append(list, zdesc.zone)
 	}
 
