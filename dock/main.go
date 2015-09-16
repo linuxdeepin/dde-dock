@@ -126,8 +126,10 @@ func (d *Daemon) Start() error {
 
 	if !initDisplay() {
 		d.Stop()
+		logger.Info("initialize display failed")
 		return nil
 	}
+	logger.Info("initialize display done")
 
 	var err error
 
@@ -144,6 +146,7 @@ func (d *Daemon) Start() error {
 	}
 
 	initAtom()
+	logger.Info("initialize atoms done")
 
 	dockProperty = NewDockProperty()
 	err = dbus.InstallOnSession(dockProperty)
@@ -151,6 +154,7 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
+	logger.Info("initialize dock property done")
 
 	entryProxyerManager = NewEntryProxyerManager()
 	err = dbus.InstallOnSession(entryProxyerManager)
@@ -158,8 +162,8 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
-
 	entryProxyerManager.watchEntries()
+	logger.Info("initialize entry proxyer manager done")
 
 	dockedAppManager = NewDockedAppManager()
 	err = dbus.InstallOnSession(dockedAppManager)
@@ -167,6 +171,7 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
+	logger.Info("initialize docked app manager done")
 
 	setting = NewSetting()
 	if setting == nil {
@@ -177,6 +182,7 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
+	logger.Info("initialize settings done")
 
 	dockProperty.updateDockHeight(DisplayModeType(setting.GetDisplayMode()))
 
@@ -187,6 +193,8 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
+	logger.Info("initialize hide mode manager done")
+
 	hideModemanager.UpdateState()
 
 	clientManager := NewClientManager()
@@ -196,6 +204,7 @@ func (d *Daemon) Start() error {
 		return err
 	}
 	go clientManager.listenRootWindow()
+	logger.Info("initialize client manager done")
 
 	region = NewRegion()
 	err = dbus.InstallOnSession(region)
@@ -244,6 +253,7 @@ func (d *Daemon) Start() error {
 	})
 
 	initialize()
+	logger.Info("initialize done")
 	return nil
 }
 

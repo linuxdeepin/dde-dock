@@ -137,11 +137,12 @@ func (l *Loader) EnableModules(enablingModules []string, disableModules []string
 
 	for _, node := range nodes {
 		module := l.modules[node.ID]
-		l.log.Debug("enable module", node.ID)
+		l.log.Info("enable module", node.ID)
 		err := module.Enable(true)
 		if err != nil {
 			l.log.Errorf("enable module(%s) failed", node.ID)
 		}
+		l.log.Info("enable module", node.ID, "done")
 	}
 
 	return nil

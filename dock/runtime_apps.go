@@ -79,6 +79,7 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	if !isNormalWindow(xid) {
 		return nil
 	}
+	logger.Info("NewRuntimeApp for", appId)
 	app := &RuntimeApp{
 		Id:        strings.ToLower(appId),
 		DesktopID: appId + ".desktop",
@@ -93,6 +94,7 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 			}
 		}
 	}
+
 	if core != nil {
 		logger.Debug(appId, ", Actions:", core.ListActions())
 		app.path = core.GetFilename()
@@ -376,10 +378,21 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	if displayMode == DisplayModeModernMode {
 		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
 			appId = getAppIDFromDesktopID(normalizeAppID(id))
-			logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
+			logger.Info("get app id from _DDE_DOCK_APP_ID", appId)
 			return appId
 		}
 	}
+
+	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
+	if err != nil {
+		logger.Warning("get AppId from_GTK_APPLICATION_ID failed:", err)
+	} else {
+		appId = gtkAppId
+		appId = getAppIDFromDesktopID(normalizeAppID(appId))
+		logger.Info("get AppId from _GTK_APPLICATION_ID:", appId)
+		return appId
+	}
+
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
 	if wmClass != nil {
@@ -389,7 +402,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	name, _ := ewmh.WmNameGet(XU, xid)
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		logger.Info("get pid failed, ", name)
+		logger.Info("get pid failed:", name)
 		if name != "" {
 			pid = lookthroughProc(name)
 		} else {
@@ -398,6 +411,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 			return appId
 		}
 	}
+
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	if pid == 0 {
 		appId = normalizeAppID(wmClassName)
@@ -517,6 +531,7 @@ func isNormalWindow(xid xproto.Window) bool {
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
+	logger.Info("update icon for", app.Id)
 	core := app.createDesktopAppInfo()
 	if core != nil {
 		defer core.Unref()
@@ -525,6 +540,9 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 			app.xids[xid].Icon = icon
 			return
 		}
+		logger.Warning("get icon from app failed")
+	} else {
+		logger.Warningf("create desktop app info for %s(window id: 0x%x) failed:", app.DesktopID, xid)
 	}
 
 	logger.Info(app.Id, "using icon from X")
