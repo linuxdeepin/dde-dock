@@ -72,6 +72,13 @@ type Loader struct {
 
 func (l *Loader) SetLogLevel(pri log.Priority) {
 	l.log.SetLogLevel(pri)
+
+	l.lock.Lock()
+	defer l.lock.Unlock()
+
+	for _, module := range l.modules {
+		module.SetLogLevel(pri)
+	}
 }
 
 func (l *Loader) AddModule(m Module) {
