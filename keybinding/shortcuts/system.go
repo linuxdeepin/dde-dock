@@ -110,6 +110,7 @@ func systemIdNameMap() map[string]string {
 		"screenshot-delayed":    gettext.Tr("Delay screenshot"),
 		"file-manager":          gettext.Tr("File manager"),
 		"disable-touchpad":      gettext.Tr("Disable touchpad"),
+		"switch-layout":         gettext.Tr("Switch Layout"),
 	}
 
 	return idNameMap
@@ -140,7 +141,7 @@ func findSysActionInTable(id string) string {
 	case "lock-screen":
 		return "dde-lock"
 	case "show-dock":
-		return "dbus-send --type=method_call --dest=com.deepin.dde.dock /com/deepin/dde/dock com.deepin.dde.dock.ToggleShow"
+		return "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
 	case "logout":
 		return "dde-shutdown"
 	case "terminal-quake":

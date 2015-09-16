@@ -67,6 +67,10 @@ func NewManager() *Manager {
 
 func (m *Manager) init() {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		logger.Fatal("Init appearance settings failed: not found valid theme")
+		return
+	}
 	subthemes.SetGtkTheme(dt.Gtk.Id)
 	subthemes.SetIconTheme(dt.Icon.Id)
 	go subthemes.SetCursorTheme(dt.Cursor.Id)
