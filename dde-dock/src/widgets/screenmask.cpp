@@ -31,9 +31,16 @@ void ScreenMask::dropEvent(QDropEvent *event)
     sourceItem = dynamic_cast<AppItem *>(event->source());
     if (sourceItem)
     {
-        DBusDockedAppManager dda;
-        if (dda.IsDocked(sourceItem->itemData().id))
+        //restore item to dock if item is actived
+        if (sourceItem->itemData().isActived){
+            emit itemMissing();
+            return;
+        }
+
+        if (sourceItem->itemData().isDocked){
+            DBusDockedAppManager dda;
             dda.RequestUndock(sourceItem->itemData().id);
+        }
 
         qWarning() << "Item drop here:" << event->pos() << event->mimeData()->hasImage();
         QImage image = qvariant_cast<QImage>(event->mimeData()->imageData());
