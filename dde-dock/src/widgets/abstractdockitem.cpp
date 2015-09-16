@@ -146,6 +146,7 @@ void AbstractDockItem::showPreview()
     }
 
     if (tmpContent) {
+        m_titleLabel->setParent(NULL);
         m_previewAR->setContent(tmpContent);
         m_previewAR->showPreview(ArrowRectangle::ArrowBottom,
                                  globalX() + width() / 2,
