@@ -42,9 +42,11 @@ import (
 // ty: 用户类型，0 为普通用户，1 为管理员
 func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 	name, fullname string, ty int32) error {
+	logger.Debug("[CreateUser] new user:", name, fullname, ty)
 	pid := dbusMsg.GetSenderPID()
 	err := m.polkitAuthManagerUser(pid, "CreateUser")
 	if err != nil {
+		logger.Debug("[CreateUser] access denied:", err)
 		return err
 	}
 
@@ -75,9 +77,11 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 // rmFiles: 是否删除用户数据
 func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 	name string, rmFiles bool) (bool, error) {
+	logger.Debug("[DeleteUser] user:", name, rmFiles)
 	pid := dbusMsg.GetSenderPID()
 	err := m.polkitAuthManagerUser(pid, "DeleteUser")
 	if err != nil {
+		logger.Debug("[DeleteUser] access denied:", err)
 		return false, err
 	}
 

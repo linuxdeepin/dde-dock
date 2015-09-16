@@ -33,9 +33,11 @@ import (
 )
 
 func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
+	logger.Debug("[SetUserName] new name:", name)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetUserName")
 	if err != nil {
+		logger.Debug("[SetUserName] access denied:", err)
 		return false, err
 	}
 
@@ -54,9 +56,11 @@ func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
 }
 
 func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
+	logger.Debug("[SetHomeDir] new home:", home)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetHomeDir")
 	if err != nil {
+		logger.Debug("[SetHomeDir] access denied:", err)
 		return false, err
 	}
 
@@ -75,9 +79,11 @@ func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
 }
 
 func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
+	logger.Debug("[SetShell] new shell:", shell)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "SetShell")
 	if err != nil {
+		logger.Debug("[SetShell] access denied:", err)
 		return false, err
 	}
 
@@ -96,9 +102,11 @@ func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
 }
 
 func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
+	logger.Debug("[SetPassword] start ...")
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetPassword")
 	if err != nil {
+		logger.Debug("[SetPassword] access denied:", err)
 		return false, err
 	}
 
@@ -120,9 +128,11 @@ func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
 }
 
 func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
+	logger.Debug("[SetAccountType] type:", ty)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetAccountType")
 	if err != nil {
+		logger.Debug("[SetAccountType] access denied:", err)
 		return false, err
 	}
 
@@ -141,9 +151,11 @@ func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
 }
 
 func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
+	logger.Debug("[SetLocked] locaked:", locked)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetLocked")
 	if err != nil {
+		logger.Debug("[SetLocked] access denied:", err)
 		return false, err
 	}
 
@@ -162,10 +174,16 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
 }
 
 func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error) {
+	logger.Debug("[SetAutomaticLogin] auto", auto)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetAutomaticLogin")
 	if err != nil {
+		logger.Debug("[SetAutomaticLogin] access denied:", err)
 		return false, err
+	}
+
+	if u.Locked {
+		return false, fmt.Errorf("%s has been locked", u.UserName)
 	}
 
 	var name = u.UserName
@@ -188,9 +206,11 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 }
 
 func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
+	logger.Debug("[SetIconFile] new icon:", icon)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "SetIconFile")
 	if err != nil {
+		logger.Debug("[SetIconFile] access denied:", err)
 		return false, err
 	}
 
@@ -232,9 +252,11 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 }
 
 func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
+	logger.Debug("[DeleteIconFile] icon:", icon)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "DeleteIconFile")
 	if err != nil {
+		logger.Debug("[DeleteIconFile] access denied:", err)
 		return false, err
 	}
 
@@ -260,9 +282,11 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 }
 
 func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error) {
+	logger.Debug("[SetBackgroundFile] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "SetBackgroundFile")
 	if err != nil {
+		logger.Debug("[SetBackgroundFile] access denied:", err)
 		return false, err
 	}
 
@@ -293,9 +317,11 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 }
 
 func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) (bool, error) {
+	logger.Debug("[DeleteHistoryIcon] icon:", icon)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "DeleteHistoryIcon")
 	if err != nil {
+		logger.Debug("[DeleteHistoryIcon] access denied:", err)
 		return false, err
 	}
 
