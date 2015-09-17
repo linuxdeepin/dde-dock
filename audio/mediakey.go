@@ -4,8 +4,8 @@ import "dbus/com/deepin/daemon/keybinding"
 
 var __keepMediakeyManagerAlive interface{}
 
-func (audio *Audio) setupMediaKeyMonitor() {
-	mediaKeyManager, err := keybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
+func (audio *Audio) setupMediakeyMonitor() {
+	mediaKeyManager, err := keybinding.NewMediakey("com.deepin.daemon.Keybinding", "/com/deepin/daemon/Keybinding/Mediakey")
 	__keepMediakeyManagerAlive = mediaKeyManager
 	if err != nil {
 		logger.Error("Can't create com.deepin.daemon.Keybinding! mediakey support will be disabled", err)
@@ -29,7 +29,7 @@ func (audio *Audio) setupMediaKeyMonitor() {
 				return
 			}
 			if sink.Volume > 1 {
-				logger.Warning("ignore add volume bigger than 100% when use MediaKey")
+				logger.Warning("ignore add volume bigger than 100% when use Mediakey")
 				return
 			}
 			playFeedbackWithDevice(sink.Name)

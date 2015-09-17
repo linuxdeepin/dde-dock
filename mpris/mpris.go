@@ -46,7 +46,7 @@ const (
 var (
 	logger      = log.NewLogger("daemon/mpris")
 	dbusObj     *libdbus.DBusDaemon
-	mediaKeyObj *libkeybind.MediaKey
+	mediaKeyObj *libkeybind.Mediakey
 	loginObj    *liblogin1.Manager
 	prevSender  = ""
 )
@@ -306,11 +306,11 @@ func initDBusIFC() error {
 		return err
 	}
 
-	mediaKeyObj, err = libkeybind.NewMediaKey(
-		"com.deepin.daemon.KeyBinding",
-		"/com/deepin/daemon/MediaKey")
+	mediaKeyObj, err = libkeybind.NewMediakey(
+		"com.deepin.daemon.Keybinding",
+		"/com/deepin/daemon/Keybinding/Mediakey")
 	if err != nil {
-		logger.Error("New MediaKey Object Failed: ", err)
+		logger.Error("New Mediakey Object Failed: ", err)
 		return err
 	}
 
@@ -331,7 +331,7 @@ func finalizeDBusIFC() {
 	}
 
 	if mediaKeyObj != nil {
-		libkeybind.DestroyMediaKey(mediaKeyObj)
+		libkeybind.DestroyMediakey(mediaKeyObj)
 		mediaKeyObj = nil
 	}
 

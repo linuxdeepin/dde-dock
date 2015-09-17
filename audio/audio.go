@@ -87,7 +87,7 @@ func NewAudio(core *pulse.Context) *Audio {
 	a.update()
 	a.initEventHandlers()
 
-	a.setupMediaKeyMonitor()
+	a.setupMediakeyMonitor()
 	go a.sinkInputPoller()
 
 	return a

@@ -18,7 +18,7 @@ var (
 	notifier *libnotifications.Notifier
 	upower   *libupower.Upower
 	login1   *liblogin1.Manager
-	mediaKey *libkeybinding.MediaKey
+	mediaKey *libkeybinding.Mediakey
 	player   *libsound.Sound
 
 	power *Power
@@ -37,7 +37,7 @@ func initializeLibs() error {
 		finalizeLibs()
 		return err
 	}
-	mediaKey, err = libkeybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
+	mediaKey, err = libkeybinding.NewMediakey("com.deepin.daemon.Keybinding", "/com/deepin/daemon/Keybinding/Mediakey")
 	if err != nil {
 		logger.Warning("create dbus mediaKey failed:", err)
 		finalizeLibs()
@@ -76,7 +76,7 @@ func finalizeLibs() {
 		login1 = nil
 	}
 	if mediaKey != nil {
-		libkeybinding.DestroyMediaKey(mediaKey)
+		libkeybinding.DestroyMediakey(mediaKey)
 		mediaKey = nil
 	}
 	if notifier != nil {
