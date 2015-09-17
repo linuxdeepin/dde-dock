@@ -700,7 +700,11 @@ void set_desktop_env_name(const char* name)
 {
     size_t max_len = strlen(name) + 1;
     memcpy(DE_NAME, name, max_len > 100 ? max_len : 100);
+#if GTK_CHECK_VERSION(2, 42, 0)
+    g_setenv("XDG_CURRENT_DESKTOP", name, TRUE);
+#else
     g_desktop_app_info_set_desktop_env(name);
+#endif
 }
 
 

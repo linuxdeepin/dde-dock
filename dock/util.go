@@ -71,6 +71,7 @@ func guess_desktop_id(appId string) string {
 	allApp := gio.AppInfoGetAll()
 	for _, app := range allApp {
 		baseName := filepath.Base(gio.ToDesktopAppInfo(app).GetFilename())
+		app.Unref()
 		normalizedDesktopID := normalizeAppID(baseName)
 
 		if normalizedDesktopID == desktopID {

@@ -141,11 +141,15 @@ font_match(char* family)
 static int
 append_font_info(FcInfo** list, FcPattern* pat, int idx)
 {
-     FcInfo* tmp = malloc((idx+1)*sizeof(FcInfo));
+     // realloc equals to malloc if the first argument is NULL.
+     // realloc will auto free old memory chunk.
+     FcInfo* tmp = (FcInfo*)realloc(*list, (idx+1)*sizeof(FcInfo));
      if (!tmp) {
           fprintf(stderr, "Alloc memory at append %d font info failed\n", idx+1);
           return -1;
      }
+
+     *list = tmp;
 
      tmp[idx].family = (char*)FcPatternFormat(pat, (FcChar8*)"%{family}");
      tmp[idx].familylang = (char*)FcPatternFormat(pat, (FcChar8*)"%{familylang}");
@@ -156,12 +160,6 @@ append_font_info(FcInfo** list, FcPattern* pat, int idx)
      tmp[idx].lang = (char*)FcPatternFormat(pat, (FcChar8*)"%{lang}");
      tmp[idx].spacing = (char*)FcPatternFormat(pat, (FcChar8*)"%{spacing}");
 
-     if (idx != 0) {
-          memcpy(tmp, *list, idx * sizeof(FcInfo));
-          free(*list);
-     }
-
-     *list = tmp;
      return 0;
 }
 

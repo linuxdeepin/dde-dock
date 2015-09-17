@@ -385,7 +385,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 
 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
 	if err != nil {
-		logger.Warning("get AppId from_GTK_APPLICATION_ID failed:", err)
+		logger.Warning("get AppId from _GTK_APPLICATION_ID failed:", err)
 	} else {
 		appId = gtkAppId
 		appId = getAppIDFromDesktopID(normalizeAppID(appId))

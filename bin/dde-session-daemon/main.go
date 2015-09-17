@@ -8,16 +8,41 @@ import (
 	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
+	"os/signal"
 	"pkg.deepin.io/dde/daemon/loader"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
+	"runtime/pprof"
 )
 
 // using go build -ldflags "-X main.__VERSION__ version" to set version.
 var __VERSION__ = "unknown"
 
 var logger = log.NewLogger("daemon/dde-session-daemon")
+
+func startMemProfile(name string) {
+	logger.Info("Start memory profile")
+	f, err := os.Create(name)
+	if err != nil {
+		logger.Fatal(err)
+		os.Exit(1)
+	}
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			switch sig.String() {
+			case "Interrupt":
+				logger.Info("Memory profile done.")
+				pprof.WriteHeapProfile(f)
+				f.Close()
+				close(c)
+				os.Exit(0)
+			}
+		}
+	}()
+}
 
 func main() {
 	InitI18n()
@@ -35,6 +60,8 @@ func main() {
 	enablingModules := cmd.Command("enable", "enable modules and their dependencies, ignore settings.").Arg("module", "module names.").Required().Strings()
 	disableModules := cmd.Command("disable", "disable modules, ignore settings.").Arg("module", "module names.").Required().Strings()
 	listModule := cmd.Command("list", "list all the modules or the dependencies of one module.").Arg("module", "module name.").String()
+
+	memprof := cmd.Flag("memprof", "memory profile").String()
 
 	app := NewSessionDaemon(cmd, flags, daemonSettings, logger)
 
@@ -87,6 +114,10 @@ func main() {
 	}
 
 	if needRunMainLoop {
+		if *memprof != "" {
+			startMemProfile(*memprof)
+		}
+
 		runMainLoop()
 	}
 }

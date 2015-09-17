@@ -78,6 +78,14 @@ func (m *Manager) init() {
 
 func (m *Manager) destroy() {
 	m.setting.Unref()
+
+	if m.wrapBgSetting != nil {
+		m.wrapBgSetting.Unref()
+	}
+
+	if m.gnomeBgSetting != nil {
+		m.gnomeBgSetting.Unref()
+	}
 }
 
 func (m *Manager) doSetDTheme(id string) error {

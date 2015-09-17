@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
+	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
@@ -77,13 +78,24 @@ func SetFamily(standard, monospace string) error {
 		[]byte(configContent(standard, monospace)), 0644)
 }
 
+func getFontSize(setting *gio.Settings) int32 {
+	value := setting.GetString(gsKeyFontName)
+	if len(value) == 0 {
+		return 0
+	}
+	array := strings.Split(value, " ")
+	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
+	return int32(size)
+}
+
 func SetSize(size int32) error {
-	if size == GetFontSize() {
+	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
+	defer setting.Unref()
+
+	if size == getFontSize(setting) {
 		return nil
 	}
 
-	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
-	defer setting.Unref()
 	setting.SetString(gsKeyFontName,
 		fmt.Sprintf("sans-serif %v", size))
 
@@ -92,13 +104,9 @@ func SetSize(size int32) error {
 
 func GetFontSize() int32 {
 	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
-	value := setting.GetString(gsKeyFontName)
-	if len(value) == 0 {
-		return 0
-	}
-	array := strings.Split(value, " ")
-	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
-	return int32(size)
+	defer setting.Unref()
+
+	return getFontSize(setting)
 }
 
 func (infos Families) GetIds() []string {
