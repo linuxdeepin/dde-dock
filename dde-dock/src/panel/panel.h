@@ -12,6 +12,7 @@
 #include "widgets/appitem.h"
 #include "widgets/docklayout.h"
 #include "widgets/screenmask.h"
+#include "widgets/previewframe.h"
 #include "widgets/reflectioneffect.h"
 #include "panelmenu.h"
 
@@ -60,6 +61,8 @@ private:
     void onHideStateChanged(int dockState);
     void onShowPanelFinished();
     void onHidePanelFinished();
+    void onNeedPreviewHide();
+    void onNeedPreviewShow(QPoint pos);
 
     void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
@@ -71,6 +74,7 @@ private:
     void setY(int value);   //for hide and show animation
 
 private:
+    PreviewFrame *m_globalPreview = new PreviewFrame;
     DockModeData *m_dockModeData = DockModeData::instance();
     QPropertyAnimation *m_widthAnimation = NULL;
     DBusHideStateManager *m_HSManager = NULL;
@@ -90,6 +94,8 @@ private:
     const int FASHION_PANEL_RPADDING = 21;
     const int WIDTH_ANIMATION_DURATION = 200;
     const int SHOW_HIDE_ANIMATION_DURATION = 200;
+    const int DELAY_HIDE_PREVIEW_INTERVAL = 200;
+    const int DELAY_SHOW_PREVIEW_INTERVAL = 200;
     const QEasingCurve SHOW_HIDE_EASINGCURVE = QEasingCurve::InSine;
 };
 

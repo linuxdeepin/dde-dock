@@ -50,7 +50,7 @@ void LauncherItem::slotMousePress(QMouseEvent *event)
 {
     emit mousePress(event);
 
-    hidePreview(0);
+    hidePreview();
 }
 
 void LauncherItem::slotMouseRelease(QMouseEvent *event)

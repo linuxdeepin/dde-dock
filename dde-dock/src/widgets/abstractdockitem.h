@@ -10,6 +10,7 @@
 #include <QJsonObject>
 
 #include "dbus/dbusmenu.h"
+#include "previewframe.h"
 #include "highlighteffect.h"
 #include "dbus/dbusmenumanager.h"
 #include "previewarrowrectangle.h"
@@ -47,10 +48,8 @@ public:
     void resize(const QSize &size);
     void resize(int width,int height);
     void showMenu();
-    void cancelHide();
     void showPreview();
-    void resizePreview();
-    void hidePreview(int interval = 150);
+    void hidePreview();
     void setParent(QWidget * parent);
 
     int globalX();
@@ -69,13 +68,15 @@ signals:
     void widthChanged();
     void posChanged();
     void frameUpdate();
-    void previewHidden();
     void moveAnimationFinished();
+    void needPreviewHide();
+    void needPreviewShow(QPoint pos);
+    void needPreviewUpdate();
 
 protected:
     bool m_moveable = true;
     bool m_isActived = false;
-    PreviewArrowRectangle *m_previewAR = NULL;
+    PreviewFrame *m_titlePreview = NULL;
     HighlightEffect * m_highlight = NULL;
     ItemTitleLabel *m_titleLabel = NULL;
 
@@ -90,6 +91,8 @@ protected:
 
 private:
     const int TITLE_HEIGHT = 20;
+    const int CONTENT_PREVIEW_INTERVAL = 200;
+    const int TITLE_PREVIEW_INTERVAL = 0;
 };
 
 #endif // ABSTRACTDOCKITEM_H

@@ -103,12 +103,20 @@ void Panel::initPluginManager()
     DockPluginManager *pluginManager = new DockPluginManager(this);
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
-    connect(pluginManager, &DockPluginManager::itemAppend, m_pluginLayout, &DockLayout::addItem);
     connect(pluginManager, &DockPluginManager::itemMove, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->moveItem(m_pluginLayout->indexOf(targetItem), m_pluginLayout->indexOf(baseItem));
     });
+    connect(pluginManager, &DockPluginManager::itemAppend, [=](AbstractDockItem *targetItem){
+        m_pluginLayout->addItem(targetItem);
+        connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
+        connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
+    });
     connect(pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
+        connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
+        connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
     connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         m_pluginLayout->removeItem(item);
@@ -232,6 +240,9 @@ void Panel::onLayoutContentsWidthChanged()
 void Panel::onAppItemAdd(AbstractDockItem *item)
 {
     m_appLayout->addItem(item);
+    connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
+    connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+    connect(item, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
 }
 
 void Panel::onAppItemRemove(const QString &id)
@@ -279,6 +290,21 @@ void Panel::onHidePanelFinished()
 {
     m_HSManager->SetState(3);
     emit panelHasHidden();
+}
+
+void Panel::onNeedPreviewHide()
+{
+    m_globalPreview->hidePreview(DELAY_HIDE_PREVIEW_INTERVAL);
+}
+
+void Panel::onNeedPreviewShow(QPoint pos)
+{
+    AbstractDockItem *item = qobject_cast<AbstractDockItem *>(sender());
+    if (item && item->getApplet()) {
+        m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
+        m_globalPreview->setContent(item->getApplet());
+        m_globalPreview->showPreview(PreviewFrame::ArrowBottom, pos.x(), pos.y(), DELAY_SHOW_PREVIEW_INTERVAL);
+    }
 }
 
 void Panel::reanchorsLayout(Dock::DockMode mode)

@@ -184,8 +184,7 @@ void AppItem::initPreview()
 {
     m_preview = new AppPreviews();
     connect(m_preview,&AppPreviews::requestHide, [=]{hidePreview();});
-    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::resizePreview);
-    connect(this, &AppItem::previewHidden, m_preview, &AppPreviews::clearUpPreview);
+    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::needPreviewUpdate);
 }
 
 void AppItem::initAppIcon()
@@ -289,7 +288,7 @@ void AppItem::onMousePress(QMouseEvent *event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event);
-    hidePreview(0);
+    hidePreview();
 }
 
 void AppItem::onMouseRelease(QMouseEvent *event)

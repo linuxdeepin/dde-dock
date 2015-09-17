@@ -68,7 +68,8 @@ HEADERS += \
     src/widgets/reflectioneffect.h \
     src/widgets/screenmask.h \
     src/widgets/windowpreview.h \
-    src/mainwidget.h
+    src/mainwidget.h \
+    src/widgets/previewframe.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -105,4 +106,5 @@ SOURCES += \
     src/widgets/screenmask.cpp \
     src/widgets/windowpreview.cpp \
     src/main.cpp \
-    src/mainwidget.cpp
+    src/mainwidget.cpp \
+    src/widgets/previewframe.cpp

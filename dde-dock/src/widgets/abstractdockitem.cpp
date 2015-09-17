@@ -25,9 +25,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
-    m_previewAR = new PreviewArrowRectangle();
-
-    connect(m_previewAR, &PreviewArrowRectangle::hideFinish, this, &AbstractDockItem::previewHidden);
+    m_titlePreview = new PreviewFrame;
 }
 
 AbstractDockItem::~AbstractDockItem()
@@ -127,59 +125,44 @@ QPoint AbstractDockItem::globalPos()
 
 void AbstractDockItem::showPreview()
 {
-    if (!m_previewAR->isHidden())
+    if (!m_titlePreview->isHidden())
     {
-        m_previewAR->resizeWithContent();
+        m_titlePreview->resizeWithContent();
         return;
     }
 
-    QWidget *tmpContent = getApplet();
-
-    if (tmpContent == NULL) {
+    m_previewPos = QPoint(globalX() + width() / 2, globalY() - 5);
+    if (getApplet() == NULL) {
         QString title = getTitle();
-
         if (!title.isEmpty()) {
             m_titleLabel->setTitle(title);
 
-            tmpContent = m_titleLabel;
+            m_titlePreview->setContent(m_titleLabel);
+            m_titlePreview->showPreview(ArrowRectangle::ArrowBottom,
+                                     globalX() + width() / 2,
+                                     globalY() - 5,
+                                     0);
         }
     }
-
-    if (tmpContent) {
+    else {
         m_titleLabel->setParent(NULL);
-        m_previewAR->setContent(tmpContent);
-        m_previewAR->showPreview(ArrowRectangle::ArrowBottom,
-                                 globalX() + width() / 2,
-                                 globalY() - 5);
-        m_previewPos = QPoint(globalX() + width() / 2,globalY() - 5);
+
+        emit needPreviewShow(m_previewPos);
     }
 }
 
-void AbstractDockItem::hidePreview(int interval)
+void AbstractDockItem::hidePreview()
 {
-    m_previewAR->hidePreview(interval);
-}
+    m_titlePreview->hidePreview();
 
-void AbstractDockItem::cancelHide()
-{
-    m_previewAR->showPreview(ArrowRectangle::ArrowBottom, m_previewPos.x(), m_previewPos.y());
-}
-
-void AbstractDockItem::resizePreview()
-{
-    m_previewAR->resizeWithContent();
-    if (!m_previewAR->isHidden())
-    {
-        m_previewAR->resizeWithContent();
-        return;
-    }
+    emit needPreviewHide();
 }
 
 void AbstractDockItem::showMenu()
 {
     if (getMenuContent().isEmpty()) return;
 
-    hidePreview(0);
+    hidePreview();
 
     if (m_dbusMenuManager == NULL) {
         m_dbusMenuManager = new DBusMenuManager(this);

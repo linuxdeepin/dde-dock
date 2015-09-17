@@ -80,7 +80,6 @@ void DockPluginProxy::appletSizeChangedEvent(QString id)
     qWarning() << "Applet size changed on plugin " << m_plugin->getPluginName() << id;
 
     AbstractDockItem * item = m_items.value(id);
-    if (item) {
-        item->resizePreview();
-    }
+    if (item)
+        item->needPreviewUpdate();
 }

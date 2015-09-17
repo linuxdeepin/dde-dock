@@ -22,12 +22,14 @@ void ArrowRectangle::show(ArrowDirection direction, int x, int y)
 void ArrowRectangle::setContent(QWidget *content)
 {
     if (!content)
-    {
         return;
-    }
+
+    if (m_content)
+        m_content->setParent(NULL);
 
     m_content = content;
     m_content->setParent(this);
+    m_content->show();
 
     resizeWithContent();
     switch(arrowDirection)
@@ -244,12 +246,7 @@ void ArrowRectangle::setArrowWidth(int value)
 
 void ArrowRectangle::setArrowX(int value)
 {
-    if (value < arrowWidth / 2)
-        this->m_arrowX = arrowWidth / 2;
-    else if (value > (width() - arrowWidth / 2))
-        this->m_arrowX = width() - arrowWidth / 2;
-    else
-        this->m_arrowX = value;
+    this->m_arrowX = value;
 }
 
 void ArrowRectangle::setArrowY(int value)
