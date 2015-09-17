@@ -57,7 +57,7 @@ void LauncherItem::slotMouseRelease(QMouseEvent *event)
 {
     emit mouseRelease(event);
 
-    m_launcherProcess->start("dde-launcher",QStringList());
+    m_launcherProcess->startDetached("dde-launcher",QStringList());
 }
 
 void LauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
