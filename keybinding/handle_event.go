@@ -31,6 +31,10 @@ import (
 	"strings"
 )
 
+const (
+	cmdDDEOSD = "/usr/lib/deepin-daemon/dde-osd"
+)
+
 func (m *Manager) handleKeyEvent(mod uint16, code int, pressed bool) {
 	modStr := keybind.ModifierString(mod)
 	codeStr := keybind.LookupString(m.xu, mod, xproto.Keycode(code))
@@ -70,6 +74,9 @@ func (m *Manager) handleMediaEvent(modStr, codeStr string, pressed bool) {
 
 	//TODO: emit signal
 	logger.Debug("Emit signal:", signal)
+	if pressed {
+		go doAction(cmdDDEOSD + " --" + signal)
+	}
 	dbus.Emit(m.media, signal, pressed)
 }
 
