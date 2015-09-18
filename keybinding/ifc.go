@@ -103,7 +103,7 @@ func (m *Manager) Delete(id string, ty int32) error {
 // Disable cancel the special id accels
 func (m *Manager) Disable(id string, ty int32) error {
 	logger.Debugf("Disable '%s' type '%v'", id, ty)
-	s := m.grabedList.GetById(id, ty)
+	s := m.listAll().GetById(id, ty)
 	if s == nil {
 		return fmt.Errorf("Invalid shortcut id '%s'", id)
 	}
@@ -123,8 +123,7 @@ func (m *Manager) Disable(id string, ty int32) error {
 // CheckAvaliable check the accel whether conflict
 func (m *Manager) CheckAvaliable(accel string) (bool, string) {
 	logger.Debug("Check accel:", accel)
-	list := m.listAll()
-	s := list.GetByAccel(accel)
+	s := m.listAll().GetByAccel(accel)
 	if s == nil {
 		return true, ""
 	}
@@ -219,7 +218,7 @@ func (m *Manager) GrabScreen() error {
 }
 
 func (m *Manager) addAccel(id string, ty int32, accel string) error {
-	s := m.grabedList.GetById(id, ty)
+	s := m.listAll().GetById(id, ty)
 	if s == nil {
 		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
 	}
@@ -241,7 +240,7 @@ func (m *Manager) addAccel(id string, ty int32, accel string) error {
 }
 
 func (m *Manager) deleteAccel(id string, ty int32, accel string) error {
-	s := m.grabedList.GetById(id, ty)
+	s := m.listAll().GetById(id, ty)
 	if s == nil {
 		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
 	}

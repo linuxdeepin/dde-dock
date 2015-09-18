@@ -26,7 +26,6 @@ package core
 import "C"
 
 import (
-	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
@@ -169,10 +168,10 @@ func doGrabAccel(s string) error {
 }
 
 func doGrabSingleKey(s string) error {
-	h := handlers.GetHandler(s)
-	if h != nil {
-		return fmt.Errorf("''%s' has been grabed", s)
-	}
+	// h := handlers.GetHandler(s)
+	// if h != nil {
+	// return fmt.Errorf("'%s' has been grabed", s)
+	// }
 	return nil
 }
 
