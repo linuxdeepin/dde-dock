@@ -12,7 +12,7 @@
 #include "dbus/dbusclientmanager.h"
 #include "interfaces/dockconstants.h"
 
-class AppPreviewFrame : public QWidget
+class AppPreviewFrame : public QFrame
 {
     Q_OBJECT
 
@@ -65,12 +65,15 @@ public slots:
     void removePreview(int xid);
     void activatePreview(int xid);
     void clearUpPreview();
+    QSize getContentSize();
 
 private:
     DBusClientManager *m_clientManager = new DBusClientManager(this);
     QHBoxLayout *m_mainLayout = NULL;
     QList<int> m_xidList;
     bool m_isClosing = false;
+    const int PREVIEW_PADDING = 5;
+    const int BUTTON_SIZE = Dock::APP_PREVIEW_CLOSEBUTTON_SIZE;
 };
 
 #endif // APPPREVIEWS_H

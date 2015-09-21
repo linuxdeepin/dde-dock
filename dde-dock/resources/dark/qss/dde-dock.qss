@@ -60,14 +60,22 @@ QPushButton#PreviewCloseButton:pressed {
     border-image: url(:/images/resources/dark/images/close_press.png);
 }
 
-QFrame#WindowPreview[isHover="true"] {
+QFrame#WindowPreview {
     border-radius: 3px;
     border-width: 3px;
     border-style: solid;
+    border-color: rgba(255,255,255,0.1);
+}
+
+QFrame#WindowPreview[isHover="true"] {
     border-color: rgba(255,255,255,0.5);
 }
 
 QLabel#AppPreviewFrameTitle {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 3px;
     font-size: 10px;
     color: #FFFFFF;
     background-color: rgba(0,0,0,0.7);
