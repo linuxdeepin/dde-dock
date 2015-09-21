@@ -8,7 +8,6 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
 	"strings"
 )
@@ -235,10 +234,69 @@ func newDThemeFromFile(file string) (*DTheme, error) {
 	if !dutils.IsFileExist(dt.Thumbnail) {
 		dt.Thumbnail, _ = dt.Background.Thumbnail()
 	}
-	dt.Previews = getDThemePreviews(dt.Path)
 	dt.Deletable = isDeletable(file)
+	dt.Previews = dt.getPreviews()
 
 	return &dt, nil
+}
+
+func (dt *DTheme) getPreviews() []string {
+	var picts []string
+
+	var tmp = path.Join(dt.Path, "preview.png")
+	if !dutils.IsFileExist(tmp) {
+		return nil
+	}
+	picts = append(picts, tmp)
+
+	gtk := getThemePreview(dt.Gtk.Id, "gtk")
+	if len(gtk) != 0 {
+		picts = append(picts, gtk)
+	}
+
+	icon := getThemePreview(dt.Icon.Id, "icon")
+	if len(icon) != 0 {
+		picts = append(picts, icon)
+	}
+
+	cursor := getThemePreview(dt.Cursor.Id, "cursor")
+	if len(cursor) != 0 {
+		picts = append(picts, cursor)
+	}
+
+	return picts
+}
+
+func getThemePreview(name, ty string) string {
+	var tmp string
+	switch ty {
+	case "gtk":
+		tmp = path.Join("WindowThemes", name+"-preview.png")
+	case "icon":
+		tmp = path.Join("IconThemes", name+"-preview.png")
+	case "cursor":
+		tmp = path.Join("CursorThemes", name+"-preview.png")
+	default:
+		return ""
+	}
+
+	preview := path.Join(os.Getenv("HOME"),
+		".local/share/personalization/preview", tmp)
+	if dutils.IsFileExist(preview) {
+		return preview
+	}
+
+	preview = path.Join("/usr/local/share/personalization/preview", tmp)
+	if dutils.IsFileExist(preview) {
+		return preview
+	}
+
+	preview = path.Join("/usr/share/personalization/preview", tmp)
+	if dutils.IsFileExist(preview) {
+		return preview
+	}
+
+	return ""
 }
 
 func isDeletable(file string) bool {
@@ -246,28 +304,6 @@ func isDeletable(file string) bool {
 		return true
 	}
 	return false
-}
-
-func getDThemePreviews(dir string) []string {
-	fr, err := os.Open(dir)
-	if err != nil {
-		return nil
-	}
-	defer fr.Close()
-
-	names, err := fr.Readdirnames(0)
-	if err != nil {
-		return nil
-	}
-
-	var picts []string
-	for _, name := range names {
-		if !graphic.IsSupportedImage(path.Join(dir, name)) {
-			continue
-		}
-		picts = append(picts, path.Join(dir, name))
-	}
-	return picts
 }
 
 func getThemeList() []string {
