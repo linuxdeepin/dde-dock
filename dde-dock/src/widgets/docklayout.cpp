@@ -132,6 +132,14 @@ QList<AbstractDockItem *> DockLayout::getItemList() const
     return m_appList;
 }
 
+AbstractDockItem *DockLayout::getDraggingItem() const
+{
+    if (m_dragItemMap.isEmpty())
+        return NULL;
+    else
+        return m_dragItemMap.firstKey();
+}
+
 //to recover some damage cause by error
 //e.g: item has been drag to some place which can't receive drop event cause item miss
 void DockLayout::restoreTmpItem()

@@ -198,6 +198,9 @@ void Panel::initScreenMask()
 void Panel::onItemDropped()
 {
     m_maskWidget->hide();
+    AppItem *item = qobject_cast<AppItem *>(m_appLayout->getDraggingItem());
+    if (item)
+        m_ddam->RequestUndock(item->itemData().id);
     m_appLayout->clearTmpItem();
     m_appLayout->relayout();
 }

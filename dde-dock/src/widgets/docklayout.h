@@ -38,6 +38,7 @@ public:
     int getContentsWidth();
     int getItemCount() const;
     QList<AbstractDockItem *> getItemList() const;
+    AbstractDockItem *getDraggingItem() const;
 
 signals:
     void startDrag();

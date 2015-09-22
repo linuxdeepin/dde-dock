@@ -75,6 +75,7 @@ private:
 
 private:
     PreviewFrame *m_globalPreview = new PreviewFrame;
+    DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
     QPropertyAnimation *m_widthAnimation = NULL;
     DBusHideStateManager *m_HSManager = NULL;
