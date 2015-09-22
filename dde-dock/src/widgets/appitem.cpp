@@ -345,7 +345,10 @@ void AppItem::reanchorIcon()
         m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
         break;
     case Dock::ClassicMode:
-        m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
+        if (itemData().isActived)
+            m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
+        else
+            m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
     default:
         break;
     }
@@ -374,6 +377,7 @@ void AppItem::setActived(bool value)
         resize(m_dockModeData->getActivedItemWidth(), m_dockModeData->getItemHeight());
 
     m_appBackground->setIsActived(value);
+    reanchorIcon();
 }
 
 void AppItem::invokeMenuItem(QString id, bool)
