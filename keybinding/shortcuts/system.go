@@ -34,66 +34,34 @@ const (
 	systemActionsFile = "deepin/dde-daemon/keybinding/system_actions.json"
 )
 
-func ListSystemShortcuts() Shortcuts {
-	gs := newSystemGSetting()
-	defer gs.Unref()
-
-	keys := gs.ListKeys()
-	idMap := systemIdNameMap()
-	var list = Shortcuts{}
-	for _, k := range keys {
-		tmp := Shortcut{
-			Id:     k,
-			Type:   KeyTypeSystem,
-			Name:   getNameFromMap(k, idMap),
-			Accels: filterNilStr(gs.GetStrv(k)),
-		}
-
-		list = append(list, &tmp)
-	}
-
-	return list
+func ListSystemShortcut() Shortcuts {
+	s := newSystemGSetting()
+	defer s.Unref()
+	return doListShortcut(s, systemIdNameMap(), KeyTypeSystem)
 }
 
 func resetSystemAccels() {
-	gs := newSystemGSetting()
-	defer gs.Unref()
-
-	for _, key := range gs.ListKeys() {
-		gs.Reset(key)
-	}
+	s := newSystemGSetting()
+	defer s.Unref()
+	doResetAccels(s)
 }
 
 func disableSystemAccels(key string) {
-	gs := newSystemGSetting()
-	defer gs.Unref()
-
-	gs.SetStrv(key, []string{})
+	s := newSystemGSetting()
+	defer s.Unref()
+	doDisableAccles(s, key)
 }
 
 func addSystemAccel(key, accel string) {
-	gs := newSystemGSetting()
-	defer gs.Unref()
-
-	list := gs.GetStrv(key)
-	ret, added := addAccelToList(accel, list)
-	if !added {
-		return
-	}
-	gs.SetStrv(key, filterNilStr(ret))
+	s := newSystemGSetting()
+	defer s.Unref()
+	doAddAccel(s, key, accel)
 }
 
 func delSystemAccel(key, accel string) {
-	gs := newSystemGSetting()
-	defer gs.Unref()
-
-	list := gs.GetStrv(key)
-	ret, deleted := delAccelFromList(accel, list)
-	if !deleted {
-		return
-	}
-
-	gs.SetStrv(key, filterNilStr(ret))
+	s := newSystemGSetting()
+	defer s.Unref()
+	doDelAccel(s, key, accel)
 }
 
 func systemIdNameMap() map[string]string {

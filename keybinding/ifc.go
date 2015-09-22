@@ -193,11 +193,13 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 	var v interface{}
 	switch ty {
 	case shortcuts.KeyTypeSystem:
-		v = shortcuts.ListSystemShortcuts().GetById(id, ty)
+		v = shortcuts.ListSystemShortcut().GetById(id, ty)
 	case shortcuts.KeyTypeWM:
-		v = shortcuts.ListWMShortcuts().GetById(id, ty)
+		v = shortcuts.ListWMShortcut().GetById(id, ty)
 	case shortcuts.KeyTypeMedia:
-		v = shortcuts.ListMediaShortcuts().GetById(id, ty)
+		v = shortcuts.ListMediaShortcut().GetById(id, ty)
+	case shortcuts.KeyTypeMetacity:
+		v = shortcuts.ListMetacityShortcut().GetById(id, ty)
 	case shortcuts.KeyTypeCustom:
 		v = shortcuts.ListCustomKey().Get(id)
 	default:

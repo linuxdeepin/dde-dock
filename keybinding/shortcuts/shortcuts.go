@@ -23,9 +23,10 @@ package shortcuts
 
 const (
 	KeyTypeSystem int32 = iota
+	KeyTypeCustom
 	KeyTypeMedia
 	KeyTypeWM
-	KeyTypeCustom
+	KeyTypeMetacity
 )
 
 type Shortcut struct {
@@ -39,10 +40,11 @@ type Shortcut struct {
 type Shortcuts []*Shortcut
 
 func ListAllShortcuts() Shortcuts {
-	list := ListSystemShortcuts()
-	list = append(list, ListMediaShortcuts()...)
-	list = append(list, ListWMShortcuts()...)
+	list := ListSystemShortcut()
+	list = append(list, ListMediaShortcut()...)
+	list = append(list, ListWMShortcut()...)
 	list = append(list, ListCustomKey().GetShortcuts()...)
+	list = append(list, ListMetacityShortcut()...)
 
 	return list
 }
@@ -51,6 +53,7 @@ func Reset() {
 	resetSystemAccels()
 	resetWMAccels()
 	resetMediaAccels()
+	resetMetacityAccels()
 }
 
 func (list Shortcuts) GetById(id string, ty int32) *Shortcut {
@@ -101,12 +104,14 @@ func (s *Shortcut) Disable() {
 	switch s.Type {
 	case KeyTypeSystem:
 		disableSystemAccels(s.Id)
-	case KeyTypeWM:
-		disableWMAccels(s.Id)
-	case KeyTypeMedia:
-		disableMediaAccels(s.Id)
 	case KeyTypeCustom:
 		disableCustomKey(s.Id)
+	case KeyTypeMedia:
+		disableMediaAccels(s.Id)
+	case KeyTypeWM:
+		disableWMAccels(s.Id)
+	case KeyTypeMetacity:
+		disableMetacityAccels(s.Id)
 	}
 }
 
@@ -114,12 +119,14 @@ func (s *Shortcut) AddAccel(accel string) {
 	switch s.Type {
 	case KeyTypeSystem:
 		addSystemAccel(s.Id, accel)
-	case KeyTypeWM:
-		addWMAccel(s.Id, accel)
-	case KeyTypeMedia:
-		addMediaAccel(s.Id, accel)
 	case KeyTypeCustom:
 		modifyCustomAccels(s.Id, accel, false)
+	case KeyTypeMedia:
+		addMediaAccel(s.Id, accel)
+	case KeyTypeWM:
+		addWMAccel(s.Id, accel)
+	case KeyTypeMetacity:
+		addMetacityAccel(s.Id, accel)
 	}
 }
 
@@ -127,12 +134,14 @@ func (s *Shortcut) DeleteAccel(accel string) {
 	switch s.Type {
 	case KeyTypeSystem:
 		delSystemAccel(s.Id, accel)
-	case KeyTypeWM:
-		delWMAccel(s.Id, accel)
-	case KeyTypeMedia:
-		delMediaAccel(s.Id, accel)
 	case KeyTypeCustom:
 		modifyCustomAccels(s.Id, accel, true)
+	case KeyTypeMedia:
+		delMediaAccel(s.Id, accel)
+	case KeyTypeWM:
+		delWMAccel(s.Id, accel)
+	case KeyTypeMetacity:
+		delMetacityAccel(s.Id, accel)
 	}
 }
 
@@ -167,13 +176,15 @@ func newShortcut(id string, ty int32) *Shortcut {
 	var list Shortcuts
 	switch ty {
 	case KeyTypeSystem:
-		list = ListSystemShortcuts()
-	case KeyTypeMedia:
-		list = ListMediaShortcuts()
-	case KeyTypeWM:
-		list = ListWMShortcuts()
+		list = ListSystemShortcut()
 	case KeyTypeCustom:
 		list = ListCustomKey().GetShortcuts()
+	case KeyTypeMedia:
+		list = ListMediaShortcut()
+	case KeyTypeWM:
+		list = ListWMShortcut()
+	case KeyTypeMetacity:
+		list = ListMetacityShortcut()
 	default:
 		return nil
 	}

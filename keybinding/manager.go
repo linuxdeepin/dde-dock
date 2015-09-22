@@ -98,9 +98,9 @@ func (m *Manager) stopLoop() {
 }
 
 func (m *Manager) initGrabedList() {
-	sysList := shortcuts.ListSystemShortcuts()
+	sysList := shortcuts.ListSystemShortcut()
 	customList := shortcuts.ListCustomKey().GetShortcuts()
-	mediaList := shortcuts.ListMediaShortcuts()
+	mediaList := shortcuts.ListMediaShortcut()
 
 	m.grabShortcuts(sysList)
 	m.grabShortcuts(customList)
@@ -108,7 +108,8 @@ func (m *Manager) initGrabedList() {
 }
 
 func (m *Manager) listAll() shortcuts.Shortcuts {
-	list := shortcuts.ListWMShortcuts()
+	list := shortcuts.ListWMShortcut()
+	list = append(list, shortcuts.ListMetacityShortcut()...)
 	list = append(list, m.grabedList...)
 	return list
 }

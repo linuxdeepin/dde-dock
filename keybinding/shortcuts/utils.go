@@ -30,7 +30,53 @@ const (
 	systemSchema   = "com.deepin.dde.keybinding.system"
 	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
 	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
+	metacitySchema = "com.deepin.wrap.gnome.metacity.keybindings"
+	galaSchema     = "com.deepin.wrap.pantheon.desktop.gala.keybindings"
 )
+
+func doListShortcut(setting *gio.Settings, idMap map[string]string, ty int32) Shortcuts {
+	var list = Shortcuts{}
+	for _, key := range setting.ListKeys() {
+		var tmp = Shortcut{
+			Id:     key,
+			Type:   ty,
+			Name:   getNameFromMap(key, idMap),
+			Accels: filterNilStr(setting.GetStrv(key)),
+		}
+
+		list = append(list, &tmp)
+	}
+
+	return list
+}
+
+func doResetAccels(setting *gio.Settings) {
+	for _, key := range setting.ListKeys() {
+		setting.Reset(key)
+	}
+}
+
+func doDisableAccles(setting *gio.Settings, key string) {
+	setting.SetStrv(key, []string{})
+}
+
+func doAddAccel(setting *gio.Settings, key, accel string) {
+	accels := setting.GetStrv(key)
+	list, added := addAccelToList(accel, accels)
+	if !added {
+		return
+	}
+	setting.SetStrv(key, list)
+}
+
+func doDelAccel(setting *gio.Settings, key, accel string) {
+	accels := setting.GetStrv(key)
+	list, deleted := delAccelFromList(accel, accels)
+	if !deleted {
+		return
+	}
+	setting.SetStrv(key, list)
+}
 
 func newSystemGSetting() *gio.Settings {
 	return gio.NewSettings(systemSchema)
@@ -42,6 +88,14 @@ func newWMGSetting() *gio.Settings {
 
 func newMediakeyGSetting() *gio.Settings {
 	return gio.NewSettings(mediakeySchema)
+}
+
+func newMetacityGSetting() *gio.Settings {
+	return gio.NewSettings(metacitySchema)
+}
+
+func newGalaGSetting() *gio.Settings {
+	return gio.NewSettings(galaSchema)
 }
 
 func getNameFromMap(id string, m map[string]string) string {

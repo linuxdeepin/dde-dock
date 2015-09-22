@@ -21,67 +21,37 @@
 
 package shortcuts
 
-func ListMediaShortcuts() Shortcuts {
-	gs := newMediakeyGSetting()
-	defer gs.Unref()
-
-	keys := gs.ListKeys()
-	idMap := getMediaIdNameMap()
-	var list Shortcuts
-	for _, k := range keys {
-		tmp := Shortcut{
-			Id:     k,
-			Type:   KeyTypeMedia,
-			Name:   getNameFromMap(k, idMap),
-			Accels: filterNilStr(gs.GetStrv(k)),
-		}
-		list = append(list, &tmp)
-	}
-	return list
+func ListMediaShortcut() Shortcuts {
+	s := newMediakeyGSetting()
+	defer s.Unref()
+	return doListShortcut(s, mediaIdNameMap(), KeyTypeMedia)
 }
 
 func resetMediaAccels() {
-	gs := newMediakeyGSetting()
-	defer gs.Unref()
-
-	for _, key := range gs.ListKeys() {
-		gs.Reset(key)
-	}
+	s := newMediakeyGSetting()
+	defer s.Unref()
+	doResetAccels(s)
 }
 
 func disableMediaAccels(key string) {
-	gs := newMediakeyGSetting()
-	defer gs.Unref()
-
-	gs.SetStrv(key, []string{})
+	s := newMediakeyGSetting()
+	defer s.Unref()
+	doDisableAccles(s, key)
 }
 
 func addMediaAccel(key, accel string) {
-	gs := newMediakeyGSetting()
-	defer gs.Unref()
-
-	list := gs.GetStrv(key)
-	ret, added := addAccelToList(accel, list)
-	if !added {
-		return
-	}
-	gs.SetStrv(key, filterNilStr(ret))
+	s := newMediakeyGSetting()
+	defer s.Unref()
+	doAddAccel(s, key, accel)
 }
 
 func delMediaAccel(key, accel string) {
-	gs := newMediakeyGSetting()
-	defer gs.Unref()
-
-	list := gs.GetStrv(key)
-	ret, deleted := delAccelFromList(accel, list)
-	if !deleted {
-		return
-	}
-
-	gs.SetStrv(key, filterNilStr(ret))
+	s := newMediakeyGSetting()
+	defer s.Unref()
+	doDelAccel(s, key, accel)
 }
 
-func getMediaIdNameMap() map[string]string {
+func mediaIdNameMap() map[string]string {
 	var idMap = map[string]string{
 		"calculator":  "Calculator",
 		"eject":       "Eject",

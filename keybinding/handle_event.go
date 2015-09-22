@@ -58,6 +58,12 @@ func (m *Manager) handleKeyEvent(mod uint16, code int, pressed bool) {
 		if !pressed {
 			return
 		}
+
+		if s.Id == "switch-layout" {
+			m.handleMediaEvent(modStr, codeStr, pressed)
+			break
+		}
+
 		logger.Debug("Exec action:", s.GetAction())
 		go doAction(s.GetAction())
 	case shortcuts.KeyTypeMedia:
