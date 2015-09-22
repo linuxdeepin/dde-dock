@@ -5,6 +5,7 @@ import (
 	"pkg.deepin.io/lib/log"
 	"sort"
 	"sync"
+	"time"
 )
 
 type byName []Module
@@ -138,11 +139,14 @@ func (l *Loader) EnableModules(enablingModules []string, disableModules []string
 	for _, node := range nodes {
 		module := l.modules[node.ID]
 		l.log.Info("enable module", node.ID)
+		startTime := time.Now()
 		err := module.Enable(true)
+		endTime := time.Now()
+		duration := endTime.Sub(startTime)
 		if err != nil {
-			l.log.Errorf("enable module(%s) failed", node.ID)
+			l.log.Fatalf("enable module %s failed: %s, cost %s", node.ID, err, duration)
 		}
-		l.log.Info("enable module", node.ID, "done")
+		l.log.Info("enable module", node.ID, "done, cost", duration)
 	}
 
 	return nil
