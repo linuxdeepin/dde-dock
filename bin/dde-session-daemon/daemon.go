@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
@@ -10,47 +9,20 @@ import (
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
 	"pkg.deepin.io/lib/log"
-	"strings"
 )
 
 func runMainLoop() {
 	ddeSessionRegister()
 	dbus.DealWithUnhandledMessage()
-	glib.StartLoop()
-}
+	go glib.StartLoop()
 
-func toBool(v string) bool {
-	return v == "true"
-}
-
-func toLogLevel(name string) (log.Priority, error) {
-	name = strings.ToLower(name)
-	logLevel := log.LevelInfo
-	var err error
-	switch name {
-	case "":
-	case "error":
-		logLevel = log.LevelError
-	case "warn":
-		logLevel = log.LevelWarning
-	case "info":
-		logLevel = log.LevelInfo
-	case "debug":
-		logLevel = log.LevelDebug
-	case "no":
-		logLevel = log.LevelDisable
-	default:
-		err = fmt.Errorf("%s is not support", name)
+	if err := dbus.Wait(); err != nil {
+		logger.Errorf("Lost dbus: %v", err)
+		os.Exit(-1)
 	}
 
-	return logLevel, err
-}
-
-type Flags struct {
-	Verbose              *bool
-	LogLevel             *string
-	IgnoreMissingModules *bool
-	ForceStart           *bool
+	logger.Info("dbus connection is closed by user")
+	os.Exit(0)
 }
 
 func getEnableFlag(flag *Flags) loader.EnableFlag {
@@ -68,8 +40,6 @@ func getEnableFlag(flag *Flags) loader.EnableFlag {
 }
 
 type SessionDaemon struct {
-	cmd             *kingpin.Application
-	ctx             *kingpin.ParseContext
 	flags           *Flags
 	logLevel        log.Priority
 	log             *log.Logger
@@ -78,9 +48,8 @@ type SessionDaemon struct {
 	disabledModules map[string]loader.Module
 }
 
-func NewSessionDaemon(cmd *kingpin.Application, flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
+func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
 	session := &SessionDaemon{
-		cmd:             cmd,
 		flags:           flags,
 		settings:        settings,
 		logLevel:        log.LevelInfo,
@@ -102,34 +71,6 @@ func (s *SessionDaemon) exitIfNotSingleton() {
 
 }
 
-func (s *SessionDaemon) parse() (string, error) {
-	// kingpin doesn't support customized default action for now.
-	// If no subcommand is selected, usage will be printed.
-
-	// check the validity of command line arguments first.
-	ctx, err := s.cmd.ParseContext(os.Args[1:])
-	s.ctx = ctx
-	if err != nil {
-		return "", err
-	}
-
-	// using "" to indicate no subcommand is selected.
-	if s.ctx.SelectedCommand == nil {
-		return "", nil
-	}
-
-	return kingpin.MustParse(s.cmd.Parse(os.Args[1:])), nil
-}
-
-func (s *SessionDaemon) printUsage() {
-	s.cmd.UsageForContext(s.ctx)
-}
-
-func (s *SessionDaemon) version() string {
-	model := s.cmd.Model()
-	return fmt.Sprintf("%s %s", model.Name, model.Version)
-}
-
 func (s *SessionDaemon) defaultAction() {
 	loader.SetLogLevel(s.logLevel)
 
@@ -139,66 +80,9 @@ func (s *SessionDaemon) defaultAction() {
 		// TODO: define exit code.
 		os.Exit(3)
 	}
-
-	go func() {
-		if err := dbus.Wait(); err != nil {
-			logger.Errorf("Lost dbus: %v", err)
-			os.Exit(-1)
-		} else {
-			logger.Info("dbus connection is closed by user")
-			os.Exit(0)
-		}
-	}()
-
-	runMainLoop()
 }
 
 func (s *SessionDaemon) execDefaultAction() {
-	verboseExist := false
-
-	// If no subcommand is selected, flags won't be parsed, do it ourself.
-	// Just handle the first flag, otherwise print usage.
-	for _, el := range s.ctx.Elements {
-		switch c := el.Clause.(type) {
-		case *kingpin.FlagClause:
-			switch c.Model().Name {
-			case "help":
-				s.printUsage()
-				return
-			case "version":
-				fmt.Println(s.version())
-				return
-			case "ignore":
-				*s.flags.IgnoreMissingModules = toBool(*el.Value)
-			case "verbose":
-				verboseExist = true
-				*s.flags.Verbose = toBool(*el.Value)
-				if *s.flags.Verbose {
-					s.logLevel = log.LevelDebug
-				}
-			case "loglevel":
-				if verboseExist {
-					continue
-				}
-				logLevel, err := toLogLevel(*el.Value)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				s.logLevel = logLevel
-			case "force":
-				*s.flags.ForceStart = toBool(*el.Value)
-			}
-		case *kingpin.ArgClause:
-			fmt.Println("not support ArgClause now:", c.Model().Name)
-			os.Exit(2)
-		case *kingpin.CmdClause:
-			fmt.Println("not support CmdClause now:", c.Model().Name)
-			os.Exit(2)
-		}
-	}
-
-	s.exitIfNotSingleton()
 	s.defaultAction()
 }
 

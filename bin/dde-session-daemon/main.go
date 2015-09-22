@@ -5,44 +5,18 @@ package main
 //void init(){gtk_init(0,0);}
 import "C"
 import (
-	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"os"
-	"os/signal"
 	"pkg.deepin.io/dde/daemon/loader"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
-	"runtime/pprof"
 )
 
 // using go build -ldflags "-X main.__VERSION__ version" to set version.
 var __VERSION__ = "unknown"
 
 var logger = log.NewLogger("daemon/dde-session-daemon")
-
-func startMemProfile(name string) {
-	logger.Info("Start memory profile")
-	f, err := os.Create(name)
-	if err != nil {
-		logger.Fatal(err)
-		os.Exit(1)
-	}
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func() {
-		for sig := range c {
-			switch sig.String() {
-			case "Interrupt":
-				logger.Info("Memory profile done.")
-				pprof.WriteHeapProfile(f)
-				f.Close()
-				close(c)
-				os.Exit(0)
-			}
-		}
-	}()
-}
 
 func main() {
 	InitI18n()
@@ -52,35 +26,29 @@ func main() {
 	cmd.Version("version " + __VERSION__)
 
 	flags := new(Flags)
-	flags.Verbose = cmd.Flag("verbose", "show much more message, the shorthand for --loglevel debug, if specificed, loglevel is ignored.").Short('v').Bool()
-	flags.LogLevel = cmd.Flag("loglevel", "set log level, possible value is error/warn/info/debug/no.").Short('l').String()
-	flags.IgnoreMissingModules = cmd.Flag("ignore", "ignore missing modules, --no-ignore to revert it.").Short('i').Default("true").Bool()
-	flags.ForceStart = cmd.Flag("force", "force start disabled module.").Short('f').Bool()
+	flags.Verbose = cmd.Flag("verbose", "Show much more message, the shorthand for --loglevel debug, if specificed, loglevel is ignored.").Short('v').Bool()
+	flags.LogLevel = cmd.Flag("loglevel", "Set log level, possible value is error/warn/info/debug/no.").Short('l').String()
+	flags.IgnoreMissingModules = cmd.Flag("Ignore", "ignore missing modules, --no-ignore to revert it.").Short('i').Default("true").Bool()
+	flags.ForceStart = cmd.Flag("force", "Force start disabled module.").Short('f').Bool()
 
-	enablingModules := cmd.Command("enable", "enable modules and their dependencies, ignore settings.").Arg("module", "module names.").Required().Strings()
-	disableModules := cmd.Command("disable", "disable modules, ignore settings.").Arg("module", "module names.").Required().Strings()
-	listModule := cmd.Command("list", "list all the modules or the dependencies of one module.").Arg("module", "module name.").String()
+	cmd.Command("auto", "Automatically get enabled and disabled modules from settings.").Default()
+	enablingModules := cmd.Command("enable", "Enable modules and their dependencies, ignore settings.").Arg("module", "module names.").Required().Strings()
+	disableModules := cmd.Command("disable", "Disable modules, ignore settings.").Arg("module", "module names.").Required().Strings()
+	listModule := cmd.Command("list", "List all the modules or the dependencies of one module.").Arg("module", "module name.").String()
 
-	memprof := cmd.Flag("memprof", "memory profile").String()
+	memprof := cmd.Flag("memprof", "Write memory profile to specific file").String()
+	cpuprof := cmd.Flag("cpuprof", "Write cpu profile to specific file").String()
 
-	app := NewSessionDaemon(cmd, flags, daemonSettings, logger)
+	subCmd := kingpin.MustParse(cmd.Parse(os.Args[1:]))
 
-	subCmd, err := app.parse()
-	if err != nil {
-		fmt.Println(err)
-		fmt.Println()
-		app.printUsage()
-		return
+	if *memprof != "" && *cpuprof != "" {
+		logger.Fatal("can not use memprof and cpuprof together")
 	}
 
 	C.init()
 	proxy.SetupProxy()
 
-	if subCmd == "" {
-		app.execDefaultAction()
-		return
-	}
-
+	app := NewSessionDaemon(flags, daemonSettings, logger)
 	app.exitIfNotSingleton()
 
 	if *flags.Verbose {
@@ -88,7 +56,7 @@ func main() {
 	} else {
 		logLevel, err := toLogLevel(*flags.LogLevel)
 		if err != nil {
-			fmt.Println(err)
+			logger.Error(err)
 			return
 		}
 		app.logLevel = logLevel
@@ -97,8 +65,19 @@ func main() {
 	loader.SetLogLevel(app.logLevel)
 	logger.Info("LogLevel is", app.logLevel)
 
+	if *memprof != "" {
+		startMemProfile(*memprof)
+	}
+
+	if *cpuprof != "" {
+		startCPUProfile(*cpuprof)
+	}
+
+	var err error
 	needRunMainLoop := true
 	switch subCmd {
+	case "auto":
+		app.execDefaultAction()
 	case "enable":
 		err = app.EnableModules(*enablingModules)
 	case "disable":
@@ -109,15 +88,11 @@ func main() {
 	}
 
 	if err != nil {
-		fmt.Println(err)
+		logger.Warning(err)
 		os.Exit(1)
 	}
 
 	if needRunMainLoop {
-		if *memprof != "" {
-			startMemProfile(*memprof)
-		}
-
 		runMainLoop()
 	}
 }
