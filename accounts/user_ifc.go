@@ -167,6 +167,10 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
 			return
 		}
 
+		if locked && u.AutomaticLogin {
+			users.SetAutoLoginUser("")
+		}
+
 		u.setPropBool(&u.Locked, "Locked", locked)
 	}()
 
