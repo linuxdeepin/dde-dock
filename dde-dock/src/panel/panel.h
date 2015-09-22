@@ -30,12 +30,14 @@ public:
 
     void setContainMouse(bool value);   //for smart-hide and keep-hide
     bool isFashionMode();               //for qss setting background
+    void showPanelMenu();
 
 signals:
     void startShow();
     void startHide();
     void panelHasShown();
     void panelHasHidden();
+    void sizeChanged();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -70,7 +72,6 @@ private:
     void showPluginLayoutMask();
     void hidePluginLayoutMask();
     void reloadStyleSheet();
-    void showPanelMenu();
     void setY(int value);   //for hide and show animation
 
 private:

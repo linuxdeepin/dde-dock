@@ -94,7 +94,7 @@ void Panel::initWidthAnimation()
         m_pluginLayout->move(width() - m_pluginLayout->width() - FASHION_PANEL_RPADDING, 1);
         updateRightReflection();
 
-        this->move((m_parentWidget->width() - width()) / 2,0);
+        emit sizeChanged();
     });
 }
 
@@ -229,14 +229,16 @@ void Panel::onLayoutContentsWidthChanged()
     }
     else
     {
+        QRect rec = QApplication::desktop()->screenGeometry();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
-        m_pluginLayout->move(m_parentWidget->width() - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
 
         m_appLayout->move(0,1);
-        m_appLayout->resize(m_parentWidget->width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(),m_dockModeData->getDockHeight());
-        this->move((m_parentWidget->width() - m_appLayout->width() - m_pluginLayout->width()) / 2,0);
+
+        emit sizeChanged();
     }
 }
 
@@ -324,18 +326,21 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         m_appLayout->move(FASHION_PANEL_LPADDING,1);
 
         m_pluginLayout->move(m_appLayout->x() + m_appLayout->width() - m_dockModeData->getAppItemSpacing(),1);
-        this->move((m_parentWidget->width() - width()) / 2,0);
+
+        emit sizeChanged();
     }
     else
     {
+        QRect rec = QApplication::desktop()->screenGeometry();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(), m_dockModeData->getItemHeight());
-        m_pluginLayout->move(m_parentWidget->width() - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
 
         m_appLayout->move(0,1);
-        m_appLayout->resize(m_parentWidget->width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(), m_dockModeData->getDockHeight());
-        this->move((m_parentWidget->width() - m_appLayout->width() - m_pluginLayout->width()) / 2,0);
+
+        emit sizeChanged();
     }
 }
 

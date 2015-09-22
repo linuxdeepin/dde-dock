@@ -33,12 +33,14 @@ protected:
 private:
     void showDock();
     void hideDock();
+    void onPanelSizeChanged();
     void changeDockMode(Dock::DockMode, Dock::DockMode);
     void updateXcbStructPartial();
     void initHideStateManager();
     void initDockSetting();
+
 private:
-    Panel *mainPanel = NULL;
+    Panel *m_mainPanel = NULL;
     bool hasHidden = false;
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;
