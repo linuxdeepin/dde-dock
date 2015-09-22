@@ -214,5 +214,8 @@ func (d *Daemon) Start() error {
 	_m.SetBottomLeft(_m.BottomLeftAction())
 	_m.SetTopRight(_m.TopRightAction())
 	_m.SetBottomRight(_m.BottomRightAction())
+
+	handleSettingsChanged()
+
 	return nil
 }
