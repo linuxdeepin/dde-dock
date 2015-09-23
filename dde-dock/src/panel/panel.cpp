@@ -110,12 +110,14 @@ void Panel::initPluginManager()
         m_pluginLayout->addItem(targetItem);
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+        connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
     connect(pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+        connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
     connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
@@ -247,6 +249,7 @@ void Panel::onAppItemAdd(AbstractDockItem *item)
     m_appLayout->addItem(item);
     connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
     connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+    connect(item, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
     connect(item, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
 }
 
@@ -310,6 +313,11 @@ void Panel::onNeedPreviewShow(QPoint pos)
         m_globalPreview->setContent(item->getApplet());
         m_globalPreview->showPreview(pos.x(), pos.y() + 10, DELAY_SHOW_PREVIEW_INTERVAL);
     }
+}
+
+void Panel::onNeedPreviewImmediatelyHide()
+{
+    m_globalPreview->hidePreview(0);
 }
 
 void Panel::reanchorsLayout(Dock::DockMode mode)

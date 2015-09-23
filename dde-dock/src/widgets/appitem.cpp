@@ -288,7 +288,8 @@ void AppItem::onMousePress(QMouseEvent *event)
 {
     //qWarning() << "mouse press...";
     emit mousePress(event);
-    hidePreview();
+
+    hidePreview(true);
 }
 
 void AppItem::onMouseRelease(QMouseEvent *event)

@@ -47,7 +47,7 @@ public:
     void resize(int width,int height);
     void showMenu();
     void showPreview();
-    void hidePreview();
+    void hidePreview(bool immediately = false);
     void setParent(QWidget * parent);
 
     int globalX();
@@ -68,6 +68,7 @@ signals:
     void frameUpdate();
     void moveAnimationFinished();
     void needPreviewHide();
+    void needPreviewImmediatelyHide();
     void needPreviewShow(QPoint pos);
     void needPreviewUpdate();
 

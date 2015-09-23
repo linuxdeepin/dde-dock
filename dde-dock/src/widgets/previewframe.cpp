@@ -42,7 +42,10 @@ void PreviewFrame::hidePreview(int interval)
 {
     m_showTimer->stop();
 
-    m_hideTimer->start(interval);
+    if (interval <= 0)
+        onHideTimerTriggered();
+    else
+        m_hideTimer->start(interval);
 }
 
 void PreviewFrame::setContent(QWidget *content)

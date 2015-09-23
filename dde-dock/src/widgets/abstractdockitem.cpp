@@ -151,18 +151,21 @@ void AbstractDockItem::showPreview()
     }
 }
 
-void AbstractDockItem::hidePreview()
+void AbstractDockItem::hidePreview(bool immediately)
 {
     m_titlePreview->hidePreview();
 
-    emit needPreviewHide();
+    if (immediately)
+        emit needPreviewImmediatelyHide();
+    else
+        emit needPreviewHide();
 }
 
 void AbstractDockItem::showMenu()
 {
     if (getMenuContent().isEmpty()) return;
 
-    hidePreview();
+    hidePreview(true);
 
     if (m_dbusMenuManager == NULL) {
         m_dbusMenuManager = new DBusMenuManager(this);

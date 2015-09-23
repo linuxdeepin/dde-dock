@@ -65,6 +65,7 @@ private:
     void onHidePanelFinished();
     void onNeedPreviewHide();
     void onNeedPreviewShow(QPoint pos);
+    void onNeedPreviewImmediatelyHide();
 
     void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
