@@ -25,7 +25,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
-    m_titlePreview = new PreviewFrame;
+    m_titlePreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
 }
 
 AbstractDockItem::~AbstractDockItem()
@@ -137,10 +137,10 @@ void AbstractDockItem::showPreview()
         if (!title.isEmpty()) {
             m_titleLabel->setTitle(title);
 
+            m_titlePreview->setArrowX(-1);  //reset position
             m_titlePreview->setContent(m_titleLabel);
-            m_titlePreview->showPreview(ArrowRectangle::ArrowBottom,
-                                     globalX() + width() / 2,
-                                     globalY() - 5,
+            m_titlePreview->showPreview(globalX() + width() / 2,
+                                     globalY() + 18,
                                      0);
         }
     }

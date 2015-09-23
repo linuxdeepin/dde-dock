@@ -8,7 +8,6 @@
 #include <QProcess>
 
 #include "appicon.h"
-#include "arrowrectangle.h"
 #include "abstractdockitem.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"

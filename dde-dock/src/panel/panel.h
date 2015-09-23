@@ -75,7 +75,7 @@ private:
     void setY(int value);   //for hide and show animation
 
 private:
-    PreviewFrame *m_globalPreview = new PreviewFrame;
+    PreviewFrame *m_globalPreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
     QPropertyAnimation *m_widthAnimation = NULL;

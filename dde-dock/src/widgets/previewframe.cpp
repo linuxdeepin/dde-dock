@@ -1,7 +1,11 @@
 #include "previewframe.h"
 
-PreviewFrame::PreviewFrame(QWidget *parent) : ArrowRectangle(parent)
+PreviewFrame::PreviewFrame(ArrowDirection direction, QWidget *parent) : DArrowRectangle(direction, parent)
 {
+    setWindowFlags(Qt::X11BypassWindowManagerHint);
+    setArrowWidth(ARROW_WIDTH);
+    setArrowHeight(ARROW_HEIGHT);
+
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, this, &PreviewFrame::onShowTimerTriggered);
@@ -20,14 +24,13 @@ PreviewFrame::~PreviewFrame()
 
 }
 
-void PreviewFrame::showPreview(ArrowRectangle::ArrowDirection direction, int x, int y, int interval)
+void PreviewFrame::showPreview(int x, int y, int interval)
 {
     m_hideTimer->stop();
 
     if (m_showTimer->isActive())
         return;
 
-    m_direction = direction;
     m_lastPos = QPoint(m_x, m_y);
     m_x = x;
     m_y = y;
@@ -49,7 +52,7 @@ void PreviewFrame::setContent(QWidget *content)
 
 void PreviewFrame::setArrowPos(const QPoint &pos)
 {
-    show(m_direction, pos.x(), pos.y());
+    show(pos.x(), pos.y());
 }
 
 void PreviewFrame::enterEvent(QEvent *)
@@ -64,10 +67,10 @@ void PreviewFrame::leaveEvent(QEvent *)
 
 void PreviewFrame::onShowTimerTriggered()
 {
-    ArrowRectangle::setContent(m_tmpContent);
+    DArrowRectangle::setContent(m_tmpContent);
 
     if (isHidden())
-        show(m_direction, m_x, m_y);
+        show(m_x, m_y);
     else{
         m_animation->setStartValue(m_lastPos);
         m_animation->setEndValue(QPoint(m_x, m_y));

@@ -58,13 +58,11 @@ HEADERS += \
     src/widgets/appicon.h \
     src/widgets/appitem.h \
     src/widgets/apppreviews.h \
-    src/widgets/arrowrectangle.h \
     src/widgets/docklayout.h \
     src/widgets/dockmodel.h \
     src/widgets/dockview.h \
     src/widgets/highlighteffect.h \
     src/widgets/launcheritem.h \
-    src/widgets/previewarrowrectangle.h \
     src/widgets/reflectioneffect.h \
     src/widgets/screenmask.h \
     src/widgets/windowpreview.h \
@@ -95,13 +93,11 @@ SOURCES += \
     src/widgets/appicon.cpp \
     src/widgets/appitem.cpp \
     src/widgets/apppreviews.cpp \
-    src/widgets/arrowrectangle.cpp \
     src/widgets/docklayout.cpp \
     src/widgets/dockmodel.cpp \
     src/widgets/dockview.cpp \
     src/widgets/highlighteffect.cpp \
     src/widgets/launcheritem.cpp \
-    src/widgets/previewarrowrectangle.cpp \
     src/widgets/reflectioneffect.cpp \
     src/widgets/screenmask.cpp \
     src/widgets/windowpreview.cpp \

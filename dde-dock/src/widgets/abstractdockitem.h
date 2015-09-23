@@ -13,8 +13,6 @@
 #include "previewframe.h"
 #include "highlighteffect.h"
 #include "dbus/dbusmenumanager.h"
-#include "previewarrowrectangle.h"
-#include "widgets/arrowrectangle.h"
 #include "interfaces/dockconstants.h"
 
 class ItemTitleLabel : public QLabel
