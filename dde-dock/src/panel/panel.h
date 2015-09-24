@@ -53,6 +53,7 @@ private:
     void initAppManager();
     void initReflection();
     void initScreenMask();
+    void initGlobalPreview();
 
     void onItemDropped();
     void onItemDragStarted();
@@ -76,7 +77,7 @@ private:
     void setY(int value);   //for hide and show animation
 
 private:
-    PreviewFrame *m_globalPreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
+    PreviewFrame *m_globalPreview = NULL;
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
     QPropertyAnimation *m_widthAnimation = NULL;

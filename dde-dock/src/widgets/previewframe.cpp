@@ -43,7 +43,7 @@ void PreviewFrame::hidePreview(int interval)
     m_showTimer->stop();
 
     if (interval <= 0)
-        onHideTimerTriggered();
+        hide();
     else
         m_hideTimer->start(interval);
 }
@@ -58,6 +58,14 @@ void PreviewFrame::setArrowPos(const QPoint &pos)
     show(pos.x(), pos.y());
 }
 
+void PreviewFrame::hide()
+{
+
+    emit hideFinish(m_lastContent);
+
+    DArrowRectangle::hide();
+}
+
 void PreviewFrame::enterEvent(QEvent *)
 {
     m_hideTimer->stop();
@@ -70,7 +78,11 @@ void PreviewFrame::leaveEvent(QEvent *)
 
 void PreviewFrame::onShowTimerTriggered()
 {
+    if (m_lastContent != m_tmpContent)
+        emit showFinish(m_lastContent);
+
     DArrowRectangle::setContent(m_tmpContent);
+    m_lastContent = m_tmpContent;
 
     if (isHidden())
         show(m_x, m_y);
@@ -79,12 +91,5 @@ void PreviewFrame::onShowTimerTriggered()
         m_animation->setEndValue(QPoint(m_x, m_y));
         m_animation->start();
     }
-}
-
-void PreviewFrame::onHideTimerTriggered()
-{
-    hide();
-
-    emit hideFinish();
 }
 

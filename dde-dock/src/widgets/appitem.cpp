@@ -45,6 +45,7 @@ QWidget *AppItem::getApplet()
     QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
     if (m_itemData.isActived && !tmpArray.isEmpty())
     {
+        m_preview->clearUpPreview();
         foreach (QJsonValue v, tmpArray) {
             QString title = v.toObject().value("Title").toString();
             int xid = v.toObject().value("Xid").toInt();

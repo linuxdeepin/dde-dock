@@ -10,6 +10,7 @@ Panel::Panel(QWidget *parent)
 {
     setObjectName("Panel");
 
+    initGlobalPreview();
     initShowHideAnimation();
     initHideStateManager();
     initWidthAnimation();
@@ -195,6 +196,27 @@ void Panel::initScreenMask()
     //for plugin layout mask
     connect(m_maskWidget, &ScreenMask::itemDropped, this, &Panel::hidePluginLayoutMask);
     connect(m_maskWidget, &ScreenMask::itemMissing, this, &Panel::hidePluginLayoutMask);
+}
+
+void Panel::initGlobalPreview()
+{
+    m_globalPreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
+
+    //make sure all app-preview will be destroy to save resources
+    connect(m_globalPreview, &PreviewFrame::showFinish, [=] (QWidget *lastContent) {
+        if (lastContent) {
+            AppPreviews *tmpFrame = qobject_cast<AppPreviews *>(lastContent);
+            if (tmpFrame)
+                tmpFrame->clearUpPreview();
+        }
+    });
+    connect(m_globalPreview, &PreviewFrame::hideFinish, [=] (QWidget *lastContent) {
+        if (lastContent) {
+            AppPreviews *tmpFrame = qobject_cast<AppPreviews *>(lastContent);
+            if (tmpFrame)
+                tmpFrame->clearUpPreview();
+        }
+    });
 }
 
 void Panel::onItemDropped()

@@ -20,9 +20,11 @@ public:
     void hidePreview(int interval = 0);
     void setContent(QWidget *content);
     void setArrowPos(const QPoint &pos);
+    void hide();
 
 signals:
-    void hideFinish();
+    void showFinish(QWidget *lastContent);
+    void hideFinish(QWidget *lastContent);
 
 protected:
     void enterEvent(QEvent *);
@@ -30,12 +32,12 @@ protected:
 
 private:
     void onShowTimerTriggered();
-    void onHideTimerTriggered();
 
 private:
     QTimer *m_showTimer = NULL;
     QTimer *m_hideTimer = NULL;
     QWidget *m_tmpContent = NULL;
+    QWidget *m_lastContent = NULL;
     QPropertyAnimation *m_animation = NULL;
     QPoint m_lastPos = QPoint(0, 0);
     int m_x = 0;
