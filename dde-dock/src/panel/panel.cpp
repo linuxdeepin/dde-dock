@@ -333,7 +333,9 @@ void Panel::onNeedPreviewShow(QPoint pos)
     if (item && item->getApplet()) {
         m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
         m_globalPreview->setContent(item->getApplet());
-        m_globalPreview->showPreview(pos.x(), pos.y() + 10, DELAY_SHOW_PREVIEW_INTERVAL);
+        m_globalPreview->showPreview(pos.x(),
+                                     pos.y() + m_globalPreview->shadowBlurRadius() + m_globalPreview->shadowDistance(),
+                                     DELAY_SHOW_PREVIEW_INTERVAL);
     }
 }
 
