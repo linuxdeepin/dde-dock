@@ -22,8 +22,6 @@
 package mounts
 
 import (
-	"fmt"
-	"os"
 	"pkg.deepin.io/lib/gio-2.0"
 	"regexp"
 	"strings"
@@ -85,7 +83,7 @@ func newDiskInfoFromMount(mount *gio.Mount) DiskInfo {
 	}
 
 	if len(info.UUID) == 0 {
-		info.UUID = generateUUID()
+		info.UUID = info.Path
 	}
 
 	iconObj := mount.GetIcon()
@@ -124,7 +122,7 @@ func newDiskInfoFromVolume(volume *gio.Volume) DiskInfo {
 	}
 
 	if len(info.UUID) == 0 {
-		info.UUID = generateUUID()
+		info.UUID = info.Path
 	}
 
 	iconObj := volume.GetIcon()
@@ -162,19 +160,4 @@ func getIconFromGIcon(iconObj *gio.Icon) string {
 	}
 
 	return ""
-}
-
-func generateUUID() string {
-	f, err := os.Open("/dev/urandom")
-	if err != nil {
-		return ""
-	}
-
-	defer f.Close()
-	b := make([]byte, 16)
-	f.Read(b)
-	uuid := fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6],
-		b[6:8], b[8:10], b[10:])
-
-	return uuid
 }
