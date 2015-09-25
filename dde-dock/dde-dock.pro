@@ -28,7 +28,7 @@ headers.files += src/interfaces/dockconstants.h \
     src/interfaces/dockplugininterface.h \
     src/interfaces/dockpluginproxyinterface.h
 headers.path = /usr/include/dde-dock
-
+include (../cutelogger/cutelogger.pri)
 INSTALLS += headers target
 
 HEADERS += \
