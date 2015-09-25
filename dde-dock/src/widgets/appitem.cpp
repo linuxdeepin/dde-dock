@@ -394,7 +394,6 @@ QString AppItem::getMenuContent()
 
 AppItem::~AppItem()
 {
-    if (m_preview)
-        m_preview->deleteLater();
+
 }
 
