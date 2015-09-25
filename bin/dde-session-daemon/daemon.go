@@ -48,6 +48,14 @@ type SessionDaemon struct {
 	disabledModules map[string]loader.Module
 }
 
+func (*SessionDaemon) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       "com.deepin.daemon.Daemon",
+		ObjectPath: "/com/deepin/daemon/Daemon",
+		Interface:  "com.deepin.daemon.Daemon",
+	}
+}
+
 func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
 	session := &SessionDaemon{
 		flags:           flags,
@@ -64,9 +72,13 @@ func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) 
 }
 
 func (s *SessionDaemon) exitIfNotSingleton() {
-	if !lib.UniqueOnSession("com.deepin.daemon") {
+	if !lib.UniqueOnSession(s.GetDBusInfo().Dest) {
 		s.log.Warning("There already has a dde daemon running.")
 		os.Exit(0)
+	}
+
+	if err := dbus.InstallOnSession(s); err != nil {
+		logger.Fatal(err)
 	}
 
 }
