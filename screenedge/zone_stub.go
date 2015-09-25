@@ -112,13 +112,14 @@ func (m *Manager) handleCursorSignal(x, y int32, id string, into bool) {
 		return
 	}
 
+	setting := zoneSettings()
 	if isInArea(x, y, topLeftArea) {
-		m.lTopTimer.DoAction(leftTopEdge, leftTopDelay)
+		m.lTopTimer.DoAction(leftTopEdge, setting.GetInt("left-up-delay"))
 	} else if isInArea(x, y, bottomLeftArea) {
-		m.lBottomTimer.DoAction(leftBottomEdge, leftBottomDelay)
+		m.lBottomTimer.DoAction(leftBottomEdge, setting.GetInt("left-down-delay"))
 	} else if isInArea(x, y, topRightArea) {
-		m.rTopTimer.DoAction(rightTopEdge, rightTopDelay)
+		m.rTopTimer.DoAction(rightTopEdge, setting.GetInt("right-up-delay"))
 	} else if isInArea(x, y, bottomRightArea) {
-		m.rBottomTimer.DoAction(rightBottomEdge, rightBottomDelay)
+		m.rBottomTimer.DoAction(rightBottomEdge, setting.GetInt("right-down-delay"))
 	}
 }
