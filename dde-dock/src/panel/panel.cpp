@@ -101,36 +101,34 @@ void Panel::initWidthAnimation()
 
 void Panel::initPluginManager()
 {
-    DockPluginManager *pluginManager = new DockPluginManager(this);
+    m_pluginManager = new DockPluginManager(this);
 
-    connect(m_dockModeData, &DockModeData::dockModeChanged, pluginManager, &DockPluginManager::onDockModeChanged);
-    connect(pluginManager, &DockPluginManager::itemMove, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
+    connect(m_dockModeData, &DockModeData::dockModeChanged, m_pluginManager, &DockPluginManager::onDockModeChanged);
+    connect(m_pluginManager, &DockPluginManager::itemMove, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->moveItem(m_pluginLayout->indexOf(targetItem), m_pluginLayout->indexOf(baseItem));
     });
-    connect(pluginManager, &DockPluginManager::itemAppend, [=](AbstractDockItem *targetItem){
+    connect(m_pluginManager, &DockPluginManager::itemAppend, [=](AbstractDockItem *targetItem){
         m_pluginLayout->addItem(targetItem);
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
-    connect(pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
+    connect(m_pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
-    connect(pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
+    connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         m_pluginLayout->removeItem(item);
         item->deleteLater();
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
         QRect rec = QApplication::desktop()->screenGeometry();
-        pluginManager->onPluginsSetting(rec.height() - height());
+        m_pluginManager->onPluginsSetting(rec.height() - height());
     });
-
-    pluginManager->initAll();
 }
 
 void Panel::initPluginLayout()
@@ -162,7 +160,6 @@ void Panel::initAppManager()
     m_appManager = new AppManager(this);
     connect(m_appManager, &AppManager::entryAdded, this, &Panel::onAppItemAdd);
     connect(m_appManager, &AppManager::entryRemoved, this, &Panel::onAppItemRemove);
-    m_appManager->initEntries();
 }
 
 void Panel::initReflection()
@@ -444,6 +441,12 @@ void Panel::showPanelMenu()
     QPoint tmpPos = QCursor::pos();
 
     PanelMenu::instance()->showMenu(tmpPos.x(),tmpPos.y());
+}
+
+void Panel::loadResources()
+{
+    m_pluginManager->initAll();
+    m_appManager->initEntries();
 }
 
 void Panel::setY(int value)

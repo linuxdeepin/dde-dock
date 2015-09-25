@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 
         MainWidget w;
         w.show();
+        w.loadResources();
 
         RegisterDdeSession();
 

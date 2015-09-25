@@ -112,6 +112,11 @@ MainWidget::~MainWidget()
 
 }
 
+void MainWidget::loadResources()
+{
+    m_mainPanel->loadResources();
+}
+
 DockUIDbus::DockUIDbus(MainWidget *parent):
     QDBusAbstractAdaptor(parent),
     m_parent(parent)

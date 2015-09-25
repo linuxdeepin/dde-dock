@@ -25,6 +25,7 @@ class MainWidget : public QWidget
 public:
     MainWidget(QWidget *parent = 0);
     ~MainWidget();
+    void loadResources();
 
 protected:
     void enterEvent(QEvent *event);

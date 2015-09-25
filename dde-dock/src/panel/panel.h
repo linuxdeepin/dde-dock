@@ -17,6 +17,7 @@
 #include "panelmenu.h"
 
 class LayoutDropMask;
+class DockPluginManager;
 class Panel : public QLabel
 {
     Q_OBJECT
@@ -31,6 +32,7 @@ public:
     void setContainMouse(bool value);   //for smart-hide and keep-hide
     bool isFashionMode();               //for qss setting background
     void showPanelMenu();
+    void loadResources();
 
 signals:
     void startShow();
@@ -90,6 +92,7 @@ private:
     QWidget *m_parentWidget = NULL;
     LayoutDropMask *m_pluginLayoutMask = NULL;
     DockLayout *m_appLayout = NULL;
+    DockPluginManager *m_pluginManager = NULL;
 
     bool m_containMouse = false;
     bool m_isFashionMode = false;
