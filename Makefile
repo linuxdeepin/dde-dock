@@ -17,7 +17,7 @@ else
 endif
 
 BINARIES =  \
-	    backlight_helper \
+	    dde-preload \
 	    dde-session-daemon \
 	    dde-system-daemon \
 	    desktop-toggle \
@@ -25,6 +25,7 @@ BINARIES =  \
 	    grub2ext \
 	    search \
 	    theme-thumb-tool \
+	    backlight_helper \
 	    langselector
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))

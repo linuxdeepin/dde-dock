@@ -78,7 +78,7 @@ func (s *SessionDaemon) exitIfNotSingleton() {
 	}
 
 	if err := dbus.InstallOnSession(s); err != nil {
-		logger.Fatal(err)
+		s.log.Fatal(err)
 	}
 
 }
