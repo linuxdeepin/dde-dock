@@ -146,7 +146,7 @@ void PluginsSettingFrame::resizeWithLineCount()
 
 void PluginsSettingFrame::initCloseTitle()
 {
-    QLabel *titleLabel = new QLabel(tr("Notice Region Setting"));
+    QLabel *titleLabel = new QLabel(tr("Notification Area Settings"));
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setObjectName("PluginSettingTitle");
     QPushButton *closeButton = new QPushButton;

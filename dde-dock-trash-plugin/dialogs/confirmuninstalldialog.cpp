@@ -10,7 +10,7 @@ ConfirmUninstallDialog::ConfirmUninstallDialog(QWidget *parent) : DBaseDialog(pa
     QString message = tr("Are you sure to uninstall this application?");
     QString tipMessage = tr("This action cannot be restored");
     QStringList buttons;
-    buttons << "Cancel" << "Ok";
+    buttons << tr("Cancel") << tr("Ok");
     initUI(icon, message, tipMessage, buttons, buttons);
     moveCenter();
     getButtonsGroup()->button(1)->setFocus();

@@ -12,7 +12,7 @@ ClearTrashDialog::ClearTrashDialog(QWidget *parent):
     QString message = tr("Are you sure to clear items in trash?");
     QString tipMessage = tr("This action cannot be restored");
     QStringList buttons;
-    buttons << "Cancel" << "Clear";
+    buttons << tr("Cancel") << tr("Clear");
     initUI(icon, message, tipMessage, buttons, buttons);
     moveCenter();
     getButtonsGroup()->button(1)->setFocus();

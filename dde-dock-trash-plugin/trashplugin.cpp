@@ -79,7 +79,7 @@ QString TrashPlugin::getMenuContent(QString)
 
     QJsonArray items;
 
-    items.append(createMenuItem("clear_trash", "Clear Trash"));
+    items.append(createMenuItem("clear_trash", tr("Empty")));
 
     contentObj.insert("items", items);
 

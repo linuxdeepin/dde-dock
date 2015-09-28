@@ -32,15 +32,15 @@ void PanelMenu::showMenu(int x, int y)
             targetObj.insert("isDockMenu",QJsonValue(false));
 
             QJsonArray contentArry;
-            contentArry.append(createRadioItemObj("Fashion mode",ToFashionMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::FashionMode));
-            contentArry.append(createRadioItemObj("Efficient mode",ToEfficientMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::EfficientMode));
-            contentArry.append(createRadioItemObj("Classic mode",ToClassicMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::ClassicMode));
+            contentArry.append(createRadioItemObj(tr("Fashion mode"),ToFashionMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::FashionMode));
+            contentArry.append(createRadioItemObj(tr("Efficient mode"),ToEfficientMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::EfficientMode));
+            contentArry.append(createRadioItemObj(tr("Classic mode"),ToClassicMode,DockModeGroup,m_dockModeData->getDockMode() == Dock::ClassicMode));
             contentArry.append(createItemObj("",OperationType(-1)));
-            contentArry.append(createRadioItemObj("Keep showing",ToKeepShowing,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepShowing));
-            contentArry.append(createRadioItemObj("Keep hidden",ToKeepHidden,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepHidden));
-            contentArry.append(createRadioItemObj("Smart hide",ToSmartHide,HideModeGroup,m_dockModeData->getHideMode() == Dock::SmartHide));
+            contentArry.append(createRadioItemObj(tr("Keep showing"),ToKeepShowing,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepShowing));
+            contentArry.append(createRadioItemObj(tr("Keep hidden"),ToKeepHidden,HideModeGroup,m_dockModeData->getHideMode() == Dock::KeepHidden));
+            contentArry.append(createRadioItemObj(tr("Smart hide"),ToSmartHide,HideModeGroup,m_dockModeData->getHideMode() == Dock::SmartHide));
             contentArry.append(createItemObj("",OperationType(-1)));
-            contentArry.append(createItemObj("Notification area setting",ToPluginSetting));
+            contentArry.append(createItemObj(tr("Notification area settings"),ToPluginSetting));
 
             QJsonObject contentObj;
             contentObj.insert("items",contentArry);
