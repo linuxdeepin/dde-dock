@@ -55,7 +55,8 @@ public:
 
     bool nativeEventFilter(const QByteArray &eventType, void *message, long *)
     {
-        if (eventType=="xcb_generic_event_t") {
+        //only draw once data to save computing resources
+        if (m_wp->imageData.isEmpty() && eventType=="xcb_generic_event_t") {
             xcb_generic_event_t *event = static_cast<xcb_generic_event_t*>(message);
             const uint8_t responseType = event->response_type & ~0x80;
 
@@ -91,7 +92,7 @@ WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
 
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    prepareRepaint();
+//    prepareRepaint();
 
     installMonitor();
 }
