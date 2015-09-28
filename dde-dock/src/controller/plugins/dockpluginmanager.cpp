@@ -17,6 +17,12 @@ DockPluginManager::DockPluginManager(QObject *parent) :
 //    m_watcher = new QFileSystemWatcher(this);
 //    m_watcher->addPaths(m_searchPaths);
 
+//    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
+//    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
+}
+
+void DockPluginManager::initAll()
+{
     foreach (QString path, m_searchPaths) {
         QDir pluginsDir(path);
 
@@ -27,12 +33,6 @@ DockPluginManager::DockPluginManager(QObject *parent) :
         }
     }
 
-//    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
-//    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
-}
-
-void DockPluginManager::initAll()
-{
     foreach (DockPluginProxy * proxy, m_proxies.values()) {
         proxy->plugin()->init(proxy);
     }

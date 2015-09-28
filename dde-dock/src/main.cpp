@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 
         MainWidget w;
         w.show();
+        qWarning() << "The main window has been shown!";
         w.loadResources();
 
         RegisterDdeSession();
