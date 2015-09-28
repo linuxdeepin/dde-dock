@@ -77,7 +77,7 @@ func systemIdNameMap() map[string]string {
 		"screenshot-window":     gettext.Tr("Window screenshot"),
 		"screenshot-delayed":    gettext.Tr("Delay screenshot"),
 		"file-manager":          gettext.Tr("File manager"),
-		"disable-touchpad":      gettext.Tr("Disable touchpad"),
+		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
 		"switch-layout":         gettext.Tr("Switch Layout"),
 	}
 

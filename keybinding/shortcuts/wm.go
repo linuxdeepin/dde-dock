@@ -74,7 +74,7 @@ func wmIdNameMap() map[string]string {
 		"switch-to-workspace-up":       gettext.Tr("Switch to upper workspace"),
 		"switch-to-workspace-down":     gettext.Tr("Switch to lower workspace"),
 		"switch-to-workspace-last":     "Switch to last workspace",
-		"switch-group":                 gettext.Tr("Switch similar window"),
+		"switch-group":                 gettext.Tr("Switch similar windows"),
 		"switch-group-backward":        gettext.Tr("Switch similar windows in reverse"),
 		"switch-applications":          gettext.Tr("Switch windows"),
 		"switch-applications-backward": gettext.Tr("Switch windows in reverse"),

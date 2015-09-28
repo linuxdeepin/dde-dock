@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 10:11+0800\n"
+"POT-Creation-Date: 2015-09-28 15:40+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -440,14 +440,17 @@ msgstr ""
 
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:299
 msgid "_Undock"
 msgstr ""
 
 #: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268
 msgid "_Close All"
 msgstr ""
 
 #: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311
 msgid "_Dock"
 msgstr ""
 
@@ -481,19 +484,19 @@ msgstr ""
 msgid "Page Down"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:47
+#: ../../keybinding/id_desc_list.go:47 ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:48
+#: ../../keybinding/id_desc_list.go:48 ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:49
+#: ../../keybinding/id_desc_list.go:49 ../../keybinding/shortcuts/system.go:71
 msgid "Lock screen"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:50
+#: ../../keybinding/id_desc_list.go:50 ../../keybinding/shortcuts/system.go:79
 msgid "File manager"
 msgstr ""
 
@@ -513,39 +516,39 @@ msgstr ""
 msgid "3D reverse switch applications"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:55
+#: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:56
+#: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:75
 msgid "Screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:57
+#: ../../keybinding/id_desc_list.go:57 ../../keybinding/shortcuts/system.go:76
 msgid "Full screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:58
+#: ../../keybinding/id_desc_list.go:58 ../../keybinding/shortcuts/system.go:77
 msgid "Window screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:59
+#: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:60
+#: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:70
 msgid "Terminal"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:61
+#: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:62
+#: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:73
 msgid "Logout"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:63
+#: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
 msgstr ""
 
@@ -553,7 +556,7 @@ msgstr ""
 msgid "Deepin Translator"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:65
+#: ../../keybinding/id_desc_list.go:65 ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
 msgstr ""
 
@@ -609,15 +612,15 @@ msgstr ""
 msgid "Eject"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:93
+#: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:104
 msgid "Close window"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:94
+#: ../../keybinding/id_desc_list.go:94 ../../keybinding/shortcuts/wm.go:100
 msgid "Maximize window"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:95
+#: ../../keybinding/id_desc_list.go:95 ../../keybinding/shortcuts/wm.go:101
 msgid "Restore window"
 msgstr ""
 
@@ -625,11 +628,11 @@ msgstr ""
 msgid "Minimize window"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:97
+#: ../../keybinding/id_desc_list.go:97 ../../keybinding/shortcuts/wm.go:105
 msgid "Move window"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:98
+#: ../../keybinding/id_desc_list.go:98 ../../keybinding/shortcuts/wm.go:106
 msgid "Resize window"
 msgstr ""
 
@@ -657,19 +660,19 @@ msgstr ""
 msgid "Switch to workspace 4"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:112
+#: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:113
+#: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:114
+#: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:115
+#: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
 msgstr ""
 
@@ -689,20 +692,48 @@ msgstr ""
 msgid "Move to workspace 4"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:120
+#: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:121
+#: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:122
+#: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
 msgstr ""
 
-#: ../../keybinding/id_desc_list.go:123
+#: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
+msgstr ""
+
+#: ../../keybinding/shortcuts/metacity.go:55
+msgid "Display windows of all workspaces"
+msgstr ""
+
+#: ../../keybinding/shortcuts/metacity.go:56
+msgid "Display windows of current workspace"
+msgstr ""
+
+#: ../../keybinding/shortcuts/metacity.go:57
+msgid "Display workspace"
+msgstr ""
+
+#: ../../keybinding/shortcuts/wm.go:77
+msgid "Switch similar windows"
+msgstr ""
+
+#: ../../keybinding/shortcuts/wm.go:78
+msgid "Switch similar windows in reverse"
+msgstr ""
+
+#: ../../keybinding/shortcuts/wm.go:79
+msgid "Switch windows"
+msgstr ""
+
+#: ../../keybinding/shortcuts/wm.go:80
+msgid "Switch windows in reverse"
 msgstr ""
 
 #: ../../langselector/handle_event.go:36
