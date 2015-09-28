@@ -140,7 +140,10 @@ void AbstractDockItem::showPreview()
             m_titlePreview->setArrowX(-1);  //reset position
             m_titlePreview->setContent(m_titleLabel);
             m_titlePreview->showPreview(globalX() + width() / 2,
-                                     globalY() + m_titlePreview->shadowBlurRadius() + m_titlePreview->shadowDistance(),
+                                     globalY() -
+                                        m_titlePreview->shadowYOffset() +
+                                        m_titlePreview->shadowBlurRadius() +
+                                        m_titlePreview->shadowDistance(),
                                      0);
         }
     }
