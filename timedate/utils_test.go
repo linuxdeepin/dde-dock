@@ -118,3 +118,28 @@ func (*testWrapper) TestDeleteItem(c *C.C) {
 		c.Check(isItemInList(info.name, tList), C.Equals, false)
 	}
 }
+
+func (*testWrapper) TestFilterNilStr(c *C.C) {
+	var infos = []struct {
+		list   []string
+		hasNil bool
+		ret    []string
+	}{
+		{
+			list:   []string{"abs", "apt", "", "pacman"},
+			hasNil: true,
+			ret:    []string{"abs", "apt", "pacman"},
+		},
+		{
+			list:   []string{"c", "go", "python"},
+			hasNil: false,
+			ret:    []string{"c", "go", "python"},
+		},
+	}
+
+	for _, info := range infos {
+		list, hasNil := filterNilString(info.list)
+		c.Check(hasNil, C.Equals, info.hasNil)
+		c.Check(len(list), C.Equals, len(info.ret))
+	}
+}

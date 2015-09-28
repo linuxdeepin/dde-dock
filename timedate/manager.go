@@ -83,6 +83,11 @@ func NewManager() (*Manager, error) {
 	m.UserTimezones = property.NewGSettingsStrvProperty(
 		m, "UserTimezones",
 		m.settings, settingsKeyTimezoneList)
+
+	newList, hasNil := filterNilString(m.UserTimezones.Get())
+	if hasNil {
+		m.UserTimezones.Set(newList)
+	}
 	m.AddUserTimezone(m.Timezone)
 
 	return m, nil

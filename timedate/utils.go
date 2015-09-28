@@ -43,7 +43,7 @@ func addItemToList(item string, list []string) ([]string, bool) {
 func deleteItemFromList(item string, list []string) ([]string, bool) {
 	var (
 		ret   []string
-		found bool
+		found bool = false
 	)
 	for _, v := range list {
 		if v == item {
@@ -55,4 +55,20 @@ func deleteItemFromList(item string, list []string) ([]string, bool) {
 	}
 
 	return ret, found
+}
+
+func filterNilString(list []string) ([]string, bool) {
+	var (
+		ret    []string
+		hasNil bool = false
+	)
+	for _, v := range list {
+		if len(v) == 0 {
+			hasNil = true
+			continue
+		}
+		ret = append(ret, v)
+	}
+
+	return ret, hasNil
 }

@@ -79,6 +79,10 @@ func init() {
 
 // Check timezone validity
 func IsZoneValid(zone string) bool {
+	if len(zone) == 0 {
+		return false
+	}
+
 	file := path.Join(defaultZoneDir, zone)
 	return dutils.IsFileExist(file)
 }

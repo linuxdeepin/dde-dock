@@ -106,10 +106,10 @@ func (m *Manager) AddUserTimezone(zone string) error {
 		return zoneinfo.ErrZoneInvalid
 	}
 
-	oldList := m.UserTimezones.Get()
+	oldList, hasNil := filterNilString(m.UserTimezones.Get())
 	newList, added := addItemToList(zone, oldList)
-	if added {
-		m.settings.SetStrv(settingsKeyTimezoneList, newList)
+	if added || hasNil {
+		m.UserTimezones.Set(newList)
 	}
 	return nil
 }
@@ -121,10 +121,10 @@ func (m *Manager) DeleteUserTimezone(zone string) error {
 		return zoneinfo.ErrZoneInvalid
 	}
 
-	oldList := m.UserTimezones.Get()
+	oldList, hasNil := filterNilString(m.UserTimezones.Get())
 	newList, deleted := deleteItemFromList(zone, oldList)
-	if deleted {
-		m.settings.SetStrv(settingsKeyTimezoneList, newList)
+	if deleted || hasNil {
+		m.UserTimezones.Set(newList)
 	}
 	return nil
 }
