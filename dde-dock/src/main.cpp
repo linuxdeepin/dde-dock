@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug>
+#include <QTranslator>
 #include <QDBusConnection>
 
 #include "mainwidget.h"
@@ -30,6 +31,11 @@ int main(int argc, char *argv[])
     a.setOrganizationName("deepin");
     a.setApplicationName("dde-dock");
     a.setApplicationDisplayName("Dock");
+
+    // install translators
+    QTranslator translator;
+    translator.load("/usr/share/dde-dock/translations/dde-dock_" + QLocale::system().name());
+    a.installTranslator(&translator);
 
     LogManager::instance()->debug_log_console_on();
     LOG_INFO() << LogManager::instance()->getlogFilePath();
