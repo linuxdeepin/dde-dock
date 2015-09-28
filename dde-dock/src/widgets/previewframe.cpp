@@ -2,7 +2,7 @@
 
 PreviewFrame::PreviewFrame(ArrowDirection direction, QWidget *parent) : DArrowRectangle(direction, parent)
 {
-    setWindowFlags(Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::Tool);
     setArrowWidth(ARROW_WIDTH);
     setArrowHeight(ARROW_HEIGHT);
 
