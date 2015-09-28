@@ -123,6 +123,8 @@ void AppPreviews::removePreview(int xid)
 void AppPreviews::activatePreview(int xid)
 {
     m_clientManager->ActiveWindow(xid);
+
+    emit requestHide();
 }
 
 void AppPreviews::clearUpPreview()
