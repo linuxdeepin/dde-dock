@@ -265,10 +265,9 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	}
 
 	item := self.itemManager.GetItem(id)
-	logger.Info("emit ItemChanged signal")
-	dbus.Emit(self, "ItemChanged", status, NewItemInfoExport(item), item.GetCategoryId())
+	cid := item.GetCategoryId()
+	itemInfo := NewItemInfoExport(item)
 
-	cid := self.itemManager.GetItem(id).GetCategoryId()
 	if status == SoftwareStatusDeleted {
 		self.itemManager.MarkLaunched(id)
 		self.categoryManager.RemoveItem(id, cid)
@@ -276,6 +275,10 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	} else {
 		self.categoryManager.AddItem(id, cid)
 	}
+
+	logger.Info("emit ItemChanged signal")
+	dbus.Emit(self, "ItemChanged", status, itemInfo, cid)
+
 	logger.Info(name, status, "successful")
 }
 
