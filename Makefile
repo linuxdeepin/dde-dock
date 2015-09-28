@@ -3,23 +3,29 @@ GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.deepin.io/dde/daemon
 
 ifndef USE_GCCGO
-    GOBUILD = go build
+	ifndef GOLLANG_DEBUG
+		LDFLAGS = -ldflags '-s -w'
+	endif
+
+	GOBUILD = go build ${LDFLAGS}
 else
-   LDFLAGS = $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 sqlite3 fontconfig)
-   GOBUILD = go build -compiler gccgo -gccgoflags "${LDFLAGS}"
+	ifndef GOLANG_DEBUG
+		LDFLAGS = -s -w -Os -O2
+	endif
+	LDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 sqlite3 fontconfig)
+	GOBUILD = go build -compiler gccgo -gccgoflags "${LDFLAGS}"
 endif
 
 BINARIES =  \
-    dde-preload \
-    dde-session-daemon \
-    dde-system-daemon \
-    desktop-toggle \
-    grub2 \
-    grub2ext \
-    search \
-    theme-thumb-tool \
-    backlight_helper \
-    langselector
+	    backlight_helper \
+	    dde-session-daemon \
+	    dde-system-daemon \
+	    desktop-toggle \
+	    grub2 \
+	    grub2ext \
+	    search \
+	    theme-thumb-tool \
+	    langselector
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
@@ -29,17 +35,17 @@ prepare:
 	@if [ ! -d ${GOPATH_DIR}/src/${GOPKG_PREFIX} ]; then \
 		mkdir -p ${GOPATH_DIR}/src/$(dir ${GOPKG_PREFIX}); \
 		ln -sf ../../../.. ${GOPATH_DIR}/src/${GOPKG_PREFIX}; \
-	fi
+		fi
 
 out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 ifdef USE_GCCGO
-out/bin/gtk-thumb-tool:
+	out/bin/gtk-thumb-tool:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" \
-            go build -compiler gccgo -gccgoflags \
-            "$(shell pkg-config --libs gtk+-2.0 libmetacity-private)" \
-            -o $@  ${GOPKG_PREFIX}/bin/${@F}
+		go build -compiler gccgo -gccgoflags \
+		"$(shell pkg-config --libs gtk+-2.0 libmetacity-private)" \
+		-o $@  ${GOPKG_PREFIX}/bin/${@F}
 endif
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
