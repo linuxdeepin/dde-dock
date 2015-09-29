@@ -7,13 +7,15 @@
 ConfirmUninstallDialog::ConfirmUninstallDialog(QWidget *parent) : DBaseDialog(parent)
 {
     QString icon = ":/images/skin/dialogs/images/user-trash-full.png";
-    QString message = tr("Are you sure to uninstall this application?");
-    QString tipMessage = tr("This action cannot be restored");
-    QStringList buttons;
-    buttons << tr("Cancel") << tr("Ok");
+    QString message = "Are you sure to uninstall this application?";
+    QString tipMessage = tr("All dependencies will be removed together");
+    QStringList buttons, buttonTexts;
+    buttons << "Cancel" << "Confirm";
+    buttonTexts << tr("Cancel") << tr("Confirm");
     initUI(icon, message, tipMessage, buttons, buttons);
     moveCenter();
     getButtonsGroup()->button(1)->setFocus();
+    setButtonTexts(buttonTexts);
 }
 
 void ConfirmUninstallDialog::handleKeyEnter(){
