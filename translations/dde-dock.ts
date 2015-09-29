@@ -5,7 +5,7 @@
     <name>ClearTrashDialog</name>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="12"/>
-        <source>Are you sure to clear items in trash?</source>
+        <source>Are you sure to empty trash?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -14,36 +14,31 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="15"/>
+        <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="16"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="15"/>
-        <source>Clear</source>
+        <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="16"/>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConfirmUninstallDialog</name>
     <message>
-        <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="10"/>
-        <source>Are you sure to uninstall this application?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="11"/>
-        <source>This action cannot be restored</source>
+        <source>All dependencies will be removed together</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="13"/>
+        <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="14"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="13"/>
-        <source>Ok</source>
+        <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="14"/>
+        <source>Confirm</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -51,7 +46,7 @@
     <name>MainItem</name>
     <message>
         <location filename="../dde-dock-trash-plugin/mainitem.cpp" line="96"/>
-        <source>Are you sure to uninstall &quot;%1&quot;</source>
+        <source>Are you sure to uninstall %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
