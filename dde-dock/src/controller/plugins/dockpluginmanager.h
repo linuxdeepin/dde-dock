@@ -18,8 +18,6 @@ class DockPluginManager : public QObject
 public:
     explicit DockPluginManager(QObject *parent = 0);
 
-    void initAll();
-
 signals:
     void itemMove(AbstractDockItem *baseItem, AbstractDockItem *targetItem);
     void itemInsert(AbstractDockItem *baseItem, AbstractDockItem *targetItem);
@@ -27,6 +25,7 @@ signals:
     void itemRemoved(AbstractDockItem * item);
 
 public slots:
+    void initAll();
     void onPluginsSetting(int y);
     void onDockModeChanged(Dock::DockMode newMode,
                            Dock::DockMode oldMode);

@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <QTimer>
 
 #include "panel.h"
 #include "controller/dockmodedata.h"
@@ -445,8 +446,9 @@ void Panel::showPanelMenu()
 
 void Panel::loadResources()
 {
-    m_pluginManager->initAll();
     m_appManager->initEntries();
+
+    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
 }
 
 void Panel::setY(int value)
