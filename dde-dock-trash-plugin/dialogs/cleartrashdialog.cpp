@@ -9,13 +9,15 @@ ClearTrashDialog::ClearTrashDialog(QWidget *parent):
 {
 
     QString icon = ":/images/skin/dialogs/images/user-trash-full.png";
-    QString message = tr("Are you sure to clear items in trash?");
+    QString message = tr("Are you sure to empty trash?");
     QString tipMessage = tr("This action cannot be restored");
-    QStringList buttons;
-    buttons << tr("Cancel") << tr("Clear");
+    QStringList buttons, buttonTexts;
+    buttons << "Cancel" << "Empty";
+    buttonTexts << tr("Cancel") << tr("Empty");
     initUI(icon, message, tipMessage, buttons, buttons);
     moveCenter();
     getButtonsGroup()->button(1)->setFocus();
+    setButtonTexts(buttonTexts);
 }
 
 void ClearTrashDialog::handleKeyEnter(){

@@ -81,29 +81,29 @@ void MainItem::dropEvent(QDropEvent *event)
     if (event->source())
         return;
 
-    QStringList formats = event->mimeData()->formats();
-    if (formats.indexOf("_DEEPIN_DND") != -1 && formats.indexOf("text/plain") != -1)//Application
-    {
-        QString jsonStr = QString(event->mimeData()->data("_DEEPIN_DND")).split("uninstall").last().trimmed();
+    if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from desktop or launcher
+        QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
+        if (!dataObj.isEmpty()){
+            QString appKey = dataObj.value("appKey").toString();
+            QString appName = dataObj.value("appName").toString();
+            if (appKey.isEmpty())
+                return;
+            event->ignore();
 
-        //Tim at both ends of the string is added to a character SOH (start of heading)
-        jsonStr = jsonStr.mid(1,jsonStr.length() - 2);
-        QJsonObject dataObj = QJsonDocument::fromJson(jsonStr.trimmed().toUtf8()).object();
-        if (dataObj.isEmpty())
-            return;
-
-        ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
-        QString message = tr("Are you sure to uninstall \"%1\"").arg(dataObj.value("name").toString());
-        dialog->setMessage(message);
-        dialog->setIcon(getThemeIconPath(dataObj.value("icon").toString()));
-        connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
-            dialog->deleteLater();
-            if (key == 1){
-                qWarning() << "Uninstall application:" << dataObj.value("id").toString();
-                m_launcher->RequestUninstall(dataObj.value("id").toString(), true);
-            }
-        });
-        dialog->exec();
+            ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
+            //TODO: need real icon name
+            dialog->setIcon(getThemeIconPath(appKey));
+            QString message = tr("Are you sure to uninstall %1?").arg(appName);
+            dialog->setMessage(message);
+            connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
+                dialog->deleteLater();
+                if (key == 1){
+                    qWarning() << "Uninstall application:" << appKey << appName;
+                    m_launcher->RequestUninstall(appKey, true);
+                }
+            });
+            dialog->exec();
+        }
     }
     else//File or Dirctory
     {
