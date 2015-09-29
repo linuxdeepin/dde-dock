@@ -3,17 +3,20 @@ GOPATH_DIR = gopath
 GOPKG_PREFIX = pkg.deepin.io/dde/daemon
 
 ifndef USE_GCCGO
-	ifndef GOLLANG_DEBUG
-		LDFLAGS = -ldflags '-s -w'
-	endif
-
-	GOBUILD = go build ${LDFLAGS}
+	GOLDFLAGS = -ldflags '-s -w'
 else
-	ifndef GOLANG_DEBUG
-		LDFLAGS = -s -w -Os -O2
-	endif
-	LDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 sqlite3 fontconfig)
-	GOBUILD = go build -compiler gccgo -gccgoflags "${LDFLAGS}"
+	GOLDFLAGS = -s -w  -Os -O2
+endif
+
+ifdef GODEBUG
+	GOLDFLAGS =
+endif
+
+ifndef USE_GCCGO
+	GOBUILD = go build ${GOLDFLAGS}
+else
+	GOLDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 sqlite3 fontconfig)
+	GOBUILD = go build -compiler gccgo -gccgoflags "${GOLDFLAGS}"
 endif
 
 BINARIES =  \
@@ -42,11 +45,7 @@ out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 ifdef USE_GCCGO
-	ifndef GOLANG_DEBUG
-		LDFLAGS = -s -w -Os -O2
-	endif
-
-	out/bin/theme-thumb-tool:
+out/bin/theme-thumb-tool:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" \
 		go build -compiler gccgo -gccgoflags \
 		"$(shell pkg-config --libs glib-2.0 gdk-3.0 cairo-ft poppler-glib libmetacity-private )" \
