@@ -26,7 +26,7 @@ type NormalApp struct {
 
 func NewNormalApp(desktopID string) *NormalApp {
 	app := &NormalApp{Id: normalizeAppID(trimDesktop(desktopID)), DesktopID: desktopID}
-	logger.Info("NewNormalApp:", desktopID)
+	logger.Info("NewNormalApp:", app.Id, "for desktop", desktopID)
 	var core *DesktopAppInfo
 	if strings.ContainsRune(desktopID, filepath.Separator) {
 		core = NewDesktopAppInfoFromFilename(desktopID)

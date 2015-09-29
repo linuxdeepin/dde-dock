@@ -122,6 +122,7 @@ func (m *DockedAppManager) DockedAppList() []string {
 
 // IsDocked通过传入的程序id判断一个程序是否已经驻留。
 func (m *DockedAppManager) IsDocked(id string) bool {
+	id = normalizeAppID(id)
 	item := m.findItem(id)
 	if item != nil {
 		return true
@@ -143,6 +144,7 @@ type dockedItemInfo struct {
 // 成功后会触发Docked信号。
 // （废弃，此接口名并不好，第一反映很难理解，请使用新接口RequestDock)
 func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
+	id = normalizeAppID(id)
 	idElement := m.findItem(id)
 	if idElement != nil {
 		logger.Info(id, "is already docked.")
@@ -208,8 +210,7 @@ func (m *DockedAppManager) doUndock(id string) bool {
 
 // Undock通过程序id移除已驻留程序。成功后会触发Undocked信号。（废弃，请使用新接口RequestUndock）
 func (m *DockedAppManager) Undock(id string) bool {
-	id = strings.ToLower(id)
-	logger.Debug("undock lower id:", id)
+	id = normalizeAppID(id)
 	if m.doUndock(id) {
 		return true
 	}
@@ -249,6 +250,7 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 func (m *DockedAppManager) Sort(items []string) {
 	logger.Info("sort:", items)
 	for _, item := range items {
+		item = normalizeAppID(item)
 		if i := m.findItem(item); i != nil {
 			m.items.PushBack(m.items.Remove(i))
 		}

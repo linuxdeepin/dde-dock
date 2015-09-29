@@ -41,6 +41,7 @@ func (m *EntryManager) listenDockedApp() {
 	}
 
 	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
+		id = normalizeAppID(id)
 		if _, ok := m.normalApps[id]; ok {
 			logger.Info(id, "is already docked")
 			return
@@ -50,6 +51,7 @@ func (m *EntryManager) listenDockedApp() {
 
 	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
 		// undocked is operated on normal app
+		id = normalizeAppID(id)
 		logger.Info("ConnectUndocked: Undock", id)
 		if app, ok := m.normalApps[id]; ok {
 			logger.Info("destroy normal app")
