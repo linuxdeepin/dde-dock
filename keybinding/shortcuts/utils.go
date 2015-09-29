@@ -52,6 +52,10 @@ func doListShortcut(setting *gio.Settings, idMap map[string]string, ty int32) Sh
 
 func doResetAccels(setting *gio.Settings) {
 	for _, key := range setting.ListKeys() {
+		_, srcList := setting.GetDefaultValue(key).GetStrv()
+		if isAccelsEqual(srcList, setting.GetStrv(key)) {
+			continue
+		}
 		setting.Reset(key)
 	}
 }
@@ -104,6 +108,20 @@ func getNameFromMap(id string, m map[string]string) string {
 		return id
 	}
 	return name
+}
+
+func isAccelsEqual(l1, l2 []string) bool {
+	if len(l1) != len(l2) {
+		return false
+	}
+
+	for _, v := range l1 {
+		if !isAccelInList(v, l2) {
+			return false
+		}
+	}
+
+	return true
 }
 
 func isAccelInList(accel string, list []string) bool {
