@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"pkg.deepin.io/dde/daemon/loader"
@@ -71,16 +72,23 @@ func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) 
 	return session
 }
 
-func (s *SessionDaemon) exitIfNotSingleton() {
+func (s *SessionDaemon) exitIfNotSingleton() error {
 	if !lib.UniqueOnSession(s.GetDBusInfo().Dest) {
-		s.log.Warning("There already has a dde daemon running.")
-		os.Exit(0)
+		return errors.New("There already has a dde daemon running.")
+	}
+	return nil
+}
+
+func (s *SessionDaemon) register() error {
+	if err := s.exitIfNotSingleton(); err != nil {
+		return err
 	}
 
 	if err := dbus.InstallOnSession(s); err != nil {
 		s.log.Fatal(err)
 	}
 
+	return nil
 }
 
 func (s *SessionDaemon) defaultAction() {

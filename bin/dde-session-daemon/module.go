@@ -30,7 +30,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/dsc"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
-	//_ "pkg.deepin.io/dde/daemon/launcher"
+	_ "pkg.deepin.io/dde/daemon/launcher"
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/mpris"
 	_ "pkg.deepin.io/dde/daemon/network"

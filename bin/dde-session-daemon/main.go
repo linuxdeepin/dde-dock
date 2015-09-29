@@ -49,7 +49,10 @@ func main() {
 	proxy.SetupProxy()
 
 	app := NewSessionDaemon(flags, daemonSettings, logger)
-	app.exitIfNotSingleton()
+	if err := app.register(); err != nil {
+		logger.Info(err)
+		os.Exit(0)
+	}
 
 	if *flags.Verbose {
 		app.logLevel = log.LevelDebug
