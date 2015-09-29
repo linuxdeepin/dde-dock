@@ -42,10 +42,14 @@ out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 ifdef USE_GCCGO
-	out/bin/gtk-thumb-tool:
+	ifndef GOLANG_DEBUG
+		LDFLAGS = -s -w -Os -O2
+	endif
+
+	out/bin/theme-thumb-tool:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" \
 		go build -compiler gccgo -gccgoflags \
-		"$(shell pkg-config --libs gtk+-2.0 libmetacity-private)" \
+		"$(shell pkg-config --libs glib-2.0 gdk-3.0 cairo-ft poppler-glib libmetacity-private )" \
 		-o $@  ${GOPKG_PREFIX}/bin/${@F}
 endif
 
