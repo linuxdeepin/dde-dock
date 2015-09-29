@@ -4,41 +4,54 @@
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
+    this->setWindowFlags(Qt::Window);
+    this->setAttribute(Qt::WA_TranslucentBackground);
+
     initHideStateManager();
     initDockSetting();
-
-    QRect rec = QApplication::desktop()->screenGeometry();
-    this->setFixedSize(rec.width(),m_dmd->getDockHeight());
-    this->move((rec.width() - width()) / 2, rec.height() - this->height());
 
     m_mainPanel = new Panel(this);
     connect(m_mainPanel,&Panel::startShow,this,&MainWidget::showDock);
     connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
 
-    this->setWindowFlags(Qt::Window);
-    this->setAttribute(Qt::WA_TranslucentBackground);
-
-    connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::changeDockMode);
+    connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
 
     //For init
-    changeDockMode(m_dmd->getDockMode(), m_dmd->getDockMode());
+    updatePosition();
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
     Q_UNUSED(dockUIDbus)
 
-    XcbMisc::instance()->set_window_type(winId(),
-                                         XcbMisc::Dock);
+    XcbMisc::instance()->set_window_type(winId(), XcbMisc::Dock);
+
+    connect(QApplication::desktop(), &QDesktopWidget::workAreaResized, [=](int screen) {
+        if (screen == QApplication::desktop()->primaryScreen()) {
+            QRect rect = QApplication::desktop()->screenGeometry(screen);
+            qWarning() << QString("PrimaryScreen(index: %0) size changed %1x%2").arg(screen).arg(rect.width()).arg(rect.height());
+            updatePosition();
+        }
+    });
 }
 
-void MainWidget::changeDockMode(Dock::DockMode, Dock::DockMode)
+void MainWidget::onDockModeChanged()
 {
-    if (hasHidden)
-        return;
+    updatePosition();
+}
 
+void MainWidget::updatePosition()
+{
     QRect rec = QApplication::desktop()->screenGeometry();
-    this->setFixedSize(rec.width(),m_dmd->getDockHeight());
-    this->move((rec.width() - width()) / 2, rec.height() - this->height());
+    if (m_hasHidden) {
+        //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
+        this->setFixedSize(m_mainPanel->width(), 1);
+        this->move((rec.width() - width()) / 2, rec.height() - 1);//1 pixel for grab mouse enter event to show panel
+    }
+    else {
+
+        this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
+        this->move((rec.width() - width()) / 2, rec.height() - this->height());
+    }
 
     updateXcbStructPartial();
 }
@@ -67,7 +80,7 @@ void MainWidget::initDockSetting()
     connect(m_dds, &DBusDockSetting::HideModeChanged, this, &MainWidget::updateXcbStructPartial);
 }
 
-void MainWidget::enterEvent(QEvent *event)
+void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
         showDock();
@@ -83,27 +96,20 @@ void MainWidget::leaveEvent(QEvent *)
 
 void MainWidget::showDock()
 {
-    hasHidden = false;
-    QRect rec = QApplication::desktop()->screenGeometry();
-    this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
-    this->move((rec.width() - width()) / 2, rec.height() - this->height());
-    updateXcbStructPartial();
+    m_hasHidden = false;
+    updatePosition();
 }
 
 void MainWidget::hideDock()
 {
-    hasHidden = true;
-    QRect rec = QApplication::desktop()->screenGeometry();
-    //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
-    this->setFixedSize(m_mainPanel->width(), 1);
-    this->move((rec.width() - width()) / 2, rec.height() - 1);//1 pixel for grab mouse enter event to show panel
-    updateXcbStructPartial();
+    m_hasHidden = true;
+    updatePosition();
 }
 
 void MainWidget::onPanelSizeChanged()
 {
-    this->setFixedSize(m_mainPanel->size());
     QRect rec = QApplication::desktop()->screenGeometry();
+    this->setFixedSize(m_mainPanel->size());
     this->move((rec.width() - width()) / 2, y());
 }
 
