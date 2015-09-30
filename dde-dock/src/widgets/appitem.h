@@ -29,7 +29,7 @@ struct AppItemData {
     QString id;
     QString iconPath;
     QString title;
-    QString xidsJsonString;
+    QMap<int, QString> xidTitleMap;
     QString menuJsonString;
     bool isActived;
     bool currentOpened;
@@ -72,7 +72,7 @@ private:
     void updateIcon();
     void updateTitle();
     void updateState();
-    void updateXids();
+    void updateXidTitleMap();
     void updateMenuJsonString();
 
     void onDbusDataChanged(const QString &, const QString &);

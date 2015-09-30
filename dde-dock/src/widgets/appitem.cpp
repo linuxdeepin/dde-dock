@@ -42,14 +42,13 @@ QWidget *AppItem::getApplet()
     if (!m_preview)
         initPreview();
 
-    QJsonArray tmpArray = QJsonDocument::fromJson(m_itemData.xidsJsonString.toUtf8()).array();
-    if (m_itemData.isActived && !tmpArray.isEmpty())
+    if (m_itemData.isActived && !m_itemData.xidTitleMap.isEmpty())
     {
         m_preview->clearUpPreview();
-        foreach (QJsonValue v, tmpArray) {
-            QString title = v.toObject().value("Title").toString();
-            int xid = v.toObject().value("Xid").toInt();
-            m_preview->addItem(title,xid);
+        //Returns a list containing all the keys in the map in ascending order.
+        QList<int> xids = m_itemData.xidTitleMap.keys();
+        foreach (int xid, xids) {
+            m_preview->addItem(m_itemData.xidTitleMap[xid], xid);
         }
     } else {
         return NULL;    //use getTitle() to show title by abstractdockitem
@@ -210,9 +209,9 @@ void AppItem::initData()
     m_itemData.title = dataMap.value("title");
     m_itemData.iconPath = dataMap.value("icon");
     m_itemData.menuJsonString = dataMap.value("menu");
-    m_itemData.xidsJsonString = dataMap.value("app-xids");
+    updateXidTitleMap();
     m_itemData.isActived = dataMap.value("app-status") == "active";
-    m_itemData.currentOpened = m_itemData.xidsJsonString.indexOf(QString::number(m_clientmanager->CurrentActiveWindow())) != -1;
+    m_itemData.currentOpened = m_itemData.xidTitleMap.keys().indexOf(m_clientmanager->CurrentActiveWindow().value()) != -1;
     m_itemData.id = m_entryProxyer->id();
 
     setActived(m_itemData.isActived);
@@ -261,9 +260,14 @@ void AppItem::updateState()
     m_appBackground->setIsActived(m_itemData.isActived);
 }
 
-void AppItem::updateXids()
+void AppItem::updateXidTitleMap()
 {
-    m_itemData.xidsJsonString = m_entryProxyer->data().value("app-xids");
+    m_itemData.xidTitleMap.clear();
+    QJsonArray nArray = QJsonDocument::fromJson(m_entryProxyer->data().value("app-xids").toUtf8()).array();
+    foreach (QJsonValue value, nArray) {
+        QJsonObject obj = value.toObject();
+        m_itemData.xidTitleMap.insert(obj.value("Xid").toInt(), obj.value("Title").toString());
+    }
 }
 
 void AppItem::updateMenuJsonString()
@@ -275,7 +279,7 @@ void AppItem::onDbusDataChanged(const QString &, const QString &)
 {
     updateTitle();
     updateState();
-    updateXids();
+    updateXidTitleMap();
     updateMenuJsonString();
 }
 
@@ -358,7 +362,7 @@ void AppItem::reanchorIcon()
 
 void AppItem::setCurrentOpened(uint value)
 {
-    if (m_itemData.xidsJsonString.indexOf(QString::number(value)) != -1)
+    if (m_itemData.xidTitleMap.keys().indexOf(value) != -1)
     {
         m_itemData.currentOpened = true;
         m_appBackground->setIsCurrentOpened(true);
