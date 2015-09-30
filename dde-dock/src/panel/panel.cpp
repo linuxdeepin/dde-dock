@@ -448,7 +448,7 @@ void Panel::loadResources()
 {
     m_appManager->initEntries();
 
-    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
+    QTimer::singleShot(5000, m_pluginManager, SLOT(initAll()));
 }
 
 void Panel::setY(int value)
