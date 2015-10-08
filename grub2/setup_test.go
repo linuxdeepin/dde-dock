@@ -1,3 +1,5 @@
+// +build ignore
+
 package grub2
 
 import (
@@ -14,9 +16,9 @@ const (
 )
 
 var (
-	tmpBaseDir    = "/tmp/dde_daemon_grub2_test"
-	tmpConfigFile = tmpBaseDir + "/dde_daemon_grub2_test_settings"
-	tmpThemeDir   = tmpBaseDir + "/dde_daemon_grub2_test_theme_dir"
+	tmpBaseDir    = "./testdata"
+	tmpConfigFile = tmpBaseDir + "/tmp_settings"
+	tmpThemeDir   = tmpBaseDir + "/tmp_theme_dir"
 	tmpGfxmode    = "1200x900"
 )
 
@@ -58,7 +60,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
 GRUB_DISTRIBUTOR="` + "`lsb_release -d -s 2> /dev/null || echo Debian`" + `"
 GRUB_GFXMODE="1200x900"
-GRUB_THEME="/tmp/dde_daemon_grub2_test/dde_daemon_grub2_test_theme_dir/theme.txt"
+GRUB_THEME="./testdata/tmp_theme_dir/theme.txt"
 GRUB_TIMEOUT="5"
 `
 
