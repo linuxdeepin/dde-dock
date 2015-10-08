@@ -194,7 +194,7 @@ func (p *Power) initEventHandle() {
 				if p.lowBatteryStatus == lowBatteryStatusAction {
 					doShowLowpower()
 				} else {
-					if p.coreSettings.GetBoolean("lock-enabled") {
+					if p.coreSettings.GetBoolean(settingKeyLockEnabled) {
 						now := time.Now()
 						doLock()
 						logger.Debug("screenlock ready time:", time.Now().Sub(now))

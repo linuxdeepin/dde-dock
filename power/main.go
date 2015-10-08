@@ -5,6 +5,14 @@ import "pkg.deepin.io/lib/dbus/property"
 import "pkg.deepin.io/lib/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
 
+const (
+	settingKeyPowerButton = "button-power"
+	settingKeyLidClose    = "lid-close"
+	settingKeyLinePlan    = "ac-plan"
+	settingKeyBatteryPlan = "battery-plan"
+	settingKeyLockEnabled = "lock-enabled"
+)
+
 var logger = log.NewLogger("daemon/power")
 
 type Power struct {
@@ -55,20 +63,47 @@ type Power struct {
 }
 
 func (p *Power) Reset() {
-	p.PowerButtonAction.Set(ActionInteractive)
-	p.LidClosedAction.Set(ActionSuspend)
-	p.LockWhenActive.Set(true)
+	_, str := p.coreSettings.GetDefaultValue(
+		settingKeyPowerButton).GetString()
+	action := queryPowerAction(str)
+	if action != p.PowerButtonAction.Get() {
+		p.PowerButtonAction.Set(action)
+	}
 
-	p.LinePowerPlan.Set(PowerPlanHighPerformance)
-	p.BatteryPlan.Set(PowerPlanBalanced)
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyLidClose).GetString()
+	action = queryPowerAction(str)
+	if action != p.LidClosedAction.Get() {
+		p.LidClosedAction.Set(action)
+	}
+
+	enabled := p.coreSettings.GetDefaultValue(
+		settingKeyLockEnabled).GetBoolean()
+	if enabled != p.LockWhenActive.Get() {
+		p.LockWhenActive.Set(enabled)
+	}
+
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyLinePlan).GetString()
+	plan := queryPowerPlan(str)
+	if plan != p.LinePowerPlan.Get() {
+		p.LinePowerPlan.Set(plan)
+	}
+
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyBatteryPlan).GetString()
+	plan = queryPowerPlan(str)
+	if plan != p.BatteryPlan.Get() {
+		p.BatteryPlan.Set(plan)
+	}
 }
 
 func NewPower() *Power {
 	p := &Power{}
 	p.coreSettings = gio.NewSettings("com.deepin.daemon.power")
-	p.PowerButtonAction = property.NewGSettingsEnumProperty(p, "PowerButtonAction", p.coreSettings, "button-power")
-	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, "lid-close")
-	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, "lock-enabled")
+	p.PowerButtonAction = property.NewGSettingsEnumProperty(p, "PowerButtonAction", p.coreSettings, settingKeyPowerButton)
+	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, settingKeyLidClose)
+	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, settingKeyLockEnabled)
 
 	var err error
 	if p.screensaver, err = ss.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err != nil {
@@ -79,13 +114,13 @@ func NewPower() *Power {
 	p.initUpower()
 	p.initEventHandle()
 
-	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, "ac-plan")
+	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, settingKeyLinePlan)
 	p.LinePowerPlan.ConnectChanged(func() {
 		p.setLinePowerPlan(p.LinePowerPlan.Get())
 	})
 	p.setLinePowerPlan(p.LinePowerPlan.Get())
 
-	p.BatteryPlan = property.NewGSettingsEnumProperty(p, "BatteryPlan", p.coreSettings, "battery-plan")
+	p.BatteryPlan = property.NewGSettingsEnumProperty(p, "BatteryPlan", p.coreSettings, settingKeyBatteryPlan)
 	p.BatteryPlan.ConnectChanged(func() {
 		p.setBatteryPlan(p.BatteryPlan.Get())
 	})
