@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>ClearTrashDialog</name>
     <message>
@@ -84,6 +86,19 @@
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="43"/>
         <source>Notification area settings</source>
         <translation>通知区域设置</translation>
+    </message>
+</context>
+<context>
+    <name>PluginItemWrapper</name>
+    <message>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="92"/>
+        <source>_Run</source>
+        <translation>运行(R)</translation>
+    </message>
+    <message>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="93"/>
+        <source>_Undock</source>
+        <translation>移除驻留(U)</translation>
     </message>
 </context>
 <context>

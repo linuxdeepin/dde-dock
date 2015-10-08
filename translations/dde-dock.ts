@@ -89,6 +89,19 @@
     </message>
 </context>
 <context>
+    <name>PluginItemWrapper</name>
+    <message>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="92"/>
+        <source>_Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="93"/>
+        <source>_Undock</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PluginsSettingFrame</name>
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="149"/>

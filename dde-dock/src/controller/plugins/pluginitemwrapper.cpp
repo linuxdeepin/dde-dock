@@ -86,11 +86,11 @@ QString PluginItemWrapper::getMenuContent()
     bool canDisable = m_plugin->canDisable(m_id);
 
     if (canRun || canDisable) {
-        QJsonObject result = QJsonDocument::fromJson(menuContent.toLatin1()).object();
+        QJsonObject result = QJsonDocument::fromJson(menuContent.toUtf8()).object();
         QJsonArray array = result["items"].toArray();
 
-        QJsonObject itemRun = createMenuItem(MenuItemRun, "Run", false, false);
-        QJsonObject itemRemove = createMenuItem(MenuItemRemove, "Remove", false, false);
+        QJsonObject itemRun = createMenuItem(MenuItemRun, tr("_Run"), false, false);
+        QJsonObject itemRemove = createMenuItem(MenuItemRemove, tr("_Undock"), false, false);
 
         if (canRun) array.insert(0, itemRun);
         if (canDisable) array.append(itemRemove);
