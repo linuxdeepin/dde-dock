@@ -19,9 +19,9 @@ public:
     explicit LauncherItem(QWidget *parent = 0);
     ~LauncherItem();
 
-    QString getTitle(){return "Launcher";}
-    QWidget * getApplet(){return NULL;}
-    bool moveable(){return false;}
+    QString getTitle() { return tr("Launcher"); }
+    QWidget * getApplet() { return NULL; }
+    bool moveable() { return false; }
 
 protected:
     void enterEvent(QEvent *);

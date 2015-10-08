@@ -43,6 +43,14 @@
     </message>
 </context>
 <context>
+    <name>LauncherItem</name>
+    <message>
+        <location filename="../dde-dock/src/widgets/launcheritem.h" line="22"/>
+        <source>Launcher</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>MainItem</name>
     <message>
         <location filename="../dde-dock-trash-plugin/mainitem.cpp" line="96"/>
