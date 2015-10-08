@@ -94,6 +94,10 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 			return
 		}
 
+		if users.IsAutoLoginUser(name) {
+			users.SetAutoLoginUser("")
+		}
+
 		//delete user config and icons
 		if !rmFiles {
 			return

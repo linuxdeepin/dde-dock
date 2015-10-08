@@ -29,6 +29,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
 	"strings"
+	"sync"
 )
 
 const (
@@ -60,6 +61,8 @@ type User struct {
 
 	IconList     []string
 	HistoryIcons []string
+
+	syncLocker sync.Mutex
 }
 
 func NewUser(userPath string) (*User, error) {

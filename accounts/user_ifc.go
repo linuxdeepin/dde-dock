@@ -33,15 +33,19 @@ import (
 )
 
 func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetUserName] new name:", name)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetUserName")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetUserName] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.ModifyName(name, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify username failed:", err)
@@ -56,15 +60,19 @@ func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
 }
 
 func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetHomeDir] new home:", home)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetHomeDir")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetHomeDir] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.ModifyHome(home, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify home failed:", err)
@@ -79,15 +87,19 @@ func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
 }
 
 func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetShell] new shell:", shell)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, true, "SetShell")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetShell] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.ModifyShell(shell, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify shell failed:", err)
@@ -102,15 +114,19 @@ func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
 }
 
 func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetPassword] start ...")
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetPassword")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetPassword] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.ModifyPasswd(words, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify passwd failed:", err)
@@ -122,21 +138,26 @@ func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
 		if err != nil {
 			logger.Warning("DoAction: unlock user failed:", err)
 		}
+		u.setPropBool(&u.Locked, "Locked", false)
 	}()
 
 	return true, nil
 }
 
 func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetAccountType] type:", ty)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetAccountType")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetAccountType] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.SetUserType(ty, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: set user type failed:", err)
@@ -151,15 +172,19 @@ func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
 }
 
 func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetLocked] locaked:", locked)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetLocked")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetLocked] access denied:", err)
 		return false, err
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.LockedUser(locked, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: locked user failed:", err)
@@ -178,15 +203,18 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
 }
 
 func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error) {
+	u.syncLocker.Lock()
 	logger.Debug("[SetAutomaticLogin] auto", auto)
 	pid := dbusMsg.GetSenderPID()
 	err := u.accessAuthentication(pid, false, "SetAutomaticLogin")
 	if err != nil {
+		u.syncLocker.Unlock()
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
 		return false, err
 	}
 
 	if u.Locked {
+		u.syncLocker.Unlock()
 		return false, fmt.Errorf("%s has been locked", u.UserName)
 	}
 
@@ -196,6 +224,8 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 	}
 
 	go func() {
+		defer u.syncLocker.Unlock()
+
 		err := users.SetAutoLoginUser(name)
 		if err != nil {
 			logger.Warning("DoAction: set auto login failed:", err)
