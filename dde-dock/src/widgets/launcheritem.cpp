@@ -48,6 +48,9 @@ void LauncherItem::mouseReleaseEvent(QMouseEvent *event)
 
 void LauncherItem::slotMousePress(QMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton)
+        return;
+
     emit mousePress(event);
 
     hidePreview();
@@ -55,6 +58,9 @@ void LauncherItem::slotMousePress(QMouseEvent *event)
 
 void LauncherItem::slotMouseRelease(QMouseEvent *event)
 {
+    if (event->button() != Qt::LeftButton)
+        return;
+
     emit mouseRelease(event);
 
     m_launcherProcess->startDetached("dde-launcher",QStringList());
