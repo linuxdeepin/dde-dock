@@ -1,6 +1,7 @@
 package subthemes
 
 import (
+	"dbus/com/deepin/api/cursorhelper"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -65,7 +66,13 @@ func SetIconTheme(id string) error {
 }
 
 func SetCursorTheme(id string) error {
-	return themes.SetCursorTheme(id)
+	helper, err := cursorhelper.NewCursorHelper("com.deepin.api.CursorHelper",
+		"/com/deepin/api/CursorHelper")
+	if err != nil {
+		return err
+	}
+	helper.Set(id)
+	return nil
 }
 
 func GetGtkThumbnail(id string) (string, error) {

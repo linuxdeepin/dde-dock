@@ -86,7 +86,7 @@ func SetDTheme(id string) error {
 
 	subthemes.SetGtkTheme(dt.Gtk.Id)
 	subthemes.SetIconTheme(dt.Icon.Id)
-	go subthemes.SetCursorTheme(dt.Cursor.Id)
+	subthemes.SetCursorTheme(dt.Cursor.Id)
 	background.ListBackground().Set(dt.Background.URI)
 	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id)
 	fonts.SetSize(dt.FontSize)

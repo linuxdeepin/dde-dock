@@ -60,20 +60,7 @@ func NewManager() *Manager {
 	m.wrapBgSetting, _ = dutils.CheckAndNewGSettings(wrapBgSchema)
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
-	m.init()
-
 	return m
-}
-
-func (m *Manager) init() {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		logger.Fatal("Init appearance settings failed: not found valid theme")
-		return
-	}
-	subthemes.SetGtkTheme(dt.Gtk.Id)
-	subthemes.SetIconTheme(dt.Icon.Id)
-	go subthemes.SetCursorTheme(dt.Cursor.Id)
 }
 
 func (m *Manager) destroy() {
@@ -156,7 +143,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 		return fmt.Errorf("Invalid cursor theme '%v'", value)
 	}
 
-	go subthemes.SetCursorTheme(value)
+	subthemes.SetCursorTheme(value)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
