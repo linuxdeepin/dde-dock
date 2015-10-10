@@ -51,6 +51,7 @@ signals:
     void itemDropped();
     void contentsWidthChange();
     void frameUpdate();
+    void itemHoverableChange(bool hoverable);
 
 public slots:
     void removeSpacingItem();

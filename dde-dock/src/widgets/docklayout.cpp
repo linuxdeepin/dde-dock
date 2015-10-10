@@ -41,6 +41,7 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
     connect(item, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
     connect(item, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
     connect(item, &AbstractDockItem::moveAnimationFinished,this, &DockLayout::slotAnimationFinish);
+    connect(this, &DockLayout::itemHoverableChange, item, &AbstractDockItem::setHoverable);
 
     m_ddam->Sort(itemsIdList());
 
@@ -212,6 +213,7 @@ bool DockLayout::eventFilter(QObject *obj, QEvent *event)
     case QEvent::MouseMove:
 //    case QEvent::Enter:
 //    case QEvent::Leave:
+        emit itemHoverableChange(true);
         if (m_dragItemMap.isEmpty())
             break;
         restoreTmpItem();

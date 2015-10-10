@@ -310,6 +310,9 @@ void AppItem::onMouseRelease(QMouseEvent *event)
 
 void AppItem::onMouseEnter()
 {
+    if (!hoverable())
+        return;
+
     emit mouseEntered();
     m_appBackground->setIsHovered(true);
     showPreview();

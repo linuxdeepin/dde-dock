@@ -81,6 +81,16 @@ QPoint AbstractDockItem::getNextPos()
 {
     return m_itemNextPos;
 }
+bool AbstractDockItem::hoverable() const
+{
+    return m_hoverable;
+}
+
+void AbstractDockItem::setHoverable(bool hoverable)
+{
+    m_hoverable = hoverable;
+}
+
 
 void AbstractDockItem::setNextPos(const QPoint &value)
 {
@@ -187,6 +197,9 @@ void AbstractDockItem::showMenu()
         m_dbusMenu = new DBusMenu(op.path(), this);
 
         connect(m_dbusMenu, &DBusMenu::ItemInvoked, this, &AbstractDockItem::invokeMenuItem);
+        connect(m_dbusMenu, &DBusMenu::MenuUnregistered, [=] {
+            setHoverable(true);
+        });
 
         QJsonObject targetObj;
         targetObj.insert("x", QJsonValue(globalX() + width() / 2));
@@ -195,6 +208,8 @@ void AbstractDockItem::showMenu()
         targetObj.insert("menuJsonContent", QJsonValue(getMenuContent()));
 
         m_dbusMenu->ShowMenu(QString(QJsonDocument(targetObj).toJson()));
+
+        setHoverable(false);
     }
 }
 

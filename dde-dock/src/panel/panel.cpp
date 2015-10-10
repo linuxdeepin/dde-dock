@@ -445,6 +445,9 @@ void Panel::showPanelMenu()
     QPoint tmpPos = QCursor::pos();
 
     PanelMenu::instance()->showMenu(tmpPos.x(),tmpPos.y());
+
+    m_appLayout->itemHoverableChange(false);
+    m_pluginLayout->itemHoverableChange(false);
 }
 
 void Panel::loadResources()

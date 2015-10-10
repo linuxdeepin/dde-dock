@@ -55,6 +55,9 @@ public:
     QPoint globalPos();
     QPoint getNextPos();
 
+    bool hoverable() const;
+    void setHoverable(bool hoverable);
+
 signals:
     void dragStart();
     void dragEntered(QDragEnterEvent * event);
@@ -75,6 +78,7 @@ signals:
 protected:
     bool m_moveable = true;
     bool m_isActived = false;
+    bool m_hoverable = true;
     PreviewFrame *m_titlePreview = NULL;
     HighlightEffect * m_highlight = NULL;
     ItemTitleLabel *m_titleLabel = NULL;

@@ -55,7 +55,8 @@ void PluginItemWrapper::enterEvent(QEvent *)
 {
     emit mouseEntered();
 
-    showPreview();
+    if (hoverable())
+        showPreview();
 }
 
 void PluginItemWrapper::leaveEvent(QEvent *)
