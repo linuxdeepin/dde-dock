@@ -44,6 +44,18 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
 
     m_ddam->Sort(itemsIdList());
 
+    //hide for delay show
+    item->setVisible(false);
+    //Qt5.3.* not support singleshot with lamda expressions
+    QTimer *delayTimer = new QTimer(this);
+    connect(delayTimer, &QTimer::timeout, [=] {
+        delayTimer->stop();
+        delayTimer->deleteLater();
+
+        item->setVisible(true);
+    });
+    delayTimer->start(m_addItemDelayInterval);
+
     relayout();
 
     //reset state
@@ -59,8 +71,17 @@ void DockLayout::moveItem(int from, int to)
 
 void DockLayout::removeItem(int index)
 {
-    m_appList.removeAt(index);
-    relayout();
+    //Qt5.3.* not support singleshot with lamda expressions
+    QTimer *delayTimer = new QTimer(this);
+    connect(delayTimer, &QTimer::timeout, [=] {
+        delayTimer->stop();
+        delayTimer->deleteLater();
+
+        m_appList.removeAt(index);
+        removeSpacingItem();
+        relayout();
+    });
+    delayTimer->start(m_removeItemDelayInterval);
 }
 
 void DockLayout::removeItem(AbstractDockItem *item)
@@ -429,7 +450,8 @@ void DockLayout::removeSpacingItem()
                                       MOVE_ANIMATION_DURATION_BASE + i * 25);
     }
 
-    emit contentsWidthChange();
+    //emit the width change signal after the last animation is finish
+    QTimer::singleShot(MOVE_ANIMATION_DURATION_BASE + m_appList.count() * 25, this, SIGNAL(contentsWidthChange()));
 }
 
 void DockLayout::dragoutFromLayout(int index)
@@ -489,3 +511,23 @@ QStringList DockLayout::itemsIdList() const
     }
     return idList;
 }
+int DockLayout::removeItemDelayInterval() const
+{
+    return m_removeItemDelayInterval;
+}
+
+void DockLayout::setRemoveItemDelayInterval(int removeItemDelayInterval)
+{
+    m_removeItemDelayInterval = removeItemDelayInterval;
+}
+
+int DockLayout::addItemDelayInterval() const
+{
+    return m_addItemDelayInterval;
+}
+
+void DockLayout::setaddItemDelayInterval(int addItemDelayInterval)
+{
+    m_addItemDelayInterval = addItemDelayInterval;
+}
+

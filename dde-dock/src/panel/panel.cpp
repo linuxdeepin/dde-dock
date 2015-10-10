@@ -123,8 +123,9 @@ void Panel::initPluginManager()
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
     });
     connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
-        m_pluginLayout->removeItem(item);
+        item->setVisible(false);
         item->deleteLater();
+        m_pluginLayout->removeItem(item);
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
         QRect rec = QApplication::desktop()->screenGeometry();
@@ -143,6 +144,7 @@ void Panel::initPluginLayout()
 void Panel::initAppLayout()
 {
     m_appLayout = new DockLayout(this);
+    m_appLayout->setaddItemDelayInterval(0);
     m_appLayout->setAcceptDrops(true);
     m_appLayout->setSpacing(m_dockModeData->getAppItemSpacing());
     m_appLayout->move(0, 1);
@@ -281,8 +283,9 @@ void Panel::onAppItemRemove(const QString &id)
         AppItem *tmpItem = qobject_cast<AppItem *>(tmpList.at(i));
         if (tmpItem && tmpItem->getItemId() == id)
         {
-            m_appLayout->removeItem(i);
+            tmpItem->setVisible(false);
             tmpItem->deleteLater();
+            m_appLayout->removeItem(i);
             return;
         }
     }
@@ -447,6 +450,7 @@ void Panel::showPanelMenu()
 void Panel::loadResources()
 {
     m_appManager->initEntries();
+    m_appLayout->setaddItemDelayInterval(500);
 
     QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
 }

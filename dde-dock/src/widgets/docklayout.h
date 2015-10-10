@@ -40,6 +40,12 @@ public:
     QList<AbstractDockItem *> getItemList() const;
     AbstractDockItem *getDraggingItem() const;
 
+    int addItemDelayInterval() const;
+    void setaddItemDelayInterval(int addItemDelayInterval);
+
+    int removeItemDelayInterval() const;
+    void setRemoveItemDelayInterval(int removeItemDelayInterval);
+
 signals:
     void startDrag();
     void itemDropped();
@@ -87,8 +93,10 @@ private:
 
     qreal m_itemSpacing = 10;
     QPoint m_lastPost = QPoint(0,0);
-    int m_lastHoverIndex = -1;
     bool m_movingLeftward = true;
+    int m_lastHoverIndex = -1;
+    int m_addItemDelayInterval = 500;
+    int m_removeItemDelayInterval = 500;
 
     const int MOVE_ANIMATION_DURATION_BASE = 300;
 };
