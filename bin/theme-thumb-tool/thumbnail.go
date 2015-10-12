@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"path"
+	"time"
+
 	"pkg.deepin.io/dde/api/themes"
 	"pkg.deepin.io/dde/api/thumbnails/cursor"
 	"pkg.deepin.io/dde/api/thumbnails/gtk"
@@ -12,7 +14,6 @@ import (
 	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/lib/graphic"
-	"time"
 )
 
 const (
@@ -32,7 +33,7 @@ func genAllThumbnails(force bool) {
 func genGtkThumbnails(force bool) {
 	list := themes.ListGtkTheme()
 	for _, v := range list {
-		_, err := gtk.GenThumbnail(path.Join(v, "index.theme"),
+		_, err := gtk.ThumbnailForTheme(path.Join(v, "index.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
@@ -44,7 +45,7 @@ func genGtkThumbnails(force bool) {
 func genIconThumbnails(force bool) {
 	list := themes.ListIconTheme()
 	for _, v := range list {
-		_, err := icon.GenThumbnail(path.Join(v, "index.theme"),
+		_, err := icon.ThumbnailForTheme(path.Join(v, "index.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
@@ -56,7 +57,7 @@ func genIconThumbnails(force bool) {
 func genCursorThumbnails(force bool) {
 	list := themes.ListCursorTheme()
 	for _, v := range list {
-		_, err := cursor.GenThumbnail(path.Join(v, "cursor.theme"),
+		_, err := cursor.ThumbnailForTheme(path.Join(v, "cursor.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
@@ -68,7 +69,7 @@ func genCursorThumbnails(force bool) {
 func genBgThumbnails(force bool) {
 	infos := background.ListBackground()
 	for _, info := range infos {
-		_, err := images.GenThumbnail(info.URI,
+		_, err := images.ThumbnailForTheme(info.URI,
 			defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", info.URI, err)

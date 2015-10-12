@@ -7,14 +7,15 @@ import (
 	"math/rand"
 	"os"
 	"path"
+	"strings"
+	"time"
+
 	"pkg.deepin.io/dde/api/themes"
 	"pkg.deepin.io/dde/api/thumbnails/cursor"
 	"pkg.deepin.io/dde/api/thumbnails/gtk"
 	"pkg.deepin.io/dde/api/thumbnails/icon"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
-	"strings"
-	"time"
 )
 
 const (
@@ -86,7 +87,7 @@ func GetGtkThumbnail(id string) (string, error) {
 		return thumb, nil
 	}
 
-	return gtk.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
+	return gtk.ThumbnailForTheme(path.Join(info.Path, "index.theme"), getThumbBg(),
 		thumbWidth, thumbHeight, false)
 }
 
@@ -100,7 +101,7 @@ func GetIconThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return icon.GenThumbnail(path.Join(info.Path, "index.theme"), getThumbBg(),
+	return icon.ThumbnailForTheme(path.Join(info.Path, "index.theme"), getThumbBg(),
 		thumbWidth, thumbHeight, false)
 }
 
@@ -114,7 +115,7 @@ func GetCursorThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return cursor.GenThumbnail(path.Join(info.Path, "cursor.theme"), getThumbBg(),
+	return cursor.ThumbnailForTheme(path.Join(info.Path, "cursor.theme"), getThumbBg(),
 		thumbWidth, thumbHeight, false)
 }
 
