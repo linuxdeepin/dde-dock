@@ -83,14 +83,8 @@ void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
         showDock();
-        m_mainPanel->setContainMouse(true);
         m_mainPanel->startShow();
     }
-}
-
-void MainWidget::leaveEvent(QEvent *)
-{
-    m_mainPanel->setContainMouse(false);
 }
 
 void MainWidget::showDock()

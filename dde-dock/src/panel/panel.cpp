@@ -27,13 +27,6 @@ Panel::Panel(QWidget *parent)
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::onDockModeChanged);
 }
 
-void Panel::setContainMouse(bool value)
-{
-    //mouse leave or enter need update state
-    m_HSManager->UpdateState();
-    m_containMouse = value;
-}
-
 bool Panel::isFashionMode()
 {
     return m_isFashionMode;
@@ -305,9 +298,10 @@ void Panel::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode)
 
 void Panel::onHideStateChanged(int dockState)
 {
+    bool containsMouse = m_parentWidget->geometry().contains(QCursor::pos());
     if (dockState == 0)
         emit startShow();
-    else if (dockState == 1 && !m_containMouse)
+    else if (dockState == 1 && !containsMouse)
         emit startHide();
 }
 

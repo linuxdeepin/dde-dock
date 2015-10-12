@@ -29,7 +29,6 @@ public:
 
 protected:
     void enterEvent(QEvent *);
-    void leaveEvent(QEvent *);
 
 private:
     void showDock();

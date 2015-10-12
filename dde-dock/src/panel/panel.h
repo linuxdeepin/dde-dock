@@ -29,7 +29,6 @@ public:
     explicit Panel(QWidget *parent = 0);
     ~Panel();
 
-    void setContainMouse(bool value);   //for smart-hide and keep-hide
     bool isFashionMode();               //for qss setting background
     void showPanelMenu();
     void loadResources();
@@ -94,7 +93,6 @@ private:
     DockLayout *m_appLayout = NULL;
     DockPluginManager *m_pluginManager = NULL;
 
-    bool m_containMouse = false;
     bool m_isFashionMode = false;
     const int REFLECTION_HEIGHT = 15;
     const int FASHION_PANEL_LPADDING = 21;
