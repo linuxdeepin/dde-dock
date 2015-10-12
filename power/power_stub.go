@@ -2,11 +2,17 @@ package power
 
 import "pkg.deepin.io/lib/dbus"
 
+const (
+	dbusDest = "com.deepin.daemon.Power"
+	dbusPath = "/com/deepin/daemon/Power"
+	dbusIFC  = "com.deepin.daemon.Power"
+)
+
 func (*Power) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Power",
-		ObjectPath: "/com/deepin/daemon/Power",
-		Interface:  "com.deepin.daemon.Power",
+		Dest:       dbusDest,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }
 

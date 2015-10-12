@@ -132,7 +132,7 @@ func NewPower() *Power {
 func sendNotify(icon, summary, body string) {
 	//TODO: close previous notification
 	if notifier != nil {
-		notifier.Notify("com.deepin.daemon.power", 0, icon, summary, body, nil, nil, 0)
+		notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
 	} else {
 		logger.Warning("failed to show notify message:", summary, body)
 	}
