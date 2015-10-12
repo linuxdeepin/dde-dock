@@ -87,6 +87,12 @@ void MainWidget::enterEvent(QEvent *)
     }
 }
 
+void MainWidget::leaveEvent(QEvent *)
+{
+    if (!this->geometry().contains(QCursor::pos()))
+        m_dhsm->UpdateState();
+}
+
 void MainWidget::showDock()
 {
     m_hasHidden = false;
@@ -102,7 +108,7 @@ void MainWidget::hideDock()
 void MainWidget::onPanelSizeChanged()
 {
     QRect rec = QApplication::desktop()->screenGeometry();
-    this->setFixedSize(m_mainPanel->size());
+    this->setFixedSize(m_mainPanel->width(), height());
     this->move((rec.width() - width()) / 2, y());
 }
 
