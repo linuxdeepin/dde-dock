@@ -48,7 +48,6 @@ void MainWidget::updatePosition()
         this->move((rec.width() - width()) / 2, rec.height() - 1);//1 pixel for grab mouse enter event to show panel
     }
     else {
-
         this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
         this->move((rec.width() - width()) / 2, rec.height() - this->height());
     }
