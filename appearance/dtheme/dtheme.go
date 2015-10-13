@@ -87,7 +87,7 @@ func SetDTheme(id string) error {
 	subthemes.SetGtkTheme(dt.Gtk.Id)
 	subthemes.SetIconTheme(dt.Icon.Id)
 	subthemes.SetCursorTheme(dt.Cursor.Id)
-	background.ListBackground().Set(dt.Background.URI)
+	background.ListBackground().Set(dt.Background.Id)
 	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id)
 	fonts.SetSize(dt.FontSize)
 	return nil
@@ -156,7 +156,7 @@ func (info *DTheme) isComponentSame(component *ThemeComponent) bool {
 	if info.Gtk.Id != component.Gtk ||
 		info.Icon.Id != component.Icon ||
 		info.Cursor.Id != component.Cursor ||
-		info.Background.URI != component.Background ||
+		info.Background.Id != component.Background ||
 		info.StandardFont.Id != component.StandardFont ||
 		info.MonospaceFont.Id != component.MonospaceFont {
 		return false

@@ -2,35 +2,36 @@ package appearance
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/dbus"
-	"strconv"
-	"strings"
 )
 
 // List list all available for the special type
-func (m *Manager) List(ty string) ([]string, error) {
+func (m *Manager) List(ty string) (string, error) {
 	logger.Debug("List for type:", ty)
 	switch strings.ToLower(ty) {
 	case TypeDTheme:
-		return dtheme.ListDTheme().GetIds(), nil
+		return m.doShow(dtheme.ListDTheme())
 	case TypeGtkTheme:
-		return subthemes.ListGtkTheme().GetIds(), nil
+		return m.doShow(subthemes.ListGtkTheme())
 	case TypeIconTheme:
-		return subthemes.ListIconTheme().GetIds(), nil
+		return m.doShow(subthemes.ListIconTheme())
 	case TypeCursorTheme:
-		return subthemes.ListCursorTheme().GetIds(), nil
+		return m.doShow(subthemes.ListCursorTheme())
 	case TypeBackground:
-		return background.ListBackground().GetURIs(), nil
+		return m.doShow(background.ListBackground())
 	case TypeStandardFont:
-		return fonts.ListStandardFamily().GetIds(), nil
+		return m.doShow(fonts.ListStandardFamily())
 	case TypeMonospaceFont:
-		return fonts.ListMonospaceFamily().GetIds(), nil
+		return m.doShow(fonts.ListMonospaceFamily())
 	}
-	return nil, fmt.Errorf("Invalid type: %v", ty)
+	return "", fmt.Errorf("Invalid type: %v", ty)
 }
 
 // Show show detail info for the special type

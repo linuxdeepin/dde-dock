@@ -106,7 +106,7 @@ func (m *Manager) doSetGtkTheme(value string) error {
 		Gtk:           value,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.URI,
+		Background:    dt.Background.Id,
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
@@ -127,7 +127,7 @@ func (m *Manager) doSetIconTheme(value string) error {
 		Gtk:           dt.Gtk.Id,
 		Icon:          value,
 		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.URI,
+		Background:    dt.Background.Id,
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
@@ -148,7 +148,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        value,
-		Background:    dt.Background.URI,
+		Background:    dt.Background.Id,
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
@@ -156,7 +156,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 
 func (m *Manager) doSetBackground(value string) error {
 	dt := m.getCurrentDTheme()
-	if dt.Background.URI == value {
+	if dt.Background.Id == value {
 		return nil
 	}
 
@@ -193,7 +193,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.URI,
+		Background:    dt.Background.Id,
 		StandardFont:  value,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
@@ -214,7 +214,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
 		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.URI,
+		Background:    dt.Background.Id,
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: value,
 	})

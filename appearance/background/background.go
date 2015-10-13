@@ -20,7 +20,7 @@ const (
 )
 
 type Background struct {
-	URI string
+	Id string
 
 	Deletable bool
 }
@@ -30,7 +30,7 @@ func ListBackground() Backgrounds {
 	var infos Backgrounds
 	for _, file := range getBgFiles() {
 		infos = append(infos, &Background{
-			URI:       dutils.EncodeURI(file, dutils.SCHEME_FILE),
+			Id:        dutils.EncodeURI(file, dutils.SCHEME_FILE),
 			Deletable: isDeletable(file),
 		})
 	}
@@ -65,18 +65,18 @@ func (infos Backgrounds) Set(uri string) (string, error) {
 	return uri, doSetByURI(dest)
 }
 
-func (infos Backgrounds) GetURIs() []string {
-	var uris []string
+func (infos Backgrounds) GetIds() []string {
+	var ids []string
 	for _, info := range infos {
-		uris = append(uris, info.URI)
+		ids = append(ids, info.Id)
 	}
-	return uris
+	return ids
 }
 
 func (infos Backgrounds) Get(uri string) *Background {
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
 	for _, info := range infos {
-		if uri == info.URI {
+		if uri == info.Id {
 			return info
 		}
 	}
@@ -106,11 +106,11 @@ func (info *Background) Delete() error {
 		return fmt.Errorf("Permission Denied")
 	}
 
-	return os.Remove(dutils.DecodeURI(info.URI))
+	return os.Remove(dutils.DecodeURI(info.Id))
 }
 
 func (info *Background) Thumbnail() (string, error) {
-	return images.ThumbnailForTheme(info.URI, thumbWidth, thumbHeight, false)
+	return images.ThumbnailForTheme(info.Id, thumbWidth, thumbHeight, false)
 }
 
 func doSetByURI(uri string) error {

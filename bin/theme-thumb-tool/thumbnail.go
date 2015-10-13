@@ -69,10 +69,10 @@ func genCursorThumbnails(force bool) {
 func genBgThumbnails(force bool) {
 	infos := background.ListBackground()
 	for _, info := range infos {
-		_, err := images.ThumbnailForTheme(info.URI,
+		_, err := images.ThumbnailForTheme(info.Id,
 			defaultWidth, defaultHeight, force)
 		if err != nil {
-			fmt.Printf("Gen '%s' thumbnail failed: %v\n", info.URI, err)
+			fmt.Printf("Gen '%s' thumbnail failed: %v\n", info.Id, err)
 			continue
 		}
 	}
