@@ -478,6 +478,7 @@ void LayoutDropMask::dragEnterEvent(QDragEnterEvent *event)
 
 void LayoutDropMask::dragMoveEvent(QDragMoveEvent *event)
 {
+    Q_UNUSED(event);
     emit itemMove();
 }
 

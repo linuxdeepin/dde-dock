@@ -6,11 +6,18 @@
 #include <QStringList>
 
 #include "dockconstants.h"
-#include "dockpluginproxyinterface.h"
 
+class DockPluginProxyInterface;
 class DockPluginInterface
 {
 public:
+    enum InfoType{
+        ItemSize,
+        AppletSize,
+        Title,
+        CanDisable
+    };
+
     virtual ~DockPluginInterface() {}
 
     virtual QString getPluginName() = 0;

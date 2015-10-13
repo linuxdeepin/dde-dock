@@ -20,12 +20,15 @@ public:
 
     void itemAddedEvent(QString id) Q_DECL_OVERRIDE;
     void itemRemovedEvent(QString id) Q_DECL_OVERRIDE;
-    void itemSizeChangedEvent(QString id) Q_DECL_OVERRIDE;
-    void appletSizeChangedEvent(QString id) Q_DECL_OVERRIDE;
+    void itemSizeChangedEvent(QString id);
+    void appletSizeChangedEvent(QString id);
+    void infoChanged(DockPluginInterface::InfoType type, const QString &id) Q_DECL_OVERRIDE;
 
 signals:
     void itemAdded(AbstractDockItem * item, QString uuid);
     void itemRemoved(AbstractDockItem * item, QString uuid);
+    void titleChanged(const QString &id);
+    void canDisableChanged(const QString &id);
 
 private:
     QMap<QString, AbstractDockItem*> m_items;

@@ -4,6 +4,7 @@
 #include <QString>
 
 #include "dockconstants.h"
+#include "dockplugininterface.h"
 
 class DockPluginProxyInterface
 {
@@ -12,9 +13,7 @@ public:
 
     virtual void itemAddedEvent(QString id) = 0;
     virtual void itemRemovedEvent(QString id) = 0;
-
-    virtual void itemSizeChangedEvent(QString id) = 0;
-    virtual void appletSizeChangedEvent(QString id) = 0;
+    virtual void infoChanged(DockPluginInterface::InfoType type, const QString &id) = 0;
 };
 
 #endif // DOCKPLUGINPROXYINTERFACE_H

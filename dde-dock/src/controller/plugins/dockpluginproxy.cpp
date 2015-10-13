@@ -63,6 +63,26 @@ void DockPluginProxy::itemRemovedEvent(QString id)
     }
 }
 
+void DockPluginProxy::infoChanged(DockPluginInterface::InfoType type, const QString &id)
+{
+    switch (type) {
+    case DockPluginInterface::ItemSize:
+        itemSizeChangedEvent(id);
+        break;
+    case DockPluginInterface::AppletSize:
+        appletSizeChangedEvent(id);
+        break;
+    case DockPluginInterface::Title:
+        emit titleChanged(id);
+        break;
+    case DockPluginInterface::CanDisable:
+        emit canDisableChanged(id);
+        break;
+    default:
+        break;
+    }
+}
+
 void DockPluginProxy::itemSizeChangedEvent(QString id)
 {
     qDebug() << "Item size changed on plugin " << m_plugin->getPluginName() << id;

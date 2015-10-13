@@ -35,6 +35,17 @@ void DockPluginManager::initAll()
 
     foreach (DockPluginProxy * proxy, m_proxies.values()) {
         proxy->plugin()->init(proxy);
+
+        connect(proxy, &DockPluginProxy::canDisableChanged, this, [this, proxy](const QString &uuid){
+            if(proxy->plugin()->canDisable(uuid)){
+                m_settingFrame->onPluginAdd(!proxy->plugin()->isDisabled(uuid),
+                                            uuid,
+                                            proxy->plugin()->getName(uuid),
+                                            proxy->plugin()->getIcon(uuid));
+            }else{
+                m_settingFrame->onPluginRemove(uuid);
+            }
+        });
     }
 
     refreshSettingWindow();
@@ -98,14 +109,12 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
             }
         } else {
             qWarning() << "Load plugin failed(failed to convert) " << path;
-
-            return NULL;
         }
     } else {
         qWarning() << "Load plugin failed" << pluginLoader->errorString();
-
-        return NULL;
     }
+
+    return NULL;
 }
 
 void DockPluginManager::unloadPlugin(const QString &path)
