@@ -3,9 +3,10 @@ package power
 import (
 	"dbus/com/deepin/daemon/display"
 	"fmt"
+	"time"
+
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/dpms"
-	"time"
 )
 
 const (
@@ -102,7 +103,7 @@ func (p *Power) setLinePowerPlan(plan int32) {
 		p.setLinePowerSuspendDelay(BlancedSuspendTime)
 	case PowerPlanPowerSaver:
 		p.setLinePowerIdleDelay(PowerSaverIdleTime)
-		p.setLinePowerSuspendDelay(PowerSaverIdleTime)
+		p.setLinePowerSuspendDelay(PowerSaverSuspendTime)
 	case PowerPlanCustom:
 		p.setLinePowerIdleDelay(int32(p.coreSettings.GetInt("ac-idle-delay")))
 		p.setLinePowerSuspendDelay(int32(p.coreSettings.GetInt("ac-suspend-delay")))
