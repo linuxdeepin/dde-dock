@@ -20,9 +20,7 @@ public:
 
     void itemAddedEvent(QString id) Q_DECL_OVERRIDE;
     void itemRemovedEvent(QString id) Q_DECL_OVERRIDE;
-    void itemSizeChangedEvent(QString id);
-    void appletSizeChangedEvent(QString id);
-    void infoChanged(DockPluginInterface::InfoType type, const QString &id) Q_DECL_OVERRIDE;
+    void infoChangedEvent(DockPluginInterface::InfoType type, const QString &id) Q_DECL_OVERRIDE;
 
 signals:
     void itemAdded(AbstractDockItem * item, QString uuid);
@@ -35,6 +33,9 @@ private:
 
     QPluginLoader * m_loader;
     DockPluginInterface * m_plugin;
+
+    void itemSizeChangedEvent(QString id);
+    void appletSizeChangedEvent(QString id);
 };
 
 #endif // DOCKPLUGINPROXY_H

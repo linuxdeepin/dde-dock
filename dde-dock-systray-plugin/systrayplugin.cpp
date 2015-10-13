@@ -94,7 +94,7 @@ QWidget * SystrayPlugin::getApplet(QString)
 void SystrayPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode)
 {
     m_compositeItem->setMode(newMode);
-    m_proxy->infoChanged(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
 }
 
 QString SystrayPlugin::getMenuContent(QString)
@@ -116,7 +116,7 @@ void SystrayPlugin::onAdded(WId winId)
 
     m_compositeItem->addTrayIcon(key, icon);
 
-    m_proxy->infoChanged(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
 }
 
 void SystrayPlugin::onRemoved(WId winId)
@@ -125,5 +125,5 @@ void SystrayPlugin::onRemoved(WId winId)
 
     m_compositeItem->remove(key);
 
-    m_proxy->infoChanged(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
 }

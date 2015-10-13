@@ -13,7 +13,7 @@ public:
 
     virtual void itemAddedEvent(QString id) = 0;
     virtual void itemRemovedEvent(QString id) = 0;
-    virtual void infoChanged(DockPluginInterface::InfoType type, const QString &id) = 0;
+    virtual void infoChangedEvent(DockPluginInterface::InfoType type, const QString &id) = 0;
 };
 
 #endif // DOCKPLUGINPROXYINTERFACE_H

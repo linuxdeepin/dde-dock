@@ -63,7 +63,7 @@ void DockPluginProxy::itemRemovedEvent(QString id)
     }
 }
 
-void DockPluginProxy::infoChanged(DockPluginInterface::InfoType type, const QString &id)
+void DockPluginProxy::infoChangedEvent(DockPluginInterface::InfoType type, const QString &id)
 {
     switch (type) {
     case DockPluginInterface::ItemSize:
