@@ -23,37 +23,39 @@ void DockLayout::addItem(AbstractDockItem *item)
 
 void DockLayout::insertItem(AbstractDockItem *item, int index)
 {
-    if (!item)
+    QPointer<AbstractDockItem> pItem = item;
+    if (pItem.isNull())
         return;
 
-    item->setParent(this);
-    item->show();
+    pItem->setParent(this);
+    pItem->show();
     int appCount = m_appList.count();
     index = index > appCount ? appCount : (index < 0 ? 0 : index);
 
-    m_appList.insert(index,item);
+    m_appList.insert(index,pItem);
 
-    connect(item, &AbstractDockItem::frameUpdate, this, &DockLayout::frameUpdate);
-    connect(item, &AbstractDockItem::posChanged, this, &DockLayout::frameUpdate);
-    connect(item, &AbstractDockItem::mouseRelease, this, &DockLayout::slotItemRelease);
-    connect(item, &AbstractDockItem::dragStart, this, &DockLayout::slotItemDrag);
-    connect(item, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
-    connect(item, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
-    connect(item, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
-    connect(item, &AbstractDockItem::moveAnimationFinished,this, &DockLayout::slotAnimationFinish);
-    connect(this, &DockLayout::itemHoverableChange, item, &AbstractDockItem::setHoverable);
+    connect(pItem, &AbstractDockItem::frameUpdate, this, &DockLayout::frameUpdate);
+    connect(pItem, &AbstractDockItem::posChanged, this, &DockLayout::frameUpdate);
+    connect(pItem, &AbstractDockItem::mouseRelease, this, &DockLayout::slotItemRelease);
+    connect(pItem, &AbstractDockItem::dragStart, this, &DockLayout::slotItemDrag);
+    connect(pItem, &AbstractDockItem::dragEntered, this, &DockLayout::slotItemEntered);
+    connect(pItem, &AbstractDockItem::dragExited, this, &DockLayout::slotItemExited);
+    connect(pItem, &AbstractDockItem::widthChanged, this, &DockLayout::relayout);
+    connect(pItem, &AbstractDockItem::moveAnimationFinished,this, &DockLayout::slotAnimationFinish);
+    connect(this, &DockLayout::itemHoverableChange, pItem, &AbstractDockItem::setHoverable);
 
     m_ddam->Sort(itemsIdList());
 
     //hide for delay show
-    item->setVisible(false);
+    pItem->setVisible(false);
     //Qt5.3.* not support singleshot with lamda expressions
     QTimer *delayTimer = new QTimer(this);
     connect(delayTimer, &QTimer::timeout, [=] {
         delayTimer->stop();
         delayTimer->deleteLater();
 
-        item->setVisible(true);
+        if (!pItem.isNull())
+            item->setVisible(true);
     });
     delayTimer->start(m_addItemDelayInterval);
 
