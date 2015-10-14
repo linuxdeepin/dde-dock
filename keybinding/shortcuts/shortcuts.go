@@ -50,6 +50,7 @@ func ListAllShortcuts() Shortcuts {
 }
 
 func Reset() {
+	resetCustomKeys()
 	resetSystemAccels()
 	resetWMAccels()
 	resetMediaAccels()
@@ -76,15 +77,19 @@ func (list Shortcuts) GetByAccel(accel string) *Shortcut {
 }
 
 func (list Shortcuts) Add(id string, ty int32) Shortcuts {
-	item := list.GetById(id, ty)
-	if item != nil {
-		list = list.Delete(item.Id, item.Type)
+	s := newShortcut(id, ty)
+	if s == nil {
+		return list
 	}
 
-	s := newShortcut(id, ty)
-	if s != nil {
+	item := list.GetById(id, ty)
+	if item == nil {
 		list = append(list, s)
+		return list
 	}
+
+	item.Name = s.Name
+	item.Accels = s.Accels
 	return list
 }
 

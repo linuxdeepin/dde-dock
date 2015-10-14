@@ -26,9 +26,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"sync"
+
 	"pkg.deepin.io/lib/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
-	"sync"
 )
 
 const (
@@ -97,6 +98,12 @@ func (infos customKeyInfos) Get(id string) *customKeyInfo {
 		}
 	}
 	return nil
+}
+
+func resetCustomKeys() {
+	for _, info := range ListCustomKey() {
+		DeleteCustomKey(info.Id)
+	}
 }
 
 func disableCustomKey(id string) error {
