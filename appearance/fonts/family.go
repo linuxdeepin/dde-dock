@@ -3,12 +3,15 @@ package fonts
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path"
+	"strconv"
+	"strings"
+	"sync"
+
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -19,6 +22,8 @@ const (
 	xsettingsSchema = "com.deepin.xsettings"
 	gsKeyFontName   = "gtk-font-name"
 )
+
+var locker sync.Mutex
 
 type Family struct {
 	Id   string
@@ -73,33 +78,13 @@ func SetFamily(standard, monospace string) error {
 		return nil
 	}
 
-	return ioutil.WriteFile(path.Join(glib.GetUserConfigDir(),
-		"fontconfig/fonts.conf"),
-		[]byte(configContent(standard, monospace)), 0644)
-}
-
-func getFontSize(setting *gio.Settings) int32 {
-	value := setting.GetString(gsKeyFontName)
-	if len(value) == 0 {
-		return 0
-	}
-	array := strings.Split(value, " ")
-	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
-	return int32(size)
+	setFontByXSettings(standard, -1)
+	return writeFontConfig(configContent(standard, monospace),
+		path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf"))
 }
 
 func SetSize(size int32) error {
-	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
-	defer setting.Unref()
-
-	if size == getFontSize(setting) {
-		return nil
-	}
-
-	setting.SetString(gsKeyFontName,
-		fmt.Sprintf("sans-serif %v", size))
-
-	return nil
+	return setFontByXSettings(fcFontMatch("sans-serif"), size)
 }
 
 func GetFontSize() int32 {
@@ -138,6 +123,35 @@ func (infos Families) add(info *Family) Families {
 	return infos
 }
 
+func setFontByXSettings(name string, size int32) error {
+	setting, err := dutils.CheckAndNewGSettings(xsettingsSchema)
+	if err != nil {
+		return err
+	}
+	defer setting.Unref()
+
+	if size == -1 {
+		size = getFontSize(setting)
+	}
+	v := fmt.Sprintf("%s %v", name, size)
+	if v == setting.GetString(gsKeyFontName) {
+		return nil
+	}
+
+	setting.SetString(gsKeyFontName, v)
+	return nil
+}
+
+func getFontSize(setting *gio.Settings) int32 {
+	value := setting.GetString(gsKeyFontName)
+	if len(value) == 0 {
+		return 0
+	}
+	array := strings.Split(value, " ")
+	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
+	return int32(size)
+}
+
 func compositeList(l1, l2 []string) []string {
 	for _, v := range l2 {
 		if isItemInList(v, l1) {
@@ -155,6 +169,17 @@ func isItemInList(item string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func writeFontConfig(content, file string) error {
+	locker.Lock()
+	defer locker.Unlock()
+	err := os.MkdirAll(path.Dir(file), 0755)
+	if err != nil {
+		return err
+	}
+
+	return ioutil.WriteFile(file, []byte(content), 0644)
 }
 
 // If set pixelsize, wps-office-wps will not show some text.

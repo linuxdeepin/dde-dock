@@ -3,11 +3,14 @@ package appearance
 import (
 	"encoding/json"
 	"fmt"
+	"path"
+
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	"pkg.deepin.io/lib/gio-2.0"
+	"pkg.deepin.io/lib/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -60,6 +63,8 @@ func NewManager() *Manager {
 	m.wrapBgSetting, _ = dutils.CheckAndNewGSettings(wrapBgSchema)
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
+	m.init()
+
 	return m
 }
 
@@ -73,6 +78,26 @@ func (m *Manager) destroy() {
 	if m.gnomeBgSetting != nil {
 		m.gnomeBgSetting.Unref()
 	}
+}
+
+func (m *Manager) init() {
+	var file = path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf")
+	if dutils.IsFileExist(file) {
+		return
+	}
+
+	dt := m.getCurrentDTheme()
+	if dt == nil {
+		logger.Error("Not found valid dtheme")
+		return
+	}
+
+	err := fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id)
+	if err != nil {
+		logger.Debug("[init]----------- font failed:", err)
+		return
+	}
+	fonts.SetSize(dt.FontSize)
 }
 
 func (m *Manager) doSetDTheme(id string) error {
