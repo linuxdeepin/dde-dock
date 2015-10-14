@@ -61,7 +61,9 @@ func IsFontSizeValid(size int32) bool {
 	return false
 }
 
-func SetFamily(standard, monospace string) error {
+func SetFamily(standard, monospace string, size int32) error {
+	locker.Lock()
+	defer locker.Unlock()
 	standInfo := ListStandardFamily().Get(standard)
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
@@ -71,20 +73,22 @@ func SetFamily(standard, monospace string) error {
 		return fmt.Errorf("Invalid monospace id '%s'", monospace)
 	}
 
-	curStand := fcFontMatch("sans-serif")
-	curMono := fcFontMatch("monospace")
-	if (standInfo.Id == curStand || standInfo.Name == curStand) &&
-		(monoInfo.Id == curMono || monoInfo.Name == curMono) {
-		return nil
-	}
+	// fc-match can not real time update
+	/*
+		curStand := fcFontMatch("sans-serif")
+		curMono := fcFontMatch("monospace")
+		if (standInfo.Id == curStand || standInfo.Name == curStand) &&
+			(monoInfo.Id == curMono || monoInfo.Name == curMono) {
+			return nil
+		}
+	*/
 
-	setFontByXSettings(standard, -1)
-	return writeFontConfig(configContent(standard, monospace),
+	err := writeFontConfig(configContent(standard, monospace),
 		path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf"))
-}
-
-func SetSize(size int32) error {
-	return setFontByXSettings(fcFontMatch("sans-serif"), size)
+	if err != nil {
+		return err
+	}
+	return setFontByXSettings(standard, size)
 }
 
 func GetFontSize() int32 {
@@ -147,6 +151,7 @@ func getFontSize(setting *gio.Settings) int32 {
 	if len(value) == 0 {
 		return 0
 	}
+
 	array := strings.Split(value, " ")
 	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
 	return int32(size)
@@ -172,8 +177,6 @@ func isItemInList(item string, list []string) bool {
 }
 
 func writeFontConfig(content, file string) error {
-	locker.Lock()
-	defer locker.Unlock()
 	err := os.MkdirAll(path.Dir(file), 0755)
 	if err != nil {
 		return err

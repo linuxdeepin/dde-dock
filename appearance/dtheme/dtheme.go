@@ -5,11 +5,12 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	dutils "pkg.deepin.io/lib/utils"
-	"strings"
 )
 
 const (
@@ -88,8 +89,7 @@ func SetDTheme(id string) error {
 	subthemes.SetIconTheme(dt.Icon.Id)
 	subthemes.SetCursorTheme(dt.Cursor.Id)
 	background.ListBackground().Set(dt.Background.Id)
-	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id)
-	fonts.SetSize(dt.FontSize)
+	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
 	return nil
 }
 

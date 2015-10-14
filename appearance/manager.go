@@ -92,12 +92,11 @@ func (m *Manager) init() {
 		return
 	}
 
-	err := fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id)
+	err := fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
 	if err != nil {
 		logger.Debug("[init]----------- font failed:", err)
 		return
 	}
-	fonts.SetSize(dt.FontSize)
 }
 
 func (m *Manager) doSetDTheme(id string) error {
@@ -213,7 +212,7 @@ func (m *Manager) doSetStandardFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	fonts.SetFamily(value, dt.MonospaceFont.Id)
+	//fonts.SetFamily(value, dt.MonospaceFont.Id, m.FontSize)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
@@ -234,7 +233,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	fonts.SetFamily(dt.StandardFont.Id, value)
+	//fonts.SetFamily(dt.StandardFont.Id, value, m.FontSize)
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,
@@ -254,14 +253,18 @@ func (m *Manager) doSetFontSize(size int32) error {
 		return fmt.Errorf("Invalid font size '%v'", size)
 	}
 
-	err := fonts.SetSize(size)
-	if err != nil {
-		return err
-	}
-
 	m.setPropFontSize(size)
 	m.setting.SetInt(gsKeyFontSize, size)
-	return nil
+
+	if size == fonts.GetFontSize() {
+		return nil
+	}
+	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
+	return fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
 }
 
 func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
