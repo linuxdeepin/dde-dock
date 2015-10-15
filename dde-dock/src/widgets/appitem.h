@@ -100,7 +100,9 @@ private:
     AppPreviews *m_preview = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
+    QPoint m_lastPressPos;
 
+    const int INVALID_MOVE_RADIUS = 10;
     const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCubic;
 };
 

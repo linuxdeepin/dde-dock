@@ -110,6 +110,8 @@ void AppItem::mousePressEvent(QMouseEvent *event)
         onMousePress(event);
     else
         QFrame::mousePressEvent(event);
+
+    m_lastPressPos = event->pos();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *event)
@@ -122,30 +124,34 @@ void AppItem::mouseReleaseEvent(QMouseEvent *event)
 
 void AppItem::mouseMoveEvent(QMouseEvent *event)
 {
-    //this event will only execp onec then handle by Drag
-    emit dragStart();
+    QRect moveRect(QPoint(m_lastPressPos.x() - INVALID_MOVE_RADIUS, m_lastPressPos.y() - INVALID_MOVE_RADIUS),
+                   QPoint(m_lastPressPos.x() + INVALID_MOVE_RADIUS, m_lastPressPos.y() + INVALID_MOVE_RADIUS));
+    if (!moveRect.contains(event->pos())) {
+        //this event will only execp onec then handle by Drag
+        emit dragStart();
 
-    Qt::MouseButtons btn = event->buttons();
-    if(btn == Qt::LeftButton)
-    {
-        //drag and mimeData object will delete automatically
-        QDrag* drag = new QDrag(this);
-        QMimeData* mimeData = new QMimeData();
-        QImage dataImg = m_appIcon->grab().toImage();
-        mimeData->setImageData(QVariant(dataImg));
-        drag->setMimeData(mimeData);
-        drag->setHotSpot(QPoint(15,15));
+        Qt::MouseButtons btn = event->buttons();
+        if(btn == Qt::LeftButton)
+        {
+            //drag and mimeData object will delete automatically
+            QDrag* drag = new QDrag(this);
+            QMimeData* mimeData = new QMimeData();
+            QImage dataImg = m_appIcon->grab().toImage();
+            mimeData->setImageData(QVariant(dataImg));
+            drag->setMimeData(mimeData);
+            drag->setHotSpot(QPoint(15,15));
 
-        if (m_dockModeData->getDockMode() == Dock::FashionMode){
-            QPixmap pixmap = m_appIcon->grab();
-            drag->setPixmap(pixmap.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize()));
+            if (m_dockModeData->getDockMode() == Dock::FashionMode){
+                QPixmap pixmap = m_appIcon->grab();
+                drag->setPixmap(pixmap.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize()));
+            }
+            else{
+                QPixmap pixmap = this->grab();
+                drag->setPixmap(pixmap.scaled(this->size()));
+            }
+
+            drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
         }
-        else{
-            QPixmap pixmap = this->grab();
-            drag->setPixmap(pixmap.scaled(this->size()));
-        }
-
-        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
     }
 }
 
@@ -295,6 +301,8 @@ void AppItem::onMousePress(QMouseEvent *event)
     emit mousePress(event);
 
     hidePreview(true);
+
+    m_lastPressPos = event->pos();
 }
 
 void AppItem::onMouseRelease(QMouseEvent *event)

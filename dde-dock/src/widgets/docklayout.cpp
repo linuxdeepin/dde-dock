@@ -21,7 +21,7 @@ void DockLayout::addItem(AbstractDockItem *item)
         insertItem(item, m_lastHoverIndex);
 }
 
-void DockLayout::insertItem(AbstractDockItem *item, int index)
+void DockLayout::insertItem(AbstractDockItem *item, int index, bool delayShow)
 {
     QPointer<AbstractDockItem> pItem = item;
     if (pItem.isNull())
@@ -46,18 +46,20 @@ void DockLayout::insertItem(AbstractDockItem *item, int index)
 
     m_ddam->Sort(itemsIdList());
 
-    //hide for delay show
-    pItem->setVisible(false);
-    //Qt5.3.* not support singleshot with lamda expressions
-    QTimer *delayTimer = new QTimer(this);
-    connect(delayTimer, &QTimer::timeout, [=] {
-        delayTimer->stop();
-        delayTimer->deleteLater();
+    if (delayShow) {
+        //hide for delay show
+        pItem->setVisible(false);
+        //Qt5.3.* not support singleshot with lamda expressions
+        QTimer *delayTimer = new QTimer(this);
+        connect(delayTimer, &QTimer::timeout, [=] {
+            delayTimer->stop();
+            delayTimer->deleteLater();
 
-        if (!pItem.isNull())
-            item->setVisible(true);
-    });
-    delayTimer->start(m_addItemDelayInterval);
+            if (!pItem.isNull())
+                item->setVisible(true);
+        });
+        delayTimer->start(m_addItemDelayInterval);
+    }
 
     relayout();
 
@@ -178,9 +180,9 @@ void DockLayout::restoreTmpItem()
     if (indexOf(tmpItem) == -1)
     {
         if (m_movingLeftward)
-            insertItem(tmpItem,m_lastHoverIndex);
+            insertItem(tmpItem,m_lastHoverIndex, false);
         else
-            insertItem(tmpItem,m_lastHoverIndex + 1);
+            insertItem(tmpItem,m_lastHoverIndex + 1, false);
     }
 
     emit itemDropped();
