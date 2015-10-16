@@ -137,5 +137,5 @@ func getBgDest(file string) (string, error) {
 	}
 	return path.Join(
 		glib.GetUserSpecialDir(glib.UserDirectoryDirectoryPictures),
-		"Wallpapers", id+".png"), nil
+		"Wallpapers", id+path.Ext(file)), nil
 }

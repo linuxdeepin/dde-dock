@@ -20,7 +20,11 @@ func (m *Manager) listenGSettingChanged() {
 
 func (m *Manager) listenBgGsettings() {
 	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
-		m.doSetBackground(m.wrapBgSetting.GetString(gsKeyBackground))
+		uri := m.wrapBgSetting.GetString(gsKeyBackground)
+		err := m.doSetBackground(uri)
+		if err != nil {
+			logger.Debugf("[Wrap background] set '%s' failed: err", uri, err)
+		}
 	})
 	m.wrapBgSetting.GetString(gsKeyBackground)
 
