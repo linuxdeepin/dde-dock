@@ -11,14 +11,19 @@
 #include <X11/Xlib.h>
 QWindow* wrapper(WId w)
 {
-       Display * dpy = QX11Info::display();
+    QWindow *tmpWindow = QWindow::fromWinId(w);
+    tmpWindow->resize(Dock::APPLET_CLASSIC_ICON_SIZE, Dock::APPLET_CLASSIC_ICON_SIZE);
+    Display * dpy = QX11Info::display();
     //需要在TrayIcon销毁时候释放
-        QWindow* fake = new QWindow();
-        XReparentWindow(dpy, w, fake->winId(), 0, 0);
-        XMapSubwindows(dpy, fake->winId());
-      XFlush(dpy);
+    QWindow* fake = new QWindow();
+//    QSurfaceFormat format;
+//    format.setAlphaBufferSize(8);
+//    fake->setFormat(format);
+    XReparentWindow(dpy, tmpWindow->winId(), fake->winId(), 0, 0);
+    XMapSubwindows(dpy, fake->winId());
+    XFlush(dpy);
 
-        return QWindow::fromWinId(fake->winId());
+    return QWindow::fromWinId(fake->winId());
 }
 
 TrayIcon::TrayIcon(WId winId, QWidget *parent) :

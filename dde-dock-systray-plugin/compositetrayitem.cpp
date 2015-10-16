@@ -32,10 +32,13 @@ void CompositeTrayItem::addTrayIcon(QString key, TrayIcon * icon)
 void CompositeTrayItem::remove(QString key)
 {
     TrayIcon * icon = m_icons.take(key);
-    icon->setParent(NULL);
-    icon->deleteLater();
+    if (icon) {
 
-    this->relayout();
+        icon->setParent(NULL);
+        icon->deleteLater();
+
+        this->relayout();
+    }
 }
 
 Dock::DockMode CompositeTrayItem::mode() const

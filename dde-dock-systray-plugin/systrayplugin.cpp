@@ -31,6 +31,7 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
         connect(m_dbusTrayManager, &TrayManager::Removed, this, &SystrayPlugin::onRemoved);
     }
 
+    m_dbusTrayManager->RetryManager();
     QList<uint> trayIcons = m_dbusTrayManager->trayIcons();
     qDebug() << "Found trayicons: " << trayIcons;
 
