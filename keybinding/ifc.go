@@ -23,6 +23,7 @@ package keybinding
 
 import (
 	"fmt"
+
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -111,10 +112,7 @@ func (m *Manager) Disable(id string, ty int32) error {
 	m.ungrabAccels(s.Accels)
 	s.Disable()
 
-	// system/media update by gsetting changed
-	if ty == shortcuts.KeyTypeCustom {
-		m.grabedList = m.grabedList.Add(id, ty)
-	}
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 
 	return nil
@@ -144,7 +142,7 @@ func (m *Manager) ModifiedName(id string, ty int32, name string) error {
 	}
 
 	s.SetName(name)
-	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 	return nil
 }
@@ -162,7 +160,7 @@ func (m *Manager) ModifiedAction(id string, ty int32, action string) error {
 	}
 
 	s.SetAction(action)
-	m.grabedList = m.grabedList.Add(s.Id, s.Type)
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 	return nil
 }
@@ -232,10 +230,7 @@ func (m *Manager) addAccel(id string, ty int32, accel string) error {
 
 	s.AddAccel(accel)
 
-	// system/media update by gsetting changed
-	if ty == shortcuts.KeyTypeCustom {
-		m.grabedList = m.grabedList.Add(id, ty)
-	}
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 
 	return nil
@@ -250,10 +245,7 @@ func (m *Manager) deleteAccel(id string, ty int32, accel string) error {
 	m.ungrabAccels([]string{accel})
 	s.DeleteAccel(accel)
 
-	// system/media update by gsetting changed
-	if ty == shortcuts.KeyTypeCustom {
-		m.grabedList = m.grabedList.Add(id, ty)
-	}
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 
 	return nil

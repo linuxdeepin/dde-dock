@@ -23,13 +23,14 @@ package keybinding
 
 import (
 	"encoding/json"
+	"sort"
+	"sync"
+
 	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gio-2.0"
-	"sort"
-	"sync"
 )
 
 const (
@@ -181,9 +182,21 @@ func (m *Manager) updateShortcutById(id string, ty int32) {
 		return
 	}
 
-	m.ungrabShortcut(old)
-	m.grabShortcut(new)
+	m.ungrabAccels(old.Accels)
+	m.grabAccels(new.Accels, m.handleKeyEvent)
+	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
+}
+
+func (m *Manager) updateGrabedList(id string, ty int32) {
+	m.grabLocker.Lock()
+	defer m.grabLocker.Unlock()
+	switch ty {
+	case shortcuts.KeyTypeSystem,
+		shortcuts.KeyTypeMedia,
+		shortcuts.KeyTypeCustom:
+		m.grabedList = m.grabedList.Add(id, ty)
+	}
 }
 
 func doMarshal(v interface{}) (string, error) {
