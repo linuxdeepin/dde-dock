@@ -22,13 +22,13 @@
 package keybinding
 
 import (
+	"os/exec"
+	"strings"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/keybind"
-	"os/exec"
-	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"strings"
 )
 
 const (
@@ -60,25 +60,24 @@ func (m *Manager) handleKeyEvent(mod uint16, code int, pressed bool) {
 		}
 
 		if s.Id == "switch-layout" {
-			m.handleMediaEvent(modStr, codeStr, pressed)
+			m.handleMediaEvent(s.Id, s.Type, modStr, pressed)
 			break
 		}
 
 		logger.Debug("Exec action:", s.GetAction())
 		go doAction(s.GetAction())
 	case shortcuts.KeyTypeMedia:
-		m.handleMediaEvent(modStr, codeStr, pressed)
+		m.handleMediaEvent(s.Id, s.Type, modStr, pressed)
 	}
 	return
 }
 
-func (m *Manager) handleMediaEvent(modStr, codeStr string, pressed bool) {
-	signal := getMediakeySignal(modStr, codeStr)
+func (m *Manager) handleMediaEvent(id string, ty int32, modStr string, pressed bool) {
+	signal := getMediakeySignal(id, ty, modStr)
 	if len(signal) == 0 {
 		return
 	}
 
-	//TODO: emit signal
 	logger.Debug("Emit signal:", signal)
 	if pressed {
 		go doAction(cmdDDEOSD + " --" + signal)
@@ -86,74 +85,74 @@ func (m *Manager) handleMediaEvent(modStr, codeStr string, pressed bool) {
 	dbus.Emit(m.media, signal, pressed)
 }
 
-func getMediakeySignal(modStr, codeStr string) string {
-	switch codeStr {
-	case "XF86MonBrightnessUp":
+func getMediakeySignal(id string, ty int32, modStr string) string {
+	if ty != shortcuts.KeyTypeSystem &&
+		ty != shortcuts.KeyTypeMedia {
+		return ""
+	}
+
+	switch id {
+	case "mon-brightness-up":
 		return "BrightnessUp"
-	case "XF86MonBrightnessDown":
+	case "mon-brightness-down":
 		return "BrightnessDown"
-	case "XF86AudioMute":
+	case "volume-mute":
 		return "AudioMute"
-	case "XF86AudioLowerVolume":
+	case "volume-down":
 		return "AudioDown"
-	case "XF86AudioRaiseVolume":
+	case "volume-up":
 		return "AudioUp"
-	case "Num_Lock":
+	case "numlock":
 		// num_lock --> mod2
 		if strings.Contains(modStr, "mod2") {
 			return "NumLockOff"
 		}
 		return "NumLockOn"
-	case "Caps_Lock":
+	case "capslock":
 		// caps_lock --> lock
 		if strings.Contains(modStr, "lock") {
 			return "CapsLockOff"
 		}
 		return "CapsLockOn"
-	case "XF86TouchpadToggle":
+	case "touchpad-toggle":
 		return "TouchpadToggle"
-	case "XF86TouchpadOn":
+	case "touchpad-on":
 		return "TouchpadOn"
-	case "XF86TouchpadOff":
+	case "touchpad-off":
 		return "TouchpadOff"
-	case "XF86Display":
+	case "display":
 		return "SwitchMonitors"
-	case "XF86PowerOff":
+	case "power-off":
 		return "PowerOff"
-	case "XF86Sleep":
+	case "sleep":
 		return "PowerSleep"
 	//case "p", "P":
-	case "XF86AudioPlay":
+	case "play":
 		return "AudioPlay"
-	case "XF86AudioPause":
+	case "pause":
 		return "AudioPause"
-	case "XF86AudioStop":
+	case "stop":
 		return "AudioStop"
-	case "XF86AudioPrev":
+	case "previous":
 		return "AudioPrevious"
-	case "XF86AudioNext":
+	case "next":
 		return "AudioNext"
-	case "XF86AudioRewind":
+	case "audio-rewind":
 		return "AudioRewind"
-	case "XF86AudioForward":
+	case "audio-forward":
 		return "AudioForward"
-	case "XF86AudioRepeat":
+	case "audio-repeat":
 		return "AudioRepeat"
-	case "XF86WWW":
+	case "www":
 		return "LaunchBrowser"
-	case "XF86Mail":
+	case "email":
 		return "LaunchEmail"
-	case "XF86Calculator":
+	case "calculator":
 		return "LaunchCalculator"
-	}
-
-	if len(modStr) != 0 {
-		codeStr = modStr + "-" + codeStr
-	}
-	switch {
-	case core.IsAccelEqual("mod4-p", codeStr):
+	case "switch-monitors":
 		return "SwitchMonitors"
-	case core.IsAccelEqual("mod4-space", codeStr):
+	// system type
+	case "switch-layout":
 		// TODO: check can switch layout
 		return "SwitchLayout"
 	}
