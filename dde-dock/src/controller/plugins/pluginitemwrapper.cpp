@@ -2,8 +2,10 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QApplication>
 
 #include "pluginitemwrapper.h"
+#include "../dockmodedata.h"
 
 static const QString MenuItemRun = "id_run";
 static const QString MenuItemRemove = "id_remove";
@@ -55,8 +57,10 @@ void PluginItemWrapper::enterEvent(QEvent *)
 {
     emit mouseEntered();
 
-    if (hoverable())
-        showPreview();
+    if (hoverable()) {
+        QRect rec = QApplication::desktop()->screenGeometry();
+        showPreview(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight() - 4));
+    }
 }
 
 void PluginItemWrapper::leaveEvent(QEvent *)

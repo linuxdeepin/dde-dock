@@ -46,7 +46,7 @@ public:
     void resize(const QSize &size);
     void resize(int width,int height);
     void showMenu();
-    void showPreview();
+    void showPreview(const QPoint &previewPos = QPoint(0, 0));
     void hidePreview(bool immediately = false);
     void setParent(QWidget * parent);
 
@@ -84,7 +84,6 @@ protected:
     ItemTitleLabel *m_titleLabel = NULL;
 
     QPoint m_itemNextPos;
-    QPoint m_previewPos;
 
     DBusMenu * m_dbusMenu = NULL;
     DBusMenuManager * m_dbusMenuManager = NULL;

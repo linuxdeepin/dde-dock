@@ -133,7 +133,7 @@ QPoint AbstractDockItem::globalPos()
     return mapToGlobal(QPoint(0,0));
 }
 
-void AbstractDockItem::showPreview()
+void AbstractDockItem::showPreview(const QPoint &previewPos)
 {
     if (!m_titlePreview->isHidden())
     {
@@ -141,7 +141,7 @@ void AbstractDockItem::showPreview()
         return;
     }
 
-    m_previewPos = QPoint(globalX() + width() / 2, globalY() - 5);
+    QPoint pos = previewPos.isNull() ?  QPoint(globalX() + width() / 2, globalY() - 5) : previewPos;
     if (getApplet() == NULL) {
         QString title = getTitle();
         if (!title.isEmpty()) {
@@ -160,7 +160,7 @@ void AbstractDockItem::showPreview()
     else {
         m_titleLabel->setParent(NULL);
 
-        emit needPreviewShow(m_previewPos);
+        emit needPreviewShow(pos);
     }
 }
 
