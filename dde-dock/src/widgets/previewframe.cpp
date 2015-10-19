@@ -42,8 +42,10 @@ void PreviewFrame::hidePreview(int interval)
 {
     m_showTimer->stop();
 
-    if (interval <= 0)
+    if (interval <= 0) {
+        m_animation->stop();
         hide();
+    }
     else
         m_hideTimer->start(interval);
 }
