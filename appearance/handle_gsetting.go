@@ -23,7 +23,7 @@ func (m *Manager) listenBgGsettings() {
 		uri := m.wrapBgSetting.GetString(gsKeyBackground)
 		err := m.doSetBackground(uri)
 		if err != nil {
-			logger.Debugf("[Wrap background] set '%s' failed: err", uri, err)
+			logger.Debugf("[Wrap background] set '%s' failed: %s", uri, err)
 		}
 	})
 	m.wrapBgSetting.GetString(gsKeyBackground)

@@ -3,10 +3,11 @@ package background
 import (
 	"os"
 	"path"
-	"pkg.deepin.io/lib/glib-2.0"
-	dutils "pkg.deepin.io/lib/utils"
 	"sort"
 	"strings"
+
+	"pkg.deepin.io/lib/glib-2.0"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -62,7 +63,11 @@ func scanner(dir string) []string {
 		if !IsBackgroundFile(tmp) {
 			continue
 		}
-		walls = append(walls, tmp)
+		// TODO: 1. if a file link to two files in current dir; 2. link file is relative path
+		if dutils.IsSymlink(tmp) {
+			walls = delBgFromList(readLink(tmp), walls)
+		}
+		walls = addBgToList(tmp, walls)
 	}
 	return walls
 }
@@ -96,4 +101,35 @@ func getDirsFromDTheme(dir string) []string {
 
 	sort.Strings(dirs)
 	return dirs
+}
+
+func addBgToList(bg string, list []string) []string {
+	for _, v := range list {
+		if (v == bg) || (dutils.IsSymlink(v) && readLink(v) == bg) {
+			return list
+		}
+	}
+	list = append(list, bg)
+	return list
+}
+
+func delBgFromList(bg string, list []string) []string {
+	var ret []string
+	for _, v := range list {
+		if (v == bg) || (dutils.IsSymlink(v) && readLink(v) == bg) {
+			continue
+		}
+		ret = append(ret, v)
+	}
+	return ret
+}
+
+func readLink(file string) string {
+	for {
+		file, _ = os.Readlink(file)
+		if !dutils.IsSymlink(file) {
+			break
+		}
+	}
+	return file
 }
