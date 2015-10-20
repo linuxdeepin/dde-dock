@@ -150,8 +150,9 @@ func addAccelToList(accel string, list []string) ([]string, bool) {
 		return list, false
 	}
 
-	list = append(list, accel)
-	return list, true
+	var ret = []string{accel}
+	ret = append(ret, list...)
+	return ret, true
 }
 
 func delAccelFromList(accel string, list []string) ([]string, bool) {

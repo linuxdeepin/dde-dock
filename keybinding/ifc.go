@@ -109,7 +109,7 @@ func (m *Manager) Disable(id string, ty int32) error {
 		return fmt.Errorf("Invalid shortcut id '%s'", id)
 	}
 
-	m.ungrabAccels(s.Accels)
+	m.ungrabAccels(s.Accels, ty)
 	s.Disable()
 
 	m.updateGrabedList(id, ty)
@@ -223,7 +223,7 @@ func (m *Manager) addAccel(id string, ty int32, accel string) error {
 		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
 	}
 
-	err := m.grabAccels([]string{accel}, m.handleKeyEvent)
+	err := m.grabAccels([]string{accel}, ty, m.handleKeyEvent)
 	if err != nil {
 		return err
 	}
@@ -242,7 +242,7 @@ func (m *Manager) deleteAccel(id string, ty int32, accel string) error {
 		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
 	}
 
-	m.ungrabAccels([]string{accel})
+	m.ungrabAccels([]string{accel}, ty)
 	s.DeleteAccel(accel)
 
 	m.updateGrabedList(id, ty)

@@ -145,7 +145,7 @@ func (m *Manager) ungrabShortcuts(list shortcuts.Shortcuts) {
 }
 
 func (m *Manager) grabShortcut(s *shortcuts.Shortcut) error {
-	err := m.grabAccels(s.Accels, m.handleKeyEvent)
+	err := m.grabAccels(s.Accels, s.Type, m.handleKeyEvent)
 	if err != nil {
 		return err
 	}
@@ -155,15 +155,25 @@ func (m *Manager) grabShortcut(s *shortcuts.Shortcut) error {
 }
 
 func (m *Manager) ungrabShortcut(s *shortcuts.Shortcut) {
-	m.ungrabAccels(s.Accels)
+	m.ungrabAccels(s.Accels, s.Type)
 	m.deleteFromGrabedList(s)
 }
 
-func (m *Manager) grabAccels(accels []string, cb core.HandleType) error {
+func (m *Manager) grabAccels(accels []string, ty int32, cb core.HandleType) error {
+	switch ty {
+	case shortcuts.KeyTypeWM, shortcuts.KeyTypeMetacity:
+		return nil
+	}
+
 	return core.GrabAccels(accels, cb)
 }
 
-func (m *Manager) ungrabAccels(accels []string) {
+func (m *Manager) ungrabAccels(accels []string, ty int32) {
+	switch ty {
+	case shortcuts.KeyTypeWM, shortcuts.KeyTypeMetacity:
+		return
+	}
+
 	core.UngrabAccels(accels)
 }
 
@@ -182,8 +192,8 @@ func (m *Manager) updateShortcutById(id string, ty int32) {
 		return
 	}
 
-	m.ungrabAccels(old.Accels)
-	m.grabAccels(new.Accels, m.handleKeyEvent)
+	m.ungrabAccels(old.Accels, old.Type)
+	m.grabAccels(new.Accels, new.Type, m.handleKeyEvent)
 	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 }
