@@ -76,7 +76,8 @@ void PluginItemWrapper::mousePressEvent(QMouseEvent * event)
     hidePreview(true);
 
     if (event->button() == Qt::RightButton) {
-        this->showMenu();
+        QRect rec = QApplication::desktop()->screenGeometry();
+        this->showMenu(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight()));
     } else if (event->button() == Qt::LeftButton) {
         QString command = m_plugin->getCommand(m_id);
         if (!command.isEmpty()) QProcess::startDetached(command);

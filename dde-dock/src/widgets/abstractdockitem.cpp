@@ -149,8 +149,8 @@ void AbstractDockItem::showPreview(const QPoint &previewPos)
 
             m_titlePreview->setArrowX(-1);  //reset position
             m_titlePreview->setContent(m_titleLabel);
-            m_titlePreview->showPreview(globalX() + width() / 2,
-                                     globalY() -
+            m_titlePreview->showPreview(pos.x(),
+                                        pos.y() + 5 -
                                         m_titlePreview->shadowYOffset() +
                                         m_titlePreview->shadowBlurRadius() +
                                         m_titlePreview->shadowDistance(),
@@ -174,7 +174,7 @@ void AbstractDockItem::hidePreview(bool immediately)
         emit needPreviewHide();
 }
 
-void AbstractDockItem::showMenu()
+void AbstractDockItem::showMenu(const QPoint &menuPos)
 {
     if (getMenuContent().isEmpty()) return;
 
@@ -201,9 +201,10 @@ void AbstractDockItem::showMenu()
             setHoverable(true);
         });
 
+        QPoint pos = menuPos.isNull() ?  QPoint(globalX() + width() / 2, globalY()) : menuPos;
         QJsonObject targetObj;
-        targetObj.insert("x", QJsonValue(globalX() + width() / 2));
-        targetObj.insert("y", QJsonValue(globalY() - 5));
+        targetObj.insert("x", QJsonValue(pos.x()));
+        targetObj.insert("y", QJsonValue(pos.y()));
         targetObj.insert("isDockMenu", QJsonValue(true));
         targetObj.insert("menuJsonContent", QJsonValue(getMenuContent()));
 

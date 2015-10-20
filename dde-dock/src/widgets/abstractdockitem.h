@@ -45,7 +45,7 @@ public:
     void move(const QPoint &value);
     void resize(const QSize &size);
     void resize(int width,int height);
-    void showMenu();
+    void showMenu(const QPoint &menuPos = QPoint(0, 0));
     void showPreview(const QPoint &previewPos = QPoint(0, 0));
     void hidePreview(bool immediately = false);
     void setParent(QWidget * parent);
