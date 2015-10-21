@@ -28,9 +28,7 @@ package wrapper
 // #include "devices.h"
 import "C"
 
-import (
-	"unsafe"
-)
+import "unsafe"
 
 type XIDeviceInfo struct {
 	Name     string
@@ -56,6 +54,20 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 	for i := C.int(0); i < n_devices; i++ {
 		devInfo := (*C.DeviceInfo)(unsafe.Pointer(tmpList + uintptr(i)*length))
 		switch {
+		// XInput2 library may put the wacom as a touch screen
+		// So firstly detect wacom device
+		case (C.is_wacom_device(devInfo.deviceid) == 1):
+			info := XIDeviceInfo{
+				C.GoString(devInfo.name),
+				int32(devInfo.deviceid),
+				false,
+			}
+
+			if devInfo.enabled == 1 {
+				info.Enabled = true
+			}
+
+			wacomList = append(wacomList, info)
 		// Touch screen
 		case (devInfo.is_touchscreen == 1):
 			continue
@@ -83,18 +95,6 @@ func GetDevicesList() ([]XIDeviceInfo, []XIDeviceInfo, []XIDeviceInfo) {
 			}
 
 			tpadList = append(tpadList, info)
-		case (C.is_wacom_device(devInfo.deviceid) == 1):
-			info := XIDeviceInfo{
-				C.GoString(devInfo.name),
-				int32(devInfo.deviceid),
-				false,
-			}
-
-			if devInfo.enabled == 1 {
-				info.Enabled = true
-			}
-
-			wacomList = append(wacomList, info)
 		}
 	}
 	C.free_device_info(devices, n_devices)
