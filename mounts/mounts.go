@@ -63,8 +63,8 @@ func (d *Daemon) Start() error {
 		_manager = nil
 		return err
 	}
-	_manager.listenDiskChanged()
 	go _manager.refrashDiskInfos()
+	startDiskListener()
 	return nil
 }
 

@@ -21,11 +21,18 @@
 
 package mounts
 
+// #cgo pkg-config: gio-2.0
+// #include <stdlib.h>
+// #include "disk_listener.h"
+import "C"
+
 import (
 	"fmt"
 	"os/exec"
-	"pkg.deepin.io/lib/gio-2.0"
 	"strings"
+	"unsafe"
+
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 const (
@@ -33,41 +40,61 @@ const (
 	gsKeyAutoOpen  = "automount-open"
 )
 
-func (m *Manager) listenDiskChanged() {
-	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor, mount *gio.Mount) {
-		if mount.CanEject() && m.isAutoOpen() {
-			root := mount.GetRoot()
-			var cmd = fmt.Sprintf("xdg-open %s", root.GetUri())
-			root.Unref()
-			go doAction(cmd)
-			//err := doAction(cmd)
-			//if err != nil {
-			//m.logger.Warningf("Exec '%s' failed: %v",
-			//cmd, err)
-			//}
-		}
-		m.setPropDiskList(m.getDiskInfos())
-	})
+func startDiskListener() {
+	C.start_disk_listener()
+}
 
-	m.monitor.Connect("mount-removed", func(monitor *gio.VolumeMonitor, mount *gio.Mount) {
-		m.setPropDiskList(m.getDiskInfos())
-	})
+//export handleDiskChanged
+func handleDiskChanged(event, uuid *C.char) {
+	var ev = C.GoString(event)
+	var id = C.GoString(uuid)
+	logger.Debug("Disk event:", ev, id)
+	if len(id) != 0 {
+		defer C.free(unsafe.Pointer(uuid))
+	}
+	if _manager == nil {
+		return
+	}
 
-	m.monitor.Connect("volume-added", func(monitor *gio.VolumeMonitor, volume *gio.Volume) {
-		iconObj := volume.GetIcon()
-		icon := getIconFromGIcon(iconObj)
-		iconObj.Unref()
+	_manager.setPropDiskList(_manager.getDiskInfos())
+	switch ev {
+	case "volume-added":
+		handleVolumeAdded(id)
+	case "mount-added":
+		handleMountAdded(id)
+	}
+}
 
-		if (volume.CanEject() || strings.Contains(icon, "usb")) &&
-			m.isAutoMount() {
-			m.mountVolume("", volume)
-		}
-		m.setPropDiskList(m.getDiskInfos())
-	})
+func handleVolumeAdded(id string) {
+	info := _manager.getDiskCache(id)
+	if info == nil || info.Type != diskTypeVolume {
+		return
+	}
 
-	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor, volume *gio.Volume) {
-		m.setPropDiskList(m.getDiskInfos())
-	})
+	volume := info.Obj.(*gio.Volume)
+	iconObj := volume.GetIcon()
+	icon := getIconFromGIcon(iconObj)
+	iconObj.Unref()
+
+	if (volume.CanEject() || strings.Contains(icon, "usb")) &&
+		_manager.isAutoMount() {
+		_manager.mountVolume(id, volume)
+	}
+}
+
+func handleMountAdded(id string) {
+	info := _manager.getDiskCache(id)
+	if info == nil || info.Type != diskTypeMount {
+		return
+	}
+
+	mount := info.Obj.(*gio.Mount)
+	if mount.CanEject() && _manager.isAutoOpen() {
+		root := mount.GetRoot()
+		var cmd = fmt.Sprintf("gvfs-open %s", root.GetUri())
+		root.Unref()
+		go doAction(cmd)
+	}
 }
 
 func (m *Manager) isAutoMount() bool {

@@ -22,11 +22,12 @@
 package mounts
 
 import (
+	"sync"
+	"time"
+
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	dutils "pkg.deepin.io/lib/utils"
-	"sync"
-	"time"
 )
 
 var logger = log.NewLogger("daemon/mounts")
@@ -55,7 +56,6 @@ type Manager struct {
 	// reason: detail info about the failure
 	Error func(string, string)
 
-	monitor *gio.VolumeMonitor
 	setting *gio.Settings
 	logger  *log.Logger
 	endFlag chan struct{}
@@ -68,7 +68,6 @@ func NewManager() *Manager {
 	var m = Manager{}
 
 	m.logger = logger
-	m.monitor = gio.VolumeMonitorGet()
 	m.setting, _ = dutils.CheckAndNewGSettings(mediaHandlerSchema)
 	m.diskCache = make(map[string]*diskObjectInfo)
 	m.endFlag = make(chan struct{})
@@ -82,11 +81,6 @@ func (m *Manager) destroy() {
 	if m.diskCache != nil {
 		m.clearDiskCache()
 		m.diskCache = nil
-	}
-
-	if m.monitor != nil {
-		m.monitor.Unref()
-		m.monitor = nil
 	}
 
 	if m.logger != nil {
@@ -116,7 +110,9 @@ func (m *Manager) getDiskInfos() DiskInfos {
 	m.diskCache = make(map[string]*diskObjectInfo)
 
 	var infos DiskInfos
-	volumes := m.monitor.GetVolumes()
+	var monitor = gio.VolumeMonitorGet()
+	defer monitor.Unref()
+	volumes := monitor.GetVolumes()
 	for _, volume := range volumes {
 		mount := volume.GetMount()
 		if mount != nil {
@@ -132,7 +128,7 @@ func (m *Manager) getDiskInfos() DiskInfos {
 		infos = append(infos, info)
 	}
 
-	mounts := m.monitor.GetMounts()
+	mounts := monitor.GetMounts()
 	for _, mount := range mounts {
 		info := newDiskInfoFromMount(mount)
 		m.setDiskCache(info.UUID, &diskObjectInfo{
