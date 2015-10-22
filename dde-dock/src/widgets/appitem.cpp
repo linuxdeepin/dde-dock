@@ -30,6 +30,8 @@ void AppItem::moveWithAnimation(QPoint targetPos, int duration)
     animation->start();
     connect(animation, &QPropertyAnimation::finished, this, &AppItem::moveAnimationFinished);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
+    connect(this, &AppItem::requestAnimationFinish, animation, &QPropertyAnimation::stop);
+    connect(this, &AppItem::requestAnimationFinish, animation, &QPropertyAnimation::deleteLater);
 }
 
 AppItemData AppItem::itemData() const

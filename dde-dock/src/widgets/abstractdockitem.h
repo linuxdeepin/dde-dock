@@ -74,6 +74,7 @@ signals:
     void needPreviewImmediatelyHide();
     void needPreviewShow(QPoint pos);
     void needPreviewUpdate();
+    void requestAnimationFinish();
 
 protected:
     bool m_moveable = true;

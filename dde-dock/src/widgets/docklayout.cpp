@@ -335,6 +335,7 @@ void DockLayout::sortLeftToRight()
     for (int i = 0; i < m_appList.count(); i ++)
     {
         AbstractDockItem * toItem = m_appList.at(i);
+        toItem->requestAnimationFinish();//make sure the move-animation stop for resort
 
         int nextX = 0;
         int nextY = 0;
