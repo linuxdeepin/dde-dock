@@ -76,17 +76,8 @@ void DockLayout::moveItem(int from, int to)
 
 void DockLayout::removeItem(int index)
 {
-    //Qt5.3.* not support singleshot with lamda expressions
-    QTimer *delayTimer = new QTimer(this);
-    connect(delayTimer, &QTimer::timeout, [=] {
-        delayTimer->stop();
-        delayTimer->deleteLater();
-
-        m_appList.removeAt(index);
-        removeSpacingItem();
-        relayout();
-    });
-    delayTimer->start(m_removeItemDelayInterval);
+    m_appList.removeAt(index);
+    relayout();
 }
 
 void DockLayout::removeItem(AbstractDockItem *item)
