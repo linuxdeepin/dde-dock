@@ -64,12 +64,17 @@ func (p *Power) refreshUpower() {
 
 func (p *Power) handleBatteryPercentage() {
 	if !p.OnBattery {
+		// Close low power saver if power plug
 		if p.lowBatteryStatus == lowBatteryStatusAction {
-			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
 			if p.LockWhenActive.Get() {
 				doLock()
 			}
+		}
+
+		// Reset lowBatteryStatus status if power plug
+		if p.lowBatteryStatus != lowBatteryStatusNormal {
+			p.lowBatteryStatus = lowBatteryStatusNormal
 		}
 		return
 	}
