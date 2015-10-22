@@ -23,19 +23,20 @@ package keyboard
 
 import (
 	"bufio"
-	"dbus/com/deepin/api/greeterutils"
+	"dbus/com/deepin/api/greeterhelper"
 	"dbus/com/deepin/sessionmanager"
 	"fmt"
 	"os"
 	"os/exec"
 	"path"
+	"regexp"
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/inputdevices/wrapper"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	dutils "pkg.deepin.io/lib/utils"
-	"regexp"
-	"strings"
 )
 
 const (
@@ -69,7 +70,7 @@ type Keyboard struct {
 
 	logger        *log.Logger
 	settings      *gio.Settings
-	greeter       *greeterutils.GreeterUtils
+	greeter       *greeterhelper.GreeterHelper
 	xsettings     *sessionmanager.XSettings
 	layoutDescMap map[string]string
 }
@@ -112,11 +113,11 @@ func NewKeyboard(l *log.Logger) *Keyboard {
 		return nil
 	}
 
-	kbd.greeter, err = greeterutils.NewGreeterUtils(
-		"com.deepin.api.GreeterUtils",
-		"/com/deepin/api/GreeterUtils")
+	kbd.greeter, err = greeterhelper.NewGreeterHelper(
+		"com.deepin.api.GreeterHelper",
+		"/com/deepin/api/GreeterHelper")
 	if err != nil {
-		kbd.warningInfo("Create GreeterUtils Failed: %v", err)
+		kbd.warningInfo("Create GreeterHelper Failed: %v", err)
 		kbd.greeter = nil
 	}
 
@@ -142,19 +143,18 @@ func (kbd *Keyboard) setLayout() {
 		return
 	}
 
-	err := setUserLayout(kbd.CurrentLayout.Get())
+	value := kbd.CurrentLayout.Get()
+	err := setUserLayout(value)
 	if err != nil {
-		kbd.debugInfo("Set Layout '%s' Failed: %v",
-			kbd.CurrentLayout.Get(), err)
+		kbd.debugInfo("Set Layout '%s' Failed: %v", value, err)
 		kbd.settings.SetString(kbdKeyLayout,
 			getLayoutFromFile(kbdDefaultConfig))
 		return
 	}
 	//kbd.setLayoutOptions()
 
-	value := kbd.CurrentLayout.Get()
+	kbd.setGreeterLayout(value)
 	kbd.addUserLayoutToList(value)
-	kbd.setGreeterLayoutList(kbd.settings.GetStrv(kbdKeyUserLayoutList))
 }
 
 func (kbd *Keyboard) addUserLayoutToList(value string) {
@@ -169,6 +169,7 @@ func (kbd *Keyboard) addUserLayoutToList(value string) {
 
 	list = append(list, value)
 	kbd.settings.SetStrv(kbdKeyUserLayoutList, list)
+	kbd.setGreeterLayoutList(list)
 }
 
 func (kbd *Keyboard) deleteUserLayoutFromList(value string) {
@@ -185,6 +186,7 @@ func (kbd *Keyboard) deleteUserLayoutFromList(value string) {
 	}
 
 	kbd.settings.SetStrv(kbdKeyUserLayoutList, tmpList)
+	kbd.setGreeterLayoutList(tmpList)
 }
 
 func (kbd *Keyboard) setLayoutOptions() {
@@ -204,17 +206,38 @@ func (kbd *Keyboard) setCursorBlink(value uint32) {
 	setQtCursorBlink(value, qtPath)
 }
 
+func (kbd *Keyboard) setGreeterLayout(layout string) {
+	if kbd.greeter == nil {
+		return
+	}
+
+	name := dutils.GetUserName()
+	if filterUser(name) {
+		return
+	}
+	err := kbd.greeter.SetLayout(name, layout)
+	if err != nil {
+		kbd.logger.Warningf("Set '%s' greeter layout '%s' failed: %v",
+			name, layout, err)
+		return
+	}
+}
+
 func (kbd *Keyboard) setGreeterLayoutList(list []string) {
 	if kbd.greeter == nil {
 		return
 	}
 
-	username := dutils.GetUserName()
-	homeDir := dutils.GetHomeDir()
-	if homeDir == path.Join("/tmp", username) && len(username) == 0 {
+	name := dutils.GetUserName()
+	if filterUser(name) {
 		return
 	}
-	kbd.greeter.SetKbdLayoutList(username, list)
+	err := kbd.greeter.SetLayoutList(name, list)
+	if err != nil {
+		kbd.logger.Warningf("Set '%s' greeter layout list '%v' failed: %v",
+			name, list, err)
+		return
+	}
 }
 
 func (kbd *Keyboard) init() {
@@ -316,6 +339,18 @@ func setQtCursorBlink(rate uint32, filename string) error {
 	}
 
 	return nil
+}
+
+func filterUser(name string) bool {
+	if len(name) == 0 {
+		return true
+	}
+
+	home := os.Getenv("HOME")
+	if home == path.Join("/tmp", name) {
+		return true
+	}
+	return false
 }
 
 func isStrInList(str string, list []string) bool {
