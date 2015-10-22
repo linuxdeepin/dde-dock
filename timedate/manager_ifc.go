@@ -22,8 +22,9 @@
 package timedate
 
 import (
-	"pkg.deepin.io/dde/daemon/timedate/zoneinfo"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/timedate/zoneinfo"
 )
 
 // SetDate Set the system clock to the specified.
@@ -90,6 +91,11 @@ func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) error {
 //
 // zone: pass a value like "Asia/Shanghai" to set the timezone.
 func (m *Manager) SetTimezone(zone string) error {
+	if !zoneinfo.IsZoneValid(zone) {
+		logger.Debug("Invalid zone:", zone)
+		return zoneinfo.ErrZoneInvalid
+	}
+
 	err := m.td1.SetTimezone(zone, true)
 	if err != nil {
 		logger.Debug("SetTimezone failed:", err)
