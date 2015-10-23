@@ -291,7 +291,7 @@ func (*GrubTester) TestSettingsGeneral(c *C.C) {
 func (*GrubTester) TestSaveDefaultSettings(c *C.C) {
 	testGrubSettingsContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
-	wantConfigContent := `GRUB_BACKGROUND="<none>"
+	wantConfigContent := `GRUB_BACKGROUND="/boot/grub/themes/deepin/background.png"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
 GRUB_GFXMODE="1024x768"

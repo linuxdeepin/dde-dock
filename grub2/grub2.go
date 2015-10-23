@@ -262,10 +262,10 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 		needUpdate = true
 	}
 
-	// disable GRUB_BACKGROUND
-	if grub.settings["GRUB_BACKGROUND"] != "<none>" {
+	// make GRUB_BACKGROUND same with the theme background
+	if grub.settings["GRUB_BACKGROUND"] != themeBgFile {
 		logger.Info("fix setting GRUB_BACKGROUND")
-		grub.settings["GRUB_BACKGROUND"] = "<none>"
+		grub.settings["GRUB_BACKGROUND"] = themeBgFile
 		needUpdate = true
 	}
 
