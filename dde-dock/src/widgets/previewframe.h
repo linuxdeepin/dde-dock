@@ -11,7 +11,7 @@ DUI_USE_NAMESPACE
 class PreviewFrame : public DArrowRectangle
 {
     Q_OBJECT
-    Q_PROPERTY(QPoint arrowPos READ QPoint(0, 0) WRITE setArrowPos)
+    Q_PROPERTY(QPoint arrowPos READ pos WRITE setArrowPos)
 public:
     explicit PreviewFrame(DArrowRectangle::ArrowDirection direction, QWidget *parent = 0);
     ~PreviewFrame();
