@@ -7,6 +7,26 @@
 #include "mainwidget.h"
 #include "logmanager.h"
 #include "Logger.h"
+#include "controller/signalmanager.h"
+
+#undef signals
+extern "C" {
+  #include <gtk/gtk.h>
+}
+#define signals public
+
+static void requrestUpdateIcons()
+{
+    //can not passing QObject to the callback function,so use signal
+    emit SignalManager::instance()->requestAppIconUpdate();
+}
+
+void initGtkThemeWatcher()
+{
+    GtkSettings* gs = gtk_settings_get_default();
+    g_signal_connect(gs, "notify::gtk-icon-theme-name",
+                     G_CALLBACK(requrestUpdateIcons), NULL);
+}
 
 // let startdde know that we've already started.
 void RegisterDdeSession()
@@ -56,7 +76,6 @@ int main(int argc, char *argv[])
             qWarning() << "[Error:] Open  style file errr!";
         }
 
-
         MainWidget w;
         w.show();
         qWarning() << "The main window has been shown!";
@@ -64,6 +83,7 @@ int main(int argc, char *argv[])
 
         RegisterDdeSession();
 
+        initGtkThemeWatcher();
         return a.exec();
     } else {
         qWarning() << "dde dock is running...";

@@ -2,13 +2,14 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
+#include "appicon.h"
+#include "controller/signalmanager.h"
+
 #undef signals
 extern "C" {
   #include <gtk/gtk.h>
 }
 #define signals public
-
-#include "appicon.h"
 
 AppIcon::AppIcon(QWidget *parent, Qt::WindowFlags f) :
     QLabel(parent, f)
@@ -20,10 +21,14 @@ AppIcon::AppIcon(QWidget *parent, Qt::WindowFlags f) :
 
     this->setAttribute(Qt::WA_TranslucentBackground);
     this->setAlignment(Qt::AlignCenter);
+
+    connect(SignalManager::instance(), &SignalManager::requestAppIconUpdate, this, &AppIcon::updateIcon);
 }
 
 void AppIcon::setIcon(const QString &iconPath)
 {
+    m_iconPath = iconPath;
+
     QPixmap pixmap(48, 48);
 
     // iconPath is an absolute path of the system.
@@ -113,4 +118,10 @@ QString AppIcon::getThemeIconPath(QString iconName)
     } else {
         return "";
     }
+}
+
+void AppIcon::updateIcon()
+{
+    if (!m_iconPath.isEmpty())
+        setIcon(m_iconPath);
 }

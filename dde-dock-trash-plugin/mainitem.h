@@ -17,6 +17,19 @@
 #include "dbus/dbustrashjob.h"
 #include "dbus/dbuslauncher.h"
 
+class SignalManager : public QObject
+{
+    Q_OBJECT
+public:
+    static SignalManager * instance();
+
+signals:
+    void requestAppIconUpdate();
+
+private:
+    static SignalManager *m_signalManager;
+    explicit SignalManager(QObject *parent = 0) : QObject(parent) {}
+};
 
 class MainItem : public QLabel
 {
@@ -32,6 +45,9 @@ protected:
     void dragEnterEvent(QDragEnterEvent *);
     void dragLeaveEvent(QDragLeaveEvent *);
     void dropEvent(QDropEvent * event);
+
+private slots:
+    void onRequestUpdateIcon();
 
 private:
     QString getThemeIconPath(QString iconName);

@@ -1,4 +1,5 @@
 #include "launcheritem.h"
+#include "controller/signalmanager.h"
 
 LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 {
@@ -14,6 +15,7 @@ LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 
     //TODO icon not show on init
     QTimer::singleShot(20, this, SLOT(updateIcon()));
+    connect(SignalManager::instance(), &SignalManager::requestAppIconUpdate, this, &LauncherItem::updateIcon);
 }
 
 void LauncherItem::enterEvent(QEvent *)

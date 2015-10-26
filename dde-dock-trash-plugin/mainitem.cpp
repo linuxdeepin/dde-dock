@@ -6,6 +6,29 @@ extern "C" {
   #include <gtk/gtk.h>
 }
 #define signals public
+
+
+static void requrestUpdateIcons()
+{
+    //can not passing QObject to the callback function,so use signal
+    emit SignalManager::instance()->requestAppIconUpdate();
+}
+
+void initGtkThemeWatcher()
+{
+    GtkSettings* gs = gtk_settings_get_default();
+    g_signal_connect(gs, "notify::gtk-icon-theme-name",
+                     G_CALLBACK(requrestUpdateIcons), NULL);
+}
+
+SignalManager *SignalManager::m_signalManager = NULL;
+SignalManager *SignalManager::instance()
+{
+    if (!m_signalManager)
+        m_signalManager = new SignalManager;
+    return m_signalManager;
+}
+
 MainItem::MainItem(QWidget *parent) : QLabel(parent)
 {
     setAcceptDrops(true);
@@ -16,6 +39,10 @@ MainItem::MainItem(QWidget *parent) : QLabel(parent)
         updateIcon(false);
     });
     updateIcon(false);
+
+    initGtkThemeWatcher();
+    //can't use lambda here
+    connect(SignalManager::instance(), SIGNAL(requestAppIconUpdate()), this, SLOT(onRequestUpdateIcon()));
 }
 
 MainItem::~MainItem()
@@ -126,6 +153,11 @@ void MainItem::dropEvent(QDropEvent *event)
     }
 }
 
+void MainItem::onRequestUpdateIcon()
+{
+    updateIcon(false);
+}
+
 void MainItem::updateIcon(bool isOpen)
 {
     QString iconName = "";
@@ -144,8 +176,8 @@ void MainItem::updateIcon(bool isOpen)
             iconName = "user-trash-empty";
     }
 
-    QPixmap pixmap = QIcon::fromTheme(iconName).pixmap(Dock::APPLET_FASHION_ICON_SIZE,Dock::APPLET_FASHION_ICON_SIZE);
-    setPixmap(pixmap);
+    QPixmap pixmap(getThemeIconPath(iconName));
+    setPixmap(pixmap.scaled(Dock::APPLET_FASHION_ICON_SIZE,Dock::APPLET_FASHION_ICON_SIZE));
 }
 
 // iconName should be a icon name constraints to the freeedesktop standard.

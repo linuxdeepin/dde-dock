@@ -67,7 +67,8 @@ HEADERS += \
     src/widgets/screenmask.h \
     src/widgets/windowpreview.h \
     src/mainwidget.h \
-    src/widgets/previewframe.h
+    src/widgets/previewframe.h \
+    src/controller/signalmanager.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -103,4 +104,5 @@ SOURCES += \
     src/widgets/windowpreview.cpp \
     src/main.cpp \
     src/mainwidget.cpp \
-    src/widgets/previewframe.cpp
+    src/widgets/previewframe.cpp \
+    src/controller/signalmanager.cpp
