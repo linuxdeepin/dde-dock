@@ -136,5 +136,5 @@ DockUIDbus::~DockUIDbus()
 
 qulonglong DockUIDbus::Xid()
 {
-    return 0;
+    return m_parent->winId();
 }
