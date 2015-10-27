@@ -33,6 +33,7 @@ type adapter struct {
 
 	Path                dbus.ObjectPath
 	adddress            string
+	Name                string
 	Alias               string
 	Powered             bool
 	Discovering         bool
@@ -46,6 +47,7 @@ func newAdapter(apath dbus.ObjectPath) (a *adapter) {
 	a.connectProperties()
 	a.adddress = a.bluezAdapter.Address.Get()
 	a.Alias = a.bluezAdapter.Alias.Get()
+	a.Name = a.bluezAdapter.Name.Get()
 	a.Powered = a.bluezAdapter.Powered.Get()
 	a.Discovering = a.bluezAdapter.Discovering.Get()
 	a.Discoverable = a.bluezAdapter.Discoverable.Get()
@@ -72,6 +74,11 @@ func (a *adapter) notifyPropertiesChanged() {
 	bluetooth.setPropState()
 }
 func (a *adapter) connectProperties() {
+	a.bluezAdapter.Name.ConnectChanged(func() {
+		a.Name = a.bluezAdapter.Name.Get()
+		a.notifyPropertiesChanged()
+		bluetooth.setPropAdapters()
+	})
 	a.bluezAdapter.Alias.ConnectChanged(func() {
 		a.Alias = a.bluezAdapter.Alias.Get()
 		a.notifyPropertiesChanged()
