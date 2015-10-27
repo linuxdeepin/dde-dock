@@ -59,7 +59,7 @@ void PluginItemWrapper::enterEvent(QEvent *)
 
     if (hoverable()) {
         QRect rec = QApplication::desktop()->screenGeometry();
-        showPreview(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight() - 4));
+        showPreview(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight() - DOCK_PREVIEW_MARGIN));
     }
 }
 

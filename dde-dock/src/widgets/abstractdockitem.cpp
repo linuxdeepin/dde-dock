@@ -141,7 +141,7 @@ void AbstractDockItem::showPreview(const QPoint &previewPos)
         return;
     }
 
-    QPoint pos = previewPos.isNull() ?  QPoint(globalX() + width() / 2, globalY() - 5) : previewPos;
+    QPoint pos = previewPos.isNull() ?  QPoint(globalX() + width() / 2, globalY() - DOCK_PREVIEW_MARGIN) : previewPos;
     if (getApplet() == NULL) {
         QString title = getTitle();
         if (!title.isEmpty()) {
@@ -150,7 +150,8 @@ void AbstractDockItem::showPreview(const QPoint &previewPos)
             m_titlePreview->setArrowX(-1);  //reset position
             m_titlePreview->setContent(m_titleLabel);
             m_titlePreview->showPreview(pos.x(),
-                                        pos.y() + 5 -
+                                        pos.y() + DOCK_PREVIEW_MARGIN -
+                                        2 - //minute adjustment
                                         m_titlePreview->shadowYOffset() +
                                         m_titlePreview->shadowBlurRadius() +
                                         m_titlePreview->shadowDistance(),

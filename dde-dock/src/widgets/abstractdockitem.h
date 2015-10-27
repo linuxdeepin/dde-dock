@@ -96,6 +96,7 @@ private:
     const int TITLE_HEIGHT = 20;
     const int CONTENT_PREVIEW_INTERVAL = 200;
     const int TITLE_PREVIEW_INTERVAL = 0;
+    const int DOCK_PREVIEW_MARGIN = 8;
 };
 
 #endif // ABSTRACTDOCKITEM_H

@@ -34,6 +34,7 @@ private:
     QString m_id;
 
     QJsonObject createMenuItem(QString itemId, QString itemName, bool checkable, bool checked);
+    const int DOCK_PREVIEW_MARGIN = 7;
 };
 
 #endif // PLUGINITEMWRAPPER_H
