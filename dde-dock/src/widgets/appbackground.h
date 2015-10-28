@@ -76,7 +76,6 @@ private:
     void onDockModeChanged();
 
 private:
-    bool m_isInit = true;
     bool m_bePress = false;
     bool m_isActived = false;
     bool m_isCurrentOpened = false;

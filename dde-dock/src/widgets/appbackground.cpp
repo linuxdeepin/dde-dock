@@ -121,11 +121,12 @@ bool AppBackground::getIsActived()
 void AppBackground::setIsActived(bool value)
 {
     m_isActived = value;
-    if (!m_isActived)
+    if (!m_isActived) {
         m_activeLabel->hide();
-    else if (m_isInit && !m_bePress && getIsFashionMode()){
+        m_bePress = false;
+    }
+    else if (!m_bePress && getIsFashionMode()){
         m_activeLabel->show();
-        m_isInit = false;
     }
 
     style()->unpolish(this);
