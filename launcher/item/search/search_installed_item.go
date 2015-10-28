@@ -93,20 +93,41 @@ func (s *SearchInstalledItemTransaction) calcScore(data ItemInfoInterface) (scor
 	return
 }
 
+func (s *SearchInstalledItemTransaction) isCancelled() bool {
+	if s.cancelled {
+		return true
+	}
+
+	select {
+	case <-s.cancelChan:
+		s.cancelled = true
+		return true
+	default:
+		return false
+	}
+}
+
 func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfoInterface) {
+	if s.isCancelled() {
+		return
+	}
+
 	for data := range dataSetChan {
 		score := s.calcScore(data)
 		if score == 0 {
 			continue
 		}
+
+		if s.isCancelled() {
+			return
+		}
+
 		select {
 		case s.resChan <- SearchResult{
 			Id:    data.Id(),
 			Name:  data.Name(),
 			Score: score,
 		}:
-		case <-s.cancelChan:
-			return
 		}
 	}
 }
@@ -116,11 +137,17 @@ func (s *SearchInstalledItemTransaction) Search(key string, dataSet []ItemInfoIn
 	dataSetChan := make(chan ItemInfoInterface)
 	go func() {
 		defer close(dataSetChan)
+		if s.isCancelled() {
+			return
+		}
+
 		for _, data := range dataSet {
+			if s.isCancelled() {
+				return
+			}
+
 			select {
 			case dataSetChan <- data:
-			case <-s.cancelChan:
-				return
 			}
 		}
 	}()
