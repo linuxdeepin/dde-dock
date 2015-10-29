@@ -42,6 +42,7 @@ type device struct {
 	Path        dbus.ObjectPath
 	AdapterPath dbus.ObjectPath
 
+	Name    string
 	Alias   string
 	Trusted bool
 	Paired  bool
@@ -60,6 +61,7 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
 	d.AdapterPath = d.bluezDevice.Adapter.Get()
+	d.Name = d.bluezDevice.Name.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
@@ -110,6 +112,11 @@ func (d *device) connectProperties() {
 			}
 		}
 		d.notifyStateChanged()
+	})
+	d.bluezDevice.Name.ConnectChanged(func() {
+		d.Name = d.bluezDevice.Name.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
