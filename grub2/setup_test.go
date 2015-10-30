@@ -1,5 +1,3 @@
-// +build ignore
-
 package grub2
 
 import (
@@ -54,7 +52,7 @@ func (*GrubTester) TestCustomArguments(c *C.C) {
 }
 
 func (*GrubTester) TestSetup(c *C.C) {
-	wantSettingsContent := `GRUB_BACKGROUND="<none>"
+	wantSettingsContent := `GRUB_BACKGROUND="./testdata/tmp_theme_dir/background.png"
 GRUB_CMDLINE_LINUX="locale=zh_CN.UTF-8 url=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/preseed/deepin.seed initrd=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/casper/initrd.lz"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
