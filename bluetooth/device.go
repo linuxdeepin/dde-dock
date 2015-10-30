@@ -253,14 +253,17 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	d.notifyStateChanged()
 
 	go func() {
-		if !bluezGetDeviceTrusted(dpath) {
-			bluezSetDeviceTrusted(dpath, true)
-		}
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
 		}
 		err = bluezConnectDevice(dpath)
+		if err != nil {
+			// trust device when connecting success
+			if !bluezGetDeviceTrusted(dpath) {
+				bluezSetDeviceTrusted(dpath, true)
+			}
+		}
 
 		if d.connecting {
 			d.connecting = false
