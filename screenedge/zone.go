@@ -164,6 +164,8 @@ func getEdgeForCommand(cmd string) string {
 }
 
 func enableOneEdge(edge string) {
+	mutex.Lock()
+	defer mutex.Unlock()
 	switch edge {
 	case "left-up":
 		edgeActionMap["BottomLeft"] = ""

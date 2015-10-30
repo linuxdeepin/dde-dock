@@ -69,7 +69,7 @@ func (op *Manager) EnableZoneDetected(enable bool) {
 func (op *Manager) SetTopLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[leftTopEdge] = value
+	zoneSettings().SetString("left-up", value)
 }
 
 // Get left-top edge action
@@ -81,7 +81,7 @@ func (op *Manager) TopLeftAction() string {
 func (op *Manager) SetBottomLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[leftBottomEdge] = value
+	zoneSettings().SetString("left-down", value)
 }
 
 // Get left-bottom edge action
@@ -93,7 +93,7 @@ func (op *Manager) BottomLeftAction() string {
 func (op *Manager) SetTopRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[rightTopEdge] = value
+	zoneSettings().SetString("right-up", value)
 }
 
 // Get right-top edge action
@@ -105,7 +105,7 @@ func (op *Manager) TopRightAction() string {
 func (op *Manager) SetBottomRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	edgeActionMap[rightBottomEdge] = value
+	zoneSettings().SetString("right-down", value)
 }
 
 // Get right-bottom edge action
@@ -188,6 +188,15 @@ func (d *Daemon) Stop() error {
 	return nil
 }
 
+func (m *Manager) initEdgeActionMap() {
+	mutex.Lock()
+	defer mutex.Unlock()
+	edgeActionMap[leftTopEdge] = zoneSettings().GetString("left-up")
+	edgeActionMap[leftBottomEdge] = zoneSettings().GetString("left-down")
+	edgeActionMap[rightTopEdge] = zoneSettings().GetString("right-up")
+	edgeActionMap[rightBottomEdge] = zoneSettings().GetString("right-down")
+}
+
 func (d *Daemon) Start() error {
 	if _m != nil {
 		return nil
@@ -210,11 +219,7 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	_m.SetTopLeft(_m.TopLeftAction())
-	_m.SetBottomLeft(_m.BottomLeftAction())
-	_m.SetTopRight(_m.TopRightAction())
-	_m.SetBottomRight(_m.BottomRightAction())
-
+	_m.initEdgeActionMap()
 	handleSettingsChanged()
 
 	return nil
