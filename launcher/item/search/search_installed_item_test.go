@@ -4,8 +4,8 @@ import (
 	C "launchpad.net/gocheck"
 	"os"
 	"path"
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/dde/daemon/launcher/item"
 	"pkg.deepin.io/lib/gio-2.0"
 	"sync"
 	"time"
@@ -25,30 +25,30 @@ func (self *SearchInstalledItemTransactionTestSuite) TestSearchInstalledItemTran
 	var transaction *SearchInstalledItemTransaction
 	var err error
 
-	ch := make(chan SearchResult)
+	ch := make(chan Result)
 	transaction, err = NewSearchInstalledItemTransaction(nil, nil, 4)
 	c.Assert(transaction, C.IsNil)
 	c.Assert(err, C.NotNil)
-	c.Assert(err, C.Equals, SearchErrorNullChannel)
+	c.Assert(err, C.Equals, ErrorSearchNullChannel)
 
 	transaction, err = NewSearchInstalledItemTransaction(ch, nil, 4)
 	c.Assert(transaction, C.NotNil)
 	c.Assert(err, C.IsNil)
 }
 
-func (self *SearchInstalledItemTransactionTestSuite) testSearchInstalledItemTransaction(c *C.C, key string, fn func([]SearchResult, *C.C), delay time.Duration, cancel bool) {
+func (self *SearchInstalledItemTransactionTestSuite) testSearchInstalledItemTransaction(c *C.C, key string, fn func([]Result, *C.C), delay time.Duration, cancel bool) {
 	old := os.Getenv("LANGUAGE")
 	os.Setenv("LANGUAGE", "zh_CN.UTF-8")
 
 	cancelChan := make(chan struct{})
-	ch := make(chan SearchResult)
+	ch := make(chan Result)
 	transaction, _ := NewSearchInstalledItemTransaction(ch, cancelChan, 4)
-	itemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
+	itemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
 		time.Sleep(delay)
-		transaction.Search(key, []ItemInfoInterface{itemInfo})
+		transaction.Search(key, []interfaces.ItemInfo{itemInfo})
 		wg.Done()
 	}()
 	if cancel {
@@ -59,7 +59,7 @@ func (self *SearchInstalledItemTransactionTestSuite) testSearchInstalledItemTran
 		close(ch)
 	}()
 
-	res := []SearchResult{}
+	res := []Result{}
 	for data := range ch {
 		res = append(res, data)
 	}
@@ -70,19 +70,19 @@ func (self *SearchInstalledItemTransactionTestSuite) testSearchInstalledItemTran
 }
 
 func (self *SearchInstalledItemTransactionTestSuite) TestSearchInstalledItemTransaction(c *C.C) {
-	self.testSearchInstalledItemTransaction(c, "f", func(res []SearchResult, c *C.C) {
+	self.testSearchInstalledItemTransaction(c, "f", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 1)
 	}, 0, false)
 }
 
 func (self *SearchInstalledItemTransactionTestSuite) TestSearchInstalledItemTransactionWithAItemNotExist(c *C.C) {
-	self.testSearchInstalledItemTransaction(c, "IE", func(res []SearchResult, c *C.C) {
+	self.testSearchInstalledItemTransaction(c, "IE", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 0)
 	}, 0, false)
 }
 
 func (self *SearchInstalledItemTransactionTestSuite) TestSearchInstalledItemTransactionCancel(c *C.C) {
-	self.testSearchInstalledItemTransaction(c, "fire", func(res []SearchResult, c *C.C) {
+	self.testSearchInstalledItemTransaction(c, "fire", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 0)
 	}, time.Second, true)
 }

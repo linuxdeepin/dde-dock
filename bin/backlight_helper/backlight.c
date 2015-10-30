@@ -1,6 +1,7 @@
 #include <libudev.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "backlight.h"
 
 static struct udev_device* cached_dev = NULL;

@@ -8,7 +8,7 @@ import (
 
 type MockSettingCore struct {
 	values   map[string]int32
-	handlers map[string]func(SettingCoreInterface, string)
+	handlers map[string]func(SettingCore, string)
 }
 
 func (m *MockSettingCore) GetEnum(k string) int32 {
@@ -26,7 +26,7 @@ func (m *MockSettingCore) SetEnum(key string, v int32) bool {
 }
 
 func (m *MockSettingCore) Connect(signalName string, fn interface{}) {
-	f := fn.(func(SettingCoreInterface, string))
+	f := fn.(func(SettingCore, string))
 	m.handlers[signalName] = f
 }
 
@@ -39,7 +39,7 @@ func NewMockSettingCore() *MockSettingCore {
 			CategoryDisplayModeKey: int32(CategoryDisplayModeIcon),
 			SortMethodkey:          int32(SortMethodByName),
 		},
-		handlers: map[string]func(SettingCoreInterface, string){},
+		handlers: map[string]func(SettingCore, string){},
 	}
 
 	return s

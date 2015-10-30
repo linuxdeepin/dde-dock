@@ -14,7 +14,7 @@ import (
 // Utility -> Utilities
 // office -> Productivity
 // -> Industry
-var xCategoryNameIdMap map[string]CategoryId = map[string]CategoryId{
+var xCategoryNameIDMap map[string]CategoryID = map[string]CategoryID{
 	"network":           NetworkID,
 	"webbrowser":        NetworkID,
 	"email":             NetworkID,
@@ -133,7 +133,7 @@ var xCategoryNameIdMap map[string]CategoryId = map[string]CategoryId{
 	"texttools":        UtilitiesID,
 }
 
-var extraXCategoryNameIdMap map[string]CategoryId = map[string]CategoryId{
+var extraXCategoryNameIDMap map[string]CategoryID = map[string]CategoryID{
 	"internet":        NetworkID,
 	"videoconference": NetworkID,
 

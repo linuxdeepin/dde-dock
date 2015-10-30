@@ -10,9 +10,7 @@ type ConfigFileTestSuite struct {
 
 var _ = C.Suite(&ConfigFileTestSuite{})
 
-func (self *ConfigFileTestSuite) TestConfigFilePath(c *C.C) {
-	old := os.Getenv("HOME")
-	os.Setenv("HOME", "../testdata/")
+func (*ConfigFileTestSuite) TestConfigFilePath(c *C.C) {
+	os.Setenv("XDG_CONFIG_HOME", "../testdata/.config")
 	c.Assert(ConfigFilePath("launcher/test.ini"), C.Equals, "../testdata/.config/launcher/test.ini")
-	os.Setenv("HOME", old)
 }

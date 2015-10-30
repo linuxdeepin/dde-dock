@@ -5,11 +5,13 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
+// PinYinSearchAdapter is a adapter struct for pinyin.Search.
 type PinYinSearchAdapter struct {
 	searchObj *pinyin.Search
-	searchId  SearchId
+	searchID  SearchID
 }
 
+// NewPinYinSearchAdapter creates a new PinYinSearchAdapter object according to data.
 func NewPinYinSearchAdapter(data []string) (*PinYinSearchAdapter, error) {
 	searchObj, err := pinyin.NewSearch("com.deepin.daemon.Search", "/com/deepin/daemon/Search")
 	if err != nil {
@@ -24,17 +26,20 @@ func NewPinYinSearchAdapter(data []string) (*PinYinSearchAdapter, error) {
 	return obj, nil
 }
 
+// Init initializes object with data.
 func (p *PinYinSearchAdapter) Init(data []string) error {
-	searchId, _, err := p.searchObj.NewSearchWithStrList(data)
-	p.searchId = SearchId(searchId)
+	searchID, _, err := p.searchObj.NewSearchWithStrList(data)
+	p.searchID = SearchID(searchID)
 
 	return err
 }
 
+// Search executes transaction and returns found objects.
 func (p *PinYinSearchAdapter) Search(key string) ([]string, error) {
-	return p.searchObj.SearchString(key, string(p.searchId))
+	return p.searchObj.SearchString(key, string(p.searchID))
 }
 
+// IsValid returns true if this object is ok to use.
 func (p *PinYinSearchAdapter) IsValid() bool {
-	return p.searchId != SearchId("")
+	return p.searchID != SearchID("")
 }

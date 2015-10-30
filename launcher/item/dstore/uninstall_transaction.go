@@ -1,4 +1,4 @@
-package softwarecenter
+package dstore
 
 import (
 	"errors"
@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// UninstallTransaction is command object for uninstalling package.
 // TODO: add Cancel
 type UninstallTransaction struct {
 	pkgName         string
@@ -16,11 +17,12 @@ type UninstallTransaction struct {
 	timeout         <-chan time.Time
 	done            chan struct{}
 	failed          chan error
-	soft            SoftwareCenterInterface
+	soft            DStore
 	disconnect      func()
 }
 
-func NewUninstallTransaction(soft SoftwareCenterInterface, pkgName string, purge bool, timeout time.Duration) *UninstallTransaction {
+// NewUninstallTransaction creates a new UninstallTransaction.
+func NewUninstallTransaction(soft DStore, pkgName string, purge bool, timeout time.Duration) *UninstallTransaction {
 	return &UninstallTransaction{
 		pkgName:         pkgName,
 		purge:           purge,
@@ -83,6 +85,7 @@ func (t *UninstallTransaction) wait() error {
 	}
 }
 
+// Exec executes this transaction.
 func (t *UninstallTransaction) Exec() error {
 	t.run()
 	return t.wait()

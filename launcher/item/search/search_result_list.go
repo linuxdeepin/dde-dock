@@ -1,16 +1,17 @@
 package search
 
-type SearchResultList []SearchResult
+// ResultList is type alias for []Result used for sort.
+type ResultList []Result
 
-func (self SearchResultList) Len() int {
+func (self ResultList) Len() int {
 	return len(self)
 }
 
-func (self SearchResultList) Swap(i, j int) {
+func (self ResultList) Swap(i, j int) {
 	self[i], self[j] = self[j], self[i]
 }
 
-func (self SearchResultList) Less(i, j int) bool {
+func (self ResultList) Less(i, j int) bool {
 	if self[i].Score > self[j].Score {
 		return true
 	}

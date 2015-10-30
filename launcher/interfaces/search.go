@@ -1,13 +1,16 @@
 package interfaces
 
-type SearchId string
+// SearchID is type for pinyin search.
+type SearchID string
 
-type SearchInterface interface {
-	Search(string, []ItemInfoInterface)
+// Search is interface for search transaction.
+type Search interface {
+	Search(string, []ItemInfo)
 	Cancel()
 }
 
-type PinYinInterface interface {
+// PinYin is interface for pinyin search transaction.
+type PinYin interface {
 	Search(string) ([]string, error)
 	IsValid() bool
 }

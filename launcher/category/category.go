@@ -16,9 +16,10 @@ import (
 	"pkg.deepin.io/lib/glib-2.0"
 )
 
+// category id and name.
 const (
-	UnknownID CategoryId = iota - 3
-	OtherID
+	UnknownID CategoryID = iota - 3
+	OthersID
 	AllID
 	NetworkID
 	MultimediaID
@@ -45,13 +46,13 @@ const (
 	UtilitiesCategoryName    = "utilities"
 
 	SoftwareCenterDataDir = "/usr/share/deepin-software-center/data"
-	_DataNewestIdFileName = "data_newest_id.ini"
+	_DataNewestIDFileName = "data_newest_id.ini"
 	CategoryNameDBPath    = "/update/%s/desktop/desktop2014.db"
 )
 
 var (
-	categoryNameTable = map[string]CategoryId{
-		OtherCategoryName:        OtherID,
+	categoryNameTable = map[string]CategoryID{
+		OtherCategoryName:        OthersID,
 		AllCategoryName:          AllID,
 		NetworkCategoryName:      NetworkID,
 		MultimediaCategoryName:   MultimediaID,
@@ -66,44 +67,52 @@ var (
 	}
 )
 
-type CategoryInfo struct {
-	id    CategoryId
+// Info for category.
+type Info struct {
+	id    CategoryID
 	name  string
-	items map[ItemId]struct{}
+	items map[ItemID]struct{}
 }
 
-func (c *CategoryInfo) Id() CategoryId {
+// ID returns category id.
+func (c *Info) ID() CategoryID {
 	return c.id
 }
 
-func (c *CategoryInfo) Name() string {
+// Name returns category english name.
+func (c *Info) Name() string {
 	return c.name
 }
 
-func (c *CategoryInfo) LocaleName() string {
+// LocaleName returns category's locale name.
+func (c *Info) LocaleName() string {
 	return gettext.Tr(c.name)
 }
 
-func (c *CategoryInfo) AddItem(itemId ItemId) {
-	c.items[itemId] = struct{}{}
-}
-func (c *CategoryInfo) RemoveItem(itemId ItemId) {
-	delete(c.items, itemId)
+// AddItem adds a new app.
+func (c *Info) AddItem(itemID ItemID) {
+	c.items[itemID] = struct{}{}
 }
 
-func (c *CategoryInfo) Items() []ItemId {
-	items := []ItemId{}
-	for itemId, _ := range c.items {
-		items = append(items, itemId)
+// RemoveItem removes a app.
+func (c *Info) RemoveItem(itemID ItemID) {
+	delete(c.items, itemID)
+}
+
+// Items returns all items belongs to this category.
+func (c *Info) Items() []ItemID {
+	items := []ItemID{}
+	for itemID := range c.items {
+		items = append(items, itemID)
 	}
 	return items
 }
 
-func getNewestDataId(dataDir string) (string, error) {
+func getNewestDataID(dataDir string) (string, error) {
 	file := glib.NewKeyFile()
 	defer file.Free()
 
-	ok, err := file.LoadFromFile(path.Join(dataDir, _DataNewestIdFileName), glib.KeyFileFlagsNone)
+	ok, err := file.LoadFromFile(path.Join(dataDir, _DataNewestIDFileName), glib.KeyFileFlagsNone)
 	if !ok {
 		return "", err
 	}
@@ -116,17 +125,19 @@ func getNewestDataId(dataDir string) (string, error) {
 	return id, nil
 }
 
+// GetDBPath returns db path store category info.
 func GetDBPath(dataDir string, template string) (string, error) {
-	id, err := getNewestDataId(dataDir)
+	id, err := getNewestDataID(dataDir)
 	if err != nil {
 		return "", err
 	}
 	return filepath.Join(dataDir, fmt.Sprintf(template, id)), nil
 }
 
-func QueryCategoryId(app *gio.DesktopAppInfo, db *sql.DB) (CategoryId, error) {
+// QueryID returns app's category.
+func QueryID(app *gio.DesktopAppInfo, db *sql.DB) (CategoryID, error) {
 	if app == nil {
-		return UnknownID, lerrors.NilArgument
+		return OthersID, lerrors.NilArgument
 	}
 
 	filename := app.GetFilename()
@@ -139,9 +150,9 @@ func QueryCategoryId(app *gio.DesktopAppInfo, db *sql.DB) (CategoryId, error) {
 	return id, nil
 }
 
-func getDeepinCategory(basename string, db *sql.DB) (CategoryId, error) {
+func getDeepinCategory(basename string, db *sql.DB) (CategoryID, error) {
 	if db == nil {
-		return UnknownID, errors.New("invalid db")
+		return OthersID, errors.New("invalid db")
 	}
 
 	var categoryName string
@@ -152,65 +163,66 @@ func getDeepinCategory(basename string, db *sql.DB) (CategoryId, error) {
 		basename,
 	).Scan(&categoryName)
 	if err != nil {
-		return OtherID, err
+		return OthersID, err
 	}
 
 	if categoryName == "" {
-		return OtherID, errors.New("get empty category")
+		return OthersID, errors.New("get empty category")
 	}
 
-	return getCategoryId(categoryName)
+	return getCategoryID(categoryName)
 }
 
-type CategoryIdList []CategoryId
+// IDList type alias for []CategoryID, used for sorting.
+type IDList []CategoryID
 
-func (self CategoryIdList) Less(i, j int) bool {
-	return self[i] < self[j]
+func (list IDList) Less(i, j int) bool {
+	return list[i] < list[j]
 }
 
-func (self CategoryIdList) Swap(i, j int) {
-	self[i], self[j] = self[j], self[i]
+func (list IDList) Swap(i, j int) {
+	list[i], list[j] = list[j], list[i]
 }
 
-func (self CategoryIdList) Len() int {
-	return len(self)
+func (list IDList) Len() int {
+	return len(list)
 }
 
-func getXCategory(categories []string) CategoryId {
-	candidateIds := map[CategoryId]bool{OtherID: true}
+func getXCategory(categories []string) CategoryID {
+	candidateIDs := map[CategoryID]bool{OthersID: true}
 	for _, category := range categories {
-		if id, err := getCategoryId(category); err == nil {
-			candidateIds[id] = true
+		if id, err := getCategoryID(category); err == nil {
+			candidateIDs[id] = true
 		}
 	}
 
-	if len(candidateIds) > 1 && candidateIds[OtherID] {
-		delete(candidateIds, OtherID)
+	if len(candidateIDs) > 1 && candidateIDs[OthersID] {
+		delete(candidateIDs, OthersID)
 	}
 
-	ids := make([]CategoryId, 0)
-	for id := range candidateIds {
+	var ids []CategoryID
+	for id := range candidateIDs {
 		ids = append(ids, id)
 	}
 
-	sort.Sort(CategoryIdList(ids))
+	sort.Sort(IDList(ids))
 
 	return ids[0]
 }
 
-func getCategoryId(name string) (CategoryId, error) {
+func getCategoryID(name string) (CategoryID, error) {
 	name = strings.ToLower(name)
 	if id, ok := categoryNameTable[name]; ok {
 		return id, nil
 	}
 
-	if id, ok := xCategoryNameIdMap[name]; ok {
+	if id, ok := xCategoryNameIDMap[name]; ok {
 		return id, nil
 	}
 
-	if id, ok := extraXCategoryNameIdMap[name]; ok {
+	if id, ok := extraXCategoryNameIDMap[name]; ok {
 		return id, nil
 	}
 
-	return UnknownID, errors.New("unknown id")
+	return OthersID, errors.New("unknown id")
 }

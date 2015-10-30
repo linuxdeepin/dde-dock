@@ -1,7 +1,9 @@
 package setting
 
+// SortMethod type for sort method.
 type SortMethod int64
 
+// sort method.
 const (
 	SortMethodUnknown SortMethod = iota - 1
 	SortMethodByName

@@ -5,12 +5,12 @@ import (
 )
 
 type MockCategoryInfo struct {
-	id    CategoryId
+	id    CategoryID
 	name  string
-	items map[ItemId]bool
+	items map[ItemID]bool
 }
 
-func (c *MockCategoryInfo) Id() CategoryId {
+func (c *MockCategoryInfo) ID() CategoryID {
 	return c.id
 }
 
@@ -23,17 +23,17 @@ func (c *MockCategoryInfo) LocaleName() string {
 	return c.name
 }
 
-func (c *MockCategoryInfo) AddItem(itemId ItemId) {
-	c.items[itemId] = true
+func (c *MockCategoryInfo) AddItem(itemID ItemID) {
+	c.items[itemID] = true
 }
-func (c *MockCategoryInfo) RemoveItem(itemId ItemId) {
-	delete(c.items, itemId)
+func (c *MockCategoryInfo) RemoveItem(itemID ItemID) {
+	delete(c.items, itemID)
 }
 
-func (c *MockCategoryInfo) Items() []ItemId {
-	items := []ItemId{}
-	for itemId, _ := range c.items {
-		items = append(items, itemId)
+func (c *MockCategoryInfo) Items() []ItemID {
+	items := []ItemID{}
+	for itemID := range c.items {
+		items = append(items, itemID)
 	}
 	return items
 }

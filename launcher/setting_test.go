@@ -6,7 +6,7 @@ import (
 )
 
 type SettingTestSuite struct {
-	s                               *Setting
+	s                               *Settings
 	CategoryDisplayModeChangedCount int64
 	SortMethodChangedCount          int64
 }
@@ -17,7 +17,7 @@ type SettingTestSuite struct {
 func (sts *SettingTestSuite) SetUpTest(c *C.C) {
 	var err error
 	core := NewMockSettingCore()
-	sts.s, err = NewSetting(core)
+	sts.s, err = NewSettings(core)
 
 	sts.CategoryDisplayModeChangedCount = 0
 	sts.s.CategoryDisplayModeChanged = func(int64) {

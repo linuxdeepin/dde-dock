@@ -6,15 +6,16 @@ import (
 	"strings"
 )
 
+// item score
 const (
-	POOR          uint32 = 50000
-	BELOW_AVERAGE uint32 = 60000
-	AVERAGE       uint32 = 70000
-	ABOVE_AVERAGE uint32 = 75000
-	GOOD          uint32 = 80000
-	VERY_GOOD     uint32 = 85000
-	EXCELLENT     uint32 = 90000
-	HIGHEST       uint32 = 100000
+	Poor         uint32 = 50000
+	BelowAverage uint32 = 60000
+	Average      uint32 = 70000
+	AboveAverage uint32 = 75000
+	Good         uint32 = 80000
+	VeryGood     uint32 = 85000
+	Excellent    uint32 = 90000
+	Highest      uint32 = 100000
 )
 
 func addMatcher(template string, key string, score uint32, m map[*regexp.Regexp]uint32) error {
@@ -42,15 +43,15 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 	// * 6) split to characters and search \bq.+\bu.+\be.+\br.+\by
 	// * 7) split to characters and search \bq.*u.*e.*r.*y
 	m := make(map[*regexp.Regexp]uint32, 0)
-	addMatcher(`(?i)^(%s)$`, key, HIGHEST, m)
-	addMatcher(`(?i)^(%s)`, key, EXCELLENT, m)
-	addMatcher(`(?i)\b(%s)`, key, VERY_GOOD, m)
+	addMatcher(`(?i)^(%s)$`, key, Highest, m)
+	addMatcher(`(?i)^(%s)`, key, Excellent, m)
+	addMatcher(`(?i)\b(%s)`, key, VeryGood, m)
 
 	words := strings.Fields(key)
 	if len(words) > 1 {
-		addMatcher(`(?i)\b(%s)`, strings.Join(words, `).+\b(`), GOOD, m)
+		addMatcher(`(?i)\b(%s)`, strings.Join(words, `).+\b(`), Good, m)
 	}
-	addMatcher("(?i)(%s)", key, BELOW_AVERAGE, m)
+	addMatcher("(?i)(%s)", key, BelowAverage, m)
 
 	charSpliter, err := regexp.Compile(`\s*`)
 	if err != nil {
@@ -60,9 +61,9 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 	chars := charSpliter.Split(key, -1)
 	if len(words) == 1 && len(chars) <= 5 {
 		addMatcher(`(?i)\b(%s)`, strings.Join(chars, `).+\b(`),
-			ABOVE_AVERAGE, m)
+			AboveAverage, m)
 	}
-	addMatcher(`(?i)\b(%s)`, strings.Join(chars, ").*("), POOR, m)
+	addMatcher(`(?i)\b(%s)`, strings.Join(chars, ").*("), Poor, m)
 
 	return m
 }

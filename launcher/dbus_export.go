@@ -4,52 +4,58 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
+// ItemInfoExport is a wrapper struct used to export info to dbus .
 type ItemInfoExport struct {
 	Path          string
 	Name          string
-	Id            ItemId
+	ID            ItemID
 	Icon          string
-	CategoryId    CategoryId
+	CategoryID    CategoryID
 	TimeInstalled int64
 }
 
-func NewItemInfoExport(item ItemInfoInterface) ItemInfoExport {
+// NewItemInfoExport creates a new ItemInfoExport from ItemInfo.
+func NewItemInfoExport(item ItemInfo) ItemInfoExport {
 	if item == nil {
 		return ItemInfoExport{}
 	}
 	return ItemInfoExport{
 		Path:          item.Path(),
 		Name:          item.Name(),
-		Id:            item.Id(),
+		ID:            item.ID(),
 		Icon:          item.Icon(),
-		CategoryId:    item.GetCategoryId(),
-		TimeInstalled: item.GetTimeInstalled(),
+		CategoryID:    item.CategoryID(),
+		TimeInstalled: item.TimeInstalled(),
 	}
 }
 
+// CategoryInfoExport is a wrapper struct used to export info to dbus.
 type CategoryInfoExport struct {
 	Name  string
-	Id    CategoryId
-	Items []ItemId
+	ID    CategoryID
+	Items []ItemID
 }
 
-func NewCategoryInfoExport(c CategoryInfoInterface) CategoryInfoExport {
+// NewCategoryInfoExport creates a new CategoryInfoExport from CategoryInfo.
+func NewCategoryInfoExport(c CategoryInfo) CategoryInfoExport {
 	if c == nil {
 		return CategoryInfoExport{}
 	}
 	return CategoryInfoExport{
 		Name:  c.Name(),
-		Id:    c.Id(),
+		ID:    c.ID(),
 		Items: c.Items(),
 	}
 }
 
+// FrequencyExport is a wrapper struct used to export info to dbus.
 type FrequencyExport struct {
-	Id        ItemId
+	ID        ItemID
 	Frequency uint64
 }
 
+// TimeInstalledExport is a wrapper struct used to export info to dbus.
 type TimeInstalledExport struct {
-	Id   ItemId
+	ID   ItemID
 	Time int64
 }

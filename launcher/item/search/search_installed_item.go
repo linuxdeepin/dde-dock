@@ -8,20 +8,22 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
+// SearchInstalledItemTransaction is a command object for searching installed items.
 type SearchInstalledItemTransaction struct {
 	maxGoroutineNum int
 
 	keyMatcher   *regexp.Regexp
 	nameMatchers map[*regexp.Regexp]uint32
 
-	resChan    chan<- SearchResult
+	resChan    chan<- Result
 	cancelChan chan struct{}
 	cancelled  bool
 }
 
-func NewSearchInstalledItemTransaction(res chan<- SearchResult, cancelChan chan struct{}, maxGoroutineNum int) (*SearchInstalledItemTransaction, error) {
+// NewSearchInstalledItemTransaction creates a new SearchInstalledItemTransaction object.
+func NewSearchInstalledItemTransaction(res chan<- Result, cancelChan chan struct{}, maxGoroutineNum int) (*SearchInstalledItemTransaction, error) {
 	if res == nil {
-		return nil, SearchErrorNullChannel
+		return nil, ErrorSearchNullChannel
 	}
 
 	if maxGoroutineNum <= 0 {
@@ -38,6 +40,7 @@ func NewSearchInstalledItemTransaction(res chan<- SearchResult, cancelChan chan 
 	}, nil
 }
 
+// Cancel cancels this transaction.
 func (s *SearchInstalledItemTransaction) Cancel() {
 	if !s.cancelled {
 		close(s.cancelChan)
@@ -50,15 +53,15 @@ func (s *SearchInstalledItemTransaction) initKeyMatchers(key string) {
 	s.nameMatchers = getMatchers(key)
 }
 
-func (s *SearchInstalledItemTransaction) calcScore(data ItemInfoInterface) (score uint32) {
+func (s *SearchInstalledItemTransaction) calcScore(data ItemInfo) (score uint32) {
 	for matcher, s := range s.nameMatchers {
 		if matcher.MatchString(data.Name()) {
 			score += s
 		}
 	}
-	if data.EnName() != data.Name() {
+	if data.LocaleName() != data.Name() {
 		for matcher, s := range s.nameMatchers {
-			if matcher.MatchString(data.EnName()) {
+			if matcher.MatchString(data.Name()) {
 				score += s
 			}
 		}
@@ -70,24 +73,24 @@ func (s *SearchInstalledItemTransaction) calcScore(data ItemInfoInterface) (scor
 
 	for _, keyword := range data.Keywords() {
 		if s.keyMatcher.MatchString(keyword) {
-			score += VERY_GOOD
+			score += VeryGood
 		}
 	}
 
 	if s.keyMatcher.MatchString(data.Path()) {
-		score += AVERAGE
+		score += Average
 	}
 
 	if s.keyMatcher.MatchString(data.ExecCmd()) {
-		score += GOOD
+		score += Good
 	}
 
 	if s.keyMatcher.MatchString(data.GenericName()) {
-		score += BELOW_AVERAGE
+		score += BelowAverage
 	}
 
 	if s.keyMatcher.MatchString(data.Description()) {
-		score += POOR
+		score += Poor
 	}
 
 	return
@@ -107,7 +110,8 @@ func (s *SearchInstalledItemTransaction) isCancelled() bool {
 	}
 }
 
-func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfoInterface) {
+// ScoreItem scores item.
+func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfo) {
 	if s.isCancelled() {
 		return
 	}
@@ -123,8 +127,8 @@ func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfoIn
 		}
 
 		select {
-		case s.resChan <- SearchResult{
-			Id:    data.Id(),
+		case s.resChan <- Result{
+			ID:    data.ID(),
 			Name:  data.Name(),
 			Score: score,
 		}:
@@ -132,9 +136,10 @@ func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfoIn
 	}
 }
 
-func (s *SearchInstalledItemTransaction) Search(key string, dataSet []ItemInfoInterface) {
+// Search executes transaction and returns searching results.
+func (s *SearchInstalledItemTransaction) Search(key string, dataSet []ItemInfo) {
 	s.initKeyMatchers(key)
-	dataSetChan := make(chan ItemInfoInterface)
+	dataSetChan := make(chan ItemInfo)
 	go func() {
 		defer close(dataSetChan)
 		if s.isCancelled() {

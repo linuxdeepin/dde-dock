@@ -1,5 +1,8 @@
 package utils
 
+// #cgo pkg-config: glib-2.0
+// #include <glib.h>
+import "C"
 import (
 	"os"
 	"path"
@@ -7,24 +10,27 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
+// GReloadUserSpecialDirsCache reloads user special dirs cache.
+func GReloadUserSpecialDirsCache() {
+	C.g_reload_user_special_dirs_cache()
+}
+
+// ConfigFilePath returns path in user's config dir.
 func ConfigFilePath(name string) string {
 	return path.Join(glib.GetUserConfigDir(), name)
 }
 
-func ConfigFile(name string, defaultFile string) (*glib.KeyFile, error) {
+// ConfigFile open the given keyfile, this file will be created if not existed.
+func ConfigFile(name string) (*glib.KeyFile, error) {
 	file := glib.NewKeyFile()
 	conf := ConfigFilePath(name)
 	if !utils.IsFileExist(conf) {
 		os.MkdirAll(path.Dir(conf), DirDefaultPerm)
-		if defaultFile == "" {
-			f, err := os.Create(conf)
-			if err != nil {
-				return nil, err
-			}
-			defer f.Close()
-		} else {
-			CopyFile(defaultFile, conf, CopyFileNotKeepSymlink)
+		f, err := os.Create(conf)
+		if err != nil {
+			return nil, err
 		}
+		defer f.Close()
 	}
 
 	if ok, err := file.LoadFromFile(conf, glib.KeyFileFlagsNone); !ok {
@@ -39,8 +45,8 @@ func uniqueStringList(l []string) []string {
 	for _, v := range l {
 		m[v] = true
 	}
-	n := make([]string, 0)
-	for k, _ := range m {
+	var n []string
+	for k := range m {
 		n = append(n, k)
 	}
 	return n

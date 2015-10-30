@@ -10,9 +10,9 @@ import (
 	"sync"
 )
 
-// Setting存储launcher相关的设置。
-type Setting struct {
-	core SettingCoreInterface
+// Settings 存储launcher相关的设置。
+type Settings struct {
+	core SettingCore
 	lock sync.Mutex
 
 	categoryDisplayMode CategoryDisplayMode
@@ -24,11 +24,12 @@ type Setting struct {
 	SortMethodChanged func(int64)
 }
 
-func NewSetting(core SettingCoreInterface) (*Setting, error) {
+// NewSettings creates a new setting.
+func NewSettings(core SettingCore) (*Settings, error) {
 	if core == nil {
 		return nil, errors.New("get failed")
 	}
-	s := &Setting{
+	s := &Settings{
 		core: core,
 	}
 
@@ -62,7 +63,8 @@ func NewSetting(core SettingCoreInterface) (*Setting, error) {
 	return s, nil
 }
 
-func (d *Setting) GetDBusInfo() dbus.DBusInfo {
+// GetDBusInfo returns settings' dbus info.
+func (s *Settings) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		launcherObject,
 		launcherPath,
@@ -70,41 +72,41 @@ func (d *Setting) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (s *Setting) listenSettingChange(signalName string, handler func(*gio.Settings, string)) {
+func (s *Settings) listenSettingChange(signalName string, handler func(*gio.Settings, string)) {
 	detailSignal := fmt.Sprintf("changed::%s", signalName)
 	s.core.Connect(detailSignal, handler)
 }
 
-// GetCategoryDisplayMode获取launcher当前的分类显示模式。
-func (s *Setting) GetCategoryDisplayMode() int64 {
+// GetCategoryDisplayMode 获取launcher当前的分类显示模式。
+func (s *Settings) GetCategoryDisplayMode() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	return int64(s.categoryDisplayMode)
 }
 
-// SetCategoryDisplayMode设置launcher的分类显示模式。
-func (s *Setting) SetCategoryDisplayMode(newMode int64) {
+// SetCategoryDisplayMode 设置launcher的分类显示模式。
+func (s *Settings) SetCategoryDisplayMode(newMode int64) {
 	if CategoryDisplayMode(newMode) != s.categoryDisplayMode {
 		s.core.SetEnum(CategoryDisplayModeKey, int32(newMode))
 	}
 }
 
-// GetSortMethod获取launcher当前的排序模式。
-func (s *Setting) GetSortMethod() int64 {
+// GetSortMethod 获取launcher当前的排序模式。
+func (s *Settings) GetSortMethod() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
 	return int64(s.sortMethod)
 }
 
-// SetSortMethod设置launcher的排序方法。
-func (s *Setting) SetSortMethod(newMethod int64) {
+// SetSortMethod 设置launcher的排序方法。
+func (s *Settings) SetSortMethod(newMethod int64) {
 	if SortMethod(newMethod) != s.sortMethod {
 		s.core.SetEnum(SortMethodkey, int32(newMethod))
 	}
 }
 
-func (s *Setting) destroy() {
+func (s *Settings) Destroy() {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	if s.core != nil {

@@ -1,4 +1,4 @@
-package softwarecenter
+package dstore
 
 import (
 	"dbus/com/linuxdeepin/softwarecenter"
@@ -6,26 +6,33 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
+// action name
 const (
 	ActionStart  string = "action-start"
 	ActionUpdate string = "action-update"
 	ActionFinish string = "action-finish"
 	ActionFailed string = "action-failed"
+)
 
+// action operation
+const (
 	ActionOperationInstall = iota + 1
 	ActionOperationDelete
 )
 
+// Action is the dbus signal data structure.
 type Action struct {
 	Name   string
 	Detail dbus.Variant
 }
 
+// ActionStartDetail is the data structure for start action, used in Action's Detail field.
 type ActionStartDetail struct {
 	PkgName   string
 	Operation int32
 }
 
+// ActionUpdateDetail is the data structure for update action, used in Actions' Detail field.
 type ActionUpdateDetail struct {
 	PkgName     string
 	Operation   int32
@@ -33,6 +40,7 @@ type ActionUpdateDetail struct {
 	Description string
 }
 
+// PkgInfo is data structure for pkg info, used in all Detail structures' Pkgs field.
 type PkgInfo struct {
 	PkgName   string
 	Deleted   bool
@@ -40,12 +48,14 @@ type PkgInfo struct {
 	Upgraded  bool
 }
 
+// ActionFinishDetail is data structure for finish action, used in Actions' Detail field.
 type ActionFinishDetail struct {
 	PkgName   string
 	Operation int32
 	Pkgs      []PkgInfo
 }
 
+// ActionFailedDetail is data structure for failed action, used in Actions' Detail field.
 type ActionFailedDetail struct {
 	PkgName     string
 	Operation   int32
@@ -53,7 +63,8 @@ type ActionFailedDetail struct {
 	Description string
 }
 
-func NewSoftwareCenter() (*softwarecenter.SoftwareCenter, error) {
+// New creates a new software center object.
+func New() (*softwarecenter.SoftwareCenter, error) {
 	return softwarecenter.NewSoftwareCenter(
 		"com.linuxdeepin.softwarecenter",
 		"/com/linuxdeepin/softwarecenter",
@@ -83,7 +94,7 @@ func makeActionUpdateDetail(detail []interface{}) dbus.Variant {
 }
 
 func makePkgInfoList(infos interface{}) []PkgInfo {
-	pkgInfo := make([]PkgInfo, 0)
+	var pkgInfo []PkgInfo
 	for _, v := range infos.([][]interface{}) {
 		pkgName := v[0].(string)
 		deleted := v[1].(bool)
@@ -123,13 +134,14 @@ func makeActionFailedDetail(detail []interface{}) dbus.Variant {
 	})
 }
 
+// UpdateSignalTranslator translates dbus message to []Action.
 func UpdateSignalTranslator(message [][]interface{}) []Action {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println(err)
 		}
 	}()
-	info := make([]Action, 0)
+	var info []Action
 	for _, v := range message {
 		actionName := v[0].(string)
 		action := Action{}

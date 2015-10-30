@@ -1,7 +1,9 @@
 package setting
 
+// CategoryDisplayMode type for category display mode.
 type CategoryDisplayMode int64
 
+// category display
 const (
 	CategoryDisplayModeUnknown CategoryDisplayMode = iota - 1
 	CategoryDisplayModeIcon

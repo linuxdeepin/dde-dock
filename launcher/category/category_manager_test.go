@@ -4,26 +4,26 @@ import (
 	C "launchpad.net/gocheck"
 )
 
-type CategoryManagerTestSuite struct {
-	manager *CategoryManager
+type ManagerTestSuite struct {
+	manager *Manager
 }
 
-func (s *CategoryManagerTestSuite) SetUpTest(c *C.C) {
-	s.manager = NewCategoryManager()
+func (s *ManagerTestSuite) SetUpTest(c *C.C) {
+	s.manager = NewManager()
 }
 
-func (s *CategoryManagerTestSuite) TestGetCategory(c *C.C) {
+func (s *ManagerTestSuite) TestGetCategory(c *C.C) {
 	category := s.manager.GetCategory(AllID)
-	c.Assert(category.Id(), C.Equals, AllID)
+	c.Assert(category.ID(), C.Equals, AllID)
 
 	category2 := s.manager.GetCategory(NetworkID)
-	c.Assert(category2.Id(), C.Equals, NetworkID)
+	c.Assert(category2.ID(), C.Equals, NetworkID)
 
-	category3 := s.manager.GetCategory(UnknownID)
-	c.Assert(category3.Id(), C.IsNil)
+	category3 := s.manager.GetCategory(OthersID)
+	c.Assert(category3.ID(), C.IsNil)
 }
 
-func (s *CategoryManagerTestSuite) TestAddItem(c *C.C) {
+func (s *ManagerTestSuite) TestAddItem(c *C.C) {
 	s.manager.AddItem("google-chrome", NetworkID)
 	c.Assert(s.manager.categoryTable[NetworkID].Items(), C.HasLen, 1)
 	c.Assert(s.manager.categoryTable[AllID].Items(), C.HasLen, 1)
@@ -37,7 +37,7 @@ func (s *CategoryManagerTestSuite) TestAddItem(c *C.C) {
 	c.Assert(s.manager.categoryTable[AllID].Items(), C.HasLen, 3)
 }
 
-func (s *CategoryManagerTestSuite) TestRemoveItem(c *C.C) {
+func (s *ManagerTestSuite) TestRemoveItem(c *C.C) {
 	s.manager.AddItem("google-chrome", NetworkID)
 	s.manager.AddItem("firefox", NetworkID)
 	s.manager.AddItem("vim", DevelopmentID)

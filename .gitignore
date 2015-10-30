@@ -34,6 +34,7 @@ zone-settings/zone-settings
 bluetooth/bluetooth
 main_network.go
 bin/dde-session-daemon/dde-session-daemon
+bin/dde-preload/dde-preload
 !launcher/testdata/.config/launcher/*
 
 debian/

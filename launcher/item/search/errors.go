@@ -5,5 +5,6 @@ import (
 )
 
 var (
-	SearchErrorNullChannel = errors.New("null channel")
+	// ErrorSearchNullChannel is error for null channel
+	ErrorSearchNullChannel = errors.New("null channel")
 )

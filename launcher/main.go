@@ -3,11 +3,11 @@ package launcher
 import (
 	"database/sql"
 	storeApi "dbus/com/deepin/store/api"
-	. "pkg.deepin.io/dde/daemon/launcher/category"
+	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/item/search"
-	. "pkg.deepin.io/dde/daemon/launcher/item/softwarecenter"
 	. "pkg.deepin.io/dde/daemon/loader"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
@@ -16,22 +16,25 @@ import (
 	"sync"
 )
 
+// Daemon is the module interface's implementation.
 type Daemon struct {
 	*ModuleBase
 	launcher *Launcher
 }
 
+// NewLauncherDaemon creates a new launcher daemon module.
 func NewLauncherDaemon(logger *log.Logger) *Daemon {
 	daemon := new(Daemon)
 	daemon.ModuleBase = NewModuleBase("launcher", daemon, logger)
 	return daemon
 }
 
-//TODO
+// GetDependencies returns the dependencies of this module.
 func (d *Daemon) GetDependencies() []string {
 	return []string{}
 }
 
+// Stop stops the launcher module.
 func (d *Daemon) Stop() error {
 	if d.launcher == nil {
 		return nil
@@ -44,7 +47,7 @@ func (d *Daemon) Stop() error {
 	return nil
 }
 
-func loadItemsInfo(im *ItemManager, cm *CategoryManager) {
+func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 	timeInfo, _ := im.GetAllTimeInstalled()
 
 	appChan := make(chan *gio.AppInfo)
@@ -56,7 +59,7 @@ func loadItemsInfo(im *ItemManager, cm *CategoryManager) {
 		close(appChan)
 	}()
 
-	dbPath, _ := GetDBPath(SoftwareCenterDataDir, CategoryNameDBPath)
+	dbPath, _ := category.GetDBPath(category.SoftwareCenterDataDir, category.CategoryNameDBPath)
 	db, err := sql.Open("sqlite3", dbPath)
 
 	var wg sync.WaitGroup
@@ -71,16 +74,15 @@ func loadItemsInfo(im *ItemManager, cm *CategoryManager) {
 				}
 
 				desktopApp := gio.ToDesktopAppInfo(app)
-				item := NewItem(desktopApp)
-				cid, err := QueryCategoryId(desktopApp, db)
+				newItem := item.New(desktopApp)
+				cid, err := category.QueryID(desktopApp, db)
+				newItem.SetCategoryID(cid)
 				if err != nil {
-					item.SetCategoryId(OtherID)
 				}
-				item.SetCategoryId(cid)
-				item.SetTimeInstalled(timeInfo[item.Id()])
+				newItem.SetTimeInstalled(timeInfo[newItem.ID()])
 
-				im.AddItem(item)
-				cm.AddItem(item.Id(), item.GetCategoryId())
+				im.AddItem(newItem)
+				cm.AddItem(newItem.ID(), newItem.CategoryID())
 
 				app.Unref()
 			}
@@ -93,6 +95,7 @@ func loadItemsInfo(im *ItemManager, cm *CategoryManager) {
 	}
 }
 
+// Start starts the launcher module.
 func (d *Daemon) Start() error {
 	if d.launcher != nil {
 		return nil
@@ -106,12 +109,12 @@ func (d *Daemon) Start() error {
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
 	err := NewInitializer().Init(func(interface{}) (interface{}, error) {
-		return NewSoftwareCenter()
+		return dstore.New()
 	}).InitOnSessionBus(func(soft interface{}) (interface{}, error) {
 		d.launcher = NewLauncher()
 
-		im := NewItemManager(soft.(SoftwareCenterInterface))
-		cm := NewCategoryManager()
+		im := item.NewManager(soft.(DStore))
+		cm := category.NewManager()
 
 		d.launcher.setItemManager(im)
 		d.launcher.setCategoryManager(cm)
@@ -120,7 +123,7 @@ func (d *Daemon) Start() error {
 
 		store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 		if err == nil {
-			d.launcher.setStoreApi(store)
+			d.launcher.setStoreAPI(store)
 		}
 
 		names := []string{}
@@ -136,7 +139,7 @@ func (d *Daemon) Start() error {
 		return d.launcher, nil
 	}).InitOnSessionBus(func(interface{}) (interface{}, error) {
 		coreSetting := gio.NewSettings("com.deepin.dde.launcher")
-		setting, err := NewSetting(coreSetting)
+		setting, err := NewSettings(coreSetting)
 		d.launcher.setSetting(setting)
 		return setting, err
 	}).GetError()

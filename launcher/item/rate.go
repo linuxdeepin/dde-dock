@@ -10,6 +10,7 @@ const (
 	_RateRecordKey  = "rate"
 )
 
-func GetFrequencyRecordFile() (RateConfigFileInterface, error) {
-	return ConfigFile(_RateRecordFile, "")
+// GetFrequencyRecordFile returns the file which records items' use frequency.
+func GetFrequencyRecordFile() (RateConfigFile, error) {
+	return ConfigFile(_RateRecordFile)
 }

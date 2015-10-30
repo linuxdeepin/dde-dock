@@ -1,19 +1,44 @@
 package interfaces
 
-type ItemId string
+import (
+	"time"
+)
 
-type ItemInfoInterface interface {
+// ItemID is type for item's id.
+type ItemID string
+
+// ItemInfo is interface for item info.
+type ItemInfo interface {
 	Name() string
 	Icon() string
 	Path() string
-	Id() ItemId
+	ID() ItemID
 	ExecCmd() string
 	Description() string
-	EnName() string
+	LocaleName() string
 	GenericName() string
 	Keywords() []string
-	GetCategoryId() CategoryId
-	SetCategoryId(CategoryId)
-	GetTimeInstalled() int64
+	CategoryID() CategoryID
+	SetCategoryID(CategoryID)
+	TimeInstalled() int64
 	SetTimeInstalled(int64)
+}
+
+// ItemManager is interface for item manager.
+type ItemManager interface {
+	AddItem(ItemInfo)
+	RemoveItem(ItemID)
+	HasItem(ItemID) bool
+	GetItem(ItemID) ItemInfo
+	GetAllItems() []ItemInfo
+	GetAllFrequency(RateConfigFile) map[ItemID]uint64
+	GetAllTimeInstalled() (map[ItemID]int64, error)
+	UninstallItem(ItemID, bool, time.Duration) error
+	IsItemOnDesktop(ItemID) bool
+	SendItemToDesktop(ItemID) error
+	RemoveItemFromDesktop(ItemID) error
+	GetFrequency(ItemID, RateConfigFile) uint64
+	SetFrequency(ItemID, uint64, RateConfigFile)
+	GetAllNewInstalledApps() ([]ItemID, error)
+	MarkLaunched(ItemID) error
 }

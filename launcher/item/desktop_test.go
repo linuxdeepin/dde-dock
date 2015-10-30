@@ -9,7 +9,7 @@ import (
 )
 
 type DesktopTestSuite struct {
-	oldHome string
+	oldHome     string
 	testDataDir string
 }
 
@@ -19,6 +19,7 @@ var _ = C.Suite(&DesktopTestSuite{})
 func (s *DesktopTestSuite) SetUpSuite(c *C.C) {
 	s.oldHome = os.Getenv("HOME")
 	s.testDataDir = "../testdata"
+	os.Setenv("XDG_CONFIG_HOME", path.Join(s.testDataDir, ".config"))
 	os.Setenv("HOME", s.testDataDir)
 }
 

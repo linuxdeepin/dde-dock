@@ -4,39 +4,42 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
-type CategoryManager struct {
-	categoryTable map[CategoryId]CategoryInfoInterface
+// Manager for categories.
+type Manager struct {
+	categoryTable map[CategoryID]CategoryInfo
 }
 
-func NewCategoryManager() *CategoryManager {
-	m := &CategoryManager{
-		categoryTable: map[CategoryId]CategoryInfoInterface{},
+// NewManager creates a new category manager.
+func NewManager() *Manager {
+	m := &Manager{
+		categoryTable: map[CategoryID]CategoryInfo{},
 	}
 	m.addCategory(
-		&CategoryInfo{AllID, AllCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{OtherID, OtherCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{NetworkID, NetworkCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{MultimediaID, MultimediaCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{GamesID, GamesCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{GraphicsID, GraphicsCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{ProductivityID, ProductivityCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{IndustryID, IndustryCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{EducationID, EducationCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{DevelopmentID, DevelopmentCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{SystemID, SystemCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{UtilitiesID, UtilitiesCategoryName, map[ItemId]struct{}{}},
+		&Info{AllID, AllCategoryName, map[ItemID]struct{}{}},
+		&Info{OthersID, OtherCategoryName, map[ItemID]struct{}{}},
+		&Info{NetworkID, NetworkCategoryName, map[ItemID]struct{}{}},
+		&Info{MultimediaID, MultimediaCategoryName, map[ItemID]struct{}{}},
+		&Info{GamesID, GamesCategoryName, map[ItemID]struct{}{}},
+		&Info{GraphicsID, GraphicsCategoryName, map[ItemID]struct{}{}},
+		&Info{ProductivityID, ProductivityCategoryName, map[ItemID]struct{}{}},
+		&Info{IndustryID, IndustryCategoryName, map[ItemID]struct{}{}},
+		&Info{EducationID, EducationCategoryName, map[ItemID]struct{}{}},
+		&Info{DevelopmentID, DevelopmentCategoryName, map[ItemID]struct{}{}},
+		&Info{SystemID, SystemCategoryName, map[ItemID]struct{}{}},
+		&Info{UtilitiesID, UtilitiesCategoryName, map[ItemID]struct{}{}},
 	)
 
 	return m
 }
 
-func (m *CategoryManager) addCategory(c ...CategoryInfoInterface) {
+func (m *Manager) addCategory(c ...CategoryInfo) {
 	for _, info := range c {
-		m.categoryTable[info.Id()] = info
+		m.categoryTable[info.ID()] = info
 	}
 }
 
-func (m *CategoryManager) GetCategory(id CategoryId) CategoryInfoInterface {
+// GetCategory returns category info according to id.
+func (m *Manager) GetCategory(id CategoryID) CategoryInfo {
 	category, ok := m.categoryTable[id]
 	if ok {
 		return category
@@ -45,21 +48,24 @@ func (m *CategoryManager) GetCategory(id CategoryId) CategoryInfoInterface {
 	return nil
 }
 
-func (m *CategoryManager) GetAllCategory() []CategoryId {
-	ids := []CategoryId{}
-	for id, _ := range m.categoryTable {
+// GetAllCategory returns all categories.
+func (m *Manager) GetAllCategory() []CategoryID {
+	ids := []CategoryID{}
+	for id := range m.categoryTable {
 		ids = append(ids, id)
 	}
 
 	return ids
 }
 
-func (m *CategoryManager) AddItem(id ItemId, cid CategoryId) {
+// AddItem adds a app to category.
+func (m *Manager) AddItem(id ItemID, cid CategoryID) {
 	m.categoryTable[cid].AddItem(id)
 	m.categoryTable[AllID].AddItem(id)
 }
 
-func (m *CategoryManager) RemoveItem(id ItemId, cid CategoryId) {
+// RemoveItem removes a app from category.
+func (m *Manager) RemoveItem(id ItemID, cid CategoryID) {
 	m.categoryTable[cid].RemoveItem(id)
 	m.categoryTable[AllID].RemoveItem(id)
 }

@@ -8,8 +8,10 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
+// CopyFlag type
 type CopyFlag int
 
+// copy file flags
 const (
 	CopyFileNone CopyFlag = 1 << iota
 	CopyFileNotKeepSymlink
@@ -68,6 +70,7 @@ func copyFileAux(src, dst string, copyFlag CopyFlag) error {
 	return nil
 }
 
+// CopyFile copys file.
 func CopyFile(src, dst string, copyFlag CopyFlag) error {
 	srcStat, err := os.Lstat(src)
 	if err != nil {

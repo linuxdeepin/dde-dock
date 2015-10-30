@@ -6,7 +6,8 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
-func SaveKeyFile(file RateConfigFileInterface, path string) error {
+// SaveKeyFile saves key file.
+func SaveKeyFile(file RateConfigFile, path string) error {
 	_, content, err := file.ToData()
 	if err != nil {
 		return err

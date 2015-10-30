@@ -10,7 +10,7 @@ type MatcherTestSuite struct {
 
 var _ = C.Suite(&MatcherTestSuite{})
 
-func (self *MatcherTestSuite) TestMatcher(c *C.C) {
+func (*MatcherTestSuite) TestMatcher(c *C.C) {
 	// TODO: test them
 	getMatchers("firefox")
 	getMatchers("深度")

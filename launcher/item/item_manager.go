@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde/daemon/launcher/item/softwarecenter"
+	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"sync"
 	"time"
@@ -17,56 +17,64 @@ const (
 	_NewSoftwareKeyName    = "Ids"
 )
 
-type ItemManager struct {
+// Manager controls all items.
+type Manager struct {
 	lock      sync.Mutex
-	itemTable map[ItemId]ItemInfoInterface
-	soft      SoftwareCenterInterface
+	itemTable map[ItemID]ItemInfo
+	soft      DStore
 }
 
-func NewItemManager(soft SoftwareCenterInterface) *ItemManager {
-	return &ItemManager{
-		itemTable: map[ItemId]ItemInfoInterface{},
+// NewManager creates a new item manager.
+func NewManager(soft DStore) *Manager {
+	return &Manager{
+		itemTable: map[ItemID]ItemInfo{},
 		soft:      soft,
 	}
 }
 
-func (m *ItemManager) AddItem(item ItemInfoInterface) {
+// AddItem adds a new app.
+func (m *Manager) AddItem(item ItemInfo) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	m.itemTable[item.Id()] = item
+	m.itemTable[item.ID()] = item
 }
 
-func (m *ItemManager) HasItem(id ItemId) bool {
+// HasItem returns true if the app is existed.
+func (m *Manager) HasItem(id ItemID) bool {
 	_, ok := m.itemTable[id]
 	return ok
 }
 
-func (m *ItemManager) RemoveItem(id ItemId) {
+// RemoveItem removes a app.
+func (m *Manager) RemoveItem(id ItemID) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	delete(m.itemTable, id)
 }
 
-func (m *ItemManager) GetItem(id ItemId) ItemInfoInterface {
+// GetItem returns a Item struct object if app exist, otherwise return nil.
+func (m *Manager) GetItem(id ItemID) ItemInfo {
 	item, _ := m.itemTable[id]
 	return item
 }
 
-func (m *ItemManager) GetAllItems() []ItemInfoInterface {
-	infos := []ItemInfoInterface{}
+// GetAllItems returns all apps.
+func (m *Manager) GetAllItems() []ItemInfo {
+	infos := []ItemInfo{}
 	for _, item := range m.itemTable {
 		infos = append(infos, item)
 	}
 	return infos
 }
 
-func (m *ItemManager) UninstallItem(id ItemId, purge bool, timeout time.Duration) error {
+// UninstallItem will uninstall a app.
+func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) error {
 	item := m.GetItem(id)
 	if item == nil {
 		return fmt.Errorf("No such a item: %q", id)
 	}
 
-	pkgName, err := GetPkgName(m.soft, item.Path())
+	pkgName, err := dstore.GetPkgName(m.soft, item.Path())
 	if err != nil {
 		return err
 	}
@@ -75,11 +83,12 @@ func (m *ItemManager) UninstallItem(id ItemId, purge bool, timeout time.Duration
 		return fmt.Errorf("get package name of %q failed", string(id))
 	}
 
-	transaction := NewUninstallTransaction(m.soft, pkgName, purge, timeout)
+	transaction := dstore.NewUninstallTransaction(m.soft, pkgName, purge, timeout)
 	return transaction.Exec()
 }
 
-func (m *ItemManager) IsItemOnDesktop(id ItemId) bool {
+// IsItemOnDesktop returns true if app exists on desktop.
+func (m *Manager) IsItemOnDesktop(id ItemID) bool {
 	item := m.GetItem(id)
 	if item == nil {
 		return false
@@ -87,7 +96,8 @@ func (m *ItemManager) IsItemOnDesktop(id ItemId) bool {
 	return isOnDesktop(item.Path())
 }
 
-func (m *ItemManager) SendItemToDesktop(id ItemId) error {
+// SendItemToDesktop sends a app to desktop.
+func (m *Manager) SendItemToDesktop(id ItemID) error {
 	if !m.HasItem(id) {
 		return fmt.Errorf("No such a item %q", id)
 	}
@@ -99,7 +109,8 @@ func (m *ItemManager) SendItemToDesktop(id ItemId) error {
 	return nil
 }
 
-func (m *ItemManager) RemoveItemFromDesktop(id ItemId) error {
+// RemoveItemFromDesktop removes app from desktop.
+func (m *Manager) RemoveItemFromDesktop(id ItemID) error {
 	if !m.HasItem(id) {
 		return fmt.Errorf("No such a item %q", id)
 	}
@@ -111,36 +122,43 @@ func (m *ItemManager) RemoveItemFromDesktop(id ItemId) error {
 	return nil
 }
 
-func (m *ItemManager) GetRate(id ItemId, f RateConfigFileInterface) uint64 {
+// GetFrequency returns a item's  use frequency.
+func (m *Manager) GetFrequency(id ItemID, f RateConfigFile) uint64 {
 	rate, _ := f.GetUint64(string(id), _RateRecordKey)
 	return rate
 }
 
-func (m *ItemManager) SetRate(id ItemId, rate uint64, f RateConfigFileInterface) {
+// SetFrequency sets a item's  use frequency.
+func (m *Manager) SetFrequency(id ItemID, rate uint64, f RateConfigFile) {
 	f.SetUint64(string(id), _RateRecordKey, rate)
 	SaveKeyFile(f, ConfigFilePath(_RateRecordFile))
 }
 
-func (m *ItemManager) GetAllFrequency(f RateConfigFileInterface) (infos map[ItemId]uint64) {
-	infos = map[ItemId]uint64{}
+// GetAllFrequency returns all items' use frequency
+func (m *Manager) GetAllFrequency(f RateConfigFile) (infos map[ItemID]uint64) {
+	infos = map[ItemID]uint64{}
 	if f == nil {
-		for id, _ := range m.itemTable {
+		for id := range m.itemTable {
 			infos[id] = 0
 		}
 		return
 	}
 
-	for id, _ := range m.itemTable {
-		infos[id] = m.GetRate(id, f)
+	for id := range m.itemTable {
+		infos[id] = m.GetFrequency(id, f)
 	}
 
 	return
 }
 
-func (m *ItemManager) GetAllTimeInstalled() (map[ItemId]int64, error) {
-	infos := map[ItemId]int64{}
+// GetAllTimeInstalled returns all items installed time.
+// TODO:
+// 1. do it once.
+// 2. update it when item changed.
+func (m *Manager) GetAllTimeInstalled() (map[ItemID]int64, error) {
+	infos := map[ItemID]int64{}
 	var err error
-	for id, _ := range m.itemTable {
+	for id := range m.itemTable {
 		infos[id] = 0
 	}
 
@@ -162,7 +180,7 @@ func (m *ItemManager) GetAllTimeInstalled() (map[ItemId]int64, error) {
 	}
 
 	for _, data := range datas {
-		id := GenId(data[0].(string))
+		id := GenID(data[0].(string))
 		t := int64(data[1].(float64))
 		infos[id] = t
 	}
@@ -170,8 +188,9 @@ func (m *ItemManager) GetAllTimeInstalled() (map[ItemId]int64, error) {
 	return infos, err
 }
 
-func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
-	ids := []ItemId{}
+// GetAllNewInstalledApps returns all apps newly installed.
+func (self *Manager) GetAllNewInstalledApps() ([]ItemID, error) {
+	ids := []ItemID{}
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {
 		return ids, fmt.Errorf("create store api failed: %v", err)
@@ -190,17 +209,19 @@ func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
 	}
 
 	for _, data := range datas {
-		id := GenId(data[0].(string))
+		id := GenID(data[0].(string))
 		ids = append(ids, id)
 	}
 	return ids, nil
 }
 
-func (self *ItemManager) MarkNew(_id ItemId) error {
+// MarkNew marks a item as newly installed.
+func (self *Manager) MarkNew(_id ItemID) error {
 	return nil
 }
 
-func (self *ItemManager) MarkLaunched(_id ItemId) error {
+// MarkLaunched marks a item as launched, it won't be newly installed.
+func (self *Manager) MarkLaunched(_id ItemID) error {
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {
 		return fmt.Errorf("create store api failed: %v", err)

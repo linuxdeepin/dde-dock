@@ -5,47 +5,47 @@ import (
 	"sort"
 )
 
-type SearchResultListTestSuite struct {
+type ResultListTestSuite struct {
 }
 
-var _ = C.Suite(&SearchResultListTestSuite{})
+var _ = C.Suite(&ResultListTestSuite{})
 
-func (self *SearchResultListTestSuite) _TestSearchResultList(c *C.C) {
-	res := SearchResultList{
-		SearchResult{
-			Id:    "chrome",
+func (*ResultListTestSuite) _TestResultList(c *C.C) {
+	res := ResultList{
+		Result{
+			ID:    "chrome",
 			Name:  "chrome",
 			Score: 345000,
 		},
-		SearchResult{
-			Id:    "weibo",
+		Result{
+			ID:    "weibo",
 			Name:  "weibo",
 			Score: 80000,
 		},
-		SearchResult{
-			Id:    "music",
+		Result{
+			ID:    "music",
 			Name:  "music",
 			Score: 80000,
 		},
 	}
 	c.Assert(res.Len(), C.Equals, 3)
-	c.Assert(string(res[0].Id), C.Equals, "chrome")
-	c.Assert(string(res[1].Id), C.Equals, "weibo")
-	c.Assert(string(res[2].Id), C.Equals, "music")
+	c.Assert(string(res[0].ID), C.Equals, "chrome")
+	c.Assert(string(res[1].ID), C.Equals, "weibo")
+	c.Assert(string(res[2].ID), C.Equals, "music")
 	c.Assert(res.Less(0, 1), C.Equals, true)
 	c.Assert(res.Less(1, 2), C.Equals, false)
 
 	res.Swap(0, 1)
-	c.Assert(string(res[0].Id), C.Equals, "weibo")
+	c.Assert(string(res[0].ID), C.Equals, "weibo")
 
 	sort.Sort(res)
-	c.Assert(string(res[0].Id), C.Equals, "chrome")
-	c.Assert(string(res[1].Id), C.Equals, "music")
-	c.Assert(string(res[2].Id), C.Equals, "weibo")
+	c.Assert(string(res[0].ID), C.Equals, "chrome")
+	c.Assert(string(res[1].ID), C.Equals, "music")
+	c.Assert(string(res[2].ID), C.Equals, "weibo")
 }
 
-func (self *SearchResultListTestSuite) TestSearchResultListReal(c *C.C) {
-	list := SearchResultList{
+func (*ResultListTestSuite) TestResultListReal(c *C.C) {
+	list := ResultList{
 		{"12306", "12306", 80000},
 		{"google-chrome", "Google Chrome", 345000},
 		{"chrome-lbfehkoinhhcknnbdgnnmjhiladcgbol-Default", "Evernote Web", 150000},
@@ -65,5 +65,5 @@ func (self *SearchResultListTestSuite) TestSearchResultListReal(c *C.C) {
 	}
 
 	sort.Sort(list)
-	c.Assert(string(list[0].Id), C.Equals, "google-chrome")
+	c.Assert(string(list[0].ID), C.Equals, "google-chrome")
 }

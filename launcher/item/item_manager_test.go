@@ -14,12 +14,12 @@ import (
 
 type ItemManagerTestSuite struct {
 	softcenter  *MockSoftcenter
-	m           ItemManagerInterface
-	item        ItemInfoInterface
+	m           ItemManager
+	item        ItemInfo
 	timeout     time.Duration
 	testDataDir string
 	oldHome     string
-	f           RateConfigFileInterface
+	f           RateConfigFile
 }
 
 var _ = C.Suite(&ItemManagerTestSuite{})
@@ -47,7 +47,7 @@ func (s *ItemManagerTestSuite) SetUpSuite(c *C.C) {
 		c.Skip("get config file failed")
 	}
 
-	s.item = NewItem(firefox)
+	s.item = New(firefox)
 	firefox.Unref()
 }
 
@@ -58,29 +58,29 @@ func (s *ItemManagerTestSuite) TearDownSuite(c *C.C) {
 
 func (s *ItemManagerTestSuite) SetUpTest(c *C.C) {
 	s.softcenter = NewMockSoftcenter()
-	s.m = NewItemManager(s.softcenter)
+	s.m = NewManager(s.softcenter)
 	s.timeout = time.Second * 10
 }
 
 func (s *ItemManagerTestSuite) TestItemManager(c *C.C) {
-	c.Assert(s.m.GetItem(s.item.Id()), C.IsNil)
-	c.Assert(s.m.HasItem(s.item.Id()), C.Equals, false)
+	c.Assert(s.m.GetItem(s.item.ID()), C.IsNil)
+	c.Assert(s.m.HasItem(s.item.ID()), C.Equals, false)
 
 	s.m.AddItem(s.item)
-	c.Assert(s.m.GetItem(s.item.Id()).Id(), C.Equals, s.item.Id())
-	c.Assert(s.m.HasItem(s.item.Id()), C.Equals, true)
+	c.Assert(s.m.GetItem(s.item.ID()).ID(), C.Equals, s.item.ID())
+	c.Assert(s.m.HasItem(s.item.ID()), C.Equals, true)
 
-	s.m.RemoveItem(s.item.Id())
-	c.Assert(s.m.GetItem(s.item.Id()), C.IsNil)
-	c.Assert(s.m.HasItem(s.item.Id()), C.Equals, false)
+	s.m.RemoveItem(s.item.ID())
+	c.Assert(s.m.GetItem(s.item.ID()), C.IsNil)
+	c.Assert(s.m.HasItem(s.item.ID()), C.Equals, false)
 }
 
-func (s *ItemManagerTestSuite) addTestItem(c *C.C, path string) ItemInfoInterface {
+func (s *ItemManagerTestSuite) addTestItem(c *C.C, path string) ItemInfo {
 	desktop := gio.NewDesktopAppInfoFromFilename(path)
 	if desktop == nil {
 		c.Skip(createDesktopFailed(path))
 	}
-	item := NewItem(desktop)
+	item := New(desktop)
 	s.m.AddItem(item)
 	desktop.Unref()
 	return item
@@ -95,16 +95,16 @@ func (s *ItemManagerTestSuite) TestUnistallNotExistItem(c *C.C) {
 func (s *ItemManagerTestSuite) TestUnistallItemNoOnSoftCenter(c *C.C) {
 	softcenter := s.addTestItem(c, path.Join(s.testDataDir, "deepin-software-center.desktop"))
 
-	err := s.m.UninstallItem(softcenter.Id(), false, s.timeout)
+	err := s.m.UninstallItem(softcenter.ID(), false, s.timeout)
 	c.Assert(err, C.NotNil)
-	c.Assert(err.Error(), C.Equals, fmt.Sprintf("get package name of %q failed", softcenter.Id()))
+	c.Assert(err.Error(), C.Equals, fmt.Sprintf("get package name of %q failed", softcenter.ID()))
 
 }
 
 func (s *ItemManagerTestSuite) TestUnistallExistItem(c *C.C) {
 	s.m.AddItem(s.item)
 
-	err := s.m.UninstallItem(s.item.Id(), false, s.timeout)
+	err := s.m.UninstallItem(s.item.ID(), false, s.timeout)
 	c.Assert(err, C.IsNil)
 	c.Assert(s.softcenter.count, C.Equals, 1)
 }
@@ -114,11 +114,11 @@ func (s *ItemManagerTestSuite) TestUnistallMultiItem(c *C.C) {
 	s.m.AddItem(s.item)
 	player := s.addTestItem(c, path.Join(s.testDataDir, "deepin-music-player.desktop"))
 
-	err = s.m.UninstallItem(s.item.Id(), false, s.timeout)
+	err = s.m.UninstallItem(s.item.ID(), false, s.timeout)
 	c.Assert(err, C.IsNil)
 	c.Assert(s.softcenter.count, C.Equals, 1)
 
-	err = s.m.UninstallItem(player.Id(), false, s.timeout)
+	err = s.m.UninstallItem(player.ID(), false, s.timeout)
 	c.Assert(err, C.IsNil)
 	c.Assert(s.softcenter.count, C.Equals, 2)
 }
@@ -133,14 +133,14 @@ func (s *ItemManagerTestSuite) TestUnistallMultiItemAsync(c *C.C) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		err = s.m.UninstallItem(s.item.Id(), false, s.timeout)
+		err = s.m.UninstallItem(s.item.ID(), false, s.timeout)
 		c.Assert(err, C.IsNil)
 	}()
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		err = s.m.UninstallItem(player.Id(), false, s.timeout)
+		err = s.m.UninstallItem(player.ID(), false, s.timeout)
 		c.Assert(err, C.IsNil)
 	}()
 
@@ -148,15 +148,10 @@ func (s *ItemManagerTestSuite) TestUnistallMultiItemAsync(c *C.C) {
 	c.Assert(s.softcenter.count, C.Equals, 2)
 }
 
-func (s *ItemManagerTestSuite) TestGetRate(c *C.C) {
-	c.Assert(s.m.GetRate(ItemId("firefox"), s.f), C.Equals, uint64(2))
-	c.Assert(s.m.GetRate(ItemId("deepin-software-center"), s.f), C.Equals, uint64(0))
-}
+func (s *ItemManagerTestSuite) TestSetFrequency(c *C.C) {
+	s.m.SetFrequency("firefox", uint64(3), s.f)
+	c.Assert(s.m.GetFrequency("firefox", s.f), C.Equals, uint64(3))
 
-func (s *ItemManagerTestSuite) TestSetRate(c *C.C) {
-	s.m.SetRate("firefox", uint64(3), s.f)
-	c.Assert(s.m.GetRate("firefox", s.f), C.Equals, uint64(3))
-
-	s.m.SetRate("firefox", uint64(2), s.f)
-	c.Assert(s.m.GetRate("firefox", s.f), C.Equals, uint64(2))
+	s.m.SetFrequency("firefox", uint64(2), s.f)
+	c.Assert(s.m.GetFrequency("firefox", s.f), C.Equals, uint64(2))
 }

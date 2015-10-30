@@ -14,8 +14,8 @@ func (s *CategoryInfoExportTestSuite) TestContructor(c *C.C) {
 	info := NewCategoryInfoExport(nil)
 	c.Assert(info.Name, C.Equals, "")
 
-	m := &MockCategoryInfo{CategoryId(1), "A", map[ItemId]bool{}}
+	m := &MockCategoryInfo{CategoryID(1), "A", map[ItemID]bool{}}
 	info = NewCategoryInfoExport(m)
 	c.Assert(info.Name, C.Equals, "A")
-	c.Assert(info.Id, C.Equals, CategoryId(1))
+	c.Assert(info.ID, C.Equals, CategoryID(1))
 }

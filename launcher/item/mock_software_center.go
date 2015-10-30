@@ -3,7 +3,7 @@ package item
 import (
 	"math/rand"
 	"path/filepath"
-	. "pkg.deepin.io/dde/daemon/launcher/item/softwarecenter"
+	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -33,7 +33,7 @@ func (m *MockSoftcenter) sendMessage(msg [][]interface{}) {
 
 func (m *MockSoftcenter) sendStartMessage(pkgName string) {
 	action := []interface{}{
-		ActionStart,
+		dstore.ActionStart,
 		dbus.MakeVariant([]interface{}{pkgName, int32(0)}),
 	}
 	m.sendMessage([][]interface{}{action})
@@ -43,7 +43,7 @@ func (m *MockSoftcenter) sendUpdateMessage(pkgName string) {
 	updateTime := rand.Intn(5) + 1
 	for i := 0; i < updateTime; i++ {
 		action := []interface{}{
-			ActionUpdate,
+			dstore.ActionUpdate,
 			dbus.MakeVariant([]interface{}{
 				pkgName,
 				int32(1),
@@ -57,7 +57,7 @@ func (m *MockSoftcenter) sendUpdateMessage(pkgName string) {
 }
 func (m *MockSoftcenter) sendFinishedMessage(pkgName string) {
 	action := []interface{}{
-		ActionFinish,
+		dstore.ActionFinish,
 		dbus.MakeVariant([]interface{}{
 			pkgName,
 			int32(2),
@@ -76,7 +76,7 @@ func (m *MockSoftcenter) sendFinishedMessage(pkgName string) {
 
 func (m *MockSoftcenter) sendFailedMessage(pkgName string) {
 	action := []interface{}{
-		ActionFailed,
+		dstore.ActionFailed,
 		dbus.MakeVariant([]interface{}{
 			pkgName,
 			int32(3),

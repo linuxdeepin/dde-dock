@@ -8,32 +8,36 @@ import (
 	"sync"
 )
 
+// default values.
 const (
 	DefaultGoroutineNum = 20
 )
 
-type SearchResult struct {
-	Id    ItemId
+// Result stores items information for searching.
+type Result struct {
+	ID    ItemID
 	Name  string
 	Score uint32
 }
 
-type SearchTransaction struct {
+// Transaction is a command object used for search.
+type Transaction struct {
 	maxGoroutineNum int
-	pinyinObj       PinYinInterface
-	result          chan<- SearchResult
+	pinyinObj       PinYin
+	result          chan<- Result
 	cancelChan      chan struct{}
 	cancelled       bool
 }
 
-func NewSearchTransaction(pinyinObj PinYinInterface, result chan<- SearchResult, cancelChan chan struct{}, maxGoroutineNum int) (*SearchTransaction, error) {
+// NewTransaction creates a new Transaction object.
+func NewTransaction(pinyinObj PinYin, result chan<- Result, cancelChan chan struct{}, maxGoroutineNum int) (*Transaction, error) {
 	if result == nil {
-		return nil, SearchErrorNullChannel
+		return nil, ErrorSearchNullChannel
 	}
 	if maxGoroutineNum <= 0 {
 		maxGoroutineNum = DefaultGoroutineNum
 	}
-	return &SearchTransaction{
+	return &Transaction{
 		maxGoroutineNum: maxGoroutineNum,
 		pinyinObj:       pinyinObj,
 		result:          result,
@@ -42,14 +46,16 @@ func NewSearchTransaction(pinyinObj PinYinInterface, result chan<- SearchResult,
 	}, nil
 }
 
-func (s *SearchTransaction) Cancel() {
+// Cancel cancels this transaction.
+func (s *Transaction) Cancel() {
 	if !s.cancelled {
 		close(s.cancelChan)
 		s.cancelled = true
 	}
 }
 
-func (s *SearchTransaction) Search(key string, dataSet []ItemInfoInterface) {
+// Search executes this transaction and returns the searching result.
+func (s *Transaction) Search(key string, dataSet []ItemInfo) {
 	trimedKey := strings.TrimSpace(key)
 	escapedKey := regexp.QuoteMeta(trimedKey)
 
