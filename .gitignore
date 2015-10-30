@@ -37,6 +37,7 @@ bin/dde-session-daemon/dde-session-daemon
 bin/dde-preload/dde-preload
 !launcher/testdata/.config/launcher/*
 
+debian
 debian/
 out/
 gopath/

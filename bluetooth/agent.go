@@ -25,10 +25,23 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
+const (
+	dbusAgentDest = "."
+	dbusAgentPath = dbusBluetoothPath + "/Agent"
+	dbusAgentIfs  = "org.bluez.Agent1"
+)
+
 type Agent struct {
 	b *Bluetooth
 }
 
+func (a *Agent) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusAgentDest,
+		ObjectPath: dbusAgentPath,
+		Interface:  dbusAgentIfs,
+	}
+}
 func newAgent() (agent *Agent) {
 	// TODO
 	agent = &Agent{}
@@ -38,48 +51,50 @@ func newAgent() (agent *Agent) {
 // TODO
 func (a *Agent) Release() {
 	// TODO
-	logger.Debug("Release()")
+	logger.Info("Release()")
 }
 
 func (a *Agent) RequestPinCode(dpath dbus.ObjectPath) (pincode string) {
 	// TODO
-	logger.Debug("RequestPinCode()")
+	logger.Info("RequestPinCode()")
 	return
 }
 
 func (a *Agent) DisplayPinCode(dpath dbus.ObjectPath, pincode string) {
-	logger.Debug("DisplayPinCode()")
+	logger.Info("DisplayPinCode()")
 }
 
 func (a *Agent) DisplayPasskey(dpath dbus.ObjectPath, passkey uint32, entered uint16) {
-	logger.Debug("DisplayPasskey()")
+	logger.Info("DisplayPasskey()")
 }
 
 func (a *Agent) RequestConfirmation(dpath dbus.ObjectPath, passkey uint32) {
-	logger.Debug("RequestConfirmation()")
+	logger.Info("RequestConfirmation", dpath, passkey)
 }
 
 func (a *Agent) RequestAuthorization(dpath dbus.ObjectPath) {
 	// TODO
-	logger.Debug("RequestAuthorization()")
+	logger.Info("RequestAuthorization()")
 }
 
 func (a *Agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) {
 	// TODO
-	logger.Debug("AuthorizeService()")
+	logger.Info("AuthorizeService()")
 }
 
 func (a *Agent) Cancel() {
 	// TODO
-	logger.Debug("Cancel()")
+	logger.Info("Cancel()")
 }
 
 // TODO
 func (b *Bluetooth) FeedPinCode(pincode string) (err error) {
+	logger.Info("FeedPinCode()")
 	return
 }
 
 // TODO
 func (b *Bluetooth) FeedAuthorizeService(pincode string) (err error) {
+	logger.Info("FeedAuthorizeService()")
 	return
 }
