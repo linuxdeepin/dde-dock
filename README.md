@@ -5,7 +5,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 ## Dependencies
 
 
-### Build Dependencies
+### Build dependencies
 
 * [dde-api](https://github.com/linuxdeepin/dde-api)
 * [startdde](https://github.com/linuxdeepin/startdde)
@@ -13,7 +13,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * libudev
 * fontconfig
 
-### Runtime Dependencies
+### Runtime dependencies
 
 * upower
 * udisks2
@@ -95,7 +95,7 @@ Any usage issues can ask for help via
 
 We encourage you to report issues and contribute changes.
 
-* [Contirubtion guide for users](http://wiki.deepin.org/index.php?title=Contribution_Guidelines_for_Users)
+* [Contribution guide for users](http://wiki.deepin.org/index.php?title=Contribution_Guidelines_for_Users)
 * [Contribution guide for developers](http://wiki.deepin.org/index.php?title=Contribution_Guidelines_for_Developers)
 
 ## License
