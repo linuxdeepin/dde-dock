@@ -35,7 +35,7 @@ HEADERS += \
 DISTFILES += dde-dock-trash-plugin.json
 
 unix {
-    target.path = /usr/share/dde-dock/plugins/
+    target.path = /usr/lib/dde-dock/plugins/
     INSTALLS += target
 }
 

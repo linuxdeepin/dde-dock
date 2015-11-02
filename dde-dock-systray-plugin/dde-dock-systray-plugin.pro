@@ -27,5 +27,5 @@ HEADERS  += systrayplugin.h \
 RESOURCES += images.qrc
 DISTFILES += dde-dock-systray-plugin.json
 
-target.path = /usr/share/dde-dock/plugins/
+target.path = /usr/lib/dde-dock/plugins/
 INSTALLS += target

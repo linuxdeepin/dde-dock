@@ -12,7 +12,7 @@ DockPluginManager::DockPluginManager(QObject *parent) :
 {
     m_settingFrame = new PluginsSettingFrame;
 
-    m_searchPaths << "/usr/share/dde-dock/plugins/";
+    m_searchPaths << "/usr/lib/dde-dock/plugins/";
 
 //    m_watcher = new QFileSystemWatcher(this);
 //    m_watcher->addPaths(m_searchPaths);
