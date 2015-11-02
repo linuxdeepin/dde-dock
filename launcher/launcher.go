@@ -50,7 +50,7 @@ type Launcher struct {
 	cancelMutex         sync.Mutex
 	cancelSearchingChan chan struct{}
 	pinyinObj           PinYin
-	store               *storeApi.DStoreDesktop
+	store               *storeApi.DStoreDesktop // TODO
 	appMonitor          *fsnotify.Watcher
 
 	// ItemChanged当launcher中的item有改变后触发。
@@ -252,8 +252,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 			itemInfo.SetTimeInstalled(info[name].timeInstalled)
 		}
 
-		dbPath, _ := category.GetDBPath(category.SoftwareCenterDataDir, category.CategoryNameDBPath)
-		self.categoryManager.LoadAppCategoryInfo(dbPath, "")
+		self.categoryManager.LoadAppCategoryInfo(DStoreAppInfoFile, DStoreDesktopPkgMapFile, DStoreXCategoryAppInfoFile)
 		defer self.categoryManager.FreeAppCategoryInfo()
 
 		cid, err := self.categoryManager.QueryID(app)

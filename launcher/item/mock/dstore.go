@@ -1,21 +1,20 @@
-package item
+package mock
 
 import (
 	"math/rand"
 	"path/filepath"
-	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 
-type MockSoftcenter struct {
-	count           int
+type DStore struct {
+	Count           int
 	disconnectCount int
 	handlers        map[int]func([][]interface{})
 	softs           map[string]string
 }
 
-func (m *MockSoftcenter) GetPkgNameFromPath(path string) (string, error) {
+func (m *DStore) GetPkgNameFromPath(path string) (string, error) {
 	relPath, _ := filepath.Rel(".", path)
 	for pkgName, path := range m.softs {
 		if path == relPath {
@@ -25,25 +24,25 @@ func (m *MockSoftcenter) GetPkgNameFromPath(path string) (string, error) {
 	return "", nil
 }
 
-func (m *MockSoftcenter) sendMessage(msg [][]interface{}) {
+func (m *DStore) sendMessage(msg [][]interface{}) {
 	for _, fn := range m.handlers {
 		fn(msg)
 	}
 }
 
-func (m *MockSoftcenter) sendStartMessage(pkgName string) {
+func (m *DStore) sendStartMessage(pkgName string) {
 	action := []interface{}{
-		dstore.ActionStart,
+		"",
 		dbus.MakeVariant([]interface{}{pkgName, int32(0)}),
 	}
 	m.sendMessage([][]interface{}{action})
 }
 
-func (m *MockSoftcenter) sendUpdateMessage(pkgName string) {
+func (m *DStore) sendUpdateMessage(pkgName string) {
 	updateTime := rand.Intn(5) + 1
 	for i := 0; i < updateTime; i++ {
 		action := []interface{}{
-			dstore.ActionUpdate,
+			"",
 			dbus.MakeVariant([]interface{}{
 				pkgName,
 				int32(1),
@@ -55,9 +54,9 @@ func (m *MockSoftcenter) sendUpdateMessage(pkgName string) {
 		time.Sleep(time.Duration(rand.Int31n(100)+100) * time.Millisecond)
 	}
 }
-func (m *MockSoftcenter) sendFinishedMessage(pkgName string) {
+func (m *DStore) sendFinishedMessage(pkgName string) {
 	action := []interface{}{
-		dstore.ActionFinish,
+		"",
 		dbus.MakeVariant([]interface{}{
 			pkgName,
 			int32(2),
@@ -74,9 +73,9 @@ func (m *MockSoftcenter) sendFinishedMessage(pkgName string) {
 	m.sendMessage([][]interface{}{action})
 }
 
-func (m *MockSoftcenter) sendFailedMessage(pkgName string) {
+func (m *DStore) sendFailedMessage(pkgName string) {
 	action := []interface{}{
-		dstore.ActionFailed,
+		"",
 		dbus.MakeVariant([]interface{}{
 			pkgName,
 			int32(3),
@@ -94,7 +93,7 @@ func (m *MockSoftcenter) sendFailedMessage(pkgName string) {
 	m.sendMessage([][]interface{}{action})
 }
 
-func (m *MockSoftcenter) UninstallPkg(pkgName string, purge bool) error {
+func (m *DStore) UninstallPkg(pkgName string, purge bool) error {
 	if _, ok := m.softs[pkgName]; !ok {
 		m.sendFailedMessage(pkgName)
 		return nil
@@ -105,20 +104,20 @@ func (m *MockSoftcenter) UninstallPkg(pkgName string, purge bool) error {
 	return nil
 }
 
-func (m *MockSoftcenter) Connectupdate_signal(fn func([][]interface{})) func() {
-	id := m.count
+func (m *DStore) Connectupdate_signal(fn func([][]interface{})) func() {
+	id := m.Count
 	m.handlers[id] = fn
-	m.count++
+	m.Count++
 	return func() {
 		delete(m.handlers, id)
 		m.disconnectCount++
 	}
 }
 
-func NewMockSoftcenter() *MockSoftcenter {
-	return &MockSoftcenter{
+func NewDStore() *DStore {
+	return &DStore{
 		handlers: map[int]func([][]interface{}){},
-		count:    0,
+		Count:    0,
 		softs: map[string]string{
 			"firefox":             "../testdata/firefox.desktop",
 			"deepin-music-player": "../testdata/deepin-music-player.desktop",

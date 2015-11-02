@@ -2,16 +2,20 @@ package category
 
 import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"gir/gio-2.0"
 	"sort"
 	"strings"
 )
 
-type XCategoryQueryIDTransition struct {
+type XCategoryQueryIDTransaction struct {
+	data map[string]string
 }
 
-func NewXCategoryQueryIDTransition(string) (*XCategoryQueryIDTransition, error) {
-	return &XCategoryQueryIDTransition{}, nil
+func NewXCategoryQueryIDTransaction(file string) (*XCategoryQueryIDTransaction, error) {
+	data, err := getXCategoryInfo(file)
+	if err != nil {
+		return nil, err
+	}
+	return &XCategoryQueryIDTransaction{data: data}, nil
 }
 
 // IDList type alias for []CategoryID, used for sorting.
@@ -51,10 +55,10 @@ func getXCategory(categories []string) CategoryID {
 	return ids[0]
 }
 
-func (transition *XCategoryQueryIDTransition) Query(app *gio.DesktopAppInfo) (CategoryID, error) {
-	categories := strings.Split(strings.TrimRight(app.GetCategories(), ";"), ";")
+func (transition *XCategoryQueryIDTransaction) Query(strCategories string) (CategoryID, error) {
+	categories := strings.Split(strings.TrimRight(strCategories, ";"), ";")
 	return getXCategory(categories), nil
 }
 
-func (transition *XCategoryQueryIDTransition) Free() {
+func (transition *XCategoryQueryIDTransaction) Free() {
 }

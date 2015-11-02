@@ -2,6 +2,7 @@ package launcher
 
 import (
 	C "launchpad.net/gocheck"
+	"pkg.deepin.io/dde/daemon/launcher/mock"
 	. "pkg.deepin.io/dde/daemon/launcher/setting"
 )
 
@@ -16,7 +17,7 @@ type SettingTestSuite struct {
 
 func (sts *SettingTestSuite) SetUpTest(c *C.C) {
 	var err error
-	core := NewMockSettingCore()
+	core := mock.NewSettingCore()
 	sts.s, err = NewSettings(core)
 
 	sts.CategoryDisplayModeChangedCount = 0

@@ -4,33 +4,31 @@ import (
 	storeApi "dbus/com/deepin/store/api"
 	"encoding/json"
 	"fmt"
+	"path"
 	"sync"
 	"time"
 
+	"gir/glib-2.0"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
-	"gir/glib-2.0"
-)
-
-const (
-	_NewSoftwareRecordFile = "launcher/new_software.ini"
-	_NewSoftwareGroupName  = "NewInstalledApps"
-	_NewSoftwareKeyName    = "Ids"
 )
 
 // Manager controls all items.
 type Manager struct {
-	lock      sync.Mutex
-	itemTable map[ItemID]ItemInfo
-	soft      DStore
+	store                       DStore
+	lock                        sync.Mutex
+	itemTable                   map[ItemID]ItemInfo
+	dstoreDesktopPackageMapFile string
+	dstoreInstalledTimeFile     string
 }
 
 // NewManager creates a new item manager.
-func NewManager(soft DStore) *Manager {
+func NewManager(store DStore, dstoreDesktopPackageMapFile, dstoreInstalledTimeFile string) *Manager {
 	return &Manager{
-		itemTable: map[ItemID]ItemInfo{},
-		soft:      soft,
+		store:                       store,
+		itemTable:                   map[ItemID]ItemInfo{},
+		dstoreDesktopPackageMapFile: dstoreDesktopPackageMapFile,
+		dstoreInstalledTimeFile:     dstoreInstalledTimeFile,
 	}
 }
 
@@ -69,6 +67,15 @@ func (m *Manager) GetAllItems() []ItemInfo {
 	return infos
 }
 
+func (m *Manager) getPkgName(desktopPath string) (string, error) {
+	transition, err := m.store.NewQueryPkgNameTransaction(m.dstoreDesktopPackageMapFile)
+	if err != nil {
+		return "", err
+	}
+
+	return transition.Query(path.Base(desktopPath)), nil
+}
+
 // UninstallItem will uninstall a app.
 func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) error {
 	item := m.GetItem(id)
@@ -76,7 +83,7 @@ func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) er
 		return fmt.Errorf("No such a item: %q", id)
 	}
 
-	pkgName, err := dstore.GetPkgName(m.soft, item.Path())
+	pkgName, err := m.getPkgName(item.Path())
 	if err != nil {
 		return err
 	}
@@ -85,7 +92,7 @@ func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) er
 		return fmt.Errorf("get package name of %q failed", string(id))
 	}
 
-	transaction := dstore.NewUninstallTransaction(m.soft, pkgName, purge, timeout)
+	transaction := m.store.NewUninstallTransaction(pkgName, purge, timeout)
 	return transaction.Exec()
 }
 
@@ -161,33 +168,30 @@ func (m *Manager) GetAllTimeInstalled() (map[ItemID]int64, error) {
 		infos[id] = 0
 	}
 
-	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
-	if err != nil {
-		return infos, fmt.Errorf("create store api failed: %v", err)
-	}
-	defer storeApi.DestroyDStoreDesktop(store)
-
-	datasStr, err := store.GetAllDesktops()
-	if err != nil {
-		return infos, fmt.Errorf("get all desktops' info failed: %v", err)
-	}
-
-	datas := [][]interface{}{}
-	err = json.Unmarshal([]byte(datasStr), &datas)
+	transition, err := m.store.NewQueryTimeInstalledTransaction(m.dstoreInstalledTimeFile)
 	if err != nil {
 		return infos, err
 	}
 
-	for _, data := range datas {
-		id := GenID(data[0].(string))
-		t := int64(data[1].(float64))
-		infos[id] = t
+	for id := range m.itemTable {
+		item := m.GetItem(id)
+		if item == nil {
+			continue
+		}
+
+		pkgName, err := m.getPkgName(item.Path())
+		if err != nil {
+			continue
+		}
+
+		infos[id] = transition.Query(pkgName)
 	}
 
 	return infos, err
 }
 
 // GetAllNewInstalledApps returns all apps newly installed.
+// TODO: new dstore.
 func (self *Manager) GetAllNewInstalledApps() ([]ItemID, error) {
 	ids := []ItemID{}
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
@@ -220,6 +224,7 @@ func (self *Manager) MarkNew(_id ItemID) error {
 }
 
 // MarkLaunched marks a item as launched, it won't be newly installed.
+// TODO: new dstore.
 func (self *Manager) MarkLaunched(_id ItemID) error {
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {

@@ -1,55 +1,35 @@
 package category
 
 import (
-	"database/sql"
-	"errors"
-	"path"
+	"fmt"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"gir/gio-2.0"
 )
 
-type DeepinQueryIDTransition struct {
-	db *sql.DB
+type DeepinQueryIDTransaction struct {
+	pkgToCategory map[string]string
 }
 
-func NewDeepinQueryIDTransition(dbPath string) (*DeepinQueryIDTransition, error) {
-	db, err := sql.Open("sqlite3", dbPath)
+func NewDeepinQueryIDTransaction(pkgToCategoryFile string) (*DeepinQueryIDTransaction, error) {
+	transition := &DeepinQueryIDTransaction{
+		pkgToCategory: map[string]string{},
+	}
+
+	var err error
+	transition.pkgToCategory, err = getCategoryInfo(pkgToCategoryFile)
 	if err != nil {
 		return nil, err
 	}
 
-	transition := &DeepinQueryIDTransition{db: db}
 	return transition, nil
 }
 
-func (transition *DeepinQueryIDTransition) Query(app *gio.DesktopAppInfo) (CategoryID, error) {
-	db := transition.db
-	if db == nil {
-		return OthersID, errors.New("invalid db")
+func (transition *DeepinQueryIDTransaction) Query(pkgName string) (CategoryID, error) {
+	cidName, ok := transition.pkgToCategory[pkgName]
+	if !ok {
+		return OthersID, fmt.Errorf("No such a category for package %q", pkgName)
 	}
-
-	filename := app.GetFilename()
-	basename := path.Base(filename)
-	var categoryName string
-	err := db.QueryRow(`
-	select first_category_name
-	from desktop
-	where desktop_name = ?`,
-		basename,
-	).Scan(&categoryName)
-	if err != nil {
-		return OthersID, err
-	}
-
-	if categoryName == "" {
-		return OthersID, errors.New("get empty category")
-	}
-
-	return getCategoryID(categoryName)
+	return getCategoryID(cidName)
 }
 
-func (transition *DeepinQueryIDTransition) Free() {
-	if transition.db != nil {
-		transition.db.Close()
-	}
+func (transition *DeepinQueryIDTransaction) Free() {
 }

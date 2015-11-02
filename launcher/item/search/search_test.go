@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
+	"gir/gio-2.0"
 	C "launchpad.net/gocheck"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
-	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/launcher/item/search/mock"
 )
 
 func TestSearch(t *testing.T) {
@@ -97,7 +98,7 @@ func (self *SearchTransactionTestSuite) TestSearchTransactionWithPinYin(c *C.C) 
 	chromeItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
 	defer os.Setenv("LANGUAGE", old)
 
-	pinyinObj := NewMockPinYin(map[string][]string{
+	pinyinObj := mock.NewPinYin(map[string][]string{
 		"liu": []string{
 			fireItemInfo.LocaleName(),
 			chromeItemInfo.LocaleName(),

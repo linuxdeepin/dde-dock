@@ -5,10 +5,10 @@ import (
 	"strings"
 	"sync"
 
+	"pkg.deepin.io/dde/daemon/dstore"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
-	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	"pkg.deepin.io/dde/daemon/launcher/item/search"
 	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/gettext"
@@ -49,8 +49,6 @@ func (d *Daemon) Stop() error {
 }
 
 func loadItemsInfo(im *item.Manager, cm *category.Manager) {
-	timeInfo, _ := im.GetAllTimeInstalled()
-
 	appChan := make(chan *gio.AppInfo)
 	go func() {
 		allApps := gio.AppInfoGetAll()
@@ -60,8 +58,10 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 		close(appChan)
 	}()
 
-	dbPath, _ := category.GetDBPath(category.SoftwareCenterDataDir, category.CategoryNameDBPath)
-	cm.LoadAppCategoryInfo(dbPath, "")
+	err := cm.LoadAppCategoryInfo(DStoreDesktopPkgMapFile, DStoreAppInfoFile, DStoreXCategoryAppInfoFile)
+	if err != nil {
+		logger.Warning("LoadAppCategoryInfo failed:", err)
+	}
 	var wg sync.WaitGroup
 	const N = 20
 	wg.Add(N)
@@ -78,8 +78,8 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 				cid, err := cm.QueryID(desktopApp)
 				newItem.SetCategoryID(cid)
 				if err != nil {
+					logger.Debug("QueryCategoryID failed:", err)
 				}
-				newItem.SetTimeInstalled(timeInfo[newItem.ID()])
 
 				im.AddItem(newItem)
 				cm.AddItem(newItem.ID(), newItem.CategoryID())
@@ -111,21 +111,25 @@ func (d *Daemon) Start() error {
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
 	err := NewInitializer().Init(func(interface{}) (interface{}, error) {
-		return dstore.New()
-	}).InitOnSessionBus(func(soft interface{}) (interface{}, error) {
+		store, err := dstore.New()
+		storeAdapter := NewDStoreAdapter(store)
+		f := func(DStore) {}
+		f(storeAdapter)
+		return storeAdapter, err
+	}).InitOnSessionBus(func(store interface{}) (interface{}, error) {
 		d.launcher = NewLauncher()
 
-		im := item.NewManager(soft.(DStore))
-		cm := category.NewManager(category.GetAllInfos(""))
+		im := item.NewManager(store.(DStore), DStoreDesktopPkgMapFile, DStoreInstalledTimeFile)
+		cm := category.NewManager(store.(DStore), category.GetAllInfos(DStoreAllCategoryInfoFile))
 
 		d.launcher.setItemManager(im)
 		d.launcher.setCategoryManager(cm)
 
 		loadItemsInfo(im, cm)
 
-		store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+		storeAPI, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 		if err == nil {
-			d.launcher.setStoreAPI(store)
+			d.launcher.setStoreAPI(storeAPI)
 		}
 
 		if isZH() {
