@@ -10,7 +10,7 @@
 #include <QJsonObject>
 
 #include "dbus/dbusmenu.h"
-#include "previewframe.h"
+#include "previewwindow.h"
 #include "highlighteffect.h"
 #include "dbus/dbusmenumanager.h"
 #include "interfaces/dockconstants.h"
@@ -80,7 +80,7 @@ protected:
     bool m_moveable = true;
     bool m_isActived = false;
     bool m_hoverable = true;
-    PreviewFrame *m_titlePreview = NULL;
+    PreviewWindow *m_titlePreview = NULL;
     HighlightEffect * m_highlight = NULL;
     ItemTitleLabel *m_titleLabel = NULL;
 

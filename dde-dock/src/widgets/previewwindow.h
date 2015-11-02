@@ -1,5 +1,5 @@
-#ifndef PREVIEWFRAME_H
-#define PREVIEWFRAME_H
+#ifndef PREVIEWWINDOW_H
+#define PREVIEWWINDOW_H
 
 #include <QTimer>
 #include <QPropertyAnimation>
@@ -8,13 +8,13 @@
 
 DUI_USE_NAMESPACE
 
-class PreviewFrame : public DArrowRectangle
+class PreviewWindow : public DArrowRectangle
 {
     Q_OBJECT
     Q_PROPERTY(QPoint arrowPos READ pos WRITE setArrowPos)
 public:
-    explicit PreviewFrame(DArrowRectangle::ArrowDirection direction, QWidget *parent = 0);
-    ~PreviewFrame();
+    explicit PreviewWindow(DArrowRectangle::ArrowDirection direction, QWidget *parent = 0);
+    ~PreviewWindow();
 
     void showPreview(int x, int y, int interval);
     void hidePreview(int interval = 0);
@@ -48,4 +48,4 @@ private:
     const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCirc;
 };
 
-#endif // PREVIEWFRAME_H
+#endif // PREVIEWWINDOW_H

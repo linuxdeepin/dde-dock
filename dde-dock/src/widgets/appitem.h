@@ -16,7 +16,7 @@
 #include <QJsonDocument>
 
 #include "appicon.h"
-#include "apppreviews.h"
+#include "apppreview/apppreviewscontainer.h"
 #include "appbackground.h"
 #include "abstractdockitem.h"
 #include "dbus/dbusentryproxyer.h"
@@ -97,7 +97,7 @@ private:
     DBusClientManager *m_clientmanager = NULL;
     DBusEntryProxyer *m_entryProxyer = NULL;
     AppBackground * m_appBackground = NULL;
-    AppPreviews *m_preview = NULL;
+    AppPreviewsContainer *m_preview = NULL;
     AppIcon * m_appIcon = NULL;
     QLabel * m_appTitle = NULL;
     QPoint m_lastPressPos;

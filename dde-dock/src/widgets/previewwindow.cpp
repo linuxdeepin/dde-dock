@@ -1,6 +1,6 @@
-#include "previewframe.h"
+#include "previewwindow.h"
 
-PreviewFrame::PreviewFrame(ArrowDirection direction, QWidget *parent) : DArrowRectangle(direction, parent)
+PreviewWindow::PreviewWindow(ArrowDirection direction, QWidget *parent) : DArrowRectangle(direction, parent)
 {
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::Tool);
     setArrowWidth(ARROW_WIDTH);
@@ -8,23 +8,23 @@ PreviewFrame::PreviewFrame(ArrowDirection direction, QWidget *parent) : DArrowRe
 
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
-    connect(m_showTimer, &QTimer::timeout, this, &PreviewFrame::onShowTimerTriggered);
+    connect(m_showTimer, &QTimer::timeout, this, &PreviewWindow::onShowTimerTriggered);
 
     m_hideTimer = new QTimer(this);
     m_hideTimer->setSingleShot(true);
-    connect(m_hideTimer, &QTimer::timeout, this, &PreviewFrame::hide);
+    connect(m_hideTimer, &QTimer::timeout, this, &PreviewWindow::hide);
 
     m_animation = new QPropertyAnimation(this, "arrowPos");
     m_animation->setDuration(MOVE_ANIMATION_DURATION);
     m_animation->setEasingCurve(MOVE_ANIMATION_CURVE);
 }
 
-PreviewFrame::~PreviewFrame()
+PreviewWindow::~PreviewWindow()
 {
 
 }
 
-void PreviewFrame::showPreview(int x, int y, int interval)
+void PreviewWindow::showPreview(int x, int y, int interval)
 {
     m_hideTimer->stop();
 
@@ -38,7 +38,7 @@ void PreviewFrame::showPreview(int x, int y, int interval)
     m_showTimer->start(interval);
 }
 
-void PreviewFrame::hidePreview(int interval)
+void PreviewWindow::hidePreview(int interval)
 {
     m_showTimer->stop();
 
@@ -50,17 +50,17 @@ void PreviewFrame::hidePreview(int interval)
         m_hideTimer->start(interval);
 }
 
-void PreviewFrame::setContent(QWidget *content)
+void PreviewWindow::setContent(QWidget *content)
 {
     m_tmpContent = content;
 }
 
-void PreviewFrame::setArrowPos(const QPoint &pos)
+void PreviewWindow::setArrowPos(const QPoint &pos)
 {
     show(pos.x(), pos.y());
 }
 
-void PreviewFrame::hide()
+void PreviewWindow::hide()
 {
 
     emit hideFinish(m_lastContent);
@@ -68,17 +68,17 @@ void PreviewFrame::hide()
     DArrowRectangle::hide();
 }
 
-void PreviewFrame::enterEvent(QEvent *)
+void PreviewWindow::enterEvent(QEvent *)
 {
     m_hideTimer->stop();
 }
 
-void PreviewFrame::leaveEvent(QEvent *)
+void PreviewWindow::leaveEvent(QEvent *)
 {
     m_hideTimer->start();
 }
 
-void PreviewFrame::onShowTimerTriggered()
+void PreviewWindow::onShowTimerTriggered()
 {
     if (m_lastContent != m_tmpContent)
         emit showFinish(m_lastContent);

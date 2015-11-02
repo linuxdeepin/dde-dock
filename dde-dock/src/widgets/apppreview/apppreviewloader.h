@@ -1,5 +1,5 @@
-#ifndef WINDOWPREVIEW_H
-#define WINDOWPREVIEW_H
+#ifndef APPPREVIEWLOADER_H
+#define APPPREVIEWLOADER_H
 
 #include <QWidget>
 #include <QFrame>
@@ -9,20 +9,21 @@
 
 class Monitor;
 class QPaintEvent;
-class WindowPreview : public QFrame
+class AppPreviewLoader : public QFrame
 {
     Q_OBJECT
     Q_PROPERTY(bool isHover READ isHover WRITE setIsHover)
 public:
     friend class Monitor;
 
-    WindowPreview(WId sourceWindow, QWidget *parent = 0);
-    ~WindowPreview();
+    AppPreviewLoader(WId sourceWindow, QWidget *parent = 0);
+    ~AppPreviewLoader();
 
     QByteArray imageData;
 
     bool isHover() const;
     void setIsHover(bool isHover);
+    void requestUpdate();
 
 protected:
     void paintEvent(QPaintEvent * event);
@@ -36,8 +37,8 @@ private:
 
     void installMonitor();
     void removeMonitor();
-
     void prepareRepaint();
+
 };
 
-#endif // WINDOWPREVIEW_H
+#endif // APPPREVIEWLOADER_H

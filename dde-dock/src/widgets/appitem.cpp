@@ -190,9 +190,9 @@ void AppItem::initBackground()
 
 void AppItem::initPreview()
 {
-    m_preview = new AppPreviews();
-    connect(m_preview,&AppPreviews::requestHide, [=]{hidePreview();});
-    connect(m_preview,&AppPreviews::sizeChanged, this, &AppItem::needPreviewUpdate);
+    m_preview = new AppPreviewsContainer();
+    connect(m_preview,&AppPreviewsContainer::requestHide, [=]{hidePreview();});
+    connect(m_preview,&AppPreviewsContainer::sizeChanged, this, &AppItem::needPreviewUpdate);
 }
 
 void AppItem::initAppIcon()

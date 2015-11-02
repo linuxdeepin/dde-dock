@@ -57,7 +57,6 @@ HEADERS += \
     src/widgets/appbackground.h \
     src/widgets/appicon.h \
     src/widgets/appitem.h \
-    src/widgets/apppreviews.h \
     src/widgets/docklayout.h \
     src/widgets/dockmodel.h \
     src/widgets/dockview.h \
@@ -65,10 +64,12 @@ HEADERS += \
     src/widgets/launcheritem.h \
     src/widgets/reflectioneffect.h \
     src/widgets/screenmask.h \
-    src/widgets/windowpreview.h \
     src/mainwidget.h \
-    src/widgets/previewframe.h \
-    src/controller/signalmanager.h
+    src/controller/signalmanager.h \
+    src/widgets/apppreview/apppreviewloader.h \
+    src/widgets/apppreview/apppreviewscontainer.h \
+    src/widgets/apppreview/apppreviewloaderframe.h \
+    src/widgets/previewwindow.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -93,7 +94,6 @@ SOURCES += \
     src/widgets/appbackground.cpp \
     src/widgets/appicon.cpp \
     src/widgets/appitem.cpp \
-    src/widgets/apppreviews.cpp \
     src/widgets/docklayout.cpp \
     src/widgets/dockmodel.cpp \
     src/widgets/dockview.cpp \
@@ -101,8 +101,10 @@ SOURCES += \
     src/widgets/launcheritem.cpp \
     src/widgets/reflectioneffect.cpp \
     src/widgets/screenmask.cpp \
-    src/widgets/windowpreview.cpp \
     src/main.cpp \
     src/mainwidget.cpp \
-    src/widgets/previewframe.cpp \
-    src/controller/signalmanager.cpp
+    src/controller/signalmanager.cpp \
+    src/widgets/apppreview/apppreviewloader.cpp \
+    src/widgets/apppreview/apppreviewscontainer.cpp \
+    src/widgets/apppreview/apppreviewloaderframe.cpp \
+    src/widgets/previewwindow.cpp

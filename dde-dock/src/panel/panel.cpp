@@ -107,14 +107,14 @@ void Panel::initPluginManager()
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
     });
     connect(m_pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
     });
     connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         item->setVisible(false);
@@ -194,19 +194,19 @@ void Panel::initScreenMask()
 
 void Panel::initGlobalPreview()
 {
-    m_globalPreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
+    m_globalPreview = new PreviewWindow(DArrowRectangle::ArrowBottom);
 
     //make sure all app-preview will be destroy to save resources
-    connect(m_globalPreview, &PreviewFrame::showFinish, [=] (QWidget *lastContent) {
+    connect(m_globalPreview, &PreviewWindow::showFinish, [=] (QWidget *lastContent) {
         if (lastContent) {
-            AppPreviews *tmpFrame = qobject_cast<AppPreviews *>(lastContent);
+            AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
                 tmpFrame->clearUpPreview();
         }
     });
-    connect(m_globalPreview, &PreviewFrame::hideFinish, [=] (QWidget *lastContent) {
+    connect(m_globalPreview, &PreviewWindow::hideFinish, [=] (QWidget *lastContent) {
         if (lastContent) {
-            AppPreviews *tmpFrame = qobject_cast<AppPreviews *>(lastContent);
+            AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
                 tmpFrame->clearUpPreview();
         }
@@ -266,7 +266,7 @@ void Panel::onAppItemAdd(AbstractDockItem *item)
     connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
     connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
     connect(item, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-    connect(item, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewFrame::resizeWithContent);
+    connect(item, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
 }
 
 void Panel::onAppItemRemove(const QString &id)

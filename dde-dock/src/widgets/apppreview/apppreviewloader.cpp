@@ -17,11 +17,11 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 
-#include "windowpreview.h"
+#include "apppreviewloader.h"
 
 static cairo_status_t cairo_write_func (void *widget, const unsigned char *data, unsigned int length)
 {
-    WindowPreview * wp = (WindowPreview *)widget;
+    AppPreviewLoader * wp = (AppPreviewLoader *)widget;
 
     wp->imageData.append((const char *) data, length);
 
@@ -31,7 +31,7 @@ static cairo_status_t cairo_write_func (void *widget, const unsigned char *data,
 class Monitor : public QAbstractNativeEventFilter
 {
 public:
-    Monitor(WindowPreview * wp) :
+    Monitor(AppPreviewLoader * wp) :
         QAbstractNativeEventFilter(),
         m_wp(wp)
     {
@@ -78,12 +78,12 @@ public:
     }
 
 private:
-    WindowPreview * m_wp;
+    AppPreviewLoader * m_wp;
     int m_damageEventBase;
     int m_damage;
 };
 
-WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
+AppPreviewLoader::AppPreviewLoader(WId sourceWindow, QWidget *parent)
     : QFrame(parent),
       m_sourceWindow(sourceWindow),
       m_monitor(NULL)
@@ -97,12 +97,12 @@ WindowPreview::WindowPreview(WId sourceWindow, QWidget *parent)
     installMonitor();
 }
 
-WindowPreview::~WindowPreview()
+AppPreviewLoader::~AppPreviewLoader()
 {
     removeMonitor();
 }
 
-void WindowPreview::paintEvent(QPaintEvent *)
+void AppPreviewLoader::paintEvent(QPaintEvent *)
 {
     QPainter painter;
     painter.begin(this);
@@ -116,12 +116,12 @@ void WindowPreview::paintEvent(QPaintEvent *)
 
     painter.end();
 }
-bool WindowPreview::isHover() const
+bool AppPreviewLoader::isHover() const
 {
     return m_isHover;
 }
 
-void WindowPreview::setIsHover(bool isHover)
+void AppPreviewLoader::setIsHover(bool isHover)
 {
     m_isHover = isHover;
 
@@ -131,8 +131,14 @@ void WindowPreview::setIsHover(bool isHover)
     repaint();
 }
 
+void AppPreviewLoader::requestUpdate()
+{
+    prepareRepaint();
+    repaint();
+}
 
-void WindowPreview::installMonitor()
+
+void AppPreviewLoader::installMonitor()
 {
     if (!m_monitor) {
         m_monitor = new Monitor(this);
@@ -142,7 +148,7 @@ void WindowPreview::installMonitor()
     }
 }
 
-void WindowPreview::removeMonitor()
+void AppPreviewLoader::removeMonitor()
 {
     if (m_monitor) {
         QCoreApplication * app = QApplication::instance();
@@ -153,7 +159,7 @@ void WindowPreview::removeMonitor()
     }
 }
 
-void WindowPreview::prepareRepaint()
+void AppPreviewLoader::prepareRepaint()
 {
     Display *dsp = QX11Info::display();
 

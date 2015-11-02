@@ -25,7 +25,7 @@ AbstractDockItem::AbstractDockItem(QWidget * parent) :
 {
 
     this->setAttribute(Qt::WA_TranslucentBackground);
-    m_titlePreview = new PreviewFrame(DArrowRectangle::ArrowBottom);
+    m_titlePreview = new PreviewWindow(DArrowRectangle::ArrowBottom);
 }
 
 AbstractDockItem::~AbstractDockItem()

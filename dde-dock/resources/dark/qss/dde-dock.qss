@@ -47,15 +47,15 @@ QLabel#AppBackgroundActiveLabel {
 }
 
 /******************************Item Preview***********************/
-QPushButton#PreviewCloseButton {
+QPushButton#AppPreviewLoaderFrameCloseButton {
     border-image: url(:/images/resources/dark/images/close_normal.png);
 }
 
-QPushButton#PreviewCloseButton:hover {
+QPushButton#AppPreviewLoaderFrameCloseButton:hover {
     border-image: url(:/images/resources/dark/images/close_hover.png);
 }
 
-QPushButton#PreviewCloseButton:pressed {
+QPushButton#AppPreviewLoaderFrameCloseButton:pressed {
     border-image: url(:/images/resources/dark/images/close_press.png);
 }
 
@@ -70,7 +70,7 @@ QFrame#WindowPreview[isHover="true"] {
     border-color: rgba(255,255,255,0.5);
 }
 
-QLabel#AppPreviewFrameTitle {
+QLabel#AppPreviewLoaderFrameTitle {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 3px;
     border-top-right-radius: 0px;
