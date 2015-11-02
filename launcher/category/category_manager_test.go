@@ -9,7 +9,7 @@ type ManagerTestSuite struct {
 }
 
 func (s *ManagerTestSuite) SetUpTest(c *C.C) {
-	s.manager = NewManager()
+	s.manager = NewManager(GetAllInfos(""))
 }
 
 func (s *ManagerTestSuite) TestGetCategory(c *C.C) {

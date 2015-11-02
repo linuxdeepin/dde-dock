@@ -1,18 +1,14 @@
 package category
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"path"
 	"path/filepath"
-	"sort"
 	"strings"
 
-	lerrors "pkg.deepin.io/dde/daemon/launcher/errors"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
 )
 
@@ -72,6 +68,14 @@ type Info struct {
 	id    CategoryID
 	name  string
 	items map[ItemID]struct{}
+}
+
+func NewInfo(id CategoryID, name string) *Info {
+	return &Info{
+		id:    id,
+		name:  name,
+		items: map[ItemID]struct{}{},
+	}
 }
 
 // ID returns category id.
@@ -134,82 +138,6 @@ func GetDBPath(dataDir string, template string) (string, error) {
 	return filepath.Join(dataDir, fmt.Sprintf(template, id)), nil
 }
 
-// QueryID returns app's category.
-func QueryID(app *gio.DesktopAppInfo, db *sql.DB) (CategoryID, error) {
-	if app == nil {
-		return OthersID, lerrors.NilArgument
-	}
-
-	filename := app.GetFilename()
-	basename := path.Base(filename)
-	id, err := getDeepinCategory(basename, db)
-	if err != nil {
-		categories := strings.Split(strings.TrimRight(app.GetCategories(), ";"), ";")
-		return getXCategory(categories), nil
-	}
-	return id, nil
-}
-
-func getDeepinCategory(basename string, db *sql.DB) (CategoryID, error) {
-	if db == nil {
-		return OthersID, errors.New("invalid db")
-	}
-
-	var categoryName string
-	err := db.QueryRow(`
-	select first_category_name
-	from desktop
-	where desktop_name = ?`,
-		basename,
-	).Scan(&categoryName)
-	if err != nil {
-		return OthersID, err
-	}
-
-	if categoryName == "" {
-		return OthersID, errors.New("get empty category")
-	}
-
-	return getCategoryID(categoryName)
-}
-
-// IDList type alias for []CategoryID, used for sorting.
-type IDList []CategoryID
-
-func (list IDList) Less(i, j int) bool {
-	return list[i] < list[j]
-}
-
-func (list IDList) Swap(i, j int) {
-	list[i], list[j] = list[j], list[i]
-}
-
-func (list IDList) Len() int {
-	return len(list)
-}
-
-func getXCategory(categories []string) CategoryID {
-	candidateIDs := map[CategoryID]bool{OthersID: true}
-	for _, category := range categories {
-		if id, err := getCategoryID(category); err == nil {
-			candidateIDs[id] = true
-		}
-	}
-
-	if len(candidateIDs) > 1 && candidateIDs[OthersID] {
-		delete(candidateIDs, OthersID)
-	}
-
-	var ids []CategoryID
-	for id := range candidateIDs {
-		ids = append(ids, id)
-	}
-
-	sort.Sort(IDList(ids))
-
-	return ids[0]
-}
-
 func getCategoryID(name string) (CategoryID, error) {
 	name = strings.ToLower(name)
 	if id, ok := categoryNameTable[name]; ok {
@@ -225,4 +153,21 @@ func getCategoryID(name string) (CategoryID, error) {
 	}
 
 	return OthersID, errors.New("unknown id")
+}
+
+func GetAllInfos(string) []CategoryInfo {
+	return []CategoryInfo{
+		NewInfo(AllID, AllCategoryName),
+		NewInfo(OthersID, OtherCategoryName),
+		NewInfo(NetworkID, NetworkCategoryName),
+		NewInfo(MultimediaID, MultimediaCategoryName),
+		NewInfo(GamesID, GamesCategoryName),
+		NewInfo(GraphicsID, GraphicsCategoryName),
+		NewInfo(ProductivityID, ProductivityCategoryName),
+		NewInfo(IndustryID, IndustryCategoryName),
+		NewInfo(EducationID, EducationCategoryName),
+		NewInfo(DevelopmentID, DevelopmentCategoryName),
+		NewInfo(SystemID, SystemCategoryName),
+		NewInfo(UtilitiesID, UtilitiesCategoryName),
+	}
 }

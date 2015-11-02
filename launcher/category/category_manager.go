@@ -1,38 +1,33 @@
 package category
 
 import (
+	"errors"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/lib/gio-2.0"
 )
+
+type QueryIDTransition interface {
+	Query(*gio.DesktopAppInfo) (CategoryID, error)
+	Free()
+}
 
 // Manager for categories.
 type Manager struct {
-	categoryTable map[CategoryID]CategoryInfo
+	categoryTable              map[CategoryID]CategoryInfo
+	deepinQueryIDTransition    QueryIDTransition
+	xCategoryQueryIDTransition QueryIDTransition
 }
 
 // NewManager creates a new category manager.
-func NewManager() *Manager {
+func NewManager(categories []CategoryInfo) *Manager {
 	m := &Manager{
 		categoryTable: map[CategoryID]CategoryInfo{},
 	}
-	m.addCategory(
-		&Info{AllID, AllCategoryName, map[ItemID]struct{}{}},
-		&Info{OthersID, OtherCategoryName, map[ItemID]struct{}{}},
-		&Info{NetworkID, NetworkCategoryName, map[ItemID]struct{}{}},
-		&Info{MultimediaID, MultimediaCategoryName, map[ItemID]struct{}{}},
-		&Info{GamesID, GamesCategoryName, map[ItemID]struct{}{}},
-		&Info{GraphicsID, GraphicsCategoryName, map[ItemID]struct{}{}},
-		&Info{ProductivityID, ProductivityCategoryName, map[ItemID]struct{}{}},
-		&Info{IndustryID, IndustryCategoryName, map[ItemID]struct{}{}},
-		&Info{EducationID, EducationCategoryName, map[ItemID]struct{}{}},
-		&Info{DevelopmentID, DevelopmentCategoryName, map[ItemID]struct{}{}},
-		&Info{SystemID, SystemCategoryName, map[ItemID]struct{}{}},
-		&Info{UtilitiesID, UtilitiesCategoryName, map[ItemID]struct{}{}},
-	)
-
+	m.AddCategory(categories...)
 	return m
 }
 
-func (m *Manager) addCategory(c ...CategoryInfo) {
+func (m *Manager) AddCategory(c ...CategoryInfo) {
 	for _, info := range c {
 		m.categoryTable[info.ID()] = info
 	}
@@ -68,4 +63,43 @@ func (m *Manager) AddItem(id ItemID, cid CategoryID) {
 func (m *Manager) RemoveItem(id ItemID, cid CategoryID) {
 	m.categoryTable[cid].RemoveItem(id)
 	m.categoryTable[AllID].RemoveItem(id)
+}
+
+func (m *Manager) QueryID(app *gio.DesktopAppInfo) (CategoryID, error) {
+	var err error
+	if m.deepinQueryIDTransition != nil {
+		cid, e := m.deepinQueryIDTransition.Query(app)
+		if e == nil {
+			return cid, nil
+		}
+		err = e
+	}
+
+	if m.xCategoryQueryIDTransition != nil {
+		return m.xCategoryQueryIDTransition.Query(app)
+	}
+
+	if err != nil {
+		return OthersID, err
+	}
+
+	return OthersID, errors.New("No QueryIDTransition is created")
+}
+
+func (m *Manager) LoadAppCategoryInfo(deepin string, xcategory string) error {
+	var err error
+	m.deepinQueryIDTransition, err = NewDeepinQueryIDTransition(deepin)
+	if err != nil {
+		return err
+	}
+
+	m.xCategoryQueryIDTransition, err = NewXCategoryQueryIDTransition(xcategory)
+	return err
+}
+
+func (m *Manager) FreeAppCategoryInfo() {
+	m.deepinQueryIDTransition.Free()
+	m.xCategoryQueryIDTransition.Free()
+	m.deepinQueryIDTransition = nil
+	m.xCategoryQueryIDTransition = nil
 }

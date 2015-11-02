@@ -1,7 +1,6 @@
 package launcher
 
 import (
-	"database/sql"
 	"os"
 	"path"
 	"path/filepath"
@@ -28,9 +27,9 @@ const (
 
 	AppDirName string = "applications"
 
-	SoftwareStatusCreated  string = "created"
-	SoftwareStatusModified string = "updated"
-	SoftwareStatusDeleted  string = "deleted"
+	AppStatusCreated  string = "created"
+	AppStatusModified string = "updated"
+	AppStatusDeleted  string = "deleted"
 )
 
 // ItemChangedStatus stores item's current changed status.
@@ -215,12 +214,12 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 
 	id := item.GenID(name)
 
-	if status == SoftwareStatusCreated && self.itemManager.HasItem(id) {
-		status = SoftwareStatusModified
+	if status == AppStatusCreated && self.itemManager.HasItem(id) {
+		status = AppStatusModified
 	}
 	logger.Info(name, "Status:", status)
 
-	if status != SoftwareStatusDeleted {
+	if status != AppStatusDeleted {
 		// cannot use float number here. the total wait time is about 12s.
 		maxDuration := time.Second + time.Second/2
 		waitDuration := time.Millisecond * 0
@@ -248,15 +247,14 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		}
 
 		dbPath, _ := category.GetDBPath(category.SoftwareCenterDataDir, category.CategoryNameDBPath)
-		db, err := sql.Open("sqlite3", dbPath)
-		if err == nil {
-			defer db.Close()
-			cid, err := category.QueryID(app, db)
-			if err != nil {
-				itemInfo.SetCategoryID(category.OthersID)
-			}
-			itemInfo.SetCategoryID(cid)
+		self.categoryManager.LoadAppCategoryInfo(dbPath, "")
+		defer self.categoryManager.FreeAppCategoryInfo()
+
+		cid, err := self.categoryManager.QueryID(app)
+		if err != nil {
+			itemInfo.SetCategoryID(category.OthersID)
 		}
+		itemInfo.SetCategoryID(cid)
 
 		self.itemManager.AddItem(itemInfo)
 		self.categoryManager.AddItem(itemInfo.ID(), itemInfo.CategoryID())
@@ -271,7 +269,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	cid := item.CategoryID()
 	itemInfo := NewItemInfoExport(item)
 
-	if status == SoftwareStatusDeleted {
+	if status == AppStatusDeleted {
 		self.itemManager.MarkLaunched(id)
 		self.categoryManager.RemoveItem(id, cid)
 		self.itemManager.RemoveItem(id)
@@ -308,13 +306,13 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			case <-time.After(time.Second):
 				<-info[name].renamed
 				if true {
-					self.emitItemChanged(name, SoftwareStatusDeleted, info)
+					self.emitItemChanged(name, AppStatusDeleted, info)
 				}
 			}
 		}()
 		info[name].renamed <- true
 	} else if ev.IsCreate() {
-		self.emitItemChanged(name, SoftwareStatusCreated, info)
+		self.emitItemChanged(name, AppStatusCreated, info)
 		go func() {
 			select {
 			case <-info[name].renamed:
@@ -340,7 +338,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			}
 			select {
 			case <-info[name].renamed:
-				self.emitItemChanged(name, SoftwareStatusModified, info)
+				self.emitItemChanged(name, AppStatusModified, info)
 			default:
 			}
 		}()
@@ -355,7 +353,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}()
 	} else if ev.IsDelete() {
 		if true {
-			self.emitItemChanged(name, SoftwareStatusDeleted, info)
+			self.emitItemChanged(name, AppStatusDeleted, info)
 		}
 	}
 }
@@ -426,7 +424,7 @@ func (self *Launcher) listenItemChanged() {
 
 	if self.store != nil {
 		self.store.ConnectNewDesktopAdded(func(desktopID string, timeInstalled int32) {
-			self.emitItemChanged(desktopID, SoftwareStatusCreated, map[string]ItemChangedStatus{
+			self.emitItemChanged(desktopID, AppStatusCreated, map[string]ItemChangedStatus{
 				desktopID: ItemChangedStatus{
 					timeInstalled: int64(timeInstalled),
 				},

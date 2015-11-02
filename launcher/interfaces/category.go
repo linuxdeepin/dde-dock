@@ -1,5 +1,9 @@
 package interfaces
 
+import (
+	"pkg.deepin.io/lib/gio-2.0"
+)
+
 // CategoryID is the type for category id.
 type CategoryID int64
 
@@ -19,4 +23,7 @@ type CategoryManager interface {
 	RemoveItem(ItemID, CategoryID)
 	GetAllCategory() []CategoryID
 	GetCategory(id CategoryID) CategoryInfo
+	LoadAppCategoryInfo(deepin string, xcategory string) error
+	FreeAppCategoryInfo()
+	QueryID(app *gio.DesktopAppInfo) (CategoryID, error)
 }

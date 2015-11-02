@@ -1,7 +1,6 @@
 package launcher
 
 import (
-	"database/sql"
 	storeApi "dbus/com/deepin/store/api"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
@@ -60,8 +59,7 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 	}()
 
 	dbPath, _ := category.GetDBPath(category.SoftwareCenterDataDir, category.CategoryNameDBPath)
-	db, err := sql.Open("sqlite3", dbPath)
-
+	cm.LoadAppCategoryInfo(dbPath, "")
 	var wg sync.WaitGroup
 	const N = 20
 	wg.Add(N)
@@ -75,7 +73,7 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 
 				desktopApp := gio.ToDesktopAppInfo(app)
 				newItem := item.New(desktopApp)
-				cid, err := category.QueryID(desktopApp, db)
+				cid, err := cm.QueryID(desktopApp)
 				newItem.SetCategoryID(cid)
 				if err != nil {
 				}
@@ -90,9 +88,7 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 		}()
 	}
 	wg.Wait()
-	if err == nil {
-		db.Close()
-	}
+	cm.FreeAppCategoryInfo()
 }
 
 // Start starts the launcher module.
@@ -114,7 +110,7 @@ func (d *Daemon) Start() error {
 		d.launcher = NewLauncher()
 
 		im := item.NewManager(soft.(DStore))
-		cm := category.NewManager()
+		cm := category.NewManager(category.GetAllInfos(""))
 
 		d.launcher.setItemManager(im)
 		d.launcher.setCategoryManager(cm)
