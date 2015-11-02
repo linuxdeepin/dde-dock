@@ -14,3 +14,4 @@ XKBOPTIONS=""
 # specify an alternative keymap.  Make sure it will be accessible
 # before /usr is mounted.
 # KMAP=/etc/console-setup/defkeymap.kmap.gz
+BACKSPACE="guess"
