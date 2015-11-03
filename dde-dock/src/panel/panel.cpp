@@ -22,6 +22,7 @@ Panel::Panel(QWidget *parent)
     initReflection();
     initScreenMask();
 
+    setMinimumHeight(m_dockModeData->getDockHeight());  //set height for border-image calculate
     reloadStyleSheet();
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::onDockModeChanged);
