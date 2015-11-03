@@ -4,6 +4,9 @@ import "pkg.deepin.io/lib/pulse"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {
+		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
+			a.handleCardEvent(e, idx)
+		})
 		a.core.Connect(pulse.FacilitySink, func(e int, idx uint32) {
 			a.handleSinkEvent(e, idx)
 		})
@@ -20,10 +23,24 @@ func (a *Audio) initEventHandlers() {
 	}
 }
 
+func (a *Audio) handleCardEvent(eType int, idx uint32) {
+	switch eType {
+	case pulse.EventTypeNew:
+		card, err := a.core.GetCard(idx)
+		if nil != err {
+			logger.Warning("get card info failed: ", err)
+			return
+		}
+		selectNewCardProfile(card)
+	case pulse.EventTypeRemove:
+	case pulse.EventTypeChange:
+	}
+}
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
 		a.rebuildSinkList()
+		//TODO: switch to new sink
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sinks {

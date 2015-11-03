@@ -11,9 +11,11 @@ const (
 )
 
 const (
-	PropAppIconName = "application.icon_name"
-	PropAppName     = "application.name"
-	PropAppPID      = "application.process.id"
+	PropAppIconName      = "application.icon_name"
+	PropAppName          = "application.name"
+	PropAppPID           = "application.process.id"
+	PropDeviceFromFactor = "device.form_factor"
+	PropDeviceBus        = "device.bus"
 )
 
 func (*Audio) GetDBusInfo() dbus.DBusInfo {
