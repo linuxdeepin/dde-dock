@@ -104,7 +104,11 @@ get_dst_time(const char *zone, int year)
 		tm = newtm;
 		tmp = newtmp;
 	}
-	setenv("TZ", tz, 1);
+       if (tz) {
+               setenv("TZ", tz, 1);
+       } else {
+               unsetenv("TZ");
+       }
 
 	return ret;
 }
