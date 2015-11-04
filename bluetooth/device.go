@@ -46,11 +46,12 @@ type device struct {
 	Alias   string
 	Trusted bool
 	Paired  bool
+	State   uint32
+	UUIDs   []string
 
 	oldConnected bool
 	connected    bool
 	connecting   bool
-	State        uint32
 
 	// optional
 	Icon string
@@ -66,6 +67,7 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.connected = d.bluezDevice.Connected.Get()
+	d.UUIDs = d.bluezDevice.UUIDs.Get()
 	d.oldConnected = d.connected
 	d.notifyStateChanged()
 
@@ -135,6 +137,11 @@ func (d *device) connectProperties() {
 	})
 	d.bluezDevice.Icon.ConnectChanged(func() {
 		d.Icon = d.bluezDevice.Icon.Get()
+		d.notifyDevicePropertiesChanged()
+		bluetooth.setPropDevices()
+	})
+	d.bluezDevice.UUIDs.ConnectChanged(func() {
+		d.UUIDs = d.bluezDevice.UUIDs.Get()
 		d.notifyDevicePropertiesChanged()
 		bluetooth.setPropDevices()
 	})
@@ -257,6 +264,16 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
 		}
+
+		// TODO: remove work code if bluez a2dp is ok
+		// bluez do not support muti a2dp devices
+		// disconnect a2dp device before connect
+		for _, uuid := range d.UUIDs {
+			if uuid == A2DP_SINK_UUID {
+				b.disconnectA2DPDevice()
+			}
+		}
+
 		err = bluezConnectDevice(dpath)
 		if err != nil {
 			// trust device when connecting success
