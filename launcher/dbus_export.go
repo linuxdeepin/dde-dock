@@ -21,7 +21,7 @@ func NewItemInfoExport(item ItemInfo) ItemInfoExport {
 	}
 	return ItemInfoExport{
 		Path:          item.Path(),
-		Name:          item.Name(),
+		Name:          item.LocaleName(),
 		ID:            item.ID(),
 		Icon:          item.Icon(),
 		CategoryID:    item.CategoryID(),
