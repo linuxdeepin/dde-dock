@@ -24,6 +24,7 @@ package shortcuts
 import (
 	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/lib/gio-2.0"
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -95,11 +96,13 @@ func newMediakeyGSetting() *gio.Settings {
 }
 
 func newMetacityGSetting() *gio.Settings {
-	return gio.NewSettings(metacitySchema)
+	s, _ := dutils.CheckAndNewGSettings(metacitySchema)
+	return s
 }
 
 func newGalaGSetting() *gio.Settings {
-	return gio.NewSettings(galaSchema)
+	s, _ := dutils.CheckAndNewGSettings(galaSchema)
+	return s
 }
 
 func getNameFromMap(id string, m map[string]string) string {

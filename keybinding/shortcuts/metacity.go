@@ -5,47 +5,76 @@ import (
 )
 
 func ListMetacityShortcut() Shortcuts {
-	s := newMetacityGSetting()
-	defer s.Unref()
-	return doListShortcut(s, metacityIdNameMap(), KeyTypeMetacity)
+	gala := newGalaGSetting()
+	if gala != nil {
+		defer gala.Unref()
+		return doListShortcut(gala, metacityIdNameMap(), KeyTypeMetacity)
+	}
+
+	meta := newMetacityGSetting()
+	if meta == nil {
+		return nil
+	}
+	defer meta.Unref()
+	return doListShortcut(meta, metacityIdNameMap(), KeyTypeMetacity)
 }
 
 func resetMetacityAccels() {
 	meta := newMetacityGSetting()
-	defer meta.Unref()
-	doResetAccels(meta)
+	if meta != nil {
+		defer meta.Unref()
+		doResetAccels(meta)
+	}
 
 	gala := newGalaGSetting()
+	if gala == nil {
+		return
+	}
 	defer gala.Unref()
 	doResetAccels(gala)
 }
 
 func disableMetacityAccels(key string) {
 	meta := newMetacityGSetting()
-	defer meta.Unref()
-	doDisableAccles(meta, key)
+	if meta != nil {
+		defer meta.Unref()
+		doDisableAccles(meta, key)
+	}
 
 	gala := newGalaGSetting()
+	if gala == nil {
+		return
+	}
 	defer gala.Unref()
 	doDisableAccles(gala, key)
 }
 
 func addMetacityAccel(key, accel string) {
 	meta := newMetacityGSetting()
-	defer meta.Unref()
-	doAddAccel(meta, key, accel)
+	if meta != nil {
+		defer meta.Unref()
+		doAddAccel(meta, key, accel)
+	}
 
 	gala := newGalaGSetting()
+	if gala == nil {
+		return
+	}
 	defer gala.Unref()
 	doAddAccel(gala, key, accel)
 }
 
 func delMetacityAccel(key, accel string) {
 	meta := newMetacityGSetting()
-	defer meta.Unref()
-	doDelAccel(meta, key, accel)
+	if meta != nil {
+		defer meta.Unref()
+		doDelAccel(meta, key, accel)
+	}
 
 	gala := newGalaGSetting()
+	if gala == nil {
+		return
+	}
 	defer gala.Unref()
 	doDelAccel(gala, key, accel)
 }
