@@ -6,6 +6,7 @@ package main
 import "C"
 import (
 	_ "pkg.deepin.io/dde/daemon/dock"
+	_ "pkg.deepin.io/dde/daemon/soundeffect"
 
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
@@ -72,7 +73,7 @@ func main() {
 	C.init()
 	proxy.SetupProxy()
 
-	loader.EnableModules([]string{"dock"}, nil, loader.EnableFlagIgnoreMissingModule)
+	loader.EnableModules([]string{"dock", "soundeffect"}, nil, loader.EnableFlagIgnoreMissingModule)
 
 	runMainLoop()
 }
