@@ -10,15 +10,15 @@ DockLayout::DockLayout(QWidget *parent) :
     this->setMouseTracking(true);
 }
 
-void DockLayout::addItem(AbstractDockItem *item)
+void DockLayout::addItem(AbstractDockItem *item, bool delayShow)
 {
     if (!item)
         return;
 
     if (m_lastHoverIndex == -1)
-        insertItem(item,m_appList.count());
+        insertItem(item, m_appList.count(), delayShow);
     else
-        insertItem(item, m_lastHoverIndex);
+        insertItem(item, m_lastHoverIndex, delayShow);
 }
 
 void DockLayout::insertItem(AbstractDockItem *item, int index, bool delayShow)
@@ -235,8 +235,12 @@ void DockLayout::dropEvent(QDropEvent *event)
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString()))
             relayout();
-        else
+        else {
             m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
+            emit itemDocking(dataObj.value("appKey").toString());
+
+            qWarning() << "App drop to dock: " << dataObj.value("appKey").toString();
+        }
     }
     else
         restoreTmpItem();

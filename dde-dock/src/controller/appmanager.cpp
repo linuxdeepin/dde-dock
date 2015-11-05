@@ -11,7 +11,7 @@ void AppManager::initEntries()
 {
 
     LauncherItem * lItem = new LauncherItem();
-    emit entryAdded(lItem);
+    emit entryAdded(lItem, false);
 
     QList<QDBusObjectPath> entryList = m_entryManager->entries();
     for (int i = 0; i < entryList.count(); i ++)
@@ -40,10 +40,19 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
             item->deleteLater();
         }else{
             qWarning() << "entry add:" << tmpId;
+            bool isTheDropOne = m_dockingItemId != tmpId;
             m_ids.append(tmpId);
-            emit entryAdded(item);
+            emit entryAdded(item, isTheDropOne);
+
+            if (isTheDropOne)
+                setDockingItemId("");
         }
     }
+}
+
+void AppManager::setDockingItemId(const QString &dockingItemId)
+{
+    m_dockingItemId = dockingItemId;
 }
 
 void AppManager::onEntryRemoved(const QString &id)
@@ -61,10 +70,10 @@ void AppManager::sortItemList()
     foreach (QString id, dockedList) {  //For docked items
         int index = tmpIds.indexOf(id);
         if (index != -1)
-            emit entryAdded(m_initItemList.take(tmpIds.at(index)));
+            emit entryAdded(m_initItemList.take(tmpIds.at(index)), false);
     }
     tmpIds = m_initItemList.keys();
     foreach (QString id, tmpIds) { //For undocked items
-        emit entryAdded(m_initItemList.take(id));
+        emit entryAdded(m_initItemList.take(id), false);
     }
 }

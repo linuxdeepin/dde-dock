@@ -59,7 +59,7 @@ private:
     void onItemDropped();
     void onItemDragStarted();
     void onLayoutContentsWidthChanged();
-    void onAppItemAdd(AbstractDockItem *item);
+    void onAppItemAdd(AbstractDockItem *item, bool delayShow);
     void onAppItemRemove(const QString &id);
     void onDockModeChanged(Dock::DockMode newMode, Dock::DockMode);
     void onHideStateChanged(int dockState);
