@@ -6,6 +6,13 @@ PreviewWindow::PreviewWindow(ArrowDirection direction, QWidget *parent) : DArrow
     setArrowWidth(ARROW_WIDTH);
     setArrowHeight(ARROW_HEIGHT);
 
+    //QWidget calls this function after it has been fully constructed but before it is shown the very first time.
+    //so call it to make sure the style sheet won't repolish and cover the value set by seter-function
+    ensurePolished();
+    setRadius(4);
+    setBorderWidth(1);
+    setBorderColor(QColor(0, 0, 0, 0.2 * 255));
+
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, this, &PreviewWindow::onShowTimerTriggered);

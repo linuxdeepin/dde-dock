@@ -59,14 +59,14 @@ QPushButton#AppPreviewLoaderFrameCloseButton:pressed {
     border-image: url(:/images/resources/dark/images/close_press.png);
 }
 
-QFrame#WindowPreview {
+AppPreviewLoader {
     border-radius: 3px;
-    border-width: 3px;
+    border-width: 2px;
     border-style: solid;
     border-color: rgba(255,255,255,0.1);
 }
 
-QFrame#WindowPreview[isHover="true"] {
+AppPreviewLoader[isHover="true"] {
     border-color: rgba(255,255,255,0.5);
 }
 
@@ -75,6 +75,7 @@ QLabel#AppPreviewLoaderFrameTitle {
     border-bottom-left-radius: 3px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 3px;
+    border-width: 0;
     font-size: 10px;
     color: #FFFFFF;
     background-color: rgba(0,0,0,0.7);
