@@ -20,31 +20,43 @@ var soundEventMap = map[string]string{
 }
 
 func (m *Manager) PlaySystemSound(event string) error {
-	if !m.canPlayEvent(event) {
-		return nil
-	}
+	return m.doPlaySystemSound(event, false)
+}
 
-	err := m.player.PlaySystemSound(queryEvent(event))
-	if err != nil {
-		logger.Debugf("Play sound event '%s' failed: %v",
-			queryEvent(event), err)
-		return err
-	}
-	return nil
+func (m *Manager) PlaySystemSoundSync(event string) error {
+	return m.doPlaySystemSound(event, true)
 }
 
 func (m *Manager) PlayThemeSound(theme, event string) error {
+	return m.doPlayThemeSound(theme, event, false)
+}
+
+func (m *Manager) PlayThemeSoundSync(theme, event string) error {
+	return m.doPlayThemeSound(theme, event, true)
+}
+
+func (m *Manager) doPlaySystemSound(event string, sync bool) error {
 	if !m.canPlayEvent(event) {
 		return nil
 	}
 
-	err := m.player.PlayThemeSound(theme, queryEvent(event))
-	if err != nil {
-		logger.Debugf("Play theme '%s' sound event '%s' failed: %v",
-			theme, queryEvent(event), err)
-		return err
+	event = queryEvent(event)
+	if sync {
+		return m.player.PlaySystemSoundSync(event)
 	}
-	return nil
+	return m.player.PlaySystemSound(event)
+}
+
+func (m *Manager) doPlayThemeSound(theme, event string, sync bool) error {
+	if !m.canPlayEvent(event) {
+		return nil
+	}
+
+	event = queryEvent(event)
+	if sync {
+		return m.player.PlayThemeSoundSync(theme, event)
+	}
+	return m.player.PlayThemeSound(theme, event)
 }
 
 func (m *Manager) canPlayEvent(event string) bool {
