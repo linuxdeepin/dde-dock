@@ -19,12 +19,12 @@ type MenuItem struct {
 	showCheckMark    bool
 	subMenu          *Menu
 
-	Action func()
+	Action func(uint32)
 }
 
 // TODO: set properties.
 
-func NewMenuItem(name string, action func(), enable bool) *MenuItem {
+func NewMenuItem(name string, action func(uint32), enable bool) *MenuItem {
 	return &MenuItem{
 		name,
 		enable,
@@ -85,9 +85,9 @@ func (m *Menu) AppendItem(items ...*MenuItem) {
 	}
 }
 
-func (m *Menu) HandleAction(id string) {
+func (m *Menu) HandleAction(id string, timestamp uint32) {
 	if item, ok := m.ids[id]; ok && item.isActive {
-		item.Action()
+		item.Action(timestamp)
 	}
 }
 

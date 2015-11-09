@@ -2,10 +2,11 @@ package dock
 
 import (
 	"encoding/json"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gio-2.0"
 	"strings"
 	"sync"
+
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 const (
@@ -56,31 +57,42 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	return e
 }
 
+// NB: **deprecated**, compatible interface, use HandleMenuItemWithTimestamp instead.
 func (e *AppEntry) HandleMenuItem(id string) {
+	e.HandleMenuItemWithTimestamp(id, 0)
+}
+
+func (e *AppEntry) HandleMenuItemWithTimestamp(id string, timestamp uint32) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
-		e.nApp.HandleMenuItem(id)
+		e.nApp.HandleMenuItem(id, timestamp)
 	case ActiveStatus:
-		e.rApp.HandleMenuItem(id)
+		e.rApp.HandleMenuItem(id, timestamp)
 	}
 }
 
-func (e *AppEntry) Activate(x, y int32) bool {
-	switch e.Data[FieldStatus] {
-	case NormalStatus:
-		return e.nApp.Activate(x, y) == nil
-	case ActiveStatus:
-		return e.rApp.Activate(x, y) == nil
-	}
-	return false
+func (e *AppEntry) Activate(x, y int32) (bool, error) {
+	return e.ActivateWithTimestamp(x, y, 0)
 }
 
-func (e *AppEntry) ContextMenu(x, y int32)                  {}
-func (e *AppEntry) SecondaryActivate(x, y int32)            {}
-func (e *AppEntry) HandleDragEnter(x, y int32, data string) {}
-func (e *AppEntry) HandleDragLeave(x, y int32, data string) {}
-func (e *AppEntry) HandleDragOver(x, y int32, data string)  {}
-func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
+func (e *AppEntry) ActivateWithTimestamp(x, y int32, timestamp uint32) (bool, error) {
+	switch e.Data[FieldStatus] {
+	case NormalStatus:
+		err := e.nApp.Activate(x, y, timestamp)
+		return err == nil, err
+	case ActiveStatus:
+		err := e.rApp.Activate(x, y, timestamp)
+		return err == nil, err
+	}
+	panic("should not reach")
+}
+
+func (e *AppEntry) ContextMenu(x, y int32)                                    {}
+func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
+func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
+func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
+func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
+func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
 	paths := strings.Split(data, ",")
 	logger.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
@@ -88,7 +100,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		core := e.rApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
-			_, err := core.LaunchUris(paths, nil)
+			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -101,7 +113,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 				return
 			}
 
-			_, err = app.LaunchUris(paths, nil)
+			_, err = app.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -111,7 +123,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		core := e.nApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
-			_, err := core.LaunchUris(paths, nil)
+			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -121,7 +133,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		}
 	}
 }
-func (e *AppEntry) HandleMouseWheel(x, y, delta int32) {}
+func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32) {}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {

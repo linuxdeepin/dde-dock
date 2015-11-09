@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strings"
+
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/utils"
-	"strings"
 )
 
 type NormalApp struct {
@@ -73,14 +74,14 @@ func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
 
 func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu = NewMenu()
-	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func() {
+	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func(timestamp uint32) {
 		core := app.createDesktopAppInfo()
 		if core == nil {
 			logger.Warning("Run app failed")
 			return
 		}
 		defer core.Unref()
-		_, err := core.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext())
+		_, err := core.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 		if err != nil {
 			logger.Warning("Launch App Failed: ", err)
 		}
@@ -90,7 +91,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 		name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 		app.coreMenu.AppendItem(NewMenuItem(
 			core.GetActionName(actionName),
-			func() {
+			func(timestamp uint32) {
 				core := app.createDesktopAppInfo()
 				if core == nil {
 					logger.Warning("start action", name,
@@ -98,7 +99,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 					return
 				}
 				defer core.Unref()
-				core.LaunchAction(name, gio.GetGdkAppLaunchContext())
+				core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			},
 			true,
 		))
@@ -106,7 +107,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu.AddSeparator()
 	dockItem := NewMenuItem(
 		Tr("_Undock"),
-		func() {
+		func(timestamp uint32) {
 			DOCKED_APP_MANAGER.Undock(app.Id)
 		},
 		true,
@@ -116,9 +117,9 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.Menu = app.coreMenu.GenerateJSON()
 }
 
-func (app *NormalApp) HandleMenuItem(id string) {
+func (app *NormalApp) HandleMenuItem(id string, timestamp uint32) {
 	if app.coreMenu != nil {
-		app.coreMenu.HandleAction(id)
+		app.coreMenu.HandleAction(id, timestamp)
 	}
 }
 
@@ -136,7 +137,7 @@ func NewNormalAppFromFilename(name string) *NormalApp {
 	return app
 }
 
-func (app *NormalApp) Activate(x, y int32) error {
+func (app *NormalApp) Activate(x, y int32, timestamp uint32) error {
 	// FIXME:
 	// the launch will be successful even if the desktop file is not
 	// existed.
@@ -149,7 +150,7 @@ func (app *NormalApp) Activate(x, y int32) error {
 		return errors.New("create desktop app info failed")
 	}
 	defer core.Unref()
-	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext())
+	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)
 	}

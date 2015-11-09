@@ -2,6 +2,7 @@ package dock
 
 import (
 	"errors"
+
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -52,32 +53,44 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 func (e *EntryProxyer) ContextMenu(x, y int32) { e.core.ContextMenu(x, y) }
 
 // HandleMenuItem对出入的id在右键菜单中对应的项做处理。
-func (e *EntryProxyer) HandleMenuItem(id string) { e.core.HandleMenuItem(id) }
+func (e *EntryProxyer) HandleMenuItem(id string, timestamp uint32) {
+	e.core.HandleMenuItem(id, timestamp)
+}
 
 // Activate在程序被点击时作出响应，接受鼠标事件的位置信息。
-func (e *EntryProxyer) Activate(x, y int32) bool {
-	b, _ := e.core.Activate(x, y)
+func (e *EntryProxyer) Activate(x, y int32, timestamp uint32) bool {
+	b, _ := e.core.Activate(x, y, timestamp)
 	return b
 }
 
 // SecondaryActivate与Activate作用相同，可用于其他鼠标点击事件，通常不会被使用。
-func (e *EntryProxyer) SecondaryActivate(x, y int32) { e.core.SecondaryActivate(x, y) }
+func (e *EntryProxyer) SecondaryActivate(x, y int32, timestamp uint32) {
+	e.core.SecondaryActivate(x, y, timestamp)
+}
 
 // HandleDragEnter在前端触发DragEnter事件时被调用。
-func (e *EntryProxyer) HandleDragEnter(x, y int32, data string) { e.core.HandleDragEnter(x, y, data) }
+func (e *EntryProxyer) HandleDragEnter(x, y int32, data string, timestamp uint32) {
+	e.core.HandleDragEnter(x, y, data, timestamp)
+}
 
 // HandleDragLeave在前端触发DragLeave事件时被调用。
-func (e *EntryProxyer) HandleDragLeave(x, y int32, data string) { e.core.HandleDragLeave(x, y, data) }
+func (e *EntryProxyer) HandleDragLeave(x, y int32, data string, timestamp uint32) {
+	e.core.HandleDragLeave(x, y, data, timestamp)
+}
 
 // HandleDragOver在前端触发DragOver事件时被调用。
-func (e *EntryProxyer) HandleDragOver(x, y int32, data string) { e.core.HandleDragOver(x, y, data) }
+func (e *EntryProxyer) HandleDragOver(x, y int32, data string, timestamp uint32) {
+	e.core.HandleDragOver(x, y, data, timestamp)
+}
 
 // HandleDragDrop在前端触发Dropp事件时被调用。
-func (e *EntryProxyer) HandleDragDrop(x, y int32, data string) { e.core.HandleDragDrop(x, y, data) }
+func (e *EntryProxyer) HandleDragDrop(x, y int32, data string, timestamp uint32) {
+	e.core.HandleDragDrop(x, y, data, timestamp)
+}
 
 // HandleMouseWheel在前端触发鼠标滚轮事件时被调用。
-func (e *EntryProxyer) HandleMouseWheel(x, y, delta int32) {
-	e.core.HandleMouseWheel(x, y, delta)
+func (e *EntryProxyer) HandleMouseWheel(x, y, delta int32, timestamp uint32) {
+	e.core.HandleMouseWheel(x, y, delta, timestamp)
 }
 
 // ShowQuickWindow用于applet程序中，在需要显示时applet的窗口调用。

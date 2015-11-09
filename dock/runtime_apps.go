@@ -4,6 +4,13 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -12,15 +19,9 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"io/ioutil"
-	"path/filepath"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
 )
 
 type WindowInfo struct {
@@ -133,8 +134,8 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 	logger.Debug("app get exec:", app.exec)
 }
 
-func actionGenarator(id string) func() {
-	return func() {
+func actionGenarator(id string) func(uint32) {
+	return func(timestamp uint32) {
 		app, ok := ENTRY_MANAGER.runtimeApps[id]
 		if !ok {
 			return
@@ -203,7 +204,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	app.coreMenu.AppendItem(NewMenuItem(
 		itemName,
-		func() {
+		func(timestamp uint32) {
 			var a *gio.AppInfo
 			logger.Debug(itemName)
 			core := app.createDesktopAppInfo()
@@ -232,7 +233,7 @@ func (app *RuntimeApp) buildMenu() {
 				return
 			}
 
-			_, err := a.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext())
+			_, err := a.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch App Failed: ", err)
 			}
@@ -245,13 +246,13 @@ func (app *RuntimeApp) buildMenu() {
 			name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 			app.coreMenu.AppendItem(NewMenuItem(
 				core.GetActionName(actionName),
-				func() {
+				func(timestamp uint32) {
 					core := app.createDesktopAppInfo()
 					if core == nil {
 						return
 					}
 					defer core.Unref()
-					core.LaunchAction(name, gio.GetGdkAppLaunchContext())
+					core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 				},
 				true,
 			))
@@ -260,7 +261,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	closeItem := NewMenuItem(
 		Tr("_Close All"),
-		func() {
+		func(timestamp uint32) {
 			logger.Debug("Close All")
 			for xid := range app.xids {
 				ewmh.CloseWindow(XU, xid)
@@ -272,12 +273,12 @@ func (app *RuntimeApp) buildMenu() {
 	isDocked := DOCKED_APP_MANAGER.IsDocked(app.Id)
 	logger.Info(app.Id, "Item is docked:", isDocked)
 	var message string = ""
-	var action func() = nil
+	var action func(uint32) = nil
 	if isDocked {
 		logger.Info(app.Id, "change to undock")
 		message = Tr("_Undock")
-		action = func(id string) func() {
-			return func() {
+		action = func(id string) func(uint32) {
+			return func(uint32) {
 				app, ok := ENTRY_MANAGER.runtimeApps[id]
 				if !ok {
 					return
@@ -308,9 +309,9 @@ func (app *RuntimeApp) notifyChanged() {
 	}
 }
 
-func (app *RuntimeApp) HandleMenuItem(id string) {
+func (app *RuntimeApp) HandleMenuItem(id string, timestamp uint32) {
 	if app.coreMenu != nil {
-		app.coreMenu.HandleAction(id)
+		app.coreMenu.HandleAction(id, timestamp)
 	}
 }
 
@@ -612,7 +613,7 @@ func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 	}
 }
 
-func (app *RuntimeApp) Activate(x, y int32) error {
+func (app *RuntimeApp) Activate(x, y int32, timestamp uint32) error {
 	//TODO: handle multiple xids
 	switch {
 	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):

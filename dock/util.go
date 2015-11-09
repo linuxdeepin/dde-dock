@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"pkg.deepin.io/lib/gio-2.0"
 	"regexp"
 	"strings"
+
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 func isEntryNameValid(name string) bool {
