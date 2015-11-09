@@ -6,6 +6,7 @@ import "dbus/com/deepin/sessionmanager"
 import "time"
 import "dbus/com/deepin/daemon/display"
 import "syscall"
+import "dbus/com/deepin/daemon/soundeffect"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
@@ -204,10 +205,28 @@ func (p *Power) initEventHandle() {
 				unblockSleep()
 			} else {
 				time.AfterFunc(time.Second*1, func() { p.screensaver.SimulateUserActivity() })
+				err := playSystemSound("wakeup", true)
+				if err != nil {
+					logger.Warning("Play sound 'wakeup' failed:", err)
+				}
 				p.handleBatteryPercentage()
 
 				blockSleep()
 			}
 		})
 	}
+}
+
+func playSystemSound(event string, sync bool) error {
+	player, err := soundeffect.NewSoundEffect("com.deepin.daemon.SoundEffect",
+		"/com/deepin/daemon/SoundEffect")
+	if err != nil {
+		return err
+	}
+	defer soundeffect.DestroySoundEffect(player)
+
+	if sync {
+		return player.PlaySystemSoundSync(event)
+	}
+	return player.PlaySystemSound(event)
 }
