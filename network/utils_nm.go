@@ -30,13 +30,128 @@ import (
 	"strings"
 )
 
-// Helper function
+// Custom device state reasons
+const (
+	CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED = iota + 1000
+	CUSTOM_NM_DEVICE_STATE_REASON_WIRELESS_DISABLED
+	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
+	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
+)
+
+// Helper functions
 func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	str := string(p)
 	if len(str) == 0 || str == "/" {
 		return false
 	}
 	return true
+}
+
+// check current device state
+func isDeviceStateManaged(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNMANAGED {
+		return true
+	}
+	return false
+}
+func isDeviceStateAvailable(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNAVAILABLE {
+		return true
+	}
+	return false
+}
+func isDeviceStateActivated(state uint32) bool {
+	if state == NM_DEVICE_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isDeviceStateInActivating(state uint32) bool {
+	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+
+func isDeviceStateReasonInvalid(reason uint32) bool {
+	switch reason {
+	case NM_DEVICE_STATE_REASON_UNKNOWN, NM_DEVICE_STATE_REASON_NONE:
+		return true
+	}
+	return false
+}
+
+// check if connection activating or activated
+func isConnectionStateInActivating(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATING ||
+		state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateActivated(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateInDeactivating(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATING ||
+		state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateDeactivate(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
+		return true
+	}
+	return false
+}
+
+// check if vpn connection activating or activated
+func isVpnConnectionStateInActivating(state uint32) bool {
+	if state >= NM_VPN_CONNECTION_STATE_PREPARE &&
+		state <= NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateActivated(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateDeactivate(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_DISCONNECTED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateFailed(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_FAILED {
+		return true
+	}
+	return false
+}
+
+var availableValuesSettingSecretFlags []kvalue
+
+func initAvailableValuesSecretFlags() {
+	availableValuesSettingSecretFlags = []kvalue{
+		kvalue{NM_SETTING_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+		// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, Tr("Saved")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+	}
+}
+
+func isSettingRequireSecret(flag uint32) bool {
+	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
+		return true
+	}
+	return false
 }
 
 // General function wrappers for network manager
@@ -114,6 +229,18 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 		devVlan, err = nmNewDeviceVlan(devPath)
 		if err == nil {
 			hwAddr = devVlan.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_GENERIC:
+		var devGeneric *nm.DeviceGeneric
+		devGeneric, err = nmNewDeviceGeneric(devPath)
+		if err == nil {
+			hwAddr = devGeneric.HwAddress.Get()
+		}
+	case NM_DEVICE_TYPE_TEAM:
+		var devTeam *nm.DeviceTeam
+		devTeam, err = nmNewDeviceTeam(devPath)
+		if err == nil {
+			hwAddr = devTeam.HwAddress.Get()
 		}
 	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
 		// there is no hardware address for such devices
@@ -348,6 +475,20 @@ func nmNewDeviceVlan(devPath dbus.ObjectPath) (dev *nm.DeviceVlan, err error) {
 }
 func nmNewDeviceAdsl(devPath dbus.ObjectPath) (dev *nm.DeviceAdsl, err error) {
 	dev, err = nm.NewDeviceAdsl(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceGeneric(devPath dbus.ObjectPath) (dev *nm.DeviceGeneric, err error) {
+	dev, err = nm.NewDeviceGeneric(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceTeam(devPath dbus.ObjectPath) (dev *nm.DeviceTeam, err error) {
+	dev, err = nm.NewDeviceTeam(dbusNmDest, devPath)
 	if err != nil {
 		logger.Error(err)
 	}

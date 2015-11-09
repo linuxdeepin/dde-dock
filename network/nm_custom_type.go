@@ -42,6 +42,8 @@ const (
 	deviceVlan       = "vlan"
 	deviceAdsl       = "adsl"
 	deviceBridge     = "bridge"
+	deviceGeneric    = "generic"
+	deviceTeam       = "team"
 )
 
 func getCustomDeviceType(devType uint32) (customDevType string) {
@@ -72,6 +74,11 @@ func getCustomDeviceType(devType uint32) (customDevType string) {
 		return deviceAdsl
 	case NM_DEVICE_TYPE_BRIDGE:
 		return deviceBridge
+	case NM_DEVICE_TYPE_GENERIC:
+		return deviceGeneric
+	case NM_DEVICE_TYPE_TEAM:
+		return deviceTeam
+	case NM_DEVICE_TYPE_UNKNOWN:
 	default:
 		logger.Error("unknown device type", devType)
 	}

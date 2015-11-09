@@ -31,13 +31,13 @@ var deviceErrorTable = make(map[uint32]string)
 
 func initNmStateReasons() {
 	// device error table
-	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_UNAVAILABLE] = Tr("IP configuration could not be reserved (no available address, timeout, etc).")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_EXPIRED] = Tr("The IP configuration is no longer valid.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE] = Tr("IP configuration could not be reserved (no available address, timeout, etc).")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED] = Tr("The IP configuration is no longer valid.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS] = Tr("Passwords were required but not provided.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT] = Tr("The 802.1X supplicant disconnected from the access point or authentication server.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED] = Tr("Configuration of the 802.1X supplicant failed.")
@@ -87,10 +87,20 @@ func initNmStateReasons() {
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED] = Tr("A secondary connection of the base connection failed.")
 
+	// works for nm 1.0+
+	deviceErrorTable[NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED] = Tr("DCB or FCoE setup failed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED] = Tr("Control team network failed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_FAILED] = Tr("Modem running failed or no longer available.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_AVAILABLE] = Tr("Modem now ready and available.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT] = Tr("SIM PIN was incorrect.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_NEW_ACTIVATION] = Tr("New connection activation was enqueued.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_CHANGED] = Tr("The device's parent changed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED] = Tr("The device parent's management changed.")
+
 	// device error table for custom state reasons
-	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
-	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL] = Tr("Please make sure SIM card has been inserted with mobile network signal.")
-	deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage of SIM card.")
+	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
+	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL] = Tr("Please make sure SIM card has been inserted with mobile network signal.")
+	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage of SIM card.")
 
 	// vpn error table
 	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")
@@ -210,16 +220,16 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				switch dsi.devType {
 				case NM_DEVICE_TYPE_ETHERNET:
 					if reason == NM_DEVICE_STATE_REASON_CARRIER {
-						reason = GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
+						reason = CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
 					}
 				case NM_DEVICE_TYPE_MODEM:
 					if isDeviceStateReasonInvalid(reason) {
 						// mobile device is specially, fix its reasons here
 						signalQuality, _ := mmGetModemDeviceSignalQuality(dbus.ObjectPath(dsi.devUdi))
 						if signalQuality == 0 {
-							reason = GUESS_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
+							reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
 						} else {
-							reason = GUESS_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
+							reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
 						}
 					}
 				}

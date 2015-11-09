@@ -99,7 +99,7 @@ func notifyAirplanModeEnabled() {
 }
 
 func notifyWiredCableUnplugged() {
-	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
 }
 
 func notifyApModeNotSupport() {
