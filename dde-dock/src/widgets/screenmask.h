@@ -8,7 +8,6 @@
 #include <QMimeData>
 #include <QDropEvent>
 #include <QTransform>
-#include <QApplication>
 #include <QDesktopWidget>
 #include <QDragMoveEvent>
 #include <QDragEnterEvent>

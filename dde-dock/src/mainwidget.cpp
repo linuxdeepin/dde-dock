@@ -18,6 +18,7 @@ MainWidget::MainWidget(QWidget *parent)
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
 
     //For init
+    m_display = new DBusDisplay(this);
     updatePosition();
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
@@ -25,12 +26,13 @@ MainWidget::MainWidget(QWidget *parent)
 
     XcbMisc::instance()->set_window_type(winId(), XcbMisc::Dock);
 
-    connect(QApplication::desktop(), &QDesktopWidget::workAreaResized, [=](int screen) {
-        if (screen == QApplication::desktop()->primaryScreen()) {
-            QRect rect = QApplication::desktop()->screenGeometry(screen);
-            qWarning() << QString("PrimaryScreen(index: %0) size changed %1x%2").arg(screen).arg(rect.width()).arg(rect.height());
-            updatePosition();
-        }
+    connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
+        m_mainPanel->resizeWithContent();
+        updatePosition();
+    });
+    connect(m_display, &DBusDisplay::PrimaryRectChanged, [=] {
+        m_mainPanel->resizeWithContent();
+        updatePosition();
     });
 }
 
@@ -41,17 +43,21 @@ void MainWidget::onDockModeChanged()
 
 void MainWidget::updatePosition()
 {
-    QRect rec = QApplication::desktop()->screenGeometry();
+    DisplayRect rec = m_display->primaryRect();
+
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
         this->setFixedSize(m_mainPanel->width(), 1);
-        this->move((rec.width() - width()) / 2, rec.height() - 1);//1 pixel for grab mouse enter event to show panel
+        this->move(rec.x + (rec.width - width()) / 2,
+                   rec.y + rec.height - 1);//1 pixel for grab mouse enter event to show panel
     }
     else {
         this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
-        this->move((rec.width() - width()) / 2, rec.height() - this->height());
+        this->move(rec.x + (rec.width - width()) / 2,
+                   rec.y + rec.height - this->height());
     }
 
+    qDebug() << "Position changed: " << this->geometry();
     updateXcbStructPartial();
 }
 
@@ -107,9 +113,7 @@ void MainWidget::hideDock()
 
 void MainWidget::onPanelSizeChanged()
 {
-    QRect rec = QApplication::desktop()->screenGeometry();
-    this->setFixedSize(m_mainPanel->width(), height());
-    this->move((rec.width() - width()) / 2, y());
+    updatePosition();
 }
 
 MainWidget::~MainWidget()

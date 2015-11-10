@@ -1,4 +1,5 @@
 #include "abstractdockitem.h"
+#include "dbus/dbusdisplay.h"
 
 ItemTitleLabel::ItemTitleLabel(QWidget *parent) :
     QLabel(parent)
@@ -141,7 +142,10 @@ void AbstractDockItem::showPreview(const QPoint &previewPos)
         return;
     }
 
-    QPoint pos = previewPos.isNull() ?  QPoint(globalX() + width() / 2, globalY() - DOCK_PREVIEW_MARGIN) : previewPos;
+    QPoint pos = previewPos.isNull()
+            ?  QPoint(globalX() + width() / 2, globalY() - DOCK_PREVIEW_MARGIN)
+             : previewPos;
+
     if (getApplet() == NULL) {
         QString title = getTitle();
         if (!title.isEmpty()) {

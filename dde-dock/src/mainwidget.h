@@ -13,6 +13,7 @@
 #include "dbus/dbusdocksetting.h"
 #include "controller/dockmodedata.h"
 #include "panel/panel.h"
+#include "dbus/dbusdisplay.h"
 
 const QString DBUS_PATH = "/com/deepin/dde/dock";
 const QString DBUS_NAME = "com.deepin.dde.dock";
@@ -36,10 +37,12 @@ private:
     void hideDock();
     void onPanelSizeChanged();
     void onDockModeChanged();
-    void updatePosition();
     void updateXcbStructPartial();
     void initHideStateManager();
     void initDockSetting();
+
+private slots:
+    void updatePosition();
 
 private:
     Panel *m_mainPanel = NULL;
@@ -47,6 +50,7 @@ private:
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;
     DBusDockSetting *m_dds = NULL;
+    DBusDisplay *m_display = NULL;
 };
 
 class DockUIDbus : public QDBusAbstractAdaptor {

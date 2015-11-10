@@ -2,7 +2,6 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QProcess>
-#include <QApplication>
 
 #include "pluginitemwrapper.h"
 #include "../dockmodedata.h"
@@ -28,6 +27,8 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
             this->adjustSize();
 
             emit widthChanged();
+
+            m_display = new DBusDisplay(this);
         }
     }
 }
@@ -58,8 +59,8 @@ void PluginItemWrapper::enterEvent(QEvent *)
     emit mouseEntered();
 
     if (hoverable()) {
-        QRect rec = QApplication::desktop()->screenGeometry();
-        showPreview(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight() - DOCK_PREVIEW_MARGIN));
+        DisplayRect rec = m_display->primaryRect();
+        showPreview(QPoint(globalX() + width() / 2, rec.height- DockModeData::instance()->getDockHeight() - DOCK_PREVIEW_MARGIN));
     }
 }
 
@@ -76,8 +77,9 @@ void PluginItemWrapper::mousePressEvent(QMouseEvent * event)
     hidePreview(true);
 
     if (event->button() == Qt::RightButton) {
-        QRect rec = QApplication::desktop()->screenGeometry();
-        this->showMenu(QPoint(globalX() + width() / 2, rec.height() - DockModeData::instance()->getDockHeight()));
+        DisplayRect rec = m_display->primaryRect();
+        this->showMenu(QPoint(rec.x + globalX() + width() / 2,
+                              rec.y + rec.height - DockModeData::instance()->getDockHeight()));
     } else if (event->button() == Qt::LeftButton) {
         QString command = m_plugin->getCommand(m_id);
         if (!command.isEmpty()) QProcess::startDetached(command);

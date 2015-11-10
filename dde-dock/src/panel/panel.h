@@ -14,6 +14,7 @@
 #include "widgets/screenmask.h"
 #include "widgets/previewwindow.h"
 #include "widgets/reflectioneffect.h"
+#include "dbus/dbusdisplay.h"
 #include "panelmenu.h"
 
 class LayoutDropMask;
@@ -32,6 +33,9 @@ public:
     bool isFashionMode();               //for qss setting background
     void showPanelMenu();
     void loadResources();
+
+public slots:
+    void resizeWithContent();
 
 signals:
     void startShow();
@@ -58,7 +62,6 @@ private:
 
     void onItemDropped();
     void onItemDragStarted();
-    void onLayoutContentsWidthChanged();
     void onAppItemAdd(AbstractDockItem *item, bool delayShow);
     void onAppItemRemove(const QString &id);
     void onDockModeChanged(Dock::DockMode newMode, Dock::DockMode);
@@ -76,6 +79,8 @@ private:
     void hidePluginLayoutMask();
     void reloadStyleSheet();
     void setY(int value);   //for hide and show animation
+
+    DisplayRect getScreenRect();
 
 private:
     PreviewWindow *m_globalPreview = NULL;
