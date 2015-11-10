@@ -25,8 +25,17 @@ import (
 	"dbus/org/bluez"
 	sysdbus "dbus/org/freedesktop/dbus/system"
 	"pkg.deepin.io/lib/dbus"
+	"time"
 )
 
+var bluezDBusDaemon *sysdbus.DBusDaemon
+
+func bluezNewDBusDaemon() (*sysdbus.DBusDaemon, error) {
+	return sysdbus.NewDBusDaemon(dbusBluezDest, "/")
+}
+func bluezDestroyDbusDaemon(d *sysdbus.DBusDaemon) {
+	sysdbus.DestroyDBusDaemon(d)
+}
 func bluezNewObjectManager() (objectManager *sysdbus.ObjectManager, err error) {
 	objectManager, err = sysdbus.NewObjectManager(dbusBluezDest, "/")
 	if err != nil {
@@ -270,4 +279,26 @@ func bluezGetDevicePaired(dpath dbus.ObjectPath) (paired bool) {
 	}
 	paired = bluezDevice.Paired.Get()
 	return
+}
+
+func bluezWatchRestart() {
+	bluezDBusDaemon, _ = bluezNewDBusDaemon()
+	logger.Info("watchBluezRestart", bluezDBusDaemon)
+	bluezDBusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
+		if name == "org.bluez" {
+			// if a new dbus session was installed, the name and newOwner
+			// will be not empty, if a dbus session was uninstalled, the
+			// name and oldOwner will be not empty
+			if len(newOwner) != 0 {
+				// network-manager is starting
+				logger.Info("bluetooth is starting")
+				time.Sleep(1 * time.Second)
+				initBluetooth()
+			} else {
+				// network-manager stopped
+				logger.Info("bluetooth stopped")
+				destroyBluetooth()
+			}
+		}
+	})
 }

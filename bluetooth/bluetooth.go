@@ -77,13 +77,12 @@ type Bluetooth struct {
 
 func NewBluetooth() (b *Bluetooth) {
 	b = &Bluetooth{}
-	b.config = newConfig()
 	return
 }
 
-func DestroyBluetooth(b *Bluetooth) {
+func (b *Bluetooth) destroy() {
 	bluezDestroyObjectManager(b.objectManager)
-	dbus.UnInstallObject(bluetooth)
+	dbus.UnInstallObject(b)
 }
 
 func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
@@ -94,13 +93,15 @@ func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (b *Bluetooth) initBluetooth() {
+func (b *Bluetooth) init() {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Error(err)
+			b.destroy()
 		}
 	}()
 
+	b.config = newConfig()
 	b.devices = make(map[dbus.ObjectPath][]*device)
 
 	// initialize dbus object manager

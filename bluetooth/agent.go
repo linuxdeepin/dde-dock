@@ -22,6 +22,7 @@
 package bluetooth
 
 import (
+	"dbus/org/bluez"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -32,7 +33,7 @@ const (
 )
 
 type Agent struct {
-	b *Bluetooth
+	agentManager *bluez.AgentManager1
 }
 
 func (a *Agent) GetDBusInfo() dbus.DBusInfo {
@@ -46,6 +47,37 @@ func newAgent() (agent *Agent) {
 	// TODO
 	agent = &Agent{}
 	return
+}
+
+func (a *Agent) init() (err error) {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Error(err)
+			a.destroy()
+		}
+	}()
+
+	a.agentManager, err = bluez.NewAgentManager1(dbusBluezDest, dbusBluezPath)
+	if nil != err {
+		logger.Info("get agentmanager failed: ", err)
+		return err
+	}
+	err = a.agentManager.RegisterAgent(dbusAgentPath, "DisplayYesNo")
+	if nil != err {
+		logger.Info("register agent failed: ", err)
+		return err
+	}
+	err = a.agentManager.RequestDefaultAgent(dbusAgentPath)
+	if nil != err {
+		logger.Info("set defaulet agent failed: ", err)
+		return err
+	}
+	return nil
+}
+
+func (a *Agent) destroy() {
+	a.agentManager.UnregisterAgent(dbusAgentPath)
+	dbus.UnInstallObject(a)
 }
 
 // TODO
