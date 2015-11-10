@@ -29,6 +29,7 @@
 #include "timestamp.h"
 
 static int is_usec_has_dst(time_t t);
+static void reset_tz(char* value);
 
 DSTTime
 get_dst_time(const char *zone, int year)
@@ -104,11 +105,7 @@ get_dst_time(const char *zone, int year)
 		tm = newtm;
 		tmp = newtmp;
 	}
-       if (tz) {
-               setenv("TZ", tz, 1);
-       } else {
-               unsetenv("TZ");
-       }
+       reset_tz(tz);
 
 	return ret;
 }
@@ -121,17 +118,17 @@ get_rawoffset_usec (const char *zone, long long t)
 
 	time_t newt = t-1;
 	if (!is_usec_has_dst(newt)) {
-		setenv("TZ", tz, 1);
+               reset_tz(tz);
 		return newt;
 	}
 
 	newt = t+1;
 	if (!is_usec_has_dst(newt)) {
-		setenv("TZ", tz, 1);
+               reset_tz(tz);
 		return newt;
 	}
 
-	setenv("TZ", tz, 1);
+       reset_tz(tz);
 	return 0;
 }
 
@@ -148,7 +145,7 @@ get_offset_by_usec (const char *zone, long long t)
 	} else {
 		tmp = localtime((time_t*)&t);
 	}
-	setenv("TZ", tz, 1);
+       reset_tz(tz);
 	if (!tmp) {
 		return -1;
 	}
@@ -170,4 +167,14 @@ is_usec_has_dst(time_t t)
 	}
 
 	return 0;
+}
+
+static void
+reset_tz(char* value)
+{
+       if (value) {
+               setenv("TZ", value, 1);
+       } else {
+               unsetenv("TZ");
+       }
 }
