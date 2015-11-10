@@ -67,6 +67,7 @@ func (code ErrCodeType) String() string {
 func clearUserDatas(name string) {
 	icons := getUserCustomIcons(name)
 	config := path.Join(userConfigDir, name)
+	os.Remove(config)
 
 	icons = append(icons, config)
 	for _, v := range icons {

@@ -91,8 +91,9 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
-		//Create user config file
-		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
+		// Not set default icon, because of dde-control-center will set icon
+		// otherwise historyIcon not empty
+		// u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
 		u.writeUserConfig()
 		return u, nil
@@ -125,7 +126,6 @@ func NewUser(userPath string) (*User, error) {
 }
 
 func (u *User) destroy() {
-	u.writeUserConfig()
 	dbus.UnInstallObject(u)
 }
 
@@ -161,6 +161,10 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 }
 
 func (u *User) addHistoryIcon(icon string) {
+	if len(icon) == 0 {
+		return
+	}
+
 	icons := u.HistoryIcons
 	if isStrInArray(icon, icons) {
 		return
@@ -178,6 +182,10 @@ func (u *User) addHistoryIcon(icon string) {
 }
 
 func (u *User) deleteHistoryIcon(icon string) {
+	if len(icon) == 0 {
+		return
+	}
+
 	icons := u.HistoryIcons
 	var list []string
 	for _, v := range icons {

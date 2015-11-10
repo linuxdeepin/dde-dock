@@ -269,6 +269,7 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 
 		src := u.IconFile
 		u.setPropString(&u.IconFile, "IconFile", target)
+		u.addHistoryIcon(src)
 		err = u.writeUserConfig()
 		if err != nil {
 			logger.Warning("Write user config failed:", err)
@@ -276,7 +277,6 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 			u.setPropString(&u.IconFile, "IconFile", src)
 			return
 		}
-		u.addHistoryIcon(src)
 		if added {
 			u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
 		}
