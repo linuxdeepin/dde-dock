@@ -4,6 +4,7 @@ import "pkg.deepin.io/lib/log"
 import "pkg.deepin.io/lib/dbus/property"
 import "pkg.deepin.io/lib/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
+import "pkg.deepin.io/dde/daemon/soundplayer"
 
 const (
 	settingKeyPowerButton = "button-power"
@@ -137,8 +138,7 @@ func sendNotify(icon, summary, body string) {
 		logger.Warning("failed to show notify message:", summary, body)
 	}
 }
+
 func playSound(name string) {
-	if player != nil {
-		player.PlaySystemSound(name)
-	}
+	soundplayer.PlaySystemSound(name, "", false)
 }

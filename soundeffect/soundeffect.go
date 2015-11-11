@@ -34,19 +34,12 @@ func (*Daemon) Start() error {
 	}
 
 	logger.BeginTracing()
-	var err error
-	_manager, err = NewManager()
-	if err != nil {
-		logger.Error("New Manager failed:", err)
-		return err
-	}
-
-	err = dbus.InstallOnSession(_manager)
+	_manager = NewManager()
+	err := dbus.InstallOnSession(_manager)
 	if err != nil {
 		logger.Error("Install session bus failed:", err)
 		return err
 	}
-	_manager.handleGSetting()
 
 	return nil
 }

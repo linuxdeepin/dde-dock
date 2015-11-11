@@ -1,8 +1,8 @@
 package audio
 
 import (
-	libsound "dbus/com/deepin/api/sound"
 	. "pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/dde/daemon/soundplayer"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
@@ -334,26 +334,10 @@ func (*Daemon) Stop() error {
 	return nil
 }
 
-var playFeedback = func() func() {
-	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
-		return nil
-	}
+func playFeedback() {
+	playFeedbackWithDevice("")
+}
 
-	return func() {
-		player.PlaySystemSound("audio-volume-change")
-	}
-}()
-
-var playFeedbackWithDevice = func() func(string) {
-	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
-		return nil
-	}
-
-	return func(device string) {
-		player.PlaySystemSoundWithDevice("audio-volume-change", device)
-	}
-}()
+func playFeedbackWithDevice(device string) {
+	soundplayer.PlaySystemSound("audio-volume-change", device, false)
+}

@@ -1,33 +1,15 @@
 package soundeffect
 
 import (
+	"pkg.deepin.io/dde/daemon/soundplayer"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"
-	"dbus/com/deepin/api/sound"
 )
 
 const (
 	soundEffectSchema = "com.deepin.dde.sound-effect"
 
-	keyLogin         = "login"
-	keyShutdown      = "shutdown"
-	keyLogout        = "logout"
-	keyWakeup        = "wakeup"
-	keyNotification  = "notification"
-	keyUnableOperate = "unable-operate"
-	keyEmptyTrash    = "empty-trash"
-	keyVolumeChange  = "volume-change"
-	keyBatteryLow    = "battery-low"
-	keyPowerPlug     = "power-plug"
-	keyPowerUnplug   = "power-unplug"
-	keyDevicePlug    = "device-plug"
-	keyDeviceUnplug  = "device-unplug"
-	keyIconToDesktop = "icon-to-desktop"
-	keyScreenshot    = "screenshot"
-)
-
-const (
 	dbusDest = "com.deepin.daemon.SoundEffect"
 	dbusPath = "/com/deepin/daemon/SoundEffect"
 	dbusIFC  = dbusDest
@@ -50,68 +32,60 @@ type Manager struct {
 	IconToDesktop *property.GSettingsBoolProperty `access:"readwrite"`
 	Screenshot    *property.GSettingsBoolProperty `access:"readwrite"`
 
-	player *sound.Sound
 	setting *gio.Settings
 }
 
-func NewManager() (*Manager, error) {
+func NewManager() *Manager {
 	var m = new(Manager)
-
-	var err error
-	m.player, err = sound.NewSound("com.deepin.api.Sound",
-		"/com/deepin/api/Sound")
-	if err != nil {
-		return nil, err
-	}
 
 	m.setting = gio.NewSettings(soundEffectSchema)
 	m.Login = property.NewGSettingsBoolProperty(
 		m, "Login",
-		m.setting, keyLogin)
+		m.setting, soundplayer.KeyLogin)
 	m.Shutdown = property.NewGSettingsBoolProperty(
 		m, "Shutdown",
-		m.setting, keyShutdown)
+		m.setting, soundplayer.KeyShutdown)
 	m.Logout = property.NewGSettingsBoolProperty(
 		m, "Logout",
-		m.setting, keyLogout)
+		m.setting, soundplayer.KeyLogout)
 	m.Wakeup = property.NewGSettingsBoolProperty(
 		m, "Wakeup",
-		m.setting, keyWakeup)
+		m.setting, soundplayer.KeyWakeup)
 	m.Notification = property.NewGSettingsBoolProperty(
 		m, "Notification",
-		m.setting, keyNotification)
+		m.setting, soundplayer.KeyNotification)
 	m.UnableOperate = property.NewGSettingsBoolProperty(
 		m, "UnableOperate",
-		m.setting, keyUnableOperate)
+		m.setting, soundplayer.KeyUnableOperate)
 	m.EmptyTrash = property.NewGSettingsBoolProperty(
 		m, "EmptyTrash",
-		m.setting, keyEmptyTrash)
+		m.setting, soundplayer.KeyEmptyTrash)
 	m.VolumeChange = property.NewGSettingsBoolProperty(
 		m, "VolumeChange",
-		m.setting, keyVolumeChange)
+		m.setting, soundplayer.KeyVolumeChange)
 	m.BatteryLow = property.NewGSettingsBoolProperty(
 		m, "BatteryLow",
-		m.setting, keyBatteryLow)
+		m.setting, soundplayer.KeyBatteryLow)
 	m.PowerPlug = property.NewGSettingsBoolProperty(
 		m, "PowerPlug",
-		m.setting, keyPowerPlug)
+		m.setting, soundplayer.KeyPowerPlug)
 	m.PowerUnplug = property.NewGSettingsBoolProperty(
 		m, "PowerUnplug",
-		m.setting, keyPowerUnplug)
+		m.setting, soundplayer.KeyPowerUnplug)
 	m.DevicePlug = property.NewGSettingsBoolProperty(
 		m, "DevicePlug",
-		m.setting, keyDevicePlug)
+		m.setting, soundplayer.KeyDevicePlug)
 	m.DeviceUnplug = property.NewGSettingsBoolProperty(
 		m, "DeviceUnplug",
-		m.setting, keyDeviceUnplug)
+		m.setting, soundplayer.KeyDeviceUnplug)
 	m.IconToDesktop = property.NewGSettingsBoolProperty(
 		m, "IconToDesktop",
-		m.setting, keyIconToDesktop)
+		m.setting, soundplayer.KeyIconToDesktop)
 	m.Screenshot = property.NewGSettingsBoolProperty(
 		m, "Screenshot",
-		m.setting, keyScreenshot)
+		m.setting, soundplayer.KeyScreenshot)
 
-	return m, nil
+	return m
 }
 
 func (*Manager) GetDBusInfo() dbus.DBusInfo {
@@ -120,10 +94,4 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 		ObjectPath: dbusPath,
 		Interface:  dbusIFC,
 	}
-}
-
-func (m *Manager) handleGSetting() {
-	m.setting.Connect("changed::shutdown", func(s *gio.Settings, key string){
-		// TODO: write to users config file
-	})
 }

@@ -8,7 +8,6 @@ import libupower "dbus/org/freedesktop/upower"
 import liblogin1 "dbus/org/freedesktop/login1"
 import libkeybinding "dbus/com/deepin/daemon/keybinding"
 import libnotifications "dbus/org/freedesktop/notifications"
-import libsound "dbus/com/deepin/api/sound"
 
 func init() {
 	loader.Register(NewDaemon(logger))
@@ -19,7 +18,6 @@ var (
 	upower   *libupower.Upower
 	login1   *liblogin1.Manager
 	mediaKey *libkeybinding.Mediakey
-	player   *libsound.Sound
 
 	power *Power
 )
@@ -46,12 +44,6 @@ func initializeLibs() error {
 	notifier, err = libnotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	if err != nil {
 		logger.Warning("Can't build org.freedesktop.Notficaations:", err)
-		finalizeLibs()
-		return err
-	}
-	player, err = libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Warning("Can't build com.deepin.api.Sound:", err)
 		finalizeLibs()
 		return err
 	}
@@ -83,8 +75,6 @@ func finalizeLibs() {
 		libnotifications.DestroyNotifier(notifier)
 		notifier = nil
 	}
-
-	player = nil
 }
 
 var workaround *fullScreenWorkaround
