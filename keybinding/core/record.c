@@ -154,7 +154,6 @@ xrecord_grab_finalize ()
 int
 is_grabbed ()
 {
-	return False;
 	Display *dpy;
 	Window root;
 	int ret;
@@ -219,7 +218,7 @@ grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
 
 		pressed_cnt = 0;
 		break;
-	
+
 	case ButtonPress:
 		button_pressed = TRUE;
 		break;
