@@ -29,7 +29,7 @@ BINARIES =  \
 	    search \
 	    theme-thumb-tool \
 	    backlight_helper \
-	    langselectora
+	    langselector
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
@@ -65,7 +65,7 @@ translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LA
 pot:
 	deepin-update-pot misc/po/locale_config.ini
 
-build: prepare $(addprefix out/bin/, ${BINARIES}) out/bin/deepin-default-terminal
+build: prepare out/bin/default-terminal $(addprefix out/bin/, ${BINARIES})
 
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
