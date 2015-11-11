@@ -60,3 +60,11 @@ func TestStrList(t *testing.T) {
 		So(isItemInList("456", list), ShouldEqual, false)
 	})
 }
+
+func TestSyndaemonExist(t *testing.T) {
+	Convey("Test syndaemon exist", t, func() {
+		So(isSyndaemonExist("testdata/syndaemon.pid"), ShouldEqual, false)
+		So(isProcessExist("testdata/dde-desktop-cmdline", "dde-desktop"),
+			ShouldEqual, true)
+	})
+}

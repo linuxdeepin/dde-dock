@@ -2,6 +2,7 @@ package inputdevices
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"pkg.deepin.io/dde/api/dxinput"
@@ -9,7 +10,8 @@ import (
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"
 	dutils "pkg.deepin.io/lib/utils"
-	"io/ioutil"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -291,7 +293,7 @@ func (tpad *Touchpad) disableWhileTyping() {
 }
 
 func (tpad *Touchpad) startSyndaemon() {
-	if dutils.IsFileExist(syndaemonPidFile) {
+	if isSyndaemonExist(syndaemonPidFile) {
 		logger.Debug("Syndaemon has running")
 		return
 	}
@@ -305,7 +307,7 @@ func (tpad *Touchpad) startSyndaemon() {
 	}
 	tpad.synProcess = cmd.Process
 	content := fmt.Sprintf("%v", tpad.synProcess.Pid)
-	ioutil.WriteFile(syndaemonPidFile,  []byte(content), 0777)
+	ioutil.WriteFile(syndaemonPidFile, []byte(content), 0777)
 }
 
 func (tpad *Touchpad) stopSyndaemon() {
@@ -316,4 +318,31 @@ func (tpad *Touchpad) stopSyndaemon() {
 	tpad.synProcess.Kill()
 	tpad.synProcess = nil
 	os.Remove(syndaemonPidFile)
+}
+
+func isSyndaemonExist(pidFile string) bool {
+	if !dutils.IsFileExist(pidFile) {
+		return false
+	}
+
+	context, err := ioutil.ReadFile(pidFile)
+	if err != nil {
+		return false
+	}
+
+	pid, err := strconv.ParseInt(strings.TrimSpace(string(context)), 10, 64)
+	if err != nil {
+		return false
+	}
+	var file = fmt.Sprintf("/proc/%v/cmdline", pid)
+	return isProcessExist(file, "syndaemon")
+}
+
+func isProcessExist(file, name string) bool {
+	context, err := ioutil.ReadFile(file)
+	if err != nil {
+		return false
+	}
+
+	return strings.Contains(string(context), name)
 }
