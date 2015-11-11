@@ -105,7 +105,7 @@ func findSysActionInTable(id string) string {
 	case "launcher":
 		return "dde-launcher"
 	case "terminal":
-		return "default-terminal"
+		return "/usr/lib/deepin-daemon/default-terminal"
 	case "lock-screen":
 		return "dde-lock"
 	case "show-dock":

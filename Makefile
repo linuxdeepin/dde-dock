@@ -29,13 +29,14 @@ BINARIES =  \
 	    search \
 	    theme-thumb-tool \
 	    backlight_helper \
-	    langselector
+	    langselectora
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
 all: build
 
 prepare:
+	@mkdir -p out/bin
 	@if [ ! -d ${GOPATH_DIR}/src/${GOPKG_PREFIX} ]; then \
 		mkdir -p ${GOPATH_DIR}/src/$(dir ${GOPKG_PREFIX}); \
 		ln -sf ../../../.. ${GOPATH_DIR}/src/${GOPKG_PREFIX}; \
@@ -43,6 +44,9 @@ prepare:
 
 out/bin/%:
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
+
+out/bin/default-terminal: bin/default-terminal/default-terminal.c
+	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
 
 ifdef USE_GCCGO
 out/bin/theme-thumb-tool:
@@ -61,7 +65,7 @@ translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LA
 pot:
 	deepin-update-pot misc/po/locale_config.ini
 
-build: prepare $(addprefix out/bin/, ${BINARIES})
+build: prepare $(addprefix out/bin/, ${BINARIES}) out/bin/deepin-default-terminal
 
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...

@@ -6,7 +6,7 @@
 	},
 	{
 		"Key": "terminal",
-		"Action": "default-terminal"
+		"Action": "/usr/lib/deepin-daemon/default-terminal"
 	},
 	{
 		"Key": "lock-screen",
@@ -50,4 +50,3 @@
 	}
 	]
 }
-
