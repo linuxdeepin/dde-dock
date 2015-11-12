@@ -28,22 +28,6 @@ import (
 	"pkg.deepin.io/lib/mobileprovider"
 )
 
-const NM_SETTING_GSM_SETTING_NAME = "gsm"
-
-const (
-	NM_SETTING_GSM_NUMBER         = "number"
-	NM_SETTING_GSM_USERNAME       = "username"
-	NM_SETTING_GSM_PASSWORD       = "password"
-	NM_SETTING_GSM_PASSWORD_FLAGS = "password-flags"
-	NM_SETTING_GSM_APN            = "apn"
-	NM_SETTING_GSM_NETWORK_ID     = "network-id"
-	NM_SETTING_GSM_NETWORK_TYPE   = "network-type"
-	NM_SETTING_GSM_ALLOWED_BANDS  = "allowed-bands"
-	NM_SETTING_GSM_PIN            = "pin"
-	NM_SETTING_GSM_PIN_FLAGS      = "pin-flags"
-	NM_SETTING_GSM_HOME_ONLY      = "home-only"
-)
-
 const (
 	NM_SETTING_GSM_NETWORK_TYPE_ANY              = -1
 	NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA        = 0

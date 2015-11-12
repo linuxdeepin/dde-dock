@@ -21,16 +21,6 @@
 
 package network
 
-const NM_SETTING_SERIAL_SETTING_NAME = "serial"
-
-const (
-	NM_SETTING_SERIAL_BAUD       = "baud"
-	NM_SETTING_SERIAL_BITS       = "bits"
-	NM_SETTING_SERIAL_PARITY     = "parity"
-	NM_SETTING_SERIAL_STOPBITS   = "stopbits"
-	NM_SETTING_SERIAL_SEND_DELAY = "send-delay"
-)
-
 // Get available keys
 func getSettingSerialAvailableKeys(data connectionData) (keys []string) {
 	return

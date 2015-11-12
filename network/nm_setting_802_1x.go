@@ -27,50 +27,6 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
-// https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
-// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
-
-// The setting's name; these names are defined by the specification
-// and cannot be changed after the object has been created. Each
-// setting class has a name, and all objects of that class share the
-// same name.
-const NM_SETTING_802_1X_SETTING_NAME = "802-1x"
-
-const (
-	NM_SETTING_802_1X_EAP                               = "eap"
-	NM_SETTING_802_1X_IDENTITY                          = "identity"
-	NM_SETTING_802_1X_ANONYMOUS_IDENTITY                = "anonymous-identity"
-	NM_SETTING_802_1X_PAC_FILE                          = "pac-file"
-	NM_SETTING_802_1X_CA_CERT                           = "ca-cert"
-	NM_SETTING_802_1X_CA_PATH                           = "ca-path"
-	NM_SETTING_802_1X_SUBJECT_MATCH                     = "subject-match"
-	NM_SETTING_802_1X_ALTSUBJECT_MATCHES                = "altsubject-matches"
-	NM_SETTING_802_1X_CLIENT_CERT                       = "client-cert"
-	NM_SETTING_802_1X_PHASE1_PEAPVER                    = "phase1-peapver"
-	NM_SETTING_802_1X_PHASE1_PEAPLABEL                  = "phase1-peaplabel"
-	NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING          = "phase1-fast-provisioning"
-	NM_SETTING_802_1X_PHASE2_AUTH                       = "phase2-auth"
-	NM_SETTING_802_1X_PHASE2_AUTHEAP                    = "phase2-autheap"
-	NM_SETTING_802_1X_PHASE2_CA_CERT                    = "phase2-ca-cert"
-	NM_SETTING_802_1X_PHASE2_CA_PATH                    = "phase2-ca-path"
-	NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH              = "phase2-subject-match"
-	NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES         = "phase2-altsubject-matches"
-	NM_SETTING_802_1X_PHASE2_CLIENT_CERT                = "phase2-client-cert"
-	NM_SETTING_802_1X_PASSWORD                          = "password"
-	NM_SETTING_802_1X_PASSWORD_FLAGS                    = "password-flags"
-	NM_SETTING_802_1X_PASSWORD_RAW                      = "password-raw"
-	NM_SETTING_802_1X_PASSWORD_RAW_FLAGS                = "password-raw-flags"
-	NM_SETTING_802_1X_PRIVATE_KEY                       = "private-key"
-	NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD              = "private-key-password"
-	NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS        = "private-key-password-flags"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY                = "phase2-private-key"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD       = "phase2-private-key-password"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS = "phase2-private-key-password-flags"
-	NM_SETTING_802_1X_PIN                               = "pin"
-	NM_SETTING_802_1X_PIN_FLAGS                         = "pin-flags"
-	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
-)
-
 // Init available values
 var availableValues8021xPhasesAuth = make(availableValues)
 

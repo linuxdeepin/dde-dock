@@ -25,15 +25,6 @@ import (
 	"pkg.deepin.io/lib/utils"
 )
 
-const NM_SETTING_PPPOE_SETTING_NAME = "pppoe"
-
-const (
-	NM_SETTING_PPPOE_SERVICE        = "service"
-	NM_SETTING_PPPOE_USERNAME       = "username"
-	NM_SETTING_PPPOE_PASSWORD       = "password"
-	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
-)
-
 func newPppoeConnection(id, username string) (uuid string) {
 	logger.Debugf("new pppoe connection, id=%s", id)
 	uuid = utils.GenUuid()

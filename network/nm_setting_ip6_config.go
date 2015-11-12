@@ -26,31 +26,6 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 )
 
-const NM_SETTING_IP6_CONFIG_SETTING_NAME = "ipv6"
-
-const (
-	NM_SETTING_IP6_CONFIG_METHOD             = "method"
-	NM_SETTING_IP6_CONFIG_DNS                = "dns"
-	NM_SETTING_IP6_CONFIG_DNS_SEARCH         = "dns-search"
-	NM_SETTING_IP6_CONFIG_ADDRESSES          = "addresses"
-	NM_SETTING_IP6_CONFIG_ROUTES             = "routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
-	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = "never-default"
-	NM_SETTING_IP6_CONFIG_MAY_FAIL           = "may-fail"
-	NM_SETTING_IP6_CONFIG_IP6_PRIVACY        = "ip6-privacy"
-	NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
-)
-
-const (
-	NM_SETTING_IP6_CONFIG_METHOD_IGNORE     = "ignore"
-	NM_SETTING_IP6_CONFIG_METHOD_AUTO       = "auto"
-	NM_SETTING_IP6_CONFIG_METHOD_DHCP       = "dhcp"
-	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL = "link-local"
-	NM_SETTING_IP6_CONFIG_METHOD_MANUAL     = "manual"
-	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
-)
-
 func initSettingSectionIpv6(data connectionData) {
 	addSettingSection(data, sectionIpv6)
 	setSettingIp6ConfigMethod(data, NM_SETTING_IP6_CONFIG_METHOD_AUTO)
