@@ -31,7 +31,7 @@ import (
 var bluezDBusDaemon *sysdbus.DBusDaemon
 
 func bluezNewDBusDaemon() (*sysdbus.DBusDaemon, error) {
-	return sysdbus.NewDBusDaemon(dbusBluezDest, "/")
+	return sysdbus.NewDBusDaemon("org.freedesktop.DBus", "/org/freedesktop/DBus")
 }
 func bluezDestroyDbusDaemon(d *sysdbus.DBusDaemon) {
 	sysdbus.DestroyDBusDaemon(d)
@@ -283,9 +283,9 @@ func bluezGetDevicePaired(dpath dbus.ObjectPath) (paired bool) {
 
 func bluezWatchRestart() {
 	bluezDBusDaemon, _ = bluezNewDBusDaemon()
-	logger.Info("watchBluezRestart", bluezDBusDaemon)
+	logger.Info("bluezWatchRestart", bluezDBusDaemon)
 	bluezDBusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
-		if name == "org.bluez" {
+		if name == dbusBluezDest {
 			// if a new dbus session was installed, the name and newOwner
 			// will be not empty, if a dbus session was uninstalled, the
 			// name and oldOwner will be not empty

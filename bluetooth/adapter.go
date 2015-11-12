@@ -117,6 +117,7 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 	b.config.addAdapterConfig(bluezGetAdapterAddress(apath))
 	oldPowered := b.config.getAdapterConfigPowered(bluezGetAdapterAddress(apath))
 	b.SetAdapterPowered(apath, oldPowered)
+	b.SetAdapterDiscoverable(apath, false)
 	if oldPowered {
 		b.RequestDiscovery(apath)
 	}
@@ -198,12 +199,12 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
 			err = bluezStartDiscovery(apath)
 		}
 
-		if err == nil {
-			time.Sleep(20 * time.Second)
-			if b.isAdapterExists(apath) {
-				bluezStopDiscovery(apath)
-			}
-		}
+		//	if err == nil {
+		//		time.Sleep(20 * time.Second)
+		//		if b.isAdapterExists(apath) {
+		//			bluezStopDiscovery(apath)
+		//		}
+		//	}
 	}()
 	return
 }
