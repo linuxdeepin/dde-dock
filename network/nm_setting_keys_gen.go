@@ -177,6 +177,11 @@ const (
 	NM_SETTING_GSM_HOME_ONLY      = "home-only"
 )
 
+// /usr/include/libnm/nm-setting.h
+const (
+	NM_SETTING_NAME = "name"
+)
+
 // /usr/include/libnm/nm-setting-infiniband.h
 const (
 	NM_SETTING_INFINIBAND_SETTING_NAME   = "infiniband"
