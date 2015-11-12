@@ -28,6 +28,7 @@ import (
 	"pkg.deepin.io/lib/mobileprovider"
 )
 
+// TODO: gen enum
 const (
 	NM_SETTING_GSM_NETWORK_TYPE_ANY              = -1
 	NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA        = 0
@@ -148,7 +149,6 @@ func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 		}
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_ID)
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_TYPE)
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
 		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
 	}
@@ -161,16 +161,17 @@ func getSettingGsmAvailableValues(data connectionData, key string) (values []kva
 	case NM_SETTING_GSM_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
 	case NM_SETTING_GSM_APN:
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		values = []kvalue{
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_ANY, Tr("Any")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA, Tr("3G (UMTS/HSPA)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_GPRS_EDGE, Tr("2G (GPRS/EDGE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_UMTS_HSPA, Tr("Prefer 3G (UMTS/HSPA)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_GPRS_EDGE, Tr("Prefer 2G (GPRS/EDGE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_4G, Tr("Prefer 4G (LTE)")},
-			kvalue{NM_SETTING_GSM_NETWORK_TYPE_4G, Tr("Use Only 4G (LTE)")},
-		}
+		// TODO: gsm network type for nm 1.0+
+		// case NM_SETTING_GSM_NETWORK_TYPE:
+		// 	values = []kvalue{
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_ANY, Tr("Any")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_UMTS_HSPA, Tr("3G (UMTS/HSPA)")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_GPRS_EDGE, Tr("2G (GPRS/EDGE)")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_UMTS_HSPA, Tr("Prefer 3G (UMTS/HSPA)")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_GPRS_EDGE, Tr("Prefer 2G (GPRS/EDGE)")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_PREFER_4G, Tr("Prefer 4G (LTE)")},
+		// 		kvalue{NM_SETTING_GSM_NETWORK_TYPE_4G, Tr("Use Only 4G (LTE)")},
+		// 	}
 	}
 	return
 }

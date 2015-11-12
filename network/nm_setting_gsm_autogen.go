@@ -22,10 +22,6 @@ func getSettingGsmKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_GSM_NETWORK_ID:
 		t = ktypeString
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		t = ktypeInt32
-	case NM_SETTING_GSM_ALLOWED_BANDS:
-		t = ktypeBoolean
 	case NM_SETTING_GSM_HOME_ONLY:
 		t = ktypeBoolean
 	case NM_SETTING_GSM_PIN:
@@ -50,10 +46,6 @@ func isKeyInSettingGsm(key string) bool {
 	case NM_SETTING_GSM_PASSWORD:
 		return true
 	case NM_SETTING_GSM_NETWORK_ID:
-		return true
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		return true
-	case NM_SETTING_GSM_ALLOWED_BANDS:
 		return true
 	case NM_SETTING_GSM_HOME_ONLY:
 		return true
@@ -82,10 +74,6 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 		value = ""
 	case NM_SETTING_GSM_NETWORK_ID:
 		value = ""
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		value = -1
-	case NM_SETTING_GSM_ALLOWED_BANDS:
-		value = 1
 	case NM_SETTING_GSM_HOME_ONLY:
 		value = false
 	case NM_SETTING_GSM_PIN:
@@ -113,10 +101,6 @@ func generalGetSettingGsmKeyJSON(data connectionData, key string) (value string)
 		value = getSettingGsmPasswordJSON(data)
 	case NM_SETTING_GSM_NETWORK_ID:
 		value = getSettingGsmNetworkIdJSON(data)
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		value = getSettingGsmNetworkTypeJSON(data)
-	case NM_SETTING_GSM_ALLOWED_BANDS:
-		value = getSettingGsmAllowedBandsJSON(data)
 	case NM_SETTING_GSM_HOME_ONLY:
 		value = getSettingGsmHomeOnlyJSON(data)
 	case NM_SETTING_GSM_PIN:
@@ -144,10 +128,6 @@ func generalSetSettingGsmKeyJSON(data connectionData, key, valueJSON string) (er
 		err = setSettingGsmPasswordJSON(data, valueJSON)
 	case NM_SETTING_GSM_NETWORK_ID:
 		err = setSettingGsmNetworkIdJSON(data, valueJSON)
-	case NM_SETTING_GSM_NETWORK_TYPE:
-		err = setSettingGsmNetworkTypeJSON(data, valueJSON)
-	case NM_SETTING_GSM_ALLOWED_BANDS:
-		err = setSettingGsmAllowedBandsJSON(data, valueJSON)
 	case NM_SETTING_GSM_HOME_ONLY:
 		err = setSettingGsmHomeOnlyJSON(data, valueJSON)
 	case NM_SETTING_GSM_PIN:
@@ -176,12 +156,6 @@ func isSettingGsmPasswordExists(data connectionData) bool {
 }
 func isSettingGsmNetworkIdExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)
-}
-func isSettingGsmNetworkTypeExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE)
-}
-func isSettingGsmAllowedBandsExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS)
 }
 func isSettingGsmHomeOnlyExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY)
@@ -253,16 +227,6 @@ func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingGsmNetworkTypeNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingGsmNetworkTypeExists(data) {
-		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingGsmAllowedBandsNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingGsmAllowedBandsExists(data) {
-		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
 func ensureSettingGsmHomeOnlyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmHomeOnlyExists(data) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY, NM_KEY_ERROR_MISSING_VALUE)
@@ -314,16 +278,6 @@ func getSettingGsmNetworkId(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
-func getSettingGsmNetworkType(data connectionData) (value int32) {
-	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE)
-	value = interfaceToInt32(ivalue)
-	return
-}
-func getSettingGsmAllowedBands(data connectionData) (value bool) {
-	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS)
-	value = interfaceToBoolean(ivalue)
-	return
-}
 func getSettingGsmHomeOnly(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY)
 	value = interfaceToBoolean(ivalue)
@@ -358,12 +312,6 @@ func setSettingGsmPassword(data connectionData, value string) {
 }
 func setSettingGsmNetworkId(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, value)
-}
-func setSettingGsmNetworkType(data connectionData, value int32) {
-	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE, value)
-}
-func setSettingGsmAllowedBands(data connectionData, value bool) {
-	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS, value)
 }
 func setSettingGsmHomeOnly(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY, value)
@@ -400,14 +348,6 @@ func getSettingGsmNetworkIdJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, getSettingGsmKeyType(NM_SETTING_GSM_NETWORK_ID))
 	return
 }
-func getSettingGsmNetworkTypeJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE, getSettingGsmKeyType(NM_SETTING_GSM_NETWORK_TYPE))
-	return
-}
-func getSettingGsmAllowedBandsJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS, getSettingGsmKeyType(NM_SETTING_GSM_ALLOWED_BANDS))
-	return
-}
 func getSettingGsmHomeOnlyJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY, getSettingGsmKeyType(NM_SETTING_GSM_HOME_ONLY))
 	return
@@ -440,12 +380,6 @@ func setSettingGsmPasswordJSON(data connectionData, valueJSON string) (err error
 func setSettingGsmNetworkIdJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_NETWORK_ID))
 }
-func setSettingGsmNetworkTypeJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_NETWORK_TYPE))
-}
-func setSettingGsmAllowedBandsJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_ALLOWED_BANDS))
-}
 func setSettingGsmHomeOnlyJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_HOME_ONLY))
 }
@@ -476,12 +410,6 @@ func removeSettingGsmPassword(data connectionData) {
 }
 func removeSettingGsmNetworkId(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_ID)
-}
-func removeSettingGsmNetworkType(data connectionData) {
-	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_NETWORK_TYPE)
-}
-func removeSettingGsmAllowedBands(data connectionData) {
-	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_ALLOWED_BANDS)
 }
 func removeSettingGsmHomeOnly(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_HOME_ONLY)

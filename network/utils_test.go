@@ -117,21 +117,21 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	setValueJSON = `[""]`
 	c.Check(getSettingIp4ConfigDnsJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_DNS), C.Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIp4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES), C.Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
 	c.Check(getSettingIp4ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ROUTES), C.Equals, false)
 
 	// ktypeWrapperIpv6Dns
 	defaultValueJSON = `[]`

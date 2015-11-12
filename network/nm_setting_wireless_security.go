@@ -193,11 +193,11 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		logger.Error("invalid value", value)
 		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 	case "none":
-		removeSettingWirelessSec(data)
+		// removeSettingWirelessSec(data) // TODO:
 		removeSettingSection(data, sectionWirelessSecurity)
 		removeSettingSection(data, section8021x)
 	case "wep":
-		setSettingWirelessSec(data, sectionWirelessSecurity)
+		// setSettingWirelessSec(data, sectionWirelessSecurity) // TODO:
 		addSettingSection(data, sectionWirelessSecurity)
 		removeSettingSection(data, section8021x)
 
@@ -213,7 +213,7 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityWepKeyFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 		setSettingWirelessSecurityWepKeyType(data, 1)
 	case "wpa-psk":
-		setSettingWirelessSec(data, sectionWirelessSecurity)
+		// setSettingWirelessSec(data, sectionWirelessSecurity) // TODO:
 		addSettingSection(data, sectionWirelessSecurity)
 		removeSettingSection(data, section8021x)
 
@@ -225,7 +225,7 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
 		setSettingWirelessSecurityPskFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "wpa-eap":
-		setSettingWirelessSec(data, sectionWirelessSecurity)
+		// setSettingWirelessSec(data, sectionWirelessSecurity) // TODO:
 		addSettingSection(data, sectionWirelessSecurity)
 		addSettingSection(data, section8021x)
 

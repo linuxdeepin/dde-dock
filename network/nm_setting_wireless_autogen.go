@@ -34,8 +34,6 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 		t = ktypeUint32
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		t = ktypeArrayString
-	case NM_SETTING_WIRELESS_SEC:
-		t = ktypeString
 	case NM_SETTING_WIRELESS_HIDDEN:
 		t = ktypeBoolean
 	}
@@ -68,8 +66,6 @@ func isKeyInSettingWireless(key string) bool {
 	case NM_SETTING_WIRELESS_MTU:
 		return true
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
-		return true
-	case NM_SETTING_WIRELESS_SEC:
 		return true
 	case NM_SETTING_WIRELESS_HIDDEN:
 		return true
@@ -106,8 +102,6 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 		value = uint32(0)
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		value = make([]string, 0)
-	case NM_SETTING_WIRELESS_SEC:
-		value = ""
 	case NM_SETTING_WIRELESS_HIDDEN:
 		value = false
 	}
@@ -143,8 +137,6 @@ func generalGetSettingWirelessKeyJSON(data connectionData, key string) (value st
 		value = getSettingWirelessMtuJSON(data)
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		value = getSettingWirelessSeenBssidsJSON(data)
-	case NM_SETTING_WIRELESS_SEC:
-		value = getSettingWirelessSecJSON(data)
 	case NM_SETTING_WIRELESS_HIDDEN:
 		value = getSettingWirelessHiddenJSON(data)
 	}
@@ -180,8 +172,6 @@ func generalSetSettingWirelessKeyJSON(data connectionData, key, valueJSON string
 		err = setSettingWirelessMtuJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		err = setSettingWirelessSeenBssidsJSON(data, valueJSON)
-	case NM_SETTING_WIRELESS_SEC:
-		err = setSettingWirelessSecJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_HIDDEN:
 		err = setSettingWirelessHiddenJSON(data, valueJSON)
 	}
@@ -224,9 +214,6 @@ func isSettingWirelessMtuExists(data connectionData) bool {
 }
 func isSettingWirelessSeenBssidsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
-}
-func isSettingWirelessSecExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
 }
 func isSettingWirelessHiddenExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
@@ -338,15 +325,6 @@ func ensureSettingWirelessSeenBssidsNoEmpty(data connectionData, errs sectionErr
 		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
-func ensureSettingWirelessSecNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingWirelessSecExists(data) {
-		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_MISSING_VALUE)
-	}
-	value := getSettingWirelessSec(data)
-	if len(value) == 0 {
-		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, NM_KEY_ERROR_EMPTY_VALUE)
-	}
-}
 func ensureSettingWirelessHiddenNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWirelessHiddenExists(data) {
 		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, NM_KEY_ERROR_MISSING_VALUE)
@@ -414,11 +392,6 @@ func getSettingWirelessSeenBssids(data connectionData) (value []string) {
 	value = interfaceToArrayString(ivalue)
 	return
 }
-func getSettingWirelessSec(data connectionData) (value string) {
-	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
-	value = interfaceToString(ivalue)
-	return
-}
 func getSettingWirelessHidden(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
 	value = interfaceToBoolean(ivalue)
@@ -461,9 +434,6 @@ func setSettingWirelessMtu(data connectionData, value uint32) {
 }
 func setSettingWirelessSeenBssids(data connectionData, value []string) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, value)
-}
-func setSettingWirelessSec(data connectionData, value string) {
-	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, value)
 }
 func setSettingWirelessHidden(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value)
@@ -518,10 +488,6 @@ func getSettingWirelessSeenBssidsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
 	return
 }
-func getSettingWirelessSecJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
-	return
-}
 func getSettingWirelessHiddenJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 	return
@@ -563,9 +529,6 @@ func setSettingWirelessMtuJSON(data connectionData, valueJSON string) (err error
 }
 func setSettingWirelessSeenBssidsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEEN_BSSIDS))
-}
-func setSettingWirelessSecJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_SEC))
 }
 func setSettingWirelessHiddenJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
@@ -631,9 +594,6 @@ func removeSettingWirelessMtu(data connectionData) {
 }
 func removeSettingWirelessSeenBssids(data connectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEEN_BSSIDS)
-}
-func removeSettingWirelessSec(data connectionData) {
-	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_SEC)
 }
 func removeSettingWirelessHidden(data connectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
