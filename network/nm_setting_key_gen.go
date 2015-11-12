@@ -3,6 +3,7 @@ package network
 
 // /usr/include/libnm/nm-setting-8021x.h
 const (
+	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH           = "file://"
 	NM_SETTING_802_1X_SETTING_NAME                      = "802-1x"
 	NM_SETTING_802_1X_EAP                               = "eap"
 	NM_SETTING_802_1X_IDENTITY                          = "identity"
@@ -66,27 +67,35 @@ const (
 
 // /usr/include/libnm/nm-setting-bond.h
 const (
-	NM_SETTING_BOND_SETTING_NAME         = "bond"
-	NM_SETTING_BOND_INTERFACE_NAME       = "interface-name"
-	NM_SETTING_BOND_OPTIONS              = "options"
-	NM_SETTING_BOND_OPTION_MODE          = "mode"
-	NM_SETTING_BOND_OPTION_MIIMON        = "miimon"
-	NM_SETTING_BOND_OPTION_DOWNDELAY     = "downdelay"
-	NM_SETTING_BOND_OPTION_UPDELAY       = "updelay"
-	NM_SETTING_BOND_OPTION_ARP_INTERVAL  = "arp_interval"
-	NM_SETTING_BOND_OPTION_ARP_IP_TARGET = "arp_ip_target"
+	NM_SETTING_BOND_SETTING_NAME            = "bond"
+	NM_SETTING_BOND_OPTIONS                 = "options"
+	NM_SETTING_BOND_OPTION_MODE             = "mode"
+	NM_SETTING_BOND_OPTION_MIIMON           = "miimon"
+	NM_SETTING_BOND_OPTION_DOWNDELAY        = "downdelay"
+	NM_SETTING_BOND_OPTION_UPDELAY          = "updelay"
+	NM_SETTING_BOND_OPTION_ARP_INTERVAL     = "arp_interval"
+	NM_SETTING_BOND_OPTION_ARP_IP_TARGET    = "arp_ip_target"
+	NM_SETTING_BOND_OPTION_ARP_VALIDATE     = "arp_validate"
+	NM_SETTING_BOND_OPTION_PRIMARY          = "primary"
+	NM_SETTING_BOND_OPTION_PRIMARY_RESELECT = "primary_reselect"
+	NM_SETTING_BOND_OPTION_FAIL_OVER_MAC    = "fail_over_mac"
+	NM_SETTING_BOND_OPTION_USE_CARRIER      = "use_carrier"
+	NM_SETTING_BOND_OPTION_AD_SELECT        = "ad_select"
+	NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY = "xmit_hash_policy"
+	NM_SETTING_BOND_OPTION_RESEND_IGMP      = "resend_igmp"
+	NM_SETTING_BOND_OPTION_LACP_RATE        = "lacp_rate"
 )
 
 // /usr/include/libnm/nm-setting-bridge.h
 const (
-	NM_SETTING_BRIDGE_SETTING_NAME   = "bridge"
-	NM_SETTING_BRIDGE_INTERFACE_NAME = "interface-name"
-	NM_SETTING_BRIDGE_STP            = "stp"
-	NM_SETTING_BRIDGE_PRIORITY       = "priority"
-	NM_SETTING_BRIDGE_FORWARD_DELAY  = "forward-delay"
-	NM_SETTING_BRIDGE_HELLO_TIME     = "hello-time"
-	NM_SETTING_BRIDGE_MAX_AGE        = "max-age"
-	NM_SETTING_BRIDGE_AGEING_TIME    = "ageing-time"
+	NM_SETTING_BRIDGE_SETTING_NAME  = "bridge"
+	NM_SETTING_BRIDGE_MAC_ADDRESS   = "mac-address"
+	NM_SETTING_BRIDGE_STP           = "stp"
+	NM_SETTING_BRIDGE_PRIORITY      = "priority"
+	NM_SETTING_BRIDGE_FORWARD_DELAY = "forward-delay"
+	NM_SETTING_BRIDGE_HELLO_TIME    = "hello-time"
+	NM_SETTING_BRIDGE_MAX_AGE       = "max-age"
+	NM_SETTING_BRIDGE_AGEING_TIME   = "ageing-time"
 )
 
 // /usr/include/libnm/nm-setting-bridge-port.h
@@ -108,18 +117,50 @@ const (
 
 // /usr/include/libnm/nm-setting-connection.h
 const (
-	NM_SETTING_CONNECTION_SETTING_NAME = "connection"
-	NM_SETTING_CONNECTION_ID           = "id"
-	NM_SETTING_CONNECTION_UUID         = "uuid"
-	NM_SETTING_CONNECTION_TYPE         = "type"
-	NM_SETTING_CONNECTION_AUTOCONNECT  = "autoconnect"
-	NM_SETTING_CONNECTION_TIMESTAMP    = "timestamp"
-	NM_SETTING_CONNECTION_READ_ONLY    = "read-only"
-	NM_SETTING_CONNECTION_PERMISSIONS  = "permissions"
-	NM_SETTING_CONNECTION_ZONE         = "zone"
-	NM_SETTING_CONNECTION_MASTER       = "master"
-	NM_SETTING_CONNECTION_SLAVE_TYPE   = "slave-type"
-	NM_SETTING_CONNECTION_SECONDARIES  = "secondaries"
+	NM_SETTING_CONNECTION_SETTING_NAME         = "connection"
+	NM_SETTING_CONNECTION_ID                   = "id"
+	NM_SETTING_CONNECTION_UUID                 = "uuid"
+	NM_SETTING_CONNECTION_INTERFACE_NAME       = "interface-name"
+	NM_SETTING_CONNECTION_TYPE                 = "type"
+	NM_SETTING_CONNECTION_AUTOCONNECT          = "autoconnect"
+	NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY = "autoconnect-priority"
+	NM_SETTING_CONNECTION_TIMESTAMP            = "timestamp"
+	NM_SETTING_CONNECTION_READ_ONLY            = "read-only"
+	NM_SETTING_CONNECTION_PERMISSIONS          = "permissions"
+	NM_SETTING_CONNECTION_ZONE                 = "zone"
+	NM_SETTING_CONNECTION_MASTER               = "master"
+	NM_SETTING_CONNECTION_SLAVE_TYPE           = "slave-type"
+	NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES   = "autoconnect-slaves"
+	NM_SETTING_CONNECTION_SECONDARIES          = "secondaries"
+	NM_SETTING_CONNECTION_GATEWAY_PING_TIMEOUT = "gateway-ping-timeout"
+	NM_SETTING_CONNECTION_METERED              = "metered"
+)
+
+// /usr/include/libnm/nm-setting-dcb.h
+const (
+	NM_SETTING_DCB_SETTING_NAME                = "dcb"
+	NM_SETTING_DCB_FCOE_MODE_FABRIC            = "fabric"
+	NM_SETTING_DCB_FCOE_MODE_VN2VN             = "vn2vn"
+	NM_SETTING_DCB_APP_FCOE_FLAGS              = "app-fcoe-flags"
+	NM_SETTING_DCB_APP_FCOE_PRIORITY           = "app-fcoe-priority"
+	NM_SETTING_DCB_APP_FCOE_MODE               = "app-fcoe-mode"
+	NM_SETTING_DCB_APP_ISCSI_FLAGS             = "app-iscsi-flags"
+	NM_SETTING_DCB_APP_ISCSI_PRIORITY          = "app-iscsi-priority"
+	NM_SETTING_DCB_APP_FIP_FLAGS               = "app-fip-flags"
+	NM_SETTING_DCB_APP_FIP_PRIORITY            = "app-fip-priority"
+	NM_SETTING_DCB_PRIORITY_FLOW_CONTROL_FLAGS = "priority-flow-control-flags"
+	NM_SETTING_DCB_PRIORITY_FLOW_CONTROL       = "priority-flow-control"
+	NM_SETTING_DCB_PRIORITY_GROUP_FLAGS        = "priority-group-flags"
+	NM_SETTING_DCB_PRIORITY_GROUP_ID           = "priority-group-id"
+	NM_SETTING_DCB_PRIORITY_GROUP_BANDWIDTH    = "priority-group-bandwidth"
+	NM_SETTING_DCB_PRIORITY_BANDWIDTH          = "priority-bandwidth"
+	NM_SETTING_DCB_PRIORITY_STRICT_BANDWIDTH   = "priority-strict-bandwidth"
+	NM_SETTING_DCB_PRIORITY_TRAFFIC_CLASS      = "priority-traffic-class"
+)
+
+// /usr/include/libnm/nm-setting-generic.h
+const (
+	NM_SETTING_GENERIC_SETTING_NAME = "generic"
 )
 
 // /usr/include/libnm/nm-setting-gsm.h
@@ -131,8 +172,6 @@ const (
 	NM_SETTING_GSM_PASSWORD_FLAGS = "password-flags"
 	NM_SETTING_GSM_APN            = "apn"
 	NM_SETTING_GSM_NETWORK_ID     = "network-id"
-	NM_SETTING_GSM_NETWORK_TYPE   = "network-type"
-	NM_SETTING_GSM_ALLOWED_BANDS  = "allowed-bands"
 	NM_SETTING_GSM_PIN            = "pin"
 	NM_SETTING_GSM_PIN_FLAGS      = "pin-flags"
 	NM_SETTING_GSM_HOME_ONLY      = "home-only"
@@ -144,50 +183,48 @@ const (
 	NM_SETTING_INFINIBAND_MAC_ADDRESS    = "mac-address"
 	NM_SETTING_INFINIBAND_MTU            = "mtu"
 	NM_SETTING_INFINIBAND_TRANSPORT_MODE = "transport-mode"
+	NM_SETTING_INFINIBAND_P_KEY          = "p-key"
+	NM_SETTING_INFINIBAND_PARENT         = "parent"
 )
 
 // /usr/include/libnm/nm-setting-ip4-config.h
 const (
-	NM_SETTING_IP4_CONFIG_SETTING_NAME       = "ipv4"
-	NM_SETTING_IP4_CONFIG_METHOD             = "method"
-	NM_SETTING_IP4_CONFIG_DNS                = "dns"
-	NM_SETTING_IP4_CONFIG_DNS_SEARCH         = "dns-search"
-	NM_SETTING_IP4_CONFIG_ADDRESSES          = "addresses"
-	NM_SETTING_IP4_CONFIG_ROUTES             = "routes"
-	NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
-	NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
-	NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID     = "dhcp-client-id"
-	NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME = "dhcp-send-hostname"
-	NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
-	NM_SETTING_IP4_CONFIG_NEVER_DEFAULT      = "never-default"
-	NM_SETTING_IP4_CONFIG_MAY_FAIL           = "may-fail"
-	NM_SETTING_IP4_CONFIG_METHOD_AUTO        = "auto"
-	NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL  = "link-local"
-	NM_SETTING_IP4_CONFIG_METHOD_MANUAL      = "manual"
-	NM_SETTING_IP4_CONFIG_METHOD_SHARED      = "shared"
-	NM_SETTING_IP4_CONFIG_METHOD_DISABLED    = "disabled"
+	NM_SETTING_IP4_CONFIG_SETTING_NAME      = "ipv4"
+	NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID    = "dhcp-client-id"
+	NM_SETTING_IP4_CONFIG_METHOD_AUTO       = "auto"
+	NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL = "link-local"
+	NM_SETTING_IP4_CONFIG_METHOD_MANUAL     = "manual"
+	NM_SETTING_IP4_CONFIG_METHOD_SHARED     = "shared"
+	NM_SETTING_IP4_CONFIG_METHOD_DISABLED   = "disabled"
 )
 
 // /usr/include/libnm/nm-setting-ip6-config.h
 const (
-	NM_SETTING_IP6_CONFIG_SETTING_NAME       = "ipv6"
-	NM_SETTING_IP6_CONFIG_METHOD             = "method"
-	NM_SETTING_IP6_CONFIG_DNS                = "dns"
-	NM_SETTING_IP6_CONFIG_DNS_SEARCH         = "dns-search"
-	NM_SETTING_IP6_CONFIG_ADDRESSES          = "addresses"
-	NM_SETTING_IP6_CONFIG_ROUTES             = "routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
-	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = "never-default"
-	NM_SETTING_IP6_CONFIG_MAY_FAIL           = "may-fail"
-	NM_SETTING_IP6_CONFIG_IP6_PRIVACY        = "ip6-privacy"
-	NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
-	NM_SETTING_IP6_CONFIG_METHOD_IGNORE      = "ignore"
-	NM_SETTING_IP6_CONFIG_METHOD_AUTO        = "auto"
-	NM_SETTING_IP6_CONFIG_METHOD_DHCP        = "dhcp"
-	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL  = "link-local"
-	NM_SETTING_IP6_CONFIG_METHOD_MANUAL      = "manual"
-	NM_SETTING_IP6_CONFIG_METHOD_SHARED      = "shared"
+	NM_SETTING_IP6_CONFIG_SETTING_NAME      = "ipv6"
+	NM_SETTING_IP6_CONFIG_IP6_PRIVACY       = "ip6-privacy"
+	NM_SETTING_IP6_CONFIG_METHOD_IGNORE     = "ignore"
+	NM_SETTING_IP6_CONFIG_METHOD_AUTO       = "auto"
+	NM_SETTING_IP6_CONFIG_METHOD_DHCP       = "dhcp"
+	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL = "link-local"
+	NM_SETTING_IP6_CONFIG_METHOD_MANUAL     = "manual"
+	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
+)
+
+// /usr/include/libnm/nm-setting-ip-config.h
+const (
+	NM_SETTING_IP_CONFIG_METHOD             = "method"
+	NM_SETTING_IP_CONFIG_DNS                = "dns"
+	NM_SETTING_IP_CONFIG_DNS_SEARCH         = "dns-search"
+	NM_SETTING_IP_CONFIG_ADDRESSES          = "addresses"
+	NM_SETTING_IP_CONFIG_GATEWAY            = "gateway"
+	NM_SETTING_IP_CONFIG_ROUTES             = "routes"
+	NM_SETTING_IP_CONFIG_ROUTE_METRIC       = "route-metric"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
+	NM_SETTING_IP_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
+	NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME = "dhcp-send-hostname"
+	NM_SETTING_IP_CONFIG_NEVER_DEFAULT      = "never-default"
+	NM_SETTING_IP_CONFIG_MAY_FAIL           = "may-fail"
 )
 
 // /usr/include/libnm/nm-setting-olpc-mesh.h
@@ -230,9 +267,6 @@ const (
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 )
 
-// /usr/include/libnm/nm-setting-private.h
-const ()
-
 // /usr/include/libnm/nm-setting-serial.h
 const (
 	NM_SETTING_SERIAL_SETTING_NAME = "serial"
@@ -243,15 +277,21 @@ const (
 	NM_SETTING_SERIAL_SEND_DELAY   = "send-delay"
 )
 
-// /usr/include/libnm/nm-setting-template.h
+// /usr/include/libnm/nm-setting-team.h
 const (
-	NM_SETTING_TEMPLATE_SETTING_NAME = "template"
+	NM_SETTING_TEAM_SETTING_NAME = "team"
+	NM_SETTING_TEAM_CONFIG       = "config"
+)
+
+// /usr/include/libnm/nm-setting-team-port.h
+const (
+	NM_SETTING_TEAM_PORT_SETTING_NAME = "team-port"
+	NM_SETTING_TEAM_PORT_CONFIG       = "config"
 )
 
 // /usr/include/libnm/nm-setting-vlan.h
 const (
 	NM_SETTING_VLAN_SETTING_NAME         = "vlan"
-	NM_SETTING_VLAN_INTERFACE_NAME       = "interface-name"
 	NM_SETTING_VLAN_PARENT               = "parent"
 	NM_SETTING_VLAN_ID                   = "id"
 	NM_SETTING_VLAN_FLAGS                = "flags"
@@ -264,6 +304,7 @@ const (
 	NM_SETTING_VPN_SETTING_NAME = "vpn"
 	NM_SETTING_VPN_SERVICE_TYPE = "service-type"
 	NM_SETTING_VPN_USER_NAME    = "user-name"
+	NM_SETTING_VPN_PERSISTENT   = "persistent"
 	NM_SETTING_VPN_DATA         = "data"
 	NM_SETTING_VPN_SECRETS      = "secrets"
 )
@@ -289,6 +330,8 @@ const (
 	NM_SETTING_WIRED_S390_SUBCHANNELS      = "s390-subchannels"
 	NM_SETTING_WIRED_S390_NETTYPE          = "s390-nettype"
 	NM_SETTING_WIRED_S390_OPTIONS          = "s390-options"
+	NM_SETTING_WIRED_WAKE_ON_LAN           = "wake-on-lan"
+	NM_SETTING_WIRED_WAKE_ON_LAN_PASSWORD  = "wake-on-lan-password"
 )
 
 // /usr/include/libnm/nm-setting-wireless.h
@@ -306,7 +349,6 @@ const (
 	NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST = "mac-address-blacklist"
 	NM_SETTING_WIRELESS_MTU                   = "mtu"
 	NM_SETTING_WIRELESS_SEEN_BSSIDS           = "seen-bssids"
-	NM_SETTING_WIRELESS_SEC                   = "security"
 	NM_SETTING_WIRELESS_HIDDEN                = "hidden"
 	NM_SETTING_WIRELESS_MODE_ADHOC            = "adhoc"
 	NM_SETTING_WIRELESS_MODE_AP               = "ap"
