@@ -234,7 +234,7 @@ func bluezDisconnectDevice(dpath dbus.ObjectPath) (err error) {
 }
 
 func bluezRemoveDevice(apath, dpath dbus.ObjectPath) (err error) {
-	bluezAdapter, err := bluezNewAdapter(dpath)
+	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
 		return
 	}
