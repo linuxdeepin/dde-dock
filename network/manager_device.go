@@ -64,6 +64,7 @@ func (m *Manager) initDeviceManage() {
 	m.accessPoints = make(map[dbus.ObjectPath][]*accessPoint)
 	m.accessPointsLock.Unlock()
 
+	// TODO: nm 1.0 dbus error
 	nmManager.ConnectDeviceAdded(func(path dbus.ObjectPath) {
 		m.addDevice(path)
 	})
@@ -81,6 +82,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	if err != nil {
 		return
 	}
+	defer nmDestroyDevice(nmDev)
 
 	dev = &device{
 		nmDev:     nmDev,
@@ -99,11 +101,13 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	switch dev.nmDevType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
+			defer nmDestroyDeviceWired(nmDevWired)
 			dev.HwAddress = nmDevWired.HwAddress.Get()
 		}
 		m.ensureWiredConnectionExists(dev.Path, true)
 	case NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
+			defer nmDestroyDeviceWireless(nmDevWireless)
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
 			dev.nmDevWireless = nmDevWireless
 
@@ -119,6 +123,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			})
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
 
+			// TODO: nm 1.0 dbus error
 			// connect signal AccessPointAdded() and AccessPointRemoved()
 			dev.nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 				m.addAccessPoint(dev.Path, apPath)
@@ -174,6 +179,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 	}
 
+	// TODO: nm 1.0 dbus error
 	// connect signal
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		logger.Infof("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])

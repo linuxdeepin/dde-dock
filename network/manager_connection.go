@@ -54,8 +54,10 @@ func (m *Manager) initConnectionManage() {
 		m.addConnection(cpath)
 	}
 	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
+		logger.Info("add connection", cpath) // TODO:
 		m.addConnection(cpath)
 	})
+	// TODO: connection removed
 }
 
 func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err error) {
@@ -64,6 +66,8 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	if err != nil {
 		return
 	}
+	defer nmDestroySettingsConnection(nmConn)
+
 	conn.nmConn = nmConn
 	conn.updateProps()
 
@@ -71,6 +75,7 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 		m.config.addVpnConfig(conn.Uuid)
 	}
 
+	// TODO: nm 1.0 dbus error
 	// connect signals
 	nmConn.ConnectRemoved(func() {
 		m.removeConnection(cpath)
@@ -364,11 +369,12 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	if err != nil {
 		return
 	}
-	conn, err := nmNewSettingsConnection(cpath)
+	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
 		return
 	}
-	return conn.Delete()
+	defer nmDestroySettingsConnection(nmConn)
+	return nmConn.Delete()
 }
 
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
@@ -412,13 +418,15 @@ func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	return m.doDisconnectDevice(devPath)
 }
 func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
-	dev, err := nmNewDevice(devPath)
+	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	devState := dev.State.Get()
+	defer nmDestroyDevice(nmDev)
+
+	devState := nmDev.State.Get()
 	if isDeviceStateInActivating(devState) {
-		err = dev.Disconnect()
+		err = nmDev.Disconnect()
 		if err != nil {
 			logger.Error(err)
 		}

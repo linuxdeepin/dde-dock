@@ -14,7 +14,6 @@ grub2/testdata/tmp_settings
 grub2/testdata/tmp_theme_dir/
 themes/themes
 network/network
-network/dev_test.go
 accounts/accounts
 audio/audio
 datetime/datetime

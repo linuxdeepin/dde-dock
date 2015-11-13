@@ -89,13 +89,13 @@ func initNmStateReasons() {
 
 	// works for nm 1.0+
 	deviceErrorTable[NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED] = Tr("DCB or FCoE setup failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED] = Tr("Control team network failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_FAILED] = Tr("Modem running failed or no longer available.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED] = Tr("Network teaming control failed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_FAILED] = Tr("Modem failed to run or not available.")
 	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_AVAILABLE] = Tr("Modem now ready and available.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT] = Tr("SIM PIN was incorrect.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NEW_ACTIVATION] = Tr("New connection activation was enqueued.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_CHANGED] = Tr("The device's parent changed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED] = Tr("The device parent's management changed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT] = Tr("SIM PIN is incorrect.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_NEW_ACTIVATION] = Tr("New connection activation is enqueuing.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_CHANGED] = Tr("Parent device changed.")
+	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED] = Tr("Management status of parent device changed.")
 
 	// device error table for custom state reasons
 	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
@@ -132,6 +132,7 @@ func newStateHandler() (sh *stateHandler) {
 	sh = &stateHandler{}
 	sh.devices = make(map[dbus.ObjectPath]*deviceStateInfo)
 
+	// TODO: nm 1.0 dbus error
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		sh.remove(path)
 	})
@@ -172,18 +173,20 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			logger.Error(err)
 		}
 	}()
-	if dev, err := nmNewDevice(path); err == nil {
+	if nmDev, err := nmNewDevice(path); err == nil {
+		defer nmDestroyDevice(nmDev)
 		sh.locker.Lock()
 		defer sh.locker.Unlock()
-		sh.devices[path] = &deviceStateInfo{nmDev: dev}
-		sh.devices[path].devType = dev.DeviceType.Get()
-		sh.devices[path].devUdi = dev.Udi.Get()
+		sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
+		sh.devices[path].devType = nmDev.DeviceType.Get()
+		sh.devices[path].devUdi = nmDev.Udi.Get()
 		if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 			// remember active connection id if exists
 			sh.devices[path].aconnId = getSettingConnectionId(data)
 		}
+		// TODO: nm 1.0 dbus error
 		// connect signals
-		dev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 			sh.locker.Lock()
 			defer sh.locker.Unlock()
 			dsi, ok := sh.devices[path]

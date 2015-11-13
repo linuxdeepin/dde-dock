@@ -53,6 +53,8 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 	if err != nil {
 		return
 	}
+	defer nmDestroyAccessPoint(nmAp)
+
 	ap = &accessPoint{
 		nmAp:    nmAp,
 		devPath: devPath,
@@ -64,6 +66,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 		return
 	}
 
+	// TODO: nm 1.0 dbus error
 	// connect properties changed signals
 	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
 		if !m.isAccessPointExists(apPath) {
@@ -216,13 +219,15 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		cpath, err = m.ActivateConnection(uuid, devPath)
 	} else {
 		// if there is no connection for current access point, create one
-		var ap *nm.AccessPoint
-		ap, err = nmNewAccessPoint(apPath)
+		var nmAp *nm.AccessPoint
+		nmAp, err = nmNewAccessPoint(apPath)
 		if err != nil {
 			return
 		}
+		defer nmDestroyAccessPoint(nmAp)
+
 		uuid = utils.GenUuid()
-		data := newWirelessConnectionData(string(ap.Ssid.Get()), uuid, []byte(ap.Ssid.Get()), getApSecType(ap))
+		data := newWirelessConnectionData(string(nmAp.Ssid.Get()), uuid, []byte(nmAp.Ssid.Get()), getApSecType(nmAp))
 		cpath, _, err = nmAddAndActivateConnection(data, devPath)
 	}
 	return
@@ -236,13 +241,15 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	}
 
 	// setup access point data
-	ap, err := nmNewAccessPoint(apPath)
+	nmAp, err := nmNewAccessPoint(apPath)
 	if err != nil {
 		return
 	}
-	setSettingConnectionId(session.data, string(ap.Ssid.Get()))
-	setSettingWirelessSsid(session.data, []byte(ap.Ssid.Get()))
-	secType := getApSecType(ap)
+	defer nmDestroyAccessPoint(nmAp)
+
+	setSettingConnectionId(session.data, string(nmAp.Ssid.Get()))
+	setSettingWirelessSsid(session.data, []byte(nmAp.Ssid.Get()))
+	secType := getApSecType(nmAp)
 	switch secType {
 	case apSecNone:
 		logicSetSettingVkWirelessSecurityKeyMgmt(session.data, "none")

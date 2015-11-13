@@ -1,3 +1,5 @@
+//+build dev
+
 /**
  * Copyright (c) 2014 Deepin, Inc.
  *               2014 Xu FaSheng
@@ -25,6 +27,7 @@ import (
 	"fmt"
 	C "launchpad.net/gocheck"
 	"os"
+	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	. "pkg.deepin.io/lib/gettext"
 	"time"
@@ -32,6 +35,61 @@ import (
 
 func init() {
 	gdkpixbuf.InitGdk()
+}
+
+func (*testWrapper) TestMain(c *C.C) {
+	fmt.Println("Start service...")
+
+	manager = NewManager()
+	err := dbus.InstallOnSession(manager)
+	if err != nil {
+		logger.Error("register dbus interface failed: ", err)
+		manager = nil
+		os.Exit(1)
+	}
+
+	// initialize manager after dbus installed
+	manager.initManager()
+
+	dbus.DealWithUnhandledMessage()
+	if err := dbus.Wait(); err != nil {
+		fmt.Printf("Lost dbus: %v", err)
+		os.Exit(1)
+	}
+
+	logger.Info("dbus connection is closed by user")
+	os.Exit(0)
+}
+
+func (*testWrapper) TestWatchNmRestart(c *C.C) {
+	initDbusDaemon()
+
+	// test dbus max match rules
+	for i := 0; i < 1000; i++ {
+		dev, err := nm.NewDevice("/org/freedesktop/NetworkManager/Devices/0")
+		if err == nil {
+			nmDestroyDevice(dev)
+		}
+	}
+
+	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
+		fmt.Println("catch by dbus wrapper", name)
+	})
+
+	fmt.Println("Watch networkmanager restart...")
+	dbus.Wait()
+}
+
+func (*testWrapper) TestWatchNmConnections(c *C.C) {
+	initDbusObjects()
+	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
+		fmt.Println("connection added", cpath)
+	})
+	nmSettings.ConnectConnectionRemoved(func(cpath dbus.ObjectPath) {
+		fmt.Println("connection removed", cpath)
+	})
+	fmt.Println("Watch nm connections...")
+	dbus.Wait()
 }
 
 func (*testWrapper) TestNotify(c *C.C) {

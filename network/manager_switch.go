@@ -39,6 +39,7 @@ func newSwitchHandler(c *config) (sh *switchHandler) {
 	sh = &switchHandler{config: c}
 	sh.init()
 
+	// TODO: nm 1.0 dbus error
 	// connect global switch signals
 	nmManager.NetworkingEnabled.ConnectChanged(func() {
 		sh.setPropNetworkingEnabled()
@@ -60,6 +61,7 @@ func newSwitchHandler(c *config) (sh *switchHandler) {
 	return
 }
 
+// TODO: remove
 func destroySwitchHandler(sh *switchHandler) {
 }
 

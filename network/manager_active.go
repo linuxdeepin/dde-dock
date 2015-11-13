@@ -192,6 +192,7 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 	if err != nil {
 		return
 	}
+	defer nmDestroyActiveConnection(nmAConn)
 
 	aconn.State = nmAConn.State.Get()
 	aconn.Devices = nmAConn.Devices.Get()
@@ -230,6 +231,7 @@ func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 					acinfos = append(acinfos, info)
 				}
 			}
+			nmDestroyActiveConnection(nmAConn)
 		}
 	}
 	acinfosJSON, err = marshalJSON(acinfos)
@@ -249,16 +251,21 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	if err != nil {
 		return
 	}
+	defer nmDestroyActiveConnection(nmAConn)
+
 	nmConn, err := nmNewSettingsConnection(nmAConn.Connection.Get())
 	if err != nil {
 		return
 	}
+	defer nmDestroySettingsConnection(nmConn)
 
 	// device
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
+	defer nmDestroyDevice(nmDev)
+
 	devType = getCustomDeviceType(nmDev.DeviceType.Get())
 	devIfc = nmDev.Interface.Get()
 	if devType == deviceModem {
