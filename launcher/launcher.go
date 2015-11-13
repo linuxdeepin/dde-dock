@@ -5,6 +5,7 @@ import (
 	"path"
 	"path/filepath"
 	"sort"
+	"sync"
 	"time"
 
 	"github.com/howeyc/fsnotify"
@@ -43,6 +44,7 @@ type Launcher struct {
 	setting             Setting
 	itemManager         ItemManager
 	categoryManager     CategoryManager
+	cancelMutex         sync.Mutex
 	cancelSearchingChan chan struct{}
 	pinyinObj           PinYin
 	store               *storeApi.DStoreDesktop
@@ -486,6 +488,9 @@ func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 
 // Search 搜索给定的关键字。
 func (self *Launcher) Search(key string) {
+	self.cancelMutex.Lock()
+	defer self.cancelMutex.Unlock()
+
 	close(self.cancelSearchingChan)
 	self.cancelSearchingChan = make(chan struct{})
 	go func() {
