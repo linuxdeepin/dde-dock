@@ -42,6 +42,8 @@ func notify(icon, summary, body string) {
 		logger.Error(err)
 		return
 	}
+	defer notifications.DestroyNotifier(notifier)
+
 	logger.Info("notify", icon, summary, body)
 	// use goroutine to fix dbus cycle call issue
 	go func() {
