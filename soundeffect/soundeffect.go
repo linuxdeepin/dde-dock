@@ -16,7 +16,7 @@ func init() {
 	Register(NewSoundEffectDaemon(logger))
 }
 
-func NewSoundEffectDaemon(logger *log.Logger) *Daemon{
+func NewSoundEffectDaemon(logger *log.Logger) *Daemon {
 	var d = new(Daemon)
 	d.ModuleBase = NewModuleBase("soundeffect", d, logger)
 	return d
@@ -44,7 +44,7 @@ func (*Daemon) Start() error {
 	return nil
 }
 
-func (*Daemon) Stop() error{
+func (*Daemon) Stop() error {
 	if _manager == nil {
 		return nil
 	}

@@ -1,7 +1,7 @@
 package soundeffect
 
 import (
-	"pkg.deepin.io/dde/daemon/soundplayer"
+	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gio-2.0"
@@ -41,49 +41,49 @@ func NewManager() *Manager {
 	m.setting = gio.NewSettings(soundEffectSchema)
 	m.Login = property.NewGSettingsBoolProperty(
 		m, "Login",
-		m.setting, soundplayer.KeyLogin)
+		m.setting, soundutils.KeyLogin)
 	m.Shutdown = property.NewGSettingsBoolProperty(
 		m, "Shutdown",
-		m.setting, soundplayer.KeyShutdown)
+		m.setting, soundutils.KeyShutdown)
 	m.Logout = property.NewGSettingsBoolProperty(
 		m, "Logout",
-		m.setting, soundplayer.KeyLogout)
+		m.setting, soundutils.KeyLogout)
 	m.Wakeup = property.NewGSettingsBoolProperty(
 		m, "Wakeup",
-		m.setting, soundplayer.KeyWakeup)
+		m.setting, soundutils.KeyWakeup)
 	m.Notification = property.NewGSettingsBoolProperty(
 		m, "Notification",
-		m.setting, soundplayer.KeyNotification)
+		m.setting, soundutils.KeyNotification)
 	m.UnableOperate = property.NewGSettingsBoolProperty(
 		m, "UnableOperate",
-		m.setting, soundplayer.KeyUnableOperate)
+		m.setting, soundutils.KeyUnableOperate)
 	m.EmptyTrash = property.NewGSettingsBoolProperty(
 		m, "EmptyTrash",
-		m.setting, soundplayer.KeyEmptyTrash)
+		m.setting, soundutils.KeyEmptyTrash)
 	m.VolumeChange = property.NewGSettingsBoolProperty(
 		m, "VolumeChange",
-		m.setting, soundplayer.KeyVolumeChange)
+		m.setting, soundutils.KeyVolumeChange)
 	m.BatteryLow = property.NewGSettingsBoolProperty(
 		m, "BatteryLow",
-		m.setting, soundplayer.KeyBatteryLow)
+		m.setting, soundutils.KeyBatteryLow)
 	m.PowerPlug = property.NewGSettingsBoolProperty(
 		m, "PowerPlug",
-		m.setting, soundplayer.KeyPowerPlug)
+		m.setting, soundutils.KeyPowerPlug)
 	m.PowerUnplug = property.NewGSettingsBoolProperty(
 		m, "PowerUnplug",
-		m.setting, soundplayer.KeyPowerUnplug)
+		m.setting, soundutils.KeyPowerUnplug)
 	m.DevicePlug = property.NewGSettingsBoolProperty(
 		m, "DevicePlug",
-		m.setting, soundplayer.KeyDevicePlug)
+		m.setting, soundutils.KeyDevicePlug)
 	m.DeviceUnplug = property.NewGSettingsBoolProperty(
 		m, "DeviceUnplug",
-		m.setting, soundplayer.KeyDeviceUnplug)
+		m.setting, soundutils.KeyDeviceUnplug)
 	m.IconToDesktop = property.NewGSettingsBoolProperty(
 		m, "IconToDesktop",
-		m.setting, soundplayer.KeyIconToDesktop)
+		m.setting, soundutils.KeyIconToDesktop)
 	m.Screenshot = property.NewGSettingsBoolProperty(
 		m, "Screenshot",
-		m.setting, soundplayer.KeyScreenshot)
+		m.setting, soundutils.KeyScreenshot)
 
 	return m
 }

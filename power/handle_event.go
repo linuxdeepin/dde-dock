@@ -203,9 +203,9 @@ func (p *Power) initEventHandle() {
 
 				unblockSleep()
 			} else {
+				playSound("wakeup")
 				time.AfterFunc(time.Second*1, func() {
 					p.screensaver.SimulateUserActivity()
-					playSound("wakeup")
 				})
 				p.handleBatteryPercentage()
 

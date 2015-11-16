@@ -1,8 +1,8 @@
 package audio
 
 import (
+	"pkg.deepin.io/dde/api/soundutils"
 	. "pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/dde/daemon/soundplayer"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
@@ -339,5 +339,5 @@ func playFeedback() {
 }
 
 func playFeedbackWithDevice(device string) {
-	soundplayer.PlaySystemSound("audio-volume-change", device, false)
+	soundutils.PlaySystemSound("audio-volume-change", device, false)
 }
