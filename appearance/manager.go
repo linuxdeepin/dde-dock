@@ -117,6 +117,10 @@ func (m *Manager) doSetDTheme(id string) error {
 
 func (m *Manager) doSetGtkTheme(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.Gtk.Id == value {
 		return nil
 	}
@@ -138,6 +142,10 @@ func (m *Manager) doSetGtkTheme(value string) error {
 
 func (m *Manager) doSetIconTheme(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.Icon.Id == value {
 		return nil
 	}
@@ -159,6 +167,10 @@ func (m *Manager) doSetIconTheme(value string) error {
 
 func (m *Manager) doSetCursorTheme(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.Cursor.Id == value {
 		return nil
 	}
@@ -180,6 +192,10 @@ func (m *Manager) doSetCursorTheme(value string) error {
 
 func (m *Manager) doSetBackground(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.Background.Id == value {
 		return nil
 	}
@@ -204,6 +220,10 @@ func (m *Manager) doSetBackground(value string) error {
 
 func (m *Manager) doSetStandardFont(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.StandardFont.Id == value {
 		return nil
 	}
@@ -225,6 +245,10 @@ func (m *Manager) doSetStandardFont(value string) error {
 
 func (m *Manager) doSetMonnospaceFont(value string) error {
 	dt := m.getCurrentDTheme()
+	if dt == nil {
+		return fmt.Errorf("Not found valid dtheme")
+	}
+
 	if dt.MonospaceFont.Id == value {
 		return nil
 	}
