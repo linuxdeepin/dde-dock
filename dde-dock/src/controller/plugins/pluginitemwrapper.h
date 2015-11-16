@@ -5,6 +5,7 @@
 
 #include "widgets/abstractdockitem.h"
 #include "interfaces/dockplugininterface.h"
+#include "dbus/dbusdisplay.h"
 
 class QMouseEvent;
 class PluginItemWrapper : public AbstractDockItem
@@ -29,6 +30,7 @@ protected:
 //    void mouseReleaseEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
 
 private:
+    DBusDisplay *m_display = NULL;
     QWidget *m_pluginItemContents = NULL;
     DockPluginInterface * m_plugin;
     QString m_id;

@@ -122,8 +122,7 @@ void Panel::initPluginManager()
         m_pluginLayout->removeItem(item);
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
-        QRect rec = QApplication::desktop()->screenGeometry();
-        m_pluginManager->onPluginsSetting(rec.height() - height());
+        m_pluginManager->onPluginsSetting(getScreenRect().height - height());
     });
 }
 
@@ -132,7 +131,7 @@ void Panel::initPluginLayout()
     m_pluginLayout = new DockLayout(this);
     m_pluginLayout->setSpacing(m_dockModeData->getAppletsItemSpacing());
     m_pluginLayout->resize(0, m_dockModeData->getItemHeight());
-    connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::onLayoutContentsWidthChanged);
+    connect(m_pluginLayout, &DockLayout::contentsWidthChange, this, &Panel::resizeWithContent);
 }
 
 void Panel::initAppLayout()
@@ -145,7 +144,7 @@ void Panel::initAppLayout()
 
     connect(m_appLayout, &DockLayout::startDrag, this, &Panel::onItemDragStarted);
     connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::onItemDropped);
-    connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::onLayoutContentsWidthChanged);
+    connect(m_appLayout, &DockLayout::contentsWidthChange, this, &Panel::resizeWithContent);
 
     //for plugin layout mask
     connect(m_appLayout, &DockLayout::startDrag, this, &Panel::showPluginLayoutMask);
@@ -231,7 +230,7 @@ void Panel::onItemDragStarted()
     m_maskWidget->show();
 }
 
-void Panel::onLayoutContentsWidthChanged()
+void Panel::resizeWithContent()
 {
     if (m_dockModeData->getDockMode() == Dock::FashionMode)
     {
@@ -250,12 +249,12 @@ void Panel::onLayoutContentsWidthChanged()
     }
     else
     {
-        QRect rec = QApplication::desktop()->screenGeometry();
+        DisplayRect rec = getScreenRect();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
-        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
 
         m_appLayout->move(0,1);
-        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(),m_dockModeData->getDockHeight());
 
@@ -362,12 +361,12 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     }
     else
     {
-        QRect rec = QApplication::desktop()->screenGeometry();
+        DisplayRect rec = getScreenRect();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(), m_dockModeData->getItemHeight());
-        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
 
         m_appLayout->move(0,1);
-        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(), m_dockModeData->getDockHeight());
 
@@ -459,6 +458,12 @@ void Panel::loadResources()
 void Panel::setY(int value)
 {
     move(x(), value);
+}
+
+DisplayRect Panel::getScreenRect()
+{
+    DBusDisplay d;
+    return d.primaryRect();
 }
 
 Panel::~Panel()

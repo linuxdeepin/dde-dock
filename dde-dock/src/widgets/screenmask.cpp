@@ -1,9 +1,12 @@
 #include "screenmask.h"
+#include "dbus/dbusdisplay.h"
 
 ScreenMask::ScreenMask(QWidget *parent) : QWidget(parent)
 {
-    QRect rec = QApplication::desktop()->screenGeometry();
-    this->resize(rec.width(),rec.height());
+
+    DBusDisplay d;
+    DisplayRect rec = d.primaryRect();
+    this->resize(rec.width, rec.height);
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     this->setWindowOpacity(0);
 
