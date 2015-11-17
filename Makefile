@@ -48,13 +48,6 @@ out/bin/%:
 out/bin/default-terminal: bin/default-terminal/default-terminal.c
 	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
 
-ifdef USE_GCCGO
-out/bin/theme-thumb-tool:
-	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" \
-		go build -compiler gccgo -gccgoflags \
-		"$(shell pkg-config --libs glib-2.0 gdk-3.0 cairo-ft poppler-glib libmetacity-private )" \
-		-o $@  ${GOPKG_PREFIX}/bin/${@F}
-endif
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 	mkdir -p $(@D)
