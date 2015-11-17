@@ -30,12 +30,11 @@ func (m *Manager) listenBgGsettings() {
 
 	if m.gnomeBgSetting != nil {
 		m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
-			bg := m.gnomeBgSetting.GetString(gsKeyBackground)
-			old := m.wrapBgSetting.GetString(gsKeyBackground)
-			if bg == old {
-				return
+			uri := m.gnomeBgSetting.GetString(gsKeyBackground)
+			err := m.doSetBackground(uri)
+			if err != nil {
+				logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
 			}
-			m.wrapBgSetting.SetString(gsKeyBackground, bg)
 		})
 		m.gnomeBgSetting.GetString(gsKeyBackground)
 	}
