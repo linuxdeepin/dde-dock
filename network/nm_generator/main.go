@@ -46,7 +46,7 @@ var funcMap = template.FuncMap{
 	"ToClassName":                 ToClassName,
 	"ToVsClassName":               ToVsClassName,
 	"GetAllKeysInVsection":        GetAllKeysInVsection,
-	"GetKeyWidgetProp":            GetKeyWidgetProp,
+	"GetKeyWidgetProps":           GetKeyWidgetProps,
 	"ToKeyTypeInterfaceConverter": ToKeyTypeInterfaceConverter,
 	"IsEnableWrapperVkey":         IsEnableWrapperVkey,
 }
@@ -59,13 +59,16 @@ const (
 
 var (
 	argWriteOutput        bool
-	argBackEnd            bool
-	argFrontEnd           bool
-	argBackEndDir         string
-	argFrontEndDir        string
+	argGenBackEndGo       bool
+	argGenFrontEndQt      bool
+	argGenFrontEndQml     bool
+	argBackEndGoDir       string
+	argFrontEndQtDir      string
+	argFrontEndQmlDir     string
 	nmSettingUtilsFile    string
 	nmSettingVkeyFile     string
 	nmSettingVsectionFile string
+	backEndFile           string
 	frontEndConnPropFile  string
 	nmSections            []NMSectionStruct
 	nmVkeys               []NMVkeyStruct
@@ -87,42 +90,47 @@ type NMVsectionStruct struct {
 }
 
 type NMKeyStruct struct {
-	Name           string            // such as "NM_SETTING_CONNECTION_ID"
-	Value          string            // such as "id"
-	Type           string            // such as "ktypeString"
-	Default        string            // such as "<default>", "<null>" or "true"
-	UsedByBackEnd  bool              // determine if this key will be used by back-end(golang code)
-	UsedByFrontEnd bool              // determine if this key will be used by front-end(qml code)
-	LogicSet       bool              // determine if this key should to generate a logic setter
-	DisplayName    string            // such as "Connection name"
-	FrontEndWidget string            // such as "EditLinePasswordInput"
-	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
+	Name                 string            // such as "NM_SETTING_CONNECTION_ID"
+	Value                string            // such as "id"
+	Type                 string            // such as "ktypeString"
+	Default              string            // such as "<default>", "<null>" or "true"
+	UsedByBackEnd        bool              // determine if this key will be used by back-end(golang code)
+	UsedByFrontEnd       bool              // determine if this key will be used by front-end(qml code)
+	LogicSet             bool              // determine if this key should to generate a logic setter
+	DisplayName          string            // such as "Connection name"
+	FrontEndWidget       string            // front-end widget name, such as "EditLinePasswordInput"
+	FrontEndAlwaysUpdate bool              // mark if front-end widget should be re-get value when other keys changed
+	UseValueRange        bool              // mark custom value range will be used for integer keys
+	MinValue             int64             // minimize value
+	MaxValue             int64             // maximum value
+	WidgetProps          map[string]string // properties for front-end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
 type NMVkeyStruct struct {
-	Name           string   // such as "NM_SETTING_VK_802_1X_EAP"
-	Value          string   // such as "vk-eap"
-	Type           string   // such as "ktypeString"
-	VkType         string   // could be "vkTypeWrapper", "vkTypeEnableWrapper" or "vkTypeController"
-	RelatedSection string   // such as "NM_SETTING_802_1X_SETTING_NAME"
-	RelatedKeys    []string // such as "NM_SETTING_802_1X_EAP"
-	UsedByFrontEnd bool     // check if is used by front-end
-	ChildKey       bool     // such as ip address, mask and gateway
-	Optional       bool     // if key is optional, will ignore error for it
-	DisplayName    string
+	Name           string            // such as "NM_SETTING_VK_802_1X_EAP"
+	Value          string            // such as "vk-eap"
+	Type           string            // such as "ktypeString"
+	VkType         string            // could be "vkTypeWrapper", "vkTypeEnableWrapper" or "vkTypeController"
+	RelatedSection string            // such as "NM_SETTING_802_1X_SETTING_NAME"
+	RelatedKeys    []string          // such as "NM_SETTING_802_1X_EAP"
+	UsedByFrontEnd bool              // check if is used by front-end
+	ChildKey       bool              // such as ip address, mask and gateway
+	Optional       bool              // if key is optional, will ignore error for it
+	DisplayName    string            // display name for font-end, need i18n
 	FrontEndWidget string            // such as "EditLinePasswordInput"
-	WidgetProp     map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
+	WidgetProps    map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
 }
 
 func setupDirs() {
-	nmSettingUtilsFile = path.Join(argBackEndDir, "nm_setting_general_autogen.go")
-	nmSettingVkeyFile = path.Join(argBackEndDir, "nm_setting_virtual_key_autogen.go")
-	nmSettingVsectionFile = path.Join(argBackEndDir, "nm_setting_virtual_section_autogen.go")
-	frontEndConnPropFile = path.Join(argFrontEndDir, "BaseConnectionEdit.qml")
+	nmSettingUtilsFile = path.Join(argBackEndGoDir, "nm_setting_general_gen.go")
+	nmSettingVkeyFile = path.Join(argBackEndGoDir, "nm_setting_virtual_key_gen.go")
+	nmSettingVsectionFile = path.Join(argBackEndGoDir, "nm_setting_virtual_section_gen.go")
+	backEndFile = path.Join(argBackEndGoDir, "nm_setting_bean_gen.go")
+	frontEndConnPropFile = path.Join(argFrontEndQmlDir, "BaseConnectionEdit.qml")
 }
 
 func genNMSettingCode(nmSection NMSectionStruct) (content string) {
-	content = fileHeader
+	content += "\n// Origin file name " + getBackEndFilePath(nmSection.Name)
 	content += genTpl(nmSection, tplGetKeyType)            // get key type
 	content += genTpl(nmSection, tplIsKeyInSettingSection) // check is key in current section
 	content += genTpl(nmSection, tplGetDefaultValue)       // get default value
@@ -140,17 +148,20 @@ func genNMSettingCode(nmSection NMSectionStruct) (content string) {
 }
 
 func genNMGeneralUtilsCode(nmSections []NMSectionStruct) (content string) {
-	content = genTpl(nmSections, tplGeneralSettingUtils) // general setting utils
+	content += "\n// Origin file name " + nmSettingUtilsFile
+	content += genTpl(nmSections, tplGeneralSettingUtils) // general setting utils
 	return
 }
 
 func genNMVkeyCode(nmSections []NMSectionStruct, nmVkeys []NMVkeyStruct) (content string) {
-	content = genTpl(nmVkeys, tplVkey)
+	content += "\n// Origin file name " + nmSettingVkeyFile
+	content += genTpl(nmVkeys, tplVkey)
 	return
 }
 
 func genNMVsectionCode(nmSections []NMSectionStruct, nmVkeys []NMVsectionStruct) (content string) {
-	content = genTpl(nmVkeys, tplVsection)
+	content += "\n// Origin file name " + nmSettingVsectionFile
+	content += genTpl(nmVkeys, tplVsection)
 	return
 }
 
@@ -180,24 +191,23 @@ func genTpl(data interface{}, tplstr string) (content string) {
 }
 
 func genBackEndCode() {
-	// back-end code, echo nm setting sections
-	for _, nmSection := range nmSections {
-		autogenContent := genNMSettingCode(nmSection)
-		backEndFile := getBackEndFilePath(nmSection.Name)
-		writeOrDisplayResultForBackEnd(backEndFile, autogenContent)
-	}
+	autogenContent := fileHeader
 
 	// back-end code, general setting utils
-	autogenContent := genNMGeneralUtilsCode(nmSections)
-	writeOrDisplayResultForBackEnd(nmSettingUtilsFile, autogenContent)
+	autogenContent += genNMGeneralUtilsCode(nmSections)
 
 	// back-end code, virtual key
-	autogenContent = genNMVkeyCode(nmSections, nmVkeys)
-	writeOrDisplayResultForBackEnd(nmSettingVkeyFile, autogenContent)
+	autogenContent += genNMVkeyCode(nmSections, nmVkeys)
 
 	// back-end code, virtual sections
-	autogenContent = genNMVsectionCode(nmSections, nmVsections)
-	writeOrDisplayResultForBackEnd(nmSettingVsectionFile, autogenContent)
+	autogenContent += genNMVsectionCode(nmSections, nmVsections)
+
+	// back-end code, echo nm setting sections
+	for _, nmSection := range nmSections {
+		autogenContent += genNMSettingCode(nmSection)
+	}
+
+	writeOrDisplayResultForBackEnd(backEndFile, autogenContent)
 }
 
 func genFrontEndCode() {
@@ -218,12 +228,12 @@ func genFrontEndCode() {
 func main() {
 	flag.BoolVar(&argWriteOutput, "w", false, "write to file")
 	flag.BoolVar(&argWriteOutput, "write", false, "write to file")
-	flag.BoolVar(&argBackEnd, "b", false, "generate back-end code")
-	flag.BoolVar(&argBackEnd, "back-end", false, "generate back-end code")
-	flag.BoolVar(&argFrontEnd, "f", false, "generate front-end code")
-	flag.BoolVar(&argFrontEnd, "front-end", false, "generate front-end code")
-	flag.StringVar(&argBackEndDir, "back-end-dir", "..", "back-end directory")
-	flag.StringVar(&argFrontEndDir, "front-end-dir", "./front_end_autogen", "front-end directory")
+	flag.BoolVar(&argGenBackEndGo, "gen-back-end-go", false, "generate back-end go code")
+	flag.BoolVar(&argGenFrontEndQt, "gen-front-end-qt", false, "generate front-end qt code")
+	flag.BoolVar(&argGenFrontEndQml, "gen-front-end-qml", false, "generate front-end qml code")
+	flag.StringVar(&argBackEndGoDir, "back-end-go-dir", "..", "go back-end directory")
+	flag.StringVar(&argFrontEndQtDir, "front-end-qt-dir", "./front_end_qt_gen", "qt front-end directory")
+	flag.StringVar(&argFrontEndQmlDir, "front-end-qml-dir", "./front_end_qml_gen", "qml front-end directory")
 	flag.Parse()
 
 	setupDirs()
@@ -231,10 +241,10 @@ func main() {
 	unmarshalJSONFile(nmSettingsJSONFile, &nmSections)
 	unmarshalJSONFile(nmSettingVkeyJSONFile, &nmVkeys)
 	unmarshalJSONFile(nmSettingVsectionJSONFile, &nmVsections)
-	if argBackEnd {
+	if argGenBackEndGo {
 		genBackEndCode()
 	}
-	if argFrontEnd {
+	if argGenFrontEndQml {
 		genFrontEndCode()
 	}
 }

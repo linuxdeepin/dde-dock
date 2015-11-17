@@ -34,19 +34,19 @@ import (
 	"time"
 )
 
-// "NM_SETTING_CONNECTION_SETTING_NAME" -> "../nm_setting_connection_autogen.go"
+// "NM_SETTING_CONNECTION_SETTING_NAME" -> "../nm_setting_connection_gen.go"
 func getBackEndFilePath(sectionName string) (filePath string) {
 	sectionName = strings.Replace(sectionName, "NM_SETTING_ALIAS_", "NM_SETTING_", -1) // remove virtual section tag
 	fileName := strings.TrimSuffix(sectionName, "_SETTING_NAME")
-	fileName = strings.ToLower(fileName) + "_autogen.go"
-	filePath = path.Join(argBackEndDir, fileName)
+	fileName = strings.ToLower(fileName) + "_gen.go"
+	filePath = path.Join(argBackEndGoDir, fileName)
 	return
 }
 
 // "NM_SETTING_VS_GENERAL" -> "../../../dss/modules/network/edit_autogen/EditSectionGeneral.qml"
 func getFrontEndFilePath(vsectionName string) (filePath string) {
 	fileName := "EditSection" + ToVsClassName(vsectionName) + ".qml"
-	filePath = path.Join(argFrontEndDir, fileName)
+	filePath = path.Join(argFrontEndQmlDir, fileName)
 	return
 }
 
@@ -76,7 +76,7 @@ func writeBackEndFile(file, content string) {
 		return
 	}
 	execAndWait(10, "gofmt", "-w", file)
-	fmt.Println(file)
+	fmt.Println("GEN " + file)
 }
 
 func writeFrontEndFile(file, content string) {
@@ -86,7 +86,7 @@ func writeFrontEndFile(file, content string) {
 		fmt.Println("error, write file failed:", err)
 		return
 	}
-	fmt.Println(file)
+	fmt.Println("GEN " + file)
 }
 
 func GetAllKeysInVsection(vsectionName string) (keys []string) {
@@ -204,11 +204,11 @@ func ToSectionValue(sectionName string) (sectionValue string) {
 	return
 }
 
-func GetKeyWidgetProp(keyName string) (prop map[string]string) {
+func GetKeyWidgetProps(keyName string) (prop map[string]string) {
 	if isVk(keyName) {
-		prop = getVkInfo(keyName).WidgetProp
+		prop = getVkInfo(keyName).WidgetProps
 	} else {
-		prop = getKeyInfo(keyName).WidgetProp
+		prop = getKeyInfo(keyName).WidgetProps
 	}
 	return
 }

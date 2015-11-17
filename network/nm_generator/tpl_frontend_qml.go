@@ -99,7 +99,7 @@ import "../edit"
 BaseEditSection { {{$sectionId := .Name | ToVsClassName | printf "section%s"}}
     id: {{$sectionId}}
     virtualSection: "{{.Value}}"
-    
+
     header.sourceComponent: EditDownArrowHeader{
         text: dsTr("{{.DisplayName}}")
     }
@@ -113,7 +113,7 @@ BaseEditSection { {{$sectionId := .Name | ToVsClassName | printf "section%s"}}
             errors: {{$sectionId}}.errors
             section: "{{$sectionValue}}"
             key: "{{$value}}"
-            text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProp $key}}
+            text: dsTr("{{$key | ToKeyDisplayName}}"){{range $propKey, $propValue := GetKeyWidgetProps $key}}
             {{$propKey}}: {{$propValue}}{{end}}
         }{{end}}{{end}}
     }
