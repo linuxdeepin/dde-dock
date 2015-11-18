@@ -29,6 +29,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
 )
 
 const (
@@ -79,10 +80,13 @@ func (m *Manager) handleMediaEvent(id string, ty int32, modStr string, pressed b
 	}
 
 	logger.Debug("Emit signal:", signal)
+	dbus.Emit(m.media, signal, pressed)
 	if pressed {
+		if !canShowOSD(id) {
+			return
+		}
 		go doAction(cmdDDEOSD + " --" + signal)
 	}
-	dbus.Emit(m.media, signal, pressed)
 }
 
 func getMediakeySignal(id string, ty int32, modStr string) string {
@@ -166,4 +170,19 @@ func doAction(cmd string) error {
 	}
 
 	return exec.Command("/bin/sh", "-c", cmd).Run()
+}
+
+func canShowOSD(id string) bool {
+	switch id {
+	case "capslock":
+		return canShowCapsOSD()
+
+	}
+	return true
+}
+
+func canShowCapsOSD() bool {
+	s := gio.NewSettings("com.deepin.dde.keyboard")
+	defer s.Unref()
+	return s.GetBoolean("capslock-toggle")
 }
