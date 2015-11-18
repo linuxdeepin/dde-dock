@@ -22,14 +22,19 @@ RESOURCES += \
 PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage dui
 CONFIG += c++11 link_pkgconfig
 
+include (../cutelogger/cutelogger.pri)
+
 target.path = /usr/bin/
 
 headers.files += src/interfaces/dockconstants.h \
     src/interfaces/dockplugininterface.h \
     src/interfaces/dockpluginproxyinterface.h
 headers.path = /usr/include/dde-dock
-include (../cutelogger/cutelogger.pri)
-INSTALLS += headers target
+
+dbus_service.files += com.deepin.dde.dock.service
+dbus_service.path = /usr/share/dbus-1/services
+
+INSTALLS += dbus_service headers target
 
 HEADERS += \
     src/interfaces/dockconstants.h \

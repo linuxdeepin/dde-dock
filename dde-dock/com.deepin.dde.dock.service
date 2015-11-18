@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.dde.dock
+Exec=/usr/bin/dde-dock
