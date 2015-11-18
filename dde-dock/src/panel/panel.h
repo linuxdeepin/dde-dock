@@ -71,6 +71,7 @@ private:
     void onNeedPreviewHide();
     void onNeedPreviewShow(QPoint pos);
     void onNeedPreviewImmediatelyHide();
+    void onNeedPreviewUpdate();
 
     void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
@@ -83,6 +84,7 @@ private:
     DisplayRect getScreenRect();
 
 private:
+    QPoint m_lastPreviewPos;
     PreviewWindow *m_globalPreview = NULL;
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
