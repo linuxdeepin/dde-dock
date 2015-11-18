@@ -185,7 +185,7 @@ func getLightdmAutoLoginUser(file string) (string, error) {
 	}
 
 	v, exist := dutils.ReadKeyFromKeyFile(file,
-		"SeatDefaults", "autologin-user", "")
+		"Seat:*", "autologin-user", "")
 	if !exist {
 		return "", nil
 	}
@@ -200,7 +200,7 @@ func getLightdmAutoLoginUser(file string) (string, error) {
 
 func setLightdmAutoLoginUser(name, file string) error {
 	success := dutils.WriteKeyToKeyFile(file,
-		"SeatDefaults", "autologin-user", name)
+		"Seat:*", "autologin-user", name)
 	if !success {
 		return fmt.Errorf("Set autologin user for %q failed!", name)
 	}
