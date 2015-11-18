@@ -47,6 +47,10 @@ func ListAllFamily() Families {
 }
 
 func IsFontFamily(value string) bool {
+	if isVirtualFont(value) {
+		return true
+	}
+
 	info := ListAllFamily().Get(value)
 	if info != nil {
 		return true
@@ -64,6 +68,14 @@ func IsFontSizeValid(size int32) bool {
 func SetFamily(standard, monospace string, size int32) error {
 	locker.Lock()
 	defer locker.Unlock()
+
+	if isVirtualFont(standard) {
+		standard = fcFontMatch(standard)
+	}
+	if isVirtualFont(monospace) {
+		monospace = fcFontMatch(monospace)
+	}
+
 	standInfo := ListStandardFamily().Get(standard)
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
@@ -107,6 +119,10 @@ func (infos Families) GetIds() []string {
 }
 
 func (infos Families) Get(id string) *Family {
+	if isVirtualFont(id) {
+		id = fcFontMatch(id)
+	}
+
 	for _, info := range infos {
 		if info.Id == id {
 			return info
@@ -155,6 +171,14 @@ func getFontSize(setting *gio.Settings) int32 {
 	array := strings.Split(value, " ")
 	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
 	return int32(size)
+}
+
+func isVirtualFont(name string) bool {
+	switch name {
+	case "monospace", "mono", "sans-serif", "sans", "serif":
+		return true
+	}
+	return false
 }
 
 func compositeList(l1, l2 []string) []string {

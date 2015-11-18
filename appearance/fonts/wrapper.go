@@ -37,7 +37,14 @@ func fcFontMatch(family string) string {
 		return ""
 	}
 
-	return strings.Split(tmp[1], "\"")[1]
+	// return font family id
+	name := strings.Split(tmp[1], "\"")[1]
+	for _, info := range ListAllFamily() {
+		if info.Name == name {
+			return info.Id
+		}
+	}
+	return name
 }
 
 func fcInfosToFonts() Fonts {
