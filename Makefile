@@ -63,7 +63,7 @@ build: prepare out/bin/default-terminal $(addprefix out/bin/, ${BINARIES})
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...
 
-install: build translate
+install: build translate install-dde-data
 	mkdir -pv ${DESTDIR}${PREFIX}/lib/deepin-daemon
 	cp out/bin/* ${DESTDIR}${PREFIX}/lib/deepin-daemon/
 
@@ -85,6 +85,10 @@ install: build translate
 
 	mkdir -pv ${DESTDIR}/var/cache/appearance
 	cp -r misc/thumbnail ${DESTDIR}/var/cache/appearance/
+
+install-dde-data:
+	mkdir -pv ${DESTDIR}${PREFIX}/share/dde/
+	cp -r misc/data ${DESTDIR}${PREFIX}/share/dde/
 
 clean:
 	rm -rf ${GOPATH_DIR}
