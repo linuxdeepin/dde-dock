@@ -107,14 +107,14 @@ void Panel::initPluginManager()
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
     connect(m_pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-        connect(targetItem, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
+        connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
     connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         item->setVisible(false);
@@ -268,7 +268,7 @@ void Panel::onAppItemAdd(AbstractDockItem *item, bool delayShow)
     connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
     connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
     connect(item, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
-    connect(item, &AbstractDockItem::needPreviewUpdate, m_globalPreview, &PreviewWindow::resizeWithContent);
+    connect(item, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
 }
 
 void Panel::onAppItemRemove(const QString &id)
@@ -329,6 +329,7 @@ void Panel::onNeedPreviewShow(QPoint pos)
 {
     AbstractDockItem *item = qobject_cast<AbstractDockItem *>(sender());
     if (item && item->getApplet()) {
+        m_lastPreviewPos = pos;
         m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
         m_globalPreview->setContent(item->getApplet());
         m_globalPreview->showPreview(pos.x(),
@@ -340,6 +341,16 @@ void Panel::onNeedPreviewShow(QPoint pos)
 void Panel::onNeedPreviewImmediatelyHide()
 {
     m_globalPreview->hidePreview(0);
+}
+
+void Panel::onNeedPreviewUpdate()
+{
+    if (!m_globalPreview->isVisible())
+        return;
+    m_globalPreview->resizeWithContent();
+    m_globalPreview->showPreview(m_lastPreviewPos.x(),
+                                 m_lastPreviewPos.y() + m_globalPreview->shadowBlurRadius() + m_globalPreview->shadowDistance(),
+                                 DELAY_SHOW_PREVIEW_INTERVAL);
 }
 
 void Panel::reanchorsLayout(Dock::DockMode mode)
