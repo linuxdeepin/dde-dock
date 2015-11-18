@@ -1,129 +1,77 @@
-/**
- * Copyright (c) 2011 ~ 2015 Deepin, Inc.
- *               2013 ~ 2015 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- **/
-
 package sessionwatcher
 
-import (
-	"dbus/org/freedesktop/dbus"
-	"os/exec"
-	"pkg.deepin.io/lib/log"
-	"time"
-)
-
-const (
-	dockDest   = "com.deepin.dde.dock"
-	dockLaunch = "dde-dock"
-
-	maxDuration   = time.Second * 5
-	deltaDuration = time.Second * 1
-)
-
-var logger = log.NewLogger("daemon/sessionwatcher")
+import "time"
 
 type Manager struct {
-	quit chan struct{}
-
-	launchDockFailed bool
+	taskList *taskInfos
+	quit     chan struct{}
 }
 
-func NewManager() *Manager {
-	var m = Manager{}
+func newManager() *Manager {
+	var m = new(Manager)
 	m.quit = make(chan struct{})
-	return &m
+	m.taskList = new(taskInfos)
+	return m
 }
 
-func (m *Manager) canLaunchDock() bool {
-	if m.launchDockFailed {
-		return false
-	}
-
-	exist, err := isDBusDestExist(dockDest)
-	if err != nil {
-		logger.Debugf("Check '%s' exist failed: %v", dockDest, err)
-	}
-	if exist {
-		return false
-	}
-	return true
-}
-
-func (m *Manager) restartDock() {
-	err := doAction("killall", []string{dockLaunch})
-	if err != nil {
-		logger.Debugf("killall '%s' failed: %v", dockLaunch, err)
-	}
-
-	err = doLaunchCommand(dockLaunch, nil)
-	if err != nil {
-		m.launchDockFailed = true
-		logger.Warningf("Launch '%s' failed: %v", dockLaunch, err)
+func (m *Manager) AddTask(task *taskInfo) {
+	if m.IsTaskExist(task.Name) {
+		logger.Debugf("Task '%s' has exist", task.Name)
 		return
 	}
-	logger.Debug("Restart dde-dock over")
 
-	return
+	*m.taskList = append(*m.taskList, task)
 }
 
-func doLaunchCommand(cmd string, args []string) error {
-	var (
-		err          error
-		waitDuration = time.Second * 0
-	)
-	for waitDuration < maxDuration {
-		err = doAction(cmd, args)
-		if err == nil {
-			return nil
-		}
-
-		waitDuration += deltaDuration
-		<-time.After(waitDuration)
-	}
-	return err
-}
-
-func doAction(cmd string, args []string) error {
-	// Run() block, why?
-	//return exec.Command("/bin/sh", "-c", cmd).Run()
-	return exec.Command(cmd, args...).Start()
-}
-
-func isDBusDestExist(dest string) (bool, error) {
-	daemon, err := dbus.NewDBusDaemon("org.freedesktop.DBus", "/")
-	if err != nil {
-		return false, err
-	}
-	defer dbus.DestroyDBusDaemon(daemon)
-
-	names, err := daemon.ListNames()
-	if err != nil {
-		return false, err
-	}
-	return isItemInList(dest, names), nil
-}
-
-func isItemInList(item string, list []string) bool {
-	for _, v := range list {
-		if v == item {
+func (m *Manager) IsTaskExist(name string) bool {
+	for _, task := range *m.taskList {
+		if name == task.Name {
 			return true
 		}
 	}
 	return false
+}
+
+func (m *Manager) HasRunning() bool {
+	for _, task := range *m.taskList {
+		if !task.Over() {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Manager) LaunchAll() {
+	for _, task := range *m.taskList {
+		err := task.Launch()
+		if err != nil {
+			logger.Warningf("Launch '%s' failed: %v",
+				task.Name, err)
+		}
+	}
+}
+
+func (m *Manager) StartLoop() {
+	for {
+		select {
+		case <-m.quit:
+			return
+		case <-time.After(loopDuration):
+			if !m.HasRunning() {
+				logger.Debug("All program has launched failure")
+				m.QuitLoop()
+				return
+			}
+
+			m.LaunchAll()
+		}
+	}
+}
+
+func (m *Manager) QuitLoop() {
+	if m.quit == nil {
+		return
+	}
+	close(m.quit)
+	m.quit = nil
 }
