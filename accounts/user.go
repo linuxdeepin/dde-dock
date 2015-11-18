@@ -38,7 +38,7 @@ const (
 )
 
 const (
-	defaultUserIcon       = "/var/lib/AccountsService/icons/1.png"
+	defaultUserIcon       = "/var/lib/AccountsService/icons/default.png"
 	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
 )
 
@@ -91,9 +91,7 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
-		// Not set default icon, because of dde-control-center will set icon
-		// otherwise historyIcon not empty
-		// u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
+		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
 		u.writeUserConfig()
 		return u, nil
@@ -161,7 +159,7 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 }
 
 func (u *User) addHistoryIcon(icon string) {
-	if len(icon) == 0 {
+	if len(icon) == 0 || icon == defaultUserIcon {
 		return
 	}
 

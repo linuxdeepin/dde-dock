@@ -83,7 +83,8 @@ func getUserStandardIcons() []string {
 
 	var icons []string
 	for _, img := range imgs {
-		if strings.Contains(img, "guest") {
+		if strings.Contains(img, "guest") ||
+			strings.Contains(img, defaultUserIcon) {
 			continue
 		}
 
