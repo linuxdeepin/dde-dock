@@ -25,7 +25,7 @@ const (
 )
 
 func (m *Manager) playerAction(action int, pressed bool) {
-	if pressed {
+	if !pressed {
 		return
 	}
 

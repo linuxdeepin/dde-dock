@@ -13,7 +13,7 @@ const (
 )
 
 func execByMime(mime string, pressed bool) error {
-	if pressed {
+	if !pressed {
 		return nil
 	}
 

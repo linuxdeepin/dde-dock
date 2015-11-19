@@ -64,7 +64,7 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) changeBrightness(raised, pressed bool) {
-	if m.disp == nil || pressed {
+	if m.disp == nil || !pressed {
 		return
 	}
 
@@ -82,7 +82,7 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 }
 
 func (m *Manager) setMute(pressed bool) {
-	if pressed {
+	if !pressed {
 		return
 	}
 
@@ -95,7 +95,7 @@ func (m *Manager) setMute(pressed bool) {
 }
 
 func (m *Manager) changeVolume(raised, pressed bool) {
-	if m.audioDaemon == nil || pressed {
+	if m.audioDaemon == nil || !pressed {
 		return
 	}
 
