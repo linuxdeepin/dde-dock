@@ -17,6 +17,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
+	"runtime"
 	"strconv"
 	"strings"
 	"sync"
@@ -357,6 +358,46 @@ func lookthroughProc(name string) uint {
 	return 0
 }
 
+type GtkApplicationIDFilter struct {
+	data *glib.KeyFile
+}
+
+func NewGtkApplicationIDFilter(filePath string) *GtkApplicationIDFilter {
+	filter := &GtkApplicationIDFilter{
+		data: glib.NewKeyFile(),
+	}
+	_, err := filter.data.LoadFromFile(filePath, glib.KeyFileFlagsNone)
+	if err != nil {
+		logger.Warning("load", filePath, "failed:", err)
+		filter.data.Free()
+		filter.data = nil
+	}
+	runtime.SetFinalizer(filter, func(f *GtkApplicationIDFilter) {
+		if f.data != nil {
+			f.data.Free()
+		}
+	})
+	return filter
+}
+
+func (filter *GtkApplicationIDFilter) Filter(orig string) string {
+	if filter.data == nil {
+		return orig
+	}
+	newID, err := filter.data.GetString(orig, orig)
+	if err == nil {
+		return newID
+	}
+	logger.Debug("looking for _GTK_APPLICATION_ID_filter for", orig, "failed:", err)
+	return orig
+}
+
+var filter = NewGtkApplicationIDFilter("/usr/share/dde/data/GTK_APPLICATION_ID_filter.ini")
+
+func filterGtkApplicationID(orig string) string {
+	return filter.Filter(orig)
+}
+
 func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	var appId string
 	if displayMode == DisplayModeModernMode {
@@ -373,6 +414,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	} else {
 		appId = gtkAppId
 		appId = getAppIDFromDesktopID(normalizeAppID(appId))
+		appId = filterGtkApplicationID(appId)
 		logger.Info("get AppId from _GTK_APPLICATION_ID:", appId)
 		return appId
 	}
