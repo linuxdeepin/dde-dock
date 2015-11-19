@@ -85,6 +85,8 @@ func getCustomDeviceType(devType uint32) (customDevType string) {
 	return deviceUnknown
 }
 
+// TODO: support generic/bluetooth connection types for nm 1.0
+
 // Custom connection types
 const (
 	connectionUnknown         = "unknown"

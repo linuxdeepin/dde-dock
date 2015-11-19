@@ -61,12 +61,12 @@ func (*testWrapper) TestMain(c *C.C) {
 	os.Exit(0)
 }
 
-func (*testWrapper) TestWatchNmRestart(c *C.C) {
+func (*testWrapper) TestMaxMatchRules(c *C.C) {
 	initDbusDaemon()
 
 	// test dbus max match rules
 	for i := 0; i < 1000; i++ {
-		dev, err := nm.NewDevice("/org/freedesktop/NetworkManager/Devices/0")
+		dev, err := nmNewDevice("/org/freedesktop/NetworkManager/Devices/0")
 		if err == nil {
 			nmDestroyDevice(dev)
 		}
@@ -89,6 +89,19 @@ func (*testWrapper) TestWatchNmConnections(c *C.C) {
 		fmt.Println("connection removed", cpath)
 	})
 	fmt.Println("Watch nm connections...")
+	dbus.Wait()
+}
+
+func (*testWrapper) TestWatchNmDeviceState(c *C.C) {
+	devPath := dbus.ObjectPath("/org/freedesktop/NetworkManager/Devices/2")
+	nmDev, _ := nmNewDevice(devPath)
+	defer nmDestroyDevice(nmDev)
+
+	nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		logger.Infof("device state changed, %d => %d, reason[%d]", oldState, newState, reason)
+	})
+
+	fmt.Println("Watch nm device state changed: ", devPath)
 	dbus.Wait()
 }
 

@@ -126,21 +126,20 @@ func (m *Manager) initManager() {
 	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
 	m.stateHandler = newStateHandler()
-	m.agent = newAgent()
+	m.agent = newAgent() // TODO: nm 1.0 agent issues
 
 	// initialize device and connection handlers
 	m.initDeviceManage()
 	m.initConnectionManage()
 	m.initActiveConnectionManage()
 
-	// TODO: nm 1.0 dbus error
 	// update property "State"
 	nmManager.State.ConnectChanged(func() {
 		m.setPropState()
 	})
 	m.setPropState()
 
-	// TODO: nm 1.0 dbus error
+	// TODO: notifications issue when suspending
 	// connect computer suspend signal
 	loginManager.ConnectPrepareForSleep(func(active bool) {
 		if active {
@@ -173,7 +172,6 @@ func (m *Manager) destroyManager() {
 }
 
 func watchNetworkManagerRestart(m *Manager) {
-	// TODO: nm 1.0 dbus error
 	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
 		if name == "org.freedesktop.NetworkManager" {
 			// if a new dbus session was installed, the name and newOwner

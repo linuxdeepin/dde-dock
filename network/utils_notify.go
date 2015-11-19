@@ -194,6 +194,7 @@ func generalGetNotifyDisconnectedIcon(devType uint32, devPath dbus.ObjectPath) (
 		}
 		icon = getMobileDisconnectedNotifyIcon(mobileNetworkType)
 	default:
+		logger.Warning("lost default notify icon for device", getCustomDeviceType(devType))
 		icon = notifyIconNetworkDisconnected
 	}
 	return
@@ -206,6 +207,9 @@ func notifyDeviceRemoved(devPath dbus.ObjectPath) {
 		manager.devicesLock.Lock()
 		devType = dev.nmDevType
 		manager.devicesLock.Unlock()
+	}
+	if !isDeviceTypeValid(devType) {
+		return
 	}
 	icon := generalGetNotifyDisconnectedIcon(devType, devPath)
 	msg := deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED]

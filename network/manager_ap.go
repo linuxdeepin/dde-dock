@@ -53,7 +53,6 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 	if err != nil {
 		return
 	}
-	defer nmDestroyAccessPoint(nmAp)
 
 	ap = &accessPoint{
 		nmAp:    nmAp,
@@ -66,8 +65,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 		return
 	}
 
-	// TODO: nm 1.0 dbus error
-	// connect properties changed signals
+	// connect property changed signals
 	ap.nmAp.ConnectPropertiesChanged(func(properties map[string]dbus.Variant) {
 		if !m.isAccessPointExists(apPath) {
 			return
@@ -76,6 +74,7 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 		m.accessPointsLock.Lock()
 		defer m.accessPointsLock.Unlock()
 		ap.updateProps()
+		logger.Debugf("access point properties changed %#v", ap)
 		apJSON, _ := marshalJSON(ap)
 		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
 	})
@@ -140,6 +139,7 @@ func (m *Manager) addAccessPoint(devPath, apPath dbus.ObjectPath) {
 	if err != nil {
 		return
 	}
+	logger.Debug("add access point", devPath, apPath)
 	m.accessPoints[devPath] = append(m.accessPoints[devPath], ap)
 }
 
@@ -151,6 +151,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
+	logger.Info("remove access point", devPath, apPath)
 	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
 }
 func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint {

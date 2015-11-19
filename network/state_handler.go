@@ -132,7 +132,6 @@ func newStateHandler() (sh *stateHandler) {
 	sh = &stateHandler{}
 	sh.devices = make(map[dbus.ObjectPath]*deviceStateInfo)
 
-	// TODO: nm 1.0 dbus error
 	nmManager.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
 		sh.remove(path)
 	})
@@ -173,88 +172,96 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			logger.Error(err)
 		}
 	}()
-	if nmDev, err := nmNewDevice(path); err == nil {
-		defer nmDestroyDevice(nmDev)
+
+	nmDev, err := nmNewDevice(path)
+	if err != nil {
+		return
+	}
+
+	if !isDeviceTypeValid(nmDev.DeviceType.Get()) {
+		return
+	}
+
+	sh.locker.Lock()
+	defer sh.locker.Unlock()
+	sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
+	sh.devices[path].devType = nmDev.DeviceType.Get()
+	sh.devices[path].devUdi = nmDev.Udi.Get()
+	if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+		// remember active connection id if exists
+		sh.devices[path].aconnId = getSettingConnectionId(data)
+	}
+
+	// connect signals
+	nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
+		logger.Debugf("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
 		sh.locker.Lock()
 		defer sh.locker.Unlock()
-		sh.devices[path] = &deviceStateInfo{nmDev: nmDev}
-		sh.devices[path].devType = nmDev.DeviceType.Get()
-		sh.devices[path].devUdi = nmDev.Udi.Get()
-		if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-			// remember active connection id if exists
-			sh.devices[path].aconnId = getSettingConnectionId(data)
+		dsi, ok := sh.devices[path]
+		if !ok {
+			// the device already been removed
+			return
 		}
-		// TODO: nm 1.0 dbus error
-		// connect signals
-		nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
-			sh.locker.Lock()
-			defer sh.locker.Unlock()
-			dsi, ok := sh.devices[path]
-			if !ok {
-				// the device already been removed
+
+		switch newState {
+		case NM_DEVICE_STATE_PREPARE:
+			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+				dsi.aconnId = getSettingConnectionId(data)
+			}
+		case NM_DEVICE_STATE_ACTIVATED:
+			icon := generalGetNotifyConnectedIcon(dsi.devType, path)
+			msg := dsi.aconnId
+			notify(icon, Tr("Connected"), msg)
+		case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
+			NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
+			logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
+
+			// ignore device removed signals for that could not
+			// query related information correct
+			if reason == NM_DEVICE_STATE_REASON_REMOVED {
 				return
 			}
 
-			switch newState {
-			case NM_DEVICE_STATE_PREPARE:
-				if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-					dsi.aconnId = getSettingConnectionId(data)
-				}
-			case NM_DEVICE_STATE_ACTIVATED:
-				icon := generalGetNotifyConnectedIcon(dsi.devType, path)
-				msg := dsi.aconnId
-				notify(icon, Tr("Connected"), msg)
-			case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
-				NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
-				logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
-
-				// ignore device removed signals for that could not
-				// query related information correct
-				if reason == NM_DEVICE_STATE_REASON_REMOVED {
-					return
-				}
-
-				// notify only when network enabled and the device activated before
-				if !nmGetNetworkEnabled() || !isDeviceStateInActivating(oldState) {
-					return
-				}
-
-				// fix reasons
-				switch dsi.devType {
-				case NM_DEVICE_TYPE_ETHERNET:
-					if reason == NM_DEVICE_STATE_REASON_CARRIER {
-						reason = CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
-					}
-				case NM_DEVICE_TYPE_MODEM:
-					if isDeviceStateReasonInvalid(reason) {
-						// mobile device is specially, fix its reasons here
-						signalQuality, _ := mmGetModemDeviceSignalQuality(dbus.ObjectPath(dsi.devUdi))
-						if signalQuality == 0 {
-							reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
-						} else {
-							reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
-						}
-					}
-				}
-
-				// ignore invalid reasons
-				if isDeviceStateReasonInvalid(reason) {
-					return
-				}
-
-				var icon, msg string
-				icon = generalGetNotifyDisconnectedIcon(dsi.devType, path)
-				if len(msg) == 0 {
-					if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
-						msg = dsi.aconnId
-					} else {
-						msg = deviceErrorTable[reason]
-					}
-				}
-				notify(icon, Tr("Disconnected"), msg)
+			// notify only when network enabled
+			if !nmGetNetworkEnabled() {
+				return
 			}
-		})
-	}
+
+			// fix reasons
+			switch dsi.devType {
+			case NM_DEVICE_TYPE_ETHERNET:
+				if reason == NM_DEVICE_STATE_REASON_CARRIER {
+					reason = CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
+				}
+			case NM_DEVICE_TYPE_MODEM:
+				if isDeviceStateReasonInvalid(reason) {
+					// mobile device is specially, fix its reasons here
+					signalQuality, _ := mmGetModemDeviceSignalQuality(dbus.ObjectPath(dsi.devUdi))
+					if signalQuality == 0 {
+						reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
+					} else {
+						reason = CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
+					}
+				}
+			}
+
+			// ignore invalid reasons
+			if isDeviceStateReasonInvalid(reason) {
+				return
+			}
+
+			var icon, msg string
+			icon = generalGetNotifyDisconnectedIcon(dsi.devType, path)
+			if len(msg) == 0 {
+				if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
+					msg = dsi.aconnId
+				} else {
+					msg = deviceErrorTable[reason]
+				}
+			}
+			notify(icon, Tr("Disconnected"), msg)
+		}
+	})
 }
 
 func (sh *stateHandler) remove(path dbus.ObjectPath) {

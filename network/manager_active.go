@@ -94,7 +94,7 @@ func (m *Manager) initActiveConnectionManage() {
 		}
 	})
 
-	// handle notifications for vpn connection
+	// handle notification for vpn connections
 	m.dbusWatcher.connect(func(s *dbus.Signal) {
 		if s.Name == interfaceVpn+"."+memberVpnState && len(s.Body) >= 2 {
 			state, _ := s.Body[0].(uint32)
@@ -129,7 +129,12 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 
 	// notification for vpn
 	if isVpnConnectionStateActivated(state) {
-		notifyVpnConnected(aconn.Id)
+		// FIXME: looks like a NetworkManger issue, when user
+		// disconnect a connectiong vpn, the vpn state will changed to
+		// NM_VPN_CONNECTION_STATE_ACTIVATED first
+		if reason != NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED {
+			notifyVpnConnected(aconn.Id)
+		}
 	} else if isVpnConnectionStateDeactivate(state) {
 		notifyVpnDisconnected(aconn.Id)
 	} else if isVpnConnectionStateFailed(state) {
@@ -148,15 +153,19 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[stri
 
 	aconn, ok := m.activeConnections[apath]
 	if !ok {
-		aconn = m.newActiveConnection(apath)
+		aconn = &activeConnection{path: apath}
 	}
 
 	// query each properties that changed
+	stateChanged := false
 	for k, vv := range props {
 		if k == "State" {
+			stateChanged = true
 			aconn.State, _ = vv.Value().(uint32)
 		} else if k == "Devices" {
-			aconn.Devices, _ = vv.Value().([]dbus.ObjectPath)
+			devices, _ := vv.Value().([]dbus.ObjectPath)
+			// newValue := make([]dbus.ObjectPath, 0)
+			aconn.Devices = append(devices)
 		} else if k == "Uuid" {
 			aconn.Uuid, _ = vv.Value().(string)
 			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
@@ -172,16 +181,25 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[stri
 		}
 	}
 
-	// use "State" to determine if the active connection is
+	// use "State" to determine whether the active connection is
 	// adding or removing, if "State" property is not changed
 	// is current sequence, it also means that the active
 	// connection already exits
-	if isConnectionStateInDeactivating(aconn.State) {
-		logger.Infof("remove active connection %#v", aconn)
-		delete(m.activeConnections, apath)
-	} else {
-		logger.Infof("add active connection %#v", aconn)
-		m.activeConnections[apath] = aconn
+	if stateChanged {
+		if isConnectionStateInDeactivating(aconn.State) {
+			logger.Infof("remove active connection %#v", aconn)
+			// vpn's active connection will be removed after giving a
+			// notification
+			if !aconn.Vpn {
+				delete(m.activeConnections, apath)
+			}
+		} else {
+			// re-get all the active date especially vpn state for the
+			// new connection
+			aconn = m.newActiveConnection(apath)
+			logger.Infof("add active connection %#v", aconn)
+			m.activeConnections[apath] = aconn
+		}
 	}
 	m.setPropActiveConnections()
 }

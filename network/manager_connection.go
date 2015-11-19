@@ -54,10 +54,13 @@ func (m *Manager) initConnectionManage() {
 		m.addConnection(cpath)
 	}
 	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
-		logger.Info("add connection", cpath) // TODO:
+		logger.Info("add connection", cpath)
 		m.addConnection(cpath)
 	})
-	// TODO: connection removed
+	nmSettings.ConnectConnectionRemoved(func(cpath dbus.ObjectPath) {
+		logger.Info("remove connection", cpath)
+		m.removeConnection(cpath)
+	})
 }
 
 func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err error) {
@@ -66,7 +69,6 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	if err != nil {
 		return
 	}
-	defer nmDestroySettingsConnection(nmConn)
 
 	conn.nmConn = nmConn
 	conn.updateProps()
@@ -75,11 +77,7 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 		m.config.addVpnConfig(conn.Uuid)
 	}
 
-	// TODO: nm 1.0 dbus error
 	// connect signals
-	nmConn.ConnectRemoved(func() {
-		m.removeConnection(cpath)
-	})
 	nmConn.ConnectUpdated(func() {
 		m.updateConnection(cpath)
 	})
@@ -149,7 +147,7 @@ func (m *Manager) addConnection(cpath dbus.ObjectPath) {
 	}
 	logger.Infof("add connection %#v", conn)
 	switch conn.connType {
-	case connectionWired:
+	case connectionWired, connectionUnknown:
 		// wired connections will be special treatment, do not shown
 		// for front-end here
 	default:

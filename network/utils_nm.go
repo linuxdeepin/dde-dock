@@ -83,6 +83,14 @@ func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	return true
 }
 
+func isDeviceTypeValid(devType uint32) bool {
+	switch devType {
+	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN:
+		return false
+	}
+	return true
+}
+
 // check current device state
 func isDeviceStateManaged(state uint32) bool {
 	if state > NM_DEVICE_STATE_UNMANAGED {
@@ -1448,7 +1456,6 @@ func nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
 		cb()
 	} else {
 		hasRun := false
-		// TODO: nm 1.0 dbus error
 		dev.ConnectStateChanged(func(newState uint32, oldState uint32, reason uint32) {
 			if !hasRun && isDeviceStateAvailable(newState) {
 				cb()
@@ -1469,7 +1476,6 @@ func nmRunOnceUtilNetworkAvailable(cb func()) {
 		cb()
 	} else {
 		hasRun := false
-		// TODO: nm 1.0 dbus error
 		nm.ConnectStateChanged(func(state uint32) {
 			if !hasRun && state >= NM_STATE_CONNECTED_LOCAL {
 				cb()
