@@ -1,6 +1,5 @@
 package dock
 
-import "dbus/com/deepin/daemon/dock"
 import "pkg.deepin.io/lib/dbus"
 
 // import "flag"
@@ -28,36 +27,10 @@ func NewEntryManager() *EntryManager {
 }
 
 func (m *EntryManager) listenDockedApp() {
-	if DOCKED_APP_MANAGER == nil {
-		var err error
-		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
-			"com.deepin.daemon.Dock",
-			"/dde/dock/DockedAppManager",
-		)
-		if err != nil {
-			logger.Warning("get DockedAppManager failed", err)
-			return
-		}
+	if DOCKED_APP_MANAGER != nil {
+		DOCKED_APP_MANAGER = NewDockedAppManager()
+		return
 	}
-
-	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
-		id = normalizeAppID(id)
-		if _, ok := m.normalApps[id]; ok {
-			logger.Info(id, "is already docked")
-			return
-		}
-		m.createNormalApp(id)
-	})
-
-	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
-		// undocked is operated on normal app
-		id = normalizeAppID(id)
-		logger.Info("ConnectUndocked: Undock", id)
-		if app, ok := m.normalApps[id]; ok {
-			logger.Info("destroy normal app")
-			m.destroyNormalApp(app)
-		}
-	})
 }
 
 func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {

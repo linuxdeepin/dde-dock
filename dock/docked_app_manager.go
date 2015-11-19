@@ -175,6 +175,13 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	if app != nil {
 		app.buildMenu()
 	}
+
+	if _, ok := ENTRY_MANAGER.normalApps[id]; ok {
+		logger.Info(id, "is already docked")
+		return true
+	}
+	ENTRY_MANAGER.createNormalApp(id)
+
 	return true
 }
 
@@ -203,6 +210,11 @@ func (m *DockedAppManager) doUndock(id string) bool {
 	app := ENTRY_MANAGER.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()
+	}
+
+	if app, ok := ENTRY_MANAGER.normalApps[id]; ok {
+		logger.Info("destroy normal app")
+		ENTRY_MANAGER.destroyNormalApp(app)
 	}
 
 	return true

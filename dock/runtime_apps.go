@@ -2,7 +2,6 @@ package dock
 
 import (
 	"bytes"
-	"dbus/com/deepin/daemon/dock"
 	"encoding/base64"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
@@ -24,7 +23,7 @@ import (
 	"time"
 )
 
-var DOCKED_APP_MANAGER *dock.DockedAppManager
+var DOCKED_APP_MANAGER *DockedAppManager
 
 type WindowInfo struct {
 	Xid         xproto.Window
@@ -187,15 +186,12 @@ func actionGenarator(id string) func() {
 
 		logger.Debug("id", app.Id, "title", title, "icon", icon,
 			"exec", exec)
-		_, err := DOCKED_APP_MANAGER.Dock(
+		DOCKED_APP_MANAGER.Dock(
 			app.Id,
 			title,
 			icon,
 			exec,
 		)
-		if err != nil {
-			logger.Warning("Docked failed: ", err)
-		}
 	}
 }
 
@@ -275,22 +271,10 @@ func (app *RuntimeApp) buildMenu() {
 		true,
 	)
 	app.coreMenu.AppendItem(closeItem)
-	var err error
 	if DOCKED_APP_MANAGER == nil {
-		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
-			"com.deepin.daemon.Dock",
-			"/dde/dock/DockedAppManager",
-		)
-		if err != nil {
-			logger.Warning("get DockedAppManager failed", err)
-			return
-		}
+		DOCKED_APP_MANAGER = NewDockedAppManager()
 	}
-	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id)
-	if err != nil {
-		isDocked = false
-		logger.Warning("get docked status failed:", err)
-	}
+	isDocked := DOCKED_APP_MANAGER.IsDocked(app.Id)
 	logger.Info(app.Id, "Item is docked:", isDocked)
 	var message string = ""
 	var action func() = nil
@@ -385,7 +369,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 
 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
 	if err != nil {
-		logger.Warning("get AppId from _GTK_APPLICATION_ID failed:", err)
+		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
 	} else {
 		appId = gtkAppId
 		appId = getAppIDFromDesktopID(normalizeAppID(appId))
