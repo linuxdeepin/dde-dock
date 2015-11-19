@@ -102,7 +102,10 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
                 connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::onPluginItemAdded);
                 connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::onPluginItemRemoved);
                 connect(m_settingFrame, &PluginsSettingFrame::disableChanged, [=](QString uuid, bool disable){
-                    interface->setDisabled(uuid, disable);
+                    //NOTE:one sender, multi receiver
+                    if (interface->ids().indexOf(uuid) != -1) {
+                        interface->setDisabled(uuid, disable);
+                    }
                 });
 
                 return proxy;
