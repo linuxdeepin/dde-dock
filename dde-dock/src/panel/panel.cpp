@@ -304,7 +304,7 @@ void Panel::onHideStateChanged(int dockState)
     bool containsMouse = m_parentWidget->geometry().contains(QCursor::pos());
     if (dockState == 0)
         emit startShow();
-    else if (dockState == 1 && !containsMouse)
+    else if (dockState == 1 && !containsMouse && m_dockModeData->getHideMode() != Dock::KeepShowing)
         emit startHide();
 }
 
