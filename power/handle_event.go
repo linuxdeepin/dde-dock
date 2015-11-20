@@ -191,26 +191,24 @@ func (p *Power) initEventHandle() {
 
 		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
-				if p.lowBatteryStatus == lowBatteryStatusAction {
-					doShowLowpower()
-				} else {
-					if p.coreSettings.GetBoolean(settingKeyLockEnabled) {
-						now := time.Now()
-						doLock()
-						logger.Debug("screenlock ready time:", time.Now().Sub(now))
-					}
-				}
-
 				unblockSleep()
-			} else {
-				playSound("wakeup")
-				time.AfterFunc(time.Second*1, func() {
-					p.screensaver.SimulateUserActivity()
-				})
-				p.handleBatteryPercentage()
-
-				blockSleep()
+				return
 			}
+
+			// Wakeup
+			time.AfterFunc(time.Second*1, func() {
+				p.screensaver.SimulateUserActivity()
+			})
+
+			playSound("wakeup")
+			p.handleBatteryPercentage()
+			if p.coreSettings.GetBoolean(settingKeyLockEnabled) {
+				now := time.Now()
+				doLock()
+				logger.Debug("screenlock ready time:", time.Now().Sub(now))
+			}
+
+			blockSleep()
 		})
 	}
 }
