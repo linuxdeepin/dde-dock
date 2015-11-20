@@ -275,11 +275,13 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 		}
 
 		err = bluezConnectDevice(dpath)
-		if err != nil {
+		if err == nil {
 			// trust device when connecting success
 			if !bluezGetDeviceTrusted(dpath) {
 				bluezSetDeviceTrusted(dpath, true)
 			}
+		} else {
+			logger.Warning("ConnectDevice failed:", dpath, err)
 		}
 
 		if d.connecting {
