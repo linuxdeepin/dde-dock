@@ -49,7 +49,7 @@ func getAppIDFromDesktopID(candidateID string) string {
 	desktopID := guess_desktop_id(candidateID)
 	logger.Debug(fmt.Sprintf("get desktop id: %q", desktopID))
 	if desktopID == "" {
-		return candidateID
+		return ""
 	}
 
 	appID := normalizeAppID(trimDesktop(desktopID))
