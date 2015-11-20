@@ -9,179 +9,167 @@
 
 package network
 
-import "strings"
 import "fmt"
 import "gir/gio-2.0"
-import "regexp"
-
-// example of /etc/environment
-// http_proxy="http://127.0.0.1:0/"
-// https_proxy="https://127.0.0.1:0/"
-// ftp_proxy="ftp://127.0.0.1:0/"
-// SOCKS_SERVER=socks://127.0.0.1:8000/
-// no_proxy="localhost,127.0.0.1"
+import "strconv"
+import "strings"
 
 const (
-	proxyAuto  = "auto"
-	proxyHttp  = "http"
-	proxyHttps = "https"
-	proxyFtp   = "ftp"
-	proxySocks = "socks"
+	proxyTypeHttp  = "http"
+	proxyTypeHttps = "https"
+	proxyTypeFtp   = "ftp"
+	proxyTypeSocks = "socks"
 
-	gsettingsIdProxy = "com.deepin.dde.proxy"
-	gkeyProxyMethod  = "proxy-method"
+	// The Deepin proxy gsettings schemas use the same path with
+	// org.gnome.system.proxy which is /system/proxy. So in fact they
+	// control the same values, and we don't need to synchronize them
+	// at all.
+	gsettingsIdProxy = "com.deepin.wrap.gnome.system.proxy"
 
-	proxyMethodNone   = "none"
-	proxyMethodManual = "manual"
-	proxyMethodAuto   = "auto"
+	gkeyProxyMode   = "mode"
+	proxyModeNone   = "none"
+	proxyModeManual = "manual"
+	proxyModeAuto   = "auto"
 
-	gkeyAutoProxy = "auto-proxy"
+	gkeyProxyAuto        = "autoconfig-url"
+	gkeyProxyIgnoreHosts = "ignore-hosts"
+	gkeyProxyHost        = "host"
+	gkeyProxyPort        = "port"
 
-	gkeyHttpProxy  = "http-proxy"
-	gkeyHttpsProxy = "https-proxy"
-	gkeyFtpProxy   = "ftp-proxy"
-	gkeySocksProxy = "socks-proxy"
+	gchildProxyHttp  = "http"
+	gchildProxyHttps = "https"
+	gchildProxyFtp   = "ftp"
+	gchildProxySocks = "socks"
 )
 
 var (
-	proxySettings  *gio.Settings
-	proxyPrefixReg = regexp.MustCompile(`^.*?://(.*)$`)
+	proxySettings           *gio.Settings
+	proxyChildSettingsHttp  *gio.Settings
+	proxyChildSettingsHttps *gio.Settings
+	proxyChildSettingsFtp   *gio.Settings
+	proxyChildSettingsSocks *gio.Settings
 )
 
 func initProxyGsettings() {
 	proxySettings = gio.NewSettings(gsettingsIdProxy)
+	proxyChildSettingsHttp = proxySettings.GetChild(gchildProxyHttp)
+	proxyChildSettingsHttps = proxySettings.GetChild(gchildProxyHttps)
+	proxyChildSettingsFtp = proxySettings.GetChild(gchildProxyFtp)
+	proxyChildSettingsSocks = proxySettings.GetChild(gchildProxySocks)
 }
 
-func (m *Manager) GetProxyMethod() (proxyMethod string, err error) {
-	proxyMethod = proxySettings.GetString(gkeyProxyMethod)
-	logger.Info("GetProxyMethod", proxyMethod)
+func getProxyChildSettings(proxyType string) (childSettings *gio.Settings, err error) {
+	switch proxyType {
+	case proxyTypeHttp:
+		childSettings = proxyChildSettingsHttp
+	case proxyTypeHttps:
+		childSettings = proxyChildSettingsHttps
+	case proxyTypeFtp:
+		childSettings = proxyChildSettingsFtp
+	case proxyTypeSocks:
+		childSettings = proxyChildSettingsSocks
+	default:
+		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
+		logger.Error(err)
+	}
 	return
 }
-func (m *Manager) SetProxyMethod(proxyMethod string) (err error) {
-	logger.Info("SetProxyMethod", proxyMethod)
-	err = checkProxyMethod(proxyMethod)
+
+func (m *Manager) GetProxyMethod() (proxyMode string, err error) {
+	proxyMode = proxySettings.GetString(gkeyProxyMode)
+	logger.Info("GetProxyMethod", proxyMode)
+	return
+}
+func (m *Manager) SetProxyMethod(proxyMode string) (err error) {
+	logger.Info("SetProxyMethod", proxyMode)
+	err = checkProxyMethod(proxyMode)
 	if err != nil {
 		return
 	}
-	ok := proxySettings.SetString(gkeyProxyMethod, proxyMethod)
+	ok := proxySettings.SetString(gkeyProxyMode, proxyMode)
 	if !ok {
 		err = fmt.Errorf("set proxy method through gsettings failed")
 		return
 	}
-	switch proxyMethod {
-	case proxyMethodNone:
+	switch proxyMode {
+	case proxyModeNone:
 		notifyProxyDisabled()
 	default:
 		notifyProxyEnabled()
 	}
 	return
 }
-func checkProxyMethod(proxyMethod string) (err error) {
-	switch proxyMethod {
-	case proxyMethodNone, proxyMethodManual, proxyMethodAuto:
+func checkProxyMethod(proxyMode string) (err error) {
+	switch proxyMode {
+	case proxyModeNone, proxyModeManual, proxyModeAuto:
 	default:
-		err = fmt.Errorf("invalid proxy method %s", proxyMethod)
+		err = fmt.Errorf("invalid proxy method %s", proxyMode)
 		logger.Error(err)
 	}
 	return
 }
 
 func (m *Manager) GetAutoProxy() (proxyAuto string, err error) {
-	proxyAuto = proxySettings.GetString(gkeyAutoProxy)
+	proxyAuto = proxySettings.GetString(gkeyProxyAuto)
 	return
 }
 func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
-	logger.Info("SetAutoProxy", proxyAuto)
-	ok := proxySettings.SetString(gkeyAutoProxy, proxyAuto)
+	logger.Debug("set autoconfig-url for proxy", proxyAuto)
+	ok := proxySettings.SetString(gkeyProxyAuto, proxyAuto)
 	if !ok {
-		err = fmt.Errorf("set automatic proxy through gsettings failed %s", proxyAuto)
+		err = fmt.Errorf("set autoconfig-url proxy through gsettings failed %s", proxyAuto)
+		logger.Error(err)
 	}
 	return
 }
 
-func (m *Manager) GetProxy(proxyType string) (addr, port string, err error) {
-	proxy, err := doGetProxy(proxyType)
+func (m *Manager) GetProxyIgnoreHosts() (ignoreHosts string, err error) {
+	array := proxySettings.GetStrv(gkeyProxyIgnoreHosts)
+	ignoreHosts = strings.Join(array, ", ")
+	return
+}
+func (m *Manager) SetProxyIgnoreHosts(ignoreHosts string) (err error) {
+	logger.Debug("set ignore-hosts for proxy", ignoreHosts)
+	ignoreHostsFixed := strings.Replace(ignoreHosts, " ", "", -1)
+	array := strings.Split(ignoreHostsFixed, ",")
+	ok := proxySettings.SetStrv(gkeyProxyIgnoreHosts, array)
+	if !ok {
+		err = fmt.Errorf("set automatic proxy through gsettings failed %s", ignoreHosts)
+		logger.Error(err)
+	}
+	return
+}
+
+func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
+	childSettings, err := getProxyChildSettings(proxyType)
 	if err != nil {
 		return
 	}
-	if proxyPrefixReg.MatchString(proxy) {
-		proxy = proxyPrefixReg.FindStringSubmatch(proxy)[1]
-	}
-	proxy = strings.TrimSuffix(proxy, "/")
-	a := strings.Split(proxy, ":")
-	if len(a) == 2 {
-		addr = a[0]
-		port = a[1]
-	} else if len(a) == 3 {
-		// with user and password
-		addr = a[0] + ":" + a[1]
-		port = a[2]
-	}
+	host = childSettings.GetString(gkeyProxyHost)
+	port = strconv.Itoa(int(childSettings.GetInt(gkeyProxyPort)))
 	return
 }
 
-// if address is empty, means to remove proxy setting
-func (m *Manager) SetProxy(proxyType, addr, port string) (err error) {
-	var proxy string
-	if len(addr) > 0 {
-		if len(port) == 0 {
-			err = fmt.Errorf("proxy port is empty")
-			return
-		}
-		if !proxyPrefixReg.MatchString(proxy) {
-			addr = proxyType + "://" + addr
-		}
-		proxy = addr + ":" + port + "/"
-	}
-	err = doSetProxy(proxyType, proxy)
-	return
-}
-
-func checkProxyType(proxyType string) (err error) {
-	switch proxyType {
-	case proxyHttp, proxyHttps, proxyFtp, proxySocks:
-	default:
-		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
+func (m *Manager) SetProxy(proxyType, host, port string) (err error) {
+	portInt, err := strconv.Atoi(port)
+	if err != nil {
 		logger.Error(err)
+		return
 	}
-	return
-}
 
-func doGetProxy(proxyType string) (proxy string, err error) {
-	switch proxyType {
-	case proxyHttp:
-		proxy = proxySettings.GetString(gkeyHttpProxy)
-	case proxyHttps:
-		proxy = proxySettings.GetString(gkeyHttpsProxy)
-	case proxyFtp:
-		proxy = proxySettings.GetString(gkeyFtpProxy)
-	case proxySocks:
-		proxy = proxySettings.GetString(gkeySocksProxy)
-	default:
-		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
-		logger.Error(err)
+	childSettings, err := getProxyChildSettings(proxyType)
+	if err != nil {
+		return
 	}
-	return
-}
 
-func doSetProxy(proxyType, proxy string) (err error) {
 	var ok bool
-	switch proxyType {
-	case proxyHttp:
-		ok = proxySettings.SetString(gkeyHttpProxy, proxy)
-	case proxyHttps:
-		ok = proxySettings.SetString(gkeyHttpsProxy, proxy)
-	case proxyFtp:
-		ok = proxySettings.SetString(gkeyFtpProxy, proxy)
-	case proxySocks:
-		ok = proxySettings.SetString(gkeySocksProxy, proxy)
-	default:
-		err = fmt.Errorf("not a valid proxy type: %s", proxyType)
-		logger.Error(err)
+	if ok = childSettings.SetString(gkeyProxyHost, host); ok {
+		ok = childSettings.SetInt(gkeyProxyPort, int32(portInt))
 	}
 	if !ok {
-		err = fmt.Errorf("set proxy value to gsettings failed: %s, %s", proxyType, proxy)
+		err = fmt.Errorf("set proxy value to gsettings failed: %s, %s:%s", proxyType, host, port)
 		logger.Error(err)
 	}
+
 	return
 }
