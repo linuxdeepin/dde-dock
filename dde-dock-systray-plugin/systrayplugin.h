@@ -41,14 +41,19 @@ public:
     QString getMenuContent(QString id) Q_DECL_OVERRIDE;
     void invokeMenuItem(QString id, QString itemId, bool checked) Q_DECL_OVERRIDE;
 
+private slots:
+    void onTrayIconsChanged();
+    void onTrayInit();
+
+private:
+    void initTrayIcons();
+    void addTrayIcon(WId winId);
+    void removeTrayIcon(WId winId);
+
 private:
     CompositeTrayItem * m_compositeItem = 0;
     DockPluginProxyInterface * m_proxy = 0;
     com::deepin::dde::TrayManager *m_dbusTrayManager = 0;
-
-private slots:
-    void onAdded(WId winId);
-    void onRemoved(WId winId);
 };
 
 #endif // SYSTRAYPLUGIN_H

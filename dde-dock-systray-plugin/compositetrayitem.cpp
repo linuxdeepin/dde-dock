@@ -55,6 +55,24 @@ void CompositeTrayItem::setMode(const Dock::DockMode &mode)
     }
 }
 
+void CompositeTrayItem::clear()
+{
+    foreach (TrayIcon * icon, m_icons.values()) {
+        icon->deleteLater();
+    }
+    m_icons.clear();
+}
+
+bool CompositeTrayItem::exist(const QString &key)
+{
+    return m_icons.keys().indexOf(key) != -1;
+}
+
+QStringList CompositeTrayItem::trayIds() const
+{
+    return m_icons.keys();
+}
+
 void CompositeTrayItem::relayout()
 {
     uint childrenCount = m_icons.keys().length();

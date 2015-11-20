@@ -4,6 +4,7 @@
 #include "systrayplugin.h"
 #include "compositetrayitem.h"
 #include "trayicon.h"
+#include "../dde-dock/src/dbus/dbusentrymanager.h"
 
 static const QString CompositeItemKey = "composite_item_key";
 
@@ -27,19 +28,13 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
                                                               "/com/deepin/dde/TrayManager",
                                                               QDBusConnection::sessionBus(),
                                                               this);
-        connect(m_dbusTrayManager, &TrayManager::Added, this, &SystrayPlugin::onAdded);
-        connect(m_dbusTrayManager, &TrayManager::Removed, this, &SystrayPlugin::onRemoved);
+        connect(m_dbusTrayManager, &TrayManager::TrayIconsChanged, this, &SystrayPlugin::onTrayIconsChanged);
     }
 
-    m_dbusTrayManager->RetryManager();
-    QList<uint> trayIcons = m_dbusTrayManager->trayIcons();
-    qDebug() << "Found trayicons: " << trayIcons;
+    DBusEntryManager *entryManager = new DBusEntryManager(this);
+    connect(entryManager, &DBusEntryManager::TrayInited, this, &SystrayPlugin::onTrayInit);
 
-    foreach (uint trayIcon, trayIcons) {
-        onAdded(trayIcon);
-    }
-
-    m_proxy->itemAddedEvent(CompositeItemKey);
+    initTrayIcons();
 }
 
 QString SystrayPlugin::getPluginName()
@@ -108,10 +103,28 @@ void SystrayPlugin::invokeMenuItem(QString, QString, bool)
 
 }
 
+void SystrayPlugin::initTrayIcons()
+{
+    m_compositeItem->clear();
+
+//    m_dbusTrayManager->RetryManager();
+    QList<uint> trayIcons = m_dbusTrayManager->trayIcons();
+    qDebug() << "Init trayicons, Found trayicons: " <<m_dbusTrayManager->isValid() << trayIcons << m_dbusTrayManager->property("TrayIcons");
+
+    foreach (uint trayIcon, trayIcons) {
+        addTrayIcon(trayIcon);
+    }
+
+    m_proxy->itemAddedEvent(CompositeItemKey);
+}
+
 // private slots
-void SystrayPlugin::onAdded(WId winId)
+void SystrayPlugin::addTrayIcon(WId winId)
 {
     QString key = QString::number(winId);
+    if (m_compositeItem->exist(key))
+        return;
+    qWarning() << "Systray add:" << winId;
 
     TrayIcon * icon = new TrayIcon(winId);
 
@@ -120,11 +133,34 @@ void SystrayPlugin::onAdded(WId winId)
     m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
 }
 
-void SystrayPlugin::onRemoved(WId winId)
+void SystrayPlugin::removeTrayIcon(WId winId)
 {
+    qWarning() << "Systray remove:" << winId;
     QString key = QString::number(winId);
 
     m_compositeItem->remove(key);
 
     m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
+}
+
+void SystrayPlugin::onTrayIconsChanged()
+{
+    QList<uint> icons = m_dbusTrayManager->trayIcons();
+    QStringList ids = m_compositeItem->trayIds();
+    qDebug() << "TrayIconsChanged:" << icons;
+    foreach (uint id, icons) {   //add news
+        if (ids.indexOf(QString::number(id)) == -1) {
+            addTrayIcon(id);
+        }
+    }
+    foreach (QString id, ids) { //remove olds
+        if (icons.indexOf(id.toUInt()) == -1) {
+            removeTrayIcon(id.toUInt());
+        }
+    }
+}
+
+void SystrayPlugin::onTrayInit()
+{
+
 }

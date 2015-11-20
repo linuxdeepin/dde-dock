@@ -16,9 +16,12 @@ public:
 
     void addTrayIcon(QString key, TrayIcon * item);
     void remove(QString key);
-
-    Dock::DockMode mode() const;
     void setMode(const Dock::DockMode &mode);
+    void clear();
+
+    bool exist(const QString &key);
+    QStringList trayIds() const;
+    Dock::DockMode mode() const;
 
 private:
     Dock::DockMode m_mode;

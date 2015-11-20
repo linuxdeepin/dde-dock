@@ -17,12 +17,14 @@ INCLUDEPATH += ../dde-dock/src/
 SOURCES += systrayplugin.cpp \
     dbustraymanager.cpp \
     compositetrayitem.cpp \
-    trayicon.cpp
+    trayicon.cpp \
+    ../dde-dock/src/dbus/dbusentrymanager.cpp
 
 HEADERS  += systrayplugin.h \
     dbustraymanager.h \
     compositetrayitem.h \
-    trayicon.h
+    trayicon.h \
+    ../dde-dock/src/dbus/dbusentrymanager.h
 
 RESOURCES += images.qrc
 DISTFILES += dde-dock-systray-plugin.json
