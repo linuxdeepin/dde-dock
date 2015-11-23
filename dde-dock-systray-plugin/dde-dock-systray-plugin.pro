@@ -8,7 +8,8 @@ QT       += core gui dbus x11extras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += plugin c++11
+CONFIG += plugin c++11 link_pkgconfig
+PKGCONFIG += xcb xcb-image xcb-composite
 
 TARGET = $$qtLibraryTarget(dde-dock-systray-plugin)
 TEMPLATE = lib

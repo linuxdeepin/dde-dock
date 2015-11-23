@@ -28,6 +28,7 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
                                                               "/com/deepin/dde/TrayManager",
                                                               QDBusConnection::sessionBus(),
                                                               this);
+        m_dbusTrayManager->RetryManager();
         connect(m_dbusTrayManager, &TrayManager::TrayIconsChanged, this, &SystrayPlugin::onTrayIconsChanged);
     }
 

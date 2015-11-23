@@ -2,9 +2,11 @@
 #define TRAYICON_H
 
 #include <QWindow>
-#include <QWidget>
+#include <QFrame>
 
-class TrayIcon : public QWidget
+class QPaintEvent;
+class QMouseEvent;
+class TrayIcon : public QFrame
 {
     Q_OBJECT
 public:
@@ -13,11 +15,19 @@ public:
     void maskOn();
     void maskOff();
 
-private:
-    QWindow * m_win;
-    QPixmap m_itemMask;
+protected:
+    void paintEvent(QPaintEvent *);
+//    void mousePressEvent(QMouseEvent *);
 
-    void initItemMask();
+private:
+    WId m_windowId;
+    WId m_containerWid;
+    bool m_masked;
+
+    void wrapWindow();
+    void updateWindow();
+    QImage getImageNonComposite();
+    void sendClick(uint8_t, int, int);
 };
 
 #endif // TRAYICON_H
