@@ -12,10 +12,15 @@ class DockPluginInterface
 {
 public:
     enum InfoType{
-        ItemSize,
-        AppletSize,
-        Title,
-        CanDisable
+        ItemSize,//Q_DECL_DEPRECATED
+        AppletSize,//Q_DECL_DEPRECATED
+        Title,//Q_DECL_DEPRECATED
+        CanDisable,//Q_DECL_DEPRECATED
+        InfoTypeItemSize,
+        InfoTypeAppletSize,
+        InfoTypeTitle,
+        InfoTypeEnable,
+        InfoTypeConfigurable
     };
 
     virtual ~DockPluginInterface() {}
@@ -30,9 +35,12 @@ public:
     virtual QString getTitle(QString id) = 0;
     virtual QString getCommand(QString id) = 0;
     virtual QPixmap getIcon(QString id) {Q_UNUSED(id); return QPixmap("");}
-    virtual bool canDisable(QString id) = 0;
-    virtual bool isDisabled(QString id) = 0;
-    virtual void setDisabled(QString id, bool disabled) = 0;
+    virtual bool canDisable(QString id) {return false;} Q_DECL_DEPRECATED
+    virtual bool isDisabled(QString id) {return false;} Q_DECL_DEPRECATED
+    virtual void setDisabled(QString id, bool disabled) {return;} Q_DECL_DEPRECATED
+    virtual bool configurable(const QString &id) {return false;}    //TODO, change to pure virtual
+    virtual bool enabled(const QString &id) {return true;}  //TODO, change to pure virtual
+    virtual void setEnabled(const QString &id, bool enabled) {return;}  //TODO, change to pure virtual
     virtual QWidget * getItem(QString id) = 0;
     virtual QWidget * getApplet(QString id) = 0;
     virtual QString getMenuContent(QString id) = 0;

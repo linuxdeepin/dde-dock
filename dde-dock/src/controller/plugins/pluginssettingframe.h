@@ -33,7 +33,7 @@ public:
     bool checked();
 
 signals:
-    void disableChanged(QString id, bool check);
+    void checkedChanged(QString id, bool check);
 
 private:
     QLabel *m_iconLabel = NULL;
@@ -48,6 +48,10 @@ private:
     const int MAX_TEXT_WIDTH = 125;
 };
 
+
+
+
+
 class PluginsSettingFrame : public QFrame
 {
     Q_OBJECT
@@ -60,10 +64,11 @@ public slots:
                      const QString &title = "",
                      const QPixmap &icon = QPixmap());
     void onPluginRemove(const QString &id);
-    void clear();
+    void onPluginEnabledChanged(const QString &id, bool enabled);
+    void onPluginTitleChanged(const QString &id, const QString &title);
 
 signals:
-    void disableChanged(QString id, bool check);
+    void checkedChanged(const QString &id, bool checked);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event);

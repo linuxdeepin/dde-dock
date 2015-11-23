@@ -1,7 +1,7 @@
 #include "pluginssettingframe.h"
 
 PluginsSettingLine::PluginsSettingLine(bool checked, const QString &id, const QString &title, const QPixmap &icon, QWidget *parent)
-    :m_pluginId(id), QLabel(parent)
+    :QLabel(parent), m_pluginId(id)
 {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setContentsMargins(CONTENT_MARGIN, 0, CONTENT_MARGIN, 0);
@@ -19,7 +19,7 @@ PluginsSettingLine::PluginsSettingLine(bool checked, const QString &id, const QS
     m_switchButton = new DSwitchButton;
     m_switchButton->setChecked(checked);
     connect(m_switchButton, &DSwitchButton::checkedChanged, [=](bool checked){
-        emit disableChanged(m_pluginId, !checked);
+        emit checkedChanged(m_pluginId, checked);
     });
 
     mainLayout->addWidget(m_iconLabel);
@@ -62,7 +62,6 @@ void PluginsSettingLine::setChecked(const bool checked)
     m_switchButton->setChecked(checked);
 }
 
-
 PluginsSettingFrame::PluginsSettingFrame(QWidget *parent) :
     QFrame(parent)
 {
@@ -92,7 +91,7 @@ void PluginsSettingFrame::onPluginAdd(bool checked, const QString &id, const QSt
         return;
 
     PluginsSettingLine *line = new PluginsSettingLine(checked, id, title, icon);
-    connect(line, &PluginsSettingLine::disableChanged, this, &PluginsSettingFrame::disableChanged);
+    connect(line, &PluginsSettingLine::checkedChanged, this, &PluginsSettingFrame::checkedChanged);
 
     m_mainLayout->addWidget(line, 1, Qt::AlignTop);
 
@@ -112,10 +111,19 @@ void PluginsSettingFrame::onPluginRemove(const QString &id)
     }
 }
 
-void PluginsSettingFrame::clear()
+void PluginsSettingFrame::onPluginEnabledChanged(const QString &id, bool enabled)
 {
-    foreach (QString uuid, m_lineMap.keys()) {
-        m_lineMap.take(uuid)->deleteLater();
+    PluginsSettingLine * line = m_lineMap.value(id);
+    if (line) {
+        line->setChecked(enabled);
+    }
+}
+
+void PluginsSettingFrame::onPluginTitleChanged(const QString &id, const QString &title)
+{
+    PluginsSettingLine * line = m_lineMap.value(id);
+    if (line) {
+        line->setTitle(title);
     }
 }
 

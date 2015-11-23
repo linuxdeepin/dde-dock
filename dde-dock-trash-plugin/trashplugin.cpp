@@ -42,17 +42,17 @@ QString TrashPlugin::getCommand(QString)
     return "";
 }
 
-bool TrashPlugin::canDisable(QString)
+bool TrashPlugin::configurable(const QString &)
 {
     return false;
 }
 
-bool TrashPlugin::isDisabled(QString)
+bool TrashPlugin::enabled(const QString &)
 {
-    return false;
+    return true;
 }
 
-void TrashPlugin::setDisabled(QString, bool)
+void TrashPlugin::setEnabled(const QString &, bool)
 {
 
 }

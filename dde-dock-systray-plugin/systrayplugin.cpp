@@ -62,17 +62,17 @@ QString SystrayPlugin::getCommand(QString)
     return "";
 }
 
-bool SystrayPlugin::canDisable(QString)
+bool SystrayPlugin::configurable(const QString &)
 {
     return false;
 }
 
-bool SystrayPlugin::isDisabled(QString)
+bool SystrayPlugin::enabled(const QString &)
 {
-    return false;
+    return true;
 }
 
-void SystrayPlugin::setDisabled(QString, bool)
+void SystrayPlugin::setEnabled(const QString &, bool)
 {
 
 }
@@ -90,7 +90,7 @@ QWidget * SystrayPlugin::getApplet(QString)
 void SystrayPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode)
 {
     m_compositeItem->setMode(newMode);
-    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }
 
 QString SystrayPlugin::getMenuContent(QString)
@@ -130,7 +130,7 @@ void SystrayPlugin::addTrayIcon(WId winId)
 
     m_compositeItem->addTrayIcon(key, icon);
 
-    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }
 
 void SystrayPlugin::removeTrayIcon(WId winId)
@@ -140,7 +140,7 @@ void SystrayPlugin::removeTrayIcon(WId winId)
 
     m_compositeItem->remove(key);
 
-    m_proxy->infoChangedEvent(DockPluginInterface::ItemSize, CompositeItemKey);
+    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }
 
 void SystrayPlugin::onTrayIconsChanged()

@@ -63,8 +63,6 @@ HEADERS += \
     src/widgets/appicon.h \
     src/widgets/appitem.h \
     src/widgets/docklayout.h \
-    src/widgets/dockmodel.h \
-    src/widgets/dockview.h \
     src/widgets/highlighteffect.h \
     src/widgets/launcheritem.h \
     src/widgets/reflectioneffect.h \
@@ -101,8 +99,6 @@ SOURCES += \
     src/widgets/appicon.cpp \
     src/widgets/appitem.cpp \
     src/widgets/docklayout.cpp \
-    src/widgets/dockmodel.cpp \
-    src/widgets/dockview.cpp \
     src/widgets/highlighteffect.cpp \
     src/widgets/launcheritem.cpp \
     src/widgets/reflectioneffect.cpp \

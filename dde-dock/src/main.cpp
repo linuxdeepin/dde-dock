@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     a.installTranslator(&translator1);
 
     LogManager::instance()->debug_log_console_on();
-    LOG_INFO() << LogManager::instance()->getlogFilePath();
+    LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
 
     if (QDBusConnection::sessionBus().registerService(DBUS_NAME)) {
         QFile file("://qss/resources/dark/qss/dde-dock.qss");

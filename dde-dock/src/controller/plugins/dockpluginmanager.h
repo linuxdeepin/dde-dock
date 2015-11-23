@@ -41,7 +41,7 @@ private:
     void handleNormalPluginAdd(AbstractDockItem *item, QString uuid);
     void unloadPlugin(const QString & path);
     void updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode);
-    void refreshSettingWindow();
+    void initSettingWindow();
     void onPluginItemAdded(AbstractDockItem *item, QString uuid);
     void onPluginItemRemoved(AbstractDockItem *item, QString);
 

@@ -91,9 +91,9 @@ QString PluginItemWrapper::getMenuContent()
     QString menuContent = m_plugin->getMenuContent(m_id);
 
     bool canRun = !m_plugin->getCommand(m_id).isEmpty();
-    bool canDisable = m_plugin->canDisable(m_id);
+    bool configurable = m_plugin->configurable(m_id);
 
-    if (canRun || canDisable) {
+    if (canRun || configurable) {
         QJsonObject result = QJsonDocument::fromJson(menuContent.toUtf8()).object();
         QJsonArray array = result["items"].toArray();
 
@@ -101,7 +101,7 @@ QString PluginItemWrapper::getMenuContent()
         QJsonObject itemRemove = createMenuItem(MenuItemRemove, tr("_Undock"), false, false);
 
         if (canRun) array.insert(0, itemRun);
-        if (canDisable) array.append(itemRemove);
+        if (configurable) array.append(itemRemove);
 
         result["items"] = array;
 
@@ -117,7 +117,7 @@ void PluginItemWrapper::invokeMenuItem(QString itemId, bool checked)
         QString command = m_plugin->getCommand(m_id);
         QProcess::startDetached(command);
     } else if (itemId == MenuItemRemove){
-        m_plugin->setDisabled(m_id, true);
+        m_plugin->setEnabled(m_id, false);
     } else {
         m_plugin->invokeMenuItem(m_id, itemId, checked);
     }

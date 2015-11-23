@@ -66,17 +66,22 @@ void DockPluginProxy::itemRemovedEvent(QString id)
 void DockPluginProxy::infoChangedEvent(DockPluginInterface::InfoType type, const QString &id)
 {
     switch (type) {
-    case DockPluginInterface::ItemSize:
+    case DockPluginInterface::InfoTypeItemSize:
+    case DockPluginInterface::ItemSize: //Q_DECL_DEPRECATED
         itemSizeChangedEvent(id);
         break;
-    case DockPluginInterface::AppletSize:
+    case DockPluginInterface::InfoTypeAppletSize:
+    case DockPluginInterface::AppletSize:   //Q_DECL_DEPRECATED
         appletSizeChangedEvent(id);
         break;
-    case DockPluginInterface::Title:
+    case DockPluginInterface::InfoTypeTitle:
         emit titleChanged(id);
         break;
-    case DockPluginInterface::CanDisable:
-        emit canDisableChanged(id);
+    case DockPluginInterface::InfoTypeConfigurable:
+        emit configurableChanged(id);
+        break;
+    case DockPluginInterface::InfoTypeEnable:
+        emit enabledChanged(id);
         break;
     default:
         break;

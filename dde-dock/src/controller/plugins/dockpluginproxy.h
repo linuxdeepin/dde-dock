@@ -26,7 +26,8 @@ signals:
     void itemAdded(AbstractDockItem * item, QString uuid);
     void itemRemoved(AbstractDockItem * item, QString uuid);
     void titleChanged(const QString &id);
-    void canDisableChanged(const QString &id);
+    void configurableChanged(QString id);
+    void enabledChanged(QString id);
 
 private:
     QMap<QString, AbstractDockItem*> m_items;

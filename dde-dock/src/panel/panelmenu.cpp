@@ -51,7 +51,7 @@ void PanelMenu::showMenu(int x, int y)
     }
 }
 
-void PanelMenu::onItemInvoked(const QString &itemId, bool result)
+void PanelMenu::onItemInvoked(const QString &itemId, bool)
 {
     if (itemId.split(":").length() < 1)
         return;

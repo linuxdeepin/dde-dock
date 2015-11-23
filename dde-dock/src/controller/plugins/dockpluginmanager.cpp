@@ -34,21 +34,28 @@ void DockPluginManager::initAll()
     }
 
     foreach (DockPluginProxy * proxy, m_proxies.values()) {
-        proxy->plugin()->init(proxy);
-
-        connect(proxy, &DockPluginProxy::canDisableChanged, this, [this, proxy](const QString &uuid){
-            if(proxy->plugin()->canDisable(uuid)){
-                m_settingFrame->onPluginAdd(!proxy->plugin()->isDisabled(uuid),
-                                            uuid,
-                                            proxy->plugin()->getName(uuid),
-                                            proxy->plugin()->getIcon(uuid));
-            }else{
-                m_settingFrame->onPluginRemove(uuid);
+        connect(proxy, &DockPluginProxy::configurableChanged, [=](const QString &id) {
+            if (proxy->plugin()->configurable(id)) {
+                m_settingFrame->onPluginAdd(proxy->plugin()->enabled(id),
+                                            id,
+                                            proxy->plugin()->getName(id),
+                                            proxy->plugin()->getIcon(id));
+            }
+            else {
+                m_settingFrame->onPluginRemove(id);
             }
         });
+        connect(proxy, &DockPluginProxy::enabledChanged, [=](const QString &id) {
+            m_settingFrame->onPluginEnabledChanged(id, proxy->plugin()->enabled(id));
+        });
+        connect(proxy, &DockPluginProxy::titleChanged, [=](const QString &id) {
+           m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getTitle(id));
+        });
+
+        proxy->plugin()->init(proxy);
     }
 
-    refreshSettingWindow();
+    initSettingWindow();
 }
 
 void DockPluginManager::onPluginsSetting(int y)
@@ -71,7 +78,6 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
     }
 
     updatePluginPos(newMode, oldMode);
-    refreshSettingWindow();
 }
 
 // private methods
@@ -101,10 +107,10 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
 //                m_watcher->addPath(path);
                 connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::onPluginItemAdded);
                 connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::onPluginItemRemoved);
-                connect(m_settingFrame, &PluginsSettingFrame::disableChanged, [=](QString uuid, bool disable){
+                connect(m_settingFrame, &PluginsSettingFrame::checkedChanged, [=](QString uuid, bool checked){
                     //NOTE:one sender, multi receiver
                     if (interface->ids().indexOf(uuid) != -1) {
-                        interface->setDisabled(uuid, disable);
+                        interface->setEnabled(uuid, checked);
                     }
                 });
 
@@ -142,15 +148,13 @@ void DockPluginManager::updatePluginPos(Dock::DockMode newMode, Dock::DockMode o
     }
 }
 
-void DockPluginManager::refreshSettingWindow()
+void DockPluginManager::initSettingWindow()
 {
-    m_settingFrame->clear();
-
     foreach (DockPluginProxy *proxy, m_proxies.values()) {
         QStringList ids = proxy->plugin()->ids();
         foreach (QString uuid, ids) {
-            if (proxy->plugin()->canDisable(uuid)){
-                m_settingFrame->onPluginAdd(!proxy->plugin()->isDisabled(uuid),
+            if (proxy->plugin()->configurable(uuid)){
+                m_settingFrame->onPluginAdd(proxy->plugin()->enabled(uuid),
                                             uuid,
                                             proxy->plugin()->getName(uuid),
                                             proxy->plugin()->getIcon(uuid));

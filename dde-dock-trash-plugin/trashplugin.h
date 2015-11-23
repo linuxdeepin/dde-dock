@@ -34,9 +34,9 @@ public:
     QString getName(QString id) Q_DECL_OVERRIDE;
     QString getTitle(QString id) Q_DECL_OVERRIDE;
     QString getCommand(QString id) Q_DECL_OVERRIDE;
-    bool canDisable(QString id) Q_DECL_OVERRIDE;
-    bool isDisabled(QString id) Q_DECL_OVERRIDE;
-    void setDisabled(QString id, bool disabled) Q_DECL_OVERRIDE;
+    bool configurable(const QString &id) Q_DECL_OVERRIDE;
+    bool enabled(const QString &id) Q_DECL_OVERRIDE;
+    void setEnabled(const QString &id, bool enabled) Q_DECL_OVERRIDE;
     QWidget * getItem(QString id) Q_DECL_OVERRIDE;
     QWidget * getApplet(QString id) Q_DECL_OVERRIDE;
     QString getMenuContent(QString id) Q_DECL_OVERRIDE;
