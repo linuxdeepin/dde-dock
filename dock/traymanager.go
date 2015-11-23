@@ -39,6 +39,8 @@ type TrayManager struct {
 	Added func(id uint32)
 	// Changed信号会在系统托盘图标改变后被触发。
 	Changed func(id uint32)
+	// Inited when tray manager is initialized.
+	Inited func()
 
 	nameInfo   map[xproto.Window]string
 	notifyInfo map[xproto.Window]bool
@@ -82,6 +84,7 @@ func (m *TrayManager) addTrayIcon(xid xproto.Window) {
 	composite.RedirectWindow(TrayXU.Conn(), xid, composite.RedirectAutomatic)
 
 	m.TrayIcons = append(m.TrayIcons, uint32(xid))
+	dbus.NotifyChange(m, "TrayIcons")
 	icon := xwindow.New(TrayXU, xid)
 	icon.Listen(xproto.EventMaskVisibilityChange | damage.Notify | xproto.EventMaskStructureNotify)
 	icon.Change(xproto.CwBackPixel, 0)
@@ -108,6 +111,7 @@ func (m *TrayManager) removeTrayIcon(xid xproto.Window) {
 		}
 	}
 	m.TrayIcons = newIcons
+	dbus.NotifyChange(m, "TrayIcons")
 	dbus.Emit(m, "Removed", uint32(xid))
 }
 
@@ -133,8 +137,8 @@ func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
 
 func findRGBAVisualID() xproto.Visualid {
 	for _, dinfo := range TrayXU.Screen().AllowedDepths {
-		for _, vinfo := range dinfo.Visuals {
-			if dinfo.Depth == 32 {
+		if dinfo.Depth == 32 {
+			for _, vinfo := range dinfo.Visuals {
 				return vinfo.VisualId
 			}
 		}
@@ -201,6 +205,7 @@ func initTrayManager() {
 		xfixes.SelectionEventMaskSelectionClientClose,
 	)
 	go TRAYMANAGER.startListener()
+	dbus.Emit(TRAYMANAGER, "Inited")
 }
 
 func (m *TrayManager) requireManageTrayIcons() {
@@ -347,6 +352,10 @@ func (m *TrayManager) startListener() {
 				m.Unmanage()
 			case xfixes.SelectionNotifyEvent:
 				m.Manage()
+			case xproto.UnmapNotifyEvent:
+				if _, ok := m.dmageInfo[ev.Window]; ok {
+					m.removeTrayIcon(ev.Window)
+				}
 			}
 		}
 	}
