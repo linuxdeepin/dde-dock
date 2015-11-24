@@ -137,6 +137,7 @@ void Panel::initPluginLayout()
 void Panel::initAppLayout()
 {
     m_appLayout = new DockLayout(this);
+    m_appLayout->resize(0, m_dockModeData->getItemHeight());
     m_appLayout->setaddItemDelayInterval(0);
     m_appLayout->setAcceptDrops(true);
     m_appLayout->setSpacing(m_dockModeData->getAppItemSpacing());
