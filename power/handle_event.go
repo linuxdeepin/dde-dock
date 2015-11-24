@@ -6,6 +6,12 @@ import "dbus/com/deepin/sessionmanager"
 import "time"
 import "dbus/com/deepin/daemon/display"
 import "syscall"
+import "io/ioutil"
+import "strings"
+import "strconv"
+import "fmt"
+import "path"
+import "os"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
@@ -29,6 +35,11 @@ const (
 )
 
 func doLock() {
+	if isGreeterExist() || isLockExist() {
+		logger.Debug("There has a lock or greeter exist")
+		return
+	}
+
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
 		logger.Warning("can't build SessionManager Object:", err)
 	} else {
@@ -191,24 +202,71 @@ func (p *Power) initEventHandle() {
 
 		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
+				hasSleepInLowPower = true
 				unblockSleep()
 				return
 			}
 
 			// Wakeup
+			p.handleBatteryPercentage()
+			playSound("wakeup")
+
 			time.AfterFunc(time.Second*1, func() {
 				p.screensaver.SimulateUserActivity()
 			})
 
-			playSound("wakeup")
-			p.handleBatteryPercentage()
-			if p.coreSettings.GetBoolean(settingKeyLockEnabled) {
-				now := time.Now()
-				doLock()
-				logger.Debug("screenlock ready time:", time.Now().Sub(now))
+			blockSleep()
+			if p.lowBatteryStatus == lowBatteryStatusAction {
+				return
 			}
 
-			blockSleep()
+			if p.LockWhenActive.Get() {
+				now := time.Now()
+				go doLock()
+				logger.Debug("screenlock ready time:", time.Now().Sub(now))
+			}
 		})
 	}
+}
+
+func isLockExist() bool {
+	file := path.Join(os.Getenv("HOME"), ".dlockpid")
+	pid, err := getPidFromFile(file)
+	if err != nil {
+		return false
+	}
+	return isProccessExist(pid, "dde-lock")
+}
+
+func isGreeterExist() bool {
+	pid, err := getPidFromFile("/tmp/.dgreeterpid")
+	if err != nil {
+		return false
+	}
+	return isProccessExist(pid, "lightdm-deepin-greeter")
+}
+
+func getPidFromFile(file string) (uint32, error) {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return 0, err
+	}
+
+	s := strings.TrimSpace(string(content))
+	pid, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return uint32(pid), nil
+}
+
+func isProccessExist(pid uint32, proccess string) bool {
+	file := fmt.Sprintf("/proc/%v/cmdline", pid)
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return false
+	}
+
+	return strings.Contains(string(content), proccess)
 }

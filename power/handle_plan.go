@@ -245,6 +245,9 @@ func (p *Power) handleIdleOn() {
 
 func (*Power) handleIdleOff() {
 	for _, c := range stopAnimation {
+		if c == nil {
+			continue
+		}
 		close(c)
 	}
 	stopAnimation = nil

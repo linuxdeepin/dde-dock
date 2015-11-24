@@ -44,8 +44,9 @@ const (
 
 const abnormalBatteryPercentage = float64(1.0)
 
-func (p *Power) refreshUpower() {
+var hasSleepInLowPower bool
 
+func (p *Power) refreshUpower() {
 	if upower != nil && upower.OnBattery.Get() != p.OnBattery {
 		p.setPropOnBattery(upower.OnBattery.Get())
 
@@ -67,8 +68,10 @@ func (p *Power) handleBatteryPercentage() {
 		// Close low power saver if power plug
 		if p.lowBatteryStatus == lowBatteryStatusAction {
 			doCloseLowpower()
-			if p.LockWhenActive.Get() {
-				doLock()
+			p.lowBatteryStatus = lowBatteryStatusNormal
+			if hasSleepInLowPower && p.LockWhenActive.Get() {
+				hasSleepInLowPower = false
+				go doLock()
 			}
 		}
 
@@ -89,10 +92,14 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
 			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
-			doSuspend()
+			doShowLowpower()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
 					<-time.After(time.Second * 30)
+					if !p.OnBattery {
+						break
+					}
+					hasSleepInLowPower = false
 					//TODO: suspend when there hasn't user input event
 					if p.lowBatteryStatus == lowBatteryStatusAction {
 						doSuspend()
@@ -123,8 +130,9 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
-			if p.LockWhenActive.Get() {
-				doLock()
+			if hasSleepInLowPower && p.LockWhenActive.Get() {
+				hasSleepInLowPower = false
+				go doLock()
 			}
 		}
 	}
