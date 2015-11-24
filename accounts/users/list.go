@@ -22,19 +22,24 @@
 package users
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
+	"strconv"
 )
 
 const (
-	userFilePasswd = "/etc/passwd"
-	userFileShadow = "/etc/shadow"
-	userFileGroup  = "/etc/group"
+	userFilePasswd    = "/etc/passwd"
+	userFileShadow    = "/etc/shadow"
+	userFileGroup     = "/etc/group"
+	userFileLoginDefs = "/etc/login.defs"
 
-	itemLenPasswd = 7
-	itemLenShadow = 9
-	itemLenGroup  = 4
+	itemLenPasswd    = 7
+	itemLenShadow    = 9
+	itemLenGroup     = 4
+	itemLenLoginDefs = 2
 )
 
 var (
@@ -137,7 +142,7 @@ func (infos UserInfos) GetUserNames() []string {
 func (infos UserInfos) filterUserInfos() UserInfos {
 	var tmp UserInfos
 	for _, info := range infos {
-		if !info.isHumanUser(userFileShadow) {
+		if !info.isHumanUser(userFileShadow, userFileLoginDefs) {
 			continue
 		}
 
@@ -147,7 +152,7 @@ func (infos UserInfos) filterUserInfos() UserInfos {
 	return tmp
 }
 
-func (info UserInfo) isHumanUser(config string) bool {
+func (info UserInfo) isHumanUser(configShadow string, configLoginDefs string) bool {
 	if info.Name == "root" {
 		return false
 	}
@@ -156,7 +161,11 @@ func (info UserInfo) isHumanUser(config string) bool {
 		return false
 	}
 
-	if !info.isHumanViaShadow(config) {
+	if !info.isHumanViaShadow(configShadow) {
+		return false
+	}
+
+	if !info.isHumanViaLoginDefs(configLoginDefs) {
 		return false
 	}
 
@@ -213,4 +222,76 @@ func (info UserInfo) isHumanViaShadow(config string) bool {
 	}
 
 	return false
+}
+
+func (info UserInfo) isHumanViaLoginDefs(config string) bool {
+	fr, err := os.Open(config)
+	if err != nil {
+		return false
+	}
+	defer fr.Close()
+	var (
+		found  int
+		uidMin string
+		uidMax string
+
+		scanner = bufio.NewScanner(fr)
+	)
+
+	for scanner.Scan() {
+		if found == 2 {
+			break
+		}
+
+		var line = scanner.Text()
+
+		if len(line) == 0 {
+			continue
+		}
+
+		if line[0] == '#' {
+			continue
+		}
+
+		items := strings.Fields(line)
+		if len(items) != itemLenLoginDefs {
+			continue
+		}
+
+		if items[0] == "UID_MIN" {
+			uidMin = items[1]
+			found += 1
+			continue
+		}
+
+		if items[0] == "UID_MAX" {
+			uidMax = items[1]
+			found += 1
+		}
+	}
+
+	if len(uidMax) == 0 || len(uidMin) == 0 {
+		return false
+	}
+
+	uidMinInt, err := strconv.Atoi(uidMin)
+	if err != nil {
+		return false
+	}
+
+	uidMaxInt, err := strconv.Atoi(uidMax)
+	if err != nil {
+		return false
+	}
+
+	uidInt, err := strconv.Atoi(info.Uid)
+	if err != nil {
+		return false
+	}
+
+	if uidInt > uidMaxInt || uidInt < uidMinInt {
+		return false
+	}
+
+	return true
 }

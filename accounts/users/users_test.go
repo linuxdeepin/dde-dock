@@ -53,33 +53,45 @@ func (*testWrapper) TestUserInfoValid(c *C.C) {
 		valid bool
 	}{
 		{
-			UserInfo{Name: "root"},
+			UserInfo{Name: "root", Uid: "0", Gid: "0"},
 			false,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
 			true,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/false"},
+			UserInfo{Name: "test1", Shell: "/bin/false", Uid: "1000", Gid: "1000"},
 			false,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/nologin"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "60000", Gid: "60000"},
+			true,
+		},
+		{
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "999", Gid: "999"},
 			false,
 		},
 		{
-			UserInfo{Name: "test3", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "60001", Gid: "60001"},
 			false,
 		},
 		{
-			UserInfo{Name: "test4", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/nologin", Uid: "1000", Gid: "1000"},
+			false,
+		},
+		{
+			UserInfo{Name: "test3", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
+			false,
+		},
+		{
+			UserInfo{Name: "test4", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
 			false,
 		},
 	}
 
 	for _, v := range infos {
-		c.Check(v.name.isHumanUser("testdata/shadow"), C.Equals, v.valid)
+		c.Check(v.name.isHumanUser("testdata/shadow", "testdata/login.defs"), C.Equals, v.valid)
 	}
 }
 
