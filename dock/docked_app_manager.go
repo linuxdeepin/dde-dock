@@ -145,6 +145,7 @@ type dockedItemInfo struct {
 // （废弃，此接口名并不好，第一反映很难理解，请使用新接口RequestDock)
 func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	id = normalizeAppID(id)
+	logger.Info("start dock", id)
 	idElement := m.findItem(id)
 	if idElement != nil {
 		logger.Info(id, "is already docked.")
@@ -167,7 +168,7 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 			return false
 		}
 	} else {
-		id = trimDesktop(desktopID)
+		id = normalizeAppID(trimDesktop(desktopID))
 		m.items.PushBack(id)
 	}
 	dbus.Emit(m, "Docked", id)
@@ -193,6 +194,7 @@ func (m *DockedAppManager) ReqeustDock(id, title, icon, cmd string) bool {
 }
 
 func (m *DockedAppManager) doUndock(id string) bool {
+	logger.Info("doUndock", id)
 	removeItem := m.findItem(id)
 	if removeItem == nil {
 		logger.Warning("not find docked app:", id)

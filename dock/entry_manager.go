@@ -27,10 +27,6 @@ func NewEntryManager() *EntryManager {
 }
 
 func (m *EntryManager) listenDockedApp() {
-	if DOCKED_APP_MANAGER != nil {
-		DOCKED_APP_MANAGER = NewDockedAppManager()
-		return
-	}
 }
 
 func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
@@ -174,14 +170,4 @@ func (m *EntryManager) createNormalApp(id string) {
 func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 	delete(m.normalApps, nApp.Id)
 	m.updateEntry(nApp.Id, nil, m.mustGetEntry(nApp, nil).rApp)
-}
-
-func initialize() {
-	ENTRY_MANAGER.listenDockedApp()
-	for _, id := range loadAll() {
-		id = normalizeAppID(id)
-		logger.Debug("load", id)
-		ENTRY_MANAGER.createNormalApp(id)
-	}
-	initTrayManager()
 }

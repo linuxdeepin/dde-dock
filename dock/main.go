@@ -20,7 +20,7 @@ var (
 	dpy                 *display.Display       = nil
 	dockProperty        *DockProperty          = nil
 	entryProxyerManager *EntryProxyerManager   = nil
-	dockedAppManager    *DockedAppManager      = nil
+	DOCKED_APP_MANAGER  *DockedAppManager      = nil
 	areaImp             *xmousearea.XMouseArea = nil
 	mouseArea           *XMouseAreaProxyer     = nil
 )
@@ -41,9 +41,9 @@ func (d *Daemon) Stop() error {
 		dockProperty = nil
 	}
 
-	if dockedAppManager != nil {
-		dockedAppManager.destroy()
-		dockedAppManager = nil
+	if DOCKED_APP_MANAGER != nil {
+		DOCKED_APP_MANAGER.destroy()
+		DOCKED_APP_MANAGER = nil
 	}
 
 	if region != nil {
@@ -165,8 +165,8 @@ func (d *Daemon) Start() error {
 	entryProxyerManager.watchEntries()
 	logger.Info("initialize entry proxyer manager done")
 
-	dockedAppManager = NewDockedAppManager()
-	err = dbus.InstallOnSession(dockedAppManager)
+	DOCKED_APP_MANAGER = NewDockedAppManager()
+	err = dbus.InstallOnSession(DOCKED_APP_MANAGER)
 	if err != nil {
 		d.startFailed("register dbus interface failed:", err)
 		return err
@@ -263,4 +263,13 @@ func (d *Daemon) GetDependencies() []string {
 
 func (d *Daemon) Name() string {
 	return "dock"
+}
+
+func initialize() {
+	for _, id := range DOCKED_APP_MANAGER.DockedAppList() {
+		id = normalizeAppID(id)
+		logger.Debug("load", id)
+		ENTRY_MANAGER.createNormalApp(id)
+	}
+	initTrayManager()
 }

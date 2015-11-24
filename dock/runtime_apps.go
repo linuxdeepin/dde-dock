@@ -23,8 +23,6 @@ import (
 	"time"
 )
 
-var DOCKED_APP_MANAGER *DockedAppManager
-
 type WindowInfo struct {
 	Xid         xproto.Window
 	Title       string
@@ -271,9 +269,6 @@ func (app *RuntimeApp) buildMenu() {
 		true,
 	)
 	app.coreMenu.AppendItem(closeItem)
-	if DOCKED_APP_MANAGER == nil {
-		DOCKED_APP_MANAGER = NewDockedAppManager()
-	}
 	isDocked := DOCKED_APP_MANAGER.IsDocked(app.Id)
 	logger.Info(app.Id, "Item is docked:", isDocked)
 	var message string = ""
