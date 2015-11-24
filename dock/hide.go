@@ -154,7 +154,7 @@ func (m *HideStateManager) UpdateState() {
 
 	if isLauncherShown {
 		m.CancelToggleShow()
-		logger.Info("launcher is opend, show dock")
+		logger.Info("launcher is opened, show dock")
 		trigger = TriggerShow
 	}
 

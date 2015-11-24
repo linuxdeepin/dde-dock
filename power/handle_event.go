@@ -99,12 +99,12 @@ func (up *Power) handlePowerButton() {
 	}
 }
 
-func (up *Power) handleLidSwitch(opend bool) {
-	if opend {
-		logger.Info("LidOpend...")
+func (up *Power) handleLidSwitch(opened bool) {
+	if opened {
+		logger.Info("Lid opened...")
 		//TODO: DPMS ON
 	} else {
-		logger.Info("LidClosed...")
+		logger.Info("Lid closed...")
 		//TODO: DPMS OFF
 		switch up.LidClosedAction.Get() {
 		case ActionInteractive:
