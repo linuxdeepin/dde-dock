@@ -7,6 +7,7 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
+	"pkg.deepin.io/lib/glib-2.0"
 	"sync"
 	"time"
 )
@@ -123,19 +124,19 @@ func (m *Manager) RemoveItemFromDesktop(id ItemID) error {
 }
 
 // GetFrequency returns a item's  use frequency.
-func (m *Manager) GetFrequency(id ItemID, f RateConfigFile) uint64 {
+func (m *Manager) GetFrequency(id ItemID, f *glib.KeyFile) uint64 {
 	rate, _ := f.GetUint64(string(id), _RateRecordKey)
 	return rate
 }
 
 // SetFrequency sets a item's  use frequency.
-func (m *Manager) SetFrequency(id ItemID, rate uint64, f RateConfigFile) {
+func (m *Manager) SetFrequency(id ItemID, rate uint64, f *glib.KeyFile) {
 	f.SetUint64(string(id), _RateRecordKey, rate)
 	SaveKeyFile(f, ConfigFilePath(_RateRecordFile))
 }
 
 // GetAllFrequency returns all items' use frequency
-func (m *Manager) GetAllFrequency(f RateConfigFile) (infos map[ItemID]uint64) {
+func (m *Manager) GetAllFrequency(f *glib.KeyFile) (infos map[ItemID]uint64) {
 	infos = map[ItemID]uint64{}
 	if f == nil {
 		for id := range m.itemTable {

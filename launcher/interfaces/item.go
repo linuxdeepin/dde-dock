@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"pkg.deepin.io/lib/glib-2.0"
 	"time"
 )
 
@@ -31,14 +32,14 @@ type ItemManager interface {
 	HasItem(ItemID) bool
 	GetItem(ItemID) ItemInfo
 	GetAllItems() []ItemInfo
-	GetAllFrequency(RateConfigFile) map[ItemID]uint64
+	GetAllFrequency(*glib.KeyFile) map[ItemID]uint64
 	GetAllTimeInstalled() (map[ItemID]int64, error)
 	UninstallItem(ItemID, bool, time.Duration) error
 	IsItemOnDesktop(ItemID) bool
 	SendItemToDesktop(ItemID) error
 	RemoveItemFromDesktop(ItemID) error
-	GetFrequency(ItemID, RateConfigFile) uint64
-	SetFrequency(ItemID, uint64, RateConfigFile)
+	GetFrequency(ItemID, *glib.KeyFile) uint64
+	SetFrequency(ItemID, uint64, *glib.KeyFile)
 	GetAllNewInstalledApps() ([]ItemID, error)
 	MarkLaunched(ItemID) error
 }

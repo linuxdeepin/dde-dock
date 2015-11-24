@@ -1,8 +1,8 @@
 package item
 
 import (
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
+	"pkg.deepin.io/lib/glib-2.0"
 )
 
 const (
@@ -11,6 +11,6 @@ const (
 )
 
 // GetFrequencyRecordFile returns the file which records items' use frequency.
-func GetFrequencyRecordFile() (RateConfigFile, error) {
+func GetFrequencyRecordFile() (*glib.KeyFile, error) {
 	return ConfigFile(_RateRecordFile)
 }

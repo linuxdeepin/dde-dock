@@ -3,11 +3,11 @@ package utils
 import (
 	"io/ioutil"
 	"os"
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/lib/glib-2.0"
 )
 
 // SaveKeyFile saves key file.
-func SaveKeyFile(file RateConfigFile, path string) error {
+func SaveKeyFile(file *glib.KeyFile, path string) error {
 	_, content, err := file.ToData()
 	if err != nil {
 		return err
