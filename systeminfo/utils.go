@@ -41,7 +41,7 @@ func getOSType() (int64, error) {
 	switch strings.ToLower(arch) {
 	case "i386", "i586", "i686":
 		return 32, nil
-	case "x86_64", "alpha":
+	case "x86_64", "alpha", "mips64":
 		return 64, nil
 	}
 

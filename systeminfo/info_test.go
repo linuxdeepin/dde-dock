@@ -16,6 +16,10 @@ func TestCPUInfo(t *testing.T) {
 		cpu, err = getCPUInfo("testdata/sw-cpuinfo")
 		So(cpu, ShouldEqual, "sw 1.4GHz x 4")
 		So(err, ShouldBeNil)
+
+		cpu, err = getCPUInfo("testdata/loonson3-cpuinfo")
+		So(cpu, ShouldEqual, "ICT Loongson-3B V0.7 FPU V0.1 x 6")
+		So(err, ShouldBeNil)
 	})
 }
 

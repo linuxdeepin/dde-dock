@@ -10,47 +10,44 @@ const (
 	cpuKeyDelim     = ":"
 	cpuKeyProcessor = "processor"
 	cpuKeyName      = "model name"
+	cpuKeyModel     = "cpu model"
 	cpuKeyCPU       = "cpu"
 	cpuKeyMHz       = "CPU frequency [MHz]"
 	cpuKeyActive    = "cpus active"
 )
 
 func getCPUInfo(file string) (string, error) {
-	ret, err := parseInfoFile(file, cpuKeyDelim)
+	data, err := parseInfoFile(file, cpuKeyDelim)
 	if err != nil {
 		return "", err
 	}
 
-	cpu := swCPUInfo(ret)
+	cpu := swCPUInfo(data)
 	if len(cpu) != 0 {
 		return cpu, nil
 	}
 
-	name, err := getCPUName(cpuKeyName, ret)
-	if err != nil {
-		return "", err
+	// Loongson
+	cpu, _ = getCPUInfoFromMap(cpuKeyModel, cpuKeyProcessor, data)
+	if len(cpu) != 0 {
+		return cpu, nil
 	}
 
-	number, _ := getCPUNumber(cpuKeyProcessor, ret)
-	if number != 0 {
-		name = fmt.Sprintf("%s x %v", name, number+1)
-	}
-
-	return name, nil
+	return getCPUInfoFromMap(cpuKeyName, cpuKeyProcessor, data)
 }
 
-func swCPUInfo(ret map[string]string) string {
-	cpu, err := getCPUName(cpuKeyCPU, ret)
+func swCPUInfo(data map[string]string) string {
+	cpu, err := getCPUName(cpuKeyCPU, data)
 	if err != nil {
 		return ""
 	}
 
-	hz, err := getCPUHz(cpuKeyMHz, ret)
+	hz, err := getCPUHz(cpuKeyMHz, data)
 	if err == nil {
 		cpu = fmt.Sprintf("%s %vGHz", cpu, hz)
 	}
 
-	number, _ := getCPUNumber(cpuKeyActive, ret)
+	number, _ := getCPUNumber(cpuKeyActive, data)
 	if number != 1 {
 		cpu = fmt.Sprintf("%s x %v", cpu, number)
 	}
@@ -58,8 +55,22 @@ func swCPUInfo(ret map[string]string) string {
 	return cpu
 }
 
-func getCPUName(key string, ret map[string]string) (string, error) {
-	value, ok := ret[key]
+func getCPUInfoFromMap(nameKey, numKey string, data map[string]string) (string, error) {
+	name, err := getCPUName(nameKey, data)
+	if err != nil {
+		return "", err
+	}
+
+	number, _ := getCPUNumber(numKey, data)
+	if number != 0 {
+		name = fmt.Sprintf("%s x %v", name, number+1)
+	}
+
+	return name, nil
+}
+
+func getCPUName(key string, data map[string]string) (string, error) {
+	value, ok := data[key]
 	if !ok {
 		return "", fmt.Errorf("Can not find the key '%s'", key)
 	}
@@ -79,8 +90,8 @@ func getCPUName(key string, ret map[string]string) (string, error) {
 	return name, nil
 }
 
-func getCPUNumber(key string, ret map[string]string) (int, error) {
-	value, ok := ret[key]
+func getCPUNumber(key string, data map[string]string) (int, error) {
+	value, ok := data[key]
 	if !ok {
 		return 0, fmt.Errorf("Can not find the key '%s'", key)
 	}
@@ -93,8 +104,8 @@ func getCPUNumber(key string, ret map[string]string) (int, error) {
 	return int(number), nil
 }
 
-func getCPUHz(key string, ret map[string]string) (float64, error) {
-	value, ok := ret[key]
+func getCPUHz(key string, data map[string]string) (float64, error) {
+	value, ok := data[key]
 	if !ok {
 		return 0, fmt.Errorf("Can not find the key '%s'", key)
 	}
