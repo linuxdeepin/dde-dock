@@ -46,3 +46,17 @@ func TestVersion(t *testing.T) {
 		So(err, ShouldBeNil)
 	})
 }
+
+func TestDistro(t *testing.T) {
+	Convey("Test os distro", t, func() {
+		lang := os.Getenv("LANGUAGE")
+		os.Setenv("LANGUAGE", "en_US")
+		defer os.Setenv("LANGUAGE", lang)
+
+		distroId, distroDesc, distroVer, err := getDistroFromLSB("testdata/lsb-release")
+		So(distroId, ShouldEqual, "Deepin")
+		So(distroDesc, ShouldEqual, "Deepin 2014.3")
+		So(distroVer, ShouldEqual, "2014.3")
+		So(err, ShouldBeNil)
+	})
+}

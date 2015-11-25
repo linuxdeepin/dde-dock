@@ -7,8 +7,14 @@ import (
 )
 
 type SystemInfo struct {
-	// Current version, ex: "2015 Desktop"
+	// Current deepin version, ex: "2015 Desktop"
 	Version string
+	// Distribution ID
+	DistroID string
+	// Distribution Description
+	DistroDesc string
+	// Distribution Version
+	DistroVer string
 	// CPU information
 	Processor string
 	// Disk capacity
@@ -80,6 +86,11 @@ func NewSystemInfo() *SystemInfo {
 	info.Version, err = getVersion()
 	if err != nil {
 		logger.Warning("Get version failed:", err)
+	}
+
+	info.DistroID, info.DistroDesc, info.DistroVer, err = getDistro()
+	if err != nil {
+		logger.Warning("Get distribution failed:", err)
 	}
 
 	info.MemoryCap, err = getMemoryFromFile("/proc/meminfo")
