@@ -196,10 +196,15 @@ void TrayIcon::updateWindow()
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
 
     QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    const uint32_t windowMoveConfigVals[4] = { globalPos.x(), globalPos.y(), s_embedSize, s_embedSize };
-    xcb_configure_window(c, m_windowId,
-                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+    const uint32_t windowMoveConfigVals[2] = { globalPos.x(), globalPos.y() };
+    xcb_configure_window(c, m_containerWid,
+                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
                          windowMoveConfigVals);
+
+    const uint32_t windowResizeConfigVals[2] = { s_embedSize, s_embedSize };
+    xcb_configure_window(c, m_windowId,
+                         XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+                         windowResizeConfigVals);
 
     repaint();
 }
