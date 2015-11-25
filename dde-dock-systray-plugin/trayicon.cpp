@@ -161,12 +161,12 @@ void TrayIcon::wrapWindow()
     // xembed_message_send(m_windowId, XEMBED_EMBEDDED_NOTIFY, m_containerWid, 0, 0);
 
     //move window we're embedding
+    /*
     const uint32_t windowMoveConfigVals[2] = { 0, 0 };
-
     xcb_configure_window(c, m_windowId,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
                          windowMoveConfigVals);
-
+    */
 
     //if the window is a clearly stupid size resize to be something sensible
     //this is needed as chormium and such when resized just fill the icon with transparent space and only draw in the middle
@@ -196,8 +196,10 @@ void TrayIcon::updateWindow()
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
 
     QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    uint32_t configVals[2] = {globalPos.x(), globalPos.y()};
-    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, configVals);
+    const uint32_t windowMoveConfigVals[4] = { globalPos.x(), globalPos.y(), s_embedSize, s_embedSize };
+    xcb_configure_window(c, m_windowId,
+                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+                         windowMoveConfigVals);
 
     repaint();
 }
