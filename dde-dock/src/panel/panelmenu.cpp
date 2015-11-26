@@ -53,6 +53,8 @@ void PanelMenu::showMenu(int x, int y)
 
 void PanelMenu::onItemInvoked(const QString &itemId, bool)
 {
+    emit menuItemInvoked();
+
     if (itemId.split(":").length() < 1)
         return;
 

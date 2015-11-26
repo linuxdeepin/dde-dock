@@ -37,6 +37,7 @@ public:
 
 signals:
     void settingPlugin();
+    void menuItemInvoked();
 
 private:
     explicit PanelMenu(QObject *parent = 0);
