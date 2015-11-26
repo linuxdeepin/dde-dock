@@ -117,6 +117,8 @@ func (d *Daemon) Start() error {
 
 	workaround = newFullScreenWorkaround()
 	go workaround.start()
+	// handle sw lid state
+	go power.listenSWLidState()
 	return nil
 }
 
@@ -129,6 +131,12 @@ func (d *Daemon) Stop() error {
 		workaround.stop()
 		workaround = nil
 	}
+
+	if power.swQuit != nil {
+		close(power.swQuit)
+		power.swQuit = nil
+	}
+
 	finalizeLibs()
 	logger.EndTracing()
 	return nil

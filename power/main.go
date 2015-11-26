@@ -22,6 +22,7 @@ type Power struct {
 	batGroup         *batteryGroup
 	lidIsClosed      bool
 	lowBatteryStatus uint32
+	swQuit           chan struct{}
 
 	// 按下电源键执行的操作
 	PowerButtonAction *property.GSettingsEnumProperty `access:"readwrite"`
@@ -126,6 +127,8 @@ func NewPower() *Power {
 		p.setBatteryPlan(p.BatteryPlan.Get())
 	})
 	p.setBatteryPlan(p.BatteryPlan.Get())
+
+	p.swQuit = make(chan struct{})
 
 	return p
 }
