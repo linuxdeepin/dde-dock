@@ -32,11 +32,16 @@ TrayIcon::TrayIcon(WId winId, QWidget *parent) :
 
     wrapWindow();
 
-    QTimer * timer = new QTimer(this);
-    timer->setInterval(1000);
-    timer->setSingleShot(false);
-    timer->start();
-    connect(timer, &QTimer::timeout, [this]{ updateWindow(); });
+    m_updateTimer = new QTimer(this);
+    m_updateTimer->setInterval(1000);
+    m_updateTimer->setSingleShot(false);
+    m_updateTimer->start();
+    connect(m_updateTimer, &QTimer::timeout, [this]{ updateWindow(); });
+}
+
+TrayIcon::~TrayIcon()
+{
+    m_updateTimer->stop();
 }
 
 void TrayIcon::paintEvent(QPaintEvent *)
@@ -217,6 +222,8 @@ QImage TrayIcon::getImageNonComposite()
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (geom.isNull())
+        return QImage();
 
     xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
 
