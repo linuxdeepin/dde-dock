@@ -14,11 +14,11 @@ DockPluginManager::DockPluginManager(QObject *parent) :
 
     m_searchPaths << "/usr/lib/dde-dock/plugins/";
 
-//    m_watcher = new QFileSystemWatcher(this);
-//    m_watcher->addPaths(m_searchPaths);
+    //    m_watcher = new QFileSystemWatcher(this);
+    //    m_watcher->addPaths(m_searchPaths);
 
-//    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
-//    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
+    //    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginManager::watchedFileChanged);
+    //    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
 }
 
 void DockPluginManager::initAll()
@@ -49,7 +49,7 @@ void DockPluginManager::initAll()
             m_settingFrame->onPluginEnabledChanged(id, proxy->plugin()->enabled(id));
         });
         connect(proxy, &DockPluginProxy::titleChanged, [=](const QString &id) {
-           m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getTitle(id));
+            m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getTitle(id));
         });
 
         proxy->plugin()->init(proxy);
@@ -76,8 +76,6 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
         DockPluginInterface * plugin = proxy->plugin();
         plugin->changeMode(newMode, oldMode);
     }
-
-    updatePluginPos(newMode, oldMode);
 }
 
 // private methods
@@ -131,20 +129,6 @@ void DockPluginManager::unloadPlugin(const QString &path)
     if (m_proxies.contains(path)) {
         DockPluginProxy * proxy = m_proxies.take(path);
         delete proxy;
-    }
-}
-
-void DockPluginManager::updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode)
-{
-    if (newMode == Dock::FashionMode && oldMode != Dock::FashionMode){
-        foreach (AbstractDockItem *item, m_normalPlugins.keys()) {
-            emit itemMove(NULL, item);  //Move to the front of the list
-        }
-    }else if (oldMode == Dock::FashionMode){
-        AbstractDockItem * systrayItem = sysPluginItem(SYSTRAY_PLUGIN_ID);
-        foreach (AbstractDockItem *item, m_normalPlugins.keys()) {
-            emit itemMove(systrayItem, item);   //Move to the back of systray plugin
-        }
     }
 }
 
@@ -229,14 +213,12 @@ void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
 
     m_sysPlugins.insert(item, uuid);
 
-    if (uuid == SYSTRAY_PLUGIN_ID){
-        if (m_dockModeData->getDockMode() == Dock::FashionMode)
-            emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
-        else
-            emit itemInsert(NULL, item);
+    if (uuid == SYSTRAY_PLUGIN_ID) {
+        emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
     }
-    else
-        emit itemAppend(item);
+    else {
+        emit itemInsert(NULL, item);
+    }
 }
 
 void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uuid)
@@ -246,8 +228,5 @@ void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uu
 
     m_normalPlugins.insert(item, uuid);
 
-    if (m_dockModeData->getDockMode() == Dock::FashionMode)
-        emit itemInsert(NULL, item);
-    else
-        emit itemInsert(sysPluginItem(SYSTRAY_PLUGIN_ID), item);
+    emit itemAppend(item);
 }

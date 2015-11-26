@@ -19,7 +19,6 @@ public:
     explicit DockPluginManager(QObject *parent = 0);
 
 signals:
-    void itemMove(AbstractDockItem *baseItem, AbstractDockItem *targetItem);
     void itemInsert(AbstractDockItem *baseItem, AbstractDockItem *targetItem);
     void itemAppend(AbstractDockItem * item);
     void itemRemoved(AbstractDockItem * item);
@@ -40,7 +39,6 @@ private:
     void handleSysPluginAdd(AbstractDockItem *item, QString uuid);
     void handleNormalPluginAdd(AbstractDockItem *item, QString uuid);
     void unloadPlugin(const QString & path);
-    void updatePluginPos(Dock::DockMode newMode, Dock::DockMode oldMode);
     void initSettingWindow();
     void onPluginItemAdded(AbstractDockItem *item, QString uuid);
     void onPluginItemRemoved(AbstractDockItem *item, QString);

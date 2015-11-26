@@ -99,27 +99,25 @@ void Panel::initPluginManager()
     m_pluginManager = new DockPluginManager(this);
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, m_pluginManager, &DockPluginManager::onDockModeChanged);
-    connect(m_pluginManager, &DockPluginManager::itemMove, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
-        m_pluginLayout->moveItem(m_pluginLayout->indexOf(targetItem), m_pluginLayout->indexOf(baseItem));
-    });
     connect(m_pluginManager, &DockPluginManager::itemAppend, [=](AbstractDockItem *targetItem){
-        m_pluginLayout->addItem(targetItem);
+        m_pluginLayout->insertItem(targetItem, 0);
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
     connect(m_pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
-        m_pluginLayout->insertItem(targetItem, m_pluginLayout->indexOf(baseItem));
+        int index = m_pluginLayout->indexOf(baseItem);
+        m_pluginLayout->insertItem(targetItem, index != -1 ? index : m_pluginLayout->getItemCount());
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
     connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
+        m_pluginLayout->removeItem(item);
         item->setVisible(false);
         item->deleteLater();
-        m_pluginLayout->removeItem(item);
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
         m_pluginManager->onPluginsSetting(getScreenRect().height - height());
