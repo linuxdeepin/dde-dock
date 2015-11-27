@@ -142,11 +142,13 @@ func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 	b.setPropAdapters()
 }
 func (b *Bluetooth) doRemoveAdapter(i int) {
-	b.adapters[i].notifyAdapterRemoved()
-	destroyAdapter(b.adapters[i])
+	removeAdapter := b.adapters[i]
 	copy(b.adapters[i:], b.adapters[i+1:])
 	b.adapters[len(b.adapters)-1] = nil
 	b.adapters = b.adapters[:len(b.adapters)-1]
+
+	removeAdapter.notifyAdapterRemoved()
+	destroyAdapter(removeAdapter)
 }
 
 func (b *Bluetooth) getAdapter(apath dbus.ObjectPath) (a *adapter, err error) {
