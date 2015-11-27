@@ -49,7 +49,7 @@ void DockPluginManager::initAll()
             m_settingFrame->onPluginEnabledChanged(id, proxy->plugin()->enabled(id));
         });
         connect(proxy, &DockPluginProxy::titleChanged, [=](const QString &id) {
-            m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getTitle(id));
+            m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getName(id));
         });
 
         proxy->plugin()->init(proxy);
