@@ -108,6 +108,8 @@ void TrayIcon::wrapWindow()
 
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    if (clientGeom.isNull())
+        return;
 
     //create a container window
     auto screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
@@ -216,9 +218,6 @@ void TrayIcon::updateWindow()
 
 QImage TrayIcon::getImageNonComposite()
 {
-    if (m_windowId == 0)
-        return QImage();
-
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
