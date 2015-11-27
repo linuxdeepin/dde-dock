@@ -222,6 +222,11 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				return
 			}
 
+			// ignore if device's old state is not available
+			if !isDeviceStateAvailable(oldState) {
+				return
+			}
+
 			// notify only when network enabled
 			if !nmGetNetworkEnabled() {
 				return

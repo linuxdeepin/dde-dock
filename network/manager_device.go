@@ -47,6 +47,7 @@ type device struct {
 	// modem device
 	UniqueUuid string
 
+	// TODO: rename to IsUsbDevice
 	UsbDevice bool            // not works for mobile device(modem)
 	ActiveAp  dbus.ObjectPath // used for wireless device
 
@@ -189,6 +190,12 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 		dev.State = newState
 		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
+
+		// need get device vendor again for that some usb device may
+		// not ready before
+		dev.Vendor = nmGeneralGetDeviceVendor(dev.Path)
+		dev.UsbDevice = nmGeneralIsUsbDevice(dev.Path)
+
 		m.setPropDevices()
 
 		m.config.updateDeviceConfig(dev.Path)

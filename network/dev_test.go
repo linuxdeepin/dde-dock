@@ -53,7 +53,7 @@ func (*testWrapper) TestMain(c *C.C) {
 	// 	manager = nil
 	// 	os.Exit(1)
 	// }
-	// manager.initManager() // initialize manager after dbus installed
+	// manager.initManager()
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {
@@ -179,6 +179,8 @@ func snapshotNotify(suffix string) {
 }
 
 func (*testWrapper) TestGetUdevDeviceVendor(c *C.C) {
+	initDbusObjects()
+
 	var syspaths []string
 	syspaths = append(syspaths, "/sys/devices/pci0000:00/0000:00:01.0")
 	for _, p := range nmGetDevices() {
