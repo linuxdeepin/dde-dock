@@ -25,7 +25,6 @@ import (
 	"dbus/org/bluez"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
-	"time"
 )
 
 type adapter struct {
@@ -193,21 +192,7 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
 		return
 	}
 
-	err = bluezStartDiscovery(apath)
-	go func() {
-		// adapter is not ready, retry again
-		if err != nil {
-			time.Sleep(3 * time.Second)
-			err = bluezStartDiscovery(apath)
-		}
-
-		//	if err == nil {
-		//		time.Sleep(20 * time.Second)
-		//		if b.isAdapterExists(apath) {
-		//			bluezStopDiscovery(apath)
-		//		}
-		//	}
-	}()
+	b.SetAdapterDiscovering(apath, true)
 	return
 }
 
@@ -216,6 +201,9 @@ func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err 
 	if err == nil {
 		// save the powered state
 		b.config.setAdapterConfigPowered(bluezGetAdapterAddress(apath), powered)
+		if powered {
+			b.SetAdapterDiscovering(apath, true)
+		}
 	}
 	return
 }
@@ -225,6 +213,10 @@ func (b *Bluetooth) SetAdapterAlias(apath dbus.ObjectPath, alias string) (err er
 }
 func (b *Bluetooth) SetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err error) {
 	err = bluezSetAdapterDiscoverable(apath, discoverable)
+	return
+}
+func (b *Bluetooth) SetAdapterDiscovering(apath dbus.ObjectPath, discoverable bool) (err error) {
+	err = bluezSetAdapterDiscovering(apath, discoverable)
 	return
 }
 func (b *Bluetooth) SetAdapterDiscoverableTimeout(apath dbus.ObjectPath, discoverableTimeout uint32) (err error) {

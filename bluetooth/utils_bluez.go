@@ -170,6 +170,23 @@ func bluezSetAdapterDiscoverable(apath dbus.ObjectPath, discoverable bool) (err 
 	return
 }
 
+func bluezSetAdapterDiscovering(apath dbus.ObjectPath, discovering bool) (err error) {
+	if discovering {
+		err = bluezStartDiscovery(apath)
+		go func() {
+			// adapter is not ready, retry again
+			if err != nil {
+				time.Sleep(3 * time.Second)
+				bluezStartDiscovery(apath)
+			}
+
+		}()
+	} else {
+		err = bluezStopDiscovery(apath)
+	}
+	return
+}
+
 func bluezGetAdapterDiscovering(apath dbus.ObjectPath) (discovering bool) {
 	bluezAdapter, err := bluezNewAdapter(apath)
 	if err != nil {
