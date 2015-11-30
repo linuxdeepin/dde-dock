@@ -229,13 +229,23 @@ func doIdleAction() {
 
 func (p *Power) handleIdleOn() {
 	if p.OnBattery {
-		if p.BatteryIdleDelay < p.BatterySuspendDelay || p.BatterySuspendDelay == 0 {
+		if p.BatteryIdleDelay == 0 && p.BatterySuspendDelay == 0 {
+			return
+		}
+
+		if (p.BatteryIdleDelay != 0 && p.BatteryIdleDelay < p.BatterySuspendDelay) ||
+			p.BatterySuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
 		}
 	} else {
-		if p.LinePowerIdleDelay < p.LinePowerSuspendDelay || p.LinePowerSuspendDelay == 0 {
+		if p.LinePowerIdleDelay == 0 && p.LinePowerSuspendDelay == 0 {
+			return
+		}
+
+		if (p.LinePowerIdleDelay != 0 && p.LinePowerIdleDelay < p.LinePowerSuspendDelay) ||
+			p.LinePowerSuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
