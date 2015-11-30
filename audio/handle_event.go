@@ -39,8 +39,7 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		a.rebuildSinkList()
-		//TODO: switch to new sink
+		a.update()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sinks {
@@ -107,7 +106,7 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		a.rebuildSourceList()
+		a.update()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sources {
