@@ -55,6 +55,11 @@ func (infos Backgrounds) Set(uri string) (string, error) {
 	}
 
 	if !dutils.IsFileExist(dest) {
+		err = os.MkdirAll(path.Dir(dest), 0755)
+		if err != nil {
+			return "", err
+		}
+
 		err = dutils.CopyFile(file, dest)
 		if err != nil {
 			return "", err
