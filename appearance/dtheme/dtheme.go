@@ -72,6 +72,8 @@ func ListDTheme() DThemes {
 	for _, dir := range getThemeList() {
 		info, err := newDThemeFromFile(path.Join(dir, dthemeConfig))
 		if err != nil {
+			fmt.Printf("[Warning] match dtheme from %q failed: %v\n",
+				dir, err)
 			continue
 		}
 		infos = append(infos, info)

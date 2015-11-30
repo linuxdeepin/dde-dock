@@ -15,6 +15,12 @@ type Font struct {
 }
 type Fonts []*Font
 
+// Some fonts do not follow the standard,
+// so add a whitelist to handle these fonts.
+var idWhiteList = []string{
+	"NSimSun-18030",
+}
+
 func ListFont() Fonts {
 	return fcInfosToFonts()
 }
@@ -53,6 +59,16 @@ func (infos Fonts) Get(id string) *Font {
 func (infos Fonts) convertToFamilies() Families {
 	var ret Families
 	for _, info := range infos {
+		if isItemInList(info.Id, idWhiteList) {
+			ret = ret.add(&Family{
+				Id:     info.Id,
+				Name:   info.Name,
+				Styles: info.Styles,
+				//Files:  []string{info.File},
+			})
+			continue
+		}
+
 		ret = ret.add(&Family{
 			Id:     info.Family,
 			Name:   info.FamilyName,
