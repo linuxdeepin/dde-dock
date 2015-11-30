@@ -57,14 +57,21 @@ func (e *EntryProxyer) HandleMenuItem(id string, timestamp uint32) {
 	e.core.HandleMenuItem(id, timestamp)
 }
 
+func (e *EntryProxyer) Activate(x, y int32) (bool, error) {
+	return e.ActivateWithTimestamp(x, y, 0)
+}
+
 // Activate在程序被点击时作出响应，接受鼠标事件的位置信息。
-func (e *EntryProxyer) Activate(x, y int32, timestamp uint32) bool {
-	b, _ := e.core.Activate(x, y, timestamp)
-	return b
+func (e *EntryProxyer) ActivateWithTimestamp(x, y int32, timestamp uint32) (bool, error) {
+	return e.core.Activate(x, y, timestamp)
+}
+
+func (e *EntryProxyer) SecondaryActivate(x, y int32) {
+	e.SecondaryActivateWithTimestamp(x, y, 0)
 }
 
 // SecondaryActivate与Activate作用相同，可用于其他鼠标点击事件，通常不会被使用。
-func (e *EntryProxyer) SecondaryActivate(x, y int32, timestamp uint32) {
+func (e *EntryProxyer) SecondaryActivateWithTimestamp(x, y int32, timestamp uint32) {
 	e.core.SecondaryActivate(x, y, timestamp)
 }
 

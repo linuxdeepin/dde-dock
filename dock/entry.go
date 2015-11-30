@@ -71,11 +71,7 @@ func (e *AppEntry) HandleMenuItemWithTimestamp(id string, timestamp uint32) {
 	}
 }
 
-func (e *AppEntry) Activate(x, y int32) (bool, error) {
-	return e.ActivateWithTimestamp(x, y, 0)
-}
-
-func (e *AppEntry) ActivateWithTimestamp(x, y int32, timestamp uint32) (bool, error) {
+func (e *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
 		err := e.nApp.Activate(x, y, timestamp)
