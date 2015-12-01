@@ -60,6 +60,7 @@ type Manager struct {
 	logger  *log.Logger
 	endFlag chan struct{}
 
+	locker      sync.Mutex
 	cacheLocker sync.Mutex
 	diskCache   map[string]*diskObjectInfo
 }
@@ -106,6 +107,9 @@ func (m *Manager) refrashDiskInfos() {
 }
 
 func (m *Manager) getDiskInfos() DiskInfos {
+	m.locker.Lock()
+	defer m.locker.Unlock()
+
 	m.clearDiskCache()
 	m.diskCache = make(map[string]*diskObjectInfo)
 
@@ -116,7 +120,6 @@ func (m *Manager) getDiskInfos() DiskInfos {
 	for _, volume := range volumes {
 		mount := volume.GetMount()
 		if mount != nil {
-			mount.Unref()
 			continue
 		}
 
@@ -144,9 +147,9 @@ func (m *Manager) getDiskInfos() DiskInfos {
 func (m *Manager) setDiskCache(key string, value *diskObjectInfo) {
 	m.cacheLocker.Lock()
 	defer m.cacheLocker.Unlock()
-	_, ok := m.diskCache[key]
+	tmp, ok := m.diskCache[key]
 	if ok {
-		m.deleteDiskCache(key)
+		freeDiskInfoObj(tmp)
 	}
 
 	m.diskCache[key] = value
@@ -170,14 +173,7 @@ func (m *Manager) deleteDiskCache(key string) {
 		return
 	}
 
-	switch v.Type {
-	case diskTypeVolume:
-		volume := v.Obj.(*gio.Volume)
-		volume.Unref()
-	case diskTypeMount:
-		mount := v.Obj.(*gio.Mount)
-		mount.Unref()
-	}
+	freeDiskInfoObj(v)
 	delete(m.diskCache, key)
 }
 
@@ -185,13 +181,18 @@ func (m *Manager) clearDiskCache() {
 	m.cacheLocker.Lock()
 	defer m.cacheLocker.Unlock()
 	for _, v := range m.diskCache {
-		switch v.Type {
-		case diskTypeVolume:
-			volume := v.Obj.(*gio.Volume)
-			volume.Unref()
-		case diskTypeMount:
-			mount := v.Obj.(*gio.Mount)
-			mount.Unref()
-		}
+		freeDiskInfoObj(v)
+	}
+	m.diskCache = nil
+}
+
+func freeDiskInfoObj(v *diskObjectInfo) {
+	switch v.Type {
+	case diskTypeVolume:
+		volume := v.Obj.(*gio.Volume)
+		volume.Unref()
+	case diskTypeMount:
+		mount := v.Obj.(*gio.Mount)
+		mount.Unref()
 	}
 }
