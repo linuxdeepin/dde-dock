@@ -1,11 +1,11 @@
 package search
 
 import (
-	// "fmt"
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"regexp"
 	"strings"
 	"sync"
+
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 // default values.

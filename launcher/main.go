@@ -2,6 +2,8 @@ package launcher
 
 import (
 	storeApi "dbus/com/deepin/store/api"
+	"sync"
+
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
@@ -12,7 +14,6 @@ import (
 	"pkg.deepin.io/lib/gio-2.0"
 	. "pkg.deepin.io/lib/initializer"
 	"pkg.deepin.io/lib/log"
-	"sync"
 )
 
 // Daemon is the module interface's implementation.
@@ -124,7 +125,7 @@ func (d *Daemon) Start() error {
 
 		names := []string{}
 		for _, item := range im.GetAllItems() {
-			names = append(names, item.Name())
+			names = append(names, item.LocaleName())
 		}
 
 		pinyinObj, err := NewPinYinSearchAdapter(names)

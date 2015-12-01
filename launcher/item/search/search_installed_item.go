@@ -55,7 +55,7 @@ func (s *SearchInstalledItemTransaction) initKeyMatchers(key string) {
 
 func (s *SearchInstalledItemTransaction) calcScore(data ItemInfo) (score uint32) {
 	for matcher, s := range s.nameMatchers {
-		if matcher.MatchString(data.Name()) {
+		if matcher.MatchString(data.LocaleName()) {
 			score += s
 		}
 	}
