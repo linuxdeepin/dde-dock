@@ -71,7 +71,7 @@ func (p *Power) handleBatteryPercentage() {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			if hasSleepInLowPower && p.LockWhenActive.Get() {
 				hasSleepInLowPower = false
-				go doLock()
+				doLock()
 			}
 		}
 
@@ -92,7 +92,6 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
 			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
-			doShowLowpower()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
 					<-time.After(time.Second * 30)
@@ -107,6 +106,7 @@ func (p *Power) handleBatteryPercentage() {
 				}
 			}()
 		}
+		doShowLowpower()
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
@@ -132,7 +132,7 @@ func (p *Power) handleBatteryPercentage() {
 			doCloseLowpower()
 			if hasSleepInLowPower && p.LockWhenActive.Get() {
 				hasSleepInLowPower = false
-				go doLock()
+				doLock()
 			}
 		}
 	}

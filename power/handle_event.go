@@ -34,6 +34,10 @@ const (
 	ActionLogout = 6
 )
 
+const (
+	cmdLowPower = "/usr/lib/deepin-daemon/dde-lowpower"
+)
+
 func doLock() {
 	if isGreeterExist() || isLockExist() {
 		logger.Debug("There has a lock or greeter exist")
@@ -52,10 +56,11 @@ func doLock() {
 }
 
 func doShowLowpower() {
-	go exec.Command("/usr/lib/deepin-daemon/dde-lowpower").Run()
+	go exec.Command(cmdLowPower, "--raise").Run()
 }
+
 func doCloseLowpower() {
-	go exec.Command("killall", "dde-lowpower").Run()
+	go exec.Command(cmdLowPower, "--quit").Run()
 }
 
 func doShutDown() {
@@ -203,6 +208,9 @@ func (p *Power) initEventHandle() {
 		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
 				hasSleepInLowPower = true
+				if p.LockWhenActive.Get() {
+					doLock()
+				}
 				unblockSleep()
 				return
 			}
@@ -216,14 +224,10 @@ func (p *Power) initEventHandle() {
 			})
 
 			blockSleep()
-			if p.lowBatteryStatus == lowBatteryStatusAction {
-				return
-			}
 
-			if p.LockWhenActive.Get() {
-				now := time.Now()
-				go doLock()
-				logger.Debug("screenlock ready time:", time.Now().Sub(now))
+			if p.lowBatteryStatus != lowBatteryStatusAction &&
+				p.LockWhenActive.Get() {
+				doLock()
 			}
 		})
 	}
