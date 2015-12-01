@@ -270,7 +270,7 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 		// disconnect a2dp device before connect
 		for _, uuid := range d.UUIDs {
 			if uuid == A2DP_SINK_UUID {
-				b.disconnectA2DPDevice()
+				b.disconnectA2DPDeviceExcept(d)
 			}
 		}
 
