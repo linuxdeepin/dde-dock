@@ -6,6 +6,7 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 
+	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/lib/gio-2.0"
@@ -151,7 +152,7 @@ func GenID(filename string) ItemID {
 	}
 
 	basename := path.Base(filename)
-	return ItemID(strings.Replace(basename[:len(basename)-_DesktopSuffixLen], "_", "-", -1))
+	return ItemID(appinfo.NormalizeAppID(basename[:len(basename)-_DesktopSuffixLen]))
 }
 
 func getID(app *gio.DesktopAppInfo) ItemID {

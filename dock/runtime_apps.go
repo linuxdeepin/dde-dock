@@ -19,6 +19,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
@@ -105,6 +106,12 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	app.getExec(xid)
 	logger.Debug("Exec:", app.exec)
 	app.buildMenu()
+
+	f, err := appinfo.GetFrequencyRecordFile()
+	if err == nil {
+		appinfo.SetFrequency(app.Id, appinfo.GetFrequency(app.Id, f)+1, f)
+		f.Free()
+	}
 	return app
 }
 

@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/lib/gio-2.0"
 )
 
@@ -40,8 +41,7 @@ func trimDesktop(desktopID string) string {
 }
 
 func normalizeAppID(candidateID string) string {
-	normalizedAppID := strings.Replace(strings.ToLower(candidateID), "_", "-", -1)
-	return normalizedAppID
+	return appinfo.NormalizeAppID(candidateID)
 }
 
 var _DesktopAppIdReg = regexp.MustCompile(`(?:[^.]+\.)*(?P<desktopID>[^.]+)\.desktop`)

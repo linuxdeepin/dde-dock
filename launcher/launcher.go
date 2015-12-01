@@ -11,6 +11,8 @@ import (
 	"github.com/howeyc/fsnotify"
 
 	storeApi "dbus/com/deepin/store/api"
+
+	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
@@ -437,7 +439,7 @@ func (self *Launcher) listenItemChanged() {
 
 // RecordRate 记录程序的使用频率。（废弃，统一用词，请使用新接口RecordFrequency）
 func (self *Launcher) RecordRate(id string) {
-	f, err := item.GetFrequencyRecordFile()
+	f, err := appinfo.GetFrequencyRecordFile()
 	if err != nil {
 		logger.Warning("Open frequency record file failed:", err)
 		return
@@ -454,7 +456,7 @@ func (self *Launcher) RecordFrequency(id string) {
 // GetAllFrequency 获取所有的使用频率信息。
 // 包括：item的id与使用频率。
 func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
-	f, err := item.GetFrequencyRecordFile()
+	f, err := appinfo.GetFrequencyRecordFile()
 	frequency := self.itemManager.GetAllFrequency(f)
 
 	for id, rate := range frequency {

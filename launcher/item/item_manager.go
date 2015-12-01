@@ -4,12 +4,13 @@ import (
 	storeApi "dbus/com/deepin/store/api"
 	"encoding/json"
 	"fmt"
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
-	. "pkg.deepin.io/dde/daemon/launcher/utils"
-	"pkg.deepin.io/lib/glib-2.0"
 	"sync"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/appinfo"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
+	"pkg.deepin.io/lib/glib-2.0"
 )
 
 const (
@@ -125,14 +126,11 @@ func (m *Manager) RemoveItemFromDesktop(id ItemID) error {
 
 // GetFrequency returns a item's  use frequency.
 func (m *Manager) GetFrequency(id ItemID, f *glib.KeyFile) uint64 {
-	rate, _ := f.GetUint64(string(id), _RateRecordKey)
-	return rate
+	return appinfo.GetFrequency(string(id), f)
 }
 
-// SetFrequency sets a item's  use frequency.
+// SetFrequency sets a item's  use frequency, NOT used now.
 func (m *Manager) SetFrequency(id ItemID, rate uint64, f *glib.KeyFile) {
-	f.SetUint64(string(id), _RateRecordKey, rate)
-	SaveKeyFile(f, ConfigFilePath(_RateRecordFile))
 }
 
 // GetAllFrequency returns all items' use frequency
