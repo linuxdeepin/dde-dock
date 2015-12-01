@@ -19,6 +19,8 @@ public:
     void setDockMode(Dock::DockMode value);
     Dock::HideMode getHideMode();
     void setHideMode(Dock::HideMode value);
+    Dock::HideState getHideState();
+    void setHideState(Dock::HideState value);
 
     int getDockHeight();
     int getItemHeight();
@@ -48,6 +50,7 @@ private:
 
     Dock::DockMode m_currentMode = Dock::EfficientMode;
     Dock::HideMode m_hideMode = Dock::KeepShowing;
+    Dock::HideState m_hideState = Dock::HideStateHiding;
 
     DBusDockSetting *m_dockSetting = NULL;
     DBusHideStateManager *m_hideStateManager = new DBusHideStateManager(this);

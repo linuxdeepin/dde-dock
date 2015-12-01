@@ -20,6 +20,9 @@ LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
 
 void LauncherItem::enterEvent(QEvent *)
 {
+    if (m_dockModeData->getHideState() != Dock::HideStateShown)
+        return;
+
     emit mouseEntered();
 
     showPreview();

@@ -37,6 +37,18 @@ void DockModeData::setHideMode(Dock::HideMode value)
     QTimer::singleShot(100, m_hideStateManager, SLOT(UpdateState()));
 }
 
+Dock::HideState DockModeData::getHideState()
+{
+    return m_hideState;
+}
+
+void DockModeData::setHideState(Dock::HideState value)
+{
+    m_hideState = value;
+    m_hideStateManager->SetState(value);
+    m_hideStateManager->UpdateState();
+}
+
 int DockModeData::getDockHeight()
 {
     switch (m_currentMode)

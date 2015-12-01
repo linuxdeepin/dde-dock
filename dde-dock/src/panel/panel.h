@@ -100,6 +100,7 @@ private:
     DockLayout *m_appLayout = NULL;
     DockPluginManager *m_pluginManager = NULL;
 
+    bool m_previewShown = false;
     bool m_menuItemInvoked = false;
     bool m_isFashionMode = false;
     const int REFLECTION_HEIGHT = 15;

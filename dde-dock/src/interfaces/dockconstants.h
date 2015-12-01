@@ -15,6 +15,13 @@ enum HideMode {
     SmartHide = 3
 };
 
+enum HideState {
+    HideStateShowing = 0,
+    HideStateHiding = 1,
+    HideStateShown = 2,
+    HideStateHidden = 3
+};
+
 ////////////////  App  ////////////////////////////////
 const int APP_PREVIEW_WIDTH = 200;
 const int APP_PREVIEW_HEIGHT = 124;

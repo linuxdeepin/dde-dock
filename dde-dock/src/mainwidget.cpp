@@ -76,7 +76,7 @@ void MainWidget::updateXcbStructPartial()
 void MainWidget::initHideStateManager()
 {
     m_dhsm = new DBusHideStateManager(this);
-    m_dhsm->SetState(1);
+    m_dmd->setHideState(Dock::HideStateHiding);
 }
 
 void MainWidget::initDockSetting()

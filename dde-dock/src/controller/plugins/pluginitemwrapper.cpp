@@ -56,6 +56,9 @@ QString PluginItemWrapper::id() const
 
 void PluginItemWrapper::enterEvent(QEvent *)
 {
+    if (DockModeData::instance()->getHideState() != Dock::HideStateShown)
+        return;
+
     emit mouseEntered();
 
     if (hoverable()) {

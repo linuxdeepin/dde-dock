@@ -68,10 +68,9 @@ void Panel::initShowHideAnimation()
 
     QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
     ts1->addAnimation(hideAnimation);
-    connect(ts1,&QSignalTransition::triggered,[=]{m_HSManager->SetState(2);});
+
     QSignalTransition *ts2 = hideState->addTransition(this,SIGNAL(startShow()),showState);
     ts2->addAnimation(showAnimation);
-    connect(ts2,&QSignalTransition::triggered,[=]{m_HSManager->SetState(0);});
 
     machine->start();
 }
@@ -203,6 +202,7 @@ void Panel::initGlobalPreview()
 
     //make sure all app-preview will be destroy to save resources
     connect(m_globalPreview, &PreviewWindow::showFinish, [=] (QWidget *lastContent) {
+        m_previewShown = true;
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
@@ -210,6 +210,8 @@ void Panel::initGlobalPreview()
         }
     });
     connect(m_globalPreview, &PreviewWindow::hideFinish, [=] (QWidget *lastContent) {
+        m_previewShown = false;
+        m_HSManager->UpdateState();
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
@@ -305,10 +307,10 @@ void Panel::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode)
 void Panel::onHideStateChanged(int dockState)
 {
     bool containsMouse = m_parentWidget->geometry().contains(QCursor::pos());
-    if (dockState == 0) {
+    if (dockState == Dock::HideStateShowing) {
         emit startShow();
     }
-    else if (dockState == 1 && !containsMouse && !m_menuItemInvoked) {
+    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_menuItemInvoked && !m_previewShown) {
         emit startHide();
     }
     else {
@@ -318,13 +320,13 @@ void Panel::onHideStateChanged(int dockState)
 
 void Panel::onShowPanelFinished()
 {
-    m_HSManager->SetState(1);
+    m_dockModeData->setHideState(Dock::HideStateShown);
     emit panelHasShown();
 }
 
 void Panel::onHidePanelFinished()
 {
-    m_HSManager->SetState(3);
+    m_dockModeData->setHideState(Dock::HideStateHidden);
     emit panelHasHidden();
 }
 
@@ -337,6 +339,7 @@ void Panel::onNeedPreviewShow(QPoint pos)
 {
     AbstractDockItem *item = qobject_cast<AbstractDockItem *>(sender());
     if (item && item->getApplet()) {
+        m_previewShown = true;
         m_lastPreviewPos = pos;
         m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
         m_globalPreview->setContent(item->getApplet());
