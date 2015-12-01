@@ -23,6 +23,7 @@ package bluetooth
 
 import (
 	"dbus/org/freedesktop/notifications"
+	"fmt"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -32,8 +33,9 @@ const (
 )
 
 const (
-	notifyIconBluetoothConnected    = "notification-bluetooth-connected"
-	notifyIconBluetoothDisconnected = "notification-bluetooth-disconnected"
+	notifyIconBluetoothConnected     = "notification-bluetooth-connected"
+	notifyIconBluetoothDisconnected  = "notification-bluetooth-disconnected"
+	notifyIconBluetoothConnectFailed = "notification-bluetooth-error"
 )
 
 func notify(icon, summary, body string) {
@@ -42,7 +44,6 @@ func notify(icon, summary, body string) {
 		logger.Error(err)
 		return
 	}
-	defer notifications.DestroyNotifier(notifier)
 
 	logger.Info("notify", icon, summary, body)
 	// use goroutine to fix dbus cycle call issue
@@ -58,4 +59,8 @@ func notifyBluetoothConnected(alias string) {
 }
 func notifyBluetoothDisconnected(alias string) {
 	notify(notifyIconBluetoothDisconnected, Tr("Disconnected"), alias)
+}
+func notifyBluetoothConnectFailed(alias string) {
+	format := Tr("Make sure %q is turned on and in range")
+	notify(notifyIconBluetoothConnectFailed, Tr("Failed to connect bluetooth"), fmt.Sprintf(format, alias))
 }

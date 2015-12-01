@@ -152,6 +152,9 @@ func (d *device) connectProperties() {
 		bluetooth.setPropDevices()
 	})
 }
+func (d *device) notifyConnectFailed() {
+	notifyBluetoothConnectFailed(d.Alias)
+}
 func (d *device) notifyStateChanged() {
 	if d.connected {
 		d.connecting = false
@@ -281,6 +284,7 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 				bluezSetDeviceTrusted(dpath, true)
 			}
 		} else {
+			d.notifyConnectFailed()
 			logger.Warning("ConnectDevice failed:", dpath, err)
 		}
 
