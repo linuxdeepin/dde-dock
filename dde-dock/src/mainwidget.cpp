@@ -1,6 +1,7 @@
 #include "mainwidget.h"
 #include "xcb_misc.h"
 
+const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
@@ -11,7 +12,6 @@ MainWidget::MainWidget(QWidget *parent)
     initDockSetting();
 
     m_mainPanel = new Panel(this);
-    connect(m_mainPanel,&Panel::startShow,this,&MainWidget::showDock);
     connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
 
@@ -77,6 +77,11 @@ void MainWidget::initHideStateManager()
 {
     m_dhsm = new DBusHideStateManager(this);
     m_dhsm->SetState(Dock::HideStateHiding);
+    connect(m_dhsm, &DBusHideStateManager::ChangeState, [=](int state) {
+        if (state == Dock::HideStateShowing) {
+            showDock();
+        }
+    });
 }
 
 void MainWidget::initDockSetting()
@@ -88,8 +93,7 @@ void MainWidget::initDockSetting()
 void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
-        showDock();
-        m_mainPanel->startShow();
+        QTimer::singleShot(ENTER_DELAY_INTERVAL, this, &MainWidget::showDock);
     }
 }
 
@@ -101,8 +105,12 @@ void MainWidget::leaveEvent(QEvent *)
 
 void MainWidget::showDock()
 {
-    m_hasHidden = false;
-    updatePosition();
+    if (geometry().contains(QCursor::pos())) {
+        m_hasHidden = false;
+        updatePosition();
+        //make sure the panel will show by mouse-enter
+        m_mainPanel->startShow();
+    }
 }
 
 void MainWidget::hideDock()

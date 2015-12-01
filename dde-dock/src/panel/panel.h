@@ -107,10 +107,12 @@ private:
     const int FASHION_PANEL_LPADDING = 21;
     const int FASHION_PANEL_RPADDING = 21;
     const int WIDTH_ANIMATION_DURATION = 200;
-    const int SHOW_HIDE_ANIMATION_DURATION = 200;
+    const int SHOW_ANIMATION_DURATION = 300;
+    const int HIDE_ANIMATION_DURATION = 300;
     const int DELAY_HIDE_PREVIEW_INTERVAL = 200;
     const int DELAY_SHOW_PREVIEW_INTERVAL = 200;
-    const QEasingCurve SHOW_HIDE_EASINGCURVE = QEasingCurve::InSine;
+    const QEasingCurve SHOW_EASINGCURVE = QEasingCurve::OutCubic;
+    const QEasingCurve HIDE_EASINGCURVE = QEasingCurve::Linear;
 };
 
 class LayoutDropMask : public  QFrame

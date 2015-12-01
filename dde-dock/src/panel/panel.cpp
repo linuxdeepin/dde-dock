@@ -54,16 +54,18 @@ void Panel::initShowHideAnimation()
     QState * showState = new QState(machine);
     showState->assignProperty(this,"y", 0);
     QState * hideState = new QState(machine);
-    hideState->assignProperty(this,"y", height());
+    connect(this, &Panel::startHide, [=]{
+        hideState->assignProperty(this,"y", m_dockModeData->getDockHeight());
+    });
     machine->setInitialState(showState);
 
     QPropertyAnimation *showAnimation = new QPropertyAnimation(this, "y");
-    showAnimation->setDuration(SHOW_HIDE_ANIMATION_DURATION);
-    showAnimation->setEasingCurve(SHOW_HIDE_EASINGCURVE);
+    showAnimation->setDuration(SHOW_ANIMATION_DURATION);
+    showAnimation->setEasingCurve(SHOW_EASINGCURVE);
     connect(showAnimation,&QPropertyAnimation::finished,this,&Panel::onShowPanelFinished);
     QPropertyAnimation *hideAnimation = new QPropertyAnimation(this, "y");
-    hideAnimation->setDuration(SHOW_HIDE_ANIMATION_DURATION);
-    hideAnimation->setEasingCurve(SHOW_HIDE_EASINGCURVE);
+    hideAnimation->setDuration(HIDE_ANIMATION_DURATION);
+    hideAnimation->setEasingCurve(HIDE_EASINGCURVE);
     connect(hideAnimation,&QPropertyAnimation::finished,this,&Panel::onHidePanelFinished);
 
     QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
