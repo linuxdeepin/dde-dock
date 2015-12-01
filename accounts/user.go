@@ -228,7 +228,7 @@ func (u *User) accessAuthentication(pid uint32, check bool, action string) error
 		err = polkitAuthManagerUser(pid)
 	}
 	if err != nil {
-		triggerSigErr(pid, action, err.Error())
+		doEmitError(pid, action, err.Error())
 		return err
 	}
 

@@ -56,7 +56,7 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 		if err != nil {
 			logger.Warningf("DoAction: create user '%s' failed: %v\n",
 				name, err)
-			triggerSigErr(pid, "CreateUser", err.Error())
+			doEmitError(pid, "CreateUser", err.Error())
 			return
 		}
 
@@ -65,6 +65,7 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 			logger.Warningf("DoAction: set user type '%s' failed: %v\n",
 				name, err)
 		}
+		doEmitSuccess(pid, "CreateUser")
 	}()
 
 	return nil
@@ -90,7 +91,7 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 		if err != nil {
 			logger.Warningf("DoAction: delete user '%s' failed: %v\n",
 				name, err)
-			triggerSigErr(pid, "DeleteUser", err.Error())
+			doEmitError(pid, "DeleteUser", err.Error())
 			return
 		}
 
@@ -99,10 +100,10 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 		}
 
 		//delete user config and icons
-		if !rmFiles {
-			return
+		if rmFiles {
+			clearUserDatas(name)
 		}
-		clearUserDatas(name)
+		doEmitSuccess(pid, "DeleteUser")
 	}()
 
 	return true, nil
@@ -172,6 +173,7 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 	}
 
 	if allow == isGuestUserEnabled() {
+		doEmitSuccess(pid, "AllowGuestAccount")
 		return nil
 	}
 
@@ -179,10 +181,11 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 		actConfigGroupGroup, actConfigKeyGuest, allow)
 	if !success {
 		reason := "Enable guest user failed"
-		triggerSigErr(pid, "AllowGuestAccount", reason)
+		doEmitError(pid, "AllowGuestAccount", reason)
 		return fmt.Errorf(reason)
 	}
 	m.setPropAllowGuest(allow)
+	doEmitSuccess(pid, "AllowGuestAccount")
 
 	return nil
 }

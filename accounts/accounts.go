@@ -78,7 +78,14 @@ func (*Daemon) Stop() error {
 	return nil
 }
 
-func triggerSigErr(pid uint32, action, reason string) {
+func doEmitSuccess(pid uint32, action string) {
+	if _m == nil {
+		return
+	}
+	dbus.Emit(_m, "Success", pid, action)
+}
+
+func doEmitError(pid uint32, action, reason string) {
 	if _m == nil {
 		return
 	}

@@ -47,6 +47,7 @@ type Manager struct {
 
 	UserAdded   func(string)
 	UserDeleted func(string)
+	Success     func(uint32, string)
 	// Error(pid, action, reason)
 	//
 	// 操作失败的信号，参数包括调用者的 pid，被调用的接口和错误信息
@@ -157,7 +158,7 @@ func (m *Manager) uninstallUser(userPath string) {
 func (m *Manager) polkitAuthManagerUser(pid uint32, action string) error {
 	err := polkitAuthManagerUser(pid)
 	if err != nil {
-		triggerSigErr(pid, action, err.Error())
+		doEmitError(pid, action, err.Error())
 		return err
 	}
 

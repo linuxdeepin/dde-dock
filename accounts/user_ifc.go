@@ -49,11 +49,12 @@ func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
 		err := users.ModifyName(name, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify username failed:", err)
-			triggerSigErr(pid, "SetUserName", err.Error())
+			doEmitError(pid, "SetUserName", err.Error())
 			return
 		}
 
 		u.setPropString(&u.UserName, "UserName", name)
+		doEmitSuccess(pid, "SetUserName")
 	}()
 
 	return true, nil
@@ -76,11 +77,12 @@ func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
 		err := users.ModifyHome(home, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify home failed:", err)
-			triggerSigErr(pid, "SetHomeDir", err.Error())
+			doEmitError(pid, "SetHomeDir", err.Error())
 			return
 		}
 
 		u.setPropString(&u.HomeDir, "HomeDir", home)
+		doEmitSuccess(pid, "SetHomeDir")
 	}()
 
 	return true, nil
@@ -103,11 +105,12 @@ func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
 		err := users.ModifyShell(shell, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify shell failed:", err)
-			triggerSigErr(pid, "SetShell", err.Error())
+			doEmitError(pid, "SetShell", err.Error())
 			return
 		}
 
 		u.setPropString(&u.Shell, "Shell", shell)
+		doEmitSuccess(pid, "SetShell")
 	}()
 
 	return true, nil
@@ -130,7 +133,7 @@ func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
 		err := users.ModifyPasswd(words, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: modify passwd failed:", err)
-			triggerSigErr(pid, "SetPassword", err.Error())
+			doEmitError(pid, "SetPassword", err.Error())
 			return
 		}
 
@@ -139,6 +142,7 @@ func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
 			logger.Warning("DoAction: unlock user failed:", err)
 		}
 		u.setPropBool(&u.Locked, "Locked", false)
+		doEmitSuccess(pid, "SetPassword")
 	}()
 
 	return true, nil
@@ -161,11 +165,12 @@ func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
 		err := users.SetUserType(ty, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: set user type failed:", err)
-			triggerSigErr(pid, "SetAccountType", err.Error())
+			doEmitError(pid, "SetAccountType", err.Error())
 			return
 		}
 
 		u.setPropInt32(&u.AccountType, "AccountType", ty)
+		doEmitSuccess(pid, "SetAccountType")
 	}()
 
 	return true, nil
@@ -188,7 +193,7 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
 		err := users.LockedUser(locked, u.UserName)
 		if err != nil {
 			logger.Warning("DoAction: locked user failed:", err)
-			triggerSigErr(pid, "SetLocked", err.Error())
+			doEmitError(pid, "SetLocked", err.Error())
 			return
 		}
 
@@ -197,6 +202,7 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
 		}
 
 		u.setPropBool(&u.Locked, "Locked", locked)
+		doEmitSuccess(pid, "SetLocked")
 	}()
 
 	return true, nil
@@ -215,7 +221,9 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 
 	if u.Locked {
 		u.syncLocker.Unlock()
-		return false, fmt.Errorf("%s has been locked", u.UserName)
+		var reason = fmt.Sprintf("%s has been locked", u.UserName)
+		doEmitError(pid, "SetAutomaticLogin", reason)
+		return false, fmt.Errorf(reason)
 	}
 
 	var name = u.UserName
@@ -229,11 +237,12 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 		err := users.SetAutoLoginUser(name)
 		if err != nil {
 			logger.Warning("DoAction: set auto login failed:", err)
-			triggerSigErr(pid, "SetAutomaticLogin", err.Error())
+			doEmitError(pid, "SetAutomaticLogin", err.Error())
 			return
 		}
 
 		u.setPropBool(&u.AutomaticLogin, "AutomaticLogin", auto)
+		doEmitSuccess(pid, "SetAutomaticLogin")
 	}()
 
 	return true, nil
@@ -249,13 +258,14 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 	}
 
 	if u.IconFile == icon {
+		doEmitSuccess(pid, "SetIconFile")
 		return true, nil
 	}
 
 	if !graphic.IsSupportedImage(icon) {
 		reason := fmt.Sprintf("This icon '%s' not a image", icon)
 		logger.Debug(reason)
-		triggerSigErr(pid, "SetIconFile", reason)
+		doEmitError(pid, "SetIconFile", reason)
 		return false, err
 	}
 
@@ -263,7 +273,7 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 		target, added, err := u.addIconFile(icon)
 		if err != nil {
 			logger.Warning("Set icon failed:", err)
-			triggerSigErr(pid, "SetIconFile", err.Error())
+			doEmitError(pid, "SetIconFile", err.Error())
 			return
 		}
 
@@ -273,13 +283,14 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 		err = u.writeUserConfig()
 		if err != nil {
 			logger.Warning("Write user config failed:", err)
-			triggerSigErr(pid, "SetIconFile", err.Error())
+			doEmitError(pid, "SetIconFile", err.Error())
 			u.setPropString(&u.IconFile, "IconFile", src)
 			return
 		}
 		if added {
 			u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
 		}
+		doEmitSuccess(pid, "SetIconFile")
 	}()
 
 	return true, nil
@@ -297,19 +308,20 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 	if !u.IsIconDeletable(icon) {
 		reason := "This icon is not allowed to be deleted!"
 		logger.Warning(reason)
-		triggerSigErr(pid, "DeleteHistoryIcon", reason)
+		doEmitError(pid, "DeleteIconFile", reason)
 		return false, fmt.Errorf(reason)
 	}
 
 	go func() {
 		err := os.Remove(icon)
 		if err != nil {
-			triggerSigErr(pid, "DeleteIconFile", err.Error())
+			doEmitError(pid, "DeleteIconFile", err.Error())
 			return
 		}
 
 		u.DeleteHistoryIcon(dbusMsg, icon)
 		u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+		doEmitSuccess(pid, "DeleteIconFile")
 	}()
 
 	return true, nil
@@ -325,13 +337,14 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 	}
 
 	if bg == u.BackgroundFile {
+		doEmitSuccess(pid, "SetBackgroundFile")
 		return true, nil
 	}
 
 	if !graphic.IsSupportedImage(bg) {
 		reason := fmt.Sprintf("This background '%s' not a image", bg)
 		logger.Debug(reason)
-		triggerSigErr(pid, "SetBackgroundFile", reason)
+		doEmitError(pid, "SetBackgroundFile", reason)
 		return false, err
 	}
 
@@ -341,10 +354,11 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 		err = u.writeUserConfig()
 		if err != nil {
 			logger.Warning("Write user config failed:", err)
-			triggerSigErr(pid, "SetBackgroundFile", err.Error())
+			doEmitError(pid, "SetBackgroundFile", err.Error())
 			u.setPropString(&u.BackgroundFile, "BackgroundFile", src)
 			return
 		}
+		doEmitSuccess(pid, "SetBackgroundFile")
 	}()
 
 	return true, nil
@@ -360,6 +374,7 @@ func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) (bool, erro
 	}
 
 	u.deleteHistoryIcon(icon)
+	doEmitSuccess(pid, "DeleteHistoryIcon")
 	return true, nil
 }
 
