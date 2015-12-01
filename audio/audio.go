@@ -1,9 +1,11 @@
 package audio
 
 import (
+	"fmt"
 	"pkg.deepin.io/dde/api/soundutils"
 	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -31,14 +33,26 @@ type Audio struct {
 	siPollerExit chan struct{}
 }
 
+const (
+	audioSchema       = "com.deepin.dde.audio"
+	gsKeyFirstRun     = "first-run"
+	gsKeyInputVolume  = "input-volume"
+	gsKeyOutputVolume = "output-volume"
+)
+
+var (
+	defaultInputVolume  float64
+	defaultOutputVolume float64
+)
+
 func (a *Audio) Reset() {
 	for _, s := range a.Sinks {
-		s.SetVolume(s.BaseVolume, false)
+		s.SetVolume(defaultOutputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
 	for _, s := range a.Sources {
-		s.SetVolume(s.BaseVolume, false)
+		s.SetVolume(defaultInputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
@@ -146,7 +160,11 @@ type Sink struct {
 // v: 音量大小
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetVolume(v float64, isPlay bool) {
+func (s *Sink) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -154,6 +172,7 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedbackWithDevice(s.Name)
 	}
+	return nil
 }
 
 // 设置左右声道平衡值
@@ -161,11 +180,16 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 // v: 声道平衡值
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetBalance(v float64, isPlay bool) {
+func (s *Sink) SetBalance(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedbackWithDevice(s.Name)
 	}
+	return nil
 }
 
 // 设置前后声道平衡值
@@ -173,9 +197,14 @@ func (s *Sink) SetBalance(v float64, isPlay bool) {
 // v: 声道平衡值
 //
 // isPlay: 是否播放声音反馈
-func (s *Sink) SetFade(v float64) {
+func (s *Sink) SetFade(v float64) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedbackWithDevice(s.Name)
+	return nil
 }
 
 // 是否静音
@@ -207,7 +236,11 @@ type SinkInput struct {
 	SupportFade    bool
 }
 
-func (s *SinkInput) SetVolume(v float64, isPlay bool) {
+func (s *SinkInput) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -215,16 +248,27 @@ func (s *SinkInput) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *SinkInput) SetBalance(v float64, isPlay bool) {
+func (s *SinkInput) SetBalance(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *SinkInput) SetFade(v float64) {
+func (s *SinkInput) SetFade(v float64) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedback()
+	return nil
 }
 func (s *SinkInput) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -256,7 +300,11 @@ type Source struct {
 }
 
 // 如何反馈输入音量？
-func (s *Source) SetVolume(v float64, isPlay bool) {
+func (s *Source) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -264,16 +312,27 @@ func (s *Source) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *Source) SetBalance(v float64, isPlay bool) {
+func (s *Source) SetBalance(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *Source) SetFade(v float64) {
+func (s *Source) SetFade(v float64) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedback()
+	return nil
 }
 func (s *Source) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -322,6 +381,8 @@ func (*Daemon) Start() error {
 		finalize()
 		return err
 	}
+
+	initDefaultVolume(_audio)
 	return nil
 }
 
@@ -340,4 +401,34 @@ func playFeedback() {
 
 func playFeedbackWithDevice(device string) {
 	soundutils.PlaySystemSound("audio-volume-change", device, false)
+}
+
+func isVolumeValid(v float64) bool {
+	if v < 0 || v > pulse.VolumeUIMax {
+		return false
+	}
+	return true
+}
+
+func initDefaultVolume(audio *Audio) {
+	setting := gio.NewSettings(audioSchema)
+	defer setting.Unref()
+
+	inVolumePer := float64(setting.GetInt(gsKeyInputVolume)) / 100.0
+	outVolumePer := float64(setting.GetInt(gsKeyOutputVolume)) / 100.0
+	defaultInputVolume = pulse.VolumeUIMax * inVolumePer
+	defaultOutputVolume = pulse.VolumeUIMax * outVolumePer
+
+	if !setting.GetBoolean(gsKeyFirstRun) {
+		return
+	}
+
+	setting.SetBoolean(gsKeyFirstRun, false)
+	for _, s := range audio.Sinks {
+		s.SetVolume(defaultOutputVolume, false)
+	}
+
+	for _, s := range audio.Sources {
+		s.SetVolume(defaultInputVolume, false)
+	}
 }
