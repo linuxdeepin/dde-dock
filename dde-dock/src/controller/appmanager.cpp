@@ -1,10 +1,17 @@
 #include "appmanager.h"
+#include "dbus/dbuslauncher.h"
 
 AppManager::AppManager(QObject *parent) : QObject(parent)
 {
     m_entryManager = new DBusEntryManager(this);
     connect(m_entryManager, &DBusEntryManager::Added, this, &AppManager::onEntryAdded);
     connect(m_entryManager, &DBusEntryManager::Removed, this, &AppManager::onEntryRemoved);
+    DBusLauncher *dbusLauncher = new DBusLauncher(this);
+    connect(dbusLauncher, &DBusLauncher::ItemChanged, [=](const QString &in0, ItemInfo in1){
+        if (in0 == "deleted") {
+            onEntryRemoved(in1.key);
+        }
+    });
 }
 
 void AppManager::initEntries()
@@ -57,9 +64,11 @@ void AppManager::setDockingItemId(const QString &dockingItemId)
 
 void AppManager::onEntryRemoved(const QString &id)
 {
-    qWarning() << "entry remove:" << id;
-    m_ids.removeAll(id);
-    emit entryRemoved(id);
+    if (m_ids.indexOf(id) != -1) {
+        qWarning() << "entry remove:" << id;
+        m_ids.removeAll(id);
+        emit entryRemoved(id);
+    }
 }
 
 void AppManager::sortItemList()

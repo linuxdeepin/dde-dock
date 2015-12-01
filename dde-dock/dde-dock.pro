@@ -73,7 +73,8 @@ HEADERS += \
     src/widgets/apppreview/apppreviewscontainer.h \
     src/widgets/apppreview/apppreviewloaderframe.h \
     src/widgets/previewwindow.h \
-    src/dbus/dbusdisplay.h
+    src/dbus/dbusdisplay.h \
+    src/dbus/dbuslauncher.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -110,4 +111,5 @@ SOURCES += \
     src/widgets/apppreview/apppreviewscontainer.cpp \
     src/widgets/apppreview/apppreviewloaderframe.cpp \
     src/widgets/previewwindow.cpp \
-    src/dbus/dbusdisplay.cpp
+    src/dbus/dbusdisplay.cpp \
+    src/dbus/dbuslauncher.cpp
