@@ -52,8 +52,12 @@ func NewEntryProxyer(entryId string) (*EntryProxyer, error) {
 // ContextMenu接受鼠标事件的位置信息，然后生成
 func (e *EntryProxyer) ContextMenu(x, y int32) { e.core.ContextMenu(x, y) }
 
+func (e *EntryProxyer) HandleMenuItem(id string) {
+	e.HandleMenuItemWithTimestamp(id, 0)
+}
+
 // HandleMenuItem对出入的id在右键菜单中对应的项做处理。
-func (e *EntryProxyer) HandleMenuItem(id string, timestamp uint32) {
+func (e *EntryProxyer) HandleMenuItemWithTimestamp(id string, timestamp uint32) {
 	e.core.HandleMenuItem(id, timestamp)
 }
 

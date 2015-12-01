@@ -57,12 +57,7 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	return e
 }
 
-// NB: **deprecated**, compatible interface, use HandleMenuItemWithTimestamp instead.
-func (e *AppEntry) HandleMenuItem(id string) {
-	e.HandleMenuItemWithTimestamp(id, 0)
-}
-
-func (e *AppEntry) HandleMenuItemWithTimestamp(id string, timestamp uint32) {
+func (e *AppEntry) HandleMenuItem(id string, timestamp uint32) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
 		e.nApp.HandleMenuItem(id, timestamp)
