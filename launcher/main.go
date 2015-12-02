@@ -2,15 +2,16 @@ package launcher
 
 import (
 	storeApi "dbus/com/deepin/store/api"
+	"strings"
 	"sync"
 
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
 	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
-	. "pkg.deepin.io/dde/daemon/launcher/item/search"
+	"pkg.deepin.io/dde/daemon/launcher/item/search"
 	. "pkg.deepin.io/dde/daemon/loader"
-	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/gio-2.0"
 	. "pkg.deepin.io/lib/initializer"
 	"pkg.deepin.io/lib/log"
@@ -91,6 +92,10 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 	wg.Wait()
 	cm.FreeAppCategoryInfo()
 }
+func isZH() bool {
+	lang := gettext.QueryLang()
+	return strings.HasPrefix(lang, "zh")
+}
 
 // Start starts the launcher module.
 func (d *Daemon) Start() error {
@@ -100,7 +105,7 @@ func (d *Daemon) Start() error {
 
 	logger.BeginTracing()
 
-	InitI18n()
+	gettext.InitI18n()
 
 	// DesktopAppInfo.ShouldShow does not know deepin.
 	gio.DesktopAppInfoSetDesktopEnv("Deepin")
@@ -123,13 +128,19 @@ func (d *Daemon) Start() error {
 			d.launcher.setStoreAPI(store)
 		}
 
-		names := []string{}
-		for _, item := range im.GetAllItems() {
-			names = append(names, item.LocaleName())
-		}
+		if isZH() {
+			logger.Info("enable pinyin search in zh env")
+			names := []string{}
+			for _, item := range im.GetAllItems() {
+				names = append(names, item.LocaleName())
+			}
 
-		pinyinObj, err := NewPinYinSearchAdapter(names)
-		d.launcher.setPinYinObject(pinyinObj)
+			pinyinObj, err := search.NewPinYinSearchAdapter(names)
+			if err != nil {
+				logger.Warning("CreatePinYinSearch failed:", err)
+			}
+			d.launcher.setPinYinObject(pinyinObj)
+		}
 
 		d.launcher.listenItemChanged()
 

@@ -15,6 +15,8 @@ type SearchInstalledItemTransaction struct {
 	keyMatcher   *regexp.Regexp
 	nameMatchers map[*regexp.Regexp]uint32
 
+	freqGetter FreqGetter
+
 	resChan    chan<- Result
 	cancelChan chan struct{}
 	cancelled  bool
@@ -38,6 +40,18 @@ func NewSearchInstalledItemTransaction(res chan<- Result, cancelChan chan struct
 		cancelChan:      cancelChan,
 		cancelled:       false,
 	}, nil
+}
+
+func (s *SearchInstalledItemTransaction) SetFreqGetter(freqGetter FreqGetter) *SearchInstalledItemTransaction {
+	s.freqGetter = freqGetter
+	return s
+}
+
+func (s *SearchInstalledItemTransaction) getFreq(id ItemID) uint64 {
+	if s.freqGetter == nil {
+		return 0
+	}
+	return s.freqGetter.GetFrequency(string(id))
 }
 
 // Cancel cancels this transaction.
@@ -129,8 +143,9 @@ func (s *SearchInstalledItemTransaction) ScoreItem(dataSetChan <-chan ItemInfo) 
 		select {
 		case s.resChan <- Result{
 			ID:    data.ID(),
-			Name:  data.Name(),
+			Name:  data.LocaleName(),
 			Score: score,
+			Freq:  s.getFreq(data.ID()),
 		}:
 		}
 	}

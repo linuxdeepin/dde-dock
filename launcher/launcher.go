@@ -51,6 +51,7 @@ type Launcher struct {
 	pinyinObj           PinYin
 	store               *storeApi.DStoreDesktop
 	appMonitor          *fsnotify.Watcher
+	freqRecordFile      *glib.KeyFile
 
 	// ItemChanged当launcher中的item有改变后触发。
 	ItemChanged func(
@@ -84,8 +85,10 @@ type Launcher struct {
 
 // NewLauncher creates a new launcher object.
 func NewLauncher() *Launcher {
+	f, _ := appinfo.GetFrequencyRecordFile()
 	launcher := &Launcher{
 		cancelSearchingChan: make(chan struct{}),
+		freqRecordFile:      f,
 	}
 	return launcher
 }
@@ -439,13 +442,6 @@ func (self *Launcher) listenItemChanged() {
 
 // RecordRate 记录程序的使用频率。（废弃，统一用词，请使用新接口RecordFrequency）
 func (self *Launcher) RecordRate(id string) {
-	f, err := appinfo.GetFrequencyRecordFile()
-	if err != nil {
-		logger.Warning("Open frequency record file failed:", err)
-		return
-	}
-	defer f.Free()
-	self.itemManager.SetFrequency(ItemID(id), self.itemManager.GetFrequency(ItemID(id), f)+1, f)
 }
 
 // RecordFrequency 记录程序的使用频率。
@@ -456,18 +452,11 @@ func (self *Launcher) RecordFrequency(id string) {
 // GetAllFrequency 获取所有的使用频率信息。
 // 包括：item的id与使用频率。
 func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
-	f, err := appinfo.GetFrequencyRecordFile()
-	frequency := self.itemManager.GetAllFrequency(f)
+	frequency := self.itemManager.GetAllFrequency(self.freqRecordFile)
 
 	for id, rate := range frequency {
 		infos = append(infos, FrequencyExport{Frequency: rate, ID: id})
 	}
-
-	if err != nil {
-		logger.Warning("Open frequency record file failed:", err)
-		return
-	}
-	f.Free()
 
 	return
 }
@@ -488,6 +477,22 @@ func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	return infos
 }
 
+type FreqGetter struct {
+	f *glib.KeyFile
+}
+
+func NewFreqGetter(f *glib.KeyFile) *FreqGetter {
+	getter := &FreqGetter{f: f}
+	return getter
+}
+
+func (getter *FreqGetter) GetFrequency(id string) uint64 {
+	if getter.f == nil {
+		return 0
+	}
+	return appinfo.GetFrequency(id, getter.f)
+}
+
 // Search 搜索给定的关键字。
 func (self *Launcher) Search(key string) {
 	self.cancelMutex.Lock()
@@ -495,42 +500,45 @@ func (self *Launcher) Search(key string) {
 
 	close(self.cancelSearchingChan)
 	self.cancelSearchingChan = make(chan struct{})
-	go func() {
+	go func(cancelChan chan struct{}) {
 		resultChan := make(chan search.Result)
-		transaction, err := search.NewTransaction(self.pinyinObj, resultChan, self.cancelSearchingChan, 0)
+		freqGetter := NewFreqGetter(self.freqRecordFile)
+		transaction, err := search.NewTransaction(self.pinyinObj, resultChan, cancelChan, 0)
 		if err != nil {
 			return
 		}
 
+		transaction.SetFreqGetter(freqGetter)
 		dataSet := self.itemManager.GetAllItems()
 		go func() {
 			transaction.Search(key, dataSet)
 			close(resultChan)
 		}()
 
-		select {
-		case <-self.cancelSearchingChan:
-			return
-		default:
-			resultMap := map[ItemID]search.Result{}
-			for result := range resultChan {
+		resultMap := map[ItemID]search.Result{}
+		for result := range resultChan {
+			select {
+			case <-cancelChan:
+				return
+			default:
 				resultMap[result.ID] = result
 			}
-
-			var res search.ResultList
-			for _, data := range resultMap {
-				res = append(res, data)
-			}
-
-			sort.Sort(res)
-
-			itemIDs := []ItemID{}
-			for _, data := range res {
-				itemIDs = append(itemIDs, data.ID)
-			}
-			dbus.Emit(self, "SearchDone", itemIDs)
 		}
-	}()
+
+		var res search.ResultList
+		for _, data := range resultMap {
+			res = append(res, data)
+		}
+
+		sort.Sort(res)
+
+		logger.Debug("search result", res)
+		itemIDs := []ItemID{}
+		for _, data := range res {
+			itemIDs = append(itemIDs, data.ID)
+		}
+		dbus.Emit(self, "SearchDone", itemIDs)
+	}(self.cancelSearchingChan)
 }
 
 // MarkLaunched 将程序标记为已启动过。
@@ -565,6 +573,10 @@ func (self *Launcher) destroy() {
 	if self.appMonitor != nil {
 		self.appMonitor.Close()
 		self.appMonitor = nil
+	}
+	if self.freqRecordFile != nil {
+		self.freqRecordFile.Free()
+		self.freqRecordFile = nil
 	}
 	dbus.UnInstallObject(self)
 }

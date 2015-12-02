@@ -1,8 +1,9 @@
 package search
 
 import (
-	C "launchpad.net/gocheck"
 	"sort"
+
+	C "launchpad.net/gocheck"
 )
 
 type ResultListTestSuite struct {
@@ -46,22 +47,22 @@ func (*ResultListTestSuite) _TestResultList(c *C.C) {
 
 func (*ResultListTestSuite) TestResultListReal(c *C.C) {
 	list := ResultList{
-		{"12306", "12306", 80000},
-		{"google-chrome", "Google Chrome", 345000},
-		{"chrome-lbfehkoinhhcknnbdgnnmjhiladcgbol-Default", "Evernote Web", 150000},
-		{"chrome-kidnkfckhbdkfgbicccmdggmpgogehop-Default", "马克飞象", 150000},
-		{"doit-im", "Doit.im", 80000},
-		{"towerim", "Tower.im", 80000},
-		{"microsoft-skydrive", "微软 SkyDrive", 80000},
-		{"sina-weibo", "新浪微博", 80000},
-		{"youdao-note", "有道云笔记", 80000},
-		{"pirateslovedaisies", "海盗爱菊花", 80000},
-		{"baidu-music", "百度音乐", 80000},
-		{"xiami-music", "虾米音乐", 80000},
-		{"kuwo-music", "酷我音乐网页版", 80000},
-		{"kugou-music", "酷狗音乐", 80000},
-		{"kingsoft-fast-docs", "金山快写", 80000},
-		{"kingsoft-online-storage", "金山网盘", 80000},
+		{"12306", "12306", 80000, 0},
+		{"google-chrome", "Google Chrome", 345000, 0},
+		{"chrome-lbfehkoinhhcknnbdgnnmjhiladcgbol-Default", "Evernote Web", 150000, 0},
+		{"chrome-kidnkfckhbdkfgbicccmdggmpgogehop-Default", "马克飞象", 150000, 0},
+		{"doit-im", "Doit.im", 80000, 0},
+		{"towerim", "Tower.im", 80000, 0},
+		{"microsoft-skydrive", "微软 SkyDrive", 80000, 0},
+		{"sina-weibo", "新浪微博", 80000, 0},
+		{"youdao-note", "有道云笔记", 80000, 0},
+		{"pirateslovedaisies", "海盗爱菊花", 80000, 0},
+		{"baidu-music", "百度音乐", 80000, 0},
+		{"xiami-music", "虾米音乐", 80000, 0},
+		{"kuwo-music", "酷我音乐网页版", 80000, 0},
+		{"kugou-music", "酷狗音乐", 80000, 0},
+		{"kingsoft-fast-docs", "金山快写", 80000, 0},
+		{"kingsoft-online-storage", "金山网盘", 80000, 0},
 	}
 
 	sort.Sort(list)

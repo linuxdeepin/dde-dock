@@ -20,5 +20,13 @@ func (self ResultList) Less(i, j int) bool {
 		return false
 	}
 
+	if self[i].Freq > self[j].Freq {
+		return true
+	}
+
+	if self[j].Freq > self[i].Freq {
+		return false
+	}
+
 	return self[i].Name < self[j].Name
 }

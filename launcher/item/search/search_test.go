@@ -1,14 +1,15 @@
 package search
 
 import (
-	C "launchpad.net/gocheck"
 	"os"
 	"path"
+	"testing"
+	"time"
+
+	C "launchpad.net/gocheck"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
 	"pkg.deepin.io/lib/gio-2.0"
-	"testing"
-	"time"
 )
 
 func TestSearch(t *testing.T) {
@@ -94,13 +95,12 @@ func (self *SearchTransactionTestSuite) TestSearchTransactionWithPinYin(c *C.C) 
 	os.Setenv("LANGUAGE", "zh_CN.UTF-8")
 	fireItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
 	chromeItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
-	os.Setenv("LANGUAGE", old)
+	defer os.Setenv("LANGUAGE", old)
 
 	pinyinObj := NewMockPinYin(map[string][]string{
-		// both GenericName contains 浏
 		"liu": []string{
-			fireItemInfo.GenericName(),
-			chromeItemInfo.GenericName(),
+			fireItemInfo.LocaleName(),
+			chromeItemInfo.LocaleName(),
 		},
 	}, true)
 	self.testTransaction(c, pinyinObj, "liu", func(res []Result, c *C.C) {
