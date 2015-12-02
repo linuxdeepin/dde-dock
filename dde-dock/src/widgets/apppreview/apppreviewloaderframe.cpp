@@ -182,7 +182,7 @@ void AppPreviewLoaderFrame::updateTitleGeometry()
     if (m_canShowTitle) {
         m_titleLabel->setVisible(true);
         QFontMetrics fm(m_titleLabel->font());
-        m_titleLabel->setText(fm.elidedText(m_titleLabel->text(), Qt::ElideRight, width()));
+        m_titleLabel->setText(fm.elidedText(m_titleLabel->text(), Qt::ElideRight, width() * 4 / 5));
 
         m_titleLabel->setFixedSize(m_previewLoader->width() - BORDER_WIDTH * 2, TITLE_HEIGHT);
         m_titleLabel->move(BORDER_WIDTH, BUTTON_SIZE / 2 + m_previewLoader->height() - TITLE_HEIGHT - BORDER_WIDTH);
