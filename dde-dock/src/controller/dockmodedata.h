@@ -50,7 +50,7 @@ private:
 
     Dock::DockMode m_currentMode = Dock::EfficientMode;
     Dock::HideMode m_hideMode = Dock::KeepShowing;
-    Dock::HideState m_hideState = Dock::HideStateHiding;
+    Dock::HideState m_hideState = Dock::HideStateShown; //make sure the preview can be show
 
     DBusDockSetting *m_dockSetting = NULL;
     DBusHideStateManager *m_hideStateManager = new DBusHideStateManager(this);
