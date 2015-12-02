@@ -25,6 +25,7 @@ import (
 	sysdbus "dbus/org/freedesktop/dbus/system"
 	"pkg.deepin.io/lib/dbus"
 	"sync"
+	"time"
 )
 
 const (
@@ -51,6 +52,9 @@ type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 type Bluetooth struct {
 	config        *config
 	objectManager *sysdbus.ObjectManager
+
+	//ticker
+	scanTicker *time.Ticker
 
 	// adapter
 	adaptersLock sync.Mutex
@@ -82,6 +86,7 @@ func NewBluetooth() (b *Bluetooth) {
 
 func (b *Bluetooth) destroy() {
 	bluezDestroyObjectManager(b.objectManager)
+	b.scanTicker.Stop()
 	dbus.UnInstallObject(b)
 }
 
@@ -124,6 +129,16 @@ func (b *Bluetooth) init() {
 	for path, data := range objects {
 		b.handleInterfacesAdded(path, data)
 	}
+
+	b.scanTicker = time.NewTicker(time.Minute * 1)
+	go func() {
+		for {
+			select {
+			case <-b.scanTicker.C:
+				b.scanPowerOffDevice()
+			}
+		}
+	}()
 
 	b.config.save()
 }

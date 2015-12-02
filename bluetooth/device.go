@@ -146,6 +146,12 @@ func (d *device) connectProperties() {
 		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.RSSI.ConnectChanged(func() {
+		_, err := d.bluezDevice.RSSI.GetValue()
+		if nil != err && !d.Paired {
+			logger.Debug("Get dbus property RSSI failed", d.Path, err)
+			bluezRemoveDevice(d.AdapterPath, d.Path)
+			return
+		}
 		d.RSSI = d.bluezDevice.RSSI.Get()
 		d.fixRssi()
 		d.notifyDevicePropertiesChanged()
@@ -285,6 +291,9 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 			}
 		} else {
 			d.notifyConnectFailed()
+			if !d.Paired {
+				bluezRemoveDevice(d.AdapterPath, d.Path)
+			}
 			logger.Warning("ConnectDevice failed:", dpath, err)
 		}
 
