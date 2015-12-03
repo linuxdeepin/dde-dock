@@ -62,5 +62,9 @@ func notifyBluetoothDisconnected(alias string) {
 }
 func notifyBluetoothConnectFailed(alias string) {
 	format := Tr("Make sure %q is turned on and in range")
-	notify(notifyIconBluetoothConnectFailed, Tr("Failed to connect bluetooth"), fmt.Sprintf(format, alias))
+	notify(notifyIconBluetoothConnectFailed, Tr("Bluetooth connection failed"), fmt.Sprintf(format, alias))
+}
+func notifyBluetoothDeviceIgnored(alias string) {
+	format := Tr("Failed to connect %q, automatically ignored")
+	notify(notifyIconBluetoothConnectFailed, Tr("Bluetooth connection failed"), fmt.Sprintf(format, alias))
 }

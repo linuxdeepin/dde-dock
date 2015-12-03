@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-01 13:26+0800\n"
+"POT-Creation-Date: 2015-12-03 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,26 +94,35 @@ msgstr ""
 msgid "Message notification"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:55 ../../bluetooth/utils_notify.go:59
-#: ../../network/_dev_test.go:42 ../../network/_dev_test.go:58
-#: ../../network/dev_test.go:113 ../../network/dev_test.go:129
-#: ../../network/state_handler.go:193 ../../network/state_handler.go:214
-#: ../../network/utils_notify.go:121
+#: ../../bluetooth/utils_notify.go:55 ../../bluetooth/utils_notify.go:58
+#: ../../bluetooth/utils_notify.go:59 ../../network/_dev_test.go:42
+#: ../../network/_dev_test.go:58 ../../network/dev_test.go:113
+#: ../../network/dev_test.go:129 ../../network/state_handler.go:193
+#: ../../network/state_handler.go:214 ../../network/utils_notify.go:121
 msgid "Connected"
 msgstr ""
 
-#: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:62
-#: ../../network/_dev_test.go:46 ../../network/_dev_test.go:49
-#: ../../network/_dev_test.go:52 ../../network/_dev_test.go:61
-#: ../../network/_dev_test.go:64 ../../network/dev_test.go:117
-#: ../../network/dev_test.go:120 ../../network/dev_test.go:123
-#: ../../network/dev_test.go:132 ../../network/dev_test.go:135
-#: ../../network/state_handler.go:241 ../../network/state_handler.go:262
-#: ../../network/utils_notify.go:93 ../../network/utils_notify.go:98
-#: ../../network/utils_notify.go:102 ../../network/utils_notify.go:106
-#: ../../network/utils_notify.go:124 ../../network/utils_notify.go:127
-#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:216
+#: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:61
+#: ../../bluetooth/utils_notify.go:62 ../../network/_dev_test.go:46
+#: ../../network/_dev_test.go:49 ../../network/_dev_test.go:52
+#: ../../network/_dev_test.go:61 ../../network/_dev_test.go:64
+#: ../../network/dev_test.go:117 ../../network/dev_test.go:120
+#: ../../network/dev_test.go:123 ../../network/dev_test.go:132
+#: ../../network/dev_test.go:135 ../../network/state_handler.go:241
+#: ../../network/state_handler.go:262 ../../network/utils_notify.go:93
+#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
+#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:124
+#: ../../network/utils_notify.go:127 ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:216
 msgid "Disconnected"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:64
+msgid "Make sure %q is turned on and in range"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
+msgid "Bluetooth connection failed"
 msgstr ""
 
 #: ../../bluetooth/utils_notify.go:65
@@ -122,6 +131,10 @@ msgstr ""
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:68
+msgid "Failed to connect %q, automatically ignored"
 msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
@@ -455,18 +468,20 @@ msgstr ""
 
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
 msgid "_Undock"
 msgstr ""
 
 #: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
 #: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:270
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311
 msgid "_Dock"
 msgstr ""
 

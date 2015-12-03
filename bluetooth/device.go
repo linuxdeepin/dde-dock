@@ -161,6 +161,9 @@ func (d *device) connectProperties() {
 func (d *device) notifyConnectFailed() {
 	notifyBluetoothConnectFailed(d.Alias)
 }
+func (d *device) notifyIgnored() {
+	notifyBluetoothDeviceIgnored(d.Alias)
+}
 func (d *device) notifyStateChanged() {
 	if d.connected {
 		d.connecting = false
@@ -290,11 +293,17 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 				bluezSetDeviceTrusted(dpath, true)
 			}
 		} else {
-			d.notifyConnectFailed()
-			if !d.Paired {
-				bluezRemoveDevice(d.AdapterPath, d.Path)
-			}
 			logger.Warning("ConnectDevice failed:", dpath, err)
+			if err.Error() == bluezErrorInvalidKey.Error() || !d.Paired {
+				// we do not want to pop notify for device because we will remove it.
+				d.bluezDevice.Connected.Reset()
+				d.connected = d.bluezDevice.Connected.Get()
+				d.oldConnected = d.connected
+				bluezRemoveDevice(d.AdapterPath, d.Path)
+				d.notifyIgnored()
+				return
+			}
+			d.notifyConnectFailed()
 		}
 
 		if d.connecting {
