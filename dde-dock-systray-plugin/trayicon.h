@@ -4,7 +4,6 @@
 #include <QWindow>
 #include <QFrame>
 
-class QTimer;
 class QPaintEvent;
 class QMouseEvent;
 class TrayIcon : public QFrame
@@ -17,6 +16,8 @@ public:
     void maskOn();
     void maskOff();
 
+    void updateIcon();
+
 protected:
     void paintEvent(QPaintEvent *);
 //    void mousePressEvent(QMouseEvent *);
@@ -25,10 +26,8 @@ private:
     WId m_windowId;
     WId m_containerWid;
     bool m_masked;
-    QTimer * m_updateTimer;
 
     void wrapWindow();
-    void updateWindow();
     QImage getImageNonComposite();
     void sendClick(uint8_t, int, int);
 };

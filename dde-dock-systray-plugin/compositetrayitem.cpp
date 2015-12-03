@@ -1,7 +1,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QEvent>
-#include <QFile>
+#include <QTimer>
 #include <QDebug>
 
 #include "interfaces/dockconstants.h"
@@ -23,6 +23,12 @@ CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
     m_cover->setFixedSize(48, 48);
     m_cover->setPixmap(QPixmap(":/images/darea_cover.svg"));
     m_cover->move(QPoint(0, 0));
+
+    m_coverTimer = new QTimer(this);
+    m_coverTimer->setInterval(500);
+    m_coverTimer->setSingleShot(true);
+
+    connect(m_coverTimer, &QTimer::timeout, this, &CompositeTrayItem::coverOn);
 }
 
 CompositeTrayItem::~CompositeTrayItem()
@@ -93,11 +99,26 @@ void CompositeTrayItem::coverOff()
 {
     m_cover->lower();
     m_cover->setVisible(false);
+
+    m_coverTimer->start();
+}
+
+void CompositeTrayItem::handleTrayiconDamage()
+{
+    m_coverTimer->stop();
+    coverOff();
+
+    QList<TrayIcon*> items = m_icons.values();
+    for (int i = 0; i < items.length(); i++) {
+        TrayIcon * icon = items.at(i);
+        icon->updateIcon();
+        icon->show();
+    }
 }
 
 void CompositeTrayItem::enterEvent(QEvent * event)
 {
-    coverOff();
+    m_coverTimer->start();
 
     QFrame::enterEvent(event);
 }

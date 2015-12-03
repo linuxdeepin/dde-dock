@@ -30,6 +30,7 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
                                                               this);
         m_dbusTrayManager->RetryManager();
         connect(m_dbusTrayManager, &TrayManager::TrayIconsChanged, this, &SystrayPlugin::onTrayIconsChanged);
+        connect(m_dbusTrayManager, &TrayManager::Changed, m_compositeItem, &CompositeTrayItem::handleTrayiconDamage);
     }
 
     DBusEntryManager *entryManager = new DBusEntryManager(this);

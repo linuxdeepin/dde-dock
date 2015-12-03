@@ -6,7 +6,6 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QDebug>
-#include <QTimer>
 #include <QMouseEvent>
 
 #include <xcb/composite.h>
@@ -31,17 +30,11 @@ TrayIcon::TrayIcon(WId winId, QWidget *parent) :
     resize(s_embedSize, s_embedSize);
 
     wrapWindow();
-
-    m_updateTimer = new QTimer(this);
-    m_updateTimer->setInterval(1000);
-    m_updateTimer->setSingleShot(false);
-    m_updateTimer->start();
-    connect(m_updateTimer, &QTimer::timeout, [this]{ updateWindow(); });
 }
 
 TrayIcon::~TrayIcon()
 {
-    m_updateTimer->stop();
+
 }
 
 void TrayIcon::paintEvent(QPaintEvent *)
@@ -195,7 +188,7 @@ void TrayIcon::wrapWindow()
     xcb_flush(c);
 }
 
-void TrayIcon::updateWindow()
+void TrayIcon::updateIcon()
 {
     auto c = QX11Info::connection();
 

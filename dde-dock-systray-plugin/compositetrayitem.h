@@ -27,6 +27,9 @@ public:
     void coverOn();
     void coverOff();
 
+public slots:
+    void handleTrayiconDamage();
+
 protected:
     void enterEvent(QEvent *) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *) Q_DECL_OVERRIDE;
@@ -36,6 +39,7 @@ private:
     QMap<QString, TrayIcon*> m_icons;
     QPixmap m_itemMask;
     QLabel * m_cover;
+    QTimer * m_coverTimer;
     bool m_isCovered;
 
     void relayout();
