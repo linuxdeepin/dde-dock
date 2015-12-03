@@ -51,7 +51,6 @@ type Launcher struct {
 	pinyinObj           PinYin
 	store               *storeApi.DStoreDesktop
 	appMonitor          *fsnotify.Watcher
-	freqRecordFile      *glib.KeyFile
 
 	// ItemChanged当launcher中的item有改变后触发。
 	ItemChanged func(
@@ -85,10 +84,8 @@ type Launcher struct {
 
 // NewLauncher creates a new launcher object.
 func NewLauncher() *Launcher {
-	f, _ := appinfo.GetFrequencyRecordFile()
 	launcher := &Launcher{
 		cancelSearchingChan: make(chan struct{}),
-		freqRecordFile:      f,
 	}
 	return launcher
 }
@@ -452,7 +449,13 @@ func (self *Launcher) RecordFrequency(id string) {
 // GetAllFrequency 获取所有的使用频率信息。
 // 包括：item的id与使用频率。
 func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
-	frequency := self.itemManager.GetAllFrequency(self.freqRecordFile)
+	f, err := appinfo.GetFrequencyRecordFile()
+	if err != nil {
+		return
+	}
+
+	frequency := self.itemManager.GetAllFrequency(f)
+	f.Free()
 
 	for id, rate := range frequency {
 		infos = append(infos, FrequencyExport{Frequency: rate, ID: id})
@@ -502,7 +505,11 @@ func (self *Launcher) Search(key string) {
 	self.cancelSearchingChan = make(chan struct{})
 	go func(cancelChan chan struct{}) {
 		resultChan := make(chan search.Result)
-		freqGetter := NewFreqGetter(self.freqRecordFile)
+		recordFile, _ := appinfo.GetFrequencyRecordFile()
+		if recordFile != nil {
+			defer recordFile.Free()
+		}
+		freqGetter := NewFreqGetter(recordFile)
 		transaction, err := search.NewTransaction(self.pinyinObj, resultChan, cancelChan, 0)
 		if err != nil {
 			return
@@ -573,10 +580,6 @@ func (self *Launcher) destroy() {
 	if self.appMonitor != nil {
 		self.appMonitor.Close()
 		self.appMonitor = nil
-	}
-	if self.freqRecordFile != nil {
-		self.freqRecordFile.Free()
-		self.freqRecordFile = nil
 	}
 	dbus.UnInstallObject(self)
 }
