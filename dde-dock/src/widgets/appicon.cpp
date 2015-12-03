@@ -45,7 +45,7 @@ void AppIcon::setIcon(const QString &iconPath)
         // try to read the iconPath as a icon name.
         QString path = getThemeIconPath(iconPath);
         if (path.isEmpty())
-            path = getThemeIconPath("application-default-icon");
+            path = getThemeIconPath("application-x-desktop");
         if (path.endsWith(".svg")) {
             QSvgRenderer renderer(path);
             pixmap.fill(Qt::transparent);
