@@ -40,6 +40,10 @@ var funcMap = template.FuncMap{
 	"ToKeyTypeShortName":          ToKeyTypeShortName,
 	"ToKeyDisplayName":            ToKeyDisplayName,
 	"ToKeyValue":                  ToKeyValue,
+	"ToKeyAlwaysUpdate":           ToKeyAlwaysUpdate,
+	"ToKeyUseValueRange":          ToKeyUseValueRange,
+	"ToKeyMinValue":               ToKeyMinValue,
+	"ToKeyMaxValue":               ToKeyMaxValue,
 	"ToKeyRelatedSectionValue":    ToKeyRelatedSectionValue,
 	"IsKeyUsedByFrontEnd":         IsKeyUsedByFrontEnd,
 	"ToFrontEndWidget":            ToFrontEndWidget,
@@ -90,20 +94,20 @@ type NMVsectionStruct struct {
 }
 
 type NMKeyStruct struct {
-	Name                 string            // such as "NM_SETTING_CONNECTION_ID"
-	Value                string            // such as "id"
-	Type                 string            // such as "ktypeString"
-	Default              string            // such as "<default>", "<null>" or "true"
-	UsedByBackEnd        bool              // determine if this key will be used by back-end(golang code)
-	UsedByFrontEnd       bool              // determine if this key will be used by front-end(qml code)
-	LogicSet             bool              // determine if this key should to generate a logic setter
-	DisplayName          string            // such as "Connection name"
-	FrontEndWidget       string            // front-end widget name, such as "EditLinePasswordInput"
-	FrontEndAlwaysUpdate bool              // mark if front-end widget should be re-get value when other keys changed
-	UseValueRange        bool              // mark custom value range will be used for integer keys
-	MinValue             int64             // minimize value
-	MaxValue             int64             // maximum value
-	WidgetProps          map[string]string // properties for front-end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
+	Name           string            // such as "NM_SETTING_CONNECTION_ID"
+	Value          string            // such as "id"
+	Type           string            // such as "ktypeString"
+	Default        string            // such as "<default>", "<null>" or "true"
+	UsedByBackEnd  bool              // determine if this key will be used by back-end(golang code)
+	UsedByFrontEnd bool              // determine if this key will be used by front-end(qml code)
+	LogicSet       bool              // determine if this key should to generate a logic setter
+	DisplayName    string            // such as "Connection name"
+	FrontEndWidget string            // front-end widget name, such as "EditLinePasswordInput"
+	AlwaysUpdate   bool              // mark if front-end widget should be re-get value when other keys changed
+	UseValueRange  bool              // mark custom value range will be used for integer keys
+	MinValue       int               // minimize value
+	MaxValue       int               // maximum value
+	WidgetProps    map[string]string // properties for front-end widget, such as "WidgetProps":{"alwaysUpdate":"true"}
 }
 
 type NMVkeyStruct struct {
@@ -118,7 +122,11 @@ type NMVkeyStruct struct {
 	Optional       bool              // if key is optional, will ignore error for it
 	DisplayName    string            // display name for font-end, need i18n
 	FrontEndWidget string            // such as "EditLinePasswordInput"
-	WidgetProps    map[string]string // properties for front end widget, such as "WidgetProp":{"alwaysUpdate":"true"}
+	AlwaysUpdate   bool              // mark if front-end widget should be re-get value when other keys changed
+	UseValueRange  bool              // mark custom value range will be used for integer keys
+	MinValue       int               // minimize value
+	MaxValue       int               // maximum value
+	WidgetProps    map[string]string // properties for front end widget, such as "WidgetProps":{"alwaysUpdate":"true"}
 }
 
 func setupDirs() {
@@ -193,14 +201,14 @@ func genTpl(data interface{}, tplstr string) (content string) {
 func genBackEndCode() {
 	autogenContent := fileHeader
 
-	// back-end code, general setting utils
-	autogenContent += genNMGeneralUtilsCode(nmSections)
+	// back-end code, virtual sections
+	autogenContent += genNMVsectionCode(nmSections, nmVsections)
 
 	// back-end code, virtual key
 	autogenContent += genNMVkeyCode(nmSections, nmVkeys)
 
-	// back-end code, virtual sections
-	autogenContent += genNMVsectionCode(nmSections, nmVsections)
+	// back-end code, general setting utils
+	autogenContent += genNMGeneralUtilsCode(nmSections)
 
 	// back-end code, echo nm setting sections
 	for _, nmSection := range nmSections {

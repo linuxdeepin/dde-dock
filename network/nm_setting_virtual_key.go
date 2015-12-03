@@ -40,19 +40,19 @@ const (
 )
 
 type vkeyInfo struct {
-	Value          string
-	Type           ktype
-	VkType         string // could be "wrapper", "enable-wrapper", "control"
-	RelatedSection string
-	RelatedKeys    []string
-	Available      bool // check if is used by front-end
-	ChildKey       bool // such as ip address, mask and gateway
-	Optional       bool // if key is optional(such as child key gateway of ip address), will ignore error for it
+	value          string
+	ktype          ktype
+	vkType         string // could be "wrapper", "enable-wrapper", "controller"
+	relatedSection string
+	relatedKeys    []string
+	available      bool // check if is used by front-end
+	childKey       bool // such as ip address, mask and gateway
+	optional       bool // if key is optional(such as child key gateway of ip address), will ignore error for it
 }
 
 func getVkeyInfo(section, vkey string) (info vkeyInfo, ok bool) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.Value == vkey {
+		if vk.relatedSection == section && vk.value == vkey {
 			info = vk
 			ok = true
 			return
@@ -73,8 +73,8 @@ func isVirtualKey(section, key string) bool {
 // get all virtual keys in target section
 func getVkeysOfSection(section string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section {
-			vks = append(vks, vk.Value)
+		if vk.relatedSection == section {
+			vks = append(vks, vk.value)
 		}
 	}
 	return
@@ -83,8 +83,8 @@ func getVkeysOfSection(section string) (vks []string) {
 func getSettingVkeyType(section, key string) (t ktype) {
 	t = ktypeUnknown
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.Value == key {
-			t = vk.Type
+		if vk.relatedSection == section && vk.value == key {
+			t = vk.ktype
 		}
 	}
 	if t == ktypeUnknown {
@@ -253,8 +253,8 @@ func appendAvailableKeys(data connectionData, keys []string, section, key string
 
 func getRelatedAvailableVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && isStringInArray(key, vk.RelatedKeys) && vk.Available {
-			vks = append(vks, vk.Value)
+		if vk.relatedSection == section && isStringInArray(key, vk.relatedKeys) && vk.available {
+			vks = append(vks, vk.value)
 		}
 	}
 	return
@@ -263,8 +263,8 @@ func getRelatedAvailableVkeys(section, key string) (vks []string) {
 // get related virtual keys of target key
 func getRelatedVkeys(section, key string) (vks []string) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && isStringInArray(key, vk.RelatedKeys) {
-			vks = append(vks, vk.Value)
+		if vk.relatedSection == section && isStringInArray(key, vk.relatedKeys) {
+			vks = append(vks, vk.value)
 		}
 	}
 	return
@@ -284,8 +284,8 @@ func removeVirtualKey(data connectionData, section, vkey string) {
 	if !ok {
 		return
 	}
-	for _, key := range vkeyInfo.RelatedKeys {
-		removeSettingKey(data, vkeyInfo.RelatedSection, key)
+	for _, key := range vkeyInfo.relatedKeys {
+		removeSettingKey(data, vkeyInfo.relatedSection, key)
 	}
 }
 
@@ -294,7 +294,7 @@ func isWrapperVkey(section, vkey string) bool {
 	if !ok {
 		return false
 	}
-	if vkInfo.VkType == vkTypeWrapper {
+	if vkInfo.vkType == vkTypeWrapper {
 		return true
 	}
 	return false
@@ -305,7 +305,7 @@ func isEnableWrapperVkey(section, vkey string) bool {
 	if !ok {
 		return false
 	}
-	if vkInfo.VkType == vkTypeEnableWrapper {
+	if vkInfo.vkType == vkTypeEnableWrapper {
 		return true
 	}
 	return false
@@ -316,7 +316,7 @@ func isControllerVkey(section, vkey string) bool {
 	if !ok {
 		return false
 	}
-	if vkInfo.VkType == vkTypeController {
+	if vkInfo.vkType == vkTypeController {
 		return true
 	}
 	return false
@@ -324,8 +324,8 @@ func isControllerVkey(section, vkey string) bool {
 
 func isChildVkey(section, vkey string) (childKey bool) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.Value == vkey {
-			childKey = vk.ChildKey
+		if vk.relatedSection == section && vk.value == vkey {
+			childKey = vk.childKey
 		}
 	}
 	return
@@ -333,8 +333,8 @@ func isChildVkey(section, vkey string) (childKey bool) {
 
 func isOptionalVkey(section, vkey string) (optional bool) {
 	for _, vk := range virtualKeys {
-		if vk.RelatedSection == section && vk.Value == vkey {
-			optional = vk.Optional
+		if vk.relatedSection == section && vk.value == vkey {
+			optional = vk.optional
 		}
 	}
 	return
@@ -506,7 +506,8 @@ func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
 		case connectionVpnVpnc:
 			missingPlugin = "network-manager-vpnc"
 		default:
-			fmt.Errorf("invalid vpn type %s", vpnType)
+			// TODO:
+			// fmt.Errorf("invalid vpn type %s", vpnType)
 		}
 	}
 	return

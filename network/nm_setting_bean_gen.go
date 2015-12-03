@@ -3,509 +3,451 @@ package network
 
 import (
 	"fmt"
+	. "pkg.deepin.io/lib/gettext"
 )
 
-// Origin file name ../nm_setting_general_gen.go
-func generalIsKeyInSettingSection(section, key string) bool {
-	if isVirtualKey(section, key) {
-		return true
-	}
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		return isKeyInSetting8021x(key)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		return isKeyInSettingCdma(key)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		return isKeyInSettingConnection(key)
-	case NM_SETTING_GSM_SETTING_NAME:
-		return isKeyInSettingGsm(key)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		return isKeyInSettingIp4Config(key)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		return isKeyInSettingIp6Config(key)
-	case NM_SETTING_PPP_SETTING_NAME:
-		return isKeyInSettingPpp(key)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		return isKeyInSettingPppoe(key)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		return isKeyInSettingSerial(key)
-	case NM_SETTING_VPN_SETTING_NAME:
-		return isKeyInSettingVpn(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		return isKeyInSettingVpnL2tp(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		return isKeyInSettingVpnL2tpPpp(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		return isKeyInSettingVpnL2tpIpsec(key)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		return isKeyInSettingVpnOpenconnect(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		return isKeyInSettingVpnOpenvpn(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		return isKeyInSettingVpnOpenvpnAdvanced(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		return isKeyInSettingVpnOpenvpnSecurity(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		return isKeyInSettingVpnOpenvpnTlsauth(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		return isKeyInSettingVpnOpenvpnProxies(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		return isKeyInSettingVpnPptp(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		return isKeyInSettingVpnPptpPpp(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		return isKeyInSettingVpnVpnc(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		return isKeyInSettingVpnVpncAdvanced(key)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		return isKeyInSettingWired(key)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		return isKeyInSettingWireless(key)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		return isKeyInSettingWirelessSecurity(key)
-	}
-	return false
-}
+// Origin file name ../nm_setting_virtual_section_gen.go
 
-func generalGetSettingKeyType(section, key string) (t ktype) {
-	if isVirtualKey(section, key) {
-		t = getSettingVkeyType(section, key)
-		return
-	}
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		t = getSetting8021xKeyType(key)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		t = getSettingCdmaKeyType(key)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		t = getSettingConnectionKeyType(key)
-	case NM_SETTING_GSM_SETTING_NAME:
-		t = getSettingGsmKeyType(key)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		t = getSettingIp4ConfigKeyType(key)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		t = getSettingIp6ConfigKeyType(key)
-	case NM_SETTING_PPP_SETTING_NAME:
-		t = getSettingPppKeyType(key)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		t = getSettingPppoeKeyType(key)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		t = getSettingSerialKeyType(key)
-	case NM_SETTING_VPN_SETTING_NAME:
-		t = getSettingVpnKeyType(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		t = getSettingVpnL2tpKeyType(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		t = getSettingVpnL2tpPppKeyType(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		t = getSettingVpnL2tpIpsecKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		t = getSettingVpnOpenconnectKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		t = getSettingVpnOpenvpnKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		t = getSettingVpnOpenvpnAdvancedKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		t = getSettingVpnOpenvpnSecurityKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		t = getSettingVpnOpenvpnTlsauthKeyType(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		t = getSettingVpnOpenvpnProxiesKeyType(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		t = getSettingVpnPptpKeyType(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		t = getSettingVpnPptpPppKeyType(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		t = getSettingVpnVpncKeyType(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		t = getSettingVpnVpncAdvancedKeyType(key)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		t = getSettingWiredKeyType(key)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		t = getSettingWirelessKeyType(key)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		t = getSettingWirelessSecurityKeyType(key)
-	}
-	return
-}
+// Virtual section names
+const (
+	NM_SETTING_VS_GENERAL              = "vs-general"
+	NM_SETTING_VS_ETHERNET             = "vs-ethernet"
+	NM_SETTING_VS_MOBILE               = "vs-mobile"
+	NM_SETTING_VS_MOBILE_GSM           = "vs-mobile-gsm"
+	NM_SETTING_VS_MOBILE_CDMA          = "vs-mobile-cdma"
+	NM_SETTING_VS_SECURITY             = "vs-security"
+	NM_SETTING_VS_WIFI                 = "vs-wifi"
+	NM_SETTING_VS_PPPOE                = "vs-pppoe"
+	NM_SETTING_VS_PPP                  = "vs-ppp"
+	NM_SETTING_VS_VPN                  = "vs-vpn"
+	NM_SETTING_VS_VPN_L2TP             = "vs-vpn-l2tp"
+	NM_SETTING_VS_VPN_L2TP_IPSEC       = "vs-vpn-l2tp-ipsec"
+	NM_SETTING_VS_VPN_L2TP_PPP         = "vs-vpn-l2tp-ppp"
+	NM_SETTING_VS_VPN_OPENCONNECT      = "vs-vpn-openconnect"
+	NM_SETTING_VS_VPN_OPENVPN          = "vs-vpn-openvpn"
+	NM_SETTING_VS_VPN_OPENVPN_SECURITY = "vs-vpn-openvpn-security"
+	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  = "vs-vpn-openvpn-tlsauth"
+	NM_SETTING_VS_VPN_OPENVPN_PROXIES  = "vs-vpn-openvpn-proxies"
+	NM_SETTING_VS_VPN_OPENVPN_ADVANCED = "vs-vpn-openvpn-advanced"
+	NM_SETTING_VS_VPN_PPTP             = "vs-vpn-pptp"
+	NM_SETTING_VS_VPN_PPTP_PPP         = "vs-vpn-pptp-ppp"
+	NM_SETTING_VS_VPN_VPNC             = "vs-vpn-vpnc"
+	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
+	NM_SETTING_VS_IPV4                 = "vs-ipv4"
+	NM_SETTING_VS_IPV6                 = "vs-ipv6"
+)
 
-func generalGetSettingAvailableKeys(data connectionData, section string) (keys []string) {
-	if isVirtualSection(section) {
-		keys = generalGetSettingVsectionAvailableKeys(data, section)
-		return
-	}
-	switch section {
-	case NM_SETTING_802_1X_SETTING_NAME:
-		keys = getSetting8021xAvailableKeys(data)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		keys = getSettingCdmaAvailableKeys(data)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		keys = getSettingConnectionAvailableKeys(data)
-	case NM_SETTING_GSM_SETTING_NAME:
-		keys = getSettingGsmAvailableKeys(data)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		keys = getSettingIp4ConfigAvailableKeys(data)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		keys = getSettingIp6ConfigAvailableKeys(data)
-	case NM_SETTING_PPP_SETTING_NAME:
-		keys = getSettingPppAvailableKeys(data)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		keys = getSettingPppoeAvailableKeys(data)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		keys = getSettingSerialAvailableKeys(data)
-	case NM_SETTING_VPN_SETTING_NAME:
-		keys = getSettingVpnAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		keys = getSettingVpnL2tpAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		keys = getSettingVpnL2tpPppAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		keys = getSettingVpnL2tpIpsecAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		keys = getSettingVpnOpenconnectAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		keys = getSettingVpnOpenvpnAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		keys = getSettingVpnOpenvpnAdvancedAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		keys = getSettingVpnOpenvpnSecurityAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		keys = getSettingVpnOpenvpnTlsauthAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		keys = getSettingVpnOpenvpnProxiesAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		keys = getSettingVpnPptpAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		keys = getSettingVpnPptpPppAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		keys = getSettingVpnVpncAvailableKeys(data)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		keys = getSettingVpnVpncAdvancedAvailableKeys(data)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		keys = getSettingWiredAvailableKeys(data)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		keys = getSettingWirelessAvailableKeys(data)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		keys = getSettingWirelessSecurityAvailableKeys(data)
-	}
-	return
-}
+// Virtual section data
+var virtualSections = make(map[string]vsectionInfo)
 
-func generalGetSettingAvailableValues(data connectionData, section, key string) (values []kvalue) {
-	if isVirtualKey(section, key) {
-		values = generalGetSettingVkeyAvailableValues(data, section, key)
-		return
+func initVirtualSections() {
+	virtualSections[NM_SETTING_VS_GENERAL] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_GENERAL,
+		relatedSections: []string{NM_SETTING_CONNECTION_SETTING_NAME},
+		Name:            Tr("General"),
+		Keys: []generalKeyInfo{
+			{Section: "connection", Key: "autoconnect", Name: Tr("Automatically connect"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "connection", Key: "vk-no-permission", Name: Tr("For All Users"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	switch section {
-	case NM_SETTING_802_1X_SETTING_NAME:
-		values = getSetting8021xAvailableValues(data, key)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		values = getSettingCdmaAvailableValues(data, key)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		values = getSettingConnectionAvailableValues(data, key)
-	case NM_SETTING_GSM_SETTING_NAME:
-		values = getSettingGsmAvailableValues(data, key)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		values = getSettingIp4ConfigAvailableValues(data, key)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		values = getSettingIp6ConfigAvailableValues(data, key)
-	case NM_SETTING_PPP_SETTING_NAME:
-		values = getSettingPppAvailableValues(data, key)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		values = getSettingPppoeAvailableValues(data, key)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		values = getSettingSerialAvailableValues(data, key)
-	case NM_SETTING_VPN_SETTING_NAME:
-		values = getSettingVpnAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		values = getSettingVpnL2tpAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		values = getSettingVpnL2tpPppAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		values = getSettingVpnL2tpIpsecAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		values = getSettingVpnOpenconnectAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		values = getSettingVpnOpenvpnAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		values = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		values = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		values = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		values = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		values = getSettingVpnPptpAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		values = getSettingVpnPptpPppAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		values = getSettingVpnVpncAvailableValues(data, key)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		values = getSettingVpnVpncAdvancedAvailableValues(data, key)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		values = getSettingWiredAvailableValues(data, key)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		values = getSettingWirelessAvailableValues(data, key)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		values = getSettingWirelessSecurityAvailableValues(data, key)
+	virtualSections[NM_SETTING_VS_ETHERNET] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_ETHERNET,
+		relatedSections: []string{NM_SETTING_WIRED_SETTING_NAME},
+		Name:            Tr("Ethernet"),
+		Keys: []generalKeyInfo{
+			{Section: "802-3-ethernet", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineEditComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-3-ethernet", Key: "cloned-mac-address", Name: Tr("Cloned MAC Addr"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-3-ethernet", Key: "vk-enable-mtu", Name: Tr("Customize MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-3-ethernet", Key: "mtu", Name: Tr("MTU"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 10000},
+		},
 	}
-	return
-}
-
-func generalCheckSettingValues(data connectionData, section string) (errs sectionErrors) {
-	if isVirtualSection(section) {
-		return
+	virtualSections[NM_SETTING_VS_MOBILE] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_MOBILE,
+		relatedSections: []string{NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME},
+		Name:            Tr("Mobile"),
+		Keys: []generalKeyInfo{
+			{Section: "vs-mobile", Key: "vk-mobile-country", Name: Tr("Country or region"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "vs-mobile", Key: "vk-mobile-provider", Name: Tr("Provider"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "vs-mobile", Key: "vk-mobile-plan", Name: Tr("Plan"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "vs-mobile", Key: "vk-mobile-service-type", Name: Tr("Service Type"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "vs-mobile", Key: "vk-gsm-apn-readonly", Name: Tr("APN"), WidgetType: "EditLineLabel", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "apn", Name: Tr("APN"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "number", Name: Tr("Number"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "network-id", Name: Tr("Network ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "home-only", Name: Tr("Home Network Only"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "pin", Name: Tr("PIN"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "cdma", Key: "number", Name: Tr("Number"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "cdma", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "cdma", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		errs = checkSetting8021xValues(data)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		errs = checkSettingCdmaValues(data)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		errs = checkSettingConnectionValues(data)
-	case NM_SETTING_GSM_SETTING_NAME:
-		errs = checkSettingGsmValues(data)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		errs = checkSettingIp4ConfigValues(data)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		errs = checkSettingIp6ConfigValues(data)
-	case NM_SETTING_PPP_SETTING_NAME:
-		errs = checkSettingPppValues(data)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		errs = checkSettingPppoeValues(data)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		errs = checkSettingSerialValues(data)
-	case NM_SETTING_VPN_SETTING_NAME:
-		errs = checkSettingVpnValues(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		errs = checkSettingVpnL2tpValues(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		errs = checkSettingVpnL2tpPppValues(data)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		errs = checkSettingVpnL2tpIpsecValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		errs = checkSettingVpnOpenconnectValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		errs = checkSettingVpnOpenvpnValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		errs = checkSettingVpnOpenvpnAdvancedValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		errs = checkSettingVpnOpenvpnSecurityValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		errs = checkSettingVpnOpenvpnTlsauthValues(data)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		errs = checkSettingVpnOpenvpnProxiesValues(data)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		errs = checkSettingVpnPptpValues(data)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		errs = checkSettingVpnPptpPppValues(data)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		errs = checkSettingVpnVpncValues(data)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		errs = checkSettingVpnVpncAdvancedValues(data)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		errs = checkSettingWiredValues(data)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		errs = checkSettingWirelessValues(data)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		errs = checkSettingWirelessSecurityValues(data)
+	virtualSections[NM_SETTING_VS_MOBILE_GSM] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_MOBILE_GSM,
+		relatedSections: []string{NM_SETTING_GSM_SETTING_NAME},
+		Name:            Tr("Mobile"),
+		Keys: []generalKeyInfo{
+			{Section: "gsm", Key: "apn", Name: Tr("APN"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "number", Name: Tr("Number"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "network-id", Name: Tr("Network ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "home-only", Name: Tr("Home Network Only"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "gsm", Key: "pin", Name: Tr("PIN"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	return
-}
-
-func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJSON string) {
-	if isVirtualKey(section, key) {
-		valueJSON = generalGetVkeyJSON(data, section, key)
-		return
+	virtualSections[NM_SETTING_VS_MOBILE_CDMA] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_MOBILE_CDMA,
+		relatedSections: []string{NM_SETTING_CDMA_SETTING_NAME},
+		Name:            Tr("Mobile"),
+		Keys: []generalKeyInfo{
+			{Section: "cdma", Key: "number", Name: Tr("Number"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "cdma", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "cdma", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		valueJSON = generalGetSetting8021xKeyJSON(data, key)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		valueJSON = generalGetSettingCdmaKeyJSON(data, key)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
-	case NM_SETTING_GSM_SETTING_NAME:
-		valueJSON = generalGetSettingGsmKeyJSON(data, key)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		valueJSON = generalGetSettingIp4ConfigKeyJSON(data, key)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		valueJSON = generalGetSettingIp6ConfigKeyJSON(data, key)
-	case NM_SETTING_PPP_SETTING_NAME:
-		valueJSON = generalGetSettingPppKeyJSON(data, key)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		valueJSON = generalGetSettingSerialKeyJSON(data, key)
-	case NM_SETTING_VPN_SETTING_NAME:
-		valueJSON = generalGetSettingVpnKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		valueJSON = generalGetSettingVpnL2tpKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		valueJSON = generalGetSettingVpnL2tpPppKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		valueJSON = generalGetSettingVpnL2tpIpsecKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenconnectKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenvpnKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenvpnAdvancedKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenvpnSecurityKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenvpnTlsauthKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		valueJSON = generalGetSettingVpnOpenvpnProxiesKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		valueJSON = generalGetSettingVpnPptpKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		valueJSON = generalGetSettingVpnPptpPppKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		valueJSON = generalGetSettingVpnVpncKeyJSON(data, key)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		valueJSON = generalGetSettingVpnVpncAdvancedKeyJSON(data, key)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		valueJSON = generalGetSettingWiredKeyJSON(data, key)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
+	virtualSections[NM_SETTING_VS_SECURITY] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_SECURITY,
+		relatedSections: []string{NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_802_1X_SETTING_NAME},
+		Name:            Tr("Security"),
+		Keys: []generalKeyInfo{
+			{Section: "vs-security", Key: "vk-enable-8021x", Name: Tr("Security Required"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless-security", Key: "vk-key-mgmt", Name: Tr("Security"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless-security", Key: "wep-key0", Name: Tr("Key"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless-security", Key: "psk", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "vk-eap", Name: Tr("EAP Auth"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "identity", Name: Tr("Identity"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "anonymous-identity", Name: Tr("Anonymous ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "vk-ca-cert", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "vk-client-cert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "phase1-fast-provisioning", Name: Tr("Provisioning"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "vk-pac-file", Name: Tr("PAC file"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "phase1-peapver", Name: Tr("PEAP Version"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "phase2-auth", Name: Tr("Inner Auth"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "vk-private-key", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "private-key-password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-1x", Key: "private-key-password", Name: Tr("Private Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	return
-}
-
-func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON string) (err error) {
-	if isVirtualKey(section, key) {
-		err = generalSetVkeyJSON(data, section, key, valueJSON)
-		return
+	virtualSections[NM_SETTING_VS_WIFI] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_WIFI,
+		relatedSections: []string{NM_SETTING_WIRELESS_SETTING_NAME},
+		Name:            Tr("Wi-Fi"),
+		Keys: []generalKeyInfo{
+			{Section: "802-11-wireless", Key: "ssid", Name: Tr("SSID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "mode", Name: Tr("Mode"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "band", Name: Tr("Band"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "channel", Name: Tr("Channel"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineEditComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "cloned-mac-address", Name: Tr("Cloned MAC Addr"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "vk-enable-mtu", Name: Tr("Customize MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "802-11-wireless", Key: "mtu", Name: Tr("MTU"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 10000},
+		},
 	}
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		err = generalSetSettingCdmaKeyJSON(data, key, valueJSON)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		err = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
-	case NM_SETTING_GSM_SETTING_NAME:
-		err = generalSetSettingGsmKeyJSON(data, key, valueJSON)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		err = generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		err = generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
-	case NM_SETTING_PPP_SETTING_NAME:
-		err = generalSetSettingPppKeyJSON(data, key, valueJSON)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		err = generalSetSettingPppoeKeyJSON(data, key, valueJSON)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		err = generalSetSettingSerialKeyJSON(data, key, valueJSON)
-	case NM_SETTING_VPN_SETTING_NAME:
-		err = generalSetSettingVpnKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		err = generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		err = generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		err = generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		err = generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		err = generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		err = generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		err = generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		err = generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		err = generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		err = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		err = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		err = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		err = generalSetSettingVpnVpncAdvancedKeyJSON(data, key, valueJSON)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		err = generalSetSettingWiredKeyJSON(data, key, valueJSON)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		err = generalSetSettingWirelessKeyJSON(data, key, valueJSON)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		err = generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
+	virtualSections[NM_SETTING_VS_PPPOE] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_PPPOE,
+		relatedSections: []string{NM_SETTING_PPPOE_SETTING_NAME},
+		Name:            Tr("PPPoE"),
+		Keys: []generalKeyInfo{
+			{Section: "pppoe", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "pppoe", Key: "service", Name: Tr("Service"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "pppoe", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	return
-}
-
-func generalGetSettingDefaultValue(section, key string) (value interface{}) {
-	switch section {
-	default:
-		logger.Error("invalid section name", section)
-	case NM_SETTING_802_1X_SETTING_NAME:
-		value = getSetting8021xDefaultValue(key)
-	case NM_SETTING_CDMA_SETTING_NAME:
-		value = getSettingCdmaDefaultValue(key)
-	case NM_SETTING_CONNECTION_SETTING_NAME:
-		value = getSettingConnectionDefaultValue(key)
-	case NM_SETTING_GSM_SETTING_NAME:
-		value = getSettingGsmDefaultValue(key)
-	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
-		value = getSettingIp4ConfigDefaultValue(key)
-	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
-		value = getSettingIp6ConfigDefaultValue(key)
-	case NM_SETTING_PPP_SETTING_NAME:
-		value = getSettingPppDefaultValue(key)
-	case NM_SETTING_PPPOE_SETTING_NAME:
-		value = getSettingPppoeDefaultValue(key)
-	case NM_SETTING_SERIAL_SETTING_NAME:
-		value = getSettingSerialDefaultValue(key)
-	case NM_SETTING_VPN_SETTING_NAME:
-		value = getSettingVpnDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		value = getSettingVpnL2tpDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		value = getSettingVpnL2tpPppDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		value = getSettingVpnL2tpIpsecDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		value = getSettingVpnOpenconnectDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		value = getSettingVpnOpenvpnDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		value = getSettingVpnOpenvpnAdvancedDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		value = getSettingVpnOpenvpnSecurityDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		value = getSettingVpnOpenvpnTlsauthDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		value = getSettingVpnOpenvpnProxiesDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		value = getSettingVpnPptpDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		value = getSettingVpnPptpPppDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		value = getSettingVpnVpncDefaultValue(key)
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		value = getSettingVpnVpncAdvancedDefaultValue(key)
-	case NM_SETTING_WIRED_SETTING_NAME:
-		value = getSettingWiredDefaultValue(key)
-	case NM_SETTING_WIRELESS_SETTING_NAME:
-		value = getSettingWirelessDefaultValue(key)
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
-		value = getSettingWirelessSecurityDefaultValue(key)
+	virtualSections[NM_SETTING_VS_PPP] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_PPP,
+		relatedSections: []string{NM_SETTING_PPP_SETTING_NAME},
+		Name:            Tr("PPP"),
+		Keys: []generalKeyInfo{
+			{Section: "ppp", Key: "require-mppe", Name: Tr("Use MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "require-mppe-128", Name: Tr("128-bit MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "mppe-stateful", Name: Tr("Stateful MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "nobsdcomp", Name: Tr("No BSD Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "nodeflate", Name: Tr("No Deflate Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "no-vj-comp", Name: Tr("No TCP Header Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ppp", Key: "vk-enable-lcp-echo", Name: Tr("Send PPP Echo Packets"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
 	}
-	return
+	virtualSections[NM_SETTING_VS_VPN] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "vs-vpn", Key: "vk-vpn-missing-plugin", Name: Tr("Need VPN Plugin"), WidgetType: "EditLineMissingPackage", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "domain", Name: Tr("NT Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "cacert", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "proxy", Name: Tr("Proxy"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "enable_csd_trojan", Name: Tr("Allow Cisco Secure Desktop Trojan"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "csd_wrapper", Name: Tr("CSD Script"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "usercert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "userkey", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "pem_passphrase_fsid", Name: Tr("Use FSID for Key Passphrase"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "remote", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "connection-type", Name: Tr("Auth Type"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "ca", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "key", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert-pass-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert-pass", Name: Tr("Private Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "static-key", Name: Tr("Static Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "vk-static-key-direction", Name: Tr("Customize Key Direction"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "static-key-direction", Name: Tr("Key Direction"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "remote-ip", Name: Tr("Remote IP"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "local-ip", Name: Tr("Local IP"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "domain", Name: Tr("NT Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth password", Name: Tr("User Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec ID", Name: Tr("Group Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec secret-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec secret", Name: Tr("Group Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "vk-hybrid-authmode", Name: Tr("Use Hybrid Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "CA-File", Name: Tr("CA File"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_L2TP] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_L2TP,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-l2tp", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp", Key: "domain", Name: Tr("NT Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_L2TP_IPSEC] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_L2TP_IPSEC,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME},
+		Name:            Tr("VPN IPsec"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-enabled", Name: Tr("Enable IPsec"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-group-name", Name: Tr("Group Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-gateway-id", Name: Tr("Group ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ipsec", Key: "ipsec-psk", Name: Tr("Pre-Shared Key"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_L2TP_PPP] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_L2TP_PPP,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME},
+		Name:            Tr("VPN PPP"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-l2tp-ppp", Key: "vk-require-mppe", Name: Tr("Use MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "vk-mppe-security", Name: Tr("Security"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "mppe-stateful", Name: Tr("Stateful MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "nobsdcomp", Name: Tr("No BSD Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "nodeflate", Name: Tr("No Deflate Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "no-vj-comp", Name: Tr("No TCP Header Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "nopcomp", Name: Tr("No Protocol Field Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "noaccomp", Name: Tr("No Address/Control Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-l2tp-ppp", Key: "vk-enable-lcp-echo", Name: Tr("Send PPP Echo Packets"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENCONNECT] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENCONNECT,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openconnect", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "cacert", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "proxy", Name: Tr("Proxy"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "enable_csd_trojan", Name: Tr("Allow Cisco Secure Desktop Trojan"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "csd_wrapper", Name: Tr("CSD Script"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "usercert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "userkey", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openconnect", Key: "pem_passphrase_fsid", Name: Tr("Use FSID for Key Passphrase"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENVPN] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENVPN,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openvpn", Key: "remote", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "connection-type", Name: Tr("Auth Type"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "ca", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "key", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert-pass-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "cert-pass", Name: Tr("Private Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "static-key", Name: Tr("Static Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "vk-static-key-direction", Name: Tr("Customize Key Direction"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "static-key-direction", Name: Tr("Key Direction"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "remote-ip", Name: Tr("Remote IP"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn", Key: "local-ip", Name: Tr("Local IP"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENVPN_SECURITY] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENVPN_SECURITY,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME},
+		Name:            Tr("VPN Security"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openvpn-security", Key: "cipher", Name: Tr("Cipher"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-security", Key: "auth", Name: Tr("HMAC Auth"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENVPN_TLSAUTH] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENVPN_TLSAUTH,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME},
+		Name:            Tr("VPN TLS Authentication"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openvpn-tlsauth", Key: "tls-remote", Name: Tr("Subject Match"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-tlsauth", Key: "remote-cert-tls", Name: Tr("Remote Cert Type"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-tlsauth", Key: "ta", Name: Tr("Key File"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-tlsauth", Key: "vk-ta-dir", Name: Tr("Customize Key Direction"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-tlsauth", Key: "ta-dir", Name: Tr("Key Direction"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENVPN_PROXIES] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENVPN_PROXIES,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME},
+		Name:            Tr("VPN Proxies"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openvpn-proxies", Key: "proxy-type", Name: Tr("Proxy Type"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-proxies", Key: "proxy-server", Name: Tr("Server IP"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-proxies", Key: "proxy-port", Name: Tr("Port"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 65535},
+			{Section: "alias-vpn-openvpn-proxies", Key: "proxy-retry", Name: Tr("Retry Indefinitely When Failed"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-proxies", Key: "http-proxy-username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-proxies", Key: "http-proxy-password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_OPENVPN_ADVANCED] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_OPENVPN_ADVANCED,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME},
+		Name:            Tr("VPN Advanced"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-openvpn-advanced", Key: "vk-enable-port", Name: Tr("Customize Gateway Port"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "port", Name: Tr("Gateway Port"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 65535},
+			{Section: "alias-vpn-openvpn-advanced", Key: "vk-enable-reneg-seconds", Name: Tr("Customize Renegotiation Interval"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "reneg-seconds", Name: Tr("Renegotiation Interval"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 604800},
+			{Section: "alias-vpn-openvpn-advanced", Key: "comp-lzo", Name: Tr("Use LZO data compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "proto-tcp", Name: Tr("Use TCP connection"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "tap-dev", Name: Tr("Use TAP device"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "vk-enable-tunnel-mtu", Name: Tr("Customize Tunnel MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "tunnel-mtu", Name: Tr("MTU"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 65535},
+			{Section: "alias-vpn-openvpn-advanced", Key: "vk-enable-fragment-size", Name: Tr("Customize UDP Fragment Size"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "fragment-size", Name: Tr("UDP Fragment Size"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 65535},
+			{Section: "alias-vpn-openvpn-advanced", Key: "mssfix", Name: Tr("Restrict Tunnel TCP MSS"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-openvpn-advanced", Key: "remote-random", Name: Tr("Randomize Remote Hosts"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_PPTP] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_PPTP,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-pptp", Key: "gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp", Key: "domain", Name: Tr("NT Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_PPTP_PPP] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_PPTP_PPP,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME},
+		Name:            Tr("VPN PPP"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-pptp-ppp", Key: "vk-require-mppe", Name: Tr("Use MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "vk-mppe-security", Name: Tr("Security"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "mppe-stateful", Name: Tr("Stateful MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "nobsdcomp", Name: Tr("No BSD Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "nodeflate", Name: Tr("No Deflate Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "no-vj-comp", Name: Tr("No TCP Header Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-pptp-ppp", Key: "vk-enable-lcp-echo", Name: Tr("Send PPP Echo Packets"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_VPNC] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_VPNC,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-vpnc", Key: "IPSec gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "Xauth password", Name: Tr("User Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec ID", Name: Tr("Group Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec secret-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "IPSec secret", Name: Tr("Group Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "vk-hybrid-authmode", Name: Tr("Use Hybrid Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc", Key: "CA-File", Name: Tr("CA File"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_VPNC_ADVANCED] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_VPNC_ADVANCED,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME},
+		Name:            Tr("VPN Advanced"),
+		Keys: []generalKeyInfo{
+			{Section: "alias-vpn-vpnc-advanced", Key: "Domain", Name: Tr("Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "Vendor", Name: Tr("Vendor"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "Application Version", Name: Tr("Version"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "vk-encryption-method", Name: Tr("Encryption"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "NAT Traversal Mode", Name: Tr("NAT Traversal"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "IKE DH Group", Name: Tr("IKE DH Group"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "Perfect Forward Secrecy", Name: Tr("Forward Secrecy"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "alias-vpn-vpnc-advanced", Key: "Local Port", Name: Tr("Local Port"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 65535},
+			{Section: "alias-vpn-vpnc-advanced", Key: "vk-disable-dpd", Name: Tr("Disable Dead Peer Detection"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_IPV4] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_IPV4,
+		relatedSections: []string{NM_SETTING_IP4_CONFIG_SETTING_NAME},
+		Name:            Tr("IPv4"),
+		Keys: []generalKeyInfo{
+			{Section: "ipv4", Key: "method", Name: Tr("Method"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv4", Key: "vk-addresses-address", Name: Tr("IP Address"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv4", Key: "vk-addresses-mask", Name: Tr("Netmask"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv4", Key: "vk-addresses-gateway", Name: Tr("Gateway"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv4", Key: "vk-dns", Name: Tr("DNS Server"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_IPV6] = vsectionInfo{
+		VirtualSection:  NM_SETTING_VS_IPV6,
+		relatedSections: []string{NM_SETTING_IP6_CONFIG_SETTING_NAME},
+		Name:            Tr("IPv6"),
+		Keys: []generalKeyInfo{
+			{Section: "ipv6", Key: "method", Name: Tr("Method"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv6", Key: "vk-addresses-address", Name: Tr("IP Address"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv6", Key: "vk-addresses-prefix", Name: Tr("Prefix"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 128},
+			{Section: "ipv6", Key: "vk-addresses-gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			{Section: "ipv6", Key: "vk-dns", Name: Tr("DNS Server"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
 }
 
 // Origin file name ../nm_setting_virtual_key_gen.go
@@ -566,56 +508,56 @@ const (
 
 // Virtual key data
 var virtualKeys = []vkeyInfo{
-	{Value: NM_SETTING_VK_802_1X_ENABLE, Type: ktypeBoolean, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_SECURITY, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_802_1X_EAP, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_EAP}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_802_1X_PAC_FILE, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_PAC_FILE}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_802_1X_CA_CERT, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_CA_CERT}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_802_1X_CLIENT_CERT, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_CLIENT_CERT}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_802_1X_PRIVATE_KEY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_802_1X_SETTING_NAME, RelatedKeys: []string{NM_SETTING_802_1X_PRIVATE_KEY}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_CONNECTION_NO_PERMISSION, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKeys: []string{NM_SETTING_CONNECTION_PERMISSIONS}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_MOBILE_COUNTRY, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_MOBILE_PROVIDER, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_MOBILE_PLAN, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_MOBILE_SERVICE_TYPE, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_MOBILE_APN_READONLY, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_MOBILE, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: true},
-	{Value: NM_SETTING_VK_IP4_CONFIG_DNS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_DNS}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, Type: ktypeUint32, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ADDRESSES}, Available: true, ChildKey: true, Optional: true},
-	{Value: NM_SETTING_VK_IP6_CONFIG_DNS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_DNS}, Available: true, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, Type: ktypeUint32, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, Type: ktypeUint32, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, RelatedKeys: []string{NM_SETTING_IP_CONFIG_ROUTES}, Available: false, ChildKey: true, Optional: false},
-	{Value: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_SETTING_PPP_LCP_ECHO_INTERVAL}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_AUTOCONNECT, Type: ktypeBoolean, VkType: vkTypeController, RelatedSection: NM_SETTING_CONNECTION_SETTING_NAME, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_TYPE, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_VPN, RelatedKeys: []string{}, Available: false, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_MISSING_PLUGIN, Type: ktypeString, VkType: vkTypeController, RelatedSection: NM_SETTING_VS_VPN, RelatedKeys: []string{}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_PORT}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_TA_DIR}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_AUTHMODE}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, Type: ktypeBoolean, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_WIRED_ENABLE_MTU, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_WIRED_SETTING_NAME, RelatedKeys: []string{NM_SETTING_WIRED_MTU}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_WIRELESS_ENABLE_MTU, Type: ktypeBoolean, VkType: vkTypeEnableWrapper, RelatedSection: NM_SETTING_WIRELESS_SETTING_NAME, RelatedKeys: []string{NM_SETTING_WIRELESS_MTU}, Available: true, ChildKey: false, Optional: false},
-	{Value: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, Type: ktypeString, VkType: vkTypeWrapper, RelatedSection: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, RelatedKeys: []string{NM_SETTING_WIRELESS_SECURITY_KEY_MGMT}, Available: true, ChildKey: false, Optional: false},
+	{value: NM_SETTING_VK_802_1X_ENABLE, ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: NM_SETTING_VS_SECURITY, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_802_1X_EAP, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_802_1X_SETTING_NAME, relatedKeys: []string{NM_SETTING_802_1X_EAP}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_802_1X_PAC_FILE, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_802_1X_SETTING_NAME, relatedKeys: []string{NM_SETTING_802_1X_PAC_FILE}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_802_1X_CA_CERT, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_802_1X_SETTING_NAME, relatedKeys: []string{NM_SETTING_802_1X_CA_CERT}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_802_1X_CLIENT_CERT, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_802_1X_SETTING_NAME, relatedKeys: []string{NM_SETTING_802_1X_CLIENT_CERT}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_802_1X_PRIVATE_KEY, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_802_1X_SETTING_NAME, relatedKeys: []string{NM_SETTING_802_1X_PRIVATE_KEY}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_CONNECTION_NO_PERMISSION, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{NM_SETTING_CONNECTION_PERMISSIONS}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_MOBILE_COUNTRY, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_MOBILE, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_MOBILE_PROVIDER, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_MOBILE, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_MOBILE_PLAN, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_MOBILE, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_MOBILE_SERVICE_TYPE, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_MOBILE, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_MOBILE_APN_READONLY, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_MOBILE, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ADDRESSES}, available: true, childKey: true, optional: true},
+	{value: NM_SETTING_VK_IP4_CONFIG_DNS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_DNS}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ROUTES_ADDRESS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ROUTES_MASK, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ROUTES_NEXTHOP, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP4_CONFIG_ROUTES_METRIC, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP4_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP4_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ADDRESSES}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX, ktype: ktypeUint32, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ADDRESSES}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ADDRESSES}, available: true, childKey: true, optional: true},
+	{value: NM_SETTING_VK_IP6_CONFIG_DNS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_DNS}, available: true, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_ADDRESS, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_PREFIX, ktype: ktypeUint32, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktype: ktypeUint32, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
+	{value: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_SETTING_PPP_LCP_ECHO_INTERVAL}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_AUTOCONNECT, ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_TYPE, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: false, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_MISSING_PLUGIN, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40, NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE, NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_PORT}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_OPENVPN_KEY_TA_DIR}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40, NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_AUTHMODE}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_SINGLE_DES, NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_WIRED_ENABLE_MTU, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_WIRED_SETTING_NAME, relatedKeys: []string{NM_SETTING_WIRED_MTU}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_WIRELESS_ENABLE_MTU, ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: NM_SETTING_WIRELESS_SETTING_NAME, relatedKeys: []string{NM_SETTING_WIRELESS_MTU}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, relatedKeys: []string{NM_SETTING_WIRELESS_SECURITY_KEY_MGMT}, available: true, childKey: false, optional: false},
 }
 
 // Get JSON value generally
@@ -1518,64 +1460,507 @@ func logicSetSettingVkWirelessEnableMtu(data connectionData, value bool) (err er
 	return
 }
 
-// Origin file name ../nm_setting_virtual_section_gen.go
+// Origin file name ../nm_setting_general_gen.go
+func generalIsKeyInSettingSection(section, key string) bool {
+	if isVirtualKey(section, key) {
+		return true
+	}
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		return isKeyInSetting8021x(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		return isKeyInSettingCdma(key)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		return isKeyInSettingConnection(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		return isKeyInSettingGsm(key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		return isKeyInSettingIp4Config(key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		return isKeyInSettingIp6Config(key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		return isKeyInSettingPpp(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		return isKeyInSettingPppoe(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		return isKeyInSettingSerial(key)
+	case NM_SETTING_VPN_SETTING_NAME:
+		return isKeyInSettingVpn(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		return isKeyInSettingVpnL2tp(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		return isKeyInSettingVpnL2tpPpp(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		return isKeyInSettingVpnL2tpIpsec(key)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		return isKeyInSettingVpnOpenconnect(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpn(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnAdvanced(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnSecurity(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnTlsauth(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		return isKeyInSettingVpnOpenvpnProxies(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		return isKeyInSettingVpnPptp(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		return isKeyInSettingVpnPptpPpp(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		return isKeyInSettingVpnVpnc(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		return isKeyInSettingVpnVpncAdvanced(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		return isKeyInSettingWired(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		return isKeyInSettingWireless(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		return isKeyInSettingWirelessSecurity(key)
+	}
+	return false
+}
 
-// Virtual section names
-const (
-	NM_SETTING_VS_GENERAL              = "vs-general"
-	NM_SETTING_VS_ETHERNET             = "vs-ethernet"
-	NM_SETTING_VS_MOBILE               = "vs-mobile"
-	NM_SETTING_VS_MOBILE_GSM           = "vs-mobile-gsm"
-	NM_SETTING_VS_MOBILE_CDMA          = "vs-mobile-cdma"
-	NM_SETTING_VS_SECURITY             = "vs-security"
-	NM_SETTING_VS_WIFI                 = "vs-wifi"
-	NM_SETTING_VS_PPPOE                = "vs-pppoe"
-	NM_SETTING_VS_PPP                  = "vs-ppp"
-	NM_SETTING_VS_VPN                  = "vs-vpn"
-	NM_SETTING_VS_VPN_L2TP             = "vs-vpn-l2tp"
-	NM_SETTING_VS_VPN_L2TP_IPSEC       = "vs-vpn-l2tp-ipsec"
-	NM_SETTING_VS_VPN_L2TP_PPP         = "vs-vpn-l2tp-ppp"
-	NM_SETTING_VS_VPN_OPENCONNECT      = "vs-vpn-openconnect"
-	NM_SETTING_VS_VPN_OPENVPN          = "vs-vpn-openvpn"
-	NM_SETTING_VS_VPN_OPENVPN_SECURITY = "vs-vpn-openvpn-security"
-	NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  = "vs-vpn-openvpn-tlsauth"
-	NM_SETTING_VS_VPN_OPENVPN_PROXIES  = "vs-vpn-openvpn-proxies"
-	NM_SETTING_VS_VPN_OPENVPN_ADVANCED = "vs-vpn-openvpn-advanced"
-	NM_SETTING_VS_VPN_PPTP             = "vs-vpn-pptp"
-	NM_SETTING_VS_VPN_PPTP_PPP         = "vs-vpn-pptp-ppp"
-	NM_SETTING_VS_VPN_VPNC             = "vs-vpn-vpnc"
-	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
-	NM_SETTING_VS_IPV4                 = "vs-ipv4"
-	NM_SETTING_VS_IPV6                 = "vs-ipv6"
-)
+func generalGetSettingKeyType(section, key string) (t ktype) {
+	if isVirtualKey(section, key) {
+		t = getSettingVkeyType(section, key)
+		return
+	}
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		t = getSetting8021xKeyType(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		t = getSettingCdmaKeyType(key)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		t = getSettingConnectionKeyType(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		t = getSettingGsmKeyType(key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		t = getSettingIp4ConfigKeyType(key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		t = getSettingIp6ConfigKeyType(key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		t = getSettingPppKeyType(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		t = getSettingPppoeKeyType(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		t = getSettingSerialKeyType(key)
+	case NM_SETTING_VPN_SETTING_NAME:
+		t = getSettingVpnKeyType(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		t = getSettingVpnL2tpKeyType(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		t = getSettingVpnL2tpPppKeyType(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		t = getSettingVpnL2tpIpsecKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		t = getSettingVpnOpenconnectKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		t = getSettingVpnOpenvpnKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		t = getSettingVpnOpenvpnAdvancedKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		t = getSettingVpnOpenvpnSecurityKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		t = getSettingVpnOpenvpnTlsauthKeyType(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		t = getSettingVpnOpenvpnProxiesKeyType(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		t = getSettingVpnPptpKeyType(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		t = getSettingVpnPptpPppKeyType(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		t = getSettingVpnVpncKeyType(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		t = getSettingVpnVpncAdvancedKeyType(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		t = getSettingWiredKeyType(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		t = getSettingWirelessKeyType(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		t = getSettingWirelessSecurityKeyType(key)
+	}
+	return
+}
 
-// Virtual section data
-var virtualSections = []vsectionInfo{
-	{Value: NM_SETTING_VS_GENERAL, RelatedSections: []string{NM_SETTING_CONNECTION_SETTING_NAME}},
-	{Value: NM_SETTING_VS_ETHERNET, RelatedSections: []string{NM_SETTING_WIRED_SETTING_NAME}},
-	{Value: NM_SETTING_VS_MOBILE, RelatedSections: []string{NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME}},
-	{Value: NM_SETTING_VS_MOBILE_GSM, RelatedSections: []string{NM_SETTING_GSM_SETTING_NAME}},
-	{Value: NM_SETTING_VS_MOBILE_CDMA, RelatedSections: []string{NM_SETTING_CDMA_SETTING_NAME}},
-	{Value: NM_SETTING_VS_SECURITY, RelatedSections: []string{NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, NM_SETTING_802_1X_SETTING_NAME}},
-	{Value: NM_SETTING_VS_WIFI, RelatedSections: []string{NM_SETTING_WIRELESS_SETTING_NAME}},
-	{Value: NM_SETTING_VS_PPPOE, RelatedSections: []string{NM_SETTING_PPPOE_SETTING_NAME}},
-	{Value: NM_SETTING_VS_PPP, RelatedSections: []string{NM_SETTING_PPP_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN, RelatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_L2TP, RelatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_L2TP_IPSEC, RelatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_L2TP_PPP, RelatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENCONNECT, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENVPN, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENVPN_SECURITY, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENVPN_TLSAUTH, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENVPN_PROXIES, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_OPENVPN_ADVANCED, RelatedSections: []string{NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_PPTP, RelatedSections: []string{NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_PPTP_PPP, RelatedSections: []string{NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_VPNC, RelatedSections: []string{NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME}},
-	{Value: NM_SETTING_VS_VPN_VPNC_ADVANCED, RelatedSections: []string{NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME}},
-	{Value: NM_SETTING_VS_IPV4, RelatedSections: []string{NM_SETTING_IP4_CONFIG_SETTING_NAME}},
-	{Value: NM_SETTING_VS_IPV6, RelatedSections: []string{NM_SETTING_IP6_CONFIG_SETTING_NAME}},
+func generalGetSettingAvailableKeys(data connectionData, section string) (keys []string) {
+	if isVirtualSection(section) {
+		keys = generalGetSettingVsectionAvailableKeys(data, section)
+		return
+	}
+	switch section {
+	case NM_SETTING_802_1X_SETTING_NAME:
+		keys = getSetting8021xAvailableKeys(data)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		keys = getSettingCdmaAvailableKeys(data)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		keys = getSettingConnectionAvailableKeys(data)
+	case NM_SETTING_GSM_SETTING_NAME:
+		keys = getSettingGsmAvailableKeys(data)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		keys = getSettingIp4ConfigAvailableKeys(data)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		keys = getSettingIp6ConfigAvailableKeys(data)
+	case NM_SETTING_PPP_SETTING_NAME:
+		keys = getSettingPppAvailableKeys(data)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		keys = getSettingPppoeAvailableKeys(data)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		keys = getSettingSerialAvailableKeys(data)
+	case NM_SETTING_VPN_SETTING_NAME:
+		keys = getSettingVpnAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		keys = getSettingVpnL2tpAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		keys = getSettingVpnL2tpPppAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		keys = getSettingVpnL2tpIpsecAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		keys = getSettingVpnOpenconnectAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		keys = getSettingVpnOpenvpnAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		keys = getSettingVpnOpenvpnAdvancedAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		keys = getSettingVpnOpenvpnSecurityAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		keys = getSettingVpnOpenvpnTlsauthAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		keys = getSettingVpnOpenvpnProxiesAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		keys = getSettingVpnPptpAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		keys = getSettingVpnPptpPppAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		keys = getSettingVpnVpncAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		keys = getSettingVpnVpncAdvancedAvailableKeys(data)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		keys = getSettingWiredAvailableKeys(data)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		keys = getSettingWirelessAvailableKeys(data)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		keys = getSettingWirelessSecurityAvailableKeys(data)
+	}
+	return
+}
+
+func generalGetSettingAvailableValues(data connectionData, section, key string) (values []kvalue) {
+	if isVirtualKey(section, key) {
+		values = generalGetSettingVkeyAvailableValues(data, section, key)
+		return
+	}
+	switch section {
+	case NM_SETTING_802_1X_SETTING_NAME:
+		values = getSetting8021xAvailableValues(data, key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		values = getSettingCdmaAvailableValues(data, key)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		values = getSettingConnectionAvailableValues(data, key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		values = getSettingGsmAvailableValues(data, key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		values = getSettingIp4ConfigAvailableValues(data, key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		values = getSettingIp6ConfigAvailableValues(data, key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		values = getSettingPppAvailableValues(data, key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		values = getSettingPppoeAvailableValues(data, key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		values = getSettingSerialAvailableValues(data, key)
+	case NM_SETTING_VPN_SETTING_NAME:
+		values = getSettingVpnAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		values = getSettingVpnL2tpAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		values = getSettingVpnL2tpPppAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		values = getSettingVpnL2tpIpsecAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		values = getSettingVpnOpenconnectAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		values = getSettingVpnOpenvpnAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		values = getSettingVpnOpenvpnAdvancedAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		values = getSettingVpnOpenvpnSecurityAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		values = getSettingVpnOpenvpnTlsauthAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		values = getSettingVpnOpenvpnProxiesAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		values = getSettingVpnPptpAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		values = getSettingVpnPptpPppAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		values = getSettingVpnVpncAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		values = getSettingVpnVpncAdvancedAvailableValues(data, key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		values = getSettingWiredAvailableValues(data, key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		values = getSettingWirelessAvailableValues(data, key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		values = getSettingWirelessSecurityAvailableValues(data, key)
+	}
+	return
+}
+
+func generalCheckSettingValues(data connectionData, section string) (errs sectionErrors) {
+	if isVirtualSection(section) {
+		return
+	}
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		errs = checkSetting8021xValues(data)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		errs = checkSettingCdmaValues(data)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		errs = checkSettingConnectionValues(data)
+	case NM_SETTING_GSM_SETTING_NAME:
+		errs = checkSettingGsmValues(data)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		errs = checkSettingIp4ConfigValues(data)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		errs = checkSettingIp6ConfigValues(data)
+	case NM_SETTING_PPP_SETTING_NAME:
+		errs = checkSettingPppValues(data)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		errs = checkSettingPppoeValues(data)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		errs = checkSettingSerialValues(data)
+	case NM_SETTING_VPN_SETTING_NAME:
+		errs = checkSettingVpnValues(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		errs = checkSettingVpnL2tpValues(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		errs = checkSettingVpnL2tpPppValues(data)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		errs = checkSettingVpnL2tpIpsecValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		errs = checkSettingVpnOpenconnectValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnAdvancedValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnSecurityValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnTlsauthValues(data)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		errs = checkSettingVpnOpenvpnProxiesValues(data)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		errs = checkSettingVpnPptpValues(data)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		errs = checkSettingVpnPptpPppValues(data)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		errs = checkSettingVpnVpncValues(data)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		errs = checkSettingVpnVpncAdvancedValues(data)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		errs = checkSettingWiredValues(data)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		errs = checkSettingWirelessValues(data)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		errs = checkSettingWirelessSecurityValues(data)
+	}
+	return
+}
+
+func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJSON string) {
+	if isVirtualKey(section, key) {
+		valueJSON = generalGetVkeyJSON(data, section, key)
+		return
+	}
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		valueJSON = generalGetSetting8021xKeyJSON(data, key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		valueJSON = generalGetSettingCdmaKeyJSON(data, key)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		valueJSON = generalGetSettingConnectionKeyJSON(data, key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		valueJSON = generalGetSettingGsmKeyJSON(data, key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		valueJSON = generalGetSettingIp4ConfigKeyJSON(data, key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		valueJSON = generalGetSettingIp6ConfigKeyJSON(data, key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		valueJSON = generalGetSettingPppKeyJSON(data, key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		valueJSON = generalGetSettingPppoeKeyJSON(data, key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		valueJSON = generalGetSettingSerialKeyJSON(data, key)
+	case NM_SETTING_VPN_SETTING_NAME:
+		valueJSON = generalGetSettingVpnKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpPppKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		valueJSON = generalGetSettingVpnL2tpIpsecKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenconnectKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnAdvancedKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnSecurityKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnTlsauthKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		valueJSON = generalGetSettingVpnOpenvpnProxiesKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnPptpKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		valueJSON = generalGetSettingVpnPptpPppKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		valueJSON = generalGetSettingVpnVpncKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		valueJSON = generalGetSettingVpnVpncAdvancedKeyJSON(data, key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		valueJSON = generalGetSettingWiredKeyJSON(data, key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		valueJSON = generalGetSettingWirelessKeyJSON(data, key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		valueJSON = generalGetSettingWirelessSecurityKeyJSON(data, key)
+	}
+	return
+}
+
+func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON string) (err error) {
+	if isVirtualKey(section, key) {
+		err = generalSetVkeyJSON(data, section, key, valueJSON)
+		return
+	}
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		err = generalSetSetting8021xKeyJSON(data, key, valueJSON)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		err = generalSetSettingCdmaKeyJSON(data, key, valueJSON)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		err = generalSetSettingConnectionKeyJSON(data, key, valueJSON)
+	case NM_SETTING_GSM_SETTING_NAME:
+		err = generalSetSettingGsmKeyJSON(data, key, valueJSON)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		err = generalSetSettingIp4ConfigKeyJSON(data, key, valueJSON)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		err = generalSetSettingIp6ConfigKeyJSON(data, key, valueJSON)
+	case NM_SETTING_PPP_SETTING_NAME:
+		err = generalSetSettingPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		err = generalSetSettingPppoeKeyJSON(data, key, valueJSON)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		err = generalSetSettingSerialKeyJSON(data, key, valueJSON)
+	case NM_SETTING_VPN_SETTING_NAME:
+		err = generalSetSettingVpnKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		err = generalSetSettingVpnL2tpKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		err = generalSetSettingVpnL2tpPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		err = generalSetSettingVpnL2tpIpsecKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		err = generalSetSettingVpnOpenconnectKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		err = generalSetSettingVpnOpenvpnKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		err = generalSetSettingVpnOpenvpnAdvancedKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		err = generalSetSettingVpnOpenvpnSecurityKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		err = generalSetSettingVpnOpenvpnTlsauthKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		err = generalSetSettingVpnOpenvpnProxiesKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		err = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		err = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		err = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		err = generalSetSettingVpnVpncAdvancedKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		err = generalSetSettingWiredKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		err = generalSetSettingWirelessKeyJSON(data, key, valueJSON)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		err = generalSetSettingWirelessSecurityKeyJSON(data, key, valueJSON)
+	}
+	return
+}
+
+func generalGetSettingDefaultValue(section, key string) (value interface{}) {
+	switch section {
+	default:
+		logger.Error("invalid section name", section)
+	case NM_SETTING_802_1X_SETTING_NAME:
+		value = getSetting8021xDefaultValue(key)
+	case NM_SETTING_CDMA_SETTING_NAME:
+		value = getSettingCdmaDefaultValue(key)
+	case NM_SETTING_CONNECTION_SETTING_NAME:
+		value = getSettingConnectionDefaultValue(key)
+	case NM_SETTING_GSM_SETTING_NAME:
+		value = getSettingGsmDefaultValue(key)
+	case NM_SETTING_IP4_CONFIG_SETTING_NAME:
+		value = getSettingIp4ConfigDefaultValue(key)
+	case NM_SETTING_IP6_CONFIG_SETTING_NAME:
+		value = getSettingIp6ConfigDefaultValue(key)
+	case NM_SETTING_PPP_SETTING_NAME:
+		value = getSettingPppDefaultValue(key)
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		value = getSettingPppoeDefaultValue(key)
+	case NM_SETTING_SERIAL_SETTING_NAME:
+		value = getSettingSerialDefaultValue(key)
+	case NM_SETTING_VPN_SETTING_NAME:
+		value = getSettingVpnDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
+		value = getSettingVpnL2tpDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
+		value = getSettingVpnL2tpPppDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
+		value = getSettingVpnL2tpIpsecDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
+		value = getSettingVpnOpenconnectDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
+		value = getSettingVpnOpenvpnDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
+		value = getSettingVpnOpenvpnAdvancedDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
+		value = getSettingVpnOpenvpnSecurityDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
+		value = getSettingVpnOpenvpnTlsauthDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
+		value = getSettingVpnOpenvpnProxiesDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
+		value = getSettingVpnPptpDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		value = getSettingVpnPptpPppDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
+		value = getSettingVpnVpncDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
+		value = getSettingVpnVpncAdvancedDefaultValue(key)
+	case NM_SETTING_WIRED_SETTING_NAME:
+		value = getSettingWiredDefaultValue(key)
+	case NM_SETTING_WIRELESS_SETTING_NAME:
+		value = getSettingWirelessDefaultValue(key)
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		value = getSettingWirelessSecurityDefaultValue(key)
+	}
+	return
 }
 
 // Origin file name ../nm_setting_802_1x_gen.go

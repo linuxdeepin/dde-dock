@@ -91,8 +91,9 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// initialize slice code
+// initialize slice code manually to make i18n works
 func initSlices() {
+	initVirtualSections()
 	initProxyGsettings()
 	initAvailableValuesSecretFlags()
 	initAvailableValuesNmPptpSecretFlags()

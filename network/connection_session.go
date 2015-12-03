@@ -312,6 +312,22 @@ func (s *ConnectionSession) Close() {
 	manager.removeConnectionSession(s)
 }
 
+// GetAllKeys return all may used section key information in current session.
+func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
+	allVsectionInfo := make([]vsectionInfo, 0)
+	vsections := getAllVsections(s.data)
+	for _, vsection := range vsections {
+		if sectionInfo, ok := virtualSections[vsection]; ok {
+			sectionInfo.Expanded = isVsectionExpandedDefault(s.data, vsection)
+			allVsectionInfo = append(allVsectionInfo, sectionInfo)
+		} else {
+			logger.Errorf("get virtaul section info failed: %s", allVsectionInfo)
+		}
+	}
+	infoJSON, _ = marshalJSON(allVsectionInfo)
+	return
+}
+
 // GetAvailableValues return available values marshaled by json for target key.
 func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
 	var values []kvalue
@@ -399,13 +415,14 @@ func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 }
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, vsection := range s.AvailableVirtualSections {
-		for _, section := range getRelatedSectionsOfVsection(s.data, vsection) {
+		for _, section := range getAvailableSectionsOfVsection(s.data, vsection) {
 			sectionKeys, ok := s.AvailableKeys[section]
 			if !ok {
 				logger.Warning("no available keys for section", section)
 				continue
 			}
 			for _, key := range sectionKeys {
+				// TODO: remove?
 				// section := getSectionOfKeyInVsection(s.data, vsection, key)
 				t := generalGetSettingKeyType(section, key)
 				if values := generalGetSettingAvailableValues(s.data, section, key); len(values) > 0 {

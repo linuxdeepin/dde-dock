@@ -170,6 +170,42 @@ func ToKeyValue(keyName string) (keyValue string) {
 	return
 }
 
+func ToKeyAlwaysUpdate(keyName string) (alwaysUpdate bool) {
+	if isVk(keyName) {
+		alwaysUpdate = getVkInfo(keyName).AlwaysUpdate
+	} else {
+		alwaysUpdate = getKeyInfo(keyName).AlwaysUpdate
+	}
+	return
+}
+
+func ToKeyUseValueRange(keyName string) (useValueRange bool) {
+	if isVk(keyName) {
+		useValueRange = getVkInfo(keyName).UseValueRange
+	} else {
+		useValueRange = getKeyInfo(keyName).UseValueRange
+	}
+	return
+}
+
+func ToKeyMinValue(keyName string) (minValue int) {
+	if isVk(keyName) {
+		minValue = getVkInfo(keyName).MinValue
+	} else {
+		minValue = getKeyInfo(keyName).MinValue
+	}
+	return
+}
+
+func ToKeyMaxValue(keyName string) (maxValue int) {
+	if isVk(keyName) {
+		maxValue = getVkInfo(keyName).MaxValue
+	} else {
+		maxValue = getKeyInfo(keyName).MaxValue
+	}
+	return
+}
+
 // "NM_SETTING_802_1X_EAP" -> "802-1x", "NM_SETTING_VS_GENERAL" -> "<none>"
 func ToKeyRelatedSectionValue(keyName string) (sectionValue string) {
 	if isVk(keyName) {
