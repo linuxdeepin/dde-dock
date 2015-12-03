@@ -1,3 +1,7 @@
+#include <QLabel>
+#include <QPixmap>
+#include <QEvent>
+#include <QFile>
 #include <QDebug>
 
 #include "interfaces/dockconstants.h"
@@ -10,9 +14,15 @@ static const int Margins = 4;
 static const int ColumnWidth = 20;
 
 CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
-    QFrame(parent)
+    QFrame(parent),
+    m_isCovered(true)
 {
     resize(1, 1);
+
+    m_cover = new QLabel(this);
+    m_cover->setFixedSize(48, 48);
+    m_cover->setPixmap(QPixmap(":/images/darea_cover.svg"));
+    m_cover->move(QPoint(0, 0));
 }
 
 CompositeTrayItem::~CompositeTrayItem()
@@ -73,6 +83,37 @@ QStringList CompositeTrayItem::trayIds() const
     return m_icons.keys();
 }
 
+void CompositeTrayItem::coverOn()
+{
+    m_cover->raise();
+    m_cover->setVisible(true);
+}
+
+void CompositeTrayItem::coverOff()
+{
+    m_cover->lower();
+    m_cover->setVisible(false);
+}
+
+void CompositeTrayItem::enterEvent(QEvent * event)
+{
+    coverOff();
+
+    QFrame::enterEvent(event);
+}
+
+void CompositeTrayItem::leaveEvent(QEvent * event)
+{
+    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    QRect globalGeometry(globalPos, size());
+
+    if (!globalGeometry.contains(QCursor::pos())) {
+        coverOn();
+    }
+
+    QFrame::leaveEvent(event);
+}
+
 void CompositeTrayItem::relayout()
 {
     uint childrenCount = m_icons.keys().length();
@@ -120,5 +161,12 @@ void CompositeTrayItem::relayout()
             icon->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
             icon->show();
         }
+    }
+
+    if (m_isCovered) {
+        m_cover->raise();
+        m_cover->show();
+    } else {
+        m_cover->hide();
     }
 }

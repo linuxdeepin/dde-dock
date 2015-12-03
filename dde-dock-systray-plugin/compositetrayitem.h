@@ -7,6 +7,7 @@
 #include "interfaces/dockconstants.h"
 
 class TrayIcon;
+class QLabel;
 class CompositeTrayItem : public QFrame
 {
     Q_OBJECT
@@ -23,10 +24,19 @@ public:
     QStringList trayIds() const;
     Dock::DockMode mode() const;
 
+    void coverOn();
+    void coverOff();
+
+protected:
+    void enterEvent(QEvent *) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *) Q_DECL_OVERRIDE;
+
 private:
     Dock::DockMode m_mode;
     QMap<QString, TrayIcon*> m_icons;
     QPixmap m_itemMask;
+    QLabel * m_cover;
+    bool m_isCovered;
 
     void relayout();
 };

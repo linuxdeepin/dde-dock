@@ -6,5 +6,9 @@
         <file>images/darea_container_10.svg</file>
         <file>images/darea_container_12.svg</file>
         <file>images/darea_cover.svg</file>
+        <file>images/fold-button-normal.png</file>
+        <file>images/fold-button-press.png</file>
+        <file>images/unfold-button-normal.png</file>
+        <file>images/unfold-button-press.png</file>
     </qresource>
 </RCC>
