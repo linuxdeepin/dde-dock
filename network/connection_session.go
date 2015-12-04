@@ -279,6 +279,13 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		// create new connection and activate it
 		// TODO vpn ad-hoc hotspot
 		connectionType := getCustomConnectionType(s.data)
+
+		// keep ID same with SSID for wireless connections
+		switch connectionType {
+		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+			setSettingConnectionId(s.data, string(getSettingWirelessSsid(s.data)))
+		}
+
 		switch connectionType {
 		case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 			nmAddAndActivateConnection(s.data, s.devPath)
