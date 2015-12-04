@@ -103,18 +103,8 @@ func (d *device) notifyDevicePropertiesChanged() {
 }
 
 func (d *device) connectProperties() {
-	d.bluezDevice.Connected.ConnectChanged(func() {
-		d.connected = d.bluezDevice.Connected.Get()
-		if d.oldConnected != d.connected {
-			d.oldConnected = d.connected
-			if d.connected {
-				notifyBluetoothConnected(d.Alias)
-			} else {
-				notifyBluetoothDisconnected(d.Alias)
-			}
-		}
-		d.notifyStateChanged()
-	})
+	d.bluezDevice.Connected.ConnectChanged(d.handleConnected)
+
 	d.bluezDevice.Name.ConnectChanged(func() {
 		d.Name = d.bluezDevice.Name.Get()
 		d.notifyDevicePropertiesChanged()
@@ -157,6 +147,18 @@ func (d *device) connectProperties() {
 		d.notifyDevicePropertiesChanged()
 		bluetooth.setPropDevices()
 	})
+}
+func (d *device) handleConnected() {
+	d.connected = d.bluezDevice.Connected.Get()
+	if d.oldConnected != d.connected {
+		d.oldConnected = d.connected
+		if d.connected {
+			notifyBluetoothConnected(d.Alias)
+		} else {
+			notifyBluetoothDisconnected(d.Alias)
+		}
+	}
+	d.notifyStateChanged()
 }
 func (d *device) notifyConnectFailed() {
 	notifyBluetoothConnectFailed(d.Alias)
@@ -272,6 +274,8 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	d.notifyStateChanged()
 
 	go func() {
+		d.bluezDevice.Connected.Reset()
+		defer d.bluezDevice.Connected.ConnectChanged(d.handleConnected)
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
@@ -296,15 +300,13 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 			logger.Warning("ConnectDevice failed:", dpath, err)
 			if err.Error() == bluezErrorInvalidKey.Error() || !d.Paired {
 				// we do not want to pop notify for device because we will remove it.
-				d.bluezDevice.Connected.Reset()
-				d.connected = d.bluezDevice.Connected.Get()
-				d.oldConnected = d.connected
 				bluezRemoveDevice(d.AdapterPath, d.Path)
 				d.notifyIgnored()
 				return
 			}
 			d.notifyConnectFailed()
 		}
+		d.handleConnected()
 
 		if d.connecting {
 			d.connecting = false
