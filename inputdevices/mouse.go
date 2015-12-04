@@ -100,7 +100,9 @@ func (m *Mouse) init() {
 	m.enableNaturalScroll()
 	m.motionAcceleration()
 	m.motionThreshold()
-	m.disableTouchpad()
+	if m.DisableTpad.Get() {
+		m.disableTouchpad()
+	}
 }
 
 func (m *Mouse) handleDeviceChanged() {

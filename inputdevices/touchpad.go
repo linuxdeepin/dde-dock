@@ -184,7 +184,7 @@ func (tpad *Touchpad) enable(enabled bool) {
 	for _, v := range tpad.dxTPads {
 		err := v.Enable(enabled)
 		if err != nil {
-			logger.Debugf("Enable '%v - %v' failed: %v",
+			logger.Warningf("Enable '%v - %v' failed: %v",
 				v.Id, v.Name, err)
 		}
 	}
