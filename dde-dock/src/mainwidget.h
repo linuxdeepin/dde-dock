@@ -33,7 +33,6 @@ protected:
     void leaveEvent(QEvent *);
 
 private:
-    void showDock();
     void hideDock();
     void onPanelSizeChanged();
     void onDockModeChanged();
@@ -42,6 +41,7 @@ private:
     void initDockSetting();
 
 private slots:
+    void showDock();
     void updatePosition();
 
 private:

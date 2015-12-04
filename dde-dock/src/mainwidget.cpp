@@ -57,7 +57,7 @@ void MainWidget::updatePosition()
                    rec.y + rec.height - this->height());
     }
 
-    qDebug() << "Position changed: " << this->geometry();
+//    qDebug() << "Position changed: " << this->geometry();
     updateXcbStructPartial();
 }
 
@@ -93,7 +93,7 @@ void MainWidget::initDockSetting()
 void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
-        QTimer::singleShot(ENTER_DELAY_INTERVAL, this, &MainWidget::showDock);
+        QTimer::singleShot(ENTER_DELAY_INTERVAL, this, SLOT(showDock()));
     }
 }
 
