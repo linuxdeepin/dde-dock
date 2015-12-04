@@ -4,8 +4,6 @@
 #include <QTimer>
 #include <QDebug>
 
-#include "interfaces/dockconstants.h"
-
 #include "trayicon.h"
 #include "compositetrayitem.h"
 
@@ -15,9 +13,11 @@ static const int ColumnWidth = 20;
 
 CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
     QFrame(parent),
-    m_isCovered(true)
+    m_isCovered(true),
+    m_isFolded(false)
 {
     resize(1, 1);
+    setObjectName("CompositeItem");
 
     m_cover = new QLabel(this);
     m_cover->setFixedSize(48, 48);
@@ -28,7 +28,30 @@ CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
     m_coverTimer->setInterval(500);
     m_coverTimer->setSingleShot(true);
 
-    connect(m_coverTimer, &QTimer::timeout, this, &CompositeTrayItem::coverOn);
+    m_updateTimer = new QTimer(this);
+    m_updateTimer->setInterval(500);
+    m_updateTimer->setSingleShot(false);
+    m_updateTimer->start();
+
+
+    m_foldButton = new DImageButton(":/images/fold-button-normal.svg",
+                                    ":/images/fold-button-hover.svg",
+                                    ":/images/fold-button-press.svg",
+                                    this);
+    m_foldButton->setFixedSize(18, 18);
+    m_foldButton->hide();
+
+    m_unfoldButton = new DImageButton(":/images/unfold-button-normal.svg",
+                                      ":/images/unfold-button-hover.svg",
+                                      ":/images/unfold-button-press.svg",
+                                      this);
+    m_unfoldButton->setFixedSize(18, 18);
+    m_unfoldButton->hide();
+
+    connect(m_coverTimer, &QTimer::timeout, this, &CompositeTrayItem::tryCoverOn);
+    connect(m_updateTimer, &QTimer::timeout, this, &CompositeTrayItem::handleUpdateTimer);
+    connect(m_foldButton, &DImageButton::clicked, this, &CompositeTrayItem::fold);
+    connect(m_unfoldButton, &DImageButton::clicked, this, &CompositeTrayItem::unfold);
 }
 
 CompositeTrayItem::~CompositeTrayItem()
@@ -91,48 +114,84 @@ QStringList CompositeTrayItem::trayIds() const
 
 void CompositeTrayItem::coverOn()
 {
+    m_coverTimer->stop();
+
     m_cover->raise();
     m_cover->setVisible(true);
+    m_isCovered = true;
 }
 
 void CompositeTrayItem::coverOff()
 {
     m_cover->lower();
     m_cover->setVisible(false);
+    m_isCovered = false;
 
     m_coverTimer->start();
+}
+
+void CompositeTrayItem::tryCoverOn()
+{
+    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    QRect globalGeometry(globalPos, size());
+
+    if (!globalGeometry.contains(QCursor::pos()) &&
+        (m_icons.keys().length() <= 4 || m_isFolded))
+    {
+        coverOn();
+    }
 }
 
 void CompositeTrayItem::handleTrayiconDamage()
 {
     m_coverTimer->stop();
-    coverOff();
+    m_coverTimer->start();
+
+    unfold();
 
     QList<TrayIcon*> items = m_icons.values();
     for (int i = 0; i < items.length(); i++) {
         TrayIcon * icon = items.at(i);
         icon->updateIcon();
-        icon->show();
+    }
+}
+
+void CompositeTrayItem::handleUpdateTimer()
+{
+    QList<TrayIcon*> items = m_icons.values();
+    for (int i = 0; i < items.length(); i++) {
+        TrayIcon * icon = items.at(i);
+        icon->updateIcon();
     }
 }
 
 void CompositeTrayItem::enterEvent(QEvent * event)
 {
-    m_coverTimer->start();
+    coverOff();
 
     QFrame::enterEvent(event);
 }
 
 void CompositeTrayItem::leaveEvent(QEvent * event)
 {
-    QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    QRect globalGeometry(globalPos, size());
-
-    if (!globalGeometry.contains(QCursor::pos())) {
-        coverOn();
-    }
+    tryCoverOn();
 
     QFrame::leaveEvent(event);
+}
+
+void CompositeTrayItem::fold()
+{
+    m_isFolded = true;
+
+    relayout();
+}
+
+void CompositeTrayItem::unfold()
+{
+    m_isFolded = false;
+
+    coverOff();
+    relayout();
 }
 
 void CompositeTrayItem::relayout()
@@ -152,14 +211,31 @@ void CompositeTrayItem::relayout()
         columnCount = 6;
     }
 
+    QList<TrayIcon*> items = m_icons.values();
+    for (int i = 0; i < items.length(); i++) {
+        TrayIcon * icon = items.at(i);
+        icon->hideIcon();
+    }
+
     if (m_mode == Dock::FashionMode) {
-        QString style = QString("QFrame { background-image: url(':/images/darea_container_%1.svg') }").arg(columnCount * 2);
+        if (m_isFolded) {
+            columnCount = 2;
+        } else if (columnCount > 2 && childrenCount % 2 == 0) {
+            columnCount += 1;
+        }
+
+        QString style = QString("QFrame#CompositeItem { background-image: url(':/images/darea_container_%1.svg') }").arg(columnCount * 2);
         setStyleSheet(style);
 
         resize(Margins * 2 + ColumnWidth * columnCount, 48);
 
         QList<TrayIcon*> items = m_icons.values();
-        for (int i = 0; i < items.length(); i++) {
+        int placesCount = items.length();
+        if (m_isFolded) {
+            placesCount = 3;
+        }
+
+        for (int i = 0; i < placesCount; i++) {
             TrayIcon * icon = items.at(i);
             icon->maskOn();
 
@@ -167,7 +243,30 @@ void CompositeTrayItem::relayout()
             int y = i / columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
 
             icon->move(x, y);
+            icon->updateIcon();
             icon->show();
+        }
+
+        if (columnCount > 2) {
+            m_foldButton->move((columnCount - 1) * ColumnWidth + Margins + (ColumnWidth - 16) / 2,
+                               ColumnWidth + Margins + (ColumnWidth - 16) / 2);
+            m_foldButton->show();
+            m_unfoldButton->hide();
+        } else if (m_isFolded) {
+            m_unfoldButton->move((columnCount - 1) * ColumnWidth + Margins + (ColumnWidth - 16) / 2,
+                                 ColumnWidth + Margins + (ColumnWidth - 16) / 2);
+            m_unfoldButton->show();
+            m_foldButton->hide();
+        } else {
+            m_foldButton->hide();
+            m_unfoldButton->hide();
+        }
+
+        if (m_isCovered) {
+            m_cover->raise();
+            m_cover->show();
+        } else {
+            m_cover->hide();
         }
     } else {
         setStyleSheet("");
@@ -180,14 +279,10 @@ void CompositeTrayItem::relayout()
             icon->maskOff();
 
             icon->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
+            icon->updateIcon();
             icon->show();
         }
     }
 
-    if (m_isCovered) {
-        m_cover->raise();
-        m_cover->show();
-    } else {
-        m_cover->hide();
-    }
+    emit relayouted();
 }

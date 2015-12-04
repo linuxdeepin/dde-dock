@@ -37,6 +37,7 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
     connect(entryManager, &DBusEntryManager::TrayInited, this, &SystrayPlugin::onTrayInit);
 
     initTrayIcons();
+    connect(m_compositeItem, &CompositeTrayItem::relayouted, this, &SystrayPlugin::onCompositeItemRelayout);
 }
 
 QString SystrayPlugin::getPluginName()
@@ -165,4 +166,9 @@ void SystrayPlugin::onTrayIconsChanged()
 void SystrayPlugin::onTrayInit()
 {
 
+}
+
+void SystrayPlugin::onCompositeItemRelayout()
+{
+    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }

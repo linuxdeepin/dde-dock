@@ -16,6 +16,7 @@ public:
     void maskOn();
     void maskOff();
 
+    void hideIcon();
     void updateIcon();
 
 protected:
@@ -26,6 +27,7 @@ private:
     WId m_windowId;
     WId m_containerWid;
     bool m_masked;
+    bool m_hided;
 
     void wrapWindow();
     QImage getImageNonComposite();

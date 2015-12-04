@@ -5,6 +5,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPainterPath>
+#include <QTimer>
 #include <QDebug>
 #include <QMouseEvent>
 
@@ -26,7 +27,6 @@ TrayIcon::TrayIcon(WId winId, QWidget *parent) :
     QFrame(parent),
     m_windowId(winId)
 {
-    setAttribute(Qt::WA_TranslucentBackground);
     resize(s_embedSize, s_embedSize);
 
     wrapWindow();
@@ -188,8 +188,25 @@ void TrayIcon::wrapWindow()
     xcb_flush(c);
 }
 
+void TrayIcon::hideIcon()
+{
+    auto c = QX11Info::connection();
+
+    const uint32_t stackAboveData[] = {XCB_STACK_MODE_BELOW};
+    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
+
+    const uint32_t windowMoveConfigVals[2] = {0, 0};
+    xcb_configure_window(c, m_containerWid,
+                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
+                         windowMoveConfigVals);
+
+    hide();
+}
+
 void TrayIcon::updateIcon()
 {
+    if (!isVisible()) return;
+
     auto c = QX11Info::connection();
 
     const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};

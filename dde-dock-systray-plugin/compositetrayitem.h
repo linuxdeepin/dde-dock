@@ -4,7 +4,11 @@
 #include <QFrame>
 #include <QMap>
 
+#include <libdui/dimagebutton.h>
+
 #include "interfaces/dockconstants.h"
+
+DUI_USE_NAMESPACE
 
 class TrayIcon;
 class QLabel;
@@ -27,8 +31,12 @@ public:
     void coverOn();
     void coverOff();
 
+signals:
+    void relayouted();
+
 public slots:
     void handleTrayiconDamage();
+    void handleUpdateTimer();
 
 protected:
     void enterEvent(QEvent *) Q_DECL_OVERRIDE;
@@ -40,9 +48,18 @@ private:
     QPixmap m_itemMask;
     QLabel * m_cover;
     QTimer * m_coverTimer;
+    QTimer * m_updateTimer;
+    DImageButton * m_foldButton;
+    DImageButton * m_unfoldButton;
     bool m_isCovered;
+    bool m_isFolded;
 
     void relayout();
+
+private slots:
+    void tryCoverOn();
+    void fold();
+    void unfold();
 };
 
 #endif // COMPOSITETRAYITEM_H
