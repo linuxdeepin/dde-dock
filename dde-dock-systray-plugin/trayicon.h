@@ -3,6 +3,7 @@
 
 #include <QWindow>
 #include <QFrame>
+#include <QImage>
 
 class QPaintEvent;
 class QMouseEvent;
@@ -28,6 +29,8 @@ private:
     WId m_containerWid;
     bool m_masked;
     bool m_hided;
+    QTimer * m_timer;
+    QImage m_image;
 
     void wrapWindow();
     QImage getImageNonComposite();

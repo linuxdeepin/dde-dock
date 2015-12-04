@@ -1,6 +1,5 @@
 #include <QApplication>
 #include <QPainter>
-#include <QBitmap>
 #include <QX11Info>
 #include <QPaintEvent>
 #include <QPainter>
@@ -30,6 +29,11 @@ TrayIcon::TrayIcon(WId winId, QWidget *parent) :
     resize(s_embedSize, s_embedSize);
 
     wrapWindow();
+
+    // prevent the updateIcon function from being executed overly.
+    m_timer = new QTimer(this);
+    m_timer->setInterval(500);
+    m_timer->setSingleShot(true);
 }
 
 TrayIcon::~TrayIcon()
@@ -43,8 +47,12 @@ void TrayIcon::paintEvent(QPaintEvent *)
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QImage img = getImageNonComposite();
-    if (!img.isNull()) {
+    if (!m_timer->isActive()) {
+        m_timer->start();
+        m_image = getImageNonComposite();
+    }
+
+    if (!m_image.isNull()) {
         if (m_masked) {
             QPainterPath path;
             path.addRoundedRect(0, 0, s_embedSize, s_embedSize, s_embedSize / 2, s_embedSize / 2);
@@ -52,7 +60,7 @@ void TrayIcon::paintEvent(QPaintEvent *)
             painter.setClipPath(path);
         }
 
-        painter.drawImage(0, 0, img.scaled(s_embedSize, s_embedSize));
+        painter.drawImage(0, 0, m_image.scaled(s_embedSize, s_embedSize));
     }
 
     painter.end();
@@ -206,6 +214,12 @@ void TrayIcon::hideIcon()
 void TrayIcon::updateIcon()
 {
     if (!isVisible()) return;
+
+    if (m_timer->isActive()) {
+        return;
+    } else {
+        m_timer->start();
+    }
 
     auto c = QX11Info::connection();
 
