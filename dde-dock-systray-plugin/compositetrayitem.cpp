@@ -136,7 +136,8 @@ void CompositeTrayItem::tryCoverOn()
     QRect globalGeometry(globalPos, size());
 
     if (!globalGeometry.contains(QCursor::pos()) &&
-        (m_icons.keys().length() <= 4 || m_isFolded))
+        (m_icons.keys().length() <= 4 || m_isFolded) &&
+        m_mode == Dock::FashionMode)
     {
         coverOn();
     }
@@ -269,6 +270,8 @@ void CompositeTrayItem::relayout()
             m_cover->hide();
         }
     } else {
+        m_cover->hide();
+
         setStyleSheet("");
         resize(childrenCount * Dock::APPLET_CLASSIC_ICON_SIZE + (childrenCount - 1) * Dock::APPLET_CLASSIC_ITEM_SPACING,
                Dock::APPLET_CLASSIC_ICON_SIZE);
