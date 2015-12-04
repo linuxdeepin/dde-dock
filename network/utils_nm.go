@@ -85,7 +85,7 @@ func isNmObjectPathValid(p dbus.ObjectPath) bool {
 
 func isDeviceTypeValid(devType uint32) bool {
 	switch devType {
-	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN:
+	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN, NM_DEVICE_TYPE_BT:
 		return false
 	}
 	return true
