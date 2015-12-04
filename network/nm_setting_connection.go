@@ -52,6 +52,12 @@ func checkSettingConnectionValues(data connectionData) (errs sectionErrors) {
 	// check id
 	ensureSettingConnectionIdNoEmpty(data, errs)
 
+	// ensure id is unique
+	id := getSettingConnectionId(data)
+	if isStringInArray(id, nmGetConnectionIds()) {
+		rememberError(errs, sectionConnection, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_INVALID_VALUE)
+	}
+
 	return
 }
 
