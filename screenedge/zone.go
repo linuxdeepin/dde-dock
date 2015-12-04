@@ -123,19 +123,12 @@ func unregisterZoneArea() {
 }
 
 func execEdgeAction(edge string) {
-	if action, ok := edgeActionMap[edge]; ok {
-		strs := strings.Split(action, " ")
-		l := len(strs)
-		if l < 0 {
-			return
-		}
-
-		argv := []string{}
-		for i := 1; i < l; i++ {
-			argv = append(argv, strs[i])
-		}
-		go exec.Command(strs[0], argv...).Run()
+	action, ok := edgeActionMap[edge]
+	if !ok {
+		return
 	}
+
+	go exec.Command("/bin/sh", "-c", action).Run()
 }
 
 func isInArea(x, y int32, area areaRange) bool {
@@ -211,7 +204,12 @@ type edgeTimer struct {
 }
 
 func (eTimer *edgeTimer) DoAction(edge string, timeout int32) {
-	if timeout == 0 {
+	action, ok := edgeActionMap[edge]
+	if !ok {
+		return
+	}
+
+	if !strings.Contains(action, "com.deepin.dde.ControlCenter") {
 		execEdgeAction(edge)
 		return
 	}
