@@ -1,3 +1,5 @@
+#include <QResizeEvent>
+
 #include "abstractdockitem.h"
 #include "dbus/dbusdisplay.h"
 
@@ -275,4 +277,11 @@ void AbstractDockItem::initHighlight()
 void AbstractDockItem::initTitleLabel()
 {
     m_titleLabel = new ItemTitleLabel;
+}
+
+void AbstractDockItem::resizeEvent(QResizeEvent * event)
+{
+    m_highlight->repaint();
+
+    QFrame::resizeEvent(event);
 }

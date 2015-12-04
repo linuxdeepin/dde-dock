@@ -92,6 +92,8 @@ protected:
     void initHighlight();
     void initTitleLabel();
 
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
+
 private:
     const int TITLE_HEIGHT = 20;
     const int CONTENT_PREVIEW_INTERVAL = 200;
