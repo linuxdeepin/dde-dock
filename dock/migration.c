@@ -387,8 +387,13 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
     cmdline[length] = NULL;
 
 #ifndef NDEBUG
-    for (int i = 0; cmdline[i] != NULL; ++i) {
-        g_debug("cmd[%d]: %s", i, cmdline[i]);
+    {
+        // avoid multi-defined in gcc-go.
+        // avoid not support c99.
+        int i = 0;
+        for (; cmdline[i] != NULL; ++i) {
+            g_debug("cmd[%d]: %s", i, cmdline[i]);
+        }
     }
 #endif
 
