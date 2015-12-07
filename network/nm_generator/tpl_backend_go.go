@@ -40,15 +40,15 @@ const ({{range .}}
 )
 
 // Virtual section data
-var virtualSections = make(map[string]vsectionInfo)
+var virtualSections = make(map[string]VsectionInfo)
 
 func initVirtualSections() { {{range .}}
-	virtualSections[{{.Name}}] = vsectionInfo{
+	virtualSections[{{.Name}}] = VsectionInfo{
 		VirtualSection:{{.Name}},
 		relatedSections:[]string{ {{range $s := .RelatedSections}}{{$s}},{{end}} },
 		Name: Tr("{{.DisplayName}}"),
-		Keys: []generalKeyInfo { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}
-			{Section:"{{$key | ToKeyRelatedSectionValue}}", Key:"{{$key | ToKeyValue}}", Name:Tr("{{$key | ToKeyDisplayName}}"), WidgetType:"{{$key | ToFrontEndWidget}}", AlwaysUpdate:{{$key | ToKeyAlwaysUpdate}}, UseValueRange:{{$key | ToKeyUseValueRange}}, MinValue:{{$key | ToKeyMinValue}}, MaxValue:{{$key | ToKeyMaxValue}} }, {{end}}{{end}}
+		Keys: []*GeneralKeyInfo { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}
+			&GeneralKeyInfo{Section:"{{$key | ToKeyRelatedSectionValue}}", Key:"{{$key | ToKeyValue}}", Name:Tr("{{$key | ToKeyDisplayName}}"), WidgetType:"{{$key | ToFrontEndWidget}}", AlwaysUpdate:{{$key | ToKeyAlwaysUpdate}}, UseValueRange:{{$key | ToKeyUseValueRange}}, MinValue:{{$key | ToKeyMinValue}}, MaxValue:{{$key | ToKeyMaxValue}} }, {{end}}{{end}}
 		},
 	}{{end}}
 }

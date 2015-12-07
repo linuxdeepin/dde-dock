@@ -151,7 +151,7 @@ func (m *Manager) removeAccessPoint(devPath, apPath dbus.ObjectPath) {
 
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
-	logger.Info("remove access point", devPath, apPath)
+	logger.Debug("remove access point", devPath, apPath)
 	m.accessPoints[devPath] = m.doRemoveAccessPoint(m.accessPoints[devPath], i)
 }
 func (m *Manager) doRemoveAccessPoint(aps []*accessPoint, i int) []*accessPoint {

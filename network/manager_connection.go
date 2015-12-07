@@ -282,7 +282,7 @@ func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, act
 		exists = true
 		return
 	}
-	// connection id will be reset when setup plan, so here just give
+	// connection id will be reset when setting up plans, so here just give
 	// an optional name like "mobile"
 	cpath, err = newMobileConnectionForDevice("mobile", uuid, modemDevPath, active)
 	return

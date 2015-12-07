@@ -314,11 +314,14 @@ func (s *ConnectionSession) Close() {
 
 // GetAllKeys return all may used section key information in current session.
 func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
-	allVsectionInfo := make([]vsectionInfo, 0)
+	allVsectionInfo := make([]VsectionInfo, 0)
 	vsections := getAllVsections(s.data)
 	for _, vsection := range vsections {
 		if sectionInfo, ok := virtualSections[vsection]; ok {
-			sectionInfo.Expanded = isVsectionExpandedDefault(s.data, vsection)
+			sectionInfo.fixExpanded(s.data)
+			for _, keyInfo := range sectionInfo.Keys {
+				keyInfo.fixReadonly(s.data)
+			}
 			allVsectionInfo = append(allVsectionInfo, sectionInfo)
 		} else {
 			logger.Errorf("get virtaul section info failed: %s", allVsectionInfo)

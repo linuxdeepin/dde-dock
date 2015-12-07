@@ -40,16 +40,20 @@ func init() {
 func (*testWrapper) TestMain(c *C.C) {
 	fmt.Println("Start service...")
 
-	manager = NewManager()
-	err := dbus.InstallOnSession(manager)
-	if err != nil {
-		logger.Error("register dbus interface failed: ", err)
-		manager = nil
-		os.Exit(1)
-	}
+	InitI18n()
+	Textdomain("dde-daemon")
 
-	// initialize manager after dbus installed
-	manager.initManager()
+	daemon := NewDaemon(logger)
+	daemon.Start()
+
+	// manager = NewManager()
+	// err := dbus.InstallOnSession(manager)
+	// if err != nil {
+	// 	logger.Error("register dbus interface failed: ", err)
+	// 	manager = nil
+	// 	os.Exit(1)
+	// }
+	// manager.initManager() // initialize manager after dbus installed
 
 	dbus.DealWithUnhandledMessage()
 	if err := dbus.Wait(); err != nil {

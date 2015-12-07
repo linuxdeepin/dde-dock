@@ -105,22 +105,52 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// Virtual sections, used by front-end
-type vsectionInfo struct {
+// VsectionInfo defines virtual section, used by front-end to build connection edit page run time.
+type VsectionInfo struct {
 	relatedSections []string // all related sections
 
+	// VirtualSection is the id of the virtual section, such as
+	// "vs-general".
 	VirtualSection string
-	Name           string
-	Expanded       bool
-	Keys           []generalKeyInfo
+
+	// Name is the display name for front-end expand widget.
+	Name string
+
+	// Expanded tells if the front-end expand widget should be
+	// expanded default.
+	Expanded bool
+
+	// Keys contains all the keys information under current virtual
+	// section.
+	Keys []*GeneralKeyInfo
 }
 
-type generalKeyInfo struct {
-	Section       string
-	Key           string
-	Name          string
-	WidgetType    string
-	AlwaysUpdate  bool
+// GeneralKeyInfo defines settings key that used by front-end.
+type GeneralKeyInfo struct {
+	// Section most time is a real section name such as "connection",
+	// but will a virtual section for vkTypeController virtual key,
+	// such as "vk-mobile-service-type" for "vs-mobile".
+	Section string
+
+	// Key will be a real or virtual key name, such as "id" and "vk-eap".
+	Key string
+
+	// Name is the display name for front-end widget.
+	Name string
+
+	// WidgetType is the showing widget type to create for the key run
+	// time.
+	WidgetType string
+
+	// Readonly tells if the front-end widget should edit the key value.
+	Readonly bool
+
+	// AlwaysUpdate tells if front-end widget should re-get value once
+	// other keys changed.
+	AlwaysUpdate bool
+
+	// UseValueRange tells the custom value range will be used for
+	// integer keys.
 	UseValueRange bool
 	MinValue      int
 	MaxValue      int
@@ -442,6 +472,9 @@ func doGetRelatedKeysOfVsection(data connectionData, vsection string, keepAll bo
 	return
 }
 
+func (vs *VsectionInfo) fixExpanded(data connectionData) {
+	vs.Expanded = isVsectionExpandedDefault(data, vs.VirtualSection)
+}
 func isVsectionExpandedDefault(data connectionData, vsection string) (expanded bool) {
 	if vsection == vsectionGeneral {
 		return true
@@ -450,49 +483,66 @@ func isVsectionExpandedDefault(data connectionData, vsection string) (expanded b
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
 	case connectionWired:
-	case connectionPppoe:
 		switch vsection {
 		case vsectionIpv4:
 			expanded = true
 		}
-	case connectionWireless:
-	case connectionWirelessAdhoc:
-	case connectionWirelessHotspot:
+	case connectionPppoe:
+		switch vsection {
+		case vsectionPppoe:
+			expanded = true
+		}
+	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		switch vsection {
 		case vsectionIpv4, vsectionWifi:
 			expanded = true
 		}
-	case connectionMobileGsm:
-	case connectionMobileCdma:
+	case connectionMobileGsm, connectionMobileCdma:
 		switch vsection {
 		case vsectionMobile:
 			expanded = true
 		}
 	case connectionVpnL2tp:
 		switch vsection {
-		case vsectionVpnL2tp:
+		case vsectionVpn:
 			expanded = true
 		}
 	case connectionVpnOpenconnect:
 		switch vsection {
-		case vsectionVpnOpenconnect:
+		case vsectionVpn:
 			expanded = true
 		}
 	case connectionVpnOpenvpn:
 		switch vsection {
-		case vsectionVpnOpenvpn:
+		case vsectionVpn:
 			expanded = true
 		}
 	case connectionVpnPptp:
 		switch vsection {
-		case vsectionVpnPptp:
+		case vsectionVpn:
 			expanded = true
 		}
 	case connectionVpnVpnc:
 		switch vsection {
-		case vsectionVpnVpnc:
+		case vsectionVpn:
 			expanded = true
 		}
+	default:
+		logger.Error("unknown custom connection type", connectionType)
 	}
 	return
+}
+
+func (k *GeneralKeyInfo) fixReadonly(data connectionData) {
+	k.Readonly = isGeneralKeyReadonly(data, k.Section, k.Key)
+}
+func isGeneralKeyReadonly(data connectionData, section, key string) (readonly bool) {
+	connectionType := getCustomConnectionType(data)
+	switch connectionType {
+	case connectionWired, connectionMobileGsm, connectionMobileCdma:
+		if section == sectionConnection && key == NM_SETTING_CONNECTION_ID {
+			return true
+		}
+	}
+	return false
 }
