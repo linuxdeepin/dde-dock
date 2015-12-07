@@ -5,11 +5,12 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
+	"text/template"
+
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gio-2.0"
 	"pkg.deepin.io/lib/glib-2.0"
-	"strings"
-	"text/template"
 )
 
 const (
@@ -162,15 +163,13 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	logger.Debug("id", id, "title", title, "cmd", cmd)
 	desktopID := guess_desktop_id(id)
 	if desktopID == "" {
-		m.items.PushBack(id)
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
-			logger.Warning("create scratch file failed:", e)
 			return false
 		}
 	} else {
 		id = normalizeAppID(trimDesktop(desktopID))
-		m.items.PushBack(id)
 	}
+	m.items.PushBack(id)
 	dbus.Emit(m, "Docked", id)
 	app := ENTRY_MANAGER.runtimeApps[id]
 	if app != nil {
@@ -284,14 +283,19 @@ func (m *DockedAppManager) toSlice() []string {
 }
 
 func createScratchFile(id, title, icon, cmd string) error {
+	logger.Info("create scratch file for %s with cmd %q", id, cmd)
 	homeDir := os.Getenv("HOME")
 	path := ".config/dock/scratch"
 	configDir := filepath.Join(homeDir, path)
-	os.MkdirAll(configDir, 0775)
+	err := os.MkdirAll(configDir, 0775)
+	if err != nil {
+		logger.Warning("create scratch failed:", err)
+		return err
+	}
 	f, err := os.OpenFile(filepath.Join(configDir, id+".desktop"),
 		os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0744)
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("OpenScratch to write failed:", err)
 		return err
 	}
 	defer f.Close()

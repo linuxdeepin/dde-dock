@@ -27,10 +27,10 @@ type NormalApp struct {
 
 func NewNormalApp(desktopID string) *NormalApp {
 	app := &NormalApp{Id: normalizeAppID(trimDesktop(desktopID)), DesktopID: desktopID}
-	logger.Info("NewNormalApp:", app.Id, "for desktop", desktopID)
 	var core *DesktopAppInfo
 	if strings.ContainsRune(desktopID, filepath.Separator) {
 		core = NewDesktopAppInfoFromFilename(desktopID)
+		app.Id = filepath.Base(app.Id)
 	} else {
 		core = NewDesktopAppInfo(desktopID)
 		if core == nil {
@@ -42,6 +42,7 @@ func NewNormalApp(desktopID string) *NormalApp {
 			}
 		}
 	}
+	logger.Info("NewNormalApp:", app.Id, "for desktop", desktopID)
 	if core == nil {
 		return nil
 	}

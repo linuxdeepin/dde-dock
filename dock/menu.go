@@ -87,6 +87,7 @@ func (m *Menu) AppendItem(items ...*MenuItem) {
 
 func (m *Menu) HandleAction(id string, timestamp uint32) {
 	if item, ok := m.ids[id]; ok && item.isActive {
+		fmt.Println(id)
 		item.Action(timestamp)
 	}
 }

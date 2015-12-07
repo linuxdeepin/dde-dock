@@ -261,6 +261,7 @@ gboolean is_chrome_app(char const* name)
 char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name)
 {
     // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
+    g_message("guess app id");
     if (s_pid == 0) return g_strdup(wmclass);
     char* app_id = NULL;
 
@@ -277,6 +278,7 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
             g_free(exec_args);
             int ppid = get_parent_pid(s_pid);
             if (ppid != 0) {
+                g_message("get appid from pid");
                 return guess_app_id(ppid, wmname, wminstance, wmclass, icon_name);
             }
         }
@@ -384,6 +386,12 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
 
     cmdline[length] = NULL;
 
+#ifndef NDEBUG
+    for (int i = 0; cmdline[i] != NULL; ++i) {
+        g_debug("cmd[%d]: %s", i, cmdline[i]);
+    }
+#endif
+
     int diff = length - name_pos;
     if (diff == 0) {
         if (name != NULL) {
@@ -407,12 +415,14 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
         return;
     }
 
+    g_debug("name before handle with suffix regexp: %s", *name);
     char* tmp = *name;
     g_assert(tmp != NULL);
     g_assert(suffix_regex != NULL);
     *name = g_regex_replace_literal (suffix_regex, tmp, -1, 0, "", 0, NULL);
     g_free(tmp);
 
+    g_debug("name after handle with suffix regexp %s", *name);
     guint i=0;
     for (; i<strlen(*name); i++) {
         if ((*name)[i] == ' ') {
@@ -433,6 +443,7 @@ void get_pid_info(int pid, char** exec_name, char** exec_args)
 
     gsize size=0;
     if (g_file_get_contents(path, &cmd_line, &size, NULL) && size > 0) {
+        g_message("[%s] get cmd info from /proc/n/cmdline", __func__);
         char** name_args = g_new(char*, 1024);
         gsize j = 0;
         name_args[j] = cmd_line;
