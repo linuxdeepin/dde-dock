@@ -4,6 +4,7 @@ import "pkg.deepin.io/lib/gio-2.0"
 import "time"
 import . "pkg.deepin.io/lib/gettext"
 import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/dde/api/soundutils"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -91,6 +92,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
+			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
 			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -110,6 +112,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
+			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
 			sendNotify("battery_low", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
 
 			playSound("power-caution")
@@ -123,6 +126,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
+			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
 			sendNotify("battery_caution", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
 			playSound("power-low")
 		}

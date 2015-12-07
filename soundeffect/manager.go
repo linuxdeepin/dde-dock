@@ -1,6 +1,7 @@
 package soundeffect
 
 import (
+	"fmt"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
@@ -94,4 +95,12 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 		ObjectPath: dbusPath,
 		Interface:  dbusIFC,
 	}
+}
+
+func (m *Manager) PlaySystemSound(event string) error {
+	if len(event) == 0 {
+		return fmt.Errorf("Invalid sound event: %v", event)
+	}
+
+	return soundutils.PlaySystemSound(event, "", false)
 }

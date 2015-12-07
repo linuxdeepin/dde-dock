@@ -32,6 +32,7 @@ import (
 	"strings"
 	"unsafe"
 
+	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/gio-2.0"
 )
 
@@ -59,7 +60,10 @@ func handleDiskChanged(event, uuid *C.char) {
 	_manager.setPropDiskList(_manager.getDiskInfos())
 	switch ev {
 	case "volume-added":
+		soundutils.PlaySystemSound(soundutils.KeyDevicePlug, "", false)
 		handleVolumeAdded(id)
+	case "volume-removed":
+		soundutils.PlaySystemSound(soundutils.KeyDeviceUnplug, "", false)
 	case "mount-added":
 		handleMountAdded(id)
 	}
