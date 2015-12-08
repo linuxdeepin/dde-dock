@@ -400,7 +400,7 @@ func playFeedback() {
 }
 
 func playFeedbackWithDevice(device string) {
-	soundutils.PlaySystemSound("audio-volume-change", device, false)
+	soundutils.PlaySystemSound(soundutils.EventVolumeChanged, device, false)
 }
 
 func isVolumeValid(v float64) bool {

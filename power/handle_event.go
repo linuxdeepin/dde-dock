@@ -12,6 +12,7 @@ import "strconv"
 import "fmt"
 import "path"
 import "os"
+import "pkg.deepin.io/dde/api/soundutils"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
@@ -217,7 +218,7 @@ func (p *Power) initEventHandle() {
 
 			// Wakeup
 			p.handleBatteryPercentage()
-			playSound("wakeup")
+			playSound(soundutils.EventWakeup)
 
 			time.AfterFunc(time.Second*1, func() {
 				p.screensaver.SimulateUserActivity()

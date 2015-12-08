@@ -52,9 +52,9 @@ func (p *Power) refreshUpower() {
 		p.setPropOnBattery(upower.OnBattery.Get())
 
 		if p.OnBattery {
-			playSound("power-unplug")
+			playSound(soundutils.EventPowerPlug)
 		} else {
-			playSound("power-plug")
+			playSound(soundutils.EventPowerUnplug)
 		}
 		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
@@ -92,7 +92,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
-			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
@@ -112,7 +112,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
-			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_low", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
 
 			playSound("power-caution")
@@ -126,7 +126,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
-			soundutils.PlaySystemSound(soundutils.KeyBatteryLow, "", false)
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_caution", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
 			playSound("power-low")
 		}

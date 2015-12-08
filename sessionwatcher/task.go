@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	loopDuration       = time.Second * 5
+	loopDuration       = time.Second * 10
 	admissibleDuration = time.Second * 2
 
 	maxLaunchTimes = 5

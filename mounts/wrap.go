@@ -60,10 +60,10 @@ func handleDiskChanged(event, uuid *C.char) {
 	_manager.setPropDiskList(_manager.getDiskInfos())
 	switch ev {
 	case "volume-added":
-		soundutils.PlaySystemSound(soundutils.KeyDevicePlug, "", false)
+		soundutils.PlaySystemSound(soundutils.EventDevicePlug, "", false)
 		handleVolumeAdded(id)
 	case "volume-removed":
-		soundutils.PlaySystemSound(soundutils.KeyDeviceUnplug, "", false)
+		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug, "", false)
 	case "mount-added":
 		handleMountAdded(id)
 	}
