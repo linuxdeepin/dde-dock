@@ -121,8 +121,6 @@ void Panel::initPluginManager()
     });
     connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
         m_pluginLayout->removeItem(item);
-        item->setVisible(false);
-        item->deleteLater();
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
         m_pluginManager->onPluginsSetting(getScreenRect().height - height());

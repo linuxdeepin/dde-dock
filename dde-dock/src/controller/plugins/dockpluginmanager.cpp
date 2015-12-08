@@ -72,10 +72,16 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
 
     qDebug() << "DockPluginManager::onDockModeChanged " << newMode << oldMode;
 
-    foreach (DockPluginProxy * proxy, m_proxies) {
+    for (DockPluginProxy * proxy : m_proxies) {
         DockPluginInterface * plugin = proxy->plugin();
         plugin->changeMode(newMode, oldMode);
     }
+
+    //reanchor systray-plugin
+    AbstractDockItem *sysItem = m_sysPlugins.key(SYSTRAY_PLUGIN_ID);
+    m_sysPlugins.remove(sysItem);
+    emit itemRemoved(sysItem);
+    handleSysPluginAdd(sysItem, SYSTRAY_PLUGIN_ID);
 }
 
 // private methods
@@ -165,6 +171,8 @@ void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString)
     m_normalPlugins.remove(item);
 
     emit itemRemoved(item);
+    item->setVisible(false);
+    item->deleteLater();
 }
 
 // private slots
@@ -214,7 +222,12 @@ void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
     m_sysPlugins.insert(item, uuid);
 
     if (uuid == SYSTRAY_PLUGIN_ID) {
-        emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+        if (m_dockModeData->getDockMode() != Dock::FashionMode) {
+            emit itemAppend(item);
+        }
+        else {
+            emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+        }
     }
     else {
         emit itemInsert(NULL, item);
@@ -226,7 +239,15 @@ void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uu
     if (!item || m_normalPlugins.values().indexOf(uuid) != -1)
         return;
 
+    if (m_dockModeData->getDockMode() != Dock::FashionMode) {
+        //Normal plug next date plugins to ensure trayicon displayed in the far left
+        emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+    }
+    else {
+        //Normal plug placed in the far left on Fashion Mode
+        emit itemAppend(item);
+    }
+
     m_normalPlugins.insert(item, uuid);
 
-    emit itemAppend(item);
 }
