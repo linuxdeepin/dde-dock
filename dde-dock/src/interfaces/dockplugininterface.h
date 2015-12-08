@@ -35,12 +35,9 @@ public:
     virtual QString getTitle(QString id) = 0;
     virtual QString getCommand(QString id) = 0;
     virtual QPixmap getIcon(QString id) {Q_UNUSED(id); return QPixmap("");}
-    virtual bool canDisable(QString id) {return false;} Q_DECL_DEPRECATED
-    virtual bool isDisabled(QString id) {return false;} Q_DECL_DEPRECATED
-    virtual void setDisabled(QString id, bool disabled) {return;} Q_DECL_DEPRECATED
-    virtual bool configurable(const QString &id) {return false;}    //TODO, change to pure virtual
-    virtual bool enabled(const QString &id) {return true;}  //TODO, change to pure virtual
-    virtual void setEnabled(const QString &id, bool enabled) {return;}  //TODO, change to pure virtual
+    virtual bool configurable(const QString &id) = 0;
+    virtual bool enabled(const QString &id) = 0;
+    virtual void setEnabled(const QString &id, bool enabled) = 0;
     virtual QWidget * getItem(QString id) = 0;
     virtual QWidget * getApplet(QString id) = 0;
     virtual QString getMenuContent(QString id) = 0;
