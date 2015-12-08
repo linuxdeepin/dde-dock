@@ -12,6 +12,7 @@ import (
 
 	storeApi "dbus/com/deepin/store/api"
 
+	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
@@ -146,6 +147,7 @@ func (self *Launcher) RequestSendToDesktop(id string) bool {
 		return false
 	}
 
+	soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "", false)
 	dbus.Emit(self, "SendToDesktopSuccess", itemID)
 	return true
 }
