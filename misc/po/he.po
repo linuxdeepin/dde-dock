@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2015
 # Yuval Bar-On <hyuvii@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-30 16:34+0800\n"
-"PO-Revision-Date: 2015-09-30 08:45+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"POT-Creation-Date: 2015-12-03 11:11+0800\n"
+"PO-Revision-Date: 2015-12-07 04:01+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hebrew (http://www.transifex.com/linuxdeepin/dde-daemon/language/he/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,7 +46,7 @@ msgstr "שם המשתמש כבר בשימוש במערכת"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "אורך שם המשתמש חורג מהמגבלה"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -95,21 +96,48 @@ msgstr "גישה להודעות"
 msgid "Message notification"
 msgstr "התרעת הודעה"
 
-#: ../../bluetooth/utils_notify.go:55 ../../network/_dev_test.go:42
-#: ../../network/_dev_test.go:58 ../../network/state_handler.go:193
-#: ../../network/utils_notify.go:121
+#: ../../bluetooth/utils_notify.go:55 ../../bluetooth/utils_notify.go:58
+#: ../../bluetooth/utils_notify.go:59 ../../network/_dev_test.go:42
+#: ../../network/_dev_test.go:58 ../../network/dev_test.go:113
+#: ../../network/dev_test.go:129 ../../network/state_handler.go:193
+#: ../../network/state_handler.go:214 ../../network/utils_notify.go:121
 msgid "Connected"
 msgstr "מחובר"
 
-#: ../../bluetooth/utils_notify.go:58 ../../network/_dev_test.go:46
+#: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:61
+#: ../../bluetooth/utils_notify.go:62 ../../network/_dev_test.go:46
 #: ../../network/_dev_test.go:49 ../../network/_dev_test.go:52
 #: ../../network/_dev_test.go:61 ../../network/_dev_test.go:64
-#: ../../network/state_handler.go:241 ../../network/utils_notify.go:93
+#: ../../network/dev_test.go:117 ../../network/dev_test.go:120
+#: ../../network/dev_test.go:123 ../../network/dev_test.go:132
+#: ../../network/dev_test.go:135 ../../network/state_handler.go:241
+#: ../../network/state_handler.go:262 ../../network/utils_notify.go:93
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
 #: ../../network/utils_notify.go:106 ../../network/utils_notify.go:124
 #: ../../network/utils_notify.go:127 ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:216
 msgid "Disconnected"
 msgstr "מנותק"
+
+#: ../../bluetooth/utils_notify.go:64
+msgid "Make sure %q is turned on and in range"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
+msgid "Bluetooth connection failed"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:65
+msgid "Make sure %q is turned on  and in range"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:66
+msgid "Failed to connect bluetooth"
+msgstr ""
+
+#: ../../bluetooth/utils_notify.go:68
+msgid "Failed to connect %q, automatically ignored"
+msgstr ""
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -496,26 +524,32 @@ msgid "Fakaofo"
 msgstr "Fakaofo"
 
 #: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
+#: ../../dock/normal_apps.go:77
 msgid "_Run"
 msgstr "_הרצה"
 
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299
+#: ../../dock/normal_apps.go:109 ../../dock/runtime_apps.go:279
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
 msgid "_Undock"
 msgstr "_שחרור"
 
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:266
-#: ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:270
 msgid "_Close All"
 msgstr "_סגור הכל"
 
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:298
 #: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
 #: ../../dock/runtime_apps.go:311
 msgid "_Dock"
 msgstr "_נעץ"
 
-#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:174
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:38
+#: ../../network/nm_setting_ip4_config.go:174
+#: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
 msgstr "אוטומטי"
@@ -770,32 +804,35 @@ msgid "Move to lower workspace"
 msgstr "עבור לסביבת עבודה אשר למטה"
 
 #: ../../keybinding/shortcuts/metacity.go:55
+#: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "הצגת החלונות של כל סביבות העבודה"
 
 #: ../../keybinding/shortcuts/metacity.go:56
+#: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "הצגת החלונות של סביבת העבודה הנוכחית"
 
 #: ../../keybinding/shortcuts/metacity.go:57
+#: ../../keybinding/shortcuts/metacity.go:86
 msgid "Display workspace"
-msgstr ""
+msgstr "הצגת סביבת העבודה"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "החלפה בין חלונות דומים"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "החלפה בין חלונות דומים בהיפוך"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "החלפת חלונות"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "החלפת חלונות בהיפוך"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -818,7 +855,7 @@ msgstr "משנה את שפת המערכת ומתקין חבילות שפה מש�
 
 #: ../../launcher/category/translate.go:8
 msgid "all"
-msgstr "הכל"
+msgstr "הכול"
 
 #: ../../launcher/category/translate.go:9
 msgid "others"
@@ -842,7 +879,7 @@ msgstr "גרפיקה"
 
 #: ../../launcher/category/translate.go:14
 msgid "productivity"
-msgstr "פרודקטיביות"
+msgstr "עזרים"
 
 #: ../../launcher/category/translate.go:15
 msgid "industry"
@@ -877,6 +914,7 @@ msgid "Run Software"
 msgstr "הפעל תוכנה"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:185
 #: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:222
@@ -886,64 +924,83 @@ msgstr "הפעל תוכנה"
 msgid "None"
 msgstr "אין"
 
-#: ../../network/manager_active.go:296
+#: ../../network/manager_active.go:296 ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active.go:298
+#: ../../network/manager_active.go:298 ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:306 ../../network/nm_setting_802_1x.go:86
+#: ../../network/manager_active.go:306 ../../network/manager_active.go:331
+#: ../../network/nm_setting_802_1x.go:42 ../../network/nm_setting_802_1x.go:86
+#: ../../network/nm_setting_802_1x.go:123
+#: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:167
 #: ../../network/nm_setting_802_1x.go:175
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:308 ../../network/nm_setting_802_1x.go:85
+#: ../../network/manager_active.go:308 ../../network/manager_active.go:333
+#: ../../network/nm_setting_802_1x.go:41 ../../network/nm_setting_802_1x.go:85
+#: ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:310 ../../network/nm_setting_802_1x.go:176
+#: ../../network/manager_active.go:310 ../../network/manager_active.go:335
+#: ../../network/nm_setting_802_1x.go:132
+#: ../../network/nm_setting_802_1x.go:176
+#: ../../network/nm_setting_wireless_security.go:83
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:312 ../../network/nm_setting_802_1x.go:169
+#: ../../network/manager_active.go:312 ../../network/manager_active.go:337
+#: ../../network/nm_setting_802_1x.go:125
+#: ../../network/nm_setting_802_1x.go:133
+#: ../../network/nm_setting_802_1x.go:169
 #: ../../network/nm_setting_802_1x.go:177
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:314 ../../network/nm_setting_802_1x.go:170
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:339
+#: ../../network/nm_setting_802_1x.go:126
+#: ../../network/nm_setting_802_1x.go:134
+#: ../../network/nm_setting_802_1x.go:170
 #: ../../network/nm_setting_802_1x.go:178
 msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
-#: ../../network/manager_active.go:316 ../../network/nm_setting_802_1x.go:171
+#: ../../network/manager_active.go:316 ../../network/manager_active.go:341
+#: ../../network/nm_setting_802_1x.go:127
+#: ../../network/nm_setting_802_1x.go:135
+#: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_802_1x.go:179
 msgid "Protected EAP"
 msgstr "Protected EAP"
 
-#: ../../network/manager_connection.go:257 ../../network/nm_custom_type.go:178
+#: ../../network/manager_connection.go:257
+#: ../../network/manager_connection.go:260 ../../network/nm_custom_type.go:178
+#: ../../network/nm_custom_type.go:187
 msgid "Wired Connection"
 msgstr "חיבור קווי"
 
 #: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:114
 #: ../../network/nm_setting_vpn_openvpn.go:168
 #: ../../network/nm_setting_vpn_pptp.go:104
-#: ../../network/nm_setting_vpn_vpnc.go:142
+#: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr "שמור"
 
 #: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:115
 #: ../../network/nm_setting_vpn_openvpn.go:169
 #: ../../network/nm_setting_vpn_pptp.go:105
-#: ../../network/nm_setting_vpn_vpnc.go:144
+#: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr "תמיד תשאל"
 
@@ -952,120 +1009,150 @@ msgstr "תמיד תשאל"
 #: ../../network/nm_setting_vpn_openvpn.go:472
 #: ../../network/nm_setting_vpn_openvpn.go:476
 #: ../../network/nm_setting_vpn_pptp.go:106
-#: ../../network/nm_setting_vpn_vpnc.go:145
+#: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "לא נחוץ"
 
-#: ../../network/nm_custom_type.go:176
+#: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
 msgid "Connection"
 msgstr "חיבור"
 
-#: ../../network/nm_custom_type.go:180
+#: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
 msgid "Wireless Connection"
 msgstr "חיבור אלחוטי"
 
-#: ../../network/nm_custom_type.go:182
+#: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
 msgid "Wireless Ad-Hoc"
 msgstr "חיבור אלחוטי Ad-Hoc"
 
-#: ../../network/nm_custom_type.go:184
+#: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
 msgid "Wireless Ap-Hotspot"
 msgstr "חיבור אלחוטי Ap-Hotspot"
 
-#: ../../network/nm_custom_type.go:186
+#: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
 msgid "PPPoE Connection"
 msgstr "חיבור PPPoE "
 
-#: ../../network/nm_custom_type.go:188
+#: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
 msgid "Mobile Connection"
 msgstr "חיבור סלולארי"
 
-#: ../../network/nm_custom_type.go:190
+#: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
 msgid "Mobile GSM Connection"
 msgstr "חיבור סלולארי GSM"
 
-#: ../../network/nm_custom_type.go:192
+#: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
 msgid "Mobile CDMA Connection"
 msgstr "חיבור סלולארי CDMA"
 
-#: ../../network/nm_custom_type.go:194
+#: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
 msgid "VPN Connection"
 msgstr "חיבור VPN"
 
-#: ../../network/nm_custom_type.go:196
+#: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
 msgid "VPN L2TP"
 msgstr "VPN L2TP"
 
-#: ../../network/nm_custom_type.go:198
+#: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
 msgid "VPN OpenConnect"
 msgstr "VPN OpenConnect"
 
-#: ../../network/nm_custom_type.go:200
+#: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
 msgid "VPN OpenVPN"
 msgstr "VPN OpenVPN"
 
-#: ../../network/nm_custom_type.go:202
+#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
 msgid "VPN PPTP"
 msgstr "VPN PPTP"
 
-#: ../../network/nm_custom_type.go:204
+#: ../../network/nm_custom_type.go:204 ../../network/nm_custom_type.go:213
 msgid "VPN VPNC"
 msgstr "VPN VPNC"
 
-#: ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_setting_802_1x.go:35 ../../network/nm_setting_802_1x.go:79
 msgid "PAP"
 msgstr "PAP"
 
-#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:36 ../../network/nm_setting_802_1x.go:80
 msgid "CHAP"
 msgstr "CHAP"
 
-#: ../../network/nm_setting_802_1x.go:81
+#: ../../network/nm_setting_802_1x.go:37 ../../network/nm_setting_802_1x.go:81
 msgid "MSCHAP"
 msgstr "MSCHAP"
 
-#: ../../network/nm_setting_802_1x.go:82
+#: ../../network/nm_setting_802_1x.go:38 ../../network/nm_setting_802_1x.go:82
 msgid "MSCHAPV2"
 msgstr "MSCHAPV2"
 
-#: ../../network/nm_setting_802_1x.go:83
+#: ../../network/nm_setting_802_1x.go:39 ../../network/nm_setting_802_1x.go:83
 msgid "GTC"
 msgstr "GTC"
 
-#: ../../network/nm_setting_802_1x.go:84
+#: ../../network/nm_setting_802_1x.go:40 ../../network/nm_setting_802_1x.go:84
 msgid "OTP"
 msgstr "OTP"
 
+#: ../../network/nm_setting_802_1x.go:140
 #: ../../network/nm_setting_802_1x.go:184
+#: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
 msgstr "מושבת"
 
+#: ../../network/nm_setting_802_1x.go:141
 #: ../../network/nm_setting_802_1x.go:185
 msgid "Anonymous"
 msgstr "אנונימי"
 
+#: ../../network/nm_setting_802_1x.go:142
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
 msgstr "מאומת"
 
+#: ../../network/nm_setting_802_1x.go:143
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Both"
 msgstr "שניהם"
 
+#: ../../network/nm_setting_802_1x.go:147
 #: ../../network/nm_setting_802_1x.go:191
+#: ../../network/nm_setting_wireless.go:192
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
 msgstr "אוטומטי"
 
+#: ../../network/nm_setting_802_1x.go:148
 #: ../../network/nm_setting_802_1x.go:192
 msgid "Version 0"
 msgstr "גרסא 0"
 
+#: ../../network/nm_setting_802_1x.go:149
 #: ../../network/nm_setting_802_1x.go:193
 msgid "Version 1"
 msgstr "גרסא 1"
+
+#: ../../network/nm_setting_gsm.go:156 ../../network/nm_setting_gsm.go:158
+#: ../../network/nm_setting_gsm.go:211 ../../network/nm_setting_gsm.go:213
+#: ../../network/nm_setting_virtual_key.go:146
+msgid "Custom"
+msgstr "בהתאמה אישית"
+
+#: ../../network/nm_setting_gsm.go:166 ../../network/nm_setting_gsm.go:221
+#: ../../network/nm_setting_virtual_key.go:155
+#: ../../network/nm_setting_vpn_openvpn.go:370
+#: ../../network/nm_setting_vpn_openvpn.go:374
+#: ../../network/nm_setting_vpn_openvpn.go:390
+#: ../../network/nm_setting_vpn_openvpn.go:394
+#: ../../network/nm_setting_vpn_openvpn.go:421
+#: ../../network/nm_setting_vpn_openvpn.go:425
+#: ../../network/nm_setting_wireless.go:35
+#: ../../network/nm_setting_wireless.go:84
+#: ../../network/nm_setting_wireless.go:140
+#: ../../network/nm_setting_wireless.go:189
+msgid "Default"
+msgstr "ברירת מחדל"
 
 #: ../../network/nm_setting_gsm.go:182
 msgid "Any"
@@ -1095,51 +1182,42 @@ msgstr "העדפה לדור 4 (LTE)"
 msgid "Use Only 4G (LTE)"
 msgstr "השתמש אך ורק בדור 4 (LTE)"
 
-#: ../../network/nm_setting_gsm.go:211 ../../network/nm_setting_gsm.go:213
-#: ../../network/nm_setting_virtual_key.go:146
-msgid "Custom"
-msgstr "מותאם אישית"
-
-#: ../../network/nm_setting_gsm.go:221
-#: ../../network/nm_setting_virtual_key.go:155
-#: ../../network/nm_setting_vpn_openvpn.go:370
-#: ../../network/nm_setting_vpn_openvpn.go:374
-#: ../../network/nm_setting_vpn_openvpn.go:390
-#: ../../network/nm_setting_vpn_openvpn.go:394
-#: ../../network/nm_setting_vpn_openvpn.go:421
-#: ../../network/nm_setting_vpn_openvpn.go:425
-#: ../../network/nm_setting_wireless.go:140
-#: ../../network/nm_setting_wireless.go:189
-msgid "Default"
-msgstr "ברירת מחדל"
-
+#: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip4_config.go:175
+#: ../../network/nm_setting_ip6_config.go:41
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
 msgstr "חיבור-מקומי בלבד"
 
+#: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip4_config.go:176
+#: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "Manual"
 msgstr "ידני"
 
+#: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip4_config.go:177
+#: ../../network/nm_setting_ip6_config.go:43
 #: ../../network/nm_setting_ip6_config.go:68
+#: ../../network/nm_setting_wireless_security.go:82
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
 msgstr "משותף"
 
+#: ../../network/nm_setting_ip6_config.go:38
 #: ../../network/nm_setting_ip6_config.go:63
 msgid "Ignore"
 msgstr "התעלם"
 
+#: ../../network/nm_setting_ip6_config.go:40
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "DHCP"
 msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)‎"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -1402,71 +1480,86 @@ msgstr "שרת (ברירת מחדל)"
 msgid "DH Group 2"
 msgstr "DH קבוצה 2"
 
+#: ../../network/nm_setting_wireless.go:186
 #: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
 msgstr "תשתית"
 
+#: ../../network/nm_setting_wireless.go:187
 #: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
+#: ../../network/nm_setting_wireless.go:188
 #: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
+#: ../../network/nm_setting_wireless.go:193
 #: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
+#: ../../network/nm_setting_wireless.go:194
 #: ../../network/nm_setting_wireless.go:299
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
+#: ../../network/nm_setting_wireless_security.go:66
 #: ../../network/nm_setting_wireless_security.go:189
 msgid "WEP"
 msgstr "WEP"
 
+#: ../../network/nm_setting_wireless_security.go:67
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
 msgstr "WEP דינאמי"
 
+#: ../../network/nm_setting_wireless_security.go:68
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
 msgstr "Ad-Hoc WPA-PSK"
 
+#: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
 msgstr "WPA-PSK Infrastructure"
 
+#: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
 msgstr "WPA Enterprise"
 
+#: ../../network/nm_setting_wireless_security.go:74
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
 msgstr "WEP40"
 
+#: ../../network/nm_setting_wireless_security.go:75
 #: ../../network/nm_setting_wireless_security.go:198
 msgid "WEP104"
 msgstr "WEP104"
 
+#: ../../network/nm_setting_wireless_security.go:76
 #: ../../network/nm_setting_wireless_security.go:199
 msgid "TKIP"
 msgstr "TKIP"
 
+#: ../../network/nm_setting_wireless_security.go:77
 #: ../../network/nm_setting_wireless_security.go:200
 msgid "CCMP"
 msgstr "CCMP"
 
+#: ../../network/nm_setting_wireless_security.go:81
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
 msgstr "פתוח"
 
-#: ../../network/state_handler.go:34
+#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason."
 msgstr "מצב המכשיר השתנה, הסיבה אינה ידועה"
 
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 msgid "Device state changed."
 msgstr "מצב המכשיר השתנה"
 
@@ -1686,68 +1779,100 @@ msgid "A secondary connection of the base connection failed."
 msgstr "חיבור משני של חיבור הבסיס נכשל"
 
 #: ../../network/state_handler.go:91
+msgid "DCB or FCoE setup failed."
+msgstr ""
+
+#: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
 msgstr "כבל רשת נותק"
 
 #: ../../network/state_handler.go:92
+msgid "Network teaming control failed."
+msgstr ""
+
+#: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "נא לוודא שכרטיס ה־SIM הוכנס ושיש קליטה של רשת סלולרית."
 
 #: ../../network/state_handler.go:93
-msgid ""
-"Please make sure a correct plan was selected without arrearage of SIM card."
+msgid "Modem failed to run or not available."
 msgstr ""
 
-#: ../../network/state_handler.go:96
+#: ../../network/state_handler.go:93 ../../network/state_handler.go:103
+msgid ""
+"Please make sure a correct plan was selected without arrearage of SIM card."
+msgstr "נא לוודא שבחרת בתכנית מתאימה מבלי סידור מחדש של כרטיס ה־SIM."
+
+#: ../../network/state_handler.go:94
+msgid "Modem now ready and available."
+msgstr ""
+
+#: ../../network/state_handler.go:95
+msgid "SIM PIN is incorrect."
+msgstr ""
+
+#: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
 msgstr "הפעלת חיבות VPN נכשלה מסיבות לא ידועות"
 
-#: ../../network/state_handler.go:97
+#: ../../network/state_handler.go:96
+msgid "New connection activation is enqueuing."
+msgstr ""
+
+#: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
 msgstr "הפעלת חיבות VPN נכשלה"
 
+#: ../../network/state_handler.go:97
+msgid "Parent device changed."
+msgstr ""
+
 #: ../../network/state_handler.go:98
+msgid "Management status of parent device changed."
+msgstr ""
+
+#: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
 msgstr "מצב חיבור VPN השתנה בשל התנתקות משתמשים"
 
-#: ../../network/state_handler.go:99
+#: ../../network/state_handler.go:99 ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices."
 msgstr "מצב חיבור VPN השתנה בשל התנתקות ממכשירים"
 
-#: ../../network/state_handler.go:100
+#: ../../network/state_handler.go:100 ../../network/state_handler.go:110
 msgid "VPN service stopped."
 msgstr "שירות VPN הופסק"
 
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:101 ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid."
 msgstr "הגדרת ה-IP של חיבור ה-VPN אינו חוקי"
 
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:102 ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out."
 msgstr "נסיון החיבור לשירות VPN עשה timeout"
 
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:103 ../../network/state_handler.go:113
 msgid "The VPN service start timed out."
 msgstr "שירות ה-VPN לא הצליח לעלות בפרק הזמן המותר"
 
-#: ../../network/state_handler.go:104
+#: ../../network/state_handler.go:104 ../../network/state_handler.go:114
 msgid "The VPN service failed to start."
 msgstr "שירות ה-VPN לא הצליח לעלות"
 
-#: ../../network/state_handler.go:105
+#: ../../network/state_handler.go:105 ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided."
 msgstr "לא סופקה סיסמא הנחוצה לחיבור ה-VPN"
 
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:106 ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed."
 msgstr "אימות שרת ה-VPN נכשל"
 
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:107 ../../network/state_handler.go:117
 msgid "The connection was deleted from settings."
 msgstr "החיבור הוסר מההגדרות"
 
-#: ../../network/utils_nm.go:169
+#: ../../network/utils_nm.go:169 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "לא ידוע"
 
@@ -1757,7 +1882,7 @@ msgstr "הנך לא מחובר לרשת"
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "הופעל מצב טיסה."
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
@@ -1781,32 +1906,33 @@ msgstr "פרוקסי מערכת הוגדר בהצלחה"
 msgid "System proxy has been cancelled."
 msgstr "פרוקסי מערכת בוטל"
 
-#: ../../power/upower.go:81
+#: ../../power/upower.go:81 ../../power/upower.go:89
 msgid "Abnormal battery power"
 msgstr "כוח סוללה לא תקין"
 
-#: ../../power/upower.go:81
+#: ../../power/upower.go:81 ../../power/upower.go:89
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
 msgstr "לא ניתן לצפות את כוח הסוללה, אנא דאג לשמור מסמכים חשובים ולהמנע מלעשות שינויים משמעותיים"
 
-#: ../../power/upower.go:86 ../../power/upower.go:101
+#: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:101
+#: ../../power/upower.go:113
 msgid "Battery Critical Low"
 msgstr "סוללה נמוכה באופן קריטי"
 
-#: ../../power/upower.go:86
+#: ../../power/upower.go:86 ../../power/upower.go:94
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "המחשב היה במצב השהייה, אנא חבר אותו לחשמל"
 
-#: ../../power/upower.go:101
+#: ../../power/upower.go:101 ../../power/upower.go:113
 msgid "Please plug in, or computer will be in suspend mode."
 msgstr "אנא חבר את המחשב לחשמל או שהוא ייכנס למצב השהייה"
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:114 ../../power/upower.go:126
 msgid "Battery Low"
 msgstr "סוללה נמוכה"
 
-#: ../../power/upower.go:114
+#: ../../power/upower.go:114 ../../power/upower.go:126
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "המחשב נכנס למצב השהייה, אנא חבר אותו לחשמל כעת"
