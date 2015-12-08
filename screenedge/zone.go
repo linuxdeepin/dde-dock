@@ -38,19 +38,12 @@ type areaRange struct {
 const (
 	edgeDistance int32 = 5
 
-	leftTopEdge     = "TopLeft"
-	leftBottomEdge  = "BottomLeft"
-	rightTopEdge    = "TopRight"
-	rightBottomEdge = "BottomRight"
+	leftTopEdge     = "left-up"
+	leftBottomEdge  = "left-down"
+	rightTopEdge    = "right-up"
+	rightBottomEdge = "right-down"
 
 	edgeActionWorkspace = "workspace"
-)
-
-const (
-	leftTopDelay     int32 = 0
-	leftBottomDelay        = 0
-	rightTopDelay          = 0
-	rightBottomDelay       = 500
 )
 
 var (
@@ -90,18 +83,13 @@ func registerZoneArea() {
 	}
 
 	topLeftArea = areaRange{startX, startY, startX + edgeDistance, startY + edgeDistance}
-	logger.Debug("TopLeft: ", topLeftArea)
+	logger.Debug("left-up: ", topLeftArea)
 	bottomLeftArea = areaRange{startX, endY - edgeDistance, startX + edgeDistance, endY}
-	logger.Debug("BottomLeft: ", bottomLeftArea)
+	logger.Debug("left-down: ", bottomLeftArea)
 	topRightArea = areaRange{endX - edgeDistance, startY, endX, startY + edgeDistance}
-	logger.Debug("TopRight: ", topRightArea)
+	logger.Debug("right-up: ", topRightArea)
 	bottomRightArea = areaRange{endX - edgeDistance, endY - edgeDistance, endX, endY}
-	logger.Debug("BottomRight: ", bottomRightArea)
-
-	logger.Debug("topLeft: ", topLeftArea)
-	logger.Debug("bottomLeft: ", bottomLeftArea)
-	logger.Debug("topRight: ", topRightArea)
-	logger.Debug("bottomRight: ", bottomRightArea)
+	logger.Debug("right-down: ", bottomRightArea)
 
 	var err error
 	areaId, err = areaObj.RegisterAreas([]areaRange{
@@ -140,42 +128,33 @@ func isInArea(x, y int32, area areaRange) bool {
 	return false
 }
 
-func getEdgeForCommand(cmd string) string {
-	keys := zoneSettings().ListKeys()
+func getEdgeForCommand(cmd string) []string {
+	var ret []string
 
+	keys := zoneSettings().ListKeys()
 	for _, key := range keys {
 		switch key {
 		case "left-up", "left-down", "right-up", "right-down":
 			v := zoneSettings().GetString(key)
-			if v == cmd {
-				return key
+			if strings.Contains(v, cmd) {
+				ret = append(ret, key)
+				continue
 			}
 		}
 	}
 
-	return ""
+	return ret
 }
 
-func enableOneEdge(edge string) {
+func enableSpecialEdges(edges []string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	switch edge {
-	case "left-up":
-		edgeActionMap["BottomLeft"] = ""
-		edgeActionMap["TopRight"] = ""
-		edgeActionMap["BottomRight"] = ""
-	case "left-down":
-		edgeActionMap["TopLeft"] = ""
-		edgeActionMap["TopRight"] = ""
-		edgeActionMap["BottomRight"] = ""
-	case "right-up":
-		edgeActionMap["TopLeft"] = ""
-		edgeActionMap["BottomLeft"] = ""
-		edgeActionMap["BottomRight"] = ""
-	case "right-down":
-		edgeActionMap["TopLeft"] = ""
-		edgeActionMap["BottomLeft"] = ""
-		edgeActionMap["TopRight"] = ""
+
+	for k, _ := range edgeActionMap {
+		if isItemInList(k, edges) {
+			continue
+		}
+		edgeActionMap[k] = ""
 	}
 }
 
@@ -209,6 +188,7 @@ func (eTimer *edgeTimer) DoAction(edge string, timeout int32) {
 		return
 	}
 
+	logger.Debug("Exec action:", edge, action)
 	if !strings.Contains(action, "com.deepin.dde.ControlCenter") {
 		execEdgeAction(edge)
 		return
@@ -234,4 +214,13 @@ func (eTimer *edgeTimer) StopTimer() {
 
 	eTimer.timer.Stop()
 	eTimer.timer = nil
+}
+
+func isItemInList(item string, list []string) bool {
+	for _, v := range list {
+		if item == v {
+			return true
+		}
+	}
+	return false
 }

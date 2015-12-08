@@ -69,48 +69,48 @@ func (op *Manager) EnableZoneDetected(enable bool) {
 func (op *Manager) SetTopLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	zoneSettings().SetString("left-up", value)
+	zoneSettings().SetString(leftTopEdge, value)
 }
 
 // Get left-top edge action
 func (op *Manager) TopLeftAction() string {
-	return zoneSettings().GetString("left-up")
+	return zoneSettings().GetString(leftTopEdge)
 }
 
 // Set left-bottom edge action
 func (op *Manager) SetBottomLeft(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	zoneSettings().SetString("left-down", value)
+	zoneSettings().SetString(leftBottomEdge, value)
 }
 
 // Get left-bottom edge action
 func (op *Manager) BottomLeftAction() string {
-	return zoneSettings().GetString("left-down")
+	return zoneSettings().GetString(leftBottomEdge)
 }
 
 // Set right-top edge action
 func (op *Manager) SetTopRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	zoneSettings().SetString("right-up", value)
+	zoneSettings().SetString(rightTopEdge, value)
 }
 
 // Get right-top edge action
 func (op *Manager) TopRightAction() string {
-	return zoneSettings().GetString("right-up")
+	return zoneSettings().GetString(rightTopEdge)
 }
 
 // Set right-bottom edge action
 func (op *Manager) SetBottomRight(value string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	zoneSettings().SetString("right-down", value)
+	zoneSettings().SetString(rightBottomEdge, value)
 }
 
 // Get right-bottom edge action
 func (op *Manager) BottomRightAction() string {
-	return zoneSettings().GetString("right-down")
+	return zoneSettings().GetString(rightBottomEdge)
 }
 
 func initDBusIFC() error {
@@ -129,8 +129,8 @@ func initDBusIFC() error {
 		return err
 	}
 
-	launchObj, err = launcher.NewLauncher("com.deepin.dde.launcher",
-		"/com/deepin/dde/launcher")
+	launchObj, err = launcher.NewLauncher("com.deepin.dde.Launcher",
+		"/com/deepin/dde/Launcher")
 	if err != nil {
 		finalizeDBusIFC()
 		return err

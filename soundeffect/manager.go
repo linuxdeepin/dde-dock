@@ -84,7 +84,7 @@ func NewManager() *Manager {
 		m.setting, soundutils.KeyIconToDesktop)
 	m.Screenshot = property.NewGSettingsBoolProperty(
 		m, "Screenshot",
-		m.setting, soundutils.KeyScreenshot)
+		m.setting, soundutils.KeyScreenCapture)
 
 	return m
 }
