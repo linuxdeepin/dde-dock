@@ -327,7 +327,7 @@ func (m *TrayManager) startListener() {
 	isListened = true
 
 	for {
-		if e, err := TrayXU.Conn().WaitForEvent(); err == nil {
+		if e, err := TrayXU.Conn().WaitForEvent(); err == nil && e != nil {
 			switch ev := e.(type) {
 			case xproto.ClientMessageEvent:
 				// logger.Info("ClientMessageEvent")

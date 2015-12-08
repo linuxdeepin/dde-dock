@@ -416,7 +416,24 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	if newAppId != "" {
 		appId = newAppId
 	}
+
+	appId = specialCaseWorkaround(xid, appId)
+
 	logger.Debug(fmt.Sprintf("get appid %q", appId))
+	return appId
+}
+
+func specialCaseWorkaround(xid xproto.Window, appId string) string {
+	switch appId {
+	case "xwalk":
+		desktopID, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP_FILE"))
+		if err != nil {
+			logger.Debug("get xwalk AppId from _NET_WM_DESKTOP_FILE failed:", err)
+		} else {
+			appId = trimDesktop(filepath.Base(desktopID))
+			return appId
+		}
+	}
 	return appId
 }
 
