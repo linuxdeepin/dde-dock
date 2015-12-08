@@ -83,6 +83,8 @@ PluginsSettingFrame::PluginsSettingFrame(QWidget *parent) :
     initCloseTitle();
 
     setFixedWidth(WIN_WIDTH);
+
+    installEventFilter(this);
 }
 
 void PluginsSettingFrame::onPluginAdd(bool checked, const QString &id, const QString &title, const QPixmap &icon)
@@ -145,6 +147,15 @@ void PluginsSettingFrame::mousePressEvent(QMouseEvent *event)
 void PluginsSettingFrame::mouseReleaseEvent(QMouseEvent *event)
 {
     QFrame::mouseReleaseEvent(event);
+}
+
+bool PluginsSettingFrame::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::WindowDeactivate) {
+        this->close();
+    }
+
+    return QFrame::eventFilter(obj, event);
 }
 
 void PluginsSettingFrame::resizeWithLineCount()
