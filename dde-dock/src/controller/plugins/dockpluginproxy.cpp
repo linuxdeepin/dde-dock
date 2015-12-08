@@ -90,7 +90,7 @@ void DockPluginProxy::infoChangedEvent(DockPluginInterface::InfoType type, const
 
 void DockPluginProxy::itemSizeChangedEvent(QString id)
 {
-    qDebug() << "Item size changed on plugin " << m_plugin->getPluginName() << id;
+//    qDebug() << "Item size changed on plugin " << m_plugin->getPluginName() << id;
 
     AbstractDockItem * item = m_items.value(id);
     if (item) {
@@ -102,7 +102,7 @@ void DockPluginProxy::itemSizeChangedEvent(QString id)
 
 void DockPluginProxy::appletSizeChangedEvent(QString id)
 {
-    qWarning() << "Applet size changed on plugin " << m_plugin->getPluginName() << id;
+//    qWarning() << "Applet size changed on plugin " << m_plugin->getPluginName() << id;
 
     AbstractDockItem * item = m_items.value(id);
     if (item)

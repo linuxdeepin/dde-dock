@@ -159,7 +159,7 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
 
 void AppItem::dropEvent(QDropEvent *event)
 {
-    qWarning() << "Item get drop:" << event->pos();
+    qDebug() << "Data drop to item:" << event->pos();
 }
 
 void AppItem::enterEvent(QEvent *)
@@ -299,7 +299,6 @@ void AppItem::onDockModeChanged(Dock::DockMode, Dock::DockMode)
 
 void AppItem::onMousePress(QMouseEvent *event)
 {
-    //qWarning() << "mouse press...";
     emit mousePress(event);
 
     hidePreview(true);
@@ -309,7 +308,6 @@ void AppItem::onMousePress(QMouseEvent *event)
 
 void AppItem::onMouseRelease(QMouseEvent *event)
 {
-    //qWarning() << "mouse release...";
     emit mouseRelease(event);
 
     if (event->button() == Qt::LeftButton)

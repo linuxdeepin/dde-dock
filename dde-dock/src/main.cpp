@@ -73,12 +73,12 @@ int main(int argc, char *argv[])
             qApp->setStyleSheet(styleSheet);
             file.close();
         } else {
-            qWarning() << "[Error:] Open  style file errr!";
+            qWarning() << "Dock Open  style file errr!";
         }
 
         MainWidget w;
         w.show();
-        qWarning() << "The main window has been shown!";
+        qWarning() << "Start Dock, The main window has been shown.............................................................";
         w.loadResources();
 
         RegisterDdeSession();
@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
         initGtkThemeWatcher();
         return a.exec();
     } else {
-        qWarning() << "dde dock is running...";
+        qWarning() << "Dock is running!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
         return 0;
     }
 }

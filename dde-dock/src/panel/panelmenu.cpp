@@ -90,37 +90,37 @@ void PanelMenu::onItemInvoked(const QString &itemId, bool)
 
 void PanelMenu::changeToFashionMode()
 {
-    qWarning() << "Change to fashion mode...";
+    qDebug() << "Change to fashion mode...";
     m_dockModeData->setDockMode(Dock::FashionMode);
 }
 
 void PanelMenu::changeToEfficientMode()
 {
-    qWarning() << "Change to efficient mode...";
+    qDebug() << "Change to efficient mode...";
     m_dockModeData->setDockMode(Dock::EfficientMode);
 }
 
 void PanelMenu::changeToClassicMode()
 {
-    qWarning() << "Change to classic mode...";
+    qDebug() << "Change to classic mode...";
     m_dockModeData->setDockMode(Dock::ClassicMode);
 }
 
 void PanelMenu::changeToKeepShowing()
 {
-    qWarning() << "Change to keep showing mode...";
+    qDebug() << "Change to keep showing mode...";
     m_dockModeData->setHideMode(Dock::KeepShowing);
 }
 
 void PanelMenu::changeToKeepHidden()
 {
-    qWarning() << "Change to keep hidden mode...";
+    qDebug() << "Change to keep hidden mode...";
     m_dockModeData->setHideMode(Dock::KeepHidden);
 }
 
 void PanelMenu::changeToSmartHide()
 {
-    qWarning() << "Change to smart hide mode...";
+    qDebug() << "Change to smart hide mode...";
     m_dockModeData->setHideMode(Dock::SmartHide);
 }
 

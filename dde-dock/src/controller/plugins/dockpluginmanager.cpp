@@ -70,8 +70,6 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
     if (newMode == oldMode)
         return;
 
-    qDebug() << "DockPluginManager::onDockModeChanged " << newMode << oldMode;
-
     for (DockPluginProxy * proxy : m_proxies) {
         DockPluginInterface * plugin = proxy->plugin();
         plugin->changeMode(newMode, oldMode);

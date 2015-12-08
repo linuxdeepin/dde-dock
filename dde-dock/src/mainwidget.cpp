@@ -57,7 +57,6 @@ void MainWidget::updatePosition()
                    rec.y + rec.height - this->height());
     }
 
-//    qDebug() << "Position changed: " << this->geometry();
     updateXcbStructPartial();
 }
 

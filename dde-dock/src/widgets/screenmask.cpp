@@ -45,7 +45,7 @@ void ScreenMask::dropEvent(QDropEvent *event)
             dda.RequestUndock(sourceItem->itemData().id);
         }
 
-        qWarning() << "Item drop here:" << event->pos() << event->mimeData()->hasImage();
+        qDebug() << "Item drop to screen mask:" << event->pos() << event->mimeData()->hasImage();
         QImage image = qvariant_cast<QImage>(event->mimeData()->imageData());
         if (!image.isNull())
         {
@@ -83,7 +83,7 @@ void ScreenMask::dropEvent(QDropEvent *event)
         }
         else
         {
-            qWarning() << "Image is NULL!";
+            qWarning() << "Item drop to screen mask, Image is NULL!";
         }
     }
 

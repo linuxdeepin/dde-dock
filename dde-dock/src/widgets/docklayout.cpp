@@ -239,7 +239,7 @@ void DockLayout::dropEvent(QDropEvent *event)
             m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
             emit itemDocking(dataObj.value("appKey").toString());
 
-            qWarning() << "App drop to dock: " << dataObj.value("appKey").toString();
+            qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
         }
     }
     else
@@ -248,7 +248,6 @@ void DockLayout::dropEvent(QDropEvent *event)
 
 void DockLayout::slotItemDrag()
 {
-//    qWarning() << "Item draging..."<<x<<y<<item;
     AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
 
     int tmpIndex = indexOf(item);

@@ -46,7 +46,7 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
         if (m_ids.indexOf(tmpId) != -1){
             item->deleteLater();
         }else{
-            qWarning() << "entry add:" << tmpId;
+            qDebug() << "app entry add:" << tmpId;
             bool isTheDropOne = m_dockingItemId != tmpId;
             m_ids.append(tmpId);
             emit entryAdded(item, isTheDropOne);
@@ -65,7 +65,7 @@ void AppManager::setDockingItemId(const QString &dockingItemId)
 void AppManager::onEntryRemoved(const QString &id)
 {
     if (m_ids.indexOf(id) != -1) {
-        qWarning() << "entry remove:" << id;
+        qDebug() << "app entry remove:" << id;
         m_ids.removeAll(id);
         emit entryRemoved(id);
     }
