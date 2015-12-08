@@ -1,7 +1,6 @@
 package dock
 
 import (
-	"dbus/com/deepin/dde/launcher"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
@@ -15,7 +14,6 @@ import (
 )
 
 var (
-	lastActive      string        = ""
 	activeWindow    xproto.Window = 0
 	isLauncherShown bool          = false
 	currentViewport []uint        = nil
@@ -336,22 +334,10 @@ func (m *ClientManager) listenRootWindow() {
 				}
 
 				logger.Debug("active window is", appId)
-				if appId != DDELauncher {
-					LAUNCHER, err := launcher.NewLauncher(
-						"com.deepin.dde.launcher",
-						"/com/deepin/dde/launcher",
-					)
-					if err != nil {
-						logger.Debug(err)
-					} else {
-						LAUNCHER.Hide()
-						launcher.DestroyLauncher(LAUNCHER)
-					}
-				} else {
+				if appId == DDELauncher {
 					isLauncherShown = true
 				}
 
-				lastActive = appId
 				dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
 			}
 
