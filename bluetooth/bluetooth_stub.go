@@ -66,23 +66,7 @@ func (b *Bluetooth) setPropState() {
 	dbus.NotifyChange(b, "State")
 }
 
-func (b *Bluetooth) scanPowerOffDevice() {
-	removeDevices := [](*device){}
-	for _, devices := range b.devices {
-		for _, d := range devices {
-			_, err := d.bluezDevice.RSSI.GetValue()
-			if nil != err && !d.Paired {
-				logger.Info("remove device", d, err)
-				removeDevices = append(removeDevices, d)
-			}
-		}
-	}
-
-	for _, d := range removeDevices {
-		bluezRemoveDevice(d.AdapterPath, d.Path)
-	}
-}
-func (b *Bluetooth) clearUnpairedDevice() {
+func (b *Bluetooth) ClearUnpairedDevice() {
 	removeDevices := [](*device){}
 	for _, devices := range b.devices {
 		for _, d := range devices {
