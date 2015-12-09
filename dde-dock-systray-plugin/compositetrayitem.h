@@ -31,9 +31,6 @@ public:
     void coverOn();
     void coverOff();
 
-signals:
-    void relayouted();
-
 public slots:
     void handleTrayiconDamage();
     void handleUpdateTimer();

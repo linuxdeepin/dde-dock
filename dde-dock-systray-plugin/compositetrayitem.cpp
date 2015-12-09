@@ -126,8 +126,6 @@ void CompositeTrayItem::coverOff()
     m_cover->lower();
     m_cover->setVisible(false);
     m_isCovered = false;
-
-    m_coverTimer->start();
 }
 
 void CompositeTrayItem::tryCoverOn()
@@ -146,7 +144,6 @@ void CompositeTrayItem::tryCoverOn()
 void CompositeTrayItem::handleTrayiconDamage()
 {
     m_coverTimer->stop();
-    m_coverTimer->start();
 
     unfold();
 
@@ -175,7 +172,7 @@ void CompositeTrayItem::enterEvent(QEvent * event)
 
 void CompositeTrayItem::leaveEvent(QEvent * event)
 {
-    tryCoverOn();
+    m_coverTimer->start();
 
     QFrame::leaveEvent(event);
 }
@@ -212,13 +209,9 @@ void CompositeTrayItem::relayout()
         columnCount = 6;
     }
 
-    QList<TrayIcon*> items = m_icons.values();
-    for (int i = 0; i < items.length(); i++) {
-        TrayIcon * icon = items.at(i);
-        icon->hideIcon();
-    }
-
     if (m_mode == Dock::FashionMode) {
+        QList<TrayIcon*> items = m_icons.values();
+
         if (m_isFolded) {
             columnCount = 2;
         } else if (columnCount > 2 && childrenCount % 2 == 0) {
@@ -230,22 +223,24 @@ void CompositeTrayItem::relayout()
 
         resize(Margins * 2 + ColumnWidth * columnCount, 48);
 
-        QList<TrayIcon*> items = m_icons.values();
         int placesCount = items.length();
-        if (m_isFolded) {
-            placesCount = 3;
-        }
+        if (m_isFolded && placesCount > 3) { placesCount = 3;}
 
-        for (int i = 0; i < placesCount; i++) {
+        for (int i = 0; i < items.length(); i++) {
             TrayIcon * icon = items.at(i);
-            icon->maskOn();
 
-            int x = i % columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
-            int y = i / columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
+            if (i < placesCount) {
+                icon->maskOn();
 
-            icon->move(x, y);
-            icon->updateIcon();
-            icon->show();
+                int x = i % columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
+                int y = i / columnCount * ColumnWidth + Margins + (ColumnWidth - 16) / 2;
+
+                icon->move(x, y);
+                icon->show();
+                icon->updateIcon();
+            } else {
+                icon->hideIcon();
+            }
         }
 
         if (columnCount > 2) {
@@ -282,10 +277,8 @@ void CompositeTrayItem::relayout()
             icon->maskOff();
 
             icon->move(i * (Dock::APPLET_CLASSIC_ICON_SIZE + Dock::APPLET_CLASSIC_ITEM_SPACING), 0);
-            icon->updateIcon();
             icon->show();
+            icon->updateIcon();
         }
     }
-
-    emit relayouted();
 }

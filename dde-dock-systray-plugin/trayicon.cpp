@@ -29,11 +29,14 @@ TrayIcon::TrayIcon(WId winId, QWidget *parent) :
     resize(s_embedSize, s_embedSize);
 
     wrapWindow();
+    updateIcon();
 
     // prevent the updateIcon function from being executed overly.
     m_timer = new QTimer(this);
     m_timer->setInterval(500);
     m_timer->setSingleShot(true);
+
+    connect(m_timer, &QTimer::timeout, this, &TrayIcon::updateIcon);
 }
 
 TrayIcon::~TrayIcon()
@@ -47,11 +50,7 @@ void TrayIcon::paintEvent(QPaintEvent *)
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    if (!m_timer->isActive()) {
-        m_timer->start();
-        m_image = getImageNonComposite();
-    }
-
+    m_image = getImageNonComposite();
     if (!m_image.isNull()) {
         if (m_masked) {
             QPainterPath path;
@@ -173,7 +172,7 @@ void TrayIcon::wrapWindow()
     const uint32_t windowMoveConfigVals[2] = { 0, 0 };
     xcb_configure_window(c, m_windowId,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-                         windowMoveConfigVals);
+                         windowMoveCentially quitting the application. Returns onfigVals);
     */
 
     //if the window is a clearly stupid size resize to be something sensible

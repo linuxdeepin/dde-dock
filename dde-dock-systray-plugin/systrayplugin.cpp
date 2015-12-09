@@ -28,7 +28,6 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
                                                               "/com/deepin/dde/TrayManager",
                                                               QDBusConnection::sessionBus(),
                                                               this);
-        m_dbusTrayManager->RetryManager();
         connect(m_dbusTrayManager, &TrayManager::TrayIconsChanged, this, &SystrayPlugin::onTrayIconsChanged);
         connect(m_dbusTrayManager, &TrayManager::Changed, m_compositeItem, &CompositeTrayItem::handleTrayiconDamage);
     }
@@ -37,7 +36,6 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
     connect(entryManager, &DBusEntryManager::TrayInited, this, &SystrayPlugin::onTrayInit);
 
     initTrayIcons();
-    connect(m_compositeItem, &CompositeTrayItem::relayouted, this, &SystrayPlugin::onCompositeItemRelayout);
 }
 
 QString SystrayPlugin::getPluginName()
@@ -110,7 +108,7 @@ void SystrayPlugin::initTrayIcons()
 {
     m_compositeItem->clear();
 
-//    m_dbusTrayManager->RetryManager();
+    m_dbusTrayManager->RetryManager();
     QList<uint> trayIcons = m_dbusTrayManager->trayIcons();
     qDebug() << "Init trayicons, Found trayicons: " <<m_dbusTrayManager->isValid() << trayIcons << m_dbusTrayManager->property("TrayIcons");
 
@@ -166,9 +164,4 @@ void SystrayPlugin::onTrayIconsChanged()
 void SystrayPlugin::onTrayInit()
 {
 
-}
-
-void SystrayPlugin::onCompositeItemRelayout()
-{
-    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }
