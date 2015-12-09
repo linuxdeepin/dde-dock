@@ -270,25 +270,30 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 
 func (m *Manager) doSetFontSize(size int32) error {
 	if m.FontSize == size {
+		logger.Debug("[doSetFontSize] equal:", m.FontSize, size)
 		return nil
 	}
 
 	if !fonts.IsFontSizeValid(size) {
+		logger.Debug("[doSetFontSize] invalid size:", size)
 		return fmt.Errorf("Invalid font size '%v'", size)
 	}
 
 	m.setPropFontSize(size)
 	m.setting.SetInt(gsKeyFontSize, size)
+	logger.Debug("[doSetFontSize] gsetting changed over:", m.setting.GetInt(gsKeyFontSize))
 
 	if size == fonts.GetFontSize() {
+		logger.Debug("[doSetFontSize] equal with xsetting:", fonts.GetFontSize(), size)
 		return nil
 	}
 	dt := m.getCurrentDTheme()
 	if dt == nil {
+		logger.Debug("[doSetFontSize] not found valid dtheme")
 		return fmt.Errorf("Not found valid dtheme")
 	}
 
-	return fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
+	return fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, size)
 }
 
 func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
