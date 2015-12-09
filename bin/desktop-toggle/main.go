@@ -41,9 +41,10 @@ func main() {
 	ret, err := ewmh.ShowingDesktopGet(X)
 	if err != nil {
 		logger.Warning("Get showing desktop state failed:", err)
-		return
+		// '_NET_SHOWING_DESKTOP' not exist, means not showing
+		ret = false
 	}
-	logger.Info("Desktop showing state:", ret)
+	logger.Debug("Desktop showing state:", ret)
 
 	var showInt int
 	if ret {
