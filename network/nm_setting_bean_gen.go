@@ -47,7 +47,7 @@ func initVirtualSections() {
 		Name:            Tr("General"),
 		Keys: []*GeneralKeyInfo{
 			&GeneralKeyInfo{Section: "connection", Key: "id", Name: Tr("Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "connection", Key: "autoconnect", Name: Tr("Automatically connect"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "connection", Key: "vk-vpn-autoconnect", Name: Tr("Automatically connect"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "connection", Key: "vk-no-permission", Name: Tr("For All Users"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
@@ -538,7 +538,7 @@ var virtualKeys = []vkeyInfo{
 	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
 	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktype: ktypeUint32, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
 	{value: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_SETTING_PPP_LCP_ECHO_INTERVAL}, available: true, childKey: false, optional: false},
-	{value: NM_SETTING_VK_VPN_AUTOCONNECT, ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_VPN_AUTOCONNECT, ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{NM_SETTING_CONNECTION_AUTOCONNECT}, available: true, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_TYPE, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: false, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_MISSING_PLUGIN, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: true, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE}, available: true, childKey: false, optional: false},
