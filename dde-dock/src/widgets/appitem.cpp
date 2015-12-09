@@ -128,13 +128,12 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
 {
     QRect moveRect(QPoint(m_lastPressPos.x() - INVALID_MOVE_RADIUS, m_lastPressPos.y() - INVALID_MOVE_RADIUS),
                    QPoint(m_lastPressPos.x() + INVALID_MOVE_RADIUS, m_lastPressPos.y() + INVALID_MOVE_RADIUS));
+    //this event will only execp onec then handle by Drag
     if (!moveRect.contains(event->pos())) {
-        //this event will only execp onec then handle by Drag
-        emit dragStart();
-
         Qt::MouseButtons btn = event->buttons();
         if(btn == Qt::LeftButton)
         {
+            emit dragStart();
             //drag and mimeData object will delete automatically
             QDrag* drag = new QDrag(this);
             QMimeData* mimeData = new QMimeData();
