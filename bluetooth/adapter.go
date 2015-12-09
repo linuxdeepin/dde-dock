@@ -112,6 +112,10 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 		return
 	}
 
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
+
+	a := newAdapter(apath)
 	// initialize adapter power state
 	b.config.addAdapterConfig(bluezGetAdapterAddress(apath))
 	oldPowered := b.config.getAdapterConfigPowered(bluezGetAdapterAddress(apath))
@@ -121,68 +125,59 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 		b.RequestDiscovery(apath)
 	}
 
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-	a := newAdapter(apath)
-	b.adapters = append(b.adapters, a)
+	b.adapters[apath] = a
 	a.notifyAdapterAdded()
 	b.setPropAdapters()
 }
+
 func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
-	i := b.getAdapterIndex(apath)
-	if i < 0 {
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
+
+	if b.adapters[apath] == nil {
 		logger.Error("repeat remove adapter", apath)
 		return
 	}
 
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-	b.doRemoveAdapter(i)
+	b.doRemoveAdapter(apath)
 	b.setPropAdapters()
 }
-func (b *Bluetooth) doRemoveAdapter(i int) {
-	removeAdapter := b.adapters[i]
-	copy(b.adapters[i:], b.adapters[i+1:])
-	b.adapters[len(b.adapters)-1] = nil
-	b.adapters = b.adapters[:len(b.adapters)-1]
+func (b *Bluetooth) doRemoveAdapter(apath dbus.ObjectPath) {
+	removeAdapter := b.adapters[apath]
+	delete(b.adapters, apath)
 
 	removeAdapter.notifyAdapterRemoved()
 	destroyAdapter(removeAdapter)
 }
 
 func (b *Bluetooth) getAdapter(apath dbus.ObjectPath) (a *adapter, err error) {
-	i := b.getAdapterIndex(apath)
-	if i < 0 {
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
+
+	a = b.adapters[apath]
+	if a == nil {
 		err = fmt.Errorf("adapter not exists %s", apath)
 		logger.Error(err)
 		return
 	}
-
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-	a = b.adapters[i]
 	return
 }
 func (b *Bluetooth) isAdapterExists(apath dbus.ObjectPath) bool {
-	if b.getAdapterIndex(apath) >= 0 {
+	b.adaptersLock.Lock()
+	defer b.adaptersLock.Unlock()
+	if b.adapters[apath] != nil {
 		return true
 	}
 	return false
 }
-func (b *Bluetooth) getAdapterIndex(apath dbus.ObjectPath) int {
-	b.adaptersLock.Lock()
-	defer b.adaptersLock.Unlock()
-	for i, a := range b.adapters {
-		if a.Path == apath {
-			return i
-		}
-	}
-	return -1
-}
 
 // GetAdapters return all adapter objects that marshaled by json.
 func (b *Bluetooth) GetAdapters() (adaptersJSON string, err error) {
-	adaptersJSON = marshalJSON(b.adapters)
+	v := make([]*adapter, 0, len(b.adapters))
+	for _, a := range b.adapters {
+		v = append(v, a)
+	}
+	adaptersJSON = marshalJSON(v)
 	return
 }
 

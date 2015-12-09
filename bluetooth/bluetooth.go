@@ -58,7 +58,7 @@ type Bluetooth struct {
 
 	// adapter
 	adaptersLock sync.Mutex
-	adapters     []*adapter
+	adapters     map[dbus.ObjectPath]*adapter
 	Adapters     string // array of adapters that marshaled by json
 
 	// device
@@ -81,6 +81,7 @@ type Bluetooth struct {
 
 func NewBluetooth() (b *Bluetooth) {
 	b = &Bluetooth{}
+	b.adapters = map[dbus.ObjectPath]*adapter{}
 	return
 }
 
