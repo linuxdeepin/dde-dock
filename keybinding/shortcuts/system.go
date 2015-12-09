@@ -31,7 +31,7 @@ import (
 
 const (
 	// Under '/usr/share' or '/usr/local/share'
-	systemActionsFile = "deepin/dde-daemon/keybinding/system_actions.json"
+	systemActionsFile = "dde-daemon/keybinding/system_actions.json"
 )
 
 func ListSystemShortcut() Shortcuts {
@@ -79,6 +79,7 @@ func systemIdNameMap() map[string]string {
 		"file-manager":          gettext.Tr("File manager"),
 		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
 		"switch-layout":         gettext.Tr("Switch Layout"),
+		"wm-switcher":           gettext.Tr("Switch window effects"),
 	}
 
 	return idNameMap
@@ -126,6 +127,8 @@ func findSysActionInTable(id string) string {
 		return "nautilus"
 	case "disable-touchpad":
 		return "gsettings set com.deepin.dde.touchpad touchpad-enabled false"
+	case "wm-switcher":
+		return "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM"
 	}
 
 	return ""
@@ -154,12 +157,12 @@ func getActionHandler(file string) (*actionHandler, error) {
 }
 
 func getSystemActionsFile() string {
-	var file = path.Join("/usr/share", systemActionsFile)
+	var file = path.Join("/usr/local/share", systemActionsFile)
 	if dutils.IsFileExist(file) {
 		return file
 	}
 
-	file = path.Join("/usr/local/share", systemActionsFile)
+	file = path.Join("/usr/share", systemActionsFile)
 	if dutils.IsFileExist(file) {
 		return file
 	}
