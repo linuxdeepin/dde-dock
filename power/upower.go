@@ -52,9 +52,9 @@ func (p *Power) refreshUpower() {
 		p.setPropOnBattery(upower.OnBattery.Get())
 
 		if p.OnBattery {
-			playSound(soundutils.EventPowerPlug)
-		} else {
 			playSound(soundutils.EventPowerUnplug)
+		} else {
+			playSound(soundutils.EventPowerPlug)
 		}
 		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
