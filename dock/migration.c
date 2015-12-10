@@ -110,7 +110,9 @@ void _build_filter_info(GKeyFile* filter, const char* path)
             for (; j<key_len; j++) {
                 g_hash_table_insert(white_apps, g_key_file_get_string(filter, groups[i], keys[j], NULL), NULL);
             }
+            g_strfreev(keys);
         }
+        g_strfreev(groups);
     }
 }
 
@@ -141,7 +143,7 @@ void _init()
     }
     if (suffix_regex == NULL) {
         g_warning("Can't build suffix_regex, use fallback config!");
-        suffix_regex = g_regex_new( "((?:-|\\.)?bin$)|(\\.py$)|(_)", G_REGEX_OPTIMIZE, 0, NULL);
+        suffix_regex = g_regex_new( "((?:-|\\.)?bin$)|(\\.py$)|(_$)", G_REGEX_OPTIMIZE, 0, NULL);
     }
     g_key_file_free(process_regex);
 
@@ -514,14 +516,14 @@ int get_parent_pid(int pid)
     }
 
     char** stats = g_strsplit(stat, " ", 0);
-    char* strppid = g_strdup(stats[3]);
-    g_strfreev(stats);
+    char* strppid = stats[3];
 
     ppid = atoi(strppid);
     if (ppid == 1) {
         // if init is parent, it is meanless
         ppid = 0;
     }
+    g_strfreev(stats);
 
 out:
     g_free(stat);
@@ -653,7 +655,6 @@ char* icon_name_to_path(const char* name, int size)
         }
     }
 
-    char* pic_name = g_strndup(name, pic_name_len);
     GtkIconTheme* them = gtk_icon_theme_get_default(); //do not ref or unref it
     if (them == NULL) {
         // NOTE: the g_message won't be recorded on log,
@@ -661,6 +662,7 @@ char* icon_name_to_path(const char* name, int size)
         return NULL;
     }
 
+    char* pic_name = g_strndup(name, pic_name_len);
     GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
     g_free(pic_name);
     if (info) {
@@ -700,8 +702,9 @@ char* check_absolute_path_icon(char const* app_id, char const* icon_path)
         char* basename = get_basename_without_extend_name(icon_path);
         if (basename != NULL) {
             if (g_strcmp0(app_id, basename) == 0
-                || (icon = _check(basename)) == NULL)
+                || (icon = _check(basename)) == NULL) {
                 icon = g_strdup(icon_path);
+            }
             g_free(basename);
         }
     }
