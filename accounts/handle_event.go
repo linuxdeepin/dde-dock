@@ -84,7 +84,8 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 }
 
 func (m *Manager) handleUserFileChanged(ev *fsnotify.FileEvent, handler func()) {
-	if !ev.IsDelete() || handler == nil {
+	// Sometime has no delete event was emit when file changed
+	if handler == nil {
 		return
 	}
 

@@ -22,8 +22,10 @@
 package users
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -55,7 +57,7 @@ func ModifyShell(shell, username string) error {
 		return errInvalidParam
 	}
 
-	var cmd = fmt.Sprintf("%s -s %s", userCmdModify, shell, username)
+	var cmd = fmt.Sprintf("%s -s %s %s", userCmdModify, shell, username)
 	return doAction(cmd)
 }
 
@@ -94,7 +96,7 @@ func IsAutoLoginUser(username string) bool {
 }
 
 func IsAdminUser(username string) bool {
-	admins, err := getAdminUserList(userFileGroup)
+	admins, err := getAdminUserList(userFileGroup, userFileSudoers)
 	if err != nil {
 		return false
 	}
@@ -102,8 +104,13 @@ func IsAdminUser(username string) bool {
 	return isStrInArray(username, admins)
 }
 
-func getAdminUserList(file string) ([]string, error) {
-	content, err := ioutil.ReadFile(file)
+func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
+	adms, err := getAdmGroup(fileSudoers)
+	if err != nil {
+		return nil, err
+	}
+
+	content, err := ioutil.ReadFile(fileGroup)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +127,7 @@ func getAdminUserList(file string) ([]string, error) {
 			continue
 		}
 
-		if items[0] != "sudo" {
+		if !isStrInArray(items[0], adms) {
 			continue
 		}
 
@@ -128,4 +135,37 @@ func getAdminUserList(file string) ([]string, error) {
 	}
 
 	return strings.Split(tmp, ","), nil
+}
+
+// get adm group from '/etc/sudoers'
+func getAdmGroup(file string) ([]string, error) {
+	fr, err := os.Open(file)
+	if err != nil {
+		return nil, err
+	}
+	defer fr.Close()
+
+	var (
+		adms    []string
+		scanner = bufio.NewScanner(fr)
+	)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if len(line) == 0 || !strings.Contains(line, "%") {
+			continue
+		}
+
+		if !strings.Contains(line, `ALL=(ALL`) {
+			continue
+		}
+
+		// deepin: %sudo\tALL=(ALL:ALL) ALL
+		// archlinux: %wheel ALL=(ALL) ALL
+		array := strings.Split(line, "ALL")
+		array = strings.Split(strings.TrimSpace(array[0]), "%")
+		adms = append(adms, strings.TrimRight(array[1], "\t"))
+	}
+
+	return adms, nil
 }

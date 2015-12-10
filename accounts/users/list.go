@@ -26,8 +26,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 const (
@@ -35,6 +35,7 @@ const (
 	userFileShadow    = "/etc/shadow"
 	userFileGroup     = "/etc/group"
 	userFileLoginDefs = "/etc/login.defs"
+	userFileSudoers   = "/etc/sudoers"
 
 	itemLenPasswd    = 7
 	itemLenShadow    = 9
