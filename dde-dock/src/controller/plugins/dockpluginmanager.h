@@ -54,6 +54,7 @@ private:
 
     const QString SYSTRAY_PLUGIN_ID = "composite_item_key";
     const QString DATETIME_PLUGIN_ID = "id_datetime";
+    const QString SHUTDOWN_PLUGIN_ID = "shutdown";
 };
 
 #endif // DOCKPLUGINMANAGER_H

@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 SUBDIRS = dde-dock \
           dde-dock-systray-plugin \
+          dde-dock-shutdown-plugin \
           dde-dock-trash-plugin
 
 TRANSLATIONS += translations/dde-dock.ts

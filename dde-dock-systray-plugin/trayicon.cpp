@@ -226,7 +226,7 @@ void TrayIcon::updateIcon()
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
 
     QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    const uint32_t windowMoveConfigVals[2] = { globalPos.x(), globalPos.y() };
+    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
     xcb_configure_window(c, m_containerWid,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
                          windowMoveConfigVals);

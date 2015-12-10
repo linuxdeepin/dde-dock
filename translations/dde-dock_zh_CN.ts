@@ -53,7 +53,7 @@
 <context>
     <name>MainItem</name>
     <message>
-        <location filename="../dde-dock-trash-plugin/mainitem.cpp" line="96"/>
+        <location filename="../dde-dock-trash-plugin/mainitem.cpp" line="123"/>
         <source>Are you sure to uninstall %1?</source>
         <translation>您确定要卸载 %1 吗？</translation>
     </message>
@@ -99,12 +99,12 @@
 <context>
     <name>PluginItemWrapper</name>
     <message>
-        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="92"/>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="103"/>
         <source>_Run</source>
         <translation>运行(R)</translation>
     </message>
     <message>
-        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="93"/>
+        <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="104"/>
         <source>_Undock</source>
         <translation>移除驻留(U)</translation>
     </message>
@@ -112,9 +112,17 @@
 <context>
     <name>PluginsSettingFrame</name>
     <message>
-        <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="149"/>
+        <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="170"/>
         <source>Notification Area Settings</source>
         <translation>通知区域设置</translation>
+    </message>
+</context>
+<context>
+    <name>ShutdownPlugin</name>
+    <message>
+        <location filename="../dde-dock-shutdown-plugin/shutdownplugin.cpp" line="17"/>
+        <source>Power</source>
+        <translation>电源</translation>
     </message>
 </context>
 <context>

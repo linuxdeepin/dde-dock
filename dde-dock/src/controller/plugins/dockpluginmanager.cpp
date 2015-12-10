@@ -219,12 +219,22 @@ void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
 
     m_sysPlugins.insert(item, uuid);
 
+    if (uuid == SHUTDOWN_PLUGIN_ID)
+    {
+        if (m_sysPlugins.values().contains(DATETIME_PLUGIN_ID))
+            emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+        else
+            emit itemAppend(item);
+
+        return;
+    }
+
     if (uuid == SYSTRAY_PLUGIN_ID) {
         if (m_dockModeData->getDockMode() != Dock::FashionMode) {
             emit itemAppend(item);
         }
         else {
-            emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+            emit itemInsert(sysPluginItem(SHUTDOWN_PLUGIN_ID), item);
         }
     }
     else {
@@ -238,8 +248,15 @@ void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uu
         return;
 
     if (m_dockModeData->getDockMode() != Dock::FashionMode) {
-        //Normal plug next date plugins to ensure trayicon displayed in the far left
-        emit itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+
+        qDebug() << uuid << m_sysPlugins.values();
+
+        if (m_sysPlugins.values().contains(SHUTDOWN_PLUGIN_ID))
+            itemInsert(sysPluginItem(SHUTDOWN_PLUGIN_ID), item);
+        else if (m_sysPlugins.values().contains(DATETIME_PLUGIN_ID))
+            itemInsert(sysPluginItem(DATETIME_PLUGIN_ID), item);
+        else
+            itemInsert(nullptr, item);
     }
     else {
         //Normal plug placed in the far left on Fashion Mode
@@ -247,5 +264,4 @@ void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uu
     }
 
     m_normalPlugins.insert(item, uuid);
-
 }
