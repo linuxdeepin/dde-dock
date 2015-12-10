@@ -54,7 +54,8 @@ func changeWorkspaceIfNeeded(xid xproto.Window) error {
 	}
 
 	if currentDesktop == desktopNum {
-		return fmt.Errorf("No need to change workspace, the current desktop is already %v", currentDesktop)
+		logger.Debug("No need to change workspace, the current desktop is already %v", currentDesktop)
+		return nil
 	}
 
 	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)

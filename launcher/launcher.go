@@ -123,7 +123,7 @@ func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
 // RequestUninstall 请求卸载程。
 func (self *Launcher) RequestUninstall(id string, purge bool) {
 	go func(id ItemID) {
-		logger.Warning("uninstall", id)
+		logger.Info("uninstall", id)
 		err := self.itemManager.UninstallItem(id, purge, time.Minute*20)
 		if err == nil {
 			dbus.Emit(self, "UninstallSuccess", id)
@@ -223,7 +223,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	if status == AppStatusCreated && self.itemManager.HasItem(id) {
 		status = AppStatusModified
 	}
-	logger.Info(name, "Status:", status)
+	logger.Info("start emitItemChanged", name, "Status:", status)
 
 	if status != AppStatusDeleted {
 		// cannot use float number here. the total wait time is about 12s.
@@ -267,7 +267,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	}
 
 	if !self.itemManager.HasItem(id) {
-		logger.Info("get item failed")
+		logger.Warning("has no such a item", id)
 		return
 	}
 
@@ -283,10 +283,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		self.categoryManager.AddItem(id, cid)
 	}
 
-	logger.Info("emit ItemChanged signal")
-	dbus.Emit(self, "ItemChanged", status, itemInfo, cid)
-
-	logger.Info(name, status, "successful")
+	logger.Info("emit ItemChanged signal", status, dbus.Emit(self, "ItemChanged", status, itemInfo, cid))
 }
 
 func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, info map[string]ItemChangedStatus) {
@@ -300,7 +297,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}
 	}
 	if ev.IsRename() {
-		logger.Info("renamed")
+		// logger.Info("renamed")
 		select {
 		case <-info[name].renamed:
 		default:
@@ -472,7 +469,7 @@ func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	infos := []TimeInstalledExport{}
 	times, err := self.itemManager.GetAllTimeInstalled()
 	if err != nil {
-		logger.Info(err)
+		logger.Warning("GetAllTimeInstalled error:", err)
 	}
 
 	for id, t := range times {
@@ -554,7 +551,7 @@ func (self *Launcher) Search(key string) {
 func (self *Launcher) MarkLaunched(id string) {
 	err := self.itemManager.MarkLaunched(ItemID(id))
 	if err != nil {
-		logger.Info(err)
+		logger.Warning("MarkLaunched error:", err)
 		return
 	}
 
