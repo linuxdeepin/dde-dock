@@ -2,6 +2,7 @@
 #define PREVIEWWINDOW_H
 
 #include <QTimer>
+#include <QPointer>
 #include <QPropertyAnimation>
 
 #include <libdui/darrowrectangle.h>
@@ -36,8 +37,8 @@ private:
 private:
     QTimer *m_showTimer = NULL;
     QTimer *m_hideTimer = NULL;
-    QWidget *m_tmpContent = NULL;
-    QWidget *m_lastContent = NULL;
+    QPointer<QWidget> m_tmpContent;
+    QPointer<QWidget> m_lastContent;
     QPropertyAnimation *m_animation = NULL;
     QPoint m_lastPos = QPoint(0, 0);
     int m_x = 0;

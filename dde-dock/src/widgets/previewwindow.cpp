@@ -87,8 +87,11 @@ void PreviewWindow::leaveEvent(QEvent *)
 
 void PreviewWindow::onShowTimerTriggered()
 {
-    if (m_lastContent != m_tmpContent)
-        emit showFinish(m_lastContent);
+    if (!m_lastContent.isNull()) {
+        m_lastContent.data()->setParent(NULL);
+        if (m_lastContent != m_tmpContent)
+            emit showFinish(m_lastContent);
+    }
 
     DArrowRectangle::setContent(m_tmpContent);
     m_lastContent = m_tmpContent;
