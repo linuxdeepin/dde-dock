@@ -237,7 +237,7 @@ func (d *Daemon) Start() error {
 			mouseAreaTimer = nil
 		}
 		mouseAreaTimer = time.AfterFunc(TOGGLE_HIDE_TIME, func() {
-			logger.Info("MouseIn:", id)
+			logger.Debug("MouseIn:", id)
 			mouseAreaTimer = nil
 			hideModemanager.UpdateState()
 		})
@@ -248,7 +248,7 @@ func (d *Daemon) Start() error {
 			mouseAreaTimer.Stop()
 			mouseAreaTimer = nil
 		}
-		logger.Info("MouseOut:", id)
+		logger.Debug("MouseOut:", id)
 		hideModemanager.UpdateState()
 	})
 

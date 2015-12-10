@@ -261,7 +261,7 @@ gboolean is_chrome_app(char const* name)
 char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name)
 {
     // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
-    g_message("guess app id");
+    g_debug("guess app id");
     if (s_pid == 0) return g_strdup(wmclass);
     char* app_id = NULL;
 
@@ -448,7 +448,7 @@ void get_pid_info(int pid, char** exec_name, char** exec_args)
 
     gsize size=0;
     if (g_file_get_contents(path, &cmd_line, &size, NULL) && size > 0) {
-        g_message("[%s] get cmd info from /proc/n/cmdline", __func__);
+        g_debug("[%s] get cmd info from /proc/n/cmdline", __func__);
         char** name_args = g_new(char*, 1024);
         gsize j = 0;
         name_args[j] = cmd_line;

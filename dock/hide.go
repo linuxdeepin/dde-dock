@@ -74,7 +74,7 @@ func (m *HideStateManager) SetState(s int32) int32 {
 	state := HideStateType(s)
 	logger.Debug("SetState m.state:", m.state, "new state:", state)
 	if m.state == state {
-		logger.Info("New HideState is the same as the old:", state)
+		logger.Debug("New HideState is the same as the old:", state)
 		return s
 	}
 
@@ -144,7 +144,7 @@ func (m *HideStateManager) UpdateState() {
 		for _, app := range ENTRY_MANAGER.runtimeApps {
 			for _, winInfo := range app.xids {
 				if winInfo.OverlapDock {
-					logger.Warning(app.Id, "overlap dock")
+					logger.Info(app.Id, "overlap dock")
 					trigger = TriggerHide
 					break
 				}
@@ -154,7 +154,7 @@ func (m *HideStateManager) UpdateState() {
 
 	if isLauncherShown {
 		m.CancelToggleShow()
-		logger.Info("launcher is opened, show dock")
+		logger.Debug("launcher is opened, show dock")
 		trigger = TriggerShow
 	}
 

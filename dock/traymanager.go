@@ -265,7 +265,7 @@ func (m *TrayManager) tryOwner() bool {
 	}
 
 	//owner the _NET_SYSTEM_TRAY_Sn
-	logger.Info("Required _NET_SYSTEM_TRAY_S0 successful")
+	logger.Debug("Required _NET_SYSTEM_TRAY_S0 successful")
 
 	m.requireManageTrayIcons()
 
@@ -285,7 +285,7 @@ func (m *TrayManager) tryOwner() bool {
 	)
 	reply, err = m.getSelectionOwner()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("get selection owner failed:", err)
 		return false
 	}
 	return reply.Owner != 0

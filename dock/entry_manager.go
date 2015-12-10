@@ -66,7 +66,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			m.appEntries[rApp.Id] = e
 			err := dbus.InstallOnSession(e)
 			if err != nil {
-				logger.Warning(err)
+				logger.Warning("Install NewRuntimeAppEntry to dbus failed:", err)
 			}
 			return e
 		}
@@ -78,7 +78,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			m.appEntries[nApp.Id] = e
 			err := dbus.InstallOnSession(e)
 			if err != nil {
-				logger.Warning(err)
+				logger.Warning("Install NewNormalAppEntry to dbus failed:", err)
 			}
 			return e
 		}

@@ -59,7 +59,7 @@ func changeWorkspaceIfNeeded(xid xproto.Window) error {
 
 	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)
 	if err != nil {
-		logger.Warningf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
+		logger.Debugf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
 	}
 
 	err = ewmh.ClientEvent(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP", int(desktopNum), int(timeStamp))
@@ -121,7 +121,7 @@ func (m *ClientManager) IsLauncherShown() bool {
 func walkClientList(pre func(xproto.Window) bool) bool {
 	list, err := ewmh.ClientListGet(XU)
 	if err != nil {
-		logger.Warning("Can't get _NET_CLIENT_LIST", err)
+		logger.Debug("Can't get _NET_CLIENT_LIST", err)
 		return false
 	}
 
@@ -266,7 +266,7 @@ func isWindowOverlapDock(xid xproto.Window) bool {
 	win := xwindow.New(XU, xid)
 	rect, err := win.DecorGeometry()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warningf("isWindowOverlapDock GetDecorGeometry of 0x%x failed: %s", xid, err)
 		return false
 	}
 
@@ -324,17 +324,14 @@ func (m *ClientManager) listenRootWindow() {
 			var err error
 			isLauncherShown = false
 			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activeWindow,
-					DisplayModeType(setting.GetDisplayMode()))
-				logger.Debug("current active window:", appId)
-				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
-					logger.Debug("find runtime app")
-					rApp.setLeader(activeWindow)
-					rApp.updateState(activeWindow)
+				// loop gets better performance than find_app_id_by_xid.
+				// setLeader/updateState will filter invalid xid.
+				for _, app := range ENTRY_MANAGER.runtimeApps {
+					app.setLeader(activeWindow)
+					app.updateState(activeWindow)
 				}
 
-				logger.Debug("active window is", appId)
-				if appId == DDELauncher {
+				if isDeepinLauncher(activeWindow) {
 					isLauncherShown = true
 				}
 

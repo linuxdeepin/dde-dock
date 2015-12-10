@@ -2,7 +2,6 @@ package dock
 
 import (
 	"errors"
-	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -35,7 +34,7 @@ func NewNormalApp(desktopID string) *NormalApp {
 		core = NewDesktopAppInfo(desktopID)
 		if core == nil {
 			newId := guess_desktop_id(app.Id)
-			logger.Info(fmt.Sprintf("guess desktop: %q", newId))
+			logger.Debugf("guess desktop: %q", newId)
 			if newId != "" {
 				core = NewDesktopAppInfo(newId)
 				app.DesktopID = newId
@@ -78,7 +77,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func(timestamp uint32) {
 		core := app.createDesktopAppInfo()
 		if core == nil {
-			logger.Warning("Run app failed")
+			logger.Warning("CreateDesktopAppInfo failed")
 			return
 		}
 		defer core.Unref()

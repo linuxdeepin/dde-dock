@@ -160,7 +160,6 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 		return false
 	}
 
-	logger.Debug("id", id, "title", title, "cmd", cmd)
 	desktopID := guess_desktop_id(id)
 	if desktopID == "" {
 		if e := createScratchFile(id, title, icon, cmd); e != nil {
@@ -200,8 +199,7 @@ func (m *DockedAppManager) doUndock(id string) bool {
 		return false
 	}
 
-	logger.Info("Undock", id)
-	logger.Info("Remove", m.items.Remove(removeItem))
+	logger.Info("Undock", id, ", Remove", m.items.Remove(removeItem))
 	m.core.SetStrv(DockedApps, m.toSlice())
 	gio.SettingsSync()
 	os.Remove(filepath.Join(scratchDir, id+".desktop"))
@@ -261,7 +259,7 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 
 // Sort将已驻留的程序按传入的程序id的顺序重新排序，并保存。
 func (m *DockedAppManager) Sort(items []string) {
-	logger.Info("sort:", items)
+	logger.Debug("sort:", items)
 	for _, item := range items {
 		item = normalizeAppID(item)
 		if i := m.findItem(item); i != nil {
@@ -269,7 +267,7 @@ func (m *DockedAppManager) Sort(items []string) {
 		}
 	}
 	l := m.toSlice()
-	logger.Info("sorted:", l)
+	logger.Debug("sorted:", l)
 	m.core.SetStrv(DockedApps, l)
 	gio.SettingsSync()
 }
@@ -283,7 +281,8 @@ func (m *DockedAppManager) toSlice() []string {
 }
 
 func createScratchFile(id, title, icon, cmd string) error {
-	logger.Info("create scratch file for %s with cmd %q", id, cmd)
+	logger.Info("create scratch file for %s with cmd %q and title %q", id, cmd, title)
+
 	homeDir := os.Getenv("HOME")
 	path := ".config/dock/scratch"
 	configDir := filepath.Join(homeDir, path)
@@ -300,7 +299,6 @@ func createScratchFile(id, title, icon, cmd string) error {
 	}
 	defer f.Close()
 	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
-	logger.Debug(title, ",", icon, ",", cmd)
 	e := temp.Execute(f, dockedItemInfo{title, icon, cmd})
 	if e != nil {
 		return e

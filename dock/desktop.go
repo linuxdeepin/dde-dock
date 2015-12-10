@@ -109,7 +109,7 @@ func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 }
 
 func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchContextLike) {
-	logger.Info(dai.GetFilename())
+	logger.Debug(dai.GetFilename())
 	// LaunchAction won't work for new style desktop, fuck gio.
 	// if dai.gioSupported {
 	// 	logger.Info("[LaunchAction]", dai.GetFilename(), "gio support")
@@ -117,7 +117,7 @@ func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchCon
 	// 	return
 	// }
 
-	logger.Info("LaunchAction")
+	logger.Debug("LaunchAction")
 	exec, _ := dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), glib.KeyFileDesktopKeyExec)
 	logger.Infof("exec: %q", exec)
 	a, err := gio.AppInfoCreateFromCommandline(

@@ -126,11 +126,11 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	ext = ext[1:]
 	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
-		logger.Info("change xpm to data uri")
+		logger.Info("transform xpm to data uri")
 		return xpm_to_dataurl(iconPath)
 	}
 
-	logger.Info("get app icon:", icon)
+	logger.Debug("get app icon:", icon)
 	return icon
 }
 

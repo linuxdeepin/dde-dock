@@ -3,7 +3,6 @@ package dock
 import (
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"io/ioutil"
 	"path/filepath"
 	"strconv"
@@ -388,6 +387,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	if wmClass != nil {
 		wmInstance = wmClass.Instance
 		wmClassName = wmClass.Class
+		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
 	}
 	name, _ := ewmh.WmNameGet(XU, xid)
 	pid, err := ewmh.WmPidGet(XU, xid)
@@ -419,7 +419,7 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 
 	appId = specialCaseWorkaround(xid, appId)
 
-	logger.Debug(fmt.Sprintf("get appid %q", appId))
+	logger.Debugf("get appid %q", appId)
 	return appId
 }
 
@@ -543,7 +543,7 @@ func isNormalWindow(xid xproto.Window) bool {
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
-	logger.Info("update icon for", app.Id)
+	logger.Debug("update icon for", app.Id)
 	core := app.createDesktopAppInfo()
 	if core != nil {
 		defer core.Unref()
@@ -591,6 +591,9 @@ func (app *RuntimeApp) updateWmName(xid xproto.Window) {
 }
 
 func (app *RuntimeApp) updateState(xid xproto.Window) {
+	if _, ok := app.xids[xid]; !ok {
+		return
+	}
 	logger.Debugf("get state of %s(0x%x)", app.Id, xid)
 	//TODO: handle state
 	var err error
@@ -632,7 +635,7 @@ func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 		if newApp := ENTRY_MANAGER.createRuntimeApp(xid); newApp != nil {
 			newApp.attachXid(xid)
 		}
-		fmt.Println("APP:", app.Id, "Changed to..", newAppId)
+		logger.Debug("APP:", app.Id, "Changed to..", newAppId)
 		//TODO: Destroy
 	}
 }
@@ -660,7 +663,7 @@ func (app *RuntimeApp) Activate(x, y int32, timestamp uint32) error {
 				s.State = icccm.StateIconic
 				iconifyWindow(app.CurrentInfo.Xid)
 			} else {
-				logger.Warningf("activeXid is 0x%x, current is 0x%x", activeXid,
+				logger.Debugf("activeXid is 0x%x, current is 0x%x", activeXid,
 					app.CurrentInfo.Xid)
 				if activeXid == app.CurrentInfo.Xid {
 					x := app.findNextLeader()
