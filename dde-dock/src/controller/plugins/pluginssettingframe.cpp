@@ -18,6 +18,7 @@ PluginsSettingLine::PluginsSettingLine(bool checked, const QString &id, const QS
 
     m_switchButton = new DSwitchButton;
     m_switchButton->setChecked(checked);
+
     connect(m_switchButton, &DSwitchButton::checkedChanged, [=](bool checked){
         emit checkedChanged(m_pluginId, checked);
     });
@@ -95,6 +96,7 @@ void PluginsSettingFrame::onPluginAdd(bool checked, const QString &id, const QSt
     PluginsSettingLine *line = new PluginsSettingLine(checked, id, title, icon);
     connect(line, &PluginsSettingLine::checkedChanged, this, &PluginsSettingFrame::checkedChanged);
 
+    line->setFixedHeight(LINE_HEIGHT);
     m_mainLayout->addWidget(line, 1, Qt::AlignTop);
 
     m_lineMap.insert(id, line);
