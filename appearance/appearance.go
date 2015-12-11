@@ -44,6 +44,7 @@ func (*Daemon) Start() error {
 		logger.EndTracing()
 		return err
 	}
+	go _m.listenCursorChanged()
 	_m.listenGSettingChanged()
 
 	return nil
