@@ -101,12 +101,12 @@
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="103"/>
         <source>_Run</source>
-        <translation>运行(R)</translation>
+        <translation>运行_(R)</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="104"/>
         <source>_Undock</source>
-        <translation>移除驻留(U)</translation>
+        <translation>移除驻留_(U)</translation>
     </message>
 </context>
 <context>
