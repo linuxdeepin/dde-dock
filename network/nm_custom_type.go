@@ -177,6 +177,20 @@ func getCustomConnectionType(data connectionData) (connType string) {
 	return
 }
 
+func isWirelessConnection(data connectionData) (isWireless bool) {
+	if getSettingConnectionType(data) == NM_SETTING_WIRELESS_SETTING_NAME {
+		return true
+	}
+	return false
+}
+
+func isVpnConnection(data connectionData) (isVpn bool) {
+	if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
+		return true
+	}
+	return false
+}
+
 // generate connection id when creating a new connection
 func genConnectionId(connType string) (id string) {
 	var idPrefix string

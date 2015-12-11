@@ -32,9 +32,10 @@ type sectionErrors map[string]string
 type sessionErrors map[string]sectionErrors
 
 type ConnectionSession struct {
-	sessionPath dbus.ObjectPath
-	devPath     dbus.ObjectPath
-	data        connectionData
+	sessionPath      dbus.ObjectPath
+	devPath          dbus.ObjectPath
+	data             connectionData
+	connectionExists bool
 
 	ConnectionPath dbus.ObjectPath
 	Uuid           string
@@ -77,6 +78,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	}
 
 	s = doNewConnectionSession(devPath, utils.GenUuid())
+	s.connectionExists = false
 
 	// expand wrapper connection type
 	id := genConnectionId(connectionType)
@@ -113,6 +115,12 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenvpnConnectionData(id, s.Uuid)
 	}
 
+	// disable vpn autoconnect default
+	if isVpnConnection(s.data) {
+		manager.config.addVpnConfig(s.Uuid)
+		logicSetSettingVkVpnAutoconnect(s.data, false)
+	}
+
 	fillSectionCache(s.data)
 	s.setProps()
 	logger.Debugf("newConnectionSessionByCreate(): %#v", s.data)
@@ -126,6 +134,7 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s = doNewConnectionSession(devPath, uuid)
+	s.connectionExists = true
 	s.ConnectionPath = connectionPath
 
 	// get connection data
@@ -261,7 +270,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 
 	refileSectionCache(s.data)
 
-	if len(s.ConnectionPath) > 0 {
+	if s.connectionExists {
 		// update connection data and activate it
 		nmConn, err := nmNewSettingsConnection(s.ConnectionPath)
 		if err != nil {
@@ -309,6 +318,13 @@ func (s *ConnectionSession) isErrorOccured() bool {
 
 // Close cancel current connection.
 func (s *ConnectionSession) Close() {
+	// clean up vpn config if abort the new connection
+	if !s.connectionExists {
+		if isVpnConnection(s.data) {
+			manager.config.removeVpnConfig(s.Uuid)
+		}
+	}
+
 	manager.removeConnectionSession(s)
 }
 
