@@ -92,7 +92,15 @@ void MainWidget::initDockSetting()
 void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
-        QTimer::singleShot(ENTER_DELAY_INTERVAL, this, SLOT(showDock()));
+        QTimer *st = new QTimer(this);
+        connect(st, &QTimer::timeout, this, [=] {
+            //make sure the panel will show by mouse-enter
+            if (geometry().contains(QCursor::pos())) {
+                showDock();
+            }
+            sender()->deleteLater();
+        });
+        st->start(ENTER_DELAY_INTERVAL);
     }
 }
 
@@ -104,12 +112,9 @@ void MainWidget::leaveEvent(QEvent *)
 
 void MainWidget::showDock()
 {
-    if (geometry().contains(QCursor::pos())) {
-        m_hasHidden = false;
-        updatePosition();
-        //make sure the panel will show by mouse-enter
-        m_mainPanel->startShow();
-    }
+    m_hasHidden = false;
+    updatePosition();
+    m_mainPanel->startShow();
 }
 
 void MainWidget::hideDock()
