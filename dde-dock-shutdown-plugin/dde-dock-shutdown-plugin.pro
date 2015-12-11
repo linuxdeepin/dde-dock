@@ -12,6 +12,7 @@ SOURCES += \
 
 HEADERS += \ 
     shutdownplugin.h
+INCLUDEPATH += ../dde-dock/src/
 
 DISTFILES += dde-dock-shutdown-plugin.json
 

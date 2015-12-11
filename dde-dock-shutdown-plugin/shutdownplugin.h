@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QLabel>
 
-#include <dde-dock/dockplugininterface.h>
-#include <dde-dock/dockpluginproxyinterface.h>
+#include "interfaces/dockplugininterface.h"
+#include "interfaces/dockpluginproxyinterface.h"
 
 class ShutdownPlugin : public QObject, public DockPluginInterface
 {
