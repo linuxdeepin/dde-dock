@@ -59,7 +59,7 @@ type Manager struct {
 
 	// update by manager_connections.go
 	connectionsLock sync.Mutex
-	connections     map[string][]*connection
+	connections     map[string]connectionSlice
 	Connections     string // array of connection information and marshaled by json
 
 	connectionSessionsLock sync.Mutex

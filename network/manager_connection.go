@@ -25,7 +25,14 @@ import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
+	"sort"
 )
+
+type connectionSlice []*connection
+
+func (c connectionSlice) Len() int           { return len(c) }
+func (c connectionSlice) Less(i, j int) bool { return c[i].Id < c[j].Id }
+func (c connectionSlice) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
 
 // TODO refactor code, different connection structures for different
 // types
@@ -47,7 +54,7 @@ type connection struct {
 
 func (m *Manager) initConnectionManage() {
 	m.connectionsLock.Lock()
-	m.connections = make(map[string][]*connection)
+	m.connections = make(map[string]connectionSlice)
 	m.connectionsLock.Unlock()
 
 	for _, cpath := range nmGetConnectionList() {
@@ -129,7 +136,7 @@ func (m *Manager) clearConnections() {
 			m.destroyConnection(conn)
 		}
 	}
-	m.connections = make(map[string][]*connection)
+	m.connections = make(map[string]connectionSlice)
 	m.setPropConnections()
 }
 
@@ -152,6 +159,7 @@ func (m *Manager) addConnection(cpath dbus.ObjectPath) {
 		// for front-end here
 	default:
 		m.connections[conn.connType] = append(m.connections[conn.connType], conn)
+		sort.Sort(m.connections[conn.connType])
 	}
 	m.setPropConnections()
 }
@@ -168,7 +176,7 @@ func (m *Manager) removeConnection(cpath dbus.ObjectPath) {
 	m.connections[connType] = m.doRemoveConnection(m.connections[connType], i)
 	m.setPropConnections()
 }
-func (m *Manager) doRemoveConnection(conns []*connection, i int) []*connection {
+func (m *Manager) doRemoveConnection(conns connectionSlice, i int) connectionSlice {
 	logger.Infof("remove connection %#v", conns[i])
 	m.destroyConnection(conns[i])
 	copy(conns[i:], conns[i+1:])
