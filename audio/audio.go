@@ -181,7 +181,7 @@ func (s *Sink) SetVolume(v float64, isPlay bool) error {
 //
 // isPlay: 是否播放声音反馈
 func (s *Sink) SetBalance(v float64, isPlay bool) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 
@@ -198,7 +198,7 @@ func (s *Sink) SetBalance(v float64, isPlay bool) error {
 //
 // isPlay: 是否播放声音反馈
 func (s *Sink) SetFade(v float64) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 
@@ -251,7 +251,7 @@ func (s *SinkInput) SetVolume(v float64, isPlay bool) error {
 	return nil
 }
 func (s *SinkInput) SetBalance(v float64, isPlay bool) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 
@@ -262,7 +262,7 @@ func (s *SinkInput) SetBalance(v float64, isPlay bool) error {
 	return nil
 }
 func (s *SinkInput) SetFade(v float64) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 
@@ -315,7 +315,7 @@ func (s *Source) SetVolume(v float64, isPlay bool) error {
 	return nil
 }
 func (s *Source) SetBalance(v float64, isPlay bool) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 
@@ -326,7 +326,7 @@ func (s *Source) SetBalance(v float64, isPlay bool) error {
 	return nil
 }
 func (s *Source) SetFade(v float64) error {
-	if !isVolumeValid(v) {
+	if v < -1.00 || v > 1.00 {
 		return fmt.Errorf("Invalid volume value: %v", v)
 	}
 

@@ -32,6 +32,7 @@ type Manager struct {
 	DeviceUnplug  *property.GSettingsBoolProperty `access:"readwrite"`
 	IconToDesktop *property.GSettingsBoolProperty `access:"readwrite"`
 	Screenshot    *property.GSettingsBoolProperty `access:"readwrite"`
+	ScreenRecord  *property.GSettingsBoolProperty `access:"readwrite"`
 
 	setting *gio.Settings
 }
@@ -84,7 +85,9 @@ func NewManager() *Manager {
 		m.setting, soundutils.KeyIconToDesktop)
 	m.Screenshot = property.NewGSettingsBoolProperty(
 		m, "Screenshot",
-		m.setting, soundutils.KeyScreenCapture)
+		m.setting, soundutils.KeyCameraShutter)
+	m.ScreenRecord = property.NewGSettingsBoolProperty(
+		m, "ScreenRecord", m.setting, soundutils.KeyScreenCapture)
 
 	return m
 }
