@@ -65,17 +65,11 @@ bool AbstractDockItem::actived()
 void AbstractDockItem::resize(int width,int height){
     QFrame::resize(width,height);
 
-    if (m_highlight)
-        m_highlight->setFixedSize(size());
-
     emit widthChanged();
 }
 
 void AbstractDockItem::resize(const QSize &size){
     QFrame::resize(size);
-
-    if (m_highlight)
-        m_highlight->setFixedSize(size);
 
     emit widthChanged();
 }
@@ -281,7 +275,9 @@ void AbstractDockItem::initTitleLabel()
 
 void AbstractDockItem::resizeEvent(QResizeEvent * event)
 {
-    m_highlight->update();
+    if (m_highlight) {
+        m_highlight->setFixedSize(size());
+    }
 
     QFrame::resizeEvent(event);
 }

@@ -28,7 +28,8 @@ public:
     void showNormal();
 
 protected:
-    void paintEvent(QPaintEvent * event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
 private:
     QWidget * m_source;

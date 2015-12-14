@@ -56,6 +56,13 @@ void HighlightEffect::showNormal()
     update();
 }
 
+void HighlightEffect::resizeEvent(QResizeEvent * event)
+{
+    QWidget::resizeEvent(event);
+
+    update();
+}
+
 void HighlightEffect::paintEvent(QPaintEvent *)
 {
     if (m_source && m_source->isVisible())
