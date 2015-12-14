@@ -14,7 +14,7 @@
 	},
 	{
 		"Key": "show-dock",
-		"Action": "dbus-send --type=method_call --dest=com.deepin.dde.dock /com/deepin/dde/dock com.deepin.dde.dock.ToggleShow"
+		"Action": "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
 	},
 	{
 		"Key": "logout",
