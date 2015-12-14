@@ -44,7 +44,7 @@ public:
 private slots:
     void onTrayIconsChanged();
     void onTrayInit();
-    void onCompositeItemRelayout();
+    void onCompositeItemSizeChanged();
 
 private:
     void initTrayIcons();

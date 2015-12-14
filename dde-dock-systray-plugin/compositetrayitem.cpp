@@ -163,6 +163,13 @@ void CompositeTrayItem::handleUpdateTimer()
     }
 }
 
+void CompositeTrayItem::resizeEvent(QResizeEvent * event)
+{
+    emit sizeChanged();
+
+    QFrame::resizeEvent(event);
+}
+
 void CompositeTrayItem::enterEvent(QEvent * event)
 {
     coverOff();

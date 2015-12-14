@@ -31,11 +31,15 @@ public:
     void coverOn();
     void coverOff();
 
+signals:
+    void sizeChanged();
+
 public slots:
     void handleTrayiconDamage();
     void handleUpdateTimer();
 
 protected:
+    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
     void enterEvent(QEvent *) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent *) Q_DECL_OVERRIDE;
 

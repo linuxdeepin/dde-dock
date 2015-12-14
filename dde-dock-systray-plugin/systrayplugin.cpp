@@ -11,6 +11,9 @@ static const QString CompositeItemKey = "composite_item_key";
 SystrayPlugin::SystrayPlugin()
 {
     m_compositeItem = new CompositeTrayItem;
+
+    connect(m_compositeItem, &CompositeTrayItem::sizeChanged,
+            this, &SystrayPlugin::onCompositeItemSizeChanged);
 }
 
 SystrayPlugin::~SystrayPlugin()
@@ -164,4 +167,9 @@ void SystrayPlugin::onTrayIconsChanged()
 void SystrayPlugin::onTrayInit()
 {
 
+}
+
+void SystrayPlugin::onCompositeItemSizeChanged()
+{
+    m_proxy->infoChangedEvent(DockPluginInterface::InfoTypeItemSize, CompositeItemKey);
 }
