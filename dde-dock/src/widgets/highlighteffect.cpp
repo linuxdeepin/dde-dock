@@ -35,7 +35,7 @@ void HighlightEffect::showDarker()
 
     m_effectState = ESDarker;
 
-    this->repaint();
+    update();
 }
 
 void HighlightEffect::showLighter()
@@ -44,7 +44,7 @@ void HighlightEffect::showLighter()
 
     m_effectState = ESLighter;
 
-    this->repaint();
+    update();
 }
 
 void HighlightEffect::showNormal()
@@ -53,12 +53,12 @@ void HighlightEffect::showNormal()
 
     m_effectState = ESNormal;
 
-    this->repaint();
+    update();
 }
 
 void HighlightEffect::paintEvent(QPaintEvent *)
 {
-    if (m_source)
+    if (m_source && m_source->isVisible())
     {
         QPixmap pixmap = m_source->grab();
 

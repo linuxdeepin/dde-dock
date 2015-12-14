@@ -128,13 +128,13 @@ void AppPreviewLoader::setIsHover(bool isHover)
     style()->unpolish(this);
     style()->polish(this);// force a stylesheet recomputation
 
-    repaint();
+    update();
 }
 
 void AppPreviewLoader::requestUpdate()
 {
     prepareRepaint();
-    repaint();
+    update();
 }
 
 
@@ -199,7 +199,7 @@ void AppPreviewLoader::prepareRepaint()
         cairo_surface_destroy(image_surface);
         cairo_destroy(cairo);
 
-        this->repaint();
+        update();
     }
 }
 

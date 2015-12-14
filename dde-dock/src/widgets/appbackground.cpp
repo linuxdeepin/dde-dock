@@ -50,7 +50,7 @@ void ActiveLabel::show()
     setFixedSize(24, 5);
     setOpacity(1);
     m_iconPath = m_openIndicatorIcon;
-    repaint();
+    update();
     emit sizeChange();
 }
 double ActiveLabel::opacity() const
@@ -61,7 +61,7 @@ double ActiveLabel::opacity() const
 void ActiveLabel::setOpacity(double opacity)
 {
     m_opacity = opacity;
-    repaint();
+    update();
 }
 
 void ActiveLabel::paintEvent(QPaintEvent *event)

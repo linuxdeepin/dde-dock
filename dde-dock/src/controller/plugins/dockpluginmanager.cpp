@@ -7,6 +7,10 @@
 #include "dockpluginmanager.h"
 #include "interfaces/dockplugininterface.h"
 
+const QString SYSTRAY_PLUGIN_ID = "composite_item_key";
+const QString DATETIME_PLUGIN_ID = "id_datetime";
+const QString SHUTDOWN_PLUGIN_ID = "shutdown";
+const int DELAY_NOTE_MODE_CHANGED_INTERVAL = 500;
 DockPluginManager::DockPluginManager(QObject *parent) :
     QObject(parent)
 {
@@ -70,16 +74,21 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
     if (newMode == oldMode)
         return;
 
-    for (DockPluginProxy * proxy : m_proxies) {
-        DockPluginInterface * plugin = proxy->plugin();
-        plugin->changeMode(newMode, oldMode);
+    m_newMode = newMode;
+    m_oldMode = oldMode;
+
+    //hide plugin immediately
+    for (AbstractDockItem *item : m_sysPlugins.keys()) {
+        item->setVisible(false);
+    }
+    for (AbstractDockItem *item : m_normalPlugins.keys()) {
+        item->setVisible(false);
     }
 
-    //reanchor systray-plugin
-    AbstractDockItem *sysItem = m_sysPlugins.key(SYSTRAY_PLUGIN_ID);
-    m_sysPlugins.remove(sysItem);
-    emit itemRemoved(sysItem);
-    handleSysPluginAdd(sysItem, SYSTRAY_PLUGIN_ID);
+    //Many plugin when changing the mode has done a lot of work
+    //and cause UI block
+    //so,delay to note plugin dock-mode changed after the dock updated it style
+    QTimer::singleShot(DELAY_NOTE_MODE_CHANGED_INTERVAL, this, SLOT(notePluginModeChanged()));
 }
 
 // private methods
@@ -200,6 +209,28 @@ void DockPluginManager::watchedDirectoryChanged(const QString & directory)
             if (proxy) proxy->plugin()->init(proxy);
         }
     }
+}
+
+void DockPluginManager::notePluginModeChanged()
+{
+    for (DockPluginProxy * proxy : m_proxies) {
+        DockPluginInterface * plugin = proxy->plugin();
+        plugin->changeMode(m_newMode, m_oldMode);
+    }
+
+    //make sure all plugin will show
+    for (AbstractDockItem *item : m_sysPlugins.keys()) {
+        item->setVisible(true);
+    }
+    for (AbstractDockItem *item : m_normalPlugins.keys()) {
+        item->setVisible(true);
+    }
+
+    //reanchor systray-plugin
+    AbstractDockItem *sysItem = m_sysPlugins.key(SYSTRAY_PLUGIN_ID);
+    m_sysPlugins.remove(sysItem);
+    emit itemRemoved(sysItem);
+    handleSysPluginAdd(sysItem, SYSTRAY_PLUGIN_ID);
 }
 
 AbstractDockItem *DockPluginManager::sysPluginItem(QString id)

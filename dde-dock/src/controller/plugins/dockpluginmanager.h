@@ -32,6 +32,7 @@ public slots:
 private slots:
     void watchedFileChanged(const QString & file);
     void watchedDirectoryChanged(const QString & directory);
+    void notePluginModeChanged();
 
 private:
     AbstractDockItem * sysPluginItem(QString id);
@@ -51,10 +52,8 @@ private:
     QFileSystemWatcher * m_watcher = NULL;
     QStringList m_searchPaths;
     DockModeData *m_dockModeData = DockModeData::instance();
-
-    const QString SYSTRAY_PLUGIN_ID = "composite_item_key";
-    const QString DATETIME_PLUGIN_ID = "id_datetime";
-    const QString SHUTDOWN_PLUGIN_ID = "shutdown";
+    Dock::DockMode m_newMode;
+    Dock::DockMode m_oldMode;
 };
 
 #endif // DOCKPLUGINMANAGER_H

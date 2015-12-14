@@ -281,7 +281,7 @@ void AbstractDockItem::initTitleLabel()
 
 void AbstractDockItem::resizeEvent(QResizeEvent * event)
 {
-    m_highlight->repaint();
+    m_highlight->update();
 
     QFrame::resizeEvent(event);
 }

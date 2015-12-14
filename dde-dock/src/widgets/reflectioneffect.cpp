@@ -42,5 +42,5 @@ void ReflectionEffect::paintEvent(QPaintEvent *)
 
 void ReflectionEffect::updateReflection()
 {
-    this->repaint();
+    update();
 }
