@@ -28,7 +28,6 @@ import (
 // Get available keys
 func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_ID)
-	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_PERMISSIONS)
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
@@ -52,10 +51,13 @@ func checkSettingConnectionValues(data connectionData) (errs sectionErrors) {
 	// check id
 	ensureSettingConnectionIdNoEmpty(data, errs)
 
-	// ensure id is unique
-	id := getSettingConnectionId(data)
-	if isStringInArray(id, nmGetConnectionIds()) {
-		rememberError(errs, sectionConnection, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_INVALID_VALUE)
+	// if the connection is created manually, ensure the id is unique
+	if isCreatedManuallyConnection(data) {
+		id := getSettingConnectionId(data)
+		uuid := getSettingConnectionUuid(data)
+		if isStringInArray(id, nmGetOtherConnectionIds(uuid)) {
+			rememberError(errs, sectionConnection, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
 
 	return

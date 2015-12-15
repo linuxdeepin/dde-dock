@@ -1010,6 +1010,20 @@ func nmGetConnectionIds() (ids []string) {
 	return
 }
 
+func nmGetOtherConnectionIds(origUuid string) (ids []string) {
+	for _, cpath := range nmGetConnectionList() {
+		if uuid, _ := nmGetConnectionUuid(cpath); uuid != origUuid {
+			ids = append(ids, nmGetConnectionId(cpath))
+		}
+	}
+	return
+}
+
+// TODO: dispatch connection permission
+func nmGetAddressableConnectionIds() (ids []string) {
+	return
+}
+
 func nmGetConnectionById(id string) (cpath dbus.ObjectPath, err error) {
 	for _, cpath = range nmGetConnectionList() {
 		data, tmperr := nmGetConnectionData(cpath)

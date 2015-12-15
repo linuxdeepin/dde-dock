@@ -191,6 +191,17 @@ func isVpnConnection(data connectionData) (isVpn bool) {
 	return false
 }
 
+func isCreatedManuallyConnection(data connectionData) (isCreateManual bool) {
+	if isVpnConnection(data) {
+		return true
+	}
+	switch getCustomConnectionType(data) {
+	case connectionWireless, connectionPppoe:
+		return true
+	}
+	return false
+}
+
 // generate connection id when creating a new connection
 func genConnectionId(connType string) (id string) {
 	var idPrefix string
