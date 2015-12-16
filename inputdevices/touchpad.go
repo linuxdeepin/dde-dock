@@ -176,11 +176,6 @@ func (tpad *Touchpad) updateDXTpads() {
 }
 
 func (tpad *Touchpad) enable(enabled bool) {
-	if enabled && getMouse().DisableTpad.Get() {
-		logger.Debugf("Touchpad was disable by mouse")
-		return
-	}
-
 	for _, v := range tpad.dxTPads {
 		err := v.Enable(enabled)
 		if err != nil {

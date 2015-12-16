@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	devInfos dxutils.DeviceInfos
+	devInfos      dxutils.DeviceInfos
 	mouseDevInfos dxutils.DeviceInfos
 	tpadDevInfos  dxutils.DeviceInfos
 	wacomDevInfos dxutils.DeviceInfos
@@ -33,8 +33,8 @@ func handleDeviceChanged() {
 	getTPadInfos(true)
 	getWacomInfos(true)
 
-	getMouse().handleDeviceChanged()
 	getTouchpad().handleDeviceChanged()
+	getMouse().handleDeviceChanged()
 	getWacom().handleDeviceChanged()
 }
 

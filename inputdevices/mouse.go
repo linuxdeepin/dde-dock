@@ -92,6 +92,9 @@ func NewMouse() *Mouse {
 
 func (m *Mouse) init() {
 	if !m.Exist {
+		if getTouchpad().Exist {
+			getTouchpad().enable(true)
+		}
 		return
 	}
 
@@ -146,7 +149,12 @@ func (m *Mouse) disableTouchpad() {
 		return
 	}
 
-	tpad.enable(!m.DisableTpad.Get())
+	if !m.DisableTpad.Get() && tpad.TPadEnable.Get() {
+		tpad.enable(true)
+		return
+	}
+
+	tpad.enable(false)
 }
 
 func (m *Mouse) enableLeftHanded() {
