@@ -112,7 +112,8 @@ func doGetSettingKey(data connectionData, section, key string) (value interface{
 	}
 
 	value = variant.Value()
-	logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
+	// only debug for develop
+	// logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
 	if isInterfaceNil(value) {
 		// variant exists, but the value is nil, so we give an error
 		// message
@@ -138,8 +139,8 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
-			valueJSON, getKtypeDescription(t), err)
+		logger.Debugf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+			valueJSON, getKtypeDesc(t), err)
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}

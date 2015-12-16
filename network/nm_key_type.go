@@ -153,8 +153,10 @@ type ipv6Route struct {
 }
 type ipv6Routes []ipv6Route
 
-func getKtypeDescription(t ktype) (desc string) {
+func getKtypeDesc(t ktype) (desc string) {
 	switch t {
+	default:
+		logger.Error("Unknown type", t)
 	case ktypeUnknown:
 		desc = "Unknown"
 	case ktypeString:
@@ -185,6 +187,22 @@ func getKtypeDescription(t ktype) (desc string) {
 		desc = "Ipv6Addresses, array of (byte array, uint32, byte array), encode by json"
 	case ktypeIpv6Routes:
 		desc = "ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"
+	case ktypeWrapperString:
+		desc = "wrap ktypeArrayByte to [string]"
+	case ktypeWrapperMacAddress:
+		desc = "wrap ktypeArrayByte to [string]"
+	case ktypeWrapperIpv4Dns:
+		desc = "wrap ktypeArrayUint32 to [array of string]"
+	case ktypeWrapperIpv4Addresses:
+		desc = "wrap ktypeArrayArrayUint32 to [array of (string, string, string)]"
+	case ktypeWrapperIpv4Routes:
+		desc = "wrap ktypeArrayArrayUint32 to [array of (string, string, string, uint32)]"
+	case ktypeWrapperIpv6Dns:
+		desc = "wrap ktypeArrayArrayByte to [array of string]"
+	case ktypeWrapperIpv6Addresses:
+		desc = "wrap ktypeIpv6Addresses to [array of (string, uint32, string)]"
+	case ktypeWrapperIpv6Routes:
+		desc = "wrap ktypeIpv6Routes to [array of (string, uint32, string, uint32)]"
 	}
 	return
 }

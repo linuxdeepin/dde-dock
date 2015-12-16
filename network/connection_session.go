@@ -447,10 +447,10 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 				if values := generalGetSettingAvailableValues(s.data, section, key); len(values) > 0 {
 					valuesJSON, _ := marshalJSON(values)
 					info += fmt.Sprintf("%s: %s[%s](%s): %s (%s)\n", vsection, section, key,
-						getKtypeDescription(t), s.GetKey(section, key), valuesJSON)
+						getKtypeDesc(t), s.GetKey(section, key), valuesJSON)
 				} else {
 					info += fmt.Sprintf("%s: %s[%s](%s): %s\n", vsection, section, key,
-						getKtypeDescription(t), s.GetKey(section, key))
+						getKtypeDesc(t), s.GetKey(section, key))
 				}
 			}
 		}

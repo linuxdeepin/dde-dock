@@ -250,7 +250,7 @@ func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, a
 	switch nmGetDeviceType(devPath) {
 	case NM_DEVICE_TYPE_ETHERNET:
 		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
-	case NM_DEVICE_TYPE_WIFI:
+	case NM_DEVICE_TYPE_WIFI: // ignore
 	case NM_DEVICE_TYPE_MODEM:
 		cpath, exists, err = m.ensureMobileConnectionExists(devPath, active)
 	}
@@ -310,6 +310,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 
 // EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	logger.Debug("EditConnection", uuid, devPath)
 	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
 		m.generalEnsureUniqueConnectionExists(devPath, false)
 	}
