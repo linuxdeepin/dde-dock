@@ -133,7 +133,8 @@ void PluginsSettingFrame::onPluginTitleChanged(const QString &id, const QString 
 
 void PluginsSettingFrame::mouseMoveEvent(QMouseEvent *event)
 {
-    move(event->globalPos() - m_pressPosition);
+    if (m_mousePressed)
+        move(event->globalPos() - m_pressPosition);
     QFrame::mouseMoveEvent(event);
 }
 
@@ -142,12 +143,14 @@ void PluginsSettingFrame::mousePressEvent(QMouseEvent *event)
     if(event->button() & Qt::LeftButton)
     {
         m_pressPosition = event->globalPos() - frameGeometry().topLeft();
+        m_mousePressed = true;
     }
     QFrame::mousePressEvent(event);
 }
 
 void PluginsSettingFrame::mouseReleaseEvent(QMouseEvent *event)
 {
+    m_mousePressed = false;
     QFrame::mouseReleaseEvent(event);
 }
 

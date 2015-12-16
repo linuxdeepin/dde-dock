@@ -80,6 +80,7 @@ private:
     void resizeWithLineCount();
     void initCloseTitle();
 
+    bool m_mousePressed;
     QPoint m_pressPosition;
     QVBoxLayout *m_mainLayout;
     QMap<QString, PluginsSettingLine *> m_lineMap;
