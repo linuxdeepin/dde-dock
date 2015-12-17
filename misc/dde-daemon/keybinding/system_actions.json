@@ -42,7 +42,7 @@
 	},
 	{
 		"Key": "file-manager",
-		"Action": "nautilus"
+		"Action": "gvfs-open ~"
 	},
 	{
 		"Key": "disable-touchpad",
