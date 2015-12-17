@@ -3,7 +3,7 @@ package mpris
 import (
 	"fmt"
 	"os/exec"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 const (

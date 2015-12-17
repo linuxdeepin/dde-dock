@@ -29,7 +29,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 const (

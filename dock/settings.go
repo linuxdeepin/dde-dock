@@ -6,7 +6,7 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"sync"
 )
 

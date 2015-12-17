@@ -6,7 +6,7 @@ import (
 	"path"
 	"pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"sync"
 	"time"
 )

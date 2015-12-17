@@ -1,6 +1,6 @@
 package power
 
-import "pkg.deepin.io/lib/gio-2.0"
+import "gir/gio-2.0"
 import "time"
 import . "pkg.deepin.io/lib/gettext"
 import "pkg.deepin.io/lib/dbus"

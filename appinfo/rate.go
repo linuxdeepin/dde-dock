@@ -2,7 +2,7 @@ package appinfo
 
 import (
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
-	"pkg.deepin.io/lib/glib-2.0"
+	"gir/glib-2.0"
 )
 
 const (

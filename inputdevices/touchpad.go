@@ -8,7 +8,7 @@ import (
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"

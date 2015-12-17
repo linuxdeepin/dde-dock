@@ -10,7 +10,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item/dstore"
-	"pkg.deepin.io/lib/glib-2.0"
+	"gir/glib-2.0"
 )
 
 const (

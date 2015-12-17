@@ -12,7 +12,7 @@ import (
 	"pkg.deepin.io/dde/daemon/launcher/item/search"
 	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/gettext"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	. "pkg.deepin.io/lib/initializer"
 	"pkg.deepin.io/lib/log"
 )

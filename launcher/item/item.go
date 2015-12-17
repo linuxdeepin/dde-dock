@@ -9,7 +9,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/utils"
 )
 

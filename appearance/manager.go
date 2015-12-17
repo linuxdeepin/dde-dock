@@ -9,8 +9,8 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"pkg.deepin.io/lib/gio-2.0"
-	"pkg.deepin.io/lib/glib-2.0"
+	"gir/gio-2.0"
+	"gir/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 )
 

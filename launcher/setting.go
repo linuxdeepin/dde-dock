@@ -6,7 +6,7 @@ import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	. "pkg.deepin.io/dde/daemon/launcher/setting"
 	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"sync"
 )
 

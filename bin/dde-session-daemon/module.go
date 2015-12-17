@@ -41,7 +41,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/soundeffect"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 var (

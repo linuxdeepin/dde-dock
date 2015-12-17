@@ -2,7 +2,7 @@ package keybinding
 
 import (
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 func (m *Manager) listenGSettingChanged() {

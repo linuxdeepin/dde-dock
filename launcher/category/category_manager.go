@@ -3,7 +3,7 @@ package category
 import (
 	"errors"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 type QueryIDTransition interface {

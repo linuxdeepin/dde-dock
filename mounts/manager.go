@@ -25,7 +25,7 @@ import (
 	"sync"
 	"time"
 
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	dutils "pkg.deepin.io/lib/utils"
 )

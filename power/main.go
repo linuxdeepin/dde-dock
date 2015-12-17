@@ -2,7 +2,7 @@ package power
 
 import "pkg.deepin.io/lib/log"
 import "pkg.deepin.io/lib/dbus/property"
-import "pkg.deepin.io/lib/gio-2.0"
+import "gir/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
 import "pkg.deepin.io/dde/api/soundutils"
 

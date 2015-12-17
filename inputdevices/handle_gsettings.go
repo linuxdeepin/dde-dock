@@ -1,7 +1,7 @@
 package inputdevices
 
 import (
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 )
 
 func (kbd *Keyboard) handleGSettings() {

@@ -2,7 +2,7 @@ package category
 
 import (
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"pkg.deepin.io/lib/gio-2.0"
+	"gir/gio-2.0"
 	"sort"
 	"strings"
 )
