@@ -230,7 +230,7 @@ void DockLayout::dropEvent(QDropEvent *event)
 {
     AbstractDockItem *sourceItem = qobject_cast<AbstractDockItem *>(event->source());
 
-    //from desktop or launcher
+    //from launcher
     if (!sourceItem && event->mimeData()->formats().indexOf("RequestDock") != -1){
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString()))
@@ -242,8 +242,27 @@ void DockLayout::dropEvent(QDropEvent *event)
             qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
         }
     }
-    else
-        restoreTmpItem();
+    else {
+        //from desktop file
+        QList<QUrl> urls = event->mimeData()->urls();
+        if (!urls.isEmpty()) {
+            for (QUrl url : urls) {
+                QString us = url.toString();
+                if (us.endsWith(".desktop")) {
+                    QString appKey = us.split(QDir::separator()).last();
+                    appKey = appKey.mid(0, appKey.length() - 8);
+                    if (!m_ddam->IsDocked(appKey)) {
+                        m_ddam->ReqeustDock(appKey, "", "", "");
+                        emit itemDocking(appKey);
+
+                        qDebug() << "Desktop file drop to dock: " << appKey;
+                    }
+                }
+            }
+        }
+    }
+
+    restoreTmpItem();
 }
 
 void DockLayout::slotItemDrag()

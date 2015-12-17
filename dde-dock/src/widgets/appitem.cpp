@@ -87,17 +87,34 @@ void AppItem::dragEnterEvent(QDragEnterEvent *event)
         event->ignore();
         emit dragEntered(event);
     }
-    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from desktop or launcher
+    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (!dataObj.isEmpty() && !m_ddam->IsDocked(dataObj.value("appKey").toString())){
             event->ignore();
             emit dragEntered(event);
         }
     }
-    else    //other files
+    else    //files
     {
-        event->setDropAction(Qt::CopyAction);
-        event->accept();
+        //desktop file
+        QList<QUrl> urls = event->mimeData()->urls();
+        if (!urls.isEmpty()) {
+            for (QUrl url : urls) {
+                QString us = url.toString();
+                if (us.endsWith(".desktop")) {
+                    QString appKey = us.split(QDir::separator()).last();
+                    appKey = appKey.mid(0, appKey.length() - 8);
+                    if (!m_ddam->IsDocked(appKey)) {
+                        event->ignore();
+                        emit dragEntered(event);
+                        return;
+                    }
+                }
+            }
+
+            event->setDropAction(Qt::CopyAction);
+            event->accept();
+        }
     }
 }
 
@@ -108,6 +125,7 @@ void AppItem::dragLeaveEvent(QDragLeaveEvent *event)
 
 void AppItem::mousePressEvent(QMouseEvent *event)
 {
+    event->timestamp();
     if (m_dockModeData->getDockMode() != Dock::FashionMode)
         onMousePress(event);
     else
@@ -158,7 +176,16 @@ void AppItem::mouseMoveEvent(QMouseEvent *event)
 
 void AppItem::dropEvent(QDropEvent *event)
 {
-    qDebug() << "Data drop to item:" << event->pos();
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (!urls.isEmpty()) {
+        for (QUrl url : urls) {
+            QString us = url.toString();
+            if (!us.endsWith(".desktop")) {
+                m_entryProxyer->HandleDragDrop(0, 0, us, 0);
+                qDebug() << "Try to open file:" << us;
+            }
+        }
+    }
 }
 
 void AppItem::enterEvent(QEvent *)

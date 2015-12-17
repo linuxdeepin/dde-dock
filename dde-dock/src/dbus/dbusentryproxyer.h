@@ -66,10 +66,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("ContextMenu"), argumentList);
     }
 
-    inline QDBusPendingReply<> HandleDragDrop(int in0, int in1, const QString &in2)
+    inline QDBusPendingReply<> HandleDragDrop(int in0, int in1, const QString &in2, uint in3)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1) << QVariant::fromValue(in2);
+        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1) << QVariant::fromValue(in2) << QVariant::fromValue(in3);
         return asyncCallWithArgumentList(QStringLiteral("HandleDragDrop"), argumentList);
     }
 
