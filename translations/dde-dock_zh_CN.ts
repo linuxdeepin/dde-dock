@@ -112,7 +112,7 @@
 <context>
     <name>PluginsSettingFrame</name>
     <message>
-        <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="170"/>
+        <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="173"/>
         <source>Notification Area Settings</source>
         <translation>通知区域设置</translation>
     </message>
@@ -121,8 +121,8 @@
     <name>ShutdownPlugin</name>
     <message>
         <location filename="../dde-dock-shutdown-plugin/shutdownplugin.cpp" line="17"/>
-        <source>Power</source>
-        <translation>电源</translation>
+        <source>Shutdown</source>
+        <translation>关机</translation>
     </message>
 </context>
 <context>

@@ -14,7 +14,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
 
 QString ShutdownPlugin::getPluginName()
 {
-    return QString(tr("Power"));
+    return QString(tr("Shutdown"));
 }
 
 void ShutdownPlugin::init(DockPluginProxyInterface *proxy)
