@@ -1,15 +1,18 @@
 package main
 
-import "pkg.deepin.io/lib/dbus"
-import "pkg.deepin.io/lib/log"
-
 //#cgo pkg-config: libudev
 //#include "backlight.h"
 //#include <stdlib.h>
 import "C"
-import "os"
-import "sync"
-import "time"
+
+import (
+	"os"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
+	"sync"
+	"time"
+	"unsafe"
+)
 
 type BacklightHelper struct {
 	SysPath string
@@ -17,29 +20,35 @@ type BacklightHelper struct {
 }
 
 func NewBacklightHelper() *BacklightHelper {
-	C.init_backlight_device()
 	return &BacklightHelper{}
 }
 
-func (h *BacklightHelper) SetBrightness(v float64) {
+// If driver is empty, auto detect
+func (h *BacklightHelper) SetBrightness(v float64, driver string) {
 	h.lock.Lock()
 	defer h.lock.Unlock()
 	if v > 1 || v < 0 {
 		logger.Warningf("SetBacklight %v failed\n", v)
 		return
 	}
-	C.set_backlight(C.double(v))
+	cDriver := C.CString(driver)
+	defer C.free(unsafe.Pointer(cDriver))
+	C.set_backlight(C.double(v), cDriver)
 }
-func (h *BacklightHelper) GetBrightness() float64 {
+
+// If driver is empty, auto detect
+func (h *BacklightHelper) GetBrightness(driver string) float64 {
 	h.lock.Lock()
 	defer h.lock.Unlock()
-	return (float64)(C.get_backlight())
+	cDriver := C.CString(driver)
+	defer C.free(unsafe.Pointer(cDriver))
+	return (float64)(C.get_backlight(cDriver))
 }
 func (*BacklightHelper) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		"com.deepin.daemon.helper.Backlight",
-		"/com/deepin/daemon/helper/Backlight",
-		"com.deepin.daemon.helper.Backlight",
+		Dest:       "com.deepin.daemon.helper.Backlight",
+		ObjectPath: "/com/deepin/daemon/helper/Backlight",
+		Interface:  "com.deepin.daemon.helper.Backlight",
 	}
 }
 
