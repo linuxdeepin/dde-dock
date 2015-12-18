@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/themes"
 	"pkg.deepin.io/dde/api/thumbnails/cursor"
 	"pkg.deepin.io/dde/api/thumbnails/gtk"
@@ -24,6 +25,9 @@ const (
 
 	thumbDir   = "/usr/share/personalization/thumbnail"
 	thumbBgDir = "/var/cache/appearance/thumbnail/background"
+
+	appearanceSchema  = "com.deepin.dde.appearance"
+	gsKeyExcludedIcon = "excluded-icon-themes"
 )
 
 type Theme struct {
@@ -39,7 +43,19 @@ func ListGtkTheme() Themes {
 }
 
 func ListIconTheme() Themes {
-	return getThemes(themes.ListIconTheme())
+	infos := getThemes(themes.ListIconTheme())
+	s := gio.NewSettings(appearanceSchema)
+	defer s.Unref()
+	blacklist := s.GetStrv(gsKeyExcludedIcon)
+
+	var ret Themes
+	for _, info := range infos {
+		if isItemInList(info.Id, blacklist) {
+			continue
+		}
+		ret = append(ret, info)
+	}
+	return ret
 }
 
 func ListCursorTheme() Themes {
@@ -196,4 +212,13 @@ func getImagesInDir() []string {
 		imgs = append(imgs, tmp)
 	}
 	return imgs
+}
+
+func isItemInList(item string, list []string) bool {
+	for _, v := range list {
+		if item == v {
+			return true
+		}
+	}
+	return false
 }
