@@ -337,11 +337,7 @@ func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
 		nm.DestroyDeviceWireless(devWireless)
 	case NM_DEVICE_TYPE_MODEM:
 		// TODO: getting device speed for modem device
-	case NM_DEVICE_TYPE_GENERIC:
-		// ignore speed
-	default:
-		err = fmt.Errorf("not support to get device speedStr for device type %d", t)
-		logger.Error(err)
+	default: // ignore speed for other device types
 	}
 	if speed != 0 {
 		speedStr = fmt.Sprintf("%d Mb/s", speed)
