@@ -6,12 +6,12 @@ package main
 //void init(){XInitThreads();gtk_init(0,0);}
 import "C"
 import (
+	"gir/glib-2.0"
 	_ "pkg.deepin.io/dde/daemon/dock"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
-	"gir/glib-2.0"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
 
@@ -66,12 +66,23 @@ func main() {
 		logger.Fatal(err)
 	}
 
+	cmd := InitCMD()
+	cmd.Parse(os.Args[1:])
+
+	cfg := &Config{
+		CPUProfile: cmd.CpuProf(),
+		MemProfile: cmd.MemProf(),
+	}
+	cfg.Start()
+	defer cfg.Stop()
+
 	InitI18n()
 	Textdomain("dde-daemon")
 
 	C.init()
 	proxy.SetupProxy()
 
+	loader.SetLogLevel(cmd.LogLevel())
 	loader.EnableModules([]string{"dock"}, nil, loader.EnableFlagIgnoreMissingModule)
 
 	runMainLoop()
