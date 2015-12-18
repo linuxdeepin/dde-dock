@@ -27,7 +27,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/bluetooth"
 	_ "pkg.deepin.io/dde/daemon/clipboard"
 	//_ "pkg.deepin.io/dde/daemon/dock"
-	_ "pkg.deepin.io/dde/daemon/dsc"
+	"gir/gio-2.0"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 	_ "pkg.deepin.io/dde/daemon/launcher"
@@ -41,7 +41,6 @@ import (
 	_ "pkg.deepin.io/dde/daemon/soundeffect"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
-	"gir/gio-2.0"
 )
 
 var (
