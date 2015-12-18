@@ -155,7 +155,7 @@ void AbstractDockItem::showPreview(const QPoint &previewPos)
                                         m_titlePreview->shadowYOffset() +
                                         m_titlePreview->shadowBlurRadius() +
                                         m_titlePreview->shadowDistance(),
-                                     0);
+                                        CONTENT_PREVIEW_INTERVAL);
         }
     }
     else {
