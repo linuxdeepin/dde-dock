@@ -4,7 +4,7 @@
 
 TrashPlugin::TrashPlugin()
 {
-    QIcon::setThemeName("Deepin");
+    QIcon::setThemeName("deepin");
 
     m_item = new MainItem();
     connect(this, &TrashPlugin::menuItemInvoked, m_item, &MainItem::emptyTrash);
