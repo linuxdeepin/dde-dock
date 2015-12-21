@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-10 10:41+0800\n"
+"POT-Creation-Date: 2015-12-21 13:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -113,10 +113,11 @@ msgstr ""
 #: ../../network/dev_test.go:132 ../../network/dev_test.go:135
 #: ../../network/dev_test.go:136 ../../network/dev_test.go:139
 #: ../../network/state_handler.go:241 ../../network/state_handler.go:262
-#: ../../network/utils_notify.go:93 ../../network/utils_notify.go:98
-#: ../../network/utils_notify.go:102 ../../network/utils_notify.go:106
-#: ../../network/utils_notify.go:124 ../../network/utils_notify.go:127
-#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:216
+#: ../../network/state_handler.go:267 ../../network/utils_notify.go:93
+#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
+#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:124
+#: ../../network/utils_notify.go:127 ../../network/utils_notify.go:212
+#: ../../network/utils_notify.go:216
 msgid "Disconnected"
 msgstr ""
 
@@ -471,21 +472,21 @@ msgstr ""
 
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
 msgid "_Undock"
 msgstr ""
 
 #: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
 #: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:298
-#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
-#: ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
 msgid "_Dock"
 msgstr ""
 
@@ -930,8 +931,9 @@ msgid "Protected EAP"
 msgstr ""
 
 #: ../../network/manager_connection.go:257
-#: ../../network/manager_connection.go:260 ../../network/nm_custom_type.go:178
-#: ../../network/nm_custom_type.go:187
+#: ../../network/manager_connection.go:260
+#: ../../network/manager_connection.go:268 ../../network/nm_custom_type.go:178
+#: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:212
 msgid "Wired Connection"
 msgstr ""
 
@@ -959,67 +961,73 @@ msgid "Not Required"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
+#: ../../network/nm_custom_type.go:210
 msgid "Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
+#: ../../network/nm_custom_type.go:214
 msgid "Wireless Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
+#: ../../network/nm_custom_type.go:216
 msgid "Wireless Ad-Hoc"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
+#: ../../network/nm_custom_type.go:218
 msgid "Wireless Ap-Hotspot"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
+#: ../../network/nm_custom_type.go:220
 msgid "PPPoE Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
+#: ../../network/nm_custom_type.go:222
 msgid "Mobile Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
+#: ../../network/nm_custom_type.go:224
 msgid "Mobile GSM Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
+#: ../../network/nm_custom_type.go:226
 msgid "Mobile CDMA Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
+#: ../../network/nm_custom_type.go:228
 msgid "VPN Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
+#: ../../network/nm_custom_type.go:230
 msgid "VPN L2TP"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
+#: ../../network/nm_custom_type.go:232
 msgid "VPN OpenConnect"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
+#: ../../network/nm_custom_type.go:234
 msgid "VPN OpenVPN"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
+#: ../../network/nm_custom_type.go:236
 msgid "VPN PPTP"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:204 ../../network/nm_custom_type.go:213
+#: ../../network/nm_custom_type.go:238
 msgid "VPN VPNC"
-msgstr ""
-
-#: ../../network/nm_generator/tpl_backend_go.go:49
-msgid "{{.DisplayName}}"
-msgstr ""
-
-#: ../../network/nm_generator/tpl_backend_go.go:51
-msgid "{{$key | ToKeyDisplayName}}"
 msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:35 ../../network/nm_setting_802_1x.go:79

@@ -46,9 +46,9 @@ func initVirtualSections() { {{range .}}
 	virtualSections[{{.Name}}] = VsectionInfo{
 		VirtualSection:{{.Name}},
 		relatedSections:[]string{ {{range $s := .RelatedSections}}{{$s}},{{end}} },
-		Name: Tr("{{.DisplayName}}"),
+		Name: Tr` + `("{{.DisplayName}}"),
 		Keys: []*GeneralKeyInfo { {{range $i, $key := GetAllKeysInVsection .Name}}{{if IsKeyUsedByFrontEnd $key}}
-			&GeneralKeyInfo{Section:"{{$key | ToKeyRelatedSectionValue}}", Key:"{{$key | ToKeyValue}}", Name:Tr("{{$key | ToKeyDisplayName}}"), WidgetType:"{{$key | ToFrontEndWidget}}", AlwaysUpdate:{{$key | ToKeyAlwaysUpdate}}, UseValueRange:{{$key | ToKeyUseValueRange}}, MinValue:{{$key | ToKeyMinValue}}, MaxValue:{{$key | ToKeyMaxValue}} }, {{end}}{{end}}
+			&GeneralKeyInfo{Section:"{{$key | ToKeyRelatedSectionValue}}", Key:"{{$key | ToKeyValue}}", Name:Tr` + `("{{$key | ToKeyDisplayName}}"), WidgetType:"{{$key | ToFrontEndWidget}}", AlwaysUpdate:{{$key | ToKeyAlwaysUpdate}}, UseValueRange:{{$key | ToKeyUseValueRange}}, MinValue:{{$key | ToKeyMinValue}}, MaxValue:{{$key | ToKeyMaxValue}} }, {{end}}{{end}}
 		},
 	}{{end}}
 }
