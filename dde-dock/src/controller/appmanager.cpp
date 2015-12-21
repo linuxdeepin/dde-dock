@@ -1,5 +1,6 @@
 #include "appmanager.h"
 #include "dbus/dbuslauncher.h"
+#include "dbus/dbusdockentry.h"
 
 AppManager::AppManager(QObject *parent) : QObject(parent)
 {
@@ -23,11 +24,11 @@ void AppManager::initEntries()
     QList<QDBusObjectPath> entryList = m_entryManager->entries();
     for (int i = 0; i < entryList.count(); i ++)
     {
-        DBusEntryProxyer *dep = new DBusEntryProxyer(entryList.at(i).path());
+        DBusDockEntry *dep = new DBusDockEntry(entryList.at(i).path());
         if (dep->isValid() && dep->type() == "App")
         {
             AppItem *item = new AppItem();
-            item->setEntryProxyer(dep);
+            item->setEntry(dep);
             m_initItemList.insert(item->getItemId(), item);
         }
     }
@@ -37,11 +38,11 @@ void AppManager::initEntries()
 
 void AppManager::onEntryAdded(const QDBusObjectPath &path)
 {
-    DBusEntryProxyer *entryProxyer = new DBusEntryProxyer(path.path());
-    if (entryProxyer->isValid() && entryProxyer->type() == "App")
+    DBusDockEntry *entry = new DBusDockEntry(path.path());
+    if (entry->isValid() && entry->type() == "App")
     {
         AppItem *item = new AppItem();
-        item->setEntryProxyer(entryProxyer);
+        item->setEntry(entry);
         QString tmpId = item->getItemId();
         if (m_ids.indexOf(tmpId) != -1){
             item->deleteLater();

@@ -51,7 +51,6 @@ HEADERS += \
     src/dbus/dbusdockedappmanager.h \
     src/dbus/dbusdocksetting.h \
     src/dbus/dbusentrymanager.h \
-    src/dbus/dbusentryproxyer.h \
     src/dbus/dbushidestatemanager.h \
     src/dbus/dbusmenu.h \
     src/dbus/dbusmenumanager.h \
@@ -74,7 +73,8 @@ HEADERS += \
     src/widgets/apppreview/apppreviewloaderframe.h \
     src/widgets/previewwindow.h \
     src/dbus/dbusdisplay.h \
-    src/dbus/dbuslauncher.h
+    src/dbus/dbuslauncher.h \
+    src/dbus/dbusdockentry.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -88,7 +88,6 @@ SOURCES += \
     src/dbus/dbusdockedappmanager.cpp \
     src/dbus/dbusdocksetting.cpp \
     src/dbus/dbusentrymanager.cpp \
-    src/dbus/dbusentryproxyer.cpp \
     src/dbus/dbushidestatemanager.cpp \
     src/dbus/dbusmenu.cpp \
     src/dbus/dbusmenumanager.cpp \
@@ -112,4 +111,5 @@ SOURCES += \
     src/widgets/apppreview/apppreviewloaderframe.cpp \
     src/widgets/previewwindow.cpp \
     src/dbus/dbusdisplay.cpp \
-    src/dbus/dbuslauncher.cpp
+    src/dbus/dbuslauncher.cpp \
+    src/dbus/dbusdockentry.cpp

@@ -101,7 +101,6 @@ private:
     DockPluginManager *m_pluginManager = NULL;
 
     bool m_previewShown = false;
-    bool m_menuItemInvoked = false;
     bool m_isFashionMode = false;
     const int REFLECTION_HEIGHT = 15;
     const int FASHION_PANEL_LPADDING = 21;

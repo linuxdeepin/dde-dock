@@ -19,7 +19,7 @@
 #include "apppreview/apppreviewscontainer.h"
 #include "appbackground.h"
 #include "abstractdockitem.h"
-#include "dbus/dbusentryproxyer.h"
+#include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"
@@ -49,7 +49,7 @@ public:
     QWidget *getApplet();
     QString getItemId();
     QString getTitle();
-    void setEntryProxyer(DBusEntryProxyer *entryProxyer);
+    void setEntry(DBusDockEntry *entry);
 
 protected:
     void dragEnterEvent(QDragEnterEvent * event);
@@ -95,7 +95,7 @@ private:
     DBusDockedAppManager *m_ddam = new DBusDockedAppManager(this);
     DockModeData *m_dockModeData = DockModeData::instance();
     DBusClientManager *m_clientmanager = NULL;
-    DBusEntryProxyer *m_entryProxyer = NULL;
+    DBusDockEntry *m_entry = NULL;
     AppBackground * m_appBackground = NULL;
     AppPreviewsContainer *m_preview = NULL;
     AppIcon * m_appIcon = NULL;

@@ -69,11 +69,11 @@ QString AppItem::getTitle()
     return m_itemData.title;
 }
 
-void AppItem::setEntryProxyer(DBusEntryProxyer *entryProxyer)
+void AppItem::setEntry(DBusDockEntry *entry)
 {
-    m_entryProxyer = entryProxyer;
-    m_entryProxyer->setParent(this);
-    connect(m_entryProxyer, &DBusEntryProxyer::DataChanged, this, &AppItem::onDbusDataChanged);
+    m_entry = entry;
+    m_entry->setParent(this);
+    connect(m_entry, &DBusDockEntry::DataChanged, this, &AppItem::onDbusDataChanged);
 
     initData();
 }
@@ -181,7 +181,7 @@ void AppItem::dropEvent(QDropEvent *event)
         for (QUrl url : urls) {
             QString us = url.toString();
             if (!us.endsWith(".desktop")) {
-                m_entryProxyer->HandleDragDrop(0, 0, us, 0);
+                m_entry->HandleDragDrop(0, 0, us, 0);
                 qDebug() << "Try to open file:" << us;
             }
         }
@@ -239,14 +239,14 @@ void AppItem::initTitle()
 
 void AppItem::initData()
 {
-    StringMap dataMap = m_entryProxyer->data();
+    StringMap dataMap = m_entry->data();
     m_itemData.title = dataMap.value("title");
     m_itemData.iconPath = dataMap.value("icon");
     m_itemData.menuJsonString = dataMap.value("menu");
     updateXidTitleMap();
     m_itemData.isActived = dataMap.value("app-status") == "active";
     m_itemData.currentOpened = m_itemData.xidTitleMap.keys().indexOf(m_clientmanager->CurrentActiveWindow().value()) != -1;
-    m_itemData.id = m_entryProxyer->id();
+    m_itemData.id = m_entry->id();
 
     setActived(m_itemData.isActived);
     setCurrentOpened(m_clientmanager->CurrentActiveWindow());
@@ -264,7 +264,7 @@ void AppItem::updateIcon()
 
 void AppItem::updateTitle()
 {
-    m_itemData.title = m_entryProxyer->data().value("title");
+    m_itemData.title = m_entry->data().value("title");
 
     switch (m_dockModeData->getDockMode()) {
     case Dock::FashionMode:
@@ -289,7 +289,7 @@ void AppItem::updateTitle()
 
 void AppItem::updateState()
 {
-    m_itemData.isActived = m_entryProxyer->data().value("app-status") == "active";
+    m_itemData.isActived = m_entry->data().value("app-status") == "active";
     setActived(m_itemData.isActived);
     m_appBackground->setIsActived(m_itemData.isActived);
 }
@@ -297,7 +297,7 @@ void AppItem::updateState()
 void AppItem::updateXidTitleMap()
 {
     m_itemData.xidTitleMap.clear();
-    QJsonArray nArray = QJsonDocument::fromJson(m_entryProxyer->data().value("app-xids").toUtf8()).array();
+    QJsonArray nArray = QJsonDocument::fromJson(m_entry->data().value("app-xids").toUtf8()).array();
     foreach (QJsonValue value, nArray) {
         QJsonObject obj = value.toObject();
         m_itemData.xidTitleMap.insert(obj.value("Xid").toInt(), obj.value("Title").toString());
@@ -306,7 +306,7 @@ void AppItem::updateXidTitleMap()
 
 void AppItem::updateMenuJsonString()
 {
-    m_itemData.menuJsonString = m_entryProxyer->data().value("menu");
+    m_itemData.menuJsonString = m_entry->data().value("menu");
 }
 
 void AppItem::onDbusDataChanged(const QString &, const QString &)
@@ -337,7 +337,7 @@ void AppItem::onMouseRelease(QMouseEvent *event)
     emit mouseRelease(event);
 
     if (event->button() == Qt::LeftButton)
-        m_entryProxyer->Activate(event->globalX(),event->globalY());
+        m_entry->Activate(event->globalX(),event->globalY(), event->timestamp());
     else if (event->button() == Qt::RightButton)
         showMenu();
 }
@@ -425,7 +425,7 @@ void AppItem::setActived(bool value)
 
 void AppItem::invokeMenuItem(QString id, bool)
 {
-    m_entryProxyer->HandleMenuItem(id);
+    m_entry->HandleMenuItem(id, 0);
 }
 
 QString AppItem::getMenuContent()

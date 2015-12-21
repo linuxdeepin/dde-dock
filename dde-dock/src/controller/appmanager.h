@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QDebug>
 #include "dbus/dbusentrymanager.h"
-#include "dbus/dbusentryproxyer.h"
 #include "dbus/dbusdockedappmanager.h"
 #include "widgets/appitem.h"
 #include "widgets/launcheritem.h"

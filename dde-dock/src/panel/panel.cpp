@@ -26,10 +26,6 @@ Panel::Panel(QWidget *parent)
     reloadStyleSheet();
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &Panel::onDockModeChanged);
-    connect(PanelMenu::instance(), &PanelMenu::menuItemInvoked, [=] {
-        //To ensure that dock will not hide at changing the hide-mode to keepshowing
-        m_menuItemInvoked = true;
-    });
 }
 
 bool Panel::isFashionMode()
@@ -310,11 +306,8 @@ void Panel::onHideStateChanged(int dockState)
     if (dockState == Dock::HideStateShowing) {
         emit startShow();
     }
-    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_menuItemInvoked && !m_previewShown) {
+    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_previewShown) {
         emit startHide();
-    }
-    else {
-        m_menuItemInvoked = false;
     }
 }
 
