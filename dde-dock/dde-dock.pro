@@ -12,7 +12,7 @@ TARGET = dde-dock
 TEMPLATE = app
 INCLUDEPATH += ./src ./libs
 
-DEFINES += PLUGIN_API_VERSION=1.0
+DEFINES += PLUGIN_API_VERSION=1.0 #NEW_DOCK_LAYOUT
 
 
 RESOURCES += \
@@ -74,7 +74,15 @@ HEADERS += \
     src/widgets/previewwindow.h \
     src/dbus/dbusdisplay.h \
     src/dbus/dbuslauncher.h \
-    src/dbus/dbusdockentry.h
+    src/dbus/dbusdockentry.h \
+    src/panel/dockpanel.h \
+    src/widgets/app/dockappbg.h \
+    src/widgets/app/dockappicon.h \
+    src/widgets/app/dockappitem.h \
+    src/widgets/app/dockapplayout.h \
+    src/widgets/app/dockitem.h \
+    src/widgets/app/movablelayout.h \
+    src/controller/apps/dockappmanager.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -112,4 +120,12 @@ SOURCES += \
     src/widgets/previewwindow.cpp \
     src/dbus/dbusdisplay.cpp \
     src/dbus/dbuslauncher.cpp \
-    src/dbus/dbusdockentry.cpp
+    src/dbus/dbusdockentry.cpp \
+    src/panel/dockpanel.cpp \
+    src/widgets/app/dockappbg.cpp \
+    src/widgets/app/dockappicon.cpp \
+    src/widgets/app/dockappitem.cpp \
+    src/widgets/app/dockapplayout.cpp \
+    src/widgets/app/dockitem.cpp \
+    src/widgets/app/movablelayout.cpp \
+    src/controller/apps/dockappmanager.cpp

@@ -1,23 +1,23 @@
-#ifndef APPMANAGER_H
-#define APPMANAGER_H
+#ifndef DOCKAPPMANAGER_H
+#define DOCKAPPMANAGER_H
 
 #include "dbus/dbusentrymanager.h"
+#include "dbus/dbusdockentry.h"
 #include "dbus/dbusdockedappmanager.h"
-#include "widgets/appitem.h"
+#include "widgets/app/dockappitem.h"
 #include "widgets/launcheritem.h"
 
-class AppManager : public QObject
+class DockAppManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit AppManager(QObject *parent = 0);
+    explicit DockAppManager(QObject *parent = 0);
     void initEntries();
 
     void setDockingItemId(const QString &dockingItemId);
 
 signals:
-    void entryAdded(AbstractDockItem *item, bool delayShow);
-    void entryAppend(AbstractDockItem *item, bool delayShow);
+    void entryAdded(DockAppItem *item, bool delayShow);
     void entryRemoved(const QString &id);
 
 private:
@@ -30,7 +30,7 @@ private:
     QString m_dockingItemId = "";   //drop to the dock one
     DBusEntryManager *m_entryManager = NULL;
     DBusDockedAppManager *m_dockAppManager = new DBusDockedAppManager(this);
-    QMap<QString, AbstractDockItem *> m_initItemList; //Juse for initialization <id, item>
+    QMap<QString, DockAppItem *> m_initItems; //Juse for initialization <id, item>
 };
 
-#endif // APPMANAGER_H
+#endif // DOCKAPPMANAGER_H

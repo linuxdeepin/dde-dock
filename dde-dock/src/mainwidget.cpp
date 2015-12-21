@@ -11,9 +11,15 @@ MainWidget::MainWidget(QWidget *parent)
     initHideStateManager();
     initDockSetting();
 
+#ifdef NEW_DOCK_LAYOUT
+    m_mainPanel = new DockPanel(this);
+    connect(m_mainPanel,&DockPanel::panelHasHidden,this,&MainWidget::hideDock);
+    connect(m_mainPanel, &DockPanel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
+#else
     m_mainPanel = new Panel(this);
     connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
+ #endif
 
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
 
@@ -26,6 +32,16 @@ MainWidget::MainWidget(QWidget *parent)
 
     XcbMisc::instance()->set_window_type(winId(), XcbMisc::Dock);
 
+#ifdef NEW_DOCK_LAYOUT
+    connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
+//        m_mainPanel->resizeWithContent();
+        updatePosition();
+    });
+    connect(m_display, &DBusDisplay::PrimaryRectChanged, [=] {
+//        m_mainPanel->resizeWithContent();
+        updatePosition();
+    });
+#else
     connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
         m_mainPanel->resizeWithContent();
         updatePosition();
@@ -34,6 +50,7 @@ MainWidget::MainWidget(QWidget *parent)
         m_mainPanel->resizeWithContent();
         updatePosition();
     });
+#endif
 }
 
 void MainWidget::onDockModeChanged()
