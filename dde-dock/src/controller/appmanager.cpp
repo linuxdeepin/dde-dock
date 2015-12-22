@@ -11,6 +11,7 @@ AppManager::AppManager(QObject *parent) : QObject(parent)
     connect(dbusLauncher, &DBusLauncher::ItemChanged, [=](const QString &in0, ItemInfo in1){
         if (in0 == "deleted") {
             onEntryRemoved(in1.key);
+            m_dockAppManager->RequestUndock(in1.key);
         }
     });
 }
