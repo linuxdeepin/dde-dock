@@ -57,6 +57,7 @@ void DockPluginProxy::itemRemovedEvent(QString id)
 
     AbstractDockItem * item = m_items.value(id);
     if (item) {
+        item->needPreviewImmediatelyHide();
         m_items.take(id);
 
         emit itemRemoved(item, id);
