@@ -10,6 +10,8 @@ import (
 	"sync"
 	"time"
 
+	"gir/gio-2.0"
+	"gir/glib-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -20,8 +22,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/lib/gettext"
-	"gir/gio-2.0"
-	"gir/glib-2.0"
 )
 
 type WindowInfo struct {
@@ -74,6 +74,12 @@ func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
 }
 
 func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
+	f, err := appinfo.GetFrequencyRecordFile()
+	if err == nil {
+		appinfo.SetFrequency(appId, appinfo.GetFrequency(appId, f)+1, f) // FIXME: DesktopID???
+		f.Free()
+	}
+
 	if !isNormalWindow(xid) {
 		return nil
 	}
@@ -105,12 +111,6 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	app.getExec(xid)
 	logger.Debug("Exec:", app.exec)
 	app.buildMenu()
-
-	f, err := appinfo.GetFrequencyRecordFile()
-	if err == nil {
-		appinfo.SetFrequency(app.Id, appinfo.GetFrequency(app.Id, f)+1, f)
-		f.Free()
-	}
 	return app
 }
 
