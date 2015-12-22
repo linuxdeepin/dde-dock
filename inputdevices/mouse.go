@@ -1,23 +1,25 @@
 package inputdevices
 
 import (
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
-	"gir/gio-2.0"
 )
 
 const (
 	mouseSchema = "com.deepin.dde.mouse"
 
-	mouseKeyLeftHanded      = "left-handed"
-	mouseKeyDisableTouchpad = "disable-touchpad"
-	mouseKeyMiddleButton    = "middle-button-enabled"
-	mouseKeyNaturalScroll   = "natural-scroll"
-	mouseKeyAcceleration    = "motion-acceleration"
-	mouseKeyThreshold       = "motion-threshold"
-	mouseKeyDoubleClick     = "double-click"
-	mouseKeyDragThreshold   = "drag-threshold"
+	mouseKeyLeftHanded        = "left-handed"
+	mouseKeyDisableTouchpad   = "disable-touchpad"
+	mouseKeyMiddleButton      = "middle-button-enabled"
+	mouseKeyNaturalScroll     = "natural-scroll"
+	mouseKeyWheelEmulation    = "wheel-emulation"
+	mouseKeyWheelEmulationBtn = "wheel-emulation-button"
+	mouseKeyAcceleration      = "motion-acceleration"
+	mouseKeyThreshold         = "motion-threshold"
+	mouseKeyDoubleClick       = "double-click"
+	mouseKeyDragThreshold     = "drag-threshold"
 )
 
 type Mouse struct {
@@ -25,12 +27,14 @@ type Mouse struct {
 	DisableTpad           *property.GSettingsBoolProperty `access:"readwrite"`
 	NaturalScroll         *property.GSettingsBoolProperty `access:"readwrite"`
 	MiddleButtonEmulation *property.GSettingsBoolProperty `access:"readwrite"`
+	WheelEmulation        *property.GSettingsBoolProperty `access:"readwrite"`
 
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
 
-	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
-	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
+	WheelEmulationButton *property.GSettingsIntProperty `access:"readwrite"`
+	DoubleClick          *property.GSettingsIntProperty `access:"readwrite"`
+	DragThreshold        *property.GSettingsIntProperty `access:"readwrite"`
 
 	DeviceList dxutils.DeviceInfos
 	Exist      bool
@@ -68,6 +72,9 @@ func NewMouse() *Mouse {
 	m.MiddleButtonEmulation = property.NewGSettingsBoolProperty(
 		m, "MiddleButtonEmulation",
 		m.setting, mouseKeyMiddleButton)
+	m.WheelEmulation = property.NewGSettingsBoolProperty(
+		m, "WheelEmulation",
+		m.setting, mouseKeyWheelEmulation)
 
 	m.MotionAcceleration = property.NewGSettingsFloatProperty(
 		m, "MotionAcceleration",
@@ -76,6 +83,9 @@ func NewMouse() *Mouse {
 		m, "MotionThreshold",
 		m.setting, mouseKeyThreshold)
 
+	m.WheelEmulationButton = property.NewGSettingsIntProperty(
+		m, "WheelEmulationButton",
+		m.setting, mouseKeyWheelEmulationBtn)
 	m.DoubleClick = property.NewGSettingsIntProperty(
 		m, "DoubleClick",
 		m.setting, mouseKeyDoubleClick)
@@ -101,6 +111,8 @@ func (m *Mouse) init() {
 	m.enableLeftHanded()
 	m.enableMidBtnEmu()
 	m.enableNaturalScroll()
+	m.enableWheelEmulation()
+	m.setWheelEmulationButton()
 	m.motionAcceleration()
 	m.motionThreshold()
 	if m.DisableTpad.Get() {
@@ -183,6 +195,26 @@ func (m *Mouse) enableMidBtnEmu() {
 			m.MiddleButtonEmulation.Get())
 		if err != nil {
 			logger.Debugf("Enable mid btn emulation for '%d - %v' failed: %v",
+				v.Id, v.Name, err)
+		}
+	}
+}
+
+func (m *Mouse) enableWheelEmulation() {
+	for _, v := range m.dxMouses {
+		err := v.EnableWheelEmulation(m.WheelEmulation.Get())
+		if err != nil {
+			logger.Debugf("Enable wheel emulation for '%d - %v' failed: %v",
+				v.Id, v.Name, err)
+		}
+	}
+}
+
+func (m *Mouse) setWheelEmulationButton() {
+	for _, v := range m.dxMouses {
+		err := v.SetWheelEmulationButton(int8(m.WheelEmulationButton.Get()))
+		if err != nil {
+			logger.Debugf("Enable wheel emulation button for '%d - %v' failed: %v",
 				v.Id, v.Name, err)
 		}
 	}
