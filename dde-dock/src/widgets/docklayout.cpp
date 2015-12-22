@@ -21,6 +21,14 @@ void DockLayout::addItem(AbstractDockItem *item, bool delayShow)
         insertItem(item, m_lastHoverIndex, delayShow);
 }
 
+void DockLayout::appendItem(AbstractDockItem *item, bool delayShow)
+{
+    if (!item)
+        return;
+
+    insertItem(item, m_appList.count(), delayShow);
+}
+
 void DockLayout::insertItem(AbstractDockItem *item, int index, bool delayShow)
 {
     QPointer<AbstractDockItem> pItem = item;

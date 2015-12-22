@@ -25,6 +25,7 @@ public:
     explicit DockLayout(QWidget *parent = 0);
 
     void addItem(AbstractDockItem *item, bool delayShow = true);
+    void appendItem(AbstractDockItem *item, bool delayShow = true);
     void insertItem(AbstractDockItem *item, int index, bool delayShow = true);
     void moveItem(int from, int to);
     void removeItem(int index);

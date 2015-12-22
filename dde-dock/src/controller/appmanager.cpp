@@ -50,7 +50,7 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
             qDebug() << "app entry add:" << tmpId;
             bool isTheDropOne = m_dockingItemId != tmpId;
             m_ids.append(tmpId);
-            emit entryAdded(item, isTheDropOne);
+            emit entryAppend(item, isTheDropOne);
 
             if (isTheDropOne)
                 setDockingItemId("");

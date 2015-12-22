@@ -153,6 +153,7 @@ void Panel::initAppManager()
 {
     m_appManager = new AppManager(this);
     connect(m_appManager, &AppManager::entryAdded, this, &Panel::onAppItemAdd);
+    connect(m_appManager, &AppManager::entryAppend, this, &Panel::onAppItemAppend);
     connect(m_appManager, &AppManager::entryRemoved, this, &Panel::onAppItemRemove);
 
     //Make sure the item which was dragged to the dock can be show at once
@@ -266,6 +267,15 @@ void Panel::resizeWithContent()
 void Panel::onAppItemAdd(AbstractDockItem *item, bool delayShow)
 {
     m_appLayout->addItem(item, delayShow);
+    connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
+    connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
+    connect(item, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
+    connect(item, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
+}
+
+void Panel::onAppItemAppend(AbstractDockItem *item, bool delayShow)
+{
+    m_appLayout->appendItem(item, delayShow);
     connect(item, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
     connect(item, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
     connect(item, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);

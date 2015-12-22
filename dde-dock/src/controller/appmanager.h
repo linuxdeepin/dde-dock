@@ -19,6 +19,7 @@ public:
 
 signals:
     void entryAdded(AbstractDockItem *item, bool delayShow);
+    void entryAppend(AbstractDockItem *item, bool delayShow);
     void entryRemoved(const QString &id);
 
 private:
