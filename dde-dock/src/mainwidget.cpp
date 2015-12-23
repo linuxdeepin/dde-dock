@@ -5,8 +5,10 @@ const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
-    this->setWindowFlags(Qt::Window);
+    this->setWindowFlags(Qt::Window | Qt::WindowDoesNotAcceptFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
+    //the attribute "Qt::WA_X11DoNotAcceptFocus" will not tack effect, not know the reason
+    //this->setAttribute(Qt::WA_X11DoNotAcceptFocus);
 
     initHideStateManager();
     initDockSetting();
