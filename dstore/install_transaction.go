@@ -32,7 +32,7 @@ func (t *DInstallTransaction) run() {
 	}
 	defer destroyDStoreManager(proxy)
 
-	t.timeout = time.After(time.Second * t.timeoutDuration)
+	t.timeout = time.After(t.timeoutDuration)
 	jobPath, err := proxy.InstallPackage(t.desc, t.pkgNames)
 	if err != nil {
 		t.done <- err

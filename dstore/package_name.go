@@ -17,18 +17,18 @@ func NewDQueryPkgNameTransaction(path string) (*DQueryPkgNameTransaction, error)
 		return nil, err
 	}
 	defer f.Close()
-	transition := &DQueryPkgNameTransaction{data: map[string]string{}}
+	t := &DQueryPkgNameTransaction{data: map[string]string{}}
 	decoder := json.NewDecoder(bufio.NewReader(f))
-	err = decoder.Decode(&transition.data)
+	err = decoder.Decode(&t.data)
 	if err != nil {
 		return nil, err
 	}
-	return transition, nil
+	return t, nil
 }
 
-func (transition *DQueryPkgNameTransaction) Query(desktopID string) string {
-	if transition.data != nil {
-		pkg := transition.data[desktopID]
+func (t *DQueryPkgNameTransaction) Query(desktopID string) string {
+	if t.data != nil {
+		pkg := t.data[desktopID]
 		return pkg
 	}
 	return ""

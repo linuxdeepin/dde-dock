@@ -4,6 +4,7 @@ import (
 	"dbus/com/deepin/lastore"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
+	"sync"
 	"time"
 )
 
@@ -51,6 +52,18 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 	}
 	defer destroyDStoreJob(job)
 
+	isQuitFlag := false
+	var quitLock sync.Mutex
+	setQuit := func() {
+		quitLock.Lock()
+		defer quitLock.Unlock()
+		isQuitFlag = true
+	}
+	isQuit := func() bool {
+		quitLock.Lock()
+		defer quitLock.Unlock()
+		return isQuitFlag
+	}
 	quit := make(chan struct{})
 
 	job.Status.ConnectChanged(func() {
@@ -61,10 +74,16 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 		status := job.Status.Get()
 		switch status {
 		case JobStatusSucceed, JobStatusEnd:
+			if isQuit() {
+				return
+			}
 			*result <- nil
 			close(quit)
 			return
 		case JobStatusFailed:
+			if isQuit() {
+				return
+			}
 			*result <- fmt.Errorf(job.Description.Get())
 			close(quit)
 			return
@@ -73,8 +92,10 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 
 	select {
 	case <-quit:
+		setQuit()
 		return
 	case <-timeout:
+		setQuit()
 		*result <- fmt.Errorf("Do job '%v - %v' timeout",
 			jobType, job.Packages.Get())
 		return

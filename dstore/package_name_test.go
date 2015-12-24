@@ -7,9 +7,9 @@ import (
 
 func TestGetPkgName(t *testing.T) {
 	Convey("GetPkgName", t, func() {
-		transition, err := NewDQueryPkgNameTransaction("testdata/package.json")
+		t, err := NewDQueryPkgNameTransaction("testdata/package.json")
 		So(err, ShouldBeNil)
-		So(transition.Query("test.desktop"), ShouldEqual, "")
-		So(transition.Query("Thunar.desktop"), ShouldEqual, "thunar")
+		So(t.Query("test.desktop"), ShouldEqual, "")
+		So(t.Query("Thunar.desktop"), ShouldEqual, "thunar")
 	})
 }

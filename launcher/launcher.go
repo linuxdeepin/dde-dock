@@ -12,6 +12,7 @@ import (
 
 	storeApi "dbus/com/deepin/store/api"
 
+	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
@@ -20,7 +21,6 @@ import (
 	"pkg.deepin.io/dde/daemon/launcher/item/search"
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"pkg.deepin.io/lib/dbus"
-	"gir/glib-2.0"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -125,12 +125,14 @@ func (self *Launcher) RequestUninstall(id string, purge bool) {
 	go func(id ItemID) {
 		logger.Info("uninstall", id)
 		err := self.itemManager.UninstallItem(id, purge, time.Minute*20)
-		if err == nil {
-			dbus.Emit(self, "UninstallSuccess", id)
+		if err != nil {
+			logger.Warning("uninstall", id, "failed:", err)
+			dbus.Emit(self, "UninstallFailed", id, err.Error())
 			return
 		}
 
-		dbus.Emit(self, "UninstallFailed", id, err.Error())
+		logger.Info("uninstall success")
+		dbus.Emit(self, "UninstallSuccess", id)
 	}(ItemID(id))
 }
 

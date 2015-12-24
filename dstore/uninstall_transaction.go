@@ -16,11 +16,11 @@ type DUninstallTransaction struct {
 }
 
 // NewDUninstallTransaction creates a new DUninstallTransaction.
-func NewDUninstallTransaction(pkgName string, purge bool, timeout time.Duration) *DUninstallTransaction {
+func NewDUninstallTransaction(pkgName string, purge bool, timeoutDuration time.Duration) *DUninstallTransaction {
 	return &DUninstallTransaction{
 		pkgName:         pkgName,
 		purge:           purge,
-		timeoutDuration: timeout,
+		timeoutDuration: timeoutDuration,
 		timeout:         nil,
 		done:            make(chan error, 1),
 	}
@@ -34,7 +34,7 @@ func (t *DUninstallTransaction) run() {
 	}
 	defer destroyDStoreManager(proxy)
 
-	t.timeout = time.After(time.Second * t.timeoutDuration)
+	t.timeout = time.After(t.timeoutDuration)
 	jobPath, err := proxy.RemovePackage("", t.pkgName)
 	if err != nil {
 		t.done <- err
