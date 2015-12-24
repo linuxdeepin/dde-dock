@@ -2,7 +2,6 @@ package appearance
 
 import (
 	"gir/gio-2.0"
-	dutils "pkg.deepin.io/lib/utils"
 )
 
 func (m *Manager) listenGSettingChanged() {
@@ -19,35 +18,37 @@ func (m *Manager) listenGSettingChanged() {
 	m.listenBgGsettings()
 }
 
-var gnomeBgId string
-
 func (m *Manager) listenBgGsettings() {
 	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		uri := m.wrapBgSetting.GetString(gsKeyBackground)
 		err := m.doSetBackground(uri)
 		if err != nil {
 			logger.Debugf("[Wrap background] set '%s' failed: %s", uri, err)
+			return
 		}
+		if m.gnomeBgSetting == nil {
+			return
+		}
+		if uri == m.gnomeBgSetting.GetString(gsKeyBackground) {
+			return
+		}
+		m.gnomeBgSetting.SetString(gsKeyBackground, uri)
 	})
 	m.wrapBgSetting.GetString(gsKeyBackground)
 
-	if m.gnomeBgSetting != nil {
-		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
-		gnomeBgId, _ = dutils.SumFileMd5(dutils.DecodeURI(uri))
-		m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
-			uri := m.gnomeBgSetting.GetString(gsKeyBackground)
-			id, _ := dutils.SumFileMd5(dutils.DecodeURI(uri))
-			logger.Debug("[Gnome background] md5:", id, gnomeBgId)
-			if id == gnomeBgId {
-				return
-			}
-			gnomeBgId = id
-
-			err := m.doSetBackground(uri)
-			if err != nil {
-				logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
-			}
-		})
-		m.gnomeBgSetting.GetString(gsKeyBackground)
+	if m.gnomeBgSetting == nil {
+		return
 	}
+	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
+		if uri == m.wrapBgSetting.GetString(gsKeyBackground) {
+			return
+		}
+
+		err := m.doSetBackground(uri)
+		if err != nil {
+			logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
+		}
+	})
+	m.gnomeBgSetting.GetString(gsKeyBackground)
 }
