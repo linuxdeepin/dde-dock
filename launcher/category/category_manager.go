@@ -63,13 +63,17 @@ func (m *Manager) GetAllCategory() []CategoryID {
 
 // AddItem adds a app to category.
 func (m *Manager) AddItem(id ItemID, cid CategoryID) {
-	m.categoryTable[cid].AddItem(id)
+	if category, ok := m.categoryTable[cid]; ok {
+		category.AddItem(id)
+	}
 	m.categoryTable[AllID].AddItem(id)
 }
 
 // RemoveItem removes a app from category.
 func (m *Manager) RemoveItem(id ItemID, cid CategoryID) {
-	m.categoryTable[cid].RemoveItem(id)
+	if category, ok := m.categoryTable[cid]; ok {
+		category.RemoveItem(id)
+	}
 	m.categoryTable[AllID].RemoveItem(id)
 }
 
