@@ -15,10 +15,10 @@ import (
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/dde/daemon/appinfo"
-	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
 	"pkg.deepin.io/dde/daemon/launcher/item/search"
+	. "pkg.deepin.io/dde/daemon/launcher/log"
 	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
@@ -123,15 +123,15 @@ func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
 // RequestUninstall 请求卸载程。
 func (self *Launcher) RequestUninstall(id string, purge bool) {
 	go func(id ItemID) {
-		logger.Info("uninstall", id)
+		Log.Info("uninstall", id)
 		err := self.itemManager.UninstallItem(id, purge, time.Minute*20)
 		if err != nil {
-			logger.Warning("uninstall", id, "failed:", err)
+			Log.Warning("uninstall", id, "failed:", err)
 			dbus.Emit(self, "UninstallFailed", id, err.Error())
 			return
 		}
 
-		logger.Info("uninstall success")
+		Log.Warning("uninstall success")
 		dbus.Emit(self, "UninstallSuccess", id)
 	}(ItemID(id))
 }
@@ -225,7 +225,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	if status == AppStatusCreated && self.itemManager.HasItem(id) {
 		status = AppStatusModified
 	}
-	logger.Info("start emitItemChanged", name, "Status:", status)
+	Log.Info("start emitItemChanged", name, "Status:", status)
 
 	if status != AppStatusDeleted {
 		// cannot use float number here. the total wait time is about 12s.
@@ -241,12 +241,12 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		}
 
 		if app == nil {
-			logger.Infof("create DesktopAppInfo for %q failed", name)
+			Log.Infof("create DesktopAppInfo for %q failed", name)
 			return
 		}
 		defer app.Unref()
 		if !app.ShouldShow() {
-			logger.Info(app.GetFilename(), "should NOT show")
+			Log.Info(app.GetFilename(), "should NOT show")
 			return
 		}
 		itemInfo := item.New(app)
@@ -254,13 +254,14 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 			itemInfo.SetTimeInstalled(info[name].timeInstalled)
 		}
 
-		self.categoryManager.LoadAppCategoryInfo(DStoreAppInfoFile, DStoreDesktopPkgMapFile, DStoreXCategoryAppInfoFile)
+		loadCategoryInfo(self.categoryManager)
 		defer self.categoryManager.FreeAppCategoryInfo()
 
 		cid, err := self.categoryManager.QueryID(app)
 		if err != nil {
-			itemInfo.SetCategoryID(category.OthersID)
+			Log.Warning("query category id for", itemInfo.ID(), "failed:", err)
 		}
+		Log.Debug("get category", cid, "for", itemInfo.ID())
 		itemInfo.SetCategoryID(cid)
 
 		self.itemManager.AddItem(itemInfo)
@@ -268,7 +269,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	}
 
 	if !self.itemManager.HasItem(id) {
-		logger.Warning("has no such a item", id)
+		Log.Warning("has no such a item", id)
 		return
 	}
 
@@ -284,7 +285,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		self.categoryManager.AddItem(id, cid)
 	}
 
-	logger.Info("emit ItemChanged signal", status, dbus.Emit(self, "ItemChanged", status, itemInfo, cid))
+	Log.Info("emit ItemChanged signal", status, dbus.Emit(self, "ItemChanged", status, itemInfo, cid))
 }
 
 func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, info map[string]ItemChangedStatus) {
@@ -298,7 +299,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}
 	}
 	if ev.IsRename() {
-		// logger.Info("renamed")
+		// Log.Info("renamed")
 		select {
 		case <-info[name].renamed:
 		default:
@@ -320,11 +321,11 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		go func() {
 			select {
 			case <-info[name].renamed:
-				// logger.Info("not renamed")
+				// Log.Info("not renamed")
 				info[name].notRenamed <- true
 				info[name].renamed <- true
 			default:
-				// logger.Info("default")
+				// Log.Info("default")
 			}
 			select {
 			case <-info[name].notCreated:
@@ -420,7 +421,7 @@ func (self *Launcher) listenItemChanged() {
 
 	self.appMonitor = watcher
 	for _, dir := range dirs {
-		logger.Info("monitor:", dir)
+		Log.Info("monitor:", dir)
 		watcher.Watch(dir)
 	}
 
@@ -470,7 +471,7 @@ func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	infos := []TimeInstalledExport{}
 	times, err := self.itemManager.GetAllTimeInstalled()
 	if err != nil {
-		logger.Warning("GetAllTimeInstalled error:", err)
+		Log.Warning("GetAllTimeInstalled error:", err)
 	}
 
 	for id, t := range times {
@@ -539,7 +540,7 @@ func (self *Launcher) Search(key string) {
 
 		sort.Sort(res)
 
-		logger.Debug("search result", res)
+		Log.Debug("search result", res)
 		itemIDs := []ItemID{}
 		for _, data := range res {
 			itemIDs = append(itemIDs, data.ID)
@@ -552,7 +553,7 @@ func (self *Launcher) Search(key string) {
 func (self *Launcher) MarkLaunched(id string) {
 	err := self.itemManager.MarkLaunched(ItemID(id))
 	if err != nil {
-		logger.Warning("MarkLaunched error:", err)
+		Log.Warning("MarkLaunched error:", err)
 		return
 	}
 
@@ -563,7 +564,7 @@ func (self *Launcher) MarkLaunched(id string) {
 func (self *Launcher) GetAllNewInstalledApps() []ItemID {
 	ids, err := self.itemManager.GetAllNewInstalledApps()
 	if err != nil {
-		logger.Info("GetAllNewInstalledApps", err)
+		Log.Info("GetAllNewInstalledApps", err)
 	}
 	return ids
 }

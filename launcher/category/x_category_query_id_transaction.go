@@ -55,10 +55,16 @@ func getXCategory(categories []string) CategoryID {
 	return ids[0]
 }
 
-func (transition *XCategoryQueryIDTransaction) Query(strCategories string) (CategoryID, error) {
+func (t *XCategoryQueryIDTransaction) Query(strCategories string) (CategoryID, error) {
 	categories := strings.Split(strings.TrimRight(strCategories, ";"), ";")
-	return getXCategory(categories), nil
+	categoryNames := make([]string, 0, len(categories))
+	for _, category := range categories {
+		if name, ok := t.data[strings.ToLower(category)]; ok {
+			categoryNames = append(categoryNames, name)
+		}
+	}
+	return getXCategory(categoryNames), nil
 }
 
-func (transition *XCategoryQueryIDTransaction) Free() {
+func (t *XCategoryQueryIDTransaction) Free() {
 }

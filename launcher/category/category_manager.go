@@ -5,6 +5,7 @@ import (
 	"gir/gio-2.0"
 	"path"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/log"
 )
 
 type QueryIDTransaction interface {
@@ -82,6 +83,7 @@ func (m *Manager) QueryID(app *gio.DesktopAppInfo) (CategoryID, error) {
 	if m.queryPkgNameTransaction != nil && m.deepinQueryIDTransaction != nil {
 		desktopID := path.Base(app.GetFilename())
 		pkgName := m.queryPkgNameTransaction.Query(desktopID)
+		Log.Debug("get package name of", desktopID, "is:", pkgName)
 		cid, e := m.deepinQueryIDTransaction.Query(pkgName)
 		if e != nil {
 			err = e
@@ -93,7 +95,9 @@ func (m *Manager) QueryID(app *gio.DesktopAppInfo) (CategoryID, error) {
 	}
 
 	if m.xCategoryQueryIDTransaction != nil {
-		return m.xCategoryQueryIDTransaction.Query(app.GetCategories())
+		Log.Debug("get category from desktop")
+		cid, err := m.xCategoryQueryIDTransaction.Query(app.GetCategories())
+		return cid, err
 	}
 
 	if err != nil {

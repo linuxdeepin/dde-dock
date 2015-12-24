@@ -1,12 +1,10 @@
 package launcher
 
 import (
+	"pkg.deepin.io/dde/daemon/launcher/log"
 	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("daemon/launcher-daemon")
-
 func init() {
-	loader.Register(NewLauncherDaemon(logger))
+	loader.Register(NewLauncherDaemon(log.Log))
 }

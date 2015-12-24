@@ -5,14 +5,15 @@ import (
 	"strings"
 	"sync"
 
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/dstore"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/dde/daemon/launcher/item"
 	"pkg.deepin.io/dde/daemon/launcher/item/search"
+	. "pkg.deepin.io/dde/daemon/launcher/log"
 	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/gettext"
-	"gir/gio-2.0"
 	. "pkg.deepin.io/lib/initializer"
 	"pkg.deepin.io/lib/log"
 )
@@ -44,8 +45,12 @@ func (d *Daemon) Stop() error {
 	d.launcher.destroy()
 	d.launcher = nil
 
-	logger.EndTracing()
+	Log.EndTracing()
 	return nil
+}
+
+func loadCategoryInfo(cm CategoryManager) error {
+	return cm.LoadAppCategoryInfo(DStoreDesktopPkgMapFile, DStoreAppInfoFile, DStoreXCategoryAppInfoFile)
 }
 
 func loadItemsInfo(im *item.Manager, cm *category.Manager) {
@@ -58,9 +63,9 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 		close(appChan)
 	}()
 
-	err := cm.LoadAppCategoryInfo(DStoreDesktopPkgMapFile, DStoreAppInfoFile, DStoreXCategoryAppInfoFile)
+	err := loadCategoryInfo(cm)
 	if err != nil {
-		logger.Warning("LoadAppCategoryInfo failed:", err)
+		Log.Warning("LoadAppCategoryInfo failed:", err)
 	}
 	var wg sync.WaitGroup
 	const N = 20
@@ -76,9 +81,10 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 				desktopApp := gio.ToDesktopAppInfo(app)
 				newItem := item.New(desktopApp)
 				cid, err := cm.QueryID(desktopApp)
+				Log.Debug("get category", cid, "for", newItem.ID())
 				newItem.SetCategoryID(cid)
 				if err != nil {
-					logger.Debug("QueryCategoryID failed:", err)
+					Log.Debug("QueryCategoryID failed:", err)
 				}
 
 				im.AddItem(newItem)
@@ -103,7 +109,7 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	logger.BeginTracing()
+	Log.BeginTracing()
 
 	gettext.InitI18n()
 
@@ -133,7 +139,7 @@ func (d *Daemon) Start() error {
 		}
 
 		if isZH() {
-			logger.Info("enable pinyin search in zh env")
+			Log.Info("enable pinyin search in zh env")
 			names := []string{}
 			for _, item := range im.GetAllItems() {
 				names = append(names, item.LocaleName())
@@ -141,7 +147,7 @@ func (d *Daemon) Start() error {
 
 			pinyinObj, err := search.NewPinYinSearchAdapter(names)
 			if err != nil {
-				logger.Warning("CreatePinYinSearch failed:", err)
+				Log.Warning("CreatePinYinSearch failed:", err)
 			}
 			d.launcher.setPinYinObject(pinyinObj)
 		}
