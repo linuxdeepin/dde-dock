@@ -31,11 +31,10 @@ func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
-	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
+	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_VPN_SETTING_NAME:
 		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
-	case NM_SETTING_VPN_SETTING_NAME:
-		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_VK_VPN_AUTOCONNECT)
 	}
+
 	return
 }
 
@@ -82,6 +81,23 @@ func logicSetSettingVkConnectionNoPermission(data connectionData, value bool) (e
 		}
 		permission := "user:" + currentUser.Username + ":"
 		setSettingConnectionPermissions(data, []string{permission})
+	}
+	return
+}
+
+func getSettingVkConnectionAutoconnect(data connectionData) (value bool) {
+	if isVpnConnection(data) {
+		value = getSettingVkVpnAutoconnect(data)
+	} else {
+		value = getSettingConnectionAutoconnect(data)
+	}
+	return
+}
+func logicSetSettingVkConnectionAutoconnect(data connectionData, value bool) (err error) {
+	if isVpnConnection(data) {
+		err = logicSetSettingVkVpnAutoconnect(data, value)
+	} else {
+		setSettingConnectionAutoconnect(data, value)
 	}
 	return
 }

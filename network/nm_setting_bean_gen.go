@@ -47,7 +47,7 @@ func initVirtualSections() {
 		Name:            Tr("General"),
 		Keys: []*GeneralKeyInfo{
 			&GeneralKeyInfo{Section: "connection", Key: "id", Name: Tr("Name"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "connection", Key: "vk-vpn-autoconnect", Name: Tr("Automatically connect"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "connection", Key: "vk-autoconnect", Name: Tr("Automatically connect"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "connection", Key: "vk-no-permission", Name: Tr("For All Users"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
@@ -483,7 +483,7 @@ const (
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP                   = "vk-routes-nexthop"
 	NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC                    = "vk-routes-metric"
 	NM_SETTING_VK_PPP_ENABLE_LCP_ECHO                         = "vk-enable-lcp-echo"
-	NM_SETTING_VK_VPN_AUTOCONNECT                             = "vk-vpn-autoconnect"
+	NM_SETTING_VK_CONNECTION_AUTOCONNECT                      = "vk-autoconnect"
 	NM_SETTING_VK_VPN_TYPE                                    = "vk-vpn-type"
 	NM_SETTING_VK_VPN_MISSING_PLUGIN                          = "vk-vpn-missing-plugin"
 	NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE                       = "vk-require-mppe"
@@ -537,7 +537,7 @@ var virtualKeys = []vkeyInfo{
 	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_NEXTHOP, ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
 	{value: NM_SETTING_VK_IP6_CONFIG_ROUTES_METRIC, ktype: ktypeUint32, vkType: vkTypeWrapper, relatedSection: NM_SETTING_IP6_CONFIG_SETTING_NAME, relatedKeys: []string{NM_SETTING_IP6_CONFIG_ROUTES}, available: false, childKey: true, optional: false},
 	{value: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_PPP_LCP_ECHO_FAILURE, NM_SETTING_PPP_LCP_ECHO_INTERVAL}, available: true, childKey: false, optional: false},
-	{value: NM_SETTING_VK_VPN_AUTOCONNECT, ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{NM_SETTING_CONNECTION_AUTOCONNECT}, available: true, childKey: false, optional: false},
+	{value: NM_SETTING_VK_CONNECTION_AUTOCONNECT, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_CONNECTION_SETTING_NAME, relatedKeys: []string{NM_SETTING_CONNECTION_AUTOCONNECT}, available: true, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_TYPE, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: false, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_MISSING_PLUGIN, ktype: ktypeString, vkType: vkTypeController, relatedSection: NM_SETTING_VS_VPN, relatedKeys: []string{}, available: true, childKey: false, optional: false},
 	{value: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE, ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME, relatedKeys: []string{NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE}, available: true, childKey: false, optional: false},
@@ -585,8 +585,8 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 		switch key {
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			return getSettingVkConnectionNoPermissionJSON(data)
-		case NM_SETTING_VK_VPN_AUTOCONNECT:
-			return getSettingVkVpnAutoconnectJSON(data)
+		case NM_SETTING_VK_CONNECTION_AUTOCONNECT:
+			return getSettingVkConnectionAutoconnectJSON(data)
 		}
 	case NM_SETTING_VS_MOBILE:
 		switch key {
@@ -760,8 +760,8 @@ func generalSetVkeyJSON(data connectionData, section, key string, valueJSON stri
 		case NM_SETTING_VK_CONNECTION_NO_PERMISSION:
 			err = logicSetSettingVkConnectionNoPermissionJSON(data, valueJSON)
 			return
-		case NM_SETTING_VK_VPN_AUTOCONNECT:
-			err = logicSetSettingVkVpnAutoconnectJSON(data, valueJSON)
+		case NM_SETTING_VK_CONNECTION_AUTOCONNECT:
+			err = logicSetSettingVkConnectionAutoconnectJSON(data, valueJSON)
 			return
 		}
 	case NM_SETTING_VS_MOBILE:
@@ -1057,8 +1057,8 @@ func getSettingVkPppEnableLcpEchoJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVkPppEnableLcpEcho(data))
 	return
 }
-func getSettingVkVpnAutoconnectJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVkVpnAutoconnect(data))
+func getSettingVkConnectionAutoconnectJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVkConnectionAutoconnect(data))
 	return
 }
 func getSettingVkVpnTypeJSON(data connectionData) (valueJSON string) {
@@ -1259,9 +1259,9 @@ func logicSetSettingVkPppEnableLcpEchoJSON(data connectionData, valueJSON string
 	value, _ := jsonToKeyValueBoolean(valueJSON)
 	return logicSetSettingVkPppEnableLcpEcho(data, value)
 }
-func logicSetSettingVkVpnAutoconnectJSON(data connectionData, valueJSON string) (err error) {
+func logicSetSettingVkConnectionAutoconnectJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
-	return logicSetSettingVkVpnAutoconnect(data, value)
+	return logicSetSettingVkConnectionAutoconnect(data, value)
 }
 func logicSetSettingVkVpnTypeJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
