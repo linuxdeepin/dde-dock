@@ -72,6 +72,7 @@ type Manager struct {
 
 	// signals
 	NeedSecrets                  func(connPath, settingName, connectionId string, autoConnect bool)
+	NeedSecretsFinished          func(connPath, settingName string)
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
