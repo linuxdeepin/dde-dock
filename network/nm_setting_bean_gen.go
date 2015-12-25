@@ -138,7 +138,6 @@ func initVirtualSections() {
 		relatedSections: []string{NM_SETTING_WIRELESS_SETTING_NAME},
 		Name:            Tr("Wi-Fi"),
 		Keys: []*GeneralKeyInfo{
-			&GeneralKeyInfo{Section: "802-11-wireless", Key: "ssid", Name: Tr("SSID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mode", Name: Tr("Mode"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "band", Name: Tr("Band"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "channel", Name: Tr("Channel"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},

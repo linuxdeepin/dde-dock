@@ -213,33 +213,33 @@ func doGetRelatedVsections(data connectionData, keepAll bool) (vsections []strin
 		vsections = []string{
 			vsectionGeneral,
 			vsectionEthernet,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWireless:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWirelessAdhoc:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWirelessHotspot:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionPppoe:
 		vsections = []string{
@@ -494,7 +494,7 @@ func isVsectionExpandedDefault(data connectionData, vsection string) (expanded b
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		switch vsection {
-		case vsectionIpv4, vsectionWifi:
+		case vsectionIpv4, vsectionSecurity:
 			expanded = true
 		}
 	case connectionMobileGsm, connectionMobileCdma:
@@ -539,7 +539,7 @@ func (k *GeneralKeyInfo) fixReadonly(data connectionData) {
 func isGeneralKeyReadonly(data connectionData, section, key string) (readonly bool) {
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
-	case connectionWired, connectionMobileGsm, connectionMobileCdma:
+	case connectionWired, connectionMobileGsm, connectionMobileCdma, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		if section == sectionConnection && key == NM_SETTING_CONNECTION_ID {
 			return true
 		}

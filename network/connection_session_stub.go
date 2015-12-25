@@ -55,7 +55,8 @@ func (s *ConnectionSession) setPropType() {
 }
 
 func (s *ConnectionSession) setPropAllowDelete() {
-	if isNmObjectPathValid(s.devPath) && nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid {
+	if !s.connectionExists || (isNmObjectPathValid(s.devPath) &&
+		nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid) {
 		s.AllowDelete = false
 	} else {
 		s.AllowDelete = true
