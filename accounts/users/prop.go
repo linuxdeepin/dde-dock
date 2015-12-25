@@ -105,7 +105,7 @@ func IsAdminUser(username string) bool {
 }
 
 func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
-	adms, err := getAdmGroup(fileSudoers)
+	groups, users, err := getAdmGroupAndUser(fileSudoers)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 		return nil, err
 	}
 
-	var tmp string
+	var list []string = users
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		if len(line) == 0 {
@@ -127,45 +127,56 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 			continue
 		}
 
-		if !isStrInArray(items[0], adms) {
+		if !isStrInArray(items[0], groups) {
 			continue
 		}
 
-		tmp = items[3]
+		list = append(list, strings.Split(items[3], ",")...)
 	}
 
-	return strings.Split(tmp, ","), nil
+	return list, nil
 }
 
-// get adm group from '/etc/sudoers'
-func getAdmGroup(file string) ([]string, error) {
+// get adm group and user from '/etc/sudoers'
+func getAdmGroupAndUser(file string) ([]string, []string, error) {
 	fr, err := os.Open(file)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer fr.Close()
 
 	var (
-		adms    []string
+		groups  []string
+		users   []string
 		scanner = bufio.NewScanner(fr)
 	)
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		if len(line) == 0 || !strings.Contains(line, "%") {
+		if len(line) == 0 {
 			continue
 		}
 
-		if !strings.Contains(line, `ALL=(ALL`) {
+		line = strings.TrimSpace(line)
+		if line[0] == '#' || !strings.Contains(line, `ALL=(ALL`) {
 			continue
 		}
 
-		// deepin: %sudo\tALL=(ALL:ALL) ALL
-		// archlinux: %wheel ALL=(ALL) ALL
 		array := strings.Split(line, "ALL")
-		array = strings.Split(strings.TrimSpace(array[0]), "%")
-		adms = append(adms, strings.TrimRight(array[1], "\t"))
+		// admin group
+		if line[0] == '%' {
+			// deepin: %sudo\tALL=(ALL:ALL) ALL
+			// archlinux: %wheel ALL=(ALL) ALL
+			array = strings.Split(array[0], "%")
+			tmp := strings.TrimRight(array[1], "\t")
+			groups = append(groups, strings.TrimSpace(tmp))
+		} else {
+			// admin user
+			// deepin: root\tALL=(ALL:ALL) ALL
+			// archlinux: root ALL=(ALL) ALL
+			tmp := strings.TrimRight(array[0], "\t")
+			users = append(users, strings.TrimSpace(tmp))
+		}
 	}
-
-	return adms, nil
+	return groups, users, nil
 }

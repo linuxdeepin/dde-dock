@@ -30,9 +30,10 @@ import (
 )
 
 const (
-	userFilePasswd = "/etc/passwd"
-	userFileGroup  = "/etc/group"
-	userFileShadow = "/etc/shadow"
+	userFilePasswd  = "/etc/passwd"
+	userFileGroup   = "/etc/group"
+	userFileShadow  = "/etc/shadow"
+	userFileSudoers = "/etc/sudoers"
 
 	lightdmConfig = "/etc/lightdm/lightdm.conf"
 	kdmConfig     = "/usr/share/config/kdm/kdmrc"
@@ -59,7 +60,8 @@ func (m *Manager) getWatchFiles() []string {
 		list = append(list, dmConfig)
 	}
 
-	list = append(list, []string{userFilePasswd, userFileGroup, userFileShadow}...)
+	list = append(list, []string{userFilePasswd, userFileGroup,
+		userFileShadow, userFileSudoers}...)
 	return list
 }
 
@@ -72,7 +74,7 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 	switch {
 	case strings.Contains(ev.Name, userFilePasswd):
 		m.handleUserFileChanged(ev, m.handleFilePasswdChanged)
-	case strings.Contains(ev.Name, userFileGroup):
+	case strings.Contains(ev.Name, userFileGroup), strings.Contains(ev.Name, userFileSudoers):
 		m.handleUserFileChanged(ev, m.handleFileGroupChanged)
 	case strings.Contains(ev.Name, userFileShadow):
 		m.handleUserFileChanged(ev, m.handleFileShadowChanged)
