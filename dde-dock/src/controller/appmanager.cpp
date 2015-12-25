@@ -51,7 +51,12 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
             qDebug() << "app entry add:" << tmpId;
             bool isTheDropOne = m_dockingItemId != tmpId;
             m_ids.append(tmpId);
-            emit entryAppend(item, isTheDropOne);
+
+            //item drag from launcher
+            if (tmpId == m_dockingItemId)
+                emit entryAdded(item, isTheDropOne);
+            else
+                emit entryAppend(item, isTheDropOne);
 
             if (isTheDropOne)
                 setDockingItemId("");
