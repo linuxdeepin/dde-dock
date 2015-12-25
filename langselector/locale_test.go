@@ -67,27 +67,3 @@ func (t *TestWrapper) TestWriteUserLocale(c *C.C) {
 	c.Check(writeUserLocalePam("zh_CN.UTF-8", "/xxxxxxxxx"),
 		C.NotNil)
 }
-
-func (t *TestWrapper) TestLocaleInfoList(c *C.C) {
-	list, err := getLocaleInfoList("testdata/support_languages.json")
-	c.Check(len(list), C.Not(C.Equals), 0)
-	c.Check(err, C.Not(C.NotNil))
-
-	list, err = getLocaleInfoList("testdata/zzxxxxxxx")
-	c.Check(len(list), C.Equals, 0)
-	c.Check(err, C.NotNil)
-}
-
-// TODO: panic in jenkins for the dbus interface
-// func (t *TestWrapper) TestNetwork(c *C.C) {
-// 	_, err := isNetworkEnable()
-// 	c.Check(err, C.Not(C.NotNil))
-// }
-
-// func (t *TestWrapper) TestNotify(c *C.C) {
-// 	err := sendNotify("", "", "Test")
-// 	//c.Check(err, C.Not(C.NotNil))
-// 	if err != nil {
-// 		c.Skip(err.Error())
-// 	}
-// }

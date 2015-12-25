@@ -23,8 +23,14 @@ package langselector
 
 import (
 	"fmt"
-	"pkg.deepin.io/dde/daemon/langselector/language_info"
+	"pkg.deepin.io/dde/api/lang_info"
 	. "pkg.deepin.io/lib/gettext"
+)
+
+const (
+	localeIconStart    = "notification-change-language-start"
+	localeIconFailed   = "notification-change-language-failed"
+	localeIconFinished = "notification-change-language-finished"
 )
 
 type LocaleInfo struct {
@@ -45,8 +51,7 @@ func (lang *LangSelector) SetLocale(locale string) error {
 		return nil
 	}
 
-	if len(locale) == 0 || !language_info.IsLocaleValid(locale,
-		language_info.LanguageListFile) {
+	if len(locale) == 0 || !lang_info.IsSupportedLocale(locale) {
 		return fmt.Errorf("Invalid locale: %v", locale)
 	}
 	if lang.lhelper == nil {
@@ -61,13 +66,13 @@ func (lang *LangSelector) SetLocale(locale string) error {
 		lang.LocaleState = LocaleStateChanging
 		lang.setPropCurrentLocale(locale)
 		if ok, _ := isNetworkEnable(); !ok {
-			err := sendNotify("", "",
+			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		} else {
-			err := sendNotify("", "",
+			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed with an installation of lacked language packages, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
@@ -87,7 +92,7 @@ func (lang *LangSelector) SetLocale(locale string) error {
 //
 // 得到系统支持的 locale 信息列表
 func (lang *LangSelector) GetLocaleList() []LocaleInfo {
-	list, err := getLocaleInfoList(language_info.LanguageListFile)
+	list, err := getLocaleInfoList()
 	if err != nil {
 		lang.logger.Warning(err)
 		return nil
@@ -96,14 +101,14 @@ func (lang *LangSelector) GetLocaleList() []LocaleInfo {
 	return list
 }
 
-func getLocaleInfoList(filename string) ([]LocaleInfo, error) {
-	infoList, err := language_info.GetLanguageInfoList(filename)
+func getLocaleInfoList() ([]LocaleInfo, error) {
+	infos, err := lang_info.GetSupportedLangInfos()
 	if err != nil {
 		return nil, err
 	}
 
 	var list []LocaleInfo
-	for _, info := range infoList {
+	for _, info := range infos {
 		tmp := LocaleInfo{info.Locale, info.Description}
 		list = append(list, tmp)
 	}

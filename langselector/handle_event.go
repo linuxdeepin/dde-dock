@@ -22,7 +22,6 @@
 package langselector
 
 import (
-	"pkg.deepin.io/dde/daemon/langselector/i18n_dependency"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -33,14 +32,16 @@ func (lang *LangSelector) onLocaleSuccess() {
 		if err != nil {
 			lang.logger.Warning(err)
 			lang.setPropCurrentLocale(getLocale())
-			e := sendNotify("", "", Tr("System language failed to change, please try later."))
+			e := sendNotify(localeIconFailed, "",
+				Tr("System language failed to change, please try later."))
 			lang.LocaleState = LocaleStateChanged
 			if e != nil {
 				lang.logger.Warning("sendNotify failed:", e)
 			}
 			return
 		}
-		e := sendNotify("", "", Tr("System language has been changed, please log in again after logged out."))
+		e := sendNotify(localeIconFinished, "",
+			Tr("System language has been changed, please log in again after logged out."))
 		lang.LocaleState = LocaleStateChanged
 		if e != nil {
 			lang.logger.Warning("sendNotify failed:", e)
@@ -58,7 +59,7 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 		return err
 	}
 
-	err = i18n_dependency.InstallDependentPackages(lang.CurrentLocale)
+	err = installI18nDependent(lang.CurrentLocale)
 	if err != nil {
 		lang.logger.Warning(err)
 	}

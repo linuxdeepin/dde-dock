@@ -31,11 +31,12 @@ const (
 	dbusSender = "com.deepin.daemon.LangSelector"
 )
 
-var _lang *LangSelector
+var (
+	_lang  *LangSelector
+	logger = log.NewLogger("daemon/langselector")
+)
 
 func Start() *LangSelector {
-	var logger = log.NewLogger("daemon/langselector")
-
 	if !lib.UniqueOnSession(dbusSender) {
 		logger.Warning("There is a LangSelector running...")
 		return nil

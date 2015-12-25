@@ -29,7 +29,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.deepin.io/dde/daemon/langselector/language_info"
+	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/lib/log"
 	"strings"
 )
@@ -162,8 +162,7 @@ func getLocale() string {
 		writeUserLocale(locale)
 	}
 
-	if !language_info.IsLocaleValid(locale,
-		language_info.LanguageListFile) {
+	if !lang_info.IsSupportedLocale(locale) {
 		locale = defaultLocale
 		writeUserLocale(locale)
 	}
