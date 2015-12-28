@@ -306,6 +306,16 @@ func bluezSetDeviceTrusted(dpath dbus.ObjectPath, trusted bool) (err error) {
 	return
 }
 
+func bluezGetDeviceAddress(dpath dbus.ObjectPath) (address string) {
+	bluezDevice, err := bluezNewDevice(dpath)
+	if err != nil {
+		return
+	}
+	defer bluezDestroyDevice(bluezDevice)
+
+	address = bluezDevice.Address.Get()
+	return
+}
 func bluezGetDeviceTrusted(dpath dbus.ObjectPath) (trusted bool) {
 	bluezDevice, err := bluezNewDevice(dpath)
 	if err != nil {

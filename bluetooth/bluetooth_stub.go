@@ -35,7 +35,8 @@ func (b *Bluetooth) setPropState() {
 	dbus.NotifyChange(b, "State")
 }
 
-func (b *Bluetooth) clearUnpairedDevice() {
+//ClearUnpairedDevice will remove all device in unpaired list
+func (b *Bluetooth) ClearUnpairedDevice() {
 	removeDevices := [](*device){}
 	for _, devices := range b.devices {
 		for _, d := range devices {

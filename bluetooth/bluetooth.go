@@ -99,31 +99,32 @@ func (b *Bluetooth) init() {
 		}
 	}()
 
-	b.config = newConfig()
-	b.devices = make(map[dbus.ObjectPath][]*device)
+	go func() {
+		b.config = newConfig()
+		b.config.save()
+		b.devices = make(map[dbus.ObjectPath][]*device)
 
-	// initialize dbus object manager
-	var err error
-	b.objectManager, err = bluezNewObjectManager()
-	if err != nil {
-		return
-	}
+		// initialize dbus object manager
+		var err error
+		b.objectManager, err = bluezNewObjectManager()
+		if err != nil {
+			return
+		}
 
-	// connect signals
-	b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
-	b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+		// connect signals
+		b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
+		b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
 
-	// add exists adapters and devices
-	objects, err := b.objectManager.GetManagedObjects()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	for path, data := range objects {
-		b.handleInterfacesAdded(path, data)
-	}
-
-	b.config.save()
+		// add exists adapters and devices
+		objects, err := b.objectManager.GetManagedObjects()
+		if err != nil {
+			logger.Error(err)
+			return
+		}
+		for path, data := range objects {
+			b.handleInterfacesAdded(path, data)
+		}
+	}()
 }
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {

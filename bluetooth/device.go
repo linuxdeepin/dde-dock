@@ -42,12 +42,14 @@ type device struct {
 	State   uint32
 	UUIDs   []string
 	// optional
-	Icon string
-	RSSI int16
+	Icon    string
+	RSSI    int16
+	Address string
 
 	oldConnected bool
 	connected    bool
 	connecting   bool
+	blockNotify  bool
 
 	lk           sync.Mutex
 	confirmation chan bool
@@ -59,11 +61,13 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	d.AdapterPath = d.bluezDevice.Adapter.Get()
 	d.Name = d.bluezDevice.Name.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
+	d.Address = d.bluezDevice.Address.Get()
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.connected = d.bluezDevice.Connected.Get()
 	d.UUIDs = d.bluezDevice.UUIDs.Get()
 	d.oldConnected = d.connected
+	d.blockNotify = false
 	d.notifyStateChanged()
 
 	// optional properties, read from dbus object data in order to
@@ -108,6 +112,10 @@ func (d *device) connectProperties() {
 		d.Alias = d.bluezDevice.Alias.Get()
 		d.notifyDevicePropertiesChanged()
 	})
+	d.bluezDevice.Address.ConnectChanged(func() {
+		d.Address = d.bluezDevice.Address.Get()
+		d.notifyDevicePropertiesChanged()
+	})
 	d.bluezDevice.Trusted.ConnectChanged(func() {
 		d.Trusted = d.bluezDevice.Trusted.Get()
 		d.notifyDevicePropertiesChanged()
@@ -140,10 +148,12 @@ func (d *device) handleConnected() {
 	d.connected = d.bluezDevice.Connected.Get()
 	if d.oldConnected != d.connected {
 		d.oldConnected = d.connected
-		if d.connected {
-			notifyBluetoothConnected(d.Alias)
-		} else {
-			notifyBluetoothDisconnected(d.Alias)
+		if !d.blockNotify {
+			if d.connected {
+				notifyBluetoothConnected(d.Alias)
+			} else {
+				notifyBluetoothDisconnected(d.Alias)
+			}
 		}
 	}
 	d.notifyStateChanged()
@@ -167,6 +177,11 @@ func (d *device) notifyStateChanged() {
 	d.notifyDevicePropertiesChanged()
 }
 
+func (d *device) connectAddress() string {
+	adapterAddress := bluezGetAdapterAddress(d.AdapterPath)
+	return adapterAddress + "/" + d.Address
+}
+
 func (d *device) fixRssi() {
 	if d.RSSI == 0 {
 		if d.Trusted {
@@ -184,10 +199,25 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	}
 
 	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
 	d := newDevice(dpath, data)
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
+	b.config.addDeviceConfig(d.connectAddress())
+
 	d.notifyDeviceAdded()
+	b.devicesLock.Unlock()
+
+	connected := b.config.getDeviceConfigConnected(d.connectAddress())
+	if connected {
+		d.blockNotify = true
+		go func() {
+			time.Sleep(25 * time.Second)
+			if d, _ := b.getDevice(dpath); nil != d && !d.connected {
+				logger.Infof("auto connect device %v", d)
+				bluezConnectDevice(dpath)
+			}
+			d.blockNotify = false
+		}()
+	}
 }
 
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
@@ -204,8 +234,10 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 }
 
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
-	devices[i].notifyDeviceRemoved()
-	destroyDevice(devices[i])
+	d := devices[i]
+	b.config.removeDeviceConfig(d.connectAddress())
+	d.notifyDeviceRemoved()
+	destroyDevice(d)
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
 	devices = devices[:len(devices)-1]
@@ -264,8 +296,8 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	d.notifyStateChanged()
 
 	go func() {
-		d.bluezDevice.Connected.Reset()
-		defer d.bluezDevice.Connected.ConnectChanged(d.handleConnected)
+		d.blockNotify = true
+		defer func() { d.blockNotify = false }()
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
@@ -282,11 +314,13 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 
 		err = bluezConnectDevice(dpath)
 		if err == nil {
+			b.config.setDeviceConfigConnected(d.connectAddress(), true)
 			// trust device when connecting success
 			if !bluezGetDeviceTrusted(dpath) {
 				bluezSetDeviceTrusted(dpath, true)
 			}
 		} else {
+			b.config.setDeviceConfigConnected(d.connectAddress(), false)
 			logger.Warning("ConnectDevice failed:", dpath, err)
 			if err.Error() == bluezErrorInvalidKey.Error() || !d.Paired {
 				// we do not want to pop notify for device because we will remove it.
@@ -314,7 +348,7 @@ func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) (err error) {
 	}
 	d.connected = false
 	d.notifyStateChanged()
-
+	b.config.setDeviceConfigConnected(d.connectAddress(), false)
 	go bluezDisconnectDevice(dpath)
 	return
 }

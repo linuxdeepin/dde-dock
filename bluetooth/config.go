@@ -17,10 +17,15 @@ type config struct {
 	core utils.Config
 
 	Adapters map[string]*adapterConfig // use adapter hardware address as key
+	Devices  map[string]*deviceConfig  // use device dpath as key
 }
 
 type adapterConfig struct {
 	Powered bool
+}
+
+type deviceConfig struct {
+	Connected bool
 }
 
 func newConfig() (c *config) {
@@ -28,6 +33,7 @@ func newConfig() (c *config) {
 	c.core.SetConfigName("bluetooth")
 	logger.Info("load bluetooth config file:", c.core.GetConfigFile())
 	c.Adapters = make(map[string]*adapterConfig)
+	c.Devices = make(map[string]*deviceConfig)
 	c.load()
 	go c.clearSpareConfig()
 	return
@@ -95,7 +101,6 @@ func (c *config) isAdapterConfigExists(address string) (ok bool) {
 	defer c.core.Unlock()
 	_, ok = c.Adapters[address]
 	return
-
 }
 
 func (c *config) getAdapterConfigPowered(address string) (powered bool) {
@@ -113,6 +118,61 @@ func (c *config) setAdapterConfigPowered(address string, powered bool) {
 		ac.Powered = powered
 	}
 	c.core.Unlock()
+	c.save()
+	return
+}
+
+func newDeviceConfig() (ac *deviceConfig) {
+	ac = &deviceConfig{Connected: false}
+	return
+}
+func (c *config) isDeviceConfigExist(address string) (ok bool) {
+	c.core.Lock()
+	defer c.core.Unlock()
+	_, ok = c.Devices[address]
+	return
+}
+func (c *config) addDeviceConfig(address string) {
+	if c.isDeviceConfigExist(address) {
+		return
+	}
+	c.core.Lock()
+	c.Devices[address] = newDeviceConfig()
+	c.core.Unlock()
+	c.save()
+}
+func (c *config) getDeviceConfig(address string) (dc *deviceConfig, ok bool) {
+	c.core.Lock()
+	defer c.core.Unlock()
+	dc, ok = c.Devices[address]
+	return
+}
+func (c *config) removeDeviceConfig(address string) {
+	c.core.Lock()
+	delete(c.Devices, address)
+	c.core.Unlock()
+	c.save()
+}
+func (c *config) getDeviceConfigConnected(address string) (connected bool) {
+	dc, ok := c.getDeviceConfig(address)
+	if !ok {
+		return
+	}
+
+	c.core.Lock()
+	defer c.core.Unlock()
+	return dc.Connected
+}
+func (c *config) setDeviceConfigConnected(address string, conneted bool) {
+	dc, ok := c.getDeviceConfig(address)
+	if !ok {
+		return
+	}
+
+	c.core.Lock()
+	dc.Connected = conneted
+	c.core.Unlock()
+
 	c.save()
 	return
 }
