@@ -4,7 +4,8 @@ SUBDIRS = dde-dock \
           dde-dock-shutdown-plugin \
           dde-dock-trash-plugin
 
-TRANSLATIONS += translations/dde-dock.ts
+# Automating generation .qm files from .ts files
+system($$PWD/translate_generation.sh)
 
 qm_files.files += translations/*.qm
 qm_files.path   = /usr/share/dde-dock/translations/
