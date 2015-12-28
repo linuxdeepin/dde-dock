@@ -75,10 +75,7 @@ func (m *Manager) listenSignal() {
 }
 
 func (m *Manager) enableAllEdge() {
-	m.SetTopLeft(m.TopLeftAction())
-	m.SetBottomLeft(m.BottomLeftAction())
-	m.SetTopRight(m.TopRightAction())
-	m.SetBottomRight(m.BottomRightAction())
+	m.initEdgeActionMap()
 }
 
 func (m *Manager) filterCursorSignal(id string) bool {
