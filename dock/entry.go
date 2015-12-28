@@ -5,8 +5,8 @@ import (
 	"strings"
 	"sync"
 
-	"pkg.deepin.io/lib/dbus"
 	"gir/gio-2.0"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -35,7 +35,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Debug("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
+	logger.Debugf("NewAppEntryWithRuntimeApp: %s, 0x%x", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",

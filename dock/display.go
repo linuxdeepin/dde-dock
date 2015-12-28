@@ -7,15 +7,14 @@ import (
 
 var displayRect xproto.Rectangle
 
-func initDisplay() bool {
+func initDisplay() error {
 	var err error
 	dpy, err = display.NewDisplay(
 		"com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display",
 	)
 	if err != nil {
-		logger.Error("connect to display failed:", err)
-		return false
+		return err
 	}
 	// to avoid get PrimaryRect failed
 	defer func() {
@@ -34,7 +33,7 @@ func initDisplay() bool {
 		}
 		hideModemanager.UpdateState()
 	})
-	return true
+	return nil
 }
 
 func setDisplayRect(rect []interface{}) {

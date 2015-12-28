@@ -3,6 +3,7 @@ package dock
 import (
 	"dbus/com/deepin/api/xmousearea"
 	"dbus/com/deepin/daemon/display"
+	"errors"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"os"
@@ -124,14 +125,14 @@ func (d *Daemon) Start() error {
 		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 
-	if !initDisplay() {
+	var err error
+
+	if err = initDisplay(); err != nil {
 		d.Stop()
 		logger.Info("initialize display failed")
-		return nil
+		return err
 	}
 	logger.Info("initialize display done")
-
-	var err error
 
 	XU, err = xgbutil.NewConn()
 	if err != nil {
@@ -176,6 +177,7 @@ func (d *Daemon) Start() error {
 	setting = NewSetting()
 	if setting == nil {
 		d.startFailed("get setting failed")
+		return errors.New("create setting failed")
 	}
 	err = dbus.InstallOnSession(setting)
 	if err != nil {

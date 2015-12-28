@@ -293,6 +293,8 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
         }
 
         if (app_id == NULL) {
+            // TODO: reading StartupWMClass field when dock module starts and monitor directory changed to reload data.
+            // This way is suck and inefficient.
             GKeyFile* f = load_app_config(FILTER_FILE);
             if (f != NULL && wminstance != NULL) {
                 app_id = g_key_file_get_string(f, wminstance, "appid", NULL);

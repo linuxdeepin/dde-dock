@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"gir/gio-2.0"
 	"gir/glib-2.0"
@@ -128,7 +129,7 @@ func find_exec_by_xid(xid xproto.Window) string {
 func (app *RuntimeApp) getExec(xid xproto.Window) {
 	core := app.createDesktopAppInfo()
 	if core != nil {
-		logger.Debug(app.Id, " Get Exec from desktop file")
+		logger.Debug(app.Id, "Get Exec from desktop file")
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
 		app.exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
@@ -385,14 +386,21 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
 	if wmClass != nil {
-		wmInstance = wmClass.Instance
-		wmClassName = wmClass.Class
+		if utf8.ValidString(wmClass.Instance) {
+			wmInstance = wmClass.Instance
+		}
+
+		// it is possible that getting invalid string which might be xgb implementation's bug.
+		// for instance: xdemineur's WMClass
+		if utf8.ValidString(wmClass.Class) {
+			wmClassName = wmClass.Class
+		}
 		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
 	}
 	name, _ := ewmh.WmNameGet(XU, xid)
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		logger.Info("get pid failed:", name)
+		logger.Debug("get pid failed for:", xid)
 		if name != "" {
 			pid = lookthroughProc(name)
 		} else {
@@ -538,6 +546,7 @@ func isNormalWindow(xid xproto.Window) bool {
 		}
 	}
 
+	logger.Debug("mayBeDocked:", mayBeDocked, "cannotBeDoced:", cannotBeDoced)
 	isNormal := mayBeDocked && !cannotBeDoced
 	return isNormal
 }
@@ -580,13 +589,22 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 }
 func (app *RuntimeApp) updateWmName(xid xproto.Window) {
 	if name, err := ewmh.WmNameGet(XU, xid); err == nil && name != "" {
-		app.xids[xid].Title = name
-		return
+		if utf8.ValidString(name) {
+			app.xids[xid].Title = name
+			return
+		}
 	}
 
 	if name, err := xprop.PropValStr(xprop.GetProperty(XU, xid,
 		"WM_NAME")); err == nil {
-		app.xids[xid].Title = name
+		if utf8.ValidString(name) {
+			app.xids[xid].Title = name
+			return
+		}
+	}
+
+	if app.xids[xid].Title == "" {
+		app.xids[xid].Title = app.Id
 	}
 }
 
