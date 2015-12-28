@@ -1,7 +1,7 @@
 #ifndef DOCKAPPLAYOUT_H
 #define DOCKAPPLAYOUT_H
 
-#include "movablelayout.h"
+#include "../movablelayout.h"
 
 class DockAppLayout : public MovableLayout
 {

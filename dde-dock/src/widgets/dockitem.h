@@ -6,8 +6,8 @@
 #include <QJsonValue>
 #include <QJsonObject>
 
-#include "../previewwindow.h"
-#include "../highlighteffect.h"
+#include "previewwindow.h"
+#include "highlighteffect.h"
 #include "dbus/dbusmenu.h"
 #include "dbus/dbusmenumanager.h"
 #include "interfaces/dockconstants.h"
@@ -29,7 +29,6 @@ public:
     void showMenu(const QPoint &menuPos = QPoint(0, 0));
     void showPreview(const QPoint &previewPos = QPoint(0, 0));
     void hidePreview(bool immediately = false);
-    void setParent(QWidget * parent);
 
     int globalX();
     int globalY();
@@ -54,8 +53,7 @@ protected:
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
 
 private:
-    void updateHighlight();
-    void updateTitleLabel();
+    void initHighlight();
 
 };
 

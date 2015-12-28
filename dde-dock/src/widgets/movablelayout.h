@@ -46,9 +46,11 @@ public:
     explicit MovableLayout(QWidget *parent = 0);
     explicit MovableLayout(QBoxLayout::Direction direction, QWidget *parent = 0);
 
+    int indexOf(QWidget * const widget, int from = 0) const;
     QWidget *widget(int index) const;
     QList<QWidget *> widgets() const;
     void addWidget(QWidget *widget);
+    void insertWidget(int index, QWidget *widget);
     void removeWidget(int index);
     void removeWidget(QWidget *widget);
 
@@ -77,7 +79,7 @@ public:
 
 signals:
     void spacingItemAdded();
-    void sizeChanged();
+    void sizeChanged(QResizeEvent *event);
 
 private:
     bool event(QEvent *e);
@@ -86,6 +88,7 @@ private:
     void dragLeaveEvent(QDragLeaveEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
+    void resizeEvent(QResizeEvent *event);
 
 private:
     void handleDrag(const QPoint &pos);

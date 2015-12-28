@@ -3,7 +3,7 @@
 
 #include "dockappicon.h"
 #include "dockappbg.h"
-#include "dockitem.h"
+#include "../dockitem.h"
 #include "interfaces/dockconstants.h"
 #include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
@@ -45,6 +45,7 @@ protected:
     void dropEvent(QDropEvent * event);
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    void resizeEvent(QResizeEvent *e);
 
 private:
     void initPreviewContainer();

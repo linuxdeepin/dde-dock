@@ -10,7 +10,7 @@
 #include "controller/dockmodedata.h"
 #include "controller/apps/dockappmanager.h"
 #include "widgets/appitem.h"
-#include "widgets/docklayout.h"
+#include "widgets/plugin/dockpluginlayout.h"
 #include "widgets/app/dockapplayout.h"
 #include "widgets/screenmask.h"
 #include "widgets/previewwindow.h"
@@ -19,7 +19,7 @@
 #include "panelmenu.h"
 
 class LayoutDropMask;
-class DockPluginManager;
+class DockPluginsManager;
 class DockPanel : public QLabel
 {
     Q_OBJECT
@@ -46,7 +46,6 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *);
 
 private:
     void initShowHideAnimation();
@@ -60,7 +59,6 @@ private:
     void initScreenMask();
     void initGlobalPreview();
 
-    void onItemDropped();
     void onItemDragStarted();
     void onAppItemAdd(DockAppItem *item, bool delayShow);
     void onAppItemRemove(const QString &id);
@@ -92,13 +90,13 @@ private:
     DBusHideStateManager *m_HSManager = NULL;
     ReflectionEffect *m_pluginReflection = NULL;
     ReflectionEffect *m_appReflection = NULL;
-    DockLayout *m_pluginLayout = NULL;
+    DockPluginLayout *m_pluginLayout = NULL;
     ScreenMask * m_maskWidget = NULL;
     DockAppManager *m_appManager = NULL;
     QWidget *m_parentWidget = NULL;
     LayoutDropMask *m_pluginLayoutMask = NULL;
     DockAppLayout *m_appLayout = NULL;
-    DockPluginManager *m_pluginManager = NULL;
+    DockPluginsManager *m_pluginManager = NULL;
 
     bool m_previewShown = false;
     bool m_menuItemInvoked = false;

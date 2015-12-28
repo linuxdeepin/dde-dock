@@ -80,9 +80,13 @@ HEADERS += \
     src/widgets/app/dockappicon.h \
     src/widgets/app/dockappitem.h \
     src/widgets/app/dockapplayout.h \
-    src/widgets/app/dockitem.h \
-    src/widgets/app/movablelayout.h \
-    src/controller/apps/dockappmanager.h
+    src/controller/apps/dockappmanager.h \
+    src/widgets/dockitem.h \
+    src/widgets/plugin/dockpluginitem.h \
+    src/widgets/plugin/dockpluginssettingwindow.h \
+    src/controller/plugins/dockpluginsmanager.h \
+    src/widgets/movablelayout.h \
+    src/widgets/plugin/dockpluginlayout.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -126,6 +130,10 @@ SOURCES += \
     src/widgets/app/dockappicon.cpp \
     src/widgets/app/dockappitem.cpp \
     src/widgets/app/dockapplayout.cpp \
-    src/widgets/app/dockitem.cpp \
-    src/widgets/app/movablelayout.cpp \
-    src/controller/apps/dockappmanager.cpp
+    src/controller/apps/dockappmanager.cpp \
+    src/widgets/dockitem.cpp \
+    src/widgets/plugin/dockpluginitem.cpp \
+    src/widgets/plugin/dockpluginssettingwindow.cpp \
+    src/controller/plugins/dockpluginsmanager.cpp \
+    src/widgets/movablelayout.cpp \
+    src/widgets/plugin/dockpluginlayout.cpp

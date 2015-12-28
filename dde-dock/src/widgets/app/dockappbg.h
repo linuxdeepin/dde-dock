@@ -19,7 +19,7 @@ class BGActiveIndicator : public QLabel
 
 public:
     explicit BGActiveIndicator(QWidget *parent = 0);
-    void showActiveWithAnimation();
+    void showActivatingAnimation();
     void show();
 
     double opacity() const;
@@ -49,25 +49,24 @@ private:
 class DockAppBG : public QLabel
 {
     Q_OBJECT
-    Q_PROPERTY(bool isActived READ getIsActived WRITE setIsActived)
-    Q_PROPERTY(bool isCurrentOpened READ getIsCurrentOpened WRITE setIsCurrentOpened)
-    Q_PROPERTY(bool isHovered READ getIsHovered WRITE setIsHovered)
-    Q_PROPERTY(bool isFashionMode READ getIsFashionMode)
+    Q_PROPERTY(bool isActived READ isActived WRITE setIsActived)
+    Q_PROPERTY(bool isCurrentOpened READ isCurrentOpened WRITE setIsCurrentOpened)
+    Q_PROPERTY(bool isHovered READ isHovered WRITE setIsHovered)
+    Q_PROPERTY(bool isFashionMode READ isFashionMode)
 public:
     explicit DockAppBG(QWidget *parent = 0);
+    void showActivatingAnimation();
 
-    void resize(int width, int height);
-
-    bool getIsActived();
+    bool isActived();
     void setIsActived(bool value);
-    bool getIsCurrentOpened();
+    bool isCurrentOpened();
     void setIsCurrentOpened(bool value);
-    bool getIsHovered();
+    bool isHovered();
     void setIsHovered(bool value);
-    bool getIsFashionMode() const;
+    bool isFashionMode() const;
 
-public slots:
-    void slotMouseRelease(QMouseEvent *event);
+protected:
+    void resizeEvent(QResizeEvent *);
 
 private:
     void initActiveLabel();

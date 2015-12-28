@@ -78,6 +78,11 @@ MovableLayout::MovableLayout(QBoxLayout::Direction direction, QWidget *parent)
     setAcceptDrops(true);
 }
 
+int MovableLayout::indexOf(QWidget * const widget, int from) const
+{
+    return m_widgetList.indexOf(widget, from);
+}
+
 QWidget *MovableLayout::widget(int index) const
 {
     return m_widgetList.at(index);
@@ -108,6 +113,11 @@ void MovableLayout::addWidget(QWidget *widget)
     default:
         break;
     }
+}
+
+void MovableLayout::insertWidget(int index, QWidget *widget)
+{
+    m_layout->insertWidget(index, widget);
 }
 
 void MovableLayout::removeWidget(int index)
@@ -243,6 +253,11 @@ void MovableLayout::dropEvent(QDropEvent *event)
     emit spacingItemAdded();
 
     event->accept();
+}
+
+void MovableLayout::resizeEvent(QResizeEvent *event)
+{
+    emit sizeChanged(event);
 }
 
 void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size)

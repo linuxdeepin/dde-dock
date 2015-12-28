@@ -37,10 +37,13 @@ void DockItemTitle::setTitle(QString title)
 }
 
 DockItem::DockItem(QWidget * parent) :
-    QFrame(parent)
+    QFrame(parent), m_dbusMenuManager(nullptr), m_dbusMenu(nullptr)
 {
 
     setAttribute(Qt::WA_TranslucentBackground);
+
+    initHighlight();
+    m_titleLabel = new DockItemTitle;
     m_titlePreview = new PreviewWindow(DArrowRectangle::ArrowBottom);
 }
 
@@ -124,7 +127,7 @@ void DockItem::showMenu(const QPoint &menuPos)
 
     hidePreview(true);
 
-    if (m_dbusMenuManager == NULL) {
+    if (m_dbusMenuManager == nullptr) {
         m_dbusMenuManager = new DBusMenuManager(this);
     }
 
@@ -134,7 +137,7 @@ void DockItem::showMenu(const QPoint &menuPos)
     if (pr.isValid()) {
         QDBusObjectPath op = pr.value();
 
-        if (m_dbusMenu != NULL) {
+        if (m_dbusMenu != nullptr) {
             m_dbusMenu->deleteLater();
         }
 
@@ -168,22 +171,10 @@ void DockItem::invokeMenuItem(QString, bool)
 
 }
 
-void DockItem::setParent(QWidget *parent)
+void DockItem::initHighlight()
 {
-    QWidget::setParent(parent);
-    updateHighlight();
-    updateTitleLabel();
-}
-
-void DockItem::updateHighlight()
-{
-    //the size and position will update with move() and resize()
     QWidget * lParent = qobject_cast<QWidget *>(parent());
-    if (lParent)
-    {
-        if (!m_highlight)
-        {
-            m_highlight = new HighlightEffect(this, lParent);
+    m_highlight = new HighlightEffect(this, lParent);
 //            connect(this, &DockItem::dragStart, [=](){
 //                m_highlight->setVisible(false);
 //            });
@@ -205,22 +196,11 @@ void DockItem::updateHighlight()
 //                m_highlight->showNormal();
 //                emit frameUpdate();
 //            });
-        }
-        else
-            m_highlight->setParent(lParent);
-    }
-}
-
-void DockItem::updateTitleLabel()
-{
-    m_titleLabel = new DockItemTitle;
 }
 
 void DockItem::resizeEvent(QResizeEvent * event)
 {
-//    if (m_highlight) {
-//        m_highlight->setFixedSize(size());
-//    }
-
-    QFrame::resizeEvent(event);
+    if (m_highlight) {
+        m_highlight->setFixedSize(event->size());
+    }
 }

@@ -96,9 +96,9 @@ void DockAppItem::dropEvent(QDropEvent *event)
 
 void DockAppItem::enterEvent(QEvent *)
 {
-//    //mouse event accept area are app-icon-area in FashionMode
-//    if (m_dockModeData->getDockMode() != Dock::FashionMode)
-//        onMouseEnter();
+    //mouse event accept area are app-icon-area in FashionMode
+    if (m_dockModeData->getDockMode() != Dock::FashionMode)
+        onMouseEnter();
 }
 
 void DockAppItem::leaveEvent(QEvent *)
@@ -106,6 +106,13 @@ void DockAppItem::leaveEvent(QEvent *)
     //mouse event accept area are app-icon-area in FashionMode
     if (m_dockModeData->getDockMode() != Dock::FashionMode)
         onMouseLeave();
+}
+
+void DockAppItem::resizeEvent(QResizeEvent *e)
+{
+    Q_UNUSED(e)
+
+    resizeResources();
 }
 
 void DockAppItem::initClientManager()
@@ -117,9 +124,7 @@ void DockAppItem::initClientManager()
 void DockAppItem::initBackground()
 {
     m_appBG = new DockAppBG(this);
-    m_appBG->move(0,0);
-//    connect(this, &DockAppItem::mouseRelease, m_appBackground, &AppBackground::slotMouseRelease);
-//    connect(this, &DockAppItem::widthChanged, this, &DockAppItem::resizeBackground);
+    m_appBG->move(0, 0);
 }
 
 void DockAppItem::initPreviewContainer()
@@ -239,8 +244,10 @@ void DockAppItem::onMousePress(QMouseEvent *event)
 
 void DockAppItem::onMouseRelease(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton) {
         m_entryProxyer->Activate(event->globalX(), event->globalY(), event->timestamp());
+        m_appBG->showActivatingAnimation();
+    }
     else if (event->button() == Qt::RightButton)
         showMenu();
 }
@@ -262,7 +269,8 @@ void DockAppItem::onMouseLeave()
 
 void DockAppItem::resizeBackground()
 {
-    m_appBG->setFixedSize(width(), height());
+    if (m_appBG)
+        m_appBG->setFixedSize(width(), height());
 }
 
 void DockAppItem::resizeResources()
@@ -292,6 +300,7 @@ void DockAppItem::reanchorIcon()
             m_appIcon->move((height() - m_appIcon->height()) / 2, (height() - m_appIcon->height()) / 2);
         else
             m_appIcon->move((width() - m_appIcon->width()) / 2, (height() - m_appIcon->height()) / 2);
+        break;
     default:
         break;
     }
@@ -301,12 +310,12 @@ void DockAppItem::setCurrentOpened(uint value)
 {
     if (m_itemData.xidTitleMap.keys().indexOf(value) != -1) {
         m_itemData.currentOpened = true;
-        m_appBG->setIsCurrentOpened(true);
     }
     else {
         m_itemData.currentOpened = false;
-        m_appBG->setIsCurrentOpened(false);
     }
+
+    m_appBG->setIsCurrentOpened(m_itemData.currentOpened);
 }
 
 void DockAppItem::setActived(bool value)

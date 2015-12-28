@@ -7,7 +7,7 @@ BGActiveIndicator::BGActiveIndicator(QWidget *parent)
     setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
 }
 
-void BGActiveIndicator::showActiveWithAnimation()
+void BGActiveIndicator::showActivatingAnimation()
 {
     if (m_loopCount != 0)
         return;
@@ -102,17 +102,11 @@ void BGActiveIndicator::setOpenIndicatorIcon(const QString &openIndicatorIcon)
 DockAppBG::DockAppBG(QWidget *parent) :
     QLabel(parent)
 {
-    this->setObjectName("AppBackground");
+    setObjectName("AppBackground");
     initActiveLabel();
 }
 
-void DockAppBG::resize(int width, int height)
-{
-    QLabel::resize(width, height);
-    updateActiveLabelPos();
-}
-
-bool DockAppBG::getIsActived()
+bool DockAppBG::isActived()
 {
     return m_isActived;
 }
@@ -124,7 +118,7 @@ void DockAppBG::setIsActived(bool value)
         m_activeLabel->hide();
         m_bePress = false;
     }
-    else if (!m_bePress && getIsFashionMode()){
+    else if (!m_bePress && isFashionMode()){
         m_activeLabel->show();
     }
 
@@ -132,7 +126,7 @@ void DockAppBG::setIsActived(bool value)
     style()->polish(this);// force a stylesheet recomputation
 }
 
-bool DockAppBG::getIsCurrentOpened()
+bool DockAppBG::isCurrentOpened()
 {
     return m_isCurrentOpened;
 }
@@ -145,7 +139,7 @@ void DockAppBG::setIsCurrentOpened(bool value)
     style()->polish(this);// force a stylesheet recomputation
 }
 
-bool DockAppBG::getIsHovered()
+bool DockAppBG::isHovered()
 {
     return m_isHovered;
 }
@@ -157,19 +151,21 @@ void DockAppBG::setIsHovered(bool value)
     style()->unpolish(this);
     style()->polish(this);// force a stylesheet recomputation
 }
-bool DockAppBG::getIsFashionMode() const
+bool DockAppBG::isFashionMode() const
 {
     return DockModeData::instance()->getDockMode() == Dock::FashionMode;
 }
 
-void DockAppBG::slotMouseRelease(QMouseEvent *event)
+void DockAppBG::showActivatingAnimation()
 {
-    if (event->button() != Qt::LeftButton)
-        return;
-
     m_bePress = true;
-    if (!m_isActived && getIsFashionMode())
-        m_activeLabel->showActiveWithAnimation();
+    if (!m_isActived && isFashionMode())
+        m_activeLabel->showActivatingAnimation();
+}
+
+void DockAppBG::resizeEvent(QResizeEvent *)
+{
+    updateActiveLabelPos();
 }
 
 void DockAppBG::initActiveLabel()
@@ -192,7 +188,7 @@ void DockAppBG::updateActiveLabelPos()
 
 void DockAppBG::onDockModeChanged()
 {
-    if (m_activeLabel && !getIsFashionMode())
+    if (m_activeLabel && !isFashionMode())
         m_activeLabel->hide();
     else if (m_activeLabel && m_isActived)
         m_activeLabel->show();
