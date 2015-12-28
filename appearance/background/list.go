@@ -25,6 +25,8 @@ func ListDirs() []string {
 
 	dirs = append(dirs, getDirsFromDTheme(path.Join("/usr/share",
 		dthemeDir))...)
+	dirs = append(dirs, getDirsFromDTheme(path.Join("/usr/local/share",
+		dthemeDir))...)
 	dirs = append(dirs, getDirsFromDTheme(path.Join(os.Getenv("HOME"),
 		dthemeDir))...)
 	return dirs

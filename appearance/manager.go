@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"path"
 
+	"gir/gio-2.0"
+	"gir/glib-2.0"
+	"github.com/howeyc/fsnotify"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"gir/gio-2.0"
-	"gir/glib-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -26,7 +27,7 @@ const (
 )
 
 const (
-	dthemeDefaultId = "Deepin"
+	dthemeDefaultId = "deepin"
 	dthemeCustomId  = "Custom"
 
 	wrapBgSchema    = "com.deepin.wrap.gnome.desktop.background"
@@ -52,6 +53,9 @@ type Manager struct {
 
 	wrapBgSetting  *gio.Settings
 	gnomeBgSetting *gio.Settings
+
+	watcher    *fsnotify.Watcher
+	endWatcher chan struct{}
 }
 
 func NewManager() *Manager {
@@ -62,6 +66,14 @@ func NewManager() *Manager {
 
 	m.wrapBgSetting, _ = dutils.CheckAndNewGSettings(wrapBgSchema)
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
+
+	var err error
+	m.watcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		logger.Warning("New file watcher failed:", err)
+	} else {
+		m.endWatcher = make(chan struct{})
+	}
 
 	m.init()
 
@@ -77,6 +89,12 @@ func (m *Manager) destroy() {
 
 	if m.gnomeBgSetting != nil {
 		m.gnomeBgSetting.Unref()
+	}
+
+	if m.watcher != nil {
+		close(m.endWatcher)
+		m.watcher.Close()
+		m.watcher = nil
 	}
 }
 
@@ -304,6 +322,7 @@ func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
 	}
 
 	m.doSetDTheme(dthemeDefaultId)
+	m.setPropTheme(dthemeDefaultId)
 	return dtheme.ListDTheme().Get(dthemeDefaultId)
 }
 

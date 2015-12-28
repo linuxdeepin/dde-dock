@@ -45,6 +45,7 @@ func (*Daemon) Start() error {
 		return err
 	}
 	go _m.listenCursorChanged()
+	go _m.handleThemeChanged()
 	_m.listenGSettingChanged()
 
 	return nil

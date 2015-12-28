@@ -38,11 +38,17 @@ type Theme struct {
 }
 type Themes []*Theme
 
-func ListGtkTheme() Themes {
-	return getThemes(themes.ListGtkTheme())
+var (
+	cacheGtkThemes    Themes
+	cacheIconThemes   Themes
+	cacheCursorThemes Themes
+)
+
+func RefreshGtkThemes() {
+	cacheGtkThemes = getThemes(themes.ListGtkTheme())
 }
 
-func ListIconTheme() Themes {
+func RefreshIconThemes() {
 	infos := getThemes(themes.ListIconTheme())
 	s := gio.NewSettings(appearanceSchema)
 	defer s.Unref()
@@ -55,11 +61,32 @@ func ListIconTheme() Themes {
 		}
 		ret = append(ret, info)
 	}
-	return ret
+	cacheIconThemes = ret
+}
+
+func RefreshCursorThemes() {
+	cacheCursorThemes = getThemes(themes.ListCursorTheme())
+}
+
+func ListGtkTheme() Themes {
+	if len(cacheGtkThemes) == 0 {
+		RefreshGtkThemes()
+	}
+	return cacheGtkThemes
+}
+
+func ListIconTheme() Themes {
+	if len(cacheIconThemes) == 0 {
+		RefreshIconThemes()
+	}
+	return cacheIconThemes
 }
 
 func ListCursorTheme() Themes {
-	return getThemes(themes.ListCursorTheme())
+	if len(cacheCursorThemes) == 0 {
+		RefreshCursorThemes()
+	}
+	return cacheCursorThemes
 }
 
 func IsGtkTheme(id string) bool {

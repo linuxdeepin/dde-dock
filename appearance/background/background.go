@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
-	"pkg.deepin.io/dde/api/thumbnails/images"
 	"gir/glib-2.0"
+	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -26,7 +26,9 @@ type Background struct {
 }
 type Backgrounds []*Background
 
-func ListBackground() Backgrounds {
+var cacheBackgrounds Backgrounds
+
+func RefreshBackground() {
 	var infos Backgrounds
 	for _, file := range getBgFiles() {
 		infos = append(infos, &Background{
@@ -34,7 +36,14 @@ func ListBackground() Backgrounds {
 			Deletable: isDeletable(file),
 		})
 	}
-	return infos
+	cacheBackgrounds = infos
+}
+
+func ListBackground() Backgrounds {
+	if len(cacheBackgrounds) == 0 {
+		RefreshBackground()
+	}
+	return cacheBackgrounds
 }
 
 func IsBackgroundFile(file string) bool {
