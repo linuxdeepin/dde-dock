@@ -1,25 +1,25 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
 <context>
     <name>ClearTrashDialog</name>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="12"/>
         <source>Are you sure to empty trash?</source>
-        <translation>您确定要彻底清空回收站吗？</translation>
+        <translation>Är du säker på att tömma papperskorgen?</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="13"/>
         <source>This action cannot be restored</source>
-        <translation>此操作不可恢复</translation>
+        <translation>Denna åtgärd kan inte återställas</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="16"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="16"/>
         <source>Empty</source>
-        <translation>清空</translation>
+        <translation>Töm</translation>
     </message>
 </context>
 <context>
@@ -27,17 +27,17 @@
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="11"/>
         <source>All dependencies will be removed together</source>
-        <translation>所有依赖也会被一起移除 </translation>
+        <translation>Alla beroenden kommer att tas bort tillsammans</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="14"/>
         <source>Cancel</source>
-        <translation>取消</translation>
+        <translation>Avbryt</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/confirmuninstalldialog.cpp" line="14"/>
         <source>Confirm</source>
-        <translation>卸载</translation>
+        <translation>Bekräfta</translation>
     </message>
 </context>
 <context>
@@ -45,7 +45,7 @@
     <message>
         <location filename="../dde-dock/src/widgets/launcheritem.h" line="22"/>
         <source>Launcher</source>
-        <translation>启动器</translation>
+        <translation>Startare</translation>
     </message>
 </context>
 <context>
@@ -53,7 +53,7 @@
     <message>
         <location filename="../dde-dock-trash-plugin/mainitem.cpp" line="96"/>
         <source>Are you sure to uninstall %1?</source>
-        <translation>您确定要卸载 %1 吗？</translation>
+        <translation>Vill du verkligen avinstallera %1?</translation>
     </message>
 </context>
 <context>
@@ -61,37 +61,37 @@
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="35"/>
         <source>Fashion mode</source>
-        <translation>时尚模式</translation>
+        <translation>Modeläge</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="36"/>
         <source>Efficient mode</source>
-        <translation>高效模式</translation>
+        <translation>Effektivt läge</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="37"/>
         <source>Classic mode</source>
-        <translation>经典模式</translation>
+        <translation>Klassiskt läge</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="39"/>
         <source>Keep showing</source>
-        <translation>一直显示</translation>
+        <translation>Fortsätt visa</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="40"/>
         <source>Keep hidden</source>
-        <translation>一直隐藏</translation>
+        <translation>Behåll som dolt</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="41"/>
         <source>Smart hide</source>
-        <translation>智能隐藏</translation>
+        <translation>Smart dölj</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="43"/>
         <source>Notification area settings</source>
-        <translation>通知区域设置</translation>
+        <translation>Meddelandefältsinställningar</translation>
     </message>
 </context>
 <context>
@@ -99,12 +99,12 @@
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="92"/>
         <source>_Run</source>
-        <translation>运行(_R)</translation>
+        <translation>_Kör</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="93"/>
         <source>_Undock</source>
-        <translation>移除驻留(_U)</translation>
+        <translation>_Avdocka</translation>
     </message>
 </context>
 <context>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginssettingframe.cpp" line="149"/>
         <source>Notification Area Settings</source>
-        <translation>通知区域设置</translation>
+        <translation>Meddelandefältsinställningar</translation>
     </message>
 </context>
 <context>
@@ -120,12 +120,12 @@
     <message>
         <location filename="../dde-dock-trash-plugin/trashplugin.cpp" line="22"/>
         <source>Trash</source>
-        <translation>回收站</translation>
+        <translation>Papperskorg</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/trashplugin.cpp" line="82"/>
         <source>Empty</source>
-        <translation>清空</translation>
+        <translation>Tom</translation>
     </message>
 </context>
 </TS>
