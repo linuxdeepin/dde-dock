@@ -196,7 +196,7 @@ func isCreatedManuallyConnection(data connectionData) (isCreateManual bool) {
 		return true
 	}
 	switch getCustomConnectionType(data) {
-	case connectionWireless, connectionPppoe:
+	case connectionPppoe:
 		return true
 	}
 	return false
