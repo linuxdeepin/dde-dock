@@ -5,7 +5,6 @@ QT       += core gui widgets
 TARGET = dde-dock-shutdown-plugin
 TEMPLATE = lib
 CONFIG += plugin c++11
-DESTDIR = $$_PRO_FILE_PWD_/../
 
 SOURCES += \ 
     shutdownplugin.cpp

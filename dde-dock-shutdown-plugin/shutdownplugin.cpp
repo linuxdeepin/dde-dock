@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QTimer>
+#include <QCoreApplication>
 
 using namespace Dock;
 
@@ -17,7 +18,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
 
 QString ShutdownPlugin::getPluginName()
 {
-    return QString(tr("Shutdown"));
+    return QString(QCoreApplication::translate("HomeScreen", "Shutdown"));
 }
 
 void ShutdownPlugin::init(DockPluginProxyInterface *proxy)
