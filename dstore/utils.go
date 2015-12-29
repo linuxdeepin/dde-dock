@@ -101,3 +101,25 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 		return
 	}
 }
+
+func IsInstalled(pkgName string) bool {
+	proxy, err := newDStoreManager()
+	if err != nil {
+		return false
+	}
+	defer destroyDStoreManager(proxy)
+
+	installed, _ := proxy.PackageExists(pkgName)
+	return installed
+}
+
+func IsExists(pkgName string) bool {
+	proxy, err := newDStoreManager()
+	if err != nil {
+		return false
+	}
+	defer destroyDStoreManager(proxy)
+
+	exists, _ := proxy.PackageInstallable(pkgName)
+	return exists
+}

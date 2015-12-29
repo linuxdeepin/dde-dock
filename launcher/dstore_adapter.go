@@ -38,3 +38,11 @@ func (s *DStoreAdapter) NewQueryPkgNameTransaction(path string) (QueryPkgNameTra
 	}
 	return t, err
 }
+
+func (s *DStoreAdapter) NewQueryCategoryTransaction() (QueryCategoryTransaction, error) {
+	t, err := s.store.NewQueryCategoryTransaction()
+	if t == nil {
+		return nil, err
+	}
+	return t, err
+}

@@ -1,4 +1,4 @@
-package category
+package dstore
 
 var xcategoriesFallback = map[string]string{
 	"2dgraphics":       "graphics",

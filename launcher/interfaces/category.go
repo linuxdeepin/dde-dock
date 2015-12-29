@@ -23,7 +23,7 @@ type CategoryManager interface {
 	RemoveItem(ItemID, CategoryID)
 	GetAllCategory() []CategoryID
 	GetCategory(id CategoryID) CategoryInfo
-	LoadAppCategoryInfo(...string) error
+	LoadCategoryInfo() error
 	FreeAppCategoryInfo()
 	QueryID(app *gio.DesktopAppInfo) (CategoryID, error)
 }

@@ -60,3 +60,11 @@ func (s *ManagerTestSuite) TestRemoveItem(c *C.C) {
 	c.Assert(s.manager.categoryTable[DevelopmentID].Items(), C.HasLen, 0)
 	c.Assert(s.manager.categoryTable[AllID].Items(), C.HasLen, 1)
 }
+
+func (s *ManagerTestSuite) TestCategoryGetAllInfos(c *C.C) {
+	infos := GetAllInfos("./testdata/categories.json")
+	c.Assert(infos, C.HasLen, 11)
+
+	infos = GetAllInfos("")
+	c.Assert(infos, C.HasLen, 0)
+}

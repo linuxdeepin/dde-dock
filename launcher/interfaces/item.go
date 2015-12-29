@@ -24,6 +24,7 @@ type ItemInfo interface {
 	TimeInstalled() int64
 	SetTimeInstalled(int64)
 	LastModifiedTime() int64
+	Refresh()
 }
 
 // ItemManager is interface for item manager.
@@ -31,6 +32,7 @@ type ItemManager interface {
 	AddItem(ItemInfo)
 	RemoveItem(ItemID)
 	HasItem(ItemID) bool
+	RefreshItem(ItemID)
 	GetItem(ItemID) ItemInfo
 	GetAllItems() []ItemInfo
 	GetAllFrequency(*glib.KeyFile) map[ItemID]uint64

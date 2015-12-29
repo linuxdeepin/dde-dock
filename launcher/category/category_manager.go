@@ -1,35 +1,68 @@
 package category
 
 import (
+	"encoding/json"
 	"errors"
 	"gir/gio-2.0"
-	"path"
+	"os"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	. "pkg.deepin.io/dde/daemon/launcher/log"
 )
 
-type QueryIDTransaction interface {
-	Query(string) (CategoryID, error)
-	Free()
+type CategoryJSONInfo struct {
+	ID      string
+	Locales map[string]map[string]string
+	Name    string
+}
+
+func GetAllInfos(file string) []CategoryInfo {
+	fallbackCategories := []CategoryInfo{
+		NewInfo(OthersID, OthersName),
+		NewInfo(InternetID, InternetName),
+		NewInfo(OfficeID, OfficeName),
+		NewInfo(DevelopmentID, DevelopmentName),
+		NewInfo(ReadingID, ReadingName),
+		NewInfo(GraphicsID, GraphicsName),
+		NewInfo(GameID, GameName),
+		NewInfo(MusicID, MusicName),
+		NewInfo(SystemID, SystemName),
+		NewInfo(VideoID, VideoName),
+		NewInfo(ChatID, ChatName),
+	}
+	var categoryInfos []CategoryInfo
+	f, err := os.Open(file)
+	if err != nil {
+		return fallbackCategories
+	}
+	defer f.Close()
+
+	decoder := json.NewDecoder(f)
+	var jsonInfo []CategoryJSONInfo
+	if err := decoder.Decode(&jsonInfo); err != nil {
+		return fallbackCategories
+	}
+
+	categoryInfos = make([]CategoryInfo, len(jsonInfo))
+	for i, info := range jsonInfo {
+		cid, _ := getCategoryID(info.ID)
+		categoryInfos[i] = NewInfo(cid, info.Name)
+	}
+
+	return categoryInfos
 }
 
 // Manager for categories.
 type Manager struct {
-	store                       DStore
-	categoryTable               map[CategoryID]CategoryInfo
-	deepinQueryIDTransaction    QueryIDTransaction
-	xCategoryQueryIDTransaction QueryIDTransaction
-	queryPkgNameTransaction     QueryPkgNameTransaction
+	store              DStore
+	categoryTable      map[CategoryID]CategoryInfo
+	queryIDTransaction QueryCategoryTransaction
 }
 
 // NewManager creates a new category manager.
 func NewManager(store DStore, categories []CategoryInfo) *Manager {
 	m := &Manager{
-		store:                       store,
-		categoryTable:               map[CategoryID]CategoryInfo{},
-		deepinQueryIDTransaction:    nil,
-		xCategoryQueryIDTransaction: nil,
-		queryPkgNameTransaction:     nil,
+		store:              store,
+		categoryTable:      map[CategoryID]CategoryInfo{},
+		queryIDTransaction: nil,
 	}
 	m.addCategory(categories...)
 	m.addCategory(NewInfo(AllID, AllName))
@@ -79,73 +112,32 @@ func (m *Manager) RemoveItem(id ItemID, cid CategoryID) {
 }
 
 func (m *Manager) QueryID(app *gio.DesktopAppInfo) (CategoryID, error) {
-	var err error
-	if m.queryPkgNameTransaction != nil && m.deepinQueryIDTransaction != nil {
-		desktopID := path.Base(app.GetFilename())
-		pkgName := m.queryPkgNameTransaction.Query(desktopID)
-		Log.Debug("get package name of", desktopID, "is:", pkgName)
-		cid, e := m.deepinQueryIDTransaction.Query(pkgName)
+	if m.queryIDTransaction != nil {
+		c, e := m.queryIDTransaction.Query(app)
 		if e != nil {
-			err = e
+			return OthersID, e
 		}
-
-		if cid != OthersID {
-			return cid, nil
-		}
-	}
-
-	if m.xCategoryQueryIDTransaction != nil {
-		Log.Debug("get category from desktop")
-		cid, err := m.xCategoryQueryIDTransaction.Query(app.GetCategories())
-		return cid, err
-	}
-
-	if err != nil {
-		return OthersID, err
+		cid, e := getCategoryID(c)
+		return cid, e
 	}
 
 	return OthersID, errors.New("No QueryIDTransaction is created or QueryIDTransaction failed")
 }
 
-func (m *Manager) LoadAppCategoryInfo(files ...string) error {
+func (m *Manager) LoadCategoryInfo() error {
 	m.FreeAppCategoryInfo()
 
-	var err1 error
-	m.queryPkgNameTransaction, err1 = m.store.NewQueryPkgNameTransaction(files[0])
+	var err error
+	m.queryIDTransaction, err = m.store.NewQueryCategoryTransaction()
 
-	dt, err2 := NewDeepinQueryIDTransaction(files[1])
-	if dt != nil {
-		m.deepinQueryIDTransaction = dt
-	}
-
-	var err3 error
-	xt, err3 := NewXCategoryQueryIDTransaction(files[2])
-	if xt != nil {
-		m.xCategoryQueryIDTransaction = xt
-	}
-
-	if err1 != nil {
-		return err1
-	}
-	if err2 != nil {
-		return err2
-	}
-	if err3 != nil {
-		return err3
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 func (m *Manager) FreeAppCategoryInfo() {
-	if m.deepinQueryIDTransaction != nil {
-		m.deepinQueryIDTransaction.Free()
-		m.deepinQueryIDTransaction = nil
-	}
-	if m.queryPkgNameTransaction != nil {
-		m.queryPkgNameTransaction = nil
-	}
-	if m.xCategoryQueryIDTransaction != nil {
-		m.xCategoryQueryIDTransaction.Free()
-		m.xCategoryQueryIDTransaction = nil
+	if m.queryIDTransaction != nil {
+		m.queryIDTransaction = nil
 	}
 }

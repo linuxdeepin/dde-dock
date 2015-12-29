@@ -82,13 +82,22 @@ func New(app *gio.DesktopAppInfo) *Info {
 	if app == nil {
 		return nil
 	}
-	item := &Info{}
+	item := &Info{
+		id: getID(app),
+	}
 	item.init(app)
 	return item
 }
 
+func (i *Info) Refresh() {
+	app := gio.NewDesktopAppInfo(i.path)
+	if app != nil {
+		i.init(app)
+		app.Unref()
+	}
+}
+
 func (i *Info) init(app *gio.DesktopAppInfo) {
-	i.id = getID(app)
 	i.path = app.GetFilename()
 	i.name = app.GetDisplayName()
 	i.enName = app.GetString("Name")

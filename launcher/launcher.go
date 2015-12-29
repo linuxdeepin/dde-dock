@@ -198,6 +198,11 @@ func (self *Launcher) GetAllCategoryInfos() []CategoryInfoExport {
 	return infos
 }
 
+func (self *Launcher) RefreshItem(id string) ItemInfoExport {
+	self.itemManager.RefreshItem(ItemID(id))
+	return self.GetItemInfo(id)
+}
+
 // GetItemInfo 获取id对应的item信息。
 // 包括：item的path，item的Name，item的id，item的icon，item的分类id，item的安装时间
 func (self *Launcher) GetItemInfo(id string) ItemInfoExport {
@@ -254,10 +259,7 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 			itemInfo.SetTimeInstalled(info[name].timeInstalled)
 		}
 
-		loadCategoryInfo(self.categoryManager)
-		defer self.categoryManager.FreeAppCategoryInfo()
-
-		cid, err := self.categoryManager.QueryID(app)
+		cid, err := queryCategoryID(self.categoryManager, app)
 		if err != nil {
 			Log.Warning("query category id for", itemInfo.ID(), "failed:", err)
 		}
@@ -564,7 +566,7 @@ func (self *Launcher) MarkLaunched(id string) {
 func (self *Launcher) GetAllNewInstalledApps() []ItemID {
 	ids, err := self.itemManager.GetAllNewInstalledApps()
 	if err != nil {
-		Log.Info("GetAllNewInstalledApps", err)
+		Log.Warning("GetAllNewInstalledApps", err)
 	}
 	return ids
 }

@@ -1,8 +1,7 @@
-package category
+package dstore
 
 import (
 	"fmt"
-	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
 type DeepinQueryIDTransaction struct {
@@ -23,13 +22,10 @@ func NewDeepinQueryIDTransaction(pkgToCategoryFile string) (*DeepinQueryIDTransa
 	return t, nil
 }
 
-func (t *DeepinQueryIDTransaction) Query(pkgName string) (CategoryID, error) {
+func (t *DeepinQueryIDTransaction) Query(pkgName string) (string, error) {
 	cidName, ok := t.pkgToCategory[pkgName]
 	if !ok {
-		return OthersID, fmt.Errorf("No such a category for package %q", pkgName)
+		return OthersName, fmt.Errorf("No such a category for package %q", pkgName)
 	}
-	return getCategoryID(cidName)
-}
-
-func (t *DeepinQueryIDTransaction) Free() {
+	return cidName, nil
 }

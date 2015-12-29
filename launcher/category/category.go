@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 
+	"pkg.deepin.io/dde/daemon/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"pkg.deepin.io/lib/gettext"
 )
@@ -23,18 +24,18 @@ const (
 	VideoID
 	ChatID
 
-	AllName         = "all"
-	OthersName      = "others"
-	InternetName    = "internet"
-	OfficeName      = "office"
-	DevelopmentName = "development"
-	ReadingName     = "reading"
-	GraphicsName    = "graphics"
-	GameName        = "game"
-	MusicName       = "music"
-	SystemName      = "system"
-	VideoName       = "video"
-	ChatName        = "chat"
+	AllName         = dstore.AllName
+	OthersName      = dstore.OthersName
+	InternetName    = dstore.InternetName
+	OfficeName      = dstore.OfficeName
+	DevelopmentName = dstore.DevelopmentName
+	ReadingName     = dstore.ReadingName
+	GraphicsName    = dstore.GraphicsName
+	GameName        = dstore.GameName
+	MusicName       = dstore.MusicName
+	SystemName      = dstore.SystemName
+	VideoName       = dstore.VideoName
+	ChatName        = dstore.ChatName
 )
 
 var (

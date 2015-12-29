@@ -60,6 +60,8 @@ func (m *Manager) GetItem(id ItemID) ItemInfo {
 
 // GetAllItems returns all apps.
 func (m *Manager) GetAllItems() []ItemInfo {
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	infos := []ItemInfo{}
 	for _, item := range m.itemTable {
 		infos = append(infos, item)
@@ -142,6 +144,8 @@ func (m *Manager) SetFrequency(id ItemID, rate uint64, f *glib.KeyFile) {
 
 // GetAllFrequency returns all items' use frequency
 func (m *Manager) GetAllFrequency(f *glib.KeyFile) (infos map[ItemID]uint64) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	infos = map[ItemID]uint64{}
 	if f == nil {
 		for id := range m.itemTable {
@@ -162,6 +166,8 @@ func (m *Manager) GetAllFrequency(f *glib.KeyFile) (infos map[ItemID]uint64) {
 // 1. do it once.
 // 2. update it when item changed.
 func (m *Manager) GetAllTimeInstalled() (map[ItemID]int64, error) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	infos := map[ItemID]int64{}
 	var err error
 	for id, item := range m.itemTable {
@@ -234,4 +240,13 @@ func (self *Manager) MarkLaunched(_id ItemID) error {
 
 	_, ok := store.MarkLaunched(string(_id))
 	return ok
+}
+
+func (self *Manager) RefreshItem(id ItemID) {
+	self.lock.Lock()
+	defer self.lock.Unlock()
+	if item, ok := self.itemTable[id]; ok {
+		item.Refresh()
+		self.itemTable[id] = item
+	}
 }

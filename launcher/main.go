@@ -49,10 +49,6 @@ func (d *Daemon) Stop() error {
 	return nil
 }
 
-func loadCategoryInfo(cm CategoryManager) error {
-	return cm.LoadAppCategoryInfo(DStoreDesktopPkgMapFile, DStoreAppInfoFile, DStoreXCategoryAppInfoFile)
-}
-
 func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 	appChan := make(chan *gio.AppInfo)
 	go func() {
@@ -63,7 +59,7 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 		close(appChan)
 	}()
 
-	err := loadCategoryInfo(cm)
+	err := cm.LoadCategoryInfo()
 	if err != nil {
 		Log.Warning("LoadAppCategoryInfo failed:", err)
 	}
