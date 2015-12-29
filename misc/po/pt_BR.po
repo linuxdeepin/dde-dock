@@ -9,14 +9,15 @@
 # RAFAEL GAUNA <rafaelgt.mbin@gmail.com>, 2014-2015
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2015
 # Rubens de Almeida Medeiros <rubens.cejovem@gmail.com>, 2014
+# Ruy Sabino <ruysabino@gmail.com>, 2015
 # viniciusarl <vinniciusal@outlook.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 06:36+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2015-12-22 07:33+0000\n"
+"Last-Translator: Ruy Sabino <ruysabino@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/dde-daemon/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -130,23 +131,23 @@ msgstr "Desconectado"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Certifique-se de que %q esteja ligado e próximo"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Conexão Bluetooth falhou"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "Certifique-se que %q esteja ligado e próximo"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Falhou ao conectar via bluetooth"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "Falha ao conectar a %q, ignorado automaticamente"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -830,7 +831,7 @@ msgstr "Exibir espaço de trabalho"
 
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "Alterar efeitos de janela"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
@@ -2430,7 +2431,7 @@ msgstr "Uma conexão secundária da conexão de base falhou."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "Falha na configuração do DCB ou FCoE."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2438,7 +2439,7 @@ msgstr "Cabo de rede está desconectado."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Falha no controle de agrupamento de rede."
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
@@ -2447,7 +2448,7 @@ msgstr "Por favor, assegure-se que o cartão SIM inserido possua sinal de rede m
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modem falhou ao rodar ou não está disponível."
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
@@ -2456,11 +2457,11 @@ msgstr "Por favor, assegure-se de ter escolhido um plano correto com saldo para 
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Modem está pronto e disponível."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "SIM PIN está incorreto."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2468,7 +2469,7 @@ msgstr "Falha na conexão VPN ativa, razão desconhecida."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Nova ativação de conexão em enfileiramento."
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2476,11 +2477,11 @@ msgstr "Falha na conexão VPN ativa."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Dispositivo pareado alterado."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "Status de gerenciamento do dispositivo pai alterado."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."

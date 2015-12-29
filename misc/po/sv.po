@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 06:36+0000\n"
+"PO-Revision-Date: 2015-12-25 02:32+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/linuxdeepin/dde-daemon/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Användarnamnet har blivit använt av systemet."
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "Användarnamnet är för långt."
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -124,23 +124,23 @@ msgstr "Frånkopplad"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Se till att %q är påslagen och inom räckhåll"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Bluetooth-anslutningen misslyckades."
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "Kontrollera att %q är aktiverat och inom räckhåll."
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Anslutningen av bluetooth misslyckades"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "%q kunde inte anslutas, automatiskt bortsedd"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -605,15 +605,15 @@ msgstr "Byt program"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr ""
+msgstr "Kör switch-applikationer baklänges"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr ""
+msgstr "3D-omkopplings applikationer"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr ""
+msgstr "3D-omkopplingsapplikationer"
 
 #: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
@@ -641,7 +641,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Terminalfönster för Quake"
 
 #: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:73
 msgid "Logout"
@@ -737,7 +737,7 @@ msgstr "Ändra fönsterstorlek"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr ""
+msgstr "Byt furltillstånd"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
@@ -810,37 +810,37 @@ msgstr "Flytta till nedre arbetsyta"
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Visa fönster för alla arbetsytor"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Visa den aktuella arbetsytans fönster"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 msgid "Display workspace"
-msgstr ""
+msgstr "Visa arbetsyta"
 
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "Byt fönstereffekter"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "Switcha liknande fönster"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "Byt liknande fönster omvänt"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "Växla fönster"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Växla fönster omvänt"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -1170,7 +1170,7 @@ msgstr "Anslut automatiskt"
 
 #: ../../network/nm_setting_bean_gen.go:51
 msgid "For All Users"
-msgstr ""
+msgstr "För alla användare"
 
 #: ../../network/nm_setting_bean_gen.go:57
 msgid "Ethernet"
@@ -1205,15 +1205,15 @@ msgstr "Mobil"
 
 #: ../../network/nm_setting_bean_gen.go:70
 msgid "Country or region"
-msgstr ""
+msgstr "Land eller region"
 
 #: ../../network/nm_setting_bean_gen.go:71
 msgid "Provider"
-msgstr ""
+msgstr "Leverantör"
 
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Plan"
-msgstr ""
+msgstr "Planera"
 
 #: ../../network/nm_setting_bean_gen.go:73
 msgid "Service Type"
@@ -1839,7 +1839,7 @@ msgstr "Använd Endast 4G (LTE)"
 #: ../../network/nm_setting_ip6_config.go:41
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
-msgstr ""
+msgstr "Länk – endast lokal"
 
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip4_config.go:176
@@ -1869,7 +1869,7 @@ msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -2088,7 +2088,7 @@ msgstr "Cisco (förval)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
-msgstr ""
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
@@ -2424,7 +2424,7 @@ msgstr "En sekundär anslutning av basanslutningen misslyckades."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "DCB eller FCoE inställning misslyckades."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2432,29 +2432,29 @@ msgstr "Nätverkskabel är urkopplad."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Kontrollen för nätverkslaget misslyckades."
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "Se till att SIM-kortet som satts in har mobil nätverkssignal."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modem kunde inte köra eller inte tillgängligt."
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr ""
+msgstr "Kontrollera att du har valt en korrekt plan utan förfallna betalningar på SIM-kortet."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Modemet är nu färdigt och tillgängligt"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "SIM-kortets PIN-kod stämmer ej."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2462,7 +2462,7 @@ msgstr "Aktiv VPN-anslutning misslyckades, okänd anledning."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Aktiveringen av den nya anslutningen läggs till i kön."
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2470,11 +2470,11 @@ msgstr "Aktiv VPN-anslutning misslyckades."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Moderenhet ändrad. "
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "Hanteringsstatusen för överordnad enhet har ändrats."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
@@ -2526,7 +2526,7 @@ msgstr "Du är nu offline."
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "Flygplansläget är aktiverat"
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."

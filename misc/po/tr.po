@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 09:31+0000\n"
+"PO-Revision-Date: 2015-12-21 12:22+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/dde-daemon/language/tr/)\n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "Bağlantı kesildi"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "%q'nın açık ve sırada olduğundan emin olun"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
@@ -134,15 +134,15 @@ msgstr "Bluetooth bağlantısı başarısız"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr " %q'nun açık ve aralıkta olduğundan emin olun"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Bluetooth bağlantısı başarısız"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "%q'ya bağlanamadı, otomatik olarak yoksayıldı"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -812,12 +812,12 @@ msgstr "Alt çalışma alanına taşı"
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Tüm çalışma alanlarının pencerelerini göster"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Şu anki çalışma alanının pencerelerini göster"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
@@ -830,19 +830,19 @@ msgstr "Anahtar pencere etkileri"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "Benzer pencereleri değiştir"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "Benzer pencerelere tersten geç"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "Pencere değiştir"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Pencereleri ters sırada değiştir"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -1871,7 +1871,7 @@ msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -2426,7 +2426,7 @@ msgstr "Temel bağlantının ikinci bağlantısı başarısız oldu."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "DCB ya da FCoE kurulumu başarısız oldu"
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2434,16 +2434,16 @@ msgstr "Ağ kablosu takılı değil."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Ağ takımlaşma kontrolü başarısız oldu."
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "Lütfen SIM kartın takılı olduğundan ve mobil ağ sinyali olduğundan emin olun."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modem çalışmıyor veya erişilebilir değil"
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
@@ -2452,11 +2452,11 @@ msgstr "SIM kartın ödenmemişe düşmemesi için doğru planın seçildiğinde
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Modem şimdi hazır ve müsait."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "SIM PIN yanlış."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2472,11 +2472,11 @@ msgstr "VPN bağlantısı kurulamadı."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Ana cihaz değişti."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "Akraba cihazın yönetim durumu değişti."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
@@ -2528,7 +2528,7 @@ msgstr "Şu anda çevrimdışısınız."
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "Uçak modu etkinleştirildi."
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."

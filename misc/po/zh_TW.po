@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 06:36+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2015-12-28 20:18+0000\n"
+"Last-Translator: freddy4212 <freddy4212@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/linuxdeepin/dde-daemon/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,7 +46,7 @@ msgstr "此用戶名已被系統使用"
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "用戶名稱長度超過限制"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -125,23 +125,23 @@ msgstr "斷開"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "確認 %q 已開啟且在範圍內"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "藍芽連接失敗"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "確認 %q 已開啟且在範圍內"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "連結藍芽失敗"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "連接失敗 %q ，自動忽略"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -811,37 +811,37 @@ msgstr "移動到下方工作區"
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "顯示所有工作區的視窗"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "顯示目前工作區的視窗"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 msgid "Display workspace"
-msgstr ""
+msgstr "顯示工作區"
 
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "切換視窗效果"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "切換至類似視窗"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "將相似的視窗反轉"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "切換視窗"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "將視窗反轉"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -1206,15 +1206,15 @@ msgstr "行動"
 
 #: ../../network/nm_setting_bean_gen.go:70
 msgid "Country or region"
-msgstr ""
+msgstr "國家或區域"
 
 #: ../../network/nm_setting_bean_gen.go:71
 msgid "Provider"
-msgstr ""
+msgstr "提供商"
 
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Plan"
-msgstr ""
+msgstr "計劃"
 
 #: ../../network/nm_setting_bean_gen.go:73
 msgid "Service Type"
@@ -1870,7 +1870,7 @@ msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM(全球數位手機系統) \nGPRS(整合封包無線電服務)\nUMTS(通用行動通訊系統)"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -2425,7 +2425,7 @@ msgstr "底座連接的二次連接失敗。"
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "DCB或FCoE設定失敗。"
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2433,29 +2433,29 @@ msgstr "網線被拔出。"
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "網絡聯合控制失敗。"
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "請確認附有行動網路信號的 SIM 卡已插入。"
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "數據機無法運行或無法使用。"
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr ""
+msgstr "請確認您選擇正確的計劃以免SIM卡未付款。"
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "數據機已準備且可使用。"
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "SIM 卡的 PIN 碼不正確。"
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2463,7 +2463,7 @@ msgstr "連接VPN失敗，原因未知。"
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "新連線啟動排程中"
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2471,11 +2471,11 @@ msgstr "連接VPN失敗。"
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "主裝置已更改。"
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "主設備的管理狀況已更改。"
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
@@ -2527,7 +2527,7 @@ msgstr "當前已離線。"
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "飛航模式已啟用。"
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 09:03+0000\n"
+"PO-Revision-Date: 2015-12-21 14:06+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Indonesian (http://www.transifex.com/linuxdeepin/dde-daemon/language/id/)\n"
 "MIME-Version: 1.0\n"
@@ -130,19 +130,19 @@ msgstr "Terputus"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Pastikan %q dinyalakan dan berada dalam jangkauan"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Koneksi bluetooth gagal"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "Pastikan %q dinyalakan dan berada dalam jangkauan"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Gagal menghubungkan ke bluetooth"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
@@ -1176,7 +1176,7 @@ msgstr "Sambung Otomatis"
 
 #: ../../network/nm_setting_bean_gen.go:51
 msgid "For All Users"
-msgstr ""
+msgstr "Untuk Semua Pengguna"
 
 #: ../../network/nm_setting_bean_gen.go:57
 msgid "Ethernet"
@@ -2430,7 +2430,7 @@ msgstr "Sambungan sekunder koneksi dasar gagal"
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "Pengaturan DCB atau FCoE gagal."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2438,7 +2438,7 @@ msgstr "Kabel jaringan tidak terpasang."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Kendali kerja sama jaringan gagal."
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
@@ -2447,7 +2447,7 @@ msgstr "Pastikan kartu SIM sudah dimasukkan dengan sinyal jaringan aktif."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Gagal menjalankan modem atau modem tidak tersedia."
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
@@ -2456,11 +2456,11 @@ msgstr "Pastikan paket data internet aktif dan pulsa kartu SIM tidak habis."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Modem sekarang siap dan tersedia."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "PIN kartu SIM salah."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2468,7 +2468,7 @@ msgstr "Aktifan koneksi VPN gagal, alasan tidak diketahui."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Pengaktifan koneksi baru sedang dalam antrean."
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2476,7 +2476,7 @@ msgstr "Aktifkan koneksi VPN gagal. "
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Perangkat induk diganti."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."

@@ -4,6 +4,7 @@
 # 
 # Translators:
 # Adam Klarić <dabomedasamja@gmail.com>, 2015
+# e2f_hr_c2 <e2fhorse@outlook.com>, 2015
 # Ivica  Kolić <ikoli@yahoo.com>, 2014-2015
 # gogo <trebelnik2@gmail.com>, 2014
 # Vlado V. <vlays@mail.com>, 2015
@@ -12,8 +13,8 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 06:36+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2015-12-24 19:40+0000\n"
+"Last-Translator: e2f_hr_c2 <e2fhorse@outlook.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/linuxdeepin/dde-daemon/language/hr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,7 +49,7 @@ msgstr "Korisničko ime koristi sustav."
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "Korisničko je ime predugačko"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -127,23 +128,23 @@ msgstr "Odspojeno"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Pobrinite se da je %q uključen i unutar dometa"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Povezivanje bluetoothom nije uspjelo"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "Pobrinite se da je %q uključen i unutar dometa"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Povezivanje bluetootha nije uspjelo"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "Neuspjelo povezivanje %d, automatski ignorirano"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -813,37 +814,37 @@ msgstr "Premjesti na donji radni prostor "
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Prikaži prozore svih radnih prostora"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Prikaži prozore trenutačnog radnog prostora"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 msgid "Display workspace"
-msgstr ""
+msgstr "Prikaži radni prostor"
 
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "Zamijeni efekte prozora"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "Zamijeni slične prozore"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "Zamijeni slične prozore u obrnutom smjeru"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "Zamijeni prozore"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Zamijeni prozore u obrnutom smjeru"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -1173,7 +1174,7 @@ msgstr "Automatsko povezivanje"
 
 #: ../../network/nm_setting_bean_gen.go:51
 msgid "For All Users"
-msgstr ""
+msgstr "Za sve korisnike"
 
 #: ../../network/nm_setting_bean_gen.go:57
 msgid "Ethernet"
@@ -1216,7 +1217,7 @@ msgstr "Provider"
 
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Plan"
-msgstr ""
+msgstr "Tarifa"
 
 #: ../../network/nm_setting_bean_gen.go:73
 msgid "Service Type"
@@ -1872,7 +1873,7 @@ msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -2427,7 +2428,7 @@ msgstr "Sekundarna konekcija neuspjela."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "Postavljanje sustava DCB ili FCoE nije uspjelo."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2435,29 +2436,29 @@ msgstr "Mrežni kabel je isključen."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Neuspjela zajednička mrežna kontrola."
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "Provjerite je li SIM kartica umetnuta s pomoću mobilnog mrežnog signala."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modem se nije uspio pokrenuti ili nije dostupan."
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr ""
+msgstr "Provjerite je li odabrana ispravna tarifa bez promjene SIM kartice."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Modem je sada spreman i dostupan."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "PIN za SIM nije ispravan."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2465,7 +2466,7 @@ msgstr "Neuspjela aktivacija VPN veze, nepoznati razlog."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Aktivacija nove veze u redu je čekanja"
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2473,11 +2474,11 @@ msgstr "Neuspjela aktivacija VPN veze."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Nadređeni je uređaj promijenjen."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "Promijenjen je status upravljanja nadređenim uređajem."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
@@ -2529,7 +2530,7 @@ msgstr "Sada ste izvan mreže."
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "Uključen je zrakoplovni način rada."
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."

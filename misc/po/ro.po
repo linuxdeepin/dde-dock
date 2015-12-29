@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: dde-daemon\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-21 13:56+0800\n"
-"PO-Revision-Date: 2015-12-21 09:42+0000\n"
+"PO-Revision-Date: 2015-12-25 02:15+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Romanian (http://www.transifex.com/linuxdeepin/dde-daemon/language/ro/)\n"
 "MIME-Version: 1.0\n"
@@ -46,7 +46,7 @@ msgstr "Numele de utilizator este folosit de sistem."
 
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "Numele utilizatorului depăşeşte limita de lungime"
 
 #: ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -125,23 +125,23 @@ msgstr "Deconectat"
 
 #: ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "Asiguraţi-vă că %q este pornit şi în zona de acoperire"
 
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "Conexiune Bluetooth eşuată"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "Asigurați-vă că %q este pornit  și în raza de acțiune"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "Conectarea bluetooth a eșuat"
 
 #: ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "Conectarea %q a eşuat, ignorare automată"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 msgid "Niue"
@@ -811,21 +811,21 @@ msgstr "Trecerea la spațiul de lucru de dedesubt"
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "Afişaţi ferestrele tuturor spaţiilor de lucru"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "Afişare ferestre ale spaţiului de lucru actual"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 msgid "Display workspace"
-msgstr ""
+msgstr "Afișează spațiu de lucru"
 
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "Comutare efecte fereastră"
 
 #: ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
@@ -833,15 +833,15 @@ msgstr "Schimbă ferestre similare"
 
 #: ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "Comutare ferestre similare în sens invers"
 
 #: ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "Schimbă ferestrele"
 
 #: ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "Comutare ferestre în sens invers"
 
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
@@ -1171,7 +1171,7 @@ msgstr "Conectare automată"
 
 #: ../../network/nm_setting_bean_gen.go:51
 msgid "For All Users"
-msgstr ""
+msgstr "Pentru toţi utilizatorii"
 
 #: ../../network/nm_setting_bean_gen.go:57
 msgid "Ethernet"
@@ -1206,15 +1206,15 @@ msgstr "Mobil"
 
 #: ../../network/nm_setting_bean_gen.go:70
 msgid "Country or region"
-msgstr ""
+msgstr "Țara sau regiunea"
 
 #: ../../network/nm_setting_bean_gen.go:71
 msgid "Provider"
-msgstr ""
+msgstr "Furnizor"
 
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Plan"
-msgstr ""
+msgstr "Plan"
 
 #: ../../network/nm_setting_bean_gen.go:73
 msgid "Service Type"
@@ -1870,7 +1870,7 @@ msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
@@ -2425,7 +2425,7 @@ msgstr " Conectare repetată a conexiunii de bază a eşuat."
 
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "Setarea DCB sau FCoE a eșuat."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
@@ -2433,7 +2433,7 @@ msgstr "Cablul de rețea este deconectat."
 
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "Control"
 
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
@@ -2442,20 +2442,20 @@ msgstr "Vă rugăm asigurați-vă că SIM-ul are semnal mobil de rețea."
 
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modemul nu a pornit sau nu este disponibil."
 
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr ""
+msgstr "Vă rugăm asigurați-vă că a fost selectat un plan corect, fără restanțe la cardul SIM."
 
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "Acum modemul este gata şi disponibil."
 
 #: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "PIN SIM incorect."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
@@ -2463,7 +2463,7 @@ msgstr "Activarea conexiunii VPN a eşuat, din motive imprevizibile."
 
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Activarea conexiunii noi este în coadă. "
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
@@ -2471,11 +2471,11 @@ msgstr "Activarea conexiunii VPN a eşuat."
 
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "Dispozitiv părinte modificat."
 
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr "Statutul managerial al dispozitivului mamă s-a modificat."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
@@ -2527,7 +2527,7 @@ msgstr "Acum sunteți deconectat de la rețea."
 
 #: ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr ""
+msgstr "Modul avion activat."
 
 #: ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
