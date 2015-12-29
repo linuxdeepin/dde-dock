@@ -39,7 +39,6 @@ private:
     void onDockModeChanged();
     void updateXcbStructPartial();
     void initHideStateManager();
-    void initDockSetting();
 
 private slots:
     void showDock();
@@ -54,7 +53,6 @@ private:
     bool m_hasHidden = false;
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;
-    DBusDockSetting *m_dds = NULL;
     DBusDisplay *m_display = NULL;
 };
 

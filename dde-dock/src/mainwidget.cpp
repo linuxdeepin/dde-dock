@@ -11,7 +11,6 @@ MainWidget::MainWidget(QWidget *parent)
     //this->setAttribute(Qt::WA_X11DoNotAcceptFocus);
 
     initHideStateManager();
-    initDockSetting();
 
 #ifdef NEW_DOCK_LAYOUT
     m_mainPanel = new DockPanel(this);
@@ -82,7 +81,8 @@ void MainWidget::updatePosition()
 void MainWidget::updateXcbStructPartial()
 {
     int tmpHeight = 0;
-    if (m_dds->GetHideMode() == 0)
+    DBusDockSetting dds;
+    if (dds.GetHideMode() == 0)
         tmpHeight = this->height();
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
@@ -102,12 +102,6 @@ void MainWidget::initHideStateManager()
     });
 }
 
-void MainWidget::initDockSetting()
-{
-    m_dds = new DBusDockSetting(this);
-    connect(m_dds, &DBusDockSetting::HideModeChanged, this, &MainWidget::updateXcbStructPartial);
-}
-
 void MainWidget::enterEvent(QEvent *)
 {
     if (height() == 1){
@@ -115,6 +109,7 @@ void MainWidget::enterEvent(QEvent *)
         connect(st, &QTimer::timeout, this, [=] {
             //make sure the panel will show by mouse-enter
             if (geometry().contains(QCursor::pos())) {
+                qDebug() << "MouseEntered, show dock...";
                 showDock();
             }
             sender()->deleteLater();
