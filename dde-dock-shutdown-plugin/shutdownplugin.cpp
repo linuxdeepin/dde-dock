@@ -1,8 +1,11 @@
 #include "shutdownplugin.h"
+#include "interfaces/dockconstants.h"
 
 #include <QLabel>
 #include <QDebug>
 #include <QTimer>
+
+using namespace Dock;
 
 const QString PLUGIN_ID = "shutdown";
 
@@ -32,12 +35,12 @@ void ShutdownPlugin::changeMode(Dock::DockMode newMode, Dock::DockMode oldMode)
     switch (newMode)
     {
     case Dock::FashionMode:
-        m_mainWidget->setFixedSize(48, 48);
+        m_mainWidget->setFixedSize(APP_ITEM_FASHION_ICON_SIZE, APP_ITEM_FASHION_ICON_SIZE);
         m_mainWidget->setPixmap(QPixmap(":/icons/icons/fashion.svg"));
         break;
     case Dock::ClassicMode:
     case Dock::EfficientMode:
-        m_mainWidget->setFixedSize(18, 18);
+        m_mainWidget->setFixedSize(APPLET_CLASSIC_ICON_SIZE, APPLET_CLASSIC_ICON_SIZE);
         m_mainWidget->setPixmap(QPixmap(":/icons/icons/normal.svg"));
         break;
     }
