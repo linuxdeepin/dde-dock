@@ -177,9 +177,14 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) 
 		return false, "", m.deleteAccel(id, ty, accel)
 	}
 
-	avaliable, conflict := m.CheckAvaliable(accel)
-	if !avaliable {
-		return true, conflict, nil
+	s := m.listAll().GetByAccel(accel)
+	if s != nil {
+		logger.Debug("Delete conflict shortcut:", s.Id, s.Type, s.Name, s.Accels)
+		err := m.deleteAccel(s.Id, s.Type, accel)
+		if err != nil {
+			logger.Error("Delete conflict shortcut failed:", err)
+			return false, "", err
+		}
 	}
 
 	return false, "", m.addAccel(id, ty, accel)
