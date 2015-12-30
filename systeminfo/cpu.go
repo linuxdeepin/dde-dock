@@ -7,13 +7,14 @@ import (
 )
 
 const (
-	cpuKeyDelim     = ":"
-	cpuKeyProcessor = "processor"
-	cpuKeyName      = "model name"
-	cpuKeyModel     = "cpu model"
-	cpuKeyCPU       = "cpu"
-	cpuKeyMHz       = "CPU frequency [MHz]"
-	cpuKeyActive    = "cpus active"
+	cpuKeyDelim        = ":"
+	cpuKeyProcessor    = "processor"
+	cpuKeyName         = "model name"
+	cpuKeyModel        = "cpu model"
+	cpuKeyCPU          = "cpu"
+	cpuKeyMHz          = "CPU frequency [MHz]"
+	cpuKeyActive       = "cpus active"
+	cpuKeyARMProcessor = "Processor"
 )
 
 func getCPUInfo(file string) (string, error) {
@@ -29,6 +30,12 @@ func getCPUInfo(file string) (string, error) {
 
 	// Loongson
 	cpu, _ = getCPUInfoFromMap(cpuKeyModel, cpuKeyProcessor, data)
+	if len(cpu) != 0 {
+		return cpu, nil
+	}
+
+	// arm
+	cpu, _ = getCPUInfoFromMap(cpuKeyARMProcessor, cpuKeyProcessor, data)
 	if len(cpu) != 0 {
 		return cpu, nil
 	}
