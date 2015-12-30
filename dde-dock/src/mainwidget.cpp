@@ -18,6 +18,7 @@ MainWidget::MainWidget(QWidget *parent)
     connect(m_mainPanel, &DockPanel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
 #else
     m_mainPanel = new Panel(this);
+    connect(m_mainPanel, &Panel::startShow, this, &MainWidget::showDock);
     connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
  #endif
@@ -95,11 +96,6 @@ void MainWidget::initHideStateManager()
 {
     m_dhsm = new DBusHideStateManager(this);
     m_dhsm->SetState(Dock::HideStateHiding);
-    connect(m_dhsm, &DBusHideStateManager::ChangeState, [=](int state) {
-        if (state == Dock::HideStateShowing) {
-            showDock();
-        }
-    });
 }
 
 void MainWidget::enterEvent(QEvent *)
@@ -111,6 +107,7 @@ void MainWidget::enterEvent(QEvent *)
             if (geometry().contains(QCursor::pos())) {
                 qDebug() << "MouseEntered, show dock...";
                 showDock();
+                m_mainPanel->startShow();
             }
             sender()->deleteLater();
         });
@@ -128,7 +125,6 @@ void MainWidget::showDock()
 {
     m_hasHidden = false;
     updatePosition();
-    m_mainPanel->startShow();
 }
 
 void MainWidget::hideDock()
