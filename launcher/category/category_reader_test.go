@@ -11,6 +11,6 @@ func TestCategoryReader(t *testing.T) {
 		So(len(infos), ShouldEqual, 11)
 
 		infos = GetAllInfos("")
-		So(len(infos), ShouldEqual, 0)
+		So(len(infos), ShouldEqual, 11)
 	})
 }

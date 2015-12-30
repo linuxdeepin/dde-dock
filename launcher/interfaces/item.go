@@ -23,6 +23,7 @@ type ItemInfo interface {
 	SetCategoryID(CategoryID)
 	TimeInstalled() int64
 	SetTimeInstalled(int64)
+	LastModifiedTime() int64
 }
 
 // ItemManager is interface for item manager.

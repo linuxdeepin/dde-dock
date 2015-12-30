@@ -1,15 +1,16 @@
 package item
 
 import (
+	"os"
 	"path"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -143,6 +144,14 @@ func (i *Info) TimeInstalled() int64 {
 // SetTimeInstalled sets the time installed.
 func (i *Info) SetTimeInstalled(timeInstalled int64) {
 	i.timeInstalled = timeInstalled
+}
+
+func (i *Info) LastModifiedTime() int64 {
+	stat, e := os.Stat(i.path)
+	if e != nil {
+		return 0
+	}
+	return stat.ModTime().UnixNano()
 }
 
 // GenID returns a valid item id.

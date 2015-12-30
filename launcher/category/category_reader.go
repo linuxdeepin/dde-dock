@@ -14,17 +14,31 @@ type CategoryJSONInfo struct {
 }
 
 func GetAllInfos(file string) []CategoryInfo {
+	fallbackCategories := []CategoryInfo{
+		NewInfo(OthersID, OthersName),
+		NewInfo(InternetID, InternetName),
+		NewInfo(OfficeID, OfficeName),
+		NewInfo(DevelopmentID, DevelopmentName),
+		NewInfo(ReadingID, ReadingName),
+		NewInfo(GraphicsID, GraphicsName),
+		NewInfo(GameID, GameName),
+		NewInfo(MusicID, MusicName),
+		NewInfo(SystemID, SystemName),
+		NewInfo(VideoID, VideoName),
+		NewInfo(ChatID, ChatName),
+	}
+
 	var categoryInfos []CategoryInfo
 	f, err := os.Open(file)
 	if err != nil {
-		return categoryInfos
+		return fallbackCategories
 	}
 	defer f.Close()
 
 	decoder := json.NewDecoder(f)
 	var jsonInfo []CategoryJSONInfo
 	if err := decoder.Decode(&jsonInfo); err != nil {
-		return categoryInfos
+		return fallbackCategories
 	}
 
 	categoryInfos = make([]CategoryInfo, len(jsonInfo))

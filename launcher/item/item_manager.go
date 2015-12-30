@@ -164,8 +164,8 @@ func (m *Manager) GetAllFrequency(f *glib.KeyFile) (infos map[ItemID]uint64) {
 func (m *Manager) GetAllTimeInstalled() (map[ItemID]int64, error) {
 	infos := map[ItemID]int64{}
 	var err error
-	for id := range m.itemTable {
-		infos[id] = 0
+	for id, item := range m.itemTable {
+		infos[id] = item.LastModifiedTime()
 	}
 
 	transition, err := m.store.NewQueryTimeInstalledTransaction(m.dstoreInstalledTimeFile)

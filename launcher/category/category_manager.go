@@ -113,11 +113,16 @@ func (m *Manager) LoadAppCategoryInfo(files ...string) error {
 	var err1 error
 	m.queryPkgNameTransaction, err1 = m.store.NewQueryPkgNameTransaction(files[0])
 
-	var err2 error
-	m.deepinQueryIDTransaction, err2 = NewDeepinQueryIDTransaction(files[1])
+	dt, err2 := NewDeepinQueryIDTransaction(files[1])
+	if dt != nil {
+		m.deepinQueryIDTransaction = dt
+	}
 
 	var err3 error
-	m.xCategoryQueryIDTransaction, err3 = NewXCategoryQueryIDTransaction(files[2])
+	xt, err3 := NewXCategoryQueryIDTransaction(files[2])
+	if xt != nil {
+		m.xCategoryQueryIDTransaction = xt
+	}
 
 	if err1 != nil {
 		return err1

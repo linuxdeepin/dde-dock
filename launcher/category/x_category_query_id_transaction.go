@@ -13,9 +13,9 @@ type XCategoryQueryIDTransaction struct {
 func NewXCategoryQueryIDTransaction(file string) (*XCategoryQueryIDTransaction, error) {
 	data, err := getXCategoryInfo(file)
 	if err != nil {
-		return nil, err
+		data = xcategoriesFallback
 	}
-	return &XCategoryQueryIDTransaction{data: data}, nil
+	return &XCategoryQueryIDTransaction{data: data}, err
 }
 
 // IDList type alias for []CategoryID, used for sorting.
