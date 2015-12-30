@@ -26,11 +26,11 @@ import (
 	"sort"
 	"sync"
 
+	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"gir/gio-2.0"
 )
 
 const (
@@ -111,7 +111,21 @@ func (m *Manager) initGrabedList() {
 func (m *Manager) listAll() shortcuts.Shortcuts {
 	list := shortcuts.ListWMShortcut()
 	list = append(list, shortcuts.ListMetacityShortcut()...)
-	list = append(list, m.grabedList...)
+
+	var ssArray = []shortcuts.Shortcuts{
+		shortcuts.ListSystemShortcut(),
+		shortcuts.ListMediaShortcut(),
+		shortcuts.ListCustomKey().GetShortcuts(),
+	}
+	for _, ss := range ssArray {
+		for _, v := range ss {
+			if m.grabedList.GetById(v.Id, v.Type) == nil {
+				v.Accels = nil
+			}
+			list = append(list, v)
+		}
+	}
+
 	return list
 }
 
@@ -178,23 +192,27 @@ func (m *Manager) ungrabAccels(accels []string, ty int32) {
 }
 
 func (m *Manager) updateShortcutById(id string, ty int32) {
-	old := m.grabedList.GetById(id, ty)
-	if old == nil {
+	newInfo := shortcuts.ListAllShortcuts().GetById(id, ty)
+	if newInfo == nil {
 		return
 	}
 
-	new := shortcuts.ListAllShortcuts().GetById(id, ty)
-	if new == nil {
-		return
+	oldInfo := m.grabedList.GetById(id, ty)
+	if oldInfo != nil {
+		if isListEqual(oldInfo.Accels, newInfo.Accels) {
+			return
+		}
+		m.ungrabAccels(oldInfo.Accels, oldInfo.Type)
 	}
 
-	if isListEqual(old.Accels, new.Accels) {
-		return
+	err := m.grabAccels(newInfo.Accels, newInfo.Type, m.handleKeyEvent)
+	if err != nil {
+		m.deleteFromGrabedList(newInfo)
+		logger.Debugf("Change '%v - %v' accels: %v failed: %v",
+			id, ty, newInfo.Accels, err)
+	} else {
+		m.updateGrabedList(id, ty)
 	}
-
-	m.ungrabAccels(old.Accels, old.Type)
-	m.grabAccels(new.Accels, new.Type, m.handleKeyEvent)
-	m.updateGrabedList(id, ty)
 	dbus.Emit(m, "Changed", id, ty)
 }
 

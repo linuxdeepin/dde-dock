@@ -41,24 +41,24 @@ const (
 	kfKeyAction = "Action"
 )
 
-type customKeyInfo struct {
+type CustomKeyInfo struct {
 	Shortcut
 	Action string
 }
-type customKeyInfos []*customKeyInfo
+type CustomKeyInfos []*CustomKeyInfo
 
 var (
 	kfileLocker sync.Mutex
 )
 
-func ListCustomKey() customKeyInfos {
+func ListCustomKey() CustomKeyInfos {
 	file, _ := getCustomConfig()
 	return readCustomConfig(file)
 }
 
 func AddCustomKey(name, action string, accels []string) (string, error) {
 	id := dutils.GenUuid()
-	err := writeCustomKeyInfo(&customKeyInfo{
+	err := writeCustomKeyInfo(&CustomKeyInfo{
 		Shortcut: Shortcut{
 			Id:     id,
 			Name:   name,
@@ -83,7 +83,7 @@ func DeleteCustomKey(id string) error {
 	return doDelKeyInfo(id, file)
 }
 
-func (infos customKeyInfos) GetShortcuts() Shortcuts {
+func (infos CustomKeyInfos) GetShortcuts() Shortcuts {
 	var ss Shortcuts
 	for _, info := range infos {
 		ss = append(ss, &info.Shortcut)
@@ -91,7 +91,7 @@ func (infos customKeyInfos) GetShortcuts() Shortcuts {
 	return ss
 }
 
-func (infos customKeyInfos) Get(id string) *customKeyInfo {
+func (infos CustomKeyInfos) Get(id string) *CustomKeyInfo {
 	for _, info := range infos {
 		if info.Id == id {
 			return info
@@ -163,7 +163,7 @@ func setCustomKey(id, prop, value string, deleted bool) error {
 	return writeCustomKeyInfo(info)
 }
 
-func readCustomConfig(file string) customKeyInfos {
+func readCustomConfig(file string) CustomKeyInfos {
 	kfile, err := dutils.NewKeyFileFromFile(file)
 	if err != nil {
 		return nil
@@ -171,7 +171,7 @@ func readCustomConfig(file string) customKeyInfos {
 	defer kfile.Free()
 
 	_, groups := kfile.GetGroups()
-	var infos customKeyInfos
+	var infos CustomKeyInfos
 	for _, group := range groups {
 		info, err := newKeyInfoByGroup(kfile, group)
 		if err != nil {
@@ -191,7 +191,7 @@ func writeCustomConfig(kfile *glib.KeyFile) error {
 	return saveKeyFile(kfile, file)
 }
 
-func writeCustomKeyInfo(info *customKeyInfo) error {
+func writeCustomKeyInfo(info *CustomKeyInfo) error {
 	file, err := getCustomConfig()
 	if err != nil {
 		return err
@@ -225,9 +225,9 @@ func doDelKeyInfo(id, file string) error {
 	return saveKeyFile(kfile, file)
 }
 
-func newKeyInfoByGroup(kfile *glib.KeyFile, group string) (*customKeyInfo, error) {
+func newKeyInfoByGroup(kfile *glib.KeyFile, group string) (*CustomKeyInfo, error) {
 	var (
-		info customKeyInfo
+		info CustomKeyInfo
 		core Shortcut
 		err  error
 	)

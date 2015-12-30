@@ -206,11 +206,23 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 	case shortcuts.KeyTypeCustom:
 		v = shortcuts.ListCustomKey().Get(id)
 	default:
-		return "", fmt.Errorf("Invalid shortcut type:", ty)
+		return "", fmt.Errorf("Invalid shortcut type: %v", ty)
 	}
 
 	if v == nil {
-		return "", fmt.Errorf("Not found the id:", id, ty)
+		return "", fmt.Errorf("Not found the id: %v %v", id, ty)
+	}
+
+	if m.grabedList.GetById(id, ty) == nil {
+		if ty == shortcuts.KeyTypeCustom {
+			info := v.(*shortcuts.CustomKeyInfo)
+			info.Accels = nil
+			v = info
+		} else {
+			info := v.(*shortcuts.Shortcut)
+			info.Accels = nil
+			v = info
+		}
 	}
 
 	ret, _ := doMarshal(v)
