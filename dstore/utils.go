@@ -67,16 +67,18 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 	quit := make(chan struct{})
 
 	job.Status.ConnectChanged(func() {
-		if jobPath != job.Path || job.Type.Get() != jobType {
+		if jobPath != job.Path {
 			return
 		}
 
+		ty := job.Type.Get()
 		status := job.Status.Get()
 		switch status {
 		case JobStatusSucceed, JobStatusEnd:
-			if isQuit() {
+			if ty != jobType || isQuit() {
 				return
 			}
+
 			*result <- nil
 			close(quit)
 			return
@@ -84,9 +86,18 @@ func waitJobDone(jobPath dbus.ObjectPath, jobType string, timeout <-chan time.Ti
 			if isQuit() {
 				return
 			}
+
 			*result <- fmt.Errorf(job.Description.Get())
 			close(quit)
 			return
+		default:
+			// Only in the case of the installation or removal is successful,
+			// the state it may be empty.
+			if len(status) == 0 && !isQuit() {
+				*result <- nil
+				close(quit)
+				return
+			}
 		}
 	})
 
