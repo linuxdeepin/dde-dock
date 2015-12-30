@@ -57,6 +57,23 @@ type RuntimeApp struct {
 	updateWMNameTimer    *time.Timer
 }
 
+func (app *RuntimeApp) updateWMName(xid xproto.Window) {
+	app.cancelUpdateWMName()
+	app.updateWMNameTimer = time.AfterFunc(time.Millisecond*20, func() {
+		app.updateWmName(xid)
+		app.updateAppid(xid)
+		app.notifyChanged()
+		app.updateWMNameTimer = nil
+	})
+}
+
+func (app *RuntimeApp) cancelUpdateWMName() {
+	if app.updateWMNameTimer != nil {
+		app.updateWMNameTimer.Stop()
+		app.updateWMNameTimer = nil
+	}
+}
+
 func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
 	core := NewDesktopAppInfo(app.DesktopID)
 
@@ -588,6 +605,9 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 
 }
 func (app *RuntimeApp) updateWmName(xid xproto.Window) {
+	if _, ok := app.xids[xid]; !ok {
+		return
+	}
 	if name, err := ewmh.WmNameGet(XU, xid); err == nil && name != "" {
 		if utf8.ValidString(name) {
 			app.xids[xid].Title = name
@@ -795,16 +815,7 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
-			if app.updateWMNameTimer != nil {
-				app.updateWMNameTimer.Stop()
-				app.updateWMNameTimer = nil
-			}
-			app.updateWMNameTimer = time.AfterFunc(time.Millisecond*20, func() {
-				app.updateWmName(xid)
-				app.updateAppid(xid)
-				app.notifyChanged()
-				app.updateWMNameTimer = nil
-			})
+			app.updateWMName(xid)
 		case ATOM_WINDOW_STATE:
 			logger.Debugf("%s(0x%x) WM_STATE is changed", app.Id, xid)
 			if app.CurrentInfo.Xid == xid {
