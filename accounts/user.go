@@ -28,7 +28,9 @@ import (
 	"path"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
+	"runtime/debug"
 	"strings"
 	"sync"
 )
@@ -41,6 +43,9 @@ const (
 const (
 	defaultUserIcon       = "/var/lib/AccountsService/icons/default.png"
 	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
+
+	maxWidth  = 200
+	maxHeight = 200
 )
 
 type User struct {
@@ -154,12 +159,21 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 		return "", false, fmt.Errorf("Sum file '%s' md5 failed", icon)
 	}
 
-	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
-	err := os.MkdirAll(path.Dir(dest), 0755)
+	tmp, scale, err := scaleUserIcon(icon, md5)
 	if err != nil {
 		return "", false, err
 	}
-	err = dutils.CopyFile(icon, dest)
+
+	if scale {
+		defer os.Remove(tmp)
+	}
+
+	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
+	err = os.MkdirAll(path.Dir(dest), 0755)
+	if err != nil {
+		return "", false, err
+	}
+	err = dutils.CopyFile(tmp, dest)
 	if err != nil {
 		return "", false, err
 	}
@@ -297,4 +311,20 @@ func getSystemLanguage(file string) string {
 		}
 	}
 	return ""
+}
+
+func scaleUserIcon(file, md5 string) (string, bool, error) {
+	w, h, err := graphic.GetImageSize(file)
+	if err != nil {
+		return "", false, err
+	}
+
+	if w < maxWidth && h < maxHeight {
+		return file, false, nil
+	}
+
+	dest := path.Join("/tmp", md5)
+	defer debug.FreeOSMemory()
+	return dest, true, graphic.ScaleImagePrefer(file, dest,
+		maxWidth, maxHeight, graphic.FormatPng)
 }
