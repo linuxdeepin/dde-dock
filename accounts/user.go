@@ -23,6 +23,7 @@ package accounts
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"pkg.deepin.io/dde/daemon/accounts/users"
@@ -48,6 +49,7 @@ type User struct {
 	Gid            string
 	HomeDir        string
 	Shell          string
+	Language       string
 	IconFile       string
 	BackgroundFile string
 
@@ -99,6 +101,13 @@ func NewUser(userPath string) (*User, error) {
 	defer kFile.Free()
 
 	var write bool = false
+	lang, _ := kFile.GetString("User", "Language")
+	u.setPropString(&u.Language, "Language", lang)
+	if len(u.Language) == 0 {
+		u.setPropString(&u.Language, "Language", getSystemLanguage(defaultLocaleFile))
+		write = true
+	}
+
 	icon, _ := kFile.GetString("User", "Icon")
 	u.setPropString(&u.IconFile, "IconFile", icon)
 	if len(u.IconFile) == 0 {
@@ -262,4 +271,30 @@ func getUidFromUserPath(userPath string) string {
 	items := strings.Split(userPath, userDBusPath)
 
 	return items[1]
+}
+
+func getSystemLanguage(file string) string {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return ""
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		line = strings.TrimSpace(line)
+		array := strings.Split(line, "=")
+		if len(array) != 2 {
+			continue
+		}
+
+		if array[0] == "LANG" {
+			tmp := strings.Split(array[1], ".")
+			return tmp[0]
+		}
+	}
+	return ""
 }

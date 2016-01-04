@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"pkg.deepin.io/dde/api/lang_info"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/graphic"
@@ -244,6 +245,39 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 		u.setPropBool(&u.AutomaticLogin, "AutomaticLogin", auto)
 		doEmitSuccess(pid, "SetAutomaticLogin")
 	}()
+
+	return true, nil
+}
+
+func (u *User) SetLanguage(dbusMsg dbus.DMessage, lang string) (bool, error) {
+	u.syncLocker.Lock()
+	logger.Debug("[SetLanguage] language:", lang)
+	pid := dbusMsg.GetSenderPID()
+	err := u.accessAuthentication(pid, true, "SetLanguage")
+	if err != nil {
+		logger.Debug("[SetLanguage] access denied:", err)
+		return false, err
+	}
+
+	if u.Language == lang {
+		doEmitSuccess(pid, "SetLanguage")
+		return true, nil
+	}
+
+	if !lang_info.IsSupportedLocale(lang+".UTF-8") ||
+		!lang_info.IsSupportedLocale(lang) {
+		reason := fmt.Sprintf("Invalid language: %v", lang)
+		logger.Debug("[SetLanguage]", reason)
+		doEmitError(pid, "SetLanguage", reason)
+		return false, fmt.Errorf(reason)
+	}
+
+	u.setPropString(&u.Language, "Language", lang)
+	err = u.writeUserConfig()
+	if err != nil {
+		logger.Info("[Setlanguage]", err)
+		return false, err
+	}
 
 	return true, nil
 }
