@@ -214,12 +214,12 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 	}
 
 	if m.grabedList.GetById(id, ty) == nil {
-		if ty == shortcuts.KeyTypeCustom {
-			info := v.(*shortcuts.CustomKeyInfo)
+		if ty == shortcuts.KeyTypeSystem || ty == shortcuts.KeyTypeMedia {
+			info := v.(*shortcuts.Shortcut)
 			info.Accels = nil
 			v = info
-		} else {
-			info := v.(*shortcuts.Shortcut)
+		} else if ty == shortcuts.KeyTypeCustom {
+			info := v.(*shortcuts.CustomKeyInfo)
 			info.Accels = nil
 			v = info
 		}
