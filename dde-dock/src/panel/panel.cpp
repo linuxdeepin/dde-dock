@@ -87,7 +87,7 @@ void Panel::initWidthAnimation()
     m_widthAnimation = new QPropertyAnimation(this, "width", this);
     m_widthAnimation->setDuration(WIDTH_ANIMATION_DURATION);
     connect(m_widthAnimation, &QPropertyAnimation::valueChanged, [=]{
-        m_appLayout->move(FASHION_PANEL_LPADDING, 1);
+        m_appLayout->move(FASHION_PANEL_LPADDING, 0);
         m_pluginLayout->move(width() - m_pluginLayout->width() - FASHION_PANEL_RPADDING, 1);
         updateRightReflection();
 
@@ -138,7 +138,7 @@ void Panel::initAppLayout()
     m_appLayout->setaddItemDelayInterval(0);
     m_appLayout->setAcceptDrops(true);
     m_appLayout->setSpacing(m_dockModeData->getAppItemSpacing());
-    m_appLayout->move(0, 1);
+    m_appLayout->move(0, 0);
 
     connect(m_appLayout, &DockLayout::startDrag, this, &Panel::onItemDragStarted);
     connect(m_appLayout, &DockLayout::itemDropped, this, &Panel::onItemDropped);
@@ -255,7 +255,7 @@ void Panel::resizeWithContent()
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
         m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
 
-        m_appLayout->move(0,1);
+        m_appLayout->move(0, 0);
         m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(),m_dockModeData->getDockHeight());
@@ -378,7 +378,7 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
                            + m_appLayout->getContentsWidth()
                            + m_pluginLayout->getContentsWidth()
                            ,m_dockModeData->getDockHeight());
-        m_appLayout->move(FASHION_PANEL_LPADDING,1);
+        m_appLayout->move(FASHION_PANEL_LPADDING, 0);
 
         m_pluginLayout->move(m_appLayout->x() + m_appLayout->width() - m_dockModeData->getAppItemSpacing(),1);
 
@@ -390,7 +390,7 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(), m_dockModeData->getItemHeight());
         m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
 
-        m_appLayout->move(0,1);
+        m_appLayout->move(0, 0);
         m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(), m_dockModeData->getDockHeight());

@@ -209,7 +209,7 @@ void AppItem::initClientManager()
 void AppItem::initBackground()
 {
     m_appBackground = new AppBackground(this);
-    m_appBackground->move(0,0);
+    resizeBackground();
     connect(this, &AppItem::mouseRelease, m_appBackground, &AppBackground::slotMouseRelease);
     connect(this, &AppItem::widthChanged, this, &AppItem::resizeBackground);
 }
@@ -361,7 +361,15 @@ void AppItem::onMouseLeave()
 
 void AppItem::resizeBackground()
 {
-    m_appBackground->resize(width(),height());
+    if (m_dockModeData->getDockMode() == Dock::FashionMode) {
+        m_appBackground->resize(width(), height());
+        m_appBackground->move(0, 0);
+    }
+    else {
+        //非时尚模式下上下各留出一个像素
+        m_appBackground->resize(width(), height() - 2);
+        m_appBackground->move(0, 1);
+    }
 }
 
 void AppItem::resizeResources()
@@ -370,10 +378,7 @@ void AppItem::resizeResources()
         updateIcon();
 
     if (m_appBackground != NULL)
-    {
         resizeBackground();
-        m_appBackground->move(0,0);
-    }
 
     updateTitle();
 }
