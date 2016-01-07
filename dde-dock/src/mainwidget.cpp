@@ -83,7 +83,7 @@ void MainWidget::updateXcbStructPartial()
 {
     int tmpHeight = 0;
     DBusDockSetting dds;
-    if (dds.GetHideMode() == 0)
+    if (dds.GetHideMode() == Dock::KeepShowing)
         tmpHeight = this->height();
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,

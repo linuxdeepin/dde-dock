@@ -323,7 +323,8 @@ void Panel::onHideStateChanged(int dockState)
 
 void Panel::onShowPanelFinished()
 {
-    m_dockModeData->setHideState(Dock::HideStateShown);
+    //dbus的ToggleShow接口会在判断时把HideStateShown对应的切换到HideStateShowing导致一直没法再切换
+    m_dockModeData->setHideState(Dock::HideStateHiding);
     emit panelHasShown();
 }
 

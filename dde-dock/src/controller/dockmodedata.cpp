@@ -33,7 +33,12 @@ Dock::HideMode DockModeData::getHideMode()
 void DockModeData::setHideMode(Dock::HideMode value)
 {
     m_dockSetting->SetHideMode(value);
-    m_hideStateManager->UpdateState();
+    if(value == Dock::KeepShowing) {
+        setHideState(Dock::HideStateShowing);
+    }
+    else if (value == Dock::SmartHide){
+        setHideState(Dock::HideStateHiding);
+    }
     QTimer::singleShot(100, m_hideStateManager, SLOT(UpdateState()));
 }
 
