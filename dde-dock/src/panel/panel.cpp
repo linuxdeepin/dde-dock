@@ -3,8 +3,8 @@
 
 #include "panel.h"
 #include "controller/dockmodedata.h"
-#include "controller/plugins/dockpluginproxy.h"
-#include "controller/plugins/dockpluginmanager.h"
+#include "controller/old/pluginproxy.h"
+#include "controller/old/pluginmanager.h"
 
 Panel::Panel(QWidget *parent)
     : QLabel(parent),m_parentWidget(parent)
@@ -97,17 +97,17 @@ void Panel::initWidthAnimation()
 
 void Panel::initPluginManager()
 {
-    m_pluginManager = new DockPluginManager(this);
+    m_pluginManager = new PluginManager(this);
 
-    connect(m_dockModeData, &DockModeData::dockModeChanged, m_pluginManager, &DockPluginManager::onDockModeChanged);
-    connect(m_pluginManager, &DockPluginManager::itemAppend, [=](AbstractDockItem *targetItem){
+    connect(m_dockModeData, &DockModeData::dockModeChanged, m_pluginManager, &PluginManager::onDockModeChanged);
+    connect(m_pluginManager, &PluginManager::itemAppend, [=](AbstractDockItem *targetItem){
         m_pluginLayout->insertItem(targetItem, 0);
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
         connect(targetItem, &AbstractDockItem::needPreviewHide, this, &Panel::onNeedPreviewHide);
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
-    connect(m_pluginManager, &DockPluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
+    connect(m_pluginManager, &PluginManager::itemInsert, [=](AbstractDockItem *baseItem, AbstractDockItem *targetItem){
         int index = m_pluginLayout->indexOf(baseItem);
         m_pluginLayout->insertItem(targetItem, index != -1 ? index : m_pluginLayout->getItemCount());
         connect(targetItem, &AbstractDockItem::needPreviewShow, this, &Panel::onNeedPreviewShow);
@@ -115,7 +115,7 @@ void Panel::initPluginManager()
         connect(targetItem, &AbstractDockItem::needPreviewImmediatelyHide, this, &Panel::onNeedPreviewImmediatelyHide);
         connect(targetItem, &AbstractDockItem::needPreviewUpdate, this, &Panel::onNeedPreviewUpdate);
     });
-    connect(m_pluginManager, &DockPluginManager::itemRemoved, [=](AbstractDockItem* item) {
+    connect(m_pluginManager, &PluginManager::itemRemoved, [=](AbstractDockItem* item) {
         m_pluginLayout->removeItem(item);
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{

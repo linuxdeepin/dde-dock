@@ -41,12 +41,7 @@ HEADERS += \
     src/interfaces/dockplugininterface.h \
     src/interfaces/dockpluginproxyinterface.h \
     libs/xcb_misc.h \
-    src/controller/appmanager.h \
     src/controller/dockmodedata.h \
-    src/controller/plugins/dockpluginmanager.h \
-    src/controller/plugins/dockpluginproxy.h \
-    src/controller/plugins/pluginitemwrapper.h \
-    src/controller/plugins/pluginssettingframe.h \
     src/dbus/dbusclientmanager.h \
     src/dbus/dbusdockedappmanager.h \
     src/dbus/dbusdocksetting.h \
@@ -57,20 +52,12 @@ HEADERS += \
     src/dbus/dbuspanelmanager.h \
     src/panel/panel.h \
     src/panel/panelmenu.h \
-    src/widgets/abstractdockitem.h \
-    src/widgets/appbackground.h \
-    src/widgets/appicon.h \
-    src/widgets/appitem.h \
-    src/widgets/docklayout.h \
     src/widgets/highlighteffect.h \
     src/widgets/launcheritem.h \
     src/widgets/reflectioneffect.h \
     src/widgets/screenmask.h \
     src/mainwidget.h \
     src/controller/signalmanager.h \
-    src/widgets/apppreview/apppreviewloader.h \
-    src/widgets/apppreview/apppreviewscontainer.h \
-    src/widgets/apppreview/apppreviewloaderframe.h \
     src/widgets/previewwindow.h \
     src/dbus/dbusdisplay.h \
     src/dbus/dbuslauncher.h \
@@ -86,16 +73,26 @@ HEADERS += \
     src/widgets/plugin/dockpluginssettingwindow.h \
     src/controller/plugins/dockpluginsmanager.h \
     src/widgets/movablelayout.h \
-    src/widgets/plugin/dockpluginlayout.h
+    src/widgets/plugin/dockpluginlayout.h \
+    src/controller/old/appmanager.h \
+    src/controller/old/pluginitemwrapper.h \
+    src/controller/old/pluginproxy.h \
+    src/controller/old/pluginssettingframe.h \
+    src/controller/old/pluginmanager.h \
+    src/controller/plugins/dockpluginitemwrapper.h \
+    src/controller/plugins/dockpluginproxy.h \
+    src/widgets/app/apppreview/apppreviewloader.h \
+    src/widgets/app/apppreview/apppreviewloaderframe.h \
+    src/widgets/app/apppreview/apppreviewscontainer.h \
+    src/widgets/old/abstractdockitem.h \
+    src/widgets/old/appbackground.h \
+    src/widgets/old/appicon.h \
+    src/widgets/old/appitem.h \
+    src/widgets/old/docklayout.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
-    src/controller/appmanager.cpp \
     src/controller/dockmodedata.cpp \
-    src/controller/plugins/dockpluginmanager.cpp \
-    src/controller/plugins/dockpluginproxy.cpp \
-    src/controller/plugins/pluginitemwrapper.cpp \
-    src/controller/plugins/pluginssettingframe.cpp \
     src/dbus/dbusclientmanager.cpp \
     src/dbus/dbusdockedappmanager.cpp \
     src/dbus/dbusdocksetting.cpp \
@@ -106,11 +103,6 @@ SOURCES += \
     src/dbus/dbuspanelmanager.cpp \
     src/panel/panel.cpp \
     src/panel/panelmenu.cpp \
-    src/widgets/abstractdockitem.cpp \
-    src/widgets/appbackground.cpp \
-    src/widgets/appicon.cpp \
-    src/widgets/appitem.cpp \
-    src/widgets/docklayout.cpp \
     src/widgets/highlighteffect.cpp \
     src/widgets/launcheritem.cpp \
     src/widgets/reflectioneffect.cpp \
@@ -118,9 +110,6 @@ SOURCES += \
     src/main.cpp \
     src/mainwidget.cpp \
     src/controller/signalmanager.cpp \
-    src/widgets/apppreview/apppreviewloader.cpp \
-    src/widgets/apppreview/apppreviewscontainer.cpp \
-    src/widgets/apppreview/apppreviewloaderframe.cpp \
     src/widgets/previewwindow.cpp \
     src/dbus/dbusdisplay.cpp \
     src/dbus/dbuslauncher.cpp \
@@ -136,4 +125,19 @@ SOURCES += \
     src/widgets/plugin/dockpluginssettingwindow.cpp \
     src/controller/plugins/dockpluginsmanager.cpp \
     src/widgets/movablelayout.cpp \
-    src/widgets/plugin/dockpluginlayout.cpp
+    src/widgets/plugin/dockpluginlayout.cpp \
+    src/controller/old/appmanager.cpp \
+    src/controller/old/pluginitemwrapper.cpp \
+    src/controller/old/pluginproxy.cpp \
+    src/controller/old/pluginssettingframe.cpp \
+    src/controller/old/pluginmanager.cpp \
+    src/controller/plugins/dockpluginitemwrapper.cpp \
+    src/controller/plugins/dockpluginproxy.cpp \
+    src/widgets/app/apppreview/apppreviewloader.cpp \
+    src/widgets/app/apppreview/apppreviewloaderframe.cpp \
+    src/widgets/app/apppreview/apppreviewscontainer.cpp \
+    src/widgets/old/abstractdockitem.cpp \
+    src/widgets/old/appbackground.cpp \
+    src/widgets/old/appicon.cpp \
+    src/widgets/old/appitem.cpp \
+    src/widgets/old/docklayout.cpp

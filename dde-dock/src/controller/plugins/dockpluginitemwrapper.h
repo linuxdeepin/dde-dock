@@ -1,23 +1,22 @@
-#ifndef PLUGINITEMWRAPPER_H
-#define PLUGINITEMWRAPPER_H
+#ifndef DOCKPLUGINITEMWRAPPER_H
+#define DOCKPLUGINITEMWRAPPER_H
 
 #include <QJsonObject>
 
-#include "widgets/abstractdockitem.h"
+#include "widgets/dockitem.h"
 #include "interfaces/dockplugininterface.h"
 #include "dbus/dbusdisplay.h"
 
 class QMouseEvent;
-class PluginItemWrapper : public AbstractDockItem
+class DockPluginItemWrapper : public DockItem
 {
     Q_OBJECT
 public:
-    PluginItemWrapper(DockPluginInterface *plugin, QString id, QWidget * parent = 0);
-    virtual ~PluginItemWrapper();
-
-    QString id() const;
+    DockPluginItemWrapper(DockPluginInterface *plugin, QString getItemId, QWidget * parent = 0);
+    virtual ~DockPluginItemWrapper();
 
     QString getTitle() Q_DECL_OVERRIDE;
+    QString getItemId() Q_DECL_OVERRIDE;
     QWidget * getApplet() Q_DECL_OVERRIDE;
 
     QString getMenuContent() Q_DECL_OVERRIDE;
@@ -39,4 +38,4 @@ private:
     const int DOCK_PREVIEW_MARGIN = 7;
 };
 
-#endif // PLUGINITEMWRAPPER_H
+#endif // DOCKPLUGINITEMWRAPPER_H

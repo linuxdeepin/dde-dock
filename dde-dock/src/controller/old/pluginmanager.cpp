@@ -3,15 +3,15 @@
 #include <QPluginLoader>
 //#include <QFileSystemWatcher>
 
-#include "dockpluginproxy.h"
-#include "dockpluginmanager.h"
+#include "pluginproxy.h"
+#include "pluginmanager.h"
 #include "interfaces/dockplugininterface.h"
 
 const QString SYSTRAY_PLUGIN_ID = "composite_item_key";
 const QString DATETIME_PLUGIN_ID = "id_datetime";
 const QString SHUTDOWN_PLUGIN_ID = "shutdown";
 const int DELAY_NOTE_MODE_CHANGED_INTERVAL = 500;
-DockPluginManager::DockPluginManager(QObject *parent) :
+PluginManager::PluginManager(QObject *parent) :
     QObject(parent)
 {
     m_settingFrame = new PluginsSettingFrame;
@@ -25,7 +25,7 @@ DockPluginManager::DockPluginManager(QObject *parent) :
     //    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginManager::watchedDirectoryChanged);
 }
 
-void DockPluginManager::initAll()
+void PluginManager::initAll()
 {
     foreach (QString path, m_searchPaths) {
         QDir pluginsDir(path);
@@ -37,8 +37,8 @@ void DockPluginManager::initAll()
         }
     }
 
-    foreach (DockPluginProxy * proxy, m_proxies.values()) {
-        connect(proxy, &DockPluginProxy::configurableChanged, [=](const QString &id) {
+    foreach (PluginProxy * proxy, m_proxies.values()) {
+        connect(proxy, &PluginProxy::configurableChanged, [=](const QString &id) {
             if (proxy->plugin()->configurable(id)) {
                 m_settingFrame->onPluginAdd(proxy->plugin()->enabled(id),
                                             id,
@@ -49,10 +49,10 @@ void DockPluginManager::initAll()
                 m_settingFrame->onPluginRemove(id);
             }
         });
-        connect(proxy, &DockPluginProxy::enabledChanged, [=](const QString &id) {
+        connect(proxy, &PluginProxy::enabledChanged, [=](const QString &id) {
             m_settingFrame->onPluginEnabledChanged(id, proxy->plugin()->enabled(id));
         });
-        connect(proxy, &DockPluginProxy::titleChanged, [=](const QString &id) {
+        connect(proxy, &PluginProxy::titleChanged, [=](const QString &id) {
             m_settingFrame->onPluginTitleChanged(id, proxy->plugin()->getName(id));
         });
 
@@ -62,14 +62,14 @@ void DockPluginManager::initAll()
     initSettingWindow();
 }
 
-void DockPluginManager::onPluginsSetting(int y)
+void PluginManager::onPluginsSetting(int y)
 {
     m_settingFrame->move(QCursor::pos().x(), y - m_settingFrame->height());
     m_settingFrame->show();
 }
 
 // public slots
-void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
+void PluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode oldMode)
 {
     if (newMode == oldMode)
         return;
@@ -92,7 +92,7 @@ void DockPluginManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMode
 }
 
 // private methods
-DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
+PluginProxy * PluginManager::loadPlugin(const QString &path)
 {
     // check the file type
     if (!QLibrary::isLibrary(path)) return NULL;
@@ -112,12 +112,12 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
         if (interface) {
             qDebug() << "Plugin loaded: " << path;
 
-            DockPluginProxy * proxy = new DockPluginProxy(pluginLoader, interface);
+            PluginProxy * proxy = new PluginProxy(pluginLoader, interface);
             if (proxy) {
                 m_proxies[path] = proxy;
 //                m_watcher->addPath(path);
-                connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginManager::onPluginItemAdded);
-                connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginManager::onPluginItemRemoved);
+                connect(proxy, &PluginProxy::itemAdded, this, &PluginManager::onPluginItemAdded);
+                connect(proxy, &PluginProxy::itemRemoved, this, &PluginManager::onPluginItemRemoved);
                 connect(m_settingFrame, &PluginsSettingFrame::checkedChanged, [=](QString uuid, bool checked){
                     //NOTE:one sender, multi receiver
                     if (interface->ids().indexOf(uuid) != -1) {
@@ -137,17 +137,17 @@ DockPluginProxy * DockPluginManager::loadPlugin(const QString &path)
     return NULL;
 }
 
-void DockPluginManager::unloadPlugin(const QString &path)
+void PluginManager::unloadPlugin(const QString &path)
 {
     if (m_proxies.contains(path)) {
-        DockPluginProxy * proxy = m_proxies.take(path);
+        PluginProxy * proxy = m_proxies.take(path);
         delete proxy;
     }
 }
 
-void DockPluginManager::initSettingWindow()
+void PluginManager::initSettingWindow()
 {
-    foreach (DockPluginProxy *proxy, m_proxies.values()) {
+    foreach (PluginProxy *proxy, m_proxies.values()) {
         QStringList ids = proxy->plugin()->ids();
         foreach (QString uuid, ids) {
             if (proxy->plugin()->configurable(uuid)){
@@ -160,9 +160,9 @@ void DockPluginManager::initSettingWindow()
     }
 }
 
-void DockPluginManager::onPluginItemAdded(AbstractDockItem *item, QString uuid)
+void PluginManager::onPluginItemAdded(AbstractDockItem *item, QString uuid)
 {
-    DockPluginProxy *proxy = qobject_cast<DockPluginProxy *>(sender());
+    PluginProxy *proxy = qobject_cast<PluginProxy *>(sender());
     if (!proxy)
         return;
 
@@ -172,7 +172,7 @@ void DockPluginManager::onPluginItemAdded(AbstractDockItem *item, QString uuid)
         handleNormalPluginAdd(item, uuid);
 }
 
-void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString)
+void PluginManager::onPluginItemRemoved(AbstractDockItem *item, QString)
 {
     m_sysPlugins.remove(item);
     m_normalPlugins.remove(item);
@@ -183,19 +183,19 @@ void DockPluginManager::onPluginItemRemoved(AbstractDockItem *item, QString)
 }
 
 // private slots
-void DockPluginManager::watchedFileChanged(const QString & file)
+void PluginManager::watchedFileChanged(const QString & file)
 {
     qDebug() << "DockPluginManager::watchedFileChanged" << file;
     this->unloadPlugin(file);
 
     if (QFile::exists(file)) {
-        DockPluginProxy * proxy = loadPlugin(file);
+        PluginProxy * proxy = loadPlugin(file);
 
         if (proxy) proxy->plugin()->init(proxy);
     }
 }
 
-void DockPluginManager::watchedDirectoryChanged(const QString & directory)
+void PluginManager::watchedDirectoryChanged(const QString & directory)
 {
     qDebug() << "DockPluginManager::watchedDirectoryChanged" << directory;
     // we just need to take care of the situation that new files pop up in
@@ -204,16 +204,16 @@ void DockPluginManager::watchedDirectoryChanged(const QString & directory)
     foreach (QString fileName, targetDir.entryList(QDir::Files)) {
         QString absPath = targetDir.absoluteFilePath(fileName);
         if (!m_proxies.contains(absPath)) {
-            DockPluginProxy * proxy = loadPlugin(absPath);
+            PluginProxy * proxy = loadPlugin(absPath);
 
             if (proxy) proxy->plugin()->init(proxy);
         }
     }
 }
 
-void DockPluginManager::notePluginModeChanged()
+void PluginManager::notePluginModeChanged()
 {
-    for (DockPluginProxy * proxy : m_proxies) {
+    for (PluginProxy * proxy : m_proxies) {
         DockPluginInterface * plugin = proxy->plugin();
         plugin->changeMode(m_newMode, m_oldMode);
     }
@@ -233,7 +233,7 @@ void DockPluginManager::notePluginModeChanged()
     handleSysPluginAdd(sysItem, SYSTRAY_PLUGIN_ID);
 }
 
-AbstractDockItem *DockPluginManager::sysPluginItem(QString id)
+AbstractDockItem *PluginManager::sysPluginItem(QString id)
 {
     int si = m_sysPlugins.values().indexOf(id);
 
@@ -243,7 +243,7 @@ AbstractDockItem *DockPluginManager::sysPluginItem(QString id)
         return NULL;
 }
 
-void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
+void PluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
 {
     if (!item || m_sysPlugins.values().indexOf(uuid) != -1)
         return;
@@ -273,7 +273,7 @@ void DockPluginManager::handleSysPluginAdd(AbstractDockItem *item, QString uuid)
     }
 }
 
-void DockPluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uuid)
+void PluginManager::handleNormalPluginAdd(AbstractDockItem *item, QString uuid)
 {
     if (!item || m_normalPlugins.values().indexOf(uuid) != -1)
         return;

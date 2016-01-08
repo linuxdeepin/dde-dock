@@ -14,7 +14,7 @@
 #include <QPropertyAnimation>
 #include <QDebug>
 
-#include "appitem.h"
+#include "old/appitem.h"
 #include "dbus/dbusdockedappmanager.h"
 
 class TransformLabel : public QLabel

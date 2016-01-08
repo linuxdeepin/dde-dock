@@ -1,10 +1,21 @@
-#include <QHBoxLayout>
 #include <QTimer>
+#include <QHBoxLayout>
+#include <QPushButton>
 
 #include "dockpanel.h"
 #include "controller/dockmodedata.h"
-#include "controller/plugins/dockpluginproxy.h"
-#include "controller/plugins/dockpluginsmanager.h"
+#include "controller/old/pluginproxy.h"
+
+const int REFLECTION_HEIGHT = 15;
+const int FASHION_PANEL_LPADDING = 21;
+const int FASHION_PANEL_RPADDING = 21;
+const int WIDTH_ANIMATION_DURATION = 200;
+const int SHOW_ANIMATION_DURATION = 300;
+const int HIDE_ANIMATION_DURATION = 300;
+const int DELAY_HIDE_PREVIEW_INTERVAL = 200;
+const int DELAY_SHOW_PREVIEW_INTERVAL = 200;
+const QEasingCurve SHOW_EASINGCURVE = QEasingCurve::OutCubic;
+const QEasingCurve HIDE_EASINGCURVE = QEasingCurve::Linear;
 
 DockPanel::DockPanel(QWidget *parent)
     : QLabel(parent),m_parentWidget(parent)
@@ -17,8 +28,6 @@ DockPanel::DockPanel(QWidget *parent)
     initWidthAnimation();
     initPluginLayout();
     initAppLayout();
-    initPluginManager();
-    initAppManager();
     initReflection();
     initScreenMask();
 
@@ -96,38 +105,16 @@ void DockPanel::initWidthAnimation()
     });
 }
 
-void DockPanel::initPluginManager()
-{
-    m_pluginManager = new DockPluginsManager(this);
-
-    connect(m_dockModeData, &DockModeData::dockModeChanged, m_pluginManager, &DockPluginsManager::onDockModeChanged);
-    connect(m_pluginManager, &DockPluginsManager::itemAppend, [=](DockItem *targetItem){
-        m_pluginLayout->insertWidget(0, targetItem);
-        connect(targetItem, &DockItem::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
-        connect(targetItem, &DockItem::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
-        connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
-    });
-    connect(m_pluginManager, &DockPluginsManager::itemInsert, [=](DockItem *baseItem, DockItem *targetItem){
-        int index = m_pluginLayout->indexOf(baseItem);
-        m_pluginLayout->insertWidget(index != -1 ? index : m_pluginLayout->count(), targetItem);
-        connect(targetItem, &DockItem::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
-        connect(targetItem, &DockItem::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
-        connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
-    });
-    connect(m_pluginManager, &DockPluginsManager::itemRemoved, [=](DockItem* item) {
-        m_pluginLayout->removeWidget(item);
-    });
-    connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
-        m_pluginManager->onPluginsSetting(getScreenRect().height - height());
-    });
-}
-
 void DockPanel::initPluginLayout()
 {
     m_pluginLayout = new DockPluginLayout(this);
     m_pluginLayout->setLayoutSpacing(m_dockModeData->getAppletsItemSpacing());
     m_pluginLayout->resize(0, m_dockModeData->getItemHeight());
+
     connect(m_pluginLayout, &DockAppLayout::sizeChanged, this, &DockPanel::resizeWithContent);
+    connect(m_pluginLayout, &DockPluginLayout::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
+    connect(m_pluginLayout, &DockPluginLayout::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
+    connect(m_pluginLayout, &DockPluginLayout::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
 }
 
 void DockPanel::initAppLayout()
@@ -137,17 +124,11 @@ void DockPanel::initAppLayout()
     m_appLayout->resize(0, m_dockModeData->getItemHeight());
     m_appLayout->setLayoutSpacing(m_dockModeData->getAppItemSpacing());
     m_appLayout->move(0, 1);
+
     connect(m_appLayout, &DockAppLayout::sizeChanged, this, &DockPanel::resizeWithContent);
-}
-
-void DockPanel::initAppManager()
-{
-    m_appManager = new DockAppManager(this);
-    connect(m_appManager, &DockAppManager::entryAdded, this, &DockPanel::onAppItemAdd);
-    connect(m_appManager, &DockAppManager::entryRemoved, this, &DockPanel::onAppItemRemove);
-
-    //Make sure the item which was dragged to the dock can be show at once
-//    connect(m_appLayout, &DockLayout::itemDocking, m_appManager, &AppManager::setDockingItemId);
+    connect(m_appLayout, &DockAppLayout::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
+    connect(m_appLayout, &DockAppLayout::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
+    connect(m_appLayout, &DockAppLayout::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
 }
 
 void DockPanel::initReflection()
@@ -234,30 +215,6 @@ void DockPanel::resizeWithContent()
         setFixedSize(m_appLayout->width() + m_pluginLayout->width(), m_dockModeData->getDockHeight());
 
         emit sizeChanged();
-    }
-}
-
-void DockPanel::onAppItemAdd(DockAppItem *item, bool delayShow)
-{
-    m_appLayout->addWidget(item);
-    connect(item, &DockAppItem::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
-    connect(item, &DockAppItem::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
-    connect(item, &DockAppItem::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
-}
-
-void DockPanel::onAppItemRemove(const QString &id)
-{
-    QList<QWidget *> tmpList = m_appLayout->widgets();
-    for (QWidget * item : tmpList)
-    {
-        DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
-        if (tmpItem && tmpItem->getItemId() == id)
-        {
-            m_appLayout->removeWidget(item);
-            tmpItem->setVisible(false);
-            tmpItem->deleteLater();
-            return;
-        }
     }
 }
 
@@ -388,34 +345,6 @@ void DockPanel::updateLeftReflection()
         m_appReflection->setFixedSize(m_appLayout->width(), 0);
 }
 
-void DockPanel::showPluginLayoutMask()
-{
-//    if (!m_pluginLayoutMask){
-//        m_pluginLayoutMask = new LayoutDropMask(this);
-//        connect(m_pluginLayoutMask, &LayoutDropMask::itemDrop, [=]{
-//            m_pluginLayoutMask->hide();
-//            m_appLayout->restoreTmpItem();
-//        });
-//        connect(m_pluginLayoutMask, &LayoutDropMask::itemMove, [=]{
-//            //readjust position and size
-//            m_pluginLayoutMask->setFixedSize(m_pluginLayout->size());
-//            m_pluginLayoutMask->move(m_pluginLayout->pos());
-//        });
-//        connect(m_pluginLayoutMask, &LayoutDropMask::itemEnter, m_appLayout, &DockLayout::removeSpacingItem);
-//    }
-//    m_pluginLayoutMask->setFixedSize(m_pluginLayout->size());
-//    m_pluginLayoutMask->move(m_pluginLayout->pos());
-//    m_pluginLayoutMask->raise();
-//    m_pluginLayoutMask->show();
-}
-
-void DockPanel::hidePluginLayoutMask()
-{
-//    if (m_pluginLayoutMask)
-//        m_pluginLayoutMask->hide();
-}
-
-
 void DockPanel::reloadStyleSheet()
 {
     m_isFashionMode = m_dockModeData->getDockMode() == Dock::FashionMode;
@@ -436,10 +365,9 @@ void DockPanel::showPanelMenu()
 
 void DockPanel::loadResources()
 {
-    m_appManager->initEntries();
+    m_appLayout->initEntries();
 //    m_appLayout->setaddItemDelayInterval(500);
-
-    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
+    m_pluginLayout->initAllPlugins();
 }
 
 void DockPanel::setY(int value)
@@ -457,46 +385,3 @@ DockPanel::~DockPanel()
 {
 
 }
-
-
-//class LayoutDropMask : public  QFrame
-//{
-//    Q_OBJECT
-//public:
-//    LayoutDropMask(QWidget *parent = 0);
-
-//signals:
-//    void itemMove();
-//    void itemEnter();
-//    void itemDrop();
-
-//protected:
-//    void dragEnterEvent(QDragEnterEvent *event);
-//    void dragMoveEvent(QDragMoveEvent *event);
-//    void dropEvent(QDropEvent *event);
-
-//};
-
-//LayoutDropMask::LayoutDropMask(QWidget *parent) : QFrame(parent)
-//{
-//    setAcceptDrops(true);
-//}
-
-//void LayoutDropMask::dragEnterEvent(QDragEnterEvent *event)
-//{
-//    emit itemEnter();
-//    event->setDropAction(Qt::MoveAction);
-//    event->accept();
-//}
-
-//void LayoutDropMask::dragMoveEvent(QDragMoveEvent *event)
-//{
-//    Q_UNUSED(event);
-//    emit itemMove();
-//}
-
-//void LayoutDropMask::dropEvent(QDropEvent *event)
-//{
-//    emit itemDrop();
-//    event->accept();
-//}

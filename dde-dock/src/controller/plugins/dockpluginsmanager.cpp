@@ -18,26 +18,22 @@ DockPluginsManager::DockPluginsManager(QObject *parent) :
 
     m_searchPaths << "/usr/lib/dde-dock/plugins/";
 
-    //    m_watcher = new QFileSystemWatcher(this);
-    //    m_watcher->addPaths(m_searchPaths);
-
-    //    connect(m_watcher, &QFileSystemWatcher::fileChanged, this, &DockPluginsManager::watchedFileChanged);
-    //    connect(m_watcher, &QFileSystemWatcher::directoryChanged, this, &DockPluginsManager::watchedDirectoryChanged);
+    connect(m_dockModeData, &DockModeData::dockModeChanged, this, &DockPluginsManager::onDockModeChanged);
 }
 
 void DockPluginsManager::initAll()
 {
-    foreach (QString path, m_searchPaths) {
+    for (QString path : m_searchPaths) {
         QDir pluginsDir(path);
 
-        foreach (QString fileName, pluginsDir.entryList(QDir::Files)) {
+        for (QString fileName : pluginsDir.entryList(QDir::Files)) {
             QString pluginPath = pluginsDir.absoluteFilePath(fileName);
 
             this->loadPlugin(pluginPath);
         }
     }
 
-    foreach (DockPluginProxy * proxy, m_proxies.values()) {
+    for (DockPluginProxy * proxy : m_proxies.values()) {
         connect(proxy, &DockPluginProxy::configurableChanged, [=](const QString &id) {
             if (proxy->plugin()->configurable(id)) {
                 m_settingWindow->onPluginAdd(proxy->plugin()->enabled(id),
@@ -91,17 +87,18 @@ void DockPluginsManager::onDockModeChanged(Dock::DockMode newMode, Dock::DockMod
     QTimer::singleShot(DELAY_NOTE_MODE_CHANGED_INTERVAL, this, SLOT(notePluginModeChanged()));
 }
 
-// private methods
 DockPluginProxy * DockPluginsManager::loadPlugin(const QString &path)
 {
     // check the file type
-    if (!QLibrary::isLibrary(path)) return NULL;
+    if (!QLibrary::isLibrary(path))
+        return NULL;
 
     QPluginLoader * pluginLoader = new QPluginLoader(path);
 
     // check the apiVersion the plugin uses
     double apiVersion = pluginLoader->metaData()["MetaData"].toObject()["api_version"].toDouble();
-    if (apiVersion != PLUGIN_API_VERSION) return NULL;
+    if (apiVersion != PLUGIN_API_VERSION)
+        return NULL;
 
 
     QObject *plugin = pluginLoader->instance();
@@ -115,9 +112,8 @@ DockPluginProxy * DockPluginsManager::loadPlugin(const QString &path)
             DockPluginProxy * proxy = new DockPluginProxy(pluginLoader, interface);
             if (proxy) {
                 m_proxies[path] = proxy;
-//                m_watcher->addPath(path);
-//                connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginsManager::onPluginItemAdded);
-//                connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginsManager::onPluginItemRemoved);
+                connect(proxy, &DockPluginProxy::itemAdded, this, &DockPluginsManager::onPluginItemAdded);
+                connect(proxy, &DockPluginProxy::itemRemoved, this, &DockPluginsManager::onPluginItemRemoved);
                 connect(m_settingWindow, &DockPluginsSettingWindow::checkedChanged, [=](QString uuid, bool checked){
                     //NOTE:one sender, multi receiver
                     if (interface->ids().indexOf(uuid) != -1) {
@@ -127,10 +123,12 @@ DockPluginProxy * DockPluginsManager::loadPlugin(const QString &path)
 
                 return proxy;
             }
-        } else {
+        }
+        else {
             qWarning() << "Load plugin failed(failed to convert) " << path;
         }
-    } else {
+    }
+    else {
         qWarning() << "Load plugin failed" << pluginLoader->errorString();
     }
 

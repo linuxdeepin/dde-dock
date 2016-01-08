@@ -1,8 +1,9 @@
 #include "dockpluginlayout.h"
+#include "../../panel/panelmenu.h"
 
 DockPluginLayout::DockPluginLayout(QWidget *parent) : MovableLayout(parent)
 {
-
+    initPluginManager();
 }
 
 QSize DockPluginLayout::sizeHint() const
@@ -30,5 +31,41 @@ QSize DockPluginLayout::sizeHint() const
     }
 
     return size;
+}
+
+void DockPluginLayout::initAllPlugins()
+{
+    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
+}
+
+void DockPluginLayout::initPluginManager()
+{
+    m_pluginManager = new DockPluginsManager(this);
+
+    connect(m_pluginManager, &DockPluginsManager::itemAppend, [=](DockItem *targetItem){
+        this->insertWidget(0, targetItem);
+        connect(targetItem, &DockItem::needPreviewShow, this, &DockPluginLayout::needPreviewShow);
+        connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
+        connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);
+    });
+    connect(m_pluginManager, &DockPluginsManager::itemInsert, [=](DockItem *baseItem, DockItem *targetItem){
+        int index = indexOf(baseItem);
+        insertWidget(index != -1 ? index : count(), targetItem);
+        connect(targetItem, &DockItem::needPreviewShow, this, &DockPluginLayout::needPreviewShow);
+        connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
+        connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);
+    });
+    connect(m_pluginManager, &DockPluginsManager::itemRemoved, [=](DockItem* item) {
+        removeWidget(item);
+    });
+    connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
+        m_pluginManager->onPluginsSetting(getScreenRect().height - parentWidget()->height());
+    });
+}
+
+DisplayRect DockPluginLayout::getScreenRect()
+{
+    DBusDisplay d;
+    return d.primaryRect();
 }
 

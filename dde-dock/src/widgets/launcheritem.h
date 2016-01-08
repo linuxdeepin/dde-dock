@@ -7,8 +7,8 @@
 #include <QObject>
 #include <QProcess>
 
-#include "appicon.h"
-#include "abstractdockitem.h"
+#include "old/appicon.h"
+#include "old/abstractdockitem.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"
 

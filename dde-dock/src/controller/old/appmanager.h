@@ -3,7 +3,7 @@
 
 #include "dbus/dbusentrymanager.h"
 #include "dbus/dbusdockedappmanager.h"
-#include "widgets/appitem.h"
+#include "widgets/old/appitem.h"
 #include "widgets/launcheritem.h"
 
 class AppManager : public QObject

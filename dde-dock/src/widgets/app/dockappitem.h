@@ -9,7 +9,7 @@
 #include "dbus/dbusclientmanager.h"
 #include "controller/dockmodedata.h"
 #include "dbus/dbusdockedappmanager.h"
-#include "../apppreview/apppreviewscontainer.h"
+#include "apppreview/apppreviewscontainer.h"
 
 struct DockAppItemData {
     QString id;

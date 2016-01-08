@@ -16,7 +16,7 @@
 #include <QJsonDocument>
 
 #include "appicon.h"
-#include "apppreview/apppreviewscontainer.h"
+#include "../app/apppreview/apppreviewscontainer.h"
 #include "appbackground.h"
 #include "abstractdockitem.h"
 #include "dbus/dbusdockentry.h"

@@ -10,8 +10,8 @@
 #include <QJsonObject>
 
 #include "dbus/dbusmenu.h"
-#include "previewwindow.h"
-#include "highlighteffect.h"
+#include "../previewwindow.h"
+#include "../highlighteffect.h"
 #include "dbus/dbusmenumanager.h"
 #include "interfaces/dockconstants.h"
 

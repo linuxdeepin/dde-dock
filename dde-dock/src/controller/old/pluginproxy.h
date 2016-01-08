@@ -1,17 +1,17 @@
-#ifndef DOCKPLUGINPROXY_H
-#define DOCKPLUGINPROXY_H
+#ifndef PLUGINPROXY_H
+#define PLUGINPROXY_H
 
-#include "widgets/dockitem.h"
+#include "widgets/old/abstractdockitem.h"
 #include "interfaces/dockplugininterface.h"
 #include "interfaces/dockpluginproxyinterface.h"
 
 class QPluginLoader;
-class DockPluginProxy : public QObject, public DockPluginProxyInterface
+class PluginProxy : public QObject, public DockPluginProxyInterface
 {
     Q_OBJECT
 public:
-    DockPluginProxy(QPluginLoader * loader, DockPluginInterface * plugin);
-    ~DockPluginProxy();
+    PluginProxy(QPluginLoader * loader, DockPluginInterface * plugin);
+    ~PluginProxy();
 
     bool isSystemPlugin();
     DockPluginInterface * plugin();
@@ -23,14 +23,14 @@ public:
     void infoChangedEvent(DockPluginInterface::InfoType type, const QString &id) Q_DECL_OVERRIDE;
 
 signals:
-    void itemAdded(DockItem * item, QString uuid);
-    void itemRemoved(DockItem * item, QString uuid);
+    void itemAdded(AbstractDockItem * item, QString uuid);
+    void itemRemoved(AbstractDockItem * item, QString uuid);
     void titleChanged(const QString &id);
     void configurableChanged(QString id);
     void enabledChanged(QString id);
 
 private:
-    QMap<QString, DockItem*> m_items;
+    QMap<QString, AbstractDockItem*> m_items;
 
     QPluginLoader * m_loader;
     DockPluginInterface * m_plugin;
@@ -39,4 +39,4 @@ private:
     void appletSizeChangedEvent(QString id);
 };
 
-#endif // DOCKPLUGINPROXY_H
+#endif // PLUGINPROXY_H

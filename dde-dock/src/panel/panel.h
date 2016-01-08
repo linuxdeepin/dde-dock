@@ -8,9 +8,9 @@
 
 #include "dbus/dbushidestatemanager.h"
 #include "controller/dockmodedata.h"
-#include "controller/appmanager.h"
-#include "widgets/appitem.h"
-#include "widgets/docklayout.h"
+#include "controller/old/appmanager.h"
+#include "widgets/old/appitem.h"
+#include "widgets/old/docklayout.h"
 #include "widgets/screenmask.h"
 #include "widgets/previewwindow.h"
 #include "widgets/reflectioneffect.h"
@@ -18,7 +18,7 @@
 #include "panelmenu.h"
 
 class LayoutDropMask;
-class DockPluginManager;
+class PluginManager;
 class Panel : public QLabel
 {
     Q_OBJECT
@@ -99,7 +99,7 @@ private:
     QWidget *m_parentWidget = NULL;
     LayoutDropMask *m_pluginLayoutMask = NULL;
     DockLayout *m_appLayout = NULL;
-    DockPluginManager *m_pluginManager = NULL;
+    PluginManager *m_pluginManager = NULL;
 
     bool m_previewShown = false;
     bool m_isFashionMode = false;
