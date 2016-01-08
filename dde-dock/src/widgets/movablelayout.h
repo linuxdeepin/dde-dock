@@ -9,27 +9,6 @@
 
 
 class QPropertyAnimation;
-class MovableSpacingItem : public QWidget
-{
-    Q_OBJECT
-    Q_PROPERTY(QSize size READ size WRITE setFixedSize)
-public:
-    explicit MovableSpacingItem(int duration, QEasingCurve::Type easingType, const QSize &targetSize, QWidget *parent = 0);
-
-signals:
-    void growFinish();
-    void declineFinish();
-
-public slots:
-    void StartGrow();
-    void StartDecline();
-
-private:
-    QSize m_targetSize;
-    QPropertyAnimation *m_growAnimation;
-    QPropertyAnimation *m_declineAnimation;
-};
-/////////////////////////////////////////////////////////////////////////
 
 class MovableLayout : public QFrame
 {
@@ -79,6 +58,7 @@ public:
 
 signals:
     void spacingItemAdded();
+    void drop(QDropEvent *event);
     void sizeChanged(QResizeEvent *event);
 
 private:
@@ -91,10 +71,12 @@ private:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    void storeDragingItem();
+    void restoreDragingItem();
     void handleDrag(const QPoint &pos);
     void updateCurrentHoverInfo(int index, const QPoint &pos);
     void addSpacingItem(QWidget *souce, MoveDirection md, const QSize &size);
-    void insertSpacingItemToLayout(int index, const QSize &size);
+    void insertSpacingItemToLayout(int index, const QSize &size, bool immediately = false);
     int getHoverIndextByPos(const QPoint &pos);
     MoveDirection getVMoveDirection(int index, const QPoint &pos);
     MoveDirection getHMoveDirection(int index, const QPoint &pos);

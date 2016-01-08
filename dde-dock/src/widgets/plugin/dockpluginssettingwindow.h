@@ -55,7 +55,6 @@ private:
     const int LINE_HEIGHT = 30;
     const int WIN_WIDTH = 230;
 
-private:
 };
 
 #endif // DOCKPLUGINSSETTINGWINDOW_H

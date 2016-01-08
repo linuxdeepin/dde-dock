@@ -6,6 +6,27 @@
 #include <QDrag>
 #include "movablelayout.h"
 
+class MovableSpacingItem : public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QSize size READ size WRITE setFixedSize)
+public:
+    explicit MovableSpacingItem(int duration, QEasingCurve::Type easingType, const QSize &targetSize, QWidget *parent = 0);
+
+signals:
+    void growFinish();
+    void declineFinish();
+
+public slots:
+    void StartGrow(bool immediately = false);
+    void StartDecline();
+
+private:
+    QSize m_targetSize;
+    QPropertyAnimation *m_growAnimation;
+    QPropertyAnimation *m_declineAnimation;
+};
+
 MovableSpacingItem::MovableSpacingItem(int duration, QEasingCurve::Type easingType, const QSize &targetSize, QWidget *parent)
     : QWidget(parent), m_targetSize(targetSize)
 {
@@ -19,8 +40,13 @@ MovableSpacingItem::MovableSpacingItem(int duration, QEasingCurve::Type easingTy
     connect(m_declineAnimation, &QPropertyAnimation::finished, this, &MovableSpacingItem::declineFinish);
 }
 
-void MovableSpacingItem::StartGrow()
+void MovableSpacingItem::StartGrow(bool immediately)
 {
+    if (immediately) {
+        setFixedSize(m_targetSize);
+        return;
+    }
+
     m_declineAnimation->stop();
 
     m_growAnimation->setStartValue(this->size());
@@ -38,8 +64,11 @@ void MovableSpacingItem::StartDecline()
 
     m_declineAnimation->start();
 }
+
+#include "movablelayout.moc"
 ///////////////////////////////////////////////////////////////////////////
 
+const int INVALID_MOVE_RADIUS = 5;
 const int MAX_SPACINGITEM_COUNT = 2;
 const int ANIMATION_DURATION = 300;
 const QSize DEFAULT_SPACING_ITEM_SIZE = QSize(48, 48);
@@ -117,6 +146,7 @@ void MovableLayout::addWidget(QWidget *widget)
 
 void MovableLayout::insertWidget(int index, QWidget *widget)
 {
+    m_widgetList.insert(index, widget);
     m_layout->insertWidget(index, widget);
 }
 
@@ -202,12 +232,31 @@ void MovableLayout::setLayoutSpacing(int spacing)
     m_layout->setSpacing(spacing);
 }
 
+QPoint basePos(0, 0);
 void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 {
+    //小范围内拖动无效
+    if (basePos.isNull()) {
+        basePos = event->pos();
+        return;
+    }
+    else {
+        if (event->pos().x() - basePos.x() > INVALID_MOVE_RADIUS ||
+                event->pos().y() - basePos.y() > INVALID_MOVE_RADIUS) {
+            basePos = QPoint(0, 0);
+        }
+        else {
+            return;
+        }
+    }
+
     int index = getHoverIndextByPos(event->pos());
     if (index == -1)
         return;
+
     m_draginItem = m_widgetList.at(index);
+    m_lastHoverIndex = index;
+    storeDragingItem();
 
     Qt::MouseButtons btn = event->buttons();
     if(btn == Qt::LeftButton)
@@ -250,8 +299,12 @@ void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
 
 void MovableLayout::dropEvent(QDropEvent *event)
 {
-    emit spacingItemAdded();
+    if (m_draginItem && event->source() == this) {
+        restoreDragingItem();
+    }
 
+    emit spacingItemAdded();
+    emit drop(event);
     event->accept();
 }
 
@@ -260,7 +313,33 @@ void MovableLayout::resizeEvent(QResizeEvent *event)
     emit sizeChanged(event);
 }
 
-void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size)
+void MovableLayout::storeDragingItem()
+{
+    m_draginItem->setVisible(false);
+    removeWidget(m_draginItem);
+    insertSpacingItemToLayout(m_lastHoverIndex, m_draginItem->size(), true);
+}
+
+void MovableLayout::restoreDragingItem()
+{
+    bool head = true;
+    switch (direction()) {
+    case QBoxLayout::TopToBottom:
+    case QBoxLayout::BottomToTop:
+        if (m_vMoveDirection == MoveBottomToTop)
+            head = false;
+    case QBoxLayout::LeftToRight:
+    case QBoxLayout::RightToLeft:
+        if (m_hMoveDirection == MoveRightToLeft)
+            head = false;
+    }
+
+    m_draginItem->setVisible(true);
+    insertWidget(head ? m_lastHoverIndex : m_lastHoverIndex + 1, m_draginItem);
+    m_draginItem = nullptr;
+}
+
+void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size, bool immediately)
 {
     //note to other
     emit spacingItemAdded();
@@ -272,7 +351,7 @@ void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size)
         nItem->deleteLater();
     });
     m_layout->insertWidget(index, nItem);
-    nItem->StartGrow();
+    nItem->StartGrow(immediately);
 }
 
 MovableLayout::MoveDirection MovableLayout::getVMoveDirection(int index, const QPoint &pos)
