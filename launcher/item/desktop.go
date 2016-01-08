@@ -4,8 +4,8 @@ import (
 	"os"
 	p "path"
 
-	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"gir/glib-2.0"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -33,6 +33,7 @@ func sendToDesktop(itemPath string) error {
 	}
 	var execPerm os.FileMode = 0100
 	os.Chmod(path, s.Mode().Perm()|execPerm)
+
 	return nil
 }
 

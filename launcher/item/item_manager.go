@@ -11,6 +11,7 @@ import (
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
 )
 
 // Manager controls all items.
@@ -115,6 +116,17 @@ func (m *Manager) SendItemToDesktop(id ItemID) error {
 
 	if err := sendToDesktop(m.GetItem(id).Path()); err != nil {
 		return err
+	}
+
+	path := getDesktopPath(m.GetItem(id).Path())
+	f := glib.NewKeyFile()
+	defer f.Free()
+
+	ok, _ := f.LoadFromFile(path, glib.KeyFileFlagsKeepComments|glib.KeyFileFlagsKeepTranslations)
+	if ok {
+		f.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-CreatedBy", "Launcher")
+		f.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-AppID", string(id))
+		SaveKeyFile(f, path)
 	}
 
 	return nil
