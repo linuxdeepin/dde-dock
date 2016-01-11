@@ -1,8 +1,10 @@
 #include "dockpluginlayout.h"
 #include "../../panel/panelmenu.h"
+#include "../../controller/dockmodedata.h"
 
 DockPluginLayout::DockPluginLayout(QWidget *parent) : MovableLayout(parent)
 {
+    setAcceptDrops(false);
     initPluginManager();
 }
 
@@ -14,15 +16,15 @@ QSize DockPluginLayout::sizeHint() const
     switch (direction()) {
     case QBoxLayout::LeftToRight:
     case QBoxLayout::RightToLeft:
-        size.setHeight(height());
+        size.setHeight(DockModeData::instance()->getAppletsItemHeight());
         for (QWidget * widget : widgets()) {
-            w += widget->width();
+            w += widget->sizeHint().width();
         }
         size.setWidth(w + getLayoutSpacing() * widgets().count());
         break;
     case QBoxLayout::TopToBottom:
     case QBoxLayout::BottomToTop:
-        size.setWidth(width());
+        size.setWidth(DockModeData::instance()->getAppletsItemWidth());
         for (QWidget * widget : widgets()) {
             h += widget->height();
         }

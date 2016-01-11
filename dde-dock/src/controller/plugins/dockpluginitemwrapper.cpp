@@ -15,18 +15,18 @@ DockPluginItemWrapper::DockPluginItemWrapper(DockPluginInterface *plugin,
     m_plugin(plugin),
     m_id(id)
 {
-    qDebug() << "PluginItemWrapper created " << m_plugin->getPluginName() << m_id;
-
     if (m_plugin) {
+        qDebug() << "PluginItemWrapper created " << m_plugin->getPluginName() << m_id;
+
         QWidget * item = m_plugin->getItem(id);
         m_pluginItemContents = m_plugin->getApplet(id);
 
         if (item) {
-            item->setParent(this);
-            item->move(0, 0);
-            this->adjustSize();
-
-//            emit widthChanged();
+            QHBoxLayout *layout = new QHBoxLayout(this);
+            layout->setContentsMargins(0, 0, 0, 0);
+            layout->setSpacing(0);
+            layout->addWidget(item);
+            adjustSize();
 
             m_display = new DBusDisplay(this);
         }

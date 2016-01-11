@@ -453,7 +453,7 @@ void MovableLayout::setEasingCurve(QEasingCurve::Type curve)
 bool MovableLayout::event(QEvent *e)
 {
     if (e->type() == QEvent::LayoutRequest && getAutoResize()) {
-        setFixedSize(m_layout->sizeHint());
+        setFixedSize(sizeHint());
     }
 
     return QFrame::event(e);

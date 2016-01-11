@@ -16,12 +16,16 @@ MainWidget::MainWidget(QWidget *parent)
     m_mainPanel = new DockPanel(this);
     connect(m_mainPanel,&DockPanel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &DockPanel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(m_mainPanel);
 #else
     m_mainPanel = new Panel(this);
     connect(m_mainPanel, &Panel::startShow, this, &MainWidget::showDock);
     connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
- #endif
+#endif
 
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
 
@@ -36,11 +40,11 @@ MainWidget::MainWidget(QWidget *parent)
 
 #ifdef NEW_DOCK_LAYOUT
     connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
-//        m_mainPanel->resizeWithContent();
+        //        m_mainPanel->resizeWithContent();
         updatePosition();
     });
     connect(m_display, &DBusDisplay::PrimaryRectChanged, [=] {
-//        m_mainPanel->resizeWithContent();
+        //        m_mainPanel->resizeWithContent();
         updatePosition();
     });
 #else
@@ -66,12 +70,20 @@ void MainWidget::updatePosition()
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
+#ifdef NEW_DOCK_LAYOUT
+        this->setFixedSize(m_mainPanel->sizeHint().width(), 1);
+#else
         this->setFixedSize(m_mainPanel->width(), 1);
+#endif
         this->move(rec.x + (rec.width - width()) / 2,
                    rec.y + rec.height - 1);//1 pixel for grab mouse enter event to show panel
     }
     else {
+#ifdef NEW_DOCK_LAYOUT
+        this->setFixedSize(m_mainPanel->sizeHint().width(), m_dmd->getDockHeight());
+#else
         this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
+#endif
         this->move(rec.x + (rec.width - width()) / 2,
                    rec.y + rec.height - this->height());
     }

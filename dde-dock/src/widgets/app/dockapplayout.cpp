@@ -1,4 +1,5 @@
 #include "dockapplayout.h"
+#include "../../controller/dockmodedata.h"
 
 DockAppLayout::DockAppLayout(QWidget *parent) : MovableLayout(parent)
 {
@@ -13,7 +14,7 @@ QSize DockAppLayout::sizeHint() const
     switch (direction()) {
     case QBoxLayout::LeftToRight:
     case QBoxLayout::RightToLeft:
-        size.setHeight(height());
+        size.setHeight(DockModeData::instance()->getItemHeight());
         for (QWidget * widget : widgets()) {
             w += widget->width();
         }
@@ -21,7 +22,7 @@ QSize DockAppLayout::sizeHint() const
         break;
     case QBoxLayout::TopToBottom:
     case QBoxLayout::BottomToTop:
-        size.setWidth(width());
+        size.setWidth(DockModeData::instance()->getNormalItemWidth());
         for (QWidget * widget : widgets()) {
             h += widget->height();
         }
