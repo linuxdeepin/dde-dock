@@ -65,7 +65,11 @@ void DockAppLayout::onAppItemRemove(const QString &id)
 void DockAppLayout::onAppItemAdd(DockAppItem *item, bool delayShow)
 {
     this->addWidget(item);
-    connect(item, &DockAppItem::needPreviewShow, this, &DockAppLayout::needPreviewShow);
+    connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
+        DockAppItem * s = qobject_cast<DockAppItem *>(sender());
+        if (s)
+            emit needPreviewShow(s, pos);
+    });
     connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
     connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
 }

@@ -111,7 +111,7 @@ void DockPanel::initAppLayout()
     m_appLayout->resize(0, m_dockModeData->getItemHeight());
     m_appLayout->setLayoutSpacing(m_dockModeData->getAppItemSpacing());
 
-    connect(m_appLayout, &DockPluginLayout::sizeChanged, this, &DockPanel::onContentsSizeChanged);
+    connect(m_appLayout, &DockAppLayout::sizeChanged, this, &DockPanel::onContentsSizeChanged);
     connect(m_appLayout, &DockAppLayout::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
     connect(m_appLayout, &DockAppLayout::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
     connect(m_appLayout, &DockAppLayout::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
@@ -200,9 +200,8 @@ void DockPanel::onNeedPreviewHide(bool immediately)
     m_globalPreview->hidePreview(interval);
 }
 
-void DockPanel::onNeedPreviewShow(QPoint pos)
+void DockPanel::onNeedPreviewShow(DockItem *item, const QPoint &pos)
 {
-    DockItem *item = qobject_cast<DockItem *>(sender());
     if (item && item->getApplet()) {
         m_previewShown = true;
         m_lastPreviewPos = pos;

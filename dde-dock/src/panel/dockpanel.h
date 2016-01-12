@@ -50,7 +50,7 @@ private:
     void onShowPanelFinished();
     void onHidePanelFinished();
     void onNeedPreviewHide(bool immediately);
-    void onNeedPreviewShow(QPoint pos);
+    void onNeedPreviewShow(DockItem *item, const QPoint &pos);
     void onNeedPreviewUpdate();
     void onContentsSizeChanged();
 

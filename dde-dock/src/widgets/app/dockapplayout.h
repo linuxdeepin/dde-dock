@@ -15,7 +15,7 @@ public:
 
 signals:
     void needPreviewHide(bool immediately);
-    void needPreviewShow(QPoint pos);
+    void needPreviewShow(DockItem *item, QPoint pos);
     void needPreviewUpdate();
 
 private:
