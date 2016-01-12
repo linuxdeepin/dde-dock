@@ -86,7 +86,7 @@
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="41"/>
         <source>Smart hide</source>
-        <translation>ocultar inteligente</translation>
+        <translation>Ocultar automáticamente</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="43"/>

@@ -4,7 +4,7 @@
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="12"/>
         <source>Are you sure to empty trash?</source>
-        <translation>정말로 휴지통을 비우시겠습니까?</translation>
+        <translation>정말 휴지통을 비우시겠습니까?</translation>
     </message>
     <message>
         <location filename="../dde-dock-trash-plugin/dialogs/cleartrashdialog.cpp" line="13"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="92"/>
         <source>_Run</source>
-        <translation>_실행</translation>
+        <translation>실행(_R)</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/controller/plugins/pluginitemwrapper.cpp" line="93"/>
@@ -125,7 +125,7 @@
     <message>
         <location filename="../dde-dock-trash-plugin/trashplugin.cpp" line="82"/>
         <source>Empty</source>
-        <translation>비어 있음</translation>
+        <translation>비었음</translation>
     </message>
 </context>
 </TS>

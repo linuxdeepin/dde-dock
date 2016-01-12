@@ -61,7 +61,7 @@
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="35"/>
         <source>Fashion mode</source>
-        <translation>Modo de moda</translation>
+        <translation>Modo Fashion</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="36"/>
@@ -76,17 +76,17 @@
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="39"/>
         <source>Keep showing</source>
-        <translation>seguir mostrando</translation>
+        <translation>Seguir mostrando</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="40"/>
         <source>Keep hidden</source>
-        <translation>mantener oculto</translation>
+        <translation>Mantener oculto</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="41"/>
         <source>Smart hide</source>
-        <translation>Ocultar inteligentemente</translation>
+        <translation>Ocultar automáticamente</translation>
     </message>
     <message>
         <location filename="../dde-dock/src/panel/panelmenu.cpp" line="43"/>
