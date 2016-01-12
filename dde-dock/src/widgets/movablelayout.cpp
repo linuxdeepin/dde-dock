@@ -212,6 +212,23 @@ int MovableLayout::count() const
     return m_widgetList.count();
 }
 
+int MovableLayout::hoverIndex() const
+{
+    bool head = true;
+    switch (direction()) {
+    case QBoxLayout::TopToBottom:
+    case QBoxLayout::BottomToTop:
+        if (m_vMoveDirection == MoveBottomToTop)
+            head = false;
+    case QBoxLayout::LeftToRight:
+    case QBoxLayout::RightToLeft:
+        if (m_hMoveDirection == MoveRightToLeft)
+            head = false;
+    }
+
+    return head ? m_lastHoverIndex : m_lastHoverIndex + 1;
+}
+
 QBoxLayout::Direction MovableLayout::direction() const
 {
     return m_layout->direction();
@@ -305,7 +322,7 @@ void MovableLayout::dropEvent(QDropEvent *event)
 
     emit spacingItemAdded();
     emit drop(event);
-    event->accept();
+//    event->accept();
 }
 
 void MovableLayout::resizeEvent(QResizeEvent *event)
@@ -322,20 +339,8 @@ void MovableLayout::storeDragingItem()
 
 void MovableLayout::restoreDragingItem()
 {
-    bool head = true;
-    switch (direction()) {
-    case QBoxLayout::TopToBottom:
-    case QBoxLayout::BottomToTop:
-        if (m_vMoveDirection == MoveBottomToTop)
-            head = false;
-    case QBoxLayout::LeftToRight:
-    case QBoxLayout::RightToLeft:
-        if (m_hMoveDirection == MoveRightToLeft)
-            head = false;
-    }
-
     m_draginItem->setVisible(true);
-    insertWidget(head ? m_lastHoverIndex : m_lastHoverIndex + 1, m_draginItem);
+    insertWidget(hoverIndex(), m_draginItem);
     m_draginItem = nullptr;
 }
 

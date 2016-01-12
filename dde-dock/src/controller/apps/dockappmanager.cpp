@@ -17,11 +17,7 @@ DockAppManager::DockAppManager(QObject *parent) : QObject(parent)
 
 void DockAppManager::initEntries()
 {
-//    LauncherItem * lItem = new LauncherItem();
-//    emit entryAdded(lItem, false);
-
     QList<QDBusObjectPath> entryList = m_entryManager->entries();
-//    for (int i = 0; i < entryList.count(); i ++)
     for (QDBusObjectPath objPath : entryList)
     {
         DBusDockEntry *dep = new DBusDockEntry(objPath.path());
@@ -46,13 +42,16 @@ void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
         if (m_ids.indexOf(tmpId) != -1) {
             item->deleteLater();
         }else{
-            qDebug() << "app entry add:" << tmpId;
-            bool isTheDropOne = m_dockingItemId != tmpId;
+            qDebug() << "app entry add:" << tmpId ;
+            bool isTheDropOne = m_dockingItemId == tmpId;
             m_ids.append(tmpId);
-            emit entryAdded(item, isTheDropOne);
-
-            if (isTheDropOne)
-                setDockingItemId("");
+            if (isTheDropOne) {
+                emit entryAdded(item);
+            }
+            else {
+                emit entryAppend(item);
+            }
+            m_dockingItemId = "";
         }
     }
 }
@@ -77,12 +76,12 @@ void DockAppManager::sortItemList()
     m_ids = m_initItems.keys();
     QStringList tmpIds = m_initItems.keys();
     for (QString id : dockedList) {  //For docked items
-        int index = tmpIds.indexOf(id);
-        if (index != -1)
-            emit entryAdded(m_initItems.take(tmpIds.at(index)), false);
+        if (tmpIds.indexOf(id) != -1) {
+            emit entryAppend(m_initItems.take(id));
+        }
     }
     tmpIds = m_initItems.keys();
     for (QString id : tmpIds) { //For undocked items
-        emit entryAdded(m_initItems.take(id), false);
+        emit entryAppend(m_initItems.take(id));
     }
 }

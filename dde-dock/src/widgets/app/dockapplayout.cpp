@@ -4,6 +4,10 @@
 DockAppLayout::DockAppLayout(QWidget *parent) : MovableLayout(parent)
 {
     initAppManager();
+
+    m_ddam = new DBusDockedAppManager(this);
+
+    connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
 }
 
 QSize DockAppLayout::sizeHint() const
@@ -38,14 +42,53 @@ void DockAppLayout::initEntries()
     m_appManager->initEntries();
 }
 
+void DockAppLayout::onDrop(QDropEvent *event)
+{
+    //form itself
+    if (event->source() == this) {
+        m_ddam->Sort(appIds());
+        event->accept();
+    }
+    //from launcher
+    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){
+        QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
+        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString()))
+            emit spacingItemAdded();
+        else {
+            m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
+            m_appManager->setDockingItemId(dataObj.value("appKey").toString());
+
+            qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
+        }
+    }
+    else {
+        //from desktop file
+        QList<QUrl> urls = event->mimeData()->urls();
+        if (!urls.isEmpty()) {
+            for (QUrl url : urls) {
+                QString us = url.toString();
+                if (us.endsWith(".desktop")) {
+                    QString appKey = us.split(QDir::separator()).last();
+                    appKey = appKey.mid(0, appKey.length() - 8);
+                    if (!m_ddam->IsDocked(appKey)) {
+                        m_ddam->ReqeustDock(appKey, "", "", "");
+                        m_appManager->setDockingItemId(appKey);
+
+                        qDebug() << "Desktop file drop to dock: " << appKey;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 void DockAppLayout::initAppManager()
 {
     m_appManager = new DockAppManager(this);
     connect(m_appManager, &DockAppManager::entryAdded, this, &DockAppLayout::onAppItemAdd);
+    connect(m_appManager, &DockAppManager::entryAppend, this, &DockAppLayout::onAppAppend);
     connect(m_appManager, &DockAppManager::entryRemoved, this, &DockAppLayout::onAppItemRemove);
-
-    //Make sure the item which was dragged to the dock can be show at once
-    //    connect(m_appLayout, &DockLayout::itemDocking, m_appManager, &AppManager::setDockingItemId);
 }
 
 void DockAppLayout::onAppItemRemove(const QString &id)
@@ -62,15 +105,42 @@ void DockAppLayout::onAppItemRemove(const QString &id)
     }
 }
 
-void DockAppLayout::onAppItemAdd(DockAppItem *item, bool delayShow)
+void DockAppLayout::onAppItemAdd(DockAppItem *item)
 {
-    this->addWidget(item);
+    insertWidget(hoverIndex(), item);
     connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
         DockAppItem * s = qobject_cast<DockAppItem *>(sender());
-        if (s)
+        if (s) {
             emit needPreviewShow(s, pos);
+        }
     });
     connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
     connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
+}
+
+void DockAppLayout::onAppAppend(DockAppItem *item)
+{
+    addWidget(item);
+    connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
+        DockAppItem * s = qobject_cast<DockAppItem *>(sender());
+        if (s) {
+            emit needPreviewShow(s, pos);
+        }
+    });
+    connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
+    connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
+}
+
+QStringList DockAppLayout::appIds()
+{
+    QStringList ids;
+    for (QWidget *w : widgets()) {
+        DockAppItem * item = qobject_cast<DockAppItem *>(w);
+        if (item) {
+            ids << item->getItemId();
+        }
+    }
+
+    return ids;
 }
 

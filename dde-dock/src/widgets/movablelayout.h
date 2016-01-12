@@ -34,6 +34,7 @@ public:
     void removeWidget(QWidget *widget);
 
     int count() const;
+    int hoverIndex() const;
 
     QBoxLayout::Direction direction() const;
     void setDirection(QBoxLayout::Direction direction);

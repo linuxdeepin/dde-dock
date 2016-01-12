@@ -3,6 +3,7 @@
 
 #include "../movablelayout.h"
 #include "../../controller/apps/dockappmanager.h"
+#include "../../dbus/dbusdockedappmanager.h"
 
 class DockAppLayout : public MovableLayout
 {
@@ -18,14 +19,19 @@ signals:
     void needPreviewShow(DockItem *item, QPoint pos);
     void needPreviewUpdate();
 
+
 private:
     void initAppManager();
 
+    void onDrop(QDropEvent *event);
     void onAppItemRemove(const QString &id);
-    void onAppItemAdd(DockAppItem *item, bool delayShow);
+    void onAppItemAdd(DockAppItem *item);
+    void onAppAppend(DockAppItem *item);
+    QStringList appIds();
 
 private:
     DockAppManager *m_appManager;
+    DBusDockedAppManager *m_ddam;
 };
 
 #endif // DOCKAPPLAYOUT_H

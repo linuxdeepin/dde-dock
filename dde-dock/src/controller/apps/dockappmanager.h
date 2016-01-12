@@ -17,7 +17,8 @@ public:
     void setDockingItemId(const QString &dockingItemId);
 
 signals:
-    void entryAdded(DockAppItem *item, bool delayShow);
+    void entryAdded(DockAppItem *item);
+    void entryAppend(DockAppItem *item);
     void entryRemoved(const QString &id);
 
 private:
@@ -30,7 +31,7 @@ private:
     QString m_dockingItemId = "";   //drop to the dock one
     DBusEntryManager *m_entryManager = NULL;
     DBusDockedAppManager *m_dockAppManager = new DBusDockedAppManager(this);
-    QMap<QString, DockAppItem *> m_initItems; //Juse for initialization <id, item>
+    QMap<QString, DockAppItem *> m_initItems; //Just for initialization <id, item>
 };
 
 #endif // DOCKAPPMANAGER_H
