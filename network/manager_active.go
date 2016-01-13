@@ -28,6 +28,7 @@ import (
 
 type activeConnection struct {
 	path dbus.ObjectPath
+	typ  string
 
 	Devices []dbus.ObjectPath
 	Id      string
@@ -214,6 +215,7 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 
 	aconn.State = nmAConn.State.Get()
 	aconn.Devices = nmAConn.Devices.Get()
+	aconn.typ = nmAConn.Type.Get()
 	aconn.Uuid = nmAConn.Uuid.Get()
 	aconn.Vpn = nmAConn.Vpn.Get()
 	if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {

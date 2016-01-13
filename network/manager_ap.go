@@ -73,14 +73,38 @@ func (m *Manager) newAccessPoint(devPath, apPath dbus.ObjectPath) (ap *accessPoi
 
 		m.accessPointsLock.Lock()
 		defer m.accessPointsLock.Unlock()
+		ignoredBefore := ap.shouldBeIgnore()
 		ap.updateProps()
-		logger.Debugf("access point properties changed %#v", ap)
+		ignoredNow := ap.shouldBeIgnore()
 		apJSON, _ := marshalJSON(ap)
-		dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
+		if ignoredNow == ignoredBefore {
+			// ignored state not changed, only send properties changed
+			// signal when not ignored
+			if ignoredNow {
+				logger.Debugf("access point(ignored) properties changed %#v", ap)
+			} else {
+				logger.Debugf("access point properties changed %#v", ap)
+				dbus.Emit(m, "AccessPointPropertiesChanged", string(devPath), apJSON)
+			}
+		} else {
+			// ignored state changed, if became ignored now, send
+			// removed signal or send added signal
+			if ignoredNow {
+				logger.Debugf("access point is ignored %#v", ap)
+				dbus.Emit(m, "AccessPointRemoved", string(devPath), apJSON)
+			} else {
+				logger.Debugf("ignored access point available %#v", ap)
+				dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+			}
+		}
 	})
 
-	apJSON, _ := marshalJSON(ap)
-	dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+	if ap.shouldBeIgnore() {
+		logger.Debugf("new access point is ignored %#v", ap)
+	} else {
+		apJSON, _ := marshalJSON(ap)
+		dbus.Emit(m, "AccessPointAdded", string(devPath), apJSON)
+	}
 
 	return
 }
@@ -115,6 +139,29 @@ func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 		r = apSecEap
 	}
 	return r
+}
+
+// Check if current access point should be ignore in front-end. Hide
+// the access point that strength less than 10 (not include 0 which
+// should be caused by the network driver issue) and not activated.
+func (a *accessPoint) shouldBeIgnore() bool {
+	if a.Strength < 10 && a.Strength != 0 &&
+		!manager.isAccessPointActivated(a.devPath, a.Ssid) {
+		return true
+	}
+	return false
+}
+
+func (m *Manager) isAccessPointActivated(devPath dbus.ObjectPath, ssid string) bool {
+	for _, path := range nmGetActiveConnections() {
+		aconn := m.newActiveConnection(path)
+		if aconn.typ == NM_SETTING_WIRELESS_SETTING_NAME && isDBusPathInArray(devPath, aconn.Devices) {
+			if ssid == string(nmGetConnectionSsidByUuid(aconn.Uuid)) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func (m *Manager) clearAccessPoints() {
@@ -207,7 +254,13 @@ func (m *Manager) isSsidExists(devPath dbus.ObjectPath, ssid string) bool {
 func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err error) {
 	m.accessPointsLock.Lock()
 	defer m.accessPointsLock.Unlock()
-	apsJSON, err = marshalJSON(m.accessPoints[path])
+	filteredAccessPoints := make([]*accessPoint, 0)
+	for _, aconn := range m.accessPoints[path] {
+		if !aconn.shouldBeIgnore() {
+			filteredAccessPoints = append(filteredAccessPoints, aconn)
+		}
+	}
+	apsJSON, err = marshalJSON(filteredAccessPoints)
 	return
 }
 

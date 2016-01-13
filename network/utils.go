@@ -24,6 +24,7 @@ package network
 import (
 	"encoding/json"
 	"fmt"
+	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 	"strings"
 )
@@ -54,6 +55,15 @@ func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 		}
 	}
 	return
+}
+
+func isDBusPathInArray(path dbus.ObjectPath, pathList []dbus.ObjectPath) bool {
+	for _, i := range pathList {
+		if i == path {
+			return true
+		}
+	}
+	return false
 }
 
 func isInterfaceNil(v interface{}) bool {

@@ -742,3 +742,14 @@ func (*testWrapper) TestDoStrToUuid(c *C.C) {
 		c.Check(d.uuid, C.Equals, doStrToUuid(d.addr))
 	}
 }
+
+func (*testWrapper) TestMarshalMobilePlanKey(c *C.C) {
+	wantJSON := "\"{\\\"IsGSM\\\":true,\\\"Name\\\":\\\"LaptopConnect (data cards)\\\",\\\"ProviderName\\\":\\\"AT\\\\u0026T\\\",\\\"APNValue\\\":\\\"Broadband\\\",\\\"APNUsageType\\\":\\\"internet\\\"}\""
+	wantValue := "{\"IsGSM\":true,\"Name\":\"LaptopConnect (data cards)\",\"ProviderName\":\"AT\\u0026T\",\"APNValue\":\"Broadband\",\"APNUsageType\":\"internet\"}"
+
+	jsonStr, _ := keyValueToJSON(wantValue, ktypeString)
+	c.Check(jsonStr, C.Equals, wantJSON)
+
+	value, _ := jsonToKeyValueString(wantJSON)
+	c.Check(value, C.Equals, wantValue)
+}
