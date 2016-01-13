@@ -53,6 +53,13 @@ QString DockAppItem::getTitle()
     return m_itemData.title;
 }
 
+QPixmap DockAppItem::iconPixmap()
+{
+    QPixmap m = m_appIcon->grab();
+    m.scaled(m_dockModeData->getAppIconSize(), m_dockModeData->getAppIconSize());
+    return m;
+}
+
 void DockAppItem::setEntryProxyer(DBusDockEntry *entryProxyer)
 {
     m_entryProxyer = entryProxyer;
