@@ -77,9 +77,9 @@ const QEasingCurve::Type ANIMATION_CURVE = QEasingCurve::OutCubic;
 MovableLayout::MovableLayout(QWidget *parent)
     : QFrame(parent),
       m_lastHoverIndex(-1),
+      m_animationDuration(ANIMATION_DURATION),
       m_draginItem(nullptr),
       m_defaultSpacingItemSize(DEFAULT_SPACING_ITEM_SIZE),
-      m_animationDuration(ANIMATION_DURATION),
       m_animationCurve(ANIMATION_CURVE)
 {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -93,9 +93,9 @@ MovableLayout::MovableLayout(QWidget *parent)
 MovableLayout::MovableLayout(QBoxLayout::Direction direction, QWidget *parent)
     : QFrame(parent),
       m_lastHoverIndex(-1),
+      m_animationDuration(ANIMATION_DURATION),
       m_draginItem(nullptr),
       m_defaultSpacingItemSize(DEFAULT_SPACING_ITEM_SIZE),
-      m_animationDuration(ANIMATION_DURATION),
       m_animationCurve(ANIMATION_CURVE)
 {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -110,6 +110,11 @@ MovableLayout::MovableLayout(QBoxLayout::Direction direction, QWidget *parent)
 int MovableLayout::indexOf(QWidget * const widget, int from) const
 {
     return m_widgetList.indexOf(widget, from);
+}
+
+QWidget *MovableLayout::dragingWidget()
+{
+    return m_draginItem;
 }
 
 QWidget *MovableLayout::widget(int index) const
@@ -175,7 +180,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                 item = qobject_cast<MovableSpacingItem *>(m_layout->itemAt(tmpIndex)->widget());
                 if (item) {
                     //note to other
-                    emit spacingItemAdded();
+                    emit requestSpacingItemsDestroy();
                     item->StartGrow();
                 }
                 else {
@@ -188,7 +193,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                 item = qobject_cast<MovableSpacingItem *>(m_layout->itemAt(tmpIndex)->widget());
                 if (item) {
                     //note to other
-                    emit spacingItemAdded();
+                    emit requestSpacingItemsDestroy();
                     item->StartGrow();
                 }
                 else {
@@ -273,7 +278,7 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 
     m_draginItem = m_widgetList.at(index);
     m_lastHoverIndex = index;
-    storeDragingItem();
+    storeDragingWidget();
 
     Qt::MouseButtons btn = event->buttons();
     if(btn == Qt::LeftButton)
@@ -285,8 +290,9 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
         mimeData->setImageData(QVariant(dataImg));
         drag->setMimeData(mimeData);
         drag->setHotSpot(QPoint(15,15));
-
         drag->setPixmap(m_draginItem->grab());
+
+        emit startDrag(drag);
 
         drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
     }
@@ -297,13 +303,15 @@ void MovableLayout::dragEnterEvent(QDragEnterEvent *event)
     handleDrag(event->pos());
 
     event->accept();
+
+    emit dragEntered();
 }
 
 void MovableLayout::dragLeaveEvent(QDragLeaveEvent *event)
 {
     Q_UNUSED(event)
 
-    emit spacingItemAdded();
+    emit requestSpacingItemsDestroy();
 }
 
 void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
@@ -317,12 +325,11 @@ void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
 void MovableLayout::dropEvent(QDropEvent *event)
 {
     if (m_draginItem && event->source() == this) {
-        restoreDragingItem();
+        restoreDragingWidget();
     }
 
-    emit spacingItemAdded();
+    emit requestSpacingItemsDestroy();
     emit drop(event);
-//    event->accept();
 }
 
 void MovableLayout::resizeEvent(QResizeEvent *event)
@@ -330,27 +337,29 @@ void MovableLayout::resizeEvent(QResizeEvent *event)
     emit sizeChanged(event);
 }
 
-void MovableLayout::storeDragingItem()
+void MovableLayout::storeDragingWidget()
 {
     m_draginItem->setVisible(false);
     removeWidget(m_draginItem);
     insertSpacingItemToLayout(m_lastHoverIndex, m_draginItem->size(), true);
 }
 
-void MovableLayout::restoreDragingItem()
+void MovableLayout::restoreDragingWidget()
 {
     m_draginItem->setVisible(true);
     insertWidget(hoverIndex(), m_draginItem);
     m_draginItem = nullptr;
+
+    emit requestSpacingItemsDestroy();
 }
 
 void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size, bool immediately)
 {
     //note to other
-    emit spacingItemAdded();
+    emit requestSpacingItemsDestroy();
 
     MovableSpacingItem *nItem = new MovableSpacingItem(m_animationDuration, m_animationCurve, size);
-    connect(this, &MovableLayout::spacingItemAdded, nItem, &MovableSpacingItem::StartDecline);
+    connect(this, &MovableLayout::requestSpacingItemsDestroy, nItem, &MovableSpacingItem::StartDecline);
     connect(nItem, &MovableSpacingItem::declineFinish, [=] {
         m_layout->removeWidget(nItem);
         nItem->deleteLater();

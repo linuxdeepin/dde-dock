@@ -1,12 +1,141 @@
+#include <QDrag>
 #include "dockapplayout.h"
 #include "../../controller/dockmodedata.h"
 
-DockAppLayout::DockAppLayout(QWidget *parent) : MovableLayout(parent)
+class DropMask : public QLabel
 {
+    Q_OBJECT
+    Q_PROPERTY(int rValue READ getRValue WRITE setRValue)
+    Q_PROPERTY(double sValue  READ getSValue WRITE setSValue)
+    int m_rValue;
+
+    double m_sValue;
+
+public:
+    DropMask(QWidget *parent = 0);
+
+    int getRValue() const {return m_rValue;}
+    double getSValue() const {return m_sValue;}
+
+public slots:
+    void setRValue(int rValue);
+    void setSValue(double sValue);
+
+signals:
+    void droped();
+    void invalidDroped();
+
+protected:
+    void dropEvent(QDropEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+};
+
+DropMask::DropMask(QWidget *parent) :
+    QLabel(parent)
+{
+    setAcceptDrops(true);
+    setWindowFlags(Qt::ToolTip);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setFixedWidth(DockModeData::instance()->getAppIconSize());
+    setFixedHeight(DockModeData::instance()->getAppIconSize());
+}
+
+void DropMask::setRValue(int rValue)
+{
+    if (!pixmap())
+        return;
+    QTransform rt;
+    rt.translate(width() / 2, height() / 2);
+    rt.rotate(rValue);
+    rt.translate(-width() / 2, -height() / 2);
+    setPixmap(pixmap()->transformed(rt));
+    m_rValue = rValue;
+}
+
+void DropMask::setSValue(double sValue)
+{
+    if (!pixmap())
+        return;
+    QTransform st(1, 0, 0, 1, width()/2, height()/2);
+    st.scale(sValue, sValue);
+    st.rotate(90);//TODO work around here
+    setPixmap(pixmap()->transformed(st));
+    m_sValue = sValue;
+}
+
+void DropMask::dropEvent(QDropEvent *e)
+{
+    DockAppLayout *layout = dynamic_cast<DockAppLayout *>(e->source());
+    if (!layout)
+        return;
+    DockAppItem *item = qobject_cast<DockAppItem *>(layout->dragingWidget());
+    if (item)
+    {
+        //restore item to dock if item is actived
+        if (item->itemData().isActived) {
+            emit invalidDroped();
+            return;
+        }
+
+        DBusDockedAppManager dda;
+        if (dda.IsDocked(item->itemData().id).value()) {
+            dda.RequestUndock(item->itemData().id);
+        }
+
+        qDebug() << "Item drop to mask:" << e->mimeData()->hasImage();
+        QImage image = qvariant_cast<QImage>(e->mimeData()->imageData());
+        if (!image.isNull()) {
+            setPixmap(QPixmap::fromImage(image).scaled(size()));
+
+            QPropertyAnimation *scaleAnimation = new QPropertyAnimation(this, "sValue");
+            scaleAnimation->setDuration(1000);
+            scaleAnimation->setStartValue(1);
+            scaleAnimation->setEndValue(0.3);
+
+            QPropertyAnimation *rotationAnimation = new QPropertyAnimation(this, "rValue");
+            rotationAnimation->setDuration(1000);
+            rotationAnimation->setStartValue(0);
+            rotationAnimation->setEndValue(360);
+
+            QParallelAnimationGroup * group = new QParallelAnimationGroup();
+            group->addAnimation(scaleAnimation);
+//            group->addAnimation(rotationAnimation);
+
+            group->start();
+            connect(group, &QPropertyAnimation::finished, [=]{
+                emit droped();
+                hide();
+
+                scaleAnimation->deleteLater();
+                rotationAnimation->deleteLater();
+                group->deleteLater();
+            });
+        }
+        else {
+            qWarning() << "Item drop to mask, Image is NULL!";
+        }
+    }
+
+
+}
+
+void DropMask::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+}
+
+#include "dockapplayout.moc"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+DockAppLayout::DockAppLayout(QWidget *parent) :
+    MovableLayout(parent), m_draging(false)
+{
+    initDropMask();
     initAppManager();
 
+    qApp->installEventFilter(this);
     m_ddam = new DBusDockedAppManager(this);
-
     connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
 }
 
@@ -37,23 +166,61 @@ QSize DockAppLayout::sizeHint() const
     return size;
 }
 
-void DockAppLayout::initEntries()
+void DockAppLayout::initEntries() const
 {
     m_appManager->initEntries();
 }
 
+bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
+{
+    if (e->type() == QEvent::Move) {
+        QMoveEvent *me = (QMoveEvent *)e;
+        if (me && m_draging && !geometry().contains(mapFromGlobal(QCursor::pos()))) {
+            //show mask to catch draging widget
+            //fixme
+            m_mask->move(QCursor::pos().x() - 15, QCursor::pos().y() - 15); //15,拖动时的鼠标位移
+            m_mask->show();
+        }
+    }
+
+    return QWidget::eventFilter(obj, e);
+}
+
+void DockAppLayout::initDropMask()
+{
+    m_mask = new DropMask;
+    connect(m_mask, &DropMask::droped, this, [=] {
+        m_draging = false;
+        emit requestSpacingItemsDestroy();
+    });
+    connect(m_mask, &DropMask::invalidDroped, this, &DockAppLayout::restoreDragingWidget);
+    connect(this, &DockAppLayout::dragEntered, m_mask, &DropMask::hide);
+    connect(this, &DockAppLayout::startDrag, this, [=](QDrag* drag) {
+        m_draging = true;
+
+        if (DockModeData::instance()->getDockMode() == Dock::FashionMode) {
+            DockAppItem *item = qobject_cast<DockAppItem *>(dragingWidget());
+            if (item) {
+                drag->setPixmap(item->iconPixmap());
+            }
+        }
+    });
+}
+
 void DockAppLayout::onDrop(QDropEvent *event)
 {
-    //form itself
-    if (event->source() == this) {
+    m_mask ->hide();
+    m_draging = false;
+
+    if (event->source() == this) {  //from itself
         m_ddam->Sort(appIds());
         event->accept();
     }
-    //from launcher
-    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){
+    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
-        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString()))
-            emit spacingItemAdded();
+        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString())) {
+            emit requestSpacingItemsDestroy();
+        }
         else {
             m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
             m_appManager->setDockingItemId(dataObj.value("appKey").toString());
@@ -61,8 +228,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
             qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
         }
     }
-    else {
-        //from desktop file
+    else {  //from desktop file
         QList<QUrl> urls = event->mimeData()->urls();
         if (!urls.isEmpty()) {
             for (QUrl url : urls) {
@@ -80,7 +246,6 @@ void DockAppLayout::onDrop(QDropEvent *event)
             }
         }
     }
-
 }
 
 void DockAppLayout::initAppManager()
@@ -97,7 +262,7 @@ void DockAppLayout::onAppItemRemove(const QString &id)
     for (QWidget * item : tmpList) {
         DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
         if (tmpItem && tmpItem->getItemId() == id) {
-            this->removeWidget(item);
+            removeWidget(item);
             tmpItem->setVisible(false);
             tmpItem->deleteLater();
             return;

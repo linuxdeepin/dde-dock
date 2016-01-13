@@ -11,7 +11,7 @@
 #include "controller/old/appmanager.h"
 #include "widgets/old/appitem.h"
 #include "widgets/old/docklayout.h"
-#include "widgets/screenmask.h"
+#include "widgets/old/screenmask.h"
 #include "widgets/previewwindow.h"
 #include "widgets/reflectioneffect.h"
 #include "dbus/dbusdisplay.h"

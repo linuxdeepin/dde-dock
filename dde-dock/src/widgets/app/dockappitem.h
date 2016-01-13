@@ -34,6 +34,7 @@ public:
     QWidget *getApplet();
     QString getItemId();
     QString getTitle();
+    QPixmap iconPixmap();
     void setEntryProxyer(DBusDockEntry *entryProxyer);
 
     bool actived() const;
