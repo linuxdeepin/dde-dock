@@ -4,7 +4,7 @@
 #include "dbus/dbusentrymanager.h"
 #include "dbus/dbusdockedappmanager.h"
 #include "widgets/old/appitem.h"
-#include "widgets/launcheritem.h"
+#include "widgets/old/launcheritem.h"
 
 class AppManager : public QObject
 {

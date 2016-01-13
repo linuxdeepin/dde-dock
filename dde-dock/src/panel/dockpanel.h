@@ -5,6 +5,7 @@
 
 #include "dbus/dbushidestatemanager.h"
 #include "controller/dockmodedata.h"
+#include "widgets/launcher/docklauncheritem.h"
 #include "widgets/plugin/dockpluginlayout.h"
 #include "widgets/app/dockapplayout.h"
 #include "widgets/previewwindow.h"
@@ -65,6 +66,7 @@ private:
     PreviewWindow *m_globalPreview = NULL;
     DBusHideStateManager *m_HSManager = NULL;
     DockModeData *m_dockModeData = DockModeData::instance();
+    DockLauncherItem *m_launcherItem = NULL;
     DockPluginLayout *m_pluginLayout = NULL;
     DockAppLayout *m_appLayout = NULL;
 

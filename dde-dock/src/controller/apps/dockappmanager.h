@@ -5,7 +5,6 @@
 #include "dbus/dbusdockentry.h"
 #include "dbus/dbusdockedappmanager.h"
 #include "widgets/app/dockappitem.h"
-#include "widgets/launcheritem.h"
 
 class DockAppManager : public QObject
 {

@@ -53,7 +53,6 @@ HEADERS += \
     src/panel/panel.h \
     src/panel/panelmenu.h \
     src/widgets/highlighteffect.h \
-    src/widgets/launcheritem.h \
     src/widgets/reflectioneffect.h \
     src/mainwidget.h \
     src/controller/signalmanager.h \
@@ -88,7 +87,9 @@ HEADERS += \
     src/widgets/old/appicon.h \
     src/widgets/old/appitem.h \
     src/widgets/old/docklayout.h \
-    src/widgets/old/screenmask.h
+    src/widgets/old/screenmask.h \
+    src/widgets/launcher/docklauncheritem.h \
+    src/widgets/old/launcheritem.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -104,7 +105,6 @@ SOURCES += \
     src/panel/panel.cpp \
     src/panel/panelmenu.cpp \
     src/widgets/highlighteffect.cpp \
-    src/widgets/launcheritem.cpp \
     src/widgets/reflectioneffect.cpp \
     src/main.cpp \
     src/mainwidget.cpp \
@@ -140,4 +140,6 @@ SOURCES += \
     src/widgets/old/appicon.cpp \
     src/widgets/old/appitem.cpp \
     src/widgets/old/docklayout.cpp \
-    src/widgets/old/screenmask.cpp
+    src/widgets/old/screenmask.cpp \
+    src/widgets/launcher/docklauncheritem.cpp \
+    src/widgets/old/launcheritem.cpp

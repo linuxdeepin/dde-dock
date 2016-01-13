@@ -122,6 +122,8 @@ void DockPanel::initMainLayout()
     QHBoxLayout *mLayout = new QHBoxLayout(this);
     mLayout->setSpacing(0);
     mLayout->setContentsMargins(0, 0, 0, 0);
+    m_launcherItem = new DockLauncherItem();
+    mLayout->addWidget(m_launcherItem, 0, Qt::AlignTop);
     mLayout->addWidget(m_appLayout, 0, Qt::AlignTop);
     mLayout->addWidget(m_pluginLayout, 0, Qt::AlignTop);
 
@@ -232,7 +234,8 @@ void DockPanel::onContentsSizeChanged()
     else {
         DisplayRect rec = getScreenRect();
         m_appLayout->setAutoResize(false);
-        m_appLayout->setFixedSize(rec.width - m_pluginLayout->width() , m_dockModeData->getItemHeight());
+
+        m_appLayout->setFixedSize(rec.width - m_pluginLayout->width() - m_launcherItem->width(), m_dockModeData->getItemHeight());
     }
 
     emit sizeChanged();
@@ -259,14 +262,13 @@ void DockPanel::showPanelMenu()
 void DockPanel::loadResources()
 {
     m_appLayout->initEntries();
-//    m_appLayout->setaddItemDelayInterval(500);
     m_pluginLayout->initAllPlugins();
 }
 
 QSize DockPanel::sizeHint() const
 {
-    int w = m_appLayout->width() + m_pluginLayout->width() ;
-    int h = m_appLayout->height() + m_pluginLayout->height();
+    int w = m_appLayout->width() + m_pluginLayout->width() + m_launcherItem->width();
+    int h = m_appLayout->height() + m_pluginLayout->height() + m_launcherItem->height();
     if (m_dockModeData->getDockMode() == Dock::FashionMode) {
         w = w + FASHION_PANEL_LPADDING + FASHION_PANEL_RPADDING;
     }
