@@ -87,12 +87,30 @@ func (p *Power) setPropPlanInfo(v string) {
 func (p *Power) OnPropertiesChanged(key string, oldv interface{}) {
 	switch key {
 	case "BatterySuspendDelay":
+		v, ok := oldv.(int32)
+		if ok && p.BatterySuspendDelay == v {
+			return
+		}
 		p.setBatterySuspendDelay(p.BatterySuspendDelay)
 	case "BatteryIdleDelay":
+		v, ok := oldv.(int32)
+		if ok && p.BatteryIdleDelay == v {
+			return
+		}
 		p.setBatteryIdleDelay(p.BatteryIdleDelay)
 	case "LinePowerSuspendDelay":
+		v, ok := oldv.(int32)
+		logger.Info("[Power] changed:", key, p.LinePowerSuspendDelay, v)
+		if ok && p.LinePowerSuspendDelay == v {
+			return
+		}
 		p.setLinePowerSuspendDelay(p.LinePowerSuspendDelay)
 	case "LinePowerIdleDelay":
+		v, ok := oldv.(int32)
+		logger.Info("[Power] changed:", key, p.LinePowerIdleDelay, v)
+		if ok && p.LinePowerIdleDelay == v {
+			return
+		}
 		p.setLinePowerIdleDelay(p.LinePowerIdleDelay)
 	}
 }

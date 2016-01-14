@@ -2,7 +2,10 @@ package inputdevices
 
 import (
 	"gir/gio-2.0"
+	"sync"
 )
+
+var gsLocker sync.Mutex
 
 func (kbd *Keyboard) handleGSettings() {
 	kbd.setting.Connect("changed", func(s *gio.Settings, key string) {
@@ -41,11 +44,14 @@ func (m *Mouse) handleGSettings() {
 			m.doubleClick()
 
 			// Sync tpad and mouse double clicck time
+			gsLocker.Lock()
 			var tpad = getTouchpad()
 			if tpad.DoubleClick.Get() == m.DoubleClick.Get() {
+				gsLocker.Unlock()
 				return
 			}
 			tpad.DoubleClick.Set(m.DoubleClick.Get())
+			gsLocker.Unlock()
 		case mouseKeyDragThreshold:
 			m.dragThreshold()
 		}
@@ -75,11 +81,14 @@ func (tpad *Touchpad) handleGSettings() {
 		case tpadKeyDoubleClick:
 			tpad.doubleClick()
 
+			gsLocker.Lock()
 			var m = getMouse()
 			if tpad.DoubleClick.Get() == m.DoubleClick.Get() {
+				gsLocker.Unlock()
 				return
 			}
 			m.DoubleClick.Set(tpad.DoubleClick.Get())
+			gsLocker.Unlock()
 		case tpadKeyDragThreshold:
 			tpad.dragThreshold()
 		case tpadKeyAcceleration:

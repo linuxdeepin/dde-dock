@@ -2,7 +2,10 @@ package appearance
 
 import (
 	"gir/gio-2.0"
+	"sync"
 )
+
+var gsLocker sync.Mutex
 
 func (m *Manager) listenGSettingChanged() {
 	m.setting.Connect("changed::theme", func(s *gio.Settings, key string) {
@@ -20,6 +23,8 @@ func (m *Manager) listenGSettingChanged() {
 
 func (m *Manager) listenBgGsettings() {
 	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		gsLocker.Lock()
+		defer gsLocker.Unlock()
 		uri := m.wrapBgSetting.GetString(gsKeyBackground)
 		err := m.doSetBackground(uri)
 		if err != nil {
@@ -40,6 +45,8 @@ func (m *Manager) listenBgGsettings() {
 		return
 	}
 	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		gsLocker.Lock()
+		defer gsLocker.Unlock()
 		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
 		if uri == m.wrapBgSetting.GetString(gsKeyBackground) {
 			return
