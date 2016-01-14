@@ -60,14 +60,15 @@ QPushButton#AppPreviewLoaderFrameCloseButton:pressed {
 }
 
 AppPreviewLoader {
-    border-radius: 3px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgba(255,255,255,0.1);
+    /*radius is 4 and width is 2 so slice should be 4 + 2 = 6*/
+    border: 6px solid transparent;
+    border-image: url(:/images/resources/dark/images/preview_border_normal.png) 6 repeat;
 }
 
 AppPreviewLoader[isHover="true"] {
-    border-color: rgba(255,255,255,0.5);
+    /*radius is 4 and width is 2 so slice should be 4 + 2 = 6*/
+    border: 6px solid transparent;
+    border-image: url(:/images/resources/dark/images/preview_border_hover.png) 6 repeat;
 }
 
 QLabel#AppPreviewLoaderFrameTitle {

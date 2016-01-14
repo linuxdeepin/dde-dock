@@ -11,7 +11,7 @@
 
 const int BUTTON_SIZE = Dock::APP_PREVIEW_CLOSEBUTTON_SIZE;
 const int TITLE_HEIGHT = 25;
-const int BORDER_WIDTH = 2;
+const int FRAME_BORDER_WIDTH = 2;
 
 ////////////////////////////////////////
 ///                             \\// ///
@@ -184,8 +184,11 @@ void AppPreviewLoaderFrame::updateTitleGeometry()
         QFontMetrics fm(m_titleLabel->font());
         m_titleLabel->setText(fm.elidedText(m_titleLabel->text(), Qt::ElideRight, width() * 4 / 5));
 
-        m_titleLabel->setFixedSize(m_previewLoader->width() - BORDER_WIDTH * 2, TITLE_HEIGHT);
-        m_titleLabel->move(BORDER_WIDTH, BUTTON_SIZE / 2 + m_previewLoader->height() - TITLE_HEIGHT - BORDER_WIDTH);
+        int titleBorderWidth = 1;
+        m_titleLabel->setFixedSize(m_previewLoader->width() - (FRAME_BORDER_WIDTH + titleBorderWidth) * 2,
+                                   TITLE_HEIGHT - titleBorderWidth*2);
+        m_titleLabel->move(FRAME_BORDER_WIDTH + titleBorderWidth,
+                           BUTTON_SIZE / 2 + m_previewLoader->height() - TITLE_HEIGHT - FRAME_BORDER_WIDTH + titleBorderWidth);
     }
     else
         m_titleLabel->setVisible(false);

@@ -9,6 +9,8 @@
         <file>resources/dark/images/setting_close_small_hover.png</file>
         <file>resources/dark/images/setting_close_small_normal.png</file>
         <file>resources/dark/images/setting_close_small_press.png</file>
+        <file>resources/dark/images/preview_border_hover.png</file>
+        <file>resources/dark/images/preview_border_normal.png</file>
     </qresource>
     <qresource prefix="/qss">
         <file>resources/dark/qss/dde-dock.qss</file>
