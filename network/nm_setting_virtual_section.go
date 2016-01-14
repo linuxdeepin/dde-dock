@@ -24,6 +24,7 @@ const (
 	sectionVpnL2tp            = NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
 	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
 	sectionVpnL2tpIpsec       = NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
+	sectionVpnStrongswan      = NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME
 	sectionVpnOpenconnect     = NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
 	sectionVpnOpenvpn         = NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME
 	sectionVpnOpenvpnAdvanced = NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME
@@ -52,6 +53,7 @@ const (
 	NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "alias-vpn-openvpn-proxies"
 	NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME             = "alias-vpn-pptp"
 	NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME         = "alias-vpn-pptp-ppp"
+	NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME       = "alias-vpn-strongswan"
 	NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME             = "alias-vpn-vpnc"
 	NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME    = "alias-vpn-vpnc-advanced"
 )
@@ -84,6 +86,8 @@ func getRealSectionName(name string) (realName string) {
 	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		realName = sectionVpn
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
+		realName = sectionVpn
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
 		realName = sectionVpn
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		realName = sectionVpn
@@ -166,6 +170,7 @@ const (
 	vsectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY // -> sectionVpnOpenVpnSecurity
 	vsectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  // -> sectionVpnOpenVpnTlsauth
 	vsectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES  // -> sectionVpnOpenVpnProxies
+	vsectionVpnStrongswan      = NM_SETTING_VS_VPN_STRONGSWAN       // -> sectionVpnStrongswan
 	vsectionVpnPptp            = NM_SETTING_VS_VPN_PPTP             // -> sectionVpnPptp
 	vsectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP         // -> sectionVpnPptpPpp
 	vsectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC             // -> sectionVpnVpnc
@@ -273,6 +278,12 @@ func doGetRelatedVsections(data connectionData, keepAll bool) (vsections []strin
 			vsectionVpnPptpPpp,
 			vsectionIpv4,
 		}
+	case connectionVpnStrongswan:
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpn,
+			vsectionIpv4,
+		}
 	case connectionVpnVpnc:
 		vsections = []string{
 			vsectionGeneral,
@@ -367,6 +378,8 @@ func doGetRelatedSectionsOfVsection(data connectionData, vsection string, keepAl
 			sections = []string{sectionVpnOpenvpn}
 		case connectionVpnPptp:
 			sections = []string{sectionVpnPptp}
+		case connectionVpnStrongswan:
+			sections = []string{sectionVpnStrongswan}
 		case connectionVpnVpnc:
 			sections = []string{sectionVpnVpnc}
 		}
@@ -506,6 +519,11 @@ func isVsectionExpandedDefault(data connectionData, vsection string) (expanded b
 			expanded = true
 		}
 	case connectionVpnPptp:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnStrongswan:
 		switch vsection {
 		case vsectionVpn:
 			expanded = true

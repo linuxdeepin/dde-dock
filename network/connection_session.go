@@ -97,6 +97,8 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newVpnOpenconnectConnectionData(id, s.Uuid)
 	case connectionVpnPptp:
 		s.data = newVpnPptpConnectionData(id, s.Uuid)
+	case connectionVpnStrongswan:
+		s.data = newVpnStrongswanConnectionData(id, s.Uuid)
 	case connectionVpnVpnc:
 		s.data = newVpnVpncConnectionData(id, s.Uuid)
 	case connectionVpnOpenvpn:

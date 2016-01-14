@@ -43,6 +43,7 @@ func getLocalSupportedVpnTypes() (vpnTypes []string) {
 		connectionVpnOpenconnect,
 		connectionVpnOpenvpn,
 		connectionVpnPptp,
+		connectionVpnStrongswan,
 		connectionVpnVpnc,
 	} {
 		_, program, _, _ := parseVncNameFile(getVpnNameFile(vpnType))
@@ -70,6 +71,8 @@ func getVpnNameFile(vpnType string) (nameFile string) {
 		nameFile = nmVpnOpenvpnNameFile
 	case connectionVpnPptp:
 		nameFile = nmVpnPptpNameFile
+	case connectionVpnStrongswan:
+		nameFile = nmVpnStrongswanNameFile
 	case connectionVpnVpnc:
 		nameFile = nmVpnVpncNameFile
 	}
@@ -136,6 +139,7 @@ func isSettingVpnPluginSecretKey(section, key string) bool {
 		case NM_SETTING_VPN_PPTP_KEY_PASSWORD:
 			return true
 		}
+	case sectionVpnStrongswan:
 	case sectionVpnVpnc:
 		switch key {
 		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:

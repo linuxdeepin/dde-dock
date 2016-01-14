@@ -88,6 +88,7 @@ const (
 	connectionVpnL2tp         = "vpn-l2tp"
 	connectionVpnOpenconnect  = "vpn-openconnect"
 	connectionVpnOpenvpn      = "vpn-openvpn"
+	connectionVpnStrongswan   = "vpn-strongswan"
 	connectionVpnPptp         = "vpn-pptp"
 	connectionVpnVpnc         = "vpn-vpnc"
 )
@@ -117,6 +118,7 @@ var supportedConnectionTypes = []string{
 	connectionVpnOpenconnect,
 	connectionVpnOpenvpn,
 	connectionVpnPptp,
+	connectionVpnStrongswan,
 	connectionVpnVpnc,
 }
 
@@ -155,6 +157,8 @@ func getCustomConnectionType(data connectionData) (connType string) {
 			connType = connectionVpnOpenvpn
 		case NM_DBUS_SERVICE_PPTP:
 			connType = connectionVpnPptp
+		case NM_DBUS_SERVICE_STRONGSWAN:
+			connType = connectionVpnStrongswan
 		case NM_DBUS_SERVICE_VPNC:
 			connType = connectionVpnVpnc
 		}
@@ -222,6 +226,8 @@ func genConnectionId(connType string) (id string) {
 		idPrefix = Tr("VPN OpenVPN")
 	case connectionVpnPptp:
 		idPrefix = Tr("VPN PPTP")
+	case connectionVpnStrongswan:
+		idPrefix = Tr("VPN StrongSwan")
 	case connectionVpnVpnc:
 		idPrefix = Tr("VPN VPNC")
 	}

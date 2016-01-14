@@ -470,6 +470,8 @@ func logicSetSettingVkVpnType(data connectionData, vpnType string) (err error) {
 	case connectionVpnOpenvpn:
 		initSettingSectionVpnOpenvpn(data)
 		initSettingSectionIpv6(data)
+	case connectionVpnStrongswan:
+		initSettingSectionVpnStrongswan(data)
 	case connectionVpnVpnc:
 		initSettingSectionVpnVpnc(data)
 	default:
@@ -485,12 +487,14 @@ func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
 		switch vpnType {
 		case connectionVpnL2tp:
 			missingPlugin = "network-manager-l2tp"
-		case connectionVpnPptp:
-			missingPlugin = "network-manager-pptp"
 		case connectionVpnOpenconnect:
 			missingPlugin = "network-manager-openconnect"
 		case connectionVpnOpenvpn:
 			missingPlugin = "network-manager-openvpn"
+		case connectionVpnPptp:
+			missingPlugin = "network-manager-pptp"
+		case connectionVpnStrongswan:
+			missingPlugin = "network-manager-strongswan"
 		case connectionVpnVpnc:
 			missingPlugin = "network-manager-vpnc"
 		default:

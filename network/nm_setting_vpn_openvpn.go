@@ -350,9 +350,7 @@ func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []stri
 func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
-		// TODO get openvpn cipher
-		// "/usr/sbin/openvpn"
-		// "/sbin/openvpn"
+		// TODO get openvpn cipher "/usr/sbin/openvpn" "/sbin/openvpn"
 		// --show-ciphers
 		values = []kvalue{
 			kvalue{"", Tr("Default")},
@@ -535,6 +533,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 			NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP,
 		)...)
 	}
+	setSettingVpnOpenvpnKeyConnectionType(data, value)
 	return
 }
 func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (err error) {

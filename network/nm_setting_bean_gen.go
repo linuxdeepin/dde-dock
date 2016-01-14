@@ -31,6 +31,7 @@ const (
 	NM_SETTING_VS_VPN_OPENVPN_ADVANCED = "vs-vpn-openvpn-advanced"
 	NM_SETTING_VS_VPN_PPTP             = "vs-vpn-pptp"
 	NM_SETTING_VS_VPN_PPTP_PPP         = "vs-vpn-pptp-ppp"
+	NM_SETTING_VS_VPN_STRONGSWAN       = "vs-vpn-strongswan"
 	NM_SETTING_VS_VPN_VPNC             = "vs-vpn-vpnc"
 	NM_SETTING_VS_VPN_VPNC_ADVANCED    = "vs-vpn-vpnc-advanced"
 	NM_SETTING_VS_IPV4                 = "vs-ipv4"
@@ -139,8 +140,8 @@ func initVirtualSections() {
 		Name:            Tr("Wi-Fi"),
 		Keys: []*GeneralKeyInfo{
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mode", Name: Tr("Mode"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-11-wireless", Key: "band", Name: Tr("Band"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-11-wireless", Key: "channel", Name: Tr("Channel"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-11-wireless", Key: "band", Name: Tr("Band"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-11-wireless", Key: "channel", Name: Tr("Channel"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineEditComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "cloned-mac-address", Name: Tr("Cloned MAC Addr"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "vk-enable-mtu", Name: Tr("Customize MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -178,7 +179,7 @@ func initVirtualSections() {
 	}
 	virtualSections[NM_SETTING_VS_VPN] = VsectionInfo{
 		VirtualSection:  NM_SETTING_VS_VPN,
-		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME},
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME},
 		Name:            Tr("VPN"),
 		Keys: []*GeneralKeyInfo{
 			&GeneralKeyInfo{Section: "vs-vpn", Key: "vk-vpn-missing-plugin", Name: Tr("Need VPN Plugin"), WidgetType: "EditLineMissingPackage", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -215,6 +216,15 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-pptp", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp", Key: "domain", Name: Tr("NT Domain"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "address", Name: Tr("Address"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "certificate", Name: Tr("Certificate"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "method", Name: Tr("Authentication"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "usercert", Name: Tr("Client Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "userkey", Name: Tr("Client Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "virtual", Name: Tr("Request an Inner IP Address"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "encap", Name: Tr("Enforce UDP Encapsulation"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "ipcomp", Name: Tr("Use IP Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-vpnc", Key: "IPSec gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-vpnc", Key: "Xauth username", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-vpnc", Key: "Xauth password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -257,11 +267,11 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "vk-require-mppe", Name: Tr("Use MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "vk-mppe-security", Name: Tr("Security"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "mppe-stateful", Name: Tr("Stateful MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "nobsdcomp", Name: Tr("No BSD Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "nodeflate", Name: Tr("No Deflate Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-l2tp-ppp", Key: "no-vj-comp", Name: Tr("No TCP Header Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -381,15 +391,31 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "vk-require-mppe", Name: Tr("Use MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "vk-mppe-security", Name: Tr("Security"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "mppe-stateful", Name: Tr("Stateful MPPE"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-eap", Name: Tr("Refuse EAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-pap", Name: Tr("Refuse PAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-chap", Name: Tr("Refuse CHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-mschap", Name: Tr("Refuse MSCHAP Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "refuse-mschapv2", Name: Tr("Refuse MSCHAPv2 Authentication"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "nobsdcomp", Name: Tr("No BSD Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "nodeflate", Name: Tr("No Deflate Data Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "no-vj-comp", Name: Tr("No TCP Header Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-pptp-ppp", Key: "vk-enable-lcp-echo", Name: Tr("Send PPP Echo Packets"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+		},
+	}
+	virtualSections[NM_SETTING_VS_VPN_STRONGSWAN] = VsectionInfo{
+		VirtualSection:  NM_SETTING_VS_VPN_STRONGSWAN,
+		relatedSections: []string{NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME},
+		Name:            Tr("VPN"),
+		Keys: []*GeneralKeyInfo{
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "address", Name: Tr("Address"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "certificate", Name: Tr("Certificate"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "method", Name: Tr("Authentication"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "usercert", Name: Tr("Client Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "userkey", Name: Tr("Client Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "virtual", Name: Tr("Request an Inner IP Address"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "encap", Name: Tr("Enforce UDP Encapsulation"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "ipcomp", Name: Tr("Use IP Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
 	virtualSections[NM_SETTING_VS_VPN_VPNC] = VsectionInfo{
@@ -1510,6 +1536,8 @@ func generalIsKeyInSettingSection(section, key string) bool {
 		return isKeyInSettingVpnPptp(key)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		return isKeyInSettingVpnPptpPpp(key)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		return isKeyInSettingVpnStrongswan(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		return isKeyInSettingVpnVpnc(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1574,6 +1602,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		t = getSettingVpnPptpKeyType(key)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		t = getSettingVpnPptpPppKeyType(key)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		t = getSettingVpnStrongswanKeyType(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		t = getSettingVpnVpncKeyType(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1636,6 +1666,8 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingVpnPptpAvailableKeys(data)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		keys = getSettingVpnPptpPppAvailableKeys(data)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		keys = getSettingVpnStrongswanAvailableKeys(data)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		keys = getSettingVpnVpncAvailableKeys(data)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1698,6 +1730,8 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingVpnPptpAvailableValues(data, key)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		values = getSettingVpnPptpPppAvailableValues(data, key)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		values = getSettingVpnStrongswanAvailableValues(data, key)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		values = getSettingVpnVpncAvailableValues(data, key)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1761,6 +1795,8 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingVpnPptpValues(data)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		errs = checkSettingVpnPptpPppValues(data)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		errs = checkSettingVpnStrongswanValues(data)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		errs = checkSettingVpnVpncValues(data)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1825,6 +1861,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		valueJSON = generalGetSettingVpnPptpKeyJSON(data, key)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		valueJSON = generalGetSettingVpnPptpPppKeyJSON(data, key)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		valueJSON = generalGetSettingVpnStrongswanKeyJSON(data, key)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		valueJSON = generalGetSettingVpnVpncKeyJSON(data, key)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1889,6 +1927,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		err = generalSetSettingVpnPptpKeyJSON(data, key, valueJSON)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		err = generalSetSettingVpnPptpPppKeyJSON(data, key, valueJSON)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		err = generalSetSettingVpnStrongswanKeyJSON(data, key, valueJSON)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		err = generalSetSettingVpnVpncKeyJSON(data, key, valueJSON)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -1949,6 +1989,8 @@ func generalGetSettingDefaultValue(section, key string) (value interface{}) {
 		value = getSettingVpnPptpDefaultValue(key)
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		value = getSettingVpnPptpPppDefaultValue(key)
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		value = getSettingVpnStrongswanDefaultValue(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		value = getSettingVpnVpncDefaultValue(key)
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -11299,6 +11341,503 @@ func removeSettingVpnPptpKeyLcpEchoFailure(data connectionData) {
 }
 func removeSettingVpnPptpKeyLcpEchoInterval(data connectionData) {
 	removeSettingKey(data, NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME, NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL)
+}
+
+// Origin file name ../nm_setting_vpn_strongswan_gen.go
+// Get key type
+func getSettingVpnStrongswanKeyType(key string) (t ktype) {
+	switch key {
+	default:
+		t = ktypeUnknown
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USER:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		t = ktypeUint32
+	}
+	return
+}
+
+// Check is key in current setting section
+func isKeyInSettingVpnStrongswan(key string) bool {
+	switch key {
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USER:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		return true
+	}
+	return false
+}
+
+// Get key's default value
+func getSettingVpnStrongswanDefaultValue(key string) (value interface{}) {
+	switch key {
+	default:
+		logger.Error("invalid key:", key)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USER:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
+		value = false
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
+		value = false
+	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
+		value = false
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		value = uint32(0)
+	}
+	return
+}
+
+// Get JSON value generally
+func generalGetSettingVpnStrongswanKeyJSON(data connectionData, key string) (value string) {
+	switch key {
+	default:
+		logger.Error("generalGetSettingVpnStrongswanKeyJSON: invalide key", key)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS:
+		value = getSettingVpnStrongswanKeyAddressJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE:
+		value = getSettingVpnStrongswanKeyCertificateJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+		value = getSettingVpnStrongswanKeyMethodJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USER:
+		value = getSettingVpnStrongswanKeyUserJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT:
+		value = getSettingVpnStrongswanKeyUsercertJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
+		value = getSettingVpnStrongswanKeyUserkeyJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
+		value = getSettingVpnStrongswanKeyVirtualJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
+		value = getSettingVpnStrongswanKeyEncapJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
+		value = getSettingVpnStrongswanKeyIpcompJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		value = getSettingVpnStrongswanKeyPasswordFlagsJSON(data)
+	}
+	return
+}
+
+// Set JSON value generally
+func generalSetSettingVpnStrongswanKeyJSON(data connectionData, key, valueJSON string) (err error) {
+	switch key {
+	default:
+		logger.Error("generalSetSettingVpnStrongswanKeyJSON: invalide key", key)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS:
+		err = setSettingVpnStrongswanKeyAddressJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE:
+		err = logicSetSettingVpnStrongswanKeyCertificateJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+		err = logicSetSettingVpnStrongswanKeyMethodJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USER:
+		err = setSettingVpnStrongswanKeyUserJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT:
+		err = logicSetSettingVpnStrongswanKeyUsercertJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
+		err = logicSetSettingVpnStrongswanKeyUserkeyJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
+		err = setSettingVpnStrongswanKeyVirtualJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
+		err = setSettingVpnStrongswanKeyEncapJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
+		err = setSettingVpnStrongswanKeyIpcompJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		err = setSettingVpnStrongswanKeyPasswordFlagsJSON(data, valueJSON)
+	}
+	return
+}
+
+// Check if key exists
+func isSettingVpnStrongswanKeyAddressExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS)
+}
+func isSettingVpnStrongswanKeyCertificateExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE)
+}
+func isSettingVpnStrongswanKeyMethodExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD)
+}
+func isSettingVpnStrongswanKeyUserExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+}
+func isSettingVpnStrongswanKeyUsercertExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
+}
+func isSettingVpnStrongswanKeyUserkeyExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
+}
+func isSettingVpnStrongswanKeyVirtualExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
+}
+func isSettingVpnStrongswanKeyEncapExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP)
+}
+func isSettingVpnStrongswanKeyIpcompExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
+}
+func isSettingVpnStrongswanKeyPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
+}
+
+// Ensure section and key exists and not empty
+func ensureSectionSettingVpnStrongswanExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingSectionExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME) {
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME))
+	}
+	sectionData, _ := data[NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, fmt.Sprintf(NM_KEY_ERROR_EMPTY_SECTION, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME))
+	}
+}
+func ensureSettingVpnStrongswanKeyAddressNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyAddressExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyAddress(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyCertificateNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyCertificateExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyCertificate(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyMethodNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyMethodExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyMethod(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyUserNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyUserExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyUser(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyUsercertNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyUsercertExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyUsercert(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyUserkeyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyUserkeyExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyUserkey(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyVirtualNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyVirtualExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyEncapNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyEncapExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyIpcompNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyIpcompExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+
+// Getter
+func getSettingVpnStrongswanKeyAddress(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyCertificate(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyMethod(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyUser(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyUsercert(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyUserkey(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyVirtual(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyEncap(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyIpcomp(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
+	value = interfaceToUint32(ivalue)
+	return
+}
+
+// Setter
+func setSettingVpnStrongswanKeyAddress(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS, value)
+}
+func setSettingVpnStrongswanKeyCertificate(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, value)
+}
+func setSettingVpnStrongswanKeyMethod(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD, value)
+}
+func setSettingVpnStrongswanKeyUser(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER, value)
+}
+func setSettingVpnStrongswanKeyUsercert(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, value)
+}
+func setSettingVpnStrongswanKeyUserkey(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value)
+}
+func setSettingVpnStrongswanKeyVirtual(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, value)
+}
+func setSettingVpnStrongswanKeyEncap(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP, value)
+}
+func setSettingVpnStrongswanKeyIpcomp(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, value)
+}
+func setSettingVpnStrongswanKeyPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, value)
+}
+
+// JSON Getter
+func getSettingVpnStrongswanKeyAddressJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS))
+	return
+}
+func getSettingVpnStrongswanKeyCertificateJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE))
+	return
+}
+func getSettingVpnStrongswanKeyMethodJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_METHOD))
+	return
+}
+func getSettingVpnStrongswanKeyUserJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USER))
+	return
+}
+func getSettingVpnStrongswanKeyUsercertJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT))
+	return
+}
+func getSettingVpnStrongswanKeyUserkeyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY))
+	return
+}
+func getSettingVpnStrongswanKeyVirtualJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL))
+	return
+}
+func getSettingVpnStrongswanKeyEncapJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP))
+	return
+}
+func getSettingVpnStrongswanKeyIpcompJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP))
+	return
+}
+func getSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
+	return
+}
+
+// JSON Setter
+func setSettingVpnStrongswanKeyAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS))
+}
+func setSettingVpnStrongswanKeyCertificateJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE))
+}
+func setSettingVpnStrongswanKeyMethodJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_METHOD))
+}
+func setSettingVpnStrongswanKeyUserJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USER))
+}
+func setSettingVpnStrongswanKeyUsercertJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT))
+}
+func setSettingVpnStrongswanKeyUserkeyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY))
+}
+func setSettingVpnStrongswanKeyVirtualJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL))
+}
+func setSettingVpnStrongswanKeyEncapJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP))
+}
+func setSettingVpnStrongswanKeyIpcompJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP))
+}
+func setSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
+}
+
+// Logic JSON Setter
+func logicSetSettingVpnStrongswanKeyCertificateJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingVpnStrongswanKeyCertificateJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingVpnStrongswanKeyCertificateExists(data) {
+		value := getSettingVpnStrongswanKeyCertificate(data)
+		err = logicSetSettingVpnStrongswanKeyCertificate(data, value)
+	}
+	return
+}
+func logicSetSettingVpnStrongswanKeyMethodJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingVpnStrongswanKeyMethodJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingVpnStrongswanKeyMethodExists(data) {
+		value := getSettingVpnStrongswanKeyMethod(data)
+		err = logicSetSettingVpnStrongswanKeyMethod(data, value)
+	}
+	return
+}
+func logicSetSettingVpnStrongswanKeyUsercertJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingVpnStrongswanKeyUsercertJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingVpnStrongswanKeyUsercertExists(data) {
+		value := getSettingVpnStrongswanKeyUsercert(data)
+		err = logicSetSettingVpnStrongswanKeyUsercert(data, value)
+	}
+	return
+}
+func logicSetSettingVpnStrongswanKeyUserkeyJSON(data connectionData, valueJSON string) (err error) {
+	err = setSettingVpnStrongswanKeyUserkeyJSON(data, valueJSON)
+	if err != nil {
+		return
+	}
+	if isSettingVpnStrongswanKeyUserkeyExists(data) {
+		value := getSettingVpnStrongswanKeyUserkey(data)
+		err = logicSetSettingVpnStrongswanKeyUserkey(data, value)
+	}
+	return
+}
+
+// Remover
+func removeSettingVpnStrongswanKeyAddress(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS)
+}
+func removeSettingVpnStrongswanKeyCertificate(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE)
+}
+func removeSettingVpnStrongswanKeyMethod(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD)
+}
+func removeSettingVpnStrongswanKeyUser(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+}
+func removeSettingVpnStrongswanKeyUsercert(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
+}
+func removeSettingVpnStrongswanKeyUserkey(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
+}
+func removeSettingVpnStrongswanKeyVirtual(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
+}
+func removeSettingVpnStrongswanKeyEncap(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP)
+}
+func removeSettingVpnStrongswanKeyIpcomp(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
+}
+func removeSettingVpnStrongswanKeyPasswordFlags(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
 }
 
 // Origin file name ../nm_setting_vpn_vpnc_gen.go
