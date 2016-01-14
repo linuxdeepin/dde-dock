@@ -108,7 +108,7 @@ void MainItem::dropEvent(QDropEvent *event)
     if (event->source())
         return;
 
-    if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from desktop or launcher
+    if (event->mimeData()->formats().indexOf("RequestDock") != -1) {    //from desktop or launcher
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (!dataObj.isEmpty()){
             QString appKey = dataObj.value("appKey").toString();
@@ -117,45 +117,72 @@ void MainItem::dropEvent(QDropEvent *event)
                 return;
             event->ignore();
 
-            ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
-            //TODO: need real icon name
-            dialog->setIcon(getThemeIconPath(appKey));
-            QString message = tr("Are you sure to uninstall %1?").arg(appName);
-            dialog->setMessage(message);
-            connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
-                dialog->deleteLater();
-                if (key == 1){
-                    qWarning() << "Uninstall application:" << appKey << appName;
-                    m_launcher->RequestUninstall(appKey, true);
-                }
-            });
-            dialog->exec();
+            execUninstall(appKey, appName);
         }
     }
-    else//File or Dirctory
-    {
-        QStringList files;
-        foreach (QUrl fileUrl, event->mimeData()->urls())
-            files << fileUrl.path();
-
-        QDBusPendingReply<QString, QDBusObjectPath, QString> tmpReply = m_dfo->NewTrashJob(files, false, "", "", "");
-        QDBusObjectPath op = tmpReply.argumentAt(1).value<QDBusObjectPath>();
-        DBusTrashJob * dtj = new DBusTrashJob(op.path(), this);
-        connect(dtj, &DBusTrashJob::Done, dtj, &DBusTrashJob::deleteLater);
-        connect(dtj, &DBusTrashJob::Done, [=](){
-            updateIcon(false);
-        });
-
-        if (dtj->isValid())
-            dtj->Execute();
-
-        qWarning()<< op.path() << "Move files to trash: "<< files;
+    else {//File or Dirctory
+        trashFiles(event->mimeData()->urls());
     }
 }
 
 void MainItem::onRequestUpdateIcon()
 {
     updateIcon(false);
+}
+
+void MainItem::execUninstall(const QString &appKey, const QString &appName)
+{
+    ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
+    //TODO: need real icon name
+    dialog->setIcon(getThemeIconPath(appKey));
+    QString message = tr("Are you sure to uninstall %1?").arg(appName);
+    dialog->setMessage(message);
+    connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
+        dialog->deleteLater();
+        if (key == 1){
+            qWarning() << "Uninstall application:" << appKey << appName;
+            m_launcher->RequestUninstall(appKey, true);
+        }
+    });
+    dialog->exec();
+}
+
+void MainItem::trashFiles(const QList<QUrl> &files)
+{
+    QStringList normalFiles;
+    for (QUrl url : files) {
+        //try to uninstall app by .desktop file
+        if (url.fileName().endsWith(".desktop")) {
+            QSettings ds(url.path(), QSettings::IniFormat);
+            ds.beginGroup("Desktop Entry");
+            QString appKey = ds.value("X-Deepin-AppID").toString();
+            if (!appKey.isEmpty()) {
+                QString l(qgetenv(QString("LANGUAGE").toUtf8().data()));
+                execUninstall(appKey, ds.value(QString("Name[%1]").arg(l)).toString());
+            }
+            else {
+                normalFiles << url.path();
+            }
+            ds.endGroup();
+        }
+        else {
+            normalFiles << url.path();
+        }
+    }
+
+    //remove normal files
+    QDBusPendingReply<QString, QDBusObjectPath, QString> tmpReply = m_dfo->NewTrashJob(normalFiles, false, "", "", "");
+    QDBusObjectPath op = tmpReply.argumentAt(1).value<QDBusObjectPath>();
+    DBusTrashJob * dtj = new DBusTrashJob(op.path(), this);
+    connect(dtj, &DBusTrashJob::Done, dtj, &DBusTrashJob::deleteLater);
+    connect(dtj, &DBusTrashJob::Done, [=](){
+        updateIcon(false);
+    });
+
+    if (dtj->isValid())
+        dtj->Execute();
+
+    qWarning()<< op.path() << "Move files to trash: "<< normalFiles;
 }
 
 void MainItem::updateIcon(bool isOpen)

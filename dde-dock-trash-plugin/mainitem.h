@@ -50,8 +50,10 @@ private slots:
     void onRequestUpdateIcon();
 
 private:
-    QString getThemeIconPath(QString iconName);
+    void execUninstall(const QString &appKey, const QString &appName);
+    void trashFiles(const QList<QUrl> &files);
     void updateIcon(bool isOpen);
+    QString getThemeIconPath(QString iconName);
 
     DBusFileOperations * m_dfo = new DBusFileOperations(this);
     DBusFileTrashMonitor * m_dftm = NULL;
