@@ -59,10 +59,12 @@ void Panel::initShowHideAnimation()
     showAnimation->setDuration(SHOW_ANIMATION_DURATION);
     showAnimation->setEasingCurve(SHOW_EASINGCURVE);
     connect(showAnimation,&QPropertyAnimation::finished,this,&Panel::onShowPanelFinished);
+    connect(showAnimation, &QPropertyAnimation::stateChanged, this, &Panel::changeItemHoverable);
     QPropertyAnimation *hideAnimation = new QPropertyAnimation(this, "y");
     hideAnimation->setDuration(HIDE_ANIMATION_DURATION);
     hideAnimation->setEasingCurve(HIDE_EASINGCURVE);
     connect(hideAnimation,&QPropertyAnimation::finished,this,&Panel::onHidePanelFinished);
+    connect(hideAnimation, &QPropertyAnimation::stateChanged, this, &Panel::changeItemHoverable);
 
     QSignalTransition *ts1 = showState->addTransition(this,SIGNAL(startHide()), hideState);
     ts1->addAnimation(hideAnimation);
@@ -366,6 +368,25 @@ void Panel::onNeedPreviewUpdate()
     m_globalPreview->showPreview(m_lastPreviewPos.x(),
                                  m_lastPreviewPos.y() + m_globalPreview->shadowBlurRadius() + m_globalPreview->shadowDistance(),
                                  DELAY_SHOW_PREVIEW_INTERVAL);
+}
+
+void Panel::changeItemHoverable(QAbstractAnimation::State state)
+{
+    bool v = true;
+    switch (state) {
+    case QAbstractAnimation::Running:
+        v = false;
+        break;
+    case QAbstractAnimation::Paused:
+    case QAbstractAnimation::Stopped:
+        v = true;
+        break;
+    default:
+        break;
+    }
+
+    m_appLayout->itemHoverableChange(v);
+    m_pluginLayout->itemHoverableChange(v);
 }
 
 void Panel::reanchorsLayout(Dock::DockMode mode)

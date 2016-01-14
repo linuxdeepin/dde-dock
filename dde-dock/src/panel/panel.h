@@ -74,6 +74,7 @@ private:
     void onNeedPreviewImmediatelyHide();
     void onNeedPreviewUpdate();
 
+    void changeItemHoverable(QAbstractAnimation::State state);
     void reanchorsLayout(Dock::DockMode mode);
     void updateRightReflection();
     void updateLeftReflection();

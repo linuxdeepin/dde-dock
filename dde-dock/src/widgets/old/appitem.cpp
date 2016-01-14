@@ -344,7 +344,7 @@ void AppItem::onMouseRelease(QMouseEvent *event)
 
 void AppItem::onMouseEnter()
 {
-    if (m_dockModeData->getHideState() != Dock::HideStateShown || !hoverable())
+    if (!hoverable())
         return;
 
     emit mouseEntered();
