@@ -15,11 +15,11 @@ public:
 
     QSize sizeHint() const;
     void initEntries() const;
-
 signals:
     void needPreviewUpdate();
     void needPreviewHide(bool immediately);
     void needPreviewShow(DockItem *item, QPoint pos);
+    void itemHoverableChange(bool v);
 
 protected:
     bool eventFilter(QObject *obj, QEvent *e);
@@ -27,6 +27,9 @@ protected:
 private:
     void initDropMask();
     void initAppManager();
+
+    bool isDraging() const;
+    void setIsDraging(bool isDraging);
 
     void onDrop(QDropEvent *event);
     void onAppItemRemove(const QString &id);
@@ -36,7 +39,7 @@ private:
     QStringList appIds();
 
 private:
-    bool m_draging;
+    bool m_isDraging;
     DropMask *m_mask;
     DockAppManager *m_appManager;
     DBusDockedAppManager *m_ddam;

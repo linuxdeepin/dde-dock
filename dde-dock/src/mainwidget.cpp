@@ -14,12 +14,9 @@ MainWidget::MainWidget(QWidget *parent)
 
 #ifdef NEW_DOCK_LAYOUT
     m_mainPanel = new DockPanel(this);
-    connect(m_mainPanel,&DockPanel::panelHasHidden,this,&MainWidget::hideDock);
+    connect(m_mainPanel, &DockPanel::startShow, this, &MainWidget::showDock);
+    connect(m_mainPanel, &DockPanel::panelHasHidden, this, &MainWidget::hideDock);
     connect(m_mainPanel, &DockPanel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(m_mainPanel);
 #else
     m_mainPanel = new Panel(this);
     connect(m_mainPanel, &Panel::startShow, this, &MainWidget::showDock);

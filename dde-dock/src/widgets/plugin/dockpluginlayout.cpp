@@ -53,6 +53,7 @@ void DockPluginLayout::initPluginManager()
         });
         connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
         connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);
+        connect(this, &DockPluginLayout::itemHoverableChange, targetItem, &DockItem::setHoverable);
     });
     connect(m_pluginManager, &DockPluginsManager::itemInsert, [=](DockItem *baseItem, DockItem *targetItem){
         int index = indexOf(baseItem);
@@ -64,6 +65,7 @@ void DockPluginLayout::initPluginManager()
         });
         connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
         connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);
+        connect(this, &DockPluginLayout::itemHoverableChange, targetItem, &DockItem::setHoverable);
     });
     connect(m_pluginManager, &DockPluginsManager::itemRemoved, [=](DockItem* item) {
         removeWidget(item);

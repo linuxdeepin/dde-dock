@@ -263,8 +263,8 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
         return;
     }
     else {
-        if (event->pos().x() - basePos.x() > INVALID_MOVE_RADIUS ||
-                event->pos().y() - basePos.y() > INVALID_MOVE_RADIUS) {
+        if ( qAbs(event->pos().x() - basePos.x())> INVALID_MOVE_RADIUS ||
+             qAbs(event->pos().y() - basePos.y()) > INVALID_MOVE_RADIUS) {
             basePos = QPoint(0, 0);
         }
         else {

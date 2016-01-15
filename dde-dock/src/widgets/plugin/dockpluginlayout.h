@@ -18,6 +18,7 @@ signals:
     void needPreviewHide(bool immediately);
     void needPreviewShow(DockItem *item, QPoint pos);
     void needPreviewUpdate();
+    void itemHoverableChange(bool v);
 
 private:
     void initPluginManager();

@@ -56,11 +56,6 @@ QString DockPluginItem::id() const
 
 void DockPluginItem::enterEvent(QEvent *)
 {
-    if (DockModeData::instance()->getHideState() != Dock::HideStateShown)
-        return;
-
-//    emit mouseEntered();
-
     if (hoverable()) {
         DisplayRect rec = m_display->primaryRect();
         showPreview(QPoint(globalX() + width() / 2, rec.height- DockModeData::instance()->getDockHeight() - DOCK_PREVIEW_MARGIN));
@@ -69,8 +64,6 @@ void DockPluginItem::enterEvent(QEvent *)
 
 void DockPluginItem::leaveEvent(QEvent *)
 {
-//    emit mouseExited();
-
     hidePreview();
 }
 

@@ -129,7 +129,7 @@ void DropMask::dragEnterEvent(QDragEnterEvent *e)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 DockAppLayout::DockAppLayout(QWidget *parent) :
-    MovableLayout(parent), m_draging(false)
+    MovableLayout(parent), m_isDraging(false)
 {
     initDropMask();
     initAppManager();
@@ -175,7 +175,7 @@ bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
 {
     if (e->type() == QEvent::Move) {
         QMoveEvent *me = (QMoveEvent *)e;
-        if (me && m_draging && !geometry().contains(mapFromGlobal(QCursor::pos()))) {
+        if (me && isDraging() && !geometry().contains(mapFromGlobal(QCursor::pos()))) {
             //show mask to catch draging widget
             //fixme
             m_mask->move(QCursor::pos().x() - 15, QCursor::pos().y() - 15); //15,拖动时的鼠标位移
@@ -190,13 +190,13 @@ void DockAppLayout::initDropMask()
 {
     m_mask = new DropMask;
     connect(m_mask, &DropMask::droped, this, [=] {
-        m_draging = false;
+        setIsDraging(false);
         emit requestSpacingItemsDestroy();
     });
     connect(m_mask, &DropMask::invalidDroped, this, &DockAppLayout::restoreDragingWidget);
     connect(this, &DockAppLayout::dragEntered, m_mask, &DropMask::hide);
     connect(this, &DockAppLayout::startDrag, this, [=](QDrag* drag) {
-        m_draging = true;
+        setIsDraging(true);
 
         if (DockModeData::instance()->getDockMode() == Dock::FashionMode) {
             DockAppItem *item = qobject_cast<DockAppItem *>(dragingWidget());
@@ -204,13 +204,15 @@ void DockAppLayout::initDropMask()
                 drag->setPixmap(item->iconPixmap());
             }
         }
+
+        emit itemHoverableChange(false);
     });
 }
 
 void DockAppLayout::onDrop(QDropEvent *event)
 {
     m_mask ->hide();
-    m_draging = false;
+    setIsDraging(false);
 
     if (event->source() == this) {  //from itself
         m_ddam->Sort(appIds());
@@ -281,6 +283,7 @@ void DockAppLayout::onAppItemAdd(DockAppItem *item)
     });
     connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
     connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
+    connect(this, &DockAppLayout::itemHoverableChange, item, &DockAppItem::setHoverable);
 }
 
 void DockAppLayout::onAppAppend(DockAppItem *item)
@@ -294,6 +297,7 @@ void DockAppLayout::onAppAppend(DockAppItem *item)
     });
     connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
     connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
+    connect(this, &DockAppLayout::itemHoverableChange, item, &DockAppItem::setHoverable);
 }
 
 QStringList DockAppLayout::appIds()
@@ -307,5 +311,17 @@ QStringList DockAppLayout::appIds()
     }
 
     return ids;
+}
+
+bool DockAppLayout::isDraging() const
+{
+    return m_isDraging;
+}
+
+void DockAppLayout::setIsDraging(bool isDraging)
+{
+    m_isDraging = isDraging;
+
+    emit itemHoverableChange(!isDraging);
 }
 

@@ -34,10 +34,6 @@ DockPanel::DockPanel(QWidget *parent)
     reloadStyleSheet();
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &DockPanel::onDockModeChanged);
-    connect(PanelMenu::instance(), &PanelMenu::menuItemInvoked, [=] {
-        //To ensure that dock will not hide at changing the hide-mode to keepshowing
-        m_menuItemInvoked = true;
-    });
 }
 
 bool DockPanel::isFashionMode()
@@ -68,15 +64,17 @@ void DockPanel::initShowHideAnimation()
     showAnimation->setDuration(SHOW_ANIMATION_DURATION);
     showAnimation->setEasingCurve(SHOW_EASINGCURVE);
     connect(showAnimation,&QPropertyAnimation::finished,this,&DockPanel::onShowPanelFinished);
+    connect(showAnimation, &QPropertyAnimation::stateChanged, this, &DockPanel::changeItemHoverable);
 
     QPropertyAnimation *hideAnimation = new QPropertyAnimation(this, "y");
     hideAnimation->setDuration(HIDE_ANIMATION_DURATION);
     hideAnimation->setEasingCurve(HIDE_EASINGCURVE);
     connect(hideAnimation,&QPropertyAnimation::finished,this,&DockPanel::onHidePanelFinished);
+    connect(hideAnimation, &QPropertyAnimation::stateChanged, this, &DockPanel::changeItemHoverable);
 
     QSignalTransition *st = showState->addTransition(this,SIGNAL(startHide()), hideState);
     st->addAnimation(hideAnimation);
-    QSignalTransition *ht = hideState->addTransition(this,SIGNAL(startShow()),showState);
+    QSignalTransition *ht = hideState->addTransition(this,SIGNAL(startShow()), showState);
     ht->addAnimation(showAnimation);
 
     machine->start();
@@ -176,17 +174,15 @@ void DockPanel::onHideStateChanged(int dockState)
     if (dockState == Dock::HideStateShowing) {
         emit startShow();
     }
-    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_menuItemInvoked && !m_previewShown) {
+    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_previewShown) {
         emit startHide();
-    }
-    else {
-        m_menuItemInvoked = false;
     }
 }
 
 void DockPanel::onShowPanelFinished()
 {
-    m_dockModeData->setHideState(Dock::HideStateShown);
+    //dbus的ToggleShow接口会在判断时把HideStateShown对应的切换到HideStateShowing导致一直没法再切换
+    m_dockModeData->setHideState(Dock::HideStateHiding);
     emit panelHasShown();
 }
 
@@ -238,7 +234,29 @@ void DockPanel::onContentsSizeChanged()
         m_appLayout->setFixedSize(rec.width - m_pluginLayout->width() - m_launcherItem->width(), m_dockModeData->getItemHeight());
     }
 
+    setFixedSize(sizeHint().width(), m_dockModeData->getDockHeight());
+
     emit sizeChanged();
+}
+
+void DockPanel::changeItemHoverable(QAbstractAnimation::State state)
+{
+    bool v = true;
+    switch (state) {
+    case QAbstractAnimation::Running:
+        v = false;
+        break;
+    case QAbstractAnimation::Paused:
+    case QAbstractAnimation::Stopped:
+        v = true;
+        break;
+    default:
+        break;
+    }
+
+    m_launcherItem->setHoverable(v);
+    m_appLayout->itemHoverableChange(v);
+    m_pluginLayout->itemHoverableChange(v);
 }
 
 void DockPanel::reloadStyleSheet()

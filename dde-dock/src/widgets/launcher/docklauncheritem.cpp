@@ -23,7 +23,7 @@ DockLauncherItem::DockLauncherItem(QWidget *parent)
 
 void DockLauncherItem::enterEvent(QEvent *)
 {
-    if (m_dockModeData->getHideState() != Dock::HideStateShown)
+    if (!hoverable())
         return;
 
     showPreview();

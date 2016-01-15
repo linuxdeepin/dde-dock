@@ -261,11 +261,10 @@ void DockAppItem::onMouseRelease(QMouseEvent *event)
 
 void DockAppItem::onMouseEnter()
 {
-    if (m_dockModeData->getHideState() != Dock::HideStateShown || !hoverable())
-        return;
-
-    m_appBG->setIsHovered(true);
-    showPreview();
+    if (hoverable()) {
+        m_appBG->setIsHovered(true);
+        showPreview();
+    }
 }
 
 void DockAppItem::onMouseLeave()

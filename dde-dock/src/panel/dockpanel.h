@@ -55,6 +55,7 @@ private:
     void onNeedPreviewUpdate();
     void onContentsSizeChanged();
 
+    void changeItemHoverable(QAbstractAnimation::State state);
     void reloadStyleSheet();
     void setY(int value);   //for hide and show animation
     void showPanelMenu();
@@ -71,7 +72,6 @@ private:
     DockAppLayout *m_appLayout = NULL;
 
     bool m_previewShown = false;
-    bool m_menuItemInvoked = false;
     bool m_isFashionMode = false;
 };
 
