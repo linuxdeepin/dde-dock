@@ -3,9 +3,8 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[dde-daemon.dde-daemon-20140620]
+[deepin-desktop-environment.dde-daemonpot]
 file_filter = misc/po/<lang>.po
 source_file = misc/po/dde-daemon.pot
 source_lang = en
 type = PO
-
