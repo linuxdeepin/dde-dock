@@ -23,59 +23,73 @@ const (
 	defaultHeight     = 72
 )
 
-func genAllThumbnails(force bool) {
-	genGtkThumbnails(force)
-	genIconThumbnails(force)
-	genCursorThumbnails(force)
-	genBgThumbnails(force)
+func genAllThumbnails(force bool) []string {
+	var ret []string
+	ret = append(ret, genGtkThumbnails(force)...)
+	ret = append(ret, genIconThumbnails(force)...)
+	ret = append(ret, genCursorThumbnails(force)...)
+	ret = append(ret, genBgThumbnails(force)...)
+	return ret
 }
 
-func genGtkThumbnails(force bool) {
+func genGtkThumbnails(force bool) []string {
+	var ret []string
 	list := themes.ListGtkTheme()
 	for _, v := range list {
-		_, err := gtk.ThumbnailForTheme(path.Join(v, "index.theme"),
+		thumb, err := gtk.ThumbnailForTheme(path.Join(v, "index.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
 			continue
 		}
+		ret = append(ret, thumb)
 	}
+	return ret
 }
 
-func genIconThumbnails(force bool) {
+func genIconThumbnails(force bool) []string {
+	var ret []string
 	list := themes.ListIconTheme()
 	for _, v := range list {
-		_, err := icon.ThumbnailForTheme(path.Join(v, "index.theme"),
+		thumb, err := icon.ThumbnailForTheme(path.Join(v, "index.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
 			continue
 		}
+		ret = append(ret, thumb)
 	}
+	return ret
 }
 
-func genCursorThumbnails(force bool) {
+func genCursorThumbnails(force bool) []string {
+	var ret []string
 	list := themes.ListCursorTheme()
 	for _, v := range list {
-		_, err := cursor.ThumbnailForTheme(path.Join(v, "cursor.theme"),
+		thumb, err := cursor.ThumbnailForTheme(path.Join(v, "cursor.theme"),
 			getThumbBg(), defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", v, err)
 			continue
 		}
+		ret = append(ret, thumb)
 	}
+	return ret
 }
 
-func genBgThumbnails(force bool) {
+func genBgThumbnails(force bool) []string {
+	var ret []string
 	infos := background.ListBackground()
 	for _, info := range infos {
-		_, err := images.ThumbnailForTheme(info.Id,
+		thumb, err := images.ThumbnailForTheme(info.Id,
 			defaultWidth, defaultHeight, force)
 		if err != nil {
 			fmt.Printf("Gen '%s' thumbnail failed: %v\n", info.Id, err)
 			continue
 		}
+		ret = append(ret, thumb)
 	}
+	return ret
 }
 
 func getThumbBg() string {
