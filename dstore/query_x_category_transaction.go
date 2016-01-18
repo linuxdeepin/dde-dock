@@ -41,15 +41,24 @@ func getUniqueCategory(categories []string) []string {
 }
 
 type XCategoryQueryIDTransaction struct {
-	data map[string]string
+	data             map[string]string
+	deepinCategories map[string]string
 }
 
-func NewXCategoryQueryIDTransaction(file string) (*XCategoryQueryIDTransaction, error) {
+func NewXCategoryQueryIDTransaction(file, categoriesFile string) (*XCategoryQueryIDTransaction, error) {
 	data, err := getXCategoryInfo(file)
 	if err != nil {
 		data = xcategoriesFallback
 	}
-	return &XCategoryQueryIDTransaction{data: data}, nil
+	deepinCategories := map[string]string{}
+	for _, c := range GetAllInfos(categoriesFile) {
+		id := c.ID
+		deepinCategories[id] = id
+	}
+	return &XCategoryQueryIDTransaction{
+		data:             data,
+		deepinCategories: deepinCategories,
+	}, nil
 }
 
 func (t *XCategoryQueryIDTransaction) Query(strCategories string) (string, error) {
@@ -60,6 +69,13 @@ func (t *XCategoryQueryIDTransaction) Query(strCategories string) (string, error
 			categoryNames = append(categoryNames, name)
 		}
 	}
+
+	if len(categoryNames) != 0 {
+		if c, ok := t.deepinCategories[categoryNames[0]]; ok {
+			return c, nil
+		}
+	}
+
 	possibleCategories := getUniqueCategory(categoryNames)
 	return possibleCategories[0], nil
 }

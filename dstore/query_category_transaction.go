@@ -17,7 +17,7 @@ func NewQueryCategoryTransaction(desktopToPkgFile string, appInfoFile string, xc
 
 	t.pkgQuery, err1 = NewDQueryPkgNameTransaction(desktopToPkgFile)
 	t.deepinQuery, err2 = NewDeepinQueryIDTransaction(appInfoFile)
-	t.xCategoryQuery, _ = NewXCategoryQueryIDTransaction(xcategoryFile)
+	t.xCategoryQuery, _ = NewXCategoryQueryIDTransaction(xcategoryFile, AllCategoryInfoFile)
 
 	if err1 != nil {
 		return t, err1

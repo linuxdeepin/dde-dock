@@ -1,52 +1,19 @@
 package category
 
 import (
-	"encoding/json"
 	"errors"
 	"gir/gio-2.0"
-	"os"
+	"pkg.deepin.io/dde/daemon/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
-type CategoryJSONInfo struct {
-	ID      string
-	Locales map[string]map[string]string
-	Name    string
-}
-
 func GetAllInfos(file string) []CategoryInfo {
-	fallbackCategories := []CategoryInfo{
-		NewInfo(OthersID, OthersName),
-		NewInfo(InternetID, InternetName),
-		NewInfo(OfficeID, OfficeName),
-		NewInfo(DevelopmentID, DevelopmentName),
-		NewInfo(ReadingID, ReadingName),
-		NewInfo(GraphicsID, GraphicsName),
-		NewInfo(GameID, GameName),
-		NewInfo(MusicID, MusicName),
-		NewInfo(SystemID, SystemName),
-		NewInfo(VideoID, VideoName),
-		NewInfo(ChatID, ChatName),
+	dstoreCategoryInfos := dstore.GetAllInfos(file)
+	categoryInfos := make([]CategoryInfo, len(dstoreCategoryInfos))
+	for i, categoryInfo := range dstoreCategoryInfos {
+		cid, _ := getCategoryID(categoryInfo.ID)
+		categoryInfos[i] = NewInfo(cid, categoryInfo.Name)
 	}
-	var categoryInfos []CategoryInfo
-	f, err := os.Open(file)
-	if err != nil {
-		return fallbackCategories
-	}
-	defer f.Close()
-
-	decoder := json.NewDecoder(f)
-	var jsonInfo []CategoryJSONInfo
-	if err := decoder.Decode(&jsonInfo); err != nil {
-		return fallbackCategories
-	}
-
-	categoryInfos = make([]CategoryInfo, len(jsonInfo))
-	for i, info := range jsonInfo {
-		cid, _ := getCategoryID(info.ID)
-		categoryInfos[i] = NewInfo(cid, info.Name)
-	}
-
 	return categoryInfos
 }
 
