@@ -25,11 +25,13 @@ public:
     explicit MovableLayout(QWidget *parent = 0);
     explicit MovableLayout(QBoxLayout::Direction direction, QWidget *parent = 0);
 
+    bool dragable() const;
     bool getAutoResize() const;
     int count() const;
     int hoverIndex() const;
     int getLayoutSpacing() const;
     int getAnimationDuration() const;
+    int getHoverIndextByPos(const QPoint &pos);
     int indexOf(QWidget * const widget, int from = 0) const;
 
     QWidget *dragingWidget();
@@ -46,6 +48,7 @@ public:
     void insertWidget(int index, QWidget *widget);
 
     void setDuration(int v);
+    void setDragable(bool v);
     void setLayoutSpacing(int spacing);
     void setAutoResize(bool autoResize);
     void setEasingCurve(QEasingCurve::Type curve);
@@ -55,11 +58,11 @@ public:
     void setDefaultSpacingItemSize(const QSize &defaultSpacingItemSize);
 
 signals:
-    void dragEntered();
     void startDrag(QDrag*);
     void drop(QDropEvent *event);
     void requestSpacingItemsDestroy();
     void sizeChanged(QResizeEvent *event);
+    void dragEntered(QDragEnterEvent *event);
 
 private:
     bool event(QEvent *e);
@@ -76,7 +79,6 @@ private:
     void updateCurrentHoverInfo(int index, const QPoint &pos);
     void addSpacingItem(QWidget *souce, MoveDirection md, const QSize &size);
     void insertSpacingItemToLayout(int index, const QSize &size, bool immediately = false);
-    int getHoverIndextByPos(const QPoint &pos);
     MoveDirection getVMoveDirection(int index, const QPoint &pos);
     MoveDirection getHMoveDirection(int index, const QPoint &pos);
 
@@ -85,6 +87,7 @@ private:
     int m_animationDuration;
     bool m_hoverToSpacing;
     bool m_autoResize;
+    bool m_dragable;
     QWidget *m_draginItem;
     QHBoxLayout *m_layout;
     QList<QWidget *> m_widgetList;

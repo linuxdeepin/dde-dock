@@ -137,6 +137,7 @@ DockAppLayout::DockAppLayout(QWidget *parent) :
     qApp->installEventFilter(this);
     m_ddam = new DBusDockedAppManager(this);
     connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
+    connect(this, &DockAppLayout::dragEntered, this, &DockAppLayout::onDragEnter);
 }
 
 QSize DockAppLayout::sizeHint() const
@@ -169,6 +170,13 @@ QSize DockAppLayout::sizeHint() const
 void DockAppLayout::initEntries() const
 {
     m_appManager->initEntries();
+}
+
+void DockAppLayout::enterEvent(QEnterEvent *e)
+{
+    Q_UNUSED(e)
+
+    setDragable(true);
 }
 
 bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
@@ -233,12 +241,13 @@ void DockAppLayout::onDrop(QDropEvent *event)
     else {  //from desktop file
         QList<QUrl> urls = event->mimeData()->urls();
         if (!urls.isEmpty()) {
-            for (QUrl url : urls) {
-                QString us = url.toString();
-                if (us.endsWith(".desktop")) {
-                    QString appKey = us.split(QDir::separator()).last();
-                    appKey = appKey.mid(0, appKey.length() - 8);
-                    if (!m_ddam->IsDocked(appKey)) {
+            QStringList normals;
+            QStringList desktops;
+            separateFiles(urls, normals, desktops);
+            if (desktops.length() > 0) {
+                for (QString path : desktops) {
+                    if (!isDesktopFileDocked(path)) {
+                        QString appKey = getAppKeyByPath(path);
                         m_ddam->ReqeustDock(appKey, "", "", "");
                         m_appManager->setDockingItemId(appKey);
 
@@ -246,6 +255,43 @@ void DockAppLayout::onDrop(QDropEvent *event)
                     }
                 }
             }
+            else {
+                //just normal files, try to open files by the target app
+                DockAppItem *item = qobject_cast<DockAppItem *>(widget(getHoverIndextByPos(mapFromGlobal(QCursor::pos()))));
+                item->openFiles(normals);
+            }
+        }
+    }
+}
+
+void DockAppLayout::onDragEnter(QDragEnterEvent *event)
+{
+    if (event->source() == this) {
+        return;
+    }
+    else if (event->mimeData()->formats().indexOf("RequestDock") != -1) {
+        QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
+        if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString())) {
+            setDragable(false);
+            emit requestSpacingItemsDestroy();
+        }
+    }
+    else {  //from desktop file
+        QList<QUrl> urls = event->mimeData()->urls();
+        if (!urls.isEmpty()) {
+            QStringList normals;
+            QStringList desktops;
+            separateFiles(urls, normals, desktops);
+            if (desktops.length() > 0) {
+                for (QString path : desktops) {
+                    //多个文件中只要存在一个有效并且未docked的desktop文件，都可以做拖入dock的操作
+                    if (!isDesktopFileDocked(path))
+                        return;
+                }
+            }
+
+            setDragable(false);
+            emit requestSpacingItemsDestroy();
         }
     }
 }
@@ -323,5 +369,46 @@ void DockAppLayout::setIsDraging(bool isDraging)
     m_isDraging = isDraging;
 
     emit itemHoverableChange(!isDraging);
+}
+
+bool DockAppLayout::isDesktopFileDocked(const QString &path)
+{
+    QSettings ds(path, QSettings::IniFormat);
+    ds.beginGroup("Desktop Entry");
+    QString appKey = ds.value("X-Deepin-AppID").toString();
+    ds.endGroup();
+
+    return m_ddam->IsDocked(appKey).value();
+}
+
+QString DockAppLayout::getAppKeyByPath(const QString &path)
+{
+    QSettings ds(path, QSettings::IniFormat);
+    ds.beginGroup("Desktop Entry");
+    QString appKey = ds.value("X-Deepin-AppID").toString();
+    ds.endGroup();
+
+    return appKey;
+}
+
+void DockAppLayout::separateFiles(const QList<QUrl> &urls, QStringList &normals, QStringList &desktopes)
+{
+    for (QUrl url : urls) {
+        if (url.fileName().endsWith(".desktop")) {
+            QSettings ds(url.path(), QSettings::IniFormat);
+            ds.beginGroup("Desktop Entry");
+            QString appKey = ds.value("X-Deepin-AppID").toString();
+            if (!appKey.isEmpty()) {
+                desktopes << url.path();
+            }
+            else {
+                normals << url.path();
+            }
+            ds.endGroup();
+        }
+        else {
+            normals << url.path();
+        }
+    }
 }
 

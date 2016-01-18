@@ -10,7 +10,6 @@ DockAppItem::DockAppItem(QWidget *parent) :
     m_dockModeData = DockModeData::instance();
     connect(m_dockModeData, &DockModeData::dockModeChanged,this, &DockAppItem::onDockModeChanged);
 
-//    setAcceptDrops(true);
     setFixedSize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
 
     initAppIcon();
@@ -60,6 +59,14 @@ QPixmap DockAppItem::iconPixmap()
     return m;
 }
 
+void DockAppItem::openFiles(const QStringList files)
+{
+    for (QString url : files) {
+        m_entryProxyer->HandleDragDrop(0, 0, "file://" + url, 0);
+        qDebug() << "Try to open file:" << url;
+    }
+}
+
 void DockAppItem::setEntryProxyer(DBusDockEntry *entryProxyer)
 {
     m_entryProxyer = entryProxyer;
@@ -85,20 +92,6 @@ void DockAppItem::mouseReleaseEvent(QMouseEvent *event)
         onMouseRelease(event);
     else
         QFrame::mouseReleaseEvent(event);
-}
-
-void DockAppItem::dropEvent(QDropEvent *event)
-{
-    QList<QUrl> urls = event->mimeData()->urls();
-    if (!urls.isEmpty()) {
-        for (QUrl url : urls) {
-            QString us = url.toString();
-            if (!us.endsWith(".desktop")) {
-                m_entryProxyer->HandleDragDrop(0, 0, us, 0);
-                qDebug() << "Try to open file:" << us;
-            }
-        }
-    }
 }
 
 void DockAppItem::enterEvent(QEvent *)

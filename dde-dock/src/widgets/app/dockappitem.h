@@ -35,6 +35,7 @@ public:
     QString getItemId();
     QString getTitle();
     QPixmap iconPixmap();
+    void openFiles(const QStringList files);
     void setEntryProxyer(DBusDockEntry *entryProxyer);
 
     bool actived() const;
@@ -43,7 +44,6 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void dropEvent(QDropEvent * event);
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
     void resizeEvent(QResizeEvent *e);

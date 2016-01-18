@@ -107,6 +107,11 @@ MovableLayout::MovableLayout(QBoxLayout::Direction direction, QWidget *parent)
     setAcceptDrops(true);
 }
 
+bool MovableLayout::dragable() const
+{
+    return m_dragable;
+}
+
 int MovableLayout::indexOf(QWidget * const widget, int from) const
 {
     return m_widgetList.indexOf(widget, from);
@@ -300,11 +305,11 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 
 void MovableLayout::dragEnterEvent(QDragEnterEvent *event)
 {
+    setDragable(true);
     handleDrag(event->pos());
-
     event->accept();
 
-    emit dragEntered();
+    emit dragEntered(event);
 }
 
 void MovableLayout::dragLeaveEvent(QDragLeaveEvent *event)
@@ -316,7 +321,7 @@ void MovableLayout::dragLeaveEvent(QDragLeaveEvent *event)
 
 void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (m_layout->count() > m_widgetList.count() + MAX_SPACINGITEM_COUNT)
+    if (!m_dragable || (m_layout->count() > m_widgetList.count() + MAX_SPACINGITEM_COUNT))
         return;
 
     handleDrag(event->pos());
@@ -457,6 +462,11 @@ void MovableLayout::setDefaultSpacingItemSize(const QSize &defaultSpacingItemSiz
 void MovableLayout::setDuration(int v)
 {
     m_animationDuration = v;
+}
+
+void MovableLayout::setDragable(bool v)
+{
+    m_dragable = v;
 }
 
 void MovableLayout::setEasingCurve(QEasingCurve::Type curve)

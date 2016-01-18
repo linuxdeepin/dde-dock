@@ -22,6 +22,7 @@ signals:
     void itemHoverableChange(bool v);
 
 protected:
+    void enterEvent(QEnterEvent *e);
     bool eventFilter(QObject *obj, QEvent *e);
 
 private:
@@ -30,8 +31,12 @@ private:
 
     bool isDraging() const;
     void setIsDraging(bool isDraging);
+    bool isDesktopFileDocked(const QString &path);
+    QString getAppKeyByPath(const QString &path);
+    void separateFiles(const QList<QUrl> &urls, QStringList &normals, QStringList &desktopes);
 
     void onDrop(QDropEvent *event);
+    void onDragEnter(QDragEnterEvent *event);
     void onAppItemRemove(const QString &id);
     void onAppItemAdd(DockAppItem *item);
     void onAppAppend(DockAppItem *item);
