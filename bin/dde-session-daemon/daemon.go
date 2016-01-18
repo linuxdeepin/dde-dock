@@ -3,13 +3,20 @@ package main
 import (
 	"errors"
 	"fmt"
+	"gir/gio-2.0"
+	"gir/glib-2.0"
 	"os"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
-	"gir/gio-2.0"
-	"gir/glib-2.0"
 	"pkg.deepin.io/lib/log"
+	"runtime/pprof"
+	"sync"
+)
+
+const (
+	ProfTypeCPU = "cpu"
+	ProfTypeMem = "memory"
 )
 
 func runMainLoop() {
@@ -47,6 +54,56 @@ type SessionDaemon struct {
 	settings        *gio.Settings
 	enabledModules  map[string]loader.Module
 	disabledModules map[string]loader.Module
+
+	cpuLocker sync.Mutex
+	cpuWriter *os.File
+}
+
+// Profile: heap, goroutine, threadcreate, block
+func (s *SessionDaemon) WriteProfile(profile, log string) error {
+	var p = pprof.Lookup(profile)
+	if p == nil {
+		return fmt.Errorf("Profile '%s' not exists", profile)
+	}
+
+	fw, err := os.Create(log)
+	if err != nil {
+		return err
+	}
+	defer fw.Close()
+
+	return p.WriteTo(fw, 1)
+}
+
+// Profile: cpu
+func (s *SessionDaemon) StartCPUProfile(log string) error {
+	s.cpuLocker.Lock()
+	defer s.cpuLocker.Unlock()
+	fw, err := os.Create(log)
+	if err != nil {
+		return err
+	}
+
+	err = pprof.StartCPUProfile(fw)
+	if err != nil {
+		fw.Close()
+		return err
+	}
+
+	s.cpuWriter = fw
+	return nil
+}
+
+func (s *SessionDaemon) StopCPUProfile() {
+	s.cpuLocker.Lock()
+	defer s.cpuLocker.Unlock()
+	if s.cpuWriter == nil {
+		return
+	}
+
+	pprof.StopCPUProfile()
+	s.cpuWriter.Close()
+	s.cpuWriter = nil
 }
 
 func (*SessionDaemon) GetDBusInfo() dbus.DBusInfo {
