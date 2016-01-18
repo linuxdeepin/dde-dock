@@ -42,6 +42,8 @@ var (
 	cacheGtkThemes    Themes
 	cacheIconThemes   Themes
 	cacheCursorThemes Themes
+
+	home = os.Getenv("HOME")
 )
 
 func RefreshGtkThemes() {
@@ -207,7 +209,7 @@ func getThemes(files []string) Themes {
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, os.Getenv("HOME")) {
+	if strings.Contains(file, home) {
 		return true
 	}
 	return false

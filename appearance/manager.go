@@ -118,18 +118,22 @@ func (m *Manager) init() {
 }
 
 func (m *Manager) doSetDTheme(id string) error {
+	logger.Debug("[doSetDTheme] theme id:", id)
 	err := dtheme.SetDTheme(id)
 	if err != nil {
+		logger.Debug("[doSetDTheme] set failed:", err)
 		return err
 	}
 
 	if m.Theme == id {
+		logger.Debug("[doSetDTheme] theme same:", id, m.Theme)
 		return nil
 	}
 
 	m.setPropTheme(id)
 	m.setting.SetString(gsKeyTheme, id)
 
+	logger.Debug("[doSetDTheme] set font size")
 	return m.doSetFontSize(dtheme.ListDTheme().Get(id).FontSize)
 }
 
@@ -211,6 +215,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 func (m *Manager) doSetBackground(value string) error {
 	dt := m.getCurrentDTheme()
 	if dt == nil {
+		logger.Debug("[doSetBackground] not found validity dtheme")
 		return fmt.Errorf("Not found valid dtheme")
 	}
 
@@ -224,6 +229,7 @@ func (m *Manager) doSetBackground(value string) error {
 
 	uri, err := background.ListBackground().Set(value)
 	if err != nil {
+		logger.Debugf("[doSetBackground] set '%s' failed: %v", value, uri, err)
 		return err
 	}
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
@@ -329,11 +335,13 @@ func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
 func (m *Manager) setDThemeByComponent(component *dtheme.ThemeComponent) error {
 	id := dtheme.ListDTheme().FindDThemeId(component)
 	if len(id) != 0 {
+		logger.Debug("[setDThemeByComponent] found match theme:", id)
 		return m.doSetDTheme(id)
 	}
 
 	err := dtheme.WriteCustomTheme(component)
 	if err != nil {
+		logger.Debug("[setDThemeByComponent] write custom theme failed:", err)
 		return err
 	}
 	return m.doSetDTheme(dthemeCustomId)

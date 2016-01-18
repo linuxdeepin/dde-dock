@@ -19,6 +19,12 @@ const (
 	spaceTypeMono    = "100"
 )
 
+var (
+	curLang string
+	home    = os.Getenv("HOME")
+	langReg = regexp.MustCompile("_")
+)
+
 // family ex: 'sans', 'serif', 'monospace'
 // cRet: `SourceCodePro-Medium.otf: "Source Code Pro" "Medium"`
 func fcFontMatch(family string) string {
@@ -108,7 +114,7 @@ func isMonospace(name, spacing string) bool {
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, os.Getenv("HOME")) {
+	if strings.Contains(file, home) {
 		return true
 	}
 	return false
@@ -136,6 +142,10 @@ func indexList(item string, list []string) int {
 }
 
 func getCurLang() string {
+	if len(curLang) != 0 {
+		return curLang
+	}
+
 	locale := os.Getenv("LANGUAGE")
 	if len(locale) == 0 {
 		locale = os.Getenv("LANG")
@@ -145,6 +155,8 @@ func getCurLang() string {
 	if len(lang) == 0 {
 		return defaultLang
 	}
+
+	curLang = lang
 	return lang
 }
 
@@ -159,7 +171,7 @@ func getLangFromLocale(locale string) string {
 	case "zh_hk":
 		lang = "zh-tw"
 	case "zh_cn", "zh_tw", "zh_sg", "ku_tr", "mn_mn", "pap_an", "pap_aw":
-		lang = regexp.MustCompile("_").ReplaceAllString(locale, "-")
+		lang = langReg.ReplaceAllString(locale, "-")
 	default:
 		lang = strings.Split(locale, "_")[0]
 	}

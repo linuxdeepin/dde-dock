@@ -33,7 +33,12 @@ static void free_font_info(FcInfo *info);
 FcInfo *
 list_font_info (int *num)
 {
-     /* FcInit(); */
+    static int hasInit = 0;
+    if (hasInit == 0) {
+        FcInit();
+        hasInit = 1;
+    }
+
      *num = -1;
      FcPattern *pat = FcPatternCreate();
      if (!pat) {

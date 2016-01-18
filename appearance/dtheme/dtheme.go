@@ -7,6 +7,7 @@ import (
 	"path"
 	"strings"
 
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
@@ -15,10 +16,11 @@ import (
 
 const (
 	// TODO: chdir to 'deepin/dde-daemon/appearance/themes'
-	dthemeDir       = "personalization/themes"
-	dthemeConfig    = "theme.ini"
-	customConfig    = ".local/share/" + dthemeDir + "/Custom/" + dthemeConfig
-	defaultFontSize = 10
+	dthemeDir        = "personalization/themes"
+	dthemeNameCustom = "Custom"
+	dthemeConfig     = "theme.ini"
+	customConfig     = ".local/share/" + dthemeDir + "/" + dthemeNameCustom + "/" + dthemeConfig
+	defaultFontSize  = 10
 
 	kfGroupTheme     = "Theme"
 	kfKeyId          = "Id"
@@ -34,6 +36,9 @@ const (
 	// TODO: rename to 'MonospaceFont'
 	kfKeyMonospaceFont = "FontMono"
 	kfKeyFontSize      = "FontSize"
+
+	appearanceSchema = "com.deepin.dde.appearance"
+	gsKeyFontSize    = "font-size"
 )
 
 type ThemeComponent struct {
@@ -67,9 +72,23 @@ type DTheme struct {
 }
 type DThemes []*DTheme
 
+var (
+	dthemeCache DThemes
+	home        = os.Getenv("HOME")
+)
+
 func ListDTheme() DThemes {
 	var infos DThemes
 	for _, dir := range getThemeList() {
+		name := path.Base(dir)
+		if name != dthemeNameCustom && len(dthemeCache) != 0 {
+			info := dthemeCache.Get(name)
+			if info != nil {
+				infos = append(infos, info)
+				continue
+			}
+		}
+
 		info, err := newDThemeFromFile(path.Join(dir, dthemeConfig))
 		if err != nil {
 			fmt.Printf("[Warning] match dtheme from %q failed: %v\n",
@@ -78,6 +97,7 @@ func ListDTheme() DThemes {
 		}
 		infos = append(infos, info)
 	}
+	dthemeCache = infos
 	return infos
 }
 
@@ -91,7 +111,15 @@ func SetDTheme(id string) error {
 	subthemes.SetIconTheme(dt.Icon.Id)
 	subthemes.SetCursorTheme(dt.Cursor.Id)
 	background.ListBackground().Set(dt.Background.Id)
-	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
+
+	var size = dt.FontSize
+	// If theme is 'Custom', get font size from gsettings
+	if id == dthemeNameCustom {
+		setting := gio.NewSettings(appearanceSchema)
+		size = setting.GetInt(gsKeyFontSize)
+		setting.Unref()
+	}
+	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, size)
 	return nil
 }
 
@@ -302,7 +330,7 @@ func getThemePreview(name, ty string) string {
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, os.Getenv("HOME")) {
+	if strings.Contains(file, home) {
 		return true
 	}
 	return false

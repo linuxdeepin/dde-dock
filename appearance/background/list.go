@@ -14,6 +14,8 @@ const (
 	dthemeDir = "personalization/themes"
 )
 
+var home = os.Getenv("HOME")
+
 // ListDirs list all background dirs
 func ListDirs() []string {
 	var dirs = []string{
@@ -41,7 +43,7 @@ func getBgFiles() []string {
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, os.Getenv("HOME")) {
+	if strings.Contains(file, home) {
 		return true
 	}
 	return false
