@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"path"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -250,8 +251,13 @@ func (self *Manager) MarkLaunched(_id ItemID) error {
 	}
 	defer storeApi.DestroyDStoreDesktop(store)
 
-	_, ok := store.MarkLaunched(string(_id))
-	return ok
+	if item, ok := self.itemTable[_id]; ok {
+		desktopID := filepath.Base(item.Path())
+		_, ok := store.MarkLaunched(desktopID)
+		return ok
+	}
+
+	return fmt.Errorf("invalid id %q", string(_id))
 }
 
 func (self *Manager) RefreshItem(id ItemID) {

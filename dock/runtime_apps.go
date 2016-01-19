@@ -21,7 +21,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"pkg.deepin.io/dde/daemon/appinfo"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -92,11 +91,8 @@ func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
 }
 
 func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
-	f, err := appinfo.GetFrequencyRecordFile()
-	if err == nil {
-		appinfo.SetFrequency(appId, appinfo.GetFrequency(appId, f)+1, f) // FIXME: DesktopID???
-		f.Free()
-	}
+	recordFrequency(appId)
+	markAsLaunched(appId)
 
 	if !isNormalWindow(xid) {
 		return nil
