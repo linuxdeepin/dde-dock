@@ -374,6 +374,7 @@ void DockAppLayout::setIsDraging(bool isDraging)
 bool DockAppLayout::isDesktopFileDocked(const QString &path)
 {
     QSettings ds(path, QSettings::IniFormat);
+    ds.setIniCodec(QTextCodec::codecForName("UTF-8"));
     ds.beginGroup("Desktop Entry");
     QString appKey = ds.value("X-Deepin-AppID").toString();
     ds.endGroup();
@@ -384,6 +385,7 @@ bool DockAppLayout::isDesktopFileDocked(const QString &path)
 QString DockAppLayout::getAppKeyByPath(const QString &path)
 {
     QSettings ds(path, QSettings::IniFormat);
+    ds.setIniCodec(QTextCodec::codecForName("UTF-8"));
     ds.beginGroup("Desktop Entry");
     QString appKey = ds.value("X-Deepin-AppID").toString();
     ds.endGroup();
@@ -396,6 +398,7 @@ void DockAppLayout::separateFiles(const QList<QUrl> &urls, QStringList &normals,
     for (QUrl url : urls) {
         if (url.fileName().endsWith(".desktop")) {
             QSettings ds(url.path(), QSettings::IniFormat);
+            ds.setIniCodec(QTextCodec::codecForName("UTF-8"));
             ds.beginGroup("Desktop Entry");
             QString appKey = ds.value("X-Deepin-AppID").toString();
             if (!appKey.isEmpty()) {

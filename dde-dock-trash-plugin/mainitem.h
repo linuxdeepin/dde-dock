@@ -50,7 +50,7 @@ private slots:
     void onRequestUpdateIcon();
 
 private:
-    void execUninstall(const QString &appKey, const QString &appName);
+    void execUninstall(const QString &appKey, const QString &appName, const QString &appIcon);
     void trashFiles(const QList<QUrl> &files);
     void updateIcon(bool isOpen);
     QString getThemeIconPath(QString iconName);

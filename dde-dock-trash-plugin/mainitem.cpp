@@ -113,11 +113,12 @@ void MainItem::dropEvent(QDropEvent *event)
         if (!dataObj.isEmpty()){
             QString appKey = dataObj.value("appKey").toString();
             QString appName = dataObj.value("appName").toString();
+            QString appIcon = dataObj.value("appIcon").toString();
             if (appKey.isEmpty())
                 return;
             event->ignore();
 
-            execUninstall(appKey, appName);
+            execUninstall(appKey, appName, appIcon);
         }
     }
     else {//File or Dirctory
@@ -130,11 +131,11 @@ void MainItem::onRequestUpdateIcon()
     updateIcon(false);
 }
 
-void MainItem::execUninstall(const QString &appKey, const QString &appName)
+void MainItem::execUninstall(const QString &appKey, const QString &appName, const QString &appIcon)
 {
     ConfirmUninstallDialog *dialog = new ConfirmUninstallDialog;
     //TODO: need real icon name
-    dialog->setIcon(getThemeIconPath(appKey));
+    dialog->setIcon(getThemeIconPath(appIcon));
     QString message = tr("Are you sure to uninstall %1?").arg(appName);
     dialog->setMessage(message);
     connect(dialog, &ConfirmUninstallDialog::buttonClicked, [=](int key){
@@ -154,11 +155,14 @@ void MainItem::trashFiles(const QList<QUrl> &files)
         //try to uninstall app by .desktop file
         if (url.fileName().endsWith(".desktop")) {
             QSettings ds(url.path(), QSettings::IniFormat);
+            ds.setIniCodec(QTextCodec::codecForName("UTF-8"));
             ds.beginGroup("Desktop Entry");
             QString appKey = ds.value("X-Deepin-AppID").toString();
             if (!appKey.isEmpty()) {
                 QString l(qgetenv(QString("LANGUAGE").toUtf8().data()));
-                execUninstall(appKey, ds.value(QString("Name[%1]").arg(l)).toString());
+                QString appName = ds.value(QString("Name[%1]").arg(l)).toString();
+                appName = appName.isEmpty() ? ds.value("Name").toString() : appName;
+                execUninstall(appKey, appName, ds.value("Icon").toString());
             }
             else {
                 normalFiles << url.path();
@@ -210,22 +214,28 @@ void MainItem::updateIcon(bool isOpen)
 // iconName should be a icon name constraints to the freeedesktop standard.
 QString MainItem::getThemeIconPath(QString iconName)
 {
-    QByteArray bytes = iconName.toUtf8();
-    const char *name = bytes.constData();
+    // iconPath is an absolute path of the system.
+    if (QFile::exists(iconName) && iconName.contains(QDir::separator())) {
+        return iconName;
+    }
+    else {
+        QByteArray bytes = iconName.toUtf8();
+        const char *name = bytes.constData();
 
-    GtkIconTheme* theme = gtk_icon_theme_get_default();
+        GtkIconTheme* theme = gtk_icon_theme_get_default();
 
-    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+        GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
-    if (info) {
-        char* path = g_strdup(gtk_icon_info_get_filename(info));
+        if (info) {
+            char* path = g_strdup(gtk_icon_info_get_filename(info));
 #if GTK_MAJOR_VERSION >= 3
-        g_object_unref(info);
+            g_object_unref(info);
 #elif GTK_MAJOR_VERSION == 2
-        gtk_icon_info_free(info);
+            gtk_icon_info_free(info);
 #endif
-        return QString(path);
-    } else {
-        return "";
+            return QString(path);
+        } else {
+            return "";
+        }
     }
 }
