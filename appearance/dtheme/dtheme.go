@@ -2,7 +2,6 @@ package dtheme
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -12,6 +11,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	dutils "pkg.deepin.io/lib/utils"
+	"sync"
 )
 
 const (
@@ -19,7 +19,6 @@ const (
 	dthemeDir        = "personalization/themes"
 	dthemeNameCustom = "Custom"
 	dthemeConfig     = "theme.ini"
-	customConfig     = ".local/share/" + dthemeDir + "/" + dthemeNameCustom + "/" + dthemeConfig
 	defaultFontSize  = 10
 
 	kfGroupTheme     = "Theme"
@@ -73,8 +72,12 @@ type DTheme struct {
 type DThemes []*DTheme
 
 var (
+	wLocker     sync.Mutex
 	dthemeCache DThemes
-	home        = os.Getenv("HOME")
+
+	home         = os.Getenv("HOME")
+	customConfig = path.Join(home, ".local/share",
+		dthemeDir, dthemeNameCustom, dthemeConfig)
 )
 
 func ListDTheme() DThemes {
@@ -98,8 +101,10 @@ func ListDTheme() DThemes {
 		infos = append(infos, info)
 	}
 	dthemeCache = infos
-	return infos
+	return dthemeCache
 }
+
+var setting = gio.NewSettings(appearanceSchema)
 
 func SetDTheme(id string) error {
 	dt := ListDTheme().Get(id)
@@ -115,22 +120,21 @@ func SetDTheme(id string) error {
 	var size = dt.FontSize
 	// If theme is 'Custom', get font size from gsettings
 	if id == dthemeNameCustom {
-		setting := gio.NewSettings(appearanceSchema)
 		size = setting.GetInt(gsKeyFontSize)
-		setting.Unref()
 	}
 	fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, size)
 	return nil
 }
 
 func WriteCustomTheme(component *ThemeComponent) error {
-	file := path.Join(os.Getenv("HOME"), customConfig)
-	err := os.MkdirAll(path.Dir(file), 0755)
+	wLocker.Lock()
+	defer wLocker.Unlock()
+	err := os.MkdirAll(path.Dir(customConfig), 0755)
 	if err != nil {
 		return err
 	}
 
-	return doWriteCustomDTheme(component, file)
+	return doWriteCustomDTheme(component, customConfig)
 }
 
 func GetDThemeThumbnail(id string) (string, error) {
@@ -397,5 +401,17 @@ func doWriteCustomDTheme(component *ThemeComponent, file string) error {
 		kfKeyStandardFont, component.StandardFont,
 		kfKeyMonospaceFont, component.MonospaceFont,
 		kfKeyFontSize, defaultFontSize)
-	return ioutil.WriteFile(file, []byte(content), 0644)
+
+	fw, err := os.Create(file)
+	if err != nil {
+		return err
+	}
+
+	_, err = fw.WriteString(content)
+	if err != nil {
+		fw.Close()
+		return err
+	}
+	fw.Sync()
+	return fw.Close()
 }

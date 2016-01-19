@@ -42,16 +42,6 @@ func (m *Mouse) handleGSettings() {
 			m.motionThreshold()
 		case mouseKeyDoubleClick:
 			m.doubleClick()
-
-			// Sync tpad and mouse double clicck time
-			gsLocker.Lock()
-			var tpad = getTouchpad()
-			if tpad.DoubleClick.Get() == m.DoubleClick.Get() {
-				gsLocker.Unlock()
-				return
-			}
-			tpad.DoubleClick.Set(m.DoubleClick.Get())
-			gsLocker.Unlock()
 		case mouseKeyDragThreshold:
 			m.dragThreshold()
 		}
@@ -78,19 +68,6 @@ func (tpad *Touchpad) handleGSettings() {
 			tpad.enableTwoFingerScroll()
 		case tpadKeyWhileTyping:
 			tpad.disableWhileTyping()
-		case tpadKeyDoubleClick:
-			tpad.doubleClick()
-
-			gsLocker.Lock()
-			var m = getMouse()
-			if tpad.DoubleClick.Get() == m.DoubleClick.Get() {
-				gsLocker.Unlock()
-				return
-			}
-			m.DoubleClick.Set(tpad.DoubleClick.Get())
-			gsLocker.Unlock()
-		case tpadKeyDragThreshold:
-			tpad.dragThreshold()
 		case tpadKeyAcceleration:
 			tpad.motionAcceleration()
 		case tpadKeyThreshold:

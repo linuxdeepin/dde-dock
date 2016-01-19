@@ -2,10 +2,8 @@ package appearance
 
 import (
 	"gir/gio-2.0"
-	"sync"
+	"time"
 )
-
-var gsLocker sync.Mutex
 
 func (m *Manager) listenGSettingChanged() {
 	m.setting.Connect("changed::theme", func(s *gio.Settings, key string) {
@@ -23,21 +21,23 @@ func (m *Manager) listenGSettingChanged() {
 
 func (m *Manager) listenBgGsettings() {
 	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
-		gsLocker.Lock()
-		defer gsLocker.Unlock()
 		uri := m.wrapBgSetting.GetString(gsKeyBackground)
+		logger.Debug("[Wrap background] changed:", key, uri)
 		err := m.doSetBackground(uri)
 		if err != nil {
 			logger.Debugf("[Wrap background] set '%s' failed: %s", uri, err)
 			return
 		}
+		logger.Debug("[Wrap background] doSetBackground OVER")
 		if m.gnomeBgSetting == nil {
 			return
 		}
+		logger.Debug("[Wrap background] sync gnome bg:", uri, m.gnomeBgSetting.GetString(gsKeyBackground))
 		if uri == m.gnomeBgSetting.GetString(gsKeyBackground) {
 			return
 		}
 		m.gnomeBgSetting.SetString(gsKeyBackground, uri)
+		logger.Debug("[Wrap background] changed OVER ENDDDDDDDDDDD:", key, uri)
 	})
 	m.wrapBgSetting.GetString(gsKeyBackground)
 
@@ -45,17 +45,16 @@ func (m *Manager) listenBgGsettings() {
 		return
 	}
 	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
-		gsLocker.Lock()
-		defer gsLocker.Unlock()
+		// Wait for file copy finished
+		<-time.After(time.Millisecond * 500)
 		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
+		logger.Debug("[Gnome background] sync wrap bg:", uri, m.wrapBgSetting.GetString(gsKeyBackground))
 		if uri == m.wrapBgSetting.GetString(gsKeyBackground) {
 			return
 		}
 
-		err := m.doSetBackground(uri)
-		if err != nil {
-			logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
-		}
+		m.wrapBgSetting.SetString(gsKeyBackground, uri)
+		logger.Debug("[Gnome background] sync wrap bg OVER ENDDDDDDDD:", uri, m.wrapBgSetting.GetString(gsKeyBackground))
 	})
 	m.gnomeBgSetting.GetString(gsKeyBackground)
 }

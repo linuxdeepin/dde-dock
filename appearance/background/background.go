@@ -5,10 +5,12 @@ import (
 	"os"
 	"path"
 
+	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
+	"sync"
 )
 
 const (
@@ -26,9 +28,16 @@ type Background struct {
 }
 type Backgrounds []*Background
 
-var cacheBackgrounds Backgrounds
+var (
+	cacheBackgrounds Backgrounds
+
+	locker  sync.Mutex
+	setting *gio.Settings
+)
 
 func RefreshBackground() {
+	locker.Lock()
+	defer locker.Unlock()
 	var infos Backgrounds
 	for _, file := range getBgFiles() {
 		infos = append(infos, &Background{
@@ -73,6 +82,7 @@ func (infos Backgrounds) Set(uri string) (string, error) {
 		if err != nil {
 			return "", err
 		}
+		RefreshBackground()
 	}
 	uri = dutils.EncodeURI(dest, dutils.SCHEME_FILE)
 
@@ -88,6 +98,9 @@ func (infos Backgrounds) GetIds() []string {
 }
 
 func (infos Backgrounds) Get(uri string) *Background {
+	// Ensure list not changed
+	locker.Lock()
+	defer locker.Unlock()
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
 	for _, info := range infos {
 		if uri == info.Id {
@@ -128,13 +141,15 @@ func (info *Background) Thumbnail() (string, error) {
 }
 
 func doSetByURI(uri string) error {
-	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	setting, err := dutils.CheckAndNewGSettings(wrapBgSchema)
-	if err != nil {
-		return err
+	if setting == nil {
+		s, err := dutils.CheckAndNewGSettings(wrapBgSchema)
+		if err != nil {
+			return err
+		}
+		setting = s
 	}
-	defer setting.Unref()
 
+	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
 	old := setting.GetString(gsKeyBackground)
 	if old == uri {
 		return nil

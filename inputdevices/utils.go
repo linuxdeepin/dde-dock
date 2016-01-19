@@ -2,8 +2,9 @@ package inputdevices
 
 import (
 	"fmt"
-	"os/exec"
 	"gir/gio-2.0"
+	"os/exec"
+	"sync"
 )
 
 const (
@@ -13,11 +14,18 @@ const (
 	xsPropDragThres   = "dnd-drag-threshold"
 )
 
-func xsSetInt32(prop string, value int32) {
-	s := gio.NewSettings(xsettingsSchema)
-	defer s.Unref()
+var (
+	xsLocker  sync.Mutex
+	xsSetting = gio.NewSettings(xsettingsSchema)
+)
 
-	s.SetInt(prop, value)
+func xsSetInt32(prop string, value int32) {
+	xsLocker.Lock()
+	if value == xsSetting.GetInt(prop) {
+		return
+	}
+	xsSetting.SetInt(prop, value)
+	xsLocker.Unlock()
 }
 
 func addItemToList(item string, list []string) ([]string, bool) {

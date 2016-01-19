@@ -15,6 +15,8 @@ var (
 	bgDirs   []string
 )
 
+var prevTimestamp int64
+
 func (m *Manager) handleThemeChanged() {
 	if m.watcher == nil {
 		return
@@ -27,21 +29,34 @@ func (m *Manager) handleThemeChanged() {
 	for {
 		select {
 		case <-m.endWatcher:
+			logger.Debug("[Fsnotify] quit watch")
 			return
 		case err := <-m.watcher.Error:
 			logger.Warning("Recieve file watcher error:", err)
 			return
 		case ev := <-m.watcher.Event:
-			<-time.After(time.Millisecond * 800)
-			file := ev.Name
-			switch {
-			case hasEventOccurred(file, bgDirs):
-				background.RefreshBackground()
-			case hasEventOccurred(file, gtkDirs):
-				subthemes.RefreshGtkThemes()
-			case hasEventOccurred(file, iconDirs):
-				subthemes.RefreshIconThemes()
-				subthemes.RefreshCursorThemes()
+			timestamp := time.Now().UnixNano()
+			tmp := timestamp - prevTimestamp
+			logger.Debug("[Fsnotify] timestamp:", prevTimestamp, timestamp, tmp, ev)
+			prevTimestamp = timestamp
+			// Filter time duration < 100ms's event
+			if tmp > 100000000 {
+				<-time.After(time.Millisecond * 100)
+				file := ev.Name
+				logger.Debug("[Fsnotify] changed file:", file)
+				switch {
+				case hasEventOccurred(file, bgDirs):
+					background.RefreshBackground()
+				case hasEventOccurred(file, gtkDirs):
+					// Wait for theme copy finished
+					<-time.After(time.Millisecond * 700)
+					subthemes.RefreshGtkThemes()
+				case hasEventOccurred(file, iconDirs):
+					// Wait for theme copy finished
+					<-time.After(time.Millisecond * 700)
+					subthemes.RefreshIconThemes()
+					subthemes.RefreshCursorThemes()
+				}
 			}
 		}
 	}

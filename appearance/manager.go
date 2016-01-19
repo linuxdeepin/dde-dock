@@ -213,6 +213,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 }
 
 func (m *Manager) doSetBackground(value string) error {
+	logger.Debug("[doSetBackground] start set:", value)
 	dt := m.getCurrentDTheme()
 	if dt == nil {
 		logger.Debug("[doSetBackground] not found validity dtheme")
@@ -232,6 +233,8 @@ func (m *Manager) doSetBackground(value string) error {
 		logger.Debugf("[doSetBackground] set '%s' failed: %v", value, uri, err)
 		return err
 	}
+
+	logger.Debug("[doSetBackground] set over...")
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
 		Icon:          dt.Icon.Id,

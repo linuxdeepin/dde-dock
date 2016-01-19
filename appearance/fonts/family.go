@@ -11,7 +11,6 @@ import (
 
 	"gir/gio-2.0"
 	"gir/glib-2.0"
-	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -23,7 +22,10 @@ const (
 	gsKeyFontName   = "gtk-font-name"
 )
 
-var locker sync.Mutex
+var (
+	locker    sync.Mutex
+	xsSetting = gio.NewSettings(xsettingsSchema)
+)
 
 type Family struct {
 	Id   string
@@ -104,10 +106,7 @@ func SetFamily(standard, monospace string, size int32) error {
 }
 
 func GetFontSize() int32 {
-	setting, _ := dutils.CheckAndNewGSettings(xsettingsSchema)
-	defer setting.Unref()
-
-	return getFontSize(setting)
+	return getFontSize(xsSetting)
 }
 
 func (infos Families) GetIds() []string {
@@ -144,21 +143,15 @@ func (infos Families) add(info *Family) Families {
 }
 
 func setFontByXSettings(name string, size int32) error {
-	setting, err := dutils.CheckAndNewGSettings(xsettingsSchema)
-	if err != nil {
-		return err
-	}
-	defer setting.Unref()
-
 	if size == -1 {
-		size = getFontSize(setting)
+		size = getFontSize(xsSetting)
 	}
 	v := fmt.Sprintf("%s %v", name, size)
-	if v == setting.GetString(gsKeyFontName) {
+	if v == xsSetting.GetString(gsKeyFontName) {
 		return nil
 	}
 
-	setting.SetString(gsKeyFontName, v)
+	xsSetting.SetString(gsKeyFontName, v)
 	return nil
 }
 
@@ -225,7 +218,7 @@ func configContent(standard, mono string) string {
 	    <string>%s</string>
 	</edit>
     </match>
- 
+
     <match target="pattern">
         <test qual="any" name="family">
             <string>sans-serif</string>

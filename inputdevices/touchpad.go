@@ -2,13 +2,13 @@ package inputdevices
 
 import (
 	"fmt"
+	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
-	"gir/gio-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"
@@ -28,8 +28,6 @@ const (
 	tpadKeyThreshold     = "motion-threshold"
 	tpadKeyTapClick      = "tap-to-click"
 	tpadKeyScrollDelta   = "delta-scroll"
-	tpadKeyDoubleClick   = "double-click"
-	tpadKeyDragThreshold = "drag-threshold"
 )
 
 const (
@@ -56,9 +54,10 @@ type Touchpad struct {
 	Exist      bool
 	DeviceList dxutils.DeviceInfos
 
-	dxTPads    map[int32]*dxinput.Touchpad
-	setting    *gio.Settings
-	synProcess *os.Process
+	dxTPads      map[int32]*dxinput.Touchpad
+	setting      *gio.Settings
+	mouseSetting *gio.Settings
+	synProcess   *os.Process
 }
 
 var _tpad *Touchpad
@@ -114,12 +113,14 @@ func NewTouchpad() *Touchpad {
 	tpad.DeltaScroll = property.NewGSettingsIntProperty(
 		tpad, "DeltaScroll",
 		tpad.setting, tpadKeyScrollDelta)
+
+	tpad.mouseSetting = gio.NewSettings(mouseSchema)
 	tpad.DoubleClick = property.NewGSettingsIntProperty(
 		tpad, "DoubleClick",
-		tpad.setting, tpadKeyDoubleClick)
+		tpad.mouseSetting, mouseKeyDoubleClick)
 	tpad.DragThreshold = property.NewGSettingsIntProperty(
 		tpad, "DragThreshold",
-		tpad.setting, tpadKeyDragThreshold)
+		tpad.mouseSetting, mouseKeyDragThreshold)
 
 	tpad.updateDeviceList()
 	tpad.dxTPads = make(map[int32]*dxinput.Touchpad)
