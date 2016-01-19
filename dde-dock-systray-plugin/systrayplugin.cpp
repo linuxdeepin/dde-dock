@@ -39,6 +39,11 @@ void SystrayPlugin::init(DockPluginProxyInterface * proxy)
     connect(entryManager, &DBusEntryManager::TrayInited, this, &SystrayPlugin::onTrayInit);
 
     initTrayIcons();
+
+    if (m_compositeItem->parentWidget()) {
+        //wait for parentWidget() is valuable to set eventFilter
+        m_compositeItem->parentWidget()->installEventFilter(m_compositeItem);
+    }
 }
 
 QString SystrayPlugin::getPluginName()

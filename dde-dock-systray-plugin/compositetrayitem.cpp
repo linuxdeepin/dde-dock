@@ -163,6 +163,16 @@ void CompositeTrayItem::handleUpdateTimer()
     }
 }
 
+bool CompositeTrayItem::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::Enter) {
+        //disable parent's hover event
+        return true;
+    }
+
+    return QFrame::eventFilter(obj, event);
+}
+
 void CompositeTrayItem::resizeEvent(QResizeEvent * event)
 {
     emit sizeChanged();
