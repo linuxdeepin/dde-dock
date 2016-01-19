@@ -89,7 +89,8 @@ HEADERS += \
     src/widgets/old/docklayout.h \
     src/widgets/old/screenmask.h \
     src/widgets/launcher/docklauncheritem.h \
-    src/widgets/old/launcheritem.h
+    src/widgets/old/launcheritem.h \
+    src/controller/stylemanager.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -142,4 +143,5 @@ SOURCES += \
     src/widgets/old/docklayout.cpp \
     src/widgets/old/screenmask.cpp \
     src/widgets/launcher/docklauncheritem.cpp \
-    src/widgets/old/launcheritem.cpp
+    src/widgets/old/launcheritem.cpp \
+    src/controller/stylemanager.cpp

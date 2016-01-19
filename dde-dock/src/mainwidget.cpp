@@ -1,5 +1,6 @@
 #include "mainwidget.h"
 #include "xcb_misc.h"
+#include "controller/stylemanager.h"
 
 const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
@@ -172,4 +173,19 @@ DockUIDbus::~DockUIDbus()
 qulonglong DockUIDbus::Xid()
 {
     return m_parent->winId();
+}
+
+QString DockUIDbus::currentStyleName()
+{
+    return StyleManager::instance()->currentStyle();
+}
+
+QStringList DockUIDbus::styleNameList()
+{
+    return StyleManager::instance()->styleNameList();
+}
+
+void DockUIDbus::applyStyle(const QString &styleName)
+{
+    StyleManager::instance()->applyStyle(styleName);
 }

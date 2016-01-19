@@ -7,6 +7,7 @@
 #include "mainwidget.h"
 #include "logmanager.h"
 #include "Logger.h"
+#include "controller/stylemanager.h"
 #include "controller/signalmanager.h"
 
 #undef signals
@@ -67,14 +68,7 @@ int main(int argc, char *argv[])
     LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
 
     if (QDBusConnection::sessionBus().registerService(DBUS_NAME)) {
-        QFile file("://qss/resources/dark/qss/dde-dock.qss");
-        if (file.open(QFile::ReadOnly)) {
-            QString styleSheet = QLatin1String(file.readAll());
-            qApp->setStyleSheet(styleSheet);
-            file.close();
-        } else {
-            qWarning() << "Dock Open  style file errr!";
-        }
+        StyleManager::instance()->initStyleSheet();
 
         MainWidget w;
         w.show();

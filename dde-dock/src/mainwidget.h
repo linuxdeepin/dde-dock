@@ -65,6 +65,10 @@ public:
     ~DockUIDbus();
 
     Q_SLOT qulonglong Xid();
+    Q_SLOT QString currentStyleName();
+    Q_SLOT QStringList styleNameList();
+    Q_SLOT void applyStyle(const QString &styleName);
+
 private:
     MainWidget* m_parent;
 };

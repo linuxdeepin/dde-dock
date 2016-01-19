@@ -3,9 +3,8 @@ QLabel#Panel[isFashionMode="false"] {
 }
 
 QLabel#Panel[isFashionMode="true"] {
-    border-width: 0px 21px 50px 21px;
-    border-image: url(:/images/resources/dark/images/dark_dock.svg)  0 21 50 21 stretch;
-
+    border-width: 0px 21px 49px 21px;
+    border-image: url(:/images/resources/dark/images/dark_dock.svg)  0 21 49 21 stretch;
 }
 
 QLabel#DockAppTitle {
@@ -48,26 +47,36 @@ QLabel#AppBackgroundActiveLabel {
 }
 
 /******************************Item Preview***********************/
-QPushButton#PreviewCloseButton {
+QPushButton#AppPreviewLoaderFrameCloseButton {
     border-image: url(:/images/resources/dark/images/close_normal.png);
 }
 
-QPushButton#PreviewCloseButton:hover {
+QPushButton#AppPreviewLoaderFrameCloseButton:hover {
     border-image: url(:/images/resources/dark/images/close_hover.png);
 }
 
-QPushButton#PreviewCloseButton:pressed {
+QPushButton#AppPreviewLoaderFrameCloseButton:pressed {
     border-image: url(:/images/resources/dark/images/close_press.png);
 }
 
-QFrame#WindowPreview[isHover="true"] {
-    border-radius: 3px;
-    border-width: 3px;
-    border-style: solid;
-    border-color: rgba(255,255,255,0.5);
+AppPreviewLoader {
+    /*radius is 4 and width is 2 so slice should be 4 + 2 = 6*/
+    border: 6px solid transparent;
+    border-image: url(:/images/resources/dark/images/preview_border_normal.png) 6 repeat;
 }
 
-QLabel#AppPreviewFrameTitle {
+AppPreviewLoader[isHover="true"] {
+    /*radius is 4 and width is 2 so slice should be 4 + 2 = 6*/
+    border: 6px solid transparent;
+    border-image: url(:/images/resources/dark/images/preview_border_hover.png) 6 repeat;
+}
+
+QLabel#AppPreviewLoaderFrameTitle {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 3px;
+    border-width: 0;
     font-size: 10px;
     color: #FFFFFF;
     background-color: rgba(0,0,0,0.7);
