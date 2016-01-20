@@ -51,6 +51,7 @@ public:
     void setDragable(bool v);
     void setLayoutSpacing(int spacing);
     void setAutoResize(bool autoResize);
+    void setAlignment(Qt::Alignment alignment);
     void setEasingCurve(QEasingCurve::Type curve);
     void setAnimationDuration(int animationDuration);
     void setDirection(QBoxLayout::Direction direction);

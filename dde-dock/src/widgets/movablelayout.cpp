@@ -429,6 +429,11 @@ void MovableLayout::setAutoResize(bool autoResize)
     m_autoResize = autoResize;
 }
 
+void MovableLayout::setAlignment(Qt::Alignment alignment)
+{
+    m_layout->setAlignment(alignment);
+}
+
 QEasingCurve::Type MovableLayout::getAnimationCurve() const
 {
     return m_animationCurve;

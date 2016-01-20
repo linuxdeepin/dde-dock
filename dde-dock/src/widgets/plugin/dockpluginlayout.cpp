@@ -16,7 +16,7 @@ QSize DockPluginLayout::sizeHint() const
     switch (direction()) {
     case QBoxLayout::LeftToRight:
     case QBoxLayout::RightToLeft:
-        size.setHeight(DockModeData::instance()->getAppletsItemHeight());
+        size.setHeight(DockModeData::instance()->getDockHeight());
         for (QWidget * widget : widgets()) {
             w += widget->sizeHint().width();
         }

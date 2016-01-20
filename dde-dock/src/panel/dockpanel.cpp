@@ -6,10 +6,10 @@
 #include "controller/dockmodedata.h"
 #include "controller/old/pluginproxy.h"
 
-//const int REFLECTION_HEIGHT = 15;
+const int REFLECTION_Y = 25;
+const int REFLECTION_HEIGHT = 40;
 const int FASHION_PANEL_LPADDING = 21;
 const int FASHION_PANEL_RPADDING = 21;
-//const int WIDTH_ANIMATION_DURATION = 200;
 const int SHOW_ANIMATION_DURATION = 300;
 const int HIDE_ANIMATION_DURATION = 300;
 const int DELAY_HIDE_PREVIEW_INTERVAL = 200;
@@ -27,13 +27,14 @@ DockPanel::DockPanel(QWidget *parent)
     initHideStateManager();
     initPluginLayout();
     initAppLayout();
-
     initMainLayout();
+    initReflection();
 
     setMinimumHeight(m_dockModeData->getDockHeight());  //set height for border-image calculate
     reloadStyleSheet();
 
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &DockPanel::onDockModeChanged);
+    connect(this, &DockPanel::sizeChanged, this, &DockPanel::updateReflection);
 }
 
 bool DockPanel::isFashionMode()
@@ -129,6 +130,13 @@ void DockPanel::initMainLayout()
     onDockModeChanged(m_dockModeData->getDockMode(), m_dockModeData->getDockMode());
 }
 
+void DockPanel::initReflection()
+{
+    m_launcherReflection = new ReflectionEffect(m_launcherItem, this);
+    m_pluginReflection = new ReflectionEffect(m_pluginLayout, this);
+    m_appReflection = new ReflectionEffect(m_appLayout, this);
+}
+
 void DockPanel::initGlobalPreview()
 {
     m_globalPreview = new PreviewWindow(DArrowRectangle::ArrowBottom);
@@ -158,13 +166,15 @@ void DockPanel::onDockModeChanged(Dock::DockMode, Dock::DockMode)
     reloadStyleSheet();
 
     m_pluginLayout->setLayoutSpacing(m_dockModeData->getAppletsItemSpacing());
-    m_pluginLayout->setFixedHeight(m_pluginLayout->sizeHint().height());
+    m_pluginLayout->setFixedHeight(m_dockModeData->getItemHeight());
     QHBoxLayout *mLayout = qobject_cast<QHBoxLayout *>(layout());
     if (m_dockModeData->getDockMode() == Dock::FashionMode) {
         mLayout->setAlignment(m_pluginLayout, Qt::AlignTop);
+        m_pluginLayout->setAlignment(Qt::AlignTop);
     }
     else {
         mLayout->setAlignment(m_pluginLayout, Qt::AlignVCenter);
+        m_pluginLayout->setAlignment(Qt::AlignVCenter);
     }
 }
 
@@ -272,9 +282,31 @@ void DockPanel::showPanelMenu()
     QPoint tmpPos = QCursor::pos();
 
     PanelMenu::instance()->showMenu(tmpPos.x(),tmpPos.y());
+}
 
-//    m_appLayout->itemHoverableChange(false);
-//    m_pluginLayout->itemHoverableChange(false);
+void DockPanel::updateReflection()
+{
+    if (m_dockModeData->getDockMode() == Dock::FashionMode) {
+        m_launcherReflection->setVisible(true);
+        m_launcherReflection->setFixedSize(m_launcherItem->width(), REFLECTION_HEIGHT);
+        m_launcherReflection->move(m_launcherItem->x(), REFLECTION_Y);
+        m_launcherReflection->updateReflection();
+
+        m_appReflection->setVisible(true);
+        m_appReflection->setFixedSize(m_appLayout->width(), REFLECTION_HEIGHT);
+        m_appReflection->move(m_appLayout->x(), REFLECTION_Y);
+        m_appReflection->updateReflection();
+
+        m_pluginReflection->setVisible(true);
+        m_pluginReflection->setFixedSize(m_pluginLayout->width(), REFLECTION_HEIGHT);
+        m_pluginReflection->move(m_pluginLayout->x(), REFLECTION_Y);
+        m_pluginReflection->updateReflection();
+    }
+    else {
+        m_launcherReflection->setVisible(false);
+        m_pluginReflection->setVisible(false);
+        m_appReflection->setVisible(false);
+    }
 }
 
 void DockPanel::loadResources()

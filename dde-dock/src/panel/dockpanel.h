@@ -8,6 +8,7 @@
 #include "widgets/launcher/docklauncheritem.h"
 #include "widgets/plugin/dockpluginlayout.h"
 #include "widgets/app/dockapplayout.h"
+#include "widgets/reflectioneffect.h"
 #include "widgets/previewwindow.h"
 #include "dbus/dbusdisplay.h"
 #include "panelmenu.h"
@@ -44,6 +45,7 @@ private:
     void initPluginLayout();
     void initAppLayout();
     void initMainLayout();
+    void initReflection();
     void initGlobalPreview();
 
     void onDockModeChanged(Dock::DockMode, Dock::DockMode);
@@ -59,6 +61,7 @@ private:
     void reloadStyleSheet();
     void setY(int value);   //for hide and show animation
     void showPanelMenu();
+    void updateReflection();
 
     DisplayRect getScreenRect();
 
@@ -70,6 +73,9 @@ private:
     DockLauncherItem *m_launcherItem = NULL;
     DockPluginLayout *m_pluginLayout = NULL;
     DockAppLayout *m_appLayout = NULL;
+    ReflectionEffect *m_launcherReflection;
+    ReflectionEffect *m_pluginReflection;
+    ReflectionEffect *m_appReflection;
 
     bool m_previewShown = false;
     bool m_isFashionMode = false;
