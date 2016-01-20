@@ -23,3 +23,19 @@ func TestGetDirsFromDTheme(t *testing.T) {
 				"testdata/Theme2/wallpapers"})
 	})
 }
+
+func TestFileInDirs(t *testing.T) {
+	Convey("Test file whether in dirs", t, func() {
+		var dirs = []string{
+			"/tmp/backgrounds",
+			"/tmp/wallpapers",
+		}
+
+		So(isFileInSpecialDir("/tmp/backgrounds/1.jpg", dirs),
+			ShouldEqual, true)
+		So(isFileInSpecialDir("/tmp/wallpapers/1.jpg", dirs),
+			ShouldEqual, true)
+		So(isFileInSpecialDir("/tmp/background/1.jpg", dirs),
+			ShouldEqual, false)
+	})
+}

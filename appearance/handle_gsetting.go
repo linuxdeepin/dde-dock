@@ -28,15 +28,6 @@ func (m *Manager) listenBgGsettings() {
 			logger.Debugf("[Wrap background] set '%s' failed: %s", uri, err)
 			return
 		}
-		logger.Debug("[Wrap background] doSetBackground OVER")
-		if m.gnomeBgSetting == nil {
-			return
-		}
-		logger.Debug("[Wrap background] sync gnome bg:", uri, m.gnomeBgSetting.GetString(gsKeyBackground))
-		if uri == m.gnomeBgSetting.GetString(gsKeyBackground) {
-			return
-		}
-		m.gnomeBgSetting.SetString(gsKeyBackground, uri)
 		logger.Debug("[Wrap background] changed OVER ENDDDDDDDDDDD:", key, uri)
 	})
 	m.wrapBgSetting.GetString(gsKeyBackground)
@@ -46,7 +37,7 @@ func (m *Manager) listenBgGsettings() {
 	}
 	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
 		// Wait for file copy finished
-		<-time.After(time.Millisecond * 500)
+		time.Sleep(time.Millisecond * 500)
 		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
 		logger.Debug("[Gnome background] sync wrap bg:", uri, m.wrapBgSetting.GetString(gsKeyBackground))
 		if uri == m.wrapBgSetting.GetString(gsKeyBackground) {

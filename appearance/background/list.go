@@ -14,10 +14,17 @@ const (
 	dthemeDir = "personalization/themes"
 )
 
-var home = os.Getenv("HOME")
+var (
+	home      = os.Getenv("HOME")
+	dirsCache []string
+)
 
 // ListDirs list all background dirs
 func ListDirs() []string {
+	if len(dirsCache) != 0 {
+		return dirsCache
+	}
+
 	var dirs = []string{
 		"/usr/share/backgrounds",
 		path.Join(glib.GetUserSpecialDir(
@@ -31,7 +38,8 @@ func ListDirs() []string {
 		dthemeDir))...)
 	dirs = append(dirs, getDirsFromDTheme(path.Join(os.Getenv("HOME"),
 		dthemeDir))...)
-	return dirs
+	dirsCache = dirs
+	return dirsCache
 }
 
 func getBgFiles() []string {
@@ -136,4 +144,14 @@ func readLink(file string) string {
 		}
 	}
 	return file
+}
+
+func isFileInSpecialDir(file string, dirs []string) bool {
+	file = dutils.DecodeURI(file)
+	for _, dir := range dirs {
+		if path.Dir(file) == dir {
+			return true
+		}
+	}
+	return false
 }

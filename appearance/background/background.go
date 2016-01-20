@@ -61,8 +61,7 @@ func IsBackgroundFile(file string) bool {
 
 func (infos Backgrounds) Set(uri string) (string, error) {
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	info := infos.Get(uri)
-	if info != nil {
+	if isFileInSpecialDir(uri, ListDirs()) {
 		return uri, doSetByURI(uri)
 	}
 
