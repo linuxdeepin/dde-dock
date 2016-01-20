@@ -115,8 +115,13 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	workaround = newFullScreenWorkaround()
-	go workaround.start()
+	workaround, err = newFullScreenWorkaround()
+	if err != nil {
+		logger.Warning("New fullscreen workaround failed:", err)
+	} else {
+		go workaround.start()
+	}
+
 	// handle sw lid state
 	go power.listenSWLidState()
 	return nil

@@ -25,11 +25,11 @@ import (
 	"os/exec"
 	"strings"
 
+	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"gir/gio-2.0"
 )
 
 const (
@@ -174,6 +174,9 @@ func doAction(cmd string) error {
 
 func canShowOSD(id string) bool {
 	switch id {
+	case "mon-brightness-up", "mon-brightness-down", "volume-up", "volume-down":
+		// Move to mpris
+		return false
 	case "capslock":
 		return canShowCapsOSD()
 

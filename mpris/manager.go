@@ -3,11 +3,17 @@ package mpris
 import (
 	"dbus/com/deepin/daemon/audio"
 	"dbus/com/deepin/daemon/display"
+	"dbus/com/deepin/daemon/helper/backlight"
 	"dbus/com/deepin/daemon/keybinding"
 	"dbus/org/freedesktop/dbus"
 	"dbus/org/freedesktop/login1"
 	"fmt"
 	"pkg.deepin.io/lib/log"
+	"time"
+)
+
+const (
+	cmdDDEOSD = "/usr/lib/deepin-daemon/dde-osd"
 )
 
 var logger = log.NewLogger("daemon/mpris")
@@ -68,17 +74,35 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		return
 	}
 
+	values := m.disp.Brightness.Get()
+	// Wait for check whether changed by driver
+	time.Sleep(time.Millisecond * 100)
+	real, err := getBrightness()
+
 	var delta float64 = 0.05
 	if !raised {
 		delta = -0.05
 	}
-	for output, v := range m.disp.Brightness.Get() {
-		v = v + delta
-		err := m.disp.SetBrightness(output, v)
-		if err != nil {
-			logger.Warning("[SetBrightness] failed:", output, v)
+	for output, v := range values {
+		logger.Debug("[changeBrightness] compare:", v, real)
+		if err == nil && (v < real-0.01 || v > real+0.01) {
+			v = real
+		} else {
+			v = v + delta
+		}
+		err1 := m.disp.SetBrightness(output, v)
+		if err1 != nil {
+			logger.Warning("[SetBrightness] failed:", output, v, err1)
 		}
 	}
+
+	// Show osd
+	var signal = "BrightnessUp"
+	if !raised {
+		signal = "BrightnessDown"
+	}
+	logger.Debug("[changeBrightness] show osd:", cmdDDEOSD, signal)
+	go doAction(cmdDDEOSD + " --" + signal)
 }
 
 func (m *Manager) setMute(pressed bool) {
@@ -105,22 +129,39 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 		return
 	}
 
-	if sink.Mute.Get() {
-		sink.SetMute(false)
-	}
+	v := sink.Volume.Get()
+	// Wait for check whether changed by driver
+	time.Sleep(time.Millisecond * 100)
+	real := sink.Volume.Get()
 
-	var delta float64 = 0.1
+	var delta float64 = 0.05
 	if !raised {
-		delta = -0.1
+		delta = -0.05
 	}
 
-	v := sink.Volume.Get() + delta
+	if v < real-0.01 || v > real+0.01 {
+		v = real
+	} else {
+		v += delta
+	}
 	if v < 0 {
 		v = 0
 	} else if v > 1 {
 		v = 1.0
 	}
+
+	if sink.Mute.Get() {
+		sink.SetMute(false)
+	}
 	sink.SetVolume(v, true)
+
+	// Show osd
+	var signal = "VolumeUp"
+	if !raised {
+		signal = "VolumeDown"
+	}
+	logger.Debug("[changeVolume] show osd:", cmdDDEOSD, signal)
+	go doAction(cmdDDEOSD + " --" + signal)
 }
 
 func (m *Manager) getDefaultSink() (*audio.AudioSink, error) {
@@ -139,4 +180,19 @@ func (m *Manager) getDefaultSink() (*audio.AudioSink, error) {
 	}
 
 	return sink, nil
+}
+
+var bl *backlight.Backlight
+
+func getBrightness() (float64, error) {
+	if bl == nil {
+		helper, err := backlight.NewBacklight(
+			"com.deepin.daemon.helper.Backlight",
+			"/com/deepin/daemon/helper/Backlight")
+		if err != nil {
+			return 1, err
+		}
+		bl = helper
+	}
+	return bl.GetBrightness("backlight")
 }
