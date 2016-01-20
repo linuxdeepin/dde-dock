@@ -16,7 +16,7 @@ CompositeTrayItem::CompositeTrayItem(QWidget *parent) :
     m_isCovered(true),
     m_isFolded(false)
 {
-    resize(1, 1);
+    setFixedSize(1, 1);
     setObjectName("CompositeItem");
 
     m_cover = new QLabel(this);
@@ -238,7 +238,7 @@ void CompositeTrayItem::relayout()
         QString style = QString("QFrame#CompositeItem { background-image: url(':/images/darea_container_%1.svg') }").arg(columnCount * 2);
         setStyleSheet(style);
 
-        resize(Margins * 2 + ColumnWidth * columnCount, 48);
+        setFixedSize(Margins * 2 + ColumnWidth * columnCount, 48);
 
         int placesCount = items.length();
         if (m_isFolded && placesCount > 3) { placesCount = 3;}
@@ -285,7 +285,7 @@ void CompositeTrayItem::relayout()
         m_cover->hide();
 
         setStyleSheet("");
-        resize(childrenCount * Dock::APPLET_CLASSIC_ICON_SIZE + (childrenCount - 1) * Dock::APPLET_CLASSIC_ITEM_SPACING,
+        setFixedSize(childrenCount * Dock::APPLET_CLASSIC_ICON_SIZE + (childrenCount - 1) * Dock::APPLET_CLASSIC_ITEM_SPACING,
                Dock::APPLET_CLASSIC_ICON_SIZE);
 
         QList<TrayIcon*> items = m_icons.values();
