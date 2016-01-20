@@ -172,7 +172,7 @@ void DockAppLayout::initEntries() const
     m_appManager->initEntries();
 }
 
-void DockAppLayout::enterEvent(QEnterEvent *e)
+void DockAppLayout::enterEvent(QEvent *e)
 {
     Q_UNUSED(e)
 

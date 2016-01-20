@@ -59,12 +59,14 @@ void DockPluginItem::enterEvent(QEvent *)
     if (hoverable()) {
         DisplayRect rec = m_display->primaryRect();
         showPreview(QPoint(globalX() + width() / 2, rec.height- DockModeData::instance()->getDockHeight() - DOCK_PREVIEW_MARGIN));
+        emit mouseEnter();
     }
 }
 
 void DockPluginItem::leaveEvent(QEvent *)
 {
     hidePreview();
+    emit mouseLeave();
 }
 
 
@@ -80,6 +82,15 @@ void DockPluginItem::mousePressEvent(QMouseEvent * event)
         QString command = m_plugin->getCommand(m_id);
         if (!command.isEmpty()) QProcess::startDetached(command);
     }
+
+    emit mousePress();
+}
+
+void DockPluginItem::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event)
+
+    emit mouseRelease();
 }
 
 QString DockPluginItem::getMenuContent()

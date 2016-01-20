@@ -27,7 +27,7 @@ protected:
     void enterEvent(QEvent * event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent * event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
-//    void mouseReleaseEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
 
 private:
     DBusDisplay *m_display = NULL;

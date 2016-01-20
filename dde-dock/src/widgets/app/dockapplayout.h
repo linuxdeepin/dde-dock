@@ -13,7 +13,7 @@ class DockAppLayout : public MovableLayout
 public:
     explicit DockAppLayout(QWidget *parent = 0);
 
-    QSize sizeHint() const;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
     void initEntries() const;
 signals:
     void needPreviewUpdate();
@@ -22,8 +22,8 @@ signals:
     void itemHoverableChange(bool v);
 
 protected:
-    void enterEvent(QEnterEvent *e);
-    bool eventFilter(QObject *obj, QEvent *e);
+    void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initDropMask();

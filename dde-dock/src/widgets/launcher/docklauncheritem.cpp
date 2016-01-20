@@ -23,16 +23,16 @@ DockLauncherItem::DockLauncherItem(QWidget *parent)
 
 void DockLauncherItem::enterEvent(QEvent *)
 {
-    if (!hoverable())
-        return;
-
-    showPreview();
+    if (hoverable()) {
+        showPreview();
+        emit mouseEnter();
+    }
 }
 
 void DockLauncherItem::leaveEvent(QEvent *)
 {
-
     hidePreview();
+    emit mouseLeave();
 }
 
 void DockLauncherItem::mousePressEvent(QMouseEvent *event)
@@ -41,6 +41,8 @@ void DockLauncherItem::mousePressEvent(QMouseEvent *event)
         slotMousePress(event);
     else
         DockItem::mousePressEvent(event);
+
+    emit mousePress();
 }
 
 void DockLauncherItem::mouseReleaseEvent(QMouseEvent *event)
@@ -49,6 +51,8 @@ void DockLauncherItem::mouseReleaseEvent(QMouseEvent *event)
         slotMouseRelease(event);
     else
         DockItem::mouseReleaseEvent(event);
+
+    emit mouseRelease();
 }
 
 void DockLauncherItem::slotMousePress(QMouseEvent *event)

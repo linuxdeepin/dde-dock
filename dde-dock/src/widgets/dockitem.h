@@ -29,6 +29,7 @@ public:
     void showMenu(const QPoint &menuPos = QPoint(0, 0));
     void showPreview(const QPoint &previewPos = QPoint(0, 0));
     void hidePreview(bool immediately = false);
+    void setFixedSize(int width, int height);
 
     int globalX();
     int globalY();
@@ -41,6 +42,11 @@ signals:
     void needPreviewHide(bool immediately);
     void needPreviewShow(QPoint pos);
     void needPreviewUpdate();
+    //signals for hightlight
+    void mouseEnter();
+    void mouseLeave();
+    void mousePress();
+    void mouseRelease();
 
 protected:
     bool m_hoverable = true;
@@ -51,6 +57,7 @@ protected:
     DBusMenuManager * m_dbusMenuManager;
 
     void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE;
+    void moveEvent(QMoveEvent *) Q_DECL_OVERRIDE;
 
 private:
     void initHighlight();

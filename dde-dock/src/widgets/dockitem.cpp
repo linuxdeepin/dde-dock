@@ -4,9 +4,7 @@
 #include "dbus/dbusdisplay.h"
 
 
-const int TITLE_HEIGHT = 20;
 const int CONTENT_PREVIEW_INTERVAL = 200;
-const int TITLE_PREVIEW_INTERVAL = 0;
 const int DOCK_PREVIEW_MARGIN = 8;
 
 class DockItemTitle : public QLabel
@@ -37,12 +35,14 @@ void DockItemTitle::setTitle(QString title)
 }
 
 DockItem::DockItem(QWidget * parent) :
-    QFrame(parent), m_dbusMenuManager(nullptr), m_dbusMenu(nullptr)
+    QFrame(parent),
+    m_dbusMenu(nullptr),
+    m_dbusMenuManager(nullptr),
+    m_highlight(nullptr)
 {
 
     setAttribute(Qt::WA_TranslucentBackground);
 
-    initHighlight();
     m_titleLabel = new DockItemTitle;
     m_titlePreview = new PreviewWindow(DArrowRectangle::ArrowBottom);
 }
@@ -81,8 +81,12 @@ QPoint DockItem::globalPos()
 
 void DockItem::showPreview(const QPoint &previewPos)
 {
-    if (!m_titlePreview->isHidden())
-    {
+    //make sure parentWidget() is valuable befor init hightlight
+    if (!m_highlight && parentWidget()) {
+        initHighlight();
+    }
+
+    if (!m_titlePreview->isHidden()) {
         m_titlePreview->resizeWithContent();
         return;
     }
@@ -119,6 +123,16 @@ void DockItem::hidePreview(bool immediately)
     m_titlePreview->hidePreview(immediately);
 
     emit needPreviewHide(immediately);
+}
+
+void DockItem::setFixedSize(int width, int height)
+{
+    QFrame::setFixedSize(width, height);
+
+    if (m_highlight) {
+        m_highlight->setFixedSize(size());
+        m_highlight->setVisible(false);
+    }
 }
 
 void DockItem::showMenu(const QPoint &menuPos)
@@ -173,34 +187,41 @@ void DockItem::invokeMenuItem(QString, bool)
 
 void DockItem::initHighlight()
 {
-    QWidget * lParent = qobject_cast<QWidget *>(parent());
-    m_highlight = new HighlightEffect(this, lParent);
-//            connect(this, &DockItem::dragStart, [=](){
-//                m_highlight->setVisible(false);
-//            });
-//            connect(this, &DockItem::mousePress, [=](){
-//                m_highlight->showDarker();
-//                emit frameUpdate();
-//            });
-//            connect(this, &DockItem::mouseRelease, [=](){
-//                m_highlight->showLighter();
-//                emit frameUpdate();
-//            });
-//            connect(this, &DockItem::mouseEntered, [=](){
-//                m_highlight->showLighter();
-//                emit frameUpdate();
-//            });
-//            connect(this, &DockItem::mouseExited, [=](){
-//                if (!m_highlight->isVisible())
-//                    return;
-//                m_highlight->showNormal();
-//                emit frameUpdate();
-//            });
+    m_highlight = new HighlightEffect(this, parentWidget());
+
+    connect(this, &DockItem::mousePress, [=](){
+        m_highlight->move(pos());
+        m_highlight->showDarker();
+    });
+    connect(this, &DockItem::mouseRelease, [=](){
+        m_highlight->move(pos());
+        m_highlight->showLighter();
+    });
+    connect(this, &DockItem::mouseEnter, [=](){
+        m_highlight->move(pos());
+        m_highlight->showLighter();
+        m_highlight->setVisible(true);
+    });
+    connect(this, &DockItem::mouseLeave, [=](){
+        if (!m_highlight->isVisible())
+            return;
+        m_highlight->setVisible(false);
+        m_highlight->move(pos());
+    });
 }
 
 void DockItem::resizeEvent(QResizeEvent * event)
 {
+    Q_UNUSED(event)
+
     if (m_highlight) {
-        m_highlight->setFixedSize(event->size());
+        m_highlight->setFixedSize(size());
+        m_highlight->setVisible(false);
     }
+}
+
+void DockItem::moveEvent(QMoveEvent *)
+{
+    if (m_highlight)
+        m_highlight->setVisible(false);
 }

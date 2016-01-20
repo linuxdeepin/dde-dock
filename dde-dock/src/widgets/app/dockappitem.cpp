@@ -1,6 +1,5 @@
 #include "dockappitem.h"
 
-const int INVALID_MOVE_RADIUS = 10;
 const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCubic;
 
 DockAppItem::DockAppItem(QWidget *parent) :
@@ -240,6 +239,7 @@ void DockAppItem::onMousePress(QMouseEvent *event)
     Q_UNUSED(event)
 
     hidePreview(true);
+    emit mousePress();
 }
 
 void DockAppItem::onMouseRelease(QMouseEvent *event)
@@ -248,8 +248,11 @@ void DockAppItem::onMouseRelease(QMouseEvent *event)
         m_entryProxyer->Activate(event->globalX(), event->globalY(), event->timestamp());
         m_appBG->showActivatingAnimation();
     }
-    else if (event->button() == Qt::RightButton)
+    else if (event->button() == Qt::RightButton) {
         showMenu();
+    }
+
+    emit mouseRelease();
 }
 
 void DockAppItem::onMouseEnter()
@@ -257,6 +260,7 @@ void DockAppItem::onMouseEnter()
     if (hoverable()) {
         m_appBG->setIsHovered(true);
         showPreview();
+        emit mouseEnter();
     }
 }
 
@@ -264,6 +268,7 @@ void DockAppItem::onMouseLeave()
 {
     m_appBG->setIsHovered(false);
     hidePreview(false);
+    emit mouseLeave();
 }
 
 void DockAppItem::resizeBackground()
