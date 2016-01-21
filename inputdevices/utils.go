@@ -22,6 +22,7 @@ var (
 func xsSetInt32(prop string, value int32) {
 	xsLocker.Lock()
 	if value == xsSetting.GetInt(prop) {
+		xsLocker.Unlock()
 		return
 	}
 	xsSetting.SetInt(prop, value)
