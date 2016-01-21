@@ -15,6 +15,7 @@ public:
 
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void initEntries() const;
+
 signals:
     void needPreviewUpdate();
     void needPreviewHide(bool immediately);
@@ -30,12 +31,15 @@ private:
     void initAppManager();
 
     bool isDraging() const;
+    bool getDragFromOutside() const;
     void setIsDraging(bool isDraging);
+    void setDragFromOutside(bool dragFromOutside);
     bool isDesktopFileDocked(const QString &path);
     QString getAppKeyByPath(const QString &path);
     void separateFiles(const QList<QUrl> &urls, QStringList &normals, QStringList &desktopes);
 
     void onDrop(QDropEvent *event);
+    void onDragLeave(QDragLeaveEvent *event);
     void onDragEnter(QDragEnterEvent *event);
     void onAppItemRemove(const QString &id);
     void onAppItemAdd(DockAppItem *item);
@@ -45,6 +49,7 @@ private:
 
 private:
     bool m_isDraging;
+    bool m_dragFromOutside; //mark to determine sizeHint should be plus the spacing
     DropMask *m_mask;
     DockAppManager *m_appManager;
     DBusDockedAppManager *m_ddam;

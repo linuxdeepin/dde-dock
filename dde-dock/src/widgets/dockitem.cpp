@@ -37,8 +37,8 @@ void DockItemTitle::setTitle(QString title)
 DockItem::DockItem(QWidget * parent) :
     QFrame(parent),
     m_dbusMenu(nullptr),
-    m_dbusMenuManager(nullptr),
-    m_highlight(nullptr)
+    m_highlight(nullptr),
+    m_dbusMenuManager(nullptr)
 {
 
     setAttribute(Qt::WA_TranslucentBackground);

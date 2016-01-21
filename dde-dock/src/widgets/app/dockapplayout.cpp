@@ -102,8 +102,9 @@ void DropMask::dropEvent(QDropEvent *e)
 //            group->addAnimation(rotationAnimation);
 
             group->start();
+            emit droped();
+
             connect(group, &QPropertyAnimation::finished, [=]{
-                emit droped();
                 hide();
 
                 scaleAnimation->deleteLater();
@@ -137,6 +138,7 @@ DockAppLayout::DockAppLayout(QWidget *parent) :
     qApp->installEventFilter(this);
     m_ddam = new DBusDockedAppManager(this);
     connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
+    connect(this, &DockAppLayout::dragLeaved, this, &DockAppLayout::onDragLeave);
     connect(this, &DockAppLayout::dragEntered, this, &DockAppLayout::onDragEnter);
 }
 
@@ -152,6 +154,12 @@ QSize DockAppLayout::sizeHint() const
         for (QWidget * widget : widgets()) {
             w += widget->width();
         }
+        if (dragingWidget() && isDraging()) {
+            w += dragingWidget()->width();
+        }
+        else if (getDragFromOutside()){
+            w += DockModeData::instance()->getNormalItemWidth();
+        }
         size.setWidth(w + getLayoutSpacing() * widgets().count());
         break;
     case QBoxLayout::TopToBottom:
@@ -159,6 +167,12 @@ QSize DockAppLayout::sizeHint() const
         size.setWidth(DockModeData::instance()->getNormalItemWidth());
         for (QWidget * widget : widgets()) {
             h += widget->height();
+        }
+        if (dragingWidget()) {
+            h += dragingWidget()->height();
+        }
+        else if (getDragFromOutside()) {
+            h += DockModeData::instance()->getItemHeight();
         }
         size.setHeight(h + getLayoutSpacing() * widgets().count());
         break;
@@ -183,7 +197,8 @@ bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
 {
     if (e->type() == QEvent::Move) {
         QMoveEvent *me = (QMoveEvent *)e;
-        if (me && isDraging() && !geometry().contains(mapFromGlobal(QCursor::pos()))) {
+        QRect r(0, 0, width(), height());
+        if (me && isDraging() && !r.contains(mapFromGlobal(QCursor::pos()))) {
             //show mask to catch draging widget
             //fixme
             m_mask->move(QCursor::pos().x() - 15, QCursor::pos().y() - 15); //15,拖动时的鼠标位移
@@ -199,7 +214,8 @@ void DockAppLayout::initDropMask()
     m_mask = new DropMask;
     connect(m_mask, &DropMask::droped, this, [=] {
         setIsDraging(false);
-        emit requestSpacingItemsDestroy();
+        emit requestSpacingItemsDestroy(false);
+        setFixedSize(sizeHint());
     });
     connect(m_mask, &DropMask::invalidDroped, this, &DockAppLayout::restoreDragingWidget);
     connect(this, &DockAppLayout::dragEntered, m_mask, &DropMask::hide);
@@ -221,6 +237,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
 {
     m_mask ->hide();
     setIsDraging(false);
+    setDragFromOutside(false);
 
     if (event->source() == this) {  //from itself
         m_ddam->Sort(appIds());
@@ -229,7 +246,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
     else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString())) {
-            emit requestSpacingItemsDestroy();
+            emit requestSpacingItemsDestroy(true);
         }
         else {
             m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
@@ -264,6 +281,13 @@ void DockAppLayout::onDrop(QDropEvent *event)
     }
 }
 
+void DockAppLayout::onDragLeave(QDragLeaveEvent *event)
+{
+    Q_UNUSED(event)
+
+    setDragFromOutside(false);
+}
+
 void DockAppLayout::onDragEnter(QDragEnterEvent *event)
 {
     if (event->source() == this) {
@@ -273,7 +297,11 @@ void DockAppLayout::onDragEnter(QDragEnterEvent *event)
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString())) {
             setDragable(false);
-            emit requestSpacingItemsDestroy();
+            setDragFromOutside(false);
+            emit requestSpacingItemsDestroy(false);
+        }
+        else {
+            setDragFromOutside(true);
         }
     }
     else {  //from desktop file
@@ -285,13 +313,19 @@ void DockAppLayout::onDragEnter(QDragEnterEvent *event)
             if (desktops.length() > 0) {
                 for (QString path : desktops) {
                     //多个文件中只要存在一个有效并且未docked的desktop文件，都可以做拖入dock的操作
-                    if (!isDesktopFileDocked(path))
+                    if (!isDesktopFileDocked(path)) {
+                        setDragFromOutside(true);
                         return;
+                    }
                 }
             }
 
             setDragable(false);
-            emit requestSpacingItemsDestroy();
+            setDragFromOutside(false);
+            emit requestSpacingItemsDestroy(false);
+        }
+        else {
+            setDragFromOutside(false);
         }
     }
 }
@@ -357,6 +391,16 @@ QStringList DockAppLayout::appIds()
     }
 
     return ids;
+}
+
+bool DockAppLayout::getDragFromOutside() const
+{
+    return m_dragFromOutside;
+}
+
+void DockAppLayout::setDragFromOutside(bool dragFromOutside)
+{
+    m_dragFromOutside = dragFromOutside;
 }
 
 bool DockAppLayout::isDraging() const

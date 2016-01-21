@@ -13,6 +13,7 @@ class QPropertyAnimation;
 class MovableLayout : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(QSize size READ size WRITE setFixedSize)
 public:
     enum MoveDirection {
         MoveLeftToRight,
@@ -34,7 +35,7 @@ public:
     int getHoverIndextByPos(const QPoint &pos);
     int indexOf(QWidget * const widget, int from = 0) const;
 
-    QWidget *dragingWidget();
+    QWidget *dragingWidget() const;
     QWidget *widget(int index) const;
     QList<QWidget *> widgets() const;
     QSize getDefaultSpacingItemSize() const;
@@ -61,8 +62,9 @@ public:
 signals:
     void startDrag(QDrag*);
     void drop(QDropEvent *event);
-    void requestSpacingItemsDestroy();
+    void requestSpacingItemsDestroy(bool immediately);
     void sizeChanged(QResizeEvent *event);
+    void dragLeaved(QDragLeaveEvent *event);
     void dragEntered(QDragEnterEvent *event);
 
 private:
@@ -75,6 +77,7 @@ private:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    void initSizeAniamtion();
     void storeDragingWidget();
     void handleDrag(const QPoint &pos);
     void updateCurrentHoverInfo(int index, const QPoint &pos);
@@ -95,6 +98,7 @@ private:
     QSize m_defaultSpacingItemSize;
     MoveDirection m_vMoveDirection;
     MoveDirection m_hMoveDirection;
+    QPropertyAnimation *m_sizeAnimation;
     QEasingCurve::Type m_animationCurve;
 };
 

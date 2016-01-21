@@ -19,7 +19,7 @@ signals:
 
 public slots:
     void StartGrow(bool immediately = false);
-    void StartDecline();
+    void StartDecline(bool immediately);
 
 private:
     QSize m_targetSize;
@@ -55,14 +55,20 @@ void MovableSpacingItem::StartGrow(bool immediately)
     m_growAnimation->start();
 }
 
-void MovableSpacingItem::StartDecline()
+void MovableSpacingItem::StartDecline(bool immediately)
 {
-    m_growAnimation->stop();
+    if (immediately) {
+        setFixedSize(0, 0);
+        emit declineFinish();
+    }
+    else {
+        m_growAnimation->stop();
 
-    m_declineAnimation->setStartValue(this->size());
-    m_declineAnimation->setEndValue(QSize(0, 0));
+        m_declineAnimation->setStartValue(this->size());
+        m_declineAnimation->setEndValue(QSize(0, 0));
 
-    m_declineAnimation->start();
+        m_declineAnimation->start();
+    }
 }
 
 #include "movablelayout.moc"
@@ -84,6 +90,8 @@ MovableLayout::MovableLayout(QWidget *parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
+    initSizeAniamtion();
+
     m_layout = new QHBoxLayout(this);
     m_layout->setSpacing(0);
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -99,6 +107,8 @@ MovableLayout::MovableLayout(QBoxLayout::Direction direction, QWidget *parent)
       m_animationCurve(ANIMATION_CURVE)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+
+    initSizeAniamtion();
 
     m_layout = new QHBoxLayout(this);
     m_layout->setDirection(direction);
@@ -117,7 +127,7 @@ int MovableLayout::indexOf(QWidget * const widget, int from) const
     return m_widgetList.indexOf(widget, from);
 }
 
-QWidget *MovableLayout::dragingWidget()
+QWidget *MovableLayout::dragingWidget() const
 {
     return m_draginItem;
 }
@@ -185,7 +195,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                 item = qobject_cast<MovableSpacingItem *>(m_layout->itemAt(tmpIndex)->widget());
                 if (item) {
                     //note to other
-                    emit requestSpacingItemsDestroy();
+                    emit requestSpacingItemsDestroy(false);
                     item->StartGrow();
                 }
                 else {
@@ -198,7 +208,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                 item = qobject_cast<MovableSpacingItem *>(m_layout->itemAt(tmpIndex)->widget());
                 if (item) {
                     //note to other
-                    emit requestSpacingItemsDestroy();
+                    emit requestSpacingItemsDestroy(false);
                     item->StartGrow();
                 }
                 else {
@@ -316,7 +326,8 @@ void MovableLayout::dragLeaveEvent(QDragLeaveEvent *event)
 {
     Q_UNUSED(event)
 
-    emit requestSpacingItemsDestroy();
+    emit dragLeaved(event);
+    emit requestSpacingItemsDestroy(false);
 }
 
 void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
@@ -333,13 +344,20 @@ void MovableLayout::dropEvent(QDropEvent *event)
         restoreDragingWidget();
     }
 
-    emit requestSpacingItemsDestroy();
+    emit requestSpacingItemsDestroy(false);
     emit drop(event);
 }
 
 void MovableLayout::resizeEvent(QResizeEvent *event)
 {
     emit sizeChanged(event);
+}
+
+void MovableLayout::initSizeAniamtion()
+{
+    m_sizeAnimation = new QPropertyAnimation(this, "size");
+    m_sizeAnimation->setDuration(ANIMATION_DURATION);
+    m_sizeAnimation->setEasingCurve(ANIMATION_CURVE);
 }
 
 void MovableLayout::storeDragingWidget()
@@ -355,13 +373,14 @@ void MovableLayout::restoreDragingWidget()
     insertWidget(hoverIndex(), m_draginItem);
     m_draginItem = nullptr;
 
-    emit requestSpacingItemsDestroy();
+    //destroy all spacingitem make drop look smooth
+    emit requestSpacingItemsDestroy(true);
 }
 
 void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size, bool immediately)
 {
     //note to other
-    emit requestSpacingItemsDestroy();
+    emit requestSpacingItemsDestroy(false);
 
     MovableSpacingItem *nItem = new MovableSpacingItem(m_animationDuration, m_animationCurve, size);
     connect(this, &MovableLayout::requestSpacingItemsDestroy, nItem, &MovableSpacingItem::StartDecline);
@@ -482,7 +501,9 @@ void MovableLayout::setEasingCurve(QEasingCurve::Type curve)
 bool MovableLayout::event(QEvent *e)
 {
     if (e->type() == QEvent::LayoutRequest && getAutoResize()) {
-        setFixedSize(sizeHint());
+        m_sizeAnimation->setStartValue(size());
+        m_sizeAnimation->setEndValue(sizeHint());
+        m_sizeAnimation->start();
     }
 
     return QFrame::event(e);
