@@ -17,7 +17,7 @@ const (
 	cpuKeyARMProcessor = "Processor"
 )
 
-func getCPUInfo(file string) (string, error) {
+func GetCPUInfo(file string) (string, error) {
 	data, err := parseInfoFile(file, cpuKeyDelim)
 	if err != nil {
 		return "", err

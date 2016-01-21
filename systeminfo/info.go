@@ -78,7 +78,7 @@ func NewSystemInfo() *SystemInfo {
 		err  error
 	)
 
-	info.Processor, err = getCPUInfo("/proc/cpuinfo")
+	info.Processor, err = GetCPUInfo("/proc/cpuinfo")
 	if err != nil {
 		logger.Warning("Get cpu info failed:", err)
 	}

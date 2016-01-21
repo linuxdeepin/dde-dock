@@ -24,8 +24,12 @@ package power
 import (
 	libupower "dbus/org/freedesktop/upower"
 	"fmt"
+	"io/ioutil"
 	"pkg.deepin.io/lib/dbus"
+	"strconv"
+	"strings"
 	"sync"
+	"time"
 )
 
 type batteryDevice libupower.Device
@@ -35,13 +39,29 @@ type batteryGroup struct {
 	propChangedHandler func()
 	changeLock         sync.Mutex
 	destroyLock        sync.Mutex
+	quitListener       chan struct{}
+}
+
+var batteryStateMap = map[string]uint32{
+	"Unknown":          BatteryStateUnknown,
+	"Charging":         BatteryStateCharging,
+	"Discharging":      BatteryStateDischarging,
+	"Empty":            BatteryStateEmpty,
+	"FullCharged":      BatteryStateFullyCharged,
+	"PendingCharge":    BatteryStatePendingCharge,
+	"PendingDischarge": BatteryStatePendingDischarge,
 }
 
 func NewBatteryGroup(handler func()) *batteryGroup {
 	batGroup := batteryGroup{}
 
 	batGroup.propChangedHandler = handler
-	batGroup.setDeviceLsit()
+	batGroup.setDeviceList()
+
+	if isSWPlatform() {
+		batGroup.quitListener = make(chan struct{})
+		go batGroup.stateListener()
+	}
 
 	return &batGroup
 }
@@ -91,7 +111,11 @@ func (batGroup *batteryGroup) SetPropChnagedHandler(handler func()) {
 
 	batGroup.Destroy()
 	batGroup.propChangedHandler = handler
-	batGroup.setDeviceLsit()
+	if isSWPlatform() {
+		batGroup.quitListener = make(chan struct{})
+		go batGroup.stateListener()
+	}
+	batGroup.setDeviceList()
 }
 
 func (batGroup *batteryGroup) GetBatteryInfo() (bool, uint32, float64, error) {
@@ -103,6 +127,12 @@ func (batGroup *batteryGroup) GetBatteryInfo() (bool, uint32, float64, error) {
 	}
 
 	battery := batGroup.BatList[0]
+	if isSWPlatform() {
+		file := "/sys/class/power_supply/" + battery.NativePath.Get() + "/uevent"
+		logger.Debug("[Battery Info] file:", file)
+		return getBatteryStateFromFile(file)
+	}
+
 	return battery.IsPresent.Get(),
 		battery.State.Get(),
 		battery.Percentage.Get(),
@@ -113,6 +143,13 @@ func (batGroup *batteryGroup) Destroy() {
 	batGroup.destroyLock.Lock()
 	defer batGroup.destroyLock.Unlock()
 
+	if isSWPlatform() {
+		if batGroup.quitListener != nil {
+			close(batGroup.quitListener)
+			batGroup.quitListener = nil
+		}
+	}
+
 	for _, battery := range batGroup.BatList {
 		battery.Destroy()
 	}
@@ -121,7 +158,7 @@ func (batGroup *batteryGroup) Destroy() {
 	batGroup.propChangedHandler = nil
 }
 
-func (batGroup *batteryGroup) setDeviceLsit() {
+func (batGroup *batteryGroup) setDeviceList() {
 	batGroup.changeLock.Lock()
 	defer batGroup.changeLock.Unlock()
 
@@ -133,6 +170,7 @@ func (batGroup *batteryGroup) setDeviceLsit() {
 
 	var tmpList []*batteryDevice
 	for _, path := range devs {
+		logger.Debug("Check device whether is battery:", path)
 		dev, err := libupower.NewDevice(UPOWER_BUS_NAME, path)
 		if err != nil {
 			logger.Warning("New Device Object Failed:", err)
@@ -144,11 +182,13 @@ func (batGroup *batteryGroup) setDeviceLsit() {
 			continue
 		}
 
+		logger.Debug("Add battery:", path)
 		tmpList = append(tmpList,
 			newBatteryDevice(dev, batGroup.propChangedHandler))
 	}
 
 	batGroup.BatList = tmpList
+	logger.Debug("Battery device list:", batGroup.BatList)
 }
 
 func (batGroup *batteryGroup) isBatteryPathExist(path dbus.ObjectPath) bool {
@@ -159,6 +199,23 @@ func (batGroup *batteryGroup) isBatteryPathExist(path dbus.ObjectPath) bool {
 	}
 
 	return false
+}
+
+func (batGroup *batteryGroup) stateListener() {
+	if batGroup.propChangedHandler == nil {
+		return
+	}
+
+	for {
+		select {
+		case <-batGroup.quitListener:
+			return
+		case <-time.After(time.Second * 5):
+			if batGroup.propChangedHandler != nil {
+				batGroup.propChangedHandler()
+			}
+		}
+	}
 }
 
 func newBatteryDevice(dev *libupower.Device, handler func()) *batteryDevice {
@@ -182,4 +239,64 @@ func (battery *batteryDevice) listenProperties(handler func()) {
 
 func (battery *batteryDevice) Destroy() {
 	libupower.DestroyDevice((*libupower.Device)(battery))
+}
+
+func getBatteryStateFromFile(file string) (bool, uint32, float64, error) {
+	data, err := readBatteryInfoFile(file)
+	if err != nil {
+		return false, BatteryStateUnknown, 0, err
+	}
+
+	isPresent, ok := data["POWER_SUPPLY_PRESENT"]
+	if !ok {
+		return false, BatteryStateUnknown, 0,
+			fmt.Errorf("Invalid battery state file: %v", file)
+	}
+
+	status, ok := data["POWER_SUPPLY_STATUS"]
+	if !ok {
+		return false, BatteryStateUnknown, 0,
+			fmt.Errorf("Invalid battery state file: %v", file)
+	}
+	state, ok := batteryStateMap[status]
+	if !ok {
+		return false, BatteryStateUnknown, 0,
+			fmt.Errorf("Invalid battery state file: %v", file)
+	}
+
+	capacity, ok := data["POWER_SUPPLY_CAPACITY"]
+	if !ok {
+		return false, BatteryStateUnknown, 0,
+			fmt.Errorf("Invalid battery state file: %v", file)
+	}
+	percentage, err := strconv.ParseFloat(capacity, 10)
+	if err != nil {
+		return false, BatteryStateUnknown, 0, err
+	}
+
+	logger.Debug("[Battery State] from file:", isPresent, state, percentage)
+	return (isPresent == "1"), state, percentage, nil
+}
+
+func readBatteryInfoFile(file string) (map[string]string, error) {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(content), "\n")
+	var data = make(map[string]string)
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		array := strings.Split(line, "=")
+		if len(array) != 2 {
+			continue
+		}
+		data[array[0]] = strings.TrimSpace(array[1])
+	}
+
+	return data, nil
 }

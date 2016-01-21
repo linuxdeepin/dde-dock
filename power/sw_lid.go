@@ -2,7 +2,9 @@ package power
 
 import (
 	"io/ioutil"
+	"pkg.deepin.io/dde/daemon/systeminfo"
 	dutils "pkg.deepin.io/lib/utils"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -61,3 +63,26 @@ func isSWLidStateChanged(state string) bool {
 	}
 	return true
 }
+
+var isSWPlatform = func() func() bool {
+	var (
+		isSW bool
+		cpu  string
+	)
+
+	return func() bool {
+		if len(cpu) != 0 {
+			return isSW
+		}
+
+		var err error
+		cpu, err = systeminfo.GetCPUInfo("/proc/cpuinfo")
+		if err != nil {
+			cpu = ""
+			return false
+		}
+		isSW, _ = regexp.MatchString(`^sw`, cpu)
+		logger.Debug("Is SW Platform:", isSW)
+		return isSW
+	}
+}()

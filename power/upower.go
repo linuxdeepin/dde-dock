@@ -187,6 +187,12 @@ func (p *Power) updateBatteryInfo() {
 		logger.Warning(err)
 		return
 	}
+
+	if present && (state == BatteryStateDischarging) {
+		p.setPropOnBattery(true)
+	} else {
+		p.setPropOnBattery(false)
+	}
 	p.setPropBatteryIsPresent(present)
 	p.setPropBatteryState(state)
 	p.setPropBatteryPercentage(percentage)

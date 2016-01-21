@@ -8,20 +8,20 @@ import (
 
 func TestCPUInfo(t *testing.T) {
 	Convey("Test cpu info", t, func() {
-		cpu, err := getCPUInfo("testdata/cpuinfo")
+		cpu, err := GetCPUInfo("testdata/cpuinfo")
 		So(cpu, ShouldEqual,
 			"Intel(R) Core(TM) i3 CPU M 330 @ 2.13GHz x 4")
 		So(err, ShouldBeNil)
 
-		cpu, err = getCPUInfo("testdata/sw-cpuinfo")
+		cpu, err = GetCPUInfo("testdata/sw-cpuinfo")
 		So(cpu, ShouldEqual, "sw 1.4GHz x 4")
 		So(err, ShouldBeNil)
 
-		cpu, err = getCPUInfo("testdata/loonson3-cpuinfo")
+		cpu, err = GetCPUInfo("testdata/loonson3-cpuinfo")
 		So(cpu, ShouldEqual, "ICT Loongson-3B V0.7 FPU V0.1 x 6")
 		So(err, ShouldBeNil)
 
-		cpu, err = getCPUInfo("testdata/arm-cpuinfo")
+		cpu, err = GetCPUInfo("testdata/arm-cpuinfo")
 		So(cpu, ShouldEqual, "ARMv7 Processor rev 0 (v7l) x 4")
 		So(err, ShouldBeNil)
 	})

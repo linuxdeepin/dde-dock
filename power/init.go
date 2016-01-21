@@ -123,7 +123,9 @@ func (d *Daemon) Start() error {
 	}
 
 	// handle sw lid state
-	go power.listenSWLidState()
+	if isSWPlatform() {
+		go power.listenSWLidState()
+	}
 	return nil
 }
 
