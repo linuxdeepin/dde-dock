@@ -341,6 +341,37 @@ void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
 void MovableLayout::dropEvent(QDropEvent *event)
 {
     if (m_draginItem && event->source() == this) {
+        //判断拖动对象是否在layout的空旷区域中drop，如果是，则把拖拽中的widget插入末尾（layout的前部总是会被填满）
+        QWidget *lw = m_widgetList.last();
+        switch (direction()) {
+        case QBoxLayout::TopToBottom:
+            if (event->pos().y() > (lw->pos().y() + lw->height())) {
+                m_lastHoverIndex = m_widgetList.length() - 1;
+                m_vMoveDirection = MoveBottomToTop;
+            }
+            break;
+        case QBoxLayout::LeftToRight:
+            if (event->pos().x() > (lw->pos().x() + lw->width())) {
+                m_lastHoverIndex = m_widgetList.length() - 1;
+                m_hMoveDirection = MoveRightToLeft;
+            }
+            break;
+        case QBoxLayout::BottomToTop:
+            if (event->pos().y() < (lw->pos().y() - lw->height())) {
+                m_lastHoverIndex = m_widgetList.length() - 1;
+                m_vMoveDirection = MoveTopToBottom;
+            }
+            break;
+        case QBoxLayout::RightToLeft:
+            if (event->pos().x() < (lw->pos().x() - lw->width())) {
+                m_lastHoverIndex = m_widgetList.length() - 1;
+                m_hMoveDirection = MoveLeftToRight;
+            }
+            break;
+        default:
+            break;
+        }
+
         restoreDragingWidget();
     }
 
