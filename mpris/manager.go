@@ -156,9 +156,9 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 	sink.SetVolume(v, true)
 
 	// Show osd
-	var signal = "VolumeUp"
+	var signal = "AudioUp"
 	if !raised {
-		signal = "VolumeDown"
+		signal = "AudioDown"
 	}
 	logger.Debug("[changeVolume] show osd:", cmdDDEOSD, signal)
 	go doAction(cmdDDEOSD + " --" + signal)
