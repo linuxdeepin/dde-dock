@@ -12,6 +12,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * sqlite3
 * libudev
 * fontconfig
+* libbamf3
 
 ### Runtime dependencies
 
