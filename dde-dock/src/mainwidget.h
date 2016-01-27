@@ -46,12 +46,13 @@ private:
     void hideDock();
     void onPanelSizeChanged();
     void onDockModeChanged();
-    void updateXcbStructPartial();
     void initHideStateManager();
 
 private slots:
     void showDock();
-    void updatePosition();
+    void updatePosition(const QRect &rec);
+    void updateXcbStructPartial();
+    void updateGeometry();
 
 private:
 #ifdef NEW_DOCK_LAYOUT

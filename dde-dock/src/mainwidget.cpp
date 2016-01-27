@@ -32,7 +32,7 @@ MainWidget::MainWidget(QWidget *parent)
 #else
     m_mainPanel = new Panel(this);
     connect(m_mainPanel, &Panel::startShow, this, &MainWidget::showDock);
-    connect(m_mainPanel,&Panel::panelHasHidden,this,&MainWidget::hideDock);
+    connect(m_mainPanel, &Panel::panelHasHidden, this, &MainWidget::hideDock);
     connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
 #endif
 
@@ -40,42 +40,32 @@ MainWidget::MainWidget(QWidget *parent)
 
     //For init
     m_display = new DBusDisplay(this);
-    updatePosition();
+    updatePosition(m_display->primaryRect());
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
     Q_UNUSED(dockUIDbus)
 
     XcbMisc::instance()->set_window_type(winId(), XcbMisc::Dock);
 
-#ifdef NEW_DOCK_LAYOUT
-    connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
-        //        m_mainPanel->resizeWithContent();
-        updatePosition();
-    });
-    connect(m_display, &DBusDisplay::PrimaryRectChanged, [=] {
-        //        m_mainPanel->resizeWithContent();
-        updatePosition();
-    });
-#else
-    connect(m_display, &DBusDisplay::PrimaryChanged, [=] {
-        m_mainPanel->resizeWithContent();
-        updatePosition();
-    });
-    connect(m_display, &DBusDisplay::PrimaryRectChanged, [=] {
-        m_mainPanel->resizeWithContent();
-        updatePosition();
-    });
-#endif
+    connect(m_display, &DBusDisplay::PrimaryChanged, this, &MainWidget::updateGeometry);
+    connect(m_display, &DBusDisplay::ScreenHeightChanged, this, &MainWidget::updateGeometry);
+    connect(m_display, &DBusDisplay::ScreenWidthChanged, this, &MainWidget::updateGeometry);
 }
 
 void MainWidget::onDockModeChanged()
 {
-    updatePosition();
+    updatePosition(m_display->primaryRect());
+//    QMetaObject::invokeMethod(this, "updatePosition", Qt::QueuedConnection, Q_ARG(QRect, m_display->primaryRect()));
 }
 
-void MainWidget::updatePosition()
+void MainWidget::updatePosition(const QRect &rec)
 {
-    DisplayRect rec = m_display->primaryRect();
+    // sometimes rec's width or height is ZERO, we need to ignore these wrong data.
+    if (!rec.width() || !rec.height()) {
+        return;
+    }
+
+    qDebug() << "move to " << rec;
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
@@ -84,18 +74,20 @@ void MainWidget::updatePosition()
 #else
         this->setFixedSize(m_mainPanel->width(), 1);
 #endif
-        this->move(rec.x + (rec.width - width()) / 2,
-                   rec.y + rec.height - 1);//1 pixel for grab mouse enter event to show panel
-    }
-    else {
+        this->move(rec.x() + (rec.width() - width()) / 2,
+                   rec.y() + rec.height() - 1);//1 pixel for grab mouse enter event to show panel
+    } else {
 #ifdef NEW_DOCK_LAYOUT
         this->setFixedSize(m_mainPanel->sizeHint().width(), m_dmd->getDockHeight());
 #else
         this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
 #endif
-        this->move(rec.x + (rec.width - width()) / 2,
-                   rec.y + rec.height - this->height());
+        move(rec.x() + (rec.width() - width()) / 2,
+             rec.y() + rec.height() - height());
     }
+
+    qDebug() << "size = " << width() << ", " << height();
+    qDebug() << "move to " << this->x() << ", " << this->y() << " end";
 
     updateXcbStructPartial();
 }
@@ -105,14 +97,53 @@ void MainWidget::updateXcbStructPartial()
     int tmpHeight = 0;
     DBusDockSetting dds;
     if (dds.GetHideMode() == Dock::KeepShowing) {
-        int maxMonitorHeight = qApp->desktop()->size().height();
+        // qApp's screenHeight is wrong. its a bug, use dbus data instead.
+//        int maxMonitorHeight = qApp->desktop()->size().height();
+//        int max = 0;
+//        for (QScreen *screen : qApp->screens())
+//        {
+//            QRect screenRect = screen->geometry();
+//            max = qMax(max, screenRect.y() + screenRect.height());
+//        }
+
+//        qDebug() << "max = " << max;
+
+        int maxMonitorHeight = m_display->screenHeight();
         tmpHeight = maxMonitorHeight - y();
     }
+
+    // sometimes screen height is wrong, we need to ignore wrong data.
+    if (tmpHeight && tmpHeight < m_dmd->getDockHeight()) {
+        return;
+    }
+
+    qDebug() << "maxHeight dbus: " << m_display->screenHeight();
+    qDebug() << "set structPartial: " << x() << ", " << width() << ", " << tmpHeight;
+
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
                                            tmpHeight,
                                            x(),
                                            x() + width());
+    this->setVisible(true);
+}
+
+void MainWidget::updateGeometry()
+{
+    QRect primaryRect = m_display->primaryRect();
+
+    qDebug() << "change screen, primary is: " << m_display->primary();
+
+    for (const QScreen *screen : qApp->screens()) {
+        if (screen->name() == m_display->primary()) {
+            primaryRect = screen->geometry();
+            connect(screen, &QScreen::geometryChanged, this, &MainWidget::updatePosition);
+        } else {
+            disconnect(screen, &QScreen::geometryChanged, this, &MainWidget::updatePosition);
+        }
+    }
+
+    updatePosition(primaryRect);
 }
 
 void MainWidget::initHideStateManager()
@@ -123,11 +154,12 @@ void MainWidget::initHideStateManager()
 
 void MainWidget::enterEvent(QEvent *)
 {
-    if (height() == 1){
+    if (height() == 1) {
         QTimer *st = new QTimer(this);
-        connect(st, &QTimer::timeout, this, [=] {
+        connect(st, &QTimer::timeout, this, [ = ] {
             //make sure the panel will show by mouse-enter
-            if (geometry().contains(QCursor::pos())) {
+            if (geometry().contains(QCursor::pos()))
+            {
                 qDebug() << "MouseEntered, show dock...";
                 showDock();
                 m_mainPanel->startShow();
@@ -140,25 +172,26 @@ void MainWidget::enterEvent(QEvent *)
 
 void MainWidget::leaveEvent(QEvent *)
 {
-    if (!this->geometry().contains(QCursor::pos()))
+    if (!this->geometry().contains(QCursor::pos())) {
         m_dhsm->UpdateState();
+    }
 }
 
 void MainWidget::showDock()
 {
     m_hasHidden = false;
-    updatePosition();
+    updatePosition(m_display->primaryRect());
 }
 
 void MainWidget::hideDock()
 {
     m_hasHidden = true;
-    updatePosition();
+    updatePosition(m_display->primaryRect());
 }
 
 void MainWidget::onPanelSizeChanged()
 {
-    updatePosition();
+    updatePosition(m_display->primaryRect());
 }
 
 MainWidget::~MainWidget()

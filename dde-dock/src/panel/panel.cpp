@@ -9,6 +9,9 @@
 
 #include <QHBoxLayout>
 #include <QTimer>
+#include <QApplication>
+#include <QScreen>
+#include <QDesktopWidget>
 
 #include "panel.h"
 #include "controller/dockmodedata.h"
@@ -30,6 +33,7 @@ Panel::Panel(QWidget *parent)
     initAppManager();
     initReflection();
     initScreenMask();
+    initScreenMointor();
 
     setMinimumHeight(m_dockModeData->getDockHeight());  //set height for border-image calculate
     reloadStyleSheet();
@@ -130,7 +134,7 @@ void Panel::initPluginManager()
         m_pluginLayout->removeItem(item);
     });
     connect(PanelMenu::instance(), &PanelMenu::settingPlugin, [=]{
-        m_pluginManager->onPluginsSetting(getScreenRect().height - height());
+        m_pluginManager->onPluginsSetting(getScreenRect().height() - height());
     });
 }
 
@@ -228,6 +232,25 @@ void Panel::initGlobalPreview()
     });
 }
 
+void Panel::initScreenMointor()
+{
+    m_displayInter = new DBusDisplay(this);
+
+    auto updateGeometry = [this] {
+        for (const QScreen *screen : qApp->screens())
+        {
+            if (screen->name() == m_displayInter->primary())
+                connect(screen, &QScreen::geometryChanged, this, &Panel::resizeWithContent);
+            else
+                disconnect(screen, &QScreen::geometryChanged, this, &Panel::resizeWithContent);
+        }
+
+        resizeWithContent();
+    };
+
+    connect(m_displayInter, &DBusDisplay::PrimaryChanged, this, updateGeometry);
+}
+
 void Panel::onItemDropped()
 {
     m_maskWidget->hide();
@@ -262,17 +285,17 @@ void Panel::resizeWithContent()
     }
     else
     {
-        DisplayRect rec = getScreenRect();
+        QRect rec = getScreenRect();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(),m_dockModeData->getItemHeight());
-        m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
 
         m_appLayout->move(0, 0);
-        m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(),m_dockModeData->getDockHeight());
-
-        emit sizeChanged();
     }
+
+    emit sizeChanged();
 }
 
 void Panel::onAppItemAdd(AbstractDockItem *item, bool delayShow)
@@ -417,12 +440,12 @@ void Panel::reanchorsLayout(Dock::DockMode mode)
     }
     else
     {
-        DisplayRect rec = getScreenRect();
+        QRect rec = getScreenRect();
         m_pluginLayout->resize(m_pluginLayout->getContentsWidth(), m_dockModeData->getItemHeight());
-        m_pluginLayout->move(rec.width - m_pluginLayout->width(),1);
+        m_pluginLayout->move(rec.width() - m_pluginLayout->width(),1);
 
         m_appLayout->move(0, 0);
-        m_appLayout->resize(rec.width - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
+        m_appLayout->resize(rec.width() - m_pluginLayout->width() ,m_dockModeData->getItemHeight());
 
         this->setFixedSize(m_appLayout->width() + m_pluginLayout->width(), m_dockModeData->getDockHeight());
 
@@ -516,10 +539,9 @@ void Panel::setY(int value)
     move(x(), value);
 }
 
-DisplayRect Panel::getScreenRect()
+QRect Panel::getScreenRect() const
 {
-    DBusDisplay d;
-    return d.primaryRect();
+    return m_displayInter->primaryRect();
 }
 
 Panel::~Panel()

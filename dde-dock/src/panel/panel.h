@@ -68,6 +68,7 @@ private:
     void initReflection();
     void initScreenMask();
     void initGlobalPreview();
+    void initScreenMointor();
 
     void onItemDropped();
     void onItemDragStarted();
@@ -92,7 +93,7 @@ private:
     void reloadStyleSheet();
     void setY(int value);   //for hide and show animation
 
-    DisplayRect getScreenRect();
+    QRect getScreenRect() const;
 
 private:
     QPoint m_lastPreviewPos;
@@ -110,6 +111,7 @@ private:
     LayoutDropMask *m_pluginLayoutMask = NULL;
     DockLayout *m_appLayout = NULL;
     PluginManager *m_pluginManager = NULL;
+    DBusDisplay *m_displayInter = nullptr;
 
     bool m_previewShown = false;
     bool m_isFashionMode = false;
