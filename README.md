@@ -9,7 +9,6 @@ DDE Daemon is a daemon for handling  the deepin session settings
 
 * [dde-api](https://github.com/linuxdeepin/dde-api)
 * [startdde](https://github.com/linuxdeepin/startdde)
-* sqlite3
 * libudev
 * fontconfig
 * libbamf3

@@ -30,7 +30,7 @@ func TestCPUInfo(t *testing.T) {
 func TestMemInfo(t *testing.T) {
 	Convey("Test memory info", t, func() {
 		mem, err := getMemoryFromFile("testdata/meminfo")
-		So(mem, ShouldEqual, 4005441536)
+		So(mem, ShouldEqual, uint64(4005441536))
 		So(err, ShouldBeNil)
 	})
 }

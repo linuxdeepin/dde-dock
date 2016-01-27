@@ -5,8 +5,6 @@ import (
 	"path"
 	"strings"
 
-	_ "github.com/mattn/go-sqlite3"
-
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appinfo"
 	"pkg.deepin.io/dde/daemon/launcher/category"
