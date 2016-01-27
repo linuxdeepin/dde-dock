@@ -17,23 +17,23 @@ type CategoryTestSuite struct {
 var _ = C.Suite(&CategoryTestSuite{})
 
 func (s *CategoryTestSuite) TestGetID(c *C.C) {
-	cf := &Info{AllID, "all", map[ItemID]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.ID(), C.Equals, AllID)
 }
 func (s *CategoryTestSuite) TestGetName(c *C.C) {
-	cf := &Info{AllID, "all", map[ItemID]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.Name(), C.Equals, "all")
 }
 
 func (s *CategoryTestSuite) TestGetAddItem(c *C.C) {
-	cf := &Info{AllID, "all", map[ItemID]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.items, C.DeepEquals, make(map[ItemID]struct{}, 0))
 	cf.AddItem(ItemID("test"))
 	c.Assert(cf.items, C.DeepEquals, map[ItemID]struct{}{ItemID("test"): struct{}{}})
 }
 
 func (s *CategoryTestSuite) TestRemoveItem(c *C.C) {
-	cf := &Info{AllID, "all", map[ItemID]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.items, C.DeepEquals, make(map[ItemID]struct{}, 0))
 	cf.AddItem(ItemID("test"))
 	c.Assert(cf.items, C.DeepEquals, map[ItemID]struct{}{ItemID("test"): struct{}{}})
@@ -42,7 +42,7 @@ func (s *CategoryTestSuite) TestRemoveItem(c *C.C) {
 }
 
 func (s *CategoryTestSuite) TestItems(c *C.C) {
-	cf := &Info{AllID, "all", map[ItemID]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.Items(), C.DeepEquals, []ItemID{})
 
 	cf.AddItem(ItemID("test"))

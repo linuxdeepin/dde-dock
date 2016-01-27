@@ -2,7 +2,9 @@ package category
 
 import (
 	"errors"
+	"sort"
 	"strings"
+	"sync"
 
 	"pkg.deepin.io/dde/daemon/dstore"
 	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
@@ -60,6 +62,7 @@ type Info struct {
 	id    CategoryID
 	name  string
 	items map[ItemID]struct{}
+	lock  sync.RWMutex
 }
 
 func NewInfo(id CategoryID, name string) *Info {
@@ -87,20 +90,41 @@ func (c *Info) LocaleName() string {
 
 // AddItem adds a new app.
 func (c *Info) AddItem(itemID ItemID) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.items[itemID] = struct{}{}
 }
 
 // RemoveItem removes a app.
 func (c *Info) RemoveItem(itemID ItemID) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	delete(c.items, itemID)
+}
+
+type ByItemID []ItemID
+
+func (items ByItemID) Swap(i, j int) {
+	items[i], items[j] = items[j], items[i]
+}
+
+func (items ByItemID) Len() int {
+	return len(items)
+}
+
+func (items ByItemID) Less(i, j int) bool {
+	return items[i] < items[j]
 }
 
 // Items returns all items belongs to this category.
 func (c *Info) Items() []ItemID {
 	items := []ItemID{}
+	c.lock.RLock()
 	for itemID := range c.items {
 		items = append(items, itemID)
 	}
+	c.lock.RUnlock()
+	sort.Sort(ByItemID(items))
 	return items
 }
 
