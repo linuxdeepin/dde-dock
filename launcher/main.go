@@ -77,7 +77,7 @@ func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 				desktopApp := gio.ToDesktopAppInfo(app)
 				newItem := item.New(desktopApp)
 				cid, err := cm.QueryID(desktopApp)
-				Log.Debug("get category", cid, "for", newItem.ID())
+				Log.Debug("get category", category.ToString(cid), "for", newItem.ID())
 				newItem.SetCategoryID(cid)
 				if err != nil {
 					Log.Debug("QueryCategoryID failed:", err)

@@ -2,6 +2,7 @@ package category
 
 import (
 	"errors"
+	"fmt"
 	"sort"
 	"strings"
 	"sync"
@@ -13,47 +14,65 @@ import (
 
 // category id and name.
 const (
-	OthersID CategoryID = iota - 2
-	AllID
+	AllID CategoryID = iota - 1
 	InternetID
-	OfficeID
-	DevelopmentID
-	ReadingID
+	ChatID
+	MusicID
+	VideoID
 	GraphicsID
 	GameID
-	MusicID
+	OfficeID
+	ReadingID
+	DevelopmentID
 	SystemID
-	VideoID
-	ChatID
-
-	AllName         = dstore.AllName
-	OthersName      = dstore.OthersName
-	InternetName    = dstore.InternetName
-	OfficeName      = dstore.OfficeName
-	DevelopmentName = dstore.DevelopmentName
-	ReadingName     = dstore.ReadingName
-	GraphicsName    = dstore.GraphicsName
-	GameName        = dstore.GameName
-	MusicName       = dstore.MusicName
-	SystemName      = dstore.SystemName
-	VideoName       = dstore.VideoName
-	ChatName        = dstore.ChatName
+	OthersID
 )
+
+func ToString(cid CategoryID) string {
+	prefix := "unknown"
+	switch cid {
+	case OthersID:
+		prefix = "Other"
+	case AllID:
+		prefix = "All"
+	case InternetID:
+		prefix = "Internet"
+	case OfficeID:
+		prefix = "Office"
+	case DevelopmentID:
+		prefix = "Development"
+	case ReadingID:
+		prefix = "Reading"
+	case GraphicsID:
+		prefix = "Graphics"
+	case GameID:
+		prefix = "Game"
+	case MusicID:
+		prefix = "Music"
+	case SystemID:
+		prefix = "System"
+	case VideoID:
+		prefix = "Video"
+	case ChatID:
+		prefix = "Chat"
+	}
+	return fmt.Sprintf("%s(%d)", prefix, int(cid))
+}
 
 var (
 	categoryNameTable = map[string]CategoryID{
-		OthersName:      OthersID,
-		AllName:         AllID,
-		InternetName:    InternetID,
-		OfficeName:      OfficeID,
-		DevelopmentName: DevelopmentID,
-		ReadingName:     ReadingID,
-		GraphicsName:    GraphicsID,
-		GameName:        GameID,
-		MusicName:       MusicID,
-		SystemName:      SystemID,
-		VideoName:       VideoID,
-		ChatName:        ChatID,
+		dstore.OthersID:      OthersID,
+		dstore.AllID:         AllID,
+		dstore.InternetID:    InternetID,
+		dstore.OfficeID:      OfficeID,
+		dstore.DevelopmentID: DevelopmentID,
+		dstore.ReadingID:     ReadingID,
+		dstore.GraphicsID:    GraphicsID,
+		dstore.GameID:        GameID,
+		dstore.MusicID:       MusicID,
+		dstore.SystemID:      SystemID,
+		dstore.VideoID:       VideoID,
+		dstore.ChatID:        ChatID,
 	}
 )
 

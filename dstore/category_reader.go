@@ -58,47 +58,47 @@ type CategoryJSONInfo struct {
 func GetAllInfos(file string) []CategoryJSONInfo {
 	fallbackCategories := []CategoryJSONInfo{
 		CategoryJSONInfo{
-			ID:   OthersName,
+			ID:   OthersID,
 			Name: OthersName,
 		},
 		CategoryJSONInfo{
-			ID:   InternetName,
+			ID:   InternetID,
 			Name: InternetName,
 		},
 		CategoryJSONInfo{
-			ID:   OfficeName,
+			ID:   OfficeID,
 			Name: OfficeName,
 		},
 		CategoryJSONInfo{
-			ID:   DevelopmentName,
+			ID:   DevelopmentID,
 			Name: DevelopmentName,
 		},
 		CategoryJSONInfo{
-			ID:   ReadingName,
+			ID:   ReadingID,
 			Name: ReadingName,
 		},
 		CategoryJSONInfo{
-			ID:   GraphicsName,
+			ID:   GraphicsID,
 			Name: GraphicsName,
 		},
 		CategoryJSONInfo{
-			ID:   GameName,
+			ID:   GameID,
 			Name: GameName,
 		},
 		CategoryJSONInfo{
-			ID:   MusicName,
+			ID:   MusicID,
 			Name: MusicName,
 		},
 		CategoryJSONInfo{
-			ID:   SystemName,
+			ID:   SystemID,
 			Name: SystemName,
 		},
 		CategoryJSONInfo{
-			ID:   VideoName,
+			ID:   VideoID,
 			Name: VideoName,
 		},
 		CategoryJSONInfo{
-			ID:   ChatName,
+			ID:   ChatID,
 			Name: ChatName,
 		},
 	}

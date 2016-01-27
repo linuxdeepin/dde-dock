@@ -32,7 +32,7 @@ func NewManager(store DStore, categories []CategoryInfo) *Manager {
 		queryIDTransaction: nil,
 	}
 	m.addCategory(categories...)
-	m.addCategory(NewInfo(AllID, AllName))
+	m.addCategory(NewInfo(AllID, dstore.AllName))
 	return m
 }
 
