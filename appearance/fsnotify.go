@@ -71,7 +71,7 @@ func (m *Manager) watchGtkDirs() {
 		"/usr/share/themes",
 	}
 
-	m.watchFiles(gtkDirs)
+	m.watchDirs(gtkDirs)
 }
 
 func (m *Manager) watchIconDirs() {
@@ -83,19 +83,24 @@ func (m *Manager) watchIconDirs() {
 		"/usr/share/icons",
 	}
 
-	m.watchFiles(iconDirs)
+	m.watchDirs(iconDirs)
 }
 
 func (m *Manager) watchBgDirs() {
 	bgDirs = background.ListDirs()
-	m.watchFiles(bgDirs)
+	m.watchDirs(bgDirs)
 }
 
-func (m *Manager) watchFiles(files []string) {
-	for _, file := range files {
-		err := m.watcher.Watch(file)
+func (m *Manager) watchDirs(dirs []string) {
+	for _, dir := range dirs {
+		err := os.MkdirAll(dir, 0755)
 		if err != nil {
-			logger.Debugf("Watch file '%s' failed: %v", file, err)
+			logger.Debugf("Mkdir '%s' failed: %v", dir, err)
+		}
+
+		err = m.watcher.Watch(dir)
+		if err != nil {
+			logger.Debugf("Watch dir '%s' failed: %v", dir, err)
 		}
 	}
 }
