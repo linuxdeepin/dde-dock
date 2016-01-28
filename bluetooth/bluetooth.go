@@ -51,6 +51,7 @@ type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 type Bluetooth struct {
 	config        *config
 	objectManager *sysdbus.ObjectManager
+	agent         *agent
 
 	// adapter
 	adaptersLock sync.Mutex
@@ -71,11 +72,22 @@ type Bluetooth struct {
 	DeviceAdded              func(devJSON string)
 	DeviceRemoved            func(devJSON string)
 	DevicePropertiesChanged  func(devJSON string)
-	RequestPinCode           func(devJSON string)
-	AuthorizeService         func(devJSON string, uuid string)
+
+	DisplayPinCode func(device dbus.ObjectPath, pincode string)
+	DisplayPasskey func(device dbus.ObjectPath, passkey uint32, entered uint32)
+
+	//AuthorizeService func(device dbus.ObjectPath)
+	//RequestConfirmation you shoud call Confirm with accpet
+	RequestConfirmation func(device dbus.ObjectPath, passkey string)
+	//RequestAuthorization you shoud call Confirm with accpet
+	RequestAuthorization func(device dbus.ObjectPath)
+	//RequestPinCode you should call FeedPinCode with accpet and key
+	RequestPinCode func(device dbus.ObjectPath)
+	//RequestPasskey you should call FeedPasskey with accpet and key
+	RequestPasskey func(device dbus.ObjectPath)
 }
 
-func NewBluetooth() (b *Bluetooth) {
+func newBluetooth() (b *Bluetooth) {
 	b = &Bluetooth{}
 	b.adapters = map[dbus.ObjectPath]*adapter{}
 	return

@@ -192,7 +192,7 @@ func (b *Bluetooth) RequestDiscovery(apath dbus.ObjectPath) (err error) {
 }
 
 func (b *Bluetooth) SetAdapterPowered(apath dbus.ObjectPath, powered bool) (err error) {
-	b.ClearUnpairedDevice()
+	b.clearUnpairedDevice()
 	err = bluezSetAdapterPowered(apath, powered)
 	if err == nil {
 		// save the powered state

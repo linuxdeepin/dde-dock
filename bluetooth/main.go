@@ -27,27 +27,27 @@ import (
 	"pkg.deepin.io/lib/log"
 )
 
-type Daemon struct {
+type daemon struct {
 	*ModuleBase
 }
 
-func NewBluetoothDaemon(logger *log.Logger) *Daemon {
-	var d = new(Daemon)
+func newBluetoothDaemon(logger *log.Logger) *daemon {
+	var d = new(daemon)
 	d.ModuleBase = NewModuleBase("bluetooth", d, logger)
 	return d
 }
 
-func (*Daemon) GetDependencies() []string {
+func (*daemon) GetDependencies() []string {
 	return []string{}
 }
 
 var bluetooth *Bluetooth
-var agent *Agent
+var _agent *agent
 
 func initBluetooth() error {
 	destroyBluetooth()
 
-	bluetooth = NewBluetooth()
+	bluetooth = newBluetooth()
 	err := dbus.InstallOnSession(bluetooth)
 	if err != nil {
 		// don't panic or fatal here
@@ -56,8 +56,10 @@ func initBluetooth() error {
 		return err
 	}
 
-	agent = newAgent()
-	err = dbus.InstallOnSystem(agent)
+	_agent = newAgent()
+	_agent.b = bluetooth
+	bluetooth.agent = _agent
+	err = dbus.InstallOnSystem(_agent)
 	if err != nil {
 		//don't panic or fatal here
 		logger.Error("register dbus interface failed: ", err)
@@ -66,7 +68,7 @@ func initBluetooth() error {
 
 	// initialize bluetooth after dbus interface installed
 	bluetooth.init()
-	agent.init()
+	_agent.init()
 	return nil
 }
 
@@ -76,9 +78,9 @@ func destroyBluetooth() {
 		bluetooth = nil
 	}
 
-	if agent != nil {
-		agent.destroy()
-		agent = nil
+	if _agent != nil {
+		_agent.destroy()
+		_agent = nil
 	}
 
 }
@@ -88,7 +90,7 @@ func doStart() {
 	bluezWatchRestart()
 }
 
-func (*Daemon) Start() error {
+func (*daemon) Start() error {
 	if bluetooth != nil {
 		return nil
 	}
@@ -99,7 +101,7 @@ func (*Daemon) Start() error {
 	return nil
 }
 
-func (*Daemon) Stop() error {
+func (*daemon) Stop() error {
 	logger.EndTracing()
 	destroyBluetooth()
 	bluezDestroyDbusDaemon(bluezDBusDaemon)

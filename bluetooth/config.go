@@ -30,6 +30,7 @@ type config struct {
 
 	Adapters map[string]*adapterConfig // use adapter hardware address as key
 }
+
 type adapterConfig struct {
 	Powered bool
 }
@@ -37,15 +38,17 @@ type adapterConfig struct {
 func newConfig() (c *config) {
 	c = &config{}
 	c.core.SetConfigName("bluetooth")
-	logger.Info("config file:", c.core.GetConfigFile())
+	logger.Info("load bluetooth config file:", c.core.GetConfigFile())
 	c.Adapters = make(map[string]*adapterConfig)
 	c.load()
-	c.clearSpareConfig()
+	go c.clearSpareConfig()
 	return
 }
+
 func (c *config) load() {
 	c.core.Load(c)
 }
+
 func (c *config) save() {
 	c.core.Save(c)
 }
@@ -56,13 +59,14 @@ func newAdapterConfig() (ac *adapterConfig) {
 }
 
 func (c *config) clearSpareConfig() {
-	c.core.Lock()
-	defer c.core.Unlock()
 	var addresses []string
 	apathes := bluezGetAdapters()
 	for _, apath := range apathes {
 		addresses = append(addresses, bluezGetAdapterAddress(apath))
 	}
+
+	c.core.Lock()
+	defer c.core.Unlock()
 	for address, _ := range c.Adapters {
 		if !isStringInArray(address, addresses) {
 			delete(c.Adapters, address)
@@ -79,6 +83,7 @@ func (c *config) addAdapterConfig(address string) {
 	defer c.core.Unlock()
 	c.Adapters[address] = newAdapterConfig()
 }
+
 func (c *config) removeAdapterConfig(address string) {
 	if !c.isAdapterConfigExists(address) {
 		logger.Errorf("config for adapter %s not exists", address)
@@ -89,12 +94,14 @@ func (c *config) removeAdapterConfig(address string) {
 	defer c.core.Unlock()
 	delete(c.Adapters, address)
 }
+
 func (c *config) getAdapterConfig(address string) (ac *adapterConfig, ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
 	ac, ok = c.Adapters[address]
 	return
 }
+
 func (c *config) isAdapterConfigExists(address string) (ok bool) {
 	c.core.Lock()
 	defer c.core.Unlock()
@@ -102,27 +109,22 @@ func (c *config) isAdapterConfigExists(address string) (ok bool) {
 	return
 
 }
+
 func (c *config) getAdapterConfigPowered(address string) (powered bool) {
-	ac, ok := c.getAdapterConfig(address)
-	if !ok {
-		return
-	}
-
 	c.core.Lock()
-	powered = ac.Powered
-	c.core.Unlock()
-	return
+	defer c.core.Unlock()
+	if ac, ok := c.Adapters[address]; ok {
+		return ac.Powered
+	}
+	return false
 }
+
 func (c *config) setAdapterConfigPowered(address string, powered bool) {
-	ac, ok := c.getAdapterConfig(address)
-	if !ok {
-		return
-	}
-
 	c.core.Lock()
-	ac.Powered = powered
+	if ac, ok := c.Adapters[address]; ok {
+		ac.Powered = powered
+	}
 	c.core.Unlock()
-
 	c.save()
 	return
 }

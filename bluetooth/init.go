@@ -8,7 +8,7 @@ import (
 var logger = log.NewLogger("daemon/bluetooth")
 
 func init() {
-	loader.Register(NewBluetoothDaemon(logger))
+	loader.Register(newBluetoothDaemon(logger))
 	//loader.Register(&loader.Module{
 	//Name:   "bluetooth",
 	//Start:  Start,

@@ -25,6 +25,7 @@ import (
 	"dbus/org/bluez"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
+	"sync"
 	"time"
 )
 
@@ -34,6 +35,10 @@ const (
 	deviceStateDisconnected = 0
 	deviceStateConnecting   = 1
 	deviceStateConnected    = 2
+)
+
+var (
+	errInvaildDevicePath = fmt.Errorf("Invaild Device Path")
 )
 
 type device struct {
@@ -48,14 +53,16 @@ type device struct {
 	Paired  bool
 	State   uint32
 	UUIDs   []string
+	// optional
+	Icon string
+	RSSI int16
 
 	oldConnected bool
 	connected    bool
 	connecting   bool
 
-	// optional
-	Icon string
-	RSSI int16
+	lk           sync.Mutex
+	confirmation chan bool
 }
 
 func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
@@ -203,6 +210,7 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d.notifyDeviceAdded()
 	b.setPropDevices()
 }
+
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	apath, i := b.getDeviceIndex(dpath)
 	if i < 0 {
@@ -216,6 +224,7 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	b.setPropDevices()
 	return
 }
+
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
 	devices[i].notifyDeviceRemoved()
 	destroyDevice(devices[i])
@@ -224,19 +233,7 @@ func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
 	devices = devices[:len(devices)-1]
 	return devices
 }
-func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (d *device, err error) {
-	apath, i := b.getDeviceIndex(dpath)
-	if i < 0 {
-		err = fmt.Errorf("device not found %s", dpath)
-		logger.Error(err)
-		return
-	}
 
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
-	d = b.devices[apath][i]
-	return
-}
 func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
 	_, i := b.getDeviceIndex(dpath)
 	if i >= 0 {
@@ -244,9 +241,8 @@ func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
 	}
 	return false
 }
-func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
+
+func (b *Bluetooth) findDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
 	for p, devices := range b.devices {
 		for i, d := range devices {
 			if d.Path == dpath {
@@ -255,6 +251,22 @@ func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath
 		}
 	}
 	return "", -1
+}
+
+func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	return b.findDeviceIndex(dpath)
+}
+
+func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	apath, index := b.findDeviceIndex(dpath)
+	if index < 0 {
+		return nil, errInvaildDevicePath
+	}
+	return b.devices[apath][index], nil
 }
 
 // GetDevices return all device objects that marshaled by json.
