@@ -115,32 +115,26 @@ func (d *device) connectProperties() {
 	d.bluezDevice.Name.ConnectChanged(func() {
 		d.Name = d.bluezDevice.Name.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Alias.ConnectChanged(func() {
 		d.Alias = d.bluezDevice.Alias.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Trusted.ConnectChanged(func() {
 		d.Trusted = d.bluezDevice.Trusted.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Paired.ConnectChanged(func() {
 		d.Paired = d.bluezDevice.Paired.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.Icon.ConnectChanged(func() {
 		d.Icon = d.bluezDevice.Icon.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.UUIDs.ConnectChanged(func() {
 		d.UUIDs = d.bluezDevice.UUIDs.Get()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 	d.bluezDevice.RSSI.ConnectChanged(func() {
 		_, err := d.bluezDevice.RSSI.GetValue()
@@ -152,7 +146,6 @@ func (d *device) connectProperties() {
 		d.RSSI = d.bluezDevice.RSSI.Get()
 		d.fixRssi()
 		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
 	})
 }
 func (d *device) handleConnected() {
@@ -184,7 +177,6 @@ func (d *device) notifyStateChanged() {
 	}
 	logger.Debugf("notifyStateChanged: %#v", d) // TODO test
 	d.notifyDevicePropertiesChanged()
-	bluetooth.setPropDevices()
 }
 
 func (d *device) fixRssi() {
@@ -208,7 +200,6 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	d := newDevice(dpath, data)
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
 	d.notifyDeviceAdded()
-	b.setPropDevices()
 }
 
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
@@ -221,7 +212,6 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	b.devicesLock.Lock()
 	defer b.devicesLock.Unlock()
 	b.devices[apath] = b.doRemoveDevice(b.devices[apath], i)
-	b.setPropDevices()
 	return
 }
 

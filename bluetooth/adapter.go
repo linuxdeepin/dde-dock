@@ -76,33 +76,27 @@ func (a *adapter) connectProperties() {
 	a.bluezAdapter.Name.ConnectChanged(func() {
 		a.Name = a.bluezAdapter.Name.Get()
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 	a.bluezAdapter.Alias.ConnectChanged(func() {
 		a.Alias = a.bluezAdapter.Alias.Get()
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 	a.bluezAdapter.Powered.ConnectChanged(func() {
 		a.Powered = a.bluezAdapter.Powered.Get()
 		logger.Infof("adapter powered changed %#v", a)
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 	a.bluezAdapter.Discovering.ConnectChanged(func() {
 		a.Discovering = a.bluezAdapter.Discovering.Get()
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 	a.bluezAdapter.Discoverable.ConnectChanged(func() {
 		a.Discoverable = a.bluezAdapter.Discoverable.Get()
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 	a.bluezAdapter.DiscoverableTimeout.ConnectChanged(func() {
 		a.DiscoverableTimeout = a.bluezAdapter.DiscoverableTimeout.Get()
 		a.notifyPropertiesChanged()
-		bluetooth.setPropAdapters()
 	})
 }
 
@@ -127,7 +121,6 @@ func (b *Bluetooth) addAdapter(apath dbus.ObjectPath) {
 
 	b.adapters[apath] = a
 	a.notifyAdapterAdded()
-	b.setPropAdapters()
 }
 
 func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
@@ -140,8 +133,8 @@ func (b *Bluetooth) removeAdapter(apath dbus.ObjectPath) {
 	}
 
 	b.doRemoveAdapter(apath)
-	b.setPropAdapters()
 }
+
 func (b *Bluetooth) doRemoveAdapter(apath dbus.ObjectPath) {
 	removeAdapter := b.adapters[apath]
 	delete(b.adapters, apath)

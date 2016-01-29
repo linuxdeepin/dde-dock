@@ -56,12 +56,10 @@ type Bluetooth struct {
 	// adapter
 	adaptersLock sync.Mutex
 	adapters     map[dbus.ObjectPath]*adapter
-	Adapters     string // array of adapters that marshaled by json
 
 	// device
 	devicesLock sync.Mutex
 	devices     map[dbus.ObjectPath][]*device
-	Devices     string // device objects that marshaled by json
 
 	State uint32 // StateUnavailable/StateAvailable/StateConnected
 

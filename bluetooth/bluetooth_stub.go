@@ -26,28 +26,9 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (b *Bluetooth) OnPropertiesChanged(name string, oldv interface{}) {
-	defer func() {
-		if err := recover(); err != nil {
-			logger.Error(err)
-		}
-	}()
-	logger.Debug("OnPropertiesChanged()", name)
-}
-
 func (b *Bluetooth) DebugInfo() (info string) {
 	info = fmt.Sprintf("adapters: %s\ndevices: %s", marshalJSON(b.adapters), marshalJSON(b.devices))
 	return
-}
-
-func (b *Bluetooth) setPropAdapters() {
-	b.Adapters = marshalJSON(b.adapters)
-	dbus.NotifyChange(b, "Adapters")
-}
-
-func (b *Bluetooth) setPropDevices() {
-	b.Devices = marshalJSON(b.devices)
-	dbus.NotifyChange(b, "Devices")
 }
 
 func (b *Bluetooth) setPropState() {
