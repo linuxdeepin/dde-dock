@@ -39,9 +39,9 @@ const (
 )
 
 const (
-	stateUnavailable = 0
-	stateAvailable   = 1
-	stateConnected   = 2
+	StateUnavailable = 0
+	StateAvailable   = 1
+	StateConnected   = 2
 )
 
 type dbusObjectData map[string]dbus.Variant
@@ -63,9 +63,9 @@ type Bluetooth struct {
 	devices     map[dbus.ObjectPath][]*device
 	Devices     string // device objects that marshaled by json
 
-	State uint32
+	State uint32 // StateUnavailable/StateAvailable/StateConnected
 
-	// signals
+	// Bluetooth adaper/device properties changed signals
 	AdapterAdded             func(adapterJSON string)
 	AdapterRemoved           func(adapterJSON string)
 	AdapterPropertiesChanged func(adapterJSON string)
@@ -73,17 +73,16 @@ type Bluetooth struct {
 	DeviceRemoved            func(devJSON string)
 	DevicePropertiesChanged  func(devJSON string)
 
+	// Bluetooth pair request signals
 	DisplayPinCode func(device dbus.ObjectPath, pincode string)
 	DisplayPasskey func(device dbus.ObjectPath, passkey uint32, entered uint32)
-
-	//AuthorizeService func(device dbus.ObjectPath)
-	//RequestConfirmation you shoud call Confirm with accpet
+	// RequestConfirmation you shoud call Confirm with accpet
 	RequestConfirmation func(device dbus.ObjectPath, passkey string)
-	//RequestAuthorization you shoud call Confirm with accpet
+	// RequestAuthorization you shoud call Confirm with accpet
 	RequestAuthorization func(device dbus.ObjectPath)
-	//RequestPinCode you should call FeedPinCode with accpet and key
+	// RequestPinCode you should call FeedPinCode with accpet and key
 	RequestPinCode func(device dbus.ObjectPath)
-	//RequestPasskey you should call FeedPasskey with accpet and key
+	// RequestPasskey you should call FeedPasskey with accpet and key
 	RequestPasskey func(device dbus.ObjectPath)
 }
 

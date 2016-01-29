@@ -40,7 +40,7 @@ const (
 type authorize struct {
 	dpath  dbus.ObjectPath
 	key    string
-	accpet bool
+	accept bool
 }
 
 type agent struct {
@@ -164,7 +164,7 @@ func (a *agent) AuthorizeService(dpath dbus.ObjectPath, uuid string) (err error)
 //Cancel method gets called to indicate that the agent request failed before a reply was returned.
 func (a *agent) Cancel() {
 	logger.Info("Cancel()")
-	a.rspChan <- authorize{dpath: a.requestDevice, accpet: false, key: ""}
+	a.rspChan <- authorize{dpath: a.requestDevice, accept: false, key: ""}
 }
 
 /*****************************************************************************/
@@ -215,13 +215,13 @@ func (a *agent) waitRespone() (auth authorize, err error) {
 	for {
 		select {
 		case auth = <-a.rspChan:
-			logger.Info("recive", auth)
-			if !auth.accpet {
+			logger.Info("receive", auth)
+			if !auth.accept {
 				err = errBluezRejected
 				logger.Warningf("emitRequest return with: %v", err)
 				return
 			}
-			logger.Infof("emitRequest accpet %v with %v", a.requestDevice, auth.key)
+			logger.Infof("emitRequest accept %v with %v", a.requestDevice, auth.key)
 			return
 		case <-t.C:
 			logger.Info("timeout")
@@ -261,7 +261,7 @@ func (a *agent) emitRequest(dpath dbus.ObjectPath, signal string, ins ...interfa
 	return a.waitRespone()
 }
 
-func (b *Bluetooth) feed(dpath dbus.ObjectPath, accpet bool, key string) (err error) {
+func (b *Bluetooth) feed(dpath dbus.ObjectPath, accept bool, key string) (err error) {
 	_, err = b.getDevice(dpath)
 	if nil != err {
 		logger.Warningf("FeedRequest can not find device: %v, %v", dpath, err)
@@ -276,21 +276,27 @@ func (b *Bluetooth) feed(dpath dbus.ObjectPath, accpet bool, key string) (err er
 	}
 	b.agent.lk.Unlock()
 
-	b.agent.rspChan <- authorize{dpath: dpath, accpet: accpet, key: key}
+	b.agent.rspChan <- authorize{dpath: dpath, accept: accept, key: key}
 	return nil
 }
 
-func (b *Bluetooth) Confirm(dpath dbus.ObjectPath, accpet bool) (err error) {
+//Confirm should call when you receive RequestConfirmation signal
+func (b *Bluetooth) Confirm(dpath dbus.ObjectPath, accept bool) (err error) {
 	logger.Info("Confirm()")
-	return b.feed(dpath, accpet, "")
+	return b.feed(dpath, accept, "")
 }
 
-func (b *Bluetooth) FeedPinCode(dpath dbus.ObjectPath, accpet bool, pincode string) (err error) {
+//FeedPinCode should call when you receive RequestPinCode signal, notice that accept must true
+//if you accept connect request. If accept is false, pincode will be ignored.
+func (b *Bluetooth) FeedPinCode(dpath dbus.ObjectPath, accept bool, pincode string) (err error) {
 	logger.Info("FeedPinCode()")
-	return b.feed(dpath, accpet, pincode)
+	return b.feed(dpath, accept, pincode)
 }
 
-func (b *Bluetooth) FeedPasskey(dpath dbus.ObjectPath, accpet bool, passkey uint32) (err error) {
+//FeedPasskey should call when you receive RequestPasskey signal, notice that accept must true
+//if you accept connect request. If accept is false, passkey will be ignored.
+//passkey must be range in 0~999999.
+func (b *Bluetooth) FeedPasskey(dpath dbus.ObjectPath, accept bool, passkey uint32) (err error) {
 	logger.Info("FeedPasskey()")
-	return b.feed(dpath, accpet, fmt.Sprintf("%06d", passkey))
+	return b.feed(dpath, accept, fmt.Sprintf("%06d", passkey))
 }

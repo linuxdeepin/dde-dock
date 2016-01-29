@@ -51,14 +51,14 @@ func (b *Bluetooth) setPropDevices() {
 }
 
 func (b *Bluetooth) setPropState() {
-	b.State = stateUnavailable
+	b.State = StateUnavailable
 	if len(b.adapters) > 0 {
-		b.State = stateAvailable
+		b.State = StateAvailable
 	}
 	for _, devs := range b.devices {
 		for _, d := range devs {
 			if d.connected {
-				b.State = stateConnected
+				b.State = StateConnected
 				break
 			}
 		}
