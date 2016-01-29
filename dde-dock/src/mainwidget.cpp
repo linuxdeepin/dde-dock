@@ -11,6 +11,8 @@
 #include "xcb_misc.h"
 #include "controller/stylemanager.h"
 
+#include <QApplication>
+
 const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
@@ -102,8 +104,10 @@ void MainWidget::updateXcbStructPartial()
 {
     int tmpHeight = 0;
     DBusDockSetting dds;
-    if (dds.GetHideMode() == Dock::KeepShowing)
-        tmpHeight = this->height();
+    if (dds.GetHideMode() == Dock::KeepShowing) {
+        int maxMonitorHeight = qApp->desktop()->size().height();
+        tmpHeight = maxMonitorHeight - y();
+    }
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
                                            tmpHeight,
