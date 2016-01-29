@@ -24,6 +24,7 @@ package keybinding
 import (
 	"fmt"
 
+	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -172,6 +173,10 @@ func (m *Manager) ModifiedAction(id string, ty int32, action string) error {
 // accel: new accel
 // grabed: if true, add accel for the special id; else delete it
 func (m *Manager) ModifiedAccel(id string, ty int32, accel string, grabed bool) (bool, string, error) {
+	if !core.IsShortcutValid(accel) {
+		return false, "", fmt.Errorf("Invalid accel: %v", accel)
+	}
+
 	logger.Debugf("Modify accel '%s' type '%v' value '%s' grabed: %v", id, ty, accel, grabed)
 	if !grabed {
 		return false, "", m.deleteAccel(id, ty, accel)
@@ -242,6 +247,7 @@ func (m *Manager) addAccel(id string, ty int32, accel string) error {
 
 	err := m.grabAccels([]string{accel}, ty, m.handleKeyEvent)
 	if err != nil {
+		logger.Debug("[addAccel] grab accel failed:", accel)
 		return err
 	}
 

@@ -26,6 +26,7 @@ package core
 import "C"
 
 import (
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
@@ -99,6 +100,14 @@ func XRecordEnable(enabled bool) {
 	xrecordEnabled = enabled
 }
 
+func IsShortcutValid(s string) bool {
+	tmp := formatAccelToXGB(s)
+	if isValidSingleKey(tmp) {
+		return true
+	}
+	return isValidShortcut(tmp)
+}
+
 func GrabAccels(accels []string, handler HandleType) error {
 	var grabed []string
 	for _, s := range accels {
@@ -135,6 +144,10 @@ func grabAccel(s string) error {
 		return doGrabSingleKey(news)
 	}
 
+	if !isValidShortcut(news) {
+		return fmt.Errorf("Invalid shortcut: %v", news)
+	}
+
 	return doGrabAccel(news)
 }
 
@@ -148,7 +161,9 @@ func ungrabAccel(s string) {
 		doUngrabSingleKey(news)
 	}
 
-	doUngrabAccel(news)
+	if isValidShortcut(news) {
+		doUngrabAccel(news)
+	}
 }
 
 func doGrabAccel(s string) error {
@@ -198,6 +213,43 @@ func isValidSingleKey(key string) bool {
 		return true
 	}
 	return false
+}
+
+func isValidShortcut(shortcut string) bool {
+	shortcut = strings.ToLower(shortcut)
+	keys := strings.Split(shortcut, accelDelim)
+	if len(keys) == 1 {
+		switch shortcut {
+		case "f1", "f2", "f3", "f4", "f5", "f6",
+			"f7", "f8", "f9", "f10", "f11", "f12":
+			return true
+		}
+		return false
+	}
+
+	key := keys[len(keys)-1]
+	// The last key don't contain accel.
+	var list = []string{
+		"control",
+		"shift",
+		"super",
+		"alt",
+		"meta",
+		"hyper",
+	}
+
+	for _, v := range list {
+		if strings.Contains(key, v) {
+			return false
+		}
+	}
+
+	// filter 'shift-xxx'
+	if len(keys) == 2 && keys[0] == "shift" {
+		return false
+	}
+
+	return true
 }
 
 func isKeycodesEqual(list1, list2 []xproto.Keycode) bool {

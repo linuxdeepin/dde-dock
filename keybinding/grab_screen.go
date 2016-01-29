@@ -46,12 +46,20 @@ func (m *Manager) doGrabScreen() error {
 		func(x *xgbutil.XUtil, e xevent.KeyPressEvent) {
 			pressedKey, _ = core.FormatKeyEvent(e.State,
 				int(e.Detail))
-			dbus.Emit(m, "KeyEvent", true, pressedKey)
+			if core.IsShortcutValid(pressedKey) {
+				logger.Debug("[Grab Screen] emit press key:", pressedKey)
+				dbus.Emit(m, "KeyEvent", true, pressedKey)
+			}
 		}).Connect(xu, xu.RootWin())
 
 	xevent.KeyReleaseFun(
 		func(x *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-			dbus.Emit(m, "KeyEvent", false, pressedKey)
+			if core.IsShortcutValid(pressedKey) {
+				logger.Debug("[Grab Screen] emit release key:", pressedKey)
+				dbus.Emit(m, "KeyEvent", false, pressedKey)
+			} else {
+				dbus.Emit(m, "KeyEvent", false, "")
+			}
 			pressedKey = ""
 			ungrabKbdAndMouse(xu)
 			xevent.Quit(xu)
