@@ -384,11 +384,6 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 			}
 		}
 	}
-	appId = getAppIDFromXid(xid)
-	if appId != "" {
-		logger.Debug("get app id from bamf", appId)
-		return normalizeAppID(appId)
-	}
 
 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
 	if err != nil {
@@ -399,6 +394,12 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 		if appId != "" {
 			return appId
 		}
+	}
+
+	appId = getAppIDFromXid(xid)
+	if appId != "" {
+		logger.Debug("get app id from bamf", appId)
+		return normalizeAppID(appId)
 	}
 
 	wmClass, _ := icccm.WmClassGet(XU, xid)
