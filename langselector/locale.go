@@ -37,6 +37,7 @@ import (
 const (
 	systemLocaleFile  = "/etc/default/locale"
 	userLocaleFilePAM = ".pam_environment"
+	userLocaleConfigFile = ".config/locale.conf"
 
 	defaultLocale = "en_US.UTF-8"
 )
@@ -171,19 +172,28 @@ func getLocale() string {
 }
 
 func writeUserLocale(locale string) error {
-	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
-	return writeUserLocalePam(locale, filename)
+	homeDir := os.Getenv("HOME")
+	pamEnvFile := path.Join( homeDir, userLocaleFilePAM)
+	var err error
+	// only for lightdm
+	err = writeLocaleEnvFile(locale, pamEnvFile)
+	if err != nil {
+		return err
+	}
+	localeConfigFile := path.Join( homeDir, userLocaleConfigFile)
+	err = writeLocaleEnvFile(locale, localeConfigFile)
+	if ( err != nil ) {
+		return err
+	}
+	return nil
 }
 
-/**
- * gnome locale config
- **/
-func writeUserLocalePam(locale, filename string) error {
-	var content = generatePamEnvFile(locale, filename)
+func writeLocaleEnvFile(locale, filename string) error {
+	var content = generateLocaleEnvFile(locale, filename)
 	return ioutil.WriteFile(filename, []byte(content), 0644)
 }
 
-func generatePamEnvFile(locale, filename string) string {
+func generateLocaleEnvFile(locale, filename string) string {
 	var (
 		lFound   bool //LANG
 		lgFound  bool //LANGUAGE

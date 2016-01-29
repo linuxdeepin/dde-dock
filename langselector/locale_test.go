@@ -42,12 +42,12 @@ type localeDescTest struct {
 	ret    bool
 }
 
-func (t *TestWrapper) TestGeneratePamEnvFile(c *C.C) {
+func (t *TestWrapper) TestGenerateLocaleEnvFile(c *C.C) {
 	example := `LANG=en_US.UTF-8
 LANGUAGE=en_US
 LC_TIME="zh_CN.UTF-8"`
 
-	c.Check(generatePamEnvFile("en_US.UTF-8",
+	c.Check(generateLocaleEnvFile("en_US.UTF-8",
 		"testdata/pam_environment"), C.Equals, example)
 }
 
@@ -61,9 +61,9 @@ func (t *TestWrapper) TestGetLocale(c *C.C) {
 }
 
 func (t *TestWrapper) TestWriteUserLocale(c *C.C) {
-	c.Check(writeUserLocalePam("zh_CN.UTF-8", "testdata/pam"),
+	c.Check(writeLocaleEnvFile("zh_CN.UTF-8", "testdata/pam"),
 		C.Not(C.NotNil))
 	os.RemoveAll("testdata/pam")
-	c.Check(writeUserLocalePam("zh_CN.UTF-8", "/xxxxxxxxx"),
+	c.Check(writeLocaleEnvFile("zh_CN.UTF-8", "/xxxxxxxxx"),
 		C.NotNil)
 }
