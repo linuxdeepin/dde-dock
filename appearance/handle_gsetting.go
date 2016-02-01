@@ -11,6 +11,7 @@ package appearance
 
 import (
 	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/appearance/background"
 	"time"
 )
 
@@ -54,6 +55,10 @@ func (m *Manager) listenBgGsettings() {
 		uri := m.gnomeBgSetting.GetString(gsKeyBackground)
 		logger.Debug("[Gnome background] sync wrap bg:", uri, m.wrapBgSetting.GetString(gsKeyBackground))
 		if uri == m.wrapBgSetting.GetString(gsKeyBackground) {
+			return
+		}
+		if !background.IsBackgroundFile(uri) {
+			logger.Debugf("[Gnome background] Invalid background file '%v'", uri)
 			return
 		}
 
