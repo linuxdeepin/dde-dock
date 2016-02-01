@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"strings"
 
-	"pkg.deepin.io/dde/daemon/appinfo"
 	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
 func isEntryNameValid(name string) bool {
@@ -70,21 +70,32 @@ func guess_desktop_id(appId string) string {
 
 	desktopID := appId + ".desktop"
 	allApp := gio.AppInfoGetAll()
-	for _, app := range allApp {
-		baseName := filepath.Base(gio.ToDesktopAppInfo(app).GetFilename())
-		app.Unref()
-		normalizedDesktopID := normalizeAppID(baseName)
 
-		if normalizedDesktopID == desktopID {
-			_appIDCache[appId] = baseName
-			return baseName
+	defer func() {
+		for _, app := range allApp {
+			app.Unref()
+		}
+	}()
+
+	for _, app := range allApp {
+		_appInfo := gio.ToDesktopAppInfo(app)
+
+		if _appInfo == nil {
+			continue
+		}
+
+		_desktopID := _appInfo.GetId()
+		normalizedDesktopID := normalizeAppID(_desktopID)
+		if strings.HasSuffix(normalizedDesktopID, desktopID) {
+			_appIDCache[appId] = _desktopID
+			return _desktopID
 		}
 
 		// TODO: this is not a silver bullet, fix it later.
 		appIDs := _DesktopAppIdReg.FindStringSubmatch(normalizedDesktopID)
 		if len(appIDs) == 2 && appIDs[1] == appId {
-			_appIDCache[appId] = baseName
-			return baseName
+			_appIDCache[appId] = _desktopID
+			return _desktopID
 		}
 	}
 

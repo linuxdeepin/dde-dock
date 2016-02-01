@@ -8,9 +8,9 @@ import (
 	"strings"
 	"text/template"
 
-	"pkg.deepin.io/lib/dbus"
 	"gir/gio-2.0"
 	"gir/glib-2.0"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -129,7 +129,7 @@ func (m *DockedAppManager) IsDocked(id string) bool {
 		return true
 	}
 
-	if id = guess_desktop_id(id); id != "" {
+	if id = trimDesktop(guess_desktop_id(id)); id != "" {
 		item = m.findItem(id)
 	}
 	// logger.Info("IsDocked:", item, item != nil)
@@ -227,7 +227,7 @@ func (m *DockedAppManager) Undock(id string) bool {
 	}
 
 	tmpId := ""
-	if tmpId = guess_desktop_id(id); tmpId != "" {
+	if tmpId = trimDesktop(guess_desktop_id(id)); tmpId != "" {
 		logger.Debug("undock guess desktop id:", tmpId)
 		m.doUndock(tmpId)
 		return true
