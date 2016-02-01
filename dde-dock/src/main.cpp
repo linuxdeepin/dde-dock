@@ -10,6 +10,8 @@
 #include "controller/stylemanager.h"
 #include "controller/signalmanager.h"
 
+#include <sys/file.h>
+
 #undef signals
 extern "C" {
   #include <gtk/gtk.h>
@@ -67,7 +69,15 @@ int main(int argc, char *argv[])
     LogManager::instance()->debug_log_console_on();
     LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
 
-    if (QDBusConnection::sessionBus().registerService(DBUS_NAME)) {
+    int pidLock = open("/tmp/dde-dock.pid", O_CREAT | O_RDWR, 0666);
+    int rc = flock(pidLock, LOCK_EX | LOCK_NB);
+    if (!rc) {
+
+        // TODO: 根据日志发现注册 dbus 来做单例不靠谱，所以改用 pid 锁来做，这里注册 dbus
+        // 是为了兼容，等后端把服务监控改为 pid 监控后可以移除这部分代码
+        QDBusConnection::sessionBus().registerService(DBUS_NAME);
+        RegisterDdeSession();
+
         StyleManager::instance()->initStyleSheet();
 
         MainWidget w;
@@ -75,9 +85,8 @@ int main(int argc, char *argv[])
         qWarning() << "Start Dock, The main window has been shown.............................................................";
         w.loadResources();
 
-        RegisterDdeSession();
-
         initGtkThemeWatcher();
+
         return a.exec();
     } else {
         qWarning() << "Dock is running!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
