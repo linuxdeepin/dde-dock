@@ -31,6 +31,7 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"regexp"
 	"strings"
 	"sync"
 )
@@ -215,13 +216,20 @@ func isValidSingleKey(key string) bool {
 	return false
 }
 
+var mediaReg = regexp.MustCompile(`^xf86`)
+
 func isValidShortcut(shortcut string) bool {
 	shortcut = strings.ToLower(shortcut)
 	keys := strings.Split(shortcut, accelDelim)
 	if len(keys) == 1 {
+		if mediaReg.MatchString(shortcut) {
+			return true
+		}
+
 		switch shortcut {
 		case "f1", "f2", "f3", "f4", "f5", "f6",
-			"f7", "f8", "f9", "f10", "f11", "f12":
+			"f7", "f8", "f9", "f10", "f11", "f12",
+			"caps_lock", "num_lock":
 			return true
 		}
 		return false
