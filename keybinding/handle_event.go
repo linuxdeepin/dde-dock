@@ -84,9 +84,9 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 	}
 
 	switch id {
-	case "mon-brightness-up":
+	case "mon-brightness-up", "kbd-brightness-up":
 		return "BrightnessUp"
-	case "mon-brightness-down":
+	case "mon-brightness-down", "kbd-brightness-down":
 		return "BrightnessDown"
 	case "volume-mute":
 		return "AudioMute"
@@ -118,6 +118,8 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 		return "PowerOff"
 	case "sleep":
 		return "PowerSleep"
+	case "suspend":
+		return "PowerSuspend"
 	//case "p", "P":
 	case "play":
 		return "AudioPlay"
@@ -135,7 +137,7 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 		return "AudioForward"
 	case "audio-repeat":
 		return "AudioRepeat"
-	case "www":
+	case "www", "home":
 		return "LaunchBrowser"
 	case "email":
 		return "LaunchEmail"
@@ -147,6 +149,10 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 	case "switch-layout":
 		// TODO: check can switch layout
 		return "SwitchLayout"
+	case "eject":
+		return "Eject"
+	case "media":
+		return "AudioMedia"
 	}
 
 	return ""

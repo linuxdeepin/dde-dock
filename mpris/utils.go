@@ -10,6 +10,7 @@ const (
 	mimeTypeBrowser = "x-scheme-handler/http"
 	mimeTypeEmail   = "x-scheme-handler/mailto"
 	mimeTypeCalc    = "x-scheme-handler/calculator"
+	mimeTypeAudioMedia = "audio/mpeg"
 )
 
 func execByMime(mime string, pressed bool) error {
@@ -39,5 +40,6 @@ func queryCommand(mime string) string {
 }
 
 func doAction(cmd string) error {
+	logger.Debug("execute command: ", cmd)
 	return exec.Command("/bin/sh", "-c", cmd).Run()
 }

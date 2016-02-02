@@ -7,6 +7,7 @@ import (
 	"dbus/com/deepin/daemon/keybinding"
 	"dbus/org/freedesktop/dbus"
 	"dbus/org/freedesktop/login1"
+	"dbus/com/deepin/sessionmanager"
 	"fmt"
 	"pkg.deepin.io/lib/log"
 	"time"
@@ -24,6 +25,7 @@ type Manager struct {
 	disp        *display.Display
 	dbusDaemon  *dbus.DBusDaemon
 	audioDaemon *audio.Audio
+	sessionManager *sessionmanager.SessionManager
 
 	prevPlayer string
 }
@@ -59,6 +61,12 @@ func NewManager() (*Manager, error) {
 		"/com/deepin/daemon/Audio")
 	if err != nil {
 		logger.Warning("Create audio connection failed:", err)
+	}
+
+	m.sessionManager, err = sessionmanager.NewSessionManager("com.deepin.SessionManager",
+		"/com/deepin/SessionManager")
+	if err != nil {
+		logger.Warning("Create session manager connection failed:", err);
 	}
 
 	return m, nil
@@ -195,4 +203,28 @@ func getBrightness() (float64, error) {
 		bl = helper
 	}
 	return bl.GetBrightness("backlight")
+}
+
+func (m *Manager) suspend(pressed bool) {
+	if !pressed {
+		return
+	}
+	if m.sessionManager == nil {
+		logger.Warning("can not connect session manager")
+		return
+	}
+	var err error
+	err = m.sessionManager.RequestSuspend()
+	logger.Debug("Request suspend")
+	if err != nil {
+		logger.Warning("Request suspend failed: ", err)
+	}
+}
+
+func (m *Manager) eject(pressed bool) {
+	if !pressed {
+		return
+	}
+	// eject CDROM
+	doAction("eject -r")
 }

@@ -68,4 +68,21 @@ func (m *Manager) listenMediakey() {
 	m.login.ConnectPrepareForSleep(func(actived bool) {
 		m.pauseAllPlayer(actived)
 	})
+
+	m.mediakey.ConnectPowerSleep(func(pressed bool) {
+		m.suspend(pressed)
+	})
+
+	m.mediakey.ConnectPowerSuspend(func(pressed bool) {
+		m.suspend(pressed)
+	})
+
+	m.mediakey.ConnectEject(func(pressed bool) {
+		go m.eject(pressed)
+	})
+
+	m.mediakey.ConnectAudioMedia(func(pressed bool) {
+		go execByMime(mimeTypeAudioMedia, pressed)
+	})
+
 }

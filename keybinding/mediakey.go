@@ -25,6 +25,7 @@ type Mediakey struct {
 	TouchpadToggle   func(bool)
 	PowerOff         func(bool)
 	PowerSleep       func(bool)
+	PowerSuspend     func(bool)
 	SwitchLayout     func(bool)
 	AudioPlay        func(bool)
 	AudioPause       func(bool)
@@ -34,7 +35,9 @@ type Mediakey struct {
 	AudioRewind      func(bool)
 	AudioForward     func(bool)
 	AudioRepeat      func(bool)
+	AudioMedia       func(bool)
 	LaunchEmail      func(bool)
 	LaunchBrowser    func(bool)
 	LaunchCalculator func(bool)
+	Eject            func(bool)
 }
