@@ -21,6 +21,7 @@ typedef struct _FcInfo {
 	char *filename;
 } FcInfo;
 
+int fc_cache_update ();
 FcInfo *list_font_info (int *num);
 void free_font_info_list(FcInfo *list, int num);
 

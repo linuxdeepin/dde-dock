@@ -18,15 +18,22 @@
 static int append_font_info(FcInfo** list, FcPattern* pat, int idx);
 static void free_font_info(FcInfo *info);
 
+int
+fc_cache_update ()
+{
+    static int first = 0;
+    if (first == 0) {
+        FcInit();
+        first = 1;
+        return 1;
+    }
+
+    return !FcConfigUptoDate (NULL) && FcInitReinitialize ();
+}
+
 FcInfo *
 list_font_info (int *num)
 {
-    static int hasInit = 0;
-    if (hasInit == 0) {
-        FcInit();
-        hasInit = 1;
-    }
-
      *num = -1;
      FcPattern *pat = FcPatternCreate();
      if (!pat) {

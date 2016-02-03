@@ -23,6 +23,8 @@ var (
 	curLang string
 	home    = os.Getenv("HOME")
 	langReg = regexp.MustCompile("_")
+
+	cacheFonts Fonts
 )
 
 // family ex: 'sans', 'serif', 'monospace'
@@ -53,7 +55,16 @@ func fcFontMatch(family string) string {
 	return name
 }
 
+func isFcCacheUpdate() bool {
+	ret := C.fc_cache_update()
+	return (ret == 1)
+}
+
 func fcInfosToFonts() Fonts {
+	if len(cacheFonts) != 0 && !isFcCacheUpdate() {
+		return cacheFonts
+	}
+
 	var num = C.int(0)
 	list := C.list_font_info(&num)
 	if num < 1 {
