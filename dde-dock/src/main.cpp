@@ -11,6 +11,8 @@
 #include "controller/signalmanager.h"
 
 #include <sys/file.h>
+#include <pwd.h>
+#include <unistd.h>
 
 #undef signals
 extern "C" {
@@ -69,7 +71,11 @@ int main(int argc, char *argv[])
     LogManager::instance()->debug_log_console_on();
     LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
 
-    int pidLock = open("/tmp/dde-dock.pid", O_CREAT | O_RDWR, 0666);
+    struct passwd *pws;
+    pws = getpwuid(getuid());
+    const QString username(pws->pw_name);
+
+    int pidLock = open(QString("/tmp/dde-dock_%1.pid").arg(username).toStdString().c_str(), O_CREAT | O_RDWR, 0666);
     int rc = flock(pidLock, LOCK_EX | LOCK_NB);
     if (!rc) {
 
