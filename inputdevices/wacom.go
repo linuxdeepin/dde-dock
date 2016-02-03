@@ -1,10 +1,10 @@
 package inputdevices
 
 import (
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
-	"gir/gio-2.0"
 )
 
 const (
@@ -16,6 +16,9 @@ const (
 	wacomKeyDownAction        = "keydown-action"
 	wacomKeyDoubleDelta       = "double-delta"
 	wacomKeyPressureSensitive = "pressure-sensitive"
+	wacomKeyMapOutput         = "map-output"
+	wacomKeyRawSample         = "raw-sample"
+	wacomKeyThreshold         = "threshold"
 )
 
 const (
@@ -32,16 +35,16 @@ var actionMap = map[string]string{
 }
 
 // Soften(x1<y1 x2<y2) --> Firmer(x1>y1 x2>y2)
-var pressureLevel = map[uint32][]int {
-	1: []int{0, 100, 0, 100},
-	2: []int{20, 80, 20, 80},
-	3: []int{30, 70, 30, 70},
-	4: []int{0, 0, 100, 100},
-	5: []int{60, 40, 60, 40},
-	6: []int{70, 30, 70, 30}, // default
-	7: []int{75, 25, 75, 25},
-	8: []int{80, 20, 80, 20},
-	9: []int{90, 10, 90, 10},
+var pressureLevel = map[uint32][]int{
+	1:  []int{0, 100, 0, 100},
+	2:  []int{20, 80, 20, 80},
+	3:  []int{30, 70, 30, 70},
+	4:  []int{0, 0, 100, 100},
+	5:  []int{60, 40, 60, 40},
+	6:  []int{70, 30, 70, 30}, // default
+	7:  []int{75, 25, 75, 25},
+	8:  []int{80, 20, 80, 20},
+	9:  []int{90, 10, 90, 10},
 	10: []int{100, 0, 100, 0},
 }
 
@@ -57,9 +60,12 @@ type Wacom struct {
 
 	KeyUpAction   *property.GSettingsStringProperty `access:"readwrite"`
 	KeyDownAction *property.GSettingsStringProperty `access:"readwrite"`
+	MapOutput     *property.GSettingsStringProperty `access:"readwrite"`
 
 	DoubleDelta       *property.GSettingsUintProperty `access:"readwrite"`
 	PressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
+	RawSample         *property.GSettingsUintProperty `access:"readwrite"`
+	Threshold         *property.GSettingsUintProperty `access:"readwrite"`
 
 	DeviceList  dxutils.DeviceInfos
 	ActionInfos ActionInfos
@@ -99,6 +105,9 @@ func NewWacom() *Wacom {
 	w.KeyDownAction = property.NewGSettingsStringProperty(
 		w, "KeyDownAction",
 		w.setting, wacomKeyDownAction)
+	w.MapOutput = property.NewGSettingsStringProperty(
+		w, "MapOutput",
+		w.setting, wacomKeyMapOutput)
 
 	w.DoubleDelta = property.NewGSettingsUintProperty(
 		w, "DoubleDelta",
@@ -106,6 +115,12 @@ func NewWacom() *Wacom {
 	w.PressureSensitive = property.NewGSettingsUintProperty(
 		w, "PressureSensitive",
 		w.setting, wacomKeyPressureSensitive)
+	w.RawSample = property.NewGSettingsUintProperty(
+		w, "RawSample",
+		w.setting, wacomKeyRawSample)
+	w.Threshold = property.NewGSettingsUintProperty(
+		w, "Threshold",
+		w.setting, wacomKeyThreshold)
 
 	w.updateDeviceList()
 	w.dxWacoms = make(map[int32]*dxinput.Wacom)
@@ -125,6 +140,9 @@ func (w *Wacom) init() {
 	w.setKeyAction(btnNumDownKey, w.KeyDownAction.Get())
 	w.setPressure()
 	w.setClickDelta()
+	w.mapToOutput()
+	w.setRawSample()
+	w.setThreshold()
 }
 
 func (w *Wacom) handleDeviceChanged() {
@@ -219,11 +237,45 @@ func (w *Wacom) setPressure() {
 }
 
 func (w *Wacom) setClickDelta() {
+	delta := int(w.DoubleDelta.Get())
 	for _, v := range w.dxWacoms {
-		err := v.SetSuppress(int(w.DoubleDelta.Get()))
+		err := v.SetSuppress(delta)
 		if err != nil {
-			logger.Debugf("Set double click delta for '%v - %v' failed: %v",
-				v.Id, v.Name, err)
+			logger.Debugf("Set double click delta for '%v - %v' to %v failed: %v",
+				v.Id, v.Name, delta, err)
+		}
+	}
+}
+
+func (w *Wacom) mapToOutput() {
+	output := w.MapOutput.Get()
+	for _, v := range w.dxWacoms {
+		err := v.MapToOutput(output)
+		if err != nil {
+			logger.Debugf("Map output for '%v - %v' to %v failed: %v",
+				v.Id, v.Name, output, err)
+		}
+	}
+}
+
+func (w *Wacom) setRawSample() {
+	sample := w.RawSample.Get()
+	for _, v := range w.dxWacoms {
+		err := v.SetRawSample(sample)
+		if err != nil {
+			logger.Debugf("Set raw sample for '%v - %v' to %v failed: %v",
+				v.Id, v.Name, sample, err)
+		}
+	}
+}
+
+func (w *Wacom) setThreshold() {
+	thres := int(w.Threshold.Get())
+	for _, v := range w.dxWacoms {
+		err := v.SetThreshold(thres)
+		if err != nil {
+			logger.Debugf("Set threshold for '%v - %v' to %v failed: %v",
+				v.Id, v.Name, thres, err)
 		}
 	}
 }
