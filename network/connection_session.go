@@ -350,6 +350,12 @@ func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
 	return
 }
 
+// GetKeyName return the display name for special key.
+func (s *ConnectionSession) GetKeyName(section, key string) (name string, err error) {
+	name, err = getRelatedKeyName(s.data, section, key)
+	return
+}
+
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON)
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)

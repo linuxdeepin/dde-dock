@@ -9,6 +9,10 @@
 
 package network
 
+import (
+	"fmt"
+)
+
 // Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
@@ -470,6 +474,28 @@ func doGetRelatedKeysOfVsection(data connectionData, vsection string, keepAll bo
 	if len(keys) == 0 {
 		logger.Warning("there is no available keys for virtual section", vsection)
 	}
+	return
+}
+
+func getRelatedKeyName(data connectionData, vsection, key string) (name string, err error) {
+	keyInfo, err := getGeneralKeyInfo(data, vsection, key)
+	if keyInfo != nil {
+		name = keyInfo.Name
+	}
+	return
+}
+
+func getGeneralKeyInfo(data connectionData, vsection, key string) (keyInfo *GeneralKeyInfo, err error) {
+	for _, sectionInfo := range virtualSections {
+		for _, tmpKeyInfo := range sectionInfo.Keys {
+			if tmpKeyInfo.Section == vsection && tmpKeyInfo.Key == key {
+				keyInfo = tmpKeyInfo
+				return
+			}
+		}
+	}
+	err = fmt.Errorf("get key information failed for vsection=%s, key=%s", vsection, key)
+	logger.Error(err)
 	return
 }
 
