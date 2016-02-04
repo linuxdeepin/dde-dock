@@ -30,6 +30,7 @@ QWidget *DockAppItem::getApplet()
         m_previewContainer->clearUpPreview();
         //Returns a list containing all the keys in the map in ascending order.
         QList<int> xids = m_itemData.xidTitleMap.keys();
+
         for (int xid : xids) {
             m_previewContainer->addItem(m_itemData.xidTitleMap[xid], xid);
         }

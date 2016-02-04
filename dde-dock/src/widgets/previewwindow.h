@@ -37,7 +37,7 @@ private:
 private:
     QTimer *m_showTimer = NULL;
     QTimer *m_hideTimer = NULL;
-    QPointer<QWidget> m_tmpContent;
+    QPointer<QWidget> m_currentContent;
     QPointer<QWidget> m_lastContent;
     QPropertyAnimation *m_animation = NULL;
     QPoint m_lastPos = QPoint(0, 0);

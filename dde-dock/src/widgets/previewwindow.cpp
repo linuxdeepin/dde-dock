@@ -59,7 +59,7 @@ void PreviewWindow::hidePreview(int interval)
 
 void PreviewWindow::setContent(QWidget *content)
 {
-    m_tmpContent = content;
+    m_currentContent = content;
 }
 
 void PreviewWindow::setArrowPos(const QPoint &pos)
@@ -69,8 +69,8 @@ void PreviewWindow::setArrowPos(const QPoint &pos)
 
 void PreviewWindow::hide()
 {
-
-    emit hideFinish(m_lastContent);
+    if (m_lastContent != m_currentContent)
+        emit hideFinish(m_lastContent);
 
     DArrowRectangle::hide();
 }
@@ -89,12 +89,12 @@ void PreviewWindow::onShowTimerTriggered()
 {
     if (!m_lastContent.isNull()) {
         m_lastContent.data()->setParent(NULL);
-        if (m_lastContent != m_tmpContent)
+        if (m_lastContent != m_currentContent)
             emit showFinish(m_lastContent);
     }
 
-    DArrowRectangle::setContent(m_tmpContent);
-    m_lastContent = m_tmpContent;
+    DArrowRectangle::setContent(m_currentContent);
+    m_lastContent = m_currentContent;
 
     if (isHidden())
         show(m_x, m_y);
