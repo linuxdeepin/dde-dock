@@ -80,27 +80,35 @@ func fcInfosToFonts() Fonts {
 		cItem := (*C.FcInfo)(unsafe.Pointer(
 			listPtr + uintptr(i)*itemLen))
 
-		infos = append(infos, fcInfoToFont(cItem))
+		info := fcInfoToFont(cItem)
+		if info != nil {
+			infos = append(infos, info)
+		}
 	}
 	return infos
 }
 
 func fcInfoToFont(cInfo *C.FcInfo) *Font {
-	names := strings.Split(C.GoString(cInfo.fullname), defaultNameDelim)
+	var fullname = C.GoString(cInfo.fullname)
+	var familyname = C.GoString(cInfo.family)
+	if len(fullname) == 0 || len(familyname) == 0 {
+		return nil
+	}
+	names := strings.Split(fullname, defaultNameDelim)
 	nameLang := strings.Split(C.GoString(cInfo.fullnamelang),
 		defaultNameDelim)
-	families := strings.Split(C.GoString(cInfo.family), defaultNameDelim)
+	families := strings.Split(familyname, defaultNameDelim)
 	familyLang := strings.Split(C.GoString(cInfo.familylang),
 		defaultNameDelim)
 
 	var info = Font{
-		Id: getItemByIndex(indexList(defaultLang,
+		Id: getItemByIndex(lastIndexOf(defaultLang,
 			nameLang), names),
-		Name: getItemByIndex(indexList(getCurLang(),
+		Name: getItemByIndex(lastIndexOf(getCurLang(),
 			nameLang), names),
-		Family: getItemByIndex(indexList(defaultLang,
+		Family: getItemByIndex(indexOf(defaultLang,
 			familyLang), families),
-		FamilyName: getItemByIndex(indexList(getCurLang(),
+		FamilyName: getItemByIndex(indexOf(getCurLang(),
 			familyLang), families),
 		File: C.GoString(cInfo.filename),
 		Styles: strings.Split(C.GoString(cInfo.style),
@@ -108,7 +116,7 @@ func fcInfoToFont(cInfo *C.FcInfo) *Font {
 		Lang: strings.Split(C.GoString(cInfo.lang),
 			defaultLangDelim),
 	}
-	info.Monospace = isMonospace(info.Name,
+	info.Monospace = isMonospace(info.Id,
 		C.GoString(cInfo.spacing))
 	info.Deletable = isDeletable(info.File)
 
@@ -143,13 +151,23 @@ func getItemByIndex(idx int, list []string) string {
 	return list[idx]
 }
 
-func indexList(item string, list []string) int {
+func indexOf(item string, list []string) int {
 	for i, v := range list {
-		if v == item {
+		if item == v {
 			return i
 		}
 	}
 	return -1
+}
+
+func lastIndexOf(item string, list []string) int {
+	var ret int = -1
+	for i, v := range list {
+		if item == v {
+			ret = i
+		}
+	}
+	return ret
 }
 
 func getCurLang() string {
