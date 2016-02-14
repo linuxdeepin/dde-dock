@@ -91,7 +91,7 @@ func XRecordEnable(enabled bool) {
 
 func IsShortcutValid(s string) bool {
 	tmp := formatAccelToXGB(s)
-	if isValidSingleKey(tmp) {
+	if IsValidSingleKey(tmp) {
 		return true
 	}
 	return isValidShortcut(tmp)
@@ -129,7 +129,7 @@ func grabAccel(s string) error {
 	}
 
 	news := formatAccelToXGB(s)
-	if isValidSingleKey(news) {
+	if IsValidSingleKey(news) {
 		return doGrabSingleKey(news)
 	}
 
@@ -146,7 +146,7 @@ func ungrabAccel(s string) {
 	}
 
 	news := formatAccelToXGB(s)
-	if isValidSingleKey(news) {
+	if IsValidSingleKey(news) {
 		doUngrabSingleKey(news)
 	}
 
@@ -194,8 +194,8 @@ func doUngrabAccel(s string) {
 	}
 }
 
-// check single key valid
-func isValidSingleKey(key string) bool {
+// IsValidSingleKey check single key whether valid
+func IsValidSingleKey(key string) bool {
 	tmp := strings.ToLower(key)
 	switch tmp {
 	case "super_l", "super_r":
@@ -218,7 +218,7 @@ func isValidShortcut(shortcut string) bool {
 		case "f1", "f2", "f3", "f4", "f5", "f6",
 			"f7", "f8", "f9", "f10", "f11", "f12",
 			"caps_lock", "num_lock", "print",
-			"backspace","delete" :
+			"backspace", "delete":
 			return true
 		}
 		return false

@@ -29,7 +29,7 @@ func handleSingleKeyEvent(keycode, pressed int) {
 
 	key, _ := FormatKeyEvent(0, keycode)
 	key = formatAccelToXGB(key)
-	if !isValidSingleKey(key) {
+	if !IsValidSingleKey(key) {
 		return
 	}
 

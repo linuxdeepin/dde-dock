@@ -228,6 +228,13 @@ func (m *Manager) GrabScreen() error {
 }
 
 func (m *Manager) addAccel(id string, ty int32, accel string) error {
+	if core.IsValidSingleKey(accel) {
+		switch ty {
+		case shortcuts.KeyTypeWM, shortcuts.KeyTypeMetacity:
+			return fmt.Errorf("Invalid accel: %v", accel)
+		}
+	}
+
 	s := m.listAll().GetById(id, ty)
 	if s == nil {
 		return fmt.Errorf("Invalid id '%s' or type '%v'", id, ty)
