@@ -4,6 +4,7 @@ import (
 	storeApi "dbus/com/deepin/store/api"
 	"encoding/json"
 	"fmt"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"sync"
@@ -87,17 +88,32 @@ func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) er
 		return fmt.Errorf("No such a item: %q", id)
 	}
 
+	err := m.uninstallFromDStore(item, purge, timeout)
+	if err != nil {
+		return m.uninstallFromDeepinWine(item)
+	}
+
+	return nil
+}
+
+func (m *Manager) uninstallFromDeepinWine(item ItemInfo) error {
+	cmd := exec.Command("/opt/deepinwine/tools/uninstall.sh", item.Path())
+	return cmd.Run()
+}
+
+func (m *Manager) uninstallFromDStore(item ItemInfo, purge bool, timeout time.Duration) error {
 	pkgName, err := m.getPkgName(item.Path())
 	if err != nil {
 		return err
 	}
 
 	if pkgName == "" {
-		return fmt.Errorf("get package name of %q failed", string(id))
+		return fmt.Errorf("get package name of %q failed", string(item.ID()))
 	}
 
 	transaction := m.store.NewUninstallTransaction(pkgName, purge, timeout)
-	return transaction.Exec()
+	err = transaction.Exec()
+	return err
 }
 
 // IsItemOnDesktop returns true if app exists on desktop.
