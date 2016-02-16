@@ -26,8 +26,12 @@ func markAsLaunched(appId string) {
 	if dbusConn == nil {
 		return
 	}
-	obj := dbusConn.Object(launcherDest, dbus.ObjectPath(launcherObjPath))
-	obj.Call(fullMethodName, 0, appId)
+
+	go func() {
+		// may block the whole process if launcher is not ready.
+		obj := dbusConn.Object(launcherDest, dbus.ObjectPath(launcherObjPath))
+		obj.Call(fullMethodName, 0, appId)
+	}()
 }
 
 func recordFrequency(appId string) {
