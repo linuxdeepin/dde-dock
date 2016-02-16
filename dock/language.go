@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 // Port from glib(gkeyfile.c and gcharset.c).
 // because we cannot pass NULL to glib.KeyFile.GetLocaleString like C, so the
 // locale must be passed expclitly.
