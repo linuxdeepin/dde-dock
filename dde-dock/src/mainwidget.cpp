@@ -196,7 +196,7 @@ void MainWidget::onPanelSizeChanged()
 
 MainWidget::~MainWidget()
 {
-
+    qDebug() << "dde-dock destroyed";
 }
 
 void MainWidget::loadResources()
