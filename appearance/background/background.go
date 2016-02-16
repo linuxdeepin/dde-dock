@@ -148,7 +148,11 @@ func (info *Background) Thumbnail() (string, error) {
 	return images.ThumbnailForTheme(info.Id, thumbWidth, thumbHeight, false)
 }
 
+var sLocker sync.Mutex
+
 func doSetByURI(uri string) error {
+	sLocker.Lock()
+	defer sLocker.Unlock()
 	if setting == nil {
 		s, err := dutils.CheckAndNewGSettings(wrapBgSchema)
 		if err != nil {
@@ -158,12 +162,10 @@ func doSetByURI(uri string) error {
 	}
 
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	old := setting.GetString(gsKeyBackground)
-	if old == uri {
-		return nil
+	if uri != setting.GetString(gsKeyBackground) {
+		setting.SetString(gsKeyBackground, uri)
+		gio.SettingsSync()
 	}
-
-	setting.SetString(gsKeyBackground, uri)
 	return nil
 }
 

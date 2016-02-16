@@ -16,7 +16,11 @@ import (
 
 func (m *Manager) listenGSettingChanged() {
 	m.setting.Connect("changed::theme", func(s *gio.Settings, key string) {
-		m.doSetDTheme(m.setting.GetString(key))
+		value := m.setting.GetString(key)
+		if m.Theme == value {
+			return
+		}
+		m.doSetDTheme(value)
 	})
 	m.setting.GetString(gsKeyTheme)
 

@@ -22,6 +22,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	dutils "pkg.deepin.io/lib/utils"
+	"sync"
 )
 
 const (
@@ -128,22 +129,20 @@ func (m *Manager) init() {
 
 func (m *Manager) doSetDTheme(id string) error {
 	logger.Debug("[doSetDTheme] theme id:", id)
+	m.setPropTheme(id)
 	err := dtheme.SetDTheme(id)
 	if err != nil {
 		logger.Debug("[doSetDTheme] set failed:", err)
 		return err
 	}
 
-	if m.Theme == id {
-		logger.Debug("[doSetDTheme] theme same:", id, m.Theme)
-		return nil
+	if id != m.setting.GetString(gsKeyTheme) {
+		m.setting.SetString(gsKeyTheme, id)
+		gio.SettingsSync()
 	}
 
-	m.setPropTheme(id)
-	m.setting.SetString(gsKeyTheme, id)
-
-	logger.Debug("[doSetDTheme] set font size")
-	return m.doSetFontSize(dtheme.ListDTheme().Get(id).FontSize)
+	logger.Debug("[doSetDTheme] DONE")
+	return nil
 }
 
 func (m *Manager) doSetGtkTheme(value string) error {
@@ -221,7 +220,12 @@ func (m *Manager) doSetCursorTheme(value string) error {
 	})
 }
 
+var bgLocker sync.Mutex
+
 func (m *Manager) doSetBackground(value string) error {
+	bgLocker.Lock()
+	defer bgLocker.Unlock()
+
 	logger.Debug("[doSetBackground] start set:", value)
 	dt := m.getCurrentDTheme()
 	if dt == nil {
@@ -333,8 +337,7 @@ func (m *Manager) doSetFontSize(size int32) error {
 }
 
 func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
-	id := m.setting.GetString(gsKeyTheme)
-	dt := dtheme.ListDTheme().Get(id)
+	dt := dtheme.ListDTheme().Get(m.Theme)
 	if dt != nil {
 		return dt
 	}
