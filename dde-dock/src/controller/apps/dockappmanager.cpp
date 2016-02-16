@@ -60,6 +60,9 @@ void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
             else {
                 emit entryAppend(item);
             }
+
+            emit requestSort();
+
             m_dockingItemId = "";
         }
     }

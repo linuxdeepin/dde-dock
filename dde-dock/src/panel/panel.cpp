@@ -170,6 +170,11 @@ void Panel::initAppManager()
     connect(m_appManager, &AppManager::entryAdded, this, &Panel::onAppItemAdd);
     connect(m_appManager, &AppManager::entryAppend, this, &Panel::onAppItemAppend);
     connect(m_appManager, &AppManager::entryRemoved, this, &Panel::onAppItemRemove);
+    connect(m_appManager, &AppManager::requestSort, this, [=] {
+        if (m_appLayout) {
+            m_appLayout->recordOrder();
+        }
+    });
 
     //Make sure the item which was dragged to the dock can be show at once
     connect(m_appLayout, &DockLayout::itemDocking, m_appManager, &AppManager::setDockingItemId);

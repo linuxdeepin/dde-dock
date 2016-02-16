@@ -67,6 +67,8 @@ void AppManager::onEntryAdded(const QDBusObjectPath &path)
             else
                 emit entryAppend(item, isTheDropOne);
 
+            emit requestSort();
+
             if (isTheDropOne)
                 setDockingItemId("");
         }

@@ -25,6 +25,7 @@ public:
     void setDockingItemId(const QString &dockingItemId);
 
 signals:
+    void requestSort();
     void entryAdded(AbstractDockItem *item, bool delayShow);
     void entryAppend(AbstractDockItem *item, bool delayShow);
     void entryRemoved(const QString &id);

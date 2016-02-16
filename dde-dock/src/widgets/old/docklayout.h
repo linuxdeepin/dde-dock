@@ -69,6 +69,7 @@ public slots:
     void restoreTmpItem();
     void clearTmpItem();
     void relayout();
+    void recordOrder();
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);

@@ -345,6 +345,9 @@ void DockAppLayout::initAppManager()
     connect(m_appManager, &DockAppManager::entryAdded, this, &DockAppLayout::onAppItemAdd);
     connect(m_appManager, &DockAppManager::entryAppend, this, &DockAppLayout::onAppAppend);
     connect(m_appManager, &DockAppManager::entryRemoved, this, &DockAppLayout::onAppItemRemove);
+    connect(m_appManager, &DockAppManager::requestSort, this, [=] {
+        m_ddam->Sort(appIds());
+    });
 }
 
 void DockAppLayout::onAppItemRemove(const QString &id)

@@ -61,8 +61,6 @@ void DockLayout::insertItem(AbstractDockItem *item, int index, bool delayShow)
     connect(pItem, &AbstractDockItem::moveAnimationFinished,this, &DockLayout::slotAnimationFinish);
     connect(this, &DockLayout::itemHoverableChange, pItem, &AbstractDockItem::setHoverable);
 
-    m_ddam->Sort(itemsIdList());
-
     if (delayShow) {
         //hide for delay show
         pItem->setVisible(false);
@@ -191,6 +189,8 @@ void DockLayout::restoreTmpItem()
             insertItem(tmpItem,m_lastHoverIndex, false);
         else
             insertItem(tmpItem,m_lastHoverIndex + 1, false);
+
+        recordOrder();
     }
 
     emit itemDropped();
@@ -216,6 +216,12 @@ void DockLayout::relayout()
     }
 
     emit contentsWidthChange();
+}
+
+void DockLayout::recordOrder()
+{
+    //读取顺序的id列表并用后端记录排列顺序
+    m_ddam->Sort(itemsIdList());
 }
 
 //for handle item drop in some area which not accept drop event and respond nothing to the drop event
@@ -304,8 +310,10 @@ void DockLayout::slotItemRelease()
     AbstractDockItem *item = qobject_cast<AbstractDockItem*>(sender());
 
     item->setVisible(true);
-    if (indexOf(item) == -1)
+    if (indexOf(item) == -1) {
         insertItem(item,m_lastHoverIndex);
+        recordOrder();
+    }
 }
 
 void DockLayout::slotItemEntered(QDragEnterEvent *)
@@ -543,7 +551,7 @@ QStringList DockLayout::itemsIdList() const
     QStringList idList;
     foreach (AbstractDockItem *item, m_appList) {
         QString itemId = item->getItemId();
-        if (!itemId.isEmpty() && dockedAppList.indexOf(itemId) != -1)
+        if (!itemId.isEmpty() && m_ddam->IsDocked(itemId))
             idList << itemId;
     }
     return idList;
