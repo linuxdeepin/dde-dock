@@ -82,8 +82,9 @@ void MainWidget::updatePosition(const QRect &rec)
 #else
         this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
 #endif
+
         move(rec.x() + (rec.width() - width()) / 2,
-             rec.y() + rec.height() - height());
+             rec.y() + rec.height() - height() /*- 10*/);
     }
 
     qDebug() << "size = " << width() << ", " << height();
