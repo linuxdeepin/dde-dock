@@ -14,6 +14,9 @@ package dock
 #include <stdlib.h>
 #include <libbamf/bamf-matcher.h>
 #include <libbamf/bamf-application.h>
+
+#define KDE4_PREFIX "kde4"
+
 char* getAppIdFromXid(guint32 xid) {
 	static BamfMatcher* matcher = NULL;
 	if (matcher == NULL) {
@@ -27,7 +30,24 @@ char* getAppIdFromXid(guint32 xid) {
 	if (desktop_file == NULL) {
 		return NULL;
 	}
-	return g_path_get_basename(desktop_file);
+
+	char* dirname = g_path_get_dirname(desktop_file);
+	char* basedir = g_path_get_basename(dirname);
+	char* basename = g_path_get_basename(desktop_file);
+
+	free(dirname);
+
+	if (g_strcmp0(basedir, KDE4_PREFIX) != 0) {
+		free(basedir);
+		return basename;
+	} else {
+		char* result = g_strconcat(KDE4_PREFIX, "-", basename, NULL);
+
+		free(basedir);
+		free(basename);
+
+		return result;
+	}
 }
 */
 import "C"
