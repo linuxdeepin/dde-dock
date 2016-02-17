@@ -133,7 +133,8 @@ void DockAppItem::initClientManager()
 void DockAppItem::initBackground()
 {
     m_appBG = new DockAppBG(this);
-    m_appBG->move(0, 0);
+    // NOTE: add 1px padding for item top.
+    m_appBG->move(0, 1);
 }
 
 void DockAppItem::initPreviewContainer()
@@ -283,8 +284,11 @@ void DockAppItem::onMouseLeave()
 
 void DockAppItem::resizeBackground()
 {
-    if (m_appBG)
-        m_appBG->setFixedSize(width(), height());
+    if (!m_appBG)
+        return;
+
+    // NOTE: add 1px padding for Top and Bottom
+    m_appBG->setFixedSize(width(), height() - 2);
 }
 
 void DockAppItem::resizeResources()
@@ -294,7 +298,8 @@ void DockAppItem::resizeResources()
 
     if (m_appBG != NULL) {
         resizeBackground();
-        m_appBG->move(0, 0);
+        // NOTE: add 1px padding for item top.
+        m_appBG->move(0, 1);
     }
 
     updateTitle();

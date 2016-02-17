@@ -375,7 +375,7 @@ void AppItem::resizeBackground()
         m_appBackground->move(0, 0);
     }
     else {
-        //非时尚模式下上下各留出一个像素
+        // FIXME: 非时尚模式下上下各留出一个像素
         m_appBackground->resize(width(), height() - 2);
         m_appBackground->move(0, 1);
     }
