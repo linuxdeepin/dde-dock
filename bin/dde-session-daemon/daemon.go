@@ -17,6 +17,7 @@ import (
 	"os"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/app"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"runtime/pprof"
@@ -29,7 +30,7 @@ const (
 )
 
 func runMainLoop() {
-	ddeSessionRegister()
+	app.DDESessionRegister()
 	dbus.DealWithUnhandledMessage()
 	go glib.StartLoop()
 

@@ -9,7 +9,5 @@
 
 package main
 
-type Flags struct {
-	IgnoreMissingModules *bool
-	ForceStart           *bool
-}
+// TODO: support it
+const __VERSION__ = "unknown"

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ * Copyright (C) 2015 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -9,7 +9,5 @@
 
 package main
 
-type Flags struct {
-	IgnoreMissingModules *bool
-	ForceStart           *bool
-}
+// TODO: support it.
+const __VERSION__ string = "unknown"

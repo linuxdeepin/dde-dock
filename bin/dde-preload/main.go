@@ -19,6 +19,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/dock"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/app"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
@@ -33,7 +34,7 @@ var logger = log.NewLogger("daemon/preload")
 func runMainLoop() {
 	logger.Info("register session")
 	startTime := time.Now()
-	ddeSessionRegister()
+	app.DDESessionRegister()
 	logger.Info("register session done, cost", time.Now().Sub(startTime))
 
 	logger.Info("DealWithUnhandledMessage")
@@ -75,15 +76,11 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	cmd := InitCMD()
-	cmd.Parse(os.Args[1:])
-
-	cfg := &Config{
-		CPUProfile: cmd.CpuProf(),
-		MemProfile: cmd.MemProf(),
+	cmd := app.New("dde-preload", "dde session preload daemon", "version "+__VERSION__)
+	cmd.ParseCommandLine(os.Args[1:])
+	if err := cmd.StartProfile(); err != nil {
+		logger.Fatal(err)
 	}
-	cfg.Start()
-	defer cfg.Stop()
 
 	InitI18n()
 	Textdomain("dde-daemon")

@@ -43,7 +43,7 @@ prepare:
 		fi
 
 out/bin/%:
-	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
+	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/bin/default-terminal: bin/default-terminal/default-terminal.c
 	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
