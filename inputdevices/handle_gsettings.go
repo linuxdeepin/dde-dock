@@ -49,6 +49,8 @@ func (m *Mouse) handleGSettings() {
 			m.motionAcceleration()
 		case mouseKeyThreshold:
 			m.motionThreshold()
+		case mouseKeyScaling:
+			m.motionScaling()
 		case mouseKeyDoubleClick:
 			m.doubleClick()
 		case mouseKeyDragThreshold:
@@ -81,6 +83,8 @@ func (tpad *Touchpad) handleGSettings() {
 			tpad.motionAcceleration()
 		case tpadKeyThreshold:
 			tpad.motionThreshold()
+		case tpadKeyScaling:
+			tpad.motionScaling()
 		}
 	})
 }

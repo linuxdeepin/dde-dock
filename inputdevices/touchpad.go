@@ -35,6 +35,7 @@ const (
 	tpadKeyVertScroll    = "vert-scroll-enabled"
 	tpadKeyAcceleration  = "motion-acceleration"
 	tpadKeyThreshold     = "motion-threshold"
+	tpadKeyScaling       = "motion-scaling"
 	tpadKeyTapClick      = "tap-to-click"
 	tpadKeyScrollDelta   = "delta-scroll"
 )
@@ -55,6 +56,7 @@ type Touchpad struct {
 
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
+	MotionScaling      *property.GSettingsFloatProperty `access:"readwrite"`
 
 	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
 	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
@@ -118,6 +120,9 @@ func NewTouchpad() *Touchpad {
 	tpad.MotionThreshold = property.NewGSettingsFloatProperty(
 		tpad, "MotionThreshold",
 		tpad.setting, tpadKeyThreshold)
+	tpad.MotionScaling = property.NewGSettingsFloatProperty(
+		tpad, "MotionScaling",
+		tpad.setting, tpadKeyScaling)
 
 	tpad.DeltaScroll = property.NewGSettingsIntProperty(
 		tpad, "DeltaScroll",
@@ -151,6 +156,7 @@ func (tpad *Touchpad) init() {
 	tpad.enableTwoFingerScroll()
 	tpad.motionAcceleration()
 	tpad.motionThreshold()
+	tpad.motionScaling()
 	tpad.disableWhileTyping()
 }
 
@@ -196,8 +202,9 @@ func (tpad *Touchpad) enable(enabled bool) {
 }
 
 func (tpad *Touchpad) enableLeftHanded() {
+	enabled := tpad.LeftHanded.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.EnableLeftHanded(tpad.LeftHanded.Get())
+		err := v.EnableLeftHanded(enabled)
 		if err != nil {
 			logger.Debugf("Enable left handed '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -206,8 +213,9 @@ func (tpad *Touchpad) enableLeftHanded() {
 }
 
 func (tpad *Touchpad) enableNaturalScroll() {
+	enabled := tpad.NaturalScroll.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.EnableNaturalScroll(tpad.NaturalScroll.Get())
+		err := v.EnableNaturalScroll(enabled)
 		if err != nil {
 			logger.Debugf("Enable natural scroll '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -216,8 +224,9 @@ func (tpad *Touchpad) enableNaturalScroll() {
 }
 
 func (tpad *Touchpad) setScrollDistance() {
+	delta := tpad.DeltaScroll.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.SetScrollDistance(tpad.DeltaScroll.Get(), tpad.DeltaScroll.Get())
+		err := v.SetScrollDistance(delta, delta)
 		if err != nil {
 			logger.Debugf("Set natural scroll distance '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -226,8 +235,9 @@ func (tpad *Touchpad) setScrollDistance() {
 }
 
 func (tpad *Touchpad) enableEdgeScroll() {
+	enabled := tpad.EdgeScroll.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.EnableEdgeScroll(tpad.EdgeScroll.Get())
+		err := v.EnableEdgeScroll(enabled)
 		if err != nil {
 			logger.Debugf("Enable edge scroll '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -236,9 +246,10 @@ func (tpad *Touchpad) enableEdgeScroll() {
 }
 
 func (tpad *Touchpad) enableTwoFingerScroll() {
+	vert := tpad.VertScroll.Get()
+	horiz := tpad.HorizScroll.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.EnableTwoFingerScroll(tpad.VertScroll.Get(),
-			tpad.HorizScroll.Get())
+		err := v.EnableTwoFingerScroll(vert, horiz)
 		if err != nil {
 			logger.Debugf("Enable two-finger scroll '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -247,8 +258,9 @@ func (tpad *Touchpad) enableTwoFingerScroll() {
 }
 
 func (tpad *Touchpad) enableTapToClick() {
+	enabled := tpad.TapClick.Get()
 	for _, v := range tpad.dxTPads {
-		err := v.EnableTapToClick(tpad.TapClick.Get())
+		err := v.EnableTapToClick(enabled)
 		if err != nil {
 			logger.Debugf("Enable tap to click '%v - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -257,9 +269,9 @@ func (tpad *Touchpad) enableTapToClick() {
 }
 
 func (tpad *Touchpad) motionAcceleration() {
+	accel := float32(tpad.MotionAcceleration.Get())
 	for _, v := range tpad.dxTPads {
-		err := v.SetMotionAcceleration(
-			float32(tpad.MotionAcceleration.Get()))
+		err := v.SetMotionAcceleration(accel)
 		if err != nil {
 			logger.Debugf("Set acceleration for '%d - %v' failed: %v",
 				v.Id, v.Name, err)
@@ -268,10 +280,22 @@ func (tpad *Touchpad) motionAcceleration() {
 }
 
 func (tpad *Touchpad) motionThreshold() {
+	thres := float32(tpad.MotionThreshold.Get())
 	for _, v := range tpad.dxTPads {
-		err := v.SetMotionThreshold(float32(tpad.MotionThreshold.Get()))
+		err := v.SetMotionThreshold(thres)
 		if err != nil {
 			logger.Debugf("Set threshold for '%d - %v' failed: %v",
+				v.Id, v.Name, err)
+		}
+	}
+}
+
+func (tpad *Touchpad) motionScaling() {
+	scaling := float32(tpad.MotionScaling.Get())
+	for _, v := range tpad.dxTPads {
+		err := v.SetMotionScaling(scaling)
+		if err != nil {
+			logger.Debugf("Set scaling for '%d - %v' failed: %v",
 				v.Id, v.Name, err)
 		}
 	}

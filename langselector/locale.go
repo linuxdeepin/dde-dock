@@ -23,9 +23,9 @@ import (
 )
 
 const (
-	systemLocaleFile  = "/etc/default/locale"
-	systemdLocaleFile  = "/etc/locale.conf"
-	userLocaleFilePAM = ".pam_environment"
+	systemLocaleFile     = "/etc/default/locale"
+	systemdLocaleFile    = "/etc/locale.conf"
+	userLocaleFilePAM    = ".pam_environment"
 	userLocaleConfigFile = ".config/locale.conf"
 
 	defaultLocale = "en_US.UTF-8"
@@ -166,16 +166,16 @@ func getLocale() string {
 
 func writeUserLocale(locale string) error {
 	homeDir := os.Getenv("HOME")
-	pamEnvFile := path.Join( homeDir, userLocaleFilePAM)
+	pamEnvFile := path.Join(homeDir, userLocaleFilePAM)
 	var err error
 	// only for lightdm
 	err = writeLocaleEnvFile(locale, pamEnvFile)
 	if err != nil {
 		return err
 	}
-	localeConfigFile := path.Join( homeDir, userLocaleConfigFile)
+	localeConfigFile := path.Join(homeDir, userLocaleConfigFile)
 	err = writeLocaleEnvFile(locale, localeConfigFile)
-	if ( err != nil ) {
+	if err != nil {
 		return err
 	}
 	return nil
@@ -210,11 +210,9 @@ func generateLocaleEnvFile(locale, filename string) string {
 	}
 	if !lFound {
 		content += fmt.Sprintf("LANG=%s", locale)
-		if !lgFound {
-			content += "\n"
-		}
 	}
 	if !lgFound {
+		content += "\n"
 		content += fmt.Sprintf("LANGUAGE=%s", lang)
 	}
 
