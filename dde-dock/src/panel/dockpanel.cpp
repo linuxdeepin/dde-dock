@@ -13,6 +13,7 @@
 
 #include "dockpanel.h"
 #include "controller/dockmodedata.h"
+#include "controller/stylemanager.h"
 #include "controller/old/pluginproxy.h"
 
 const int REFLECTION_Y = 25;
@@ -282,8 +283,11 @@ void DockPanel::reloadStyleSheet()
 {
     m_isFashionMode = m_dockModeData->getDockMode() == Dock::FashionMode;
 
-    style()->unpolish(this);
-    style()->polish(this);  // force a stylesheet recomputation
+    // INFO: 这里用 unpolish/polish 会出现只有部分 qss 起作用的情况，必须重新加载所有 qss
+    StyleManager::instance()->initStyleSheet();
+
+//    style()->unpolish(this);
+//    style()->polish(this);  // force a stylesheet recomputation
 }
 
 void DockPanel::showPanelMenu()
