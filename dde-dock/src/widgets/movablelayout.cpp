@@ -69,8 +69,7 @@ void MovableSpacingItem::StartDecline(bool immediately)
     if (immediately) {
         setFixedSize(0, 0);
         emit declineFinish();
-    }
-    else {
+    } else {
         m_growAnimation->stop();
 
         m_declineAnimation->setStartValue(this->size());
@@ -131,7 +130,7 @@ bool MovableLayout::dragable() const
     return m_dragable;
 }
 
-int MovableLayout::indexOf(QWidget * const widget, int from) const
+int MovableLayout::indexOf(QWidget *const widget, int from) const
 {
     return m_widgetList.indexOf(widget, from);
 }
@@ -195,7 +194,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
     int layoutCount = m_layout->count();
     for (int i = 0; i < layoutCount; i ++) {
         if (m_layout->itemAt(i)->widget() == souce) {
-            MovableSpacingItem * item;
+            MovableSpacingItem *item;
             int tmpIndex = i;
             switch (md) {
             case MoveLeftToRight:
@@ -206,8 +205,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                     //note to other
                     emit requestSpacingItemsDestroy(false);
                     item->StartGrow();
-                }
-                else {
+                } else {
                     insertSpacingItemToLayout(tmpIndex, size);
                 }
                 break;
@@ -219,8 +217,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
                     //note to other
                     emit requestSpacingItemsDestroy(false);
                     item->StartGrow();
-                }
-                else {
+                } else {
                     insertSpacingItemToLayout(tmpIndex, size);
                 }
                 break;
@@ -229,8 +226,7 @@ void MovableLayout::addSpacingItem(QWidget *souce, MovableLayout::MoveDirection 
             }
 
             break;
-        }
-        else {
+        } else {
             continue;
         }
     }
@@ -247,12 +243,14 @@ int MovableLayout::hoverIndex() const
     switch (direction()) {
     case QBoxLayout::TopToBottom:
     case QBoxLayout::BottomToTop:
-        if (m_vMoveDirection == MoveBottomToTop)
+        if (m_vMoveDirection == MoveBottomToTop) {
             head = false;
+        }
     case QBoxLayout::LeftToRight:
     case QBoxLayout::RightToLeft:
-        if (m_hMoveDirection == MoveRightToLeft)
+        if (m_hMoveDirection == MoveRightToLeft) {
             head = false;
+        }
     }
 
     return head ? m_lastHoverIndex : m_lastHoverIndex + 1;
@@ -278,48 +276,50 @@ void MovableLayout::setLayoutSpacing(int spacing)
     m_layout->setSpacing(spacing);
 }
 
-QPoint basePos(0, 0);
 void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 {
+    static QPoint basePos(0, 0);
+
+    // only response left button drag
+    if (event->buttons() != Qt::LeftButton) {
+        return;
+    }
+
     //小范围内拖动无效
     if (basePos.isNull()) {
         basePos = event->pos();
         return;
-    }
-    else {
-        if ( qAbs(event->pos().x() - basePos.x())> INVALID_MOVE_RADIUS ||
-             qAbs(event->pos().y() - basePos.y()) > INVALID_MOVE_RADIUS) {
+    } else {
+        if (qAbs(event->pos().x() - basePos.x()) > INVALID_MOVE_RADIUS ||
+                qAbs(event->pos().y() - basePos.y()) > INVALID_MOVE_RADIUS) {
             basePos = QPoint(0, 0);
-        }
-        else {
+        } else {
             return;
         }
     }
 
     int index = getHoverIndextByPos(event->pos());
-    if (index == -1)
+    if (index == -1) {
         return;
+    }
 
     m_draginItem = m_widgetList.at(index);
     m_lastHoverIndex = index;
     storeDragingWidget();
 
-    Qt::MouseButtons btn = event->buttons();
-    if(btn == Qt::LeftButton)
-    {
-        //drag and mimeData object will delete automatically
-        QDrag* drag = new QDrag(this);
-        QMimeData* mimeData = new QMimeData();
-        QImage dataImg = m_draginItem->grab().toImage();
-        mimeData->setImageData(QVariant(dataImg));
-        drag->setMimeData(mimeData);
-        drag->setHotSpot(QPoint(15,15));
-        drag->setPixmap(m_draginItem->grab());
 
-        emit startDrag(drag);
+    // drag and mimeData object will delete automatically
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData();
+    QImage dataImg = m_draginItem->grab().toImage();
+    mimeData->setImageData(QVariant(dataImg));
+    drag->setMimeData(mimeData);
+    drag->setHotSpot(QPoint(15, 15));
+    drag->setPixmap(m_draginItem->grab());
 
-        drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
-    }
+    emit startDrag(drag);
+
+    drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
 }
 
 void MovableLayout::dragEnterEvent(QDragEnterEvent *event)
@@ -341,8 +341,9 @@ void MovableLayout::dragLeaveEvent(QDragLeaveEvent *event)
 
 void MovableLayout::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (!m_dragable || (m_layout->count() > m_widgetList.count() + MAX_SPACINGITEM_COUNT))
+    if (!m_dragable || (m_layout->count() > m_widgetList.count() + MAX_SPACINGITEM_COUNT)) {
         return;
+    }
 
     handleDrag(event->pos());
 }
@@ -424,7 +425,7 @@ void MovableLayout::insertSpacingItemToLayout(int index, const QSize &size, bool
 
     MovableSpacingItem *nItem = new MovableSpacingItem(m_animationDuration, m_animationCurve, size);
     connect(this, &MovableLayout::requestSpacingItemsDestroy, nItem, &MovableSpacingItem::StartDecline);
-    connect(nItem, &MovableSpacingItem::declineFinish, [=] {
+    connect(nItem, &MovableSpacingItem::declineFinish, [ = ] {
         m_layout->removeWidget(nItem);
         nItem->deleteLater();
     });
@@ -441,16 +442,15 @@ MovableLayout::MoveDirection MovableLayout::getVMoveDirection(int index, const Q
         wr.moveTo(pp);
         if (wr.contains(pos)) {
             QRect topArea(wr.x(), wr.y(), wr.width(), wr.height() / 2);
-            if (topArea.contains(pos))
+            if (topArea.contains(pos)) {
                 return MoveTopToBottom;
-            else
+            } else {
                 return MoveBottomToTop;
-        }
-        else {
+            }
+        } else {
             return MoveUnknow;
         }
-    }
-    else {
+    } else {
         return MoveUnknow;
     }
 }
@@ -464,16 +464,15 @@ MovableLayout::MoveDirection MovableLayout::getHMoveDirection(int index, const Q
         wr.moveTo(pp);
         if (wr.contains(pos)) {
             QRect leftArea(wr.x(), wr.y(), wr.width() / 2, wr.height());
-            if (leftArea.contains(pos))
+            if (leftArea.contains(pos)) {
                 return MoveLeftToRight;
-            else
+            } else {
                 return MoveRightToLeft;
-        }
-        else {
+            }
+        } else {
             return MoveUnknow;
         }
-    }
-    else {
+    } else {
         return MoveUnknow;
     }
 }
@@ -596,8 +595,7 @@ void MovableLayout::handleDrag(const QPoint &pos)
         }
 
         m_hoverToSpacing = false;
-    }
-    else {
+    } else {
         m_hoverToSpacing = true;
     }
 }
