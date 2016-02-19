@@ -24,6 +24,7 @@ import (
 
 const (
 	systemLocaleFile  = "/etc/default/locale"
+	systemdLocaleFile  = "/etc/locale.conf"
 	userLocaleFilePAM = ".pam_environment"
 	userLocaleConfigFile = ".config/locale.conf"
 
@@ -145,7 +146,11 @@ func getLocale() string {
 	if err != nil || len(locale) == 0 {
 		locale, err = getLocaleFromFile(systemLocaleFile)
 		if err != nil || len(locale) == 0 {
-			locale = defaultLocale
+			/* This file is used by systemd to store system-wide locale settings */
+			locale, err = getLocaleFromFile(systemdLocaleFile)
+			if err != nil || len(locale) == 0 {
+				locale = defaultLocale
+			}
 		}
 
 		writeUserLocale(locale)
