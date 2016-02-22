@@ -16,6 +16,7 @@ package main
 import "C"
 import (
 	"gir/glib-2.0"
+	"pkg.deepin.io/dde/api/session"
 	_ "pkg.deepin.io/dde/daemon/dock"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
@@ -34,7 +35,7 @@ var logger = log.NewLogger("daemon/preload")
 func runMainLoop() {
 	logger.Info("register session")
 	startTime := time.Now()
-	app.DDESessionRegister()
+	session.Register()
 	logger.Info("register session done, cost", time.Now().Sub(startTime))
 
 	logger.Info("DealWithUnhandledMessage")

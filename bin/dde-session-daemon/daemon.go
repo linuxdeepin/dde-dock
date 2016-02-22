@@ -12,16 +12,17 @@ package main
 import (
 	"errors"
 	"fmt"
-	"gir/gio-2.0"
-	"gir/glib-2.0"
 	"os"
-	"pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib"
-	"pkg.deepin.io/lib/app"
-	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
 	"runtime/pprof"
 	"sync"
+
+	"gir/gio-2.0"
+	"gir/glib-2.0"
+	"pkg.deepin.io/dde/api/session"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 )
 
 const (
@@ -30,7 +31,7 @@ const (
 )
 
 func runMainLoop() {
-	app.DDESessionRegister()
+	session.Register()
 	dbus.DealWithUnhandledMessage()
 	go glib.StartLoop()
 
