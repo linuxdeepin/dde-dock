@@ -14,12 +14,11 @@ import (
 	"dbus/com/deepin/daemon/display"
 	"dbus/com/deepin/daemon/helper/backlight"
 	"dbus/com/deepin/daemon/keybinding"
+	"dbus/com/deepin/sessionmanager"
 	"dbus/org/freedesktop/dbus"
 	"dbus/org/freedesktop/login1"
-	"dbus/com/deepin/sessionmanager"
 	"fmt"
 	"pkg.deepin.io/lib/log"
-	"time"
 )
 
 const (
@@ -29,11 +28,11 @@ const (
 var logger = log.NewLogger("daemon/mpris")
 
 type Manager struct {
-	mediakey    *keybinding.Mediakey
-	login       *login1.Manager
-	disp        *display.Display
-	dbusDaemon  *dbus.DBusDaemon
-	audioDaemon *audio.Audio
+	mediakey       *keybinding.Mediakey
+	login          *login1.Manager
+	disp           *display.Display
+	dbusDaemon     *dbus.DBusDaemon
+	audioDaemon    *audio.Audio
 	sessionManager *sessionmanager.SessionManager
 
 	prevPlayer string
@@ -75,7 +74,7 @@ func NewManager() (*Manager, error) {
 	m.sessionManager, err = sessionmanager.NewSessionManager("com.deepin.SessionManager",
 		"/com/deepin/SessionManager")
 	if err != nil {
-		logger.Warning("Create session manager connection failed:", err);
+		logger.Warning("Create session manager connection failed:", err)
 	}
 
 	return m, nil
@@ -92,24 +91,34 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 	}
 
 	values := m.disp.Brightness.Get()
-	// Wait for check whether changed by driver
-	time.Sleep(time.Millisecond * 100)
-	real, err := getBrightness()
-
-	var delta float64 = 0.05
+	var step float64 = 0.05
 	if !raised {
-		delta = -0.05
+		step = -0.05
 	}
+
+	backlight, err := getBrightness()
+	if err != nil {
+		logger.Debug("[changeBrightness] get backlight brightness failed:", err)
+	}
+
 	for output, v := range values {
-		logger.Debug("[changeBrightness] compare:", v, real)
-		if err == nil && (v < real-0.01 || v > real+0.01) {
-			v = real
+		var discrete float64
+		if err == nil {
+			discrete = backlight
 		} else {
-			v = v + delta
+			discrete = v
 		}
-		err1 := m.disp.SetBrightness(output, v)
+
+		discrete += step
+		if discrete > 1.0 {
+			discrete = 1
+		}
+		if discrete < 0.02 {
+			discrete = 0.02
+		}
+		err1 := m.disp.SetBrightness(output, discrete)
 		if err1 != nil {
-			logger.Warning("[SetBrightness] failed:", output, v, err1)
+			logger.Warning("[changeBrightness] set failed:", output, discrete, err1)
 		}
 	}
 
@@ -147,20 +156,12 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 	}
 
 	v := sink.Volume.Get()
-	// Wait for check whether changed by driver
-	time.Sleep(time.Millisecond * 100)
-	real := sink.Volume.Get()
-
-	var delta float64 = 0.05
+	var step float64 = 0.05
 	if !raised {
-		delta = -0.05
+		step = -0.05
 	}
 
-	if v < real-0.01 || v > real+0.01 {
-		v = real
-	} else {
-		v += delta
-	}
+	v += step
 	if v < 0 {
 		v = 0
 	} else if v > 1 {
