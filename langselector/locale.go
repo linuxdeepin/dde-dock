@@ -152,13 +152,11 @@ func getLocale() string {
 				locale = defaultLocale
 			}
 		}
-
-		writeUserLocale(locale)
 	}
 
+	locale = strings.Trim(locale, "\"")
 	if !lang_info.IsSupportedLocale(locale) {
 		locale = defaultLocale
-		writeUserLocale(locale)
 	}
 
 	return locale
