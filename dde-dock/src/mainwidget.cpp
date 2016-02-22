@@ -17,7 +17,7 @@ const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent)
 {
-    this->setWindowFlags(Qt::Window | Qt::WindowDoesNotAcceptFocus);
+    this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
     //the attribute "Qt::WA_X11DoNotAcceptFocus" will not tack effect, not know the reason
     //this->setAttribute(Qt::WA_X11DoNotAcceptFocus);
@@ -125,7 +125,7 @@ void MainWidget::updateXcbStructPartial()
                                            XcbMisc::OrientationBottom,
                                            tmpHeight,
                                            x(),
-                                           x() + width());
+                                           x() + width() - 1);
     this->setVisible(true);
 }
 
