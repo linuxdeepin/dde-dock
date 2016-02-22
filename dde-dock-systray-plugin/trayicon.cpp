@@ -328,7 +328,8 @@ void TrayIcon::sendClick(uint8_t mouseButton, int x, int y)
         event->detail = mouseButton;
 
         xcb_send_event(c, false, m_windowId, XCB_EVENT_MASK_BUTTON_PRESS, (char *) event);
-        free(event);
+//        free(event);
+        delete event;
     }
 
     //mouse up
@@ -349,7 +350,8 @@ void TrayIcon::sendClick(uint8_t mouseButton, int x, int y)
         event->detail = mouseButton;
 
         xcb_send_event(c, false, m_windowId, XCB_EVENT_MASK_BUTTON_RELEASE, (char *) event);
-        free(event);
+//        free(event);
+        delete event;
     }
 
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
