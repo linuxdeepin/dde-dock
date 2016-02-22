@@ -65,7 +65,7 @@ void MainWidget::updatePosition(const QRect &rec)
         return;
     }
 
-    qDebug() << "move to " << rec;
+//    qDebug() << "move to " << rec;
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
@@ -87,8 +87,8 @@ void MainWidget::updatePosition(const QRect &rec)
              rec.y() + rec.height() - height() /*- 10*/);
     }
 
-    qDebug() << "size = " << width() << ", " << height();
-    qDebug() << "move to " << this->x() << ", " << this->y() << " end";
+//    qDebug() << "size = " << width() << ", " << height();
+//    qDebug() << "move to " << this->x() << ", " << this->y() << " end";
 
     updateXcbStructPartial();
 }
@@ -118,8 +118,8 @@ void MainWidget::updateXcbStructPartial()
         return;
     }
 
-    qDebug() << "maxHeight dbus: " << m_display->screenHeight();
-    qDebug() << "set structPartial: " << x() << ", " << width() << ", " << tmpHeight;
+//    qDebug() << "maxHeight dbus: " << m_display->screenHeight();
+//    qDebug() << "set structPartial: " << x() << ", " << width() << ", " << tmpHeight;
 
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
