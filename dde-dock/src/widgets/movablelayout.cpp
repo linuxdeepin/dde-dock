@@ -278,6 +278,9 @@ void MovableLayout::setLayoutSpacing(int spacing)
 
 void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 {
+    if (!m_dragable)
+        return;
+
     static QPoint basePos(0, 0);
 
     // only response left button drag
@@ -306,7 +309,6 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
     m_draginItem = m_widgetList.at(index);
     m_lastHoverIndex = index;
     storeDragingWidget();
-
 
     // drag and mimeData object will delete automatically
     QDrag *drag = new QDrag(this);

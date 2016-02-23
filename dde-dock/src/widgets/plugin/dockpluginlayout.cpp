@@ -14,6 +14,7 @@
 DockPluginLayout::DockPluginLayout(QWidget *parent) : MovableLayout(parent)
 {
     setAcceptDrops(false);
+    setDragable(false);
     initPluginManager();
 }
 
