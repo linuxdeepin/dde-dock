@@ -8,6 +8,7 @@
  **/
 
 #include <QFile>
+#include <QFileInfo>
 #include <QPainter>
 #include <QSvgRenderer>
 
@@ -41,7 +42,7 @@ void AppIcon::setIcon(const QString &iconPath)
     QPixmap pixmap(48, 48);
 
     // iconPath is an absolute path of the system.
-    if (QFile::exists(iconPath)) {
+    if (QFile::exists(iconPath) && QFileInfo(iconPath).isAbsolute()) {
         pixmap = QPixmap(iconPath);
     } else if (iconPath.startsWith("data:image/")){
         // iconPath is a string representing an inline image.
