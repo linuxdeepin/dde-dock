@@ -126,7 +126,9 @@ void MainWidget::updateXcbStructPartial()
                                            tmpHeight,
                                            x(),
                                            x() + width() - 1);
-    this->setVisible(true);
+// The line below causes deepin-wm to regard dde-dock as a normal window
+// while previewing windows. https://github.com/fasheng/arch-deepin/issues/249
+//    this->setVisible(true);
 }
 
 void MainWidget::updateGeometry()
