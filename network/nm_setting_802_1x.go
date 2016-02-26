@@ -1,74 +1,18 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/utils"
-)
-
-// https://developer.gnome.org/libnm-util/0.9/NMSettingWired.html
-// https://developer.gnome.org/NetworkManager/unstable/ref-settings.html
-
-// The setting's name; these names are defined by the specification
-// and cannot be changed after the object has been created. Each
-// setting class has a name, and all objects of that class share the
-// same name.
-const NM_SETTING_802_1X_SETTING_NAME = "802-1x"
-
-const (
-	NM_SETTING_802_1X_EAP                               = "eap"
-	NM_SETTING_802_1X_IDENTITY                          = "identity"
-	NM_SETTING_802_1X_ANONYMOUS_IDENTITY                = "anonymous-identity"
-	NM_SETTING_802_1X_PAC_FILE                          = "pac-file"
-	NM_SETTING_802_1X_CA_CERT                           = "ca-cert"
-	NM_SETTING_802_1X_CA_PATH                           = "ca-path"
-	NM_SETTING_802_1X_SUBJECT_MATCH                     = "subject-match"
-	NM_SETTING_802_1X_ALTSUBJECT_MATCHES                = "altsubject-matches"
-	NM_SETTING_802_1X_CLIENT_CERT                       = "client-cert"
-	NM_SETTING_802_1X_PHASE1_PEAPVER                    = "phase1-peapver"
-	NM_SETTING_802_1X_PHASE1_PEAPLABEL                  = "phase1-peaplabel"
-	NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING          = "phase1-fast-provisioning"
-	NM_SETTING_802_1X_PHASE2_AUTH                       = "phase2-auth"
-	NM_SETTING_802_1X_PHASE2_AUTHEAP                    = "phase2-autheap"
-	NM_SETTING_802_1X_PHASE2_CA_CERT                    = "phase2-ca-cert"
-	NM_SETTING_802_1X_PHASE2_CA_PATH                    = "phase2-ca-path"
-	NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH              = "phase2-subject-match"
-	NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES         = "phase2-altsubject-matches"
-	NM_SETTING_802_1X_PHASE2_CLIENT_CERT                = "phase2-client-cert"
-	NM_SETTING_802_1X_PASSWORD                          = "password"
-	NM_SETTING_802_1X_PASSWORD_FLAGS                    = "password-flags"
-	NM_SETTING_802_1X_PASSWORD_RAW                      = "password-raw"
-	NM_SETTING_802_1X_PASSWORD_RAW_FLAGS                = "password-raw-flags"
-	NM_SETTING_802_1X_PRIVATE_KEY                       = "private-key"
-	NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD              = "private-key-password"
-	NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS        = "private-key-password-flags"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY                = "phase2-private-key"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD       = "phase2-private-key-password"
-	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS = "phase2-private-key-password-flags"
-	NM_SETTING_802_1X_PIN                               = "pin"
-	NM_SETTING_802_1X_PIN_FLAGS                         = "pin-flags"
-	NM_SETTING_802_1X_SYSTEM_CA_CERTS                   = "system-ca-certs"
+	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/utils"
 )
 
 // Init available values
@@ -240,7 +184,6 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 		if isSettingRequireSecret(getSetting8021xPrivateKeyPasswordFlags(data)) {
 			ensureSetting8021xPrivateKeyPasswordNoEmpty(data, errs)
 		}
-		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 	case "md5":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
 		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
@@ -254,21 +197,18 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 	case "fast":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
 			ensureSetting8021xPasswordNoEmpty(data, errs)
 		}
 	case "ttls":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
 			ensureSetting8021xPasswordNoEmpty(data, errs)
 		}
 	case "peap":
 		ensureSetting8021xPhase2AuthNoEmpty(data, errs)
 		ensureSetting8021xIdentityNoEmpty(data, errs)
-		ensureSetting8021xSystemCaCertsNoEmpty(data, errs)
 		if isSettingRequireSecret(getSetting8021xPasswordFlags(data)) {
 			ensureSetting8021xPasswordNoEmpty(data, errs)
 		}
@@ -342,27 +282,21 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 			NM_SETTING_802_1X_CA_CERT,
 			NM_SETTING_802_1X_PRIVATE_KEY,
 			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD,
-			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
-		setSetting8021xSystemCaCerts(data, true)
+			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 		setSetting8021xPrivateKeyPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "md5":
 		removeSettingKeyBut(data, section8021x,
 			NM_SETTING_802_1X_EAP,
 			NM_SETTING_802_1X_IDENTITY,
 			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
-		setSetting8021xSystemCaCerts(data, true)
+			NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "leap":
 		removeSettingKeyBut(data, section8021x,
 			NM_SETTING_802_1X_EAP,
 			NM_SETTING_802_1X_IDENTITY,
 			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
-		setSetting8021xSystemCaCerts(data, true)
+			NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "fast":
 		removeSettingKeyBut(data, section8021x,
@@ -373,11 +307,9 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 			NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING,
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+			NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPhase1FastProvisioning(data, "1")
 		setSetting8021xPhase2Auth(data, "gtc")
-		setSetting8021xSystemCaCerts(data, true)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "ttls":
 		removeSettingKeyBut(data, section8021x,
@@ -387,10 +319,8 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 			NM_SETTING_802_1X_CA_CERT,
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+			NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPhase2Auth(data, "pap")
-		setSetting8021xSystemCaCerts(data, true)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	case "peap":
 		removeSettingKeyBut(data, section8021x,
@@ -401,11 +331,9 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 			NM_SETTING_802_1X_PHASE1_PEAPVER,
 			NM_SETTING_802_1X_PHASE2_AUTH,
 			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS,
-			NM_SETTING_802_1X_SYSTEM_CA_CERTS)
+			NM_SETTING_802_1X_PASSWORD_FLAGS)
 		removeSetting8021xPhase1Peapver(data)
 		setSetting8021xPhase2Auth(data, "mschapv2")
-		setSetting8021xSystemCaCerts(data, true)
 		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
 	}
 	setSetting8021xEap(data, value)

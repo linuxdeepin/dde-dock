@@ -1,29 +1,19 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package users
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -55,7 +45,7 @@ func ModifyShell(shell, username string) error {
 		return errInvalidParam
 	}
 
-	var cmd = fmt.Sprintf("%s -s %s", userCmdModify, shell, username)
+	var cmd = fmt.Sprintf("%s -s %s %s", userCmdModify, shell, username)
 	return doAction(cmd)
 }
 
@@ -94,7 +84,7 @@ func IsAutoLoginUser(username string) bool {
 }
 
 func IsAdminUser(username string) bool {
-	admins, err := getAdminUserList(userFileGroup)
+	admins, err := getAdminUserList(userFileGroup, userFileSudoers)
 	if err != nil {
 		return false
 	}
@@ -102,13 +92,18 @@ func IsAdminUser(username string) bool {
 	return isStrInArray(username, admins)
 }
 
-func getAdminUserList(file string) ([]string, error) {
-	content, err := ioutil.ReadFile(file)
+func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
+	groups, users, err := getAdmGroupAndUser(fileSudoers)
 	if err != nil {
 		return nil, err
 	}
 
-	var tmp string
+	content, err := ioutil.ReadFile(fileGroup)
+	if err != nil {
+		return nil, err
+	}
+
+	var list []string = users
 	lines := strings.Split(string(content), "\n")
 	for _, line := range lines {
 		if len(line) == 0 {
@@ -120,12 +115,56 @@ func getAdminUserList(file string) ([]string, error) {
 			continue
 		}
 
-		if items[0] != "sudo" {
+		if !isStrInArray(items[0], groups) {
 			continue
 		}
 
-		tmp = items[3]
+		list = append(list, strings.Split(items[3], ",")...)
 	}
 
-	return strings.Split(tmp, ","), nil
+	return list, nil
+}
+
+// get adm group and user from '/etc/sudoers'
+func getAdmGroupAndUser(file string) ([]string, []string, error) {
+	fr, err := os.Open(file)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer fr.Close()
+
+	var (
+		groups  []string
+		users   []string
+		scanner = bufio.NewScanner(fr)
+	)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		if len(line) == 0 {
+			continue
+		}
+
+		line = strings.TrimSpace(line)
+		if line[0] == '#' || !strings.Contains(line, `ALL=(ALL`) {
+			continue
+		}
+
+		array := strings.Split(line, "ALL")
+		// admin group
+		if line[0] == '%' {
+			// deepin: %sudo\tALL=(ALL:ALL) ALL
+			// archlinux: %wheel ALL=(ALL) ALL
+			array = strings.Split(array[0], "%")
+			tmp := strings.TrimRight(array[1], "\t")
+			groups = append(groups, strings.TrimSpace(tmp))
+		} else {
+			// admin user
+			// deepin: root\tALL=(ALL:ALL) ALL
+			// archlinux: root ALL=(ALL) ALL
+			tmp := strings.TrimRight(array[0], "\t")
+			users = append(users, strings.TrimSpace(tmp))
+		}
+	}
+	return groups, users, nil
 }

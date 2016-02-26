@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package item
 
 import (
@@ -5,11 +14,11 @@ import (
 	"path"
 
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
 type DesktopTestSuite struct {
-	oldHome string
+	oldHome     string
 	testDataDir string
 }
 
@@ -19,6 +28,7 @@ var _ = C.Suite(&DesktopTestSuite{})
 func (s *DesktopTestSuite) SetUpSuite(c *C.C) {
 	s.oldHome = os.Getenv("HOME")
 	s.testDataDir = "../testdata"
+	os.Setenv("XDG_CONFIG_HOME", path.Join(s.testDataDir, ".config"))
 	os.Setenv("HOME", s.testDataDir)
 }
 

@@ -1,30 +1,17 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package langselector
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/langselector/i18n_dependency"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 func (lang *LangSelector) onLocaleSuccess() {
@@ -33,14 +20,16 @@ func (lang *LangSelector) onLocaleSuccess() {
 		if err != nil {
 			lang.logger.Warning(err)
 			lang.setPropCurrentLocale(getLocale())
-			e := sendNotify("", "", Tr("System language failed to change, please try later."))
+			e := sendNotify(localeIconFailed, "",
+				Tr("System language failed to change, please try later."))
 			lang.LocaleState = LocaleStateChanged
 			if e != nil {
 				lang.logger.Warning("sendNotify failed:", e)
 			}
 			return
 		}
-		e := sendNotify("", "", Tr("System language has been changed, please log in again after logged out."))
+		e := sendNotify(localeIconFinished, "",
+			Tr("System language has been changed, please log in again after logged out."))
 		lang.LocaleState = LocaleStateChanged
 		if e != nil {
 			lang.logger.Warning("sendNotify failed:", e)
@@ -58,7 +47,7 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 		return err
 	}
 
-	err = i18n_dependency.InstallDependentPackages(lang.CurrentLocale)
+	err = installI18nDependent(lang.CurrentLocale)
 	if err != nil {
 		lang.logger.Warning(err)
 	}

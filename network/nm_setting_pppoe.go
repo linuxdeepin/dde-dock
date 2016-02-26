@@ -1,37 +1,16 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/utils"
-)
-
-const NM_SETTING_PPPOE_SETTING_NAME = "pppoe"
-
-const (
-	NM_SETTING_PPPOE_SERVICE        = "service"
-	NM_SETTING_PPPOE_USERNAME       = "username"
-	NM_SETTING_PPPOE_PASSWORD       = "password"
-	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
+	"pkg.deepin.io/lib/utils"
 )
 
 func newPppoeConnection(id, username string) (uuid string) {

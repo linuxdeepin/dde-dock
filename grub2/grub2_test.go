@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package grub2
 
 import (
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/log"
 	"testing"
 )
 
@@ -291,7 +300,7 @@ func (*GrubTester) TestSettingsGeneral(c *C.C) {
 func (*GrubTester) TestSaveDefaultSettings(c *C.C) {
 	testGrubSettingsContent := `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 `
-	wantConfigContent := `GRUB_BACKGROUND="<none>"
+	wantConfigContent := `GRUB_BACKGROUND="/boot/grub/themes/deepin/background.png"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
 GRUB_GFXMODE="1024x768"

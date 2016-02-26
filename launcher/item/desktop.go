@@ -1,19 +1,25 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package item
 
-// #cgo pkg-config: glib-2.0
-// #include <glib.h>
-import "C"
 import (
 	"os"
 	p "path"
 
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
+	"gir/glib-2.0"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
 func getDesktopPath(name string) string {
-	C.g_reload_user_special_dirs_cache()
+	GReloadUserSpecialDirsCache()
 	return p.Join(glib.GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop), p.Base(name))
 }
 
@@ -36,6 +42,7 @@ func sendToDesktop(itemPath string) error {
 	}
 	var execPerm os.FileMode = 0100
 	os.Chmod(path, s.Mode().Perm()|execPerm)
+
 	return nil
 }
 

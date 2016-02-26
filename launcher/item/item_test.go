@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package item
 
 import (
@@ -5,8 +14,8 @@ import (
 	C "launchpad.net/gocheck"
 	"os"
 	"path"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"gir/gio-2.0"
 	"strings"
 	"testing"
 )
@@ -28,7 +37,7 @@ func (s *ItemTestSuite) SetUpSuite(c *C.C) {
 	s.notExistDesktop = nil
 }
 
-func (s *ItemTestSuite) getItemInfoForDiffLang(name, lang string, c *C.C) ItemInfoInterface {
+func (s *ItemTestSuite) getItemInfoForDiffLang(name, lang string, c *C.C) ItemInfo {
 	oldLangEnv := os.Getenv("LANGUAGE")
 	defer os.Setenv("LANGUAGE", oldLangEnv)
 
@@ -41,55 +50,55 @@ func (s *ItemTestSuite) getItemInfoForDiffLang(name, lang string, c *C.C) ItemIn
 	}
 	defer desktop.Unref()
 
-	return NewItem(desktop)
+	return New(desktop)
 }
 
 func (s *ItemTestSuite) TestNewItem(c *C.C) {
-	c.Assert(NewItem(s.notExistDesktop), C.IsNil)
+	c.Assert(New(s.notExistDesktop), C.IsNil)
 
 	firefox := gio.NewDesktopAppInfoFromFilename(path.Join(s.testDataDir, "firefox.desktop"))
 	c.Assert(firefox, C.NotNil)
 }
 
+func (s *ItemTestSuite) TestLocaleName(c *C.C) {
+	var item ItemInfo
+	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
+	c.Assert(item.LocaleName(), C.Equals, "Firefox Web Browser")
+
+	item = s.getItemInfoForDiffLang("firefox.desktop", "zh_CN", c)
+	c.Assert(item.LocaleName(), C.Equals, "Firefox 网络浏览器")
+}
+
+func (s *ItemTestSuite) TestID(c *C.C) {
+	var item ItemInfo
+
+	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
+	c.Assert(item.ID(), C.Equals, ItemID("firefox"))
+	item = s.getItemInfoForDiffLang("firefox.desktop", "zh_CN", c)
+	c.Assert(item.ID(), C.Equals, ItemID("firefox"))
+
+	item = s.getItemInfoForDiffLang("deepin-music-player.desktop", "en_US", c)
+	c.Assert(item.ID(), C.Equals, ItemID("deepin-music-player"))
+	item = s.getItemInfoForDiffLang("deepin-music-player.desktop", "zh_CN", c)
+	c.Assert(item.ID(), C.Equals, ItemID("deepin-music-player"))
+
+	item = s.getItemInfoForDiffLang("qmmp_cue.desktop", "en_US", c)
+	c.Assert(item.ID(), C.Equals, ItemID("qmmp-cue"))
+	item = s.getItemInfoForDiffLang("qmmp_cue.desktop", "zh_CN", c)
+	c.Assert(item.ID(), C.Equals, ItemID("qmmp-cue"))
+}
+
 func (s *ItemTestSuite) TestName(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.Name(), C.Equals, "Firefox Web Browser")
 
 	item = s.getItemInfoForDiffLang("firefox.desktop", "zh_CN", c)
-	c.Assert(item.Name(), C.Equals, "Firefox 网络浏览器")
-}
-
-func (s *ItemTestSuite) TestId(c *C.C) {
-	var item ItemInfoInterface
-
-	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
-	c.Assert(item.Id(), C.Equals, ItemId("firefox"))
-	item = s.getItemInfoForDiffLang("firefox.desktop", "zh_CN", c)
-	c.Assert(item.Id(), C.Equals, ItemId("firefox"))
-
-	item = s.getItemInfoForDiffLang("deepin-music-player.desktop", "en_US", c)
-	c.Assert(item.Id(), C.Equals, ItemId("deepin-music-player"))
-	item = s.getItemInfoForDiffLang("deepin-music-player.desktop", "zh_CN", c)
-	c.Assert(item.Id(), C.Equals, ItemId("deepin-music-player"))
-
-	item = s.getItemInfoForDiffLang("qmmp_cue.desktop", "en_US", c)
-	c.Assert(item.Id(), C.Equals, ItemId("qmmp-cue"))
-	item = s.getItemInfoForDiffLang("qmmp_cue.desktop", "zh_CN", c)
-	c.Assert(item.Id(), C.Equals, ItemId("qmmp-cue"))
-}
-
-func (s *ItemTestSuite) TestEnName(c *C.C) {
-	var item ItemInfoInterface
-	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
-	c.Assert(item.EnName(), C.Equals, "Firefox Web Browser")
-
-	item = s.getItemInfoForDiffLang("firefox.desktop", "zh_CN", c)
-	c.Assert(item.EnName(), C.Equals, "Firefox Web Browser")
+	c.Assert(item.Name(), C.Equals, "Firefox Web Browser")
 }
 
 func (s *ItemTestSuite) TestKeywords(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	expectedKeywords := strings.Split("Internet;WWW;Browser;Web;Explorer", ";")
 	keywords := item.Keywords()
@@ -110,7 +119,7 @@ func (s *ItemTestSuite) TestKeywords(c *C.C) {
 }
 
 func (s *ItemTestSuite) TestDescription(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.Description(), C.Equals, "Browse the World Wide Web")
 
@@ -119,7 +128,7 @@ func (s *ItemTestSuite) TestDescription(c *C.C) {
 }
 
 func (s *ItemTestSuite) TestGenericName(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.GenericName(), C.Equals, "Web Browser")
 
@@ -128,19 +137,19 @@ func (s *ItemTestSuite) TestGenericName(c *C.C) {
 }
 
 func (s *ItemTestSuite) TestPath(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.Path(), C.Equals, path.Join(s.testDataDir, "firefox.desktop"))
 }
 
 func (s *ItemTestSuite) TestIcon(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.Icon(), C.Equals, "firefox")
 }
 
 func (s *ItemTestSuite) TestExecCmd(c *C.C) {
-	var item ItemInfoInterface
+	var item ItemInfo
 	item = s.getItemInfoForDiffLang("firefox.desktop", "en_US", c)
 	c.Assert(item.ExecCmd(), C.Equals, "ls firefox %u")
 

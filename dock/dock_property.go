@@ -1,15 +1,27 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
+// DockProperty存储dock前端界面相关的一些属性，包括dock的高度以及底板的宽度。
 type DockProperty struct {
 	heightLock sync.RWMutex
-	Height     int32
+	// Height是前端dock的高度。
+	Height int32
 
-	panelLock  sync.RWMutex
+	panelLock sync.RWMutex
+	// PanelWidth是前端dock底板的宽度。
 	PanelWidth int32
 }
 
@@ -43,6 +55,7 @@ func (p *DockProperty) updateDockHeight(mode DisplayModeType) int32 {
 	return 0
 }
 
+// SetPanelWidth由前端界面调用，为后端设置底板的宽度。
 func (p *DockProperty) SetPanelWidth(width int32) int32 {
 	p.panelLock.Lock()
 	defer p.panelLock.Unlock()

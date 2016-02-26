@@ -1,7 +1,15 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
-	"dbus/com/deepin/dde/launcher"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
@@ -11,11 +19,10 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"os/exec"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 var (
-	lastActive      string        = ""
 	activeWindow    xproto.Window = 0
 	isLauncherShown bool          = false
 	currentViewport []uint        = nil
@@ -25,15 +32,21 @@ const (
 	DDELauncher string = "dde-launcher"
 )
 
+// ClientManager用来管理启动程序相关窗口。
 type ClientManager struct {
-	ActiveWindowChanged   func(xid uint32)
+	// ActiveWindowChanged会在焦点窗口被改变时触发，会将最新的焦点窗口id发送给监听者。
+	ActiveWindowChanged func(xid uint32)
+
+	// ShowingDesktopChanged会在_NET_SHOWING_DESKTOP改变时被触发。
 	ShowingDesktopChanged func()
 }
 
+// NewClientManager creates a new client manager.
 func NewClientManager() *ClientManager {
 	return &ClientManager{}
 }
 
+// CurrentActiveWindow会返回当前焦点窗口的窗口id。
 func (m *ClientManager) CurrentActiveWindow() uint32 {
 	return uint32(activeWindow)
 }
@@ -50,12 +63,13 @@ func changeWorkspaceIfNeeded(xid xproto.Window) error {
 	}
 
 	if currentDesktop == desktopNum {
-		return fmt.Errorf("No need to change workspace, the current desktop is already %v", currentDesktop)
+		logger.Debug("No need to change workspace, the current desktop is already %v", currentDesktop)
+		return nil
 	}
 
 	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)
 	if err != nil {
-		logger.Warningf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
+		logger.Debugf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
 	}
 
 	err = ewmh.ClientEvent(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP", int(desktopNum), int(timeStamp))
@@ -74,17 +88,27 @@ func activateWindow(xid xproto.Window) error {
 	return ewmh.ActiveWindowReq(XU, xid)
 }
 
-// maybe move to apps-builder
+// ActiveWindow会激活给定id的窗口，被激活的窗口将通常会程序焦点窗口。(废弃，名字应该是ActivateWindow，当时手残打错了，此接口会在之后被移除，请使用正确的接口)
 func (m *ClientManager) ActiveWindow(xid uint32) bool {
 	err := activateWindow(xproto.Window(xid))
 	if err != nil {
-		logger.Warning("Actice window failed:", err)
+		logger.Warning("Activate window failed:", err)
 		return false
 	}
 	return true
 }
 
-// maybe move to apps-builder
+// ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
+func (m *ClientManager) ActivateWindow(xid uint32) bool {
+	err := activateWindow(xproto.Window(xid))
+	if err != nil {
+		logger.Warning("Activate window failed:", err)
+		return false
+	}
+	return true
+}
+
+// CloseWindow会将传入id的窗口关闭。
 func (m *ClientManager) CloseWindow(xid uint32) bool {
 	err := ewmh.CloseWindow(XU, xproto.Window(xid))
 	if err != nil {
@@ -94,10 +118,12 @@ func (m *ClientManager) CloseWindow(xid uint32) bool {
 	return true
 }
 
+// ToggleShowDesktop会触发显示桌面，当桌面显示时，会将窗口恢复，当桌面未显示时，会隐藏窗口以显示桌面。
 func (m *ClientManager) ToggleShowDesktop() {
 	exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
 }
 
+// IsLauncherShown判断launcher是否已经显示。
 func (m *ClientManager) IsLauncherShown() bool {
 	return isLauncherShown
 }
@@ -105,7 +131,7 @@ func (m *ClientManager) IsLauncherShown() bool {
 func walkClientList(pre func(xproto.Window) bool) bool {
 	list, err := ewmh.ClientListGet(XU)
 	if err != nil {
-		logger.Warning("Can't get _NET_CLIENT_LIST", err)
+		logger.Debug("Can't get _NET_CLIENT_LIST", err)
 		return false
 	}
 
@@ -250,7 +276,7 @@ func isWindowOverlapDock(xid xproto.Window) bool {
 	win := xwindow.New(XU, xid)
 	rect, err := win.DecorGeometry()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warningf("isWindowOverlapDock GetDecorGeometry of 0x%x failed: %s", xid, err)
 		return false
 	}
 
@@ -308,32 +334,17 @@ func (m *ClientManager) listenRootWindow() {
 			var err error
 			isLauncherShown = false
 			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
-				appId := find_app_id_by_xid(activeWindow,
-					DisplayModeType(setting.GetDisplayMode()))
-				logger.Debug("current active window:", appId)
-				if rApp, ok := ENTRY_MANAGER.runtimeApps[appId]; ok {
-					logger.Debug("find runtime app")
-					rApp.setLeader(activeWindow)
-					rApp.updateState(activeWindow)
+				// loop gets better performance than find_app_id_by_xid.
+				// setLeader/updateState will filter invalid xid.
+				for _, app := range ENTRY_MANAGER.runtimeApps {
+					app.setLeader(activeWindow)
+					app.updateState(activeWindow)
 				}
 
-				logger.Debug("active window is", appId)
-				if appId != DDELauncher {
-					LAUNCHER, err := launcher.NewLauncher(
-						"com.deepin.dde.launcher",
-						"/com/deepin/dde/launcher",
-					)
-					if err != nil {
-						logger.Debug(err)
-					} else {
-						LAUNCHER.Hide()
-						launcher.DestroyLauncher(LAUNCHER)
-					}
-				} else {
+				if isDeepinLauncher(activeWindow) {
 					isLauncherShown = true
 				}
 
-				lastActive = appId
 				dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
 			}
 

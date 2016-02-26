@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2012 Deepin, Inc.
- *               2011 ~ 2012 snyh
- *
- * Author:      snyh <snyh@snyh.org>
- * Maintainer:  snyh <snyh@snyh.org>
+ * Copyright (C) 2012 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name);
@@ -110,7 +98,9 @@ void _build_filter_info(GKeyFile* filter, const char* path)
             for (; j<key_len; j++) {
                 g_hash_table_insert(white_apps, g_key_file_get_string(filter, groups[i], keys[j], NULL), NULL);
             }
+            g_strfreev(keys);
         }
+        g_strfreev(groups);
     }
 }
 
@@ -141,7 +131,7 @@ void _init()
     }
     if (suffix_regex == NULL) {
         g_warning("Can't build suffix_regex, use fallback config!");
-        suffix_regex = g_regex_new( "((?:-|\\.)?bin$)|(\\.py$)|(_)", G_REGEX_OPTIMIZE, 0, NULL);
+        suffix_regex = g_regex_new( "((?:-|\\.)?bin$)|(\\.py$)|(_$)", G_REGEX_OPTIMIZE, 0, NULL);
     }
     g_key_file_free(process_regex);
 
@@ -261,6 +251,7 @@ gboolean is_chrome_app(char const* name)
 char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const char* wmclass, const char* icon_name)
 {
     // g_setenv("G_MESSAGES_DEBUG", "all", FALSE);
+    g_debug("guess app id");
     if (s_pid == 0) return g_strdup(wmclass);
     char* app_id = NULL;
 
@@ -277,6 +268,7 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
             g_free(exec_args);
             int ppid = get_parent_pid(s_pid);
             if (ppid != 0) {
+                g_message("get appid from pid");
                 return guess_app_id(ppid, wmname, wminstance, wmclass, icon_name);
             }
         }
@@ -289,6 +281,8 @@ char* guess_app_id(long s_pid, const char* wmname, const char* wminstance, const
         }
 
         if (app_id == NULL) {
+            // TODO: reading StartupWMClass field when dock module starts and monitor directory changed to reload data.
+            // This way is suck and inefficient.
             GKeyFile* f = load_app_config(FILTER_FILE);
             if (f != NULL && wminstance != NULL) {
                 app_id = g_key_file_get_string(f, wminstance, "appid", NULL);
@@ -384,6 +378,17 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
 
     cmdline[length] = NULL;
 
+#ifndef NDEBUG
+    {
+        // avoid multi-defined in gcc-go.
+        // avoid not support c99.
+        int i = 0;
+        for (; cmdline[i] != NULL; ++i) {
+            g_debug("cmd[%d]: %s", i, cmdline[i]);
+        }
+    }
+#endif
+
     int diff = length - name_pos;
     if (diff == 0) {
         if (name != NULL) {
@@ -407,12 +412,14 @@ void _get_exec_name_args(char** cmdline, gsize length, char** name, char** args)
         return;
     }
 
+    g_debug("name before handle with suffix regexp: %s", *name);
     char* tmp = *name;
     g_assert(tmp != NULL);
     g_assert(suffix_regex != NULL);
     *name = g_regex_replace_literal (suffix_regex, tmp, -1, 0, "", 0, NULL);
     g_free(tmp);
 
+    g_debug("name after handle with suffix regexp %s", *name);
     guint i=0;
     for (; i<strlen(*name); i++) {
         if ((*name)[i] == ' ') {
@@ -433,6 +440,7 @@ void get_pid_info(int pid, char** exec_name, char** exec_args)
 
     gsize size=0;
     if (g_file_get_contents(path, &cmd_line, &size, NULL) && size > 0) {
+        g_debug("[%s] get cmd info from /proc/n/cmdline", __func__);
         char** name_args = g_new(char*, 1024);
         gsize j = 0;
         name_args[j] = cmd_line;
@@ -498,14 +506,14 @@ int get_parent_pid(int pid)
     }
 
     char** stats = g_strsplit(stat, " ", 0);
-    char* strppid = g_strdup(stats[3]);
-    g_strfreev(stats);
+    char* strppid = stats[3];
 
     ppid = atoi(strppid);
     if (ppid == 1) {
         // if init is parent, it is meanless
         ppid = 0;
     }
+    g_strfreev(stats);
 
 out:
     g_free(stat);
@@ -637,7 +645,6 @@ char* icon_name_to_path(const char* name, int size)
         }
     }
 
-    char* pic_name = g_strndup(name, pic_name_len);
     GtkIconTheme* them = gtk_icon_theme_get_default(); //do not ref or unref it
     if (them == NULL) {
         // NOTE: the g_message won't be recorded on log,
@@ -645,6 +652,7 @@ char* icon_name_to_path(const char* name, int size)
         return NULL;
     }
 
+    char* pic_name = g_strndup(name, pic_name_len);
     GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
     g_free(pic_name);
     if (info) {
@@ -684,8 +692,9 @@ char* check_absolute_path_icon(char const* app_id, char const* icon_path)
         char* basename = get_basename_without_extend_name(icon_path);
         if (basename != NULL) {
             if (g_strcmp0(app_id, basename) == 0
-                || (icon = _check(basename)) == NULL)
+                || (icon = _check(basename)) == NULL) {
                 icon = g_strdup(icon_path);
+            }
             g_free(basename);
         }
     }
@@ -700,7 +709,11 @@ void set_desktop_env_name(const char* name)
 {
     size_t max_len = strlen(name) + 1;
     memcpy(DE_NAME, name, max_len > 100 ? max_len : 100);
+#if GTK_CHECK_VERSION(2, 42, 0)
+    g_setenv("XDG_CURRENT_DESKTOP", name, TRUE);
+#else
     g_desktop_app_info_set_desktop_env(name);
+#endif
 }
 
 

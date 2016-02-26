@@ -4,6 +4,7 @@
 	    <arg type="b" direction="out"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="ContextMenu">
 	    <arg type="i" direction="in"></arg>
@@ -11,35 +12,42 @@
 	</method>
 	<method name="HandleMenuItem">
 	    <arg type="s" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="HandleDragDrop">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="HandleDragEnter">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="HandleDragLeave">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="HandleDragOver">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="s" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="HandleMouseWheel">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="SecondaryActivate">
 	    <arg type="i" direction="in"></arg>
 	    <arg type="i" direction="in"></arg>
+	    <arg type="u" direction="in"></arg>
 	</method>
 	<method name="ShowQuickWindow">
 	</method>

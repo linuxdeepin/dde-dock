@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package langselector
@@ -29,36 +17,57 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde/api/lang_info"
+	"pkg.deepin.io/lib/log"
 	"strings"
 )
 
 const (
-	systemLocaleFile  = "/etc/default/locale"
-	userLocaleFilePAM = ".pam_environment"
+	systemLocaleFile     = "/etc/default/locale"
+	systemdLocaleFile    = "/etc/locale.conf"
+	userLocaleFilePAM    = ".pam_environment"
+	userLocaleConfigFile = ".config/locale.conf"
 
 	defaultLocale = "en_US.UTF-8"
 )
 
 const (
-	LocaleStateChanged  = 0
+	// Locale changed state: has been done
+	//
+	// Locale 更改状态：已经修改完成
+	LocaleStateChanged = 0
+	// Locale changed state: changing
+	//
+	// Locale 更改状态：正在修改中
 	LocaleStateChanging = 1
 )
 
 var (
-	ErrFileNotExist       = fmt.Errorf("File not exist")
-	ErrLocaleNotFound     = fmt.Errorf("Locale not found")
+	// Error: not found the file
+	//
+	// 错误：没有此文件
+	ErrFileNotExist = fmt.Errorf("File not exist")
+	// Error: not found the locale
+	//
+	// 错误：无效的 Locale
+	ErrLocaleNotFound = fmt.Errorf("Locale not found")
+	// Error: changing locale failure
+	//
+	// 错误：修改 locale 失败
 	ErrLocaleChangeFailed = fmt.Errorf("Changing locale failed")
 )
 
 type LangSelector struct {
+	// The current locale
 	CurrentLocale string
-	Changed       func(locale string)
+	// Signal: will be emited if locale changed
+	Changed func(locale string)
 
+	// Store locale changed state
 	LocaleState int32
-	logger      *log.Logger
-	lhelper     *localehelper.LocaleHelper
+
+	logger  *log.Logger
+	lhelper *localehelper.LocaleHelper
 }
 
 type envInfo struct {
@@ -73,7 +82,7 @@ func newLangSelector(l *log.Logger) *LangSelector {
 	if l != nil {
 		lang.logger = l
 	} else {
-		lang.logger = log.NewLogger(dbusSender)
+		lang.logger = log.NewLogger("daemon/langselector")
 	}
 
 	var err error
@@ -137,35 +146,45 @@ func getLocale() string {
 	if err != nil || len(locale) == 0 {
 		locale, err = getLocaleFromFile(systemLocaleFile)
 		if err != nil || len(locale) == 0 {
-			locale = defaultLocale
+			/* This file is used by systemd to store system-wide locale settings */
+			locale, err = getLocaleFromFile(systemdLocaleFile)
+			if err != nil || len(locale) == 0 {
+				locale = defaultLocale
+			}
 		}
-
-		writeUserLocale(locale)
 	}
 
-	if !language_info.IsLocaleValid(locale,
-		language_info.LanguageListFile) {
+	locale = strings.Trim(locale, "\"")
+	if !lang_info.IsSupportedLocale(locale) {
 		locale = defaultLocale
-		writeUserLocale(locale)
 	}
 
 	return locale
 }
 
 func writeUserLocale(locale string) error {
-	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
-	return writeUserLocalePam(locale, filename)
+	homeDir := os.Getenv("HOME")
+	pamEnvFile := path.Join(homeDir, userLocaleFilePAM)
+	var err error
+	// only for lightdm
+	err = writeLocaleEnvFile(locale, pamEnvFile)
+	if err != nil {
+		return err
+	}
+	localeConfigFile := path.Join(homeDir, userLocaleConfigFile)
+	err = writeLocaleEnvFile(locale, localeConfigFile)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-/**
- * gnome locale config
- **/
-func writeUserLocalePam(locale, filename string) error {
-	var content = generatePamEnvFile(locale, filename)
+func writeLocaleEnvFile(locale, filename string) error {
+	var content = generateLocaleEnvFile(locale, filename)
 	return ioutil.WriteFile(filename, []byte(content), 0644)
 }
 
-func generatePamEnvFile(locale, filename string) string {
+func generateLocaleEnvFile(locale, filename string) string {
 	var (
 		lFound   bool //LANG
 		lgFound  bool //LANGUAGE
@@ -189,11 +208,9 @@ func generatePamEnvFile(locale, filename string) string {
 	}
 	if !lFound {
 		content += fmt.Sprintf("LANG=%s", locale)
-		if !lgFound {
-			content += "\n"
-		}
 	}
 	if !lgFound {
+		content += "\n"
 		content += fmt.Sprintf("LANGUAGE=%s", lang)
 	}
 

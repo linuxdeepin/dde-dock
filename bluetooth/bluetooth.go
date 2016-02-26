@@ -1,29 +1,17 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package bluetooth
 
 import (
 	sysdbus "dbus/org/freedesktop/dbus/system"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
@@ -39,9 +27,9 @@ const (
 )
 
 const (
-	stateUnavailable = 0
-	stateAvailable   = 1
-	stateConnected   = 2
+	StateUnavailable = 0
+	StateAvailable   = 1
+	StateConnected   = 2
 )
 
 type dbusObjectData map[string]dbus.Variant
@@ -51,39 +39,48 @@ type dbusInterfacesData map[dbus.ObjectPath]map[string]map[string]dbus.Variant
 type Bluetooth struct {
 	config        *config
 	objectManager *sysdbus.ObjectManager
+	agent         *agent
 
 	// adapter
 	adaptersLock sync.Mutex
-	adapters     []*adapter
-	Adapters     string // array of adapters that marshaled by json
+	adapters     map[dbus.ObjectPath]*adapter
 
 	// device
 	devicesLock sync.Mutex
 	devices     map[dbus.ObjectPath][]*device
-	Devices     string // device objects that marshaled by json
 
-	State uint32
+	State uint32 // StateUnavailable/StateAvailable/StateConnected
 
-	// signals
+	// Bluetooth adaper/device properties changed signals
 	AdapterAdded             func(adapterJSON string)
 	AdapterRemoved           func(adapterJSON string)
 	AdapterPropertiesChanged func(adapterJSON string)
 	DeviceAdded              func(devJSON string)
 	DeviceRemoved            func(devJSON string)
 	DevicePropertiesChanged  func(devJSON string)
-	RequestPinCode           func(devJSON string)
-	AuthorizeService         func(devJSON string, uuid string)
+
+	// Bluetooth pair request signals
+	DisplayPinCode func(device dbus.ObjectPath, pincode string)
+	DisplayPasskey func(device dbus.ObjectPath, passkey uint32, entered uint32)
+	// RequestConfirmation you shoud call Confirm with accpet
+	RequestConfirmation func(device dbus.ObjectPath, passkey string)
+	// RequestAuthorization you shoud call Confirm with accpet
+	RequestAuthorization func(device dbus.ObjectPath)
+	// RequestPinCode you should call FeedPinCode with accpet and key
+	RequestPinCode func(device dbus.ObjectPath)
+	// RequestPasskey you should call FeedPasskey with accpet and key
+	RequestPasskey func(device dbus.ObjectPath)
 }
 
-func NewBluetooth() (b *Bluetooth) {
+func newBluetooth() (b *Bluetooth) {
 	b = &Bluetooth{}
-	b.config = newConfig()
+	b.adapters = map[dbus.ObjectPath]*adapter{}
 	return
 }
 
-func DestroyBluetooth(b *Bluetooth) {
+func (b *Bluetooth) destroy() {
 	bluezDestroyObjectManager(b.objectManager)
-	dbus.UnInstallObject(bluetooth)
+	dbus.UnInstallObject(b)
 }
 
 func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
@@ -94,37 +91,40 @@ func (b *Bluetooth) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (b *Bluetooth) initBluetooth() {
+func (b *Bluetooth) init() {
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Error(err)
+			b.destroy()
 		}
 	}()
 
-	b.devices = make(map[dbus.ObjectPath][]*device)
+	go func() {
+		b.config = newConfig()
+		b.config.save()
+		b.devices = make(map[dbus.ObjectPath][]*device)
 
-	// initialize dbus object manager
-	var err error
-	b.objectManager, err = bluezNewObjectManager()
-	if err != nil {
-		return
-	}
+		// initialize dbus object manager
+		var err error
+		b.objectManager, err = bluezNewObjectManager()
+		if err != nil {
+			return
+		}
 
-	// connect signals
-	b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
-	b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
+		// connect signals
+		b.objectManager.ConnectInterfacesAdded(b.handleInterfacesAdded)
+		b.objectManager.ConnectInterfacesRemoved(b.handleInterfacesRemoved)
 
-	// add exists adapters and devices
-	objects, err := b.objectManager.GetManagedObjects()
-	if err != nil {
-		logger.Error(err)
-		return
-	}
-	for path, data := range objects {
-		b.handleInterfacesAdded(path, data)
-	}
-
-	b.config.save()
+		// add exists adapters and devices
+		objects, err := b.objectManager.GetManagedObjects()
+		if err != nil {
+			logger.Error(err)
+			return
+		}
+		for path, data := range objects {
+			b.handleInterfacesAdded(path, data)
+		}
+	}()
 }
 func (b *Bluetooth) handleInterfacesAdded(path dbus.ObjectPath, data map[string]map[string]dbus.Variant) {
 	if _, ok := data[dbusBluezIfsAdapter]; ok {

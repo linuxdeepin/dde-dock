@@ -1,7 +1,15 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
-import "dbus/com/deepin/daemon/dock"
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 
 // import "flag"
 import "github.com/BurntSushi/xgb/xproto"
@@ -12,6 +20,7 @@ var (
 	ENTRY_MANAGER = NewEntryManager()
 )
 
+// EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
 	runtimeApps map[string]*RuntimeApp
 	normalApps  map[string]*NormalApp
@@ -27,34 +36,6 @@ func NewEntryManager() *EntryManager {
 }
 
 func (m *EntryManager) listenDockedApp() {
-	if DOCKED_APP_MANAGER == nil {
-		var err error
-		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
-			"com.deepin.daemon.Dock",
-			"/dde/dock/DockedAppManager",
-		)
-		if err != nil {
-			logger.Warning("get DockedAppManager failed", err)
-			return
-		}
-	}
-
-	DOCKED_APP_MANAGER.ConnectDocked(func(id string) {
-		if _, ok := m.normalApps[id]; ok {
-			logger.Info(id, "is already docked")
-			return
-		}
-		m.createNormalApp(id)
-	})
-
-	DOCKED_APP_MANAGER.ConnectUndocked(func(id string) {
-		// undocked is operated on normal app
-		logger.Info("ConnectUndocked: Undock", id)
-		if app, ok := m.normalApps[id]; ok {
-			logger.Info("destroy normal app")
-			m.destroyNormalApp(app)
-		}
-	})
 }
 
 func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
@@ -94,7 +75,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			m.appEntries[rApp.Id] = e
 			err := dbus.InstallOnSession(e)
 			if err != nil {
-				logger.Warning(err)
+				logger.Warning("Install NewRuntimeAppEntry to dbus failed:", err)
 			}
 			return e
 		}
@@ -106,7 +87,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			m.appEntries[nApp.Id] = e
 			err := dbus.InstallOnSession(e)
 			if err != nil {
-				logger.Warning(err)
+				logger.Warning("Install NewNormalAppEntry to dbus failed:", err)
 			}
 			return e
 		}
@@ -198,14 +179,4 @@ func (m *EntryManager) createNormalApp(id string) {
 func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
 	delete(m.normalApps, nApp.Id)
 	m.updateEntry(nApp.Id, nil, m.mustGetEntry(nApp, nil).rApp)
-}
-
-func initialize() {
-	ENTRY_MANAGER.listenDockedApp()
-	for _, id := range loadAll() {
-		id = normalizeAppID(id)
-		logger.Debug("load", id)
-		ENTRY_MANAGER.createNormalApp(id)
-	}
-	initTrayManager()
 }

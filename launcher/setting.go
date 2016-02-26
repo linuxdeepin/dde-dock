@@ -1,31 +1,44 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package launcher
 
 import (
 	"errors"
 	"fmt"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/setting"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/setting"
+	"pkg.deepin.io/lib/dbus"
+	"gir/gio-2.0"
 	"sync"
 )
 
-type Setting struct {
-	core SettingCoreInterface
+// Settings 存储launcher相关的设置。
+type Settings struct {
+	core SettingCore
 	lock sync.Mutex
 
-	categoryDisplayMode        CategoryDisplayMode
+	categoryDisplayMode CategoryDisplayMode
+	// CategoryDisplayModeChanged当分类的显示模式改变后触发。
 	CategoryDisplayModeChanged func(int64)
 
-	sortMethod        SortMethod
+	sortMethod SortMethod
+	// SortMethodChanged在排序方式改变后触发。
 	SortMethodChanged func(int64)
 }
 
-func NewSetting(core SettingCoreInterface) (*Setting, error) {
+// NewSettings creates a new setting.
+func NewSettings(core SettingCore) (*Settings, error) {
 	if core == nil {
 		return nil, errors.New("get failed")
 	}
-	s := &Setting{
+	s := &Settings{
 		core: core,
 	}
 
@@ -59,7 +72,8 @@ func NewSetting(core SettingCoreInterface) (*Setting, error) {
 	return s, nil
 }
 
-func (d *Setting) GetDBusInfo() dbus.DBusInfo {
+// GetDBusInfo returns settings' dbus info.
+func (s *Settings) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		launcherObject,
 		launcherPath,
@@ -67,37 +81,41 @@ func (d *Setting) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (s *Setting) listenSettingChange(signalName string, handler func(*gio.Settings, string)) {
+func (s *Settings) listenSettingChange(signalName string, handler func(*gio.Settings, string)) {
 	detailSignal := fmt.Sprintf("changed::%s", signalName)
 	s.core.Connect(detailSignal, handler)
 }
 
-func (s *Setting) GetCategoryDisplayMode() int64 {
+// GetCategoryDisplayMode 获取launcher当前的分类显示模式。
+func (s *Settings) GetCategoryDisplayMode() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	return int64(s.categoryDisplayMode)
 }
 
-func (s *Setting) SetCategoryDisplayMode(newMode int64) {
+// SetCategoryDisplayMode 设置launcher的分类显示模式。
+func (s *Settings) SetCategoryDisplayMode(newMode int64) {
 	if CategoryDisplayMode(newMode) != s.categoryDisplayMode {
 		s.core.SetEnum(CategoryDisplayModeKey, int32(newMode))
 	}
 }
 
-func (s *Setting) GetSortMethod() int64 {
+// GetSortMethod 获取launcher当前的排序模式。
+func (s *Settings) GetSortMethod() int64 {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
 	return int64(s.sortMethod)
 }
 
-func (s *Setting) SetSortMethod(newMethod int64) {
+// SetSortMethod 设置launcher的排序方法。
+func (s *Settings) SetSortMethod(newMethod int64) {
 	if SortMethod(newMethod) != s.sortMethod {
 		s.core.SetEnum(SortMethodkey, int32(newMethod))
 	}
 }
 
-func (s *Setting) destroy() {
+func (s *Settings) Destroy() {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 	if s.core != nil {

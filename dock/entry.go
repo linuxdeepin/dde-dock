@@ -1,11 +1,21 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
 	"encoding/json"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"strings"
 	"sync"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
@@ -34,7 +44,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Debug("NewAppEntryWithRuntimeApp:", rApp.Id, rApp.CurrentInfo.Xid)
+	logger.Debugf("NewAppEntryWithRuntimeApp: %s, 0x%x", rApp.Id, rApp.CurrentInfo.Xid)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",
@@ -56,31 +66,33 @@ func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	return e
 }
 
-func (e *AppEntry) HandleMenuItem(id string) {
+func (e *AppEntry) HandleMenuItem(id string, timestamp uint32) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
-		e.nApp.HandleMenuItem(id)
+		e.nApp.HandleMenuItem(id, timestamp)
 	case ActiveStatus:
-		e.rApp.HandleMenuItem(id)
+		e.rApp.HandleMenuItem(id, timestamp)
 	}
 }
 
-func (e *AppEntry) Activate(x, y int32) bool {
+func (e *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
 	switch e.Data[FieldStatus] {
 	case NormalStatus:
-		return e.nApp.Activate(x, y) == nil
+		err := e.nApp.Activate(x, y, timestamp)
+		return err == nil, err
 	case ActiveStatus:
-		return e.rApp.Activate(x, y) == nil
+		err := e.rApp.Activate(x, y, timestamp)
+		return err == nil, err
 	}
-	return false
+	panic("should not reach")
 }
 
-func (e *AppEntry) ContextMenu(x, y int32)                  {}
-func (e *AppEntry) SecondaryActivate(x, y int32)            {}
-func (e *AppEntry) HandleDragEnter(x, y int32, data string) {}
-func (e *AppEntry) HandleDragLeave(x, y int32, data string) {}
-func (e *AppEntry) HandleDragOver(x, y int32, data string)  {}
-func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
+func (e *AppEntry) ContextMenu(x, y int32)                                    {}
+func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
+func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
+func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
+func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
+func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
 	paths := strings.Split(data, ",")
 	logger.Debug("HandleDragDrop:", paths)
 	if e.rApp != nil {
@@ -88,7 +100,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		core := e.rApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
-			_, err := core.LaunchUris(paths, nil)
+			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -101,7 +113,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 				return
 			}
 
-			_, err = app.LaunchUris(paths, nil)
+			_, err = app.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -111,7 +123,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		core := e.nApp.createDesktopAppInfo()
 		if core != nil {
 			defer core.Unref()
-			_, err := core.LaunchUris(paths, nil)
+			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
 			}
@@ -121,7 +133,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string) {
 		}
 	}
 }
-func (e *AppEntry) HandleMouseWheel(x, y, delta int32) {}
+func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32) {}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {

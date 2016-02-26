@@ -1,12 +1,16 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package screenedge
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import "pkg.deepin.io/dde/daemon/loader"
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "screenedge",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }

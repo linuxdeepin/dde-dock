@@ -1,12 +1,27 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
+
+const (
+	dbusDest = "com.deepin.daemon.Power"
+	dbusPath = "/com/deepin/daemon/Power"
+	dbusIFC  = "com.deepin.daemon.Power"
+)
 
 func (*Power) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Power",
-		ObjectPath: "/com/deepin/daemon/Power",
-		Interface:  "com.deepin.daemon.Power",
+		Dest:       dbusDest,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }
 
@@ -81,12 +96,30 @@ func (p *Power) setPropPlanInfo(v string) {
 func (p *Power) OnPropertiesChanged(key string, oldv interface{}) {
 	switch key {
 	case "BatterySuspendDelay":
+		v, ok := oldv.(int32)
+		if ok && p.BatterySuspendDelay == v {
+			return
+		}
 		p.setBatterySuspendDelay(p.BatterySuspendDelay)
 	case "BatteryIdleDelay":
+		v, ok := oldv.(int32)
+		if ok && p.BatteryIdleDelay == v {
+			return
+		}
 		p.setBatteryIdleDelay(p.BatteryIdleDelay)
 	case "LinePowerSuspendDelay":
+		v, ok := oldv.(int32)
+		logger.Info("[Power] changed:", key, p.LinePowerSuspendDelay, v)
+		if ok && p.LinePowerSuspendDelay == v {
+			return
+		}
 		p.setLinePowerSuspendDelay(p.LinePowerSuspendDelay)
 	case "LinePowerIdleDelay":
+		v, ok := oldv.(int32)
+		logger.Info("[Power] changed:", key, p.LinePowerIdleDelay, v)
+		if ok && p.LinePowerIdleDelay == v {
+			return
+		}
 		p.setLinePowerIdleDelay(p.LinePowerIdleDelay)
 	}
 }

@@ -1,40 +1,34 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package users
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"strconv"
 	"strings"
 )
 
 const (
-	userFilePasswd = "/etc/passwd"
-	userFileShadow = "/etc/shadow"
-	userFileGroup  = "/etc/group"
+	userFilePasswd    = "/etc/passwd"
+	userFileShadow    = "/etc/shadow"
+	userFileGroup     = "/etc/group"
+	userFileLoginDefs = "/etc/login.defs"
+	userFileSudoers   = "/etc/sudoers"
 
-	itemLenPasswd = 7
-	itemLenShadow = 9
-	itemLenGroup  = 4
+	itemLenPasswd    = 7
+	itemLenShadow    = 9
+	itemLenGroup     = 4
+	itemLenLoginDefs = 2
 )
 
 var (
@@ -137,7 +131,7 @@ func (infos UserInfos) GetUserNames() []string {
 func (infos UserInfos) filterUserInfos() UserInfos {
 	var tmp UserInfos
 	for _, info := range infos {
-		if !info.isHumanUser(userFileShadow) {
+		if !info.isHumanUser(userFileShadow, userFileLoginDefs) {
 			continue
 		}
 
@@ -147,7 +141,7 @@ func (infos UserInfos) filterUserInfos() UserInfos {
 	return tmp
 }
 
-func (info UserInfo) isHumanUser(config string) bool {
+func (info UserInfo) isHumanUser(configShadow string, configLoginDefs string) bool {
 	if info.Name == "root" {
 		return false
 	}
@@ -156,7 +150,11 @@ func (info UserInfo) isHumanUser(config string) bool {
 		return false
 	}
 
-	if !info.isHumanViaShadow(config) {
+	if !info.isHumanViaShadow(configShadow) {
+		return false
+	}
+
+	if !info.isHumanViaLoginDefs(configLoginDefs) {
 		return false
 	}
 
@@ -213,4 +211,76 @@ func (info UserInfo) isHumanViaShadow(config string) bool {
 	}
 
 	return false
+}
+
+func (info UserInfo) isHumanViaLoginDefs(config string) bool {
+	fr, err := os.Open(config)
+	if err != nil {
+		return false
+	}
+	defer fr.Close()
+	var (
+		found  int
+		uidMin string
+		uidMax string
+
+		scanner = bufio.NewScanner(fr)
+	)
+
+	for scanner.Scan() {
+		if found == 2 {
+			break
+		}
+
+		var line = scanner.Text()
+
+		if len(line) == 0 {
+			continue
+		}
+
+		if line[0] == '#' {
+			continue
+		}
+
+		items := strings.Fields(line)
+		if len(items) != itemLenLoginDefs {
+			continue
+		}
+
+		if items[0] == "UID_MIN" {
+			uidMin = items[1]
+			found += 1
+			continue
+		}
+
+		if items[0] == "UID_MAX" {
+			uidMax = items[1]
+			found += 1
+		}
+	}
+
+	if len(uidMax) == 0 || len(uidMin) == 0 {
+		return false
+	}
+
+	uidMinInt, err := strconv.Atoi(uidMin)
+	if err != nil {
+		return false
+	}
+
+	uidMaxInt, err := strconv.Atoi(uidMax)
+	if err != nil {
+		return false
+	}
+
+	uidInt, err := strconv.Atoi(info.Uid)
+	if err != nil {
+		return false
+	}
+
+	if uidInt > uidMaxInt || uidInt < uidMinInt {
+		return false
+	}
+
+	return true
 }

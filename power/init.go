@@ -1,29 +1,32 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
-import "pkg.linuxdeepin.com/dde-daemon"
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/dde/daemon/loader"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/log"
 
 import libupower "dbus/org/freedesktop/upower"
 import liblogin1 "dbus/org/freedesktop/login1"
 import libkeybinding "dbus/com/deepin/daemon/keybinding"
 import libnotifications "dbus/org/freedesktop/notifications"
-import libsound "dbus/com/deepin/api/sound"
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "power",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }
 
 var (
 	notifier *libnotifications.Notifier
 	upower   *libupower.Upower
 	login1   *liblogin1.Manager
-	mediaKey *libkeybinding.MediaKey
-	player   *libsound.Sound
+	mediaKey *libkeybinding.Mediakey
 
 	power *Power
 )
@@ -41,7 +44,7 @@ func initializeLibs() error {
 		finalizeLibs()
 		return err
 	}
-	mediaKey, err = libkeybinding.NewMediaKey("com.deepin.daemon.KeyBinding", "/com/deepin/daemon/MediaKey")
+	mediaKey, err = libkeybinding.NewMediakey("com.deepin.daemon.Keybinding", "/com/deepin/daemon/Keybinding/Mediakey")
 	if err != nil {
 		logger.Warning("create dbus mediaKey failed:", err)
 		finalizeLibs()
@@ -50,12 +53,6 @@ func initializeLibs() error {
 	notifier, err = libnotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	if err != nil {
 		logger.Warning("Can't build org.freedesktop.Notficaations:", err)
-		finalizeLibs()
-		return err
-	}
-	player, err = libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Warning("Can't build com.deepin.api.Sound:", err)
 		finalizeLibs()
 		return err
 	}
@@ -80,22 +77,34 @@ func finalizeLibs() {
 		login1 = nil
 	}
 	if mediaKey != nil {
-		libkeybinding.DestroyMediaKey(mediaKey)
+		libkeybinding.DestroyMediakey(mediaKey)
 		mediaKey = nil
 	}
 	if notifier != nil {
 		libnotifications.DestroyNotifier(notifier)
 		notifier = nil
 	}
-
-	player = nil
 }
 
 var workaround *fullScreenWorkaround
 
-func Start() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("power", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{"screensaver"}
+}
+
+func (d *Daemon) Start() error {
 	if power != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -104,7 +113,7 @@ func Start() {
 	if err != nil {
 		logger.Error(err)
 		logger.EndTracing()
-		return
+		return err
 	}
 
 	err = dbus.InstallOnSession(power)
@@ -112,22 +121,39 @@ func Start() {
 		logger.Error("Failed InstallOnSession:", err)
 		finalizeLibs()
 		logger.EndTracing()
-		return
+		return err
 	}
 
-	workaround = newFullScreenWorkaround()
-	go workaround.start()
+	workaround, err = newFullScreenWorkaround()
+	if err != nil {
+		logger.Warning("New fullscreen workaround failed:", err)
+	} else {
+		go workaround.start()
+	}
+
+	// handle sw lid state
+	if isSWPlatform() {
+		go power.listenSWLidState()
+	}
+	return nil
 }
 
-func Stop() {
+func (d *Daemon) Stop() error {
 	if power == nil {
-		return
+		return nil
 	}
 
 	if workaround != nil {
 		workaround.stop()
 		workaround = nil
 	}
+
+	if power.swQuit != nil {
+		close(power.swQuit)
+		power.swQuit = nil
+	}
+
 	finalizeLibs()
 	logger.EndTracing()
+	return nil
 }

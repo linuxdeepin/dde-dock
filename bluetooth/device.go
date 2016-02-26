@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package bluetooth
@@ -24,7 +12,8 @@ package bluetooth
 import (
 	"dbus/org/bluez"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
+	"sync"
 	"time"
 )
 
@@ -36,35 +25,49 @@ const (
 	deviceStateConnected    = 2
 )
 
+var (
+	errInvaildDevicePath = fmt.Errorf("Invaild Device Path")
+)
+
 type device struct {
 	bluezDevice *bluez.Device1
 
 	Path        dbus.ObjectPath
 	AdapterPath dbus.ObjectPath
 
+	Name    string
 	Alias   string
 	Trusted bool
 	Paired  bool
+	State   uint32
+	UUIDs   []string
+	// optional
+	Icon    string
+	RSSI    int16
+	Address string
 
 	oldConnected bool
 	connected    bool
 	connecting   bool
-	State        uint32
+	blockNotify  bool
 
-	// optional
-	Icon string
-	RSSI int16
+	lk           sync.Mutex
+	confirmation chan bool
 }
 
 func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) {
 	d = &device{Path: dpath}
 	d.bluezDevice, _ = bluezNewDevice(dpath)
 	d.AdapterPath = d.bluezDevice.Adapter.Get()
+	d.Name = d.bluezDevice.Name.Get()
 	d.Alias = d.bluezDevice.Alias.Get()
+	d.Address = d.bluezDevice.Address.Get()
 	d.Trusted = d.bluezDevice.Trusted.Get()
 	d.Paired = d.bluezDevice.Paired.Get()
 	d.connected = d.bluezDevice.Connected.Get()
+	d.UUIDs = d.bluezDevice.UUIDs.Get()
 	d.oldConnected = d.connected
+	d.blockNotify = false
 	d.notifyStateChanged()
 
 	// optional properties, read from dbus object data in order to
@@ -99,44 +102,67 @@ func (d *device) notifyDevicePropertiesChanged() {
 }
 
 func (d *device) connectProperties() {
-	d.bluezDevice.Connected.ConnectChanged(func() {
-		d.connected = d.bluezDevice.Connected.Get()
-		if d.oldConnected != d.connected {
-			d.oldConnected = d.connected
+	d.bluezDevice.Connected.ConnectChanged(d.handleConnected)
+
+	d.bluezDevice.Name.ConnectChanged(func() {
+		d.Name = d.bluezDevice.Name.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.Alias.ConnectChanged(func() {
+		d.Alias = d.bluezDevice.Alias.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.Address.ConnectChanged(func() {
+		d.Address = d.bluezDevice.Address.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.Trusted.ConnectChanged(func() {
+		d.Trusted = d.bluezDevice.Trusted.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.Paired.ConnectChanged(func() {
+		d.Paired = d.bluezDevice.Paired.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.Icon.ConnectChanged(func() {
+		d.Icon = d.bluezDevice.Icon.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.UUIDs.ConnectChanged(func() {
+		d.UUIDs = d.bluezDevice.UUIDs.Get()
+		d.notifyDevicePropertiesChanged()
+	})
+	d.bluezDevice.RSSI.ConnectChanged(func() {
+		_, err := d.bluezDevice.RSSI.GetValue()
+		if nil != err && !d.Paired {
+			logger.Debug("Get dbus property RSSI failed", d.Path, err)
+			bluezRemoveDevice(d.AdapterPath, d.Path)
+			return
+		}
+		d.RSSI = d.bluezDevice.RSSI.Get()
+		d.fixRssi()
+		d.notifyDevicePropertiesChanged()
+	})
+}
+func (d *device) handleConnected() {
+	d.connected = d.bluezDevice.Connected.Get()
+	if d.oldConnected != d.connected {
+		d.oldConnected = d.connected
+		if !d.blockNotify {
 			if d.connected {
 				notifyBluetoothConnected(d.Alias)
 			} else {
 				notifyBluetoothDisconnected(d.Alias)
 			}
 		}
-		d.notifyStateChanged()
-	})
-	d.bluezDevice.Alias.ConnectChanged(func() {
-		d.Alias = d.bluezDevice.Alias.Get()
-		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Trusted.ConnectChanged(func() {
-		d.Trusted = d.bluezDevice.Trusted.Get()
-		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Paired.ConnectChanged(func() {
-		d.Paired = d.bluezDevice.Paired.Get()
-		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.Icon.ConnectChanged(func() {
-		d.Icon = d.bluezDevice.Icon.Get()
-		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
-	})
-	d.bluezDevice.RSSI.ConnectChanged(func() {
-		d.RSSI = d.bluezDevice.RSSI.Get()
-		d.fixRssi()
-		d.notifyDevicePropertiesChanged()
-		bluetooth.setPropDevices()
-	})
+	}
+	d.notifyStateChanged()
+}
+func (d *device) notifyConnectFailed() {
+	notifyBluetoothConnectFailed(d.Alias)
+}
+func (d *device) notifyIgnored() {
+	notifyBluetoothDeviceIgnored(d.Alias)
 }
 func (d *device) notifyStateChanged() {
 	if d.connected {
@@ -149,7 +175,11 @@ func (d *device) notifyStateChanged() {
 	}
 	logger.Debugf("notifyStateChanged: %#v", d) // TODO test
 	d.notifyDevicePropertiesChanged()
-	bluetooth.setPropDevices()
+}
+
+func (d *device) connectAddress() string {
+	adapterAddress := bluezGetAdapterAddress(d.AdapterPath)
+	return adapterAddress + "/" + d.Address
 }
 
 func (d *device) fixRssi() {
@@ -169,12 +199,27 @@ func (b *Bluetooth) addDevice(dpath dbus.ObjectPath, data map[string]dbus.Varian
 	}
 
 	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
 	d := newDevice(dpath, data)
 	b.devices[d.AdapterPath] = append(b.devices[d.AdapterPath], d)
+	b.config.addDeviceConfig(d.connectAddress())
+
 	d.notifyDeviceAdded()
-	b.setPropDevices()
+	b.devicesLock.Unlock()
+
+	connected := b.config.getDeviceConfigConnected(d.connectAddress())
+	if connected {
+		d.blockNotify = true
+		go func() {
+			time.Sleep(25 * time.Second)
+			if d, _ := b.getDevice(dpath); nil != d && !d.connected {
+				logger.Infof("auto connect device %v", d)
+				bluezConnectDevice(dpath)
+			}
+			d.blockNotify = false
+		}()
+	}
 }
+
 func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	apath, i := b.getDeviceIndex(dpath)
 	if i < 0 {
@@ -185,30 +230,20 @@ func (b *Bluetooth) removeDevice(dpath dbus.ObjectPath) {
 	b.devicesLock.Lock()
 	defer b.devicesLock.Unlock()
 	b.devices[apath] = b.doRemoveDevice(b.devices[apath], i)
-	b.setPropDevices()
 	return
 }
+
 func (b *Bluetooth) doRemoveDevice(devices []*device, i int) []*device {
-	devices[i].notifyDeviceRemoved()
-	destroyDevice(devices[i])
+	d := devices[i]
+	b.config.removeDeviceConfig(d.connectAddress())
+	d.notifyDeviceRemoved()
+	destroyDevice(d)
 	copy(devices[i:], devices[i+1:])
 	devices[len(devices)-1] = nil
 	devices = devices[:len(devices)-1]
 	return devices
 }
-func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (d *device, err error) {
-	apath, i := b.getDeviceIndex(dpath)
-	if i < 0 {
-		err = fmt.Errorf("device not found %s", dpath)
-		logger.Error(err)
-		return
-	}
 
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
-	d = b.devices[apath][i]
-	return
-}
 func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
 	_, i := b.getDeviceIndex(dpath)
 	if i >= 0 {
@@ -216,9 +251,8 @@ func (b *Bluetooth) isDeviceExists(dpath dbus.ObjectPath) bool {
 	}
 	return false
 }
-func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
-	b.devicesLock.Lock()
-	defer b.devicesLock.Unlock()
+
+func (b *Bluetooth) findDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
 	for p, devices := range b.devices {
 		for i, d := range devices {
 			if d.Path == dpath {
@@ -227,6 +261,22 @@ func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath
 		}
 	}
 	return "", -1
+}
+
+func (b *Bluetooth) getDeviceIndex(dpath dbus.ObjectPath) (apath dbus.ObjectPath, index int) {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	return b.findDeviceIndex(dpath)
+}
+
+func (b *Bluetooth) getDevice(dpath dbus.ObjectPath) (*device, error) {
+	b.devicesLock.Lock()
+	defer b.devicesLock.Unlock()
+	apath, index := b.findDeviceIndex(dpath)
+	if index < 0 {
+		return nil, errInvaildDevicePath
+	}
+	return b.devices[apath][index], nil
 }
 
 // GetDevices return all device objects that marshaled by json.
@@ -246,14 +296,41 @@ func (b *Bluetooth) ConnectDevice(dpath dbus.ObjectPath) (err error) {
 	d.notifyStateChanged()
 
 	go func() {
-		if !bluezGetDeviceTrusted(dpath) {
-			bluezSetDeviceTrusted(dpath, true)
-		}
+		d.blockNotify = true
+		defer func() { d.blockNotify = false }()
 		if !bluezGetDevicePaired(dpath) {
 			bluezPairDevice(dpath)
 			time.Sleep(200 * time.Millisecond)
 		}
+
+		// TODO: remove work code if bluez a2dp is ok
+		// bluez do not support muti a2dp devices
+		// disconnect a2dp device before connect
+		for _, uuid := range d.UUIDs {
+			if uuid == A2DP_SINK_UUID {
+				b.disconnectA2DPDeviceExcept(d)
+			}
+		}
+
 		err = bluezConnectDevice(dpath)
+		if err == nil {
+			b.config.setDeviceConfigConnected(d.connectAddress(), true)
+			// trust device when connecting success
+			if !bluezGetDeviceTrusted(dpath) {
+				bluezSetDeviceTrusted(dpath, true)
+			}
+		} else {
+			b.config.setDeviceConfigConnected(d.connectAddress(), false)
+			logger.Warning("ConnectDevice failed:", dpath, err)
+			if err.Error() == bluezErrorInvalidKey.Error() || !d.Paired {
+				// we do not want to pop notify for device because we will remove it.
+				bluezRemoveDevice(d.AdapterPath, d.Path)
+				d.notifyIgnored()
+				return
+			}
+			d.notifyConnectFailed()
+		}
+		d.handleConnected()
 
 		if d.connecting {
 			d.connecting = false
@@ -271,7 +348,7 @@ func (b *Bluetooth) DisconnectDevice(dpath dbus.ObjectPath) (err error) {
 	}
 	d.connected = false
 	d.notifyStateChanged()
-
+	b.config.setDeviceConfigConnected(d.connectAddress(), false)
 	go bluezDisconnectDevice(dpath)
 	return
 }

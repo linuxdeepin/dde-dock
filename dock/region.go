@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
@@ -6,10 +15,11 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
+// Region表示dock有效的可接受事件区域以及可显示区域。
 type Region struct {
 }
 
@@ -50,6 +60,7 @@ func (r *Region) getDockWindow() (xproto.Window, error) {
 	return 0, errors.New("find dock window failed, it's not existed.")
 }
 
+// GetDockRegion获取dock有效的可接受事件区域以及可显示区域。
 func (r *Region) GetDockRegion() xproto.Rectangle {
 	initShape()
 	defer func() {
@@ -61,7 +72,7 @@ func (r *Region) GetDockRegion() xproto.Rectangle {
 	var dockRegion xproto.Rectangle
 	dockWindow, err := r.getDockWindow()
 	if err != nil {
-		logger.Warning(err)
+		logger.Warning("get dock window failed:", err)
 		return dockRegion
 	}
 	cookie := shape.GetRectangles(XU.Conn(), dockWindow, shape.SkInput)

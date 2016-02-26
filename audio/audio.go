@@ -1,36 +1,67 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package audio
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/log"
-import "pkg.linuxdeepin.com/lib/pulse"
-import libsound "dbus/com/deepin/api/sound"
-
-var logger = log.NewLogger("com.deepin.daemon.Audio")
+import (
+	"fmt"
+	"pkg.deepin.io/dde/api/soundutils"
+	. "pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus"
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/pulse"
+)
 
 type Audio struct {
 	init bool
 	core *pulse.Context
 
-	Sinks         []*Sink
-	Sources       []*Source
-	SinkInputs    []*SinkInput
-	DefaultSink   string
+	// 输出设备 ObjectPath 列表
+	Sinks []*Sink
+	// 输入设备ObjectPath 列表
+	Sources []*Source
+	// 正常输出声音的程序列表
+	SinkInputs []*SinkInput
+
+	// 默认的输出设备名称
+	DefaultSink string
+	// 默认的输入设备名称
 	DefaultSource string
 
+	// 最大音量
 	MaxUIVolume float64
 
 	siEventChan  chan func()
 	siPollerExit chan struct{}
 }
 
+const (
+	audioSchema       = "com.deepin.dde.audio"
+	gsKeyFirstRun     = "first-run"
+	gsKeyInputVolume  = "input-volume"
+	gsKeyOutputVolume = "output-volume"
+)
+
+var (
+	defaultInputVolume  float64
+	defaultOutputVolume float64
+)
+
 func (a *Audio) Reset() {
 	for _, s := range a.Sinks {
-		s.SetVolume(s.BaseVolume, false)
+		s.SetVolume(defaultOutputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
 	for _, s := range a.Sources {
-		s.SetVolume(s.BaseVolume, false)
+		s.SetVolume(defaultInputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
@@ -79,7 +110,6 @@ func NewAudio(core *pulse.Context) *Audio {
 	a.update()
 	a.initEventHandlers()
 
-	a.setupMediaKeyMonitor()
 	go a.sinkInputPoller()
 
 	return a
@@ -111,21 +141,39 @@ type Sink struct {
 	Name        string
 	Description string
 
+	// 默认音量值
 	BaseVolume float64
 
+	// 是否静音
 	Mute bool
 
-	Volume         float64
-	Balance        float64
+	// 当前音量
+	Volume float64
+	// 左右声道平衡值
+	Balance float64
+	// 是否支持左右声道调整
 	SupportBalance bool
-	Fade           float64
-	SupportFade    bool
+	// 前后声道平衡值
+	Fade float64
+	// 是否支持前后声道调整
+	SupportFade bool
 
-	Ports      []Port
+	// 支持的输出端口
+	Ports []Port
+	// 当前使用的输出端口
 	ActivePort Port
 }
 
-func (s *Sink) SetVolume(v float64, isPlay bool) {
+// 设置音量大小
+//
+// v: 音量大小
+//
+// isPlay: 是否播放声音反馈
+func (s *Sink) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -133,23 +181,50 @@ func (s *Sink) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedbackWithDevice(s.Name)
 	}
+	return nil
 }
-func (s *Sink) SetBalance(v float64, isPlay bool) {
+
+// 设置左右声道平衡值
+//
+// v: 声道平衡值
+//
+// isPlay: 是否播放声音反馈
+func (s *Sink) SetBalance(v float64, isPlay bool) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedbackWithDevice(s.Name)
 	}
+	return nil
 }
-func (s *Sink) SetFade(v float64) {
+
+// 设置前后声道平衡值
+//
+// v: 声道平衡值
+//
+// isPlay: 是否播放声音反馈
+func (s *Sink) SetFade(v float64) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedbackWithDevice(s.Name)
+	return nil
 }
+
+// 是否静音
 func (s *Sink) SetMute(v bool) {
 	s.core.SetMute(v)
 	if !v {
 		playFeedbackWithDevice(s.Name)
 	}
 }
+
+// 设置此设备的当前使用端口
 func (s *Sink) SetPort(name string) {
 	s.core.SetPort(name)
 }
@@ -158,6 +233,7 @@ type SinkInput struct {
 	core  *pulse.SinkInput
 	index uint32
 
+	// process name
 	Name string
 	Icon string
 	Mute bool
@@ -169,7 +245,11 @@ type SinkInput struct {
 	SupportFade    bool
 }
 
-func (s *SinkInput) SetVolume(v float64, isPlay bool) {
+func (s *SinkInput) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -177,16 +257,27 @@ func (s *SinkInput) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *SinkInput) SetBalance(v float64, isPlay bool) {
+func (s *SinkInput) SetBalance(v float64, isPlay bool) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *SinkInput) SetFade(v float64) {
+func (s *SinkInput) SetFade(v float64) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedback()
+	return nil
 }
 func (s *SinkInput) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -202,6 +293,7 @@ type Source struct {
 	Name        string
 	Description string
 
+	// 默认的输入音量
 	BaseVolume float64
 
 	Mute bool
@@ -216,7 +308,12 @@ type Source struct {
 	ActivePort Port
 }
 
-func (s *Source) SetVolume(v float64, isPlay bool) {
+// 如何反馈输入音量？
+func (s *Source) SetVolume(v float64, isPlay bool) error {
+	if !isVolumeValid(v) {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	if v == 0 {
 		v = 0.001
 	}
@@ -224,16 +321,27 @@ func (s *Source) SetVolume(v float64, isPlay bool) {
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *Source) SetBalance(v float64, isPlay bool) {
+func (s *Source) SetBalance(v float64, isPlay bool) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetBalance(s.core.ChannelMap, v))
 	if isPlay {
 		playFeedback()
 	}
+	return nil
 }
-func (s *Source) SetFade(v float64) {
+func (s *Source) SetFade(v float64) error {
+	if v < -1.00 || v > 1.00 {
+		return fmt.Errorf("Invalid volume value: %v", v)
+	}
+
 	s.core.SetVolume(s.core.Volume.SetFade(s.core.ChannelMap, v))
 	playFeedback()
+	return nil
 }
 func (s *Source) SetMute(v bool) {
 	s.core.SetMute(v)
@@ -245,6 +353,20 @@ func (s *Source) SetPort(name string) {
 	s.core.SetPort(name)
 }
 
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewAudioDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("audio", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
 var _audio *Audio
 
 func finalize() {
@@ -253,9 +375,9 @@ func finalize() {
 	logger.EndTracing()
 }
 
-func Start() {
+func (*Daemon) Start() error {
 	if _audio != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -266,38 +388,56 @@ func Start() {
 	if err := dbus.InstallOnSession(_audio); err != nil {
 		logger.Error("Failed InstallOnSession:", err)
 		finalize()
-		return
+		return err
 	}
+
+	initDefaultVolume(_audio)
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	if _audio == nil {
-		return
+		return nil
 	}
 
 	finalize()
+	return nil
 }
 
-var playFeedback = func() func() {
-	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
-		return nil
+func playFeedback() {
+	playFeedbackWithDevice("")
+}
+
+func playFeedbackWithDevice(device string) {
+	soundutils.PlaySystemSound(soundutils.EventVolumeChanged, device, false)
+}
+
+func isVolumeValid(v float64) bool {
+	if v < 0 || v > pulse.VolumeUIMax {
+		return false
+	}
+	return true
+}
+
+func initDefaultVolume(audio *Audio) {
+	setting := gio.NewSettings(audioSchema)
+	defer setting.Unref()
+
+	inVolumePer := float64(setting.GetInt(gsKeyInputVolume)) / 100.0
+	outVolumePer := float64(setting.GetInt(gsKeyOutputVolume)) / 100.0
+	defaultInputVolume = pulse.VolumeUIMax * inVolumePer
+	defaultOutputVolume = pulse.VolumeUIMax * outVolumePer
+
+	if !setting.GetBoolean(gsKeyFirstRun) {
+		return
 	}
 
-	return func() {
-		player.PlaySystemSound("audio-volume-change")
-	}
-}()
-
-var playFeedbackWithDevice = func() func(string) {
-	player, err := libsound.NewSound("com.deepin.api.Sound", "/com/deepin/api/Sound")
-	if err != nil {
-		logger.Error("Can't create com.deepin.api.Sound! Sound feedback support will be disabled", err)
-		return nil
+	setting.SetBoolean(gsKeyFirstRun, false)
+	for _, s := range audio.Sinks {
+		s.SetVolume(defaultOutputVolume, false)
 	}
 
-	return func(device string) {
-		player.PlaySystemSoundWithDevice("audio-volume-change", device)
+	for _, s := range audio.Sources {
+		s.SetVolume(defaultInputVolume, false)
 	}
-}()
+}

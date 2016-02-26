@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2013 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package grub2
@@ -25,7 +13,7 @@ import (
 	"bufio"
 	"fmt"
 	"io/ioutil"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"regexp"
 	"sort"
 	"strconv"
@@ -262,10 +250,10 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 		needUpdate = true
 	}
 
-	// disable GRUB_BACKGROUND
-	if grub.settings["GRUB_BACKGROUND"] != "<none>" {
+	// make GRUB_BACKGROUND same with the theme background
+	if grub.settings["GRUB_BACKGROUND"] != themeBgFile {
 		logger.Info("fix setting GRUB_BACKGROUND")
-		grub.settings["GRUB_BACKGROUND"] = "<none>"
+		grub.settings["GRUB_BACKGROUND"] = themeBgFile
 		needUpdate = true
 	}
 

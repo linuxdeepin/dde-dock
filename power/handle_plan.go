@@ -1,27 +1,47 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
 import (
 	"dbus/com/deepin/daemon/display"
 	"fmt"
+	"time"
+
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/dpms"
-	"time"
 )
 
 const (
-	HighPerformanceIdleTime    = 15 * 60
+	// 高性能模式下空闲检测超时
+	HighPerformanceIdleTime = 15 * 60
+	// 高性能模式下挂起超时
 	HighPerformanceSuspendTime = 0
-	BlancedIdleTime            = 10 * 60
-	BlancedSuspendTime         = 0
-	PowerSaverIdleTime         = 5 * 60
-	PowerSaverSuspendTime      = 15 * 60
+	// 均衡模式下空闲检测超时
+	BlancedIdleTime = 10 * 60
+	// 均衡模式下挂起超时
+	BlancedSuspendTime = 0
+	// 节能模式下空闲检测超时
+	PowerSaverIdleTime = 5 * 60
+	// 节能模式下挂起超时
+	PowerSaverSuspendTime = 15 * 60
 )
 
 const (
 	//sync with com.deepin.daemon.power.schema
-	PowerPlanCustom          = 0
-	PowerPlanPowerSaver      = 1
-	PowerPlanBalanced        = 2
+	// 电源计划：自定义
+	PowerPlanCustom = 0
+	// 电源计划：节能模式
+	PowerPlanPowerSaver = 1
+	// 电源计划：均衡模式
+	PowerPlanBalanced = 2
+	// 电源计划：高性能模式
 	PowerPlanHighPerformance = 3
 )
 
@@ -92,7 +112,7 @@ func (p *Power) setLinePowerPlan(plan int32) {
 		p.setLinePowerSuspendDelay(BlancedSuspendTime)
 	case PowerPlanPowerSaver:
 		p.setLinePowerIdleDelay(PowerSaverIdleTime)
-		p.setLinePowerSuspendDelay(PowerSaverIdleTime)
+		p.setLinePowerSuspendDelay(PowerSaverSuspendTime)
 	case PowerPlanCustom:
 		p.setLinePowerIdleDelay(int32(p.coreSettings.GetInt("ac-idle-delay")))
 		p.setLinePowerSuspendDelay(int32(p.coreSettings.GetInt("ac-suspend-delay")))
@@ -218,13 +238,23 @@ func doIdleAction() {
 
 func (p *Power) handleIdleOn() {
 	if p.OnBattery {
-		if p.BatteryIdleDelay < p.BatterySuspendDelay || p.BatterySuspendDelay == 0 {
+		if p.BatteryIdleDelay == 0 && p.BatterySuspendDelay == 0 {
+			return
+		}
+
+		if (p.BatteryIdleDelay != 0 && p.BatteryIdleDelay < p.BatterySuspendDelay) ||
+			p.BatterySuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
 		}
 	} else {
-		if p.LinePowerIdleDelay < p.LinePowerSuspendDelay || p.LinePowerSuspendDelay == 0 {
+		if p.LinePowerIdleDelay == 0 && p.LinePowerSuspendDelay == 0 {
+			return
+		}
+
+		if (p.LinePowerIdleDelay != 0 && p.LinePowerIdleDelay < p.LinePowerSuspendDelay) ||
+			p.LinePowerSuspendDelay == 0 {
 			doIdleAction()
 		} else {
 			doSuspend()
@@ -234,6 +264,9 @@ func (p *Power) handleIdleOn() {
 
 func (*Power) handleIdleOff() {
 	for _, c := range stopAnimation {
+		if c == nil {
+			continue
+		}
 		close(c)
 	}
 	stopAnimation = nil

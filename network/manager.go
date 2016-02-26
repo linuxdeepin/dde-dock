@@ -1,28 +1,16 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
 )
@@ -59,7 +47,7 @@ type Manager struct {
 
 	// update by manager_connections.go
 	connectionsLock sync.Mutex
-	connections     map[string][]*connection
+	connections     map[string]connectionSlice
 	Connections     string // array of connection information and marshaled by json
 
 	connectionSessionsLock sync.Mutex
@@ -72,6 +60,7 @@ type Manager struct {
 
 	// signals
 	NeedSecrets                  func(connPath, settingName, connectionId string, autoConnect bool)
+	NeedSecretsFinished          func(connPath, settingName string)
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)
 	AccessPointPropertiesChanged func(devPath, apJSON string)
@@ -91,8 +80,9 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// initialize slice code
+// initialize slice code manually to make i18n works
 func initSlices() {
+	initVirtualSections()
 	initProxyGsettings()
 	initAvailableValuesSecretFlags()
 	initAvailableValuesNmPptpSecretFlags()
@@ -116,13 +106,17 @@ func DestroyManager(m *Manager) {
 
 func (m *Manager) initManager() {
 	logger.Info("initialize network")
+
 	initDbusObjects()
+
 	disableNotify()
+	defer enableNotify()
+
 	m.config = newConfig()
 	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
 	m.stateHandler = newStateHandler()
-	m.agent = newAgent()
+	m.agent = newAgent() // TODO: nm 1.0 agent issues
 
 	// initialize device and connection handlers
 	m.initDeviceManage()
@@ -135,6 +129,7 @@ func (m *Manager) initManager() {
 	})
 	m.setPropState()
 
+	// TODO: notifications issue when suspending
 	// connect computer suspend signal
 	loginManager.ConnectPrepareForSleep(func(active bool) {
 		if active {
@@ -146,8 +141,6 @@ func (m *Manager) initManager() {
 			enableNotify()
 		}
 	})
-
-	enableNotify()
 }
 
 func (m *Manager) destroyManager() {
@@ -172,7 +165,7 @@ func watchNetworkManagerRestart(m *Manager) {
 	dbusDaemon.ConnectNameOwnerChanged(func(name, oldOwner, newOwner string) {
 		if name == "org.freedesktop.NetworkManager" {
 			// if a new dbus session was installed, the name and newOwner
-			// will be not empty, if a dbus session was uninstalled, the
+			// will be no empty, if a dbus session was uninstalled, the
 			// name and oldOwner will be not empty
 			if len(newOwner) != 0 {
 				// network-manager is starting

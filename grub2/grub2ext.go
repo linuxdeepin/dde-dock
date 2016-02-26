@@ -1,25 +1,13 @@
 /**
- * Copyright (c) 2013 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
-// This module is split from dde-daemon/grub2 to fix launch issue
+// This module is split from dde/daemon/grub2 to fix launch issue
 // through dbus-daemon for that system bus in root couldn't access
 // session bus interface.
 
@@ -31,9 +19,9 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"pkg.linuxdeepin.com/lib/dbus"
-	graphic "pkg.linuxdeepin.com/lib/gdkpixbuf"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -42,7 +30,7 @@ const (
 	DbusGrub2ExtIfs  = "com.deepin.daemon.Grub2Ext"
 )
 
-// Grub2Ext is a dbus object that split from dde-daemon/grub2 to fix
+// Grub2Ext is a dbus object that split from dde/daemon/grub2 to fix
 // issue that system bus in root permission couldn't access session
 // bus's interface.
 type Grub2Ext struct{}

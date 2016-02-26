@@ -1,85 +1,132 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package item
 
 import (
 	storeApi "dbus/com/deepin/store/api"
 	"encoding/json"
 	"fmt"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
+	"os/exec"
+	"path"
+	"path/filepath"
 	"sync"
 	"time"
+
+	"gir/glib-2.0"
+	"pkg.deepin.io/dde/daemon/appinfo"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
 )
 
-const (
-	_NewSoftwareRecordFile = "launcher/new_software.ini"
-	_NewSoftwareGroupName  = "NewInstalledApps"
-	_NewSoftwareKeyName    = "Ids"
-)
-
-type ItemManager struct {
-	lock      sync.Mutex
-	itemTable map[ItemId]ItemInfoInterface
-	soft      SoftwareCenterInterface
+// Manager controls all items.
+type Manager struct {
+	store                       DStore
+	lock                        sync.Mutex
+	itemTable                   map[ItemID]ItemInfo
+	dstoreDesktopPackageMapFile string
+	dstoreInstalledTimeFile     string
 }
 
-func NewItemManager(soft SoftwareCenterInterface) *ItemManager {
-	return &ItemManager{
-		itemTable: map[ItemId]ItemInfoInterface{},
-		soft:      soft,
+// NewManager creates a new item manager.
+func NewManager(store DStore, dstoreDesktopPackageMapFile, dstoreInstalledTimeFile string) *Manager {
+	return &Manager{
+		store:                       store,
+		itemTable:                   map[ItemID]ItemInfo{},
+		dstoreDesktopPackageMapFile: dstoreDesktopPackageMapFile,
+		dstoreInstalledTimeFile:     dstoreInstalledTimeFile,
 	}
 }
 
-func (m *ItemManager) AddItem(item ItemInfoInterface) {
+// AddItem adds a new app.
+func (m *Manager) AddItem(item ItemInfo) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
-	m.itemTable[item.Id()] = item
+	m.itemTable[item.ID()] = item
 }
 
-func (m *ItemManager) HasItem(id ItemId) bool {
+// HasItem returns true if the app is existed.
+func (m *Manager) HasItem(id ItemID) bool {
 	_, ok := m.itemTable[id]
 	return ok
 }
 
-func (m *ItemManager) RemoveItem(id ItemId) {
+// RemoveItem removes a app.
+func (m *Manager) RemoveItem(id ItemID) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
 	delete(m.itemTable, id)
 }
 
-func (m *ItemManager) GetItem(id ItemId) ItemInfoInterface {
+// GetItem returns a Item struct object if app exist, otherwise return nil.
+func (m *Manager) GetItem(id ItemID) ItemInfo {
 	item, _ := m.itemTable[id]
 	return item
 }
 
-func (m *ItemManager) GetAllItems() []ItemInfoInterface {
-	infos := []ItemInfoInterface{}
+// GetAllItems returns all apps.
+func (m *Manager) GetAllItems() []ItemInfo {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	infos := []ItemInfo{}
 	for _, item := range m.itemTable {
 		infos = append(infos, item)
 	}
 	return infos
 }
 
-func (m *ItemManager) UninstallItem(id ItemId, purge bool, timeout time.Duration) error {
+func (m *Manager) getPkgName(desktopPath string) (string, error) {
+	transition, err := m.store.NewQueryPkgNameTransaction(m.dstoreDesktopPackageMapFile)
+	if err != nil {
+		return "", err
+	}
+
+	return transition.Query(path.Base(desktopPath)), nil
+}
+
+// UninstallItem will uninstall a app.
+func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) error {
 	item := m.GetItem(id)
 	if item == nil {
 		return fmt.Errorf("No such a item: %q", id)
 	}
 
-	pkgName, err := GetPkgName(m.soft, item.Path())
+	err := m.uninstallFromDStore(item, purge, timeout)
+	if err != nil {
+		return m.uninstallFromDeepinWine(item)
+	}
+
+	return nil
+}
+
+func (m *Manager) uninstallFromDeepinWine(item ItemInfo) error {
+	cmd := exec.Command("/opt/deepinwine/tools/uninstall.sh", item.Path())
+	return cmd.Run()
+}
+
+func (m *Manager) uninstallFromDStore(item ItemInfo, purge bool, timeout time.Duration) error {
+	pkgName, err := m.getPkgName(item.Path())
 	if err != nil {
 		return err
 	}
 
 	if pkgName == "" {
-		return fmt.Errorf("get package name of %q failed", string(id))
+		return fmt.Errorf("get package name of %q failed", string(item.ID()))
 	}
 
-	transaction := NewUninstallTransaction(m.soft, pkgName, purge, timeout)
-	return transaction.Exec()
+	transaction := m.store.NewUninstallTransaction(pkgName, purge, timeout)
+	err = transaction.Exec()
+	return err
 }
 
-func (m *ItemManager) IsItemOnDesktop(id ItemId) bool {
+// IsItemOnDesktop returns true if app exists on desktop.
+func (m *Manager) IsItemOnDesktop(id ItemID) bool {
 	item := m.GetItem(id)
 	if item == nil {
 		return false
@@ -87,7 +134,8 @@ func (m *ItemManager) IsItemOnDesktop(id ItemId) bool {
 	return isOnDesktop(item.Path())
 }
 
-func (m *ItemManager) SendItemToDesktop(id ItemId) error {
+// SendItemToDesktop sends a app to desktop.
+func (m *Manager) SendItemToDesktop(id ItemID) error {
 	if !m.HasItem(id) {
 		return fmt.Errorf("No such a item %q", id)
 	}
@@ -96,10 +144,22 @@ func (m *ItemManager) SendItemToDesktop(id ItemId) error {
 		return err
 	}
 
+	path := getDesktopPath(m.GetItem(id).Path())
+	f := glib.NewKeyFile()
+	defer f.Free()
+
+	ok, _ := f.LoadFromFile(path, glib.KeyFileFlagsKeepComments|glib.KeyFileFlagsKeepTranslations)
+	if ok {
+		f.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-CreatedBy", "Launcher")
+		f.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-AppID", string(id))
+		SaveKeyFile(f, path)
+	}
+
 	return nil
 }
 
-func (m *ItemManager) RemoveItemFromDesktop(id ItemId) error {
+// RemoveItemFromDesktop removes app from desktop.
+func (m *Manager) RemoveItemFromDesktop(id ItemID) error {
 	if !m.HasItem(id) {
 		return fmt.Errorf("No such a item %q", id)
 	}
@@ -111,67 +171,73 @@ func (m *ItemManager) RemoveItemFromDesktop(id ItemId) error {
 	return nil
 }
 
-func (m *ItemManager) GetRate(id ItemId, f RateConfigFileInterface) uint64 {
-	rate, _ := f.GetUint64(string(id), _RateRecordKey)
-	return rate
+// GetFrequency returns a item's  use frequency.
+func (m *Manager) GetFrequency(id ItemID, f *glib.KeyFile) uint64 {
+	return appinfo.GetFrequency(string(id), f)
 }
 
-func (m *ItemManager) SetRate(id ItemId, rate uint64, f RateConfigFileInterface) {
-	f.SetUint64(string(id), _RateRecordKey, rate)
-	SaveKeyFile(f, ConfigFilePath(_RateRecordFile))
+// SetFrequency sets a item's  use frequency, NOT used now.
+func (m *Manager) SetFrequency(id ItemID, rate uint64, f *glib.KeyFile) {
 }
 
-func (m *ItemManager) GetAllFrequency(f RateConfigFileInterface) (infos map[ItemId]uint64) {
-	infos = map[ItemId]uint64{}
+// GetAllFrequency returns all items' use frequency
+func (m *Manager) GetAllFrequency(f *glib.KeyFile) (infos map[ItemID]uint64) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	infos = map[ItemID]uint64{}
 	if f == nil {
-		for id, _ := range m.itemTable {
+		for id := range m.itemTable {
 			infos[id] = 0
 		}
 		return
 	}
 
-	for id, _ := range m.itemTable {
-		infos[id] = m.GetRate(id, f)
+	for id := range m.itemTable {
+		infos[id] = m.GetFrequency(id, f)
 	}
 
 	return
 }
 
-func (m *ItemManager) GetAllTimeInstalled() (map[ItemId]int64, error) {
-	infos := map[ItemId]int64{}
+// GetAllTimeInstalled returns all items installed time.
+// TODO:
+// 1. do it once.
+// 2. update it when item changed.
+func (m *Manager) GetAllTimeInstalled() (map[ItemID]int64, error) {
+	m.lock.Lock()
+	defer m.lock.Unlock()
+	infos := map[ItemID]int64{}
 	var err error
-	for id, _ := range m.itemTable {
-		infos[id] = 0
+	for id, item := range m.itemTable {
+		infos[id] = item.LastModifiedTime()
 	}
 
-	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
-	if err != nil {
-		return infos, fmt.Errorf("create store api failed: %v", err)
-	}
-	defer storeApi.DestroyDStoreDesktop(store)
-
-	datasStr, err := store.GetAllDesktops()
-	if err != nil {
-		return infos, fmt.Errorf("get all desktops' info failed: %v", err)
-	}
-
-	datas := [][]interface{}{}
-	err = json.Unmarshal([]byte(datasStr), &datas)
+	transition, err := m.store.NewQueryTimeInstalledTransaction(m.dstoreInstalledTimeFile)
 	if err != nil {
 		return infos, err
 	}
 
-	for _, data := range datas {
-		id := GenId(data[0].(string))
-		t := int64(data[1].(float64))
-		infos[id] = t
+	for id := range m.itemTable {
+		item := m.GetItem(id)
+		if item == nil {
+			continue
+		}
+
+		pkgName, err := m.getPkgName(item.Path())
+		if err != nil {
+			continue
+		}
+
+		infos[id] = transition.Query(pkgName)
 	}
 
 	return infos, err
 }
 
-func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
-	ids := []ItemId{}
+// GetAllNewInstalledApps returns all apps newly installed.
+// TODO: new dstore.
+func (self *Manager) GetAllNewInstalledApps() ([]ItemID, error) {
+	ids := []ItemID{}
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {
 		return ids, fmt.Errorf("create store api failed: %v", err)
@@ -190,23 +256,40 @@ func (self *ItemManager) GetAllNewInstalledApps() ([]ItemId, error) {
 	}
 
 	for _, data := range datas {
-		id := GenId(data[0].(string))
+		id := GenID(data[0].(string))
 		ids = append(ids, id)
 	}
 	return ids, nil
 }
 
-func (self *ItemManager) MarkNew(_id ItemId) error {
+// MarkNew marks a item as newly installed.
+func (self *Manager) MarkNew(_id ItemID) error {
 	return nil
 }
 
-func (self *ItemManager) MarkLaunched(_id ItemId) error {
+// MarkLaunched marks a item as launched, it won't be newly installed.
+// TODO: new dstore.
+func (self *Manager) MarkLaunched(_id ItemID) error {
 	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
 	if err != nil {
 		return fmt.Errorf("create store api failed: %v", err)
 	}
 	defer storeApi.DestroyDStoreDesktop(store)
 
-	_, ok := store.MarkLaunched(string(_id))
-	return ok
+	if item, ok := self.itemTable[_id]; ok {
+		desktopID := filepath.Base(item.Path())
+		_, ok := store.MarkLaunched(desktopID)
+		return ok
+	}
+
+	return fmt.Errorf("invalid id %q", string(_id))
+}
+
+func (self *Manager) RefreshItem(id ItemID) {
+	self.lock.Lock()
+	defer self.lock.Unlock()
+	if item, ok := self.itemTable[id]; ok {
+		item.Refresh()
+		self.itemTable[id] = item
+	}
 }

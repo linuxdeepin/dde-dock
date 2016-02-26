@@ -1,28 +1,16 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *Manager) OnPropertiesChanged(name string, oldv interface{}) {
@@ -77,15 +65,15 @@ func (m *Manager) setPropNetworkingEnabled(value bool) {
 }
 func (m *Manager) setPropWirelessEnabled(value bool) {
 	m.wirelessEnabled = value
-	// dbus.NotifyChange(m, "WirelessEnabled")
+	// dbus.NotifyChange(m, "WirelessEnabled") // TODO: remove
 }
 func (m *Manager) setPropWwanEnabled(value bool) {
 	m.wwanEnabled = value
-	// dbus.NotifyChange(m, "WwanEnabled")
+	// dbus.NotifyChange(m, "WwanEnabled") // TODO: remove
 }
 func (m *Manager) setPropWiredEnabled(value bool) {
 	m.wiredEnabled = value
-	// dbus.NotifyChange(m, "WiredEnabled")
+	// dbus.NotifyChange(m, "WiredEnabled") // TODO: remove
 }
 func (m *Manager) setPropVpnEnabled(value bool) {
 	m.VpnEnabled = value

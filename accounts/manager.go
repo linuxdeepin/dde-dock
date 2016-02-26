@@ -1,30 +1,18 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package accounts
 
 import (
-	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
-	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
 
@@ -40,13 +28,17 @@ const (
 )
 
 type Manager struct {
+	// 用户 ObjectPath 列表
 	UserList   []string
 	GuestIcon  string
 	AllowGuest bool
 
 	UserAdded   func(string)
 	UserDeleted func(string)
+	Success     func(uint32, string)
 	// Error(pid, action, reason)
+	//
+	// 操作失败的信号，参数包括调用者的 pid，被调用的接口和错误信息
 	Error func(uint32, string, string)
 
 	watcher   *dutils.WatchProxy
@@ -154,7 +146,7 @@ func (m *Manager) uninstallUser(userPath string) {
 func (m *Manager) polkitAuthManagerUser(pid uint32, action string) error {
 	err := polkitAuthManagerUser(pid)
 	if err != nil {
-		triggerSigErr(pid, action, err.Error())
+		doEmitError(pid, action, err.Error())
 		return err
 	}
 

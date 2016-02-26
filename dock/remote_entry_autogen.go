@@ -1,8 +1,17 @@
-/*This file is auto generate by pkg.linuxdeepin.com/dbus-generator. Don't edit it*/
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
+/*This file is auto generate by pkg.deepin.io/dbus-generator. Don't edit it*/
 package dock
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/dbus/property"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/dbus/property"
 import "reflect"
 import "sync"
 import "runtime"
@@ -67,8 +76,8 @@ func DestroyRemoteEntry(obj *RemoteEntry) {
 	obj.Data.Reset()
 }
 
-func (obj *RemoteEntry) Activate(arg1 int32, arg2 int32) (arg0 bool, _err error) {
-	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg1, arg2).Store(&arg0)
+func (obj *RemoteEntry) Activate(arg1 int32, arg2 int32, arg3 uint32) (arg0 bool, _err error) {
+	_err = obj.core.Call("dde.dock.Entry.Activate", 0, arg1, arg2, arg3).Store(&arg0)
 	if _err != nil {
 		fmt.Println(_err)
 	}
@@ -83,56 +92,56 @@ func (obj *RemoteEntry) ContextMenu(arg0 int32, arg1 int32) (_err error) {
 	return
 }
 
-func (obj *RemoteEntry) HandleMenuItem(arg0 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleMenuItem", 0, arg0).Store()
+func (obj *RemoteEntry) HandleMenuItem(arg0 string, arg1 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleMenuItem", 0, arg0, arg1).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleDragDrop", 0, arg0, arg1, arg2).Store()
+func (obj *RemoteEntry) HandleDragDrop(arg0 int32, arg1 int32, arg2 string, arg3 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragDrop", 0, arg0, arg1, arg2, arg3).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleDragEnter", 0, arg0, arg1, arg2).Store()
+func (obj *RemoteEntry) HandleDragEnter(arg0 int32, arg1 int32, arg2 string, arg3 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragEnter", 0, arg0, arg1, arg2, arg3).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleDragLeave", 0, arg0, arg1, arg2).Store()
+func (obj *RemoteEntry) HandleDragLeave(arg0 int32, arg1 int32, arg2 string, arg3 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragLeave", 0, arg0, arg1, arg2, arg3).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleDragOver", 0, arg0, arg1, arg2).Store()
+func (obj *RemoteEntry) HandleDragOver(arg0 int32, arg1 int32, arg2 string, arg3 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleDragOver", 0, arg0, arg1, arg2, arg3).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.HandleMouseWheel", 0, arg0, arg1, arg2).Store()
+func (obj *RemoteEntry) HandleMouseWheel(arg0 int32, arg1 int32, arg2 int32, arg3 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.HandleMouseWheel", 0, arg0, arg1, arg2, arg3).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}
 	return
 }
 
-func (obj *RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32) (_err error) {
-	_err = obj.core.Call("dde.dock.Entry.SecondaryActivate", 0, arg0, arg1).Store()
+func (obj *RemoteEntry) SecondaryActivate(arg0 int32, arg1 int32, arg2 uint32) (_err error) {
+	_err = obj.core.Call("dde.dock.Entry.SecondaryActivate", 0, arg0, arg1, arg2).Store()
 	if _err != nil {
 		fmt.Println(_err)
 	}

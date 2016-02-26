@@ -1,84 +1,231 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package main
 
-import _ "pkg.linuxdeepin.com/dde-daemon/inputdevices"
-import _ "pkg.linuxdeepin.com/dde-daemon/screensaver"
-import _ "pkg.linuxdeepin.com/dde-daemon/power"
-import "pkg.linuxdeepin.com/lib/proxy"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"runtime/pprof"
+	"sync"
 
-import _ "pkg.linuxdeepin.com/dde-daemon/audio"
+	"gir/gio-2.0"
+	"gir/glib-2.0"
+	"pkg.deepin.io/dde/api/session"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
+)
 
-import _ "pkg.linuxdeepin.com/dde-daemon/appearance"
+const (
+	ProfTypeCPU = "cpu"
+	ProfTypeMem = "memory"
+)
 
-import _ "pkg.linuxdeepin.com/dde-daemon/clipboard"
-import _ "pkg.linuxdeepin.com/dde-daemon/timedate"
-import _ "pkg.linuxdeepin.com/dde-daemon/mime"
+func runMainLoop() {
+	session.Register()
+	dbus.DealWithUnhandledMessage()
+	go glib.StartLoop()
 
-import _ "pkg.linuxdeepin.com/dde-daemon/screenedge"
+	if err := dbus.Wait(); err != nil {
+		logger.Errorf("Lost dbus: %v", err)
+		os.Exit(-1)
+	}
 
-import _ "pkg.linuxdeepin.com/dde-daemon/bluetooth"
+	logger.Info("dbus connection is closed by user")
+	os.Exit(0)
+}
 
-import _ "pkg.linuxdeepin.com/dde-daemon/network"
-import _ "pkg.linuxdeepin.com/dde-daemon/mounts"
+func getEnableFlag(flag *Flags) loader.EnableFlag {
+	enableFlag := loader.EnableFlagIgnoreMissingModule
 
-import _ "pkg.linuxdeepin.com/dde-daemon/dock"
-import _ "pkg.linuxdeepin.com/dde-daemon/launcher"
-import _ "pkg.linuxdeepin.com/dde-daemon/keybinding"
+	if *flag.IgnoreMissingModules {
+		enableFlag = loader.EnableFlagNone
+	}
 
-import _ "pkg.linuxdeepin.com/dde-daemon/dsc"
-import _ "pkg.linuxdeepin.com/dde-daemon/mpris"
-import _ "pkg.linuxdeepin.com/dde-daemon/systeminfo"
+	if *flag.ForceStart {
+		enableFlag |= loader.EnableFlagForceStart
+	}
 
-import _ "pkg.linuxdeepin.com/dde-daemon/sessionwatcher"
+	return enableFlag
+}
 
-import "pkg.linuxdeepin.com/lib/glib-2.0"
+type SessionDaemon struct {
+	flags           *Flags
+	logLevel        log.Priority
+	log             *log.Logger
+	settings        *gio.Settings
+	enabledModules  map[string]loader.Module
+	disabledModules map[string]loader.Module
 
-//#cgo pkg-config:gtk+-3.0
-//#include <gtk/gtk.h>
-//void init(){gtk_init(0,0);}
-import "C"
-import . "pkg.linuxdeepin.com/lib/gettext"
-import "pkg.linuxdeepin.com/lib"
-import "pkg.linuxdeepin.com/lib/log"
-import "os"
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/dde-daemon"
+	cpuLocker sync.Mutex
+	cpuWriter *os.File
+}
 
-var logger = log.NewLogger("com.deepin.daemon")
+// Profile: heap, goroutine, threadcreate, block
+func (s *SessionDaemon) WriteProfile(profile, log string) error {
+	var p = pprof.Lookup(profile)
+	if p == nil {
+		return fmt.Errorf("Profile '%s' not exists", profile)
+	}
 
-func main() {
-	InitI18n()
-	Textdomain("dde-daemon")
+	fw, err := os.Create(log)
+	if err != nil {
+		return err
+	}
+	defer fw.Close()
 
-	if !lib.UniqueOnSession("com.deepin.daemon") {
-		logger.Warning("There already has a dde-daemon running.")
+	return p.WriteTo(fw, 1)
+}
+
+// Profile: cpu
+func (s *SessionDaemon) StartCPUProfile(log string) error {
+	s.cpuLocker.Lock()
+	defer s.cpuLocker.Unlock()
+	fw, err := os.Create(log)
+	if err != nil {
+		return err
+	}
+
+	err = pprof.StartCPUProfile(fw)
+	if err != nil {
+		fw.Close()
+		return err
+	}
+
+	s.cpuWriter = fw
+	return nil
+}
+
+func (s *SessionDaemon) StopCPUProfile() {
+	s.cpuLocker.Lock()
+	defer s.cpuLocker.Unlock()
+	if s.cpuWriter == nil {
 		return
 	}
-	if len(os.Args) >= 2 {
-		for _, disabledModuleName := range os.Args[1:] {
-			loader.Enable(disabledModuleName, false)
-		}
+
+	pprof.StopCPUProfile()
+	s.cpuWriter.Close()
+	s.cpuWriter = nil
+}
+
+func (*SessionDaemon) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       "com.deepin.daemon.Daemon",
+		ObjectPath: "/com/deepin/daemon/Daemon",
+		Interface:  "com.deepin.daemon.Daemon",
+	}
+}
+
+func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) *SessionDaemon {
+	session := &SessionDaemon{
+		flags:           flags,
+		settings:        settings,
+		logLevel:        log.LevelInfo,
+		log:             logger,
+		enabledModules:  map[string]loader.Module{},
+		disabledModules: map[string]loader.Module{},
 	}
 
-	C.init()
-	proxy.SetupProxy()
+	session.initModules()
 
-	initModules()
-	listenDaemonSettings()
+	return session
+}
 
-	loader.StartAll()
-	defer loader.StopAll()
+func (s *SessionDaemon) exitIfNotSingleton() error {
+	if !lib.UniqueOnSession(s.GetDBusInfo().Dest) {
+		return errors.New("There already has a dde daemon running.")
+	}
+	return nil
+}
 
-	go func() {
-		if err := dbus.Wait(); err != nil {
-			logger.Errorf("Lost dbus: %v", err)
-			os.Exit(-1)
+func (s *SessionDaemon) register() error {
+	if err := s.exitIfNotSingleton(); err != nil {
+		return err
+	}
+
+	if err := dbus.InstallOnSession(s); err != nil {
+		s.log.Fatal(err)
+	}
+
+	return nil
+}
+
+func (s *SessionDaemon) defaultAction() {
+	loader.SetLogLevel(s.logLevel)
+
+	err := loader.EnableModules(s.getEnabledModules(), s.getDisabledModules(), getEnableFlag(s.flags))
+	if err != nil {
+		fmt.Println(err)
+		// TODO: define exit code.
+		os.Exit(3)
+	}
+}
+
+func (s *SessionDaemon) execDefaultAction() {
+	s.defaultAction()
+}
+
+func (s *SessionDaemon) initModules() {
+	allModules := loader.List()
+	for _, module := range allModules {
+		name := module.Name()
+		if s.settings.GetBoolean(name) {
+			s.enabledModules[name] = module
 		} else {
-			logger.Info("dbus connection is closed by user")
-			os.Exit(0)
+			s.disabledModules[name] = module
 		}
-	}()
+	}
+}
 
-	ddeSessionRegister()
-	dbus.DealWithUnhandledMessage()
-	glib.StartLoop()
+func keys(m map[string]loader.Module) []string {
+	keys := []string{}
+	for key, _ := range m {
+		keys = append(keys, key)
+	}
+	return keys
+}
+
+func (s *SessionDaemon) getDisabledModules() []string {
+	return keys(s.disabledModules)
+}
+
+func (s *SessionDaemon) getEnabledModules() []string {
+	return keys(s.enabledModules)
+}
+
+func (s *SessionDaemon) EnableModules(enablingModules []string) error {
+	return loader.EnableModules(enablingModules, s.getDisabledModules(), getEnableFlag(s.flags))
+}
+
+func (s *SessionDaemon) DisableModules(disableModules []string) error {
+	return loader.EnableModules(s.getEnabledModules(), disableModules, getEnableFlag(s.flags))
+}
+
+func (s *SessionDaemon) ListModule(name string) error {
+	if name == "" {
+		for _, module := range loader.List() {
+			fmt.Println(module.Name())
+		}
+		return nil
+	}
+
+	module := loader.GetModule(name)
+	if module == nil {
+		return fmt.Errorf("no such a module named %s", name)
+	}
+
+	for _, m := range module.GetDependencies() {
+		fmt.Println(m)
+	}
+
+	return nil
 }

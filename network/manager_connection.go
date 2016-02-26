@@ -1,31 +1,26 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	nm "dbus/org/freedesktop/networkmanager"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
+	"sort"
 )
+
+type connectionSlice []*connection
+
+func (c connectionSlice) Len() int           { return len(c) }
+func (c connectionSlice) Less(i, j int) bool { return c[i].Id < c[j].Id }
+func (c connectionSlice) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
 
 // TODO refactor code, different connection structures for different
 // types
@@ -47,14 +42,19 @@ type connection struct {
 
 func (m *Manager) initConnectionManage() {
 	m.connectionsLock.Lock()
-	m.connections = make(map[string][]*connection)
+	m.connections = make(map[string]connectionSlice)
 	m.connectionsLock.Unlock()
 
 	for _, cpath := range nmGetConnectionList() {
 		m.addConnection(cpath)
 	}
 	nmSettings.ConnectNewConnection(func(cpath dbus.ObjectPath) {
+		logger.Info("add connection", cpath)
 		m.addConnection(cpath)
+	})
+	nmSettings.ConnectConnectionRemoved(func(cpath dbus.ObjectPath) {
+		logger.Info("remove connection", cpath)
+		m.removeConnection(cpath)
 	})
 }
 
@@ -64,6 +64,7 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	if err != nil {
 		return
 	}
+
 	conn.nmConn = nmConn
 	conn.updateProps()
 
@@ -72,9 +73,6 @@ func (m *Manager) newConnection(cpath dbus.ObjectPath) (conn *connection, err er
 	}
 
 	// connect signals
-	nmConn.ConnectRemoved(func() {
-		m.removeConnection(cpath)
-	})
 	nmConn.ConnectUpdated(func() {
 		m.updateConnection(cpath)
 	})
@@ -126,7 +124,7 @@ func (m *Manager) clearConnections() {
 			m.destroyConnection(conn)
 		}
 	}
-	m.connections = make(map[string][]*connection)
+	m.connections = make(map[string]connectionSlice)
 	m.setPropConnections()
 }
 
@@ -144,11 +142,12 @@ func (m *Manager) addConnection(cpath dbus.ObjectPath) {
 	}
 	logger.Infof("add connection %#v", conn)
 	switch conn.connType {
-	case connectionWired:
+	case connectionWired, connectionUnknown:
 		// wired connections will be special treatment, do not shown
 		// for front-end here
 	default:
 		m.connections[conn.connType] = append(m.connections[conn.connType], conn)
+		sort.Sort(m.connections[conn.connType])
 	}
 	m.setPropConnections()
 }
@@ -165,7 +164,7 @@ func (m *Manager) removeConnection(cpath dbus.ObjectPath) {
 	m.connections[connType] = m.doRemoveConnection(m.connections[connType], i)
 	m.setPropConnections()
 }
-func (m *Manager) doRemoveConnection(conns []*connection, i int) []*connection {
+func (m *Manager) doRemoveConnection(conns connectionSlice, i int) connectionSlice {
 	logger.Infof("remove connection %#v", conns[i])
 	m.destroyConnection(conns[i])
 	copy(conns[i:], conns[i+1:])
@@ -239,7 +238,7 @@ func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, a
 	switch nmGetDeviceType(devPath) {
 	case NM_DEVICE_TYPE_ETHERNET:
 		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
-	case NM_DEVICE_TYPE_WIFI:
+	case NM_DEVICE_TYPE_WIFI: // ignore
 	case NM_DEVICE_TYPE_MODEM:
 		cpath, exists, err = m.ensureMobileConnectionExists(devPath, active)
 	}
@@ -279,7 +278,7 @@ func (m *Manager) ensureMobileConnectionExists(modemDevPath dbus.ObjectPath, act
 		exists = true
 		return
 	}
-	// connection id will be reset when setup plan, so here just give
+	// connection id will be reset when setting up plans, so here just give
 	// an optional name like "mobile"
 	cpath, err = newMobileConnectionForDevice("mobile", uuid, modemDevPath, active)
 	return
@@ -299,6 +298,7 @@ func (m *Manager) CreateConnection(connType string, devPath dbus.ObjectPath) (se
 
 // EditConnection open a connection through uuid, return ConnectionSession's dbus object path if success.
 func (m *Manager) EditConnection(uuid string, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
+	logger.Debug("EditConnection", uuid, devPath)
 	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
 		m.generalEnsureUniqueConnectionExists(devPath, false)
 	}
@@ -364,11 +364,12 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	if err != nil {
 		return
 	}
-	conn, err := nmNewSettingsConnection(cpath)
+	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
 		return
 	}
-	return conn.Delete()
+	defer nmDestroySettingsConnection(nmConn)
+	return nmConn.Delete()
 }
 
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
@@ -412,13 +413,15 @@ func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	return m.doDisconnectDevice(devPath)
 }
 func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
-	dev, err := nmNewDevice(devPath)
+	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	devState := dev.State.Get()
+	defer nmDestroyDevice(nmDev)
+
+	devState := nmDev.State.Get()
 	if isDeviceStateInActivating(devState) {
-		err = dev.Disconnect()
+		err = nmDev.Disconnect()
 		if err != nil {
 			logger.Error(err)
 		}

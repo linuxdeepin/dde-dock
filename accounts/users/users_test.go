@@ -1,29 +1,17 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package users
 
 import (
 	C "launchpad.net/gocheck"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"testing"
 )
 
@@ -53,33 +41,45 @@ func (*testWrapper) TestUserInfoValid(c *C.C) {
 		valid bool
 	}{
 		{
-			UserInfo{Name: "root"},
+			UserInfo{Name: "root", Uid: "0", Gid: "0"},
 			false,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
 			true,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/false"},
+			UserInfo{Name: "test1", Shell: "/bin/false", Uid: "1000", Gid: "1000"},
 			false,
 		},
 		{
-			UserInfo{Name: "test1", Shell: "/bin/nologin"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "60000", Gid: "60000"},
+			true,
+		},
+		{
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "999", Gid: "999"},
 			false,
 		},
 		{
-			UserInfo{Name: "test3", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/bash", Uid: "60001", Gid: "60001"},
 			false,
 		},
 		{
-			UserInfo{Name: "test4", Shell: "/bin/bash"},
+			UserInfo{Name: "test1", Shell: "/bin/nologin", Uid: "1000", Gid: "1000"},
+			false,
+		},
+		{
+			UserInfo{Name: "test3", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
+			false,
+		},
+		{
+			UserInfo{Name: "test4", Shell: "/bin/bash", Uid: "1000", Gid: "1000"},
 			false,
 		},
 	}
 
 	for _, v := range infos {
-		c.Check(v.name.isHumanUser("testdata/shadow"), C.Equals, v.valid)
+		c.Check(v.name.isHumanUser("testdata/shadow", "testdata/login.defs"), C.Equals, v.valid)
 	}
 }
 
@@ -121,7 +121,7 @@ func (*testWrapper) TestAdminUser(c *C.C) {
 		},
 	}
 
-	list, err := getAdminUserList("testdata/group")
+	list, err := getAdminUserList("testdata/group", "testdata/sudoers_deepin")
 	c.Check(err, C.Equals, nil)
 
 	for _, data := range datas {
@@ -157,10 +157,10 @@ func (*testWrapper) TestGetAutoLoginUser(c *C.C) {
 	_, err = getKDMAutoLoginUser("testdata/autologin/xxxxx")
 	c.Check(err, C.Not(C.Equals), nil)
 
-	m, err := getDefaultDisplayManager("testdata/autologin/default-display-manager")
+	m, err := getDefaultDM("testdata/autologin/default-display-manager")
 	c.Check(err, C.Equals, nil)
 	c.Check(m, C.Equals, "lightdm")
-	_, err = getDefaultDisplayManager("testdata/autologin/xxxxx")
+	_, err = getDefaultDM("testdata/autologin/xxxxx")
 	c.Check(err, C.Not(C.Equals), nil)
 }
 
@@ -213,4 +213,17 @@ func (*testWrapper) TestStrInArray(c *C.C) {
 	for _, data := range datas {
 		c.Check(isStrInArray(data.value, array), C.Equals, data.ret)
 	}
+}
+
+func (*testWrapper) TestGetAdmGroup(c *C.C) {
+	groups, users, err := getAdmGroupAndUser("testdata/sudoers_deepin")
+	c.Check(err, C.Equals, nil)
+	c.Check(isStrInArray("sudo", groups), C.Equals, true)
+	c.Check(isStrInArray("root", users), C.Equals, true)
+
+	groups, users, err = getAdmGroupAndUser("testdata/sudoers_arch")
+	c.Check(err, C.Equals, nil)
+	c.Check(isStrInArray("sudo", groups), C.Equals, true)
+	c.Check(isStrInArray("wheel", groups), C.Equals, true)
+	c.Check(isStrInArray("root", users), C.Equals, true)
 }

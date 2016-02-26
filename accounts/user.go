@@ -1,34 +1,26 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package accounts
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
-	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/graphic"
+	dutils "pkg.deepin.io/lib/utils"
+	"runtime/debug"
 	"strings"
+	"sync"
 )
 
 const (
@@ -37,8 +29,11 @@ const (
 )
 
 const (
-	defaultUserIcon       = "/var/lib/AccountsService/icons/1.png"
+	defaultUserIcon       = "/var/lib/AccountsService/icons/default.png"
 	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
+
+	maxWidth  = 200
+	maxHeight = 200
 )
 
 type User struct {
@@ -47,10 +42,13 @@ type User struct {
 	Gid            string
 	HomeDir        string
 	Shell          string
+	Language       string
 	IconFile       string
 	BackgroundFile string
 
-	Locked         bool
+	// 用户是否被禁用
+	Locked bool
+	// 是否允许此用户自动登录
 	AutomaticLogin bool
 
 	AccountType int32
@@ -58,6 +56,8 @@ type User struct {
 
 	IconList     []string
 	HistoryIcons []string
+
+	syncLocker sync.Mutex
 }
 
 func NewUser(userPath string) (*User, error) {
@@ -86,7 +86,6 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
-		//Create user config file
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
 		u.writeUserConfig()
@@ -95,6 +94,13 @@ func NewUser(userPath string) (*User, error) {
 	defer kFile.Free()
 
 	var write bool = false
+	lang, _ := kFile.GetString("User", "Language")
+	u.setPropString(&u.Language, "Language", lang)
+	if len(u.Language) == 0 {
+		u.setPropString(&u.Language, "Language", getSystemLanguage(defaultLocaleFile))
+		write = true
+	}
+
 	icon, _ := kFile.GetString("User", "Icon")
 	u.setPropString(&u.IconFile, "IconFile", icon)
 	if len(u.IconFile) == 0 {
@@ -120,7 +126,6 @@ func NewUser(userPath string) (*User, error) {
 }
 
 func (u *User) destroy() {
-	u.writeUserConfig()
 	dbus.UnInstallObject(u)
 }
 
@@ -142,12 +147,21 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 		return "", false, fmt.Errorf("Sum file '%s' md5 failed", icon)
 	}
 
-	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
-	err := os.MkdirAll(path.Dir(dest), 0755)
+	tmp, scale, err := scaleUserIcon(icon, md5)
 	if err != nil {
 		return "", false, err
 	}
-	err = dutils.CopyFile(icon, dest)
+
+	if scale {
+		defer os.Remove(tmp)
+	}
+
+	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
+	err = os.MkdirAll(path.Dir(dest), 0755)
+	if err != nil {
+		return "", false, err
+	}
+	err = dutils.CopyFile(tmp, dest)
 	if err != nil {
 		return "", false, err
 	}
@@ -156,6 +170,10 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 }
 
 func (u *User) addHistoryIcon(icon string) {
+	if len(icon) == 0 || icon == defaultUserIcon {
+		return
+	}
+
 	icons := u.HistoryIcons
 	if isStrInArray(icon, icons) {
 		return
@@ -173,6 +191,10 @@ func (u *User) addHistoryIcon(icon string) {
 }
 
 func (u *User) deleteHistoryIcon(icon string) {
+	if len(icon) == 0 {
+		return
+	}
+
 	icons := u.HistoryIcons
 	var list []string
 	for _, v := range icons {
@@ -217,7 +239,7 @@ func (u *User) accessAuthentication(pid uint32, check bool, action string) error
 		err = polkitAuthManagerUser(pid)
 	}
 	if err != nil {
-		triggerSigErr(pid, action, err.Error())
+		doEmitError(pid, action, err.Error())
 		return err
 	}
 
@@ -251,4 +273,46 @@ func getUidFromUserPath(userPath string) string {
 	items := strings.Split(userPath, userDBusPath)
 
 	return items[1]
+}
+
+func getSystemLanguage(file string) string {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return ""
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		line = strings.TrimSpace(line)
+		array := strings.Split(line, "=")
+		if len(array) != 2 {
+			continue
+		}
+
+		if array[0] == "LANG" {
+			tmp := strings.Split(array[1], ".")
+			return tmp[0]
+		}
+	}
+	return ""
+}
+
+func scaleUserIcon(file, md5 string) (string, bool, error) {
+	w, h, err := graphic.GetImageSize(file)
+	if err != nil {
+		return "", false, err
+	}
+
+	if w < maxWidth && h < maxHeight {
+		return file, false, nil
+	}
+
+	dest := path.Join("/tmp", md5)
+	defer debug.FreeOSMemory()
+	return dest, true, graphic.ScaleImagePrefer(file, dest,
+		maxWidth, maxHeight, graphic.FormatPng)
 }

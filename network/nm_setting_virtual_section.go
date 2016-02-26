@@ -1,25 +1,17 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
+
+import (
+	"fmt"
+)
 
 // Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (
@@ -36,6 +28,7 @@ const (
 	sectionVpnL2tp            = NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
 	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
 	sectionVpnL2tpIpsec       = NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
+	sectionVpnStrongswan      = NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME
 	sectionVpnOpenconnect     = NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
 	sectionVpnOpenvpn         = NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME
 	sectionVpnOpenvpnAdvanced = NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME
@@ -64,6 +57,7 @@ const (
 	NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "alias-vpn-openvpn-proxies"
 	NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME             = "alias-vpn-pptp"
 	NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME         = "alias-vpn-pptp-ppp"
+	NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME       = "alias-vpn-strongswan"
 	NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME             = "alias-vpn-vpnc"
 	NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME    = "alias-vpn-vpnc-advanced"
 )
@@ -97,6 +91,8 @@ func getRealSectionName(name string) (realName string) {
 		realName = sectionVpn
 	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
 		realName = sectionVpn
+	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
+		realName = sectionVpn
 	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		realName = sectionVpn
 	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
@@ -105,17 +101,62 @@ func getRealSectionName(name string) (realName string) {
 	return
 }
 
-// Virtual sections, used by front-end
-type vsectionInfo struct {
-	Value           string
-	RelatedSections []string // all related sections
+// VsectionInfo defines virtual section, used by front-end to build connection edit page run time.
+type VsectionInfo struct {
+	relatedSections []string // all related sections
+
+	// VirtualSection is the id of the virtual section, such as
+	// "vs-general".
+	VirtualSection string
+
+	// Name is the display name for front-end expand widget.
+	Name string
+
+	// Expanded tells if the front-end expand widget should be
+	// expanded default.
+	Expanded bool
+
+	// Keys contains all the keys information under current virtual
+	// section.
+	Keys []*GeneralKeyInfo
+}
+
+// GeneralKeyInfo defines settings key that used by front-end.
+type GeneralKeyInfo struct {
+	// Section most time is a real section name such as "connection",
+	// but will a virtual section for vkTypeController virtual key,
+	// such as "vk-mobile-service-type" for "vs-mobile".
+	Section string
+
+	// Key will be a real or virtual key name, such as "id" and "vk-eap".
+	Key string
+
+	// Name is the display name for front-end widget.
+	Name string
+
+	// WidgetType is the showing widget type to create for the key run
+	// time.
+	WidgetType string
+
+	// Readonly tells if the front-end widget should edit the key value.
+	Readonly bool
+
+	// AlwaysUpdate tells if front-end widget should re-get value once
+	// other keys changed.
+	AlwaysUpdate bool
+
+	// UseValueRange tells the custom value range will be used for
+	// integer keys.
+	UseValueRange bool
+	MinValue      int
+	MaxValue      int
 }
 
 const (
 	vsectionGeneral            = NM_SETTING_VS_GENERAL              // -> sectionConnection
 	vsectionEthernet           = NM_SETTING_VS_ETHERNET             // -> sectionWired
 	vsectionMobile             = NM_SETTING_VS_MOBILE               // -> sectionGsm, sectionCdma
-	vsectionMobileGsm          = NM_SETTING_VS_MOBILE_GSM           // -> sectionGsm
+	vsectionMobileGsm          = NM_SETTING_VS_MOBILE_GSM           // -> sectionGsm // TODO: remove
 	vsectionMobileCdma         = NM_SETTING_VS_MOBILE_CDMA          // -> sectionCdma
 	vsectionWifi               = NM_SETTING_VS_WIFI                 // -> sectionWireless
 	vsectionIpv4               = NM_SETTING_VS_IPV4                 // -> sectionIpv4
@@ -133,6 +174,7 @@ const (
 	vsectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY // -> sectionVpnOpenVpnSecurity
 	vsectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  // -> sectionVpnOpenVpnTlsauth
 	vsectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES  // -> sectionVpnOpenVpnProxies
+	vsectionVpnStrongswan      = NM_SETTING_VS_VPN_STRONGSWAN       // -> sectionVpnStrongswan
 	vsectionVpnPptp            = NM_SETTING_VS_VPN_PPTP             // -> sectionVpnPptp
 	vsectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP         // -> sectionVpnPptpPpp
 	vsectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC             // -> sectionVpnVpnc
@@ -141,48 +183,60 @@ const (
 
 func isVirtualSection(section string) bool {
 	for _, vs := range virtualSections {
-		if vs.Value == section {
+		if vs.VirtualSection == section {
 			return true
 		}
 	}
 	return false
 }
 
-// get available virtual sections for target connection type
+// get avaiable virtual sections for target connection type run time
 func getAvailableVsections(data connectionData) (vsections []string) {
+	return doGetRelatedVsections(data, false)
+}
+
+// get all related virtual sections for target connection type
+func getAllVsections(data connectionData) (vsections []string) {
+	return doGetRelatedVsections(data, true)
+}
+
+// get related virtual sections for target connection type. If
+// keepAll is true, will return all may used sections instead of
+// filter some of theme through the context.
+func doGetRelatedVsections(data connectionData, keepAll bool) (vsections []string) {
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
 	case connectionWired:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionEthernet,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWireless:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWirelessAdhoc:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionWirelessHotspot:
 		vsections = []string{
 			vsectionGeneral,
 			vsectionWifi,
+			vsectionSecurity,
 			vsectionIpv4,
 			vsectionIpv6,
-			vsectionSecurity,
 		}
 	case connectionPppoe:
 		vsections = []string{
@@ -218,7 +272,7 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 			vsectionIpv6,
 		}
 		// when connection connection is static key, vsectionVpnOpenvpnTlsauth is not available
-		if getSettingVpnOpenvpnKeyConnectionType(data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
+		if keepAll || getSettingVpnOpenvpnKeyConnectionType(data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
 			vsections = append(vsections, vsectionVpnOpenvpnTlsauth)
 		}
 	case connectionVpnPptp:
@@ -226,6 +280,12 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 			vsectionGeneral,
 			vsectionVpn,
 			vsectionVpnPptpPpp,
+			vsectionIpv4,
+		}
+	case connectionVpnStrongswan:
+		vsections = []string{
+			vsectionGeneral,
+			vsectionVpn,
 			vsectionIpv4,
 		}
 	case connectionVpnVpnc:
@@ -253,9 +313,22 @@ func getAvailableVsections(data connectionData) (vsections []string) {
 	return
 }
 
-// get available related sections of virtual section run time,
-// different with vsectionInfo.RelatedSections
-func getRelatedSectionsOfVsection(data connectionData, vsection string) (sections []string) {
+// get available sections of virtual section run time
+func getAvailableSectionsOfVsection(data connectionData, vsection string) (sections []string) {
+	return doGetRelatedSectionsOfVsection(data, vsection, false)
+}
+
+// get all related sections of virtual section
+func getAllSectionsOfVsection(data connectionData, vsection string) (sections []string) {
+	return doGetRelatedSectionsOfVsection(data, vsection, true)
+}
+
+// get related sections of virtual section run time. The returned
+// sections may contains virtual sections like vsectionMobile, for
+// that some vkTypeController keys will be contained in them. If
+// keepAll is true, will return all may used sections instead of
+// filter some of them through the context.
+func doGetRelatedSectionsOfVsection(data connectionData, vsection string, keepAll bool) (sections []string) {
 	connectionType := getCustomConnectionType(data)
 	switch vsection {
 	default:
@@ -263,13 +336,13 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 	case vsectionGeneral:
 		sections = []string{sectionConnection}
 	case vsectionMobile:
+		sections = []string{vsectionMobile}
 		switch connectionType {
 		case connectionMobileGsm:
-			sections = []string{sectionGsm}
+			sections = append(sections, sectionGsm)
 		case connectionMobileCdma:
-			sections = []string{sectionCdma}
+			sections = append(sections, sectionCdma)
 		}
-		sections = append(sections, vsectionMobile)
 	case vsectionMobileGsm:
 		sections = []string{sectionGsm}
 	case vsectionMobileCdma:
@@ -285,15 +358,14 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 	case vsectionSecurity:
 		switch connectionType {
 		case connectionWired:
-			if isSettingSectionExists(data, section8021x) {
-				sections = []string{section8021x}
+			sections = []string{vsectionSecurity}
+			if keepAll || isSettingSectionExists(data, section8021x) {
+				sections = append(sections, section8021x)
 			}
-			sections = append(sections, vsectionSecurity)
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-			if isSettingSectionExists(data, section8021x) {
-				sections = []string{sectionWirelessSecurity, section8021x}
-			} else {
-				sections = []string{sectionWirelessSecurity}
+			sections = []string{sectionWirelessSecurity}
+			if keepAll || isSettingSectionExists(data, section8021x) {
+				sections = append(sections, section8021x)
 			}
 		}
 	case vsectionPppoe:
@@ -310,6 +382,8 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 			sections = []string{sectionVpnOpenvpn}
 		case connectionVpnPptp:
 			sections = []string{sectionVpnPptp}
+		case connectionVpnStrongswan:
+			sections = []string{sectionVpnStrongswan}
 		case connectionVpnVpnc:
 			sections = []string{sectionVpnVpnc}
 		}
@@ -344,17 +418,26 @@ func getRelatedSectionsOfVsection(data connectionData, vsection string) (section
 	return
 }
 
-// getAvailableSections return all related virtual sections
+// getAvailableSections return all related available sections run time
 func getAvailableSections(data connectionData) (sections []string) {
-	for _, vsection := range getAvailableVsections(data) {
-		sections = appendStrArrayUnique(sections, getRelatedSectionsOfVsection(data, vsection)...)
+	return doGetRelatedSections(data, false)
+}
+
+// getAllSections return all related sections
+func getAllSections(data connectionData) (sections []string) {
+	return doGetRelatedSections(data, true)
+}
+
+func doGetRelatedSections(data connectionData, keepAll bool) (sections []string) {
+	for _, vsection := range doGetRelatedVsections(data, keepAll) {
+		sections = appendStrArrayUnique(sections, doGetRelatedSectionsOfVsection(data, vsection, keepAll)...)
 	}
 	return
 }
 
 // get real section name of target key in virtual section
 func getSectionOfKeyInVsection(data connectionData, vsection, key string) (section string) {
-	sections := getRelatedSectionsOfVsection(data, vsection)
+	sections := doGetRelatedSectionsOfVsection(data, vsection, false)
 	for _, section := range sections {
 		if generalIsKeyInSettingSection(section, key) {
 			return section
@@ -373,9 +456,18 @@ func isKeyAvailable(data connectionData, section, key string) bool {
 	return false
 }
 
-// get available keys of virtual section
+// get all available keys of virtual section run time
 func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []string) {
-	sections := getRelatedSectionsOfVsection(data, vsection)
+	return doGetRelatedKeysOfVsection(data, vsection, false)
+}
+
+// get all related keys of virtual section run time
+func getAllKeysOfVsection(data connectionData, vsection string) (keys []string) {
+	return doGetRelatedKeysOfVsection(data, vsection, true)
+}
+
+func doGetRelatedKeysOfVsection(data connectionData, vsection string, keepAll bool) (keys []string) {
+	sections := doGetRelatedSectionsOfVsection(data, vsection, keepAll)
 	for _, section := range sections {
 		keys = appendStrArrayUnique(keys, generalGetSettingAvailableKeys(data, section)...)
 	}
@@ -383,4 +475,106 @@ func getAvailableKeysOfVsection(data connectionData, vsection string) (keys []st
 		logger.Warning("there is no available keys for virtual section", vsection)
 	}
 	return
+}
+
+func getRelatedKeyName(data connectionData, vsection, key string) (name string, err error) {
+	keyInfo, err := getGeneralKeyInfo(data, vsection, key)
+	if keyInfo != nil {
+		name = keyInfo.Name
+	}
+	return
+}
+
+func getGeneralKeyInfo(data connectionData, vsection, key string) (keyInfo *GeneralKeyInfo, err error) {
+	for _, sectionInfo := range virtualSections {
+		for _, tmpKeyInfo := range sectionInfo.Keys {
+			if tmpKeyInfo.Section == vsection && tmpKeyInfo.Key == key {
+				keyInfo = tmpKeyInfo
+				return
+			}
+		}
+	}
+	err = fmt.Errorf("get key information failed for vsection=%s, key=%s", vsection, key)
+	logger.Error(err)
+	return
+}
+
+func (vs *VsectionInfo) fixExpanded(data connectionData) {
+	vs.Expanded = isVsectionExpandedDefault(data, vs.VirtualSection)
+}
+func isVsectionExpandedDefault(data connectionData, vsection string) (expanded bool) {
+	if vsection == vsectionGeneral {
+		return true
+	}
+
+	connectionType := getCustomConnectionType(data)
+	switch connectionType {
+	case connectionWired:
+		switch vsection {
+		case vsectionIpv4:
+			expanded = true
+		}
+	case connectionPppoe:
+		switch vsection {
+		case vsectionPppoe:
+			expanded = true
+		}
+	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		switch vsection {
+		case vsectionIpv4, vsectionSecurity:
+			expanded = true
+		}
+	case connectionMobileGsm, connectionMobileCdma:
+		switch vsection {
+		case vsectionMobile:
+			expanded = true
+		}
+	case connectionVpnL2tp:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnOpenconnect:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnOpenvpn:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnPptp:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnStrongswan:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	case connectionVpnVpnc:
+		switch vsection {
+		case vsectionVpn:
+			expanded = true
+		}
+	default:
+		logger.Error("unknown custom connection type", connectionType)
+	}
+	return
+}
+
+func (k *GeneralKeyInfo) fixReadonly(data connectionData) {
+	k.Readonly = isGeneralKeyReadonly(data, k.Section, k.Key)
+}
+func isGeneralKeyReadonly(data connectionData, section, key string) (readonly bool) {
+	connectionType := getCustomConnectionType(data)
+	switch connectionType {
+	case connectionWired, connectionMobileGsm, connectionMobileCdma, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		if section == sectionConnection && key == NM_SETTING_CONNECTION_ID {
+			return true
+		}
+	}
+	return false
 }

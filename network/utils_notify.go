@@ -1,30 +1,18 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	"dbus/org/freedesktop/notifications"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 	"time"
 )
 
@@ -99,7 +87,7 @@ func notifyAirplanModeEnabled() {
 }
 
 func notifyWiredCableUnplugged() {
-	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[GUESS_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
 }
 
 func notifyApModeNotSupport() {
@@ -194,6 +182,7 @@ func generalGetNotifyDisconnectedIcon(devType uint32, devPath dbus.ObjectPath) (
 		}
 		icon = getMobileDisconnectedNotifyIcon(mobileNetworkType)
 	default:
+		logger.Warning("lost default notify icon for device", getCustomDeviceType(devType))
 		icon = notifyIconNetworkDisconnected
 	}
 	return
@@ -206,6 +195,9 @@ func notifyDeviceRemoved(devPath dbus.ObjectPath) {
 		manager.devicesLock.Lock()
 		devType = dev.nmDevType
 		manager.devicesLock.Unlock()
+	}
+	if !isDeviceTypeValid(devType) {
+		return
 	}
 	icon := generalGetNotifyDisconnectedIcon(devType, devPath)
 	msg := deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED]

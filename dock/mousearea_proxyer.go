@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
@@ -20,12 +29,15 @@ type XMouseAreaInterface interface {
 	RegisterFullScreen() (string, error)
 }
 
+// XMouseAreaProxyer为dde-api中XMouseAreaProxy接口的简单封装，用于触发隐藏dock的显示。
+// 由于之前在C后端调用DBus不方便，因此特意实现了次接口，没有存在的意义，将会被废弃。
 type XMouseAreaProxyer struct {
 	lock    sync.RWMutex
 	area    XMouseAreaInterface
 	areaId  string
 	idValid bool
 
+	// InvalidId信号会在需要相应事件，但目前所持有的鼠标响应区域非法时被触发。
 	InvalidId func()
 }
 
@@ -92,12 +104,16 @@ func (a *XMouseAreaProxyer) registerArea(registerHandler func() (string, error))
 	a.areaId = newAreaId
 }
 
+// RegisterAreas注册多个区域为鼠标可响应区域。
+// coordinateRange类型为{x0, y0, x1, y1}所表示的矩形区域。
+// (x0, y0)表示矩形的左上角，(x1, y1)表示矩形的右下角。
 func (a *XMouseAreaProxyer) RegisterAreas(areas []coordinateRange, eventMask int32) {
 	a.registerArea(func() (string, error) {
 		return a.area.RegisterAreas(areas, eventMask)
 	})
 }
 
+// RegisterFullScreen将全屏注册为有效的鼠标响应区域。
 func (a *XMouseAreaProxyer) RegisterFullScreen() {
 	a.registerArea(a.area.RegisterFullScreen)
 }

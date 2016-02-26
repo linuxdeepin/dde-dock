@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package clipboard
@@ -26,21 +14,41 @@ package clipboard
 // #include "gsd-clipboard-manager.h"
 import "C"
 
-import "pkg.linuxdeepin.com/dde-daemon"
+import . "pkg.deepin.io/dde/daemon/loader"
+import "pkg.deepin.io/lib/log"
+
+var logger = log.NewLogger("daemon/clipboard")
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "clipboard",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	Register(NewClipboardDaemon(logger))
+	//loader.Register(&loader.Module{
+	//Name:   "clipboard",
+	//Start:  Start,
+	//Stop:   Stop,
+	//Enable: true,
+	//})
 }
 
-func Start() {
+type Daemon struct {
+	*ModuleBase
+}
+
+func NewClipboardDaemon(logger *log.Logger) *Daemon {
+	var d = new(Daemon)
+	d.ModuleBase = NewModuleBase("clipboard", d, logger)
+	return d
+}
+
+func (*Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (*Daemon) Start() error {
 	C.start_clip_manager()
+	return nil
 }
 
-func Stop() {
+func (*Daemon) Stop() error {
 	C.stop_clip_manager()
+	return nil
 }

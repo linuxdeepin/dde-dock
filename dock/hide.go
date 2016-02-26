@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 	"time"
 )
 
@@ -74,7 +83,7 @@ func (m *HideStateManager) SetState(s int32) int32 {
 	state := HideStateType(s)
 	logger.Debug("SetState m.state:", m.state, "new state:", state)
 	if m.state == state {
-		logger.Info("New HideState is the same as the old:", state)
+		logger.Debug("New HideState is the same as the old:", state)
 		return s
 	}
 
@@ -144,7 +153,7 @@ func (m *HideStateManager) UpdateState() {
 		for _, app := range ENTRY_MANAGER.runtimeApps {
 			for _, winInfo := range app.xids {
 				if winInfo.OverlapDock {
-					logger.Warning(app.Id, "overlap dock")
+					logger.Info(app.Id, "overlap dock")
 					trigger = TriggerHide
 					break
 				}
@@ -154,7 +163,7 @@ func (m *HideStateManager) UpdateState() {
 
 	if isLauncherShown {
 		m.CancelToggleShow()
-		logger.Info("launcher is opend, show dock")
+		logger.Debug("launcher is opened, show dock")
 		trigger = TriggerShow
 	}
 

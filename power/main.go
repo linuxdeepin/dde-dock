@@ -1,11 +1,29 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
-import "pkg.linuxdeepin.com/lib/log"
-import "pkg.linuxdeepin.com/lib/dbus/property"
-import "pkg.linuxdeepin.com/lib/gio-2.0"
+import "pkg.deepin.io/lib/log"
+import "pkg.deepin.io/lib/dbus/property"
+import "gir/gio-2.0"
 import ss "dbus/org/freedesktop/screensaver"
+import "pkg.deepin.io/dde/api/soundutils"
 
-var logger = log.NewLogger("com.deepin.daemon.Power")
+const (
+	settingKeyPowerButton = "button-power"
+	settingKeyLidClose    = "lid-close"
+	settingKeyLinePlan    = "ac-plan"
+	settingKeyBatteryPlan = "battery-plan"
+	settingKeyLockEnabled = "lock-enabled"
+)
+
+var logger = log.NewLogger("daemon/power")
 
 type Power struct {
 	coreSettings     *gio.Settings
@@ -13,48 +31,90 @@ type Power struct {
 	batGroup         *batteryGroup
 	lidIsClosed      bool
 	lowBatteryStatus uint32
+	swQuit           chan struct{}
 
+	// 按下电源键执行的操作
 	PowerButtonAction *property.GSettingsEnumProperty `access:"readwrite"`
-	LidClosedAction   *property.GSettingsEnumProperty `access:"readwrite"`
-	LockWhenActive    *property.GSettingsBoolProperty `access:"readwrite"`
+	// 合上笔记本盖时执行的操作
+	LidClosedAction *property.GSettingsEnumProperty `access:"readwrite"`
+	// 屏幕唤醒时是否锁屏
+	LockWhenActive *property.GSettingsBoolProperty `access:"readwrite"`
 
+	// 是否有显示器
 	LidIsPresent bool
 
-	LinePowerPlan         *property.GSettingsEnumProperty `access:"readwrite"`
-	LinePowerSuspendDelay int32                           `access:"readwrite"`
-	LinePowerIdleDelay    int32                           `access:"readwrite"`
+	// 接通电源时的电源计划
+	LinePowerPlan *property.GSettingsEnumProperty `access:"readwrite"`
+	// 接通电源时的挂起超时
+	LinePowerSuspendDelay int32 `access:"readwrite"`
+	// 接通电源时的空闲检测超时
+	LinePowerIdleDelay int32 `access:"readwrite"`
 
-	BatteryPlan         *property.GSettingsEnumProperty `access:"readwrite"`
-	BatterySuspendDelay int32                           `access:"readwrite"`
-	BatteryIdleDelay    int32                           `access:"readwrite"`
+	// 使用电池时的电源计划
+	BatteryPlan *property.GSettingsEnumProperty `access:"readwrite"`
+	// 使用电池时的挂起超时
+	BatterySuspendDelay int32 `access:"readwrite"`
+	// 使用电池时的空闲检测超时
+	BatteryIdleDelay int32 `access:"readwrite"`
 
+	// 剩余电量
 	BatteryPercentage float64
 
 	//Not in Charging, Charging, Full
 	BatteryState uint32
 
+	// 是否有电池设备
 	BatteryIsPresent bool
 
+	// 是否使用电池
 	OnBattery bool
 
+	// 电源计划列表
 	PlanInfo string
 }
 
 func (p *Power) Reset() {
-	p.PowerButtonAction.Set(ActionInteractive)
-	p.LidClosedAction.Set(ActionSuspend)
-	p.LockWhenActive.Set(true)
+	_, str := p.coreSettings.GetDefaultValue(
+		settingKeyPowerButton).GetString()
+	action := queryPowerAction(str)
+	if action != p.PowerButtonAction.Get() {
+		p.PowerButtonAction.Set(action)
+	}
 
-	p.LinePowerPlan.Set(PowerPlanHighPerformance)
-	p.BatteryPlan.Set(PowerPlanBalanced)
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyLidClose).GetString()
+	action = queryPowerAction(str)
+	if action != p.LidClosedAction.Get() {
+		p.LidClosedAction.Set(action)
+	}
+
+	enabled := p.coreSettings.GetDefaultValue(
+		settingKeyLockEnabled).GetBoolean()
+	if enabled != p.LockWhenActive.Get() {
+		p.LockWhenActive.Set(enabled)
+	}
+
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyLinePlan).GetString()
+	plan := queryPowerPlan(str)
+	if plan != p.LinePowerPlan.Get() {
+		p.LinePowerPlan.Set(plan)
+	}
+
+	_, str = p.coreSettings.GetDefaultValue(
+		settingKeyBatteryPlan).GetString()
+	plan = queryPowerPlan(str)
+	if plan != p.BatteryPlan.Get() {
+		p.BatteryPlan.Set(plan)
+	}
 }
 
 func NewPower() *Power {
 	p := &Power{}
 	p.coreSettings = gio.NewSettings("com.deepin.daemon.power")
-	p.PowerButtonAction = property.NewGSettingsEnumProperty(p, "PowerButtonAction", p.coreSettings, "button-power")
-	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, "lid-close")
-	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, "lock-enabled")
+	p.PowerButtonAction = property.NewGSettingsEnumProperty(p, "PowerButtonAction", p.coreSettings, settingKeyPowerButton)
+	p.LidClosedAction = property.NewGSettingsEnumProperty(p, "LidClosedAction", p.coreSettings, settingKeyLidClose)
+	p.LockWhenActive = property.NewGSettingsBoolProperty(p, "LockWhenActive", p.coreSettings, settingKeyLockEnabled)
 
 	var err error
 	if p.screensaver, err = ss.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err != nil {
@@ -65,17 +125,19 @@ func NewPower() *Power {
 	p.initUpower()
 	p.initEventHandle()
 
-	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, "ac-plan")
+	p.LinePowerPlan = property.NewGSettingsEnumProperty(p, "LinePowerPlan", p.coreSettings, settingKeyLinePlan)
 	p.LinePowerPlan.ConnectChanged(func() {
 		p.setLinePowerPlan(p.LinePowerPlan.Get())
 	})
 	p.setLinePowerPlan(p.LinePowerPlan.Get())
 
-	p.BatteryPlan = property.NewGSettingsEnumProperty(p, "BatteryPlan", p.coreSettings, "battery-plan")
+	p.BatteryPlan = property.NewGSettingsEnumProperty(p, "BatteryPlan", p.coreSettings, settingKeyBatteryPlan)
 	p.BatteryPlan.ConnectChanged(func() {
 		p.setBatteryPlan(p.BatteryPlan.Get())
 	})
 	p.setBatteryPlan(p.BatteryPlan.Get())
+
+	p.swQuit = make(chan struct{})
 
 	return p
 }
@@ -83,13 +145,12 @@ func NewPower() *Power {
 func sendNotify(icon, summary, body string) {
 	//TODO: close previous notification
 	if notifier != nil {
-		notifier.Notify("com.deepin.daemon.power", 0, icon, summary, body, nil, nil, 0)
+		notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
 	} else {
 		logger.Warning("failed to show notify message:", summary, body)
 	}
 }
+
 func playSound(name string) {
-	if player != nil {
-		player.PlaySystemSound(name)
-	}
+	soundutils.PlaySystemSound(name, "", false)
 }

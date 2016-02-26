@@ -1,18 +1,17 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package utils
 
-import (
-	C "launchpad.net/gocheck"
-	"os"
-)
+import C "launchpad.net/gocheck"
 
 type ConfigFileTestSuite struct {
 }
 
 var _ = C.Suite(&ConfigFileTestSuite{})
-
-func (self *ConfigFileTestSuite) TestConfigFilePath(c *C.C) {
-	old := os.Getenv("HOME")
-	os.Setenv("HOME", "../testdata/")
-	c.Assert(ConfigFilePath("launcher/test.ini"), C.Equals, "../testdata/.config/launcher/test.ini")
-	os.Setenv("HOME", old)
-}

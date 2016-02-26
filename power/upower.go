@@ -1,9 +1,19 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
-import "pkg.linuxdeepin.com/lib/gio-2.0"
+import "gir/gio-2.0"
 import "time"
-import . "pkg.linuxdeepin.com/lib/gettext"
-import "pkg.linuxdeepin.com/lib/dbus"
+import . "pkg.deepin.io/lib/gettext"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/dde/api/soundutils"
 
 const (
 	UPOWER_BUS_NAME = "org.freedesktop.UPower"
@@ -44,15 +54,16 @@ const (
 
 const abnormalBatteryPercentage = float64(1.0)
 
-func (p *Power) refreshUpower() {
+var hasSleepInLowPower bool
 
+func (p *Power) refreshUpower() {
 	if upower != nil && upower.OnBattery.Get() != p.OnBattery {
 		p.setPropOnBattery(upower.OnBattery.Get())
 
 		if p.OnBattery {
-			playSound("power-unplug")
+			playSound(soundutils.EventPowerUnplug)
 		} else {
-			playSound("power-plug")
+			playSound(soundutils.EventPowerPlug)
 		}
 		//OnBattery will effect current PowerPlan idle value
 		p.updateIdletimer()
@@ -64,12 +75,19 @@ func (p *Power) refreshUpower() {
 
 func (p *Power) handleBatteryPercentage() {
 	if !p.OnBattery {
+		// Close low power saver if power plug
 		if p.lowBatteryStatus == lowBatteryStatusAction {
-			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
-			if p.LockWhenActive.Get() {
+			p.lowBatteryStatus = lowBatteryStatusNormal
+			if hasSleepInLowPower && p.LockWhenActive.Get() {
+				hasSleepInLowPower = false
 				doLock()
 			}
+		}
+
+		// Reset lowBatteryStatus status if power plug
+		if p.lowBatteryStatus != lowBatteryStatusNormal {
+			p.lowBatteryStatus = lowBatteryStatusNormal
 		}
 		return
 	}
@@ -83,11 +101,15 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-action")):
 		if p.lowBatteryStatus != lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusAction
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
-			doSuspend()
 			go func() {
 				for p.lowBatteryStatus == lowBatteryStatusAction {
 					<-time.After(time.Second * 30)
+					if !p.OnBattery {
+						break
+					}
+					hasSleepInLowPower = false
 					//TODO: suspend when there hasn't user input event
 					if p.lowBatteryStatus == lowBatteryStatusAction {
 						doSuspend()
@@ -95,9 +117,11 @@ func (p *Power) handleBatteryPercentage() {
 				}
 			}()
 		}
+		doShowLowpower()
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-critical")):
 		if p.lowBatteryStatus != lowBatteryStatusCritcal {
 			p.lowBatteryStatus = lowBatteryStatusCritcal
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_low", Tr("Battery Critical Low"), Tr("Please plug in, or computer will be in suspend mode."))
 
 			playSound("power-caution")
@@ -111,6 +135,7 @@ func (p *Power) handleBatteryPercentage() {
 	case p.BatteryPercentage < float64(p.coreSettings.GetInt("percentage-low")):
 		if p.lowBatteryStatus != lowBatteryStatusLow {
 			p.lowBatteryStatus = lowBatteryStatusLow
+			playSound(soundutils.EventBatteryLow)
 			sendNotify("battery_caution", Tr("Battery Low"), Tr("Computer will be in suspend mode, please plug in now."))
 			playSound("power-low")
 		}
@@ -118,7 +143,8 @@ func (p *Power) handleBatteryPercentage() {
 		if p.lowBatteryStatus == lowBatteryStatusAction {
 			p.lowBatteryStatus = lowBatteryStatusNormal
 			doCloseLowpower()
-			if p.LockWhenActive.Get() {
+			if hasSleepInLowPower && p.LockWhenActive.Get() {
+				hasSleepInLowPower = false
 				doLock()
 			}
 		}
@@ -169,6 +195,12 @@ func (p *Power) updateBatteryInfo() {
 	if err != nil {
 		logger.Warning(err)
 		return
+	}
+
+	if present && (state == BatteryStateDischarging) {
+		p.setPropOnBattery(true)
+	} else {
+		p.setPropOnBattery(false)
 	}
 	p.setPropBatteryIsPresent(present)
 	p.setPropBatteryState(state)

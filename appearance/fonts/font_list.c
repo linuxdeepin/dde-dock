@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 #include <fontconfig/fontconfig.h>
@@ -27,124 +15,167 @@
 
 #include "font_list.h"
 
-void font_info_free(FontInfo *info);
+static int append_font_info(FcInfo** list, FcPattern* pat, int idx);
+static void free_font_info(FcInfo *info);
 
-FontInfo *
-get_font_info_list (int *num)
+int
+fc_cache_update ()
 {
-	FcInit();
-	*num = -1;
-	FcPattern *pat = FcPatternCreate();
-	if (!pat) {
-		fprintf(stderr, "Create FcPattern Failed\n");
-		return NULL;
-	}
+    static int first = 0;
+    if (first == 0) {
+        FcInit();
+        first = 1;
+        return 1;
+    }
 
-	FcObjectSet *os = FcObjectSetBuild(
-	                      FC_FAMILY,
-	                      FC_FAMILYLANG,
-	                      FC_STYLE,
-	                      FC_FILE,
-	                      FC_LANG,
-	                      FC_SPACING,
-	                      NULL);
-	if (!os) {
-		fprintf(stderr, "Build FcObjectSet Failed\n");
-		FcPatternDestroy(pat);
-		return NULL;
-	}
+    return !FcConfigUptoDate (NULL) && FcInitReinitialize ();
+}
 
-	FcFontSet *fs = FcFontList(0, pat, os);
-	FcObjectSetDestroy(os);
-	FcPatternDestroy(pat);
-	if (!fs) {
-		fprintf(stderr, "List Font Failed\n");
-		return NULL;
-	}
+FcInfo *
+list_font_info (int *num)
+{
+     *num = -1;
+     FcPattern *pat = FcPatternCreate();
+     if (!pat) {
+          fprintf(stderr, "Create FcPattern Failed\n");
+          return NULL;
+     }
 
-	int i;
-	int cnt = 0;
-	FontInfo *list = NULL;
-	for (i = 0; i < fs->nfont; i++) {
-		FontInfo *info = calloc(1, sizeof(FontInfo));
-		if (!info) {
-			fprintf(stderr, "Alloc memory failed");
-			continue;
-		}
+     FcObjectSet *os = FcObjectSetBuild(
+          FC_FAMILY,
+          FC_FAMILYLANG,
+          FC_FULLNAME,
+          FC_FULLNAMELANG,
+          FC_STYLE,
+          FC_FILE,
+          FC_LANG,
+          FC_SPACING,
+          NULL);
+     if (!os) {
+          fprintf(stderr, "Build FcObjectSet Failed\n");
+          FcPatternDestroy(pat);
+          return NULL;
+     }
 
-		info->family = (char*)FcPatternFormat(fs->fonts[i],
-		                                      (FcChar8*)"%{family}");
-		info->familylang = (char*)FcPatternFormat(fs->fonts[i],
-		                   (FcChar8*)"%{familylang}");
-		info->style = (char*)FcPatternFormat(fs->fonts[i],
-		                                     (FcChar8*)"%{style}");
-		info->filename = (char*)FcPatternFormat(fs->fonts[i],
-		                                        (FcChar8*)"%{file}");
-		info->lang = (char*)FcPatternFormat(fs->fonts[i],
-		                                    (FcChar8*)"%{lang}");
-		info->spacing = (char*)FcPatternFormat(fs->fonts[i],
-		                                       (FcChar8*)"%{spacing}");
-		if (!info->family || !info->familylang ||
-		        !info->style || !info->filename ||
-		        !info->lang || !info->spacing) {
-			font_info_free(info);
-			continue;
-		}
+     FcFontSet *fs = FcFontList(0, pat, os);
+     FcObjectSetDestroy(os);
+     FcPatternDestroy(pat);
+     if (!fs) {
+          fprintf(stderr, "List Font Failed\n");
+          return NULL;
+     }
 
-		FontInfo *tmp = malloc((cnt+1) * sizeof(FontInfo));
-		if (!tmp) {
-			fprintf(stderr, "Alloc memory failed\n");
-			font_info_free(info);
-			continue;
-		}
+     int i;
+     int cnt = 0;
+     FcInfo *list = NULL;
+     for (i = 0; i < fs->nfont; i++) {
+          if (append_font_info(&list, fs->fonts[i], cnt) == -1) {
+               continue;
+          }
+          cnt++;
+     }
+     FcFontSetDestroy(fs);
+     //FcFini(); // SIGABRT: FcCacheFini 'assert fcCacheChains[i] == NULL failed'
 
-		memcpy(tmp+cnt, info, sizeof(FontInfo));
-		free(info);
-		if (cnt != 0 ) {
-			memcpy(tmp, list, cnt * sizeof(FontInfo));
-			free(list);
-			list = NULL;
-		}
+     *num = cnt;
 
-		list = tmp;
-		tmp = NULL;
-
-		cnt++;
-	}
-	FcFontSetDestroy(fs);
-	FcFini(); // Error: FcCacheFini
-
-	*num = cnt;
-
-	return list;
+     return list;
 }
 
 void
-font_info_list_free(FontInfo *list, int num)
+free_font_info_list(FcInfo *list, int num)
 {
-	if (!list) {
-		return;
-	}
+     if (!list) {
+          return;
+     }
 
-	int i;
-	for (i = 0; i < num; i++) {
-		font_info_free(list+i);
-	}
+     int i;
+     for (i = 0; i < num; i++) {
+          free_font_info(list+i);
+     }
 
-	free(list);
+     free(list);
 }
 
-void
-font_info_free(FontInfo *info)
+char*
+font_match(char* family)
 {
-	if (info == NULL) {
-		return;
-	}
+     // configure the search pattern
+     FcPattern* pat = FcNameParse((FcChar8*)family);
+     if (!pat) {
+          return NULL;
+     }
 
-	free(info->family);
-	free(info->familylang);
-	free(info->style);
-	free(info->lang);
-	free(info->spacing);
-	free(info->filename);
+     FcConfigSubstitute(NULL, pat, FcMatchPattern);
+     FcDefaultSubstitute(pat);
+
+     FcResult result;
+     FcPattern* match = FcFontMatch(NULL, pat, &result);
+     FcPatternDestroy(pat);
+     if (!match) {
+          return NULL;
+     }
+
+     FcFontSet* fs = FcFontSetCreate();
+     if (!fs) {
+          FcPatternDestroy(match);
+          return NULL;
+     }
+
+     FcFontSetAdd(fs, match);
+     FcPattern* font = FcPatternFilter(fs->fonts[0], NULL);
+     FcChar8* ret = FcPatternFormat(font, (const FcChar8*)"%{=fcmatch}\n");
+
+     FcPatternDestroy(font);
+     FcFontSetDestroy(fs);
+     FcPatternDestroy(match);
+     //FcFini(); // SIGABRT: FcCacheFini 'assert fcCacheChains[i] == NULL failed'
+
+     if (!ret) {
+          return NULL;
+     }
+
+     return (char*)ret;
+}
+
+static int
+append_font_info(FcInfo** list, FcPattern* pat, int idx)
+{
+     // realloc equals to malloc if the first argument is NULL.
+     // realloc will auto free old memory chunk.
+     FcInfo* tmp = (FcInfo*)realloc(*list, (idx+1)*sizeof(FcInfo));
+     if (!tmp) {
+          fprintf(stderr, "Alloc memory at append %d font info failed\n", idx+1);
+          return -1;
+     }
+
+     *list = tmp;
+
+     tmp[idx].family = (char*)FcPatternFormat(pat, (FcChar8*)"%{family}");
+     tmp[idx].familylang = (char*)FcPatternFormat(pat, (FcChar8*)"%{familylang}");
+     tmp[idx].fullname = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullname}");
+     tmp[idx].fullnamelang = (char*)FcPatternFormat(pat, (FcChar8*)"%{fullnamelang}");
+     tmp[idx].style = (char*)FcPatternFormat(pat, (FcChar8*)"%{style}");
+     tmp[idx].filename = (char*)FcPatternFormat(pat, (FcChar8*)"%{file}");
+     tmp[idx].lang = (char*)FcPatternFormat(pat, (FcChar8*)"%{lang}");
+     tmp[idx].spacing = (char*)FcPatternFormat(pat, (FcChar8*)"%{spacing}");
+
+     return 0;
+}
+
+static void
+free_font_info(FcInfo *info)
+{
+     if (info == NULL) {
+          return;
+     }
+
+     free(info->family);
+     free(info->familylang);
+     free(info->fullname);
+     free(info->fullnamelang);
+     free(info->style);
+     free(info->lang);
+     free(info->spacing);
+     free(info->filename);
 }

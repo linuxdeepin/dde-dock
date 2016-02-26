@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package accounts
@@ -26,7 +14,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/lib/graphic"
+	"pkg.deepin.io/lib/graphic"
 	"strings"
 )
 
@@ -39,9 +27,13 @@ const (
 type ErrCodeType int32
 
 const (
+	// 未知错误
 	ErrCodeUnkown ErrCodeType = iota
+	// 权限认证失败
 	ErrCodeAuthFailed
+	// 执行命令失败
 	ErrCodeExecFailed
+	// 传入的参数不合法
 	ErrCodeParamInvalid
 )
 
@@ -63,6 +55,7 @@ func (code ErrCodeType) String() string {
 func clearUserDatas(name string) {
 	icons := getUserCustomIcons(name)
 	config := path.Join(userConfigDir, name)
+	os.Remove(config)
 
 	icons = append(icons, config)
 	for _, v := range icons {
@@ -78,7 +71,8 @@ func getUserStandardIcons() []string {
 
 	var icons []string
 	for _, img := range imgs {
-		if strings.Contains(img, "guest") {
+		if strings.Contains(img, "guest") ||
+			strings.Contains(img, defaultUserIcon) {
 			continue
 		}
 

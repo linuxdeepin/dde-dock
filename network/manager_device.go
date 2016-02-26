@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
@@ -25,7 +13,7 @@ import (
 	mm "dbus/org/freedesktop/modemmanager1"
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 
@@ -47,6 +35,7 @@ type device struct {
 	// modem device
 	UniqueUuid string
 
+	// TODO: rename to IsUsbDevice
 	UsbDevice bool            // not works for mobile device(modem)
 	ActiveAp  dbus.ObjectPath // used for wireless device
 
@@ -99,13 +88,14 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	switch dev.nmDevType {
 	case NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
+			defer nmDestroyDeviceWired(nmDevWired)
 			dev.HwAddress = nmDevWired.HwAddress.Get()
 		}
 		m.ensureWiredConnectionExists(dev.Path, true)
 	case NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
-			dev.HwAddress = nmDevWireless.HwAddress.Get()
 			dev.nmDevWireless = nmDevWireless
+			dev.HwAddress = nmDevWireless.HwAddress.Get()
 
 			// connect property, about wireless active access point
 			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
@@ -119,7 +109,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			})
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
 
-			// connect signal AccessPointAdded() and AccessPointRemoved()
+			// connect signals AccessPointAdded() and AccessPointRemoved()
 			dev.nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 				m.addAccessPoint(dev.Path, apPath)
 			})
@@ -174,7 +164,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 	}
 
-	// connect signal
+	// connect signals
 	dev.nmDev.ConnectStateChanged(func(newState, oldState, reason uint32) {
 		logger.Infof("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
 		if !m.isDeviceExists(devPath) {
@@ -188,6 +178,12 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		}
 		dev.State = newState
 		dev.Managed = nmGeneralIsDeviceManaged(dev.Path)
+
+		// need get device vendor again for that some usb device may
+		// not ready before
+		dev.Vendor = nmGeneralGetDeviceVendor(dev.Path)
+		dev.UsbDevice = nmGeneralIsUsbDevice(dev.Path)
+
 		m.setPropDevices()
 
 		m.config.updateDeviceConfig(dev.Path)

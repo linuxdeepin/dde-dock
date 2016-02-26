@@ -1,42 +1,58 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package category
 
 import (
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	"errors"
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/dstore"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 )
 
-type CategoryManager struct {
-	categoryTable map[CategoryId]CategoryInfoInterface
+func GetAllInfos(file string) []CategoryInfo {
+	dstoreCategoryInfos := dstore.GetAllInfos(file)
+	categoryInfos := make([]CategoryInfo, len(dstoreCategoryInfos))
+	for i, categoryInfo := range dstoreCategoryInfos {
+		cid, _ := getCategoryID(categoryInfo.ID)
+		categoryInfos[i] = NewInfo(cid, categoryInfo.Name)
+	}
+	return categoryInfos
 }
 
-func NewCategoryManager() *CategoryManager {
-	m := &CategoryManager{
-		categoryTable: map[CategoryId]CategoryInfoInterface{},
-	}
-	m.addCategory(
-		&CategoryInfo{AllID, AllCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{OtherID, OtherCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{NetworkID, NetworkCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{MultimediaID, MultimediaCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{GamesID, GamesCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{GraphicsID, GraphicsCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{ProductivityID, ProductivityCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{IndustryID, IndustryCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{EducationID, EducationCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{DevelopmentID, DevelopmentCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{SystemID, SystemCategoryName, map[ItemId]struct{}{}},
-		&CategoryInfo{UtilitiesID, UtilitiesCategoryName, map[ItemId]struct{}{}},
-	)
+// Manager for categories.
+type Manager struct {
+	store              DStore
+	categoryTable      map[CategoryID]CategoryInfo
+	queryIDTransaction QueryCategoryTransaction
+}
 
+// NewManager creates a new category manager.
+func NewManager(store DStore, categories []CategoryInfo) *Manager {
+	m := &Manager{
+		store:              store,
+		categoryTable:      map[CategoryID]CategoryInfo{},
+		queryIDTransaction: nil,
+	}
+	m.addCategory(categories...)
+	m.addCategory(NewInfo(AllID, dstore.AllName))
 	return m
 }
 
-func (m *CategoryManager) addCategory(c ...CategoryInfoInterface) {
+func (m *Manager) addCategory(c ...CategoryInfo) {
 	for _, info := range c {
-		m.categoryTable[info.Id()] = info
+		m.categoryTable[info.ID()] = info
 	}
 }
 
-func (m *CategoryManager) GetCategory(id CategoryId) CategoryInfoInterface {
+// GetCategory returns category info according to id.
+func (m *Manager) GetCategory(id CategoryID) CategoryInfo {
 	category, ok := m.categoryTable[id]
 	if ok {
 		return category
@@ -45,21 +61,59 @@ func (m *CategoryManager) GetCategory(id CategoryId) CategoryInfoInterface {
 	return nil
 }
 
-func (m *CategoryManager) GetAllCategory() []CategoryId {
-	ids := []CategoryId{}
-	for id, _ := range m.categoryTable {
+// GetAllCategory returns all categories.
+func (m *Manager) GetAllCategory() []CategoryID {
+	ids := []CategoryID{}
+	for id := range m.categoryTable {
 		ids = append(ids, id)
 	}
 
 	return ids
 }
 
-func (m *CategoryManager) AddItem(id ItemId, cid CategoryId) {
-	m.categoryTable[cid].AddItem(id)
+// AddItem adds a app to category.
+func (m *Manager) AddItem(id ItemID, cid CategoryID) {
+	if category, ok := m.categoryTable[cid]; ok {
+		category.AddItem(id)
+	}
 	m.categoryTable[AllID].AddItem(id)
 }
 
-func (m *CategoryManager) RemoveItem(id ItemId, cid CategoryId) {
-	m.categoryTable[cid].RemoveItem(id)
+// RemoveItem removes a app from category.
+func (m *Manager) RemoveItem(id ItemID, cid CategoryID) {
+	if category, ok := m.categoryTable[cid]; ok {
+		category.RemoveItem(id)
+	}
 	m.categoryTable[AllID].RemoveItem(id)
+}
+
+func (m *Manager) QueryID(app *gio.DesktopAppInfo) (CategoryID, error) {
+	if m.queryIDTransaction != nil {
+		c, e := m.queryIDTransaction.Query(app)
+		if e != nil {
+			return OthersID, e
+		}
+		cid, e := getCategoryID(c)
+		return cid, e
+	}
+
+	return OthersID, errors.New("No QueryIDTransaction is created or QueryIDTransaction failed")
+}
+
+func (m *Manager) LoadCategoryInfo() error {
+	m.FreeAppCategoryInfo()
+
+	var err error
+	m.queryIDTransaction, err = m.store.NewQueryCategoryTransaction()
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Manager) FreeAppCategoryInfo() {
+	if m.queryIDTransaction != nil {
+		m.queryIDTransaction = nil
+	}
 }

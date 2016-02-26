@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
@@ -24,19 +12,178 @@ package network
 import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 	"sort"
 	"strings"
 )
 
-// Helper function
+// Wrapper NetworkManger dbus methods to hide
+// "dbus/org/freedesktop/networkmanager" details for other source
+// files.
+
+// Custom device state reasons
+const (
+	CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED = iota + 1000
+	CUSTOM_NM_DEVICE_STATE_REASON_WIRELESS_DISABLED
+	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_NO_SIGNAL
+	CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN
+)
+
+// Map IP4/IP6 setting keys to compatible with network-manager 1.0+
+const (
+	NM_SETTING_IP4_CONFIG_METHOD             = NM_SETTING_IP_CONFIG_METHOD
+	NM_SETTING_IP4_CONFIG_DNS                = NM_SETTING_IP_CONFIG_DNS
+	NM_SETTING_IP4_CONFIG_DNS_SEARCH         = NM_SETTING_IP_CONFIG_DNS_SEARCH
+	NM_SETTING_IP4_CONFIG_ADDRESSES          = NM_SETTING_IP_CONFIG_ADDRESSES
+	NM_SETTING_IP4_CONFIG_GATEWAY            = NM_SETTING_IP_CONFIG_GATEWAY
+	NM_SETTING_IP4_CONFIG_ROUTES             = NM_SETTING_IP_CONFIG_ROUTES
+	NM_SETTING_IP4_CONFIG_ROUTE_METRIC       = NM_SETTING_IP_CONFIG_ROUTE_METRIC
+	NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES = NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES
+	NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS    = NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS
+	NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME      = NM_SETTING_IP_CONFIG_DHCP_HOSTNAME
+	NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME = NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
+	NM_SETTING_IP4_CONFIG_NEVER_DEFAULT      = NM_SETTING_IP_CONFIG_NEVER_DEFAULT
+	NM_SETTING_IP4_CONFIG_MAY_FAIL           = NM_SETTING_IP_CONFIG_MAY_FAIL
+)
+const (
+	NM_SETTING_IP6_CONFIG_METHOD             = NM_SETTING_IP_CONFIG_METHOD
+	NM_SETTING_IP6_CONFIG_DNS                = NM_SETTING_IP_CONFIG_DNS
+	NM_SETTING_IP6_CONFIG_DNS_SEARCH         = NM_SETTING_IP_CONFIG_DNS_SEARCH
+	NM_SETTING_IP6_CONFIG_ADDRESSES          = NM_SETTING_IP_CONFIG_ADDRESSES
+	NM_SETTING_IP6_CONFIG_GATEWAY            = NM_SETTING_IP_CONFIG_GATEWAY
+	NM_SETTING_IP6_CONFIG_ROUTES             = NM_SETTING_IP_CONFIG_ROUTES
+	NM_SETTING_IP6_CONFIG_ROUTE_METRIC       = NM_SETTING_IP_CONFIG_ROUTE_METRIC
+	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES = NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES
+	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS    = NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS
+	NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME      = NM_SETTING_IP_CONFIG_DHCP_HOSTNAME
+	NM_SETTING_IP6_CONFIG_DHCP_SEND_HOSTNAME = NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
+	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = NM_SETTING_IP_CONFIG_NEVER_DEFAULT
+	NM_SETTING_IP6_CONFIG_MAY_FAIL           = NM_SETTING_IP_CONFIG_MAY_FAIL
+)
+
+// Helper functions
 func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	str := string(p)
 	if len(str) == 0 || str == "/" {
 		return false
 	}
 	return true
+}
+
+func isDeviceTypeValid(devType uint32) bool {
+	switch devType {
+	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN, NM_DEVICE_TYPE_BT:
+		return false
+	}
+	return true
+}
+
+// check current device state
+func isDeviceStateManaged(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNMANAGED {
+		return true
+	}
+	return false
+}
+func isDeviceStateAvailable(state uint32) bool {
+	if state > NM_DEVICE_STATE_UNAVAILABLE {
+		return true
+	}
+	return false
+}
+func isDeviceStateActivated(state uint32) bool {
+	if state == NM_DEVICE_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isDeviceStateInActivating(state uint32) bool {
+	if state >= NM_DEVICE_STATE_PREPARE && state <= NM_DEVICE_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+
+func isDeviceStateReasonInvalid(reason uint32) bool {
+	switch reason {
+	case NM_DEVICE_STATE_REASON_UNKNOWN, NM_DEVICE_STATE_REASON_NONE:
+		return true
+	}
+	return false
+}
+
+// check if connection activating or activated
+func isConnectionStateInActivating(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATING ||
+		state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateActivated(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateInDeactivating(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATING ||
+		state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
+		return true
+	}
+	return false
+}
+func isConnectionStateDeactivate(state uint32) bool {
+	if state == NM_ACTIVE_CONNECTION_STATE_DEACTIVATED {
+		return true
+	}
+	return false
+}
+
+// check if vpn connection activating or activated
+func isVpnConnectionStateInActivating(state uint32) bool {
+	if state >= NM_VPN_CONNECTION_STATE_PREPARE &&
+		state <= NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateActivated(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_ACTIVATED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateDeactivate(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_DISCONNECTED {
+		return true
+	}
+	return false
+}
+func isVpnConnectionStateFailed(state uint32) bool {
+	if state == NM_VPN_CONNECTION_STATE_FAILED {
+		return true
+	}
+	return false
+}
+
+var availableValuesSettingSecretFlags []kvalue
+
+func initAvailableValuesSecretFlags() {
+	availableValuesSettingSecretFlags = []kvalue{
+		kvalue{NM_SETTING_SECRET_FLAG_NONE, Tr("Saved")}, // system saved
+		// kvalue{NM_SETTING_SECRET_FLAG_AGENT_OWNED, Tr("Saved")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_SAVED, Tr("Always Ask")},
+		kvalue{NM_SETTING_SECRET_FLAG_NOT_REQUIRED, Tr("Not Required")},
+	}
+}
+
+func isSettingRequireSecret(flag uint32) bool {
+	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
+		return true
+	}
+	return false
 }
 
 // General function wrappers for network manager
@@ -48,6 +195,7 @@ func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 			if err == nil {
 				allHwAddr[dev.Interface.Get()] = hwAddr
 			}
+			nm.DestroyDevice(dev)
 		}
 	}
 	return
@@ -58,63 +206,54 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
 
 	devType := dev.DeviceType.Get()
 	switch devType {
 	case NM_DEVICE_TYPE_ETHERNET:
-		var devWired *nm.DeviceWired
-		devWired, err = nmNewDeviceWired(devPath)
-		if err == nil {
-			hwAddr = devWired.PermHwAddress.Get()
-		}
+		devWired, _ := nmNewDeviceWired(devPath)
+		hwAddr = devWired.PermHwAddress.Get()
+		nm.DestroyDeviceWired(devWired)
 	case NM_DEVICE_TYPE_WIFI:
-		var devWireless *nm.DeviceWireless
-		devWireless, err = nmNewDeviceWireless(devPath)
-		if err == nil {
-			hwAddr = devWireless.PermHwAddress.Get()
-		}
+		devWireless, _ := nmNewDeviceWireless(devPath)
+		hwAddr = devWireless.PermHwAddress.Get()
+		nm.DestroyDeviceWireless(devWireless)
 	case NM_DEVICE_TYPE_BT:
-		var devBluetooth *nm.DeviceBluetooth
-		devBluetooth, err = nmNewDeviceBluetooth(devPath)
-		if err == nil {
-			hwAddr = devBluetooth.HwAddress.Get()
-		}
+		devBluetooth, _ := nmNewDeviceBluetooth(devPath)
+		hwAddr = devBluetooth.HwAddress.Get()
+		nm.DestroyDeviceBluetooth(devBluetooth)
 	case NM_DEVICE_TYPE_OLPC_MESH:
-		var devOlpcMesh *nm.DeviceOlpcMesh
-		devOlpcMesh, err = nmNewDeviceOlpcMesh(devPath)
-		if err == nil {
-			hwAddr = devOlpcMesh.HwAddress.Get()
-		}
+		devOlpcMesh, _ := nmNewDeviceOlpcMesh(devPath)
+		hwAddr = devOlpcMesh.HwAddress.Get()
+		nm.DestroyDeviceOlpcMesh(devOlpcMesh)
 	case NM_DEVICE_TYPE_WIMAX:
-		var devWiMax *nm.DeviceWiMax
-		devWiMax, err = nmNewDeviceWiMax(devPath)
-		if err == nil {
-			hwAddr = devWiMax.HwAddress.Get()
-		}
+		devWiMax, _ := nmNewDeviceWiMax(devPath)
+		hwAddr = devWiMax.HwAddress.Get()
+		nm.DestroyDeviceWiMax(devWiMax)
 	case NM_DEVICE_TYPE_INFINIBAND:
-		var devInfiniband *nm.DeviceInfiniband
-		devInfiniband, err = nmNewDeviceInfiniband(devPath)
-		if err == nil {
-			hwAddr = devInfiniband.HwAddress.Get()
-		}
+		devInfiniband, _ := nmNewDeviceInfiniband(devPath)
+		hwAddr = devInfiniband.HwAddress.Get()
+		nm.DestroyDeviceInfiniband(devInfiniband)
 	case NM_DEVICE_TYPE_BOND:
-		var devBond *nm.DeviceBond
-		devBond, err = nmNewDeviceBond(devPath)
-		if err == nil {
-			hwAddr = devBond.HwAddress.Get()
-		}
+		devBond, _ := nmNewDeviceBond(devPath)
+		hwAddr = devBond.HwAddress.Get()
+		nm.DestroyDeviceBond(devBond)
 	case NM_DEVICE_TYPE_BRIDGE:
-		var devBridge *nm.DeviceBridge
-		devBridge, err = nmNewDeviceBridge(devPath)
-		if err == nil {
-			hwAddr = devBridge.HwAddress.Get()
-		}
+		devBridge, _ := nmNewDeviceBridge(devPath)
+		hwAddr = devBridge.HwAddress.Get()
+		nm.DestroyDeviceBridge(devBridge)
 	case NM_DEVICE_TYPE_VLAN:
-		var devVlan *nm.DeviceVlan
-		devVlan, err = nmNewDeviceVlan(devPath)
-		if err == nil {
-			hwAddr = devVlan.HwAddress.Get()
-		}
+		devVlan, _ := nmNewDeviceVlan(devPath)
+		hwAddr = devVlan.HwAddress.Get()
+		nm.DestroyDeviceVlan(devVlan)
+	case NM_DEVICE_TYPE_GENERIC:
+		devGeneric, _ := nmNewDeviceGeneric(devPath)
+		hwAddr = devGeneric.HwAddress.Get()
+		nm.DestroyDeviceGeneric(devGeneric)
+	case NM_DEVICE_TYPE_TEAM:
+		devTeam, _ := nmNewDeviceTeam(devPath)
+		hwAddr = devTeam.HwAddress.Get()
+		nm.DestroyDeviceTeam(devTeam)
 	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
 		// there is no hardware address for such devices
 		err = fmt.Errorf("there is no hardware address for device modem and adsl")
@@ -139,6 +278,8 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	devType := dev.DeviceType.Get()
 	switch devType {
 	case NM_DEVICE_TYPE_MODEM:
@@ -167,22 +308,24 @@ func nmGeneralGetDeviceUniqueUuid(devPath dbus.ObjectPath) (uuid string) {
 func nmGeneralGetDeviceSpeed(devPath dbus.ObjectPath) (speedStr string) {
 	speed := uint32(0)
 	speedStr = Tr("Unknown")
-	nmDev, err := nmNewDevice(devPath)
+	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
-	switch t := nmDev.DeviceType.Get(); t {
+	defer nm.DestroyDevice(dev)
+
+	switch t := dev.DeviceType.Get(); t {
 	case NM_DEVICE_TYPE_ETHERNET:
 		devWired, _ := nmNewDeviceWired(devPath)
 		speed = devWired.Speed.Get()
+		nm.DestroyDeviceWired(devWired)
 	case NM_DEVICE_TYPE_WIFI:
 		devWireless, _ := nmNewDeviceWireless(devPath)
 		speed = devWireless.Bitrate.Get() / 1024
+		nm.DestroyDeviceWireless(devWireless)
 	case NM_DEVICE_TYPE_MODEM:
 		// TODO: getting device speed for modem device
-	default:
-		err = fmt.Errorf("not support to get device speedStr for device type %d", t)
-		logger.Error(err)
+	default: // ignore speed for other device types
 	}
 	if speed != 0 {
 		speedStr = fmt.Sprintf("%d Mb/s", speed)
@@ -195,6 +338,8 @@ func nmGeneralIsDeviceManaged(devPath dbus.ObjectPath) bool {
 	if err != nil {
 		return false
 	}
+	defer nm.DestroyDevice(dev)
+
 	if !isDeviceStateManaged(dev.State.Get()) {
 		return false
 	}
@@ -208,11 +353,13 @@ func nmGeneralIsDeviceManaged(devPath dbus.ObjectPath) bool {
 	return true
 }
 
-func nmGeneralGetDeviveSysPath(devPath dbus.ObjectPath) (sysPath string, err error) {
+func nmGeneralGetDeviceSysPath(devPath dbus.ObjectPath) (sysPath string, err error) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	switch dev.DeviceType.Get() {
 	case NM_DEVICE_TYPE_MODEM:
 		sysPath, _ = mmGetModemDeviceSysPath(dbus.ObjectPath(dev.Udi.Get()))
@@ -223,7 +370,7 @@ func nmGeneralGetDeviveSysPath(devPath dbus.ObjectPath) (sysPath string, err err
 }
 
 func nmGeneralGetDeviceVendor(devPath dbus.ObjectPath) (vendor string) {
-	sysPath, err := nmGeneralGetDeviveSysPath(devPath)
+	sysPath, err := nmGeneralGetDeviceSysPath(devPath)
 	if err != nil {
 		return
 	}
@@ -232,7 +379,7 @@ func nmGeneralGetDeviceVendor(devPath dbus.ObjectPath) (vendor string) {
 }
 
 func nmGeneralIsUsbDevice(devPath dbus.ObjectPath) bool {
-	sysPath, err := nmGeneralGetDeviveSysPath(devPath)
+	sysPath, err := nmGeneralGetDeviceSysPath(devPath)
 	if err != nil {
 		return false
 	}
@@ -353,6 +500,20 @@ func nmNewDeviceAdsl(devPath dbus.ObjectPath) (dev *nm.DeviceAdsl, err error) {
 	}
 	return
 }
+func nmNewDeviceGeneric(devPath dbus.ObjectPath) (dev *nm.DeviceGeneric, err error) {
+	dev, err = nm.NewDeviceGeneric(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+func nmNewDeviceTeam(devPath dbus.ObjectPath) (dev *nm.DeviceTeam, err error) {
+	dev, err = nm.NewDeviceTeam(dbusNmDest, devPath)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
 func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	ap, err = nm.NewAccessPoint(dbusNmDest, apPath)
 	if err != nil {
@@ -361,8 +522,8 @@ func nmNewAccessPoint(apPath dbus.ObjectPath) (ap *nm.AccessPoint, err error) {
 	}
 	return
 }
-func nmNewActiveConnection(apath dbus.ObjectPath) (ac *nm.ActiveConnection, err error) {
-	ac, err = nm.NewActiveConnection(dbusNmDest, apath)
+func nmNewActiveConnection(apath dbus.ObjectPath) (aconn *nm.ActiveConnection, err error) {
+	aconn, err = nm.NewActiveConnection(dbusNmDest, apath)
 	if err != nil {
 		logger.Error(err)
 		return
@@ -418,13 +579,16 @@ func nmNewSettingsConnection(cpath dbus.ObjectPath) (conn *nm.SettingsConnection
 	return
 }
 func nmNewVpnConnection(apath dbus.ObjectPath) (vpnConn *nm.VPNConnection, err error) {
-	vpnConn, err = nm.NewVPNConnection(dbusNmDest, apath)
+	vpnConn, err =
+		nm.NewVPNConnection(dbusNmDest, apath)
 	if err != nil {
 		logger.Error(err)
 		return
 	}
 	return
 }
+
+// TODO: gen code
 
 // Destroy network manager objects
 func nmDestroyManager(m *nm.Manager) {
@@ -443,7 +607,7 @@ func nmDestroyDevice(dev *nm.Device) {
 }
 func nmDestroyDeviceWired(dev *nm.DeviceWired) {
 	if dev == nil {
-		logger.Error("DeviceWired to destroy is null")
+		logger.Error("DeviceWired to destroy is nil")
 		return
 	}
 	nm.DestroyDeviceWired(dev)
@@ -531,16 +695,20 @@ func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	devInterface = dev.Interface.Get()
 	return
 }
 
 func nmGetDeviceModemCapabilities(devPath dbus.ObjectPath) (capabilities uint32) {
-	dev, err := nmNewDeviceModem(devPath)
+	devModem, err := nmNewDeviceModem(devPath)
 	if err != nil {
 		return
 	}
-	capabilities = dev.CurrentCapabilities.Get()
+	defer nm.DestroyDeviceModem(devModem)
+
+	capabilities = devModem.CurrentCapabilities.Get()
 	return
 }
 
@@ -606,6 +774,7 @@ func nmGetVpnActiveConnections() (apaths []dbus.ObjectPath) {
 			if aconn.Vpn.Get() {
 				apaths = append(apaths, p)
 			}
+			nm.DestroyActiveConnection(aconn)
 		}
 	}
 	return
@@ -616,16 +785,20 @@ func nmGetVpnConnectionState(apath dbus.ObjectPath) (state uint32) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyVPNConnection(vpnConn)
+
 	state = vpnConn.VpnState.Get()
 	return
 }
 
 func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
-	dev, err := nmNewDeviceWireless(devPath)
+	devWireless, err := nmNewDeviceWireless(devPath)
 	if err != nil {
 		return
 	}
-	apPaths, err = dev.GetAccessPoints()
+	defer nm.DestroyDeviceWireless(devWireless)
+
+	apPaths, err = devWireless.GetAccessPoints()
 	if err != nil {
 		logger.Error(err)
 	}
@@ -636,6 +809,7 @@ func nmGetAccessPointSsids(devPath dbus.ObjectPath) (ssids []string) {
 	for _, apPath := range nmGetAccessPoints(devPath) {
 		if ap, err := nmNewAccessPoint(apPath); err == nil {
 			ssids = append(ssids, string(ap.Ssid.Get()))
+			nm.DestroyAccessPoint(ap)
 		}
 	}
 	return
@@ -648,8 +822,9 @@ func nmGetManagerState() (state uint32) {
 
 func nmGetActiveConnectionByUuid(uuid string) (apaths []dbus.ObjectPath, err error) {
 	for _, apath := range nmGetActiveConnections() {
-		if ac, tmperr := nmNewActiveConnection(apath); tmperr == nil {
-			if ac.Uuid.Get() == uuid {
+		if aconn, tmperr := nmNewActiveConnection(apath); tmperr == nil {
+			defer nm.DestroyActiveConnection(aconn)
+			if aconn.Uuid.Get() == uuid {
 				apaths = append(apaths, apath)
 				return
 			}
@@ -664,6 +839,8 @@ func nmGetActiveConnectionState(apath dbus.ObjectPath) (state uint32) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyActiveConnection(aconn)
+
 	state = aconn.State.Get()
 	return
 }
@@ -673,16 +850,19 @@ func nmGetActiveConnectionVpn(apath dbus.ObjectPath) (isVpn bool) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyActiveConnection(aconn)
+
 	isVpn = aconn.Vpn.Get()
 	return
 }
 
 func nmGetConnectionData(cpath dbus.ObjectPath) (data connectionData, err error) {
-	nmConn, err := nm.NewSettingsConnection(dbusNmDest, cpath)
+	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
-		logger.Error(err)
 		return
 	}
+	defer nm.DestroySettingsConnection(nmConn)
+
 	data, err = nmConn.GetSettings()
 	if err != nil {
 		logger.Error(err)
@@ -696,6 +876,8 @@ func nmUpdateConnectionData(cpath dbus.ObjectPath, data connectionData) (err err
 	if err != nil {
 		return
 	}
+	defer nm.DestroySettingsConnection(nmConn)
+
 	err = nmConn.Update(data)
 	if err != nil {
 		logger.Error(err)
@@ -704,11 +886,12 @@ func nmUpdateConnectionData(cpath dbus.ObjectPath, data connectionData) (err err
 }
 
 func nmGetConnectionSecrets(cpath dbus.ObjectPath, secretField string) (secrets connectionData, err error) {
-	nmConn, err := nm.NewSettingsConnection(dbusNmDest, cpath)
+	nmConn, err := nmNewSettingsConnection(cpath)
 	if err != nil {
-		logger.Error(err)
 		return
 	}
+	defer nm.DestroySettingsConnection(nmConn)
+
 	secrets, err = nmConn.GetSecrets(secretField)
 	if err != nil {
 		logger.Error(err)
@@ -811,6 +994,20 @@ func nmGetConnectionIds() (ids []string) {
 	return
 }
 
+func nmGetOtherConnectionIds(origUuid string) (ids []string) {
+	for _, cpath := range nmGetConnectionList() {
+		if uuid, _ := nmGetConnectionUuid(cpath); uuid != origUuid {
+			ids = append(ids, nmGetConnectionId(cpath))
+		}
+	}
+	return
+}
+
+// TODO: dispatch connection permission
+func nmGetAddressableConnectionIds() (ids []string) {
+	return
+}
+
 func nmGetConnectionById(id string) (cpath dbus.ObjectPath, err error) {
 	for _, cpath = range nmGetConnectionList() {
 		data, tmperr := nmGetConnectionData(cpath)
@@ -900,10 +1097,13 @@ func nmGetDhcp4Info(path dbus.ObjectPath) (ip, mask string, routers, nameServers
 	mask = "0.0.0.0"
 	routers = make([]string, 0)
 	nameServers = make([]string, 0)
+
 	dhcp4, err := nmNewDHCP4Config(path)
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDHCP4Config(dhcp4)
+
 	options := dhcp4.Options.Get()
 	if ipData, ok := options["ip_address"]; ok {
 		ip, _ = ipData.Value().(string)
@@ -931,10 +1131,13 @@ func nmGetDhcp6Info(path dbus.ObjectPath) (ip string, routers, nameServers []str
 	ip = "0::0"
 	routers = make([]string, 0)
 	nameServers = make([]string, 0)
+
 	dhcp6, err := nmNewDHCP6Config(path)
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDHCP6Config(dhcp6)
+
 	options := dhcp6.Options.Get()
 	if ipData, ok := options["ip6_address"]; ok {
 		ip, _ = ipData.Value().(string)
@@ -961,6 +1164,7 @@ func nmGetIp4ConfigInfo(path dbus.ObjectPath) (address, mask string, gateways, n
 	if err != nil {
 		return
 	}
+	defer nm.DestroyIP4Config(ip4config)
 
 	ipv4Addresses := wrapIpv4Addresses(ip4config.Addresses.Get())
 	if len(ipv4Addresses) > 0 {
@@ -982,6 +1186,7 @@ func nmGetIp6ConfigInfo(path dbus.ObjectPath) (address, prefix string, gateways,
 	if err != nil {
 		return
 	}
+	defer nm.DestroyIP6Config(ip6config)
 
 	ipv6Addresses := wrapIpv6Addresses(interfaceToIpv6Addresses(ip6config.Addresses.Get()))
 	if len(ipv6Addresses) > 0 {
@@ -1001,6 +1206,8 @@ func nmGetDeviceState(devPath dbus.ObjectPath) (state uint32) {
 	if err != nil {
 		return NM_DEVICE_STATE_UNKNOWN
 	}
+	defer nm.DestroyDevice(dev)
+
 	state = dev.State.Get()
 	return
 }
@@ -1010,6 +1217,8 @@ func nmGetDeviceAutoconnect(devPath dbus.ObjectPath) (autoconnect bool) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	autoconnect = dev.Autoconnect.Get()
 	return
 }
@@ -1018,6 +1227,8 @@ func nmSetDeviceAutoconnect(devPath dbus.ObjectPath, autoconnect bool) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	dev.Autoconnect.Set(autoconnect)
 	return
 }
@@ -1027,6 +1238,8 @@ func nmGetDeviceType(devPath dbus.ObjectPath) (devType uint32) {
 	if err != nil {
 		return NM_DEVICE_TYPE_UNKNOWN
 	}
+	defer nm.DestroyDevice(dev)
+
 	devType = dev.DeviceType.Get()
 	return
 }
@@ -1036,6 +1249,8 @@ func nmGetDeviceUdi(devPath dbus.ObjectPath) (udi string) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	udi = dev.Udi.Get()
 	return
 }
@@ -1045,6 +1260,8 @@ func nmGetDeviceActiveConnection(devPath dbus.ObjectPath) (acPath dbus.ObjectPat
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	acPath = dev.ActiveConnection.Get()
 	return
 }
@@ -1054,6 +1271,8 @@ func nmGetDeviceAvailableConnections(devPath dbus.ObjectPath) (paths []dbus.Obje
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	paths = dev.AvailableConnections.Get()
 	return
 }
@@ -1064,6 +1283,8 @@ func nmGetDeviceActiveConnectionUuid(devPath dbus.ObjectPath) (uuid string, err 
 	if err != nil {
 		return
 	}
+	defer nm.DestroyActiveConnection(aconn)
+
 	uuid = aconn.Uuid.Get()
 	return
 }
@@ -1078,10 +1299,14 @@ func nmGetDeviceActiveConnectionData(devPath dbus.ObjectPath) (data connectionDa
 	if err != nil {
 		return
 	}
+	defer nm.DestroyActiveConnection(aconn)
+
 	conn, err := nmNewSettingsConnection(aconn.Connection.Get())
 	if err != nil {
 		return
 	}
+	defer nm.DestroySettingsConnection(conn)
+
 	data, err = conn.GetSettings()
 	if err != nil {
 		logger.Error(err)
@@ -1190,7 +1415,7 @@ func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionU
 				id := getSettingConnectionId(cdata)
 				timestamp := getSettingConnectionTimestamp(cdata)
 				if timestamp > 0 {
-					// only collect connections that connected
+					// only collect connections that connected before
 					ac := autoConnectConn{
 						id:        id,
 						uuid:      uuid,
@@ -1206,7 +1431,7 @@ func nmGetConnectionUuidsForAutoConnect(devPath dbus.ObjectPath, lastConnectionU
 		getCustomDeviceType(nmGetDeviceType(devPath)), acs)
 	if len(lastConnectionUuid) > 0 {
 		// the last activated connection has the highest priority if
-		// exists and autoconnect enabled
+		// exists and the auto-connect property enabled
 		if cpath, err := nmGetConnectionByUuid(lastConnectionUuid); err == nil {
 			if nmGetConnectionAutoconnect(cpath) {
 				uuids = []string{lastConnectionUuid}
@@ -1224,6 +1449,8 @@ func nmRunOnceUntilDeviceAvailable(devPath dbus.ObjectPath, cb func()) {
 	if err != nil {
 		return
 	}
+	defer nm.DestroyDevice(dev)
+
 	state := dev.State.Get()
 	if isDeviceStateAvailable(state) {
 		cb()

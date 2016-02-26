@@ -1,13 +1,22 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
 	"errors"
-	"fmt"
 	"path/filepath"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
 	"strings"
+
+	. "pkg.deepin.io/lib/gettext"
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/utils"
 )
 
 type NormalApp struct {
@@ -26,21 +35,22 @@ type NormalApp struct {
 
 func NewNormalApp(desktopID string) *NormalApp {
 	app := &NormalApp{Id: normalizeAppID(trimDesktop(desktopID)), DesktopID: desktopID}
-	logger.Info("NewNormalApp:", desktopID)
 	var core *DesktopAppInfo
 	if strings.ContainsRune(desktopID, filepath.Separator) {
 		core = NewDesktopAppInfoFromFilename(desktopID)
+		app.Id = filepath.Base(app.Id)
 	} else {
 		core = NewDesktopAppInfo(desktopID)
 		if core == nil {
 			newId := guess_desktop_id(app.Id)
-			logger.Info(fmt.Sprintf("guess desktop: %q", newId))
+			logger.Debugf("guess desktop: %q", newId)
 			if newId != "" {
 				core = NewDesktopAppInfo(newId)
 				app.DesktopID = newId
 			}
 		}
 	}
+	logger.Info("NewNormalApp:", app.Id, "for desktop", desktopID)
 	if core == nil {
 		return nil
 	}
@@ -73,14 +83,14 @@ func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
 
 func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu = NewMenu()
-	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func() {
+	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func(timestamp uint32) {
 		core := app.createDesktopAppInfo()
 		if core == nil {
-			logger.Warning("Run app failed")
+			logger.Warning("CreateDesktopAppInfo failed")
 			return
 		}
 		defer core.Unref()
-		_, err := core.Launch(make([]*gio.File, 0), nil)
+		_, err := core.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 		if err != nil {
 			logger.Warning("Launch App Failed: ", err)
 		}
@@ -90,7 +100,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 		name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 		app.coreMenu.AppendItem(NewMenuItem(
 			core.GetActionName(actionName),
-			func() {
+			func(timestamp uint32) {
 				core := app.createDesktopAppInfo()
 				if core == nil {
 					logger.Warning("start action", name,
@@ -98,7 +108,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 					return
 				}
 				defer core.Unref()
-				core.LaunchAction(name, nil)
+				core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			},
 			true,
 		))
@@ -106,7 +116,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.coreMenu.AddSeparator()
 	dockItem := NewMenuItem(
 		Tr("_Undock"),
-		func() {
+		func(timestamp uint32) {
 			DOCKED_APP_MANAGER.Undock(app.Id)
 		},
 		true,
@@ -116,9 +126,9 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	app.Menu = app.coreMenu.GenerateJSON()
 }
 
-func (app *NormalApp) HandleMenuItem(id string) {
+func (app *NormalApp) HandleMenuItem(id string, timestamp uint32) {
 	if app.coreMenu != nil {
-		app.coreMenu.HandleAction(id)
+		app.coreMenu.HandleAction(id, timestamp)
 	}
 }
 
@@ -136,7 +146,7 @@ func NewNormalAppFromFilename(name string) *NormalApp {
 	return app
 }
 
-func (app *NormalApp) Activate(x, y int32) error {
+func (app *NormalApp) Activate(x, y int32, timestamp uint32) error {
 	// FIXME:
 	// the launch will be successful even if the desktop file is not
 	// existed.
@@ -149,7 +159,7 @@ func (app *NormalApp) Activate(x, y int32) error {
 		return errors.New("create desktop app info failed")
 	}
 	defer core.Unref()
-	_, err := core.Launch(nil, nil)
+	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)
 	}

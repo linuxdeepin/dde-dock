@@ -1,12 +1,22 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package launcher
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/setting"
+	"pkg.deepin.io/dde/daemon/launcher/mock"
+	. "pkg.deepin.io/dde/daemon/launcher/setting"
 )
 
 type SettingTestSuite struct {
-	s                               *Setting
+	s                               *Settings
 	CategoryDisplayModeChangedCount int64
 	SortMethodChangedCount          int64
 }
@@ -16,8 +26,8 @@ type SettingTestSuite struct {
 
 func (sts *SettingTestSuite) SetUpTest(c *C.C) {
 	var err error
-	core := NewMockSettingCore()
-	sts.s, err = NewSetting(core)
+	core := mock.NewSettingCore()
+	sts.s, err = NewSettings(core)
 
 	sts.CategoryDisplayModeChangedCount = 0
 	sts.s.CategoryDisplayModeChanged = func(int64) {

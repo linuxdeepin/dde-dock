@@ -1,37 +1,21 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package utils
 
-import (
-	"os"
-	"path"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
-)
+// #cgo pkg-config: glib-2.0
+// #include <glib.h>
+import "C"
 
-func ConfigFilePath(name string) string {
-	return path.Join(glib.GetUserConfigDir(), name)
-}
-
-func ConfigFile(name string, defaultFile string) (*glib.KeyFile, error) {
-	file := glib.NewKeyFile()
-	conf := ConfigFilePath(name)
-	if !utils.IsFileExist(conf) {
-		os.MkdirAll(path.Dir(conf), DirDefaultPerm)
-		if defaultFile == "" {
-			f, err := os.Create(conf)
-			if err != nil {
-				return nil, err
-			}
-			defer f.Close()
-		} else {
-			CopyFile(defaultFile, conf, CopyFileNotKeepSymlink)
-		}
-	}
-
-	if ok, err := file.LoadFromFile(conf, glib.KeyFileFlagsNone); !ok {
-		file.Free()
-		return nil, err
-	}
-	return file, nil
+// GReloadUserSpecialDirsCache reloads user special dirs cache.
+func GReloadUserSpecialDirsCache() {
+	C.g_reload_user_special_dirs_cache()
 }
 
 func uniqueStringList(l []string) []string {
@@ -39,8 +23,8 @@ func uniqueStringList(l []string) []string {
 	for _, v := range l {
 		m[v] = true
 	}
-	n := make([]string, 0)
-	for k, _ := range m {
+	var n []string
+	for k := range m {
 		n = append(n, k)
 	}
 	return n

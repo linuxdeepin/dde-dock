@@ -1,33 +1,22 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 type activeConnection struct {
 	path dbus.ObjectPath
+	typ  string
 
 	Devices []dbus.ObjectPath
 	Id      string
@@ -94,7 +83,7 @@ func (m *Manager) initActiveConnectionManage() {
 		}
 	})
 
-	// handle notifications for vpn connection
+	// handle notification for vpn connections
 	m.dbusWatcher.connect(func(s *dbus.Signal) {
 		if s.Name == interfaceVpn+"."+memberVpnState && len(s.Body) >= 2 {
 			state, _ := s.Body[0].(uint32)
@@ -129,7 +118,12 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 
 	// notification for vpn
 	if isVpnConnectionStateActivated(state) {
-		notifyVpnConnected(aconn.Id)
+		// FIXME: looks like a NetworkManger issue, when user
+		// disconnect a connectiong vpn, the vpn state will changed to
+		// NM_VPN_CONNECTION_STATE_ACTIVATED first
+		if reason != NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED {
+			notifyVpnConnected(aconn.Id)
+		}
 	} else if isVpnConnectionStateDeactivate(state) {
 		notifyVpnDisconnected(aconn.Id)
 	} else if isVpnConnectionStateFailed(state) {
@@ -148,15 +142,19 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[stri
 
 	aconn, ok := m.activeConnections[apath]
 	if !ok {
-		aconn = m.newActiveConnection(apath)
+		aconn = &activeConnection{path: apath}
 	}
 
 	// query each properties that changed
+	stateChanged := false
 	for k, vv := range props {
 		if k == "State" {
+			stateChanged = true
 			aconn.State, _ = vv.Value().(uint32)
 		} else if k == "Devices" {
-			aconn.Devices, _ = vv.Value().([]dbus.ObjectPath)
+			devices, _ := vv.Value().([]dbus.ObjectPath)
+			// newValue := make([]dbus.ObjectPath, 0)
+			aconn.Devices = append(devices)
 		} else if k == "Uuid" {
 			aconn.Uuid, _ = vv.Value().(string)
 			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
@@ -172,16 +170,25 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[stri
 		}
 	}
 
-	// use "State" to determine if the active connection is
+	// use "State" to determine whether the active connection is
 	// adding or removing, if "State" property is not changed
 	// is current sequence, it also means that the active
 	// connection already exits
-	if isConnectionStateInDeactivating(aconn.State) {
-		logger.Infof("remove active connection %#v", aconn)
-		delete(m.activeConnections, apath)
-	} else {
-		logger.Infof("add active connection %#v", aconn)
-		m.activeConnections[apath] = aconn
+	if stateChanged {
+		if isConnectionStateInDeactivating(aconn.State) {
+			logger.Infof("remove active connection %#v", aconn)
+			// vpn's active connection will be removed after giving a
+			// notification
+			if !aconn.Vpn {
+				delete(m.activeConnections, apath)
+			}
+		} else {
+			// re-get all the active date especially vpn state for the
+			// new connection
+			aconn = m.newActiveConnection(apath)
+			logger.Infof("add active connection %#v", aconn)
+			m.activeConnections[apath] = aconn
+		}
 	}
 	m.setPropActiveConnections()
 }
@@ -192,9 +199,11 @@ func (m *Manager) newActiveConnection(path dbus.ObjectPath) (aconn *activeConnec
 	if err != nil {
 		return
 	}
+	defer nmDestroyActiveConnection(nmAConn)
 
 	aconn.State = nmAConn.State.Get()
 	aconn.Devices = nmAConn.Devices.Get()
+	aconn.typ = nmAConn.Type.Get()
 	aconn.Uuid = nmAConn.Uuid.Get()
 	aconn.Vpn = nmAConn.Vpn.Get()
 	if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
@@ -230,6 +239,7 @@ func (m *Manager) GetActiveConnectionInfo() (acinfosJSON string, err error) {
 					acinfos = append(acinfos, info)
 				}
 			}
+			nmDestroyActiveConnection(nmAConn)
 		}
 	}
 	acinfosJSON, err = marshalJSON(acinfos)
@@ -249,16 +259,21 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	if err != nil {
 		return
 	}
+	defer nmDestroyActiveConnection(nmAConn)
+
 	nmConn, err := nmNewSettingsConnection(nmAConn.Connection.Get())
 	if err != nil {
 		return
 	}
+	defer nmDestroySettingsConnection(nmConn)
 
 	// device
 	nmDev, err := nmNewDevice(devPath)
 	if err != nil {
 		return
 	}
+	defer nmDestroyDevice(nmDev)
+
 	devType = getCustomDeviceType(nmDev.DeviceType.Get())
 	devIfc = nmDev.Interface.Get()
 	if devType == deviceModem {

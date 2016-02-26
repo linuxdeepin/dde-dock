@@ -1,10 +1,27 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
 	"bytes"
-	"dbus/com/deepin/daemon/dock"
 	"encoding/base64"
-	"fmt"
+	"io/ioutil"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+	"unicode/utf8"
+
+	"gir/gio-2.0"
+	"gir/glib-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -13,18 +30,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"io/ioutil"
-	"path/filepath"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
+	. "pkg.deepin.io/lib/gettext"
 )
-
-var DOCKED_APP_MANAGER *dock.DockedAppManager
 
 type WindowInfo struct {
 	Xid         xproto.Window
@@ -58,6 +65,23 @@ type RuntimeApp struct {
 	updateWMNameTimer    *time.Timer
 }
 
+func (app *RuntimeApp) updateWMName(xid xproto.Window) {
+	app.cancelUpdateWMName()
+	app.updateWMNameTimer = time.AfterFunc(time.Millisecond*20, func() {
+		app.updateWmName(xid)
+		app.updateAppid(xid)
+		app.notifyChanged()
+		app.updateWMNameTimer = nil
+	})
+}
+
+func (app *RuntimeApp) cancelUpdateWMName() {
+	if app.updateWMNameTimer != nil {
+		app.updateWMNameTimer.Stop()
+		app.updateWMNameTimer = nil
+	}
+}
+
 func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
 	core := NewDesktopAppInfo(app.DesktopID)
 
@@ -76,9 +100,13 @@ func (app *RuntimeApp) createDesktopAppInfo() *DesktopAppInfo {
 }
 
 func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
+	recordFrequency(appId)
+	markAsLaunched(appId)
+
 	if !isNormalWindow(xid) {
 		return nil
 	}
+	logger.Info("NewRuntimeApp for", appId)
 	app := &RuntimeApp{
 		Id:        strings.ToLower(appId),
 		DesktopID: appId + ".desktop",
@@ -93,6 +121,7 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 			}
 		}
 	}
+
 	if core != nil {
 		logger.Debug(appId, ", Actions:", core.ListActions())
 		app.path = core.GetFilename()
@@ -122,7 +151,7 @@ func find_exec_by_xid(xid xproto.Window) string {
 func (app *RuntimeApp) getExec(xid xproto.Window) {
 	core := app.createDesktopAppInfo()
 	if core != nil {
-		logger.Debug(app.Id, " Get Exec from desktop file")
+		logger.Debug(app.Id, "Get Exec from desktop file")
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
 		app.exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
@@ -134,8 +163,8 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 	logger.Debug("app get exec:", app.exec)
 }
 
-func actionGenarator(id string) func() {
-	return func() {
+func actionGenarator(id string) func(uint32) {
+	return func(timestamp uint32) {
 		app, ok := ENTRY_MANAGER.runtimeApps[id]
 		if !ok {
 			return
@@ -185,15 +214,12 @@ func actionGenarator(id string) func() {
 
 		logger.Debug("id", app.Id, "title", title, "icon", icon,
 			"exec", exec)
-		_, err := DOCKED_APP_MANAGER.Dock(
+		DOCKED_APP_MANAGER.Dock(
 			app.Id,
 			title,
 			icon,
 			exec,
 		)
-		if err != nil {
-			logger.Warning("Docked failed: ", err)
-		}
 	}
 }
 
@@ -207,7 +233,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	app.coreMenu.AppendItem(NewMenuItem(
 		itemName,
-		func() {
+		func(timestamp uint32) {
 			var a *gio.AppInfo
 			logger.Debug(itemName)
 			core := app.createDesktopAppInfo()
@@ -236,7 +262,7 @@ func (app *RuntimeApp) buildMenu() {
 				return
 			}
 
-			_, err := a.Launch(make([]*gio.File, 0), nil)
+			_, err := a.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch App Failed: ", err)
 			}
@@ -249,13 +275,13 @@ func (app *RuntimeApp) buildMenu() {
 			name := actionName //NOTE: don't directly use 'actionName' with closure in an forloop
 			app.coreMenu.AppendItem(NewMenuItem(
 				core.GetActionName(actionName),
-				func() {
+				func(timestamp uint32) {
 					core := app.createDesktopAppInfo()
 					if core == nil {
 						return
 					}
 					defer core.Unref()
-					core.LaunchAction(name, nil)
+					core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 				},
 				true,
 			))
@@ -264,7 +290,7 @@ func (app *RuntimeApp) buildMenu() {
 	}
 	closeItem := NewMenuItem(
 		Tr("_Close All"),
-		func() {
+		func(timestamp uint32) {
 			logger.Debug("Close All")
 			for xid := range app.xids {
 				ewmh.CloseWindow(XU, xid)
@@ -273,30 +299,15 @@ func (app *RuntimeApp) buildMenu() {
 		true,
 	)
 	app.coreMenu.AppendItem(closeItem)
-	var err error
-	if DOCKED_APP_MANAGER == nil {
-		DOCKED_APP_MANAGER, err = dock.NewDockedAppManager(
-			"com.deepin.daemon.Dock",
-			"/dde/dock/DockedAppManager",
-		)
-		if err != nil {
-			logger.Warning("get DockedAppManager failed", err)
-			return
-		}
-	}
-	isDocked, err := DOCKED_APP_MANAGER.IsDocked(app.Id)
-	if err != nil {
-		isDocked = false
-		logger.Warning("get docked status failed:", err)
-	}
+	isDocked := DOCKED_APP_MANAGER.IsDocked(app.Id)
 	logger.Info(app.Id, "Item is docked:", isDocked)
 	var message string = ""
-	var action func() = nil
+	var action func(uint32) = nil
 	if isDocked {
 		logger.Info(app.Id, "change to undock")
 		message = Tr("_Undock")
-		action = func(id string) func() {
-			return func() {
+		action = func(id string) func(uint32) {
+			return func(uint32) {
 				app, ok := ENTRY_MANAGER.runtimeApps[id]
 				if !ok {
 					return
@@ -327,9 +338,9 @@ func (app *RuntimeApp) notifyChanged() {
 	}
 }
 
-func (app *RuntimeApp) HandleMenuItem(id string) {
+func (app *RuntimeApp) HandleMenuItem(id string, timestamp uint32) {
 	if app.coreMenu != nil {
-		app.coreMenu.HandleAction(id)
+		app.coreMenu.HandleAction(id, timestamp)
 	}
 }
 
@@ -376,28 +387,59 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	if displayMode == DisplayModeModernMode {
 		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
 			appId = getAppIDFromDesktopID(normalizeAppID(id))
-			logger.Debug("get app id from _DDE_DOCK_APP_ID", appId)
+			if appId != "" {
+				logger.Info("get app id from _DDE_DOCK_APP_ID", appId)
+				return appId
+			}
+		}
+	}
+
+	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
+	if err != nil {
+		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
+	} else {
+		appId = gtkAppId
+		appId = getAppIDFromDesktopID(normalizeAppID(appId))
+		if appId != "" {
 			return appId
 		}
 	}
+
+	appId = getAppIDFromXid(xid)
+	if appId != "" {
+		logger.Debug("get app id from bamf", appId)
+		return normalizeAppID(appId)
+	}
+
 	wmClass, _ := icccm.WmClassGet(XU, xid)
 	var wmInstance, wmClassName string
 	if wmClass != nil {
-		wmInstance = wmClass.Instance
-		wmClassName = wmClass.Class
+		if utf8.ValidString(wmClass.Instance) {
+			wmInstance = wmClass.Instance
+		}
+
+		// it is possible that getting invalid string which might be xgb implementation's bug.
+		// for instance: xdemineur's WMClass
+		if utf8.ValidString(wmClass.Class) {
+			wmClassName = wmClass.Class
+		}
+		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
 	}
 	name, _ := ewmh.WmNameGet(XU, xid)
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
-		logger.Info("get pid failed, ", name)
+		logger.Debug("get pid failed for:", xid)
 		if name != "" {
 			pid = lookthroughProc(name)
 		} else {
-			appId = getAppIDFromDesktopID(normalizeAppID(wmClassName))
-			logger.Debug("get Pid failed, using wm class name as app id", appId)
-			return appId
+			newAppId := getAppIDFromDesktopID(normalizeAppID(wmClassName))
+			if newAppId != "" {
+				logger.Debug("get Pid failed, using wm class name as app id", newAppId)
+				return newAppId
+			}
 		}
 	}
+
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	if pid == 0 {
 		appId = normalizeAppID(wmClassName)
@@ -406,8 +448,28 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	} else {
 	}
 	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	appId = getAppIDFromDesktopID(normalizeAppID(appId))
-	logger.Debug(fmt.Sprintf("get appid %q", appId))
+	newAppId := getAppIDFromDesktopID(normalizeAppID(appId))
+	if newAppId != "" {
+		appId = newAppId
+	}
+
+	appId = specialCaseWorkaround(xid, appId)
+
+	logger.Debugf("get appid %q", appId)
+	return appId
+}
+
+func specialCaseWorkaround(xid xproto.Window, appId string) string {
+	switch appId {
+	case "xwalk":
+		desktopID, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP_FILE"))
+		if err != nil {
+			logger.Debug("get xwalk AppId from _NET_WM_DESKTOP_FILE failed:", err)
+		} else {
+			appId = trimDesktop(filepath.Base(desktopID))
+			return appId
+		}
+	}
 	return appId
 }
 
@@ -512,11 +574,13 @@ func isNormalWindow(xid xproto.Window) bool {
 		}
 	}
 
+	logger.Debug("mayBeDocked:", mayBeDocked, "cannotBeDoced:", cannotBeDoced)
 	isNormal := mayBeDocked && !cannotBeDoced
 	return isNormal
 }
 
 func (app *RuntimeApp) updateIcon(xid xproto.Window) {
+	logger.Debug("update icon for", app.Id)
 	core := app.createDesktopAppInfo()
 	if core != nil {
 		defer core.Unref()
@@ -525,6 +589,9 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 			app.xids[xid].Icon = icon
 			return
 		}
+		logger.Warning("get icon from app failed")
+	} else {
+		logger.Warningf("create desktop app info for %s(window id: 0x%x) failed:", app.DesktopID, xid)
 	}
 
 	logger.Info(app.Id, "using icon from X")
@@ -549,18 +616,33 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 
 }
 func (app *RuntimeApp) updateWmName(xid xproto.Window) {
-	if name, err := ewmh.WmNameGet(XU, xid); err == nil && name != "" {
-		app.xids[xid].Title = name
+	if _, ok := app.xids[xid]; !ok {
 		return
+	}
+	if name, err := ewmh.WmNameGet(XU, xid); err == nil && name != "" {
+		if utf8.ValidString(name) {
+			app.xids[xid].Title = name
+			return
+		}
 	}
 
 	if name, err := xprop.PropValStr(xprop.GetProperty(XU, xid,
 		"WM_NAME")); err == nil {
-		app.xids[xid].Title = name
+		if utf8.ValidString(name) {
+			app.xids[xid].Title = name
+			return
+		}
+	}
+
+	if app.xids[xid].Title == "" {
+		app.xids[xid].Title = app.Id
 	}
 }
 
 func (app *RuntimeApp) updateState(xid xproto.Window) {
+	if _, ok := app.xids[xid]; !ok {
+		return
+	}
 	logger.Debugf("get state of %s(0x%x)", app.Id, xid)
 	//TODO: handle state
 	var err error
@@ -602,12 +684,12 @@ func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 		if newApp := ENTRY_MANAGER.createRuntimeApp(xid); newApp != nil {
 			newApp.attachXid(xid)
 		}
-		fmt.Println("APP:", app.Id, "Changed to..", newAppId)
+		logger.Debug("APP:", app.Id, "Changed to..", newAppId)
 		//TODO: Destroy
 	}
 }
 
-func (app *RuntimeApp) Activate(x, y int32) error {
+func (app *RuntimeApp) Activate(x, y int32, timestamp uint32) error {
 	//TODO: handle multiple xids
 	switch {
 	case !contains(app.state, "_NET_WM_STATE_FOCUSED"):
@@ -630,7 +712,7 @@ func (app *RuntimeApp) Activate(x, y int32) error {
 				s.State = icccm.StateIconic
 				iconifyWindow(app.CurrentInfo.Xid)
 			} else {
-				logger.Warningf("activeXid is 0x%x, current is 0x%x", activeXid,
+				logger.Debugf("activeXid is 0x%x, current is 0x%x", activeXid,
 					app.CurrentInfo.Xid)
 				if activeXid == app.CurrentInfo.Xid {
 					x := app.findNextLeader()
@@ -744,16 +826,7 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.updateAppid(xid)
 			app.notifyChanged()
 		case ATOM_WINDOW_NAME:
-			if app.updateWMNameTimer != nil {
-				app.updateWMNameTimer.Stop()
-				app.updateWMNameTimer = nil
-			}
-			app.updateWMNameTimer = time.AfterFunc(time.Millisecond*20, func() {
-				app.updateWmName(xid)
-				app.updateAppid(xid)
-				app.notifyChanged()
-				app.updateWMNameTimer = nil
-			})
+			app.updateWMName(xid)
 		case ATOM_WINDOW_STATE:
 			logger.Debugf("%s(0x%x) WM_STATE is changed", app.Id, xid)
 			if app.CurrentInfo.Xid == xid {

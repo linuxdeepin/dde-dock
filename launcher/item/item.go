@@ -1,19 +1,28 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package item
 
 import (
+	"os"
 	"path"
 	"strings"
 
-	_ "github.com/mattn/go-sqlite3"
-
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/appinfo"
+	"pkg.deepin.io/dde/daemon/launcher/category"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
-	DesktopSuffixLen = len(".desktop")
+	_DesktopSuffixLen = len(".desktop")
 )
 
 // #define FILENAME_WEIGHT 0.3
@@ -24,6 +33,8 @@ const (
 // #define DISPLAY_NAME_WEIGHT 0.1
 // #define DESCRIPTION_WEIGHT 0.01
 // #define EXECUTABLE_WEIGHT 0.05
+
+// Xinfo stores some information in desktop.
 type Xinfo struct {
 	keywords    []string
 	exec        string
@@ -31,51 +42,69 @@ type Xinfo struct {
 	description string
 }
 
-type ItemInfo struct {
+// Info stores some information for app.
+type Info struct {
 	path          string
 	name          string
 	enName        string
-	id            ItemId
+	id            ItemID
 	icon          string
-	categoryId    CategoryId
+	categoryID    CategoryID
 	timeInstalled int64
 	xinfo         Xinfo
 }
 
-func (i *ItemInfo) Path() string {
+// Path returns desktop's path.
+func (i *Info) Path() string {
 	return i.path
 }
 
-func (i *ItemInfo) Name() string {
-	return i.name
-}
-func (i *ItemInfo) EnName() string {
+// Name returns app's english name.
+func (i *Info) Name() string {
 	return i.enName
 }
 
-func (i *ItemInfo) Id() ItemId {
+// LocaleName returns app's locale name.
+func (i *Info) LocaleName() string {
+	return i.name
+}
+
+// ID returns appid.
+func (i *Info) ID() ItemID {
 	return i.id
 }
 
-func (i *ItemInfo) Keywords() []string {
+// Keywords returns keywords for searching.
+func (i *Info) Keywords() []string {
 	return i.xinfo.keywords
 }
 
-func (i *ItemInfo) GenericName() string {
+// GenericName returns generic name in desktop file.
+func (i *Info) GenericName() string {
 	return i.xinfo.genericName
 }
 
-func NewItem(app *gio.DesktopAppInfo) *ItemInfo {
+// New creates a new Info object from GDesktopAppInfo.
+func New(app *gio.DesktopAppInfo) *Info {
 	if app == nil {
 		return nil
 	}
-	item := &ItemInfo{}
+	item := &Info{
+		id: getID(app),
+	}
 	item.init(app)
 	return item
 }
 
-func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
-	i.id = getId(app)
+func (i *Info) Refresh() {
+	app := gio.NewDesktopAppInfo(i.path)
+	if app != nil {
+		i.init(app)
+		app.Unref()
+	}
+}
+
+func (i *Info) init(app *gio.DesktopAppInfo) {
 	i.path = app.GetFilename()
 	i.name = app.GetDisplayName()
 	i.enName = app.GetString("Name")
@@ -95,46 +124,62 @@ func (i *ItemInfo) init(app *gio.DesktopAppInfo) {
 	i.xinfo.exec = app.GetCommandline()
 	i.xinfo.genericName = app.GetGenericName()
 	i.xinfo.description = app.GetDescription()
-	i.categoryId = OtherID
+	i.categoryID = category.OthersID
 }
 
-func (i *ItemInfo) Description() string {
+// Description returns the description storing in desktop file.
+func (i *Info) Description() string {
 	return i.xinfo.description
 }
 
-func (i *ItemInfo) ExecCmd() string {
+// ExecCmd returns the exec stroing in desktop file.
+func (i *Info) ExecCmd() string {
 	return i.xinfo.exec
 }
 
-func (i *ItemInfo) Icon() string {
+// Icon returns the app's icon.
+func (i *Info) Icon() string {
 	return i.icon
 }
 
-func (i *ItemInfo) GetCategoryId() CategoryId {
-	return i.categoryId
+// CategoryID returns category id in deepin store.
+func (i *Info) CategoryID() CategoryID {
+	return i.categoryID
 }
 
-func (i *ItemInfo) SetCategoryId(id CategoryId) {
-	i.categoryId = id
+// SetCategoryID sets the category id in deepin store.
+func (i *Info) SetCategoryID(id CategoryID) {
+	i.categoryID = id
 }
 
-func (i *ItemInfo) GetTimeInstalled() int64 {
+// TimeInstalled returns the time installed.
+func (i *Info) TimeInstalled() int64 {
 	return i.timeInstalled
 }
 
-func (i *ItemInfo) SetTimeInstalled(timeInstalled int64) {
+// SetTimeInstalled sets the time installed.
+func (i *Info) SetTimeInstalled(timeInstalled int64) {
 	i.timeInstalled = timeInstalled
 }
 
-func GenId(filename string) ItemId {
-	if len(filename) <= DesktopSuffixLen {
-		return ItemId("")
+func (i *Info) LastModifiedTime() int64 {
+	stat, e := os.Stat(i.path)
+	if e != nil {
+		return 0
+	}
+	return stat.ModTime().UnixNano()
+}
+
+// GenID returns a valid item id.
+func GenID(filename string) ItemID {
+	if len(filename) <= _DesktopSuffixLen {
+		return ItemID("")
 	}
 
 	basename := path.Base(filename)
-	return ItemId(strings.Replace(basename[:len(basename)-DesktopSuffixLen], "_", "-", -1))
+	return ItemID(appinfo.NormalizeAppID(basename[:len(basename)-_DesktopSuffixLen]))
 }
 
-func getId(app *gio.DesktopAppInfo) ItemId {
-	return GenId(app.GetFilename())
+func getID(app *gio.DesktopAppInfo) ItemID {
+	return GenID(app.GetFilename())
 }

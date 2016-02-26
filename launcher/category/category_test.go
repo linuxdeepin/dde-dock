@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package category
 
 import (
 	C "launchpad.net/gocheck"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
 	"testing"
 )
 
@@ -16,43 +25,43 @@ type CategoryTestSuite struct {
 
 var _ = C.Suite(&CategoryTestSuite{})
 
-func (s *CategoryTestSuite) TestGetId(c *C.C) {
-	cf := &CategoryInfo{AllID, "all", map[ItemId]struct{}{}}
-	c.Assert(cf.Id(), C.Equals, AllID)
+func (s *CategoryTestSuite) TestGetID(c *C.C) {
+	cf := NewInfo(AllID, "all")
+	c.Assert(cf.ID(), C.Equals, AllID)
 }
 func (s *CategoryTestSuite) TestGetName(c *C.C) {
-	cf := &CategoryInfo{AllID, "all", map[ItemId]struct{}{}}
+	cf := NewInfo(AllID, "all")
 	c.Assert(cf.Name(), C.Equals, "all")
 }
 
 func (s *CategoryTestSuite) TestGetAddItem(c *C.C) {
-	cf := &CategoryInfo{AllID, "all", map[ItemId]struct{}{}}
-	c.Assert(cf.items, C.DeepEquals, make(map[ItemId]struct{}, 0))
-	cf.AddItem(ItemId("test"))
-	c.Assert(cf.items, C.DeepEquals, map[ItemId]struct{}{ItemId("test"): struct{}{}})
+	cf := NewInfo(AllID, "all")
+	c.Assert(cf.items, C.DeepEquals, make(map[ItemID]struct{}, 0))
+	cf.AddItem(ItemID("test"))
+	c.Assert(cf.items, C.DeepEquals, map[ItemID]struct{}{ItemID("test"): struct{}{}})
 }
 
 func (s *CategoryTestSuite) TestRemoveItem(c *C.C) {
-	cf := &CategoryInfo{AllID, "all", map[ItemId]struct{}{}}
-	c.Assert(cf.items, C.DeepEquals, make(map[ItemId]struct{}, 0))
-	cf.AddItem(ItemId("test"))
-	c.Assert(cf.items, C.DeepEquals, map[ItemId]struct{}{ItemId("test"): struct{}{}})
-	cf.RemoveItem(ItemId("test"))
-	c.Assert(cf.items, C.DeepEquals, make(map[ItemId]struct{}, 0))
+	cf := NewInfo(AllID, "all")
+	c.Assert(cf.items, C.DeepEquals, make(map[ItemID]struct{}, 0))
+	cf.AddItem(ItemID("test"))
+	c.Assert(cf.items, C.DeepEquals, map[ItemID]struct{}{ItemID("test"): struct{}{}})
+	cf.RemoveItem(ItemID("test"))
+	c.Assert(cf.items, C.DeepEquals, make(map[ItemID]struct{}, 0))
 }
 
 func (s *CategoryTestSuite) TestItems(c *C.C) {
-	cf := &CategoryInfo{AllID, "all", map[ItemId]struct{}{}}
-	c.Assert(cf.Items(), C.DeepEquals, []ItemId{})
+	cf := NewInfo(AllID, "all")
+	c.Assert(cf.Items(), C.DeepEquals, []ItemID{})
 
-	cf.AddItem(ItemId("test"))
+	cf.AddItem(ItemID("test"))
 	c.Assert(cf.Items(), C.HasLen, 1)
 
-	cf.AddItem(ItemId("test2"))
+	cf.AddItem(ItemID("test2"))
 	c.Assert(cf.Items(), C.HasLen, 2)
 
-	cf.RemoveItem(ItemId("test"))
+	cf.RemoveItem(ItemID("test"))
 	c.Assert(cf.Items(), C.HasLen, 1)
 }
 
-// TODO: fake a db to test QueryCategoryId
+// TODO: fake a db to test QueryID

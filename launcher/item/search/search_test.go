@@ -1,14 +1,25 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package search
 
 import (
-	C "launchpad.net/gocheck"
 	"os"
 	"path"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"testing"
 	"time"
+
+	"gir/gio-2.0"
+	C "launchpad.net/gocheck"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/item/search/mock"
 )
 
 func TestSearch(t *testing.T) {
@@ -26,32 +37,32 @@ func (self *SearchTransactionTestSuite) SetUpSuite(c *C.C) {
 }
 
 func (self *SearchTransactionTestSuite) TestSearchTransactionConstructor(c *C.C) {
-	var transaction *SearchTransaction
+	var transaction *Transaction
 	var err error
 
-	transaction, err = NewSearchTransaction(nil, nil, nil, 4)
+	transaction, err = NewTransaction(nil, nil, nil, 4)
 	c.Assert(transaction, C.IsNil)
 	c.Assert(err, C.NotNil)
-	c.Assert(err, C.Equals, SearchErrorNullChannel)
+	c.Assert(err, C.Equals, ErrorSearchNullChannel)
 
-	transaction, err = NewSearchTransaction(nil, make(chan SearchResult), nil, 4)
+	transaction, err = NewTransaction(nil, make(chan Result), nil, 4)
 	c.Assert(transaction, C.NotNil)
 	c.Assert(err, C.IsNil)
 }
 
-func (self *SearchTransactionTestSuite) testSearchTransaction(c *C.C, pinyinObj PinYinInterface, key string, fn func([]SearchResult, *C.C), delay time.Duration, cancel bool) {
+func (self *SearchTransactionTestSuite) testTransaction(c *C.C, pinyinObj PinYin, key string, fn func([]Result, *C.C), delay time.Duration, cancel bool) {
 	old := os.Getenv("LANGUAGE")
 	os.Setenv("LANGUAGE", "zh_CN.UTF-8")
 
 	cancelChan := make(chan struct{})
-	ch := make(chan SearchResult)
-	transaction, _ := NewSearchTransaction(pinyinObj, ch, cancelChan, 4)
-	firefoxItemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
-	playerItemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "deepin-music-player.desktop")))
-	chromeItemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
+	ch := make(chan Result)
+	transaction, _ := NewTransaction(pinyinObj, ch, cancelChan, 4)
+	firefoxItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
+	playerItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "deepin-music-player.desktop")))
+	chromeItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
 	go func() {
 		time.Sleep(delay)
-		transaction.Search(key, []ItemInfoInterface{
+		transaction.Search(key, []ItemInfo{
 			firefoxItemInfo,
 			playerItemInfo,
 			chromeItemInfo,
@@ -62,12 +73,12 @@ func (self *SearchTransactionTestSuite) testSearchTransaction(c *C.C, pinyinObj 
 		transaction.Cancel()
 	}
 
-	result := map[ItemId]SearchResult{}
+	result := map[ItemID]Result{}
 	for itemInfo := range ch {
-		result[itemInfo.Id] = itemInfo
+		result[itemInfo.ID] = itemInfo
 	}
 
-	res := []SearchResult{}
+	res := []Result{}
 	for _, data := range result {
 		res = append(res, data)
 	}
@@ -77,14 +88,14 @@ func (self *SearchTransactionTestSuite) testSearchTransaction(c *C.C, pinyinObj 
 	os.Setenv("LANGUAGE", old)
 }
 
-func (self *SearchTransactionTestSuite) TestSearchTransaction(c *C.C) {
-	self.testSearchTransaction(c, nil, "fire", func(res []SearchResult, c *C.C) {
+func (self *SearchTransactionTestSuite) TestTransaction(c *C.C) {
+	self.testTransaction(c, nil, "fire", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 1)
 	}, 0, false)
 }
 
 func (self *SearchTransactionTestSuite) TestSearchTransactionWithAItemNotExist(c *C.C) {
-	self.testSearchTransaction(c, nil, "IE", func(res []SearchResult, c *C.C) {
+	self.testTransaction(c, nil, "IE", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 0)
 	}, 0, false)
 }
@@ -92,25 +103,24 @@ func (self *SearchTransactionTestSuite) TestSearchTransactionWithAItemNotExist(c
 func (self *SearchTransactionTestSuite) TestSearchTransactionWithPinYin(c *C.C) {
 	old := os.Getenv("LANGUAGE")
 	os.Setenv("LANGUAGE", "zh_CN.UTF-8")
-	fireItemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
-	chromeItemInfo := NewItem(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
-	os.Setenv("LANGUAGE", old)
+	fireItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "firefox.desktop")))
+	chromeItemInfo := item.New(gio.NewDesktopAppInfoFromFilename(path.Join(self.testDataDir, "google-chrome.desktop")))
+	defer os.Setenv("LANGUAGE", old)
 
-	pinyinObj := NewMockPinYin(map[string][]string{
-		// both GenericName contains 浏
+	pinyinObj := mock.NewPinYin(map[string][]string{
 		"liu": []string{
-			fireItemInfo.GenericName(),
-			chromeItemInfo.GenericName(),
+			fireItemInfo.LocaleName(),
+			chromeItemInfo.LocaleName(),
 		},
 	}, true)
-	self.testSearchTransaction(c, pinyinObj, "liu", func(res []SearchResult, c *C.C) {
+	self.testTransaction(c, pinyinObj, "liu", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 2)
 	}, 0, false)
 
 }
 
 func (self *SearchTransactionTestSuite) TestSearchCancel(c *C.C) {
-	self.testSearchTransaction(c, nil, "fire", func(res []SearchResult, c *C.C) {
+	self.testTransaction(c, nil, "fire", func(res []Result, c *C.C) {
 		c.Assert(len(res), C.Equals, 0)
 	}, time.Second, true)
 }

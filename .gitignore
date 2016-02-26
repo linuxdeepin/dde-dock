@@ -9,9 +9,11 @@ _*
 .test
 */*.test
 grub2/grub2
+grub2/testdata/grub2.json
+grub2/testdata/tmp_settings
+grub2/testdata/tmp_theme_dir/
 themes/themes
 network/network
-network/dev_test.go
 accounts/accounts
 audio/audio
 datetime/datetime
@@ -31,4 +33,10 @@ zone-settings/zone-settings
 bluetooth/bluetooth
 main_network.go
 bin/dde-session-daemon/dde-session-daemon
+bin/dde-preload/dde-preload
 !launcher/testdata/.config/launcher/*
+
+debian
+debian/
+out/
+gopath/

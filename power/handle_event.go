@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 //handle LidSwitch, PowerButton and Battery status event.
 package power
 
@@ -6,19 +15,45 @@ import "dbus/com/deepin/sessionmanager"
 import "time"
 import "dbus/com/deepin/daemon/display"
 import "syscall"
+import "io/ioutil"
+import "strings"
+import "strconv"
+import "fmt"
+import "path"
+import "os"
+import "pkg.deepin.io/dde/api/soundutils"
 
 const (
 	//sync with com.deepin.daemon.power.schemas
-	ActionBlank       int32 = 0
-	ActionSuspend           = 1
-	ActionShutdown          = 2
-	ActionHibernate         = 3
-	ActionInteractive       = 4
-	ActionNothing           = 5
-	ActionLogout            = 6
+	//
+	// 按下电源键和合上笔记本盖时支持的操作
+	//
+	// 关闭显示器
+	ActionBlank int32 = 0
+	// 挂起
+	ActionSuspend = 1
+	// 关机
+	ActionShutdown = 2
+	// 休眠
+	ActionHibernate = 3
+	// 询问
+	ActionInteractive = 4
+	// 无
+	ActionNothing = 5
+	// 注销
+	ActionLogout = 6
+)
+
+const (
+	cmdLowPower = "/usr/lib/deepin-daemon/dde-lowpower"
 )
 
 func doLock() {
+	if isGreeterExist() || isLockExist() {
+		logger.Debug("There has a lock or greeter exist")
+		return
+	}
+
 	if m, err := sessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager"); err != nil {
 		logger.Warning("can't build SessionManager Object:", err)
 	} else {
@@ -31,10 +66,11 @@ func doLock() {
 }
 
 func doShowLowpower() {
-	go exec.Command("/usr/lib/deepin-daemon/dde-lowpower").Run()
+	go exec.Command(cmdLowPower, "--raise").Run()
 }
+
 func doCloseLowpower() {
-	go exec.Command("killall", "dde-lowpower").Run()
+	go exec.Command(cmdLowPower, "--quit").Run()
 }
 
 func doShutDown() {
@@ -89,12 +125,12 @@ func (up *Power) handlePowerButton() {
 	}
 }
 
-func (up *Power) handleLidSwitch(opend bool) {
-	if opend {
-		logger.Info("LidOpend...")
+func (up *Power) handleLidSwitch(opened bool) {
+	if opened {
+		logger.Info("Lid opened...")
 		//TODO: DPMS ON
 	} else {
-		logger.Info("LidClosed...")
+		logger.Info("Lid closed...")
 		//TODO: DPMS OFF
 		switch up.LidClosedAction.Get() {
 		case ActionInteractive:
@@ -181,23 +217,70 @@ func (p *Power) initEventHandle() {
 
 		login1.ConnectPrepareForSleep(func(before bool) {
 			if before {
-				if p.lowBatteryStatus == lowBatteryStatusAction {
-					doShowLowpower()
-				} else {
-					if p.coreSettings.GetBoolean("lock-enabled") {
-						now := time.Now()
-						doLock()
-						logger.Debug("screenlock ready time:", time.Now().Sub(now))
-					}
+				hasSleepInLowPower = true
+				if p.LockWhenActive.Get() {
+					doLock()
 				}
-
 				unblockSleep()
-			} else {
-				time.AfterFunc(time.Second*1, func() { p.screensaver.SimulateUserActivity() })
-				p.handleBatteryPercentage()
+				return
+			}
 
-				blockSleep()
+			// Wakeup
+			p.handleBatteryPercentage()
+			playSound(soundutils.EventWakeup)
+
+			time.AfterFunc(time.Second*1, func() {
+				p.screensaver.SimulateUserActivity()
+			})
+
+			blockSleep()
+
+			if p.lowBatteryStatus != lowBatteryStatusAction &&
+				p.LockWhenActive.Get() {
+				doLock()
 			}
 		})
 	}
+}
+
+func isLockExist() bool {
+	file := path.Join(os.Getenv("HOME"), ".dlockpid")
+	pid, err := getPidFromFile(file)
+	if err != nil {
+		return false
+	}
+	return isProccessExist(pid, "dde-lock")
+}
+
+func isGreeterExist() bool {
+	pid, err := getPidFromFile("/tmp/.dgreeterpid")
+	if err != nil {
+		return false
+	}
+	return isProccessExist(pid, "lightdm-deepin-greeter")
+}
+
+func getPidFromFile(file string) (uint32, error) {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return 0, err
+	}
+
+	s := strings.TrimSpace(string(content))
+	pid, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return uint32(pid), nil
+}
+
+func isProccessExist(pid uint32, proccess string) bool {
+	file := fmt.Sprintf("/proc/%v/cmdline", pid)
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return false
+	}
+
+	return strings.Contains(string(content), proccess)
 }

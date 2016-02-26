@@ -1,0 +1,56 @@
+{
+	"Actions": [
+	{
+		"Key": "launcher",
+		"Action": "dde-launcher"
+	},
+	{
+		"Key": "terminal",
+		"Action": "/usr/lib/deepin-daemon/default-terminal"
+	},
+	{
+		"Key": "lock-screen",
+		"Action": "dde-lock"
+	},
+	{
+		"Key": "show-dock",
+		"Action": "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
+	},
+	{
+		"Key": "logout",
+		"Action": "dde-shutdown"
+	},
+	{
+		"Key": "terminal-quake",
+		"Action": "deepin-terminal --quake-mode"
+	},
+	{
+		"Key": "screenshot",
+		"Action": "deepin-screenshot"
+	},
+	{
+		"Key": "screenshot-fullscreen",
+		"Action": "deepin-screenshot -f"
+	},
+	{
+		"Key": "screenshot-window",
+		"Action": "deepin-screenshot -w"
+	},
+	{
+		"Key": "screenshot-delayed",
+		"Action": "deepin-screenshot -d 5"
+	},
+	{
+		"Key": "file-manager",
+		"Action": "gvfs-open ~"
+	},
+	{
+		"Key": "disable-touchpad",
+		"Action": "gsettings set com.deepin.dde.touchpad touchpad-enabled false"
+	},
+	{
+		"Key": "wm-switcher",
+		"Action": "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM"
+	}
+	]
+}

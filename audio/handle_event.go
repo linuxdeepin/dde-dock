@@ -1,9 +1,21 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package audio
 
-import "pkg.linuxdeepin.com/lib/pulse"
+import "pkg.deepin.io/lib/pulse"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {
+		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
+			a.handleCardEvent(e, idx)
+		})
 		a.core.Connect(pulse.FacilitySink, func(e int, idx uint32) {
 			a.handleSinkEvent(e, idx)
 		})
@@ -20,10 +32,23 @@ func (a *Audio) initEventHandlers() {
 	}
 }
 
+func (a *Audio) handleCardEvent(eType int, idx uint32) {
+	switch eType {
+	case pulse.EventTypeNew:
+		card, err := a.core.GetCard(idx)
+		if nil != err {
+			logger.Warning("get card info failed: ", err)
+			return
+		}
+		selectNewCardProfile(card)
+	case pulse.EventTypeRemove:
+	case pulse.EventTypeChange:
+	}
+}
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		a.rebuildSinkList()
+		a.update()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sinks {
@@ -90,7 +115,7 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		a.rebuildSourceList()
+		a.update()
 
 	case pulse.EventTypeChange:
 		for _, s := range a.Sources {

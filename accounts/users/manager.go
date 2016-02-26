@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package users
@@ -27,7 +15,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 )
 
@@ -44,10 +32,10 @@ const (
 
 	defaultConfigShell = "/etc/adduser.conf"
 
-	displayManagerDefaultConfig = "/etc/X11/default-display-manager"
-	lightdmDefaultConfig        = "/etc/lightdm/lightdm.conf"
-	kdmDefaultConfig            = "/usr/share/config/kdm/kdmrc"
-	gdmDefaultConfig            = "/etc/gdm/custom.conf"
+	defaultDMFile = "/etc/X11/default-display-manager"
+	lightdmConfig = "/etc/lightdm/lightdm.conf"
+	kdmConfig     = "/usr/share/config/kdm/kdmrc"
+	gdmConfig     = "/etc/gdm/custom.conf"
 )
 
 func CreateUser(username, fullname, shell string, ty int32) error {
@@ -117,7 +105,7 @@ func SetUserType(ty int32, username string) error {
 }
 
 func SetAutoLoginUser(username string) error {
-	dm, err := getDefaultDisplayManager(displayManagerDefaultConfig)
+	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
 		return err
 	}
@@ -129,11 +117,11 @@ func SetAutoLoginUser(username string) error {
 
 	switch dm {
 	case "lightdm":
-		return setLightdmAutoLoginUser(username, lightdmDefaultConfig)
+		return setLightdmAutoLoginUser(username, lightdmConfig)
 	case "kdm":
-		return setKDMAutoLoginUser(username, kdmDefaultConfig)
+		return setKDMAutoLoginUser(username, kdmConfig)
 	case "gdm":
-		return setGDMAutoLoginUser(username, gdmDefaultConfig)
+		return setGDMAutoLoginUser(username, gdmConfig)
 	default:
 		return fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
@@ -142,23 +130,40 @@ func SetAutoLoginUser(username string) error {
 }
 
 func GetAutoLoginUser() (string, error) {
-	dm, err := getDefaultDisplayManager(displayManagerDefaultConfig)
+	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
 		return "", err
 	}
 
 	switch dm {
 	case "lightdm":
-		return getLightdmAutoLoginUser(lightdmDefaultConfig)
+		return getLightdmAutoLoginUser(lightdmConfig)
 	case "kdm":
-		return getKDMAutoLoginUser(kdmDefaultConfig)
+		return getKDMAutoLoginUser(kdmConfig)
 	case "gdm":
-		return getGDMAutoLoginUser(gdmDefaultConfig)
+		return getGDMAutoLoginUser(gdmConfig)
 	default:
 		return "", fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
 
 	return "", nil
+}
+
+func GetDMConfig() (string, error) {
+	dm, err := getDefaultDM(defaultDMFile)
+	if err != nil {
+		return "", err
+	}
+
+	switch dm {
+	case "lightdm":
+		return lightdmConfig, nil
+	case "kdm":
+		return kdmConfig, nil
+	case "gdm":
+		return gdmConfig, nil
+	}
+	return "", fmt.Errorf("Not supported the display manager: %q", dm)
 }
 
 //Default config: /etc/lightdm/lightdm.conf
@@ -168,7 +173,7 @@ func getLightdmAutoLoginUser(file string) (string, error) {
 	}
 
 	v, exist := dutils.ReadKeyFromKeyFile(file,
-		"SeatDefaults", "autologin-user", "")
+		"Seat:*", "autologin-user", "")
 	if !exist {
 		return "", nil
 	}
@@ -183,7 +188,7 @@ func getLightdmAutoLoginUser(file string) (string, error) {
 
 func setLightdmAutoLoginUser(name, file string) error {
 	success := dutils.WriteKeyToKeyFile(file,
-		"SeatDefaults", "autologin-user", name)
+		"Seat:*", "autologin-user", name)
 	if !success {
 		return fmt.Errorf("Set autologin user for %q failed!", name)
 	}
@@ -274,7 +279,7 @@ func setGDMAutoLoginUser(name, file string) error {
 }
 
 //Default config: /etc/X11/default-display-manager
-func getDefaultDisplayManager(file string) (string, error) {
+func getDefaultDM(file string) (string, error) {
 	if !dutils.IsFileExist(file) {
 		return "", fmt.Errorf("Not found this file: %s", file)
 	}

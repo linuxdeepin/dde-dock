@@ -1,24 +1,36 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package launcher
 
 import (
-	"database/sql"
 	"os"
 	"path"
 	"path/filepath"
 	"sort"
+	"sync"
 	"time"
 
 	"github.com/howeyc/fsnotify"
 
 	storeApi "dbus/com/deepin/store/api"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/utils"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
-	"pkg.linuxdeepin.com/lib/utils"
+
+	"gir/glib-2.0"
+	"pkg.deepin.io/dde/api/soundutils"
+	"pkg.deepin.io/dde/daemon/appinfo"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/item/search"
+	. "pkg.deepin.io/dde/daemon/launcher/log"
+	. "pkg.deepin.io/dde/daemon/launcher/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -28,71 +40,87 @@ const (
 
 	AppDirName string = "applications"
 
-	SoftwareStatusCreated  string = "created"
-	SoftwareStatusModified string = "updated"
-	SoftwareStatusDeleted  string = "deleted"
+	AppStatusCreated  string = "created"
+	AppStatusModified string = "updated"
+	AppStatusDeleted  string = "deleted"
 )
 
+// ItemChangedStatus stores item's current changed status.
 type ItemChangedStatus struct {
 	renamed, created, notRenamed, notCreated chan bool
 	timeInstalled                            int64
 }
 
+// Launcher 为launcher的后端。
 type Launcher struct {
-	setting             SettingInterface
-	itemManager         ItemManagerInterface
-	categoryManager     CategoryManagerInterface
+	setting             Setting
+	itemManager         ItemManager
+	categoryManager     CategoryManager
+	cancelMutex         sync.Mutex
 	cancelSearchingChan chan struct{}
-	pinyinObj           PinYinInterface
-	store               *storeApi.DStoreDesktop
+	pinyinObj           PinYin
+	store               *storeApi.DStoreDesktop // TODO
 	appMonitor          *fsnotify.Watcher
 
+	// ItemChanged当launcher中的item有改变后触发。
 	ItemChanged func(
 		status string,
 		itemInfo ItemInfoExport,
-		categoryId CategoryId,
+		categoryID CategoryID,
 	)
-	UninstallSuccess func(ItemId)
-	UninstallFailed  func(ItemId, string)
+	// UninstallSuccess在卸载程序成功后触发。
+	UninstallSuccess func(ItemID)
+	// UninstallFailed在卸载程序失败后触发。
+	UninstallFailed func(ItemID, string)
 
-	SendToDesktopSuccess func(ItemId)
-	SendToDesktopFailed  func(ItemId, string)
+	// SendToDesktopSuccess在发送到桌面成功后触发。
+	SendToDesktopSuccess func(ItemID)
+	// SendToDesktopFailed在发送到桌面失败后触发。
+	SendToDesktopFailed func(ItemID, string)
 
-	RemoveFromDesktopSuccess func(ItemId)
-	RemoveFromDesktopFailed  func(ItemId, string)
+	// RemoveFromDesktopSuccess在从桌面移除成功后触发。
+	RemoveFromDesktopSuccess func(ItemID)
+	// RemoveFromDesktopFailed在从桌面移除失败后触发。
+	RemoveFromDesktopFailed func(ItemID, string)
 
-	SearchDone func([]ItemId)
+	// SearchDone在搜索结束后触发。
+	SearchDone func([]ItemID)
 
-	NewAppLaunched func(ItemId)
+	// NewAppLaunched在新安装程序被标记为已启动后被触发。（废弃，不够直观，使用新信号NewAppMarkedAsLaunched）
+	NewAppLaunched func(ItemID)
+	// NewAppMarkedAsLaunched在新安装程序被标记为已启动后被触发。
+	NewAppMarkedAsLaunched func(ItemID)
 }
 
+// NewLauncher creates a new launcher object.
 func NewLauncher() *Launcher {
-	launcher = &Launcher{
+	launcher := &Launcher{
 		cancelSearchingChan: make(chan struct{}),
 	}
 	return launcher
 }
 
-func (self *Launcher) setSetting(s SettingInterface) {
+func (self *Launcher) setSetting(s Setting) {
 	self.setting = s
 }
 
-func (self *Launcher) setCategoryManager(cm CategoryManagerInterface) {
+func (self *Launcher) setCategoryManager(cm CategoryManager) {
 	self.categoryManager = cm
 }
 
-func (self *Launcher) setItemManager(im ItemManagerInterface) {
+func (self *Launcher) setItemManager(im ItemManager) {
 	self.itemManager = im
 }
 
-func (self *Launcher) setPinYinObject(pinyinObj PinYinInterface) {
+func (self *Launcher) setPinYinObject(pinyinObj PinYin) {
 	self.pinyinObj = pinyinObj
 }
 
-func (self *Launcher) setStoreApi(s *storeApi.DStoreDesktop) {
+func (self *Launcher) setStoreAPI(s *storeApi.DStoreDesktop) {
 	self.store = s
 }
 
+// GetDBusInfo returns launcher's dbus info.
 func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		launcherObject,
@@ -101,64 +129,74 @@ func (self *Launcher) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// RequestUninstall 请求卸载程。
 func (self *Launcher) RequestUninstall(id string, purge bool) {
-	go func(id ItemId) {
-		logger.Warning("uninstall", id)
+	go func(id ItemID) {
+		Log.Info("uninstall", id)
 		err := self.itemManager.UninstallItem(id, purge, time.Minute*20)
-		if err == nil {
-			dbus.Emit(self, "UninstallSuccess", id)
+		if err != nil {
+			Log.Warning("uninstall", id, "failed:", err)
+			dbus.Emit(self, "UninstallFailed", id, err.Error())
 			return
 		}
 
-		dbus.Emit(self, "UninstallFailed", id, err.Error())
-	}(ItemId(id))
+		Log.Warning("uninstall success")
+		dbus.Emit(self, "UninstallSuccess", id)
+	}(ItemID(id))
 }
 
+// RequestSendToDesktop 请求将程序发送到桌面。
 func (self *Launcher) RequestSendToDesktop(id string) bool {
-	itemId := ItemId(id)
+	itemID := ItemID(id)
 	if filepath.IsAbs(id) {
-		dbus.Emit(self, "SendToDesktopFailed", itemId, "app id is expected")
+		dbus.Emit(self, "SendToDesktopFailed", itemID, "app id is expected")
 		return false
 	}
 
-	if err := self.itemManager.SendItemToDesktop(itemId); err != nil {
-		dbus.Emit(self, "SendToDesktopFailed", itemId, err.Error())
+	if err := self.itemManager.SendItemToDesktop(itemID); err != nil {
+		dbus.Emit(self, "SendToDesktopFailed", itemID, err.Error())
 		return false
 	}
 
-	dbus.Emit(self, "SendToDesktopSuccess", itemId)
+	soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "", false)
+	dbus.Emit(self, "SendToDesktopSuccess", itemID)
 	return true
 }
 
+// RequestRemoveFromDesktop 请求将程序从桌面移除。
 func (self *Launcher) RequestRemoveFromDesktop(id string) bool {
-	itemId := ItemId(id)
+	itemID := ItemID(id)
 	if filepath.IsAbs(id) {
-		dbus.Emit(self, "RemoveFromDesktopFailed", itemId, "app id is expected")
+		dbus.Emit(self, "RemoveFromDesktopFailed", itemID, "app id is expected")
 		return false
 	}
 
-	if err := self.itemManager.RemoveItemFromDesktop(itemId); err != nil {
-		dbus.Emit(self, "RemoveFromDesktopFailed", itemId, err.Error())
+	if err := self.itemManager.RemoveItemFromDesktop(itemID); err != nil {
+		dbus.Emit(self, "RemoveFromDesktopFailed", itemID, err.Error())
 		return false
 	}
 
-	dbus.Emit(self, "RemoveFromDesktopSuccess", itemId)
+	dbus.Emit(self, "RemoveFromDesktopSuccess", itemID)
 	return true
 }
 
+// IsItemOnDesktop 判断程序是否已经在桌面上。
 func (self *Launcher) IsItemOnDesktop(id string) bool {
-	itemId := ItemId(id)
+	itemID := ItemID(id)
 	if filepath.IsAbs(id) {
 		return false
 	}
 
-	return self.itemManager.IsItemOnDesktop(itemId)
+	return self.itemManager.IsItemOnDesktop(itemID)
 }
 
+// GetCategoryInfo 获取分类id对应的分类信息。
+// 包括：分类名，分类id，分类所包含的程序。
 func (self *Launcher) GetCategoryInfo(cid int64) CategoryInfoExport {
-	return NewCategoryInfoExport(self.categoryManager.GetCategory(CategoryId(cid)))
+	return NewCategoryInfoExport(self.categoryManager.GetCategory(CategoryID(cid)))
 }
 
+// GetAllCategoryInfos 获取所有分类的分类信息。
 func (self *Launcher) GetAllCategoryInfos() []CategoryInfoExport {
 	infos := []CategoryInfoExport{}
 	ids := self.categoryManager.GetAllCategory()
@@ -169,10 +207,18 @@ func (self *Launcher) GetAllCategoryInfos() []CategoryInfoExport {
 	return infos
 }
 
-func (self *Launcher) GetItemInfo(id string) ItemInfoExport {
-	return NewItemInfoExport(self.itemManager.GetItem(ItemId(id)))
+func (self *Launcher) RefreshItem(id string) ItemInfoExport {
+	self.itemManager.RefreshItem(ItemID(id))
+	return self.GetItemInfo(id)
 }
 
+// GetItemInfo 获取id对应的item信息。
+// 包括：item的path，item的Name，item的id，item的icon，item的分类id，item的安装时间
+func (self *Launcher) GetItemInfo(id string) ItemInfoExport {
+	return NewItemInfoExport(self.itemManager.GetItem(ItemID(id)))
+}
+
+// GetAllItemInfos 获取所有item的信息。
 func (self *Launcher) GetAllItemInfos() []ItemInfoExport {
 	items := self.itemManager.GetAllItems()
 	infos := []ItemInfoExport{}
@@ -188,14 +234,14 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		defer delete(info, name)
 	}
 
-	id := GenId(name)
+	id := item.GenID(name)
 
-	if status == SoftwareStatusCreated && self.itemManager.HasItem(id) {
-		status = SoftwareStatusModified
+	if status == AppStatusCreated && self.itemManager.HasItem(id) {
+		status = AppStatusModified
 	}
-	logger.Info(name, "Status:", status)
+	Log.Info("start emitItemChanged", name, "Status:", status)
 
-	if status != SoftwareStatusDeleted {
+	if status != AppStatusDeleted {
 		// cannot use float number here. the total wait time is about 12s.
 		maxDuration := time.Second + time.Second/2
 		waitDuration := time.Millisecond * 0
@@ -209,52 +255,48 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 		}
 
 		if app == nil {
-			logger.Infof("create DesktopAppInfo for %q failed", name)
+			Log.Infof("create DesktopAppInfo for %q failed", name)
 			return
 		}
 		defer app.Unref()
 		if !app.ShouldShow() {
-			logger.Info(app.GetFilename(), "should NOT show")
+			Log.Info(app.GetFilename(), "should NOT show")
 			return
 		}
-		itemInfo := NewItem(app)
+		itemInfo := item.New(app)
 		if info[name].timeInstalled != 0 {
 			itemInfo.SetTimeInstalled(info[name].timeInstalled)
 		}
 
-		dbPath, _ := GetDBPath(SoftwareCenterDataDir, CategoryNameDBPath)
-		db, err := sql.Open("sqlite3", dbPath)
-		if err == nil {
-			defer db.Close()
-			cid, err := QueryCategoryId(app, db)
-			if err != nil {
-				itemInfo.SetCategoryId(OtherID)
-			}
-			itemInfo.SetCategoryId(cid)
+		cid, err := queryCategoryID(self.categoryManager, app)
+		if err != nil {
+			Log.Warning("query category id for", itemInfo.ID(), "failed:", err)
 		}
+		Log.Debug("get category", cid, "for", itemInfo.ID())
+		itemInfo.SetCategoryID(cid)
 
 		self.itemManager.AddItem(itemInfo)
-		self.categoryManager.AddItem(itemInfo.Id(), itemInfo.GetCategoryId())
+		self.categoryManager.AddItem(itemInfo.ID(), itemInfo.CategoryID())
 	}
 
 	if !self.itemManager.HasItem(id) {
-		logger.Info("get item failed")
+		Log.Warning("has no such a item", id)
 		return
 	}
 
 	item := self.itemManager.GetItem(id)
-	logger.Info("emit ItemChanged signal")
-	dbus.Emit(self, "ItemChanged", status, NewItemInfoExport(item), item.GetCategoryId())
+	cid := item.CategoryID()
+	itemInfo := NewItemInfoExport(item)
 
-	cid := self.itemManager.GetItem(id).GetCategoryId()
-	if status == SoftwareStatusDeleted {
+	if status == AppStatusDeleted {
 		self.itemManager.MarkLaunched(id)
 		self.categoryManager.RemoveItem(id, cid)
 		self.itemManager.RemoveItem(id)
 	} else {
 		self.categoryManager.AddItem(id, cid)
 	}
-	logger.Info(name, status, "successful")
+
+	Log.Info("emit ItemChanged signal", status, dbus.Emit(self, "ItemChanged", status, itemInfo, cid))
 }
 
 func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, info map[string]ItemChangedStatus) {
@@ -268,7 +310,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}
 	}
 	if ev.IsRename() {
-		logger.Info("renamed")
+		// Log.Info("renamed")
 		select {
 		case <-info[name].renamed:
 		default:
@@ -280,21 +322,21 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			case <-time.After(time.Second):
 				<-info[name].renamed
 				if true {
-					self.emitItemChanged(name, SoftwareStatusDeleted, info)
+					self.emitItemChanged(name, AppStatusDeleted, info)
 				}
 			}
 		}()
 		info[name].renamed <- true
 	} else if ev.IsCreate() {
-		self.emitItemChanged(name, SoftwareStatusCreated, info)
+		self.emitItemChanged(name, AppStatusCreated, info)
 		go func() {
 			select {
 			case <-info[name].renamed:
-				// logger.Info("not renamed")
+				// Log.Info("not renamed")
 				info[name].notRenamed <- true
 				info[name].renamed <- true
 			default:
-				// logger.Info("default")
+				// Log.Info("default")
 			}
 			select {
 			case <-info[name].notCreated:
@@ -312,7 +354,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 			}
 			select {
 			case <-info[name].renamed:
-				self.emitItemChanged(name, SoftwareStatusModified, info)
+				self.emitItemChanged(name, AppStatusModified, info)
 			default:
 			}
 		}()
@@ -327,7 +369,7 @@ func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, in
 		}()
 	} else if ev.IsDelete() {
 		if true {
-			self.emitItemChanged(name, SoftwareStatusDeleted, info)
+			self.emitItemChanged(name, AppStatusDeleted, info)
 		}
 	}
 }
@@ -356,7 +398,7 @@ func (self *Launcher) eventHandler(watcher *fsnotify.Watcher) {
 }
 
 func getApplicationsDirs() []string {
-	dirs := make([]string, 0)
+	var dirs []string
 	dataDirs := glib.GetSystemDataDirs()
 	for _, dir := range dataDirs {
 		applicationsDir := path.Join(dir, AppDirName)
@@ -390,16 +432,16 @@ func (self *Launcher) listenItemChanged() {
 
 	self.appMonitor = watcher
 	for _, dir := range dirs {
-		logger.Info("monitor:", dir)
+		Log.Info("monitor:", dir)
 		watcher.Watch(dir)
 	}
 
 	go self.eventHandler(watcher)
 
 	if self.store != nil {
-		self.store.ConnectNewDesktopAdded(func(desktopId string, timeInstalled int32) {
-			self.emitItemChanged(desktopId, SoftwareStatusCreated, map[string]ItemChangedStatus{
-				desktopId: ItemChangedStatus{
+		self.store.ConnectNewDesktopAdded(func(desktopID string, timeInstalled int32) {
+			self.emitItemChanged(desktopID, AppStatusCreated, map[string]ItemChangedStatus{
+				desktopID: ItemChangedStatus{
 					timeInstalled: int64(timeInstalled),
 				},
 			})
@@ -407,110 +449,141 @@ func (self *Launcher) listenItemChanged() {
 	}
 }
 
+// RecordRate 记录程序的使用频率。（废弃，统一用词，请使用新接口RecordFrequency）
 func (self *Launcher) RecordRate(id string) {
-	f, err := GetFrequencyRecordFile()
-	if err != nil {
-		logger.Warning("Open frequency record file failed:", err)
-		return
-	}
-	defer f.Free()
-	self.itemManager.SetRate(ItemId(id), self.itemManager.GetRate(ItemId(id), f)+1, f)
 }
 
+// RecordFrequency 记录程序的使用频率。
+func (self *Launcher) RecordFrequency(id string) {
+	self.RecordRate(id)
+}
+
+// GetAllFrequency 获取所有的使用频率信息。
+// 包括：item的id与使用频率。
 func (self *Launcher) GetAllFrequency() (infos []FrequencyExport) {
-	f, err := GetFrequencyRecordFile()
-	frequency := self.itemManager.GetAllFrequency(f)
-
-	for id, rate := range frequency {
-		infos = append(infos, FrequencyExport{Frequency: rate, Id: id})
-	}
-
+	f, err := appinfo.GetFrequencyRecordFile()
 	if err != nil {
-		logger.Warning("Open frequency record file failed:", err)
 		return
 	}
+
+	frequency := self.itemManager.GetAllFrequency(f)
 	f.Free()
+
+	for id, rate := range frequency {
+		infos = append(infos, FrequencyExport{Frequency: rate, ID: id})
+	}
 
 	return
 }
 
+// GetAllTimeInstalled 获取所有程序的安装时间。
+// 包括：item的id与安装时间。
 func (self *Launcher) GetAllTimeInstalled() []TimeInstalledExport {
 	infos := []TimeInstalledExport{}
 	times, err := self.itemManager.GetAllTimeInstalled()
 	if err != nil {
-		logger.Info(err)
+		Log.Warning("GetAllTimeInstalled error:", err)
 	}
 
 	for id, t := range times {
-		infos = append(infos, TimeInstalledExport{Time: t, Id: id})
+		infos = append(infos, TimeInstalledExport{Time: t, ID: id})
 	}
 
 	return infos
 }
 
+type FreqGetter struct {
+	f *glib.KeyFile
+}
+
+func NewFreqGetter(f *glib.KeyFile) *FreqGetter {
+	getter := &FreqGetter{f: f}
+	return getter
+}
+
+func (getter *FreqGetter) GetFrequency(id string) uint64 {
+	if getter.f == nil {
+		return 0
+	}
+	return appinfo.GetFrequency(id, getter.f)
+}
+
+// Search 搜索给定的关键字。
 func (self *Launcher) Search(key string) {
+	self.cancelMutex.Lock()
+	defer self.cancelMutex.Unlock()
+
 	close(self.cancelSearchingChan)
 	self.cancelSearchingChan = make(chan struct{})
-	go func() {
-		resultChan := make(chan SearchResult)
-		transaction, err := NewSearchTransaction(self.pinyinObj, resultChan, self.cancelSearchingChan, 0)
+	go func(cancelChan chan struct{}) {
+		resultChan := make(chan search.Result)
+		recordFile, _ := appinfo.GetFrequencyRecordFile()
+		if recordFile != nil {
+			defer recordFile.Free()
+		}
+		freqGetter := NewFreqGetter(recordFile)
+		transaction, err := search.NewTransaction(self.pinyinObj, resultChan, cancelChan, 0)
 		if err != nil {
 			return
 		}
 
+		transaction.SetFreqGetter(freqGetter)
 		dataSet := self.itemManager.GetAllItems()
 		go func() {
 			transaction.Search(key, dataSet)
 			close(resultChan)
 		}()
 
-		select {
-		case <-self.cancelSearchingChan:
-			return
-		default:
-			resultMap := map[ItemId]SearchResult{}
-			for result := range resultChan {
-				resultMap[result.Id] = result
+		resultMap := map[ItemID]search.Result{}
+		for result := range resultChan {
+			select {
+			case <-cancelChan:
+				return
+			default:
+				resultMap[result.ID] = result
 			}
-
-			var res SearchResultList
-			for _, data := range resultMap {
-				res = append(res, data)
-			}
-
-			sort.Sort(res)
-
-			itemIds := []ItemId{}
-			for _, data := range res {
-				itemIds = append(itemIds, data.Id)
-			}
-			dbus.Emit(self, "SearchDone", itemIds)
 		}
-	}()
+
+		var res search.ResultList
+		for _, data := range resultMap {
+			res = append(res, data)
+		}
+
+		sort.Sort(res)
+
+		Log.Debug("search result", res)
+		itemIDs := []ItemID{}
+		for _, data := range res {
+			itemIDs = append(itemIDs, data.ID)
+		}
+		dbus.Emit(self, "SearchDone", itemIDs)
+	}(self.cancelSearchingChan)
 }
 
+// MarkLaunched 将程序标记为已启动过。
 func (self *Launcher) MarkLaunched(id string) {
-	err := self.itemManager.MarkLaunched(ItemId(id))
+	err := self.itemManager.MarkLaunched(ItemID(id))
 	if err != nil {
-		logger.Info(err)
+		Log.Warning("MarkLaunched error:", err)
 		return
 	}
 
-	dbus.Emit(self, "NewAppLaunched", ItemId(id))
+	dbus.Emit(self, "NewAppLaunched", ItemID(id))
 }
 
-func (self *Launcher) GetAllNewInstalledApps() []ItemId {
+// GetAllNewInstalledApps 获取所有新安装的程序。
+func (self *Launcher) GetAllNewInstalledApps() []ItemID {
 	ids, err := self.itemManager.GetAllNewInstalledApps()
 	if err != nil {
-		logger.Info("GetAllNewInstalledApps", err)
+		Log.Warning("GetAllNewInstalledApps", err)
 	}
 	return ids
 }
 
 func (self *Launcher) destroy() {
 	if self.setting != nil {
-		self.setting.destroy()
-		launcher.setting = nil
+		self.setting.Destroy()
+		self.setting = nil
 	}
 	if self.store != nil {
 		storeApi.DestroyDStoreDesktop(self.store)

@@ -1,65 +1,64 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package launcher
 
 import (
-	"database/sql"
 	storeApi "dbus/com/deepin/store/api"
-	"errors"
+	"strings"
 	"sync"
-	// . "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/category"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/search"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/item/softwarecenter"
-	"pkg.linuxdeepin.com/lib/dbus"
-	. "pkg.linuxdeepin.com/lib/gettext"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/dstore"
+	"pkg.deepin.io/dde/daemon/launcher/category"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/dde/daemon/launcher/item"
+	"pkg.deepin.io/dde/daemon/launcher/item/search"
+	. "pkg.deepin.io/dde/daemon/launcher/log"
+	. "pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/gettext"
+	. "pkg.deepin.io/lib/initializer"
+	"pkg.deepin.io/lib/log"
 )
 
-var logger = log.NewLogger("dde-daemon/launcher-daemon")
-var launcher *Launcher = nil
-
-func Stop() {
-	if launcher == nil {
-		return
-	}
-
-	launcher.destroy()
-	launcher = nil
-
-	logger.EndTracing()
+// Daemon is the module interface's implementation.
+type Daemon struct {
+	*ModuleBase
+	launcher *Launcher
 }
 
-func startFailed(err error) {
-	logger.Error(err)
-	Stop()
+// NewLauncherDaemon creates a new launcher daemon module.
+func NewLauncherDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = NewModuleBase("launcher", daemon, logger)
+	return daemon
 }
 
-func Start() {
-	if launcher != nil {
-		return
+// GetDependencies returns the dependencies of this module.
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+// Stop stops the launcher module.
+func (d *Daemon) Stop() error {
+	if d.launcher == nil {
+		return nil
 	}
 
-	var err error
+	d.launcher.destroy()
+	d.launcher = nil
 
-	logger.BeginTracing()
+	Log.EndTracing()
+	return nil
+}
 
-	InitI18n()
-
-	// DesktopAppInfo.ShouldShow does not know deepin.
-	gio.DesktopAppInfoSetDesktopEnv("Deepin")
-
-	soft, err := NewSoftwareCenter()
-	if err != nil {
-		startFailed(err)
-		return
-	}
-
-	im := NewItemManager(soft)
-	cm := NewCategoryManager()
-
-	timeInfo, _ := im.GetAllTimeInstalled()
-
+func loadItemsInfo(im *item.Manager, cm *category.Manager) {
 	appChan := make(chan *gio.AppInfo)
 	go func() {
 		allApps := gio.AppInfoGetAll()
@@ -69,9 +68,10 @@ func Start() {
 		close(appChan)
 	}()
 
-	dbPath, _ := GetDBPath(SoftwareCenterDataDir, CategoryNameDBPath)
-	db, err := sql.Open("sqlite3", dbPath)
-
+	err := cm.LoadCategoryInfo()
+	if err != nil {
+		Log.Warning("LoadAppCategoryInfo failed:", err)
+	}
 	var wg sync.WaitGroup
 	const N = 20
 	wg.Add(N)
@@ -84,16 +84,16 @@ func Start() {
 				}
 
 				desktopApp := gio.ToDesktopAppInfo(app)
-				item := NewItem(desktopApp)
-				cid, err := QueryCategoryId(desktopApp, db)
+				newItem := item.New(desktopApp)
+				cid, err := cm.QueryID(desktopApp)
+				Log.Debug("get category", category.ToString(cid), "for", newItem.ID())
+				newItem.SetCategoryID(cid)
 				if err != nil {
-					item.SetCategoryId(OtherID)
+					Log.Debug("QueryCategoryID failed:", err)
 				}
-				item.SetCategoryId(cid)
-				item.SetTimeInstalled(timeInfo[item.Id()])
 
-				im.AddItem(item)
-				cm.AddItem(item.Id(), item.GetCategoryId())
+				im.AddItem(newItem)
+				cm.AddItem(newItem.ID(), newItem.CategoryID())
 
 				app.Unref()
 			}
@@ -101,48 +101,75 @@ func Start() {
 		}()
 	}
 	wg.Wait()
-	if err == nil {
-		db.Close()
+	cm.FreeAppCategoryInfo()
+}
+func isZH() bool {
+	lang := gettext.QueryLang()
+	return strings.HasPrefix(lang, "zh")
+}
+
+// Start starts the launcher module.
+func (d *Daemon) Start() error {
+	if d.launcher != nil {
+		return nil
 	}
 
-	launcher = NewLauncher()
-	launcher.setItemManager(im)
-	launcher.setCategoryManager(cm)
+	Log.BeginTracing()
 
-	store, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
-	if err == nil {
-		launcher.setStoreApi(store)
-	}
+	gettext.InitI18n()
 
-	names := []string{}
-	for _, item := range im.GetAllItems() {
-		names = append(names, item.Name())
-	}
-	pinyinObj, err := NewPinYinSearchAdapter(names)
-	launcher.setPinYinObject(pinyinObj)
+	// DesktopAppInfo.ShouldShow does not know deepin.
+	gio.DesktopAppInfoSetDesktopEnv("Deepin")
 
-	launcher.listenItemChanged()
+	err := NewInitializer().Init(func(interface{}) (interface{}, error) {
+		store, err := dstore.New()
+		storeAdapter := NewDStoreAdapter(store)
+		f := func(DStore) {}
+		f(storeAdapter)
+		return storeAdapter, err
+	}).InitOnSessionBus(func(store interface{}) (interface{}, error) {
+		d.launcher = NewLauncher()
 
-	err = dbus.InstallOnSession(launcher)
+		im := item.NewManager(store.(DStore), DStoreDesktopPkgMapFile, DStoreInstalledTimeFile)
+		cm := category.NewManager(store.(DStore), category.GetAllInfos(DStoreAllCategoryInfoFile))
+
+		d.launcher.setItemManager(im)
+		d.launcher.setCategoryManager(cm)
+
+		loadItemsInfo(im, cm)
+
+		storeAPI, err := storeApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+		if err == nil {
+			d.launcher.setStoreAPI(storeAPI)
+		}
+
+		if isZH() {
+			Log.Info("enable pinyin search in zh env")
+			names := []string{}
+			for _, item := range im.GetAllItems() {
+				names = append(names, item.LocaleName())
+			}
+
+			pinyinObj, err := search.NewPinYinSearchAdapter(names)
+			if err != nil {
+				Log.Warning("CreatePinYinSearch failed:", err)
+			}
+			d.launcher.setPinYinObject(pinyinObj)
+		}
+
+		d.launcher.listenItemChanged()
+
+		return d.launcher, nil
+	}).InitOnSessionBus(func(interface{}) (interface{}, error) {
+		coreSetting := gio.NewSettings("com.deepin.dde.launcher")
+		setting, err := NewSettings(coreSetting)
+		d.launcher.setSetting(setting)
+		return setting, err
+	}).GetError()
+
 	if err != nil {
-		startFailed(err)
-		return
+		d.Stop()
 	}
 
-	coreSetting := gio.NewSettings("com.deepin.dde.launcher")
-	if coreSetting == nil {
-		startFailed(errors.New("get schema failed"))
-		return
-	}
-	setting, err := NewSetting(coreSetting)
-	if err != nil {
-		startFailed(err)
-		return
-	}
-	err = dbus.InstallOnSession(setting)
-	if err != nil {
-		startFailed(err)
-		return
-	}
-	launcher.setSetting(setting)
+	return err
 }

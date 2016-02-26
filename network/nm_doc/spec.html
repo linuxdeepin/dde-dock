@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ascii" /><title>NetworkManager D-Bus Interface Specification version 0.9.8.8</title><style type="text/css">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ascii" /><title>NetworkManager D-Bus Interface Specification version 1.0.7</title><style type="text/css">
 
           body {
             font-family: sans-serif;
@@ -97,7 +97,7 @@
             margin-right: 4em;
           }
 
-        </style></head><body><h1 class="topbox">NetworkManager D-Bus Interface Specification</h1><h2>Version 0.9.8.8</h2><div>Copyright (C) 2008 - 2011 Red Hat, Inc.</div><div>Copyright (C) 2008 - 2009 Novell, Inc.</div><div class="license">
+        </style></head><body><h1 class="topbox">NetworkManager D-Bus Interface Specification</h1><h2>Version 1.0.7</h2><div>Copyright (C) 2008 - 2011 Red Hat, Inc.</div><div>Copyright (C) 2008 - 2009 Novell, Inc.</div><div class="license">
 <p>This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
@@ -111,7 +111,7 @@ General Public License for more details.</p>
 <p>You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</p>
-</div><h2>Interfaces</h2><ul><li><code><a href="#org.freedesktop.NetworkManager">org.freedesktop.NetworkManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AccessPoint">org.freedesktop.NetworkManager.AccessPoint</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device">org.freedesktop.NetworkManager.Device</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wired">org.freedesktop.NetworkManager.Device.Wired</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wireless">org.freedesktop.NetworkManager.Device.Wireless</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Modem">org.freedesktop.NetworkManager.Device.Modem</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bluetooth">org.freedesktop.NetworkManager.Device.Bluetooth</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.OlpcMesh">org.freedesktop.NetworkManager.Device.OlpcMesh</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.WiMax">org.freedesktop.NetworkManager.Device.WiMax</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Infiniband">org.freedesktop.NetworkManager.Device.Infiniband</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bond">org.freedesktop.NetworkManager.Device.Bond</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bridge">org.freedesktop.NetworkManager.Device.Bridge</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Vlan">org.freedesktop.NetworkManager.Device.Vlan</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Adsl">org.freedesktop.NetworkManager.Device.Adsl</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.WiMax.Nsp">org.freedesktop.NetworkManager.WiMax.Nsp</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP4Config">org.freedesktop.NetworkManager.IP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP6Config">org.freedesktop.NetworkManager.IP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP4Config">org.freedesktop.NetworkManager.DHCP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP6Config">org.freedesktop.NetworkManager.DHCP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings">org.freedesktop.NetworkManager.Settings</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings.Connection">org.freedesktop.NetworkManager.Settings.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Connection.Active">org.freedesktop.NetworkManager.Connection.Active</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AgentManager">org.freedesktop.NetworkManager.AgentManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.SecretAgent">org.freedesktop.NetworkManager.SecretAgent</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Connection">org.freedesktop.NetworkManager.VPN.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Plugin">org.freedesktop.NetworkManager.VPN.Plugin</a></code></li></ul>
+</div><h2>Interfaces</h2><ul><li><code><a href="#org.freedesktop.NetworkManager">org.freedesktop.NetworkManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AccessPoint">org.freedesktop.NetworkManager.AccessPoint</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device">org.freedesktop.NetworkManager.Device</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wired">org.freedesktop.NetworkManager.Device.Wired</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wireless">org.freedesktop.NetworkManager.Device.Wireless</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Modem">org.freedesktop.NetworkManager.Device.Modem</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bluetooth">org.freedesktop.NetworkManager.Device.Bluetooth</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.OlpcMesh">org.freedesktop.NetworkManager.Device.OlpcMesh</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.WiMax">org.freedesktop.NetworkManager.Device.WiMax</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Infiniband">org.freedesktop.NetworkManager.Device.Infiniband</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bond">org.freedesktop.NetworkManager.Device.Bond</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bridge">org.freedesktop.NetworkManager.Device.Bridge</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Team">org.freedesktop.NetworkManager.Device.Team</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Generic">org.freedesktop.NetworkManager.Device.Generic</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Vlan">org.freedesktop.NetworkManager.Device.Vlan</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Adsl">org.freedesktop.NetworkManager.Device.Adsl</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.WiMax.Nsp">org.freedesktop.NetworkManager.WiMax.Nsp</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP4Config">org.freedesktop.NetworkManager.IP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP6Config">org.freedesktop.NetworkManager.IP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP4Config">org.freedesktop.NetworkManager.DHCP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP6Config">org.freedesktop.NetworkManager.DHCP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings">org.freedesktop.NetworkManager.Settings</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings.Connection">org.freedesktop.NetworkManager.Settings.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Connection.Active">org.freedesktop.NetworkManager.Connection.Active</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AgentManager">org.freedesktop.NetworkManager.AgentManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.SecretAgent">org.freedesktop.NetworkManager.SecretAgent</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Connection">org.freedesktop.NetworkManager.VPN.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Plugin">org.freedesktop.NetworkManager.VPN.Plugin</a></code></li></ul>
   <h1><a name="org.freedesktop.NetworkManager" id="org.freedesktop.NetworkManager"></a>org.freedesktop.NetworkManager</h1><h2>Methods:</h2><div class="method"><h3><a name="org.freedesktop.NetworkManager.GetDevices" id="org.freedesktop.NetworkManager.GetDevices">GetDevices</a> (
         
         ) &#8594;
@@ -140,28 +140,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         Activate a connection using the supplied device.
       </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
       <code>o</code></dt><dd>
-          The connection to activate the devices with.
+          The connection to activate.  If "/" is given, a valid device path must
+          be given, and NetworkManager picks the best connection to activate for
+          the given device.  VPN connections must always pass a valid connection
+          path.
         </dd><dt><code>device</code> -
       <code>o</code></dt><dd>
-          The object path of device to be activated for physical connections.  This parameter is ignored for VPN connections, because the specific_object (if provided) specifies the device to use.
+          The object path of device to be activated for physical connections.
+          This parameter is ignored for VPN connections, because the
+          specific_object (if provided) specifies the device to use.
         </dd><dt><code>specific_object</code> -
       <code>o</code></dt><dd>
           The path of a connection-type-specific object this activation should use. 
           This parameter is currently ignored for wired and mobile broadband connections,
           and the value of "/" should be used (ie, no specific object).  For WiFi
           connections, pass the object path of a specific AP from the card's scan
-          list, or "/" to pick and AP automatically.  For VPN connections, pass
+          list, or "/" to pick an AP automatically.  For VPN connections, pass
           the object path of an ActiveConnection object that should serve as the
           "base" connection (to which the VPN connections lifetime will be tied),
           or pass "/" and NM will automatically use the current default device.
         </dd></dl></div><div><h4>Returns</h4><dl><dt><code>active_connection</code> -
       <code>o</code></dt><dd>
           The path of the active connection object representing this active connection.
-        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.Error.UnknownConnection</code></dt><dd>
-        Connection was not provided by the settings service.
-    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.Error.UnknownDevice</code></dt><dd>
-        Unknown device.
-    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.Error.ConnectionActivating</code></dt><dd>Another connection is already activating or the same connection is already active.  FIXME: check if the error name is correct.  FIXME: split into 2 errors?</dd><dt><code>org.freedesktop.NetworkManager.Error.ConnectionInvalid</code></dt><dd>The connection is invalid for this device.</dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.AddAndActivateConnection" id="org.freedesktop.NetworkManager.AddAndActivateConnection">AddAndActivateConnection</a> (
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.AddAndActivateConnection" id="org.freedesktop.NetworkManager.AddAndActivateConnection">AddAndActivateConnection</a> (
         a{sa{sv}}: connection, o: device, o: specific_object
         ) &#8594;
         o, o</h3><div class="docstring">
@@ -190,11 +191,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         </dd><dt><code>active_connection</code> -
       <code>o</code></dt><dd>
           The path of the active connection object representing this active connection.
-        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.Error.UnknownConnection</code></dt><dd>
-        Connection was not provided by the settings service.
-    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.Error.UnknownDevice</code></dt><dd>
-        Unknown device.
-    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.Error.ConnectionInvalid</code></dt><dd>The connection is invalid for this device.</dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.DeactivateConnection" id="org.freedesktop.NetworkManager.DeactivateConnection">DeactivateConnection</a> (
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.DeactivateConnection" id="org.freedesktop.NetworkManager.DeactivateConnection">DeactivateConnection</a> (
         o: active_connection
         ) &#8594;
         nothing</h3><div class="docstring">
@@ -249,18 +246,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         Set logging verbosity and which operations are logged.
       </div><div><h4>Parameters</h4><dl><dt><code>level</code> -
       <code>s</code></dt><dd>
-          One of [ERR, WARN, INFO, DEBUG].
+          One of [ERR, WARN, INFO, DEBUG, TRACE].
         </dd><dt><code>domains</code> -
       <code>s</code></dt><dd>
           A combination of logging domains separated by commas (','), or "NONE"
           to disable logging.  Each domain enables logging for operations
-          related to that domain.  Available domains are: [HW, RFKILL, ETHER,
+          related to that domain.  Available domains are: [PLATFORM, RFKILL, ETHER,
           WIFI, BT, MB, DHCP4, DHCP6, PPP, WIFI_SCAN, IP4, IP6, AUTOIP4, DNS,
           VPN, SHARING, SUPPLICANT, AGENTS, SETTINGS, SUSPEND, CORE, DEVICE,
-          OLPC, WIMAX, INFINIBAND, FIREWALL, ADSL, BOND, VLAN].  In addition to
-          these domains, the following special domains can be used: [NONE, ALL,
-          DEFAULT, DHCP, IP].  If an empty string is given, the log level is
-          changed but the current set of log domains remains unchanged.
+          OLPC, WIMAX, INFINIBAND, FIREWALL, ADSL, BOND, VLAN, BRIDGE, DBUS_PROPS,
+          TEAM, CONCHECK, DCB, DISPATCH, AUDIT].
+          In addition to these domains, the following special domains can be used:
+          [NONE, ALL, DEFAULT, DHCP, IP].  You can also specify that some domains
+          should log at a different level from the default by appending a colon (':')
+          and a log level (eg, 'WIFI:DEBUG').  If an empty string is given, the
+          log level is changed but the current set of log domains remains
+          unchanged.
         </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.GetLogging" id="org.freedesktop.NetworkManager.GetLogging">GetLogging</a> (
         
         ) &#8594;
@@ -268,7 +269,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         Get current logging verbosity level and operations domains.
       </div><div><h4>Returns</h4><dl><dt><code>level</code> -
       <code>s</code></dt><dd>
-          One of [ERR, WARN, INFO, DEBUG].
+          One of [ERR, WARN, INFO, DEBUG, TRACE].
         </dd><dt><code>domains</code> -
       <code>s</code></dt><dd>
           For available domains see SetLogging() call.
@@ -328,7 +329,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       </div><div><h4>Parameters</h4><dl><dt><code>device_path</code> -
       <code>o</code></dt><dd>
           The object path of the device that was just removed.
-        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>NetworkingEnabled</code> -
+        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Devices</code> -
+      <code>ao</code> -
+      <code>(read)</code></dt><dd>
+        The list of network devices/interfaces NetworkManager knows about.
+      </dd><dt><code>NetworkingEnabled</code> -
       <code>b</code> -
       <code>(read)</code></dt><dd>
         Indicates if overall networking is currently enabled or not.  See the
@@ -370,12 +375,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         indicates the connection that has the default route. If there
         is a VPN active with the default route, then this indicates
         the connection that contains the route to the VPN endpoint.
+      </dd><dt><code>PrimaryConnectionType</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        The connection type of the "primary" active connection being
+        used to access the network. This is the same as the Type
+        property on the object indicated by PrimaryConnection.
+      </dd><dt><code>Metered</code> -
+      <code>u</code> -
+      <code>(read)</code>
+      (<a xmlns="" href="#type-NM_METERED">NM_METERED</a>)
+    </dt><dd>
+        Wheter the connectivity is metered. This is equivalent to the
+        metered property of the device associated with the primary
+        connection.
       </dd><dt><code>ActivatingConnection</code> -
       <code>o</code> -
       <code>(read)</code></dt><dd>
         The object path of an active connection that is currently
         being activated and which is expected to become the new
         PrimaryConnection when it finishes activating.
+      </dd><dt><code>Startup</code> -
+      <code>b</code> -
+      <code>(read)</code></dt><dd>
+        Indicates whether NM is still starting up; this becomes FALSE
+        when NM has finished attempting to activate every connection
+        that it might be able to activate at startup.
       </dd><dt><code>Version</code> -
       <code>s</code> -
       <code>(read)</code></dt><dd>
@@ -461,7 +486,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       <code>u</code> -
       <code>(read)</code></dt><dd>The maximum bitrate this access point is capable of, in kilobits/second (Kb/s).</dd><dt><code>Strength</code> -
       <code>y</code> -
-      <code>(read)</code></dt><dd>The current signal quality of the access point, in percent.</dd></dl><h2>Sets of flags:</h2><h3 xmlns=""><a name="type-NM_802_11_AP_FLAGS" id="type-NM_802_11_AP_FLAGS">NM_802_11_AP_FLAGS</a></h3>
+      <code>(read)</code></dt><dd>The current signal quality of the access point, in percent.</dd><dt><code>LastSeen</code> -
+      <code>i</code> -
+      <code>(read)</code></dt><dd>
+        The timestamp (in CLOCK_BOOTTIME seconds) for the last time the access
+        point was found in scan results.  A value of -1 means the access point
+        has never been found in scan results.
+      </dd></dl><h2>Sets of flags:</h2><h3 xmlns=""><a name="type-NM_802_11_AP_FLAGS" id="type-NM_802_11_AP_FLAGS">NM_802_11_AP_FLAGS</a></h3>
         Flags describing the general capabilities of the access point.
       <dl><dt><code>NM_802_11_AP_FLAGS_NONE = 0x0</code></dt><dd>Null capability - says nothing about the access point.</dd><dt><code>NM_802_11_AP_FLAGS_PRIVACY = 0x1</code></dt><dd>Access point supports privacy measures.</dd></dl><h3 xmlns=""><a name="type-NM_802_11_AP_SEC" id="type-NM_802_11_AP_SEC">NM_802_11_AP_SEC</a></h3>
         Flags describing the security capabilities of the access point.
@@ -472,6 +503,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         ) &#8594;
         nothing</h3><div class="docstring">
         Disconnects a device and prevents the device from automatically activating further connections without user intervention.
+      </div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Device.Delete" id="org.freedesktop.NetworkManager.Device.Delete">Delete</a> (
+        
+        ) &#8594;
+        nothing</h3><div class="docstring">
+        Deletes a software device from NetworkManager and removes the interface from the system.
+        The method returns an error when called for a hardware device.
       </div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.StateChanged" id="org.freedesktop.NetworkManager.Device.StateChanged">StateChanged</a> (
         u: new_state, u: old_state, u: reason
         )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>new_state</code> -
@@ -534,9 +571,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     </dt><dd>
         Flags describing the capabilities of the device.
       </dd><dt><code>Ip4Address</code> -
-      <code>i</code> -
+      <code>u</code> -
       <code>(read)</code></dt><dd>
-        The IPv4 address bound to the device. FIXME: what about devices with &gt;1 IP address?
+        DEPRECATED; use the 'Addresses' property of the 'Ip4Config' object instead.
       </dd><dt><code>State</code> -
       <code>u</code> -
       <code>(read)</code>
@@ -584,7 +621,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         If TRUE, indicates the device is allowed to autoconnect.  If FALSE,
         manual intervention is required before the device will automatically
         connect to a known network, such as activating a connection using the
-        device, or setting this property to TRUE.
+        device, or setting this property to TRUE.  This property cannot be
+        set to TRUE for default-unmanaged devices, since they never autoconnect.
       </dd><dt><code>FirmwareMissing</code> -
       <code>b</code> -
       <code>(read)</code></dt><dd>
@@ -600,6 +638,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       <code>ao</code> -
       <code>(read)</code></dt><dd>
         An array of object paths of every configured connection that is currently 'available' through this device.
+      </dd><dt><code>PhysicalPortId</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        If non-empty, an (opaque) indicator of the physical network
+        port associated with the device. This can be used to recognize
+	when two seemingly-separate hardware devices are actually just
+	different virtual interfaces to the same physical port.
+      </dd><dt><code>Mtu</code> -
+      <code>u</code> -
+      <code>(read)</code></dt><dd>
+        The device MTU (maximum transmission unit).
+      </dd><dt><code>Metered</code> -
+      <code>u</code> -
+      <code>(read)</code>
+      (<a xmlns="" href="#type-NM_METERED">NM_METERED</a>)
+    </dt><dd>
+        Whether the amount of traffic flowing through the device is
+        subject to limitations, for example set by service providers.
       </dd></dl><h2>Enumerated types:</h2><h3><a name="type-NM_DEVICE_STATE" id="type-NM_DEVICE_STATE">NM_DEVICE_STATE</a></h3><dl><dt><code>NM_DEVICE_STATE_UNKNOWN = 0</code></dt><dd>
           The device is in an unknown state.
         </dd><dt><code>NM_DEVICE_STATE_UNMANAGED = 10</code></dt><dd>
@@ -652,6 +708,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
           The device is an ADSL device supporting PPPoE and PPPoATM protocols.
         </dd><dt><code>NM_DEVICE_TYPE_BRIDGE = 13</code></dt><dd>
           The device is a bridge interface.
+        </dd><dt><code>NM_DEVICE_TYPE_GENERIC = 14</code></dt><dd>
+          The device is a generic interface type unrecognized by NetworkManager.
+        </dd><dt><code>NM_DEVICE_TYPE_TEAM = 15</code></dt><dd>
+          The device is a team master interface.
         </dd></dl><h3><a name="type-NM_DEVICE_STATE_REASON" id="type-NM_DEVICE_STATE_REASON">NM_DEVICE_STATE_REASON</a></h3><dl><dt><code>NM_DEVICE_STATE_REASON_UNKNOWN = 0</code></dt><dd>
           The reason for the device state change is unknown.
         </dd><dt><code>NM_DEVICE_STATE_REASON_NONE = 1</code></dt><dd>
@@ -762,6 +822,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
           The 802.11 Wi-Fi network could not be found.
         </dd><dt><code>NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED = 54</code></dt><dd>
           A secondary connection of the base connection failed.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED = 55</code></dt><dd>
+          DCB or FCoE setup failed.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED = 56</code></dt><dd>
+          teamd control failed.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_MODEM_FAILED = 57</code></dt><dd>
+          Modem failed or no longer available.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_MODEM_AVAILABLE = 58</code></dt><dd>
+          Modem now ready and available.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT = 59</code></dt><dd>
+          The SIM PIN was incorrect.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_NEW_ACTIVATION = 60</code></dt><dd>
+          A new connection activation was enqueued.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_PARENT_CHANGED = 61</code></dt><dd>
+          The device's parent changed.
+        </dd><dt><code>NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED = 62</code></dt><dd>
+          The device parent's management changed.
+        </dd></dl><h3><a name="type-NM_METERED" id="type-NM_METERED">NM_METERED</a></h3><dl><dt><code>NM_METERED_UNKNOWN = 0</code></dt><dd>
+          The device metered status is unknown.
+        </dd><dt><code>NM_METERED_YES = 1</code></dt><dd>
+          The device is metered and the value was statically set.
+        </dd><dt><code>NM_METERED_NO = 2</code></dt><dd>
+          The device is not metered and the value was statically set.
+        </dd><dt><code>NM_METERED_GUESS_YES = 3</code></dt><dd>
+          The device is metered and the value was guessed.
+        </dd><dt><code>NM_METERED_GUESS_NO = 4</code></dt><dd>
+          The device is not metered and the value was guessed.
         </dd></dl><h2>Sets of flags:</h2><h3 xmlns=""><a name="type-NM_DEVICE_CAP" id="type-NM_DEVICE_CAP">NM_DEVICE_CAP</a></h3><dl><dt><code>NM_DEVICE_CAP_NONE = 0x0</code></dt><dd>Null capability.</dd><dt><code>NM_DEVICE_CAP_NM_SUPPORTED = 0x1</code></dt><dd>The device is supported by NetworkManager.</dd><dt><code>NM_DEVICE_CAP_CARRIER_DETECT = 0x2</code></dt><dd>The device supports carrier detection.</dd></dl><h2>Structure types:</h2><div class="struct"><h3><a name="type-NM_DEVICE_STATE_REASON_STRUCT" id="type-NM_DEVICE_STATE_REASON_STRUCT">NM_DEVICE_STATE_REASON_STRUCT</a> - (
         u: state, u: reason
         )
@@ -807,10 +893,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         
         ) &#8594;
         ao</h3><div class="docstring">
-        Get the list of access points visible to this device.
+        DEPRECATED.  Get the list of access points visible to this device.  Note
+        that this list does not include access points which hide their SSID.  To
+        retrieve a list of all access points (including hidden ones) use the
+        GetAllAccessPoints() method.
       </div><div><h4>Returns</h4><dl><dt><code>access_points</code> -
       <code>ao</code></dt><dd>
-          List of access point object paths
+          List of access point object paths.
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Device.Wireless.GetAllAccessPoints" id="org.freedesktop.NetworkManager.Device.Wireless.GetAllAccessPoints">GetAllAccessPoints</a> (
+        
+        ) &#8594;
+        ao</h3><div class="docstring">
+        Get the list of all access points visible to this device, including
+        hidden ones for which the SSID is not yet known.
+      </div><div><h4>Returns</h4><dl><dt><code>access_points</code> -
+      <code>ao</code></dt><dd>
+          List of access point object paths.
         </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Device.Wireless.RequestScan" id="org.freedesktop.NetworkManager.Device.Wireless.RequestScan">RequestScan</a> (
         a{sv}: options
         ) &#8594;
@@ -818,7 +916,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         Request the device to scan
       </div><div><h4>Parameters</h4><dl><dt><code>options</code> -
       <code>a{sv}</code></dt><dd>
-          Options of scan
+          Options of scan.
+          Currently 'ssids' option with value of "aay" type is supported.
         </dd></dl></div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.Wireless.PropertiesChanged" id="org.freedesktop.NetworkManager.Device.Wireless.PropertiesChanged">PropertiesChanged</a> (
         a{sv}: properties
         )</h3><div class="docstring">
@@ -860,6 +959,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       <code>u</code> -
       <code>(read)</code></dt><dd>
         The bit rate currently used by the wireless device, in kilobits/second (Kb/s).
+      </dd><dt><code>AccessPoints</code> -
+      <code>ao</code> -
+      <code>(read)</code></dt><dd>
+        List of object paths of access point visible to this wireless device.
       </dd><dt><code>ActiveAccessPoint</code> -
       <code>o</code> -
       <code>(read)</code></dt><dd>
@@ -872,7 +975,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         The capabilities of the wireless device.
       </dd></dl><h2>Sets of flags:</h2><h3 xmlns=""><a name="type-NM_802_11_DEVICE_CAP" id="type-NM_802_11_DEVICE_CAP">NM_802_11_DEVICE_CAP</a></h3>
         Flags describing the capabilities of a wireless device.
-      <dl><dt><code>NM_802_11_DEVICE_CAP_NONE = 0x0</code></dt><dd>Null capability - syntactic sugar for no capabilities supported.  Do not AND this with other capabilities!</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_WEP40 = 0x1</code></dt><dd>The device supports the 40-bit WEP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_WEP104 = 0x2</code></dt><dd>The device supports the 104-bit WEP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_TKIP = 0x4</code></dt><dd>The device supports the TKIP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_CCMP = 0x8</code></dt><dd>The device supports the CCMP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_WPA = 0x10</code></dt><dd>The device supports the WPA encryption/authentication protocol.</dd><dt><code>NM_802_11_DEVICE_CAP_RSN = 0x20</code></dt><dd>The device supports the RSN encryption/authentication protocol.</dd><dt><code>NM_802_11_DEVICE_CAP_AP = 0x40</code></dt><dd>The device supports Access Point mode.</dd><dt><code>NM_802_11_DEVICE_CAP_ADHOC = 0x80</code></dt><dd>The device supports Ad-Hoc mode.</dd></dl>
+      <dl><dt><code>NM_802_11_DEVICE_CAP_NONE = 0x0</code></dt><dd>Null capability - syntactic sugar for no capabilities supported.  Do not AND this with other capabilities!</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_WEP40 = 0x1</code></dt><dd>The device supports the 40-bit WEP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_WEP104 = 0x2</code></dt><dd>The device supports the 104-bit WEP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_TKIP = 0x4</code></dt><dd>The device supports the TKIP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_CIPHER_CCMP = 0x8</code></dt><dd>The device supports the CCMP cipher.</dd><dt><code>NM_802_11_DEVICE_CAP_WPA = 0x10</code></dt><dd>The device supports the WPA encryption/authentication protocol.</dd><dt><code>NM_802_11_DEVICE_CAP_RSN = 0x20</code></dt><dd>The device supports the RSN encryption/authentication protocol.</dd><dt><code>NM_802_11_DEVICE_CAP_AP = 0x40</code></dt><dd>The device supports Access Point mode.</dd><dt><code>NM_802_11_DEVICE_CAP_ADHOC = 0x80</code></dt><dd>The device supports Ad-Hoc mode.</dd><dt><code>NM_802_11_DEVICE_CAP_FREQ_VALID = 0x100</code></dt><dd>
+	  The device properly reports information about supported
+	  frequencies and thus both NM_802_11_DEVICE_CAP_FREQ_2GHZ and
+	  NM_802_11_DEVICE_CAP_FREQ_5GHZ are valid.
+	</dd><dt><code>NM_802_11_DEVICE_CAP_FREQ_2GHZ = 0x200</code></dt><dd>
+          The device supports 2.4GHz frequencies.
+        </dd><dt><code>NM_802_11_DEVICE_CAP_FREQ_5GHZ = 0x400</code></dt><dd>
+          The device supports 5GHz frequencies.
+        </dd></dl>
 
   <h1><a name="org.freedesktop.NetworkManager.Device.Modem" id="org.freedesktop.NetworkManager.Device.Modem"></a>org.freedesktop.NetworkManager.Device.Modem</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.Modem.PropertiesChanged" id="org.freedesktop.NetworkManager.Device.Modem.PropertiesChanged">PropertiesChanged</a> (
         a{sv}: properties
@@ -992,7 +1103,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         </div><div><h4>Parameters</h4><dl><dt><code>nsp</code> -
       <code>o</code></dt><dd>
                 The object path of the NSP that has disappeared.
-            </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>HwAddress</code> -
+            </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Nsps</code> -
+      <code>ao</code> -
+      <code>(read)</code></dt><dd>
+        List of object paths of Network Service Providers (NSPs) visible to this
+        WiMAX device.
+      </dd><dt><code>HwAddress</code> -
       <code>s</code> -
       <code>(read)</code></dt><dd>
         Hardware address of the device.
@@ -1093,6 +1209,45 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
 	slaved to this device.
       </dd></dl>
 
+  <h1><a name="org.freedesktop.NetworkManager.Device.Team" id="org.freedesktop.NetworkManager.Device.Team"></a>org.freedesktop.NetworkManager.Device.Team</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.Team.PropertiesChanged" id="org.freedesktop.NetworkManager.Device.Team.PropertiesChanged">PropertiesChanged</a> (
+        a{sv}: properties
+        )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+                A dictionary mapping property names to variant boxed values
+            </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>HwAddress</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        Hardware address of the device.
+      </dd><dt><code>Carrier</code> -
+      <code>b</code> -
+      <code>(read)</code></dt><dd>
+        Indicates whether the physical carrier is found (e.g. whether a cable is plugged in or not).
+      </dd><dt><code>Slaves</code> -
+      <code>ao</code> -
+      <code>(read)</code></dt><dd>
+        Array of object paths representing devices which are currently
+	slaved to this device.
+      </dd></dl>
+
+  <h1><a name="org.freedesktop.NetworkManager.Device.Generic" id="org.freedesktop.NetworkManager.Device.Generic"></a>org.freedesktop.NetworkManager.Device.Generic</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.Generic.PropertiesChanged" id="org.freedesktop.NetworkManager.Device.Generic.PropertiesChanged">PropertiesChanged</a> (
+        a{sv}: properties
+        )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+                A dictionary mapping property names to variant boxed values
+            </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>HwAddress</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        Hardware address of the device.
+      </dd><dt><code>TypeDescription</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        A (non-localized) description of the interface type, if known.
+      </dd></dl>
+
   <h1><a name="org.freedesktop.NetworkManager.Device.Vlan" id="org.freedesktop.NetworkManager.Device.Vlan"></a>org.freedesktop.NetworkManager.Device.Vlan</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Device.Vlan.PropertiesChanged" id="org.freedesktop.NetworkManager.Device.Vlan.PropertiesChanged">PropertiesChanged</a> (
         a{sv}: properties
         )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
@@ -1108,6 +1263,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       <code>b</code> -
       <code>(read)</code></dt><dd>
         Indicates whether the physical carrier is found (e.g. whether a cable is plugged in or not).
+      </dd><dt><code>Parent</code> -
+      <code>o</code> -
+      <code>(read)</code></dt><dd>
+        Object path of the parent device of this VLAN device.
       </dd><dt><code>VlanId</code> -
       <code>u</code> -
       <code>(read)</code></dt><dd>
@@ -1146,34 +1305,97 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         Network type of the NSP.
       <dl><dt><code>NM_WIMAX_NSP_NETWORK_TYPE_UNKNOWN = 0x0</code></dt><dd>Unknown network.</dd><dt><code>NM_WIMAX_NSP_NETWORK_TYPE_HOME = 0x1</code></dt><dd>Home network.</dd><dt><code>NM_WIMAX_NSP_NETWORK_TYPE_PARTNER = 0x2</code></dt><dd>Partner network.</dd><dt><code>NM_WIMAX_NSP_NETWORK_TYPE_ROAMING_PARTNER = 0x3</code></dt><dd>Roaming partner network.</dd></dl>
 
-  <h1><a name="org.freedesktop.NetworkManager.IP4Config" id="org.freedesktop.NetworkManager.IP4Config"></a>org.freedesktop.NetworkManager.IP4Config</h1><p>Interface has no methods.</p><p>Interface has no signals.</p><h2>Properties:</h2><dl><dt><code>Addresses</code> -
+  <h1><a name="org.freedesktop.NetworkManager.IP4Config" id="org.freedesktop.NetworkManager.IP4Config"></a>org.freedesktop.NetworkManager.IP4Config</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.IP4Config.PropertiesChanged" id="org.freedesktop.NetworkManager.IP4Config.PropertiesChanged">PropertiesChanged</a> (
+        a{sv}: properties
+        )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+          A dictionary mapping property names to variant boxed values
+        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Addresses</code> -
       <code>aau</code> -
-      <code>(read)</code></dt><dd>Array of tuples of IPv4 address/prefix/gateway.  All 3
-      elements of each tuple are in network byte order.  Essentially:
-      [(addr, prefix, gateway), (addr, prefix, gateway), ...]
+      <code>(read)</code></dt><dd>
+	Array of arrays of IPv4 address/prefix/gateway.  All 3
+	elements of each array are in network byte order.  Essentially:
+	[(addr, prefix, gateway), (addr, prefix, gateway), ...]
+
+	Deprecated: use AddressData and Gateway
+      </dd><dt><code>AddressData</code> -
+      <code>aa{sv}</code> -
+      <code>(read)</code></dt><dd>
+	Array of IP address data objects. All addresses will include
+	"address" (an IP address string), and "prefix" (a uint). Some
+	addresses may include additional attributes.
+      </dd><dt><code>Gateway</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>The gateway in use.</dd><dt><code>Routes</code> -
+      <code>aau</code> -
+      <code>(read)</code></dt><dd>
+	Arrays of IPv4 route/prefix/next-hop/metric. All 4 elements of
+	each tuple are in network byte order. 'route' and 'next hop'
+	are IPv4 addresses, while prefix and metric are simple
+	unsigned integers. Essentially: [(route, prefix, next-hop,
+	metric), (route, prefix, next-hop, metric), ...]
+
+	Deprecated: use RouteData
+      </dd><dt><code>RouteData</code> -
+      <code>aa{sv}</code> -
+      <code>(read)</code></dt><dd>
+	Array of IP route data objects. All routes will include "dest"
+	(an IP address string) and "prefix" (a uint). Some routes may
+	include "next-hop" (an IP address string), "metric" (a uint),
+	and additional attributes.
       </dd><dt><code>Nameservers</code> -
       <code>au</code> -
-      <code>(read)</code></dt><dd>The nameservers in use.</dd><dt><code>WinsServers</code> -
-      <code>au</code> -
-      <code>(read)</code></dt><dd>The Windows Internet Name Service servers associated with the connection.  Each address is in network byte order.</dd><dt><code>Domains</code> -
+      <code>(read)</code></dt><dd>The nameservers in use.</dd><dt><code>Domains</code> -
       <code>as</code> -
-      <code>(read)</code></dt><dd>A list of domains this address belongs to.</dd><dt><code>Routes</code> -
-      <code>aau</code> -
-      <code>(read)</code></dt><dd>Tuples of IPv4 route/prefix/next-hop/metric.  All 4 elements
-      of each tuple are in network byte order.  'route' and 'next hop' are IPv4
-      addresses, while prefix and metric are simple unsigned integers.  Essentially:
-      [(route, prefix, next-hop, metric), (route, prefix, next-hop, metric), ...]
-      </dd></dl>
+      <code>(read)</code></dt><dd>A list of domains this address belongs to.</dd><dt><code>Searches</code> -
+      <code>as</code> -
+      <code>(read)</code></dt><dd>A list of dns searches.</dd><dt><code>WinsServers</code> -
+      <code>au</code> -
+      <code>(read)</code></dt><dd>The Windows Internet Name Service servers associated with the connection.  Each address is in network byte order.</dd></dl>
 
-  <h1><a name="org.freedesktop.NetworkManager.IP6Config" id="org.freedesktop.NetworkManager.IP6Config"></a>org.freedesktop.NetworkManager.IP6Config</h1><p>Interface has no methods.</p><p>Interface has no signals.</p><h2>Properties:</h2><dl><dt><code>Addresses</code> -
+  <h1><a name="org.freedesktop.NetworkManager.IP6Config" id="org.freedesktop.NetworkManager.IP6Config"></a>org.freedesktop.NetworkManager.IP6Config</h1><p>Interface has no methods.</p><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.IP6Config.PropertiesChanged" id="org.freedesktop.NetworkManager.IP6Config.PropertiesChanged">PropertiesChanged</a> (
+        a{sv}: properties
+        )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+          A dictionary mapping property names to variant boxed values
+        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Addresses</code> -
       <code>a(ayuay)</code> -
-      <code>(read)</code></dt><dd>Tuples of IPv6 address/prefix/gateway.</dd><dt><code>Nameservers</code> -
+      <code>(read)</code></dt><dd>
+	Array of tuples of IPv6 address/prefix/gateway.
+
+	Deprecated: use AddressData and Gateway.
+      </dd><dt><code>AddressData</code> -
+      <code>aa{sv}</code> -
+      <code>(read)</code></dt><dd>
+	Array of IP address data objects. All addresses will include
+	"address" (an IP address string), and "prefix" (a uint). Some
+	addresses may include additional attributes.
+      </dd><dt><code>Gateway</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>The gateway in use.</dd><dt><code>Routes</code> -
+      <code>a(ayuayu)</code> -
+      <code>(read)</code></dt><dd>
+	Tuples of IPv6 route/prefix/next-hop/metric.
+
+	Deprecated: use RouteData
+      </dd><dt><code>RouteData</code> -
+      <code>aa{sv}</code> -
+      <code>(read)</code></dt><dd>
+	Array of IP route data objects. All routes will include "dest"
+	(an IP address string) and "prefix" (a uint). Some routes may
+	include "next-hop" (an IP address string), "metric" (a uint),
+	and additional attributes.
+      </dd><dt><code>Nameservers</code> -
       <code>aay</code> -
       <code>(read)</code></dt><dd>The nameservers in use.</dd><dt><code>Domains</code> -
       <code>as</code> -
-      <code>(read)</code></dt><dd>A list of domains this address belongs to.</dd><dt><code>Routes</code> -
-      <code>a(ayuayu)</code> -
-      <code>(read)</code></dt><dd>Tuples of IPv6 route/prefix/next-hop/metric.</dd></dl>
+      <code>(read)</code></dt><dd>A list of domains this address belongs to.</dd><dt><code>Searches</code> -
+      <code>as</code> -
+      <code>(read)</code></dt><dd>A list of dns searches.</dd></dl>
 
     <h1><a name="org.freedesktop.NetworkManager.DHCP4Config" id="org.freedesktop.NetworkManager.DHCP4Config"></a>org.freedesktop.NetworkManager.DHCP4Config</h1>
             Options and configuration returned by the IPv4 DHCP server.
@@ -1236,6 +1458,62 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         </dd></dl></div><div><h4>Returns</h4><dl><dt><code>path</code> -
       <code>o</code></dt><dd>
           Object path of the new connection that was just added.
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.AddConnectionUnsaved" id="org.freedesktop.NetworkManager.Settings.AddConnectionUnsaved">AddConnectionUnsaved</a> (
+        a{sa{sv}}: connection
+        ) &#8594;
+        o</h3><div class="docstring">
+        Add new connection but do not save it to disk immediately.  This
+        operation does not start the network connection unless (1) device is
+        idle and able to connect to the network described by the new connection,
+        and (2) the connection is allowed to be started automatically.
+
+        Use the 'Save' method on the connection to save these changes
+        to disk. Note that unsaved changes will be lost if the
+        connection is reloaded from disk (either automatically on file
+        change or due to an explicit ReloadConnections call).
+      </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
+      <code>a{sa{sv}}</code></dt><dd>
+          Connection settings and properties.
+        </dd></dl></div><div><h4>Returns</h4><dl><dt><code>path</code> -
+      <code>o</code></dt><dd>
+          Object path of the new connection that was just added.
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.LoadConnections" id="org.freedesktop.NetworkManager.Settings.LoadConnections">LoadConnections</a> (
+        as: filenames
+        ) &#8594;
+        b, as</h3><div class="docstring">
+        Loads or reloads the indicated connections from disk. You
+        should call this after making changes directly to an on-disk
+        connection file to make sure that NetworkManager sees the
+        changes. (If "monitor-connection-files" in NetworkManager.conf
+        is "true", then this will have no real effect, but is
+        harmless.) As with AddConnection(), this operation does not
+        necessarily start the network connection.
+      </div><div><h4>Parameters</h4><dl><dt><code>filenames</code> -
+      <code>as</code></dt><dd>
+          Array of paths to on-disk connection profiles in directories
+          monitored by NetworkManager.
+        </dd></dl></div><div><h4>Returns</h4><dl><dt><code>status</code> -
+      <code>b</code></dt><dd>
+          Success or failure of the operation as a whole. True if
+          NetworkManager at least tried to load the indicated
+          connections, even if it did not succeed. False if an error
+          occurred before trying to load the connections (eg,
+          permission denied).
+        </dd><dt><code>failures</code> -
+      <code>as</code></dt><dd>
+          Paths of connection files that could not be loaded.
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.ReloadConnections" id="org.freedesktop.NetworkManager.Settings.ReloadConnections">ReloadConnections</a> (
+        
+        ) &#8594;
+        b</h3><div class="docstring">
+        Tells NetworkManager to reload all connection files from disk,
+        including noticing any added or deleted connection files. By
+        default, connections are re-read automatically any time they
+        change, so you only need to use this command if you have set
+        "monitor-connection-files=false" in NetworkManager.conf.
+      </div><div><h4>Returns</h4><dl><dt><code>status</code> -
+      <code>b</code></dt><dd>
+          Success or failure.
         </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.SaveHostname" id="org.freedesktop.NetworkManager.Settings.SaveHostname">SaveHostname</a> (
         s: hostname
         ) &#8594;
@@ -1265,7 +1543,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
       <code>o</code></dt><dd>
           Object path of the new connection.
-        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Hostname</code> -
+        </dd></dl></div></div><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Settings.ConnectionRemoved" id="org.freedesktop.NetworkManager.Settings.ConnectionRemoved">ConnectionRemoved</a> (
+        o: connection
+        )</h3><div class="docstring">
+        Emitted when a connection is no longer available.  This happens when
+        the connection is deleted or if it is no longer accessible by any of
+        the system's logged-in users.  After receipt of this signal, the
+        connection no longer exists and cannot be used.  Also see the
+        Settings.Connection.Removed signal.
+      </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
+      <code>o</code></dt><dd>
+          Object path of the removed connection.
+        </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Connections</code> -
+      <code>ao</code> -
+      <code>(read)</code></dt><dd>
+        List of object paths of available network connection profiles.
+      </dd><dt><code>Hostname</code> -
       <code>s</code> -
       <code>(read)</code></dt><dd>
         The machine hostname stored in persistent configuration.
@@ -1282,10 +1575,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         a{sa{sv}}: properties
         ) &#8594;
         nothing</h3><div class="docstring">
-            Update the connection with new settings and properties, replacing
-            all previous settings and properties.  Secrets may be part of the
-            update request, and will be either stored in persistent storage or
-            given to a Secret Agent for storage, depending on the request.
+            Update the connection with new settings and properties (replacing
+            all previous settings and properties) and save the connection to
+            disk.  Secrets may be part of the update request, and will be either
+            stored in persistent storage or sent to a Secret Agent for storage,
+            depending on the flags associated with each secret.
+          </div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sa{sv}}</code></dt><dd>
+              New connection settings, properties, and (optionally) secrets.
+            </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.UpdateUnsaved" id="org.freedesktop.NetworkManager.Settings.Connection.UpdateUnsaved">UpdateUnsaved</a> (
+        a{sa{sv}}: properties
+        ) &#8594;
+        nothing</h3><div class="docstring">
+            Update the connection with new settings and properties (replacing
+            all previous settings and properties) but do not immediately save
+            the connection to disk.  Secrets may be part of the update request
+            and may sent to a Secret Agent for storage, depending on the
+            flags associated with each secret.
+
+            Use the 'Save' method to save these changes to disk. Note
+            that unsaved changes will be lost if the connection is
+            reloaded from disk (either automatically on file change or
+            due to an explicit ReloadConnections call).
           </div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
       <code>a{sa{sv}}</code></dt><dd>
               New connection settings, properties, and (optionally) secrets.
@@ -1324,7 +1635,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       (<a xmlns="" href="#type-String_String_Variant_Map_Map">String_String_Variant_Map_Map</a>)
     </dt><dd>
                     Nested settings maps containing secrets.
-                </dd></dl></div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.Updated" id="org.freedesktop.NetworkManager.Settings.Connection.Updated">Updated</a> (
+                </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.ClearSecrets" id="org.freedesktop.NetworkManager.Settings.Connection.ClearSecrets">ClearSecrets</a> (
+        
+        ) &#8594;
+        nothing</h3><div class="docstring">
+            Clear the secrets belonging to this network connection profile.
+          </div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.Save" id="org.freedesktop.NetworkManager.Settings.Connection.Save">Save</a> (
+        
+        ) &#8594;
+        nothing</h3><div class="docstring">
+                Saves a "dirty" connection (that had previously been
+                updated with UpdateUnsaved) to persistent storage.
+            </div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.Updated" id="org.freedesktop.NetworkManager.Settings.Connection.Updated">Updated</a> (
         
         )</h3><div class="docstring">
                 Emitted when any settings or permissions change.  When handling
@@ -1336,9 +1658,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         )</h3><div class="docstring">
                 Emitted when this connection is no longer available.  This
                 happens when the connection is deleted or if it is no longer
-                accessable by any of the system's logged-in users.  After
-                receipt of this signal, the object no longer exists.
-            </div></div><p>Interface has no properties.</p>
+                accessible by any of the system's logged-in users.  After
+                receipt of this signal, the object no longer exists.  Also
+                see the Settings.ConnectionRemoved signal.
+            </div></div><div class="signal"><h3><a name="org.freedesktop.NetworkManager.Settings.Connection.PropertiesChanged" id="org.freedesktop.NetworkManager.Settings.Connection.PropertiesChanged">PropertiesChanged</a> (
+        a{sv}: properties
+        )</h3><div class="docstring"></div><div><h4>Parameters</h4><dl><dt><code>properties</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+                    A dictionary mapping property names to variant boxed values.
+                </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Unsaved</code> -
+      <code>b</code> -
+      <code>(read)</code></dt><dd>
+                If set, indicates that the in-memory state of the
+                connection does not match the on-disk state. This flag
+                will be set when UpdateUnsaved() is called or when any
+                connection details change, and cleared when the connection
+                is saved to disk via Save() or from internal operations.
+            </dd></dl>
 
 
   <h1><a name="org.freedesktop.NetworkManager.Connection.Active" id="org.freedesktop.NetworkManager.Connection.Active"></a>org.freedesktop.NetworkManager.Connection.Active</h1>
@@ -1356,32 +1694,85 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
                 A dictionary mapping property names to variant boxed values
             </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>Connection</code> -
       <code>o</code> -
-      <code>(read)</code></dt><dd>The path of the connection.</dd><dt><code>SpecificObject</code> -
+      <code>(read)</code></dt><dd>
+        The path of the connection.
+      </dd><dt><code>SpecificObject</code> -
       <code>o</code> -
       <code>(read)</code></dt><dd>
         A specific object associated with the active connection.  This property
         reflects the specific object used during connection activation, and will
         not change over the lifetime of the ActiveConnection once set.
+      </dd><dt><code>Id</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        The ID of the connection, provided as a convenience so that clients
+        do not have to retrieve all connection details.
       </dd><dt><code>Uuid</code> -
       <code>s</code> -
       <code>(read)</code></dt><dd>
         The UUID of the connection, provided as a convenience so that clients
         do not have to retrieve all connection details.
+      </dd><dt><code>Type</code> -
+      <code>s</code> -
+      <code>(read)</code></dt><dd>
+        The type of the connection, provided as a convenience so that clients
+        do not have to retrieve all connection details.
       </dd><dt><code>Devices</code> -
       <code>ao</code> -
-      <code>(read)</code></dt><dd>Array of object paths representing devices which are part of this active connection.</dd><dt><code>State</code> -
+      <code>(read)</code></dt><dd>
+        Array of object paths representing devices which are part of this active
+        connection.
+      </dd><dt><code>State</code> -
       <code>u</code> -
       <code>(read)</code>
       (<a xmlns="" href="#type-NM_ACTIVE_CONNECTION_STATE">NM_ACTIVE_CONNECTION_STATE</a>)
-    </dt><dd>The state of this active connection.</dd><dt><code>Default</code> -
+    </dt><dd>
+        The state of this active connection.
+      </dd><dt><code>Default</code> -
       <code>b</code> -
-      <code>(read)</code></dt><dd>Whether this active connection is the default IPv4 connection, i.e. whether it currently owns the default IPv4 route.</dd><dt><code>Default6</code> -
-      <code>b</code> -
-      <code>(read)</code></dt><dd>Whether this active connection is the default IPv6 connection, i.e. whether it currently owns the default IPv6 route.</dd><dt><code>Vpn</code> -
-      <code>b</code> -
-      <code>(read)</code></dt><dd>Whether this active connection is also a VPN connection.</dd><dt><code>Master</code> -
+      <code>(read)</code></dt><dd>
+        Whether this active connection is the default IPv4 connection, i.e.
+        whether it currently owns the default IPv4 route.
+      </dd><dt><code>Ip4Config</code> -
       <code>o</code> -
-      <code>(read)</code></dt><dd>The path to the master device if the connection is a slave.</dd></dl><h2>Enumerated types:</h2><h3><a name="type-NM_ACTIVE_CONNECTION_STATE" id="type-NM_ACTIVE_CONNECTION_STATE">NM_ACTIVE_CONNECTION_STATE</a></h3><dl><dt><code>NM_ACTIVE_CONNECTION_STATE_UNKNOWN = 0</code></dt><dd>
+      <code>(read)</code></dt><dd>
+        Object path of the Ip4Config object describing the configuration of the
+        connection. Only valid when the connection is in the
+        NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+      </dd><dt><code>Dhcp4Config</code> -
+      <code>o</code> -
+      <code>(read)</code></dt><dd>
+        Object path of the Dhcp4Config object describing the DHCP options
+        returned by the DHCP server (assuming the connection used DHCP). Only
+        valid when the connection is in the NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+        state.
+      </dd><dt><code>Default6</code> -
+      <code>b</code> -
+      <code>(read)</code></dt><dd>
+        Whether this active connection is the default IPv6 connection, i.e.
+        whether it currently owns the default IPv6 route.
+      </dd><dt><code>Ip6Config</code> -
+      <code>o</code> -
+      <code>(read)</code></dt><dd>
+        Object path of the Ip6Config object describing the configuration of the
+        connection. Only valid when the connection is in the
+        NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+      </dd><dt><code>Dhcp6Config</code> -
+      <code>o</code> -
+      <code>(read)</code></dt><dd>
+        Object path of the Dhcp6Config object describing the DHCP options
+        returned by the DHCP server (assuming the connection used DHCP). Only
+        valid when the connection is in the NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+        state.
+      </dd><dt><code>Vpn</code> -
+      <code>b</code> -
+      <code>(read)</code></dt><dd>
+        Whether this active connection is also a VPN connection.
+      </dd><dt><code>Master</code> -
+      <code>o</code> -
+      <code>(read)</code></dt><dd>
+        The path to the master device if the connection is a slave.
+      </dd></dl><h2>Enumerated types:</h2><h3><a name="type-NM_ACTIVE_CONNECTION_STATE" id="type-NM_ACTIVE_CONNECTION_STATE">NM_ACTIVE_CONNECTION_STATE</a></h3><dl><dt><code>NM_ACTIVE_CONNECTION_STATE_UNKNOWN = 0</code></dt><dd>
           The active connection is in an unknown state.
         </dd><dt><code>NM_ACTIVE_CONNECTION_STATE_ACTIVATING = 1</code></dt><dd>
           The connection is activating.
@@ -1408,6 +1799,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
           identifier is limited in length to 255 characters with a minimum
           of 3 characters.  An example valid identifier is 'org.gnome.nm-applet'
           (without quotes).
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.AgentManager.RegisterWithCapabilities" id="org.freedesktop.NetworkManager.AgentManager.RegisterWithCapabilities">RegisterWithCapabilities</a> (
+        s: identifier, u: capabilities
+        ) &#8594;
+        nothing</h3><div class="docstring">
+        Like Register() but indicates agent capabilities to NetworkManager.
+      </div><div><h4>Parameters</h4><dl><dt><code>identifier</code> -
+      <code>s</code></dt><dd>
+            See the Register() method's identifier argument.
+        </dd><dt><code>capabilities</code> -
+      <code>u</code>
+      (<a xmlns="" href="#type-NM_SECRET_AGENT_CAPABILITIES">NM_SECRET_AGENT_CAPABILITIES</a>)
+    </dt><dd>
+            Indicates various agent capabilities to NetworkManager.
         </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.AgentManager.Unregister" id="org.freedesktop.NetworkManager.AgentManager.Unregister">Unregister</a> (
         
         ) &#8594;
@@ -1426,7 +1830,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
             itself and should not expect its SaveSecrets() method to be called.
             SaveSecrets() will be called eg if some program other than the
             agent itself (like a connection editor) changes the secrets out of
-            band.
+            band.  The agent should implement this D-Bus interface on an object
+            with the path /org/freedesktop/NetworkManager/SecretAgent.
         <h2>Methods:</h2><div class="method"><h3><a name="org.freedesktop.NetworkManager.SecretAgent.GetSecrets" id="org.freedesktop.NetworkManager.SecretAgent.GetSecrets">GetSecrets</a> (
         a{sa{sv}}: connection, o: connection_path, s: setting_name, as: hints, u: flags
         ) &#8594;
@@ -1436,7 +1841,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
                 and the user enters new secrets, the agent is expected to save
                 the new secrets to persistent storage (if the secret's flags
                 include AGENT_OWNED) as NetworkManager will not send these
-                secrets back to the same agent via a SaveSecrets() call.
+                secrets back to the same agent via a SaveSecrets() call.  If
+                the user canceled any interaction, the agent should return the
+                UserCanceled error (see below).
             </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
       <code>a{sa{sv}}</code>
       (<a xmlns="" href="#type-String_String_Variant_Map_Map">String_String_Variant_Map_Map</a>)
@@ -1463,7 +1870,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
                     required, so in some cases no hints may be given.  The Agent
                     should return any secrets it has, or that it thinks are
                     required, regardless of what hints NetworkManager sends
-                    in this request.
+                    in this request.  Some hints have special prefixes that
+                    provide information to the agent; for example, VPN requests
+                    may send server-specific messages prefixed with
+                    "x-vpn-message:".
                 </dd><dt><code>flags</code> -
       <code>u</code>
       (<a xmlns="" href="#type-NM_SECRET_AGENT_GET_SECRETS_FLAGS">NM_SECRET_AGENT_GET_SECRETS_FLAGS</a>)
@@ -1480,7 +1890,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
                     Nested settings maps containing secrets.  Each setting MUST
                     contain at least the 'name' field, containing the name of
                     the setting, and one or more secrets.
-                </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.SecretAgent.CancelGetSecrets" id="org.freedesktop.NetworkManager.SecretAgent.CancelGetSecrets">CancelGetSecrets</a> (
+                </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.SecretAgent.NotAuthorized</code></dt><dd>
+                      Should be returned when the process requesting secrets is
+                      not authorized to do so (like if the caller is not root
+                      or not NetworkManager).
+                  </dd><dt><code>org.freedesktop.NetworkManager.SecretAgent.InvalidConnection</code></dt><dd>
+                      Should be returned if the 'connection' argument is invalid.
+                  </dd><dt><code>org.freedesktop.NetworkManager.SecretAgent.UserCanceled</code></dt><dd>
+                      Should be returned when the user has canceled the request.
+                  </dd><dt><code>org.freedesktop.NetworkManager.SecretAgent.AgentCanceled</code></dt><dd>
+                      Should be returned when NetworkManager has requested that
+                      the agent cancel the request.
+                  </dd><dt><code>org.freedesktop.NetworkManager.SecretAgent.InternalError</code></dt><dd>
+                      Should be returned if the agent has encountered some internal
+                      error processing the request.
+                  </dd><dt><code>org.freedesktop.NetworkManager.SecretAgent.NoSecrets</code></dt><dd>
+                      Should be returned if there are no available secrets, for
+                      example if user interaction is not allowed and there are
+                      no secrets stored by the agent for this connection.
+                  </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.SecretAgent.CancelGetSecrets" id="org.freedesktop.NetworkManager.SecretAgent.CancelGetSecrets">CancelGetSecrets</a> (
         o: connection_path, s: setting_name
         ) &#8594;
         nothing</h3><div class="docstring">
@@ -1551,7 +1979,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
               D-Bus interface, as opposed to automatically initiated by
               NetworkManager in response to (for example) scan results or
               carrier changes.
-            </dd></dl>
+            </dd></dl><h3 xmlns=""><a name="type-NM_SECRET_AGENT_CAPABILITIES" id="type-NM_SECRET_AGENT_CAPABILITIES">NM_SECRET_AGENT_CAPABILITIES</a></h3><dl><dt><code>NM_SECRET_AGENT_CAPABILITY_NONE = 0x0</code></dt><dd>No special capabilities.</dd><dt><code>NM_SECRET_AGENT_CAPABILITY_VPN_HINTS = 0x1</code></dt><dd>
+                    The agent supports passing hints to VPN plugin authentication
+                    dialogs.
+                </dd></dl>
 
 
   <h1><a name="org.freedesktop.NetworkManager.VPN.Connection" id="org.freedesktop.NetworkManager.VPN.Connection"></a>org.freedesktop.NetworkManager.VPN.Connection</h1>
@@ -1631,13 +2062,67 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         a{sa{sv}}: connection
         ) &#8594;
         nothing</h3><div class="docstring">
-        Tells the plugin to connect.
+        Tells the plugin to connect.  Interactive secrets requests (eg, emitting
+        the SecretsRequired signal) are not allowed.
       </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
       <code>a{sa{sv}}</code>
       (<a xmlns="" href="#type-String_String_Variant_Map_Map">String_String_Variant_Map_Map</a>)
     </dt><dd>
           Describes the connection to be established.
-        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.StartingInProgress</code></dt><dd>The request could not be processed because the VPN connection is already being started.<em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted</code></dt><dd>The request could not be processed because a VPN connection was already active.<em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</code></dt><dd>The request could not be processed because the VPN connection is already being stopped.<em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.BadArguments</code></dt><dd>Invalid arguments were passed with the request.  FIXME: too general.<em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</code></dt><dd>A binary providing the service failed to launch.<em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.NeedSecrets" id="org.freedesktop.NetworkManager.VPN.Plugin.NeedSecrets">NeedSecrets</a> (
+        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.StartingInProgress</code></dt><dd>
+      The plugin is already starting, and another connect request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted</code></dt><dd>
+      The plugin is already connected, and another connect request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</code></dt><dd>
+      The plugin is already stopping, and another stop request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.BadArguments</code></dt><dd>
+      The request could not be processed because it contained malformed
+      arguments, or arguments of unexpected type. It usually means that one of
+      the VPN setting data items or secrets was not of the expected type (i.e.
+      int, string, bool, etc).
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</code></dt><dd>
+      A binary providing the service failed to launch.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.WrongState</code></dt><dd>
+      The request could not be processed because the VPN plugin is in the wrong
+      state for this type of request.
+    <em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.ConnectInteractive" id="org.freedesktop.NetworkManager.VPN.Plugin.ConnectInteractive">ConnectInteractive</a> (
+        a{sa{sv}}: connection, a{sv}: details
+        ) &#8594;
+        nothing</h3><div class="docstring">
+        Tells the plugin to connect, allowing interactive secrets requests (eg
+        the plugin is allowed to emit the SecretsRequired signal if the VPN
+        service indicates that it needs additional secrets during the connect
+        process).
+      </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
+      <code>a{sa{sv}}</code>
+      (<a xmlns="" href="#type-String_String_Variant_Map_Map">String_String_Variant_Map_Map</a>)
+    </dt><dd>
+          Describes the connection to be established.
+        </dd><dt><code>details</code> -
+      <code>a{sv}</code>
+      (<a xmlns="" href="#type-String_Variant_Map">String_Variant_Map</a>)
+    </dt><dd>
+          Additional details about the Connect process.
+        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.StartingInProgress</code></dt><dd>
+      The plugin is already starting, and another connect request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted</code></dt><dd>
+      The plugin is already connected, and another connect request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</code></dt><dd>
+      The plugin is already stopping, and another stop request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.BadArguments</code></dt><dd>
+      The request could not be processed because it contained malformed
+      arguments, or arguments of unexpected type. It usually means that one of
+      the VPN setting data items or secrets was not of the expected type (i.e.
+      int, string, bool, etc).
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</code></dt><dd>
+      A binary providing the service failed to launch.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.WrongState</code></dt><dd>
+      The request could not be processed because the VPN plugin is in the wrong
+      state for this type of request.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.InteractiveNotSupported</code></dt><dd>
+      The request could not be processed because the plugin does not support
+      interactive operations, such as ConnectInteractive() or NewSecrets().
+    <em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.NeedSecrets" id="org.freedesktop.NetworkManager.VPN.Plugin.NeedSecrets">NeedSecrets</a> (
         a{sa{sv}}: settings
         ) &#8594;
         s</h3><div class="docstring">
@@ -1650,12 +2135,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         </dd></dl></div><div><h4>Returns</h4><dl><dt><code>setting_name</code> -
       <code>s</code></dt><dd>
           The setting name within the provided connection that requires secrets, if any.
-        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid</code></dt><dd>The request could not be processed because the VPN connection settings were invalid.<em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.Disconnect" id="org.freedesktop.NetworkManager.VPN.Plugin.Disconnect">Disconnect</a> (
+        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid</code></dt><dd>
+      The request could not be processed because the connection was invalid. It
+      usually means that the connection's VPN setting was missing some required
+      data item or secret.
+    <em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.Disconnect" id="org.freedesktop.NetworkManager.VPN.Plugin.Disconnect">Disconnect</a> (
         
         ) &#8594;
         nothing</h3><div class="docstring">
         Disconnect the plugin.
-      </div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</code></dt><dd>The request could not be processed because the VPN connection is already being stopped.<em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped</code></dt><dd>The request could not be processed because the VPN connection was already stopped.<em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.SetConfig" id="org.freedesktop.NetworkManager.VPN.Plugin.SetConfig">SetConfig</a> (
+      </div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</code></dt><dd>
+      The plugin is already stopping, and another stop request was received.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped</code></dt><dd>
+      The plugin is already stopped, and another disconnect request was received.
+    <em>(generic description)</em></dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.SetConfig" id="org.freedesktop.NetworkManager.VPN.Plugin.SetConfig">SetConfig</a> (
         a{sv}: config
         ) &#8594;
         nothing</h3><div class="docstring">
@@ -1695,16 +2188,57 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
       </div><div><h4>Parameters</h4><dl><dt><code>reason</code> -
       <code>s</code></dt><dd>
           The reason for the failure.
-        </dd></dl></div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.StateChanged" id="org.freedesktop.NetworkManager.VPN.Plugin.StateChanged">StateChanged</a> (
+        </dd></dl></div></div><div class="method"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.NewSecrets" id="org.freedesktop.NetworkManager.VPN.Plugin.NewSecrets">NewSecrets</a> (
+        a{sa{sv}}: connection
+        ) &#8594;
+        nothing</h3><div class="docstring">
+        Called in response to a SecretsRequired signal to deliver updated secrets
+        or other information to the plugin.
+      </div><div><h4>Parameters</h4><dl><dt><code>connection</code> -
+      <code>a{sa{sv}}</code>
+      (<a xmlns="" href="#type-String_String_Variant_Map_Map">String_String_Variant_Map_Map</a>)
+    </dt><dd>
+          Describes the connection including the new secrets.
+        </dd></dl></div><div><h4>Possible errors</h4><dl><dt><code>org.freedesktop.NetworkManager.VPN.Error.WrongState</code></dt><dd>
+      The request could not be processed because the VPN plugin is in the wrong
+      state for this type of request.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.BadArguments</code></dt><dd>
+      The request could not be processed because it contained malformed
+      arguments, or arguments of unexpected type. It usually means that one of
+      the VPN setting data items or secrets was not of the expected type (i.e.
+      int, string, bool, etc).
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</code></dt><dd>
+      A binary providing the service failed to launch.
+    <em>(generic description)</em></dd><dt><code>org.freedesktop.NetworkManager.VPN.Error.InteractiveNotSupported</code></dt><dd>
+      The request could not be processed because the plugin does not support
+      interactive operations, such as ConnectInteractive() or NewSecrets().
+    <em>(generic description)</em></dd></dl></div></div><h2>Signals:</h2><div class="signal"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.StateChanged" id="org.freedesktop.NetworkManager.VPN.Plugin.StateChanged">StateChanged</a> (
         u: state
         )</h3><div class="docstring">
         Emitted when the plugin state changes.
       </div><div><h4>Parameters</h4><dl><dt><code>state</code> -
       <code>u</code>
-      (<a xmlns="" href="#type-NM_VPN_CONNECTION_STATE">NM_VPN_CONNECTION_STATE</a>)
+      (<a xmlns="" href="#type-NM_VPN_SERVICE_STATE">NM_VPN_SERVICE_STATE</a>)
     </dt><dd>
           The new state of the plugin.
-        </dd></dl></div></div><div class="signal"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.Config" id="org.freedesktop.NetworkManager.VPN.Plugin.Config">Config</a> (
+        </dd></dl></div></div><div class="signal"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.SecretsRequired" id="org.freedesktop.NetworkManager.VPN.Plugin.SecretsRequired">SecretsRequired</a> (
+        s: message, as: secrets
+        )</h3><div class="docstring">
+        Emitted during an ongoing ConnectInteractive() request when the plugin
+        has determined that new secrets are required.  NetworkManager will then
+        call the NewSecrets() method with a connection hash including the new
+        secrets.
+      </div><div><h4>Parameters</h4><dl><dt><code>message</code> -
+      <code>s</code></dt><dd>
+              Informational message, if any, about the request.  For example, if
+              a second PIN is required, could indicate to the user to wait for
+              the token code to change until entering the next PIN.
+          </dd><dt><code>secrets</code> -
+      <code>as</code></dt><dd>
+              Array of strings of VPN secret names which the plugin thinks
+              secrets may be required for, or other VPN-specific data to be
+              processed by the VPN's front-end.
+          </dd></dl></div></div><div class="signal"><h3><a name="org.freedesktop.NetworkManager.VPN.Plugin.Config" id="org.freedesktop.NetworkManager.VPN.Plugin.Config">Config</a> (
         a{sv}: config
         )</h3><div class="docstring">
         The plugin obtained generic configuration information.
@@ -1750,10 +2284,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         </dd></dl></div></div><h2>Properties:</h2><dl><dt><code>State</code> -
       <code>u</code> -
       <code>(read)</code>
-      (<a xmlns="" href="#type-NM_VPN_CONNECTION_STATE">NM_VPN_CONNECTION_STATE</a>)
+      (<a xmlns="" href="#type-NM_VPN_SERVICE_STATE">NM_VPN_SERVICE_STATE</a>)
     </dt><dd>
         The state of the plugin.
-      </dd></dl><h2>Enumerated types:</h2><h3><a name="type-NM_VPN_PLUGIN_FAILURE" id="type-NM_VPN_PLUGIN_FAILURE">NM_VPN_PLUGIN_FAILURE</a></h3><dl><dt><code>NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED = 0</code></dt><dd>
+      </dd></dl><h2>Enumerated types:</h2><h3><a name="type-NM_VPN_SERVICE_STATE" id="type-NM_VPN_SERVICE_STATE">NM_VPN_SERVICE_STATE</a></h3><dl><dt><code>NM_VPN_SERVICE_STATE_UNKNOWN = 0</code></dt><dd>
+          The state of the VPN plugin is unknown.
+        </dd><dt><code>NM_VPN_SERVICE_STATE_INIT = 1</code></dt><dd>
+          The VPN plugin is initialized.
+        </dd><dt><code>NM_VPN_SERVICE_STATE_SHUTDOWN = 2</code></dt><dd>
+          (Not used.)
+        </dd><dt><code>NM_VPN_SERVICE_STATE_STARTING = 3</code></dt><dd>
+          The plugin is attempting to connect to a VPN server.
+        </dd><dt><code>NM_VPN_SERVICE_STATE_STARTED = 4</code></dt><dd>
+          The plugin has connected to a VPN server.
+        </dd><dt><code>NM_VPN_SERVICE_STATE_STOPPING = 5</code></dt><dd>
+          The plugin is disconnecting from the VPN server.
+        </dd><dt><code>NM_VPN_SERVICE_STATE_STOPPED = 6</code></dt><dd>
+          The plugin has disconnected from the VPN server.
+        </dd></dl><h3><a name="type-NM_VPN_PLUGIN_FAILURE" id="type-NM_VPN_PLUGIN_FAILURE">NM_VPN_PLUGIN_FAILURE</a></h3><dl><dt><code>NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED = 0</code></dt><dd>
           Login failed.
         </dd><dt><code>NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED = 1</code></dt><dd>
           Connect failed.
@@ -1807,16 +2355,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     
 
 <h1>Errors:</h1>
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.General" id="org.freedesktop.NetworkManager.VPN.Error.General"></a>org.freedesktop.NetworkManager.VPN.Error.General</h2>This is a drab, nondescript error.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.StartingInProgress" id="org.freedesktop.NetworkManager.VPN.Error.StartingInProgress"></a>org.freedesktop.NetworkManager.VPN.Error.StartingInProgress</h2>The request could not be processed because the VPN connection is already being started.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted" id="org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted"></a>org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted</h2>The request could not be processed because a VPN connection was already active.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress" id="org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress"></a>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</h2>The request could not be processed because the VPN connection is already being stopped.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped" id="org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped"></a>org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped</h2>The request could not be processed because the VPN connection was already stopped.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.WrongState" id="org.freedesktop.NetworkManager.VPN.Error.WrongState"></a>org.freedesktop.NetworkManager.VPN.Error.WrongState</h2>The request could not be processed because the VPN connection is in the wrong state for this type of request. FIXME: too general?
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.BadArguments" id="org.freedesktop.NetworkManager.VPN.Error.BadArguments"></a>org.freedesktop.NetworkManager.VPN.Error.BadArguments</h2>Invalid arguments were passed with the request.  FIXME: too general.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.LaunchFailed" id="org.freedesktop.NetworkManager.VPN.Error.LaunchFailed"></a>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</h2>A binary providing the service failed to launch.
-  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid" id="org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid"></a>org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid</h2>The request could not be processed because the VPN connection settings were invalid.
-<h1>Index</h1><h2>Index of interfaces</h2><ul><li><code><a href="#org.freedesktop.NetworkManager">org.freedesktop.NetworkManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AccessPoint">org.freedesktop.NetworkManager.AccessPoint</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device">org.freedesktop.NetworkManager.Device</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wired">org.freedesktop.NetworkManager.Device.Wired</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wireless">org.freedesktop.NetworkManager.Device.Wireless</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Modem">org.freedesktop.NetworkManager.Device.Modem</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bluetooth">org.freedesktop.NetworkManager.Device.Bluetooth</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.OlpcMesh">org.freedesktop.NetworkManager.Device.OlpcMesh</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.WiMax">org.freedesktop.NetworkManager.Device.WiMax</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Infiniband">org.freedesktop.NetworkManager.Device.Infiniband</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bond">org.freedesktop.NetworkManager.Device.Bond</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bridge">org.freedesktop.NetworkManager.Device.Bridge</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Vlan">org.freedesktop.NetworkManager.Device.Vlan</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Adsl">org.freedesktop.NetworkManager.Device.Adsl</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.WiMax.Nsp">org.freedesktop.NetworkManager.WiMax.Nsp</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP4Config">org.freedesktop.NetworkManager.IP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP6Config">org.freedesktop.NetworkManager.IP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP4Config">org.freedesktop.NetworkManager.DHCP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP6Config">org.freedesktop.NetworkManager.DHCP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings">org.freedesktop.NetworkManager.Settings</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings.Connection">org.freedesktop.NetworkManager.Settings.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Connection.Active">org.freedesktop.NetworkManager.Connection.Active</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AgentManager">org.freedesktop.NetworkManager.AgentManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.SecretAgent">org.freedesktop.NetworkManager.SecretAgent</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Connection">org.freedesktop.NetworkManager.VPN.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Plugin">org.freedesktop.NetworkManager.VPN.Plugin</a></code></li></ul><h2>Index of types</h2><ul><li><code><a href="#type-NM_802_11_AP_FLAGS">NM_802_11_AP_FLAGS</a></code>
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.General" id="org.freedesktop.NetworkManager.VPN.Error.General"></a>org.freedesktop.NetworkManager.VPN.Error.General</h2>General failure without further details.
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.StartingInProgress" id="org.freedesktop.NetworkManager.VPN.Error.StartingInProgress"></a>org.freedesktop.NetworkManager.VPN.Error.StartingInProgress</h2>
+      The plugin is already starting, and another connect request was received.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted" id="org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted"></a>org.freedesktop.NetworkManager.VPN.Error.AlreadyStarted</h2>
+      The plugin is already connected, and another connect request was received.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress" id="org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress"></a>org.freedesktop.NetworkManager.VPN.Error.StoppingInProgress</h2>
+      The plugin is already stopping, and another stop request was received.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped" id="org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped"></a>org.freedesktop.NetworkManager.VPN.Error.AlreadyStopped</h2>
+      The plugin is already stopped, and another disconnect request was received.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.WrongState" id="org.freedesktop.NetworkManager.VPN.Error.WrongState"></a>org.freedesktop.NetworkManager.VPN.Error.WrongState</h2>
+      The request could not be processed because the VPN plugin is in the wrong
+      state for this type of request.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.BadArguments" id="org.freedesktop.NetworkManager.VPN.Error.BadArguments"></a>org.freedesktop.NetworkManager.VPN.Error.BadArguments</h2>
+      The request could not be processed because it contained malformed
+      arguments, or arguments of unexpected type. It usually means that one of
+      the VPN setting data items or secrets was not of the expected type (i.e.
+      int, string, bool, etc).
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.LaunchFailed" id="org.freedesktop.NetworkManager.VPN.Error.LaunchFailed"></a>org.freedesktop.NetworkManager.VPN.Error.LaunchFailed</h2>
+      A binary providing the service failed to launch.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid" id="org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid"></a>org.freedesktop.NetworkManager.VPN.Error.ConnectionInvalid</h2>
+      The request could not be processed because the connection was invalid. It
+      usually means that the connection's VPN setting was missing some required
+      data item or secret.
+    
+  <h2><a name="org.freedesktop.NetworkManager.VPN.Error.InteractiveNotSupported" id="org.freedesktop.NetworkManager.VPN.Error.InteractiveNotSupported"></a>org.freedesktop.NetworkManager.VPN.Error.InteractiveNotSupported</h2>
+      The request could not be processed because the plugin does not support
+      interactive operations, such as ConnectInteractive() or NewSecrets().
+    
+<h1>Index</h1><h2>Index of interfaces</h2><ul><li><code><a href="#org.freedesktop.NetworkManager">org.freedesktop.NetworkManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AccessPoint">org.freedesktop.NetworkManager.AccessPoint</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device">org.freedesktop.NetworkManager.Device</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wired">org.freedesktop.NetworkManager.Device.Wired</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Wireless">org.freedesktop.NetworkManager.Device.Wireless</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Modem">org.freedesktop.NetworkManager.Device.Modem</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bluetooth">org.freedesktop.NetworkManager.Device.Bluetooth</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.OlpcMesh">org.freedesktop.NetworkManager.Device.OlpcMesh</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.WiMax">org.freedesktop.NetworkManager.Device.WiMax</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Infiniband">org.freedesktop.NetworkManager.Device.Infiniband</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bond">org.freedesktop.NetworkManager.Device.Bond</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Bridge">org.freedesktop.NetworkManager.Device.Bridge</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Team">org.freedesktop.NetworkManager.Device.Team</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Generic">org.freedesktop.NetworkManager.Device.Generic</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Vlan">org.freedesktop.NetworkManager.Device.Vlan</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Device.Adsl">org.freedesktop.NetworkManager.Device.Adsl</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.WiMax.Nsp">org.freedesktop.NetworkManager.WiMax.Nsp</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP4Config">org.freedesktop.NetworkManager.IP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.IP6Config">org.freedesktop.NetworkManager.IP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP4Config">org.freedesktop.NetworkManager.DHCP4Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.DHCP6Config">org.freedesktop.NetworkManager.DHCP6Config</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings">org.freedesktop.NetworkManager.Settings</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Settings.Connection">org.freedesktop.NetworkManager.Settings.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.Connection.Active">org.freedesktop.NetworkManager.Connection.Active</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.AgentManager">org.freedesktop.NetworkManager.AgentManager</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.SecretAgent">org.freedesktop.NetworkManager.SecretAgent</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Connection">org.freedesktop.NetworkManager.VPN.Connection</a></code></li><li><code><a href="#org.freedesktop.NetworkManager.VPN.Plugin">org.freedesktop.NetworkManager.VPN.Plugin</a></code></li></ul><h2>Index of types</h2><ul><li><code><a href="#type-NM_802_11_AP_FLAGS">NM_802_11_AP_FLAGS</a></code>
     - u</li><li><code><a href="#type-NM_802_11_AP_SEC">NM_802_11_AP_SEC</a></code>
     - u</li><li><code><a href="#type-NM_802_11_DEVICE_CAP">NM_802_11_DEVICE_CAP</a></code>
     - u</li><li><code><a href="#type-NM_802_11_MODE">NM_802_11_MODE</a></code>
@@ -1830,11 +2404,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     - u</li><li><code><a href="#type-NM_DEVICE_STATE_REASON_STRUCT">NM_DEVICE_STATE_REASON_STRUCT</a></code>
     - ( u, u )
   </li><li><code><a href="#type-NM_DEVICE_TYPE">NM_DEVICE_TYPE</a></code>
+    - u</li><li><code><a href="#type-NM_METERED">NM_METERED</a></code>
+    - u</li><li><code><a href="#type-NM_SECRET_AGENT_CAPABILITIES">NM_SECRET_AGENT_CAPABILITIES</a></code>
     - u</li><li><code><a href="#type-NM_SECRET_AGENT_GET_SECRETS_FLAGS">NM_SECRET_AGENT_GET_SECRETS_FLAGS</a></code>
     - u</li><li><code><a href="#type-NM_STATE">NM_STATE</a></code>
     - u</li><li><code><a href="#type-NM_VPN_CONNECTION_STATE">NM_VPN_CONNECTION_STATE</a></code>
     - u</li><li><code><a href="#type-NM_VPN_CONNECTION_STATE_REASON">NM_VPN_CONNECTION_STATE_REASON</a></code>
     - u</li><li><code><a href="#type-NM_VPN_PLUGIN_FAILURE">NM_VPN_PLUGIN_FAILURE</a></code>
+    - u</li><li><code><a href="#type-NM_VPN_SERVICE_STATE">NM_VPN_SERVICE_STATE</a></code>
     - u</li><li><code><a href="#type-NM_WIMAX_NSP_NETWORK_TYPE">NM_WIMAX_NSP_NETWORK_TYPE</a></code>
     - u</li><li><code><a href="#type-String_String_Map">String_String_Map</a></code>
     - a{ s &#8594; s }

@@ -1,30 +1,16 @@
 /**
- * Copyright (c) 2011 ~ 2015 Deepin, Inc.
- *               2013 ~ 2015 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package mounts
 
 import (
-	"fmt"
-	"os"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
+	"gir/gio-2.0"
 	"regexp"
 	"strings"
 )
@@ -44,17 +30,22 @@ const (
 )
 
 type DiskInfo struct {
+	// Disk description
 	Name string
+	// Disk type, ex: native, removable, network...
 	Type string
 
 	CanUnmount bool
 	CanEject   bool
 
+	// The size of disk used
 	Used uint64
+	// The capacity of disk
 	Size uint64
 
-	Path       string
-	UUID       string
+	Path string
+	UUID string
+	// The mounted path
 	MountPoint string
 	Icon       string
 }
@@ -80,7 +71,7 @@ func newDiskInfoFromMount(mount *gio.Mount) DiskInfo {
 	}
 
 	if len(info.UUID) == 0 {
-		info.UUID = generateUUID()
+		info.UUID = info.Path
 	}
 
 	iconObj := mount.GetIcon()
@@ -119,7 +110,7 @@ func newDiskInfoFromVolume(volume *gio.Volume) DiskInfo {
 	}
 
 	if len(info.UUID) == 0 {
-		info.UUID = generateUUID()
+		info.UUID = info.Path
 	}
 
 	iconObj := volume.GetIcon()
@@ -157,19 +148,4 @@ func getIconFromGIcon(iconObj *gio.Icon) string {
 	}
 
 	return ""
-}
-
-func generateUUID() string {
-	f, err := os.Open("/dev/urandom")
-	if err != nil {
-		return ""
-	}
-
-	defer f.Close()
-	b := make([]byte, 16)
-	f.Read(b)
-	uuid := fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6],
-		b[6:8], b[8:10], b[10:])
-
-	return uuid
 }

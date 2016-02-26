@@ -1,54 +1,17 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	"fmt"
-	. "pkg.linuxdeepin.com/lib/gettext"
-)
-
-const NM_SETTING_IP6_CONFIG_SETTING_NAME = "ipv6"
-
-const (
-	NM_SETTING_IP6_CONFIG_METHOD             = "method"
-	NM_SETTING_IP6_CONFIG_DNS                = "dns"
-	NM_SETTING_IP6_CONFIG_DNS_SEARCH         = "dns-search"
-	NM_SETTING_IP6_CONFIG_ADDRESSES          = "addresses"
-	NM_SETTING_IP6_CONFIG_ROUTES             = "routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
-	NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
-	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = "never-default"
-	NM_SETTING_IP6_CONFIG_MAY_FAIL           = "may-fail"
-	NM_SETTING_IP6_CONFIG_IP6_PRIVACY        = "ip6-privacy"
-	NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
-)
-
-const (
-	NM_SETTING_IP6_CONFIG_METHOD_IGNORE     = "ignore"
-	NM_SETTING_IP6_CONFIG_METHOD_AUTO       = "auto"
-	NM_SETTING_IP6_CONFIG_METHOD_DHCP       = "dhcp"
-	NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL = "link-local"
-	NM_SETTING_IP6_CONFIG_METHOD_MANUAL     = "manual"
-	NM_SETTING_IP6_CONFIG_METHOD_SHARED     = "shared"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 func initSettingSectionIpv6(data connectionData) {
@@ -70,20 +33,20 @@ func initAvailableValuesIp6() {
 
 // Get available keys
 func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD)
+	keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP_CONFIG_METHOD)
 	method := getSettingIp6ConfigMethod(data)
 	switch method {
 	default:
 		logger.Error("ip6 config method is invalid:", method)
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP_CONFIG_DNS)
 	case NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS)
-		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, sectionIpv6, NM_SETTING_IP_CONFIG_ADDRESSES)
 	case NM_SETTING_IP6_CONFIG_METHOD_SHARED:
 	}
 	return
@@ -92,7 +55,7 @@ func getSettingIp6ConfigAvailableKeys(data connectionData) (keys []string) {
 // Get available values
 func getSettingIp6ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_IP6_CONFIG_METHOD:
+	case NM_SETTING_IP_CONFIG_METHOD:
 		// values = []string{
 		// 	// NM_SETTING_IP6_CONFIG_METHOD_IGNORE, // ignore
 		// 	NM_SETTING_IP6_CONFIG_METHOD_AUTO,
@@ -125,7 +88,7 @@ func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 	ensureSettingIp6ConfigMethodNoEmpty(data, errs)
 	switch getSettingIp6ConfigMethod(data) {
 	default:
-		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, sectionIpv6, NM_SETTING_IP_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
 		return
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 		checkSettingIp6MethodConflict(data, errs)
@@ -153,19 +116,19 @@ func checkSettingIp6ConfigValues(data connectionData) (errs sectionErrors) {
 func checkSettingIp6MethodConflict(data connectionData, errs sectionErrors) {
 	// check dns
 	if isSettingIp6ConfigDnsExists(data) && len(getSettingIp6ConfigDns(data)) > 0 {
-		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_DNS))
 	}
 	// check dns search
 	if isSettingIp6ConfigDnsSearchExists(data) && len(getSettingIp6ConfigDnsSearch(data)) > 0 {
-		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_DNS_SEARCH))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_DNS_SEARCH))
 	}
 	// check address
 	if isSettingIp6ConfigAddressesExists(data) && len(getSettingIp6ConfigAddresses(data)) > 0 {
-		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ADDRESSES))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_ADDRESSES))
 	}
 	// check route
 	if isSettingIp6ConfigRoutesExists(data) && len(getSettingIp6ConfigRoutes(data)) > 0 {
-		rememberError(errs, sectionIpv6, NM_SETTING_IP6_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP6_CONFIG_ROUTES))
+		rememberError(errs, sectionIpv6, NM_SETTING_IP_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP6_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_ROUTES))
 	}
 }
 
@@ -216,7 +179,7 @@ func checkSettingIp6ConfigAddresses(data connectionData, errs sectionErrors) {
 func logicSetSettingIp6ConfigMethod(data connectionData, value string) (err error) {
 	switch value {
 	case NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
-		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_METHOD)
+		removeSettingKeyBut(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP_CONFIG_METHOD)
 	case NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 		removeSettingIp6ConfigAddresses(data)
 	case NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore

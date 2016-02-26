@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
@@ -7,15 +16,14 @@ import (
 
 var displayRect xproto.Rectangle
 
-func initDisplay() bool {
+func initDisplay() error {
 	var err error
 	dpy, err = display.NewDisplay(
 		"com.deepin.daemon.Display",
 		"/com/deepin/daemon/Display",
 	)
 	if err != nil {
-		logger.Error("connect to display failed:", err)
-		return false
+		return err
 	}
 	// to avoid get PrimaryRect failed
 	defer func() {
@@ -34,7 +42,7 @@ func initDisplay() bool {
 		}
 		hideModemanager.UpdateState()
 	})
-	return true
+	return nil
 }
 
 func setDisplayRect(rect []interface{}) {

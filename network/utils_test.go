@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
@@ -117,21 +105,21 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	setValueJSON = `[""]`
 	c.Check(getSettingIp4ConfigDnsJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_DNS), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_DNS), C.Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIp4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ADDRESSES), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES), C.Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
 	c.Check(getSettingIp4ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP4_CONFIG_ROUTES), C.Equals, false)
+	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ROUTES), C.Equals, false)
 
 	// ktypeWrapperIpv6Dns
 	defaultValueJSON = `[]`
@@ -741,4 +729,15 @@ func (*testWrapper) TestDoStrToUuid(c *C.C) {
 	for _, d := range data {
 		c.Check(d.uuid, C.Equals, doStrToUuid(d.addr))
 	}
+}
+
+func (*testWrapper) TestMarshalMobilePlanKey(c *C.C) {
+	wantJSON := "\"{\\\"IsGSM\\\":true,\\\"Name\\\":\\\"LaptopConnect (data cards)\\\",\\\"ProviderName\\\":\\\"AT\\\\u0026T\\\",\\\"APNValue\\\":\\\"Broadband\\\",\\\"APNUsageType\\\":\\\"internet\\\"}\""
+	wantValue := "{\"IsGSM\":true,\"Name\":\"LaptopConnect (data cards)\",\"ProviderName\":\"AT\\u0026T\",\"APNValue\":\"Broadband\",\"APNUsageType\":\"internet\"}"
+
+	jsonStr, _ := keyValueToJSON(wantValue, ktypeString)
+	c.Check(jsonStr, C.Equals, wantJSON)
+
+	value, _ := jsonToKeyValueString(wantJSON)
+	c.Check(value, C.Equals, wantValue)
 }

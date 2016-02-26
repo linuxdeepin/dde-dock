@@ -1,19 +1,23 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"pkg.linuxdeepin.com/dde-daemon"
+	"pkg.deepin.io/dde/daemon/loader"
 	"time"
 )
 
 func init() {
-	loader.Register(&loader.Module{
-		Name:   "dock",
-		Start:  Start,
-		Stop:   Stop,
-		Enable: true,
-	})
+	loader.Register(NewDaemon(logger))
 }
 
 var (

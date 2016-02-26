@@ -1,33 +1,24 @@
 /**
- * Copyright (c) 2011 ~ 2015 Deepin, Inc.
- *               2013 ~ 2015 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package mounts
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/log"
-	dutils "pkg.linuxdeepin.com/lib/utils"
 	"sync"
 	"time"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/log"
+	dutils "pkg.deepin.io/lib/utils"
 )
+
+var logger = log.NewLogger("daemon/mounts")
 
 const (
 	mediaHandlerSchema = "org.gnome.desktop.media-handling"
@@ -44,16 +35,20 @@ type diskObjectInfo struct {
 }
 
 type Manager struct {
+	// All disk info list in system
 	DiskList DiskInfos
 
-	//Error(uuid, reason)
+	// Error(uuid, reason) signal. It will be emited if operation failure
+	//
+	// uuid: the disk uuid
+	// reason: detail info about the failure
 	Error func(string, string)
 
-	monitor *gio.VolumeMonitor
 	setting *gio.Settings
 	logger  *log.Logger
 	endFlag chan struct{}
 
+	locker      sync.Mutex
 	cacheLocker sync.Mutex
 	diskCache   map[string]*diskObjectInfo
 }
@@ -61,8 +56,7 @@ type Manager struct {
 func NewManager() *Manager {
 	var m = Manager{}
 
-	m.logger = log.NewLogger(dbusSender)
-	m.monitor = gio.VolumeMonitorGet()
+	m.logger = logger
 	m.setting, _ = dutils.CheckAndNewGSettings(mediaHandlerSchema)
 	m.diskCache = make(map[string]*diskObjectInfo)
 	m.endFlag = make(chan struct{})
@@ -76,11 +70,6 @@ func (m *Manager) destroy() {
 	if m.diskCache != nil {
 		m.clearDiskCache()
 		m.diskCache = nil
-	}
-
-	if m.monitor != nil {
-		m.monitor.Unref()
-		m.monitor = nil
 	}
 
 	if m.logger != nil {
@@ -106,15 +95,19 @@ func (m *Manager) refrashDiskInfos() {
 }
 
 func (m *Manager) getDiskInfos() DiskInfos {
+	m.locker.Lock()
+	defer m.locker.Unlock()
+
 	m.clearDiskCache()
 	m.diskCache = make(map[string]*diskObjectInfo)
 
 	var infos DiskInfos
-	volumes := m.monitor.GetVolumes()
+	var monitor = gio.VolumeMonitorGet()
+	defer monitor.Unref()
+	volumes := monitor.GetVolumes()
 	for _, volume := range volumes {
 		mount := volume.GetMount()
 		if mount != nil {
-			mount.Unref()
 			continue
 		}
 
@@ -126,7 +119,7 @@ func (m *Manager) getDiskInfos() DiskInfos {
 		infos = append(infos, info)
 	}
 
-	mounts := m.monitor.GetMounts()
+	mounts := monitor.GetMounts()
 	for _, mount := range mounts {
 		info := newDiskInfoFromMount(mount)
 		m.setDiskCache(info.UUID, &diskObjectInfo{
@@ -142,9 +135,9 @@ func (m *Manager) getDiskInfos() DiskInfos {
 func (m *Manager) setDiskCache(key string, value *diskObjectInfo) {
 	m.cacheLocker.Lock()
 	defer m.cacheLocker.Unlock()
-	_, ok := m.diskCache[key]
+	tmp, ok := m.diskCache[key]
 	if ok {
-		m.deleteDiskCache(key)
+		freeDiskInfoObj(tmp)
 	}
 
 	m.diskCache[key] = value
@@ -168,14 +161,7 @@ func (m *Manager) deleteDiskCache(key string) {
 		return
 	}
 
-	switch v.Type {
-	case diskTypeVolume:
-		volume := v.Obj.(*gio.Volume)
-		volume.Unref()
-	case diskTypeMount:
-		mount := v.Obj.(*gio.Mount)
-		mount.Unref()
-	}
+	freeDiskInfoObj(v)
 	delete(m.diskCache, key)
 }
 
@@ -183,13 +169,18 @@ func (m *Manager) clearDiskCache() {
 	m.cacheLocker.Lock()
 	defer m.cacheLocker.Unlock()
 	for _, v := range m.diskCache {
-		switch v.Type {
-		case diskTypeVolume:
-			volume := v.Obj.(*gio.Volume)
-			volume.Unref()
-		case diskTypeMount:
-			mount := v.Obj.(*gio.Mount)
-			mount.Unref()
-		}
+		freeDiskInfoObj(v)
+	}
+	m.diskCache = nil
+}
+
+func freeDiskInfoObj(v *diskObjectInfo) {
+	switch v.Type {
+	case diskTypeVolume:
+		volume := v.Obj.(*gio.Volume)
+		volume.Unref()
+	case diskTypeMount:
+		mount := v.Obj.(*gio.Mount)
+		mount.Unref()
 	}
 }

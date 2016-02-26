@@ -1,7 +1,16 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package audio
 
-import "pkg.linuxdeepin.com/lib/dbus"
-import "pkg.linuxdeepin.com/lib/pulse"
+import "pkg.deepin.io/lib/dbus"
+import "pkg.deepin.io/lib/pulse"
 import "fmt"
 
 const (
@@ -11,9 +20,11 @@ const (
 )
 
 const (
-	PropAppIconName = "application.icon_name"
-	PropAppName     = "application.name"
-	PropAppPID      = "application.process.id"
+	PropAppIconName      = "application.icon_name"
+	PropAppName          = "application.name"
+	PropAppPID           = "application.process.id"
+	PropDeviceFromFactor = "device.form_factor"
+	PropDeviceBus        = "device.bus"
 )
 
 func (*Audio) GetDBusInfo() dbus.DBusInfo {

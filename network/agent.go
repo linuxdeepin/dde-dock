@@ -1,27 +1,15 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib/dbus"
 import "time"
 
 var invalidKeyData = make(map[string]map[string]dbus.Variant)
@@ -144,7 +132,7 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 
 	if _, ok := a.pendingKeys[keyId]; ok {
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
-		a.CancelGetSecrets(connectionPath, settingName)
+		a.CancelGetSecrets(connectionPath, settingName, false)
 	}
 	select {
 	case key, ok := <-a.createPendingKey(connectionData, keyId):
@@ -154,8 +142,9 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 		} else {
 			logger.Info("failed to get secretes", keyId)
 		}
+		dbus.Emit(manager, "NeedSecretsFinished", string(connectionPath), settingName)
 	case <-time.After(120 * time.Second):
-		a.CancelGetSecrets(connectionPath, settingName)
+		a.CancelGetSecrets(connectionPath, settingName, true)
 		logger.Info("get secrets timeout", keyId)
 	}
 	return
@@ -170,9 +159,13 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 	return a.pendingKeys[keyId]
 }
 
-func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string) {
+func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string, notifyFinished bool) {
 	logger.Debug("CancelGetSecrets:", connectionPath, settingName)
 	keyId := mapKey{connectionPath, settingName}
+
+	if notifyFinished {
+		dbus.Emit(manager, "NeedSecretsFinished", string(connectionPath), settingName)
+	}
 
 	if pendingChan, ok := a.pendingKeys[keyId]; ok {
 		close(pendingChan)
@@ -221,5 +214,5 @@ func (m *Manager) FeedSecret(path string, name, key string, autoConnect bool) {
 }
 func (m *Manager) CancelSecret(path string, name string) {
 	logger.Debug("CancelSecret:", path, name)
-	m.agent.CancelGetSecrets(dbus.ObjectPath(path), name)
+	m.agent.CancelGetSecrets(dbus.ObjectPath(path), name, true)
 }

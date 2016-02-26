@@ -1,43 +1,22 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	"io/ioutil"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/utils"
 	"regexp"
 )
 
 const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
-
-const NM_SETTING_VPN_SETTING_NAME = "vpn"
-
-const (
-	NM_SETTING_VPN_SERVICE_TYPE = "service-type"
-	NM_SETTING_VPN_USER_NAME    = "user-name"
-	NM_SETTING_VPN_DATA         = "data"
-	NM_SETTING_VPN_SECRETS      = "secrets"
-)
 
 func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
@@ -46,7 +25,6 @@ func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionType(data, NM_SETTING_VPN_SETTING_NAME)
-	setSettingConnectionAutoconnect(data, false)
 
 	initSettingSectionIpv4(data)
 	return
@@ -65,6 +43,7 @@ func getLocalSupportedVpnTypes() (vpnTypes []string) {
 		connectionVpnOpenconnect,
 		connectionVpnOpenvpn,
 		connectionVpnPptp,
+		connectionVpnStrongswan,
 		connectionVpnVpnc,
 	} {
 		_, program, _, _ := parseVncNameFile(getVpnNameFile(vpnType))
@@ -92,6 +71,8 @@ func getVpnNameFile(vpnType string) (nameFile string) {
 		nameFile = nmVpnOpenvpnNameFile
 	case connectionVpnPptp:
 		nameFile = nmVpnPptpNameFile
+	case connectionVpnStrongswan:
+		nameFile = nmVpnStrongswanNameFile
 	case connectionVpnVpnc:
 		nameFile = nmVpnVpncNameFile
 	}
@@ -158,6 +139,7 @@ func isSettingVpnPluginSecretKey(section, key string) bool {
 		case NM_SETTING_VPN_PPTP_KEY_PASSWORD:
 			return true
 		}
+	case sectionVpnStrongswan:
 	case sectionVpnVpnc:
 		switch key {
 		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:

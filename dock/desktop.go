@@ -1,8 +1,17 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
+	"gir/gio-2.0"
+	"gir/glib-2.0"
 	"regexp"
 )
 
@@ -78,7 +87,10 @@ func (dai *DesktopAppInfo) ListActions() []string {
 	return actions
 }
 
-func getGroupName(actionGropuName string) string {
+func getGroupName(gioSupported bool, actionGropuName string) string {
+	if gioSupported {
+		return "Desktop Action " + actionGropuName
+	}
 	return actionGropuName + " Shortcut Group"
 }
 
@@ -92,14 +104,14 @@ func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 	langs := GetLanguageNames()
 	str := ""
 	for _, lang := range langs {
-		str, _ = dai.KeyFile.GetLocaleString(getGroupName(actionGroup), "Name", lang)
+		str, _ = dai.KeyFile.GetLocaleString(getGroupName(dai.gioSupported, actionGroup), "Name", lang)
 		if str != "" {
 			return str
 		}
 	}
 
 	if str == "" {
-		str, _ = dai.KeyFile.GetString(getGroupName(actionGroup), "Name")
+		str, _ = dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), "Name")
 	}
 
 	return str
@@ -107,15 +119,16 @@ func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
 
 func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchContextLike) {
 	logger.Debug(dai.GetFilename())
-	if dai.gioSupported {
-		logger.Debug("[LaunchAction]", dai.GetFilename(), "gio support")
-		dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
-		return
-	}
+	// LaunchAction won't work for new style desktop, fuck gio.
+	// if dai.gioSupported {
+	// 	logger.Info("[LaunchAction]", dai.GetFilename(), "gio support")
+	// 	dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
+	// 	return
+	// }
 
 	logger.Debug("LaunchAction")
-	exec, _ := dai.KeyFile.GetString(getGroupName(actionGroup), glib.KeyFileDesktopKeyExec)
-	logger.Debug("exec:", exec)
+	exec, _ := dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), glib.KeyFileDesktopKeyExec)
+	logger.Infof("exec: %q", exec)
 	a, err := gio.AppInfoCreateFromCommandline(
 		exec,
 		"",
@@ -127,7 +140,7 @@ func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchCon
 	}
 
 	defer a.Unref()
-	_, err = a.Launch(make([]*gio.File, 0), nil)
+	_, err = a.Launch(make([]*gio.File, 0), ctx)
 	if err != nil {
 		logger.Warning("Launch App Failed: ", err)
 	}

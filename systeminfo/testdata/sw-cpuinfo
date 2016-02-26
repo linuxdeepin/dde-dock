@@ -1,0 +1,26 @@
+cpu			: sw
+cpu model		: sw
+cpu variation		: 1
+cpu revision		: 0
+cpu serial number	: 
+system type		: Tembin
+system variation	: Tembin
+system revision		: 0
+system serial number	: 30303030
+CPU frequency [MHz]	: 1400.00 
+timer frequency [Hz]	: 1024.00
+page size [bytes]	: 8192
+phys. address bits	: 40
+max. addr. space #	: 255
+BogoMIPS		: 2791.42
+kernel unaligned acc	: 1480274 (pc=fffffc0000ee8460,va=fffffc00d971c89e)
+user unaligned acc	: 1805698 (pc=200007629a4,va=11feb9264)
+platform string		: Unknown manufacturer.
+cpus detected		: 4
+cpus active		: 4
+cpu active mask		: 000000000000000f
+cpus core_start		: 000000000000000f
+L1 Icache		: 128K, 2-way, 128b line
+L1 Dcache		: 128K, 4-way, 128b line
+L2 cache		: 2048K, 8-way, 128b line
+L3 cache		: n/a

@@ -1,28 +1,16 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
-	. "pkg.linuxdeepin.com/lib/gettext"
+	. "pkg.deepin.io/lib/gettext"
 	"strconv"
 )
 
@@ -42,6 +30,8 @@ const (
 	deviceVlan       = "vlan"
 	deviceAdsl       = "adsl"
 	deviceBridge     = "bridge"
+	deviceGeneric    = "generic"
+	deviceTeam       = "team"
 )
 
 func getCustomDeviceType(devType uint32) (customDevType string) {
@@ -72,11 +62,18 @@ func getCustomDeviceType(devType uint32) (customDevType string) {
 		return deviceAdsl
 	case NM_DEVICE_TYPE_BRIDGE:
 		return deviceBridge
+	case NM_DEVICE_TYPE_GENERIC:
+		return deviceGeneric
+	case NM_DEVICE_TYPE_TEAM:
+		return deviceTeam
+	case NM_DEVICE_TYPE_UNKNOWN:
 	default:
 		logger.Error("unknown device type", devType)
 	}
 	return deviceUnknown
 }
+
+// TODO: support generic/bluetooth connection types for nm 1.0
 
 // Custom connection types
 const (
@@ -91,6 +88,7 @@ const (
 	connectionVpnL2tp         = "vpn-l2tp"
 	connectionVpnOpenconnect  = "vpn-openconnect"
 	connectionVpnOpenvpn      = "vpn-openvpn"
+	connectionVpnStrongswan   = "vpn-strongswan"
 	connectionVpnPptp         = "vpn-pptp"
 	connectionVpnVpnc         = "vpn-vpnc"
 )
@@ -120,6 +118,7 @@ var supportedConnectionTypes = []string{
 	connectionVpnOpenconnect,
 	connectionVpnOpenvpn,
 	connectionVpnPptp,
+	connectionVpnStrongswan,
 	connectionVpnVpnc,
 }
 
@@ -158,6 +157,8 @@ func getCustomConnectionType(data connectionData) (connType string) {
 			connType = connectionVpnOpenvpn
 		case NM_DBUS_SERVICE_PPTP:
 			connType = connectionVpnPptp
+		case NM_DBUS_SERVICE_STRONGSWAN:
+			connType = connectionVpnStrongswan
 		case NM_DBUS_SERVICE_VPNC:
 			connType = connectionVpnVpnc
 		}
@@ -166,6 +167,31 @@ func getCustomConnectionType(data connectionData) (connType string) {
 		connType = connectionUnknown
 	}
 	return
+}
+
+func isWirelessConnection(data connectionData) (isWireless bool) {
+	if getSettingConnectionType(data) == NM_SETTING_WIRELESS_SETTING_NAME {
+		return true
+	}
+	return false
+}
+
+func isVpnConnection(data connectionData) (isVpn bool) {
+	if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
+		return true
+	}
+	return false
+}
+
+func isCreatedManuallyConnection(data connectionData) (isCreateManual bool) {
+	if isVpnConnection(data) {
+		return true
+	}
+	switch getCustomConnectionType(data) {
+	case connectionPppoe:
+		return true
+	}
+	return false
 }
 
 // generate connection id when creating a new connection
@@ -200,6 +226,8 @@ func genConnectionId(connType string) (id string) {
 		idPrefix = Tr("VPN OpenVPN")
 	case connectionVpnPptp:
 		idPrefix = Tr("VPN PPTP")
+	case connectionVpnStrongswan:
+		idPrefix = Tr("VPN StrongSwan")
 	case connectionVpnVpnc:
 		idPrefix = Tr("VPN VPNC")
 	}

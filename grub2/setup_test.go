@@ -1,11 +1,20 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package grub2
 
 import (
 	"io/ioutil"
 	C "launchpad.net/gocheck"
-	"pkg.linuxdeepin.com/lib/graphic"
-	"pkg.linuxdeepin.com/lib/log"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -14,9 +23,9 @@ const (
 )
 
 var (
-	tmpBaseDir    = "/tmp/dde_daemon_grub2_test"
-	tmpConfigFile = tmpBaseDir + "/dde_daemon_grub2_test_settings"
-	tmpThemeDir   = tmpBaseDir + "/dde_daemon_grub2_test_theme_dir"
+	tmpBaseDir    = "./testdata"
+	tmpConfigFile = tmpBaseDir + "/tmp_settings"
+	tmpThemeDir   = tmpBaseDir + "/tmp_theme_dir"
 	tmpGfxmode    = "1200x900"
 )
 
@@ -52,13 +61,13 @@ func (*GrubTester) TestCustomArguments(c *C.C) {
 }
 
 func (*GrubTester) TestSetup(c *C.C) {
-	wantSettingsContent := `GRUB_BACKGROUND="<none>"
+	wantSettingsContent := `GRUB_BACKGROUND="./testdata/tmp_theme_dir/background.png"
 GRUB_CMDLINE_LINUX="locale=zh_CN.UTF-8 url=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/preseed/deepin.seed initrd=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/casper/initrd.lz"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
 GRUB_DISTRIBUTOR="` + "`lsb_release -d -s 2> /dev/null || echo Debian`" + `"
 GRUB_GFXMODE="1200x900"
-GRUB_THEME="/tmp/dde_daemon_grub2_test/dde_daemon_grub2_test_theme_dir/theme.txt"
+GRUB_THEME="./testdata/tmp_theme_dir/theme.txt"
 GRUB_TIMEOUT="5"
 `
 

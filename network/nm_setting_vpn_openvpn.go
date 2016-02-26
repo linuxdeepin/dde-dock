@@ -1,27 +1,15 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
-import . "pkg.linuxdeepin.com/lib/gettext"
+import . "pkg.deepin.io/lib/gettext"
 
 const (
 	NM_DBUS_SERVICE_OPENVPN   = "org.freedesktop.NetworkManager.openvpn"
@@ -362,9 +350,7 @@ func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []stri
 func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
-		// TODO get openvpn cipher
-		// "/usr/sbin/openvpn"
-		// "/sbin/openvpn"
+		// TODO get openvpn cipher "/usr/sbin/openvpn" "/sbin/openvpn"
 		// --show-ciphers
 		values = []kvalue{
 			kvalue{"", Tr("Default")},
@@ -547,6 +533,7 @@ func logicSetSettingVpnOpenvpnKeyConnectionType(data connectionData, value strin
 			NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP,
 		)...)
 	}
+	setSettingVpnOpenvpnKeyConnectionType(data, value)
 	return
 }
 func logicSetSettingVpnOpenvpnKeyProxyType(data connectionData, value string) (err error) {

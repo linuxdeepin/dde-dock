@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package accounts
@@ -24,18 +12,29 @@ package accounts
 import (
 	"fmt"
 	"math/rand"
-	"pkg.linuxdeepin.com/dde-daemon/accounts/checkers"
-	"pkg.linuxdeepin.com/dde-daemon/accounts/users"
-	"pkg.linuxdeepin.com/lib/dbus"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/dde/daemon/accounts/checkers"
+	"pkg.deepin.io/dde/daemon/accounts/users"
+	"pkg.deepin.io/lib/dbus"
+	dutils "pkg.deepin.io/lib/utils"
 	"time"
 )
 
+// Create new user.
+//
+// 如果收到 Error 信号，则创建失败。
+//
+// name: 用户名
+//
+// fullname: 全名，可以为空
+//
+// ty: 用户类型，0 为普通用户，1 为管理员
 func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 	name, fullname string, ty int32) error {
+	logger.Debug("[CreateUser] new user:", name, fullname, ty)
 	pid := dbusMsg.GetSenderPID()
 	err := m.polkitAuthManagerUser(pid, "CreateUser")
 	if err != nil {
+		logger.Debug("[CreateUser] access denied:", err)
 		return err
 	}
 
@@ -45,7 +44,7 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 		if err != nil {
 			logger.Warningf("DoAction: create user '%s' failed: %v\n",
 				name, err)
-			triggerSigErr(pid, "CreateUser", err.Error())
+			doEmitError(pid, "CreateUser", err.Error())
 			return
 		}
 
@@ -54,16 +53,24 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 			logger.Warningf("DoAction: set user type '%s' failed: %v\n",
 				name, err)
 		}
+		doEmitSuccess(pid, "CreateUser")
 	}()
 
 	return nil
 }
 
+// Delete a exist user.
+//
+// name: 用户名
+//
+// rmFiles: 是否删除用户数据
 func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 	name string, rmFiles bool) (bool, error) {
+	logger.Debug("[DeleteUser] user:", name, rmFiles)
 	pid := dbusMsg.GetSenderPID()
 	err := m.polkitAuthManagerUser(pid, "DeleteUser")
 	if err != nil {
+		logger.Debug("[DeleteUser] access denied:", err)
 		return false, err
 	}
 
@@ -72,15 +79,19 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 		if err != nil {
 			logger.Warningf("DoAction: delete user '%s' failed: %v\n",
 				name, err)
-			triggerSigErr(pid, "DeleteUser", err.Error())
+			doEmitError(pid, "DeleteUser", err.Error())
 			return
 		}
 
-		//delete user config and icons
-		if !rmFiles {
-			return
+		if users.IsAutoLoginUser(name) {
+			users.SetAutoLoginUser("")
 		}
-		clearUserDatas(name)
+
+		//delete user config and icons
+		if rmFiles {
+			clearUserDatas(name)
+		}
+		doEmitSuccess(pid, "DeleteUser")
 	}()
 
 	return true, nil
@@ -106,6 +117,11 @@ func (m *Manager) FindUserByName(name string) (string, error) {
 	return m.FindUserById(info.Uid)
 }
 
+// 随机得到一个用户头像
+//
+// ret0：头像路径，为空则表示获取失败
+//
+// ret1: 是否获取成功
 func (m *Manager) RandUserIcon() (string, bool, error) {
 	icons := getUserStandardIcons()
 	if len(icons) == 0 {
@@ -117,6 +133,13 @@ func (m *Manager) RandUserIcon() (string, bool, error) {
 	return icons[idx], true, nil
 }
 
+// 检查用户名是否有效
+//
+// ret0: 是否合法
+//
+// ret1: 不合法原因
+//
+// ret2: 不合法代码
 func (m *Manager) IsUsernameValid(name string) (bool, string, int32) {
 	info := checkers.CheckUsernameValid(name)
 	if info == nil {
@@ -138,6 +161,7 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 	}
 
 	if allow == isGuestUserEnabled() {
+		doEmitSuccess(pid, "AllowGuestAccount")
 		return nil
 	}
 
@@ -145,10 +169,11 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 		actConfigGroupGroup, actConfigKeyGuest, allow)
 	if !success {
 		reason := "Enable guest user failed"
-		triggerSigErr(pid, "AllowGuestAccount", reason)
+		doEmitError(pid, "AllowGuestAccount", reason)
 		return fmt.Errorf(reason)
 	}
 	m.setPropAllowGuest(allow)
+	doEmitSuccess(pid, "AllowGuestAccount")
 
 	return nil
 }

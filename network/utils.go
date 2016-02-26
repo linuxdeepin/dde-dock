@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
@@ -24,7 +12,8 @@ package network
 import (
 	"encoding/json"
 	"fmt"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 
@@ -54,6 +43,15 @@ func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 		}
 	}
 	return
+}
+
+func isDBusPathInArray(path dbus.ObjectPath, pathList []dbus.ObjectPath) bool {
+	for _, i := range pathList {
+		if i == path {
+			return true
+		}
+	}
+	return false
 }
 
 func isInterfaceNil(v interface{}) bool {

@@ -1,10 +1,19 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package power
 
 //this should only use org.freedesktop.ScreenSaver interface with SimulateUserActivity
 
 import (
 	"dbus/org/freedesktop/screensaver"
-	//"pkg.linuxdeepin.com/lib/logger"
+	//"pkg.deepin.io/lib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
@@ -14,6 +23,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"io/ioutil"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -21,16 +31,46 @@ type fullScreenWorkaround struct {
 	xu               *xgbutil.XUtil
 	targets          []string
 	activeWindowAtom xproto.Atom
-	isHintingTarget  bool
+
+	ss         *screensaver.ScreenSaver
+	idleId     uint32
+	idleLocker sync.Mutex
 }
 
-func newFullScreenWorkaround() *fullScreenWorkaround {
-	XU, _ := xgbutil.NewConn()
-	ACTIVE_WINDOW, _ := xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
-	w := &fullScreenWorkaround{
-		XU, []string{"libflash", "chrome", "mplayer", "operaplugin", "soffice", "wpp", "evince", "vlc", "totem"}, ACTIVE_WINDOW, false,
+func newFullScreenWorkaround() (*fullScreenWorkaround, error) {
+	XU, err := xgbutil.NewConn()
+	if err != nil {
+		return nil, err
 	}
-	return w
+
+	ACTIVE_WINDOW, err := xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	if err != nil {
+		return nil, err
+	}
+
+	ss, err := screensaver.NewScreenSaver("org.freedesktop.ScreenSaver",
+		"/org/freedesktop/ScreenSaver")
+	if err != nil {
+		return nil, err
+	}
+
+	return &fullScreenWorkaround{
+		xu: XU,
+		targets: []string{
+			"libflash",
+			"chrome",
+			"mplayer",
+			"operaplugin",
+			"soffice",
+			"wpp",
+			"evince",
+			"vlc",
+			"totem",
+		},
+		activeWindowAtom: ACTIVE_WINDOW,
+		ss:               ss,
+		idleId:           0,
+	}, nil
 }
 
 func (wa *fullScreenWorkaround) detectTarget(w xproto.Window) {
@@ -48,27 +88,40 @@ func (wa *fullScreenWorkaround) detectTarget(w xproto.Window) {
 				return
 			}
 		}
+	} else {
+		if wa.ss != nil && wa.idleId != 0 {
+			wa.idleLocker.Lock()
+			logger.Debug("[detectTarget] try to inhibit:", wa.idleId)
+			err := wa.ss.UnInhibit(wa.idleId)
+			if err != nil {
+				logger.Warning("[detectTarget] uninhibit failed:", wa.idleId, err)
+			}
+			wa.idleId = 0
+			wa.idleLocker.Unlock()
+		}
 	}
-	wa.isHintingTarget = false
 }
 
 func (wa *fullScreenWorkaround) inhibit(target, cmdline string) {
-	wa.isHintingTarget = true
-	if ss, err := screensaver.NewScreenSaver("org.freedesktop.ScreenSaver", "/org/freedesktop/ScreenSaver"); err == nil {
-		var hit func()
-		hit = func() {
-			time.AfterFunc(time.Second*2, func() {
-				if wa.isHintingTarget {
-					ss.SimulateUserActivity()
-					hit()
-				}
-			})
-		}
-		hit()
-		logger.Debug("Inhibit Hight Performance :", "TARGET:", target, "CMDLINE:", cmdline)
-	} else {
-		logger.Error("ERRRR:", err)
+	wa.idleLocker.Lock()
+	defer wa.idleLocker.Unlock()
+	if wa.ss == nil {
+		return
 	}
+
+	if wa.idleId != 0 {
+		logger.Debug("[inhibit] has in inhibit mode:", wa.idleId)
+		return
+	}
+
+	id, err := wa.ss.Inhibit("idle", "Fullscreen play video")
+	if err != nil {
+		logger.Warning("Inhibit 'idle' failed:", err)
+		return
+	}
+
+	logger.Debug("[inhibit] success:", id)
+	wa.idleId = id
 }
 
 func (wa *fullScreenWorkaround) isFullScreen(xid xproto.Window) bool {
@@ -109,4 +162,8 @@ func (wa *fullScreenWorkaround) start() {
 }
 func (wa *fullScreenWorkaround) stop() {
 	xevent.Quit(wa.xu)
+	if wa.ss != nil {
+		screensaver.DestroyScreenSaver(wa.ss)
+		wa.ss = nil
+	}
 }

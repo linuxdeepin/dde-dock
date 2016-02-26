@@ -1,44 +1,45 @@
 /**
- * Copyright (c) 2011 ~ 2014 Deepin, Inc.
- *               2013 ~ 2014 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package langselector
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/dde-daemon/langselector/language_info"
-	. "pkg.linuxdeepin.com/lib/gettext"
+	"pkg.deepin.io/dde/api/lang_info"
+	. "pkg.deepin.io/lib/gettext"
 )
 
-type localeInfo struct {
+const (
+	localeIconStart    = "notification-change-language-start"
+	localeIconFailed   = "notification-change-language-failed"
+	localeIconFinished = "notification-change-language-finished"
+)
+
+type LocaleInfo struct {
+	// Locale name
 	Locale string
-	Desc   string
+	// Locale description
+	Desc string
 }
 
+// Set user desktop environment locale, the new locale will work after relogin.
+// (Notice: this locale is only for the current user.)
+//
+// 设置用户会话的 locale，注销后生效，此改变只对当前用户生效。
+//
+// locale: see '/etc/locale.gen'
 func (lang *LangSelector) SetLocale(locale string) error {
 	if lang.LocaleState == LocaleStateChanging {
 		return nil
 	}
 
-	if len(locale) == 0 || !language_info.IsLocaleValid(locale,
-		language_info.LanguageListFile) {
+	if len(locale) == 0 || !lang_info.IsSupportedLocale(locale) {
 		return fmt.Errorf("Invalid locale: %v", locale)
 	}
 	if lang.lhelper == nil {
@@ -53,13 +54,13 @@ func (lang *LangSelector) SetLocale(locale string) error {
 		lang.LocaleState = LocaleStateChanging
 		lang.setPropCurrentLocale(locale)
 		if ok, _ := isNetworkEnable(); !ok {
-			err := sendNotify("", "",
+			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
 			}
 		} else {
-			err := sendNotify("", "",
+			err := sendNotify(localeIconStart, "",
 				Tr("System language is being changed with an installation of lacked language packages, please wait..."))
 			if err != nil {
 				lang.logger.Warning("sendNotify failed:", err)
@@ -75,8 +76,11 @@ func (lang *LangSelector) SetLocale(locale string) error {
 	return nil
 }
 
-func (lang *LangSelector) GetLocaleList() []localeInfo {
-	list, err := getLocaleInfoList(language_info.LanguageListFile)
+// Get locale info list that deepin supported
+//
+// 得到系统支持的 locale 信息列表
+func (lang *LangSelector) GetLocaleList() []LocaleInfo {
+	list, err := getLocaleInfoList()
 	if err != nil {
 		lang.logger.Warning(err)
 		return nil
@@ -85,15 +89,15 @@ func (lang *LangSelector) GetLocaleList() []localeInfo {
 	return list
 }
 
-func getLocaleInfoList(filename string) ([]localeInfo, error) {
-	infoList, err := language_info.GetLanguageInfoList(filename)
+func getLocaleInfoList() ([]LocaleInfo, error) {
+	infos, err := lang_info.GetSupportedLangInfos()
 	if err != nil {
 		return nil, err
 	}
 
-	var list []localeInfo
-	for _, info := range infoList {
-		tmp := localeInfo{info.Locale, info.Description}
+	var list []LocaleInfo
+	for _, info := range infos {
+		tmp := LocaleInfo{info.Locale, info.Description}
 		list = append(list, tmp)
 	}
 

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
@@ -19,12 +28,12 @@ type MenuItem struct {
 	showCheckMark    bool
 	subMenu          *Menu
 
-	Action func()
+	Action func(uint32)
 }
 
 // TODO: set properties.
 
-func NewMenuItem(name string, action func(), enable bool) *MenuItem {
+func NewMenuItem(name string, action func(uint32), enable bool) *MenuItem {
 	return &MenuItem{
 		name,
 		enable,
@@ -85,9 +94,10 @@ func (m *Menu) AppendItem(items ...*MenuItem) {
 	}
 }
 
-func (m *Menu) HandleAction(id string) {
+func (m *Menu) HandleAction(id string, timestamp uint32) {
 	if item, ok := m.ids[id]; ok && item.isActive {
-		item.Action()
+		fmt.Println(id)
+		item.Action(timestamp)
 	}
 }
 

@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package utils
 
 import (
@@ -5,11 +14,13 @@ import (
 	"io"
 	"os"
 	"path"
-	"pkg.linuxdeepin.com/lib/utils"
+	"pkg.deepin.io/lib/utils"
 )
 
+// CopyFlag type
 type CopyFlag int
 
+// copy file flags
 const (
 	CopyFileNone CopyFlag = 1 << iota
 	CopyFileNotKeepSymlink
@@ -68,6 +79,7 @@ func copyFileAux(src, dst string, copyFlag CopyFlag) error {
 	return nil
 }
 
+// CopyFile copys file.
 func CopyFile(src, dst string, copyFlag CopyFlag) error {
 	srcStat, err := os.Lstat(src)
 	if err != nil {

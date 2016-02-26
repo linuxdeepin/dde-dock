@@ -1,211 +1,165 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package category
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
-	"path"
-	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 
-	lerrors "pkg.linuxdeepin.com/dde-daemon/launcher/errors"
-	. "pkg.linuxdeepin.com/dde-daemon/launcher/interfaces"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
-	"pkg.linuxdeepin.com/lib/glib-2.0"
+	"pkg.deepin.io/dde/daemon/dstore"
+	. "pkg.deepin.io/dde/daemon/launcher/interfaces"
+	"pkg.deepin.io/lib/gettext"
 )
 
+// category id and name.
 const (
-	UnknownID CategoryId = iota - 3
-	OtherID
-	AllID
-	NetworkID
-	MultimediaID
-	GamesID
+	AllID CategoryID = iota - 1
+	InternetID
+	ChatID
+	MusicID
+	VideoID
 	GraphicsID
-	ProductivityID
-	IndustryID
-	EducationID
+	GameID
+	OfficeID
+	ReadingID
 	DevelopmentID
 	SystemID
-	UtilitiesID
-
-	AllCategoryName          = "all"
-	OtherCategoryName        = "others"
-	NetworkCategoryName      = "internet"
-	MultimediaCategoryName   = "multimedia"
-	GamesCategoryName        = "games"
-	GraphicsCategoryName     = "graphics"
-	ProductivityCategoryName = "productivity"
-	IndustryCategoryName     = "industry"
-	EducationCategoryName    = "education"
-	DevelopmentCategoryName  = "development"
-	SystemCategoryName       = "system"
-	UtilitiesCategoryName    = "utilities"
-
-	SoftwareCenterDataDir = "/usr/share/deepin-software-center/data"
-	_DataNewestIdFileName = "data_newest_id.ini"
-	CategoryNameDBPath    = "/update/%s/desktop/desktop2014.db"
+	OthersID
 )
 
+func ToString(cid CategoryID) string {
+	prefix := "unknown"
+	switch cid {
+	case OthersID:
+		prefix = "Other"
+	case AllID:
+		prefix = "All"
+	case InternetID:
+		prefix = "Internet"
+	case OfficeID:
+		prefix = "Office"
+	case DevelopmentID:
+		prefix = "Development"
+	case ReadingID:
+		prefix = "Reading"
+	case GraphicsID:
+		prefix = "Graphics"
+	case GameID:
+		prefix = "Game"
+	case MusicID:
+		prefix = "Music"
+	case SystemID:
+		prefix = "System"
+	case VideoID:
+		prefix = "Video"
+	case ChatID:
+		prefix = "Chat"
+	}
+	return fmt.Sprintf("%s(%d)", prefix, int(cid))
+}
+
 var (
-	categoryNameTable = map[string]CategoryId{
-		OtherCategoryName:        OtherID,
-		AllCategoryName:          AllID,
-		NetworkCategoryName:      NetworkID,
-		MultimediaCategoryName:   MultimediaID,
-		GamesCategoryName:        GamesID,
-		GraphicsCategoryName:     GraphicsID,
-		ProductivityCategoryName: ProductivityID,
-		IndustryCategoryName:     IndustryID,
-		EducationCategoryName:    EducationID,
-		DevelopmentCategoryName:  DevelopmentID,
-		SystemCategoryName:       SystemID,
-		UtilitiesCategoryName:    UtilitiesID,
+	categoryNameTable = map[string]CategoryID{
+		dstore.OthersID:      OthersID,
+		dstore.AllID:         AllID,
+		dstore.InternetID:    InternetID,
+		dstore.OfficeID:      OfficeID,
+		dstore.DevelopmentID: DevelopmentID,
+		dstore.ReadingID:     ReadingID,
+		dstore.GraphicsID:    GraphicsID,
+		dstore.GameID:        GameID,
+		dstore.MusicID:       MusicID,
+		dstore.SystemID:      SystemID,
+		dstore.VideoID:       VideoID,
+		dstore.ChatID:        ChatID,
 	}
 )
 
-type CategoryInfo struct {
-	id    CategoryId
+// Info for category.
+type Info struct {
+	id    CategoryID
 	name  string
-	items map[ItemId]struct{}
+	items map[ItemID]struct{}
+	lock  sync.RWMutex
 }
 
-func (c *CategoryInfo) Id() CategoryId {
+func NewInfo(id CategoryID, name string) *Info {
+	return &Info{
+		id:    id,
+		name:  name,
+		items: map[ItemID]struct{}{},
+	}
+}
+
+// ID returns category id.
+func (c *Info) ID() CategoryID {
 	return c.id
 }
 
-func (c *CategoryInfo) Name() string {
+// Name returns category english name.
+func (c *Info) Name() string {
 	return c.name
 }
 
-func (c *CategoryInfo) AddItem(itemId ItemId) {
-	c.items[itemId] = struct{}{}
-}
-func (c *CategoryInfo) RemoveItem(itemId ItemId) {
-	delete(c.items, itemId)
+// LocaleName returns category's locale name.
+func (c *Info) LocaleName() string {
+	return gettext.Tr(c.name)
 }
 
-func (c *CategoryInfo) Items() []ItemId {
-	items := []ItemId{}
-	for itemId, _ := range c.items {
-		items = append(items, itemId)
+// AddItem adds a new app.
+func (c *Info) AddItem(itemID ItemID) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	c.items[itemID] = struct{}{}
+}
+
+// RemoveItem removes a app.
+func (c *Info) RemoveItem(itemID ItemID) {
+	c.lock.Lock()
+	defer c.lock.Unlock()
+	delete(c.items, itemID)
+}
+
+type ByItemID []ItemID
+
+func (items ByItemID) Swap(i, j int) {
+	items[i], items[j] = items[j], items[i]
+}
+
+func (items ByItemID) Len() int {
+	return len(items)
+}
+
+func (items ByItemID) Less(i, j int) bool {
+	return items[i] < items[j]
+}
+
+// Items returns all items belongs to this category.
+func (c *Info) Items() []ItemID {
+	items := []ItemID{}
+	c.lock.RLock()
+	for itemID := range c.items {
+		items = append(items, itemID)
 	}
+	c.lock.RUnlock()
+	sort.Sort(ByItemID(items))
 	return items
 }
 
-func getNewestDataId(dataDir string) (string, error) {
-	file := glib.NewKeyFile()
-	defer file.Free()
-
-	ok, err := file.LoadFromFile(path.Join(dataDir, _DataNewestIdFileName), glib.KeyFileFlagsNone)
-	if !ok {
-		return "", err
-	}
-
-	id, err := file.GetString("newest", "data_id")
-	if err != nil {
-		return "", err
-	}
-
-	return id, nil
-}
-
-func GetDBPath(dataDir string, template string) (string, error) {
-	id, err := getNewestDataId(dataDir)
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(dataDir, fmt.Sprintf(template, id)), nil
-}
-
-func QueryCategoryId(app *gio.DesktopAppInfo, db *sql.DB) (CategoryId, error) {
-	if app == nil {
-		return UnknownID, lerrors.NilArgument
-	}
-
-	filename := app.GetFilename()
-	basename := path.Base(filename)
-	id, err := getDeepinCategory(basename, db)
-	if err != nil {
-		categories := strings.Split(strings.TrimRight(app.GetCategories(), ";"), ";")
-		return getXCategory(categories), nil
-	}
-	return id, nil
-}
-
-func getDeepinCategory(basename string, db *sql.DB) (CategoryId, error) {
-	if db == nil {
-		return UnknownID, errors.New("invalid db")
-	}
-
-	var categoryName string
-	err := db.QueryRow(`
-	select first_category_name
-	from desktop
-	where desktop_name = ?`,
-		basename,
-	).Scan(&categoryName)
-	if err != nil {
-		return OtherID, err
-	}
-
-	if categoryName == "" {
-		return OtherID, errors.New("get empty category")
-	}
-
-	return getCategoryId(categoryName)
-}
-
-type CategoryIdList []CategoryId
-
-func (self CategoryIdList) Less(i, j int) bool {
-	return self[i] < self[j]
-}
-
-func (self CategoryIdList) Swap(i, j int) {
-	self[i], self[j] = self[j], self[i]
-}
-
-func (self CategoryIdList) Len() int {
-	return len(self)
-}
-
-func getXCategory(categories []string) CategoryId {
-	candidateIds := map[CategoryId]bool{OtherID: true}
-	for _, category := range categories {
-		if id, err := getCategoryId(category); err == nil {
-			candidateIds[id] = true
-		}
-	}
-
-	if len(candidateIds) > 1 && candidateIds[OtherID] {
-		delete(candidateIds, OtherID)
-	}
-
-	ids := make([]CategoryId, 0)
-	for id := range candidateIds {
-		ids = append(ids, id)
-	}
-
-	sort.Sort(CategoryIdList(ids))
-
-	return ids[0]
-}
-
-func getCategoryId(name string) (CategoryId, error) {
+func getCategoryID(name string) (CategoryID, error) {
 	name = strings.ToLower(name)
 	if id, ok := categoryNameTable[name]; ok {
 		return id, nil
 	}
-
-	if id, ok := xCategoryNameIdMap[name]; ok {
-		return id, nil
-	}
-
-	if id, ok := extraXCategoryNameIdMap[name]; ok {
-		return id, nil
-	}
-
-	return UnknownID, errors.New("unknown id")
+	return OthersID, errors.New("unknown id")
 }

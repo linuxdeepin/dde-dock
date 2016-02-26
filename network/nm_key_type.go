@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
@@ -153,8 +141,10 @@ type ipv6Route struct {
 }
 type ipv6Routes []ipv6Route
 
-func getKtypeDescription(t ktype) (desc string) {
+func getKtypeDesc(t ktype) (desc string) {
 	switch t {
+	default:
+		logger.Error("Unknown type", t)
 	case ktypeUnknown:
 		desc = "Unknown"
 	case ktypeString:
@@ -185,6 +175,22 @@ func getKtypeDescription(t ktype) (desc string) {
 		desc = "Ipv6Addresses, array of (byte array, uint32, byte array), encode by json"
 	case ktypeIpv6Routes:
 		desc = "ipv6Routes, array of (byte array, uint32, byte array, uint32), encode by json"
+	case ktypeWrapperString:
+		desc = "wrap ktypeArrayByte to [string]"
+	case ktypeWrapperMacAddress:
+		desc = "wrap ktypeArrayByte to [string]"
+	case ktypeWrapperIpv4Dns:
+		desc = "wrap ktypeArrayUint32 to [array of string]"
+	case ktypeWrapperIpv4Addresses:
+		desc = "wrap ktypeArrayArrayUint32 to [array of (string, string, string)]"
+	case ktypeWrapperIpv4Routes:
+		desc = "wrap ktypeArrayArrayUint32 to [array of (string, string, string, uint32)]"
+	case ktypeWrapperIpv6Dns:
+		desc = "wrap ktypeArrayArrayByte to [array of string]"
+	case ktypeWrapperIpv6Addresses:
+		desc = "wrap ktypeIpv6Addresses to [array of (string, uint32, string)]"
+	case ktypeWrapperIpv6Routes:
+		desc = "wrap ktypeIpv6Routes to [array of (string, uint32, string, uint32)]"
 	}
 	return
 }

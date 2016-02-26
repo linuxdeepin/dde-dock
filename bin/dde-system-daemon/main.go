@@ -1,22 +1,31 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package main
 
-import "pkg.linuxdeepin.com/lib/log"
+import "pkg.deepin.io/lib/log"
 
-import "pkg.linuxdeepin.com/lib"
-import "pkg.linuxdeepin.com/lib/dbus"
+import "pkg.deepin.io/lib"
+import "pkg.deepin.io/lib/dbus"
 import "os"
-import _ "pkg.linuxdeepin.com/dde-daemon/accounts"
-import "pkg.linuxdeepin.com/dde-daemon"
-import . "pkg.linuxdeepin.com/lib/gettext"
+import _ "pkg.deepin.io/dde/daemon/accounts"
+import "pkg.deepin.io/dde/daemon/loader"
+import . "pkg.deepin.io/lib/gettext"
 
-var logger = log.NewLogger("com.deepin.daemon")
+var logger = log.NewLogger("daemon/dde-system-daemon")
 
 func main() {
 	logger.BeginTracing()
 	defer logger.EndTracing()
 
 	if !lib.UniqueOnSystem("com.deepin.daemon") {
-		logger.Warning("There already has an dde-daemon running.")
+		logger.Warning("There already has an dde daemon running.")
 		return
 	}
 

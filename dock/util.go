@@ -1,3 +1,12 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
@@ -5,9 +14,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path/filepath"
-	"pkg.linuxdeepin.com/lib/gio-2.0"
 	"regexp"
 	"strings"
+
+	"gir/gio-2.0"
+	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
 func isEntryNameValid(name string) bool {
@@ -39,8 +50,7 @@ func trimDesktop(desktopID string) string {
 }
 
 func normalizeAppID(candidateID string) string {
-	normalizedAppID := strings.Replace(strings.ToLower(candidateID), "_", "-", -1)
-	return normalizedAppID
+	return appinfo.NormalizeAppID(candidateID)
 }
 
 var _DesktopAppIdReg = regexp.MustCompile(`(?:[^.]+\.)*(?P<desktopID>[^.]+)\.desktop`)
@@ -49,7 +59,7 @@ func getAppIDFromDesktopID(candidateID string) string {
 	desktopID := guess_desktop_id(candidateID)
 	logger.Debug(fmt.Sprintf("get desktop id: %q", desktopID))
 	if desktopID == "" {
-		return candidateID
+		return ""
 	}
 
 	appID := normalizeAppID(trimDesktop(desktopID))
@@ -69,20 +79,32 @@ func guess_desktop_id(appId string) string {
 
 	desktopID := appId + ".desktop"
 	allApp := gio.AppInfoGetAll()
-	for _, app := range allApp {
-		baseName := filepath.Base(gio.ToDesktopAppInfo(app).GetFilename())
-		normalizedDesktopID := normalizeAppID(baseName)
 
-		if normalizedDesktopID == desktopID {
-			_appIDCache[appId] = baseName
-			return baseName
+	defer func() {
+		for _, app := range allApp {
+			app.Unref()
+		}
+	}()
+
+	for _, app := range allApp {
+		_appInfo := gio.ToDesktopAppInfo(app)
+
+		if _appInfo == nil {
+			continue
+		}
+
+		_desktopID := _appInfo.GetId()
+		normalizedDesktopID := normalizeAppID(_desktopID)
+		if strings.HasSuffix(normalizedDesktopID, desktopID) {
+			_appIDCache[appId] = _desktopID
+			return _desktopID
 		}
 
 		// TODO: this is not a silver bullet, fix it later.
 		appIDs := _DesktopAppIdReg.FindStringSubmatch(normalizedDesktopID)
 		if len(appIDs) == 2 && appIDs[1] == appId {
-			_appIDCache[appId] = baseName
-			return baseName
+			_appIDCache[appId] = _desktopID
+			return _desktopID
 		}
 	}
 
@@ -124,11 +146,11 @@ func getAppIcon(core *gio.DesktopAppInfo) string {
 	ext = ext[1:]
 	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, "xpm") {
-		logger.Info("change xpm to data uri")
+		logger.Info("transform xpm to data uri")
 		return xpm_to_dataurl(iconPath)
 	}
 
-	logger.Info("get app icon:", icon)
+	logger.Debug("get app icon:", icon)
 	return icon
 }
 

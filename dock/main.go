@@ -1,38 +1,59 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
 package dock
 
 import (
 	"dbus/com/deepin/api/xmousearea"
 	"dbus/com/deepin/daemon/display"
+	"errors"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
 	"os"
-	"pkg.linuxdeepin.com/lib/dbus"
-	"pkg.linuxdeepin.com/lib/log"
+	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 	"time"
 )
 
 var (
-	logger                                     = log.NewLogger("com.deepin.daemon.Dock")
+	logger                                     = log.NewLogger("daemon/dock")
 	region              *Region                = nil
 	setting             *Setting               = nil
 	hideModemanager     *HideStateManager      = nil
 	dpy                 *display.Display       = nil
 	dockProperty        *DockProperty          = nil
 	entryProxyerManager *EntryProxyerManager   = nil
-	dockedAppManager    *DockedAppManager      = nil
+	DOCKED_APP_MANAGER  *DockedAppManager      = nil
 	areaImp             *xmousearea.XMouseArea = nil
 	mouseArea           *XMouseAreaProxyer     = nil
 )
 
-func Stop() {
+type Daemon struct {
+	*loader.ModuleBase
+}
+
+func NewDaemon(logger *log.Logger) *Daemon {
+	daemon := new(Daemon)
+	daemon.ModuleBase = loader.NewModuleBase("dock", daemon, logger)
+	return daemon
+}
+
+func (d *Daemon) Stop() error {
 	if dockProperty != nil {
 		dockProperty.destroy()
 		dockProperty = nil
 	}
 
-	if dockedAppManager != nil {
-		dockedAppManager.destroy()
-		dockedAppManager = nil
+	if DOCKED_APP_MANAGER != nil {
+		DOCKED_APP_MANAGER.destroy()
+		DOCKED_APP_MANAGER = nil
 	}
 
 	if region != nil {
@@ -77,11 +98,12 @@ func Stop() {
 	}
 
 	logger.EndTracing()
+	return nil
 }
 
-func startFailed(args ...interface{}) {
+func (d *Daemon) startFailed(args ...interface{}) {
 	logger.Error(args...)
-	Stop()
+	d.Stop()
 }
 
 func initAtom() {
@@ -99,9 +121,9 @@ func initAtom() {
 	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 }
 
-func Start() {
+func (d *Daemon) Start() error {
 	if dockProperty != nil {
-		return
+		return nil
 	}
 
 	logger.BeginTracing()
@@ -112,59 +134,66 @@ func Start() {
 		os.Setenv("G_MESSAGES_DEBUG", "all")
 	}
 
-	if !initDisplay() {
-		Stop()
-		return
-	}
-
 	var err error
+
+	if err = initDisplay(); err != nil {
+		d.Stop()
+		logger.Info("initialize display failed")
+		return err
+	}
+	logger.Info("initialize display done")
 
 	XU, err = xgbutil.NewConn()
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	TrayXU, err = xgbutil.NewConn()
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	initAtom()
+	logger.Info("initialize atoms done")
 
 	dockProperty = NewDockProperty()
 	err = dbus.InstallOnSession(dockProperty)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
+	logger.Info("initialize dock property done")
 
 	entryProxyerManager = NewEntryProxyerManager()
 	err = dbus.InstallOnSession(entryProxyerManager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
-
 	entryProxyerManager.watchEntries()
+	logger.Info("initialize entry proxyer manager done")
 
-	dockedAppManager = NewDockedAppManager()
-	err = dbus.InstallOnSession(dockedAppManager)
+	DOCKED_APP_MANAGER = NewDockedAppManager()
+	err = dbus.InstallOnSession(DOCKED_APP_MANAGER)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
+	logger.Info("initialize docked app manager done")
 
 	setting = NewSetting()
 	if setting == nil {
-		startFailed("get setting failed")
+		d.startFailed("get setting failed")
+		return errors.New("create setting failed")
 	}
 	err = dbus.InstallOnSession(setting)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
+	logger.Info("initialize settings done")
 
 	dockProperty.updateDockHeight(DisplayModeType(setting.GetDisplayMode()))
 
@@ -172,24 +201,27 @@ func Start() {
 		NewHideStateManager(HideModeType(setting.GetHideMode()))
 	err = dbus.InstallOnSession(hideModemanager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
+	logger.Info("initialize hide mode manager done")
+
 	hideModemanager.UpdateState()
 
 	clientManager := NewClientManager()
 	err = dbus.InstallOnSession(clientManager)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 	go clientManager.listenRootWindow()
+	logger.Info("initialize client manager done")
 
 	region = NewRegion()
 	err = dbus.InstallOnSession(region)
 	if err != nil {
-		startFailed("register dbus interface failed:", err)
-		return
+		d.startFailed("register dbus interface failed:", err)
+		return err
 	}
 
 	areaImp, err = xmousearea.NewXMouseArea(
@@ -199,14 +231,14 @@ func Start() {
 	mouseArea, err = NewXMouseAreaProxyer(areaImp, err)
 
 	if err != nil {
-		startFailed("register xmouse area failed:", err)
-		return
+		d.startFailed("register xmouse area failed:", err)
+		return err
 	}
 
 	err = dbus.InstallOnSession(mouseArea)
 	if err != nil {
-		startFailed(err)
-		return
+		d.startFailed(err)
+		return err
 	}
 
 	dbus.Emit(mouseArea, "InvalidId")
@@ -216,7 +248,7 @@ func Start() {
 			mouseAreaTimer = nil
 		}
 		mouseAreaTimer = time.AfterFunc(TOGGLE_HIDE_TIME, func() {
-			logger.Info("MouseIn:", id)
+			logger.Debug("MouseIn:", id)
 			mouseAreaTimer = nil
 			hideModemanager.UpdateState()
 		})
@@ -227,9 +259,28 @@ func Start() {
 			mouseAreaTimer.Stop()
 			mouseAreaTimer = nil
 		}
-		logger.Info("MouseOut:", id)
+		logger.Debug("MouseOut:", id)
 		hideModemanager.UpdateState()
 	})
 
 	initialize()
+	logger.Info("initialize done")
+	return nil
+}
+
+func (d *Daemon) GetDependencies() []string {
+	return []string{}
+}
+
+func (d *Daemon) Name() string {
+	return "dock"
+}
+
+func initialize() {
+	for _, id := range DOCKED_APP_MANAGER.DockedAppList() {
+		id = normalizeAppID(id)
+		logger.Debug("load", id)
+		ENTRY_MANAGER.createNormalApp(id)
+	}
+	initTrayManager()
 }

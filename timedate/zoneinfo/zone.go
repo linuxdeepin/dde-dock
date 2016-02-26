@@ -1,22 +1,10 @@
 /**
- * Copyright (c) 2011 ~ 2015 Deepin, Inc.
- *               2013 ~ 2015 jouyouyun
- *
- * Author:      jouyouyun <jouyouwen717@gmail.com>
- * Maintainer:  jouyouyun <jouyouwen717@gmail.com>
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package zoneinfo
@@ -25,7 +13,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
-	dutils "pkg.linuxdeepin.com/lib/utils"
+	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 	"strings"
 )
@@ -35,16 +23,22 @@ const (
 )
 
 type DSTInfo struct {
+	// The timestamp of entering DST every year
 	Enter int64
+	// The timestamp of leaving DST every year
 	Leave int64
 
+	// The DST offset
 	Offset int32
 }
 
 type ZoneInfo struct {
+	// Timezone name, ex: "Asia/Shanghai"
 	Name string
+	// Timezone description, ex: "China Shanghai"
 	Desc string
 
+	// Timezone offset
 	Offset int32
 
 	DST DSTInfo
@@ -53,6 +47,7 @@ type ZoneInfo struct {
 var (
 	//_zoneList []string
 
+	// Error, invalid timezone
 	ErrZoneInvalid = fmt.Errorf("Invalid time zone")
 	errZoneNoDST   = fmt.Errorf("The time zone has no DST info")
 
@@ -70,7 +65,12 @@ func init() {
 }
 */
 
+// Check timezone validity
 func IsZoneValid(zone string) bool {
+	if len(zone) == 0 {
+		return false
+	}
+
 	file := path.Join(defaultZoneDir, zone)
 	return dutils.IsFileExist(file)
 }
@@ -86,6 +86,7 @@ func GetAllZones() []string {
 }
 */
 
+// Query timezone detail info by timezone
 func GetZoneInfo(zone string) (*ZoneInfo, error) {
 	if !IsZoneValid(zone) {
 		return nil, ErrZoneInvalid

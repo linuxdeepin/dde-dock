@@ -1,29 +1,17 @@
 /**
- * Copyright (c) 2014 Deepin, Inc.
- *               2014 Xu FaSheng
- *
- * Author:      Xu FaSheng <fasheng.xu@gmail.com>
- * Maintainer:  Xu FaSheng <fasheng.xu@gmail.com>
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
  **/
 
 package network
 
 import (
 	"fmt"
-	"pkg.linuxdeepin.com/lib/dbus"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func isJSONValueMeansToDeleteKey(valueJSON string, t ktype) (doDelete bool) {
@@ -112,7 +100,8 @@ func doGetSettingKey(data connectionData, section, key string) (value interface{
 	}
 
 	value = variant.Value()
-	logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
+	// only debug for develop
+	// logger.Debugf("getSettingKey: data[%s][%s]=%v", section, key, value)
 	if isInterfaceNil(value) {
 		// variant exists, but the value is nil, so we give an error
 		// message
@@ -138,8 +127,8 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 
 	value, err := jsonToKeyValue(valueJSON, t)
 	if err != nil {
-		logger.Errorf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
-			valueJSON, getKtypeDescription(t), err)
+		logger.Debugf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
+			valueJSON, getKtypeDesc(t), err)
 		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
 		return
 	}
