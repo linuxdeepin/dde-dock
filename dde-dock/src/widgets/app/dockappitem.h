@@ -49,6 +49,7 @@ public:
     void setEntryProxyer(DBusDockEntry *entryProxyer);
     bool actived() const;
     void setActived(bool actived);
+    void setWindowIconGeometries();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

@@ -185,6 +185,9 @@ void DockPanel::onDockModeChanged(Dock::DockMode, Dock::DockMode)
         mLayout->setAlignment(m_pluginLayout, Qt::AlignVCenter);
         m_pluginLayout->setAlignment(Qt::AlignVCenter);
     }
+
+    // interval 0 stands for timeout will be triggered on idle.
+    QTimer::singleShot(0, m_appLayout, &DockAppLayout::updateWindowIconGeometries);
 }
 
 void DockPanel::onHideStateChanged(int dockState)
@@ -251,9 +254,9 @@ void DockPanel::onContentsSizeChanged()
 
         m_appLayout->setFixedSize(rec.width - m_pluginLayout->width() - m_launcherItem->width(), m_dockModeData->getItemHeight());
     }
+    m_appLayout->updateWindowIconGeometries();
 
     setFixedSize(sizeHint().width(), m_dockModeData->getDockHeight());
-
     emit sizeChanged();
 }
 

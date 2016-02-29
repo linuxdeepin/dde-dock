@@ -8,6 +8,7 @@
  **/
 
 #include "dockappitem.h"
+#include "xcb_misc.h"
 
 const QEasingCurve MOVE_ANIMATION_CURVE = QEasingCurve::OutCubic;
 
@@ -234,11 +235,21 @@ void DockAppItem::updateXidTitleMap()
         QJsonObject obj = v.toObject();
         m_itemData.xidTitleMap.insert(obj.value("Xid").toInt(), obj.value("Title").toString());
     }
+
+    setWindowIconGeometries();
 }
 
 void DockAppItem::updateMenuJsonString()
 {
     m_itemData.menuJsonString = m_entryProxyer->data().value("menu");
+}
+
+void DockAppItem::setWindowIconGeometries()
+{
+    for (int xid : m_itemData.xidTitleMap.keys()) {
+        qDebug() << "set _NET_WM_WINDOW_ICON_GEOMETRY for window " << xid << " to " << globalPos() << size();
+        XcbMisc::instance()->set_window_icon_geometry(xid, QRect(globalPos(), size()));
+    }
 }
 
 void DockAppItem::onDbusDataChanged(const QString &, const QString &)

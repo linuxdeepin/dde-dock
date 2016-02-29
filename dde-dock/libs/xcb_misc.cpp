@@ -89,3 +89,8 @@ void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uin
 
     xcb_ewmh_set_wm_strut_partial(&m_ewmh_connection, winId, strut_partial);
 }
+
+void XcbMisc::set_window_icon_geometry(xcb_window_t winId, QRect geo)
+{
+    xcb_ewmh_set_wm_icon_geometry(&m_ewmh_connection, winId, geo.x(), geo.y(), geo.width(), geo.height());
+}

@@ -25,6 +25,9 @@ public:
     QSize sizeHint() const Q_DECL_OVERRIDE;
     void initEntries() const;
 
+public slots:
+    void updateWindowIconGeometries();
+
 signals:
     void needPreviewUpdate();
     void needPreviewHide(bool immediately);

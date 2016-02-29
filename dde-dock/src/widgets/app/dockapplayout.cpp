@@ -197,6 +197,18 @@ void DockAppLayout::initEntries() const
     m_appManager->initEntries();
 }
 
+void DockAppLayout::updateWindowIconGeometries()
+{
+    qDebug() << "update window icon geometries.";
+
+    for (QWidget *w : widgets()) {
+        DockAppItem * item = qobject_cast<DockAppItem *>(w);
+        if (item) {
+            item->setWindowIconGeometries();
+        }
+    }
+}
+
 void DockAppLayout::enterEvent(QEvent *e)
 {
     Q_UNUSED(e)
@@ -290,6 +302,9 @@ void DockAppLayout::onDrop(QDropEvent *event)
             }
         }
     }
+
+    // interval 0 stands for timeout will be triggered on idle.
+    QTimer::singleShot(0, this, &DockAppLayout::updateWindowIconGeometries);
 }
 
 void DockAppLayout::onDragLeave(QDragLeaveEvent *event)
