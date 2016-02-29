@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,177 +10,87 @@
 package mounts
 
 import (
-	"sync"
-	"time"
-
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/log"
-	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/utils"
+	"time"
 )
-
-var logger = log.NewLogger("daemon/mounts")
 
 const (
 	mediaHandlerSchema = "org.gnome.desktop.media-handling"
 
-	diskTypeVolume int = iota + 1
-	diskTypeMount
-
-	refrashTimeout = 90
+	refrashDuration = time.Minute * 10
 )
 
-type diskObjectInfo struct {
-	Type int
-	Obj  interface{}
-}
-
 type Manager struct {
-	// All disk info list in system
 	DiskList DiskInfos
+	Error    func(string, string) // (id, message)
 
-	// Error(uuid, reason) signal. It will be emited if operation failure
-	//
-	// uuid: the disk uuid
-	// reason: detail info about the failure
-	Error func(string, string)
-
+	monitor *gio.VolumeMonitor
 	setting *gio.Settings
-	logger  *log.Logger
-	endFlag chan struct{}
-
-	locker      sync.Mutex
-	cacheLocker sync.Mutex
-	diskCache   map[string]*diskObjectInfo
+	quit    chan struct{}
 }
 
-func NewManager() *Manager {
-	var m = Manager{}
-
-	m.logger = logger
-	m.setting, _ = dutils.CheckAndNewGSettings(mediaHandlerSchema)
-	m.diskCache = make(map[string]*diskObjectInfo)
-	m.endFlag = make(chan struct{})
-
-	m.DiskList = m.getDiskInfos()
-
-	return &m
+func newManager() *Manager {
+	var m = new(Manager)
+	m.monitor = gio.VolumeMonitorGet()
+	m.DiskList = m.listDisk()
+	m.init()
+	m.setting, _ = utils.CheckAndNewGSettings(mediaHandlerSchema)
+	m.quit = make(chan struct{})
+	return m
 }
 
-func (m *Manager) destroy() {
-	if m.diskCache != nil {
-		m.clearDiskCache()
-		m.diskCache = nil
-	}
-
-	if m.logger != nil {
-		m.logger.EndTracing()
-		m.logger = nil
-	}
-
-	if m.endFlag != nil {
-		close(m.endFlag)
-		m.endFlag = nil
-	}
-}
-
-func (m *Manager) refrashDiskInfos() {
-	for {
-		select {
-		case <-time.NewTicker(time.Second * refrashTimeout).C:
-			m.setPropDiskList(m.getDiskInfos())
-		case <-m.endFlag:
-			return
-		}
-	}
-}
-
-func (m *Manager) getDiskInfos() DiskInfos {
-	m.locker.Lock()
-	defer m.locker.Unlock()
-
-	m.clearDiskCache()
-	m.diskCache = make(map[string]*diskObjectInfo)
-
-	var infos DiskInfos
-	var monitor = gio.VolumeMonitorGet()
-	defer monitor.Unref()
-	volumes := monitor.GetVolumes()
-	for _, volume := range volumes {
-		mount := volume.GetMount()
-		if mount != nil {
+func (m *Manager) init() {
+	for _, info := range m.DiskList {
+		if info.object.Type != diskObjVolume || info.Type != DiskTypeRemovable {
 			continue
 		}
 
-		info := newDiskInfoFromVolume(volume)
-		m.setDiskCache(info.UUID, &diskObjectInfo{
-			Type: diskTypeVolume,
-			Obj:  volume,
-		})
-		infos = append(infos, info)
+		logger.Debug("[init] will mount volume:", info.Name, info.Id)
+		err := m.Mount(info.Id)
+		if err != nil {
+			logger.Warningf("Mount '%s - %s' failed: %v",
+				info.Name, info.Id, err)
+		}
 	}
-
-	mounts := monitor.GetMounts()
-	for _, mount := range mounts {
-		info := newDiskInfoFromMount(mount)
-		m.setDiskCache(info.UUID, &diskObjectInfo{
-			Type: diskTypeMount,
-			Obj:  mount,
-		})
-		infos = append(infos, info)
-	}
-
-	return infos
+	m.refrashDiskList()
 }
 
-func (m *Manager) setDiskCache(key string, value *diskObjectInfo) {
-	m.cacheLocker.Lock()
-	defer m.cacheLocker.Unlock()
-	tmp, ok := m.diskCache[key]
-	if ok {
-		freeDiskInfoObj(tmp)
+func (m *Manager) destroy() {
+	if m.quit != nil {
+		close(m.quit)
+		m.quit = nil
 	}
 
-	m.diskCache[key] = value
-}
-
-func (m *Manager) getDiskCache(key string) *diskObjectInfo {
-	m.cacheLocker.Lock()
-	defer m.cacheLocker.Unlock()
-	v, ok := m.diskCache[key]
-	if !ok {
-		return nil
-	}
-	return v
-}
-
-func (m *Manager) deleteDiskCache(key string) {
-	m.cacheLocker.Lock()
-	defer m.cacheLocker.Unlock()
-	v, ok := m.diskCache[key]
-	if !ok {
-		return
+	if m.setting != nil {
+		m.setting.Unref()
+		m.setting = nil
 	}
 
-	freeDiskInfoObj(v)
-	delete(m.diskCache, key)
-}
-
-func (m *Manager) clearDiskCache() {
-	m.cacheLocker.Lock()
-	defer m.cacheLocker.Unlock()
-	for _, v := range m.diskCache {
-		freeDiskInfoObj(v)
+	m.DiskList.destroy()
+	if m.monitor != nil {
+		m.monitor.Unref()
+		m.monitor = nil
 	}
-	m.diskCache = nil
 }
 
-func freeDiskInfoObj(v *diskObjectInfo) {
-	switch v.Type {
-	case diskTypeVolume:
-		volume := v.Obj.(*gio.Volume)
-		volume.Unref()
-	case diskTypeMount:
-		mount := v.Obj.(*gio.Mount)
-		mount.Unref()
+func (m *Manager) emitError(id, msg string) {
+	dbus.Emit(m, "Error", id, msg)
+}
+
+func (m *Manager) refrashDiskList() {
+	m.DiskList.destroy()
+	m.setPropDiskList(m.listDisk())
+}
+
+func (m *Manager) updateDiskInfo() {
+	for {
+		select {
+		case <-time.After(refrashDuration):
+			m.refrashDiskList()
+		case <-m.quit:
+			return
+		}
 	}
 }

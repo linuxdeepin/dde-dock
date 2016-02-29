@@ -21,6 +21,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
+	"runtime"
 )
 
 var logger = log.NewLogger("daemon/dde-session-daemon")
@@ -58,6 +59,11 @@ func main() {
 
 	var err error
 	needRunMainLoop := true
+
+	// Ensure each module and mainloop in the same thread
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
+
 	switch subCmd {
 	case "auto":
 		app.execDefaultAction()

@@ -1,0 +1,76 @@
+/**
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
+package mounts
+
+import (
+	"fmt"
+	"gir/gio-2.0"
+	"os/exec"
+	"pkg.deepin.io/dde/api/soundutils"
+)
+
+func (m *Manager) handleEvent() {
+	m.monitor.Connect("volume-added", func(monitor *gio.VolumeMonitor,
+		volume *gio.Volume) {
+		soundutils.PlaySystemSound(soundutils.EventDevicePlug,
+			"", false)
+		info := newDiskInfoFromVolume(volume)
+		logger.Debug("[Event] volume added:", info.Name, info.Type)
+		if info.Type == DiskTypeRemovable && m.isAutoMount() {
+			m.mountVolume(info.Id, info.object)
+			return
+		}
+		logger.Debug("[Event] emit list changed signal")
+		m.setPropDiskList(m.DiskList.add(info))
+	})
+
+	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor,
+		volume *gio.Volume) {
+		logger.Debug("[Event] volume removed")
+		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
+			"", false)
+		logger.Debug("[Event] emit list changed signal")
+		m.refrashDiskList()
+	})
+
+	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
+		mount *gio.Mount) {
+		info := newDiskInfoFromMount(mount)
+		logger.Debug("[Event] mount added:", info.Name, info.CanEject)
+		if info.CanEject && m.isAutoOpen() {
+			go exec.Command("/bin/sh", "-c",
+				fmt.Sprintf("gvfs-open %s",
+					info.MountPoint)).Run()
+		}
+		logger.Debug("[Event] emit list changed signal")
+		m.setPropDiskList(m.DiskList.add(info))
+	})
+
+	m.monitor.Connect("mount-removed", func(monitor *gio.VolumeMonitor,
+		mount *gio.Mount) {
+		logger.Debug("[Event] mount removed")
+		logger.Debug("[Event] emit list changed signal")
+		m.refrashDiskList()
+	})
+}
+
+func (m *Manager) isAutoMount() bool {
+	if m.setting == nil {
+		return false
+	}
+	return m.setting.GetBoolean("automount")
+}
+
+func (m *Manager) isAutoOpen() bool {
+	if m.setting == nil {
+		return false
+	}
+	return m.setting.GetBoolean("automount-open")
+}

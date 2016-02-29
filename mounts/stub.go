@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,14 @@ import (
 )
 
 const (
-	dbusSender = "com.deepin.daemon.DiskMount"
-	dbusPath   = "/com/deepin/daemon/DiskMount"
-	dbusIFC    = "com.deepin.daemon.DiskMount"
+	dbusDest = "com.deepin.daemon.DiskMount"
+	dbusPath = "/com/deepin/daemon/DiskMount"
+	dbusIFC  = "com.deepin.daemon.DiskMount"
 )
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       dbusSender,
+		Dest:       dbusDest,
 		ObjectPath: dbusPath,
 		Interface:  dbusIFC,
 	}

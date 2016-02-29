@@ -17,6 +17,7 @@ import (
 
 var (
 	_manager *Manager
+	logger   = log.NewLogger("daemon/mounts")
 )
 
 func init() {
@@ -42,17 +43,17 @@ func (d *Daemon) Start() error {
 		return nil
 	}
 
-	_manager = NewManager()
-	_manager.logger.BeginTracing()
+	_manager = newManager()
+	logger.BeginTracing()
 	err := dbus.InstallOnSession(_manager)
 	if err != nil {
-		_manager.logger.Error("Install mounts dbus failed:", err)
+		logger.Error("Install mounts dbus failed:", err)
 		_manager.destroy()
 		_manager = nil
 		return err
 	}
-	go _manager.refrashDiskInfos()
-	startDiskListener()
+	go _manager.updateDiskInfo()
+	_manager.handleEvent()
 	return nil
 }
 
