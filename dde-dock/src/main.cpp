@@ -13,14 +13,14 @@
 #include <QTranslator>
 #include <QDBusConnection>
 
+#include <libdui/dapplication.h>
+
 #include "mainwidget.h"
 #include "logmanager.h"
 #include "Logger.h"
 #include "controller/stylemanager.h"
 #include "controller/signalmanager.h"
 
-#include <sys/file.h>
-#include <pwd.h>
 #include <unistd.h>
 
 #undef signals
@@ -61,7 +61,11 @@ void RegisterDdeSession()
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    DApplication a(argc, argv);
+    if (!a.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
+        qDebug() << "set single instance failed!";
+        return -1;
+    }
     a.setOrganizationName("deepin");
     a.setApplicationName("dde-dock");
     a.setApplicationDisplayName("Dock");
@@ -80,31 +84,17 @@ int main(int argc, char *argv[])
     LogManager::instance()->debug_log_console_on();
     LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
 
-    struct passwd *pws;
-    pws = getpwuid(getuid());
-    const QString username(pws->pw_name);
+    QDBusConnection::sessionBus().registerService(DBUS_NAME);
+    RegisterDdeSession();
 
-    int pidLock = open(QString("/tmp/dde-dock_%1.pid").arg(username).toStdString().c_str(), O_CREAT | O_RDWR, 0666);
-    int rc = flock(pidLock, LOCK_EX | LOCK_NB);
-    if (!rc) {
+    StyleManager::instance()->initStyleSheet();
 
-        // TODO: 根据日志发现注册 dbus 来做单例不靠谱，所以改用 pid 锁来做，这里注册 dbus
-        // 是为了兼容，等后端把服务监控改为 pid 监控后可以移除这部分代码
-        QDBusConnection::sessionBus().registerService(DBUS_NAME);
-        RegisterDdeSession();
+    MainWidget w;
+    w.show();
+    qWarning() << "Start Dock, The main window has been shown.";
+    w.loadResources();
 
-        StyleManager::instance()->initStyleSheet();
+    initGtkThemeWatcher();
 
-        MainWidget w;
-        w.show();
-        qWarning() << "Start Dock, The main window has been shown.............................................................";
-        w.loadResources();
-
-        initGtkThemeWatcher();
-
-        return a.exec();
-    } else {
-        qWarning() << "Dock is running!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-        return 0;
-    }
+    return a.exec();
 }
