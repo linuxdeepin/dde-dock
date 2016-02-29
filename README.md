@@ -12,7 +12,7 @@ DDE Dock is Deepin Desktop Environment task bar.
 ### Runtime dependencies
 
 * [libdui](https://github.com/linuxdeepin/libdui)
-* [dde-daemon]((https://github.com/linuxdeepin/dde-daemon)
+* [dde-daemon](https://github.com/linuxdeepin/dde-daemon)
 * gtk+-2.0
 * Qt5 (>= 5.3)
   * Qt5-DBus
