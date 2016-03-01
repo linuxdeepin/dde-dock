@@ -32,9 +32,9 @@ DockPanel::DockPanel(QWidget *parent)
 {
     setObjectName("Panel");
 
+    initHideStateManager();
     initGlobalPreview();
     initShowHideAnimation();
-    initHideStateManager();
     initPluginLayout();
     initAppLayout();
     initMainLayout();
@@ -94,7 +94,7 @@ void DockPanel::initShowHideAnimation()
 void DockPanel::initHideStateManager()
 {
     m_HSManager = new DBusHideStateManager(this);
-    connect(m_HSManager,&DBusHideStateManager::ChangeState, this,&DockPanel::onHideStateChanged);
+    connect(m_HSManager,&DBusHideStateManager::ChangeState, this, &DockPanel::onHideStateChanged);
 
     //for initialization
     m_HSManager->UpdateState();
@@ -153,7 +153,6 @@ void DockPanel::initGlobalPreview()
 
     //make sure all app-preview will be destroy to save resources
     connect(m_globalPreview, &PreviewWindow::showFinish, [=] (QWidget *lastContent) {
-        m_previewShown = true;
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
@@ -161,7 +160,6 @@ void DockPanel::initGlobalPreview()
         }
     });
     connect(m_globalPreview, &PreviewWindow::hideFinish, [=] (QWidget *lastContent) {
-        m_previewShown = false;
         m_HSManager->UpdateState();
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
@@ -169,6 +167,7 @@ void DockPanel::initGlobalPreview()
                 tmpFrame->clearUpPreview();
         }
     });
+    connect(m_globalPreview, &PreviewWindow::previewFrameHided, m_HSManager, &DBusHideStateManager::UpdateState);
 }
 
 void DockPanel::onDockModeChanged(Dock::DockMode, Dock::DockMode)
@@ -191,10 +190,10 @@ void DockPanel::onDockModeChanged(Dock::DockMode, Dock::DockMode)
 void DockPanel::onHideStateChanged(int dockState)
 {
     bool containsMouse = parentWidget()->geometry().contains(QCursor::pos());
+
     if (dockState == Dock::HideStateShowing) {
         emit startShow();
-    }
-    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_previewShown) {
+    } else if (dockState == Dock::HideStateHiding && !containsMouse && !m_globalPreview->isVisible()) {
         emit startHide();
     }
 }
@@ -221,7 +220,6 @@ void DockPanel::onNeedPreviewHide(bool immediately)
 void DockPanel::onNeedPreviewShow(DockItem *item, const QPoint &pos)
 {
     if (item && item->getApplet()) {
-        m_previewShown = true;
         m_lastPreviewPos = pos;
         m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
         m_globalPreview->setContent(item->getApplet());

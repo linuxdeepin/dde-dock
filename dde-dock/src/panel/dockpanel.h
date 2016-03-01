@@ -86,7 +86,6 @@ private:
     ReflectionEffect *m_pluginReflection;
     ReflectionEffect *m_appReflection;
 
-    bool m_previewShown = false;
     bool m_isFashionMode = false;
 };
 
