@@ -81,6 +81,8 @@ void PreviewWindow::hide()
     if (m_lastContent != m_currentContent)
         emit hideFinish(m_lastContent);
 
+    emit previewFrameHided();
+
     DArrowRectangle::hide();
 }
 
@@ -105,9 +107,9 @@ void PreviewWindow::onShowTimerTriggered()
     DArrowRectangle::setContent(m_currentContent);
     m_lastContent = m_currentContent;
 
-    if (isHidden())
+    if (isHidden()) {
         show(m_x, m_y);
-    else{
+    } else {
         m_animation->setStartValue(m_lastPos);
         m_animation->setEndValue(QPoint(m_x, m_y));
         m_animation->start();

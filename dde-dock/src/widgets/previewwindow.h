@@ -35,6 +35,7 @@ public:
 signals:
     void showFinish(QWidget *lastContent);
     void hideFinish(QWidget *lastContent);
+    void previewFrameHided();
 
 protected:
     void enterEvent(QEvent *);
