@@ -203,11 +203,15 @@ func (s *SessionDaemon) getEnabledModules() []string {
 }
 
 func (s *SessionDaemon) EnableModules(enablingModules []string) error {
-	return loader.EnableModules(enablingModules, s.getDisabledModules(), getEnableFlag(s.flags))
+	disabledModules := s.getDisabledModules()
+	disabledModules = filterList(disabledModules, enablingModules)
+	return loader.EnableModules(enablingModules, disabledModules, getEnableFlag(s.flags))
 }
 
 func (s *SessionDaemon) DisableModules(disableModules []string) error {
-	return loader.EnableModules(s.getEnabledModules(), disableModules, getEnableFlag(s.flags))
+	enablingModules := s.getEnabledModules()
+	enablingModules = filterList(enablingModules, disableModules)
+	return loader.EnableModules(enablingModules, disableModules, getEnableFlag(s.flags))
 }
 
 func (s *SessionDaemon) ListModule(name string) error {
@@ -228,4 +232,25 @@ func (s *SessionDaemon) ListModule(name string) error {
 	}
 
 	return nil
+}
+
+func filterList(origin, condition []string) []string {
+	if len(condition) == 0 {
+		return origin
+	}
+
+	var tmp = make(map[string]struct{})
+	for _, v := range condition {
+		tmp[v] = struct{}{}
+	}
+
+	var ret []string
+	for _, v := range origin {
+		_, ok := tmp[v]
+		if ok {
+			continue
+		}
+		ret = append(ret, v)
+	}
+	return ret
 }
