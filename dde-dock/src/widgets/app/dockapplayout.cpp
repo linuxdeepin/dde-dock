@@ -11,6 +11,7 @@
 #include "dockapplayout.h"
 #include "../../controller/dockmodedata.h"
 
+/*
 class DropMask : public QLabel
 {
     Q_OBJECT
@@ -137,14 +138,15 @@ void DropMask::dragEnterEvent(QDragEnterEvent *e)
 #include "dockapplayout.moc"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+*/
 
 DockAppLayout::DockAppLayout(QWidget *parent) :
     MovableLayout(parent), m_isDraging(false)
 {
-    initDropMask();
+//    initDropMask();
     initAppManager();
 
-    qApp->installEventFilter(this);
+//    qApp->installEventFilter(this);
     m_ddam = new DBusDockedAppManager(this);
     connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
     connect(this, &DockAppLayout::dragLeaved, this, &DockAppLayout::onDragLeave);
@@ -202,49 +204,49 @@ void DockAppLayout::enterEvent(QEvent *e)
     setDragable(true);
 }
 
-bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
-{
-    if (e->type() == QEvent::Move) {
-        QMoveEvent *me = (QMoveEvent *)e;
-        QRect r(0, 0, width(), height());
-        if (me && isDraging() && !r.contains(mapFromGlobal(QCursor::pos()))) {
-            //show mask to catch draging widget
-            //fixme
-            m_mask->move(QCursor::pos().x() - 15, QCursor::pos().y() - 15); //15,拖动时的鼠标位移
-            m_mask->show();
-        }
-    }
+//bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
+//{
+//    if (e->type() == QEvent::Move) {
+//        QMoveEvent *me = (QMoveEvent *)e;
+//        QRect r(0, 0, width(), height());
+//        if (me && isDraging() && !r.contains(mapFromGlobal(QCursor::pos()))) {
+//            //show mask to catch draging widget
+//            //fixme
+//            m_mask->move(QCursor::pos().x() - 15, QCursor::pos().y() - 15); //15,拖动时的鼠标位移
+//            m_mask->show();
+//        }
+//    }
 
-    return QWidget::eventFilter(obj, e);
-}
+//    return QWidget::eventFilter(obj, e);
+//}
 
-void DockAppLayout::initDropMask()
-{
-    m_mask = new DropMask;
-    connect(m_mask, &DropMask::droped, this, [=] {
-        setIsDraging(false);
-        emit requestSpacingItemsDestroy(false);
-        setFixedSize(sizeHint());
-    });
-    connect(m_mask, &DropMask::invalidDroped, this, &DockAppLayout::restoreDragingWidget);
-    connect(this, &DockAppLayout::dragEntered, m_mask, &DropMask::hide);
-    connect(this, &DockAppLayout::startDrag, this, [=](QDrag* drag) {
-        setIsDraging(true);
+//void DockAppLayout::initDropMask()
+//{
+//    m_mask = new DropMask;
+//    connect(m_mask, &DropMask::droped, this, [=] {
+//        setIsDraging(false);
+//        emit requestSpacingItemsDestroy(false);
+//        setFixedSize(sizeHint());
+//    });
+//    connect(m_mask, &DropMask::invalidDroped, this, &DockAppLayout::restoreDragingWidget);
+//    connect(this, &DockAppLayout::dragEntered, m_mask, &DropMask::hide);
+//    connect(this, &DockAppLayout::startDrag, this, [=](QDrag* drag) {
+//        setIsDraging(true);
 
-        if (DockModeData::instance()->getDockMode() == Dock::FashionMode) {
-            DockAppItem *item = qobject_cast<DockAppItem *>(dragingWidget());
-            if (item) {
-                drag->setPixmap(item->iconPixmap());
-            }
-        }
+//        if (DockModeData::instance()->getDockMode() == Dock::FashionMode) {
+//            DockAppItem *item = qobject_cast<DockAppItem *>(dragingWidget());
+//            if (item) {
+//                drag->setPixmap(item->iconPixmap());
+//            }
+//        }
 
-        emit itemHoverableChange(false);
-    });
-}
+//        emit itemHoverableChange(false);
+//    });
+//}
 
 void DockAppLayout::onDrop(QDropEvent *event)
 {
-    m_mask ->hide();
+//    m_mask ->hide();
     setIsDraging(false);
     setDragFromOutside(false);
 

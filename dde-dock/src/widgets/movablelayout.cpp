@@ -321,7 +321,9 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
 
     emit startDrag(drag);
 
-    drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    const Qt::DropAction act = drag->exec(Qt::CopyAction | Qt::MoveAction, Qt::MoveAction);
+    if (act == Qt::IgnoreAction)
+        restoreDragingWidget();
 }
 
 void MovableLayout::dragEnterEvent(QDragEnterEvent *event)

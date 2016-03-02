@@ -14,7 +14,7 @@
 #include "../../controller/apps/dockappmanager.h"
 #include "../../dbus/dbusdockedappmanager.h"
 
-class DropMask;
+//class DropMask;
 
 class DockAppLayout : public MovableLayout
 {
@@ -33,7 +33,7 @@ signals:
 
 protected:
     void enterEvent(QEvent *e) Q_DECL_OVERRIDE;
-    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
+//    bool eventFilter(QObject *obj, QEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initDropMask();
@@ -59,7 +59,7 @@ private:
 private:
     bool m_isDraging;
     bool m_dragFromOutside; //mark to determine sizeHint should be plus the spacing
-    DropMask *m_mask;
+//    DropMask *m_mask;
     DockAppManager *m_appManager;
     DBusDockedAppManager *m_ddam;
 };
