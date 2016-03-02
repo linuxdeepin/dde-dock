@@ -130,7 +130,7 @@ bool MovableLayout::dragable() const
     return m_dragable;
 }
 
-int MovableLayout::indexOf(QWidget *const widget, int from) const
+int MovableLayout::indexOf(DockItem * const widget, int from) const
 {
     return m_widgetList.indexOf(widget, from);
 }
@@ -145,12 +145,12 @@ QWidget *MovableLayout::widget(int index) const
     return m_widgetList.at(index);
 }
 
-QList<QWidget *> MovableLayout::widgets() const
+QList<DockItem *> MovableLayout::widgets() const
 {
     return m_widgetList;
 }
 
-void MovableLayout::addWidget(QWidget *widget)
+void MovableLayout::addWidget(DockItem *widget)
 {
     m_widgetList.append(widget);
 
@@ -172,7 +172,7 @@ void MovableLayout::addWidget(QWidget *widget)
     }
 }
 
-void MovableLayout::insertWidget(int index, QWidget *widget)
+void MovableLayout::insertWidget(int index, DockItem *widget)
 {
     m_widgetList.insert(index, widget);
     m_layout->insertWidget(index, widget);
@@ -183,7 +183,7 @@ void MovableLayout::removeWidget(int index)
     m_layout->removeWidget(m_widgetList.takeAt(index));
 }
 
-void MovableLayout::removeWidget(QWidget *widget)
+void MovableLayout::removeWidget(DockItem *widget)
 {
     m_layout->removeWidget(widget);
     m_widgetList.removeAll(widget);
@@ -313,11 +313,11 @@ void MovableLayout::mouseMoveEvent(QMouseEvent *event)
     // drag and mimeData object will delete automatically
     QDrag *drag = new QDrag(this);
     QMimeData *mimeData = new QMimeData();
-    QImage dataImg = m_draginItem->grab().toImage();
-    mimeData->setImageData(QVariant(dataImg));
+    QPixmap dataImg = m_draginItem->grab();
+    mimeData->setImageData(QVariant(dataImg.toImage()));
     drag->setMimeData(mimeData);
     drag->setHotSpot(QPoint(15, 15));
-    drag->setPixmap(m_draginItem->grab());
+    drag->setPixmap(dataImg);
 
     emit startDrag(drag);
 

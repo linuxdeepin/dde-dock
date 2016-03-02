@@ -34,6 +34,7 @@ public:
     virtual QWidget * getApplet() = 0;
     virtual QString getMenuContent();
     virtual void invokeMenuItem(QString menuItemId, bool checked);
+    virtual QPixmap grab(const QRect &rectangle = QRect(QPoint(0, 0), QSize(-1, -1)));
 
     void showMenu(const QPoint &menuPos = QPoint(0, 0));
     void showPreview(const QPoint &previewPos = QPoint(0, 0));

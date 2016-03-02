@@ -194,6 +194,11 @@ void DockItem::invokeMenuItem(QString, bool)
 
 }
 
+QPixmap DockItem::grab(const QRect &rectangle)
+{
+    return QWidget::grab(rectangle);
+}
+
 void DockItem::initHighlight()
 {
     m_highlight = new HighlightEffect(this, parentWidget());

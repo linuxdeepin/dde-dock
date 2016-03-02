@@ -354,8 +354,8 @@ void DockAppLayout::initAppManager()
 
 void DockAppLayout::onAppItemRemove(const QString &id)
 {
-    QList<QWidget *> tmpList = this->widgets();
-    for (QWidget * item : tmpList) {
+    QList<DockItem *> tmpList = this->widgets();
+    for (DockItem * item : tmpList) {
         DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
         if (tmpItem && tmpItem->getItemId() == id) {
             removeWidget(item);

@@ -16,6 +16,8 @@
 #include <QHBoxLayout>
 #include <QEasingCurve>
 
+#include "dockitem.h"
+
 class QDrag;
 class QPropertyAnimation;
 
@@ -42,20 +44,20 @@ public:
     int getLayoutSpacing() const;
     int getAnimationDuration() const;
     int getHoverIndextByPos(const QPoint &pos);
-    int indexOf(QWidget * const widget, int from = 0) const;
+    int indexOf(DockItem * const widget, int from = 0) const;
 
     QWidget *dragingWidget() const;
     QWidget *widget(int index) const;
-    QList<QWidget *> widgets() const;
+    QList<DockItem *> widgets() const;
     QSize getDefaultSpacingItemSize() const;
     QBoxLayout::Direction direction() const;
     QEasingCurve::Type getAnimationCurve() const;
 
     void restoreDragingWidget();
     void removeWidget(int index);
-    void addWidget(QWidget *widget);
-    void removeWidget(QWidget *widget);
-    void insertWidget(int index, QWidget *widget);
+    void addWidget(DockItem *widget);
+    void removeWidget(DockItem *widget);
+    void insertWidget(int index, DockItem *widget);
 
     void setDuration(int v);
     void setDragable(bool v);
@@ -101,9 +103,9 @@ private:
     bool m_hoverToSpacing;
     bool m_autoResize;
     bool m_dragable;
-    QWidget *m_draginItem;
+    DockItem *m_draginItem;
     QHBoxLayout *m_layout;
-    QList<QWidget *> m_widgetList;
+    QList<DockItem *> m_widgetList;
     QSize m_defaultSpacingItemSize;
     MoveDirection m_vMoveDirection;
     MoveDirection m_hMoveDirection;

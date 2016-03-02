@@ -68,6 +68,16 @@ QPixmap DockAppItem::iconPixmap()
     return m;
 }
 
+QPixmap DockAppItem::grab(const QRect &rectangle)
+{
+    const bool actived = m_appBG->isActived();
+    m_appBG->setIsActived(false);
+    const QPixmap pixmap = DockItem::grab(rectangle);
+    m_appBG->setIsActived(actived);
+
+    return pixmap;
+}
+
 void DockAppItem::openFiles(const QStringList files)
 {
     for (QString url : files) {
