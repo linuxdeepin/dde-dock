@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	logger := log.NewLogger("desktop-toggle")
+	logger := log.NewLogger("daemon/desktop-toggle")
 	logger.BeginTracing()
 	defer logger.EndTracing()
 

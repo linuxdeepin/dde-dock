@@ -29,7 +29,7 @@ const (
 )
 
 var (
-	logger = log.NewLogger(DBUS_DEST)
+	logger = log.NewLogger("daemon/search")
 )
 
 func newManager() *Manager {
