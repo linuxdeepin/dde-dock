@@ -13,7 +13,7 @@
 #include <QTranslator>
 #include <QDBusConnection>
 
-#include <libdui/dapplication.h>
+#include <dapplication.h>
 
 #include "mainwidget.h"
 #include "logmanager.h"

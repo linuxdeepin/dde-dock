@@ -1,5 +1,3 @@
-include(../../common.pri)
-
 QT       += core gui widgets
 
 TARGET = dde-dock-shutdown-plugin

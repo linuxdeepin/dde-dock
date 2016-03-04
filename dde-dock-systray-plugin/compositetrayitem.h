@@ -13,11 +13,11 @@
 #include <QFrame>
 #include <QMap>
 
-#include <libdui/dimagebutton.h>
+#include <dimagebutton.h>
 
 #include "interfaces/dockconstants.h"
 
-DUI_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE;
 
 class TrayIcon;
 class QLabel;

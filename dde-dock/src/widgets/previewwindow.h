@@ -14,9 +14,9 @@
 #include <QPointer>
 #include <QPropertyAnimation>
 
-#include <libdui/darrowrectangle.h>
+#include <darrowrectangle.h>
 
-DUI_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
 class PreviewWindow : public DArrowRectangle
 {
