@@ -13,4 +13,5 @@
 
 int is_device_has_property(struct udev_device *device, const char *property);
 char *get_device_vendor(const char *syspath);
+char *get_device_product(const char *syspath);
 int is_usb_device(const char *syspath);

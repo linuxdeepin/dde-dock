@@ -251,7 +251,7 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 	uuid := nmGeneralGetDeviceUniqueUuid(wiredDevPath)
 	var id string
 	if nmGeneralIsUsbDevice(wiredDevPath) {
-		id = nmGeneralGetDeviceVendor(wiredDevPath)
+		id = nmGeneralGetDeviceDesc(wiredDevPath)
 	} else {
 		id = Tr("Wired Connection")
 	}

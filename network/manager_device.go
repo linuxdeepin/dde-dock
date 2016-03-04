@@ -27,17 +27,20 @@ type device struct {
 
 	Path      dbus.ObjectPath
 	State     uint32
+	Interface string
 	HwAddress string
 	Managed   bool
-	Vendor    string
+
+	// Description is the device vendor ID and product ID, if failed,
+	// use interface name instead
+	Description string
 
 	// unique connection uuid for this device, works for wired and
 	// modem device
 	UniqueUuid string
 
-	// TODO: rename to IsUsbDevice
-	UsbDevice bool            // not works for mobile device(modem)
-	ActiveAp  dbus.ObjectPath // used for wireless device
+	IsUsbDevice bool            // not works for mobile device(modem)
+	ActiveAp    dbus.ObjectPath // used for wireless device
 
 	// used for mobile device
 	MobileNetworkType   string
@@ -74,14 +77,15 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	dev = &device{
 		nmDev:     nmDev,
 		nmDevType: nmDev.DeviceType.Get(),
+		udi:       nmDev.Udi.Get(),
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),
+		Interface: nmDev.Interface.Get(),
 	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
-	dev.Vendor = nmGeneralGetDeviceVendor(devPath)
-	dev.UsbDevice = nmGeneralIsUsbDevice(devPath)
+	dev.Description = nmGeneralGetDeviceDesc(devPath)
+	dev.IsUsbDevice = nmGeneralIsUsbDevice(devPath)
 	dev.id, _ = nmGeneralGetDeviceIdentifier(devPath)
-	dev.udi = dev.nmDev.Udi.Get()
 	dev.UniqueUuid = nmGeneralGetDeviceUniqueUuid(devPath)
 
 	// dispatch for different device types
@@ -181,8 +185,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 		// need get device vendor again for that some usb device may
 		// not ready before
-		dev.Vendor = nmGeneralGetDeviceVendor(dev.Path)
-		dev.UsbDevice = nmGeneralIsUsbDevice(dev.Path)
+		dev.Description = nmGeneralGetDeviceDesc(dev.Path)
+		dev.IsUsbDevice = nmGeneralIsUsbDevice(dev.Path)
 
 		m.setPropDevices()
 

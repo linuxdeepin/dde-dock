@@ -741,3 +741,15 @@ func (*testWrapper) TestMarshalMobilePlanKey(c *C.C) {
 	value, _ := jsonToKeyValueString(wantJSON)
 	c.Check(value, C.Equals, wantValue)
 }
+
+func (*testWrapper) TestFixupDeviceDesc(c *C.C) {
+	data := []struct {
+		desc, fixedDesc string
+	}{
+		{"Intel Corporation 82567LM Gigabit Network Connection", "Intel 82567LM Gigabit"},
+		{"Intel Corporation PRO/Wireless 5100 AGN [Shiloh] Network Connection", "Intel PRO/Wireless 5100 AGN [Shiloh]"},
+	}
+	for _, d := range data {
+		c.Check(fixupDeviceDesc(d.desc), C.Equals, d.fixedDesc)
+	}
+}

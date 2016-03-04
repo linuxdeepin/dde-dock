@@ -23,6 +23,35 @@ char *new_str(const char *src_str) {
         return dest_str;
 }
 
+char *get_device_product(const char *syspath) {
+        struct udev *udev;
+        struct udev_device *device;
+        const char *product_tmp;
+        char *vendor = NULL;
+
+        udev = udev_new();
+        if (udev == NULL) {
+                return vendor;
+        }
+
+        device = udev_device_new_from_syspath(udev, syspath);
+        if (device == NULL) {
+                udev_unref(udev);
+                return vendor;
+        }
+
+        product_tmp = udev_device_get_property_value(device, "ID_MODEL_FROM_DATABASE");
+        if (!product_tmp) {
+                /* Sometimes ID_PRODUCT_FROM_DATABASE is used? */
+                product_tmp = udev_device_get_property_value(device, "ID_PRODUCT_FROM_DATABASE");
+        }
+        vendor = new_str(product_tmp);
+
+        udev_device_unref(device);
+        udev_unref(udev);
+        return vendor;
+}
+
 char *get_device_vendor(const char *syspath) {
         struct udev *udev;
         struct udev_device *device;

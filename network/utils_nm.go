@@ -369,12 +369,15 @@ func nmGeneralGetDeviceSysPath(devPath dbus.ObjectPath) (sysPath string, err err
 	return
 }
 
-func nmGeneralGetDeviceVendor(devPath dbus.ObjectPath) (vendor string) {
+func nmGeneralGetDeviceDesc(devPath dbus.ObjectPath) (desc string) {
 	sysPath, err := nmGeneralGetDeviceSysPath(devPath)
 	if err != nil {
 		return
 	}
-	vendor = udevGetDeviceVendor(sysPath)
+	desc, ok := udevGetDeviceDesc(sysPath)
+	if !ok {
+		desc = nmGetDeviceInterface(devPath)
+	}
 	return
 }
 
