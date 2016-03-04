@@ -30,7 +30,7 @@ type SystemInfo struct {
 	DiskCap uint64
 	// Memory size
 	MemoryCap uint64
-	// System architecture
+	// System type: 32bit or 64bit
 	SystemType int64
 }
 
@@ -107,9 +107,10 @@ func NewSystemInfo() *SystemInfo {
 		logger.Warning("Get memory capacity failed:", err)
 	}
 
-	info.SystemType, err = getOSType()
-	if err != nil {
-		logger.Warning("Get os type failed:", err)
+	if systemBit() == "64" {
+		info.SystemType = 64
+	} else {
+		info.SystemType = 32
 	}
 
 	info.DiskCap, err = getDiskCap()

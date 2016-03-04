@@ -41,29 +41,14 @@ func getMemoryFromFile(file string) (uint64, error) {
 	return cap * 1024, nil
 }
 
-func getOSType() (int64, error) {
-	arch, err := getOSArch()
+func systemBit() string {
+	output, err := exec.Command("/usr/bin/getconf", "LONG_BIT").Output()
 	if err != nil {
-		return 0, err
+		return "64"
 	}
 
-	switch strings.ToLower(arch) {
-	case "i386", "i586", "i686":
-		return 32, nil
-	case "x86_64", "alpha", "mips64":
-		return 64, nil
-	}
-
-	return 0, fmt.Errorf("Unknown architecture: %v", arch)
-}
-
-func getOSArch() (string, error) {
-	out, err := exec.Command("/bin/sh", "-c", "uname -m").Output()
-	if err != nil {
-		return "", err
-	}
-
-	return strings.TrimSpace(string(out)), nil
+	v := strings.TrimRight(string(output), "\n")
+	return v
 }
 
 func parseInfoFile(file, delim string) (map[string]string, error) {

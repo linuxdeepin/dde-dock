@@ -73,3 +73,16 @@ func TestDistro(t *testing.T) {
 		So(err, ShouldBeNil)
 	})
 }
+
+func TestSystemBit(t *testing.T) {
+	Convey("Test getconf", t, func() {
+		v := systemBit()
+		if v != "32" {
+			So(v, ShouldEqual, "64")
+		}
+
+		if v != "64" {
+			So(v, ShouldEqual, "32")
+		}
+	})
+}
