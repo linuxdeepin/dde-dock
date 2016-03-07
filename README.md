@@ -20,6 +20,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * acpid
 * bluez
 * systemd
+* pulseaudio
 * network-manager
 * policykit-1-gnome
 * grub-themes-deepin
