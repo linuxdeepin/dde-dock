@@ -81,6 +81,8 @@ void PreviewWindow::hide()
     if (m_lastContent != m_currentContent)
         emit hideFinish(m_lastContent);
 
+    emit previewFrameHided();
+
     DArrowRectangle::hide();
 }
 
