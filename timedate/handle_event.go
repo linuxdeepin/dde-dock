@@ -25,5 +25,6 @@ func (m *Manager) handlePropChanged() {
 	})
 	m.td1.Timezone.ConnectChanged(func() {
 		m.setPropString(&m.Timezone, "Timezone", m.td1.Timezone.Get())
+		m.AddUserTimezone(m.Timezone)
 	})
 }
