@@ -2080,6 +2080,8 @@ func getSetting8021xKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
+	case NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH:
+		t = ktypeArrayString
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
@@ -2091,6 +2093,8 @@ func getSetting8021xKeyType(key string) (t ktype) {
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
 		t = ktypeWrapperString
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		t = ktypeString
+	case NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH:
 		t = ktypeString
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		t = ktypeArrayString
@@ -2151,6 +2155,8 @@ func isKeyInSetting8021x(key string) bool {
 		return true
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		return true
+	case NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH:
+		return true
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		return true
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
@@ -2162,6 +2168,8 @@ func isKeyInSetting8021x(key string) bool {
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
 		return true
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		return true
+	case NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH:
 		return true
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		return true
@@ -2224,6 +2232,8 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 		value = ""
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		value = make([]string, 0)
+	case NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH:
+		value = make([]string, 0)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
@@ -2235,6 +2245,8 @@ func getSetting8021xDefaultValue(key string) (value interface{}) {
 	case NM_SETTING_802_1X_PHASE2_CLIENT_CERT:
 		value = make([]byte, 0)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
+		value = ""
+	case NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH:
 		value = ""
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		value = make([]string, 0)
@@ -2297,6 +2309,8 @@ func generalGetSetting8021xKeyJSON(data connectionData, key string) (value strin
 		value = getSetting8021xSubjectMatchJSON(data)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		value = getSetting8021xAltsubjectMatchesJSON(data)
+	case NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH:
+		value = getSetting8021xDomainSuffixMatchJSON(data)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		value = getSetting8021xPhase1PeaplabelJSON(data)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
@@ -2309,6 +2323,8 @@ func generalGetSetting8021xKeyJSON(data connectionData, key string) (value strin
 		value = getSetting8021xPhase2ClientCertJSON(data)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		value = getSetting8021xPhase2SubjectMatchJSON(data)
+	case NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH:
+		value = getSetting8021xPhase2DomainSuffixMatchJSON(data)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		value = getSetting8021xPhase2AltsubjectMatchesJSON(data)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
@@ -2370,6 +2386,8 @@ func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (
 		err = setSetting8021xSubjectMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_ALTSUBJECT_MATCHES:
 		err = setSetting8021xAltsubjectMatchesJSON(data, valueJSON)
+	case NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH:
+		err = setSetting8021xDomainSuffixMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE1_PEAPLABEL:
 		err = setSetting8021xPhase1PeaplabelJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_AUTHEAP:
@@ -2382,6 +2400,8 @@ func generalSetSetting8021xKeyJSON(data connectionData, key, valueJSON string) (
 		err = setSetting8021xPhase2ClientCertJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH:
 		err = setSetting8021xPhase2SubjectMatchJSON(data, valueJSON)
+	case NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH:
+		err = setSetting8021xPhase2DomainSuffixMatchJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES:
 		err = setSetting8021xPhase2AltsubjectMatchesJSON(data, valueJSON)
 	case NM_SETTING_802_1X_PASSWORD_RAW:
@@ -2456,6 +2476,9 @@ func isSetting8021xSubjectMatchExists(data connectionData) bool {
 func isSetting8021xAltsubjectMatchesExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
 }
+func isSetting8021xDomainSuffixMatchExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH)
+}
 func isSetting8021xPhase1PeaplabelExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
 }
@@ -2473,6 +2496,9 @@ func isSetting8021xPhase2ClientCertExists(data connectionData) bool {
 }
 func isSetting8021xPhase2SubjectMatchExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
+}
+func isSetting8021xPhase2DomainSuffixMatchExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH)
 }
 func isSetting8021xPhase2AltsubjectMatchesExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
@@ -2657,6 +2683,15 @@ func ensureSetting8021xAltsubjectMatchesNoEmpty(data connectionData, errs sectio
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSetting8021xDomainSuffixMatchNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xDomainSuffixMatchExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xDomainSuffixMatch(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 func ensureSetting8021xPhase1PeaplabelNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSetting8021xPhase1PeaplabelExists(data) {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, NM_KEY_ERROR_MISSING_VALUE)
@@ -2709,6 +2744,15 @@ func ensureSetting8021xPhase2SubjectMatchNoEmpty(data connectionData, errs secti
 	value := getSetting8021xPhase2SubjectMatch(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSetting8021xPhase2DomainSuffixMatchNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase2DomainSuffixMatchExists(data) {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSetting8021xPhase2DomainSuffixMatch(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
 func ensureSetting8021xPhase2AltsubjectMatchesNoEmpty(data connectionData, errs sectionErrors) {
@@ -2863,6 +2907,11 @@ func getSetting8021xAltsubjectMatches(data connectionData) (value []string) {
 	value = interfaceToArrayString(ivalue)
 	return
 }
+func getSetting8021xDomainSuffixMatch(data connectionData) (value []string) {
+	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH)
+	value = interfaceToArrayString(ivalue)
+	return
+}
 func getSetting8021xPhase1Peaplabel(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
 	value = interfaceToString(ivalue)
@@ -2890,6 +2939,11 @@ func getSetting8021xPhase2ClientCert(data connectionData) (value []byte) {
 }
 func getSetting8021xPhase2SubjectMatch(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSetting8021xPhase2DomainSuffixMatch(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH)
 	value = interfaceToString(ivalue)
 	return
 }
@@ -2991,6 +3045,9 @@ func setSetting8021xSubjectMatch(data connectionData, value string) {
 func setSetting8021xAltsubjectMatches(data connectionData, value []string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, value)
 }
+func setSetting8021xDomainSuffixMatch(data connectionData, value []string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, value)
+}
 func setSetting8021xPhase1Peaplabel(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, value)
 }
@@ -3008,6 +3065,9 @@ func setSetting8021xPhase2ClientCert(data connectionData, value []byte) {
 }
 func setSetting8021xPhase2SubjectMatch(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, value)
+}
+func setSetting8021xPhase2DomainSuffixMatch(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH, value)
 }
 func setSetting8021xPhase2AltsubjectMatches(data connectionData, value []string) {
 	setSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, value)
@@ -3106,6 +3166,10 @@ func getSetting8021xAltsubjectMatchesJSON(data connectionData) (valueJSON string
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 	return
 }
+func getSetting8021xDomainSuffixMatchJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH))
+	return
+}
 func getSetting8021xPhase1PeaplabelJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 	return
@@ -3128,6 +3192,10 @@ func getSetting8021xPhase2ClientCertJSON(data connectionData) (valueJSON string)
 }
 func getSetting8021xPhase2SubjectMatchJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+	return
+}
+func getSetting8021xPhase2DomainSuffixMatchJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH))
 	return
 }
 func getSetting8021xPhase2AltsubjectMatchesJSON(data connectionData) (valueJSON string) {
@@ -3219,6 +3287,9 @@ func setSetting8021xSubjectMatchJSON(data connectionData, valueJSON string) (err
 func setSetting8021xAltsubjectMatchesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_ALTSUBJECT_MATCHES))
 }
+func setSetting8021xDomainSuffixMatchJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH))
+}
 func setSetting8021xPhase1PeaplabelJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE1_PEAPLABEL))
 }
@@ -3236,6 +3307,9 @@ func setSetting8021xPhase2ClientCertJSON(data connectionData, valueJSON string) 
 }
 func setSetting8021xPhase2SubjectMatchJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH))
+}
+func setSetting8021xPhase2DomainSuffixMatchJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH))
 }
 func setSetting8021xPhase2AltsubjectMatchesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES, valueJSON, getSetting8021xKeyType(NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES))
@@ -3330,6 +3404,9 @@ func removeSetting8021xSubjectMatch(data connectionData) {
 func removeSetting8021xAltsubjectMatches(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_ALTSUBJECT_MATCHES)
 }
+func removeSetting8021xDomainSuffixMatch(data connectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH)
+}
 func removeSetting8021xPhase1Peaplabel(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE1_PEAPLABEL)
 }
@@ -3347,6 +3424,9 @@ func removeSetting8021xPhase2ClientCert(data connectionData) {
 }
 func removeSetting8021xPhase2SubjectMatch(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH)
+}
+func removeSetting8021xPhase2DomainSuffixMatch(data connectionData) {
+	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH)
 }
 func removeSetting8021xPhase2AltsubjectMatches(data connectionData) {
 	removeSettingKey(data, NM_SETTING_802_1X_SETTING_NAME, NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES)
@@ -4122,6 +4202,12 @@ func getSettingGsmKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_GSM_PIN_FLAGS:
 		t = ktypeUint32
+	case NM_SETTING_GSM_DEVICE_ID:
+		t = ktypeString
+	case NM_SETTING_GSM_SIM_ID:
+		t = ktypeString
+	case NM_SETTING_GSM_SIM_OPERATOR_ID:
+		t = ktypeString
 	}
 	return
 }
@@ -4146,6 +4232,12 @@ func isKeyInSettingGsm(key string) bool {
 	case NM_SETTING_GSM_PIN:
 		return true
 	case NM_SETTING_GSM_PIN_FLAGS:
+		return true
+	case NM_SETTING_GSM_DEVICE_ID:
+		return true
+	case NM_SETTING_GSM_SIM_ID:
+		return true
+	case NM_SETTING_GSM_SIM_OPERATOR_ID:
 		return true
 	}
 	return false
@@ -4174,6 +4266,12 @@ func getSettingGsmDefaultValue(key string) (value interface{}) {
 		value = ""
 	case NM_SETTING_GSM_PIN_FLAGS:
 		value = uint32(0)
+	case NM_SETTING_GSM_DEVICE_ID:
+		value = ""
+	case NM_SETTING_GSM_SIM_ID:
+		value = ""
+	case NM_SETTING_GSM_SIM_OPERATOR_ID:
+		value = ""
 	}
 	return
 }
@@ -4201,6 +4299,12 @@ func generalGetSettingGsmKeyJSON(data connectionData, key string) (value string)
 		value = getSettingGsmPinJSON(data)
 	case NM_SETTING_GSM_PIN_FLAGS:
 		value = getSettingGsmPinFlagsJSON(data)
+	case NM_SETTING_GSM_DEVICE_ID:
+		value = getSettingGsmDeviceIdJSON(data)
+	case NM_SETTING_GSM_SIM_ID:
+		value = getSettingGsmSimIdJSON(data)
+	case NM_SETTING_GSM_SIM_OPERATOR_ID:
+		value = getSettingGsmSimOperatorIdJSON(data)
 	}
 	return
 }
@@ -4228,6 +4332,12 @@ func generalSetSettingGsmKeyJSON(data connectionData, key, valueJSON string) (er
 		err = setSettingGsmPinJSON(data, valueJSON)
 	case NM_SETTING_GSM_PIN_FLAGS:
 		err = setSettingGsmPinFlagsJSON(data, valueJSON)
+	case NM_SETTING_GSM_DEVICE_ID:
+		err = setSettingGsmDeviceIdJSON(data, valueJSON)
+	case NM_SETTING_GSM_SIM_ID:
+		err = setSettingGsmSimIdJSON(data, valueJSON)
+	case NM_SETTING_GSM_SIM_OPERATOR_ID:
+		err = setSettingGsmSimOperatorIdJSON(data, valueJSON)
 	}
 	return
 }
@@ -4259,6 +4369,15 @@ func isSettingGsmPinExists(data connectionData) bool {
 }
 func isSettingGsmPinFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS)
+}
+func isSettingGsmDeviceIdExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID)
+}
+func isSettingGsmSimIdExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID)
+}
+func isSettingGsmSimOperatorIdExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID)
 }
 
 // Ensure section and key exists and not empty
@@ -4340,6 +4459,33 @@ func ensureSettingGsmPinFlagsNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
+func ensureSettingGsmDeviceIdNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingGsmDeviceIdExists(data) {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingGsmDeviceId(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingGsmSimIdNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingGsmSimIdExists(data) {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingGsmSimId(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingGsmSimOperatorIdNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingGsmSimOperatorIdExists(data) {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingGsmSimOperatorId(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 
 // Getter
 func getSettingGsmApn(data connectionData) (value string) {
@@ -4387,6 +4533,21 @@ func getSettingGsmPinFlags(data connectionData) (value uint32) {
 	value = interfaceToUint32(ivalue)
 	return
 }
+func getSettingGsmDeviceId(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingGsmSimId(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingGsmSimOperatorId(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID)
+	value = interfaceToString(ivalue)
+	return
+}
 
 // Setter
 func setSettingGsmApn(data connectionData, value string) {
@@ -4415,6 +4576,15 @@ func setSettingGsmPin(data connectionData, value string) {
 }
 func setSettingGsmPinFlags(data connectionData, value uint32) {
 	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS, value)
+}
+func setSettingGsmDeviceId(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID, value)
+}
+func setSettingGsmSimId(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID, value)
+}
+func setSettingGsmSimOperatorId(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID, value)
 }
 
 // JSON Getter
@@ -4454,6 +4624,18 @@ func getSettingGsmPinFlagsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS, getSettingGsmKeyType(NM_SETTING_GSM_PIN_FLAGS))
 	return
 }
+func getSettingGsmDeviceIdJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID, getSettingGsmKeyType(NM_SETTING_GSM_DEVICE_ID))
+	return
+}
+func getSettingGsmSimIdJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID, getSettingGsmKeyType(NM_SETTING_GSM_SIM_ID))
+	return
+}
+func getSettingGsmSimOperatorIdJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID, getSettingGsmKeyType(NM_SETTING_GSM_SIM_OPERATOR_ID))
+	return
+}
 
 // JSON Setter
 func setSettingGsmApnJSON(data connectionData, valueJSON string) (err error) {
@@ -4482,6 +4664,15 @@ func setSettingGsmPinJSON(data connectionData, valueJSON string) (err error) {
 }
 func setSettingGsmPinFlagsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_PIN_FLAGS))
+}
+func setSettingGsmDeviceIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_DEVICE_ID))
+}
+func setSettingGsmSimIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_SIM_ID))
+}
+func setSettingGsmSimOperatorIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID, valueJSON, getSettingGsmKeyType(NM_SETTING_GSM_SIM_OPERATOR_ID))
 }
 
 // Logic JSON Setter
@@ -4514,6 +4705,15 @@ func removeSettingGsmPin(data connectionData) {
 func removeSettingGsmPinFlags(data connectionData) {
 	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_PIN_FLAGS)
 }
+func removeSettingGsmDeviceId(data connectionData) {
+	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_DEVICE_ID)
+}
+func removeSettingGsmSimId(data connectionData) {
+	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_ID)
+}
+func removeSettingGsmSimOperatorId(data connectionData) {
+	removeSettingKey(data, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_GSM_SIM_OPERATOR_ID)
+}
 
 // Origin file name ../nm_setting_ip4_config_gen.go
 // Get key type
@@ -4537,6 +4737,8 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		t = ktypeString
+	case NM_SETTING_IP4_CONFIG_DHCP_FQDN:
+		t = ktypeString
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
 		t = ktypeBoolean
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
@@ -4545,6 +4747,16 @@ func getSettingIp4ConfigKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
 		t = ktypeBoolean
+	case NM_SETTING_IP4_CONFIG_DNS_OPTIONS:
+		t = ktypeArrayString
+	case NM_SETTING_IP4_CONFIG_DNS_PRIORITY:
+		t = ktypeInt32
+	case NM_SETTING_IP4_CONFIG_ROUTE_METRIC:
+		t = ktypeInt64
+	case NM_SETTING_IP4_CONFIG_DAD_TIMEOUT:
+		t = ktypeInt32
+	case NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT:
+		t = ktypeInt32
 	}
 	return
 }
@@ -4568,6 +4780,8 @@ func isKeyInSettingIp4Config(key string) bool {
 		return true
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		return true
+	case NM_SETTING_IP4_CONFIG_DHCP_FQDN:
+		return true
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
 		return true
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
@@ -4575,6 +4789,16 @@ func isKeyInSettingIp4Config(key string) bool {
 	case NM_SETTING_IP4_CONFIG_NEVER_DEFAULT:
 		return true
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
+		return true
+	case NM_SETTING_IP4_CONFIG_DNS_OPTIONS:
+		return true
+	case NM_SETTING_IP4_CONFIG_DNS_PRIORITY:
+		return true
+	case NM_SETTING_IP4_CONFIG_ROUTE_METRIC:
+		return true
+	case NM_SETTING_IP4_CONFIG_DAD_TIMEOUT:
+		return true
+	case NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT:
 		return true
 	}
 	return false
@@ -4601,6 +4825,8 @@ func getSettingIp4ConfigDefaultValue(key string) (value interface{}) {
 		value = false
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		value = ""
+	case NM_SETTING_IP4_CONFIG_DHCP_FQDN:
+		value = ""
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
 		value = true
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
@@ -4609,6 +4835,16 @@ func getSettingIp4ConfigDefaultValue(key string) (value interface{}) {
 		value = false
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
 		value = true
+	case NM_SETTING_IP4_CONFIG_DNS_OPTIONS:
+		value = make([]string, 0)
+	case NM_SETTING_IP4_CONFIG_DNS_PRIORITY:
+		value = int32(0)
+	case NM_SETTING_IP4_CONFIG_ROUTE_METRIC:
+		value = -1
+	case NM_SETTING_IP4_CONFIG_DAD_TIMEOUT:
+		value = -1
+	case NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT:
+		value = 0
 	}
 	return
 }
@@ -4634,6 +4870,8 @@ func generalGetSettingIp4ConfigKeyJSON(data connectionData, key string) (value s
 		value = getSettingIp4ConfigIgnoreAutoDnsJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		value = getSettingIp4ConfigDhcpClientIdJSON(data)
+	case NM_SETTING_IP4_CONFIG_DHCP_FQDN:
+		value = getSettingIp4ConfigDhcpFqdnJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
 		value = getSettingIp4ConfigDhcpSendHostnameJSON(data)
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
@@ -4642,6 +4880,16 @@ func generalGetSettingIp4ConfigKeyJSON(data connectionData, key string) (value s
 		value = getSettingIp4ConfigNeverDefaultJSON(data)
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
 		value = getSettingIp4ConfigMayFailJSON(data)
+	case NM_SETTING_IP4_CONFIG_DNS_OPTIONS:
+		value = getSettingIp4ConfigDnsOptionsJSON(data)
+	case NM_SETTING_IP4_CONFIG_DNS_PRIORITY:
+		value = getSettingIp4ConfigDnsPriorityJSON(data)
+	case NM_SETTING_IP4_CONFIG_ROUTE_METRIC:
+		value = getSettingIp4ConfigRouteMetricJSON(data)
+	case NM_SETTING_IP4_CONFIG_DAD_TIMEOUT:
+		value = getSettingIp4ConfigDadTimeoutJSON(data)
+	case NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT:
+		value = getSettingIp4ConfigDhcpTimeoutJSON(data)
 	}
 	return
 }
@@ -4667,6 +4915,8 @@ func generalSetSettingIp4ConfigKeyJSON(data connectionData, key, valueJSON strin
 		err = setSettingIp4ConfigIgnoreAutoDnsJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID:
 		err = setSettingIp4ConfigDhcpClientIdJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_DHCP_FQDN:
+		err = setSettingIp4ConfigDhcpFqdnJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME:
 		err = setSettingIp4ConfigDhcpSendHostnameJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME:
@@ -4675,6 +4925,16 @@ func generalSetSettingIp4ConfigKeyJSON(data connectionData, key, valueJSON strin
 		err = setSettingIp4ConfigNeverDefaultJSON(data, valueJSON)
 	case NM_SETTING_IP4_CONFIG_MAY_FAIL:
 		err = setSettingIp4ConfigMayFailJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_DNS_OPTIONS:
+		err = setSettingIp4ConfigDnsOptionsJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_DNS_PRIORITY:
+		err = setSettingIp4ConfigDnsPriorityJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_ROUTE_METRIC:
+		err = setSettingIp4ConfigRouteMetricJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_DAD_TIMEOUT:
+		err = setSettingIp4ConfigDadTimeoutJSON(data, valueJSON)
+	case NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT:
+		err = setSettingIp4ConfigDhcpTimeoutJSON(data, valueJSON)
 	}
 	return
 }
@@ -4704,6 +4964,9 @@ func isSettingIp4ConfigIgnoreAutoDnsExists(data connectionData) bool {
 func isSettingIp4ConfigDhcpClientIdExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
 }
+func isSettingIp4ConfigDhcpFqdnExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN)
+}
 func isSettingIp4ConfigDhcpSendHostnameExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
 }
@@ -4715,6 +4978,21 @@ func isSettingIp4ConfigNeverDefaultExists(data connectionData) bool {
 }
 func isSettingIp4ConfigMayFailExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
+}
+func isSettingIp4ConfigDnsOptionsExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS)
+}
+func isSettingIp4ConfigDnsPriorityExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY)
+}
+func isSettingIp4ConfigRouteMetricExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC)
+}
+func isSettingIp4ConfigDadTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT)
+}
+func isSettingIp4ConfigDhcpTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT)
 }
 
 // Ensure section and key exists and not empty
@@ -4791,6 +5069,15 @@ func ensureSettingIp4ConfigDhcpClientIdNoEmpty(data connectionData, errs section
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingIp4ConfigDhcpFqdnNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigDhcpFqdnExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingIp4ConfigDhcpFqdn(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
 func ensureSettingIp4ConfigDhcpSendHostnameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingIp4ConfigDhcpSendHostnameExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
@@ -4813,6 +5100,35 @@ func ensureSettingIp4ConfigNeverDefaultNoEmpty(data connectionData, errs section
 func ensureSettingIp4ConfigMayFailNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingIp4ConfigMayFailExists(data) {
 		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp4ConfigDnsOptionsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigDnsOptionsExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingIp4ConfigDnsOptions(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingIp4ConfigDnsPriorityNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigDnsPriorityExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp4ConfigRouteMetricNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigRouteMetricExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp4ConfigDadTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigDadTimeoutExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp4ConfigDhcpTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp4ConfigDhcpTimeoutExists(data) {
+		rememberError(errs, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
@@ -4857,6 +5173,11 @@ func getSettingIp4ConfigDhcpClientId(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSettingIp4ConfigDhcpFqdn(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN)
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingIp4ConfigDhcpSendHostname(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
 	value = interfaceToBoolean(ivalue)
@@ -4875,6 +5196,31 @@ func getSettingIp4ConfigNeverDefault(data connectionData) (value bool) {
 func getSettingIp4ConfigMayFail(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
 	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingIp4ConfigDnsOptions(data connectionData) (value []string) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS)
+	value = interfaceToArrayString(ivalue)
+	return
+}
+func getSettingIp4ConfigDnsPriority(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY)
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingIp4ConfigRouteMetric(data connectionData) (value int64) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC)
+	value = interfaceToInt64(ivalue)
+	return
+}
+func getSettingIp4ConfigDadTimeout(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT)
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingIp4ConfigDhcpTimeout(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT)
+	value = interfaceToInt32(ivalue)
 	return
 }
 
@@ -4903,6 +5249,9 @@ func setSettingIp4ConfigIgnoreAutoDns(data connectionData, value bool) {
 func setSettingIp4ConfigDhcpClientId(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, value)
 }
+func setSettingIp4ConfigDhcpFqdn(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN, value)
+}
 func setSettingIp4ConfigDhcpSendHostname(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, value)
 }
@@ -4914,6 +5263,21 @@ func setSettingIp4ConfigNeverDefault(data connectionData, value bool) {
 }
 func setSettingIp4ConfigMayFail(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, value)
+}
+func setSettingIp4ConfigDnsOptions(data connectionData, value []string) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS, value)
+}
+func setSettingIp4ConfigDnsPriority(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY, value)
+}
+func setSettingIp4ConfigRouteMetric(data connectionData, value int64) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC, value)
+}
+func setSettingIp4ConfigDadTimeout(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT, value)
+}
+func setSettingIp4ConfigDhcpTimeout(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT, value)
 }
 
 // JSON Getter
@@ -4949,6 +5313,10 @@ func getSettingIp4ConfigDhcpClientIdJSON(data connectionData) (valueJSON string)
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 	return
 }
+func getSettingIp4ConfigDhcpFqdnJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_FQDN))
+	return
+}
 func getSettingIp4ConfigDhcpSendHostnameJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 	return
@@ -4963,6 +5331,26 @@ func getSettingIp4ConfigNeverDefaultJSON(data connectionData) (valueJSON string)
 }
 func getSettingIp4ConfigMayFailJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+	return
+}
+func getSettingIp4ConfigDnsOptionsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_OPTIONS))
+	return
+}
+func getSettingIp4ConfigDnsPriorityJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_PRIORITY))
+	return
+}
+func getSettingIp4ConfigRouteMetricJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTE_METRIC))
+	return
+}
+func getSettingIp4ConfigDadTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DAD_TIMEOUT))
+	return
+}
+func getSettingIp4ConfigDhcpTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT))
 	return
 }
 
@@ -4991,6 +5379,9 @@ func setSettingIp4ConfigIgnoreAutoDnsJSON(data connectionData, valueJSON string)
 func setSettingIp4ConfigDhcpClientIdJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID))
 }
+func setSettingIp4ConfigDhcpFqdnJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_FQDN))
+}
 func setSettingIp4ConfigDhcpSendHostnameJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME))
 }
@@ -5002,6 +5393,21 @@ func setSettingIp4ConfigNeverDefaultJSON(data connectionData, valueJSON string) 
 }
 func setSettingIp4ConfigMayFailJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_MAY_FAIL))
+}
+func setSettingIp4ConfigDnsOptionsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_OPTIONS))
+}
+func setSettingIp4ConfigDnsPriorityJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DNS_PRIORITY))
+}
+func setSettingIp4ConfigRouteMetricJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_ROUTE_METRIC))
+}
+func setSettingIp4ConfigDadTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DAD_TIMEOUT))
+}
+func setSettingIp4ConfigDhcpTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT, valueJSON, getSettingIp4ConfigKeyType(NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT))
 }
 
 // Logic JSON Setter
@@ -5042,6 +5448,9 @@ func removeSettingIp4ConfigIgnoreAutoDns(data connectionData) {
 func removeSettingIp4ConfigDhcpClientId(data connectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID)
 }
+func removeSettingIp4ConfigDhcpFqdn(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_FQDN)
+}
 func removeSettingIp4ConfigDhcpSendHostname(data connectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME)
 }
@@ -5053,6 +5462,21 @@ func removeSettingIp4ConfigNeverDefault(data connectionData) {
 }
 func removeSettingIp4ConfigMayFail(data connectionData) {
 	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_MAY_FAIL)
+}
+func removeSettingIp4ConfigDnsOptions(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_OPTIONS)
+}
+func removeSettingIp4ConfigDnsPriority(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DNS_PRIORITY)
+}
+func removeSettingIp4ConfigRouteMetric(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_ROUTE_METRIC)
+}
+func removeSettingIp4ConfigDadTimeout(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DAD_TIMEOUT)
+}
+func removeSettingIp4ConfigDhcpTimeout(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT)
 }
 
 // Origin file name ../nm_setting_ip6_config_gen.go
@@ -5081,8 +5505,20 @@ func getSettingIp6ConfigKeyType(key string) (t ktype) {
 		t = ktypeBoolean
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		t = ktypeInt32
+	case NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE:
+		t = ktypeInt32
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		t = ktypeString
+	case NM_SETTING_IP6_CONFIG_DNS_OPTIONS:
+		t = ktypeArrayString
+	case NM_SETTING_IP6_CONFIG_DNS_PRIORITY:
+		t = ktypeInt32
+	case NM_SETTING_IP6_CONFIG_ROUTE_METRIC:
+		t = ktypeInt64
+	case NM_SETTING_IP6_CONFIG_DAD_TIMEOUT:
+		t = ktypeInt32
+	case NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT:
+		t = ktypeInt32
 	}
 	return
 }
@@ -5110,7 +5546,19 @@ func isKeyInSettingIp6Config(key string) bool {
 		return true
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		return true
+	case NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE:
+		return true
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
+		return true
+	case NM_SETTING_IP6_CONFIG_DNS_OPTIONS:
+		return true
+	case NM_SETTING_IP6_CONFIG_DNS_PRIORITY:
+		return true
+	case NM_SETTING_IP6_CONFIG_ROUTE_METRIC:
+		return true
+	case NM_SETTING_IP6_CONFIG_DAD_TIMEOUT:
+		return true
+	case NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT:
 		return true
 	}
 	return false
@@ -5141,8 +5589,20 @@ func getSettingIp6ConfigDefaultValue(key string) (value interface{}) {
 		value = true
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		value = -1
+	case NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE:
+		value = 1
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		value = ""
+	case NM_SETTING_IP6_CONFIG_DNS_OPTIONS:
+		value = make([]string, 0)
+	case NM_SETTING_IP6_CONFIG_DNS_PRIORITY:
+		value = int32(0)
+	case NM_SETTING_IP6_CONFIG_ROUTE_METRIC:
+		value = -1
+	case NM_SETTING_IP6_CONFIG_DAD_TIMEOUT:
+		value = -1
+	case NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT:
+		value = 0
 	}
 	return
 }
@@ -5172,8 +5632,20 @@ func generalGetSettingIp6ConfigKeyJSON(data connectionData, key string) (value s
 		value = getSettingIp6ConfigMayFailJSON(data)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		value = getSettingIp6ConfigIp6PrivacyJSON(data)
+	case NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE:
+		value = getSettingIp6ConfigAddrGenModeJSON(data)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		value = getSettingIp6ConfigDhcpHostnameJSON(data)
+	case NM_SETTING_IP6_CONFIG_DNS_OPTIONS:
+		value = getSettingIp6ConfigDnsOptionsJSON(data)
+	case NM_SETTING_IP6_CONFIG_DNS_PRIORITY:
+		value = getSettingIp6ConfigDnsPriorityJSON(data)
+	case NM_SETTING_IP6_CONFIG_ROUTE_METRIC:
+		value = getSettingIp6ConfigRouteMetricJSON(data)
+	case NM_SETTING_IP6_CONFIG_DAD_TIMEOUT:
+		value = getSettingIp6ConfigDadTimeoutJSON(data)
+	case NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT:
+		value = getSettingIp6ConfigDhcpTimeoutJSON(data)
 	}
 	return
 }
@@ -5203,8 +5675,20 @@ func generalSetSettingIp6ConfigKeyJSON(data connectionData, key, valueJSON strin
 		err = setSettingIp6ConfigMayFailJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_IP6_PRIVACY:
 		err = setSettingIp6ConfigIp6PrivacyJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE:
+		err = setSettingIp6ConfigAddrGenModeJSON(data, valueJSON)
 	case NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME:
 		err = setSettingIp6ConfigDhcpHostnameJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_DNS_OPTIONS:
+		err = setSettingIp6ConfigDnsOptionsJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_DNS_PRIORITY:
+		err = setSettingIp6ConfigDnsPriorityJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_ROUTE_METRIC:
+		err = setSettingIp6ConfigRouteMetricJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_DAD_TIMEOUT:
+		err = setSettingIp6ConfigDadTimeoutJSON(data, valueJSON)
+	case NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT:
+		err = setSettingIp6ConfigDhcpTimeoutJSON(data, valueJSON)
 	}
 	return
 }
@@ -5240,8 +5724,26 @@ func isSettingIp6ConfigMayFailExists(data connectionData) bool {
 func isSettingIp6ConfigIp6PrivacyExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
 }
+func isSettingIp6ConfigAddrGenModeExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE)
+}
 func isSettingIp6ConfigDhcpHostnameExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
+}
+func isSettingIp6ConfigDnsOptionsExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS)
+}
+func isSettingIp6ConfigDnsPriorityExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY)
+}
+func isSettingIp6ConfigRouteMetricExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC)
+}
+func isSettingIp6ConfigDadTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT)
+}
+func isSettingIp6ConfigDhcpTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT)
 }
 
 // Ensure section and key exists and not empty
@@ -5324,6 +5826,11 @@ func ensureSettingIp6ConfigIp6PrivacyNoEmpty(data connectionData, errs sectionEr
 		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
+func ensureSettingIp6ConfigAddrGenModeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigAddrGenModeExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingIp6ConfigDhcpHostnameExists(data) {
 		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_MISSING_VALUE)
@@ -5331,6 +5838,35 @@ func ensureSettingIp6ConfigDhcpHostnameNoEmpty(data connectionData, errs section
 	value := getSettingIp6ConfigDhcpHostname(data)
 	if len(value) == 0 {
 		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingIp6ConfigDnsOptionsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigDnsOptionsExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingIp6ConfigDnsOptions(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingIp6ConfigDnsPriorityNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigDnsPriorityExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp6ConfigRouteMetricNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigRouteMetricExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp6ConfigDadTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigDadTimeoutExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingIp6ConfigDhcpTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIp6ConfigDhcpTimeoutExists(data) {
+		rememberError(errs, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
@@ -5385,9 +5921,39 @@ func getSettingIp6ConfigIp6Privacy(data connectionData) (value int32) {
 	value = interfaceToInt32(ivalue)
 	return
 }
+func getSettingIp6ConfigAddrGenMode(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE)
+	value = interfaceToInt32(ivalue)
+	return
+}
 func getSettingIp6ConfigDhcpHostname(data connectionData) (value string) {
 	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
 	value = interfaceToString(ivalue)
+	return
+}
+func getSettingIp6ConfigDnsOptions(data connectionData) (value []string) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS)
+	value = interfaceToArrayString(ivalue)
+	return
+}
+func getSettingIp6ConfigDnsPriority(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY)
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingIp6ConfigRouteMetric(data connectionData) (value int64) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC)
+	value = interfaceToInt64(ivalue)
+	return
+}
+func getSettingIp6ConfigDadTimeout(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT)
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingIp6ConfigDhcpTimeout(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT)
+	value = interfaceToInt32(ivalue)
 	return
 }
 
@@ -5422,8 +5988,26 @@ func setSettingIp6ConfigMayFail(data connectionData, value bool) {
 func setSettingIp6ConfigIp6Privacy(data connectionData, value int32) {
 	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, value)
 }
+func setSettingIp6ConfigAddrGenMode(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE, value)
+}
 func setSettingIp6ConfigDhcpHostname(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, value)
+}
+func setSettingIp6ConfigDnsOptions(data connectionData, value []string) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS, value)
+}
+func setSettingIp6ConfigDnsPriority(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY, value)
+}
+func setSettingIp6ConfigRouteMetric(data connectionData, value int64) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC, value)
+}
+func setSettingIp6ConfigDadTimeout(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT, value)
+}
+func setSettingIp6ConfigDhcpTimeout(data connectionData, value int32) {
+	setSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT, value)
 }
 
 // JSON Getter
@@ -5467,8 +6051,32 @@ func getSettingIp6ConfigIp6PrivacyJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 	return
 }
+func getSettingIp6ConfigAddrGenModeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE))
+	return
+}
 func getSettingIp6ConfigDhcpHostnameJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+	return
+}
+func getSettingIp6ConfigDnsOptionsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_OPTIONS))
+	return
+}
+func getSettingIp6ConfigDnsPriorityJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_PRIORITY))
+	return
+}
+func getSettingIp6ConfigRouteMetricJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTE_METRIC))
+	return
+}
+func getSettingIp6ConfigDadTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DAD_TIMEOUT))
+	return
+}
+func getSettingIp6ConfigDhcpTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT))
 	return
 }
 
@@ -5503,8 +6111,26 @@ func setSettingIp6ConfigMayFailJSON(data connectionData, valueJSON string) (err 
 func setSettingIp6ConfigIp6PrivacyJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_IP6_PRIVACY))
 }
+func setSettingIp6ConfigAddrGenModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE))
+}
 func setSettingIp6ConfigDhcpHostnameJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME))
+}
+func setSettingIp6ConfigDnsOptionsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_OPTIONS))
+}
+func setSettingIp6ConfigDnsPriorityJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DNS_PRIORITY))
+}
+func setSettingIp6ConfigRouteMetricJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_ROUTE_METRIC))
+}
+func setSettingIp6ConfigDadTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DAD_TIMEOUT))
+}
+func setSettingIp6ConfigDhcpTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT, valueJSON, getSettingIp6ConfigKeyType(NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT))
 }
 
 // Logic JSON Setter
@@ -5551,8 +6177,26 @@ func removeSettingIp6ConfigMayFail(data connectionData) {
 func removeSettingIp6ConfigIp6Privacy(data connectionData) {
 	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_IP6_PRIVACY)
 }
+func removeSettingIp6ConfigAddrGenMode(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE)
+}
 func removeSettingIp6ConfigDhcpHostname(data connectionData) {
 	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME)
+}
+func removeSettingIp6ConfigDnsOptions(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_OPTIONS)
+}
+func removeSettingIp6ConfigDnsPriority(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DNS_PRIORITY)
+}
+func removeSettingIp6ConfigRouteMetric(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_ROUTE_METRIC)
+}
+func removeSettingIp6ConfigDadTimeout(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DAD_TIMEOUT)
+}
+func removeSettingIp6ConfigDhcpTimeout(data connectionData) {
+	removeSettingKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT)
 }
 
 // Origin file name ../nm_setting_ppp_gen.go
@@ -6771,6 +7415,10 @@ func getSettingVpnKeyType(key string) (t ktype) {
 		t = ktypeDictStringString
 	case NM_SETTING_VPN_SECRETS:
 		t = ktypeDictStringString
+	case NM_SETTING_VPN_PERSISTENT:
+		t = ktypeBoolean
+	case NM_SETTING_VPN_TIMEOUT:
+		t = ktypeUint32
 	}
 	return
 }
@@ -6785,6 +7433,10 @@ func isKeyInSettingVpn(key string) bool {
 	case NM_SETTING_VPN_DATA:
 		return true
 	case NM_SETTING_VPN_SECRETS:
+		return true
+	case NM_SETTING_VPN_PERSISTENT:
+		return true
+	case NM_SETTING_VPN_TIMEOUT:
 		return true
 	}
 	return false
@@ -6803,6 +7455,10 @@ func getSettingVpnDefaultValue(key string) (value interface{}) {
 		value = make(map[string]string)
 	case NM_SETTING_VPN_SECRETS:
 		value = make(map[string]string)
+	case NM_SETTING_VPN_PERSISTENT:
+		value = false
+	case NM_SETTING_VPN_TIMEOUT:
+		value = 0
 	}
 	return
 }
@@ -6820,6 +7476,10 @@ func generalGetSettingVpnKeyJSON(data connectionData, key string) (value string)
 		value = getSettingVpnDataJSON(data)
 	case NM_SETTING_VPN_SECRETS:
 		value = getSettingVpnSecretsJSON(data)
+	case NM_SETTING_VPN_PERSISTENT:
+		value = getSettingVpnPersistentJSON(data)
+	case NM_SETTING_VPN_TIMEOUT:
+		value = getSettingVpnTimeoutJSON(data)
 	}
 	return
 }
@@ -6837,6 +7497,10 @@ func generalSetSettingVpnKeyJSON(data connectionData, key, valueJSON string) (er
 		err = setSettingVpnDataJSON(data, valueJSON)
 	case NM_SETTING_VPN_SECRETS:
 		err = setSettingVpnSecretsJSON(data, valueJSON)
+	case NM_SETTING_VPN_PERSISTENT:
+		err = setSettingVpnPersistentJSON(data, valueJSON)
+	case NM_SETTING_VPN_TIMEOUT:
+		err = setSettingVpnTimeoutJSON(data, valueJSON)
 	}
 	return
 }
@@ -6853,6 +7517,12 @@ func isSettingVpnDataExists(data connectionData) bool {
 }
 func isSettingVpnSecretsExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
+}
+func isSettingVpnPersistentExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT)
+}
+func isSettingVpnTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT)
 }
 
 // Ensure section and key exists and not empty
@@ -6901,6 +7571,16 @@ func ensureSettingVpnSecretsNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingVpnPersistentNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnPersistentExists(data) {
+		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingVpnTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnTimeoutExists(data) {
+		rememberError(errs, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 
 // Getter
 func getSettingVpnServiceType(data connectionData) (value string) {
@@ -6923,6 +7603,16 @@ func getSettingVpnSecrets(data connectionData) (value map[string]string) {
 	value = interfaceToDictStringString(ivalue)
 	return
 }
+func getSettingVpnPersistent(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT)
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingVpnTimeout(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT)
+	value = interfaceToUint32(ivalue)
+	return
+}
 
 // Setter
 func setSettingVpnServiceType(data connectionData, value string) {
@@ -6936,6 +7626,12 @@ func setSettingVpnData(data connectionData, value map[string]string) {
 }
 func setSettingVpnSecrets(data connectionData, value map[string]string) {
 	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, value)
+}
+func setSettingVpnPersistent(data connectionData, value bool) {
+	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT, value)
+}
+func setSettingVpnTimeout(data connectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT, value)
 }
 
 // JSON Getter
@@ -6955,6 +7651,14 @@ func getSettingVpnSecretsJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
 	return
 }
+func getSettingVpnPersistentJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT, getSettingVpnKeyType(NM_SETTING_VPN_PERSISTENT))
+	return
+}
+func getSettingVpnTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT, getSettingVpnKeyType(NM_SETTING_VPN_TIMEOUT))
+	return
+}
 
 // JSON Setter
 func setSettingVpnServiceTypeJSON(data connectionData, valueJSON string) (err error) {
@@ -6968,6 +7672,12 @@ func setSettingVpnDataJSON(data connectionData, valueJSON string) (err error) {
 }
 func setSettingVpnSecretsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_SECRETS))
+}
+func setSettingVpnPersistentJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_PERSISTENT))
+}
+func setSettingVpnTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT, valueJSON, getSettingVpnKeyType(NM_SETTING_VPN_TIMEOUT))
 }
 
 // Logic JSON Setter
@@ -6984,6 +7694,12 @@ func removeSettingVpnData(data connectionData) {
 }
 func removeSettingVpnSecrets(data connectionData) {
 	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_SECRETS)
+}
+func removeSettingVpnPersistent(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_PERSISTENT)
+}
+func removeSettingVpnTimeout(data connectionData) {
+	removeSettingKey(data, NM_SETTING_VPN_SETTING_NAME, NM_SETTING_VPN_TIMEOUT)
 }
 
 // Origin file name ../nm_setting_vpn_l2tp_gen.go
@@ -13456,6 +14172,10 @@ func getSettingWirelessKeyType(key string) (t ktype) {
 		t = ktypeArrayString
 	case NM_SETTING_WIRELESS_HIDDEN:
 		t = ktypeBoolean
+	case NM_SETTING_WIRELESS_POWERSAVE:
+		t = ktypeUint32
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION:
+		t = ktypeUint32
 	}
 	return
 }
@@ -13488,6 +14208,10 @@ func isKeyInSettingWireless(key string) bool {
 	case NM_SETTING_WIRELESS_SEEN_BSSIDS:
 		return true
 	case NM_SETTING_WIRELESS_HIDDEN:
+		return true
+	case NM_SETTING_WIRELESS_POWERSAVE:
+		return true
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION:
 		return true
 	}
 	return false
@@ -13524,6 +14248,10 @@ func getSettingWirelessDefaultValue(key string) (value interface{}) {
 		value = make([]string, 0)
 	case NM_SETTING_WIRELESS_HIDDEN:
 		value = false
+	case NM_SETTING_WIRELESS_POWERSAVE:
+		value = uint32(0)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION:
+		value = uint32(0)
 	}
 	return
 }
@@ -13559,6 +14287,10 @@ func generalGetSettingWirelessKeyJSON(data connectionData, key string) (value st
 		value = getSettingWirelessSeenBssidsJSON(data)
 	case NM_SETTING_WIRELESS_HIDDEN:
 		value = getSettingWirelessHiddenJSON(data)
+	case NM_SETTING_WIRELESS_POWERSAVE:
+		value = getSettingWirelessPowersaveJSON(data)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION:
+		value = getSettingWirelessMacAddressRandomizationJSON(data)
 	}
 	return
 }
@@ -13594,6 +14326,10 @@ func generalSetSettingWirelessKeyJSON(data connectionData, key, valueJSON string
 		err = setSettingWirelessSeenBssidsJSON(data, valueJSON)
 	case NM_SETTING_WIRELESS_HIDDEN:
 		err = setSettingWirelessHiddenJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_POWERSAVE:
+		err = setSettingWirelessPowersaveJSON(data, valueJSON)
+	case NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION:
+		err = setSettingWirelessMacAddressRandomizationJSON(data, valueJSON)
 	}
 	return
 }
@@ -13637,6 +14373,12 @@ func isSettingWirelessSeenBssidsExists(data connectionData) bool {
 }
 func isSettingWirelessHiddenExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+}
+func isSettingWirelessPowersaveExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE)
+}
+func isSettingWirelessMacAddressRandomizationExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION)
 }
 
 // Ensure section and key exists and not empty
@@ -13750,6 +14492,16 @@ func ensureSettingWirelessHiddenNoEmpty(data connectionData, errs sectionErrors)
 		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
+func ensureSettingWirelessPowersaveNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWirelessPowersaveExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
+func ensureSettingWirelessMacAddressRandomizationNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWirelessMacAddressRandomizationExists(data) {
+		rememberError(errs, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 
 // Getter
 func getSettingWirelessSsid(data connectionData) (value []byte) {
@@ -13817,6 +14569,16 @@ func getSettingWirelessHidden(data connectionData) (value bool) {
 	value = interfaceToBoolean(ivalue)
 	return
 }
+func getSettingWirelessPowersave(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE)
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingWirelessMacAddressRandomization(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION)
+	value = interfaceToUint32(ivalue)
+	return
+}
 
 // Setter
 func setSettingWirelessSsid(data connectionData, value []byte) {
@@ -13857,6 +14619,12 @@ func setSettingWirelessSeenBssids(data connectionData, value []string) {
 }
 func setSettingWirelessHidden(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, value)
+}
+func setSettingWirelessPowersave(data connectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE, value)
+}
+func setSettingWirelessMacAddressRandomization(data connectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION, value)
 }
 
 // JSON Getter
@@ -13912,6 +14680,14 @@ func getSettingWirelessHiddenJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
 	return
 }
+func getSettingWirelessPowersaveJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE, getSettingWirelessKeyType(NM_SETTING_WIRELESS_POWERSAVE))
+	return
+}
+func getSettingWirelessMacAddressRandomizationJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION))
+	return
+}
 
 // JSON Setter
 func setSettingWirelessSsidJSON(data connectionData, valueJSON string) (err error) {
@@ -13952,6 +14728,12 @@ func setSettingWirelessSeenBssidsJSON(data connectionData, valueJSON string) (er
 }
 func setSettingWirelessHiddenJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_HIDDEN))
+}
+func setSettingWirelessPowersaveJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_POWERSAVE))
+}
+func setSettingWirelessMacAddressRandomizationJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION, valueJSON, getSettingWirelessKeyType(NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION))
 }
 
 // Logic JSON Setter
@@ -14017,6 +14799,12 @@ func removeSettingWirelessSeenBssids(data connectionData) {
 }
 func removeSettingWirelessHidden(data connectionData) {
 	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_HIDDEN)
+}
+func removeSettingWirelessPowersave(data connectionData) {
+	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_POWERSAVE)
+}
+func removeSettingWirelessMacAddressRandomization(data connectionData) {
+	removeSettingKey(data, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION)
 }
 
 // Origin file name ../nm_setting_wireless_security_gen.go

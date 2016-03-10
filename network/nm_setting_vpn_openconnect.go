@@ -68,17 +68,22 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 
 func initSettingSectionVpnOpenconnect(data connectionData) {
 	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_OPENCONNECT)
+
 	setSettingVpnOpenconnectKeyCsdEnable(data, false)
-	setSettingKey(data, sectionVpn, "xmlconfig-flags", uint32(0))
 	setSettingVpnOpenconnectKeyPemPassphraseFsid(data, false)
-	setSettingKey(data, sectionVpn, "gwcert-flags", uint32(2))
-	setSettingKey(data, sectionVpn, "gateway-flags", uint32(2))
-	setSettingKey(data, sectionVpn, "autoconnect-flags", uint32(0))
-	setSettingKey(data, sectionVpn, "lasthost-flags", uint32(0))
 	setSettingVpnOpenconnectKeyStokenSource(data, "disabled")
-	setSettingKey(data, sectionVpn, "certsigs-flags", uint32(0))
-	setSettingKey(data, sectionVpn, "cookie-flags", uint32(2))
 	setSettingVpnOpenconnectKeyAuthtype(data, "password")
+
+	if vpnPluginData, ok := doGetSettingVpnPluginData(data, false); ok {
+		vpnPluginData["gwcert-flags"] = "2"
+		vpnPluginData["cookie-flags"] = "2"
+		vpnPluginData["gateway-flags"] = "2"
+
+		vpnPluginData["xmlconfig-flags"] = "0"
+		vpnPluginData["lasthost-flags"] = "0"
+		vpnPluginData["autoconnect-flags"] = "0"
+		vpnPluginData["certsigs-flags"] = "0"
+	}
 }
 
 func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {

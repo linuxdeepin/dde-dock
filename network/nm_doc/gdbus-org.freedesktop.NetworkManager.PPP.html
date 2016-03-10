@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager.PPP: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html" title="org.freedesktop.NetworkManager.AccessPoint">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html" title="org.freedesktop.NetworkManager.Settings.Connection">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.PPP.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager.PPP"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager-PPP.top_of_page"></a>org.freedesktop.NetworkManager.PPP</span></h2>
+<p>org.freedesktop.NetworkManager.PPP</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.NeedSecrets" title="The NeedSecrets() method">NeedSecrets</a>  (OUT s     username,
+              OUT s     password);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp4Config" title="The SetIp4Config() method">SetIp4Config</a> (IN  a{sv} config);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp6Config" title="The SetIp6Config() method">SetIp6Config</a> (IN  a{sv} config);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetState" title="The SetState() method">SetState</a>     (IN  u     state);
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager-PPP"></a><h2>Description</h2>
+<p></p>
+</div>
+<div class="refsect1">
+<a name="gdbus-methods-org.freedesktop.NetworkManager.PPP"></a><h2>Method Details</h2>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-PPP.NeedSecrets"></a><h3>The NeedSecrets() method</h3>
+<pre class="programlisting">
+NeedSecrets (OUT s username,
+             OUT s password);
+</pre>
+<p></p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">OUT s <em class="parameter"><code>username</code></em></code>:</span></p></td>
+<td><p></p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT s <em class="parameter"><code>password</code></em></code>:</span></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp4Config"></a><h3>The SetIp4Config() method</h3>
+<pre class="programlisting">
+SetIp4Config (IN  a{sv} config);
+</pre>
+<p></p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN a{sv} <em class="parameter"><code>config</code></em></code>:</span></p></td>
+<td><p></p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp6Config"></a><h3>The SetIp6Config() method</h3>
+<pre class="programlisting">
+SetIp6Config (IN  a{sv} config);
+</pre>
+<p></p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN a{sv} <em class="parameter"><code>config</code></em></code>:</span></p></td>
+<td><p></p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-PPP.SetState"></a><h3>The SetState() method</h3>
+<pre class="programlisting">
+SetState (IN  u state);
+</pre>
+<p></p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN u <em class="parameter"><code>state</code></em></code>:</span></p></td>
+<td><p></p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

@@ -45,6 +45,7 @@ const (
 	ktypeByte // for byte and gchar type
 	ktypeInt32
 	ktypeUint32
+	ktypeInt64
 	ktypeUint64
 	ktypeBoolean
 	ktypeArrayByte

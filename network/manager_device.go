@@ -97,9 +97,16 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		return
 	}
 
+	devType := nmDev.DeviceType.Get()
+	if !isDeviceTypeValid(devType) {
+		err = fmt.Errorf("ignore invalid device type %d", devType)
+		logger.Info(err)
+		return
+	}
+
 	dev = &device{
 		nmDev:     nmDev,
-		nmDevType: nmDev.DeviceType.Get(),
+		nmDevType: devType,
 		udi:       nmDev.Udi.Get(),
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),

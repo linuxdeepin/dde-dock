@@ -1,0 +1,3120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>NetworkManager D-Bus API Types: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="dbus-types.html" title="Types">
+<link rel="prev" href="dbus-types.html" title="Types">
+<link rel="next" href="nm-vpn-dbus-types.html" title="VPN Plugin D-Bus API Types">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts"></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="dbus-types.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="dbus-types.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="nm-vpn-dbus-types.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="nm-dbus-types"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="nm-dbus-types.top_of_page"></a>NetworkManager D-Bus API Types</span></h2>
+<p>NetworkManager D-Bus API Types</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect2">
+<a name="NMState"></a><h3>enum NMState</h3>
+<p><a class="link" href="nm-dbus-types.html#NMState" title="enum NMState">NMState</a> values indicate the current overall networking state.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.3.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>networking state is unknown</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_ASLEEP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">10</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>networking is not enabled</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_DISCONNECTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">20</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>there is no active network connection</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_DISCONNECTING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">30</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>network connections are being cleaned up</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_CONNECTING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">40</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a network connection is being started</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_CONNECTED_LOCAL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">50</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>there is only local IPv4 and/or IPv6 connectivity</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_CONNECTED_SITE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">60</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>there is only site-wide IPv4 and/or IPv6 connectivity</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_STATE_CONNECTED_GLOBAL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">70</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>there is global IPv4 and/or IPv6 Internet connectivity</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMConnectivityState"></a><h3>enum NMConnectivityState</h3>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.4.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_CONNECTIVITY_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Network connectivity is unknown.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_CONNECTIVITY_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The host is not connected to any network.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_CONNECTIVITY_PORTAL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The host is behind a captive portal and cannot reach the full Internet.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_CONNECTIVITY_LIMITED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The host is connected to a network, but does not appear to be able to reach the full Internet.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_CONNECTIVITY_FULL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The host is connected to a network, and appears to be able to reach the full Internet.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceType"></a><h3>enum NMDeviceType</h3>
+<p><a class="link" href="nm-dbus-types.html#NMDeviceType" title="enum NMDeviceType">NMDeviceType</a> values indicate the type of hardware represented by a device object.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.5.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>unknown device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_GENERIC</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">14</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>generic support for unrecognized device types</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_ETHERNET</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a wired ethernet device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_WIFI</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>an 802.11 WiFi device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_UNUSED1</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>not used</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_UNUSED2</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>not used</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_BT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a Bluetooth device supporting PAN or DUN access protocols</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_OLPC_MESH</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>an OLPC XO mesh networking device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_WIMAX</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">7</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>an 802.16e Mobile WiMAX broadband device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_MODEM</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">8</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a modem supporting analog telephone, CDMA/EVDO, GSM/UMTS, or LTE network access protocols</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_INFINIBAND</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">9</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>an IP-over-InfiniBand device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_BOND</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">10</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a bond master interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_VLAN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">11</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>an 802.1Q VLAN interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_ADSL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">12</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>ADSL modem</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_BRIDGE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">13</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a bridge master interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_TEAM</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">15</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a team master interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_TUN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">16</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a TUN or TAP interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_IP_TUNNEL</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">17</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a IP tunnel interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_MACVLAN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">18</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a MACVLAN interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_VXLAN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">19</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a VXLAN interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_TYPE_VETH</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">20</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a VETH interface</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceCapabilities"></a><h3>enum NMDeviceCapabilities</h3>
+<p>General device capability flags.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.6.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_CAP_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device has no special capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_CAP_NM_SUPPORTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>NetworkManager supports this device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_CAP_CARRIER_DETECT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000002</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>this device can indicate carrier status</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_CAP_IS_SOFTWARE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000004</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>this device is a software device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceWifiCapabilities"></a><h3>enum NMDeviceWifiCapabilities</h3>
+<p>802.11 specific device encryption and authentication capabilities.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.7.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device has no encryption/authentication capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_CIPHER_WEP40</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports 40/64-bit WEP encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_CIPHER_WEP104</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000002</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports 104/128-bit WEP encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_CIPHER_TKIP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000004</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports TKIP encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_CIPHER_CCMP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000008</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports AES/CCMP encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_WPA</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000010</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports WPA1 authentication</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_RSN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000020</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports WPA2/RSN authentication</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_AP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000040</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports Access Point mode</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_ADHOC</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000080</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports Ad-Hoc mode</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_FREQ_VALID</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000100</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device reports frequency capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_FREQ_2GHZ</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000200</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports 2.4GHz frequencies</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIFI_DEVICE_CAP_FREQ_5GHZ</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000400</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device supports 5GHz frequencies</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NM80211ApFlags"></a><h3>enum NM80211ApFlags</h3>
+<p>802.11 access point flags.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.8.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_FLAGS_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>access point has no special capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_FLAGS_PRIVACY</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>access point requires authentication and encryption (usually means WEP)</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NM80211ApSecurityFlags"></a><h3>enum NM80211ApSecurityFlags</h3>
+<p>802.11 access point security and authentication flags.  These flags describe the current security requirements of an access point as determined from the access point's beacon.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.9.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the access point has no special security requirements</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_PAIR_WEP40</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>40/64-bit WEP is supported for pairwise/unicast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_PAIR_WEP104</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000002</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>104/128-bit WEP is supported for pairwise/unicast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_PAIR_TKIP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000004</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>TKIP is supported for pairwise/unicast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_PAIR_CCMP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000008</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>AES/CCMP is supported for pairwise/unicast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_GROUP_WEP40</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000010</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>40/64-bit WEP is supported for group/broadcast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_GROUP_WEP104</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000020</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>104/128-bit WEP is supported for group/broadcast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_GROUP_TKIP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000040</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>TKIP is supported for group/broadcast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_GROUP_CCMP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000080</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>AES/CCMP is supported for group/broadcast encryption</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_KEY_MGMT_PSK</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000100</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>WPA/RSN Pre-Shared Key encryption is supported</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_AP_SEC_KEY_MGMT_802_1X</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000200</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>802.1x authentication and key management is supported</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NM80211Mode"></a><h3>enum NM80211Mode</h3>
+<p>Indicates the 802.11 mode an access point or device is currently in.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.10.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_MODE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device or access point mode is unknown</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_MODE_ADHOC</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>for both devices and access point objects, indicates the object is part of an Ad-Hoc 802.11 network without a central coordinating access point.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_MODE_INFRA</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device or access point is in infrastructure mode. For devices, this indicates the device is an 802.11 client/station.  For access point objects, this indicates the object is an access point that provides connectivity to clients.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_802_11_MODE_AP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is an access point/hotspot.  Not valid for access point objects; used only for hotspot mode on the local machine.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMBluetoothCapabilities"></a><h3>enum NMBluetoothCapabilities</h3>
+<p><a class="link" href="nm-dbus-types.html#NMBluetoothCapabilities" title="enum NMBluetoothCapabilities">NMBluetoothCapabilities</a> values indicate the usable capabilities of a Bluetooth device.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.11.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_BT_CAPABILITY_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device has no usable capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_BT_CAPABILITY_DUN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device provides Dial-Up Networking capability</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_BT_CAPABILITY_NAP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000002</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>device provides Network Access Point capability</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceModemCapabilities"></a><h3>enum NMDeviceModemCapabilities</h3>
+<p><a class="link" href="nm-dbus-types.html#NMDeviceModemCapabilities" title="enum NMDeviceModemCapabilities">NMDeviceModemCapabilities</a> values indicate the generic radio access technology families a modem device supports.  For more information on the specific access technologies the device supports use the ModemManager D-Bus API.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.12.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_MODEM_CAPABILITY_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>modem has no usable capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_MODEM_CAPABILITY_POTS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000001</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>modem uses the analog wired telephone network and is not a wireless/cellular device</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000002</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>modem supports at least one of CDMA 1xRTT, EVDO revision 0, EVDO revision A, or EVDO revision B</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000004</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>modem supports at least one of GSM, GPRS, EDGE, UMTS, HSDPA, HSUPA, or HSPA+ packet switched data capability</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_MODEM_CAPABILITY_LTE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x00000008</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>modem has LTE data capability</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMWimaxNspNetworkType"></a><h3>enum NMWimaxNspNetworkType</h3>
+<p>WiMAX network type.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.13.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIMAX_NSP_NETWORK_TYPE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>unknown network type</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIMAX_NSP_NETWORK_TYPE_HOME</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>home network</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIMAX_NSP_NETWORK_TYPE_PARTNER</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>partner network</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_WIMAX_NSP_NETWORK_TYPE_ROAMING_PARTNER</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>roaming partner network</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceState"></a><h3>enum NMDeviceState</h3>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.14.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device's state is unknown</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_UNMANAGED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">10</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is recognized, but not managed by NetworkManager</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_UNAVAILABLE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">20</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is managed by NetworkManager, but is not available for use.  Reasons may include the wireless switched off, missing firmware, no ethernet carrier, missing supplicant or modem manager, etc.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_DISCONNECTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">30</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device can be activated, but is currently idle and not connected to a network.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_PREPARE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">40</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is preparing the connection to the network.  This may include operations like changing the MAC address, setting physical link properties, and anything else required to connect to the requested network.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_CONFIG</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">50</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is connecting to the requested network. This may include operations like associating with the WiFi AP, dialing the modem, connecting to the remote Bluetooth device, etc.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_NEED_AUTH</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">60</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device requires more information to continue connecting to the requested network.  This includes secrets like WiFi passphrases, login passwords, PIN codes, etc.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_IP_CONFIG</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">70</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is requesting IPv4 and/or IPv6 addresses and routing information from the network.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_IP_CHECK</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">80</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is checking whether further action is required for the requested network connection.  This may include checking whether only local network access is available, whether a captive portal is blocking access to the Internet, etc.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_SECONDARIES</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">90</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device is waiting for a secondary connection (like a VPN) which must activated before the device can be activated</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_ACTIVATED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">100</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device has a network connection, either local or global.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_DEACTIVATING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">110</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a disconnection from the current network connection was requested, and the device is cleaning up resources used for that connection.  The network connection may still be valid.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">120</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device failed to connect to the requested network and is cleaning up the connection request</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMDeviceStateReason"></a><h3>enum NMDeviceStateReason</h3>
+<p>Device state change reason codes</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.15.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>No reason given</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Unknown error</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_NOW_MANAGED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Device is now managed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_NOW_UNMANAGED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Device is now unmanaged</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_CONFIG_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The device could not be readied for configuration</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IP configuration could not be reserved (no available address, timeout, etc)</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The IP config is no longer valid</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_NO_SECRETS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">7</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Secrets were required, but not provided</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">8</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>802.1x supplicant disconnected</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">9</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>802.1x supplicant configuration failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">10</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>802.1x supplicant failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">11</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>802.1x supplicant took too long to authenticate</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_PPP_START_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">12</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>PPP service failed to start</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_PPP_DISCONNECT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">13</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>PPP service disconnected</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_PPP_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">14</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>PPP failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_DHCP_START_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">15</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>DHCP client failed to start</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_DHCP_ERROR</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">16</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>DHCP client error</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_DHCP_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">17</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>DHCP client failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SHARED_START_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">18</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Shared connection service failed to start</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SHARED_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">19</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Shared connection service failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">20</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>AutoIP service failed to start</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_AUTOIP_ERROR</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">21</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>AutoIP service error</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_AUTOIP_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">22</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>AutoIP service failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_BUSY</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">23</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The line is busy</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">24</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>No dial tone</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">25</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>No carrier could be established</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">26</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The dialing request timed out</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">27</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The dialing attempt failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">28</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Modem initialization failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_APN_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">29</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Failed to select the specified APN</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">30</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Not searching for networks</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">31</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Network registration denied</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">32</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Network registration timed out</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">33</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Failed to register with the requested network</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">34</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>PIN check failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_FIRMWARE_MISSING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">35</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Necessary firmware for the device may be missing</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_REMOVED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">36</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The device was removed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SLEEPING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">37</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>NetworkManager went to sleep</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_CONNECTION_REMOVED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">38</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The device's active connection disappeared</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_USER_REQUESTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">39</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Device disconnected by user or client</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_CARRIER</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">40</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Carrier/link changed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">41</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The device's existing connection was assumed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">42</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The supplicant is now available</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">43</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The modem could not be found</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_BT_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">44</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The Bluetooth connection failed or timed out</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">45</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>GSM Modem's SIM Card not inserted</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">46</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>GSM Modem's SIM Pin required</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">47</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>GSM Modem's SIM Puk required</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_GSM_SIM_WRONG</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">48</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>GSM Modem's SIM wrong</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_INFINIBAND_MODE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">49</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>InfiniBand device does not support connected mode</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">50</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>A dependency of the connection failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_BR2684_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">51</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Problem with the RFC 2684 Ethernet over ADSL bridge</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">52</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>ModemManager not running</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SSID_NOT_FOUND</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">53</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The WiFi network could not be found</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">54</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>A secondary connection of the base connection failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">55</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>DCB or FCoE setup failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">56</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>teamd control failed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">57</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Modem failed or no longer available</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_MODEM_AVAILABLE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">58</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Modem now ready and available</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">59</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>SIM PIN was incorrect</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_NEW_ACTIVATION</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">60</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>New connection activation was enqueued</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_PARENT_CHANGED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">61</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device's parent changed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">62</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the device parent's management changed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMMetered"></a><h3>enum NMMetered</h3>
+<p>Since: 1.2</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.16.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_METERED_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The metered status is unknown</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_METERED_YES</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Metered, the value was statically set</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_METERED_NO</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Not metered, the value was statically set</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_METERED_GUESS_YES</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Metered, the value was guessed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_METERED_GUESS_NO</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Not metered, the value was guessed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMActiveConnectionState"></a><h3>enum NMActiveConnectionState</h3>
+<p><a class="link" href="nm-dbus-types.html#NMActiveConnectionState" title="enum NMActiveConnectionState">NMActiveConnectionState</a> values indicate the state of a connection to a specific network while it is starting, connected, or disconnecting from that network.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.17.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_ACTIVE_CONNECTION_STATE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the state of the connection is unknown</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_ACTIVE_CONNECTION_STATE_ACTIVATING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>a network connection is being prepared</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_ACTIVE_CONNECTION_STATE_ACTIVATED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>there is a connection to the network</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_ACTIVE_CONNECTION_STATE_DEACTIVATING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the network connection is being torn down and cleaned up</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_ACTIVE_CONNECTION_STATE_DEACTIVATED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the network connection is disconnected and will be removed</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMSecretAgentGetSecretsFlags"></a><h3>enum NMSecretAgentGetSecretsFlags</h3>
+<p><a class="link" href="nm-dbus-types.html#NMSecretAgentGetSecretsFlags" title="enum NMSecretAgentGetSecretsFlags">NMSecretAgentGetSecretsFlags</a> values modify the behavior of a GetSecrets request.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.18.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>no special behavior; by default no user interaction is allowed and requests for secrets are fulfilled from persistent storage, or if no secrets are available an error is returned.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>allows the request to interact with the user, possibly prompting via UI for secrets if any are required, or if none are found in persistent storage.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>explicitly prompt for new secrets from the user.  This flag signals that NetworkManager thinks any existing secrets are invalid or wrong.  This flag implies that interaction is allowed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>set if the request was initiated by user-requested action via the D-Bus interface, as opposed to automatically initiated by NetworkManager in response to (for example) scan results or carrier changes.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_ONLY_SYSTEM</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x80000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Internal flag, not part of the D-Bus API.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_GET_SECRETS_FLAG_NO_ERRORS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x40000000</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Internal flag, not part of the D-Bus API.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMSecretAgentCapabilities"></a><h3>enum NMSecretAgentCapabilities</h3>
+<p><a class="link" href="nm-dbus-types.html#NMSecretAgentCapabilities" title="enum NMSecretAgentCapabilities">NMSecretAgentCapabilities</a> indicate various capabilities of the agent.</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.19.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_CAPABILITY_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the agent supports no special capabilities</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_SECRET_AGENT_CAPABILITY_VPN_HINTS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0x1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>the agent supports passing hints to VPN plugin authentication dialogs.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMIPTunnelMode"></a><h3>enum NMIPTunnelMode</h3>
+<p>The tunneling mode.</p>
+<p>Since: 1.2</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.2.20.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Unknown/unset tunnel mode</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_IPIP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IP in IP tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_GRE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>GRE tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_SIT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>SIT tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_ISATAP</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>ISATAP tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_VTI</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>VTI tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_IP6IP6</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IPv6 in IPv6 tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_IPIP6</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">7</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IPv4 in IPv6 tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_IP6GRE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">8</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IPv6 GRE tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_IP_TUNNEL_MODE_VTI6</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">9</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>IPv6 VTI tunnel</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

@@ -34,6 +34,8 @@ func ToKeyTypeRealData(ktype string) (realData string) {
 		realData = "int32"
 	case "ktypeUint32":
 		realData = "uint32"
+	case "ktypeInt64":
+		realData = "int64"
 	case "ktypeUint64":
 		realData = "uint64"
 	case "ktypeBoolean":
@@ -84,6 +86,8 @@ func ToKeyDefaultValue(keyName string) (value string) {
 		value = `int32(0)`
 	case "ktypeUint32":
 		value = `uint32(0)`
+	case "ktypeInt64":
+		value = `int64(0)`
 	case "ktypeUint64":
 		value = `uint64(0)`
 	case "ktypeBoolean":
@@ -130,6 +134,8 @@ func ToKeyTypeInterfaceConverter(ktype string) (converter string) {
 		converter = "interfaceToInt32"
 	case "ktypeUint32":
 		converter = "interfaceToUint32"
+	case "ktypeInt64":
+		converter = "interfaceToInt64"
 	case "ktypeUint64":
 		converter = "interfaceToUint64"
 	case "ktypeBoolean":
@@ -167,6 +173,8 @@ func IfNeedCheckValueLength(ktype string) (need string) {
 	case "ktypeInt32":
 		need = ""
 	case "ktypeUint32":
+		need = ""
+	case "ktypeInt64":
 		need = ""
 	case "ktypeUint64":
 		need = ""

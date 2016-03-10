@@ -2,21 +2,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>NetworkManager D-Bus Reference Manual: NetworkManager D-Bus Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="NetworkManager D-Bus Reference Manual">
-<link rel="next" href="ref-dbus.html" title="D-Bus API Reference">
-<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<title>NetworkManager Reference Manual: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="next" href="manpages.html" title="Manual Pages">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="book">
 <div class="titlepage">
 <div>
-<div><table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0"><tr><th valign="middle"><p class="title">NetworkManager D-Bus Reference Manual</p></th></tr></table></div>
-<div><p class="releaseinfo">Version 1.0.7
+<div><table class="navigation" id="top" width="100%" cellpadding="2" cellspacing="0"><tr><th valign="middle"><p class="title">NetworkManager Reference Manual</p></th></tr></table></div>
+<div><p class="releaseinfo">Version 1.2.4
 </p></div>
-<div><p class="copyright">Copyright © 2012 The NetworkManager Authors</p></div>
+<div><p class="copyright">Copyright © 2012, 2013, 2014, 2015, 2016 The NetworkManager Authors</p></div>
 <div><div class="legalnotice">
 <a name="id-1.1.4"></a><p>
 	Permission is granted to copy, distribute and/or modify this
@@ -43,35 +43,157 @@
 <hr>
 </div>
 <div class="toc"><dl class="toc">
-<dt><span class="chapter"><a href="ref-dbus.html">D-Bus API Reference</a></span></dt>
+<dt><span class="chapter"><a href="manpages.html">Manual Pages</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="nmcli.html">nmcli</a></span><span class="refpurpose"> — command-line tool for controlling NetworkManager</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nmtui.html">nmtui</a></span><span class="refpurpose"> — Text User Interface for controlling NetworkManager</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nm-online.html">nm-online</a></span><span class="refpurpose"> — ask NetworkManager whether the network is connected</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="NetworkManager.conf.html">NetworkManager.conf</a></span><span class="refpurpose"> — NetworkManager configuration file</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nm-settings.html">nm-settings</a></span><span class="refpurpose"> — Description of settings and properties of NetworkManager connection profiles</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nm-settings-keyfile.html">nm-settings-keyfile</a></span><span class="refpurpose"> — Description of <span class="emphasis"><em>keyfile</em></span> settings plugin</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nmcli-examples.html">nmcli-examples</a></span><span class="refpurpose"> — usage examples of nmcli</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="NetworkManager.html">NetworkManager</a></span><span class="refpurpose"> — network management daemon</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="spec.html">D-Bus API Reference</a></span></dt>
+<dd><dl>
+<dt><span class="section"><a href="spec.html#dbus-interfaces">Interfaces</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.html">org.freedesktop.NetworkManager</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Settings.html">org.freedesktop.NetworkManager.Settings</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.AgentManager.html">org.freedesktop.NetworkManager.AgentManager</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html">org.freedesktop.NetworkManager.AccessPoint</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.PPP.html">org.freedesktop.NetworkManager.PPP</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html">org.freedesktop.NetworkManager.Settings.Connection</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html">org.freedesktop.NetworkManager.VPN.Connection</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html">org.freedesktop.NetworkManager.Connection.Active</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.html">org.freedesktop.NetworkManager.Device</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html">org.freedesktop.NetworkManager.Device.Adsl</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html">org.freedesktop.NetworkManager.Device.Bond</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html">org.freedesktop.NetworkManager.Device.Bridge</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html">org.freedesktop.NetworkManager.Device.Bluetooth</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html">org.freedesktop.NetworkManager.Device.Wired</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Generic.html">org.freedesktop.NetworkManager.Device.Generic</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html">org.freedesktop.NetworkManager.Device.Infiniband</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html">org.freedesktop.NetworkManager.Device.IPTunnel</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html">org.freedesktop.NetworkManager.Device.Macvlan</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Modem.html">org.freedesktop.NetworkManager.Device.Modem</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html">org.freedesktop.NetworkManager.Device.OlpcMesh</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Team.html">org.freedesktop.NetworkManager.Device.Team</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html">org.freedesktop.NetworkManager.Device.Tun</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Veth.html">org.freedesktop.NetworkManager.Device.Veth</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html">org.freedesktop.NetworkManager.Device.Vlan</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html">org.freedesktop.NetworkManager.Device.Vxlan</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html">org.freedesktop.NetworkManager.Device.Wireless</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html">org.freedesktop.NetworkManager.Device.WiMax</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html">org.freedesktop.NetworkManager.DHCP4Config</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html">org.freedesktop.NetworkManager.DHCP6Config</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.IP4Config.html">org.freedesktop.NetworkManager.IP4Config</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.IP6Config.html">org.freedesktop.NetworkManager.IP6Config</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html">org.freedesktop.NetworkManager.VPN.Plugin</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html">org.freedesktop.NetworkManager.SecretAgent</a></span><span class="refpurpose"></span>
+</dt>
+</dl></dd>
+<dt><span class="section"><a href="dbus-types.html">Types</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="nm-dbus-types.html">NetworkManager D-Bus API Types</a></span><span class="refpurpose"></span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="nm-vpn-dbus-types.html">VPN Plugin D-Bus API Types</a></span><span class="refpurpose"></span>
+</dt>
+</dl></dd>
+</dl></dd>
 <dt><span class="chapter"><a href="ref-settings.html">Network Configuration Setting Specification</a></span></dt>
 <dd><dl>
-<dt><span class="section"><a href="ref-settings.html#id-1.3.3">Configuration Settings</a></span></dt>
+<dt><span class="section"><a href="ref-settings.html#id-1.4.3">Configuration Settings</a></span></dt>
 <dt><span class="section"><a href="secrets-flags.html">Secret flag types</a></span></dt>
-</dl></dd>
-<dt><span class="chapter"><a href="ref-migrating.html">Migrating from NetworkManager 0.8 to NetworkManager 0.9</a></span></dt>
-<dd><dl>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3">Architecture and D-Bus API Changes in 0.9</a></span></dt>
-<dd><dl>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.3">Elimination of the User Settings Service</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.4">User Secret Agents</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.5">Settings Service Interface Changes</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.6">Connection Object Interface Changes</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.7">Permissions Methods Consolidation</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.8">AddConnection Returns Object Path of New Connection</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.9">Support for WiMAX Devices</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.10">New Device States</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.11">New Active Connection State</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.12">Consolidated Modem Devices</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.13">Secret Property Flags</a></span></dt>
-<dt><span class="section"><a href="ref-migrating.html#id-1.4.3.14">Deprecated Methods Removed</a></span></dt>
-</dl></dd>
 </dl></dd>
 <dt><span class="index"><a href="ix01.html">Index</a></span></dt>
 <dt><span class="appendix"><a href="license.html">A. License</a></span></dt>
 </dl></div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.24</div>
+<hr>Generated by GTK-Doc V1.25</div>
 </body>
 </html>

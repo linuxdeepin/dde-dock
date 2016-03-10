@@ -1,0 +1,515 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>NetworkManager: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="manpages.html" title="Manual Pages">
+<link rel="prev" href="nmcli-examples.html" title="nmcli-examples">
+<link rel="next" href="spec.html" title="D-Bus API Reference">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts"></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="manpages.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="nmcli-examples.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="spec.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="NetworkManager"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">NetworkManager</span></h2>
+<p>NetworkManager — network management daemon</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Synopsis</h2>
+<div class="cmdsynopsis"><p><code class="command">NetworkManager [OPTIONS...]</code> </p></div>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.5"></a><h2>Description</h2>
+<p>
+      The NetworkManager daemon attempts to make networking
+      configuration and operation as painless and automatic as
+      possible by managing the primary network connection and other
+      network interfaces, like Ethernet, WiFi, and Mobile Broadband
+      devices.  NetworkManager will connect any network device when a
+      connection for that device becomes available, unless that
+      behavior is disabled.  Information about networking is exported
+      via a D-Bus interface to any interested application, providing a
+      rich API with which to inspect and control network settings and
+      operation.
+    </p>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.6"></a><h2>Dispatcher scripts</h2>
+<p>
+      NetworkManager will execute scripts in the
+      /etc/NetworkManager/dispatcher.d directory or subdirectories in
+      alphabetical order in response to network events.  Each script should
+      be a regular executable file owned by root.  Furthermore, it must not be
+      writable by group or other, and not setuid.
+    </p>
+<p>
+      Each script receives two arguments, the first being the interface name of the
+      device an operation just happened on, and second the action. For device actions,
+      the interface is the name of the kernel interface suitable for IP configuration.
+      Thus it is either VPN_IP_IFACE, DEVICE_IP_IFACE, or DEVICE_IFACE, as applicable.
+      For the <code class="varname">hostname</code> action it is always "none".
+    </p>
+<p>The actions are:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="varname">pre-up</code></span></p></td>
+<td><p>The interface is connected to the network but is not
+        yet fully activated.  Scripts acting on this event must be placed or
+        symlinked into the /etc/NetworkManager/dispatcher.d/pre-up.d directory,
+        and NetworkManager will wait for script execution to complete before
+        indicating to applications that the interface is fully activated.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">up</code></span></p></td>
+<td><p>The interface has been activated.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">pre-down</code></span></p></td>
+<td><p>The interface will be deactivated but has not yet been
+        disconnected from the network.  Scripts acting on this event must be
+        placed or symlinked into the /etc/NetworkManager/dispatcher.d/pre-down.d
+        directory, and NetworkManager will wait for script execution to complete
+        before disconnecting the interface from its network.  Note that this
+        event is not emitted for forced disconnections, like when carrier is
+        lost or a wireless signal fades.  It is only emitted when there is
+        an opportunity to cleanly handle a network disconnection event.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">down</code></span></p></td>
+<td><p>
+          The interface has been deactivated.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">vpn-pre-up</code></span></p></td>
+<td><p>The VPN is connected to the network but is not yet
+        fully activated.  Scripts acting on this event must be placed or
+        symlinked into the /etc/NetworkManager/dispatcher.d/pre-up.d directory,
+        and NetworkManager will wait for script execution to complete before
+        indicating to applications that the VPN is fully activated.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">vpn-up</code></span></p></td>
+<td><p>
+          A VPN connection has been activated.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">vpn-pre-down</code></span></p></td>
+<td><p>The VPN will be deactivated but has not yet been
+        disconnected from the network.  Scripts acting on this event must be
+        placed or symlinked into the /etc/NetworkManager/dispatcher.d/pre-down.d
+        directory, and NetworkManager will wait for script execution to complete
+        before disconnecting the VPN from its network.  Note that this
+        event is not emitted for forced disconnections, like when the VPN
+        terminates unexpectedly or general connectivity is lost.  It is only
+        emitted when there is an opportunity to cleanly handle a VPN
+        disconnection event.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">vpn-down</code></span></p></td>
+<td><p>
+          A VPN connection has been deactivated.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">hostname</code></span></p></td>
+<td><p>
+          The system hostname has been updated.  Use gethostname(2) to retrieve it.
+          The interface name (first argument) is empty and no environment variable is
+          set for this action.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">dhcp4-change</code></span></p></td>
+<td><p>
+          The DHCPv4 lease has changed (renewed, rebound, etc).
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">dhcp6-change</code></span></p></td>
+<td><p>
+          The DHCPv6 lease has changed (renewed, rebound, etc).
+        </p></td>
+</tr>
+</tbody>
+</table></div>
+<p>
+      The environment contains more information about the interface and the connection.
+      The following variables are available for the use in the dispatcher scripts:
+      </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="varname">CONNECTION_UUID</code></span></p></td>
+<td><p>
+            The UUID of the connection profile.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">CONNECTION_ID</code></span></p></td>
+<td><p>
+            The name (ID) of the connection profile.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">CONNECTION_DBUS_PATH</code></span></p></td>
+<td><p>
+            The NetworkManager D-Bus path of the connection.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">CONNECTION_FILENAME</code></span></p></td>
+<td><p>
+            The backing file name of the connection profile (if any).
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">CONNECTION_EXTERNAL</code></span></p></td>
+<td><p>
+            If "1", this indicates that the connection describes a
+            network configuration created outside of NetworkManager.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">DEVICE_IFACE</code></span></p></td>
+<td><p>
+            The interface name of the control interface of the device.
+            Depending on the device type, this differs from
+            <code class="varname">DEVICE_IP_IFACE</code>. For example for
+            ADSL devices, this could be 'atm0' or for WWAN devices
+            it might be 'ttyUSB0'.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">DEVICE_IP_IFACE</code></span></p></td>
+<td><p>
+            The IP interface name of the device. This is the network
+            interface on which IP addresses and routes will be configured.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_ADDRESS_N</code></span></p></td>
+<td><p>
+            The IPv4 address in the format "address/prefix gateway", where N is a number
+            from 0 to (# IPv4 addresses - 1). gateway item in this variable is deprecated,
+            use IP4_GATEWAY instead.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_NUM_ADDRESSES</code></span></p></td>
+<td><p>
+            The variable contains the number of IPv4 addresses the script may expect.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_GATEWAY</code></span></p></td>
+<td><p>
+            The gateway IPv4 address in traditional numbers-and-dots notation.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_ROUTE_N</code></span></p></td>
+<td><p>
+            The IPv4 route in the format "address/prefix next-hop metric", where N is a number
+            from 0 to (# IPv4 routes - 1).
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_NUM_ROUTES</code></span></p></td>
+<td><p>
+            The variable contains the number of IPv4 routes the script may expect.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_NAMESERVERS</code></span></p></td>
+<td><p>
+            The variable contains a space-separated list of the DNS servers.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP4_DOMAINS</code></span></p></td>
+<td><p>
+            The variable contains a space-separated list of the search domains.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">DHCP4_&lt;dhcp-option-name&gt;</code></span></p></td>
+<td><p>
+            If the connection used DHCP for address configuration, the received DHCP
+            configuration is passed in the environment using standard DHCP
+            option names, prefixed with "DHCP4_", like "DHCP4_HOST_NAME=foobar".
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">IP6_&lt;name&gt; and DHCP6_&lt;name&gt;</code></span></p></td>
+<td><p>
+            The same variables as for IPv4 are available for IPv6, but the prefixes are IP6_
+            and DHCP6_ instead.
+          </p></td>
+</tr>
+</tbody>
+</table></div>
+<p>
+    </p>
+<p>
+      In case of VPN, VPN_IP_IFACE is set, and IP4_*, IP6_* variables with VPN prefix are
+      exported too, like VPN_IP4_ADDRESS_0, VPN_IP4_NUM_ADDRESSES.
+    </p>
+<p>
+      Dispatcher scripts are run one at a time, but asynchronously from the main
+      NetworkManager process, and will be killed if they run for too long. If your script
+      might take arbitrarily long to complete, you should spawn a child process and have the
+      parent return immediately. Scripts that are symbolic links pointing inside the
+      /etc/NetworkManager/dispatcher.d/no-wait.d/ directory are run immediately, without
+      waiting for the termination of previous scripts, and in parallel. Also beware that
+      once a script is queued, it will always be run, even if a later event renders it
+      obsolete. (Eg, if an interface goes up, and then back down again quickly, it is
+      possible that one or more "up" scripts will be run after the interface has gone down.)
+    </p>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.7"></a><h2>Options</h2>
+<p>The following options are understood:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">--version</code> | <code class="option">-V</code></span></p></td>
+<td><p>Print the NetworkManager software version and exit.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--help</code> | <code class="option">-h</code></span></p></td>
+<td><p>Print NetworkManager's available options and exit.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--no-daemon</code> | <code class="option">-n</code></span></p></td>
+<td><p>Do not daemonize.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--debug</code> | <code class="option">-d</code></span></p></td>
+<td><p>Do not daemonize, and direct log output to the
+        controlling terminal in addition to syslog.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--pid-file</code> | <code class="option">-p</code></span></p></td>
+<td><p>Specify location of a PID file.  The PID file
+        is used for storing PID of the running process and prevents
+        running multiple instances.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--state-file</code></span></p></td>
+<td><p>Specify file for storing state of the
+        NetworkManager persistently.  If not specified, the default
+        value of /var/lib/NetworkManager/NetworkManager.state is used.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--config</code></span></p></td>
+<td><p> Specify configuration file to set up various
+        settings for NetworkManager.  If not specified, the default
+        value of /etc/NetworkManager/NetworkManager.conf is used with
+        a fallback to the older 'nm-system-settings.conf' if located
+        in the same directory.  See
+        <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>
+        for more information on configuration file.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--plugins</code></span></p></td>
+<td><p>List plugins used to manage system-wide
+        connection settings.  This list has preference over plugins
+        specified in the configuration file.  Currently supported
+        plugins are: keyfile, <code class="option">ifcfg-rh</code>,
+        <code class="option">ifcfg-suse</code>, <code class="option">ifupdown</code>.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--log-level</code></span></p></td>
+<td><p>
+          Sets how much information NetworkManager sends to the log destination (usually
+          syslog's "daemon" facility).  By default, only informational, warning, and error
+          messages are logged. See the section on <code class="literal">logging</code> in
+          <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>
+          for more information.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--log-domains</code></span></p></td>
+<td><p>
+          A comma-separated list specifying which operations are logged to the log
+          destination (usually syslog). By default, most domains are logging-enabled.
+          See the section on <code class="literal">logging</code> in
+          <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>
+          for more information.
+        </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--print-config</code></span></p></td>
+<td><p>
+          Print the NetworkManager configuration to stdout and exit.
+        </p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.8"></a><h2>UDEV PROPERTIES</h2>
+<p>
+      <span class="citerefentry"><span class="refentrytitle">udev</span>(7)</span>
+      device manager is used for the network device discovery. The following
+      property influences how NetworkManager manages the devices:
+    </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="varname">NM_UNMANAGED</code></span></p></td>
+<td>
+<p>
+          No default connection will be created and automatic activation
+          will not be attempted when this property of a device is set to a
+          true value ("1" or "true"). You will still be able to attach a
+          connection to the device manually or observe externally added
+          configuration such as addresses or routes.
+        </p>
+<p>
+          Create an udev rule that sets this property to prevent NetworkManager
+          from interfering with virtual Ethernet device interfaces that are
+          managed by virtualization tools.
+        </p>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.9"></a><h2>SIGNALS</h2>
+<p>
+      NetworkManager process handles the following signals:
+      </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="varname">SIGHUP</code></span></p></td>
+<td><p>
+          The signal causes a reload of NetworkManager's configuration.
+          Note that not all configuration parameters can be changed at
+          runtime and therefore some changes may be applied only after
+          the next restart of the daemon.
+          A SIGHUP also involves further reloading actions, like doing
+          a DNS update and restarting the DNS plugin. The latter can be
+          useful for example when using the dnsmasq plugin and changing
+          its configuration in /etc/NetworkManager/dnsmasq.d. However,
+          it also means this will shortly interrupt name resolution.
+          In the future, there may be further actions added.
+          A SIGHUP means to update NetworkManager configuration and reload
+          everything that is supported. Note that this does not reload
+          connections from disk. For that there is a D-Bus API and
+          nmcli's reload action
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">SIGUSR1</code></span></p></td>
+<td><p>
+            The signal forces a rewrite of DNS configuration. Contrary to
+            SIGHUP, this does not restart the DNS plugin and will not interrupt
+            name resolution.
+            In the future, further actions may be added. A SIGUSR1
+            means to write out data like resolv.conf, or refresh a cache.
+            It is a subset of what is done for SIGHUP without reloading
+            configuration from disk.
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="varname">SIGUSR2</code></span></p></td>
+<td><p>
+            The signal has no effect at the moment but is reserved for future
+            use.
+          </p></td>
+</tr>
+</tbody>
+</table></div>
+<p>
+    </p>
+<p>
+      An alternative to a signal to reload configuration is the Reload D-Bus call.
+      It allows for more fine-grained selection of what to reload, it only returns
+      after the reload is complete, and it is guarded by PolicyKit.
+    </p>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.10"></a><h2>DEBUGGING</h2>
+<p>
+      The following environment variables are supported to help
+      debugging.  When used in conjunction with the
+      <code class="option">--no-daemon</code> option (thus echoing PPP and DHCP
+      helper output to stdout) these can quickly help pinpoint the
+      source of connection issues.  Also see the
+      <code class="option">--log-level</code> and <code class="option">--log-domains</code>
+      to enable debug logging inside NetworkManager itself.
+    </p>
+<p>
+      <code class="option">NM_PPP_DEBUG</code>: When set to anything, causes
+      NetworkManager to turn on PPP debugging in pppd, which logs
+      all PPP and PPTP frames and client/server exchanges.
+    </p>
+</div>
+<div class="refsect1">
+<a name="id-1.2.9.11"></a><h2>See Also</h2>
+<p>
+      <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nmcli</span>(1)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nmcli-examples</span>(7)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nm-online</span>(1)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nm-settings</span>(5)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nm-applet</span>(1)</span>,
+      <span class="citerefentry"><span class="refentrytitle">nm-connection-editor</span>(1)</span>
+      <span class="citerefentry"><span class="refentrytitle">udev</span>(7)</span>
+    </p>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

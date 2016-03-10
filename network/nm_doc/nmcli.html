@@ -1,0 +1,2270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>nmcli: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="manpages.html" title="Manual Pages">
+<link rel="prev" href="manpages.html" title="Manual Pages">
+<link rel="next" href="nmtui.html" title="nmtui">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts"></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="manpages.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="manpages.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="nmtui.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="nmcli"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">nmcli</span></h2>
+<p>nmcli — command-line tool for controlling NetworkManager</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="synopsis"></a><h2>Synopsis</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli</code>  [<em class="replaceable"><code>OPTIONS</code></em>...] { <code class="option">help</code>  |   <code class="option">general</code>  |   <code class="option">networking</code>  |   <code class="option">radio</code>  |   <code class="option">connection</code>  |   <code class="option">device</code>  |   <code class="option">agent</code>  |   <code class="option">monitor</code> } [<em class="replaceable"><code>COMMAND</code></em>] [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+</div>
+<div class="refsect1">
+<a name="description"></a><h2>Description</h2>
+<p><span class="command"><strong>nmcli</strong></span> is a command-line tool for controlling
+    NetworkManager and reporting network status. It can be utilized as a
+    replacement for <span class="command"><strong>nm-applet</strong></span> or other graphical clients.
+    <span class="command"><strong>nmcli</strong></span> is used to create, display, edit, delete, activate,
+    and deactivate network connections, as well as control and display network
+    device status.</p>
+<p>Typical uses include:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Scripts: Utilize NetworkManager via <span class="command"><strong>nmcli</strong></span> instead of
+        managing network connections manually. <span class="command"><strong>nmcli</strong></span> supports a
+        terse output format which is better suited for script processing. Note that
+        NetworkManager can also execute scripts, called "dispatcher scripts", in
+        response to network events. See
+        <span class="citerefentry"><span class="refentrytitle">NetworkManager</span>(8)</span>
+        for details about these dispatcher scripts.</p></li>
+<li class="listitem"><p>Servers, headless machines, and terminals: <span class="command"><strong>nmcli</strong></span> can
+        be used to control NetworkManager without a GUI, including creating, editing,
+        starting and stopping network connections and viewing network status.</p></li>
+</ul></div>
+</div>
+<div class="refsect1">
+<a name="options"></a><h2>Options</h2>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">  <code class="option">-t</code>  |   <code class="option">--terse</code>  </span></p></td>
+<td><p>Output is terse. This mode is designed and suitable for computer (script)
+          processing.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-p</code>  |   <code class="option">--pretty</code>  </span></p></td>
+<td><p>Output is pretty. This causes <span class="command"><strong>nmcli</strong></span> to produce easily
+          readable outputs for humans, i.e. values are aligned, headers are printed,
+          etc.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-m</code>  |   <code class="option">--mode</code>  { tabular  |   multiline } </span></p></td>
+<td>
+<p>Switch between tabular and multiline output:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"> tabular </span></p></td>
+<td><p>Output is a table where each line describes a single entry.
+                Columns define particular properties of the entry.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"> multiline </span></p></td>
+<td><p>Each entry comprises multiple lines, each property on its
+                own line. The values are prefixed with the property name.</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>If omitted, default is <code class="literal">tabular</code> for most commands.
+          For the commands producing more structured information, that cannot be
+          displayed on a single line, default is <code class="literal">multiline</code>.
+          Currently, they are:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><code class="literal">nmcli connection show <em class="replaceable"><code>ID</code></em></code></p></li>
+<li class="listitem"><p><code class="literal">nmcli device show</code></p></li>
+</ul></div>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-c</code>  |   <code class="option">--colors</code>  { yes  |   no  |   auto } </span></p></td>
+<td><p>This option controls color output (using terminal escape sequences).
+          <code class="literal">yes</code> enables colors, <code class="literal">no</code> disables them,
+          <code class="literal">auto</code> only produces colors when standard output is directed
+          to a terminal. The default value is <code class="literal">auto</code>.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-f</code>  |   <code class="option">--fields</code>  {[<em class="replaceable"><code>field</code></em>...] |   all  |   common } </span></p></td>
+<td>
+<p>This option is used to specify what fields (column names) should be
+          printed. Valid field names differ for specific commands. List available fields
+          by providing an invalid value to the <code class="option">--fields</code> option.
+          <code class="literal">all</code> is used to print all valid field values of the
+          command. <code class="literal">common</code> is used to print common field values of
+          the command.</p>
+<p>If omitted, default is <code class="literal">common</code>. The option is
+          mandatory when <code class="option">--terse</code> is used. In this case, generic values
+          <code class="literal">all</code> and <code class="literal">common</code> cannot be used. This
+          is to maintain compatibility when new fields are added in the future.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-e</code>  |   <code class="option">--escape</code>  { yes  |   no } </span></p></td>
+<td>
+<p>Whether to escape <code class="literal">:</code> and <code class="literal">\</code> characters in terse tabular mode. The
+          escape character is <code class="literal">\</code>.</p>
+<p>If omitted, default is <code class="literal">yes</code>.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-a</code>  |   <code class="option">--ask</code>  </span></p></td>
+<td><p>When using this option <span class="command"><strong>nmcli</strong></span> will stop and ask for any
+          missing required arguments, so do not use this option for non-interactive
+          purposes like scripts. This option controls, for example, whether you will be
+          prompted for a password if it is required for connecting to a network.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-s</code>  |   <code class="option">--show-secrets</code>  </span></p></td>
+<td><p>When using this option <span class="command"><strong>nmcli</strong></span> will display passwords
+          and secrets that might be present in an output of an operation. This option
+          also influences echoing passwords typed by user as an input.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">[
+            <code class="option">-w</code>  |   <code class="option">--wait</code>  
+            <em class="replaceable"><code>seconds</code></em>... 
+        ]</span></p></td>
+<td>
+<p>This option sets a timeout period for which <span class="command"><strong>nmcli</strong></span> will
+          wait for NetworkManager to finish operations. It is
+          especially useful for commands that may take a longer time to complete, e.g.
+          connection activation.</p>
+<p>Specifying a value of <code class="literal">0</code> instructs
+          <span class="command"><strong>nmcli</strong></span> not to wait but to exit immediately with a status of
+          success. The default value depends on the executed command.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-v</code>  |   <code class="option">--version</code>  </span></p></td>
+<td><p>Show <span class="command"><strong>nmcli</strong></span> version.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-h</code>  |   <code class="option">--help</code>  </span></p></td>
+<td><p>Print help information.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="general"></a><h2>General Commands</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli general</code>  { <span class="command"><strong>status</strong></span>  |   <span class="command"><strong>hostname</strong></span>  |   <span class="command"><strong>permissions</strong></span>  |   <span class="command"><strong>logging</strong></span> } [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+<p>Use this command to show NetworkManager status and permissions. You can also get
+    and change system hostname, as well as NetworkManager logging level and domains.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="command"><strong>status</strong></span></span></p></td>
+<td><p>Show overall status of NetworkManager. This is the default action, when
+          no additional command is provided for <span class="command"><strong>nmcli general</strong></span>.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>hostname</strong></span>
+           [<em class="replaceable"><code>hostname</code></em>]
+        </span></p></td>
+<td>
+<p>Get and change system hostname. With no arguments, this prints currently
+          configured hostname. When you pass a hostname, it will be handed over to
+          NetworkManager to be set as a new system hostname.</p>
+<p>Note that the term "system" hostname may also be referred to as
+          "persistent" or "static" by other programs or tools. The hostname is stored
+          in <code class="filename">/etc/hostname</code> file in most distributions. For example,
+          systemd-hostnamed service uses the term "static" hostname and it only reads
+          the <code class="filename">/etc/hostname</code> file when it starts.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="command"><strong>permissions</strong></span></span></p></td>
+<td><p>Show the permissions a caller has for various authenticated operations
+          that NetworkManager provides, like enable and disable networking, changing
+          Wi-Fi and WWAN state, modifying connections, etc.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>logging</strong></span>
+           [<code class="option">level</code> <em class="replaceable"><code>level</code></em>]
+           [<code class="option">domain</code> <em class="replaceable"><code>domains</code></em>...]
+        </span></p></td>
+<td><p>Get and change NetworkManager logging level and
+          domains. Without any argument current logging level and domains are shown. In
+          order to change logging state, provide <code class="option">level</code> and, or,
+          <code class="option">domain</code> parameters. See
+          <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>
+          for available level and domain values.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="networking"></a><h2>Networking Control Commands</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli networking</code>  { <span class="command"><strong>on</strong></span>  |   <span class="command"><strong>off</strong></span>  |   <span class="command"><strong>connectivity</strong></span> } [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+<p>Query NetworkManager networking status, enable and disable networking.
+    </p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="command"><strong>on</strong></span>, </span><span class="term"><span class="command"><strong>off</strong></span></span></p></td>
+<td><p>Enable enable or disable networking control by NetworkManager.
+          All interfaces managed by NetworkManager are deactivated when networking
+          is disabled.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>connectivity</strong></span>
+           [check]
+        </span></p></td>
+<td>
+<p>Get network connectivity state. The optional <code class="option">check</code>
+          argument tells NetworkManager to re-check the connectivity, else the most
+          recent known connectivity state is displayed without re-checking.</p>
+<p>Possible states are:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"> none </span></p></td>
+<td><p>the host is not connected to any network.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"> portal </span></p></td>
+<td><p>the host is behind a captive portal and cannot reach the full Internet.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"> limited </span></p></td>
+<td><p>the host is connected to a network, but it has no access to the Internet.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"> full </span></p></td>
+<td><p>the host is connected to a network and has full access to the Internet.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"> unknown </span></p></td>
+<td><p>the connectivity status cannot be found out.</p></td>
+</tr>
+</tbody>
+</table></div>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="radio"></a><h2>Radio Transmission Control Commands</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli radio</code>  { <span class="command"><strong>all</strong></span>  |   <span class="command"><strong>wifi</strong></span>  |   <span class="command"><strong>wwan</strong></span> } [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+<p>Show radio switches status, or enable and disable the switches.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wifi</strong></span>
+           [ on  |   off ]
+        </span></p></td>
+<td><p>Show or set status of Wi-Fi in NetworkManager. If no arguments are
+          supplied, Wi-Fi status is printed; <code class="option">on</code> enables Wi-Fi;
+          <code class="option">off</code> disables Wi-Fi.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wwan</strong></span>
+           [ on  |   off ]
+        </span></p></td>
+<td><p>Show or set status of WWAN (mobile broadband) in NetworkManager. If no
+          arguments are supplied, mobile broadband status is printed;
+          <code class="option">on</code> enables mobile broadband, <code class="option">off</code>
+          disables it.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>all</strong></span>
+           [ on  |   off ]
+        </span></p></td>
+<td><p>Show or set all previously mentioned radio switches at the same time.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="monitor"></a><h2>Activity Monitor</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli monitor</code> </p></div>
+<p>Observe NetworkManager activity. Watches for changes
+    in connectivity state, devices or connection profiles.</p>
+<p>See also <span class="command"><strong>nmcli connection monitor</strong></span>
+    and <span class="command"><strong>nmcli device monitor</strong></span> to watch
+    for changes in certain devices or connections.</p>
+</div>
+<div class="refsect1">
+<a name="connection"></a><h2>Connection Management Commands</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli connection</code>  { <span class="command"><strong>show</strong></span>  |   <span class="command"><strong>up</strong></span>  |   <span class="command"><strong>down</strong></span>  |   <span class="command"><strong>add</strong></span>  |   <span class="command"><strong>edit</strong></span>  |   <span class="command"><strong>modify</strong></span>  |   <span class="command"><strong>delete</strong></span>  |   <span class="command"><strong>monitor</strong></span>  |   <span class="command"><strong>reload</strong></span>  |   <span class="command"><strong>load</strong></span> } [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+<p>NetworkManager stores all network configuration as "connections",
+    which are collections of data (Layer2 details, IP addressing, etc.) that
+    describe how to create or connect to a network. A connection is "active"
+    when a device uses that connection's configuration to create or connect to
+    a network. There may be multiple connections that apply to a device, but only
+    one of them can be active on that device at any given time. The additional
+    connections can be used to allow quick switching between different networks
+    and configurations.</p>
+<p>Consider a machine which is usually connected to a DHCP-enabled network,
+    but sometimes connected to a testing network which uses static IP addressing.
+    Instead of manually reconfiguring eth0 each time the network is changed, the
+    settings can be saved as two connections which both apply to eth0, one for DHCP
+    (called <code class="literal">default</code>) and one with the static addressing details (called
+    <code class="literal">testing</code>). When connected to the DHCP-enabled network the user would run
+    <span class="command"><strong>nmcli con up default</strong></span> , and when connected to the static network the user
+    would run <span class="command"><strong>nmcli con up testing</strong></span>.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>show</strong></span>
+           [<code class="option">--active</code>]
+           [
+             <code class="option">--order</code>
+               [+-]<em class="replaceable"><code>category</code></em>:... 
+          ]
+        </span></p></td>
+<td>
+<p>List in-memory and on-disk connection profiles, some of which may also be
+          active if a device is using that connection profile. Without a parameter, all
+          profiles are listed. When <code class="option">--active</code> option is specified, only
+          the active profiles are shown.</p>
+<p>The <code class="option">--order</code> option can be used to get custom
+          ordering of connections. The connections can be ordered by active status
+          (<code class="literal">active</code>), name (<code class="literal">name</code>), type
+          (<code class="literal">type</code>) or D-Bus path (<code class="literal">path</code>). If
+          connections are equal according to a sort order category, an additional
+          category can be specified. The default sorting order is equivalent to
+          <code class="literal">--order active:name:path</code>. <code class="literal">+</code> or no
+          prefix means sorting in ascending order (alphabetically or in numbers),
+          <code class="literal">-</code> means reverse (descending) order. The category names
+          can be abbreviated (e.g. <code class="literal">--order -a:na</code>).</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>show</strong></span>
+           [<code class="option">--active</code>]
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code>  |   <code class="option">apath</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+        </span></p></td>
+<td>
+<p>Show details for specified connections. By default, both static
+          configuration and active connection data are displayed. When
+          <code class="option">--active</code> option is specified, only the active profiles are
+          taken into account. Use global <code class="option">--show-secrets</code> option to
+          display secrets associated with the profile.</p>
+<p><code class="option">id</code>, <code class="option">uuid</code>,
+          <code class="option">path</code> and <code class="option">apath</code> keywords can be used
+          if <em class="replaceable"><code>ID</code></em> is ambiguous.  Optional
+          <em class="replaceable"><code>ID</code></em>-specifying keywords are:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">id</code></span></p></td>
+<td><p>the <em class="replaceable"><code>ID</code></em> denotes a connection name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">uuid</code></span></p></td>
+<td><p>the <em class="replaceable"><code>ID</code></em> denotes a connection UUID.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">path</code></span></p></td>
+<td><p>the <em class="replaceable"><code>ID</code></em> denotes a D-Bus
+                static connection path in the format of
+                /org/freedesktop/NetworkManager/Settings/<em class="replaceable"><code>num</code></em>
+                or just <em class="replaceable"><code>num</code></em>.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">apath</code></span></p></td>
+<td><p>the <em class="replaceable"><code>ID</code></em> denotes a D-Bus active connection path in the format of
+                /org/freedesktop/NetworkManager/ActiveConnection/<em class="replaceable"><code>num</code></em> or just
+                <em class="replaceable"><code>num</code></em>.</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>It is possible to filter the output using the global
+          <code class="option">--fields</code> option. Use the following values:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">profile</code></span></p></td>
+<td><p>only shows static profile configuration.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">active</code></span></p></td>
+<td><p>only shows active connection data (when the profile is active).</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>You can also specify particular fields. For static configuration, use
+          setting and property names as described in
+          <span class="citerefentry"><span class="refentrytitle">nm-settings</span>(5)</span> manual page. For active data use GENERAL, IP4, DHCP4, IP6,
+          DHCP6, VPN.</p>
+<p>When no command is given to the <span class="command"><strong>nmcli connection</strong></span>,
+          the default action is <span class="command"><strong>nmcli connection show</strong></span>.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>up</strong></span>
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+           [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+           [<code class="option">ap</code> <em class="replaceable"><code>BSSID</code></em>]
+           [<code class="option">passwd-file</code> <em class="replaceable"><code>file</code></em>]
+        </span></p></td>
+<td>
+<p>Activate a connection. The connection is identified by its name, UUID or
+          D-Bus path. If <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword <code class="option">id</code>,
+          <code class="option">uuid</code> or <code class="option">path</code> can be used. When
+          requiring a particular device to activate the connection on, the
+          <code class="option">ifname</code> option with interface name should be given. If the
+          <em class="replaceable"><code>ID</code></em> is not given an <code class="option">ifname</code> is required, and
+          NetworkManager will activate the best available connection for the given
+          <code class="option">ifname</code>. In case of a VPN connection, the
+          <code class="option">ifname</code> option specifies the device of the base connection.
+          The <code class="option">ap</code> option specify what particular AP should be used in
+          case of a Wi-Fi connection.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout will be 90
+          seconds.</p>
+<p>See <span class="command"><strong>connection show</strong></span> above for the description of the
+          <em class="replaceable"><code>ID</code></em>-specifying keywords.</p>
+<p>Available options are:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">ifname</code></span></p></td>
+<td><p>interface that will be used for activation.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ap</code></span></p></td>
+<td><p>BSSID of the AP which the command should connect to (for Wi-Fi connections).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">passwd-file</code></span></p></td>
+<td>
+<p>some networks may require credentials during activation. You can give
+                these credentials using this option. Each line of the file should contain one
+                password in the form:
+
+                </p>
+<pre class="programlisting">setting_name.property_name:the password</pre>
+<p>
+
+                For example, for WPA Wi-Fi with PSK, the line would be
+
+                </p>
+<pre class="programlisting">802-11-wireless-security.psk:secret12345</pre>
+<p>
+
+                For 802.1X password, the line would be
+
+                </p>
+<pre class="programlisting">802-1x.password:my 1X password</pre>
+<p>
+
+                <span class="command"><strong>nmcli</strong></span> also accepts <code class="literal">wifi-sec</code> and <code class="literal">wifi</code> strings instead of
+                <code class="literal">802-11-wireless-security</code>. When NetworkManager requires a password and it is
+                not given, <span class="command"><strong>nmcli</strong></span> will ask for it when run with <code class="option">--ask</code>.
+                If <code class="option">--ask</code> was not passed, NetworkManager can ask another secret
+                agent that may be running (typically a GUI secret agent, such as nm-applet or
+                gnome-shell).</p>
+</td>
+</tr>
+</tbody>
+</table></div>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>down</strong></span>
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code>  |   <code class="option">apath</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+        </span></p></td>
+<td>
+<p>Deactivate a connection from a device without preventing the device from
+          further auto-activation. Multiple connections can be passed to the
+          command.</p>
+<p>Be aware that this command deactivates the specified active connection,
+          but the device on which the connection was active, is still ready to connect
+          and will perform auto-activation by looking for a suitable connection that has
+          the 'autoconnect' flag set. This includes the just deactivated connection. So
+          if the connection is set to auto-connect, it will be automatically started on
+          the disconnected device again.</p>
+<p>In most cases you may want to use <span class="command"><strong>device disconnect</strong></span>
+          command instead.</p>
+<p>The connection is identified by its name, UUID or D-Bus path. If
+          <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword <code class="option">id</code>,
+          <code class="option">uuid</code>, <code class="option">path</code> or
+          <code class="option">apath</code> can be used.</p>
+<p> See <span class="command"><strong>connection show</strong></span> above for the description of
+          the <em class="replaceable"><code>ID</code></em>-specifying keywords.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout
+          will be 10 seconds.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>add</strong></span>
+            <code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em> 
+           [con-name <em class="replaceable"><code>name</code></em>]
+           [
+            <code class="option">autoconnect</code>
+             { yes  |   no }
+          ]
+           [
+            <code class="option">save</code>
+             { yes  |   no }
+          ]
+           [master <em class="replaceable"><code>master</code></em>]
+           [slave-type <em class="replaceable"><code>type</code></em>]
+           [type <em class="replaceable"><code>type</code></em>]
+           [<em class="replaceable"><code>ARGUMENTS</code></em>...]
+           [ip4 <em class="replaceable"><code>addr</code></em>]
+           [gw4 <em class="replaceable"><code>addr</code></em>]
+           [ip6 <em class="replaceable"><code>addr</code></em>]
+           [gw6 <em class="replaceable"><code>addr</code></em>]
+           [
+            <code class="option">--</code>
+              
+              [+|-]<em class="replaceable"><code>setting</code></em>.<em class="replaceable"><code>property</code></em>
+              <em class="replaceable"><code>value</code></em>
+            ... 
+          ]
+        </span></p></td>
+<td>
+<p>Add a connection for NetworkManager. Arguments differ according to connection types, see below.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">ifname</code></span></p></td>
+<td><p>interface to bind the connection to. The connection will only be
+                applicable to this interface name. A special value of <code class="literal">*</code>
+                can be used for interface-independent connections. The
+                <code class="option">ifname</code> argument is mandatory for all connection types
+                except bond, team, bridge and vlan. Note: use quotes around
+                <code class="literal">*</code> to suppress shell expansion.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">con-name</code></span></p></td>
+<td><p>connection name (when not provided a default name is generated:
+                &lt;type&gt;[-&lt;ifname&gt;][-&lt;num&gt;]).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">autoconnect</code></span></p></td>
+<td><p>whether the connection profile can be automatically activated (default:
+                yes).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">save</code></span></p></td>
+<td><p>whether the connection should be persistent, i.e. NetworkManager should
+                store it on disk (default: <code class="literal">yes</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">master</code></span></p></td>
+<td><p>master interface name, or connection UUID or ID of master connection
+                profile. The value can be prefixed with <code class="literal">ifname/</code>,
+                <code class="literal">uuid/</code> or <code class="literal">id/</code> to disambiguate it.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">slave-type</code></span></p></td>
+<td><p>type of master connection. Only required when it can not be inferred
+                (i.e. the master connection does
+                not exist yet).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">type</code></span></p></td>
+<td><p>connection type; see below for allowed values. Note that types
+                <code class="option">bond-slave</code>, <code class="option">team-slave</code> and
+                <code class="option">bridge-slave</code> create <code class="option">ethernet</code> connection
+                profiles. Their use is discouraged in favor of using a specific type with
+                <code class="option">master</code> option.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type ethernet</code>
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">cloned-mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">mtu</code> <em class="replaceable"><code>mtu</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the device this connection is locked to.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">cloned-mac</code></span></p></td>
+<td><p>cloned MAC.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mtu</code></span></p></td>
+<td><p>MTU.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type wifi</code>
+                  <code class="option">ssid</code> <em class="replaceable"><code>SSID</code></em> 
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">cloned-mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [
+                  <code class="option">mode</code>
+                   { infrastructure  |   ap  |   adhoc }
+                ]
+                 [<code class="option">mtu</code> <em class="replaceable"><code>mtu</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">ssid</code></span></p></td>
+<td><p>SSID.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the device this connection is locked to.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">cloned-mac</code></span></p></td>
+<td><p>cloned MAC.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mode</code></span></p></td>
+<td><p>Wi-Fi network mode. If blank, <code class="literal">infrastructure</code>
+                      is assumed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mtu</code></span></p></td>
+<td><p>MTU.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type wimax</code>
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">nsp</code> <em class="replaceable"><code>nsp</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the device this connection is locked to.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">nsp</code></span></p></td>
+<td><p>Network Service Provider name.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type pppoe</code>
+                  <code class="option">username</code> <em class="replaceable"><code>user</code></em> 
+                 [<code class="option">password</code> <em class="replaceable"><code>passwd</code></em>]
+                 [<code class="option">service</code> <em class="replaceable"><code>name</code></em>]
+                 [<code class="option">mtu</code> <em class="replaceable"><code>mtu</code></em>]
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">username</code></span></p></td>
+<td><p>PPPoE username.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td><p>Password for the PPPoE username.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">service</code></span></p></td>
+<td><p>PPPoE service name (if required by concentrator).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mtu</code></span></p></td>
+<td><p>MTU.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the device this connection is locked to.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type gsm</code>
+                 [<code class="option">apn</code> <em class="replaceable"><code>APN</code></em>]
+                 [<code class="option">username</code> <em class="replaceable"><code>user</code></em>]
+                 [<code class="option">password</code> <em class="replaceable"><code>passwd</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">apn</code></span></p></td>
+<td><p>APN - GSM Access Point Name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">user</code></span></p></td>
+<td><p>user name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td><p>password.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type cdma</code>
+                 [<code class="option">username</code> <em class="replaceable"><code>user</code></em>]
+                 [<code class="option">password</code> <em class="replaceable"><code>passwd</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">user</code></span></p></td>
+<td><p>user name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td><p>password.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type infiniband</code>
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">mtu</code> <em class="replaceable"><code>mtu</code></em>]
+                 [
+                  <code class="option">transport-mode</code>
+                   { datagram  |   connected }
+                ]
+                 [<code class="option">parent</code> <em class="replaceable"><code>device</code></em>]
+                 [<code class="option">p-key</code> <em class="replaceable"><code>key</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the device this connection is locked to
+                      (InfiniBand MAC is 20 bytes).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mtu</code></span></p></td>
+<td><p>MTU.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">transport-mode</code></span></p></td>
+<td><p>InfiniBand transport mode.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">parent</code></span></p></td>
+<td><p>the interface name of the parent device (if any).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">p-key</code></span></p></td>
+<td><p>the InfiniBand P_Key (16-bit unsigned integer).</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type bluetooth</code>
+                 [<code class="option">addr</code> <em class="replaceable"><code>addr</code></em>]
+                 [
+                  <code class="option">bt-type</code>
+                   { panu  |   dun-gsm  |   dun-cdma }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">addr</code></span></p></td>
+<td><p>Bluetooth device address (MAC).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">bt-type</code></span></p></td>
+<td><p>Bluetooth connection type.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type vlan</code>
+                  <code class="option">dev</code> <em class="replaceable"><code>device</code></em> 
+                  <code class="option">id</code> <em class="replaceable"><code>id</code></em> 
+                 [<code class="option">flags</code> <em class="replaceable"><code>flags</code></em>]
+                 [<code class="option">ingress</code> <em class="replaceable"><code>mapping</code></em>]
+                 [<code class="option">egress</code> <em class="replaceable"><code>mapping</code></em>]
+                 [<code class="option">mtu</code> <em class="replaceable"><code>mtu</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">dev</code></span></p></td>
+<td><p>parent device this VLAN is on.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">id</code></span></p></td>
+<td><p>VLAN ID in range 0-4095.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">flags</code></span></p></td>
+<td><p>flags.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ingress</code></span></p></td>
+<td><p>VLAN ingress priority mapping.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">egress</code></span></p></td>
+<td><p>VLAN egress priority mapping.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mtu</code></span></p></td>
+<td><p>MTU.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type bond</code>
+                 [
+                  <code class="option">mode</code>
+                   { active-backup  |   balance-xor  |   broadcast  |   802.3ad  |   balance-tlb  |   balance-alb  |   <em class="replaceable"><code>num</code></em> }
+                ]
+                 [<code class="option">primary</code> <em class="replaceable"><code>ifname</code></em>]
+                 [<code class="option">miimon</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">downdelay</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">updelay</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">arp-interval</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">arp-ip-target</code> <em class="replaceable"><code>num</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mode</code></span></p></td>
+<td><p>bonding mode (default: <code class="literal">balance-rr</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">primary</code></span></p></td>
+<td><p>primary interface name (for <code class="literal">active-backup</code> mode).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">miimon</code></span></p></td>
+<td><p>miimon (default: <code class="literal">100</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">downdelay</code></span></p></td>
+<td><p>downdelay (default: <code class="literal">0</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">updelay</code></span></p></td>
+<td><p>updelay (default: <code class="literal">0</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">arp-interval</code></span></p></td>
+<td><p>ARP interval (default: <code class="literal">0</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">arp-ip-target</code></span></p></td>
+<td><p>ARP IP target.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type bond-slave</code>
+                 [<code class="option">master</code> <em class="replaceable"><code>master</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="option">master</code></span></p></td>
+<td><p>master bond interface name, or connection UUID or
+                      ID of bond master connection profile. The value can be
+                      prefixed with <code class="literal">ifname/</code>,
+                      <code class="literal">uuid/</code> or <code class="literal">id/</code> to
+                      disambiguate it.</p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type team</code>
+                 [
+                  <code class="option">config</code>
+                   { file  |   <em class="replaceable"><code>JSON</code></em> }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="option">config</code></span></p></td>
+<td><p>JSON configuration for team.</p></td>
+</tr></tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type team-slave</code>
+                 [
+                  <code class="option">config</code>
+                  <code class="option"><em class="replaceable"><code>JSON</code></em></code>
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">master</code></span></p></td>
+<td><p>master team interface name, or connection UUID or
+                      ID of team master connection profile. The value can be
+                      prefixed with <code class="literal">ifname/</code>,
+                      <code class="literal">uuid/</code> or <code class="literal">id/</code>to
+                      disambiguate it.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">config</code></span></p></td>
+<td><p>JSON configuration for team.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type bridge</code>
+                 [
+                  <code class="option">stp</code>
+                   { yes  |   no }
+                ]
+                 [<code class="option">priority</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">forward-delay</code> <em class="replaceable"><code>2-30</code></em>]
+                 [<code class="option">hello-time</code> <em class="replaceable"><code>1-10</code></em>]
+                 [<code class="option">max-age</code> <em class="replaceable"><code>6-42</code></em>]
+                 [<code class="option">ageing-time</code> <em class="replaceable"><code>0-1000000</code></em>]
+                 [
+                  <code class="option">multicast-snooping</code>
+                   { yes  |   no }
+                ]
+                 [<code class="option">mac</code> <em class="replaceable"><code>addr</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">stp</code></span></p></td>
+<td><p>controls whether Spanning Tree Protocol (STP) is enabled for this bridge
+                      (default: <code class="literal">yes</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">priority</code></span></p></td>
+<td><p>sets STP priority (default: <code class="literal">128</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">forward-delay</code></span></p></td>
+<td><p>STP forwarding delay, in seconds (default: <code class="literal">15</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">hello-time</code></span></p></td>
+<td><p>STP hello time, in seconds (default: <code class="literal">2</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">max-age</code></span></p></td>
+<td><p>STP maximum message age, in seconds (default: <code class="literal">20</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ageing-time</code></span></p></td>
+<td><p>the Ethernet MAC address aging time, in seconds (default: <code class="literal">300</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">multicast-snooping</code></span></p></td>
+<td><p>controls whether IGMP snooping is enabled (default: <code class="literal">yes</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mac</code></span></p></td>
+<td><p>MAC address of the bridge (note: this requires a recent kernel feature,
+                      originally introduced in 3.15 upstream kernel).</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type bridge-slave</code>
+                 [<code class="option">master</code> <em class="replaceable"><code>master</code></em>]
+                 [<code class="option">priority</code> <em class="replaceable"><code>num</code></em>]
+                 [<code class="option">path-cost</code> <em class="replaceable"><code>1-65535</code></em>]
+                 [
+                  <code class="option">hairpin</code>
+                   { yes  |   no }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">master</code></span></p></td>
+<td><p>master bridge interface name, or connection UUID
+                      or ID of bridge master connection profile. The value
+                      can be prefixed with <code class="literal">ifname/</code>,
+                      <code class="literal">uuid/</code> or <code class="literal">id/</code>
+                      to disambiguate it.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">priority</code></span></p></td>
+<td><p>STP priority of this slave (default: <code class="literal">32</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">path-cost</code></span></p></td>
+<td><p>STP port cost for destinations via this slave (default: <code class="literal">100</code>).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">hairpin</code></span></p></td>
+<td><p>'hairpin mode' for the slave, which allows frames to be sent back out
+                       through the slave the frame was received on (default: <code class="literal">yes</code>).</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type vpn</code>
+                 [<code class="option">type</code> <em class="replaceable"><code>type</code></em>]
+                 [<code class="option">user</code> <em class="replaceable"><code>username</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">vpn-type</code></span></p></td>
+<td><p>VPN type.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">user</code></span></p></td>
+<td><p>VPN username.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type olpc-mesh</code>
+                  <code class="option">ssid</code> <em class="replaceable"><code>SSID</code></em> 
+                 [<code class="option">channel</code> <em class="replaceable"><code>1-13</code></em>]
+                 [<code class="option">dhcp-anycast</code> <em class="replaceable"><code>MAC</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">ssid</code></span></p></td>
+<td><p>SSID.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">channel</code></span></p></td>
+<td><p>channel to use for the network.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">dhcp-anycast</code></span></p></td>
+<td><p>anycast DHCP MAC address used when requesting an IP address via DHCP.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type adsl</code>
+                  <code class="option">username</code> <em class="replaceable"><code>username</code></em> 
+                  
+                  <code class="option">protocol</code>
+                   { pppoa  |   pppoe  |   ipoatm }
+                 
+                 [<code class="option">password</code> <em class="replaceable"><code>passwd</code></em>]
+                 [
+                  <code class="option">encapsulation</code>
+                   { vcmux  |   llc }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">username</code></span></p></td>
+<td><p>ADSL user name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">protocol</code></span></p></td>
+<td><p>ADSL protocol.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td><p>ADSL password.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">encapsulation</code></span></p></td>
+<td><p>ADSL encapsulation.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type tun</code>
+                  
+                  <code class="option">mode</code>
+                   { tun  |   tap }
+                 
+                 [<code class="option">owner</code> <em class="replaceable"><code>UID</code></em>]
+                 [<code class="option">group</code> <em class="replaceable"><code>GID</code></em>]
+                 [
+                  <code class="option">pi</code>
+                   { yes  |   no }
+                ]
+                 [
+                  <code class="option">vnet-hdr</code>
+                   { yes  |   no }
+                ]
+                 [
+                  <code class="option">multi-queue</code>
+                   { yes  |   no }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mode</code></span></p></td>
+<td><p>Mode for the device.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">owner</code></span></p></td>
+<td><p>UID of the owner.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">group</code></span></p></td>
+<td><p>GID of the group.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">pi</code></span></p></td>
+<td><p>include packet information (~IFF_NO_PI flag).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">vnet-hdr</code></span></p></td>
+<td><p>send and receive large (i.e. GSO) packets and packets with partial
+                      checksums (IFF_VNET_HDR flag).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">multi-queue</code></span></p></td>
+<td><p>multi-queue support for tun/tap device (IFF_MULTI_QUEUE flag).</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type ip-tunnel</code>
+                  
+                  <code class="option">mode</code>
+                   { ipip  |   gre  |   sit  |   isatap  |   vti  |   ip6ip6  |   ipip6  |   ip6gre  |   vti6  |   tun }
+                 
+                  <code class="option">remote</code> <em class="replaceable"><code>addr</code></em> 
+                 [<code class="option">local</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">dev</code> <em class="replaceable"><code>device</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">mode</code></span></p></td>
+<td><p>tunnel mode.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">remote</code></span></p></td>
+<td><p>IPv4 or IPv6 address of the remote tunnel endpoint.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">local</code></span></p></td>
+<td><p>IPv4 or IPv6 address of the local tunnel endpoint.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">dev</code></span></p></td>
+<td><p>device to use for tunnel endpoint communication.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type macvlan</code>
+                  <code class="option">dev</code> <em class="replaceable"><code>device</code></em> 
+                  
+                  <code class="option">mode</code>
+                   { vepa  |   bridge  |   private  |   passthru  |   source }
+                 
+                 [
+                  <code class="option">tap</code>
+                   { yes  |   no }
+                ]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">dev</code></span></p></td>
+<td><p>parent device this MACVLAN is on.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">mode</code></span></p></td>
+<td><p>MACVLAN mode, which specifies the communication mechanism between
+                      multiple MACVLANs on the same lower device.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">tap</code></span></p></td>
+<td><p>controls the device type. If set to 'yes' a MACVTAP will be created
+                      (default: <code class="literal">no</code>).</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term">
+                <code class="option">type vxlan</code>
+                  <code class="option">id</code> <em class="replaceable"><code>id</code></em> 
+                  <code class="option">remote</code> <em class="replaceable"><code>addr</code></em> 
+                 [<code class="option">dev</code> <em class="replaceable"><code>parent device (ifname or connection UUID)</code></em>]
+                 [<code class="option">local</code> <em class="replaceable"><code>addr</code></em>]
+                 [<code class="option">source-port-min</code> <em class="replaceable"><code>0-65535</code></em>]
+                 [<code class="option">source-port-max</code> <em class="replaceable"><code>0-65535</code></em>]
+                 [<code class="option">destination-port</code> <em class="replaceable"><code>0-65535</code></em>]
+              </span></p></td>
+<td><div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">id</code></span></p></td>
+<td><p>VXLAN Network Identifer to use.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">remote</code></span></p></td>
+<td><p>unicast destination IP address or multicast IP address to join.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">dev</code></span></p></td>
+<td><p>device to use for tunnel endpoint communication.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">local</code></span></p></td>
+<td><p>source IP address.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">source-port-min</code></span></p></td>
+<td><p>minimum UDP source port to communicate to the remote VXLAN tunnel endpoint.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">source-port-max</code></span></p></td>
+<td><p>maximum UDP source port to communicate to the remote VXLAN tunnel endpoint.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">destination-port</code></span></p></td>
+<td><p>UDP destination port to communicate to the remote VXLAN tunnel endpoint.</p></td>
+</tr>
+</tbody>
+</table></div></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ip4</code>, </span><span class="term"><code class="option">gw4</code></span></p></td>
+<td><p>IPv4 addresses.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ip6</code>, </span><span class="term"><code class="option">gw6</code></span></p></td>
+<td><p>IPv6 addresses.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">--</code></span></p></td>
+<td><p>If a <code class="option">--</code> argument is encountered, the rest of command
+                line is interpreted as property list in the same format as <span class="command"><strong>connection
+                modify</strong></span> command accepts.  This makes it possible to adjust the
+                connection properties before it's added.</p></td>
+</tr>
+</tbody>
+</table></div>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>edit</strong></span>
+           { 
+              [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+                <em class="replaceable"><code>ID</code></em>... 
+              |   
+              [<code class="option">type</code> <em class="replaceable"><code>type</code></em>]
+               [<code class="option">con-name</code> <em class="replaceable"><code>name</code></em>]
+             }
+        </span></p></td>
+<td>
+<p>Edit an existing connection or add a new one, using an interactive editor.</p>
+<p>The existing connection is identified by its name, UUID or D-Bus path. If
+          <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword <code class="option">id</code>,
+          <code class="option">uuid</code>, or <code class="option">path</code> can be used. See
+          <span class="command"><strong>connection show</strong></span> above for the description of the
+          <em class="replaceable"><code>ID</code></em>-specifying keywords. Not providing an
+          <em class="replaceable"><code>ID</code></em> means that a new connection will be added.</p>
+<p>The interactive editor will guide you through the connection editing and
+          allow you to change connection parameters according to your needs by means of
+          a simple menu-driven interface. The editor indicates what settings and
+          properties can be modified and provides in-line help.</p>
+<p>Available options:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">type</code></span></p></td>
+<td><p>type of the new connection; valid types are the same as for
+                  <span class="command"><strong>connection add</strong></span> command.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">con-name</code></span></p></td>
+<td><p>name for the new connection. It can be changed later in the editor.</p></td>
+</tr>
+</tbody>
+</table></div>
+<p>See also
+          <span class="citerefentry"><span class="refentrytitle">nm-settings</span>(5)</span> for all NetworkManager settings and property names, and their
+          descriptions; and
+          <span class="citerefentry"><span class="refentrytitle">nmcli-examples</span>(7)</span>
+          for sample editor sessions.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>modify</strong></span>
+           [<code class="option">--temporary</code>]
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em> 
+            
+            [+|-]<em class="replaceable"><code>setting</code></em>.<em class="replaceable"><code>property</code></em>
+            <em class="replaceable"><code>value</code></em>
+          ... 
+        </span></p></td>
+<td>
+<p>Modify one or more properties in the connection profile.</p>
+<p>The connection is identified by its name, UUID or D-Bus path. If
+          <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword <code class="option">id</code>,
+          <code class="option">uuid</code> or <code class="option">path</code> can be used. See
+          <span class="citerefentry"><span class="refentrytitle">nm-settings</span>(5)</span> for setting and property names, their descriptions and default
+          values. This command supports abbreviations for <em class="replaceable"><code>setting</code></em>
+          and <em class="replaceable"><code>property</code></em> provided they are unique. Empty
+          <em class="replaceable"><code>value</code></em> ("") removes the property value (sets
+          the property to the default value). The provided value overwrites the existing
+          property value.</p>
+<p>If you want to append an item to the existing value, use
+          <code class="literal">+</code> prefix for the property name. If you want to remove just
+          one item from container-type property, use <code class="literal">-</code> prefix for
+          the property name and specify a value or an zero-based index of the item to
+          remove (or option name for properties with named options) as
+          <em class="replaceable"><code>value</code></em>. Of course, <code class="literal">+</code> and
+          <code class="literal">-</code> only have a real effect for multi-value (container)
+          properties like <code class="literal">ipv4.dns</code>, <code class="literal">ipv4.addresses</code>,
+          <code class="literal">bond.options</code>, etc.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>clone</strong></span>
+           [<code class="option">--temporary</code>]
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+            <code class="option">new</code> <em class="replaceable"><code>name</code></em> 
+        </span></p></td>
+<td>
+<p>Clone a connection. The connection to be cloned is identified by its
+          name, UUID or D-Bus path. If <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword
+          <code class="option">id</code>, <code class="option">uuid</code> or <code class="option">path</code>
+          can be used. See <span class="command"><strong>connection show</strong></span> above for the description
+          of the <em class="replaceable"><code>ID</code></em>-specifying keywords. <em class="replaceable"><code>name</code></em> is
+          the name of the new cloned connection. The new connection will be the exact
+          copy except the connection.id (<em class="replaceable"><code>name</code></em>) and
+          connection.uuid (generated) properties.</p>
+<p>The new connection profile will be saved as persistent unless
+          <code class="option">--temporary</code> option is specified, in which case the new profile
+          won't exist after NetworkManager restart.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>delete</strong></span>
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+        </span></p></td>
+<td>
+<p>Delete a configured connection. The connection to be deleted is
+          identified by its name, UUID or D-Bus path. If <em class="replaceable"><code>ID</code></em> is ambiguous, a
+          keyword <code class="option">id</code>, <code class="option">uuid</code> or <code class="option">path</code> can be used.
+          See <span class="command"><strong>connection show</strong></span> above for the description of
+          the <em class="replaceable"><code>ID</code></em>-specifying keywords.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout will be 10
+          seconds.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>monitor</strong></span>
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em>... 
+        </span></p></td>
+<td>
+<p>Monitor connection profile activity. This command prints a line whenever
+          the specified connection changes. The connection to be monitored is identified
+          by its name, UUID or D-Bus path. If <em class="replaceable"><code>ID</code></em> is ambiguous, a keyword
+          <code class="option">id</code>, <code class="option">uuid</code> or <code class="option">path</code>
+          can be used. See <span class="command"><strong>connection show</strong></span> above for the description of the
+          <em class="replaceable"><code>ID</code></em>-specifying keywords.</p>
+<p>Monitors all connection profiles in case none is specified. The command
+          terminates when all monitored connections disappear. If you want to monitor
+          connection creation consider using the global monitor with <span class="command"><strong>nmcli
+          monitor</strong></span> command.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>reload</strong></span>
+        </span></p></td>
+<td><p>Reload all connection files from disk.
+          NetworkManager does not monitor changes to connection
+          files by default. So you need to use this command in order to tell
+          NetworkManager to re-read the connection profiles from
+          disk when a change was made to them. However, the auto-loading feature can be
+          enabled and then NetworkManager will reload connection
+          files any time they change (monitor-connection-files=true in
+          <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>).
+          </p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>load</strong></span>
+            <em class="replaceable"><code>filename</code></em>... 
+        </span></p></td>
+<td><p>Load/reload one or more connection files from disk. Use this after
+          manually editing a connection file to ensure that
+          NetworkManager is aware of its latest state.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>import</strong></span>
+           [<code class="option">--temporary</code>]
+           [<code class="option">type</code> <em class="replaceable"><code>type</code></em>]
+           [<code class="option">file</code> <em class="replaceable"><code>file</code></em>]
+        </span></p></td>
+<td>
+<p>Import an external/foreign configuration as a NetworkManager connection
+          profile. The type of the input file is specified by <code class="option">type</code>
+          option.</p>
+<p>Only VPN configurations are supported at the moment. The configuration is
+          imported by NetworkManager VPN plugins. <code class="option">type</code> values are
+          the same as for <code class="option">vpn-type</code> option in <span class="command"><strong>nmcli
+          connection add</strong></span>. VPN configurations are imported by VPN plugins.
+          Therefore the proper VPN plugin has to be installed so that <span class="command"><strong>nmcli</strong></span> could import
+          the data.</p>
+<p>The imported connection profile will be saved as persistent unless
+          <code class="option">--temporary</code> option is specified, in which case the new profile
+          won't exist after NetworkManager restart.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>export</strong></span>
+           [ <code class="option">id</code>  |   <code class="option">uuid</code>  |   <code class="option">path</code> ]
+            <em class="replaceable"><code>ID</code></em> 
+           [<em class="replaceable"><code>file</code></em>]
+        </span></p></td>
+<td>
+<p>Export a connection.</p>
+<p>Only VPN connections are supported at the moment. A proper VPN plugin has
+          to be installed so that <span class="command"><strong>nmcli</strong></span> could export a connection. If no
+          <em class="replaceable"><code>file</code></em> is provided, the VPN configuration
+          data will be printed to standard output.</p>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="device"></a><h2>Device Management Commands</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli device</code>  { <span class="command"><strong>status</strong></span>  |   <span class="command"><strong>show</strong></span>  |   <span class="command"><strong>set</strong></span>  |   <span class="command"><strong>connect</strong></span>  |   <span class="command"><strong>reapply</strong></span>  |   <span class="command"><strong>disconnect</strong></span>  |   <span class="command"><strong>delete</strong></span>  |   <span class="command"><strong>monitor</strong></span>  |   <span class="command"><strong>wifi</strong></span>  |   <span class="command"><strong>lldp</strong></span> } [<em class="replaceable"><code>ARGUMENTS</code></em>...]</p></div>
+<p>Show and manage network interfaces.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="command"><strong>status</strong></span></span></p></td>
+<td>
+<p>Print status of devices.</p>
+<p>This is the default action if no command is specified to
+          <span class="command"><strong>nmcli device</strong></span>.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>show</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>]
+        </span></p></td>
+<td><p>Show detailed information about devices. Without an argument, all
+          devices are examined. To get information for a specific device, the interface
+          name has to be provided.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>set</strong></span>
+           [ifname]
+            <em class="replaceable"><code>ifname</code></em> 
+           [
+            <code class="option">autoconnect</code>
+             { yes  |   no }
+          ]
+           [
+            <code class="option">managed</code>
+             { yes  |   no }
+          ]
+        </span></p></td>
+<td><p>Set device properties.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>connect</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>]
+        </span></p></td>
+<td>
+<p>Connect the device. NetworkManager will try to find a suitable connection
+          that will be activated. It will also consider connections that are not set to
+          auto connect.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout will be 90
+          seconds.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>reapply</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>]
+        </span></p></td>
+<td><p>Attempt to update device with changes to the currently active connection
+          made since it was last applied.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>disconnect</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>...]
+        </span></p></td>
+<td>
+<p>Disconnect a device and prevent the device from automatically activating
+          further connections without user/manual intervention. Note that disconnecting
+          software devices may mean that the devices will disappear.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout
+          will be 10 seconds.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>delete</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>...]
+        </span></p></td>
+<td>
+<p>Delete a device. The command removes the interface from the system. Note
+          that this only works for software devices like bonds, bridges, teams, etc.
+          Hardware devices (like Ethernet) cannot be deleted by the command.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout will be 10
+          seconds.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>monitor</strong></span>
+           [<em class="replaceable"><code>ifname</code></em>...]
+        </span></p></td>
+<td>
+<p>Monitor device activity. This command prints a line whenever the
+          specified devices change state.</p>
+<p>Monitors all devices in case no interface is specified. The monitor
+          terminates when all specified devices disappear. If you want to monitor device
+          addition consider using the global monitor with <span class="command"><strong>nmcli
+          monitor</strong></span> command.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wifi</strong></span>
+           [
+            <span class="command"><strong>list</strong></span>
+             [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+             [<code class="option">bssid</code> <em class="replaceable"><code>BSSID</code></em>]
+          ]
+        </span></p></td>
+<td><p>List available Wi-Fi access points. The <code class="option">ifname</code> and
+          <code class="option">bssid</code> options can be used to list APs for a particular
+          interface or with a specific BSSID, respectively.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wifi</strong></span>
+          <span class="command"><strong>connect</strong></span>
+            <em class="replaceable"><code>(B)SSID</code></em> 
+           [<code class="option">password</code> <em class="replaceable"><code>password</code></em>]
+           [
+            <code class="option">wep-key-type</code>
+             { key  |   phrase }
+          ]
+           [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+           [<code class="option">bssid</code> <em class="replaceable"><code>BSSID</code></em>]
+           [<code class="option">name</code> <em class="replaceable"><code>name</code></em>]
+           [
+            <code class="option">private</code>
+             { yes  |   no }
+          ]
+           [
+            <code class="option">hidden</code>
+             { yes  |   no }
+          ]
+        </span></p></td>
+<td>
+<p>Connect to a Wi-Fi network specified by SSID or BSSID. The command
+          creates a new connection and then activates it on a device. This is a
+          command-line counterpart of clicking an SSID in a GUI client. The command
+          always creates a new connection and thus it is mainly useful for connecting to
+          new Wi-Fi networks. If a connection for the network already exists, it is
+          better to bring up (activate) the existing connection as follows:
+          <span class="command"><strong>nmcli con up id <em class="replaceable"><code>name</code></em></strong></span>. Note that
+          only open, WEP and WPA-PSK networks are supported at the moment. It is also
+          supposed that IP configuration is obtained via DHCP.</p>
+<p>If <code class="option">--wait</code> option is not specified, the default timeout will be 90
+          seconds.</p>
+<p>Available options are:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td><p>password for secured networks (WEP or WPA).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">wep-key-type</code></span></p></td>
+<td><p>type of WEP secret, either <code class="option">key</code> for ASCII/HEX key or
+                <code class="option">phrase</code> for passphrase.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ifname</code></span></p></td>
+<td><p>interface that will be used for activation.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">bssid</code></span></p></td>
+<td><p>if specified, the created connection will be restricted just for the
+                BSSID.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">name</code></span></p></td>
+<td><p>if specified, the connection will use the name (else NM creates a name
+                itself).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">private</code></span></p></td>
+<td><p>if set to <code class="literal">yes</code>, the connection will only be visible
+                to the user who created it. Otherwise the connection is system-wide, which is
+                the default.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">hidden</code></span></p></td>
+<td><p>set to <code class="literal">yes</code> when connecting for the first time to an
+                AP not broadcasting its SSID. Otherwise the SSID would not be found and the
+                connection attempt would fail.</p></td>
+</tr>
+</tbody>
+</table></div>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wifi</strong></span>
+          <span class="command"><strong>hotspot</strong></span>
+           [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+           [<code class="option">con-name</code> <em class="replaceable"><code>name</code></em>]
+           [<code class="option">ssid</code> <em class="replaceable"><code>SSID</code></em>]
+           [
+            <code class="option">band</code>
+             { a  |   bg }
+          ]
+           [<code class="option">channel</code> <em class="replaceable"><code>channel</code></em>]
+           [<code class="option">password</code> <em class="replaceable"><code>password</code></em>]
+        </span></p></td>
+<td>
+<p>Create a Wi-Fi hotspot. The command creates a hotspot connection profile
+          according to Wi-Fi device capabilities and activates it on the device. The
+          hotspot is secured with WPA if device/driver supports that, otherwise WEP is
+          used. Use <span class="command"><strong>connection down</strong></span> or <span class="command"><strong>device
+          disconnect</strong></span> to stop the hotspot.</p>
+<p>Parameters of the hotspot can be influenced by the optional
+          parameters:</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="option">ifname</code></span></p></td>
+<td><p>what Wi-Fi device is used.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">con-name</code></span></p></td>
+<td><p>name of the created hotspot connection profile.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">ssid</code></span></p></td>
+<td><p>SSID of the hotspot.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">band</code></span></p></td>
+<td><p>Wi-Fi band to use.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">channel</code></span></p></td>
+<td><p>Wi-Fi channel to use.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="option">password</code></span></p></td>
+<td>
+<p>password to use for the created hotspot. If not provided, <span class="command"><strong>nmcli</strong></span> will
+                generate a password. The password is either WPA pre-shared key or WEP
+                key.</p>
+<p>Note that <code class="option">--show-secrets</code> global option can be used to
+                print the hotspot password. It is useful especially when the password was
+                generated.</p>
+</td>
+</tr>
+</tbody>
+</table></div>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>wifi</strong></span>
+          <span class="command"><strong>rescan</strong></span>
+           [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+           [<code class="option">ssid</code> <em class="replaceable"><code>SSID</code></em>...]
+        </span></p></td>
+<td>
+<p>Request that NetworkManager immediately re-scan for
+          available access points. NetworkManager scans Wi-Fi networks periodically, but
+          in some cases it can be useful to start scanning manually (e.g. after resuming
+          the computer). By using <code class="option">ssid</code>, it is possible to scan for a
+          specific SSID, which is useful for APs with hidden SSIDs. You can provide
+          multiple <code class="option">ssid</code> parameters in order to scan more
+          SSIDs.</p>
+<p>This command does not show the APs, use <span class="command"><strong>nmcli device wifi list</strong></span>
+          for that.</p>
+</td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>lldp</strong></span>
+           [
+            <span class="command"><strong>list</strong></span>
+             [<code class="option">ifname</code> <em class="replaceable"><code>ifname</code></em>]
+          ]
+        </span></p></td>
+<td><p>Display information about neighboring devices learned through the Link
+          Layer Discovery Protocol (LLDP). The <code class="option">ifname</code> option can be
+          used to list neighbors only for a given interface. The protocol must be enabled
+          in the connection settings.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="agent"></a><h2>Secret Agent</h2>
+<div class="cmdsynopsis"><p><code class="command">nmcli agent</code>  { <span class="command"><strong>secret</strong></span>  |   <span class="command"><strong>polkit</strong></span>  |   <span class="command"><strong>all</strong></span> }</p></div>
+<p>Run <span class="command"><strong>nmcli</strong></span> as a NetworkManager secret agent, or polkit agent.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="command"><strong>secret</strong></span></span></p></td>
+<td><p>Register <span class="command"><strong>nmcli</strong></span> as a NetworkManager secret agent and listen for secret
+          requests. You do usually not need this command, because <span class="command"><strong>nmcli</strong></span> can handle
+          secrets when connecting to networks. However, you may find the command useful
+          when you use another tool for activating connections and you do not have a
+          secret agent available (like nm-applet).</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>polkit</strong></span>
+        </span></p></td>
+<td><p>Register <span class="command"><strong>nmcli</strong></span> as a polkit agent for the user session and listen for
+          authorization requests. You do not usually need this command, because <span class="command"><strong>nmcli</strong></span> can
+          handle polkit actions related to NetworkManager operations (when run with
+          <code class="option">--ask</code>). However, you may find the command useful when you want
+          to run a simple text based polkit agent and you do not have an agent of a desktop
+          environment.  Note that running this command makes <span class="command"><strong>nmcli</strong></span> handle all polkit requests,
+          not only NetworkManager related ones, because only one polkit agent can run for the
+          session.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">
+          <span class="command"><strong>all</strong></span>
+        </span></p></td>
+<td><p>Runs <span class="command"><strong>nmcli</strong></span> as both NetworkManager secret and a polkit agent.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="environment_variables"></a><h2>Environment Variables</h2>
+<p><span class="command"><strong>nmcli</strong></span>'s behavior is affected by the following
+    environment variables.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="envar">LC_ALL</code></span></p></td>
+<td><p>If set to a non-empty string value, it overrides the values of all the
+          other internationalization variables.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="envar">LC_MESSAGES</code></span></p></td>
+<td><p>Determines the locale to be used for internationalized messages.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="envar">LANG</code></span></p></td>
+<td><p>Provides a default value for the internationalization variables that are
+          unset or null.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="internationalization_notes"></a><h2>Internationalization notes</h2>
+<p>Be aware that <span class="command"><strong>nmcli</strong></span> is localized and that is why the
+    output depends on your environment. This is important to realize especially
+    when you parse the output.</p>
+<p>Call <span class="command"><strong>nmcli</strong></span> as <span class="command"><strong>LC_ALL=C nmcli</strong></span> to
+    be sure the locale is set to <code class="literal">C</code> while executing in a script.</p>
+<p><code class="envar">LC_ALL</code>, <code class="envar">LC_MESSAGES</code>, <code class="envar">LANG</code>
+    variables specify the <code class="envar">LC_MESSAGES</code> locale category (in that
+    order), which determines the language that <span class="command"><strong>nmcli</strong></span> uses for
+    messages. The <code class="literal">C</code> locale is used if none of these variables are set, and this
+    locale uses English messages.</p>
+</div>
+<div class="refsect1">
+<a name="exit_status"></a><h2>Exit Status</h2>
+<p><span class="command"><strong>nmcli</strong></span> exits with status 0 if it succeeds, a value
+    greater than 0 is returned if an error occurs.</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="errorcode">0</span></span></p></td>
+<td><p>Success – indicates the operation succeeded.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">1</span></span></p></td>
+<td><p>Unknown or unspecified error.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">2</span></span></p></td>
+<td><p>Invalid user input, wrong <span class="command"><strong>nmcli</strong></span>
+          invocation.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">3</span></span></p></td>
+<td><p>Timeout expired (see <code class="option">--wait</code> option).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">4</span></span></p></td>
+<td><p>Connection activation failed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">5</span></span></p></td>
+<td><p>Connection deactivation failed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">6</span></span></p></td>
+<td><p>Disconnecting device failed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">7</span></span></p></td>
+<td><p>Connection deletion failed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">8</span></span></p></td>
+<td><p>NetworkManager is not running.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">10</span></span></p></td>
+<td><p>Connection, device, or access point does not exist.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="examples"></a><h2>Examples</h2>
+<p>This section presents various examples of <span class="command"><strong>nmcli</strong></span> usage. If you want even
+    more, please refer to
+    <span class="citerefentry"><span class="refentrytitle">nmcli-examples</span>(7)</span>
+    manual page.</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -t -f RUNNING general</code></strong></span></p></td>
+<td><p>tells you whether NetworkManager is running or not.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -t -f STATE general</code></strong></span></p></td>
+<td><p>shows the overall status of NetworkManager.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli radio wifi off</code></strong></span></p></td>
+<td><p>switches Wi-Fi off.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli connection show</code></strong></span></p></td>
+<td><p>lists all connections NetworkManager has.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -p -m multiline -f all con show</code></strong></span></p></td>
+<td><p>shows all configured connections in multi-line mode.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli connection show --active</code></strong></span></p></td>
+<td><p>lists all currently active connections.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -f name,autoconnect c s</code></strong></span></p></td>
+<td><p>shows all connection profile names and their auto-connect property.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -p connection show "My default em1"</code></strong></span></p></td>
+<td><p>shows details for "My default em1" connection profile.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli --show-secrets connection show "My Home WiFi"</code></strong></span></p></td>
+<td><p>shows details for "My Home WiFi" connection profile with all passwords.
+          Without <code class="option">--show-secrets</code> option, secrets would not be
+          displayed.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -f active connection show "My default em1"</code></strong></span></p></td>
+<td><p>shows details for "My default em1" active connection, like IP, DHCP
+          information, etc.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -f profile con s "My wired connection"</code></strong></span></p></td>
+<td><p>shows static configuration details of the connection profile with "My
+          wired connection" name.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -p con up "My wired connection" ifname eth0</code></strong></span></p></td>
+<td><p>activates the connection profile with name "My wired connection" on
+          interface eth0. The -p option makes <span class="command"><strong>nmcli</strong></span> show progress of the
+          activation.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con up 6b028a27-6dc9-4411-9886-e9ad1dd43761 ap 00:3A:98:7C:42:D3</code></strong></span></p></td>
+<td><p>connects the Wi-Fi connection with UUID
+          6b028a27-6dc9-4411-9886-e9ad1dd43761 to the AP with BSSID
+          00:3A:98:7C:42:D3.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli device status</code></strong></span></p></td>
+<td><p>shows the status for all devices.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli dev disconnect em2</code></strong></span></p></td>
+<td><p>disconnects a connection on interface em2 and marks the device as
+          unavailable for auto-connecting. As a result, no connection will automatically
+          be activated on the device until the device's 'autoconnect' is set to TRUE or
+          the user manually activates a connection.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -f GENERAL,WIFI-PROPERTIES dev show wlan0</code></strong></span></p></td>
+<td><p>shows details for wlan0 interface; only GENERAL and WIFI-PROPERTIES
+          sections will be shown.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -f CONNECTIONS device show wlp3s0</code></strong></span></p></td>
+<td><p>shows all available connection profiles for your Wi-Fi interface
+          wlp3s0.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli dev wifi</code></strong></span></p></td>
+<td><p>lists available Wi-Fi access points known to NetworkManager.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli dev wifi con "Cafe Hotspot 1" password caffeine name "My cafe"</code></strong></span></p></td>
+<td><p>creates a new connection named "My cafe" and then connects it to "Cafe
+          Hotspot 1" SSID using password "caffeine". This is mainly useful when
+          connecting to "Cafe Hotspot 1" for the first time. Next time, it is better to
+          use <span class="command"><strong>nmcli con up id "My cafe"</strong></span> so that the
+          existing connection profile can be used and no additional is created.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli -s dev wifi hotspot con-name QuickHotspot</code></strong></span></p></td>
+<td><p>creates a hotspot profile and connects it. Prints the hotspot password
+          the user should use to connect to the hotspot from other devices.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli connection add type ethernet autoconnect no ifname eth0</code></strong></span></p></td>
+<td><p>non-interactively adds an Ethernet connection tied to eth0 interface with
+          automatic IP configuration (DHCP), and disables the connection's <code class="literal">autoconnect</code>
+          flag.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli c a ifname Maxipes-fik type vlan dev eth0 id 55</code></strong></span></p></td>
+<td><p>non-interactively adds a VLAN connection with ID 55. The connection will
+          use eth0 and the VLAN interface will be named Maxipes-fik.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli c a ifname eth0 type ethernet -- ipv4.method disabled ipv6.method link-local</code></strong></span></p></td>
+<td><p>non-interactively adds a connection that will use eth0 Ethernet interface
+          and only have an IPv6 link-local address configured.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli connection edit ethernet-em1-2</code></strong></span></p></td>
+<td><p>edits existing "ethernet-em1-2" connection in the interactive
+          editor.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli connection edit type ethernet con-name "yet another Ethernet connection"</code></strong></span></p></td>
+<td><p>adds a new Ethernet connection in the interactive editor.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con mod ethernet-2 connection.autoconnect no</code></strong></span></p></td>
+<td><p>modifies 'autoconnect' property in the 'connection' setting of
+          'ethernet-2' connection.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con mod "Home Wi-Fi" wifi.mtu 1350</code></strong></span></p></td>
+<td><p>modifies 'mtu' property in the 'wifi' setting of 'Home Wi-Fi'
+          connection.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con mod em1-1 ipv4.method manual ipv4.addr "192.168.1.23/24 192.168.1.1, 10.10.1.5/8, 10.0.0.11"</code></strong></span></p></td>
+<td><p>sets manual addressing and the addresses in em1-1 profile.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con modify ABC +ipv4.dns 8.8.8.8</code></strong></span></p></td>
+<td><p>appends a Google public DNS server to DNS servers in ABC profile.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con modify ABC -ipv4.addresses "192.168.100.25/24 192.168.1.1"</code></strong></span></p></td>
+<td><p>removes the specified IP address from (static) profile ABC.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con import type openvpn file ~/Downloads/frootvpn.ovpn</code></strong></span></p></td>
+<td><p>imports an OpenVPN configuration to NetworkManager.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><strong class="userinput"><code>nmcli con export corp-vpnc /home/joe/corpvpn.conf</code></strong></span></p></td>
+<td><p>exports NetworkManager VPN profile corp-vpnc as standard Cisco (vpnc)
+          configuration.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="notes"></a><h2>Notes</h2>
+<p><span class="command"><strong>nmcli</strong></span> accepts abbreviations, as long as they are a unique prefix in the set
+    of possible options. As new options get added, these abbreviations are not guaranteed
+    to stay unique. For scripting and long term compatibility it is therefore strongly
+    advised to spell out the full option names.</p>
+</div>
+<div class="refsect1">
+<a name="bugs"></a><h2>Bugs</h2>
+<p>There are probably some bugs. If you find a bug, please report it to
+    https://bugzilla.gnome.org/ — product <code class="literal">NetworkManager</code>.</p>
+</div>
+<div class="refsect1">
+<a name="see_also"></a><h2>See Also</h2>
+<p><span class="citerefentry"><span class="refentrytitle">nmcli-examples</span>(7)</span>,
+    <span class="citerefentry"><span class="refentrytitle">nm-online</span>(1)</span>,
+    <span class="citerefentry"><span class="refentrytitle">NetworkManager</span>(8)</span>,
+    <span class="citerefentry"><span class="refentrytitle">NetworkManager.conf</span>(5)</span>,
+    <span class="citerefentry"><span class="refentrytitle">nm-settings</span>(5)</span>,
+    <span class="citerefentry"><span class="refentrytitle">nm-applet</span>(1)</span>,
+    <span class="citerefentry"><span class="refentrytitle">nm-connection-editor</span>(1)</span>.</p>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

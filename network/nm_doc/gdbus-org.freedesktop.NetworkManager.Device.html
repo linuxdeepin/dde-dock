@@ -1,0 +1,526 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager.Device: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html" title="org.freedesktop.NetworkManager.Connection.Active">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html" title="org.freedesktop.NetworkManager.Device.Adsl">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Device.description" class="shortcut">Description</a></span><span id="nav_properties">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Device.properties" class="shortcut">Properties</a></span><span id="nav_signals">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Device.signals" class="shortcut">Signals</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager.Device"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager-Device.top_of_page"></a>org.freedesktop.NetworkManager.Device</span></h2>
+<p>org.freedesktop.NetworkManager.Device</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Reapply" title="The Reapply() method">Reapply</a>              (IN  a{sa{sv}} connection,
+                      IN  t         version_id,
+                      IN  u         flags);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.GetAppliedConnection" title="The GetAppliedConnection() method">GetAppliedConnection</a> (IN  u         flags,
+                      OUT a{sa{sv}} connection,
+                      OUT t         version_id);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Disconnect" title="The Disconnect() method">Disconnect</a>           ();
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Delete" title="The Delete() method">Delete</a>               ();
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.10.4"></a><h2>Signals</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-signal-org-freedesktop-NetworkManager-Device.StateChanged" title='The "StateChanged" signal'>StateChanged</a> (u new_state,
+              u old_state,
+              u reason);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.10.5"></a><h2>Properties</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Udi" title='The "Udi" property'>Udi</a>                   readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Interface" title='The "Interface" property'>Interface</a>             readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.IpInterface" title='The "IpInterface" property'>IpInterface</a>           readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Driver" title='The "Driver" property'>Driver</a>                readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DriverVersion" title='The "DriverVersion" property'>DriverVersion</a>         readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareVersion" title='The "FirmwareVersion" property'>FirmwareVersion</a>       readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Capabilities" title='The "Capabilities" property'>Capabilities</a>          readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Address" title='The "Ip4Address" property'>Ip4Address</a>            readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.State" title='The "State" property'>State</a>                 readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.StateReason" title='The "StateReason" property'>StateReason</a>           readable   (uu)
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.ActiveConnection" title='The "ActiveConnection" property'>ActiveConnection</a>      readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Config" title='The "Ip4Config" property'>Ip4Config</a>             readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp4Config" title='The "Dhcp4Config" property'>Dhcp4Config</a>           readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip6Config" title='The "Ip6Config" property'>Ip6Config</a>             readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp6Config" title='The "Dhcp6Config" property'>Dhcp6Config</a>           readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Managed" title='The "Managed" property'>Managed</a>               readwrite  b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Autoconnect" title='The "Autoconnect" property'>Autoconnect</a>           readwrite  b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareMissing" title='The "FirmwareMissing" property'>FirmwareMissing</a>       readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.NmPluginMissing" title='The "NmPluginMissing" property'>NmPluginMissing</a>       readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DeviceType" title='The "DeviceType" property'>DeviceType</a>            readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.AvailableConnections" title='The "AvailableConnections" property'>AvailableConnections</a>  readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.PhysicalPortId" title='The "PhysicalPortId" property'>PhysicalPortId</a>        readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Mtu" title='The "Mtu" property'>Mtu</a>                   readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Metered" title='The "Metered" property'>Metered</a>               readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.LldpNeighbors" title='The "LldpNeighbors" property'>LldpNeighbors</a>         readable   aa{sv}
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Real" title='The "Real" property'>Real</a>                  readable   b
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager-Device"></a><h2>Description</h2>
+<p></p>
+</div>
+<div class="refsect1">
+<a name="gdbus-methods-org.freedesktop.NetworkManager.Device"></a><h2>Method Details</h2>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Device.Reapply"></a><h3>The Reapply() method</h3>
+<pre class="programlisting">
+Reapply (IN  a{sa{sv}} connection,
+         IN  t         version_id,
+         IN  u         flags);
+</pre>
+<p>        Attempts to update the configuration of a device without deactivating it.
+        NetworkManager has the concept of connections, which are profiles that
+        contain the configuration for a networking device. Those connections are
+        exposed via D-Bus as individual objects that can be created, modified and
+        deleted. When activating such a settings-connection on a device, the
+        settings-connection is cloned to become an applied-connection and used to
+        configure the device (see GetAppliedConnection). Subsequent modification
+        of the settings-connection don't propagate automatically to the device's
+        applied-connection (with exception of the firewall-zone and the metered
+        property). For the changes to take effect, you can either re-activate the
+        settings-connection, or call Reapply. The Reapply call allows you to
+        directly update the applied-connection and reconfigure the device. Reapply
+        can also be useful if the currently applied-connection is equal to the
+        connection that is about to be reapplied. This allows to reconfigure the
+        device and revert external changes like removing or adding an IP address
+        (which NetworkManager doesn't revert automatically because it is assumed
+        that the user made these changes intentionally outside of NetworkManager).
+        Reapply can make the applied-connection different from the
+        settings-connection, just like updating the settings-connection can make
+        them different.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN a{sa{sv}} <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>The optional connection settings that will be reapplied on the device. If empty, the currently active settings-connection will be used. The connection cannot arbitrarly differ from the current applied-connection otherwise the call will fail. Only certain changes are supported, like adding or removing IP addresses.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN t <em class="parameter"><code>version_id</code></em></code>:</span></p></td>
+<td><p>If non-zero, the current version id of the applied-connection must match. The current version id can be retrieved via GetAppliedConnection. This optional argument allows to catch concurrent modifications between the GetAppliedConnection call and Reapply.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN u <em class="parameter"><code>flags</code></em></code>:</span></p></td>
+<td><p>Flags which would modify the behavior of the Reapply call. There are no flags defined currently and the users should use the value of 0.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Device.GetAppliedConnection"></a><h3>The GetAppliedConnection() method</h3>
+<pre class="programlisting">
+GetAppliedConnection (IN  u         flags,
+                      OUT a{sa{sv}} connection,
+                      OUT t         version_id);
+</pre>
+<p>        Get the currently applied connection on the device. This is a snapshot of
+        the last activated connection on the device, that is the configuration
+        that is currently applied on the device. Usually this is the same as
+        GetSettings of the referenced settings connection. However, it can differ
+        if the settings connection was subsequently modified or the applied
+        connection was modified by Reapply. The applied connection is set when
+        activating a device or when calling Reapply.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN u <em class="parameter"><code>flags</code></em></code>:</span></p></td>
+<td><p>Flags which would modify the behavior of the GetAppliedConnection call. There are no flags defined currently and the users should use the value of 0.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT a{sa{sv}} <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>The effective connection settings that the connection has currently applied.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT t <em class="parameter"><code>version_id</code></em></code>:</span></p></td>
+<td><p>The version-id of the currently applied connection. This can be specified during Reapply to avoid races where you first fetch the applied connection, modify it and try to reapply it. If the applied connection is modified in the meantime, the version_id gets incremented and Reapply will fail.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Device.Disconnect"></a><h3>The Disconnect() method</h3>
+<pre class="programlisting">
+Disconnect ();
+</pre>
+<p>        Disconnects a device and prevents the device from automatically activating
+        further connections without user intervention.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Device.Delete"></a><h3>The Delete() method</h3>
+<pre class="programlisting">
+Delete ();
+</pre>
+<p>        Deletes a software device from NetworkManager and removes the interface
+        from the system. The method returns an error when called for a hardware
+        device.
+</p>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-signals-org.freedesktop.NetworkManager.Device"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager-Device.StateChanged"></a><h3>The "StateChanged" signal</h3>
+<pre class="programlisting">
+StateChanged (u new_state,
+              u old_state,
+              u reason);
+</pre>
+<p></p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">u <em class="parameter"><code>new_state</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMDeviceState" title="enum NMDeviceState">NMDeviceState</a>) The new state of the device.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">u <em class="parameter"><code>old_state</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMDeviceState" title="enum NMDeviceState">NMDeviceState</a>) The previous state of the device.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">u <em class="parameter"><code>reason</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMDeviceStateReason" title="enum NMDeviceStateReason">NMDeviceStateReason</a>) A reason for the state transition.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-properties-org.freedesktop.NetworkManager.Device"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Udi"></a><h3>The "Udi" property</h3>
+<pre class="programlisting">
+Udi  readable   s
+</pre>
+<p>        Operating-system specific transient device hardware identifier. This is an
+        opaque string representing the underlying hardware for the device, and
+        shouldn't be used to keep track of individual devices. For some device
+        types (Bluetooth, Modems) it is an identifier used by the hardware service
+        (ie bluez or ModemManager) to refer to that device, and client programs
+        use it get additional information from those services which NM does not
+        provide. The Udi is not guaranteed to be consistent across reboots or
+        hotplugs of the hardware. If you're looking for a way to uniquely track
+        each device in your application, use the object path. If you're looking
+        for a way to track a specific piece of hardware across reboot or hotplug,
+        use a MAC address or USB serial number.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Interface"></a><h3>The "Interface" property</h3>
+<pre class="programlisting">
+Interface  readable   s
+</pre>
+<p>        The name of the device's control (and often data) interface.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.IpInterface"></a><h3>The "IpInterface" property</h3>
+<pre class="programlisting">
+IpInterface  readable   s
+</pre>
+<p>        The name of the device's data interface when available. This property may
+        not refer to the actual data interface until the device has successfully
+        established a data connection, indicated by the device's State becoming
+        ACTIVATED.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Driver"></a><h3>The "Driver" property</h3>
+<pre class="programlisting">
+Driver  readable   s
+</pre>
+<p>        The driver handling the device.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.DriverVersion"></a><h3>The "DriverVersion" property</h3>
+<pre class="programlisting">
+DriverVersion  readable   s
+</pre>
+<p>        The version of the driver handling the device.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareVersion"></a><h3>The "FirmwareVersion" property</h3>
+<pre class="programlisting">
+FirmwareVersion  readable   s
+</pre>
+<p>        The firmware version for the device.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Capabilities"></a><h3>The "Capabilities" property</h3>
+<pre class="programlisting">
+Capabilities  readable   u
+</pre>
+<p>        Flags describing the capabilities of the device.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMDeviceCapabilities" title="enum NMDeviceCapabilities">NMDeviceCapabilities</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Address"></a><h3>The "Ip4Address" property</h3>
+<pre class="programlisting">
+Ip4Address  readable   u
+</pre>
+<p>        DEPRECATED; use the 'Addresses' property of the 'Ip4Config' object
+        instead.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.State"></a><h3>The "State" property</h3>
+<pre class="programlisting">
+State  readable   u
+</pre>
+<p>        The current state of the device.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMDeviceState" title="enum NMDeviceState">NMDeviceState</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.StateReason"></a><h3>The "StateReason" property</h3>
+<pre class="programlisting">
+StateReason  readable   (uu)
+</pre>
+<p>        The current state and reason for changing to that state.
+</p>
+<p>        Returns: A tuple of  <a class="link" href="nm-dbus-types.html#NMDeviceState" title="enum NMDeviceState">NMDeviceState</a> and  <a class="link" href="nm-dbus-types.html#NMDeviceStateReason" title="enum NMDeviceStateReason">NMDeviceStateReason</a>.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.ActiveConnection"></a><h3>The "ActiveConnection" property</h3>
+<pre class="programlisting">
+ActiveConnection  readable   o
+</pre>
+<p>        Object path of an ActiveConnection object that "owns" this device during
+        activation. The ActiveConnection object tracks the life-cycle of a
+        connection to a specific network and implements the
+        org.freedesktop.NetworkManager.Connection.Active D-Bus interface.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Config"></a><h3>The "Ip4Config" property</h3>
+<pre class="programlisting">
+Ip4Config  readable   o
+</pre>
+<p>        Object path of the Ip4Config object describing the configuration of the
+        device. Only valid when the device is in the NM_DEVICE_STATE_ACTIVATED
+        state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp4Config"></a><h3>The "Dhcp4Config" property</h3>
+<pre class="programlisting">
+Dhcp4Config  readable   o
+</pre>
+<p>        Object path of the Dhcp4Config object describing the DHCP options returned
+        by the DHCP server. Only valid when the device is in the
+        NM_DEVICE_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Ip6Config"></a><h3>The "Ip6Config" property</h3>
+<pre class="programlisting">
+Ip6Config  readable   o
+</pre>
+<p>        Object path of the Ip6Config object describing the configuration of the
+        device. Only valid when the device is in the NM_DEVICE_STATE_ACTIVATED
+        state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp6Config"></a><h3>The "Dhcp6Config" property</h3>
+<pre class="programlisting">
+Dhcp6Config  readable   o
+</pre>
+<p>        Object path of the Dhcp6Config object describing the DHCP options returned
+        by the DHCP server. Only valid when the device is in the
+        NM_DEVICE_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Managed"></a><h3>The "Managed" property</h3>
+<pre class="programlisting">
+Managed  readwrite  b
+</pre>
+<p>        Whether or not this device is managed by NetworkManager. Setting this
+        property has a similar effect to configuring the device as unmanaged via
+        the keyfile.unmanaged-devices setting in NetworkManager.conf. Changes to
+        this value are not persistent and lost after NetworkManager restart.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Autoconnect"></a><h3>The "Autoconnect" property</h3>
+<pre class="programlisting">
+Autoconnect  readwrite  b
+</pre>
+<p>        If TRUE, indicates the device is allowed to autoconnect. If FALSE, manual
+        intervention is required before the device will automatically connect to a
+        known network, such as activating a connection using the device, or
+        setting this property to TRUE. This property cannot be set to TRUE for
+        default-unmanaged devices, since they never autoconnect.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareMissing"></a><h3>The "FirmwareMissing" property</h3>
+<pre class="programlisting">
+FirmwareMissing  readable   b
+</pre>
+<p>        If TRUE, indicates the device is likely missing firmware necessary for its
+        operation.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.NmPluginMissing"></a><h3>The "NmPluginMissing" property</h3>
+<pre class="programlisting">
+NmPluginMissing  readable   b
+</pre>
+<p>        If TRUE, indicates the NetworkManager plugin for the device is likely
+        missing or misconfigured.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.DeviceType"></a><h3>The "DeviceType" property</h3>
+<pre class="programlisting">
+DeviceType  readable   u
+</pre>
+<p>        The general type of the network device; ie Ethernet, WiFi, etc.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMDeviceType" title="enum NMDeviceType">NMDeviceType</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.AvailableConnections"></a><h3>The "AvailableConnections" property</h3>
+<pre class="programlisting">
+AvailableConnections  readable   ao
+</pre>
+<p>        An array of object paths of every configured connection that is currently
+        'available' through this device.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.PhysicalPortId"></a><h3>The "PhysicalPortId" property</h3>
+<pre class="programlisting">
+PhysicalPortId  readable   s
+</pre>
+<p>        If non-empty, an (opaque) indicator of the physical network port
+        associated with the device. This can be used to recognize when two
+        seemingly-separate hardware devices are actually just different virtual
+        interfaces to the same physical port.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Mtu"></a><h3>The "Mtu" property</h3>
+<pre class="programlisting">
+Mtu  readable   u
+</pre>
+<p>        The device MTU (maximum transmission unit).
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Metered"></a><h3>The "Metered" property</h3>
+<pre class="programlisting">
+Metered  readable   u
+</pre>
+<p>        Whether the amount of traffic flowing through the device is subject to
+        limitations, for example set by service providers.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMMetered" title="enum NMMetered">NMMetered</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.LldpNeighbors"></a><h3>The "LldpNeighbors" property</h3>
+<pre class="programlisting">
+LldpNeighbors  readable   aa{sv}
+</pre>
+<p>        Array of LLDP neighbors; each element is a dictionary mapping LLDP TLV
+        names to variant boxed values.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Device.Real"></a><h3>The "Real" property</h3>
+<pre class="programlisting">
+Real  readable   b
+</pre>
+<p>        True if the device exists, or False for placeholder devices that do not
+        yet exist but could be automatically created by NetworkManager if one of
+        their AvailableConnections was activated.
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

@@ -373,6 +373,7 @@ func (a *agent) SaveSecrets(connection map[string]map[string]dbus.Variant, conne
 }
 
 func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath) {
+	logger.Info("DeleteSecrets:", connectionPath)
 	if _, ok := connection["802-11-wireless-security"]; ok {
 		keyId := mapKey{path: connectionPath, name: "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)

@@ -2,13 +2,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Index: NetworkManager D-Bus Reference Manual</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="NetworkManager D-Bus Reference Manual">
-<link rel="up" href="index.html" title="NetworkManager D-Bus Reference Manual">
-<link rel="prev" href="ref-migrating.html" title="Migrating from NetworkManager 0.8 to NetworkManager 0.9">
+<title>Index: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="index.html" title="NetworkManager Reference Manual">
+<link rel="prev" href="secrets-flags.html" title="Secret flag types">
 <link rel="next" href="license.html" title="Appendix A. License">
-<meta name="generator" content="GTK-Doc V1.24 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -16,15 +16,743 @@
 <td width="100%" align="left" class="shortcuts"></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
 <td><img src="up-insensitive.png" width="16" height="16" border="0"></td>
-<td><a accesskey="p" href="ref-migrating.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="p" href="secrets-flags.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
 <td><a accesskey="n" href="license.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
 </tr></table>
 <div class="index">
 <div class="titlepage"><div><div><h1 class="title">
 <a name="id-1.5"></a>Index</h1></div></div></div>
-<div class="index"></div>
+<div xmlns:xlink="http://www.w3.org/1999/xlink" class="index">
+<div class="indexdiv">
+<h3>Symbols</h3>
+<dl>
+<dt id="ientry-idm140124809969840">org.freedesktop.NetworkManager.AccessPoint, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-interface-org-freedesktop-NetworkManager-AccessPoint.top_of_page">org.freedesktop.NetworkManager.AccessPoint</a>
+</dt>
+<dt id="ientry-idm140124807325776">org.freedesktop.NetworkManager.AccessPoint::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-signal-org-freedesktop-NetworkManager-AccessPoint.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124810877632">org.freedesktop.NetworkManager.AccessPoint:Flags, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Flags">The "Flags" property</a>
+</dt>
+<dt id="ientry-idm140124803294944">org.freedesktop.NetworkManager.AccessPoint:Frequency, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Frequency">The "Frequency" property</a>
+</dt>
+<dt id="ientry-idm140124803290800">org.freedesktop.NetworkManager.AccessPoint:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803545904">org.freedesktop.NetworkManager.AccessPoint:LastSeen, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.LastSeen">The "LastSeen" property</a>
+</dt>
+<dt id="ientry-idm140124803281376">org.freedesktop.NetworkManager.AccessPoint:MaxBitrate, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.MaxBitrate">The "MaxBitrate" property</a>
+</dt>
+<dt id="ientry-idm140124803286592">org.freedesktop.NetworkManager.AccessPoint:Mode, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Mode">The "Mode" property</a>
+</dt>
+<dt id="ientry-idm140124803304432">org.freedesktop.NetworkManager.AccessPoint:RsnFlags, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.RsnFlags">The "RsnFlags" property</a>
+</dt>
+<dt id="ientry-idm140124803299152">org.freedesktop.NetworkManager.AccessPoint:Ssid, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Ssid">The "Ssid" property</a>
+</dt>
+<dt id="ientry-idm140124803277136">org.freedesktop.NetworkManager.AccessPoint:Strength, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Strength">The "Strength" property</a>
+</dt>
+<dt id="ientry-idm140124803830512">org.freedesktop.NetworkManager.AccessPoint:WpaFlags, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.WpaFlags">The "WpaFlags" property</a>
+</dt>
+<dt id="ientry-idm140124810852384">org.freedesktop.NetworkManager.AgentManager, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-interface-org-freedesktop-NetworkManager-AgentManager.top_of_page">org.freedesktop.NetworkManager.AgentManager</a>
+</dt>
+<dt id="ientry-idm140124809426192">org.freedesktop.NetworkManager.AgentManager.Register(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Register">The Register() method</a>
+</dt>
+<dt id="ientry-idm140124806973088">org.freedesktop.NetworkManager.AgentManager.RegisterWithCapabilities(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.RegisterWithCapabilities">The RegisterWithCapabilities() method</a>
+</dt>
+<dt id="ientry-idm140124810385344">org.freedesktop.NetworkManager.AgentManager.Unregister(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Unregister">The Unregister() method</a>
+</dt>
+<dt id="ientry-idm140124810307120">org.freedesktop.NetworkManager.Device, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-interface-org-freedesktop-NetworkManager-Device.top_of_page">org.freedesktop.NetworkManager.Device</a>
+</dt>
+<dt id="ientry-idm140124810151744">org.freedesktop.NetworkManager.Device.Adsl, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Adsl.top_of_page">org.freedesktop.NetworkManager.Device.Adsl</a>
+</dt>
+<dt id="ientry-idm140124810164272">org.freedesktop.NetworkManager.Device.Adsl::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Adsl.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124806602032">org.freedesktop.NetworkManager.Device.Adsl:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html#gdbus-property-org-freedesktop-NetworkManager-Device-Adsl.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124806108816">org.freedesktop.NetworkManager.Device.Bluetooth, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Bluetooth.top_of_page">org.freedesktop.NetworkManager.Device.Bluetooth</a>
+</dt>
+<dt id="ientry-idm140124802187392">org.freedesktop.NetworkManager.Device.Bluetooth::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bluetooth.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803875680">org.freedesktop.NetworkManager.Device.Bluetooth:BtCapabilities, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.BtCapabilities">The "BtCapabilities" property</a>
+</dt>
+<dt id="ientry-idm140124807774800">org.freedesktop.NetworkManager.Device.Bluetooth:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803879904">org.freedesktop.NetworkManager.Device.Bluetooth:Name, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.Name">The "Name" property</a>
+</dt>
+<dt id="ientry-idm140124806171376">org.freedesktop.NetworkManager.Device.Bond, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Bond.top_of_page">org.freedesktop.NetworkManager.Device.Bond</a>
+</dt>
+<dt id="ientry-idm140124805667392">org.freedesktop.NetworkManager.Device.Bond::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bond.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124806503920">org.freedesktop.NetworkManager.Device.Bond:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124806508048">org.freedesktop.NetworkManager.Device.Bond:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803535568">org.freedesktop.NetworkManager.Device.Bond:Slaves, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.Slaves">The "Slaves" property</a>
+</dt>
+<dt id="ientry-idm140124809205312">org.freedesktop.NetworkManager.Device.Bridge, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Bridge.top_of_page">org.freedesktop.NetworkManager.Device.Bridge</a>
+</dt>
+<dt id="ientry-idm140124802872144">org.freedesktop.NetworkManager.Device.Bridge::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bridge.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802859184">org.freedesktop.NetworkManager.Device.Bridge:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124802193952">org.freedesktop.NetworkManager.Device.Bridge:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124802854864">org.freedesktop.NetworkManager.Device.Bridge:Slaves, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.Slaves">The "Slaves" property</a>
+</dt>
+<dt id="ientry-idm140124803218944">org.freedesktop.NetworkManager.Device.Delete(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Delete">The Delete() method</a>
+</dt>
+<dt id="ientry-idm140124803223216">org.freedesktop.NetworkManager.Device.Disconnect(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Disconnect">The Disconnect() method</a>
+</dt>
+<dt id="ientry-idm140124807155632">org.freedesktop.NetworkManager.Device.Generic, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Generic.top_of_page">org.freedesktop.NetworkManager.Device.Generic</a>
+</dt>
+<dt id="ientry-idm140124806315760">org.freedesktop.NetworkManager.Device.Generic::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Generic.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803062416">org.freedesktop.NetworkManager.Device.Generic:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-property-org-freedesktop-NetworkManager-Device-Generic.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803058496">org.freedesktop.NetworkManager.Device.Generic:TypeDescription, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-property-org-freedesktop-NetworkManager-Device-Generic.TypeDescription">The "TypeDescription" property</a>
+</dt>
+<dt id="ientry-idm140124803497552">org.freedesktop.NetworkManager.Device.GetAppliedConnection(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.GetAppliedConnection">The GetAppliedConnection() method</a>
+</dt>
+<dt id="ientry-idm140124809980304">org.freedesktop.NetworkManager.Device.Infiniband, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Infiniband.top_of_page">org.freedesktop.NetworkManager.Device.Infiniband</a>
+</dt>
+<dt id="ientry-idm140124806575200">org.freedesktop.NetworkManager.Device.Infiniband::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Infiniband.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124806566832">org.freedesktop.NetworkManager.Device.Infiniband:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-property-org-freedesktop-NetworkManager-Device-Infiniband.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124806570736">org.freedesktop.NetworkManager.Device.Infiniband:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-property-org-freedesktop-NetworkManager-Device-Infiniband.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803496288">org.freedesktop.NetworkManager.Device.IPTunnel, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-interface-org-freedesktop-NetworkManager-Device-IPTunnel.top_of_page">org.freedesktop.NetworkManager.Device.IPTunnel</a>
+</dt>
+<dt id="ientry-idm140124803073728">org.freedesktop.NetworkManager.Device.IPTunnel::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-signal-org-freedesktop-NetworkManager-Device-IPTunnel.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802156976">org.freedesktop.NetworkManager.Device.IPTunnel:EncapsulationLimit, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.EncapsulationLimit">The "EncapsulationLimit" property</a>
+</dt>
+<dt id="ientry-idm140124802152576">org.freedesktop.NetworkManager.Device.IPTunnel:FlowLabel, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.FlowLabel">The "FlowLabel" property</a>
+</dt>
+<dt id="ientry-idm140124802165328">org.freedesktop.NetworkManager.Device.IPTunnel:InputKey, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.InputKey">The "InputKey" property</a>
+</dt>
+<dt id="ientry-idm140124810840320">org.freedesktop.NetworkManager.Device.IPTunnel:Local, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Local">The "Local" property</a>
+</dt>
+<dt id="ientry-idm140124802822432">org.freedesktop.NetworkManager.Device.IPTunnel:Mode, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Mode">The "Mode" property</a>
+</dt>
+<dt id="ientry-idm140124802161168">org.freedesktop.NetworkManager.Device.IPTunnel:OutputKey, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.OutputKey">The "OutputKey" property</a>
+</dt>
+<dt id="ientry-idm140124810844432">org.freedesktop.NetworkManager.Device.IPTunnel:Parent, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Parent">The "Parent" property</a>
+</dt>
+<dt id="ientry-idm140124810823856">org.freedesktop.NetworkManager.Device.IPTunnel:PathMtuDiscovery, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.PathMtuDiscovery">The "PathMtuDiscovery" property</a>
+</dt>
+<dt id="ientry-idm140124810836208">org.freedesktop.NetworkManager.Device.IPTunnel:Remote, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Remote">The "Remote" property</a>
+</dt>
+<dt id="ientry-idm140124810827856">org.freedesktop.NetworkManager.Device.IPTunnel:Tos, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Tos">The "Tos" property</a>
+</dt>
+<dt id="ientry-idm140124810832096">org.freedesktop.NetworkManager.Device.IPTunnel:Ttl, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Ttl">The "Ttl" property</a>
+</dt>
+<dt id="ientry-idm140124808508368">org.freedesktop.NetworkManager.Device.Macvlan, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Macvlan.top_of_page">org.freedesktop.NetworkManager.Device.Macvlan</a>
+</dt>
+<dt id="ientry-idm140124806537760">org.freedesktop.NetworkManager.Device.Macvlan::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Macvlan.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124810799104">org.freedesktop.NetworkManager.Device.Macvlan:Mode, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Mode">The "Mode" property</a>
+</dt>
+<dt id="ientry-idm140124810794976">org.freedesktop.NetworkManager.Device.Macvlan:NoPromisc, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.NoPromisc">The "NoPromisc" property</a>
+</dt>
+<dt id="ientry-idm140124803791072">org.freedesktop.NetworkManager.Device.Macvlan:Parent, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Parent">The "Parent" property</a>
+</dt>
+<dt id="ientry-idm140124802843968">org.freedesktop.NetworkManager.Device.Macvlan:Tap, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Tap">The "Tap" property</a>
+</dt>
+<dt id="ientry-idm140124809854096">org.freedesktop.NetworkManager.Device.Modem, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Modem.top_of_page">org.freedesktop.NetworkManager.Device.Modem</a>
+</dt>
+<dt id="ientry-idm140124806099152">org.freedesktop.NetworkManager.Device.Modem::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Modem.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124809737040">org.freedesktop.NetworkManager.Device.Modem:CurrentCapabilities, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-property-org-freedesktop-NetworkManager-Device-Modem.CurrentCapabilities">The "CurrentCapabilities" property</a>
+</dt>
+<dt id="ientry-idm140124809742576">org.freedesktop.NetworkManager.Device.Modem:ModemCapabilities, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-property-org-freedesktop-NetworkManager-Device-Modem.ModemCapabilities">The "ModemCapabilities" property</a>
+</dt>
+<dt id="ientry-idm140124806958304">org.freedesktop.NetworkManager.Device.OlpcMesh, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-interface-org-freedesktop-NetworkManager-Device-OlpcMesh.top_of_page">org.freedesktop.NetworkManager.Device.OlpcMesh</a>
+</dt>
+<dt id="ientry-idm140124802000192">org.freedesktop.NetworkManager.Device.OlpcMesh::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-signal-org-freedesktop-NetworkManager-Device-OlpcMesh.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802304416">org.freedesktop.NetworkManager.Device.OlpcMesh:ActiveChannel, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.ActiveChannel">The "ActiveChannel" property</a>
+</dt>
+<dt id="ientry-idm140124802308336">org.freedesktop.NetworkManager.Device.OlpcMesh:Companion, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.Companion">The "Companion" property</a>
+</dt>
+<dt id="ientry-idm140124809700528">org.freedesktop.NetworkManager.Device.OlpcMesh:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803512496">org.freedesktop.NetworkManager.Device.Reapply(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Reapply">The Reapply() method</a>
+</dt>
+<dt id="ientry-idm140124810214336">org.freedesktop.NetworkManager.Device.Team, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Team.top_of_page">org.freedesktop.NetworkManager.Device.Team</a>
+</dt>
+<dt id="ientry-idm140124802267920">org.freedesktop.NetworkManager.Device.Team::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Team.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802921728">org.freedesktop.NetworkManager.Device.Team:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124802925856">org.freedesktop.NetworkManager.Device.Team:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124802249696">org.freedesktop.NetworkManager.Device.Team:Slaves, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.Slaves">The "Slaves" property</a>
+</dt>
+<dt id="ientry-idm140124806862592">org.freedesktop.NetworkManager.Device.Tun, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Tun.top_of_page">org.freedesktop.NetworkManager.Device.Tun</a>
+</dt>
+<dt id="ientry-idm140124803044800">org.freedesktop.NetworkManager.Device.Tun::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Tun.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802898416">org.freedesktop.NetworkManager.Device.Tun:Group, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Group">The "Group" property</a>
+</dt>
+<dt id="ientry-idm140124809716064">org.freedesktop.NetworkManager.Device.Tun:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124802894224">org.freedesktop.NetworkManager.Device.Tun:Mode, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Mode">The "Mode" property</a>
+</dt>
+<dt id="ientry-idm140124809720368">org.freedesktop.NetworkManager.Device.Tun:MultiQueue, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.MultiQueue">The "MultiQueue" property</a>
+</dt>
+<dt id="ientry-idm140124809728864">org.freedesktop.NetworkManager.Device.Tun:NoPi, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.NoPi">The "NoPi" property</a>
+</dt>
+<dt id="ientry-idm140124809668224">org.freedesktop.NetworkManager.Device.Tun:Owner, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Owner">The "Owner" property</a>
+</dt>
+<dt id="ientry-idm140124809724624">org.freedesktop.NetworkManager.Device.Tun:VnetHdr, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.VnetHdr">The "VnetHdr" property</a>
+</dt>
+<dt id="ientry-idm140124810982176">org.freedesktop.NetworkManager.Device.Veth, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Veth.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Veth.top_of_page">org.freedesktop.NetworkManager.Device.Veth</a>
+</dt>
+<dt id="ientry-idm140124809620896">org.freedesktop.NetworkManager.Device.Veth::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Veth.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Veth.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124809685856">org.freedesktop.NetworkManager.Device.Veth:Peer, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Veth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Veth.Peer">The "Peer" property</a>
+</dt>
+<dt id="ientry-idm140124808466624">org.freedesktop.NetworkManager.Device.Vlan, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Vlan.top_of_page">org.freedesktop.NetworkManager.Device.Vlan</a>
+</dt>
+<dt id="ientry-idm140124802906608">org.freedesktop.NetworkManager.Device.Vlan::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Vlan.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801963472">org.freedesktop.NetworkManager.Device.Vlan:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124801967600">org.freedesktop.NetworkManager.Device.Vlan:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124801983744">org.freedesktop.NetworkManager.Device.Vlan:Parent, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.Parent">The "Parent" property</a>
+</dt>
+<dt id="ientry-idm140124801979552">org.freedesktop.NetworkManager.Device.Vlan:VlanId, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.VlanId">The "VlanId" property</a>
+</dt>
+<dt id="ientry-idm140124806465280">org.freedesktop.NetworkManager.Device.Vxlan, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Vxlan.top_of_page">org.freedesktop.NetworkManager.Device.Vxlan</a>
+</dt>
+<dt id="ientry-idm140124801959376">org.freedesktop.NetworkManager.Device.Vxlan::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Vxlan.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801568240">org.freedesktop.NetworkManager.Device.Vxlan:Ageing, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Ageing">The "Ageing" property</a>
+</dt>
+<dt id="ientry-idm140124801559904">org.freedesktop.NetworkManager.Device.Vxlan:DstPort, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.DstPort">The "DstPort" property</a>
+</dt>
+<dt id="ientry-idm140124802943856">org.freedesktop.NetworkManager.Device.Vxlan:Group, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Group">The "Group" property</a>
+</dt>
+<dt id="ientry-idm140124802952096">org.freedesktop.NetworkManager.Device.Vxlan:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124802947968">org.freedesktop.NetworkManager.Device.Vxlan:Id, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Id">The "Id" property</a>
+</dt>
+<dt id="ientry-idm140124801539024">org.freedesktop.NetworkManager.Device.Vxlan:L2miss, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.L2miss">The "L2miss" property</a>
+</dt>
+<dt id="ientry-idm140124801534816">org.freedesktop.NetworkManager.Device.Vxlan:L3miss, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.L3miss">The "L3miss" property</a>
+</dt>
+<dt id="ientry-idm140124801572448">org.freedesktop.NetworkManager.Device.Vxlan:Learning, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Learning">The "Learning" property</a>
+</dt>
+<dt id="ientry-idm140124801564128">org.freedesktop.NetworkManager.Device.Vxlan:Limit, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Limit">The "Limit" property</a>
+</dt>
+<dt id="ientry-idm140124802939616">org.freedesktop.NetworkManager.Device.Vxlan:Local, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Local">The "Local" property</a>
+</dt>
+<dt id="ientry-idm140124801944176">org.freedesktop.NetworkManager.Device.Vxlan:Parent, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Parent">The "Parent" property</a>
+</dt>
+<dt id="ientry-idm140124801547472">org.freedesktop.NetworkManager.Device.Vxlan:Proxy, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Proxy">The "Proxy" property</a>
+</dt>
+<dt id="ientry-idm140124801543264">org.freedesktop.NetworkManager.Device.Vxlan:Rsc, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Rsc">The "Rsc" property</a>
+</dt>
+<dt id="ientry-idm140124801551616">org.freedesktop.NetworkManager.Device.Vxlan:SrcPortMax, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.SrcPortMax">The "SrcPortMax" property</a>
+</dt>
+<dt id="ientry-idm140124801555776">org.freedesktop.NetworkManager.Device.Vxlan:SrcPortMin, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.SrcPortMin">The "SrcPortMin" property</a>
+</dt>
+<dt id="ientry-idm140124801580976">org.freedesktop.NetworkManager.Device.Vxlan:Tos, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Tos">The "Tos" property</a>
+</dt>
+<dt id="ientry-idm140124801576672">org.freedesktop.NetworkManager.Device.Vxlan:Ttl, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Ttl">The "Ttl" property</a>
+</dt>
+<dt id="ientry-idm140124810492320">org.freedesktop.NetworkManager.Device.WiMax, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-interface-org-freedesktop-NetworkManager-Device-WiMax.top_of_page">org.freedesktop.NetworkManager.Device.WiMax</a>
+</dt>
+<dt id="ientry-idm140124801501440">org.freedesktop.NetworkManager.Device.WiMax.GetNspList(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-method-org-freedesktop-NetworkManager-Device-WiMax.GetNspList">The GetNspList() method</a>
+</dt>
+<dt id="ientry-idm140124809219264">org.freedesktop.NetworkManager.Device.WiMax::NspAdded, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.NspAdded">The "NspAdded" signal</a>
+</dt>
+<dt id="ientry-idm140124810803296">org.freedesktop.NetworkManager.Device.WiMax::NspRemoved, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.NspRemoved">The "NspRemoved" signal</a>
+</dt>
+<dt id="ientry-idm140124801816720">org.freedesktop.NetworkManager.Device.WiMax::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801878192">org.freedesktop.NetworkManager.Device.WiMax:ActiveNsp, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.ActiveNsp">The "ActiveNsp" property</a>
+</dt>
+<dt id="ientry-idm140124801882464">org.freedesktop.NetworkManager.Device.WiMax:Bsid, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Bsid">The "Bsid" property</a>
+</dt>
+<dt id="ientry-idm140124801924400">org.freedesktop.NetworkManager.Device.WiMax:CenterFrequency, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.CenterFrequency">The "CenterFrequency" property</a>
+</dt>
+<dt id="ientry-idm140124802233744">org.freedesktop.NetworkManager.Device.WiMax:Cinr, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Cinr">The "Cinr" property</a>
+</dt>
+<dt id="ientry-idm140124803003984">org.freedesktop.NetworkManager.Device.WiMax:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803008224">org.freedesktop.NetworkManager.Device.WiMax:Nsps, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Nsps">The "Nsps" property</a>
+</dt>
+<dt id="ientry-idm140124801919968">org.freedesktop.NetworkManager.Device.WiMax:Rssi, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Rssi">The "Rssi" property</a>
+</dt>
+<dt id="ientry-idm140124802229408">org.freedesktop.NetworkManager.Device.WiMax:TxPower, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.TxPower">The "TxPower" property</a>
+</dt>
+<dt id="ientry-idm140124803212944">org.freedesktop.NetworkManager.Device::StateChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-signal-org-freedesktop-NetworkManager-Device.StateChanged">The "StateChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803150000">org.freedesktop.NetworkManager.Device:ActiveConnection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.ActiveConnection">The "ActiveConnection" property</a>
+</dt>
+<dt id="ientry-idm140124803123712">org.freedesktop.NetworkManager.Device:Autoconnect, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Autoconnect">The "Autoconnect" property</a>
+</dt>
+<dt id="ientry-idm140124803105728">org.freedesktop.NetworkManager.Device:AvailableConnections, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.AvailableConnections">The "AvailableConnections" property</a>
+</dt>
+<dt id="ientry-idm140124803170576">org.freedesktop.NetworkManager.Device:Capabilities, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Capabilities">The "Capabilities" property</a>
+</dt>
+<dt id="ientry-idm140124803110640">org.freedesktop.NetworkManager.Device:DeviceType, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DeviceType">The "DeviceType" property</a>
+</dt>
+<dt id="ientry-idm140124803141200">org.freedesktop.NetworkManager.Device:Dhcp4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp4Config">The "Dhcp4Config" property</a>
+</dt>
+<dt id="ientry-idm140124803132512">org.freedesktop.NetworkManager.Device:Dhcp6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp6Config">The "Dhcp6Config" property</a>
+</dt>
+<dt id="ientry-idm140124803182992">org.freedesktop.NetworkManager.Device:Driver, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Driver">The "Driver" property</a>
+</dt>
+<dt id="ientry-idm140124803178864">org.freedesktop.NetworkManager.Device:DriverVersion, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DriverVersion">The "DriverVersion" property</a>
+</dt>
+<dt id="ientry-idm140124803119168">org.freedesktop.NetworkManager.Device:FirmwareMissing, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareMissing">The "FirmwareMissing" property</a>
+</dt>
+<dt id="ientry-idm140124803174720">org.freedesktop.NetworkManager.Device:FirmwareVersion, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareVersion">The "FirmwareVersion" property</a>
+</dt>
+<dt id="ientry-idm140124803191616">org.freedesktop.NetworkManager.Device:Interface, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Interface">The "Interface" property</a>
+</dt>
+<dt id="ientry-idm140124803165344">org.freedesktop.NetworkManager.Device:Ip4Address, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Address">The "Ip4Address" property</a>
+</dt>
+<dt id="ientry-idm140124803145536">org.freedesktop.NetworkManager.Device:Ip4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Config">The "Ip4Config" property</a>
+</dt>
+<dt id="ientry-idm140124803136848">org.freedesktop.NetworkManager.Device:Ip6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip6Config">The "Ip6Config" property</a>
+</dt>
+<dt id="ientry-idm140124803187392">org.freedesktop.NetworkManager.Device:IpInterface, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.IpInterface">The "IpInterface" property</a>
+</dt>
+<dt id="ientry-idm140124803087520">org.freedesktop.NetworkManager.Device:LldpNeighbors, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.LldpNeighbors">The "LldpNeighbors" property</a>
+</dt>
+<dt id="ientry-idm140124803128176">org.freedesktop.NetworkManager.Device:Managed, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Managed">The "Managed" property</a>
+</dt>
+<dt id="ientry-idm140124803092816">org.freedesktop.NetworkManager.Device:Metered, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Metered">The "Metered" property</a>
+</dt>
+<dt id="ientry-idm140124803096928">org.freedesktop.NetworkManager.Device:Mtu, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Mtu">The "Mtu" property</a>
+</dt>
+<dt id="ientry-idm140124803114912">org.freedesktop.NetworkManager.Device:NmPluginMissing, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.NmPluginMissing">The "NmPluginMissing" property</a>
+</dt>
+<dt id="ientry-idm140124803101344">org.freedesktop.NetworkManager.Device:PhysicalPortId, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.PhysicalPortId">The "PhysicalPortId" property</a>
+</dt>
+<dt id="ientry-idm140124803083264">org.freedesktop.NetworkManager.Device:Real, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Real">The "Real" property</a>
+</dt>
+<dt id="ientry-idm140124803161104">org.freedesktop.NetworkManager.Device:State, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.State">The "State" property</a>
+</dt>
+<dt id="ientry-idm140124803155968">org.freedesktop.NetworkManager.Device:StateReason, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.StateReason">The "StateReason" property</a>
+</dt>
+<dt id="ientry-idm140124803196608">org.freedesktop.NetworkManager.Device:Udi, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Udi">The "Udi" property</a>
+</dt>
+<dt id="ientry-idm140124807989040">org.freedesktop.NetworkManager.IP4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-interface-org-freedesktop-NetworkManager-IP4Config.top_of_page">org.freedesktop.NetworkManager.IP4Config</a>
+</dt>
+<dt id="ientry-idm140124802121168">org.freedesktop.NetworkManager.IP4Config::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-signal-org-freedesktop-NetworkManager-IP4Config.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801866224">org.freedesktop.NetworkManager.IP4Config:AddressData, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.AddressData">The "AddressData" property</a>
+</dt>
+<dt id="ientry-idm140124801870624">org.freedesktop.NetworkManager.IP4Config:Addresses, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Addresses">The "Addresses" property</a>
+</dt>
+<dt id="ientry-idm140124801409456">org.freedesktop.NetworkManager.IP4Config:DnsOptions, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.DnsOptions">The "DnsOptions" property</a>
+</dt>
+<dt id="ientry-idm140124801405152">org.freedesktop.NetworkManager.IP4Config:DnsPriority, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.DnsPriority">The "DnsPriority" property</a>
+</dt>
+<dt id="ientry-idm140124801417776">org.freedesktop.NetworkManager.IP4Config:Domains, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Domains">The "Domains" property</a>
+</dt>
+<dt id="ientry-idm140124801494608">org.freedesktop.NetworkManager.IP4Config:Gateway, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Gateway">The "Gateway" property</a>
+</dt>
+<dt id="ientry-idm140124801481536">org.freedesktop.NetworkManager.IP4Config:Nameservers, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Nameservers">The "Nameservers" property</a>
+</dt>
+<dt id="ientry-idm140124801485936">org.freedesktop.NetworkManager.IP4Config:RouteData, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.RouteData">The "RouteData" property</a>
+</dt>
+<dt id="ientry-idm140124801490448">org.freedesktop.NetworkManager.IP4Config:Routes, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Routes">The "Routes" property</a>
+</dt>
+<dt id="ientry-idm140124801413648">org.freedesktop.NetworkManager.IP4Config:Searches, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Searches">The "Searches" property</a>
+</dt>
+<dt id="ientry-idm140124801401008">org.freedesktop.NetworkManager.IP4Config:WinsServers, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.WinsServers">The "WinsServers" property</a>
+</dt>
+<dt id="ientry-idm140124806756176">org.freedesktop.NetworkManager.IP6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-interface-org-freedesktop-NetworkManager-IP6Config.top_of_page">org.freedesktop.NetworkManager.IP6Config</a>
+</dt>
+<dt id="ientry-idm140124802042784">org.freedesktop.NetworkManager.IP6Config::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-signal-org-freedesktop-NetworkManager-IP6Config.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801590000">org.freedesktop.NetworkManager.IP6Config:AddressData, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.AddressData">The "AddressData" property</a>
+</dt>
+<dt id="ientry-idm140124802955808">org.freedesktop.NetworkManager.IP6Config:Addresses, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Addresses">The "Addresses" property</a>
+</dt>
+<dt id="ientry-idm140124801290864">org.freedesktop.NetworkManager.IP6Config:DnsOptions, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.DnsOptions">The "DnsOptions" property</a>
+</dt>
+<dt id="ientry-idm140124801286560">org.freedesktop.NetworkManager.IP6Config:DnsPriority, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.DnsPriority">The "DnsPriority" property</a>
+</dt>
+<dt id="ientry-idm140124801299184">org.freedesktop.NetworkManager.IP6Config:Domains, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Domains">The "Domains" property</a>
+</dt>
+<dt id="ientry-idm140124801585664">org.freedesktop.NetworkManager.IP6Config:Gateway, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Gateway">The "Gateway" property</a>
+</dt>
+<dt id="ientry-idm140124802129040">org.freedesktop.NetworkManager.IP6Config:Nameservers, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Nameservers">The "Nameservers" property</a>
+</dt>
+<dt id="ientry-idm140124802133440">org.freedesktop.NetworkManager.IP6Config:RouteData, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.RouteData">The "RouteData" property</a>
+</dt>
+<dt id="ientry-idm140124802137584">org.freedesktop.NetworkManager.IP6Config:Routes, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Routes">The "Routes" property</a>
+</dt>
+<dt id="ientry-idm140124801295056">org.freedesktop.NetworkManager.IP6Config:Searches, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Searches">The "Searches" property</a>
+</dt>
+<dt id="ientry-idm140124809987936">org.freedesktop.NetworkManager.SecretAgent, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-interface-org-freedesktop-NetworkManager-SecretAgent.top_of_page">org.freedesktop.NetworkManager.SecretAgent</a>
+</dt>
+<dt id="ientry-idm140124802074208">org.freedesktop.NetworkManager.SecretAgent.CancelGetSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.CancelGetSecrets">The CancelGetSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124800957376">org.freedesktop.NetworkManager.SecretAgent.DeleteSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.DeleteSecrets">The DeleteSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124806980272">org.freedesktop.NetworkManager.SecretAgent.GetSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.GetSecrets">The GetSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124800968320">org.freedesktop.NetworkManager.SecretAgent.SaveSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.SaveSecrets">The SaveSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124808176816">org.freedesktop.NetworkManager.Settings, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-interface-org-freedesktop-NetworkManager-Settings.top_of_page">org.freedesktop.NetworkManager.Settings</a>
+</dt>
+<dt id="ientry-idm140124809341600">org.freedesktop.NetworkManager.Settings.AddConnection(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnection">The AddConnection() method</a>
+</dt>
+<dt id="ientry-idm140124805551216">org.freedesktop.NetworkManager.Settings.AddConnectionUnsaved(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnectionUnsaved">The AddConnectionUnsaved() method</a>
+</dt>
+<dt id="ientry-idm140124809807344">org.freedesktop.NetworkManager.Settings.Connection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-interface-org-freedesktop-NetworkManager-Settings-Connection.top_of_page">org.freedesktop.NetworkManager.Settings.Connection</a>
+</dt>
+<dt id="ientry-idm140124803320272">org.freedesktop.NetworkManager.Settings.Connection.ClearSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.ClearSecrets">The ClearSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124803494160">org.freedesktop.NetworkManager.Settings.Connection.Delete(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Delete">The Delete() method</a>
+</dt>
+<dt id="ientry-idm140124803482000">org.freedesktop.NetworkManager.Settings.Connection.GetSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.GetSecrets">The GetSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124803489840">org.freedesktop.NetworkManager.Settings.Connection.GetSettings(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.GetSettings">The GetSettings() method</a>
+</dt>
+<dt id="ientry-idm140124803315968">org.freedesktop.NetworkManager.Settings.Connection.Save(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Save">The Save() method</a>
+</dt>
+<dt id="ientry-idm140124805425472">org.freedesktop.NetworkManager.Settings.Connection.Update(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Update">The Update() method</a>
+</dt>
+<dt id="ientry-idm140124803459792">org.freedesktop.NetworkManager.Settings.Connection.UpdateUnsaved(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.UpdateUnsaved">The UpdateUnsaved() method</a>
+</dt>
+<dt id="ientry-idm140124803249120">org.freedesktop.NetworkManager.Settings.Connection::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803253616">org.freedesktop.NetworkManager.Settings.Connection::Removed, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.Removed">The "Removed" signal</a>
+</dt>
+<dt id="ientry-idm140124803309776">org.freedesktop.NetworkManager.Settings.Connection::Updated, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.Updated">The "Updated" signal</a>
+</dt>
+<dt id="ientry-idm140124803239696">org.freedesktop.NetworkManager.Settings.Connection:Unsaved, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-property-org-freedesktop-NetworkManager-Settings-Connection.Unsaved">The "Unsaved" property</a>
+</dt>
+<dt id="ientry-idm140124810209856">org.freedesktop.NetworkManager.Settings.GetConnectionByUuid(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.GetConnectionByUuid">The GetConnectionByUuid() method</a>
+</dt>
+<dt id="ientry-idm140124809503760">org.freedesktop.NetworkManager.Settings.ListConnections(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ListConnections">The ListConnections() method</a>
+</dt>
+<dt id="ientry-idm140124810669520">org.freedesktop.NetworkManager.Settings.LoadConnections(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.LoadConnections">The LoadConnections() method</a>
+</dt>
+<dt id="ientry-idm140124810608608">org.freedesktop.NetworkManager.Settings.ReloadConnections(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ReloadConnections">The ReloadConnections() method</a>
+</dt>
+<dt id="ientry-idm140124810329744">org.freedesktop.NetworkManager.Settings.SaveHostname(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.SaveHostname">The SaveHostname() method</a>
+</dt>
+<dt id="ientry-idm140124810139632">org.freedesktop.NetworkManager.Settings::ConnectionRemoved, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.ConnectionRemoved">The "ConnectionRemoved" signal</a>
+</dt>
+<dt id="ientry-idm140124805462608">org.freedesktop.NetworkManager.Settings::NewConnection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.NewConnection">The "NewConnection" signal</a>
+</dt>
+<dt id="ientry-idm140124805470080">org.freedesktop.NetworkManager.Settings::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124805780144">org.freedesktop.NetworkManager.Settings:CanModify, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.CanModify">The "CanModify" property</a>
+</dt>
+<dt id="ientry-idm140124805788576">org.freedesktop.NetworkManager.Settings:Connections, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Connections">The "Connections" property</a>
+</dt>
+<dt id="ientry-idm140124805784368">org.freedesktop.NetworkManager.Settings:Hostname, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Hostname">The "Hostname" property</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>A</h3>
+<dl>
+<dt id="ientry-idm140124810917824">org.freedesktop.NetworkManager.Connection.Active, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-interface-org-freedesktop-NetworkManager-Connection-Active.top_of_page">org.freedesktop.NetworkManager.Connection.Active</a>
+</dt>
+<dt id="ientry-idm140124808564336">org.freedesktop.NetworkManager.Connection.Active::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-signal-org-freedesktop-NetworkManager-Connection-Active.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124810246320">org.freedesktop.NetworkManager.Connection.Active:Connection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Connection">The "Connection" property</a>
+</dt>
+<dt id="ientry-idm140124810658256">org.freedesktop.NetworkManager.Connection.Active:Default, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default">The "Default" property</a>
+</dt>
+<dt id="ientry-idm140124803379248">org.freedesktop.NetworkManager.Connection.Active:Default6, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default6">The "Default6" property</a>
+</dt>
+<dt id="ientry-idm140124810414704">org.freedesktop.NetworkManager.Connection.Active:Devices, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Devices">The "Devices" property</a>
+</dt>
+<dt id="ientry-idm140124803383776">org.freedesktop.NetworkManager.Connection.Active:Dhcp4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp4Config">The "Dhcp4Config" property</a>
+</dt>
+<dt id="ientry-idm140124803525024">org.freedesktop.NetworkManager.Connection.Active:Dhcp6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp6Config">The "Dhcp6Config" property</a>
+</dt>
+<dt id="ientry-idm140124803344368">org.freedesktop.NetworkManager.Connection.Active:Id, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Id">The "Id" property</a>
+</dt>
+<dt id="ientry-idm140124803388272">org.freedesktop.NetworkManager.Connection.Active:Ip4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip4Config">The "Ip4Config" property</a>
+</dt>
+<dt id="ientry-idm140124803374816">org.freedesktop.NetworkManager.Connection.Active:Ip6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip6Config">The "Ip6Config" property</a>
+</dt>
+<dt id="ientry-idm140124803516352">org.freedesktop.NetworkManager.Connection.Active:Master, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Master">The "Master" property</a>
+</dt>
+<dt id="ientry-idm140124803348752">org.freedesktop.NetworkManager.Connection.Active:SpecificObject, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.SpecificObject">The "SpecificObject" property</a>
+</dt>
+<dt id="ientry-idm140124810410368">org.freedesktop.NetworkManager.Connection.Active:State, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.State">The "State" property</a>
+</dt>
+<dt id="ientry-idm140124803353136">org.freedesktop.NetworkManager.Connection.Active:Type, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Type">The "Type" property</a>
+</dt>
+<dt id="ientry-idm140124803357392">org.freedesktop.NetworkManager.Connection.Active:Uuid, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Uuid">The "Uuid" property</a>
+</dt>
+<dt id="ientry-idm140124803520544">org.freedesktop.NetworkManager.Connection.Active:Vpn, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Vpn">The "Vpn" property</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>D</h3>
+<dl>
+<dt id="ientry-idm140124810729136">org.freedesktop.NetworkManager.Device.Wired, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Wired.top_of_page">org.freedesktop.NetworkManager.Device.Wired</a>
+</dt>
+<dt id="ientry-idm140124809648256">org.freedesktop.NetworkManager.Device.Wired::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wired.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124810399728">org.freedesktop.NetworkManager.Device.Wired:Carrier, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.Carrier">The "Carrier" property</a>
+</dt>
+<dt id="ientry-idm140124802201184">org.freedesktop.NetworkManager.Device.Wired:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124803398976">org.freedesktop.NetworkManager.Device.Wired:PermHwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.PermHwAddress">The "PermHwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124810404048">org.freedesktop.NetworkManager.Device.Wired:S390Subchannels, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.S390Subchannels">The "S390Subchannels" property</a>
+</dt>
+<dt id="ientry-idm140124803394752">org.freedesktop.NetworkManager.Device.Wired:Speed, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.Speed">The "Speed" property</a>
+</dt>
+<dt id="ientry-idm140124810870384">org.freedesktop.NetworkManager.Device.Wireless, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-interface-org-freedesktop-NetworkManager-Device-Wireless.top_of_page">org.freedesktop.NetworkManager.Device.Wireless</a>
+</dt>
+<dt id="ientry-idm140124801841216">org.freedesktop.NetworkManager.Device.Wireless.GetAccessPoints(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.GetAccessPoints">The GetAccessPoints() method</a>
+</dt>
+<dt id="ientry-idm140124801895280">org.freedesktop.NetworkManager.Device.Wireless.GetAllAccessPoints(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.GetAllAccessPoints">The GetAllAccessPoints() method</a>
+</dt>
+<dt id="ientry-idm140124801912576">org.freedesktop.NetworkManager.Device.Wireless.RequestScan(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.RequestScan">The RequestScan() method</a>
+</dt>
+<dt id="ientry-idm140124801467232">org.freedesktop.NetworkManager.Device.Wireless::AccessPointAdded, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.AccessPointAdded">The "AccessPointAdded" signal</a>
+</dt>
+<dt id="ientry-idm140124801459584">org.freedesktop.NetworkManager.Device.Wireless::AccessPointRemoved, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.AccessPointRemoved">The "AccessPointRemoved" signal</a>
+</dt>
+<dt id="ientry-idm140124801902960">org.freedesktop.NetworkManager.Device.Wireless::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801432192">org.freedesktop.NetworkManager.Device.Wireless:AccessPoints, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.AccessPoints">The "AccessPoints" property</a>
+</dt>
+<dt id="ientry-idm140124801428240">org.freedesktop.NetworkManager.Device.Wireless:ActiveAccessPoint, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.ActiveAccessPoint">The "ActiveAccessPoint" property</a>
+</dt>
+<dt id="ientry-idm140124801436080">org.freedesktop.NetworkManager.Device.Wireless:Bitrate, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.Bitrate">The "Bitrate" property</a>
+</dt>
+<dt id="ientry-idm140124801450048">org.freedesktop.NetworkManager.Device.Wireless:HwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.HwAddress">The "HwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124801441552">org.freedesktop.NetworkManager.Device.Wireless:Mode, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.Mode">The "Mode" property</a>
+</dt>
+<dt id="ientry-idm140124801445776">org.freedesktop.NetworkManager.Device.Wireless:PermHwAddress, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.PermHwAddress">The "PermHwAddress" property</a>
+</dt>
+<dt id="ientry-idm140124801424288">org.freedesktop.NetworkManager.Device.Wireless:WirelessCapabilities, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.WirelessCapabilities">The "WirelessCapabilities" property</a>
+</dt>
+<dt id="ientry-idm140124802836480">org.freedesktop.NetworkManager.DHCP4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html#gdbus-interface-org-freedesktop-NetworkManager-DHCP4Config.top_of_page">org.freedesktop.NetworkManager.DHCP4Config</a>
+</dt>
+<dt id="ientry-idm140124807755712">org.freedesktop.NetworkManager.DHCP4Config::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html#gdbus-signal-org-freedesktop-NetworkManager-DHCP4Config.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802863824">org.freedesktop.NetworkManager.DHCP4Config:Options, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html#gdbus-property-org-freedesktop-NetworkManager-DHCP4Config.Options">The "Options" property</a>
+</dt>
+<dt id="ientry-idm140124807323584">org.freedesktop.NetworkManager.DHCP6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html#gdbus-interface-org-freedesktop-NetworkManager-DHCP6Config.top_of_page">org.freedesktop.NetworkManager.DHCP6Config</a>
+</dt>
+<dt id="ientry-idm140124806494208">org.freedesktop.NetworkManager.DHCP6Config::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html#gdbus-signal-org-freedesktop-NetworkManager-DHCP6Config.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124802030560">org.freedesktop.NetworkManager.DHCP6Config:Options, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html#gdbus-property-org-freedesktop-NetworkManager-DHCP6Config.Options">The "Options" property</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>M</h3>
+<dl>
+<dt id="ientry-idm140124807411632">org.freedesktop.NetworkManager, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-interface-org-freedesktop-NetworkManager.top_of_page">org.freedesktop.NetworkManager</a>
+</dt>
+<dt id="ientry-idm140124810549600">org.freedesktop.NetworkManager.ActivateConnection(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.ActivateConnection">The ActivateConnection() method</a>
+</dt>
+<dt id="ientry-idm140124810637344">org.freedesktop.NetworkManager.AddAndActivateConnection(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.AddAndActivateConnection">The AddAndActivateConnection() method</a>
+</dt>
+<dt id="ientry-idm140124809131296">org.freedesktop.NetworkManager.CheckConnectivity(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.CheckConnectivity">The CheckConnectivity() method</a>
+</dt>
+<dt id="ientry-idm140124808996400">org.freedesktop.NetworkManager.DeactivateConnection(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.DeactivateConnection">The DeactivateConnection() method</a>
+</dt>
+<dt id="ientry-idm140124810529248">org.freedesktop.NetworkManager.Enable(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Enable">The Enable() method</a>
+</dt>
+<dt id="ientry-idm140124807139664">org.freedesktop.NetworkManager.GetAllDevices(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetAllDevices">The GetAllDevices() method</a>
+</dt>
+<dt id="ientry-idm140124807132096">org.freedesktop.NetworkManager.GetDeviceByIpIface(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDeviceByIpIface">The GetDeviceByIpIface() method</a>
+</dt>
+<dt id="ientry-idm140124803806864">org.freedesktop.NetworkManager.GetDevices(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDevices">The GetDevices() method</a>
+</dt>
+<dt id="ientry-idm140124803753824">org.freedesktop.NetworkManager.GetLogging(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetLogging">The GetLogging() method</a>
+</dt>
+<dt id="ientry-idm140124810521248">org.freedesktop.NetworkManager.GetPermissions(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetPermissions">The GetPermissions() method</a>
+</dt>
+<dt id="ientry-idm140124810484016">org.freedesktop.NetworkManager.Reload(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Reload">The Reload() method</a>
+</dt>
+<dt id="ientry-idm140124803764816">org.freedesktop.NetworkManager.SetLogging(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.SetLogging">The SetLogging() method</a>
+</dt>
+<dt id="ientry-idm140124808989264">org.freedesktop.NetworkManager.Sleep(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Sleep">The Sleep() method</a>
+</dt>
+<dt id="ientry-idm140124809123392">org.freedesktop.NetworkManager.state(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.state">The state() method</a>
+</dt>
+<dt id="ientry-idm140124809113664">org.freedesktop.NetworkManager::CheckPermissions, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.CheckPermissions">The "CheckPermissions" signal</a>
+</dt>
+<dt id="ientry-idm140124809093936">org.freedesktop.NetworkManager::DeviceAdded, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceAdded">The "DeviceAdded" signal</a>
+</dt>
+<dt id="ientry-idm140124809086512">org.freedesktop.NetworkManager::DeviceRemoved, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceRemoved">The "DeviceRemoved" signal</a>
+</dt>
+<dt id="ientry-idm140124809101168">org.freedesktop.NetworkManager::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124809109360">org.freedesktop.NetworkManager::StateChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.StateChanged">The "StateChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803434064">org.freedesktop.NetworkManager:ActivatingConnection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActivatingConnection">The "ActivatingConnection" property</a>
+</dt>
+<dt id="ientry-idm140124809039136">org.freedesktop.NetworkManager:ActiveConnections, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActiveConnections">The "ActiveConnections" property</a>
+</dt>
+<dt id="ientry-idm140124809073264">org.freedesktop.NetworkManager:AllDevices, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.AllDevices">The "AllDevices" property</a>
+</dt>
+<dt id="ientry-idm140124803416592">org.freedesktop.NetworkManager:Connectivity, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Connectivity">The "Connectivity" property</a>
+</dt>
+<dt id="ientry-idm140124809077664">org.freedesktop.NetworkManager:Devices, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Devices">The "Devices" property</a>
+</dt>
+<dt id="ientry-idm140124803411440">org.freedesktop.NetworkManager:GlobalDnsConfiguration, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.GlobalDnsConfiguration">The "GlobalDnsConfiguration" property</a>
+</dt>
+<dt id="ientry-idm140124803439424">org.freedesktop.NetworkManager:Metered, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Metered">The "Metered" property</a>
+</dt>
+<dt id="ientry-idm140124809068864">org.freedesktop.NetworkManager:NetworkingEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.NetworkingEnabled">The "NetworkingEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809034976">org.freedesktop.NetworkManager:PrimaryConnection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnection">The "PrimaryConnection" property</a>
+</dt>
+<dt id="ientry-idm140124803443536">org.freedesktop.NetworkManager:PrimaryConnectionType, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnectionType">The "PrimaryConnectionType" property</a>
+</dt>
+<dt id="ientry-idm140124803429952">org.freedesktop.NetworkManager:Startup, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Startup">The "Startup" property</a>
+</dt>
+<dt id="ientry-idm140124803421856">org.freedesktop.NetworkManager:State, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.State">The "State" property</a>
+</dt>
+<dt id="ientry-idm140124803425824">org.freedesktop.NetworkManager:Version, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Version">The "Version" property</a>
+</dt>
+<dt id="ientry-idm140124809047648">org.freedesktop.NetworkManager:WimaxEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxEnabled">The "WimaxEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809043424">org.freedesktop.NetworkManager:WimaxHardwareEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxHardwareEnabled">The "WimaxHardwareEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809064592">org.freedesktop.NetworkManager:WirelessEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessEnabled">The "WirelessEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809060368">org.freedesktop.NetworkManager:WirelessHardwareEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessHardwareEnabled">The "WirelessHardwareEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809056080">org.freedesktop.NetworkManager:WwanEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanEnabled">The "WwanEnabled" property</a>
+</dt>
+<dt id="ientry-idm140124809051936">org.freedesktop.NetworkManager:WwanHardwareEnabled, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanHardwareEnabled">The "WwanHardwareEnabled" property</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>N</h3>
+<dl>
+<dt id="ientry-idm140124800738384">NM80211ApFlags, <a class="indexterm" href="nm-dbus-types.html#NM80211ApFlags">enum NM80211ApFlags</a>
+</dt>
+<dt id="ientry-idm140124800720528">NM80211ApSecurityFlags, <a class="indexterm" href="nm-dbus-types.html#NM80211ApSecurityFlags">enum NM80211ApSecurityFlags</a>
+</dt>
+<dt id="ientry-idm140124798777888">NM80211Mode, <a class="indexterm" href="nm-dbus-types.html#NM80211Mode">enum NM80211Mode</a>
+</dt>
+<dt id="ientry-idm140124798352256">NMActiveConnectionState, <a class="indexterm" href="nm-dbus-types.html#NMActiveConnectionState">enum NMActiveConnectionState</a>
+</dt>
+<dt id="ientry-idm140124798754064">NMBluetoothCapabilities, <a class="indexterm" href="nm-dbus-types.html#NMBluetoothCapabilities">enum NMBluetoothCapabilities</a>
+</dt>
+<dt id="ientry-idm140124800990256">NMConnectivityState, <a class="indexterm" href="nm-dbus-types.html#NMConnectivityState">enum NMConnectivityState</a>
+</dt>
+<dt id="ientry-idm140124800824976">NMDeviceCapabilities, <a class="indexterm" href="nm-dbus-types.html#NMDeviceCapabilities">enum NMDeviceCapabilities</a>
+</dt>
+<dt id="ientry-idm140124798734064">NMDeviceModemCapabilities, <a class="indexterm" href="nm-dbus-types.html#NMDeviceModemCapabilities">enum NMDeviceModemCapabilities</a>
+</dt>
+<dt id="ientry-idm140124798682832">NMDeviceState, <a class="indexterm" href="nm-dbus-types.html#NMDeviceState">enum NMDeviceState</a>
+</dt>
+<dt id="ientry-idm140124798624384">NMDeviceStateReason, <a class="indexterm" href="nm-dbus-types.html#NMDeviceStateReason">enum NMDeviceStateReason</a>
+</dt>
+<dt id="ientry-idm140124800923440">NMDeviceType, <a class="indexterm" href="nm-dbus-types.html#NMDeviceType">enum NMDeviceType</a>
+</dt>
+<dt id="ientry-idm140124800798512">NMDeviceWifiCapabilities, <a class="indexterm" href="nm-dbus-types.html#NMDeviceWifiCapabilities">enum NMDeviceWifiCapabilities</a>
+</dt>
+<dt id="ientry-idm140124798276288">NMIPTunnelMode, <a class="indexterm" href="nm-dbus-types.html#NMIPTunnelMode">enum NMIPTunnelMode</a>
+</dt>
+<dt id="ientry-idm140124798379280">NMMetered, <a class="indexterm" href="nm-dbus-types.html#NMMetered">enum NMMetered</a>
+</dt>
+<dt id="ientry-idm140124798292528">NMSecretAgentCapabilities, <a class="indexterm" href="nm-dbus-types.html#NMSecretAgentCapabilities">enum NMSecretAgentCapabilities</a>
+</dt>
+<dt id="ientry-idm140124798324592">NMSecretAgentGetSecretsFlags, <a class="indexterm" href="nm-dbus-types.html#NMSecretAgentGetSecretsFlags">enum NMSecretAgentGetSecretsFlags</a>
+</dt>
+<dt id="ientry-idm140124809857168">NMState, <a class="indexterm" href="nm-dbus-types.html#NMState">enum NMState</a>
+</dt>
+<dt id="ientry-idm140124800656560">NMVpnConnectionState, <a class="indexterm" href="nm-vpn-dbus-types.html#NMVpnConnectionState">enum NMVpnConnectionState</a>
+</dt>
+<dt id="ientry-idm140124799999680">NMVpnConnectionStateReason, <a class="indexterm" href="nm-vpn-dbus-types.html#NMVpnConnectionStateReason">enum NMVpnConnectionStateReason</a>
+</dt>
+<dt id="ientry-idm140124799940352">NMVpnPluginFailure, <a class="indexterm" href="nm-vpn-dbus-types.html#NMVpnPluginFailure">enum NMVpnPluginFailure</a>
+</dt>
+<dt id="ientry-idm140124808428064">NMVpnServiceState, <a class="indexterm" href="nm-vpn-dbus-types.html#NMVpnServiceState">enum NMVpnServiceState</a>
+</dt>
+<dt id="ientry-idm140124798706096">NMWimaxNspNetworkType, <a class="indexterm" href="nm-dbus-types.html#NMWimaxNspNetworkType">enum NMWimaxNspNetworkType</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>P</h3>
+<dl>
+<dt id="ientry-idm140124810341216">org.freedesktop.NetworkManager.PPP, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-interface-org-freedesktop-NetworkManager-PPP.top_of_page">org.freedesktop.NetworkManager.PPP</a>
+</dt>
+<dt id="ientry-idm140124810866592">org.freedesktop.NetworkManager.PPP.NeedSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.NeedSecrets">The NeedSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124806363488">org.freedesktop.NetworkManager.PPP.SetIp4Config(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp4Config">The SetIp4Config() method</a>
+</dt>
+<dt id="ientry-idm140124806711456">org.freedesktop.NetworkManager.PPP.SetIp6Config(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp6Config">The SetIp6Config() method</a>
+</dt>
+<dt id="ientry-idm140124806697136">org.freedesktop.NetworkManager.PPP.SetState(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetState">The SetState() method</a>
+</dt>
+</dl>
+</div>
+<div class="indexdiv">
+<h3>V</h3>
+<dl>
+<dt id="ientry-idm140124807802544">org.freedesktop.NetworkManager.VPN.Connection, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-interface-org-freedesktop-NetworkManager-VPN-Connection.top_of_page">org.freedesktop.NetworkManager.VPN.Connection</a>
+</dt>
+<dt id="ientry-idm140124808019424">org.freedesktop.NetworkManager.VPN.Connection::PropertiesChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Connection.PropertiesChanged">The "PropertiesChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803583200">org.freedesktop.NetworkManager.VPN.Connection::VpnStateChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Connection.VpnStateChanged">The "VpnStateChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124803674096">org.freedesktop.NetworkManager.VPN.Connection:Banner, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Connection.Banner">The "Banner" property</a>
+</dt>
+<dt id="ientry-idm140124803334864">org.freedesktop.NetworkManager.VPN.Connection:VpnState, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Connection.VpnState">The "VpnState" property</a>
+</dt>
+<dt id="ientry-idm140124809159568">org.freedesktop.NetworkManager.VPN.Plugin, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-interface-org-freedesktop-NetworkManager-VPN-Plugin.top_of_page">org.freedesktop.NetworkManager.VPN.Plugin</a>
+</dt>
+<dt id="ientry-idm140124802062208">org.freedesktop.NetworkManager.VPN.Plugin.Connect(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.Connect">The Connect() method</a>
+</dt>
+<dt id="ientry-idm140124802085616">org.freedesktop.NetworkManager.VPN.Plugin.ConnectInteractive(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.ConnectInteractive">The ConnectInteractive() method</a>
+</dt>
+<dt id="ientry-idm140124801515776">org.freedesktop.NetworkManager.VPN.Plugin.Disconnect(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.Disconnect">The Disconnect() method</a>
+</dt>
+<dt id="ientry-idm140124801525920">org.freedesktop.NetworkManager.VPN.Plugin.NeedSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.NeedSecrets">The NeedSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124801695280">org.freedesktop.NetworkManager.VPN.Plugin.NewSecrets(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.NewSecrets">The NewSecrets() method</a>
+</dt>
+<dt id="ientry-idm140124801613760">org.freedesktop.NetworkManager.VPN.Plugin.SetConfig(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetConfig">The SetConfig() method</a>
+</dt>
+<dt id="ientry-idm140124801702736">org.freedesktop.NetworkManager.VPN.Plugin.SetFailure(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetFailure">The SetFailure() method</a>
+</dt>
+<dt id="ientry-idm140124801606256">org.freedesktop.NetworkManager.VPN.Plugin.SetIp4Config(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetIp4Config">The SetIp4Config() method</a>
+</dt>
+<dt id="ientry-idm140124801710320">org.freedesktop.NetworkManager.VPN.Plugin.SetIp6Config(), <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetIp6Config">The SetIp6Config() method</a>
+</dt>
+<dt id="ientry-idm140124801667152">org.freedesktop.NetworkManager.VPN.Plugin::Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Config">The "Config" signal</a>
+</dt>
+<dt id="ientry-idm140124801381056">org.freedesktop.NetworkManager.VPN.Plugin::Failure, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Failure">The "Failure" signal</a>
+</dt>
+<dt id="ientry-idm140124801659616">org.freedesktop.NetworkManager.VPN.Plugin::Ip4Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Ip4Config">The "Ip4Config" signal</a>
+</dt>
+<dt id="ientry-idm140124801396064">org.freedesktop.NetworkManager.VPN.Plugin::Ip6Config, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Ip6Config">The "Ip6Config" signal</a>
+</dt>
+<dt id="ientry-idm140124801388608">org.freedesktop.NetworkManager.VPN.Plugin::LoginBanner, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.LoginBanner">The "LoginBanner" signal</a>
+</dt>
+<dt id="ientry-idm140124801677888">org.freedesktop.NetworkManager.VPN.Plugin::SecretsRequired, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.SecretsRequired">The "SecretsRequired" signal</a>
+</dt>
+<dt id="ientry-idm140124801686080">org.freedesktop.NetworkManager.VPN.Plugin::StateChanged, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.StateChanged">The "StateChanged" signal</a>
+</dt>
+<dt id="ientry-idm140124801370976">org.freedesktop.NetworkManager.VPN.Plugin:State, <a class="indexterm" href="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Plugin.State">The "State" property</a>
+</dt>
+</dl>
+</div>
+</div>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.24</div>
+<hr>Generated by GTK-Doc V1.25</div>
 </body>
 </html>

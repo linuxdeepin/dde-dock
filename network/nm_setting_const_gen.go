@@ -13,6 +13,7 @@ const (
 	NM_SETTING_802_1X_CA_PATH                           = "ca-path"
 	NM_SETTING_802_1X_SUBJECT_MATCH                     = "subject-match"
 	NM_SETTING_802_1X_ALTSUBJECT_MATCHES                = "altsubject-matches"
+	NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH               = "domain-suffix-match"
 	NM_SETTING_802_1X_CLIENT_CERT                       = "client-cert"
 	NM_SETTING_802_1X_PHASE1_PEAPVER                    = "phase1-peapver"
 	NM_SETTING_802_1X_PHASE1_PEAPLABEL                  = "phase1-peaplabel"
@@ -23,6 +24,7 @@ const (
 	NM_SETTING_802_1X_PHASE2_CA_PATH                    = "phase2-ca-path"
 	NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH              = "phase2-subject-match"
 	NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES         = "phase2-altsubject-matches"
+	NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH        = "phase2-domain-suffix-match"
 	NM_SETTING_802_1X_PHASE2_CLIENT_CERT                = "phase2-client-cert"
 	NM_SETTING_802_1X_PASSWORD                          = "password"
 	NM_SETTING_802_1X_PASSWORD_FLAGS                    = "password-flags"
@@ -67,35 +69,48 @@ const (
 
 // /usr/include/libnm/nm-setting-bond.h
 const (
-	NM_SETTING_BOND_SETTING_NAME            = "bond"
-	NM_SETTING_BOND_OPTIONS                 = "options"
-	NM_SETTING_BOND_OPTION_MODE             = "mode"
-	NM_SETTING_BOND_OPTION_MIIMON           = "miimon"
-	NM_SETTING_BOND_OPTION_DOWNDELAY        = "downdelay"
-	NM_SETTING_BOND_OPTION_UPDELAY          = "updelay"
-	NM_SETTING_BOND_OPTION_ARP_INTERVAL     = "arp_interval"
-	NM_SETTING_BOND_OPTION_ARP_IP_TARGET    = "arp_ip_target"
-	NM_SETTING_BOND_OPTION_ARP_VALIDATE     = "arp_validate"
-	NM_SETTING_BOND_OPTION_PRIMARY          = "primary"
-	NM_SETTING_BOND_OPTION_PRIMARY_RESELECT = "primary_reselect"
-	NM_SETTING_BOND_OPTION_FAIL_OVER_MAC    = "fail_over_mac"
-	NM_SETTING_BOND_OPTION_USE_CARRIER      = "use_carrier"
-	NM_SETTING_BOND_OPTION_AD_SELECT        = "ad_select"
-	NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY = "xmit_hash_policy"
-	NM_SETTING_BOND_OPTION_RESEND_IGMP      = "resend_igmp"
-	NM_SETTING_BOND_OPTION_LACP_RATE        = "lacp_rate"
+	NM_SETTING_BOND_SETTING_NAME             = "bond"
+	NM_SETTING_BOND_OPTIONS                  = "options"
+	NM_SETTING_BOND_OPTION_MODE              = "mode"
+	NM_SETTING_BOND_OPTION_MIIMON            = "miimon"
+	NM_SETTING_BOND_OPTION_DOWNDELAY         = "downdelay"
+	NM_SETTING_BOND_OPTION_UPDELAY           = "updelay"
+	NM_SETTING_BOND_OPTION_ARP_INTERVAL      = "arp_interval"
+	NM_SETTING_BOND_OPTION_ARP_IP_TARGET     = "arp_ip_target"
+	NM_SETTING_BOND_OPTION_ARP_VALIDATE      = "arp_validate"
+	NM_SETTING_BOND_OPTION_PRIMARY           = "primary"
+	NM_SETTING_BOND_OPTION_PRIMARY_RESELECT  = "primary_reselect"
+	NM_SETTING_BOND_OPTION_FAIL_OVER_MAC     = "fail_over_mac"
+	NM_SETTING_BOND_OPTION_USE_CARRIER       = "use_carrier"
+	NM_SETTING_BOND_OPTION_AD_SELECT         = "ad_select"
+	NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY  = "xmit_hash_policy"
+	NM_SETTING_BOND_OPTION_RESEND_IGMP       = "resend_igmp"
+	NM_SETTING_BOND_OPTION_LACP_RATE         = "lacp_rate"
+	NM_SETTING_BOND_OPTION_ACTIVE_SLAVE      = "active_slave"
+	NM_SETTING_BOND_OPTION_AD_ACTOR_SYS_PRIO = "ad_actor_sys_prio"
+	NM_SETTING_BOND_OPTION_AD_ACTOR_SYSTEM   = "ad_actor_system"
+	NM_SETTING_BOND_OPTION_AD_USER_PORT_KEY  = "ad_user_port_key"
+	NM_SETTING_BOND_OPTION_ALL_SLAVES_ACTIVE = "all_slaves_active"
+	NM_SETTING_BOND_OPTION_ARP_ALL_TARGETS   = "arp_all_targets"
+	NM_SETTING_BOND_OPTION_MIN_LINKS         = "min_links"
+	NM_SETTING_BOND_OPTION_NUM_GRAT_ARP      = "num_grat_arp"
+	NM_SETTING_BOND_OPTION_NUM_UNSOL_NA      = "num_unsol_na"
+	NM_SETTING_BOND_OPTION_PACKETS_PER_SLAVE = "packets_per_slave"
+	NM_SETTING_BOND_OPTION_TLB_DYNAMIC_LB    = "tlb_dynamic_lb"
+	NM_SETTING_BOND_OPTION_LP_INTERVAL       = "lp_interval"
 )
 
 // /usr/include/libnm/nm-setting-bridge.h
 const (
-	NM_SETTING_BRIDGE_SETTING_NAME  = "bridge"
-	NM_SETTING_BRIDGE_MAC_ADDRESS   = "mac-address"
-	NM_SETTING_BRIDGE_STP           = "stp"
-	NM_SETTING_BRIDGE_PRIORITY      = "priority"
-	NM_SETTING_BRIDGE_FORWARD_DELAY = "forward-delay"
-	NM_SETTING_BRIDGE_HELLO_TIME    = "hello-time"
-	NM_SETTING_BRIDGE_MAX_AGE       = "max-age"
-	NM_SETTING_BRIDGE_AGEING_TIME   = "ageing-time"
+	NM_SETTING_BRIDGE_SETTING_NAME       = "bridge"
+	NM_SETTING_BRIDGE_MAC_ADDRESS        = "mac-address"
+	NM_SETTING_BRIDGE_STP                = "stp"
+	NM_SETTING_BRIDGE_PRIORITY           = "priority"
+	NM_SETTING_BRIDGE_FORWARD_DELAY      = "forward-delay"
+	NM_SETTING_BRIDGE_HELLO_TIME         = "hello-time"
+	NM_SETTING_BRIDGE_MAX_AGE            = "max-age"
+	NM_SETTING_BRIDGE_AGEING_TIME        = "ageing-time"
+	NM_SETTING_BRIDGE_MULTICAST_SNOOPING = "multicast-snooping"
 )
 
 // /usr/include/libnm/nm-setting-bridge-port.h
@@ -134,6 +149,7 @@ const (
 	NM_SETTING_CONNECTION_SECONDARIES          = "secondaries"
 	NM_SETTING_CONNECTION_GATEWAY_PING_TIMEOUT = "gateway-ping-timeout"
 	NM_SETTING_CONNECTION_METERED              = "metered"
+	NM_SETTING_CONNECTION_LLDP                 = "lldp"
 )
 
 // /usr/include/libnm/nm-setting-dcb.h
@@ -165,16 +181,19 @@ const (
 
 // /usr/include/libnm/nm-setting-gsm.h
 const (
-	NM_SETTING_GSM_SETTING_NAME   = "gsm"
-	NM_SETTING_GSM_NUMBER         = "number"
-	NM_SETTING_GSM_USERNAME       = "username"
-	NM_SETTING_GSM_PASSWORD       = "password"
-	NM_SETTING_GSM_PASSWORD_FLAGS = "password-flags"
-	NM_SETTING_GSM_APN            = "apn"
-	NM_SETTING_GSM_NETWORK_ID     = "network-id"
-	NM_SETTING_GSM_PIN            = "pin"
-	NM_SETTING_GSM_PIN_FLAGS      = "pin-flags"
-	NM_SETTING_GSM_HOME_ONLY      = "home-only"
+	NM_SETTING_GSM_SETTING_NAME    = "gsm"
+	NM_SETTING_GSM_NUMBER          = "number"
+	NM_SETTING_GSM_USERNAME        = "username"
+	NM_SETTING_GSM_PASSWORD        = "password"
+	NM_SETTING_GSM_PASSWORD_FLAGS  = "password-flags"
+	NM_SETTING_GSM_APN             = "apn"
+	NM_SETTING_GSM_NETWORK_ID      = "network-id"
+	NM_SETTING_GSM_PIN             = "pin"
+	NM_SETTING_GSM_PIN_FLAGS       = "pin-flags"
+	NM_SETTING_GSM_HOME_ONLY       = "home-only"
+	NM_SETTING_GSM_DEVICE_ID       = "device-id"
+	NM_SETTING_GSM_SIM_ID          = "sim-id"
+	NM_SETTING_GSM_SIM_OPERATOR_ID = "sim-operator-id"
 )
 
 // /usr/include/libnm/nm-setting.h
@@ -196,6 +215,7 @@ const (
 const (
 	NM_SETTING_IP4_CONFIG_SETTING_NAME      = "ipv4"
 	NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID    = "dhcp-client-id"
+	NM_SETTING_IP4_CONFIG_DHCP_FQDN         = "dhcp-fqdn"
 	NM_SETTING_IP4_CONFIG_METHOD_AUTO       = "auto"
 	NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL = "link-local"
 	NM_SETTING_IP4_CONFIG_METHOD_MANUAL     = "manual"
@@ -207,6 +227,7 @@ const (
 const (
 	NM_SETTING_IP6_CONFIG_SETTING_NAME      = "ipv6"
 	NM_SETTING_IP6_CONFIG_IP6_PRIVACY       = "ip6-privacy"
+	NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE     = "addr-gen-mode"
 	NM_SETTING_IP6_CONFIG_METHOD_IGNORE     = "ignore"
 	NM_SETTING_IP6_CONFIG_METHOD_AUTO       = "auto"
 	NM_SETTING_IP6_CONFIG_METHOD_DHCP       = "dhcp"
@@ -217,19 +238,64 @@ const (
 
 // /usr/include/libnm/nm-setting-ip-config.h
 const (
-	NM_SETTING_IP_CONFIG_METHOD             = "method"
-	NM_SETTING_IP_CONFIG_DNS                = "dns"
-	NM_SETTING_IP_CONFIG_DNS_SEARCH         = "dns-search"
-	NM_SETTING_IP_CONFIG_ADDRESSES          = "addresses"
-	NM_SETTING_IP_CONFIG_GATEWAY            = "gateway"
-	NM_SETTING_IP_CONFIG_ROUTES             = "routes"
-	NM_SETTING_IP_CONFIG_ROUTE_METRIC       = "route-metric"
-	NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES = "ignore-auto-routes"
-	NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS    = "ignore-auto-dns"
-	NM_SETTING_IP_CONFIG_DHCP_HOSTNAME      = "dhcp-hostname"
-	NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME = "dhcp-send-hostname"
-	NM_SETTING_IP_CONFIG_NEVER_DEFAULT      = "never-default"
-	NM_SETTING_IP_CONFIG_MAY_FAIL           = "may-fail"
+	NM_SETTING_IP_CONFIG_METHOD                 = "method"
+	NM_SETTING_IP_CONFIG_DNS                    = "dns"
+	NM_SETTING_IP_CONFIG_DNS_SEARCH             = "dns-search"
+	NM_SETTING_IP_CONFIG_DNS_OPTIONS            = "dns-options"
+	NM_SETTING_IP_CONFIG_DNS_PRIORITY           = "dns-priority"
+	NM_SETTING_IP_CONFIG_ADDRESSES              = "addresses"
+	NM_SETTING_IP_CONFIG_GATEWAY                = "gateway"
+	NM_SETTING_IP_CONFIG_ROUTES                 = "routes"
+	NM_SETTING_IP_CONFIG_ROUTE_METRIC           = "route-metric"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES     = "ignore-auto-routes"
+	NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS        = "ignore-auto-dns"
+	NM_SETTING_IP_CONFIG_DHCP_HOSTNAME          = "dhcp-hostname"
+	NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME     = "dhcp-send-hostname"
+	NM_SETTING_IP_CONFIG_NEVER_DEFAULT          = "never-default"
+	NM_SETTING_IP_CONFIG_MAY_FAIL               = "may-fail"
+	NM_SETTING_IP_CONFIG_DAD_TIMEOUT            = "dad-timeout"
+	NM_SETTING_IP_CONFIG_DHCP_TIMEOUT           = "dhcp-timeout"
+	NM_SETTING_DNS_OPTION_DEBUG                 = "debug"
+	NM_SETTING_DNS_OPTION_NDOTS                 = "ndots"
+	NM_SETTING_DNS_OPTION_TIMEOUT               = "timeout"
+	NM_SETTING_DNS_OPTION_ATTEMPTS              = "attempts"
+	NM_SETTING_DNS_OPTION_ROTATE                = "rotate"
+	NM_SETTING_DNS_OPTION_NO_CHECK_NAMES        = "no-check-names"
+	NM_SETTING_DNS_OPTION_INET6                 = "inet6"
+	NM_SETTING_DNS_OPTION_IP6_BYTESTRING        = "ip6-bytestring"
+	NM_SETTING_DNS_OPTION_IP6_DOTINT            = "ip6-dotint"
+	NM_SETTING_DNS_OPTION_NO_IP6_DOTINT         = "no-ip6-dotint"
+	NM_SETTING_DNS_OPTION_EDNS0                 = "edns0"
+	NM_SETTING_DNS_OPTION_SINGLE_REQUEST        = "single-request"
+	NM_SETTING_DNS_OPTION_SINGLE_REQUEST_REOPEN = "single-request-reopen"
+	NM_SETTING_DNS_OPTION_NO_TLD_QUERY          = "no-tld-query"
+	NM_SETTING_DNS_OPTION_USE_VC                = "use-vc"
+)
+
+// /usr/include/libnm/nm-setting-ip-tunnel.h
+const (
+	NM_SETTING_IP_TUNNEL_SETTING_NAME        = "ip-tunnel"
+	NM_SETTING_IP_TUNNEL_PARENT              = "parent"
+	NM_SETTING_IP_TUNNEL_MODE                = "mode"
+	NM_SETTING_IP_TUNNEL_LOCAL               = "local"
+	NM_SETTING_IP_TUNNEL_REMOTE              = "remote"
+	NM_SETTING_IP_TUNNEL_TTL                 = "ttl"
+	NM_SETTING_IP_TUNNEL_TOS                 = "tos"
+	NM_SETTING_IP_TUNNEL_PATH_MTU_DISCOVERY  = "path-mtu-discovery"
+	NM_SETTING_IP_TUNNEL_INPUT_KEY           = "input-key"
+	NM_SETTING_IP_TUNNEL_OUTPUT_KEY          = "output-key"
+	NM_SETTING_IP_TUNNEL_ENCAPSULATION_LIMIT = "encapsulation-limit"
+	NM_SETTING_IP_TUNNEL_FLOW_LABEL          = "flow-label"
+	NM_SETTING_IP_TUNNEL_MTU                 = "mtu"
+)
+
+// /usr/include/libnm/nm-setting-macvlan.h
+const (
+	NM_SETTING_MACVLAN_SETTING_NAME = "macvlan"
+	NM_SETTING_MACVLAN_PARENT       = "parent"
+	NM_SETTING_MACVLAN_MODE         = "mode"
+	NM_SETTING_MACVLAN_PROMISCUOUS  = "promiscuous"
+	NM_SETTING_MACVLAN_TAP          = "tap"
 )
 
 // /usr/include/libnm/nm-setting-olpc-mesh.h
@@ -294,6 +360,17 @@ const (
 	NM_SETTING_TEAM_PORT_CONFIG       = "config"
 )
 
+// /usr/include/libnm/nm-setting-tun.h
+const (
+	NM_SETTING_TUN_SETTING_NAME = "tun"
+	NM_SETTING_TUN_MODE         = "mode"
+	NM_SETTING_TUN_OWNER        = "owner"
+	NM_SETTING_TUN_GROUP        = "group"
+	NM_SETTING_TUN_PI           = "pi"
+	NM_SETTING_TUN_VNET_HDR     = "vnet-hdr"
+	NM_SETTING_TUN_MULTI_QUEUE  = "multi-queue"
+)
+
 // /usr/include/libnm/nm-setting-vlan.h
 const (
 	NM_SETTING_VLAN_SETTING_NAME         = "vlan"
@@ -312,6 +389,28 @@ const (
 	NM_SETTING_VPN_PERSISTENT   = "persistent"
 	NM_SETTING_VPN_DATA         = "data"
 	NM_SETTING_VPN_SECRETS      = "secrets"
+	NM_SETTING_VPN_TIMEOUT      = "timeout"
+)
+
+// /usr/include/libnm/nm-setting-vxlan.h
+const (
+	NM_SETTING_VXLAN_SETTING_NAME     = "vxlan"
+	NM_SETTING_VXLAN_PARENT           = "parent"
+	NM_SETTING_VXLAN_ID               = "id"
+	NM_SETTING_VXLAN_LOCAL            = "local"
+	NM_SETTING_VXLAN_REMOTE           = "remote"
+	NM_SETTING_VXLAN_SOURCE_PORT_MIN  = "source-port-min"
+	NM_SETTING_VXLAN_SOURCE_PORT_MAX  = "source-port-max"
+	NM_SETTING_VXLAN_DESTINATION_PORT = "destination-port"
+	NM_SETTING_VXLAN_TOS              = "tos"
+	NM_SETTING_VXLAN_TTL              = "ttl"
+	NM_SETTING_VXLAN_AGEING           = "ageing"
+	NM_SETTING_VXLAN_LIMIT            = "limit"
+	NM_SETTING_VXLAN_PROXY            = "proxy"
+	NM_SETTING_VXLAN_LEARNING         = "learning"
+	NM_SETTING_VXLAN_RSC              = "rsc"
+	NM_SETTING_VXLAN_L2_MISS          = "l2-miss"
+	NM_SETTING_VXLAN_L3_MISS          = "l3-miss"
 )
 
 // /usr/include/libnm/nm-setting-wimax.h
@@ -341,23 +440,25 @@ const (
 
 // /usr/include/libnm/nm-setting-wireless.h
 const (
-	NM_SETTING_WIRELESS_SETTING_NAME          = "802-11-wireless"
-	NM_SETTING_WIRELESS_SSID                  = "ssid"
-	NM_SETTING_WIRELESS_MODE                  = "mode"
-	NM_SETTING_WIRELESS_BAND                  = "band"
-	NM_SETTING_WIRELESS_CHANNEL               = "channel"
-	NM_SETTING_WIRELESS_BSSID                 = "bssid"
-	NM_SETTING_WIRELESS_RATE                  = "rate"
-	NM_SETTING_WIRELESS_TX_POWER              = "tx-power"
-	NM_SETTING_WIRELESS_MAC_ADDRESS           = "mac-address"
-	NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS    = "cloned-mac-address"
-	NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST = "mac-address-blacklist"
-	NM_SETTING_WIRELESS_MTU                   = "mtu"
-	NM_SETTING_WIRELESS_SEEN_BSSIDS           = "seen-bssids"
-	NM_SETTING_WIRELESS_HIDDEN                = "hidden"
-	NM_SETTING_WIRELESS_MODE_ADHOC            = "adhoc"
-	NM_SETTING_WIRELESS_MODE_AP               = "ap"
-	NM_SETTING_WIRELESS_MODE_INFRA            = "infrastructure"
+	NM_SETTING_WIRELESS_SETTING_NAME              = "802-11-wireless"
+	NM_SETTING_WIRELESS_SSID                      = "ssid"
+	NM_SETTING_WIRELESS_MODE                      = "mode"
+	NM_SETTING_WIRELESS_BAND                      = "band"
+	NM_SETTING_WIRELESS_CHANNEL                   = "channel"
+	NM_SETTING_WIRELESS_BSSID                     = "bssid"
+	NM_SETTING_WIRELESS_RATE                      = "rate"
+	NM_SETTING_WIRELESS_TX_POWER                  = "tx-power"
+	NM_SETTING_WIRELESS_MAC_ADDRESS               = "mac-address"
+	NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS        = "cloned-mac-address"
+	NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST     = "mac-address-blacklist"
+	NM_SETTING_WIRELESS_MTU                       = "mtu"
+	NM_SETTING_WIRELESS_SEEN_BSSIDS               = "seen-bssids"
+	NM_SETTING_WIRELESS_HIDDEN                    = "hidden"
+	NM_SETTING_WIRELESS_POWERSAVE                 = "powersave"
+	NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION = "mac-address-randomization"
+	NM_SETTING_WIRELESS_MODE_ADHOC                = "adhoc"
+	NM_SETTING_WIRELESS_MODE_AP                   = "ap"
+	NM_SETTING_WIRELESS_MODE_INFRA                = "infrastructure"
 )
 
 // /usr/include/libnm/nm-setting-wireless-security.h

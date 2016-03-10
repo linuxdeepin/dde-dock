@@ -1,0 +1,761 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="spec.html" title="D-Bus API Reference">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.Settings.html" title="org.freedesktop.NetworkManager.Settings">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.description" class="shortcut">Description</a></span><span id="nav_properties">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.properties" class="shortcut">Properties</a></span><span id="nav_signals">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.signals" class="shortcut">Signals</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="spec.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.Settings.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager.top_of_page"></a>org.freedesktop.NetworkManager</span></h2>
+<p>org.freedesktop.NetworkManager</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Reload" title="The Reload() method">Reload</a>                   (IN  u         flags);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDevices" title="The GetDevices() method">GetDevices</a>               (OUT ao        devices);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetAllDevices" title="The GetAllDevices() method">GetAllDevices</a>            (OUT ao        devices);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDeviceByIpIface" title="The GetDeviceByIpIface() method">GetDeviceByIpIface</a>       (IN  s         iface,
+                          OUT o         device);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.ActivateConnection" title="The ActivateConnection() method">ActivateConnection</a>       (IN  o         connection,
+                          IN  o         device,
+                          IN  o         specific_object,
+                          OUT o         active_connection);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.AddAndActivateConnection" title="The AddAndActivateConnection() method">AddAndActivateConnection</a> (IN  a{sa{sv}} connection,
+                          IN  o         device,
+                          IN  o         specific_object,
+                          OUT o         path,
+                          OUT o         active_connection);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.DeactivateConnection" title="The DeactivateConnection() method">DeactivateConnection</a>     (IN  o         active_connection);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Sleep" title="The Sleep() method">Sleep</a>                    (IN  b         sleep);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Enable" title="The Enable() method">Enable</a>                   (IN  b         enable);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetPermissions" title="The GetPermissions() method">GetPermissions</a>           (OUT a{ss}     permissions);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.SetLogging" title="The SetLogging() method">SetLogging</a>               (IN  s         level,
+                          IN  s         domains);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetLogging" title="The GetLogging() method">GetLogging</a>               (OUT s         level,
+                          OUT s         domains);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.CheckConnectivity" title="The CheckConnectivity() method">CheckConnectivity</a>        (OUT u         connectivity);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.state" title="The state() method">state</a>                    (OUT u         state);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.2.4"></a><h2>Signals</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.CheckPermissions" title='The "CheckPermissions" signal'>CheckPermissions</a>  ();
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.StateChanged" title='The "StateChanged" signal'>StateChanged</a>      (u     state);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.PropertiesChanged" title='The "PropertiesChanged" signal'>PropertiesChanged</a> (a{sv} properties);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceAdded" title='The "DeviceAdded" signal'>DeviceAdded</a>       (o     device_path);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceRemoved" title='The "DeviceRemoved" signal'>DeviceRemoved</a>     (o     device_path);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.2.5"></a><h2>Properties</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Devices" title='The "Devices" property'>Devices</a>                  readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.AllDevices" title='The "AllDevices" property'>AllDevices</a>               readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.NetworkingEnabled" title='The "NetworkingEnabled" property'>NetworkingEnabled</a>        readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessEnabled" title='The "WirelessEnabled" property'>WirelessEnabled</a>          readwrite  b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessHardwareEnabled" title='The "WirelessHardwareEnabled" property'>WirelessHardwareEnabled</a>  readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanEnabled" title='The "WwanEnabled" property'>WwanEnabled</a>              readwrite  b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanHardwareEnabled" title='The "WwanHardwareEnabled" property'>WwanHardwareEnabled</a>      readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxEnabled" title='The "WimaxEnabled" property'>WimaxEnabled</a>             readwrite  b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxHardwareEnabled" title='The "WimaxHardwareEnabled" property'>WimaxHardwareEnabled</a>     readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActiveConnections" title='The "ActiveConnections" property'>ActiveConnections</a>        readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnection" title='The "PrimaryConnection" property'>PrimaryConnection</a>        readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnectionType" title='The "PrimaryConnectionType" property'>PrimaryConnectionType</a>    readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Metered" title='The "Metered" property'>Metered</a>                  readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActivatingConnection" title='The "ActivatingConnection" property'>ActivatingConnection</a>     readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Startup" title='The "Startup" property'>Startup</a>                  readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Version" title='The "Version" property'>Version</a>                  readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.State" title='The "State" property'>State</a>                    readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Connectivity" title='The "Connectivity" property'>Connectivity</a>             readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.GlobalDnsConfiguration" title='The "GlobalDnsConfiguration" property'>GlobalDnsConfiguration</a>   readwrite  a{sv}
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager"></a><h2>Description</h2>
+<p></p>
+</div>
+<div class="refsect1">
+<a name="gdbus-methods-org.freedesktop.NetworkManager"></a><h2>Method Details</h2>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.Reload"></a><h3>The Reload() method</h3>
+<pre class="programlisting">
+Reload (IN  u flags);
+</pre>
+<p>        Reload NetworkManager's configuration and perform certain updates, like flushing a cache or
+        rewriting external state to disk. This is similar to sending SIGHUP to NetworkManager but it
+        allows for more fine-grained control over what to reload (see <em class="parameter"><code>flags</code></em>). It also allows
+        non-root access via PolicyKit and contrary to signals it is synchronous.
+</p>
+<p>        No flags (0x00) means to reload everything that is supported which is identical to
+        sending a SIGHUP.
+        (0x01) means to reload the NetworkManager.conf configuration from disk. Note that this
+        does not include connections, which can be reloaded via Setting's ReloadConnections.
+        (0x02) means to update DNS configuration, which usually involves writing /etc/resolv.conf
+        anew.
+        (0x04) means to restart the DNS plugin. This is for example useful when using
+        dnsmasq plugin, which uses additional configuration in /etc/NetworkManager/dnsmasq.d.
+        If you edit those files, you can restart the DNS plugin. This action shortly interrupts
+        rename resolution.
+        Note that flags may affect each other. For example, restarting the DNS plugin (0x04)
+        implicitly updates DNS too (0x02). Or when reloading the configuration (0x01), changes
+        to DNS setting also cause a DNS update (0x02). However, (0x01) does not involve restarting
+        the DNS plugin (0x02), unless an entirely different plugin is selected.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN u <em class="parameter"><code>flags</code></em></code>:</span></p></td>
+<td><p>optional flags to specify which parts shall be reloaded.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.GetDevices"></a><h3>The GetDevices() method</h3>
+<pre class="programlisting">
+GetDevices (OUT ao devices);
+</pre>
+<p>        Get the list of realized network devices.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT ao <em class="parameter"><code>devices</code></em></code>:</span></p></td>
+<td><p>List of object paths of network devices known to the system. This list does not include device placeholders (see GetAllDevices()).</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.GetAllDevices"></a><h3>The GetAllDevices() method</h3>
+<pre class="programlisting">
+GetAllDevices (OUT ao devices);
+</pre>
+<p>        Get the list of all network devices.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT ao <em class="parameter"><code>devices</code></em></code>:</span></p></td>
+<td><p>List of object paths of network devices and device placeholders (eg, devices that do not yet exist but which can be automatically created by NetworkManager if one of their AvailableConnections was activated).</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.GetDeviceByIpIface"></a><h3>The GetDeviceByIpIface() method</h3>
+<pre class="programlisting">
+GetDeviceByIpIface (IN  s iface,
+                    OUT o device);
+</pre>
+<p>        Return the object path of the network device referenced by its IP
+        interface name. Note that some devices (usually modems) only have an IP
+        interface name when they are connected.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>iface</code></em></code>:</span></p></td>
+<td><p>Interface name of the device to find.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>device</code></em></code>:</span></p></td>
+<td><p>Object path of the network device.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.ActivateConnection"></a><h3>The ActivateConnection() method</h3>
+<pre class="programlisting">
+ActivateConnection (IN  o connection,
+                    IN  o device,
+                    IN  o specific_object,
+                    OUT o active_connection);
+</pre>
+<p>        Activate a connection using the supplied device.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>The connection to activate. If "/" is given, a valid device path must be given, and NetworkManager picks the best connection to activate for the given device. VPN connections must always pass a valid connection path.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>device</code></em></code>:</span></p></td>
+<td><p>The object path of device to be activated for physical connections. This parameter is ignored for VPN connections, because the specific_object (if provided) specifies the device to use.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>specific_object</code></em></code>:</span></p></td>
+<td><p>The path of a connection-type-specific object this activation should use. This parameter is currently ignored for wired and mobile broadband connections, and the value of "/" should be used (ie, no specific object). For WiFi connections, pass the object path of a specific AP from the card's scan list, or "/" to pick an AP automatically. For VPN connections, pass the object path of an ActiveConnection object that should serve as the "base" connection (to which the VPN connections lifetime will be tied), or pass "/" and NM will automatically use the current default device.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>active_connection</code></em></code>:</span></p></td>
+<td><p>The path of the active connection object representing this active connection.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.AddAndActivateConnection"></a><h3>The AddAndActivateConnection() method</h3>
+<pre class="programlisting">
+AddAndActivateConnection (IN  a{sa{sv}} connection,
+                          IN  o         device,
+                          IN  o         specific_object,
+                          OUT o         path,
+                          OUT o         active_connection);
+</pre>
+<p>        Adds a new connection using the given details (if any) as a template
+        (automatically filling in missing settings with the capabilities of the
+        given device and specific object), then activate the new connection.
+        Cannot be used for VPN connections at this time.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN a{sa{sv}} <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>Connection settings and properties; if incomplete missing settings will be automatically completed using the given device and specific object.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>device</code></em></code>:</span></p></td>
+<td><p>The object path of device to be activated using the given connection.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>specific_object</code></em></code>:</span></p></td>
+<td><p>The path of a connection-type-specific object this activation should use. This parameter is currently ignored for wired and mobile broadband connections, and the value of "/" should be used (ie, no specific object). For WiFi connections, pass the object path of a specific AP from the card's scan list, which will be used to complete the details of the newly added connection.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>path</code></em></code>:</span></p></td>
+<td><p>Object path of the new connection that was just added.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>active_connection</code></em></code>:</span></p></td>
+<td><p>The path of the active connection object representing this active connection.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.DeactivateConnection"></a><h3>The DeactivateConnection() method</h3>
+<pre class="programlisting">
+DeactivateConnection (IN  o active_connection);
+</pre>
+<p>        Deactivate an active connection.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN o <em class="parameter"><code>active_connection</code></em></code>:</span></p></td>
+<td><p>The currently active connection to deactivate.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.Sleep"></a><h3>The Sleep() method</h3>
+<pre class="programlisting">
+Sleep (IN  b sleep);
+</pre>
+<p>        Control the NetworkManager daemon's sleep state. When asleep, all
+        interfaces that it manages are deactivated. When awake, devices are
+        available to be activated. This command should not be called directly by
+        users or clients; it is intended for system suspend/resume tracking.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN b <em class="parameter"><code>sleep</code></em></code>:</span></p></td>
+<td><p>Indicates whether the NetworkManager daemon should sleep or wake.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.Enable"></a><h3>The Enable() method</h3>
+<pre class="programlisting">
+Enable (IN  b enable);
+</pre>
+<p>        Control whether overall networking is enabled or disabled. When disabled,
+        all interfaces that NM manages are deactivated. When enabled, all managed
+        interfaces are re-enabled and available to be activated. This command
+        should be used by clients that provide to users the ability to
+        enable/disable all networking.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN b <em class="parameter"><code>enable</code></em></code>:</span></p></td>
+<td><p>If FALSE, indicates that all networking should be disabled. If TRUE, indicates that NetworkManager should begin managing network devices.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.GetPermissions"></a><h3>The GetPermissions() method</h3>
+<pre class="programlisting">
+GetPermissions (OUT a{ss} permissions);
+</pre>
+<p>        Returns the permissions a caller has for various authenticated operations
+        that NetworkManager provides, like Enable/Disable networking, changing
+        WiFi, WWAN, and WiMAX state, etc.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT a{ss} <em class="parameter"><code>permissions</code></em></code>:</span></p></td>
+<td><p>Dictionary of available permissions and results. Each permission is represented by a name (ie "org.freedesktop.NetworkManager.Foobar") and each result is one of the following values: "yes" (the permission is available), "auth" (the permission is available after a successful authentication), or "no" (the permission is denied). Clients may use these values in the UI to indicate the ability to perform certain operations.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.SetLogging"></a><h3>The SetLogging() method</h3>
+<pre class="programlisting">
+SetLogging (IN  s level,
+            IN  s domains);
+</pre>
+<p>        Set logging verbosity and which operations are logged.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>level</code></em></code>:</span></p></td>
+<td><p>One of [ERR, WARN, INFO, DEBUG, TRACE, OFF, KEEP]. This level is applied to the domains as specified in the domains argument. Except for the special level "KEEP", all unmentioned domains are disabled entirely. "KEEP" is special and allows not to change the current setting except for the specified domains. E.g. level=KEEP and domains=PLATFORM:DEBUG will only touch the platform domain.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>domains</code></em></code>:</span></p></td>
+<td><p>A combination of logging domains separated by commas (','), or "NONE" to disable logging. Each domain enables logging for operations related to that domain. Available domains are: [PLATFORM, RFKILL, ETHER, WIFI, BT, MB, DHCP4, DHCP6, PPP, WIFI_SCAN, IP4, IP6, AUTOIP4, DNS, VPN, SHARING, SUPPLICANT, AGENTS, SETTINGS, SUSPEND, CORE, DEVICE, OLPC, WIMAX, INFINIBAND, FIREWALL, ADSL, BOND, VLAN, BRIDGE, DBUS_PROPS, TEAM, CONCHECK, DCB, DISPATCH, AUDIT]. In addition to these domains, the following special domains can be used: [NONE, ALL, DEFAULT, DHCP, IP]. You can also specify that some domains should log at a different level from the default by appending a colon (':') and a log level (eg, 'WIFI:DEBUG'). If an empty string is given, the log level is changed but the current set of log domains remains unchanged.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.GetLogging"></a><h3>The GetLogging() method</h3>
+<pre class="programlisting">
+GetLogging (OUT s level,
+            OUT s domains);
+</pre>
+<p>        Get current logging verbosity level and operations domains.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">OUT s <em class="parameter"><code>level</code></em></code>:</span></p></td>
+<td><p>One of [ERR, WARN, INFO, DEBUG, TRACE].</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT s <em class="parameter"><code>domains</code></em></code>:</span></p></td>
+<td><p>For available domains see SetLogging() call.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.CheckConnectivity"></a><h3>The CheckConnectivity() method</h3>
+<pre class="programlisting">
+CheckConnectivity (OUT u connectivity);
+</pre>
+<p>        Re-check the network connectivity state.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT u <em class="parameter"><code>connectivity</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMConnectivityState" title="enum NMConnectivityState">NMConnectivityState</a>) The current connectivity state.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager.state"></a><h3>The state() method</h3>
+<pre class="programlisting">
+state (OUT u state);
+</pre>
+<p>        The overall networking state as determined by the NetworkManager daemon,
+        based on the state of network devices under it's management.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT u <em class="parameter"><code>state</code></em></code>:</span></p></td>
+<td><p><a class="link" href="nm-dbus-types.html#NMState" title="enum NMState">NMState</a></p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-signals-org.freedesktop.NetworkManager"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager.CheckPermissions"></a><h3>The "CheckPermissions" signal</h3>
+<pre class="programlisting">
+CheckPermissions ();
+</pre>
+<p>        Emitted when system authorization details change, indicating that clients
+        may wish to recheck permissions with GetPermissions.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager.StateChanged"></a><h3>The "StateChanged" signal</h3>
+<pre class="programlisting">
+StateChanged (u state);
+</pre>
+<p>        NetworkManager's state changed.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">u <em class="parameter"><code>state</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMState" title="enum NMState">NMState</a>) The new state of NetworkManager.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager.PropertiesChanged"></a><h3>The "PropertiesChanged" signal</h3>
+<pre class="programlisting">
+PropertiesChanged (a{sv} properties);
+</pre>
+<p>        NetworkManager's properties changed.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">a{sv} <em class="parameter"><code>properties</code></em></code>:</span></p></td>
+<td><p>The changed properties.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager.DeviceAdded"></a><h3>The "DeviceAdded" signal</h3>
+<pre class="programlisting">
+DeviceAdded (o device_path);
+</pre>
+<p>        A device was added to the system
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">o <em class="parameter"><code>device_path</code></em></code>:</span></p></td>
+<td><p>The object path of the newly added device.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager.DeviceRemoved"></a><h3>The "DeviceRemoved" signal</h3>
+<pre class="programlisting">
+DeviceRemoved (o device_path);
+</pre>
+<p>        A device was removed from the system, and is no longer available.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">o <em class="parameter"><code>device_path</code></em></code>:</span></p></td>
+<td><p>The object path of the device that was just removed.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-properties-org.freedesktop.NetworkManager"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.Devices"></a><h3>The "Devices" property</h3>
+<pre class="programlisting">
+Devices  readable   ao
+</pre>
+<p>        The list of realized network devices. Realized devices are those which
+        have backing resources (eg from the kernel or a management daemon like
+        ModemManager, teamd, etc).
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.AllDevices"></a><h3>The "AllDevices" property</h3>
+<pre class="programlisting">
+AllDevices  readable   ao
+</pre>
+<p>        The list of both realized and un-realized network devices. Un-realized
+        devices are software devices which do not yet have backing resources, but
+        for which backing resources can be created if the device is activated.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.NetworkingEnabled"></a><h3>The "NetworkingEnabled" property</h3>
+<pre class="programlisting">
+NetworkingEnabled  readable   b
+</pre>
+<p>        Indicates if overall networking is currently enabled or not. See the
+        Enable() method.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WirelessEnabled"></a><h3>The "WirelessEnabled" property</h3>
+<pre class="programlisting">
+WirelessEnabled  readwrite  b
+</pre>
+<p>        Indicates if wireless is currently enabled or not.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WirelessHardwareEnabled"></a><h3>The "WirelessHardwareEnabled" property</h3>
+<pre class="programlisting">
+WirelessHardwareEnabled  readable   b
+</pre>
+<p>        Indicates if the wireless hardware is currently enabled, i.e. the state of
+        the RF kill switch.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WwanEnabled"></a><h3>The "WwanEnabled" property</h3>
+<pre class="programlisting">
+WwanEnabled  readwrite  b
+</pre>
+<p>        Indicates if mobile broadband devices are currently enabled or not.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WwanHardwareEnabled"></a><h3>The "WwanHardwareEnabled" property</h3>
+<pre class="programlisting">
+WwanHardwareEnabled  readable   b
+</pre>
+<p>        Indicates if the mobile broadband hardware is currently enabled, i.e. the
+        state of the RF kill switch.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WimaxEnabled"></a><h3>The "WimaxEnabled" property</h3>
+<pre class="programlisting">
+WimaxEnabled  readwrite  b
+</pre>
+<p>        Indicates if WiMAX devices are currently enabled or not.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.WimaxHardwareEnabled"></a><h3>The "WimaxHardwareEnabled" property</h3>
+<pre class="programlisting">
+WimaxHardwareEnabled  readable   b
+</pre>
+<p>        Indicates if the WiMAX hardware is currently enabled, i.e. the state of
+        the RF kill switch.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.ActiveConnections"></a><h3>The "ActiveConnections" property</h3>
+<pre class="programlisting">
+ActiveConnections  readable   ao
+</pre>
+<p>        List of active connection object paths.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.PrimaryConnection"></a><h3>The "PrimaryConnection" property</h3>
+<pre class="programlisting">
+PrimaryConnection  readable   o
+</pre>
+<p>        The object path of the "primary" active connection being used to access
+        the network. In particular, if there is no VPN active, or the VPN does not
+        have the default route, then this indicates the connection that has the
+        default route. If there is a VPN active with the default route, then this
+        indicates the connection that contains the route to the VPN endpoint.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.PrimaryConnectionType"></a><h3>The "PrimaryConnectionType" property</h3>
+<pre class="programlisting">
+PrimaryConnectionType  readable   s
+</pre>
+<p>        The connection type of the "primary" active connection being used to
+        access the network. This is the same as the Type property on the object
+        indicated by PrimaryConnection.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.Metered"></a><h3>The "Metered" property</h3>
+<pre class="programlisting">
+Metered  readable   u
+</pre>
+<p>        Indicates whether the connectivity is metered. This is equivalent to the
+        metered property of the device associated with the primary connection.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMMetered" title="enum NMMetered">NMMetered</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.ActivatingConnection"></a><h3>The "ActivatingConnection" property</h3>
+<pre class="programlisting">
+ActivatingConnection  readable   o
+</pre>
+<p>        The object path of an active connection that is currently being activated
+        and which is expected to become the new PrimaryConnection when it finishes
+        activating.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.Startup"></a><h3>The "Startup" property</h3>
+<pre class="programlisting">
+Startup  readable   b
+</pre>
+<p>        Indicates whether NM is still starting up; this becomes FALSE when NM has
+        finished attempting to activate every connection that it might be able to
+        activate at startup.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.Version"></a><h3>The "Version" property</h3>
+<pre class="programlisting">
+Version  readable   s
+</pre>
+<p>        NetworkManager version.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.State"></a><h3>The "State" property</h3>
+<pre class="programlisting">
+State  readable   u
+</pre>
+<p>        The overall state of the NetworkManager daemon.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMState" title="enum NMState">NMState</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.Connectivity"></a><h3>The "Connectivity" property</h3>
+<pre class="programlisting">
+Connectivity  readable   u
+</pre>
+<p>        The network connectivity state.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMConnectivityState" title="enum NMConnectivityState">NMConnectivityState</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager.GlobalDnsConfiguration"></a><h3>The "GlobalDnsConfiguration" property</h3>
+<pre class="programlisting">
+GlobalDnsConfiguration  readwrite  a{sv}
+</pre>
+<p>        Dictionary of global DNS settings where the key is one of "searches",
+        "options" and "domains". The values for the "searches" and "options" keys
+        are string arrays describing the list of search domains and resolver
+        options, respectively. The value of the "domains" key is a second-level
+        dictionary, where each key is a domain name, and each key's value is a
+        third-level dictionary with the keys "servers" and "options". "servers" is
+        a string array of DNS servers, "options" is a string array of
+        domain-specific options.
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

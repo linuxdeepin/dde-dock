@@ -45,6 +45,10 @@ const (
 	NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME = NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
 	NM_SETTING_IP4_CONFIG_NEVER_DEFAULT      = NM_SETTING_IP_CONFIG_NEVER_DEFAULT
 	NM_SETTING_IP4_CONFIG_MAY_FAIL           = NM_SETTING_IP_CONFIG_MAY_FAIL
+	NM_SETTING_IP4_CONFIG_DNS_OPTIONS        = NM_SETTING_IP_CONFIG_DNS_OPTIONS
+	NM_SETTING_IP4_CONFIG_DNS_PRIORITY       = NM_SETTING_IP_CONFIG_DNS_PRIORITY
+	NM_SETTING_IP4_CONFIG_DAD_TIMEOUT        = NM_SETTING_IP_CONFIG_DAD_TIMEOUT
+	NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT       = NM_SETTING_IP_CONFIG_DHCP_TIMEOUT
 )
 const (
 	NM_SETTING_IP6_CONFIG_METHOD             = NM_SETTING_IP_CONFIG_METHOD
@@ -60,6 +64,10 @@ const (
 	NM_SETTING_IP6_CONFIG_DHCP_SEND_HOSTNAME = NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
 	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = NM_SETTING_IP_CONFIG_NEVER_DEFAULT
 	NM_SETTING_IP6_CONFIG_MAY_FAIL           = NM_SETTING_IP_CONFIG_MAY_FAIL
+	NM_SETTING_IP6_CONFIG_DNS_OPTIONS        = NM_SETTING_IP_CONFIG_DNS_OPTIONS
+	NM_SETTING_IP6_CONFIG_DNS_PRIORITY       = NM_SETTING_IP_CONFIG_DNS_PRIORITY
+	NM_SETTING_IP6_CONFIG_DAD_TIMEOUT        = NM_SETTING_IP_CONFIG_DAD_TIMEOUT
+	NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT       = NM_SETTING_IP_CONFIG_DHCP_TIMEOUT
 )
 
 var nmPermissions map[string]string
@@ -75,7 +83,7 @@ func isNmObjectPathValid(p dbus.ObjectPath) bool {
 
 func isDeviceTypeValid(devType uint32) bool {
 	switch devType {
-	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN, NM_DEVICE_TYPE_BT:
+	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN, NM_DEVICE_TYPE_BT, NM_DEVICE_TYPE_TEAM, NM_DEVICE_TYPE_TUN, NM_DEVICE_TYPE_IP_TUNNEL, NM_DEVICE_TYPE_MACVLAN, NM_DEVICE_TYPE_VXLAN, NM_DEVICE_TYPE_VETH:
 		return false
 	}
 	return true
@@ -256,9 +264,9 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 		devTeam, _ := nmNewDeviceTeam(devPath)
 		hwAddr = devTeam.HwAddress.Get()
 		nm.DestroyDeviceTeam(devTeam)
-	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL:
+	case NM_DEVICE_TYPE_MODEM, NM_DEVICE_TYPE_ADSL, NM_DEVICE_TYPE_TUN, NM_DEVICE_TYPE_IP_TUNNEL, NM_DEVICE_TYPE_MACVLAN, NM_DEVICE_TYPE_VXLAN, NM_DEVICE_TYPE_VETH:
 		// there is no hardware address for such devices
-		err = fmt.Errorf("there is no hardware address for device modem and adsl")
+		err = fmt.Errorf("there is no hardware address for device modem, adsl, tun")
 	default:
 		err = fmt.Errorf("unknown device type %d", devType)
 		logger.Error(err)
@@ -269,8 +277,10 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 
 func nmGetDeviceIdentifiers() (devIds []string) {
 	for _, devPath := range nmGetDevices() {
-		id, _ := nmGeneralGetDeviceIdentifier(devPath)
-		devIds = append(devIds, id)
+		id, err := nmGeneralGetDeviceIdentifier(devPath)
+		if err == nil {
+			devIds = append(devIds, id)
+		}
 	}
 	return
 }

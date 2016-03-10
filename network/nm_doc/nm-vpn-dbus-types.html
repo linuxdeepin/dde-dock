@@ -1,0 +1,560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>VPN Plugin D-Bus API Types: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="dbus-types.html" title="Types">
+<link rel="prev" href="nm-dbus-types.html" title="NetworkManager D-Bus API Types">
+<link rel="next" href="ref-settings.html" title="Network Configuration Setting Specification">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts"></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="dbus-types.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="nm-dbus-types.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="ref-settings.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="nm-vpn-dbus-types"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="nm-vpn-dbus-types.top_of_page"></a>VPN Plugin D-Bus API Types</span></h2>
+<p>VPN Plugin D-Bus API Types</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect2">
+<a name="NMVpnServiceState"></a><h3>enum NMVpnServiceState</h3>
+<p>VPN daemon states</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.3.3.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The state of the VPN plugin is unknown.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_INIT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN plugin is initialized.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_SHUTDOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Not used.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_STARTING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The plugin is attempting to connect to a VPN server.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_STARTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The plugin has connected to a VPN server.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_STOPPING</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The plugin is disconnecting from the VPN server.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_SERVICE_STATE_STOPPED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The plugin has disconnected from the VPN server.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMVpnConnectionState"></a><h3>enum NMVpnConnectionState</h3>
+<p>VPN connection states</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.3.4.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The state of the VPN connection is unknown.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_PREPARE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection is preparing to connect.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_NEED_AUTH</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection needs authorization credentials.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_CONNECT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection is being established.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_IP_CONFIG_GET</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection is getting an IP address.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_ACTIVATED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection is active.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection failed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_DISCONNECTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">7</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection is disconnected.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMVpnConnectionStateReason"></a><h3>enum NMVpnConnectionStateReason</h3>
+<p>VPN connection state reasons</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.3.5.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_UNKNOWN</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">0</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The reason for the VPN connection state change is unknown.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_NONE</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>No reason was given for the VPN connection state change.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection changed state because the user disconnected it.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The VPN connection changed state because the device it was using was disconnected.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">4</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The service providing the VPN connection was stopped.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">5</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The IP config of the VPN connection was invalid.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">6</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The connection attempt to the VPN service timed out.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">7</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>A timeout occurred while starting the service providing the VPN connection.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">8</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Starting the service starting the service providing the VPN connection failed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">9</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Necessary secrets for the VPN connection were not provided.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">10</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Authentication to the VPN server failed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">11</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>The connection was deleted from settings.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="NMVpnPluginFailure"></a><h3>enum NMVpnPluginFailure</h3>
+<p>VPN plugin failure reasons</p>
+<p></p>
+<div class="refsect3">
+<a name="id-1.3.4.3.6.4"></a><h4>Values</h4>
+<div class="informaltable"><table class="informaltable" width="100%" border="0">
+<colgroup>
+<col width="300px" class="enum_members_name">
+<col width="100px" class="enum_members_value">
+<col class="enum_members_description">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">1</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Login failed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">2</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Connect failed.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+<tr>
+<td class="enum_member_name">
+<p>NM_VPN_PLUGIN_FAILURE_BAD_IP_CONFIG</p>
+<p></p>
+</td>
+<td class="enum_member_value">
+<p>= <code class="literal">3</code></p>
+<p></p>
+</td>
+<td class="enum_member_description">
+<p>Invalid IP configuration returned from the VPN plugin.</p>
+<p></p>
+</td>
+<td class="auto-generated"> </td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

@@ -1,29 +1,590 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<book xmlns="http://www.devhelp.net/book" title="NetworkManager D-Bus Reference Manual" link="index.html" author="" name="NetworkManager" version="2" language="c">
+<book xmlns="http://www.devhelp.net/book" title="NetworkManager Reference Manual" link="index.html" author="" name="NetworkManager" version="2" language="c">
   <chapters>
-    <sub name="D-Bus API Reference" link="ref-dbus.html"/>
-    <sub name="Network Configuration Setting Specification" link="ref-settings.html">
-      <sub name="Configuration Settings" link="ref-settings.html#id-1.3.3"/>
-      <sub name="Secret flag types" link="secrets-flags.html"/>
+    <sub name="Manual Pages" link="manpages.html">
+      <sub name="nmcli" link="nmcli.html"/>
+      <sub name="nmtui" link="nmtui.html"/>
+      <sub name="nm-online" link="nm-online.html"/>
+      <sub name="NetworkManager.conf" link="NetworkManager.conf.html"/>
+      <sub name="nm-settings" link="nm-settings.html"/>
+      <sub name="nm-settings-keyfile" link="nm-settings-keyfile.html"/>
+      <sub name="nmcli-examples" link="nmcli-examples.html"/>
+      <sub name="NetworkManager" link="NetworkManager.html"/>
     </sub>
-    <sub name="Migrating from NetworkManager 0.8 to NetworkManager 0.9" link="ref-migrating.html">
-      <sub name="Architecture and D-Bus API Changes in 0.9" link="ref-migrating.html#id-1.4.3">
-        <sub name="Elimination of the User Settings Service" link="ref-migrating.html#id-1.4.3.3"/>
-        <sub name="User Secret Agents" link="ref-migrating.html#id-1.4.3.4"/>
-        <sub name="Settings Service Interface Changes" link="ref-migrating.html#id-1.4.3.5"/>
-        <sub name="Connection Object Interface Changes" link="ref-migrating.html#id-1.4.3.6"/>
-        <sub name="Permissions Methods Consolidation" link="ref-migrating.html#id-1.4.3.7"/>
-        <sub name="AddConnection Returns Object Path of New Connection" link="ref-migrating.html#id-1.4.3.8"/>
-        <sub name="Support for WiMAX Devices" link="ref-migrating.html#id-1.4.3.9"/>
-        <sub name="New Device States" link="ref-migrating.html#id-1.4.3.10"/>
-        <sub name="New Active Connection State" link="ref-migrating.html#id-1.4.3.11"/>
-        <sub name="Consolidated Modem Devices" link="ref-migrating.html#id-1.4.3.12"/>
-        <sub name="Secret Property Flags" link="ref-migrating.html#id-1.4.3.13"/>
-        <sub name="Deprecated Methods Removed" link="ref-migrating.html#id-1.4.3.14"/>
+    <sub name="D-Bus API Reference" link="spec.html">
+      <sub name="Interfaces" link="spec.html#dbus-interfaces">
+        <sub name="org.freedesktop.NetworkManager" link="gdbus-org.freedesktop.NetworkManager.html"/>
+        <sub name="org.freedesktop.NetworkManager.Settings" link="gdbus-org.freedesktop.NetworkManager.Settings.html"/>
+        <sub name="org.freedesktop.NetworkManager.AgentManager" link="gdbus-org.freedesktop.NetworkManager.AgentManager.html"/>
+        <sub name="org.freedesktop.NetworkManager.AccessPoint" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html"/>
+        <sub name="org.freedesktop.NetworkManager.PPP" link="gdbus-org.freedesktop.NetworkManager.PPP.html"/>
+        <sub name="org.freedesktop.NetworkManager.Settings.Connection" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html"/>
+        <sub name="org.freedesktop.NetworkManager.VPN.Connection" link="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html"/>
+        <sub name="org.freedesktop.NetworkManager.Connection.Active" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device" link="gdbus-org.freedesktop.NetworkManager.Device.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Adsl" link="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Bond" link="gdbus-org.freedesktop.NetworkManager.Device.Bond.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Bridge" link="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Bluetooth" link="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Wired" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Generic" link="gdbus-org.freedesktop.NetworkManager.Device.Generic.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Infiniband" link="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.IPTunnel" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Macvlan" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Modem" link="gdbus-org.freedesktop.NetworkManager.Device.Modem.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.OlpcMesh" link="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Team" link="gdbus-org.freedesktop.NetworkManager.Device.Team.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Tun" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Veth" link="gdbus-org.freedesktop.NetworkManager.Device.Veth.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Vlan" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Vxlan" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.Wireless" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html"/>
+        <sub name="org.freedesktop.NetworkManager.Device.WiMax" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html"/>
+        <sub name="org.freedesktop.NetworkManager.DHCP4Config" link="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html"/>
+        <sub name="org.freedesktop.NetworkManager.DHCP6Config" link="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html"/>
+        <sub name="org.freedesktop.NetworkManager.IP4Config" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html"/>
+        <sub name="org.freedesktop.NetworkManager.IP6Config" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html"/>
+        <sub name="org.freedesktop.NetworkManager.VPN.Plugin" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html"/>
+        <sub name="org.freedesktop.NetworkManager.SecretAgent" link="gdbus-org.freedesktop.NetworkManager.SecretAgent.html"/>
       </sub>
+      <sub name="Types" link="dbus-types.html">
+        <sub name="NetworkManager D-Bus API Types" link="nm-dbus-types.html"/>
+        <sub name="VPN Plugin D-Bus API Types" link="nm-vpn-dbus-types.html"/>
+      </sub>
+    </sub>
+    <sub name="Network Configuration Setting Specification" link="ref-settings.html">
+      <sub name="Configuration Settings" link="ref-settings.html#id-1.4.3"/>
+      <sub name="Secret flag types" link="secrets-flags.html"/>
     </sub>
     <sub name="Index" link="ix01.html"/>
     <sub name="License" link="license.html"/>
   </chapters>
-  <functions/>
+  <functions>
+    <keyword type="method" name="The Reload() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Reload"/>
+    <keyword type="method" name="The GetDevices() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDevices"/>
+    <keyword type="method" name="The GetAllDevices() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetAllDevices"/>
+    <keyword type="method" name="The GetDeviceByIpIface() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetDeviceByIpIface"/>
+    <keyword type="method" name="The ActivateConnection() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.ActivateConnection"/>
+    <keyword type="method" name="The AddAndActivateConnection() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.AddAndActivateConnection"/>
+    <keyword type="method" name="The DeactivateConnection() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.DeactivateConnection"/>
+    <keyword type="method" name="The Sleep() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Sleep"/>
+    <keyword type="method" name="The Enable() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.Enable"/>
+    <keyword type="method" name="The GetPermissions() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetPermissions"/>
+    <keyword type="method" name="The SetLogging() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.SetLogging"/>
+    <keyword type="method" name="The GetLogging() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.GetLogging"/>
+    <keyword type="method" name="The CheckConnectivity() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.CheckConnectivity"/>
+    <keyword type="method" name="The state() method" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-method-org-freedesktop-NetworkManager.state"/>
+    <keyword type="signal" name="The &quot;CheckPermissions&quot; signal" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.CheckPermissions"/>
+    <keyword type="signal" name="The &quot;StateChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.StateChanged"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.PropertiesChanged"/>
+    <keyword type="signal" name="The &quot;DeviceAdded&quot; signal" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceAdded"/>
+    <keyword type="signal" name="The &quot;DeviceRemoved&quot; signal" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-signal-org-freedesktop-NetworkManager.DeviceRemoved"/>
+    <keyword type="property" name="The &quot;Devices&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Devices"/>
+    <keyword type="property" name="The &quot;AllDevices&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.AllDevices"/>
+    <keyword type="property" name="The &quot;NetworkingEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.NetworkingEnabled"/>
+    <keyword type="property" name="The &quot;WirelessEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessEnabled"/>
+    <keyword type="property" name="The &quot;WirelessHardwareEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WirelessHardwareEnabled"/>
+    <keyword type="property" name="The &quot;WwanEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanEnabled"/>
+    <keyword type="property" name="The &quot;WwanHardwareEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WwanHardwareEnabled"/>
+    <keyword type="property" name="The &quot;WimaxEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxEnabled"/>
+    <keyword type="property" name="The &quot;WimaxHardwareEnabled&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.WimaxHardwareEnabled"/>
+    <keyword type="property" name="The &quot;ActiveConnections&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActiveConnections"/>
+    <keyword type="property" name="The &quot;PrimaryConnection&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnection"/>
+    <keyword type="property" name="The &quot;PrimaryConnectionType&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.PrimaryConnectionType"/>
+    <keyword type="property" name="The &quot;Metered&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Metered"/>
+    <keyword type="property" name="The &quot;ActivatingConnection&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.ActivatingConnection"/>
+    <keyword type="property" name="The &quot;Startup&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Startup"/>
+    <keyword type="property" name="The &quot;Version&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Version"/>
+    <keyword type="property" name="The &quot;State&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.State"/>
+    <keyword type="property" name="The &quot;Connectivity&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.Connectivity"/>
+    <keyword type="property" name="The &quot;GlobalDnsConfiguration&quot; property" link="gdbus-org.freedesktop.NetworkManager.html#gdbus-property-org-freedesktop-NetworkManager.GlobalDnsConfiguration"/>
+    <keyword type="method" name="The ListConnections() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ListConnections"/>
+    <keyword type="method" name="The GetConnectionByUuid() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.GetConnectionByUuid"/>
+    <keyword type="method" name="The AddConnection() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnection"/>
+    <keyword type="method" name="The AddConnectionUnsaved() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnectionUnsaved"/>
+    <keyword type="method" name="The LoadConnections() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.LoadConnections"/>
+    <keyword type="method" name="The ReloadConnections() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ReloadConnections"/>
+    <keyword type="method" name="The SaveHostname() method" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.SaveHostname"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.PropertiesChanged"/>
+    <keyword type="signal" name="The &quot;NewConnection&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.NewConnection"/>
+    <keyword type="signal" name="The &quot;ConnectionRemoved&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.ConnectionRemoved"/>
+    <keyword type="property" name="The &quot;Connections&quot; property" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Connections"/>
+    <keyword type="property" name="The &quot;Hostname&quot; property" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Hostname"/>
+    <keyword type="property" name="The &quot;CanModify&quot; property" link="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.CanModify"/>
+    <keyword type="method" name="The Register() method" link="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Register"/>
+    <keyword type="method" name="The RegisterWithCapabilities() method" link="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.RegisterWithCapabilities"/>
+    <keyword type="method" name="The Unregister() method" link="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Unregister"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-signal-org-freedesktop-NetworkManager-AccessPoint.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Flags&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Flags"/>
+    <keyword type="property" name="The &quot;WpaFlags&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.WpaFlags"/>
+    <keyword type="property" name="The &quot;RsnFlags&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.RsnFlags"/>
+    <keyword type="property" name="The &quot;Ssid&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Ssid"/>
+    <keyword type="property" name="The &quot;Frequency&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Frequency"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.HwAddress"/>
+    <keyword type="property" name="The &quot;Mode&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Mode"/>
+    <keyword type="property" name="The &quot;MaxBitrate&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.MaxBitrate"/>
+    <keyword type="property" name="The &quot;Strength&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.Strength"/>
+    <keyword type="property" name="The &quot;LastSeen&quot; property" link="gdbus-org.freedesktop.NetworkManager.AccessPoint.html#gdbus-property-org-freedesktop-NetworkManager-AccessPoint.LastSeen"/>
+    <keyword type="method" name="The NeedSecrets() method" link="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.NeedSecrets"/>
+    <keyword type="method" name="The SetIp4Config() method" link="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp4Config"/>
+    <keyword type="method" name="The SetIp6Config() method" link="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetIp6Config"/>
+    <keyword type="method" name="The SetState() method" link="gdbus-org.freedesktop.NetworkManager.PPP.html#gdbus-method-org-freedesktop-NetworkManager-PPP.SetState"/>
+    <keyword type="method" name="The Update() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Update"/>
+    <keyword type="method" name="The UpdateUnsaved() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.UpdateUnsaved"/>
+    <keyword type="method" name="The Delete() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Delete"/>
+    <keyword type="method" name="The GetSettings() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.GetSettings"/>
+    <keyword type="method" name="The GetSecrets() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.GetSecrets"/>
+    <keyword type="method" name="The ClearSecrets() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.ClearSecrets"/>
+    <keyword type="method" name="The Save() method" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-method-org-freedesktop-NetworkManager-Settings-Connection.Save"/>
+    <keyword type="signal" name="The &quot;Updated&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.Updated"/>
+    <keyword type="signal" name="The &quot;Removed&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.Removed"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-Settings-Connection.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Unsaved&quot; property" link="gdbus-org.freedesktop.NetworkManager.Settings.Connection.html#gdbus-property-org-freedesktop-NetworkManager-Settings-Connection.Unsaved"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Connection.PropertiesChanged"/>
+    <keyword type="signal" name="The &quot;VpnStateChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Connection.VpnStateChanged"/>
+    <keyword type="property" name="The &quot;VpnState&quot; property" link="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Connection.VpnState"/>
+    <keyword type="property" name="The &quot;Banner&quot; property" link="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Connection.Banner"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-signal-org-freedesktop-NetworkManager-Connection-Active.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Connection&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Connection"/>
+    <keyword type="property" name="The &quot;SpecificObject&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.SpecificObject"/>
+    <keyword type="property" name="The &quot;Id&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Id"/>
+    <keyword type="property" name="The &quot;Uuid&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Uuid"/>
+    <keyword type="property" name="The &quot;Type&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Type"/>
+    <keyword type="property" name="The &quot;Devices&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Devices"/>
+    <keyword type="property" name="The &quot;State&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.State"/>
+    <keyword type="property" name="The &quot;Default&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default"/>
+    <keyword type="property" name="The &quot;Ip4Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip4Config"/>
+    <keyword type="property" name="The &quot;Dhcp4Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp4Config"/>
+    <keyword type="property" name="The &quot;Default6&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default6"/>
+    <keyword type="property" name="The &quot;Ip6Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip6Config"/>
+    <keyword type="property" name="The &quot;Dhcp6Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp6Config"/>
+    <keyword type="property" name="The &quot;Vpn&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Vpn"/>
+    <keyword type="property" name="The &quot;Master&quot; property" link="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Master"/>
+    <keyword type="method" name="The Reapply() method" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Reapply"/>
+    <keyword type="method" name="The GetAppliedConnection() method" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.GetAppliedConnection"/>
+    <keyword type="method" name="The Disconnect() method" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Disconnect"/>
+    <keyword type="method" name="The Delete() method" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-method-org-freedesktop-NetworkManager-Device.Delete"/>
+    <keyword type="signal" name="The &quot;StateChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-signal-org-freedesktop-NetworkManager-Device.StateChanged"/>
+    <keyword type="property" name="The &quot;Udi&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Udi"/>
+    <keyword type="property" name="The &quot;Interface&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Interface"/>
+    <keyword type="property" name="The &quot;IpInterface&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.IpInterface"/>
+    <keyword type="property" name="The &quot;Driver&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Driver"/>
+    <keyword type="property" name="The &quot;DriverVersion&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DriverVersion"/>
+    <keyword type="property" name="The &quot;FirmwareVersion&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareVersion"/>
+    <keyword type="property" name="The &quot;Capabilities&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Capabilities"/>
+    <keyword type="property" name="The &quot;Ip4Address&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Address"/>
+    <keyword type="property" name="The &quot;State&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.State"/>
+    <keyword type="property" name="The &quot;StateReason&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.StateReason"/>
+    <keyword type="property" name="The &quot;ActiveConnection&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.ActiveConnection"/>
+    <keyword type="property" name="The &quot;Ip4Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip4Config"/>
+    <keyword type="property" name="The &quot;Dhcp4Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp4Config"/>
+    <keyword type="property" name="The &quot;Ip6Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Ip6Config"/>
+    <keyword type="property" name="The &quot;Dhcp6Config&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Dhcp6Config"/>
+    <keyword type="property" name="The &quot;Managed&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Managed"/>
+    <keyword type="property" name="The &quot;Autoconnect&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Autoconnect"/>
+    <keyword type="property" name="The &quot;FirmwareMissing&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.FirmwareMissing"/>
+    <keyword type="property" name="The &quot;NmPluginMissing&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.NmPluginMissing"/>
+    <keyword type="property" name="The &quot;DeviceType&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.DeviceType"/>
+    <keyword type="property" name="The &quot;AvailableConnections&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.AvailableConnections"/>
+    <keyword type="property" name="The &quot;PhysicalPortId&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.PhysicalPortId"/>
+    <keyword type="property" name="The &quot;Mtu&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Mtu"/>
+    <keyword type="property" name="The &quot;Metered&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Metered"/>
+    <keyword type="property" name="The &quot;LldpNeighbors&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.LldpNeighbors"/>
+    <keyword type="property" name="The &quot;Real&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.html#gdbus-property-org-freedesktop-NetworkManager-Device.Real"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Adsl.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Adsl.html#gdbus-property-org-freedesktop-NetworkManager-Device-Adsl.Carrier"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bond.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.HwAddress"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.Carrier"/>
+    <keyword type="property" name="The &quot;Slaves&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bond.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bond.Slaves"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bridge.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.HwAddress"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.Carrier"/>
+    <keyword type="property" name="The &quot;Slaves&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bridge.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bridge.Slaves"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Bluetooth.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.HwAddress"/>
+    <keyword type="property" name="The &quot;Name&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.Name"/>
+    <keyword type="property" name="The &quot;BtCapabilities&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Bluetooth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Bluetooth.BtCapabilities"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wired.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.HwAddress"/>
+    <keyword type="property" name="The &quot;PermHwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.PermHwAddress"/>
+    <keyword type="property" name="The &quot;Speed&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.Speed"/>
+    <keyword type="property" name="The &quot;S390Subchannels&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.S390Subchannels"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wired.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wired.Carrier"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Generic.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-property-org-freedesktop-NetworkManager-Device-Generic.HwAddress"/>
+    <keyword type="property" name="The &quot;TypeDescription&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Generic.html#gdbus-property-org-freedesktop-NetworkManager-Device-Generic.TypeDescription"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Infiniband.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-property-org-freedesktop-NetworkManager-Device-Infiniband.HwAddress"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Infiniband.html#gdbus-property-org-freedesktop-NetworkManager-Device-Infiniband.Carrier"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-signal-org-freedesktop-NetworkManager-Device-IPTunnel.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Mode&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Mode"/>
+    <keyword type="property" name="The &quot;Parent&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Parent"/>
+    <keyword type="property" name="The &quot;Local&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Local"/>
+    <keyword type="property" name="The &quot;Remote&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Remote"/>
+    <keyword type="property" name="The &quot;Ttl&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Ttl"/>
+    <keyword type="property" name="The &quot;Tos&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.Tos"/>
+    <keyword type="property" name="The &quot;PathMtuDiscovery&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.PathMtuDiscovery"/>
+    <keyword type="property" name="The &quot;InputKey&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.InputKey"/>
+    <keyword type="property" name="The &quot;OutputKey&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.OutputKey"/>
+    <keyword type="property" name="The &quot;EncapsulationLimit&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.EncapsulationLimit"/>
+    <keyword type="property" name="The &quot;FlowLabel&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.IPTunnel.html#gdbus-property-org-freedesktop-NetworkManager-Device-IPTunnel.FlowLabel"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Macvlan.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Parent&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Parent"/>
+    <keyword type="property" name="The &quot;Mode&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Mode"/>
+    <keyword type="property" name="The &quot;NoPromisc&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.NoPromisc"/>
+    <keyword type="property" name="The &quot;Tap&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Macvlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Macvlan.Tap"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Modem.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;ModemCapabilities&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-property-org-freedesktop-NetworkManager-Device-Modem.ModemCapabilities"/>
+    <keyword type="property" name="The &quot;CurrentCapabilities&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Modem.html#gdbus-property-org-freedesktop-NetworkManager-Device-Modem.CurrentCapabilities"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-signal-org-freedesktop-NetworkManager-Device-OlpcMesh.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.HwAddress"/>
+    <keyword type="property" name="The &quot;Companion&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.Companion"/>
+    <keyword type="property" name="The &quot;ActiveChannel&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.OlpcMesh.html#gdbus-property-org-freedesktop-NetworkManager-Device-OlpcMesh.ActiveChannel"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Team.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.HwAddress"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.Carrier"/>
+    <keyword type="property" name="The &quot;Slaves&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Team.html#gdbus-property-org-freedesktop-NetworkManager-Device-Team.Slaves"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Tun.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Owner&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Owner"/>
+    <keyword type="property" name="The &quot;Group&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Group"/>
+    <keyword type="property" name="The &quot;Mode&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.Mode"/>
+    <keyword type="property" name="The &quot;NoPi&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.NoPi"/>
+    <keyword type="property" name="The &quot;VnetHdr&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.VnetHdr"/>
+    <keyword type="property" name="The &quot;MultiQueue&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.MultiQueue"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Tun.html#gdbus-property-org-freedesktop-NetworkManager-Device-Tun.HwAddress"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Veth.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Veth.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Peer&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Veth.html#gdbus-property-org-freedesktop-NetworkManager-Device-Veth.Peer"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Vlan.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.HwAddress"/>
+    <keyword type="property" name="The &quot;Carrier&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.Carrier"/>
+    <keyword type="property" name="The &quot;Parent&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.Parent"/>
+    <keyword type="property" name="The &quot;VlanId&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vlan.VlanId"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Vxlan.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Parent&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Parent"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.HwAddress"/>
+    <keyword type="property" name="The &quot;Id&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Id"/>
+    <keyword type="property" name="The &quot;Group&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Group"/>
+    <keyword type="property" name="The &quot;Local&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Local"/>
+    <keyword type="property" name="The &quot;Tos&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Tos"/>
+    <keyword type="property" name="The &quot;Ttl&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Ttl"/>
+    <keyword type="property" name="The &quot;Learning&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Learning"/>
+    <keyword type="property" name="The &quot;Ageing&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Ageing"/>
+    <keyword type="property" name="The &quot;Limit&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Limit"/>
+    <keyword type="property" name="The &quot;DstPort&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.DstPort"/>
+    <keyword type="property" name="The &quot;SrcPortMin&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.SrcPortMin"/>
+    <keyword type="property" name="The &quot;SrcPortMax&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.SrcPortMax"/>
+    <keyword type="property" name="The &quot;Proxy&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Proxy"/>
+    <keyword type="property" name="The &quot;Rsc&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.Rsc"/>
+    <keyword type="property" name="The &quot;L2miss&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.L2miss"/>
+    <keyword type="property" name="The &quot;L3miss&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Vxlan.html#gdbus-property-org-freedesktop-NetworkManager-Device-Vxlan.L3miss"/>
+    <keyword type="method" name="The GetAccessPoints() method" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.GetAccessPoints"/>
+    <keyword type="method" name="The GetAllAccessPoints() method" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.GetAllAccessPoints"/>
+    <keyword type="method" name="The RequestScan() method" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-method-org-freedesktop-NetworkManager-Device-Wireless.RequestScan"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.PropertiesChanged"/>
+    <keyword type="signal" name="The &quot;AccessPointAdded&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.AccessPointAdded"/>
+    <keyword type="signal" name="The &quot;AccessPointRemoved&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-signal-org-freedesktop-NetworkManager-Device-Wireless.AccessPointRemoved"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.HwAddress"/>
+    <keyword type="property" name="The &quot;PermHwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.PermHwAddress"/>
+    <keyword type="property" name="The &quot;Mode&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.Mode"/>
+    <keyword type="property" name="The &quot;Bitrate&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.Bitrate"/>
+    <keyword type="property" name="The &quot;AccessPoints&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.AccessPoints"/>
+    <keyword type="property" name="The &quot;ActiveAccessPoint&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.ActiveAccessPoint"/>
+    <keyword type="property" name="The &quot;WirelessCapabilities&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.Wireless.html#gdbus-property-org-freedesktop-NetworkManager-Device-Wireless.WirelessCapabilities"/>
+    <keyword type="method" name="The GetNspList() method" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-method-org-freedesktop-NetworkManager-Device-WiMax.GetNspList"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.PropertiesChanged"/>
+    <keyword type="signal" name="The &quot;NspAdded&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.NspAdded"/>
+    <keyword type="signal" name="The &quot;NspRemoved&quot; signal" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-signal-org-freedesktop-NetworkManager-Device-WiMax.NspRemoved"/>
+    <keyword type="property" name="The &quot;Nsps&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Nsps"/>
+    <keyword type="property" name="The &quot;HwAddress&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.HwAddress"/>
+    <keyword type="property" name="The &quot;CenterFrequency&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.CenterFrequency"/>
+    <keyword type="property" name="The &quot;Rssi&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Rssi"/>
+    <keyword type="property" name="The &quot;Cinr&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Cinr"/>
+    <keyword type="property" name="The &quot;TxPower&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.TxPower"/>
+    <keyword type="property" name="The &quot;Bsid&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.Bsid"/>
+    <keyword type="property" name="The &quot;ActiveNsp&quot; property" link="gdbus-org.freedesktop.NetworkManager.Device.WiMax.html#gdbus-property-org-freedesktop-NetworkManager-Device-WiMax.ActiveNsp"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html#gdbus-signal-org-freedesktop-NetworkManager-DHCP4Config.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Options&quot; property" link="gdbus-org.freedesktop.NetworkManager.DHCP4Config.html#gdbus-property-org-freedesktop-NetworkManager-DHCP4Config.Options"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html#gdbus-signal-org-freedesktop-NetworkManager-DHCP6Config.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Options&quot; property" link="gdbus-org.freedesktop.NetworkManager.DHCP6Config.html#gdbus-property-org-freedesktop-NetworkManager-DHCP6Config.Options"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-signal-org-freedesktop-NetworkManager-IP4Config.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Addresses&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Addresses"/>
+    <keyword type="property" name="The &quot;AddressData&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.AddressData"/>
+    <keyword type="property" name="The &quot;Gateway&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Gateway"/>
+    <keyword type="property" name="The &quot;Routes&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Routes"/>
+    <keyword type="property" name="The &quot;RouteData&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.RouteData"/>
+    <keyword type="property" name="The &quot;Nameservers&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Nameservers"/>
+    <keyword type="property" name="The &quot;Domains&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Domains"/>
+    <keyword type="property" name="The &quot;Searches&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.Searches"/>
+    <keyword type="property" name="The &quot;DnsOptions&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.DnsOptions"/>
+    <keyword type="property" name="The &quot;DnsPriority&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.DnsPriority"/>
+    <keyword type="property" name="The &quot;WinsServers&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP4Config.html#gdbus-property-org-freedesktop-NetworkManager-IP4Config.WinsServers"/>
+    <keyword type="signal" name="The &quot;PropertiesChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-signal-org-freedesktop-NetworkManager-IP6Config.PropertiesChanged"/>
+    <keyword type="property" name="The &quot;Addresses&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Addresses"/>
+    <keyword type="property" name="The &quot;AddressData&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.AddressData"/>
+    <keyword type="property" name="The &quot;Gateway&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Gateway"/>
+    <keyword type="property" name="The &quot;Routes&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Routes"/>
+    <keyword type="property" name="The &quot;RouteData&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.RouteData"/>
+    <keyword type="property" name="The &quot;Nameservers&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Nameservers"/>
+    <keyword type="property" name="The &quot;Domains&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Domains"/>
+    <keyword type="property" name="The &quot;Searches&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.Searches"/>
+    <keyword type="property" name="The &quot;DnsOptions&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.DnsOptions"/>
+    <keyword type="property" name="The &quot;DnsPriority&quot; property" link="gdbus-org.freedesktop.NetworkManager.IP6Config.html#gdbus-property-org-freedesktop-NetworkManager-IP6Config.DnsPriority"/>
+    <keyword type="method" name="The Connect() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.Connect"/>
+    <keyword type="method" name="The ConnectInteractive() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.ConnectInteractive"/>
+    <keyword type="method" name="The NeedSecrets() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.NeedSecrets"/>
+    <keyword type="method" name="The Disconnect() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.Disconnect"/>
+    <keyword type="method" name="The SetConfig() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetConfig"/>
+    <keyword type="method" name="The SetIp4Config() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetIp4Config"/>
+    <keyword type="method" name="The SetIp6Config() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetIp6Config"/>
+    <keyword type="method" name="The SetFailure() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.SetFailure"/>
+    <keyword type="method" name="The NewSecrets() method" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-method-org-freedesktop-NetworkManager-VPN-Plugin.NewSecrets"/>
+    <keyword type="signal" name="The &quot;StateChanged&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.StateChanged"/>
+    <keyword type="signal" name="The &quot;SecretsRequired&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.SecretsRequired"/>
+    <keyword type="signal" name="The &quot;Config&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Config"/>
+    <keyword type="signal" name="The &quot;Ip4Config&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Ip4Config"/>
+    <keyword type="signal" name="The &quot;Ip6Config&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Ip6Config"/>
+    <keyword type="signal" name="The &quot;LoginBanner&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.LoginBanner"/>
+    <keyword type="signal" name="The &quot;Failure&quot; signal" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-signal-org-freedesktop-NetworkManager-VPN-Plugin.Failure"/>
+    <keyword type="property" name="The &quot;State&quot; property" link="gdbus-org.freedesktop.NetworkManager.VPN.Plugin.html#gdbus-property-org-freedesktop-NetworkManager-VPN-Plugin.State"/>
+    <keyword type="method" name="The GetSecrets() method" link="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.GetSecrets"/>
+    <keyword type="method" name="The CancelGetSecrets() method" link="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.CancelGetSecrets"/>
+    <keyword type="method" name="The SaveSecrets() method" link="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.SaveSecrets"/>
+    <keyword type="method" name="The DeleteSecrets() method" link="gdbus-org.freedesktop.NetworkManager.SecretAgent.html#gdbus-method-org-freedesktop-NetworkManager-SecretAgent.DeleteSecrets"/>
+    <keyword type="enum" name="enum NMState" link="nm-dbus-types.html#NMState"/>
+    <keyword type="enum" name="enum NMConnectivityState" link="nm-dbus-types.html#NMConnectivityState"/>
+    <keyword type="enum" name="enum NMDeviceType" link="nm-dbus-types.html#NMDeviceType"/>
+    <keyword type="enum" name="enum NMDeviceCapabilities" link="nm-dbus-types.html#NMDeviceCapabilities"/>
+    <keyword type="enum" name="enum NMDeviceWifiCapabilities" link="nm-dbus-types.html#NMDeviceWifiCapabilities"/>
+    <keyword type="enum" name="enum NM80211ApFlags" link="nm-dbus-types.html#NM80211ApFlags"/>
+    <keyword type="enum" name="enum NM80211ApSecurityFlags" link="nm-dbus-types.html#NM80211ApSecurityFlags"/>
+    <keyword type="enum" name="enum NM80211Mode" link="nm-dbus-types.html#NM80211Mode"/>
+    <keyword type="enum" name="enum NMBluetoothCapabilities" link="nm-dbus-types.html#NMBluetoothCapabilities"/>
+    <keyword type="enum" name="enum NMDeviceModemCapabilities" link="nm-dbus-types.html#NMDeviceModemCapabilities"/>
+    <keyword type="enum" name="enum NMWimaxNspNetworkType" link="nm-dbus-types.html#NMWimaxNspNetworkType"/>
+    <keyword type="enum" name="enum NMDeviceState" link="nm-dbus-types.html#NMDeviceState"/>
+    <keyword type="enum" name="enum NMDeviceStateReason" link="nm-dbus-types.html#NMDeviceStateReason"/>
+    <keyword type="enum" name="enum NMMetered" link="nm-dbus-types.html#NMMetered"/>
+    <keyword type="enum" name="enum NMActiveConnectionState" link="nm-dbus-types.html#NMActiveConnectionState"/>
+    <keyword type="enum" name="enum NMSecretAgentGetSecretsFlags" link="nm-dbus-types.html#NMSecretAgentGetSecretsFlags"/>
+    <keyword type="enum" name="enum NMSecretAgentCapabilities" link="nm-dbus-types.html#NMSecretAgentCapabilities"/>
+    <keyword type="enum" name="enum NMIPTunnelMode" link="nm-dbus-types.html#NMIPTunnelMode"/>
+    <keyword type="enum" name="enum NMVpnServiceState" link="nm-vpn-dbus-types.html#NMVpnServiceState"/>
+    <keyword type="enum" name="enum NMVpnConnectionState" link="nm-vpn-dbus-types.html#NMVpnConnectionState"/>
+    <keyword type="enum" name="enum NMVpnConnectionStateReason" link="nm-vpn-dbus-types.html#NMVpnConnectionStateReason"/>
+    <keyword type="enum" name="enum NMVpnPluginFailure" link="nm-vpn-dbus-types.html#NMVpnPluginFailure"/>
+    <keyword type="constant" name="NM_STATE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.1.1.1id-1.3.4.2.3.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_STATE_ASLEEP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.2.1.1id-1.3.4.2.3.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_STATE_DISCONNECTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.3.1.1id-1.3.4.2.3.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_STATE_DISCONNECTING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.4.1.1id-1.3.4.2.3.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_STATE_CONNECTING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.5.1.1id-1.3.4.2.3.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_STATE_CONNECTED_LOCAL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.6.1.1id-1.3.4.2.3.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_STATE_CONNECTED_SITE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.7.1.1id-1.3.4.2.3.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_STATE_CONNECTED_GLOBAL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.3.4.2.1.4.8.1.1id-1.3.4.2.3.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_CONNECTIVITY_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.4.4.2.1.4.1.1.1id-1.3.4.2.4.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_CONNECTIVITY_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.4.4.2.1.4.2.1.1id-1.3.4.2.4.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_CONNECTIVITY_PORTAL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.4.4.2.1.4.3.1.1id-1.3.4.2.4.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_CONNECTIVITY_LIMITED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.4.4.2.1.4.4.1.1id-1.3.4.2.4.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_CONNECTIVITY_FULL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.4.4.2.1.4.5.1.1id-1.3.4.2.4.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.1.1.1id-1.3.4.2.5.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_GENERIC" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.2.1.1id-1.3.4.2.5.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_ETHERNET" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.3.1.1id-1.3.4.2.5.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_WIFI" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.4.1.1id-1.3.4.2.5.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_UNUSED1" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.5.1.1id-1.3.4.2.5.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_UNUSED2" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.6.1.1id-1.3.4.2.5.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_BT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.7.1.1id-1.3.4.2.5.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_OLPC_MESH" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.8.1.1id-1.3.4.2.5.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_WIMAX" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.9.1.1id-1.3.4.2.5.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_MODEM" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.10.1.1id-1.3.4.2.5.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_INFINIBAND" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.11.1.1id-1.3.4.2.5.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_BOND" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.12.1.1id-1.3.4.2.5.4.2.1.4.12.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_VLAN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.13.1.1id-1.3.4.2.5.4.2.1.4.13.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_ADSL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.14.1.1id-1.3.4.2.5.4.2.1.4.14.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_BRIDGE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.15.1.1id-1.3.4.2.5.4.2.1.4.15.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_TEAM" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.16.1.1id-1.3.4.2.5.4.2.1.4.16.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_TUN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.17.1.1id-1.3.4.2.5.4.2.1.4.17.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_IP_TUNNEL" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.18.1.1id-1.3.4.2.5.4.2.1.4.18.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_MACVLAN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.19.1.1id-1.3.4.2.5.4.2.1.4.19.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_VXLAN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.20.1.1id-1.3.4.2.5.4.2.1.4.20.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_TYPE_VETH" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.5.4.2.1.4.21.1.1id-1.3.4.2.5.4.2.1.4.21.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_CAP_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.6.4.2.1.4.1.1.1id-1.3.4.2.6.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_CAP_NM_SUPPORTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.6.4.2.1.4.2.1.1id-1.3.4.2.6.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_CAP_CARRIER_DETECT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.6.4.2.1.4.3.1.1id-1.3.4.2.6.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_CAP_IS_SOFTWARE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.6.4.2.1.4.4.1.1id-1.3.4.2.6.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.1.1.1id-1.3.4.2.7.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_CIPHER_WEP40" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.2.1.1id-1.3.4.2.7.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_CIPHER_WEP104" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.3.1.1id-1.3.4.2.7.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_CIPHER_TKIP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.4.1.1id-1.3.4.2.7.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_CIPHER_CCMP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.5.1.1id-1.3.4.2.7.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_WPA" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.6.1.1id-1.3.4.2.7.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_RSN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.7.1.1id-1.3.4.2.7.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_AP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.8.1.1id-1.3.4.2.7.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_ADHOC" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.9.1.1id-1.3.4.2.7.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_FREQ_VALID" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.10.1.1id-1.3.4.2.7.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_FREQ_2GHZ" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.11.1.1id-1.3.4.2.7.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_WIFI_DEVICE_CAP_FREQ_5GHZ" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.7.4.2.1.4.12.1.1id-1.3.4.2.7.4.2.1.4.12.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_FLAGS_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.8.4.2.1.4.1.1.1id-1.3.4.2.8.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_FLAGS_PRIVACY" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.8.4.2.1.4.2.1.1id-1.3.4.2.8.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.1.1.1id-1.3.4.2.9.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_PAIR_WEP40" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.2.1.1id-1.3.4.2.9.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_PAIR_WEP104" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.3.1.1id-1.3.4.2.9.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_PAIR_TKIP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.4.1.1id-1.3.4.2.9.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_PAIR_CCMP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.5.1.1id-1.3.4.2.9.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_GROUP_WEP40" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.6.1.1id-1.3.4.2.9.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_GROUP_WEP104" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.7.1.1id-1.3.4.2.9.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_GROUP_TKIP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.8.1.1id-1.3.4.2.9.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_GROUP_CCMP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.9.1.1id-1.3.4.2.9.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_KEY_MGMT_PSK" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.10.1.1id-1.3.4.2.9.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_802_11_AP_SEC_KEY_MGMT_802_1X" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.9.4.2.1.4.11.1.1id-1.3.4.2.9.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_802_11_MODE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.10.4.2.1.4.1.1.1id-1.3.4.2.10.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_802_11_MODE_ADHOC" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.10.4.2.1.4.2.1.1id-1.3.4.2.10.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_802_11_MODE_INFRA" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.10.4.2.1.4.3.1.1id-1.3.4.2.10.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_802_11_MODE_AP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.10.4.2.1.4.4.1.1id-1.3.4.2.10.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_BT_CAPABILITY_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.11.4.2.1.4.1.1.1id-1.3.4.2.11.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_BT_CAPABILITY_DUN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.11.4.2.1.4.2.1.1id-1.3.4.2.11.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_BT_CAPABILITY_NAP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.11.4.2.1.4.3.1.1id-1.3.4.2.11.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_MODEM_CAPABILITY_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.12.4.2.1.4.1.1.1id-1.3.4.2.12.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_MODEM_CAPABILITY_POTS" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.12.4.2.1.4.2.1.1id-1.3.4.2.12.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.12.4.2.1.4.3.1.1id-1.3.4.2.12.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.12.4.2.1.4.4.1.1id-1.3.4.2.12.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_MODEM_CAPABILITY_LTE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.12.4.2.1.4.5.1.1id-1.3.4.2.12.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_WIMAX_NSP_NETWORK_TYPE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.13.4.2.1.4.1.1.1id-1.3.4.2.13.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_WIMAX_NSP_NETWORK_TYPE_HOME" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.13.4.2.1.4.2.1.1id-1.3.4.2.13.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_WIMAX_NSP_NETWORK_TYPE_PARTNER" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.13.4.2.1.4.3.1.1id-1.3.4.2.13.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_WIMAX_NSP_NETWORK_TYPE_ROAMING_PARTNER" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.13.4.2.1.4.4.1.1id-1.3.4.2.13.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.1.1.1id-1.3.4.2.14.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_UNMANAGED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.2.1.1id-1.3.4.2.14.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_UNAVAILABLE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.3.1.1id-1.3.4.2.14.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_DISCONNECTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.4.1.1id-1.3.4.2.14.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_PREPARE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.5.1.1id-1.3.4.2.14.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_CONFIG" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.6.1.1id-1.3.4.2.14.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_NEED_AUTH" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.7.1.1id-1.3.4.2.14.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_IP_CONFIG" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.8.1.1id-1.3.4.2.14.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_IP_CHECK" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.9.1.1id-1.3.4.2.14.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_SECONDARIES" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.10.1.1id-1.3.4.2.14.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_ACTIVATED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.11.1.1id-1.3.4.2.14.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_DEACTIVATING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.12.1.1id-1.3.4.2.14.4.2.1.4.12.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.14.4.2.1.4.13.1.1id-1.3.4.2.14.4.2.1.4.13.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.1.1.1id-1.3.4.2.15.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.2.1.1id-1.3.4.2.15.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_NOW_MANAGED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.3.1.1id-1.3.4.2.15.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_NOW_UNMANAGED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.4.1.1id-1.3.4.2.15.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_CONFIG_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.5.1.1id-1.3.4.2.15.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.6.1.1id-1.3.4.2.15.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.7.1.1id-1.3.4.2.15.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_NO_SECRETS" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.8.1.1id-1.3.4.2.15.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.9.1.1id-1.3.4.2.15.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.10.1.1id-1.3.4.2.15.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.11.1.1id-1.3.4.2.15.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.12.1.1id-1.3.4.2.15.4.2.1.4.12.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_PPP_START_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.13.1.1id-1.3.4.2.15.4.2.1.4.13.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_PPP_DISCONNECT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.14.1.1id-1.3.4.2.15.4.2.1.4.14.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_PPP_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.15.1.1id-1.3.4.2.15.4.2.1.4.15.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_DHCP_START_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.16.1.1id-1.3.4.2.15.4.2.1.4.16.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_DHCP_ERROR" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.17.1.1id-1.3.4.2.15.4.2.1.4.17.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_DHCP_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.18.1.1id-1.3.4.2.15.4.2.1.4.18.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SHARED_START_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.19.1.1id-1.3.4.2.15.4.2.1.4.19.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SHARED_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.20.1.1id-1.3.4.2.15.4.2.1.4.20.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.21.1.1id-1.3.4.2.15.4.2.1.4.21.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_AUTOIP_ERROR" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.22.1.1id-1.3.4.2.15.4.2.1.4.22.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_AUTOIP_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.23.1.1id-1.3.4.2.15.4.2.1.4.23.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_BUSY" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.24.1.1id-1.3.4.2.15.4.2.1.4.24.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.25.1.1id-1.3.4.2.15.4.2.1.4.25.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.26.1.1id-1.3.4.2.15.4.2.1.4.26.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.27.1.1id-1.3.4.2.15.4.2.1.4.27.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.28.1.1id-1.3.4.2.15.4.2.1.4.28.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.29.1.1id-1.3.4.2.15.4.2.1.4.29.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_APN_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.30.1.1id-1.3.4.2.15.4.2.1.4.30.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.31.1.1id-1.3.4.2.15.4.2.1.4.31.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.32.1.1id-1.3.4.2.15.4.2.1.4.32.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.33.1.1id-1.3.4.2.15.4.2.1.4.33.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.34.1.1id-1.3.4.2.15.4.2.1.4.34.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.35.1.1id-1.3.4.2.15.4.2.1.4.35.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_FIRMWARE_MISSING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.36.1.1id-1.3.4.2.15.4.2.1.4.36.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_REMOVED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.37.1.1id-1.3.4.2.15.4.2.1.4.37.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SLEEPING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.38.1.1id-1.3.4.2.15.4.2.1.4.38.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_CONNECTION_REMOVED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.39.1.1id-1.3.4.2.15.4.2.1.4.39.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_USER_REQUESTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.40.1.1id-1.3.4.2.15.4.2.1.4.40.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_CARRIER" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.41.1.1id-1.3.4.2.15.4.2.1.4.41.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.42.1.1id-1.3.4.2.15.4.2.1.4.42.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.43.1.1id-1.3.4.2.15.4.2.1.4.43.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.44.1.1id-1.3.4.2.15.4.2.1.4.44.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_BT_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.45.1.1id-1.3.4.2.15.4.2.1.4.45.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.46.1.1id-1.3.4.2.15.4.2.1.4.46.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.47.1.1id-1.3.4.2.15.4.2.1.4.47.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.48.1.1id-1.3.4.2.15.4.2.1.4.48.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_GSM_SIM_WRONG" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.49.1.1id-1.3.4.2.15.4.2.1.4.49.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_INFINIBAND_MODE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.50.1.1id-1.3.4.2.15.4.2.1.4.50.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.51.1.1id-1.3.4.2.15.4.2.1.4.51.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_BR2684_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.52.1.1id-1.3.4.2.15.4.2.1.4.52.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.53.1.1id-1.3.4.2.15.4.2.1.4.53.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SSID_NOT_FOUND" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.54.1.1id-1.3.4.2.15.4.2.1.4.54.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.55.1.1id-1.3.4.2.15.4.2.1.4.55.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.56.1.1id-1.3.4.2.15.4.2.1.4.56.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.57.1.1id-1.3.4.2.15.4.2.1.4.57.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_FAILED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.58.1.1id-1.3.4.2.15.4.2.1.4.58.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_MODEM_AVAILABLE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.59.1.1id-1.3.4.2.15.4.2.1.4.59.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.60.1.1id-1.3.4.2.15.4.2.1.4.60.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_NEW_ACTIVATION" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.61.1.1id-1.3.4.2.15.4.2.1.4.61.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_PARENT_CHANGED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.62.1.1id-1.3.4.2.15.4.2.1.4.62.1.2"/>
+    <keyword type="constant" name="NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.15.4.2.1.4.63.1.1id-1.3.4.2.15.4.2.1.4.63.1.2"/>
+    <keyword type="constant" name="NM_METERED_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.16.4.2.1.4.1.1.1id-1.3.4.2.16.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_METERED_YES" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.16.4.2.1.4.2.1.1id-1.3.4.2.16.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_METERED_NO" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.16.4.2.1.4.3.1.1id-1.3.4.2.16.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_METERED_GUESS_YES" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.16.4.2.1.4.4.1.1id-1.3.4.2.16.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_METERED_GUESS_NO" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.16.4.2.1.4.5.1.1id-1.3.4.2.16.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_ACTIVE_CONNECTION_STATE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.17.4.2.1.4.1.1.1id-1.3.4.2.17.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_ACTIVE_CONNECTION_STATE_ACTIVATING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.17.4.2.1.4.2.1.1id-1.3.4.2.17.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_ACTIVE_CONNECTION_STATE_ACTIVATED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.17.4.2.1.4.3.1.1id-1.3.4.2.17.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_ACTIVE_CONNECTION_STATE_DEACTIVATING" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.17.4.2.1.4.4.1.1id-1.3.4.2.17.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_ACTIVE_CONNECTION_STATE_DEACTIVATED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.17.4.2.1.4.5.1.1id-1.3.4.2.17.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.1.1.1id-1.3.4.2.18.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.2.1.1id-1.3.4.2.18.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.3.1.1id-1.3.4.2.18.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.4.1.1id-1.3.4.2.18.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_ONLY_SYSTEM" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.5.1.1id-1.3.4.2.18.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_GET_SECRETS_FLAG_NO_ERRORS" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.18.4.2.1.4.6.1.1id-1.3.4.2.18.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_CAPABILITY_NONE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.19.4.2.1.4.1.1.1id-1.3.4.2.19.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_SECRET_AGENT_CAPABILITY_VPN_HINTS" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.19.4.2.1.4.2.1.1id-1.3.4.2.19.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_UNKNOWN" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.1.1.1id-1.3.4.2.20.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_IPIP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.2.1.1id-1.3.4.2.20.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_GRE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.3.1.1id-1.3.4.2.20.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_SIT" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.4.1.1id-1.3.4.2.20.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_ISATAP" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.5.1.1id-1.3.4.2.20.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_VTI" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.6.1.1id-1.3.4.2.20.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_IP6IP6" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.7.1.1id-1.3.4.2.20.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_IPIP6" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.8.1.1id-1.3.4.2.20.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_IP6GRE" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.9.1.1id-1.3.4.2.20.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_IP_TUNNEL_MODE_VTI6" link="nm-dbus-types.htmlnm-dbus-types.html#id-1.3.4.2.20.4.2.1.4.10.1.1id-1.3.4.2.20.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_UNKNOWN" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.1.1.1id-1.3.4.3.3.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_INIT" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.2.1.1id-1.3.4.3.3.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_SHUTDOWN" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.3.1.1id-1.3.4.3.3.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_STARTING" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.4.1.1id-1.3.4.3.3.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_STARTED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.5.1.1id-1.3.4.3.3.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_STOPPING" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.6.1.1id-1.3.4.3.3.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_VPN_SERVICE_STATE_STOPPED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.3.4.2.1.4.7.1.1id-1.3.4.3.3.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_UNKNOWN" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.1.1.1id-1.3.4.3.4.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_PREPARE" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.2.1.1id-1.3.4.3.4.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_NEED_AUTH" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.3.1.1id-1.3.4.3.4.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_CONNECT" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.4.1.1id-1.3.4.3.4.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_IP_CONFIG_GET" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.5.1.1id-1.3.4.3.4.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_ACTIVATED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.6.1.1id-1.3.4.3.4.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_FAILED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.7.1.1id-1.3.4.3.4.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_DISCONNECTED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.4.4.2.1.4.8.1.1id-1.3.4.3.4.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_UNKNOWN" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.1.1.1id-1.3.4.3.5.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_NONE" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.2.1.1id-1.3.4.3.5.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.3.1.1id-1.3.4.3.5.4.2.1.4.3.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.4.1.1id-1.3.4.3.5.4.2.1.4.4.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.5.1.1id-1.3.4.3.5.4.2.1.4.5.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.6.1.1id-1.3.4.3.5.4.2.1.4.6.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.7.1.1id-1.3.4.3.5.4.2.1.4.7.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.8.1.1id-1.3.4.3.5.4.2.1.4.8.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.9.1.1id-1.3.4.3.5.4.2.1.4.9.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.10.1.1id-1.3.4.3.5.4.2.1.4.10.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.11.1.1id-1.3.4.3.5.4.2.1.4.11.1.2"/>
+    <keyword type="constant" name="NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.5.4.2.1.4.12.1.1id-1.3.4.3.5.4.2.1.4.12.1.2"/>
+    <keyword type="constant" name="NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.6.4.2.1.4.1.1.1id-1.3.4.3.6.4.2.1.4.1.1.2"/>
+    <keyword type="constant" name="NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.6.4.2.1.4.2.1.1id-1.3.4.3.6.4.2.1.4.2.1.2"/>
+    <keyword type="constant" name="NM_VPN_PLUGIN_FAILURE_BAD_IP_CONFIG" link="nm-vpn-dbus-types.htmlnm-vpn-dbus-types.html#id-1.3.4.3.6.4.2.1.4.3.1.1id-1.3.4.3.6.4.2.1.4.3.1.2"/>
+  </functions>
 </book>

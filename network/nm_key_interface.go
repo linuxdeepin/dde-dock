@@ -59,6 +59,18 @@ func interfaceToUint32(v interface{}) (d uint32) {
 	return
 }
 
+func interfaceToInt64(v interface{}) (d int64) {
+	if isInterfaceNil(v) {
+		return
+	}
+	d, ok := v.(int64)
+	if !ok {
+		logger.Errorf("interfaceToInt64() failed: %#v", v)
+		return
+	}
+	return
+}
+
 func interfaceToUint64(v interface{}) (d uint64) {
 	if isInterfaceNil(v) {
 		return

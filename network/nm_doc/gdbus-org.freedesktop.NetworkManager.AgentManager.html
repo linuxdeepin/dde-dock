@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager.AgentManager: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="gdbus-org.freedesktop.NetworkManager.Settings.html" title="org.freedesktop.NetworkManager.Settings">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html" title="org.freedesktop.NetworkManager.AccessPoint">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.AgentManager.description" class="shortcut">Description</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gdbus-org.freedesktop.NetworkManager.Settings.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.AccessPoint.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager.AgentManager"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager-AgentManager.top_of_page"></a>org.freedesktop.NetworkManager.AgentManager</span></h2>
+<p>org.freedesktop.NetworkManager.AgentManager</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Register" title="The Register() method">Register</a>                 (IN  s identifier);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.RegisterWithCapabilities" title="The RegisterWithCapabilities() method">RegisterWithCapabilities</a> (IN  s identifier,
+                          IN  u capabilities);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html#gdbus-method-org-freedesktop-NetworkManager-AgentManager.Unregister" title="The Unregister() method">Unregister</a>               ();
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager-AgentManager"></a><h2>Description</h2>
+<p></p>
+</div>
+<div class="refsect1">
+<a name="gdbus-methods-org.freedesktop.NetworkManager.AgentManager"></a><h2>Method Details</h2>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-AgentManager.Register"></a><h3>The Register() method</h3>
+<pre class="programlisting">
+Register (IN  s identifier);
+</pre>
+<p>        Called by secret Agents to register their ability to provide and save
+        network secrets.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>identifier</code></em></code>:</span></p></td>
+<td><p>Identifies this agent; only one agent in each user session may use the same identifier. Identifier formatting follows the same rules as D-Bus bus names with the exception that the ':' character is not allowed. The valid set of characters is "[A-Z][a-z][0-9]_-." and the identifier is limited in length to 255 characters with a minimum of 3 characters. An example valid identifier is 'org.gnome.nm-applet' (without quotes).</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-AgentManager.RegisterWithCapabilities"></a><h3>The RegisterWithCapabilities() method</h3>
+<pre class="programlisting">
+RegisterWithCapabilities (IN  s identifier,
+                          IN  u capabilities);
+</pre>
+<p>        Like Register() but indicates agent capabilities to NetworkManager.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>identifier</code></em></code>:</span></p></td>
+<td><p>See the Register() method's identifier argument.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">IN u <em class="parameter"><code>capabilities</code></em></code>:</span></p></td>
+<td><p>(<a class="link" href="nm-dbus-types.html#NMSecretAgentCapabilities" title="enum NMSecretAgentCapabilities">NMSecretAgentCapabilities</a>) Indicates various agent capabilities to NetworkManager.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-AgentManager.Unregister"></a><h3>The Unregister() method</h3>
+<pre class="programlisting">
+Unregister ();
+</pre>
+<p>        Called by secret Agents to notify NetworkManager that they will no longer
+        handle requests for network secrets. Agents are automatically unregistered
+        when they disconnect from D-Bus.
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

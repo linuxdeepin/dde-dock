@@ -20,12 +20,14 @@
             {"Name":"NM_SETTING_802_1X_CA_PATH", "Value":"ca-path", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_SUBJECT_MATCH", "Value":"subject-match", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_ALTSUBJECT_MATCHES", "Value":"altsubject-matches", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH", "Value":"domain-suffix-match", "Type":"ktypeArrayString","Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE1_PEAPLABEL", "Value":"phase1-peaplabel", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_AUTHEAP", "Value":"phase2-autheap", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_CA_CERT", "Value":"phase2-ca-cert", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_CA_PATH", "Value":"phase2-ca-path", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_CLIENT_CERT", "Value":"phase2-client-cert", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH", "Value":"phase2-subject-match", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH", "Value":"phase2-domain-suffix-match", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES", "Value":"phase2-altsubject-matches", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PASSWORD_RAW", "Value":"password-raw", "Type":"ktypeArrayByte", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_802_1X_PASSWORD_RAW_FLAGS", "Value":"password-raw-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
@@ -76,7 +78,10 @@
             {"Name":"NM_SETTING_GSM_NETWORK_ID", "Value":"network-id", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Network ID", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_GSM_HOME_ONLY", "Value":"home-only", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Home Network Only", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_GSM_PIN", "Value":"pin", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"PIN", "FrontEndWidget":"EditLinePasswordInput"},
-            {"Name":"NM_SETTING_GSM_PIN_FLAGS", "Value":"pin-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"EditLineComboBox"}
+            {"Name":"NM_SETTING_GSM_PIN_FLAGS", "Value":"pin-flags", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"EditLineComboBox"},
+            {"Name":"NM_SETTING_GSM_DEVICE_ID", "Value":"device-id", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_GSM_SIM_ID", "Value":"sim-id", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_GSM_SIM_OPERATOR_ID", "Value":"sim-operator-id", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
         ]
     },
     {
@@ -91,10 +96,16 @@
             {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES", "Value":"ignore-auto-routes", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS", "Value":"ignore-auto-dns", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID", "Value":"dhcp-client-id", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_DHCP_FQDN", "Value":"dhcp-fqdn", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME", "Value":"dhcp-send-hostname", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME", "Value":"dhcp-hostname", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP4_CONFIG_NEVER_DEFAULT", "Value":"never-default", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-            {"Name":"NM_SETTING_IP4_CONFIG_MAY_FAIL", "Value":"may-fail", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
+            {"Name":"NM_SETTING_IP4_CONFIG_MAY_FAIL", "Value":"may-fail", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_DNS_OPTIONS", "Value":"dns-options", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_DNS_PRIORITY", "Value":"dns-priority", "Type":"ktypeInt32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_ROUTE_METRIC", "Value":"route-metric", "Type":"ktypeInt64", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_DAD_TIMEOUT", "Value":"dad-timeout", "Type":"ktypeInt32", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT", "Value":"dhcp-timeout", "Type":"ktypeInt32", "Default":"0", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
         ]
     },
     {
@@ -111,7 +122,13 @@
             {"Name":"NM_SETTING_IP6_CONFIG_NEVER_DEFAULT", "Value":"never-default", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP6_CONFIG_MAY_FAIL", "Value":"may-fail", "Type":"ktypeBoolean", "Default":"true", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_IP6_CONFIG_IP6_PRIVACY", "Value":"ip6-privacy", "Type":"ktypeInt32", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-            {"Name":"NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME", "Value":"dhcp-hostname", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
+            {"Name":"NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE", "Value":"addr-gen-mode", "Type":"ktypeInt32", "Default":"1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME", "Value":"dhcp-hostname", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_DNS_OPTIONS", "Value":"dns-options", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_DNS_PRIORITY", "Value":"dns-priority", "Type":"ktypeInt32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_ROUTE_METRIC", "Value":"route-metric", "Type":"ktypeInt64", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_DAD_TIMEOUT", "Value":"dad-timeout", "Type":"ktypeInt32", "Default":"-1", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT", "Value":"dhcp-timeout", "Type":"ktypeInt32", "Default":"0", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
         ]
     },
     {
@@ -166,7 +183,9 @@
             {"Name":"NM_SETTING_VPN_SERVICE_TYPE", "Value":"service-type", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_VPN_USER_NAME", "Value":"user-name", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_VPN_DATA", "Value":"data", "Type":"ktypeDictStringString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
-            {"Name":"NM_SETTING_VPN_SECRETS", "Value":"secrets", "Type":"ktypeDictStringString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
+            {"Name":"NM_SETTING_VPN_SECRETS", "Value":"secrets", "Type":"ktypeDictStringString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_VPN_PERSISTENT", "Value":"persistent", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_VPN_TIMEOUT", "Value":"timeout", "Type":"ktypeUint32", "Default":"0", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "Displayname":"<default>", "FrontEndWidget":"<default>"}
         ]
     },
     {
@@ -413,7 +432,9 @@
             {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST", "Value":"mac-address-blacklist", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_WIRELESS_MTU", "Value":"mtu", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"MTU", "FrontEndWidget":"<default>", "UseValueRange":true, "MinValue":0, "MaxValue":10000},
             {"Name":"NM_SETTING_WIRELESS_SEEN_BSSIDS", "Value":"seen-bssids", "Type":"ktypeArrayString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
-            {"Name":"NM_SETTING_WIRELESS_HIDDEN", "Value":"hidden", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
+            {"Name":"NM_SETTING_WIRELESS_HIDDEN", "Value":"hidden", "Type":"ktypeBoolean", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_WIRELESS_POWERSAVE", "Value":"powersave", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION", "Value":"mac-address-randomization", "Type":"ktypeUint32", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"<default>", "FrontEndWidget":"<default>"}
         ]
     },
     {
