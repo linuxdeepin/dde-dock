@@ -237,36 +237,64 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 	return true, nil
 }
 
-func (u *User) SetLanguage(dbusMsg dbus.DMessage, lang string) (bool, error) {
-	u.syncLocker.Lock()
-	logger.Debug("[SetLanguage] language:", lang)
+func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) (bool, error) {
+	logger.Debug("[SetLocale] locale:", locale)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetLanguage")
+	err := u.accessAuthentication(pid, true, "SetLocale")
 	if err != nil {
-		logger.Debug("[SetLanguage] access denied:", err)
+		logger.Debug("[SetLocale] access denied:", err)
 		return false, err
 	}
 
-	if u.Language == lang {
-		doEmitSuccess(pid, "SetLanguage")
+	if u.Locale == locale {
+		doEmitSuccess(pid, "SetLocale")
 		return true, nil
 	}
 
-	if !lang_info.IsSupportedLocale(lang+".UTF-8") ||
-		!lang_info.IsSupportedLocale(lang) {
-		reason := fmt.Sprintf("Invalid language: %v", lang)
-		logger.Debug("[SetLanguage]", reason)
-		doEmitError(pid, "SetLanguage", reason)
+	if !lang_info.IsSupportedLocale(locale) {
+		reason := fmt.Sprintf("Invalid locale: %v", locale)
+		logger.Debug("[SetLocale]", reason)
+		doEmitError(pid, "SetLocale", reason)
 		return false, fmt.Errorf(reason)
 	}
 
-	u.setPropString(&u.Language, "Language", lang)
+	u.setPropString(&u.Locale, "Locale", locale)
 	err = u.writeUserConfig()
 	if err != nil {
-		logger.Info("[Setlanguage]", err)
+		logger.Info("[SetLocale]", err)
 		return false, err
 	}
 
+	return true, nil
+}
+
+func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) (bool, error) {
+	logger.Debug("[SetLayout] new layout:", layout)
+	pid := dbusMsg.GetSenderPID()
+	err := u.accessAuthentication(pid, true, "SetLayout")
+	if err != nil {
+		logger.Debug("[SetLayout] access denied:", err)
+		return false, err
+	}
+
+	if u.Layout == layout {
+		doEmitSuccess(pid, "SetLayout")
+		return true, nil
+	}
+
+	go func() {
+		// TODO: check layout validity
+		src := u.Layout
+		u.setPropString(&u.Layout, "Layout", layout)
+		err = u.writeUserConfig()
+		if err != nil {
+			logger.Warning("Write user config failed:", err)
+			doEmitError(pid, "SetLayout", err.Error())
+			u.setPropString(&u.Layout, "Layout", src)
+			return
+		}
+		doEmitSuccess(pid, "SetLayout")
+	}()
 	return true, nil
 }
 
@@ -352,21 +380,14 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error) {
 	logger.Debug("[SetBackgroundFile] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetBackgroundFile")
-	if err != nil {
-		logger.Debug("[SetBackgroundFile] access denied:", err)
-		return false, err
-	}
-
+	bg = dutils.DecodeURI(bg)
 	if bg == u.BackgroundFile {
 		doEmitSuccess(pid, "SetBackgroundFile")
 		return true, nil
 	}
 
-	if !graphic.IsSupportedImage(bg) {
-		reason := fmt.Sprintf("This background '%s' not a image", bg)
-		logger.Debug(reason)
-		doEmitError(pid, "SetBackgroundFile", reason)
+	_, err := u.isBackgroundValid(pid, "SetBackgroundFile", bg)
+	if err != nil {
 		return false, err
 	}
 
@@ -383,6 +404,63 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 		doEmitSuccess(pid, "SetBackgroundFile")
 	}()
 
+	return true, nil
+}
+
+func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) (bool, error) {
+	logger.Debug("[SetGreeterBackground] new background:", bg)
+	bg = dutils.DecodeURI(bg)
+	pid := dbusMsg.GetSenderPID()
+	if u.GreeterBackground == bg {
+		doEmitSuccess(pid, "SetGreeterBackground")
+		return true, nil
+	}
+	_, err := u.isBackgroundValid(pid, "SetGreeterBackground", bg)
+	if err != nil {
+		return false, err
+	}
+
+	go func() {
+		src := u.GreeterBackground
+		u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
+		err = u.writeUserConfig()
+		if err != nil {
+			logger.Warning("Write user config failed:", err)
+			doEmitError(pid, "SetGreeterBackground", err.Error())
+			u.setPropString(&u.GreeterBackground, "GreeterBackground", src)
+			return
+		}
+		doEmitSuccess(pid, "SetGreeterBackground")
+	}()
+	return true, nil
+}
+
+func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) (bool, error) {
+	logger.Debug("[SetHistoryLayout] new history layout:", list)
+	pid := dbusMsg.GetSenderPID()
+	err := u.accessAuthentication(pid, true, "SetHistoryLayout")
+	if err != nil {
+		logger.Debug("[SetHistoryLayout] access denied:", err)
+		return false, err
+	}
+
+	if isStrvEqual(u.HistoryLayout, list) {
+		return true, nil
+	}
+
+	// TODO: check layout list whether validity
+
+	go func() {
+		src := u.HistoryLayout
+		u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
+		err := u.writeUserConfig()
+		if err != nil {
+			logger.Warning("Write user config failed:", err)
+			doEmitError(pid, "SetHistoryLayout", err.Error())
+			u.setPropStrv(&u.HistoryLayout, "HistoryLayout", src)
+		}
+		doEmitSuccess(pid, "SetHistoryLayout")
+	}()
 	return true, nil
 }
 
@@ -423,4 +501,20 @@ func (u *User) GetLargeIcon() string {
 	}
 
 	return filename
+}
+
+func (u *User) isBackgroundValid(pid uint32, action, bg string) (bool, error) {
+	err := u.accessAuthentication(pid, true, action)
+	if err != nil {
+		logger.Debugf("[%s] access denied: %v", action, err)
+		return false, err
+	}
+
+	if !graphic.IsSupportedImage(bg) {
+		reason := fmt.Sprintf("This background '%s' not a image", bg)
+		logger.Debug(reason)
+		doEmitError(pid, action, reason)
+		return false, err
+	}
+	return true, nil
 }

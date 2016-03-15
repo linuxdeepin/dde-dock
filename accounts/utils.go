@@ -15,6 +15,7 @@ import (
 	"os"
 	"path"
 	"pkg.deepin.io/lib/graphic"
+	"sort"
 	"strings"
 )
 
@@ -112,6 +113,21 @@ func isStrInArray(str string, array []string) bool {
 	}
 
 	return false
+}
+
+func isStrvEqual(l1, l2 []string) bool {
+	if len(l1) != len(l2) {
+		return false
+	}
+
+	sort.Strings(l1)
+	sort.Strings(l2)
+	for i, v := range l1 {
+		if v != l2[i] {
+			return false
+		}
+	}
+	return true
 }
 
 func polkitAuthManagerUser(pid uint32) error {

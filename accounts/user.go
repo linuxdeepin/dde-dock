@@ -29,6 +29,7 @@ const (
 )
 
 const (
+	defaultLayout         = "us;"
 	defaultUserIcon       = "/var/lib/AccountsService/icons/default.png"
 	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
 
@@ -36,15 +37,28 @@ const (
 	maxHeight = 200
 )
 
+const (
+	confGroupUser            string = "User"
+	confKeyIcon                     = "Icon"
+	confKeyLocale                   = "Locale"
+	confKeyLayout                   = "Layout"
+	confKeyBackground               = "Background"
+	confKeyGreeterBackground        = "GreeterBackground"
+	confKeyHistoryIcons             = "HistoryIcons"
+	confKeyHistoryLayout            = "HistoryLayout"
+)
+
 type User struct {
-	UserName       string
-	Uid            string
-	Gid            string
-	HomeDir        string
-	Shell          string
-	Language       string
-	IconFile       string
-	BackgroundFile string
+	UserName          string
+	Uid               string
+	Gid               string
+	HomeDir           string
+	Shell             string
+	Locale            string
+	Layout            string
+	IconFile          string
+	BackgroundFile    string
+	GreeterBackground string
 
 	// 用户是否被禁用
 	Locked bool
@@ -54,10 +68,12 @@ type User struct {
 	AccountType int32
 	LoginTime   uint64
 
-	IconList     []string
-	HistoryIcons []string
+	IconList      []string
+	HistoryLayout []string
+	HistoryIcons  []string
 
-	syncLocker sync.Mutex
+	syncLocker   sync.Mutex
+	configLocker sync.Mutex
 }
 
 func NewUser(userPath string) (*User, error) {
@@ -86,41 +102,57 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
+		u.setPropString(&u.Layout, "Layout", defaultLayout)
+		u.setPropString(&u.Locale, "Locale", getSystemLocale(defaultLocaleFile))
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
+		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
 		u.writeUserConfig()
 		return u, nil
 	}
 	defer kFile.Free()
 
-	var write bool = false
-	lang, _ := kFile.GetString("User", "Language")
-	u.setPropString(&u.Language, "Language", lang)
-	if len(u.Language) == 0 {
-		u.setPropString(&u.Language, "Language", getSystemLanguage(defaultLocaleFile))
-		write = true
+	var isSave bool = false
+	locale, _ := kFile.GetString(confGroupUser, confKeyLocale)
+	u.setPropString(&u.Locale, "Locale", locale)
+	if len(locale) == 0 {
+		u.setPropString(&u.Locale, "Locale", getSystemLocale(defaultLocaleFile))
+		isSave = true
 	}
-
-	icon, _ := kFile.GetString("User", "Icon")
+	layout, _ := kFile.GetString(confGroupUser, confKeyLayout)
+	u.setPropString(&u.Layout, "Layout", layout)
+	if len(layout) == 0 {
+		u.setPropString(&u.Layout, "Layout", defaultLayout)
+		isSave = true
+	}
+	icon, _ := kFile.GetString(confGroupUser, confKeyIcon)
 	u.setPropString(&u.IconFile, "IconFile", icon)
 	if len(u.IconFile) == 0 {
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
-		write = true
+		isSave = true
 	}
 
-	bg, _ := kFile.GetString("User", "Background")
+	bg, _ := kFile.GetString(confGroupUser, confKeyBackground)
 	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
-	if len(u.BackgroundFile) == 0 {
+	if len(bg) == 0 {
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
-		write = true
+		isSave = true
+	}
+	greeterBg, _ := kFile.GetString(confGroupUser, confKeyGreeterBackground)
+	u.setPropString(&u.GreeterBackground, "GreeterBackground", greeterBg)
+	if len(greeterBg) == 0 {
+		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
+		isSave = true
 	}
 
-	if write {
+	_, hisLayout, _ := kFile.GetStringList(confGroupUser, confKeyHistoryLayout)
+	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", hisLayout)
+	_, hisIcons, _ := kFile.GetStringList(confGroupUser, confKeyHistoryIcons)
+	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", hisIcons)
+
+	if isSave {
 		u.writeUserConfig()
 	}
-
-	_, hisIcons, _ := kFile.GetStringList("User", "HistoryIcons")
-	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", hisIcons)
 
 	return u, nil
 }
@@ -207,8 +239,36 @@ func (u *User) deleteHistoryIcon(icon string) {
 }
 
 func (u *User) writeUserConfig() error {
-	return doWriteUserConfig(path.Join(userConfigDir, u.UserName),
-		u.IconFile, u.BackgroundFile, u.HistoryIcons)
+	u.configLocker.Lock()
+	defer u.configLocker.Unlock()
+
+	config := path.Join(userConfigDir, u.UserName)
+	if !dutils.IsFileExist(config) {
+		err := dutils.CreateFile(config)
+		if err != nil {
+			return err
+		}
+	}
+
+	kFile, err := dutils.NewKeyFileFromFile(config)
+	if err != nil {
+		logger.Warningf("Load %s config file failed: %v", u.UserName, err)
+		return err
+	}
+	defer kFile.Free()
+
+	kFile.SetString(confGroupUser, confKeyLayout, u.Layout)
+	kFile.SetString(confGroupUser, confKeyLocale, u.Locale)
+	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
+	kFile.SetString(confGroupUser, confKeyBackground, u.BackgroundFile)
+	kFile.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
+	kFile.SetStringList(confGroupUser, confKeyHistoryIcons, u.HistoryIcons)
+	kFile.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
+	_, err = kFile.SaveToFile(config)
+	if err != nil {
+		logger.Warningf("Save %s config file failed: %v", u.UserName, err)
+	}
+	return err
 }
 
 func (u *User) updatePropLocked() {
@@ -246,28 +306,6 @@ func (u *User) accessAuthentication(pid uint32, check bool, action string) error
 	return nil
 }
 
-func doWriteUserConfig(config, icon, bg string, hisIcons []string) error {
-	if !dutils.IsFileExist(config) {
-		err := dutils.CreateFile(config)
-		if err != nil {
-			return err
-		}
-	}
-
-	kFile, err := dutils.NewKeyFileFromFile(config)
-	if err != nil {
-		return err
-	}
-	defer kFile.Free()
-
-	kFile.SetString("User", "Icon", icon)
-	kFile.SetString("User", "Background", bg)
-	kFile.SetStringList("User", "HistoryIcons", hisIcons)
-	_, content, err := kFile.ToData()
-
-	return dutils.WriteStringToFile(config, content)
-}
-
 // userPath must be composed with 'userDBusPath + uid'
 func getUidFromUserPath(userPath string) string {
 	items := strings.Split(userPath, userDBusPath)
@@ -275,7 +313,8 @@ func getUidFromUserPath(userPath string) string {
 	return items[1]
 }
 
-func getSystemLanguage(file string) string {
+func getSystemLocale(file string) string {
+	// If file is big, please using bufio.Scanner
 	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		return ""
@@ -294,8 +333,7 @@ func getSystemLanguage(file string) string {
 		}
 
 		if array[0] == "LANG" {
-			tmp := strings.Split(array[1], ".")
-			return tmp[0]
+			return array[1]
 		}
 	}
 	return ""

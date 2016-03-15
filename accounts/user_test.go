@@ -16,6 +16,6 @@ import (
 
 func TestSystemLocale(t *testing.T) {
 	Convey("Test system locale", t, func() {
-		So(getSystemLanguage("testdata/locale"), ShouldEqual, "zh_CN")
+		So(getSystemLocale("testdata/locale"), ShouldEqual, "zh_CN.UTF-8")
 	})
 }
