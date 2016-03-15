@@ -26,7 +26,6 @@ import (
 	_ "pkg.deepin.io/dde/daemon/screenedge"
 	_ "pkg.deepin.io/dde/daemon/screensaver"
 	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
-	_ "pkg.deepin.io/dde/daemon/soundeffect"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
 )

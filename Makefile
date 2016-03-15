@@ -29,7 +29,8 @@ BINARIES =  \
 	    search \
 	    theme-thumb-tool \
 	    backlight_helper \
-	    langselector
+	    langselector \
+	    soundeffect
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
