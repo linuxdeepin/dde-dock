@@ -175,6 +175,16 @@ func getBgDest(file string) (string, error) {
 		return "", fmt.Errorf("Not found '%s'", file)
 	}
 	return path.Join(
-		glib.GetUserSpecialDir(glib.UserDirectoryDirectoryPictures),
+		getUserPictureDir(),
 		"Wallpapers", id+path.Ext(file)), nil
+}
+
+func getUserPictureDir() string {
+	dir := glib.GetUserSpecialDir(glib.UserDirectoryDirectoryPictures)
+	if len(dir) == 0 {
+		dir = path.Join(os.Getenv("HOME"), "Pictures")
+	}
+	// Ensure dir exists
+	os.MkdirAll(dir, 0755)
+	return dir
 }

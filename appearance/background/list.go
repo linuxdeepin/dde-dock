@@ -12,11 +12,9 @@ package background
 import (
 	"os"
 	"path"
+	dutils "pkg.deepin.io/lib/utils"
 	"sort"
 	"strings"
-
-	"gir/glib-2.0"
-	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -36,9 +34,7 @@ func ListDirs() []string {
 
 	var dirs = []string{
 		"/usr/share/backgrounds",
-		path.Join(glib.GetUserSpecialDir(
-			glib.UserDirectoryDirectoryPictures),
-			"Wallpapers"),
+		path.Join(getUserPictureDir(), "Wallpapers"),
 	}
 
 	dirs = append(dirs, getDirsFromDTheme(path.Join("/usr/share",
