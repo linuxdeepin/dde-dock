@@ -81,6 +81,8 @@ func (m *Manager) Set(ty, value string) error {
 		err = m.doSetCursorTheme(value)
 	case TypeBackground:
 		err = m.doSetBackground(value)
+	case TypeGreeterBackground:
+		err = m.doSetGreeterBackground(value)
 	case TypeStandardFont:
 		err = m.doSetStandardFont(value)
 	case TypeMonospaceFont:

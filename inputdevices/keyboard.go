@@ -11,14 +11,15 @@ package inputdevices
 
 import (
 	"bufio"
-	"dbus/com/deepin/api/greeterhelper"
+	"dbus/com/deepin/daemon/accounts"
 	"fmt"
+	"gir/gio-2.0"
 	"os"
 	"os/user"
 	"path"
 	"pkg.deepin.io/dde/api/dxinput"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus/property"
-	"gir/gio-2.0"
 	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 	"strings"
@@ -62,7 +63,7 @@ type Keyboard struct {
 	UserOptionList *property.GSettingsStrvProperty
 
 	setting       *gio.Settings
-	greeter       *greeterhelper.GreeterHelper
+	userObj       *accounts.User
 	layoutDescMap map[string]string
 }
 
@@ -115,22 +116,26 @@ func NewKeyboard() *Keyboard {
 		return nil
 	}
 
-	kbd.greeter, err = greeterhelper.NewGreeterHelper(
-		"com.deepin.api.GreeterHelper",
-		"/com/deepin/api/GreeterHelper")
+	cur, err := user.Current()
 	if err != nil {
-		logger.Warning("Create 'GreeterHelper' failed:", err)
-		kbd.greeter = nil
+		logger.Warning("Get current user info failed:", err)
+	} else {
+		kbd.userObj, err = ddbus.NewUserByUid(cur.Uid)
+		if err != nil {
+			logger.Warning("New user object failed:", cur.Name, err)
+			kbd.userObj = nil
+		}
 	}
 
 	return kbd
 }
 
 func (kbd *Keyboard) init() {
-	group, _ := getUsername()
-	value, _ := getGreeterLayout(kbdGreeterConfig, group)
-	if len(value) != 0 && value != kbd.CurrentLayout.Get() {
-		kbd.CurrentLayout.Set(value)
+	if kbd.userObj != nil {
+		value := kbd.userObj.Layout.Get()
+		if len(value) != 0 && value != kbd.CurrentLayout.Get() {
+			kbd.CurrentLayout.Set(value)
+		}
 	}
 
 	kbd.setLayout()
@@ -245,32 +250,32 @@ func (kbd *Keyboard) setCursorBlink() {
 }
 
 func (kbd *Keyboard) setGreeterLayout() {
-	if kbd.greeter == nil {
+	if kbd.userObj == nil {
 		return
 	}
 
-	name, _ := getUsername()
+	name := kbd.userObj.UserName.Get()
 	if isInvalidUser(name) {
 		return
 	}
 
-	err := kbd.greeter.SetLayout(name, kbd.CurrentLayout.Get())
+	_, err := kbd.userObj.SetLayout(kbd.CurrentLayout.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout failed: %v", name, err)
 	}
 }
 
 func (kbd *Keyboard) setGreeterLayoutList() {
-	if kbd.greeter == nil {
+	if kbd.userObj == nil {
 		return
 	}
 
-	name, _ := getUsername()
+	name := kbd.userObj.UserName.Get()
 	if isInvalidUser(name) {
 		return
 	}
 
-	err := kbd.greeter.SetLayoutList(name, kbd.UserLayoutList.Get())
+	_, err := kbd.userObj.SetHistoryLayout(kbd.UserLayoutList.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout list failed: %v",
 			name, err)
@@ -310,30 +315,6 @@ func setQtCursorBlink(rate int32, file string) error {
 	return nil
 }
 
-func getGreeterLayout(file, group string) (string, error) {
-	if isInvalidUser(group) {
-		return "", fmt.Errorf("Invalid group: %s", group)
-	}
-
-	kfile, err := dutils.NewKeyFileFromFile(file)
-	if err != nil {
-		return "", err
-	}
-	defer kfile.Free()
-
-	value, err := kfile.GetString(group, "KeyboardLayout")
-	if err != nil {
-		return "", err
-	}
-
-	array := strings.Split(value, "|")
-	if len(array) != 2 {
-		return "", fmt.Errorf("Invalid kbd layout: %v", value)
-	}
-
-	return array[0] + layoutDelim + array[1], nil
-}
-
 func getSystemLayout(file string) (string, error) {
 	fr, err := os.Open(file)
 	if err != nil {
@@ -346,7 +327,7 @@ func getSystemLayout(file string) (string, error) {
 		layout  string
 		variant string
 
-		regLayout = regexp.MustCompile(`^XKBLAYOUT=`)
+		regLayout  = regexp.MustCompile(`^XKBLAYOUT=`)
 		regVariant = regexp.MustCompile(`^XKBVARIANT=`)
 
 		scanner = bufio.NewScanner(fr)
@@ -395,13 +376,4 @@ func isInvalidUser(name string) bool {
 	}
 
 	return false
-}
-
-func getUsername() (string, error) {
-	u, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-
-	return u.Username, nil
 }

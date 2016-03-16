@@ -14,26 +14,30 @@ import (
 	"fmt"
 	"path"
 
+	"dbus/com/deepin/daemon/accounts"
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"github.com/howeyc/fsnotify"
+	"os/user"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
 
 const (
-	TypeDTheme        string = "dtheme"
-	TypeGtkTheme             = "gtk"
-	TypeIconTheme            = "icon"
-	TypeCursorTheme          = "cursor"
-	TypeBackground           = "background"
-	TypeStandardFont         = "standardfont"
-	TypeMonospaceFont        = "monospacefont"
-	TypeFontSize             = "fontsize"
+	TypeDTheme            string = "dtheme"
+	TypeGtkTheme                 = "gtk"
+	TypeIconTheme                = "icon"
+	TypeCursorTheme              = "cursor"
+	TypeBackground               = "background"
+	TypeGreeterBackground        = "greeterbackground"
+	TypeStandardFont             = "standardfont"
+	TypeMonospaceFont            = "monospacefont"
+	TypeFontSize                 = "fontsize"
 )
 
 const (
@@ -59,8 +63,9 @@ type Manager struct {
 	// ty, name
 	Changed func(string, string)
 
-	setting *gio.Settings
+	userObj *accounts.User
 
+	setting        *gio.Settings
 	wrapBgSetting  *gio.Settings
 	gnomeBgSetting *gio.Settings
 
@@ -85,20 +90,41 @@ func NewManager() *Manager {
 		m.endWatcher = make(chan struct{})
 	}
 
+	cur, err := user.Current()
+	if err != nil {
+		logger.Warning("Get current user info failed:", err)
+	} else {
+		m.userObj, err = ddbus.NewUserByUid(cur.Uid)
+		if err != nil {
+			logger.Warning("New user object failed:", cur.Name, err)
+			m.userObj = nil
+		}
+	}
+
 	m.init()
 
 	return m
 }
 
 func (m *Manager) destroy() {
-	m.setting.Unref()
+	if m.setting != nil {
+		m.setting.Unref()
+		m.setting = nil
+	}
 
 	if m.wrapBgSetting != nil {
 		m.wrapBgSetting.Unref()
+		m.wrapBgSetting = nil
 	}
 
 	if m.gnomeBgSetting != nil {
 		m.gnomeBgSetting.Unref()
+		m.gnomeBgSetting = nil
+	}
+
+	if m.userObj != nil {
+		ddbus.DestroyUser(m.userObj)
+		m.userObj = nil
 	}
 
 	if m.watcher != nil {
@@ -247,6 +273,10 @@ func (m *Manager) doSetBackground(value string) error {
 		return err
 	}
 
+	if m.userObj != nil {
+		m.userObj.SetBackgroundFile(uri)
+	}
+
 	logger.Debug("[doSetBackground] set over...")
 	return m.setDThemeByComponent(&dtheme.ThemeComponent{
 		Gtk:           dt.Gtk.Id,
@@ -256,6 +286,15 @@ func (m *Manager) doSetBackground(value string) error {
 		StandardFont:  dt.StandardFont.Id,
 		MonospaceFont: dt.MonospaceFont.Id,
 	})
+}
+
+func (m *Manager) doSetGreeterBackground(value string) error {
+	if m.userObj == nil {
+		return fmt.Errorf("Create user object failed")
+	}
+
+	_, err := m.userObj.SetGreeterBackground(value)
+	return err
 }
 
 func (m *Manager) doSetStandardFont(value string) error {

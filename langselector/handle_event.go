@@ -10,6 +10,8 @@
 package langselector
 
 import (
+	"os/user"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -22,18 +24,26 @@ func (lang *LangSelector) onLocaleSuccess() {
 			lang.setPropCurrentLocale(getLocale())
 			e := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later."))
-			lang.LocaleState = LocaleStateChanged
 			if e != nil {
 				lang.logger.Warning("sendNotify failed:", e)
 			}
+			e = syncUserLocale(lang.CurrentLocale)
+			if e != nil {
+				lang.logger.Warning("Sync user object locale failed:", e)
+			}
+			lang.LocaleState = LocaleStateChanged
 			return
 		}
 		e := sendNotify(localeIconFinished, "",
 			Tr("System language has been changed, please log in again after logged out."))
-		lang.LocaleState = LocaleStateChanged
 		if e != nil {
 			lang.logger.Warning("sendNotify failed:", e)
 		}
+		e = syncUserLocale(lang.CurrentLocale)
+		if e != nil {
+			lang.logger.Warning("Sync user object locale failed:", e)
+		}
+		lang.LocaleState = LocaleStateChanged
 	})
 }
 
@@ -54,4 +64,19 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 	dbus.Emit(lang, "Changed", lang.CurrentLocale)
 
 	return nil
+}
+
+func syncUserLocale(locale string) error {
+	cur, err := user.Current()
+	if err != nil {
+		return err
+	}
+
+	u, err := ddbus.NewUserByUid(cur.Uid)
+	if err != nil {
+		return err
+	}
+	_, err = u.SetLocale(locale)
+	ddbus.DestroyUser(u)
+	return err
 }

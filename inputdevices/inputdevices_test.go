@@ -10,32 +10,20 @@
 package inputdevices
 
 import (
-	"testing"
 	. "github.com/smartystreets/goconvey/convey"
+	"testing"
 )
 
 func TestSystemLayout(t *testing.T) {
-	Convey("Get system layout", t, func (){
+	Convey("Get system layout", t, func() {
 		layout, err := getSystemLayout("testdata/keyboard")
 		So(err, ShouldBeNil)
 		So(layout, ShouldEqual, "us;")
 	})
 }
 
-func TestGreeterLayout(t *testing.T) {
-	Convey("Get greeter layout", t, func (){
-		layout, err := getGreeterLayout("testdata/users.ini", "wen")
-		So(err, ShouldBeNil)
-		So(layout, ShouldEqual, "us;")
-
-		layout, err = getGreeterLayout("testdata/users.ini", "xxxx")
-		So(err, ShouldNotBeNil)
-		So(len(layout), ShouldEqual, 0)
-	})
-}
-
 func TestParseXKBFile(t *testing.T) {
-	Convey("Parse xkb rule file",t, func(){
+	Convey("Parse xkb rule file", t, func() {
 		handler, err := getLayoutListByFile("testdata/base.xml")
 		So(err, ShouldBeNil)
 		So(handler, ShouldNotBeNil)
@@ -44,7 +32,7 @@ func TestParseXKBFile(t *testing.T) {
 
 func TestStrList(t *testing.T) {
 	var list = []string{"abc", "xyz", "123"}
-	Convey("Add item to list", t, func (){
+	Convey("Add item to list", t, func() {
 		ret, added := addItemToList("456", list)
 		So(len(ret), ShouldEqual, 4)
 		So(added, ShouldEqual, true)
@@ -54,7 +42,7 @@ func TestStrList(t *testing.T) {
 		So(added, ShouldEqual, false)
 	})
 
-	Convey("Delete item from list", t, func (){
+	Convey("Delete item from list", t, func() {
 		ret, deleted := delItemFromList("123", list)
 		So(len(ret), ShouldEqual, 2)
 		So(deleted, ShouldEqual, true)
@@ -64,7 +52,7 @@ func TestStrList(t *testing.T) {
 		So(deleted, ShouldEqual, false)
 	})
 
-	Convey("Is item in list",t, func (){
+	Convey("Is item in list", t, func() {
 		So(isItemInList("123", list), ShouldEqual, true)
 		So(isItemInList("456", list), ShouldEqual, false)
 	})
