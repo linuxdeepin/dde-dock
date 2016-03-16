@@ -13,10 +13,10 @@
 #include <QTranslator>
 #include <QDBusConnection>
 
+#include <DLog>
 #include <dapplication.h>
 
 #include "mainwidget.h"
-#include "logmanager.h"
 #include "Logger.h"
 #include "controller/stylemanager.h"
 #include "controller/signalmanager.h"
@@ -59,6 +59,8 @@ void RegisterDdeSession()
     }
 }
 
+DUTIL_USE_NAMESPACE
+
 int main(int argc, char *argv[])
 {
     DApplication a(argc, argv);
@@ -81,8 +83,9 @@ int main(int argc, char *argv[])
     translator1.load("/usr/share/dde-control-center/translations/dde-control-center_" + QLocale::system().name());
     a.installTranslator(&translator1);
 
-    LogManager::instance()->debug_log_console_on();
-    LOG_INFO()<< "LogFile:" << LogManager::instance()->getlogFilePath();
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
+    dInfo()<< "LogFile:" << DLogManager::getlogFilePath();
 
     QDBusConnection::sessionBus().registerService(DBUS_NAME);
     RegisterDdeSession();

@@ -19,10 +19,8 @@ RESOURCES += \
     dark.qrc \
     light.qrc
 
-PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage dtkbase dtkwidget
 CONFIG += c++11 link_pkgconfig
-
-include (../cutelogger/cutelogger.pri)
+PKGCONFIG += gtk+-2.0 x11 cairo xcb xcb-ewmh xcb-damage dtkbase dtkutil dtkwidget
 
 target.path = /usr/bin/
 

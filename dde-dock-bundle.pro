@@ -4,6 +4,8 @@ SUBDIRS = dde-dock \
           dde-dock-shutdown-plugin \
           dde-dock-trash-plugin
 
+DEFINES += QT_MESSAGELOGCONTEXT
+
 # Automating generation .qm files from .ts files
 system($$PWD/translate_generation.sh)
 
