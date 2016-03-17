@@ -31,6 +31,8 @@ type Audio struct {
 	// 正常输出声音的程序列表
 	SinkInputs []*SinkInput
 
+	Cards string
+
 	// 默认的输出设备名称
 	DefaultSink string
 	// 默认的输入设备名称
@@ -38,6 +40,8 @@ type Audio struct {
 
 	// 最大音量
 	MaxUIVolume float64
+
+	cards CardInfos
 
 	siEventChan  chan func()
 	siPollerExit chan struct{}
@@ -85,6 +89,42 @@ func (s *Audio) GetDefaultSource() *Source {
 			return o
 		}
 	}
+	return nil
+}
+
+// SetProfile activate the profile for the special card and disable others card
+// The available sinks and sources will also change with the profile changing.
+func (a *Audio) SetProfile(cardId uint32, profile string) error {
+	var (
+		others []*pulse.Card
+
+		hasActivatedCard bool = false
+	)
+
+	for _, card := range a.core.GetCardList() {
+		if card.Index != cardId {
+			others = append(others, card)
+			continue
+		}
+
+		if !(cProfileInfos2(card.Profiles).exist(profile)) {
+			return fmt.Errorf("Invalid profile '%s' for %s", profile, card.Name)
+		}
+		if card.ActiveProfile.Name != profile {
+			card.SetProfile(profile)
+		}
+		hasActivatedCard = true
+	}
+
+	if !hasActivatedCard {
+		return fmt.Errorf("Invalid card id: %v", cardId)
+	}
+
+	// disable other card, otherwise the active card maybe not work
+	for _, card := range others {
+		card.SetProfile("off")
+	}
+
 	return nil
 }
 

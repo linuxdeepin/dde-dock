@@ -179,6 +179,7 @@ func (a *Audio) update() {
 	a.rebuildSinkList()
 	a.rebuildSourceList()
 	a.rebuildSinkInputList()
+	a.setPropCards(newCardInfos(a.core.GetCardList()).string())
 }
 
 func (s *Audio) setPropDefaultSink(v string) {
@@ -222,6 +223,14 @@ func (s *Audio) setPropSinkInputs(v []*SinkInput) {
 	}
 	s.SinkInputs = v
 	dbus.NotifyChange(s, "SinkInputs")
+}
+
+func (a *Audio) setPropCards(v string) {
+	if a.Cards == v {
+		return
+	}
+	a.Cards = v
+	dbus.NotifyChange(a, "Cards")
 }
 
 func (s *Sink) setPropCanBalance(v bool) {

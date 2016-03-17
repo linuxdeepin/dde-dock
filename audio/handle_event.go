@@ -10,6 +10,7 @@
 package audio
 
 import "pkg.deepin.io/lib/pulse"
+import "sync"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {
@@ -36,25 +37,52 @@ func (a *Audio) initEventHandlers() {
 	}
 }
 
+var cardEventLocker sync.Mutex
+
 func (a *Audio) handleCardEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew:
+		logger.Debug("[Event] card added:", idx)
 		card, err := a.core.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
 			return
 		}
+		infos, added := a.cards.add(newCardInfo(card))
+		if added {
+			a.setPropCards(infos.string())
+			a.cards = infos
+		}
 		selectNewCardProfile(card)
 	case pulse.EventTypeRemove:
+		logger.Debug("[Event] card removed:", idx)
+		infos, deleted := a.cards.delete(idx)
+		if deleted {
+			a.setPropCards(infos.string())
+			a.cards = infos
+		}
 	case pulse.EventTypeChange:
+		logger.Debug("[Event] card changed:", idx)
+		card, err := a.core.GetCard(idx)
+		if nil != err {
+			logger.Warning("get card info failed: ", err)
+			return
+		}
+		info, _ := a.cards.get(idx)
+		if info != nil {
+			info.update(card)
+			a.setPropCards(a.cards.string())
+		}
 	}
 }
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
+		logger.Debug("[Event] sink added:", (eType == pulse.EventTypeNew), idx)
 		a.update()
 
 	case pulse.EventTypeChange:
+		logger.Debug("[Event] sink changed:", idx)
 		for _, s := range a.Sinks {
 			if s.index == idx {
 				info, err := a.core.GetSink(idx)
@@ -119,9 +147,11 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
+		logger.Debug("[Event] source added:", (eType == pulse.EventTypeNew), idx)
 		a.update()
 
 	case pulse.EventTypeChange:
+		logger.Debug("[Event] source changed:", idx)
 		for _, s := range a.Sources {
 			if s.index == idx {
 				info, err := a.core.GetSource(idx)
