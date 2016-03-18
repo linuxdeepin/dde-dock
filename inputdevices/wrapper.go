@@ -15,14 +15,21 @@ package inputdevices
 import "C"
 
 import (
+	"encoding/json"
+	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
+	"strings"
 )
 
+type dxMouses []*dxinput.Mouse
+type dxTouchpads []*dxinput.Touchpad
+type dxWacoms []*dxinput.Wacom
+
 var (
-	devInfos      dxutils.DeviceInfos
-	mouseDevInfos dxutils.DeviceInfos
-	tpadDevInfos  dxutils.DeviceInfos
-	wacomDevInfos dxutils.DeviceInfos
+	devInfos   dxutils.DeviceInfos
+	mouseInfos dxMouses
+	tpadInfos  dxTouchpads
+	wacomInfos dxWacoms
 )
 
 func startDeviceListener() {
@@ -55,47 +62,103 @@ func getDeviceInfos(force bool) dxutils.DeviceInfos {
 	return devInfos
 }
 
-func getMouseInfos(force bool) dxutils.DeviceInfos {
-	if !force && len(mouseDevInfos) != 0 {
-		return mouseDevInfos
+func getMouseInfos(force bool) dxMouses {
+	if !force && len(mouseInfos) != 0 {
+		return mouseInfos
 	}
 
-	mouseDevInfos = nil
-	for _, info := range getDeviceInfos(false) {
+	mouseInfos = nil
+	for _, info := range getDeviceInfos(force) {
 		if info.Type == dxutils.DevTypeMouse {
-			mouseDevInfos = append(mouseDevInfos, info)
+			mouseInfos = append(mouseInfos, &dxinput.Mouse{
+				Id:   info.Id,
+				Name: info.Name,
+				TrackPoint: strings.Contains(
+					strings.ToLower(info.Name),
+					"trackpoint"),
+			})
 		}
 	}
 
-	return mouseDevInfos
+	return mouseInfos
 }
 
-func getTPadInfos(force bool) dxutils.DeviceInfos {
-	if !force && len(tpadDevInfos) != 0 {
-		return tpadDevInfos
+func getTPadInfos(force bool) dxTouchpads {
+	if !force && len(tpadInfos) != 0 {
+		return tpadInfos
 	}
 
-	tpadDevInfos = nil
+	tpadInfos = nil
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeTouchpad {
-			tpadDevInfos = append(tpadDevInfos, info)
+			tpadInfos = append(tpadInfos, &dxinput.Touchpad{
+				Id:   info.Id,
+				Name: info.Name,
+			})
 		}
 	}
 
-	return tpadDevInfos
+	return tpadInfos
 }
 
-func getWacomInfos(force bool) dxutils.DeviceInfos {
-	if !force && len(wacomDevInfos) != 0 {
-		return wacomDevInfos
+func getWacomInfos(force bool) dxWacoms {
+	if !force && len(wacomInfos) != 0 {
+		return wacomInfos
 	}
 
-	wacomDevInfos = nil
+	wacomInfos = nil
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeWacom {
-			wacomDevInfos = append(wacomDevInfos, info)
+			wacomInfos = append(wacomInfos, &dxinput.Wacom{
+				Id:   info.Id,
+				Name: info.Name,
+			})
 		}
 	}
 
-	return wacomDevInfos
+	return wacomInfos
+}
+
+func (infos dxMouses) get(id int32) *dxinput.Mouse {
+	for _, info := range infos {
+		if info.Id == id {
+			return info
+		}
+	}
+	return nil
+}
+
+func (infos dxMouses) string() string {
+	return toJSON(infos)
+}
+
+func (infos dxTouchpads) get(id int32) *dxinput.Touchpad {
+	for _, info := range infos {
+		if info.Id == id {
+			return info
+		}
+	}
+	return nil
+}
+
+func (infos dxTouchpads) string() string {
+	return toJSON(infos)
+}
+
+func (infos dxWacoms) get(id int32) *dxinput.Wacom {
+	for _, info := range infos {
+		if info.Id == id {
+			return info
+		}
+	}
+	return nil
+}
+
+func (infos dxWacoms) string() string {
+	return toJSON(infos)
+}
+
+func toJSON(v interface{}) string {
+	data, _ := json.Marshal(v)
+	return string(data)
 }

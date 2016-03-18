@@ -11,8 +11,6 @@ package inputdevices
 
 import (
 	"gir/gio-2.0"
-	"pkg.deepin.io/dde/api/dxinput"
-	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
 )
 
@@ -28,16 +26,6 @@ const (
 	mouseKeyScaling         = "motion-scaling"
 	mouseKeyDoubleClick     = "double-click"
 	mouseKeyDragThreshold   = "drag-threshold"
-	// TrackPoint
-	mouseKeyTPMidButton        = "trackpoint-mid-button"
-	mouseKeyTPMidButtonTimeout = "trackpoint-mid-button-timeout"
-	mouseKeyTPWheel            = "trackpoint-wheel"
-	mouseKeyTPWheelButton      = "trackpoint-wheel-button"
-	mouseKeyTPWheelTimeout     = "trackpoint-wheel-timeout"
-	mouseKeyTPWheelHorizScroll = "trackpoint-wheel-horiz-scroll"
-	mouseKeyTPAcceleration     = "trackpoint-acceleration"
-	mouseKeyTPThreshold        = "trackpoint-threshold"
-	mouseKeyTPScaling          = "trackpoint-scaling"
 )
 
 type Mouse struct {
@@ -53,10 +41,10 @@ type Mouse struct {
 	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
 	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
 
-	DeviceList dxutils.DeviceInfos
+	DeviceList string
 	Exist      bool
 
-	dxMouses map[int32]*dxinput.Mouse
+	devInfos dxMouses
 	setting  *gio.Settings
 }
 
@@ -107,8 +95,6 @@ func NewMouse() *Mouse {
 		m, "DragThreshold",
 		m.setting, mouseKeyDragThreshold)
 
-	m.updateDeviceList()
-	m.dxMouses = make(map[int32]*dxinput.Mouse)
 	m.updateDXMouses()
 
 	return m
@@ -130,38 +116,34 @@ func (m *Mouse) init() {
 	if m.DisableTpad.Get() {
 		m.disableTouchpad()
 	}
-	m.setTrackPoint()
 }
 
 func (m *Mouse) handleDeviceChanged() {
-	m.updateDeviceList()
 	m.updateDXMouses()
 	m.init()
 }
 
-func (m *Mouse) updateDeviceList() {
-	m.DeviceList = getMouseInfos(false)
-	if len(m.DeviceList) == 0 {
+func (m *Mouse) updateDXMouses() {
+	for _, info := range getMouseInfos(false) {
+		if info.TrackPoint {
+			continue
+		}
+
+		tmp := m.devInfos.get(info.Id)
+		if tmp != nil {
+			continue
+		}
+		m.devInfos = append(m.devInfos, info)
+	}
+
+	var v string
+	if len(m.devInfos) == 0 {
 		m.setPropExist(false)
 	} else {
 		m.setPropExist(true)
+		v = m.devInfos.string()
 	}
-}
-
-func (m *Mouse) updateDXMouses() {
-	for _, info := range m.DeviceList {
-		_, ok := m.dxMouses[info.Id]
-		if ok {
-			continue
-		}
-
-		dxm, err := dxinput.NewMouse(info.Id)
-		if err != nil {
-			logger.Warning(err)
-			continue
-		}
-		m.dxMouses[info.Id] = dxm
-	}
+	setPropString(m, &m.DeviceList, "DeviceList", v)
 }
 
 func (m *Mouse) disableTouchpad() {
@@ -184,7 +166,7 @@ func (m *Mouse) disableTouchpad() {
 
 func (m *Mouse) enableLeftHanded() {
 	enabled := m.LeftHanded.Get()
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		err := v.EnableLeftHanded(enabled)
 		if err != nil {
 			logger.Debugf("Enable left handed for '%d - %v' failed: %v",
@@ -195,7 +177,7 @@ func (m *Mouse) enableLeftHanded() {
 
 func (m *Mouse) enableNaturalScroll() {
 	enabled := m.NaturalScroll.Get()
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		err := v.EnableNaturalScroll(enabled)
 		if err != nil {
 			logger.Debugf("Enable natural scroll for '%d - %v' failed: %v",
@@ -206,7 +188,7 @@ func (m *Mouse) enableNaturalScroll() {
 
 func (m *Mouse) enableMidBtnEmu() {
 	enabled := m.MiddleButtonEmulation.Get()
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		if v.TrackPoint {
 			continue
 		}
@@ -221,7 +203,7 @@ func (m *Mouse) enableMidBtnEmu() {
 
 func (m *Mouse) motionAcceleration() {
 	accel := float32(m.MotionAcceleration.Get())
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		if v.TrackPoint {
 			continue
 		}
@@ -236,7 +218,7 @@ func (m *Mouse) motionAcceleration() {
 
 func (m *Mouse) motionThreshold() {
 	thres := float32(m.MotionThreshold.Get())
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		if v.TrackPoint {
 			continue
 		}
@@ -251,7 +233,7 @@ func (m *Mouse) motionThreshold() {
 
 func (m *Mouse) motionScaling() {
 	scaling := float32(m.MotionScaling.Get())
-	for _, v := range m.dxMouses {
+	for _, v := range m.devInfos {
 		if v.TrackPoint {
 			continue
 		}
@@ -270,31 +252,4 @@ func (m *Mouse) doubleClick() {
 
 func (m *Mouse) dragThreshold() {
 	xsSetInt32(xsPropDragThres, m.DragThreshold.Get())
-}
-
-func (m *Mouse) setTrackPoint() {
-	middle := m.setting.GetBoolean(mouseKeyTPMidButton)
-	middleTimeout := int16(m.setting.GetInt(mouseKeyTPMidButtonTimeout))
-	wheel := m.setting.GetBoolean(mouseKeyTPWheel)
-	wheelButton := int8(m.setting.GetInt(mouseKeyTPWheelButton))
-	wheelTimeout := int16(m.setting.GetInt(mouseKeyTPWheelTimeout))
-	wheelHorizScroll := m.setting.GetBoolean(mouseKeyTPWheelHorizScroll)
-	accel := float32(m.setting.GetDouble(mouseKeyTPAcceleration))
-	thres := float32(m.setting.GetDouble(mouseKeyTPThreshold))
-	scaling := float32(m.setting.GetDouble(mouseKeyTPScaling))
-
-	for _, v := range m.dxMouses {
-		if !v.TrackPoint {
-			continue
-		}
-		v.EnableMiddleButtonEmulation(middle)
-		v.SetMiddleButtonEmulationTimeout(middleTimeout)
-		v.EnableWheelEmulation(wheel)
-		v.SetWheelEmulationButton(wheelButton)
-		v.SetWheelEmulationTimeout(wheelTimeout)
-		v.EnableWheelHorizScroll(wheelHorizScroll)
-		v.SetMotionAcceleration(accel)
-		v.SetMotionThreshold(thres)
-		v.SetMotionScaling(scaling)
-	}
 }

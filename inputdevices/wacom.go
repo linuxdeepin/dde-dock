@@ -11,8 +11,6 @@ package inputdevices
 
 import (
 	"gir/gio-2.0"
-	"pkg.deepin.io/dde/api/dxinput"
-	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
 )
 
@@ -76,11 +74,11 @@ type Wacom struct {
 	RawSample         *property.GSettingsUintProperty `access:"readwrite"`
 	Threshold         *property.GSettingsUintProperty `access:"readwrite"`
 
-	DeviceList  dxutils.DeviceInfos
+	DeviceList  string
 	ActionInfos ActionInfos
 	Exist       bool
 
-	dxWacoms map[int32]*dxinput.Wacom
+	devInfos dxWacoms
 	setting  *gio.Settings
 }
 
@@ -131,8 +129,6 @@ func NewWacom() *Wacom {
 		w, "Threshold",
 		w.setting, wacomKeyThreshold)
 
-	w.updateDeviceList()
-	w.dxWacoms = make(map[int32]*dxinput.Wacom)
 	w.updateDXWacoms()
 
 	return w
@@ -155,34 +151,27 @@ func (w *Wacom) init() {
 }
 
 func (w *Wacom) handleDeviceChanged() {
-	w.updateDeviceList()
 	w.updateDXWacoms()
 	w.init()
 }
 
-func (w *Wacom) updateDeviceList() {
-	w.DeviceList = getWacomInfos(false)
-	if len(w.DeviceList) == 0 {
+func (w *Wacom) updateDXWacoms() {
+	for _, info := range getWacomInfos(false) {
+		tmp := w.devInfos.get(info.Id)
+		if tmp != nil {
+			continue
+		}
+		w.devInfos = append(w.devInfos, info)
+	}
+
+	var v string
+	if len(w.devInfos) == 0 {
 		w.setPropExist(false)
 	} else {
 		w.setPropExist(true)
+		v = w.devInfos.string()
 	}
-}
-
-func (w *Wacom) updateDXWacoms() {
-	for _, info := range w.DeviceList {
-		_, ok := w.dxWacoms[info.Id]
-		if ok {
-			continue
-		}
-
-		dxw, err := dxinput.NewWacom(info.Id)
-		if err != nil {
-			logger.Warning(err)
-			continue
-		}
-		w.dxWacoms[info.Id] = dxw
-	}
+	setPropString(w, &w.DeviceList, "DeviceList", v)
 }
 
 func (w *Wacom) setKeyAction(btnNum int32, action string) {
@@ -191,7 +180,7 @@ func (w *Wacom) setKeyAction(btnNum int32, action string) {
 		return
 	}
 
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetButton(int(btnNum), value)
 		if err != nil {
 			logger.Debugf("Set btn mapping for '%v - %v' failed: %v",
@@ -206,7 +195,7 @@ func (w *Wacom) enableLeftHanded() {
 		rotate = "half"
 	}
 
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetRotate(rotate)
 		if err != nil {
 			logger.Debugf("Enable left handed for '%v - %v' failed: %v",
@@ -221,7 +210,7 @@ func (w *Wacom) enableCursorMode() {
 		mode = "Relative"
 	}
 
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetMode(mode)
 		if err != nil {
 			logger.Debugf("Enable cursor mode for '%v - %v' failed: %v",
@@ -236,7 +225,7 @@ func (w *Wacom) setPressure() {
 		return
 	}
 
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetPressureCurve(array[0], array[1], array[2], array[3])
 		if err != nil {
 			logger.Debugf("Set pressure curve for '%v - %v' failed: %v",
@@ -247,7 +236,7 @@ func (w *Wacom) setPressure() {
 
 func (w *Wacom) setClickDelta() {
 	delta := int(w.DoubleDelta.Get())
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetSuppress(delta)
 		if err != nil {
 			logger.Debugf("Set double click delta for '%v - %v' to %v failed: %v",
@@ -258,7 +247,7 @@ func (w *Wacom) setClickDelta() {
 
 func (w *Wacom) mapToOutput() {
 	output := w.MapOutput.Get()
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.MapToOutput(output)
 		if err != nil {
 			logger.Debugf("Map output for '%v - %v' to %v failed: %v",
@@ -269,7 +258,7 @@ func (w *Wacom) mapToOutput() {
 
 func (w *Wacom) setRawSample() {
 	sample := w.RawSample.Get()
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetRawSample(sample)
 		if err != nil {
 			logger.Debugf("Set raw sample for '%v - %v' to %v failed: %v",
@@ -280,7 +269,7 @@ func (w *Wacom) setRawSample() {
 
 func (w *Wacom) setThreshold() {
 	thres := int(w.Threshold.Get())
-	for _, v := range w.dxWacoms {
+	for _, v := range w.devInfos {
 		err := v.SetThreshold(thres)
 		if err != nil {
 			logger.Debugf("Set threshold for '%v - %v' to %v failed: %v",

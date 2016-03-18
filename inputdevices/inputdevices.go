@@ -10,15 +10,15 @@
 package inputdevices
 
 import (
-	. "pkg.deepin.io/dde/daemon/loader"
-	"pkg.deepin.io/lib/log"
-	"pkg.deepin.io/lib/dbus"
 	"fmt"
+	. "pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/log"
 )
 
 var (
 	_manager *Manager
-	logger = log.NewLogger("daemon/inputdevices")
+	logger   = log.NewLogger("daemon/inputdevices")
 )
 
 type Daemon struct {
@@ -66,6 +66,10 @@ func (*Daemon) Start() error {
 		return err
 	}
 	err = installSessionBus(_manager.mouse)
+	if err != nil {
+		return err
+	}
+	err = installSessionBus(_manager.trackPoint)
 	if err != nil {
 		return err
 	}

@@ -9,7 +9,6 @@
 
 package inputdevices
 
-
 type devicePathInfo struct {
 	Path string
 	Type string
@@ -19,10 +18,11 @@ type devicePathInfos []*devicePathInfo
 type Manager struct {
 	Infos devicePathInfos
 
-	kbd *Keyboard
-	mouse *Mouse
-	tpad *Touchpad
-	wacom *Wacom
+	kbd        *Keyboard
+	mouse      *Mouse
+	trackPoint *TrackPoint
+	tpad       *Touchpad
+	wacom      *Wacom
 }
 
 func NewManager() *Manager {
@@ -30,16 +30,20 @@ func NewManager() *Manager {
 
 	m.Infos = devicePathInfos{
 		&devicePathInfo{
-			Path:"com.deepin.daemon.InputDevice.Keyboard",
-			Type:"keyboard",
+			Path: "com.deepin.daemon.InputDevice.Keyboard",
+			Type: "keyboard",
 		},
 		&devicePathInfo{
-			Path:"com.deepin.daemon.InputDevice.Mouse",
-			Type:"mouse",
+			Path: "com.deepin.daemon.InputDevice.Mouse",
+			Type: "mouse",
 		},
 		&devicePathInfo{
-			Path:"com.deepin.daemon.InputDevice.TouchPad",
-			Type:"touchpad",
+			Path: "com.deepin.daemon.InputDevice.TrackPoint",
+			Type: "trackpoint",
+		},
+		&devicePathInfo{
+			Path: "com.deepin.daemon.InputDevice.TouchPad",
+			Type: "touchpad",
 		},
 	}
 
@@ -47,6 +51,7 @@ func NewManager() *Manager {
 	m.wacom = getWacom()
 	m.tpad = getTouchpad()
 	m.mouse = getMouse()
+	m.trackPoint = getTrackPoint()
 
 	return m
 }

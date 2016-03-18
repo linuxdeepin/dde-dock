@@ -16,16 +16,17 @@ import (
 const (
 	dbusDest = "com.deepin.daemon.InputDevices"
 	dbusPath = "/com/deepin/daemon/InputDevices"
-	dbusIFC = dbusDest
+	dbusIFC  = dbusDest
 
 	kbdDBusPath = "/com/deepin/daemon/InputDevice/Keyboard"
-	kbdDBusIFC = "com.deepin.daemon.InputDevice.Keyboard"
+	kbdDBusIFC  = "com.deepin.daemon.InputDevice.Keyboard"
 
-	mouseDBusPath = "/com/deepin/daemon/InputDevice/Mouse"
-	mouseDBusIFC  = "com.deepin.daemon.InputDevice.Mouse"
+	mouseDBusPath     = "/com/deepin/daemon/InputDevice/Mouse"
+	mouseDBusIFC      = "com.deepin.daemon.InputDevice.Mouse"
+	trackPointDBusIFC = "com.deepin.daemon.InputDevice.TrackPoint"
 
 	tpadDBusPath = "/com/deepin/daemon/InputDevice/TouchPad"
-	tpadDBusIFC = "com.deepin.daemon.InputDevice.TouchPad"
+	tpadDBusIFC  = "com.deepin.daemon.InputDevice.TouchPad"
 
 	wacomDBusPath = "/com/deepin/daemon/InputDevice/Wacom"
 	wacomDBusIFC  = "com.deepin.daemon.InputDevice.Wacom"
@@ -33,17 +34,17 @@ const (
 
 func (*Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest: dbusDest,
+		Dest:       dbusDest,
 		ObjectPath: dbusPath,
-		Interface: dbusIFC,
+		Interface:  dbusIFC,
 	}
 }
 
 func (*Keyboard) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest: dbusDest,
+		Dest:       dbusDest,
 		ObjectPath: kbdDBusPath,
-		Interface: kbdDBusIFC,
+		Interface:  kbdDBusIFC,
 	}
 }
 
@@ -52,6 +53,14 @@ func (*Mouse) GetDBusInfo() dbus.DBusInfo {
 		Dest:       dbusDest,
 		ObjectPath: mouseDBusPath,
 		Interface:  mouseDBusIFC,
+	}
+}
+
+func (*TrackPoint) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       dbusDest,
+		ObjectPath: mouseDBusPath,
+		Interface:  trackPointDBusIFC,
 	}
 }
 
@@ -64,11 +73,20 @@ func (m *Mouse) setPropExist(exist bool) {
 	dbus.NotifyChange(m, "Exist")
 }
 
+func (tp *TrackPoint) setPropExist(exist bool) {
+	if exist == tp.Exist {
+		return
+	}
+
+	tp.Exist = exist
+	dbus.NotifyChange(tp, "Exist")
+}
+
 func (*Touchpad) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest: dbusDest,
+		Dest:       dbusDest,
 		ObjectPath: tpadDBusPath,
-		Interface: tpadDBusIFC,
+		Interface:  tpadDBusIFC,
 	}
 }
 
@@ -96,4 +114,12 @@ func (w *Wacom) setPropExist(exist bool) {
 
 	w.Exist = exist
 	dbus.NotifyChange(w, "Exist")
+}
+
+func setPropString(obj dbus.DBusObject, handler *string, prop, v string) {
+	if *handler == v {
+		return
+	}
+	*handler = v
+	dbus.NotifyChange(obj, prop)
 }

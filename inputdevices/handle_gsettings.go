@@ -59,6 +59,31 @@ func (m *Mouse) handleGSettings() {
 	})
 }
 
+func (tp *TrackPoint) handleGSettings() {
+	tp.setting.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case trackPointKeyMidButton:
+			tp.enableMiddleButton()
+		case trackPointKeyMidButtonTimeout:
+			tp.middleButtonTimeout()
+		case trackPointKeyWheel:
+			tp.enableWheelEmulation()
+		case trackPointKeyWheelButton:
+			tp.wheelEmulationButton()
+		case trackPointKeyWheelTimeout:
+			tp.wheelEmulationTimeout()
+		case trackPointKeyWheelHorizScroll:
+			tp.enableWheelHorizScroll()
+		case trackPointKeyAcceleration:
+			tp.motionAcceleration()
+		case trackPointKeyThreshold:
+			tp.motionThreshold()
+		case trackPointKeyScaling:
+			tp.motionScaling()
+		}
+	})
+}
+
 func (tpad *Touchpad) handleGSettings() {
 	tpad.setting.Connect("changed", func(s *gio.Settings, key string) {
 		switch key {

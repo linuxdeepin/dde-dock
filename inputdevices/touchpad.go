@@ -15,8 +15,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"pkg.deepin.io/dde/api/dxinput"
-	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
 	"pkg.deepin.io/lib/dbus/property"
 	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
@@ -63,9 +61,9 @@ type Touchpad struct {
 	DeltaScroll   *property.GSettingsIntProperty `access:"readwrite"`
 
 	Exist      bool
-	DeviceList dxutils.DeviceInfos
+	DeviceList string
 
-	dxTPads      map[int32]*dxinput.Touchpad
+	devInfos     dxTouchpads
 	setting      *gio.Settings
 	mouseSetting *gio.Settings
 	synProcess   *os.Process
@@ -136,8 +134,6 @@ func NewTouchpad() *Touchpad {
 		tpad, "DragThreshold",
 		tpad.mouseSetting, mouseKeyDragThreshold)
 
-	tpad.updateDeviceList()
-	tpad.dxTPads = make(map[int32]*dxinput.Touchpad)
 	tpad.updateDXTpads()
 
 	return tpad
@@ -161,38 +157,31 @@ func (tpad *Touchpad) init() {
 }
 
 func (tpad *Touchpad) handleDeviceChanged() {
-	tpad.updateDeviceList()
 	tpad.updateDXTpads()
 	tpad.init()
 }
 
-func (tpad *Touchpad) updateDeviceList() {
-	tpad.DeviceList = getTPadInfos(false)
-	if len(tpad.DeviceList) == 0 {
+func (tpad *Touchpad) updateDXTpads() {
+	for _, info := range getTPadInfos(false) {
+		tmp := tpad.devInfos.get(info.Id)
+		if tmp != nil {
+			continue
+		}
+		tpad.devInfos = append(tpad.devInfos, info)
+	}
+
+	var v string
+	if len(tpad.devInfos) == 0 {
 		tpad.setPropExist(false)
 	} else {
 		tpad.setPropExist(true)
+		v = tpad.devInfos.string()
 	}
-}
-
-func (tpad *Touchpad) updateDXTpads() {
-	for _, info := range tpad.DeviceList {
-		_, ok := tpad.dxTPads[info.Id]
-		if ok {
-			continue
-		}
-
-		dxt, err := dxinput.NewTouchpad(info.Id)
-		if err != nil {
-			logger.Warning(err)
-			continue
-		}
-		tpad.dxTPads[info.Id] = dxt
-	}
+	setPropString(tpad, &tpad.DeviceList, "DeviceList", v)
 }
 
 func (tpad *Touchpad) enable(enabled bool) {
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.Enable(enabled)
 		if err != nil {
 			logger.Warningf("Enable '%v - %v' failed: %v",
@@ -203,7 +192,7 @@ func (tpad *Touchpad) enable(enabled bool) {
 
 func (tpad *Touchpad) enableLeftHanded() {
 	enabled := tpad.LeftHanded.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.EnableLeftHanded(enabled)
 		if err != nil {
 			logger.Debugf("Enable left handed '%v - %v' failed: %v",
@@ -214,7 +203,7 @@ func (tpad *Touchpad) enableLeftHanded() {
 
 func (tpad *Touchpad) enableNaturalScroll() {
 	enabled := tpad.NaturalScroll.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.EnableNaturalScroll(enabled)
 		if err != nil {
 			logger.Debugf("Enable natural scroll '%v - %v' failed: %v",
@@ -225,7 +214,7 @@ func (tpad *Touchpad) enableNaturalScroll() {
 
 func (tpad *Touchpad) setScrollDistance() {
 	delta := tpad.DeltaScroll.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.SetScrollDistance(delta, delta)
 		if err != nil {
 			logger.Debugf("Set natural scroll distance '%v - %v' failed: %v",
@@ -236,7 +225,7 @@ func (tpad *Touchpad) setScrollDistance() {
 
 func (tpad *Touchpad) enableEdgeScroll() {
 	enabled := tpad.EdgeScroll.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.EnableEdgeScroll(enabled)
 		if err != nil {
 			logger.Debugf("Enable edge scroll '%v - %v' failed: %v",
@@ -248,7 +237,7 @@ func (tpad *Touchpad) enableEdgeScroll() {
 func (tpad *Touchpad) enableTwoFingerScroll() {
 	vert := tpad.VertScroll.Get()
 	horiz := tpad.HorizScroll.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.EnableTwoFingerScroll(vert, horiz)
 		if err != nil {
 			logger.Debugf("Enable two-finger scroll '%v - %v' failed: %v",
@@ -259,7 +248,7 @@ func (tpad *Touchpad) enableTwoFingerScroll() {
 
 func (tpad *Touchpad) enableTapToClick() {
 	enabled := tpad.TapClick.Get()
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.EnableTapToClick(enabled)
 		if err != nil {
 			logger.Debugf("Enable tap to click '%v - %v' failed: %v",
@@ -270,7 +259,7 @@ func (tpad *Touchpad) enableTapToClick() {
 
 func (tpad *Touchpad) motionAcceleration() {
 	accel := float32(tpad.MotionAcceleration.Get())
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.SetMotionAcceleration(accel)
 		if err != nil {
 			logger.Debugf("Set acceleration for '%d - %v' failed: %v",
@@ -281,7 +270,7 @@ func (tpad *Touchpad) motionAcceleration() {
 
 func (tpad *Touchpad) motionThreshold() {
 	thres := float32(tpad.MotionThreshold.Get())
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.SetMotionThreshold(thres)
 		if err != nil {
 			logger.Debugf("Set threshold for '%d - %v' failed: %v",
@@ -292,7 +281,7 @@ func (tpad *Touchpad) motionThreshold() {
 
 func (tpad *Touchpad) motionScaling() {
 	scaling := float32(tpad.MotionScaling.Get())
-	for _, v := range tpad.dxTPads {
+	for _, v := range tpad.devInfos {
 		err := v.SetMotionScaling(scaling)
 		if err != nil {
 			logger.Debugf("Set scaling for '%d - %v' failed: %v",
