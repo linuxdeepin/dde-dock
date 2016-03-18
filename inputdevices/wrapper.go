@@ -116,10 +116,11 @@ func getWacomInfos(force bool) dxWacoms {
 	wacomInfos = dxWacoms{}
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeWacom {
-			wacomInfos = append(wacomInfos, &dxinput.Wacom{
+			wacomInfo := &dxinput.Wacom{
 				Id:   info.Id,
 				Name: info.Name,
-			})
+			}
+			wacomInfos = append(wacomInfos, wacomInfo)
 		}
 	}
 

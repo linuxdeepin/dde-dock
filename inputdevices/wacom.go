@@ -10,18 +10,23 @@
 package inputdevices
 
 import (
+	"fmt"
 	"gir/gio-2.0"
+	"pkg.deepin.io/dde/api/dxinput"
 	"pkg.deepin.io/lib/dbus/property"
+	"strings"
 )
 
 const (
-	wacomSchema = "com.deepin.dde.wacom"
+	wacomSchema       = "com.deepin.dde.wacom"
+	wacomStylusSchema = wacomSchema + ".stylus"
+	wacomEraserSchema = wacomSchema + ".eraser"
 
 	wacomKeyLeftHanded        = "left-handed"
 	wacomKeyCursorMode        = "cursor-mode"
 	wacomKeyUpAction          = "keyup-action"
 	wacomKeyDownAction        = "keydown-action"
-	wacomKeyDoubleDelta       = "double-delta"
+	wacomKeySuppress          = "suppress"
 	wacomKeyPressureSensitive = "pressure-sensitive"
 	wacomKeyMapOutput         = "map-output"
 	wacomKeyRawSample         = "raw-sample"
@@ -29,8 +34,8 @@ const (
 )
 
 const (
-	btnNumUpKey   int32 = 3
-	btnNumDownKey       = 2
+	btnNumUpKey   = 3
+	btnNumDownKey = 2
 )
 
 var actionMap = map[string]string{
@@ -39,20 +44,6 @@ var actionMap = map[string]string{
 	"RightClick":  "button 3",
 	"PageUp":      "key KP_Page_Up",
 	"PageDown":    "key KP_Page_Down",
-}
-
-// Soften(x1<y1 x2<y2) --> Firmer(x1>y1 x2>y2)
-var pressureLevel = map[uint32][]int{
-	1:  []int{0, 100, 0, 100},
-	2:  []int{20, 80, 20, 80},
-	3:  []int{30, 70, 30, 70},
-	4:  []int{0, 0, 100, 100},
-	5:  []int{60, 40, 60, 40},
-	6:  []int{70, 30, 70, 30}, // default
-	7:  []int{75, 25, 75, 25},
-	8:  []int{80, 20, 80, 20},
-	9:  []int{90, 10, 90, 10},
-	10: []int{100, 0, 100, 0},
 }
 
 type ActionInfo struct {
@@ -69,17 +60,22 @@ type Wacom struct {
 	KeyDownAction *property.GSettingsStringProperty `access:"readwrite"`
 	MapOutput     *property.GSettingsStringProperty `access:"readwrite"`
 
-	DoubleDelta       *property.GSettingsUintProperty `access:"readwrite"`
-	PressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
-	RawSample         *property.GSettingsUintProperty `access:"readwrite"`
-	Threshold         *property.GSettingsUintProperty `access:"readwrite"`
+	Suppress                *property.GSettingsUintProperty `access:"readwrite"`
+	StylusPressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
+	EraserPressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
+	StylusRawSample         *property.GSettingsUintProperty `access:"readwrite"`
+	EraserRawSample         *property.GSettingsUintProperty `access:"readwrite"`
+	StylusThreshold         *property.GSettingsUintProperty `access:"readwrite"`
+	EraserThreshold         *property.GSettingsUintProperty `access:"readwrite"`
 
 	DeviceList  string
 	ActionInfos ActionInfos
 	Exist       bool
 
-	devInfos dxWacoms
-	setting  *gio.Settings
+	devInfos      dxWacoms
+	setting       *gio.Settings
+	stylusSetting *gio.Settings
+	eraserSetting *gio.Settings
 }
 
 var _wacom *Wacom
@@ -99,6 +95,9 @@ func NewWacom() *Wacom {
 	var w = new(Wacom)
 
 	w.setting = gio.NewSettings(wacomSchema)
+	w.stylusSetting = gio.NewSettings(wacomStylusSchema)
+	w.eraserSetting = gio.NewSettings(wacomEraserSchema)
+
 	w.LeftHanded = property.NewGSettingsBoolProperty(
 		w, "LeftHanded",
 		w.setting, wacomKeyLeftHanded)
@@ -108,26 +107,42 @@ func NewWacom() *Wacom {
 
 	w.KeyUpAction = property.NewGSettingsStringProperty(
 		w, "KeyUpAction",
-		w.setting, wacomKeyUpAction)
+		w.stylusSetting, wacomKeyUpAction)
 	w.KeyDownAction = property.NewGSettingsStringProperty(
 		w, "KeyDownAction",
-		w.setting, wacomKeyDownAction)
+		w.stylusSetting, wacomKeyDownAction)
+
 	w.MapOutput = property.NewGSettingsStringProperty(
 		w, "MapOutput",
 		w.setting, wacomKeyMapOutput)
 
-	w.DoubleDelta = property.NewGSettingsUintProperty(
-		w, "DoubleDelta",
-		w.setting, wacomKeyDoubleDelta)
-	w.PressureSensitive = property.NewGSettingsUintProperty(
-		w, "PressureSensitive",
-		w.setting, wacomKeyPressureSensitive)
-	w.RawSample = property.NewGSettingsUintProperty(
-		w, "RawSample",
-		w.setting, wacomKeyRawSample)
-	w.Threshold = property.NewGSettingsUintProperty(
-		w, "Threshold",
-		w.setting, wacomKeyThreshold)
+	w.Suppress = property.NewGSettingsUintProperty(
+		w, "Suppress",
+		w.setting, wacomKeySuppress)
+
+	w.StylusPressureSensitive = property.NewGSettingsUintProperty(
+		w, "StylusPressureSensitive",
+		w.stylusSetting, wacomKeyPressureSensitive)
+
+	w.EraserPressureSensitive = property.NewGSettingsUintProperty(
+		w, "EraserPressureSensitive",
+		w.eraserSetting, wacomKeyPressureSensitive)
+
+	w.StylusRawSample = property.NewGSettingsUintProperty(
+		w, "StylusRawSample",
+		w.stylusSetting, wacomKeyRawSample)
+
+	w.EraserRawSample = property.NewGSettingsUintProperty(
+		w, "EraserRawSample",
+		w.eraserSetting, wacomKeyRawSample)
+
+	w.StylusThreshold = property.NewGSettingsUintProperty(
+		w, "StylusThreshold",
+		w.stylusSetting, wacomKeyThreshold)
+
+	w.EraserThreshold = property.NewGSettingsUintProperty(
+		w, "EraserThreshold",
+		w.eraserSetting, wacomKeyThreshold)
 
 	w.updateDXWacoms()
 
@@ -141,10 +156,10 @@ func (w *Wacom) init() {
 
 	w.enableCursorMode()
 	w.enableLeftHanded()
-	w.setKeyAction(btnNumUpKey, w.KeyUpAction.Get())
-	w.setKeyAction(btnNumDownKey, w.KeyDownAction.Get())
-	w.setPressure()
-	w.setClickDelta()
+	w.setStylusButtonAction(btnNumUpKey, w.KeyUpAction.Get())
+	w.setStylusButtonAction(btnNumDownKey, w.KeyDownAction.Get())
+	w.setPressureSensitive()
+	w.setSuppress()
 	w.mapToOutput()
 	w.setRawSample()
 	w.setThreshold()
@@ -175,17 +190,20 @@ func (w *Wacom) updateDXWacoms() {
 	setPropString(w, &w.DeviceList, "DeviceList", v)
 }
 
-func (w *Wacom) setKeyAction(btnNum int32, action string) {
+func (w *Wacom) setStylusButtonAction(btnNum int, action string) {
 	value, ok := actionMap[action]
 	if !ok {
+		logger.Warningf("Invalid button action %q, actionMap: %v", action, actionMap)
 		return
 	}
-
+	// set button action for stylus
 	for _, v := range w.devInfos {
-		err := v.SetButton(int(btnNum), value)
-		if err != nil {
-			logger.Debugf("Set btn mapping for '%v - %v' failed: %v",
-				v.Id, v.Name, err)
+		if v.QueryType() == dxinput.WacomTypeStylus {
+			err := v.SetButton(btnNum, value)
+			if err != nil {
+				logger.Warningf("Set button mapping for '%v - %v' failed: %v",
+					v.Id, v.Name, err)
+			}
 		}
 	}
 }
@@ -195,12 +213,17 @@ func (w *Wacom) enableLeftHanded() {
 	if w.LeftHanded.Get() {
 		rotate = "half"
 	}
-
+	// set rotate for stylus and eraser
+	// Rotation is a tablet-wide option:
+	// rotation of one tool affects all other tools associated with the same tablet.
 	for _, v := range w.devInfos {
-		err := v.SetRotate(rotate)
-		if err != nil {
-			logger.Debugf("Enable left handed for '%v - %v' failed: %v",
-				v.Id, v.Name, err)
+		devType := v.QueryType()
+		if devType == dxinput.WacomTypeStylus || devType == dxinput.WacomTypeEraser {
+			err := v.SetRotate(rotate)
+			if err != nil {
+				logger.Warningf("Set rotate for '%v - %v' failed: %v",
+					v.Id, v.Name, err)
+			}
 		}
 	}
 }
@@ -211,70 +234,169 @@ func (w *Wacom) enableCursorMode() {
 		mode = "Relative"
 	}
 
+	// set mode for stylus and eraser
+	// NOTE: set mode Relative for pad  will cause X error
 	for _, v := range w.devInfos {
-		err := v.SetMode(mode)
-		if err != nil {
-			logger.Debugf("Enable cursor mode for '%v - %v' failed: %v",
-				v.Id, v.Name, err)
+		devType := v.QueryType()
+		if devType == dxinput.WacomTypeStylus || devType == dxinput.WacomTypeEraser {
+			err := v.SetMode(mode)
+			if err != nil {
+				logger.Warningf("Set mode for '%v - %v' failed: %v",
+					v.Id, v.Name, err)
+			}
 		}
 	}
 }
 
-func (w *Wacom) setPressure() {
-	array, ok := pressureLevel[w.PressureSensitive.Get()]
-	if !ok {
-		return
-	}
+func getPressureCurveControlPoints(level int) []int {
+	// level 1 ~ 7 Soften ~ Firmer
+	const seg = 6.0
+	const d = 30.0
+	x := (100-2*d)/seg*(float64(level)-1) + d
+	y := 100 - x
+	x1 := x - d
+	y1 := y - d
+	x2 := x + d
+	y2 := y + d
+	return []int{int(x1), int(y1), int(x2), int(y2)}
+}
 
+func (w *Wacom) getPressureCurveArray(devType int) ([]int, error) {
+	// level is float value
+	var level uint32
+	switch devType {
+	case dxinput.WacomTypeStylus:
+		level = w.StylusPressureSensitive.Get()
+	case dxinput.WacomTypeEraser:
+		level = w.EraserPressureSensitive.Get()
+	default:
+		return nil, fmt.Errorf("Invalid wacom device type")
+	}
+	logger.Debug("pressure level:", level)
+	if 1 <= level && level <= 7 {
+		points := getPressureCurveControlPoints(int(level))
+		return points, nil
+	} else {
+		return nil, fmt.Errorf("Invalid pressure sensitive level %v, range: [1, 7]", level)
+	}
+}
+
+func (w *Wacom) setPressureSensitiveForType(devType int) {
 	for _, v := range w.devInfos {
-		err := v.SetPressureCurve(array[0], array[1], array[2], array[3])
-		if err != nil {
-			logger.Debugf("Set pressure curve for '%v - %v' failed: %v",
-				v.Id, v.Name, err)
+		if v.QueryType() == devType {
+			array, err := w.getPressureCurveArray(devType)
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+
+			logger.Debug("set curve array:", array)
+			err = v.SetPressureCurve(array[0], array[1], array[2], array[3])
+			if err != nil {
+				logger.Warningf("Set pressure curve for '%v - %v' failed: %v",
+					v.Id, v.Name, err)
+			}
 		}
 	}
 }
 
-func (w *Wacom) setClickDelta() {
-	delta := int(w.DoubleDelta.Get())
-	for _, v := range w.devInfos {
-		err := v.SetSuppress(delta)
+func (w *Wacom) setPressureSensitive() {
+	w.setPressureSensitiveForType(dxinput.WacomTypeStylus)
+	w.setPressureSensitiveForType(dxinput.WacomTypeEraser)
+}
+
+func (w *Wacom) setSuppress() {
+	delta := int(w.Suppress.Get())
+	for _, dev := range w.devInfos {
+		err := dev.SetSuppress(delta)
 		if err != nil {
-			logger.Debugf("Set double click delta for '%v - %v' to %v failed: %v",
-				v.Id, v.Name, delta, err)
+			logger.Debugf("Set suppress for '%v - %v' to %v failed: %v",
+				dev.Id, dev.Name, delta, err)
 		}
 	}
 }
 
 func (w *Wacom) mapToOutput() {
-	output := w.MapOutput.Get()
+	output := strings.Trim(w.MapOutput.Get(), " ")
+	if output == "" {
+		output = "desktop"
+	}
+
 	for _, v := range w.devInfos {
 		err := v.MapToOutput(output)
 		if err != nil {
-			logger.Debugf("Map output for '%v - %v' to %v failed: %v",
+			logger.Warningf("Map output for '%v - %v' to %v failed: %v",
 				v.Id, v.Name, output, err)
 		}
 	}
 }
 
-func (w *Wacom) setRawSample() {
-	sample := w.RawSample.Get()
+func (w *Wacom) getRawSample(devType int) (uint32, error) {
+	var rawSample uint32
+	switch devType {
+	case dxinput.WacomTypeStylus:
+		rawSample = w.StylusRawSample.Get()
+	case dxinput.WacomTypeEraser:
+		rawSample = w.EraserRawSample.Get()
+	default:
+		return 0, fmt.Errorf("Invalid wacom device type")
+	}
+	return rawSample, nil
+}
+
+func (w *Wacom) setRawSampleForType(devType int) {
 	for _, v := range w.devInfos {
-		err := v.SetRawSample(sample)
-		if err != nil {
-			logger.Debugf("Set raw sample for '%v - %v' to %v failed: %v",
-				v.Id, v.Name, sample, err)
+		if v.QueryType() == devType {
+			rawSample, err := w.getRawSample(devType)
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+			err = v.SetRawSample(rawSample)
+			if err != nil {
+				logger.Warningf("Set raw sample for '%v - %v' to %v failed: %v",
+					v.Id, v.Name, rawSample, err)
+			}
+		}
+	}
+}
+
+func (w *Wacom) setRawSample() {
+	w.setRawSampleForType(dxinput.WacomTypeStylus)
+	w.setRawSampleForType(dxinput.WacomTypeEraser)
+}
+
+func (w *Wacom) getThreshold(devType int) (int, error) {
+	var threshold int
+	switch devType {
+	case dxinput.WacomTypeStylus:
+		threshold = int(w.StylusThreshold.Get())
+	case dxinput.WacomTypeEraser:
+		threshold = int(w.EraserThreshold.Get())
+	default:
+		return 0, fmt.Errorf("Invalid wacom device type")
+	}
+	return threshold, nil
+}
+
+func (w *Wacom) setThresholdForType(devType int) {
+	for _, v := range w.devInfos {
+		if v.QueryType() == devType {
+			threshold, err := w.getThreshold(devType)
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+			err = v.SetThreshold(threshold)
+			if err != nil {
+				logger.Warningf("Set threshold for '%v - %v' to %v failed: %v",
+					v.Id, v.Name, threshold, err)
+			}
 		}
 	}
 }
 
 func (w *Wacom) setThreshold() {
-	thres := int(w.Threshold.Get())
-	for _, v := range w.devInfos {
-		err := v.SetThreshold(thres)
-		if err != nil {
-			logger.Debugf("Set threshold for '%v - %v' to %v failed: %v",
-				v.Id, v.Name, thres, err)
-		}
-	}
+	w.setThresholdForType(dxinput.WacomTypeStylus)
+	w.setThresholdForType(dxinput.WacomTypeEraser)
 }

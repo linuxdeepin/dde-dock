@@ -10,6 +10,7 @@
 package inputdevices
 
 import (
+	"fmt"
 	. "github.com/smartystreets/goconvey/convey"
 	"testing"
 )
@@ -64,4 +65,15 @@ func TestSyndaemonExist(t *testing.T) {
 		So(isProcessExist("testdata/dde-desktop-cmdline", "dde-desktop"),
 			ShouldEqual, true)
 	})
+}
+
+func TestCurveControlPoints(t *testing.T) {
+	// output svg path for debug
+	for i := 1; i <= 7; i++ {
+		p := getPressureCurveControlPoints(i)
+		fmt.Printf(
+			`<path d="M0,0 C%v,%v %v,%v 100,100" stroke="red" fill="none" style="stroke-width: 2px;"></path>`,
+			p[0], p[1], p[2], p[3])
+		fmt.Println("")
+	}
 }

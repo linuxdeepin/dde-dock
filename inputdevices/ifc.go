@@ -31,6 +31,12 @@ func (w *Wacom) Reset() {
 	for _, key := range w.setting.ListKeys() {
 		w.setting.Reset(key)
 	}
+	for _, key := range w.stylusSetting.ListKeys() {
+		w.stylusSetting.Reset(key)
+	}
+	for _, key := range w.eraserSetting.ListKeys() {
+		w.eraserSetting.Reset(key)
+	}
 }
 
 func (kbd *Keyboard) Reset() {

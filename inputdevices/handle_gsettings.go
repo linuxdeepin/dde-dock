@@ -11,6 +11,7 @@ package inputdevices
 
 import (
 	"gir/gio-2.0"
+	"pkg.deepin.io/dde/api/dxinput"
 	"sync"
 )
 
@@ -116,19 +117,44 @@ func (tpad *Touchpad) handleGSettings() {
 
 func (w *Wacom) handleGSettings() {
 	w.setting.Connect("changed", func(s *gio.Settings, key string) {
+		logger.Debugf("wacom gsettings changed %v", key)
 		switch key {
 		case wacomKeyLeftHanded:
 			w.enableLeftHanded()
 		case wacomKeyCursorMode:
 			w.enableCursorMode()
-		case wacomKeyUpAction:
-			w.setKeyAction(btnNumUpKey, w.KeyUpAction.Get())
-		case wacomKeyDownAction:
-			w.setKeyAction(btnNumDownKey, w.KeyDownAction.Get())
-		case wacomKeyDoubleDelta:
-			w.setClickDelta()
+		case wacomKeySuppress:
+			w.setSuppress()
+		case wacomKeyMapOutput:
+			w.mapToOutput()
+		}
+	})
+
+	w.stylusSetting.Connect("changed", func(s *gio.Settings, key string) {
+		logger.Debugf("wacom.stylus gsettings changed %v", key)
+		switch key {
 		case wacomKeyPressureSensitive:
-			w.setPressure()
+			w.setPressureSensitiveForType(dxinput.WacomTypeStylus)
+		case wacomKeyUpAction:
+			w.setStylusButtonAction(btnNumUpKey, w.KeyUpAction.Get())
+		case wacomKeyDownAction:
+			w.setStylusButtonAction(btnNumDownKey, w.KeyDownAction.Get())
+		case wacomKeyThreshold:
+			w.setThresholdForType(dxinput.WacomTypeStylus)
+		case wacomKeyRawSample:
+			w.setRawSampleForType(dxinput.WacomTypeStylus)
+		}
+	})
+
+	w.eraserSetting.Connect("changed", func(s *gio.Settings, key string) {
+		logger.Debugf("wacom.eraser gsettings changed %v", key)
+		switch key {
+		case wacomKeyPressureSensitive:
+			w.setPressureSensitiveForType(dxinput.WacomTypeEraser)
+		case wacomKeyThreshold:
+			w.setThresholdForType(dxinput.WacomTypeEraser)
+		case wacomKeyRawSample:
+			w.setRawSampleForType(dxinput.WacomTypeEraser)
 		}
 	})
 }
