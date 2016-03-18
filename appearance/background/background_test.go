@@ -24,15 +24,6 @@ func TestScanner(t *testing.T) {
 	})
 }
 
-func TestGetDirsFromDTheme(t *testing.T) {
-	Convey("Get bg dirs from dtheme", t, func() {
-		So(getDirsFromDTheme("testdata"), ShouldResemble,
-			[]string{
-				"testdata/Theme1/wallpapers",
-				"testdata/Theme2/wallpapers"})
-	})
-}
-
 func TestFileInDirs(t *testing.T) {
 	Convey("Test file whether in dirs", t, func() {
 		var dirs = []string{

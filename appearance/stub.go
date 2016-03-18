@@ -27,20 +27,20 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (m *Manager) setPropTheme(value string) {
-	if m.Theme == value {
+func (m *Manager) setPropString(handler *string, prop, value string) {
+	if *handler == value {
 		return
 	}
 
-	m.Theme = value
-	dbus.NotifyChange(m, "Theme")
+	*handler = value
+	dbus.NotifyChange(m, prop)
 }
 
 func (m *Manager) setPropFontSize(size int32) {
-	if m.FontSize == size {
+	if m.FontSize.Get() == size {
 		return
 	}
 
-	m.FontSize = size
+	m.FontSize.Set(size)
 	dbus.NotifyChange(m, "FontSize")
 }

@@ -10,54 +10,61 @@
 package appearance
 
 import (
+	"dbus/com/deepin/daemon/accounts"
 	"encoding/json"
 	"fmt"
-	"path"
-
-	"dbus/com/deepin/daemon/accounts"
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"github.com/howeyc/fsnotify"
 	"os/user"
+	"path"
 	"pkg.deepin.io/dde/daemon/appearance/background"
-	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 	dutils "pkg.deepin.io/lib/utils"
-	"sync"
 )
 
 const (
-	TypeDTheme            string = "dtheme"
-	TypeGtkTheme                 = "gtk"
-	TypeIconTheme                = "icon"
-	TypeCursorTheme              = "cursor"
-	TypeBackground               = "background"
-	TypeGreeterBackground        = "greeterbackground"
-	TypeStandardFont             = "standardfont"
-	TypeMonospaceFont            = "monospacefont"
-	TypeFontSize                 = "fontsize"
+	TypeGtkTheme          = "gtk"
+	TypeIconTheme         = "icon"
+	TypeCursorTheme       = "cursor"
+	TypeBackground        = "background"
+	TypeGreeterBackground = "greeterbackground"
+	TypeStandardFont      = "standardfont"
+	TypeMonospaceFont     = "monospacefont"
+	TypeFontSize          = "fontsize"
 )
 
 const (
-	dthemeDefaultId = "deepin"
-	dthemeCustomId  = "Custom"
-
 	wrapBgSchema    = "com.deepin.wrap.gnome.desktop.background"
 	gnomeBgSchema   = "org.gnome.desktop.background"
 	gsKeyBackground = "picture-uri"
 
-	appearanceSchema = "com.deepin.dde.appearance"
-	gsKeyTheme       = "theme"
-	gsKeyFontSize    = "font-size"
+	appearanceSchema   = "com.deepin.dde.appearance"
+	gsKeyGtkTheme      = "gtk-theme"
+	gsKeyIconTheme     = "icon-theme"
+	gsKeyCursorTheme   = "cursor-theme"
+	gsKeyFontStandard  = "font-standard"
+	gsKeyFontMonospace = "font-monospace"
+	gsKeyFontSize      = "font-size"
+)
+
+const (
+	defaultStandardFont  = "sans-serif"
+	defaultMonospaceFont = "monospace"
 )
 
 type Manager struct {
-	// Current desktop theme
-	Theme string
-	// Current desktop font size
-	FontSize int32
+	GtkTheme      *property.GSettingsStringProperty `access:"readwrite"`
+	IconTheme     *property.GSettingsStringProperty `access:"readwrite"`
+	CursorTheme   *property.GSettingsStringProperty `access:"readwrite"`
+	Background    *property.GSettingsStringProperty `access:"readwrite"`
+	StandardFont  *property.GSettingsStringProperty `access:"readwrite"`
+	MonospaceFont *property.GSettingsStringProperty `access:"readwrite"`
+
+	FontSize *property.GSettingsIntProperty `access:"readwrite"`
 
 	// Theme changed signal
 	// ty, name
@@ -76,10 +83,31 @@ type Manager struct {
 func NewManager() *Manager {
 	var m = new(Manager)
 	m.setting = gio.NewSettings(appearanceSchema)
-	m.setPropTheme(m.setting.GetString(gsKeyTheme))
-	m.setPropFontSize(m.setting.GetInt(gsKeyFontSize))
+	m.wrapBgSetting = gio.NewSettings(wrapBgSchema)
 
-	m.wrapBgSetting, _ = dutils.CheckAndNewGSettings(wrapBgSchema)
+	m.GtkTheme = property.NewGSettingsStringProperty(
+		m, "GtkTheme",
+		m.setting, gsKeyGtkTheme)
+	m.IconTheme = property.NewGSettingsStringProperty(
+		m, "IconTheme",
+		m.setting, gsKeyIconTheme)
+	m.CursorTheme = property.NewGSettingsStringProperty(
+		m, "CursorTheme",
+		m.setting, gsKeyCursorTheme)
+	m.StandardFont = property.NewGSettingsStringProperty(
+		m, "StandardFont",
+		m.setting, gsKeyFontStandard)
+	m.MonospaceFont = property.NewGSettingsStringProperty(
+		m, "MonospaceFont",
+		m.setting, gsKeyFontMonospace)
+	m.Background = property.NewGSettingsStringProperty(
+		m, "Background",
+		m.wrapBgSetting, gsKeyBackground)
+
+	m.FontSize = property.NewGSettingsIntProperty(
+		m, "FontSize",
+		m.setting, gsKeyFontSize)
+
 	m.gnomeBgSetting, _ = dutils.CheckAndNewGSettings(gnomeBgSchema)
 
 	var err error
@@ -135,157 +163,81 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) init() {
+	m.correctFontName()
+
 	var file = path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf")
 	if dutils.IsFileExist(file) {
 		return
 	}
 
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		logger.Error("Not found valid dtheme")
-		return
-	}
-
-	err := fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, dt.FontSize)
+	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(),
+		m.FontSize.Get())
 	if err != nil {
 		logger.Debug("[init]----------- font failed:", err)
 		return
 	}
 }
 
-func (m *Manager) doSetDTheme(id string) error {
-	logger.Debug("[doSetDTheme] theme id:", id)
-	m.setPropTheme(id)
-	err := dtheme.SetDTheme(id)
-	if err != nil {
-		logger.Debug("[doSetDTheme] set failed:", err)
-		return err
+func (m *Manager) correctFontName() {
+	families := fonts.ListAllFamily()
+	stand := families.Get(m.StandardFont.Get())
+	if stand != nil {
+		if stand.Id != m.StandardFont.Get() {
+			m.StandardFont.Set(stand.Id)
+		}
+	} else {
+		m.StandardFont.Set(defaultStandardFont)
 	}
 
-	if id != m.setting.GetString(gsKeyTheme) {
-		m.setting.SetString(gsKeyTheme, id)
-		gio.SettingsSync()
+	mono := families.Get(m.MonospaceFont.Get())
+	if mono != nil {
+		if mono.Id != m.MonospaceFont.Get() {
+			m.MonospaceFont.Set(mono.Id)
+		}
+	} else {
+		m.MonospaceFont.Set(defaultMonospaceFont)
 	}
-
-	logger.Debug("[doSetDTheme] DONE")
-	return nil
 }
 
 func (m *Manager) doSetGtkTheme(value string) error {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.Gtk.Id == value {
-		return nil
-	}
-
 	if !subthemes.IsGtkTheme(value) {
 		return fmt.Errorf("Invalid gtk theme '%v'", value)
 	}
 
-	subthemes.SetGtkTheme(value)
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           value,
-		Icon:          dt.Icon.Id,
-		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.Id,
-		StandardFont:  dt.StandardFont.Id,
-		MonospaceFont: dt.MonospaceFont.Id,
-	})
+	return subthemes.SetGtkTheme(value)
 }
 
 func (m *Manager) doSetIconTheme(value string) error {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.Icon.Id == value {
-		return nil
-	}
-
 	if !subthemes.IsIconTheme(value) {
 		return fmt.Errorf("Invalid icon theme '%v'", value)
 	}
 
-	subthemes.SetIconTheme(value)
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           dt.Gtk.Id,
-		Icon:          value,
-		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.Id,
-		StandardFont:  dt.StandardFont.Id,
-		MonospaceFont: dt.MonospaceFont.Id,
-	})
+	return subthemes.SetIconTheme(value)
 }
 
 func (m *Manager) doSetCursorTheme(value string) error {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.Cursor.Id == value {
-		return nil
-	}
-
 	if !subthemes.IsCursorTheme(value) {
 		return fmt.Errorf("Invalid cursor theme '%v'", value)
 	}
 
-	subthemes.SetCursorTheme(value)
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           dt.Gtk.Id,
-		Icon:          dt.Icon.Id,
-		Cursor:        value,
-		Background:    dt.Background.Id,
-		StandardFont:  dt.StandardFont.Id,
-		MonospaceFont: dt.MonospaceFont.Id,
-	})
+	return subthemes.SetCursorTheme(value)
 }
 
-var bgLocker sync.Mutex
-
-func (m *Manager) doSetBackground(value string) error {
-	bgLocker.Lock()
-	defer bgLocker.Unlock()
-
-	logger.Debug("[doSetBackground] start set:", value)
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		logger.Debug("[doSetBackground] not found validity dtheme")
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.Background.Id == value {
-		return nil
-	}
-
+func (m *Manager) doSetBackground(value string) (string, error) {
 	if !background.IsBackgroundFile(value) {
-		return fmt.Errorf("Invalid background file '%v'", value)
+		return "", fmt.Errorf("Invalid background file '%v'", value)
 	}
 
-	uri, err := background.ListBackground().Set(value)
+	uri, err := background.ListBackground().EnsureExists(value)
 	if err != nil {
 		logger.Debugf("[doSetBackground] set '%s' failed: %v", value, uri, err)
-		return err
+		return "", err
 	}
 
 	if m.userObj != nil {
 		m.userObj.SetBackgroundFile(uri)
 	}
-
-	logger.Debug("[doSetBackground] set over...")
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           dt.Gtk.Id,
-		Icon:          dt.Icon.Id,
-		Cursor:        dt.Cursor.Id,
-		Background:    uri,
-		StandardFont:  dt.StandardFont.Id,
-		MonospaceFont: dt.MonospaceFont.Id,
-	})
+	return uri, nil
 }
 
 func (m *Manager) doSetGreeterBackground(value string) error {
@@ -298,107 +250,28 @@ func (m *Manager) doSetGreeterBackground(value string) error {
 }
 
 func (m *Manager) doSetStandardFont(value string) error {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.StandardFont.Id == value {
-		return nil
-	}
-
 	if !fonts.IsFontFamily(value) {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	//fonts.SetFamily(value, dt.MonospaceFont.Id, m.FontSize)
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           dt.Gtk.Id,
-		Icon:          dt.Icon.Id,
-		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.Id,
-		StandardFont:  value,
-		MonospaceFont: dt.MonospaceFont.Id,
-	})
+	return fonts.SetFamily(value, m.MonospaceFont.Get(), m.FontSize.Get())
 }
 
 func (m *Manager) doSetMonnospaceFont(value string) error {
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	if dt.MonospaceFont.Id == value {
-		return nil
-	}
-
 	if !fonts.IsFontFamily(value) {
 		return fmt.Errorf("Invalid font family '%v'", value)
 	}
 
-	//fonts.SetFamily(dt.StandardFont.Id, value, m.FontSize)
-	return m.setDThemeByComponent(&dtheme.ThemeComponent{
-		Gtk:           dt.Gtk.Id,
-		Icon:          dt.Icon.Id,
-		Cursor:        dt.Cursor.Id,
-		Background:    dt.Background.Id,
-		StandardFont:  dt.StandardFont.Id,
-		MonospaceFont: value,
-	})
+	return fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
 }
 
 func (m *Manager) doSetFontSize(size int32) error {
-	if m.FontSize == size {
-		logger.Debug("[doSetFontSize] equal:", m.FontSize, size)
-		return nil
-	}
-
 	if !fonts.IsFontSizeValid(size) {
 		logger.Debug("[doSetFontSize] invalid size:", size)
 		return fmt.Errorf("Invalid font size '%v'", size)
 	}
 
-	m.setPropFontSize(size)
-	m.setting.SetInt(gsKeyFontSize, size)
-	logger.Debug("[doSetFontSize] gsetting changed over:", m.setting.GetInt(gsKeyFontSize))
-
-	if size == fonts.GetFontSize() {
-		logger.Debug("[doSetFontSize] equal with xsetting:", fonts.GetFontSize(), size)
-		return nil
-	}
-	dt := m.getCurrentDTheme()
-	if dt == nil {
-		logger.Debug("[doSetFontSize] not found valid dtheme")
-		return fmt.Errorf("Not found valid dtheme")
-	}
-
-	return fonts.SetFamily(dt.StandardFont.Id, dt.MonospaceFont.Id, size)
-}
-
-func (m *Manager) getCurrentDTheme() *dtheme.DTheme {
-	dt := dtheme.ListDTheme().Get(m.Theme)
-	if dt != nil {
-		return dt
-	}
-
-	m.doSetDTheme(dthemeDefaultId)
-	m.setPropTheme(dthemeDefaultId)
-	return dtheme.ListDTheme().Get(dthemeDefaultId)
-}
-
-func (m *Manager) setDThemeByComponent(component *dtheme.ThemeComponent) error {
-	id := dtheme.ListDTheme().FindDThemeId(component)
-	if len(id) != 0 {
-		logger.Debug("[setDThemeByComponent] found match theme:", id)
-		return m.doSetDTheme(id)
-	}
-
-	err := dtheme.WriteCustomTheme(component)
-	if err != nil {
-		logger.Debug("[setDThemeByComponent] write custom theme failed:", err)
-		return err
-	}
-	return m.doSetDTheme(dthemeCustomId)
+	return fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(), size)
 }
 
 func (*Manager) doShow(ifc interface{}) (string, error) {

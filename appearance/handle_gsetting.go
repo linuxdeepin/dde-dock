@@ -10,23 +10,54 @@
 package appearance
 
 import (
+	"fmt"
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/appearance/background"
+	"pkg.deepin.io/lib/dbus"
 	"time"
 )
 
 func (m *Manager) listenGSettingChanged() {
-	m.setting.Connect("changed::theme", func(s *gio.Settings, key string) {
-		value := m.setting.GetString(key)
-		if m.Theme == value {
+	m.setting.Connect("changed", func(s *gio.Settings, key string) {
+		var (
+			ty    string
+			value string
+			err   error
+		)
+		switch key {
+		case gsKeyGtkTheme:
+			ty = TypeGtkTheme
+			value = m.setting.GetString(key)
+			err = m.doSetGtkTheme(value)
+		case gsKeyIconTheme:
+			ty = TypeIconTheme
+			value = m.setting.GetString(key)
+			err = m.doSetIconTheme(value)
+		case gsKeyCursorTheme:
+			ty = TypeCursorTheme
+			value = m.setting.GetString(key)
+			err = m.doSetCursorTheme(value)
+		case gsKeyFontStandard:
+			ty = TypeStandardFont
+			value = m.setting.GetString(key)
+			err = m.doSetStandardFont(value)
+		case gsKeyFontMonospace:
+			ty = TypeMonospaceFont
+			value = m.setting.GetString(key)
+			err = m.doSetMonnospaceFont(value)
+		case gsKeyFontSize:
+			ty = TypeFontSize
+			size := m.setting.GetInt(key)
+			value = fmt.Sprint(size)
+			err = m.doSetFontSize(size)
+		default:
 			return
 		}
-		m.doSetDTheme(value)
-	})
-	m.setting.GetString(gsKeyTheme)
-
-	m.setting.Connect("changed::font-size", func(s *gio.Settings, key string) {
-		m.doSetFontSize(m.setting.GetInt(key))
+		if err != nil {
+			logger.Warningf("Set %v failed: %v", key, err)
+			return
+		}
+		dbus.Emit(m, "Changed", ty, value)
 	})
 	m.setting.GetInt(gsKeyFontSize)
 
@@ -34,6 +65,21 @@ func (m *Manager) listenGSettingChanged() {
 }
 
 func (m *Manager) listenBgGSettings() {
+	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		value := m.wrapBgSetting.GetString(key)
+		uri, err := m.doSetBackground(value)
+		if err != nil {
+			// TODO: set bg to default bg
+			logger.Warning("Ensure bg exists failed:", err, value)
+			return
+		}
+		if uri != value {
+			m.wrapBgSetting.SetString(key, uri)
+		}
+		dbus.Emit(m, "Changed", TypeBackground, uri)
+	})
+	m.wrapBgSetting.GetString(gsKeyBackground)
+
 	if m.gnomeBgSetting == nil {
 		return
 	}
@@ -51,10 +97,14 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
-		err := m.doSetBackground(uri)
+		v, err := m.doSetBackground(uri)
 		if err != nil {
 			logger.Debugf("[Gnome background] set '%s' failed: %s", uri, err)
 			return
+		}
+
+		if uri != v {
+			m.wrapBgSetting.SetString(key, v)
 		}
 		logger.Debug("[Gnome background] sync wrap bg OVER ENDDDDDDDD:", uri)
 	})

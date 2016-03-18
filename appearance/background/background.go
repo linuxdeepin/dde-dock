@@ -68,10 +68,10 @@ func IsBackgroundFile(file string) bool {
 	return graphic.IsSupportedImage(dutils.DecodeURI(file))
 }
 
-func (infos Backgrounds) Set(uri string) (string, error) {
+func (infos Backgrounds) EnsureExists(uri string) (string, error) {
 	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
 	if isFileInSpecialDir(uri, ListDirs()) {
-		return uri, doSetByURI(uri)
+		return uri, nil
 	}
 
 	file := dutils.DecodeURI(uri)
@@ -94,7 +94,7 @@ func (infos Backgrounds) Set(uri string) (string, error) {
 	}
 	uri = dutils.EncodeURI(dest, dutils.SCHEME_FILE)
 
-	return uri, doSetByURI(dest)
+	return uri, nil
 }
 
 func (infos Backgrounds) GetIds() []string {
@@ -146,27 +146,6 @@ func (info *Background) Delete() error {
 
 func (info *Background) Thumbnail() (string, error) {
 	return images.ThumbnailForTheme(info.Id, thumbWidth, thumbHeight, false)
-}
-
-var sLocker sync.Mutex
-
-func doSetByURI(uri string) error {
-	sLocker.Lock()
-	defer sLocker.Unlock()
-	if setting == nil {
-		s, err := dutils.CheckAndNewGSettings(wrapBgSchema)
-		if err != nil {
-			return err
-		}
-		setting = s
-	}
-
-	uri = dutils.EncodeURI(uri, dutils.SCHEME_FILE)
-	if uri != setting.GetString(gsKeyBackground) {
-		setting.SetString(gsKeyBackground, uri)
-		gio.SettingsSync()
-	}
-	return nil
 }
 
 func getBgDest(file string) (string, error) {

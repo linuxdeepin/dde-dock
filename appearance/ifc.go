@@ -15,18 +15,14 @@ import (
 	"strings"
 
 	"pkg.deepin.io/dde/daemon/appearance/background"
-	"pkg.deepin.io/dde/daemon/appearance/dtheme"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
-	"pkg.deepin.io/lib/dbus"
 )
 
 // List list all available for the special type
 func (m *Manager) List(ty string) (string, error) {
 	logger.Debug("List for type:", ty)
 	switch strings.ToLower(ty) {
-	case TypeDTheme:
-		return m.doShow(dtheme.ListDTheme())
 	case TypeGtkTheme:
 		return m.doShow(subthemes.ListGtkTheme())
 	case TypeIconTheme:
@@ -48,8 +44,6 @@ func (m *Manager) List(ty string) (string, error) {
 func (m *Manager) Show(ty, name string) (string, error) {
 	logger.Debugf("Show '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
-	case TypeDTheme:
-		return m.doShow(dtheme.ListDTheme().Get(name))
 	case TypeGtkTheme:
 		return m.doShow(subthemes.ListGtkTheme().Get(name))
 	case TypeIconTheme:
@@ -71,47 +65,81 @@ func (m *Manager) Set(ty, value string) error {
 	logger.Debugf("Set '%s' for type '%s'", value, ty)
 	var err error
 	switch strings.ToLower(ty) {
-	case TypeDTheme:
-		err = m.doSetDTheme(value)
 	case TypeGtkTheme:
+		if m.GtkTheme.Get() == value {
+			return nil
+		}
 		err = m.doSetGtkTheme(value)
+		if err == nil {
+			m.GtkTheme.Set(value)
+		}
 	case TypeIconTheme:
+		if m.IconTheme.Get() == value {
+			return nil
+		}
 		err = m.doSetIconTheme(value)
+		if err == nil {
+			m.IconTheme.Set(value)
+		}
 	case TypeCursorTheme:
+		if m.CursorTheme.Get() == value {
+			return nil
+		}
 		err = m.doSetCursorTheme(value)
+		if err == nil {
+			m.CursorTheme.Set(value)
+		}
 	case TypeBackground:
-		err = m.doSetBackground(value)
+		if m.Background.Get() == value {
+			return nil
+		}
+		var uri string
+		uri, err = m.doSetBackground(value)
+		if err == nil && uri != m.Background.Get() {
+			m.Background.Set(uri)
+		}
 	case TypeGreeterBackground:
 		err = m.doSetGreeterBackground(value)
 	case TypeStandardFont:
+		if m.StandardFont.Get() == value {
+			return nil
+		}
 		err = m.doSetStandardFont(value)
+		if err == nil {
+			m.StandardFont.Set(value)
+		}
 	case TypeMonospaceFont:
+		if m.MonospaceFont.Get() == value {
+			return nil
+		}
 		err = m.doSetMonnospaceFont(value)
+		if err == nil {
+			m.MonospaceFont.Set(value)
+		}
 	case TypeFontSize:
 		size, e := strconv.ParseInt(value, 10, 64)
 		if e != nil {
 			return e
 		}
-		err = m.doSetFontSize(int32(size))
+
+		v := int32(size)
+		if m.FontSize.Get() == v {
+			return nil
+		}
+		err = m.doSetFontSize(v)
+		if err == nil {
+			m.FontSize.Set(v)
+		}
 	default:
 		return fmt.Errorf("Invalid type: %v", ty)
 	}
-
-	if err != nil {
-		return err
-	}
-
-	// Emit theme changed signal
-	dbus.Emit(m, "Changed", ty, value)
-	return nil
+	return err
 }
 
 // Delete delete the special 'name'
 func (m *Manager) Delete(ty, name string) error {
 	logger.Debugf("Delete '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
-	case TypeDTheme:
-		return dtheme.ListDTheme().Delete(name)
 	case TypeGtkTheme:
 		return subthemes.ListGtkTheme().Delete(name)
 	case TypeIconTheme:
@@ -130,8 +158,6 @@ func (m *Manager) Delete(ty, name string) error {
 func (m *Manager) Thumbnail(ty, name string) (string, error) {
 	logger.Debugf("Get thumbnail for '%s' type '%s'", name, ty)
 	switch strings.ToLower(ty) {
-	case TypeDTheme:
-		return dtheme.GetDThemeThumbnail(name)
 	case TypeGtkTheme:
 		return subthemes.GetGtkThumbnail(name)
 	case TypeIconTheme:
