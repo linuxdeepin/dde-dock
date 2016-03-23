@@ -167,6 +167,21 @@ func (s *ConnectionSession) fixValues() {
 		setSettingIp6ConfigRoutes(s.data, getSettingIp6ConfigRoutes(s.data))
 	}
 
+	// remove address-data and gateway fields in IP4/IP6 section to keep
+	// compatible with NetworkManager 1.0+
+	if isSettingKeyExists(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data") {
+		removeSettingKey(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data")
+	}
+	if isSettingKeyExists(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data") {
+		removeSettingKey(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data")
+	}
+	if isSettingKeyExists(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway") {
+		removeSettingKey(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway")
+	}
+	if isSettingKeyExists(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway") {
+		removeSettingKey(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway")
+	}
+
 	// vpn plugin data and secret
 	if getSettingConnectionType(s.data) == NM_SETTING_VPN_SETTING_NAME {
 		if !isSettingVpnDataExists(s.data) {
