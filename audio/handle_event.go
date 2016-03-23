@@ -15,18 +15,22 @@ func (a *Audio) initEventHandlers() {
 	if !a.init {
 		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
 			a.handleCardEvent(e, idx)
+			a.saveConfig()
 		})
 		a.core.Connect(pulse.FacilitySink, func(e int, idx uint32) {
 			a.handleSinkEvent(e, idx)
+			a.saveConfig()
 		})
 		a.core.Connect(pulse.FacilitySource, func(e int, idx uint32) {
 			a.handleSourceEvent(e, idx)
+			a.saveConfig()
 		})
 		a.core.Connect(pulse.FacilitySinkInput, func(e int, idx uint32) {
 			a.handleSinkInputEvent(e, idx)
 		})
 		a.core.Connect(pulse.FacilityServer, func(e int, idx uint32) {
 			a.handleServerEvent()
+			a.saveConfig()
 		})
 		a.init = true
 	}

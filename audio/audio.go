@@ -11,12 +11,13 @@ package audio
 
 import (
 	"fmt"
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/soundutils"
 	. "pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
+	"sync"
 )
 
 type Audio struct {
@@ -40,6 +41,9 @@ type Audio struct {
 
 	siEventChan  chan func()
 	siPollerExit chan struct{}
+
+	isSaving    bool
+	saverLocker sync.Mutex
 }
 
 const (
@@ -107,6 +111,7 @@ func NewAudio(core *pulse.Context) *Audio {
 	a.MaxUIVolume = pulse.VolumeUIMax
 	a.siEventChan = make(chan func(), 10)
 	a.siPollerExit = make(chan struct{})
+	a.applyConfig()
 	a.update()
 	a.initEventHandlers()
 
