@@ -343,13 +343,14 @@ func logicSetSettingVk8021xEap(data connectionData, value string) (err error) {
 }
 
 func getSettingVkMobileCountry(data connectionData) (countryCode string) {
-	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY)
-	countryCode = interfaceToString(ivalue)
-	return
+	return getSettingCacheKeyString(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_COUNTRY)
+}
+func doLogicSetSettingVkMobileCountry(data connectionData, countryCode string) {
+	setSettingCacheKey(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_COUNTRY, countryCode)
 }
 func logicSetSettingVkMobileCountry(data connectionData, countryCode string) (err error) {
 	logger.Info("set", NM_SETTING_VK_MOBILE_COUNTRY, countryCode)
-	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY, countryCode)
+	doLogicSetSettingVkMobileCountry(data, countryCode)
 	defaultProvider, err := mobileprovider.GetDefaultProvider(countryCode)
 	if err == nil {
 		err = logicSetSettingVkMobileProvider(data, defaultProvider)
@@ -358,13 +359,14 @@ func logicSetSettingVkMobileCountry(data connectionData, countryCode string) (er
 }
 
 func getSettingVkMobileProvider(data connectionData) (provider string) {
-	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER)
-	provider = interfaceToString(ivalue)
-	return
+	return getSettingCacheKeyString(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_PROVIDER)
+}
+func doLogicSetSettingVkMobileProvider(data connectionData, provider string) {
+	setSettingCacheKey(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_PROVIDER, provider)
 }
 func logicSetSettingVkMobileProvider(data connectionData, provider string) (err error) {
 	logger.Info("set", NM_SETTING_VK_MOBILE_PROVIDER, provider)
-	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER, provider)
+	doLogicSetSettingVkMobileProvider(data, provider)
 	if provider != mobileProviderValueCustom {
 		defaultPlan, err := mobileprovider.GetDefaultPlan(getSettingVkMobileCountry(data), provider)
 		if err == nil {
@@ -377,13 +379,14 @@ func logicSetSettingVkMobileProvider(data connectionData, provider string) (err 
 }
 
 func getSettingVkMobilePlan(data connectionData) (planValue string) {
-	ivalue := getSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN)
-	planValue = interfaceToString(ivalue)
-	return
+	return getSettingCacheKeyString(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_PLAN)
+}
+func doLogicSetSettingVkMobilePlan(data connectionData, planValue string) {
+	setSettingCacheKey(data, NM_SETTING_VS_MOBILE, NM_SETTING_VK_MOBILE_PLAN, planValue)
 }
 func logicSetSettingVkMobilePlan(data connectionData, planValue string) (err error) {
 	logger.Info("set", NM_SETTING_VK_MOBILE_PLAN, planValue)
-	setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN, planValue)
+	doLogicSetSettingVkMobilePlan(data, planValue)
 	p, err := mobileprovider.UnmarshalPlan(planValue)
 	if err != nil {
 		logger.Error(err)

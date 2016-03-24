@@ -258,24 +258,98 @@ func generalSetSettingAutoconnect(data connectionData, autoConnect bool) {
 }
 
 // operator for cache section
-func getSettingCacheKey(data connectionData, key string) (value interface{}) {
-	return doGetSettingKey(data, sectionCache, key)
+func getSettingCacheKey(data connectionData, section, key string) (value interface{}) {
+	return doGetSettingKey(data, sectionCache, section+"/"+key)
 }
-func setSettingCacheKey(data connectionData, key string, value interface{}) {
-	doSetSettingKey(data, sectionCache, key, value)
+func getSettingCacheKeyString(data connectionData, section, key string) (value string) {
+	return interfaceToString(getSettingCacheKey(data, section, key))
+}
+func setSettingCacheKey(data connectionData, section, key string, value interface{}) {
+	doSetSettingKey(data, sectionCache, section+"/"+key, value)
 }
 func fillSectionCache(data connectionData) {
 	addSettingSection(data, sectionCache)
+
+	// ip4
+	if isSettingSectionExists(data, sectionIpv4) {
+		dnses := getSettingIp4ConfigDns(data)
+		switch len(dnses) {
+		case 0:
+			logicSetSettingVkIp4ConfigDns(data, "")
+			logicSetSettingVkIp4ConfigDns2(data, "")
+		case 1:
+			logicSetSettingVkIp4ConfigDns(data, convertIpv4AddressToString(dnses[0]))
+			logicSetSettingVkIp4ConfigDns2(data, "")
+		default:
+			logicSetSettingVkIp4ConfigDns(data, convertIpv4AddressToString(dnses[0]))
+			logicSetSettingVkIp4ConfigDns2(data, convertIpv4AddressToString(dnses[1]))
+		}
+	}
+
+	// ip6
+	if isSettingSectionExists(data, sectionIpv6) {
+		dnses := getSettingIp6ConfigDns(data)
+		switch len(dnses) {
+		case 0:
+			logicSetSettingVkIp6ConfigDns(data, "")
+			logicSetSettingVkIp6ConfigDns2(data, "")
+		case 1:
+			logicSetSettingVkIp6ConfigDns(data, convertIpv6AddressToString(dnses[0]))
+			logicSetSettingVkIp6ConfigDns2(data, "")
+		default:
+			logicSetSettingVkIp6ConfigDns(data, convertIpv6AddressToString(dnses[0]))
+			logicSetSettingVkIp6ConfigDns2(data, convertIpv6AddressToString(dnses[1]))
+		}
+	}
+
+	// mobile
 	uuid := getSettingConnectionUuid(data)
 	manager.config.ensureMobileConfigExists(uuid)
 	switch getCustomConnectionType(data) {
 	case connectionMobileGsm, connectionMobileCdma:
-		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_COUNTRY, manager.config.getMobileConnectionCountry(uuid))
-		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PROVIDER, manager.config.getMobileConnectionProvider(uuid))
-		setSettingCacheKey(data, NM_SETTING_VK_MOBILE_PLAN, manager.config.getMobileConnectionPlan(uuid))
+		doLogicSetSettingVkMobileCountry(data, manager.config.getMobileConnectionCountry(uuid))
+		doLogicSetSettingVkMobileProvider(data, manager.config.getMobileConnectionProvider(uuid))
+		doLogicSetSettingVkMobilePlan(data, manager.config.getMobileConnectionPlan(uuid))
 	}
 }
 func refileSectionCache(data connectionData) {
+	// ip4
+	if isSettingSectionExists(data, sectionIpv4) {
+		dnses := make([]uint32, 0)
+		dns1Str := getSettingVkIp4ConfigDns(data)
+		dns2Str := getSettingVkIp4ConfigDns2(data)
+		if dns, err := convertIpv4AddressToUint32Check(dns1Str); err == nil {
+			dnses = append(dnses, dns)
+		}
+		if dns, err := convertIpv4AddressToUint32Check(dns2Str); err == nil {
+			dnses = append(dnses, dns)
+		}
+		if len(dnses) == 0 {
+			removeSettingIp4ConfigDns(data)
+		} else {
+			setSettingIp4ConfigDns(data, dnses)
+		}
+	}
+
+	// ip6
+	if isSettingSectionExists(data, sectionIpv6) {
+		dnses := make([][]byte, 0)
+		dns1Str := getSettingVkIp6ConfigDns(data)
+		dns2Str := getSettingVkIp6ConfigDns2(data)
+		if dns, err := convertIpv6AddressToArrayByteCheck(dns1Str); err == nil {
+			dnses = append(dnses, dns)
+		}
+		if dns, err := convertIpv6AddressToArrayByteCheck(dns2Str); err == nil {
+			dnses = append(dnses, dns)
+		}
+		if len(dnses) == 0 {
+			removeSettingIp6ConfigDns(data)
+		} else {
+			setSettingIp6ConfigDns(data, dnses)
+		}
+	}
+
+	// mobile
 	uuid := getSettingConnectionUuid(data)
 	manager.config.ensureMobileConfigExists(uuid)
 	switch getCustomConnectionType(data) {

@@ -15,6 +15,8 @@ import (
 
 // Sections, correspondence to "NM_SETTING_XXX" in network manager.
 const (
+	// TODO: refactor code, add mappings to virtual sections and merge
+	// sectionVpnL2tp with NM_SETTING_VS_VPN_L2TP
 	section8021x              = NM_SETTING_802_1X_SETTING_NAME
 	sectionConnection         = NM_SETTING_CONNECTION_SETTING_NAME
 	sectionGsm                = NM_SETTING_GSM_SETTING_NAME
@@ -26,8 +28,8 @@ const (
 	sectionSerial             = NM_SETTING_SERIAL_SETTING_NAME
 	sectionVpn                = NM_SETTING_VPN_SETTING_NAME
 	sectionVpnL2tp            = NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
-	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
 	sectionVpnL2tpIpsec       = NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
+	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
 	sectionVpnStrongswan      = NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME
 	sectionVpnOpenconnect     = NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
 	sectionVpnOpenvpn         = NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME

@@ -214,12 +214,10 @@ func getOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint3
 
 // Virtual key getter
 func getSettingVkIp4ConfigDns(data connectionData) (value string) {
-	dnses := getSettingIp4ConfigDns(data)
-	if len(dnses) == 0 {
-		return
-	}
-	value = convertIpv4AddressToString(dnses[0])
-	return
+	return getSettingCacheKeyString(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS)
+}
+func getSettingVkIp4ConfigDns2(data connectionData) (value string) {
+	return getSettingCacheKeyString(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS2)
 }
 func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
 	if isSettingIp4ConfigAddressesEmpty(data) {
@@ -268,24 +266,20 @@ func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value string) {
 
 // Virtual key logic setter
 func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (err error) {
-	if len(value) == 0 {
-		removeSettingIp4ConfigDns(data)
-		return
+	setSettingCacheKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS, value)
+	if len(value) > 0 {
+		if _, errWrap := convertIpv4AddressToUint32Check(value); errWrap != nil {
+			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
-	dnses := getSettingIp4ConfigDns(data)
-	if len(dnses) == 0 {
-		dnses = make([]uint32, 1)
-	}
-	tmpn, err := convertIpv4AddressToUint32Check(value)
-	dnses[0] = tmpn
-	if err != nil {
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
-		return
-	}
-	if dnses[0] != 0 {
-		setSettingIp4ConfigDns(data, dnses)
-	} else {
-		removeSettingIp4ConfigDns(data)
+	return
+}
+func logicSetSettingVkIp4ConfigDns2(data connectionData, value string) (err error) {
+	setSettingCacheKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS2, value)
+	if len(value) > 0 {
+		if _, errWrap := convertIpv4AddressToUint32Check(value); errWrap != nil {
+			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
 	return
 }

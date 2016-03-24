@@ -219,12 +219,10 @@ func getOrNewSettingIp6ConfigAddresses(data connectionData) (addresses ipv6Addre
 
 // Virtual key getter
 func getSettingVkIp6ConfigDns(data connectionData) (value string) {
-	dnses := getSettingIp6ConfigDns(data)
-	if len(dnses) == 0 {
-		return
-	}
-	value = convertIpv6AddressToString(dnses[0])
-	return
+	return getSettingCacheKeyString(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_VK_IP6_CONFIG_DNS)
+}
+func getSettingVkIp6ConfigDns2(data connectionData) (value string) {
+	return getSettingCacheKeyString(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_VK_IP6_CONFIG_DNS2)
 }
 func getSettingVkIp6ConfigAddressesAddress(data connectionData) (value string) {
 	if isSettingIp6ConfigAddressesEmpty(data) {
@@ -276,24 +274,20 @@ func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
 
 // Virtual key logic setter
 func logicSetSettingVkIp6ConfigDns(data connectionData, value string) (err error) {
-	if len(value) == 0 {
-		removeSettingIp6ConfigDns(data)
-		return
+	setSettingCacheKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_VK_IP6_CONFIG_DNS, value)
+	if len(value) > 0 {
+		if _, errWrap := convertIpv6AddressToArrayByteCheck(value); errWrap != nil {
+			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
-	dnses := getSettingIp6ConfigDns(data)
-	if len(dnses) == 0 {
-		dnses = make([][]byte, 1)
-	}
-	tmp, err := convertIpv6AddressToArrayByteCheck(value)
-	dnses[0] = tmp
-	if err != nil {
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
-		return
-	}
-	if !isIpv6AddressZero(dnses[0]) {
-		setSettingIp6ConfigDns(data, dnses)
-	} else {
-		removeSettingIp6ConfigDns(data)
+	return
+}
+func logicSetSettingVkIp6ConfigDns2(data connectionData, value string) (err error) {
+	setSettingCacheKey(data, NM_SETTING_IP6_CONFIG_SETTING_NAME, NM_SETTING_VK_IP6_CONFIG_DNS2, value)
+	if len(value) > 0 {
+		if _, errWrap := convertIpv6AddressToArrayByteCheck(value); errWrap != nil {
+			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		}
 	}
 	return
 }
