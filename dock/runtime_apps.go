@@ -384,6 +384,7 @@ func lookthroughProc(name string) uint {
 
 func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	var appId string
+	logger.Debugf("find_app_id_by_xid 0x%x", xid)
 	if displayMode == DisplayModeModernMode {
 		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
 			appId = getAppIDFromDesktopID(normalizeAppID(id))
@@ -425,16 +426,24 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 		}
 		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
 	}
-	name, _ := ewmh.WmNameGet(XU, xid)
+
+	name, err := getWmName(XU, xid)
+	if err != nil {
+		logger.Warning("getWmName failed: ", err)
+	}
+	logger.Debugf("wmName is `%s`", name)
+
 	pid, err := ewmh.WmPidGet(XU, xid)
 	if err != nil {
 		logger.Debug("get pid failed for:", xid)
 		if name != "" {
 			pid = lookthroughProc(name)
+			logger.Debugf("lookthroughProc(%q) get pid %v", name, pid)
 		} else {
 			newAppId := getAppIDFromDesktopID(normalizeAppID(wmClassName))
 			if newAppId != "" {
-				logger.Debug("get Pid failed, using wm class name as app id", newAppId)
+				logger.Debugf("get Pid failed, guess app id `%s` by wm class name `%s`",
+					newAppId, wmClassName)
 				return newAppId
 			}
 		}
@@ -443,10 +452,12 @@ func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
 	if pid == 0 {
 		appId = normalizeAppID(wmClassName)
-		logger.Debug("get window name failed, using wm class name as app id", appId)
+		logger.Debugf("get window name failed, using wm class name as app id %q", appId)
 		return appId
-	} else {
 	}
+
+	logger.Debugf("call c.find_app_id(pid=%v, wmName=%s, wmInstance=%s, wmClassName=%s, iconName=%s)",
+		pid, name, wmInstance, wmClassName, iconName)
 	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
 	newAppId := getAppIDFromDesktopID(normalizeAppID(appId))
 	if newAppId != "" {

@@ -18,6 +18,9 @@ import (
 	"strings"
 
 	"gir/gio-2.0"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/xprop"
 	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
@@ -162,4 +165,15 @@ func dataUriToFile(dataUri, path string) (string, error) {
 	}
 
 	return path, ioutil.WriteFile(path, img, 0744)
+}
+
+func getWmName(xu *xgbutil.XUtil, win xproto.Window) (string, error) {
+	wmname, err := xprop.PropValStr(xprop.GetProperty(xu, win, "_NET_WM_NAME"))
+	if err != nil {
+		wmname, err = xprop.PropValStr(xprop.GetProperty(xu, win, "WM_NAME"))
+		if err != nil {
+			return "", err
+		}
+	}
+	return wmname, nil
 }
