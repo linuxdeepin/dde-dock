@@ -212,10 +212,6 @@ func (tp *TrackPoint) wheelEmulationTimeout() {
 func (tp *TrackPoint) motionAcceleration() {
 	accel := float32(tp.MotionAcceleration.Get())
 	for _, v := range tp.devInfos {
-		if v.TrackPoint {
-			continue
-		}
-
 		err := v.SetMotionAcceleration(accel)
 		if err != nil {
 			logger.Debugf("Set acceleration for '%d - %v' failed: %v",
@@ -227,10 +223,6 @@ func (tp *TrackPoint) motionAcceleration() {
 func (tp *TrackPoint) motionThreshold() {
 	thres := float32(tp.MotionThreshold.Get())
 	for _, v := range tp.devInfos {
-		if v.TrackPoint {
-			continue
-		}
-
 		err := v.SetMotionThreshold(thres)
 		if err != nil {
 			logger.Debugf("Set threshold for '%d - %v' failed: %v",
@@ -242,10 +234,6 @@ func (tp *TrackPoint) motionThreshold() {
 func (tp *TrackPoint) motionScaling() {
 	scaling := float32(tp.MotionScaling.Get())
 	for _, v := range tp.devInfos {
-		if v.TrackPoint {
-			continue
-		}
-
 		err := v.SetMotionScaling(scaling)
 		if err != nil {
 			logger.Debugf("Set scaling for '%d - %v' failed: %v",
