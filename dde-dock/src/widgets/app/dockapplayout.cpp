@@ -199,7 +199,7 @@ void DockAppLayout::initEntries() const
 
 void DockAppLayout::updateWindowIconGeometries()
 {
-    qDebug() << "update window icon geometries.";
+//    qDebug() << "update window icon geometries.";
 
     for (QWidget *w : widgets()) {
         DockAppItem * item = qobject_cast<DockAppItem *>(w);

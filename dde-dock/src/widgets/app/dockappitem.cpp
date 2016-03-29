@@ -247,7 +247,7 @@ void DockAppItem::updateMenuJsonString()
 void DockAppItem::setWindowIconGeometries()
 {
     for (int xid : m_itemData.xidTitleMap.keys()) {
-        qDebug() << "set _NET_WM_WINDOW_ICON_GEOMETRY for window " << xid << " to " << globalPos() << size();
+//        qDebug() << "set _NET_WM_WINDOW_ICON_GEOMETRY for window " << xid << " to " << globalPos() << size();
         XcbMisc::instance()->set_window_icon_geometry(xid, QRect(globalPos(), size()));
     }
 }

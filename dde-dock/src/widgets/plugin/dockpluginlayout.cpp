@@ -57,9 +57,10 @@ void DockPluginLayout::initPluginManager()
     connect(m_pluginManager, &DockPluginsManager::itemAppend, [=](DockItem *targetItem){
         this->insertWidget(0, targetItem);
         connect(targetItem, &DockItem::needPreviewShow, [=](QPoint pos) {
-            DockItem *s = qobject_cast<DockItem *>(sender());
-            if (s)
-                emit needPreviewShow(s, pos);
+//            DockItem *s = qobject_cast<DockItem *>(sender());
+//            if (s)
+//                emit needPreviewShow(s, pos);
+            emit needPreviewShow(targetItem, pos);
         });
         connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
         connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);
@@ -69,9 +70,10 @@ void DockPluginLayout::initPluginManager()
         int index = indexOf(baseItem);
         insertWidget(index != -1 ? index : count(), targetItem);
         connect(targetItem, &DockItem::needPreviewShow, this, [=](QPoint pos) {
-            DockItem *s = qobject_cast<DockItem *>(sender());
-            if (s)
-                emit needPreviewShow(s, pos);
+//            DockItem *s = qobject_cast<DockItem *>(sender());
+//            if (s)
+//                emit needPreviewShow(s, pos);
+            emit needPreviewShow(targetItem, pos);
         });
         connect(targetItem, &DockItem::needPreviewHide, this, &DockPluginLayout::needPreviewHide);
         connect(targetItem, &DockItem::needPreviewUpdate, this, &DockPluginLayout::needPreviewUpdate);

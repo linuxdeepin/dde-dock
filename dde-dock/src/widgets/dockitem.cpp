@@ -122,7 +122,6 @@ void DockItem::showPreview(const QPoint &previewPos)
     }
     else {
         m_titleLabel->setParent(NULL);
-
         emit needPreviewShow(pos);
     }
 }
