@@ -20,10 +20,3 @@ func (m *DockedAppManager) GetDBusInfo() dbus.DBusInfo {
 		Interface:  "dde.dock.DockedAppManager",
 	}
 }
-
-func (m *DockedAppManager) destroy() {
-	if m.core != nil {
-		m.core.Unref()
-	}
-	dbus.UnInstallObject(m)
-}

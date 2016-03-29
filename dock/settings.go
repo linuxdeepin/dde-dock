@@ -130,7 +130,7 @@ func NewSetting() *Setting {
 }
 
 func (s *Setting) init() bool {
-	s.core = gio.NewSettings(SchemaId)
+	s.core = gio.NewSettings(dockSchema)
 	if s.core == nil {
 		return false
 	}

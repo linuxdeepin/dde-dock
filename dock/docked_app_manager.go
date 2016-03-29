@@ -23,9 +23,9 @@ import (
 )
 
 const (
-	SchemaId       string = "com.deepin.dde.dock"
-	DockedApps     string = "docked-apps"
-	DockedItemTemp string = `[Desktop Entry]
+	dockSchema           string = "com.deepin.dde.dock"
+	settingKeyDockedApps string = "docked-apps"
+	dockedItemTemplate   string = `[Desktop Entry]
 Name={{ .Name }}
 Exec={{ .Exec }}
 Icon={{ .Icon }}
@@ -39,8 +39,8 @@ var scratchDir string = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
 
 // DockedAppManager是管理已驻留程序的管理器。
 type DockedAppManager struct {
-	core  *gio.Settings
-	items *list.List
+	settings *gio.Settings
+	items    *list.List
 
 	// Docked是信号，在某程序驻留成功后被触发，并将该程序的id发送给信号的接受者。
 	Docked func(id string) // find indicator on front-end.
@@ -56,18 +56,29 @@ func NewDockedAppManager() *DockedAppManager {
 
 func (m *DockedAppManager) init() {
 	m.items = list.New()
-	m.core = gio.NewSettings(SchemaId)
-	if m.core == nil {
+	m.settings = gio.NewSettings(dockSchema)
+	if m.settings == nil {
 		return
 	}
 
 	// TODO:
 	// listen changed.
-	appList := m.core.GetStrv(DockedApps)
+	appList := m.settings.GetStrv(settingKeyDockedApps)
 	for _, id := range appList {
 		m.items.PushBack(normalizeAppID(id))
 	}
 
+	m.handleOldConfigFile()
+}
+
+func (m *DockedAppManager) destroy() {
+	if m.settings != nil {
+		m.settings.Unref()
+	}
+	dbus.UnInstallObject(m)
+}
+
+func (m *DockedAppManager) handleOldConfigFile() {
 	conf := glib.NewKeyFile()
 	defer conf.Free()
 
@@ -100,7 +111,7 @@ func (m *DockedAppManager) init() {
 		createScratchFile(id, title, icon, exec)
 	}
 
-	m.core.SetStrv(DockedApps, ids)
+	m.settings.SetStrv(settingKeyDockedApps, ids)
 	gio.SettingsSync()
 	conf.SetBoolean("__Config__", "inited", true)
 
@@ -123,8 +134,8 @@ func (m *DockedAppManager) init() {
 
 // DockedAppList返回一个已排序的程序id列表。
 func (m *DockedAppManager) DockedAppList() []string {
-	if m.core != nil {
-		appList := m.core.GetStrv(DockedApps)
+	if m.settings != nil {
+		appList := m.settings.GetStrv(settingKeyDockedApps)
 		return appList
 	}
 	return make([]string, 0)
@@ -209,7 +220,7 @@ func (m *DockedAppManager) doUndock(id string) bool {
 	}
 
 	logger.Info("Undock", id, ", Remove", m.items.Remove(removeItem))
-	m.core.SetStrv(DockedApps, m.toSlice())
+	m.settings.SetStrv(settingKeyDockedApps, m.toSlice())
 	gio.SettingsSync()
 	os.Remove(filepath.Join(scratchDir, id+".desktop"))
 	os.Remove(filepath.Join(scratchDir, id+".sh"))
@@ -277,7 +288,7 @@ func (m *DockedAppManager) Sort(items []string) {
 	}
 	l := m.toSlice()
 	logger.Debug("sorted:", l)
-	m.core.SetStrv(DockedApps, l)
+	m.settings.SetStrv(settingKeyDockedApps, l)
 	gio.SettingsSync()
 }
 
@@ -290,24 +301,20 @@ func (m *DockedAppManager) toSlice() []string {
 }
 
 func createScratchFile(id, title, icon, cmd string) error {
-	logger.Info("create scratch file for %s with cmd %q and title %q", id, cmd, title)
-
-	homeDir := os.Getenv("HOME")
-	path := ".config/dock/scratch"
-	configDir := filepath.Join(homeDir, path)
-	err := os.MkdirAll(configDir, 0775)
+	logger.Infof("create scratch file for %s with cmd %q and title %q", id, cmd, title)
+	err := os.MkdirAll(scratchDir, 0775)
 	if err != nil {
-		logger.Warning("create scratch failed:", err)
+		logger.Warning("create scratch directory failed:", err)
 		return err
 	}
-	f, err := os.OpenFile(filepath.Join(configDir, id+".desktop"),
-		os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0744)
+	f, err := os.OpenFile(filepath.Join(scratchDir, id+".desktop"),
+		os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0744)
 	if err != nil {
-		logger.Warning("OpenScratch to write failed:", err)
+		logger.Warning("Open file for write failed:", err)
 		return err
 	}
 	defer f.Close()
-	temp := template.Must(template.New("docked_item_temp").Parse(DockedItemTemp))
+	temp := template.Must(template.New("docked_item_temp").Parse(dockedItemTemplate))
 	e := temp.Execute(f, dockedItemInfo{title, icon, cmd})
 	if e != nil {
 		return e
