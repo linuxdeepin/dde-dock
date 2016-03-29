@@ -74,7 +74,7 @@ func getAppIDFromDesktopID(candidateID string) string {
 var _appIDCache map[string]string = make(map[string]string)
 
 func guess_desktop_id(appId string) string {
-	logger.Debug(fmt.Sprintf("guess_desktop_id for %q", appId))
+	logger.Debugf("guess_desktop_id %q", appId)
 	if desktopID, ok := _appIDCache[appId]; ok {
 		logger.Debug(appId, "is in cache")
 		return desktopID

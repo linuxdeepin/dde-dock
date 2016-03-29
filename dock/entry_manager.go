@@ -176,7 +176,12 @@ func (m *EntryManager) createNormalApp(id string) {
 	m.normalApps[id] = nApp
 	m.updateEntry(id, nApp, m.mustGetEntry(nApp, nil).rApp)
 }
-func (m *EntryManager) destroyNormalApp(nApp *NormalApp) {
-	delete(m.normalApps, nApp.Id)
-	m.updateEntry(nApp.Id, nil, m.mustGetEntry(nApp, nil).rApp)
+func (m *EntryManager) destroyNormalApp(id string) {
+	if nApp, ok := m.normalApps[id]; ok {
+		logger.Debugf("destroyNormalApp id: %q", id)
+		delete(m.normalApps, nApp.Id)
+		m.updateEntry(nApp.Id, nil, m.mustGetEntry(nApp, nil).rApp)
+	} else {
+		logger.Debugf("no need destroyNormalApp id: %q", id)
+	}
 }
