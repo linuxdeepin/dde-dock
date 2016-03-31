@@ -136,8 +136,7 @@ func (d *Daemon) Start() error {
 	var err error
 
 	if err = initDisplay(); err != nil {
-		d.Stop()
-		logger.Info("initialize display failed")
+		d.startFailed("initialize display failed")
 		return err
 	}
 	logger.Info("initialize display done")
@@ -213,7 +212,7 @@ func (d *Daemon) Start() error {
 		d.startFailed("register dbus interface failed:", err)
 		return err
 	}
-	go clientManager.listenRootWindow()
+	go clientManager.listenRootWindowPropertyChange()
 	logger.Info("initialize client manager done")
 
 	region = NewRegion()

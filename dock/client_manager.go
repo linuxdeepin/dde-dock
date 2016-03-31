@@ -10,22 +10,18 @@
 package dock
 
 import (
-	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xevent"
-	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"os/exec"
 	"pkg.deepin.io/lib/dbus"
 )
 
 var (
 	activeWindow    xproto.Window = 0
 	isLauncherShown bool          = false
-	currentViewport []uint        = nil
 )
 
 const (
@@ -35,10 +31,7 @@ const (
 // ClientManager用来管理启动程序相关窗口。
 type ClientManager struct {
 	// ActiveWindowChanged会在焦点窗口被改变时触发，会将最新的焦点窗口id发送给监听者。
-	ActiveWindowChanged func(xid uint32)
-
-	// ShowingDesktopChanged会在_NET_SHOWING_DESKTOP改变时被触发。
-	ShowingDesktopChanged func()
+	ActiveWindowChanged func(win uint32)
 }
 
 // NewClientManager creates a new client manager.
@@ -51,46 +44,62 @@ func (m *ClientManager) CurrentActiveWindow() uint32 {
 	return uint32(activeWindow)
 }
 
-func changeWorkspaceIfNeeded(xid xproto.Window) error {
-	desktopNum, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
+func getWindowUserTime(win xproto.Window) (uint, error) {
+	timestamp, err := ewmh.WmUserTimeGet(XU, win)
 	if err != nil {
-		return fmt.Errorf("Get _NET_WM_DESKTOP failed: %s", err)
+		userTimeWindow, err := ewmh.WmUserTimeWindowGet(XU, win)
+		if err != nil {
+			return 0, err
+		}
+		timestamp, err = ewmh.WmUserTimeGet(XU, userTimeWindow)
+		if err != nil {
+			return 0, err
+		}
+	}
+	return timestamp, nil
+}
+
+func changeCurrentWorkspaceToWindowWorkspace(win xproto.Window) error {
+	winWorkspace, err := ewmh.WmDesktopGet(XU, win)
+	if err != nil {
+		return err
 	}
 
-	currentDesktop, err := ewmh.CurrentDesktopGet(XU)
+	currentWorkspace, err := ewmh.CurrentDesktopGet(XU)
 	if err != nil {
-		return fmt.Errorf("Get _NET_CURRENT_DESKTOP failed: %v", err)
+		return err
 	}
 
-	if currentDesktop == desktopNum {
-		logger.Debug("No need to change workspace, the current desktop is already %v", currentDesktop)
+	if currentWorkspace == winWorkspace {
+		logger.Debugf("No need to change workspace, the current desktop is already %v", currentWorkspace)
 		return nil
 	}
+	logger.Debug("Change workspace")
 
-	timeStamp, err := ewmh.WmUserTimeGet(XU, xid)
+	winUserTime, err := getWindowUserTime(win)
+	logger.Debug("window user time:", winUserTime)
 	if err != nil {
-		logger.Debugf("Get timestamp of 0x%x failed: %v", uint32(xid), err)
+		// only warning not return
+		logger.Warning("getWindowUserTime failed:", err)
 	}
-
-	err = ewmh.ClientEvent(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP", int(desktopNum), int(timeStamp))
+	err = ewmh.CurrentDesktopReqExtra(XU, int(winWorkspace), xproto.Timestamp(winUserTime))
 	if err != nil {
-		return fmt.Errorf("Send ClientMessage Failed: %v", err)
+		return err
 	}
-
 	return nil
 }
 
-func activateWindow(xid xproto.Window) error {
-	err := changeWorkspaceIfNeeded(xid)
+func activateWindow(win xproto.Window) error {
+	err := changeCurrentWorkspaceToWindowWorkspace(win)
 	if err != nil {
-		logger.Warning(err)
+		return err
 	}
-	return ewmh.ActiveWindowReq(XU, xid)
+	return ewmh.ActiveWindowReq(XU, win)
 }
 
 // ActiveWindow会激活给定id的窗口，被激活的窗口将通常会程序焦点窗口。(废弃，名字应该是ActivateWindow，当时手残打错了，此接口会在之后被移除，请使用正确的接口)
-func (m *ClientManager) ActiveWindow(xid uint32) bool {
-	err := activateWindow(xproto.Window(xid))
+func (m *ClientManager) ActiveWindow(win uint32) bool {
+	err := activateWindow(xproto.Window(win))
 	if err != nil {
 		logger.Warning("Activate window failed:", err)
 		return false
@@ -99,8 +108,8 @@ func (m *ClientManager) ActiveWindow(xid uint32) bool {
 }
 
 // ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
-func (m *ClientManager) ActivateWindow(xid uint32) bool {
-	err := activateWindow(xproto.Window(xid))
+func (m *ClientManager) ActivateWindow(win uint32) bool {
+	err := activateWindow(xproto.Window(win))
 	if err != nil {
 		logger.Warning("Activate window failed:", err)
 		return false
@@ -109,18 +118,13 @@ func (m *ClientManager) ActivateWindow(xid uint32) bool {
 }
 
 // CloseWindow会将传入id的窗口关闭。
-func (m *ClientManager) CloseWindow(xid uint32) bool {
-	err := ewmh.CloseWindow(XU, xproto.Window(xid))
+func (m *ClientManager) CloseWindow(win uint32) bool {
+	err := ewmh.CloseWindow(XU, xproto.Window(win))
 	if err != nil {
 		logger.Warning("Close window failed:", err)
 		return false
 	}
 	return true
-}
-
-// ToggleShowDesktop会触发显示桌面，当桌面显示时，会将窗口恢复，当桌面未显示时，会隐藏窗口以显示桌面。
-func (m *ClientManager) ToggleShowDesktop() {
-	exec.Command("/usr/lib/deepin-daemon/desktop-toggle").Run()
 }
 
 // IsLauncherShown判断launcher是否已经显示。
@@ -144,43 +148,44 @@ func walkClientList(pre func(xproto.Window) bool) bool {
 	return false
 }
 
-func isMaximizeVertClientPre(xid xproto.Window) bool {
-	state, _ := ewmh.WmStateGet(XU, xid)
+func isMaximizeVertClientPre(win xproto.Window) bool {
+	state, _ := ewmh.WmStateGet(XU, win)
 	return contains(state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }
 
-func isHiddenPre(xid xproto.Window) bool {
-	state, _ := ewmh.WmStateGet(XU, xid)
+func isHiddenPre(win xproto.Window) bool {
+	state, _ := ewmh.WmStateGet(XU, win)
 	return contains(state, "_NET_WM_STATE_HIDDEN")
 }
 
 // works for new deepin wm.
-func checkCurrentDesktop(xid xproto.Window) (bool, error) {
-	num, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
+func isWindowOnCurrentWorkspace(win xproto.Window) (bool, error) {
+	winWorkspace, err := ewmh.WmDesktopGet(XU, win)
 	if err != nil {
 		return false, err
 	}
 
-	currentDesktop, err := xprop.PropValNum(xprop.GetProperty(XU, XU.RootWin(), "_NET_CURRENT_DESKTOP"))
+	currentWorkspace, err := ewmh.CurrentDesktopGet(XU)
 	if err != nil {
 		return false, err
 	}
 
-	return num == currentDesktop, nil
+	return winWorkspace == currentWorkspace, nil
 }
 
-func onCurrentWorkspacePre(xid xproto.Window) bool {
-	isOnCurrentWorkspace, err := checkCurrentDesktop(xid)
+func onCurrentWorkspacePre(win xproto.Window) bool {
+	isOnCurrentWorkspace, err := isWindowOnCurrentWorkspace(win)
 	if err != nil {
+		logger.Warning(err)
 		return false
 	}
 	return isOnCurrentWorkspace
 }
 
-func hasMaximizeClientPre(xid xproto.Window) bool {
-	isMax := isMaximizeVertClientPre(xid)
-	isHidden := isHiddenPre(xid)
-	onCurrentWorkspace := onCurrentWorkspacePre(xid)
+func hasMaximizeClientPre(win xproto.Window) bool {
+	isMax := isMaximizeVertClientPre(win)
+	isHidden := isHiddenPre(win)
+	onCurrentWorkspace := onCurrentWorkspacePre(win)
 	logger.Debug("isMax:", isMax, "isHidden:", isHidden,
 		"onCurrentWorkspace:", onCurrentWorkspace)
 	return isMax && !isHidden && onCurrentWorkspace
@@ -190,21 +195,19 @@ func hasMaximizeClient() bool {
 	return walkClientList(hasMaximizeClientPre)
 }
 
-func isDeepinLauncher(xid xproto.Window) bool {
-	res, err := icccm.WmClassGet(XU, xid)
+func isDeepinLauncher(win xproto.Window) (bool, error) {
+	winClass, err := icccm.WmClassGet(XU, win)
 	if err != nil {
-		return false
+		return false, err
 	}
-
-	return res.Instance == DDELauncher
+	return winClass.Instance == DDELauncher, nil
 }
 
-func isWindowOnPrimaryScreen(xid xproto.Window) bool {
+func isWindowOnPrimaryScreen(win xproto.Window) bool {
 	var err error
-
-	win := xwindow.New(XU, xid)
+	window := xwindow.New(XU, win)
 	// include shadow
-	gemo, err := win.DecorGeometry()
+	gemo, err := window.DecorGeometry()
 	if err != nil {
 		logger.Debug(err)
 		return false
@@ -229,11 +232,11 @@ func isWindowOnPrimaryScreen(xid xproto.Window) bool {
 	return isOnPrimary
 }
 
-func isWindowOverlapDock(xid xproto.Window) bool {
-	win := xwindow.New(XU, xid)
-	rect, err := win.DecorGeometry()
+func isWindowOverlapDock(win xproto.Window) bool {
+	window := xwindow.New(XU, win)
+	rect, err := window.DecorGeometry()
 	if err != nil {
-		logger.Warningf("isWindowOverlapDock GetDecorGeometry of 0x%x failed: %s", xid, err)
+		logger.Warningf("isWindowOverlapDock GetDecorGeometry of 0x%x failed: %s", win, err)
 		return false
 	}
 
@@ -256,64 +259,55 @@ func isWindowOverlapDock(xid xproto.Window) bool {
 		dockX < winX+winWidth && dockX+dockWidth > winX
 }
 
-func (m *ClientManager) listenRootWindow() {
-	var update = func() {
-		list, err := ewmh.ClientListGet(XU)
-		if err != nil {
-			logger.Warning("Can't Get _NET_CLIENT_LIST", err)
-		}
-		isLauncherShown = false
-		for _, xid := range list {
-			if !isDeepinLauncher(xid) {
-				continue
-			}
+func (m *ClientManager) handleClientListChanged() {
+	clientList, err := ewmh.ClientListGet(XU)
+	if err != nil {
+		logger.Warning("Get client list failed:", err)
+		return
+	}
+	ENTRY_MANAGER.runtimeAppChanged(clientList)
+}
 
-			winProps, err :=
-				xproto.GetWindowAttributes(XU.Conn(),
-					xid).Reply()
-			if err != nil {
-				break
-			}
-			if winProps.MapState == xproto.MapStateViewable {
-				isLauncherShown = true
-			}
-			break
-		}
-		ENTRY_MANAGER.runtimeAppChanged(list)
+func (m *ClientManager) handleActiveWindowChanged() {
+	logger.Debug("Active window changed")
+	var err error
+	isLauncherShown = false
+	activeWindow, err = ewmh.ActiveWindowGet(XU)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	// loop gets better performance than find_app_id_by_xid.
+	// setLeader/updateState will filter invalid xid.
+	for _, app := range ENTRY_MANAGER.runtimeApps {
+		app.setLeader(activeWindow)
+		app.updateState(activeWindow)
 	}
 
-	xwindow.New(XU, XU.RootWin()).Listen(xproto.EventMaskPropertyChange)
+	isLauncherShown, err = isDeepinLauncher(activeWindow)
+	if err != nil {
+		logger.Debug(err)
+	}
+	dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
+
+	hideMode := HideModeType(setting.GetHideMode())
+	if hideMode == HideModeSmartHide || hideMode == HideModeKeepHidden {
+		hideModemanager.UpdateState()
+	}
+}
+
+func (m *ClientManager) listenRootWindowPropertyChange() {
+	rootWin := XU.RootWin()
+	xwindow.New(XU, rootWin).Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
 		case _NET_CLIENT_LIST:
-			update()
+			m.handleClientListChanged()
 		case _NET_ACTIVE_WINDOW:
-			var err error
-			isLauncherShown = false
-			if activeWindow, err = ewmh.ActiveWindowGet(XU); err == nil {
-				// loop gets better performance than find_app_id_by_xid.
-				// setLeader/updateState will filter invalid xid.
-				for _, app := range ENTRY_MANAGER.runtimeApps {
-					app.setLeader(activeWindow)
-					app.updateState(activeWindow)
-				}
-
-				if isDeepinLauncher(activeWindow) {
-					isLauncherShown = true
-				}
-
-				dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
-			}
-
-			hideMode := HideModeType(setting.GetHideMode())
-			if hideMode == HideModeSmartHide || hideMode == HideModeKeepHidden {
-				hideModemanager.UpdateState()
-			}
-		case _NET_SHOWING_DESKTOP:
-			dbus.Emit(m, "ShowingDesktopChanged")
+			m.handleActiveWindowChanged()
 		}
-	}).Connect(XU, XU.RootWin())
+	}).Connect(XU, rootWin)
 
-	update()
+	m.handleClientListChanged()
 	xevent.Main(XU)
 }
