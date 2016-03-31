@@ -27,7 +27,6 @@ var (
 	//There variable must be initialized after the Xu/TrayXU has been
 	//created.
 	_NET_SHOWING_DESKTOP    xproto.Atom
-	DEEPIN_SCREEN_VIEWPORT  xproto.Atom
 	_NET_CLIENT_LIST        xproto.Atom
 	_NET_ACTIVE_WINDOW      xproto.Atom
 	ATOM_WINDOW_ICON        xproto.Atom
@@ -38,7 +37,6 @@ var (
 	_NET_SYSTEM_TRAY_S0     xproto.Atom
 	_NET_SYSTEM_TRAY_OPCODE xproto.Atom
 
-	// ATOM_DEEPIN_WINDOW_VIEWPORTS, _ = xprop.Atm(XU, "DEEPIN_WINDOW_VIEWPORTS")
 
 	mouseAreaTimer   *time.Timer
 	TOGGLE_HIDE_TIME = time.Millisecond * 400

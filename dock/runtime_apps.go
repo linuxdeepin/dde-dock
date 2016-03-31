@@ -666,25 +666,6 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 	app.isMaximized = contains(app.state, "_NET_WM_STATE_MAXIMIZED_VERT")
 }
 
-// TODO: using this instead of walking throught all client
-// to get the workspaces
-// func (app *RuntimeApp) updateViewports(xid xproto.Window) {
-// 	app.workspaces = nil
-// 	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
-// 		"DEEPIN_WINDOW_VIEWPORTS"))
-// 	if err != nil {
-// 		logger.Error("get DEEPIN_WINDOW_VIEWPORTS failed", err)
-// 		return
-// 	}
-// 	app.workspaces = make([][]uint, 0)
-// 	for i := uint(0); i < viewports[0]; i++ {
-// 		viewport := make([]uint, 0)
-// 		viewport[0] = viewports[i+1]
-// 		viewport[1] = viewports[i+2]
-// 		app.workspaces = append(app.workspaces, viewport)
-// 	}
-// }
-
 func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 	newAppId := find_app_id_by_xid(
 		xid,
@@ -853,8 +834,6 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			time.AfterFunc(time.Millisecond*20, func() {
 				app.updateOverlap(xid)
 			})
-		// case ATOM_DEEPIN_WINDOW_VIEWPORTS:
-		// 	app.updateViewports(xid)
 		case ATOM_WINDOW_TYPE:
 			if !isNormalWindow(ev.Window) {
 				app.detachXid(xid)

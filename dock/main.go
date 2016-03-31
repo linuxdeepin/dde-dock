@@ -108,7 +108,6 @@ func (d *Daemon) startFailed(args ...interface{}) {
 
 func initAtom() {
 	_NET_SHOWING_DESKTOP, _ = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
-	DEEPIN_SCREEN_VIEWPORT, _ = xprop.Atm(XU, "DEEPIN_SCREEN_VIEWPORT")
 	_NET_CLIENT_LIST, _ = xprop.Atm(XU, "_NET_CLIENT_LIST")
 	_NET_ACTIVE_WINDOW, _ = xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
 	ATOM_WINDOW_ICON, _ = xprop.Atm(XU, "_NET_WM_ICON")

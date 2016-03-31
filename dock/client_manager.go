@@ -154,45 +154,6 @@ func isHiddenPre(xid xproto.Window) bool {
 	return contains(state, "_NET_WM_STATE_HIDDEN")
 }
 
-func isCoverWorkspace(workspaces [][]uint, workspace []uint) bool {
-	for _, w := range workspaces {
-		if workspace[0] == w[0] && workspace[1] == w[1] {
-			return true
-		}
-	}
-	return false
-}
-
-func updateCurrentViewport() {
-	currentViewport, _ = xprop.PropValNums(
-		xprop.GetProperty(
-			XU,
-			XU.RootWin(),
-			"DEEPIN_SCREEN_VIEWPORT",
-		))
-}
-
-// works for old deepin wm.
-func checkDeepinWindowViewports(xid xproto.Window) (bool, error) {
-	viewports, err := xprop.PropValNums(xprop.GetProperty(XU, xid,
-		"DEEPIN_WINDOW_VIEWPORTS"))
-	if err != nil {
-		return false, err
-	}
-
-	workspaces := make([][]uint, 0)
-	for i := uint(0); i < viewports[0]; i++ {
-		viewport := make([]uint, 2)
-		viewport[0] = viewports[i*2+1]
-		viewport[1] = viewports[i*2+2]
-		workspaces = append(workspaces, viewport)
-	}
-	if currentViewport == nil {
-		updateCurrentViewport()
-	}
-	return isCoverWorkspace(workspaces, currentViewport), nil
-}
-
 // works for new deepin wm.
 func checkCurrentDesktop(xid xproto.Window) (bool, error) {
 	num, err := xprop.PropValNum(xprop.GetProperty(XU, xid, "_NET_WM_DESKTOP"))
@@ -209,13 +170,9 @@ func checkCurrentDesktop(xid xproto.Window) (bool, error) {
 }
 
 func onCurrentWorkspacePre(xid xproto.Window) bool {
-	isOnCurrentWorkspace, err := checkDeepinWindowViewports(xid)
+	isOnCurrentWorkspace, err := checkCurrentDesktop(xid)
 	if err != nil {
-		isOnCurrentWorkspace, err = checkCurrentDesktop(xid)
-		if err != nil {
-			return false
-		}
-		return isOnCurrentWorkspace
+		return false
 	}
 	return isOnCurrentWorkspace
 }
@@ -354,8 +311,6 @@ func (m *ClientManager) listenRootWindow() {
 			}
 		case _NET_SHOWING_DESKTOP:
 			dbus.Emit(m, "ShowingDesktopChanged")
-		case DEEPIN_SCREEN_VIEWPORT:
-			updateCurrentViewport()
 		}
 	}).Connect(XU, XU.RootWin())
 
