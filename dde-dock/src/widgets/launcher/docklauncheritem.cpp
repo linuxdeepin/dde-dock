@@ -13,7 +13,8 @@
 #include "controller/signalmanager.h"
 
 DockLauncherItem::DockLauncherItem(QWidget *parent)
-    : DockItem(parent)
+    : DockItem(parent),
+      m_launcherInter(new DBusLauncherController(this))
 {
     setFixedSize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &DockLauncherItem::changeDockMode);
@@ -77,7 +78,10 @@ void DockLauncherItem::slotMouseRelease(QMouseEvent *event)
     if (event->button() != Qt::LeftButton)
         return;
 
-    m_launcherProcess->startDetached("dde-launcher",QStringList());
+    if (m_launcherInter->isValid())
+        m_launcherInter->Toggle();
+    else
+        m_launcherProcess->startDetached("dde-launcher",QStringList());
 }
 
 void DockLauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)

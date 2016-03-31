@@ -16,6 +16,7 @@
 #include "../app/dockappicon.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"
+#include "dbus/dbuslaunchercontroller.h"
 
 class QProcess;
 
@@ -48,6 +49,7 @@ private:
 private:
     DockAppIcon * m_appIcon;
     QProcess * m_launcherProcess;
+    DBusLauncherController *m_launcherInter;
     QString m_menuInterfacePath = "";
     DockModeData * m_dockModeData = DockModeData::instance();
 };
