@@ -2,7 +2,7 @@
 	"Actions": [
 	{
 		"Key": "launcher",
-		"Action": "dde-launcher"
+		"Action": "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
 	},
 	{
 		"Key": "terminal",
@@ -10,7 +10,7 @@
 	},
 	{
 		"Key": "lock-screen",
-		"Action": "dde-lock"
+		"Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show"
 	},
 	{
 		"Key": "show-dock",
@@ -18,7 +18,7 @@
 	},
 	{
 		"Key": "logout",
-		"Action": "dde-shutdown"
+		"Action": "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Ping"
 	},
 	{
 		"Key": "terminal-quake",

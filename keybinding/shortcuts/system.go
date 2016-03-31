@@ -92,15 +92,15 @@ func getSystemAction(id string) string {
 func findSysActionInTable(id string) string {
 	switch id {
 	case "launcher":
-		return "dde-launcher"
+		return "dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.Toggle"
 	case "terminal":
 		return "/usr/lib/deepin-daemon/default-terminal"
 	case "lock-screen":
-		return "dde-lock"
+		return "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show"
 	case "show-dock":
 		return "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
 	case "logout":
-		return "dde-shutdown"
+		return "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Ping"
 	case "terminal-quake":
 		return "deepin-terminal --quake-mode"
 	case "screenshot":
