@@ -99,7 +99,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
 		logger.Debug("Launch from runtime app")
 		core := e.rApp.createDesktopAppInfo()
 		if core != nil {
-			defer core.Unref()
+			defer core.Destroy()
 			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)
@@ -122,7 +122,7 @@ func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
 		logger.Debug("Launch from normal app")
 		core := e.nApp.createDesktopAppInfo()
 		if core != nil {
-			defer core.Unref()
+			defer core.Destroy()
 			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			if err != nil {
 				logger.Warning("Launch Drop failed:", err)

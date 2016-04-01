@@ -15,24 +15,22 @@ import (
 	"regexp"
 )
 
-const (
-	ACTION_PATTERN = `(?P<actionGroup>.*) Shortcut Group` // |Desktop Action (.*)
-)
-
 var (
-	actionReg, _ = regexp.Compile(ACTION_PATTERN)
+	// gio support `Desktop Action`, not support `Shortcut Group`
+	actionReg = regexp.MustCompile(`(?P<actionGroup>.*) Shortcut Group`)
 )
 
 type DesktopAppInfo struct {
+	id string
 	*gio.DesktopAppInfo
 	*glib.KeyFile
 	gioSupported bool
 }
 
-func NewDesktopAppInfo(desktopID string) *DesktopAppInfo {
-	dai := &DesktopAppInfo{nil, nil, false}
-	dai.DesktopAppInfo = gio.NewDesktopAppInfo(desktopID)
+func (dai *DesktopAppInfo) init() *DesktopAppInfo {
+	logger.Debugf("[init] %q", dai.id)
 	if dai.DesktopAppInfo == nil {
+		logger.Debugf("[init] %q failed", dai.id)
 		return nil
 	}
 
@@ -41,41 +39,36 @@ func NewDesktopAppInfo(desktopID string) *DesktopAppInfo {
 	}
 
 	dai.KeyFile = glib.NewKeyFile()
-	if ok, _ := dai.LoadFromFile(dai.GetFilename(), glib.KeyFileFlagsNone); !ok {
-		dai.Unref()
+	if ok, err := dai.LoadFromFile(dai.GetFilename(), glib.KeyFileFlagsNone); !ok {
+		logger.Warning(err)
+		dai.Destroy()
 		return nil
 	}
-
 	return dai
 }
 
-func NewDesktopAppInfoFromFilename(filename string) *DesktopAppInfo {
-	dai := &DesktopAppInfo{nil, nil, false}
-	dai.DesktopAppInfo = gio.NewDesktopAppInfoFromFilename(filename)
-	if dai.DesktopAppInfo == nil {
-		return nil
-	}
+func NewDesktopAppInfo(desktopID string) *DesktopAppInfo {
+	dai := &DesktopAppInfo{}
+	dai.DesktopAppInfo = gio.NewDesktopAppInfo(desktopID)
+	dai.id = desktopID
+	return dai.init()
+}
 
-	if len(dai.DesktopAppInfo.ListActions()) != 0 {
-		dai.gioSupported = true
-	}
-
-	dai.KeyFile = glib.NewKeyFile()
-	if ok, _ := dai.LoadFromFile(dai.GetFilename(), glib.KeyFileFlagsNone); !ok {
-		dai.Unref()
-		return nil
-	}
-
-	return dai
+func NewDesktopAppInfoFromFilename(file string) *DesktopAppInfo {
+	dai := &DesktopAppInfo{}
+	dai.DesktopAppInfo = gio.NewDesktopAppInfoFromFilename(file)
+	dai.id = file
+	return dai.init()
 }
 
 func (dai *DesktopAppInfo) ListActions() []string {
-	logger.Debug(dai.GetFilename())
+	logger.Debugf("[ListActions] %q", dai.id)
 	if dai.gioSupported {
+		logger.Debug("ListActions gio support")
 		return dai.DesktopAppInfo.ListActions()
 	}
 
-	logger.Debug("ListActions .* Shortcut Group")
+	logger.Debug("ListActions gio not support")
 	actions := make([]string, 0)
 	_, groups := dai.GetGroups()
 	for _, groupName := range groups {
@@ -87,49 +80,47 @@ func (dai *DesktopAppInfo) ListActions() []string {
 	return actions
 }
 
-func getGroupName(gioSupported bool, actionGropuName string) string {
-	if gioSupported {
-		return "Desktop Action " + actionGropuName
+func (dai *DesktopAppInfo) getGroupName(name string) string {
+	if dai.gioSupported {
+		return "Desktop Action " + name
 	}
-	return actionGropuName + " Shortcut Group"
+	return name + " Shortcut Group"
 }
 
 func (dai *DesktopAppInfo) GetActionName(actionGroup string) string {
+	logger.Debugf("[GetActionName] %q", dai.id)
 	if dai.gioSupported {
-		logger.Debug("[GetActionName]", dai.GetFilename(), "gio support")
+		logger.Debug("GetActionName gio support")
 		return dai.DesktopAppInfo.GetActionName(actionGroup)
 	}
 
-	logger.Debug("GetActionName")
+	logger.Debug("GetActionName gio not support")
 	langs := GetLanguageNames()
-	str := ""
+	var str string
+	groupName := dai.getGroupName(actionGroup)
 	for _, lang := range langs {
-		str, _ = dai.KeyFile.GetLocaleString(getGroupName(dai.gioSupported, actionGroup), "Name", lang)
+		str, _ = dai.KeyFile.GetLocaleString(groupName, glib.KeyFileDesktopKeyName, lang)
 		if str != "" {
 			return str
 		}
 	}
 
-	if str == "" {
-		str, _ = dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), "Name")
-	}
-
+	str, _ = dai.KeyFile.GetString(groupName, glib.KeyFileDesktopKeyName)
 	return str
 }
 
 func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchContextLike) {
-	logger.Debug(dai.GetFilename())
-	// LaunchAction won't work for new style desktop, fuck gio.
-	// if dai.gioSupported {
-	// 	logger.Info("[LaunchAction]", dai.GetFilename(), "gio support")
-	// 	dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
-	// 	return
-	// }
+	logger.Debugf("[LaunchAction] %q action: %q", dai.id, actionGroup)
+	if dai.gioSupported {
+		logger.Info("LaunchAction gio support")
+		dai.DesktopAppInfo.LaunchAction(actionGroup, ctx)
+		return
+	}
 
-	logger.Debug("LaunchAction")
-	exec, _ := dai.KeyFile.GetString(getGroupName(dai.gioSupported, actionGroup), glib.KeyFileDesktopKeyExec)
+	logger.Debug("LaunchAction gio not support")
+	exec, _ := dai.KeyFile.GetString(dai.getGroupName(actionGroup), glib.KeyFileDesktopKeyExec)
 	logger.Infof("exec: %q", exec)
-	a, err := gio.AppInfoCreateFromCommandline(
+	cmdAppInfo, err := gio.AppInfoCreateFromCommandline(
 		exec,
 		"",
 		gio.AppInfoCreateFlagsNone,
@@ -139,14 +130,21 @@ func (dai *DesktopAppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchCon
 		return
 	}
 
-	defer a.Unref()
-	_, err = a.Launch(make([]*gio.File, 0), ctx)
+	defer cmdAppInfo.Unref()
+	_, err = cmdAppInfo.Launch(nil, ctx)
 	if err != nil {
 		logger.Warning("Launch App Failed: ", err)
 	}
 }
 
-func (dai *DesktopAppInfo) Unref() {
-	dai.DesktopAppInfo.Unref()
-	dai.KeyFile.Free()
+func (dai *DesktopAppInfo) Destroy() {
+	logger.Debugf("[Destroy] %q", dai.id)
+	if dai.DesktopAppInfo != nil {
+		dai.DesktopAppInfo.Unref()
+		dai.DesktopAppInfo = nil
+	}
+	if dai.KeyFile != nil {
+		dai.KeyFile.Free()
+		dai.KeyFile = nil
+	}
 }

@@ -54,7 +54,7 @@ func NewNormalApp(desktopID string) *NormalApp {
 	if core == nil {
 		return nil
 	}
-	defer core.Unref()
+	defer core.Destroy()
 	app.path = core.GetFilename()
 	app.Icon = getAppIcon(core.DesktopAppInfo)
 	logger.Debug(app.Id, "::app icon:", app.Icon)
@@ -89,7 +89,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 			logger.Warning("CreateDesktopAppInfo failed")
 			return
 		}
-		defer core.Unref()
+		defer core.Destroy()
 		_, err := core.Launch(make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 		if err != nil {
 			logger.Warning("Launch App Failed: ", err)
@@ -107,7 +107,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 						"failed")
 					return
 				}
-				defer core.Unref()
+				defer core.Destroy()
 				core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 			},
 			true,
@@ -138,7 +138,7 @@ func NewNormalAppFromFilename(name string) *NormalApp {
 	if core == nil {
 		return nil
 	}
-	defer core.Unref()
+	defer core.Destroy()
 	app.path = core.GetFilename()
 	app.Icon = core.GetIcon().ToString()
 	app.Name = core.GetDisplayName()
@@ -158,7 +158,7 @@ func (app *NormalApp) Activate(x, y int32, timestamp uint32) error {
 	if core == nil {
 		return errors.New("create desktop app info failed")
 	}
-	defer core.Unref()
+	defer core.Destroy()
 	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)

@@ -99,7 +99,7 @@ func (m *DockedAppManager) handleOldConfigFile() {
 	}
 	for _, id := range ids {
 		if a := NewDesktopAppInfo(id + ".desktop"); a != nil {
-			a.Unref()
+			a.Destroy()
 			continue
 		}
 

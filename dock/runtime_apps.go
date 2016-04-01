@@ -125,7 +125,7 @@ func NewRuntimeApp(xid xproto.Window, appId string) *RuntimeApp {
 	if core != nil {
 		logger.Debug(appId, ", Actions:", core.ListActions())
 		app.path = core.GetFilename()
-		core.Unref()
+		core.Destroy()
 	} else {
 		logger.Debug(appId, ", Actions:[]")
 	}
@@ -155,7 +155,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 		// should NOT use GetExecuable, get wrong result, like skype
 		// which gets 'env'.
 		app.exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
-		core.Unref()
+		core.Destroy()
 		return
 	}
 	logger.Debug(app.Id, "Get Exec from pid")
@@ -206,7 +206,7 @@ func actionGenarator(id string) func(uint32) {
 			ioutil.WriteFile(execFile, []byte(shExec), 0744)
 			exec = execFile
 		} else {
-			defer core.Unref()
+			defer core.Destroy()
 			title = core.GetDisplayName()
 			icon = get_theme_icon(core.GetIcon().ToString(), 48)
 			exec = core.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
@@ -229,7 +229,7 @@ func (app *RuntimeApp) buildMenu() {
 	core := app.createDesktopAppInfo()
 	if core != nil {
 		itemName = strings.Title(core.GetDisplayName())
-		defer core.Unref()
+		defer core.Destroy()
 	}
 	app.coreMenu.AppendItem(NewMenuItem(
 		itemName,
@@ -240,7 +240,7 @@ func (app *RuntimeApp) buildMenu() {
 			if core != nil {
 				logger.Debug("DesktopAppInfo")
 				a = (*gio.AppInfo)(core.DesktopAppInfo)
-				defer core.Unref()
+				defer core.Destroy()
 			} else {
 				logger.Debug("Non-DesktopAppInfo", app.exec)
 				var err error = nil
@@ -280,7 +280,7 @@ func (app *RuntimeApp) buildMenu() {
 					if core == nil {
 						return
 					}
-					defer core.Unref()
+					defer core.Destroy()
 					core.LaunchAction(name, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 				},
 				true,
@@ -594,7 +594,7 @@ func (app *RuntimeApp) updateIcon(xid xproto.Window) {
 	logger.Debug("update icon for", app.Id)
 	core := app.createDesktopAppInfo()
 	if core != nil {
-		defer core.Unref()
+		defer core.Destroy()
 		icon := getAppIcon(core.DesktopAppInfo)
 		if icon != "" {
 			app.xids[xid].Icon = icon
