@@ -1,0 +1,6 @@
+  <interface name="com.deepin.dde.shutdownFront">
+    <method name="Ping">
+    </method>
+    <method name="Show">
+    </method>
+  </interface>

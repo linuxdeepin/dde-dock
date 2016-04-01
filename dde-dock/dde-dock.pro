@@ -91,7 +91,8 @@ HEADERS += \
     src/widgets/launcher/docklauncheritem.h \
     src/widgets/old/launcheritem.h \
     src/controller/stylemanager.h \
-    src/dbus/dbuslaunchercontroller.h
+    src/dbus/dbuslaunchercontroller.h \
+    src/dbus/dbusshutdownfront.h
 
 SOURCES += \
     libs/xcb_misc.cpp \
@@ -146,4 +147,5 @@ SOURCES += \
     src/widgets/launcher/docklauncheritem.cpp \
     src/widgets/old/launcheritem.cpp \
     src/controller/stylemanager.cpp \
-    src/dbus/dbuslaunchercontroller.cpp
+    src/dbus/dbuslaunchercontroller.cpp \
+    src/dbus/dbusshutdownfront.cpp
