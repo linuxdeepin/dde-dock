@@ -118,14 +118,15 @@ void MainWidget::updateXcbStructPartial()
         return;
     }
 
-//    qDebug() << "maxHeight dbus: " << m_display->screenHeight();
-//    qDebug() << "set structPartial: " << x() << ", " << width() << ", " << tmpHeight;
+    // Set the strut partial to be full-width of the primary screen to
+    // avoid some strange bugs.
+    QRect primaryRect = m_display->primaryRect();
 
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
                                            tmpHeight,
-                                           x(),
-                                           x() + width() - 1);
+                                           primaryRect.x(),
+                                           primaryRect.x() + primaryRect.width());
 // The line below causes deepin-wm to regard dde-dock as a normal window
 // while previewing windows. https://github.com/fasheng/arch-deepin/issues/249
 //    this->setVisible(true);
