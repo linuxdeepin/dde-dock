@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@ package main
 import "C"
 
 import (
+	"fmt"
 	"os"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
@@ -23,61 +24,144 @@ import (
 	"unsafe"
 )
 
-type BacklightHelper struct {
-	SysPath string
-	lock    sync.Mutex
+const (
+	dbusDest = "com.deepin.daemon.helper.Backlight"
+	dbusPath = "/com/deepin/daemon/helper/Backlight"
+	dbusIFC  = "com.deepin.daemon.helper.Backlight"
+)
+
+var logger = log.NewLogger("backlight_helper")
+
+type Manager struct {
+	initFailed bool
+	locker     sync.Mutex
 }
 
-func NewBacklightHelper() *BacklightHelper {
-	return &BacklightHelper{}
-}
-
-// If driver is empty, auto detect
-func (h *BacklightHelper) SetBrightness(v float64, driver string) {
-	h.lock.Lock()
-	defer h.lock.Unlock()
-	if v > 1 || v < 0 {
-		logger.Warningf("SetBacklight %v failed\n", v)
-		return
+// ListSysPath return all the backlight device syspath
+func (m *Manager) ListSysPath() []string {
+	if m.initFailed {
+		return nil
 	}
-	cDriver := C.CString(driver)
-	defer C.free(unsafe.Pointer(cDriver))
-	C.set_backlight(C.double(v), cDriver)
+
+	var cNum = C.int(0)
+	cList := C.get_syspath_list(&cNum)
+	num := int(cNum)
+	if num == 0 {
+		return nil
+	}
+	cSlice := (*[1 << 30]*C.char)(unsafe.Pointer(cList))[:num:num]
+
+	var list []string
+	for _, cItem := range cSlice {
+		list = append(list, C.GoString(cItem))
+	}
+	C.free_syspath_list(cList, cNum)
+	return list
 }
 
-// If driver is empty, auto detect
-func (h *BacklightHelper) GetBrightness(driver string) float64 {
-	h.lock.Lock()
-	defer h.lock.Unlock()
-	cDriver := C.CString(driver)
-	defer C.free(unsafe.Pointer(cDriver))
-	return (float64)(C.get_backlight(cDriver))
+// GetSysPathByType return the special type's syspath
+// The type range: raw, platform, firmware
+func (m *Manager) GetSysPathByType(ty string) (string, error) {
+	if m.initFailed {
+		return "", fmt.Errorf("Init udev backlight failed")
+	}
+
+	switch ty {
+	case "raw", "platform", "firmware":
+		break
+	default:
+		return "", fmt.Errorf("Invalid backlight type: %s", ty)
+	}
+
+	cTy := C.CString(ty)
+	cSysPath := C.get_syspath_by_type(cTy)
+	C.free(unsafe.Pointer(cTy))
+	sysPath := C.GoString(cSysPath)
+	C.free(unsafe.Pointer(cSysPath))
+	return sysPath, nil
 }
-func (*BacklightHelper) GetDBusInfo() dbus.DBusInfo {
+
+// GetBrightness return the special syspath's brightness
+func (m *Manager) GetBrightness(sysPath string) (int32, error) {
+	if m.initFailed {
+		return 1, fmt.Errorf("Init udev backlight failed")
+	}
+
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	cSysPath := C.CString(sysPath)
+	ret := C.get_brightness(cSysPath)
+	C.free(unsafe.Pointer(cSysPath))
+	if int(ret) == -1 {
+		return 1, fmt.Errorf("Get brightness failed for: %s", sysPath)
+	}
+	return int32(ret), nil
+}
+
+// GetBrightness return the special syspath's max brightness
+func (m *Manager) GetMaxBrightness(sysPath string) (int32, error) {
+	if m.initFailed {
+		return 1, fmt.Errorf("Init udev backlight failed")
+	}
+
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	cSysPath := C.CString(sysPath)
+	ret := C.get_max_brightness(cSysPath)
+	C.free(unsafe.Pointer(cSysPath))
+	if int(ret) == -1 {
+		return 1, fmt.Errorf("Get max brightness failed for: %s",
+			sysPath)
+	}
+	return int32(ret), nil
+}
+
+// SetBrightness set the special syspath's brightness
+func (m *Manager) SetBrightness(sysPath string, value int32) error {
+	if m.initFailed {
+		return fmt.Errorf("Init udev backlight failed")
+	}
+
+	m.locker.Lock()
+	defer m.locker.Unlock()
+	cSysPath := C.CString(sysPath)
+	ret := C.set_brightness(cSysPath, C.int(value))
+	C.free(unsafe.Pointer(cSysPath))
+	if int(ret) != 0 {
+		return fmt.Errorf("Set brightness for %s to %d failed",
+			sysPath, value)
+	}
+	return nil
+}
+
+func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.helper.Backlight",
-		ObjectPath: "/com/deepin/daemon/helper/Backlight",
-		Interface:  "com.deepin.daemon.helper.Backlight",
+		Dest:       dbusDest,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }
-
-var logger = log.NewLogger("com.deepin.daemon.helper.Backlight")
 
 func main() {
-	helper := NewBacklightHelper()
-	err := dbus.InstallOnSystem(helper)
+	m := &Manager{
+		initFailed: false,
+	}
+
+	cRet := C.init_udev()
+	m.initFailed = (int(cRet) != 0)
+	defer C.finalize_udev()
+
+	err := dbus.InstallOnSystem(m)
 	if err != nil {
-		logger.Errorf("register dbus interface failed: %v", err)
-		os.Exit(1)
+		logger.Error("Install session bus failed:", err)
+		return
 	}
-
-	dbus.SetAutoDestroyHandler(time.Second*1, nil)
-
+	dbus.SetAutoDestroyHandler(time.Second*3, nil)
 	dbus.DealWithUnhandledMessage()
-	if err := dbus.Wait(); err != nil {
-		logger.Errorf("lost dbus session: %v", err)
-		os.Exit(1)
-	} else {
-		os.Exit(0)
+	err = dbus.Wait()
+	if err != nil {
+		logger.Error("Lost dbus connection:", err)
+		os.Exit(-1)
 	}
+	os.Exit(0)
 }

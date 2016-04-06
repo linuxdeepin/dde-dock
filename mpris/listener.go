@@ -9,6 +9,12 @@
 
 package mpris
 
+import (
+	"time"
+)
+
+var timestampMap = make(map[int]int64)
+
 func (m *Manager) listenMediakey() {
 	m.mediakey.ConnectAudioPlay(func(pressed bool) {
 		m.playerAction(actionTypePlay, pressed)
@@ -55,22 +61,37 @@ func (m *Manager) listenMediakey() {
 	})
 
 	m.mediakey.ConnectBrightnessUp(func(pressed bool) {
+		if filterEvent(actionTypeBrightnessUp) {
+			return
+		}
 		m.changeBrightness(true, pressed)
 	})
 
 	m.mediakey.ConnectBrightnessDown(func(pressed bool) {
+		if filterEvent(actionTypeBrightnessDown) {
+			return
+		}
 		m.changeBrightness(false, pressed)
 	})
 
 	m.mediakey.ConnectAudioUp(func(pressed bool) {
+		if filterEvent(actionTypeAudioUp) {
+			return
+		}
 		m.changeVolume(true, pressed)
 	})
 
 	m.mediakey.ConnectAudioDown(func(pressed bool) {
+		if filterEvent(actionTypeAudioDown) {
+			return
+		}
 		m.changeVolume(false, pressed)
 	})
 
 	m.mediakey.ConnectAudioMute(func(pressed bool) {
+		if filterEvent(actionTypeAudioMute) {
+			return
+		}
 		m.setMute(pressed)
 	})
 
@@ -94,4 +115,17 @@ func (m *Manager) listenMediakey() {
 		go execByMime(mimeTypeAudioMedia, pressed)
 	})
 
+}
+
+func filterEvent(action int) bool {
+	now := time.Now().UnixNano()
+	v, ok := timestampMap[action]
+	if ok {
+		// filter < 100ms event, 1ms = 1000000ns
+		if now-v <= 100*1000000 {
+			return true
+		}
+	}
+	timestampMap[action] = now
+	return false
 }

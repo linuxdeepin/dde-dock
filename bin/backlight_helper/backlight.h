@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -7,10 +7,19 @@
  * (at your option) any later version.
  **/
 
-#ifndef __GET_BACKLIGHT_PATH__
-#define __GET_BACKLIGHT_PATH__
+#ifndef __BACKLIGHT_H__
+#define __BACKLIGHT_H__
 
-double get_backlight(char* driver_type);
-void set_backlight(double v, char* driver_type);
+int init_udev();
+void finalize_udev();
+
+char** get_syspath_list(int* num);
+void free_syspath_list(char** list, int num);
+
+char* get_syspath_by_type(char* type);
+
+int get_brightness(char* syspath);
+int get_max_brightness(char* syspath);
+int set_brightness(char* syspath, int value);
 
 #endif

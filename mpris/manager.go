@@ -12,7 +12,6 @@ package mpris
 import (
 	"dbus/com/deepin/daemon/audio"
 	"dbus/com/deepin/daemon/display"
-	"dbus/com/deepin/daemon/helper/backlight"
 	"dbus/com/deepin/daemon/keybinding"
 	"dbus/com/deepin/sessionmanager"
 	"dbus/org/freedesktop/dbus"
@@ -96,20 +95,9 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		step = -0.05
 	}
 
-	backlight, err := getBrightness()
-	if err != nil {
-		logger.Debug("[changeBrightness] get backlight brightness failed:", err)
-	}
-
 	for output, v := range values {
 		var discrete float64
-		if err == nil {
-			discrete = backlight
-		} else {
-			discrete = v
-		}
-
-		discrete += step
+		discrete = v + step
 		if discrete > 1.0 {
 			discrete = 1
 		}
@@ -198,21 +186,6 @@ func (m *Manager) getDefaultSink() (*audio.AudioSink, error) {
 	}
 
 	return sink, nil
-}
-
-var bl *backlight.Backlight
-
-func getBrightness() (float64, error) {
-	if bl == nil {
-		helper, err := backlight.NewBacklight(
-			"com.deepin.daemon.helper.Backlight",
-			"/com/deepin/daemon/helper/Backlight")
-		if err != nil {
-			return 1, err
-		}
-		bl = helper
-	}
-	return bl.GetBrightness("backlight")
 }
 
 func (m *Manager) suspend(pressed bool) {

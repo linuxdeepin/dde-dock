@@ -24,6 +24,17 @@ const (
 	actionTypeRewind
 	actionTypeForward
 	actionTypeRepeat
+	actionTypeBrowser
+	actionTypeEmain
+	actionTypeCalc
+	actionTypeBrightnessUp
+	actionTypeBrightnessDown
+	actionTypeAudioUp
+	actionTypeAudioDown
+	actionTypeAudioMute
+	actionTypeSleep
+	actionTypeSuspend
+	actionTypeEject
 )
 
 const (
