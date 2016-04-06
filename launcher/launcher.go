@@ -568,7 +568,9 @@ func (self *Launcher) MarkLaunched(id string) {
 		return
 	}
 
+	// NewAppLaunched signal is deprecated, use NewAppMarkedAsLaunched instead.
 	dbus.Emit(self, "NewAppLaunched", ItemID(id))
+	dbus.Emit(self, "NewAppMarkedAsLaunched", ItemID(id))
 }
 
 // GetAllNewInstalledApps 获取所有新安装的程序。
