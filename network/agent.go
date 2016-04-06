@@ -12,7 +12,7 @@ package network
 import "pkg.deepin.io/lib/dbus"
 import "time"
 
-var invalidKeyData = make(map[string]map[string]dbus.Variant)
+var invalidSecretsData = make(map[string]map[string]dbus.Variant)
 
 type mapKey struct {
 	path dbus.ObjectPath
@@ -55,78 +55,149 @@ func (a *agent) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// FIXME: some section support multiple secret keys like 8021x and vpn
-func fillSecret(connectionData map[string]map[string]dbus.Variant, settingName, key string) (keyData map[string]map[string]dbus.Variant) {
-	keyData = make(map[string]map[string]dbus.Variant)
-	keyData[settingName] = make(map[string]dbus.Variant)
-	doFillSecret(connectionData, keyData, settingName, key)
-	return keyData
+// TODO: refactor code
+// isSecretKey check if target setting key is a secret key which should be stored in keyring
+func isSecretKey(connectionData map[string]map[string]dbus.Variant, settingName, keyName string) (isSecret bool) {
+	switch settingName {
+	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		switch keyName {
+		case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, NM_SETTING_WIRELESS_SECURITY_PSK:
+			isSecret = true
+		}
+	case NM_SETTING_802_1X_SETTING_NAME:
+		switch keyName {
+		case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_SETTING_802_1X_PASSWORD:
+			isSecret = true
+		}
+	case NM_SETTING_PPPOE_SETTING_NAME:
+		switch keyName {
+		case NM_SETTING_PPPOE_PASSWORD:
+			isSecret = true
+		}
+	case NM_SETTING_GSM_SETTING_NAME:
+		switch keyName {
+		case NM_SETTING_GSM_PASSWORD, NM_SETTING_GSM_PIN:
+			isSecret = true
+		}
+	case NM_SETTING_CDMA_SETTING_NAME:
+		switch keyName {
+		case NM_SETTING_CDMA_PASSWORD:
+			isSecret = true
+		}
+	case NM_SETTING_VPN_SETTING_NAME:
+		if keyName == NM_SETTING_VPN_SECRETS {
+			isSecret = true
+		}
+	}
+	return
 }
-func doFillSecret(refData, keyData map[string]map[string]dbus.Variant, settingName, key string) {
+
+// FIXME: some sections support multiple secret keys such as 8021x and vpn
+func buildSecretData(connectionData map[string]map[string]dbus.Variant, settingName, value string) (secretsData map[string]map[string]dbus.Variant) {
+	secretsData = make(map[string]map[string]dbus.Variant)
+	secretsData[settingName] = make(map[string]dbus.Variant)
+	fillSecretData(connectionData, secretsData, settingName, value)
+	return secretsData
+}
+func fillSecretData(connectionData, secretsData map[string]map[string]dbus.Variant, settingName, value string) {
 	switch settingName {
 	case sectionWirelessSecurity:
-		switch getSettingVkWirelessSecurityKeyMgmt(refData) {
+		switch getSettingVkWirelessSecurityKeyMgmt(connectionData) {
 		case "none": // ignore
 		case "wep":
-			setSettingWirelessSecurityWepKey0(keyData, key)
+			setSettingWirelessSecurityWepKey0(secretsData, value)
 		case "wpa-psk":
-			setSettingWirelessSecurityPsk(keyData, key)
+			setSettingWirelessSecurityPsk(secretsData, value)
 		case "wpa-eap":
 			// If the user chose an 802.1x-based auth method, return
 			// 802.1x secrets together.
-			keyData[section8021x] = make(map[string]dbus.Variant)
-			doFillSecret8021x(refData, keyData, key)
+			secretsData[section8021x] = make(map[string]dbus.Variant)
+			doFillSecret8021x(connectionData, secretsData, value)
 		}
 	case section8021x:
 		// wired 8021x
-		doFillSecret8021x(refData, keyData, key)
+		doFillSecret8021x(connectionData, secretsData, value)
 	case sectionPppoe:
-		setSettingPppoePassword(keyData, key)
+		setSettingPppoePassword(secretsData, value)
 	case sectionVpn:
-		setSettingVpnSecrets(keyData, make(map[string]string))
-		switch getCustomConnectionType(refData) {
+		setSettingVpnSecrets(secretsData, make(map[string]string))
+		switch getCustomConnectionType(connectionData) {
 		case connectionVpnL2tp:
-			setSettingVpnL2tpKeyPassword(keyData, key)
+			setSettingVpnL2tpKeyPassword(secretsData, value)
 		case connectionVpnOpenconnect: // ignore
 		case connectionVpnOpenvpn:
-			setSettingVpnOpenvpnKeyPassword(keyData, key)
+			setSettingVpnOpenvpnKeyPassword(secretsData, value)
 			// setSettingVpnOpenvpnKeyCertpass
 			// setSettingVpnOpenvpnKeyHttpProxyPassword
 		case connectionVpnPptp:
-			setSettingVpnPptpKeyPassword(keyData, key)
+			setSettingVpnPptpKeyPassword(secretsData, value)
 		case connectionVpnVpnc:
-			setSettingVpnVpncKeySecret(keyData, key)
-			// setSettingVpnVpncKeyXauthPassword(keyData, key)
+			setSettingVpnVpncKeySecret(secretsData, value)
+			// setSettingVpnVpncKeyXauthPassword(secretsData, value)
 		}
 	default:
 		logger.Error("Unknown secretly setting name", settingName, ", please report it to linuxdeepin")
 	}
 }
-func doFillSecret8021x(refData, keyData map[string]map[string]dbus.Variant, key string) {
-	switch getSettingVk8021xEap(refData) {
+func doFillSecret8021x(connectionData, secretsData map[string]map[string]dbus.Variant, value string) {
+	switch getSettingVk8021xEap(connectionData) {
 	case "tls":
-		setSetting8021xPrivateKeyPassword(keyData, key)
+		setSetting8021xPrivateKeyPassword(secretsData, value)
 	case "md5":
-		setSetting8021xPassword(keyData, key)
+		setSetting8021xPassword(secretsData, value)
 	case "leap":
 		// LEAP secrets aren't in the 802.1x setting, just ignore
 	case "fast":
-		setSetting8021xPassword(keyData, key)
+		setSetting8021xPassword(secretsData, value)
 	case "ttls":
-		setSetting8021xPassword(keyData, key)
+		setSetting8021xPassword(secretsData, value)
 	case "peap":
-		setSetting8021xPassword(keyData, key)
+		setSetting8021xPassword(secretsData, value)
 	}
 }
 
-func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (keyData map[string]map[string]dbus.Variant) {
+func buildKeyringSecret(connectionData map[string]map[string]dbus.Variant, settingName string, values map[string]string) (secretsData map[string]map[string]dbus.Variant) {
+	secretsData = make(map[string]map[string]dbus.Variant)
+	fillKeyringSecret(secretsData, settingName, values)
+	return secretsData
+}
+func fillKeyringSecret(secretsData map[string]map[string]dbus.Variant, settingName string, values map[string]string) {
+	if !isSettingSectionExists(secretsData, settingName) {
+		addSettingSection(secretsData, settingName)
+	}
+	if settingName == NM_SETTING_VPN_SETTING_NAME {
+		// FIXME: looks vpn secrets should be ignored here
+		vpnSecretData := make(map[string]string)
+		// if vpnSecretData, ok := doGetSettingVpnPluginData(secretsData, true); ok {
+		for k, v := range values {
+			// secret values for vpn should always are string type
+			valueStr := marshalVpnPluginKey(v, ktypeString)
+			vpnSecretData[k] = valueStr
+		}
+		// }
+		setSettingVpnSecrets(secretsData, vpnSecretData)
+	} else {
+		for k, v := range values {
+			doSetSettingKey(secretsData, settingName, k, v)
+		}
+	}
+}
+
+func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (secretsData map[string]map[string]dbus.Variant) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
 	keyId := mapKey{connectionPath, settingName}
+
+	// TODO: get secrets from keyring for agent
+	// // try to get secrets from keyring
+	// if values, ok := secretGetAll(getSettingConnectionUuid(connectionData), settingName); ok {
+	// 	secretsData = buildKeyringSecret(connectionData, settingName, values)
+	// 	return
+	// }
 
 	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
 		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
 		logger.Info("GetSecrets, invalid key flag", flags)
-		keyData = invalidKeyData
+		secretsData = invalidSecretsData
 		return
 	}
 
@@ -135,10 +206,10 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 		a.CancelGetSecrets(connectionPath, settingName, false)
 	}
 	select {
-	case key, ok := <-a.createPendingKey(connectionData, keyId):
+	case value, ok := <-a.createPendingKey(connectionData, keyId):
 		if ok {
-			keyData = fillSecret(connectionData, settingName, key)
-			a.SaveSecrets(keyData, connectionPath)
+			secretsData = buildSecretData(connectionData, settingName, value)
+			a.SaveSecrets(secretsData, connectionPath)
 		} else {
 			logger.Info("failed to get secretes", keyId)
 		}
@@ -186,21 +257,21 @@ func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, con
 	}
 }
 
-func (a *agent) feedSecret(path dbus.ObjectPath, name string, key string) {
-	keyId := mapKey{path, name}
+func (a *agent) feedSecret(path dbus.ObjectPath, settingName string, keyName string) {
+	keyId := mapKey{path, settingName}
 	if ch, ok := a.pendingKeys[keyId]; ok {
-		ch <- key
+		ch <- keyName
 		delete(a.pendingKeys, keyId)
 	} else {
 		logger.Warning("feedSecret, unknown PendingKey", keyId)
 	}
 }
 
-func (m *Manager) FeedSecret(path string, name, key string, autoConnect bool) {
-	logger.Debug("FeedSecret:", path, name, "xxxx")
+func (m *Manager) FeedSecret(path string, settingName, keyName string, autoConnect bool) {
+	logger.Debug("FeedSecret:", path, settingName, "xxxx")
 
 	opath := dbus.ObjectPath(path)
-	m.agent.feedSecret(opath, name, key)
+	m.agent.feedSecret(opath, settingName, keyName)
 
 	// FIXME: update secret data in connection settings manually to fix
 	// password popup issue when editing such connections
@@ -209,10 +280,10 @@ func (m *Manager) FeedSecret(path string, name, key string, autoConnect bool) {
 		return
 	}
 	generalSetSettingAutoconnect(data, autoConnect)
-	doFillSecret(data, data, name, key)
+	fillSecretData(data, data, settingName, keyName)
 	nmUpdateConnectionData(opath, data)
 }
-func (m *Manager) CancelSecret(path string, name string) {
-	logger.Debug("CancelSecret:", path, name)
-	m.agent.CancelGetSecrets(dbus.ObjectPath(path), name, true)
+func (m *Manager) CancelSecret(path string, settingName string) {
+	logger.Debug("CancelSecret:", path, settingName)
+	m.agent.CancelGetSecrets(dbus.ObjectPath(path), settingName, true)
 }

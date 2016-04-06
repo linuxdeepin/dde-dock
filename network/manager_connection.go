@@ -157,10 +157,12 @@ func (m *Manager) removeConnection(cpath dbus.ObjectPath) {
 		logger.Warning("connection not found", cpath)
 		return
 	}
+	conn := m.getConnection(cpath)
 	connType, i := m.getConnectionIndex(cpath)
 
 	m.connectionsLock.Lock()
 	defer m.connectionsLock.Unlock()
+	secretDeleteAll(conn.Uuid)
 	m.connections[connType] = m.doRemoveConnection(m.connections[connType], i)
 	m.setPropConnections()
 }

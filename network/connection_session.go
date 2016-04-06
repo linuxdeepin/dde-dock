@@ -134,6 +134,8 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	}
 
 	s.fixValues()
+	fillSectionCache(s.data)
+	s.setProps()
 
 	// execute asynchronous to avoid front-end block if
 	// NeedSecrets() signal emitted
@@ -147,8 +149,6 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 	case <-chSecret:
 	}
 
-	fillSectionCache(s.data)
-	s.setProps()
 	logger.Debugf("NewConnectionSessionByOpen(): %#v", s.data)
 	return
 }
@@ -211,44 +211,83 @@ func (s *ConnectionSession) fixValues() {
 }
 
 func (s *ConnectionSession) getSecrets() {
-	// get secret data
+	if !s.getSecretsFromKeyring() {
+		logger.Info("get secrets from keyring failed, try network-manager configuration again")
+		s.getSecretsFromNM()
+	}
+}
+
+func (s *ConnectionSession) getSecretsFromKeyring() (ok bool) {
+	for _, section := range s.AvailableSections {
+		settingName := getRealSectionName(section)
+		if values, okNest := secretGetAll(s.Uuid, settingName); okNest {
+			ok = true
+			secretsData := buildKeyringSecret(s.data, settingName, values)
+			s.doGetSecrets(secretsData)
+		}
+	}
+	return
+}
+func (s *ConnectionSession) doGetSecrets(secretsData connectionData) {
+	for section, sectionData := range secretsData {
+		if !isSettingSectionExists(s.data, section) {
+			addSettingSection(s.data, section)
+		}
+		for key, value := range sectionData {
+			s.data[section][key] = value
+		}
+	}
+}
+
+func (s *ConnectionSession) getSecretsFromNM() {
 	switch getCustomConnectionType(s.data) {
 	case connectionWired:
 		if getSettingVk8021xEnable(s.data) {
 			// TODO 8021x secret
-			// s.doGetSecrets(section8021x)
+			// s.doGetSecretsFromNM(section8021x)
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		if getSettingVk8021xEnable(s.data) {
 			// TODO 8021x secret
-			// s.doGetSecrets(section8021x)
+			// s.doGetSecretsFromNM(section8021x)
 		} else {
-			s.doGetSecrets(sectionWirelessSecurity)
+			s.doGetSecretsFromNM(sectionWirelessSecurity)
 		}
 	case connectionPppoe:
-		s.doGetSecrets(sectionPppoe)
+		s.doGetSecretsFromNM(sectionPppoe)
 	case connectionMobileGsm:
 		// FIXME: if the connection owns no secret key, such as "US -> AT&T -> MEdia Net (phones)"
 		// it will popup password dialog when editing the connection.
-		// s.doGetSecrets(sectionGsm)
+		// s.doGetSecretsFromNM(sectionGsm)
 	case connectionMobileCdma:
 		// FIXME: same with connectionMobileGsm
-		// s.doGetSecrets(sectionCdma)
+		// s.doGetSecretsFromNM(sectionCdma)
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
 		// TODO
 	}
 }
+func (s *ConnectionSession) doGetSecretsFromNM(secretSection string) {
+	if isSettingSectionExists(s.data, secretSection) {
+		if secretsData, err := nmGetConnectionSecrets(s.ConnectionPath, secretSection); err == nil {
+			if isSettingSectionExists(s.data, secretSection) {
+				s.doGetSecrets(secretsData)
+			}
+		}
+	}
+}
 
-func (s *ConnectionSession) doGetSecrets(secretField string) {
-	if isSettingSectionExists(s.data, secretField) {
-		secrets, err := nmGetConnectionSecrets(s.ConnectionPath, secretField)
-		if err == nil {
-			for section, sectionData := range secrets {
-				if !isSettingSectionExists(s.data, section) {
-					addSettingSection(s.data, section)
-				}
-				for key, value := range sectionData {
-					s.data[section][key] = value
+func (s *ConnectionSession) updateSecretsToKeyring() {
+	for sectionName, sectionData := range s.data {
+		for keyName, variant := range sectionData {
+			if isSecretKey(s.data, sectionName, keyName) {
+				if sectionName == NM_SETTING_VPN_SETTING_NAME && keyName == NM_SETTING_VPN_SECRETS {
+					// dispatch vpn secret keys specially
+					vpnSecrets := getSettingVpnSecrets(s.data)
+					for k, v := range vpnSecrets {
+						secretSet(s.Uuid, sectionName, k, v)
+					}
+				} else if value, ok := variant.Value().(string); ok {
+					secretSet(s.Uuid, sectionName, keyName, value)
 				}
 			}
 		}
@@ -307,6 +346,8 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 			nmAddConnection(s.data)
 		}
 	}
+
+	s.updateSecretsToKeyring()
 
 	manager.removeConnectionSession(s)
 	return true, nil

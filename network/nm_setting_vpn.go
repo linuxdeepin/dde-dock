@@ -115,52 +115,48 @@ func isSettingVpnPluginKey(section string) bool {
 	}
 	return false
 }
-func isSettingVpnPluginSecretKey(section, key string) bool {
+func isSettingVpnPluginSecretKey(section, key string) (isSecret bool) {
 	switch section {
 	case sectionVpnL2tp:
 		switch key {
-		case NM_SETTING_VPN_L2TP_KEY_PASSWORD:
-			return true
+		case NM_SETTING_VPN_L2TP_KEY_PASSWORD, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
+			isSecret = true
 		}
 	case sectionVpnOpenvpn:
 		switch key {
-		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD:
-			return true
-		case NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
-			return true
+		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
+			isSecret = true
 		}
 	case sectionVpnOpenvpnProxies:
 		switch key {
 		case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
-			return true
+			isSecret = true
 		}
 	case sectionVpnPptp:
 		switch key {
 		case NM_SETTING_VPN_PPTP_KEY_PASSWORD:
-			return true
+			isSecret = true
 		}
 	case sectionVpnStrongswan:
 	case sectionVpnVpnc:
 		switch key {
-		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD:
-			return true
-		case NM_SETTING_VPN_VPNC_KEY_SECRET:
-			return true
+		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, NM_SETTING_VPN_VPNC_KEY_SECRET:
+			isSecret = true
 		}
 	}
-	return false
+	return
 }
 
 // Basic getter and setter for vpn plugin keys
 func getSettingVpnPluginKey(data connectionData, section, key string) (value interface{}) {
 	value = generalGetSettingDefaultValue(section, key) // get default value firstly
-	vpnData, ok := getSettingVpnPluginData(data, section, key)
+	vpnPluginData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
 		// not exists, just return nil
 		logger.Errorf("invalid vpn plugin data: data[%s][%s]", section, key)
 		return
 	}
-	valueStr, ok := vpnData[key]
+	valueStr, ok := vpnPluginData[key]
 	if !ok {
 		return
 	}
@@ -169,21 +165,21 @@ func getSettingVpnPluginKey(data connectionData, section, key string) (value int
 	return
 }
 func setSettingVpnPluginKey(data connectionData, section, key string, value interface{}) {
-	vpnData, ok := getSettingVpnPluginData(data, section, key)
+	vpnPluginData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
 		logger.Errorf("invalid vpn plugin data: data[%s][%s]", section, key)
 		return
 	}
 	valueStr := marshalVpnPluginKey(value, generalGetSettingKeyType(section, key))
-	vpnData[key] = valueStr
+	vpnPluginData[key] = valueStr
 	logger.Debugf("setSettingVpnPluginKey data[%s][%s]=%#v, valueStr=%s", section, key, value, valueStr)
 }
 func isSettingVpnPluginKeyExists(data connectionData, section, key string) (ok bool) {
-	vpnData, ok := getSettingVpnPluginData(data, section, key)
+	vpnPluginData, ok := getSettingVpnPluginData(data, section, key)
 	if !ok {
 		return
 	}
-	_, ok = vpnData[key]
+	_, ok = vpnPluginData[key]
 	return
 }
 func removeSettingVpnPluginKey(data connectionData, section string, keys ...string) {
@@ -191,9 +187,9 @@ func removeSettingVpnPluginKey(data connectionData, section string, keys ...stri
 	if ok {
 		doRemoveSettingVpnPluginKey(vpnSerectData, keys...)
 	}
-	vpnData, ok := doGetSettingVpnPluginData(data, false)
+	vpnPluginData, ok := doGetSettingVpnPluginData(data, false)
 	if ok {
-		doRemoveSettingVpnPluginKey(vpnData, keys...)
+		doRemoveSettingVpnPluginKey(vpnPluginData, keys...)
 	}
 }
 func removeSettingVpnPluginKeyBut(data connectionData, section string, keys ...string) {
@@ -201,33 +197,33 @@ func removeSettingVpnPluginKeyBut(data connectionData, section string, keys ...s
 	if ok {
 		doRemoveSettingVpnPluginKeyBut(vpnSerectData, keys...)
 	}
-	vpnData, ok := doGetSettingVpnPluginData(data, false)
+	vpnPluginData, ok := doGetSettingVpnPluginData(data, false)
 	if ok {
-		doRemoveSettingVpnPluginKeyBut(vpnData, keys...)
+		doRemoveSettingVpnPluginKeyBut(vpnPluginData, keys...)
 	}
 }
-func doRemoveSettingVpnPluginKey(vpnData map[string]string, keys ...string) {
+func doRemoveSettingVpnPluginKey(vpnPluginData map[string]string, keys ...string) {
 	for _, k := range keys {
-		delete(vpnData, k)
+		delete(vpnPluginData, k)
 	}
 }
-func doRemoveSettingVpnPluginKeyBut(vpnData map[string]string, keys ...string) {
-	for k := range vpnData {
+func doRemoveSettingVpnPluginKeyBut(vpnPluginData map[string]string, keys ...string) {
+	for k := range vpnPluginData {
 		if !isStringInArray(k, keys) {
-			delete(vpnData, k)
+			delete(vpnPluginData, k)
 		}
 	}
 }
 
-func getSettingVpnPluginData(data connectionData, section, key string) (vpnData map[string]string, ok bool) {
+func getSettingVpnPluginData(data connectionData, section, key string) (vpnPluginData map[string]string, ok bool) {
 	if isSettingVpnPluginSecretKey(section, key) {
-		vpnData, ok = doGetSettingVpnPluginData(data, true)
+		vpnPluginData, ok = doGetSettingVpnPluginData(data, true)
 	} else {
-		vpnData, ok = doGetSettingVpnPluginData(data, false)
+		vpnPluginData, ok = doGetSettingVpnPluginData(data, false)
 	}
 	return
 }
-func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnData map[string]string, ok bool) {
+func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnPluginData map[string]string, ok bool) {
 	vpnSectionData, ok := data[sectionVpn]
 	if !ok {
 		return
@@ -244,7 +240,7 @@ func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnData m
 			return
 		}
 	}
-	vpnData = interfaceToDictStringString(variantValue.Value())
+	vpnPluginData = interfaceToDictStringString(variantValue.Value())
 	return
 }
 
