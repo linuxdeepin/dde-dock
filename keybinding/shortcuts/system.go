@@ -100,7 +100,7 @@ func findSysActionInTable(id string) string {
 	case "show-dock":
 		return "dbus-send --type=method_call --dest=com.deepin.daemon.Dock /dde/dock/HideStateManager dde.dock.HideStateManager.ToggleShow"
 	case "logout":
-		return "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Ping"
+		return "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show"
 	case "terminal-quake":
 		return "deepin-terminal --quake-mode"
 	case "screenshot":

@@ -18,7 +18,7 @@
 	},
 	{
 		"Key": "logout",
-		"Action": "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Ping"
+		"Action": "dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show"
 	},
 	{
 		"Key": "terminal-quake",
