@@ -9,11 +9,7 @@
 
 package power
 
-//this should only use org.freedesktop.ScreenSaver interface with SimulateUserActivity
-
 import (
-	"dbus/org/freedesktop/screensaver"
-	//"pkg.deepin.io/lib/logger"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
@@ -27,106 +23,139 @@ import (
 	"time"
 )
 
+func init() {
+	submoduleList = append(submoduleList, newFullScreenWorkaround)
+}
+
 type fullScreenWorkaround struct {
+	manager          *Manager
 	xu               *xgbutil.XUtil
+	keyEventAtomList []xproto.Atom
+	idleId           uint32
+	enable           bool
+	enableMutex      sync.Mutex
+	ticker           *time.Ticker
 	targets          []string
-	activeWindowAtom xproto.Atom
-
-	ss         *screensaver.ScreenSaver
-	idleId     uint32
-	idleLocker sync.Mutex
 }
 
-func newFullScreenWorkaround() (*fullScreenWorkaround, error) {
-	XU, err := xgbutil.NewConn()
-	if err != nil {
-		return nil, err
+func newFullScreenWorkaround(m *Manager) (string, submodule, error) {
+	name := "FullscreenWorkaround"
+	wa := &fullScreenWorkaround{
+		manager: m,
+		enable:  true,
 	}
-
-	ACTIVE_WINDOW, err := xprop.Atm(XU, "_NET_ACTIVE_WINDOW")
+	var err error
+	wa.xu, err = xgbutil.NewConnXgb(m.xConn)
 	if err != nil {
-		return nil, err
+		return name, nil, err
 	}
+	var atomList []xproto.Atom
 
-	ss, err := screensaver.NewScreenSaver("org.freedesktop.ScreenSaver",
-		"/org/freedesktop/ScreenSaver")
-	if err != nil {
-		return nil, err
+	list := []string{"_NET_ACTIVE_WINDOW", "_NET_CLIENT_LIST_STACKING"}
+	for _, name := range list {
+		atom, err := xprop.Atm(wa.xu, name)
+		if err != nil {
+			return name, nil, err
+		}
+		atomList = append(atomList, atom)
 	}
+	wa.keyEventAtomList = atomList
 
-	return &fullScreenWorkaround{
-		xu: XU,
-		targets: []string{
-			"libflash",
-			"chrome",
-			"mplayer",
-			"operaplugin",
-			"soffice",
-			"wpp",
-			"evince",
-			"vlc",
-			"totem",
-		},
-		activeWindowAtom: ACTIVE_WINDOW,
-		ss:               ss,
-		idleId:           0,
-	}, nil
+	wa.targets = m.settings.GetStrv("fullscreen-workaround-app-list")
+
+	return name, wa, nil
 }
 
-func (wa *fullScreenWorkaround) detectTarget(w xproto.Window) {
-	pid, _ := xprop.PropValNum(xprop.GetProperty(wa.xu, w, "_NET_WM_PID"))
+func (wa *fullScreenWorkaround) detect() {
+	activeWin, _ := ewmh.ActiveWindowGet(wa.xu)
+	wa.enableMutex.Lock()
 
+	if !wa.enable {
+		logger.Debug("disabled")
+		wa.enableMutex.Unlock()
+		return
+	}
+
+	// 先禁止处理信号，几秒后恢复处理
+	wa.enable = false
+	wa.enableMutex.Unlock()
+
+	time.AfterFunc(1*time.Second, func() {
+		if wa.isFullscreenFocused(activeWin) {
+			wa.tryInhibit(activeWin)
+		} else {
+			logger.Debug("Try uninhibit")
+			wa.uninhibit()
+		}
+		wa.enableMutex.Lock()
+		wa.enable = true
+		wa.enableMutex.Unlock()
+	})
+}
+
+func (wa *fullScreenWorkaround) uninhibit() {
+	screenSaver := wa.manager.screenSaver
+	if screenSaver == nil {
+		logger.Warning("screenSaver is nil")
+		return
+	}
+	if wa.idleId != 0 {
+		logger.Debug("* Uninhibit:", wa.idleId)
+		err := screenSaver.UnInhibit(wa.idleId)
+		if err != nil {
+			logger.Warning("Uninhibit failed:", wa.idleId, err)
+		}
+		wa.idleId = 0
+	} else {
+		logger.Debug("wa.idleId == 0")
+	}
+}
+
+func (wa *fullScreenWorkaround) tryInhibit(activeWin xproto.Window) {
+	logger.Debug("Try inhibit")
+	if wa.idleId != 0 {
+		logger.Debugf("Inhibit idleId %v != 0", wa.idleId)
+		return
+	}
+
+	// get active window pid and cmdline
+	pid, _ := xprop.PropValNum(xprop.GetProperty(wa.xu, activeWin, "_NET_WM_PID"))
 	contents, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
 	if err != nil {
+		logger.Warningf("get pid %v cmdline failed: %v", pid, err)
 		return
 	}
-
-	if wa.isFullScreen(w) {
-		for _, target := range wa.targets {
-			if strings.Contains(string(contents), target) {
-				wa.inhibit(target, string(contents))
-				return
-			}
-		}
-	} else {
-		if wa.ss != nil && wa.idleId != 0 {
-			wa.idleLocker.Lock()
-			logger.Debug("[detectTarget] try to inhibit:", wa.idleId)
-			err := wa.ss.UnInhibit(wa.idleId)
-			if err != nil {
-				logger.Warning("[detectTarget] uninhibit failed:", wa.idleId, err)
-			}
-			wa.idleId = 0
-			wa.idleLocker.Unlock()
+	cmdline := string(contents)
+	logger.Debugf("Focused | Fullscreen, Pid %v, Cmd line: %q", pid, cmdline)
+	// match process cmdline with targets
+	for _, target := range wa.targets {
+		if strings.Contains(cmdline, target) {
+			logger.Debugf("matchs %q", target)
+			wa.inhibit()
+			break
 		}
 	}
 }
 
-func (wa *fullScreenWorkaround) inhibit(target, cmdline string) {
-	wa.idleLocker.Lock()
-	defer wa.idleLocker.Unlock()
-	if wa.ss == nil {
+func (wa *fullScreenWorkaround) inhibit() {
+	screenSaver := wa.manager.screenSaver
+	if screenSaver == nil {
+		logger.Warning("screenSaver is nil")
 		return
 	}
-
-	if wa.idleId != 0 {
-		logger.Debug("[inhibit] has in inhibit mode:", wa.idleId)
-		return
-	}
-
-	id, err := wa.ss.Inhibit("idle", "Fullscreen play video")
+	id, err := screenSaver.Inhibit("idle", "Fullscreen play video")
 	if err != nil {
 		logger.Warning("Inhibit 'idle' failed:", err)
 		return
 	}
-
-	logger.Debug("[inhibit] success:", id)
+	logger.Debug("* Inhibit success:", id)
 	wa.idleId = id
 }
 
-func (wa *fullScreenWorkaround) isFullScreen(xid xproto.Window) bool {
+func (wa *fullScreenWorkaround) isFullscreenFocused(xid xproto.Window) bool {
 	states, _ := ewmh.WmStateGet(wa.xu, xid)
 	found := 0
+	logger.Debug("window states:", states)
 	for _, s := range states {
 		if s == "_NET_WM_STATE_FULLSCREEN" {
 			found++
@@ -135,35 +164,46 @@ func (wa *fullScreenWorkaround) isFullScreen(xid xproto.Window) bool {
 			found++
 		}
 	}
-	if found == 2 {
-		logger.Debug("HAHAH:::::", states)
-	}
 	return found == 2
 }
 
-func (wa *fullScreenWorkaround) start() {
-	var runner func()
-	runner = func() {
-		w, _ := ewmh.ActiveWindowGet(wa.xu)
-		wa.detectTarget(w)
-		time.AfterFunc(time.Second*5, runner)
+func (wa *fullScreenWorkaround) Start() error {
+	if !wa.manager.settings.GetBoolean(settingKeyFullscreenWorkaroundEnabled) {
+		logger.Info("fullscreen workaround disabled")
+		return nil
 	}
-	runner()
+
+	// 遇到 wpp 监听信号的方式会失效，所以增加一个定时轮询
+	wa.ticker = time.NewTicker(5 * time.Second)
+	go func() {
+		for range wa.ticker.C {
+			logger.Debug("Loop detect tick")
+			wa.detect()
+		}
+	}()
 
 	root := xwindow.New(wa.xu, wa.xu.RootWin())
 	root.Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		if wa.activeWindowAtom == ev.Atom {
-			w, _ := ewmh.ActiveWindowGet(XU)
-			wa.detectTarget(w)
+		atomName, _ := xprop.AtomName(wa.xu, ev.Atom)
+		logger.Debugf("signal %v %s", ev.Atom, atomName)
+		for _, atom := range wa.keyEventAtomList {
+			if ev.Atom == atom {
+				wa.detect()
+			}
 		}
 	}).Connect(wa.xu, root.Id)
-	xevent.Main(wa.xu)
+	go xevent.Main(wa.xu)
+	return nil
 }
-func (wa *fullScreenWorkaround) stop() {
-	xevent.Quit(wa.xu)
-	if wa.ss != nil {
-		screensaver.DestroyScreenSaver(wa.ss)
-		wa.ss = nil
+
+func (wa *fullScreenWorkaround) Destroy() {
+	if wa.ticker != nil {
+		wa.ticker.Stop()
+		wa.ticker = nil
+	}
+	if wa.xu != nil {
+		xevent.Quit(wa.xu)
+		wa.xu = nil
 	}
 }
