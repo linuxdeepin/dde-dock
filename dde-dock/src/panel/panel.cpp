@@ -23,9 +23,9 @@ Panel::Panel(QWidget *parent)
 {
     setObjectName("Panel");
 
+    initHideStateManager();
     initGlobalPreview();
     initShowHideAnimation();
-    initHideStateManager();
     initWidthAnimation();
     initPluginLayout();
     initAppLayout();
@@ -219,7 +219,6 @@ void Panel::initGlobalPreview()
 
     //make sure all app-preview will be destroy to save resources
     connect(m_globalPreview, &PreviewWindow::showFinish, [=] (QWidget *lastContent) {
-        m_previewShown = true;
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
             if (tmpFrame)
@@ -227,7 +226,6 @@ void Panel::initGlobalPreview()
         }
     });
     connect(m_globalPreview, &PreviewWindow::hideFinish, [=] (QWidget *lastContent) {
-        m_previewShown = false;
         m_HSManager->UpdateState();
         if (lastContent) {
             AppPreviewsContainer *tmpFrame = qobject_cast<AppPreviewsContainer *>(lastContent);
@@ -235,6 +233,7 @@ void Panel::initGlobalPreview()
                 tmpFrame->clearUpPreview();
         }
     });
+    connect(m_globalPreview, &PreviewWindow::previewFrameHided, m_HSManager, &DBusHideStateManager::UpdateState);
 }
 
 void Panel::initScreenMointor()
@@ -355,7 +354,7 @@ void Panel::onHideStateChanged(int dockState)
     if (dockState == Dock::HideStateShowing) {
         emit startShow();
     }
-    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_previewShown) {
+    else if (dockState == Dock::HideStateHiding && !containsMouse && !m_globalPreview->isVisible()) {
         emit startHide();
     }
 }
@@ -382,7 +381,6 @@ void Panel::onNeedPreviewShow(QPoint pos)
 {
     AbstractDockItem *item = qobject_cast<AbstractDockItem *>(sender());
     if (item && item->getApplet()) {
-        m_previewShown = true;
         m_lastPreviewPos = pos;
         m_globalPreview->setArrowX(-1);//reset x to move arrow to horizontal-center
         m_globalPreview->setContent(item->getApplet());

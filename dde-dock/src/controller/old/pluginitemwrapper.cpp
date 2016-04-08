@@ -38,6 +38,7 @@ PluginItemWrapper::PluginItemWrapper(DockPluginInterface *plugin,
             emit widthChanged();
 
             m_display = new DBusDisplay(this);
+            m_shutdownInter = new DBusShutdownFront(this);
         }
     }
 }
@@ -94,7 +95,11 @@ void PluginItemWrapper::mousePressEvent(QMouseEvent * event)
                               rec.y + rec.height - DockModeData::instance()->getDockHeight()));
     } else if (event->button() == Qt::LeftButton) {
         QString command = m_plugin->getCommand(m_id);
-        if (!command.isEmpty()) QProcess::startDetached(command);
+
+        // FIXME:optimize for loongson
+        if (!command.compare("dde-shutdown") && m_shutdownInter->isValid())
+            m_shutdownInter->Show();
+        else if (!command.isEmpty()) QProcess::startDetached(command);
     }
 }
 

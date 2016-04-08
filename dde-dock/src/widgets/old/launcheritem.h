@@ -20,6 +20,7 @@
 #include "abstractdockitem.h"
 #include "controller/dockmodedata.h"
 #include "interfaces/dockconstants.h"
+#include "dbus/dbuslaunchercontroller.h"
 
 class LauncherItem : public AbstractDockItem
 {
@@ -50,6 +51,7 @@ private:
 private:
     DockModeData * m_dockModeData = DockModeData::instance();
     AppIcon * m_appIcon = NULL;
+    DBusLauncherController *m_launcherController;
     QProcess * m_launcherProcess = NULL;
     QString m_menuInterfacePath = "";
 };

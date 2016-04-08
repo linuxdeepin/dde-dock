@@ -15,6 +15,7 @@
 #include "widgets/old/abstractdockitem.h"
 #include "interfaces/dockplugininterface.h"
 #include "dbus/dbusdisplay.h"
+#include "dbus/dbusshutdownfront.h"
 
 class QMouseEvent;
 class PluginItemWrapper : public AbstractDockItem
@@ -40,6 +41,7 @@ protected:
 
 private:
     DBusDisplay *m_display = NULL;
+    DBusShutdownFront *m_shutdownInter;
     QWidget *m_pluginItemContents = NULL;
     DockPluginInterface * m_plugin;
     QString m_id;

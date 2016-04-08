@@ -10,7 +10,9 @@
 #include "launcheritem.h"
 #include "controller/signalmanager.h"
 
-LauncherItem::LauncherItem(QWidget *parent) : AbstractDockItem(parent)
+LauncherItem::LauncherItem(QWidget *parent) :
+    AbstractDockItem(parent),
+    m_launcherController(new DBusLauncherController(this))
 {
     resize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
     connect(m_dockModeData, &DockModeData::dockModeChanged, this, &LauncherItem::changeDockMode);
@@ -77,7 +79,10 @@ void LauncherItem::slotMouseRelease(QMouseEvent *event)
 
     emit mouseRelease(event);
 
-    m_launcherProcess->startDetached("dde-launcher",QStringList());
+    if (m_launcherController->isValid())
+        m_launcherController->Toggle();
+    else
+        m_launcherProcess->startDetached("dde-launcher", QStringList());
 }
 
 void LauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
