@@ -20,7 +20,7 @@ else
 endif
 
 BINARIES =  \
-	    dde-preload \
+	    dde-dock-daemon \
 	    dde-session-daemon \
 	    dde-system-daemon \
 	    desktop-toggle \

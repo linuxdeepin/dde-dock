@@ -30,7 +30,7 @@ import (
 	"time"
 )
 
-var logger = log.NewLogger("daemon/preload")
+var logger = log.NewLogger("daemon/dock-daemon")
 
 func runMainLoop() {
 	logger.Info("register session")
@@ -54,30 +54,30 @@ func runMainLoop() {
 	os.Exit(0)
 }
 
-type Preload struct {
+type DockDaemon struct {
 }
 
-func (*Preload) GetDBusInfo() dbus.DBusInfo {
+func (*DockDaemon) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Preload",
-		ObjectPath: "/com/deepin/daemon/Preload",
-		Interface:  "com.deepin.daemon.Preload",
+		Dest:       "com.deepin.daemon.DockDaemon",
+		ObjectPath: "/com/deepin/daemon/DockDaemon",
+		Interface:  "com.deepin.daemon.DockDaemon",
 	}
 }
 
 func main() {
-	preload := new(Preload)
-	if !lib.UniqueOnSession(preload.GetDBusInfo().Dest) {
-		logger.Warning("There already has a dde preload running.")
+	dockDaemon := new(DockDaemon)
+	if !lib.UniqueOnSession(dockDaemon.GetDBusInfo().Dest) {
+		logger.Warning("There's a dde-dock-daemon instance running.")
 		os.Exit(0)
 	}
 
-	err := dbus.InstallOnSession(preload)
+	err := dbus.InstallOnSession(dockDaemon)
 	if err != nil {
 		logger.Fatal(err)
 	}
 
-	cmd := app.New("dde-preload", "dde session preload daemon", "version "+__VERSION__)
+	cmd := app.New("dde-dock-daemon", "daemon for dde-dock", "version "+__VERSION__)
 	cmd.ParseCommandLine(os.Args[1:])
 	if err := cmd.StartProfile(); err != nil {
 		logger.Fatal(err)
