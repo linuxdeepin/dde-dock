@@ -10,12 +10,14 @@
 #include "mainwidget.h"
 #include "xcb_misc.h"
 #include "controller/stylemanager.h"
+#include "dbus/dbuspanelmanager.h"
 
 #include <QApplication>
 
 const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      m_dockProperty(new DBusPanelManager(this))
 {
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     this->setAttribute(Qt::WA_TranslucentBackground);
@@ -58,14 +60,15 @@ void MainWidget::onDockModeChanged()
 //    QMetaObject::invokeMethod(this, "updatePosition", Qt::QueuedConnection, Q_ARG(QRect, m_display->primaryRect()));
 }
 
+// TODO: it should be named to `updateSize' instead I think.
 void MainWidget::updatePosition(const QRect &rec)
 {
+    static QTimer *delayOpTimer = nullptr;
+
     // sometimes rec's width or height is ZERO, we need to ignore these wrong data.
     if (!rec.width() || !rec.height()) {
         return;
     }
-
-//    qDebug() << "move to " << rec;
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
@@ -87,10 +90,32 @@ void MainWidget::updatePosition(const QRect &rec)
              rec.y() + rec.height() - height() /*- 10*/);
     }
 
-//    qDebug() << "size = " << width() << ", " << height();
-//    qDebug() << "move to " << this->x() << ", " << this->y() << " end";
 
-    updateXcbStructPartial();
+    if (delayOpTimer == nullptr) {
+        delayOpTimer = new QTimer(this);
+        delayOpTimer->setSingleShot(true);
+        delayOpTimer->setInterval(500);
+    }
+
+    // NOTE: this function is called too much times, so we should avoid heavy operations
+    // to be executed everytime. All heavy operations go in delayedOp.
+    auto delayedOp = [this] {
+        updateXcbStructPartial();
+
+        // Let the backend know the width change, otherwise the smart-hide mode will
+        // not work properly.
+        updateBackendProperty();
+    };
+
+    delayOpTimer->disconnect();
+
+    if (delayOpTimer->isActive()) {
+        delayOpTimer->stop();
+        connect(delayOpTimer, &QTimer::timeout, delayedOp);
+    } else {
+        delayedOp();
+    }
+    delayOpTimer->start();
 }
 
 void MainWidget::updateXcbStructPartial()
@@ -129,7 +154,12 @@ void MainWidget::updateXcbStructPartial()
                                            primaryRect.x() + primaryRect.width());
 // The line below causes deepin-wm to regard dde-dock as a normal window
 // while previewing windows. https://github.com/fasheng/arch-deepin/issues/249
-//    this->setVisible(true);
+    //    this->setVisible(true);
+}
+
+void MainWidget::updateBackendProperty()
+{
+    m_dockProperty->SetPanelWidth(width());
 }
 
 void MainWidget::updateGeometry()

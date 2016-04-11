@@ -29,6 +29,7 @@ const QString DBUS_PATH = "/com/deepin/dde/dock";
 const QString DBUS_NAME = "com.deepin.dde.dock";
 
 class DockUIDbus;
+class DBusPanelManager;
 class MainWidget : public QWidget
 {
     Q_OBJECT
@@ -52,6 +53,7 @@ private slots:
     void showDock();
     void updatePosition(const QRect &rec);
     void updateXcbStructPartial();
+    void updateBackendProperty();
     void updateGeometry();
 
 private:
@@ -64,6 +66,7 @@ private:
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;
     DBusDisplay *m_display = NULL;
+    DBusPanelManager *m_dockProperty = NULL;
 };
 
 class DockUIDbus : public QDBusAbstractAdaptor {
