@@ -49,7 +49,7 @@ func (m *Manager) ListSysPath() []string {
 	if num == 0 {
 		return nil
 	}
-	cSlice := (*[1 << 30]*C.char)(unsafe.Pointer(cList))[:num:num]
+	cSlice := (*[1 << 5]*C.char)(unsafe.Pointer(cList))[:num:num]
 
 	var list []string
 	for _, cItem := range cSlice {
