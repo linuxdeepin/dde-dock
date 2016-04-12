@@ -42,10 +42,12 @@ func (*Daemon) Start() error {
 		return nil
 	}
 
-	_manager = newManager()
-	_manager.AddTask(newDockTask())
-	_manager.AddTask(newDesktopTask())
-	go _manager.StartLoop()
+	m, err := newManager()
+	if err != nil {
+		return err
+	}
+	_manager = m
+	_manager.initUserSessions()
 	return nil
 }
 
@@ -54,7 +56,7 @@ func (*Daemon) Stop() error {
 		return nil
 	}
 
-	_manager.QuitLoop()
+	_manager.destroy()
 	_manager = nil
 	logger.EndTracing()
 	return nil

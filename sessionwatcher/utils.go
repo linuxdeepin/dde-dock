@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,28 +10,44 @@
 package sessionwatcher
 
 import (
-	"dbus/org/freedesktop/dbus"
+	"dbus/org/freedesktop/login1"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/pulse"
 )
 
-func isDBusDestExist(dest string) bool {
-	daemon, err := dbus.NewDBusDaemon("org.freedesktop.DBus", "/")
+func newLoginSession(path dbus.ObjectPath) (uint32, *login1.Session) {
+	session, err := login1.NewSession(login1Dest, path)
 	if err != nil {
-		return false
+		logger.Warning("New session '(%v)%s' failed: %v", path, err)
+		return 0, nil
 	}
-	defer dbus.DestroyDBusDaemon(daemon)
 
-	names, err := daemon.ListNames()
-	if err != nil {
-		return false
+	uinfo := session.User.Get()
+	if len(uinfo) != 2 {
+		logger.Warning("Invalid session user info:", path)
+		login1.DestroySession(session)
+		return 0, nil
 	}
-	return isItemInList(dest, names)
+
+	uid, ok := uinfo[0].(uint32)
+	if !ok {
+		logger.Warning("Get session uid failed:", path)
+		login1.DestroySession(session)
+		return 0, nil
+	}
+	return uid, session
 }
 
-func isItemInList(item string, list []string) bool {
-	for _, v := range list {
-		if item == v {
-			return true
-		}
+func suspendPulseSinks(suspend int) {
+	var ctx = pulse.GetContext()
+	for _, sink := range ctx.GetSinkList() {
+		ctx.SuspendSinkById(sink.Index, suspend)
 	}
-	return false
+}
+
+func suspendPulseSources(suspend int) {
+	var ctx = pulse.GetContext()
+	for _, source := range ctx.GetSourceList() {
+		ctx.SuspendSourceById(source.Index, suspend)
+	}
 }

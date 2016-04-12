@@ -9,78 +9,169 @@
 
 package sessionwatcher
 
-import "time"
+import (
+	"dbus/org/freedesktop/login1"
+	"pkg.deepin.io/lib/dbus"
+	"sync"
+)
+
+const (
+	login1Dest = "org.freedesktop.login1"
+	login1Path = "/org/freedesktop/login1"
+)
 
 type Manager struct {
-	taskList *taskInfos
-	quit     chan struct{}
+	loginManager  *login1.Manager
+	sessionLocker sync.Mutex
+	userIds       map[string]uint32
+	userSessions  map[uint32][]*login1.Session
 }
 
-func newManager() *Manager {
-	var m = new(Manager)
-	m.quit = make(chan struct{})
-	m.taskList = new(taskInfos)
-	return m
+func newManager() (*Manager, error) {
+	loginObj, err := login1.NewManager(login1Dest, login1Path)
+	if err != nil {
+		logger.Warning("New login1 manager failed:", err)
+		return nil, err
+	}
+
+	return &Manager{
+		loginManager: loginObj,
+		userIds:      make(map[string]uint32),
+		userSessions: make(map[uint32][]*login1.Session),
+	}, nil
 }
 
-func (m *Manager) AddTask(task *taskInfo) {
-	if m.IsTaskExist(task.Name) {
-		logger.Debugf("Task '%s' has exist", task.Name)
+func (m *Manager) destroy() {
+	if m.loginManager != nil {
+		m.destroyUserSessions()
+	}
+
+	if m.userIds != nil {
+		m.userIds = nil
+	}
+
+	if m.userSessions != nil {
+		m.userSessions = nil
+	}
+}
+
+func (m *Manager) initUserSessions() {
+	list, err := m.loginManager.ListSessions()
+	if err != nil {
+		logger.Warning("List sessions failed:", err)
 		return
 	}
 
-	*m.taskList = append(*m.taskList, task)
+	for _, v := range list {
+		// v info: (id, uid, username, seat id, session path)
+		if len(v) != 5 {
+			logger.Warning("Invalid session info:", v)
+			continue
+		}
+
+		id, ok := v[0].(string)
+		if !ok {
+			continue
+		}
+
+		p, ok := v[4].(dbus.ObjectPath)
+		if !ok {
+			continue
+		}
+
+		m.addSession(id, p)
+	}
+
+	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
+		logger.Debug("Session added:", id, path)
+		m.addSession(id, path)
+	})
+
+	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
+		logger.Debug("Session removed:", id, path)
+		m.deleteSession(id, path)
+	})
 }
 
-func (m *Manager) IsTaskExist(name string) bool {
-	for _, task := range *m.taskList {
-		if name == task.Name {
-			return true
+func (m *Manager) destroyUserSessions() {
+	m.sessionLocker.Lock()
+	m.sessionLocker.Unlock()
+	for _, ss := range m.userSessions {
+		for _, s := range ss {
+			login1.DestroySession(s)
+			s = nil
 		}
 	}
-	return false
+	m.userSessions = nil
 }
 
-func (m *Manager) HasRunning() bool {
-	for _, task := range *m.taskList {
-		if !task.Over() {
-			return true
-		}
+func (m *Manager) addSession(id string, path dbus.ObjectPath) {
+	logger.Debug("Add session:", path)
+	uid, session := newLoginSession(path)
+	if session == nil {
+		return
 	}
-	return false
-}
 
-func (m *Manager) LaunchAll() {
-	for _, task := range *m.taskList {
-		err := task.Launch()
-		if err != nil {
-			logger.Warningf("Launch '%s' failed: %v",
-				task.Name, err)
-		}
-	}
-}
+	m.sessionLocker.Lock()
+	m.userIds[id] = uid
+	m.userSessions[uid] = append(m.userSessions[uid], session)
+	m.sessionLocker.Unlock()
 
-func (m *Manager) StartLoop() {
-	for {
-		select {
-		case <-m.quit:
+	session.Active.ConnectChanged(func() {
+		if session == nil {
 			return
-		case <-time.After(loopDuration):
-			if !m.HasRunning() {
-				logger.Debug("All program has launched failure")
-				m.QuitLoop()
-				return
-			}
-
-			m.LaunchAll()
 		}
+		m.handleSessionChanged(uid)
+	})
+	m.handleSessionChanged(uid)
+}
+
+func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
+	m.sessionLocker.Lock()
+	uid, ok := m.userIds[id]
+	if !ok {
+		m.sessionLocker.Unlock()
+		return
+	}
+
+	var list []*login1.Session
+	for _, s := range m.userSessions[uid] {
+		if s.Path != path {
+			list = append(list, s)
+			continue
+		}
+
+		logger.Debug("Delete session:", path)
+		login1.DestroySession(s)
+		s = nil
+	}
+	m.userSessions[uid] = list
+	m.sessionLocker.Unlock()
+	m.handleSessionChanged(uid)
+}
+
+func (m *Manager) handleSessionChanged(uid uint32) {
+	if m.isActive(uid) {
+		suspendPulseSinks(0)
+		suspendPulseSources(0)
+	} else {
+		suspendPulseSinks(1)
+		suspendPulseSources(1)
 	}
 }
 
-func (m *Manager) QuitLoop() {
-	if m.quit == nil {
-		return
+func (m *Manager) isActive(uid uint32) bool {
+	var active bool = false
+	m.sessionLocker.Lock()
+	for _, s := range m.userSessions[uid] {
+		logger.Debug("[isActive] info:", uid, s.Path, s.Active.Get())
+		if s.Active.Get() {
+			active = true
+			break
+		}
 	}
-	close(m.quit)
-	m.quit = nil
+	m.sessionLocker.Unlock()
+
+	logger.Debug("Session state:", uid, active)
+	return active
 }
