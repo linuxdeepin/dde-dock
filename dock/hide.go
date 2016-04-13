@@ -11,7 +11,7 @@ package dock
 
 import (
 	"pkg.deepin.io/lib/dbus"
-	"pkg.deepin.io/lib/log"
+	"sync"
 	"time"
 )
 
@@ -45,29 +45,31 @@ const (
 )
 
 type HideStateManager struct {
-	state               HideStateType
-	toggleShowTimer     <-chan time.Time
-	cleanToggleShowChan chan bool
-
+	state       HideStateType
 	ChangeState func(int32)
+
+	smartHideModeTimer *time.Timer
+	smartHideModeMutex sync.Mutex
 }
 
 func NewHideStateManager(mode HideModeType) *HideStateManager {
-	h := &HideStateManager{}
-	h.toggleShowTimer = nil
-	h.cleanToggleShowChan = make(chan bool, 1)
-
+	m := &HideStateManager{}
 	if mode == HideModeKeepHidden {
-		h.state = HideStateHidden
+		m.state = HideStateHidden
 	} else {
-		h.state = HideStateShown
+		m.state = HideStateShown
 	}
 
-	return h
+	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
+	m.smartHideModeTimer.Stop()
+	return m
 }
 
 func (e *HideStateManager) destroy() {
-	close(e.cleanToggleShowChan)
+	if e.smartHideModeTimer != nil {
+		e.smartHideModeTimer.Stop()
+		e.smartHideModeTimer = nil
+	}
 	dbus.UnInstallObject(e)
 }
 
@@ -80,127 +82,125 @@ func (e *HideStateManager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (m *HideStateManager) SetState(s int32) int32 {
-	state := HideStateType(s)
-	logger.Debug("SetState m.state:", m.state, "new state:", state)
-	if m.state == state {
-		logger.Debug("New HideState is the same as the old:", state)
-		return s
+	newState := HideStateType(s)
+	if m.state != newState {
+		logger.Debugf("SetState: %v => %v", m.state, newState)
+		m.state = newState
 	}
-
-	m.state = state
-
 	return s
 }
 
-func (m *HideStateManager) UpdateState() {
-	if m.toggleShowTimer != nil && !isLauncherShown {
-		logger.Info("in ToggleShow")
+func shouldHideOnSmartHideMode() bool {
+	return isWindowDockOverlap(activeWindow)
+}
+
+func (m *HideStateManager) smartHideModeTimerExpired() {
+	logger.Debug("smartHideModeTimer expired!")
+	if isLauncherShown {
+		logger.Debug("launcher is showing, dock show")
+		m.emitSignalChangeState(TriggerShow)
 		return
 	}
-	trigger := TriggerShow
-	switch HideModeType(setting.GetHideMode()) {
-	case HideModeKeepShowing:
-		logger.Debug("KeepShowing Mode")
-	case HideModeAutoHide:
-		logger.Debug("AutoHide Mode")
+	if shouldHideOnSmartHideMode() {
+		m.emitSignalChangeState(TriggerHide)
+	} else {
+		m.emitSignalChangeState(TriggerShow)
+	}
+}
 
-		<-time.After(time.Millisecond * 100)
-		if region.mouseInRegion() {
-			logger.Debug("MouseInDockRegion")
-			break
+func (m *HideStateManager) resetSmartHideModeTimer(delay time.Duration) {
+	m.smartHideModeMutex.Lock()
+	defer m.smartHideModeMutex.Unlock()
+
+	m.smartHideModeTimer.Reset(delay)
+	logger.Debug("reset smart hide mode timer ", delay)
+}
+
+func (m *HideStateManager) cancelSmartHideModeTimer() {
+	m.smartHideModeMutex.Lock()
+	defer m.smartHideModeMutex.Unlock()
+
+	m.smartHideModeTimer.Stop()
+	logger.Debug("cancel smart hide mode timer ")
+}
+
+func (m *HideStateManager) smartHideModeDelayHandle() {
+	switch m.state {
+	case HideStateShown:
+		if shouldHideOnSmartHideMode() {
+			logger.Debug("smartHideModeDelayHandle: show -> hide")
+			m.resetSmartHideModeTimer(time.Millisecond * 500)
+		} else {
+			logger.Debug("smartHideModeDelayHandle: show -> show")
+			m.cancelSmartHideModeTimer()
 		}
 
-		if logger.GetLogLevel() == log.LevelDebug {
-			hasMax := hasMaximizeClientPre(activeWindow)
-			isOnPrimary := isWindowOnPrimaryScreen(activeWindow)
-			logger.Infof("hasMax: %v, isOnPrimary: %v", hasMax,
-				isOnPrimary)
-		}
-
-		if isWindowOnPrimaryScreen(activeWindow) &&
-			hasMaximizeClientPre(activeWindow) {
-			logger.Debug("active window is maximized client")
-			trigger = TriggerHide
-		}
-	case HideModeKeepHidden:
-		logger.Debug("KeepHidden Mode")
-		<-time.After(time.Millisecond * 100)
-		if region.mouseInRegion() {
-			logger.Debug("MouseInDockRegion")
-			break
-		}
-
-		trigger = TriggerHide
-	case HideModeSmartHide:
-		logger.Debug("SmartHide Mode")
-
-		<-time.After(time.Millisecond * 100)
-		if region.mouseInRegion() {
-			logger.Debug("mouse in region")
-			break
-		}
-
-		isOnPrimary := isWindowOnPrimaryScreen(activeWindow)
-		hasMax := hasMaximizeClientPre(activeWindow)
-		logger.Debug("isOnPrimary:", isOnPrimary, "hasMaxClient:", hasMax)
-
-		if isOnPrimary && hasMax {
-			logger.Info("active window is maximized client")
-			trigger = TriggerHide
-			break
-		}
-
-		for _, app := range ENTRY_MANAGER.runtimeApps {
-			for _, winInfo := range app.xids {
-				if winInfo.OverlapDock {
-					logger.Info(app.Id, "overlap dock")
-					trigger = TriggerHide
-					break
-				}
-			}
+	case HideStateHidden:
+		if shouldHideOnSmartHideMode() {
+			logger.Debug("smartHideModeDelayHandle: hide -> hide")
+			m.cancelSmartHideModeTimer()
+		} else {
+			logger.Debug("smartHideModeDelayHandle: hide -> show")
+			m.resetSmartHideModeTimer(time.Millisecond * 500)
 		}
 	}
+}
 
+func (m *HideStateManager) updateState(delay bool) {
 	if isLauncherShown {
-		m.CancelToggleShow()
-		logger.Debug("launcher is opened, show dock")
-		trigger = TriggerShow
+		logger.Debug("updateState: launcher is showing, show dock")
+		m.emitSignalChangeState(TriggerShow)
+		return
 	}
 
-	if (m.state != HideStateShown && trigger == TriggerShow) ||
-		(m.state != HideStateHidden && trigger == TriggerHide) {
-		dbus.Emit(m, "ChangeState", trigger)
-	}
-}
+	hideMode := HideModeType(setting.GetHideMode())
+	logger.Debug("updateState:", hideMode)
+	switch hideMode {
+	case HideModeKeepShowing:
+		m.emitSignalChangeState(TriggerShow)
 
-func (m *HideStateManager) CancelToggleShow() {
-	if m.toggleShowTimer != nil {
-		logger.Info("Cancel ToggleShow")
-		m.cleanToggleShowChan <- true
-		m.toggleShowTimer = nil
-	}
-}
+	case HideModeKeepHidden:
+		m.emitSignalChangeState(TriggerHide)
 
-func (m *HideStateManager) ToggleShow() {
-	logger.Info("cancel ToggleShow on ToggleShow")
-	m.CancelToggleShow()
-
-	if m.state == HideStateHidden || m.state == HideStateHidding {
-		dbus.Emit(m, "ChangeState", TriggerShow)
-	} else if m.state == HideStateShown || m.state == HideStateShowing {
-		dbus.Emit(m, "ChangeState", TriggerHide)
-	}
-
-	m.toggleShowTimer = time.After(time.Second * 3)
-	go func() {
-		select {
-		case <-m.toggleShowTimer:
-			logger.Info("ToggleShow is done")
-			m.toggleShowTimer = nil
-			m.UpdateState()
-		case <-m.cleanToggleShowChan:
-			logger.Info("ToggleShow is cancelled")
-			return
+	case HideModeSmartHide:
+		if delay {
+			m.smartHideModeDelayHandle()
+		} else {
+			m.smartHideModeTimer.Reset(0)
 		}
-	}()
+	}
+}
+
+func (m *HideStateManager) updateStateWithDelay() {
+	m.updateState(true)
+}
+
+func (m *HideStateManager) updateStateWithoutDelay() {
+	m.updateState(false)
+}
+
+func (m *HideStateManager) UpdateState() {
+	logger.Debug("dbus call UpdateState")
+	m.updateState(true)
+}
+
+func (m *HideStateManager) emitSignalChangeState(trigger int32) {
+	if (m.state == HideStateShown && trigger == TriggerShow) ||
+		(m.state == HideStateHidden && trigger == TriggerHide) {
+		logger.Debug("No need emit signal ChangeState")
+		return
+	}
+
+	triggerStr := "TriggerUnknown"
+	if trigger == TriggerShow {
+		triggerStr = "TriggerShow"
+	} else if trigger == TriggerHide {
+		triggerStr = "TriggerHide"
+	}
+	logger.Debugf("Emit signal ChangeState: %v", triggerStr)
+	dbus.Emit(m, "ChangeState", trigger)
+}
+
+// super+H 功能废弃，此接口废弃
+func (m *HideStateManager) ToggleShow() {
 }

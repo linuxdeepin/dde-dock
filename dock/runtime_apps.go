@@ -34,10 +34,14 @@ import (
 )
 
 type WindowInfo struct {
-	Xid         xproto.Window
-	Title       string
-	Icon        string
-	OverlapDock bool
+	Xid                      xproto.Window
+	Title                    string
+	Icon                     string
+	x                        int16
+	y                        int16
+	width                    uint16
+	height                   uint16
+	lastConfigureNotifyEvent *xevent.ConfigureNotifyEvent
 }
 
 type RuntimeApp struct {
@@ -783,17 +787,6 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 	}
 }
 
-func (app *RuntimeApp) updateOverlap(xid xproto.Window) {
-	if _, ok := app.xids[xid]; ok {
-		logger.Debug(app.Id, "isHidden:", isHiddenPre(xid), "isOnCurrentWorkspace:", onCurrentWorkspacePre(xid), "isOverDock:", isWindowOverlapDock(xid))
-		overlap := !isHiddenPre(xid) && onCurrentWorkspacePre(xid) && isWindowOverlapDock(xid)
-		if overlap != app.xids[xid].OverlapDock {
-			app.xids[xid].OverlapDock = overlap
-			hideModemanager.UpdateState()
-		}
-	}
-}
-
 func (app *RuntimeApp) attachXid(xid xproto.Window) {
 	logger.Debugf("attach 0x%x to %s", xid, app.Id)
 	if _, ok := app.xids[xid]; ok {
@@ -827,13 +820,6 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			}
 			app.notifyChanged()
 
-			if HideModeType(setting.GetHideMode()) != HideModeSmartHide {
-				break
-			}
-
-			time.AfterFunc(time.Millisecond*20, func() {
-				app.updateOverlap(xid)
-			})
 		case ATOM_WINDOW_TYPE:
 			if !isNormalWindow(ev.Window) {
 				app.detachXid(xid)
@@ -843,28 +829,52 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 			app.notifyChanged()
 		}
 	}).Connect(XU, xid)
-	update := func(xid xproto.Window) {
-		app.lock.Lock()
-		defer app.lock.Unlock()
-		app.updateOverlap(xid)
-	}
+
+	// move resize minimized Maximize window
 	xevent.ConfigureNotifyFun(func(XU *xgbutil.XUtil, ev xevent.ConfigureNotifyEvent) {
-		app.lock.Lock()
-		defer app.lock.Unlock()
+		winfo.lastConfigureNotifyEvent = &ev
+		const configureNotifyDelay = 100 // ms
 		if app.updateConfigureTimer != nil {
-			app.updateConfigureTimer.Stop()
-			app.updateConfigureTimer = nil
+			app.updateConfigureTimer.Reset(time.Millisecond * configureNotifyDelay)
+		} else {
+			app.updateConfigureTimer = time.AfterFunc(time.Millisecond*configureNotifyDelay, func() {
+				logger.Debug("ConfigureNotify: updateConfigureTimer expired")
+				ev := winfo.lastConfigureNotifyEvent
+				logger.Debugf("in closure: configure notify ev %s", ev)
+				isXYWHChange := false
+				if winfo.x != ev.X {
+					winfo.x = ev.X
+					isXYWHChange = true
+				}
+
+				if winfo.y != ev.Y {
+					winfo.y = ev.Y
+					isXYWHChange = true
+				}
+
+				if winfo.width != ev.Width {
+					winfo.width = ev.Width
+					isXYWHChange = true
+				}
+
+				if winfo.height != ev.Height {
+					winfo.height = ev.Height
+					isXYWHChange = true
+				}
+				logger.Debug("isXYWHChange", isXYWHChange)
+				if isXYWHChange {
+					hideModemanager.updateStateWithoutDelay()
+				} else {
+					hideModemanager.updateStateWithDelay()
+				}
+			})
 		}
-		app.updateConfigureTimer = time.AfterFunc(time.Millisecond*20, func() {
-			update(ev.Window)
-			app.updateConfigureTimer = nil
-		})
 	}).Connect(XU, xid)
+	hideModemanager.updateStateWithoutDelay()
+
 	app.xids[xid] = winfo
-	update(xid)
 	app.updateIcon(xid)
 	app.updateWmName(xid)
 	app.updateState(xid)
-	// app.updateViewports(xid)
 	app.notifyChanged()
 }

@@ -132,27 +132,6 @@ func (m *ClientManager) IsLauncherShown() bool {
 	return isLauncherShown
 }
 
-func walkClientList(pre func(xproto.Window) bool) bool {
-	list, err := ewmh.ClientListGet(XU)
-	if err != nil {
-		logger.Debug("Can't get _NET_CLIENT_LIST", err)
-		return false
-	}
-
-	for _, c := range list {
-		if pre(c) {
-			return true
-		}
-	}
-
-	return false
-}
-
-func isMaximizeVertClientPre(win xproto.Window) bool {
-	state, _ := ewmh.WmStateGet(XU, win)
-	return contains(state, "_NET_WM_STATE_MAXIMIZED_VERT")
-}
-
 func isHiddenPre(win xproto.Window) bool {
 	state, _ := ewmh.WmStateGet(XU, win)
 	return contains(state, "_NET_WM_STATE_HIDDEN")
@@ -182,19 +161,6 @@ func onCurrentWorkspacePre(win xproto.Window) bool {
 	return isOnCurrentWorkspace
 }
 
-func hasMaximizeClientPre(win xproto.Window) bool {
-	isMax := isMaximizeVertClientPre(win)
-	isHidden := isHiddenPre(win)
-	onCurrentWorkspace := onCurrentWorkspacePre(win)
-	logger.Debug("isMax:", isMax, "isHidden:", isHidden,
-		"onCurrentWorkspace:", onCurrentWorkspace)
-	return isMax && !isHidden && onCurrentWorkspace
-}
-
-func hasMaximizeClient() bool {
-	return walkClientList(hasMaximizeClientPre)
-}
-
 func isDeepinLauncher(win xproto.Window) (bool, error) {
 	winClass, err := icccm.WmClassGet(XU, win)
 	if err != nil {
@@ -203,60 +169,59 @@ func isDeepinLauncher(win xproto.Window) (bool, error) {
 	return winClass.Instance == DDELauncher, nil
 }
 
-func isWindowOnPrimaryScreen(win xproto.Window) bool {
-	var err error
-	window := xwindow.New(XU, win)
-	// include shadow
-	gemo, err := window.DecorGeometry()
-	if err != nil {
-		logger.Debug(err)
-		return false
+func max(a, b int32) int32 {
+	if a < b {
+		return b
 	}
-
-	displayRectX := (int)(displayRect.X)
-	displayRectY := (int)(displayRect.Y)
-	displayRectWidth := (int)(displayRect.Width)
-	displayRectHeight := (int)(displayRect.Height)
-
-	SHADOW_OFFSET := 10
-	gemoX := gemo.X() + SHADOW_OFFSET
-	gemoY := gemo.Y() + SHADOW_OFFSET
-	isOnPrimary := gemoX+SHADOW_OFFSET >= displayRectX &&
-		gemoX < displayRectX+displayRectWidth &&
-		gemoY >= displayRectY &&
-		gemoY < displayRectY+displayRectHeight
-
-	logger.Debugf("isWindowOnPrimaryScreen: %dx%d, %dx%d, %v", gemo.X(),
-		gemo.Y(), displayRect.X, displayRect.Y, isOnPrimary)
-
-	return isOnPrimary
+	return a
 }
 
-func isWindowOverlapDock(win xproto.Window) bool {
+func min(a, b int32) int32 {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func hasIntersection(x, y, w, h, x1, y1, w1, h1 int32) bool {
+	ax := max(x, x1)
+	ay := max(y, y1)
+	bx := min(x+w, x1+w1)
+	by := min(y+h, y1+h1)
+	return ax <= bx && ay <= by
+}
+
+func isWindowDockOverlap(win xproto.Window) bool {
+	// overlap 的条件： window showing + window on current workspace + window dock rect has intersection
 	window := xwindow.New(XU, win)
-	rect, err := window.DecorGeometry()
-	if err != nil {
-		logger.Warningf("isWindowOverlapDock GetDecorGeometry of 0x%x failed: %s", win, err)
+	if isHiddenPre(win) || (!onCurrentWorkspacePre(win)) {
 		return false
 	}
 
-	winX := int32(rect.X())
-	winY := int32(rect.Y())
-	winWidth := int32(rect.Width())
-	winHeight := int32(rect.Height())
-
-	dockX := int32(displayRect.X) + (int32(displayRect.Width)-
-		dockProperty.PanelWidth)/2
-	dockY := int32(displayRect.Y) + int32(displayRect.Height) -
-		dockProperty.Height
-	dockWidth := int32(displayRect.Width)
-	if DisplayModeType(setting.GetDisplayMode()) == DisplayModeModernMode {
-		dockWidth = dockProperty.PanelWidth
+	winRect, err := window.DecorGeometry()
+	if err != nil {
+		logger.Warningf("isWindowDockOverlap GetDecorGeometry of 0x%x failed: %s", win, err)
+		return false
 	}
 
-	// TODO: dock on the other side like top, left.
-	return dockY < winY+winHeight &&
-		dockX < winX+winWidth && dockX+dockWidth > winX
+	winX := int32(winRect.X())
+	winY := int32(winRect.Y())
+	winW := int32(winRect.Width())
+	winH := int32(winRect.Height())
+
+	dockX := int32(displayRect.X) + (int32(displayRect.Width)-dockProperty.PanelWidth)/2
+	dockY := int32(displayRect.Y) + int32(displayRect.Height) - dockProperty.Height
+	dockW := dockProperty.PanelWidth
+	dockH := dockProperty.Height
+
+	logger.Debugf("displayRect (%v,%v | %v x %v)",
+		displayRect.X, displayRect.Y, displayRect.Width, displayRect.Height)
+	logger.Debugf("dockProperty (%v x %v)", dockProperty.PanelWidth, dockProperty.Height)
+
+	result := hasIntersection(winX, winY, winW, winH, dockX, dockY, dockW, dockH)
+	logger.Debugf("window: (%v,%v | %v x %v), dock: (%v,%v | %v x %v), hasIntersection: %v",
+		winX, winY, winW, winH, dockX, dockY, dockW, dockH, result)
+	return result
 }
 
 func (m *ClientManager) handleClientListChanged() {
@@ -289,11 +254,7 @@ func (m *ClientManager) handleActiveWindowChanged() {
 		logger.Debug(err)
 	}
 	dbus.Emit(m, "ActiveWindowChanged", uint32(activeWindow))
-
-	hideMode := HideModeType(setting.GetHideMode())
-	if hideMode == HideModeSmartHide || hideMode == HideModeKeepHidden {
-		hideModemanager.UpdateState()
-	}
+	hideModemanager.updateStateWithDelay()
 }
 
 func (m *ClientManager) listenRootWindowPropertyChange() {

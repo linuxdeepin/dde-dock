@@ -204,7 +204,7 @@ func (d *Daemon) Start() error {
 	}
 	logger.Info("initialize hide mode manager done")
 
-	hideModemanager.UpdateState()
+	hideModemanager.updateStateWithoutDelay()
 
 	clientManager := NewClientManager()
 	err = dbus.InstallOnSession(clientManager)
@@ -248,7 +248,7 @@ func (d *Daemon) Start() error {
 		mouseAreaTimer = time.AfterFunc(TOGGLE_HIDE_TIME, func() {
 			logger.Debug("MouseIn:", id)
 			mouseAreaTimer = nil
-			hideModemanager.UpdateState()
+			hideModemanager.updateStateWithoutDelay()
 		})
 	})
 
@@ -258,7 +258,7 @@ func (d *Daemon) Start() error {
 			mouseAreaTimer = nil
 		}
 		logger.Debug("MouseOut:", id)
-		hideModemanager.UpdateState()
+		hideModemanager.updateStateWithoutDelay()
 	})
 
 	initialize()

@@ -161,7 +161,7 @@ func (e *AppEntry) update() {
 		e.setData(FieldAppXids, string(b))
 		if hideModemanager.state == HideStateShown &&
 			region.mouseInRegion() {
-			hideModemanager.UpdateState()
+			hideModemanager.updateStateWithDelay()
 		}
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
