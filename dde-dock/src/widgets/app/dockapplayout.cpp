@@ -279,7 +279,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
             emit requestSpacingItemsDestroy(true);
         }
         else {
-            m_ddam->ReqeustDock(dataObj.value("appKey").toString(), "", "", "");
+            m_ddam->RequestDock(dataObj.value("appKey").toString(), "", "", "");
             m_appManager->setDockingItemId(dataObj.value("appKey").toString());
 
             qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
@@ -295,7 +295,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
                 for (QString path : desktops) {
                     if (!isDesktopFileDocked(path)) {
                         QString appKey = getAppKeyByPath(path);
-                        m_ddam->ReqeustDock(appKey, "", "", "");
+                        m_ddam->RequestDock(appKey, "", "", "");
                         m_appManager->setDockingItemId(appKey);
 
                         qDebug() << "Desktop file drop to dock: " << appKey;

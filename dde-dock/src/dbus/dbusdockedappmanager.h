@@ -69,11 +69,11 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("IsDocked"), argumentList);
     }
 
-    inline QDBusPendingReply<bool> ReqeustDock(const QString &in0, const QString &in1, const QString &in2, const QString &in3)
+    inline QDBusPendingReply<bool> RequestDock(const QString &in0, const QString &in1, const QString &in2, const QString &in3)
     {
         QList<QVariant> argumentList;
         argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1) << QVariant::fromValue(in2) << QVariant::fromValue(in3);
-        return asyncCallWithArgumentList(QStringLiteral("ReqeustDock"), argumentList);
+        return asyncCallWithArgumentList(QStringLiteral("RequestDock"), argumentList);
     }
 
     inline QDBusPendingReply<bool> RequestUndock(const QString &in0)
