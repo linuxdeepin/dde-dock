@@ -32,8 +32,7 @@ void DockAppManager::initEntries()
         DBusDockEntry *dep = new DBusDockEntry(objPath.path());
         if (dep->isValid() && dep->type() == "App") {
             DockAppItem *item = new DockAppItem();
-            item->setEntryProxyer(dep);
-            m_initItems.insert(item->getItemId(), item);
+            m_initItems.insert(dep, item);
         }
     }
 
@@ -46,8 +45,7 @@ void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
     if (entryProxyer->isValid() && entryProxyer->type() == "App")
     {
         DockAppItem *item = new DockAppItem();
-        item->setEntryProxyer(entryProxyer);
-        QString tmpId = item->getItemId();
+        QString tmpId = entryProxyer->id();
         if (m_ids.indexOf(tmpId) != -1) {
             item->deleteLater();
         }else{
@@ -65,6 +63,8 @@ void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
 
             m_dockingItemId = "";
         }
+
+        item->setEntryProxyer(entryProxyer);
     }
 }
 
@@ -85,15 +85,25 @@ void DockAppManager::onEntryRemoved(const QString &id)
 void DockAppManager::sortItemList()
 {
     QStringList dockedList = m_dockAppManager->DockedAppList().value();
-    m_ids = m_initItems.keys();
-    QStringList tmpIds = m_initItems.keys();
-    for (QString id : dockedList) {  //For docked items
-        if (tmpIds.indexOf(id) != -1) {
-            emit entryAppend(m_initItems.take(id));
+
+    m_ids = QStringList();
+    QList<DBusDockEntry*> undockedEntries;
+
+    QList<DBusDockEntry*> entries = m_initItems.keys();
+    for (DBusDockEntry *entry : entries) {
+        m_ids << entry->id();
+        if (dockedList.indexOf(entry->id()) != -1) {
+            DockAppItem *item = m_initItems.take(entry);
+            emit entryAppend(item);
+            item->setEntryProxyer(entry);
+        } else {
+            undockedEntries << entry;
         }
     }
-    tmpIds = m_initItems.keys();
-    for (QString id : tmpIds) { //For undocked items
-        emit entryAppend(m_initItems.take(id));
+
+    for (DBusDockEntry *entry : undockedEntries) {
+        DockAppItem *item = m_initItems.take(entry);
+        emit entryAppend(item);
+        item->setEntryProxyer(entry);
     }
 }

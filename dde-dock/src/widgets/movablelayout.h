@@ -78,7 +78,7 @@ signals:
     void dragLeaved(QDragLeaveEvent *event);
     void dragEntered(QDragEnterEvent *event);
 
-private:
+protected:
     bool event(QEvent *e);
     void mouseMoveEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);

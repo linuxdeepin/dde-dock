@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui x11extras dbus svg
+QT       += core gui x11extras dbus svg concurrent
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

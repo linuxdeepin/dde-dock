@@ -252,6 +252,12 @@ void DockAppItem::setWindowIconGeometries()
     }
 }
 
+void DockAppItem::refreshUI()
+{
+    m_appBG->setIsActived(m_actived);
+    reanchorIcon();
+}
+
 void DockAppItem::onDbusDataChanged(const QString &, const QString &)
 {
     updateTitle();
@@ -360,14 +366,11 @@ void DockAppItem::setCurrentOpened(uint value)
 
 void DockAppItem::setActived(bool value)
 {
-    m_actived = value;
-    if (!value)
-        setFixedSize(m_dockModeData->getNormalItemWidth(), m_dockModeData->getItemHeight());
-    else
-        setFixedSize(m_dockModeData->getActivedItemWidth(), m_dockModeData->getItemHeight());
+    if (m_actived != value) {
+        m_actived = value;
 
-    m_appBG->setIsActived(value);
-    reanchorIcon();
+        emit activatedChanged(value);
+    }
 }
 
 void DockAppItem::invokeMenuItem(QString id, bool)

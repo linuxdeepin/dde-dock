@@ -51,6 +51,11 @@ public:
     void setActived(bool actived);
     void setWindowIconGeometries();
 
+    void refreshUI();
+
+signals:
+    void activatedChanged(bool activated);
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -97,7 +102,7 @@ private:
     DBusDockedAppManager *m_appManager;
     AppPreviewsContainer *m_previewContainer;
 
-    bool m_actived;
+    bool m_actived = false;
 };
 
 #endif // DOCKAPPITEM_H

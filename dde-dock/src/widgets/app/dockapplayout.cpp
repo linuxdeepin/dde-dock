@@ -8,6 +8,7 @@
  **/
 
 #include <QDrag>
+#include <QtConcurrent>
 #include "dockapplayout.h"
 #include "../../controller/dockmodedata.h"
 
@@ -216,6 +217,12 @@ void DockAppLayout::enterEvent(QEvent *e)
     setDragable(true);
 }
 
+void DockAppLayout::resizeEvent(QResizeEvent *e)
+{
+    MovableLayout::resizeEvent(e);
+    updateItemWidths();
+}
+
 //bool DockAppLayout::eventFilter(QObject *obj, QEvent *e)
 //{
 //    if (e->type() == QEvent::Move) {
@@ -379,34 +386,21 @@ void DockAppLayout::onAppItemRemove(const QString &id)
             return;
         }
     }
+    updateItemWidths();
 }
 
 void DockAppLayout::onAppItemAdd(DockAppItem *item)
 {
     insertWidget(hoverIndex(), item);
-    connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
-        DockAppItem * s = qobject_cast<DockAppItem *>(sender());
-        if (s) {
-            emit needPreviewShow(s, pos);
-        }
-    });
-    connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
-    connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
-    connect(this, &DockAppLayout::itemHoverableChange, item, &DockAppItem::setHoverable);
+    createConnections(item);
+    updateItemWidths();
 }
 
 void DockAppLayout::onAppAppend(DockAppItem *item)
 {
     addWidget(item);
-    connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
-        DockAppItem * s = qobject_cast<DockAppItem *>(sender());
-        if (s) {
-            emit needPreviewShow(s, pos);
-        }
-    });
-    connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
-    connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
-    connect(this, &DockAppLayout::itemHoverableChange, item, &DockAppItem::setHoverable);
+    createConnections(item);
+    updateItemWidths();
 }
 
 QStringList DockAppLayout::appIds()
@@ -420,6 +414,87 @@ QStringList DockAppLayout::appIds()
     }
 
     return ids;
+}
+
+void DockAppLayout::createConnections(DockAppItem *item)
+{
+    connect(item, &DockAppItem::needPreviewShow, this, [=](QPoint pos) {
+        DockAppItem * s = qobject_cast<DockAppItem *>(sender());
+        if (s) {
+            emit needPreviewShow(s, pos);
+        }
+    });
+    connect(item, &DockAppItem::activatedChanged, this, [this](bool) {
+        updateItemWidths();
+    });
+    connect(item, &DockAppItem::needPreviewHide, this, &DockAppLayout::needPreviewHide);
+    connect(item, &DockAppItem::needPreviewUpdate, this, &DockAppLayout::needPreviewUpdate);
+    connect(this, &DockAppLayout::itemHoverableChange, item, &DockAppItem::setHoverable);
+}
+
+// update the width of all items according to the spaces that left.
+void DockAppLayout::updateItemWidths()
+{
+    DockModeData *dmd = DockModeData::instance();
+
+    if (dmd->getDockMode() == Dock::ClassicMode) {
+        QList<DockAppItem *> activeItems;
+        QList<DockAppItem *> inactiveItems;
+
+        QList<DockItem *> tmpList = this->widgets();
+        for (DockItem * item : tmpList) {
+            DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
+            if (tmpItem->actived()) {
+                activeItems << tmpItem;
+            } else {
+                inactiveItems << tmpItem;
+            }
+        }
+
+        int itemsCount = activeItems.length() + inactiveItems.length();
+        bool cannotHoldAllAsInactives = itemsCount * dmd->getNormalItemWidth() + itemsCount * getLayoutSpacing() > this->width();
+
+        if (cannotHoldAllAsInactives || activeItems.length() == 0) {
+            // TODO: should scale the items or something.
+            for (DockAppItem *item : activeItems) {
+                item->setFixedSize(dmd->getActivedItemWidth(), dmd->getItemHeight());
+                item->refreshUI();
+            }
+
+            for (DockAppItem *item: inactiveItems) {
+                item->setFixedSize(dmd->getNormalItemWidth(), dmd->getItemHeight());
+                item->refreshUI();
+            }
+        } else {
+            uint normalItemWidth = dmd->getNormalItemWidth();
+            int widthLeft = this->width() - inactiveItems.length() * normalItemWidth - itemsCount * getLayoutSpacing();
+            int averageItemWidthLeft = widthLeft / activeItems.length();
+            uint activeItemWidth = qMin(dmd->getActivedItemWidth(), averageItemWidthLeft);
+
+            for (DockAppItem *item : activeItems) {
+                item->setFixedSize(activeItemWidth, dmd->getItemHeight());
+                item->refreshUI();
+            }
+
+            for (DockAppItem *item: inactiveItems) {
+                item->setFixedSize(normalItemWidth, dmd->getItemHeight());
+                item->refreshUI();
+            }
+        }
+    } else {
+        QList<DockItem *> tmpList = this->widgets();
+        for (DockItem * item : tmpList) {
+            DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
+            if (tmpItem) {
+                if (tmpItem->actived()) {
+                    tmpItem->setFixedSize(dmd->getActivedItemWidth(), dmd->getDockHeight());
+                } else {
+                    tmpItem->setFixedSize(dmd->getNormalItemWidth(), dmd->getDockHeight());
+                }
+                tmpItem->refreshUI();
+            }
+        }
+    }
 }
 
 bool DockAppLayout::getDragFromOutside() const

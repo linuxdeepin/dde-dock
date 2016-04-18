@@ -187,6 +187,7 @@ void DockPanel::onDockModeChanged(Dock::DockMode, Dock::DockMode)
     }
 
     // interval 0 stands for timeout will be triggered on idle.
+    QTimer::singleShot(0, m_appLayout, &DockAppLayout::updateItemWidths);
     QTimer::singleShot(0, m_appLayout, &DockAppLayout::updateWindowIconGeometries);
 }
 
