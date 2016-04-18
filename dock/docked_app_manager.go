@@ -53,6 +53,33 @@ func NewDockedAppManager() *DockedAppManager {
 	return m
 }
 
+func strListToSlice(l *list.List) []string {
+	s := make([]string, 0, l.Len())
+	for e := l.Front(); e != nil; e = e.Next() {
+		s = append(s, e.Value.(string))
+	}
+	return s
+}
+
+func uniqStrSlice(slice []string) []string {
+	newSlice := make([]string, 0)
+	for _, e := range slice {
+		if !isStrInSlice(e, newSlice) {
+			newSlice = append(newSlice, e)
+		}
+	}
+	return newSlice
+}
+
+func isStrInSlice(v string, slice []string) bool {
+	for _, e := range slice {
+		if e == v {
+			return true
+		}
+	}
+	return false
+}
+
 func (m *DockedAppManager) init() {
 	m.items = list.New()
 	m.settings = gio.NewSettings(dockSchema)
@@ -63,10 +90,11 @@ func (m *DockedAppManager) init() {
 
 	// TODO:
 	// listen changed.
-	appList := m.settings.GetStrv(settingKeyDockedApps)
+	appList := uniqStrSlice(m.settings.GetStrv(settingKeyDockedApps))
 	for _, id := range appList {
 		m.items.PushBack(normalizeAppID(id))
 	}
+	m.saveAppList(m.getAppList())
 }
 
 func (m *DockedAppManager) destroy() {
@@ -97,6 +125,7 @@ func (m *DockedAppManager) handleOldConfigFile() {
 		logger.Debug("Read docked app from old config file failed:", err)
 		return
 	}
+	ids = uniqStrSlice(ids)
 	for _, id := range ids {
 		if a := NewDesktopAppInfo(id + ".desktop"); a != nil {
 			a.Destroy()
@@ -131,11 +160,7 @@ func (m *DockedAppManager) handleOldConfigFile() {
 
 // DockedAppList返回程序id列表。
 func (m *DockedAppManager) DockedAppList() []string {
-	if m.settings != nil {
-		appList := m.settings.GetStrv(settingKeyDockedApps)
-		return appList
-	}
-	return nil
+	return m.getAppList()
 }
 
 // IsDocked通过传入的程序id判断一个程序是否已经驻留。
@@ -257,19 +282,13 @@ func (m *DockedAppManager) Sort(items []string) {
 			m.items.PushBack(m.items.Remove(i))
 		}
 	}
-
 	sortedAppList := m.getAppList()
 	logger.Debug("After sort:", sortedAppList)
 	m.saveAppList(sortedAppList)
 }
 
 func (m *DockedAppManager) getAppList() []string {
-	length := m.items.Len()
-	list := make([]string, 0, length)
-	for e := m.items.Front(); e != nil; e = e.Next() {
-		list = append(list, e.Value.(string))
-	}
-	return list
+	return strListToSlice(m.items)
 }
 
 // 保存 apps 到 gsettings
