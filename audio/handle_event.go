@@ -10,10 +10,17 @@
 package audio
 
 import "pkg.deepin.io/lib/pulse"
-import "sync"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {
+		a.core.ConnectStateChanged(pulse.ContextStateFailed, func() {
+			logger.Warning("Pulse context connection failed, try again")
+			a.core = pulse.GetContextForced()
+			a.update()
+			a.init = false
+			a.initEventHandlers()
+		})
+
 		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
 			a.handleCardEvent(e, idx)
 			a.saveConfig()
@@ -36,8 +43,6 @@ func (a *Audio) initEventHandlers() {
 		a.init = true
 	}
 }
-
-var cardEventLocker sync.Mutex
 
 func (a *Audio) handleCardEvent(eType int, idx uint32) {
 	switch eType {
