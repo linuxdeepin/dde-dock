@@ -10,8 +10,11 @@
 package screenedge
 
 import (
+	"regexp"
 	"strings"
 )
+
+var ddeLauncherCommandRegexp = regexp.MustCompile(`(?i)dde.*launcher`)
 
 func (m *Manager) handleSettingsChanged() {
 	m.settings.ConnectChanged(func(key string) {
@@ -117,7 +120,7 @@ func (m *Manager) handleCursorSignal(x, y int32, id string, into bool) {
 	for _, edge := range m.edges {
 		if edge.Area.Contains(x, y) {
 			if isLauncherShowing {
-				if strings.Contains(edge.Command, "dde-launcher") {
+				if ddeLauncherCommandRegexp.MatchString(edge.Command) {
 					m.execAction(edge)
 					return
 				}
