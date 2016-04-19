@@ -167,57 +167,81 @@ func (m *Manager) handleBatteryPowerLevelChanged() {
 
 }
 
+func (m *Manager) getBatteryGroupTimeToEmpty() int64 {
+	var timeToEmpty int64
+	for _, batInfo := range m.batteryGroup.InfoMap {
+		timeToEmpty += batInfo.TimeToEmpty
+	}
+	return timeToEmpty
+}
+
+func (m *Manager) getBatteryGroupPercentage() float64 {
+	var energySum, energyFullSum float64
+	for _, batInfo := range m.batteryGroup.InfoMap {
+		energySum += batInfo.Energy
+		energyFullSum += batInfo.EnergyFull
+	}
+	return (energySum / energyFullSum) * 100.0
+}
+
+func getBatteryPowerLevelByPercentage(percentage float64) uint32 {
+	switch {
+	case percentage < batteryPercentageAbnormal:
+		return batteryPowerLevelAbnormal
+
+	case percentage <= batteryPercentageExhausted:
+		return batteryPowerLevelExhausted
+
+	case percentage <= batteryPercentageVeryLow:
+		return batteryPowerLevelVeryLow
+
+	case percentage <= batteryPercentageLow:
+		return batteryPowerLevelLow
+
+	default:
+		return batteryPowerLevelSufficient
+	}
+}
+
+func getBatteryPowerLevelByTimeToEmpty(time int64) uint32 {
+	switch {
+	case time < timeToEmptyAbnormal:
+		return batteryPowerLevelAbnormal
+
+	case time < timeToEmptyExhausted:
+		return batteryPowerLevelExhausted
+
+	case time < timeToEmptyVeryLow:
+		return batteryPowerLevelVeryLow
+
+	case time < timeToEmptyLow:
+		return batteryPowerLevelLow
+
+	default:
+		return batteryPowerLevelSufficient
+	}
+}
+
 func (m *Manager) getNewBatteryPowerLevel() uint32 {
 	if !m.OnBattery {
 		return batteryPowerLevelSufficient
 	}
 
-	if !m.usePercentageForPolicy {
-		var timeToEmpty int64
-		for _, batInfo := range m.batteryGroup.InfoMap {
-			timeToEmpty += batInfo.TimeToEmpty
-		}
-		logger.Debug("sum timeToEmpty(secs):", timeToEmpty)
-
-		switch {
-		case timeToEmpty < timeToEmptyAbnormal:
-			return batteryPowerLevelAbnormal
-
-		case timeToEmpty < timeToEmptyExhausted:
-			return batteryPowerLevelExhausted
-
-		case timeToEmpty < timeToEmptyVeryLow:
-			return batteryPowerLevelVeryLow
-
-		case timeToEmpty < timeToEmptyLow:
-			return batteryPowerLevelLow
-
-		default:
-			return batteryPowerLevelSufficient
-		}
-	} else {
-		var energySum, energyFullSum float64
-		for _, batInfo := range m.batteryGroup.InfoMap {
-			energySum += batInfo.Energy
-			energyFullSum += batInfo.EnergyFull
-		}
-		percentage := (energySum / energyFullSum) * 100.0
+	if m.usePercentageForPolicy {
+		percentage := m.getBatteryGroupPercentage()
 		logger.Debugf("sum percentage: %.2f%%", percentage)
-		switch {
-		case percentage < batteryPercentageAbnormal:
-			return batteryPowerLevelAbnormal
-
-		case percentage <= batteryPercentageExhausted:
-			return batteryPowerLevelExhausted
-
-		case percentage <= batteryPercentageVeryLow:
-			return batteryPowerLevelVeryLow
-
-		case percentage <= batteryPercentageLow:
-			return batteryPowerLevelLow
-
-		default:
-			return batteryPowerLevelSufficient
+		return getBatteryPowerLevelByPercentage(percentage)
+	} else {
+		// use time to empty for policy
+		timeToEmpty := m.getBatteryGroupTimeToEmpty()
+		logger.Debug("sum timeToEmpty(secs):", timeToEmpty)
+		powerLevel := getBatteryPowerLevelByTimeToEmpty(timeToEmpty)
+		if powerLevel == batteryPowerLevelAbnormal {
+			logger.Debug("Try use percentage for policy")
+			percentage := m.getBatteryGroupPercentage()
+			logger.Debugf("sum percentage: %.2f%%", percentage)
+			return getBatteryPowerLevelByPercentage(percentage)
 		}
+		return powerLevel
 	}
 }
