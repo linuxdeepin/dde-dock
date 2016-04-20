@@ -12,10 +12,58 @@ package power
 import (
 	libdisplay "dbus/com/deepin/daemon/display"
 	"github.com/BurntSushi/xgb/dpms"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/icccm"
 	"os/exec"
 	"pkg.deepin.io/dde/api/soundutils"
 	"time"
 )
+
+func (m *Manager) findWindow(wminstance, wmclass string) bool {
+	rootWin := m.xu.RootWin()
+	tree, err := xproto.QueryTree(m.xConn, rootWin).Reply()
+	if err != nil {
+		logger.Warning("QueryTree error:", err)
+		return false
+	}
+	for i := int(tree.ChildrenLen) - 1; i >= 0; i-- {
+		wmClass, err := icccm.WmClassGet(m.xu, tree.Children[i])
+		if err == nil &&
+			wmClass.Instance == wminstance &&
+			wmClass.Class == wmclass {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Manager) waitWindow(wminstance, wmclass string, timeout time.Duration) {
+	logger.Debug("waitWindow", wminstance, wmclass)
+	ticker := time.NewTicker(time.Millisecond * 300)
+	timer := time.NewTimer(timeout)
+	for {
+		select {
+		case <-ticker.C:
+			logger.Debug("waitWindow tick")
+			if m.findWindow(wminstance, wmclass) {
+				logger.Debug("waitWindow found")
+				ticker.Stop()
+				return
+			}
+
+		case <-timer.C:
+			logger.Debug("waitWindow failed timeout!")
+			ticker.Stop()
+			return
+		}
+	}
+}
+
+func (m *Manager) lockWaitShow(timeout time.Duration) {
+	const ddeLock = "dde-lock"
+	m.doLock()
+	m.waitWindow(ddeLock, ddeLock, timeout)
+}
 
 func getBatteryPowerLevelName(num uint32) string {
 	if name, ok := batteryPowerLevelNameMap[num]; !ok {
@@ -41,35 +89,6 @@ func (m *Manager) doLock() {
 		err := m.sessionManager.RequestLock()
 		if err != nil {
 			logger.Error("Lock failed:", err)
-		}
-
-		// wait dde-lock show
-		if m.lockFront != nil {
-			lockWaiter := &struct {
-				ch chan int
-			}{make(chan int)}
-			go func() {
-				for lockWaiter.ch != nil {
-					time.Sleep(300 * time.Millisecond)
-					logger.Debug("check lock result")
-					_, err = m.lockFront.LockResult()
-					if err == nil {
-						if lockWaiter.ch != nil {
-							lockWaiter.ch <- 1
-						}
-						break
-					}
-				}
-			}()
-
-			select {
-			case <-time.After(3 * time.Second):
-				logger.Warning("lock timeout")
-			case <-lockWaiter.ch:
-				logger.Debug("lock done")
-			}
-			close(lockWaiter.ch)
-			lockWaiter.ch = nil
 		}
 	}
 }

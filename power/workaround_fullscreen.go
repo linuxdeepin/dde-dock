@@ -29,7 +29,6 @@ func init() {
 
 type fullScreenWorkaround struct {
 	manager          *Manager
-	xu               *xgbutil.XUtil
 	keyEventAtomList []xproto.Atom
 	idleId           uint32
 	enable           bool
@@ -44,16 +43,11 @@ func newFullScreenWorkaround(m *Manager) (string, submodule, error) {
 		manager: m,
 		enable:  true,
 	}
-	var err error
-	wa.xu, err = xgbutil.NewConnXgb(m.xConn)
-	if err != nil {
-		return name, nil, err
-	}
 	var atomList []xproto.Atom
 
 	list := []string{"_NET_ACTIVE_WINDOW", "_NET_CLIENT_LIST_STACKING"}
 	for _, name := range list {
-		atom, err := xprop.Atm(wa.xu, name)
+		atom, err := xprop.Atm(wa.manager.xu, name)
 		if err != nil {
 			return name, nil, err
 		}
@@ -67,7 +61,7 @@ func newFullScreenWorkaround(m *Manager) (string, submodule, error) {
 }
 
 func (wa *fullScreenWorkaround) detect() {
-	activeWin, _ := ewmh.ActiveWindowGet(wa.xu)
+	activeWin, _ := ewmh.ActiveWindowGet(wa.manager.xu)
 	wa.enableMutex.Lock()
 
 	if !wa.enable {
@@ -119,7 +113,7 @@ func (wa *fullScreenWorkaround) tryInhibit(activeWin xproto.Window) {
 	}
 
 	// get active window pid and cmdline
-	pid, _ := xprop.PropValNum(xprop.GetProperty(wa.xu, activeWin, "_NET_WM_PID"))
+	pid, _ := xprop.PropValNum(xprop.GetProperty(wa.manager.xu, activeWin, "_NET_WM_PID"))
 	contents, err := ioutil.ReadFile(fmt.Sprintf("/proc/%d/cmdline", pid))
 	if err != nil {
 		logger.Warningf("get pid %v cmdline failed: %v", pid, err)
@@ -153,7 +147,7 @@ func (wa *fullScreenWorkaround) inhibit() {
 }
 
 func (wa *fullScreenWorkaround) isFullscreenFocused(xid xproto.Window) bool {
-	states, _ := ewmh.WmStateGet(wa.xu, xid)
+	states, _ := ewmh.WmStateGet(wa.manager.xu, xid)
 	found := 0
 	logger.Debug("window states:", states)
 	for _, s := range states {
@@ -182,18 +176,18 @@ func (wa *fullScreenWorkaround) Start() error {
 		}
 	}()
 
-	root := xwindow.New(wa.xu, wa.xu.RootWin())
+	root := xwindow.New(wa.manager.xu, wa.manager.xu.RootWin())
 	root.Listen(xproto.EventMaskPropertyChange)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		atomName, _ := xprop.AtomName(wa.xu, ev.Atom)
+		atomName, _ := xprop.AtomName(wa.manager.xu, ev.Atom)
 		logger.Debugf("signal %v %s", ev.Atom, atomName)
 		for _, atom := range wa.keyEventAtomList {
 			if ev.Atom == atom {
 				wa.detect()
 			}
 		}
-	}).Connect(wa.xu, root.Id)
-	go xevent.Main(wa.xu)
+	}).Connect(wa.manager.xu, root.Id)
+	go xevent.Main(wa.manager.xu)
 	return nil
 }
 
@@ -202,8 +196,5 @@ func (wa *fullScreenWorkaround) Destroy() {
 		wa.ticker.Stop()
 		wa.ticker = nil
 	}
-	if wa.xu != nil {
-		xevent.Quit(wa.xu)
-		wa.xu = nil
-	}
+	xevent.Quit(wa.manager.xu)
 }

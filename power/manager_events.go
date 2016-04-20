@@ -12,6 +12,7 @@ package power
 import (
 	"pkg.deepin.io/dde/api/soundutils"
 	. "pkg.deepin.io/lib/gettext"
+	"time"
 )
 
 // 按下电源键
@@ -70,12 +71,12 @@ func (m *Manager) handleBeforeSuspend() {
 	logger.Debug("before sleep")
 	m.isSuspending = true
 
-	if m.SleepLock.Get() {
+	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 		logger.Debug("* lock screen: DPMS on")
 		m.setDPMSModeOn()
 		// 此时执行 setDPMSModeOn() 将触发 HandleIdleOff
 		// 如果 DPMS 是 off 状态，lock screen 将无法完成
-		m.doLock()
+		m.lockWaitShow(2 * time.Second)
 	}
 }
 
@@ -87,8 +88,8 @@ func (m *Manager) handleWeakup() {
 
 	m.checkBatteryPowerLevel()
 	playSound(soundutils.EventWakeup)
-	if m.SleepLock.Get() {
-		go m.doLock()
+	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+		m.doLock()
 	}
 }
 
@@ -134,8 +135,8 @@ func (m *Manager) handleBatteryPowerLevelChanged() {
 			if count == 3 {
 				// after 3 seconds, lock and then show lowpower
 				go func() {
-					if m.SleepLock.Get() {
-						m.doLock()
+					if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+						m.lockWaitShow(2 * time.Second)
 					}
 					doShowLowpower()
 				}()

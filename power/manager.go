@@ -22,6 +22,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb"
 	"github.com/BurntSushi/xgb/dpms"
+	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/initializer/v2"
@@ -39,6 +40,7 @@ type Manager struct {
 	upower         *libupower.Upower
 
 	xConn        *xgb.Conn
+	xu           *xgbutil.XUtil
 	batteryGroup *batteryGroup
 	submodules   map[string]submodule
 
@@ -193,11 +195,8 @@ func NewManager() (*Manager, error) {
 			return dbus.InstallOnSession(m)
 		}).Do(
 		m.initBatteryGroup).Do(
-		func() (err error) {
-			m.xConn, err = xgb.NewConn()
-			dpms.Init(m.xConn)
-			return
-		}).Do(m.initSubmodules).GetError()
+		m.initXConn).Do(
+		m.initSubmodules).GetError()
 
 	if err != nil {
 		m.destroy()
@@ -213,6 +212,20 @@ func NewManager() (*Manager, error) {
 	m.initEventHandle()
 	m.initProperties()
 	return m, nil
+}
+
+func (m *Manager) initXConn() error {
+	var err error
+	m.xConn, err = xgb.NewConn()
+	if err != nil {
+		return err
+	}
+	m.xu, err = xgbutil.NewConnXgb(m.xConn)
+	if err != nil {
+		return err
+	}
+	dpms.Init(m.xConn)
+	return nil
 }
 
 func (m *Manager) initSubmodules() error {
