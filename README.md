@@ -24,6 +24,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * network-manager
 * policykit-1-gnome
 * grub-themes-deepin
+* gnome-keyring
 * deepin-notifications
 * xserver-xorg-input-wacom
 
@@ -58,7 +59,7 @@ sudo make install
 
 ### dde-system-daemon
 
-`dde-system-daemon` primarily provide account services, need to run as root. 
+`dde-system-daemon` primarily provide account services, need to run as root.
 
 ### dde-session-daemon
 

@@ -158,20 +158,21 @@ func secretGetAll(uuid, settingName string) (values map[string]string, ok bool) 
 	if err != nil {
 		logger.Error(err)
 	}
+	reUnlockedPaths, _, _ := service.Unlock(lockedPaths)
 
 	doSecretGetAll(service, sessionPath, unlockedPaths, values)
-	doSecretGetAll(service, sessionPath, lockedPaths, values)
+	doSecretGetAll(service, sessionPath, reUnlockedPaths, values)
 	if len(values) > 0 {
 		ok = true
 	}
 	return
 }
 func doSecretGetAll(service *secret.Service, sessionPath dbus.ObjectPath, itemPaths []dbus.ObjectPath, values map[string]string) {
-	unlockedSecretsMap, err := service.GetSecrets(itemPaths, sessionPath)
+	secretsMap, err := service.GetSecrets(itemPaths, sessionPath)
 	if err != nil {
 		logger.Error(err)
 	}
-	for itemPath, itemSecretIfcArray := range unlockedSecretsMap {
+	for itemPath, itemSecretIfcArray := range secretsMap {
 		if itemSecret, ok := convertToItemSecret(itemSecretIfcArray); ok {
 			item, err := secretNewItem(itemPath)
 			if err != nil {
