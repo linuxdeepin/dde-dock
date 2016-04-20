@@ -24,7 +24,7 @@ const int PREVIEW_WIDTH = Dock::APP_PREVIEW_WIDTH;
 const int PREVIEW_MARGIN = Dock::APP_PREVIEW_MARGIN;
 
 AppPreviewsContainer::AppPreviewsContainer(QWidget *parent) :
-    QWidget(parent), m_isClosing(false)
+    QWidget(parent)
 {
     m_clientManager  = new DBusClientManager(this);
 
@@ -55,14 +55,10 @@ void AppPreviewsContainer::addItem(const QString &title, int xid)
 
 void AppPreviewsContainer::leaveEvent(QEvent *)
 {
-    if (m_isClosing)
-        m_isClosing = false;
 }
 
 void AppPreviewsContainer::removePreview(int xid)
 {
-    m_isClosing = true;
-
     m_previewMap.remove(xid);
     m_mainLayout->removeWidget(qobject_cast<AppPreviewLoaderFrame *>(sender()));
     sender()->deleteLater();

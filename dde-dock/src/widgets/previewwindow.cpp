@@ -44,12 +44,12 @@ void PreviewWindow::showPreview(int x, int y, int interval)
 {
     m_hideTimer->stop();
 
-    if (m_showTimer->isActive())
-        return;
-
     m_lastPos = QPoint(m_x, m_y);
     m_x = x;
     m_y = y;
+
+    if (m_showTimer->isActive())
+        return;
 
     m_showTimer->start(interval);
 }

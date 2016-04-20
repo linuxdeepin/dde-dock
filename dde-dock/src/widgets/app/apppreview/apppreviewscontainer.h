@@ -45,7 +45,6 @@ private:
     QMap<int, AppPreviewLoaderFrame *> m_previewMap;
     DBusClientManager *m_clientManager;
     QHBoxLayout *m_mainLayout;
-    bool m_isClosing;
 };
 
 #endif // APPPREVIEWSCONTAINER_H

@@ -324,6 +324,7 @@ void DockAppLayout::onDragLeave(QDragLeaveEvent *event)
 void DockAppLayout::onDragEnter(QDragEnterEvent *event)
 {
     if (event->source() == this) {
+        setDragFromOutside(true);
         return;
     }
     else if (event->mimeData()->formats().indexOf("RequestDock") != -1) {
