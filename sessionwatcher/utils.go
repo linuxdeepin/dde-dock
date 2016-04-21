@@ -11,6 +11,8 @@ package sessionwatcher
 
 import (
 	"dbus/org/freedesktop/login1"
+	"fmt"
+	"os/user"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/pulse"
 )
@@ -50,4 +52,18 @@ func suspendPulseSources(suspend int) {
 	for _, source := range ctx.GetSourceList() {
 		ctx.SuspendSourceById(source.Index, suspend)
 	}
+}
+
+var curUid string
+
+func isCurrentUser(uid uint32) bool {
+	if len(curUid) == 0 {
+		cur, err := user.Current()
+		if err != nil {
+			return false
+		}
+		curUid = cur.Uid
+	}
+
+	return curUid == fmt.Sprint(uid)
 }

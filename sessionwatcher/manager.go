@@ -23,8 +23,7 @@ const (
 type Manager struct {
 	loginManager  *login1.Manager
 	sessionLocker sync.Mutex
-	userIds       map[string]uint32
-	userSessions  map[uint32][]*login1.Session
+	sessions      map[string]*login1.Session
 }
 
 func newManager() (*Manager, error) {
@@ -36,22 +35,13 @@ func newManager() (*Manager, error) {
 
 	return &Manager{
 		loginManager: loginObj,
-		userIds:      make(map[string]uint32),
-		userSessions: make(map[uint32][]*login1.Session),
+		sessions:     make(map[string]*login1.Session),
 	}, nil
 }
 
 func (m *Manager) destroy() {
-	if m.loginManager != nil {
-		m.destroyUserSessions()
-	}
-
-	if m.userIds != nil {
-		m.userIds = nil
-	}
-
-	if m.userSessions != nil {
-		m.userSessions = nil
+	if m.sessions != nil {
+		m.destroySessions()
 	}
 }
 
@@ -93,65 +83,63 @@ func (m *Manager) initUserSessions() {
 	})
 }
 
-func (m *Manager) destroyUserSessions() {
+func (m *Manager) destroySessions() {
 	m.sessionLocker.Lock()
-	m.sessionLocker.Unlock()
-	for _, ss := range m.userSessions {
-		for _, s := range ss {
-			login1.DestroySession(s)
-			s = nil
-		}
+	for _, s := range m.sessions {
+		login1.DestroySession(s)
+		s = nil
 	}
-	m.userSessions = nil
+	m.sessions = nil
+	m.sessionLocker.Unlock()
 }
 
 func (m *Manager) addSession(id string, path dbus.ObjectPath) {
-	logger.Debug("Add session:", path)
 	uid, session := newLoginSession(path)
 	if session == nil {
 		return
 	}
 
+	logger.Debug("Add session:", id, path, uid)
+	if !isCurrentUser(uid) {
+		logger.Debug("Not the current user session:", id, path, uid)
+		return
+	}
+
 	m.sessionLocker.Lock()
-	m.userIds[id] = uid
-	m.userSessions[uid] = append(m.userSessions[uid], session)
+	m.sessions[id] = session
 	m.sessionLocker.Unlock()
 
 	session.Active.ConnectChanged(func() {
 		if session == nil {
 			return
 		}
-		m.handleSessionChanged(uid)
+		m.handleSessionChanged()
 	})
-	m.handleSessionChanged(uid)
+	m.handleSessionChanged()
 }
 
 func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
 	m.sessionLocker.Lock()
-	uid, ok := m.userIds[id]
+	session, ok := m.sessions[id]
 	if !ok {
 		m.sessionLocker.Unlock()
 		return
 	}
 
-	var list []*login1.Session
-	for _, s := range m.userSessions[uid] {
-		if s.Path != path {
-			list = append(list, s)
-			continue
-		}
-
-		logger.Debug("Delete session:", path)
-		login1.DestroySession(s)
-		s = nil
-	}
-	m.userSessions[uid] = list
+	logger.Debug("Delete session:", id, path)
+	login1.DestroySession(session)
+	session = nil
+	delete(m.sessions, id)
 	m.sessionLocker.Unlock()
-	m.handleSessionChanged(uid)
+	m.handleSessionChanged()
 }
 
-func (m *Manager) handleSessionChanged(uid uint32) {
-	if m.isActive(uid) {
+func (m *Manager) handleSessionChanged() {
+	if len(m.sessions) == 0 {
+		return
+	}
+
+	if m.isActive() {
 		suspendPulseSinks(0)
 		suspendPulseSources(0)
 	} else {
@@ -160,11 +148,11 @@ func (m *Manager) handleSessionChanged(uid uint32) {
 	}
 }
 
-func (m *Manager) isActive(uid uint32) bool {
+func (m *Manager) isActive() bool {
 	var active bool = false
 	m.sessionLocker.Lock()
-	for _, s := range m.userSessions[uid] {
-		logger.Debug("[isActive] info:", uid, s.Path, s.Active.Get())
+	for _, s := range m.sessions {
+		logger.Debug("[isActive] info:", s.Path, s.Active.Get())
 		if s.Active.Get() {
 			active = true
 			break
@@ -172,6 +160,6 @@ func (m *Manager) isActive(uid uint32) bool {
 	}
 	m.sessionLocker.Unlock()
 
-	logger.Debug("Session state:", uid, active)
+	logger.Debug("Session state:", curUid, active)
 	return active
 }
