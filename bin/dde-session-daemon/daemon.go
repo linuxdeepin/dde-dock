@@ -60,7 +60,6 @@ func getEnableFlag(flag *Flags) loader.EnableFlag {
 
 type SessionDaemon struct {
 	flags           *Flags
-	logLevel        log.Priority
 	log             *log.Logger
 	settings        *gio.Settings
 	enabledModules  map[string]loader.Module
@@ -129,7 +128,6 @@ func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) 
 	session := &SessionDaemon{
 		flags:           flags,
 		settings:        settings,
-		logLevel:        log.LevelInfo,
 		log:             logger,
 		enabledModules:  map[string]loader.Module{},
 		disabledModules: map[string]loader.Module{},
@@ -160,8 +158,6 @@ func (s *SessionDaemon) register() error {
 }
 
 func (s *SessionDaemon) defaultAction() {
-	loader.SetLogLevel(s.logLevel)
-
 	err := loader.EnableModules(s.getEnabledModules(), s.getDisabledModules(), getEnableFlag(s.flags))
 	if err != nil {
 		fmt.Println(err)

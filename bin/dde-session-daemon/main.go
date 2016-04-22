@@ -21,6 +21,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
+	"pkg.deepin.io/lib/utils"
 	"runtime"
 )
 
@@ -53,9 +54,16 @@ func main() {
 		os.Exit(0)
 	}
 
-	app.logLevel = cmd.LogLevel()
-	loader.SetLogLevel(app.logLevel)
-	logger.Info("LogLevel is", app.logLevel)
+	logger.SetLogLevel(log.LevelInfo)
+	if cmd.IsLogLevelNone() &&
+		(utils.IsEnvExists(log.DebugLevelEnv) || utils.IsEnvExists(log.DebugMatchEnv)) {
+		logger.Info("Log level is none and debug env exists, so ignore cmd.loglevel")
+	} else {
+		appLogLevel := cmd.LogLevel()
+		logger.Info("App log level:", appLogLevel)
+		// set all modules log level to appLogLevel
+		loader.SetLogLevel(appLogLevel)
+	}
 
 	var err error
 	needRunMainLoop := true
