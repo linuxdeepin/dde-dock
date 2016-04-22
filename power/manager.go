@@ -47,7 +47,7 @@ type Manager struct {
 	isSuspending           bool
 	batteryPowerLevel      uint32
 	settings               *gio.Settings
-	secondTicker           *secondTicker
+	powerLevelTicker       *countTicker
 	usePercentageForPolicy bool
 
 	// 接通电源时，不做任何操作，到关闭屏幕需要的时间

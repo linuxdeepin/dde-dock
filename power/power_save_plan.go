@@ -11,6 +11,7 @@ package power
 
 import (
 	"gir/gio-2.0"
+	"math"
 	"time"
 )
 
@@ -24,11 +25,11 @@ func init() {
 }
 
 type powerSavePlan struct {
-	manager         *Manager
-	sleepDelay      int32
-	screenBlackExit chan int
-	sleepExit       chan int
-	oldBrightness   float64
+	manager           *Manager
+	screenBlackTicker *countTicker
+	sleepDelay        int32
+	sleepExit         chan int
+	oldBrightness     float64
 }
 
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
@@ -95,9 +96,8 @@ func (psp *powerSavePlan) Start() error {
 
 // 取消之前的计划
 func (psp *powerSavePlan) interruptScreenBlack() {
-	if psp.screenBlackExit != nil {
-		close(psp.screenBlackExit)
-		psp.screenBlackExit = nil
+	if psp.screenBlackTicker != nil {
+		psp.screenBlackTicker.Stop()
 	}
 }
 
@@ -126,6 +126,14 @@ func (psp *powerSavePlan) Update(screenBlackDelay, sleepDelay int32) error {
 	logger.Debugf("update(screenBlackDelay=%vs, sleepDelay=%vs)",
 		screenBlackDelay, sleepDelay)
 
+	if screenBlackDelay > 5 {
+		screenBlackDelay -= 5
+	} else if screenBlackDelay > 0 {
+		// 0 < screenBlackDelay <= 5
+		screenBlackDelay = 1
+	}
+
+	logger.Debug("screen saver set timeout: ", screenBlackDelay)
 	if err := psp.manager.screenSaver.SetTimeout(uint32(screenBlackDelay), 0, false); err != nil {
 		logger.Errorf("Failed set ScreenSaver's timeout %v : %v", screenBlackDelay, err)
 		return err
@@ -145,40 +153,50 @@ func (psp *powerSavePlan) saveCurrentBrightness() {
 }
 
 // 逐渐降低显示器亮度，最终关闭显示器
-// 可被 psp.screenBlackExit 中断
+// 以1分钟关闭显示器为例， 55秒的时候屏幕黑到 50% (以动画的方式从 100% 降到 50%, 动画耗时 500ms, 动画曲线是加速曲线), 5秒钟以后没有用户操作， 关闭显示器。
+// 关闭显示器之后，开始休眠记时
 func (psp *powerSavePlan) screenBlack() {
+	logger.Info("Start screen black")
 	psp.saveCurrentBrightness()
-	ticker := time.NewTicker(time.Millisecond * 500)
-	defer ticker.Stop()
-	const brightnessDelta = 0.05
-	b := psp.oldBrightness - brightnessDelta
-	for {
-		select {
-		case <-psp.screenBlackExit:
-			logger.Debug("Interrupt screen black")
-			return
-		case <-ticker.C:
-			if b >= 0.0 {
-				psp.manager.setDisplayBrightness(b)
-				b -= brightnessDelta
-			} else {
-				manager := psp.manager
-				manager.setDPMSModeOff()
-				if manager.ScreenBlackLock.Get() {
-					manager.doLock()
-				}
-				return
-			}
-		}
+
+	if psp.screenBlackTicker != nil {
+		psp.screenBlackTicker.Reset()
+		return
 	}
+
+	psp.screenBlackTicker = newCountTicker(time.Millisecond*10, func(count int) {
+		manager := psp.manager
+		if 0 <= count && count <= 50 {
+			// 0ms ~ 500ms
+			// count: [0,50], brightness ratio:  1 ~ 0.5
+			brightnessRatio := 0.5 * (math.Cos(math.Pi*float64(count)/100) + 1)
+			manager.setDisplayBrightness(psp.oldBrightness * brightnessRatio)
+		} else if count == 500 {
+			// 5000ms 5s
+			psp.screenBlackTicker.Stop()
+			go func() {
+				if manager.ScreenBlackLock.Get() {
+					manager.lockWaitShow(2 * time.Second)
+				}
+				// set min brightness
+				manager.setDisplayBrightness(0.02)
+				manager.setDPMSModeOff()
+
+				// try sleep
+				if psp.sleepDelay != 0 {
+					psp.sleepExit = make(chan int)
+					psp.sleep()
+				}
+
+			}()
+		}
+	})
 }
 
 // 等待 psp.sleepDelay 后待机，可被 psp.sleepExit 中断
 func (psp *powerSavePlan) sleep() {
 	select {
 	case <-time.After(time.Second * time.Duration(psp.sleepDelay)):
-		// 打断有可能还在的 idle 过程
-		psp.interruptScreenBlack()
 		psp.manager.doSuspend()
 	case <-psp.sleepExit:
 		logger.Debugf("Interrupt sleep")
@@ -193,18 +211,10 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	}
 
 	logger.Debug("HandleIdleOn")
-	psp.screenBlackExit = make(chan int)
-	go psp.screenBlack()
-
-	// sleep
-	if psp.sleepDelay != 0 {
-		psp.sleepExit = make(chan int)
-		go psp.sleep()
-	}
+	psp.screenBlack()
 }
 
 // 结束 Idle
-// stop idle/suspend action
 func (psp *powerSavePlan) HandleIdleOff() {
 	if psp.manager.isSuspending {
 		logger.Debug("Suspending NOT HandleIdleOff")
@@ -212,11 +222,13 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	}
 	logger.Debug("HandleIdleOff")
 	psp.interruptAll()
-	// reset display
-	if psp.oldBrightness != 0.0 {
-		psp.manager.setDPMSModeOn()
-		logger.Debug("Reset all outputs brightness")
-		psp.manager.setDisplayBrightness(psp.oldBrightness)
-		psp.oldBrightness = 0.0
-	}
+	time.AfterFunc(50*time.Millisecond, func() {
+		// reset brightness
+		if psp.oldBrightness != 0.0 {
+			psp.manager.setDPMSModeOn()
+			logger.Debug("Reset all outputs brightness")
+			psp.manager.setDisplayBrightness(psp.oldBrightness)
+			psp.oldBrightness = 0.0
+		}
+	})
 }

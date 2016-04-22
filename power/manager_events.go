@@ -113,16 +113,16 @@ func (m *Manager) checkBatteryPowerLevel() {
 	}
 }
 
-func (m *Manager) disableSecondTicker() {
-	if m.secondTicker != nil {
-		m.secondTicker.Stop()
-		m.secondTicker = nil
+func (m *Manager) disablePowerLevelTicker() {
+	if m.powerLevelTicker != nil {
+		m.powerLevelTicker.Stop()
+		m.powerLevelTicker = nil
 	}
 }
 
 func (m *Manager) handleBatteryPowerLevelChanged() {
 	logger.Debug("handleBatteryPowerLevelChanged")
-	m.disableSecondTicker()
+	m.disablePowerLevelTicker()
 
 	switch m.batteryPowerLevel {
 	case batteryPowerLevelAbnormal:
@@ -131,7 +131,7 @@ func (m *Manager) handleBatteryPowerLevelChanged() {
 	case batteryPowerLevelExhausted:
 		playSound(soundutils.EventBatteryLow)
 		m.sendNotify("battery_empty", Tr("Battery Critical Low"), Tr("Computer has been in suspend mode, please plug in."))
-		m.secondTicker = newSecondTicker(func(count int) {
+		m.powerLevelTicker = newCountTicker(time.Second, func(count int) {
 			if count == 3 {
 				// after 3 seconds, lock and then show lowpower
 				go func() {
@@ -142,13 +142,13 @@ func (m *Manager) handleBatteryPowerLevelChanged() {
 				}()
 			} else if count == 5 {
 				// after 5 seconds, force suspend
-				m.disableSecondTicker()
+				m.disablePowerLevelTicker()
 				m.doSuspend()
 			}
 		})
 
 	case batteryPowerLevelVeryLow:
-		m.secondTicker = newSecondTicker(func(count int) {
+		m.powerLevelTicker = newCountTicker(time.Second, func(count int) {
 			// notify every 60 seconds
 			if count%60 == 0 {
 				playSound(soundutils.EventBatteryLow)

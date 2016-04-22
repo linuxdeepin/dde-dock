@@ -75,12 +75,18 @@ func getBatteryPowerLevelName(num uint32) string {
 
 func (m *Manager) setDPMSModeOn() {
 	logger.Debug("DPMS On")
-	dpms.ForceLevel(m.xConn, dpms.DPMSModeOn)
+	err := dpms.ForceLevelChecked(m.xConn, dpms.DPMSModeOn).Check()
+	if err != nil {
+		logger.Warning("Set DPMS on error:", err)
+	}
 }
 
 func (m *Manager) setDPMSModeOff() {
 	logger.Debug("DPMS Off")
-	dpms.ForceLevel(m.xConn, dpms.DPMSModeOff)
+	err := dpms.ForceLevelChecked(m.xConn, dpms.DPMSModeOff).Check()
+	if err != nil {
+		logger.Warning("Set DPMS off error:", err)
+	}
 }
 
 func (m *Manager) doLock() {

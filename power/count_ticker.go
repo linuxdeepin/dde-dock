@@ -13,36 +13,38 @@ import (
 	"time"
 )
 
-type secondTicker struct {
-	action func(int)
-	count  int
-	ticker *time.Ticker
+type countTicker struct {
+	action   func(int)
+	interval time.Duration
+	count    int
+	ticker   *time.Ticker
 }
 
-func newSecondTicker(action func(int)) *secondTicker {
-	st := &secondTicker{
-		ticker: time.NewTicker(time.Second),
-		action: action,
-		count:  0,
+func newCountTicker(interval time.Duration, action func(int)) *countTicker {
+	st := &countTicker{
+		interval: interval,
+		action:   action,
 	}
+	st.Reset()
+	return st
+}
+
+func (st *countTicker) Reset() {
+	st.ticker = time.NewTicker(st.interval)
+	st.count = 0
 	st.action(0)
 	go func() {
 		for range st.ticker.C {
 			st.count++
-			logger.Debug("count", st.count)
 			st.action(st.count)
 		}
 	}()
-	return st
 }
 
-func (st *secondTicker) Stop() {
+func (st *countTicker) Stop() {
 	logger.Debug("Stop")
 	if st.ticker != nil {
 		st.ticker.Stop()
 		st.ticker = nil
-	}
-	if st.action != nil {
-		st.action = nil
 	}
 }
