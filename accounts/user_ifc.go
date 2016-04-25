@@ -307,12 +307,14 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
 		return false, err
 	}
 
+	srcIcon := dutils.DecodeURI(icon)
+	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	if u.IconFile == icon {
 		doEmitSuccess(pid, "SetIconFile")
 		return true, nil
 	}
 
-	if !graphic.IsSupportedImage(icon) {
+	if !graphic.IsSupportedImage(srcIcon) {
 		reason := fmt.Sprintf("This icon '%s' not a image", icon)
 		logger.Debug(reason)
 		doEmitError(pid, "SetIconFile", reason)
@@ -355,6 +357,7 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 		return false, err
 	}
 
+	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	if !u.IsIconDeletable(icon) {
 		reason := "This icon is not allowed to be deleted!"
 		logger.Warning(reason)
@@ -380,7 +383,7 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error) {
 	logger.Debug("[SetBackgroundFile] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
-	bg = dutils.DecodeURI(bg)
+	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if bg == u.BackgroundFile {
 		doEmitSuccess(pid, "SetBackgroundFile")
 		return true, nil
@@ -409,8 +412,8 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 
 func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) (bool, error) {
 	logger.Debug("[SetGreeterBackground] new background:", bg)
-	bg = dutils.DecodeURI(bg)
 	pid := dbusMsg.GetSenderPID()
+	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if u.GreeterBackground == bg {
 		doEmitSuccess(pid, "SetGreeterBackground")
 		return true, nil
@@ -473,6 +476,7 @@ func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) (bool, erro
 		return false, err
 	}
 
+	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	u.deleteHistoryIcon(icon)
 	doEmitSuccess(pid, "DeleteHistoryIcon")
 	return true, nil
@@ -493,14 +497,14 @@ func (u *User) IsIconDeletable(icon string) bool {
 // 获取当前头像的大图标
 func (u *User) GetLargeIcon() string {
 	baseName := path.Base(u.IconFile)
-	dir := path.Dir(u.IconFile)
+	dir := path.Dir(dutils.DecodeURI(u.IconFile))
 
 	filename := path.Join(dir, "bigger", baseName)
 	if !dutils.IsFileExist(filename) {
 		return ""
 	}
 
-	return filename
+	return dutils.EncodeURI(filename, dutils.SCHEME_FILE)
 }
 
 func (u *User) isBackgroundValid(pid uint32, action, bg string) (bool, error) {
@@ -510,6 +514,7 @@ func (u *User) isBackgroundValid(pid uint32, action, bg string) (bool, error) {
 		return false, err
 	}
 
+	bg = dutils.DecodeURI(bg)
 	if !graphic.IsSupportedImage(bg) {
 		reason := fmt.Sprintf("This background '%s' not a image", bg)
 		logger.Debug(reason)

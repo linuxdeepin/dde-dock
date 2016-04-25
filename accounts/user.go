@@ -30,8 +30,8 @@ const (
 
 const (
 	defaultLayout         = "us;"
-	defaultUserIcon       = "/var/lib/AccountsService/icons/default.png"
-	defaultUserBackground = "/usr/share/backgrounds/default_background.jpg"
+	defaultUserIcon       = "file:///var/lib/AccountsService/icons/default.png"
+	defaultUserBackground = "file:///usr/share/backgrounds/default_background.jpg"
 
 	maxWidth  = 200
 	maxHeight = 200
@@ -174,6 +174,7 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 		return icon, false, nil
 	}
 
+	icon = dutils.DecodeURI(icon)
 	md5, ok := dutils.SumFileMd5(icon)
 	if !ok {
 		return "", false, fmt.Errorf("Sum file '%s' md5 failed", icon)
@@ -198,7 +199,7 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 		return "", false, err
 	}
 
-	return dest, true, nil
+	return dutils.EncodeURI(dest, dutils.SCHEME_FILE), true, nil
 }
 
 func (u *User) addHistoryIcon(icon string) {

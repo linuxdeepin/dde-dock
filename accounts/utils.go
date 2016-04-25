@@ -15,6 +15,7 @@ import (
 	"os"
 	"path"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/utils"
 	"sort"
 	"strings"
 )
@@ -77,7 +78,7 @@ func getUserStandardIcons() []string {
 			continue
 		}
 
-		icons = append(icons, img)
+		icons = append(icons, utils.EncodeURI(img, utils.SCHEME_FILE))
 	}
 
 	return icons
@@ -99,7 +100,7 @@ func getUserIconsFromDir(dir, condition string) []string {
 			continue
 		}
 
-		icons = append(icons, img)
+		icons = append(icons, utils.EncodeURI(img, utils.SCHEME_FILE))
 	}
 
 	return icons
