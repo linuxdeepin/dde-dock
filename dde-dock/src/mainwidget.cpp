@@ -14,6 +14,9 @@
 
 #include <QApplication>
 
+// Keep it longer than dock show/hide animation duration.
+const int UPDATE_STRUT_PARTIAL_DELAY = 350;
+
 const int ENTER_DELAY_INTERVAL = 600;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent),
@@ -39,10 +42,12 @@ MainWidget::MainWidget(QWidget *parent)
 #endif
 
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
+    connect(m_dmd, &DockModeData::hideModeChanged, this, &MainWidget::onHideModeChanged);
 
     //For init
     m_display = new DBusDisplay(this);
     updatePosition(m_display->primaryRect());
+    updateXcbStrutPartial();
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
     Q_UNUSED(dockUIDbus)
@@ -57,7 +62,17 @@ MainWidget::MainWidget(QWidget *parent)
 void MainWidget::onDockModeChanged()
 {
     updatePosition(m_display->primaryRect());
-//    QMetaObject::invokeMethod(this, "updatePosition", Qt::QueuedConnection, Q_ARG(QRect, m_display->primaryRect()));
+    //    QMetaObject::invokeMethod(this, "updatePosition", Qt::QueuedConnection, Q_ARG(QRect, m_display->primaryRect()));
+    QTimer::singleShot(UPDATE_STRUT_PARTIAL_DELAY, this, &MainWidget::updateXcbStrutPartial);
+}
+
+void MainWidget::onHideModeChanged()
+{
+    if (m_dmd->getHideMode() != Dock::KeepShowing) {
+        clearXcbStrutPartial();
+    } else {
+        QTimer::singleShot(UPDATE_STRUT_PARTIAL_DELAY, this, &MainWidget::updateXcbStrutPartial);
+    }
 }
 
 // TODO: it should be named to `updateSize' instead I think.
@@ -100,8 +115,6 @@ void MainWidget::updatePosition(const QRect &rec)
     // NOTE: this function is called too much times, so we should avoid heavy operations
     // to be executed everytime. All heavy operations go in delayedOp.
     auto delayedOp = [this] {
-        updateXcbStructPartial();
-
         // Let the backend know the width change, otherwise the smart-hide mode will
         // not work properly.
         updateBackendProperty();
@@ -118,7 +131,7 @@ void MainWidget::updatePosition(const QRect &rec)
     delayOpTimer->start();
 }
 
-void MainWidget::updateXcbStructPartial()
+void MainWidget::updateXcbStrutPartial()
 {
     int tmpHeight = 0;
     DBusDockSetting dds;
@@ -155,6 +168,13 @@ void MainWidget::updateXcbStructPartial()
 // The line below causes deepin-wm to regard dde-dock as a normal window
 // while previewing windows. https://github.com/fasheng/arch-deepin/issues/249
     //    this->setVisible(true);
+}
+
+void MainWidget::clearXcbStrutPartial()
+{
+    XcbMisc::instance()->set_strut_partial(winId(),
+                                           XcbMisc::OrientationBottom,
+                                           0, 0, 0);
 }
 
 void MainWidget::updateBackendProperty()

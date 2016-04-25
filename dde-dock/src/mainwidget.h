@@ -47,12 +47,14 @@ private:
     void hideDock();
     void onPanelSizeChanged();
     void onDockModeChanged();
+    void onHideModeChanged();
     void initHideStateManager();
 
 private slots:
     void showDock();
     void updatePosition(const QRect &rec);
-    void updateXcbStructPartial();
+    void updateXcbStrutPartial();
+    void clearXcbStrutPartial();
     void updateBackendProperty();
     void updateGeometry();
 
