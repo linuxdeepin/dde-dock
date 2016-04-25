@@ -169,7 +169,7 @@ func (app *RuntimeApp) getExec(xid xproto.Window) {
 
 func actionGenarator(id string) func(uint32) {
 	return func(timestamp uint32) {
-		app, ok := ENTRY_MANAGER.runtimeApps[id]
+		app, ok := dockManager.entryManager.runtimeApps[id]
 		if !ok {
 			return
 		}
@@ -218,7 +218,7 @@ func actionGenarator(id string) func(uint32) {
 
 		logger.Debug("id", app.Id, "title", title, "icon", icon,
 			"exec", exec)
-		DOCKED_APP_MANAGER.Dock(
+		dockManager.dockedAppManager.Dock(
 			app.Id,
 			title,
 			icon,
@@ -303,7 +303,7 @@ func (app *RuntimeApp) buildMenu() {
 		true,
 	)
 	app.coreMenu.AppendItem(closeItem)
-	isDocked := DOCKED_APP_MANAGER.IsDocked(app.Id)
+	isDocked := dockManager.dockedAppManager.IsDocked(app.Id)
 	logger.Info(app.Id, "Item is docked:", isDocked)
 	var message string = ""
 	var action func(uint32) = nil
@@ -312,11 +312,11 @@ func (app *RuntimeApp) buildMenu() {
 		message = Tr("_Undock")
 		action = func(id string) func(uint32) {
 			return func(uint32) {
-				app, ok := ENTRY_MANAGER.runtimeApps[id]
+				app, ok := dockManager.entryManager.runtimeApps[id]
 				if !ok {
 					return
 				}
-				DOCKED_APP_MANAGER.Undock(app.Id)
+				dockManager.dockedAppManager.Undock(app.Id)
 			}
 		}(app.Id)
 	} else {
@@ -673,11 +673,11 @@ func (app *RuntimeApp) updateState(xid xproto.Window) {
 func (app *RuntimeApp) updateAppid(xid xproto.Window) {
 	newAppId := find_app_id_by_xid(
 		xid,
-		DisplayModeType(setting.GetDisplayMode()),
+		DisplayModeType(dockManager.setting.GetDisplayMode()),
 	)
 	if app.Id != newAppId {
 		app.detachXid(xid)
-		if newApp := ENTRY_MANAGER.createRuntimeApp(xid); newApp != nil {
+		if newApp := dockManager.entryManager.createRuntimeApp(xid); newApp != nil {
 			newApp.attachXid(xid)
 		}
 		logger.Debug("APP:", app.Id, "Changed to..", newAppId)
@@ -763,7 +763,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 		xevent.Detach(XU, xid)
 
 		if len(app.xids) == 1 {
-			ENTRY_MANAGER.destroyRuntimeApp(app)
+			dockManager.entryManager.destroyRuntimeApp(app)
 		} else {
 			delete(app.xids, xid)
 			if info == app.CurrentInfo {
@@ -773,7 +773,7 @@ func (app *RuntimeApp) detachXid(xid xproto.Window) {
 						app.updateState(app.CurrentInfo.Xid)
 						app.notifyChanged()
 					} else {
-						ENTRY_MANAGER.destroyRuntimeApp(app)
+						dockManager.entryManager.destroyRuntimeApp(app)
 					}
 					break
 				}
@@ -863,14 +863,14 @@ func (app *RuntimeApp) attachXid(xid xproto.Window) {
 				}
 				logger.Debug("isXYWHChange", isXYWHChange)
 				if isXYWHChange {
-					hideModemanager.updateStateWithoutDelay()
+					dockManager.hideStateManager.updateStateWithoutDelay()
 				} else {
-					hideModemanager.updateStateWithDelay()
+					dockManager.hideStateManager.updateStateWithDelay()
 				}
 			})
 		}
 	}).Connect(XU, xid)
-	hideModemanager.updateStateWithoutDelay()
+	dockManager.hideStateManager.updateStateWithoutDelay()
 
 	app.xids[xid] = winfo
 	app.updateIcon(xid)

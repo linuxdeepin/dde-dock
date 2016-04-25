@@ -208,11 +208,11 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	m.items.PushBack(id)
 	m.saveAppList(m.getAppList())
 	m.emitSignal("Docked", id)
-	app := ENTRY_MANAGER.runtimeApps[id]
+	app := dockManager.entryManager.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()
 	}
-	ENTRY_MANAGER.createNormalApp(id)
+	dockManager.entryManager.createNormalApp(id)
 	return true
 }
 
@@ -241,12 +241,12 @@ func (m *DockedAppManager) Undock(id string) bool {
 	removedApp := removeItem.Value.(string)
 	m.emitSignal("Undocked", removedApp)
 	removeScratchFiles(id)
-	app := ENTRY_MANAGER.runtimeApps[id]
+	app := dockManager.entryManager.runtimeApps[id]
 	if app != nil {
 		// update menu item undock to dock
 		app.buildMenu()
 	}
-	ENTRY_MANAGER.destroyNormalApp(id)
+	dockManager.entryManager.destroyNormalApp(id)
 	return true
 }
 

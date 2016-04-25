@@ -14,8 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	. "pkg.deepin.io/lib/gettext"
 	"gir/gio-2.0"
+	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -117,7 +117,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	dockItem := NewMenuItem(
 		Tr("_Undock"),
 		func(timestamp uint32) {
-			DOCKED_APP_MANAGER.Undock(app.Id)
+			dockManager.dockedAppManager.Undock(app.Id)
 		},
 		true,
 	)

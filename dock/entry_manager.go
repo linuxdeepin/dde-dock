@@ -16,10 +16,6 @@ import "github.com/BurntSushi/xgb/xproto"
 import "os"
 import "path/filepath"
 
-var (
-	ENTRY_MANAGER = NewEntryManager()
-)
-
 // EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
 	runtimeApps map[string]*RuntimeApp
@@ -35,8 +31,8 @@ func NewEntryManager() *EntryManager {
 	return m
 }
 
-func (m *EntryManager) listenDockedApp() {
-}
+// func (m *EntryManager) listenDockedApp() {
+// }
 
 func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 	logger.Debug("runtime app changed")
@@ -48,7 +44,9 @@ func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 	// 1. create newfound RuntimeApps
 	for _, xid := range xids {
 		if isNormalWindow(xid) {
-			appId := find_app_id_by_xid(xid, DisplayModeType(setting.GetDisplayMode()))
+			// FIXME
+			// appId := find_app_id_by_xid(xid, DisplayModeType(dockManager.setting.GetDisplayMode()))
+			appId := find_app_id_by_xid(xid, dockManager.displayMode)
 			if rApp, ok := m.runtimeApps[appId]; ok {
 				logger.Debugf("%s is already existed, attach xid: 0x%x", appId, xid)
 				willBeDestroied[appId] = nil
@@ -126,7 +124,7 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 }
 
 func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
-	appId := find_app_id_by_xid(xid, DisplayModeType(setting.GetDisplayMode()))
+	appId := find_app_id_by_xid(xid, DisplayModeType(dockManager.setting.GetDisplayMode()))
 	if appId == "" {
 		logger.Debug("get appid for", xid, "failed")
 		return nil
@@ -168,7 +166,7 @@ func (m *EntryManager) createNormalApp(id string) {
 		nApp = NewNormalApp(newId)
 		if nApp == nil {
 			logger.Warning("create normal app failed:", id)
-			DOCKED_APP_MANAGER.Undock(id)
+			dockManager.dockedAppManager.Undock(id)
 			return
 		}
 	}
