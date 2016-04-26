@@ -29,17 +29,10 @@ MainWidget::MainWidget(QWidget *parent)
 
     initHideStateManager();
 
-#ifdef NEW_DOCK_LAYOUT
     m_mainPanel = new DockPanel(this);
     connect(m_mainPanel, &DockPanel::startShow, this, &MainWidget::showDock);
     connect(m_mainPanel, &DockPanel::panelHasHidden, this, &MainWidget::hideDock);
     connect(m_mainPanel, &DockPanel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
-#else
-    m_mainPanel = new Panel(this);
-    connect(m_mainPanel, &Panel::startShow, this, &MainWidget::showDock);
-    connect(m_mainPanel, &Panel::panelHasHidden, this, &MainWidget::hideDock);
-    connect(m_mainPanel, &Panel::sizeChanged, this, &MainWidget::onPanelSizeChanged);
-#endif
 
     connect(m_dmd, &DockModeData::dockModeChanged, this, &MainWidget::onDockModeChanged);
     connect(m_dmd, &DockModeData::hideModeChanged, this, &MainWidget::onHideModeChanged);
@@ -87,24 +80,15 @@ void MainWidget::updatePosition(const QRect &rec)
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
-#ifdef NEW_DOCK_LAYOUT
         this->setFixedSize(m_mainPanel->sizeHint().width(), 1);
-#else
-        this->setFixedSize(m_mainPanel->width(), 1);
-#endif
         this->move(rec.x() + (rec.width() - width()) / 2,
                    rec.y() + rec.height() - 1);//1 pixel for grab mouse enter event to show panel
     } else {
-#ifdef NEW_DOCK_LAYOUT
         this->setFixedSize(m_mainPanel->sizeHint().width(), m_dmd->getDockHeight());
-#else
-        this->setFixedSize(m_mainPanel->width(), m_dmd->getDockHeight());
-#endif
 
         move(rec.x() + (rec.width() - width()) / 2,
              rec.y() + rec.height() - height() /*- 10*/);
     }
-
 
     if (delayOpTimer == nullptr) {
         delayOpTimer = new QTimer(this);

@@ -14,7 +14,6 @@
 #include "dockpanel.h"
 #include "controller/dockmodedata.h"
 #include "controller/stylemanager.h"
-#include "controller/old/pluginproxy.h"
 
 const int REFLECTION_Y = 25;
 const int REFLECTION_HEIGHT = 40;

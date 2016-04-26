@@ -22,7 +22,6 @@
 #include "dbus/dbusdocksetting.h"
 #include "dbus/dbusdisplay.h"
 #include "controller/dockmodedata.h"
-#include "panel/panel.h"
 #include "panel/dockpanel.h"
 
 const QString DBUS_PATH = "/com/deepin/dde/dock";
@@ -59,11 +58,7 @@ private slots:
     void updateGeometry();
 
 private:
-#ifdef NEW_DOCK_LAYOUT
     DockPanel *m_mainPanel = NULL;
-#else
-    Panel *m_mainPanel = NULL;
-#endif
     bool m_hasHidden = false;
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;

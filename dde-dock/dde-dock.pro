@@ -12,7 +12,7 @@ TARGET = dde-dock
 TEMPLATE = app
 INCLUDEPATH += ./src ./libs
 
-DEFINES += PLUGIN_API_VERSION=1.0 NEW_DOCK_LAYOUT
+DEFINES += PLUGIN_API_VERSION=1.0
 
 
 RESOURCES += \
@@ -48,7 +48,6 @@ HEADERS += \
     src/dbus/dbusmenu.h \
     src/dbus/dbusmenumanager.h \
     src/dbus/dbuspanelmanager.h \
-    src/panel/panel.h \
     src/panel/panelmenu.h \
     src/widgets/highlighteffect.h \
     src/widgets/reflectioneffect.h \
@@ -70,24 +69,12 @@ HEADERS += \
     src/controller/plugins/dockpluginsmanager.h \
     src/widgets/movablelayout.h \
     src/widgets/plugin/dockpluginlayout.h \
-    src/controller/old/appmanager.h \
-    src/controller/old/pluginitemwrapper.h \
-    src/controller/old/pluginproxy.h \
-    src/controller/old/pluginssettingframe.h \
-    src/controller/old/pluginmanager.h \
     src/controller/plugins/dockpluginitemwrapper.h \
     src/controller/plugins/dockpluginproxy.h \
     src/widgets/app/apppreview/apppreviewloader.h \
     src/widgets/app/apppreview/apppreviewloaderframe.h \
     src/widgets/app/apppreview/apppreviewscontainer.h \
-    src/widgets/old/abstractdockitem.h \
-    src/widgets/old/appbackground.h \
-    src/widgets/old/appicon.h \
-    src/widgets/old/appitem.h \
-    src/widgets/old/docklayout.h \
-    src/widgets/old/screenmask.h \
     src/widgets/launcher/docklauncheritem.h \
-    src/widgets/old/launcheritem.h \
     src/controller/stylemanager.h \
     src/dbus/dbuslaunchercontroller.h \
     src/dbus/dbusshutdownfront.h
@@ -103,7 +90,6 @@ SOURCES += \
     src/dbus/dbusmenu.cpp \
     src/dbus/dbusmenumanager.cpp \
     src/dbus/dbuspanelmanager.cpp \
-    src/panel/panel.cpp \
     src/panel/panelmenu.cpp \
     src/widgets/highlighteffect.cpp \
     src/widgets/reflectioneffect.cpp \
@@ -126,24 +112,12 @@ SOURCES += \
     src/controller/plugins/dockpluginsmanager.cpp \
     src/widgets/movablelayout.cpp \
     src/widgets/plugin/dockpluginlayout.cpp \
-    src/controller/old/appmanager.cpp \
-    src/controller/old/pluginitemwrapper.cpp \
-    src/controller/old/pluginproxy.cpp \
-    src/controller/old/pluginssettingframe.cpp \
-    src/controller/old/pluginmanager.cpp \
     src/controller/plugins/dockpluginitemwrapper.cpp \
     src/controller/plugins/dockpluginproxy.cpp \
     src/widgets/app/apppreview/apppreviewloader.cpp \
     src/widgets/app/apppreview/apppreviewloaderframe.cpp \
     src/widgets/app/apppreview/apppreviewscontainer.cpp \
-    src/widgets/old/abstractdockitem.cpp \
-    src/widgets/old/appbackground.cpp \
-    src/widgets/old/appicon.cpp \
-    src/widgets/old/appitem.cpp \
-    src/widgets/old/docklayout.cpp \
-    src/widgets/old/screenmask.cpp \
     src/widgets/launcher/docklauncheritem.cpp \
-    src/widgets/old/launcheritem.cpp \
     src/controller/stylemanager.cpp \
     src/dbus/dbuslaunchercontroller.cpp \
     src/dbus/dbusshutdownfront.cpp
