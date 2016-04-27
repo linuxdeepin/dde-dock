@@ -60,7 +60,7 @@ func swCPUInfo(data map[string]string) string {
 
 	hz, err := getCPUHz(cpuKeyMHz, data)
 	if err == nil {
-		cpu = fmt.Sprintf("%s %vGHz", cpu, hz)
+		cpu = fmt.Sprintf("%s %.2fGHz", cpu, hz)
 	}
 
 	number, _ := getCPUNumber(cpuKeyActive, data)
