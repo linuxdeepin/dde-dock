@@ -10,14 +10,18 @@
 package utils
 
 import (
-	"os"
+	"dbus/org/freedesktop/notifications"
 	"gir/gio-2.0"
+	"os"
 	"strings"
 )
 
 // dir default perm.
 const (
 	DirDefaultPerm os.FileMode = 0755
+
+	dbusNotifyDest = "org.freedesktop.Notifications"
+	dbusNotifyPath = "/org/freedesktop/Notifications"
 )
 
 // CreateDesktopAppInfo is a helper function for creating GDesktopAppInfo object.
@@ -29,4 +33,18 @@ func CreateDesktopAppInfo(name string) *gio.DesktopAppInfo {
 	} else {
 		return gio.NewDesktopAppInfo(name)
 	}
+}
+
+func Notify(icon, summary, body string) {
+	notifier, err := notifications.NewNotifier(dbusNotifyDest, dbusNotifyPath)
+	if err != nil {
+		return
+	}
+
+	go func() {
+		notifier.Notify("Launcher", 0, icon, summary, body, nil, nil, 0)
+		notifications.DestroyNotifier(notifier)
+	}()
+
+	return
 }

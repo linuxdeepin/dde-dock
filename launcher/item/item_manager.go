@@ -97,9 +97,13 @@ func (m *Manager) UninstallItem(id ItemID, purge bool, timeout time.Duration) er
 		return fmt.Errorf("No such a item: %q", id)
 	}
 
-	err := m.uninstallFromDStore(item, purge, timeout)
-	if err != nil {
-		return m.uninstallFromDeepinWine(item)
+	if itemIsChromeShortcut(item) {
+		return uninstallFromChromeShortcuts(item)
+	} else {
+		err := m.uninstallFromDStore(item, purge, timeout)
+		if err != nil {
+			return m.uninstallFromDeepinWine(item)
+		}
 	}
 
 	return nil
