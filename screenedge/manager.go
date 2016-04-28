@@ -13,6 +13,7 @@ import (
 	"dbus/com/deepin/api/xmousearea"
 	"dbus/com/deepin/daemon/display"
 	"fmt"
+	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/initializer/v2"
 	"sync"
@@ -26,6 +27,7 @@ type Manager struct {
 	areaId     string
 	mutex      sync.Mutex
 	timer      *edgeTimer
+	xu         *xgbutil.XUtil
 }
 
 func NewManager() (*Manager, error) {
@@ -33,12 +35,15 @@ func NewManager() (*Manager, error) {
 	m.timer = new(edgeTimer)
 	m.edges = make(map[string]*edge)
 	m.settings = NewSettings()
-	err := initializer.Do(m.initDBusIFC).Do(
+	err := initializer.Do(
+		m.initXUtil).Do(
+		m.initDBusIFC).Do(
 		func() error {
 			m.handleDBusSignal()
 			m.handleSettingsChanged()
 			return m.initEdges()
-		}).Do(m.registerEdgeAreas).Do(
+		}).Do(
+		m.registerEdgeAreas).Do(
 		func() error {
 			return dbus.InstallOnSession(m)
 		}).GetError()
@@ -48,6 +53,12 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func (m *Manager) initXUtil() error {
+	var err error
+	m.xu, err = xgbutil.NewConn()
+	return err
 }
 
 func (m *Manager) initDBusIFC() error {
@@ -79,6 +90,11 @@ func (m *Manager) finalizeDBusIFC() {
 }
 
 func (m *Manager) destroy() {
+	if m.xu != nil {
+		m.xu.Conn().Close()
+		m.xu = nil
+	}
+
 	m.unregisterEdgeAreas()
 	m.finalizeDBusIFC()
 	dbus.UnInstallObject(m)

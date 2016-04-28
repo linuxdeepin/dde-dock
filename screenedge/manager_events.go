@@ -10,6 +10,7 @@
 package screenedge
 
 import (
+	"github.com/BurntSushi/xgbutil/mousebind"
 	"regexp"
 	"strings"
 )
@@ -51,11 +52,28 @@ func (m *Manager) handleDBusSignal() {
 
 }
 
+func (m *Manager) tryGrabPointer() (bool, error) {
+	win := m.xu.RootWin()
+	ok, err := mousebind.GrabPointer(m.xu, win, 0, 0)
+	defer mousebind.UngrabPointer(m.xu)
+	return ok, err
+}
+
 // return true 过滤掉，没有动作
 func (m *Manager) filterCursorSignal(id string) bool {
 	if id != m.areaId {
 		logger.Debug("id not eq m.areaId")
 		return true
+	}
+
+	canGrabPointer, err := m.tryGrabPointer()
+	if err == nil {
+		if !canGrabPointer {
+			logger.Debug("can not grab pointer")
+			return true
+		}
+	} else {
+		logger.Warning(err)
 	}
 
 	activeWindow, err := getActiveWindow()
@@ -88,6 +106,7 @@ func (m *Manager) filterCursorSignal(id string) bool {
 		logger.Debug("active window is fullscreen, and not in whiteList")
 		return true
 	}
+
 	return false
 }
 
