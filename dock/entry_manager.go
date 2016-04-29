@@ -15,12 +15,17 @@ import "pkg.deepin.io/lib/dbus"
 import "github.com/BurntSushi/xgb/xproto"
 import "os"
 import "path/filepath"
+import "errors"
+import "fmt"
 
 // EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
 	runtimeApps map[string]*RuntimeApp
 	normalApps  map[string]*NormalApp
 	appEntries  map[string]*AppEntry
+
+	// 保持 entry 的顺序
+	entryIDs []string
 }
 
 func NewEntryManager() *EntryManager {
@@ -31,8 +36,32 @@ func NewEntryManager() *EntryManager {
 	return m
 }
 
-// func (m *EntryManager) listenDockedApp() {
-// }
+// Reorder 重排序dock上的app项目
+// 参数entryIDs为dock上app项目的新顺序id列表，要求与当前app项目是同一个集合，只是顺序不同。
+func (m *EntryManager) Reorder(entryIDs []string) error {
+	logger.Debugf("Reorder entryIDs %#v", entryIDs)
+	if len(entryIDs) != len(m.entryIDs) {
+		logger.Warning("Reorder: len(entryIDs) != len(m.entryIDs)")
+		return errors.New("length of incomming entryIDs not equal length of m.entryIDs")
+	}
+	var orderedEntryIDs []string
+	for _, id := range entryIDs {
+		_, ok := m.appEntries[id]
+		if ok {
+			orderedEntryIDs = append(orderedEntryIDs, id)
+		} else {
+			logger.Warningf("Reorder: invaild entry id %q", id)
+			return fmt.Errorf("Invaild entry id %q", id)
+		}
+	}
+	m.entryIDs = orderedEntryIDs
+	dockManager.dockedAppManager.reorderThenSave(m.entryIDs)
+	return nil
+}
+
+func (m *EntryManager) GetEntryIDs() []string {
+	return m.entryIDs
+}
 
 func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
 	logger.Debug("runtime app changed")
@@ -71,6 +100,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 		} else {
 			e := NewAppEntryWithRuntimeApp(rApp)
 			m.appEntries[rApp.Id] = e
+			m.entryIDs = append(m.entryIDs, rApp.Id)
 			err := dbus.InstallOnSession(e)
 			if err != nil {
 				logger.Warning("Install NewRuntimeAppEntry to dbus failed:", err)
@@ -83,6 +113,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 		} else {
 			e := NewAppEntryWithNormalApp(nApp)
 			m.appEntries[nApp.Id] = e
+			m.entryIDs = append(m.entryIDs, nApp.Id)
 			err := dbus.InstallOnSession(e)
 			if err != nil {
 				logger.Warning("Install NewNormalAppEntry to dbus failed:", err)
@@ -102,6 +133,20 @@ func (m *EntryManager) destroyEntry(appId string) {
 		logger.Info("destroyEntry:", appId)
 	}
 	delete(m.appEntries, appId)
+	m.entryIDs = strSliceRemove(m.entryIDs, appId)
+}
+
+func strSliceRemove(slice []string, str string) []string {
+	var index int = -1
+	for i, v := range slice {
+		if v == str {
+			index = i
+		}
+	}
+	if index != -1 {
+		return append(slice[:index], slice[index+1:]...)
+	}
+	return slice
 }
 
 func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeApp) {

@@ -35,16 +35,16 @@ type MenuItem struct {
 
 func NewMenuItem(name string, action func(uint32), enable bool) *MenuItem {
 	return &MenuItem{
-		name,
-		enable,
-		false,
-		false,
-		"",
-		"",
-		"",
-		false,
-		nil,
-		action,
+		itemText:         name,
+		isActive:         enable,
+		isCheckable:      false,
+		checked:          false,
+		itemIcon:         "",
+		itemIconHover:    "",
+		itemIconInactive: "",
+		showCheckMark:    false,
+		subMenu:          nil,
+		Action:           action,
 	}
 }
 

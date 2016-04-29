@@ -43,6 +43,16 @@ type EntryProxyerManager struct {
 	TrayInited func()
 }
 
+// Reorder 重排序dock上的程序图标
+func (m *EntryProxyerManager) Reorder(entryIDs []string) error {
+	return dockManager.entryManager.Reorder(entryIDs)
+}
+
+// GetEntryIDs 仅供开发者测试，请勿使用，返回所有项目的 ID 列表
+func (m *EntryProxyerManager) GetEntryIDs() []string {
+	return dockManager.entryManager.GetEntryIDs()
+}
+
 func (m *EntryProxyerManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       "com.deepin.daemon.Dock",

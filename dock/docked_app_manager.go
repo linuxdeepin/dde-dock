@@ -206,13 +206,50 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	}
 
 	m.items.PushBack(id)
-	m.saveAppList(m.getAppList())
-	m.emitSignal("Docked", id)
 	app := dockManager.entryManager.runtimeApps[id]
 	if app != nil {
 		app.buildMenu()
 	}
 	dockManager.entryManager.createNormalApp(id)
+
+	entryIDs := dockManager.entryManager.GetEntryIDs()
+	logger.Debug("entries id list:", entryIDs)
+	// ensure save
+	m.reorderNotSave(entryIDs)
+	m.saveAppList(m.getAppList())
+
+	m.emitSignal("Docked", id)
+	return true
+}
+
+func (m *DockedAppManager) reorderNotSave(items []string) {
+	for _, item := range items {
+		i := m.findItem(item)
+		if i != nil {
+			m.items.PushBack(m.items.Remove(i))
+		}
+	}
+}
+
+func (m *DockedAppManager) reorderThenSave(items []string) {
+	oldAppList := m.getAppList()
+	m.reorderNotSave(items)
+	newAppList := m.getAppList()
+	if !strSliceEqual(oldAppList, newAppList) {
+		m.saveAppList(newAppList)
+	}
+}
+
+func strSliceEqual(sa, sb []string) bool {
+	if len(sa) != len(sb) {
+		return false
+	}
+	for i, va := range sa {
+		vb := sb[i]
+		if va != vb {
+			return false
+		}
+	}
 	return true
 }
 
@@ -273,18 +310,8 @@ func (m *DockedAppManager) findItem(id string) *list.Element {
 	return nil
 }
 
-// Sort将已驻留的程序按传入的程序id的顺序重新排序，并保存。
-func (m *DockedAppManager) Sort(items []string) {
-	logger.Debug("Before sort:", items)
-	for _, item := range items {
-		item = normalizeAppID(item)
-		if i := m.findItem(item); i != nil {
-			m.items.PushBack(m.items.Remove(i))
-		}
-	}
-	sortedAppList := m.getAppList()
-	logger.Debug("After sort:", sortedAppList)
-	m.saveAppList(sortedAppList)
+// Sort 废弃
+func (m *DockedAppManager) Sort([]string) {
 }
 
 func (m *DockedAppManager) getAppList() []string {

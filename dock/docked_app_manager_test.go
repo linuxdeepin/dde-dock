@@ -30,3 +30,13 @@ func Test_uniqStrSlice(t *testing.T) {
 		So(slice[2], ShouldEqual, "c")
 	})
 }
+
+func Test_strSliceEqual(t *testing.T) {
+	sa := []string{"a", "b", "c"}
+	sb := []string{"a", "b", "c", "d"}
+	sc := sa[:]
+	Convey("strSliceEqual", t, func() {
+		So(strSliceEqual(sa, sb), ShouldBeFalse)
+		So(strSliceEqual(sa, sc), ShouldBeTrue)
+	})
+}
