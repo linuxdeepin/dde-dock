@@ -152,6 +152,8 @@ DockAppLayout::DockAppLayout(QWidget *parent) :
     connect(this, &DockAppLayout::drop, this, &DockAppLayout::onDrop);
     connect(this, &DockAppLayout::dragLeaved, this, &DockAppLayout::onDragLeave);
     connect(this, &DockAppLayout::dragEntered, this, &DockAppLayout::onDragEnter);
+
+    m_dem = new DBusEntryManager(this);
 }
 
 QSize DockAppLayout::sizeHint() const
@@ -270,7 +272,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
     setDragFromOutside(false);
 
     if (event->source() == this) {  //from itself
-        m_ddam->Sort(appIds());
+        m_dem->Reorder(appIds());
         event->accept();
     }
     else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
@@ -371,7 +373,7 @@ void DockAppLayout::initAppManager()
     connect(m_appManager, &DockAppManager::entryAppend, this, &DockAppLayout::onAppAppend);
     connect(m_appManager, &DockAppManager::entryRemoved, this, &DockAppLayout::onAppItemRemove);
     connect(m_appManager, &DockAppManager::requestSort, this, [=] {
-        m_ddam->Sort(appIds());
+        m_dem->Reorder(appIds());
     });
 }
 

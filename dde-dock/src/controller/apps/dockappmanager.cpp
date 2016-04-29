@@ -36,7 +36,7 @@ void DockAppManager::initEntries()
         }
     }
 
-    sortItemList();
+    initItemList();
 }
 
 void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
@@ -82,7 +82,7 @@ void DockAppManager::onEntryRemoved(const QString &id)
     }
 }
 
-void DockAppManager::sortItemList()
+void DockAppManager::initItemList()
 {
     QStringList dockedList = m_dockAppManager->DockedAppList().value();
 

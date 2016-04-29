@@ -31,7 +31,7 @@ signals:
     void entryRemoved(const QString &id);
 
 private:
-    void sortItemList();    //Sort and append item to dock
+    void initItemList();    //Sort and append item to dock
     void onEntryRemoved(const QString &id);
     void onEntryAdded(const QDBusObjectPath &path);
 

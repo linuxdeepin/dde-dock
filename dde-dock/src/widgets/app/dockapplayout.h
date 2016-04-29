@@ -67,6 +67,7 @@ private:
 //    DropMask *m_mask;
     DockAppManager *m_appManager;
     DBusDockedAppManager *m_ddam;
+    DBusEntryManager *m_dem;
 
     void createConnections(DockAppItem *item);
 };

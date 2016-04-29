@@ -53,6 +53,13 @@ public:
     { return qvariant_cast< QList<QDBusObjectPath> >(property("Entries")); }
 
 public Q_SLOTS: // METHODS
+    inline QDBusPendingReply<> Reorder(const QStringList &in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("Reorder"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void Added(const QDBusObjectPath &in0);
     void Removed(const QString &in0);
