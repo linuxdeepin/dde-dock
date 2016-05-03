@@ -274,8 +274,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
     if (event->source() == this) {  //from itself
         m_dem->Reorder(appIds());
         event->accept();
-    }
-    else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
+    } else if (event->mimeData()->formats().indexOf("RequestDock") != -1){    //from launcher
         QJsonObject dataObj = QJsonDocument::fromJson(event->mimeData()->data("RequestDock")).object();
         if (dataObj.isEmpty() || m_ddam->IsDocked(dataObj.value("appKey").toString())) {
             emit requestSpacingItemsDestroy(true);
@@ -286,8 +285,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
 
             qDebug() << "App drop to dock: " << dataObj.value("appKey").toString();
         }
-    }
-    else {  //from desktop file
+    } else {  //from desktop file
         QList<QUrl> urls = event->mimeData()->urls();
         if (!urls.isEmpty()) {
             QStringList normals;

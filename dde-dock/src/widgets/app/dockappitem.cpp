@@ -87,6 +87,11 @@ void DockAppItem::openFiles(const QStringList files)
     }
 }
 
+void DockAppItem::setItemId(QString id)
+{
+    m_itemData.id = id;
+}
+
 void DockAppItem::setEntryProxyer(DBusDockEntry *entryProxyer)
 {
     m_entryProxyer = entryProxyer;

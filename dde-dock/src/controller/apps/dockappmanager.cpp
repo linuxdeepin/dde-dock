@@ -46,6 +46,7 @@ void DockAppManager::onEntryAdded(const QDBusObjectPath &path)
     {
         DockAppItem *item = new DockAppItem();
         QString tmpId = entryProxyer->id();
+        item->setItemId(tmpId);
         if (m_ids.indexOf(tmpId) != -1) {
             item->deleteLater();
         }else{

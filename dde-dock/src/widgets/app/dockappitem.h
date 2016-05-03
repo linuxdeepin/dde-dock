@@ -46,6 +46,7 @@ public:
     QPixmap iconPixmap();
     QPixmap grab(const QRect &rectangle = QRect(QPoint(0, 0), QSize(-1, -1))) Q_DECL_OVERRIDE;
     void openFiles(const QStringList files);
+    void setItemId(QString id);
     void setEntryProxyer(DBusDockEntry *entryProxyer);
     bool actived() const;
     void setActived(bool actived);
