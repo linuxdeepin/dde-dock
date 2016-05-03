@@ -22,7 +22,8 @@ import (
 )
 
 const (
-	_DesktopSuffixLen = len(".desktop")
+	_DesktopSuffix    = ".desktop"
+	_DesktopSuffixLen = len(_DesktopSuffix)
 )
 
 // #define FILENAME_WEIGHT 0.3
@@ -177,9 +178,10 @@ func GenID(filename string) ItemID {
 	}
 
 	basename := path.Base(filename)
-	return ItemID(appinfo.NormalizeAppID(basename[:len(basename)-_DesktopSuffixLen]))
+	return ItemID(appinfo.NormalizeAppID(strings.TrimSuffix(basename, _DesktopSuffix)))
 }
 
 func getID(app *gio.DesktopAppInfo) ItemID {
-	return GenID(app.GetFilename())
+	id := app.GetId()
+	return ItemID(appinfo.NormalizeAppID(strings.TrimSuffix(id, _DesktopSuffix)))
 }
