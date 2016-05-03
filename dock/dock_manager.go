@@ -128,8 +128,6 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize docked app manager done")
 
-	m.initDockedAppEntries()
-
 	err = m.initHideStateManager()
 	if err != nil {
 		return err

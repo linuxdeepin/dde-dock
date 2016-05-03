@@ -84,6 +84,7 @@ func (d *Daemon) Start() error {
 		d.startFailed(err)
 		return err
 	}
+	dockManager.initDockedAppEntries()
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
 	dockManager.hideStateManager.updateStateWithoutDelay()
