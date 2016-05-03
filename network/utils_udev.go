@@ -37,6 +37,7 @@ var deviceDescIgnoredWords = []string{
 	"[hex]",
 	"NDIS",
 	"Module",
+	"Technology",
 }
 var deviceDescIgnoredPhrases = []string{
 	"Multiprotocol MAC/baseband processor",
