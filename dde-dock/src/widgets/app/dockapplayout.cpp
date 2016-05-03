@@ -301,11 +301,13 @@ void DockAppLayout::onDrop(QDropEvent *event)
                         qDebug() << "Desktop file drop to dock: " << appKey;
                     }
                 }
-            }
-            else {
+            } else {
                 //just normal files, try to open files by the target app
-                DockAppItem *item = qobject_cast<DockAppItem *>(widget(getHoverIndextByPos(mapFromGlobal(QCursor::pos()))));
-                item->openFiles(normals);
+                int index = getHoverIndextByPos(mapFromGlobal(QCursor::pos()));
+                if (index != -1) {
+                    DockAppItem *item = qobject_cast<DockAppItem *>(widget(index));
+                    item->openFiles(normals);
+                }
             }
         }
     }
