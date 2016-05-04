@@ -180,7 +180,7 @@ func (m *DockedAppManager) fuzzyFindItem(id string) (string, *list.Element) {
 	if guessId == id {
 		return id, nil
 	}
-	return guessId, m.findItem(id)
+	return guessId, m.findItem(guessId)
 }
 
 type dockedItemInfo struct {
