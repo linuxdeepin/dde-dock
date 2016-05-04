@@ -146,5 +146,6 @@ func onCurrentWorkspacePre(win xproto.Window) bool {
 }
 
 func (m *ClientManager) updateActiveWindow(win xproto.Window) {
-	dbus.Emit(m, "ActiveWindowChanged", uint32(m.activeWindow))
+	m.activeWindow = win
+	dbus.Emit(m, "ActiveWindowChanged", uint32(win))
 }
