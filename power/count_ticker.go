@@ -21,30 +21,29 @@ type countTicker struct {
 }
 
 func newCountTicker(interval time.Duration, action func(int)) *countTicker {
-	st := &countTicker{
+	t := &countTicker{
 		interval: interval,
 		action:   action,
 	}
-	st.Reset()
-	return st
+	t.Reset()
+	return t
 }
 
-func (st *countTicker) Reset() {
-	st.ticker = time.NewTicker(st.interval)
-	st.count = 0
-	st.action(0)
+func (t *countTicker) Reset() {
+	t.ticker = time.NewTicker(t.interval)
+	t.count = 0
+	t.action(0)
 	go func() {
-		for range st.ticker.C {
-			st.count++
-			st.action(st.count)
+		for range t.ticker.C {
+			t.count++
+			t.action(t.count)
 		}
 	}()
 }
 
-func (st *countTicker) Stop() {
-	logger.Debug("Stop")
-	if st.ticker != nil {
-		st.ticker.Stop()
-		st.ticker = nil
+func (t *countTicker) Stop() {
+	if t.ticker != nil {
+		logger.Debug("Stop")
+		t.ticker.Stop()
 	}
 }

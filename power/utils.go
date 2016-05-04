@@ -118,8 +118,8 @@ func (m *Manager) doSuspend() {
 	}
 }
 
-func (m *Manager) setDisplayBrightness(brightness float64) {
-	outputNames := []string{}
+func (m *Manager) getDisplayOutputs() []string {
+	outputs := []string{}
 	if m.display != nil {
 		for _, objPath := range m.display.Monitors.Get() {
 			monitor, err := libdisplay.NewMonitor(dbusDisplayDest, objPath)
@@ -129,13 +129,27 @@ func (m *Manager) setDisplayBrightness(brightness float64) {
 			}
 			defer libdisplay.DestroyMonitor(monitor)
 			for _, name := range monitor.Outputs.Get() {
-				outputNames = append(outputNames, name)
+				outputs = append(outputs, name)
 			}
 		}
-		for _, name := range outputNames {
-			logger.Debugf("Change output %q brightness to %.2f", name, brightness)
-			m.display.ChangeBrightness(name, brightness)
+	}
+	return outputs
+}
+
+func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
+	for _, output := range m.getDisplayOutputs() {
+		brightness, ok := brightnessTable[output]
+		if ok {
+			logger.Debugf("Change output %q brightness to %.2f", output, brightness)
+			m.display.ChangeBrightness(output, brightness)
 		}
+	}
+}
+
+func (m *Manager) setDisplaySameBrightness(brightness float64) {
+	for _, output := range m.getDisplayOutputs() {
+		logger.Debugf("Change output %q brightness to %.2f", output, brightness)
+		m.display.ChangeBrightness(output, brightness)
 	}
 }
 

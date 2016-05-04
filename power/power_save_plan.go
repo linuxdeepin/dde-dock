@@ -29,7 +29,8 @@ type powerSavePlan struct {
 	screenBlackTicker *countTicker
 	sleepDelay        int32
 	sleepExit         chan int
-	oldBrightness     float64
+	// key output name, value old brightness
+	oldBrightnessTable map[string]float64
 }
 
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
@@ -142,13 +143,24 @@ func (psp *powerSavePlan) Update(screenBlackDelay, sleepDelay int32) error {
 	return nil
 }
 
-// 获取当前亮度并保存到 psp.oldBrightness
-// 假设所有显示器亮度都一样，只获取第一个
 func (psp *powerSavePlan) saveCurrentBrightness() {
-	for _, br := range psp.manager.display.Brightness.Get() {
-		psp.oldBrightness = br
-		logger.Debug("Save brightness:", br)
-		break
+	if psp.oldBrightnessTable == nil {
+		psp.oldBrightnessTable = make(map[string]float64)
+		for output, brightness := range psp.manager.display.Brightness.Get() {
+			psp.oldBrightnessTable[output] = brightness
+			logger.Debugf("Save output %q brightness: %v", output, brightness)
+		}
+	} else {
+		logger.Debug("saveCurrentBrightness failed")
+	}
+}
+
+func (psp *powerSavePlan) resetBrightness() {
+	if psp.oldBrightnessTable != nil {
+		psp.manager.setDPMSModeOn()
+		logger.Debug("Reset all outputs brightness")
+		psp.manager.setDisplayBrightness(psp.oldBrightnessTable)
+		psp.oldBrightnessTable = nil
 	}
 }
 
@@ -169,8 +181,13 @@ func (psp *powerSavePlan) screenBlack() {
 		if 0 <= count && count <= 50 {
 			// 0ms ~ 500ms
 			// count: [0,50], brightness ratio:  1 ~ 0.5
-			brightnessRatio := 0.5 * (math.Cos(math.Pi*float64(count)/100) + 1)
-			manager.setDisplayBrightness(psp.oldBrightness * brightnessRatio)
+			brightnessTable := make(map[string]float64)
+			for output, oldBrightness := range psp.oldBrightnessTable {
+				brightnessRatio := 0.5 * (math.Cos(math.Pi*float64(count)/100) + 1)
+				brightnessTable[output] = oldBrightness * brightnessRatio
+			}
+			manager.setDisplayBrightness(brightnessTable)
+
 		} else if count == 500 {
 			// 5000ms 5s
 			psp.screenBlackTicker.Stop()
@@ -178,8 +195,8 @@ func (psp *powerSavePlan) screenBlack() {
 				if manager.ScreenBlackLock.Get() {
 					manager.lockWaitShow(2 * time.Second)
 				}
-				// set min brightness
-				manager.setDisplayBrightness(0.02)
+				// set min brightness for all outputs
+				manager.setDisplaySameBrightness(0.02)
 				manager.setDPMSModeOff()
 
 				// try sleep
@@ -223,12 +240,6 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	logger.Debug("HandleIdleOff")
 	psp.interruptAll()
 	time.AfterFunc(50*time.Millisecond, func() {
-		// reset brightness
-		if psp.oldBrightness != 0.0 {
-			psp.manager.setDPMSModeOn()
-			logger.Debug("Reset all outputs brightness")
-			psp.manager.setDisplayBrightness(psp.oldBrightness)
-			psp.oldBrightness = 0.0
-		}
+		psp.resetBrightness()
 	})
 }
