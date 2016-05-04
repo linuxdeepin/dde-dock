@@ -159,11 +159,6 @@ func (e *AppEntry) update() {
 		}
 		b, _ := json.Marshal(xids)
 		e.setData(FieldAppXids, string(b))
-		// if hideModemanager.state == HideStateShown &&
-		// 	region.mouseInRegion() {
-		// 	hideModemanager.updateStateWithDelay()
-		// }
-		// TODO
 		if dockManager.hideStateManager.state == HideStateShown {
 			dockManager.hideStateManager.updateStateWithDelay()
 		}
