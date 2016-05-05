@@ -103,7 +103,7 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
-		if uri != v {
+		if v != old {
 			m.wrapBgSetting.SetString(key, v)
 		}
 		logger.Debug("[Gnome background] sync wrap bg OVER ENDDDDDDDD:", uri)
