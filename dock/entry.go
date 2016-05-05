@@ -44,7 +44,7 @@ type AppEntry struct {
 }
 
 func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Debugf("NewAppEntryWithRuntimeApp: %s, 0x%x", rApp.Id, rApp.CurrentInfo.Xid)
+	logger.Debugf("NewAppEntryWithRuntimeApp: app id %s, win %v", rApp.Id, rApp.CurrentInfo.window)
 	e := &AppEntry{
 		Id:   rApp.Id,
 		Type: "App",
@@ -154,14 +154,11 @@ func (e *AppEntry) update() {
 	if e.rApp != nil {
 		e.setData(FieldStatus, ActiveStatus)
 		xids := make([]XidInfo, 0)
-		for k, v := range e.rApp.xids {
+		for k, v := range e.rApp.windowInfoTable {
 			xids = append(xids, XidInfo{uint32(k), v.Title})
 		}
 		b, _ := json.Marshal(xids)
 		e.setData(FieldAppXids, string(b))
-		if dockManager.hideStateManager.state == HideStateShown {
-			dockManager.hideStateManager.updateStateWithDelay()
-		}
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {

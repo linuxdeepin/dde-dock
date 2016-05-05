@@ -9,14 +9,17 @@
 
 package dock
 
-import "pkg.deepin.io/lib/dbus"
-
-// import "flag"
-import "github.com/BurntSushi/xgb/xproto"
-import "os"
-import "path/filepath"
-import "errors"
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/xprop"
+	"os"
+	"path/filepath"
+	"pkg.deepin.io/lib/dbus"
+	"sort"
+)
 
 // EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
@@ -26,13 +29,18 @@ type EntryManager struct {
 
 	// 保持 entry 的顺序
 	entryIDs []string
+
+	dockedAppManager *DockedAppManager
+	clientList       windowSlice
 }
 
 func NewEntryManager() *EntryManager {
-	m := &EntryManager{}
-	m.runtimeApps = make(map[string]*RuntimeApp)
-	m.normalApps = make(map[string]*NormalApp)
-	m.appEntries = make(map[string]*AppEntry)
+	m := &EntryManager{
+		runtimeApps:      make(map[string]*RuntimeApp),
+		normalApps:       make(map[string]*NormalApp),
+		appEntries:       make(map[string]*AppEntry),
+		dockedAppManager: NewDockedAppManager(),
+	}
 	return m
 }
 
@@ -55,7 +63,7 @@ func (m *EntryManager) Reorder(entryIDs []string) error {
 		}
 	}
 	m.entryIDs = orderedEntryIDs
-	dockManager.dockedAppManager.reorderThenSave(m.entryIDs)
+	m.dockedAppManager.reorderThenSave(m.entryIDs)
 	return nil
 }
 
@@ -63,33 +71,71 @@ func (m *EntryManager) GetEntryIDs() []string {
 	return m.entryIDs
 }
 
-func (m *EntryManager) runtimeAppChanged(xids []xproto.Window) {
-	logger.Debug("runtime app changed")
-	willBeDestroied := make(map[string]*RuntimeApp)
+func (m *EntryManager) getRuntimeAppByWindow(win xproto.Window) *RuntimeApp {
 	for _, app := range m.runtimeApps {
-		willBeDestroied[app.Id] = app
+		_, ok := app.windowInfoTable[win]
+		if ok {
+			return app
+		}
 	}
+	return nil
+}
 
-	// 1. create newfound RuntimeApps
-	for _, xid := range xids {
-		if isNormalWindow(xid) {
-			// FIXME
-			// appId := find_app_id_by_xid(xid, DisplayModeType(dockManager.setting.GetDisplayMode()))
-			appId := find_app_id_by_xid(xid, dockManager.displayMode)
-			if rApp, ok := m.runtimeApps[appId]; ok {
-				logger.Debugf("%s is already existed, attach xid: 0x%x", appId, xid)
-				willBeDestroied[appId] = nil
-				rApp.attachXid(xid)
-			} else {
-				m.createRuntimeApp(xid)
-			}
+func (m *EntryManager) updateActiveWindow(win xproto.Window) {
+	app := m.getRuntimeAppByWindow(win)
+	if app != nil {
+		app.setLeader(win)
+	}
+}
+
+func (m *EntryManager) attachOrDetachRuntimeAppWindow(winInfo *WindowInfo) {
+	win := winInfo.window
+	canShowOnDock := winInfo.canShowOnDock()
+	logger.Debugf("win %v canShowOnDock? %v", win, canShowOnDock)
+	app := winInfo.app
+	if app != nil {
+		if !canShowOnDock {
+			m.detachRuntimeAppWindow(winInfo)
+		}
+	} else {
+		// app is nil
+		if canShowOnDock {
+			m.attachRuntimeAppWindow(winInfo)
 		}
 	}
-	// 2. destroy disappeared RuntimeApps since last runtimeAppChanged point
-	for _, app := range willBeDestroied {
-		if app != nil {
-			m.destroyRuntimeApp(app)
-		}
+}
+
+func (m *EntryManager) initRuntimeApps() {
+	clientList, err := ewmh.ClientListGet(XU)
+	if err != nil {
+		logger.Warning("Get client list failed:", err)
+		return
+	}
+	winSlice := windowSlice(clientList)
+	sort.Sort(winSlice)
+	for _, win := range winSlice {
+		winInfo := NewWindowInfo(win)
+		m.listenWindowXEvent(winInfo)
+		m.attachOrDetachRuntimeAppWindow(winInfo)
+	}
+	m.clientList = winSlice
+}
+
+func (m *EntryManager) initDockedApps() {
+	for _, id := range m.dockedAppManager.DockedAppList() {
+		id = normalizeAppID(id)
+		logger.Debug("load docked app", id)
+		m.createNormalApp(id)
+	}
+}
+
+func (m *EntryManager) addAppEntry(id string, e *AppEntry) {
+	m.appEntries[id] = e
+	m.entryIDs = append(m.entryIDs, id)
+
+	err := dbus.InstallOnSession(e)
+	if err != nil {
+		logger.Warning("Install AppEntry to dbus failed:", err)
 	}
 }
 
@@ -99,12 +145,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			return e
 		} else {
 			e := NewAppEntryWithRuntimeApp(rApp)
-			m.appEntries[rApp.Id] = e
-			m.entryIDs = append(m.entryIDs, rApp.Id)
-			err := dbus.InstallOnSession(e)
-			if err != nil {
-				logger.Warning("Install NewRuntimeAppEntry to dbus failed:", err)
-			}
+			m.addAppEntry(rApp.Id, e)
 			return e
 		}
 	} else if nApp != nil {
@@ -112,12 +153,7 @@ func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry
 			return e
 		} else {
 			e := NewAppEntryWithNormalApp(nApp)
-			m.appEntries[nApp.Id] = e
-			m.entryIDs = append(m.entryIDs, nApp.Id)
-			err := dbus.InstallOnSession(e)
-			if err != nil {
-				logger.Warning("Install NewNormalAppEntry to dbus failed:", err)
-			}
+			m.addAppEntry(nApp.Id, e)
 			return e
 		}
 	}
@@ -168,19 +204,60 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 	}
 }
 
-func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
-	appId := find_app_id_by_xid(xid, DisplayModeType(dockManager.setting.GetDisplayMode()))
-	if appId == "" {
-		logger.Debug("get appid for", xid, "failed")
-		return nil
+func getDesktopAppInfoFromWindow(win xproto.Window) *AppInfo {
+	var dai *AppInfo
+
+	// _GTK_APPLICATION_ID
+	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, win, "_GTK_APPLICATION_ID"))
+	if err != nil {
+		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
+	} else {
+		gtkAppId += ".desktop	"
+		dai = NewAppInfo(gtkAppId)
+		if dai != nil {
+			return dai
+		}
+		logger.Debugf("NewAppInfo failed gtk app id: %q", gtkAppId)
 	}
 
+	// bamf
+	desktop := getDesktopFromWindowByBamf(win)
+	logger.Debug("bamf desktop:", desktop)
+	if desktop == "" {
+		logger.Debug("get desktop from bamf failed")
+	} else {
+		dai = NewAppInfoFromFile(desktop)
+		if dai != nil {
+			return dai
+		}
+		logger.Debugf("NewAppInfoFromFile faield, desktop: %q", desktop)
+	}
+
+	// fail
+	return nil
+}
+
+// 给 window 一个 runtimeApp
+// 根据 window id 找到 appId， 如果 runtimeApp 已经存, 则 app.attachWindow
+// 如果不存在，则 NewRuntimeApp 创建新的 RuntimeApp
+func (m *EntryManager) attachRuntimeAppWindow(winInfo *WindowInfo) *RuntimeApp {
+	win := winInfo.window
+	appInfo := getDesktopAppInfoFromWindow(win)
+	if appInfo == nil {
+		logger.Warning("getDesktopAppInfoFromWindow failed, win:", win)
+		return nil
+	}
+	appId := appInfo.GetId()
+
 	if v, ok := m.runtimeApps[appId]; ok {
+		v.attachWindow(winInfo)
 		return v
 	}
 
-	rApp := NewRuntimeApp(xid, appId)
+	isAppDocked := m.dockedAppManager.IsDocked(appId)
+	rApp := NewRuntimeApp(winInfo, appInfo, isAppDocked)
 	if rApp == nil {
+		logger.Warningf("NewRuntimeApp failed win %v app id %v", win, appId)
 		return nil
 	}
 
@@ -188,10 +265,25 @@ func (m *EntryManager) createRuntimeApp(xid xproto.Window) *RuntimeApp {
 	m.updateEntry(appId, m.mustGetEntry(nil, rApp).nApp, rApp)
 	return rApp
 }
+
+// 取消绑定 winInfo.app 与 winInfo , 如果 rApp 窗口数量为 0 者销毁 rApp
+func (m *EntryManager) detachRuntimeAppWindow(winInfo *WindowInfo) {
+	app := winInfo.app
+	if app == nil {
+		return
+	}
+	app.detachWindow(winInfo)
+	if len(app.windowInfoTable) == 0 {
+		m.destroyRuntimeApp(app)
+	}
+}
+
 func (m *EntryManager) destroyRuntimeApp(rApp *RuntimeApp) {
+	logger.Debug("Destory runtime app", rApp.Id)
 	delete(m.runtimeApps, rApp.Id)
 	m.updateEntry(rApp.Id, m.mustGetEntry(nil, rApp).nApp, nil)
 }
+
 func (m *EntryManager) createNormalApp(id string) {
 	logger.Info("createNormalApp for", id)
 	if _, ok := m.normalApps[id]; ok {
@@ -211,7 +303,7 @@ func (m *EntryManager) createNormalApp(id string) {
 		nApp = NewNormalApp(newId)
 		if nApp == nil {
 			logger.Warning("create normal app failed:", id)
-			dockManager.dockedAppManager.Undock(id)
+			m.dockedAppManager.Undock(id)
 			return
 		}
 	}
@@ -219,6 +311,7 @@ func (m *EntryManager) createNormalApp(id string) {
 	m.normalApps[id] = nApp
 	m.updateEntry(id, nApp, m.mustGetEntry(nApp, nil).rApp)
 }
+
 func (m *EntryManager) destroyNormalApp(id string) {
 	if nApp, ok := m.normalApps[id]; ok {
 		logger.Debugf("destroyNormalApp id: %q", id)

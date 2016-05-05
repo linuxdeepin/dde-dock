@@ -23,7 +23,6 @@ type DockManager struct {
 	dockProperty        *DockProperty
 	entryManager        *EntryManager
 	entryProxyerManager *EntryProxyerManager
-	dockedAppManager    *DockedAppManager
 	clientManager       *ClientManager
 
 	// 共用部分
@@ -50,24 +49,17 @@ func NewDockManager() (*DockManager, error) {
 
 func (m *DockManager) initEntryManager() error {
 	m.entryManager = NewEntryManager()
+	m.entryManager.initRuntimeApps()
+	m.entryManager.initDockedApps()
+	err := dbus.InstallOnSession(m.entryManager.dockedAppManager)
+	if err != nil {
+		return err
+	}
+
 	m.entryProxyerManager = NewEntryProxyerManager()
 	m.entryProxyerManager.watchEntries()
-	err := dbus.InstallOnSession(m.entryProxyerManager)
+	err = dbus.InstallOnSession(m.entryProxyerManager)
 	return err
-}
-
-func (m *DockManager) initDockedAppManager() error {
-	m.dockedAppManager = NewDockedAppManager()
-	err := dbus.InstallOnSession(m.dockedAppManager)
-	return err
-}
-
-func (m *DockManager) initDockedAppEntries() {
-	for _, id := range m.dockedAppManager.DockedAppList() {
-		id = normalizeAppID(id)
-		logger.Debug("load docked app", id)
-		m.entryManager.createNormalApp(id)
-	}
 }
 
 func (m *DockManager) initHideStateManager() error {
@@ -122,12 +114,6 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize entry proxyer manager done")
 
-	err = m.initDockedAppManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize docked app manager done")
-
 	err = m.initHideStateManager()
 	if err != nil {
 		return err
@@ -157,11 +143,6 @@ func (m *DockManager) destroy() {
 	if m.dockProperty != nil {
 		m.dockProperty.destroy()
 		m.dockProperty = nil
-	}
-
-	if m.dockedAppManager != nil {
-		m.dockedAppManager.destroy()
-		m.dockedAppManager = nil
 	}
 
 	if m.setting != nil {

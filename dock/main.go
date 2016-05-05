@@ -84,14 +84,11 @@ func (d *Daemon) Start() error {
 		d.startFailed(err)
 		return err
 	}
-	dockManager.initDockedAppEntries()
+
+	initTrayManager()
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
 	dockManager.hideStateManager.updateStateWithoutDelay()
-
-	// initialize()
-	// TODO
-	initTrayManager()
 
 	logger.Info("initialize done")
 	return nil

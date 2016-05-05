@@ -10,9 +10,9 @@
 package dock
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/xprop"
+// "github.com/BurntSushi/xgb/xproto"
+// "github.com/BurntSushi/xgbutil/ewmh"
+// "github.com/BurntSushi/xgbutil/xprop"
 )
 
 // return is mode changed
@@ -22,54 +22,53 @@ func (m *DockManager) setDisplayMode(mode DisplayModeType) bool {
 	}
 	m.displayMode = mode
 
-	for _, rApp := range m.entryManager.runtimeApps {
-		rebuildXids := []xproto.Window{}
-		for xid, _ := range rApp.xids {
-			if _, err := xprop.PropValStr(
-				xprop.GetProperty(
-					XU,
-					xid,
-					"_DDE_DOCK_APP_ID",
-				),
-			); err != nil {
-				continue
-			}
-
-			rebuildXids = append(rebuildXids, xid)
-			rApp.detachXid(xid)
-		}
-
-		l := len(rebuildXids)
-		if l == 0 {
-			continue
-		}
-
-		if len(rApp.xids) == 0 {
-			m.entryManager.destroyRuntimeApp(rApp)
-		}
-
-		newApp := m.entryManager.createRuntimeApp(rebuildXids[0])
-		for i := 0; i < l; i++ {
-			newApp.attachXid(rebuildXids[i])
-		}
-
-		activeXid, err := ewmh.ActiveWindowGet(XU)
-		if err != nil {
-			continue
-		}
-
-		for xid, _ := range newApp.xids {
-			logger.Debugf("through new app xids")
-			if activeXid == xid {
-				logger.Debugf("0x%x(a), 0x%x(x)",
-					activeXid, xid)
-				newApp.setLeader(xid)
-				newApp.updateState(xid)
-				ewmh.ActiveWindowSet(XU, xid)
-				break
-			}
-		}
-	}
+	// for _, rApp := range m.entryManager.runtimeApps {
+	// 	rebuildXids := []xproto.Window{}
+	// 	for xid, _ := range rApp.xids {
+	// 		if _, err := xprop.PropValStr(
+	// 			xprop.GetProperty(
+	// 				XU,
+	// 				xid,
+	// 				"_DDE_DOCK_APP_ID",
+	// 			),
+	// 		); err != nil {
+	// 			continue
+	// 		}
+	//
+	// 		rebuildXids = append(rebuildXids, xid)
+	// 		rApp.detachXid(xid)
+	// 	}
+	//
+	// 	l := len(rebuildXids)
+	// 	if l == 0 {
+	// 		continue
+	// 	}
+	//
+	// 	if len(rApp.xids) == 0 {
+	// 		m.entryManager.destroyRuntimeApp(rApp)
+	// 	}
+	//
+	// 	newApp := m.entryManager.createRuntimeApp(rebuildXids[0])
+	// 	for i := 0; i < l; i++ {
+	// 		newApp.attachXid(rebuildXids[i])
+	// 	}
+	//
+	// 	activeXid, err := ewmh.ActiveWindowGet(XU)
+	// 	if err != nil {
+	// 		continue
+	// 	}
+	//
+	// 	for xid, _ := range newApp.xids {
+	// 		logger.Debugf("through new app xids")
+	// 		if activeXid == xid {
+	// 			logger.Debugf("0x%x(a), 0x%x(x)",
+	// 				activeXid, xid)
+	// 			newApp.setLeader(xid)
+	// 			ewmh.ActiveWindowSet(XU, xid)
+	// 			break
+	// 		}
+	// 	}
+	// }
 
 	m.dockHeight = getDockHeightByDisplayMode(mode)
 	m.updateDockRect()

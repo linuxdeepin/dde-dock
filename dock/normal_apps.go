@@ -35,17 +35,17 @@ type NormalApp struct {
 
 func NewNormalApp(desktopID string) *NormalApp {
 	app := &NormalApp{Id: normalizeAppID(trimDesktop(desktopID)), DesktopID: desktopID}
-	var core *DesktopAppInfo
+	var core *AppInfo
 	if strings.ContainsRune(desktopID, filepath.Separator) {
-		core = NewDesktopAppInfoFromFilename(desktopID)
+		core = NewAppInfoFromFile(desktopID)
 		app.Id = filepath.Base(app.Id)
 	} else {
-		core = NewDesktopAppInfo(desktopID)
+		core = NewAppInfo(desktopID)
 		if core == nil {
 			newId := guess_desktop_id(app.Id)
 			logger.Debugf("guess desktop: %q", newId)
 			if newId != "" {
-				core = NewDesktopAppInfo(newId)
+				core = NewAppInfo(newId)
 				app.DesktopID = newId
 			}
 		}
@@ -56,7 +56,7 @@ func NewNormalApp(desktopID string) *NormalApp {
 	}
 	defer core.Destroy()
 	app.path = core.GetFilename()
-	app.Icon = getAppIcon(core.DesktopAppInfo)
+	app.Icon = core.GetIcon()
 	logger.Debug(app.Id, "::app icon:", app.Icon)
 	app.Name = core.GetDisplayName()
 	logger.Debug("Name", app.Name)
@@ -64,24 +64,24 @@ func NewNormalApp(desktopID string) *NormalApp {
 	return app
 }
 
-func (app *NormalApp) createDesktopAppInfo() *DesktopAppInfo {
-	core := NewDesktopAppInfo(app.DesktopID)
+func (app *NormalApp) createDesktopAppInfo() *AppInfo {
+	core := NewAppInfo(app.DesktopID)
 
 	if core != nil {
 		return core
 	}
 
 	if newId := guess_desktop_id(app.Id); newId != "" {
-		core = NewDesktopAppInfo(newId)
+		core = NewAppInfo(newId)
 		if core != nil {
 			return core
 		}
 	}
 
-	return NewDesktopAppInfoFromFilename(app.path)
+	return NewAppInfoFromFile(app.path)
 }
 
-func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
+func (app *NormalApp) buildMenu(core *AppInfo) {
 	app.coreMenu = NewMenu()
 	app.coreMenu.AppendItem(NewMenuItem(Tr("_Run"), func(timestamp uint32) {
 		core := app.createDesktopAppInfo()
@@ -117,7 +117,7 @@ func (app *NormalApp) buildMenu(core *DesktopAppInfo) {
 	dockItem := NewMenuItem(
 		Tr("_Undock"),
 		func(timestamp uint32) {
-			dockManager.dockedAppManager.Undock(app.Id)
+			dockManager.entryManager.dockedAppManager.Undock(app.Id)
 		},
 		true,
 	)
@@ -134,13 +134,13 @@ func (app *NormalApp) HandleMenuItem(id string, timestamp uint32) {
 
 func NewNormalAppFromFilename(name string) *NormalApp {
 	app := &NormalApp{}
-	core := NewDesktopAppInfoFromFilename(name)
+	core := NewAppInfoFromFile(name)
 	if core == nil {
 		return nil
 	}
 	defer core.Destroy()
 	app.path = core.GetFilename()
-	app.Icon = core.GetIcon().ToString()
+	app.Icon = core.GetIcon()
 	app.Name = core.GetDisplayName()
 	app.buildMenu(core)
 	return app
@@ -159,6 +159,7 @@ func (app *NormalApp) Activate(x, y int32, timestamp uint32) error {
 		return errors.New("create desktop app info failed")
 	}
 	defer core.Destroy()
+	logger.Debug("launch desktop file:", core.GetFilename())
 	_, err := core.Launch(nil, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
 	if err != nil {
 		logger.Warning("launch", app.Id, "failed:", err)

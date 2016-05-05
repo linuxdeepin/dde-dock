@@ -127,7 +127,7 @@ func (m *DockedAppManager) handleOldConfigFile() {
 	}
 	ids = uniqStrSlice(ids)
 	for _, id := range ids {
-		if a := NewDesktopAppInfo(id + ".desktop"); a != nil {
+		if a := NewAppInfo(id + ".desktop"); a != nil {
 			a.Destroy()
 			continue
 		}
@@ -208,7 +208,8 @@ func (m *DockedAppManager) Dock(id, title, icon, cmd string) bool {
 	m.items.PushBack(id)
 	app := dockManager.entryManager.runtimeApps[id]
 	if app != nil {
-		app.buildMenu()
+		app.updateMenu(true)
+		app.notifyChanged()
 	}
 	dockManager.entryManager.createNormalApp(id)
 
@@ -281,7 +282,8 @@ func (m *DockedAppManager) Undock(id string) bool {
 	app := dockManager.entryManager.runtimeApps[id]
 	if app != nil {
 		// update menu item undock to dock
-		app.buildMenu()
+		app.updateMenu(false)
+		app.notifyChanged()
 	}
 	dockManager.entryManager.destroyNormalApp(id)
 	return true

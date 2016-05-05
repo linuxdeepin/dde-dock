@@ -13,14 +13,17 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"path/filepath"
 	"regexp"
 	"strings"
 
+	"bytes"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/xprop"
+	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/BurntSushi/xgbutil/xgraphics"
+	"os"
 	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
@@ -114,49 +117,6 @@ func guess_desktop_id(appId string) string {
 	return ""
 }
 
-func getAppIcon(core *gio.DesktopAppInfo) string {
-	gioIcon := core.GetIcon()
-	if gioIcon == nil {
-		logger.Warning("get icon from appinfo failed")
-		return ""
-	}
-
-	icon := gioIcon.ToString()
-	logger.Debug("GetIcon:", icon)
-	if icon == "" {
-		logger.Warning("gioIcon to string failed")
-		return ""
-	}
-
-	iconPath := get_theme_icon(icon, 48)
-	if iconPath == "" {
-		logger.Warning("get icon from theme failed")
-		// return a empty string might be a better idea here.
-		// However, gtk will get theme icon failed sometimes for unknown reason.
-		// frontend must make a validity check for icon.
-		iconPath = icon
-	}
-
-	logger.Debug("get_theme_icon:", icon)
-	ext := filepath.Ext(iconPath)
-	if ext == "" {
-		logger.Info("get app icon:", icon)
-		return icon
-	}
-
-	// strip the '.' before extension name,
-	// filepath.Ext function will return ".xxx"
-	ext = ext[1:]
-	logger.Debug("ext:", ext)
-	if strings.EqualFold(ext, "xpm") {
-		logger.Info("transform xpm to data uri")
-		return xpm_to_dataurl(iconPath)
-	}
-
-	logger.Debug("get app icon:", icon)
-	return icon
-}
-
 func dataUriToFile(dataUri, path string) (string, error) {
 	commaIndex := strings.Index(dataUri, ",")
 	img, err := base64.StdEncoding.DecodeString(dataUri[commaIndex+1:])
@@ -167,13 +127,66 @@ func dataUriToFile(dataUri, path string) (string, error) {
 	return path, ioutil.WriteFile(path, img, 0744)
 }
 
-func getWmName(xu *xgbutil.XUtil, win xproto.Window) (string, error) {
-	wmname, err := xprop.PropValStr(xprop.GetProperty(xu, win, "_NET_WM_NAME"))
-	if err != nil {
-		wmname, err = xprop.PropValStr(xprop.GetProperty(xu, win, "WM_NAME"))
-		if err != nil {
-			return "", err
-		}
+func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {
+	// get _NET_WM_NAME
+	name, err := ewmh.WmNameGet(xu, win)
+	if err != nil || name == "" {
+		// get WM_NAME
+		name, _ = icccm.WmNameGet(xu, win)
 	}
-	return wmname, nil
+	return name
+}
+
+func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
+	pid, _ := ewmh.WmPidGet(xu, win)
+	return pid
+}
+
+func getProcessCmdline(pid uint) (string, error) {
+	cmdlinePath := fmt.Sprintf("/proc/%d/cmdline", pid)
+	bytes, err := ioutil.ReadFile(cmdlinePath)
+	if err != nil {
+		return "", err
+	}
+	content := string(bytes)
+	parts := strings.Split(content, "\x00")
+	content = strings.Join(parts, " ")
+	logger.Debug("content:", content)
+	return content, nil
+}
+
+func getProcessCwd(pid uint) (string, error) {
+	cwdPath := fmt.Sprintf("/proc/%d/cwd", pid)
+	cwd, err := os.Readlink(cwdPath)
+	return cwd, err
+}
+
+func getExecFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
+	pid := getWmPid(xu, win)
+	cmdline, err := getProcessCmdline(pid)
+	if err != nil {
+		logger.Warning(err)
+	}
+	cwd, err := getProcessCwd(pid)
+	if err != nil {
+		logger.Warning(err)
+	}
+	// TODO: sh 转义
+	cmdline = "cd " + cwd + "\n" + cmdline
+	return cmdline
+}
+
+func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
+	icon, err := xgraphics.FindIcon(xu, win, 48, 48)
+	// FIXME: gets empty icon for minecraft
+	if err == nil {
+		buf := bytes.NewBuffer(nil)
+		icon.WritePng(buf)
+		return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+	}
+
+	logger.Debug("get icon from X failed:", err)
+	logger.Debug("get icon name from _NET_WM_ICON_NAME")
+	name, _ := ewmh.WmIconNameGet(XU, win)
+	return name
 }
