@@ -25,21 +25,24 @@ func (s *SinkInput) correctAppName() {
 	}
 
 	ctx := string(contents)
-	if strings.Contains(ctx, "deepin-movie") {
+	switch {
+	case strings.Contains(ctx, "deepin-movie"):
 		s.Name = "Deepin Movie"
 		s.Icon = "deepin-movie"
-	} else if strings.Contains(ctx, "firefox") {
+	case strings.Contains(ctx, "firefox"):
 		s.Name = "Firefox"
 		s.Icon = "firefox"
-	} else if strings.Contains(ctx, "maxthon") {
+	case strings.Contains(ctx, "maxthon"):
 		s.Name = "Maxthon"
 		s.Icon = "maxthon-browser"
-	} else if strings.Contains(ctx, "chrome") &&
-		strings.Contains(ctx, "google") {
+	case (strings.Contains(ctx, "chrome") && strings.Contains(ctx, "google")):
 		s.Name = "Google Chrome"
 		s.Icon = "google-chrome"
-	} else if strings.Contains(ctx, "deepin-music-player") {
+	case strings.Contains(ctx, "deepin-music-player"):
 		s.Name = "Deepin Music"
 		s.Icon = "deepin-music-player"
+	case strings.Contains(ctx, "smplayer"):
+		s.Name = "SMPlayer"
+		s.Icon = "smplayer"
 	}
 }

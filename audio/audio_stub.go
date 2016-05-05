@@ -388,6 +388,10 @@ func (s *SinkInput) update() {
 
 	// Correct app name and icon
 	s.correctAppName()
+	if len(s.Icon) == 0 {
+		// Using default media player icon
+		s.Icon = "media-player"
+	}
 
 	s.setPropVolume(s.core.Volume.Avg())
 	s.setPropMute(s.core.Mute)
