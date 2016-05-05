@@ -394,13 +394,20 @@ void DockAppLayout::onAppItemRemove(const QString &id)
 
 void DockAppLayout::onAppItemAdd(DockAppItem *item)
 {
-    insertWidget(hoverIndex(), item);
+    const int index = hoverIndex();
+
+    if (index == -1)
+        return onAppAppend(item);
+
+    insertWidget(index, item);
     createConnections(item);
     updateItemWidths();
 }
 
 void DockAppLayout::onAppAppend(DockAppItem *item)
 {
+
+
     addWidget(item);
     createConnections(item);
     updateItemWidths();
