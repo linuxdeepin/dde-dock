@@ -11,14 +11,16 @@ package mpris
 
 import (
 	"fmt"
-	"os/exec"
 	"gir/gio-2.0"
+	"os/exec"
+
+	"pkg.deepin.io/lib/dbus"
 )
 
 const (
-	mimeTypeBrowser = "x-scheme-handler/http"
-	mimeTypeEmail   = "x-scheme-handler/mailto"
-	mimeTypeCalc    = "x-scheme-handler/calculator"
+	mimeTypeBrowser    = "x-scheme-handler/http"
+	mimeTypeEmail      = "x-scheme-handler/mailto"
+	mimeTypeCalc       = "x-scheme-handler/calculator"
 	mimeTypeAudioMedia = "audio/mpeg"
 )
 
@@ -32,6 +34,11 @@ func execByMime(mime string, pressed bool) error {
 		return fmt.Errorf("Not found executable for: %s", mime)
 	}
 	return doAction(cmd)
+}
+
+func showOSD(signal string) {
+	sessionDBus, _ := dbus.SessionBus()
+	sessionDBus.Object("com.deepin.dde.osd", "/").Call("com.deepin.dde.osd.ShowOSD", 0, signal)
 }
 
 func queryCommand(mime string) string {

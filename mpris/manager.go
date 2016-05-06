@@ -20,10 +20,6 @@ import (
 	"pkg.deepin.io/lib/log"
 )
 
-const (
-	cmdDDEOSD = "/usr/lib/deepin-daemon/dde-osd"
-)
-
 var logger = log.NewLogger("daemon/mpris")
 
 type Manager struct {
@@ -115,8 +111,7 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 	if !raised {
 		signal = "BrightnessDown"
 	}
-	logger.Debug("[changeBrightness] show osd:", cmdDDEOSD, signal)
-	go doAction(cmdDDEOSD + " --" + signal)
+	go showOSD(signal)
 }
 
 func (m *Manager) setMute(pressed bool) {
@@ -166,8 +161,8 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 	if !raised {
 		signal = "AudioDown"
 	}
-	logger.Debug("[changeVolume] show osd:", cmdDDEOSD, signal)
-	go doAction(cmdDDEOSD + " --" + signal)
+
+	go showOSD(signal)
 }
 
 func (m *Manager) getDefaultSink() (*audio.AudioSink, error) {

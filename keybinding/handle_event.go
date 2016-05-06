@@ -73,7 +73,7 @@ func (m *Manager) handleMediaEvent(id string, ty int32, modStr string, pressed b
 		if !canShowOSD(id) {
 			return
 		}
-		go doAction(cmdDDEOSD + " --" + signal)
+		go showOSD(signal)
 	}
 }
 
@@ -164,6 +164,11 @@ func doAction(cmd string) error {
 	}
 
 	return exec.Command("/bin/sh", "-c", cmd).Run()
+}
+
+func showOSD(signal string) {
+	sessionDBus, _ := dbus.SessionBus()
+	sessionDBus.Object("com.deepin.dde.osd", "/").Call("com.deepin.dde.osd.ShowOSD", 0, signal)
 }
 
 func canShowOSD(id string) bool {
