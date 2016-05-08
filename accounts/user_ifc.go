@@ -405,6 +405,7 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 			return
 		}
 		doEmitSuccess(pid, "SetBackgroundFile")
+		go genGaussianBlur(bg)
 	}()
 
 	return true, nil
@@ -434,6 +435,7 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) (bool, err
 			return
 		}
 		doEmitSuccess(pid, "SetGreeterBackground")
+		go genGaussianBlur(bg)
 	}()
 	return true, nil
 }

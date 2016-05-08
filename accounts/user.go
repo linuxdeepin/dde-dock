@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
@@ -354,4 +355,10 @@ func scaleUserIcon(file, md5 string) (string, bool, error) {
 	defer debug.FreeOSMemory()
 	return dest, true, graphic.ScaleImagePrefer(file, dest,
 		maxWidth, maxHeight, graphic.FormatPng)
+}
+
+func genGaussianBlur(file string) {
+	file = dutils.DecodeURI(file)
+	exec.Command("/usr/lib/deepin-api/image-blur-helper",
+		file).CombinedOutput()
 }
