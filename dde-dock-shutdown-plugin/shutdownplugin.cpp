@@ -81,7 +81,7 @@ QString ShutdownPlugin::getCommand(QString id)
 {
     Q_UNUSED(id)
 
-    return QString("dbus-send --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
 }
 
 QWidget *ShutdownPlugin::getItem(QString id)
