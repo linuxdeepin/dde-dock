@@ -13,7 +13,15 @@ import (
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
+	"sync"
 	"time"
+)
+
+const (
+	EventTypeVolumeAdded int32 = iota + 1
+	EventTypeVolumeRemoved
+	EventTypeMountAdded
+	EventTypeMountRemoved
 )
 
 const (
@@ -24,17 +32,21 @@ const (
 
 type Manager struct {
 	DiskList DiskInfos
+	Changed  func(int32, string)  // (eventType, id)
 	Error    func(string, string) // (id, message)
 
 	monitor *gio.VolumeMonitor
 	setting *gio.Settings
 	quit    chan struct{}
+
+	listLocker    sync.Mutex
+	refrashLocker sync.Mutex
 }
 
 func newManager() *Manager {
 	var m = new(Manager)
 	m.monitor = gio.VolumeMonitorGet()
-	m.DiskList = m.listDisk()
+	m.DiskList = m.getDiskInfos()
 	m.init()
 	m.setting, _ = utils.CheckAndNewGSettings(mediaHandlerSchema)
 	m.quit = make(chan struct{})
@@ -80,8 +92,10 @@ func (m *Manager) emitError(id, msg string) {
 }
 
 func (m *Manager) refrashDiskList() {
+	m.refrashLocker.Lock()
+	defer m.refrashLocker.Unlock()
 	m.DiskList.destroy()
-	m.setPropDiskList(m.listDisk())
+	m.setPropDiskList(m.getDiskInfos())
 }
 
 func (m *Manager) updateDiskInfo() {

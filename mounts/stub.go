@@ -10,6 +10,7 @@
 package mounts
 
 import (
+	"encoding/json"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -28,6 +29,17 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (m *Manager) setPropDiskList(infos DiskInfos) {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
+	if toJSON(m.DiskList) == toJSON(infos) {
+		return
+	}
+
 	m.DiskList = infos
 	dbus.NotifyChange(m, "DiskList")
+}
+
+func toJSON(v interface{}) string {
+	data, _ := json.Marshal(v)
+	return string(data)
 }

@@ -87,9 +87,7 @@ func (obj *diskObject) getMount() *gio.Mount {
 	return mount
 }
 
-func (m *Manager) listDisk() DiskInfos {
-	diskLocker.Lock()
-	defer diskLocker.Unlock()
+func (m *Manager) getDiskInfos() DiskInfos {
 	var infos DiskInfos
 	for _, volume := range m.monitor.GetVolumes() {
 		mount := volume.GetMount()
@@ -145,6 +143,29 @@ func (infos DiskInfos) delete(id string) DiskInfos {
 		ret = append(ret, info)
 	}
 	return ret
+}
+
+func (infos DiskInfos) duplicate() DiskInfos {
+	diskLocker.Lock()
+	defer diskLocker.Unlock()
+	var newInfos DiskInfos
+	for _, info := range infos {
+		tmp := DiskInfo{
+			Id:         info.Id,
+			Name:       info.Name,
+			Type:       info.Type,
+			Icon:       info.Icon,
+			Path:       info.Path,
+			MountPoint: info.MountPoint,
+			CanEject:   info.CanEject,
+			CanUnmount: info.CanUnmount,
+			Used:       info.Used,
+			Total:      info.Total,
+			object:     info.object,
+		}
+		newInfos = append(newInfos, &tmp)
+	}
+	return newInfos
 }
 
 func (infos DiskInfos) destroy() {

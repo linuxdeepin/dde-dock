@@ -14,6 +14,7 @@ import (
 	"gir/gio-2.0"
 	"os/exec"
 	"pkg.deepin.io/dde/api/soundutils"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *Manager) handleEvent() {
@@ -29,6 +30,7 @@ func (m *Manager) handleEvent() {
 		}
 		logger.Debug("[Event] emit list changed signal")
 		m.setPropDiskList(m.DiskList.add(info))
+		dbus.Emit(m, "Changed", EventTypeVolumeAdded, info.Id)
 	})
 
 	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor,
@@ -37,7 +39,13 @@ func (m *Manager) handleEvent() {
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
 		logger.Debug("[Event] emit list changed signal")
+		oldInfos := m.DiskList.duplicate()
 		m.refrashDiskList()
+		id := findRemovedId(oldInfos, m.DiskList)
+		if len(id) > 0 {
+			dbus.Emit(m, "Changed", EventTypeVolumeRemoved, id)
+		}
+		oldInfos = nil
 	})
 
 	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
@@ -51,13 +59,20 @@ func (m *Manager) handleEvent() {
 		}
 		logger.Debug("[Event] emit list changed signal")
 		m.setPropDiskList(m.DiskList.add(info))
+		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
 	})
 
 	m.monitor.Connect("mount-removed", func(monitor *gio.VolumeMonitor,
 		mount *gio.Mount) {
 		logger.Debug("[Event] mount removed")
 		logger.Debug("[Event] emit list changed signal")
+		oldInfos := m.DiskList.duplicate()
 		m.refrashDiskList()
+		id := findRemovedId(oldInfos, m.DiskList)
+		if len(id) > 0 {
+			dbus.Emit(m, "Changed", EventTypeMountRemoved, id)
+		}
+		oldInfos = nil
 	})
 }
 
@@ -73,4 +88,14 @@ func (m *Manager) isAutoOpen() bool {
 		return false
 	}
 	return m.setting.GetBoolean("automount-open")
+}
+
+func findRemovedId(oldInfos, newInfos DiskInfos) string {
+	for _, info := range oldInfos {
+		_, err := newInfos.get(info.Id)
+		if err != nil {
+			return info.Id
+		}
+	}
+	return ""
 }

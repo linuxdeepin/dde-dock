@@ -15,7 +15,21 @@ import (
 	"gir/gobject-2.0"
 )
 
+func (m *Manager) ListDisk() DiskInfos {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
+	return m.DiskList
+}
+
+func (m *Manager) QueryDisk(id string) (*DiskInfo, error) {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
+	return m.DiskList.get(id)
+}
+
 func (m *Manager) Eject(id string) error {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
 		return err
@@ -31,6 +45,8 @@ func (m *Manager) Eject(id string) error {
 }
 
 func (m *Manager) Mount(id string) error {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
 		return err
@@ -45,6 +61,8 @@ func (m *Manager) Mount(id string) error {
 }
 
 func (m *Manager) Unmount(id string) error {
+	m.listLocker.Lock()
+	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
 		return err
