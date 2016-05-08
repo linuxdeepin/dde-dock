@@ -357,8 +357,22 @@ func scaleUserIcon(file, md5 string) (string, bool, error) {
 		maxWidth, maxHeight, graphic.FormatPng)
 }
 
+var (
+	gaussianLocker sync.Mutex
+	gaussianTasks  = make(map[string]bool)
+)
+
 func genGaussianBlur(file string) {
+	gaussianLocker.Lock()
 	file = dutils.DecodeURI(file)
-	exec.Command("/usr/lib/deepin-api/image-blur-helper",
+	_, ok := gaussianTasks[file]
+	if ok {
+		gaussianLocker.Unlock()
+		return
+	}
+	gaussianTasks[file] = true
+	gaussianLocker.Unlock()
+
+	go exec.Command("/usr/lib/deepin-api/image-blur-helper",
 		file).CombinedOutput()
 }
