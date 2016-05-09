@@ -30,7 +30,7 @@ void DockAppManager::initEntries()
     for (QDBusObjectPath objPath : entryList)
     {
         DBusDockEntry *dep = new DBusDockEntry(objPath.path());
-        if (dep->isValid() && dep->type() == "App") {
+        if (/*dep->isValid() && */dep->type() == "App") {
             DockAppItem *item = new DockAppItem();
             m_initItems.insert(dep, item);
         }

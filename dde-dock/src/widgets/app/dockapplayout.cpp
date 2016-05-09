@@ -492,15 +492,21 @@ void DockAppLayout::updateItemWidths()
             }
         }
     } else {
-        QList<DockItem *> tmpList = this->widgets();
+        const int itemCount = widgets().size();
+        const bool canHold = itemCount * dmd->getActivedItemWidth() < width();
+        const QList<DockItem *> tmpList = this->widgets();
+
+        const int itemWidth = canHold ? dmd->getActivedItemWidth() : width() / itemCount;
+
         for (DockItem * item : tmpList) {
             DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
             if (tmpItem) {
                 if (tmpItem->actived()) {
-                    tmpItem->setFixedSize(dmd->getActivedItemWidth(), dmd->getDockHeight());
+                    tmpItem->setFixedSize(itemWidth, dmd->getDockHeight());
                 } else {
-                    tmpItem->setFixedSize(dmd->getNormalItemWidth(), dmd->getDockHeight());
+                    tmpItem->setFixedSize(itemWidth, dmd->getDockHeight());
                 }
+
                 tmpItem->refreshUI();
             }
         }
