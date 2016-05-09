@@ -203,6 +203,8 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 
+	m.initPowerModule()
+
 	// start all submodule
 	for name, submodule := range m.submodules {
 		logger.Debug("Start submodule:", name)
@@ -289,6 +291,20 @@ func (m *Manager) initBatteryGroup() error {
 		return err
 	}
 	return nil
+}
+
+func (m *Manager) initPowerModule() {
+	inited := m.settings.GetBoolean(settingKeyPowerModuleInitialized)
+	if !inited {
+		// TODO: 也许有更好的判断台式机的方法
+		if len(m.batteryGroup.batterys) == 0 {
+			// 电池数量为零，判断为台式机, 设置待机为 从不
+			m.LinePowerSleepDelay.Set(0)
+			m.BatterySleepDelay.Set(0)
+		}
+
+		m.settings.SetBoolean(settingKeyPowerModuleInitialized, true)
+	}
 }
 
 func (m *Manager) updateBatteryGroupInfo() {

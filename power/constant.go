@@ -25,6 +25,8 @@ const (
 	settingKeyFullscreenWorkaroundEnabled     = "fullscreen-workaround-enabled"
 	settingKeyMultiScreenPreventLidClosedExec = "multi-screen-prevent-lid-closed-exec"
 	settingKeyUsePercentageForPolicy          = "use-percentage-for-policy"
+
+	settingKeyPowerModuleInitialized = "power-module-initialized"
 )
 
 var (
