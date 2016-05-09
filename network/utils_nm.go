@@ -62,6 +62,8 @@ const (
 	NM_SETTING_IP6_CONFIG_MAY_FAIL           = NM_SETTING_IP_CONFIG_MAY_FAIL
 )
 
+var nmPermissions map[string]string
+
 // Helper functions
 func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	str := string(p)
@@ -652,6 +654,39 @@ func nmDestroyVpnConnection(vpnConn *nm.VPNConnection) {
 }
 
 // Operate wrapper for network manager
+func nmHasSystemSettingsModifyPermission() (hasPerm bool) {
+	permissions := nmGetPermissionsInstance()
+	hasPermStr, ok := permissions["org.freedesktop.NetworkManager.settings.modify.system"]
+	if !ok {
+		hasPermStr = "no"
+	}
+	if hasPermStr == "yes" {
+		hasPerm = true
+	} else {
+		hasPerm = false
+	}
+	return
+}
+func nmGetPermissionsInstance() map[string]string {
+	if nmPermissions == nil {
+		nmPermissions = nmGetPermissions()
+	}
+	return nmPermissions
+}
+func nmGetPermissions() (permissions map[string]string) {
+	m, err := nmNewManager()
+	if err != nil {
+		return
+	}
+	defer nmDestroyManager(m)
+
+	permissions, err = m.GetPermissions()
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+
 func nmAgentRegister(identifier string) {
 	am, err := nmNewAgentManager()
 	if err != nil {

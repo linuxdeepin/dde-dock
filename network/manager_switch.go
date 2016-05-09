@@ -112,9 +112,11 @@ func (sh *switchHandler) setVpnEnabled(enabled bool) {
 }
 
 func (sh *switchHandler) initPropNetworkingEnabled() {
-	sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
-	if !sh.NetworkingEnabled {
-		sh.doTurnOffGlobalDeviceSwitches()
+	if nmHasSystemSettingsModifyPermission() {
+		sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
+		if !sh.NetworkingEnabled {
+			sh.doTurnOffGlobalDeviceSwitches()
+		}
 	}
 	sh.NetworkingEnabled = nmManager.NetworkingEnabled.Get()
 	manager.setPropNetworkingEnabled(sh.NetworkingEnabled)
@@ -154,12 +156,14 @@ func (sh *switchHandler) doTurnOffGlobalDeviceSwitches() {
 }
 
 func (sh *switchHandler) initPropWirelessEnabled() {
-	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_WIFI) {
-		if sh.WirelessEnabled {
-			sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
-		} else {
-			sh.doEnableDevice(devPath, false)
+	if nmHasSystemSettingsModifyPermission() {
+		sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
+		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_WIFI) {
+			if sh.WirelessEnabled {
+				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
+			} else {
+				sh.doEnableDevice(devPath, false)
+			}
 		}
 	}
 	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
@@ -184,12 +188,14 @@ func (sh *switchHandler) setPropWirelessEnabled() {
 }
 
 func (sh *switchHandler) initPropWwanEnabled() {
-	sh.WwanEnabled = nmManager.WwanEnabled.Get()
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_MODEM) {
-		if sh.WwanEnabled {
-			sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
-		} else {
-			sh.doEnableDevice(devPath, false)
+	if nmHasSystemSettingsModifyPermission() {
+		sh.WwanEnabled = nmManager.WwanEnabled.Get()
+		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_MODEM) {
+			if sh.WwanEnabled {
+				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
+			} else {
+				sh.doEnableDevice(devPath, false)
+			}
 		}
 	}
 	sh.WwanEnabled = nmManager.WwanEnabled.Get()
@@ -214,11 +220,13 @@ func (sh *switchHandler) setPropWwanEnabled() {
 
 func (sh *switchHandler) initPropWiredEnabled() {
 	sh.WiredEnabled = sh.config.getWiredEnabled()
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_ETHERNET) {
-		if sh.WiredEnabled {
-			sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
-		} else {
-			sh.doEnableDevice(devPath, false)
+	if nmHasSystemSettingsModifyPermission() {
+		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_ETHERNET) {
+			if sh.WiredEnabled {
+				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
+			} else {
+				sh.doEnableDevice(devPath, false)
+			}
 		}
 	}
 	manager.setPropWiredEnabled(sh.WiredEnabled)
@@ -242,7 +250,11 @@ func (sh *switchHandler) setPropWiredEnabled(enabled bool) {
 }
 
 func (sh *switchHandler) initPropVpnEnabled() {
-	sh.enableVpn(sh.config.getVpnEnabled())
+	sh.VpnEnabled = sh.config.getVpnEnabled()
+	if nmHasSystemSettingsModifyPermission() {
+		sh.enableVpn(sh.config.getVpnEnabled())
+	}
+	manager.setPropVpnEnabled(sh.VpnEnabled)
 }
 func (sh *switchHandler) setPropVpnEnabled(enabled bool) {
 	if sh.config.getVpnEnabled() == enabled {
