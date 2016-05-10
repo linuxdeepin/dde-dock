@@ -400,7 +400,7 @@
         "Name":"NM_SETTING_WIRELESS_SETTING_NAME",
         "Value":"802-11-wireless",
         "Keys":[
-            {"Name":"NM_SETTING_WIRELESS_SSID", "Value":"ssid", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":false, "LogicSet":false, "DisplayName":"SSID", "FrontEndWidget":"<default>"},
+            {"Name":"NM_SETTING_WIRELESS_SSID", "Value":"ssid", "Type":"ktypeWrapperString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"SSID", "FrontEndWidget":"<default>"},
             {"Name":"NM_SETTING_WIRELESS_MODE", "Value":"mode", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Mode", "FrontEndWidget":"EditLineComboBox"},
             {"Name":"NM_SETTING_WIRELESS_BAND", "Value":"band", "Type":"ktypeString", "Default":"<null>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":true, "DisplayName":"Band", "FrontEndWidget":"EditLineComboBox", "AlwaysUpdate":true},
             {"Name":"NM_SETTING_WIRELESS_CHANNEL", "Value":"channel", "Type":"ktypeString", "Default":"<default>", "UsedByBackEnd":true, "UsedByFrontEnd":true, "LogicSet":false, "DisplayName":"Channel", "FrontEndWidget":"EditLineComboBox", "AlwaysUpdate":true},
