@@ -88,7 +88,8 @@ void MainWidget::updatePosition()
 
     const Dock::DockMode dockMode = m_dmd->getDockMode();
     const int w = dockMode == Dock::FashionMode ? m_mainPanel->sizeHint().width() : rec.width();
-
+    if (dockMode != Dock::FashionMode)
+        m_mainPanel->setFixedWidth(w);
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
