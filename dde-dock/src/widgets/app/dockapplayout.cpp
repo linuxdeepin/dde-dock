@@ -496,7 +496,7 @@ void DockAppLayout::updateItemWidths()
         const bool canHold = itemCount * dmd->getActivedItemWidth() < width();
         const QList<DockItem *> tmpList = this->widgets();
 
-        const int itemWidth = canHold ? dmd->getActivedItemWidth() : width() / itemCount;
+        const int itemWidth = canHold ? dmd->getActivedItemWidth() : (width() - itemCount * dmd->getAppItemSpacing()) / itemCount;
 
         for (DockItem * item : tmpList) {
             DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
