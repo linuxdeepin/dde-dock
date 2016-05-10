@@ -39,24 +39,31 @@ MainWidget::MainWidget(QWidget *parent)
 
     //For init
     m_display = new DBusDisplay(this);
-    updatePosition(m_display->primaryRect());
+    m_windowStayRect = m_display->primaryRect();
     updateXcbStrutPartial();
+
+    m_windowRectDelayApplyTimer = new QTimer(this);
+    m_windowRectDelayApplyTimer->setSingleShot(true);
+    m_windowRectDelayApplyTimer->setInterval(100);
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
     Q_UNUSED(dockUIDbus)
 
     XcbMisc::instance()->set_window_type(winId(), XcbMisc::Dock);
 
-    connect(m_display, &DBusDisplay::PrimaryChanged, this, &MainWidget::updateGeometry);
+    connect(m_display, &DBusDisplay::PrimaryRectChanged, this, &MainWidget::updateGeometry);
     connect(m_display, &DBusDisplay::ScreenHeightChanged, this, &MainWidget::updateGeometry);
     connect(m_display, &DBusDisplay::ScreenWidthChanged, this, &MainWidget::updateGeometry);
+    connect(m_windowRectDelayApplyTimer, &QTimer::timeout, this, &MainWidget::updatePosition);
+
+    updatePosition();
 }
 
 void MainWidget::onDockModeChanged()
 {
-    updatePosition(m_display->primaryRect());
-    //    QMetaObject::invokeMethod(this, "updatePosition", Qt::QueuedConnection, Q_ARG(QRect, m_display->primaryRect()));
-    QTimer::singleShot(UPDATE_STRUT_PARTIAL_DELAY, this, &MainWidget::updateXcbStrutPartial);
+    // force update position twice
+    updatePosition();
+    updateGeometry();
 }
 
 void MainWidget::onHideModeChanged()
@@ -69,22 +76,28 @@ void MainWidget::onHideModeChanged()
 }
 
 // TODO: it should be named to `updateSize' instead I think.
-void MainWidget::updatePosition(const QRect &rec)
+void MainWidget::updatePosition()
 {
     static QTimer *delayOpTimer = nullptr;
 
-    // sometimes rec's width or height is ZERO, we need to ignore these wrong data.
-    if (!rec.width() || !rec.height()) {
-        return;
-    }
+    const QRect rec = m_windowStayRect;
+
+    qDebug() << "update position with rect: " << rec;
+
+    clearXcbStrutPartial();
+
+    const Dock::DockMode dockMode = m_dmd->getDockMode();
+    const int w = dockMode == Dock::FashionMode ? m_mainPanel->sizeHint().width() : rec.width();
+
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
-        this->setFixedSize(m_mainPanel->sizeHint().width(), 1);
+        this->setFixedSize(w, 1);
+
         this->move(rec.x() + (rec.width() - width()) / 2,
                    rec.y() + rec.height() - 1);//1 pixel for grab mouse enter event to show panel
     } else {
-        this->setFixedSize(m_mainPanel->sizeHint().width(), m_dmd->getDockHeight());
+        this->setFixedSize(w, m_dmd->getDockHeight());
 
         move(rec.x() + (rec.width() - width()) / 2,
              rec.y() + rec.height() - height() /*- 10*/);
@@ -102,6 +115,7 @@ void MainWidget::updatePosition(const QRect &rec)
         // Let the backend know the width change, otherwise the smart-hide mode will
         // not work properly.
         updateBackendProperty();
+        updateXcbStrutPartial();
     };
 
     delayOpTimer->disconnect();
@@ -142,7 +156,7 @@ void MainWidget::updateXcbStrutPartial()
 
     // Set the strut partial to be full-width of the primary screen to
     // avoid some strange bugs.
-    QRect primaryRect = m_display->primaryRect();
+    const QRect primaryRect = m_windowStayRect;
 
     XcbMisc::instance()->set_strut_partial(winId(),
                                            XcbMisc::OrientationBottom,
@@ -170,18 +184,24 @@ void MainWidget::updateGeometry()
 {
     QRect primaryRect = m_display->primaryRect();
 
-    qDebug() << "change screen, primary is: " << m_display->primary();
-
     for (const QScreen *screen : qApp->screens()) {
         if (screen->name() == m_display->primary()) {
             primaryRect = screen->geometry();
-            connect(screen, &QScreen::geometryChanged, this, &MainWidget::updatePosition);
+            connect(screen, &QScreen::geometryChanged, this, &MainWidget::updateGeometry, Qt::UniqueConnection);
         } else {
-            disconnect(screen, &QScreen::geometryChanged, this, &MainWidget::updatePosition);
+            disconnect(screen, &QScreen::geometryChanged, this, &MainWidget::updateGeometry);
         }
     }
 
-    updatePosition(primaryRect);
+    m_windowStayRect = primaryRect;
+    m_windowRectDelayApplyTimer->start();
+}
+
+void MainWidget::move(const int ax, const int ay)
+{
+    QWidget::move(ax, ay);
+
+//    qDebug() << "move to " << ax << ',' << ay;
 }
 
 void MainWidget::initHideStateManager()
@@ -218,18 +238,38 @@ void MainWidget::leaveEvent(QEvent *)
 void MainWidget::showDock()
 {
     m_hasHidden = false;
-    updatePosition(m_display->primaryRect());
 }
 
 void MainWidget::hideDock()
 {
     m_hasHidden = true;
-    updatePosition(m_display->primaryRect());
 }
 
 void MainWidget::onPanelSizeChanged()
 {
-    updatePosition(m_display->primaryRect());
+//    m_windowRectDelayApplyTimer->start();
+
+    if (m_dmd->getDockMode() != Dock::FashionMode)
+        return;
+
+    const QRect rec = m_windowStayRect;
+    const int w = m_mainPanel->sizeHint().width();
+
+    if (m_hasHidden) {
+        //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
+        this->setFixedSize(w, 1);
+
+        this->move(rec.x() + (rec.width() - width()) / 2,
+                   rec.y() + rec.height() - 1);//1 pixel for grab mouse enter event to show panel
+    } else {
+        this->setFixedSize(w, m_dmd->getDockHeight());
+
+        move(rec.x() + (rec.width() - width()) / 2,
+             rec.y() + rec.height() - height() /*- 10*/);
+    }
+//        setFixedWidth(m_mainPanel->sizeHint().width());
+//        updatePosition();
+//                updateGeometry();
 }
 
 MainWidget::~MainWidget()

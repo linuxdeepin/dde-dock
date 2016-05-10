@@ -491,23 +491,35 @@ void DockAppLayout::updateItemWidths()
                 item->refreshUI();
             }
         }
-    } else {
+    } else if (dmd->getDockMode() == Dock::EfficientMode){
         const int itemCount = widgets().size();
-        const bool canHold = itemCount * dmd->getActivedItemWidth() < width();
+        const bool canHold = !itemCount || itemCount * dmd->getActivedItemWidth() < width();
         const QList<DockItem *> tmpList = this->widgets();
 
         const int itemWidth = canHold ? dmd->getActivedItemWidth() : (width() - itemCount * dmd->getAppItemSpacing()) / itemCount;
 
+        if (itemWidth <= 0)
+            return;
+
         for (DockItem * item : tmpList) {
             DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
             if (tmpItem) {
-                if (tmpItem->actived()) {
-                    tmpItem->setFixedSize(itemWidth, dmd->getDockHeight());
-                } else {
-                    tmpItem->setFixedSize(itemWidth, dmd->getDockHeight());
+                tmpItem->setFixedSize(itemWidth, dmd->getDockHeight());
+                tmpItem->refreshUI();
+            }
+        }
+    } else {
+        QList<DockItem *> tmpList = this->widgets();
+            for (DockItem * item : tmpList) {
+                DockAppItem *tmpItem = qobject_cast<DockAppItem *>(item);
+                if (tmpItem) {
+                   if (tmpItem->actived()) {
+                       tmpItem->setFixedSize(dmd->getActivedItemWidth(), dmd->getDockHeight());
+                   } else {
+                   tmpItem->setFixedSize(dmd->getNormalItemWidth(), dmd->getDockHeight());
                 }
 
-                tmpItem->refreshUI();
+               tmpItem->refreshUI();
             }
         }
     }

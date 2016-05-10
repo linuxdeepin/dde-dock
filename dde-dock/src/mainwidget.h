@@ -51,15 +51,20 @@ private:
 
 private slots:
     void showDock();
-    void updatePosition(const QRect &rec);
+    void updatePosition();
     void updateXcbStrutPartial();
     void clearXcbStrutPartial();
     void updateBackendProperty();
     void updateGeometry();
 
 private:
+    void move(const int ax, const int ay);
+
+private:
     DockPanel *m_mainPanel = NULL;
     bool m_hasHidden = false;
+    QRect m_windowStayRect;
+    QTimer *m_windowRectDelayApplyTimer = nullptr;
     DockModeData * m_dmd = DockModeData::instance();
     DBusHideStateManager *m_dhsm = NULL;
     DBusDisplay *m_display = NULL;

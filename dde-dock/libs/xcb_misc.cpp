@@ -60,7 +60,9 @@ void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uin
     // xcb_ewmh_wm_strut_partial_t strut_partial is very different from
     // xcb_ewmh_wm_strut_partial_t strut_partial {};
     // the latter one ensures all its member to be initialized to 0;
-    xcb_ewmh_wm_strut_partial_t strut_partial {};
+//    xcb_ewmh_wm_strut_partial_t strut_partial {};
+    xcb_ewmh_wm_strut_partial_t strut_partial;
+    memset(&strut_partial, 0, sizeof(xcb_ewmh_wm_strut_partial_t));
 
     switch (orientation) {
     case OrientationLeft:
@@ -86,6 +88,12 @@ void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uin
     default:
         break;
     }
+
+//    qDebug() << "xcb_ewmh_set_wm_strut_partial" << endl
+//             << "top" << strut_partial.top << strut_partial.top_start_x << strut_partial.top_end_x << endl
+//             << "left" << strut_partial.left << strut_partial.left_start_y << strut_partial.left_end_y << endl
+//             << "right" << strut_partial.right << strut_partial.right_start_y << strut_partial.right_end_y << endl
+//             << "bottom" << strut_partial.bottom << strut_partial.bottom_start_x << strut_partial.bottom_end_x << endl;
 
     xcb_ewmh_set_wm_strut_partial(&m_ewmh_connection, winId, strut_partial);
 }
