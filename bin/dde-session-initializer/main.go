@@ -18,6 +18,7 @@ import (
 	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/session"
 	_ "pkg.deepin.io/dde/daemon/dock"
+	_ "pkg.deepin.io/dde/daemon/launcher"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/app"
