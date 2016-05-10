@@ -24,8 +24,6 @@ DockLauncherItem::DockLauncherItem(QWidget *parent)
     connect(m_appIcon, &DockAppIcon::mousePress, this, &DockLauncherItem::slotMousePress);
     connect(m_appIcon, &DockAppIcon::mouseRelease, this, &DockLauncherItem::slotMouseRelease);
 
-    m_launcherProcess = new QProcess();
-
     //TODO icon not show on init
     QTimer::singleShot(20, this, SLOT(updateIcon()));
     connect(SignalManager::instance(), &SignalManager::requestAppIconUpdate, this, &DockLauncherItem::updateIcon);
@@ -81,7 +79,18 @@ void DockLauncherItem::slotMouseRelease(QMouseEvent *event)
     if (m_launcherInter->isValid())
         m_launcherInter->Toggle();
     else
-        m_launcherProcess->startDetached("dde-launcher",QStringList());
+    {
+        QProcess *proc = new QProcess;
+
+        connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+
+        QStringList args = QStringList() << "--print-reply"
+                                         << "--dest=com.deepin.dde.Launcher"
+                                         << "/com/deepin/dde/Launcher"
+                                         << "com.deepin.dde.Launcher.Toggle";
+
+        proc->start("dbus-send", args);
+    }
 }
 
 void DockLauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)

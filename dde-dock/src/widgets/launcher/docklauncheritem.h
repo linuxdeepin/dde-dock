@@ -48,7 +48,6 @@ private:
 
 private:
     DockAppIcon * m_appIcon;
-    QProcess * m_launcherProcess;
     DBusLauncherController *m_launcherInter;
     QString m_menuInterfacePath = "";
     DockModeData * m_dockModeData = DockModeData::instance();
