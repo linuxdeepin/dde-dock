@@ -30,7 +30,7 @@ import (
 	"time"
 )
 
-var logger = log.NewLogger("daemon/dock-daemon")
+var logger = log.NewLogger("daemon/initializer")
 
 func runMainLoop() {
 	logger.Info("register session")
@@ -54,30 +54,31 @@ func runMainLoop() {
 	os.Exit(0)
 }
 
-type DockDaemon struct {
+type Initializer struct {
 }
 
-func (*DockDaemon) GetDBusInfo() dbus.DBusInfo {
+func (*Initializer) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.DockDaemon",
-		ObjectPath: "/com/deepin/daemon/DockDaemon",
-		Interface:  "com.deepin.daemon.DockDaemon",
+		Dest:       "com.deepin.daemon.Initializer",
+		ObjectPath: "/com/deepin/daemon/Initializer",
+		Interface:  "com.deepin.daemon.Initializer",
 	}
 }
 
 func main() {
-	dockDaemon := new(DockDaemon)
-	if !lib.UniqueOnSession(dockDaemon.GetDBusInfo().Dest) {
-		logger.Warning("There's a dde-dock-daemon instance running.")
+	sessionInitializer := new(Initializer)
+	if !lib.UniqueOnSession(sessionInitializer.GetDBusInfo().Dest) {
+		logger.Warning("There's a dde-session-initializer instance running.")
 		os.Exit(0)
 	}
 
-	err := dbus.InstallOnSession(dockDaemon)
+	err := dbus.InstallOnSession(sessionInitializer)
 	if err != nil {
 		logger.Fatal(err)
 	}
 
-	cmd := app.New("dde-dock-daemon", "daemon for dde-dock", "version "+__VERSION__)
+	cmd := app.New("dde-session-initializer",
+		"daemon for dde-dock dde-launcher", "version "+__VERSION__)
 	cmd.ParseCommandLine(os.Args[1:])
 	if err := cmd.StartProfile(); err != nil {
 		logger.Fatal(err)
@@ -90,7 +91,7 @@ func main() {
 	proxy.SetupProxy()
 
 	loader.SetLogLevel(cmd.LogLevel())
-	loader.EnableModules([]string{"dock"}, nil, loader.EnableFlagIgnoreMissingModule)
+	loader.EnableModules([]string{"dock", "launcher"}, nil, loader.EnableFlagIgnoreMissingModule)
 
 	runMainLoop()
 }

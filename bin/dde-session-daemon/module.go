@@ -18,7 +18,7 @@ import (
 	"gir/gio-2.0"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
-	_ "pkg.deepin.io/dde/daemon/launcher"
+	// _ "pkg.deepin.io/dde/daemon/launcher"
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/mpris"
 	_ "pkg.deepin.io/dde/daemon/network"
