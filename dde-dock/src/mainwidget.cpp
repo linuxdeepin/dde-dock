@@ -42,9 +42,9 @@ MainWidget::MainWidget(QWidget *parent)
     m_windowStayRect = m_display->primaryRect();
     updateXcbStrutPartial();
 
-    m_windowRectDelayApplyTimer = new QTimer(this);
-    m_windowRectDelayApplyTimer->setSingleShot(true);
-    m_windowRectDelayApplyTimer->setInterval(100);
+    m_positionUpdateTimer = new QTimer(this);
+    m_positionUpdateTimer->setSingleShot(true);
+    m_positionUpdateTimer->setInterval(100);
 
     DockUIDbus *dockUIDbus = new DockUIDbus(this);
     Q_UNUSED(dockUIDbus)
@@ -54,18 +54,19 @@ MainWidget::MainWidget(QWidget *parent)
     connect(m_display, &DBusDisplay::PrimaryRectChanged, this, &MainWidget::updateGeometry);
     connect(m_display, &DBusDisplay::ScreenHeightChanged, this, &MainWidget::updateGeometry);
     connect(m_display, &DBusDisplay::ScreenWidthChanged, this, &MainWidget::updateGeometry);
-    connect(m_windowRectDelayApplyTimer, &QTimer::timeout, this, &MainWidget::updatePosition);
+    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWidget::updatePosition);
 
     connect(m_mainPanel, &DockPanel::pluginsInitDone, this, &MainWidget::show);
 
-    updatePosition();
+    m_positionUpdateTimer->start();
 }
 
 void MainWidget::onDockModeChanged()
 {
     // force update position twice
-    updatePosition();
+    m_positionUpdateTimer->start();
     updateGeometry();
+    updateBackendProperty();
 }
 
 void MainWidget::onHideModeChanged()
@@ -76,8 +77,6 @@ void MainWidget::onHideModeChanged()
 // TODO: it should be named to `updateSize' instead I think.
 void MainWidget::updatePosition()
 {
-    static QTimer *delayOpTimer = nullptr;
-
     const QRect rec = m_windowStayRect;
 
     qDebug() << "update position with rect: " << rec;
@@ -87,7 +86,8 @@ void MainWidget::updatePosition()
     const Dock::DockMode dockMode = m_dmd->getDockMode();
     const int w = dockMode == Dock::FashionMode ? m_mainPanel->sizeHint().width() : rec.width();
     if (dockMode != Dock::FashionMode)
-        m_mainPanel->setFixedWidth(w);
+//        m_mainPanel->setFixedWidth(w);
+        m_mainPanel->onContentsSizeChanged();
 
     if (m_hasHidden) {
         //set height with 0 mean window is hidden,Windows manager will handle it's showing animation
@@ -102,30 +102,9 @@ void MainWidget::updatePosition()
              rec.y() + rec.height() - height() /*- 10*/);
     }
 
-    if (delayOpTimer == nullptr) {
-        delayOpTimer = new QTimer(this);
-        delayOpTimer->setSingleShot(true);
-        delayOpTimer->setInterval(500);
-    }
-
-    // NOTE: this function is called too much times, so we should avoid heavy operations
-    // to be executed everytime. All heavy operations go in delayedOp.
-    auto delayedOp = [this] {
-        // Let the backend know the width change, otherwise the smart-hide mode will
-        // not work properly.
+    if (dockMode == Dock::FashionMode)
         updateBackendProperty();
-        updateXcbStrutPartial();
-    };
-
-    delayOpTimer->disconnect();
-
-    if (delayOpTimer->isActive()) {
-        delayOpTimer->stop();
-        connect(delayOpTimer, &QTimer::timeout, delayedOp);
-    } else {
-        delayedOp();
-    }
-    delayOpTimer->start();
+    updateXcbStrutPartial();
 }
 
 void MainWidget::updateXcbStrutPartial()
@@ -193,7 +172,7 @@ void MainWidget::updateGeometry()
     }
 
     m_windowStayRect = primaryRect;
-    m_windowRectDelayApplyTimer->start();
+    m_positionUpdateTimer->start();
 }
 
 void MainWidget::move(const int ax, const int ay)
@@ -218,8 +197,7 @@ void MainWidget::enterEvent(QEvent *)
             if (geometry().contains(QCursor::pos()))
             {
                 qDebug() << "MouseEntered, show dock...";
-                showDock();
-                m_mainPanel->startShow();
+                emit m_mainPanel->startShow();
             }
             sender()->deleteLater();
         });
@@ -237,13 +215,13 @@ void MainWidget::leaveEvent(QEvent *)
 void MainWidget::showDock()
 {
     m_hasHidden = false;
-    updatePosition();
+    m_positionUpdateTimer->start();
 }
 
 void MainWidget::hideDock()
 {
     m_hasHidden = true;
-    updatePosition();
+    m_positionUpdateTimer->start();
 }
 
 void MainWidget::onPanelSizeChanged()
