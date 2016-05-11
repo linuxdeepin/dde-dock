@@ -40,7 +40,7 @@ private:
     QString m_dockingItemId = "";   //drop to the dock one
     DBusEntryManager *m_entryManager = NULL;
     DBusDockedAppManager *m_dockAppManager = new DBusDockedAppManager(this);
-    QMap<DBusDockEntry*, DockAppItem *> m_initItems;
+    QList<DBusDockEntry*> m_initEntries;
 };
 
 #endif // DOCKAPPMANAGER_H

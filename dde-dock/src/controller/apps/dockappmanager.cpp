@@ -31,8 +31,7 @@ void DockAppManager::initEntries()
     {
         DBusDockEntry *dep = new DBusDockEntry(objPath.path());
         if (/*dep->isValid() && */dep->type() == "App") {
-            DockAppItem *item = new DockAppItem();
-            m_initItems.insert(dep, item);
+            m_initEntries << dep;
         }
     }
 
@@ -90,11 +89,10 @@ void DockAppManager::initItemList()
     m_ids = QStringList();
     QList<DBusDockEntry*> undockedEntries;
 
-    QList<DBusDockEntry*> entries = m_initItems.keys();
-    for (DBusDockEntry *entry : entries) {
+    for (DBusDockEntry *entry : m_initEntries) {
         m_ids << entry->id();
         if (dockedList.indexOf(entry->id()) != -1) {
-            DockAppItem *item = m_initItems.take(entry);
+            DockAppItem *item = new DockAppItem;
             emit entryAppend(item);
             item->setEntryProxyer(entry);
         } else {
@@ -103,7 +101,7 @@ void DockAppManager::initItemList()
     }
 
     for (DBusDockEntry *entry : undockedEntries) {
-        DockAppItem *item = m_initItems.take(entry);
+        DockAppItem *item = new DockAppItem;
         emit entryAppend(item);
         item->setEntryProxyer(entry);
     }
