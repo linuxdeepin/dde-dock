@@ -17,7 +17,7 @@
 // Keep it longer than dock show/hide animation duration.
 const int UPDATE_STRUT_PARTIAL_DELAY = 350;
 
-const int ENTER_DELAY_INTERVAL = 600;
+const int ENTER_DELAY_INTERVAL = 200;
 MainWidget::MainWidget(QWidget *parent)
     : QWidget(parent),
       m_dockProperty(new DBusPanelManager(this))
@@ -70,11 +70,7 @@ void MainWidget::onDockModeChanged()
 
 void MainWidget::onHideModeChanged()
 {
-    if (m_dmd->getHideMode() != Dock::KeepShowing) {
-        clearXcbStrutPartial();
-    } else {
-        QTimer::singleShot(UPDATE_STRUT_PARTIAL_DELAY, this, &MainWidget::updateXcbStrutPartial);
-    }
+    updateGeometry();
 }
 
 // TODO: it should be named to `updateSize' instead I think.
@@ -241,11 +237,13 @@ void MainWidget::leaveEvent(QEvent *)
 void MainWidget::showDock()
 {
     m_hasHidden = false;
+    updatePosition();
 }
 
 void MainWidget::hideDock()
 {
     m_hasHidden = true;
+    updatePosition();
 }
 
 void MainWidget::onPanelSizeChanged()
