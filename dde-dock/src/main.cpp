@@ -29,6 +29,8 @@ extern "C" {
 }
 #define signals public
 
+//#define ARCH_MIPSEL
+
 static void requrestUpdateIcons()
 {
     //can not passing QObject to the callback function,so use signal
@@ -93,9 +95,11 @@ int main(int argc, char *argv[])
     StyleManager::instance()->initStyleSheet();
 
     MainWidget w;
-    w.show();
     qWarning() << "Start Dock, The main window has been shown.";
     w.loadResources();
+//#ifndef ARCH_MIPSEL
+//    w.show();
+//#endif
 
     initGtkThemeWatcher();
 

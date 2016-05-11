@@ -398,6 +398,13 @@ void MovableLayout::resizeEvent(QResizeEvent *event)
     emit sizeChanged(event);
 }
 
+void MovableLayout::showEvent(QShowEvent *e)
+{
+    setFixedSize(sizeHint());
+
+    QFrame::showEvent(e);
+}
+
 void MovableLayout::initSizeAniamtion()
 {
     m_sizeAnimation = new QPropertyAnimation(this, "size");
@@ -543,7 +550,8 @@ void MovableLayout::setEasingCurve(QEasingCurve::Type curve)
 
 bool MovableLayout::event(QEvent *e)
 {
-    if (e->type() == QEvent::LayoutRequest && getAutoResize()) {
+    if (e->type() == QEvent::LayoutRequest && getAutoResize() && isVisible())
+    {
         m_sizeAnimation->setStartValue(size());
         m_sizeAnimation->setEndValue(sizeHint());
         m_sizeAnimation->start();

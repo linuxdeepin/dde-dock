@@ -86,6 +86,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     void resizeEvent(QResizeEvent *event);
+    void showEvent(QShowEvent *e);
 
 private:
     void initSizeAniamtion();

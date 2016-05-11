@@ -1,8 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2015-06-20T10:09:57
-#
-#-------------------------------------------------
 
 QT       += core gui x11extras dbus svg concurrent
 
@@ -13,6 +8,11 @@ TEMPLATE = app
 INCLUDEPATH += ./src ./libs
 
 DEFINES += PLUGIN_API_VERSION=1.0
+
+ARCH = $$QMAKE_HOST.arch
+isEqual(ARCH, mips64) | isEqual(ARCH, mips32) {
+    DEFINES += ARCH_MIPSEL
+}
 
 
 RESOURCES += \

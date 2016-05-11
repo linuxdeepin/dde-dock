@@ -28,6 +28,10 @@ signals:
     void needPreviewShow(DockItem *item, QPoint pos);
     void needPreviewUpdate();
     void itemHoverableChange(bool v);
+    void pluginsInitDone();
+
+protected:
+    void insertWidget(const int index, DockItem *widget);
 
 private:
     void initPluginManager();
@@ -35,6 +39,7 @@ private:
 
 private:
     DockPluginsManager *m_pluginManager;
+    QTimer *m_pluginLoadFinishedTimer;
 };
 
 #endif // DOCKPLUGINLAYOUT_H

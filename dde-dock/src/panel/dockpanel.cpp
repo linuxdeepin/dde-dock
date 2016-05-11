@@ -110,6 +110,7 @@ void DockPanel::initPluginLayout()
     connect(m_pluginLayout, &DockPluginLayout::needPreviewShow, this, &DockPanel::onNeedPreviewShow);
     connect(m_pluginLayout, &DockPluginLayout::needPreviewHide, this, &DockPanel::onNeedPreviewHide);
     connect(m_pluginLayout, &DockPluginLayout::needPreviewUpdate, this, &DockPanel::onNeedPreviewUpdate);
+    connect(m_pluginLayout, &DockPluginLayout::pluginsInitDone, this, &DockPanel::pluginsInitDone, Qt::QueuedConnection);
 }
 
 void DockPanel::initAppLayout()

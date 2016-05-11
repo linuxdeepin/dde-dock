@@ -44,6 +44,7 @@ signals:
     void panelHasShown();
     void panelHasHidden();
     void sizeChanged();
+    void pluginsInitDone();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

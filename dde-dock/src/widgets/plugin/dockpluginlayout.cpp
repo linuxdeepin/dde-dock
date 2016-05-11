@@ -13,9 +13,15 @@
 
 DockPluginLayout::DockPluginLayout(QWidget *parent) : MovableLayout(parent)
 {
+    m_pluginLoadFinishedTimer = new QTimer(this);
+    m_pluginLoadFinishedTimer->setSingleShot(true);
+    m_pluginLoadFinishedTimer->setInterval(100);
+
     setAcceptDrops(false);
     setDragable(false);
     initPluginManager();
+
+    connect(m_pluginLoadFinishedTimer, &QTimer::timeout, this, &DockPluginLayout::pluginsInitDone, Qt::QueuedConnection);
 }
 
 QSize DockPluginLayout::sizeHint() const
@@ -47,7 +53,15 @@ QSize DockPluginLayout::sizeHint() const
 
 void DockPluginLayout::initAllPlugins()
 {
-    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
+//    QTimer::singleShot(500, m_pluginManager, SLOT(initAll()));
+    m_pluginManager->initAll();
+}
+
+void DockPluginLayout::insertWidget(const int index, DockItem *widget)
+{
+    MovableLayout::insertWidget(index, widget);
+
+    m_pluginLoadFinishedTimer->start();
 }
 
 void DockPluginLayout::initPluginManager()

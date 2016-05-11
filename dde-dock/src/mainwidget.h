@@ -23,6 +23,7 @@
 #include "dbus/dbusdisplay.h"
 #include "controller/dockmodedata.h"
 #include "panel/dockpanel.h"
+#include "controller/plugins/dockpluginsmanager.h"
 
 const QString DBUS_PATH = "/com/deepin/dde/dock";
 const QString DBUS_NAME = "com.deepin.dde.dock";

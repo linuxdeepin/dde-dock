@@ -56,6 +56,8 @@ MainWidget::MainWidget(QWidget *parent)
     connect(m_display, &DBusDisplay::ScreenWidthChanged, this, &MainWidget::updateGeometry);
     connect(m_windowRectDelayApplyTimer, &QTimer::timeout, this, &MainWidget::updatePosition);
 
+    connect(m_mainPanel, &DockPanel::pluginsInitDone, this, &MainWidget::show);
+
     updatePosition();
 }
 
