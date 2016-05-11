@@ -37,6 +37,7 @@ public:
     bool isFashionMode();               //for qss setting background
     void loadResources();
     QSize sizeHint() const;
+    void onContentsSizeChanged();
 
 signals:
     void startShow();
@@ -65,7 +66,6 @@ private:
     void onNeedPreviewHide(bool immediately);
     void onNeedPreviewShow(DockItem *item, const QPoint &pos);
     void onNeedPreviewUpdate();
-    void onContentsSizeChanged();
 
     void changeItemHoverable(QAbstractAnimation::State state);
     void reloadStyleSheet();

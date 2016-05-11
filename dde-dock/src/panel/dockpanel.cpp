@@ -59,16 +59,16 @@ void DockPanel::mousePressEvent(QMouseEvent *event)
 
 void DockPanel::initShowHideAnimation()
 {
-    QStateMachine * machine = new QStateMachine(this);
+//    QStateMachine * machine = new QStateMachine(this);
 
-    QState * showState = new QState(machine);
-    showState->assignProperty(this,"y", 0);
-    QState * hideState = new QState(machine);
+//    QState * showState = new QState(machine);
+//    showState->assignProperty(this,"y", 0);
+//    QState * hideState = new QState(machine);
     //y should change with DockMode changed
-    connect(this, &DockPanel::startHide, [=]{
-        hideState->assignProperty(this,"y", m_dockModeData->getDockHeight());
-    });
-    machine->setInitialState(showState);
+//    connect(this, &DockPanel::startHide, [&]{
+//        hideState->assignProperty(this,"y", m_dockModeData->getDockHeight());
+//    });
+//    machine->setInitialState(showState);
 
     QPropertyAnimation *showAnimation = new QPropertyAnimation(this, "y");
     showAnimation->setDuration(SHOW_ANIMATION_DURATION);
@@ -82,12 +82,27 @@ void DockPanel::initShowHideAnimation()
     connect(hideAnimation,&QPropertyAnimation::finished,this,&DockPanel::onHidePanelFinished);
     connect(hideAnimation, &QPropertyAnimation::stateChanged, this, &DockPanel::changeItemHoverable);
 
-    QSignalTransition *st = showState->addTransition(this,SIGNAL(startHide()), hideState);
-    st->addAnimation(hideAnimation);
-    QSignalTransition *ht = hideState->addTransition(this,SIGNAL(startShow()), showState);
-    ht->addAnimation(showAnimation);
+    connect(this, &DockPanel::startHide, [=] {
+        hideAnimation->setStartValue(0);
+        hideAnimation->setEndValue(m_dockModeData->getDockHeight());
+        hideAnimation->start();
+    });
 
-    machine->start();
+    connect(this, &DockPanel::startShow, [=] {
+        showAnimation->setStartValue(m_dockModeData->getDockHeight());
+        showAnimation->setEndValue(0);
+        showAnimation->start();
+    });
+
+//    connect(this, &DockPanel::startHide, [hideAnimation] {hideAnimation->start();});
+
+//    QSignalTransition *st = showState->addTransition(this,SIGNAL(startHide()), hideState);
+//    st->addAnimation(hideAnimation);
+//    connect(this, &DockPanel::startShow, [this] {qDebug() << "Ccc";});
+//    QSignalTransition *ht = hideState->addTransition(this,SIGNAL(startShow()), showState);
+//    ht->addAnimation(showAnimation);
+
+//    machine->start();
 }
 
 void DockPanel::initHideStateManager()
