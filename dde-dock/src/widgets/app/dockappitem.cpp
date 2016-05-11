@@ -7,6 +7,8 @@
  * (at your option) any later version.
  **/
 
+#include <QX11Info>
+
 #include "dockappitem.h"
 #include "xcb_misc.h"
 
@@ -380,7 +382,7 @@ void DockAppItem::setActived(bool value)
 
 void DockAppItem::invokeMenuItem(QString id, bool)
 {
-    m_entryProxyer->HandleMenuItem(id, 0);
+    m_entryProxyer->HandleMenuItem(id, QX11Info::getTimestamp());
 }
 
 QString DockAppItem::getMenuContent()
