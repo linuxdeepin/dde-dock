@@ -232,6 +232,9 @@ func (u *User) deleteHistoryIcon(icon string) {
 	icons := u.HistoryIcons
 	var list []string
 	for _, v := range icons {
+		// for compatible reason, old config files may contain icon paths
+		// that are not encoded.
+		v = dutils.EncodeURI(v, dutils.SCHEME_FILE)
 		if v == icon {
 			continue
 		}

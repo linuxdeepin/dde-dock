@@ -366,7 +366,8 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) 
 	}
 
 	go func() {
-		err := os.Remove(icon)
+		iconPath := dutils.DecodeURI(icon)
+		err := os.Remove(iconPath)
 		if err != nil {
 			doEmitError(pid, "DeleteIconFile", err.Error())
 			return
