@@ -119,6 +119,17 @@ func (infos DiskInfos) get(id string) (*DiskInfo, error) {
 	return nil, fmt.Errorf("Invalid disk id: %v", id)
 }
 
+func (infos DiskInfos) getByMountPoint(point string) (*DiskInfo, error) {
+	diskLocker.Lock()
+	defer diskLocker.Unlock()
+	for _, info := range infos {
+		if info.MountPoint == point {
+			return info, nil
+		}
+	}
+	return nil, fmt.Errorf("Invalid disk mount point: %v", point)
+}
+
 func (infos DiskInfos) add(info *DiskInfo) DiskInfos {
 	tmp, _ := infos.get(info.Id)
 	if tmp != nil {

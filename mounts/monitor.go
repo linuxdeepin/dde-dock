@@ -28,7 +28,6 @@ func (m *Manager) handleEvent() {
 			m.mountVolume(info.Id, info.object)
 			return
 		}
-		logger.Debug("[Event] emit list changed signal")
 		m.setPropDiskList(m.DiskList.add(info))
 		dbus.Emit(m, "Changed", EventTypeVolumeAdded, info.Id)
 	})
@@ -38,7 +37,6 @@ func (m *Manager) handleEvent() {
 		logger.Debug("[Event] volume removed")
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
-		logger.Debug("[Event] emit list changed signal")
 		oldInfos := m.DiskList.duplicate()
 		m.refrashDiskList()
 		id := findRemovedId(oldInfos, m.DiskList)
@@ -57,7 +55,6 @@ func (m *Manager) handleEvent() {
 				fmt.Sprintf("gvfs-open %s",
 					info.MountPoint)).Run()
 		}
-		logger.Debug("[Event] emit list changed signal")
 		m.setPropDiskList(m.DiskList.add(info))
 		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
 	})
@@ -65,14 +62,28 @@ func (m *Manager) handleEvent() {
 	m.monitor.Connect("mount-removed", func(monitor *gio.VolumeMonitor,
 		mount *gio.Mount) {
 		logger.Debug("[Event] mount removed")
-		logger.Debug("[Event] emit list changed signal")
-		oldInfos := m.DiskList.duplicate()
-		m.refrashDiskList()
-		id := findRemovedId(oldInfos, m.DiskList)
-		if len(id) > 0 {
-			dbus.Emit(m, "Changed", EventTypeMountRemoved, id)
+		if mount == nil || mount.Object.C == nil {
+			logger.Warning("Invalid GMount Object")
+			return
 		}
-		oldInfos = nil
+
+		root := mount.GetRoot()
+		point := root.GetUri()
+		info, err := m.DiskList.getByMountPoint(point)
+		root.Unref()
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+		oldLen := len(m.DiskList)
+		m.refrashDiskList()
+		if oldLen != len(m.DiskList) {
+			logger.Debug("Mount removed && volume removed")
+			return
+		}
+
+		logger.Debug("Only mount removed:", info.Id)
+		dbus.Emit(m, "Changed", EventTypeMountRemoved, info.Id)
 	})
 }
 

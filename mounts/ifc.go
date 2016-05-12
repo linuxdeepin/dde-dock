@@ -32,6 +32,7 @@ func (m *Manager) Eject(id string) error {
 	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
+		m.emitError(id, err.Error())
 		return err
 	}
 
@@ -49,11 +50,13 @@ func (m *Manager) Mount(id string) error {
 	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
+		m.emitError(id, err.Error())
 		return err
 	}
 
 	if info.object.Type != diskObjVolume {
-		return fmt.Errorf("Not unmounted volume: %v", id)
+		logger.Warningf("The volume '%s' had been mounted", id)
+		return nil
 	}
 
 	m.mountVolume(id, info.object)
@@ -65,11 +68,14 @@ func (m *Manager) Unmount(id string) error {
 	defer m.listLocker.Unlock()
 	info, err := m.DiskList.get(id)
 	if err != nil {
+		m.emitError(id, err.Error())
 		return err
 	}
 
 	if info.object.Type != diskObjMount {
-		return fmt.Errorf("Not mounted volume: %v", id)
+		err := fmt.Errorf("The volume '%s' hadn't been mounted", id)
+		m.emitError(id, err.Error())
+		return err
 	}
 
 	m.unmountMount(id, info.object)
@@ -79,10 +85,12 @@ func (m *Manager) Unmount(id string) error {
 func (m *Manager) ejectVolume(id string, obj *diskObject) {
 	volume := obj.getVolume()
 	if volume == nil {
+		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
 		return
 	}
 
 	if !volume.CanEject() {
+		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
 		return
 	}
 
@@ -102,10 +110,12 @@ func (m *Manager) ejectVolume(id string, obj *diskObject) {
 func (m *Manager) ejectMount(id string, obj *diskObject) {
 	mount := obj.getMount()
 	if mount == nil {
+		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
 		return
 	}
 
 	if !mount.CanEject() {
+		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
 		return
 	}
 
@@ -124,10 +134,12 @@ func (m *Manager) ejectMount(id string, obj *diskObject) {
 func (m *Manager) mountVolume(id string, obj *diskObject) {
 	volume := obj.getVolume()
 	if volume == nil {
+		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
 		return
 	}
 
 	if !volume.CanMount() {
+		m.emitError(id, fmt.Sprintf("Permission denied or the volume '%s' had be mounted", id))
 		return
 	}
 
@@ -146,10 +158,12 @@ func (m *Manager) mountVolume(id string, obj *diskObject) {
 func (m *Manager) unmountMount(id string, obj *diskObject) {
 	mount := obj.getMount()
 	if mount == nil {
+		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
 		return
 	}
 
 	if !mount.CanUnmount() {
+		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
 		return
 	}
 
