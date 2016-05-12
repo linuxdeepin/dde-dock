@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Resource/qss/trash.qss</file>
-    </qresource>
-</RCC>

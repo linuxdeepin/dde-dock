@@ -40,5 +40,5 @@ unix {
 }
 
 RESOURCES += \
-    light.qrc \
-    dark.qrc
+    trash-plugin-light.qrc \
+    trash-plugin-dark.qrc
