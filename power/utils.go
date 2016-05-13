@@ -19,40 +19,51 @@ import (
 	"time"
 )
 
-func (m *Manager) findWindow(wminstance, wmclass string) bool {
+func (m *Manager) findWindow(wminstance, wmclass string) xproto.Window {
 	rootWin := m.xu.RootWin()
 	tree, err := xproto.QueryTree(m.xConn, rootWin).Reply()
 	if err != nil {
 		logger.Warning("QueryTree error:", err)
-		return false
+		return 0
 	}
 	for i := int(tree.ChildrenLen) - 1; i >= 0; i-- {
-		wmClass, err := icccm.WmClassGet(m.xu, tree.Children[i])
+		win := tree.Children[i]
+		wmClass, err := icccm.WmClassGet(m.xu, win)
 		if err == nil &&
 			wmClass.Instance == wminstance &&
 			wmClass.Class == wmclass {
-			return true
+			return win
 		}
 	}
-	return false
+	return 0
 }
 
-func (m *Manager) waitWindow(wminstance, wmclass string, timeout time.Duration) {
-	logger.Debug("waitWindow", wminstance, wmclass)
+func (m *Manager) waitWindowViewable(wminstance, wmclass string, timeout time.Duration) {
+	logger.Debug("waitWindowViewable", wminstance, wmclass)
 	ticker := time.NewTicker(time.Millisecond * 300)
 	timer := time.NewTimer(timeout)
 	for {
 		select {
 		case <-ticker.C:
-			logger.Debug("waitWindow tick")
-			if m.findWindow(wminstance, wmclass) {
-				logger.Debug("waitWindow found")
+			logger.Debug("waitWindowViewable tick")
+			win := m.findWindow(wminstance, wmclass)
+			if win == 0 {
+				continue
+			}
+
+			winAttr, err := xproto.GetWindowAttributes(m.xConn, win).Reply()
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+			if winAttr.MapState == xproto.MapStateViewable {
+				logger.Debug("waitWindowViewable found")
 				ticker.Stop()
 				return
 			}
 
 		case <-timer.C:
-			logger.Debug("waitWindow failed timeout!")
+			logger.Debug("waitWindowViewable failed timeout!")
 			ticker.Stop()
 			return
 		}
@@ -62,7 +73,7 @@ func (m *Manager) waitWindow(wminstance, wmclass string, timeout time.Duration) 
 func (m *Manager) lockWaitShow(timeout time.Duration) {
 	const ddeLock = "dde-lock"
 	m.doLock()
-	m.waitWindow(ddeLock, ddeLock, timeout)
+	m.waitWindowViewable(ddeLock, ddeLock, timeout)
 }
 
 func getBatteryPowerLevelName(num uint32) string {

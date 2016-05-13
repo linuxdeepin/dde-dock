@@ -76,7 +76,7 @@ func (m *Manager) handleBeforeSuspend() {
 		m.setDPMSModeOn()
 		// 此时执行 setDPMSModeOn() 将触发 HandleIdleOff
 		// 如果 DPMS 是 off 状态，lock screen 将无法完成
-		m.lockWaitShow(2 * time.Second)
+		m.lockWaitShow(4 * time.Second)
 	}
 }
 
