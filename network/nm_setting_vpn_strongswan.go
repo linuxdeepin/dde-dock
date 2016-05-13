@@ -92,11 +92,11 @@ func getSettingVpnStrongswanAvailableValues(data connectionData, key string) (va
 	switch key {
 	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
 		values = []kvalue{
-			kvalue{NM_STRONGSWAN_METHOD_KEY, Tr("Certificate/private key")},
-			kvalue{NM_STRONGSWAN_METHOD_AGENT, Tr("Certificate/ssh-agent")},
+			kvalue{NM_STRONGSWAN_METHOD_KEY, Tr("Private Key")},
+			kvalue{NM_STRONGSWAN_METHOD_AGENT, Tr("SSH Agent")},
 			kvalue{NM_STRONGSWAN_METHOD_SMARTCARD, Tr("Smartcard")},
 			kvalue{NM_STRONGSWAN_METHOD_EAP, Tr("EAP")},
-			kvalue{NM_STRONGSWAN_METHOD_PSK, Tr("Pre-shared key")},
+			kvalue{NM_STRONGSWAN_METHOD_PSK, Tr("Pre-Shared Key")},
 		}
 	}
 	return
