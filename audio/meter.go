@@ -13,6 +13,7 @@ import "pkg.deepin.io/lib/dbus"
 import "pkg.deepin.io/lib/pulse"
 import "fmt"
 import "time"
+import "sync"
 
 type Meter struct {
 	Volume  float64
@@ -32,7 +33,7 @@ func (m *Meter) tryQuit() {
 
 	for {
 		select {
-		case <-time.After(time.Second * 2):
+		case <-time.After(time.Second * 10):
 			if !m.hasTick {
 				return
 			}
@@ -52,19 +53,24 @@ func NewMeter(id string, core *pulse.SourceMeter) *Meter {
 	return m
 }
 
-var meters = make(map[string]*Meter)
+var (
+	meterLocker sync.Mutex
+	meters      = make(map[string]*Meter)
+)
 
 func (s *Source) GetMeter() *Meter {
+	meterLocker.Lock()
+	defer meterLocker.Unlock()
 	id := fmt.Sprintf("source%d", s.core.Index)
 	m, ok := meters[id]
 	if !ok {
 		core := pulse.NewSourceMeter(pulse.GetContext(), s.core.Index)
-		core.ConnectChanged(func(v float64) {
-			m.setPropVolume(v)
-		})
 		m = NewMeter(id, core)
 		dbus.InstallOnSession(m)
 		meters[id] = m
+		core.ConnectChanged(func(v float64) {
+			m.setPropVolume(v)
+		})
 	}
 	return m
 }
