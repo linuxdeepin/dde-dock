@@ -73,12 +73,12 @@ func getUserStandardIcons() []string {
 
 	var icons []string
 	for _, img := range imgs {
-		if strings.Contains(img, "guest") ||
-			strings.Contains(img, defaultUserIcon) {
+		img = utils.EncodeURI(img, utils.SCHEME_FILE)
+		if strings.Contains(img, "guest") || img == defaultUserIcon {
 			continue
 		}
 
-		icons = append(icons, utils.EncodeURI(img, utils.SCHEME_FILE))
+		icons = append(icons, img)
 	}
 
 	return icons
