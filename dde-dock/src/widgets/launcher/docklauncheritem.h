@@ -45,6 +45,7 @@ private slots:
 private:
     void changeDockMode(Dock::DockMode newMode, Dock::DockMode oldMode);
     void reanchorIcon();
+    void startupLauncher();
 
 private:
     DockAppIcon * m_appIcon;
