@@ -21,8 +21,8 @@ DockLauncherItem::DockLauncherItem(QWidget *parent)
 
     m_appIcon = new DockAppIcon(this);
     m_appIcon->resize(height(), height());
-    connect(m_appIcon, &DockAppIcon::mousePress, this, &DockLauncherItem::slotMousePress);
-    connect(m_appIcon, &DockAppIcon::mouseRelease, this, &DockLauncherItem::slotMouseRelease);
+//    connect(m_appIcon, &DockAppIcon::mousePress, this, &DockLauncherItem::slotMousePress);
+//    connect(m_appIcon, &DockAppIcon::mouseRelease, this, &DockLauncherItem::slotMouseRelease);
     connect(this, &DockLauncherItem::mouseRelease, this, &DockLauncherItem::startupLauncher);
 
     //TODO icon not show on init
@@ -77,10 +77,7 @@ void DockLauncherItem::slotMouseRelease(QMouseEvent *event)
     if (event->button() != Qt::LeftButton)
         return;
 
-    if (m_launcherInter->isValid())
-        m_launcherInter->Toggle();
-    else
-        startupLauncher();
+//    startupLauncher();
 }
 
 void DockLauncherItem::changeDockMode(Dock::DockMode, Dock::DockMode)
@@ -114,6 +111,12 @@ void DockLauncherItem::reanchorIcon()
 
 void DockLauncherItem::startupLauncher()
 {
+    if (m_launcherInter->isValid())
+    {
+        m_launcherInter->Toggle();
+        return;
+    }
+
     QProcess *proc = new QProcess;
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
