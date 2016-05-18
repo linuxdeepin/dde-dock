@@ -176,3 +176,16 @@ func (app *NormalApp) notifyChanged() {
 		app.changedCB()
 	}
 }
+
+func (app *NormalApp) HandleDragDrop(path string, timestamp uint32) {
+	logger.Debugf("handle drag drop path: %q", path)
+	ai := app.createDesktopAppInfo()
+	if ai != nil {
+		defer ai.Destroy()
+		paths := []string{path}
+		_, err := ai.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
+		if err != nil {
+			logger.Warning("LaunchUris failed:", err)
+		}
+	}
+}

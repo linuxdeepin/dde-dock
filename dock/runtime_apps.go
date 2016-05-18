@@ -565,3 +565,18 @@ func (app *RuntimeApp) detachWindow(winInfo *WindowInfo) {
 		app.notifyChanged()
 	}
 }
+
+func (app *RuntimeApp) HandleDragDrop(path string, timestamp uint32) {
+	logger.Debugf("handle drag drop path: %q", path)
+	ai := app.appInfo
+	appLaunchContext := gio.GetGdkAppLaunchContext().SetTimestamp(timestamp)
+	if ai.DesktopAppInfo != nil {
+		paths := []string{path}
+		_, err := ai.LaunchUris(paths, appLaunchContext)
+		if err != nil {
+			logger.Warningf("LaunchUris failed path: %q", path)
+		}
+	} else {
+		logger.Warningf("no support!")
+	}
+}

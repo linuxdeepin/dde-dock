@@ -11,10 +11,7 @@ package dock
 
 import (
 	"encoding/json"
-	"strings"
 	"sync"
-
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -92,47 +89,18 @@ func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
 func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
 func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
 func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
-func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
-	paths := strings.Split(data, ",")
-	logger.Debug("HandleDragDrop:", paths)
-	if e.rApp != nil {
-		logger.Debug("Launch from runtime app")
-		core := e.rApp.createDesktopAppInfo()
-		if core != nil {
-			defer core.Destroy()
-			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		} else {
-			app, err :=
-				gio.AppInfoCreateFromCommandline(e.rApp.exec,
-					e.rApp.Id, gio.AppInfoCreateFlagsSupportsUris)
-			if err != nil {
-				logger.Warning("Create Launch app failed:", err)
-				return
-			}
 
-			_, err = app.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		}
+func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
+	// x, y useless
+	// only handle file://
+	logger.Debug("HandleDragDrop:", data)
+	if e.rApp != nil {
+		e.rApp.HandleDragDrop(data, timestamp)
 	} else if e.nApp != nil {
-		logger.Debug("Launch from normal app")
-		core := e.nApp.createDesktopAppInfo()
-		if core != nil {
-			defer core.Destroy()
-			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		} else {
-			// TODO:
-			logger.Warning("TODO: AppEntry.nApp.core == nil")
-		}
+		e.nApp.HandleDragDrop(data, timestamp)
 	}
 }
+
 func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32) {}
 
 func (e *AppEntry) setData(key, value string) {
