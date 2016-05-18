@@ -45,9 +45,12 @@ func handleDeviceChanged() {
 	logger.Debug("Device changed")
 
 	getDeviceInfos(true)
-	getMouseInfos(true)
-	getTPadInfos(true)
-	getWacomInfos(true)
+	mouseInfos = dxMouses{}
+	getMouseInfos(false)
+	tpadInfos = dxTouchpads{}
+	getTPadInfos(false)
+	wacomInfos = dxWacoms{}
+	getWacomInfos(false)
 
 	getTouchpad().handleDeviceChanged()
 	getMouse().handleDeviceChanged()
@@ -67,7 +70,7 @@ func getMouseInfos(force bool) dxMouses {
 		return mouseInfos
 	}
 
-	mouseInfos = nil
+	mouseInfos = dxMouses{}
 	for _, info := range getDeviceInfos(force) {
 		if info.Type == dxutils.DevTypeMouse {
 			mouseInfos = append(mouseInfos, &dxinput.Mouse{
@@ -88,7 +91,7 @@ func getTPadInfos(force bool) dxTouchpads {
 		return tpadInfos
 	}
 
-	tpadInfos = nil
+	tpadInfos = dxTouchpads{}
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeTouchpad {
 			tpadInfos = append(tpadInfos, &dxinput.Touchpad{
@@ -106,7 +109,7 @@ func getWacomInfos(force bool) dxWacoms {
 		return wacomInfos
 	}
 
-	wacomInfos = nil
+	wacomInfos = dxWacoms{}
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeWacom {
 			wacomInfos = append(wacomInfos, &dxinput.Wacom{

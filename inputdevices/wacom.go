@@ -156,6 +156,7 @@ func (w *Wacom) handleDeviceChanged() {
 }
 
 func (w *Wacom) updateDXWacoms() {
+	w.devInfos = dxWacoms{}
 	for _, info := range getWacomInfos(false) {
 		tmp := w.devInfos.get(info.Id)
 		if tmp != nil {

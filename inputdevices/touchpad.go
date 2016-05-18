@@ -162,6 +162,7 @@ func (tpad *Touchpad) handleDeviceChanged() {
 }
 
 func (tpad *Touchpad) updateDXTpads() {
+	tpad.devInfos = dxTouchpads{}
 	for _, info := range getTPadInfos(false) {
 		tmp := tpad.devInfos.get(info.Id)
 		if tmp != nil {

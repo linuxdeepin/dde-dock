@@ -121,6 +121,7 @@ func (tp *TrackPoint) handleDeviceChanged() {
 }
 
 func (tp *TrackPoint) updateDXMouses() {
+	tp.devInfos = dxMouses{}
 	for _, info := range getMouseInfos(false) {
 		if !info.TrackPoint {
 			continue
