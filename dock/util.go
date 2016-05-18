@@ -24,6 +24,7 @@ import (
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"os"
+	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
@@ -142,17 +143,19 @@ func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
 	return pid
 }
 
-func getProcessCmdline(pid uint) (string, error) {
+func getProcessCmdline(pid uint) ([]string, error) {
 	cmdlinePath := fmt.Sprintf("/proc/%d/cmdline", pid)
 	bytes, err := ioutil.ReadFile(cmdlinePath)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	content := string(bytes)
 	parts := strings.Split(content, "\x00")
-	content = strings.Join(parts, " ")
-	logger.Debug("content:", content)
-	return content, nil
+	length := len(parts)
+	if length >= 2 && parts[length-1] == "" {
+		return parts[:length-1], nil
+	}
+	return parts, nil
 }
 
 func getProcessCwd(pid uint) (string, error) {
@@ -161,19 +164,10 @@ func getProcessCwd(pid uint) (string, error) {
 	return cwd, err
 }
 
-func getExecFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
-	pid := getWmPid(xu, win)
-	cmdline, err := getProcessCmdline(pid)
-	if err != nil {
-		logger.Warning(err)
-	}
-	cwd, err := getProcessCwd(pid)
-	if err != nil {
-		logger.Warning(err)
-	}
-	// TODO: sh 转义
-	cmdline = "cd " + cwd + "\n" + cmdline
-	return cmdline
+func getProcessExe(pid uint) (string, error) {
+	exePath := fmt.Sprintf("/proc/%d/exe", pid)
+	exe, err := filepath.EvalSymlinks(exePath)
+	return exe, err
 }
 
 func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {

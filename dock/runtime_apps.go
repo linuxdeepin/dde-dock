@@ -15,7 +15,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"unicode/utf8"
 
 	"gir/gio-2.0"
 	"gir/glib-2.0"
@@ -85,13 +84,18 @@ func NewRuntimeApp(winInfo *WindowInfo, appInfo *AppInfo, isAppDocked bool) *Run
 }
 
 func (app *RuntimeApp) initExec(winInfo *WindowInfo) {
-	if app.appInfo != nil {
-		// NOTE: should NOT use GetExecuable, get wrong result,
+	ai := app.appInfo
+	if ai.DesktopAppInfo != nil {
+		// NOTE: should NOT use GetExecuable, get wrong result
 		// like skype which gets 'env'.
-		app.exec = app.appInfo.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
-	} else {
-		app.exec = getExecFromWindow(XU, winInfo.window)
+		// TODO: ai.getExec() or ai.getCmdline()
+		app.exec = ai.DesktopAppInfo.GetString(glib.KeyFileDesktopKeyExec)
 	}
+
+	if winInfo.process != nil {
+		app.exec = winInfo.process.GetShellScript()
+	}
+
 	logger.Debug("initExec:", app.exec)
 }
 
@@ -152,7 +156,7 @@ func (app *RuntimeApp) getMenuItemDesktopActions() []*MenuItem {
 
 func (app *RuntimeApp) launchApp(timestamp uint32) {
 	var appInfo *gio.AppInfo
-	if app.appInfo != nil {
+	if app.appInfo.DesktopAppInfo != nil {
 		logger.Debug("Has AppInfo")
 		appInfo = (*gio.AppInfo)(app.appInfo.DesktopAppInfo)
 	} else {
@@ -206,7 +210,8 @@ func (app *RuntimeApp) getMenuItemDock() *MenuItem {
 		logger.Debug("Dock app:", app.Id)
 		var title, icon, exec string
 		appInfo := app.appInfo
-		if appInfo != nil {
+		// TODO
+		if appInfo.DesktopAppInfo != nil {
 			title = appInfo.GetDisplayName()
 			icon = appInfo.GetIcon()
 			// TODO get cmdline
@@ -308,90 +313,90 @@ func lookthroughProc(name string) uint {
 }
 
 // TODO: 废弃
-func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
-	var appId string
-	logger.Debugf("find_app_id_by_xid 0x%x", xid)
-	if displayMode == DisplayModeModernMode {
-		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
-			appId = getAppIDFromDesktopID(normalizeAppID(id))
-			if appId != "" {
-				logger.Info("get app id from _DDE_DOCK_APP_ID", appId)
-				return appId
-			}
-		}
-	}
-
-	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
-	if err != nil {
-		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
-	} else {
-		appId = gtkAppId
-		appId = getAppIDFromDesktopID(normalizeAppID(appId))
-		if appId != "" {
-			return appId
-		}
-	}
-
-	appId = getAppIDFromXid(xid)
-	if appId != "" {
-		logger.Debug("get app id from bamf", appId)
-		return normalizeAppID(appId)
-	}
-
-	wmClass, _ := icccm.WmClassGet(XU, xid)
-	var wmInstance, wmClassName string
-	if wmClass != nil {
-		if utf8.ValidString(wmClass.Instance) {
-			wmInstance = wmClass.Instance
-		}
-
-		// it is possible that getting invalid string which might be xgb implementation's bug.
-		// for instance: xdemineur's WMClass
-		if utf8.ValidString(wmClass.Class) {
-			wmClassName = wmClass.Class
-		}
-		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
-	}
-
-	name := getWmName(XU, xid)
-	logger.Debugf("wmName is %q", name)
-
-	pid, err := ewmh.WmPidGet(XU, xid)
-	if err != nil {
-		logger.Debug("get pid failed for:", xid)
-		if name != "" {
-			pid = lookthroughProc(name)
-			logger.Debugf("lookthroughProc(%q) get pid %v", name, pid)
-		} else {
-			newAppId := getAppIDFromDesktopID(normalizeAppID(wmClassName))
-			if newAppId != "" {
-				logger.Debugf("get Pid failed, guess app id `%s` by wm class name `%s`",
-					newAppId, wmClassName)
-				return newAppId
-			}
-		}
-	}
-
-	iconName, _ := ewmh.WmIconNameGet(XU, xid)
-	if pid == 0 {
-		appId = normalizeAppID(wmClassName)
-		logger.Debugf("get window name failed, using wm class name as app id %q", appId)
-		return appId
-	}
-
-	logger.Debugf("call c.find_app_id(pid=%v, wmName=%s, wmInstance=%s, wmClassName=%s, iconName=%s)",
-		pid, name, wmInstance, wmClassName, iconName)
-	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
-	newAppId := getAppIDFromDesktopID(normalizeAppID(appId))
-	if newAppId != "" {
-		appId = newAppId
-	}
-
-	appId = specialCaseWorkaround(xid, appId)
-
-	logger.Debugf("get appid %q", appId)
-	return appId
-}
+// func find_app_id_by_xid(xid xproto.Window, displayMode DisplayModeType) string {
+// 	var appId string
+// 	logger.Debugf("find_app_id_by_xid 0x%x", xid)
+// 	if displayMode == DisplayModeModernMode {
+// 		if id, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_DDE_DOCK_APP_ID")); err == nil {
+// 			appId = getAppIDFromDesktopID(normalizeAppID(id))
+// 			if appId != "" {
+// 				logger.Info("get app id from _DDE_DOCK_APP_ID", appId)
+// 				return appId
+// 			}
+// 		}
+// 	}
+//
+// 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, xid, "_GTK_APPLICATION_ID"))
+// 	if err != nil {
+// 		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
+// 	} else {
+// 		appId = gtkAppId
+// 		appId = getAppIDFromDesktopID(normalizeAppID(appId))
+// 		if appId != "" {
+// 			return appId
+// 		}
+// 	}
+//
+// 	appId = getAppIDFromXid(xid)
+// 	if appId != "" {
+// 		logger.Debug("get app id from bamf", appId)
+// 		return normalizeAppID(appId)
+// 	}
+//
+// 	wmClass, _ := icccm.WmClassGet(XU, xid)
+// 	var wmInstance, wmClassName string
+// 	if wmClass != nil {
+// 		if utf8.ValidString(wmClass.Instance) {
+// 			wmInstance = wmClass.Instance
+// 		}
+//
+// 		// it is possible that getting invalid string which might be xgb implementation's bug.
+// 		// for instance: xdemineur's WMClass
+// 		if utf8.ValidString(wmClass.Class) {
+// 			wmClassName = wmClass.Class
+// 		}
+// 		logger.Debug("WMClass", wmClassName, ", WMInstance", wmInstance)
+// 	}
+//
+// 	name := getWmName(XU, xid)
+// 	logger.Debugf("wmName is %q", name)
+//
+// 	pid, err := ewmh.WmPidGet(XU, xid)
+// 	if err != nil {
+// 		logger.Debug("get pid failed for:", xid)
+// 		if name != "" {
+// 			pid = lookthroughProc(name)
+// 			logger.Debugf("lookthroughProc(%q) get pid %v", name, pid)
+// 		} else {
+// 			newAppId := getAppIDFromDesktopID(normalizeAppID(wmClassName))
+// 			if newAppId != "" {
+// 				logger.Debugf("get Pid failed, guess app id `%s` by wm class name `%s`",
+// 					newAppId, wmClassName)
+// 				return newAppId
+// 			}
+// 		}
+// 	}
+//
+// 	iconName, _ := ewmh.WmIconNameGet(XU, xid)
+// 	if pid == 0 {
+// 		appId = normalizeAppID(wmClassName)
+// 		logger.Debugf("get window name failed, using wm class name as app id %q", appId)
+// 		return appId
+// 	}
+//
+// 	logger.Debugf("call c.find_app_id(pid=%v, wmName=%s, wmInstance=%s, wmClassName=%s, iconName=%s)",
+// 		pid, name, wmInstance, wmClassName, iconName)
+// 	appId = find_app_id(pid, name, wmInstance, wmClassName, iconName)
+// 	newAppId := getAppIDFromDesktopID(normalizeAppID(appId))
+// 	if newAppId != "" {
+// 		appId = newAppId
+// 	}
+//
+// 	appId = specialCaseWorkaround(xid, appId)
+//
+// 	logger.Debugf("get appid %q", appId)
+// 	return appId
+// }
 
 func specialCaseWorkaround(xid xproto.Window, appId string) string {
 	switch appId {
@@ -416,6 +421,7 @@ func contains(haystack []string, needle string) bool {
 	return false
 }
 
+// TODO: move to winInfo.updateIcon
 func (app *RuntimeApp) updateIcon(winInfo *WindowInfo) {
 	logger.Debug("update icon for", app.Id)
 	if app.appInfo != nil {
@@ -431,22 +437,6 @@ func (app *RuntimeApp) updateIcon(winInfo *WindowInfo) {
 	winInfo.Icon = getIconFromWindow(XU, winInfo.window)
 	if winInfo.Icon == "" {
 		winInfo.Icon = "application-default-icon"
-	}
-}
-
-func (app *RuntimeApp) updateTitle(xid xproto.Window) {
-	if _, ok := app.windowInfoTable[xid]; !ok {
-		return
-	}
-	name := getWmName(XU, xid)
-	if name == "" {
-		app.windowInfoTable[xid].Title = app.Id
-		// TODO: try get name from .desktop file
-		return
-	}
-
-	if utf8.ValidString(name) {
-		app.windowInfoTable[xid].Title = name
 	}
 }
 
@@ -552,7 +542,7 @@ func (app *RuntimeApp) attachWindow(winInfo *WindowInfo) {
 	app.windowInfoTable[win] = winInfo
 	winInfo.app = app
 	app.updateIcon(winInfo)
-	app.updateTitle(win)
+	winInfo.Title = winInfo.getTitle()
 	app.notifyChanged()
 }
 

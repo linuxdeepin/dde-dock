@@ -52,23 +52,51 @@ func (dai *AppInfo) init() *AppInfo {
 func NewAppInfo(desktopID string) *AppInfo {
 	dai := &AppInfo{}
 	dai.DesktopAppInfo = gio.NewDesktopAppInfo(desktopID)
-	dai.id = desktopID
+	dai.id = trimDesktop(normalizeAppID(desktopID))
 	return dai.init()
 }
 
 func NewAppInfoFromFile(file string) *AppInfo {
-	dai := &AppInfo{}
-	dai.DesktopAppInfo = gio.NewDesktopAppInfoFromFilename(file)
-	dai.id = file
-	return dai.init()
+	ai := &AppInfo{}
+	ai.DesktopAppInfo = gio.NewDesktopAppInfoFromFilename(file)
+	id := filepath.Base(file)
+
+	// in kde4 dir
+	dir := filepath.Dir(file)
+	basedir := filepath.Base(dir)
+	if basedir == "kde4" {
+		id = "kde4-" + id
+	}
+	ai.id = trimDesktop(normalizeAppID(id))
+	return ai.init()
 }
 
-func (dai *AppInfo) GetId() string {
-	return trimDesktop(normalizeAppID(dai.DesktopAppInfo.GetId()))
+func NewAppInfoFromWindow(winInfo *WindowInfo) *AppInfo {
+	id := winInfo.createAppId()
+	if id == "" {
+		return nil
+	}
+	desktopId := guess_desktop_id(id)
+	ai := NewAppInfo(desktopId)
+	if ai != nil {
+		return ai
+	}
+	ai = &AppInfo{
+		id: id,
+	}
+	return ai
+}
+
+func (ai *AppInfo) GetId() string {
+	return ai.id
 }
 
 func (dai *AppInfo) ListActions() []string {
 	logger.Debugf("[ListActions] %q", dai.id)
+	if dai.DesktopAppInfo == nil {
+		return nil
+	}
+
 	if dai.gioSupported {
 		logger.Debug("ListActions gio support")
 		return dai.DesktopAppInfo.ListActions()
@@ -95,6 +123,10 @@ func (dai *AppInfo) getGroupName(name string) string {
 
 func (dai *AppInfo) GetActionName(actionGroup string) string {
 	logger.Debugf("[GetActionName] %q", dai.id)
+	if dai.DesktopAppInfo == nil {
+		return ""
+	}
+
 	if dai.gioSupported {
 		logger.Debug("GetActionName gio support")
 		return dai.DesktopAppInfo.GetActionName(actionGroup)
@@ -116,6 +148,10 @@ func (dai *AppInfo) GetActionName(actionGroup string) string {
 }
 
 func (dai *AppInfo) GetIcon() string {
+	if dai.DesktopAppInfo == nil {
+		return ""
+	}
+
 	gioIcon := dai.DesktopAppInfo.GetIcon()
 	if gioIcon == nil {
 		logger.Warning("get icon from appinfo failed")
@@ -155,7 +191,25 @@ func (dai *AppInfo) GetIcon() string {
 	return icon
 }
 
+func (ai *AppInfo) GetFilename() string {
+	if ai.DesktopAppInfo == nil {
+		return ""
+	}
+	return ai.DesktopAppInfo.GetFilename()
+}
+
+func (ai *AppInfo) GetDisplayName() string {
+	if ai.DesktopAppInfo == nil {
+		return ai.id
+	}
+	return ai.DesktopAppInfo.GetDisplayName()
+}
+
 func (dai *AppInfo) LaunchAction(actionGroup string, ctx gio.AppLaunchContextLike) {
+	if dai.DesktopAppInfo == nil {
+		return
+	}
+
 	logger.Debugf("[LaunchAction] %q action: %q", dai.id, actionGroup)
 	if dai.gioSupported {
 		logger.Info("LaunchAction gio support")

@@ -10,12 +10,16 @@
 package dock
 
 import (
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"path/filepath"
+	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 type WindowInfo struct {
@@ -40,8 +44,10 @@ type WindowInfo struct {
 	hasXEmbedInfo    bool
 	mapState         byte
 	wmClass          *icccm.WmClass
+	wmName           string
 
-	app *RuntimeApp
+	process *ProcessInfo
+	app     *RuntimeApp
 
 	firstUpdate bool
 }
@@ -137,6 +143,32 @@ func (winInfo *WindowInfo) updateHasXEmbedInfo() {
 	winInfo.hasXEmbedInfo = (err == nil)
 }
 
+// wm name
+func (winInfo *WindowInfo) updateWmName() {
+	winInfo.wmName = getWmName(XU, winInfo.window)
+	winInfo.Title = winInfo.getTitle()
+	if winInfo.app != nil {
+		winInfo.app.notifyChanged()
+	}
+}
+
+func (winInfo *WindowInfo) getTitle() string {
+	wmName := winInfo.wmName
+	if wmName == "" || !utf8.ValidString(wmName) {
+		if winInfo.app != nil {
+			appInfo := winInfo.app.appInfo
+			if appInfo != nil {
+				return appInfo.GetDisplayName()
+			}
+			return winInfo.app.Id
+		}
+		// winInfo.app is nil
+		return fmt.Sprintf("window: %v", winInfo.window)
+	} else {
+		return wmName
+	}
+}
+
 var skipTaskbarWindowTypes []string = []string{
 	"_NET_WM_WINDOW_TYPE_UTILITY",
 	"_NET_WM_WINDOW_TYPE_COMBO",
@@ -191,6 +223,90 @@ func (winInfo *WindowInfo) update() {
 	if len(winInfo.wmWindowType) == 0 {
 		winInfo.updateHasXEmbedInfo()
 	}
+	winInfo.updateWmName()
+
+	pid := getWmPid(XU, win)
+	var err error
+	winInfo.process, err = NewProcessInfo(pid)
+	if err != nil {
+		logger.Warning(err)
+	}
+	logger.Debugf("process: %#v", winInfo.process)
+}
+
+func (winInfo *WindowInfo) guessAppId(filterGroup *AppIdFilterGroup) string {
+	var appId string
+	if winInfo.process == nil {
+		return ""
+	}
+	process := winInfo.process
+	execName := filepath.Base(process.exe)
+	// wm name
+	appId = findAppIdByFilter(execName, winInfo.wmName, filterGroup.KeyFileWmName)
+	if appId != "" {
+		return appId
+	}
+
+	if winInfo.wmClass != nil {
+		// wmclass instance
+		appId = findAppIdByFilter(execName, winInfo.wmClass.Instance, filterGroup.KeyFileWmInstance)
+		if appId != "" {
+			return appId
+		}
+
+		// wmclass class
+		appId = findAppIdByFilter(execName, winInfo.wmClass.Class, filterGroup.KeyFileWmClass)
+		if appId != "" {
+			return appId
+		}
+	}
+
+	// args
+	argsJoined := strings.Join(process.args, " ")
+	appId = findAppIdByFilter(execName, argsJoined, filterGroup.KeyFileArgs)
+	if appId != "" {
+		return appId
+	}
+
+	// icon name
+	iconName, _ := ewmh.WmIconNameGet(XU, winInfo.window)
+	appId = findAppIdByFilter(execName, iconName, filterGroup.KeyFileIconName)
+	if appId != "" {
+		return appId
+	}
+
+	// exec name
+	appId = findAppIdByFilter(execName, execName, filterGroup.KeyFileExecName)
+	return appId
+}
+
+func (winInfo *WindowInfo) createAppId() string {
+	var appId string
+	if winInfo.wmClass != nil {
+		appId = winInfo.wmClass.Class
+		// it is possible that getting invalid string which might be xgb implementation's bug.
+		// for instance: xdemineur's WMClass
+		if appId != "" && utf8.ValidString(appId) {
+			return normalizeAppID(appId)
+		}
+
+		appId = winInfo.wmClass.Instance
+		if appId != "" && utf8.ValidString(appId) {
+			// wmclass instance 可能是文件路径，比如 xdemineur 的
+			appId = filepath.Base(appId)
+			return normalizeAppID(appId)
+		}
+	}
+
+	if winInfo.process != nil {
+		appId = filepath.Base(winInfo.process.exe)
+		if appId != "" {
+			return normalizeAppID(appId)
+		}
+	}
+	// TODO: try WM_COMMAND
+	// TODO: try ICON NAME
+	return ""
 }
 
 func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryManager) {
@@ -226,7 +342,6 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 }
 
 func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
-	win := winInfo.window
 	app := winInfo.app
 
 	switch atom {
@@ -243,10 +358,7 @@ func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
 		return true
 
 	case ATOM_WINDOW_NAME:
-		if app != nil {
-			app.updateTitle(win)
-			app.notifyChanged()
-		}
+		winInfo.updateWmName()
 		return false
 
 	case ATOM_WINDOW_ICON:

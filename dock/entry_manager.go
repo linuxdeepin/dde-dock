@@ -32,6 +32,7 @@ type EntryManager struct {
 
 	dockedAppManager *DockedAppManager
 	clientList       windowSlice
+	appIdFilterGroup *AppIdFilterGroup
 }
 
 func NewEntryManager() *EntryManager {
@@ -40,6 +41,7 @@ func NewEntryManager() *EntryManager {
 		normalApps:       make(map[string]*NormalApp),
 		appEntries:       make(map[string]*AppEntry),
 		dockedAppManager: NewDockedAppManager(),
+		appIdFilterGroup: NewAppIdFilterGroup(),
 	}
 	return m
 }
@@ -204,37 +206,51 @@ func (m *EntryManager) updateEntry(appId string, nApp *NormalApp, rApp *RuntimeA
 	}
 }
 
-func getDesktopAppInfoFromWindow(win xproto.Window) *AppInfo {
-	var dai *AppInfo
+func (m *EntryManager) getAppInfoFromWindow(winInfo *WindowInfo) *AppInfo {
+	win := winInfo.window
+	var ai *AppInfo
 
 	// _GTK_APPLICATION_ID
 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, win, "_GTK_APPLICATION_ID"))
 	if err != nil {
 		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
 	} else {
-		gtkAppId += ".desktop	"
-		dai = NewAppInfo(gtkAppId)
-		if dai != nil {
-			return dai
+		ai = NewAppInfo(gtkAppId + ".desktop")
+		if ai != nil {
+			return ai
 		}
 		logger.Debugf("NewAppInfo failed gtk app id: %q", gtkAppId)
 	}
 
 	// bamf
 	desktop := getDesktopFromWindowByBamf(win)
-	logger.Debug("bamf desktop:", desktop)
 	if desktop == "" {
 		logger.Debug("get desktop from bamf failed")
 	} else {
-		dai = NewAppInfoFromFile(desktop)
-		if dai != nil {
-			return dai
+		logger.Debugf("bamf desktop: %q", desktop)
+		ai = NewAppInfoFromFile(desktop)
+		if ai != nil {
+			return ai
 		}
 		logger.Debugf("NewAppInfoFromFile faield, desktop: %q", desktop)
 	}
 
+	// 通常不由 desktop 文件启动的应用 bamf 识别容易失败
+	winGuessAppId := winInfo.guessAppId(m.appIdFilterGroup)
+	if winGuessAppId == "" {
+		logger.Debug("guess app id by window info failed")
+	} else {
+		logger.Debugf("win guess app id: %q", winGuessAppId)
+		ai = NewAppInfo(winGuessAppId + ".desktop")
+		if ai != nil {
+			return ai
+		}
+		logger.Debugf("NewAppInfo failed win guess app id: %q", winGuessAppId)
+	}
+
 	// fail
-	return nil
+	winAppInfo := NewAppInfoFromWindow(winInfo)
+	return winAppInfo
 }
 
 // 给 window 一个 runtimeApp
@@ -242,9 +258,9 @@ func getDesktopAppInfoFromWindow(win xproto.Window) *AppInfo {
 // 如果不存在，则 NewRuntimeApp 创建新的 RuntimeApp
 func (m *EntryManager) attachRuntimeAppWindow(winInfo *WindowInfo) *RuntimeApp {
 	win := winInfo.window
-	appInfo := getDesktopAppInfoFromWindow(win)
+	appInfo := m.getAppInfoFromWindow(winInfo)
 	if appInfo == nil {
-		logger.Warning("getDesktopAppInfoFromWindow failed, win:", win)
+		logger.Warning("getAppInfoFromWindow failed, win:", win)
 		return nil
 	}
 	appId := appInfo.GetId()
