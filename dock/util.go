@@ -23,6 +23,7 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xgraphics"
+	"github.com/BurntSushi/xgbutil/xprop"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
@@ -141,6 +142,11 @@ func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {
 func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
 	pid, _ := ewmh.WmPidGet(xu, win)
 	return pid
+}
+
+func getWmCommand(xu *xgbutil.XUtil, win xproto.Window) ([]string, error) {
+	command, err := xprop.PropValStrs(xprop.GetProperty(xu, win, "WM_COMMAND"))
+	return command, err
 }
 
 func getProcessCmdline(pid uint) ([]string, error) {

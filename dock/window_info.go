@@ -212,6 +212,22 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	return true
 }
 
+func (winInfo *WindowInfo) initProcessInfo() {
+	win := winInfo.window
+	pid := getWmPid(XU, win)
+	var err error
+	winInfo.process, err = NewProcessInfo(pid)
+	if err != nil {
+		logger.Warning(err)
+		// Try WM_COMMAND
+		wmCommand, err := getWmCommand(XU, win)
+		if err == nil {
+			winInfo.process = NewProcessInfoWithCmdline(wmCommand)
+		}
+	}
+	logger.Debugf("process: %#v", winInfo.process)
+}
+
 func (winInfo *WindowInfo) update() {
 	win := winInfo.window
 	logger.Debugf("update window %v info", win)
@@ -224,14 +240,7 @@ func (winInfo *WindowInfo) update() {
 		winInfo.updateHasXEmbedInfo()
 	}
 	winInfo.updateWmName()
-
-	pid := getWmPid(XU, win)
-	var err error
-	winInfo.process, err = NewProcessInfo(pid)
-	if err != nil {
-		logger.Warning(err)
-	}
-	logger.Debugf("process: %#v", winInfo.process)
+	winInfo.initProcessInfo()
 }
 
 func (winInfo *WindowInfo) guessAppId(filterGroup *AppIdFilterGroup) string {

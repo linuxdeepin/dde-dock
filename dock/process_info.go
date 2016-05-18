@@ -14,6 +14,17 @@ type ProcessInfo struct {
 	cwd     string
 }
 
+func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
+	if len(cmd) == 0 {
+		return nil
+	}
+	return &ProcessInfo{
+		cmdline: cmd,
+		args:    cmd[1:],
+		exe:     cmd[0],
+	}
+}
+
 func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 	pInfo := &ProcessInfo{
 		pid: pid,
