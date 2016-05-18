@@ -115,12 +115,12 @@ func (m *EntryManager) initRuntimeApps() {
 	}
 	winSlice := windowSlice(clientList)
 	sort.Sort(winSlice)
+	m.clientList = winSlice
 	for _, win := range winSlice {
 		winInfo := NewWindowInfo(win)
 		m.listenWindowXEvent(winInfo)
 		m.attachOrDetachRuntimeAppWindow(winInfo)
 	}
-	m.clientList = winSlice
 }
 
 func (m *EntryManager) initDockedApps() {
