@@ -101,7 +101,7 @@ func (m *EntryManager) attachOrDetachRuntimeAppWindow(winInfo *WindowInfo) {
 		}
 	} else {
 		// app is nil
-		if canShowOnDock {
+		if canShowOnDock && m.clientList.Contains(win) {
 			m.attachRuntimeAppWindow(winInfo)
 		}
 	}

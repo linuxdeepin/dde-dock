@@ -19,6 +19,15 @@ func (a windowSlice) Len() int           { return len(a) }
 func (a windowSlice) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a windowSlice) Less(i, j int) bool { return uint32(a[i]) < uint32(a[j]) }
 
+func (winSlice windowSlice) Contains(win xproto.Window) bool {
+	for _, window := range winSlice {
+		if window == win {
+			return true
+		}
+	}
+	return false
+}
+
 // from a to b
 // return [add, remove]
 func diffSortedWindowSlice(a, b windowSlice) (add, remove windowSlice) {
