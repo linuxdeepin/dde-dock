@@ -19,6 +19,7 @@ import (
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
+	"strconv"
 )
 
 // EntryManager为驻留程序以及打开程序的管理器。
@@ -237,13 +238,36 @@ func (m *EntryManager) getAppInfoFromWindow(winInfo *WindowInfo) *AppInfo {
 	// _GTK_APPLICATION_ID
 	gtkAppId, err := xprop.PropValStr(xprop.GetProperty(XU, win, "_GTK_APPLICATION_ID"))
 	if err != nil {
-		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:", err)
+		logger.Debug("get AppId from _GTK_APPLICATION_ID failed:")
 	} else {
 		ai = NewAppInfo(gtkAppId + ".desktop")
 		if ai != nil {
 			return ai
 		}
 		logger.Debugf("NewAppInfo failed gtk app id: %q", gtkAppId)
+	}
+
+	// env GIO_LAUNCHED_DESKTOP_FILE
+	var launchedDesktopFile string
+	if winInfo.process != nil {
+		envVars, err := getProcessEnvVars(winInfo.process.pid)
+		if err == nil {
+			launchedDesktopFile = envVars["GIO_LAUNCHED_DESKTOP_FILE"]
+			pidStr := envVars["GIO_LAUNCHED_DESKTOP_FILE_PID"]
+			launchedDesktopFilePid, _ := strconv.ParseUint(pidStr, 10, 32)
+			if winInfo.process.pid != 0 &&
+				uint(launchedDesktopFilePid) == winInfo.process.pid {
+				logger.Debug("launchedDesktopFilePid == window pid")
+				ai = NewAppInfoFromFile(launchedDesktopFile)
+				if ai != nil {
+					return ai
+				}
+			} else {
+				logger.Debug("launchedDesktopFilePid != window pid")
+			}
+		}
+	} else {
+		logger.Debug("winInfo.process is nil, get desktop from process env failed")
 	}
 
 	// bamf
@@ -256,7 +280,15 @@ func (m *EntryManager) getAppInfoFromWindow(winInfo *WindowInfo) *AppInfo {
 		if ai != nil {
 			return ai
 		}
-		logger.Debugf("NewAppInfoFromFile faield, desktop: %q", desktop)
+		logger.Debugf("NewAppInfoFromFile failed, desktop: %q", desktop)
+	}
+
+	// try launchedDesktopFile
+	if launchedDesktopFile != "" {
+		ai = NewAppInfoFromFile(launchedDesktopFile)
+		if ai != nil {
+			return ai
+		}
 	}
 
 	// 通常不由 desktop 文件启动的应用 bamf 识别容易失败

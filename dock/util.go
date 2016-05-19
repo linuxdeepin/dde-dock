@@ -161,6 +161,24 @@ func getProcessExe(pid uint) (string, error) {
 	return exe, err
 }
 
+func getProcessEnvVars(pid uint) (map[string]string, error) {
+	envPath := fmt.Sprintf("/proc/%d/environ", pid)
+	bytes, err := ioutil.ReadFile(envPath)
+	if err != nil {
+		return nil, err
+	}
+	content := string(bytes)
+	lines := strings.Split(content, "\x00")
+	vars := make(map[string]string, len(lines))
+	for _, line := range lines {
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			vars[parts[0]] = parts[1]
+		}
+	}
+	return vars, nil
+}
+
 func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
 	icon, err := xgraphics.FindIcon(xu, win, 48, 48)
 	// FIXME: gets empty icon for minecraft
