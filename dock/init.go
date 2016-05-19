@@ -13,6 +13,8 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"os"
+	"path/filepath"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -23,6 +25,7 @@ func init() {
 
 var (
 	logger      = log.NewLogger("daemon/dock")
+	scratchDir  = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
 	dockManager *DockManager
 
 	XU     *xgbutil.XUtil

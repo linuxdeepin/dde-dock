@@ -242,9 +242,10 @@ func (app *RuntimeApp) getMenuItemDock() *MenuItem {
 				break
 			}
 			// exec
-			exec = filepath.Join(scratchDir, app.Id+".sh")
 			scriptContent := "#!/bin/sh\n" + app.exec
-			ioutil.WriteFile(exec, []byte(scriptContent), 0744)
+			scriptFile := filepath.Join(scratchDir, app.Id+".sh")
+			ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
+			exec = scriptFile + " %U"
 		}
 		logger.Debugf("title: %q, icon: %q, exec: %q", title, icon, exec)
 		// TODO:

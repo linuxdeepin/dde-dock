@@ -134,15 +134,17 @@ func (app *NormalApp) HandleMenuItem(id string, timestamp uint32) {
 
 func NewNormalAppFromFilename(name string) *NormalApp {
 	app := &NormalApp{}
-	core := NewAppInfoFromFile(name)
-	if core == nil {
+	appInfo := NewAppInfoFromFile(name)
+	if appInfo == nil {
 		return nil
 	}
-	defer core.Destroy()
-	app.path = core.GetFilename()
-	app.Icon = core.GetIcon()
-	app.Name = core.GetDisplayName()
-	app.buildMenu(core)
+	defer appInfo.Destroy()
+	app.Id = appInfo.GetId()
+	app.DesktopID = app.Id + ".desktop"
+	app.path = appInfo.GetFilename()
+	app.Icon = appInfo.GetIcon()
+	app.Name = appInfo.GetDisplayName()
+	app.buildMenu(appInfo)
 	return app
 }
 

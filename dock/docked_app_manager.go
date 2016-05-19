@@ -34,8 +34,6 @@ StartupNotify=false
 `
 )
 
-var scratchDir string = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
-
 // DockedAppManager是管理已驻留程序的管理器。
 type DockedAppManager struct {
 	settings *gio.Settings

@@ -3,6 +3,7 @@ package dock
 import (
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -98,6 +99,11 @@ func verifyExe(exe, cwd, firstArg string) bool {
 }
 
 func (p *ProcessInfo) GetShellScript() string {
-	cmdlineJoined := strings.Join(p.cmdline, " ")
-	return fmt.Sprintf("cd %q\n%s\n", p.cwd, cmdlineJoined)
+	var cmdline string
+	cmdline = strconv.Quote(p.exe)
+	for _, arg := range p.args {
+		cmdline += (" " + strconv.Quote(arg))
+	}
+	cmdline += " $@"
+	return fmt.Sprintf("cd %q\nexec %s\n", p.cwd, cmdline)
 }

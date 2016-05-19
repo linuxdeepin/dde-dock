@@ -15,7 +15,6 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xprop"
-	"os"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
@@ -367,12 +366,8 @@ func (m *EntryManager) createNormalApp(id string) {
 	nApp := NewNormalApp(desktopId)
 	if nApp == nil {
 		logger.Info("get desktop file failed, create", id, "from scratch file")
-		newId := filepath.Join(
-			os.Getenv("HOME"),
-			".config/dock/scratch",
-			desktopId,
-		)
-		nApp = NewNormalApp(newId)
+		desktopFile := filepath.Join(scratchDir, desktopId)
+		nApp = NewNormalAppFromFilename(desktopFile)
 		if nApp == nil {
 			logger.Warning("create normal app failed:", id)
 			m.dockedAppManager.Undock(id)
