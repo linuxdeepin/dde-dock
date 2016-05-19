@@ -27,12 +27,25 @@ type EntryManager struct {
 	normalApps  map[string]*NormalApp
 	appEntries  map[string]*AppEntry
 
-	// 保持 entry 的顺序
-	entryIDs []string
-
 	dockedAppManager *DockedAppManager
 	clientList       windowSlice
 	appIdFilterGroup *AppIdFilterGroup
+
+	Entries []*AppEntry
+	// Added在程序需要在前端显示时被触发。
+	Added func(dbus.ObjectPath)
+	// Removed会在程序不再需要在dock前端显示时触发。
+	Removed func(string)
+	// 废弃：TrayInited在trayicon相关内容初始化完成后触发。
+	TrayInited func()
+}
+
+func (m *EntryManager) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       "com.deepin.daemon.Dock",
+		ObjectPath: "/dde/dock/EntryManager",
+		Interface:  "dde.dock.EntryManager",
+	}
 }
 
 func NewEntryManager() *EntryManager {
@@ -50,27 +63,31 @@ func NewEntryManager() *EntryManager {
 // 参数entryIDs为dock上app项目的新顺序id列表，要求与当前app项目是同一个集合，只是顺序不同。
 func (m *EntryManager) Reorder(entryIDs []string) error {
 	logger.Debugf("Reorder entryIDs %#v", entryIDs)
-	if len(entryIDs) != len(m.entryIDs) {
-		logger.Warning("Reorder: len(entryIDs) != len(m.entryIDs)")
-		return errors.New("length of incomming entryIDs not equal length of m.entryIDs")
+	if len(entryIDs) != len(m.Entries) {
+		logger.Warning("Reorder: len(entryIDs) != len(m.Entries)")
+		return errors.New("length of incomming entryIDs not equal length of m.Entries")
 	}
-	var orderedEntryIDs []string
+	var orderedEntries []*AppEntry
 	for _, id := range entryIDs {
-		_, ok := m.appEntries[id]
+		entry, ok := m.appEntries[id]
 		if ok {
-			orderedEntryIDs = append(orderedEntryIDs, id)
+			orderedEntries = append(orderedEntries, entry)
 		} else {
 			logger.Warningf("Reorder: invaild entry id %q", id)
 			return fmt.Errorf("Invaild entry id %q", id)
 		}
 	}
-	m.entryIDs = orderedEntryIDs
-	m.dockedAppManager.reorderThenSave(m.entryIDs)
+	m.Entries = orderedEntries
+	m.dockedAppManager.reorderThenSave(m.GetEntryIDs())
 	return nil
 }
 
 func (m *EntryManager) GetEntryIDs() []string {
-	return m.entryIDs
+	list := make([]string, 0, len(m.Entries))
+	for _, e := range m.Entries {
+		list = append(list, e.Id)
+	}
+	return list
 }
 
 func (m *EntryManager) getRuntimeAppByWindow(win xproto.Window) *RuntimeApp {
@@ -133,12 +150,16 @@ func (m *EntryManager) initDockedApps() {
 
 func (m *EntryManager) addAppEntry(id string, e *AppEntry) {
 	m.appEntries[id] = e
-	m.entryIDs = append(m.entryIDs, id)
-
 	err := dbus.InstallOnSession(e)
 	if err != nil {
 		logger.Warning("Install AppEntry to dbus failed:", err)
+		return
 	}
+
+	m.Entries = append(m.Entries, e)
+	// emit signal Added
+	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.hashId)
+	dbus.Emit(m, "Added", entryObjPath)
 }
 
 func (m *EntryManager) mustGetEntry(nApp *NormalApp, rApp *RuntimeApp) *AppEntry {
@@ -169,15 +190,18 @@ func (m *EntryManager) destroyEntry(appId string) {
 		dbus.ReleaseName(e)
 		dbus.UnInstallObject(e)
 		logger.Info("destroyEntry:", appId)
+
+		delete(m.appEntries, appId)
+		m.Entries = entrySliceRemove(m.Entries, e)
+		// emit signal Removed
+		dbus.Emit(m, "Removed", e.Id)
 	}
-	delete(m.appEntries, appId)
-	m.entryIDs = strSliceRemove(m.entryIDs, appId)
 }
 
-func strSliceRemove(slice []string, str string) []string {
+func entrySliceRemove(slice []*AppEntry, entry *AppEntry) []*AppEntry {
 	var index int = -1
 	for i, v := range slice {
-		if v == str {
+		if v.hashId == entry.hashId {
 			index = i
 		}
 	}

@@ -10,12 +10,18 @@
 package dock
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
-	"sync"
 	"pkg.deepin.io/lib/dbus"
+	"sync"
 )
 
 const (
+	entryDBusObjPathPrefix = "/dde/dock/entry/v1/"
+	entryDBusDestPrefix    = "dde.dock.entry."
+	entryDBusInterface     = "dde.dock.Entry"
+
 	FieldTitle   = "title"
 	FieldIcon    = "icon"
 	FieldMenu    = "menu"
@@ -33,31 +39,40 @@ type AppEntry struct {
 	nAppLock sync.RWMutex
 	rAppLock sync.RWMutex
 
-	Id   string
-	Type string
-	Data map[string]string
+	hashId string
+	Id     string
+	Type   string
+	Data   map[string]string
 
 	DataChanged func(string, string)
 }
 
-func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Debugf("NewAppEntryWithRuntimeApp: app id %s, win %v", rApp.Id, rApp.CurrentInfo.window)
+func NewAppEntry(id string) *AppEntry {
 	e := &AppEntry{
-		Id:   rApp.Id,
+		Id:   id,
 		Type: "App",
 		Data: make(map[string]string),
 	}
+
+	// Set hash id
+	hasher := md5.New()
+	hasher.Write([]byte(e.Id))
+	// DBusObjectPath can't be start with digital number
+	e.hashId = "d" + hex.EncodeToString(hasher.Sum(nil))
+	return e
+}
+
+func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
+	logger.Debugf("NewAppEntryWithRuntimeApp: app id %s, win %v", rApp.Id, rApp.CurrentInfo.window)
+	e := NewAppEntry(rApp.Id)
 	e.setData(FieldStatus, ActiveStatus)
 	e.attachRuntimeApp(rApp)
 	return e
 }
+
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	logger.Debug("NewAppEntryWithNormalApp:", nApp.Id)
-	e := &AppEntry{
-		Id:   nApp.Id,
-		Type: "App",
-		Data: make(map[string]string),
-	}
+	e := NewAppEntry(nApp.Id)
 	e.setData(FieldStatus, NormalStatus)
 	e.attachNormalApp(nApp)
 	return e

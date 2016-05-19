@@ -29,21 +29,6 @@ import (
 	"pkg.deepin.io/dde/daemon/appinfo"
 )
 
-func isEntryNameValid(name string) bool {
-	if !strings.HasPrefix(name, entryDestPrefix) {
-		return false
-	}
-	return true
-}
-
-func getEntryId(name string) (string, bool) {
-	a := strings.SplitN(name, entryDestPrefix, 2)
-	if len(a) >= 1 {
-		return a[len(a)-1], true
-	}
-	return "", false
-}
-
 func trimDesktop(desktopID string) string {
 	desktopIDLen := len(desktopID)
 	if desktopIDLen == 0 {

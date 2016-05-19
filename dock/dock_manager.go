@@ -18,12 +18,11 @@ import (
 )
 
 type DockManager struct {
-	hideStateManager    *HideStateManager
-	setting             *Setting
-	dockProperty        *DockProperty
-	entryManager        *EntryManager
-	entryProxyerManager *EntryProxyerManager
-	clientManager       *ClientManager
+	hideStateManager *HideStateManager
+	setting          *Setting
+	dockProperty     *DockProperty
+	entryManager     *EntryManager
+	clientManager    *ClientManager
 
 	// 共用部分
 	hideMode    HideModeType
@@ -56,9 +55,7 @@ func (m *DockManager) initEntryManager() error {
 		return err
 	}
 
-	m.entryProxyerManager = NewEntryProxyerManager()
-	m.entryProxyerManager.watchEntries()
-	err = dbus.InstallOnSession(m.entryProxyerManager)
+	err = dbus.InstallOnSession(m.entryManager)
 	return err
 }
 
@@ -153,11 +150,6 @@ func (m *DockManager) destroy() {
 	if m.hideStateManager != nil {
 		m.hideStateManager.destroy()
 		m.hideStateManager = nil
-	}
-
-	if m.entryProxyerManager != nil {
-		m.entryProxyerManager.destroy()
-		m.entryProxyerManager = nil
 	}
 
 	if m.dpy != nil {
