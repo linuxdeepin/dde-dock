@@ -84,6 +84,10 @@ func (s *Transaction) getFreq(id ItemID) uint64 {
 // Search executes this transaction and returns the searching result.
 func (s *Transaction) Search(key string, dataSet []ItemInfo) {
 	trimedKey := strings.TrimSpace(key)
+	if len(trimedKey) == 0 {
+		return
+	}
+
 	escapedKey := regexp.QuoteMeta(trimedKey)
 
 	enablePinYinSearch := s.pinyinObj != nil && s.pinyinObj.IsValid()

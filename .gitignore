@@ -34,6 +34,7 @@ bluetooth/bluetooth
 main_network.go
 bin/dde-session-daemon/dde-session-daemon
 bin/dde-dock-daemon/dde-dock-daemon
+bin/dde-session-initializer/dde-session-initializer
 !launcher/testdata/.config/launcher/*
 
 debian
