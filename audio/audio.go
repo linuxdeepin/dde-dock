@@ -48,6 +48,8 @@ type Audio struct {
 
 	isSaving    bool
 	saverLocker sync.Mutex
+
+	sinkLocker sync.Mutex
 }
 
 const (
@@ -166,8 +168,20 @@ func (a *Audio) destroy() {
 }
 
 func (a *Audio) SetDefaultSink(name string) {
+	a.sinkLocker.Lock()
+	defer a.sinkLocker.Unlock()
+
 	a.core.SetDefaultSink(name)
 	a.update()
+
+	var idxList []uint32
+	for _, sinkInput := range a.SinkInputs {
+		idxList = append(idxList, sinkInput.index)
+	}
+	if len(idxList) == 0 {
+		return
+	}
+	a.core.MoveSinkInputsByName(idxList, name)
 }
 func (a *Audio) SetDefaultSource(name string) {
 	a.core.SetDefaultSource(name)
