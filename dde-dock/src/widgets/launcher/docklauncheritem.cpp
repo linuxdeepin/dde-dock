@@ -23,6 +23,7 @@ DockLauncherItem::DockLauncherItem(QWidget *parent)
     m_appIcon->resize(height(), height());
 //    connect(m_appIcon, &DockAppIcon::mousePress, this, &DockLauncherItem::slotMousePress);
 //    connect(m_appIcon, &DockAppIcon::mouseRelease, this, &DockLauncherItem::slotMouseRelease);
+    connect(m_appIcon, &DockAppIcon::mouseRelease, this, &DockLauncherItem::startupLauncher);
     connect(this, &DockLauncherItem::mouseRelease, this, &DockLauncherItem::startupLauncher);
 
     //TODO icon not show on init
