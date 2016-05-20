@@ -78,6 +78,10 @@ func (ge *Grub2Ext) DoWriteGrubSettings(fileContent string) (ok bool, err error)
 // generate a new grub configuration.
 func (ge *Grub2Ext) DoGenerateGrubMenu() (ok bool, err error) {
 	logger.Info("start to generate a new grub configuration file")
+	// force use LANG=en_US.UTF-8 to make lsb-release/os-probe support
+	// Unicode characters
+	// FIXME: keep same with the current system language settings
+	os.Setenv("LANG", "en_US.UTF-8")
 	cmd := exec.Command(grubUpdateCmd)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr

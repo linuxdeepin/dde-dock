@@ -36,6 +36,7 @@ func SetDefaultGrubSettingFile(file string) {
 const (
 	grubMenuFile                  = DefaultGrubMenuFile
 	grubUpdateCmd                 = "/usr/sbin/update-grub"
+	lsbReleaseCmd                 = "/usr/bin/lsb_release"
 	defaultGrubDefaultEntry       = "0"
 	defaultGrubGfxmode            = "auto"
 	defaultGrubTimeout            = "5"
@@ -284,7 +285,7 @@ func (grub *Grub2) fixSettingDistro() (needUpdate bool) {
 }
 func (grub *Grub2) doFixSettingDistro() (needUpdate bool) {
 	// fix GRUB_DISTRIBUTOR
-	wantGrubDistroCmd := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	wantGrubDistroCmd := fmt.Sprintf("`%s -d -s 2>/dev/null || echo Debian`", lsbReleaseCmd)
 	if grub.doGetSettingDistributor() != wantGrubDistroCmd {
 		needUpdate = true
 		grub.doSetSettingDistributor(wantGrubDistroCmd)

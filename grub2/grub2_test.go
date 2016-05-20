@@ -258,7 +258,7 @@ func (*GrubTester) TestFixSettings(c *C.C) {
 
 	wantSettingCount := 8
 	wantDefaultEntry := "0"
-	wantDistro := "`lsb_release -d -s 2> /dev/null || echo Debian`"
+	wantDistro := "`/usr/bin/lsb_release -d -s 2>/dev/null || echo Debian`"
 	wantTimeout := "5"
 	wantTheme := "/boot/grub/themes/deepin/theme.txt"
 	c.Check(len(grub.settings), C.Equals, wantSettingCount)

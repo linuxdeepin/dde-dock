@@ -65,7 +65,7 @@ func (*GrubTester) TestSetup(c *C.C) {
 GRUB_CMDLINE_LINUX="locale=zh_CN.UTF-8 url=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/preseed/deepin.seed initrd=http://cdimage/nfsroot/deepin-2014/desktop/current/amd64/casper/initrd.lz"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
 GRUB_DEFAULT="0"
-GRUB_DISTRIBUTOR="` + "`lsb_release -d -s 2> /dev/null || echo Debian`" + `"
+GRUB_DISTRIBUTOR="` + "`/usr/bin/lsb_release -d -s 2>/dev/null || echo Debian`" + `"
 GRUB_GFXMODE="1200x900"
 GRUB_THEME="./testdata/tmp_theme_dir/theme.txt"
 GRUB_TIMEOUT="5"
