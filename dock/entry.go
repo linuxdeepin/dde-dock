@@ -10,15 +10,18 @@
 package dock
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
-	"strings"
-	"sync"
-
-	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
+	"sync"
 )
 
 const (
+	entryDBusObjPathPrefix = "/dde/dock/entry/v1/"
+	entryDBusDestPrefix    = "dde.dock.entry."
+	entryDBusInterface     = "dde.dock.Entry"
+
 	FieldTitle   = "title"
 	FieldIcon    = "icon"
 	FieldMenu    = "menu"
@@ -36,31 +39,40 @@ type AppEntry struct {
 	nAppLock sync.RWMutex
 	rAppLock sync.RWMutex
 
-	Id   string
-	Type string
-	Data map[string]string
+	hashId string
+	Id     string
+	Type   string
+	Data   map[string]string
 
 	DataChanged func(string, string)
 }
 
-func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
-	logger.Debugf("NewAppEntryWithRuntimeApp: %s, 0x%x", rApp.Id, rApp.CurrentInfo.Xid)
+func NewAppEntry(id string) *AppEntry {
 	e := &AppEntry{
-		Id:   rApp.Id,
+		Id:   id,
 		Type: "App",
 		Data: make(map[string]string),
 	}
+
+	// Set hash id
+	hasher := md5.New()
+	hasher.Write([]byte(e.Id))
+	// DBusObjectPath can't be start with digital number
+	e.hashId = "d" + hex.EncodeToString(hasher.Sum(nil))
+	return e
+}
+
+func NewAppEntryWithRuntimeApp(rApp *RuntimeApp) *AppEntry {
+	logger.Debugf("NewAppEntryWithRuntimeApp: app id %s, win %v", rApp.Id, rApp.CurrentInfo.window)
+	e := NewAppEntry(rApp.Id)
 	e.setData(FieldStatus, ActiveStatus)
 	e.attachRuntimeApp(rApp)
 	return e
 }
+
 func NewAppEntryWithNormalApp(nApp *NormalApp) *AppEntry {
 	logger.Debug("NewAppEntryWithNormalApp:", nApp.Id)
-	e := &AppEntry{
-		Id:   nApp.Id,
-		Type: "App",
-		Data: make(map[string]string),
-	}
+	e := NewAppEntry(nApp.Id)
 	e.setData(FieldStatus, NormalStatus)
 	e.attachNormalApp(nApp)
 	return e
@@ -92,47 +104,18 @@ func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
 func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
 func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
 func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
-func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
-	paths := strings.Split(data, ",")
-	logger.Debug("HandleDragDrop:", paths)
-	if e.rApp != nil {
-		logger.Debug("Launch from runtime app")
-		core := e.rApp.createDesktopAppInfo()
-		if core != nil {
-			defer core.Destroy()
-			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		} else {
-			app, err :=
-				gio.AppInfoCreateFromCommandline(e.rApp.exec,
-					e.rApp.Id, gio.AppInfoCreateFlagsSupportsUris)
-			if err != nil {
-				logger.Warning("Create Launch app failed:", err)
-				return
-			}
 
-			_, err = app.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		}
+func (e *AppEntry) HandleDragDrop(x, y int32, data string, timestamp uint32) {
+	// x, y useless
+	// only handle file://
+	logger.Debug("HandleDragDrop:", data)
+	if e.rApp != nil {
+		e.rApp.HandleDragDrop(data, timestamp)
 	} else if e.nApp != nil {
-		logger.Debug("Launch from normal app")
-		core := e.nApp.createDesktopAppInfo()
-		if core != nil {
-			defer core.Destroy()
-			_, err := core.LaunchUris(paths, gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-			if err != nil {
-				logger.Warning("Launch Drop failed:", err)
-			}
-		} else {
-			// TODO:
-			logger.Warning("TODO: AppEntry.nApp.core == nil")
-		}
+		e.nApp.HandleDragDrop(data, timestamp)
 	}
 }
+
 func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32) {}
 
 func (e *AppEntry) setData(key, value string) {
@@ -154,14 +137,11 @@ func (e *AppEntry) update() {
 	if e.rApp != nil {
 		e.setData(FieldStatus, ActiveStatus)
 		xids := make([]XidInfo, 0)
-		for k, v := range e.rApp.xids {
+		for k, v := range e.rApp.windowInfoTable {
 			xids = append(xids, XidInfo{uint32(k), v.Title})
 		}
 		b, _ := json.Marshal(xids)
 		e.setData(FieldAppXids, string(b))
-		if dockManager.hideStateManager.state == HideStateShown {
-			dockManager.hideStateManager.updateStateWithDelay()
-		}
 	} else if e.nApp != nil {
 		e.setData(FieldStatus, NormalStatus)
 	} else {

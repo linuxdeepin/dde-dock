@@ -23,7 +23,7 @@ func (m *DockManager) handleClientListChanged() {
 		logger.Warning("Get client list failed:", err)
 		return
 	}
-	m.entryManager.runtimeAppChanged(clientList)
+	m.entryManager.updateClientList(clientList)
 }
 
 func (m *DockManager) handleActiveWindowChanged() {
@@ -35,14 +35,7 @@ func (m *DockManager) handleActiveWindowChanged() {
 		return
 	}
 
-	// TODO: entry manager update active window
-	// loop gets better performance than find_app_id_by_xid.
-	// setLeader/updateState will filter invalid xid.
-	for _, app := range m.entryManager.runtimeApps {
-		app.setLeader(m.activeWindow)
-		app.updateState(m.activeWindow)
-	}
-
+	m.entryManager.updateActiveWindow(m.activeWindow)
 	m.clientManager.updateActiveWindow(m.activeWindow)
 	m.hideStateManager.updateActiveWindow(m.activeWindow)
 }
@@ -56,6 +49,8 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 			m.handleClientListChanged()
 		case _NET_ACTIVE_WINDOW:
 			m.handleActiveWindowChanged()
+		case _NET_SHOWING_DESKTOP:
+			m.hideStateManager.updateStateWithoutDelay()
 		}
 	}).Connect(XU, rootWin)
 
