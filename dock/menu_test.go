@@ -27,7 +27,7 @@ func (m *MenuTestSuite) TestGenerateMenuJson(c *C.C) {
 		c.Skip("get test data failed")
 		return
 	}
-	core := NewDesktopAppInfoFromFilename("./testdata/firefox.desktop")
+	core := NewAppInfoFromFile("./testdata/firefox.desktop")
 	f.buildMenu(core)
 	core.Destroy()
 	os.Setenv("LANGUAGE", old)

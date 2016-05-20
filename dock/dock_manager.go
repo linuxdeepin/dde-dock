@@ -18,13 +18,11 @@ import (
 )
 
 type DockManager struct {
-	hideStateManager    *HideStateManager
-	setting             *Setting
-	dockProperty        *DockProperty
-	entryManager        *EntryManager
-	entryProxyerManager *EntryProxyerManager
-	dockedAppManager    *DockedAppManager
-	clientManager       *ClientManager
+	hideStateManager *HideStateManager
+	setting          *Setting
+	dockProperty     *DockProperty
+	entryManager     *EntryManager
+	clientManager    *ClientManager
 
 	// 共用部分
 	hideMode    HideModeType
@@ -50,24 +48,15 @@ func NewDockManager() (*DockManager, error) {
 
 func (m *DockManager) initEntryManager() error {
 	m.entryManager = NewEntryManager()
-	m.entryProxyerManager = NewEntryProxyerManager()
-	m.entryProxyerManager.watchEntries()
-	err := dbus.InstallOnSession(m.entryProxyerManager)
-	return err
-}
-
-func (m *DockManager) initDockedAppManager() error {
-	m.dockedAppManager = NewDockedAppManager()
-	err := dbus.InstallOnSession(m.dockedAppManager)
-	return err
-}
-
-func (m *DockManager) initDockedAppEntries() {
-	for _, id := range m.dockedAppManager.DockedAppList() {
-		id = normalizeAppID(id)
-		logger.Debug("load docked app", id)
-		m.entryManager.createNormalApp(id)
+	m.entryManager.initRuntimeApps()
+	m.entryManager.initDockedApps()
+	err := dbus.InstallOnSession(m.entryManager.dockedAppManager)
+	if err != nil {
+		return err
 	}
+
+	err = dbus.InstallOnSession(m.entryManager)
+	return err
 }
 
 func (m *DockManager) initHideStateManager() error {
@@ -122,12 +111,6 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize entry proxyer manager done")
 
-	err = m.initDockedAppManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize docked app manager done")
-
 	err = m.initHideStateManager()
 	if err != nil {
 		return err
@@ -159,11 +142,6 @@ func (m *DockManager) destroy() {
 		m.dockProperty = nil
 	}
 
-	if m.dockedAppManager != nil {
-		m.dockedAppManager.destroy()
-		m.dockedAppManager = nil
-	}
-
 	if m.setting != nil {
 		m.setting.destroy()
 		m.setting = nil
@@ -172,11 +150,6 @@ func (m *DockManager) destroy() {
 	if m.hideStateManager != nil {
 		m.hideStateManager.destroy()
 		m.hideStateManager = nil
-	}
-
-	if m.entryProxyerManager != nil {
-		m.entryProxyerManager.destroy()
-		m.entryProxyerManager = nil
 	}
 
 	if m.dpy != nil {
