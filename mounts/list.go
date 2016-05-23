@@ -10,8 +10,11 @@
 package mounts
 
 import (
+	"dbus/org/freedesktop/udisks2"
 	"fmt"
 	"gir/gio-2.0"
+	"path"
+	"pkg.deepin.io/lib/dbus"
 	"regexp"
 	"strings"
 	"sync"
@@ -209,6 +212,10 @@ func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 		volume.Unref()
 	}
 
+	if info.Total == 0 {
+		info.Total = getTotalSizeByUDisks2(info.Path)
+	}
+
 	if len(info.Id) == 0 {
 		if len(info.Path) != 0 {
 			info.Id = info.Path
@@ -236,6 +243,10 @@ func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 			Object: volume,
 			Type:   diskObjVolume,
 		},
+	}
+
+	if info.Total == 0 {
+		info.Total = getTotalSizeByUDisks2(info.Path)
 	}
 
 	if len(info.Id) == 0 {
@@ -305,4 +316,16 @@ func getIconFromGIcon(gicon *gio.Icon) string {
 		return icons[2]
 	}
 	return ""
+}
+
+func getTotalSizeByUDisks2(devPath string) uint64 {
+	blockObj, err := udisks2.NewBlock("org.freedesktop.UDisks2",
+		dbus.ObjectPath("/org/freedesktop/UDisks2/block_devices/"+path.Base(devPath)))
+	if err != nil {
+		logger.Warning("New udisks2 block object failed:", err)
+		return 0
+	}
+	defer udisks2.DestroyBlock(blockObj)
+
+	return blockObj.Size.Get() / 1024
 }
