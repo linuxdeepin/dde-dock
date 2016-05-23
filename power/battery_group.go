@@ -10,184 +10,183 @@
 package power
 
 import (
-	libupower "dbus/org/freedesktop/upower"
-	"fmt"
-	"pkg.deepin.io/lib/dbus"
+	"errors"
+	"math"
 	"sync"
 )
 
 type batteryGroup struct {
-	manager            *Manager
-	batterys           []*batteryDevice
-	changeLock         sync.Mutex
-	destroyLock        sync.Mutex
+	manager    *Manager
+	batteryMap map[string]batteryDevice
+
+	changeLock  sync.Mutex
+	destroyLock sync.Mutex
+
 	propChangedHandler func()
-	getInfoMethod      func(*batteryDevice) (*batteryInfo, error)
-	InfoMap            map[string]*batteryInfo
 }
 
 func NewBatteryGroup(m *Manager) (*batteryGroup, error) {
 	batGroup := &batteryGroup{
-		manager:            m,
-		getInfoMethod:      getBatteryInfoFromUPower,
-		propChangedHandler: m.updateBatteryGroupInfo,
+		manager: m,
 	}
-	batGroup.setDeviceList()
 
-	upower := m.upower
-	upower.ConnectDeviceAdded(func(path dbus.ObjectPath) {
-		if batGroup != nil {
-			batGroup.AddBatteryDevice(path)
-		}
-		batGroup.propChangedHandler()
-	})
+	batGroup.batteryMap = make(map[string]batteryDevice, 0)
 
-	upower.ConnectDeviceRemoved(func(path dbus.ObjectPath) {
-		if batGroup != nil {
-			batGroup.RemoveBatteryDevice(path)
-		}
-		batGroup.propChangedHandler()
-	})
+	logger.Debug("powerSupplyDataBackend:", m.powerSupplyDataBackend)
+	switch m.powerSupplyDataBackend {
+	case powerSupplyDataBackendUPower:
+		batGroup.initUPowerBackend()
+
+	case powerSupplyDataBackendPoll:
+		batGroup.initPollBackend()
+	default:
+		return nil, errors.New("unknown data backend")
+	}
+
 	return batGroup, nil
 }
 
-func (batGroup *batteryGroup) NewBatteryDevice(dev *libupower.Device) *batteryDevice {
-	return newBatteryDevice(dev, batGroup.propChangedHandler)
+func (batGroup *batteryGroup) isBatteryDeviceExist(path string) bool {
+	_, ok := batGroup.batteryMap[path]
+	return ok
 }
 
-func (batGroup *batteryGroup) AddBatteryDevice(path dbus.ObjectPath) {
-	batGroup.changeLock.Lock()
-	defer batGroup.changeLock.Unlock()
-	if batGroup.isBatteryPathExist(path) {
+func (batGroup *batteryGroup) Add(device batteryDevice) {
+	manager := batGroup.manager
+	path := device.GetPath()
+
+	if batGroup.isBatteryDeviceExist(path) {
+		logger.Warning("Add failed, battery device existed")
 		return
 	}
 
-	dev, err := libupower.NewDevice(upowerDBusDest, dbus.ObjectPath(path))
-	if err != nil {
-		logger.Warning("New Device Failed:", err)
-		return
-	}
+	batGroup.batteryMap[path] = device
+	batInfo := newBatteryInfo()
+	batInfo.OnPropertyChange(func(property string, oldVal interface{}, newVal interface{}) {
+		logger.Debugf("%q propertyChange %q: %v => %v", path, property, oldVal, newVal)
 
-	if dev.Type.Get() != DeviceTypeBattery {
-		return
-	}
+		switch property {
+		case "IsPresent":
+			isPresent := newVal.(bool)
+			manager.setPropBatteryIsPresent(path, isPresent)
 
-	batGroup.batterys = append(batGroup.batterys, batGroup.NewBatteryDevice(dev))
-}
+		case "Percentage":
+			percentage := newVal.(float64)
+			manager.setPropBatteryPercentage(path, percentage)
 
-func (batGroup *batteryGroup) RemoveBatteryDevice(path dbus.ObjectPath) {
-	batGroup.changeLock.Lock()
-	defer batGroup.changeLock.Unlock()
+		case "Energy":
+			manager.checkBatteryPowerLevel(batGroup)
 
-	var tmpList []*batteryDevice
-	for _, battery := range batGroup.batterys {
-		if battery.Path == path {
-			battery.Destroy()
-			continue
+		case "TimeToEmpty":
+			manager.checkBatteryPowerLevel(batGroup)
+
+		case "State":
+			state := newVal.(batteryStateType)
+			manager.setPropBatteryState(path, state)
 		}
+	})
 
-		tmpList = append(tmpList, battery)
-	}
-
-	batGroup.batterys = tmpList
+	device.SetInfo(batInfo)
 }
 
-func (batGroup *batteryGroup) UpdateInfo() error {
-	if len(batGroup.batterys) == 0 {
-		return fmt.Errorf("No battery device")
+func (batGroup *batteryGroup) Remove(path string) {
+	if batDevice, ok := batGroup.batteryMap[path]; ok {
+		batDevice.Destroy()
+		delete(batGroup.batteryMap, path)
 	}
-
-	if batGroup.getInfoMethod == nil {
-		return fmt.Errorf("batteryGroup.getInfoMethod is nil")
-	}
-
-	batGroup.InfoMap = make(map[string]*batteryInfo, len(batGroup.batterys))
-	for _, battery := range batGroup.batterys {
-		key := battery.NativePath.Get()
-		batInfo, err := batGroup.getInfoMethod(battery)
-		if err != nil {
-			return fmt.Errorf("getInfo failed: %v", err)
-		}
-		logger.Debugf("%v %#v", key, batInfo)
-		batGroup.InfoMap[key] = batInfo
-	}
-	return nil
 }
 
 func (batGroup *batteryGroup) Destroy() {
 	batGroup.destroyLock.Lock()
 	defer batGroup.destroyLock.Unlock()
 
-	for _, battery := range batGroup.batterys {
-		battery.Destroy()
+	for _, dev := range batGroup.batteryMap {
+		dev.Destroy()
 	}
-	batGroup.batterys = nil
-	batGroup.propChangedHandler = nil
+	batGroup.batteryMap = nil
 }
 
-func (batGroup *batteryGroup) setDeviceList() {
-	batGroup.changeLock.Lock()
-	defer batGroup.changeLock.Unlock()
+func (batGroup *batteryGroup) batteryDevicesCount() int {
+	return len(batGroup.batteryMap)
+}
 
-	devs, err := batGroup.manager.upower.EnumerateDevices()
-	if err != nil {
-		logger.Error("Can't EnumerateDevices", err)
-		return
+func (batGroup *batteryGroup) getTimeToEmpty() int64 {
+	var time int64
+	for _, dev := range batGroup.batteryMap {
+		batInfo := dev.GetInfo()
+		time += batInfo.TimeToEmpty
 	}
+	return time
+}
 
-	var tmpList []*batteryDevice
-	for _, path := range devs {
-		logger.Debug("Check device whether is battery:", path)
-		dev, err := libupower.NewDevice(upowerDBusDest, path)
-		if err != nil {
-			logger.Warning("New Device Object Failed:", err)
-			continue
+func (batGroup *batteryGroup) getPercentage() float64 {
+	var energySum, energyFullSum float64
+	for path, dev := range batGroup.batteryMap {
+		batInfo := dev.GetInfo()
+		logger.Debugf("path %q, batInfo: %#v", path, batInfo)
+		energySum += batInfo.Energy
+		energyFullSum += batInfo.EnergyFull
+	}
+	logger.Debugf("%v/%v", energySum, energyFullSum)
+	return math.Floor((energySum / energyFullSum) * 100.0)
+}
+
+func (m *Manager) getBatteryPowerLevelByPercentage(percentage float64) uint32 {
+	switch {
+	case percentage < batteryPercentageAbnormal:
+		return batteryPowerLevelAbnormal
+
+	case percentage <= m.batteryPercentageExhausted:
+		return batteryPowerLevelExhausted
+
+	case percentage <= m.batteryPercentageVeryLow:
+		return batteryPowerLevelVeryLow
+
+	case percentage <= m.batteryPercentageLow:
+		return batteryPowerLevelLow
+
+	default:
+		return batteryPowerLevelSufficient
+	}
+}
+
+func (m *Manager) getBatteryPowerLevelByTimeToEmpty(time int64) uint32 {
+	switch {
+	case time < timeToEmptyAbnormal:
+		return batteryPowerLevelAbnormal
+
+	case time <= m.timeToEmptyExhausted:
+		return batteryPowerLevelExhausted
+
+	case time <= m.timeToEmptyVeryLow:
+		return batteryPowerLevelVeryLow
+
+	case time <= m.timeToEmptyLow:
+		return batteryPowerLevelLow
+
+	default:
+		return batteryPowerLevelSufficient
+	}
+}
+
+func (batGroup *batteryGroup) getPowerLevel(usePercentageForPolicy bool) uint32 {
+	manager := batGroup.manager
+	if usePercentageForPolicy {
+		percentage := batGroup.getPercentage()
+		logger.Debugf("sum percentage: %.2f%%", percentage)
+		return manager.getBatteryPowerLevelByPercentage(percentage)
+	} else {
+		// use time to empty for policy
+		timeToEmpty := batGroup.getTimeToEmpty()
+		logger.Debug("sum timeToEmpty(secs):", timeToEmpty)
+		powerLevel := manager.getBatteryPowerLevelByTimeToEmpty(timeToEmpty)
+
+		if powerLevel == batteryPowerLevelAbnormal {
+			logger.Debug("Try use percentage for policy")
+			percentage := batGroup.getPercentage()
+			logger.Debugf("sum percentage: %.2f%%", percentage)
+			return manager.getBatteryPowerLevelByPercentage(percentage)
 		}
-
-		if dev.Type.Get() != DeviceTypeBattery {
-			logger.Debugf("Not battery device: %v, type %v", path, dev.Type.Get())
-			continue
-		}
-
-		logger.Debug("Add battery:", path)
-		tmpList = append(tmpList, batGroup.NewBatteryDevice(dev))
+		return powerLevel
 	}
-
-	batGroup.batterys = tmpList
-	logger.Debug("Battery device list:", batGroup.batterys)
-}
-
-func (batGroup *batteryGroup) isBatteryPathExist(path dbus.ObjectPath) bool {
-	for _, battery := range batGroup.batterys {
-		if battery.Path == path {
-			return true
-		}
-	}
-	return false
-}
-
-type batteryInfo struct {
-	IsPresent        bool
-	State            uint32
-	Percentage       float64
-	Energy           float64
-	EnergyFull       float64
-	EnergyFullDesign float64
-	EnergyEmpty      float64
-	TimeToFull       int64
-	TimeToEmpty      int64
-}
-
-func getBatteryInfoFromUPower(b *batteryDevice) (*batteryInfo, error) {
-	return &batteryInfo{
-		IsPresent:        b.IsPresent.Get(),
-		State:            b.State.Get(),
-		Percentage:       b.Percentage.Get(),
-		Energy:           b.Energy.Get(),
-		EnergyFull:       b.EnergyFull.Get(),
-		EnergyFullDesign: b.EnergyFullDesign.Get(),
-		EnergyEmpty:      b.EnergyEmpty.Get(),
-		TimeToFull:       b.TimeToFull.Get(),
-		TimeToEmpty:      b.TimeToEmpty.Get(),
-	}, nil
 }

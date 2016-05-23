@@ -40,7 +40,6 @@ func (m *Manager) initOnBatteryChangedHandler() {
 	upower.OnBattery.ConnectChanged(func() {
 		logger.Debug("property OnBattery changed")
 		m.setPropOnBattery(upower.OnBattery.Get())
-		m.updateBatteryGroupInfo()
 
 		if m.OnBattery {
 			playSound(soundutils.EventPowerUnplug)
@@ -86,7 +85,7 @@ func (m *Manager) handleWeakup() {
 	logger.Debug("Simulate user activity")
 	m.screenSaver.SimulateUserActivity()
 
-	m.checkBatteryPowerLevel()
+	m.checkBatteryPowerLevel(m.batteryGroup)
 	playSound(soundutils.EventWakeup)
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
 		m.doLock()
@@ -99,10 +98,10 @@ func (m *Manager) initEventHandle() {
 	m.initOnBatteryChangedHandler()
 }
 
-func (m *Manager) checkBatteryPowerLevel() {
+func (m *Manager) checkBatteryPowerLevel(batGroup *batteryGroup) {
 	logger.Debug("checkBatteryPowerLevel")
 
-	newLevel := m.getNewBatteryPowerLevel()
+	newLevel := m.getNewBatteryPowerLevel(batGroup)
 	if m.batteryPowerLevel != newLevel {
 		logger.Debugf("batteryPowerLevel changed: %v => %v",
 			getBatteryPowerLevelName(m.batteryPowerLevel), getBatteryPowerLevelName(newLevel))
@@ -166,83 +165,4 @@ func (m *Manager) handleBatteryPowerLevelChanged() {
 		// 由 低电量 到 电量充足，必然需要有线电源插入
 	}
 
-}
-
-func (m *Manager) getBatteryGroupTimeToEmpty() int64 {
-	var timeToEmpty int64
-	for _, batInfo := range m.batteryGroup.InfoMap {
-		timeToEmpty += batInfo.TimeToEmpty
-	}
-	return timeToEmpty
-}
-
-func (m *Manager) getBatteryGroupPercentage() float64 {
-	var energySum, energyFullSum float64
-	for _, batInfo := range m.batteryGroup.InfoMap {
-		energySum += batInfo.Energy
-		energyFullSum += batInfo.EnergyFull
-	}
-	return (energySum / energyFullSum) * 100.0
-}
-
-func getBatteryPowerLevelByPercentage(percentage float64) uint32 {
-	switch {
-	case percentage < batteryPercentageAbnormal:
-		return batteryPowerLevelAbnormal
-
-	case percentage <= batteryPercentageExhausted:
-		return batteryPowerLevelExhausted
-
-	case percentage <= batteryPercentageVeryLow:
-		return batteryPowerLevelVeryLow
-
-	case percentage <= batteryPercentageLow:
-		return batteryPowerLevelLow
-
-	default:
-		return batteryPowerLevelSufficient
-	}
-}
-
-func getBatteryPowerLevelByTimeToEmpty(time int64) uint32 {
-	switch {
-	case time < timeToEmptyAbnormal:
-		return batteryPowerLevelAbnormal
-
-	case time < timeToEmptyExhausted:
-		return batteryPowerLevelExhausted
-
-	case time < timeToEmptyVeryLow:
-		return batteryPowerLevelVeryLow
-
-	case time < timeToEmptyLow:
-		return batteryPowerLevelLow
-
-	default:
-		return batteryPowerLevelSufficient
-	}
-}
-
-func (m *Manager) getNewBatteryPowerLevel() uint32 {
-	if !m.OnBattery {
-		return batteryPowerLevelSufficient
-	}
-
-	if m.usePercentageForPolicy {
-		percentage := m.getBatteryGroupPercentage()
-		logger.Debugf("sum percentage: %.2f%%", percentage)
-		return getBatteryPowerLevelByPercentage(percentage)
-	} else {
-		// use time to empty for policy
-		timeToEmpty := m.getBatteryGroupTimeToEmpty()
-		logger.Debug("sum timeToEmpty(secs):", timeToEmpty)
-		powerLevel := getBatteryPowerLevelByTimeToEmpty(timeToEmpty)
-		if powerLevel == batteryPowerLevelAbnormal {
-			logger.Debug("Try use percentage for policy")
-			percentage := m.getBatteryGroupPercentage()
-			logger.Debugf("sum percentage: %.2f%%", percentage)
-			return getBatteryPowerLevelByPercentage(percentage)
-		}
-		return powerLevel
-	}
 }

@@ -50,6 +50,16 @@ type Manager struct {
 	powerLevelTicker       *countTicker
 	usePercentageForPolicy bool
 
+	timeToEmptyLow       int64
+	timeToEmptyVeryLow   int64
+	timeToEmptyExhausted int64
+
+	batteryPercentageLow       float64
+	batteryPercentageVeryLow   float64
+	batteryPercentageExhausted float64
+
+	powerSupplyDataBackend int
+
 	// 接通电源时，不做任何操作，到关闭屏幕需要的时间
 	LinePowerScreenBlackDelay *property.GSettingsIntProperty `access:"readwrite"`
 	// 接通电源时，不做任何操作，从黑屏到睡眠的时间
@@ -177,7 +187,16 @@ func NewManager() (*Manager, error) {
 	m := &Manager{}
 
 	m.settings = gio.NewSettings("com.deepin.dde.power")
+	m.powerSupplyDataBackend = powerSupplyDataBackendUPower
 	m.usePercentageForPolicy = m.settings.GetBoolean(settingKeyUsePercentageForPolicy)
+
+	m.batteryPercentageLow = float64(m.settings.GetInt(settingKeyPercentageLow))
+	m.batteryPercentageVeryLow = float64(m.settings.GetInt(settingKeyPercentageVeryLow))
+	m.batteryPercentageExhausted = float64(m.settings.GetInt(settingKeyPercentageExhausted))
+
+	m.timeToEmptyLow = int64(m.settings.GetInt(settingKeyTimeToEmptyLow))
+	m.timeToEmptyVeryLow = int64(m.settings.GetInt(settingKeyTimeToEmptyVeryLow))
+	m.timeToEmptyExhausted = int64(m.settings.GetInt(settingKeyTimeToEmptyExhausted))
 
 	m.LinePowerScreenBlackDelay = property.NewGSettingsIntProperty(m, "LinePowerScreenBlackDelay", m.settings, settingKeyLinePowerScreenBlackDelay)
 	m.LinePowerSleepDelay = property.NewGSettingsIntProperty(m, "LinePowerSleepDelay", m.settings, settingKeyLinePowerSleepDelay)
@@ -212,7 +231,6 @@ func NewManager() (*Manager, error) {
 	}
 
 	m.initEventHandle()
-	m.initProperties()
 	return m, nil
 }
 
@@ -279,11 +297,16 @@ func (m *Manager) initProperties() {
 	upower := m.upower
 	m.setPropOnBattery(upower.OnBattery.Get())
 	m.setPropLidIsPresent(upower.LidIsPresent.Get())
-	m.updateBatteryGroupInfo()
+
+	m.BatteryIsPresent = make(map[string]bool)
+	m.BatteryPercentage = make(map[string]float64)
+	m.BatteryState = make(map[string]uint32)
 }
 
 func (m *Manager) initBatteryGroup() error {
 	logger.Debug("initBatteryGroup")
+	m.initProperties()
+
 	var err error
 	m.batteryGroup, err = NewBatteryGroup(m)
 	if err != nil {
@@ -297,7 +320,7 @@ func (m *Manager) initPowerModule() {
 	inited := m.settings.GetBoolean(settingKeyPowerModuleInitialized)
 	if !inited {
 		// TODO: 也许有更好的判断台式机的方法
-		if len(m.batteryGroup.batterys) == 0 {
+		if m.batteryGroup.batteryDevicesCount() == 0 {
 			// 电池数量为零，判断为台式机, 设置待机为 从不
 			m.LinePowerSleepDelay.Set(0)
 			m.BatterySleepDelay.Set(0)
@@ -307,23 +330,12 @@ func (m *Manager) initPowerModule() {
 	}
 }
 
-func (m *Manager) updateBatteryGroupInfo() {
-	logger.Debug("updateBatteryGroupInfo")
-	if m.batteryGroup == nil {
-		logger.Debug("No battery device")
-		return
+func (m *Manager) getNewBatteryPowerLevel(batGroup *batteryGroup) uint32 {
+	if !m.OnBattery {
+		return batteryPowerLevelSufficient
 	}
 
-	err := m.batteryGroup.UpdateInfo()
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	m.setPropBatteryIsPresent()
-	m.setPropBatteryState()
-	m.setPropBatteryPercentage()
-	m.checkBatteryPowerLevel()
+	return batGroup.getPowerLevel(m.usePercentageForPolicy)
 }
 
 func (m *Manager) setPropLidIsPresent(val bool) {
@@ -336,30 +348,18 @@ func (m *Manager) setPropOnBattery(val bool) {
 	dbus.NotifyChange(m, "OnBattery")
 }
 
-func (m *Manager) setPropBatteryIsPresent() {
-	val := make(map[string]bool)
-	for key, info := range m.batteryGroup.InfoMap {
-		val[key] = info.IsPresent
-	}
-	m.BatteryIsPresent = val
+func (m *Manager) setPropBatteryIsPresent(path string, isPresent bool) {
+	m.BatteryIsPresent[path] = isPresent
 	dbus.NotifyChange(m, "BatteryIsPresent")
 }
 
-func (m *Manager) setPropBatteryPercentage() {
-	val := make(map[string]float64)
-	for key, info := range m.batteryGroup.InfoMap {
-		val[key] = info.Percentage
-	}
-	m.BatteryPercentage = val
+func (m *Manager) setPropBatteryPercentage(path string, p float64) {
+	m.BatteryPercentage[path] = p
 	dbus.NotifyChange(m, "BatteryPercentage")
 }
 
-func (m *Manager) setPropBatteryState() {
-	val := make(map[string]uint32)
-	for key, info := range m.batteryGroup.InfoMap {
-		val[key] = info.State
-	}
-	m.BatteryState = val
+func (m *Manager) setPropBatteryState(path string, state batteryStateType) {
+	m.BatteryState[path] = uint32(state)
 	dbus.NotifyChange(m, "BatteryState")
 }
 

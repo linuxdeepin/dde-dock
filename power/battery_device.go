@@ -9,28 +9,9 @@
 
 package power
 
-import (
-	libupower "dbus/org/freedesktop/upower"
-)
-
-type batteryDevice libupower.Device
-
-func newBatteryDevice(dev *libupower.Device, handler func()) *batteryDevice {
-	battery := (*batteryDevice)(dev)
-	if handler != nil {
-		battery.listenProperties(handler)
-	}
-	return battery
-}
-
-func (battery *batteryDevice) listenProperties(handler func()) {
-	battery.Percentage.ConnectChanged(handler)
-	battery.State.ConnectChanged(handler)
-	battery.IsPresent.ConnectChanged(handler)
-	battery.TimeToEmpty.ConnectChanged(handler)
-	battery.TimeToFull.ConnectChanged(handler)
-}
-
-func (battery *batteryDevice) Destroy() {
-	libupower.DestroyDevice((*libupower.Device)(battery))
+type batteryDevice interface {
+	SetInfo(*batteryInfo)
+	GetInfo() *batteryInfo
+	Destroy()
+	GetPath() string
 }

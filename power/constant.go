@@ -27,6 +27,13 @@ const (
 	settingKeyUsePercentageForPolicy          = "use-percentage-for-policy"
 
 	settingKeyPowerModuleInitialized = "power-module-initialized"
+	settingKeyPercentageLow          = "percentage-low"
+	settingKeyPercentageVeryLow      = "percentage-critical"
+	settingKeyPercentageExhausted    = "percentage-action"
+
+	settingKeyTimeToEmptyLow       = "time-to-empty-low"
+	settingKeyTimeToEmptyVeryLow   = "time-to-empty-critical"
+	settingKeyTimeToEmptyExhausted = "time-to-empty-action"
 )
 
 var (
@@ -48,27 +55,6 @@ const (
 )
 
 const (
-	//defined at http://upower.freedesktop.org/docs/Device.html#Device:State
-	BatteryStateUnknown          = 0
-	BatteryStateCharging         = 1
-	BatteryStateDischarging      = 2
-	BatteryStateEmpty            = 3
-	BatteryStateFullyCharged     = 4
-	BatteryStatePendingCharge    = 5
-	BatteryStatePendingDischarge = 6
-)
-
-var batteryStateMap = map[string]uint32{
-	"Unknown":          BatteryStateUnknown,
-	"Charging":         BatteryStateCharging,
-	"Discharging":      BatteryStateDischarging,
-	"Empty":            BatteryStateEmpty,
-	"FullCharged":      BatteryStateFullyCharged,
-	"PendingCharge":    BatteryStatePendingCharge,
-	"PendingDischarge": BatteryStatePendingDischarge,
-}
-
-const (
 	//internal used
 	batteryPowerLevelSufficient = iota
 	batteryPowerLevelAbnormal
@@ -86,15 +72,8 @@ var batteryPowerLevelNameMap = map[uint32]string{
 }
 
 const (
-	batteryPercentageAbnormal  = 1.0
-	batteryPercentageLow       = 20.0
-	batteryPercentageVeryLow   = 10.0
-	batteryPercentageExhausted = 5.0
-
-	timeToEmptyLow       = 1200
-	timeToEmptyVeryLow   = 600
-	timeToEmptyExhausted = 300
-	timeToEmptyAbnormal  = 1
+	batteryPercentageAbnormal = 1.0
+	timeToEmptyAbnormal       = 1
 )
 
 const (
@@ -119,5 +98,11 @@ const (
 )
 
 const (
-	cmdLowPower = "/usr/lib/deepin-daemon/dde-lowpower"
+	powerSupplyDataBackendUPower = 0
+	powerSupplyDataBackendPoll   = 1
+)
+
+const (
+	cmdLowPower       = "/usr/lib/deepin-daemon/dde-lowpower"
+	sysPowerSupplyDir = "/sys/class/power_supply"
 )
