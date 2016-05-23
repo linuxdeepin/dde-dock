@@ -163,6 +163,7 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) init() {
+	m.initBackground()
 	m.correctFontName()
 
 	var file = path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf")
