@@ -27,6 +27,9 @@ func (m *EntryManager) updateClientList(clientList []xproto.Window) {
 		logger.Debug("client list add:", add)
 		for _, win := range add {
 			winInfo := NewWindowInfo(win)
+			time.AfterFunc(300*time.Millisecond, func() {
+				m.attachOrDetachRuntimeAppWindow(winInfo)
+			})
 			m.listenWindowXEvent(winInfo)
 		}
 	}

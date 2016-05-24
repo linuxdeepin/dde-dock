@@ -27,13 +27,13 @@ func (m *DockManager) handleClientListChanged() {
 }
 
 func (m *DockManager) handleActiveWindowChanged() {
-	logger.Debug("Active window changed")
 	var err error
 	m.activeWindow, err = ewmh.ActiveWindowGet(XU)
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
+	logger.Debug("Active window changed window:", m.activeWindow)
 
 	m.entryManager.updateActiveWindow(m.activeWindow)
 	m.clientManager.updateActiveWindow(m.activeWindow)
