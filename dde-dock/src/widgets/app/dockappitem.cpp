@@ -271,6 +271,8 @@ void DockAppItem::onDbusDataChanged(const QString &, const QString &)
     updateState();
     updateXidTitleMap();
     updateMenuJsonString();
+
+    setCurrentOpened(m_clientManager->CurrentActiveWindow());
 }
 
 void DockAppItem::onDockModeChanged(Dock::DockMode, Dock::DockMode)
