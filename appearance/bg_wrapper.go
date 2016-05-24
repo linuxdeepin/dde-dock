@@ -13,6 +13,7 @@ import (
 	"path"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/lib/utils"
+	"time"
 )
 
 const (
@@ -25,6 +26,15 @@ func (m *Manager) initBackground() {
 		m.wrapBgSetting.Reset(gsKeyBackground)
 	} else if bg != m.Background.Get() {
 		m.wrapBgSetting.SetString(gsKeyBackground, bg)
+	} else if !checkBlurredBackgroundExists(bg) {
+		// If the corresponding blurred image doesn't exist, set the background
+		// again to trigger the blur process.
+
+		// This function is executed before gsettings signals are correctly
+		// connected, so we need some time.
+		time.AfterFunc(5*time.Second, func() {
+			m.wrapBgSetting.SetString(gsKeyBackground, bg)
+		})
 	}
 }
 
@@ -39,4 +49,11 @@ func correctBackgroundPath(bg string) string {
 		return uri
 	}
 	return ""
+}
+
+func checkBlurredBackgroundExists(src string) bool {
+	id, _ := utils.SumStrMd5(src)
+	blurredImagePath := "/var/cache/image-blur/" + id + path.Ext(src)
+
+	return utils.IsFileExist(blurredImagePath)
 }

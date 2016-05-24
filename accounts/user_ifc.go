@@ -387,6 +387,7 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error)
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if bg == u.BackgroundFile {
 		doEmitSuccess(pid, "SetBackgroundFile")
+		genGaussianBlur(bg)
 		return true, nil
 	}
 
@@ -418,6 +419,7 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) (bool, err
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if u.GreeterBackground == bg {
 		doEmitSuccess(pid, "SetGreeterBackground")
+		genGaussianBlur(bg)
 		return true, nil
 	}
 	_, err := u.isBackgroundValid(pid, "SetGreeterBackground", bg)
