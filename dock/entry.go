@@ -34,10 +34,11 @@ const (
 )
 
 type AppEntry struct {
-	nApp     *NormalApp
-	rApp     *RuntimeApp
-	nAppLock sync.RWMutex
-	rAppLock sync.RWMutex
+	entryManager *EntryManager
+	nApp         *NormalApp
+	rApp         *RuntimeApp
+	nAppLock     sync.RWMutex
+	rAppLock     sync.RWMutex
 
 	hashId string
 	Id     string
@@ -120,6 +121,7 @@ func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32) {}
 
 func (e *AppEntry) setData(key, value string) {
 	if e.Data[key] != value {
+		logger.Debugf("setData %q : %v", key, value)
 		e.Data[key] = value
 		dbus.Emit(e, "DataChanged", key, value)
 	}
@@ -151,9 +153,14 @@ func (e *AppEntry) update() {
 	//NOTE: sync this with NormalApp/RuntimeApp
 	switch e.getData(FieldStatus) {
 	case ActiveStatus:
-		e.setData(FieldTitle, e.rApp.CurrentInfo.Title)
-		e.setData(FieldIcon, e.rApp.CurrentInfo.Icon)
-		e.setData(FieldMenu, e.rApp.Menu)
+		rApp := e.rApp
+		if e.entryManager != nil {
+			rApp.setLeader(e.entryManager.activeWindow)
+		}
+
+		e.setData(FieldTitle, rApp.CurrentInfo.Title)
+		e.setData(FieldIcon, rApp.CurrentInfo.Icon)
+		e.setData(FieldMenu, rApp.Menu)
 	case NormalStatus:
 		e.setData(FieldTitle, e.nApp.Name)
 		e.setData(FieldIcon, e.nApp.Icon)

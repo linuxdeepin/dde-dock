@@ -23,9 +23,10 @@ import (
 
 // EntryManager为驻留程序以及打开程序的管理器。
 type EntryManager struct {
-	runtimeApps map[string]*RuntimeApp
-	normalApps  map[string]*NormalApp
-	appEntries  map[string]*AppEntry
+	activeWindow xproto.Window
+	runtimeApps  map[string]*RuntimeApp
+	normalApps   map[string]*NormalApp
+	appEntries   map[string]*AppEntry
 
 	dockedAppManager *DockedAppManager
 	clientList       windowSlice
@@ -101,9 +102,10 @@ func (m *EntryManager) getRuntimeAppByWindow(win xproto.Window) *RuntimeApp {
 }
 
 func (m *EntryManager) updateActiveWindow(win xproto.Window) {
+	m.activeWindow = win
 	app := m.getRuntimeAppByWindow(win)
 	if app != nil {
-		app.setLeader(win)
+		app.notifyChanged()
 	}
 }
 
@@ -150,6 +152,7 @@ func (m *EntryManager) initDockedApps() {
 
 func (m *EntryManager) addAppEntry(id string, e *AppEntry) {
 	m.appEntries[id] = e
+	e.entryManager = m
 	err := dbus.InstallOnSession(e)
 	if err != nil {
 		logger.Warning("Install AppEntry to dbus failed:", err)

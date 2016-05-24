@@ -498,7 +498,6 @@ func (app *RuntimeApp) setLeader(leader xproto.Window) {
 	if info, ok := app.windowInfoTable[leader]; ok {
 		if app.CurrentInfo != info {
 			app.CurrentInfo = info
-			app.notifyChanged()
 		}
 	}
 }
