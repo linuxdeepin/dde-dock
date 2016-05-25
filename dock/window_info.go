@@ -324,9 +324,11 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 	}
 
 	winInfo.propertyNotifyAtomTable = make(map[xproto.Atom]bool)
-	winInfo.propertyNotifyEnabled = true
+	winInfo.propertyNotifyEnabled = false
+	// simulate first property notify event
+	winInfo.propertyNotifyAtomTable[ATOM_WINDOW_STATE] = true
 
-	winInfo.propertyNotifyTimer = time.AfterFunc(1000*time.Millisecond, func() {
+	winInfo.propertyNotifyTimer = time.AfterFunc(300*time.Millisecond, func() {
 		var atomNames []string
 		var needUpdate bool
 		for atom, _ := range winInfo.propertyNotifyAtomTable {
@@ -347,7 +349,14 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 		winInfo.propertyNotifyAtomTable = make(map[xproto.Atom]bool)
 		winInfo.propertyNotifyEnabled = true
 	})
-	winInfo.propertyNotifyTimer.Stop()
+}
+
+func (winInfo *WindowInfo) handlePropertyNotifyEvent(ev xevent.PropertyNotifyEvent) {
+	winInfo.propertyNotifyAtomTable[ev.Atom] = true
+	if winInfo.propertyNotifyEnabled {
+		winInfo.propertyNotifyTimer.Reset(300 * time.Millisecond)
+		winInfo.propertyNotifyEnabled = false
+	}
 }
 
 func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {

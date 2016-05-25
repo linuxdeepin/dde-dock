@@ -10,26 +10,23 @@
 package dock
 
 import (
-	"io/ioutil"
-	"path/filepath"
-	"strconv"
-	"strings"
-	"sync"
-
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"io/ioutil"
+	"path/filepath"
 	. "pkg.deepin.io/lib/gettext"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 type RuntimeApp struct {
 	Id              string
 	DesktopID       string
-	lock            sync.RWMutex
 	windowInfoTable map[xproto.Window]*WindowInfo
 
 	CurrentInfo *WindowInfo

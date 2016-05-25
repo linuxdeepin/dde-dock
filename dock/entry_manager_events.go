@@ -27,9 +27,6 @@ func (m *EntryManager) updateClientList(clientList []xproto.Window) {
 		logger.Debug("client list add:", add)
 		for _, win := range add {
 			winInfo := NewWindowInfo(win)
-			time.AfterFunc(300*time.Millisecond, func() {
-				m.attachOrDetachRuntimeAppWindow(winInfo)
-			})
 			m.listenWindowXEvent(winInfo)
 		}
 	}
@@ -55,7 +52,7 @@ func (m *EntryManager) listenWindowXEvent(winInfo *WindowInfo) {
 	winInfo.initPropertyNotifyEventHandler(m)
 	// need listen EventMaskPropertyChange
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
-		m.handlePropertyNotifyEvent(winInfo, ev)
+		winInfo.handlePropertyNotifyEvent(ev)
 	}).Connect(XU, win)
 
 	// need listen EventMaskStructureNotify
@@ -76,14 +73,6 @@ func (m *EntryManager) listenWindowXEvent(winInfo *WindowInfo) {
 func (m *EntryManager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent.VisibilityNotifyEvent) {
 	logger.Debug(ev)
 	winInfo.updateMapState()
-}
-
-func (m *EntryManager) handlePropertyNotifyEvent(winInfo *WindowInfo, ev xevent.PropertyNotifyEvent) {
-	winInfo.propertyNotifyAtomTable[ev.Atom] = true
-	if winInfo.propertyNotifyEnabled {
-		winInfo.propertyNotifyTimer.Reset(300 * time.Millisecond)
-		winInfo.propertyNotifyEnabled = false
-	}
 }
 
 func (m *EntryManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
