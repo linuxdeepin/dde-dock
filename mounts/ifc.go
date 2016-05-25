@@ -89,11 +89,6 @@ func (m *Manager) ejectVolume(id string, obj *diskObject) {
 		return
 	}
 
-	if !volume.CanEject() {
-		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
-		return
-	}
-
 	volume.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if volume == nil || volume.Object.C == nil {
@@ -111,11 +106,6 @@ func (m *Manager) ejectMount(id string, obj *diskObject) {
 	mount := obj.getMount()
 	if mount == nil {
 		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
-	if !mount.CanEject() {
-		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
 		return
 	}
 
@@ -138,11 +128,6 @@ func (m *Manager) mountVolume(id string, obj *diskObject) {
 		return
 	}
 
-	if !volume.CanMount() {
-		m.emitError(id, fmt.Sprintf("Permission denied or the volume '%s' had be mounted", id))
-		return
-	}
-
 	volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if volume == nil || volume.Object.C == nil {
@@ -159,11 +144,6 @@ func (m *Manager) unmountMount(id string, obj *diskObject) {
 	mount := obj.getMount()
 	if mount == nil {
 		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
-	if !mount.CanUnmount() {
-		m.emitError(id, fmt.Sprintf("The volume '%s' is in use", id))
 		return
 	}
 

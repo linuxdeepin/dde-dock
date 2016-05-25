@@ -48,6 +48,13 @@ func (m *Manager) handleEvent() {
 
 	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
 		mount *gio.Mount) {
+		// Filter invalid 'mount-added' event, if mount iphone, it will emit twice 'mount-added' event
+		volume := mount.GetVolume()
+		if volume == nil || volume.Object.C == nil {
+			return
+		}
+		volume.Unref()
+
 		info := newDiskInfoFromMount(mount)
 		logger.Debug("[Event] mount added:", info.Name, info.CanEject)
 		if info.CanEject && m.isAutoOpen() {
