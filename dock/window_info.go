@@ -107,6 +107,7 @@ func (winInfo *WindowInfo) updateMapState() {
 		return
 	}
 	winInfo.mapState = windowAttributes.MapState
+	logger.Debug("update map state:", winInfo.mapState)
 }
 
 func (winInfo *WindowInfo) isMapStateViewable() bool {
