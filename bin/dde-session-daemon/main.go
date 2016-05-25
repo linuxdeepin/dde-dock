@@ -9,9 +9,10 @@
 
 package main
 
-//#cgo pkg-config:gtk+-3.0
+//#cgo pkg-config: x11 gtk+-3.0
+//#include <X11/Xlib.h>
 //#include <gtk/gtk.h>
-//void init(){gtk_init(0,0);}
+//void init(){XInitThreads();gtk_init(0,0);}
 import "C"
 import (
 	// "gopkg.in/alecthomas/kingpin.v2"
