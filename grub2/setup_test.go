@@ -19,19 +19,21 @@ import (
 
 const (
 	testGrubSettingsFile              = "testdata/grub_settings"
+	testGrubMenuFile                  = "testdata/grub.cfg"
 	testGrubThemeBackgroundSourceFile = "testdata/grub_theme_background_source"
 )
 
 var (
-	tmpBaseDir    = "./testdata"
-	tmpConfigFile = tmpBaseDir + "/tmp_settings"
-	tmpThemeDir   = tmpBaseDir + "/tmp_theme_dir"
-	tmpGfxmode    = "1200x900"
+	tmpBaseDir      = "./testdata"
+	tmpConfigFile   = tmpBaseDir + "/tmp_settings"
+	tmpGrubMenuFile = tmpBaseDir + "/tmp_grub.cfg"
+	tmpThemeDir     = tmpBaseDir + "/tmp_theme_dir"
+	tmpGfxmode      = "1200x900"
 )
 
 func (*GrubTester) TestCustomArguments(c *C.C) {
 	// prepare
-	configFile = tmpBaseDir + "/grub2.json"
+	configFile = tmpBaseDir + "/tmp_grub2.json"
 	SetDefaultGrubSettingFile(tmpConfigFile)
 	SetDefaultThemeDir(tmpThemeDir)
 	defer func() {
@@ -72,7 +74,7 @@ GRUB_TIMEOUT="5"
 `
 
 	// prepare
-	configFile = tmpBaseDir + "/grub2.json"
+	configFile = tmpBaseDir + "/tmp_grub2.json"
 	utils.EnsureDirExist(tmpThemeDir)
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubSettingFile(tmpConfigFile)
@@ -103,7 +105,7 @@ GRUB_TIMEOUT="5"
 
 func (*GrubTester) TestSetupGfxmode(c *C.C) {
 	// prepare
-	configFile = tmpBaseDir + "/grub2.json"
+	configFile = tmpBaseDir + "/tmp_grub2.json"
 	utils.EnsureDirExist(tmpThemeDir)
 	utils.CopyFile(testGrubThemeBackgroundSourceFile, tmpThemeDir+"/background_source")
 	SetDefaultGrubSettingFile(tmpConfigFile)

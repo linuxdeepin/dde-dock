@@ -78,7 +78,7 @@ func runAsDaemon() {
 		return
 	}
 	grub2.Start()
-	dbus.SetAutoDestroyHandler(60*time.Second, func() bool {
+	dbus.SetAutoDestroyHandler(300*time.Second, func() bool {
 		return !grub2.IsUpdating()
 	})
 	dbus.DealWithUnhandledMessage()

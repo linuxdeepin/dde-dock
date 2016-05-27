@@ -32,7 +32,8 @@ func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// GetSimpleEntryTitles return entry titles only in level one.
+// GetSimpleEntryTitles return entry titles only in level one and will
+// filter out some useless entries such as sub-menus and "memtest86+".
 func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 	entryTitles := make([]string, 0)
 	for _, entry := range grub.entries {
@@ -76,11 +77,7 @@ func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 
 // Reset reset all configuretion.
 func (grub *Grub2) Reset() {
-	simpleEntryTitles, _ := grub.GetSimpleEntryTitles()
 	defaultEntry := defaultGrubDefaultEntry
-	if len(simpleEntryTitles) > 0 {
-		defaultEntry = simpleEntryTitles[0]
-	}
 	grub.setPropFixSettingsAlways(true)
 	grub.setPropEnableTheme(true)
 	grub.setPropResolution(getDefaultGfxmode())

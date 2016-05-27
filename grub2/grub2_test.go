@@ -12,6 +12,7 @@ package grub2
 import (
 	C "launchpad.net/gocheck"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/utils"
 	"testing"
 )
 
@@ -22,6 +23,7 @@ type GrubTester struct{}
 func init() {
 	// disable all output but error messages
 	logger.SetLogLevel(log.LevelError)
+	runWithoutDbus = true
 	C.Suite(&GrubTester{})
 }
 
@@ -337,7 +339,7 @@ GRUB_TIMEOUT="15"
 	c.Check(grub.getSettingContentToSave(), C.Equals, wantConfigContent)
 }
 
-func (*GrubTester) TestGetEntryTitles(c *C.C) {
+func (*GrubTester) TestGetSimpleEntryTitles(c *C.C) {
 	wantEntyTitles := []string{
 		`LinuxDeepin GNU/Linux`,
 		`Other OS`,
@@ -350,4 +352,32 @@ func (*GrubTester) TestGetEntryTitles(c *C.C) {
 	for i, title := range entryTitles {
 		c.Check(title, C.Equals, wantEntyTitles[i])
 	}
+}
+
+func (*GrubTester) TestRealSettings(c *C.C) {
+	// prepare for real environment
+	utils.CopyFile(testGrubSettingsFile, tmpConfigFile)
+	utils.CopyFile(testGrubMenuFile, tmpGrubMenuFile)
+	configFile = tmpBaseDir + "/tmp_grub2.json"
+	grubMenuFile = tmpGrubMenuFile
+	SetDefaultGrubSettingFile(tmpConfigFile)
+	SetDefaultThemeDir(tmpThemeDir)
+	defer func() {
+		configFile = ConfigFileDefault
+		grubSettingFile = DefaultGrubSettingFile
+		SetDefaultGrubSettingFile(DefaultGrubSettingFile)
+		SetDefaultThemeDir(DefaultThemeDir)
+	}()
+
+	c.Check(grubSettingFile, C.Equals, tmpConfigFile)
+	c.Check(themeDir, C.Equals, tmpThemeDir)
+
+	grub := NewGrub2()
+	grub.readEntries()
+	grub.readSettings()
+	c.Check(grub.doGetSettingDefaultEntry(), C.Equals, "0")
+	c.Check(grub.getSettingDefaultEntry(), C.Equals, "Deepin 15.2 GNU/Linux")
+	grub.setSettingDefaultEntry("Windows 10 (loader) (on /dev/sda1)")
+	c.Check(grub.doGetSettingDefaultEntry(), C.Equals, "2")
+	c.Check(grub.getSettingDefaultEntry(), C.Equals, "Windows 10 (loader) (on /dev/sda1)")
 }

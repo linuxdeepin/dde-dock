@@ -42,6 +42,15 @@ func isStringInArray(a string, list []string) bool {
 	return false
 }
 
+func getStringIndexInArray(a string, list []string) int {
+	for i, b := range list {
+		if b == a {
+			return i
+		}
+	}
+	return -1
+}
+
 func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
 	a = a1
 	for _, s := range a2 {

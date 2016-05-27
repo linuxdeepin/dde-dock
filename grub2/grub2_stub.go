@@ -77,8 +77,8 @@ func (grub *Grub2) setPropEnableTheme(value bool) {
 }
 
 func (grub *Grub2) setPropDefaultEntry(value string) {
-	grub.DefaultEntry = value
 	grub.setSettingDefaultEntry(value)
+	grub.DefaultEntry = grub.getSettingDefaultEntry()
 	dbus.NotifyChange(grub, "DefaultEntry")
 }
 

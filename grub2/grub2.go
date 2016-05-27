@@ -34,7 +34,6 @@ func SetDefaultGrubSettingFile(file string) {
 }
 
 const (
-	grubMenuFile                  = DefaultGrubMenuFile
 	grubUpdateCmd                 = "/usr/sbin/update-grub"
 	lsbReleaseCmd                 = "/usr/bin/lsb_release"
 	defaultGrubDefaultEntry       = "0"
@@ -45,6 +44,7 @@ const (
 
 var (
 	runWithoutDbus         = false
+	grubMenuFile           = DefaultGrubMenuFile
 	entryRegexpSingleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +'(.*?)'.*$`)
 	entryRegexpDoubleQuote = regexp.MustCompile(`^ *(menuentry|submenu) +"(.*?)".*$`)
 )
@@ -62,9 +62,11 @@ type Grub2 struct {
 	chanUpdate         chan int
 	chanStopUpdateLoop chan int
 
+	// DefaultEntry should always is the entry title instead of index,
+	// and will convert to index when saving settings
+	DefaultEntry      string `access:"readwrite"`
 	FixSettingsAlways bool   `access:"readwrite"`
 	EnableTheme       bool   `access:"readwrite"`
-	DefaultEntry      string `access:"readwrite"`
 	Timeout           int32  `access:"readwrite"`
 	Resolution        string `access:"readwrite"`
 	Updating          bool
@@ -415,16 +417,12 @@ func (grub *Grub2) parseSettings(fileContent string) error {
 	return nil
 }
 
-func (grub *Grub2) getEntryTitles() (entryTitles []string, err error) {
-	entryTitles = make([]string, 0)
+// getAllEntriesLv1 return all entires titles in level one.
+func (grub *Grub2) getEntryTitlesLv1() (entryTitles []string) {
 	for _, entry := range grub.entries {
-		if entry.entryType == MENUENTRY {
+		if entry.parentSubMenu == nil {
 			entryTitles = append(entryTitles, entry.getFullTitle())
 		}
-	}
-	if len(entryTitles) == 0 {
-		err = fmt.Errorf("there is no menu entry in %s", grubMenuFile)
-		return
 	}
 	return
 }
@@ -441,7 +439,7 @@ func (grub *Grub2) getSettingDefaultEntry() (entry string) {
 	entry = convertToSimpleEntry(entry)
 
 	// if there is no entry titles, just return origin value
-	entryTitles, _ := grub.getEntryTitles()
+	entryTitles := grub.getEntryTitlesLv1()
 	if len(entryTitles) == 0 {
 		return
 	}
@@ -463,6 +461,13 @@ func (grub *Grub2) getSettingDefaultEntry() (entry string) {
 }
 
 func (grub *Grub2) setSettingDefaultEntry(title string) {
+	// Convert the default entry value to index if possible for that
+	// the disk number may be different between live-cd and normal
+	// mode and the entry value will be invalid then.
+	entriesLv1 := grub.getEntryTitlesLv1()
+	if i := getStringIndexInArray(title, entriesLv1); i != -1 {
+		title = strconv.Itoa(i)
+	}
 	grub.doSetSettingDefaultEntry(title)
 	grub.writeSettings()
 	grub.config.save()
