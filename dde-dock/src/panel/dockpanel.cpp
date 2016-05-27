@@ -148,6 +148,7 @@ void DockPanel::initMainLayout()
     mLayout->setContentsMargins(0, 0, 0, 0);
     m_launcherItem = new DockLauncherItem();
     mLayout->addWidget(m_launcherItem, 0, Qt::AlignTop);
+    mLayout->addSpacing(m_dockModeData->getAppItemSpacing());
     mLayout->addWidget(m_appLayout, 0, Qt::AlignTop);
     mLayout->addSpacing(8);
     mLayout->addWidget(m_pluginLayout, 0, Qt::AlignTop);
