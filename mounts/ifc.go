@@ -30,65 +30,55 @@ func (m *Manager) QueryDisk(id string) (*DiskInfo, error) {
 func (m *Manager) Eject(id string) error {
 	m.listLocker.Lock()
 	defer m.listLocker.Unlock()
-	info, err := m.DiskList.get(id)
-	if err != nil {
-		m.emitError(id, err.Error())
-		return err
+
+	mount := m.getMountById(id)
+	if mount != nil {
+		m.ejectMount(id, mount)
+		return nil
 	}
 
-	switch info.object.Type {
-	case diskObjVolume:
-		m.ejectVolume(id, info.object)
-	case diskObjMount:
-		m.ejectMount(id, info.object)
+	volume := m.getVolumeById(id)
+	if volume != nil {
+		m.ejectVolume(id, volume)
+		return nil
 	}
-	return nil
+
+	err := fmt.Errorf("Invalid disk id: %v", id)
+	m.emitError(id, err.Error())
+	return err
 }
 
 func (m *Manager) Mount(id string) error {
 	m.listLocker.Lock()
 	defer m.listLocker.Unlock()
-	info, err := m.DiskList.get(id)
-	if err != nil {
-		m.emitError(id, err.Error())
-		return err
-	}
 
-	if info.object.Type != diskObjVolume {
-		logger.Warningf("The volume '%s' had been mounted", id)
+	volume := m.getVolumeById(id)
+	if volume != nil {
+		m.mountVolume(id, volume)
 		return nil
 	}
 
-	m.mountVolume(id, info.object)
-	return nil
+	err := fmt.Errorf("Not found GVolume by '%s'", id)
+	m.emitError(id, err.Error())
+	return err
 }
 
 func (m *Manager) Unmount(id string) error {
 	m.listLocker.Lock()
 	defer m.listLocker.Unlock()
-	info, err := m.DiskList.get(id)
-	if err != nil {
-		m.emitError(id, err.Error())
-		return err
+
+	mount := m.getMountById(id)
+	if mount != nil {
+		m.unmountMount(id, mount)
+		return nil
 	}
 
-	if info.object.Type != diskObjMount {
-		err := fmt.Errorf("The volume '%s' hadn't been mounted", id)
-		m.emitError(id, err.Error())
-		return err
-	}
-
-	m.unmountMount(id, info.object)
-	return nil
+	err := fmt.Errorf("Not found GMount by '%s'", id)
+	m.emitError(id, err.Error())
+	return err
 }
 
-func (m *Manager) ejectVolume(id string, obj *diskObject) {
-	volume := obj.getVolume()
-	if volume == nil {
-		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
+func (m *Manager) ejectVolume(id string, volume *gio.Volume) {
 	volume.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if volume == nil || volume.Object.C == nil {
@@ -96,63 +86,49 @@ func (m *Manager) ejectVolume(id string, obj *diskObject) {
 			}
 
 			_, err := volume.EjectFinish(ret)
+			volume.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
 }
 
-func (m *Manager) ejectMount(id string, obj *diskObject) {
-	mount := obj.getMount()
-	if mount == nil {
-		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
+func (m *Manager) ejectMount(id string, mount *gio.Mount) {
 	mount.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if mount == nil || mount.Object.C == nil {
 				return
 			}
 			_, err := mount.EjectFinish(ret)
+			mount.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
 }
 
-func (m *Manager) mountVolume(id string, obj *diskObject) {
-	volume := obj.getVolume()
-	if volume == nil {
-		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
+func (m *Manager) mountVolume(id string, volume *gio.Volume) {
 	volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if volume == nil || volume.Object.C == nil {
 				return
 			}
 			_, err := volume.MountFinish(ret)
+			volume.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
 }
 
-func (m *Manager) unmountMount(id string, obj *diskObject) {
-	mount := obj.getMount()
-	if mount == nil {
-		m.emitError(id, fmt.Sprintf("Invalid volume '%s'", id))
-		return
-	}
-
+func (m *Manager) unmountMount(id string, mount *gio.Mount) {
 	mount.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			if mount == nil || mount.Object.C == nil {
 				return
 			}
 			_, err := mount.UnmountFinish(ret)
+			mount.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}

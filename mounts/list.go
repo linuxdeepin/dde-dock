@@ -36,11 +36,6 @@ const (
 	mtpDeviceIcon = "drive-removable-media-mtp"
 )
 
-const (
-	diskObjVolume int = iota + 1
-	diskObjMount
-)
-
 var diskLocker sync.Mutex
 
 type DiskInfo struct {
@@ -56,39 +51,8 @@ type DiskInfo struct {
 
 	Used  uint64
 	Total uint64
-
-	object *diskObject
 }
 type DiskInfos []*DiskInfo
-
-type diskObject struct {
-	Object interface{}
-	Type   int
-}
-
-func (obj *diskObject) getVolume() *gio.Volume {
-	if obj.Type != diskObjVolume {
-		return nil
-	}
-
-	volume, ok := obj.Object.(*gio.Volume)
-	if !ok {
-		return nil
-	}
-	return volume
-}
-
-func (obj *diskObject) getMount() *gio.Mount {
-	if obj.Type != diskObjMount {
-		return nil
-	}
-
-	mount, ok := obj.Object.(*gio.Mount)
-	if !ok {
-		return nil
-	}
-	return mount
-}
 
 func (m *Manager) getDiskInfos() DiskInfos {
 	var infos DiskInfos
@@ -96,19 +60,61 @@ func (m *Manager) getDiskInfos() DiskInfos {
 		mount := volume.GetMount()
 		if mount != nil {
 			mount.Unref()
+			volume.Unref()
 			continue
 		}
 
 		info := newDiskInfoFromVolume(volume)
-		infos = append(infos, info)
+		volume.Unref()
+		infos = infos.add(info)
 	}
 
 	for _, mount := range m.monitor.GetMounts() {
 		info := newDiskInfoFromMount(mount)
-		infos = append(infos, info)
+		mount.Unref()
+		infos = infos.add(info)
 	}
 
 	return infos
+}
+
+func (m *Manager) getVolumeById(id string) *gio.Volume {
+	var ret *gio.Volume = nil
+	for _, volume := range m.monitor.GetVolumes() {
+		if ret != nil {
+			volume.Unref()
+			continue
+		}
+
+		mount := volume.GetMount()
+		if mount != nil && mount.Object.C != nil {
+			mount.Unref()
+			volume.Unref()
+			continue
+		}
+
+		if getVolumeId(volume) == id {
+			ret = volume
+			continue
+		}
+	}
+	return ret
+}
+
+func (m *Manager) getMountById(id string) *gio.Mount {
+	var ret *gio.Mount
+	for _, mount := range m.monitor.GetMounts() {
+		if ret != nil {
+			mount.Unref()
+			continue
+		}
+
+		if getMountId(mount) == id {
+			ret = mount
+			continue
+		}
+	}
+	return ret
 }
 
 func (infos DiskInfos) get(id string) (*DiskInfo, error) {
@@ -133,10 +139,24 @@ func (infos DiskInfos) getByMountPoint(point string) (*DiskInfo, error) {
 	return nil, fmt.Errorf("Invalid disk mount point: %v", point)
 }
 
+func (infos DiskInfos) exists(value *DiskInfo) string {
+	diskLocker.Lock()
+	defer diskLocker.Unlock()
+	for _, info := range infos {
+		// iphone exist 2 mount struct in gio mounts
+		if info.Id == value.Id ||
+			((len(info.MountPoint) != 0) && (info.MountPoint == value.MountPoint)) {
+			return info.Id
+		}
+	}
+	return ""
+}
+
 func (infos DiskInfos) add(info *DiskInfo) DiskInfos {
-	tmp, _ := infos.get(info.Id)
-	if tmp != nil {
-		infos = infos.delete(info.Id)
+	id := infos.exists(info)
+	if len(id) != 0 {
+		logger.Debug("[Add] disk exist:", id)
+		infos = infos.delete(id)
 	}
 	diskLocker.Lock()
 	infos = append(infos, info)
@@ -151,7 +171,6 @@ func (infos DiskInfos) delete(id string) DiskInfos {
 	var ret DiskInfos
 	for _, info := range infos {
 		if info.Id == id {
-			info.destroy()
 			continue
 		}
 		ret = append(ret, info)
@@ -175,17 +194,10 @@ func (infos DiskInfos) duplicate() DiskInfos {
 			CanUnmount: info.CanUnmount,
 			Used:       info.Used,
 			Total:      info.Total,
-			object:     info.object,
 		}
 		newInfos = append(newInfos, &tmp)
 	}
 	return newInfos
-}
-
-func (infos DiskInfos) destroy() {
-	for _, info := range infos {
-		info.destroy()
-	}
 }
 
 func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
@@ -198,10 +210,6 @@ func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 		CanUnmount: mount.CanUnmount(),
 		Used:       queryAttrUint64(root, fsAttrUsed),
 		Total:      queryAttrUint64(root, fsAttrSize),
-		object: &diskObject{
-			Object: mount,
-			Type:   diskObjMount,
-		},
 	}
 	root.Unref()
 
@@ -239,10 +247,6 @@ func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 		Type:     DiskTypeNative,
 		Path:     volume.GetIdentifier(volumeKindUnix),
 		CanEject: volume.CanEject(),
-		object: &diskObject{
-			Object: volume,
-			Type:   diskObjVolume,
-		},
 	}
 
 	if info.Total == 0 {
@@ -259,21 +263,6 @@ func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 
 	info.correctDiskType()
 	return info
-}
-
-func (info *DiskInfo) destroy() {
-	switch info.object.Type {
-	case diskObjVolume:
-		volume, ok := info.object.Object.(*gio.Volume)
-		if ok && volume.Object.C != nil {
-			volume.Unref()
-		}
-	case diskObjMount:
-		mount, ok := info.object.Object.(*gio.Mount)
-		if ok && mount.Object.C != nil {
-			mount.Unref()
-		}
-	}
 }
 
 var (
@@ -328,4 +317,32 @@ func getTotalSizeByUDisks2(devPath string) uint64 {
 	defer udisks2.DestroyBlock(blockObj)
 
 	return blockObj.Size.Get() / 1024
+}
+
+func getVolumeId(volume *gio.Volume) string {
+	id := volume.GetIdentifier(volumeKindUUID)
+	if len(id) != 0 {
+		return id
+	}
+
+	// if uuid not exist, use path as id
+	return volume.GetIdentifier(volumeKindUnix)
+}
+
+func getMountId(mount *gio.Mount) string {
+	root := mount.GetRoot()
+	mountPoint := root.GetUri()
+	root.Unref()
+
+	volume := mount.GetVolume()
+	if volume == nil || volume.Object.C == nil {
+		return mountPoint
+	}
+
+	id := getVolumeId(volume)
+	volume.Unref()
+	if len(id) != 0 {
+		return id
+	}
+	return mountPoint
 }

@@ -25,16 +25,19 @@ func (m *Manager) handleEvent() {
 		info := newDiskInfoFromVolume(volume)
 		logger.Debug("[Event] volume added:", info.Name, info.Type)
 		if info.Type == DiskTypeRemovable && m.isAutoMount() {
-			m.mountVolume(info.Id, info.object)
+			m.mountVolume(info.Id, volume)
+			volume.Unref()
 			return
 		}
-		m.setPropDiskList(m.DiskList.add(info))
+		volume.Unref()
+		m.refrashDiskList()
 		dbus.Emit(m, "Changed", EventTypeVolumeAdded, info.Id)
 	})
 
 	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor,
 		volume *gio.Volume) {
 		logger.Debug("[Event] volume removed")
+		volume.Unref()
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
 		oldInfos := m.DiskList.duplicate()
@@ -56,13 +59,14 @@ func (m *Manager) handleEvent() {
 		volume.Unref()
 
 		info := newDiskInfoFromMount(mount)
+		mount.Unref()
 		logger.Debug("[Event] mount added:", info.Name, info.CanEject)
 		if info.CanEject && m.isAutoOpen() {
 			go exec.Command("/bin/sh", "-c",
 				fmt.Sprintf("gvfs-open %s",
 					info.MountPoint)).Run()
 		}
-		m.setPropDiskList(m.DiskList.add(info))
+		m.refrashDiskList()
 		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
 	})
 
@@ -78,6 +82,7 @@ func (m *Manager) handleEvent() {
 		point := root.GetUri()
 		info, err := m.DiskList.getByMountPoint(point)
 		root.Unref()
+		mount.Unref()
 		if err != nil {
 			logger.Warning(err)
 			return

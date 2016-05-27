@@ -55,7 +55,7 @@ func newManager() *Manager {
 
 func (m *Manager) init() {
 	for _, info := range m.DiskList {
-		if info.object.Type != diskObjVolume || info.Type != DiskTypeRemovable {
+		if info.CanUnmount || info.Type != DiskTypeRemovable {
 			continue
 		}
 
@@ -80,7 +80,7 @@ func (m *Manager) destroy() {
 		m.setting = nil
 	}
 
-	m.DiskList.destroy()
+	m.DiskList = nil
 	if m.monitor != nil {
 		m.monitor.Unref()
 		m.monitor = nil
@@ -94,7 +94,7 @@ func (m *Manager) emitError(id, msg string) {
 func (m *Manager) refrashDiskList() {
 	m.refrashLocker.Lock()
 	defer m.refrashLocker.Unlock()
-	m.DiskList.destroy()
+	m.DiskList = nil
 	m.setPropDiskList(m.getDiskInfos())
 }
 
