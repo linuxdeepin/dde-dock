@@ -17,6 +17,7 @@ import "C"
 import (
 	// "gopkg.in/alecthomas/kingpin.v2"
 	"os"
+	"os/user"
 	"pkg.deepin.io/dde/daemon/loader"
 	dapp "pkg.deepin.io/lib/app"
 	. "pkg.deepin.io/lib/gettext"
@@ -34,6 +35,11 @@ func main() {
 
 	cmd := dapp.New("dde-session-dameon", "dde session daemon", "version "+__VERSION__)
 
+	usr, err := user.Current()
+	if err == nil {
+		os.Chdir(usr.HomeDir)
+	}
+
 	flags := new(Flags)
 	flags.IgnoreMissingModules = cmd.Flag("Ignore", "ignore missing modules, --no-ignore to revert it.").Short('i').Default("true").Bool()
 	flags.ForceStart = cmd.Flag("force", "Force start disabled module.").Short('f').Bool()
@@ -50,7 +56,7 @@ func main() {
 	proxy.SetupProxy()
 
 	app := NewSessionDaemon(flags, daemonSettings, logger)
-	if err := app.register(); err != nil {
+	if err = app.register(); err != nil {
 		logger.Info(err)
 		os.Exit(0)
 	}
@@ -66,7 +72,6 @@ func main() {
 		loader.SetLogLevel(appLogLevel)
 	}
 
-	var err error
 	needRunMainLoop := true
 
 	// Ensure each module and mainloop in the same thread
