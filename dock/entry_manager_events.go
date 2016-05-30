@@ -121,7 +121,8 @@ func (m *EntryManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent
 func (m *EntryManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
 	logger.Debug(ev)
 	xevent.Detach(XU, winInfo.window)
-	m.detachRuntimeAppWindow(winInfo)
+	// m.detachRuntimeAppWindow(winInfo)
+	m.detachWindow(winInfo)
 }
 
 func (m *EntryManager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {

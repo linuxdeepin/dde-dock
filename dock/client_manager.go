@@ -84,6 +84,7 @@ func changeCurrentWorkspaceToWindowWorkspace(win xproto.Window) error {
 }
 
 func activateWindow(win xproto.Window) error {
+	logger.Debug("activateWindow", win)
 	err := changeCurrentWorkspaceToWindowWorkspace(win)
 	if err != nil {
 		return err

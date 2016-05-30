@@ -24,10 +24,27 @@ import (
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"io"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
+	dutils "pkg.deepin.io/lib/utils"
+	"text/template"
 )
+
+func iconifyWindow(win xproto.Window) {
+	logger.Debug("iconifyWindow", win)
+	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+}
+
+func contains(haystack []string, needle string) bool {
+	for _, s := range haystack {
+		if s == needle {
+			return true
+		}
+	}
+	return false
+}
 
 func trimDesktop(desktopID string) string {
 	desktopIDLen := len(desktopID)
@@ -43,7 +60,7 @@ func trimDesktop(desktopID string) string {
 }
 
 func normalizeAppID(candidateID string) string {
-	return appinfo.NormalizeAppID(candidateID)
+	return strings.Replace(appinfo.NormalizeAppID(candidateID), " ", "-", -1)
 }
 
 var _DesktopAppIdReg = regexp.MustCompile(`(?:[^.]+\.)*(?P<desktopID>[^.]+)\.desktop`)
@@ -134,6 +151,16 @@ func getWmCommand(xu *xgbutil.XUtil, win xproto.Window) ([]string, error) {
 	return command, err
 }
 
+func getWindowGtkApplicationId(xu *xgbutil.XUtil, win xproto.Window) string {
+	gtkAppId, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "_GTK_APPLICATION_ID"))
+	return gtkAppId
+}
+
+func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
+	role, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "WM_WINDOW_ROLE"))
+	return role
+}
+
 func getProcessCmdline(pid uint) ([]string, error) {
 	cmdlinePath := fmt.Sprintf("/proc/%d/cmdline", pid)
 	bytes, err := ioutil.ReadFile(cmdlinePath)
@@ -192,4 +219,98 @@ func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
 	logger.Debug("get icon name from _NET_WM_ICON_NAME")
 	name, _ := ewmh.WmIconNameGet(XU, win)
 	return name
+}
+
+func createScratchDesktopFile(id, title, icon, cmd string) error {
+	logger.Debugf("create scratch file for %q", id)
+	err := os.MkdirAll(scratchDir, 0775)
+	if err != nil {
+		logger.Warning("create scratch directory failed:", err)
+		return err
+	}
+	f, err := os.OpenFile(filepath.Join(scratchDir, id+".desktop"),
+		os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0744)
+	if err != nil {
+		logger.Warning("Open file for write failed:", err)
+		return err
+	}
+
+	defer f.Close()
+	temp := template.Must(template.New("docked_item_temp").Parse(dockedItemTemplate))
+	dockedItem := dockedItemInfo{title, icon, cmd}
+	logger.Debugf("dockedItem: %#v", dockedItem)
+	err = temp.Execute(f, dockedItem)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func removeScratchFiles(id string) {
+	extList := []string{"desktop", "sh", "png"}
+	for _, ext := range extList {
+		file := filepath.Join(scratchDir, id+"."+ext)
+		if dutils.IsFileExist(file) {
+			logger.Debugf("remove scratch file %q", file)
+			err := os.Remove(file)
+			if err != nil {
+				logger.Warning("remove scratch file %q failed:", file, err)
+			}
+		}
+	}
+}
+
+func strSliceEqual(sa, sb []string) bool {
+	if len(sa) != len(sb) {
+		return false
+	}
+	for i, va := range sa {
+		vb := sb[i]
+		if va != vb {
+			return false
+		}
+	}
+	return true
+}
+
+func uniqStrSlice(slice []string) []string {
+	newSlice := make([]string, 0)
+	for _, e := range slice {
+		if !isStrInSlice(e, newSlice) {
+			newSlice = append(newSlice, e)
+		}
+	}
+	return newSlice
+}
+
+func isStrInSlice(v string, slice []string) bool {
+	for _, e := range slice {
+		if e == v {
+			return true
+		}
+	}
+	return false
+}
+
+func copyFileContents(src, dst string) (err error) {
+	in, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer in.Close()
+	out, err := os.Create(dst)
+	if err != nil {
+		return
+	}
+	defer func() {
+		cerr := out.Close()
+		if err == nil {
+			err = cerr
+		}
+	}()
+	if _, err = io.Copy(out, in); err != nil {
+		return
+	}
+	err = out.Sync()
+	return
 }

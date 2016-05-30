@@ -77,6 +77,7 @@ func (d *Daemon) Start() error {
 		return err
 	}
 	initAtom()
+	initDir()
 	logger.Info("initialize atoms done")
 
 	dockManager, err = NewDockManager()

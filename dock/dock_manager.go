@@ -47,10 +47,25 @@ func NewDockManager() (*DockManager, error) {
 }
 
 func (m *DockManager) initEntryManager() error {
-	m.entryManager = NewEntryManager()
-	m.entryManager.initRuntimeApps()
+	var err error
+	m.entryManager, err = NewEntryManager()
+	if err != nil {
+		return err
+	}
+
+	m.entryManager.desktopIdFileMap.SetAutoSaveEnabled(false)
+	m.entryManager.windowDesktopMap.SetAutoSaveEnabled(false)
+
 	m.entryManager.initDockedApps()
-	err := dbus.InstallOnSession(m.entryManager.dockedAppManager)
+	m.entryManager.initClientList()
+
+	m.entryManager.desktopIdFileMap.SetAutoSaveEnabled(true)
+	m.entryManager.desktopIdFileMap.AutoSave()
+
+	m.entryManager.windowDesktopMap.SetAutoSaveEnabled(true)
+	m.entryManager.windowDesktopMap.AutoSave()
+
+	err = dbus.InstallOnSession(m.entryManager.dockedAppManager)
 	if err != nil {
 		return err
 	}

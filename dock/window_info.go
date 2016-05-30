@@ -10,6 +10,8 @@
 package dock
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -23,9 +25,10 @@ import (
 )
 
 type WindowInfo struct {
-	window xproto.Window
-	Title  string
-	Icon   string
+	innerId string
+	window  xproto.Window
+	Title   string
+	Icon    string
 
 	x                        int16
 	y                        int16
@@ -46,8 +49,11 @@ type WindowInfo struct {
 	wmClass          *icccm.WmClass
 	wmName           string
 
-	process *ProcessInfo
-	app     *RuntimeApp
+	gtkAppId string
+	wmRole   string
+	pid      uint
+	process  *ProcessInfo
+	entry    *AppEntry
 
 	firstUpdate bool
 }
@@ -148,26 +154,117 @@ func (winInfo *WindowInfo) updateHasXEmbedInfo() {
 func (winInfo *WindowInfo) updateWmName() {
 	winInfo.wmName = getWmName(XU, winInfo.window)
 	winInfo.Title = winInfo.getTitle()
-	if winInfo.app != nil {
-		winInfo.app.notifyChanged()
+	entry := winInfo.entry
+	if entry != nil {
+		entry.updateAppXids()
+		if winInfo == entry.current {
+			entry.setTitle(winInfo.Title)
+		}
 	}
+}
+
+func (winInfo *WindowInfo) getDisplayName() string {
+	return strings.Title(winInfo._getDisplayName())
+}
+
+func (winInfo *WindowInfo) _getDisplayName() string {
+	win := winInfo.window
+	role := winInfo.wmRole
+	if !utf8.ValidString(role) {
+		role = ""
+	}
+
+	var class, instance string
+	if winInfo.wmClass != nil {
+		class = winInfo.wmClass.Class
+		if !utf8.ValidString(class) {
+			class = ""
+		}
+
+		instance = filepath.Base(winInfo.wmClass.Instance)
+		if !utf8.ValidString(instance) {
+			instance = ""
+		}
+	}
+	logger.Debugf("getDisplayName class: %q, instance: %q", class, instance)
+
+	if role != "" && class != "" {
+		return class + " " + role
+	}
+
+	if class != "" {
+		return class
+	}
+
+	if instance != "" {
+		return instance
+	}
+
+	wmName := winInfo.wmName
+	if wmName != "" {
+		var shortWmName string
+		rindex := strings.LastIndex(wmName, "-")
+		if rindex > 0 {
+			shortWmName = wmName[rindex:]
+			if shortWmName != "" && utf8.ValidString(shortWmName) {
+				return shortWmName
+			}
+		}
+	}
+
+	if winInfo.process != nil {
+		exeBasename := filepath.Base(winInfo.process.exe)
+		if utf8.ValidString(exeBasename) {
+			return exeBasename
+		}
+	}
+
+	return fmt.Sprintf("window: %v", win)
 }
 
 func (winInfo *WindowInfo) getTitle() string {
 	wmName := winInfo.wmName
 	if wmName == "" || !utf8.ValidString(wmName) {
-		if winInfo.app != nil {
-			appInfo := winInfo.app.appInfo
+		if winInfo.entry != nil {
+			appInfo := winInfo.entry.appInfo
 			if appInfo != nil {
 				return appInfo.GetDisplayName()
 			}
-			return winInfo.app.Id
 		}
-		// winInfo.app is nil
-		return fmt.Sprintf("window: %v", winInfo.window)
+		// winInfo.entry is nil
+		return winInfo.getDisplayName()
 	} else {
 		return wmName
 	}
+}
+
+func (winInfo *WindowInfo) updateIcon() {
+	winInfo.Icon = winInfo.getIcon()
+	entry := winInfo.entry
+	if entry != nil {
+		if winInfo == entry.current {
+			entry.setIcon(winInfo.Icon)
+		}
+	}
+}
+
+func (winInfo *WindowInfo) getIcon() string {
+	entry := winInfo.entry
+	var icon string
+	if entry != nil && entry.appInfo != nil {
+		icon = entry.appInfo.GetIcon()
+		if icon != "" {
+			return icon
+		}
+		logger.Warning("get icon form entry.appInfo failed")
+	}
+
+	logger.Debug("using icon from X")
+	icon = getIconFromWindow(XU, winInfo.window)
+	if icon != "" {
+		return icon
+	}
+	return "application-default-icon"
 }
 
 var skipTaskbarWindowTypes []string = []string{
@@ -215,11 +312,11 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 
 func (winInfo *WindowInfo) initProcessInfo() {
 	win := winInfo.window
-	pid := getWmPid(XU, win)
+	winInfo.pid = getWmPid(XU, win)
 	var err error
-	winInfo.process, err = NewProcessInfo(pid)
+	winInfo.process, err = NewProcessInfo(winInfo.pid)
 	if err != nil {
-		logger.Warning(err)
+		logger.Debug(err)
 		// Try WM_COMMAND
 		wmCommand, err := getWmCommand(XU, win)
 		if err == nil {
@@ -240,8 +337,11 @@ func (winInfo *WindowInfo) update() {
 	if len(winInfo.wmWindowType) == 0 {
 		winInfo.updateHasXEmbedInfo()
 	}
-	winInfo.updateWmName()
 	winInfo.initProcessInfo()
+	winInfo.wmRole = getWmWindowRole(XU, win)
+	winInfo.gtkAppId = getWindowGtkApplicationId(XU, win)
+	winInfo.updateWmName()
+	winInfo.genInnerId()
 }
 
 func (winInfo *WindowInfo) guessAppId(filterGroup *AppIdFilterGroup) string {
@@ -290,33 +390,51 @@ func (winInfo *WindowInfo) guessAppId(filterGroup *AppIdFilterGroup) string {
 	return appId
 }
 
-func (winInfo *WindowInfo) createAppId() string {
-	var appId string
+func _filterFilePath(args []string) string {
+	var filtered []string
+	for _, arg := range args {
+		if strings.Contains(arg, "/") || arg == "." || arg == ".." {
+			filtered = append(filtered, "%F")
+		} else {
+			filtered = append(filtered, arg)
+		}
+	}
+	return strings.Join(filtered, " ")
+}
+
+func (winInfo *WindowInfo) genInnerId() {
+	win := winInfo.window
+	var wmClass string
+	var wmInstance string
 	if winInfo.wmClass != nil {
-		appId = winInfo.wmClass.Class
-		// it is possible that getting invalid string which might be xgb implementation's bug.
-		// for instance: xdemineur's WMClass
-		if appId != "" && utf8.ValidString(appId) {
-			return normalizeAppID(appId)
-		}
-
-		appId = winInfo.wmClass.Instance
-		if appId != "" && utf8.ValidString(appId) {
-			// wmclass instance 可能是文件路径，比如 xdemineur 的
-			appId = filepath.Base(appId)
-			return normalizeAppID(appId)
-		}
+		wmClass = winInfo.wmClass.Class
+		wmInstance = filepath.Base(winInfo.wmClass.Instance)
 	}
-
+	var exe string
+	var args string
 	if winInfo.process != nil {
-		appId = filepath.Base(winInfo.process.exe)
-		if appId != "" {
-			return normalizeAppID(appId)
-		}
+		exe = winInfo.process.exe
+		args = _filterFilePath(winInfo.process.args)
 	}
-	// TODO: try WM_COMMAND
-	// TODO: try ICON NAME
-	return ""
+	hasPid := (winInfo.pid != 0)
+
+	var str string
+	// NOTE: 不要使用 wmRole，有些程序总会改变这个值比如 GVim
+	if wmInstance == "" && wmClass == "" && exe == "" && winInfo.gtkAppId == "" {
+		if winInfo.wmName != "" {
+			str = fmt.Sprintf("wmName:%q", winInfo.wmName)
+		} else {
+			str = fmt.Sprintf("windowId:%v", winInfo.window)
+		}
+	} else {
+		str = fmt.Sprintf("wmInstance:%q,wmClass:%q,exe:%q,args:%q,hasPid:%v,gtkAppId:%q",
+			wmInstance, wmClass, exe, args, hasPid, winInfo.gtkAppId)
+	}
+
+	hasher := md5.New()
+	hasher.Write([]byte(str))
+	winInfo.innerId = "w:" + hex.EncodeToString(hasher.Sum(nil))
+	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
 }
 
 func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryManager) {
@@ -343,7 +461,8 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 		logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
 
 		if needUpdate {
-			entryManager.attachOrDetachRuntimeAppWindow(winInfo)
+			// entryManager.attachOrDetachRuntimeAppWindow(winInfo)
+			entryManager.attachOrDetachWindow(winInfo)
 		}
 
 		// end
@@ -361,8 +480,6 @@ func (winInfo *WindowInfo) handlePropertyNotifyEvent(ev xevent.PropertyNotifyEve
 }
 
 func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
-	app := winInfo.app
-
 	switch atom {
 	case ATOM_WINDOW_STATE:
 		winInfo.updateWmState()
@@ -381,10 +498,7 @@ func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
 		return false
 
 	case ATOM_WINDOW_ICON:
-		if app != nil {
-			app.updateIcon(winInfo)
-			app.notifyChanged()
-		}
+		winInfo.updateIcon()
 		return false
 		// case ATOM_DOCK_APP_ID:
 		// 	// TODO DOCK_APP_ID?
@@ -397,3 +511,32 @@ func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
 		return false
 	}
 }
+
+// func (winInfo *WindowInfo) createAppId() string {
+// 	var appId string
+// 	if winInfo.wmClass != nil {
+// 		appId = winInfo.wmClass.Class
+// 		// it is possible that getting invalid string which might be xgb implementation's bug.
+// 		// for instance: xdemineur's WMClass
+// 		if appId != "" && utf8.ValidString(appId) {
+// 			return normalizeAppID(appId)
+// 		}
+//
+// 		appId = winInfo.wmClass.Instance
+// 		if appId != "" && utf8.ValidString(appId) {
+// 			// wmclass instance 可能是文件路径，比如 xdemineur 的
+// 			appId = filepath.Base(appId)
+// 			return normalizeAppID(appId)
+// 		}
+// 	}
+//
+// 	if winInfo.process != nil {
+// 		appId = filepath.Base(winInfo.process.exe)
+// 		if appId != "" {
+// 			return normalizeAppID(appId)
+// 		}
+// 	}
+// 	// TODO: try WM_COMMAND
+// 	// TODO: try ICON NAME
+// 	return ""
+// }

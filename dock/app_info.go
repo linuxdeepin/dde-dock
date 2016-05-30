@@ -10,6 +10,9 @@
 package dock
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"fmt"
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"path/filepath"
@@ -23,7 +26,9 @@ var (
 )
 
 type AppInfo struct {
-	id string
+	id        string
+	desktopId string
+	innerId   string
 	*gio.DesktopAppInfo
 	*glib.KeyFile
 	gioSupported bool
@@ -35,6 +40,8 @@ func (dai *AppInfo) init() *AppInfo {
 		logger.Debugf("[init] %q failed", dai.id)
 		return nil
 	}
+
+	dai.genInnerId()
 
 	if len(dai.DesktopAppInfo.ListActions()) != 0 {
 		dai.gioSupported = true
@@ -49,10 +56,37 @@ func (dai *AppInfo) init() *AppInfo {
 	return dai
 }
 
-func NewAppInfo(desktopID string) *AppInfo {
+func NewAppInfo(id string) *AppInfo {
+	if id == "" {
+		return nil
+	}
 	dai := &AppInfo{}
-	dai.DesktopAppInfo = gio.NewDesktopAppInfo(desktopID)
-	dai.id = trimDesktop(normalizeAppID(desktopID))
+	desktopId := id + ".desktop"
+	desktopAppInfo := gio.NewDesktopAppInfo(desktopId)
+	if desktopAppInfo == nil {
+		// try guess_desktop_id
+		logger.Debug("NewAppInfo add .desktop failed")
+		desktopId = guess_desktop_id(id)
+		desktopAppInfo = gio.NewDesktopAppInfo(desktopId)
+		if desktopAppInfo == nil {
+			logger.Debug("NewAppInfo guess_desktop_id failed")
+			// try scratch dir
+			desktopFile := filepath.Join(scratchDir, id+".desktop")
+			logger.Debugf("scratch dir desktopFile : %q", desktopFile)
+			desktopAppInfo = gio.NewDesktopAppInfoFromFilename(desktopFile)
+			if desktopAppInfo == nil {
+				logger.Debug("NewAppInfo scratchDir failed")
+				logger.Warningf("NewAppInfo failed: id %q", id)
+				return nil
+			} else {
+				desktopId = desktopAppInfo.GetId()
+			}
+		}
+	}
+
+	dai.DesktopAppInfo = desktopAppInfo
+	dai.desktopId = desktopId
+	dai.id = trimDesktop(normalizeAppID(desktopId))
 	return dai.init()
 }
 
@@ -67,28 +101,41 @@ func NewAppInfoFromFile(file string) *AppInfo {
 	if basedir == "kde4" {
 		id = "kde4-" + id
 	}
+	ai.desktopId = id
 	ai.id = trimDesktop(normalizeAppID(id))
 	return ai.init()
 }
 
-func NewAppInfoFromWindow(winInfo *WindowInfo) *AppInfo {
-	id := winInfo.createAppId()
-	if id == "" {
-		return nil
+func (ai *AppInfo) genInnerId() {
+	cmdline := ai.DesktopAppInfo.GetCommandline()
+	hasher := md5.New()
+	hasher.Write([]byte(cmdline))
+	ai.innerId = "d:" + hex.EncodeToString(hasher.Sum(nil))
+}
+
+func (ai *AppInfo) String() string {
+	desktopFile := ai.GetFilePath()
+	gioIcon := ai.DesktopAppInfo.GetIcon()
+	var icon string
+	if gioIcon == nil {
+		logger.Warning("get icon from appinfo failed")
+		icon = ""
+	} else {
+		icon = gioIcon.ToString()
 	}
-	desktopId := guess_desktop_id(id)
-	ai := NewAppInfo(desktopId)
-	if ai != nil {
-		return ai
-	}
-	ai = &AppInfo{
-		id: id,
-	}
-	return ai
+	return fmt.Sprintf("<AppInfo id=%q hash=%q icon=%q desktop=%q>", ai.id, ai.innerId, icon, desktopFile)
 }
 
 func (ai *AppInfo) GetId() string {
 	return ai.id
+}
+
+func (ai *AppInfo) GetDesktopId() string {
+	return ai.desktopId
+}
+
+func (ai *AppInfo) GetFilePath() string {
+	return ai.DesktopAppInfo.GetFilename()
 }
 
 func (dai *AppInfo) ListActions() []string {
@@ -189,13 +236,6 @@ func (dai *AppInfo) GetIcon() string {
 
 	logger.Debug("get app icon:", icon)
 	return icon
-}
-
-func (ai *AppInfo) GetFilename() string {
-	if ai.DesktopAppInfo == nil {
-		return ""
-	}
-	return ai.DesktopAppInfo.GetFilename()
 }
 
 func (ai *AppInfo) GetDisplayName() string {

@@ -25,7 +25,8 @@ func init() {
 
 var (
 	logger      = log.NewLogger("daemon/dock")
-	scratchDir  = filepath.Join(os.Getenv("HOME"), ".config/dock/scratch")
+	scratchDir  string
+	cacheDir    string
 	dockManager *DockManager
 
 	XU     *xgbutil.XUtil
@@ -45,6 +46,16 @@ var (
 	_NET_SYSTEM_TRAY_OPCODE xproto.Atom
 	ATOM_XEMBED_INFO        xproto.Atom
 )
+
+func initDir() {
+	homeDir := os.Getenv("HOME")
+	scratchDir = filepath.Join(homeDir, ".config/dock/scratch")
+	cacheDir = filepath.Join(homeDir, ".cache/deepin/dde-daemon/dock/")
+	logger.Debugf("scratch dir: %q", scratchDir)
+	logger.Debugf("cache dir: %q", cacheDir)
+	os.MkdirAll(cacheDir, 0755)
+	os.MkdirAll(scratchDir, 0755)
+}
 
 func initAtom() {
 	_NET_SHOWING_DESKTOP, _ = xprop.Atm(XU, "_NET_SHOWING_DESKTOP")
