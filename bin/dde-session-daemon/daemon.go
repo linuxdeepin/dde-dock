@@ -13,7 +13,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"runtime/pprof"
 	"sync"
 
 	"gir/gio-2.0"
@@ -67,53 +66,6 @@ type SessionDaemon struct {
 
 	cpuLocker sync.Mutex
 	cpuWriter *os.File
-}
-
-// Profile: heap, goroutine, threadcreate, block
-func (s *SessionDaemon) WriteProfile(profile, log string) error {
-	var p = pprof.Lookup(profile)
-	if p == nil {
-		return fmt.Errorf("Profile '%s' not exists", profile)
-	}
-
-	fw, err := os.Create(log)
-	if err != nil {
-		return err
-	}
-	defer fw.Close()
-
-	return p.WriteTo(fw, 1)
-}
-
-// Profile: cpu
-func (s *SessionDaemon) StartCPUProfile(log string) error {
-	s.cpuLocker.Lock()
-	defer s.cpuLocker.Unlock()
-	fw, err := os.Create(log)
-	if err != nil {
-		return err
-	}
-
-	err = pprof.StartCPUProfile(fw)
-	if err != nil {
-		fw.Close()
-		return err
-	}
-
-	s.cpuWriter = fw
-	return nil
-}
-
-func (s *SessionDaemon) StopCPUProfile() {
-	s.cpuLocker.Lock()
-	defer s.cpuLocker.Unlock()
-	if s.cpuWriter == nil {
-		return
-	}
-
-	pprof.StopCPUProfile()
-	s.cpuWriter.Close()
-	s.cpuWriter = nil
 }
 
 func (*SessionDaemon) GetDBusInfo() dbus.DBusInfo {
