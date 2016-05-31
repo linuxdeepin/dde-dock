@@ -24,6 +24,10 @@ const (
 	DiskTypeNative    string = "native"
 	DiskTypeRemovable        = "removable"
 	DiskTypeNetwork          = "network"
+	DiskTypeIPhone           = "iphone"
+	DiskTypePhone            = "phone"
+	DiskTypeCamera           = "camera"
+	DiskTypeDVD              = "dvd"
 )
 
 const (
@@ -72,6 +76,9 @@ func (m *Manager) getDiskInfos() DiskInfos {
 	for _, mount := range m.monitor.GetMounts() {
 		info := newDiskInfoFromMount(mount)
 		mount.Unref()
+		if info == nil {
+			continue
+		}
 		infos = infos.add(info)
 	}
 
@@ -203,6 +210,7 @@ func (infos DiskInfos) duplicate() DiskInfos {
 func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 	var root = mount.GetRoot()
 	var info = &DiskInfo{
+		Id:         getMountId(mount),
 		Name:       mount.GetName(),
 		MountPoint: root.GetUri(),
 		Type:       DiskTypeNative,
@@ -213,23 +221,8 @@ func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 	}
 	root.Unref()
 
-	volume := mount.GetVolume()
-	if volume != nil {
-		info.Id = volume.GetIdentifier(volumeKindUUID)
-		info.Path = volume.GetIdentifier(volumeKindUnix)
-		volume.Unref()
-	}
-
 	if info.Total == 0 {
 		info.Total = getTotalSizeByUDisks2(info.Path)
-	}
-
-	if len(info.Id) == 0 {
-		if len(info.Path) != 0 {
-			info.Id = info.Path
-		} else {
-			info.Id = info.MountPoint
-		}
 	}
 
 	gicon := mount.GetIcon()
@@ -237,13 +230,21 @@ func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 	gicon.Unref()
 
 	info.correctDiskType()
+	if info.Type != DiskTypeNetwork {
+		volume := mount.GetVolume()
+		// All devices must have Volume objects, in addition to network devices
+		if volume == nil || volume.Object.C == nil {
+			logger.Debugf("Invalid disk info: %#v", info)
+			return nil
+		}
+	}
 	return info
 }
 
 func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 	var info = &DiskInfo{
+		Id:       getVolumeId(volume),
 		Name:     volume.GetName(),
-		Id:       volume.GetIdentifier(volumeKindUUID),
 		Type:     DiskTypeNative,
 		Path:     volume.GetIdentifier(volumeKindUnix),
 		CanEject: volume.CanEject(),
@@ -251,10 +252,6 @@ func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 
 	if info.Total == 0 {
 		info.Total = getTotalSizeByUDisks2(info.Path)
-	}
-
-	if len(info.Id) == 0 {
-		info.Id = info.Path
 	}
 
 	gicon := volume.GetIcon()
@@ -265,33 +262,46 @@ func newDiskInfoFromVolume(volume *gio.Volume) *DiskInfo {
 	return info
 }
 
-var (
-	mtpReg     = regexp.MustCompile(`^mtp://`)
-	smbReg     = regexp.MustCompile(`^smb://`)
-	ftpReg     = regexp.MustCompile(`^ftp://`)
-	networkReg = regexp.MustCompile(`^network`)
-)
-
 func (info *DiskInfo) correctDiskType() {
 	if info.CanEject || strings.Contains(info.Icon, "usb") {
 		info.Type = DiskTypeRemovable
 	}
 
-	if smbReg.MatchString(info.MountPoint) ||
-		ftpReg.MatchString(info.MountPoint) ||
-		networkReg.MatchString(info.Path) {
+	if stringStartWith(info.MountPoint, "smb://") ||
+		stringStartWith(info.MountPoint, "ftp://") ||
+		stringStartWith(info.Path, "network://") {
 		info.Type = DiskTypeNetwork
+		return
 	}
 
-	if mtpReg.MatchString(info.MountPoint) {
-		info.Type = DiskTypeRemovable
-		info.Icon = mtpDeviceIcon
+	if stringStartWith(info.MountPoint, "afc://") ||
+		strings.Contains(info.Icon, "iphone") {
+		info.Type = DiskTypeIPhone
+		return
+	}
+
+	if stringStartWith(info.MountPoint, "mtp://") ||
+		info.Icon == "phone" {
+		info.Type = DiskTypePhone
+		info.Icon = "phone"
+		return
+	}
+
+	if stringStartWith(info.MountPoint, "gphoto2://") ||
+		strings.Contains(info.Icon, "camera") {
+		info.Type = DiskTypeCamera
+		return
+	}
+
+	if strings.Contains(info.Icon, "dvd") {
+		info.Type = DiskTypeDVD
+		return
 	}
 }
 
 func queryAttrUint64(file *gio.File, attr string) uint64 {
 	info, err := file.QueryFilesystemInfo(attr, nil)
-	if err != nil {
+	if err != nil || info == nil || info.Object.C == nil {
 		return 0
 	}
 	defer info.Unref()
@@ -304,14 +314,14 @@ func getIconFromGIcon(gicon *gio.Icon) string {
 	if len(icons) > 2 {
 		return icons[2]
 	}
-	return ""
+	return icons[0]
 }
 
 func getTotalSizeByUDisks2(devPath string) uint64 {
 	blockObj, err := udisks2.NewBlock("org.freedesktop.UDisks2",
 		dbus.ObjectPath("/org/freedesktop/UDisks2/block_devices/"+path.Base(devPath)))
 	if err != nil {
-		logger.Warning("New udisks2 block object failed:", err)
+		logger.Debug("New udisks2 block object failed:", err)
 		return 0
 	}
 	defer udisks2.DestroyBlock(blockObj)
@@ -332,11 +342,12 @@ func getVolumeId(volume *gio.Volume) string {
 func getMountId(mount *gio.Mount) string {
 	root := mount.GetRoot()
 	mountPoint := root.GetUri()
-	root.Unref()
+	// Don't unref root, root only ref once in mount
+	// root.Unref()
 
 	volume := mount.GetVolume()
 	if volume == nil || volume.Object.C == nil {
-		return mountPoint
+		return getIdByMountPoint(mountPoint)
 	}
 
 	id := getVolumeId(volume)
@@ -344,5 +355,24 @@ func getMountId(mount *gio.Mount) string {
 	if len(id) != 0 {
 		return id
 	}
-	return mountPoint
+	return getIdByMountPoint(mountPoint)
+}
+
+func getIdByMountPoint(mountPoint string) string {
+	var id = mountPoint
+	switch {
+	// iphone
+	case stringStartWith(mountPoint, "afc://"):
+		id = regexp.MustCompile(`^afc://`).ReplaceAllString(id, "")
+		id = strings.TrimRight(id, "/")
+	}
+
+	return id
+}
+
+func stringStartWith(s, key string) bool {
+	if len(s) > len(key) && (string(s[:len(key)]) == key) {
+		return true
+	}
+	return false
 }

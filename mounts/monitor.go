@@ -23,8 +23,8 @@ func (m *Manager) handleEvent() {
 		soundutils.PlaySystemSound(soundutils.EventDevicePlug,
 			"", false)
 		info := newDiskInfoFromVolume(volume)
-		logger.Debug("[Event] volume added:", info.Name, info.Type)
-		if info.Type == DiskTypeRemovable && m.isAutoMount() {
+		logger.Debug("[Event] volume added:", info.Name, info.Type, info.Id)
+		if volume.ShouldAutomount() && m.isAutoMount() {
 			m.mountVolume(info.Id, volume)
 			volume.Unref()
 			return
@@ -36,7 +36,7 @@ func (m *Manager) handleEvent() {
 
 	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor,
 		volume *gio.Volume) {
-		logger.Debug("[Event] volume removed")
+		logger.Debug("[Event] volume removed:", getVolumeId(volume))
 		volume.Unref()
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
@@ -51,28 +51,36 @@ func (m *Manager) handleEvent() {
 
 	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
 		mount *gio.Mount) {
-		// Filter invalid 'mount-added' event, if mount iphone, it will emit twice 'mount-added' event
-		volume := mount.GetVolume()
-		if volume == nil || volume.Object.C == nil {
+		info := newDiskInfoFromMount(mount)
+		if info == nil {
+			mount.Unref()
 			return
 		}
-		volume.Unref()
+		logger.Debug("[Event] mount added:", info.Name, info.Id, info.CanEject)
 
-		info := newDiskInfoFromMount(mount)
+		volume := mount.GetVolume()
 		mount.Unref()
-		logger.Debug("[Event] mount added:", info.Name, info.CanEject)
-		if info.CanEject && m.isAutoOpen() {
+		var autoOpen bool = false
+		if volume != nil && volume.Object.C != nil {
+			if volume.ShouldAutomount() && m.isAutoOpen() {
+				autoOpen = true
+			}
+			volume.Unref()
+		}
+
+		m.refrashDiskList()
+		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
+
+		if autoOpen {
 			go exec.Command("/bin/sh", "-c",
 				fmt.Sprintf("gvfs-open %s",
 					info.MountPoint)).Run()
 		}
-		m.refrashDiskList()
-		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
 	})
 
 	m.monitor.Connect("mount-removed", func(monitor *gio.VolumeMonitor,
 		mount *gio.Mount) {
-		logger.Debug("[Event] mount removed")
+		logger.Debug("[Event] mount removed:", getMountId(mount))
 		if mount == nil || mount.Object.C == nil {
 			logger.Warning("Invalid GMount Object")
 			return
@@ -82,15 +90,21 @@ func (m *Manager) handleEvent() {
 		point := root.GetUri()
 		info, err := m.DiskList.getByMountPoint(point)
 		root.Unref()
-		mount.Unref()
 		if err != nil {
+			// fixed phone device
+			m.refrashDiskList()
+			dbus.Emit(m, "Changed", EventTypeMountRemoved, getMountId(mount))
+			mount.Unref()
 			logger.Warning(err)
 			return
 		}
+		mount.Unref()
 		oldLen := len(m.DiskList)
 		m.refrashDiskList()
 		if oldLen != len(m.DiskList) {
 			logger.Debug("Mount removed && volume removed")
+			// fixed for smb
+			dbus.Emit(m, "Changed", EventTypeMountRemoved, info.Id)
 			return
 		}
 
