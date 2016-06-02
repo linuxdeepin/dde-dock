@@ -237,6 +237,7 @@ func (m *EntryManager) addDockedAppEntry(id string) *AppEntry {
 
 	if e := m.getAppEntryByInnerId(entryInnerId); e != nil {
 		entry = e
+		appInfo.Destroy()
 	} else {
 		entry = newAppEntry(m, entryInnerId, appInfo)
 		m.addAppEntry(entry)
