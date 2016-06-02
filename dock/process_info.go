@@ -1,6 +1,7 @@
 package dock
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strconv"
@@ -27,6 +28,10 @@ func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
 }
 
 func NewProcessInfo(pid uint) (*ProcessInfo, error) {
+	if pid == 0 {
+		return nil, errors.New("pid is 0")
+	}
+
 	pInfo := &ProcessInfo{
 		pid: pid,
 	}
@@ -90,7 +95,7 @@ func verifyExe(exe, cwd, firstArg string) bool {
 	logger.Debugf("firstArg: %q", firstArg)
 	firstArgPath, err := filepath.EvalSymlinks(firstArg)
 	if err != nil {
-		logger.Error(err)
+		logger.Warning(err)
 		// first arg is not exe file, contains arguments
 		return false
 	}
