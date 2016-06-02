@@ -1,0 +1,97 @@
+     <interface name="dde.dock.Entry">
+          <method name="Activate">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+               <arg type="b" direction="out"></arg>
+          </method>
+          <method name="ContextMenu">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+          </method>
+          <method name="HandleDragDrop">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="HandleDragEnter">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="HandleDragLeave">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="HandleDragOver">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="HandleMenuItem">
+               <arg type="s" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="HandleMouseWheel">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <method name="SecondaryActivate">
+               <arg type="i" direction="in"></arg>
+               <arg type="i" direction="in"></arg>
+               <arg type="u" direction="in"></arg>
+          </method>
+          <signal name="DataChanged">
+               <arg type="s"></arg>
+               <arg type="s"></arg>
+          </signal>
+          <property name="Id" type="s" access="read"></property>
+          <property name="Type" type="s" access="read"></property>
+          <property name="Data" type="a{ss}" access="read"></property>
+     </interface>
+     <interface name="org.freedesktop.DBus.Introspectable">
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Introspect">
+               <arg type="s" direction="out"></arg>
+          </method>
+     </interface>
+     <interface name="org.freedesktop.DBus.Properties">
+          <method name="Get">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="out"></arg>
+          </method>
+          <method name="GetAll">
+               <arg type="s" direction="in"></arg>
+               <arg type="a{sv}" direction="out"></arg>
+          </method>
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Set">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="in"></arg>
+          </method>
+          <signal name="PropertiesChanged">
+               <arg type="s"></arg>
+               <arg type="a{sv}"></arg>
+               <arg type="as"></arg>
+          </signal>
+     </interface>
+     <interface name="com.deepin.DBus.LifeManager">
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Ref"></method>
+          <method name="Unref"></method>
+     </interface>
