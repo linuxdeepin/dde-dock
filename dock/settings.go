@@ -131,7 +131,11 @@ func (s *Setting) GetHideMode() int32 {
 
 // SetHideMode设置dock的隐藏模式。
 func (s *Setting) SetHideMode(mode int32) bool {
-	return s.setHideMode(HideModeType(mode))
+	if validHideModeNum(mode) {
+		return s.setHideMode(HideModeType(mode))
+	}
+	logger.Warning("Invalid hide mode", mode)
+	return false
 }
 
 // GetDisplayMode获取dock当前的显示模式。
@@ -141,7 +145,11 @@ func (s *Setting) GetDisplayMode() int32 {
 
 // SetDisplayMode设置dock的显示模式。
 func (s *Setting) SetDisplayMode(mode int32) bool {
-	return s.setDisplayMode(DisplayModeType(mode))
+	if validDisplayModeNum(mode) {
+		return s.setDisplayMode(DisplayModeType(mode))
+	}
+	logger.Warning("Invalid display mode", mode)
+	return false
 }
 
 func (s *Setting) destroy() {
