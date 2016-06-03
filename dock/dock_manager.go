@@ -47,30 +47,29 @@ func NewDockManager() (*DockManager, error) {
 }
 
 func (m *DockManager) initEntryManager() error {
-	var err error
-	m.entryManager, err = NewEntryManager()
+	em, err := NewEntryManager()
+	if err != nil {
+		return err
+	}
+	m.entryManager = em
+
+	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(false)
+	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(false)
+
+	em.initDockedApps()
+	em.initClientList()
+
+	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(true)
+	em.desktopWindowsMapCacheManager.AutoSave()
+	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(true)
+	em.desktopHashFileMapCacheManager.AutoSave()
+
+	err = dbus.InstallOnSession(em.dockedAppManager)
 	if err != nil {
 		return err
 	}
 
-	m.entryManager.desktopIdFileMap.SetAutoSaveEnabled(false)
-	m.entryManager.windowDesktopMap.SetAutoSaveEnabled(false)
-
-	m.entryManager.initDockedApps()
-	m.entryManager.initClientList()
-
-	m.entryManager.desktopIdFileMap.SetAutoSaveEnabled(true)
-	m.entryManager.desktopIdFileMap.AutoSave()
-
-	m.entryManager.windowDesktopMap.SetAutoSaveEnabled(true)
-	m.entryManager.windowDesktopMap.AutoSave()
-
-	err = dbus.InstallOnSession(m.entryManager.dockedAppManager)
-	if err != nil {
-		return err
-	}
-
-	err = dbus.InstallOnSession(m.entryManager)
+	err = dbus.InstallOnSession(em)
 	return err
 }
 

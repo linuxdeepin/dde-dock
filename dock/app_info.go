@@ -20,6 +20,8 @@ import (
 	"strings"
 )
 
+const desktopHashPrefix = "d:"
+
 var (
 	// gio support `Desktop Action`, not support `Shortcut Group`
 	actionReg = regexp.MustCompile(`(?P<actionGroup>.*) Shortcut Group`)
@@ -110,7 +112,7 @@ func (ai *AppInfo) genInnerId() {
 	cmdline := ai.DesktopAppInfo.GetCommandline()
 	hasher := md5.New()
 	hasher.Write([]byte(cmdline))
-	ai.innerId = "d:" + hex.EncodeToString(hasher.Sum(nil))
+	ai.innerId = desktopHashPrefix + hex.EncodeToString(hasher.Sum(nil))
 }
 
 func (ai *AppInfo) String() string {

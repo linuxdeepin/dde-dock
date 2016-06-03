@@ -24,6 +24,8 @@ import (
 	"unicode/utf8"
 )
 
+const windowHashPrefix = "w:"
+
 type WindowInfo struct {
 	innerId string
 	window  xproto.Window
@@ -433,7 +435,7 @@ func (winInfo *WindowInfo) genInnerId() {
 
 	hasher := md5.New()
 	hasher.Write([]byte(str))
-	winInfo.innerId = "w:" + hex.EncodeToString(hasher.Sum(nil))
+	winInfo.innerId = windowHashPrefix + hex.EncodeToString(hasher.Sum(nil))
 	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
 }
 

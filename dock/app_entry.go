@@ -10,15 +10,13 @@
 package dock
 
 import (
+	"encoding/json"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
-	"sort"
-	// "crypto/md5"
-	// "encoding/hex"
-	"encoding/json"
 	"pkg.deepin.io/lib/dbus"
+	"sort"
 )
 
 const (
@@ -78,13 +76,6 @@ func newAppEntry(entryManager *EntryManager, id string, appInfo *AppInfo) *AppEn
 		Data:         make(map[string]string),
 		windows:      make(map[xproto.Window]*WindowInfo),
 		appInfo:      appInfo,
-	}
-
-	if appInfo != nil {
-		desktopFilePath := appInfo.GetFilePath()
-		entryManager.desktopIdFileMap.NewRel(desktopFilePath, id)
-		logger.Debugf("desktopIdFileMap: desktop file %q => desktop hash %q", desktopFilePath, id)
-		entryManager.desktopIdFileMap.AutoSave()
 	}
 	return entry
 }

@@ -29,11 +29,11 @@ import (
 type EntryManager struct {
 	activeWindow xproto.Window
 
-	dockedAppManager *DockedAppManager
-	clientList       windowSlice
-	appIdFilterGroup *AppIdFilterGroup
-	windowDesktopMap *windowDesktopMap
-	desktopIdFileMap *desktopIdFileMap
+	dockedAppManager               *DockedAppManager
+	clientList                     windowSlice
+	appIdFilterGroup               *AppIdFilterGroup
+	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
+	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
 
 	Entries []*AppEntry
 	// Added在程序需要在前端显示时被触发。
@@ -66,11 +66,11 @@ func NewEntryManager() (*EntryManager, error) {
 		appIdFilterGroup: NewAppIdFilterGroup(),
 	}
 	var err error
-	m.windowDesktopMap, err = newWindowDesktopMapFromFile(filepath.Join(cacheDir, "windowDesktopMap.gob"))
+	m.desktopWindowsMapCacheManager, err = newDesktopWindowsMapCacheManager(filepath.Join(cacheDir, "desktopWindowsMapCache.gob"))
 	if err != nil {
 		return nil, err
 	}
-	m.desktopIdFileMap, err = newDesktopIdFileMapFromFile(filepath.Join(cacheDir, "desktopIdFileMap.gob"))
+	m.desktopHashFileMapCacheManager, err = newDesktopHashFileMapCacheManager(filepath.Join(cacheDir, "desktopHashFileMapCache.gob"))
 	if err != nil {
 		return nil, err
 	}
@@ -235,6 +235,9 @@ func (m *EntryManager) addDockedAppEntry(id string) *AppEntry {
 	entryInnerId := appInfo.innerId
 	var entry *AppEntry
 
+	m.desktopHashFileMapCacheManager.SetKeyValue(entryInnerId, appInfo.GetFilePath())
+	m.desktopHashFileMapCacheManager.AutoSave()
+
 	if e := m.getAppEntryByInnerId(entryInnerId); e != nil {
 		entry = e
 		appInfo.Destroy()
@@ -284,25 +287,28 @@ func entrySliceRemove(slice []*AppEntry, entry *AppEntry) []*AppEntry {
 
 func (m *EntryManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	logger.Debugf("identifyWindow: window id: %v, window hash %v", winInfo.window, winInfo.innerId)
-	desktopHash := m.windowDesktopMap.FindRel(winInfo.innerId)
-	logger.Debug("identifyWindow: FindRel desktop hash:", desktopHash)
+	desktopHash := m.desktopWindowsMapCacheManager.GetKeyByValue(winInfo.innerId)
+	logger.Debug("identifyWindow: get desktop hash:", desktopHash)
 	var appInfo *AppInfo
 	if desktopHash != "" {
-		appInfo = m.desktopIdFileMap.FindRelAppInfo(desktopHash)
-		logger.Debug("identifyWindow: FindRelAppInfo:", appInfo)
+		appInfo = m.desktopHashFileMapCacheManager.GetAppInfo(desktopHash)
+		logger.Debug("identifyWindow: get AppInfo by desktop hash:", appInfo)
 	}
 
 	if appInfo == nil {
 		// cache faild
 		if desktopHash != "" {
-			logger.Warning("winHash->DesktopHash success, but DesktopHash->appInfo fail, delRel")
-			m.windowDesktopMap.DelRel(winInfo.innerId, desktopHash)
+			logger.Warning("winHash->DesktopHash success, but DesktopHash->appInfo fail")
+			m.desktopHashFileMapCacheManager.DeleteKey(desktopHash)
+			m.desktopWindowsMapCacheManager.DeleteKeyValue(desktopHash, winInfo.innerId)
 		}
+
 		var canCache bool
 		appInfo, canCache = m.getAppInfoFromWindow(winInfo)
 		logger.Debug("identifyWindow: getAppInfoFromWindow:", appInfo)
 		if appInfo != nil && canCache {
-			m.windowDesktopMap.NewRel(winInfo.innerId, appInfo.innerId)
+			m.desktopWindowsMapCacheManager.AddKeyValue(appInfo.innerId, winInfo.innerId)
+			m.desktopHashFileMapCacheManager.SetKeyValue(appInfo.innerId, appInfo.GetFilePath())
 		}
 	}
 
@@ -315,7 +321,8 @@ func (m *EntryManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 		logger.Debug("Set entryInnerId to window hash")
 	}
 
-	m.windowDesktopMap.AutoSave()
+	m.desktopWindowsMapCacheManager.AutoSave()
+	m.desktopHashFileMapCacheManager.AutoSave()
 	return entryInnerId, appInfo
 }
 
@@ -457,11 +464,15 @@ func (m *EntryManager) dockEntry(entry *AppEntry) {
 			entryOldInnerId := entry.innerId
 			entry.innerId = entry.appInfo.innerId
 			logger.Debug("dockEntry: createScratchDesktopFile successed, entry use new innerId", entry.innerId)
-			entryManager := entry.entryManager
-			entryManager.windowDesktopMap.NewRel(entryOldInnerId, entry.innerId)
-			entryManager.windowDesktopMap.AutoSave()
-			entryManager.desktopIdFileMap.NewRel(entry.appInfo.GetFilePath(), entry.innerId)
-			entryManager.desktopIdFileMap.AutoSave()
+
+			if strings.HasPrefix(entryOldInnerId, windowHashPrefix) {
+				// entryOldInnerId is window hash
+				m.desktopWindowsMapCacheManager.AddKeyValue(entry.innerId, entryOldInnerId)
+				m.desktopWindowsMapCacheManager.AutoSave()
+			}
+
+			m.desktopHashFileMapCacheManager.SetKeyValue(entry.innerId, entry.appInfo.GetFilePath())
+			m.desktopHashFileMapCacheManager.AutoSave()
 		} else {
 			logger.Warning("createScratchDesktopFileWithAppEntry failed")
 			return
