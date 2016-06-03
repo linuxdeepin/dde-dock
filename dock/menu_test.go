@@ -24,7 +24,7 @@ func Test_GenerateMenuJson(t *testing.T) {
 		menu.AppendItem(item0, item1, item2)
 
 		menuJSON := menu.GenerateJSON()
-		So(menuJSON, ShouldEqual, `{"checkableMenu":false, "singleCheck": false, "items":[{"itemId":"1", "itemText": "item 0", "isActive": true, "isCheckable":false, "checked":false, "itemIcon":"", "itemIconHover":"", "itemIconInactive":"", "showCheckMark":false, "itemSubMenu":{"checkableMenu":false, "singleCheck":false, "items": []}},{"itemId":"2", "itemText": "item 1", "isActive": true, "isCheckable":false, "checked":false, "itemIcon":"", "itemIconHover":"", "itemIconInactive":"", "showCheckMark":false, "itemSubMenu":{"checkableMenu":false, "singleCheck":false, "items": []}},{"itemId":"3", "itemText": "item 2", "isActive": true, "isCheckable":false, "checked":false, "itemIcon":"", "itemIconHover":"", "itemIconInactive":"", "showCheckMark":false, "itemSubMenu":{"checkableMenu":false, "singleCheck":false, "items": []}}]}`)
+		So(menuJSON, ShouldEqual, `{"items":[{"itemId":"0","itemText":"item 0","isActive":true,"isCheckable":false,"checked":false,"itemIcon":"","itemIconHover":"","itemIconInactive":"","showCheckMark":false,"itemSubMenu":null},{"itemId":"1","itemText":"item 1","isActive":true,"isCheckable":false,"checked":false,"itemIcon":"","itemIconHover":"","itemIconInactive":"","showCheckMark":false,"itemSubMenu":null},{"itemId":"2","itemText":"item 2","isActive":true,"isCheckable":false,"checked":false,"itemIcon":"","itemIconHover":"","itemIconInactive":"","showCheckMark":false,"itemSubMenu":null}],"checkableMenu":false,"singleCheck":false}`)
 
 		var parseResult interface{}
 		err := json.Unmarshal([]byte(menuJSON), &parseResult)

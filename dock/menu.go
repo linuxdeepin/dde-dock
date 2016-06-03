@@ -10,129 +10,95 @@
 package dock
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 )
 
+// json sample
+// {
+//    "checkableMenu" : false,
+//    "items" : [
+//       {
+//          "itemText" : "item 1",
+//          "isActive" : true,
+//          "itemSubMenu" : nil,
+//          "itemId" : "2",
+//          "itemIconInactive" : "",
+//          "checked" : false,
+//          "itemIconHover" : "",
+//          "itemIcon" : "",
+//          "showCheckMark" : false,
+//          "isCheckable" : false
+//       },
+//    ],
+//    "singleCheck" : false
+// }
+
 type MenuItem struct {
-	// Name    string
-	// Enabled bool
+	Id            string `json:"itemId"`
+	Text          string `json:"itemText"`
+	IsActive      bool   `json:"isActive"`
+	IsCheckable   bool   `json:"isCheckable"`
+	Checked       bool   `json:"checked"`
+	Icon          string `json:"itemIcon"`
+	IconHover     string `json:"itemIconHover"`
+	IconInactive  string `json:"itemIconInactive"`
+	ShowCheckMark bool   `json:"showCheckMark"`
+	SubMenu       *Menu  `json:"itemSubMenu"`
 
-	itemText         string
-	isActive         bool
-	isCheckable      bool
-	checked          bool
-	itemIcon         string
-	itemIconHover    string
-	itemIconInactive string
-	showCheckMark    bool
-	subMenu          *Menu
-
-	Action func(uint32)
+	action func(uint32)
 }
-
-// TODO: set properties.
 
 func NewMenuItem(name string, action func(uint32), enable bool) *MenuItem {
 	return &MenuItem{
-		itemText:         name,
-		isActive:         enable,
-		isCheckable:      false,
-		checked:          false,
-		itemIcon:         "",
-		itemIconHover:    "",
-		itemIconInactive: "",
-		showCheckMark:    false,
-		subMenu:          nil,
-		Action:           action,
+		Text:     name,
+		IsActive: enable,
+		action:   action,
 	}
 }
 
 type Menu struct {
-	// Dock handle these.
-	// x, y            int32
-	// isDockMenu      bool
-	// cornerDirection Direction
-	// content         *MenuContent
-	items []*MenuItem
+	Items         []*MenuItem `json:"items"`
+	CheckableMenu bool        `json:"checkableMenu"`
+	SingleCheck   bool        `json:"singleCheck"`
 
-	ids map[string]*MenuItem
-
-	checkableMenu bool
-	singleCheck   bool
-
-	genID func() string
+	itemCount int64
 }
 
 func NewMenu() *Menu {
-	return &Menu{
-		make([]*MenuItem, 0),
-		make(map[string]*MenuItem),
-		false,
-		false,
-		func() func() string {
-			id := int64(0)
-			return func() string {
-				id++
-				return strconv.FormatInt(id, 10)
-			}
-		}(),
-	}
+	return &Menu{}
 }
 
-func (m *Menu) AddSeparator() *Menu {
-	m.AppendItem(NewMenuItem("", nil, false))
-	return m
+func (menu *Menu) allocId() string {
+	idStr := strconv.FormatInt(menu.itemCount, 10)
+	menu.itemCount++
+	return idStr
 }
 
 func (m *Menu) AppendItem(items ...*MenuItem) {
-	m.items = append(m.items, items...)
 	for _, item := range items {
-		if item.itemText != "" { // filter separator
-			m.ids[m.genID()] = item
+		if item.Text != "" {
+			item.Id = m.allocId()
+			m.Items = append(m.Items, item)
 		}
 	}
 }
 
 func (m *Menu) HandleAction(id string, timestamp uint32) {
-	if item, ok := m.ids[id]; ok && item.isActive {
-		fmt.Println(id)
-		item.Action(timestamp)
+	for _, item := range m.Items {
+		if id == item.Id && item.IsActive {
+			fmt.Println(id)
+			item.action(timestamp)
+		}
 	}
 }
 
 func (m *Menu) GenerateJSON() string {
-	ret := fmt.Sprintf(`{"checkableMenu":%v, "singleCheck": %v, "items":[`, m.checkableMenu, m.singleCheck)
-	itemNumber := len(m.items)
-	for i, item := range m.items {
-		for id, _item := range m.ids {
-			if _item == item {
-				ret += fmt.Sprintf(`{"itemId":"%s", "itemText": "%s", "isActive": %v, "isCheckable":%v, "checked":%v, "itemIcon":"%s", "itemIconHover":"%s", "itemIconInactive":"%s", "showCheckMark":%v, "itemSubMenu":`,
-					id,
-					item.itemText,
-					item.isActive,
-					item.isCheckable,
-					item.checked,
-					item.itemIcon,
-					item.itemIconHover,
-					item.itemIconInactive,
-					item.showCheckMark,
-				)
-
-				if item.subMenu == nil {
-					ret += `{"checkableMenu":false, "singleCheck":false, "items": []}`
-				} else {
-					ret += item.subMenu.GenerateJSON()
-				}
-
-				if i+1 == itemNumber {
-					ret += "}"
-				} else {
-					ret += "},"
-				}
-			}
-		}
+	bytes, err := json.Marshal(m)
+	if err != nil {
+		logger.Warning(err)
+		return ""
 	}
-	ret += "]}"
-	return ret
+	return string(bytes)
 }
