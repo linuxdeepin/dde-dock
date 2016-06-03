@@ -5,7 +5,8 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
-      m_mainPanel(new MainPanel(this))
+      m_mainPanel(new MainPanel(this)),
+      m_itemController(DockItemController::instance(this))
 {
 }
 

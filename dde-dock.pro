@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     xcb/xcb_misc.cpp \
     item/dockitem.cpp \
     panel/mainpanel.cpp \
-    controller/dockitemcontroller.cpp
+    controller/dockitemcontroller.cpp \
+    dbus/dbusdockentry.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -20,4 +21,5 @@ HEADERS  += \
     xcb/xcb_misc.h \
     item/dockitem.h \
     panel/mainpanel.h \
-    controller/dockitemcontroller.h
+    controller/dockitemcontroller.h \
+    dbus/dbusdockentry.h

@@ -1,13 +1,5 @@
      <interface name="dde.dock.Entry">
           <method name="Activate">
-               <arg type="i" direction="in"></arg>
-               <arg type="i" direction="in"></arg>
-               <arg type="u" direction="in"></arg>
-               <arg type="b" direction="out"></arg>
-          </method>
-          <method name="ContextMenu">
-               <arg type="i" direction="in"></arg>
-               <arg type="i" direction="in"></arg>
           </method>
           <signal name="DataChanged">
                <arg type="s"></arg>
@@ -15,5 +7,7 @@
           </signal>
           <property name="Id" type="s" access="read"></property>
           <property name="Type" type="s" access="read"></property>
-          <property name="Data" type="a{ss}" access="read"></property>
+          <property name="Data" type="a{ss}" access="read">
+               <annotation name="org.qtproject.QtDBus.QtTypeName" value="Dict"/>
+          </property>
      </interface>
