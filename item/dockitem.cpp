@@ -5,3 +5,8 @@ DockItem::DockItem(QWidget *parent)
 {
 
 }
+
+void DockItem::paintEvent(QPaintEvent *e)
+{
+    QWidget::paintEvent(e);
+}

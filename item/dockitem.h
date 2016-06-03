@@ -7,8 +7,17 @@ class DockItem : public QWidget
 {
     Q_OBJECT
 
+    enum ItemType {
+        Launcher,
+        App,
+        Plugins,
+    };
+
 public:
-    explicit DockItem(QWidget *parent = 0);
+    explicit DockItem(QWidget *parent = nullptr);
+
+protected:
+    void paintEvent(QPaintEvent *e);
 };
 
 #endif // DOCKITEM_H
