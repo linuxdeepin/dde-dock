@@ -9,7 +9,7 @@
 
 package main
 
-//#cgo pkg-config: libudev
+//#cgo pkg-config: glib-2.0 libudev
 //#include "backlight.h"
 //#include <stdlib.h>
 import "C"

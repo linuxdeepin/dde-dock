@@ -12,13 +12,20 @@
 #include <string.h>
 #include <libudev.h>
 
+#include <glib.h>
+
 #include "backlight.h"
 
 struct udev* udev = NULL;
 struct udev_enumerate* enumerate = NULL;
 
+static GMutex table_locker;
+static GHashTable* max_brightness_table;
+
 // key range: brightness, max_brightness
 static int get_brightness_by_key(char* syspath, char* key);
+static void destroy_table_key(gpointer data);
+static void destroy_table_value(gpointer data);
 
 int
 init_udev()
@@ -42,6 +49,9 @@ init_udev()
         return -1;
     }
 
+    g_mutex_init(&table_locker);
+    max_brightness_table = g_hash_table_new_full(g_int_hash, g_str_equal,
+                                                 (GDestroyNotify)destroy_table_key, (GDestroyNotify)destroy_table_value);
     return 0;
 }
 
@@ -56,6 +66,11 @@ finalize_udev()
     if (udev) {
         udev_unref(udev);
         udev = NULL;
+    }
+
+    if (max_brightness_table) {
+        g_hash_table_destroy(max_brightness_table);
+        max_brightness_table = NULL;
     }
 }
 
@@ -147,25 +162,51 @@ get_brightness(char* syspath)
 int
 get_max_brightness(char* syspath)
 {
-    return get_brightness_by_key(syspath, "max_brightness");
+    g_mutex_lock(&table_locker);
+    int* value = (int*)g_hash_table_lookup(max_brightness_table, syspath);
+    if (value != NULL) {
+        g_debug("Found cache: %s %d\n", syspath, *value);
+        if (*value > 0) {
+            g_mutex_unlock(&table_locker);
+            return *value;
+        }
+    }
+
+    int v = get_brightness_by_key(syspath, "max_brightness");
+    if (v > 0) {
+        g_debug("Insert cache: %s %d\n", syspath, v);
+        int* tmp = (int*)malloc(sizeof(int));
+        if (tmp == NULL) {
+            fprintf(stderr, "Alloc value memory failed\n");
+        } else {
+            *tmp = v;
+            g_hash_table_replace(max_brightness_table, g_strdup(syspath), tmp);
+        }
+    }
+    g_mutex_unlock(&table_locker);
+    return v;
 }
 
 int
 set_brightness(char* syspath, int value)
 {
+    int max = get_max_brightness(syspath);
+    if (max <= 0) {
+        fprintf(stderr, "Query max brightness failed for %s\n", syspath);
+        return -1;
+    }
+
+    if (value < 0) {
+        value  = 0;
+    } else if (value > max) {
+        value = max;
+    }
+
     struct udev_device* device = udev_device_new_from_syspath(udev, syspath);
     if (!device) {
         fprintf(stderr, "Invalid device: %s\n", syspath);
         return -1;
     }
-
-	const char* str_max = udev_device_get_sysattr_value(device, "max_brightness");
-	int max = atoi(str_max);
-	if (value < 0) {
-		value  = 0;
-	} else if (value > max) {
-		value = max;
-	}
 
     char str[1000] = {0};
     sprintf(str, "%d", value);
@@ -190,4 +231,20 @@ get_brightness_by_key(char* syspath, char* key)
     const char* str = udev_device_get_sysattr_value(device, key);
     udev_device_unref(device);
     return atoi(str);
+}
+
+static void destroy_table_key(gpointer data)
+{
+    char* key = (char*)data;
+    if (key != NULL) {
+        g_free(key);
+    }
+}
+
+static void destroy_table_value(gpointer data)
+{
+    int* value = (int*)data;
+    if (value != NULL) {
+        free(value);
+    }
 }
