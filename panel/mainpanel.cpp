@@ -1,22 +1,34 @@
 #include "mainpanel.h"
 
-#include <QHBoxLayout>
+#include <QBoxLayout>
 
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
+      m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
+
       m_itemController(DockItemController::instance(this))
 {
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:none;"
                   "background-color:red;"
-//                  "border-radius:5px 5px 5px 5px;"
+                  "border-radius:5px 5px 5px 5px;"
                   "}");
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    setLayout(layout);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
-        layout->addWidget(item);
+        m_itemLayout->addWidget(item);
+
+    setLayout(m_itemLayout);
+}
+
+void MainPanel::updateDockSide(const DockSettings::DockSide dockSide)
+{
+    switch (dockSide)
+    {
+    case DockSettings::Top:
+    case DockSettings::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
+    case DockSettings::Left:
+    case DockSettings::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
+    }
 }

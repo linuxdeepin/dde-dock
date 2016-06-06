@@ -2,22 +2,16 @@
 #define MAINWINDOW_H
 
 #include "xcb/xcb_misc.h"
-#include "panel/mainpanel.h"
 #include "dbus/dbusdisplay.h"
+#include "util/docksettings.h"
 
 #include <QWidget>
 #include <QTimer>
 
+class MainPanel;
 class MainWindow : public QWidget
 {
     Q_OBJECT
-
-    enum Position {
-        TOP,
-        BOTTOM,
-        LEFT,
-        RIGHT,
-    };
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -25,15 +19,16 @@ public:
 private:
     void resizeEvent(QResizeEvent *e);
     void keyPressEvent(QKeyEvent *e);
+    void initComponents();
+    void initConnections();
 
 private slots:
     void updatePosition();
 
 private:
-    Position m_position;
-
     MainPanel *m_mainPanel;
 
+    DockSettings *m_settings;
     DBusDisplay *m_displayInter;
 
     QTimer *m_positionUpdateTimer;

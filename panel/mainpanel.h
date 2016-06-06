@@ -2,8 +2,10 @@
 #define MAINPANEL_H
 
 #include "controller/dockitemcontroller.h"
+#include "util/docksettings.h"
 
 #include <QFrame>
+#include <QBoxLayout>
 
 class MainPanel : public QFrame
 {
@@ -12,7 +14,11 @@ class MainPanel : public QFrame
 public:
     explicit MainPanel(QWidget *parent = 0);
 
+    void updateDockSide(const DockSettings::DockSide dockSide);
+
 private:
+    QBoxLayout *m_itemLayout;
+
     DockItemController *m_itemController;
 };
 

@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     controller/dockitemcontroller.cpp \
     dbus/dbusdockentry.cpp \
     dbus/dbusdisplay.cpp \
-    item/appitem.cpp
+    item/appitem.cpp \
+    util/docksettings.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -26,4 +27,5 @@ HEADERS  += \
     controller/dockitemcontroller.h \
     dbus/dbusdockentry.h \
     dbus/dbusdisplay.h \
-    item/appitem.h
+    item/appitem.h \
+    util/docksettings.h

@@ -1,26 +1,23 @@
 #include "mainwindow.h"
+#include "panel/mainpanel.h"
 
 #include <QDebug>
 #include <QResizeEvent>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
-      m_position(BOTTOM),
-
       m_mainPanel(new MainPanel(this)),
 
+      m_settings(new DockSettings(this)),
       m_displayInter(new DBusDisplay(this)),
 
       m_positionUpdateTimer(new QTimer(this))
 {
-    setWindowFlags(Qt::FramelessWindowHint);
+    setWindowFlags(Qt::X11BypassWindowManagerHint);
     setAttribute(Qt::WA_TranslucentBackground);
 
-    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
-
-    m_positionUpdateTimer->setSingleShot(true);
-    m_positionUpdateTimer->setInterval(200);
-    m_positionUpdateTimer->start();
+    initComponents();
+    initConnections();
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -39,6 +36,18 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
 #endif
     default:;
     }
+}
+
+void MainWindow::initComponents()
+{
+    m_positionUpdateTimer->setSingleShot(true);
+    m_positionUpdateTimer->setInterval(200);
+    m_positionUpdateTimer->start();
+}
+
+void MainWindow::initConnections()
+{
+    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
 }
 
 void MainWindow::updatePosition()
