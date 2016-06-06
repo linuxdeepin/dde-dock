@@ -1,6 +1,7 @@
 #include "dockitemcontroller.h"
 #include "dbus/dbusdockentry.h"
 #include "item/appitem.h"
+#include "item/placeholderitem.h"
 
 #include <QDebug>
 
@@ -30,4 +31,5 @@ DockItemController::DockItemController(QObject *parent)
 {
     for (auto entry : m_entryManager->entries())
         m_itemList.append(new AppItem(entry));
+    m_itemList.append(new PlaceholderItem);
 }

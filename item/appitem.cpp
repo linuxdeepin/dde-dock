@@ -3,7 +3,7 @@
 #include <QPainter>
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
-    : DockItem(parent),
+    : DockItem(App, parent),
       m_itemEntry(new DBusDockEntry(entry.path(), this))
 {
     qDebug() << m_itemEntry->data();

@@ -57,5 +57,5 @@ void MainWindow::updatePosition()
     setFixedWidth(rect.width());
     setFixedHeight(80);
 
-    move(0, 0);
+    move(0, 950);
 }

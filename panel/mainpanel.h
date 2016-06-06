@@ -17,6 +17,10 @@ public:
     void updateDockSide(const DockSettings::DockSide dockSide);
 
 private:
+    void resizeEvent(QResizeEvent *e);
+    void adjustItemSize();
+
+private:
     QBoxLayout *m_itemLayout;
 
     DockItemController *m_itemController;

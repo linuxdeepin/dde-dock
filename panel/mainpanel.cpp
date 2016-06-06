@@ -32,3 +32,23 @@ void MainPanel::updateDockSide(const DockSettings::DockSide dockSide)
     case DockSettings::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
     }
 }
+
+void MainPanel::resizeEvent(QResizeEvent *e)
+{
+    QWidget::resizeEvent(e);
+
+    adjustItemSize();
+}
+
+void MainPanel::adjustItemSize()
+{
+    const QList<DockItem *> itemList = m_itemController->itemList();
+    for (auto item : itemList)
+    {
+        switch (item->itemType())
+        {
+        case DockItem::App:     item->setFixedWidth(80);    break;
+        default:;
+        }
+    }
+}

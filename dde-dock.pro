@@ -16,7 +16,8 @@ SOURCES += main.cpp \
     dbus/dbusdockentry.cpp \
     dbus/dbusdisplay.cpp \
     item/appitem.cpp \
-    util/docksettings.cpp
+    util/docksettings.cpp \
+    item/placeholderitem.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -28,4 +29,5 @@ HEADERS  += \
     dbus/dbusdockentry.h \
     dbus/dbusdisplay.h \
     item/appitem.h \
-    util/docksettings.h
+    util/docksettings.h \
+    item/placeholderitem.h
