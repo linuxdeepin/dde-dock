@@ -10,11 +10,14 @@
 #define APP_ACTIVE_STATUS       "active"
 #define APP_NORMAL_STATUS       "normal"
 
+DBusClientManager *AppItem::ClientInter = nullptr;
+uint AppItem::ActiveWindowId = 0;
+
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
       m_itemEntry(new DBusDockEntry(entry.path(), this))
 {
-    qDebug() << m_itemEntry->data();
+    initClientManager();
 
     m_data = m_itemEntry->data();
 
@@ -35,11 +38,16 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
-    // draw active background
-    if (m_data[APP_STATUS_KEY] == APP_ACTIVE_STATUS)
+    // draw current active background
+    if (m_windows.contains(ActiveWindowId))
     {
+        painter.fillRect(rect(), Qt::blue);
+    } else if (m_data[APP_STATUS_KEY] == APP_ACTIVE_STATUS)
+    {
+        // draw active background
         painter.fillRect(rect(), Qt::cyan);
     } else {
+        // draw normal background
         painter.fillRect(rect(), Qt::gray);
     }
 
@@ -56,6 +64,17 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
     // TODO: dbus signature changed
     m_itemEntry->Activate();
+}
+
+void AppItem::initClientManager()
+{
+    if (ClientInter)
+        return;
+
+    ClientInter = new DBusClientManager(this);
+    connect(ClientInter, &DBusClientManager::ActiveWindowChanged, [&] (const uint wid) {
+        ActiveWindowId = wid;
+    });
 }
 
 void AppItem::entryDataChanged(const QString &key, const QString &value)
