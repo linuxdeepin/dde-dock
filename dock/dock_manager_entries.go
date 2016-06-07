@@ -10,7 +10,6 @@
 package dock
 
 import (
-	"errors"
 	"fmt"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
@@ -25,27 +24,7 @@ import (
 	"time"
 )
 
-// EntryManager为驻留程序以及打开程序的管理器。
-type EntryManager struct {
-	activeWindow xproto.Window
-
-	dockedAppManager               *DockedAppManager
-	clientList                     windowSlice
-	appIdFilterGroup               *AppIdFilterGroup
-	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
-	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
-
-	Entries []*AppEntry
-	// Added在程序需要在前端显示时被触发。
-	Added func(dbus.ObjectPath)
-	// Removed会在程序不再需要在dock前端显示时触发。
-	Removed func(string)
-	// 废弃：TrayInited在trayicon相关内容初始化完成后触发。
-	TrayInited func()
-	entryCount uint
-}
-
-func (m *EntryManager) allocEntryId() string {
+func (m *DockManager) allocEntryId() string {
 	num := m.entryCount
 	m.entryCount++
 	timeNow := time.Now()
@@ -53,71 +32,7 @@ func (m *EntryManager) allocEntryId() string {
 	return fmt.Sprintf("e%dT%x", num, timeNowUnixSeconds)
 }
 
-func (m *EntryManager) GetDBusInfo() dbus.DBusInfo {
-	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Dock",
-		ObjectPath: "/dde/dock/EntryManager",
-		Interface:  "dde.dock.EntryManager",
-	}
-}
-
-func NewEntryManager() (*EntryManager, error) {
-	m := &EntryManager{
-		appIdFilterGroup: NewAppIdFilterGroup(),
-	}
-	var err error
-	m.desktopWindowsMapCacheManager, err = newDesktopWindowsMapCacheManager(filepath.Join(cacheDir, "desktopWindowsMapCache.gob"))
-	if err != nil {
-		return nil, err
-	}
-	m.desktopHashFileMapCacheManager, err = newDesktopHashFileMapCacheManager(filepath.Join(cacheDir, "desktopHashFileMapCache.gob"))
-	if err != nil {
-		return nil, err
-	}
-
-	m.dockedAppManager = NewDockedAppManager(m)
-	return m, nil
-}
-
-// Reorder 重排序dock上的app项目
-// 参数entryIDs为dock上app项目的新顺序id列表，要求与当前app项目是同一个集合，只是顺序不同。
-func (m *EntryManager) Reorder(entryIDs []string) error {
-	logger.Debugf("Reorder entryIDs %#v", entryIDs)
-	if len(entryIDs) != len(m.Entries) {
-		logger.Warning("Reorder: len(entryIDs) != len(m.Entries)")
-		return errors.New("length of incomming entryIDs not equal length of m.Entries")
-	}
-	var orderedEntries []*AppEntry
-	for _, id := range entryIDs {
-		// TODO: 优化
-		entry := m.getAppEntryByEntryId(id)
-		if entry != nil {
-			orderedEntries = append(orderedEntries, entry)
-		} else {
-			logger.Warningf("Reorder: invaild entry id %q", id)
-			return fmt.Errorf("Invaild entry id %q", id)
-		}
-	}
-	m.Entries = orderedEntries
-	m.dockedAppManager.saveDockedAppList()
-	return nil
-}
-
-func (m *EntryManager) GetEntryIDs() []string {
-	list := make([]string, 0, len(m.Entries))
-	for _, entry := range m.Entries {
-		var appId string
-		if entry.appInfo != nil {
-			appId = entry.appInfo.GetId()
-		} else {
-			appId = entry.innerId
-		}
-		list = append(list, appId)
-	}
-	return list
-}
-
-func (m *EntryManager) getAppEntryByWindow(win xproto.Window) *AppEntry {
+func (m *DockManager) getAppEntryByWindow(win xproto.Window) *AppEntry {
 	for _, entry := range m.Entries {
 		_, ok := entry.windows[win]
 		if ok {
@@ -127,7 +42,7 @@ func (m *EntryManager) getAppEntryByWindow(win xproto.Window) *AppEntry {
 	return nil
 }
 
-func (m *EntryManager) getAppEntryByAppId(id string) *AppEntry {
+func (m *DockManager) getAppEntryByAppId(id string) *AppEntry {
 	for _, entry := range m.Entries {
 		if entry.appInfo != nil && id == entry.appInfo.GetId() {
 			return entry
@@ -136,7 +51,7 @@ func (m *EntryManager) getAppEntryByAppId(id string) *AppEntry {
 	return nil
 }
 
-func (m *EntryManager) getAppEntryByEntryId(id string) *AppEntry {
+func (m *DockManager) getAppEntryByEntryId(id string) *AppEntry {
 	for _, entry := range m.Entries {
 		if entry.Id == id {
 			return entry
@@ -145,7 +60,7 @@ func (m *EntryManager) getAppEntryByEntryId(id string) *AppEntry {
 	return nil
 }
 
-func (m *EntryManager) getAppEntryByInnerId(id string) *AppEntry {
+func (m *DockManager) getAppEntryByInnerId(id string) *AppEntry {
 	for _, entry := range m.Entries {
 		if entry.innerId == id {
 			return entry
@@ -154,17 +69,7 @@ func (m *EntryManager) getAppEntryByInnerId(id string) *AppEntry {
 	return nil
 }
 
-func (m *EntryManager) updateActiveWindow(win xproto.Window) {
-	m.activeWindow = win
-	entry := m.getAppEntryByWindow(win)
-	if entry != nil {
-		entry.setLeader(win)
-		entry.current.updateWmName()
-		entry.current.updateIcon()
-	}
-}
-
-func (m *EntryManager) attachOrDetachWindow(winInfo *WindowInfo) {
+func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
 	canShowOnDock := winInfo.canShowOnDock()
 	logger.Debugf("win %v canShowOnDock? %v", win, canShowOnDock)
@@ -180,7 +85,7 @@ func (m *EntryManager) attachOrDetachWindow(winInfo *WindowInfo) {
 	}
 }
 
-func (m *EntryManager) initClientList() {
+func (m *DockManager) initClientList() {
 	clientList, err := ewmh.ClientListGet(XU)
 	if err != nil {
 		logger.Warning("Get client list failed:", err)
@@ -196,13 +101,13 @@ func (m *EntryManager) initClientList() {
 	}
 }
 
-func (m *EntryManager) initDockedApps() {
+func (m *DockManager) initDockedApps() {
 	for _, id := range m.dockedAppManager.DockedAppList() {
 		m.addDockedAppEntry(id)
 	}
 }
 
-func (m *EntryManager) addAppEntry(e *AppEntry) {
+func (m *DockManager) addAppEntry(e *AppEntry) {
 	if m.getAppEntryByInnerId(e.innerId) != nil {
 		logger.Debug("addAppEntry: entry exist, return")
 		return
@@ -219,13 +124,12 @@ func (m *EntryManager) addAppEntry(e *AppEntry) {
 		return
 	}
 
-	// emit signal Added
 	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.Id)
 	logger.Debugf("addAppEntry %v", entryObjPath)
-	dbus.Emit(m, "Added", entryObjPath)
+	dbus.Emit(m, "EntryAdded", entryObjPath)
 }
 
-func (m *EntryManager) addDockedAppEntry(id string) *AppEntry {
+func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 	logger.Infof("Add docked app entry id: %q", id)
 	appInfo := NewAppInfo(id)
 	if appInfo == nil {
@@ -254,7 +158,7 @@ func (m *EntryManager) addDockedAppEntry(id string) *AppEntry {
 	return entry
 }
 
-func (m *EntryManager) removeAppEntry(e *AppEntry) {
+func (m *DockManager) removeAppEntry(e *AppEntry) {
 	for _, entry := range m.Entries {
 		if entry == e {
 			dbus.ReleaseName(e)
@@ -264,8 +168,7 @@ func (m *EntryManager) removeAppEntry(e *AppEntry) {
 			logger.Info("removeAppEntry id:", entryId)
 			m.Entries = entrySliceRemove(m.Entries, e)
 			e.destroy()
-			// emit signal Removed
-			dbus.Emit(m, "Removed", entryId)
+			dbus.Emit(m, "EntryRemoved", entryId)
 			return
 		}
 	}
@@ -285,7 +188,7 @@ func entrySliceRemove(slice []*AppEntry, entry *AppEntry) []*AppEntry {
 	return slice
 }
 
-func (m *EntryManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
+func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	logger.Debugf("identifyWindow: window id: %v, window hash %v", winInfo.window, winInfo.innerId)
 	desktopHash := m.desktopWindowsMapCacheManager.GetKeyByValue(winInfo.innerId)
 	logger.Debug("identifyWindow: get desktop hash:", desktopHash)
@@ -296,7 +199,7 @@ func (m *EntryManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	}
 
 	if appInfo == nil {
-		// cache faild
+		// cache fail
 		if desktopHash != "" {
 			logger.Warning("winHash->DesktopHash success, but DesktopHash->appInfo fail")
 			m.desktopHashFileMapCacheManager.DeleteKey(desktopHash)
@@ -326,7 +229,7 @@ func (m *EntryManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	return entryInnerId, appInfo
 }
 
-func (m *EntryManager) attachWindow(winInfo *WindowInfo) {
+func (m *DockManager) attachWindow(winInfo *WindowInfo) {
 	entryInnerId, appInfo := m.identifyWindow(winInfo)
 	entry := m.getAppEntryByInnerId(entryInnerId)
 	if entry != nil {
@@ -343,7 +246,7 @@ func (m *EntryManager) attachWindow(winInfo *WindowInfo) {
 	m.addAppEntry(entry)
 }
 
-func (m *EntryManager) detachWindow(winInfo *WindowInfo) {
+func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	entry := winInfo.entry
 	if entry == nil {
 		return
@@ -361,7 +264,7 @@ func (m *EntryManager) detachWindow(winInfo *WindowInfo) {
 	entry.updateTitle()
 }
 
-func (m *EntryManager) getDockedAppList() []string {
+func (m *DockManager) getDockedAppList() []string {
 	var list []string
 	for _, entry := range m.Entries {
 		if entry.appInfo != nil && entry.isDocked {
@@ -421,7 +324,7 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
 	return appId
 }
 
-func (m *EntryManager) requestDock(appId, title, icon, cmd string) bool {
+func (m *DockManager) requestDock(appId, title, icon, cmd string) bool {
 	// create entry
 	entry := m.addDockedAppEntry(appId)
 	if entry == nil {
@@ -439,7 +342,7 @@ func (m *EntryManager) requestDock(appId, title, icon, cmd string) bool {
 	return true
 }
 
-func (m *EntryManager) dockEntry(entry *AppEntry) {
+func (m *DockManager) dockEntry(entry *AppEntry) {
 	needScratchDesktop := false
 	if entry.appInfo == nil {
 		logger.Debug("dockEntry: entry.appInfo is nil")
@@ -484,7 +387,7 @@ func (m *EntryManager) dockEntry(entry *AppEntry) {
 	m.dockedAppManager.dockAppEntry(entry)
 }
 
-func (m *EntryManager) undockEntry(entry *AppEntry) {
+func (m *DockManager) undockEntry(entry *AppEntry) {
 	if entry.appInfo == nil {
 		logger.Warning("undockEntry failed, entry.appInfo is nil")
 		return
@@ -511,7 +414,7 @@ func (m *EntryManager) undockEntry(entry *AppEntry) {
 	m.dockedAppManager.undockAppEntry(appId)
 }
 
-func (m *EntryManager) undockEntryByAppId(appId string) bool {
+func (m *DockManager) undockEntryByAppId(appId string) bool {
 	entry := m.getAppEntryByAppId(appId)
 	if entry != nil {
 		m.undockEntry(entry)
@@ -520,7 +423,7 @@ func (m *EntryManager) undockEntryByAppId(appId string) bool {
 	return false
 }
 
-func (m *EntryManager) getAppInfoFromWindow(winInfo *WindowInfo) (*AppInfo, bool) {
+func (m *DockManager) getAppInfoFromWindow(winInfo *WindowInfo) (*AppInfo, bool) {
 	win := winInfo.window
 	var ai *AppInfo
 

@@ -41,7 +41,7 @@ type XidInfo struct {
 }
 
 type AppEntry struct {
-	entryManager *EntryManager
+	dockManager *DockManager
 	// hashId string
 
 	Id      string
@@ -67,27 +67,27 @@ type AppEntry struct {
 	isDocked bool
 }
 
-func newAppEntry(entryManager *EntryManager, id string, appInfo *AppInfo) *AppEntry {
+func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
-		entryManager: entryManager,
-		Id:           entryManager.allocEntryId(),
-		innerId:      id,
-		Type:         "App",
-		Data:         make(map[string]string),
-		windows:      make(map[xproto.Window]*WindowInfo),
-		appInfo:      appInfo,
+		dockManager: dockManager,
+		Id:          dockManager.allocEntryId(),
+		innerId:     id,
+		Type:        "App",
+		Data:        make(map[string]string),
+		windows:     make(map[xproto.Window]*WindowInfo),
+		appInfo:     appInfo,
 	}
 	return entry
 }
 
-func newAppEntryWithWindow(entryManager *EntryManager, id string, winInfo *WindowInfo, appInfo *AppInfo) *AppEntry {
+func newAppEntryWithWindow(dockManager *DockManager, id string, winInfo *WindowInfo, appInfo *AppInfo) *AppEntry {
 	if appInfo != nil {
 		appId := appInfo.GetId()
 		recordFrequency(appId)
 		markAsLaunched(appId)
 	}
 
-	entry := newAppEntry(entryManager, id, appInfo)
+	entry := newAppEntry(dockManager, id, appInfo)
 	entry.initExec(winInfo)
 
 	entry.current = winInfo
@@ -230,7 +230,7 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 
 	winInfo.entry = entry
 
-	if (entry.entryManager != nil && win == entry.entryManager.activeWindow) ||
+	if (entry.dockManager != nil && win == entry.dockManager.ActiveWindow) ||
 		entry.current == nil {
 		entry.current = winInfo
 		winInfo.updateWmName()
@@ -250,7 +250,7 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) {
 }
 
 func (entry *AppEntry) destroy() {
-	entry.entryManager = nil
+	entry.dockManager = nil
 	if entry.appInfo != nil {
 		entry.appInfo.Destroy()
 		entry.appInfo = nil

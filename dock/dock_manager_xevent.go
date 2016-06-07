@@ -16,6 +16,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"pkg.deepin.io/lib/dbus"
+	"sort"
+	"time"
 )
 
 func (m *DockManager) handleClientListChanged() {
@@ -24,21 +26,46 @@ func (m *DockManager) handleClientListChanged() {
 		logger.Warning("Get client list failed:", err)
 		return
 	}
-	m.entryManager.updateClientList(clientList)
+	newClientList := windowSlice(clientList)
+	sort.Sort(newClientList)
+
+	add, remove := diffSortedWindowSlice(m.clientList, newClientList)
+	if len(add) > 0 {
+		logger.Debug("client list add:", add)
+		for _, win := range add {
+			winInfo := NewWindowInfo(win)
+			m.listenWindowXEvent(winInfo)
+		}
+	}
+
+	if len(remove) > 0 {
+		logger.Debug("client list remove:", remove)
+	}
+	m.clientList = newClientList
 }
 
 func (m *DockManager) handleActiveWindowChanged() {
-	var err error
-	m.ActiveWindow, err = ewmh.ActiveWindowGet(XU)
+	activeWindow, err := ewmh.ActiveWindowGet(XU)
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
-	logger.Debug("Active window changed window:", m.ActiveWindow)
+	if m.ActiveWindow == activeWindow {
+		logger.Debug("Active window no change")
+		return
+	}
+
+	logger.Debug("Active window changed window:", activeWindow)
+	m.ActiveWindow = activeWindow
 	dbus.NotifyChange(m, "ActiveWindow")
 
-	m.entryManager.updateActiveWindow(m.ActiveWindow)
-	m.hideStateManager.updateActiveWindow(m.ActiveWindow)
+	entry := m.getAppEntryByWindow(activeWindow)
+	if entry != nil {
+		entry.setLeader(activeWindow)
+		entry.current.updateWmName()
+		entry.current.updateIcon()
+	}
+	m.hideStateManager.updateActiveWindow(activeWindow)
 }
 
 func (m *DockManager) listenRootWindowPropertyChange() {
@@ -57,4 +84,96 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 
 	m.handleActiveWindowChanged()
 	m.handleClientListChanged()
+}
+
+func (m *DockManager) listenWindowXEvent(winInfo *WindowInfo) {
+	win := winInfo.window
+	logger.Debugf("start listen window %v x event", win)
+	xwin := xwindow.New(XU, win)
+
+	xwin.Listen(xproto.EventMaskPropertyChange | xproto.EventMaskStructureNotify | xproto.EventMaskVisibilityChange)
+
+	// need listen EventMaskVisibilityChange
+	xevent.VisibilityNotifyFun(func(XU *xgbutil.XUtil, ev xevent.VisibilityNotifyEvent) {
+		m.handleVisibilityNotifyEvent(winInfo, ev)
+	}).Connect(XU, win)
+
+	winInfo.initPropertyNotifyEventHandler(m)
+	// need listen EventMaskPropertyChange
+	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
+		winInfo.handlePropertyNotifyEvent(ev)
+	}).Connect(XU, win)
+
+	// need listen EventMaskStructureNotify
+	// move resize minimized Maximize window
+	xevent.ConfigureNotifyFun(func(XU *xgbutil.XUtil, ev xevent.ConfigureNotifyEvent) {
+		m.handleConfigureNotifyEvent(winInfo, ev)
+	}).Connect(XU, win)
+
+	xevent.DestroyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.DestroyNotifyEvent) {
+		m.handleDestroyNotifyEvent(winInfo, ev)
+	}).Connect(XU, win)
+
+	xevent.UnmapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.UnmapNotifyEvent) {
+		m.handleUnmapNotifyEvent(winInfo, ev)
+	}).Connect(XU, win)
+}
+
+func (m *DockManager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent.VisibilityNotifyEvent) {
+	logger.Debug(ev)
+	winInfo.updateMapState()
+}
+
+func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
+	if m.hideMode != HideModeSmartHide {
+		return
+	}
+	winInfo.lastConfigureNotifyEvent = &ev
+	const configureNotifyDelay = 100 // ms
+	if winInfo.updateConfigureTimer != nil {
+		winInfo.updateConfigureTimer.Reset(time.Millisecond * configureNotifyDelay)
+	} else {
+		winInfo.updateConfigureTimer = time.AfterFunc(time.Millisecond*configureNotifyDelay, func() {
+			logger.Debug("ConfigureNotify: updateConfigureTimer expired")
+			ev := winInfo.lastConfigureNotifyEvent
+			logger.Debugf("in closure: configure notify ev %s", ev)
+			isXYWHChange := false
+			if winInfo.x != ev.X {
+				winInfo.x = ev.X
+				isXYWHChange = true
+			}
+
+			if winInfo.y != ev.Y {
+				winInfo.y = ev.Y
+				isXYWHChange = true
+			}
+
+			if winInfo.width != ev.Width {
+				winInfo.width = ev.Width
+				isXYWHChange = true
+			}
+
+			if winInfo.height != ev.Height {
+				winInfo.height = ev.Height
+				isXYWHChange = true
+			}
+			logger.Debug("isXYWHChange", isXYWHChange)
+			if isXYWHChange {
+				dockManager.hideStateManager.updateStateWithoutDelay()
+			} else {
+				dockManager.hideStateManager.updateStateWithDelay()
+			}
+		})
+	}
+}
+
+func (m *DockManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
+	logger.Debug(ev)
+	xevent.Detach(XU, winInfo.window)
+	m.detachWindow(winInfo)
+}
+
+func (m *DockManager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
+	logger.Debug(ev)
+	winInfo.updateMapState()
 }

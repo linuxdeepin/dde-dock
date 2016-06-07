@@ -12,9 +12,10 @@ package dock
 import (
 	"dbus/com/deepin/daemon/display"
 	"errors"
+	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -22,9 +23,15 @@ type DockManager struct {
 	hideStateManager *HideStateManager
 	setting          *Setting
 	dockProperty     *DockProperty
-	entryManager     *EntryManager
+	dockedAppManager *DockedAppManager
 
-	// 共用部分
+	clientList                     windowSlice
+	appIdFilterGroup               *AppIdFilterGroup
+	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
+	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
+
+	Entries []*AppEntry
+
 	hideMode    HideModeType
 	displayMode DisplayModeType
 
@@ -35,6 +42,10 @@ type DockManager struct {
 
 	dockHeight int
 	dockWidth  int
+	entryCount uint
+	// Signals
+	EntryAdded   func(dbus.ObjectPath)
+	EntryRemoved func(string)
 }
 
 func NewDockManager() (*DockManager, error) {
@@ -44,107 +55,6 @@ func NewDockManager() (*DockManager, error) {
 		return nil, err
 	}
 	return m, nil
-}
-
-func (m *DockManager) initEntryManager() error {
-	em, err := NewEntryManager()
-	if err != nil {
-		return err
-	}
-	m.entryManager = em
-
-	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(false)
-	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(false)
-
-	em.initDockedApps()
-	em.initClientList()
-
-	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(true)
-	em.desktopWindowsMapCacheManager.AutoSave()
-	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(true)
-	em.desktopHashFileMapCacheManager.AutoSave()
-
-	err = dbus.InstallOnSession(em.dockedAppManager)
-	if err != nil {
-		return err
-	}
-
-	err = dbus.InstallOnSession(em)
-	return err
-}
-
-func (m *DockManager) initHideStateManager() error {
-	m.hideStateManager = NewHideStateManager()
-	m.hideStateManager.dockRect = m.dockRect
-	logger.Debug("initHideStateManager dockRect", m.hideStateManager.dockRect)
-	m.hideStateManager.mode = m.hideMode
-	m.hideStateManager.initHideState()
-	err := dbus.InstallOnSession(m.hideStateManager)
-	return err
-}
-
-func (m *DockManager) initDockProperty() error {
-	m.dockProperty = NewDockProperty(m)
-	err := dbus.InstallOnSession(m.dockProperty)
-	return err
-}
-
-func (m *DockManager) initSetting() error {
-	m.setting = NewSetting(m)
-	if m.setting == nil {
-		return errors.New("create setting failed")
-	}
-	err := dbus.InstallOnSession(m.setting)
-
-	logger.Debug("init display and hide mode")
-	m.displayMode = DisplayModeType(m.setting.core.GetEnum(DisplayModeKey))
-	m.hideMode = HideModeType(m.setting.core.GetEnum(HideModeKey))
-	m.dockHeight = getDockHeightByDisplayMode(m.displayMode)
-	return err
-}
-
-func (m *DockManager) init() error {
-	var err error
-
-	err = m.initSetting()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize setting done")
-
-	// ensure init display after init setting
-	err = m.initDisplay()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize display done")
-
-	err = m.initEntryManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize entry proxyer manager done")
-
-	err = m.initHideStateManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize hide state manager done")
-
-	err = m.initDockProperty()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize dock property done")
-
-	m.setting.listenSettingsChanged()
-	logger.Info("initialize settings done")
-
-	err = dbus.InstallOnSession(m)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func (m *DockManager) destroy() {
@@ -234,4 +144,43 @@ func (m *DockManager) CloseWindow(win uint32) error {
 		return err
 	}
 	return nil
+}
+
+// ReorderEntries 重排序dock上的app项目
+// 参数entryIDs为dock上app项目的新顺序id列表，要求与当前app项目是同一个集合，只是顺序不同。
+func (m *DockManager) ReorderEntries(entryIDs []string) error {
+	logger.Debugf("Reorder entryIDs %#v", entryIDs)
+	if len(entryIDs) != len(m.Entries) {
+		logger.Warning("Reorder: len(entryIDs) != len(m.Entries)")
+		return errors.New("length of incomming entryIDs not equal length of m.Entries")
+	}
+	var orderedEntries []*AppEntry
+	for _, id := range entryIDs {
+		// TODO: 优化
+		entry := m.getAppEntryByEntryId(id)
+		if entry != nil {
+			orderedEntries = append(orderedEntries, entry)
+		} else {
+			logger.Warningf("Reorder: invaild entry id %q", id)
+			return fmt.Errorf("Invaild entry id %q", id)
+		}
+	}
+	m.Entries = orderedEntries
+	m.dockedAppManager.saveDockedAppList()
+	return nil
+}
+
+// for debug
+func (m *DockManager) GetEntryIDs() []string {
+	list := make([]string, 0, len(m.Entries))
+	for _, entry := range m.Entries {
+		var appId string
+		if entry.appInfo != nil {
+			appId = entry.appInfo.GetId()
+		} else {
+			appId = entry.innerId
+		}
+		list = append(list, appId)
+	}
+	return list
 }

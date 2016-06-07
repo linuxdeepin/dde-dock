@@ -22,7 +22,7 @@ func (m *DockManager) setDisplayMode(mode DisplayModeType) bool {
 	}
 	m.displayMode = mode
 
-	// for _, rApp := range m.entryManager.runtimeApps {
+	// for _, rApp := range m.DockManager.runtimeApps {
 	// 	rebuildXids := []xproto.Window{}
 	// 	for xid, _ := range rApp.xids {
 	// 		if _, err := xprop.PropValStr(
@@ -45,10 +45,10 @@ func (m *DockManager) setDisplayMode(mode DisplayModeType) bool {
 	// 	}
 	//
 	// 	if len(rApp.xids) == 0 {
-	// 		m.entryManager.destroyRuntimeApp(rApp)
+	// 		m.DockManager.destroyRuntimeApp(rApp)
 	// 	}
 	//
-	// 	newApp := m.entryManager.createRuntimeApp(rebuildXids[0])
+	// 	newApp := m.DockManager.createRuntimeApp(rebuildXids[0])
 	// 	for i := 0; i < l; i++ {
 	// 		newApp.attachXid(rebuildXids[i])
 	// 	}

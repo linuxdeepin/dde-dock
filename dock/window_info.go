@@ -439,7 +439,7 @@ func (winInfo *WindowInfo) genInnerId() {
 	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
 }
 
-func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryManager) {
+func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManager) {
 	if winInfo.propertyNotifyTimer != nil {
 		return
 	}
@@ -463,8 +463,7 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 		logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
 
 		if needUpdate {
-			// entryManager.attachOrDetachRuntimeAppWindow(winInfo)
-			entryManager.attachOrDetachWindow(winInfo)
+			dockManager.attachOrDetachWindow(winInfo)
 		}
 
 		// end

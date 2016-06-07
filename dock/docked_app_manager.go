@@ -34,7 +34,7 @@ StartupNotify=false
 // DockedAppManager是管理已驻留程序的管理器。
 type DockedAppManager struct {
 	settings      *gio.Settings
-	entryManager  *EntryManager
+	dockManager   *DockManager
 	dockedAppList []string
 
 	// Docked是信号，在某程序驻留成功后被触发，并将该程序的id发送给信号的接受者。
@@ -43,9 +43,9 @@ type DockedAppManager struct {
 	Undocked func(id string)
 }
 
-func NewDockedAppManager(entryManager *EntryManager) *DockedAppManager {
+func NewDockedAppManager(dockManager *DockManager) *DockedAppManager {
 	m := &DockedAppManager{
-		entryManager: entryManager,
+		dockManager: dockManager,
 	}
 	m.init()
 	return m
@@ -159,12 +159,12 @@ func (m *DockedAppManager) undockAppEntry(appId string) bool {
 // title表示前端程序的tooltip内容，icon为程序图标，cmd为程序的启动命令。
 // 成功后会触发Docked信号。
 func (m *DockedAppManager) RequestDock(id, title, icon, cmd string) bool {
-	return m.entryManager.requestDock(id, title, icon, cmd)
+	return m.dockManager.requestDock(id, title, icon, cmd)
 }
 
 // RequestUndock 通过程序id移除已驻留程序。成功后会触发Undocked信号。
 func (m *DockedAppManager) RequestUndock(id string) bool {
-	return m.entryManager.undockEntryByAppId(id)
+	return m.dockManager.undockEntryByAppId(id)
 }
 
 func (m *DockedAppManager) emitSignal(name string, values ...interface{}) {
@@ -179,7 +179,7 @@ func (m *DockedAppManager) saveAppList(apps []string) {
 }
 
 func (m *DockedAppManager) saveDockedAppList() {
-	apps := m.entryManager.getDockedAppList()
+	apps := m.dockManager.getDockedAppList()
 	if !strSliceEqual(m.dockedAppList, apps) {
 		logger.Debugf("Save gsettings %s: %#v", settingKeyDockedApps, apps)
 		m.saveAppList(apps)
