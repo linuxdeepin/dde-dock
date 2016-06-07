@@ -20,9 +20,8 @@ import (
 )
 
 const (
-	entryDBusObjPathPrefix = "/dde/dock/entry/"
-	entryDBusDestPrefix    = "dde.dock.entry."
-	entryDBusInterface     = "dde.dock.Entry"
+	entryDBusObjPathPrefix = dockManagerDBusObjPath + "/entries/"
+	entryDBusInterface     = dockManagerDBusInterface + ".Entry"
 
 	FieldTitle   = "title"
 	FieldIcon    = "icon"

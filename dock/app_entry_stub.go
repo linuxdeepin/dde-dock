@@ -13,7 +13,7 @@ import "pkg.deepin.io/lib/dbus"
 
 func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       entryDBusDestPrefix + e.Id,
+		Dest:       dockManagerDBusDest,
 		ObjectPath: entryDBusObjPathPrefix + e.Id,
 		Interface:  entryDBusInterface,
 	}

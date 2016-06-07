@@ -11,10 +11,16 @@ package dock
 
 import "pkg.deepin.io/lib/dbus"
 
+const (
+	dockManagerDBusDest      = "com.deepin.dde.daemon.Dock"
+	dockManagerDBusObjPath   = "/com/deepin/dde/daemon/Dock"
+	dockManagerDBusInterface = dockManagerDBusDest
+)
+
 func (m *DockManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.dde.daemon.Dock",
-		ObjectPath: "/com/deepin/dde/daemon/Dock",
-		Interface:  "com.deepin.dde.daemon.Dock",
+		Dest:       dockManagerDBusDest,
+		ObjectPath: dockManagerDBusObjPath,
+		Interface:  dockManagerDBusInterface,
 	}
 }
