@@ -19,7 +19,8 @@ uint AppItem::ActiveWindowId = 0;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
-      m_itemEntry(new DBusDockEntry(entry.path(), this))
+      m_itemEntry(new DBusDockEntry(entry.path(), this)),
+      m_draging(false)
 {
     initClientManager();
 
@@ -31,6 +32,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
+
+    if (m_draging)
+        return;
 
     const QRect itemRect = rect();
     const int iconSize = std::min(itemRect.width(), itemRect.height());
@@ -90,6 +94,9 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
 
 void AppItem::startDrag()
 {
+    m_draging = true;
+    update();
+
     QPixmap pixmap(25, 25);
     pixmap.fill(Qt::red);
 
@@ -101,6 +108,9 @@ void AppItem::startDrag()
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
 
     qDebug() << result;
+
+    m_draging = false;
+    update();
 }
 
 void AppItem::initClientManager()

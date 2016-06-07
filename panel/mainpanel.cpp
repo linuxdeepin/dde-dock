@@ -1,6 +1,7 @@
 #include "mainpanel.h"
 
 #include <QBoxLayout>
+#include <QDragEnterEvent>
 
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
@@ -8,6 +9,7 @@ MainPanel::MainPanel(QWidget *parent)
 
       m_itemController(DockItemController::instance(this))
 {
+    setAcceptDrops(true);
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:none;"
@@ -38,6 +40,22 @@ void MainPanel::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     adjustItemSize();
+}
+
+void MainPanel::dragEnterEvent(QDragEnterEvent *e)
+{
+    // TODO: check
+    e->accept();
+}
+
+void MainPanel::dragMoveEvent(QDragMoveEvent *e)
+{
+    qDebug() << e;
+}
+
+void MainPanel::dropEvent(QDropEvent *e)
+{
+    qDebug() << e;
 }
 
 void MainPanel::adjustItemSize()

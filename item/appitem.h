@@ -25,6 +25,8 @@ private:
 private:
     DBusDockEntry *m_itemEntry;
 
+    bool m_draging;
+
     QMap<QString, QString> m_data;
     QMap<uint, QString> m_windows;
 
