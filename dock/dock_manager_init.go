@@ -10,9 +10,10 @@
 package dock
 
 import (
-	"errors"
+	"gir/gio-2.0"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 )
 
 func (m *DockManager) initHideStateManager() error {
@@ -28,20 +29,6 @@ func (m *DockManager) initHideStateManager() error {
 func (m *DockManager) initDockProperty() error {
 	m.dockProperty = NewDockProperty(m)
 	err := dbus.InstallOnSession(m.dockProperty)
-	return err
-}
-
-func (m *DockManager) initSetting() error {
-	m.setting = NewSetting(m)
-	if m.setting == nil {
-		return errors.New("create setting failed")
-	}
-	err := dbus.InstallOnSession(m.setting)
-
-	logger.Debug("init display and hide mode")
-	m.displayMode = DisplayModeType(m.setting.core.GetEnum(DisplayModeKey))
-	m.hideMode = HideModeType(m.setting.core.GetEnum(HideModeKey))
-	m.dockHeight = getDockHeightByDisplayMode(m.displayMode)
 	return err
 }
 
@@ -72,14 +59,36 @@ func (m *DockManager) initEntries() {
 	m.desktopHashFileMapCacheManager.AutoSave()
 }
 
+func (m *DockManager) connectSettingKeyChanged(key string, handler func(*gio.Settings, string)) {
+	m.settings.Connect("changed::"+key, handler)
+}
+
+func (m *DockManager) listenSettingsChanged() {
+	// listen hide mode change
+	m.connectSettingKeyChanged(HideModeKey, func(g *gio.Settings, key string) {
+		mode := HideModeType(g.GetEnum(key))
+		logger.Debug(key, "changed to", mode)
+
+		m.hideStateManager.updateHideMode(mode)
+	})
+
+	// listen display mode change
+	m.connectSettingKeyChanged(DisplayModeKey, func(g *gio.Settings, key string) {
+		mode := DisplayModeType(g.GetEnum(key))
+		logger.Debug(key, "changed to", mode)
+
+		m.dockHeight = getDockHeightByDisplayMode(mode)
+		m.updateDockRect()
+	})
+}
+
 func (m *DockManager) init() error {
 	var err error
 
-	err = m.initSetting()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize setting done")
+	m.settings = gio.NewSettings(dockSchema)
+
+	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, HideModeKey)
+	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, DisplayModeKey)
 
 	// ensure init display after init setting
 	err = m.initDisplay()
@@ -100,8 +109,7 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize dock property done")
 
-	m.setting.listenSettingsChanged()
-	logger.Info("initialize settings done")
+	m.listenSettingsChanged()
 
 	m.appIdFilterGroup = NewAppIdFilterGroup()
 	err = m.loadCache()

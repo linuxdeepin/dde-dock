@@ -13,15 +13,16 @@ import (
 	"dbus/com/deepin/daemon/display"
 	"errors"
 	"fmt"
+	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 )
 
 type DockManager struct {
 	hideStateManager *HideStateManager
-	setting          *Setting
 	dockProperty     *DockProperty
 	dockedAppManager *DockedAppManager
 
@@ -34,6 +35,10 @@ type DockManager struct {
 
 	hideMode    HideModeType
 	displayMode DisplayModeType
+
+	settings    *gio.Settings
+	HideMode    *property.GSettingsEnumProperty
+	DisplayMode *property.GSettingsEnumProperty
 
 	ActiveWindow       xproto.Window
 	dpy                *display.Display
@@ -48,6 +53,11 @@ type DockManager struct {
 	EntryRemoved func(string)
 }
 
+const (
+	HideModeKey    string = "hide-mode"
+	DisplayModeKey string = "display-mode"
+)
+
 func NewDockManager() (*DockManager, error) {
 	m := new(DockManager)
 	err := m.init()
@@ -61,11 +71,6 @@ func (m *DockManager) destroy() {
 	if m.dockProperty != nil {
 		m.dockProperty.destroy()
 		m.dockProperty = nil
-	}
-
-	if m.setting != nil {
-		m.setting.destroy()
-		m.setting = nil
 	}
 
 	if m.hideStateManager != nil {
