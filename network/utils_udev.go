@@ -38,6 +38,8 @@ var deviceDescIgnoredWords = []string{
 	"NDIS",
 	"Module",
 	"Technology",
+	"(Motherboard)",
+	"Fast",
 }
 var deviceDescIgnoredPhrases = []string{
 	"Multiprotocol MAC/baseband processor",
@@ -59,6 +61,10 @@ var deviceDescIgnoredPhrases = []string{
 	"Mobile Broadband Minicard Composite Device",
 	"Mobile Communications AB",
 	"(PC-Suite Mode)",
+	"PCI Express",
+	"Ethernet Controller",
+	"Ethernet Adapter",
+	"(Industrial Computer Source / ICS Advent)",
 }
 
 func udevGetDeviceDesc(syspath string) (desc string, ok bool) {

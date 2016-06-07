@@ -189,6 +189,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 		// need get device vendor again for that some usb device may
 		// not ready before
+		dev.Interface = dev.nmDev.Interface.Get()
 		dev.Vendor = nmGeneralGetDeviceDesc(dev.Path)
 		dev.UsbDevice = nmGeneralIsUsbDevice(dev.Path)
 
