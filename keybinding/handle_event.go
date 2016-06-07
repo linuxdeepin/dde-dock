@@ -14,8 +14,7 @@ import (
 	"strings"
 
 	"gir/gio-2.0"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/keybind"
+	"pkg.deepin.io/dde/daemon/keybinding/core"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -25,11 +24,7 @@ const (
 )
 
 func (m *Manager) handleKeyEvent(mod uint16, code int, pressed bool) {
-	modStr := keybind.ModifierString(mod)
-	codeStr := keybind.LookupString(m.xu, mod, xproto.Keycode(code))
-	if code == 65 {
-		codeStr = "space"
-	}
+	modStr, codeStr, _ := core.LookupKeyEvent(mod, code)
 	logger.Debug("Handle key event:", mod, modStr, code, codeStr, pressed)
 
 	var accel = codeStr

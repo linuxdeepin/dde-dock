@@ -33,9 +33,21 @@ func FormatAccel(accel string) string {
 
 // FormatKeyEvent lookup keyevent to accel
 func FormatKeyEvent(state uint16, detail int) (string, error) {
-	xu, err := Initialize()
+	mod, key, err := LookupKeyEvent(state, detail)
 	if err != nil {
 		return "", err
+	}
+
+	if len(mod) != 0 {
+		key = mod + "-" + key
+	}
+	return FormatAccel(key), nil
+}
+
+func LookupKeyEvent(state uint16, detail int) (string, string, error) {
+	xu, err := Initialize()
+	if err != nil {
+		return "", "", err
 	}
 
 	mod := keybind.ModifierString(state)
@@ -44,11 +56,15 @@ func FormatKeyEvent(state uint16, detail int) (string, error) {
 		key = "space"
 	}
 
-	if len(mod) != 0 {
-		key = mod + "-" + key
+	switch strings.ToLower(key) {
+	case "kp_tab", "iso_left_tab":
+		key = "tab"
+	case "l1":
+		key = "f11"
+	case "l2":
+		key = "f12"
 	}
-
-	return FormatAccel(key), nil
+	return mod, key, nil
 }
 
 // IsAccelEqual check 's1', 's2' whether equal
