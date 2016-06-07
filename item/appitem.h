@@ -15,7 +15,10 @@ public:
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 
+    void startDrag();
     void initClientManager();
     void entryDataChanged(const QString &key, const QString &value);
 
@@ -24,6 +27,8 @@ private:
 
     QMap<QString, QString> m_data;
     QMap<uint, QString> m_windows;
+
+    QPoint m_mousePressPos;
 
     static DBusClientManager *ClientInter;
     static uint ActiveWindowId;

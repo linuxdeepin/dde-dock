@@ -1,6 +1,8 @@
 #include "appitem.h"
 
 #include <QPainter>
+#include <QDrag>
+#include <QMouseEvent>
 
 #define APP_STATUS_KEY          "app-status"
 #define APP_ICON_KEY            "icon"
@@ -9,6 +11,8 @@
 
 #define APP_ACTIVE_STATUS       "active"
 #define APP_NORMAL_STATUS       "normal"
+
+#define APP_DRAG_THRESHOLD      20
 
 DBusClientManager *AppItem::ClientInter = nullptr;
 uint AppItem::ActiveWindowId = 0;
@@ -60,10 +64,43 @@ void AppItem::paintEvent(QPaintEvent *e)
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_UNUSED(e);
-
+    // activate
     // TODO: dbus signature changed
-    m_itemEntry->Activate();
+    if (e->button() == Qt::LeftButton)
+        m_itemEntry->Activate();
+}
+
+void AppItem::mousePressEvent(QMouseEvent *e)
+{
+    m_mousePressPos = e->pos();
+}
+
+void AppItem::mouseMoveEvent(QMouseEvent *e)
+{
+    // handle drag
+    if (e->buttons() != Qt::LeftButton)
+        return;
+
+    const QPoint distance = e->pos() - m_mousePressPos;
+    if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
+        return;
+
+    startDrag();
+}
+
+void AppItem::startDrag()
+{
+    QPixmap pixmap(25, 25);
+    pixmap.fill(Qt::red);
+
+    QDrag *drag = new QDrag(this);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(pixmap.rect().center());
+    drag->setMimeData(new QMimeData);
+
+    const Qt::DropAction result = drag->exec(Qt::MoveAction);
+
+    qDebug() << result;
 }
 
 void AppItem::initClientManager()
@@ -81,8 +118,6 @@ void AppItem::entryDataChanged(const QString &key, const QString &value)
 {
     // update data
     m_data[key] = value;
-
-    qDebug() << m_data;
 
     if (key == APP_STATUS_KEY)
         return update();
