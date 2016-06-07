@@ -167,7 +167,7 @@ func (entry *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
 			if len(entry.windows) == 1 {
 				iconifyWindow(win)
 			} else {
-				if dockManager.activeWindow == win {
+				if dockManager.ActiveWindow == win {
 					nextWin := entry.findNextLeader()
 					activateWindow(nextWin)
 				}

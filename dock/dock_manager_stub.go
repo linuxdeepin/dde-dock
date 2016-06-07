@@ -9,14 +9,12 @@
 
 package dock
 
-import (
-	"pkg.deepin.io/lib/dbus"
-)
+import "pkg.deepin.io/lib/dbus"
 
-func (m *ClientManager) GetDBusInfo() dbus.DBusInfo {
+func (m *DockManager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "com.deepin.daemon.Dock",
-		ObjectPath: "/dde/dock/ClientManager",
-		Interface:  "dde.dock.ClientManager",
+        Dest: "com.deepin.dde.daemon.Dock",
+        ObjectPath: "/com/deepin/dde/daemon/Dock",
+        Interface: "com.deepin.dde.daemon.Dock",
 	}
 }

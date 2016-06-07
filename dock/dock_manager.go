@@ -14,6 +14,7 @@ import (
 	"errors"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/xrect"
+	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -22,13 +23,12 @@ type DockManager struct {
 	setting          *Setting
 	dockProperty     *DockProperty
 	entryManager     *EntryManager
-	clientManager    *ClientManager
 
 	// 共用部分
 	hideMode    HideModeType
 	displayMode DisplayModeType
 
-	activeWindow       xproto.Window
+	ActiveWindow       xproto.Window
 	dpy                *display.Display
 	displayPrimaryRect *xrect.XRect
 	dockRect           *xrect.XRect
@@ -140,13 +140,10 @@ func (m *DockManager) init() error {
 	m.setting.listenSettingsChanged()
 	logger.Info("initialize settings done")
 
-	// init client manager
-	m.clientManager = NewClientManager()
-	err = dbus.InstallOnSession(m.clientManager)
+	err = dbus.InstallOnSession(m)
 	if err != nil {
 		return err
 	}
-	logger.Info("initialize client manager done")
 	return nil
 }
 
@@ -217,4 +214,24 @@ func (m *DockManager) updateDockRect() {
 	} else {
 		logger.Debug("m.dockProperty is nil")
 	}
+}
+
+// ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
+func (m *DockManager) ActivateWindow(win uint32) error {
+	err := activateWindow(xproto.Window(win))
+	if err != nil {
+		logger.Warning("Activate window failed:", err)
+		return err
+	}
+	return nil
+}
+
+// CloseWindow会将传入id的窗口关闭。
+func (m *DockManager) CloseWindow(win uint32) error {
+	err := ewmh.CloseWindow(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("Close window failed:", err)
+		return err
+	}
+	return nil
 }

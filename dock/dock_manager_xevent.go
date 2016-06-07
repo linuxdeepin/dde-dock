@@ -15,6 +15,7 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"pkg.deepin.io/lib/dbus"
 )
 
 func (m *DockManager) handleClientListChanged() {
@@ -28,16 +29,16 @@ func (m *DockManager) handleClientListChanged() {
 
 func (m *DockManager) handleActiveWindowChanged() {
 	var err error
-	m.activeWindow, err = ewmh.ActiveWindowGet(XU)
+	m.ActiveWindow, err = ewmh.ActiveWindowGet(XU)
 	if err != nil {
 		logger.Warning(err)
 		return
 	}
-	logger.Debug("Active window changed window:", m.activeWindow)
+	logger.Debug("Active window changed window:", m.ActiveWindow)
+	dbus.NotifyChange(m, "ActiveWindow")
 
-	m.entryManager.updateActiveWindow(m.activeWindow)
-	m.clientManager.updateActiveWindow(m.activeWindow)
-	m.hideStateManager.updateActiveWindow(m.activeWindow)
+	m.entryManager.updateActiveWindow(m.ActiveWindow)
+	m.hideStateManager.updateActiveWindow(m.ActiveWindow)
 }
 
 func (m *DockManager) listenRootWindowPropertyChange() {
