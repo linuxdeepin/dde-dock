@@ -126,6 +126,6 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
-	dbus.Emit(m, "ServiceRestart")
+	dbus.Emit(m, "ServiceRestarted")
 	return nil
 }

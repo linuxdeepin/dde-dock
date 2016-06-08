@@ -44,7 +44,7 @@ type DockManager struct {
 	displayPrimaryRect *xrect.XRect
 	dockRect           *xrect.XRect
 
-	HideState *propertyHideState `access:"readwrite"`
+	HideState      *propertyHideState `access:"readwrite"`
 	frontendWindow xproto.Window
 
 	smartHideModeTimer *time.Timer
@@ -55,10 +55,10 @@ type DockManager struct {
 	entryCount uint
 
 	// Signals
-	ServiceRestart  func()
-	EntryAdded      func(dbus.ObjectPath)
-	EntryRemoved    func(string)
-	ChangeHideState func(int32)
+	ServiceRestarted func()
+	EntryAdded       func(dbus.ObjectPath)
+	EntryRemoved     func(string)
+	ChangeHideState  func(int32)
 }
 
 const (
