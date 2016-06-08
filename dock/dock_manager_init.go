@@ -14,17 +14,8 @@ import (
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
+	"time"
 )
-
-func (m *DockManager) initHideStateManager() error {
-	m.hideStateManager = NewHideStateManager()
-	m.hideStateManager.dockRect = m.dockRect
-	logger.Debug("initHideStateManager dockRect", m.hideStateManager.dockRect)
-	m.hideStateManager.mode = m.hideMode
-	m.hideStateManager.initHideState()
-	err := dbus.InstallOnSession(m.hideStateManager)
-	return err
-}
 
 func (m *DockManager) initDockProperty() error {
 	m.dockProperty = NewDockProperty(m)
@@ -68,8 +59,7 @@ func (m *DockManager) listenSettingsChanged() {
 	m.connectSettingKeyChanged(settingKeyHideMode, func(g *gio.Settings, key string) {
 		mode := HideModeType(g.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
-
-		m.hideStateManager.updateHideMode(mode)
+		m.updateHideStateWithoutDelay()
 	})
 
 	// listen display mode change
@@ -104,11 +94,19 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize display done")
 
-	err = m.initHideStateManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize hide state manager done")
+	m.FrontendWindow = newPropertyFrontendWindow(m)
+	m.FrontendWindow.ConnectChanged(func() {
+		logger.Debug("FrontendWindow changed", m.FrontendWindow.Get())
+		m.updateHideStateWithoutDelay()
+	})
+
+	m.HideState = newPropertyHideState(m)
+	m.HideState.ConnectChanged(func() {
+		logger.Debug("HideState changed", m.HideState.Get())
+	})
+
+	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
+	m.smartHideModeTimer.Stop()
 
 	err = m.initDockProperty()
 	if err != nil {
@@ -134,5 +132,6 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
+	dbus.Emit(m, "ServiceRestart")
 	return nil
 }

@@ -89,7 +89,6 @@ func (d *Daemon) Start() error {
 	initTrayManager()
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
-	dockManager.hideStateManager.updateStateWithoutDelay()
 
 	logger.Info("initialize done")
 	return nil

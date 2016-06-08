@@ -16,6 +16,7 @@ const (
 	HideStateShown
 	HideStateHidding
 	HideStateHidden
+	HideStateUnknown
 )
 
 func (s HideStateType) String() string {

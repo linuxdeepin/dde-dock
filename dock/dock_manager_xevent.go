@@ -65,7 +65,7 @@ func (m *DockManager) handleActiveWindowChanged() {
 		entry.current.updateWmName()
 		entry.current.updateIcon()
 	}
-	m.hideStateManager.updateActiveWindow(activeWindow)
+	m.updateHideStateWithDelay()
 }
 
 func (m *DockManager) listenRootWindowPropertyChange() {
@@ -78,7 +78,7 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 		case _NET_ACTIVE_WINDOW:
 			m.handleActiveWindowChanged()
 		case _NET_SHOWING_DESKTOP:
-			m.hideStateManager.updateStateWithoutDelay()
+			m.updateHideStateWithoutDelay()
 		}
 	}).Connect(XU, rootWin)
 
@@ -125,9 +125,10 @@ func (m *DockManager) handleVisibilityNotifyEvent(winInfo *WindowInfo, ev xevent
 }
 
 func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.ConfigureNotifyEvent) {
-	if m.hideMode != HideModeSmartHide {
+	if HideModeType(m.HideMode.Get()) != HideModeSmartHide {
 		return
 	}
+
 	winInfo.lastConfigureNotifyEvent = &ev
 	const configureNotifyDelay = 100 // ms
 	if winInfo.updateConfigureTimer != nil {
@@ -159,9 +160,9 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 			}
 			logger.Debug("isXYWHChange", isXYWHChange)
 			if isXYWHChange {
-				dockManager.hideStateManager.updateStateWithoutDelay()
+				m.updateHideStateWithoutDelay()
 			} else {
-				dockManager.hideStateManager.updateStateWithDelay()
+				m.updateHideStateWithDelay()
 			}
 		})
 	}

@@ -19,10 +19,11 @@ import (
 	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
+	"sync"
+	"time"
 )
 
 type DockManager struct {
-	hideStateManager *HideStateManager
 	dockProperty     *DockProperty
 	dockedAppManager *DockedAppManager
 
@@ -32,9 +33,6 @@ type DockManager struct {
 	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
 
 	Entries []*AppEntry
-
-	hideMode    HideModeType
-	displayMode DisplayModeType
 
 	settings    *gio.Settings
 	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
@@ -46,12 +44,21 @@ type DockManager struct {
 	displayPrimaryRect *xrect.XRect
 	dockRect           *xrect.XRect
 
+	HideState      *propertyHideState      `access:"readwrite"`
+	FrontendWindow *propertyFrontendWindow `access:"readwrite"`
+
+	smartHideModeTimer *time.Timer
+	smartHideModeMutex sync.Mutex
+
 	dockHeight int
 	dockWidth  int
 	entryCount uint
+
 	// Signals
-	EntryAdded   func(dbus.ObjectPath)
-	EntryRemoved func(string)
+	ServiceRestart  func()
+	EntryAdded      func(dbus.ObjectPath)
+	EntryRemoved    func(string)
+	ChangeHideState func(int32)
 }
 
 const (
@@ -75,9 +82,9 @@ func (m *DockManager) destroy() {
 		m.dockProperty = nil
 	}
 
-	if m.hideStateManager != nil {
-		m.hideStateManager.destroy()
-		m.hideStateManager = nil
+	if m.smartHideModeTimer != nil {
+		m.smartHideModeTimer.Stop()
+		m.smartHideModeTimer = nil
 	}
 
 	if m.dpy != nil {
@@ -119,12 +126,6 @@ func (m *DockManager) updateDockRect() {
 	logger.Debug("dock width:", m.dockWidth)
 	logger.Debug("dock height:", m.dockHeight)
 	logger.Debug("updateDockRect dock rect:", m.dockRect)
-
-	if m.hideStateManager != nil {
-		m.hideStateManager.updateStateWithoutDelay()
-	} else {
-		logger.Debug("m.hideStateManager is nil")
-	}
 
 	if m.dockProperty != nil {
 		m.dockProperty.updateDockRect()
