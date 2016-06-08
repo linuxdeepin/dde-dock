@@ -44,8 +44,8 @@ type DockManager struct {
 	displayPrimaryRect *xrect.XRect
 	dockRect           *xrect.XRect
 
-	HideState      *propertyHideState      `access:"readwrite"`
-	FrontendWindow *propertyFrontendWindow `access:"readwrite"`
+	HideState *propertyHideState `access:"readwrite"`
+	frontendWindow xproto.Window
 
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
@@ -191,4 +191,17 @@ func (m *DockManager) GetEntryIDs() []string {
 		list = append(list, appId)
 	}
 	return list
+}
+
+func (m *DockManager) SetFrontendWindow(windowId uint32) error {
+	win := xproto.Window(windowId)
+	if m.frontendWindow == win {
+		return nil
+	}
+
+	// TODO: valid win
+	m.frontendWindow = win
+	logger.Debug("FrontendWindow changed", win)
+	m.updateHideStateWithoutDelay()
+	return nil
 }

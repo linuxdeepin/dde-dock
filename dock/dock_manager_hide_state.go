@@ -65,7 +65,7 @@ func (m *DockManager) isWindowDockOverlap(win xproto.Window) bool {
 		return false
 	}
 
-	dockWindow := xwindow.New(XU, m.FrontendWindow.Get())
+	dockWindow := xwindow.New(XU, m.frontendWindow)
 	dockRect, err := dockWindow.DecorGeometry()
 	if err != nil {
 		logger.Warning(err)

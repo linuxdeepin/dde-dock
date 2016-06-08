@@ -94,12 +94,6 @@ func (m *DockManager) init() error {
 	}
 	logger.Info("initialize display done")
 
-	m.FrontendWindow = newPropertyFrontendWindow(m)
-	m.FrontendWindow.ConnectChanged(func() {
-		logger.Debug("FrontendWindow changed", m.FrontendWindow.Get())
-		m.updateHideStateWithoutDelay()
-	})
-
 	m.HideState = newPropertyHideState(m)
 	m.HideState.ConnectChanged(func() {
 		logger.Debug("HideState changed", m.HideState.Get())
