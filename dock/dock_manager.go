@@ -37,8 +37,9 @@ type DockManager struct {
 	displayMode DisplayModeType
 
 	settings    *gio.Settings
-	HideMode    *property.GSettingsEnumProperty
-	DisplayMode *property.GSettingsEnumProperty
+	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
+	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
+	Position    *property.GSettingsEnumProperty `access:"readwrite"`
 
 	ActiveWindow       xproto.Window
 	dpy                *display.Display
@@ -54,8 +55,9 @@ type DockManager struct {
 }
 
 const (
-	HideModeKey    string = "hide-mode"
-	DisplayModeKey string = "display-mode"
+	settingKeyHideMode    = "hide-mode"
+	settingKeyDisplayMode = "display-mode"
+	settingKeyPosition    = "position"
 )
 
 func NewDockManager() (*DockManager, error) {

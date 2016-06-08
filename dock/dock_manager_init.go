@@ -65,7 +65,7 @@ func (m *DockManager) connectSettingKeyChanged(key string, handler func(*gio.Set
 
 func (m *DockManager) listenSettingsChanged() {
 	// listen hide mode change
-	m.connectSettingKeyChanged(HideModeKey, func(g *gio.Settings, key string) {
+	m.connectSettingKeyChanged(settingKeyHideMode, func(g *gio.Settings, key string) {
 		mode := HideModeType(g.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
 
@@ -73,12 +73,18 @@ func (m *DockManager) listenSettingsChanged() {
 	})
 
 	// listen display mode change
-	m.connectSettingKeyChanged(DisplayModeKey, func(g *gio.Settings, key string) {
+	m.connectSettingKeyChanged(settingKeyDisplayMode, func(g *gio.Settings, key string) {
 		mode := DisplayModeType(g.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
 
 		m.dockHeight = getDockHeightByDisplayMode(mode)
 		m.updateDockRect()
+	})
+
+	// listen position change
+	m.connectSettingKeyChanged(settingKeyPosition, func(g *gio.Settings, key string) {
+		position := positionType(g.GetEnum(key))
+		logger.Debug(key, "changed to", position)
 	})
 }
 
@@ -87,8 +93,9 @@ func (m *DockManager) init() error {
 
 	m.settings = gio.NewSettings(dockSchema)
 
-	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, HideModeKey)
-	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, DisplayModeKey)
+	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, settingKeyHideMode)
+	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
+	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
 
 	// ensure init display after init setting
 	err = m.initDisplay()
