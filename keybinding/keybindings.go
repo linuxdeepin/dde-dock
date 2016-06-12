@@ -70,5 +70,7 @@ func (*Daemon) Stop() error {
 
 	logger.EndTracing()
 	_m.destroy()
+	dbus.UnInstallObject(_m)
+	_m = nil
 	return nil
 }

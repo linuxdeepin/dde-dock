@@ -63,6 +63,7 @@ func (d *Daemon) Stop() error {
 	}
 
 	_manager.destroy()
+	dbus.UnInstallObject(_manager)
 	_manager = nil
 	return nil
 }

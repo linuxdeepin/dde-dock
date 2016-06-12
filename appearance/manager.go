@@ -160,6 +160,8 @@ func (m *Manager) destroy() {
 		m.watcher.Close()
 		m.watcher = nil
 	}
+
+	m.endCursorChangedHandler()
 }
 
 func (m *Manager) init() {

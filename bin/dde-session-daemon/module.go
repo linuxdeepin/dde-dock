@@ -19,7 +19,9 @@ import (
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 	// _ "pkg.deepin.io/dde/daemon/launcher"
+	"fmt"
 	_ "pkg.deepin.io/dde/daemon/debug"
+	"pkg.deepin.io/dde/daemon/loader"
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/mpris"
 	_ "pkg.deepin.io/dde/daemon/network"
@@ -29,23 +31,70 @@ import (
 	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
+	"sync"
 )
 
 var (
+	moduleLocker   sync.Mutex
 	daemonSettings = gio.NewSettings("com.deepin.dde.daemon")
 )
 
-// TODO:
-// func listenDaemonSettings() {
-// 	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
-// 		// gsettings key names must keep consistent with module names
-// 		enable := daemonSettings.GetBoolean(name)
-// 		loader.Enable(name, enable)
-// 		if enable {
-// 			loader.Start(name)
-// 		} else {
-// 			loader.Stop(name)
-// 		}
-// 	})
-// 	daemonSettings.GetBoolean("mounts")
-// }
+func listenDaemonSettings() {
+	daemonSettings.Connect("changed", func(s *gio.Settings, name string) {
+		// gsettings key names must keep consistent with module names
+		moduleLocker.Lock()
+		defer moduleLocker.Unlock()
+		module := loader.GetModule(name)
+		if module == nil {
+			logger.Error("Invalid module name:", name)
+			return
+		}
+
+		enable := daemonSettings.GetBoolean(name)
+		err := checkDependencies(daemonSettings, module, enable)
+		if err != nil {
+			logger.Error(err)
+			return
+		}
+
+		err = module.Enable(enable)
+		if err != nil {
+			logger.Warningf("Enable '%s' failed: %v", name, err)
+			return
+		}
+	})
+	daemonSettings.GetBoolean("mounts")
+}
+
+func checkDependencies(s *gio.Settings, module loader.Module, enabled bool) error {
+	if enabled {
+		depends := module.GetDependencies()
+		for _, n := range depends {
+			if s.GetBoolean(n) != true {
+				return fmt.Errorf("Dependency lose: %v", n)
+			}
+		}
+		return nil
+	}
+
+	for _, m := range loader.List() {
+		if m == nil || m.Name() == module.Name() {
+			continue
+		}
+
+		if m.IsEnable() == true && isStrInList(module.Name(), m.GetDependencies()) {
+			return fmt.Errorf("Can not diable this module '%s', because of it was depended by'%s'",
+				module.Name(), m.Name())
+		}
+	}
+	return nil
+}
+
+func isStrInList(item string, list []string) bool {
+	for _, v := range list {
+		if item == v {
+			return true
+		}
+	}
+	return false
+}

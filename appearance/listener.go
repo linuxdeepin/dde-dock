@@ -17,3 +17,7 @@ import "C"
 func (*Manager) listenCursorChanged() {
 	C.handle_gtk_cursor_changed()
 }
+
+func (*Manager) endCursorChangedHandler() {
+	C.end_cursor_changed_handler()
+}

@@ -11,5 +11,6 @@
 #define __CURSOR_H__
 
 void handle_gtk_cursor_changed();
+void end_cursor_changed_handler();
 
 #endif

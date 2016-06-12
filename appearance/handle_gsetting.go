@@ -19,6 +19,10 @@ import (
 
 func (m *Manager) listenGSettingChanged() {
 	m.setting.Connect("changed", func(s *gio.Settings, key string) {
+		if m.setting == nil {
+			return
+		}
+
 		var (
 			ty    string
 			value string
@@ -66,6 +70,10 @@ func (m *Manager) listenGSettingChanged() {
 
 func (m *Manager) listenBgGSettings() {
 	m.wrapBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		if m.wrapBgSetting == nil {
+			return
+		}
+
 		value := m.wrapBgSetting.GetString(key)
 		uri, err := m.doSetBackground(value)
 		if err != nil {
@@ -84,6 +92,10 @@ func (m *Manager) listenBgGSettings() {
 		return
 	}
 	m.gnomeBgSetting.Connect("changed::picture-uri", func(s *gio.Settings, key string) {
+		if m.gnomeBgSetting == nil {
+			return
+		}
+
 		// Wait for file copy finished
 		time.Sleep(time.Millisecond * 500)
 		uri := m.gnomeBgSetting.GetString(gsKeyBackground)

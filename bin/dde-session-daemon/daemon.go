@@ -32,6 +32,7 @@ const (
 func runMainLoop() {
 	session.Register()
 	dbus.DealWithUnhandledMessage()
+	listenDaemonSettings()
 	go glib.StartLoop()
 
 	if err := dbus.Wait(); err != nil {
