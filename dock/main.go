@@ -14,6 +14,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"os"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -91,6 +92,7 @@ func (d *Daemon) Start() error {
 	go xevent.Main(XU)
 
 	logger.Info("initialize done")
+	dbus.Emit(dockManager, "ServiceRestarted")
 	return nil
 }
 

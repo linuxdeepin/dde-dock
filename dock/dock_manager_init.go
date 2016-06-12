@@ -78,11 +78,6 @@ func (m *DockManager) init() error {
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
 	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
 
-	m.HideState = newPropertyHideState(m)
-	m.HideState.ConnectChanged(func() {
-		logger.Debug("HideState changed", m.HideState.Get())
-	})
-
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
 	m.smartHideModeTimer.Stop()
 
@@ -104,6 +99,5 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
-	dbus.Emit(m, "ServiceRestarted")
 	return nil
 }

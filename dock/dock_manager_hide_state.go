@@ -10,17 +10,13 @@
 package dock
 
 import (
+	"errors"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
 	"pkg.deepin.io/lib/dbus"
 	"time"
-)
-
-const (
-	TriggerShow int32 = iota
-	TriggerHide
 )
 
 func max(a, b int) int {
@@ -51,32 +47,33 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	return ax <= bx && ay <= by
 }
 
-func (m *DockManager) isWindowDockOverlap(win xproto.Window) bool {
+func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 	// overlap condition:  window showing and  on current workspace,
 	// window dock rect has intersection
 	window := xwindow.New(XU, win)
 	if isHiddenPre(win) || (!onCurrentWorkspacePre(win)) {
-		return false
+		logger.Debugf("window %v is hidden or not on current workspace", win)
+		return false, nil
 	}
 
 	winRect, err := window.DecorGeometry()
 	if err != nil {
-		logger.Warningf("isWindowDockOverlap GetDecorGeometry of 0x%x failed: %s", win, err)
-		return false
+		logger.Warning("Get target window geometry failed", err)
+		return false, err
 	}
 
 	dockWindow := xwindow.New(XU, m.frontendWindow)
 	dockRect, err := dockWindow.DecorGeometry()
 	if err != nil {
-		logger.Warning(err)
-		return false
+		logger.Warning("Get dock window geometry failed:", err)
+		return false, err
 	}
 
 	logger.Debug("window rect:", winRect)
 	logger.Debug("dock rect:", dockRect)
 	result := hasIntersection(winRect, dockRect)
 	logger.Debug("window dock overlap:", result)
-	return result
+	return result, nil
 }
 
 const (
@@ -92,20 +89,30 @@ func (m *DockManager) isDeepinLauncherShown() bool {
 	return winClass.Instance == DDELauncher
 }
 
-func (m *DockManager) shouldHideOnSmartHideMode() bool {
+func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
+	if m.ActiveWindow == 0 {
+		logger.Debug("shouldHideOnSmartHideMode: activeWindow is 0")
+		return false, errors.New("activeWindow is 0")
+	}
 	if m.isDeepinLauncherShown() {
 		logger.Debug("launcher is shown")
-		return false
+		return false, nil
 	}
 	return m.isWindowDockOverlap(m.ActiveWindow)
 }
 
 func (m *DockManager) smartHideModeTimerExpired() {
 	logger.Debug("smartHideModeTimer expired!")
-	if m.shouldHideOnSmartHideMode() {
-		m.emitSignalChangeHideState(TriggerHide)
+	shouldHide, err := m.shouldHideOnSmartHideMode()
+	if err != nil {
+		m.setPropHideState(HideStateUnknown)
+		return
+	}
+
+	if shouldHide {
+		m.setPropHideState(HideStateHide)
 	} else {
-		m.emitSignalChangeHideState(TriggerShow)
+		m.setPropHideState(HideStateShow)
 	}
 }
 
@@ -126,32 +133,39 @@ func (m *DockManager) cancelSmartHideModeTimer() {
 }
 
 func (m *DockManager) smartHideModeDelayHandle() {
-	hideState := m.HideState.Get()
-	switch hideState {
-	case HideStateShown:
-		if m.shouldHideOnSmartHideMode() {
+	shouldHide, err := m.shouldHideOnSmartHideMode()
+	if err != nil {
+		m.cancelSmartHideModeTimer()
+		m.setPropHideState(HideStateUnknown)
+		return
+	}
+
+	switch m.HideState {
+	case HideStateShow:
+		if shouldHide {
 			logger.Debug("smartHideModeDelayHandle: show -> hide")
 			m.resetSmartHideModeTimer(time.Millisecond * 500)
 		} else {
 			logger.Debug("smartHideModeDelayHandle: show -> show")
 			m.cancelSmartHideModeTimer()
 		}
-
-	case HideStateHidden:
-		if m.shouldHideOnSmartHideMode() {
+	case HideStateHide:
+		if shouldHide {
 			logger.Debug("smartHideModeDelayHandle: hide -> hide")
 			m.cancelSmartHideModeTimer()
 		} else {
 			logger.Debug("smartHideModeDelayHandle: hide -> show")
 			m.resetSmartHideModeTimer(time.Millisecond * 500)
 		}
+	default:
+		m.resetSmartHideModeTimer(0)
 	}
 }
 
 func (m *DockManager) updateHideState(delay bool) {
 	if m.isDeepinLauncherShown() {
 		logger.Debug("updateHideState: launcher is shown, show dock")
-		m.emitSignalChangeHideState(TriggerShow)
+		m.setPropHideState(HideStateShow)
 		return
 	}
 
@@ -159,10 +173,10 @@ func (m *DockManager) updateHideState(delay bool) {
 	logger.Debug("updateHideState: mode is", hideMode)
 	switch hideMode {
 	case HideModeKeepShowing:
-		m.emitSignalChangeHideState(TriggerShow)
+		m.setPropHideState(HideStateShow)
 
 	case HideModeKeepHidden:
-		m.emitSignalChangeHideState(TriggerHide)
+		m.setPropHideState(HideStateHide)
 
 	case HideModeSmartHide:
 		if delay {
@@ -181,20 +195,11 @@ func (m *DockManager) updateHideStateWithoutDelay() {
 	m.updateHideState(false)
 }
 
-func (m *DockManager) emitSignalChangeHideState(trigger int32) {
-	hideState := m.HideState.Get()
-	if (hideState == HideStateShown && trigger == TriggerShow) ||
-		(hideState == HideStateHidden && trigger == TriggerHide) {
-		logger.Debug("No need emit signal ChangeState")
-		return
+func (m *DockManager) setPropHideState(hideState HideStateType) {
+	logger.Debug("setPropHideState", hideState)
+	if m.HideState != hideState {
+		logger.Debugf("HideState %v => %v", m.HideState, hideState)
+		m.HideState = hideState
+		dbus.NotifyChange(m, "HideState")
 	}
-
-	triggerStr := "TriggerUnknown"
-	if trigger == TriggerShow {
-		triggerStr = "TriggerShow"
-	} else if trigger == TriggerHide {
-		triggerStr = "TriggerHide"
-	}
-	logger.Debugf("Emit signal ChangeHideState: %v", triggerStr)
-	dbus.Emit(m, "ChangeHideState", trigger)
 }

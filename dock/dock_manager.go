@@ -38,7 +38,7 @@ type DockManager struct {
 
 	ActiveWindow xproto.Window
 
-	HideState      *propertyHideState `access:"readwrite"`
+	HideState      HideStateType
 	frontendWindow xproto.Window
 
 	smartHideModeTimer *time.Timer
@@ -50,7 +50,6 @@ type DockManager struct {
 	ServiceRestarted func()
 	EntryAdded       func(dbus.ObjectPath)
 	EntryRemoved     func(string)
-	ChangeHideState  func(int32)
 }
 
 const (
@@ -141,6 +140,7 @@ func (m *DockManager) SetFrontendWindow(windowId uint32) error {
 	}
 
 	// TODO: valid win
+	m.setPropHideState(HideStateUnknown)
 	m.frontendWindow = win
 	logger.Debug("FrontendWindow changed", win)
 	m.updateHideStateWithoutDelay()
