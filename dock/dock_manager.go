@@ -10,13 +10,11 @@
 package dock
 
 import (
-	"dbus/com/deepin/daemon/display"
 	"errors"
 	"fmt"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"sync"
@@ -24,7 +22,6 @@ import (
 )
 
 type DockManager struct {
-	dockProperty     *DockProperty
 	dockedAppManager *DockedAppManager
 
 	clientList                     windowSlice
@@ -39,10 +36,7 @@ type DockManager struct {
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
 
-	ActiveWindow       xproto.Window
-	dpy                *display.Display
-	displayPrimaryRect *xrect.XRect
-	dockRect           *xrect.XRect
+	ActiveWindow xproto.Window
 
 	HideState      *propertyHideState `access:"readwrite"`
 	frontendWindow xproto.Window
@@ -50,8 +44,6 @@ type DockManager struct {
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
 
-	dockHeight int
-	dockWidth  int
 	entryCount uint
 
 	// Signals
@@ -77,60 +69,9 @@ func NewDockManager() (*DockManager, error) {
 }
 
 func (m *DockManager) destroy() {
-	if m.dockProperty != nil {
-		m.dockProperty.destroy()
-		m.dockProperty = nil
-	}
-
 	if m.smartHideModeTimer != nil {
 		m.smartHideModeTimer.Stop()
 		m.smartHideModeTimer = nil
-	}
-
-	if m.dpy != nil {
-		display.DestroyDisplay(m.dpy)
-		m.dpy = nil
-	}
-
-}
-
-func getDockHeightByDisplayMode(mode DisplayModeType) int {
-	switch mode {
-	case DisplayModeModernMode:
-		return 68
-	case DisplayModeEfficientMode:
-		return 48
-	case DisplayModeClassicMode:
-		return 32
-	default:
-		return 0
-	}
-}
-
-func (m *DockManager) updateDockRect() {
-	// calc dock rect
-	primaryX, primaryY, primaryW, primaryH := m.displayPrimaryRect.Pieces()
-	dockX := primaryX + (primaryW-m.dockWidth)/2
-	dockY := primaryY + primaryH - m.dockHeight
-
-	if m.dockRect == nil {
-		m.dockRect = xrect.New(dockX, dockY, m.dockWidth, m.dockHeight)
-	} else {
-		m.dockRect.XSet(dockX)
-		m.dockRect.YSet(dockY)
-		m.dockRect.WidthSet(m.dockWidth)
-		m.dockRect.HeightSet(m.dockHeight)
-	}
-
-	logger.Debug("primary rect:", m.displayPrimaryRect)
-	logger.Debug("dock width:", m.dockWidth)
-	logger.Debug("dock height:", m.dockHeight)
-	logger.Debug("updateDockRect dock rect:", m.dockRect)
-
-	if m.dockProperty != nil {
-		m.dockProperty.updateDockRect()
-	} else {
-		logger.Debug("m.dockProperty is nil")
 	}
 }
 

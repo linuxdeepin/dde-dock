@@ -17,12 +17,6 @@ import (
 	"time"
 )
 
-func (m *DockManager) initDockProperty() error {
-	m.dockProperty = NewDockProperty(m)
-	err := dbus.InstallOnSession(m.dockProperty)
-	return err
-}
-
 func (m *DockManager) loadCache() error {
 	var err error
 	m.desktopWindowsMapCacheManager, err = newDesktopWindowsMapCacheManager(filepath.Join(cacheDir, "desktopWindowsMapCache.gob"))
@@ -66,9 +60,6 @@ func (m *DockManager) listenSettingsChanged() {
 	m.connectSettingKeyChanged(settingKeyDisplayMode, func(g *gio.Settings, key string) {
 		mode := DisplayModeType(g.GetEnum(key))
 		logger.Debug(key, "changed to", mode)
-
-		m.dockHeight = getDockHeightByDisplayMode(mode)
-		m.updateDockRect()
 	})
 
 	// listen position change
@@ -87,13 +78,6 @@ func (m *DockManager) init() error {
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
 	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
 
-	// ensure init display after init setting
-	err = m.initDisplay()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize display done")
-
 	m.HideState = newPropertyHideState(m)
 	m.HideState.ConnectChanged(func() {
 		logger.Debug("HideState changed", m.HideState.Get())
@@ -101,12 +85,6 @@ func (m *DockManager) init() error {
 
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
 	m.smartHideModeTimer.Stop()
-
-	err = m.initDockProperty()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize dock property done")
 
 	m.listenSettingsChanged()
 
