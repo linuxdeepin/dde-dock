@@ -161,7 +161,6 @@ func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 func (m *DockManager) removeAppEntry(e *AppEntry) {
 	for _, entry := range m.Entries {
 		if entry == e {
-			dbus.ReleaseName(e)
 			dbus.UnInstallObject(e)
 
 			entryId := entry.Id
