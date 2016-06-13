@@ -35,7 +35,7 @@ class DBusDockEntry: public QDBusAbstractInterface
         if (3 != arguments.count())
             return;
         QString interfaceName = msg.arguments().at(0).toString();
-        if (interfaceName !="dde.dock.Entry")
+        if (interfaceName !="com.deepin.dde.daemon.Dock.Entry")
             return;
         QVariantMap changedProps = qdbus_cast<QVariantMap>(arguments.at(1).value<QDBusArgument>());
         foreach(const QString &prop, changedProps.keys()) {
@@ -50,7 +50,7 @@ class DBusDockEntry: public QDBusAbstractInterface
    }
 public:
     static inline const char *staticInterfaceName()
-    { return "dde.dock.Entry"; }
+    { return "com.deepin.dde.daemon.Dock.Entry"; }
 
 public:
     explicit DBusDockEntry(const QString &path, QObject *parent = 0);

@@ -4,13 +4,9 @@
 #include <QDrag>
 #include <QMouseEvent>
 
-#define APP_STATUS_KEY          "app-status"
 #define APP_ICON_KEY            "icon"
 #define APP_MENU_KEY            "menu"
 #define APP_XIDS_KEY            "app-xids"
-
-#define APP_ACTIVE_STATUS       "active"
-#define APP_NORMAL_STATUS       "normal"
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -25,6 +21,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     initClientManager();
 
     m_data = m_itemEntry->data();
+
+    qDebug() << m_data;
 
     connect(m_itemEntry, static_cast<void (DBusDockEntry::*)(const QString&, const QString&)>(&DBusDockEntry::DataChanged), this, &AppItem::entryDataChanged);
 }
@@ -46,18 +44,18 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
-    // draw current active background
-    if (m_windows.contains(ActiveWindowId))
-    {
-        painter.fillRect(rect(), Qt::blue);
-    } else if (m_data[APP_STATUS_KEY] == APP_ACTIVE_STATUS)
-    {
-        // draw active background
-        painter.fillRect(rect(), Qt::cyan);
-    } else {
-        // draw normal background
-        painter.fillRect(rect(), Qt::gray);
-    }
+//    // draw current active background
+//    if (m_windows.contains(ActiveWindowId))
+//    {
+//        painter.fillRect(rect(), Qt::blue);
+//    } else if (m_data[APP_STATUS_KEY] == APP_ACTIVE_STATUS)
+//    {
+//        // draw active background
+//        painter.fillRect(rect(), Qt::cyan);
+//    } else {
+//        // draw normal background
+//        painter.fillRect(rect(), Qt::gray);
+//    }
 
     // draw icon
     painter.fillRect(iconRect, Qt::yellow);
@@ -126,9 +124,11 @@ void AppItem::initClientManager()
 
 void AppItem::entryDataChanged(const QString &key, const QString &value)
 {
+    qDebug() << "data chanegd" << key << value;
+
     // update data
     m_data[key] = value;
 
-    if (key == APP_STATUS_KEY)
+//    if (key == APP_STATUS_KEY)
         return update();
 }

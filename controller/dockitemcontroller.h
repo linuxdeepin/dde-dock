@@ -1,7 +1,7 @@
 #ifndef DOCKITEMCONTROLLER_H
 #define DOCKITEMCONTROLLER_H
 
-#include "dbus/dbusdockentrymanager.h"
+#include "dbus/dbusdock.h"
 #include "item/dockitem.h"
 
 #include <QObject>
@@ -25,7 +25,7 @@ private:
 private:
     QList<DockItem *> m_itemList;
 
-    DBusDockEntryManager *m_entryManager;
+    DBusDock *m_dockInter;
 
     static DockItemController *INSTANCE;
 };

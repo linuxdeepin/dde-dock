@@ -27,9 +27,9 @@ const QList<DockItem *> DockItemController::itemList() const
 
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
-      m_entryManager(new DBusDockEntryManager(this))
+      m_dockInter(new DBusDock(this))
 {
-    for (auto entry : m_entryManager->entries())
+    for (auto entry : m_dockInter->entries())
         m_itemList.append(new AppItem(entry));
     m_itemList.append(new PlaceholderItem);
 }
