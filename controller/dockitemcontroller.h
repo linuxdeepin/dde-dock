@@ -21,6 +21,8 @@ signals:
 
 private:
     explicit DockItemController(QObject *parent = 0);
+    void appItemAdded(const QDBusObjectPath &path);
+    void appItemRemoved(const QString &itemId);
 
 private:
     QList<DockItem *> m_itemList;

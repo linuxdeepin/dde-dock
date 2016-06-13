@@ -121,8 +121,8 @@ public Q_SLOTS: // METHODS
     }
 
 Q_SIGNALS: // SIGNALS
-    void EntryAdded(const QDBusObjectPath &in0);
-    void EntryRemoved(const QString &in0);
+    void EntryAdded(const QDBusObjectPath &entryPath);
+    void EntryRemoved(const QString &entryId);
     void ServiceRestarted();
 // begin property changed signals
 void ActiveWindowChanged();

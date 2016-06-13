@@ -22,8 +22,6 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_data = m_itemEntry->data();
 
-    qDebug() << m_data;
-
     connect(m_itemEntry, static_cast<void (DBusDockEntry::*)(const QString&, const QString&)>(&DBusDockEntry::DataChanged), this, &AppItem::entryDataChanged);
 }
 
