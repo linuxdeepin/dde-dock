@@ -15,7 +15,6 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
-	"pkg.deepin.io/lib/dbus"
 	"sort"
 	"time"
 )
@@ -50,21 +49,26 @@ func (m *DockManager) handleActiveWindowChanged() {
 		logger.Warning(err)
 		return
 	}
-	if m.ActiveWindow == activeWindow {
+	if m.activeWindow == activeWindow {
 		logger.Debug("Active window no change")
 		return
 	}
 
 	logger.Debug("Active window changed window:", activeWindow)
-	m.ActiveWindow = activeWindow
-	dbus.NotifyChange(m, "ActiveWindow")
+	m.activeWindow = activeWindow
 
-	entry := m.getAppEntryByWindow(activeWindow)
-	if entry != nil {
-		entry.setLeader(activeWindow)
-		entry.current.updateWmName()
-		entry.current.updateIcon()
+	for _, entry := range m.Entries {
+		_, ok := entry.windows[activeWindow]
+		if ok {
+			entry.setIsActive(true)
+			entry.setLeader(activeWindow)
+			entry.current.updateWmName()
+			entry.current.updateIcon()
+		} else {
+			entry.setIsActive(false)
+		}
 	}
+
 	m.updateHideStateWithDelay()
 }
 

@@ -36,7 +36,7 @@ type DockManager struct {
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
 
-	ActiveWindow xproto.Window
+	activeWindow xproto.Window
 
 	HideState      HideStateType
 	frontendWindow xproto.Window

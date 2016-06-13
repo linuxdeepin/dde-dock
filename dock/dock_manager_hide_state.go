@@ -81,7 +81,7 @@ const (
 )
 
 func (m *DockManager) isDeepinLauncherShown() bool {
-	winClass, err := icccm.WmClassGet(XU, m.ActiveWindow)
+	winClass, err := icccm.WmClassGet(XU, m.activeWindow)
 	if err != nil {
 		logger.Debug(err)
 		return false
@@ -90,7 +90,7 @@ func (m *DockManager) isDeepinLauncherShown() bool {
 }
 
 func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
-	if m.ActiveWindow == 0 {
+	if m.activeWindow == 0 {
 		logger.Debug("shouldHideOnSmartHideMode: activeWindow is 0")
 		return false, errors.New("activeWindow is 0")
 	}
@@ -98,7 +98,7 @@ func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
 		logger.Debug("launcher is shown")
 		return false, nil
 	}
-	return m.isWindowDockOverlap(m.ActiveWindow)
+	return m.isWindowDockOverlap(m.activeWindow)
 }
 
 func (m *DockManager) smartHideModeTimerExpired() {

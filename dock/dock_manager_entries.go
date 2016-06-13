@@ -21,15 +21,12 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"time"
 )
 
 func (m *DockManager) allocEntryId() string {
 	num := m.entryCount
 	m.entryCount++
-	timeNow := time.Now()
-	timeNowUnixSeconds := timeNow.Unix()
-	return fmt.Sprintf("e%dT%x", num, timeNowUnixSeconds)
+	return fmt.Sprintf("e%dT%x", num, getCurrentTimestamp())
 }
 
 func (m *DockManager) getAppEntryByWindow(win xproto.Window) *AppEntry {
@@ -152,7 +149,6 @@ func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 
 	entry.isDocked = true
 	entry.updateMenu()
-	entry.updateStatus()
 	entry.updateTitle()
 	entry.updateIcon()
 	return entry
@@ -252,15 +248,15 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	}
 
 	entry.detachWindow(winInfo)
-	if !entry.isActive() && !entry.isDocked {
+	if !entry.hasWindow() && !entry.isDocked {
 		m.removeAppEntry(entry)
 		return
 	}
 	entry.updateIcon()
-	entry.updateStatus()
-	entry.updateAppXids()
+	entry.updateWindowTitles()
 	entry.updateMenu()
 	entry.updateTitle()
+	entry.updateIsActive()
 }
 
 func (m *DockManager) getDockedAppList() []string {
@@ -393,7 +389,7 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 	}
 	appId := entry.appInfo.GetId()
 
-	if !entry.isActive() {
+	if !entry.hasWindow() {
 		m.removeAppEntry(entry)
 	} else {
 		dir := filepath.Dir(entry.appInfo.GetFilePath())

@@ -12,8 +12,19 @@ package dock
 import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
+
+func (e *AppEntry) setMenu(menu *Menu) {
+	e.coreMenu = menu
+	menuJSON := menu.GenerateJSON()
+	// set menu JSON
+	if e.Menu != menuJSON {
+		e.Menu = menuJSON
+		dbus.NotifyChange(e, "Menu")
+	}
+}
 
 func (entry *AppEntry) updateMenu() {
 	logger.Debug("Update menu")
@@ -23,7 +34,7 @@ func (entry *AppEntry) updateMenu() {
 	desktopActionMenuItems := entry.getMenuItemDesktopActions()
 	menu.AppendItem(desktopActionMenuItems...)
 
-	if entry.isActive() {
+	if entry.hasWindow() {
 		menu.AppendItem(entry.getMenuItemCloseAll())
 	}
 
@@ -35,9 +46,7 @@ func (entry *AppEntry) updateMenu() {
 		menu.AppendItem(entry.getMenuItemDock())
 	}
 
-	entry.coreMenu = menu
-	menuJSON := menu.GenerateJSON()
-	entry.setData(FieldMenu, menuJSON)
+	entry.setMenu(menu)
 }
 
 func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
@@ -97,7 +106,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 
 func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 	var itemName string
-	if entry.isActive() {
+	if entry.hasWindow() {
 		itemName = entry.getDisplayName()
 	} else {
 		itemName = Tr("_Run")

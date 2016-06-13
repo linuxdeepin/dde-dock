@@ -10,7 +10,6 @@
 package dock
 
 import (
-	"encoding/json"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -41,23 +40,18 @@ type XidInfo struct {
 
 type AppEntry struct {
 	dockManager *DockManager
-	// hashId string
 
 	Id      string
 	innerId string
 
-	Type string
-	Data map[string]string
-	// Data Fields
-	// Menu
-	// Icon
-	// Title
+	IsActive bool
+	Title    string
+	Icon     string
+	Menu     string
 
-	// Signal
-	DataChanged func(string, string)
-
-	windows map[xproto.Window]*WindowInfo
-	current *WindowInfo
+	WindowTitles windowTitlesType
+	windows      map[xproto.Window]*WindowInfo
+	current      *WindowInfo
 
 	coreMenu *Menu
 	exec     string
@@ -68,13 +62,12 @@ type AppEntry struct {
 
 func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
-		dockManager: dockManager,
-		Id:          dockManager.allocEntryId(),
-		innerId:     id,
-		Type:        "App",
-		Data:        make(map[string]string),
-		windows:     make(map[xproto.Window]*WindowInfo),
-		appInfo:     appInfo,
+		dockManager:  dockManager,
+		Id:           dockManager.allocEntryId(),
+		innerId:      id,
+		WindowTitles: newWindowTitles(),
+		windows:      make(map[xproto.Window]*WindowInfo),
+		appInfo:      appInfo,
 	}
 	return entry
 }
@@ -105,7 +98,7 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 	entry.appInfo = newAppInfo
 }
 
-func (entry *AppEntry) isActive() bool {
+func (entry *AppEntry) hasWindow() bool {
 	return len(entry.windows) != 0
 }
 
@@ -132,41 +125,39 @@ func (entry *AppEntry) getDisplayName() string {
 	return ""
 }
 
-func (entry *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
-	// x,y  useless
+func (entry *AppEntry) Activate() error {
+	timestamp := getCurrentTimestamp()
 	logger.Debug("Activate timestamp:", timestamp)
-	if !entry.isActive() {
+	if !entry.hasWindow() {
 		entry.launchApp(timestamp)
-		return true, nil
+		return nil
 	}
 
 	if entry.current == nil {
 		logger.Warning("entry.current is nil")
-		return false, nil
+		return nil
 	}
 	win := entry.current.window
 	state, err := ewmh.WmStateGet(XU, win)
 	if err != nil {
 		logger.Warning("Get ewmh wmState failed win:", win)
-		return false, err
+		return err
 	}
 
 	if contains(state, "_NET_WM_STATE_FOCUSED") {
 		s, err := icccm.WmStateGet(XU, win)
 		if err != nil {
 			logger.Warning("Get icccm WmState failed win:", win)
-			return false, err
+			return err
 		}
 		switch s.State {
 		case icccm.StateIconic:
-			s.State = icccm.StateNormal
-			logger.Debugf("set window %v state Iconic to Normal", win)
-			icccm.WmStateSet(XU, win, s)
+			activateWindow(win)
 		case icccm.StateNormal:
 			if len(entry.windows) == 1 {
 				iconifyWindow(win)
 			} else {
-				if dockManager.ActiveWindow == win {
+				if dockManager.activeWindow == win {
 					nextWin := entry.findNextLeader()
 					activateWindow(nextWin)
 				}
@@ -175,7 +166,7 @@ func (entry *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
 	} else {
 		activateWindow(win)
 	}
-	return true, nil
+	return nil
 }
 
 func (entry *AppEntry) setLeader(leader xproto.Window) {
@@ -223,13 +214,13 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	}
 
 	entry.windows[win] = winInfo
-	entry.updateStatus()
-	entry.updateAppXids()
+	entry.updateWindowTitles()
 	entry.updateMenu()
+	entry.updateIsActive()
 
 	winInfo.entry = entry
 
-	if (entry.dockManager != nil && win == entry.dockManager.ActiveWindow) ||
+	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
 		entry.current == nil {
 		entry.current = winInfo
 		winInfo.updateWmName()
@@ -256,29 +247,30 @@ func (entry *AppEntry) destroy() {
 	}
 }
 
-func (e *AppEntry) setData(key, value string) {
-	if e.Data[key] != value {
-		logger.Debugf("setData %q : %v", key, value)
-		e.Data[key] = value
-		dbus.Emit(e, "DataChanged", key, value)
+func (e *AppEntry) setTitle(title string) {
+	if e.Title != title {
+		e.Title = title
+		dbus.NotifyChange(e, "Title")
 	}
 }
 
-func (e *AppEntry) getData(key string) string {
-	return e.Data[key]
-}
-
-func (e *AppEntry) setTitle(title string) {
-	e.setData(FieldTitle, title)
-}
-
 func (e *AppEntry) setIcon(icon string) {
-	e.setData(FieldIcon, icon)
+	if e.Icon != icon {
+		e.Icon = icon
+		dbus.NotifyChange(e, "Icon")
+	}
+}
+
+func (e *AppEntry) setIsActive(isActive bool) {
+	if e.IsActive != isActive {
+		e.IsActive = isActive
+		dbus.NotifyChange(e, "IsActive")
+	}
 }
 
 func (entry *AppEntry) updateTitle() {
 	var title string
-	if entry.isActive() {
+	if entry.hasWindow() {
 		title = entry.current.getTitle()
 	} else if entry.appInfo != nil {
 		title = entry.appInfo.GetDisplayName()
@@ -291,7 +283,7 @@ func (entry *AppEntry) updateTitle() {
 
 func (entry *AppEntry) updateIcon() {
 	var icon string
-	if entry.isActive() {
+	if entry.hasWindow() {
 		icon = entry.current.getIcon()
 	} else {
 		icon = entry.appInfo.GetIcon()
@@ -299,26 +291,27 @@ func (entry *AppEntry) updateIcon() {
 	entry.setIcon(icon)
 }
 
-func (entry *AppEntry) updateStatus() {
-	var status string
-	if entry.isActive() {
-		status = ActiveStatus
-	} else {
-		status = NormalStatus
+func (e *AppEntry) updateWindowTitles() {
+	windowTitles := newWindowTitles()
+	for win, winInfo := range e.windows {
+		windowTitles[win] = winInfo.Title
 	}
-	entry.setData(FieldStatus, status)
+	if !e.WindowTitles.Equal(windowTitles) {
+		e.WindowTitles = windowTitles
+		dbus.NotifyChange(e, "WindowTitles")
+	}
 }
 
-func (entry *AppEntry) updateAppXids() {
-	xids := make([]XidInfo, 0)
-	for win, winInfo := range entry.windows {
-		xids = append(xids, XidInfo{uint32(win), winInfo.Title})
+func (e *AppEntry) updateIsActive() {
+	if e.dockManager == nil {
+		return
 	}
-	bytes, _ := json.Marshal(xids)
-	entry.setData(FieldAppXids, string(bytes))
+	_, ok := e.windows[e.dockManager.activeWindow]
+	e.setIsActive(ok)
 }
 
-func (e *AppEntry) HandleMenuItem(id string, timestamp uint32) {
+func (e *AppEntry) HandleMenuItem(id string) {
+	timestamp := getCurrentTimestamp()
 	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
 	if e.coreMenu != nil {
 		e.coreMenu.HandleAction(id, timestamp)
@@ -327,25 +320,17 @@ func (e *AppEntry) HandleMenuItem(id string, timestamp uint32) {
 	}
 }
 
-func (entry *AppEntry) HandleDragDrop(path string, timestamp uint32) {
-	logger.Debugf("handle drag drop path: %q", path)
+func (entry *AppEntry) HandleDragDrop(files []string) {
+	logger.Debugf("handle drag drop files: %v", files)
 	ai := entry.appInfo
+	timestamp := getCurrentTimestamp()
 	appLaunchContext := gio.GetGdkAppLaunchContext().SetTimestamp(timestamp)
 	if ai.DesktopAppInfo != nil {
-		paths := []string{path}
-		_, err := ai.LaunchUris(paths, appLaunchContext)
+		_, err := ai.LaunchUris(files, appLaunchContext)
 		if err != nil {
-			logger.Warningf("LaunchUris failed path: %q", path)
+			logger.Warning("LaunchUris failed")
 		}
 	} else {
 		logger.Warningf("no support!")
 	}
 }
-
-// 暂时无用或废弃
-func (e *AppEntry) ContextMenu(x, y int32)                                    {}
-func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
-func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
-func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
-func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
-func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32)      {}

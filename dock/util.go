@@ -30,6 +30,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appinfo"
 	dutils "pkg.deepin.io/lib/utils"
 	"text/template"
+	"time"
 )
 
 func iconifyWindow(win xproto.Window) {
@@ -313,4 +314,8 @@ func copyFileContents(src, dst string) (err error) {
 	}
 	err = out.Sync()
 	return
+}
+
+func getCurrentTimestamp() uint32 {
+	return uint32(time.Now().Unix())
 }
