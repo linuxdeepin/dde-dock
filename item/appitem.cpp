@@ -1,5 +1,7 @@
 #include "appitem.h"
 
+#include "util/themeappicon.h"
+
 #include <QPainter>
 #include <QDrag>
 #include <QMouseEvent>
@@ -20,11 +22,13 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 {
     initClientManager();
 
-    m_titles = m_itemEntry->titles();
     m_id = m_itemEntry->id();
 
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::titlesChanged);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+
+    titlesChanged();
+    iconChanged();
 }
 
 const QString AppItem::appId() const
@@ -49,15 +53,17 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
+    // draw background
+    const QRect backgroundRect = rect().marginsRemoved(QMargins(3, 3, 3, 3));
     if (m_itemEntry->active())
-        painter.fillRect(rect(), Qt::blue);
+        painter.fillRect(backgroundRect, Qt::blue);
     else if (!m_titles.isEmpty())
-        painter.fillRect(rect(), Qt::cyan);
+        painter.fillRect(backgroundRect, Qt::cyan);
     else
-        painter.fillRect(rect(), Qt::gray);
+        painter.fillRect(backgroundRect, Qt::gray);
 
     // draw icon
-    painter.fillRect(iconRect, Qt::yellow);
+    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
 
     // draw text
     painter.setPen(Qt::red);
@@ -129,4 +135,11 @@ void AppItem::titlesChanged()
     m_titles = m_itemEntry->titles();
 
     update();
+}
+
+void AppItem::iconChanged()
+{
+    const QString icon = m_itemEntry->icon();
+
+    m_icon = ThemeAppIcon::getIcon(icon, 48);
 }

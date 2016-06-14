@@ -73,6 +73,10 @@ public:
     inline QString title() const
     { return qvariant_cast< QString >(property("Title")); }
 
+    Q_PROPERTY(QString Icon READ icon NOTIFY IconChanged)
+    inline QString icon() const
+    { return qvariant_cast< QString >(property("Icon")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Activate()
     {
@@ -94,6 +98,7 @@ void TitlesChanged();
 void DataChanged();
 void IdChanged();
 void TitleChanged();
+void IconChanged();
 };
 
 namespace dde {

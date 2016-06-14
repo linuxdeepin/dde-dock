@@ -1,10 +1,10 @@
-QT       += core gui widgets dbus x11extras
+QT       += core gui widgets dbus x11extras svg
 
 TARGET = dde-dock
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += xcb-ewmh
+PKGCONFIG += xcb-ewmh gtk+-2.0
 
 SOURCES += main.cpp \
     window/mainwindow.cpp \
@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     item/placeholderitem.cpp \
     dbus/dbusclientmanager.cpp \
     dbus/dbusdock.cpp \
-    dbus/dbusmenu.cpp
+    dbus/dbusmenu.cpp \
+    util/themeappicon.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -34,4 +35,5 @@ HEADERS  += \
     item/placeholderitem.h \
     dbus/dbusclientmanager.h \
     dbus/dbusdock.h \
-    dbus/dbusmenu.h
+    dbus/dbusmenu.h \
+    util/themeappicon.h

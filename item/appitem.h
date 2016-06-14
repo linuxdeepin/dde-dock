@@ -22,7 +22,10 @@ private:
 
     void startDrag();
     void initClientManager();
+
+private slots:
     void titlesChanged();
+    void iconChanged();
 
 private:
     DBusDockEntry *m_itemEntry;
@@ -31,6 +34,7 @@ private:
 
     WindowDict m_titles;
     QString m_id;
+    QPixmap m_icon;
 
     QPoint m_mousePressPos;
 
