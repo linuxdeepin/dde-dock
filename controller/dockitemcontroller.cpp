@@ -39,12 +39,18 @@ DockItemController::DockItemController(QObject *parent)
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path)
 {
-    qDebug() << "entry add: " << path.path();
+    for (int i(0); i != m_itemList.size(); ++i)
+    {
+        if (m_itemList[i]->itemType() != DockItem::Placeholder)
+            continue;
 
-    AppItem *item = new AppItem(path);
+        // insert to placeholder position
+        AppItem *item = new AppItem(path);
+        m_itemList.insert(i, item);
+        emit itemInserted(i, item);
 
-    m_itemList.append(item);
-    emit itemInserted(0, item);
+        break;
+    }
 }
 
 void DockItemController::appItemRemoved(const QString &appId)

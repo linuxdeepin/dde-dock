@@ -79,6 +79,8 @@ void AppItem::mousePressEvent(QMouseEvent *e)
 
 void AppItem::mouseMoveEvent(QMouseEvent *e)
 {
+    e->accept();
+
     // handle drag
     if (e->buttons() != Qt::LeftButton)
         return;
