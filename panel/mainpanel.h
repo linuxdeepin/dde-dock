@@ -23,6 +23,8 @@ private:
     void dropEvent(QDropEvent *e);
 
     void adjustItemSize();
+    void itemInserted(const int index, DockItem *item);
+    void itemRemoved(DockItem *item);
 
 private:
     QBoxLayout *m_itemLayout;

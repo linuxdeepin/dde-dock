@@ -11,7 +11,7 @@
 #define APP_DRAG_THRESHOLD      20
 
 DBusClientManager *AppItem::ClientInter = nullptr;
-uint AppItem::ActiveWindowId = 0;
+//uint AppItem::ActiveWindowId = 0;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
@@ -20,9 +20,17 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 {
     initClientManager();
 
-    m_data = m_itemEntry->data();
+    m_titles = m_itemEntry->titles();
+    m_id = m_itemEntry->id();
+    qDebug() << m_titles;
 
-    connect(m_itemEntry, static_cast<void (DBusDockEntry::*)(const QString&, const QString&)>(&DBusDockEntry::DataChanged), this, &AppItem::entryDataChanged);
+    connect(m_itemEntry,&DBusDockEntry::TitlesChanged, this, &AppItem::entryDataChanged);
+    connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+}
+
+const QString AppItem::appId() const
+{
+    return m_id;
 }
 
 void AppItem::paintEvent(QPaintEvent *e)
@@ -42,6 +50,13 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
+    if (m_itemEntry->active())
+    {
+        painter.fillRect(rect(), Qt::blue);
+    } else {
+        painter.fillRect(rect(), Qt::gray);
+    }
+
 //    // draw current active background
 //    if (m_windows.contains(ActiveWindowId))
 //    {
@@ -59,7 +74,8 @@ void AppItem::paintEvent(QPaintEvent *e)
     painter.fillRect(iconRect, Qt::yellow);
 
     // draw text
-    painter.drawText(rect(), m_itemEntry->id());
+    painter.setPen(Qt::red);
+    painter.drawText(rect(), m_itemEntry->title());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -67,7 +83,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     // activate
     // TODO: dbus signature changed
     if (e->button() == Qt::LeftButton)
-        m_itemEntry->Activate();
+        m_itemEntry->Activate1();
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)
@@ -103,7 +119,7 @@ void AppItem::startDrag()
 
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
 
-    qDebug() << result;
+    qDebug() << "dnd result: " << result;
 
     m_draging = false;
     update();
@@ -115,18 +131,12 @@ void AppItem::initClientManager()
         return;
 
     ClientInter = new DBusClientManager(this);
-    connect(ClientInter, &DBusClientManager::ActiveWindowChanged, [&] (const uint wid) {
-        ActiveWindowId = wid;
-    });
+//    connect(ClientInter, &DBusClientManager::ActiveWindowChanged, [&] (const uint wid) {
+//        ActiveWindowId = wid;
+//    });
 }
 
-void AppItem::entryDataChanged(const QString &key, const QString &value)
+void AppItem::entryDataChanged(const quint32 xid, const QString &title)
 {
-    qDebug() << "data chanegd" << key << value;
-
-    // update data
-    m_data[key] = value;
-
-//    if (key == APP_STATUS_KEY)
-        return update();
+    qDebug() << "title changed: " << xid << title;
 }

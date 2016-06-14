@@ -17,12 +17,13 @@ public:
     const QList<DockItem *> itemList() const;
 
 signals:
-    void dockItemCountChanged(const int count) const;
+    void itemInserted(const int index, DockItem *item);
+    void itemRemoved(DockItem *item);
 
 private:
     explicit DockItemController(QObject *parent = 0);
     void appItemAdded(const QDBusObjectPath &path);
-    void appItemRemoved(const QString &itemId);
+    void appItemRemoved(const QString &appId);
 
 private:
     QList<DockItem *> m_itemList;

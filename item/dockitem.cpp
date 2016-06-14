@@ -5,7 +5,6 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
       m_side(DockSettings::Top),
       m_type(type)
 {
-
 }
 
 void DockItem::setDockSide(const DockSettings::DockSide side)

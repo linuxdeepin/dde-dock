@@ -13,9 +13,12 @@ MainPanel::MainPanel(QWidget *parent)
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:none;"
-                  "background-color:red;"
+                  "background-color:green;"
                   "border-radius:5px 5px 5px 5px;"
                   "}");
+
+    connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
+    connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -69,4 +72,20 @@ void MainPanel::adjustItemSize()
         default:;
         }
     }
+
+    updateGeometry();
+}
+
+void MainPanel::itemInserted(const int index, DockItem *item)
+{
+    m_itemLayout->insertWidget(index, item);
+
+    item->setFixedWidth(80);
+
+    adjustSize();
+}
+
+void MainPanel::itemRemoved(DockItem *item)
+{
+    m_itemLayout->removeWidget(item);
 }

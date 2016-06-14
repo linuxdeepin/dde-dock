@@ -20,7 +20,7 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
-typedef QMap<QString, QString> Dict;
+typedef QMap<quint32, QString> WindowDict;
 
 /*
  * Proxy class for interface dde.dock.Entry
@@ -57,17 +57,21 @@ public:
 
     ~DBusDockEntry();
 
-    Q_PROPERTY(Dict Data READ data NOTIFY DataChanged)
-    inline Dict data() const
-    { return qvariant_cast< Dict >(property("Data")); }
+    Q_PROPERTY(bool IsActive READ active NOTIFY ActiveChanged)
+    inline bool active() const
+    { return qvariant_cast< bool >(property("IsActive")); }
+
+    Q_PROPERTY(WindowDict WindowTitles READ titles NOTIFY TitlesChanged)
+    inline WindowDict titles() const
+    { return qvariant_cast< WindowDict >(property("WindowTitles")); }
 
     Q_PROPERTY(QString Id READ id NOTIFY IdChanged)
     inline QString id() const
     { return qvariant_cast< QString >(property("Id")); }
 
-    Q_PROPERTY(QString Type READ type NOTIFY TypeChanged)
-    inline QString type() const
-    { return qvariant_cast< QString >(property("Type")); }
+    Q_PROPERTY(QString Title READ title NOTIFY TitleChanged)
+    inline QString title() const
+    { return qvariant_cast< QString >(property("Title")); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Activate()
@@ -76,12 +80,20 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
+    inline QDBusPendingReply<> Activate1()
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(qint32(0)) << QVariant::fromValue(qint32(0)) << QVariant::fromValue(quint32(0));
+        return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
-    void DataChanged(const QString &in0, const QString &in1);
+    void TitlesChanged(const quint32 xid, const QString &title);
 // begin property changed signals
+void ActiveChanged();
 void DataChanged();
 void IdChanged();
-void TypeChanged();
+void TitleChanged();
 };
 
 namespace dde {

@@ -39,10 +39,29 @@ DockItemController::DockItemController(QObject *parent)
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path)
 {
-    qDebug() << path.path();
+    qDebug() << "entry add: " << path.path();
+
+    AppItem *item = new AppItem(path);
+
+    m_itemList.append(item);
+    emit itemInserted(0, item);
 }
 
-void DockItemController::appItemRemoved(const QString &itemId)
+void DockItemController::appItemRemoved(const QString &appId)
 {
-    qDebug() << itemId;
+    for (int i(0); i != m_itemList.size(); ++i)
+    {
+        if (m_itemList[i]->itemType() != DockItem::App)
+            continue;
+
+        AppItem *app = static_cast<AppItem *>(m_itemList[i]);
+        if (app->appId() != appId)
+            continue;
+
+        emit itemRemoved(m_itemList[i]);
+        m_itemList[i]->deleteLater();
+        m_itemList.removeAt(i);
+
+        break;
+    }
 }

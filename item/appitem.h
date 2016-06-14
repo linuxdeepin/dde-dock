@@ -12,6 +12,8 @@ class AppItem : public DockItem
 public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
 
+    const QString appId() const;
+
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
@@ -20,20 +22,20 @@ private:
 
     void startDrag();
     void initClientManager();
-    void entryDataChanged(const QString &key, const QString &value);
+    void entryDataChanged(const quint32 xid, const QString &title);
 
 private:
     DBusDockEntry *m_itemEntry;
 
     bool m_draging;
 
-    QMap<QString, QString> m_data;
-    QMap<uint, QString> m_windows;
+    WindowDict m_titles;
+    QString m_id;
 
     QPoint m_mousePressPos;
 
     static DBusClientManager *ClientInter;
-    static uint ActiveWindowId;
+//    static uint ActiveWindowId;
 };
 
 #endif // APPITEM_H

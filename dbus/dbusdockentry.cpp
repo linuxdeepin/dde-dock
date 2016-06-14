@@ -18,8 +18,8 @@
 DBusDockEntry::DBusDockEntry(const QString &path, QObject *parent)
     : QDBusAbstractInterface("com.deepin.dde.daemon.Dock", path, staticInterfaceName(), QDBusConnection::sessionBus(), parent)
 {
-    qRegisterMetaType<Dict>("Dict");
-    qDBusRegisterMetaType<Dict>();
+    qRegisterMetaType<WindowDict>("WindowDict");
+    qDBusRegisterMetaType<WindowDict>();
 
     QDBusConnection::sessionBus().connect(this->service(), this->path(), "org.freedesktop.DBus.Properties",  "PropertiesChanged","sa{sv}as", this, SLOT(__propertyChanged__(QDBusMessage)));
 }
