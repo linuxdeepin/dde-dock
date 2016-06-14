@@ -22,9 +22,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_titles = m_itemEntry->titles();
     m_id = m_itemEntry->id();
-    qDebug() << m_titles;
 
-    connect(m_itemEntry,&DBusDockEntry::TitlesChanged, this, &AppItem::entryDataChanged);
+    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::titlesChanged);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 }
 
@@ -51,24 +50,11 @@ void AppItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
 
     if (m_itemEntry->active())
-    {
         painter.fillRect(rect(), Qt::blue);
-    } else {
+    else if (!m_titles.isEmpty())
+        painter.fillRect(rect(), Qt::cyan);
+    else
         painter.fillRect(rect(), Qt::gray);
-    }
-
-//    // draw current active background
-//    if (m_windows.contains(ActiveWindowId))
-//    {
-//        painter.fillRect(rect(), Qt::blue);
-//    } else if (m_data[APP_STATUS_KEY] == APP_ACTIVE_STATUS)
-//    {
-//        // draw active background
-//        painter.fillRect(rect(), Qt::cyan);
-//    } else {
-//        // draw normal background
-//        painter.fillRect(rect(), Qt::gray);
-//    }
 
     // draw icon
     painter.fillRect(iconRect, Qt::yellow);
@@ -136,7 +122,9 @@ void AppItem::initClientManager()
 //    });
 }
 
-void AppItem::entryDataChanged(const quint32 xid, const QString &title)
+void AppItem::titlesChanged()
 {
-    qDebug() << "title changed: " << xid << title;
+    m_titles = m_itemEntry->titles();
+
+    update();
 }

@@ -9,6 +9,9 @@ MainPanel::MainPanel(QWidget *parent)
 
       m_itemController(DockItemController::instance(this))
 {
+    m_itemLayout->setSpacing(0);
+    m_itemLayout->setContentsMargins(5, 5, 5, 5);
+
     setAcceptDrops(true);
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"

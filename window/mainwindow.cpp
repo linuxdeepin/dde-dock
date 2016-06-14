@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_positionUpdateTimer(new QTimer(this))
 {
-    setWindowFlags(Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
     initComponents();

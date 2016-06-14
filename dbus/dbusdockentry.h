@@ -88,9 +88,9 @@ public Q_SLOTS: // METHODS
     }
 
 Q_SIGNALS: // SIGNALS
-    void TitlesChanged(const quint32 xid, const QString &title);
 // begin property changed signals
 void ActiveChanged();
+void TitlesChanged();
 void DataChanged();
 void IdChanged();
 void TitleChanged();

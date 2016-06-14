@@ -22,7 +22,7 @@ private:
 
     void startDrag();
     void initClientManager();
-    void entryDataChanged(const quint32 xid, const QString &title);
+    void titlesChanged();
 
 private:
     DBusDockEntry *m_itemEntry;
