@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     dbus/dbusclientmanager.cpp \
     dbus/dbusdock.cpp \
     dbus/dbusmenu.cpp \
-    util/themeappicon.cpp
+    util/themeappicon.cpp \
+    item/launcheritem.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -36,4 +37,5 @@ HEADERS  += \
     dbus/dbusclientmanager.h \
     dbus/dbusdock.h \
     dbus/dbusmenu.h \
-    util/themeappicon.h
+    util/themeappicon.h \
+    item/launcheritem.h

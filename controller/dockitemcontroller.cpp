@@ -2,6 +2,7 @@
 #include "dbus/dbusdockentry.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
+#include "item/launcheritem.h"
 
 #include <QDebug>
 
@@ -29,6 +30,7 @@ DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
       m_dockInter(new DBusDock(this))
 {
+    m_itemList.append(new LauncherItem);
     for (auto entry : m_dockInter->entries())
         m_itemList.append(new AppItem(entry));
     m_itemList.append(new PlaceholderItem);

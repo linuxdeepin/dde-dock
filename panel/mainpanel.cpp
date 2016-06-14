@@ -71,6 +71,7 @@ void MainPanel::adjustItemSize()
     {
         switch (item->itemType())
         {
+        case DockItem::Launcher:
         case DockItem::App:     item->setFixedWidth(80);    break;
         default:;
         }
