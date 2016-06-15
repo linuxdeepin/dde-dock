@@ -173,6 +173,7 @@ func (a *Audio) SetDefaultSink(name string) {
 
 	a.core.SetDefaultSink(name)
 	a.update()
+	a.saveConfig()
 
 	var idxList []uint32
 	for _, sinkInput := range a.SinkInputs {
@@ -186,6 +187,7 @@ func (a *Audio) SetDefaultSink(name string) {
 func (a *Audio) SetDefaultSource(name string) {
 	a.core.SetDefaultSource(name)
 	a.update()
+	a.saveConfig()
 }
 
 type Port struct {

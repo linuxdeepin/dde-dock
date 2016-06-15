@@ -17,9 +17,7 @@ import (
 )
 
 type configInfo struct {
-	CardId uint32
-
-	Profile    string
+	Profiles   map[string]string // Profiles[cardName] = activeProfile
 	Sink       string
 	Source     string
 	SinkPort   string
@@ -52,10 +50,15 @@ func (a *Audio) applyConfig() {
 		return
 	}
 
-	card, _ := a.core.GetCard(info.CardId)
-	if card != nil {
-		if card.ActiveProfile.Name != info.Profile {
-			card.SetProfile(info.Profile)
+	for _, card := range a.core.GetCardList() {
+		v, ok := info.Profiles[card.Name]
+		if !ok {
+			continue
+		}
+
+		if card.ActiveProfile.Name != v {
+			card.SetProfile(v)
+			time.Sleep(time.Microsecond * 500)
 		}
 	}
 
@@ -105,14 +108,11 @@ func (a *Audio) saveConfig() {
 }
 
 func (a *Audio) doSaveConfig() {
-	var info configInfo
+	var info = configInfo{
+		Profiles: make(map[string]string),
+	}
 	for _, card := range a.core.GetCardList() {
-		if card.ActiveProfile.Name == "off" {
-			continue
-		}
-		info.CardId = card.Index
-		info.Profile = card.ActiveProfile.Name
-		break
+		info.Profiles[card.Name] = card.ActiveProfile.Name
 	}
 
 	for _, s := range a.core.GetSinkList() {
@@ -143,20 +143,26 @@ func (a *Audio) doSaveConfig() {
 
 func (a *Audio) isConfigValid(info *configInfo) bool {
 	var (
-		profileValid bool
-		sinkValid    bool
-		sourceValid  bool
+		cardNumber  int
+		sinkValid   bool
+		sourceValid bool
 	)
 
 	for _, card := range a.core.GetCardList() {
-		if card.Index == info.CardId {
-			for _, profile := range card.Profiles {
-				if profile.Name == info.Profile {
-					profileValid = true
-				}
-			}
-			break
+		v, ok := info.Profiles[card.Name]
+		if !ok {
+			continue
 		}
+
+		for _, profile := range card.Profiles {
+			if profile.Name == v {
+				cardNumber += 1
+				break
+			}
+		}
+	}
+	if cardNumber != len(info.Profiles) {
+		return false
 	}
 
 	for _, sink := range a.core.GetSinkList() {
@@ -174,6 +180,9 @@ func (a *Audio) isConfigValid(info *configInfo) bool {
 			break
 		}
 	}
+	if !sinkValid {
+		return false
+	}
 
 	for _, source := range a.core.GetSourceList() {
 		if source.Name == info.Source {
@@ -190,7 +199,7 @@ func (a *Audio) isConfigValid(info *configInfo) bool {
 			break
 		}
 	}
-	return (profileValid && sinkValid && sourceValid)
+	return sourceValid
 }
 
 func (info *configInfo) string() string {
@@ -220,7 +229,9 @@ func saveConfigInfo(info *configInfo) error {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
 
+	logger.Debug("[saveConfigInfo] will save:", info.string())
 	if configCache.string() == info.string() {
+		logger.Debug("[saveConfigInfo] config info not changed")
 		return nil
 	}
 
