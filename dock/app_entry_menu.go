@@ -127,13 +127,13 @@ func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 func (entry *AppEntry) getMenuItemDock() *MenuItem {
 	return NewMenuItem(Tr("_Dock"), func(uint32) {
 		logger.Debug("menu action dock entry")
-		entry.dockManager.dockEntry(entry)
+		entry.RequestDock()
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 	return NewMenuItem(Tr("_Undock"), func(uint32) {
 		logger.Debug("menu action undock entry")
-		entry.dockManager.undockEntry(entry)
+		entry.RequestUndock()
 	}, true)
 }

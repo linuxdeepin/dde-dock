@@ -92,3 +92,17 @@ func (entry *AppEntry) HandleDragDrop(files []string) {
 		logger.Warningf("no support!")
 	}
 }
+
+// RequestDock 驻留
+func (entry *AppEntry) RequestDock() {
+	if entry.dockManager != nil {
+		entry.dockManager.dockEntry(entry)
+	}
+}
+
+// RequestUndock 取消驻留
+func (entry *AppEntry) RequestUndock() {
+	if entry.dockManager != nil {
+		entry.dockManager.undockEntry(entry)
+	}
+}

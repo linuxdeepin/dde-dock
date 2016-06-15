@@ -13,6 +13,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
+	"sync"
 )
 
 const (
@@ -50,11 +51,12 @@ type AppEntry struct {
 	windows      map[xproto.Window]*WindowInfo
 	current      *WindowInfo
 
-	coreMenu *Menu
-	exec     string
-	path     string
-	appInfo  *AppInfo
-	IsDocked bool
+	coreMenu  *Menu
+	exec      string
+	path      string
+	appInfo   *AppInfo
+	IsDocked  bool
+	dockMutex sync.Mutex
 }
 
 func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {

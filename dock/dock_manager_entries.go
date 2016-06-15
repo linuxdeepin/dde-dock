@@ -338,6 +338,13 @@ func (m *DockManager) requestDock(appId, title, icon, cmd string) bool {
 }
 
 func (m *DockManager) dockEntry(entry *AppEntry) {
+	entry.dockMutex.Lock()
+	defer entry.dockMutex.Unlock()
+
+	if entry.IsDocked {
+		logger.Warningf("dockEntry failed: entry %v is docked", entry.Id)
+		return
+	}
 	needScratchDesktop := false
 	if entry.appInfo == nil {
 		logger.Debug("dockEntry: entry.appInfo is nil")
@@ -383,8 +390,16 @@ func (m *DockManager) dockEntry(entry *AppEntry) {
 }
 
 func (m *DockManager) undockEntry(entry *AppEntry) {
+	entry.dockMutex.Lock()
+	defer entry.dockMutex.Unlock()
+
+	if !entry.IsDocked {
+		logger.Warningf("undockEntry failed: entry %v is not docked", entry.Id)
+		return
+	}
+
 	if entry.appInfo == nil {
-		logger.Warning("undockEntry failed, entry.appInfo is nil")
+		logger.Warning("undockEntry failed: entry.appInfo is nil")
 		return
 	}
 	appId := entry.appInfo.GetId()
