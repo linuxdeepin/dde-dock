@@ -18,13 +18,6 @@ const (
 	HideModeSmartHide
 )
 
-func validHideModeNum(mode int32) bool {
-	if mode != 2 && (0 <= mode && mode <= 3) {
-		return true
-	}
-	return false
-}
-
 func (t HideModeType) String() string {
 	switch t {
 	case HideModeKeepShowing:
