@@ -47,9 +47,10 @@ type AppEntry struct {
 	Icon     string
 	Menu     string
 
-	WindowTitles windowTitlesType
-	windows      map[xproto.Window]*WindowInfo
-	current      *WindowInfo
+	WindowTitles  windowTitlesType
+	windows       map[xproto.Window]*WindowInfo
+	current       *WindowInfo
+	CurrentWindow xproto.Window
 
 	coreMenu  *Menu
 	exec      string
@@ -81,7 +82,7 @@ func newAppEntryWithWindow(dockManager *DockManager, id string, winInfo *WindowI
 	entry := newAppEntry(dockManager, id, appInfo)
 	entry.initExec(winInfo)
 
-	entry.current = winInfo
+	entry.setCurrentWindowInfo(winInfo)
 	entry.attachWindow(winInfo)
 	winInfo.updateWmName()
 	winInfo.updateIcon()
@@ -124,9 +125,25 @@ func (entry *AppEntry) getDisplayName() string {
 	return ""
 }
 
-func (entry *AppEntry) setLeader(leader xproto.Window) {
-	if info, ok := entry.windows[leader]; ok {
-		entry.current = info
+func (e *AppEntry) setCurrentWindow(win xproto.Window) {
+	if e.CurrentWindow != win {
+		e.CurrentWindow = win
+		dbus.NotifyChange(e, "CurrentWindow")
+	}
+}
+
+func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
+	entry.current = winInfo
+	if winInfo == nil {
+		entry.setCurrentWindow(0)
+	} else {
+		entry.setCurrentWindow(winInfo.window)
+	}
+}
+
+func (entry *AppEntry) setLeader(win xproto.Window) {
+	if info, ok := entry.windows[win]; ok {
+		entry.setCurrentWindowInfo(info)
 	}
 }
 
@@ -177,7 +194,7 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 
 	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
 		entry.current == nil {
-		entry.current = winInfo
+		entry.setCurrentWindowInfo(winInfo)
 		winInfo.updateWmName()
 		winInfo.updateIcon()
 	}
@@ -189,6 +206,8 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) {
 		if len(entry.windows) > 1 {
 			// switch current to next window
 			entry.setLeader(entry.findNextLeader())
+		} else {
+			entry.setCurrentWindowInfo(nil)
 		}
 		delete(entry.windows, win)
 	}
