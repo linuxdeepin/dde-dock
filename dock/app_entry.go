@@ -57,7 +57,7 @@ type AppEntry struct {
 	exec     string
 	path     string
 	appInfo  *AppInfo
-	isDocked bool
+	IsDocked bool
 }
 
 func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
@@ -265,6 +265,13 @@ func (e *AppEntry) setIsActive(isActive bool) {
 	if e.IsActive != isActive {
 		e.IsActive = isActive
 		dbus.NotifyChange(e, "IsActive")
+	}
+}
+
+func (e *AppEntry) setIsDocked(isDocked bool) {
+	if e.IsDocked != isDocked {
+		e.IsDocked = isDocked
+		dbus.NotifyChange(e, "IsDocked")
 	}
 }
 

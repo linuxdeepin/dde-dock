@@ -39,8 +39,8 @@ func (entry *AppEntry) updateMenu() {
 	}
 
 	// menu item dock or undock
-	logger.Info(entry.Id, "Item docked?", entry.isDocked)
-	if entry.isDocked {
+	logger.Info(entry.Id, "Item docked?", entry.IsDocked)
+	if entry.IsDocked {
 		menu.AppendItem(entry.getMenuItemUndock())
 	} else {
 		menu.AppendItem(entry.getMenuItemDock())

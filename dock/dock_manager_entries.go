@@ -147,7 +147,7 @@ func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 		m.addAppEntry(entry)
 	}
 
-	entry.isDocked = true
+	entry.setIsDocked(true)
 	entry.updateMenu()
 	entry.updateTitle()
 	entry.updateIcon()
@@ -248,7 +248,7 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	}
 
 	entry.detachWindow(winInfo)
-	if !entry.hasWindow() && !entry.isDocked {
+	if !entry.hasWindow() && !entry.IsDocked {
 		m.removeAppEntry(entry)
 		return
 	}
@@ -262,7 +262,7 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 func (m *DockManager) getDockedAppList() []string {
 	var list []string
 	for _, entry := range m.Entries {
-		if entry.appInfo != nil && entry.isDocked {
+		if entry.appInfo != nil && entry.IsDocked {
 			appId := entry.appInfo.GetId()
 			list = append(list, appId)
 		}
@@ -377,7 +377,7 @@ func (m *DockManager) dockEntry(entry *AppEntry) {
 		}
 	}
 
-	entry.isDocked = true
+	entry.setIsDocked(true)
 	entry.updateMenu()
 	m.dockedAppManager.dockAppEntry(entry)
 }
@@ -403,7 +403,7 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 			}
 		}
 
-		entry.isDocked = false
+		entry.setIsDocked(false)
 		entry.updateMenu()
 	}
 	m.dockedAppManager.undockAppEntry(appId)
