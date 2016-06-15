@@ -15,6 +15,7 @@ class MainWindow : public QWidget
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private:
     void resizeEvent(QResizeEvent *e);
@@ -24,12 +25,15 @@ private:
 
 private slots:
     void updatePosition();
+    void clearStrutPartial();
+    void setStrutPartial();
 
 private:
     MainPanel *m_mainPanel;
 
     DockSettings *m_settings;
     DBusDisplay *m_displayInter;
+    XcbMisc *m_xcbMisc;
 
     QTimer *m_positionUpdateTimer;
 };

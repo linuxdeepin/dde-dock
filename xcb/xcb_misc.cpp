@@ -55,12 +55,16 @@ void XcbMisc::set_window_type(xcb_window_t winId, WindowType winType)
     xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId, 1, atoms);
 }
 
+void XcbMisc::clear_strut_partial(xcb_window_t winId)
+{
+    xcb_ewmh_wm_strut_partial_t strutPartial;
+    memset(&strutPartial, 0, sizeof(xcb_ewmh_wm_strut_partial_t));
+
+    xcb_ewmh_set_wm_strut_partial(&m_ewmh_connection, winId, strutPartial);
+}
+
 void XcbMisc::set_strut_partial(xcb_window_t winId, Orientation orientation, uint strut, uint start, uint end)
 {
-    // xcb_ewmh_wm_strut_partial_t strut_partial is very different from
-    // xcb_ewmh_wm_strut_partial_t strut_partial {};
-    // the latter one ensures all its member to be initialized to 0;
-//    xcb_ewmh_wm_strut_partial_t strut_partial {};
     xcb_ewmh_wm_strut_partial_t strut_partial;
     memset(&strut_partial, 0, sizeof(xcb_ewmh_wm_strut_partial_t));
 

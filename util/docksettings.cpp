@@ -8,7 +8,7 @@ DockSettings::DockSettings(QObject *parent)
 
 DockSettings::DockSide DockSettings::side() const
 {
-    return Top;
+    return Bottom;
 }
 
 const QSize DockSettings::mainWindowSize() const

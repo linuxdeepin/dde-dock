@@ -4,7 +4,7 @@ TARGET = dde-dock
 TEMPLATE = app
 CONFIG += c++11 link_pkgconfig
 
-PKGCONFIG += xcb-ewmh gtk+-2.0
+PKGCONFIG += xcb-ewmh gtk+-2.0 dtkwidget dtkbase
 
 SOURCES += main.cpp \
     window/mainwindow.cpp \

@@ -11,13 +11,22 @@ MainWindow::MainWindow(QWidget *parent)
       m_settings(new DockSettings(this)),
       m_displayInter(new DBusDisplay(this)),
 
+      m_xcbMisc(XcbMisc::instance()),
+
       m_positionUpdateTimer(new QTimer(this))
 {
-    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowDoesNotAcceptFocus);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
+
+    m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
     initComponents();
     initConnections();
+}
+
+MainWindow::~MainWindow()
+{
+    delete m_xcbMisc;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -47,15 +56,71 @@ void MainWindow::initComponents()
 
 void MainWindow::initConnections()
 {
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, [this] {m_positionUpdateTimer->start();});
+
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
 }
 
 void MainWindow::updatePosition()
 {
-    const QRect rect = m_displayInter->primaryRect();
+    clearStrutPartial();
 
-    setFixedWidth(rect.width());
-    setFixedHeight(80);
+    const QRect screenRect = m_displayInter->primaryRect();
 
-    move(0, 950);
+    setFixedWidth(screenRect.width());
+    setFixedHeight(60);
+
+    move(0, screenRect.bottom() - 60);
+
+    setStrutPartial();
+}
+
+void MainWindow::clearStrutPartial()
+{
+    m_xcbMisc->clear_strut_partial(winId());
+}
+
+void MainWindow::setStrutPartial()
+{
+    const DockSettings::DockSide side = m_settings->side();
+    const int maxScreenHeight = m_displayInter->screenHeight();
+
+    XcbMisc::Orientation orientation;
+    uint strut;
+    uint strutStart;
+    uint strutEnd;
+
+    const QPoint p = pos();
+    const QRect r = rect();
+    switch (side)
+    {
+    case DockSettings::Top:
+        orientation = XcbMisc::OrientationTop;
+        strut = r.bottom();
+        strutStart = r.left();
+        strutEnd = r.right();
+        break;
+    case DockSettings::Bottom:
+        orientation = XcbMisc::OrientationBottom;
+        strut = maxScreenHeight - p.y();
+        strutStart = r.left();
+        strutEnd = r.right();
+        break;
+    case DockSettings::Left:
+        orientation = XcbMisc::OrientationLeft;
+        strut = r.width();
+        strutStart = r.top();
+        strutEnd = r.bottom();
+        break;
+    case DockSettings::Right:
+        orientation = XcbMisc::OrientationRight;
+        strut = r.width();
+        strutStart = r.top();
+        strutEnd = r.bottom();
+        break;
+    default:
+        Q_ASSERT(false);
+    }
+
+    m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }
