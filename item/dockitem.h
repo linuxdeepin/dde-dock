@@ -4,6 +4,7 @@
 #include <QFrame>
 
 #include "util/docksettings.h"
+#include "dbus/dbusmenumanager.h"
 
 class DockItem : public QWidget
 {
@@ -25,10 +26,17 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+
+    void showContextMenu();
+    virtual void invokedMenuItem(const QString &itemId, const bool checked);
+    virtual const QString contextMenu() const;
 
 protected:
     DockSettings::DockSide m_side;
     ItemType m_type;
+
+    DBusMenuManager *m_menuManagerInter;
 };
 
 #endif // DOCKITEM_H

@@ -12,6 +12,7 @@
 
 #define APP_DRAG_THRESHOLD      20
 
+QPoint AppItem::MousePressPos;
 DBusClientManager *AppItem::ClientInter = nullptr;
 //uint AppItem::ActiveWindowId = 0;
 
@@ -80,7 +81,10 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
 void AppItem::mousePressEvent(QMouseEvent *e)
 {
-    m_mousePressPos = e->pos();
+    DockItem::mousePressEvent(e);
+
+    if (e->button() == Qt::LeftButton)
+        MousePressPos = e->pos();
 }
 
 void AppItem::mouseMoveEvent(QMouseEvent *e)
@@ -91,7 +95,7 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    const QPoint distance = e->pos() - m_mousePressPos;
+    const QPoint distance = e->pos() - MousePressPos;
     if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
         return;
 
@@ -103,6 +107,17 @@ void AppItem::resizeEvent(QResizeEvent *e)
     DockItem::resizeEvent(e);
 
     updateIcon();
+}
+
+void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
+{
+    Q_UNUSED(itemId)
+    Q_UNUSED(checked)
+}
+
+const QString AppItem::contextMenu() const
+{
+    return m_itemEntry->menu();
 }
 
 void AppItem::startDrag()
@@ -147,7 +162,7 @@ void AppItem::updateTitle()
 void AppItem::updateIcon()
 {
     const QString icon = m_itemEntry->icon();
-    const int iconSize = qMin(width(), height()) * 0.8;
+    const int iconSize = qMin(width(), height()) * 0.6;
 
     m_icon = ThemeAppIcon::getIcon(icon, iconSize);
 }

@@ -21,6 +21,9 @@ private:
     void mouseMoveEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
 
+    void invokedMenuItem(const QString &itemId, const bool checked);
+    const QString contextMenu() const;
+
     void startDrag();
     void initClientManager();
 
@@ -37,8 +40,7 @@ private:
     QString m_id;
     QPixmap m_icon;
 
-    QPoint m_mousePressPos;
-
+    static QPoint MousePressPos;
     static DBusClientManager *ClientInter;
 //    static uint ActiveWindowId;
 };

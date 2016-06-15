@@ -19,9 +19,10 @@ SOURCES += main.cpp \
     item/placeholderitem.cpp \
     dbus/dbusclientmanager.cpp \
     dbus/dbusdock.cpp \
-    dbus/dbusmenu.cpp \
     util/themeappicon.cpp \
-    item/launcheritem.cpp
+    item/launcheritem.cpp \
+    dbus/dbusmenumanager.cpp \
+    dbus/dbusmenu.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -36,6 +37,7 @@ HEADERS  += \
     item/placeholderitem.h \
     dbus/dbusclientmanager.h \
     dbus/dbusdock.h \
-    dbus/dbusmenu.h \
     util/themeappicon.h \
-    item/launcheritem.h
+    item/launcheritem.h \
+    dbus/dbusmenumanager.h \
+    dbus/dbusmenu.h

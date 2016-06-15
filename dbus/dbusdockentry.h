@@ -77,6 +77,10 @@ public:
     inline QString icon() const
     { return qvariant_cast< QString >(property("Icon")); }
 
+    Q_PROPERTY(QString Menu READ menu NOTIFY MenuChanged)
+    inline QString menu() const
+    { return qvariant_cast< QString >(property("Menu")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Activate()
     {
@@ -99,6 +103,7 @@ void DataChanged();
 void IdChanged();
 void TitleChanged();
 void IconChanged();
+void MenuChanged();
 };
 
 namespace dde {

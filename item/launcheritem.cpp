@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QProcess>
+#include <QMouseEvent>
 
 LauncherItem::LauncherItem(QWidget *parent)
     : DockItem(DockItem::Launcher, parent)
@@ -26,7 +27,8 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
-    DockItem::mousePressEvent(e);
+    if (e->button() != Qt::LeftButton)
+        return;
 
     QProcess *proc = new QProcess;
 
