@@ -19,13 +19,14 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
     void startDrag();
     void initClientManager();
 
 private slots:
-    void titlesChanged();
-    void iconChanged();
+    void updateTitle();
+    void updateIcon();
 
 private:
     DBusDockEntry *m_itemEntry;

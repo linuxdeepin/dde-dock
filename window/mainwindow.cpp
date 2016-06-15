@@ -70,7 +70,7 @@ void MainWindow::updatePosition()
     setFixedWidth(screenRect.width());
     setFixedHeight(60);
 
-    move(0, screenRect.bottom() - 60);
+    move(0, screenRect.height() - 60);
 
     setStrutPartial();
 }
@@ -82,6 +82,9 @@ void MainWindow::clearStrutPartial()
 
 void MainWindow::setStrutPartial()
 {
+    // first, clear old strut partial
+    clearStrutPartial();
+
     const DockSettings::DockSide side = m_settings->side();
     const int maxScreenHeight = m_displayInter->screenHeight();
 

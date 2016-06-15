@@ -24,11 +24,11 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_id = m_itemEntry->id();
 
-    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::titlesChanged);
+    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
-    titlesChanged();
-    iconChanged();
+    updateTitle();
+    updateIcon();
 }
 
 const QString AppItem::appId() const
@@ -98,6 +98,13 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     startDrag();
 }
 
+void AppItem::resizeEvent(QResizeEvent *e)
+{
+    DockItem::resizeEvent(e);
+
+    updateIcon();
+}
+
 void AppItem::startDrag()
 {
     m_draging = true;
@@ -130,16 +137,17 @@ void AppItem::initClientManager()
 //    });
 }
 
-void AppItem::titlesChanged()
+void AppItem::updateTitle()
 {
     m_titles = m_itemEntry->titles();
 
     update();
 }
 
-void AppItem::iconChanged()
+void AppItem::updateIcon()
 {
     const QString icon = m_itemEntry->icon();
+    const int iconSize = qMin(width(), height()) * 0.8;
 
-    m_icon = ThemeAppIcon::getIcon(icon, 48);
+    m_icon = ThemeAppIcon::getIcon(icon, iconSize);
 }
