@@ -3,9 +3,9 @@
 
 #include <QFrame>
 
-#include "util/docksettings.h"
-#include "dbus/dbusmenumanager.h"
+//#include "util/docksettings.h"
 
+class DBusMenuManager;
 class DockItem : public QWidget
 {
     Q_OBJECT
@@ -20,7 +20,7 @@ public:
 
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
-    void setDockSide(const DockSettings::DockSide side);
+//    void setDockSide(const DockSettings::DockSide side);
 
     ItemType itemType() const;
 
@@ -33,7 +33,7 @@ protected:
     virtual const QString contextMenu() const;
 
 protected:
-    DockSettings::DockSide m_side;
+//    DockSettings::DockSide m_side;
     ItemType m_type;
 
     DBusMenuManager *m_menuManagerInter;

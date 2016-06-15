@@ -1,25 +1,26 @@
 
 #include "dockitem.h"
 #include "dbus/dbusmenu.h"
+#include "dbus/dbusmenumanager.h"
 
 #include <QMouseEvent>
 #include <QJsonObject>
 
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
-      m_side(DockSettings::Top),
+//      m_side(DockSettings::Top),
       m_type(type),
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
 }
 
-void DockItem::setDockSide(const DockSettings::DockSide side)
-{
-    m_side = side;
+//void DockItem::setDockSide(const DockSettings::DockSide side)
+//{
+//    m_side = side;
 
-    update();
-}
+//    update();
+//}
 
 DockItem::ItemType DockItem::itemType() const
 {
@@ -76,5 +77,5 @@ void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 
 const QString DockItem::contextMenu() const
 {
-    return "";
+    return QString();
 }
