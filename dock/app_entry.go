@@ -72,24 +72,6 @@ func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntr
 	return entry
 }
 
-func newAppEntryWithWindow(dockManager *DockManager, id string, winInfo *WindowInfo, appInfo *AppInfo) *AppEntry {
-	if appInfo != nil {
-		appId := appInfo.GetId()
-		recordFrequency(appId)
-		markAsLaunched(appId)
-	}
-
-	entry := newAppEntry(dockManager, id, appInfo)
-	entry.initExec(winInfo)
-
-	entry.setCurrentWindowInfo(winInfo)
-	entry.attachWindow(winInfo)
-	entry.updateName()
-	winInfo.updateWmName()
-	winInfo.updateIcon()
-	return entry
-}
-
 func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 	if newAppInfo == nil {
 		logger.Debug("setAppInfo failed: newAppInfo is nil")

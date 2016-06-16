@@ -154,6 +154,24 @@ func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 	return entry
 }
 
+func (m *DockManager) addWindowOpendAppEntry(id string, winInfo *WindowInfo, appInfo *AppInfo) *AppEntry {
+	if appInfo != nil {
+		appId := appInfo.GetId()
+		recordFrequency(appId)
+		markAsLaunched(appId)
+	}
+
+	entry := newAppEntry(m, id, appInfo)
+	entry.initExec(winInfo)
+	entry.attachWindow(winInfo)
+	entry.updateName()
+	winInfo.updateWmName()
+	winInfo.updateIcon()
+
+	m.addAppEntry(entry)
+	return entry
+}
+
 func (m *DockManager) removeAppEntry(e *AppEntry) {
 	for _, entry := range m.Entries {
 		if entry == e {
@@ -237,8 +255,7 @@ func (m *DockManager) attachWindow(winInfo *WindowInfo) {
 	}
 
 	logger.Debug("entry innerId not exist, add new entry")
-	entry = newAppEntryWithWindow(m, entryInnerId, winInfo, appInfo)
-	m.addAppEntry(entry)
+	m.addWindowOpendAppEntry(entryInnerId, winInfo, appInfo)
 }
 
 func (m *DockManager) detachWindow(winInfo *WindowInfo) {
