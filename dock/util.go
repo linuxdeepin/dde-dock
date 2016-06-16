@@ -28,8 +28,6 @@ import (
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
-	dutils "pkg.deepin.io/lib/utils"
-	"text/template"
 	"time"
 )
 
@@ -220,45 +218,6 @@ func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
 	logger.Debug("get icon name from _NET_WM_ICON_NAME")
 	name, _ := ewmh.WmIconNameGet(XU, win)
 	return name
-}
-
-func createScratchDesktopFile(id, title, icon, cmd string) error {
-	logger.Debugf("create scratch file for %q", id)
-	err := os.MkdirAll(scratchDir, 0775)
-	if err != nil {
-		logger.Warning("create scratch directory failed:", err)
-		return err
-	}
-	f, err := os.OpenFile(filepath.Join(scratchDir, id+".desktop"),
-		os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0744)
-	if err != nil {
-		logger.Warning("Open file for write failed:", err)
-		return err
-	}
-
-	defer f.Close()
-	temp := template.Must(template.New("docked_item_temp").Parse(dockedItemTemplate))
-	dockedItem := dockedItemInfo{title, icon, cmd}
-	logger.Debugf("dockedItem: %#v", dockedItem)
-	err = temp.Execute(f, dockedItem)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func removeScratchFiles(id string) {
-	extList := []string{"desktop", "sh", "png"}
-	for _, ext := range extList {
-		file := filepath.Join(scratchDir, id+"."+ext)
-		if dutils.IsFileExist(file) {
-			logger.Debugf("remove scratch file %q", file)
-			err := os.Remove(file)
-			if err != nil {
-				logger.Warning("remove scratch file %q failed:", file, err)
-			}
-		}
-	}
 }
 
 func strSliceEqual(sa, sb []string) bool {

@@ -77,6 +77,9 @@ func (m *DockManager) init() error {
 	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, settingKeyHideMode)
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
 	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
+	m.DockedApps = property.NewGSettingsStrvProperty(m, "DockedApps", m.settings, settingKeyDockedApps)
+	// uniq docked apps
+	m.DockedApps.Set(uniqStrSlice(m.DockedApps.Get()))
 
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
 	m.smartHideModeTimer.Stop()
@@ -88,12 +91,7 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
-	m.dockedAppManager = NewDockedAppManager(m)
 	m.initEntries()
-	err = dbus.InstallOnSession(m.dockedAppManager)
-	if err != nil {
-		return err
-	}
 
 	err = dbus.InstallOnSession(m)
 	if err != nil {

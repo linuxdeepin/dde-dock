@@ -22,8 +22,6 @@ import (
 )
 
 type DockManager struct {
-	dockedAppManager *DockedAppManager
-
 	clientList                     windowSlice
 	appIdFilterGroup               *AppIdFilterGroup
 	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
@@ -35,6 +33,7 @@ type DockManager struct {
 	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
+	DockedApps  *property.GSettingsStrvProperty
 
 	activeWindow xproto.Window
 
@@ -48,14 +47,16 @@ type DockManager struct {
 
 	// Signals
 	ServiceRestarted func()
-	EntryAdded       func(dbus.ObjectPath)
+	EntryAdded       func(dbus.ObjectPath, int32)
 	EntryRemoved     func(string)
 }
 
 const (
+	dockSchema            = "com.deepin.dde.dock"
 	settingKeyHideMode    = "hide-mode"
 	settingKeyDisplayMode = "display-mode"
 	settingKeyPosition    = "position"
+	settingKeyDockedApps  = "docked-apps"
 )
 
 func NewDockManager() (*DockManager, error) {
@@ -72,6 +73,13 @@ func (m *DockManager) destroy() {
 		m.smartHideModeTimer.Stop()
 		m.smartHideModeTimer = nil
 	}
+
+	if m.settings != nil {
+		m.settings.Unref()
+		m.settings = nil
+	}
+
+	dbus.UnInstallObject(m)
 }
 
 // ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
@@ -91,30 +99,6 @@ func (m *DockManager) CloseWindow(win uint32) error {
 		logger.Warning("Close window failed:", err)
 		return err
 	}
-	return nil
-}
-
-// ReorderEntries 重排序dock上的app项目
-// 参数entryIDs为dock上app项目的新顺序id列表，要求与当前app项目是同一个集合，只是顺序不同。
-func (m *DockManager) ReorderEntries(entryIDs []string) error {
-	logger.Debugf("Reorder entryIDs %#v", entryIDs)
-	if len(entryIDs) != len(m.Entries) {
-		logger.Warning("Reorder: len(entryIDs) != len(m.Entries)")
-		return errors.New("length of incomming entryIDs not equal length of m.Entries")
-	}
-	var orderedEntries []*AppEntry
-	for _, id := range entryIDs {
-		// TODO: 优化
-		entry := m.getAppEntryByEntryId(id)
-		if entry != nil {
-			orderedEntries = append(orderedEntries, entry)
-		} else {
-			logger.Warningf("Reorder: invaild entry id %q", id)
-			return fmt.Errorf("Invaild entry id %q", id)
-		}
-	}
-	m.Entries = orderedEntries
-	m.dockedAppManager.saveDockedAppList()
 	return nil
 }
 
@@ -145,4 +129,54 @@ func (m *DockManager) SetFrontendWindow(windowId uint32) error {
 	logger.Debug("FrontendWindow changed", win)
 	m.updateHideStateWithoutDelay()
 	return nil
+}
+
+func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
+	}
+	return entry != nil, nil
+}
+
+func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, error) {
+	appInfo := NewAppInfoFromFile(desktopFilePath)
+	if appInfo == nil {
+		return false, errors.New("Invalid desktopFilePath")
+	}
+	entry, isNewAdded := m.addAppEntry(appInfo.innerId, appInfo, int(index))
+	if isNewAdded {
+		entry.updateName()
+		entry.updateIcon()
+	}
+	return m.dockEntry(entry), nil
+}
+
+func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
+	}
+	if entry == nil {
+		return false, nil
+	}
+	m.undockEntry(entry)
+	return true, nil
+}
+
+func (m *DockManager) SwapEntries(aIndex, bIndex int32) error {
+	if aIndex == bIndex {
+		logger.Debug("SwapEntries failed: aIndex == bIndex")
+		return errors.New("aIndex == bIndex")
+	}
+	entriesLength := int32(len(m.Entries))
+	if 0 <= aIndex && aIndex < entriesLength &&
+		0 <= bIndex && bIndex < entriesLength {
+
+		m.Entries[aIndex], m.Entries[bIndex] = m.Entries[bIndex], m.Entries[aIndex]
+		m.saveDockedApps()
+		logger.Debug("SwapEntries: ok")
+		return nil
+	}
+	return fmt.Errorf("Index out of bounds, a: %v, b: %v, len: %v", aIndex, bIndex, entriesLength)
 }

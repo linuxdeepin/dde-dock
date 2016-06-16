@@ -170,7 +170,6 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 
 	entry.windows[win] = winInfo
 	entry.updateWindowTitles()
-	entry.updateMenu()
 	entry.updateIsActive()
 
 	winInfo.entry = entry
