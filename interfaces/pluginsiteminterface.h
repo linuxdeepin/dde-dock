@@ -1,13 +1,15 @@
 #ifndef PLUGINSITEMINTERFACE_H
 #define PLUGINSITEMINTERFACE_H
 
-class QString;
+#include <QtCore>
+
 class PluginsItemInterface
 {
 public:
     virtual ~PluginsItemInterface() {}
 
     virtual const QString name() = 0;
+    virtual QWidget *centeralWidget() = 0;
 };
 
 QT_BEGIN_NAMESPACE
