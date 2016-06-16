@@ -149,7 +149,7 @@ func (m *DockManager) addDockedAppEntry(id string) *AppEntry {
 
 	entry.setIsDocked(true)
 	entry.updateMenu()
-	entry.updateTitle()
+	entry.updateName()
 	entry.updateIcon()
 	return entry
 }
@@ -255,7 +255,6 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	entry.updateIcon()
 	entry.updateWindowTitles()
 	entry.updateMenu()
-	entry.updateTitle()
 	entry.updateIsActive()
 }
 

@@ -43,7 +43,7 @@ type AppEntry struct {
 	innerId string
 
 	IsActive bool
-	Title    string
+	Name     string
 	Icon     string
 	Menu     string
 
@@ -84,6 +84,7 @@ func newAppEntryWithWindow(dockManager *DockManager, id string, winInfo *WindowI
 
 	entry.setCurrentWindowInfo(winInfo)
 	entry.attachWindow(winInfo)
+	entry.updateName()
 	winInfo.updateWmName()
 	winInfo.updateIcon()
 	return entry
@@ -221,10 +222,10 @@ func (entry *AppEntry) destroy() {
 	}
 }
 
-func (e *AppEntry) setTitle(title string) {
-	if e.Title != title {
-		e.Title = title
-		dbus.NotifyChange(e, "Title")
+func (e *AppEntry) setName(name string) {
+	if e.Name != name {
+		e.Name = name
+		dbus.NotifyChange(e, "Name")
 	}
 }
 
@@ -249,17 +250,17 @@ func (e *AppEntry) setIsDocked(isDocked bool) {
 	}
 }
 
-func (entry *AppEntry) updateTitle() {
-	var title string
-	if entry.hasWindow() {
-		title = entry.current.getTitle()
-	} else if entry.appInfo != nil {
-		title = entry.appInfo.GetDisplayName()
+func (entry *AppEntry) updateName() {
+	var name string
+	if entry.appInfo != nil {
+		name = entry.appInfo.GetDisplayName()
+	} else if entry.current != nil {
+		name = entry.current.getDisplayName()
 	} else {
-		logger.Debug("updateTitle failed, entry is not active and entry.appInfo is nil")
+		logger.Debug("updateName failed")
 		return
 	}
-	entry.setTitle(title)
+	entry.setName(name)
 }
 
 func (entry *AppEntry) updateIcon() {

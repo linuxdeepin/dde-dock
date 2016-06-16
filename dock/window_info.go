@@ -159,9 +159,6 @@ func (winInfo *WindowInfo) updateWmName() {
 	entry := winInfo.entry
 	if entry != nil {
 		entry.updateWindowTitles()
-		if winInfo == entry.current {
-			entry.setTitle(winInfo.Title)
-		}
 	}
 }
 
