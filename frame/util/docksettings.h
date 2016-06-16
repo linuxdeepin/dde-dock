@@ -1,20 +1,14 @@
 #ifndef DOCKSETTINGS_H
 #define DOCKSETTINGS_H
 
+#include "constants.h"
+
 #include <QObject>
 #include <QSize>
 
 class DockSettings : public QObject
 {
     Q_OBJECT
-
-public:
-    enum DockSide {
-        Top,
-        Bottom,
-        Left,
-        Right,
-    };
 
 public:
     explicit DockSettings(QObject *parent = 0);

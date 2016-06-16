@@ -14,7 +14,7 @@ class MainPanel : public QFrame
 public:
     explicit MainPanel(QWidget *parent = 0);
 
-    void updateDockSide(const DockSettings::DockSide dockSide);
+    void updateDockSide(const DockSide dockSide);
 
 private:
     void resizeEvent(QResizeEvent *e);

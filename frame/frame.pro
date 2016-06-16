@@ -1,8 +1,12 @@
+
+include(../interfaces/interfaces.pri)
+
 QT       += core gui widgets dbus x11extras svg
 
-TARGET = dde-dock
-TEMPLATE = app
-CONFIG += c++11 link_pkgconfig
+TARGET          = dde-dock
+DESTDIR         = $$_PRO_FILE_PWD_/../
+TEMPLATE        = app
+CONFIG         += c++11 link_pkgconfig
 
 PKGCONFIG += xcb-ewmh gtk+-2.0 dtkwidget dtkbase
 
@@ -23,7 +27,8 @@ SOURCES += main.cpp \
     item/launcheritem.cpp \
     dbus/dbusmenumanager.cpp \
     dbus/dbusmenu.cpp \
-    item/pluginsitem.cpp
+    item/pluginsitem.cpp \
+    controller/dockpluginscontroller.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -42,5 +47,5 @@ HEADERS  += \
     item/launcheritem.h \
     dbus/dbusmenumanager.h \
     dbus/dbusmenu.h \
-    item/pluginsiteminterface.h \
-    item/pluginsitem.h
+    item/pluginsitem.h \
+    controller/dockpluginscontroller.h

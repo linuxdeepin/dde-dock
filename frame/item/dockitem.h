@@ -1,9 +1,9 @@
 #ifndef DOCKITEM_H
 #define DOCKITEM_H
 
-#include <QFrame>
+#include "constants.h"
 
-//#include "util/docksettings.h"
+#include <QFrame>
 
 class DBusMenuManager;
 class DockItem : public QWidget
@@ -20,7 +20,7 @@ public:
 
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
-//    void setDockSide(const DockSettings::DockSide side);
+    void setDockSide(const DockSide side);
 
     ItemType itemType() const;
 
@@ -33,7 +33,7 @@ protected:
     virtual const QString contextMenu() const;
 
 protected:
-//    DockSettings::DockSide m_side;
+    DockSide m_side;
     ItemType m_type;
 
     DBusMenuManager *m_menuManagerInter;

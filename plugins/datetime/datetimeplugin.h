@@ -13,7 +13,8 @@ class DatetimePlugin : public QObject, PluginsItemInterface
 
 public:
     explicit DatetimePlugin(QObject *parent = 0);
-    PluginsItem *getPluginsItem();
+
+    const QString name();
 };
 
 #endif // DATETIMEPLUGIN_H

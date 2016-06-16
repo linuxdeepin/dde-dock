@@ -6,7 +6,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
 }
 
-PluginsItem *DatetimePlugin::getPluginsItem()
+const QString DatetimePlugin::name()
 {
-    return nullptr;
+    return "datetime";
 }

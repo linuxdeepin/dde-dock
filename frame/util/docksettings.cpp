@@ -1,12 +1,13 @@
 #include "docksettings.h"
 
+#include <QDebug>
+
 DockSettings::DockSettings(QObject *parent)
     : QObject(parent)
 {
-
 }
 
-DockSettings::DockSide DockSettings::side() const
+DockSide DockSettings::side() const
 {
     return Bottom;
 }

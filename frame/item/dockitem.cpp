@@ -15,12 +15,12 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
 {
 }
 
-//void DockItem::setDockSide(const DockSettings::DockSide side)
-//{
-//    m_side = side;
+void DockItem::setDockSide(const DockSide side)
+{
+    m_side = side;
 
-//    update();
-//}
+    update();
+}
 
 DockItem::ItemType DockItem::itemType() const
 {

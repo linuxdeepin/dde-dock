@@ -1,12 +1,13 @@
 #ifndef PLUGINSITEMINTERFACE_H
 #define PLUGINSITEMINTERFACE_H
 
-class PluginsItem;
+class QString;
 class PluginsItemInterface
 {
 public:
     virtual ~PluginsItemInterface() {}
-    virtual PluginsItem *getPluginsItem() = 0;
+
+    virtual const QString name() = 0;
 };
 
 QT_BEGIN_NAMESPACE

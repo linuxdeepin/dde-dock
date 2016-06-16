@@ -1,20 +1,19 @@
 
+include(../../interfaces/interfaces.pri)
+
 QT              += widgets
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
 PKGCONFIG       +=
 
 TARGET          = $$qtLibraryTarget(datetime)
-DESTDIR         = $$_PRO_FILE_PWD_/../
+DESTDIR          = $$_PRO_FILE_PWD_/../
 
 HEADERS += \
-    datetimeplugin.h \
-    datetimeitem.h
+    datetimeplugin.h
 
 SOURCES += \
-    datetimeplugin.cpp \
-    datetimeitem.cpp
+    datetimeplugin.cpp
 
-include(../../interfaces/interfaces.pri)
-
-INCLUDEPATH += "../../frame/item"
+target.path = $${PREFIX}/lib/dde-dock/plugins/
+INSTALLS += target

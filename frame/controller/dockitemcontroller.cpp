@@ -3,6 +3,7 @@
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
 #include "item/launcheritem.h"
+#include "item/pluginsitem.h"
 
 #include <QDebug>
 
@@ -28,15 +29,18 @@ const QList<DockItem *> DockItemController::itemList() const
 
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
-      m_dockInter(new DBusDock(this))
+      m_appInter(new DBusDock(this)),
+      m_pluginsInter(new DockPluginsController(this))
 {
     m_itemList.append(new LauncherItem);
-    for (auto entry : m_dockInter->entries())
+    for (auto entry : m_appInter->entries())
         m_itemList.append(new AppItem(entry));
     m_itemList.append(new PlaceholderItem);
 
-    connect(m_dockInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
-    connect(m_dockInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
+    connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
+    connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
+
+    connect(m_pluginsInter, &DockPluginsController::pluginsInserted, this, &DockItemController::pluginsItemAdded);
 }
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path)
@@ -72,4 +76,12 @@ void DockItemController::appItemRemoved(const QString &appId)
 
         break;
     }
+}
+
+void DockItemController::pluginsItemAdded(PluginsItemInterface *interface)
+{
+    PluginsItem *item = new PluginsItem(interface);
+
+    m_itemList.append(item);
+    emit itemInserted(m_itemList.size(), item);
 }
