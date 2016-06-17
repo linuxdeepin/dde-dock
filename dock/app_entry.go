@@ -157,8 +157,6 @@ func (entry *AppEntry) findNextLeader() xproto.Window {
 }
 
 func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
-	entry.windowMutex.Lock()
-	defer entry.windowMutex.Unlock()
 	win := winInfo.window
 	logger.Debugf("attach win %v to entry", win)
 
@@ -180,27 +178,24 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	}
 }
 
-// return hasWindow?
+// return is detached
 func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
-	entry.windowMutex.Lock()
-	defer entry.windowMutex.Unlock()
-
 	win := winInfo.window
 	logger.Debug("detach window ", win)
 	if _, ok := entry.windows[win]; ok {
-		if len(entry.windows) == 1 {
-			return false
-		}
 		delete(entry.windows, win)
+		if len(entry.windows) == 0 {
+			return true
+		}
 		for _, winInfo := range entry.windows {
 			// select first
 			entry.setCurrentWindowInfo(winInfo)
 			break
 		}
-	} else {
-		logger.Debug("detachWindow failed: window not attach with entry")
+		return true
 	}
-	return true
+	logger.Debug("detachWindow failed: window not attach with entry")
+	return false
 }
 
 func (entry *AppEntry) destroy() {

@@ -145,11 +145,13 @@ func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, er
 		return false, errors.New("Invalid desktopFilePath")
 	}
 	entry, isNewAdded := m.addAppEntry(appInfo.innerId, appInfo, int(index))
+	dockResult := m.dockEntry(entry)
 	if isNewAdded {
 		entry.updateName()
 		entry.updateIcon()
+		m.installAppEntry(entry)
 	}
-	return m.dockEntry(entry), nil
+	return dockResult, nil
 }
 
 func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {

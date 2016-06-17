@@ -99,10 +99,7 @@ func (m *DockManager) initDockedApps() {
 	}
 }
 
-func (m *DockManager) insertAndInstallAppEntry(e *AppEntry, index int) {
-	var insertIndex int
-	m.Entries, insertIndex = entrySliceInsert(m.Entries, e, index)
-
+func (m *DockManager) installAppEntry(e *AppEntry) {
 	// install on session D-Bus
 	err := dbus.InstallOnSession(e)
 	if err != nil {
@@ -112,7 +109,22 @@ func (m *DockManager) insertAndInstallAppEntry(e *AppEntry, index int) {
 
 	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.Id)
 	logger.Debugf("insertAndInstallAppEntry %v", entryObjPath)
-	dbus.Emit(m, "EntryAdded", entryObjPath, int32(insertIndex))
+	index := -1
+	for i, entry := range m.Entries {
+		if e.Id == entry.Id {
+			index = i
+			break
+		}
+	}
+	if index >= 0 {
+		dbus.Emit(m, "EntryAdded", entryObjPath, int32(index))
+	}
+}
+
+func (m *DockManager) insertAppEntry(e *AppEntry, index int) {
+	var insertIndex int
+	m.Entries, insertIndex = entrySliceInsert(m.Entries, e, index)
+	logger.Debugf("insertAppEntry entry: %v insert at: %v", e.Id, insertIndex)
 }
 
 func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index int) (*AppEntry, bool) {
@@ -123,7 +135,9 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 	if e := m.getAppEntryByInnerId(entryInnerId); e != nil {
 		logger.Debug("entry existed")
 		entry = e
-		appInfo.Destroy()
+		if appInfo != nil {
+			appInfo.Destroy()
+		}
 	} else {
 		// cache desktop hash => desktop file path
 		if appInfo != nil {
@@ -132,7 +146,7 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 		}
 		logger.Debug("entry not existed, newAppEntry")
 		entry = newAppEntry(m, entryInnerId, appInfo)
-		m.insertAndInstallAppEntry(entry, index)
+		m.insertAppEntry(entry, index)
 		isNewAdded = true
 	}
 	return entry, isNewAdded
@@ -145,11 +159,14 @@ func (m *DockManager) appendDockedApp(appId string) {
 		logger.Warning("appendDockedApp failed: appInfo is nil")
 		return
 	}
-	entry, _ := m.addAppEntry(appInfo.innerId, appInfo, -1)
+	entry, isNewAdded := m.addAppEntry(appInfo.innerId, appInfo, -1)
 	entry.setIsDocked(true)
 	entry.updateMenu()
-	entry.updateName()
-	entry.updateIcon()
+	if isNewAdded {
+		entry.updateName()
+		entry.updateIcon()
+		m.installAppEntry(entry)
+	}
 }
 
 func (m *DockManager) removeAppEntry(e *AppEntry) {
@@ -237,13 +254,16 @@ func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 func (m *DockManager) attachWindow(winInfo *WindowInfo) {
 	entryInnerId, appInfo := m.identifyWindow(winInfo)
 	entry, isNewAdded := m.addAppEntry(entryInnerId, appInfo, -1)
+	entry.windowMutex.Lock()
+	defer entry.windowMutex.Unlock()
+
 	entry.attachWindow(winInfo)
 	entry.updateMenu()
 	if isNewAdded {
 		entry.initExec(winInfo)
 		entry.updateName()
-		winInfo.updateWmName()
-		winInfo.updateIcon()
+		entry.updateIcon()
+		m.installAppEntry(entry)
 	}
 }
 
@@ -252,14 +272,19 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	if entry == nil {
 		return
 	}
+	entry.windowMutex.Lock()
+	defer entry.windowMutex.Unlock()
 
-	hasWindow := entry.detachWindow(winInfo)
-	if !hasWindow && !entry.IsDocked {
+	detached := entry.detachWindow(winInfo)
+	if !detached {
+		return
+	}
+	if !entry.hasWindow() && !entry.IsDocked {
 		m.removeAppEntry(entry)
 		return
 	}
-	entry.updateIcon()
 	entry.updateWindowTitles()
+	entry.updateIcon()
 	entry.updateMenu()
 	entry.updateIsActive()
 }
