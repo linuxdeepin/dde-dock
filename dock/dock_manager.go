@@ -164,19 +164,28 @@ func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
 	return true, nil
 }
 
-func (m *DockManager) SwapEntries(aIndex, bIndex int32) error {
-	if aIndex == bIndex {
-		logger.Debug("SwapEntries failed: aIndex == bIndex")
-		return errors.New("aIndex == bIndex")
+func (m *DockManager) MoveEntry(index, newIndex int32) error {
+	if index == newIndex {
+		err := errors.New("index == newIndex")
+		logger.Warning("MoveEntry failed:", err)
+		return err
 	}
-	entriesLength := int32(len(m.Entries))
-	if 0 <= aIndex && aIndex < entriesLength &&
-		0 <= bIndex && bIndex < entriesLength {
 
-		m.Entries[aIndex], m.Entries[bIndex] = m.Entries[bIndex], m.Entries[aIndex]
+	entriesLength := int32(len(m.Entries))
+	if 0 <= index && index < entriesLength &&
+		0 <= newIndex && newIndex < entriesLength {
+
+		entry := m.Entries[index]
+		// remove entry at index
+		removed := append(m.Entries[:index], m.Entries[index+1:]...)
+		// insert entry at newIndex
+		m.Entries = append(removed[:newIndex],
+			append([]*AppEntry{entry}, removed[newIndex:]...)...)
+		logger.Debug("MoveEntry: ok")
 		m.saveDockedApps()
-		logger.Debug("SwapEntries: ok")
 		return nil
 	}
-	return fmt.Errorf("Index out of bounds, a: %v, b: %v, len: %v", aIndex, bIndex, entriesLength)
+	err := fmt.Errorf("Index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
+	logger.Warning("MoveEntry failed:", err)
+	return err
 }
