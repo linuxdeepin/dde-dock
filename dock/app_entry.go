@@ -47,10 +47,12 @@ type AppEntry struct {
 	Icon     string
 	Menu     string
 
-	WindowTitles  windowTitlesType
-	windows       map[xproto.Window]*WindowInfo
+	WindowTitles windowTitlesType
+	windows      map[xproto.Window]*WindowInfo
+
 	current       *WindowInfo
 	CurrentWindow xproto.Window
+	windowMutex   sync.Mutex
 
 	coreMenu  *Menu
 	exec      string
@@ -111,6 +113,7 @@ func (entry *AppEntry) getDisplayName() string {
 func (e *AppEntry) setCurrentWindow(win xproto.Window) {
 	if e.CurrentWindow != win {
 		e.CurrentWindow = win
+		logger.Debug("setCurrentWindow", win)
 		dbus.NotifyChange(e, "CurrentWindow")
 	}
 }
@@ -121,12 +124,6 @@ func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
 		entry.setCurrentWindow(0)
 	} else {
 		entry.setCurrentWindow(winInfo.window)
-	}
-}
-
-func (entry *AppEntry) setLeader(win xproto.Window) {
-	if info, ok := entry.windows[win]; ok {
-		entry.setCurrentWindowInfo(info)
 	}
 }
 
@@ -160,9 +157,12 @@ func (entry *AppEntry) findNextLeader() xproto.Window {
 }
 
 func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
+	entry.windowMutex.Lock()
+	defer entry.windowMutex.Unlock()
 	win := winInfo.window
 	logger.Debugf("attach win %v to entry", win)
 
+	winInfo.entry = entry
 	if _, ok := entry.windows[win]; ok {
 		logger.Debugf("win %v is already attach to entry", win)
 		return
@@ -172,8 +172,6 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	entry.updateWindowTitles()
 	entry.updateIsActive()
 
-	winInfo.entry = entry
-
 	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
 		entry.current == nil {
 		entry.setCurrentWindowInfo(winInfo)
@@ -182,17 +180,27 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	}
 }
 
-func (entry *AppEntry) detachWindow(winInfo *WindowInfo) {
+// return hasWindow?
+func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
+	entry.windowMutex.Lock()
+	defer entry.windowMutex.Unlock()
+
 	win := winInfo.window
+	logger.Debug("detach window ", win)
 	if _, ok := entry.windows[win]; ok {
-		if len(entry.windows) > 1 {
-			// switch current to next window
-			entry.setLeader(entry.findNextLeader())
-		} else {
-			entry.setCurrentWindowInfo(nil)
+		if len(entry.windows) == 1 {
+			return false
 		}
 		delete(entry.windows, win)
+		for _, winInfo := range entry.windows {
+			// select first
+			entry.setCurrentWindowInfo(winInfo)
+			break
+		}
+	} else {
+		logger.Debug("detachWindow failed: window not attach with entry")
 	}
+	return true
 }
 
 func (entry *AppEntry) destroy() {

@@ -253,8 +253,8 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 		return
 	}
 
-	entry.detachWindow(winInfo)
-	if !entry.hasWindow() && !entry.IsDocked {
+	hasWindow := entry.detachWindow(winInfo)
+	if !hasWindow && !entry.IsDocked {
 		m.removeAppEntry(entry)
 		return
 	}
