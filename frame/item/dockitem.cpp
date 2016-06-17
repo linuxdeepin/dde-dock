@@ -8,7 +8,7 @@
 
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
-//      m_side(DockSettings::Top),
+      m_side(DockSide::Top),
       m_type(type),
 
       m_menuManagerInter(new DBusMenuManager(this))

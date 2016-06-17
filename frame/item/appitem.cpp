@@ -6,10 +6,6 @@
 #include <QDrag>
 #include <QMouseEvent>
 
-#define APP_ICON_KEY            "icon"
-#define APP_MENU_KEY            "menu"
-#define APP_XIDS_KEY            "app-xids"
-
 #define APP_DRAG_THRESHOLD      20
 
 QPoint AppItem::MousePressPos;
@@ -41,7 +37,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_draging)
+    if (m_draging || !m_itemEntry->isValid())
         return;
 
     const QRect itemRect = rect();

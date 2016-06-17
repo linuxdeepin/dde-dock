@@ -121,7 +121,7 @@ public Q_SLOTS: // METHODS
     }
 
 Q_SIGNALS: // SIGNALS
-    void EntryAdded(const QDBusObjectPath &entryPath);
+    void EntryAdded(const QDBusObjectPath &entryPath, const int index);
     void EntryRemoved(const QString &entryId);
     void ServiceRestarted();
 // begin property changed signals

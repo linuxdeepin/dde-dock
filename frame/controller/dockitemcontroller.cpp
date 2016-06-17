@@ -43,20 +43,24 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_pluginsInter, &DockPluginsController::pluginsInserted, this, &DockItemController::pluginsItemAdded);
 }
 
-void DockItemController::appItemAdded(const QDBusObjectPath &path)
+void DockItemController::appItemAdded(const QDBusObjectPath &path, const int index)
 {
-    for (int i(0); i != m_itemList.size(); ++i)
+    // the first index is launcher item
+    int insertIndex = 1;
+
+    // -1 for append to app list end
+    if (index != -1)
     {
-        if (m_itemList[i]->itemType() != DockItem::Placeholder)
-            continue;
-
-        // insert to placeholder position
-        AppItem *item = new AppItem(path);
-        m_itemList.insert(i, item);
-        emit itemInserted(i, item);
-
-        break;
+        insertIndex += index;
+    } else {
+        for (auto item : m_itemList)
+            if (item->itemType() == DockItem::App)
+                ++insertIndex;
     }
+
+    AppItem *item = new AppItem(path);
+    m_itemList.insert(insertIndex, item);
+    emit itemInserted(insertIndex, item);
 }
 
 void DockItemController::appItemRemoved(const QString &appId)
