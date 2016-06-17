@@ -88,13 +88,6 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
-    inline QDBusPendingReply<> Activate1()
-    {
-        QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(qint32(0)) << QVariant::fromValue(qint32(0)) << QVariant::fromValue(quint32(0));
-        return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
-    }
-
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
 void ActiveChanged();

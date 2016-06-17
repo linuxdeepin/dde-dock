@@ -76,7 +76,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     // activate
     // TODO: dbus signature changed
     if (e->button() == Qt::LeftButton)
-        m_itemEntry->Activate1();
+        m_itemEntry->Activate();
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)

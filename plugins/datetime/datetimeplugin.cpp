@@ -5,7 +5,10 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
       m_timeLabel(new QLabel),
       m_refershTimer(new QTimer(this))
 {
-    m_timeLabel->setStyleSheet("color:red;");
+    m_timeLabel->setAlignment(Qt::AlignCenter);
+    m_timeLabel->setStyleSheet("color:white;"
+                               "background-color:black;"
+                               "font-size:12px;");
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();
