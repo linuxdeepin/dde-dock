@@ -313,7 +313,7 @@ void DockAppLayout::onDrop(QDropEvent *event)
     }
 
     // interval 0 stands for timeout will be triggered on idle.
-    QTimer::singleShot(0, this, &DockAppLayout::updateWindowIconGeometries);
+    QTimer::singleShot(0, this, SLOT(updateWindowIconGeometries()));
 }
 
 void DockAppLayout::onDragLeave(QDragLeaveEvent *event)
