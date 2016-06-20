@@ -87,7 +87,7 @@ func (winInfo *WindowInfo) updateWmAllowedActions() {
 }
 func (winInfo *WindowInfo) isActionMinimizeAllowed() bool {
 	logger.Debugf("wmAllowedActions: %#v", winInfo.wmAllowedActions)
-	return contains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
+	return strSliceContains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
 }
 
 // wm state
@@ -100,11 +100,11 @@ func (winInfo *WindowInfo) updateWmState() {
 }
 
 func (winInfo *WindowInfo) hasWmStateSkipTaskbar() bool {
-	return contains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
 }
 
 func (winInfo *WindowInfo) hasWmStateModal() bool {
-	return contains(winInfo.wmState, "_NET_WM_STATE_MODAL")
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
 }
 
 // map state
@@ -302,7 +302,7 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 		if winType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
 			!winInfo.isActionMinimizeAllowed() {
 			return false
-		} else if contains(skipTaskbarWindowTypes, winType) {
+		} else if strSliceContains(skipTaskbarWindowTypes, winType) {
 			return false
 		}
 	}

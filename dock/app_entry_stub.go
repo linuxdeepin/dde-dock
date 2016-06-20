@@ -43,7 +43,7 @@ func (entry *AppEntry) Activate() error {
 		return err
 	}
 
-	if contains(state, "_NET_WM_STATE_FOCUSED") {
+	if strSliceContains(state, "_NET_WM_STATE_FOCUSED") {
 		s, err := icccm.WmStateGet(XU, win)
 		if err != nil {
 			logger.Warning("Get icccm WmState failed win:", win)

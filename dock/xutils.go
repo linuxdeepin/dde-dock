@@ -1,9 +1,65 @@
 package dock
 
 import (
+	"bytes"
+	"encoding/base64"
 	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/icccm"
+	"github.com/BurntSushi/xgbutil/xgraphics"
+	"github.com/BurntSushi/xgbutil/xprop"
 )
+
+func iconifyWindow(win xproto.Window) {
+	logger.Debug("iconifyWindow", win)
+	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+}
+
+func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {
+	// get _NET_WM_NAME
+	name, err := ewmh.WmNameGet(xu, win)
+	if err != nil || name == "" {
+		// get WM_NAME
+		name, _ = icccm.WmNameGet(xu, win)
+	}
+	return name
+}
+
+func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
+	pid, _ := ewmh.WmPidGet(xu, win)
+	return pid
+}
+
+func getWmCommand(xu *xgbutil.XUtil, win xproto.Window) ([]string, error) {
+	command, err := xprop.PropValStrs(xprop.GetProperty(xu, win, "WM_COMMAND"))
+	return command, err
+}
+
+func getWindowGtkApplicationId(xu *xgbutil.XUtil, win xproto.Window) string {
+	gtkAppId, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "_GTK_APPLICATION_ID"))
+	return gtkAppId
+}
+
+func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
+	role, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "WM_WINDOW_ROLE"))
+	return role
+}
+
+func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
+	icon, err := xgraphics.FindIcon(xu, win, 48, 48)
+	// FIXME: gets empty icon for minecraft
+	if err == nil {
+		buf := bytes.NewBuffer(nil)
+		icon.WritePng(buf)
+		return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+	}
+
+	logger.Debug("get icon from X failed:", err)
+	logger.Debug("get icon name from _NET_WM_ICON_NAME")
+	name, _ := ewmh.WmIconNameGet(XU, win)
+	return name
+}
 
 func getWindowUserTime(win xproto.Window) (uint, error) {
 	timestamp, err := ewmh.WmUserTimeGet(XU, win)
@@ -61,7 +117,7 @@ func activateWindow(win xproto.Window) error {
 
 func isHiddenPre(win xproto.Window) bool {
 	state, _ := ewmh.WmStateGet(XU, win)
-	return contains(state, "_NET_WM_STATE_HIDDEN")
+	return strSliceContains(state, "_NET_WM_STATE_HIDDEN")
 }
 
 // works for new deepin wm.

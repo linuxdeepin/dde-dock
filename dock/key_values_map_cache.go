@@ -41,7 +41,7 @@ func (m *keyValuesMapCacheManager) GetKeyByValue(value string) string {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 	for key, slice := range data {
-		if isStrInSlice(value, slice) {
+		if strSliceContains(slice, value) {
 			return key
 		}
 	}
