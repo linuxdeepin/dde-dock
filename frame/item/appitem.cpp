@@ -137,6 +137,7 @@ void AppItem::startDrag()
     qDebug() << "dnd result: " << result;
 
     m_draging = false;
+    setVisible(true);
     update();
 }
 

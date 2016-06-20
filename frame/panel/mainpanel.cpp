@@ -142,5 +142,9 @@ void MainPanel::itemDragStarted()
 {
     DragingItem = qobject_cast<DockItem *>(sender());
 
-    DragingItem->setVisible(rect().contains(QCursor::pos()));
+    QRect rect;
+    rect.setTopLeft(mapToGlobal(pos()));
+    rect.setSize(size());
+
+    DragingItem->setVisible(rect.contains(QCursor::pos()));
 }
