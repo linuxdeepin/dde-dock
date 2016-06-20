@@ -69,9 +69,11 @@ void AppItem::paintEvent(QPaintEvent *e)
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    // activate
-    // TODO: dbus signature changed
-    if (e->button() == Qt::LeftButton)
+    if (e->button() != Qt::LeftButton)
+        return;
+
+    const QPoint distance = MousePressPos - e->pos();
+    if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
         m_itemEntry->Activate();
 }
 
@@ -129,12 +131,14 @@ void AppItem::startDrag()
     drag->setHotSpot(pixmap.rect().center());
     drag->setMimeData(new QMimeData);
 
+    emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
 
     qDebug() << "dnd result: " << result;
 
     m_draging = false;
     update();
+    setVisible(true);
 }
 
 void AppItem::initClientManager()

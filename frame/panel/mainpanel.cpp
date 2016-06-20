@@ -3,6 +3,8 @@
 #include <QBoxLayout>
 #include <QDragEnterEvent>
 
+DockItem *MainPanel::DragingItem = nullptr;
+
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
@@ -25,7 +27,10 @@ MainPanel::MainPanel(QWidget *parent)
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
+    {
+        initItemConnection(item);
         m_itemLayout->addWidget(item);
+    }
 
     setLayout(m_itemLayout);
 }
@@ -52,16 +57,36 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
     // TODO: check
     e->accept();
+
+    if (!DragingItem)
+        return;
+    DragingItem->show();
 }
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
-    qDebug() << e;
+    Q_UNUSED(e);
+    //    qDebug() << e;
+}
+
+void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    Q_UNUSED(e)
+
+    if (!DragingItem)
+        return;
+    DragingItem->hide();
 }
 
 void MainPanel::dropEvent(QDropEvent *e)
 {
-    qDebug() << e;
+    Q_UNUSED(e)
+//    qDebug() << e;
+}
+
+void MainPanel::initItemConnection(DockItem *item)
+{
+    connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted);
 }
 
 void MainPanel::adjustItemSize()
@@ -82,6 +107,7 @@ void MainPanel::adjustItemSize()
 
 void MainPanel::itemInserted(const int index, DockItem *item)
 {
+    initItemConnection(item);
     m_itemLayout->insertWidget(index, item);
 
     item->setFixedWidth(80);
@@ -92,4 +118,9 @@ void MainPanel::itemInserted(const int index, DockItem *item)
 void MainPanel::itemRemoved(DockItem *item)
 {
     m_itemLayout->removeWidget(item);
+}
+
+void MainPanel::itemDragStarted()
+{
+    DragingItem = qobject_cast<DockItem *>(sender());
 }

@@ -24,6 +24,9 @@ public:
 
     ItemType itemType() const;
 
+signals:
+    void dragStarted() const;
+
 protected:
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
