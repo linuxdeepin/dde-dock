@@ -75,11 +75,13 @@ func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntr
 }
 
 func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
-	if newAppInfo == nil {
-		logger.Debug("setAppInfo failed: newAppInfo is nil")
+	if entry.appInfo == newAppInfo {
+		logger.Debug("setAppInfo failed: old == new")
 		return
 	}
-	entry.appInfo.Destroy()
+	if entry.appInfo != nil {
+		entry.appInfo.Destroy()
+	}
 	entry.appInfo = newAppInfo
 }
 

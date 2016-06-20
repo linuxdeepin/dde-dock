@@ -183,7 +183,8 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 	if needScratchDesktop {
 		appId := createScratchDesktopFileWithAppEntry(entry)
 		if appId != "" {
-			entry.appInfo = NewAppInfo(appId)
+			entry.setAppInfo(NewAppInfo(appId))
+			entry.updateIcon()
 			entryOldInnerId := entry.innerId
 			entry.innerId = entry.appInfo.innerId
 			logger.Debug("dockEntry: createScratchDesktopFile successed, entry use new innerId", entry.innerId)
@@ -208,6 +209,11 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 	return true
 }
 
+func isFileInDir(file, dir string) bool {
+	fileDir := filepath.Dir(file)
+	return fileDir == dir
+}
+
 func (m *DockManager) undockEntry(entry *AppEntry) {
 	entry.dockMutex.Lock()
 	defer entry.dockMutex.Unlock()
@@ -221,23 +227,27 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 		logger.Warning("undockEntry failed: entry.appInfo is nil")
 		return
 	}
-	appId := entry.appInfo.GetId()
+	desktop := entry.appInfo.GetFilePath()
+	logger.Debugf("undockEntry desktop: %q", desktop)
+	isDesktopInScratchDir := false
+	if isFileInDir(desktop, scratchDir) {
+		isDesktopInScratchDir = true
+		appId := entry.appInfo.GetId()
+		removeScratchFiles(appId)
+	}
 
 	if !entry.hasWindow() {
 		m.removeAppEntry(entry)
 	} else {
-		dir := filepath.Dir(entry.appInfo.GetFilePath())
-		if dir == scratchDir {
-			removeScratchFiles(appId)
-			// Re-identify Window
-			if entry.current != nil {
-				var newAppInfo *AppInfo
-				entry.innerId, newAppInfo = m.identifyWindow(entry.current)
-				entry.setAppInfo(newAppInfo)
-			}
+		// Re-identify Window
+		if isDesktopInScratchDir && entry.current != nil {
+			var newAppInfo *AppInfo
+			entry.innerId, newAppInfo = m.identifyWindow(entry.current)
+			entry.setAppInfo(newAppInfo)
 		}
-
+		entry.updateIcon()
 		entry.setIsDocked(false)
+		entry.updateName()
 		entry.updateMenu()
 	}
 	m.saveDockedApps()
