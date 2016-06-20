@@ -27,6 +27,18 @@ const QList<DockItem *> DockItemController::itemList() const
     return m_itemList;
 }
 
+void DockItemController::itemMove(DockItem * const moveItem, DockItem * const replaceItem)
+{
+    const int moveIndex = m_itemList.indexOf(moveItem);
+    const int replaceIndex = m_itemList.indexOf(replaceItem);
+
+    m_itemList.removeAt(moveIndex);
+    emit itemRemoved(moveItem);
+
+    m_itemList.insert(replaceIndex, moveItem);
+    emit itemInserted(replaceIndex, moveItem);
+}
+
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
       m_appInter(new DBusDock(this)),

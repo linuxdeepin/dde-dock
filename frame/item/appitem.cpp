@@ -138,7 +138,6 @@ void AppItem::startDrag()
 
     m_draging = false;
     update();
-    setVisible(true);
 }
 
 void AppItem::initClientManager()

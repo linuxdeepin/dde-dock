@@ -58,23 +58,24 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
     // TODO: check
     e->accept();
 
-    if (!DragingItem)
-        return;
+//    qDebug() << e->pos() << itemAt(e->pos());
+
     DragingItem->show();
 }
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
-    Q_UNUSED(e);
-    //    qDebug() << e;
+    DockItem *item = itemAt(e->pos());
+    if (item == DragingItem)
+        return;
+
+    m_itemController->itemMove(DragingItem, item);
 }
 
 void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e)
 
-    if (!DragingItem)
-        return;
     DragingItem->hide();
 }
 
@@ -87,6 +88,23 @@ void MainPanel::dropEvent(QDropEvent *e)
 void MainPanel::initItemConnection(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted);
+}
+
+DockItem *MainPanel::itemAt(const QPoint &point)
+{
+    const QList<DockItem *> itemList = m_itemController->itemList();
+
+    for (auto item : itemList)
+    {
+        QRect rect;
+        rect.setTopLeft(item->pos());
+        rect.setSize(item->size());
+
+        if (rect.contains(point))
+            return item;
+    }
+
+    return nullptr;
 }
 
 void MainPanel::adjustItemSize()
@@ -123,4 +141,6 @@ void MainPanel::itemRemoved(DockItem *item)
 void MainPanel::itemDragStarted()
 {
     DragingItem = qobject_cast<DockItem *>(sender());
+
+    DragingItem->setVisible(rect().contains(QCursor::pos()));
 }

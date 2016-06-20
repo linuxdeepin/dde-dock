@@ -24,6 +24,7 @@ private:
     void dropEvent(QDropEvent *e);
 
     void initItemConnection(DockItem *item);
+    DockItem *itemAt(const QPoint &point);
 
 private slots:
     void adjustItemSize();

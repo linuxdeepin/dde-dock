@@ -22,6 +22,9 @@ signals:
     void itemInserted(const int index, DockItem *item);
     void itemRemoved(DockItem *item);
 
+public slots:
+    void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
+
 private:
     explicit DockItemController(QObject *parent = 0);
     void appItemAdded(const QDBusObjectPath &path, const int index);
