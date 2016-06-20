@@ -38,7 +38,10 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
             return;
 
     const int moveIndex = m_itemList.indexOf(moveItem);
-    const int replaceIndex = m_itemList.indexOf(replaceItem);
+    const int replaceIndex = replaceItem->itemType() == DockItem::Placeholder ?
+                                // disable insert after placeholder item
+                                m_itemList.indexOf(replaceItem) - 1 :
+                                m_itemList.indexOf(replaceItem);
 
     m_itemList.removeAt(moveIndex);
     emit itemRemoved(moveItem);

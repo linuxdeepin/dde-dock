@@ -60,7 +60,8 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 
 //    qDebug() << e->pos() << itemAt(e->pos());
 
-    DragingItem->show();
+    if (qobject_cast<DockItem *>(e->source()))
+        DragingItem->show();
 }
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)

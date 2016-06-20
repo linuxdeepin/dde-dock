@@ -88,6 +88,16 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
+    inline QDBusPendingReply<> RequestDock()
+    {
+        return asyncCall(QStringLiteral("RequestDock"));
+    }
+
+    inline QDBusPendingReply<> RequestUndock()
+    {
+        return asyncCall(QStringLiteral("RequestUndock"));
+    }
+
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
 void ActiveChanged();

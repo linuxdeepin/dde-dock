@@ -134,7 +134,11 @@ void AppItem::startDrag()
     emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
 
-    qDebug() << "dnd result: " << result;
+    qDebug() << "dnd result: " << result << drag->target();
+
+    // drag out of dock panel
+    if (!drag->target())
+        m_itemEntry->RequestUndock();
 
     m_draging = false;
     setVisible(true);
