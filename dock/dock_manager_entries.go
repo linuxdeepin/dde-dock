@@ -11,7 +11,6 @@ package dock
 
 import (
 	"fmt"
-	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
@@ -22,43 +21,6 @@ func (m *DockManager) allocEntryId() string {
 	num := m.entryCount
 	m.entryCount++
 	return fmt.Sprintf("e%dT%x", num, getCurrentTimestamp())
-}
-
-func (m *DockManager) getAppEntryByWindow(win xproto.Window) *AppEntry {
-	for _, entry := range m.Entries {
-		_, ok := entry.windows[win]
-		if ok {
-			return entry
-		}
-	}
-	return nil
-}
-
-func (m *DockManager) getAppEntryByAppId(id string) *AppEntry {
-	for _, entry := range m.Entries {
-		if entry.appInfo != nil && id == entry.appInfo.GetId() {
-			return entry
-		}
-	}
-	return nil
-}
-
-func (m *DockManager) getAppEntryByEntryId(id string) *AppEntry {
-	for _, entry := range m.Entries {
-		if entry.Id == id {
-			return entry
-		}
-	}
-	return nil
-}
-
-func (m *DockManager) getAppEntryByInnerId(id string) *AppEntry {
-	for _, entry := range m.Entries {
-		if entry.innerId == id {
-			return entry
-		}
-	}
-	return nil
 }
 
 func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
@@ -109,22 +71,10 @@ func (m *DockManager) installAppEntry(e *AppEntry) {
 
 	entryObjPath := dbus.ObjectPath(entryDBusObjPathPrefix + e.Id)
 	logger.Debugf("insertAndInstallAppEntry %v", entryObjPath)
-	index := -1
-	for i, entry := range m.Entries {
-		if e.Id == entry.Id {
-			index = i
-			break
-		}
-	}
+	index := m.Entries.IndexOf(e)
 	if index >= 0 {
 		dbus.Emit(m, "EntryAdded", entryObjPath, int32(index))
 	}
-}
-
-func (m *DockManager) insertAppEntry(e *AppEntry, index int) {
-	var insertIndex int
-	m.Entries, insertIndex = entrySliceInsert(m.Entries, e, index)
-	logger.Debugf("insertAppEntry entry: %v insert at: %v", e.Id, insertIndex)
 }
 
 func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index int) (*AppEntry, bool) {
@@ -132,7 +82,7 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 
 	var entry *AppEntry
 	isNewAdded := false
-	if e := m.getAppEntryByInnerId(entryInnerId); e != nil {
+	if e := m.Entries.GetFirstByInnerId(entryInnerId); e != nil {
 		logger.Debug("entry existed")
 		entry = e
 		if appInfo != nil {
@@ -146,7 +96,8 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 		}
 		logger.Debug("entry not existed, newAppEntry")
 		entry = newAppEntry(m, entryInnerId, appInfo)
-		m.insertAppEntry(entry, index)
+		m.Entries = m.Entries.Insert(entry, index)
+		logger.Debugf("insert entry %v at %v", entry.Id, index)
 		isNewAdded = true
 	}
 	return entry, isNewAdded
@@ -176,38 +127,13 @@ func (m *DockManager) removeAppEntry(e *AppEntry) {
 
 			entryId := entry.Id
 			logger.Info("removeAppEntry id:", entryId)
-			m.Entries = entrySliceRemove(m.Entries, e)
+			m.Entries = m.Entries.Remove(e)
 			e.destroy()
 			dbus.Emit(m, "EntryRemoved", entryId)
 			return
 		}
 	}
 	logger.Warning("removeAppEntry failed, entry not found")
-}
-
-func entrySliceInsert(slice []*AppEntry, entry *AppEntry, index int) ([]*AppEntry, int) {
-	logger.Debug("entrySliceInsert index:", index)
-	sliceLen := len(slice)
-	if index < 0 || index >= len(slice) {
-		logger.Debug("entrySliceInsert: append")
-		return append(slice, entry), sliceLen
-	}
-	// insert
-	return append(slice[:index],
-		append([]*AppEntry{entry}, slice[index:]...)...), index
-}
-
-func entrySliceRemove(slice []*AppEntry, entry *AppEntry) []*AppEntry {
-	var index int = -1
-	for i, v := range slice {
-		if v.Id == entry.Id {
-			index = i
-		}
-	}
-	if index != -1 {
-		return append(slice[:index], slice[index+1:]...)
-	}
-	return slice
 }
 
 func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {

@@ -11,7 +11,6 @@ package dock
 
 import (
 	"errors"
-	"fmt"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -27,7 +26,7 @@ type DockManager struct {
 	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
 	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
 
-	Entries []*AppEntry
+	Entries AppEntries
 
 	settings    *gio.Settings
 	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
@@ -167,27 +166,12 @@ func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
 }
 
 func (m *DockManager) MoveEntry(index, newIndex int32) error {
-	if index == newIndex {
-		err := errors.New("index == newIndex")
+	entries, err := m.Entries.Move(int(index), int(newIndex))
+	if err != nil {
 		logger.Warning("MoveEntry failed:", err)
 		return err
 	}
-
-	entriesLength := int32(len(m.Entries))
-	if 0 <= index && index < entriesLength &&
-		0 <= newIndex && newIndex < entriesLength {
-
-		entry := m.Entries[index]
-		// remove entry at index
-		removed := append(m.Entries[:index], m.Entries[index+1:]...)
-		// insert entry at newIndex
-		m.Entries = append(removed[:newIndex],
-			append([]*AppEntry{entry}, removed[newIndex:]...)...)
-		logger.Debug("MoveEntry: ok")
-		m.saveDockedApps()
-		return nil
-	}
-	err := fmt.Errorf("Index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
-	logger.Warning("MoveEntry failed:", err)
-	return err
+	logger.Debug("MoveEntry ok")
+	m.Entries = entries
+	return nil
 }
