@@ -29,6 +29,14 @@ const QList<DockItem *> DockItemController::itemList() const
 
 void DockItemController::itemMove(DockItem * const moveItem, DockItem * const replaceItem)
 {
+    const DockItem::ItemType moveType = moveItem->itemType();
+    const DockItem::ItemType replaceType = replaceItem->itemType();
+
+    // app move
+    if (moveType == DockItem::App)
+        if (replaceType != DockItem::App && replaceType != DockItem::Placeholder)
+            return;
+
     const int moveIndex = m_itemList.indexOf(moveItem);
     const int replaceIndex = m_itemList.indexOf(replaceItem);
 
@@ -37,6 +45,10 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
     m_itemList.insert(replaceIndex, moveItem);
     emit itemInserted(replaceIndex, moveItem);
+
+    // for app move, index 0 is launcher item, need to pass it.
+    if (moveItem->itemType() == DockItem::App)
+        m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
 }
 
 DockItemController::DockItemController(QObject *parent)

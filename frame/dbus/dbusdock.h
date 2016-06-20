@@ -106,11 +106,12 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("GetEntryIDs"), argumentList);
     }
 
-    inline QDBusPendingReply<> ReorderEntries(const QStringList &in0)
+    inline QDBusPendingReply<> MoveEntry(const int oldIndex, const int newIndex)
     {
-        QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0);
-        return asyncCallWithArgumentList(QStringLiteral("ReorderEntries"), argumentList);
+        QList<QVariant> args;
+        args << oldIndex << newIndex;
+
+        return asyncCallWithArgumentList(QStringLiteral("MoveEntry"), args);
     }
 
     inline QDBusPendingReply<> SetFrontendWindow(uint in0)
