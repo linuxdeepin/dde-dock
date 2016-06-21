@@ -36,6 +36,14 @@ void MainWindow::resizeEvent(QResizeEvent *e)
     m_mainPanel->setFixedSize(e->size());
 }
 
+void MainWindow::mousePressEvent(QMouseEvent *e)
+{
+    e->ignore();
+
+    if (e->button() == Qt::RightButton)
+        m_settings->showDockSettingsMenu();
+}
+
 void MainWindow::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key())

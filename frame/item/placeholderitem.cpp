@@ -5,3 +5,8 @@ PlaceholderItem::PlaceholderItem(QWidget *parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
+
+void PlaceholderItem::mousePressEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+}

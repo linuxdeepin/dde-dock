@@ -19,6 +19,7 @@ public:
 
 private:
     void resizeEvent(QResizeEvent *e);
+    void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void initComponents();
     void initConnections();
