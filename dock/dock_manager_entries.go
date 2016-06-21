@@ -186,7 +186,6 @@ func (m *DockManager) attachWindow(winInfo *WindowInfo) {
 	entry.attachWindow(winInfo)
 	entry.updateMenu()
 	if isNewAdded {
-		entry.initExec(winInfo)
 		entry.updateName()
 		entry.updateIcon()
 		m.installAppEntry(entry)

@@ -55,8 +55,6 @@ type AppEntry struct {
 	windowMutex   sync.Mutex
 
 	coreMenu  *Menu
-	exec      string
-	path      string
 	appInfo   *AppInfo
 	IsDocked  bool
 	dockMutex sync.Mutex
@@ -89,17 +87,19 @@ func (entry *AppEntry) hasWindow() bool {
 	return len(entry.windows) != 0
 }
 
-func (entry *AppEntry) initExec(winInfo *WindowInfo) {
-	ai := entry.appInfo
-	if ai != nil && ai.DesktopAppInfo != nil {
-		entry.exec = ai.DesktopAppInfo.GetCommandline()
+func (entry *AppEntry) getExec(oneLine bool) string {
+	if entry.current == nil {
+		return ""
 	}
-
-	if winInfo.process != nil {
-		entry.exec = winInfo.process.GetShellScript()
+	winProcess := entry.current.process
+	if winProcess != nil {
+		if oneLine {
+			return winProcess.GetOneCommandLine()
+		} else {
+			return winProcess.GetShellScriptLines()
+		}
 	}
-
-	logger.Debug("initExec:", entry.exec)
+	return ""
 }
 
 func (entry *AppEntry) getDisplayName() string {

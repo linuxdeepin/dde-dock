@@ -99,7 +99,7 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
 	}
 
 	// cmd
-	scriptContent := "#!/bin/sh\n" + entry.exec
+	scriptContent := entry.getExec(false)
 	scriptFile := filepath.Join(scratchDir, appId+".sh")
 	ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
 	cmd := scriptFile + " %U"

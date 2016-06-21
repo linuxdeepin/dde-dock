@@ -72,15 +72,18 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 }
 
 func (entry *AppEntry) launchApp(timestamp uint32) {
+	logger.Debug("launchApp timestamp:", timestamp)
 	var appInfo *gio.AppInfo
-	if entry.appInfo.DesktopAppInfo != nil {
+
+	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
 		appInfo = (*gio.AppInfo)(entry.appInfo.DesktopAppInfo)
 	} else {
-		logger.Debug("No AppInfo", entry.exec)
-		var err error = nil
+		exec := entry.getExec(true)
+		logger.Debugf("No AppInfo, exec [%s]", exec)
+		var err error
 		appInfo, err = gio.AppInfoCreateFromCommandline(
-			entry.exec,
+			exec,
 			"",
 			gio.AppInfoCreateFlagsNone,
 		)
