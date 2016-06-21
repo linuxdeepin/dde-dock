@@ -3,3 +3,8 @@ HEADERS += \
     $$PWD/constants.h
 
 INCLUDEPATH += $$PWD
+
+isEmpty(PREFIX)
+{
+    PREFIX = /usr
+}

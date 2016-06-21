@@ -49,3 +49,6 @@ HEADERS  += \
     dbus/dbusmenu.h \
     item/pluginsitem.h \
     controller/dockpluginscontroller.h
+
+target.path = $${PREFIX}/bin/
+INSTALLS += target
