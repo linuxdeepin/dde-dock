@@ -35,7 +35,7 @@ MainPanel::MainPanel(QWidget *parent)
     setLayout(m_itemLayout);
 }
 
-void MainPanel::updateDockSide(const Position dockSide)
+void MainPanel::updateDockPosition(const Position dockSide)
 {
     switch (dockSide)
     {
@@ -44,6 +44,8 @@ void MainPanel::updateDockSide(const Position dockSide)
     case Position::Left:
     case Position::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
     }
+
+    adjustItemSize();
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
@@ -110,13 +112,15 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::adjustItemSize()
 {
+    const QSize size(80, 60);
+
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         switch (item->itemType())
         {
         case DockItem::Launcher:
-        case DockItem::App:     item->setFixedWidth(80);    break;
+        case DockItem::App:     item->setFixedSize(size);    break;
         default:;
         }
     }

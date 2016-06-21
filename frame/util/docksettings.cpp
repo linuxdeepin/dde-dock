@@ -23,11 +23,15 @@ DockSettings::DockSettings(QObject *parent)
       m_keepHiddenAct(tr("Keep Hidden"), this),
       m_smartHideAct(tr("Smart Hide"), this),
 
+      m_displayInter(new DBusDisplay(this)),
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
+
+    m_mainWindowSize.setWidth(m_displayInter->primaryRect().width);
+    m_mainWindowSize.setHeight(60);
 
     m_fashionModeAct.setCheckable(true);
     m_efficientModeAct.setCheckable(true);
@@ -76,6 +80,7 @@ DockSettings::DockSettings(QObject *parent)
     m_settingsMenu.addAction(statusSubMenuAct);
 
     connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
 }
 
 Position DockSettings::position() const
@@ -83,7 +88,7 @@ Position DockSettings::position() const
     return m_position;
 }
 
-const QSize DockSettings::mainWindowSize() const
+const QSize DockSettings::windowSize() const
 {
     return m_mainWindowSize;
 }
@@ -119,6 +124,7 @@ void DockSettings::menuActionClicked(DAction *action)
         return m_dockInter->setDisplayMode(Fashion);
     if (action == &m_efficientModeAct)
         return m_dockInter->setDisplayMode(Efficient);
+
     if (action == &m_topPosAct)
         return m_dockInter->setPosition(Top);
     if (action == &m_bottomPosAct)
@@ -127,10 +133,45 @@ void DockSettings::menuActionClicked(DAction *action)
         return m_dockInter->setPosition(Left);
     if (action == &m_rightPosAct)
         return m_dockInter->setPosition(Right);
+
     if (action == &m_keepShownAct)
         return m_dockInter->setHideMode(KeepShowing);
     if (action == &m_keepHiddenAct)
         return m_dockInter->setHideMode(KeepHidden);
     if (action == &m_smartHideAct)
         return m_dockInter->setHideMode(SmartHide);
+}
+
+void DockSettings::positionChanged()
+{
+    m_position = Dock::Position(m_dockInter->position());
+
+    const QRect primaryRect = m_displayInter->primaryRect();
+    const int defaultHeight = 60;
+    const int defaultWidth = 60;
+
+    switch (m_position)
+    {
+    case Top:
+    case Bottom:
+        m_mainWindowSize.setHeight(defaultHeight);
+        m_mainWindowSize.setWidth(primaryRect.width());
+        break;
+
+    case Left:
+    case Right:
+        m_mainWindowSize.setHeight(primaryRect.height());
+        m_mainWindowSize.setWidth(defaultWidth);
+        break;
+
+    default:
+        Q_ASSERT(false);
+    }
+
+    emit dataChanged();
+}
+
+void DockSettings::calculateWindowConfig()
+{
+
 }

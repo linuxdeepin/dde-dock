@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "dbus/dbusdock.h"
 #include "dbus/dbusmenumanager.h"
+#include "dbus/dbusdisplay.h"
 #include "controller/dockitemcontroller.h"
 
 #include <DAction>
@@ -24,7 +25,7 @@ public:
     explicit DockSettings(QObject *parent = 0);
 
     Position position() const;
-    const QSize mainWindowSize() const;
+    const QSize windowSize() const;
 
     void showDockSettingsMenu();
 
@@ -36,6 +37,10 @@ public slots:
 
 private slots:
     void menuActionClicked(DAction *action);
+    void positionChanged();
+
+private:
+    void calculateWindowConfig();
 
 private:
     int m_iconSize;
@@ -58,6 +63,7 @@ private:
     DAction m_keepHiddenAct;
     DAction m_smartHideAct;
 
+    DBusDisplay *m_displayInter;
     DBusDock *m_dockInter;
     DockItemController *m_itemController;
 };

@@ -64,7 +64,8 @@ void MainWindow::initComponents()
 
 void MainWindow::initConnections()
 {
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, [this] {m_positionUpdateTimer->start();});
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
 }
@@ -74,13 +75,22 @@ void MainWindow::updatePosition()
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
     clearStrutPartial();
+    setFixedSize(m_settings->windowSize());
+    m_mainPanel->updateDockPosition(m_settings->position());
 
-    const QRect screenRect = m_displayInter->primaryRect();
-
-    setFixedWidth(screenRect.width());
-    setFixedHeight(60);
-
-    move(0, screenRect.height() - 60);
+    const QRect primaryRect = m_displayInter->primaryRect();
+    switch (m_settings->position())
+    {
+    case Top:
+    case Left:
+        move(primaryRect.topLeft());                    break;
+    case Right:
+        move(primaryRect.right() - width(), 0);         break;
+    case Bottom:
+        move(0, primaryRect.bottom() - height() + 1);   break;
+    default:
+        Q_ASSERT(false);
+    }
 
     setStrutPartial();
 }
