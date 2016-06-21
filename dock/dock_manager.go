@@ -32,6 +32,7 @@ type DockManager struct {
 	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
+	IconSize    *property.GSettingsUintProperty `access:"readwrite"`
 	DockedApps  *property.GSettingsStrvProperty
 
 	activeWindow xproto.Window
@@ -55,6 +56,7 @@ const (
 	settingKeyHideMode    = "hide-mode"
 	settingKeyDisplayMode = "display-mode"
 	settingKeyPosition    = "position"
+	settingKeyIconSize    = "icon-size"
 	settingKeyDockedApps  = "docked-apps"
 )
 

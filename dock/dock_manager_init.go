@@ -77,6 +77,7 @@ func (m *DockManager) init() error {
 	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, settingKeyHideMode)
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, settingKeyDisplayMode)
 	m.Position = property.NewGSettingsEnumProperty(m, "Position", m.settings, settingKeyPosition)
+	m.IconSize = property.NewGSettingsUintProperty(m, "IconSize", m.settings, settingKeyIconSize)
 	m.DockedApps = property.NewGSettingsStrvProperty(m, "DockedApps", m.settings, settingKeyDockedApps)
 	// uniq docked apps
 	m.DockedApps.Set(uniqStrSlice(m.DockedApps.Get()))
