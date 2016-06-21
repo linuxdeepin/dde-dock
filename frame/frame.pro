@@ -50,5 +50,8 @@ HEADERS  += \
     item/pluginsitem.h \
     controller/dockpluginscontroller.h
 
+dbus_service.files += com.deepin.dde.dock.service
+dbus_service.path = /usr/share/dbus-1/services
+
 target.path = $${PREFIX}/bin/
-INSTALLS += target
+INSTALLS += target dbus_service
