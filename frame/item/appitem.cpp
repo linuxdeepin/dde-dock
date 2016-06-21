@@ -8,6 +8,7 @@
 
 #define APP_DRAG_THRESHOLD      20
 
+int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 DBusClientManager *AppItem::ClientInter = nullptr;
 //uint AppItem::ActiveWindowId = 0;
@@ -33,6 +34,26 @@ const QString AppItem::appId() const
     return m_id;
 }
 
+void AppItem::setIconBaseSize(const int size)
+{
+    IconBaseSize = size;
+}
+
+int AppItem::iconBaseSize()
+{
+    return IconBaseSize;
+}
+
+int AppItem::itemBaseWidth()
+{
+    return itemBaseHeight() / 0.7;
+}
+
+int AppItem::itemBaseHeight()
+{
+    return IconBaseSize / 0.8;
+}
+
 void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
@@ -41,12 +62,12 @@ void AppItem::paintEvent(QPaintEvent *e)
         return;
 
     const QRect itemRect = rect();
-    const int iconSize = std::min(itemRect.width(), itemRect.height());
+//    const int iconSize = std::min(itemRect.width(), itemRect.height());
 
-    QRect iconRect;
-    iconRect.setWidth(iconSize);
-    iconRect.setHeight(iconSize);
-    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
+//    QRect iconRect;
+//    iconRect.setWidth(iconSize);
+//    iconRect.setHeight(iconSize);
+//    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
 
     QPainter painter(this);
 
@@ -60,7 +81,7 @@ void AppItem::paintEvent(QPaintEvent *e)
         painter.fillRect(backgroundRect, Qt::gray);
 
     // draw icon
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    painter.drawPixmap(itemRect.center() - m_icon.rect().center(), m_icon);
 
     // draw text
 //    painter.setPen(Qt::red);

@@ -85,6 +85,12 @@ public:
     inline void setPosition(int value)
     { setProperty("Position", QVariant::fromValue(int(value))); }
 
+    Q_PROPERTY(quint32 IconSize READ iconSize WRITE setIconSize NOTIFY IconSizeChanged)
+    inline quint32 iconSize() const
+    { return qvariant_cast< quint32 >(property("IconSize")); }
+    inline void setIconSize(quint32 value)
+    { setProperty("IconSize", QVariant::fromValue(value)); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ActivateWindow(uint in0)
     {
@@ -132,6 +138,7 @@ void EntriesChanged();
 void HideModeChanged();
 void HideStateChanged();
 void PositionChanged();
+void IconSizeChanged();
 };
 
 namespace com {

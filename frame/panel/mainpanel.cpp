@@ -1,4 +1,5 @@
 #include "mainpanel.h"
+#include "item/appitem.h"
 
 #include <QBoxLayout>
 #include <QDragEnterEvent>
@@ -7,6 +8,7 @@ DockItem *MainPanel::DragingItem = nullptr;
 
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
+      m_position(Dock::Top),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
 
       m_itemController(DockItemController::instance(this))
@@ -35,9 +37,11 @@ MainPanel::MainPanel(QWidget *parent)
     setLayout(m_itemLayout);
 }
 
-void MainPanel::updateDockPosition(const Position dockSide)
+void MainPanel::updateDockPosition(const Position dockPosition)
 {
-    switch (dockSide)
+    m_position = dockPosition;
+
+    switch (m_position)
     {
     case Position::Top:
     case Position::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
@@ -112,7 +116,24 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::adjustItemSize()
 {
-    const QSize size(80, 60);
+    QSize itemSize;
+    switch (m_position)
+    {
+    case Top:
+    case Bottom:
+        itemSize.setHeight(height());
+        itemSize.setWidth(AppItem::itemBaseWidth());
+        break;
+
+    case Left:
+    case Right:
+        itemSize.setWidth(width());
+        itemSize.setHeight(AppItem::itemBaseHeight());
+        break;
+
+    default:
+        Q_ASSERT(false);
+    }
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -120,20 +141,16 @@ void MainPanel::adjustItemSize()
         switch (item->itemType())
         {
         case DockItem::Launcher:
-        case DockItem::App:     item->setFixedSize(size);    break;
+        case DockItem::App:     item->setFixedSize(itemSize);    break;
         default:;
         }
     }
-
-    updateGeometry();
 }
 
 void MainPanel::itemInserted(const int index, DockItem *item)
 {
     initItemConnection(item);
     m_itemLayout->insertWidget(index, item);
-
-    item->setFixedWidth(80);
 
     adjustSize();
 }

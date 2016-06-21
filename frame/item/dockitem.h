@@ -22,7 +22,7 @@ public:
 
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
-    void setDockSide(const Position side);
+    static void setDockPosition(const Position side);
 
     ItemType itemType() const;
 
@@ -38,10 +38,11 @@ protected:
     virtual const QString contextMenu() const;
 
 protected:
-    Position m_side;
     ItemType m_type;
 
     DBusMenuManager *m_menuManagerInter;
+
+    static Position DockPosition;
 };
 
 #endif // DOCKITEM_H

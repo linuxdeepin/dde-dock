@@ -13,6 +13,10 @@ public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
 
     const QString appId() const;
+    static void setIconBaseSize(const int size);
+    static int iconBaseSize();
+    static int itemBaseHeight();
+    static int itemBaseWidth();
 
 private:
     void paintEvent(QPaintEvent *e);
@@ -40,6 +44,7 @@ private:
     QString m_id;
     QPixmap m_icon;
 
+    static int IconBaseSize;
     static QPoint MousePressPos;
     static DBusClientManager *ClientInter;
 //    static uint ActiveWindowId;

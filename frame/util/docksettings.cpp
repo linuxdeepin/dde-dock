@@ -1,4 +1,5 @@
 #include "docksettings.h"
+#include "item/appitem.h"
 
 #include <QDebug>
 
@@ -29,9 +30,8 @@ DockSettings::DockSettings(QObject *parent)
 {
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
-
-    m_mainWindowSize.setWidth(m_displayInter->primaryRect().width);
-    m_mainWindowSize.setHeight(60);
+    m_iconSize = m_dockInter->iconSize();
+    AppItem::setIconBaseSize(m_iconSize);
 
     m_fashionModeAct.setCheckable(true);
     m_efficientModeAct.setCheckable(true);
@@ -81,6 +81,8 @@ DockSettings::DockSettings(QObject *parent)
 
     connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
+
+    calculateWindowConfig();
 }
 
 Position DockSettings::position() const
@@ -134,6 +136,13 @@ void DockSettings::menuActionClicked(DAction *action)
     if (action == &m_rightPosAct)
         return m_dockInter->setPosition(Right);
 
+    if (action == &m_largeSizeAct)
+        return m_dockInter->setIconSize(ICON_SIZE_LARGE);
+    if (action == &m_mediumSizeAct)
+        return m_dockInter->setIconSize(ICON_SIZE_MEDIUM);
+    if (action == &m_smallSizeAct)
+        return m_dockInter->setIconSize(ICON_SIZE_SMALL);
+
     if (action == &m_keepShownAct)
         return m_dockInter->setHideMode(KeepShowing);
     if (action == &m_keepHiddenAct)
@@ -145,10 +154,18 @@ void DockSettings::menuActionClicked(DAction *action)
 void DockSettings::positionChanged()
 {
     m_position = Dock::Position(m_dockInter->position());
+    DockItem::setDockPosition(m_position);
 
+    calculateWindowConfig();
+
+    emit dataChanged();
+}
+
+void DockSettings::calculateWindowConfig()
+{
     const QRect primaryRect = m_displayInter->primaryRect();
-    const int defaultHeight = 60;
-    const int defaultWidth = 60;
+    const int defaultHeight = AppItem::itemBaseHeight();
+    const int defaultWidth = AppItem::itemBaseWidth();
 
     switch (m_position)
     {
@@ -167,11 +184,4 @@ void DockSettings::positionChanged()
     default:
         Q_ASSERT(false);
     }
-
-    emit dataChanged();
-}
-
-void DockSettings::calculateWindowConfig()
-{
-
 }

@@ -14,7 +14,7 @@ class MainPanel : public QFrame
 public:
     explicit MainPanel(QWidget *parent = 0);
 
-    void updateDockPosition(const Position dockSide);
+    void updateDockPosition(const Position dockPosition);
 
 private:
     void resizeEvent(QResizeEvent *e);
@@ -33,6 +33,7 @@ private slots:
     void itemDragStarted();
 
 private:
+    Position m_position;
     QBoxLayout *m_itemLayout;
 
     DockItemController *m_itemController;

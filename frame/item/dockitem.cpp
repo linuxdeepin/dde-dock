@@ -6,20 +6,19 @@
 #include <QMouseEvent>
 #include <QJsonObject>
 
+Position DockItem::DockPosition = Position::Top;
+
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
-      m_side(Position::Top),
       m_type(type),
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
 }
 
-void DockItem::setDockSide(const Position side)
+void DockItem::setDockPosition(const Position side)
 {
-    m_side = side;
-
-    update();
+    DockPosition = side;
 }
 
 DockItem::ItemType DockItem::itemType() const

@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     initComponents();
     initConnections();
+
+    m_positionUpdateTimer->start();
 }
 
 MainWindow::~MainWindow()
