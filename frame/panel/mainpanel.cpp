@@ -64,8 +64,6 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
     // TODO: check
     e->accept();
 
-//    qDebug() << e->pos() << itemAt(e->pos());
-
     if (qobject_cast<DockItem *>(e->source()))
         DragingItem->show();
 }
@@ -127,8 +125,8 @@ void MainPanel::adjustItemSize()
 
     case Left:
     case Right:
-        itemSize.setWidth(width());
         itemSize.setHeight(AppItem::itemBaseHeight());
+        itemSize.setWidth(width());
         break;
 
     default:

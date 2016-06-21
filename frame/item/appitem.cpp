@@ -46,12 +46,12 @@ int AppItem::iconBaseSize()
 
 int AppItem::itemBaseWidth()
 {
-    return itemBaseHeight() / 0.7;
+    return itemBaseHeight() * 1.4;
 }
 
 int AppItem::itemBaseHeight()
 {
-    return IconBaseSize / 0.8;
+    return IconBaseSize * 1.5;
 }
 
 void AppItem::paintEvent(QPaintEvent *e)
@@ -61,7 +61,6 @@ void AppItem::paintEvent(QPaintEvent *e)
     if (m_draging || !m_itemEntry->isValid())
         return;
 
-    const QRect itemRect = rect();
 //    const int iconSize = std::min(itemRect.width(), itemRect.height());
 
 //    QRect iconRect;
@@ -70,9 +69,13 @@ void AppItem::paintEvent(QPaintEvent *e)
 //    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
 
     QPainter painter(this);
+    if (!painter.isActive())
+        return;
+
+    const QRect itemRect = rect();
 
     // draw background
-    const QRect backgroundRect = rect().marginsRemoved(QMargins(3, 3, 3, 3));
+    const QRect backgroundRect = itemRect.marginsRemoved(QMargins(3, 3, 3, 3));
     if (m_itemEntry->active())
         painter.fillRect(backgroundRect, Qt::blue);
     else if (!m_titles.isEmpty())
@@ -155,8 +158,7 @@ void AppItem::startDrag()
 
     emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
-
-    qDebug() << "dnd result: " << result << drag->target();
+    Q_UNUSED(result);
 
     // drag out of dock panel
     if (!drag->target())
@@ -188,7 +190,7 @@ void AppItem::updateTitle()
 void AppItem::updateIcon()
 {
     const QString icon = m_itemEntry->icon();
-    const int iconSize = qMin(width(), height()) * 0.6;
+    const int iconSize = qMin(width(), height()) * 0.7;
 
     m_icon = ThemeAppIcon::getIcon(icon, iconSize);
 }

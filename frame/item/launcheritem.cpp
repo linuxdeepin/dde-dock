@@ -22,7 +22,7 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    m_icon = ThemeAppIcon::getIcon("deepin-launcher", 48);
+    m_icon = ThemeAppIcon::getIcon("deepin-launcher", qMin(width(), height()) * 0.7);
 }
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)

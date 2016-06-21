@@ -38,6 +38,7 @@ public slots:
 private slots:
     void menuActionClicked(DAction *action);
     void positionChanged();
+    void iconSizeChanged();
 
 private:
     void calculateWindowConfig();

@@ -81,6 +81,7 @@ DockSettings::DockSettings(QObject *parent)
 
     connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
+    connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
 
     calculateWindowConfig();
 }
@@ -155,6 +156,16 @@ void DockSettings::positionChanged()
 {
     m_position = Dock::Position(m_dockInter->position());
     DockItem::setDockPosition(m_position);
+
+    calculateWindowConfig();
+
+    emit dataChanged();
+}
+
+void DockSettings::iconSizeChanged()
+{
+    m_iconSize = m_dockInter->iconSize();
+    AppItem::setIconBaseSize(m_iconSize);
 
     calculateWindowConfig();
 
