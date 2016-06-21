@@ -69,10 +69,6 @@ public:
     inline QString id() const
     { return qvariant_cast< QString >(property("Id")); }
 
-    Q_PROPERTY(QString Title READ title NOTIFY TitleChanged)
-    inline QString title() const
-    { return qvariant_cast< QString >(property("Title")); }
-
     Q_PROPERTY(QString Icon READ icon NOTIFY IconChanged)
     inline QString icon() const
     { return qvariant_cast< QString >(property("Icon")); }
@@ -86,6 +82,11 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
+    }
+
+    inline QDBusPendingReply<> HandleMenuItem(const QString &item)
+    {
+        return asyncCall(QStringLiteral("HandleMenuItem"), item);
     }
 
     inline QDBusPendingReply<> RequestDock()

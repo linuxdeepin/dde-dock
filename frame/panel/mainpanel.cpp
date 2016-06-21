@@ -35,14 +35,14 @@ MainPanel::MainPanel(QWidget *parent)
     setLayout(m_itemLayout);
 }
 
-void MainPanel::updateDockSide(const DockSide dockSide)
+void MainPanel::updateDockSide(const Position dockSide)
 {
     switch (dockSide)
     {
-    case DockSide::Top:
-    case DockSide::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
-    case DockSide::Left:
-    case DockSide::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
+    case Position::Top:
+    case Position::Bottom:          m_itemLayout->setDirection(QBoxLayout::LeftToRight);    break;
+    case Position::Left:
+    case Position::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
     }
 }
 

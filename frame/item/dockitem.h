@@ -5,6 +5,8 @@
 
 #include <QFrame>
 
+using namespace Dock;
+
 class DBusMenuManager;
 class DockItem : public QWidget
 {
@@ -20,7 +22,7 @@ public:
 
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
-    void setDockSide(const DockSide side);
+    void setDockSide(const Position side);
 
     ItemType itemType() const;
 
@@ -36,7 +38,7 @@ protected:
     virtual const QString contextMenu() const;
 
 protected:
-    DockSide m_side;
+    Position m_side;
     ItemType m_type;
 
     DBusMenuManager *m_menuManagerInter;

@@ -87,7 +87,7 @@ void MainWindow::setStrutPartial()
     // first, clear old strut partial
     clearStrutPartial();
 
-    const DockSide side = m_settings->side();
+    const Position side = m_settings->position();
     const int maxScreenHeight = m_displayInter->screenHeight();
 
     XcbMisc::Orientation orientation;
@@ -99,25 +99,25 @@ void MainWindow::setStrutPartial()
     const QRect r = rect();
     switch (side)
     {
-    case DockSide::Top:
+    case Position::Top:
         orientation = XcbMisc::OrientationTop;
         strut = r.bottom();
         strutStart = r.left();
         strutEnd = r.right();
         break;
-    case DockSide::Bottom:
+    case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
         strut = maxScreenHeight - p.y();
         strutStart = r.left();
         strutEnd = r.right();
         break;
-    case DockSide::Left:
+    case Position::Left:
         orientation = XcbMisc::OrientationLeft;
         strut = r.width();
         strutStart = r.top();
         strutEnd = r.bottom();
         break;
-    case DockSide::Right:
+    case Position::Right:
         orientation = XcbMisc::OrientationRight;
         strut = r.width();
         strutStart = r.top();

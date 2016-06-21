@@ -63,8 +63,8 @@ void AppItem::paintEvent(QPaintEvent *e)
     painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
 
     // draw text
-    painter.setPen(Qt::red);
-    painter.drawText(rect(), m_itemEntry->title());
+//    painter.setPen(Qt::red);
+//    painter.drawText(rect(), m_itemEntry->title());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -109,8 +109,9 @@ void AppItem::resizeEvent(QResizeEvent *e)
 
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
-    Q_UNUSED(itemId)
-    Q_UNUSED(checked)
+    Q_UNUSED(checked);
+
+    m_itemEntry->HandleMenuItem(itemId);
 }
 
 const QString AppItem::contextMenu() const

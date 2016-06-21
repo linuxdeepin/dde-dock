@@ -3,13 +3,16 @@
 #include <QDebug>
 
 DockSettings::DockSettings(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_dockInter(new DBusDock(this)),
+      m_itemController(DockItemController::instance(this))
 {
+    m_position = Dock::Position(m_dockInter->position());
 }
 
-DockSide DockSettings::side() const
+Position DockSettings::position() const
 {
-    return Bottom;
+    return m_position;
 }
 
 const QSize DockSettings::mainWindowSize() const

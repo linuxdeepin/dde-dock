@@ -8,14 +8,14 @@
 
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
-      m_side(DockSide::Top),
+      m_side(Position::Top),
       m_type(type),
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
 }
 
-void DockItem::setDockSide(const DockSide side)
+void DockItem::setDockSide(const Position side)
 {
     m_side = side;
 

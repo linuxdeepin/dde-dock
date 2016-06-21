@@ -2,9 +2,13 @@
 #define DOCKSETTINGS_H
 
 #include "constants.h"
+#include "dbus/dbusdock.h"
+#include "controller/dockitemcontroller.h"
 
 #include <QObject>
 #include <QSize>
+
+using namespace Dock;
 
 class DockSettings : public QObject
 {
@@ -13,17 +17,23 @@ class DockSettings : public QObject
 public:
     explicit DockSettings(QObject *parent = 0);
 
-    DockSide side() const;
+    Position position() const;
     const QSize mainWindowSize() const;
-
-public slots:
-    void updateGeometry();
 
 signals:
     void dataChanged() const;
 
+public slots:
+    void updateGeometry();
+
+private slots:
+
 private:
+    Position m_position;
     QSize m_mainWindowSize;
+
+    DBusDock *m_dockInter;
+    DockItemController *m_itemController;
 };
 
 #endif // DOCKSETTINGS_H

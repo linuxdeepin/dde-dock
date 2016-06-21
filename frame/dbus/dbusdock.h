@@ -59,15 +59,15 @@ public:
     inline uint activeWindow() const
     { return qvariant_cast< uint >(property("ActiveWindow")); }
 
-    Q_PROPERTY(int DisplayMode READ displayMode WRITE setDisplayMode NOTIFY DisplayModeChanged)
-    inline int displayMode() const
-    { return qvariant_cast< int >(property("DisplayMode")); }
-    inline void setDisplayMode(int value)
-    { setProperty("DisplayMode", QVariant::fromValue(value)); }
-
     Q_PROPERTY(QList<QDBusObjectPath> Entries READ entries NOTIFY EntriesChanged)
     inline QList<QDBusObjectPath> entries() const
     { return qvariant_cast< QList<QDBusObjectPath> >(property("Entries")); }
+
+    Q_PROPERTY(int DisplayMode READ displayMode WRITE setDisplayMode NOTIFY DisplayModeChanged)
+    inline int displayMode() const
+    { return int(qvariant_cast< int >(property("DisplayMode"))); }
+    inline void setDisplayMode(int value)
+    { setProperty("DisplayMode", QVariant::fromValue(int(value))); }
 
     Q_PROPERTY(int HideMode READ hideMode WRITE setHideMode NOTIFY HideModeChanged)
     inline int hideMode() const
@@ -77,13 +77,13 @@ public:
 
     Q_PROPERTY(int HideState READ hideState NOTIFY HideStateChanged)
     inline int hideState() const
-    { return qvariant_cast< int >(property("HideState")); }
+    { return int(qvariant_cast< int >(property("HideState"))); }
 
     Q_PROPERTY(int Position READ position WRITE setPosition NOTIFY PositionChanged)
     inline int position() const
-    { return qvariant_cast< int >(property("Position")); }
+    { return int(qvariant_cast< int >(property("Position"))); }
     inline void setPosition(int value)
-    { setProperty("Position", QVariant::fromValue(value)); }
+    { setProperty("Position", QVariant::fromValue(int(value))); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ActivateWindow(uint in0)
