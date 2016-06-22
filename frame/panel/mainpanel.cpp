@@ -151,7 +151,7 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     initItemConnection(item);
     m_itemLayout->insertWidget(index, item);
 
-    adjustSize();
+    adjustItemSize();
 }
 
 void MainPanel::itemRemoved(DockItem *item)
