@@ -31,6 +31,7 @@ public:
 
 signals:
     void dataChanged() const;
+    void windowGeometryChanged() const;
 
 public slots:
     void updateGeometry();
@@ -39,6 +40,9 @@ private slots:
     void menuActionClicked(DAction *action);
     void positionChanged();
     void iconSizeChanged();
+    void displayModeChanged();
+
+    void dockItemCountChanged();
 
 private:
     void calculateWindowConfig();

@@ -11,7 +11,6 @@
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 DBusClientManager *AppItem::ClientInter = nullptr;
-//uint AppItem::ActiveWindowId = 0;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
@@ -175,9 +174,6 @@ void AppItem::initClientManager()
         return;
 
     ClientInter = new DBusClientManager(this);
-//    connect(ClientInter, &DBusClientManager::ActiveWindowChanged, [&] (const uint wid) {
-//        ActiveWindowId = wid;
-//    });
 }
 
 void AppItem::updateTitle()

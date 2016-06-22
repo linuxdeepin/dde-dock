@@ -47,7 +47,6 @@ private:
     static int IconBaseSize;
     static QPoint MousePressPos;
     static DBusClientManager *ClientInter;
-//    static uint ActiveWindowId;
 };
 
 #endif // APPITEM_H

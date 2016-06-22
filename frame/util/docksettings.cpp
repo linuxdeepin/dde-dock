@@ -82,6 +82,10 @@ DockSettings::DockSettings(QObject *parent)
     connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
+    connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
+
+    connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
+    connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
 
     calculateWindowConfig();
 }
@@ -172,27 +176,87 @@ void DockSettings::iconSizeChanged()
     emit dataChanged();
 }
 
+void DockSettings::displayModeChanged()
+{
+    m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
+
+    calculateWindowConfig();
+
+    emit dataChanged();
+}
+
+void DockSettings::dockItemCountChanged()
+{
+    if (m_displayMode == Dock::Efficient)
+        return;
+
+    calculateWindowConfig();
+
+    emit windowGeometryChanged();
+}
+
 void DockSettings::calculateWindowConfig()
 {
     const QRect primaryRect = m_displayInter->primaryRect();
     const int defaultHeight = AppItem::itemBaseHeight();
     const int defaultWidth = AppItem::itemBaseWidth();
 
-    switch (m_position)
+    if (m_displayMode == Dock::Efficient)
     {
-    case Top:
-    case Bottom:
-        m_mainWindowSize.setHeight(defaultHeight);
-        m_mainWindowSize.setWidth(primaryRect.width());
-        break;
+        switch (m_position)
+        {
+        case Top:
+        case Bottom:
+            m_mainWindowSize.setHeight(defaultHeight);
+            m_mainWindowSize.setWidth(primaryRect.width());
+            break;
 
-    case Left:
-    case Right:
-        m_mainWindowSize.setHeight(primaryRect.height());
-        m_mainWindowSize.setWidth(defaultWidth);
-        break;
+        case Left:
+        case Right:
+            m_mainWindowSize.setHeight(primaryRect.height());
+            m_mainWindowSize.setWidth(defaultWidth);
+            break;
 
-    default:
+        default:
+            Q_ASSERT(false);
+        }
+    }
+    else if (m_displayMode == Dock::Fashion)
+    {
+        int appItemCount = 0;
+        int pluginItemCount = 0;
+        const QList<DockItem *> itemList = m_itemController->itemList();
+        for (auto item : itemList)
+        {
+            switch (item->itemType())
+            {
+            case DockItem::Launcher:
+            case DockItem::App:         ++appItemCount;     break;
+            case DockItem::Plugins:     ++pluginItemCount;  break;
+            default:;
+            }
+        }
+
+        const int perfectWidth = qMin(primaryRect.width(), defaultWidth * (appItemCount + pluginItemCount));
+        const int perfectHeight = qMin(primaryRect.height(), defaultHeight * (appItemCount + pluginItemCount));
+        switch (m_position)
+        {
+        case Top:
+        case Bottom:
+            m_mainWindowSize.setHeight(defaultHeight);
+            m_mainWindowSize.setWidth(perfectWidth);
+            break;
+
+        case Left:
+        case Right:
+            m_mainWindowSize.setHeight(perfectHeight);
+            m_mainWindowSize.setWidth(defaultWidth);
+            break;
+
+        default:
+            Q_ASSERT(false);
+        }
+    } else {
         Q_ASSERT(false);
     }
 }

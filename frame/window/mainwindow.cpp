@@ -68,33 +68,42 @@ void MainWindow::initConnections()
 {
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
 }
 
 void MainWindow::updatePosition()
 {
+    // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
     clearStrutPartial();
+    updateGeometry();
+    setStrutPartial();
+}
+
+void MainWindow::updateGeometry()
+{
     setFixedSize(m_settings->windowSize());
     m_mainPanel->updateDockPosition(m_settings->position());
 
     const QRect primaryRect = m_displayInter->primaryRect();
+    const int offsetX = (primaryRect.width() - width()) / 2;
+    const int offsetY = (primaryRect.height() - height()) / 2;
     switch (m_settings->position())
     {
     case Top:
+        move(primaryRect.topLeft().x() + offsetX, 0);         break;
     case Left:
-        move(primaryRect.topLeft());                    break;
+        move(primaryRect.topLeft().x(), offsetY);             break;
     case Right:
-        move(primaryRect.right() - width(), 0);         break;
+        move(primaryRect.right() - width(), offsetY);         break;
     case Bottom:
-        move(0, primaryRect.bottom() - height() + 1);   break;
+        move(offsetX, primaryRect.bottom() - height() + 1);   break;
     default:
         Q_ASSERT(false);
     }
-
-    setStrutPartial();
 }
 
 void MainWindow::clearStrutPartial()
@@ -121,7 +130,7 @@ void MainWindow::setStrutPartial()
     {
     case Position::Top:
         orientation = XcbMisc::OrientationTop;
-        strut = r.bottom();
+        strut = r.bottom() + 1;
         strutStart = r.left();
         strutEnd = r.right();
         break;

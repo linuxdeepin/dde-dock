@@ -19,8 +19,9 @@ public:
     const QList<DockItem *> itemList() const;
 
 signals:
-    void itemInserted(const int index, DockItem *item);
-    void itemRemoved(DockItem *item);
+    void itemInserted(const int index, DockItem *item) const;
+    void itemRemoved(DockItem *item) const;
+    void itemMoved(DockItem *item, const int index) const;
 
 public slots:
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);

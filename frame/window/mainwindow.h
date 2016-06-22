@@ -26,6 +26,7 @@ private:
 
 private slots:
     void updatePosition();
+    void updateGeometry();
     void clearStrutPartial();
     void setStrutPartial();
 

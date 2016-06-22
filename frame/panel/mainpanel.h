@@ -30,6 +30,7 @@ private slots:
     void adjustItemSize();
     void itemInserted(const int index, DockItem *item);
     void itemRemoved(DockItem *item);
+    void itemMoved(DockItem *item, const int index);
     void itemDragStarted();
 
 private:

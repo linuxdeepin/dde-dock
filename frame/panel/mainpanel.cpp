@@ -26,6 +26,7 @@ MainPanel::MainPanel(QWidget *parent)
 
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved);
+    connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -156,6 +157,14 @@ void MainPanel::itemInserted(const int index, DockItem *item)
 void MainPanel::itemRemoved(DockItem *item)
 {
     m_itemLayout->removeWidget(item);
+}
+
+void MainPanel::itemMoved(DockItem *item, const int index)
+{
+    // remove old item
+    m_itemLayout->removeWidget(item);
+    // insert new position
+    m_itemLayout->insertWidget(index, item);
 }
 
 void MainPanel::itemDragStarted()
