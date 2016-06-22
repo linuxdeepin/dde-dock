@@ -19,7 +19,11 @@ void DockPluginsController::loadPlugins()
     Q_ASSERT(m_pluginLoaderList.isEmpty());
     Q_ASSERT(m_pluginsInterfaceList.isEmpty());
 
+#ifdef QT_DEBUG
     const QDir pluginsDir("plugins");
+#else
+    const QDir pluginsDir("../lib/dde-dock/plugins");
+#endif
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
     for (const QString file : plugins)
