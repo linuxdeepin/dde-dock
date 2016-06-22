@@ -33,6 +33,8 @@ protected:
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
+    const QRect perfectIconRect() const;
+
     void showContextMenu();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;

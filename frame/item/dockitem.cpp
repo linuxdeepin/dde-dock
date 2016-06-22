@@ -37,6 +37,19 @@ void DockItem::mousePressEvent(QMouseEvent *e)
         return showContextMenu();
 }
 
+const QRect DockItem::perfectIconRect() const
+{
+    const QRect itemRect = rect();
+    const int iconSize = std::min(itemRect.width(), itemRect.height());
+
+    QRect iconRect;
+    iconRect.setWidth(iconSize);
+    iconRect.setHeight(iconSize);
+    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
+
+    return iconRect;
+}
+
 void DockItem::showContextMenu()
 {
     const QString menuJson = contextMenu();

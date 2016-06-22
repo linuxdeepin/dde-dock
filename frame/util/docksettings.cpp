@@ -208,7 +208,6 @@ void DockSettings::dockItemCountChanged()
 
 void DockSettings::calculateWindowConfig()
 {
-    const QRect primaryRect = m_displayInter->primaryRect();
     const int defaultHeight = AppItem::itemBaseHeight();
     const int defaultWidth = AppItem::itemBaseWidth();
 
@@ -219,12 +218,12 @@ void DockSettings::calculateWindowConfig()
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight);
-            m_mainWindowSize.setWidth(primaryRect.width());
+            m_mainWindowSize.setWidth(m_primaryRect.width());
             break;
 
         case Left:
         case Right:
-            m_mainWindowSize.setHeight(primaryRect.height());
+            m_mainWindowSize.setHeight(m_primaryRect.height());
             m_mainWindowSize.setWidth(defaultWidth);
             break;
 
@@ -234,33 +233,37 @@ void DockSettings::calculateWindowConfig()
     }
     else if (m_displayMode == Dock::Fashion)
     {
-        int appItemCount = 0;
-        int pluginItemCount = 0;
+//        int appItemCount = 0;
+//        int pluginItemCount = 0;
+        int perfectWidth = 0;
+        int perfectHeight = 0;
         const QList<DockItem *> itemList = m_itemController->itemList();
         for (auto item : itemList)
         {
             switch (item->itemType())
             {
             case DockItem::Launcher:
-            case DockItem::App:         ++appItemCount;     break;
-            case DockItem::Plugins:     ++pluginItemCount;  break;
+            case DockItem::App:         perfectWidth += defaultWidth;
+                                        perfectHeight += defaultHeight;             break;
+            case DockItem::Plugins:     perfectWidth += item->sizeHint().width();
+                                        perfectHeight += item->sizeHint().height(); break;
             default:;
             }
         }
 
-        const int perfectWidth = qMin(primaryRect.width(), defaultWidth * (appItemCount + pluginItemCount));
-        const int perfectHeight = qMin(primaryRect.height(), defaultHeight * (appItemCount + pluginItemCount));
+        const int calcWidth = qMin(m_primaryRect.width(), perfectWidth);
+        const int calcHeight = qMin(m_primaryRect.height(), perfectHeight);
         switch (m_position)
         {
         case Top:
         case Bottom:
             m_mainWindowSize.setHeight(defaultHeight);
-            m_mainWindowSize.setWidth(perfectWidth);
+            m_mainWindowSize.setWidth(calcWidth);
             break;
 
         case Left:
         case Right:
-            m_mainWindowSize.setHeight(perfectHeight);
+            m_mainWindowSize.setHeight(calcHeight);
             m_mainWindowSize.setWidth(defaultWidth);
             break;
 

@@ -27,6 +27,9 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
 {
+    if (e->button() == Qt::RightButton && !perfectIconRect().contains(e->pos()))
+        return QWidget::mousePressEvent(e);
+
     if (e->button() != Qt::LeftButton)
         return;
 

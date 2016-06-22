@@ -102,7 +102,13 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
 void AppItem::mousePressEvent(QMouseEvent *e)
 {
-    DockItem::mousePressEvent(e);
+    if (e->button() == Qt::RightButton)
+    {
+        if (perfectIconRect().contains(e->pos()))
+            return showContextMenu();
+        else
+            return QWidget::mousePressEvent(e);
+    }
 
     if (e->button() == Qt::LeftButton)
         MousePressPos = e->pos();
