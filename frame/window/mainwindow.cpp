@@ -83,6 +83,7 @@ void MainWindow::updateGeometry()
 {
     setFixedSize(m_settings->windowSize());
     m_mainPanel->updateDockPosition(m_settings->position());
+    m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     const QRect primaryRect = m_settings->primaryRect();
     const int offsetX = (primaryRect.width() - width()) / 2;

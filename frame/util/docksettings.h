@@ -24,6 +24,7 @@ class DockSettings : public QObject
 public:
     explicit DockSettings(QObject *parent = 0);
 
+    DisplayMode displayMode() const;
     Position position() const;
     int screenHeight() const;
     const QRect primaryRect() const;

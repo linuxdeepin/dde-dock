@@ -58,6 +58,16 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     m_itemAdjustTimer->start();
 }
 
+void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
+{
+    const QList<DockItem *> itemList = m_itemController->itemList();
+    for (auto item : itemList)
+    {
+        if (item->itemType() == DockItem::Placeholder)
+            item->setVisible(displayMode == Dock::Efficient);
+    }
+}
+
 void MainPanel::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
@@ -192,13 +202,13 @@ void MainPanel::adjustItemSize()
     int base;
     if (m_position == Dock::Top || m_position == Dock::Bottom)
     {
-        qDebug() << "width: " << totalWidth << width();
+//        qDebug() << "width: " << totalWidth << width();
         overflow = totalWidth;
         base = width();
     }
     else
     {
-        qDebug() << "height: " << totalHeight << height();
+//        qDebug() << "height: " << totalHeight << height();
         overflow = totalHeight;
         base = height();
     }

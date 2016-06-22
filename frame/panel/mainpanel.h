@@ -16,6 +16,7 @@ public:
     explicit MainPanel(QWidget *parent = 0);
 
     void updateDockPosition(const Position dockPosition);
+    void updateDockDisplayMode(const Dock::DisplayMode displayMode);
 
 private:
     void resizeEvent(QResizeEvent *e);

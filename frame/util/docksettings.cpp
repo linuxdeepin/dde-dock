@@ -91,6 +91,11 @@ DockSettings::DockSettings(QObject *parent)
     calculateWindowConfig();
 }
 
+DisplayMode DockSettings::displayMode() const
+{
+    return m_displayMode;
+}
+
 Position DockSettings::position() const
 {
     return m_position;
