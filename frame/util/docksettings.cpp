@@ -233,8 +233,6 @@ void DockSettings::calculateWindowConfig()
     }
     else if (m_displayMode == Dock::Fashion)
     {
-//        int appItemCount = 0;
-//        int pluginItemCount = 0;
         int perfectWidth = 0;
         int perfectHeight = 0;
         const QList<DockItem *> itemList = m_itemController->itemList();

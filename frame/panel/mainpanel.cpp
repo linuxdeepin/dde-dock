@@ -11,6 +11,7 @@ MainPanel::MainPanel(QWidget *parent)
       m_position(Dock::Top),
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
 
+      m_itemAdjustTimer(new QTimer(this)),
       m_itemController(DockItemController::instance(this))
 {
     m_itemLayout->setSpacing(0);
@@ -27,6 +28,10 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
+    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize);
+
+    m_itemAdjustTimer->setSingleShot(true);
+    m_itemAdjustTimer->setInterval(200);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -50,14 +55,14 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     case Position::Right:           m_itemLayout->setDirection(QBoxLayout::TopToBottom);    break;
     }
 
-    adjustItemSize();
+    m_itemAdjustTimer->start();
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
 
-    adjustItemSize();
+    m_itemAdjustTimer->start();
 }
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
@@ -115,6 +120,8 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::adjustItemSize()
 {
+    Q_ASSERT(sender() == m_itemAdjustTimer);
+
     QSize itemSize;
     switch (m_position)
     {
@@ -134,16 +141,93 @@ void MainPanel::adjustItemSize()
         Q_ASSERT(false);
     }
 
+    if (itemSize.height() < 0 || itemSize.width() < 0)
+        return;
+
+    int totalAppItemCount = 0;
+    int totalWidth = 0;
+    int totalHeight = 0;
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
         switch (item->itemType())
         {
+        case DockItem::App:
         case DockItem::Launcher:
-        case DockItem::App:     item->setFixedSize(itemSize);    break;
+            item->setFixedSize(itemSize);
+            ++totalAppItemCount;
+            totalWidth += itemSize.width();
+            totalHeight += itemSize.height();
+            break;
+        case DockItem::Plugins:
+            totalWidth += item->sizeHint().width();
+            totalHeight += item->sizeHint().height();
+            break;
         default:;
         }
     }
+
+    // test if panel can display all items completely
+    bool containsCompletely = false;
+    switch (m_position)
+    {
+    case Dock::Top:
+    case Dock::Bottom:
+        containsCompletely = totalWidth <= width();     break;
+
+    case Dock::Left:
+    case Dock::Right:
+        containsCompletely = totalHeight <= height();   break;
+
+    default:
+        Q_ASSERT(false);
+    }
+
+    // abort adjust.
+    if (containsCompletely)
+        return;
+
+    // now, we need to decrease item size to fit panel size
+    int overflow;
+    int base;
+    if (m_position == Dock::Top || m_position == Dock::Bottom)
+    {
+        qDebug() << "width: " << totalWidth << width();
+        overflow = totalWidth;
+        base = width();
+    }
+    else
+    {
+        qDebug() << "height: " << totalHeight << height();
+        overflow = totalHeight;
+        base = height();
+    }
+
+    const int decrease = double(overflow - base) / totalAppItemCount;
+    int extraDecrease = overflow - base - decrease * totalAppItemCount;
+
+    for (auto item : itemList)
+    {
+        if (item->itemType() != DockItem::App && item->itemType() != DockItem::Launcher)
+            continue;
+
+        switch (m_position)
+        {
+        case Dock::Top:
+        case Dock::Bottom:
+            item->setFixedWidth(item->width() - decrease - bool(extraDecrease));
+
+        case Dock::Left:
+        case Dock::Right:
+            item->setFixedHeight(item->height() - decrease - bool(extraDecrease));
+        }
+
+        if (extraDecrease)
+            --extraDecrease;
+    }
+
+    // ensure all extra space assigned
+    Q_ASSERT(extraDecrease == 0);
 }
 
 void MainPanel::itemInserted(const int index, DockItem *item)
@@ -151,7 +235,7 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     initItemConnection(item);
     m_itemLayout->insertWidget(index, item);
 
-    adjustItemSize();
+    m_itemAdjustTimer->start();
 }
 
 void MainPanel::itemRemoved(DockItem *item)

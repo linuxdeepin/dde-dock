@@ -12,6 +12,7 @@ public:
 
 private:
     void mousePressEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e);
 };
 
 #endif // PLACEHOLDERITEM_H

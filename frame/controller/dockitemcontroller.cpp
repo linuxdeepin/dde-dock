@@ -44,10 +44,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
                                 m_itemList.indexOf(replaceItem);
 
     m_itemList.removeAt(moveIndex);
-//    emit itemRemoved(moveItem);
-
     m_itemList.insert(replaceIndex, moveItem);
-//    emit itemInserted(replaceIndex, moveItem);
     emit itemMoved(moveItem, replaceIndex);
 
     // for app move, index 0 is launcher item, need to pass it.

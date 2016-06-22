@@ -60,13 +60,6 @@ void AppItem::paintEvent(QPaintEvent *e)
     if (m_draging || !m_itemEntry->isValid())
         return;
 
-//    const int iconSize = std::min(itemRect.width(), itemRect.height());
-
-//    QRect iconRect;
-//    iconRect.setWidth(iconSize);
-//    iconRect.setHeight(iconSize);
-//    iconRect.moveTopLeft(itemRect.center() - iconRect.center());
-
     QPainter painter(this);
     if (!painter.isActive())
         return;
@@ -84,10 +77,6 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     // draw icon
     painter.drawPixmap(itemRect.center() - m_icon.rect().center(), m_icon);
-
-    // draw text
-//    painter.setPen(Qt::red);
-//    painter.drawText(rect(), m_itemEntry->title());
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)

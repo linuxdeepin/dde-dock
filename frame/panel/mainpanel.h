@@ -5,6 +5,7 @@
 #include "util/docksettings.h"
 
 #include <QFrame>
+#include <QTimer>
 #include <QBoxLayout>
 
 class MainPanel : public QFrame
@@ -37,6 +38,7 @@ private:
     Position m_position;
     QBoxLayout *m_itemLayout;
 
+    QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
 
     static DockItem *DragingItem;

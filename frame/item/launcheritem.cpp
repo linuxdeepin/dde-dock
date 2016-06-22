@@ -14,6 +14,9 @@ void LauncherItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
+    if (!isVisible())
+        return;
+
     QPainter painter(this);
     painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
 }
