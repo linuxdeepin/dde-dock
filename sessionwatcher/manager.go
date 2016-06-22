@@ -24,6 +24,7 @@ type Manager struct {
 	loginManager  *login1.Manager
 	sessionLocker sync.Mutex
 	sessions      map[string]*login1.Session
+	IsActive      bool
 }
 
 func newManager() (*Manager, error) {
@@ -139,27 +140,47 @@ func (m *Manager) handleSessionChanged() {
 		return
 	}
 
-	if m.isActive() {
+	isActive := m.checkIsActive()
+	changed := m.setIsActive(isActive)
+	if !changed {
+		return
+	}
+
+	if isActive {
+		logger.Debug("[handleSessionChanged] Resume pulse")
 		suspendPulseSinks(0)
 		suspendPulseSources(0)
 	} else {
+		logger.Debug("[handleSessionChanged] Suspend pulse")
 		suspendPulseSinks(1)
 		suspendPulseSources(1)
 	}
 }
 
-func (m *Manager) isActive() bool {
+// return is changed?
+func (m *Manager) setIsActive(val bool) bool {
+	if m.IsActive != val {
+		m.IsActive = val
+		logger.Debug("[setIsActive] IsActive changed:", val)
+		dbus.NotifyChange(m, "IsActive")
+		return true
+	}
+	return false
+}
+
+func (m *Manager) checkIsActive() bool {
 	var active bool = false
 	m.sessionLocker.Lock()
-	for _, s := range m.sessions {
-		logger.Debug("[isActive] info:", s.Path, s.Active.Get())
-		if s.Active.Get() {
+	for _, session := range m.sessions {
+		isSessionActive := session.Active.Get()
+		logger.Debugf("[checkIsActive] session path: %q,isActive: %v", session.Path, isSessionActive)
+		if isSessionActive {
 			active = true
 			break
 		}
 	}
 	m.sessionLocker.Unlock()
 
-	logger.Debug("Session state:", curUid, active)
+	logger.Debugf("[checkIsActive] result user: %v isActive: %v", curUid, active)
 	return active
 }

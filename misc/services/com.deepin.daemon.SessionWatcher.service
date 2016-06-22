@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=com.deepin.daemon.SessionWatcher
+Exec=/usr/lib/deepin-daemon/dde-session-daemon
