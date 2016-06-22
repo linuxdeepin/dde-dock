@@ -34,7 +34,6 @@ private:
     MainPanel *m_mainPanel;
 
     DockSettings *m_settings;
-    DBusDisplay *m_displayInter;
     XcbMisc *m_xcbMisc;
 
     QTimer *m_positionUpdateTimer;

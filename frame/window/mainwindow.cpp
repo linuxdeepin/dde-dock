@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
       m_mainPanel(new MainPanel(this)),
 
       m_settings(new DockSettings(this)),
-      m_displayInter(new DBusDisplay(this)),
 
       m_xcbMisc(XcbMisc::instance()),
 
@@ -22,8 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     initComponents();
     initConnections();
-
-    m_positionUpdateTimer->start();
 }
 
 MainWindow::~MainWindow()
@@ -66,7 +63,6 @@ void MainWindow::initComponents()
 
 void MainWindow::initConnections()
 {
-    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry);
 
@@ -88,7 +84,7 @@ void MainWindow::updateGeometry()
     setFixedSize(m_settings->windowSize());
     m_mainPanel->updateDockPosition(m_settings->position());
 
-    const QRect primaryRect = m_displayInter->primaryRect();
+    const QRect primaryRect = m_settings->primaryRect();
     const int offsetX = (primaryRect.width() - width()) / 2;
     const int offsetY = (primaryRect.height() - height()) / 2;
     switch (m_settings->position())
@@ -117,7 +113,7 @@ void MainWindow::setStrutPartial()
     clearStrutPartial();
 
     const Position side = m_settings->position();
-    const int maxScreenHeight = m_displayInter->screenHeight();
+    const int maxScreenHeight = m_settings->screenHeight();
 
     XcbMisc::Orientation orientation;
     uint strut;

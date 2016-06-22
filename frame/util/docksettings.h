@@ -25,6 +25,8 @@ public:
     explicit DockSettings(QObject *parent = 0);
 
     Position position() const;
+    int screenHeight() const;
+    const QRect primaryRect() const;
     const QSize windowSize() const;
 
     void showDockSettingsMenu();
@@ -52,6 +54,7 @@ private:
     Position m_position;
     HideMode m_hideMode;
     DisplayMode m_displayMode;
+    QRect m_primaryRect;
     QSize m_mainWindowSize;
 
     DMenu m_settingsMenu;

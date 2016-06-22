@@ -28,6 +28,7 @@ DockSettings::DockSettings(QObject *parent)
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
+    m_primaryRect = m_displayInter->primaryRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     m_iconSize = m_dockInter->iconSize();
@@ -93,6 +94,16 @@ DockSettings::DockSettings(QObject *parent)
 Position DockSettings::position() const
 {
     return m_position;
+}
+
+int DockSettings::screenHeight() const
+{
+    return m_displayInter->screenHeight();
+}
+
+const QRect DockSettings::primaryRect() const
+{
+    return m_primaryRect;
 }
 
 const QSize DockSettings::windowSize() const
