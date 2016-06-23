@@ -32,7 +32,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (d *Daemon) GetDependencies() []string {
-	return []string{"screensaver", "keybinding"}
+	return []string{"screensaver", "keybinding", "sessionwatcher"}
 }
 
 func (d *Daemon) Start() (err error) {

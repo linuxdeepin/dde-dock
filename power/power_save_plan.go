@@ -26,6 +26,7 @@ func init() {
 
 type powerSavePlan struct {
 	manager           *Manager
+	isSessionActive   bool
 	screenBlackTicker *countTicker
 	sleepDelay        int32
 	sleepExit         chan int
@@ -36,6 +37,10 @@ type powerSavePlan struct {
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
 	p := new(powerSavePlan)
 	p.manager = manager
+
+	sessionWatcher := p.manager.sessionWatcher
+	p.isSessionActive = sessionWatcher.IsActive.Get()
+
 	return "PowerSavePlan", p, nil
 }
 
@@ -85,6 +90,12 @@ func (psp *powerSavePlan) Reset() {
 func (psp *powerSavePlan) Start() error {
 	psp.Reset()
 	psp.initSettingsChangedHandler()
+
+	sessionWatcher := psp.manager.sessionWatcher
+	sessionWatcher.IsActive.ConnectChanged(func() {
+		psp.isSessionActive = sessionWatcher.IsActive.Get()
+		logger.Debug("is session active changed", psp.isSessionActive)
+	})
 
 	//OnBattery changed will effect current PowerSavePlan
 	psp.manager.upower.OnBattery.ConnectChanged(psp.Reset)
@@ -224,6 +235,11 @@ func (psp *powerSavePlan) sleep() {
 func (psp *powerSavePlan) HandleIdleOn() {
 	if psp.manager.isSuspending {
 		logger.Debug("Suspending NOT HandleIdleOn")
+		return
+	}
+
+	if !psp.isSessionActive {
+		logger.Info("Session isn't active, don't HandleIdleOn")
 		return
 	}
 

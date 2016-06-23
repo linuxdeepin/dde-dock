@@ -12,6 +12,7 @@ package power
 import (
 	libdisplay "dbus/com/deepin/daemon/display"
 	libkeybinding "dbus/com/deepin/daemon/keybinding"
+	libsessionwatcher "dbus/com/deepin/daemon/sessionwatcher"
 	liblockfront "dbus/com/deepin/dde/lockfront"
 	libsessionmanager "dbus/com/deepin/sessionmanager"
 	libnotifications "dbus/org/freedesktop/notifications"
@@ -34,6 +35,7 @@ type Manager struct {
 	mediaKey       *libkeybinding.Mediakey
 	notifier       *libnotifications.Notifier
 	sessionManager *libsessionmanager.SessionManager
+	sessionWatcher *libsessionwatcher.SessionWatcher
 	screenSaver    *libscreensaver.ScreenSaver
 	display        *libdisplay.Display
 	lockFront      *liblockfront.LockFront
@@ -142,6 +144,13 @@ func (m *Manager) initDBusLib() error {
 		logger.Error("init lockFront failed:", err)
 		return err
 	}
+
+	m.sessionWatcher, err = libsessionwatcher.NewSessionWatcher("com.deepin.daemon.SessionWatcher", "/com/deepin/daemon/SessionWatcher")
+	if err != nil {
+		logger.Error("init SessionWatcher failed:", err)
+		return err
+	}
+
 	return nil
 }
 
@@ -180,6 +189,10 @@ func (m *Manager) finalizeDBusLib() {
 		m.lockFront = nil
 	}
 
+	if m.sessionWatcher != nil {
+		libsessionwatcher.DestroySessionWatcher(m.sessionWatcher)
+		m.sessionWatcher = nil
+	}
 }
 
 func NewManager() (*Manager, error) {
