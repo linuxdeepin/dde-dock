@@ -34,15 +34,18 @@ private:
 private slots:
     void updateTitle();
     void updateIcon();
+    void activeChanged();
 
 private:
     DBusDockEntry *m_itemEntry;
 
     bool m_draging;
 
+    bool m_active;
     WindowDict m_titles;
     QString m_id;
-    QPixmap m_icon;
+    QPixmap m_smallIcon;
+    QPixmap m_largeIcon;
 
     static int IconBaseSize;
     static QPoint MousePressPos;

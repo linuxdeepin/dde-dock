@@ -20,7 +20,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     initClientManager();
 
     m_id = m_itemEntry->id();
+    m_active = m_itemEntry->active();
 
+    connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
@@ -45,7 +47,10 @@ int AppItem::iconBaseSize()
 
 int AppItem::itemBaseWidth()
 {
-    return itemBaseHeight() * 1.4;
+    if (DockDisplayMode == Dock::Fashion)
+        return itemBaseHeight() * 1.1;
+    else
+        return itemBaseHeight() * 1.4;
 }
 
 int AppItem::itemBaseHeight()
@@ -57,7 +62,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_draging || !m_itemEntry->isValid())
+    if (m_draging)
         return;
 
     QPainter painter(this);
@@ -68,29 +73,69 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     // draw background
     const QRect backgroundRect = itemRect.marginsRemoved(QMargins(1, 2, 1, 2));
-    if (m_itemEntry->active())
+    if (DockDisplayMode == Efficient)
     {
-        painter.fillRect(backgroundRect, QColor(70, 100, 200, 120));
-
-        const int activeLineWidth = 3;
-        QRect activeRect = backgroundRect;
-        switch (DockPosition)
+        if (m_active)
         {
-        case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
-        case Bottom:    activeRect.setTop(activeRect.bottom() - activeLineWidth);   break;
-        case Left:      activeRect.setRight(activeRect.left() + activeLineWidth);   break;
-        case Right:     activeRect.setLeft(activeRect.right() - activeLineWidth);   break;
-        }
+            painter.fillRect(backgroundRect, QColor(70, 100, 200, 120));
 
-        painter.fillRect(activeRect, QColor(47, 168, 247));
+            const int activeLineWidth = 3;
+            QRect activeRect = backgroundRect;
+            switch (DockPosition)
+            {
+            case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
+            case Bottom:    activeRect.setTop(activeRect.bottom() - activeLineWidth);   break;
+            case Left:      activeRect.setRight(activeRect.left() + activeLineWidth);   break;
+            case Right:     activeRect.setLeft(activeRect.right() - activeLineWidth);   break;
+            }
+
+            painter.fillRect(activeRect, QColor(47, 168, 247));
+        }
+        else if (!m_titles.isEmpty())
+            painter.fillRect(backgroundRect, QColor(255, 255, 255, 50));
+    //    else
+    //        painter.fillRect(backgroundRect, Qt::gray);
     }
-    else if (!m_titles.isEmpty())
-        painter.fillRect(backgroundRect, QColor(255, 255, 255, 50));
-//    else
-//        painter.fillRect(backgroundRect, Qt::gray);
+    else
+    {
+        if (!m_titles.isEmpty())
+        {
+            const int activeLineWidth = 1;
+            const int activeLineLength = 20;
+            QRect activeRect = itemRect;
+            switch (DockPosition)
+            {
+            case Top:
+                activeRect.setBottom(activeRect.top() + activeLineWidth);
+                activeRect.setWidth(activeLineLength);
+                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+                break;
+            case Bottom:
+                activeRect.setTop(activeRect.bottom() - activeLineWidth);
+                activeRect.setWidth(activeLineLength);
+                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+                break;
+            case Left:
+                activeRect.setRight(activeRect.left() + activeLineWidth);
+                activeRect.setHeight(activeLineLength);
+                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+                break;
+            case Right:
+                activeRect.setLeft(activeRect.right() - activeLineWidth);
+                activeRect.setHeight(activeLineLength);
+                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+                break;
+            }
+
+            painter.fillRect(activeRect, QColor(163, 167, 166));
+        }
+    }
 
     // draw icon
-    painter.drawPixmap(itemRect.center() - m_icon.rect().center(), m_icon);
+    if (DockDisplayMode == Efficient)
+        painter.drawPixmap(itemRect.center() - m_smallIcon.rect().center(), m_smallIcon);
+    else
+        painter.drawPixmap(itemRect.center() - m_largeIcon.rect().center(), m_largeIcon);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -195,7 +240,13 @@ void AppItem::updateTitle()
 void AppItem::updateIcon()
 {
     const QString icon = m_itemEntry->icon();
-    const int iconSize = qMin(width(), height()) * 0.7;
+    const int iconSize = qMin(width(), height());
 
-    m_icon = ThemeAppIcon::getIcon(icon, iconSize);
+    m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
+    m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
+}
+
+void AppItem::activeChanged()
+{
+    m_active = !m_active;
 }

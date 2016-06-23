@@ -23,6 +23,7 @@ public:
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
     static void setDockPosition(const Position side);
+    static void setDockDisplayMode(const DisplayMode mode);
 
     ItemType itemType() const;
 
@@ -45,6 +46,7 @@ protected:
     DBusMenuManager *m_menuManagerInter;
 
     static Position DockPosition;
+    static DisplayMode DockDisplayMode;
 };
 
 #endif // DOCKITEM_H

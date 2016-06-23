@@ -34,6 +34,7 @@ DockSettings::DockSettings(QObject *parent)
     m_iconSize = m_dockInter->iconSize();
     AppItem::setIconBaseSize(m_iconSize);
     DockItem::setDockPosition(m_position);
+    DockItem::setDockDisplayMode(m_displayMode);
 
     m_fashionModeAct.setCheckable(true);
     m_efficientModeAct.setCheckable(true);
@@ -196,6 +197,7 @@ void DockSettings::iconSizeChanged()
 void DockSettings::displayModeChanged()
 {
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
+    DockItem::setDockDisplayMode(m_displayMode);
 
     calculateWindowConfig();
 

@@ -7,6 +7,7 @@
 #include <QJsonObject>
 
 Position DockItem::DockPosition = Position::Top;
+DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
@@ -19,6 +20,11 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
 void DockItem::setDockPosition(const Position side)
 {
     DockPosition = side;
+}
+
+void DockItem::setDockDisplayMode(const DisplayMode mode)
+{
+    DockDisplayMode = mode;
 }
 
 DockItem::ItemType DockItem::itemType() const

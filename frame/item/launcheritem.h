@@ -16,7 +16,8 @@ private:
     void mousePressEvent(QMouseEvent *e);
 
 private:
-    QPixmap m_icon;
+    QPixmap m_smallIcon;
+    QPixmap m_largeIcon;
 };
 
 #endif // LAUNCHERITEM_H

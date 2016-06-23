@@ -58,7 +58,7 @@ DockItemController::DockItemController(QObject *parent)
       m_pluginsInter(new DockPluginsController(this)),
       m_placeholderItem(new PlaceholderItem)
 {
-    m_placeholderItem->hide();
+//    m_placeholderItem->hide();
 
     m_itemList.append(new LauncherItem);
     for (auto entry : m_appInter->entries())

@@ -63,12 +63,12 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
 
-    const QList<DockItem *> itemList = m_itemController->itemList();
-    for (auto item : itemList)
-    {
-        if (item->itemType() == DockItem::Placeholder)
-            item->setVisible(displayMode == Dock::Efficient);
-    }
+//    const QList<DockItem *> itemList = m_itemController->itemList();
+//    for (auto item : itemList)
+//    {
+//        if (item->itemType() == DockItem::Placeholder)
+//            item->setVisible(displayMode == Dock::Efficient);
+//    }
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)

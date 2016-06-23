@@ -18,14 +18,19 @@ void LauncherItem::paintEvent(QPaintEvent *e)
         return;
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    if (DockDisplayMode == Fashion)
+        painter.drawPixmap(rect().center() - m_largeIcon.rect().center(), m_largeIcon);
+    else
+        painter.drawPixmap(rect().center() - m_smallIcon.rect().center(), m_smallIcon);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    m_icon = ThemeAppIcon::getIcon("deepin-launcher", qMin(width(), height()) * 0.7);
+    const int iconSize = qMin(width(), height());
+    m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
+    m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
 }
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
