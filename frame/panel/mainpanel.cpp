@@ -80,10 +80,13 @@ void MainPanel::resizeEvent(QResizeEvent *e)
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
-    // TODO: check
+    DockItem *dragSourceItem = qobject_cast<DockItem *>(e->source());
+    if (!dragSourceItem)
+        return;
+
     e->accept();
 
-    if (qobject_cast<DockItem *>(e->source()))
+    if (dragSourceItem)
         DragingItem->show();
 }
 
