@@ -7,7 +7,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 {
     m_timeLabel->setAlignment(Qt::AlignCenter);
     m_timeLabel->setStyleSheet("color:white;"
-                               "background-color:black;"
+//                               "background-color:black;"
                                "padding:5px;"
                                "font-size:12px;");
 

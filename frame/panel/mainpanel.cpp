@@ -22,7 +22,7 @@ MainPanel::MainPanel(QWidget *parent)
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:none;"
-                  "background-color:green;"
+                  "background-color:rgba(0, 0, 0, .6);"
                   "border-radius:5px 5px 5px 5px;"
                   "}");
 

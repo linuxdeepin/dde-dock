@@ -67,13 +67,27 @@ void AppItem::paintEvent(QPaintEvent *e)
     const QRect itemRect = rect();
 
     // draw background
-    const QRect backgroundRect = itemRect.marginsRemoved(QMargins(3, 3, 3, 3));
+    const QRect backgroundRect = itemRect.marginsRemoved(QMargins(1, 2, 1, 2));
     if (m_itemEntry->active())
-        painter.fillRect(backgroundRect, Qt::blue);
+    {
+        painter.fillRect(backgroundRect, QColor(70, 100, 200, 120));
+
+        const int activeLineWidth = 3;
+        QRect activeRect = backgroundRect;
+        switch (DockPosition)
+        {
+        case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
+        case Bottom:    activeRect.setTop(activeRect.bottom() - activeLineWidth);   break;
+        case Left:      activeRect.setRight(activeRect.left() + activeLineWidth);   break;
+        case Right:     activeRect.setLeft(activeRect.right() - activeLineWidth);   break;
+        }
+
+        painter.fillRect(activeRect, QColor(47, 168, 247));
+    }
     else if (!m_titles.isEmpty())
-        painter.fillRect(backgroundRect, Qt::cyan);
-    else
-        painter.fillRect(backgroundRect, Qt::gray);
+        painter.fillRect(backgroundRect, QColor(255, 255, 255, 50));
+//    else
+//        painter.fillRect(backgroundRect, Qt::gray);
 
     // draw icon
     painter.drawPixmap(itemRect.center() - m_icon.rect().center(), m_icon);
