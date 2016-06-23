@@ -7,6 +7,23 @@
 
 DWIDGET_USE_NAMESPACE
 
+// let startdde know that we've already started.
+void RegisterDdeSession()
+{
+    QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
+
+    QByteArray cookie = qgetenv(envName.toUtf8().data());
+    qunsetenv(envName.toUtf8().data());
+
+    if (!cookie.isEmpty()) {
+        QDBusInterface iface("com.deepin.SessionManager",
+                             "/com/deepin/SessionManager",
+                             "com.deepin.SessionManager",
+                             QDBusConnection::sessionBus());
+        iface.asyncCall("Register", QString(cookie));
+    }
+}
+
 int main(int argc, char *argv[])
 {
     DApplication app(argc, argv);
@@ -22,6 +39,7 @@ int main(int argc, char *argv[])
     MainWindow mw;
     QDBusConnection::sessionBus().registerService("com.deepin.dde.dock");
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/dock", "com.deepin.dde.dock", &mw);
+    RegisterDdeSession();
 
     QTimer::singleShot(500, &mw, &MainWindow::show);
 
