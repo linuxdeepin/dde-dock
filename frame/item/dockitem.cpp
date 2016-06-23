@@ -46,7 +46,7 @@ void DockItem::mousePressEvent(QMouseEvent *e)
 const QRect DockItem::perfectIconRect() const
 {
     const QRect itemRect = rect();
-    const int iconSize = std::min(itemRect.width(), itemRect.height());
+    const int iconSize = std::min(itemRect.width(), itemRect.height()) * 0.8;
 
     QRect iconRect;
     iconRect.setWidth(iconSize);
@@ -71,9 +71,24 @@ void DockItem::showContextMenu()
         return;
     }
 
-    const QPoint p = mapToGlobal(pos());
+    QPoint p;
+    QWidget *w = this;
+    do {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    } while (w);
+
+    const QRect r = rect();
+    switch (DockPosition)
+    {
+    case Top:       p += QPoint(r.width() / 2, r.height());      break;
+    case Bottom:    p += QPoint(r.width() / 2, 0);               break;
+    case Left:      p += QPoint(r.width(), r.height() / 2);      break;
+    case Right:     p += QPoint(0, r.height() / 2);              break;
+    }
+
     QJsonObject menuObject;
-    menuObject.insert("x", QJsonValue(p.x() + width() / 2));
+    menuObject.insert("x", QJsonValue(p.x()));
     menuObject.insert("y", QJsonValue(p.y()));
     menuObject.insert("isDockMenu", QJsonValue(true));
     menuObject.insert("menuJsonContent", QJsonValue(menuJson));
