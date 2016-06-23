@@ -10,14 +10,13 @@
 
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
-DBusClientManager *AppItem::ClientInter = nullptr;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
       m_draging(false)
 {
-    initClientManager();
+    setAcceptDrops(true);
 
     m_id = m_itemEntry->id();
     m_active = m_itemEntry->active();
@@ -184,6 +183,11 @@ void AppItem::resizeEvent(QResizeEvent *e)
     updateIcon();
 }
 
+void AppItem::dragEnterEvent(QDragEnterEvent *e)
+{
+    qDebug() << e;
+}
+
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(checked);
@@ -220,14 +224,6 @@ void AppItem::startDrag()
     m_draging = false;
     setVisible(true);
     update();
-}
-
-void AppItem::initClientManager()
-{
-    if (ClientInter)
-        return;
-
-    ClientInter = new DBusClientManager(this);
 }
 
 void AppItem::updateTitle()

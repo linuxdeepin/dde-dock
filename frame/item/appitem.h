@@ -24,6 +24,7 @@ private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
 
     void invokedMenuItem(const QString &itemId, const bool checked);
     const QString contextMenu() const;
@@ -49,7 +50,6 @@ private:
 
     static int IconBaseSize;
     static QPoint MousePressPos;
-    static DBusClientManager *ClientInter;
 };
 
 #endif // APPITEM_H

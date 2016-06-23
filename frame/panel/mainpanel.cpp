@@ -109,7 +109,6 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 void MainPanel::dropEvent(QDropEvent *e)
 {
     Q_UNUSED(e)
-//    qDebug() << e;
 }
 
 void MainPanel::initItemConnection(DockItem *item)
