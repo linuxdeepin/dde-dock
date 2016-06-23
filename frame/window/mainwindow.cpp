@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     initComponents();
     initConnections();
+
+    m_mainPanel->setFixedSize(m_settings->windowSize());
 }
 
 MainWindow::~MainWindow()

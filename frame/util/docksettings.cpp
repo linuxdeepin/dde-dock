@@ -238,22 +238,39 @@ void DockSettings::calculateWindowConfig()
     }
     else if (m_displayMode == Dock::Fashion)
     {
-        int perfectWidth = 0;
-        int perfectHeight = 0;
+//        int perfectWidth = 0;
+//        int perfectHeight = 0;
+//        const QList<DockItem *> itemList = m_itemController->itemList();
+//        for (auto item : itemList)
+//        {
+//            switch (item->itemType())
+//            {
+//            case DockItem::Launcher:
+//            case DockItem::App:         perfectWidth += defaultWidth;
+//                                        perfectHeight += defaultHeight;             break;
+//            case DockItem::Plugins:     perfectWidth += item->sizeHint().width();
+//                                        perfectHeight += item->sizeHint().height(); break;
+//            default:;
+//            }
+//        }
+
+        int visibleItemCount = 0;
         const QList<DockItem *> itemList = m_itemController->itemList();
         for (auto item : itemList)
         {
             switch (item->itemType())
             {
             case DockItem::Launcher:
-            case DockItem::App:         perfectWidth += defaultWidth;
-                                        perfectHeight += defaultHeight;             break;
-            case DockItem::Plugins:     perfectWidth += item->sizeHint().width();
-                                        perfectHeight += item->sizeHint().height(); break;
+            case DockItem::App:
+            case DockItem::Plugins:
+                ++visibleItemCount;
+                break;
             default:;
             }
         }
 
+        const int perfectWidth = visibleItemCount * defaultWidth;
+        const int perfectHeight = visibleItemCount * defaultHeight;
         const int calcWidth = qMin(m_primaryRect.width(), perfectWidth);
         const int calcHeight = qMin(m_primaryRect.height(), perfectHeight);
         switch (m_position)

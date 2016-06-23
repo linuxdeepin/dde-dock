@@ -5,6 +5,7 @@
 #include "pluginsiteminterface.h"
 #include "dbus/dbusdock.h"
 #include "item/dockitem.h"
+#include "item/placeholderitem.h"
 
 #include <QObject>
 
@@ -37,6 +38,7 @@ private:
 
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
+    PlaceholderItem *m_placeholderItem;
 
     static DockItemController *INSTANCE;
 };

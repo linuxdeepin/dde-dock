@@ -37,6 +37,7 @@ private slots:
 
 private:
     Position m_position;
+    DisplayMode m_displayMode;
     QBoxLayout *m_itemLayout;
 
     QTimer *m_itemAdjustTimer;

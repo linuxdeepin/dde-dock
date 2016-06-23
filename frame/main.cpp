@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     app.setApplicationVersion("2.0");
 
     MainWindow mw;
-    mw.show();
+    QTimer::singleShot(500, &mw, &MainWindow::show);
 
     return app.exec();
 }

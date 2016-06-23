@@ -9,7 +9,8 @@ DockItem *MainPanel::DragingItem = nullptr;
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
       m_position(Dock::Top),
-      m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight, this)),
+      m_displayMode(Dock::Fashion),
+      m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
 
       m_itemAdjustTimer(new QTimer(this)),
       m_itemController(DockItemController::instance(this))
@@ -60,6 +61,8 @@ void MainPanel::updateDockPosition(const Position dockPosition)
 
 void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
+    m_displayMode = displayMode;
+
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
@@ -170,8 +173,29 @@ void MainPanel::adjustItemSize()
             totalHeight += itemSize.height();
             break;
         case DockItem::Plugins:
-            totalWidth += item->sizeHint().width();
-            totalHeight += item->sizeHint().height();
+            if (m_displayMode == Fashion)
+            {
+                item->setFixedSize(itemSize);
+                ++totalAppItemCount;
+                totalWidth += itemSize.width();
+                totalHeight += itemSize.height();
+            }
+            else
+            {
+                item->setFixedSize(item->sizeHint());
+                if (m_position == Dock::Top || m_position == Dock::Bottom)
+                {
+                    item->setFixedHeight(itemSize.height());
+                    item->setFixedWidth(item->sizeHint().width());
+                }
+                else
+                {
+                    item->setFixedHeight(item->sizeHint().height());
+                    item->setFixedWidth(itemSize.width());
+                }
+                totalWidth += item->sizeHint().width();
+                totalHeight += item->sizeHint().height();
+            }
             break;
         default:;
         }
@@ -218,18 +242,23 @@ void MainPanel::adjustItemSize()
 
     for (auto item : itemList)
     {
-        if (item->itemType() != DockItem::App && item->itemType() != DockItem::Launcher)
+        if (item->itemType() == DockItem::Placeholder)
             continue;
+        if (item->itemType() == DockItem::Plugins)
+            if (m_displayMode != Dock::Fashion)
+                continue;
 
         switch (m_position)
         {
         case Dock::Top:
         case Dock::Bottom:
             item->setFixedWidth(item->width() - decrease - bool(extraDecrease));
+            break;
 
         case Dock::Left:
         case Dock::Right:
             item->setFixedHeight(item->height() - decrease - bool(extraDecrease));
+            break;
         }
 
         if (extraDecrease)

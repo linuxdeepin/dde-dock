@@ -55,12 +55,15 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
       m_appInter(new DBusDock(this)),
-      m_pluginsInter(new DockPluginsController(this))
+      m_pluginsInter(new DockPluginsController(this)),
+      m_placeholderItem(new PlaceholderItem)
 {
+    m_placeholderItem->hide();
+
     m_itemList.append(new LauncherItem);
     for (auto entry : m_appInter->entries())
         m_itemList.append(new AppItem(entry));
-    m_itemList.append(new PlaceholderItem);
+    m_itemList.append(m_placeholderItem);
 
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
