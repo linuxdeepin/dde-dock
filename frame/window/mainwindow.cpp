@@ -103,6 +103,8 @@ void MainWindow::updateGeometry()
     default:
         Q_ASSERT(false);
     }
+
+    m_mainPanel->update();
 }
 
 void MainWindow::clearStrutPartial()
