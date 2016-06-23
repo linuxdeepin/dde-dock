@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
 
+    QDBusConnection::sessionBus().registerService("com.deepin.dde.dock");
+
     MainWindow mw;
     QTimer::singleShot(500, &mw, &MainWindow::show);
 

@@ -31,7 +31,7 @@ private:
     explicit DockItemController(QObject *parent = 0);
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
-    void pluginsItemAdded(PluginsItemInterface *interface);
+    void pluginsItemInserted(PluginsItem *item);
 
 private:
     QList<DockItem *> m_itemList;

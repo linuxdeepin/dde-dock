@@ -1,20 +1,23 @@
 #ifndef DOCKPLUGINSCONTROLLER_H
 #define DOCKPLUGINSCONTROLLER_H
 
+#include "item/pluginsitem.h"
+
 #include <QPluginLoader>
 #include <QList>
 
+class DockItemController;
 class PluginsItemInterface;
 class DockPluginsController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit DockPluginsController(QObject *parent = 0);
+    explicit DockPluginsController(DockItemController *itemControllerInter = 0);
     ~DockPluginsController();
 
 signals:
-    void pluginsInserted(PluginsItemInterface *interface) const;
+    void pluginsInserted(PluginsItem *pluginsItem) const;
 
 private slots:
     void loadPlugins();
@@ -22,6 +25,7 @@ private slots:
 private:
     QList<PluginsItemInterface *> m_pluginsInterfaceList;
     QList<QPluginLoader *> m_pluginLoaderList;
+    DockItemController *m_itemControllerInter;
 };
 
 #endif // DOCKPLUGINSCONTROLLER_H

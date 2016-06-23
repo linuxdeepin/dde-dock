@@ -1,11 +1,13 @@
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
+#include "dockitemcontroller.h"
 
 #include <QDebug>
 #include <QDir>
 
-DockPluginsController::DockPluginsController(QObject *parent)
-    : QObject(parent)
+DockPluginsController::DockPluginsController(DockItemController *itemControllerInter)
+    : QObject(itemControllerInter),
+      m_itemControllerInter(itemControllerInter)
 {
     QMetaObject::invokeMethod(this, "loadPlugins", Qt::QueuedConnection);
 }
@@ -42,6 +44,5 @@ void DockPluginsController::loadPlugins()
 
         m_pluginLoaderList.append(pluginLoader);
         m_pluginsInterfaceList.append(interface);
-        emit pluginsInserted(interface);
     }
 }

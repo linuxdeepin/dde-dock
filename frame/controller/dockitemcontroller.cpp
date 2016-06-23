@@ -68,7 +68,7 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
 
-    connect(m_pluginsInter, &DockPluginsController::pluginsInserted, this, &DockItemController::pluginsItemAdded);
+    connect(m_pluginsInter, &DockPluginsController::pluginsInserted, this, &DockItemController::pluginsItemInserted);
 }
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path, const int index)
@@ -110,10 +110,8 @@ void DockItemController::appItemRemoved(const QString &appId)
     }
 }
 
-void DockItemController::pluginsItemAdded(PluginsItemInterface *interface)
+void DockItemController::pluginsItemInserted(PluginsItem *item)
 {
-    PluginsItem *item = new PluginsItem(interface);
-
     m_itemList.append(item);
     emit itemInserted(m_itemList.size(), item);
 }
