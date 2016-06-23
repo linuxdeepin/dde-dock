@@ -32,7 +32,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize);
 
     m_itemAdjustTimer->setSingleShot(true);
-    m_itemAdjustTimer->setInterval(200);
+    m_itemAdjustTimer->setInterval(100);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)

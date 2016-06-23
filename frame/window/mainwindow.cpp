@@ -12,7 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_xcbMisc(XcbMisc::instance()),
 
-      m_positionUpdateTimer(new QTimer(this))
+      m_positionUpdateTimer(new QTimer(this)),
+      m_sizeChangeAni(new QPropertyAnimation(this, "size")),
+      m_posChangeAni(new QPropertyAnimation(this, "pos"))
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -56,11 +58,37 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void MainWindow::setFixedSize(const QSize &size)
+{
+    if (m_sizeChangeAni->state() == QPropertyAnimation::Running)
+        return m_sizeChangeAni->setEndValue(size);
+
+    m_sizeChangeAni->setStartValue(this->size());
+    m_sizeChangeAni->setEndValue(size);
+    m_sizeChangeAni->start();
+}
+
+void MainWindow::move(int x, int y)
+{
+    if (m_posChangeAni->state() == QPropertyAnimation::Running)
+        return m_posChangeAni->setEndValue(QPoint(x, y));
+
+    m_posChangeAni->setStartValue(pos());
+    m_posChangeAni->setEndValue(QPoint(x, y));
+    m_posChangeAni->start();
+}
+
 void MainWindow::initComponents()
 {
     m_positionUpdateTimer->setSingleShot(true);
     m_positionUpdateTimer->setInterval(200);
     m_positionUpdateTimer->start();
+
+    m_sizeChangeAni->setDuration(200);
+    m_sizeChangeAni->setEasingCurve(QEasingCurve::OutCubic);
+
+    m_posChangeAni->setDuration(200);
+    m_posChangeAni->setEasingCurve(QEasingCurve::OutCubic);
 }
 
 void MainWindow::initConnections()
@@ -83,23 +111,25 @@ void MainWindow::updatePosition()
 
 void MainWindow::updateGeometry()
 {
-    setFixedSize(m_settings->windowSize());
+    const QSize size = m_settings->windowSize();
+
+    setFixedSize(size);
     m_mainPanel->updateDockPosition(m_settings->position());
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     const QRect primaryRect = m_settings->primaryRect();
-    const int offsetX = (primaryRect.width() - width()) / 2;
-    const int offsetY = (primaryRect.height() - height()) / 2;
+    const int offsetX = (primaryRect.width() - size.width()) / 2;
+    const int offsetY = (primaryRect.height() - size.height()) / 2;
     switch (m_settings->position())
     {
     case Top:
-        move(primaryRect.topLeft().x() + offsetX, 0);         break;
+        move(primaryRect.topLeft().x() + offsetX, 0);               break;
     case Left:
-        move(primaryRect.topLeft().x(), offsetY);             break;
+        move(primaryRect.topLeft().x(), offsetY);                   break;
     case Right:
-        move(primaryRect.right() - width(), offsetY);         break;
+        move(primaryRect.right() - size.width() + 1, offsetY);      break;
     case Bottom:
-        move(offsetX, primaryRect.bottom() - height() + 1);   break;
+        move(offsetX, primaryRect.bottom() - size.height() + 1);    break;
     default:
         Q_ASSERT(false);
     }
@@ -125,8 +155,8 @@ void MainWindow::setStrutPartial()
     uint strutStart;
     uint strutEnd;
 
-    const QPoint p = pos();
-    const QRect r = rect();
+    const QPoint p = m_posChangeAni->endValue().toPoint();
+    const QRect r = QRect(p, m_settings->windowSize());
     switch (side)
     {
     case Position::Top:

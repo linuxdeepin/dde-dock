@@ -21,6 +21,8 @@ private:
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
+    void setFixedSize(const QSize &size);
+    void move(int x, int y);
     void initComponents();
     void initConnections();
 
@@ -37,6 +39,8 @@ private:
     XcbMisc *m_xcbMisc;
 
     QTimer *m_positionUpdateTimer;
+    QPropertyAnimation *m_sizeChangeAni;
+    QPropertyAnimation *m_posChangeAni;
 };
 
 #endif // MAINWINDOW_H
