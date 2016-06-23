@@ -89,6 +89,11 @@ public Q_SLOTS: // METHODS
         return asyncCall(QStringLiteral("HandleMenuItem"), item);
     }
 
+    inline QDBusPendingReply<> HandleDragDrop(const QStringList &uriList)
+    {
+        return asyncCall(QStringLiteral("HandleDragDrop"), QVariant::fromValue(uriList));
+    }
+
     inline QDBusPendingReply<> RequestDock()
     {
         return asyncCall(QStringLiteral("RequestDock"));

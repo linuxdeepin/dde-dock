@@ -185,7 +185,21 @@ void AppItem::resizeEvent(QResizeEvent *e)
 
 void AppItem::dragEnterEvent(QDragEnterEvent *e)
 {
-    qDebug() << e;
+    // ignore drag from panel
+    if (e->source())
+        return;
+
+    e->accept();
+}
+
+void AppItem::dropEvent(QDropEvent *e)
+{
+    QStringList uriList;
+    for (auto uri : e->mimeData()->urls())
+        uriList << uri.toString();
+
+//    qDebug() << uriList;
+    m_itemEntry->HandleDragDrop(uriList);
 }
 
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
