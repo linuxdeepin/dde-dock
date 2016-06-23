@@ -219,12 +219,9 @@ void AppItem::startDrag()
     m_draging = true;
     update();
 
-    QPixmap pixmap(25, 25);
-    pixmap.fill(Qt::red);
-
     QDrag *drag = new QDrag(this);
-    drag->setPixmap(pixmap);
-    drag->setHotSpot(pixmap.rect().center());
+    drag->setPixmap(m_smallIcon);
+    drag->setHotSpot(m_smallIcon.rect().center());
     drag->setMimeData(new QMimeData);
 
     emit dragStarted();
