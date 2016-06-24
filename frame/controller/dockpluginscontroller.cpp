@@ -40,6 +40,10 @@ void DockPluginsController::loadPlugins()
         if (!QLibrary::isLibrary(file))
             continue;
 
+        // TODO: old dock plugins is uncompatible
+        if (file.startsWith("libdde-dock-"))
+            continue;
+
         const QString pluginFilePath = pluginsDir.absoluteFilePath(file);
         QPluginLoader *pluginLoader = new QPluginLoader(pluginFilePath, this);
         PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
