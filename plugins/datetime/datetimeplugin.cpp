@@ -24,13 +24,28 @@ DatetimePlugin::~DatetimePlugin()
     delete m_timeLabel;
 }
 
-const QString DatetimePlugin::name()
+const QString DatetimePlugin::pluginName()
 {
     return "datetime";
 }
 
-QWidget *DatetimePlugin::centeralWidget()
+PluginsItemInterface::PluginType DatetimePlugin::pluginType(const QString &itemKey)
 {
+    Q_UNUSED(itemKey);
+
+    return Complex;
+}
+
+void DatetimePlugin::init(PluginProxyInterface *proxyInter)
+{
+    m_proxyInter = proxyInter;
+    m_proxyInter->itemAdded(this, QString());
+}
+
+QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
     return m_timeLabel;
 }
 

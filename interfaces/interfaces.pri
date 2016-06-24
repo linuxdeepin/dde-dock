@@ -1,6 +1,7 @@
 HEADERS += \
     $$PWD/pluginsiteminterface.h \
-    $$PWD/constants.h
+    $$PWD/constants.h \
+    $$PWD/pluginproxyinterface.h
 
 INCLUDEPATH += $$PWD
 

@@ -16,8 +16,12 @@ public:
     explicit DatetimePlugin(QObject *parent = 0);
     ~DatetimePlugin();
 
-    const QString name();
-    QWidget *centeralWidget();
+    const QString pluginName();
+    PluginType pluginType(const QString &itemKey);
+    void init(PluginProxyInterface *proxyInter);
+
+    QWidget *itemWidget(const QString &itemKey);
+
 
 private slots:
     void refershTime();

@@ -16,10 +16,17 @@ DockPluginsController::~DockPluginsController()
 {
 }
 
+void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItem *item = new PluginsItem(itemInter, itemKey);
+
+    emit pluginItemInserted(item);
+}
+
 void DockPluginsController::loadPlugins()
 {
-    Q_ASSERT(m_pluginLoaderList.isEmpty());
-    Q_ASSERT(m_pluginsInterfaceList.isEmpty());
+//    Q_ASSERT(m_pluginLoaderList.isEmpty());
+//    Q_ASSERT(m_pluginsInterfaceList.isEmpty());
 
 #ifdef QT_DEBUG
     const QDir pluginsDir("plugins");
@@ -42,7 +49,9 @@ void DockPluginsController::loadPlugins()
             continue;
         }
 
-        m_pluginLoaderList.append(pluginLoader);
-        m_pluginsInterfaceList.append(interface);
+        interface->init(this);
+
+//        m_pluginLoaderList.append(pluginLoader);
+//        m_pluginsInterfaceList.append(interface);
     }
 }
