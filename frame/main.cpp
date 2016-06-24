@@ -2,6 +2,7 @@
 #include "window/mainwindow.h"
 
 #include <dapplication.h>
+#include <QDir>
 
 #include <unistd.h>
 
@@ -35,6 +36,10 @@ int main(int argc, char *argv[])
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
+
+#ifndef QT_DEBUG
+    QDir::setCurrent(QApplication::applicationDirPath());
+#endif
 
     MainWindow mw;
     QDBusConnection::sessionBus().registerService("com.deepin.dde.dock");

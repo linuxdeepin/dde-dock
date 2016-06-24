@@ -45,6 +45,7 @@ void DockPluginsController::loadPlugins()
         PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
         if (!interface)
         {
+            pluginLoader->unload();
             pluginLoader->deleteLater();
             continue;
         }
