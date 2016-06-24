@@ -165,6 +165,8 @@ void MainPanel::adjustItemSize()
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
+        item->setVisible(true);
+
         switch (item->itemType())
         {
         case DockItem::App:
@@ -273,6 +275,9 @@ void MainPanel::adjustItemSize()
 
 void MainPanel::itemInserted(const int index, DockItem *item)
 {
+    // hide new item, display it after size adjust finished
+    item->hide();
+
     initItemConnection(item);
     m_itemLayout->insertWidget(index, item);
 
