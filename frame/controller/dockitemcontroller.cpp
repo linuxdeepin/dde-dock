@@ -68,7 +68,7 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
 
-    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginsItemInserted);
+    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginsItemInserted, Qt::QueuedConnection);
 }
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path, const int index)
@@ -112,6 +112,38 @@ void DockItemController::appItemRemoved(const QString &appId)
 
 void DockItemController::pluginsItemInserted(PluginsItem *item)
 {
-    m_itemList.append(item);
-    emit itemInserted(m_itemList.size(), item);
+    // find first plugins item position
+    int firstPluginPosition = -1;
+    for (int i(0); i != m_itemList.size(); ++i)
+    {
+        if (m_itemList[i]->itemType() != DockItem::Plugins)
+            continue;
+
+        firstPluginPosition = i;
+        break;
+    }
+    if (firstPluginPosition == -1)
+        firstPluginPosition = m_itemList.size();
+
+    // find insert position
+    int insertIndex = 0;
+    const int itemSortKey = item->itemSortKey();
+    if (itemSortKey == -1)
+    {
+        insertIndex = m_itemList.size();
+    }
+    else if (itemSortKey == 0)
+    {
+        insertIndex = firstPluginPosition;
+    }
+    else
+    {
+        // TODO: compare other plugins to find insert position
+        Q_ASSERT(false);
+    }
+
+//    qDebug() << insertIndex << item;
+
+    m_itemList.insert(insertIndex, item);
+    emit itemInserted(insertIndex, item);
 }

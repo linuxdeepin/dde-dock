@@ -20,10 +20,13 @@ public:
 
     // the unique plugin id
     virtual const QString pluginName() = 0;
-    // plugins type, simple icon or complex widget
-    virtual PluginType pluginType(const QString &itemKey) = 0;
     // init plugins
     virtual void init(PluginProxyInterface *proxyInter) = 0;
+
+    // plugins type, simple icon or complex widget
+    virtual PluginType pluginType(const QString &itemKey) = 0;
+    // item sort key
+    virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return -1;}
 
     // if complex widget mode, only return widget to plugins item
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}

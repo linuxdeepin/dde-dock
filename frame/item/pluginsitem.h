@@ -11,6 +11,12 @@ class PluginsItem : public DockItem
 public:
     explicit PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent = 0);
 
+    int itemSortKey() const;
+
+private:
+    void paintEvent(QPaintEvent *e);
+    QSize sizeHint() const;
+
 private:
     PluginsItemInterface * const m_pluginInter;
     const QString m_itemKey;
