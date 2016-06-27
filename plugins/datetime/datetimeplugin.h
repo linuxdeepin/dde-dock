@@ -22,9 +22,14 @@ public:
 
     QWidget *itemWidget(const QString &itemKey);
 
+private slots:
+    void updateCurrentTimeString();
+
 private:
     DatetimeWidget *m_centeralWidget;
     QTimer *m_refershTimer;
+
+    QString m_currentTimeString;
 };
 
 #endif // DATETIMEPLUGIN_H

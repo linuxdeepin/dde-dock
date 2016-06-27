@@ -9,7 +9,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
     m_centeralWidget = new DatetimeWidget;
 
-    connect(m_refershTimer, &QTimer::timeout, m_centeralWidget, static_cast<void (DatetimeWidget::*)()>(&DatetimeWidget::update));
+    connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
 DatetimePlugin::~DatetimePlugin()
@@ -40,4 +40,15 @@ QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return m_centeralWidget;
+}
+
+void DatetimePlugin::updateCurrentTimeString()
+{
+    const QString currentString = QTime::currentTime().toString("mm");
+
+    if (currentString == m_currentTimeString)
+        return;
+
+    m_currentTimeString = currentString;
+    m_centeralWidget->update();
 }

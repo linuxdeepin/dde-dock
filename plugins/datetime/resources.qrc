@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>resources/icons/panel.png</file>
+        <file>resources/icons/big0.png</file>
+        <file>resources/icons/big1.png</file>
+        <file>resources/icons/big2.png</file>
+        <file>resources/icons/big3.png</file>
+        <file>resources/icons/big4.png</file>
+        <file>resources/icons/big5.png</file>
+        <file>resources/icons/big6.png</file>
+        <file>resources/icons/big7.png</file>
+        <file>resources/icons/big8.png</file>
+        <file>resources/icons/big9.png</file>
+        <file>resources/icons/small0.png</file>
+        <file>resources/icons/small1.png</file>
+        <file>resources/icons/small2.png</file>
+        <file>resources/icons/small3.png</file>
+        <file>resources/icons/small4.png</file>
+        <file>resources/icons/small5.png</file>
+        <file>resources/icons/small6.png</file>
+        <file>resources/icons/small7.png</file>
+        <file>resources/icons/small8.png</file>
+        <file>resources/icons/small9.png</file>
+    </qresource>
+</RCC>
