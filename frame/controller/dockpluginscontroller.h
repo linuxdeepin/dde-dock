@@ -17,7 +17,10 @@ public:
     explicit DockPluginsController(DockItemController *itemControllerInter = 0);
     ~DockPluginsController();
 
+    // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
+
+    Dock::DisplayMode displayMode() const;
 
 signals:
     void pluginItemInserted(PluginsItem *pluginsItem) const;

@@ -178,6 +178,7 @@ void DockSettings::positionChanged()
 {
     m_position = Dock::Position(m_dockInter->position());
     DockItem::setDockPosition(m_position);
+    qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
 
     calculateWindowConfig();
 
@@ -198,6 +199,7 @@ void DockSettings::displayModeChanged()
 {
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     DockItem::setDockDisplayMode(m_displayMode);
+    qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
 
     calculateWindowConfig();
 

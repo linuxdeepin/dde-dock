@@ -10,10 +10,12 @@ TARGET          = $$qtLibraryTarget(datetime)
 DESTDIR          = $$_PRO_FILE_PWD_/../
 
 HEADERS += \
-    datetimeplugin.h
+    datetimeplugin.h \
+    datetimewidget.h
 
 SOURCES += \
-    datetimeplugin.cpp
+    datetimeplugin.cpp \
+    datetimewidget.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

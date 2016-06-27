@@ -1,8 +1,11 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <QtCore>
+
 namespace Dock {
 
+#define PROP_DISPLAY_MODE   "DisplayMode"
 enum DisplayMode
 {
     Fashion     = 0,
@@ -11,6 +14,7 @@ enum DisplayMode
 //    Classic     = 2,
 };
 
+#define PROP_HIDE_MODE      "HideMode"
 enum HideMode
 {
     KeepShowing     = 0,
@@ -18,6 +22,7 @@ enum HideMode
     SmartHide       = 3,
 };
 
+#define PROP_POSITION       "Position"
 enum Position
 {
     Top         = 0,
@@ -26,6 +31,7 @@ enum Position
     Left        = 3,
 };
 
+#define PROP_HIDE_STATE     "HideState"
 enum HideState
 {
     Unknown     = 0,
@@ -34,5 +40,8 @@ enum HideState
 };
 
 }
+
+Q_DECLARE_METATYPE(Dock::DisplayMode)
+Q_DECLARE_METATYPE(Dock::Position)
 
 #endif // CONSTANTS_H

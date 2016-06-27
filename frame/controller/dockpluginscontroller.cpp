@@ -23,6 +23,11 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
     emit pluginItemInserted(item);
 }
 
+DisplayMode DockPluginsController::displayMode() const
+{
+    return Fashion;
+}
+
 void DockPluginsController::loadPlugins()
 {
 //    Q_ASSERT(m_pluginLoaderList.isEmpty());

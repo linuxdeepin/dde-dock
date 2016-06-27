@@ -2,8 +2,8 @@
 #define DATETIMEPLUGIN_H
 
 #include "pluginsiteminterface.h"
+#include "datetimewidget.h"
 
-#include <QLabel>
 #include <QTimer>
 
 class DatetimePlugin : public QObject, PluginsItemInterface
@@ -22,12 +22,8 @@ public:
 
     QWidget *itemWidget(const QString &itemKey);
 
-
-private slots:
-    void refershTime();
-
 private:
-    QLabel *m_timeLabel;
+    DatetimeWidget *m_centeralWidget;
     QTimer *m_refershTimer;
 };
 
