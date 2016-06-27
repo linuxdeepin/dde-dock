@@ -14,14 +14,25 @@ public:
     int itemSortKey() const;
 
 private:
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
+    bool eventFilter(QObject *o, QEvent *e);
     QSize sizeHint() const;
+
+private:
+    void startDrag();
+    void mouseClicked();
 
 private:
     PluginsItemInterface * const m_pluginInter;
     const QString m_itemKey;
+    PluginsItemInterface::PluginType m_pluginType;
 
-    PluginsItemInterface::PluginType m_type;
+    bool m_draging;
+
+    static QPoint MousePressPoint;
 };
 
 #endif // PLUGINSITEM_H

@@ -37,6 +37,11 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
         if (replaceType != DockItem::App && replaceType != DockItem::Placeholder)
             return;
 
+    // plugins move
+    if (moveType == DockItem::Plugins)
+        if (replaceType != DockItem::Plugins)
+            return;
+
     const int moveIndex = m_itemList.indexOf(moveItem);
     const int replaceIndex = replaceItem->itemType() == DockItem::Placeholder ?
                                 // disable insert after placeholder item

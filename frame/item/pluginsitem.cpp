@@ -4,23 +4,36 @@
 
 #include <QPainter>
 #include <QBoxLayout>
+#include <QMouseEvent>
+#include <QDrag>
+#include <QMimeData>
+
+#define PLUGIN_ITEM_DRAG_THRESHOLD      20
+
+QPoint PluginsItem::MousePressPoint = QPoint();
 
 PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(Plugins, parent),
       m_pluginInter(pluginInter),
-      m_itemKey(itemKey)
+      m_itemKey(itemKey),
+      m_draging(false)
 {
-    m_type = pluginInter->pluginType(itemKey);
+    m_pluginType = pluginInter->pluginType(itemKey);
 
-    if (m_type == PluginsItemInterface::Simple)
+    if (m_pluginType == PluginsItemInterface::Simple)
         return;
 
     // construct complex widget layout
+    QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
+    centeralWidget->installEventFilter(this);
+
     QBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(m_pluginInter->itemWidget(itemKey));
+    layout->addWidget(centeralWidget);
     layout->setSpacing(0);
     layout->setMargin(0);
+
     setLayout(layout);
+    setAttribute(Qt::WA_TranslucentBackground);
 }
 
 int PluginsItem::itemSortKey() const
@@ -28,9 +41,50 @@ int PluginsItem::itemSortKey() const
     return m_pluginInter->itemSortKey(m_itemKey);
 }
 
+void PluginsItem::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        MousePressPoint = e->pos();
+    }
+    else if (e->button() == Qt::RightButton)
+    {
+
+    }
+    else
+        DockItem::mousePressEvent(e);
+}
+
+void PluginsItem::mouseMoveEvent(QMouseEvent *e)
+{
+    if (e->buttons() != Qt::LeftButton)
+        return DockItem::mouseMoveEvent(e);
+
+    e->accept();
+
+    const QPoint distance = e->pos() - MousePressPoint;
+    if (distance.manhattanLength() > PLUGIN_ITEM_DRAG_THRESHOLD)
+        startDrag();
+}
+
+void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
+{
+    if (e->button() != Qt::LeftButton)
+        return DockItem::mouseReleaseEvent(e);
+
+    e->accept();
+
+    const QPoint distance = e->pos() - MousePressPoint;
+    if (distance.manhattanLength() < PLUGIN_ITEM_DRAG_THRESHOLD)
+        mouseClicked();
+}
+
 void PluginsItem::paintEvent(QPaintEvent *e)
 {
-    if (m_type == PluginsItemInterface::Complex)
+    if (m_draging)
+        return;
+
+    if (m_pluginType == PluginsItemInterface::Complex)
         return DockItem::paintEvent(e);
 
     QPainter painter(this);
@@ -41,11 +95,50 @@ void PluginsItem::paintEvent(QPaintEvent *e)
     painter.drawPixmap(iconRect, pixmap);
 }
 
+bool PluginsItem::eventFilter(QObject *o, QEvent *e)
+{
+    if (m_draging)
+        if (o->parent() == this && e->type() == QEvent::Paint)
+            return true;
+
+    return DockItem::eventFilter(o, e);
+}
+
 QSize PluginsItem::sizeHint() const
 {
-    if (m_type == PluginsItemInterface::Complex)
+    if (m_pluginType == PluginsItemInterface::Complex)
         return DockItem::sizeHint();
 
     // TODO: icon size on efficient mode
     return QSize(48, 48);
+}
+
+void PluginsItem::startDrag()
+{
+    QPixmap pixmap;
+    if (m_pluginType == PluginsItemInterface::Simple)
+        pixmap = m_pluginInter->itemIcon(m_itemKey).pixmap(perfectIconRect().size());
+    else
+        pixmap = grab();
+
+    m_draging = true;
+    update();
+
+    QDrag *drag = new QDrag(this);
+    drag->setPixmap(pixmap);
+    drag->setHotSpot(pixmap.rect().center());
+    drag->setMimeData(new QMimeData);
+
+    emit dragStarted();
+    const Qt::DropAction result = drag->exec(Qt::MoveAction);
+    Q_UNUSED(result);
+
+    m_draging = false;
+    setVisible(true);
+    update();
+}
+
+void PluginsItem::mouseClicked()
+{
+
 }

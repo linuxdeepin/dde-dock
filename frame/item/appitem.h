@@ -31,7 +31,6 @@ private:
     const QString contextMenu() const;
 
     void startDrag();
-    void initClientManager();
 
 private slots:
     void updateTitle();
