@@ -12,6 +12,7 @@ DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
       m_type(type),
+      m_hover(false),
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
@@ -41,6 +42,24 @@ void DockItem::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton)
         return showContextMenu();
+}
+
+void DockItem::enterEvent(QEvent *e)
+{
+    m_hover = true;
+
+    update();
+
+    return QWidget::enterEvent(e);
+}
+
+void DockItem::leaveEvent(QEvent *e)
+{
+    m_hover = false;
+
+    update();
+
+    return QWidget::leaveEvent(e);
 }
 
 const QRect DockItem::perfectIconRect() const

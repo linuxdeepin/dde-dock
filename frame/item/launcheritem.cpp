@@ -1,5 +1,6 @@
 #include "launcheritem.h"
 #include "util/themeappicon.h"
+#include "util/imagefactory.h"
 
 #include <QPainter>
 #include <QProcess>
@@ -18,10 +19,11 @@ void LauncherItem::paintEvent(QPaintEvent *e)
         return;
 
     QPainter painter(this);
-    if (DockDisplayMode == Fashion)
-        painter.drawPixmap(rect().center() - m_largeIcon.rect().center(), m_largeIcon);
-    else
-        painter.drawPixmap(rect().center() - m_smallIcon.rect().center(), m_smallIcon);
+
+    QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
+    if (m_hover)
+        pixmap = ImageFactory::lighter(pixmap);
+    painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)

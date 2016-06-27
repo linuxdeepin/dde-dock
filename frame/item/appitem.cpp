@@ -1,6 +1,7 @@
 #include "appitem.h"
 
 #include "util/themeappicon.h"
+#include "util/imagefactory.h"
 
 #include <QPainter>
 #include <QDrag>
@@ -130,11 +131,14 @@ void AppItem::paintEvent(QPaintEvent *e)
         }
     }
 
+    // icon
+    QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
+    // ligher icon
+    if (m_hover)
+        pixmap = ImageFactory::lighter(pixmap);
+
     // draw icon
-    if (DockDisplayMode == Efficient)
-        painter.drawPixmap(itemRect.center() - m_smallIcon.rect().center(), m_smallIcon);
-    else
-        painter.drawPixmap(itemRect.center() - m_largeIcon.rect().center(), m_largeIcon);
+    painter.drawPixmap(itemRect.center() - pixmap.rect().center(), pixmap);
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)

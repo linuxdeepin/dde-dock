@@ -33,6 +33,8 @@ signals:
 protected:
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
     const QRect perfectIconRect() const;
 
@@ -42,6 +44,7 @@ protected:
 
 protected:
     ItemType m_type;
+    bool m_hover;
 
     DBusMenuManager *m_menuManagerInter;
 

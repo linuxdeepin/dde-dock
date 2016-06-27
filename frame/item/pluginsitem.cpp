@@ -1,6 +1,7 @@
 #include "pluginsitem.h"
-
 #include "pluginsiteminterface.h"
+
+#include "util/imagefactory.h"
 
 #include <QPainter>
 #include <QBoxLayout>
@@ -92,7 +93,8 @@ void PluginsItem::paintEvent(QPaintEvent *e)
     const QIcon icon = m_pluginInter->itemIcon(m_itemKey);
     const QRect iconRect = perfectIconRect();
     const QPixmap pixmap = icon.pixmap(iconRect.size());
-    painter.drawPixmap(iconRect, pixmap);
+
+    painter.drawPixmap(iconRect, m_hover ? ImageFactory::lighter(pixmap) : pixmap);
 }
 
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)
