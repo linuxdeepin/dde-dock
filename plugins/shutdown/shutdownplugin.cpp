@@ -33,6 +33,13 @@ const QIcon ShutdownPlugin::itemIcon(const QString &itemKey)
     return m_icon;
 }
 
+const QString ShutdownPlugin::itemCommand(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+}
+
 int ShutdownPlugin::itemSortKey(const QString &itemKey)
 {
     Q_UNUSED(itemKey);

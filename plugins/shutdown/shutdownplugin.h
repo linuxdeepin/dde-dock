@@ -14,11 +14,12 @@ public:
 
     const QString pluginName();
     void init(PluginProxyInterface *proxyInter);
+    int itemSortKey(const QString &itemKey);
 
     PluginType pluginType(const QString &itemKey);
 
     const QIcon itemIcon(const QString &itemKey);
-    int itemSortKey(const QString &itemKey);
+    const QString itemCommand(const QString &itemKey);
 
 private:
     QIcon m_icon;

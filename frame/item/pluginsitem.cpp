@@ -140,5 +140,13 @@ void PluginsItem::startDrag()
 
 void PluginsItem::mouseClicked()
 {
+    const QString command = m_pluginInter->itemCommand(m_itemKey);
+    if (command.isEmpty())
+        return;
 
+    QProcess *proc = new QProcess(this);
+
+    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+
+    proc->startDetached(command);
 }

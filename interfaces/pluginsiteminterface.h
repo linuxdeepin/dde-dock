@@ -32,6 +32,7 @@ public:
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
     // in simple icon mode, plugins need to implements some data source functions
     virtual const QIcon itemIcon(const QString &itemKey) {Q_UNUSED(itemKey); return QIcon();}
+    virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
 protected:
     PluginProxyInterface *m_proxyInter;
