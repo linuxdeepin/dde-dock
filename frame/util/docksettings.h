@@ -22,7 +22,7 @@ class DockSettings : public QObject
     Q_OBJECT
 
 public:
-    explicit DockSettings(QObject *parent = 0);
+    explicit DockSettings(QWidget *parent = 0);
 
     DisplayMode displayMode() const;
     Position position() const;
@@ -44,6 +44,7 @@ private slots:
     void positionChanged();
     void iconSizeChanged();
     void displayModeChanged();
+    void hideModeChanged();
 
     void dockItemCountChanged();
 

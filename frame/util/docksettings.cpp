@@ -2,12 +2,13 @@
 #include "item/appitem.h"
 
 #include <QDebug>
+#include <QX11Info>
 
 #define ICON_SIZE_LARGE     48
 #define ICON_SIZE_MEDIUM    36
 #define ICON_SIZE_SMALL     24
 
-DockSettings::DockSettings(QObject *parent)
+DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),
 
       m_settingsMenu(this),
@@ -28,9 +29,11 @@ DockSettings::DockSettings(QObject *parent)
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
+    m_dockInter->SetFrontendWindow(parent->winId());
     m_primaryRect = m_displayInter->primaryRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
+    m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_iconSize = m_dockInter->iconSize();
     AppItem::setIconBaseSize(m_iconSize);
     DockItem::setDockPosition(m_position);
@@ -88,6 +91,7 @@ DockSettings::DockSettings(QObject *parent)
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
+    connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -206,6 +210,11 @@ void DockSettings::displayModeChanged()
     calculateWindowConfig();
 
     emit dataChanged();
+}
+
+void DockSettings::hideModeChanged()
+{
+    m_hideMode = Dock::HideMode(m_dockInter->hideMode());
 }
 
 void DockSettings::dockItemCountChanged()

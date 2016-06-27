@@ -7,18 +7,15 @@
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
       m_mainPanel(new MainPanel(this)),
-
-      m_settings(new DockSettings(this)),
-
-      m_xcbMisc(XcbMisc::instance()),
-
       m_positionUpdateTimer(new QTimer(this)),
       m_sizeChangeAni(new QPropertyAnimation(this, "size")),
-      m_posChangeAni(new QPropertyAnimation(this, "pos"))
+      m_posChangeAni(new QPropertyAnimation(this, "pos")),
+      m_xcbMisc(XcbMisc::instance())
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
+    m_settings = new DockSettings(this);
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
     initComponents();

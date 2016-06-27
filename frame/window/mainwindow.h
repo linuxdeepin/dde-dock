@@ -35,12 +35,12 @@ private slots:
 private:
     MainPanel *m_mainPanel;
 
-    DockSettings *m_settings;
-    XcbMisc *m_xcbMisc;
-
     QTimer *m_positionUpdateTimer;
     QPropertyAnimation *m_sizeChangeAni;
     QPropertyAnimation *m_posChangeAni;
+
+    XcbMisc *m_xcbMisc;
+    DockSettings *m_settings;
 };
 
 #endif // MAINWINDOW_H
