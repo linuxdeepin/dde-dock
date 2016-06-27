@@ -187,19 +187,14 @@ void MainPanel::adjustItemSize()
             }
             else
             {
-                item->setFixedSize(item->sizeHint());
+                const QSize size = item->sizeHint();
+                item->setFixedSize(size);
                 if (m_position == Dock::Top || m_position == Dock::Bottom)
-                {
                     item->setFixedHeight(itemSize.height());
-                    item->setFixedWidth(item->sizeHint().width());
-                }
                 else
-                {
-                    item->setFixedHeight(item->sizeHint().height());
                     item->setFixedWidth(itemSize.width());
-                }
-                totalWidth += item->sizeHint().width();
-                totalHeight += item->sizeHint().height();
+                totalWidth += size.width();
+                totalHeight += size.height();
             }
             break;
         default:;
