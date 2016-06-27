@@ -10,17 +10,21 @@
 package sessionwatcher
 
 import (
+	libdisplay "dbus/com/deepin/daemon/display"
 	"dbus/org/freedesktop/login1"
 	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
 const (
-	login1Dest = "org.freedesktop.login1"
-	login1Path = "/org/freedesktop/login1"
+	login1Dest         = "org.freedesktop.login1"
+	login1Path         = "/org/freedesktop/login1"
+	displayDBusDest    = "com.deepin.daemon.Display"
+	displayDBusObjPath = "/com/deepin/daemon/Display"
 )
 
 type Manager struct {
+	display       *libdisplay.Display
 	loginManager  *login1.Manager
 	sessionLocker sync.Mutex
 	sessions      map[string]*login1.Session
@@ -28,21 +32,38 @@ type Manager struct {
 }
 
 func newManager() (*Manager, error) {
-	loginObj, err := login1.NewManager(login1Dest, login1Path)
+	manager := &Manager{
+		sessions: make(map[string]*login1.Session),
+	}
+	var err error
+	manager.loginManager, err = login1.NewManager(login1Dest, login1Path)
 	if err != nil {
 		logger.Warning("New login1 manager failed:", err)
 		return nil, err
 	}
 
-	return &Manager{
-		loginManager: loginObj,
-		sessions:     make(map[string]*login1.Session),
-	}, nil
+	manager.display, err = libdisplay.NewDisplay(displayDBusDest, displayDBusObjPath)
+	if err != nil {
+		logger.Warning(err)
+		return nil, err
+	}
+
+	return manager, nil
 }
 
 func (m *Manager) destroy() {
 	if m.sessions != nil {
 		m.destroySessions()
+	}
+
+	if m.display != nil {
+		libdisplay.DestroyDisplay(m.display)
+		m.display = nil
+	}
+
+	if m.loginManager != nil {
+		login1.DestroyManager(m.loginManager)
+		m.loginManager = nil
 	}
 }
 
@@ -150,6 +171,9 @@ func (m *Manager) handleSessionChanged() {
 		logger.Debug("[handleSessionChanged] Resume pulse")
 		suspendPulseSinks(0)
 		suspendPulseSources(0)
+
+		logger.Debug("[handleSessionChanged] Reset Brightness")
+		m.display.ResetChanges()
 	} else {
 		logger.Debug("[handleSessionChanged] Suspend pulse")
 		suspendPulseSinks(1)
