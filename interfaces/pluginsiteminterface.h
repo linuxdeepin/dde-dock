@@ -22,17 +22,32 @@ public:
     virtual const QString pluginName() = 0;
     // init plugins
     virtual void init(PluginProxyInterface *proxyInter) = 0;
+    // dock display mode changed
+    virtual void displayModeChanged(const Dock::DisplayMode displayMode) {Q_UNUSED(displayMode);}
+    // dock position changed
+    virtual void positionChanged(const Dock::Position position) {Q_UNUSED(position);}
 
     // plugins type, simple icon or complex widget
     virtual PluginType pluginType(const QString &itemKey) = 0;
     // item sort key
-    virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return -1;}
+    virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return 0;}
 
     // if complex widget mode, only return widget to plugins item
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
     // in simple icon mode, plugins need to implements some data source functions
     virtual const QIcon itemIcon(const QString &itemKey) {Q_UNUSED(itemKey); return QIcon();}
     virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
+
+protected:
+    Dock::DisplayMode displayMode() const
+    {
+        return qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+    }
+
+    Dock::Position position() const
+    {
+        return qApp->property(PROP_POSITION).value<Dock::Position>();
+    }
 
 protected:
     PluginProxyInterface *m_proxyInter;

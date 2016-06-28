@@ -14,7 +14,6 @@ public:
 
     const QString pluginName();
     void init(PluginProxyInterface *proxyInter);
-    int itemSortKey(const QString &itemKey);
 
     PluginType pluginType(const QString &itemKey);
 

@@ -35,6 +35,13 @@ void DatetimePlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter->itemAdded(this, QString());
 }
 
+int DatetimePlugin::itemSortKey(const QString &itemKey) const
+{
+    Q_UNUSED(itemKey);
+
+    return -1;
+}
+
 QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);

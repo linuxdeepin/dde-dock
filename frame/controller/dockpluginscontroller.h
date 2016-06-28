@@ -6,6 +6,7 @@
 
 #include <QPluginLoader>
 #include <QList>
+#include <QMap>
 
 class DockItemController;
 class PluginsItemInterface;
@@ -19,18 +20,24 @@ public:
 
     // implements PluginProxyInterface
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
-
-    Dock::DisplayMode displayMode() const;
+    void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
 
 signals:
     void pluginItemInserted(PluginsItem *pluginsItem) const;
 
 private slots:
     void loadPlugins();
+    void displayModeChanged();
+    void positionChanged();
+
+private:
+    bool eventFilter(QObject *o, QEvent *e);
+    PluginsItem *pluginItemAt(PluginsItemInterface * const itemInter, const QString &itemKey) const;
 
 private:
 //    QList<PluginsItemInterface *> m_pluginsInterfaceList;
 //    QList<QPluginLoader *> m_pluginLoaderList;
+    QMap<PluginsItemInterface *, QMap<QString, PluginsItem *>> m_pluginList;
     DockItemController *m_itemControllerInter;
 };
 

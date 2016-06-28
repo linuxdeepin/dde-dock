@@ -20,6 +20,8 @@ public:
     PluginType pluginType(const QString &itemKey);
     void init(PluginProxyInterface *proxyInter);
 
+    int itemSortKey(const QString &itemKey) const;
+
     QWidget *itemWidget(const QString &itemKey);
 
 private slots:
