@@ -77,7 +77,7 @@ func (batGroup *batteryGroup) Add(device batteryDevice) {
 		case "Energy":
 			manager.checkBatteryPowerLevel(batGroup)
 
-		case "TimeToEmpty":
+		case "EnergyRate":
 			manager.checkBatteryPowerLevel(batGroup)
 
 		case "State":
@@ -111,12 +111,19 @@ func (batGroup *batteryGroup) batteryDevicesCount() int {
 }
 
 func (batGroup *batteryGroup) getTimeToEmpty() int64 {
-	var time int64
-	for _, dev := range batGroup.batteryMap {
+	var energySum, energyRate float64
+	for path, dev := range batGroup.batteryMap {
 		batInfo := dev.GetInfo()
-		time += batInfo.TimeToEmpty
+		logger.Debugf("path %q, batInfo: %#v", path, batInfo)
+		energySum += batInfo.Energy
+		// 假设只有正在使用的电池 engeryRate 大于 0
+		if batInfo.EnergyRate > 0 {
+			energyRate = batInfo.EnergyRate
+		}
 	}
-	return time
+	hours := energySum / energyRate
+	logger.Debugf("getTimeToEmpty: %v/%v = %.1f h", energySum, energyRate, hours)
+	return int64(hours * 3600)
 }
 
 func (batGroup *batteryGroup) getPercentage() float64 {
