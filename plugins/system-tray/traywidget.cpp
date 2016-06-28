@@ -22,6 +22,17 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
 {
     wrapWindow();
     updateIcon();
+
+    m_updateTimer = new QTimer(this);
+    m_updateTimer->setInterval(500);
+    m_updateTimer->setSingleShot(false);
+    m_updateTimer->start();
+
+    connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::updateIcon);
+}
+
+TrayWidget::~TrayWidget()
+{
 }
 
 QSize TrayWidget::sizeHint() const
@@ -169,12 +180,6 @@ void TrayWidget::wrapWindow()
 void TrayWidget::updateIcon()
 {
     if (!isVisible()) return;
-
-//    if (m_timer->isActive()) {
-//        return;
-//    } else {
-//        m_timer->start();
-//    }
 
     auto c = QX11Info::connection();
 

@@ -10,8 +10,10 @@ class PluginsItem : public DockItem
 
 public:
     explicit PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent = 0);
+    ~PluginsItem();
 
     int itemSortKey() const;
+    void detachPluginWidget();
 
 private:
     void mousePressEvent(QMouseEvent *e);

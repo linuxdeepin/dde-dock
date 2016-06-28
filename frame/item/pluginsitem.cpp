@@ -26,6 +26,7 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 
     // construct complex widget layout
     QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
+    Q_ASSERT(centeralWidget);
     centeralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
@@ -37,9 +38,23 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     setAttribute(Qt::WA_TranslucentBackground);
 }
 
+PluginsItem::~PluginsItem()
+{
+}
+
 int PluginsItem::itemSortKey() const
 {
     return m_pluginInter->itemSortKey(m_itemKey);
+}
+
+void PluginsItem::detachPluginWidget()
+{
+    if (m_pluginType == PluginsItemInterface::Simple)
+        return;
+
+    QWidget *widget = m_pluginInter->itemWidget(m_itemKey);
+    if (widget)
+        widget->setParent(nullptr);
 }
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)

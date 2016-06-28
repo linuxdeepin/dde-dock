@@ -2,6 +2,7 @@
 #define TRAYWIDGET_H
 
 #include <QWidget>
+#include <QTimer>
 
 class TrayWidget : public QWidget
 {
@@ -9,6 +10,7 @@ class TrayWidget : public QWidget
 
 public:
     explicit TrayWidget(quint32 winId, QWidget *parent = 0);
+    ~TrayWidget();
 
 private:
     QSize sizeHint() const;
@@ -25,6 +27,8 @@ private:
     WId m_windowId;
     WId m_containerWid;
     QImage m_image;
+
+    QTimer *m_updateTimer;
 };
 
 #endif // TRAYWIDGET_H

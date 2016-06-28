@@ -16,16 +16,19 @@ public:
 
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
+    void displayModeChanged(const Dock::DisplayMode mode);
     ItemType pluginType(const QString &itemKey);
 
     QWidget *itemWidget(const QString &itemKey);
 
 private slots:
-    void pluginAdded(const quint32 winId);
-    void pluginRemoved(const quint32 winId);
+    void trayAdded(const quint32 winId);
+    void trayRemoved(const quint32 winId);
+    void switchToMode(const Dock::DisplayMode mode);
 
 private:
     DBusTrayManager *m_trayInter;
+    QWidget *m_fashionItem;
     QMap<quint32, TrayWidget *> m_trayList;
 };
 

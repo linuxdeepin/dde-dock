@@ -22,6 +22,10 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
 {
     PluginsItem *item = new PluginsItem(itemInter, itemKey);
 
+    // check if same item added
+    if (m_pluginList.contains(itemInter))
+        Q_ASSERT(!m_pluginList[itemInter].contains(itemKey));
+
     m_pluginList[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);
@@ -40,7 +44,10 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
 {
     PluginsItem *item = pluginItemAt(itemInter, itemKey);
 
-    Q_ASSERT(item);
+    if (!item)
+        return;
+
+    item->detachPluginWidget();
 
     emit pluginItemRemoved(item);
 
