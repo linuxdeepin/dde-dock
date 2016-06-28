@@ -116,10 +116,7 @@ func (batGroup *batteryGroup) getTimeToEmpty() int64 {
 		batInfo := dev.GetInfo()
 		logger.Debugf("path %q, batInfo: %#v", path, batInfo)
 		energySum += batInfo.Energy
-		// 假设只有正在使用的电池 engeryRate 大于 0
-		if batInfo.EnergyRate > 0 {
-			energyRate = batInfo.EnergyRate
-		}
+		energyRate += batInfo.EnergyRate
 	}
 	hours := energySum / energyRate
 	logger.Debugf("getTimeToEmpty: %v/%v = %.1f h", energySum, energyRate, hours)
