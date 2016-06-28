@@ -28,12 +28,12 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
     centeralWidget->installEventFilter(this);
 
-    QBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(centeralWidget);
-    layout->setSpacing(0);
-    layout->setMargin(0);
+    QBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addWidget(centeralWidget);
+    hLayout->setSpacing(0);
+    hLayout->setMargin(0);
 
-    setLayout(layout);
+    setLayout(hLayout);
     setAttribute(Qt::WA_TranslucentBackground);
 }
 

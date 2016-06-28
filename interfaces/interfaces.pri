@@ -3,11 +3,11 @@ HEADERS += \
     $$PWD/constants.h \
     $$PWD/pluginproxyinterface.h
 
+SOURCES += \
+
 INCLUDEPATH += $$PWD
 
 isEmpty(PREFIX)
 {
     PREFIX = /usr
 }
-
-SOURCES += \
