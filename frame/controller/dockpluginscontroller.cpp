@@ -36,6 +36,18 @@ void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, c
     item->update();
 }
 
+void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+
+    Q_ASSERT(item);
+
+    emit pluginItemRemoved(item);
+
+    m_pluginList[itemInter].remove(itemKey);
+    item->deleteLater();
+}
+
 void DockPluginsController::loadPlugins()
 {
 //    Q_ASSERT(m_pluginLoaderList.isEmpty());

@@ -27,7 +27,7 @@ MainPanel::MainPanel(QWidget *parent)
                   "}");
 
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
-    connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved);
+    connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize);
 
@@ -165,7 +165,6 @@ void MainPanel::adjustItemSize()
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
-//        item->setVisible(true);
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
 
         switch (item->itemType())
@@ -283,6 +282,8 @@ void MainPanel::itemInserted(const int index, DockItem *item)
 void MainPanel::itemRemoved(DockItem *item)
 {
     m_itemLayout->removeWidget(item);
+
+    m_itemAdjustTimer->start();
 }
 
 void MainPanel::itemMoved(DockItem *item, const int index)

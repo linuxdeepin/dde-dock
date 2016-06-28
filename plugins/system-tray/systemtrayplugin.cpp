@@ -57,5 +57,12 @@ void SystemTrayPlugin::pluginAdded(const quint32 winId)
 
 void SystemTrayPlugin::pluginRemoved(const quint32 winId)
 {
-    Q_UNUSED(winId);
+    TrayWidget *widget = m_trayList[winId];
+    if (!widget)
+        return;
+
+    m_trayList.remove(winId);
+
+    m_proxyInter->itemRemoved(this, QString::number(winId));
+    widget->deleteLater();
 }

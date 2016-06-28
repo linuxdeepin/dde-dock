@@ -73,7 +73,8 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
 
-    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginsItemInserted, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginItemInserted, Qt::QueuedConnection);
+    connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemController::pluginItemRemoved, Qt::QueuedConnection);
 }
 
 void DockItemController::appItemAdded(const QDBusObjectPath &path, const int index)
@@ -115,7 +116,7 @@ void DockItemController::appItemRemoved(const QString &appId)
     }
 }
 
-void DockItemController::pluginsItemInserted(PluginsItem *item)
+void DockItemController::pluginItemInserted(PluginsItem *item)
 {
     // find first plugins item position
     int firstPluginPosition = -1;
@@ -151,4 +152,10 @@ void DockItemController::pluginsItemInserted(PluginsItem *item)
 
     m_itemList.insert(insertIndex, item);
     emit itemInserted(insertIndex, item);
+}
+
+void DockItemController::pluginItemRemoved(PluginsItem *item)
+{
+    emit itemRemoved(item);
+    m_itemList.removeOne(item);
 }
