@@ -8,7 +8,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     m_icon.addFile(":/icons/resources/icons/fashion.svg");
 }
 
-const QString ShutdownPlugin::pluginName()
+const QString ShutdownPlugin::pluginName() const
 {
     return "shutdown";
 }

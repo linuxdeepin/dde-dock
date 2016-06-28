@@ -16,7 +16,7 @@ public:
     explicit DatetimePlugin(QObject *parent = 0);
     ~DatetimePlugin();
 
-    const QString pluginName();
+    const QString pluginName() const;
     ItemType pluginType(const QString &itemKey);
     void init(PluginProxyInterface *proxyInter);
 

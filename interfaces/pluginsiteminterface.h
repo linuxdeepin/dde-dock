@@ -19,7 +19,7 @@ public:
     virtual ~PluginsItemInterface() {}
 
     // the unique plugin id
-    virtual const QString pluginName() = 0;
+    virtual const QString pluginName() const = 0;
     // init plugins
     virtual void init(PluginProxyInterface *proxyInter) = 0;
     // dock display mode changed

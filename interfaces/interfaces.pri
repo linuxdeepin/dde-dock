@@ -9,3 +9,5 @@ isEmpty(PREFIX)
 {
     PREFIX = /usr
 }
+
+SOURCES += \

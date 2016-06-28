@@ -17,7 +17,7 @@ DatetimePlugin::~DatetimePlugin()
     delete m_centeralWidget;
 }
 
-const QString DatetimePlugin::pluginName()
+const QString DatetimePlugin::pluginName() const
 {
     return "datetime";
 }

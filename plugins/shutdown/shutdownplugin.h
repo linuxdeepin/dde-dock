@@ -12,7 +12,7 @@ class ShutdownPlugin : public QObject, PluginsItemInterface
 public:
     explicit ShutdownPlugin(QObject *parent = 0);
 
-    const QString pluginName();
+    const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
 
     ItemType pluginType(const QString &itemKey);
