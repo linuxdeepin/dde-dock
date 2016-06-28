@@ -15,7 +15,7 @@ public:
     const QString pluginName();
     void init(PluginProxyInterface *proxyInter);
 
-    PluginType pluginType(const QString &itemKey);
+    ItemType pluginType(const QString &itemKey);
 
     const QIcon itemIcon(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);

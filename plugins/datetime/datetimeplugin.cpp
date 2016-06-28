@@ -22,7 +22,7 @@ const QString DatetimePlugin::pluginName()
     return "datetime";
 }
 
-PluginsItemInterface::PluginType DatetimePlugin::pluginType(const QString &itemKey)
+PluginsItemInterface::ItemType DatetimePlugin::pluginType(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 

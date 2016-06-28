@@ -28,7 +28,7 @@ private:
 private:
     PluginsItemInterface * const m_pluginInter;
     const QString m_itemKey;
-    PluginsItemInterface::PluginType m_pluginType;
+    PluginsItemInterface::ItemType m_pluginType;
 
     bool m_draging;
 

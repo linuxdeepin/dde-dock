@@ -13,7 +13,7 @@ const QString ShutdownPlugin::pluginName()
     return "shutdown";
 }
 
-PluginsItemInterface::PluginType ShutdownPlugin::pluginType(const QString &itemKey)
+PluginsItemInterface::ItemType ShutdownPlugin::pluginType(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 

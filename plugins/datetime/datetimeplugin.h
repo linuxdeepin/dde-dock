@@ -17,7 +17,7 @@ public:
     ~DatetimePlugin();
 
     const QString pluginName();
-    PluginType pluginType(const QString &itemKey);
+    ItemType pluginType(const QString &itemKey);
     void init(PluginProxyInterface *proxyInter);
 
     int itemSortKey(const QString &itemKey) const;
