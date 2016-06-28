@@ -94,7 +94,10 @@ void PluginsItem::paintEvent(QPaintEvent *e)
     const QRect iconRect = perfectIconRect();
     const QPixmap pixmap = icon.pixmap(iconRect.size());
 
-    painter.drawPixmap(iconRect, m_hover ? ImageFactory::lighter(pixmap) : pixmap);
+    painter.drawPixmap(iconRect, pixmap);
+
+    if (m_hover)
+        painter.drawPixmap(iconRect, ImageFactory::lighterEffect(pixmap));
 }
 
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)

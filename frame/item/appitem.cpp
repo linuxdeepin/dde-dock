@@ -132,13 +132,12 @@ void AppItem::paintEvent(QPaintEvent *e)
     }
 
     // icon
-    QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
-    // ligher icon
-    if (m_hover)
-        pixmap = ImageFactory::lighter(pixmap);
-
+    const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
     // draw icon
     painter.drawPixmap(itemRect.center() - pixmap.rect().center(), pixmap);
+    // draw ligher
+    if (m_hover)
+        painter.drawPixmap(itemRect.center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
