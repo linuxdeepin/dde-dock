@@ -34,6 +34,7 @@ type fullScreenWorkaround struct {
 	enable           bool
 	enableMutex      sync.Mutex
 	ticker           *time.Ticker
+	exit             chan struct{}
 	targets          []string
 }
 
@@ -169,10 +170,17 @@ func (wa *fullScreenWorkaround) Start() error {
 
 	// 遇到 wpp 监听信号的方式会失效，所以增加一个定时轮询
 	wa.ticker = time.NewTicker(5 * time.Second)
+	wa.exit = make(chan struct{})
 	go func() {
-		for range wa.ticker.C {
-			logger.Debug("Loop detect tick")
-			wa.detect()
+		for {
+			select {
+			case <-wa.ticker.C:
+				logger.Debug("Loop detect tick")
+				wa.detect()
+			case <-wa.exit:
+				wa.exit = nil
+				return
+			}
 		}
 	}()
 
@@ -195,6 +203,9 @@ func (wa *fullScreenWorkaround) Destroy() {
 	if wa.ticker != nil {
 		wa.ticker.Stop()
 		wa.ticker = nil
+	}
+	if wa.exit != nil {
+		close(wa.exit)
 	}
 	xevent.Quit(wa.manager.xu)
 }

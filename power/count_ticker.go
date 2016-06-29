@@ -18,6 +18,7 @@ type countTicker struct {
 	interval time.Duration
 	count    int
 	ticker   *time.Ticker
+	exit     chan struct{}
 }
 
 func newCountTicker(interval time.Duration, action func(int)) *countTicker {
@@ -33,10 +34,17 @@ func (t *countTicker) Reset() {
 	t.ticker = time.NewTicker(t.interval)
 	t.count = 0
 	t.action(0)
+	t.exit = make(chan struct{})
 	go func() {
-		for range t.ticker.C {
-			t.count++
-			t.action(t.count)
+		for {
+			select {
+			case <-t.ticker.C:
+				t.count++
+				t.action(t.count)
+			case <-t.exit:
+				t.exit = nil
+				return
+			}
 		}
 	}()
 }
@@ -45,5 +53,9 @@ func (t *countTicker) Stop() {
 	if t.ticker != nil {
 		logger.Debug("Stop")
 		t.ticker.Stop()
+	}
+	if t.exit != nil {
+		logger.Debug("exit")
+		close(t.exit)
 	}
 }
