@@ -13,16 +13,17 @@ public:
     ~TrayWidget();
 
     const QImage trayImage() const;
+    void sendClick(uint8_t mouseButton, int x, int y);
 
 private:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
     void wrapWindow();
     void updateIcon();
     void hideIcon();
-    void sendClick(uint8_t mouseButton, int x, int y);
     QImage getImageNonComposite() const;
 
 private:
@@ -31,6 +32,7 @@ private:
     QImage m_image;
 
     QTimer *m_updateTimer;
+    QPoint m_pressPoint;
 };
 
 #endif // TRAYWIDGET_H

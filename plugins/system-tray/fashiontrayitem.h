@@ -19,9 +19,13 @@ public slots:
 
 private:
     void paintEvent(QPaintEvent *e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
     TrayWidget *m_activeTray;
+
+    QPoint m_pressPoint;
 };
 
 #endif // FASHIONTRAYITEM_H

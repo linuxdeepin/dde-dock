@@ -11,6 +11,8 @@
 
 static const quint16 iconSize = 16;
 
+#define DRAG_THRESHOLD  20
+
 void sni_cleanup_xcb_image(void *data)
 {
     xcb_image_destroy(static_cast<xcb_image_t*>(data));
@@ -72,6 +74,17 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 
 void TrayWidget::mousePressEvent(QMouseEvent *e)
 {
+    QWidget::mousePressEvent(e);
+
+    m_pressPoint = e->pos();
+}
+
+void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
+{
+    const QPoint distance = e->pos() - m_pressPoint;
+    if (distance.manhattanLength() > DRAG_THRESHOLD)
+        return;
+
     QPoint globalPos = mapToGlobal(QPoint(0, 0));
     uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
 

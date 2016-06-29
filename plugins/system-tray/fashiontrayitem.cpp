@@ -2,6 +2,11 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QMouseEvent>
+
+#include <xcb/xproto.h>
+
+#define DRAG_THRESHOLD  10
 
 const double pi = std::acos(-1);
 
@@ -51,4 +56,38 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
         const QImage image = m_activeTray->trayImage();
         painter.drawImage(r.center().x() - image.width() / 2, r.center().y() - image.height() / 2, image);
     }
+}
+
+void FashionTrayItem::mousePressEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+
+    m_pressPoint = e->pos();
+}
+
+void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
+{
+    const QPoint point = e->pos() - m_pressPoint;
+
+    if (point.manhattanLength() > DRAG_THRESHOLD)
+        return;
+
+    if (!m_activeTray)
+        return;
+
+    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
+
+    switch (e->button()) {
+    case Qt:: MiddleButton:
+        buttonIndex = XCB_BUTTON_INDEX_2;
+        break;
+    case Qt::RightButton:
+        buttonIndex = XCB_BUTTON_INDEX_3;
+        break;
+    default:
+        break;
+    }
+
+    m_activeTray->sendClick(buttonIndex, globalPos.x(), globalPos.y());
 }
