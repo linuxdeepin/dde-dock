@@ -112,6 +112,14 @@ void DockItem::showContextMenu()
     menuObject.insert("isDockMenu", QJsonValue(true));
     menuObject.insert("menuJsonContent", QJsonValue(menuJson));
 
+    switch (DockPosition)
+    {
+    case Top:       menuObject.insert("direction", "top");      break;
+    case Bottom:    menuObject.insert("direction", "bottom");   break;
+    case Left:      menuObject.insert("direction", "left");     break;
+    case Right:     menuObject.insert("direction", "right");    break;
+    }
+
     const QDBusObjectPath path = result.argumentAt(0).value<QDBusObjectPath>();
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
