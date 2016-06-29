@@ -266,6 +266,8 @@ void MainPanel::adjustItemSize()
 
     // ensure all extra space assigned
     Q_ASSERT(extraDecrease == 0);
+
+    update();
 }
 
 void MainPanel::itemInserted(const int index, DockItem *item)

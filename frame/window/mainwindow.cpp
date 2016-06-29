@@ -82,6 +82,9 @@ void MainWindow::setFixedSize(const QSize &size)
 
 void MainWindow::move(int x, int y)
 {
+    if (this->pos() == QPoint(x, y))
+        return;
+
     if (m_posChangeAni->state() == QPropertyAnimation::Running)
         return m_posChangeAni->setEndValue(QPoint(x, y));
 
@@ -106,13 +109,13 @@ void MainWindow::initComponents()
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry);
-    connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial);
-    connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible);
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry);
 
-    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition);
+    connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
 }
 
 void MainWindow::updatePosition()
@@ -134,6 +137,7 @@ void MainWindow::updateGeometry()
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     QSize size = m_settings->windowSize();
+    setFixedSize(size);
     if (m_settings->hideState() == Hide)
     {
         m_sizeChangeAni->stop();
@@ -145,10 +149,6 @@ void MainWindow::updateGeometry()
         case Right:     size.setWidth(1);       break;
         }
         QWidget::setFixedSize(size);
-    }
-    else
-    {
-        setFixedSize(size);
     }
 
     const QRect primaryRect = m_settings->primaryRect();
@@ -169,6 +169,7 @@ void MainWindow::updateGeometry()
         Q_ASSERT(false);
     }
 
+    qDebug() << this->size() << m_mainPanel->size();
     update();
 }
 
@@ -230,9 +231,12 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-    if (m_mainPanel->pos() == QPoint(0, 0))
+    const QPoint finishPos(0, 0);
+
+    if (m_mainPanel->pos() == finishPos)
         return;
 
+    // reset environment
     m_sizeChangeAni->stop();
     m_posChangeAni->stop();
     const QSize size = m_settings->windowSize();
@@ -255,7 +259,6 @@ void MainWindow::expand()
         Q_ASSERT(false);
     }
 
-    const QPoint finishPos(0, 0);
     if (m_panelShowAni->state() == QPropertyAnimation::Running)
         return m_panelShowAni->setEndValue(finishPos);
 
@@ -300,7 +303,7 @@ void MainWindow::updatePanelVisible()
 {
     const Dock::HideState state = m_settings->hideState();
 
-//    qDebug() << state;
+    qDebug() << state;
 
     if (state == Unknown)
         return;

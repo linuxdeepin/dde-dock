@@ -49,6 +49,7 @@ private slots:
     void iconSizeChanged();
     void displayModeChanged();
     void hideModeChanged();
+    void hideStateChanegd();
     void dockItemCountChanged();
     void primaryScreenChanged();
 
@@ -59,6 +60,7 @@ private:
     int m_iconSize;
     Position m_position;
     HideMode m_hideMode;
+    HideState m_hideState;
     DisplayMode m_displayMode;
     QRect m_primaryRect;
     QSize m_mainWindowSize;
