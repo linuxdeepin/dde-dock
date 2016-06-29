@@ -5,6 +5,7 @@
 #include "traywidget.h"
 #include "dbus/dbustraymanager.h"
 
+class FashionTrayItem;
 class SystemTrayPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -24,11 +25,12 @@ public:
 private slots:
     void trayAdded(const quint32 winId);
     void trayRemoved(const quint32 winId);
+    void trayChanged(const quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);
 
 private:
     DBusTrayManager *m_trayInter;
-    QWidget *m_fashionItem;
+    FashionTrayItem *m_fashionItem;
     QMap<quint32, TrayWidget *> m_trayList;
 };
 

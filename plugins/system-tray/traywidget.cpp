@@ -35,9 +35,14 @@ TrayWidget::~TrayWidget()
 {
 }
 
+const QImage TrayWidget::trayImage() const
+{
+    return getImageNonComposite();
+}
+
 QSize TrayWidget::sizeHint() const
 {
-    return QSize(36, 36);
+    return QSize(24, 24);
 }
 
 void TrayWidget::paintEvent(QPaintEvent *e)
@@ -307,7 +312,7 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 }
 
-QImage TrayWidget::getImageNonComposite()
+QImage TrayWidget::getImageNonComposite() const
 {
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);

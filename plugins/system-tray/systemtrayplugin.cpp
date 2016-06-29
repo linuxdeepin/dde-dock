@@ -1,4 +1,5 @@
 #include "systemtrayplugin.h"
+#include "fashiontrayitem.h"
 
 #include <QWindow>
 #include <QWidget>
@@ -9,7 +10,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this))
 {
-    m_fashionItem = new QWidget;
+    m_fashionItem = new FashionTrayItem;
 }
 
 const QString SystemTrayPlugin::pluginName() const
@@ -23,6 +24,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 
     connect(m_trayInter, &DBusTrayManager::Added, this, &SystemTrayPlugin::trayAdded);
     connect(m_trayInter, &DBusTrayManager::Removed, this, &SystemTrayPlugin::trayRemoved);
+    connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
     m_trayInter->RetryManager();
 
@@ -73,6 +75,22 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
     m_proxyInter->itemRemoved(this, QString::number(winId));
     m_trayList.remove(winId);
     widget->deleteLater();
+
+    if (m_fashionItem->activeTray() != widget)
+        return;
+    // reset active tray
+    if (m_trayList.values().isEmpty())
+        m_fashionItem->setActiveTray(nullptr);
+    else
+        m_fashionItem->setActiveTray(m_trayList.values().last());
+}
+
+void SystemTrayPlugin::trayChanged(const quint32 winId)
+{
+    if (!m_trayList.contains(winId))
+        return;
+
+    m_fashionItem->setActiveTray(m_trayList[winId]);
 }
 
 void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)

@@ -12,6 +12,8 @@ public:
     explicit TrayWidget(quint32 winId, QWidget *parent = 0);
     ~TrayWidget();
 
+    const QImage trayImage() const;
+
 private:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
@@ -21,7 +23,7 @@ private:
     void updateIcon();
     void hideIcon();
     void sendClick(uint8_t mouseButton, int x, int y);
-    QImage getImageNonComposite();
+    QImage getImageNonComposite() const;
 
 private:
     WId m_windowId;
