@@ -96,6 +96,8 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
 
+    connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged);
+
     calculateWindowConfig();
 }
 
@@ -225,6 +227,15 @@ void DockSettings::dockItemCountChanged()
     calculateWindowConfig();
 
     emit windowGeometryChanged();
+}
+
+void DockSettings::primaryScreenChanged()
+{
+    m_primaryRect = m_displayInter->primaryRect();
+
+    calculateWindowConfig();
+
+    emit dataChanged();
 }
 
 void DockSettings::calculateWindowConfig()

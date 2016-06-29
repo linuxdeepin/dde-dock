@@ -45,8 +45,8 @@ private slots:
     void iconSizeChanged();
     void displayModeChanged();
     void hideModeChanged();
-
     void dockItemCountChanged();
+    void primaryScreenChanged();
 
 private:
     void calculateWindowConfig();
