@@ -92,6 +92,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged);
+    connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::windowVisibleChanegd);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -106,6 +107,11 @@ DisplayMode DockSettings::displayMode() const
     return m_displayMode;
 }
 
+HideMode DockSettings::hideMode() const
+{
+    return m_hideMode;
+}
+
 Position DockSettings::position() const
 {
     return m_position;
@@ -114,6 +120,11 @@ Position DockSettings::position() const
 int DockSettings::screenHeight() const
 {
     return m_displayInter->screenHeight();
+}
+
+HideState DockSettings::hideState() const
+{
+    return HideState(m_dockInter->hideState());
 }
 
 const QRect DockSettings::primaryRect() const
@@ -217,6 +228,8 @@ void DockSettings::displayModeChanged()
 void DockSettings::hideModeChanged()
 {
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
+
+    emit windowHideModeChanged();
 }
 
 void DockSettings::dockItemCountChanged()

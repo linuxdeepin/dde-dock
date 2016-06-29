@@ -25,6 +25,8 @@ public:
     explicit DockSettings(QWidget *parent = 0);
 
     DisplayMode displayMode() const;
+    HideMode hideMode() const;
+    HideState hideState() const;
     Position position() const;
     int screenHeight() const;
     const QRect primaryRect() const;
@@ -34,6 +36,8 @@ public:
 
 signals:
     void dataChanged() const;
+    void windowVisibleChanegd() const;
+    void windowHideModeChanged() const;
     void windowGeometryChanged() const;
 
 public slots:

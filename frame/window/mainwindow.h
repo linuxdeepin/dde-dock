@@ -21,6 +21,9 @@ private:
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+
     void setFixedSize(const QSize &size);
     void move(int x, int y);
     void initComponents();
@@ -32,12 +35,18 @@ private slots:
     void clearStrutPartial();
     void setStrutPartial();
 
+    void expand();
+    void narrow();
+    void updatePanelVisible();
+
 private:
     MainPanel *m_mainPanel;
 
     QTimer *m_positionUpdateTimer;
     QPropertyAnimation *m_sizeChangeAni;
     QPropertyAnimation *m_posChangeAni;
+    QPropertyAnimation *m_panelShowAni;
+    QPropertyAnimation *m_panelHideAni;
 
     XcbMisc *m_xcbMisc;
     DockSettings *m_settings;
