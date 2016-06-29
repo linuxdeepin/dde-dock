@@ -130,7 +130,7 @@ QSize PluginsItem::sizeHint() const
         return DockItem::sizeHint();
 
     // TODO: icon size on efficient mode
-    return QSize(48, 48);
+    return QSize(24, 24);
 }
 
 void PluginsItem::startDrag()

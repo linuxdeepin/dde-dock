@@ -14,6 +14,7 @@ public:
 
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
+    void displayModeChanged(const Dock::DisplayMode displayMode);
 
     ItemType pluginType(const QString &itemKey);
 

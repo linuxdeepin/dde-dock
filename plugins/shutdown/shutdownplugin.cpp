@@ -5,7 +5,6 @@
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent)
 {
-    m_icon.addFile(":/icons/resources/icons/fashion.svg");
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -24,6 +23,16 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
     m_proxyInter->itemAdded(this, QString());
+
+    displayModeChanged(qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>());
+}
+
+void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
+{
+    if (displayMode == Dock::Fashion)
+        m_icon.addFile(":/icons/resources/icons/fashion.svg");
+    else
+        m_icon.addFile(":/icons/resources/icons/normal.svg");
 }
 
 const QIcon ShutdownPlugin::itemIcon(const QString &itemKey)
