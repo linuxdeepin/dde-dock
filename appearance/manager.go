@@ -24,6 +24,7 @@ import (
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	dutils "pkg.deepin.io/lib/utils"
+	"time"
 )
 
 const (
@@ -165,6 +166,15 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) init() {
+	// Init theme list
+	time.AfterFunc(time.Second*10, func() {
+		subthemes.ListGtkTheme()
+		subthemes.ListIconTheme()
+		subthemes.ListCursorTheme()
+		background.ListBackground()
+		fonts.ListStandardFamily()
+	})
+
 	m.initBackground()
 	m.correctFontName()
 
