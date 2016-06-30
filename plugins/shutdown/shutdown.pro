@@ -8,6 +8,7 @@ PKGCONFIG       +=
 
 TARGET          = $$qtLibraryTarget(shutdown)
 DESTDIR          = $$_PRO_FILE_PWD_/../
+DISTFILES       += shutdown.json
 
 HEADERS += \
     shutdownplugin.h

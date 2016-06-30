@@ -86,10 +86,9 @@ void DockPluginsController::loadPlugins()
             continue;
         }
 
-        interface->init(this);
-
-//        m_pluginLoaderList.append(pluginLoader);
-//        m_pluginsInterfaceList.append(interface);
+//        interface->init(this);
+        // delay load
+        QTimer::singleShot(100, [=] {interface->init(this);});
     }
 }
 

@@ -33,6 +33,8 @@ public:
     virtual ItemType tipsType(const QString &itemKey) {Q_UNUSED(itemKey); return Simple;}
     // item sort key
     virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return 0;}
+    // reset sort key when plugins order changed
+    virtual void setSortKey(const QString &itemKey, const int order) {Q_UNUSED(itemKey); Q_UNUSED(order);}
 
     // if pluginType is complex widget mode, return a widget to plugins item
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}

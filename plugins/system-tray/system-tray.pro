@@ -8,6 +8,7 @@ PKGCONFIG       += xcb xcb-image xcb-composite
 
 TARGET          = $$qtLibraryTarget(system-tray)
 DESTDIR          = $$_PRO_FILE_PWD_/../
+DISTFILES       += system-tray.json
 
 HEADERS += \
     systemtrayplugin.h \
