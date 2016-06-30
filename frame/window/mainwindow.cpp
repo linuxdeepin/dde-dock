@@ -114,6 +114,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry);
 
@@ -326,8 +327,21 @@ void MainWindow::updatePanelVisible()
     if (state == Unknown)
         return;
 
-    if (state == Show)
-        expand();
-    else
-        narrow();
+    do
+    {
+        if (state != Hide)
+            break;
+
+        if (!m_settings->autoHide())
+            break;
+
+        QRect r(pos(), size());
+        if (r.contains(QCursor::pos()))
+            break;
+
+        return narrow();
+
+    } while (false);
+
+    return expand();
 }

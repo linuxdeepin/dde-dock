@@ -29,6 +29,7 @@ public:
     HideState hideState() const;
     Position position() const;
     int screenHeight() const;
+    bool autoHide() const;
     const QRect primaryRect() const;
     const QSize windowSize() const;
 
@@ -36,12 +37,14 @@ public:
 
 signals:
     void dataChanged() const;
+    void autoHideChanged(const bool autoHide) const;
     void windowVisibleChanegd() const;
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
 
 public slots:
     void updateGeometry();
+    void setAutoHide(const bool autoHide);
 
 private slots:
     void menuActionClicked(DAction *action);
@@ -60,6 +63,7 @@ private:
 
 private:
     int m_iconSize;
+    bool m_autoHide;
     Position m_position;
     HideMode m_hideMode;
     HideState m_hideState;

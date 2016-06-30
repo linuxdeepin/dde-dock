@@ -11,6 +11,8 @@
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),
 
+      m_autoHide(true),
+
       m_settingsMenu(this),
       m_fashionModeAct(tr("Fashion Mode"), this),
       m_efficientModeAct(tr("Efficient Mode"), this),
@@ -124,6 +126,11 @@ int DockSettings::screenHeight() const
     return m_displayInter->screenHeight();
 }
 
+bool DockSettings::autoHide() const
+{
+    return m_autoHide;
+}
+
 HideState DockSettings::hideState() const
 {
     return m_hideState;
@@ -141,6 +148,8 @@ const QSize DockSettings::windowSize() const
 
 void DockSettings::showDockSettingsMenu()
 {
+    setAutoHide(false);
+
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
     m_topPosAct.setChecked(m_position == Top);
@@ -155,11 +164,22 @@ void DockSettings::showDockSettingsMenu()
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
 
     m_settingsMenu.exec();
+
+    setAutoHide(true);
 }
 
 void DockSettings::updateGeometry()
 {
 
+}
+
+void DockSettings::setAutoHide(const bool autoHide)
+{
+    if (m_autoHide == autoHide)
+        return;
+
+    m_autoHide = autoHide;
+    emit autoHideChanged(m_autoHide);
 }
 
 void DockSettings::menuActionClicked(DAction *action)
