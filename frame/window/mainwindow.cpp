@@ -24,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     initConnections();
 
     m_mainPanel->setFixedSize(m_settings->windowSize());
+
+    updatePanelVisible();
 }
 
 MainWindow::~MainWindow()
