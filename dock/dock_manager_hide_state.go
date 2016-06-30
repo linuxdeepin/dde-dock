@@ -44,7 +44,7 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	ay := max(y, y1)
 	bx := min(x+w, x1+w1)
 	by := min(y+h, y1+h1)
-	return ax <= bx && ay <= by
+	return ax < bx && ay < by
 }
 
 func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
