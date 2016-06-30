@@ -249,7 +249,7 @@ void MainWindow::expand()
 {
     const QPoint finishPos(0, 0);
 
-    if (m_mainPanel->pos() == finishPos)
+    if (m_mainPanel->pos() == finishPos && m_settings->windowSize() == this->size())
         return;
 
     // reset environment
@@ -324,6 +324,8 @@ void MainWindow::updatePanelVisible()
         return;
 
     const Dock::HideState state = m_settings->hideState();
+
+//    qDebug() << state;
 
     if (state == Unknown)
         return;
