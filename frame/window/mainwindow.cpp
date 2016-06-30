@@ -116,6 +116,11 @@ void MainWindow::initConnections()
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
+
+    // to fix qt animation bug, sometimes window size not change
+    connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
+        QWidget::setFixedSize(m_sizeChangeAni->currentValue().toSize());
+    });
 }
 
 void MainWindow::updatePosition()
@@ -137,7 +142,6 @@ void MainWindow::updateGeometry()
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
     QSize size = m_settings->windowSize();
-    setFixedSize(size);
     if (m_settings->hideState() == Hide)
     {
         m_sizeChangeAni->stop();
@@ -149,6 +153,10 @@ void MainWindow::updateGeometry()
         case Right:     size.setWidth(1);       break;
         }
         QWidget::setFixedSize(size);
+    }
+    else
+    {
+        setFixedSize(size);
     }
 
     const QRect primaryRect = m_settings->primaryRect();
@@ -169,8 +177,7 @@ void MainWindow::updateGeometry()
         Q_ASSERT(false);
     }
 
-    qDebug() << this->size() << m_mainPanel->size();
-    update();
+    m_mainPanel->update();
 }
 
 void MainWindow::clearStrutPartial()
@@ -303,7 +310,7 @@ void MainWindow::updatePanelVisible()
 {
     const Dock::HideState state = m_settings->hideState();
 
-    qDebug() << state;
+//    qDebug() << state;
 
     if (state == Unknown)
         return;
