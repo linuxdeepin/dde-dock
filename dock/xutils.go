@@ -9,11 +9,18 @@ import (
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xgraphics"
 	"github.com/BurntSushi/xgbutil/xprop"
+	"github.com/BurntSushi/xgbutil/xrect"
+	"github.com/BurntSushi/xgbutil/xwindow"
 )
 
 func iconifyWindow(win xproto.Window) {
 	logger.Debug("iconifyWindow", win)
 	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+}
+
+func getWindowDecorGeometry(xu *xgbutil.XUtil, win xproto.Window) (xrect.Rect, error) {
+	window := xwindow.New(xu, win)
+	return window.DecorGeometry()
 }
 
 func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {

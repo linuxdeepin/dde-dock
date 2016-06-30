@@ -14,6 +14,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"sync"
@@ -44,6 +45,7 @@ type DockManager struct {
 	smartHideModeMutex sync.Mutex
 
 	entryCount uint
+	dockRect   xrect.Rect
 
 	// Signals
 	ServiceRestarted func()
@@ -120,14 +122,14 @@ func (m *DockManager) GetEntryIDs() []string {
 
 func (m *DockManager) SetFrontendWindow(windowId uint32) error {
 	win := xproto.Window(windowId)
-	if m.frontendWindow == win {
-		return nil
-	}
-
-	// TODO: valid win
 	m.setPropHideState(HideStateUnknown)
 	m.frontendWindow = win
-	logger.Debug("FrontendWindow changed", win)
+	logger.Debug("SetFrontendWindow", win)
+	var err error
+	m.dockRect, err = getWindowDecorGeometry(XU, win)
+	if err != nil {
+		logger.Warning(err)
+	}
 	m.updateHideStateWithoutDelay()
 	return nil
 }

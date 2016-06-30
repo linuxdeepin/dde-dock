@@ -164,6 +164,18 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 			}
 			logger.Debug("isXYWHChange", isXYWHChange)
 			if isXYWHChange {
+				if m.frontendWindow == winInfo.window {
+					logger.Debug("window is dock")
+					if winInfo.width != 1 && winInfo.height != 1 {
+						// update m.dockRect
+						m.dockRect.XSet(int(winInfo.x))
+						m.dockRect.YSet(int(winInfo.y))
+						m.dockRect.WidthSet(int(winInfo.width))
+						m.dockRect.HeightSet(int(winInfo.height))
+					} else {
+						logger.Debug("Ignore dock rect change")
+					}
+				}
 				m.updateHideStateWithoutDelay()
 			} else {
 				m.updateHideStateWithDelay()

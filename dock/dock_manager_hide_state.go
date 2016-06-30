@@ -14,7 +14,6 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
-	"github.com/BurntSushi/xgbutil/xwindow"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -50,28 +49,20 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 	// overlap condition:  window showing and  on current workspace,
 	// window dock rect has intersection
-	window := xwindow.New(XU, win)
 	if isHiddenPre(win) || (!onCurrentWorkspacePre(win)) {
 		logger.Debugf("window %v is hidden or not on current workspace", win)
 		return false, nil
 	}
 
-	winRect, err := window.DecorGeometry()
+	winRect, err := getWindowDecorGeometry(XU, win)
 	if err != nil {
 		logger.Warning("Get target window geometry failed", err)
 		return false, err
 	}
 
-	dockWindow := xwindow.New(XU, m.frontendWindow)
-	dockRect, err := dockWindow.DecorGeometry()
-	if err != nil {
-		logger.Warning("Get dock window geometry failed:", err)
-		return false, err
-	}
-
 	logger.Debug("window rect:", winRect)
-	logger.Debug("dock rect:", dockRect)
-	result := hasIntersection(winRect, dockRect)
+	logger.Debug("dock rect:", m.dockRect)
+	result := hasIntersection(winRect, m.dockRect)
 	logger.Debug("window dock overlap:", result)
 	return result, nil
 }
