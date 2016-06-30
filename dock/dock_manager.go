@@ -177,5 +177,6 @@ func (m *DockManager) MoveEntry(index, newIndex int32) error {
 	}
 	logger.Debug("MoveEntry ok")
 	m.Entries = entries
+	m.saveDockedApps()
 	return nil
 }
