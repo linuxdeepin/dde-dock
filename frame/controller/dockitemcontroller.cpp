@@ -71,7 +71,8 @@ DockItemController::DockItemController(QObject *parent)
     m_itemList.append(m_placeholderItem);
 
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
-    connect(m_appInter, &DBusDock::EntryRemoved, this, &DockItemController::appItemRemoved);
+    connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemController::*)(const QString &)>(&DockItemController::appItemRemoved));
+    connect(m_appInter, &DBusDock::ServiceRestarted, this, &DockItemController::reloadAppItems);
 
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginItemInserted, Qt::QueuedConnection);
     connect(m_pluginsInter, &DockPluginsController::pluginItemRemoved, this, &DockItemController::pluginItemRemoved, Qt::QueuedConnection);
@@ -108,12 +109,17 @@ void DockItemController::appItemRemoved(const QString &appId)
         if (app->appId() != appId)
             continue;
 
-        emit itemRemoved(m_itemList[i]);
-        m_itemList[i]->deleteLater();
-        m_itemList.removeAt(i);
+        appItemRemoved(app);
 
         break;
     }
+}
+
+void DockItemController::appItemRemoved(AppItem *appItem)
+{
+    emit itemRemoved(appItem);
+    appItem->deleteLater();
+    m_itemList.removeOne(appItem);
 }
 
 void DockItemController::pluginItemInserted(PluginsItem *item)
@@ -158,4 +164,16 @@ void DockItemController::pluginItemRemoved(PluginsItem *item)
 {
     emit itemRemoved(item);
     m_itemList.removeOne(item);
+}
+
+void DockItemController::reloadAppItems()
+{
+    // remove old item
+    for (auto item : m_itemList)
+        if (item->itemType() == DockItem::App)
+            appItemRemoved(static_cast<AppItem *>(item));
+
+    // append new item
+    for (auto path : m_appInter->entries())
+        appItemAdded(path, -1);
 }

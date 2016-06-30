@@ -6,6 +6,7 @@
 #include "dbus/dbusdock.h"
 #include "item/dockitem.h"
 #include "item/placeholderitem.h"
+#include "item/appitem.h"
 
 #include <QObject>
 
@@ -31,8 +32,10 @@ private:
     explicit DockItemController(QObject *parent = 0);
     void appItemAdded(const QDBusObjectPath &path, const int index);
     void appItemRemoved(const QString &appId);
+    void appItemRemoved(AppItem *appItem);
     void pluginItemInserted(PluginsItem *item);
     void pluginItemRemoved(PluginsItem *item);
+    void reloadAppItems();
 
 private:
     QList<DockItem *> m_itemList;

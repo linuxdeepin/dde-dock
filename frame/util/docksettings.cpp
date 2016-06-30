@@ -29,7 +29,7 @@ DockSettings::DockSettings(QWidget *parent)
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
-    m_dockInter->SetFrontendWindow(parent->winId());
+    resetFrontendWinId();
     m_primaryRect = m_displayInter->primaryRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
@@ -94,6 +94,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanegd);
+    connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendWinId);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -257,6 +258,11 @@ void DockSettings::primaryScreenChanged()
     calculateWindowConfig();
 
     emit dataChanged();
+}
+
+void DockSettings::resetFrontendWinId()
+{
+    m_dockInter->SetFrontendWindow(static_cast<QWidget *>(parent())->winId());
 }
 
 void DockSettings::calculateWindowConfig()
