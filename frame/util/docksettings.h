@@ -56,7 +56,7 @@ private slots:
     void dockItemCountChanged();
     void primaryScreenChanged();
 
-    void resetFrontendWinId();
+    void resetFrontendGeometry();
 
 private:
     void calculateWindowConfig();

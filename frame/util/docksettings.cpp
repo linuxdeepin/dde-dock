@@ -31,7 +31,7 @@ DockSettings::DockSettings(QWidget *parent)
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
-    resetFrontendWinId();
+    resetFrontendGeometry();
     m_primaryRect = m_displayInter->primaryRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
@@ -96,7 +96,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged);
     connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanegd);
-    connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendWinId);
+    connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -280,9 +280,27 @@ void DockSettings::primaryScreenChanged()
     emit dataChanged();
 }
 
-void DockSettings::resetFrontendWinId()
+void DockSettings::resetFrontendGeometry()
 {
-    m_dockInter->SetFrontendWindow(static_cast<QWidget *>(parent())->winId());
+    const QSize size = m_mainWindowSize;
+    const QRect primaryRect = m_primaryRect;
+    const int offsetX = (primaryRect.width() - size.width()) / 2;
+    const int offsetY = (primaryRect.height() - size.height()) / 2;
+
+    QPoint p(0, 0);
+    switch (m_position)
+    {
+    case Top:
+        p = QPoint(primaryRect.topLeft().x() + offsetX, 0);               break;
+    case Left:
+        p = QPoint(primaryRect.topLeft().x(), offsetY);                   break;
+    case Right:
+        p = QPoint(primaryRect.right() - size.width() + 1, offsetY);      break;
+    case Bottom:
+        p = QPoint(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+    }
+
+    m_dockInter->SetFrontendWindowRect(p.x(), p.y(), size.width(), size.height());
 }
 
 void DockSettings::calculateWindowConfig()
@@ -367,4 +385,6 @@ void DockSettings::calculateWindowConfig()
     } else {
         Q_ASSERT(false);
     }
+
+    resetFrontendGeometry();
 }

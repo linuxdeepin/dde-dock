@@ -120,11 +120,11 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("MoveEntry"), args);
     }
 
-    inline QDBusPendingReply<> SetFrontendWindow(uint in0)
+    inline QDBusPendingReply<> SetFrontendWindowRect(const int x, const int y, const quint32 width, const quint32 height)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0);
-        return asyncCallWithArgumentList(QStringLiteral("SetFrontendWindow"), argumentList);
+        argumentList << QVariant::fromValue(x) << QVariant::fromValue(y) << QVariant::fromValue(width) << QVariant::fromValue(height);
+        return asyncCallWithArgumentList(QStringLiteral("SetFrontendWindowRect"), argumentList);
     }
 
 Q_SIGNALS: // SIGNALS
