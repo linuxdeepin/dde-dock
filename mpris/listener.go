@@ -61,35 +61,35 @@ func (m *Manager) listenMediakey() {
 	})
 
 	m.mediakey.ConnectBrightnessUp(func(pressed bool) {
-		if filterEvent(actionTypeBrightnessUp) {
+		if filterEvent(actionTypeBrightnessUp, pressed) {
 			return
 		}
 		m.changeBrightness(true, pressed)
 	})
 
 	m.mediakey.ConnectBrightnessDown(func(pressed bool) {
-		if filterEvent(actionTypeBrightnessDown) {
+		if filterEvent(actionTypeBrightnessDown, pressed) {
 			return
 		}
 		m.changeBrightness(false, pressed)
 	})
 
 	m.mediakey.ConnectAudioUp(func(pressed bool) {
-		if filterEvent(actionTypeAudioUp) {
+		if filterEvent(actionTypeAudioUp, pressed) {
 			return
 		}
 		m.changeVolume(true, pressed)
 	})
 
 	m.mediakey.ConnectAudioDown(func(pressed bool) {
-		if filterEvent(actionTypeAudioDown) {
+		if filterEvent(actionTypeAudioDown, pressed) {
 			return
 		}
 		m.changeVolume(false, pressed)
 	})
 
 	m.mediakey.ConnectAudioMute(func(pressed bool) {
-		if filterEvent(actionTypeAudioMute) {
+		if filterEvent(actionTypeAudioMute, pressed) {
 			return
 		}
 		m.setMute(pressed)
@@ -117,12 +117,17 @@ func (m *Manager) listenMediakey() {
 
 }
 
-func filterEvent(action int) bool {
+func filterEvent(action int, pressed bool) bool {
+	if !pressed {
+		return true
+	}
+
 	now := time.Now().UnixNano()
 	v, ok := timestampMap[action]
 	if ok {
-		// filter < 100ms event, 1ms = 1000000ns
-		if now-v <= 100*1000000 {
+		// 1ms = 1000000ns
+		if now-v < 250*1000000 {
+			// delta time < 250 ms
 			return true
 		}
 	}
