@@ -104,10 +104,16 @@ void MainWindow::initComponents()
     m_positionUpdateTimer->start();
 
     m_sizeChangeAni->setDuration(200);
-    m_sizeChangeAni->setEasingCurve(QEasingCurve::OutCubic);
+    m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
 
     m_posChangeAni->setDuration(200);
-    m_posChangeAni->setEasingCurve(QEasingCurve::OutCubic);
+    m_posChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
+
+    m_panelShowAni->setDuration(200);
+    m_panelShowAni->setEasingCurve(QEasingCurve::InOutCubic);
+
+    m_panelHideAni->setDuration(200);
+    m_panelHideAni->setEasingCurve(QEasingCurve::InOutCubic);
 }
 
 void MainWindow::initConnections()
