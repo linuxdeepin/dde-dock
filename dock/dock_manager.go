@@ -38,8 +38,7 @@ type DockManager struct {
 
 	activeWindow xproto.Window
 
-	HideState      HideStateType
-	frontendWindow xproto.Window
+	HideState HideStateType
 
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
@@ -120,18 +119,12 @@ func (m *DockManager) GetEntryIDs() []string {
 	return list
 }
 
-func (m *DockManager) SetFrontendWindow(windowId uint32) error {
-	win := xproto.Window(windowId)
-	m.setPropHideState(HideStateUnknown)
-	m.frontendWindow = win
-	logger.Debug("SetFrontendWindow", win)
-	var err error
-	m.dockRect, err = getWindowDecorGeometry(XU, win)
-	if err != nil {
-		logger.Warning(err)
-	}
+func (m *DockManager) SetFrontendWindowRect(x, y int32, width, height uint32) {
+	m.dockRect.XSet(int(x))
+	m.dockRect.YSet(int(y))
+	m.dockRect.WidthSet(int(width))
+	m.dockRect.HeightSet(int(height))
 	m.updateHideStateWithoutDelay()
-	return nil
 }
 
 func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
