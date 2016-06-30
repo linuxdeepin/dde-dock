@@ -116,6 +116,9 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
+    connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible);
+    connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
+
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
@@ -321,8 +324,6 @@ void MainWindow::updatePanelVisible()
         return;
 
     const Dock::HideState state = m_settings->hideState();
-
-//    qDebug() << state;
 
     if (state == Unknown)
         return;

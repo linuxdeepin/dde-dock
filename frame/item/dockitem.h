@@ -29,6 +29,8 @@ public:
 
 signals:
     void dragStarted() const;
+    void menuUnregistered() const;
+    void requestWindowAutoHide(const bool autoHide) const;
 
 protected:
     void paintEvent(QPaintEvent *e);

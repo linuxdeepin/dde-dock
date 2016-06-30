@@ -124,6 +124,7 @@ void DockItem::showContextMenu()
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &DockItem::invokedMenuItem);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::menuUnregistered);
     connect(menuInter, &DBusMenu::MenuUnregistered, menuInter, &DBusMenu::deleteLater, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
