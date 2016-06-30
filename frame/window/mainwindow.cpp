@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setFixedSize(m_settings->windowSize());
 
     updatePanelVisible();
+
+//    setStyleSheet("background-color:red;");
 }
 
 MainWindow::~MainWindow()
@@ -98,7 +100,7 @@ void MainWindow::move(int x, int y)
 void MainWindow::initComponents()
 {
     m_positionUpdateTimer->setSingleShot(true);
-    m_positionUpdateTimer->setInterval(200);
+    m_positionUpdateTimer->setInterval(20);
     m_positionUpdateTimer->start();
 
     m_sizeChangeAni->setDuration(200);
@@ -116,12 +118,12 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
-    connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible);
+    connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
 
-    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry);
-
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
+
+    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
 
     // to fix qt animation bug, sometimes window size not change
     connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
@@ -154,6 +156,7 @@ void MainWindow::updateGeometry()
     if (m_settings->hideState() == Hide)
     {
         m_sizeChangeAni->stop();
+        m_posChangeAni->stop();
         switch (position)
         {
         case Top:
@@ -247,36 +250,18 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
+//    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
-    if (m_mainPanel->pos() == finishPos && m_settings->windowSize() == this->size())
+    if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size())
         return;
 
-    // reset environment
-    m_sizeChangeAni->stop();
-    m_posChangeAni->stop();
-    const QSize size = m_settings->windowSize();
-    const QRect primaryRect = m_settings->primaryRect();
-    const int offsetX = (primaryRect.width() - size.width()) / 2;
-    const int offsetY = (primaryRect.height() - size.height()) / 2;
-
-    QWidget::setFixedSize(size);
-    switch (m_settings->position())
-    {
-    case Top:
-        QWidget::move(primaryRect.topLeft().x() + offsetX, 0);               break;
-    case Left:
-        QWidget::move(primaryRect.topLeft().x(), offsetY);                   break;
-    case Right:
-        QWidget::move(primaryRect.right() - size.width() + 1, offsetY);      break;
-    case Bottom:
-        QWidget::move(offsetX, primaryRect.bottom() - size.height() + 1);    break;
-    default:
-        Q_ASSERT(false);
-    }
+    resetPanelEnvironment();
 
     if (m_panelShowAni->state() == QPropertyAnimation::Running)
         return m_panelShowAni->setEndValue(finishPos);
+
+    const QSize size = m_settings->windowSize();
 
     QPoint startPos(0, 0);
     switch (m_settings->position())
@@ -295,7 +280,8 @@ void MainWindow::expand()
 
 void MainWindow::narrow()
 {
-    const QSize size = m_mainPanel->size();
+//    qDebug() << "narrow";
+    const QSize size = m_settings->windowSize();
 
     QPoint finishPos(0, 0);
     switch (m_settings->position())
@@ -306,9 +292,6 @@ void MainWindow::narrow()
     case Right:     finishPos.setX(size.width());       break;
     }
 
-    if (m_mainPanel->pos() == finishPos)
-        return;
-
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
         return m_panelHideAni->setEndValue(finishPos);
 
@@ -316,6 +299,34 @@ void MainWindow::narrow()
     m_panelHideAni->setStartValue(m_mainPanel->pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
+}
+
+void MainWindow::resetPanelEnvironment()
+{
+    // reset environment
+    m_sizeChangeAni->stop();
+    m_posChangeAni->stop();
+    const QSize size = m_settings->windowSize();
+    const QRect primaryRect = m_settings->primaryRect();
+    const int offsetX = (primaryRect.width() - size.width()) / 2;
+    const int offsetY = (primaryRect.height() - size.height()) / 2;
+
+    QWidget::setFixedSize(size);
+    m_mainPanel->setFixedSize(size);
+    m_mainPanel->move(0, 0);
+    switch (m_settings->position())
+    {
+    case Top:
+        QWidget::move(primaryRect.topLeft().x() + offsetX, 0);               break;
+    case Left:
+        QWidget::move(primaryRect.topLeft().x(), offsetY);                   break;
+    case Right:
+        QWidget::move(primaryRect.right() - size.width() + 1, offsetY);      break;
+    case Bottom:
+        QWidget::move(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+    default:
+        Q_ASSERT(false);
+    }
 }
 
 void MainWindow::updatePanelVisible()
@@ -326,9 +337,6 @@ void MainWindow::updatePanelVisible()
     const Dock::HideState state = m_settings->hideState();
 
 //    qDebug() << state;
-
-    if (state == Unknown)
-        return;
 
     do
     {

@@ -37,6 +37,7 @@ private slots:
 
     void expand();
     void narrow();
+    void resetPanelEnvironment();
     void updatePanelVisible();
 
 private:

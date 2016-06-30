@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     QDBusConnection::sessionBus().registerObject("/com/deepin/dde/dock", "com.deepin.dde.dock", &mw);
     RegisterDdeSession();
 
-    QTimer::singleShot(300, &mw, &MainWindow::show);
+    QTimer::singleShot(500, &mw, &MainWindow::show);
 
     return app.exec();
 }

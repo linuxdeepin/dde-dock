@@ -148,7 +148,7 @@ const QSize DockSettings::windowSize() const
 
 void DockSettings::showDockSettingsMenu()
 {
-    setAutoHide(false);
+    m_autoHide = false;
 
     m_fashionModeAct.setChecked(m_displayMode == Fashion);
     m_efficientModeAct.setChecked(m_displayMode == Efficient);
@@ -256,7 +256,12 @@ void DockSettings::hideModeChanged()
 
 void DockSettings::hideStateChanegd()
 {
-    m_hideState = Dock::HideState(m_dockInter->hideState());
+    const Dock::HideState state = Dock::HideState(m_dockInter->hideState());
+
+    if (state == Dock::Unknown)
+        return;
+
+    m_hideState = state;
 
     emit windowVisibleChanegd();
 }
