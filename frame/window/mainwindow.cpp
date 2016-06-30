@@ -121,7 +121,10 @@ void MainWindow::initConnections()
 
     // to fix qt animation bug, sometimes window size not change
     connect(m_sizeChangeAni, &QPropertyAnimation::valueChanged, [this] {
-        QWidget::setFixedSize(m_sizeChangeAni->currentValue().toSize());
+        const QSize size = m_sizeChangeAni->currentValue().toSize();
+
+        QWidget::setFixedSize(size);
+        m_mainPanel->setFixedSize(size);
     });
 }
 
@@ -139,7 +142,6 @@ void MainWindow::updateGeometry()
 {
     const Position position = m_settings->position();
 
-    m_mainPanel->setFixedSize(m_settings->windowSize());
     m_mainPanel->updateDockPosition(position);
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
