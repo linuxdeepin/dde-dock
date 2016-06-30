@@ -13,6 +13,8 @@ public:
 private:
     QSize sizeHint() const;
     void paintEvent(QPaintEvent *e);
+
+    const QPixmap loadSvg(const QString &fileName, const QSize size);
 };
 
 #endif // DATETIMEWIDGET_H

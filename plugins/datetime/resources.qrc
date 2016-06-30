@@ -1,25 +1,25 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>resources/icons/panel.png</file>
-        <file>resources/icons/big0.png</file>
-        <file>resources/icons/big1.png</file>
-        <file>resources/icons/big2.png</file>
-        <file>resources/icons/big3.png</file>
-        <file>resources/icons/big4.png</file>
-        <file>resources/icons/big5.png</file>
-        <file>resources/icons/big6.png</file>
-        <file>resources/icons/big7.png</file>
-        <file>resources/icons/big8.png</file>
-        <file>resources/icons/big9.png</file>
-        <file>resources/icons/small0.png</file>
-        <file>resources/icons/small1.png</file>
-        <file>resources/icons/small2.png</file>
-        <file>resources/icons/small3.png</file>
-        <file>resources/icons/small4.png</file>
-        <file>resources/icons/small5.png</file>
-        <file>resources/icons/small6.png</file>
-        <file>resources/icons/small7.png</file>
-        <file>resources/icons/small8.png</file>
-        <file>resources/icons/small9.png</file>
+        <file>resources/icons/background.svg</file>
+        <file>resources/icons/big0.svg</file>
+        <file>resources/icons/big1.svg</file>
+        <file>resources/icons/big2.svg</file>
+        <file>resources/icons/big3.svg</file>
+        <file>resources/icons/big4.svg</file>
+        <file>resources/icons/big5.svg</file>
+        <file>resources/icons/big6.svg</file>
+        <file>resources/icons/big7.svg</file>
+        <file>resources/icons/big8.svg</file>
+        <file>resources/icons/big9.svg</file>
+        <file>resources/icons/small0.svg</file>
+        <file>resources/icons/small1.svg</file>
+        <file>resources/icons/small2.svg</file>
+        <file>resources/icons/small3.svg</file>
+        <file>resources/icons/small4.svg</file>
+        <file>resources/icons/small5.svg</file>
+        <file>resources/icons/small6.svg</file>
+        <file>resources/icons/small7.svg</file>
+        <file>resources/icons/small8.svg</file>
+        <file>resources/icons/small9.svg</file>
     </qresource>
 </RCC>
