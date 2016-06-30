@@ -146,7 +146,8 @@ func onCurrentWorkspacePre(win xproto.Window) bool {
 	isOnCurrentWorkspace, err := isWindowOnCurrentWorkspace(win)
 	if err != nil {
 		logger.Warning(err)
-		return false
+		// 也许是窗口跳过窗口管理器了，如 dde-control-center
+		return true
 	}
 	return isOnCurrentWorkspace
 }

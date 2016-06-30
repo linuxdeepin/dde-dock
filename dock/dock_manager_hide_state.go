@@ -12,6 +12,7 @@ package dock
 import (
 	"errors"
 	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"pkg.deepin.io/lib/dbus"
@@ -47,8 +48,18 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 }
 
 func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
-	// overlap condition:  window showing and  on current workspace,
+	// overlap condition:
+	// window type is not desktop
+	// window showing and  on current workspace,
 	// window dock rect has intersection
+	windowType, err := ewmh.WmWindowTypeGet(XU, win)
+	if err != nil {
+		logger.Debug(err)
+	}
+	if strSliceContains(windowType, "_NET_WM_WINDOW_TYPE_DESKTOP") {
+		return false, nil
+	}
+
 	if isHiddenPre(win) || (!onCurrentWorkspacePre(win)) {
 		logger.Debugf("window %v is hidden or not on current workspace", win)
 		return false, nil
