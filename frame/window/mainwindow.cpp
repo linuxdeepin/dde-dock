@@ -142,6 +142,7 @@ void MainWindow::updateGeometry()
 {
     const Position position = m_settings->position();
 
+    m_mainPanel->setFixedSize(m_settings->windowSize());
     m_mainPanel->updateDockPosition(position);
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
@@ -301,6 +302,9 @@ void MainWindow::narrow()
     case Right:     finishPos.setX(size.width());       break;
     }
 
+    if (m_mainPanel->pos() == finishPos)
+        return;
+
     if (m_panelHideAni->state() == QPropertyAnimation::Running)
         return m_panelHideAni->setEndValue(finishPos);
 
@@ -312,6 +316,9 @@ void MainWindow::narrow()
 
 void MainWindow::updatePanelVisible()
 {
+    if (m_settings->hideMode() == KeepShowing)
+        return;
+
     const Dock::HideState state = m_settings->hideState();
 
 //    qDebug() << state;
