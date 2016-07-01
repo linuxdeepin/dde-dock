@@ -8,6 +8,10 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
       m_refershTimer(new QTimer(this))
 {
     m_calendar->setFixedSize(300, 300);
+    m_calendar->setDateInfoVisible(true);
+    m_calendar->setControlPanelVisible(false);
+    m_calendar->setSolarDisplayFormat(tr("MM/dd/yyyy"));
+    m_calendar->setLunarVisible(QLocale::system().name().startsWith("zh_"));
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();
@@ -20,6 +24,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 DatetimePlugin::~DatetimePlugin()
 {
     delete m_centeralWidget;
+    delete m_calendar;
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -64,6 +69,8 @@ QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
 QWidget *DatetimePlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
+
+    m_calendar->setCurrentDate(QDate::currentDate());
 
     return m_calendar;
 }
