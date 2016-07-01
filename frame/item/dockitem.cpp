@@ -8,14 +8,24 @@
 
 Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
+std::unique_ptr<DArrowRectangle> DockItem::PopupTips(nullptr);
 
 DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
       m_type(type),
       m_hover(false),
 
+      m_popupTipsDelayTimer(new QTimer(this)),
+
       m_menuManagerInter(new DBusMenuManager(this))
 {
+    if (!PopupTips.get())
+        PopupTips.reset(new DArrowRectangle(DArrowRectangle::ArrowBottom, nullptr));
+
+    m_popupTipsDelayTimer->setInterval(200);
+    m_popupTipsDelayTimer->setSingleShot(true);
+
+    connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showPopupTips);
 }
 
 void DockItem::setDockPosition(const Position side)
@@ -38,6 +48,13 @@ void DockItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 }
 
+void DockItem::mouseMoveEvent(QMouseEvent *e)
+{
+    QWidget::mouseMoveEvent(e);
+
+    m_popupTipsDelayTimer->start();
+}
+
 void DockItem::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::RightButton)
@@ -47,6 +64,7 @@ void DockItem::mousePressEvent(QMouseEvent *e)
 void DockItem::enterEvent(QEvent *e)
 {
     m_hover = true;
+    m_popupTipsDelayTimer->start();
 
     update();
 
@@ -56,6 +74,9 @@ void DockItem::enterEvent(QEvent *e)
 void DockItem::leaveEvent(QEvent *e)
 {
     m_hover = false;
+    m_popupTipsDelayTimer->stop();
+
+    PopupTips->hide();
 
     update();
 
@@ -90,21 +111,7 @@ void DockItem::showContextMenu()
         return;
     }
 
-    QPoint p;
-    QWidget *w = this;
-    do {
-        p += w->pos();
-        w = qobject_cast<QWidget *>(w->parent());
-    } while (w);
-
-    const QRect r = rect();
-    switch (DockPosition)
-    {
-    case Top:       p += QPoint(r.width() / 2, r.height());      break;
-    case Bottom:    p += QPoint(r.width() / 2, 0);               break;
-    case Left:      p += QPoint(r.width(), r.height() / 2);      break;
-    case Right:     p += QPoint(0, r.height() / 2);              break;
-    }
+    const QPoint p = popupMarkPoint();
 
     QJsonObject menuObject;
     menuObject.insert("x", QJsonValue(p.x()));
@@ -130,6 +137,30 @@ void DockItem::showContextMenu()
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
 }
 
+void DockItem::showPopupTips()
+{
+    QWidget * const content = popupTips();
+    if (!content)
+        return;
+
+    DArrowRectangle *tips = PopupTips.get();
+
+    switch (DockPosition)
+    {
+    case Top:   tips->setArrowDirection(DArrowRectangle::ArrowTop);     break;
+    case Bottom:tips->setArrowDirection(DArrowRectangle::ArrowBottom);  break;
+    case Left:  tips->setArrowDirection(DArrowRectangle::ArrowLeft);    break;
+    case Right: tips->setArrowDirection(DArrowRectangle::ArrowRight);   break;
+    }
+    tips->setContent(content);
+    tips->setMargin(5);
+    tips->setWidth(content->sizeHint().width());
+    tips->setHeight(content->sizeHint().height());
+
+    const QPoint p = popupMarkPoint();
+    tips->show(p.x(), p.y());
+}
+
 void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(itemId)
@@ -139,4 +170,30 @@ void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 const QString DockItem::contextMenu() const
 {
     return QString();
+}
+
+QWidget *DockItem::popupTips() const
+{
+    return nullptr;
+}
+
+const QPoint DockItem::popupMarkPoint()
+{
+    QPoint p;
+    QWidget *w = this;
+    do {
+        p += w->pos();
+        w = qobject_cast<QWidget *>(w->parent());
+    } while (w);
+
+    const QRect r = rect();
+    switch (DockPosition)
+    {
+    case Top:       p += QPoint(r.width() / 2, r.height());      break;
+    case Bottom:    p += QPoint(r.width() / 2, 0);               break;
+    case Left:      p += QPoint(r.width(), r.height() / 2);      break;
+    case Right:     p += QPoint(0, r.height() / 2);              break;
+    }
+
+    return p;
 }
