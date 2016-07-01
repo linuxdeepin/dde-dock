@@ -38,8 +38,10 @@ public:
 
     // if pluginType is complex widget mode, return a widget to plugins item
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
+    virtual QWidget *itemTipsWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
     // if pluginType is simple icon mode, plugins need to implements these data source functions
     virtual const QIcon itemIcon(const QString &itemKey) {Q_UNUSED(itemKey); return QIcon();}
+    virtual const QString itemTipsString(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
     virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
     // return simple string tips, call this function when tips type is Simple

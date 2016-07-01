@@ -172,7 +172,7 @@ const QString DockItem::contextMenu() const
     return QString();
 }
 
-QWidget *DockItem::popupTips() const
+QWidget *DockItem::popupTips()
 {
     return nullptr;
 }

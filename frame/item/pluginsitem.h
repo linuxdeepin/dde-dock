@@ -23,6 +23,8 @@ private:
     bool eventFilter(QObject *o, QEvent *e);
     QSize sizeHint() const;
 
+    QWidget *popupTips();
+
 private:
     void startDrag();
     void mouseClicked();
@@ -33,6 +35,7 @@ private:
     PluginsItemInterface::ItemType m_pluginType;
 
     bool m_draging;
+    QLabel *m_simpleTips;
 
     static QPoint MousePressPoint;
 };

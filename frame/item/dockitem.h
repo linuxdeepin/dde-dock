@@ -51,7 +51,7 @@ protected:
     void showPopupTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
-    virtual QWidget *popupTips() const;
+    virtual QWidget *popupTips();
 
 private:
     const QPoint popupMarkPoint();

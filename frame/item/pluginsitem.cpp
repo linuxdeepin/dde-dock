@@ -17,12 +17,17 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     : DockItem(Plugins, parent),
       m_pluginInter(pluginInter),
       m_itemKey(itemKey),
-      m_draging(false)
+      m_draging(false),
+      m_simpleTips(new QLabel(this))
 {
     m_pluginType = pluginInter->pluginType(itemKey);
 
     if (m_pluginType == PluginsItemInterface::Simple)
         return;
+
+    m_simpleTips->setAlignment(Qt::AlignCenter);
+    m_simpleTips->setStyleSheet("color:white;"
+                                "font-size:12px;");
 
     // construct complex widget layout
     QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
@@ -131,6 +136,19 @@ QSize PluginsItem::sizeHint() const
 
     // TODO: icon size on efficient mode
     return QSize(24, 24);
+}
+
+QWidget *PluginsItem::popupTips()
+{
+    if (m_pluginInter->tipsType(m_itemKey) == PluginsItemInterface::Complex)
+        return m_pluginInter->itemTipsWidget(m_itemKey);
+
+    const QString tips = m_pluginInter->itemTipsString(m_itemKey);
+    if (tips.isEmpty())
+        return nullptr;
+
+    m_simpleTips->setText(tips);
+    return m_simpleTips;
 }
 
 void PluginsItem::startDrag()
