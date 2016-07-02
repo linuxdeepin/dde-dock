@@ -12,6 +12,7 @@ package mpris
 import (
 	"dbus/com/deepin/daemon/audio"
 	"dbus/com/deepin/daemon/display"
+	"dbus/com/deepin/daemon/helper/backlight"
 	"dbus/com/deepin/daemon/keybinding"
 	"dbus/com/deepin/sessionmanager"
 	"dbus/org/freedesktop/dbus"
@@ -29,6 +30,7 @@ type Manager struct {
 	dbusDaemon     *dbus.DBusDaemon
 	audioDaemon    *audio.Audio
 	sessionManager *sessionmanager.SessionManager
+	blDaemon       *backlight.Backlight
 
 	prevPlayer string
 }
@@ -70,6 +72,12 @@ func NewManager() (*Manager, error) {
 		"/com/deepin/SessionManager")
 	if err != nil {
 		logger.Warning("Create session manager connection failed:", err)
+	}
+
+	m.blDaemon, err = backlight.NewBacklight("com.deepin.daemon.helper.Backlight",
+		"/com/deepin/daemon/helper/Backlight")
+	if err != nil {
+		logger.Warning("Create backlight manager connection failed:", err)
 	}
 
 	return m, nil
@@ -205,4 +213,39 @@ func (m *Manager) eject(pressed bool) {
 	}
 	// eject CDROM
 	doAction("eject -r")
+}
+
+func (m *Manager) changeKbdBrightness(raised, pressed bool) {
+	if m.blDaemon == nil {
+		return
+	}
+
+	value, err := m.blDaemon.GetKbdBrightness()
+	if err != nil {
+		logger.Debug("Query keyboard brightness failed:", err)
+		return
+	}
+
+	maxValue, err := m.blDaemon.GetKbdMaxBrightness()
+	if err != nil {
+		logger.Debug("Query keyboard brightness failed:", err)
+		return
+	}
+
+	if raised {
+		value += 1
+	} else {
+		value -= 1
+	}
+
+	if value < 0 {
+		value = 0
+	} else if value > maxValue {
+		value = maxValue
+	}
+
+	err = m.blDaemon.SetKbdBrightness(value)
+	if err != nil {
+		logger.Warning("Set keyboard brightness failed:", value, err)
+	}
 }

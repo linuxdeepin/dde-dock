@@ -29,6 +29,8 @@ const (
 	actionTypeCalc
 	actionTypeBrightnessUp
 	actionTypeBrightnessDown
+	actionTypeKbdBrightnessUp
+	actionTypeKbdBrightnessDown
 	actionTypeAudioUp
 	actionTypeAudioDown
 	actionTypeAudioMute

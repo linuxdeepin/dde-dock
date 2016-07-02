@@ -35,6 +35,7 @@ var logger = log.NewLogger("backlight_helper")
 type Manager struct {
 	initFailed bool
 	locker     sync.Mutex
+	kbdLocker  sync.Mutex
 }
 
 // ListSysPath return all the backlight device syspath
@@ -98,20 +99,44 @@ func (m *Manager) GetBrightness(sysPath string) (int32, error) {
 	return int32(ret), nil
 }
 
+func (m *Manager) GetKbdBrightness() (int32, error) {
+	if m.initFailed {
+		return 1, fmt.Errorf("Init udev backlight failed")
+	}
+
+	m.kbdLocker.Lock()
+	defer m.kbdLocker.Unlock()
+	ret := C.get_kbd_brightness()
+	if int(ret) == -1 {
+		return 1, fmt.Errorf("Get keyboard brightness failed")
+	}
+	return int32(ret), nil
+}
+
 // GetBrightness return the special syspath's max brightness
 func (m *Manager) GetMaxBrightness(sysPath string) (int32, error) {
 	if m.initFailed {
 		return 1, fmt.Errorf("Init udev backlight failed")
 	}
 
-	m.locker.Lock()
-	defer m.locker.Unlock()
 	cSysPath := C.CString(sysPath)
 	ret := C.get_max_brightness(cSysPath)
 	C.free(unsafe.Pointer(cSysPath))
 	if int(ret) == -1 {
 		return 1, fmt.Errorf("Get max brightness failed for: %s",
 			sysPath)
+	}
+	return int32(ret), nil
+}
+
+func (m *Manager) GetKbdMaxBrightness() (int32, error) {
+	if m.initFailed {
+		return 1, fmt.Errorf("Init udev backlight failed")
+	}
+
+	ret := C.get_kbd_max_brightness()
+	if int(ret) == -1 {
+		return 1, fmt.Errorf("Get keyboard brightness failed")
 	}
 	return int32(ret), nil
 }
@@ -130,6 +155,21 @@ func (m *Manager) SetBrightness(sysPath string, value int32) error {
 	if int(ret) != 0 {
 		return fmt.Errorf("Set brightness for %s to %d failed",
 			sysPath, value)
+	}
+	return nil
+}
+
+func (m *Manager) SetKbdBrightness(value int32) error {
+	if m.initFailed {
+		return fmt.Errorf("Init udev backlight failed")
+	}
+
+	m.kbdLocker.Lock()
+	defer m.kbdLocker.Unlock()
+	ret := C.set_kbd_brightness(C.int(value))
+	if int(ret) != 0 {
+		return fmt.Errorf("Set keyboard brightness to %d failed",
+			value)
 	}
 	return nil
 }

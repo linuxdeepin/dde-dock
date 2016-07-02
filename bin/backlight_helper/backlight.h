@@ -22,4 +22,8 @@ int get_brightness(char* syspath);
 int get_max_brightness(char* syspath);
 int set_brightness(char* syspath, int value);
 
+int get_kbd_brightness();
+int get_kbd_max_brightness();
+int set_kbd_brightness(int value);
+
 #endif

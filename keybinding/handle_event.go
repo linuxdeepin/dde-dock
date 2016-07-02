@@ -79,10 +79,14 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 	}
 
 	switch id {
-	case "mon-brightness-up", "kbd-brightness-up":
+	case "mon-brightness-up":
 		return "BrightnessUp"
-	case "mon-brightness-down", "kbd-brightness-down":
+	case "mon-brightness-down":
 		return "BrightnessDown"
+	case "kbd-brightness-up":
+		return "KbdBrightnessUp"
+	case "kbd-brightness-down":
+		return "KbdBrightnessDown"
 	case "volume-mute":
 		return "AudioMute"
 	case "volume-down":

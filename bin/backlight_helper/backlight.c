@@ -16,16 +16,26 @@
 
 #include "backlight.h"
 
+#define MAX_STR_BUFFER 1024
+
 struct udev* udev = NULL;
 struct udev_enumerate* enumerate = NULL;
 
 static GMutex table_locker;
 static GHashTable* max_brightness_table;
 
+static char kbd_syspath[MAX_STR_BUFFER] = {0};
+
 // key range: brightness, max_brightness
 static int get_brightness_by_key(char* syspath, char* key);
 static void destroy_table_key(gpointer data);
 static void destroy_table_value(gpointer data);
+
+static void set_kbd_syspath();
+
+static int get_brightness_by_syspath(char* syspath);
+static int get_max_brightness_by_syspath(char* syspath);
+static int set_brightness_by_syspath(char* syspath, int value);
 
 int
 init_udev()
@@ -52,6 +62,9 @@ init_udev()
     g_mutex_init(&table_locker);
     max_brightness_table = g_hash_table_new_full(g_int_hash, g_str_equal,
                                                  (GDestroyNotify)destroy_table_key, (GDestroyNotify)destroy_table_value);
+
+    set_kbd_syspath();
+
     return 0;
 }
 
@@ -156,12 +169,56 @@ get_syspath_by_type(char* type)
 int
 get_brightness(char* syspath)
 {
-    return get_brightness_by_key(syspath, "brightness");
+    return get_brightness_by_syspath(syspath);
+}
+
+int
+get_kbd_brightness()
+{
+    return get_brightness_by_syspath(kbd_syspath);
 }
 
 int
 get_max_brightness(char* syspath)
 {
+    return get_max_brightness_by_syspath(syspath);
+}
+
+int
+get_kbd_max_brightness()
+{
+    return get_max_brightness_by_syspath(kbd_syspath);
+}
+
+int
+set_brightness(char* syspath, int value)
+{
+    return set_brightness_by_syspath(syspath, value);
+}
+
+int
+set_kbd_brightness(int value)
+{
+    return set_brightness_by_syspath(kbd_syspath, value);
+}
+
+static int
+get_brightness_by_syspath(char* syspath)
+{
+    if (strlen(syspath) == 0) {
+        return -1;
+    }
+
+    return get_brightness_by_key(syspath, "brightness");
+}
+
+static int
+get_max_brightness_by_syspath(char* syspath)
+{
+    if (strlen(syspath) == 0) {
+        return -1;
+    }
+
     g_mutex_lock(&table_locker);
     int* value = (int*)g_hash_table_lookup(max_brightness_table, syspath);
     if (value != NULL) {
@@ -187,9 +244,13 @@ get_max_brightness(char* syspath)
     return v;
 }
 
-int
-set_brightness(char* syspath, int value)
+static int
+set_brightness_by_syspath(char* syspath, int value)
 {
+    if (strlen(syspath) == 0) {
+        return -1;
+    }
+
     int max = get_max_brightness(syspath);
     if (max <= 0) {
         fprintf(stderr, "Query max brightness failed for %s\n", syspath);
@@ -247,4 +308,49 @@ static void destroy_table_value(gpointer data)
     if (value != NULL) {
         free(value);
     }
+}
+
+static void set_kbd_syspath()
+{
+    if (strlen(kbd_syspath) != 0) {
+        return;
+    }
+
+    struct udev_enumerate *kbd_enumerate = udev_enumerate_new(udev);
+    if (!kbd_enumerate) {
+        fprintf(stderr, "New kbd enumerate failed\n");
+        return;
+    }
+
+    int ret = udev_enumerate_add_match_subsystem(kbd_enumerate, "leds");
+    if (ret != 0) {
+        fprintf(stderr, "Match led subsystem failed\n");
+        goto out;
+    }
+
+    ret = udev_enumerate_scan_devices(kbd_enumerate);
+    if (ret != 0) {
+        fprintf(stderr, "Scan leds device failed\n");
+        goto out;
+    }
+
+    struct udev_list_entry *entries = udev_enumerate_get_list_entry(kbd_enumerate);
+    if (!entries) {
+        fprintf(stderr, "Get leds entries failed\n");
+        goto out;
+    }
+
+    struct udev_list_entry *current = NULL;
+    udev_list_entry_foreach(current, entries) {
+        const char *name = udev_list_entry_get_name(current);
+        if (strstr(name, "kbd_backlight") == NULL) {
+            continue;
+        }
+        memset(kbd_syspath, 0, sizeof(char)*MAX_STR_BUFFER);
+        memcpy(kbd_syspath, name, strlen(name));
+        break;
+    }
+out:
+    udev_enumerate_unref(kbd_enumerate);
+    return;
 }

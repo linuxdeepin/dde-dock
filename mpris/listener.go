@@ -74,6 +74,20 @@ func (m *Manager) listenMediakey() {
 		m.changeBrightness(false, pressed)
 	})
 
+	m.mediakey.ConnectKbdBrightnessUp(func(pressed bool) {
+		if filterEvent(actionTypeKbdBrightnessUp, pressed) {
+			return
+		}
+		m.changeKbdBrightness(true, pressed)
+	})
+
+	m.mediakey.ConnectKbdBrightnessDown(func(pressed bool) {
+		if filterEvent(actionTypeKbdBrightnessDown, pressed) {
+			return
+		}
+		m.changeKbdBrightness(false, pressed)
+	})
+
 	m.mediakey.ConnectAudioUp(func(pressed bool) {
 		if filterEvent(actionTypeAudioUp, pressed) {
 			return
