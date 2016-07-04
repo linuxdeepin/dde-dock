@@ -33,6 +33,9 @@ type Audio struct {
 
 	Cards string
 
+	ActiveSinkPort   string
+	ActiveSourcePort string
+
 	// 默认的输出设备名称
 	DefaultSink string
 	// 默认的输入设备名称
@@ -50,6 +53,7 @@ type Audio struct {
 	saverLocker sync.Mutex
 
 	sinkLocker sync.Mutex
+	portLocker sync.Mutex
 }
 
 const (
@@ -94,40 +98,77 @@ func (s *Audio) GetDefaultSource() *Source {
 	return nil
 }
 
-// SetProfile activate the profile for the special card and disable others card
+// SetPort activate the port for the special card.
 // The available sinks and sources will also change with the profile changing.
-func (a *Audio) SetProfile(cardId uint32, profile string) error {
+func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
+	a.portLocker.Lock()
+	defer a.portLocker.Unlock()
 	var (
-		others []*pulse.Card
-
-		hasActivatedCard bool = false
+		curCard           *CardInfo
+		oppositePort      string
+		oppositeDirection int
 	)
+	if int(direction) == pulse.DirectionSink {
+		oppositePort = a.getActiveSourcePort()
+		oppositeDirection = pulse.DirectionSource
+	} else if int(direction) == pulse.DirectionSource {
+		oppositePort = a.getActiveSinkPort()
+		oppositeDirection = pulse.DirectionSink
+	} else {
+		return fmt.Errorf("Invalid port direction: %d", direction)
+	}
+	curCard, _ = a.cards.getByPort(oppositePort, oppositeDirection)
 
-	for _, card := range a.core.GetCardList() {
-		if card.Index != cardId {
-			others = append(others, card)
-			continue
-		}
+	var (
+		destCard     *CardInfo
+		destPortInfo pulse.CardPortInfo
+		destProfile  string
 
-		if !(cProfileInfos2(card.Profiles).exist(profile)) {
-			return fmt.Errorf("Invalid profile '%s' for %s", profile, card.Name)
+		oppositePortInfo pulse.CardPortInfo
+		commonProfiles   pulse.ProfileInfos2
+	)
+	if curCard != nil && curCard.Id == cardId {
+		portInfo, err := curCard.Ports.Get(portName, int(direction))
+		if err != nil {
+			return err
 		}
-		if card.ActiveProfile.Name != profile {
-			card.SetProfile(profile)
+		if portInfo.Profiles.Exists(curCard.ActiveProfile.Name) {
+			goto setPort
 		}
-		hasActivatedCard = true
+		destCard = curCard
+		destPortInfo = portInfo
+	} else {
+		tmpCard, err := a.cards.get(cardId)
+		if err != nil {
+			return err
+		}
+		portInfo, err := tmpCard.Ports.Get(portName, int(direction))
+		if err != nil {
+			return err
+		}
+		destCard = tmpCard
+		destPortInfo = portInfo
 	}
 
-	if !hasActivatedCard {
-		return fmt.Errorf("Invalid card id: %v", cardId)
+	// match the common profile contain sinkPort and sourcePort
+	oppositePortInfo, _ = destCard.Ports.Get(oppositePort, oppositeDirection)
+	commonProfiles = getCommonProfiles(destPortInfo, oppositePortInfo)
+	if len(commonProfiles) != 0 {
+		destProfile = commonProfiles[0].Name
+	} else {
+		name, err := destCard.tryGetProfileByPort(portName)
+		if err != nil {
+			return err
+		}
+		destProfile = name
 	}
+	destCard.core.SetProfile(destProfile)
 
-	// disable other card, otherwise the active card maybe not work
-	for _, card := range others {
-		card.SetProfile("off")
+setPort:
+	if int(direction) == pulse.DirectionSink {
+		return a.trySetSinkByPort(portName)
 	}
-
-	return nil
+	return a.trySetSourceByPort(portName)
 }
 
 func NewSink(core *pulse.Sink) *Sink {
@@ -501,4 +542,63 @@ func initDefaultVolume(audio *Audio) {
 	for _, s := range audio.Sources {
 		s.SetVolume(defaultInputVolume, false)
 	}
+}
+
+func (a *Audio) trySetSinkByPort(portName string) error {
+	for _, sink := range a.core.GetSinkList() {
+		if !isPortExists(portName, sink.Ports) {
+			continue
+		}
+		if sink.ActivePort.Name != portName {
+			sink.SetPort(portName)
+		}
+		if a.DefaultSink != sink.Name {
+			a.SetDefaultSink(sink.Name)
+		}
+		return nil
+	}
+	return fmt.Errorf("Cann't find valid sink for port '%s'", portName)
+}
+
+func (a *Audio) trySetSourceByPort(portName string) error {
+	for _, source := range a.core.GetSourceList() {
+		if !isPortExists(portName, source.Ports) {
+			continue
+		}
+		if source.ActivePort.Name != portName {
+			source.SetPort(portName)
+		}
+		if a.DefaultSource != source.Name {
+			a.SetDefaultSource(source.Name)
+		}
+		return nil
+	}
+	return fmt.Errorf("Cann't find valid source for port '%s'", portName)
+}
+
+func (a *Audio) getActiveSinkPort() string {
+	for _, sink := range a.Sinks {
+		if sink.Name == a.DefaultSink {
+			return sink.ActivePort.Name
+		}
+	}
+	return ""
+}
+
+func (a *Audio) getActiveSourcePort() string {
+	for _, source := range a.Sources {
+		if source.Name == a.DefaultSource {
+			return source.ActivePort.Name
+		}
+	}
+	return ""
+}
+
+func isPortExists(name string, ports []pulse.PortInfo) bool {
+	for _, port := range ports {
+		if port.Name == name {
+			return true
+		}
+	}
+	return false
 }

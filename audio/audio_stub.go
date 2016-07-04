@@ -179,7 +179,10 @@ func (a *Audio) update() {
 	a.rebuildSinkList()
 	a.rebuildSourceList()
 	a.rebuildSinkInputList()
-	a.setPropCards(newCardInfos(a.core.GetCardList()).string())
+	a.cards = newCardInfos(a.core.GetCardList())
+	a.setPropCards(a.cards.string())
+	a.setPropActiveSinkPort(a.getActiveSinkPort())
+	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
 
 func (s *Audio) setPropDefaultSink(v string) {
@@ -193,6 +196,20 @@ func (s *Audio) setPropDefaultSource(v string) {
 		s.DefaultSource = v
 		dbus.NotifyChange(s, "DefaultSource")
 	}
+}
+func (a *Audio) setPropActiveSinkPort(port string) {
+	if len(port) == 0 || a.ActiveSinkPort == port {
+		return
+	}
+	a.ActiveSinkPort = port
+	dbus.NotifyChange(a, "ActiveSinkPort")
+}
+func (a *Audio) setPropActiveSourcePort(port string) {
+	if len(port) == 0 || a.ActiveSourcePort == port {
+		return
+	}
+	a.ActiveSourcePort = port
+	dbus.NotifyChange(a, "ActiveSourcePort")
 }
 func (s *Audio) setPropSinks(v []*Sink) {
 	for _, o := range s.Sinks {

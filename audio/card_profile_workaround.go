@@ -43,6 +43,9 @@ type CardInfo struct {
 
 	ActiveProfile *ProfileInfo2
 	Profiles      ProfileInfos2
+	Ports         pulse.CardPortInfos
+
+	core *pulse.Card
 }
 type CardInfos []*CardInfo
 
@@ -78,6 +81,7 @@ func newProfileInfo2(info pulse.ProfileInfo2) *ProfileInfo2 {
 
 func newCardInfo(card *pulse.Card) *CardInfo {
 	var info = new(CardInfo)
+	info.core = card
 	info.update(card)
 	return info
 }
@@ -89,6 +93,16 @@ func (info *CardInfo) update(card *pulse.Card) {
 	sort.Sort(cProfileInfos2(card.Profiles))
 	info.Profiles = newProfileInfos2(card.Profiles)
 	info.filterProfile(card)
+	info.Ports = card.Ports
+}
+
+func (info *CardInfo) tryGetProfileByPort(portName string) (string, error) {
+
+	profile, _ := info.Ports.TrySelectProfile(portName)
+	if len(profile) == 0 {
+		return "", fmt.Errorf("Not found profile for port '%s'", portName)
+	}
+	return profile, nil
 }
 
 func (info *CardInfo) filterProfile(card *pulse.Card) {
@@ -154,6 +168,20 @@ func (infos CardInfos) delete(id uint32) (CardInfos, bool) {
 		ret = append(ret, info)
 	}
 	return ret, deleted
+}
+
+func (infos CardInfos) getByPort(name string, direction int) (*CardInfo, error) {
+	if len(name) == 0 {
+		return nil, fmt.Errorf("Port name is empty")
+	}
+
+	for _, info := range infos {
+		_, err := info.Ports.Get(name, direction)
+		if err == nil {
+			return info, nil
+		}
+	}
+	return nil, fmt.Errorf("Invalid port name: %v", name)
 }
 
 func cardType(c *pulse.Card) int {
@@ -237,4 +265,21 @@ func toJSON(v interface{}) string {
 		return ""
 	}
 	return string(data)
+}
+
+func getCommonProfiles(info1, info2 pulse.CardPortInfo) pulse.ProfileInfos2 {
+	var commons pulse.ProfileInfos2
+	if len(info1.Profiles) == 0 || len(info2.Profiles) == 0 {
+		return commons
+	}
+	for _, profile := range info1.Profiles {
+		if !info2.Profiles.Exists(profile.Name) {
+			continue
+		}
+		commons = append(commons, profile)
+	}
+	if len(commons) != 0 {
+		sort.Sort(commons)
+	}
+	return commons
 }

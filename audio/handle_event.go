@@ -23,6 +23,8 @@ func (a *Audio) initEventHandlers() {
 
 		a.core.Connect(pulse.FacilityCard, func(e int, idx uint32) {
 			a.handleCardEvent(e, idx)
+			a.setPropActiveSinkPort(a.getActiveSinkPort())
+			a.setPropActiveSourcePort(a.getActiveSourcePort())
 			a.saveConfig()
 		})
 		a.core.Connect(pulse.FacilitySink, func(e int, idx uint32) {
@@ -101,6 +103,7 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 				break
 			}
 		}
+		a.setPropActiveSinkPort(a.getActiveSinkPort())
 	}
 }
 
@@ -170,6 +173,7 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 				break
 			}
 		}
+		a.setPropActiveSourcePort(a.getActiveSourcePort())
 	}
 }
 
