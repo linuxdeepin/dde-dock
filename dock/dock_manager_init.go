@@ -10,6 +10,7 @@
 package dock
 
 import (
+	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"path/filepath"
@@ -95,6 +96,11 @@ func (m *DockManager) init() error {
 		return err
 	}
 	m.initEntries()
+
+	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	if err != nil {
+		return err
+	}
 
 	err = dbus.InstallOnSession(m)
 	if err != nil {

@@ -10,6 +10,7 @@
 package dock
 
 import (
+	"errors"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
@@ -27,14 +28,20 @@ func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 func (entry *AppEntry) Activate() error {
 	timestamp := getCurrentTimestamp()
 	logger.Debug("Activate timestamp:", timestamp)
-	if !entry.hasWindow() {
+	windowCount := len(entry.windows)
+	if windowCount == 0 {
 		entry.launchApp(timestamp)
+		return nil
+	} else if windowCount > 1 {
+		entry.dockManager.wm.PresentWindows(entry.getWindowIds())
 		return nil
 	}
 
+	// windowCount == 1
 	if entry.current == nil {
-		logger.Warning("entry.current is nil")
-		return nil
+		err := errors.New("entry.current is nil")
+		logger.Warning(err)
+		return err
 	}
 	win := entry.current.window
 	state, err := ewmh.WmStateGet(XU, win)
@@ -53,14 +60,7 @@ func (entry *AppEntry) Activate() error {
 		case icccm.StateIconic:
 			activateWindow(win)
 		case icccm.StateNormal:
-			if len(entry.windows) == 1 {
-				iconifyWindow(win)
-			} else {
-				if dockManager.activeWindow == win {
-					nextWin := entry.findNextLeader()
-					activateWindow(nextWin)
-				}
-			}
+			iconifyWindow(win)
 		}
 	} else {
 		activateWindow(win)

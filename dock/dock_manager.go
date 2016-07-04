@@ -10,6 +10,7 @@
 package dock
 
 import (
+	"dbus/com/deepin/wm"
 	"errors"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
@@ -45,6 +46,8 @@ type DockManager struct {
 
 	entryCount uint
 	dockRect   xrect.Rect
+
+	wm *wm.Wm
 
 	// Signals
 	ServiceRestarted func()

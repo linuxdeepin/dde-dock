@@ -87,6 +87,14 @@ func (entry *AppEntry) hasWindow() bool {
 	return len(entry.windows) != 0
 }
 
+func (entry *AppEntry) getWindowIds() []uint32 {
+	list := make([]uint32, 0, len(entry.windows))
+	for _, winInfo := range entry.windows {
+		list = append(list, uint32(winInfo.window))
+	}
+	return list
+}
+
 func (entry *AppEntry) getExec(oneLine bool) string {
 	if entry.current == nil {
 		return ""
