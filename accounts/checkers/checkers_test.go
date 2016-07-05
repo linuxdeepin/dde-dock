@@ -78,3 +78,34 @@ func (*testWrapper) TestGetUsernames(c *C.C) {
 		c.Check(isStrInArray(data.name, names), C.Equals, data.ret)
 	}
 }
+
+func (*testWrapper) TestCheckPasswordValid(c *C.C) {
+	type passwordCheckPair struct {
+		str     string
+		errCode passwordErrorCode
+	}
+
+	passwordStrErrList := []passwordCheckPair{
+		{"", passwordErrCodeShort},
+		{"aa", passwordErrCodeShort},
+		{"aA1?", passwordErrCodeShort},
+		{"aaaaaaaa", passwordErrCodeSimple},
+		{"aaaaAAAA", passwordErrCodeSimple},
+		{"aaaaAA12", passwordErrCodeSimple},
+		{"aaaaaa1?", passwordErrCodeSimple},
+		{"AAAAAA1?", passwordErrCodeSimple},
+		{"aaaaA12?", passwordOK},
+	}
+
+	releaseType := "Server"
+	for _, v := range passwordStrErrList {
+		errCode := CheckPasswordValid(releaseType, v.str)
+		c.Check(errCode, C.Equals, v.errCode)
+	}
+
+	releaseType = "Desktop"
+	for _, v := range passwordStrErrList {
+		errCode := CheckPasswordValid(releaseType, v.str)
+		c.Check(errCode, C.Equals, passwordOK)
+	}
+}

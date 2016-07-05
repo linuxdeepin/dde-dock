@@ -149,8 +149,18 @@ func (m *Manager) IsUsernameValid(name string) (bool, string, int32) {
 	return false, info.Error.Error(), int32(info.Code)
 }
 
-func (m *Manager) IsPasswordValid(passwd string) bool {
-	return true
+// 检测密码是否有效
+//
+// ret0: 是否合法
+//
+// ret1: 提示信息
+//
+// ret2: 不合法代码
+func (m *Manager) IsPasswordValid(passwd string) (bool, string, int32) {
+	releaseType := getDeepinReleaseType()
+	logger.Infof("release type %q", releaseType)
+	errCode := checkers.CheckPasswordValid(releaseType, passwd)
+	return errCode.IsOk(), errCode.Prompt(), int32(errCode)
 }
 
 func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
