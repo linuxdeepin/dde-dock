@@ -8,14 +8,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-13 10:31+0800\n"
-"PO-Revision-Date: 2016-05-13 10:33+0800\n"
+"POT-Creation-Date: 2016-07-05 16:45+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../../accounts/checkers/password.go:45
+msgid "Please enter a password not less than 8 characters"
+msgstr ""
+
+#: ../../accounts/checkers/password.go:47
+#, c-format
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (%s)"
+msgstr ""
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -562,40 +573,41 @@ msgstr ""
 msgid "Fakaofo"
 msgstr ""
 
-#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
-#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
-#: ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:103 ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
+#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
-msgid "_Undock"
-msgstr ""
-
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:110 ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
+#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:119 ../../dock/runtime_apps.go:291
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
+#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
 msgid "_Dock"
 msgstr ""
 
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:75
-#: ../../network/nm_setting_ip4_config.go:26
+#: ../../dock/app_entry_menu.go:126 ../../dock/normal_apps.go:105
+#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
+#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
+#: ../../dock/runtime_apps.go:312
+msgid "_Undock"
+msgstr ""
+
+#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
@@ -3437,19 +3449,22 @@ msgstr ""
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid "Abnormal battery power"
 msgstr ""
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid ""
 "Battery power can not be predicted, please save important documents properly "
 "and  not do important operations."
 msgstr ""
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
@@ -3457,21 +3472,22 @@ msgstr ""
 msgid "Battery Critical Low"
 msgstr ""
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:105
 msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
 msgid "Battery Low"
 msgstr ""
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
 
