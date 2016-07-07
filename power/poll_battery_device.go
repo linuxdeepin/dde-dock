@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -35,7 +36,7 @@ func (dev *pollBatteryDevice) Destroy() {
 }
 
 func (dev *pollBatteryDevice) GetPath() string {
-	return "file://" + dev.ueventFile
+	return filepath.Base(filepath.Dir(dev.ueventFile))
 }
 
 func (dev *pollBatteryDevice) GetInfo() *batteryInfo {
@@ -153,4 +154,5 @@ func (dev *pollBatteryDevice) SetInfo(bi *batteryInfo) {
 		}
 	}()
 	dev.fillInfo()
+	bi.Inited = true
 }

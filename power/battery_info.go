@@ -12,6 +12,7 @@ type batteryInfo struct {
 	TimeToFull       int64
 	TimeToEmpty      int64
 	propertyChange   func(name string, oldVal interface{}, newVal interface{})
+	Inited           bool
 }
 
 func newBatteryInfo() *batteryInfo {

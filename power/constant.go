@@ -56,7 +56,8 @@ const (
 
 const (
 	//internal used
-	batteryPowerLevelSufficient = iota
+	batteryPowerLevelUnknown = iota
+	batteryPowerLevelSufficient
 	batteryPowerLevelAbnormal
 	batteryPowerLevelLow
 	batteryPowerLevelVeryLow
@@ -64,11 +65,12 @@ const (
 )
 
 var batteryPowerLevelNameMap = map[uint32]string{
-	0: "Sufficient",
-	1: "Abnormal",
-	2: "Low",
-	3: "VeryLow",
-	4: "Exhausted",
+	0: "Unknown",
+	1: "Sufficient",
+	2: "Abnormal",
+	3: "Low",
+	4: "VeryLow",
+	5: "Exhausted",
 }
 
 const (
@@ -103,6 +105,7 @@ const (
 )
 
 const (
+	batteryDisplay    = "Display"
 	cmdLowPower       = "/usr/lib/deepin-daemon/dde-lowpower"
 	sysPowerSupplyDir = "/sys/class/power_supply"
 )

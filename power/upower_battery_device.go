@@ -31,7 +31,7 @@ func (dev *upowerBatteryDevice) Destroy() {
 }
 
 func (dev *upowerBatteryDevice) GetPath() string {
-	return "upower://" + string(dev.udevice.Path)
+	return dev.udevice.NativePath.Get()
 }
 
 func (dev *upowerBatteryDevice) GetInfo() *batteryInfo {
@@ -53,6 +53,7 @@ func (dev *upowerBatteryDevice) SetInfo(bi *batteryInfo) {
 	bi.setTimeToFull(udevice.TimeToFull.Get())
 	bi.setEnergyRate(udevice.EnergyRate.Get())
 	bi.setPercentage(udevice.Percentage.Get())
+	bi.Inited = true
 
 	// Connect changed
 	udevice.IsPresent.ConnectChanged(func() {

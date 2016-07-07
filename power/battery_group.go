@@ -22,6 +22,9 @@ type batteryGroup struct {
 	changeLock  sync.Mutex
 	destroyLock sync.Mutex
 
+	percentage         float64
+	timeToEmpty        int64
+	state              batteryStateType
 	propChangedHandler func()
 }
 
@@ -73,16 +76,22 @@ func (batGroup *batteryGroup) Add(device batteryDevice) {
 		case "Percentage":
 			percentage := newVal.(float64)
 			manager.setPropBatteryPercentage(path, percentage)
+			batGroup.updateDisplayPercentage()
 
 		case "Energy":
+			batGroup.updateDisplayPercentage()
+			batGroup.updateDisplayTimeToEmpty()
 			manager.checkBatteryPowerLevel(batGroup)
 
 		case "EnergyRate":
+			batGroup.updateDisplayPercentage()
+			batGroup.updateDisplayTimeToEmpty()
 			manager.checkBatteryPowerLevel(batGroup)
 
 		case "State":
 			state := newVal.(batteryStateType)
 			manager.setPropBatteryState(path, state)
+			batGroup.updateDisplayState()
 		}
 	})
 
@@ -135,6 +144,53 @@ func (batGroup *batteryGroup) getPercentage() float64 {
 	return math.Floor((energySum / energyFullSum) * 100.0)
 }
 
+func (batGroup *batteryGroup) getState() batteryStateType {
+	/* If one battery is charging, then the composite is charging
+	* If all batteries are discharging, then the composite is discharging
+	* If all batteries are fully charged, then they're all fully charged
+	* Everything else is unknown */
+	var stateTotal batteryStateType = BatteryStateUnknown
+	for path, dev := range batGroup.batteryMap {
+		batInfo := dev.GetInfo()
+		state := batInfo.State
+		logger.Debugf("path %q state %s", path, state)
+
+		if state == BatteryStateCharging {
+
+			stateTotal = BatteryStateCharging
+
+		} else if stateTotal != BatteryStateCharging &&
+			state == BatteryStateDischarging {
+
+			stateTotal = BatteryStateDischarging
+
+		} else if stateTotal == BatteryStateUnknown &&
+			state == BatteryStateFullyCharged {
+
+			stateTotal = BatteryStateFullyCharged
+
+		}
+	}
+	return stateTotal
+}
+
+func (batGroup *batteryGroup) updateDisplayState() {
+	batGroup.state = batGroup.getState()
+	logger.Debug("display state", batGroup.state)
+	batGroup.manager.setPropBatteryState(batteryDisplay, batGroup.state)
+}
+
+func (batGroup *batteryGroup) updateDisplayPercentage() {
+	batGroup.percentage = batGroup.getPercentage()
+	batGroup.manager.setPropBatteryPercentage(batteryDisplay, batGroup.percentage)
+	logger.Debug("display percentage:", batGroup.percentage)
+}
+
+func (batGroup *batteryGroup) updateDisplayTimeToEmpty() {
+	batGroup.timeToEmpty = batGroup.getTimeToEmpty()
+	logger.Debug("display timeToEmpty:", batGroup.timeToEmpty)
+}
+
 func (m *Manager) getBatteryPowerLevelByPercentage(percentage float64) uint32 {
 	switch {
 	case percentage < batteryPercentageAbnormal:
@@ -174,22 +230,23 @@ func (m *Manager) getBatteryPowerLevelByTimeToEmpty(time int64) uint32 {
 }
 
 func (batGroup *batteryGroup) getPowerLevel(usePercentageForPolicy bool) uint32 {
+	for _, dev := range batGroup.batteryMap {
+		batInfo := dev.GetInfo()
+		if !batInfo.Inited {
+			return batteryPowerLevelUnknown
+		}
+	}
+
 	manager := batGroup.manager
 	if usePercentageForPolicy {
-		percentage := batGroup.getPercentage()
-		logger.Debugf("sum percentage: %.2f%%", percentage)
-		return manager.getBatteryPowerLevelByPercentage(percentage)
+		return manager.getBatteryPowerLevelByPercentage(batGroup.percentage)
 	} else {
 		// use time to empty for policy
-		timeToEmpty := batGroup.getTimeToEmpty()
-		logger.Debug("sum timeToEmpty(secs):", timeToEmpty)
-		powerLevel := manager.getBatteryPowerLevelByTimeToEmpty(timeToEmpty)
+		powerLevel := manager.getBatteryPowerLevelByTimeToEmpty(batGroup.timeToEmpty)
 
 		if powerLevel == batteryPowerLevelAbnormal {
 			logger.Debug("Try use percentage for policy")
-			percentage := batGroup.getPercentage()
-			logger.Debugf("sum percentage: %.2f%%", percentage)
-			return manager.getBatteryPowerLevelByPercentage(percentage)
+			return manager.getBatteryPowerLevelByPercentage(batGroup.percentage)
 		}
 		return powerLevel
 	}

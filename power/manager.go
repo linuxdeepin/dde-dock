@@ -326,6 +326,10 @@ func (m *Manager) initBatteryGroup() error {
 		logger.Error(err)
 		return err
 	}
+	if m.batteryGroup.batteryDevicesCount() > 0 {
+		m.setPropBatteryIsPresent(batteryDisplay, true)
+	}
+	m.checkBatteryPowerLevel(m.batteryGroup)
 	return nil
 }
 
