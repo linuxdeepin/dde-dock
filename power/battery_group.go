@@ -12,6 +12,7 @@ package power
 import (
 	"errors"
 	"math"
+	"pkg.deepin.io/lib/dbus"
 	"sync"
 )
 
@@ -100,8 +101,21 @@ func (batGroup *batteryGroup) Add(device batteryDevice) {
 
 func (batGroup *batteryGroup) Remove(path string) {
 	if batDevice, ok := batGroup.batteryMap[path]; ok {
+		logger.Debug("Remove ", path)
 		batDevice.Destroy()
 		delete(batGroup.batteryMap, path)
+		// update manager properties
+		manager := batGroup.manager
+		delete(manager.BatteryPercentage, path)
+		delete(manager.BatteryIsPresent, path)
+		delete(manager.BatteryState, path)
+		dbus.NotifyChange(manager, "BatteryPercentage")
+		dbus.NotifyChange(manager, "BatteryIsPresent")
+		dbus.NotifyChange(manager, "BatteryState")
+		batGroup.updateDisplayState()
+		batGroup.updateDisplayPercentage()
+		batGroup.updateDisplayTimeToEmpty()
+		manager.checkBatteryPowerLevel(batGroup)
 	}
 }
 

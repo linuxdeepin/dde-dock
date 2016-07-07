@@ -12,6 +12,7 @@ package power
 import (
 	libupower "dbus/org/freedesktop/upower"
 	"errors"
+	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -28,6 +29,7 @@ func newBatteryDeviceWithUPowerDBusObjPath(path dbus.ObjectPath) (batteryDevice,
 }
 
 func (batGroup *batteryGroup) AddUPowerBatteryDevice(path dbus.ObjectPath) {
+	logger.Info("AddUPowerBatteryDevice", path)
 	batGroup.changeLock.Lock()
 	defer batGroup.changeLock.Unlock()
 
@@ -38,10 +40,11 @@ func (batGroup *batteryGroup) AddUPowerBatteryDevice(path dbus.ObjectPath) {
 }
 
 func (batGroup *batteryGroup) RemoveUPowerBatteryDevice(path dbus.ObjectPath) {
+	logger.Info("RemoveUPowerBatteryDevice", path)
 	batGroup.changeLock.Lock()
 	defer batGroup.changeLock.Unlock()
-	pathStr := "upower://" + string(path)
-	batGroup.Remove(pathStr)
+	name := filepath.Base(string(path))
+	batGroup.Remove(name)
 }
 
 func (batGroup *batteryGroup) initUpowerBatteryDevices() {

@@ -11,6 +11,7 @@ package power
 
 import (
 	libupower "dbus/org/freedesktop/upower"
+	"path/filepath"
 )
 
 type upowerBatteryDevice struct {
@@ -31,7 +32,7 @@ func (dev *upowerBatteryDevice) Destroy() {
 }
 
 func (dev *upowerBatteryDevice) GetPath() string {
-	return dev.udevice.NativePath.Get()
+	return filepath.Base(string(dev.udevice.Path))
 }
 
 func (dev *upowerBatteryDevice) GetInfo() *batteryInfo {
