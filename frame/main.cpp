@@ -1,5 +1,6 @@
 
 #include "window/mainwindow.h"
+#include "util/themeappicon.h"
 
 #include <dapplication.h>
 #include <QDir>
@@ -40,6 +41,8 @@ int main(int argc, char *argv[])
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
+
+    ThemeAppIcon::gtkInit();
 
     MainWindow mw;
     QDBusConnection::sessionBus().registerService("com.deepin.dde.dock");
