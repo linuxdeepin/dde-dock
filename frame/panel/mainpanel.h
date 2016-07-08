@@ -11,12 +11,16 @@
 class MainPanel : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(int displayMode READ displayMode DESIGNABLE true)
+    Q_PROPERTY(int position READ position DESIGNABLE true)
 
 public:
     explicit MainPanel(QWidget *parent = 0);
 
     void updateDockPosition(const Position dockPosition);
     void updateDockDisplayMode(const Dock::DisplayMode displayMode);
+    int displayMode();
+    int position();
 
 signals:
     void requestRefershWindowVisible() const;

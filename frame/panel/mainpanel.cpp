@@ -22,8 +22,27 @@ MainPanel::MainPanel(QWidget *parent)
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:none;"
-                  "background-color:rgba(0, 0, 0, .6);"
-                  "border-radius:5px 5px 5px 5px;"
+                  "background-color:rgba(0, 0, 0, .65);"
+                  "}"
+                  // Top
+                  "QWidget #MainPanel[displayMode='0'][position='0'] {"
+                  "border-bottom-left-radius:5px;"
+                  "border-bottom-right-radius:5px;"
+                  "}"
+                  // Right
+                  "QWidget #MainPanel[displayMode='0'][position='1'] {"
+                  "border-top-left-radius:5px;"
+                  "border-bottom-left-radius:5px;"
+                  "}"
+                  // Bottom
+                  "QWidget #MainPanel[displayMode='0'][position='2'] {"
+                  "border-top-left-radius:5px;"
+                  "border-top-right-radius:5px;"
+                  "}"
+                  // Left
+                  "QWidget #MainPanel[displayMode='0'][position='3'] {"
+                  "border-top-right-radius:5px;"
+                  "border-bottom-right-radius:5px;"
                   "}");
 
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
@@ -69,6 +88,19 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 //        if (item->itemType() == DockItem::Placeholder)
 //            item->setVisible(displayMode == Dock::Efficient);
 //    }
+
+    // reload qss
+    setStyleSheet(styleSheet());
+}
+
+int MainPanel::displayMode()
+{
+    return int(m_displayMode);
+}
+
+int MainPanel::position()
+{
+    return int(m_position);
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
