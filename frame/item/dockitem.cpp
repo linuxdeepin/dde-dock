@@ -144,6 +144,9 @@ void DockItem::showPopupTips()
         return;
 
     DArrowRectangle *tips = PopupTips.get();
+    QWidget *lastContent = tips->getContent();
+    if (lastContent)
+        lastContent->hide();
 
     switch (DockPosition)
     {
