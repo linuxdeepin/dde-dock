@@ -2,6 +2,7 @@
 #define SHUTDOWNPLUGIN_H
 
 #include "pluginsiteminterface.h"
+#include "dbus/dbuspower.h"
 
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
@@ -20,9 +21,12 @@ public:
 
     const QIcon itemIcon(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
+    const QString itemTipsString(const QString &itemKey);
 
 private:
     QIcon m_icon;
+
+    DBusPower *m_powerInter;
 };
 
 #endif // SHUTDOWNPLUGIN_H

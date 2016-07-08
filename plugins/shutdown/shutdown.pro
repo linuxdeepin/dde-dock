@@ -11,10 +11,12 @@ DESTDIR          = $$_PRO_FILE_PWD_/../
 DISTFILES       += shutdown.json
 
 HEADERS += \
-    shutdownplugin.h
+    shutdownplugin.h \
+    dbus/dbuspower.h
 
 SOURCES += \
-    shutdownplugin.cpp
+    shutdownplugin.cpp \
+    dbus/dbuspower.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
