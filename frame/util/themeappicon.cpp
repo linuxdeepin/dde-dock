@@ -15,15 +15,15 @@ extern "C" {
 #define signals public
 
 
-static GtkIconTheme* them = NULL;
+//static GtkIconTheme* them = NULL;
 
-inline char* get_icon_theme_name()
-{
-    GtkSettings* gs = gtk_settings_get_default();
-    char* name = NULL;
-    g_object_get(gs, "gtk-icon-theme-name", &name, NULL);
-    return name;
-}
+//inline char* get_icon_theme_name()
+//{
+//    GtkSettings* gs = gtk_settings_get_default();
+//    char* name = NULL;
+//    g_object_get(gs, "gtk-icon-theme-name", &name, NULL);
+//    return name;
+//}
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -93,23 +93,23 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
         }
 
         // In pratice, default icon theme may not gets the right icon path when program starting.
-        if (them == NULL)
-            them = gtk_icon_theme_new();
-        char* icon_theme_name = get_icon_theme_name();
-        gtk_icon_theme_set_custom_theme(them, icon_theme_name);
-        g_free(icon_theme_name);
+//        if (them == NULL)
+//            them = gtk_icon_theme_new();
+//        char* icon_theme_name = get_icon_theme_name();
+//        gtk_icon_theme_set_custom_theme(them, icon_theme_name);
+//        g_free(icon_theme_name);
 
         char* pic_name = g_strndup(name, pic_name_len);
 
-        GtkIconInfo* info = gtk_icon_theme_lookup_icon(them, pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-        if (info == NULL) {
-            info = gtk_icon_theme_lookup_icon(gtk_icon_theme_get_default(), pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-            if (info == NULL) {
-//                qWarning() << "get gtk icon theme info failed for" << pic_name;
-                g_free(pic_name);
-                return "";
-            }
-        }
+        GtkIconInfo* info = gtk_icon_theme_lookup_icon(gtk_icon_theme_get_default(), pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+//        if (info == NULL) {
+//            info = gtk_icon_theme_lookup_icon(gtk_icon_theme_get_default(), pic_name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
+//            if (info == NULL) {
+////                qWarning() << "get gtk icon theme info failed for" << pic_name;
+//                g_free(pic_name);
+//                return "";
+//            }
+//        }
         g_free(pic_name);
 
         char* path = g_strdup(gtk_icon_info_get_filename(info));
@@ -125,7 +125,9 @@ QString ThemeAppIcon::getThemeIconPath(QString iconName, int size)
 
 QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
-    const QString fileName = getThemeIconPath(iconName, size);
+    QString fileName = getThemeIconPath(iconName, size);
+    if (fileName.isEmpty())
+        fileName = getThemeIconPath("application-x-desktop", size);
 
     QPixmap pixmap;
     if (fileName.startsWith("data:image/")) {
