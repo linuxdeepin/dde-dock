@@ -44,11 +44,6 @@ public:
     virtual const QString itemTipsString(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
     virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
-    // return simple string tips, call this function when tips type is Simple
-    virtual const QString simpleTipsString(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
-    // return complex widget tips, call this function when tips type is Complex
-    virtual QWidget *complexTipsWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
-
 protected:
     Dock::DisplayMode displayMode() const
     {
