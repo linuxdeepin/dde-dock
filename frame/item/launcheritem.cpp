@@ -32,8 +32,14 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
     DockItem::resizeEvent(e);
 
     const int iconSize = qMin(width(), height());
-    m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
-    m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
+    if (DockDisplayMode == Efficient)
+    {
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7);
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9);
+    } else {
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
+    }
 }
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)

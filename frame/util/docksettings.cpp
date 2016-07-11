@@ -6,7 +6,7 @@
 
 #define ICON_SIZE_LARGE     48
 #define ICON_SIZE_MEDIUM    36
-#define ICON_SIZE_SMALL     24
+#define ICON_SIZE_SMALL     30
 
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),

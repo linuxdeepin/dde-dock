@@ -55,7 +55,10 @@ int AppItem::itemBaseWidth()
 
 int AppItem::itemBaseHeight()
 {
-    return IconBaseSize * 1.5;
+    if (DockDisplayMode == Efficient)
+        return IconBaseSize * 1.2;
+    else
+        return IconBaseSize * 1.5;
 }
 
 void AppItem::paintEvent(QPaintEvent *e)
@@ -72,14 +75,27 @@ void AppItem::paintEvent(QPaintEvent *e)
     const QRect itemRect = rect();
 
     // draw background
-    const QRect backgroundRect = itemRect.marginsRemoved(QMargins(1, 2, 1, 2));
+    QRect backgroundRect = itemRect;
+    if (DockDisplayMode == Efficient)
+    {
+        switch (DockPosition)
+        {
+        case Top:
+        case Bottom:
+            backgroundRect = itemRect.marginsRemoved(QMargins(2, 1, 2, 1));
+        case Left:
+        case Right:
+            backgroundRect = itemRect.marginsRemoved(QMargins(1, 2, 1, 2));
+        }
+    }
+
     if (DockDisplayMode == Efficient)
     {
         if (m_active)
         {
-            painter.fillRect(backgroundRect, QColor(70, 100, 200, 120));
+            painter.fillRect(backgroundRect, QColor(44, 167, 248, 255 * 0.3));
 
-            const int activeLineWidth = 3;
+            const int activeLineWidth = itemRect.height() > 50 ? 4 : 2;
             QRect activeRect = backgroundRect;
             switch (DockPosition)
             {
@@ -89,10 +105,10 @@ void AppItem::paintEvent(QPaintEvent *e)
             case Right:     activeRect.setLeft(activeRect.right() - activeLineWidth);   break;
             }
 
-            painter.fillRect(activeRect, QColor(47, 168, 247));
+            painter.fillRect(activeRect, QColor(44, 167, 248, 255));
         }
         else if (!m_titles.isEmpty())
-            painter.fillRect(backgroundRect, QColor(255, 255, 255, 50));
+            painter.fillRect(backgroundRect, QColor(255, 255, 255, 255 * 0.2));
     //    else
     //        painter.fillRect(backgroundRect, Qt::gray);
     }
@@ -100,28 +116,32 @@ void AppItem::paintEvent(QPaintEvent *e)
     {
         if (!m_titles.isEmpty())
         {
-            const int activeLineWidth = 1;
+            const int activeLineWidth = 2;
             const int activeLineLength = 20;
             QRect activeRect = itemRect;
             switch (DockPosition)
             {
             case Top:
                 activeRect.setBottom(activeRect.top() + activeLineWidth);
+                activeRect.moveBottom(activeRect.bottom() + 1);
                 activeRect.setWidth(activeLineLength);
                 activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
                 break;
             case Bottom:
                 activeRect.setTop(activeRect.bottom() - activeLineWidth);
+                activeRect.moveTop(activeRect.top() - 1);
                 activeRect.setWidth(activeLineLength);
                 activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
                 break;
             case Left:
                 activeRect.setRight(activeRect.left() + activeLineWidth);
+                activeRect.moveRight(activeRect.right() + 1);
                 activeRect.setHeight(activeLineLength);
                 activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
                 break;
             case Right:
                 activeRect.setLeft(activeRect.right() - activeLineWidth);
+                activeRect.moveLeft(activeRect.left() - 1);
                 activeRect.setHeight(activeLineLength);
                 activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
                 break;
@@ -252,8 +272,14 @@ void AppItem::updateIcon()
     const QString icon = m_itemEntry->icon();
     const int iconSize = qMin(width(), height());
 
-    m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
-    m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
+    if (DockDisplayMode == Efficient)
+    {
+        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
+        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.9);
+    } else {
+        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
+        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
+    }
 }
 
 void AppItem::activeChanged()

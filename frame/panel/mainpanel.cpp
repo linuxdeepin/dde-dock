@@ -21,8 +21,8 @@ MainPanel::MainPanel(QWidget *parent)
     setAcceptDrops(true);
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
-                  "border:none;"
-                  "background-color:rgba(0, 0, 0, .65);"
+                  "border:1px solid rgba(162, 162, 162, .2);"
+                  "background-color:rgba(10, 10, 10, .6);"
                   "}"
                   // Top
                   "QWidget #MainPanel[displayMode='0'][position='0'] {"
@@ -36,13 +36,29 @@ MainPanel::MainPanel(QWidget *parent)
                   "}"
                   // Bottom
                   "QWidget #MainPanel[displayMode='0'][position='2'] {"
-                  "border-top-left-radius:5px;"
-                  "border-top-right-radius:5px;"
+                  "border-top-left-radius:6px;"
+                  "border-top-right-radius:6px;"
                   "}"
                   // Left
                   "QWidget #MainPanel[displayMode='0'][position='3'] {"
                   "border-top-right-radius:5px;"
                   "border-bottom-right-radius:5px;"
+                  "}"
+                  "QWidget #MainPanel[position='0'] {"
+                  "padding:0 6px;"
+                  "border-top:none;"
+                  "}"
+                  "QWidget #MainPanel[position='1'] {"
+                  "padding:6px 0;"
+                  "border-right:none;"
+                  "}"
+                  "QWidget #MainPanel[position='2'] {"
+                  "padding:0 6px;"
+                  "border-bottom:none;"
+                  "}"
+                  "QWidget #MainPanel[position='3'] {"
+                  "padding:6px 0;"
+                  "border-left:none;"
                   "}");
 
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
