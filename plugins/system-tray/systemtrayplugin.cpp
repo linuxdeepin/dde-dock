@@ -8,7 +8,8 @@
 
 SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
-      m_trayInter(new DBusTrayManager(this))
+      m_trayInter(new DBusTrayManager(this)),
+      m_tipsWidget(new TipsWidget)
 {
     m_fashionItem = new FashionTrayItem;
 }
@@ -43,6 +44,13 @@ PluginsItemInterface::ItemType SystemTrayPlugin::pluginType(const QString &itemK
     return Complex;
 }
 
+PluginsItemInterface::ItemType SystemTrayPlugin::tipsType(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return Complex;
+}
+
 QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == FASHION_MODE_ITEM)
@@ -51,6 +59,30 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
     const quint32 trayWinId = itemKey.toUInt();
 
     return m_trayList[trayWinId];
+}
+
+QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
+{
+    // only display tips widget on fashion mode
+    if (itemKey != FASHION_MODE_ITEM)
+        return nullptr;
+
+    // not have other tray icon
+    if (m_trayList.size() < 2)
+        return nullptr;
+
+    updateTipsContent();
+
+    return m_tipsWidget;
+}
+
+void SystemTrayPlugin::updateTipsContent()
+{
+    auto trayList = m_trayList.values();
+    trayList.removeOne(m_fashionItem->activeTray());
+
+    m_tipsWidget->clear();
+    m_tipsWidget->addWidgets(trayList);
 }
 
 void SystemTrayPlugin::trayAdded(const quint32 winId)
@@ -83,6 +115,9 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
         m_fashionItem->setActiveTray(nullptr);
     else
         m_fashionItem->setActiveTray(m_trayList.values().last());
+
+    if (m_tipsWidget->isVisible())
+        updateTipsContent();
 }
 
 void SystemTrayPlugin::trayChanged(const quint32 winId)
@@ -91,6 +126,9 @@ void SystemTrayPlugin::trayChanged(const quint32 winId)
         return;
 
     m_fashionItem->setActiveTray(m_trayList[winId]);
+
+    if (m_tipsWidget->isVisible())
+        updateTipsContent();
 }
 
 void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)

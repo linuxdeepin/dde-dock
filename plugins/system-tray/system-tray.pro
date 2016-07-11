@@ -14,13 +14,15 @@ HEADERS += \
     systemtrayplugin.h \
     dbus/dbustraymanager.h \
     traywidget.h \
-    fashiontrayitem.h
+    fashiontrayitem.h \
+    tipswidget.h
 
 SOURCES += \
     systemtrayplugin.cpp \
     dbus/dbustraymanager.cpp \
     traywidget.cpp \
-    fashiontrayitem.cpp
+    fashiontrayitem.cpp \
+    tipswidget.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

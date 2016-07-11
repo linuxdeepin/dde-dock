@@ -3,6 +3,7 @@
 
 #include "pluginsiteminterface.h"
 #include "traywidget.h"
+#include "tipswidget.h"
 #include "dbus/dbustraymanager.h"
 
 class FashionTrayItem;
@@ -19,8 +20,13 @@ public:
     void init(PluginProxyInterface *proxyInter);
     void displayModeChanged(const Dock::DisplayMode mode);
     ItemType pluginType(const QString &itemKey);
+    ItemType tipsType(const QString &itemKey);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
+
+private:
+    void updateTipsContent();
 
 private slots:
     void trayAdded(const quint32 winId);
@@ -32,6 +38,8 @@ private:
     DBusTrayManager *m_trayInter;
     FashionTrayItem *m_fashionItem;
     QMap<quint32, TrayWidget *> m_trayList;
+
+    TipsWidget *m_tipsWidget;
 };
 
 #endif // SYSTEMTRAYPLUGIN_H
