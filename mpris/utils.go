@@ -14,7 +14,9 @@ import (
 	"gir/gio-2.0"
 	"os/exec"
 
+	"io/ioutil"
 	"pkg.deepin.io/lib/dbus"
+	"strings"
 )
 
 const (
@@ -22,6 +24,10 @@ const (
 	mimeTypeEmail      = "x-scheme-handler/mailto"
 	mimeTypeCalc       = "x-scheme-handler/calculator"
 	mimeTypeAudioMedia = "audio/mpeg"
+)
+
+const (
+	ibmHotkeyFile = "/proc/acpi/ibm/hotkey"
 )
 
 func execByMime(mime string, pressed bool) error {
@@ -58,4 +64,46 @@ func queryCommand(mime string) string {
 func doAction(cmd string) error {
 	logger.Debug("execute command: ", cmd)
 	return exec.Command("/bin/sh", "-c", cmd).Run()
+}
+
+var driverSupportedHotkey = func() func() bool {
+	var (
+		init      bool = false
+		supported bool = false
+	)
+
+	return func() bool {
+		if !init {
+			init = true
+			supported = checkIBMHotkey(ibmHotkeyFile)
+		}
+		return supported
+	}
+}()
+
+func checkIBMHotkey(file string) bool {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return false
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+		list := strings.Split(line, ":")
+		if len(list) != 2 {
+			continue
+		}
+
+		if list[0] != "status" {
+			continue
+		}
+
+		if strings.TrimSpace(list[1]) == "enabled" {
+			return true
+		}
+	}
+	return false
 }

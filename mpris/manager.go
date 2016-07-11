@@ -19,6 +19,7 @@ import (
 	"dbus/org/freedesktop/login1"
 	"fmt"
 	"pkg.deepin.io/lib/log"
+	"time"
 )
 
 var logger = log.NewLogger("daemon/mpris")
@@ -99,6 +100,12 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		step = -0.05
 	}
 
+	if driverSupportedHotkey() {
+		time.Sleep(time.Microsecond * 200)
+		m.disp.RefreshBrightness()
+		goto OSD
+	}
+
 	for output, v := range values {
 		var discrete float64
 		discrete = v + step
@@ -114,6 +121,7 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		}
 	}
 
+OSD:
 	// Show osd
 	var signal = "BrightnessUp"
 	if !raised {
