@@ -8,9 +8,10 @@
 #include <QTimer>
 #include <QBoxLayout>
 
+#define xstr(s) str(s)
+#define str(s) #s
 #define PANEL_BORDER    1
 #define PANEL_PADDING   6
-#define str(x) #x
 
 class MainPanel : public QFrame
 {

@@ -21,7 +21,7 @@ MainPanel::MainPanel(QWidget *parent)
     setAcceptDrops(true);
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
-                  "border:" str(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
+                  "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
                   "background-color:rgba(10, 10, 10, .6);"
                   "}"
                   // Top
@@ -45,19 +45,19 @@ MainPanel::MainPanel(QWidget *parent)
                   "border-bottom-right-radius:5px;"
                   "}"
                   "QWidget #MainPanel[position='0'] {"
-                  "padding:0 " str(PANEL_PADDING) "px;"
+                  "padding:0 " xstr(PANEL_PADDING) "px;"
                   "border-top:none;"
                   "}"
                   "QWidget #MainPanel[position='1'] {"
-                  "padding:" str(PANEL_PADDING) "px 0;"
+                  "padding:" xstr(PANEL_PADDING) "px 0;"
                   "border-right:none;"
                   "}"
                   "QWidget #MainPanel[position='2'] {"
-                  "padding:0 " str(PANEL_PADDING) "px;"
+                  "padding:0 " xstr(PANEL_PADDING) "px;"
                   "border-bottom:none;"
                   "}"
                   "QWidget #MainPanel[position='3'] {"
-                  "padding:" str(PANEL_PADDING) "px 0;"
+                  "padding:" xstr(PANEL_PADDING) "px 0;"
                   "border-left:none;"
                   "}");
 
