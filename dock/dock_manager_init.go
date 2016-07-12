@@ -106,5 +106,11 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
+
+	// 强制将 ClassicMode 转为 EfficientMode
+	if m.DisplayMode.Get() == int32(DisplayModeClassicMode) {
+		m.DisplayMode.Set(int32(DisplayModeEfficientMode))
+	}
+
 	return nil
 }
