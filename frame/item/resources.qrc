@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/indicator">
+        <file>resources/indicator_active.png</file>
+        <file>resources/indicator.png</file>
+        <file>resources/indicator_ver.png</file>
+        <file>resources/indicator_active_ver.png</file>
+    </qresource>
+</RCC>

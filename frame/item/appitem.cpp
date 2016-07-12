@@ -15,7 +15,11 @@ QPoint AppItem::MousePressPos;
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
-      m_draging(false)
+      m_draging(false),
+      m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
+      m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
+      m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
+      m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png"))
 {
     setAcceptDrops(true);
 
@@ -116,38 +120,74 @@ void AppItem::paintEvent(QPaintEvent *e)
     {
         if (!m_titles.isEmpty())
         {
-            const int activeLineWidth = 2;
-            const int activeLineLength = 20;
-            QRect activeRect = itemRect;
+            QPoint p;
+            QPixmap pixmap;
+            QPixmap activePixmap;
             switch (DockPosition)
             {
             case Top:
-                activeRect.setBottom(activeRect.top() + activeLineWidth);
-                activeRect.moveBottom(activeRect.bottom() + 1);
-                activeRect.setWidth(activeLineLength);
-                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+                pixmap = m_horizontalIndicator;
+                activePixmap = m_activeHorizontalIndicator;
+                p.setX((itemRect.width() - pixmap.width()) / 2);
+                p.setY(1);
                 break;
             case Bottom:
-                activeRect.setTop(activeRect.bottom() - activeLineWidth);
-                activeRect.moveTop(activeRect.top() - 1);
-                activeRect.setWidth(activeLineLength);
-                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+                pixmap = m_horizontalIndicator;
+                activePixmap = m_activeHorizontalIndicator;
+                p.setX((itemRect.width() - pixmap.width()) / 2);
+                p.setY(itemRect.height() - pixmap.height() - 1);
                 break;
             case Left:
-                activeRect.setRight(activeRect.left() + activeLineWidth);
-                activeRect.moveRight(activeRect.right() + 1);
-                activeRect.setHeight(activeLineLength);
-                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+                pixmap = m_verticalIndicator;
+                activePixmap = m_activeVerticalIndicator;
+                p.setX(1);
+                p.setY((itemRect.height() - pixmap.height()) / 2);
                 break;
             case Right:
-                activeRect.setLeft(activeRect.right() - activeLineWidth);
-                activeRect.moveLeft(activeRect.left() - 1);
-                activeRect.setHeight(activeLineLength);
-                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+                pixmap = m_verticalIndicator;
+                activePixmap = m_activeVerticalIndicator;
+                p.setX(itemRect.width() - pixmap.width() - 1);
+                p.setY((itemRect.height() - pixmap.height()) / 2);
                 break;
             }
 
-            painter.fillRect(activeRect, QColor(163, 167, 166));
+            if (m_active)
+                painter.drawPixmap(p, activePixmap);
+            else
+                painter.drawPixmap(p, pixmap);
+
+//            const int activeLineWidth = 2;
+//            const int activeLineLength = 20;
+//            QRect activeRect = itemRect;
+//            switch (DockPosition)
+//            {
+//            case Top:
+//                activeRect.setBottom(activeRect.top() + activeLineWidth);
+//                activeRect.moveBottom(activeRect.bottom() + 1);
+//                activeRect.setWidth(activeLineLength);
+//                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+//                break;
+//            case Bottom:
+//                activeRect.setTop(activeRect.bottom() - activeLineWidth);
+//                activeRect.moveTop(activeRect.top() - 1);
+//                activeRect.setWidth(activeLineLength);
+//                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
+//                break;
+//            case Left:
+//                activeRect.setRight(activeRect.left() + activeLineWidth);
+//                activeRect.moveRight(activeRect.right() + 1);
+//                activeRect.setHeight(activeLineLength);
+//                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+//                break;
+//            case Right:
+//                activeRect.setLeft(activeRect.right() - activeLineWidth);
+//                activeRect.moveLeft(activeRect.left() - 1);
+//                activeRect.setHeight(activeLineLength);
+//                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
+//                break;
+//            }
+
+//            painter.fillRect(activeRect, QColor(163, 167, 166));
         }
     }
 

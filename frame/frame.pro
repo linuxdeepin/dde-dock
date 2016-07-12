@@ -57,3 +57,6 @@ dbus_service.path = /usr/share/dbus-1/services
 
 target.path = $${PREFIX}/bin/
 INSTALLS += target dbus_service
+
+RESOURCES += \
+    item/resources.qrc

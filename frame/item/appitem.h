@@ -47,6 +47,10 @@ private:
     QString m_id;
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
+    QPixmap m_horizontalIndicator;
+    QPixmap m_verticalIndicator;
+    QPixmap m_activeHorizontalIndicator;
+    QPixmap m_activeVerticalIndicator;
 
     static int IconBaseSize;
     static QPoint MousePressPos;
