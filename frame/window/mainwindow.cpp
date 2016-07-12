@@ -338,7 +338,7 @@ void MainWindow::resetPanelEnvironment()
 void MainWindow::updatePanelVisible()
 {
     if (m_settings->hideMode() == KeepShowing)
-        return expand();
+        return;
 
     const Dock::HideState state = m_settings->hideState();
 
