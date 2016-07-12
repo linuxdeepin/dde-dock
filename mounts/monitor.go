@@ -42,11 +42,21 @@ func (m *Manager) handleEvent() {
 			"", false)
 		oldInfos := m.DiskList.duplicate()
 		m.refrashDiskList()
-		id := findRemovedId(oldInfos, m.DiskList)
-		if len(id) > 0 {
-			dbus.Emit(m, "Changed", EventTypeVolumeRemoved, id)
-		}
+		removed := findChangedId(oldInfos, m.DiskList, false)
+		m.emitChanged(removed, EventTypeVolumeRemoved)
 		oldInfos = nil
+	})
+
+	m.monitor.Connect("volume-changed", func(monitor *gio.VolumeMonitor,
+		volume *gio.Volume) {
+		logger.Debug("[Event] volume changed:", getVolumeId(volume))
+		volume.Unref()
+		oldInfos := m.DiskList.duplicate()
+		m.refrashDiskList()
+		added, removed := compareDiskList(oldInfos, m.DiskList)
+		logger.Debug("[Event] after compare:", added, removed)
+		m.emitChanged(added, EventTypeVolumeAdded)
+		m.emitChanged(removed, EventTypeVolumeRemoved)
 	})
 
 	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
@@ -111,6 +121,23 @@ func (m *Manager) handleEvent() {
 		logger.Debug("Only mount removed:", info.Id)
 		dbus.Emit(m, "Changed", EventTypeMountRemoved, info.Id)
 	})
+
+	m.monitor.Connect("mount-changed", func(monitor *gio.VolumeMonitor,
+		mount *gio.Mount) {
+		logger.Debug("[Event] mount changed:", getMountId(mount))
+		oldInfos := m.DiskList.duplicate()
+		m.refrashDiskList()
+		added, removed := compareDiskList(oldInfos, m.DiskList)
+		logger.Debug("[Event] after compare:", added, removed)
+		m.emitChanged(added, EventTypeVolumeAdded)
+		m.emitChanged(removed, EventTypeVolumeRemoved)
+	})
+}
+
+func (m *Manager) emitChanged(ids []string, event int32) {
+	for _, id := range ids {
+		dbus.Emit(m, "Changed", event, id)
+	}
 }
 
 func (m *Manager) isAutoMount() bool {
@@ -127,12 +154,27 @@ func (m *Manager) isAutoOpen() bool {
 	return m.setting.GetBoolean("automount-open")
 }
 
-func findRemovedId(oldInfos, newInfos DiskInfos) string {
-	for _, info := range oldInfos {
-		_, err := newInfos.get(info.Id)
-		if err != nil {
-			return info.Id
+func findChangedId(oldInfos, newInfos DiskInfos, added bool) []string {
+	var ret []string
+	if added {
+		for _, info := range newInfos {
+			_, err := oldInfos.get(info.Id)
+			if err != nil {
+				ret = append(ret, info.Id)
+			}
+		}
+	} else {
+		for _, info := range oldInfos {
+			_, err := newInfos.get(info.Id)
+			if err != nil {
+				ret = append(ret, info.Id)
+			}
 		}
 	}
-	return ""
+	return ret
+}
+
+func compareDiskList(oldInfos, newInfos DiskInfos) ([]string, []string) {
+	return findChangedId(oldInfos, newInfos, true),
+		findChangedId(oldInfos, newInfos, false)
 }
