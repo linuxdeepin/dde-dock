@@ -64,7 +64,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
-    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize);
+    connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
@@ -142,6 +142,8 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
     DockItem *item = itemAt(e->pos());
     if (item == DragingItem)
+        return;
+    if (!item || !DragingItem)
         return;
 
     m_itemController->itemMove(DragingItem, item);
