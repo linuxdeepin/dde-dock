@@ -186,6 +186,8 @@ void DockSettings::menuActionClicked(DAction *action)
 {
     Q_ASSERT(action);
 
+    qDebug() << "settings triggered: " << action->text();
+
     if (action == &m_fashionModeAct)
         return m_dockInter->setDisplayMode(Fashion);
     if (action == &m_efficientModeAct)
