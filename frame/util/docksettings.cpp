@@ -1,4 +1,5 @@
 #include "docksettings.h"
+#include "panel/mainpanel.h"
 #include "item/appitem.h"
 
 #include <QDebug>
@@ -321,14 +322,14 @@ void DockSettings::calculateWindowConfig()
         {
         case Top:
         case Bottom:
-            m_mainWindowSize.setHeight(defaultHeight);
+            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(m_primaryRect.width());
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(m_primaryRect.height());
-            m_mainWindowSize.setWidth(defaultWidth);
+            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             break;
 
         default:
@@ -368,22 +369,22 @@ void DockSettings::calculateWindowConfig()
             }
         }
 
-        const int perfectWidth = visibleItemCount * defaultWidth;
-        const int perfectHeight = visibleItemCount * defaultHeight;
+        const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2;
+        const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2;
         const int calcWidth = qMin(m_primaryRect.width(), perfectWidth);
         const int calcHeight = qMin(m_primaryRect.height(), perfectHeight);
         switch (m_position)
         {
         case Top:
         case Bottom:
-            m_mainWindowSize.setHeight(defaultHeight);
+            m_mainWindowSize.setHeight(defaultHeight + PANEL_BORDER);
             m_mainWindowSize.setWidth(calcWidth);
             break;
 
         case Left:
         case Right:
             m_mainWindowSize.setHeight(calcHeight);
-            m_mainWindowSize.setWidth(defaultWidth);
+            m_mainWindowSize.setWidth(defaultWidth + PANEL_BORDER);
             break;
 
         default:

@@ -21,7 +21,7 @@ MainPanel::MainPanel(QWidget *parent)
     setAcceptDrops(true);
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
-                  "border:1px solid rgba(162, 162, 162, .2);"
+                  "border:" str(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
                   "background-color:rgba(10, 10, 10, .6);"
                   "}"
                   // Top
@@ -45,19 +45,19 @@ MainPanel::MainPanel(QWidget *parent)
                   "border-bottom-right-radius:5px;"
                   "}"
                   "QWidget #MainPanel[position='0'] {"
-                  "padding:0 6px;"
+                  "padding:0 " str(PANEL_PADDING) "px;"
                   "border-top:none;"
                   "}"
                   "QWidget #MainPanel[position='1'] {"
-                  "padding:6px 0;"
+                  "padding:" str(PANEL_PADDING) "px 0;"
                   "border-right:none;"
                   "}"
                   "QWidget #MainPanel[position='2'] {"
-                  "padding:0 6px;"
+                  "padding:0 " str(PANEL_PADDING) "px;"
                   "border-bottom:none;"
                   "}"
                   "QWidget #MainPanel[position='3'] {"
-                  "padding:6px 0;"
+                  "padding:" str(PANEL_PADDING) "px 0;"
                   "border-left:none;"
                   "}");
 
@@ -192,14 +192,14 @@ void MainPanel::adjustItemSize()
     {
     case Top:
     case Bottom:
-        itemSize.setHeight(height());
+        itemSize.setHeight(height() - PANEL_BORDER);
         itemSize.setWidth(AppItem::itemBaseWidth());
         break;
 
     case Left:
     case Right:
         itemSize.setHeight(AppItem::itemBaseHeight());
-        itemSize.setWidth(width());
+        itemSize.setWidth(width() - PANEL_BORDER);
         break;
 
     default:
@@ -250,17 +250,20 @@ void MainPanel::adjustItemSize()
         }
     }
 
+    const int w = width() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
+    const int h = height() - PANEL_BORDER * 2 - PANEL_PADDING * 2;
+
     // test if panel can display all items completely
     bool containsCompletely = false;
     switch (m_position)
     {
     case Dock::Top:
     case Dock::Bottom:
-        containsCompletely = totalWidth <= width();     break;
+        containsCompletely = totalWidth <= w;     break;
 
     case Dock::Left:
     case Dock::Right:
-        containsCompletely = totalHeight <= height();   break;
+        containsCompletely = totalHeight <= h;   break;
 
     default:
         Q_ASSERT(false);
@@ -277,13 +280,13 @@ void MainPanel::adjustItemSize()
     {
 //        qDebug() << "width: " << totalWidth << width();
         overflow = totalWidth;
-        base = width();
+        base = w;
     }
     else
     {
 //        qDebug() << "height: " << totalHeight << height();
         overflow = totalHeight;
-        base = height();
+        base = h;
     }
 
     const int decrease = double(overflow - base) / totalAppItemCount;
