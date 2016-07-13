@@ -30,7 +30,7 @@ func (m *Manager) handleEvent() {
 			return
 		}
 		volume.Unref()
-		m.refrashDiskList()
+		m.refreshDiskList()
 		dbus.Emit(m, "Changed", EventTypeVolumeAdded, info.Id)
 	})
 
@@ -41,7 +41,7 @@ func (m *Manager) handleEvent() {
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
 		oldInfos := m.DiskList.duplicate()
-		m.refrashDiskList()
+		m.refreshDiskList()
 		removed := findChangedId(oldInfos, m.DiskList, false)
 		m.emitChanged(removed, EventTypeVolumeRemoved)
 		oldInfos = nil
@@ -49,14 +49,18 @@ func (m *Manager) handleEvent() {
 
 	m.monitor.Connect("volume-changed", func(monitor *gio.VolumeMonitor,
 		volume *gio.Volume) {
-		logger.Debug("[Event] volume changed:", getVolumeId(volume))
+		id := getVolumeId(volume)
+		logger.Debug("[Event] volume changed:", id)
 		volume.Unref()
 		oldInfos := m.DiskList.duplicate()
-		m.refrashDiskList()
+		m.refreshDiskList()
 		added, removed := compareDiskList(oldInfos, m.DiskList)
 		logger.Debug("[Event] after compare:", added, removed)
 		m.emitChanged(added, EventTypeVolumeAdded)
 		m.emitChanged(removed, EventTypeVolumeRemoved)
+		if len(added) == 0 && len(removed) == 0 {
+			dbus.Emit(m, "Changed", EventTypeVolumeChanged, id)
+		}
 	})
 
 	m.monitor.Connect("mount-added", func(monitor *gio.VolumeMonitor,
@@ -78,7 +82,7 @@ func (m *Manager) handleEvent() {
 			volume.Unref()
 		}
 
-		m.refrashDiskList()
+		m.refreshDiskList()
 		dbus.Emit(m, "Changed", EventTypeMountAdded, info.Id)
 
 		if autoOpen {
@@ -102,7 +106,7 @@ func (m *Manager) handleEvent() {
 		root.Unref()
 		if err != nil {
 			// fixed phone device
-			m.refrashDiskList()
+			m.refreshDiskList()
 			dbus.Emit(m, "Changed", EventTypeMountRemoved, getMountId(mount))
 			mount.Unref()
 			logger.Warning(err)
@@ -110,7 +114,7 @@ func (m *Manager) handleEvent() {
 		}
 		mount.Unref()
 		oldLen := len(m.DiskList)
-		m.refrashDiskList()
+		m.refreshDiskList()
 		if oldLen != len(m.DiskList) {
 			logger.Debug("Mount removed && volume removed")
 			// fixed for smb
@@ -120,17 +124,6 @@ func (m *Manager) handleEvent() {
 
 		logger.Debug("Only mount removed:", info.Id)
 		dbus.Emit(m, "Changed", EventTypeMountRemoved, info.Id)
-	})
-
-	m.monitor.Connect("mount-changed", func(monitor *gio.VolumeMonitor,
-		mount *gio.Mount) {
-		logger.Debug("[Event] mount changed:", getMountId(mount))
-		oldInfos := m.DiskList.duplicate()
-		m.refrashDiskList()
-		added, removed := compareDiskList(oldInfos, m.DiskList)
-		logger.Debug("[Event] after compare:", added, removed)
-		m.emitChanged(added, EventTypeVolumeAdded)
-		m.emitChanged(removed, EventTypeVolumeRemoved)
 	})
 }
 

@@ -22,12 +22,13 @@ const (
 	EventTypeVolumeRemoved
 	EventTypeMountAdded
 	EventTypeMountRemoved
+	EventTypeVolumeChanged
 )
 
 const (
 	mediaHandlerSchema = "org.gnome.desktop.media-handling"
 
-	refrashDuration = time.Minute * 10
+	refreshDuration = time.Minute * 10
 )
 
 type Manager struct {
@@ -39,8 +40,7 @@ type Manager struct {
 	setting *gio.Settings
 	quit    chan struct{}
 
-	listLocker    sync.Mutex
-	refrashLocker sync.Mutex
+	refreshLocker sync.Mutex
 }
 
 func newManager() *Manager {
@@ -66,7 +66,7 @@ func (m *Manager) init() {
 				info.Name, info.Id, err)
 		}
 	}
-	m.refrashDiskList()
+	m.refreshDiskList()
 }
 
 func (m *Manager) destroy() {
@@ -91,9 +91,9 @@ func (m *Manager) emitError(id, msg string) {
 	dbus.Emit(m, "Error", id, msg)
 }
 
-func (m *Manager) refrashDiskList() {
-	m.refrashLocker.Lock()
-	defer m.refrashLocker.Unlock()
+func (m *Manager) refreshDiskList() {
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 	m.DiskList = nil
 	m.setPropDiskList(m.getDiskInfos())
 }
@@ -101,8 +101,8 @@ func (m *Manager) refrashDiskList() {
 func (m *Manager) updateDiskInfo() {
 	for {
 		select {
-		case <-time.After(refrashDuration):
-			m.refrashDiskList()
+		case <-time.After(refreshDuration):
+			m.refreshDiskList()
 		case <-m.quit:
 			return
 		}

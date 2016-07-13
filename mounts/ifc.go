@@ -16,20 +16,20 @@ import (
 )
 
 func (m *Manager) ListDisk() DiskInfos {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 	return m.DiskList
 }
 
 func (m *Manager) QueryDisk(id string) (*DiskInfo, error) {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 	return m.DiskList.get(id)
 }
 
 func (m *Manager) Eject(id string) error {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 
 	mount := m.getMountById(id)
 	if mount != nil {
@@ -49,8 +49,8 @@ func (m *Manager) Eject(id string) error {
 }
 
 func (m *Manager) Mount(id string) error {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 
 	volume := m.getVolumeById(id)
 	if volume != nil {
@@ -64,8 +64,8 @@ func (m *Manager) Mount(id string) error {
 }
 
 func (m *Manager) Unmount(id string) error {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
+	m.refreshLocker.Lock()
+	defer m.refreshLocker.Unlock()
 
 	mount := m.getMountById(id)
 	if mount != nil {

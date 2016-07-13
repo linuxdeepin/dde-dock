@@ -29,8 +29,6 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (m *Manager) setPropDiskList(infos DiskInfos) {
-	m.listLocker.Lock()
-	defer m.listLocker.Unlock()
 	if toJSON(m.DiskList) == toJSON(infos) {
 		return
 	}
