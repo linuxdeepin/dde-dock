@@ -1,17 +1,16 @@
 #include "datetimeplugin.h"
 
+#include <QLabel>
+
 DatetimePlugin::DatetimePlugin(QObject *parent)
     : QObject(parent),
 
-      m_calendar(new DCalendar(nullptr)),
+      m_dateTipsLabel(new QLabel),
 
       m_refershTimer(new QTimer(this))
 {
-    m_calendar->setFixedSize(300, 300);
-    m_calendar->setDateInfoVisible(true);
-    m_calendar->setControlPanelVisible(false);
-    m_calendar->setSolarDisplayFormat(tr("MM/dd/yyyy"));
-    m_calendar->setLunarVisible(QLocale::system().name().startsWith("zh_"));
+    m_dateTipsLabel->setStyleSheet("color:white;"
+                                   "padding:6px 10px;");
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();
@@ -24,7 +23,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 DatetimePlugin::~DatetimePlugin()
 {
     delete m_centeralWidget;
-    delete m_calendar;
+    delete m_dateTipsLabel;
 }
 
 const QString DatetimePlugin::pluginName() const
@@ -70,14 +69,23 @@ QWidget *DatetimePlugin::itemTipsWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    m_calendar->setCurrentDate(QDate::currentDate());
+    return m_dateTipsLabel;
+}
 
-    return m_calendar;
+const QString DatetimePlugin::itemCommand(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return "dde-calendar";
 }
 
 void DatetimePlugin::updateCurrentTimeString()
 {
-    const QString currentString = QTime::currentTime().toString("mm");
+    const QDateTime currentDateTime = QDateTime::currentDateTime();
+
+    m_dateTipsLabel->setText(currentDateTime.toString(tr("MM/dd/yyyy ddd HH:mm:ss")));
+
+    const QString currentString = currentDateTime.toString("mm");
 
     if (currentString == m_currentTimeString)
         return;

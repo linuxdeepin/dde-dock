@@ -5,10 +5,7 @@
 #include "datetimewidget.h"
 
 #include <QTimer>
-
-#include <dcalendar.h>
-
-DWIDGET_USE_NAMESPACE
+#include <QLabel>
 
 class DatetimePlugin : public QObject, PluginsItemInterface
 {
@@ -30,12 +27,14 @@ public:
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
 
+    const QString itemCommand(const QString &itemKey);
+
 private slots:
     void updateCurrentTimeString();
 
 private:
     DatetimeWidget *m_centeralWidget;
-    DCalendar *m_calendar;
+    QLabel *m_dateTipsLabel;
 
     QTimer *m_refershTimer;
 
