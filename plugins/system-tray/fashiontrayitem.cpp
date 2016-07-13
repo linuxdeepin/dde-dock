@@ -62,6 +62,8 @@ void FashionTrayItem::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
+    emit requestPopupApplet();
+
     m_pressPoint = e->pos();
 }
 

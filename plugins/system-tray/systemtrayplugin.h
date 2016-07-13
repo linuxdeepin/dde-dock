@@ -21,7 +21,7 @@ public:
     void displayModeChanged(const Dock::DisplayMode mode);
 
     QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
+    QWidget *itemPopupApplet(const QString &itemKey);
 
 private:
     void updateTipsContent();
@@ -31,6 +31,7 @@ private slots:
     void trayRemoved(const quint32 winId);
     void trayChanged(const quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);
+    void requestPopupApplet();
 
 private:
     DBusTrayManager *m_trayInter;

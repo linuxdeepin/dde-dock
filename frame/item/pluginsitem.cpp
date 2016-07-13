@@ -49,6 +49,11 @@ void PluginsItem::detachPluginWidget()
         widget->setParent(nullptr);
 }
 
+void PluginsItem::showPopupApplet()
+{
+    emit requestPopupApplet(popupMarkPoint(), m_pluginInter->itemPopupApplet(m_itemKey));
+}
+
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton)

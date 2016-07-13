@@ -55,6 +55,14 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
+void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
+{
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+
+    Q_ASSERT(item);
+    item->showPopupApplet();
+}
+
 void DockPluginsController::loadPlugins()
 {
 //    Q_ASSERT(m_pluginLoaderList.isEmpty());

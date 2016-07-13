@@ -14,6 +14,7 @@ public:
 
     int itemSortKey() const;
     void detachPluginWidget();
+    void showPopupApplet();
 
 private:
     void mousePressEvent(QMouseEvent *e);

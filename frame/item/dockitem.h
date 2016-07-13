@@ -46,15 +46,13 @@ protected:
     void leaveEvent(QEvent *e);
 
     const QRect perfectIconRect() const;
+    const QPoint popupMarkPoint();
 
     void showContextMenu();
     void showPopupTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
-
-private:
-    const QPoint popupMarkPoint();
 
 protected:
     ItemType m_type;

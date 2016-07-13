@@ -11,7 +11,6 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
       m_trayInter(new DBusTrayManager(this)),
       m_tipsWidget(new TipsWidget)
 {
-    m_fashionItem = new FashionTrayItem;
 }
 
 const QString SystemTrayPlugin::pluginName() const
@@ -22,6 +21,10 @@ const QString SystemTrayPlugin::pluginName() const
 void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+
+    m_fashionItem = new FashionTrayItem;
+
+    connect(m_fashionItem, &FashionTrayItem::requestPopupApplet, this, &SystemTrayPlugin::requestPopupApplet);
 
     connect(m_trayInter, &DBusTrayManager::Added, this, &SystemTrayPlugin::trayAdded);
     connect(m_trayInter, &DBusTrayManager::Removed, this, &SystemTrayPlugin::trayRemoved);
@@ -47,11 +50,9 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
     return m_trayList[trayWinId];
 }
 
-QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
+QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 {
-    // only display tips widget on fashion mode
-    if (itemKey != FASHION_MODE_ITEM)
-        return nullptr;
+    Q_ASSERT(itemKey == FASHION_MODE_ITEM);
 
     // not have other tray icon
     if (m_trayList.size() < 2)
@@ -131,4 +132,9 @@ void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)
         for (auto winId : m_trayList.keys())
             m_proxyInter->itemAdded(this, QString::number(winId));
     }
+}
+
+void SystemTrayPlugin::requestPopupApplet()
+{
+    m_proxyInter->requestPopupApplet(this, FASHION_MODE_ITEM);
 }
