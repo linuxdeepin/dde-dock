@@ -36,7 +36,7 @@ public:
 signals:
     void dragStarted() const;
     void menuUnregistered() const;
-    void requestWindowAutoHide(const bool autoHide) const;
+    void requestPopupApplet(const QPoint &p, const QWidget *w) const;
 
 protected:
     void paintEvent(QPaintEvent *e);

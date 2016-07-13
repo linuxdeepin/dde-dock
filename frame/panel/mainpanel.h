@@ -29,7 +29,6 @@ public:
 
 signals:
     void requestRefershWindowVisible() const;
-    void requestWindowAutoHide(const bool autoHide) const;
 
 private:
     void resizeEvent(QResizeEvent *e);

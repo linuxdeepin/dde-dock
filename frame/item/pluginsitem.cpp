@@ -22,12 +22,16 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 {
     m_pluginType = pluginInter->pluginType(itemKey);
 
+    m_simpleTips->setVisible(false);
+    m_simpleTips->setAlignment(Qt::AlignCenter);
+    m_simpleTips->setStyleSheet("QLabel {"
+                                "color:white;"
+                                "padding:5px 10px;"
+                                "font-size:14px;"
+                                "}");
+
     if (m_pluginType == PluginsItemInterface::Simple)
         return;
-
-    m_simpleTips->setAlignment(Qt::AlignCenter);
-    m_simpleTips->setStyleSheet("color:white;"
-                                "font-size:12px;");
 
     // construct complex widget layout
     QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
@@ -148,6 +152,7 @@ QWidget *PluginsItem::popupTips()
         return nullptr;
 
     m_simpleTips->setText(tips);
+
     return m_simpleTips;
 }
 
@@ -179,12 +184,12 @@ void PluginsItem::startDrag()
 void PluginsItem::mouseClicked()
 {
     const QString command = m_pluginInter->itemCommand(m_itemKey);
-    if (command.isEmpty())
-        return;
+    if (!command.isEmpty())
+    {
+        QProcess *proc = new QProcess(this);
 
-    QProcess *proc = new QProcess(this);
+        connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
-
-    proc->startDetached(command);
+        proc->startDetached(command);
+    }
 }

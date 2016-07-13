@@ -20,7 +20,10 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
       m_menuManagerInter(new DBusMenuManager(this))
 {
     if (!PopupTips.get())
-        PopupTips.reset(new DArrowRectangle(DArrowRectangle::ArrowBottom, nullptr));
+    {
+        DArrowRectangle *arrowRectangle = new DArrowRectangle(DArrowRectangle::ArrowBottom, nullptr);
+        PopupTips.reset(arrowRectangle);
+    }
 
     m_popupTipsDelayTimer->setInterval(200);
     m_popupTipsDelayTimer->setSingleShot(true);
