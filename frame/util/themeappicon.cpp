@@ -37,6 +37,7 @@ void ThemeAppIcon::gtkInit(){
 
 QPixmap ThemeAppIcon::getIconPixmap(QString iconPath, int width, int height){
     Q_ASSERT(false);
+
     if (iconPath.length() == 0){
         iconPath = "application-x-desktop";
     }
@@ -128,6 +129,8 @@ QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
     QString fileName = getThemeIconPath(iconName, size);
     if (fileName.isEmpty())
         fileName = getThemeIconPath("application-x-desktop", size);
+    if (iconName.startsWith("data:image/"))
+        fileName = iconName;
 
     QPixmap pixmap;
     if (fileName.startsWith("data:image/")) {

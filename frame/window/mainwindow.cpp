@@ -183,13 +183,13 @@ void MainWindow::updateGeometry()
     switch (position)
     {
     case Top:
-        move(primaryRect.topLeft().x() + offsetX, 0);               break;
+        move(primaryRect.topLeft().x() + offsetX, primaryRect.y());                   break;
     case Left:
-        move(primaryRect.topLeft().x(), offsetY);                   break;
+        move(primaryRect.topLeft().x(), primaryRect.y() + offsetY);                   break;
     case Right:
-        move(primaryRect.right() - size.width() + 1, offsetY);      break;
+        move(primaryRect.right() - size.width() + 1, primaryRect.y() + offsetY);      break;
     case Bottom:
-        move(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+        move(primaryRect.x() + offsetX, primaryRect.bottom() - size.height() + 1);    break;
     default:
         Q_ASSERT(false);
     }
