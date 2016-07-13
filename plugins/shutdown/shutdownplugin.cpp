@@ -4,6 +4,9 @@
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
+
+      m_pluginWidget(new PluginWidget),
+
       m_powerInter(new DBusPower(this))
 {
 }
@@ -17,7 +20,14 @@ PluginsItemInterface::ItemType ShutdownPlugin::pluginType(const QString &itemKey
 {
     Q_UNUSED(itemKey);
 
-    return Simple;
+    return Complex;
+}
+
+ QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_pluginWidget;
 }
 
 void ShutdownPlugin::init(PluginProxyInterface *proxyInter)

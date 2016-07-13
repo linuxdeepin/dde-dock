@@ -40,7 +40,7 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     // draw circle
     QPen circlePen(QColor(0, 164, 233));
     circlePen.setWidth(3);
-    const int circleSize = r.width() * 0.6 / 2;
+    const int circleSize = std::min(r.width(), r.height()) * 0.8 / 2 - 3;
     painter.setPen(circlePen);
     painter.drawEllipse(r.center(), circleSize, circleSize);
 
