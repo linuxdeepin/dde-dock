@@ -19,8 +19,6 @@ public:
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
     void displayModeChanged(const Dock::DisplayMode mode);
-    ItemType pluginType(const QString &itemKey);
-    ItemType tipsType(const QString &itemKey);
 
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);

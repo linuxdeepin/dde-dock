@@ -16,13 +16,6 @@ const QString ShutdownPlugin::pluginName() const
     return "shutdown";
 }
 
-PluginsItemInterface::ItemType ShutdownPlugin::pluginType(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return Complex;
-}
-
  QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
@@ -36,21 +29,6 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter->itemAdded(this, QString());
 
     displayModeChanged(qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>());
-}
-
-void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
-{
-    if (displayMode == Dock::Fashion)
-        m_icon.addFile(":/icons/resources/icons/fashion.svg");
-    else
-        m_icon.addFile(":/icons/resources/icons/normal.svg");
-}
-
-const QIcon ShutdownPlugin::itemIcon(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return m_icon;
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)

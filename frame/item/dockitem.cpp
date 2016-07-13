@@ -142,29 +142,29 @@ void DockItem::showContextMenu()
 
 void DockItem::showPopupTips()
 {
-    QWidget * const content = popupTips();
-    if (!content)
-        return;
+//    QWidget * const content = popupTips();
+//    if (!content)
+//        return;
 
-    DArrowRectangle *tips = PopupTips.get();
-    QWidget *lastContent = tips->getContent();
-    if (lastContent)
-        lastContent->hide();
+//    DArrowRectangle *tips = PopupTips.get();
+//    QWidget *lastContent = tips->getContent();
+//    if (lastContent)
+//        lastContent->hide();
 
-    switch (DockPosition)
-    {
-    case Top:   tips->setArrowDirection(DArrowRectangle::ArrowTop);     break;
-    case Bottom:tips->setArrowDirection(DArrowRectangle::ArrowBottom);  break;
-    case Left:  tips->setArrowDirection(DArrowRectangle::ArrowLeft);    break;
-    case Right: tips->setArrowDirection(DArrowRectangle::ArrowRight);   break;
-    }
-    tips->setContent(content);
-    tips->setMargin(5);
-    tips->setWidth(content->sizeHint().width());
-    tips->setHeight(content->sizeHint().height());
+//    switch (DockPosition)
+//    {
+//    case Top:   tips->setArrowDirection(DArrowRectangle::ArrowTop);     break;
+//    case Bottom:tips->setArrowDirection(DArrowRectangle::ArrowBottom);  break;
+//    case Left:  tips->setArrowDirection(DArrowRectangle::ArrowLeft);    break;
+//    case Right: tips->setArrowDirection(DArrowRectangle::ArrowRight);   break;
+//    }
+//    tips->setContent(content);
+//    tips->setMargin(5);
+//    tips->setWidth(content->sizeHint().width());
+//    tips->setHeight(content->sizeHint().height());
 
-    const QPoint p = popupMarkPoint();
-    tips->show(p.x(), p.y());
+//    const QPoint p = popupMarkPoint();
+//    tips->show(p.x(), p.y());
 }
 
 void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
@@ -176,11 +176,6 @@ void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 const QString DockItem::contextMenu() const
 {
     return QString();
-}
-
-QWidget *DockItem::popupTips()
-{
-    return nullptr;
 }
 
 const QPoint DockItem::popupMarkPoint()

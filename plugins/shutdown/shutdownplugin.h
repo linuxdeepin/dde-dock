@@ -16,19 +16,13 @@ public:
 
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
-    void displayModeChanged(const Dock::DisplayMode displayMode);
-
-    ItemType pluginType(const QString &itemKey);
 
     QWidget *itemWidget(const QString &itemKey);
-    const QIcon itemIcon(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
     const QString itemTipsString(const QString &itemKey);
 
 private:
-    QIcon m_icon;
     PluginWidget *m_pluginWidget;
-
 
     DBusPower *m_powerInter;
 };

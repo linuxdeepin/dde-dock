@@ -9,13 +9,6 @@
 class PluginsItemInterface
 {
 public:
-    enum ItemType
-    {
-        Simple,
-        Complex,
-    };
-
-public:
     virtual ~PluginsItemInterface() {}
 
     // the unique plugin id
@@ -27,22 +20,13 @@ public:
     // dock position changed
     virtual void positionChanged(const Dock::Position position) {Q_UNUSED(position);}
 
-    // plugins type, simple icon or complex widget
-    virtual ItemType pluginType(const QString &itemKey) {Q_UNUSED(itemKey); return Simple;}
-    // simple string tips or popup widget
-    virtual ItemType tipsType(const QString &itemKey) {Q_UNUSED(itemKey); return Simple;}
     // item sort key
     virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return 0;}
     // reset sort key when plugins order changed
     virtual void setSortKey(const QString &itemKey, const int order) {Q_UNUSED(itemKey); Q_UNUSED(order);}
 
-    // if pluginType is complex widget mode, return a widget to plugins item
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
     virtual QWidget *itemTipsWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
-    // if pluginType is simple icon mode, plugins need to implements these data source functions
-    virtual const QIcon itemIcon(const QString &itemKey) {Q_UNUSED(itemKey); return QIcon();}
-    virtual const QString itemTipsString(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
-    virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
 protected:
     Dock::DisplayMode displayMode() const

@@ -31,20 +31,6 @@ const QString DatetimePlugin::pluginName() const
     return "datetime";
 }
 
-PluginsItemInterface::ItemType DatetimePlugin::pluginType(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return Complex;
-}
-
-PluginsItemInterface::ItemType DatetimePlugin::tipsType(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return Complex;
-}
-
 void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;

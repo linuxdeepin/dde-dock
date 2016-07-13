@@ -21,7 +21,6 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
-    QSize sizeHint() const;
 
     QWidget *popupTips();
 
@@ -32,10 +31,8 @@ private:
 private:
     PluginsItemInterface * const m_pluginInter;
     const QString m_itemKey;
-    PluginsItemInterface::ItemType m_pluginType;
 
     bool m_draging;
-    QLabel *m_simpleTips;
 
     static QPoint MousePressPoint;
 };

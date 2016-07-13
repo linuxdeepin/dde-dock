@@ -37,20 +37,6 @@ void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
     switchToMode(mode);
 }
 
-PluginsItemInterface::ItemType SystemTrayPlugin::pluginType(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return Complex;
-}
-
-PluginsItemInterface::ItemType SystemTrayPlugin::tipsType(const QString &itemKey)
-{
-    Q_UNUSED(itemKey);
-
-    return Complex;
-}
-
 QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 {
     if (itemKey == FASHION_MODE_ITEM)
