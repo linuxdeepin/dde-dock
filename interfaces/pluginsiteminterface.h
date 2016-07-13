@@ -27,6 +27,7 @@ public:
 
     virtual QWidget *itemWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
     virtual QWidget *itemTipsWidget(const QString &itemKey) {Q_UNUSED(itemKey); return nullptr;}
+    virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
 protected:
     Dock::DisplayMode displayMode() const

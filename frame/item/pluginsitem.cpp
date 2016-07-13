@@ -16,16 +16,16 @@ QPoint PluginsItem::MousePressPoint = QPoint();
 PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(Plugins, parent),
       m_pluginInter(pluginInter),
+      m_centeralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
       m_draging(false)
 {
-    // construct complex widget layout
-    QWidget *centeralWidget = m_pluginInter->itemWidget(itemKey);
-    Q_ASSERT(centeralWidget);
-    centeralWidget->installEventFilter(this);
+    Q_ASSERT(m_centeralWidget);
+
+    m_centeralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(centeralWidget);
+    hLayout->addWidget(m_centeralWidget);
     hLayout->setSpacing(0);
     hLayout->setMargin(0);
 
@@ -92,31 +92,15 @@ void PluginsItem::paintEvent(QPaintEvent *e)
     if (m_draging)
         return;
 
-    if (!m_hover)
-        return DockItem::paintEvent(e);
+    DockItem::paintEvent(e);
 
-    // TODO: hover
-//    const QPixmap pixmap =
-
-//    if (m_pluginType == PluginsItemInterface::Complex)
-//        return DockItem::paintEvent(e);
-
-//    QPainter painter(this);
-
-//    const QIcon icon = m_pluginInter->itemIcon(m_itemKey);
-//    const QRect iconRect = perfectIconRect();
-//    const QPixmap pixmap = icon.pixmap(iconRect.size());
-
-//    painter.drawPixmap(iconRect, pixmap);
-
-//    if (m_hover)
-//        painter.drawPixmap(iconRect, ImageFactory::lighterEffect(pixmap));
+    // TODO: hover effect
 }
 
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)
 {
     if (m_draging)
-        if (o->parent() == this && e->type() == QEvent::Paint)
+        if (o == m_centeralWidget && e->type() == QEvent::Paint)
             return true;
 
     return DockItem::eventFilter(o, e);
@@ -124,16 +108,7 @@ bool PluginsItem::eventFilter(QObject *o, QEvent *e)
 
 QWidget *PluginsItem::popupTips()
 {
-//    if (m_pluginInter->tipsType(m_itemKey) == PluginsItemInterface::Complex)
-//        return m_pluginInter->itemTipsWidget(m_itemKey);
-
-//    const QString tips = m_pluginInter->itemTipsString(m_itemKey);
-//    if (tips.isEmpty())
-//        return nullptr;
-
-//    m_simpleTips->setText(tips);
-
-//    return m_simpleTips;
+    return m_pluginInter->itemTipsWidget(m_itemKey);
 }
 
 void PluginsItem::startDrag()
@@ -159,13 +134,13 @@ void PluginsItem::startDrag()
 
 void PluginsItem::mouseClicked()
 {
-//    const QString command = m_pluginInter->itemCommand(m_itemKey);
-//    if (!command.isEmpty())
-//    {
-//        QProcess *proc = new QProcess(this);
+    const QString command = m_pluginInter->itemCommand(m_itemKey);
+    if (command.isEmpty())
+        return;
 
-//        connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+    QProcess *proc = new QProcess(this);
 
-//        proc->startDetached(command);
-//    }
+    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+
+    proc->startDetached(command);
 }

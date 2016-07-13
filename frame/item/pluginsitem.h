@@ -30,8 +30,8 @@ private:
 
 private:
     PluginsItemInterface * const m_pluginInter;
+    QWidget *m_centeralWidget;
     const QString m_itemKey;
-
     bool m_draging;
 
     static QPoint MousePressPoint;
