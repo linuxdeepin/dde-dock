@@ -25,8 +25,7 @@ func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (entry *AppEntry) Activate() error {
-	timestamp := getCurrentTimestamp()
+func (entry *AppEntry) Activate(timestamp uint32) error {
 	logger.Debug("Activate timestamp:", timestamp)
 	windowCount := len(entry.windows)
 	if windowCount == 0 {
@@ -68,8 +67,7 @@ func (entry *AppEntry) Activate() error {
 	return nil
 }
 
-func (e *AppEntry) HandleMenuItem(id string) {
-	timestamp := getCurrentTimestamp()
+func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) {
 	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
 	if e.coreMenu != nil {
 		e.coreMenu.HandleAction(id, timestamp)
@@ -78,10 +76,9 @@ func (e *AppEntry) HandleMenuItem(id string) {
 	}
 }
 
-func (entry *AppEntry) HandleDragDrop(files []string) {
-	logger.Debugf("handle drag drop files: %v", files)
+func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) {
+	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
 	ai := entry.appInfo
-	timestamp := getCurrentTimestamp()
 	appLaunchContext := gio.GetGdkAppLaunchContext().SetTimestamp(timestamp)
 	if ai.DesktopAppInfo != nil {
 		_, err := ai.LaunchUris(files, appLaunchContext)
