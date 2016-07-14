@@ -62,34 +62,36 @@ void FashionTrayItem::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
 
-    emit requestPopupApplet();
-
     m_pressPoint = e->pos();
 }
 
 void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    Q_UNUSED(e);
     const QPoint point = e->pos() - m_pressPoint;
 
     if (point.manhattanLength() > DRAG_THRESHOLD)
         return;
 
-    if (!m_activeTray)
-        return;
+//    if (e->button() == Qt::LeftButton)
+//        emit requestPopupApplet();
 
-    QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
+//    if (!m_activeTray)
+//        return;
 
-    switch (e->button()) {
-    case Qt:: MiddleButton:
-        buttonIndex = XCB_BUTTON_INDEX_2;
-        break;
-    case Qt::RightButton:
-        buttonIndex = XCB_BUTTON_INDEX_3;
-        break;
-    default:
-        break;
-    }
+//    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+//    uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
 
-    m_activeTray->sendClick(buttonIndex, globalPos.x(), globalPos.y());
+//    switch (e->button()) {
+//    case Qt:: MiddleButton:
+//        buttonIndex = XCB_BUTTON_INDEX_2;
+//        break;
+//    case Qt::RightButton:
+//        buttonIndex = XCB_BUTTON_INDEX_3;
+//        break;
+//    default:
+//        break;
+//    }
+
+//    m_activeTray->sendClick(buttonIndex, globalPos.x(), globalPos.y());
 }

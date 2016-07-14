@@ -55,13 +55,18 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
+void DockPluginsController::setDockAutoHide(const bool autoHide)
 {
-    PluginsItem *item = pluginItemAt(itemInter, itemKey);
-
-    Q_ASSERT(item);
-    item->showPopupApplet();
+    Q_UNUSED(autoHide);
 }
+
+//void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
+//{
+//    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+
+//    Q_ASSERT(item);
+//    item->showPopupApplet();
+//}
 
 void DockPluginsController::loadPlugins()
 {

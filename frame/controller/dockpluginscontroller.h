@@ -22,7 +22,7 @@ public:
     void itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey);
     void itemUpdate(PluginsItemInterface * const itemInter, const QString &itemKey);
     void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey);
-    void requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey);
+    void setDockAutoHide(const bool autoHide);
 
 signals:
     void pluginItemInserted(PluginsItem *pluginItem) const;

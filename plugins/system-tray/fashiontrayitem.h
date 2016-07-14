@@ -15,7 +15,6 @@ public:
     TrayWidget *activeTray();
 
 signals:
-    void requestPopupApplet() const;
 
 public slots:
     void setActiveTray(TrayWidget *tray);

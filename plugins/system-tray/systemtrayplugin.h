@@ -31,7 +31,6 @@ private slots:
     void trayRemoved(const quint32 winId);
     void trayChanged(const quint32 winId);
     void switchToMode(const Dock::DisplayMode mode);
-    void requestPopupApplet();
 
 private:
     DBusTrayManager *m_trayInter;

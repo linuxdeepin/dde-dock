@@ -23,8 +23,6 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    connect(m_fashionItem, &FashionTrayItem::requestPopupApplet, this, &SystemTrayPlugin::requestPopupApplet);
-
     connect(m_trayInter, &DBusTrayManager::Added, this, &SystemTrayPlugin::trayAdded);
     connect(m_trayInter, &DBusTrayManager::Removed, this, &SystemTrayPlugin::trayRemoved);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
@@ -52,10 +50,7 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_ASSERT(itemKey == FASHION_MODE_ITEM);
-
-    // not have other tray icon
-    if (m_trayList.size() < 2)
-        return nullptr;
+    Q_ASSERT(m_trayList.size());
 
     updateTipsContent();
 
@@ -65,7 +60,7 @@ QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 void SystemTrayPlugin::updateTipsContent()
 {
     auto trayList = m_trayList.values();
-    trayList.removeOne(m_fashionItem->activeTray());
+//    trayList.removeOne(m_fashionItem->activeTray());
 
     m_tipsWidget->clear();
     m_tipsWidget->addWidgets(trayList);
@@ -131,9 +126,4 @@ void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)
         for (auto winId : m_trayList.keys())
             m_proxyInter->itemAdded(this, QString::number(winId));
     }
-}
-
-void SystemTrayPlugin::requestPopupApplet()
-{
-    m_proxyInter->requestPopupApplet(this, FASHION_MODE_ITEM);
 }
