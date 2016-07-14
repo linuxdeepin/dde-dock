@@ -5,6 +5,8 @@
 #include "pluginwidget.h"
 #include "dbus/dbuspower.h"
 
+#include <QLabel>
+
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -18,11 +20,13 @@ public:
     void init(PluginProxyInterface *proxyInter);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
-    const QString itemTipsString(const QString &itemKey);
+    void displayModeChanged(const Dock::DisplayMode displayMode);
 
 private:
     PluginWidget *m_pluginWidget;
+    QLabel *m_tipsLabel;
 
     DBusPower *m_powerInter;
 };

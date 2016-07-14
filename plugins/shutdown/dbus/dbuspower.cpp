@@ -18,6 +18,8 @@
 DBusPower::DBusPower(QObject *parent)
     : QDBusAbstractInterface("com.deepin.daemon.Power", "/com/deepin/daemon/Power", staticInterfaceName(), QDBusConnection::sessionBus(), parent)
 {
+    qRegisterMetaType<BatteryStateMap>("BatteryStateMap");
+    qDBusRegisterMetaType<BatteryStateMap>();
     qRegisterMetaType<BatteryPercentageMap>("BatteryPercentageMap");
     qDBusRegisterMetaType<BatteryPercentageMap>();
 

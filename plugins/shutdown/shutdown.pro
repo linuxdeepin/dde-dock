@@ -1,7 +1,7 @@
 
 include(../../interfaces/interfaces.pri)
 
-QT              += widgets
+QT              += widgets svg
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
 PKGCONFIG       +=

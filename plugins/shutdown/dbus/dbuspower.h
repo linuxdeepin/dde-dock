@@ -20,8 +20,10 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
+typedef QMap<QString, quint32> BatteryStateMap;
 typedef QMap<QString, double> BatteryPercentageMap;
 Q_DECLARE_METATYPE(BatteryPercentageMap)
+Q_DECLARE_METATYPE(BatteryStateMap)
 
 /*
  * Proxy class for interface com.deepin.daemon.Power
@@ -58,14 +60,24 @@ public:
 
     ~DBusPower();
 
+    Q_PROPERTY(bool OnBattery READ onBattery NOTIFY OnBatteryChanged)
+    inline bool onBattery() const
+    { return qvariant_cast< bool >(property("OnBattery")); }
+
     Q_PROPERTY(BatteryPercentageMap BatteryPercentage READ batteryPercentage NOTIFY BatteryPercentageChanged)
     inline BatteryPercentageMap batteryPercentage() const
     { return qvariant_cast< BatteryPercentageMap >(property("BatteryPercentage")); }
 
+    Q_PROPERTY(BatteryStateMap BatteryState READ batteryState NOTIFY BatteryStateChanged)
+    inline BatteryStateMap batteryState() const
+    { return qvariant_cast< BatteryStateMap >(property("BatteryState")); }
+
 public Q_SLOTS: // METHODS
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
+void OnBatteryChanged();
 void BatteryPercentageChanged();
+void BatteryStateChanged();
 };
 
 namespace com {

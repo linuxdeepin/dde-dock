@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>battery_020_plugged</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="battery_020_plugged">
+            <g transform="translate(3.000000, 3.000000)">
+                <g id="Group-6" filter="url(#filter-1)">
+                    <path d="M21.0000012,-2.00260217e-07 C9.40202112,-2.00260483e-07 5.99349562e-07,9.40202032 5.99349562e-07,21.0000004 C0.0076800311,23.3892208 0.423024951,25.7596105 1.22815063,28.0091006 L40.7671851,28.0091006 C41.5739002,25.7598879 41.9908247,23.3894904 42.0000018,21.0000004 C42.0000018,9.40202032 32.5979813,-2.00261013e-07 21.0000012,-2.00261013e-07 L21.0000012,-2.00260217e-07 Z" id="path15880" fill="#B25800"></path>
+                    <path d="M1.23048397,28.0091006 C4.19641817,36.3857976 12.1137368,41.9888892 21.0000012,42.000001 C29.8870793,41.9898267 37.8055285,36.3865632 40.7717351,28.0091006 L1.23048397,28.0091006 L1.23048397,28.0091006 Z" id="path15882" fill="#FFB600"></path>
+                </g>
+                <circle id="circle15676" fill="#FFFFFF" cx="20.9991" cy="21.0005" r="12"></circle>
+                <path d="M21.8574,12.0416 L15.9985,22.9894 L21.034,22.9894 L20.0125,30.9127 C20.0025,30.9947 20.1105,31.0297 20.1472,30.9537 L26.0141,20.016 L20.9969,20.03 L21.9921,12.0823 C22.0021,12.0003 21.8931,11.967 21.8574,12.0413 L21.8574,12.0416 Z" id="path15678" fill="#F0A500"></path>
+            </g>
+        </g>
+    </g>
+</svg>

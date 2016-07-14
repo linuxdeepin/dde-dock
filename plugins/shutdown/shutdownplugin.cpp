@@ -6,9 +6,14 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
       m_pluginWidget(new PluginWidget),
+      m_tipsLabel(new QLabel),
 
       m_powerInter(new DBusPower(this))
 {
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
+    m_tipsLabel->setStyleSheet("color:white;"
+                               "padding:5px 10px;");
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -16,11 +21,25 @@ const QString ShutdownPlugin::pluginName() const
     return "shutdown";
 }
 
- QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
+QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
     return m_pluginWidget;
+}
+
+QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
+
+    if (data.isEmpty())
+        return nullptr;
+
+    m_tipsLabel->setText(QString("%1%").arg(data.value("Display"), 1, 'f', 1));
+
+    return m_tipsLabel;
 }
 
 void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
@@ -38,20 +57,9 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
     return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
 }
 
-const QString ShutdownPlugin::itemTipsString(const QString &itemKey)
+void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
-    Q_UNUSED(itemKey);
+    Q_UNUSED(displayMode);
 
-    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
-
-    if (data.isEmpty())
-        return QString();
-
-    double percentage = 0.0;
-    for (auto percent : data.values())
-        percentage += percent;
-
-    if (percentage >= 99.0)
-        return QString("100%");
-    return QString("%1%").arg(percentage / data.values().count(), 1, 'f', 1);
+    m_pluginWidget->displayModeChanged();
 }

@@ -2,5 +2,19 @@
     <qresource prefix="/icons">
         <file>resources/icons/fashion.svg</file>
         <file>resources/icons/normal.svg</file>
+        <file>resources/icons/battery_0_plugged.svg</file>
+        <file>resources/icons/battery_0.svg</file>
+        <file>resources/icons/battery_2_plugged.svg</file>
+        <file>resources/icons/battery_2.svg</file>
+        <file>resources/icons/battery_4_plugged.svg</file>
+        <file>resources/icons/battery_4.svg</file>
+        <file>resources/icons/battery_6_plugged.svg</file>
+        <file>resources/icons/battery_6.svg</file>
+        <file>resources/icons/battery_8_plugged.svg</file>
+        <file>resources/icons/battery_8.svg</file>
+        <file>resources/icons/battery_10_plugged.svg</file>
+        <file>resources/icons/battery_10.svg</file>
+        <file>resources/icons/battery_plugged.svg</file>
+        <file>resources/icons/battery_unknow.svg</file>
     </qresource>
 </RCC>
