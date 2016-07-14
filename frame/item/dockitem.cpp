@@ -22,6 +22,7 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
     if (!PopupTips.get())
     {
         DArrowRectangle *arrowRectangle = new DArrowRectangle(DArrowRectangle::ArrowBottom, nullptr);
+        arrowRectangle->setShadowBlurRadius(0);
         PopupTips.reset(arrowRectangle);
     }
 
