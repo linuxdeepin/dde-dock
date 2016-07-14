@@ -5,6 +5,7 @@
 
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent),
+      m_hover(false),
       m_powerInter(new DBusPower(this))
 {
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, static_cast<void (PluginWidget::*)()>(&PluginWidget::update));
@@ -51,7 +52,10 @@ void PluginWidget::paintEvent(QPaintEvent *e)
         // battery full, charged
         if (stateData.value("Display") == 4)
         {
-            pixmap = loadSvg(":/icons/resources/icons/battery_plugged.svg", size);
+            if (!m_hover)
+                pixmap = loadSvg(":/icons/resources/icons/battery_plugged.svg", size);
+            else
+                pixmap = loadSvg(":/icons/resources/icons/battery_10.svg", size);
             break;
         }
 
@@ -59,13 +63,23 @@ void PluginWidget::paintEvent(QPaintEvent *e)
         const int percent = percentageData.value("Display");
         const int imageNumber = (percent / 10) & ~0x1;
         const QString image = QString(":/icons/resources/icons/battery_%1%2.svg").arg(imageNumber)
-                                                                                 .arg(onBattery ? "_plugged" : "");
+                                                                                 .arg(m_hover || onBattery ? "" : "_plugged");
 
         pixmap = loadSvg(image, size);
     } while (false);
 
     QPainter painter(this);
     painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+}
+
+void PluginWidget::enterEvent(QEvent *)
+{
+    m_hover = true;
+}
+
+void PluginWidget::leaveEvent(QEvent *)
+{
+    m_hover = false;
 }
 
 const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const
