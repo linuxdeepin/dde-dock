@@ -61,5 +61,5 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     Q_UNUSED(displayMode);
 
-    m_pluginWidget->displayModeChanged();
+    m_pluginWidget->update();
 }

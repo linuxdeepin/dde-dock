@@ -5,6 +5,7 @@
 #include "dbus/dbuspower.h"
 
 #include <QWidget>
+#include <QTimer>
 
 class PluginWidget : public QWidget
 {
@@ -13,12 +14,8 @@ class PluginWidget : public QWidget
 public:
     explicit PluginWidget(QWidget *parent = 0);
 
-public slots:
-    void displayModeChanged();
-
 protected:
     QSize sizeHint() const;
-    void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
 
 private:
@@ -29,7 +26,6 @@ private:
 
 private:
     Dock::DisplayMode m_displayMode;
-    QPixmap m_iconPixmap;
 
     DBusPower *m_powerInter;
 };

@@ -11,6 +11,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
       m_trayInter(new DBusTrayManager(this)),
       m_tipsWidget(new TipsWidget)
 {
+    m_fashionItem = new FashionTrayItem;
 }
 
 const QString SystemTrayPlugin::pluginName() const
@@ -21,8 +22,6 @@ const QString SystemTrayPlugin::pluginName() const
 void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-
-    m_fashionItem = new FashionTrayItem;
 
     connect(m_fashionItem, &FashionTrayItem::requestPopupApplet, this, &SystemTrayPlugin::requestPopupApplet);
 
