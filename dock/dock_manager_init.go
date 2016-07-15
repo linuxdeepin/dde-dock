@@ -12,7 +12,6 @@ package dock
 import (
 	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
-	"github.com/BurntSushi/xgbutil/xrect"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
@@ -84,7 +83,7 @@ func (m *DockManager) init() error {
 	// uniq docked apps
 	m.DockedApps.Set(uniqStrSlice(m.DockedApps.Get()))
 
-	m.dockRect = xrect.New(0, 0, 0, 0)
+	m.FrontendWindowRect = NewRect()
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)
 	m.smartHideModeTimer.Stop()
 

@@ -72,8 +72,8 @@ func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 	}
 
 	logger.Debug("window rect:", winRect)
-	logger.Debug("dock rect:", m.dockRect)
-	result := hasIntersection(winRect, m.dockRect)
+	logger.Debug("dock rect:", m.FrontendWindowRect)
+	result := hasIntersection(winRect, m.FrontendWindowRect.ToXRect())
 	logger.Debug("window dock overlap:", result)
 	return result, nil
 }
