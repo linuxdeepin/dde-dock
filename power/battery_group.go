@@ -64,6 +64,7 @@ func (batGroup *batteryGroup) Add(device batteryDevice) {
 		return
 	}
 
+	manager.setPropBatteryIsPresent(batteryDisplay, true)
 	batGroup.batteryMap[path] = device
 	batInfo := newBatteryInfo()
 	batInfo.OnPropertyChange(func(property string, oldVal interface{}, newVal interface{}) {
@@ -109,6 +110,12 @@ func (batGroup *batteryGroup) Remove(path string) {
 		delete(manager.BatteryPercentage, path)
 		delete(manager.BatteryIsPresent, path)
 		delete(manager.BatteryState, path)
+		if batGroup.batteryDevicesCount() == 0 {
+			// remove battery Display
+			delete(manager.BatteryPercentage, batteryDisplay)
+			delete(manager.BatteryIsPresent, batteryDisplay)
+			delete(manager.BatteryState, batteryDisplay)
+		}
 		dbus.NotifyChange(manager, "BatteryPercentage")
 		dbus.NotifyChange(manager, "BatteryIsPresent")
 		dbus.NotifyChange(manager, "BatteryState")
@@ -191,13 +198,17 @@ func (batGroup *batteryGroup) getState() batteryStateType {
 func (batGroup *batteryGroup) updateDisplayState() {
 	batGroup.state = batGroup.getState()
 	logger.Debug("display state", batGroup.state)
-	batGroup.manager.setPropBatteryState(batteryDisplay, batGroup.state)
+	if batGroup.batteryDevicesCount() > 0 {
+		batGroup.manager.setPropBatteryState(batteryDisplay, batGroup.state)
+	}
 }
 
 func (batGroup *batteryGroup) updateDisplayPercentage() {
 	batGroup.percentage = batGroup.getPercentage()
-	batGroup.manager.setPropBatteryPercentage(batteryDisplay, batGroup.percentage)
 	logger.Debug("display percentage:", batGroup.percentage)
+	if batGroup.batteryDevicesCount() > 0 {
+		batGroup.manager.setPropBatteryPercentage(batteryDisplay, batGroup.percentage)
+	}
 }
 
 func (batGroup *batteryGroup) updateDisplayTimeToEmpty() {
@@ -247,6 +258,7 @@ func (batGroup *batteryGroup) getPowerLevel(usePercentageForPolicy bool) uint32 
 	for _, dev := range batGroup.batteryMap {
 		batInfo := dev.GetInfo()
 		if !batInfo.Inited {
+			logger.Debug("Battery info not inited")
 			return batteryPowerLevelUnknown
 		}
 	}

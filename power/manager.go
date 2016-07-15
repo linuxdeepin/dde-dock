@@ -326,9 +326,6 @@ func (m *Manager) initBatteryGroup() error {
 		logger.Error(err)
 		return err
 	}
-	if m.batteryGroup.batteryDevicesCount() > 0 {
-		m.setPropBatteryIsPresent(batteryDisplay, true)
-	}
 	m.checkBatteryPowerLevel(m.batteryGroup)
 	return nil
 }
@@ -398,3 +395,17 @@ func (m *Manager) Reset() {
 		m.settings.Reset(key)
 	}
 }
+
+// 仅用于调试
+// func (m *Manager) Debug(cmd string) {
+// 	batGroup := m.batteryGroup
+// 	switch cmd {
+// 	case "remove_all_batteries":
+// 		for path := range batGroup.batteryMap {
+// 			batGroup.Remove(path)
+// 		}
+// 	case "init_upower_batteries":
+// 		batGroup.initUpowerBatteryDevices()
+// 		m.checkBatteryPowerLevel(batGroup)
+// 	}
+// }
