@@ -55,11 +55,6 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-void DockPluginsController::setDockAutoHide(const bool autoHide)
-{
-    Q_UNUSED(autoHide);
-}
-
 //void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
 //{
 //    PluginsItem *item = pluginItemAt(itemInter, itemKey);

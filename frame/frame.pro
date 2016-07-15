@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     dbus/dbusmenu.cpp \
     item/pluginsitem.cpp \
     controller/dockpluginscontroller.cpp \
-    util/imagefactory.cpp
+    util/imagefactory.cpp \
+    util/dockpopupwindow.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -50,7 +51,8 @@ HEADERS  += \
     dbus/dbusmenu.h \
     item/pluginsitem.h \
     controller/dockpluginscontroller.h \
-    util/imagefactory.h
+    util/imagefactory.h \
+    util/dockpopupwindow.h
 
 dbus_service.files += com.deepin.dde.dock.service
 dbus_service.path = /usr/share/dbus-1/services

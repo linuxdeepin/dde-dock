@@ -135,12 +135,19 @@ void PluginsItem::startDrag()
 void PluginsItem::mouseClicked()
 {
     const QString command = m_pluginInter->itemCommand(m_itemKey);
-    if (command.isEmpty())
+    if (!command.isEmpty())
+    {
+        QProcess *proc = new QProcess(this);
+
+        connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
+
+        proc->startDetached(command);
         return;
+    }
 
-    QProcess *proc = new QProcess(this);
-
-    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
-
-    proc->startDetached(command);
+    // request popup applet
+    QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey);
+    qDebug() << w;
+    if (w)
+        showPopupWindow(w, true);
 }

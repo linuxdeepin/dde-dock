@@ -2,14 +2,11 @@
 #define DOCKITEM_H
 
 #include "constants.h"
+#include "util/dockpopupwindow.h"
 
 #include <QFrame>
 
-#include <darrowrectangle.h>
-
 #include <memory>
-
-DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
 
@@ -48,7 +45,8 @@ protected:
     const QPoint popupMarkPoint();
 
     void showContextMenu();
-    void showPopupTips();
+    void showHoverTips();
+    void showPopupWindow(QWidget *content, const bool model = false);
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
@@ -63,7 +61,7 @@ protected:
 
     static Position DockPosition;
     static DisplayMode DockDisplayMode;
-    static std::unique_ptr<DArrowRectangle> PopupTips;
+    static std::unique_ptr<DockPopupWindow> PopupWindow;
 };
 
 #endif // DOCKITEM_H

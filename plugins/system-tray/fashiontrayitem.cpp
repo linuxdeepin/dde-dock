@@ -67,7 +67,8 @@ void FashionTrayItem::mousePressEvent(QMouseEvent *e)
 
 void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    Q_UNUSED(e);
+    QWidget::mouseReleaseEvent(e);
+
     const QPoint point = e->pos() - m_pressPoint;
 
     if (point.manhattanLength() > DRAG_THRESHOLD)
