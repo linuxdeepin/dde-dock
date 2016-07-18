@@ -19,7 +19,7 @@ public:
     enum ItemType {
         Launcher,
         App,
-        Placeholder,
+        Stretch,
         Plugins,
     };
 

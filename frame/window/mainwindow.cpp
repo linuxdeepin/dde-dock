@@ -76,7 +76,12 @@ void MainWindow::leaveEvent(QEvent *e)
 
 void MainWindow::setFixedSize(const QSize &size)
 {
-    if (m_sizeChangeAni->state() == QPropertyAnimation::Running)
+    const QPropertyAnimation::State state = m_posChangeAni->state();
+
+    if (state == QPropertyAnimation::Stopped && this->size() == size)
+        return;
+
+    if (state == QPropertyAnimation::Running)
         return m_sizeChangeAni->setEndValue(size);
 
     m_sizeChangeAni->setStartValue(this->size());
@@ -86,10 +91,12 @@ void MainWindow::setFixedSize(const QSize &size)
 
 void MainWindow::move(int x, int y)
 {
-    if (this->pos() == QPoint(x, y))
+    const QPropertyAnimation::State state = m_posChangeAni->state();
+
+    if (state == QPropertyAnimation::Stopped && this->pos() == QPoint(x, y))
         return;
 
-    if (m_posChangeAni->state() == QPropertyAnimation::Running)
+    if (state == QPropertyAnimation::Running)
         return m_posChangeAni->setEndValue(QPoint(x, y));
 
     m_posChangeAni->setStartValue(pos());
@@ -119,7 +126,7 @@ void MainWindow::initComponents()
 void MainWindow::initConnections()
 {
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
@@ -153,12 +160,12 @@ void MainWindow::updatePosition()
 void MainWindow::updateGeometry()
 {
     const Position position = m_settings->position();
+    QSize size = m_settings->windowSize();
 
-    m_mainPanel->setFixedSize(m_settings->windowSize());
+    m_mainPanel->setFixedSize(size);
     m_mainPanel->updateDockPosition(position);
     m_mainPanel->updateDockDisplayMode(m_settings->displayMode());
 
-    QSize size = m_settings->windowSize();
     if (m_settings->hideState() == Hide)
     {
         m_sizeChangeAni->stop();

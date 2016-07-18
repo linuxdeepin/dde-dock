@@ -257,6 +257,10 @@ void AppItem::dragEnterEvent(QDragEnterEvent *e)
     if (e->source())
         return;
 
+    // ignore request dock event
+    if (e->mimeData()->formats().contains("RequestDock"))
+        return e->ignore();
+
     e->accept();
 }
 
@@ -285,6 +289,8 @@ const QString AppItem::contextMenu() const
 QWidget *AppItem::popupTips()
 {
     if (m_titles.isEmpty())
+        return nullptr;
+    if (m_draging)
         return nullptr;
 
     const quint32 currentWindow = m_itemEntry->currentWindow();

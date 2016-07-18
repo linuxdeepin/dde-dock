@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     dbus/dbusdisplay.cpp \
     item/appitem.cpp \
     util/docksettings.cpp \
-    item/placeholderitem.cpp \
     dbus/dbusclientmanager.cpp \
     dbus/dbusdock.cpp \
     util/themeappicon.cpp \
@@ -31,7 +30,9 @@ SOURCES += main.cpp \
     controller/dockpluginscontroller.cpp \
     util/imagefactory.cpp \
     util/dockpopupwindow.cpp \
-    dbus/dbusxmousearea.cpp
+    dbus/dbusxmousearea.cpp \
+    item/stretchitem.cpp \
+    item/placeholderitem.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -43,7 +44,6 @@ HEADERS  += \
     dbus/dbusdisplay.h \
     item/appitem.h \
     util/docksettings.h \
-    item/placeholderitem.h \
     dbus/dbusclientmanager.h \
     dbus/dbusdock.h \
     util/themeappicon.h \
@@ -54,7 +54,9 @@ HEADERS  += \
     controller/dockpluginscontroller.h \
     util/imagefactory.h \
     util/dockpopupwindow.h \
-    dbus/dbusxmousearea.h
+    dbus/dbusxmousearea.h \
+    item/stretchitem.h \
+    item/placeholderitem.h
 
 dbus_service.files += com.deepin.dde.dock.service
 dbus_service.path = /usr/share/dbus-1/services

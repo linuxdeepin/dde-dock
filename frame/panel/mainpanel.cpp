@@ -5,6 +5,9 @@
 #include <QDragEnterEvent>
 
 DockItem *MainPanel::DragingItem = nullptr;
+PlaceholderItem *MainPanel::RequestDockItem = nullptr;
+
+const char *RequestDockKey = "RequestDock";
 
 MainPanel::MainPanel(QWidget *parent)
     : QFrame(parent),
@@ -61,7 +64,7 @@ MainPanel::MainPanel(QWidget *parent)
                   "border-left:none;"
                   "}");
 
-    connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted);
+    connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
@@ -101,7 +104,7 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 //    const QList<DockItem *> itemList = m_itemController->itemList();
 //    for (auto item : itemList)
 //    {
-//        if (item->itemType() == DockItem::Placeholder)
+//        if (item->itemType() == DockItem::Stretch)
 //            item->setVisible(displayMode == Dock::Efficient);
 //    }
 
@@ -129,36 +132,87 @@ void MainPanel::resizeEvent(QResizeEvent *e)
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
     DockItem *dragSourceItem = qobject_cast<DockItem *>(e->source());
-    if (!dragSourceItem)
+    if (dragSourceItem)
+    {
+        e->accept();
+        DragingItem->show();
+        return;
+    }
+
+    if (!e->mimeData()->formats().contains(RequestDockKey))
         return;
 
     e->accept();
-
-    if (dragSourceItem)
-        DragingItem->show();
 }
 
 void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
+    e->accept();
+
     DockItem *item = itemAt(e->pos());
-    if (item == DragingItem)
-        return;
-    if (!item || !DragingItem)
+    if (!item)
         return;
 
-    m_itemController->itemMove(DragingItem, item);
+    // internal drag swap
+    if (e->source())
+    {
+        if (item == DragingItem)
+            return;
+        if (!DragingItem)
+            return;
+
+        m_itemController->itemMove(DragingItem, item);
+    } else {
+        if (!RequestDockItem)
+        {
+            DockItem *insertPositionItem = itemAt(e->pos());
+            if (!insertPositionItem || insertPositionItem->itemType() != DockItem::App)
+                return;
+            RequestDockItem = new PlaceholderItem;
+            m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
+        } else {
+            if (item == RequestDockItem)
+                return;
+
+            m_itemController->itemMove(RequestDockItem, item);
+        }
+    }
 }
 
 void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
 {
     Q_UNUSED(e)
 
-    DragingItem->hide();
+    if (RequestDockItem)
+    {
+        const QRect r(static_cast<QWidget *>(parent())->pos(), size());
+        const QPoint p(QCursor::pos());
+
+        if (r.contains(p))
+            return;
+
+        m_itemController->placeholderItemRemoved(RequestDockItem);
+        RequestDockItem->deleteLater();
+        RequestDockItem = nullptr;
+    }
+
+    if (DragingItem)
+        DragingItem->hide();
 }
 
 void MainPanel::dropEvent(QDropEvent *e)
 {
     Q_UNUSED(e)
+
+    DragingItem = nullptr;
+
+    if (RequestDockItem)
+    {
+        m_itemController->placeholderItemDocked(e->mimeData()->data(RequestDockKey), RequestDockItem);
+        m_itemController->placeholderItemRemoved(RequestDockItem);
+        RequestDockItem->deleteLater();
+        RequestDockItem = nullptr;
+    }
 }
 
 void MainPanel::initItemConnection(DockItem *item)
@@ -296,7 +350,7 @@ void MainPanel::adjustItemSize()
 
     for (auto item : itemList)
     {
-        if (item->itemType() == DockItem::Placeholder)
+        if (item->itemType() == DockItem::Stretch)
             continue;
         if (item->itemType() == DockItem::Plugins)
             if (m_displayMode != Dock::Fashion)

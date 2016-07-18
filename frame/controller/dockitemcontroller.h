@@ -5,8 +5,9 @@
 #include "pluginsiteminterface.h"
 #include "dbus/dbusdock.h"
 #include "item/dockitem.h"
-#include "item/placeholderitem.h"
+#include "item/stretchitem.h"
 #include "item/appitem.h"
+#include "item/placeholderitem.h"
 
 #include <QObject>
 
@@ -27,6 +28,9 @@ signals:
 
 public slots:
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
+    void placeholderItemAdded(PlaceholderItem *item, DockItem *position);
+    void placeholderItemDocked(const QString &appDesktop, DockItem *position);
+    void placeholderItemRemoved(PlaceholderItem *item);
 
 private:
     explicit DockItemController(QObject *parent = 0);
@@ -42,7 +46,7 @@ private:
 
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
-    PlaceholderItem *m_placeholderItem;
+    StretchItem *m_placeholderItem;
 
     static DockItemController *INSTANCE;
 };

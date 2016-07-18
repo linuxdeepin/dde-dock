@@ -1,7 +1,7 @@
 #include "dockitemcontroller.h"
 #include "dbus/dbusdockentry.h"
 #include "item/appitem.h"
-#include "item/placeholderitem.h"
+#include "item/stretchitem.h"
 #include "item/launcheritem.h"
 #include "item/pluginsitem.h"
 
@@ -36,7 +36,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
     // app move
     if (moveType == DockItem::App)
-        if (replaceType != DockItem::App && replaceType != DockItem::Placeholder)
+        if (replaceType != DockItem::App && replaceType != DockItem::Stretch)
             return;
 
     // plugins move
@@ -45,7 +45,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
             return;
 
     const int moveIndex = m_itemList.indexOf(moveItem);
-    const int replaceIndex = replaceItem->itemType() == DockItem::Placeholder ?
+    const int replaceIndex = replaceItem->itemType() == DockItem::Stretch ?
                                 // disable insert after placeholder item
                                 m_itemList.indexOf(replaceItem) - 1 :
                                 m_itemList.indexOf(replaceItem);
@@ -59,11 +59,32 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
         m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
 }
 
+void DockItemController::placeholderItemAdded(PlaceholderItem *item, DockItem *position)
+{
+    const int pos = m_itemList.indexOf(position);
+
+    m_itemList.insert(pos, item);
+
+    emit itemInserted(pos, item);
+}
+
+void DockItemController::placeholderItemDocked(const QString &appDesktop, DockItem *position)
+{
+    m_appInter->RequestDock(appDesktop, m_itemList.indexOf(position) - 1).waitForFinished();
+}
+
+void DockItemController::placeholderItemRemoved(PlaceholderItem *item)
+{
+    emit itemRemoved(item);
+
+    m_itemList.removeOne(item);
+}
+
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
       m_appInter(new DBusDock(this)),
       m_pluginsInter(new DockPluginsController(this)),
-      m_placeholderItem(new PlaceholderItem)
+      m_placeholderItem(new StretchItem)
 {
 //    m_placeholderItem->hide();
 

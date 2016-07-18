@@ -57,6 +57,7 @@ private:
     DockItemController *m_itemController;
 
     static DockItem *DragingItem;
+    static PlaceholderItem *RequestDockItem;
 };
 
 #endif // MAINPANEL_H

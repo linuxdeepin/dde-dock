@@ -120,6 +120,22 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("MoveEntry"), args);
     }
 
+    inline QDBusPendingReply<bool> RequestDock(const QString &appDesktop, const int index = -1)
+    {
+        QList<QVariant> args;
+        args << appDesktop << index;
+
+        return asyncCallWithArgumentList(QStringLiteral("RequestDock"), args);
+    }
+
+    inline QDBusPendingReply<bool> RequestUndock(const QString &appDesktop)
+    {
+        QList<QVariant> args;
+        args << appDesktop;
+
+        return asyncCallWithArgumentList(QStringLiteral("RequestDock"), args);
+    }
+
     inline QDBusPendingReply<> SetFrontendWindowRect(const int x, const int y, const quint32 width, const quint32 height)
     {
         QList<QVariant> argumentList;

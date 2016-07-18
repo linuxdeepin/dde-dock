@@ -9,9 +9,6 @@ class PlaceholderItem : public DockItem
 
 public:
     explicit PlaceholderItem(QWidget *parent = 0);
-
-private:
-    void mousePressEvent(QMouseEvent *e);
 };
 
 #endif // PLACEHOLDERITEM_H
