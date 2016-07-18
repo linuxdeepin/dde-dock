@@ -14,6 +14,7 @@ QPoint AppItem::MousePressPos;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(App, parent),
+      m_appNameTips(new QLabel(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
       m_draging(false),
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
@@ -25,6 +26,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_id = m_itemEntry->id();
     m_active = m_itemEntry->active();
+
+    m_appNameTips->setVisible(false);
+    m_appNameTips->setStyleSheet("color:white;"
+                                 "padding:5px 10px;");
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
@@ -275,6 +280,18 @@ void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 const QString AppItem::contextMenu() const
 {
     return m_itemEntry->menu();
+}
+
+QWidget *AppItem::popupTips()
+{
+    if (m_titles.isEmpty())
+        return nullptr;
+
+    const quint32 currentWindow = m_itemEntry->currentWindow();
+    Q_ASSERT(m_titles.contains(currentWindow));
+    m_appNameTips->setText(m_titles[currentWindow]);
+
+    return m_appNameTips;
 }
 
 void AppItem::startDrag()

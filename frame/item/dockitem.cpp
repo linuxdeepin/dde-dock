@@ -26,7 +26,7 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
         PopupWindow.reset(arrowRectangle);
     }
 
-    m_popupTipsDelayTimer->setInterval(200);
+    m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);

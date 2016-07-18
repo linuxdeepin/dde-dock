@@ -29,6 +29,7 @@ private:
 
     void invokedMenuItem(const QString &itemId, const bool checked);
     const QString contextMenu() const;
+    QWidget *popupTips();
 
     void startDrag();
 
@@ -38,6 +39,7 @@ private slots:
     void activeChanged();
 
 private:
+    QLabel *m_appNameTips;
     DBusDockEntry *m_itemEntry;
 
     bool m_draging;
