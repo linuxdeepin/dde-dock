@@ -20,6 +20,8 @@
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
 
+#include <QX11Info>
+
 typedef QMap<quint32, QString> WindowDict;
 
 /*
@@ -81,17 +83,20 @@ public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Activate()
     {
         QList<QVariant> argumentList;
+
+        argumentList << QVariant::fromValue(QX11Info::getTimestamp());
+
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
     inline QDBusPendingReply<> HandleMenuItem(const QString &item)
     {
-        return asyncCall(QStringLiteral("HandleMenuItem"), item);
+        return asyncCall(QStringLiteral("HandleMenuItem"), QVariant::fromValue(QX11Info::getTimestamp()), item);
     }
 
     inline QDBusPendingReply<> HandleDragDrop(const QStringList &uriList)
     {
-        return asyncCall(QStringLiteral("HandleDragDrop"), QVariant::fromValue(uriList));
+        return asyncCall(QStringLiteral("HandleDragDrop"), QVariant::fromValue(QX11Info::getTimestamp()), QVariant::fromValue(uriList));
     }
 
     inline QDBusPendingReply<> RequestDock()
