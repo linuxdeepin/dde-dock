@@ -88,19 +88,19 @@ public Q_SLOTS: // METHODS
     {
         QList<QVariant> argumentList;
 
-        argumentList << QVariant::fromValue(QX11Info::getTimestamp());
+        argumentList << QVariant::fromValue(quint32(QX11Info::getTimestamp()));
 
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
     inline QDBusPendingReply<> HandleMenuItem(const QString &item)
     {
-        return asyncCall(QStringLiteral("HandleMenuItem"), QVariant::fromValue(QX11Info::getTimestamp()), item);
+        return asyncCall(QStringLiteral("HandleMenuItem"), QVariant::fromValue(quint32(QX11Info::getTimestamp())), item);
     }
 
     inline QDBusPendingReply<> HandleDragDrop(const QStringList &uriList)
     {
-        return asyncCall(QStringLiteral("HandleDragDrop"), QVariant::fromValue(QX11Info::getTimestamp()), QVariant::fromValue(uriList));
+        return asyncCall(QStringLiteral("HandleDragDrop"), QVariant::fromValue(quint32(QX11Info::getTimestamp())), QVariant::fromValue(uriList));
     }
 
     inline QDBusPendingReply<> RequestDock()
