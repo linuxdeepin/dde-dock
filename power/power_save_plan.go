@@ -11,7 +11,6 @@ package power
 
 import (
 	"gir/gio-2.0"
-	"math"
 	"time"
 )
 
@@ -25,11 +24,10 @@ func init() {
 }
 
 type powerSavePlan struct {
-	manager           *Manager
-	isSessionActive   bool
-	screenBlackTicker *countTicker
-	sleepDelay        int32
-	sleepExit         chan int
+	manager         *Manager
+	isSessionActive bool
+	tasks           TimeAfterTasks
+	sleepDelay      int32
 	// key output name, value old brightness
 	oldBrightnessTable map[string]float64
 }
@@ -106,27 +104,16 @@ func (psp *powerSavePlan) Start() error {
 	return nil
 }
 
-// 取消之前的计划
-func (psp *powerSavePlan) interruptScreenBlack() {
-	if psp.screenBlackTicker != nil {
-		psp.screenBlackTicker.Stop()
-	}
-}
-
-func (psp *powerSavePlan) interruptSleep() {
-	if psp.sleepExit != nil {
-		close(psp.sleepExit)
-		psp.sleepExit = nil
-	}
-}
-
-func (psp *powerSavePlan) interruptAll() {
-	psp.interruptScreenBlack()
-	psp.interruptSleep()
+// 取消之前的任务
+func (psp *powerSavePlan) interruptTasks() {
+	psp.tasks.CancelAll()
+	logger.Info("cancel all tasks")
+	psp.tasks.Wait(10*time.Millisecond, 200)
+	logger.Info("all tasks done!")
 }
 
 func (psp *powerSavePlan) Destroy() {
-	psp.interruptAll()
+	psp.interruptTasks()
 }
 
 /* 更新计划
@@ -134,7 +121,7 @@ screenBlackDelay == 0 从不关闭显示屏
 sleepDelay == 0 从不待机
 */
 func (psp *powerSavePlan) Update(screenBlackDelay, sleepDelay int32) error {
-	psp.interruptAll()
+	psp.interruptTasks()
 	logger.Debugf("update(screenBlackDelay=%vs, sleepDelay=%vs)",
 		screenBlackDelay, sleepDelay)
 
@@ -156,11 +143,8 @@ func (psp *powerSavePlan) Update(screenBlackDelay, sleepDelay int32) error {
 
 func (psp *powerSavePlan) saveCurrentBrightness() {
 	if psp.oldBrightnessTable == nil {
-		psp.oldBrightnessTable = make(map[string]float64)
-		for output, brightness := range psp.manager.display.Brightness.Get() {
-			psp.oldBrightnessTable[output] = brightness
-			logger.Debugf("Save output %q brightness: %v", output, brightness)
-		}
+		psp.oldBrightnessTable = psp.manager.display.Brightness.Get()
+		logger.Info("saveCurrentBrightness", psp.oldBrightnessTable)
 	} else {
 		logger.Debug("saveCurrentBrightness failed")
 	}
@@ -175,66 +159,57 @@ func (psp *powerSavePlan) resetBrightness() {
 	}
 }
 
-// 逐渐降低显示器亮度，最终关闭显示器
-// 以1分钟关闭显示器为例， 55秒的时候屏幕黑到 50% (以动画的方式从 100% 降到 50%, 动画耗时 500ms, 动画曲线是加速曲线), 5秒钟以后没有用户操作， 关闭显示器。
+// 降低显示器亮度，最终关闭显示器
 // 关闭显示器之后，开始休眠记时
 func (psp *powerSavePlan) screenBlack() {
+	manager := psp.manager
 	logger.Info("Start screen black")
 	psp.saveCurrentBrightness()
 
-	if psp.screenBlackTicker != nil {
-		psp.screenBlackTicker.Reset()
-		return
-	}
+	psp.tasks = make(TimeAfterTasks, 0)
 
-	psp.screenBlackTicker = newCountTicker(time.Millisecond*10, func(count int) {
-		manager := psp.manager
-		if 0 <= count && count <= 50 {
-			// 0ms ~ 500ms
-			// count: [0,50], brightness ratio:  1 ~ 0.5
-			brightnessTable := make(map[string]float64)
-			for output, oldBrightness := range psp.oldBrightnessTable {
-				brightnessRatio := 0.5 * (math.Cos(math.Pi*float64(count)/100) + 1)
-				brightnessTable[output] = oldBrightness * brightnessRatio
-			}
-			manager.setDisplayBrightness(brightnessTable)
-
-		} else if count == 500 {
-			// 5000ms 5s
-			psp.screenBlackTicker.Stop()
-			go func() {
-				if manager.ScreenBlackLock.Get() {
-					manager.lockWaitShow(2 * time.Second)
-				}
-				// set min brightness for all outputs
-				manager.setDisplaySameBrightness(0.02)
-				manager.setDPMSModeOff()
-
-				// try sleep
-				if psp.sleepDelay != 0 {
-					psp.sleepExit = make(chan int)
-					psp.sleep()
-				}
-
-			}()
+	// half black
+	taskH := NewTimeAfterTask(0, func() {
+		brightnessTable := make(map[string]float64)
+		brightnessRatio := 0.5
+		logger.Debug("brightnessRatio:", brightnessRatio)
+		for output, oldBrightness := range psp.oldBrightnessTable {
+			brightnessTable[output] = oldBrightness * brightnessRatio
 		}
+		manager.setDisplayBrightness(brightnessTable)
 	})
-}
+	// full black
+	const fullBlackTime = 5000 // ms
+	taskF := NewTimeAfterTask(fullBlackTime*time.Millisecond, func() {
+		logger.Info("Screen full black")
+		if manager.ScreenBlackLock.Get() {
+			manager.lockWaitShow(2 * time.Second)
+		}
+		// set min brightness for all outputs
+		brightnessTable := make(map[string]float64)
+		for output, _ := range psp.oldBrightnessTable {
+			brightnessTable[output] = 0.02
+		}
+		manager.setDisplayBrightness(brightnessTable)
+		manager.setDPMSModeOff()
 
-// 等待 psp.sleepDelay 后待机，可被 psp.sleepExit 中断
-func (psp *powerSavePlan) sleep() {
-	select {
-	case <-time.After(time.Second * time.Duration(psp.sleepDelay)):
-		psp.manager.doSuspend()
-	case <-psp.sleepExit:
-		logger.Debugf("Interrupt sleep")
-	}
+		if psp.sleepDelay == 0 {
+			return
+		}
+		logger.Infof("sleep after %v s", psp.sleepDelay)
+		taskS := NewTimeAfterTask(time.Duration(psp.sleepDelay)*time.Second, func() {
+			logger.Infof("sleep")
+			manager.doSuspend()
+		})
+		psp.tasks = append(psp.tasks, taskS)
+	})
+	psp.tasks = append(psp.tasks, taskH, taskF)
 }
 
 // 开始 Idle
 func (psp *powerSavePlan) HandleIdleOn() {
 	if psp.manager.isSuspending {
-		logger.Debug("Suspending NOT HandleIdleOn")
+		logger.Info("Suspending NOT HandleIdleOn")
 		return
 	}
 
@@ -243,19 +218,17 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		return
 	}
 
-	logger.Debug("HandleIdleOn")
+	logger.Info("HandleIdleOn")
 	psp.screenBlack()
 }
 
 // 结束 Idle
 func (psp *powerSavePlan) HandleIdleOff() {
 	if psp.manager.isSuspending {
-		logger.Debug("Suspending NOT HandleIdleOff")
+		logger.Info("Suspending NOT HandleIdleOff")
 		return
 	}
-	logger.Debug("HandleIdleOff")
-	psp.interruptAll()
-	time.AfterFunc(50*time.Millisecond, func() {
-		psp.resetBrightness()
-	})
+	logger.Info("HandleIdleOff")
+	psp.interruptTasks()
+	psp.resetBrightness()
 }

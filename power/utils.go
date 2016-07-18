@@ -85,7 +85,7 @@ func getBatteryPowerLevelName(num uint32) string {
 }
 
 func (m *Manager) setDPMSModeOn() {
-	logger.Debug("DPMS On")
+	logger.Info("DPMS On")
 	err := dpms.ForceLevelChecked(m.xConn, dpms.DPMSModeOn).Check()
 	if err != nil {
 		logger.Warning("Set DPMS on error:", err)
@@ -93,7 +93,7 @@ func (m *Manager) setDPMSModeOn() {
 }
 
 func (m *Manager) setDPMSModeOff() {
-	logger.Debug("DPMS Off")
+	logger.Info("DPMS Off")
 	err := dpms.ForceLevelChecked(m.xConn, dpms.DPMSModeOff).Check()
 	if err != nil {
 		logger.Warning("Set DPMS off error:", err)
@@ -129,38 +129,15 @@ func (m *Manager) doSuspend() {
 	}
 }
 
-func (m *Manager) getDisplayOutputs() []string {
-	outputs := []string{}
-	if m.display != nil {
-		for _, objPath := range m.display.Monitors.Get() {
-			monitor, err := libdisplay.NewMonitor(dbusDisplayDest, objPath)
-			if err != nil {
-				logger.Error("NewMonitor failed:", err)
-				continue
-			}
-			defer libdisplay.DestroyMonitor(monitor)
-			for _, name := range monitor.Outputs.Get() {
-				outputs = append(outputs, name)
-			}
-		}
-	}
-	return outputs
-}
-
 func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
-	for _, output := range m.getDisplayOutputs() {
-		brightness, ok := brightnessTable[output]
-		if ok {
-			logger.Debugf("Change output %q brightness to %.2f", output, brightness)
-			m.display.ChangeBrightness(output, brightness)
+	for output, brightness := range brightnessTable {
+		logger.Infof("Change output %q brightness to %.2f", output, brightness)
+		err := m.display.ChangeBrightness(output, brightness)
+		if err != nil {
+			logger.Warningf("Change output %q brightness to %.2f failed: %v", output, brightness, err)
+		} else {
+			logger.Infof("Change output %q brightness to %.2f done!", output, brightness)
 		}
-	}
-}
-
-func (m *Manager) setDisplaySameBrightness(brightness float64) {
-	for _, output := range m.getDisplayOutputs() {
-		logger.Debugf("Change output %q brightness to %.2f", output, brightness)
-		m.display.ChangeBrightness(output, brightness)
 	}
 }
 
