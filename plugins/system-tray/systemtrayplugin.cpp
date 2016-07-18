@@ -54,7 +54,10 @@ QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 
     updateTipsContent();
 
-    return m_tipsWidget;
+    if (m_trayList.size() > 1)
+        return m_tipsWidget;
+    else
+        return nullptr;
 }
 
 void SystemTrayPlugin::updateTipsContent()
@@ -75,6 +78,8 @@ void SystemTrayPlugin::trayAdded(const quint32 winId)
 
     m_trayList[winId] = trayWidget;
 
+    m_fashionItem->setMouseEnable(m_trayList.size() == 1);
+
     if (displayMode() == Dock::Efficient)
         m_proxyInter->itemAdded(this, QString::number(winId));
 }
@@ -88,6 +93,8 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
     m_proxyInter->itemRemoved(this, QString::number(winId));
     m_trayList.remove(winId);
     widget->deleteLater();
+
+    m_fashionItem->setMouseEnable(m_trayList.size() == 1);
 
     if (m_fashionItem->activeTray() != widget)
         return;

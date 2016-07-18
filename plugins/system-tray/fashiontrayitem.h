@@ -14,7 +14,7 @@ public:
 
     TrayWidget *activeTray();
 
-signals:
+    void setMouseEnable(const bool enable);
 
 public slots:
     void setActiveTray(TrayWidget *tray);
@@ -25,6 +25,8 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
 
 private:
+    bool m_enableMouseEvent;
+
     TrayWidget *m_activeTray;
 
     QPoint m_pressPoint;
