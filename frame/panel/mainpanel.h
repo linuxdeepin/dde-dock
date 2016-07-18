@@ -28,6 +28,7 @@ public:
     int position();
 
 signals:
+    void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
 
 private:

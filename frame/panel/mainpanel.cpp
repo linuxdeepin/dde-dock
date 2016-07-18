@@ -164,7 +164,8 @@ void MainPanel::dropEvent(QDropEvent *e)
 void MainPanel::initItemConnection(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted);
-    connect(item, &DockItem::menuUnregistered, this, &MainPanel::requestRefershWindowVisible);
+    connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible);
+    connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide);
 }
 
 DockItem *MainPanel::itemAt(const QPoint &point)

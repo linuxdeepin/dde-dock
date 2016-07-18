@@ -147,7 +147,6 @@ void PluginsItem::mouseClicked()
 
     // request popup applet
     QWidget *w = m_pluginInter->itemPopupApplet(m_itemKey);
-    qDebug() << w;
     if (w)
         showPopupWindow(w, true);
 }

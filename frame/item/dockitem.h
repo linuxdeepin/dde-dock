@@ -32,7 +32,8 @@ public:
 
 signals:
     void dragStarted() const;
-    void menuUnregistered() const;
+    void requestWindowAutoHide(const bool autoHide) const;
+    void requestRefershWindowVisible() const;
 
 protected:
     void paintEvent(QPaintEvent *e);
@@ -46,7 +47,8 @@ protected:
 
     void showContextMenu();
     void showHoverTips();
-    void showPopupWindow(QWidget *content, const bool model = false);
+    void showPopupWindow(QWidget * const content, const bool model = false);
+    void popupWindowAccept();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();

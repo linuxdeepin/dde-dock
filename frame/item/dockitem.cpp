@@ -80,7 +80,9 @@ void DockItem::leaveEvent(QEvent *e)
     m_hover = false;
     m_popupTipsDelayTimer->stop();
 
-    PopupWindow->hide();
+    // auto hide if popup is not model window
+    if (!PopupWindow->model())
+        PopupWindow->hide();
 
     update();
 
@@ -135,7 +137,7 @@ void DockItem::showContextMenu()
     DBusMenu *menuInter = new DBusMenu(path.path(), this);
 
     connect(menuInter, &DBusMenu::ItemInvoked, this, &DockItem::invokedMenuItem);
-    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::menuUnregistered);
+    connect(menuInter, &DBusMenu::MenuUnregistered, this, &DockItem::requestRefershWindowVisible);
     connect(menuInter, &DBusMenu::MenuUnregistered, menuInter, &DBusMenu::deleteLater, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
@@ -143,6 +145,10 @@ void DockItem::showContextMenu()
 
 void DockItem::showHoverTips()
 {
+    // another model popup window is alread exists
+    if (PopupWindow->isVisible() && PopupWindow->model())
+        return;
+
     QWidget * const content = popupTips();
     if (!content)
         return;
@@ -150,8 +156,11 @@ void DockItem::showHoverTips()
     showPopupWindow(content);
 }
 
-void DockItem::showPopupWindow(QWidget *content, const bool model)
+void DockItem::showPopupWindow(QWidget * const content, const bool model)
 {
+    if (model)
+        emit requestWindowAutoHide(false);
+
     DockPopupWindow *popup = PopupWindow.get();
     QWidget *lastContent = popup->getContent();
     if (lastContent)
@@ -171,6 +180,16 @@ void DockItem::showPopupWindow(QWidget *content, const bool model)
 
     const QPoint p = popupMarkPoint();
     popup->show(p, model);
+}
+
+void DockItem::popupWindowAccept()
+{
+    if (!PopupWindow->isVisible())
+        return;
+
+    PopupWindow->hide();
+
+    emit requestWindowAutoHide(true);
 }
 
 void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
