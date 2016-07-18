@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QMouseEvent>
 
+#include <cmath>
+
 #include <xcb/xproto.h>
 
 #define DRAG_THRESHOLD  10

@@ -51,16 +51,10 @@ void PluginsItem::detachPluginWidget()
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
-    {
-        MousePressPoint = e->pos();
-    }
-    else if (e->button() == Qt::RightButton)
-    {
+    DockItem::mousePressEvent(e);
 
-    }
-    else
-        DockItem::mousePressEvent(e);
+    if (e->button() == Qt::LeftButton)
+        MousePressPoint = e->pos();
 }
 
 void PluginsItem::mouseMoveEvent(QMouseEvent *e)
@@ -77,8 +71,10 @@ void PluginsItem::mouseMoveEvent(QMouseEvent *e)
 
 void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
 {
+    DockItem::mouseReleaseEvent(e);
+
     if (e->button() != Qt::LeftButton)
-        return DockItem::mouseReleaseEvent(e);
+        return;
 
     e->accept();
 

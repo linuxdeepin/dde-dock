@@ -179,13 +179,17 @@ void DockItem::showPopupWindow(QWidget * const content, const bool model)
     popup->setHeight(content->sizeHint().height());
 
     const QPoint p = popupMarkPoint();
-    popup->show(p, model);
+    QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+
+    connect(popup, &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 }
 
 void DockItem::popupWindowAccept()
 {
     if (!PopupWindow->isVisible())
         return;
+
+    disconnect(PopupWindow.get(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 
     PopupWindow->hide();
 

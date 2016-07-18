@@ -1,6 +1,8 @@
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
+#include "dbus/dbusxmousearea.h"
+
 #include <darrowrectangle.h>
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
@@ -12,10 +14,25 @@ public:
 
     bool model() const;
 
+public slots:
     void show(const QPoint &pos, const bool model = false);
+
+signals:
+    void accept() const;
+
+protected:
+    void mousePressEvent(QMouseEvent *e);
+
+private slots:
+    void globalMouseRelease();
 
 private:
     bool m_model;
+    QString m_mouseAreaKey;
+
+    QTimer *m_acceptDelayTimer;
+
+    DBusXMouseArea *m_mouseInter;
 };
 
 #endif // DOCKPOPUPWINDOW_H

@@ -81,6 +81,8 @@ void TrayWidget::mousePressEvent(QMouseEvent *e)
 
 void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
+    QWidget::mouseReleaseEvent(e);
+
     const QPoint distance = e->pos() - m_pressPoint;
     if (distance.manhattanLength() > DRAG_THRESHOLD)
         return;
