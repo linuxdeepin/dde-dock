@@ -128,12 +128,20 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("RequestDock"), args);
     }
 
+    inline QDBusPendingReply<bool> IsDocked(const QString &appDesktop)
+    {
+        QList<QVariant> args;
+        args << appDesktop;
+
+        return asyncCallWithArgumentList(QStringLiteral("IsDocked"), args);
+    }
+
     inline QDBusPendingReply<bool> RequestUndock(const QString &appDesktop)
     {
         QList<QVariant> args;
         args << appDesktop;
 
-        return asyncCallWithArgumentList(QStringLiteral("RequestDock"), args);
+        return asyncCallWithArgumentList(QStringLiteral("RequestUndock"), args);
     }
 
     inline QDBusPendingReply<> SetFrontendWindowRect(const int x, const int y, const quint32 width, const quint32 height)

@@ -27,6 +27,11 @@ const QList<DockItem *> DockItemController::itemList() const
     return m_itemList;
 }
 
+bool DockItemController::appIsDocked(const QString &appDesktop) const
+{
+    return m_appInter->IsDocked(appDesktop);
+}
+
 void DockItemController::itemMove(DockItem * const moveItem, DockItem * const replaceItem)
 {
     Q_ASSERT(moveItem != replaceItem);
