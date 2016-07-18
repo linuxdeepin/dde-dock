@@ -220,6 +220,7 @@ void MainWindow::setStrutPartial()
 
     const Position side = m_settings->position();
     const int maxScreenHeight = m_settings->screenHeight();
+    const int maxScreenWidth = m_settings->screenWidth();
 
     XcbMisc::Orientation orientation = XcbMisc::OrientationTop;
     uint strut = 0;
@@ -244,13 +245,13 @@ void MainWindow::setStrutPartial()
         break;
     case Position::Left:
         orientation = XcbMisc::OrientationLeft;
-        strut = r.width();
+        strut = r.right() + 1;
         strutStart = r.top();
         strutEnd = r.bottom();
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
-        strut = r.width();
+        strut = maxScreenWidth - r.left();
         strutStart = r.top();
         strutEnd = r.bottom();
         break;

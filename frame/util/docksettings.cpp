@@ -127,6 +127,11 @@ int DockSettings::screenHeight() const
     return m_displayInter->screenHeight();
 }
 
+int DockSettings::screenWidth() const
+{
+    return m_displayInter->screenWidth();
+}
+
 bool DockSettings::autoHide() const
 {
     return m_autoHide;

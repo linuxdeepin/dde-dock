@@ -29,6 +29,7 @@ public:
     HideState hideState() const;
     Position position() const;
     int screenHeight() const;
+    int screenWidth() const;
     bool autoHide() const;
     const QRect primaryRect() const;
     const QSize windowSize() const;

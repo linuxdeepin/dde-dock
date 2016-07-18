@@ -42,7 +42,8 @@ void DockPopupWindow::mousePressEvent(QMouseEvent *e)
 
 void DockPopupWindow::globalMouseRelease()
 {
-    Q_ASSERT(m_model);
+    if (!m_model)
+        return;
 
     const QRect rect = QRect(pos(), size());
     const QPoint pos = QCursor::pos();
