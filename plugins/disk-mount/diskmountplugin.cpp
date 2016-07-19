@@ -1,9 +1,11 @@
 #include "diskmountplugin.h"
 
 DiskMountPlugin::DiskMountPlugin(QObject *parent)
-    : QObject(parent)
-{
+    : QObject(parent),
 
+      m_diskInter(new DBusDiskMount(this))
+{
+    qDebug() << m_diskInter->diskList();
 }
 
 const QString DiskMountPlugin::pluginName() const

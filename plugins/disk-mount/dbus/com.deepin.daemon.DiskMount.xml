@@ -1,0 +1,31 @@
+     <interface name="com.deepin.daemon.DiskMount">
+          <method name="Eject">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="ListDisk">
+              <arg type="a(ssssssbbtt)" direction="out"></arg>
+              <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="DiskInfoList"/>
+          </method>
+          <method name="Mount">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <method name="QueryDisk">
+               <arg type="s" direction="in"></arg>
+               <arg type="(ssssssbbtt)" direction="out"></arg>
+               <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="DiskInfo"/>
+          </method>
+          <method name="Unmount">
+               <arg type="s" direction="in"></arg>
+          </method>
+          <signal name="Changed">
+               <arg type="i"></arg>
+               <arg type="s"></arg>
+          </signal>
+          <signal name="Error">
+               <arg type="s"></arg>
+               <arg type="s"></arg>
+          </signal>
+          <property name="DiskList" type="a(ssssssbbtt)" access="read">
+               <annotation name="org.qtproject.QtDBus.QtTypeName" value="DiskInfoList"/>
+          </property>
+     </interface>
