@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 SUBDIRS = \
         datetime \
         shutdown \
-        system-tray
+        system-tray \
+        disk-mount
