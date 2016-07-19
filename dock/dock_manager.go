@@ -183,3 +183,11 @@ func (m *DockManager) MoveEntry(index, newIndex int32) error {
 	m.saveDockedApps()
 	return nil
 }
+
+func (m *DockManager) IsOnDock(desktopFilePath string) (bool, error) {
+	entry, err := m.Entries.GetByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
+	}
+	return entry != nil, nil
+}

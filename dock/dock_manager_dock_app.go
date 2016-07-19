@@ -1,7 +1,6 @@
 package dock
 
 import (
-	"errors"
 	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
@@ -112,44 +111,13 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
 	return appId
 }
 
-func (m *DockManager) getDockedEntries() []*AppEntry {
-	var dockedEntries []*AppEntry
-	for _, entry := range m.Entries {
-		if entry.appInfo != nil && entry.IsDocked == true {
-			dockedEntries = append(dockedEntries, entry)
-		}
-	}
-	return dockedEntries
-}
-
 func (m *DockManager) getDockedAppEntryByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
-	dockedEntries := m.getDockedEntries()
-	// same file
-	for _, entry := range dockedEntries {
-		file := entry.appInfo.GetFilePath()
-		if file == desktopFilePath {
-			return entry, nil
-		}
-	}
-
-	// hash equal
-	appInfo := NewAppInfoFromFile(desktopFilePath)
-	if appInfo == nil {
-		return nil, errors.New("Invalid desktopFilePath")
-	}
-	hash := appInfo.innerId
-	appInfo.Destroy()
-	for _, entry := range dockedEntries {
-		if entry.appInfo.innerId == hash {
-			return entry, nil
-		}
-	}
-	return nil, nil
+	return m.Entries.FilterDocked().GetByDesktopFilePath(desktopFilePath)
 }
 
 func (m *DockManager) saveDockedApps() {
 	var list []string
-	for _, entry := range m.getDockedEntries() {
+	for _, entry := range m.Entries.FilterDocked() {
 		list = append(list, entry.appInfo.GetId())
 	}
 	m.DockedApps.Set(list)

@@ -71,3 +71,37 @@ func (entries AppEntries) Move(index, newIndex int) (AppEntries, error) {
 	}
 	return nil, fmt.Errorf("Index out of bounds, index: %v, newIndex: %v, len: %v", index, newIndex, entriesLength)
 }
+
+func (entries AppEntries) FilterDocked() AppEntries {
+	var dockedEntries AppEntries
+	for _, entry := range entries {
+		if entry.appInfo != nil && entry.IsDocked == true {
+			dockedEntries = append(dockedEntries, entry)
+		}
+	}
+	return dockedEntries
+}
+
+func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
+	// same file
+	for _, entry := range entries {
+		file := entry.appInfo.GetFilePath()
+		if file == desktopFilePath {
+			return entry, nil
+		}
+	}
+
+	// hash equal
+	appInfo := NewAppInfoFromFile(desktopFilePath)
+	if appInfo == nil {
+		return nil, errors.New("Invalid desktopFilePath")
+	}
+	hash := appInfo.innerId
+	appInfo.Destroy()
+	for _, entry := range entries {
+		if entry.appInfo.innerId == hash {
+			return entry, nil
+		}
+	}
+	return nil, nil
+}
