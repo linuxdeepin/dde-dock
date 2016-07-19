@@ -79,6 +79,10 @@ public:
     inline QString menu() const
     { return qvariant_cast< QString >(property("Menu")); }
 
+    Q_PROPERTY(QString Name READ name NOTIFY NameChanged)
+    inline QString name() const
+    { return qvariant_cast< QString >(property("Name")); }
+
     Q_PROPERTY(quint32 CurrentWindow READ currentWindow NOTIFY CurrentWindowChanged)
     inline quint32 currentWindow() const
     { return qvariant_cast< quint32 >(property("CurrentWindow")); }
@@ -122,6 +126,7 @@ void IdChanged();
 void TitleChanged();
 void IconChanged();
 void MenuChanged();
+void NameChanged();
 void CurrentWindowChanged();
 };
 

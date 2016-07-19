@@ -288,14 +288,17 @@ const QString AppItem::contextMenu() const
 
 QWidget *AppItem::popupTips()
 {
-    if (m_titles.isEmpty())
-        return nullptr;
     if (m_draging)
         return nullptr;
 
-    const quint32 currentWindow = m_itemEntry->currentWindow();
-    Q_ASSERT(m_titles.contains(currentWindow));
-    m_appNameTips->setText(m_titles[currentWindow]);
+    if (!m_titles.isEmpty())
+    {
+        const quint32 currentWindow = m_itemEntry->currentWindow();
+        Q_ASSERT(m_titles.contains(currentWindow));
+        m_appNameTips->setText(m_titles[currentWindow]);
+    } else {
+        m_appNameTips->setText(m_itemEntry->name());
+    }
 
     return m_appNameTips;
 }
