@@ -13,14 +13,19 @@ DISTFILES       += disk-mount.json
 HEADERS += \
     diskmountplugin.h \
     dbus/dbusdiskmount.h \
-    dbus/variant/diskinfo.h
+    dbus/variant/diskinfo.h \
+    diskcontrolwidget.h \
+    diskpluginitem.h
 
 SOURCES += \
     diskmountplugin.cpp \
     dbus/dbusdiskmount.cpp \
-    dbus/variant/diskinfo.cpp
+    dbus/variant/diskinfo.cpp \
+    diskcontrolwidget.cpp \
+    diskpluginitem.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
 
 RESOURCES += \
+    resources.qrc

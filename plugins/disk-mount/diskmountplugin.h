@@ -2,7 +2,8 @@
 #define DISKMOUNTPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "dbus/dbusdiskmount.h"
+#include "diskcontrolwidget.h"
+#include "diskpluginitem.h"
 
 class DiskMountPlugin : public QObject, PluginsItemInterface
 {
@@ -17,9 +18,21 @@ public:
     void init(PluginProxyInterface *proxyInter);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemPopupApplet(const QString &itemKey);
 
 private:
-    DBusDiskMount *m_diskInter;
+    void initCompoments();
+
+    void displayModeChanged(const Dock::DisplayMode mode);
+
+private slots:
+    void diskCountChanged(const int count);
+
+private:
+    bool m_pluginAdded;
+
+    DiskPluginItem *m_diskPluginItem;
+    DiskControlWidget *m_diskControlApplet;
 };
 
 #endif // DISKMOUNTPLUGIN_H
