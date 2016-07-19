@@ -29,7 +29,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
         if (displayMode == Dock::Efficient)
         {
-            pixmap = loadSvg(":/icons/resources/icons/normal.svg", QSize(24 * 0.8, 24 * 0.8));
+            pixmap = loadSvg(":/icons/resources/icons/normal.svg", QSize(18, 18));
             break;
         }
 

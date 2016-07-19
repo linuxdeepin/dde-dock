@@ -13,12 +13,14 @@ DISTFILES       += shutdown.json
 HEADERS += \
     shutdownplugin.h \
     dbus/dbuspower.h \
-    pluginwidget.h
+    pluginwidget.h \
+    powerstatuswidget.h
 
 SOURCES += \
     shutdownplugin.cpp \
     dbus/dbuspower.cpp \
-    pluginwidget.cpp
+    pluginwidget.cpp \
+    powerstatuswidget.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

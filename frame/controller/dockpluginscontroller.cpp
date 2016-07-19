@@ -24,7 +24,8 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
 
     // check if same item added
     if (m_pluginList.contains(itemInter))
-        Q_ASSERT(!m_pluginList[itemInter].contains(itemKey));
+        if (m_pluginList[itemInter].contains(itemKey))
+            return;
 
     m_pluginList[itemInter][itemKey] = item;
 

@@ -3,6 +3,7 @@
 
 #include "pluginsiteminterface.h"
 #include "pluginwidget.h"
+#include "powerstatuswidget.h"
 #include "dbus/dbuspower.h"
 
 #include <QLabel>
@@ -25,7 +26,11 @@ public:
     void displayModeChanged(const Dock::DisplayMode displayMode);
 
 private:
-    PluginWidget *m_pluginWidget;
+    void updateBatteryVisible();
+
+private:
+    PluginWidget *m_shutdownWidget;
+    PowerStatusWidget *m_powerStatusWidget;
     QLabel *m_tipsLabel;
 
     DBusPower *m_powerInter;

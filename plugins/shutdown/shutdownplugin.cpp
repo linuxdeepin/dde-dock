@@ -2,10 +2,14 @@
 
 #include <QIcon>
 
+#define POWER_KEY       "power"
+#define SHUTDOWN_KEY    "shutdown"
+
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
 
-      m_pluginWidget(new PluginWidget),
+      m_shutdownWidget(new PluginWidget),
+      m_powerStatusWidget(new PowerStatusWidget),
       m_tipsLabel(new QLabel),
 
       m_powerInter(new DBusPower(this))
@@ -14,6 +18,8 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding:5px 10px;");
+
+    connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -23,14 +29,20 @@ const QString ShutdownPlugin::pluginName() const
 
 QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    if (itemKey == SHUTDOWN_KEY)
+        return m_shutdownWidget;
+    if (itemKey == POWER_KEY)
+        return m_powerStatusWidget;
 
-    return m_pluginWidget;
+    return nullptr;
 }
 
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    const Dock::DisplayMode mode = displayMode();
+
+    if (mode == Dock::Efficient && itemKey == SHUTDOWN_KEY)
+        return nullptr;
 
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
 
@@ -45,14 +57,17 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_proxyInter->itemAdded(this, QString());
+    m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
 
-    displayModeChanged(qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>());
+    displayModeChanged(displayMode());
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 {
-    Q_UNUSED(itemKey);
+    const Dock::DisplayMode mode = displayMode();
+
+    if (mode == Dock::Efficient && itemKey != SHUTDOWN_KEY)
+        return QString();
 
     return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
 }
@@ -61,5 +76,17 @@ void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     Q_UNUSED(displayMode);
 
-    m_pluginWidget->update();
+    m_shutdownWidget->update();
+
+    updateBatteryVisible();
+}
+
+void ShutdownPlugin::updateBatteryVisible()
+{
+    const bool exist = !m_powerInter->batteryPercentage().isEmpty();
+
+    if (!exist || displayMode() == Dock::Fashion)
+        m_proxyInter->itemRemoved(this, POWER_KEY);
+    else if (exist)
+        m_proxyInter->itemAdded(this, POWER_KEY);
 }
