@@ -1,10 +1,15 @@
 #include "diskcontrolwidget.h"
 
 DiskControlWidget::DiskControlWidget(QWidget *parent)
-    : QWidget(parent),
+    : QScrollArea(parent),
 
       m_diskInter(new DBusDiskMount(this))
 {
+    setFixedWidth(300);
+    setFrameStyle(QFrame::NoFrame);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setStyleSheet("background-color:transparent;");
 
     connect(m_diskInter, &DBusDiskMount::DiskListChanged, this, &DiskControlWidget::diskListChanged);
 

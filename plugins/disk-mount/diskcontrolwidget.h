@@ -3,9 +3,9 @@
 
 #include "dbus/dbusdiskmount.h"
 
-#include <QWidget>
+#include <QScrollArea>
 
-class DiskControlWidget : public QWidget
+class DiskControlWidget : public QScrollArea
 {
     Q_OBJECT
 

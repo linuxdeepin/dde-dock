@@ -11,11 +11,13 @@ class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 
 public:
     explicit DockPopupWindow(QWidget *parent = 0);
+    ~DockPopupWindow();
 
     bool model() const;
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
+    void hide();
 
 signals:
     void accept() const;
