@@ -72,8 +72,8 @@ install: build translate install-dde-data
 	mkdir -pv ${DESTDIR}${PREFIX}/share/locale
 	cp -r out/locale/* ${DESTDIR}${PREFIX}/share/locale
 
-	mkdir -pv ${DESTDIR}/etc/dbus-1/system.d
-	cp misc/conf/*.conf ${DESTDIR}/etc/dbus-1/system.d/
+	mkdir -pv ${DESTDIR}${PREFIX}/share/dbus-1/system.d
+	cp misc/conf/*.conf ${DESTDIR}${PREFIX}/share/dbus-1/system.d/
 
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dbus-1
 	cp -r misc/services ${DESTDIR}${PREFIX}/share/dbus-1/
