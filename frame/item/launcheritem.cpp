@@ -11,6 +11,7 @@ LauncherItem::LauncherItem(QWidget *parent)
 
       m_tips(new QLabel(this))
 {
+    setAccessibleName("Launcher");
     m_tips->setVisible(false);
     m_tips->setText(tr("Launcher"));
     m_tips->setStyleSheet("color:white;"

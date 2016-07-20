@@ -3,5 +3,4 @@
 PlaceholderItem::PlaceholderItem(QWidget *parent)
     : DockItem(App, parent)
 {
-
 }

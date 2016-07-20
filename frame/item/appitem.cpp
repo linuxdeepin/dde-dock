@@ -22,6 +22,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
       m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png"))
 {
+    setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
 
     m_id = m_itemEntry->id();

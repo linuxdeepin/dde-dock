@@ -22,6 +22,8 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 {
     Q_ASSERT(m_centeralWidget);
 
+    setAccessibleName(m_pluginInter->pluginName());
+
     QBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_centeralWidget);
     hLayout->setSpacing(0);

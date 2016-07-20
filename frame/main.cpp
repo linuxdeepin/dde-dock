@@ -2,12 +2,14 @@
 #include "window/mainwindow.h"
 #include "util/themeappicon.h"
 
-#include <dapplication.h>
+#include <DApplication>
+#include <DLog>
 #include <QDir>
 
 #include <unistd.h>
 
 DWIDGET_USE_NAMESPACE
+DUTIL_USE_NAMESPACE
 
 // let startdde know that we've already started.
 void RegisterDdeSession()
@@ -37,6 +39,9 @@ int main(int argc, char *argv[])
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
+
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
 
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());

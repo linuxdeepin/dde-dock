@@ -1,3 +1,5 @@
+DEFINES += QT_MESSAGELOGCONTEXT
+
 HEADERS += \
     $$PWD/pluginsiteminterface.h \
     $$PWD/constants.h \
