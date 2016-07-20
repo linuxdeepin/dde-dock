@@ -141,7 +141,7 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 
     if (!e->mimeData()->formats().contains(RequestDockKey))
         return;
-    if (m_itemController->appIsDocked(e->mimeData()->data(RequestDockKey)))
+    if (m_itemController->appIsOnDock(e->mimeData()->data(RequestDockKey)))
         return;
 
     e->accept();

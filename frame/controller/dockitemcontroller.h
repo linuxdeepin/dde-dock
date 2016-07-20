@@ -20,7 +20,7 @@ public:
     ~DockItemController();
 
     const QList<DockItem *> itemList() const;
-    bool appIsDocked(const QString &appDesktop) const;
+    bool appIsOnDock(const QString &appDesktop) const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;

@@ -136,6 +136,14 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("IsDocked"), args);
     }
 
+    inline QDBusPendingReply<bool> IsOnDock(const QString &appDesktop)
+    {
+        QList<QVariant> args;
+        args << appDesktop;
+
+        return asyncCallWithArgumentList(QStringLiteral("IsOnDock"), args);
+    }
+
     inline QDBusPendingReply<bool> RequestUndock(const QString &appDesktop)
     {
         QList<QVariant> args;
