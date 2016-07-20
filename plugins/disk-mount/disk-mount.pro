@@ -4,7 +4,7 @@ include(../../interfaces/interfaces.pri)
 QT              += widgets svg dbus
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
-PKGCONFIG       +=
+PKGCONFIG       += dtkwidget dtkbase
 
 TARGET          = $$qtLibraryTarget(disk-mount)
 DESTDIR          = $$_PRO_FILE_PWD_/../
@@ -16,7 +16,8 @@ HEADERS += \
     dbus/variant/diskinfo.h \
     diskcontrolwidget.h \
     diskpluginitem.h \
-    imageutil.h
+    imageutil.h \
+    diskcontrolitem.h
 
 SOURCES += \
     diskmountplugin.cpp \
@@ -24,7 +25,8 @@ SOURCES += \
     dbus/variant/diskinfo.cpp \
     diskcontrolwidget.cpp \
     diskpluginitem.cpp \
-    imageutil.cpp
+    imageutil.cpp \
+    diskcontrolitem.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

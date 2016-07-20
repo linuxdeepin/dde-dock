@@ -2,5 +2,8 @@
     <qresource prefix="/icons">
         <file>resources/icon-small.svg</file>
         <file>resources/icon.svg</file>
+        <file>resources/unmount-press.png</file>
+        <file>resources/unmount-normal.png</file>
+        <file>resources/unmount-hover.png</file>
     </qresource>
 </RCC>

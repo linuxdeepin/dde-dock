@@ -4,6 +4,7 @@
 #include "dbus/dbusdiskmount.h"
 
 #include <QScrollArea>
+#include <QVBoxLayout>
 
 class DiskControlWidget : public QScrollArea
 {
@@ -19,6 +20,8 @@ private slots:
     void diskListChanged();
 
 private:
+    QVBoxLayout *m_centeralLayout;
+    QWidget *m_centeralWidget;
     DBusDiskMount *m_diskInter;
 
     DiskInfoList m_diskInfoList;
