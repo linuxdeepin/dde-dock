@@ -12,7 +12,7 @@ LauncherItem::LauncherItem(QWidget *parent)
       m_tips(new QLabel(this))
 {
     m_tips->setVisible(false);
-    m_tips->setText("Launcher");
+    m_tips->setText(tr("Launcher"));
     m_tips->setStyleSheet("color:white;"
                           "padding:5px 10px;");
 }

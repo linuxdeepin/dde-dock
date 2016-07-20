@@ -84,7 +84,7 @@ public Q_SLOTS: // METHODS
     }
 
 Q_SIGNALS: // SIGNALS
-    void ButtonRelease(int in0, int in1, int in2, const QString &in3);
+    void ButtonRelease(int button, int x, int y, const QString &id);
 // begin property changed signals
 };
 

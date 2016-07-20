@@ -89,10 +89,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("QueryDisk"), argumentList);
     }
 
-    inline QDBusPendingReply<> Unmount(const QString &in0)
+    inline QDBusPendingReply<> Unmount(const QString &diskId)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0);
+        argumentList << QVariant::fromValue(diskId);
         return asyncCallWithArgumentList(QStringLiteral("Unmount"), argumentList);
     }
 

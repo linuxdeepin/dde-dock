@@ -26,7 +26,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
 
 private slots:
-    void globalMouseRelease();
+    void globalMouseRelease(int button, int x, int y, const QString &id);
 
 private:
     bool m_model;

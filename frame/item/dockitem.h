@@ -25,6 +25,8 @@ public:
 
 public:
     explicit DockItem(const ItemType type, QWidget *parent = nullptr);
+    ~DockItem();
+
     static void setDockPosition(const Position side);
     static void setDockDisplayMode(const DisplayMode mode);
 
@@ -56,6 +58,7 @@ protected:
 protected:
     ItemType m_type;
     bool m_hover;
+    bool m_popupShown;
 
     QTimer *m_popupTipsDelayTimer;
 

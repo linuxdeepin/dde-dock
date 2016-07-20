@@ -14,6 +14,7 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
     : QWidget(parent),
       m_type(type),
       m_hover(false),
+      m_popupShown(false),
 
       m_popupTipsDelayTimer(new QTimer(this)),
 
@@ -30,6 +31,12 @@ DockItem::DockItem(const ItemType type, QWidget *parent)
     m_popupTipsDelayTimer->setSingleShot(true);
 
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
+}
+
+DockItem::~DockItem()
+{
+    if (m_popupShown)
+        popupWindowAccept();
 }
 
 void DockItem::setDockPosition(const Position side)
@@ -82,7 +89,10 @@ void DockItem::leaveEvent(QEvent *e)
 
     // auto hide if popup is not model window
     if (!PopupWindow->model())
+    {
+        m_popupShown = false;
         PopupWindow->hide();
+    }
 
     update();
 
@@ -158,6 +168,8 @@ void DockItem::showHoverTips()
 
 void DockItem::showPopupWindow(QWidget * const content, const bool model)
 {
+    m_popupShown = true;
+
     if (model)
         emit requestWindowAutoHide(false);
 
@@ -191,6 +203,7 @@ void DockItem::popupWindowAccept()
 
     disconnect(PopupWindow.get(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 
+    m_popupShown = false;
     PopupWindow->hide();
 
     emit requestWindowAutoHide(true);

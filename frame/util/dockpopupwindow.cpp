@@ -61,12 +61,17 @@ void DockPopupWindow::mousePressEvent(QMouseEvent *e)
 //        m_acceptDelayTimer->start();
 }
 
-void DockPopupWindow::globalMouseRelease()
+void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString &id)
 {
+    Q_UNUSED(button);
+
+    if (id != m_mouseAreaKey)
+        return;
+
     Q_ASSERT(m_model);
 
     const QRect rect = QRect(pos(), size());
-    const QPoint pos = QCursor::pos();
+    const QPoint pos = QPoint(x, y);
 
     if (rect.contains(pos))
         return;

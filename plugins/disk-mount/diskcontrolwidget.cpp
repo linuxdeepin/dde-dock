@@ -31,17 +31,37 @@ void DiskControlWidget::diskListChanged()
 {
     m_diskInfoList = m_diskInter->diskList();
 
-    emit diskCountChanged(m_diskInfoList.count());
+    while (QLayoutItem *item = m_centeralLayout->takeAt(0))
+    {
+        delete item->widget();
+        delete item;
+    }
 
+    int mountedCount = 0;
     for (auto info : m_diskInfoList)
     {
+        if (info.m_mountPoint.isEmpty())
+            continue;
+        else
+            ++mountedCount;
+
         DiskControlItem *item = new DiskControlItem(info, this);
+
+        connect(item, &DiskControlItem::requestUnmount, this, &DiskControlWidget::unmountDisk);
+
         m_centeralLayout->addWidget(item);
     }
 
-    const int contentHeight = m_diskInfoList.count() * 70;
+    emit diskCountChanged(mountedCount);
+
+    const int contentHeight = mountedCount * 70;
     const int maxHeight = std::min(contentHeight, MAX_HEIGHT);
 
     m_centeralWidget->setFixedHeight(contentHeight);
     setFixedHeight(maxHeight);
+}
+
+void DiskControlWidget::unmountDisk(const QString &diskId) const
+{
+    m_diskInter->Unmount(diskId);
 }

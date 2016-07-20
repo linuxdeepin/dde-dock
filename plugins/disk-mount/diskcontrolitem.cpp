@@ -28,7 +28,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
                                       "background-color:rgba(255, 255, 255, .3);"
                                       "}"
                                       "QProgressBar::chunk {"
-                                      "background-color:blue;"
+                                      "background-color:white;"
                                       "}");
 
     m_unmountButton->setNormalPic(":/icons/resources/unmount-normal.png");
@@ -60,6 +60,8 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     centeralLayout->setMargin(0);
 
     setLayout(centeralLayout);
+
+    connect(m_unmountButton, &DImageButton::clicked, [this] {emit requestUnmount(m_info.m_id);});
 
     updateInfo(info);
 }
