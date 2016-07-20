@@ -1,4 +1,5 @@
 #include "diskpluginitem.h"
+#include "imageutil.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -39,9 +40,9 @@ QSize DiskPluginItem::sizeHint() const
 void DiskPluginItem::updateIcon()
 {
     if (m_displayMode == Dock::Efficient)
-        m_icon = QPixmap(":/icons/resources/icon_small.png");
+        m_icon = ImageUtil::loadSvg(":/icons/resources/icon-small.svg", 16);
     else
-        m_icon = QPixmap(":/icons/resources/icon.png");
+        m_icon = ImageUtil::loadSvg(":/icons/resources/icon.svg", std::min(width(), height()) * 0.8);
 
     update();
 }

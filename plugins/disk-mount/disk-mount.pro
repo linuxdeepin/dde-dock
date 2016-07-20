@@ -15,14 +15,16 @@ HEADERS += \
     dbus/dbusdiskmount.h \
     dbus/variant/diskinfo.h \
     diskcontrolwidget.h \
-    diskpluginitem.h
+    diskpluginitem.h \
+    imageutil.h
 
 SOURCES += \
     diskmountplugin.cpp \
     dbus/dbusdiskmount.cpp \
     dbus/variant/diskinfo.cpp \
     diskcontrolwidget.cpp \
-    diskpluginitem.cpp
+    diskpluginitem.cpp \
+    imageutil.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
