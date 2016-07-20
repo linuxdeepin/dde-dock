@@ -15,9 +15,13 @@ private:
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
+    QWidget *popupTips();
+
 private:
     QPixmap m_smallIcon;
     QPixmap m_largeIcon;
+
+    QLabel *m_tips;
 };
 
 #endif // LAUNCHERITEM_H

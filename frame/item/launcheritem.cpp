@@ -7,8 +7,14 @@
 #include <QMouseEvent>
 
 LauncherItem::LauncherItem(QWidget *parent)
-    : DockItem(DockItem::Launcher, parent)
+    : DockItem(DockItem::Launcher, parent),
+
+      m_tips(new QLabel(this))
 {
+    m_tips->setVisible(false);
+    m_tips->setText("Launcher");
+    m_tips->setStyleSheet("color:white;"
+                          "padding:5px 10px;");
 }
 
 void LauncherItem::paintEvent(QPaintEvent *e)
@@ -60,4 +66,9 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
                                      << "com.deepin.dde.Launcher.Toggle";
 
     proc->start("dbus-send", args);
+}
+
+QWidget *LauncherItem::popupTips()
+{
+    return m_tips;
 }
