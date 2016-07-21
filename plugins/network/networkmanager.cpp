@@ -11,32 +11,27 @@ NetworkManager *NetworkManager::instance(QObject *parent)
     return INSTANCE;
 }
 
+void NetworkManager::init()
+{
+    reloadDevices();
+    reloadActiveConnections();
+}
+
+const NetworkManager::NetworkStates NetworkManager::states() const
+{
+    return m_states;
+}
+
 NetworkManager::NetworkManager(QObject *parent)
     : QObject(parent),
 
-      m_state(Offline),
+      m_states(Offline),
 
       m_networkInter(new DBusNetwork(this))
 {
-//    qDebug() << m_networkInter->activeConnections();
-
-//    QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->activeConnections().toUtf8());
-//    qDebug() << doc;
-
-//    QJsonObject obj = doc.object();
-//    for (auto value : obj)
-//    {
-//        qDebug() << value.toObject().value("Uuid").toString();
-//    }
-
-//    qDebug() << QJsonDocument::fromJson(m_networkInter->devices().toUtf8());
-//    qDebug() << QJsonDocument::fromJson(m_networkInter->connections().toUtf8());
 
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &NetworkManager::reloadDevices);
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
-
-    reloadDevices();
-    reloadActiveConnections();
 }
 
 void NetworkManager::reloadDevices()
@@ -62,7 +57,7 @@ void NetworkManager::reloadActiveConnections()
     Q_ASSERT(doc.isObject());
     const QJsonObject obj = doc.object();
 
-    m_state = Offline;
+    NetworkStates states = Offline;
     m_activeConnList.clear();
     for (auto info(obj.constBegin()); info != obj.constEnd(); ++info)
     {
@@ -74,12 +69,15 @@ void NetworkManager::reloadActiveConnections()
         const bool isWireless = std::find(m_deviceList.cbegin(), m_deviceList.cend(), uuid) == m_deviceList.cend();
 
         if (isWireless)
-            m_state |= wirelessConnection;
+            states |= wirelessConnection;
         else
-            m_state |= WiredConnection;
+            states |= WiredConnection;
 
         m_activeConnList.append(uuid);
     }
 
-    qDebug() << m_activeConnList << m_state;
+    if (m_states == states)
+        return;
+    m_states = states;
+    emit networkStateChanged(m_states);
 }

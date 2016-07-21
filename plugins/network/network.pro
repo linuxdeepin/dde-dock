@@ -15,15 +15,20 @@ HEADERS += \
     wireditem.h \
     dbus/dbusnetwork.h \
     networkmanager.h \
-    networkdevice.h
+    networkdevice.h \
+    util/imageutil.h
 
 SOURCES += \
     networkplugin.cpp \
     wireditem.cpp \
     dbus/dbusnetwork.cpp \
     networkmanager.cpp \
-    networkdevice.cpp
+    networkdevice.cpp \
+    util/imageutil.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
+
+RESOURCES += \
+    resources.qrc
 

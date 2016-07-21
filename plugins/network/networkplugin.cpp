@@ -8,9 +8,9 @@ NetworkPlugin::NetworkPlugin(QObject *parent)
 
       m_networkManager(NetworkManager::instance(this)),
 
-      m_wiredItem(nullptr)
+      m_wiredItem(new WiredItem)
 {
-
+    m_wiredItem->setVisible(false);
 }
 
 const QString NetworkPlugin::pluginName() const
@@ -21,6 +21,10 @@ const QString NetworkPlugin::pluginName() const
 void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+
+    connect(m_networkManager, &NetworkManager::networkStateChanged, this, &NetworkPlugin::networkStateChanged);
+
+    m_networkManager->init();
 }
 
 QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
@@ -29,4 +33,13 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
         return m_wiredItem;
 
     return nullptr;
+}
+
+void NetworkPlugin::networkStateChanged(const NetworkManager::NetworkStates &states)
+{
+    // has wired connection
+    if (states.testFlag(NetworkManager::WiredConnection))
+        m_proxyInter->itemAdded(this, WIRED_ITEM);
+    else
+        m_proxyInter->itemRemoved(this, WIRED_ITEM);
 }

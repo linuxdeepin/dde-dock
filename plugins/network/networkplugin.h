@@ -18,6 +18,9 @@ public:
     void init(PluginProxyInterface *proxyInter);
     QWidget *itemWidget(const QString &itemKey);
 
+private slots:
+    void networkStateChanged(const NetworkManager::NetworkStates &states);
+
 private:
     NetworkManager *m_networkManager;
     WiredItem *m_wiredItem;

@@ -22,6 +22,13 @@ public:
 
     static NetworkManager *instance(QObject *parent = nullptr);
 
+    void init();
+
+    const NetworkStates states() const;
+
+signals:
+    void networkStateChanged(const NetworkStates &states) const;
+
 private:
     explicit NetworkManager(QObject *parent = 0);
 
@@ -30,7 +37,7 @@ private slots:
     void reloadActiveConnections();
 
 private:
-    NetworkStates m_state;
+    NetworkStates m_states;
     DBusNetwork *m_networkInter;
 
     QList<NetworkDevice> m_deviceList;
