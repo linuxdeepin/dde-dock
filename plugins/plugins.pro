@@ -3,4 +3,5 @@ SUBDIRS = \
         datetime \
         shutdown \
         system-tray \
-        disk-mount
+        disk-mount \
+        network
