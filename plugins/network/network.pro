@@ -15,14 +15,14 @@ HEADERS += \
     wireditem.h \
     dbus/dbusnetwork.h \
     networkmanager.h \
-    connectioninfo.h
+    networkdevice.h
 
 SOURCES += \
     networkplugin.cpp \
     wireditem.cpp \
     dbus/dbusnetwork.cpp \
     networkmanager.cpp \
-    connectioninfo.cpp
+    networkdevice.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
