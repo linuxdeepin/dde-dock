@@ -17,6 +17,7 @@ public:
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemPopupApplet(const QString &itemKey);
 
 private slots:
     void deviceAdded(const NetworkDevice &device);

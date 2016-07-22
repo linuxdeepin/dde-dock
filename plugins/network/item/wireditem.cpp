@@ -5,9 +5,28 @@
 #include <QPainter>
 
 WiredItem::WiredItem(const QUuid &deviceUuid)
-    : DeviceItem(NetworkDevice::Wired, deviceUuid)
+    : DeviceItem(NetworkDevice::Wired, deviceUuid),
+
+      m_connected(false),
+      m_itemTips(new QLabel(this))
 {
+
+    m_itemTips->setVisible(false);
+    m_itemTips->setStyleSheet("color:white;"
+                              "padding:5px 10px;");
+
     connect(m_networkManager, &NetworkManager::networkStateChanged, this, &WiredItem::reloadIcon);
+    connect(m_networkManager, &NetworkManager::activeConnectionChanged, this, &WiredItem::activeConnectionChanged);
+}
+
+QWidget *WiredItem::itemApplet()
+{
+    if (!m_connected)
+        m_itemTips->setText(tr("Disconnect"));
+    else
+        return nullptr;
+
+    return m_itemTips;
 }
 
 void WiredItem::paintEvent(QPaintEvent *e)
@@ -20,33 +39,36 @@ void WiredItem::paintEvent(QPaintEvent *e)
 
 void WiredItem::resizeEvent(QResizeEvent *e)
 {
-    QWidget::resizeEvent(e);
+    DeviceItem::resizeEvent(e);
 
     reloadIcon();
-}
-
-QSize WiredItem::sizeHint() const
-{
-    return QSize(24, 24);
 }
 
 void WiredItem::reloadIcon()
 {
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const bool connect = m_networkManager->states().testFlag(NetworkDevice::Wired);
 
     if (displayMode == Dock::Fashion)
     {
         const int size = std::min(width(), height()) * 0.8;
 
-        if (connect)
+        if (m_connected)
             m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-connected.svg", size);
         else
             m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-disconnected.svg", size);
     } else {
-        if (connect)
+        if (m_connected)
             m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-connected-small.svg", 16);
         else
             m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-disconnected-small.svg", 16);
     }
+}
+
+void WiredItem::activeConnectionChanged(const QUuid &uuid)
+{
+    if (uuid != m_deviceUuid)
+        return;
+
+    m_connected = m_networkManager->activeConnSet().contains(m_deviceUuid);
+    update();
 }

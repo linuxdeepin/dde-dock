@@ -29,7 +29,12 @@ const NetworkDevice::NetworkTypes NetworkManager::types() const
 
 const QSet<NetworkDevice> NetworkManager::deviceList() const
 {
-    return m_deviceList;
+    return m_deviceSet;
+}
+
+const QSet<QUuid> NetworkManager::activeConnSet() const
+{
+    return m_activeConnSet;
 }
 
 NetworkManager::NetworkManager(QObject *parent)
@@ -61,19 +66,17 @@ void NetworkManager::reloadDevices()
         types |= deviceType;
 
         for (auto device : infoList.value().toArray())
-        {
             deviceSet.insert(NetworkDevice(deviceType, device.toObject()));
-        }
     }
 
-    const QSet<NetworkDevice> removedDeviceList = m_deviceList - deviceSet;
+    const QSet<NetworkDevice> removedDeviceList = m_deviceSet - deviceSet;
     for (auto dev : removedDeviceList)
         emit deviceRemoved(dev);
-    const QSet<NetworkDevice> addedDeviceList = deviceSet - m_deviceList;
+    const QSet<NetworkDevice> addedDeviceList = deviceSet - m_deviceSet;
     for (auto dev : addedDeviceList)
         emit deviceAdded(dev);
 
-    m_deviceList = std::move(deviceSet);
+    m_deviceSet = std::move(deviceSet);
     if (m_types == types)
         return;
 
@@ -88,7 +91,7 @@ void NetworkManager::reloadActiveConnections()
     const QJsonObject obj = doc.object();
 
     NetworkDevice::NetworkTypes states = NetworkDevice::None;
-    m_activeConnList.clear();
+    QSet<QUuid> activeConnList;
     for (auto info(obj.constBegin()); info != obj.constEnd(); ++info)
     {
         Q_ASSERT(info.value().isObject());
@@ -96,15 +99,24 @@ void NetworkManager::reloadActiveConnections()
 
         const QUuid uuid = infoObj.value("Uuid").toString();
         // if uuid not in device list, its a wireless connection
-        const bool isWireless = std::find(m_deviceList.cbegin(), m_deviceList.cend(), uuid) == m_deviceList.cend();
+        const bool isWireless = std::find(m_deviceSet.cbegin(), m_deviceSet.cend(), uuid) == m_deviceSet.cend();
 
         if (isWireless)
             states |= NetworkDevice::Wireless;
         else
             states |= NetworkDevice::Wired;
 
-        m_activeConnList.insert(uuid);
+        activeConnList.insert(uuid);
     }
+
+    const QSet<QUuid> removedConnList = m_activeConnSet - activeConnList;
+    m_activeConnSet = std::move(activeConnList);
+
+    for (auto uuid : removedConnList)
+        emit activeConnectionChanged(uuid);
+
+    for (auto uuid : m_activeConnSet)
+        emit activeConnectionChanged(uuid);
 
     if (m_states == states)
         return;

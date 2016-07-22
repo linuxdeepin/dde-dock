@@ -20,10 +20,12 @@ public:
     const NetworkDevice::NetworkTypes states() const;
     const NetworkDevice::NetworkTypes types() const;
     const QSet<NetworkDevice> deviceList() const;
+    const QSet<QUuid> activeConnSet() const;
 
 signals:
     void deviceAdded(const NetworkDevice &device) const;
     void deviceRemoved(const NetworkDevice &device) const;
+    void activeConnectionChanged(const QUuid &uuid) const;
     void networkStateChanged(const NetworkDevice::NetworkTypes &states) const;
 
 private:
@@ -38,8 +40,8 @@ private:
     NetworkDevice::NetworkTypes m_types;
     DBusNetwork *m_networkInter;
 
-    QSet<NetworkDevice> m_deviceList;
-    QSet<QUuid> m_activeConnList;
+    QSet<NetworkDevice> m_deviceSet;
+    QSet<QUuid> m_activeConnSet;
 
     static NetworkManager *INSTANCE;
 };

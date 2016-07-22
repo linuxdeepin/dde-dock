@@ -4,6 +4,7 @@
 #include "deviceitem.h"
 
 #include <QWidget>
+#include <QLabel>
 
 class WiredItem : public DeviceItem
 {
@@ -12,16 +13,21 @@ class WiredItem : public DeviceItem
 public:
     explicit WiredItem(const QUuid &deviceUuid);
 
+    QWidget *itemApplet();
+
 protected:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
-    QSize sizeHint() const;
 
 private:
     void reloadIcon();
+    void activeConnectionChanged(const QUuid &uuid);
 
 private:
+    bool m_connected;
     QPixmap m_icon;
+
+    QLabel *m_itemTips;
 };
 
 #endif // WIREDITEM_H

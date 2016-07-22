@@ -10,12 +10,17 @@ DeviceItem::DeviceItem(const NetworkDevice::NetworkType type, const QUuid &devic
 
 }
 
+QSize DeviceItem::sizeHint() const
+{
+    return QSize(24, 24);
+}
+
 const QUuid DeviceItem::uuid() const
 {
     return m_deviceUuid;
 }
 
-const NetworkDevice::NetworkType DeviceItem::type() const
+NetworkDevice::NetworkType DeviceItem::type() const
 {
     return m_type;
 }

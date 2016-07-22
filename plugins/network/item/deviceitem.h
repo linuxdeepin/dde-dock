@@ -13,7 +13,12 @@ public:
     explicit DeviceItem(const NetworkDevice::NetworkType type, const QUuid &deviceUuid);
 
     const QUuid uuid() const;
-    const NetworkDevice::NetworkType type() const;
+    NetworkDevice::NetworkType type() const;
+
+    virtual QWidget *itemApplet() = 0;
+
+protected:
+    QSize sizeHint() const;
 
 protected:
     NetworkDevice::NetworkType m_type;

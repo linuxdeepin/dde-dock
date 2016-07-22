@@ -8,8 +8,6 @@ NetworkDevice::NetworkDevice(const NetworkType type, const QJsonObject &info)
 {
     m_uuid = info.value("UniqueUuid").toString();
     m_objectPath = info.value("Path").toString();
-
-    //    qDebug() << m_uuid << m_objectPath;
 }
 
 bool NetworkDevice::operator==(const QUuid &uuid) const

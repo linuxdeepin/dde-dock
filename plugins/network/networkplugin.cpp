@@ -36,6 +36,15 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
     return nullptr;
 }
 
+QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
+{
+    for (auto deviceItem : m_deviceItemList)
+        if (deviceItem->uuid() == itemKey)
+            return deviceItem->itemApplet();
+
+    return nullptr;
+}
+
 void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 {
     qDebug() << "add: " << device.uuid();
