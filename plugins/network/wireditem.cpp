@@ -35,7 +35,7 @@ QSize WiredItem::sizeHint() const
 void WiredItem::reloadIcon()
 {
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-    const bool connect = m_networkManager->states().testFlag(NetworkManager::WiredConnection);
+    const bool connect = m_networkManager->states().testFlag(NetworkDevice::Wired);
 
     if (displayMode == Dock::Fashion)
     {

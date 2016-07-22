@@ -35,10 +35,10 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
     return nullptr;
 }
 
-void NetworkPlugin::networkStateChanged(const NetworkManager::NetworkStates &states)
+void NetworkPlugin::networkStateChanged(const NetworkDevice::NetworkTypes &states)
 {
     // has wired connection
-    if (states.testFlag(NetworkManager::WiredConnection))
+    if (states.testFlag(NetworkDevice::Wired))
         m_proxyInter->itemAdded(this, WIRED_ITEM);
     else
         m_proxyInter->itemRemoved(this, WIRED_ITEM);

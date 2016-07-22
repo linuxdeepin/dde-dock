@@ -13,21 +13,14 @@ class NetworkManager : public QObject
     Q_OBJECT
 
 public:
-    enum NetworkState {
-        Offline             = 0,
-        WiredConnection     = 1 << 0,
-        wirelessConnection  = 1 << 1,
-    };
-    Q_DECLARE_FLAGS(NetworkStates, NetworkState)
-
     static NetworkManager *instance(QObject *parent = nullptr);
 
     void init();
 
-    const NetworkStates states() const;
+    const NetworkDevice::NetworkTypes states() const;
 
 signals:
-    void networkStateChanged(const NetworkStates &states) const;
+    void networkStateChanged(const NetworkDevice::NetworkTypes &states) const;
 
 private:
     explicit NetworkManager(QObject *parent = 0);
@@ -37,7 +30,8 @@ private slots:
     void reloadActiveConnections();
 
 private:
-    NetworkStates m_states;
+    NetworkDevice::NetworkTypes m_states;
+    NetworkDevice::NetworkTypes m_types;
     DBusNetwork *m_networkInter;
 
     QList<NetworkDevice> m_deviceList;
@@ -45,7 +39,4 @@ private:
 
     static NetworkManager *INSTANCE;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkManager::NetworkStates)
-
 #endif // NETWORKMANAGER_H

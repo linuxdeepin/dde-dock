@@ -17,7 +17,7 @@ void NetworkManager::init()
     reloadActiveConnections();
 }
 
-const NetworkManager::NetworkStates NetworkManager::states() const
+const NetworkDevice::NetworkTypes NetworkManager::states() const
 {
     return m_states;
 }
@@ -25,7 +25,8 @@ const NetworkManager::NetworkStates NetworkManager::states() const
 NetworkManager::NetworkManager(QObject *parent)
     : QObject(parent),
 
-      m_states(Offline),
+      m_states(NetworkDevice::None),
+      m_types(NetworkDevice::None),
 
       m_networkInter(new DBusNetwork(this))
 {
@@ -40,15 +41,21 @@ void NetworkManager::reloadDevices()
     Q_ASSERT(doc.isObject());
     const QJsonObject obj = doc.object();
 
+    NetworkDevice::NetworkTypes types = NetworkDevice::None;
     m_deviceList.clear();
     for (auto infoList(obj.constBegin()); infoList != obj.constEnd(); ++infoList)
     {
         Q_ASSERT(infoList.value().isArray());
-        const NetworkDevice::DeviceType deviceType = NetworkDevice::deviceType(infoList.key());
+        const NetworkDevice::NetworkType deviceType = NetworkDevice::deviceType(infoList.key());
+
+        types |= deviceType;
 
         for (auto device : infoList.value().toArray())
             m_deviceList.append(NetworkDevice(deviceType, device.toObject()));
     }
+
+    m_types = types;
+    qDebug() << "device type: " << m_types;
 }
 
 void NetworkManager::reloadActiveConnections()
@@ -57,7 +64,7 @@ void NetworkManager::reloadActiveConnections()
     Q_ASSERT(doc.isObject());
     const QJsonObject obj = doc.object();
 
-    NetworkStates states = Offline;
+    NetworkDevice::NetworkTypes states = NetworkDevice::None;
     m_activeConnList.clear();
     for (auto info(obj.constBegin()); info != obj.constEnd(); ++info)
     {
@@ -69,15 +76,18 @@ void NetworkManager::reloadActiveConnections()
         const bool isWireless = std::find(m_deviceList.cbegin(), m_deviceList.cend(), uuid) == m_deviceList.cend();
 
         if (isWireless)
-            states |= wirelessConnection;
+            states |= NetworkDevice::Wireless;
         else
-            states |= WiredConnection;
+            states |= NetworkDevice::Wired;
 
         m_activeConnList.append(uuid);
     }
 
     if (m_states == states)
         return;
+
     m_states = states;
     emit networkStateChanged(m_states);
+
+    qDebug() << "network states: " << m_states;
 }

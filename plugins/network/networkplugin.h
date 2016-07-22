@@ -19,7 +19,7 @@ public:
     QWidget *itemWidget(const QString &itemKey);
 
 private slots:
-    void networkStateChanged(const NetworkManager::NetworkStates &states);
+    void networkStateChanged(const NetworkDevice::NetworkTypes &states);
 
 private:
     NetworkManager *m_networkManager;

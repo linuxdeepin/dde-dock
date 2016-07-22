@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QJsonObject>
 
-NetworkDevice::NetworkDevice(const DeviceType type, const QJsonObject &info)
+NetworkDevice::NetworkDevice(const NetworkType type, const QJsonObject &info)
     : m_type(type)
 {
     m_uuid = info.value("UniqueUuid").toString();
@@ -17,18 +17,28 @@ bool NetworkDevice::operator==(const QUuid &uuid) const
     return m_uuid == uuid;
 }
 
-NetworkDevice::DeviceType NetworkDevice::deviceType(const QString &type)
+NetworkDevice::NetworkType NetworkDevice::type() const
+{
+    return m_type;
+}
+
+const QString NetworkDevice::path() const
+{
+    return m_objectPath;
+}
+
+NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)
 {
     if (type == "bt")
-        return Bluetooth;
+        return NetworkDevice::Bluetooth;
     if (type == "generic")
-        return Generic;
+        return NetworkDevice::Generic;
     if (type == "wired")
-        return Wired;
+        return NetworkDevice::Wired;
     if (type == "wireless")
-        return Wireless;
+        return NetworkDevice::Wireless;
 
     Q_ASSERT(false);
 
-    return Invaild;
+    return NetworkDevice::None;
 }
