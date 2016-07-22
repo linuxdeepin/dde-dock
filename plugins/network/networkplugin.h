@@ -2,8 +2,8 @@
 #define NETWORKPLUGIN_H
 
 #include "pluginsiteminterface.h"
-#include "wireditem.h"
 #include "networkmanager.h"
+#include "item/deviceitem.h"
 
 class NetworkPlugin : public QObject, PluginsItemInterface
 {
@@ -19,11 +19,14 @@ public:
     QWidget *itemWidget(const QString &itemKey);
 
 private slots:
+    void deviceAdded(const NetworkDevice &device);
+    void deviceRemoved(const NetworkDevice &device);
     void networkStateChanged(const NetworkDevice::NetworkTypes &states);
 
 private:
     NetworkManager *m_networkManager;
-    WiredItem *m_wiredItem;
+
+    QList<DeviceItem *> m_deviceItemList;
 };
 
 #endif // NETWORKPLUGIN_H

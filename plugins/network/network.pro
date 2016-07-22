@@ -12,19 +12,21 @@ DISTFILES       += network.json
 
 HEADERS += \
     networkplugin.h \
-    wireditem.h \
+    item/wireditem.h \
     dbus/dbusnetwork.h \
     networkmanager.h \
     networkdevice.h \
-    util/imageutil.h
+    util/imageutil.h \
+    item/deviceitem.h
 
 SOURCES += \
     networkplugin.cpp \
-    wireditem.cpp \
+    item/wireditem.cpp \
     dbus/dbusnetwork.cpp \
     networkmanager.cpp \
     networkdevice.cpp \
-    util/imageutil.cpp
+    util/imageutil.cpp \
+    item/deviceitem.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

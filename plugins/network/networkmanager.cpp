@@ -22,6 +22,16 @@ const NetworkDevice::NetworkTypes NetworkManager::states() const
     return m_states;
 }
 
+const NetworkDevice::NetworkTypes NetworkManager::types() const
+{
+    return m_types;
+}
+
+const QSet<NetworkDevice> NetworkManager::deviceList() const
+{
+    return m_deviceList;
+}
+
 NetworkManager::NetworkManager(QObject *parent)
     : QObject(parent),
 
@@ -42,7 +52,7 @@ void NetworkManager::reloadDevices()
     const QJsonObject obj = doc.object();
 
     NetworkDevice::NetworkTypes types = NetworkDevice::None;
-    m_deviceList.clear();
+    QSet<NetworkDevice> deviceSet;
     for (auto infoList(obj.constBegin()); infoList != obj.constEnd(); ++infoList)
     {
         Q_ASSERT(infoList.value().isArray());
@@ -51,8 +61,21 @@ void NetworkManager::reloadDevices()
         types |= deviceType;
 
         for (auto device : infoList.value().toArray())
-            m_deviceList.append(NetworkDevice(deviceType, device.toObject()));
+        {
+            deviceSet.insert(NetworkDevice(deviceType, device.toObject()));
+        }
     }
+
+    const QSet<NetworkDevice> removedDeviceList = m_deviceList - deviceSet;
+    for (auto dev : removedDeviceList)
+        emit deviceRemoved(dev);
+    const QSet<NetworkDevice> addedDeviceList = deviceSet - m_deviceList;
+    for (auto dev : addedDeviceList)
+        emit deviceAdded(dev);
+
+    m_deviceList = std::move(deviceSet);
+    if (m_types == types)
+        return;
 
     m_types = types;
     qDebug() << "device type: " << m_types;
@@ -80,7 +103,7 @@ void NetworkManager::reloadActiveConnections()
         else
             states |= NetworkDevice::Wired;
 
-        m_activeConnList.append(uuid);
+        m_activeConnList.insert(uuid);
     }
 
     if (m_states == states)

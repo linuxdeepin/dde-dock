@@ -17,9 +17,19 @@ bool NetworkDevice::operator==(const QUuid &uuid) const
     return m_uuid == uuid;
 }
 
+bool NetworkDevice::operator==(const NetworkDevice &device) const
+{
+    return m_uuid == device.m_uuid;
+}
+
 NetworkDevice::NetworkType NetworkDevice::type() const
 {
     return m_type;
+}
+
+const QUuid NetworkDevice::uuid() const
+{
+    return m_uuid;
 }
 
 const QString NetworkDevice::path() const
@@ -42,3 +52,4 @@ NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)
 
     return NetworkDevice::None;
 }
+

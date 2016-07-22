@@ -4,10 +4,8 @@
 
 #include <QPainter>
 
-WiredItem::WiredItem(QWidget *parent)
-    : QWidget(parent),
-
-      m_networkManager(NetworkManager::instance(this))
+WiredItem::WiredItem(const QUuid &deviceUuid)
+    : DeviceItem(NetworkDevice::Wired, deviceUuid)
 {
     connect(m_networkManager, &NetworkManager::networkStateChanged, this, &WiredItem::reloadIcon);
 }

@@ -1,16 +1,16 @@
 #ifndef WIREDITEM_H
 #define WIREDITEM_H
 
-#include "networkmanager.h"
+#include "deviceitem.h"
 
 #include <QWidget>
 
-class WiredItem : public QWidget
+class WiredItem : public DeviceItem
 {
     Q_OBJECT
 
 public:
-    explicit WiredItem(QWidget *parent = 0);
+    explicit WiredItem(const QUuid &deviceUuid);
 
 protected:
     void paintEvent(QPaintEvent *e);
@@ -21,8 +21,6 @@ private:
     void reloadIcon();
 
 private:
-    NetworkManager *m_networkManager;
-
     QPixmap m_icon;
 };
 
