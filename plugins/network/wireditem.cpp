@@ -9,7 +9,7 @@ WiredItem::WiredItem(QWidget *parent)
 
       m_networkManager(NetworkManager::instance(this))
 {
-
+    connect(m_networkManager, &NetworkManager::networkStateChanged, this, &WiredItem::reloadIcon);
 }
 
 void WiredItem::paintEvent(QPaintEvent *e)
