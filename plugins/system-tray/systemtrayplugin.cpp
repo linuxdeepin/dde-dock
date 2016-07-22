@@ -49,7 +49,9 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
 
 QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 {
-    Q_ASSERT(itemKey == FASHION_MODE_ITEM);
+    if (itemKey != FASHION_MODE_ITEM)
+        return nullptr;
+
     Q_ASSERT(m_trayList.size());
 
     updateTipsContent();
