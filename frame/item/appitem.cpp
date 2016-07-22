@@ -2,6 +2,7 @@
 
 #include "util/themeappicon.h"
 #include "util/imagefactory.h"
+#include "xcb/xcb_misc.h"
 
 #include <QPainter>
 #include <QDrag>
@@ -20,7 +21,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
       m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
-      m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png"))
+      m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
+      m_updateIconGeometryTimer(new QTimer(this))
 {
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
@@ -32,9 +34,14 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_appNameTips->setStyleSheet("color:white;"
                                  "padding:5px 10px;");
 
+    m_updateIconGeometryTimer->setInterval(500);
+    m_updateIconGeometryTimer->setSingleShot(true);
+
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+
+    connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries);
 
     updateTitle();
     updateIcon();
@@ -43,6 +50,23 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 const QString AppItem::appId() const
 {
     return m_id;
+}
+
+// Update _NET_WM_ICON_GEOMETRY property for windows that every item
+// that manages, so that WM can do proper animations for specific
+// window behaviors like minimization.
+void AppItem::updateWindowIconGeometries()
+{
+    QRect rect(mapToGlobal(QPoint(0, 0)),
+               mapToGlobal(QPoint(width(),height())));
+
+    if (rect != m_lastGlobalGeometry) {
+        QList<quint32> winIds = m_titles.keys();
+        for (quint32 winId : winIds) {
+            XcbMisc::instance()->set_window_icon_geometry(winId, rect);
+        }
+        m_lastGlobalGeometry = rect;
+    }
 }
 
 void AppItem::setIconBaseSize(const int size)
@@ -204,6 +228,12 @@ void AppItem::paintEvent(QPaintEvent *e)
     // draw ligher
     if (m_hover)
         painter.drawPixmap(itemRect.center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
+
+    // Update the window icon geometry when the icon is changed.
+    if (m_updateIconGeometryTimer->isActive()) {
+        m_updateIconGeometryTimer->stop();
+    }
+    m_updateIconGeometryTimer->start();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)

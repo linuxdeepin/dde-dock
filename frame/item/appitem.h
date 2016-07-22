@@ -13,6 +13,7 @@ public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
 
     const QString appId() const;
+    void updateWindowIconGeometries();
     static void setIconBaseSize(const int size);
     static int iconBaseSize();
     static int itemBaseHeight();
@@ -53,6 +54,9 @@ private:
     QPixmap m_verticalIndicator;
     QPixmap m_activeHorizontalIndicator;
     QPixmap m_activeVerticalIndicator;
+
+    QRect m_lastGlobalGeometry;
+    QTimer * m_updateIconGeometryTimer;
 
     static int IconBaseSize;
     static QPoint MousePressPos;
