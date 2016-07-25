@@ -5,6 +5,7 @@
 
 #include <QUuid>
 #include <QDBusObjectPath>
+#include <QJsonObject>
 
 class NetworkDevice
 {
@@ -28,13 +29,14 @@ public:
     NetworkType type() const;
     const QUuid uuid() const;
     const QString path() const;
+    const QString hwAddress() const;
 
 private:
     NetworkType m_type;
 
     QUuid m_uuid;
     QString m_objectPath;
-
+    QJsonObject m_infoObj;
 };
 
 inline uint qHash(const NetworkDevice &device)

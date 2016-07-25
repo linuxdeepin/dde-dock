@@ -4,7 +4,8 @@
 #include <QJsonObject>
 
 NetworkDevice::NetworkDevice(const NetworkType type, const QJsonObject &info)
-    : m_type(type)
+    : m_type(type),
+      m_infoObj(info)
 {
     m_uuid = info.value("UniqueUuid").toString();
     m_objectPath = info.value("Path").toString();
@@ -33,6 +34,11 @@ const QUuid NetworkDevice::uuid() const
 const QString NetworkDevice::path() const
 {
     return m_objectPath;
+}
+
+const QString NetworkDevice::hwAddress() const
+{
+    return std::move(m_infoObj.value("HwAddress").toString());
 }
 
 NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)

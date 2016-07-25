@@ -37,9 +37,33 @@ const QSet<QUuid> NetworkManager::activeConnSet() const
     return m_activeConnSet;
 }
 
-QJsonObject NetworkManager::deviceInfo(const QUuid &uuid) const
+const QString NetworkManager::deviceHwAddr(const QUuid &uuid) const
 {
-    qDebug() << uuid;
+    const auto item = std::find_if(m_deviceSet.cbegin(), m_deviceSet.cend(),
+                                   [&] (const NetworkDevice &dev) {return dev == uuid;});
+
+    if (item == m_deviceSet.cend())
+        return QString();
+
+    return item->hwAddress();
+}
+
+const QJsonObject NetworkManager::deviceInfo(const QUuid &uuid) const
+{
+    const QString addr = deviceHwAddr(uuid);
+    if (addr.isEmpty())
+        return QJsonObject();
+
+    const QJsonDocument infos = QJsonDocument::fromJson(m_networkInter->GetActiveConnectionInfo().value().toUtf8());
+    Q_ASSERT(infos.isArray());
+
+    for (auto info : infos.array())
+    {
+        Q_ASSERT(info.isObject());
+        const QJsonObject obj = info.toObject();
+        if (obj.contains("HwAddress") && obj.value("HwAddress").toString() == addr)
+            return obj;
+    }
 
     return QJsonObject();
 }

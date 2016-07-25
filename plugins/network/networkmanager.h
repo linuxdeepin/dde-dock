@@ -22,7 +22,8 @@ public:
     const QSet<NetworkDevice> deviceList() const;
     const QSet<QUuid> activeConnSet() const;
 
-    QJsonObject deviceInfo(const QUuid &uuid) const;
+    const QString deviceHwAddr(const QUuid &uuid) const;
+    const QJsonObject deviceInfo(const QUuid &uuid) const;
 
 signals:
     void deviceAdded(const NetworkDevice &device) const;
