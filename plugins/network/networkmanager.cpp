@@ -103,9 +103,13 @@ void NetworkManager::reloadDevices()
     const QSet<NetworkDevice> removedDeviceList = m_deviceSet - deviceSet;
     for (auto dev : removedDeviceList)
         emit deviceRemoved(dev);
-    const QSet<NetworkDevice> addedDeviceList = deviceSet - m_deviceSet;
-    for (auto dev : addedDeviceList)
-        emit deviceAdded(dev);
+    for (auto dev : deviceSet)
+    {
+        if (m_deviceSet.contains(dev))
+            emit deviceChanged(dev);
+        else
+            emit deviceAdded(dev);
+    }
 
     m_deviceSet = std::move(deviceSet);
     if (m_types == types)

@@ -1,5 +1,6 @@
 #include "networkplugin.h"
 #include "item/wireditem.h"
+#include "item/wirelessitem.h"
 
 #define WIRED_ITEM      "wired"
 #define WIRELESS_ITEM   "wireless"
@@ -53,6 +54,7 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
     switch (device.type())
     {
     case NetworkDevice::Wired:      item = new WiredItem(device.uuid());        break;
+//    case NetworkDevice::Wireless:   item = new WirelessItem(device.uuid());     break;
     default:;
     }
 

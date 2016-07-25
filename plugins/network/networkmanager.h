@@ -27,6 +27,7 @@ public:
 
 signals:
     void deviceAdded(const NetworkDevice &device) const;
+    void deviceChanged(const NetworkDevice &device) const;
     void deviceRemoved(const NetworkDevice &device) const;
     void activeConnectionChanged(const QUuid &uuid) const;
     void networkStateChanged(const NetworkDevice::NetworkTypes &states) const;
