@@ -37,11 +37,18 @@ const QSet<QUuid> NetworkManager::activeConnSet() const
     return m_activeConnSet;
 }
 
+NetworkDevice::NetworkState NetworkManager::deviceState(const QUuid &uuid) const
+{
+    const auto item = device(uuid);
+    if (item == m_deviceSet.cend())
+        return NetworkDevice::Unknow;
+
+    return item->state();
+}
+
 const QString NetworkManager::deviceHwAddr(const QUuid &uuid) const
 {
-    const auto item = std::find_if(m_deviceSet.cbegin(), m_deviceSet.cend(),
-                                   [&] (const NetworkDevice &dev) {return dev == uuid;});
-
+    const auto item = device(uuid);
     if (item == m_deviceSet.cend())
         return QString();
 
@@ -79,6 +86,12 @@ NetworkManager::NetworkManager(QObject *parent)
 
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &NetworkManager::reloadDevices);
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
+}
+
+const QSet<NetworkDevice>::const_iterator NetworkManager::device(const QUuid &uuid) const
+{
+    return std::find_if(m_deviceSet.cbegin(), m_deviceSet.cend(),
+                        [&] (const NetworkDevice &dev) {return dev == uuid;});
 }
 
 void NetworkManager::reloadDevices()

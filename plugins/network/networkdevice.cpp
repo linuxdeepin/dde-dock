@@ -21,6 +21,11 @@ bool NetworkDevice::operator==(const NetworkDevice &device) const
     return m_uuid == device.m_uuid;
 }
 
+NetworkDevice::NetworkState NetworkDevice::state() const
+{
+    return NetworkState(m_infoObj.value("State").toInt());
+}
+
 NetworkDevice::NetworkType NetworkDevice::type() const
 {
     return m_type;

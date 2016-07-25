@@ -54,7 +54,7 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
     switch (device.type())
     {
     case NetworkDevice::Wired:      item = new WiredItem(device.uuid());        break;
-//    case NetworkDevice::Wireless:   item = new WirelessItem(device.uuid());     break;
+    case NetworkDevice::Wireless:   item = new WirelessItem(device.uuid());     break;
     default:;
     }
 

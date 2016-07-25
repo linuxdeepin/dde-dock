@@ -10,6 +10,11 @@
 class NetworkDevice
 {
 public:
+    enum NetworkState {
+        Unknow      = 0,
+        Connected   = 100,
+    };
+
     enum NetworkType {
         None        = 0,
         Generic     = 1 << 0,
@@ -26,6 +31,7 @@ public:
     bool operator==(const QUuid &uuid) const;
     bool operator==(const NetworkDevice &device) const;
 
+    NetworkState state() const;
     NetworkType type() const;
     const QUuid uuid() const;
     const QString path() const;

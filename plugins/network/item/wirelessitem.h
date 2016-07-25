@@ -1,6 +1,8 @@
 #ifndef WIRELESSITEM_H
 #define WIRELESSITEM_H
 
+#include "constants.h"
+
 #include "deviceitem.h"
 
 #include <QHash>
@@ -16,9 +18,11 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void resizeEvent(QResizeEvent *e);
 
 private:
-    const QPixmap icon(const QString &key);
+    const QPixmap iconPix(const Dock::DisplayMode displayMode, const int size);
+    const QPixmap backgroundPix(const int size);
 
 private:
     QHash<QString, QPixmap> m_icons;
