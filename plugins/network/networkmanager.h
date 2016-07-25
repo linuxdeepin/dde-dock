@@ -22,6 +22,8 @@ public:
     const QSet<NetworkDevice> deviceList() const;
     const QSet<QUuid> activeConnSet() const;
 
+    QJsonObject deviceInfo(const QUuid &uuid) const;
+
 signals:
     void deviceAdded(const NetworkDevice &device) const;
     void deviceRemoved(const NetworkDevice &device) const;

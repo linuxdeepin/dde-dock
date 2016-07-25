@@ -21,10 +21,23 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
 
 QWidget *WiredItem::itemApplet()
 {
-    if (!m_connected)
-        m_itemTips->setText(tr("Disconnect"));
-    else
-        return nullptr;
+    m_itemTips->setText(tr("Unknow"));
+
+    do {
+        if (!m_connected)
+        {
+            m_itemTips->setText(tr("Disconnect"));
+            break;
+        }
+
+        const QJsonObject info = m_networkManager->deviceInfo(m_deviceUuid);
+        if (!info.contains("Ip4"))
+            break;
+        const QJsonObject ipv4 = info.value("Ip4").toObject();
+        if (!ipv4.contains("Address"))
+            break;
+        m_itemTips->setText(ipv4.value("Address").toString());
+    } while (false);
 
     return m_itemTips;
 }

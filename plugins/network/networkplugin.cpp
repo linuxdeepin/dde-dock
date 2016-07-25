@@ -68,7 +68,7 @@ void NetworkPlugin::deviceRemoved(const NetworkDevice &device)
     qDebug() << "remove: " << device.uuid();
 
     const auto item = std::find_if(m_deviceItemList.begin(), m_deviceItemList.end(),
-                                   [&] (DeviceItem *dev) {return dev->uuid() == device.uuid();});
+                                   [&] (DeviceItem *dev) {return device == dev->uuid();});
 
     if (item == m_deviceItemList.cend())
         return;

@@ -37,6 +37,13 @@ const QSet<QUuid> NetworkManager::activeConnSet() const
     return m_activeConnSet;
 }
 
+QJsonObject NetworkManager::deviceInfo(const QUuid &uuid) const
+{
+    qDebug() << uuid;
+
+    return QJsonObject();
+}
+
 NetworkManager::NetworkManager(QObject *parent)
     : QObject(parent),
 
