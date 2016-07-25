@@ -101,6 +101,7 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 	}
 
 	if driverSupportedHotkey() {
+		logger.Debug("[changeBrightness] driver supported, wait 200ms...")
 		time.Sleep(time.Microsecond * 200)
 		m.disp.RefreshBrightness()
 		goto OSD
@@ -115,6 +116,7 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		if discrete < 0.02 {
 			discrete = 0.02
 		}
+		logger.Debug("[changeBrightness] will set to:", output, discrete)
 		err1 := m.disp.SetBrightness(output, discrete)
 		if err1 != nil {
 			logger.Warning("[changeBrightness] set failed:", output, discrete, err1)
@@ -127,6 +129,7 @@ OSD:
 	if !raised {
 		signal = "BrightnessDown"
 	}
+	logger.Debug("[changeBrightness] emit osd signal:", signal)
 	go showOSD(signal)
 }
 
@@ -160,6 +163,7 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 		step = -0.05
 	}
 
+	logger.Debug("[changeVolume] old sink info:", sink.Name.Get(), v)
 	v += step
 	if v < 0 {
 		v = 0
@@ -167,6 +171,7 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 		v = 1.0
 	}
 
+	logger.Debug("[changeVolume] will set volume to:", v)
 	if sink.Mute.Get() {
 		sink.SetMute(false)
 	}
@@ -178,6 +183,7 @@ func (m *Manager) changeVolume(raised, pressed bool) {
 		signal = "AudioDown"
 	}
 
+	logger.Debug("[changeVolume] emit signal:", signal)
 	go showOSD(signal)
 }
 
@@ -240,6 +246,7 @@ func (m *Manager) changeKbdBrightness(raised, pressed bool) {
 		return
 	}
 
+	logger.Debug("[changeKbdBrightness] pld kbd backlight info:", value, maxValue)
 	if raised {
 		value += 1
 	} else {
@@ -252,6 +259,7 @@ func (m *Manager) changeKbdBrightness(raised, pressed bool) {
 		value = maxValue
 	}
 
+	logger.Debug("[changeKbdBrightness] will set kbd backlight to:", value)
 	err = m.blDaemon.SetKbdBrightness(value)
 	if err != nil {
 		logger.Warning("Set keyboard brightness failed:", value, err)

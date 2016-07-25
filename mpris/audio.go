@@ -56,6 +56,7 @@ func (m *Manager) playerAction(action int, pressed bool) {
 		return
 	}
 
+	logger.Debugf("[playerAction] active pris: %#v\n", player)
 	switch action {
 	case actionTypePlay:
 		player.PlayPause()
