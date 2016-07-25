@@ -94,7 +94,6 @@ NetworkManager::NetworkManager(QObject *parent)
 {
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &NetworkManager::reloadDevices);
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
-    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &NetworkManager::APPropertiesChanged);
 }
 
 const QSet<NetworkDevice>::const_iterator NetworkManager::device(const QUuid &uuid) const

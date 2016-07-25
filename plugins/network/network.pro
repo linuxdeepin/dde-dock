@@ -4,7 +4,7 @@ include(../../interfaces/interfaces.pri)
 QT              += widgets svg dbus
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
-PKGCONFIG       +=
+PKGCONFIG       += dtkbase dtkwidget
 
 TARGET          = $$qtLibraryTarget(network)
 DESTDIR          = $$_PRO_FILE_PWD_/../
@@ -19,7 +19,9 @@ HEADERS += \
     util/imageutil.h \
     item/deviceitem.h \
     item/wirelessitem.h \
-    item/applet/wirelessapplet.h
+    item/applet/wirelessapplet.h \
+    item/applet/devicecontrolwidget.h \
+    item/applet/accesspoint.h
 
 SOURCES += \
     networkplugin.cpp \
@@ -30,7 +32,9 @@ SOURCES += \
     util/imageutil.cpp \
     item/deviceitem.cpp \
     item/wirelessitem.cpp \
-    item/applet/wirelessapplet.cpp
+    item/applet/wirelessapplet.cpp \
+    item/applet/devicecontrolwidget.cpp \
+    item/applet/accesspoint.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
