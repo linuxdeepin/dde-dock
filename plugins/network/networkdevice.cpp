@@ -61,4 +61,3 @@ NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)
 
     return NetworkDevice::None;
 }
-

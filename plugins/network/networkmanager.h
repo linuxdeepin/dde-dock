@@ -24,6 +24,7 @@ public:
 
     NetworkDevice::NetworkState deviceState(const QUuid &uuid) const;
     const QString deviceHwAddr(const QUuid &uuid) const;
+    const QString devicePath(const QUuid &uuid) const;
     const QJsonObject deviceInfo(const QUuid &uuid) const;
 
 signals:
@@ -32,6 +33,7 @@ signals:
     void deviceRemoved(const NetworkDevice &device) const;
     void activeConnectionChanged(const QUuid &uuid) const;
     void networkStateChanged(const NetworkDevice::NetworkTypes &states) const;
+    void APPropertiesChanged(const QString &devicePath, const QString &info) const;
 
 private:
     explicit NetworkManager(QObject *parent = 0);

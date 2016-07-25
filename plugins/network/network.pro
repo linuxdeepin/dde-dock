@@ -18,7 +18,8 @@ HEADERS += \
     networkdevice.h \
     util/imageutil.h \
     item/deviceitem.h \
-    item/wirelessitem.h
+    item/wirelessitem.h \
+    item/applet/wirelessapplet.h
 
 SOURCES += \
     networkplugin.cpp \
@@ -28,7 +29,8 @@ SOURCES += \
     networkdevice.cpp \
     util/imageutil.cpp \
     item/deviceitem.cpp \
-    item/wirelessitem.cpp
+    item/wirelessitem.cpp \
+    item/applet/wirelessapplet.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target

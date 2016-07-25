@@ -4,6 +4,7 @@
 #include "constants.h"
 
 #include "deviceitem.h"
+#include "applet/wirelessapplet.h"
 
 #include <QHash>
 
@@ -23,9 +24,15 @@ protected:
 private:
     const QPixmap iconPix(const Dock::DisplayMode displayMode, const int size);
     const QPixmap backgroundPix(const int size);
+    const QPixmap cachedPix(const QString &key, const int size);
+
+private slots:
+    void init();
 
 private:
     QHash<QString, QPixmap> m_icons;
+
+    WirelessApplet *m_applet;
 };
 
 #endif // WIRELESSITEM_H

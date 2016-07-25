@@ -5,13 +5,15 @@
 #include <QPainter>
 
 WirelessItem::WirelessItem(const QUuid &uuid)
-    : DeviceItem(NetworkDevice::Wireless, uuid)
+    : DeviceItem(NetworkDevice::Wireless, uuid),
+      m_applet(nullptr)
 {
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
 QWidget *WirelessItem::itemApplet()
 {
-    return nullptr;
+    return m_applet;
 }
 
 void WirelessItem::paintEvent(QPaintEvent *e)
@@ -45,18 +47,28 @@ const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const i
                                 .arg(8)
                                 .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
 
+    return cachedPix(key, size);
+}
+
+const QPixmap WirelessItem::backgroundPix(const int size)
+{
+    return cachedPix("wireless-background", size);
+}
+
+const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
+{
     if (!m_icons.contains(key))
         m_icons.insert(key, ImageUtil::loadSvg(":/wireless/resources/wireless/" + key + ".svg", size));
 
     return m_icons.value(key);
 }
 
-const QPixmap WirelessItem::backgroundPix(const int size)
+void WirelessItem::init()
 {
-    const QString key = "wireless-background";
+    const QString devPath = m_networkManager->devicePath(m_deviceUuid);
 
-    if (!m_icons.contains(key))
-        m_icons.insert(key, ImageUtil::loadSvg(":/wireless/resources/wireless/" + key + ".svg", size));
+    m_applet = new WirelessApplet(devPath, this);
+    m_applet->setVisible(false);
 
-    return m_icons.value(key);
+//    connect(m_networkManager, &NetworkManager::APPropertiesChanged, this, &WirelessItem::APPropertiesChanegd);
 }

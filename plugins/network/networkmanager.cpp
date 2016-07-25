@@ -55,6 +55,15 @@ const QString NetworkManager::deviceHwAddr(const QUuid &uuid) const
     return item->hwAddress();
 }
 
+const QString NetworkManager::devicePath(const QUuid &uuid) const
+{
+    const auto item = device(uuid);
+    if (item == m_deviceSet.cend())
+        return QString();
+
+    return item->path();
+}
+
 const QJsonObject NetworkManager::deviceInfo(const QUuid &uuid) const
 {
     const QString addr = deviceHwAddr(uuid);
@@ -83,9 +92,9 @@ NetworkManager::NetworkManager(QObject *parent)
 
       m_networkInter(new DBusNetwork(this))
 {
-
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &NetworkManager::reloadDevices);
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
+    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &NetworkManager::APPropertiesChanged);
 }
 
 const QSet<NetworkDevice>::const_iterator NetworkManager::device(const QUuid &uuid) const
