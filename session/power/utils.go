@@ -1,0 +1,184 @@
+/**
+ * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ **/
+
+package power
+
+import (
+	libdisplay "dbus/com/deepin/daemon/display"
+	"github.com/BurntSushi/xgb/dpms"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/icccm"
+	"os/exec"
+	"pkg.deepin.io/dde/api/soundutils"
+	"time"
+)
+
+func (m *Manager) findWindow(wminstance, wmclass string) xproto.Window {
+	xu := m.helper.xu
+	rootWin := xu.RootWin()
+	tree, err := xproto.QueryTree(xu.Conn(), rootWin).Reply()
+	if err != nil {
+		logger.Warning("QueryTree error:", err)
+		return 0
+	}
+	for i := int(tree.ChildrenLen) - 1; i >= 0; i-- {
+		win := tree.Children[i]
+		wmClass, err := icccm.WmClassGet(xu, win)
+		if err == nil &&
+			wmClass.Instance == wminstance &&
+			wmClass.Class == wmclass {
+			return win
+		}
+	}
+	return 0
+}
+
+func (m *Manager) waitWindowViewable(wminstance, wmclass string, timeout time.Duration) {
+	xu := m.helper.xu
+	logger.Debug("waitWindowViewable", wminstance, wmclass)
+	ticker := time.NewTicker(time.Millisecond * 300)
+	timer := time.NewTimer(timeout)
+	for {
+		select {
+		case <-ticker.C:
+			logger.Debug("waitWindowViewable tick")
+			win := m.findWindow(wminstance, wmclass)
+			if win == 0 {
+				continue
+			}
+
+			winAttr, err := xproto.GetWindowAttributes(xu.Conn(), win).Reply()
+			if err != nil {
+				logger.Warning(err)
+				continue
+			}
+			if winAttr.MapState == xproto.MapStateViewable {
+				logger.Debug("waitWindowViewable found")
+				ticker.Stop()
+				return
+			}
+
+		case <-timer.C:
+			logger.Debug("waitWindowViewable failed timeout!")
+			ticker.Stop()
+			return
+		}
+	}
+}
+
+func (m *Manager) lockWaitShow(timeout time.Duration) {
+	const ddeLock = "dde-lock"
+	m.doLock()
+	m.waitWindowViewable(ddeLock, ddeLock, timeout)
+}
+
+func (m *Manager) setDPMSModeOn() {
+	logger.Info("DPMS On")
+	xu := m.helper.xu
+	err := dpms.ForceLevelChecked(xu.Conn(), dpms.DPMSModeOn).Check()
+	if err != nil {
+		logger.Warning("Set DPMS on error:", err)
+	}
+}
+
+func (m *Manager) setDPMSModeOff() {
+	logger.Info("DPMS Off")
+	xu := m.helper.xu
+	err := dpms.ForceLevelChecked(xu.Conn(), dpms.DPMSModeOff).Check()
+	if err != nil {
+		logger.Warning("Set DPMS off error:", err)
+	}
+}
+
+func (m *Manager) doLock() {
+	logger.Debug("Lock Screen")
+	sessionManager := m.helper.SessionManager
+	if sessionManager != nil {
+		err := sessionManager.RequestLock()
+		if err != nil {
+			logger.Error("Lock failed:", err)
+		}
+	}
+}
+
+func (m *Manager) doSuspend() {
+	logger.Debug("Suspend")
+	sessionManager := m.helper.SessionManager
+	if sessionManager != nil {
+		err := sessionManager.RequestSuspend()
+		if err != nil {
+			logger.Error("Suspend failed:", err)
+		}
+	}
+}
+
+func (m *Manager) setDisplayBrightness(brightnessTable map[string]float64) {
+	display := m.helper.Display
+	for output, brightness := range brightnessTable {
+		logger.Infof("Change output %q brightness to %.2f", output, brightness)
+		err := display.ChangeBrightness(output, brightness)
+		if err != nil {
+			logger.Warningf("Change output %q brightness to %.2f failed: %v", output, brightness, err)
+		} else {
+			logger.Infof("Change output %q brightness to %.2f done!", output, brightness)
+		}
+	}
+}
+
+func doShowLowpower() {
+	logger.Info("Show low power")
+	go exec.Command(cmdLowPower, "--raise").Run()
+}
+
+func execCommand(cmd string) {
+	logger.Infof("exec %q", cmd)
+	go exec.Command("sh", "-c", cmd).Run()
+}
+
+func doCloseLowpower() {
+	logger.Info("Close low power")
+	go exec.Command(cmdLowPower, "--quit").Run()
+}
+
+func (m *Manager) isMultiScreen() bool {
+	display := m.helper.Display
+	if display != nil {
+		monitorObjPaths := display.Monitors.Get()
+		if len(monitorObjPaths) > 1 {
+			return true
+		} else if len(monitorObjPaths) == 1 {
+			monitor, err := libdisplay.NewMonitor(dbusDisplayDest, monitorObjPaths[0])
+			if err == nil {
+				// NOTE: 复制屏时只有一个合一的 monitor， IsComposited 属性为 true
+				if monitor.IsComposited.Get() {
+					return true
+				}
+				return false
+			}
+			logger.Warning(err)
+			return false
+		}
+	}
+	return false
+}
+
+func (m *Manager) sendNotify(icon, summary, body string) {
+	go func() {
+		notifier := m.helper.Notifier
+		if notifier != nil {
+			notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
+			logger.Debugf("send notify icon: %q, summary: %q, body: %q", icon, summary, body)
+		}
+	}()
+}
+
+func playSound(name string) {
+	logger.Debug("play system sound", name)
+	soundutils.PlaySystemSound(name, "", false)
+}

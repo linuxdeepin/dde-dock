@@ -15,8 +15,10 @@ import "pkg.deepin.io/lib"
 import "pkg.deepin.io/lib/dbus"
 import "os"
 import _ "pkg.deepin.io/dde/daemon/accounts"
+import _ "pkg.deepin.io/dde/daemon/system/power"
 import "pkg.deepin.io/dde/daemon/loader"
 import . "pkg.deepin.io/lib/gettext"
+import "gir/glib-2.0"
 
 var logger = log.NewLogger("daemon/dde-system-daemon")
 
@@ -38,6 +40,8 @@ func main() {
 	defer loader.StopAll()
 
 	dbus.DealWithUnhandledMessage()
+	// NOTE: system/power module requires glib loop
+	go glib.StartLoop()
 
 	if err := dbus.Wait(); err != nil {
 		logger.Errorf("Lost dbus: %v", err)

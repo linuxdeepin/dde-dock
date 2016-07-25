@@ -25,7 +25,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/mpris"
 	_ "pkg.deepin.io/dde/daemon/network"
-	_ "pkg.deepin.io/dde/daemon/power"
+	_ "pkg.deepin.io/dde/daemon/session/power"
 	_ "pkg.deepin.io/dde/daemon/screenedge"
 	_ "pkg.deepin.io/dde/daemon/screensaver"
 	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
