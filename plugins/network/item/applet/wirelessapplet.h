@@ -2,10 +2,13 @@
 #define WIRELESSAPPLET_H
 
 #include "devicecontrolwidget.h"
+#include "accesspoint.h"
 #include "../../dbus/dbusnetwork.h"
 
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QList>
+#include <QTimer>
 
 class WirelessApplet : public QScrollArea
 {
@@ -16,12 +19,19 @@ public:
 
 private:
     void setDeviceInfo();
+    void loadAPList();
 
 private slots:
-    void APChanged(const QString &devPath, const QString &info);
+    void init();
+    void APPropertiesChanged(const QString &devPath, const QString &info);
+    void updateAPList();
 
 private:
     const QString m_devicePath;
+
+    QList<AccessPoint> m_apList;
+
+    QTimer *m_updateAPTimer;
 
     QVBoxLayout *m_centeralLayout;
     QWidget *m_centeralWidget;

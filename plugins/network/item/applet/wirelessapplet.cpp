@@ -1,12 +1,17 @@
 #include "wirelessapplet.h"
+#include "accesspointwidget.h"
 
 #include <QJsonDocument>
 
-#define WIDTH   300
+#define WIDTH           300
+#define MAX_HEIGHT      200
+#define ITEM_HEIGHT     30
 
 WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
     : QScrollArea(parent),
       m_devicePath(devicePath),
+
+      m_updateAPTimer(new QTimer(this)),
 
       m_centeralLayout(new QVBoxLayout),
       m_centeralWidget(new QWidget),
@@ -14,6 +19,9 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
       m_networkInter(new DBusNetwork(this))
 {
     setFixedHeight(WIDTH);
+
+    m_updateAPTimer->setSingleShot(true);
+    m_updateAPTimer->setInterval(100);
 
     m_centeralWidget->setFixedWidth(WIDTH);
     m_centeralWidget->setLayout(m_centeralLayout);
@@ -27,9 +35,17 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet("background-color:transparent;");
 
-    setDeviceInfo();
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 
-    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APChanged);
+    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
+
+    connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
+}
+
+void WirelessApplet::init()
+{
+    setDeviceInfo();
+    loadAPList();
 }
 
 void WirelessApplet::setDeviceInfo()
@@ -61,10 +77,63 @@ void WirelessApplet::setDeviceInfo()
     }
 }
 
-void WirelessApplet::APChanged(const QString &devPath, const QString &info)
+void WirelessApplet::loadAPList()
+{
+    const QString data = m_networkInter->GetAccessPoints(QDBusObjectPath(m_devicePath));
+    const QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
+    Q_ASSERT(doc.isArray());
+
+    for (auto item : doc.array())
+    {
+        Q_ASSERT(item.isObject());
+
+        AccessPoint ap(item.toObject());
+        if (!m_apList.contains(ap))
+            m_apList.append(ap);
+    }
+
+    m_updateAPTimer->start();
+}
+
+void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &info)
 {
     if (devPath != m_devicePath)
         return;
 
-    qDebug() << info;
+    QJsonDocument doc = QJsonDocument::fromJson(info.toUtf8());
+    Q_ASSERT(doc.isObject());
+    const AccessPoint ap(doc.object());
+
+    auto it = std::find_if(m_apList.begin(), m_apList.end(),
+                           [&] (const AccessPoint &a) {return a == ap;});
+
+    if (it == m_apList.end())
+        return;
+
+    if (*it < ap)
+        return;
+    *it = ap;
+    m_updateAPTimer->start();
+}
+
+void WirelessApplet::updateAPList()
+{
+    Q_ASSERT(sender() == m_updateAPTimer);
+
+    // remove old items
+    while (QLayoutItem *item = m_centeralLayout->takeAt(1))
+    {
+        delete item->widget();
+        delete item;
+    }
+
+    for (auto ap : m_apList)
+    {
+        AccessPointWidget *apw = new AccessPointWidget(ap);
+        m_centeralLayout->addWidget(apw);
+    }
+
+    const int contentHeight = m_apList.count() * ITEM_HEIGHT + m_controlPanel->height();
+    m_centeralWidget->setFixedHeight(contentHeight);
+    setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
