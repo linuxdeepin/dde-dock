@@ -34,6 +34,7 @@ type lidStateChangeListener struct {
 	prevState string
 	ticker    *time.Ticker
 	manager   *Manager
+	exit chan bool
 }
 
 func newLidStateChangeListener(m *Manager) (string, submodule, error) {
@@ -49,21 +50,27 @@ func newLidStateChangeListener(m *Manager) (string, submodule, error) {
 
 func (s *lidStateChangeListener) Start() error {
 	s.ticker = time.NewTicker(3 * time.Second)
+	s.exit = make(chan bool)
 	s.prevState = getSWLidState()
 	go func() {
-		for range s.ticker.C {
-			logger.Debug("lid state check tick")
-			newState := getSWLidState()
-			if s.prevState != newState {
-				// handle state change
-				var closed bool
-				if newState == swLidOpen {
-					closed = false
-				} else if newState == swLidClose {
-					closed = true
+		for {
+			select {
+			case <- s.ticker.C:
+				logger.Debug("lid state check tick")
+				newState := getSWLidState()
+				if s.prevState != newState {
+					// handle state change
+					var closed bool
+					if newState == swLidOpen {
+						closed = false
+					} else if newState == swLidClose {
+						closed = true
+					}
+					s.manager.handleLidSwitch(closed)
+					s.prevState = newState
 				}
-				s.manager.handleLidSwitch(closed)
-				s.prevState = newState
+			case <- s.exit:
+				return
 			}
 		}
 	}()
@@ -81,8 +88,10 @@ func getSWLidState() string {
 }
 
 func (s *lidStateChangeListener) Destroy() {
+	if s.exit != nil {
+		s.exit <- true
+	}
 	if s.ticker != nil {
 		s.ticker.Stop()
-		s.ticker = nil
 	}
 }

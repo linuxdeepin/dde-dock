@@ -14,6 +14,7 @@ type pollBatteryDevice struct {
 	ueventFile string
 	info       *batteryInfo
 	ticker     *time.Ticker
+	exit chan bool
 }
 
 func newPollBatteryDevice(file string) (*pollBatteryDevice, error) {
@@ -24,12 +25,16 @@ func newPollBatteryDevice(file string) (*pollBatteryDevice, error) {
 	}
 	batDevice := &pollBatteryDevice{
 		ueventFile: file,
+		exit: make(chan bool),
 	}
 	logger.Debugf("newPollBatteryDevice file: %q", file)
 	return batDevice, nil
 }
 
 func (dev *pollBatteryDevice) Destroy() {
+	if dev.exit != nil {
+		dev.exit <- true
+	}
 	if dev.ticker != nil {
 		dev.ticker.Stop()
 	}
@@ -131,6 +136,7 @@ func (data batteryInfoMap) getEnery() float64 {
 }
 
 func (dev *pollBatteryDevice) fillInfo() {
+	logger.Debug("fillInfo")
 	bi := dev.info
 	batInfoMap, err := dev.readBatteryInfoFile()
 	if err != nil {
@@ -149,8 +155,13 @@ func (dev *pollBatteryDevice) SetInfo(bi *batteryInfo) {
 	dev.info = bi
 	dev.ticker = time.NewTicker(time.Second * 10)
 	go func() {
-		for range dev.ticker.C {
-			dev.fillInfo()
+		for {
+			select{
+			case <- dev.ticker.C:
+				dev.fillInfo()
+			case <- dev.exit:
+				return
+			}
 		}
 	}()
 	dev.fillInfo()

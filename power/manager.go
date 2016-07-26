@@ -268,7 +268,8 @@ func (m *Manager) initSubmodules() error {
 		name, submoduleInstance, err := newMethod(m)
 		logger.Debug("New submodule:", name)
 		if err != nil {
-			return err
+			logger.Warningf("init submodule %v failed: %v",name, err)
+			continue
 		}
 		m.submodules[name] = submoduleInstance
 	}
