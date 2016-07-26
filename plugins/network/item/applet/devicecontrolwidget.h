@@ -16,6 +16,9 @@ public:
     void setDeviceName(const QString &name);
     void setDeviceEnabled(const bool enable);
 
+signals:
+    void deviceEnableChanged(const bool enable) const;
+
 private:
     QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;

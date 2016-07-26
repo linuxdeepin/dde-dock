@@ -25,6 +25,7 @@ private slots:
     void init();
     void APPropertiesChanged(const QString &devPath, const QString &info);
     void updateAPList();
+    void deviceEnableChanged(const bool enable);
 
 private:
     const QString m_devicePath;

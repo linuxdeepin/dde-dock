@@ -22,6 +22,8 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     setLayout(centeralLayout);
     setFixedHeight(20);
+
+    connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)

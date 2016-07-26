@@ -39,6 +39,8 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
 
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
 
+    connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
+
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
 }
 
@@ -136,4 +138,9 @@ void WirelessApplet::updateAPList()
     const int contentHeight = m_apList.count() * ITEM_HEIGHT + m_controlPanel->height();
     m_centeralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
+}
+
+void WirelessApplet::deviceEnableChanged(const bool enable)
+{
+    m_networkInter->EnableDevice(QDBusObjectPath(m_devicePath), enable);
 }

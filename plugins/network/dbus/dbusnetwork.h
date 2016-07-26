@@ -147,10 +147,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("EditConnection"), argumentList);
     }
 
-    inline QDBusPendingReply<> EnableDevice(const QDBusObjectPath &in0, bool in1)
+    inline QDBusPendingReply<> EnableDevice(const QDBusObjectPath &devPath, bool enable)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
+        argumentList << QVariant::fromValue(devPath) << QVariant::fromValue(enable);
         return asyncCallWithArgumentList(QStringLiteral("EnableDevice"), argumentList);
     }
 
