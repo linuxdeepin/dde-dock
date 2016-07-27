@@ -17,6 +17,7 @@ public:
 
     const QString ssid() const;
     int strength() const;
+    bool secured() const;
 
 private:
     int m_strength;

@@ -48,3 +48,8 @@ int AccessPoint::strength() const
 {
     return m_strength;
 }
+
+bool AccessPoint::secured() const
+{
+    return m_secured;
+}
