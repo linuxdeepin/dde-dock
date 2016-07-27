@@ -209,6 +209,15 @@ void DockItem::popupWindowAccept()
     emit requestWindowAutoHide(true);
 }
 
+void DockItem::showPopupApplet(QWidget * const applet)
+{
+    // another model popup window is alread exists
+    if (PopupWindow->isVisible() && PopupWindow->model())
+        return;
+
+    showPopupWindow(applet, true);
+}
+
 void DockItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(itemId)

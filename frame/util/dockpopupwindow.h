@@ -15,6 +15,8 @@ public:
 
     bool model() const;
 
+    void setContent(QWidget *content);
+
 public slots:
     void show(const QPoint &pos, const bool model = false);
     void hide();
@@ -24,12 +26,14 @@ signals:
 
 protected:
     void mousePressEvent(QMouseEvent *e);
+    bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
     void globalMouseRelease(int button, int x, int y, const QString &id);
 
 private:
     bool m_model;
+    QPoint m_lastPoint;
     QString m_mouseAreaKey;
 
     QTimer *m_acceptDelayTimer;

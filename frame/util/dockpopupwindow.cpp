@@ -26,9 +26,20 @@ bool DockPopupWindow::model() const
     return m_model;
 }
 
+void DockPopupWindow::setContent(QWidget *content)
+{
+    QWidget *lastWidget = getContent();
+    if (lastWidget)
+        lastWidget->removeEventFilter(this);
+    content->installEventFilter(this);
+
+    DArrowRectangle::setContent(content);
+}
+
 void DockPopupWindow::show(const QPoint &pos, const bool model)
 {
     m_model = model;
+    m_lastPoint = pos;
 
     DArrowRectangle::show(pos.x(), pos.y());
 
@@ -58,7 +69,17 @@ void DockPopupWindow::mousePressEvent(QMouseEvent *e)
     DArrowRectangle::mousePressEvent(e);
 
 //    if (e->button() == Qt::LeftButton)
-//        m_acceptDelayTimer->start();
+//            m_acceptDelayTimer->start();
+}
+
+bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
+{
+    if (o != getContent() || e->type() != QEvent::Resize)
+        return false;
+
+//    show(m_lastPoint, m_model);
+    QMetaObject::invokeMethod(this, "show", Qt::QueuedConnection, Q_ARG(QPoint, m_lastPoint), Q_ARG(bool, m_model));
+    return false;
 }
 
 void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString &id)

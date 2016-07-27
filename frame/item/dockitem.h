@@ -49,11 +49,14 @@ protected:
 
     void showContextMenu();
     void showHoverTips();
-    void showPopupWindow(QWidget * const content, const bool model = false);
     void popupWindowAccept();
+    void showPopupApplet(QWidget * const applet);
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
+
+private:
+    void showPopupWindow(QWidget * const content, const bool model = false);
 
 protected:
     ItemType m_type;
