@@ -23,6 +23,8 @@ private:
 
 private slots:
     void init();
+    void APAdded(const QString &devPath, const QString &info);
+    void APRemoved(const QString &devPath, const QString &info);
     void APPropertiesChanged(const QString &devPath, const QString &info);
     void updateAPList();
     void deviceEnableChanged(const bool enable);

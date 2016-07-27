@@ -1,21 +1,25 @@
 #include "accesspoint.h"
 
 #include <QDebug>
+#include <QJsonDocument>
 
 AccessPoint::AccessPoint(const QJsonObject &apInfo)
     : QObject(nullptr)
 {
-    m_strength = apInfo.value("Strength").toInt();
-    m_secured = apInfo.value("Secured").toBool();
-    m_securedInEap = apInfo.value("SecuredInEap").toBool();
-    m_path = apInfo.value("Path").toString();
-    m_ssid = apInfo.value("Ssid").toString();
+    loadApInfo(apInfo);
 }
 
 AccessPoint::AccessPoint(const AccessPoint &ap)
     : QObject(nullptr)
 {
     *this = ap;
+}
+
+AccessPoint::AccessPoint(const QString &info)
+{
+    const QJsonDocument doc = QJsonDocument::fromJson(info.toUtf8());
+    Q_ASSERT(doc.isObject());
+    loadApInfo(doc.object());
 }
 
 bool AccessPoint::operator==(const AccessPoint &ap) const
@@ -52,4 +56,13 @@ int AccessPoint::strength() const
 bool AccessPoint::secured() const
 {
     return m_secured;
+}
+
+void AccessPoint::loadApInfo(const QJsonObject &apInfo)
+{
+    m_strength = apInfo.value("Strength").toInt();
+    m_secured = apInfo.value("Secured").toBool();
+    m_securedInEap = apInfo.value("SecuredInEap").toBool();
+    m_path = apInfo.value("Path").toString();
+    m_ssid = apInfo.value("Ssid").toString();
 }

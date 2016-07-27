@@ -37,6 +37,8 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 
+    connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessApplet::APAdded);
+    connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessApplet::APRemoved);
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
 
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
@@ -48,6 +50,28 @@ void WirelessApplet::init()
 {
     setDeviceInfo();
     loadAPList();
+}
+
+void WirelessApplet::APAdded(const QString &devPath, const QString &info)
+{
+    if (devPath != m_devicePath)
+        return;
+
+    AccessPoint ap(info);
+    if (m_apList.contains(ap))
+        return;
+
+    m_apList.append(ap);
+    m_updateAPTimer->start();
+}
+
+void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
+{
+    if (devPath != m_devicePath)
+        return;
+
+    m_apList.removeOne(AccessPoint(info));
+    m_updateAPTimer->start();
 }
 
 void WirelessApplet::setDeviceInfo()

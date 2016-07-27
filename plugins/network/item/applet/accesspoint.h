@@ -11,6 +11,7 @@ class AccessPoint : public QObject
 public:
     explicit AccessPoint(const QJsonObject &apInfo);
     AccessPoint(const AccessPoint &ap);
+    AccessPoint(const QString &info);
     bool operator==(const AccessPoint &ap) const;
     bool operator>(const AccessPoint &ap) const;
     AccessPoint &operator=(const AccessPoint &ap);
@@ -18,6 +19,9 @@ public:
     const QString ssid() const;
     int strength() const;
     bool secured() const;
+
+private:
+    void loadApInfo(const QJsonObject &apInfo);
 
 private:
     int m_strength;
