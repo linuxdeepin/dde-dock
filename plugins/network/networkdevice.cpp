@@ -41,9 +41,24 @@ const QString NetworkDevice::path() const
     return m_objectPath;
 }
 
+const QDBusObjectPath NetworkDevice::dbusPath() const
+{
+    return QDBusObjectPath(m_objectPath);
+}
+
 const QString NetworkDevice::hwAddress() const
 {
     return std::move(m_infoObj.value("HwAddress").toString());
+}
+
+const QString NetworkDevice::vendor() const
+{
+    return std::move(m_infoObj.value("Vendor").toString());
+}
+
+const QString NetworkDevice::activeAp() const
+{
+    return std::move(m_infoObj.value("ActiveAp").toString());
 }
 
 NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)

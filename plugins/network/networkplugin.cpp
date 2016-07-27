@@ -48,8 +48,6 @@ QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 
 void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 {
-    qDebug() << "add: " << device.uuid();
-
     DeviceItem *item = nullptr;
     switch (device.type())
     {
@@ -67,8 +65,6 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 
 void NetworkPlugin::deviceRemoved(const NetworkDevice &device)
 {
-    qDebug() << "remove: " << device.uuid();
-
     const auto item = std::find_if(m_deviceItemList.begin(), m_deviceItemList.end(),
                                    [&] (DeviceItem *dev) {return device == dev->uuid();});
 

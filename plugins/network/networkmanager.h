@@ -25,7 +25,8 @@ public:
     NetworkDevice::NetworkState deviceState(const QUuid &uuid) const;
     const QString deviceHwAddr(const QUuid &uuid) const;
     const QString devicePath(const QUuid &uuid) const;
-    const QJsonObject deviceInfo(const QUuid &uuid) const;
+    const QJsonObject deviceConnInfo(const QUuid &uuid) const;
+    const QSet<NetworkDevice>::const_iterator device(const QUuid &uuid) const;
 
 signals:
     void deviceAdded(const NetworkDevice &device) const;
@@ -37,7 +38,6 @@ signals:
 private:
     explicit NetworkManager(QObject *parent = 0);
 
-    const QSet<NetworkDevice>::const_iterator device(const QUuid &uuid) const;
 
 private slots:
     void reloadDevices();

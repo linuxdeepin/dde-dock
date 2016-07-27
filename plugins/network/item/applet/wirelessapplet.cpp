@@ -7,9 +7,10 @@
 #define MAX_HEIGHT      200
 #define ITEM_HEIGHT     30
 
-WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
+WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent)
     : QScrollArea(parent),
-      m_devicePath(devicePath),
+
+      m_device(*deviceIter),
 
       m_updateAPTimer(new QTimer(this)),
 
@@ -42,6 +43,7 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
     connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessApplet::APAdded);
     connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessApplet::APRemoved);
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
+    connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessApplet::deviceStateChanegd);
 
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
 
@@ -56,7 +58,7 @@ void WirelessApplet::init()
 
 void WirelessApplet::APAdded(const QString &devPath, const QString &info)
 {
-    if (devPath != m_devicePath)
+    if (devPath != m_device.path())
         return;
 
     AccessPoint ap(info);
@@ -69,7 +71,7 @@ void WirelessApplet::APAdded(const QString &devPath, const QString &info)
 
 void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
 {
-    if (devPath != m_devicePath)
+    if (devPath != m_device.path())
         return;
 
     m_apList.removeOne(AccessPoint(info));
@@ -79,35 +81,13 @@ void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
 void WirelessApplet::setDeviceInfo()
 {
     // set device enable state
-    m_controlPanel->setDeviceEnabled(m_networkInter->IsDeviceEnabled(QDBusObjectPath(m_devicePath)));
-
-    // set device name
-    const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->devices().toUtf8());
-    Q_ASSERT(doc.isObject());
-    const QJsonObject obj = doc.object();
-
-    for (auto infoList(obj.constBegin()); infoList != obj.constEnd(); ++infoList)
-    {
-        Q_ASSERT(infoList.value().isArray());
-
-        if (infoList.key() != "wireless")
-            continue;
-
-        for (auto wireless : infoList.value().toArray())
-        {
-            const QJsonObject info = wireless.toObject();
-            if (info.value("Path") == m_devicePath)
-            {
-                m_controlPanel->setDeviceName(info.value("Vendor").toString());
-                break;
-            }
-        }
-    }
+    m_controlPanel->setDeviceEnabled(m_networkInter->IsDeviceEnabled(m_device.dbusPath()));
+    m_controlPanel->setDeviceName(m_device.vendor());
 }
 
 void WirelessApplet::loadAPList()
 {
-    const QString data = m_networkInter->GetAccessPoints(QDBusObjectPath(m_devicePath));
+    const QString data = m_networkInter->GetAccessPoints(m_device.dbusPath());
     const QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
     Q_ASSERT(doc.isArray());
 
@@ -125,7 +105,7 @@ void WirelessApplet::loadAPList()
 
 void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &info)
 {
-    if (devPath != m_devicePath)
+    if (devPath != m_device.path())
         return;
 
     QJsonDocument doc = QJsonDocument::fromJson(info.toUtf8());
@@ -158,7 +138,7 @@ void WirelessApplet::updateAPList()
 
     int avaliableAPCount = 0;
 
-    if (m_networkInter->IsDeviceEnabled(QDBusObjectPath(m_devicePath)))
+    if (m_networkInter->IsDeviceEnabled(m_device.dbusPath()))
     {
         // sort ap list by strength
         std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
@@ -179,6 +159,39 @@ void WirelessApplet::updateAPList()
 
 void WirelessApplet::deviceEnableChanged(const bool enable)
 {
-    m_networkInter->EnableDevice(QDBusObjectPath(m_devicePath), enable);
+    m_networkInter->EnableDevice(m_device.dbusPath(), enable);
     m_updateAPTimer->start();
+}
+
+void WirelessApplet::deviceStateChanegd()
+{
+    const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->devices().toUtf8());
+    Q_ASSERT(doc.isObject());
+    const QJsonObject obj = doc.object();
+
+    for (auto infoList(obj.constBegin()); infoList != obj.constEnd(); ++infoList)
+    {
+        Q_ASSERT(infoList.value().isArray());
+
+        if (infoList.key() != "wireless")
+            continue;
+
+        for (auto wireless : infoList.value().toArray())
+        {
+            const QJsonObject info = wireless.toObject();
+            if (info.value("Path") == m_device.path())
+            {
+                NetworkDevice dev = NetworkDevice(NetworkDevice::Wireless, info);
+
+                if (dev.state() != m_device.state())
+                    emit wirelessStateChanged(dev.state());
+                if (dev.activeAp() != m_device.activeAp())
+                    emit activeAPChanged();
+
+                m_device = dev;
+                break;
+            }
+        }
+    }
+
 }

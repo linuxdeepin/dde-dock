@@ -30,7 +30,7 @@ QWidget *WiredItem::itemApplet()
             break;
         }
 
-        const QJsonObject info = m_networkManager->deviceInfo(m_deviceUuid);
+        const QJsonObject info = m_networkManager->deviceConnInfo(m_deviceUuid);
         if (!info.contains("Ip4"))
             break;
         const QJsonObject ipv4 = info.value("Ip4").toObject();

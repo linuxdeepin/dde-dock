@@ -65,8 +65,8 @@ const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 
 void WirelessItem::init()
 {
-    const QString devPath = m_networkManager->devicePath(m_deviceUuid);
+    const auto devInfo = m_networkManager->device(m_deviceUuid);
 
-    m_applet = new WirelessApplet(devPath, this);
+    m_applet = new WirelessApplet(devInfo, this);
     m_applet->setVisible(false);
 }

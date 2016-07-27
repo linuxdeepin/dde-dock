@@ -46,7 +46,10 @@ public:
     NetworkType type() const;
     const QUuid uuid() const;
     const QString path() const;
+    const QDBusObjectPath dbusPath() const;
     const QString hwAddress() const;
+    const QString vendor() const;
+    const QString activeAp() const;
 
 private:
     NetworkType m_type;

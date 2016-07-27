@@ -64,7 +64,7 @@ const QString NetworkManager::devicePath(const QUuid &uuid) const
     return item->path();
 }
 
-const QJsonObject NetworkManager::deviceInfo(const QUuid &uuid) const
+const QJsonObject NetworkManager::deviceConnInfo(const QUuid &uuid) const
 {
     const QString addr = deviceHwAddr(uuid);
     if (addr.isEmpty())

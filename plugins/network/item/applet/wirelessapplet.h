@@ -3,6 +3,7 @@
 
 #include "devicecontrolwidget.h"
 #include "accesspoint.h"
+#include "../../networkdevice.h"
 #include "../../dbus/dbusnetwork.h"
 
 #include <QScrollArea>
@@ -15,7 +16,11 @@ class WirelessApplet : public QScrollArea
     Q_OBJECT
 
 public:
-    explicit WirelessApplet(const QString &devicePath, QWidget *parent = 0);
+    explicit WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
+
+signals:
+    void wirelessStateChanged(const NetworkDevice::NetworkState state) const;
+    void activeAPChanged() const;
 
 private:
     void setDeviceInfo();
@@ -28,9 +33,10 @@ private slots:
     void APPropertiesChanged(const QString &devPath, const QString &info);
     void updateAPList();
     void deviceEnableChanged(const bool enable);
+    void deviceStateChanegd();
 
 private:
-    const QString m_devicePath;
+    NetworkDevice m_device;
 
     QList<AccessPoint> m_apList;
 
