@@ -21,7 +21,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     centeralLayout->setMargin(0);
 
     setLayout(centeralLayout);
-    setFixedHeight(20);
+    setFixedHeight(25);
 
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);
 }

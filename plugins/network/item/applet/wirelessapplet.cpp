@@ -27,6 +27,8 @@ WirelessApplet::WirelessApplet(const QString &devicePath, QWidget *parent)
     m_centeralWidget->setLayout(m_centeralLayout);
 
     m_centeralLayout->addWidget(m_controlPanel);
+    m_centeralLayout->setSpacing(0);
+    m_centeralLayout->setMargin(0);
 
     setWidget(m_centeralWidget);
     setFrameStyle(QFrame::NoFrame);
@@ -154,16 +156,23 @@ void WirelessApplet::updateAPList()
         delete item;
     }
 
-    // sort ap list by strength
-    std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
+    int avaliableAPCount = 0;
 
-    for (auto ap : m_apList)
+    if (m_networkInter->IsDeviceEnabled(QDBusObjectPath(m_devicePath)))
     {
-        AccessPointWidget *apw = new AccessPointWidget(ap);
-        m_centeralLayout->addWidget(apw);
+        // sort ap list by strength
+        std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
+
+        for (auto ap : m_apList)
+        {
+            AccessPointWidget *apw = new AccessPointWidget(ap);
+            m_centeralLayout->addWidget(apw);
+
+            ++avaliableAPCount;
+        }
     }
 
-    const int contentHeight = m_apList.count() * ITEM_HEIGHT + m_controlPanel->height();
+    const int contentHeight = avaliableAPCount * ITEM_HEIGHT + m_controlPanel->height();
     m_centeralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
@@ -171,4 +180,5 @@ void WirelessApplet::updateAPList()
 void WirelessApplet::deviceEnableChanged(const bool enable)
 {
     m_networkInter->EnableDevice(QDBusObjectPath(m_devicePath), enable);
+    m_updateAPTimer->start();
 }
