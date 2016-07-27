@@ -77,8 +77,9 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
     if (o != getContent() || e->type() != QEvent::Resize)
         return false;
 
-//    show(m_lastPoint, m_model);
-    QMetaObject::invokeMethod(this, "show", Qt::QueuedConnection, Q_ARG(QPoint, m_lastPoint), Q_ARG(bool, m_model));
+    // FIXME: ensure position move after global mouse release event
+    QTimer::singleShot(100, this, [this] {show(m_lastPoint, m_model);});
+
     return false;
 }
 
