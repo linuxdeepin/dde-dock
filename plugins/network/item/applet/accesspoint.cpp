@@ -22,6 +22,11 @@ AccessPoint::AccessPoint(const QString &info)
     loadApInfo(doc.object());
 }
 
+AccessPoint::AccessPoint()
+{
+
+}
+
 bool AccessPoint::operator==(const AccessPoint &ap) const
 {
     return m_ssid == ap.m_ssid;

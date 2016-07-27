@@ -11,6 +11,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     : QScrollArea(parent),
 
       m_device(*deviceIter),
+      m_activeAP(),
 
       m_updateAPTimer(new QTimer(this)),
 
@@ -50,10 +51,16 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
 }
 
+NetworkDevice::NetworkState WirelessApplet::wirelessState() const
+{
+    return m_device.state();
+}
+
 void WirelessApplet::init()
 {
     setDeviceInfo();
     loadAPList();
+    onActiveAPChanged();
 }
 
 void WirelessApplet::APAdded(const QString &devPath, const QString &info)
@@ -121,7 +128,10 @@ void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &
     if (*it > ap)
     {
         *it = ap;
+        m_activeAP = ap;
         m_updateAPTimer->start();
+
+        emit activeAPChanged();
     }
 }
 
@@ -181,17 +191,37 @@ void WirelessApplet::deviceStateChanegd()
             const QJsonObject info = wireless.toObject();
             if (info.value("Path") == m_device.path())
             {
-                NetworkDevice dev = NetworkDevice(NetworkDevice::Wireless, info);
+                NetworkDevice prevInfo = m_device;
+                m_device = NetworkDevice(NetworkDevice::Wireless, info);
 
-                if (dev.state() != m_device.state())
-                    emit wirelessStateChanged(dev.state());
-                if (dev.activeAp() != m_device.activeAp())
-                    emit activeAPChanged();
+                if (prevInfo.state() != m_device.state())
+                    emit wirelessStateChanged(m_device.state());
+                if (prevInfo.activeAp() != m_device.activeAp())
+                    onActiveAPChanged();
 
-                m_device = dev;
                 break;
             }
         }
     }
 
+}
+
+void WirelessApplet::onActiveAPChanged()
+{
+    const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->GetAccessPoints(m_device.dbusPath()).value().toUtf8());
+    Q_ASSERT(doc.isArray());
+
+    for (auto dev : doc.array())
+    {
+        Q_ASSERT(dev.isObject());
+        const QJsonObject obj = dev.toObject();
+
+        if (obj.value("Path").toString() != m_device.activeAp())
+            continue;
+
+        m_activeAP = AccessPoint(obj);
+        break;
+    }
+
+    emit activeAPChanged();
 }

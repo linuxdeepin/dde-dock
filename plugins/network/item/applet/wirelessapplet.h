@@ -18,6 +18,8 @@ class WirelessApplet : public QScrollArea
 public:
     explicit WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
 
+    NetworkDevice::NetworkState wirelessState() const;
+
 signals:
     void wirelessStateChanged(const NetworkDevice::NetworkState state) const;
     void activeAPChanged() const;
@@ -34,10 +36,12 @@ private slots:
     void updateAPList();
     void deviceEnableChanged(const bool enable);
     void deviceStateChanegd();
+    void onActiveAPChanged();
 
 private:
     NetworkDevice m_device;
 
+    AccessPoint m_activeAP;
     QList<AccessPoint> m_apList;
 
     QTimer *m_updateAPTimer;

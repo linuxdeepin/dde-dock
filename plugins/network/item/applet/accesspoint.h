@@ -11,6 +11,7 @@ class AccessPoint : public QObject
 public:
     explicit AccessPoint(const QJsonObject &apInfo);
     explicit AccessPoint(const QString &info);
+    explicit AccessPoint();
     AccessPoint(const AccessPoint &ap);
     bool operator==(const AccessPoint &ap) const;
     bool operator>(const AccessPoint &ap) const;
