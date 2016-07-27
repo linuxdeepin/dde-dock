@@ -23,9 +23,9 @@ bool AccessPoint::operator==(const AccessPoint &ap) const
     return m_ssid == ap.m_ssid;
 }
 
-bool AccessPoint::operator<(const AccessPoint &ap) const
+bool AccessPoint::operator>(const AccessPoint &ap) const
 {
-    return m_strength < ap.m_strength;
+    return m_strength > ap.m_strength;
 }
 
 AccessPoint &AccessPoint::operator=(const AccessPoint &ap)

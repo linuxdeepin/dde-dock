@@ -112,10 +112,11 @@ void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &
     if (it == m_apList.end())
         return;
 
-    if (*it < ap)
-        return;
-    *it = ap;
-    m_updateAPTimer->start();
+    if (*it > ap)
+    {
+        *it = ap;
+        m_updateAPTimer->start();
+    }
 }
 
 void WirelessApplet::updateAPList()
@@ -128,6 +129,9 @@ void WirelessApplet::updateAPList()
         delete item->widget();
         delete item;
     }
+
+    // sort ap list by strength
+    std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
 
     for (auto ap : m_apList)
     {

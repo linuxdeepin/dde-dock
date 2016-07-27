@@ -69,6 +69,4 @@ void WirelessItem::init()
 
     m_applet = new WirelessApplet(devPath, this);
     m_applet->setVisible(false);
-
-//    connect(m_networkManager, &NetworkManager::APPropertiesChanged, this, &WirelessItem::APPropertiesChanegd);
 }
