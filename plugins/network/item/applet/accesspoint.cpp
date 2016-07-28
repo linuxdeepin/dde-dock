@@ -56,6 +56,11 @@ const QString AccessPoint::ssid() const
     return m_ssid;
 }
 
+const QString AccessPoint::path() const
+{
+    return m_path;
+}
+
 int AccessPoint::strength() const
 {
     return m_strength;

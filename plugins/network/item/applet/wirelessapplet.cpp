@@ -4,7 +4,7 @@
 #include <QJsonDocument>
 
 #define WIDTH           300
-#define MAX_HEIGHT      200
+#define MAX_HEIGHT      300
 #define ITEM_HEIGHT     30
 
 WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent)
@@ -49,6 +49,8 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
 
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
+
+    connect(this, &WirelessApplet::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 }
 
 NetworkDevice::NetworkState WirelessApplet::wirelessState() const
@@ -170,6 +172,9 @@ void WirelessApplet::updateAPList()
             AccessPointWidget *apw = new AccessPointWidget(ap);
             if (ap == m_activeAP)
                 apw->setActive(true);
+
+            connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessApplet::activateAP);
+
             m_centeralLayout->addWidget(apw);
 
             ++avaliableAPCount;
@@ -238,4 +243,30 @@ void WirelessApplet::onActiveAPChanged()
     }
 
     emit activeAPChanged();
+}
+
+void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ssid)
+{
+    QString uuid;
+
+    const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->connections().toUtf8());
+    for (auto it : doc.object().value("wireless").toArray())
+    {
+        const QJsonObject obj = it.toObject();
+        if (obj.value("Ssid").toString() != ssid)
+            continue;
+        if (obj.value("HwAddress").toString() != m_device.hwAddress())
+            continue;
+
+        uuid = obj.value("Uuid").toString();
+        if (!uuid.isEmpty())
+            break;
+    }
+
+    m_networkInter->ActivateAccessPoint(uuid, apPath, m_device.dbusPath());
+}
+
+void WirelessApplet::needSecrets(const QString &S1, const QString &s2, const QString &s3, const bool defaultAutoConnect)
+{
+    qDebug() << S1 << s2 << s3 << defaultAutoConnect;
 }

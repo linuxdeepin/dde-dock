@@ -38,6 +38,8 @@ private slots:
     void deviceEnableChanged(const bool enable);
     void deviceStateChanegd();
     void onActiveAPChanged();
+    void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
+    void needSecrets(const QString &S1, const QString &s2, const QString &s3, const bool defaultAutoConnect);
 
 private:
     NetworkDevice m_device;

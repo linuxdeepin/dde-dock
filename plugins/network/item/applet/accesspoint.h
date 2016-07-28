@@ -18,6 +18,7 @@ public:
     AccessPoint &operator=(const AccessPoint &ap);
 
     const QString ssid() const;
+    const QString path() const;
     int strength() const;
     bool secured() const;
 
