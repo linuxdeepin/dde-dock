@@ -23,8 +23,11 @@ AccessPoint::AccessPoint(const QString &info)
 }
 
 AccessPoint::AccessPoint()
+    : QObject(nullptr),
+      m_strength(0),
+      m_secured(false),
+      m_securedInEap(false)
 {
-
 }
 
 bool AccessPoint::operator==(const AccessPoint &ap) const
