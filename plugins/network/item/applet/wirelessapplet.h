@@ -19,6 +19,7 @@ public:
     explicit WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
 
     NetworkDevice::NetworkState wirelessState() const;
+    int activeAPStrgength() const;
 
 signals:
     void wirelessStateChanged(const NetworkDevice::NetworkState state) const;

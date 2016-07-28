@@ -56,6 +56,11 @@ NetworkDevice::NetworkState WirelessApplet::wirelessState() const
     return m_device.state();
 }
 
+int WirelessApplet::activeAPStrgength() const
+{
+    return m_activeAP.strength();
+}
+
 void WirelessApplet::init()
 {
     setDeviceInfo();
@@ -191,7 +196,7 @@ void WirelessApplet::deviceStateChanegd()
             const QJsonObject info = wireless.toObject();
             if (info.value("Path") == m_device.path())
             {
-                NetworkDevice prevInfo = m_device;
+                const NetworkDevice prevInfo = m_device;
                 m_device = NetworkDevice(NetworkDevice::Wireless, info);
 
                 if (prevInfo.state() != m_device.state())

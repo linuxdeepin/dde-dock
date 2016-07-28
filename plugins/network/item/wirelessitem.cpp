@@ -43,8 +43,20 @@ void WirelessItem::resizeEvent(QResizeEvent *e)
 
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
 {
+    QString type;
+    if (m_applet->wirelessState() != NetworkDevice::Activated)
+        type = "disconnect";
+    else
+    {
+        const int strength = m_applet->activeAPStrgength();
+        if (strength == 100)
+            type = "8";
+        else
+            type = QString::number(strength / 10 & ~0x1);
+    }
+
     const QString key = QString("wireless-%1%2")
-                                .arg(8)
+                                .arg(type)
                                 .arg(displayMode == Dock::Fashion ? "" : "-symbolic");
 
     return cachedPix(key, size);
@@ -69,4 +81,7 @@ void WirelessItem::init()
 
     m_applet = new WirelessApplet(devInfo, this);
     m_applet->setVisible(false);
+
+    connect(m_applet, &WirelessApplet::activeAPChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
+    connect(m_applet, &WirelessApplet::wirelessStateChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
 }
