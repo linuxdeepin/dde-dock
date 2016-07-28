@@ -9,6 +9,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
       m_refershTimer(new QTimer(this))
 {
+    m_dateTipsLabel->setObjectName("datetime");
     m_dateTipsLabel->setStyleSheet("color:white;"
                                    "padding:6px 10px;");
 

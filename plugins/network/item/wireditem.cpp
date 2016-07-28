@@ -11,6 +11,7 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
       m_itemTips(new QLabel(this))
 {
 
+    m_itemTips->setObjectName("wired-" + deviceUuid.toString());
     m_itemTips->setVisible(false);
     m_itemTips->setStyleSheet("color:white;"
                               "padding:5px 10px;");

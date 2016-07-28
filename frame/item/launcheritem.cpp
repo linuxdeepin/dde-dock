@@ -13,6 +13,7 @@ LauncherItem::LauncherItem(QWidget *parent)
 {
     setAccessibleName("Launcher");
     m_tips->setVisible(false);
+    m_tips->setObjectName("launcher");
     m_tips->setText(tr("Launcher"));
     m_tips->setStyleSheet("color:white;"
                           "padding:5px 10px;");

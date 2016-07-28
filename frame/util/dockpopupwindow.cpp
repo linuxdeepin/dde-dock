@@ -33,6 +33,8 @@ void DockPopupWindow::setContent(QWidget *content)
         lastWidget->removeEventFilter(this);
     content->installEventFilter(this);
 
+    setAccessibleName(content->objectName() + "-popup");
+
     DArrowRectangle::setContent(content);
 }
 

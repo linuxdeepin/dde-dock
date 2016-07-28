@@ -41,6 +41,7 @@ QWidget *DiskMountPlugin::itemPopupApplet(const QString &itemKey)
 void DiskMountPlugin::initCompoments()
 {
     m_diskControlApplet = new DiskControlWidget;
+    m_diskControlApplet->setObjectName("dist-mount");
     m_diskControlApplet->setVisible(false);
 
     connect(m_diskControlApplet, &DiskControlWidget::diskCountChanged, this, &DiskMountPlugin::diskCountChanged);

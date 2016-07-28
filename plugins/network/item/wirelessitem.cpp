@@ -80,6 +80,7 @@ void WirelessItem::init()
     const auto devInfo = m_networkManager->device(m_deviceUuid);
 
     m_applet = new WirelessApplet(devInfo, this);
+    m_applet->setObjectName("wireless-" + m_deviceUuid.toString());
     m_applet->setVisible(false);
 
     connect(m_applet, &WirelessApplet::activeAPChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));

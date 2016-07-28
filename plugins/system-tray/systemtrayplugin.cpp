@@ -11,6 +11,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
       m_trayInter(new DBusTrayManager(this)),
       m_tipsWidget(new TipsWidget)
 {
+    m_tipsWidget->setObjectName("sys-tray");
     m_fashionItem = new FashionTrayItem;
 }
 

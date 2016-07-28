@@ -22,8 +22,6 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
 {
     Q_ASSERT(m_centeralWidget);
 
-    setAccessibleName(m_pluginInter->pluginName());
-
     QBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_centeralWidget);
     hLayout->setSpacing(0);
@@ -33,6 +31,7 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
     m_centeralWidget->setVisible(true);
 
     setLayout(hLayout);
+    setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
     setAttribute(Qt::WA_TranslucentBackground);
 }
 

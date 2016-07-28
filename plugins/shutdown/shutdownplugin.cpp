@@ -15,6 +15,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
       m_powerInter(new DBusPower(this))
 {
     m_tipsLabel->setVisible(false);
+    m_tipsLabel->setObjectName("power");
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding:5px 10px;");
