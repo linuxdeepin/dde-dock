@@ -32,7 +32,7 @@ AccessPoint::AccessPoint()
 
 bool AccessPoint::operator==(const AccessPoint &ap) const
 {
-    return m_ssid == ap.m_ssid;
+    return m_path == ap.m_path;
 }
 
 bool AccessPoint::operator>(const AccessPoint &ap) const

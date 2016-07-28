@@ -13,10 +13,15 @@ class AccessPointWidget : public QWidget
 public:
     explicit AccessPointWidget(const AccessPoint &ap);
 
+    void setActive(const bool active);
+
 private:
     void setStrengthIcon(const int strength);
 
 private:
+    bool m_active;
+
+    AccessPoint m_ap;
     QLabel *m_ssid;
     QLabel *m_securityIcon;
     QLabel *m_strengthIcon;

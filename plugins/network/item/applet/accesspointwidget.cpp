@@ -6,6 +6,7 @@
 AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     : QWidget(nullptr),
 
+      m_ap(ap),
       m_ssid(new QLabel),
       m_securityIcon(new QLabel),
       m_strengthIcon(new QLabel)
@@ -32,6 +33,19 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
 
     setStrengthIcon(ap.strength());
     setLayout(centeralLayout);
+}
+
+void AccessPointWidget::setActive(const bool active)
+{
+    if (m_active == active)
+        return;
+
+    m_active = active;
+
+    if (m_active)
+        m_ssid->setStyleSheet("color:#2c8cde;");
+    else
+        m_ssid->setStyleSheet("color:white;");
 }
 
 void AccessPointWidget::setStrengthIcon(const int strength)

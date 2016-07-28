@@ -130,14 +130,21 @@ void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &
     if (it == m_apList.end())
         return;
 
-    if (*it > ap)
+    *it = ap;
+    if (m_activeAP == ap)
     {
-        *it = ap;
         m_activeAP = ap;
-        m_updateAPTimer->start();
-
         emit activeAPChanged();
     }
+
+//    if (*it > ap)
+//    {
+//        *it = ap;
+//        m_activeAP = ap;
+//        m_updateAPTimer->start();
+
+//        emit activeAPChanged();
+//    }
 }
 
 void WirelessApplet::updateAPList()
@@ -161,6 +168,8 @@ void WirelessApplet::updateAPList()
         for (auto ap : m_apList)
         {
             AccessPointWidget *apw = new AccessPointWidget(ap);
+            if (ap == m_activeAP)
+                apw->setActive(true);
             m_centeralLayout->addWidget(apw);
 
             ++avaliableAPCount;
