@@ -2,6 +2,14 @@
 #include "accesspointwidget.h"
 
 #include <QJsonDocument>
+#include <QScreen>
+#include <QScreen>
+#include <QGuiApplication>
+
+#include <dinputdialog.h>
+#include <dcheckbox.h>
+
+DWIDGET_USE_NAMESPACE
 
 #define WIDTH           300
 #define MAX_HEIGHT      300
@@ -45,6 +53,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessApplet::APRemoved);
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessApplet::deviceStateChanegd);
+    connect(m_networkInter, &DBusNetwork::NeedSecrets, this, &WirelessApplet::needSecrets);
 
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
 
@@ -263,10 +272,40 @@ void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ss
             break;
     }
 
-    m_networkInter->ActivateAccessPoint(uuid, apPath, m_device.dbusPath());
+    m_networkInter->ActivateAccessPoint(uuid, apPath, m_device.dbusPath()).waitForFinished();
 }
 
-void WirelessApplet::needSecrets(const QString &S1, const QString &s2, const QString &s3, const bool defaultAutoConnect)
+void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)
 {
-    qDebug() << S1 << s2 << s3 << defaultAutoConnect;
+    qDebug() << apPath << uuid << ssid << defaultAutoConnect;
+
+    DInputDialog *dialog = new DInputDialog(this);
+    DCheckBox *checkBox = new DCheckBox(dialog);
+
+    checkBox->setChecked(defaultAutoConnect);
+    checkBox->setText(tr("Auto-connect"));
+
+    dialog->setTextEchoMode(DLineEdit::Password);
+    dialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
+    dialog->addSpacing(10);
+    dialog->addContent(checkBox, Qt::AlignLeft);
+    dialog->setOkButtonText(tr("Connect"));
+
+    connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, dialog, &DInputDialog::close);
+    connect(dialog, &DInputDialog::closed, dialog, &DInputDialog::deleteLater, Qt::QueuedConnection);
+    connect(dialog, &DInputDialog::textValueChanged, [=] {dialog->setTextAlert(false);});
+    connect(dialog, &DInputDialog::cancelButtonClicked, [=] {
+        m_networkInter->CancelSecret(apPath, uuid);
+        dialog->close();
+    });
+    connect(dialog, &DInputDialog::okButtonClicked, [=] {
+        if (dialog->textValue().isEmpty())
+            return dialog->setTextAlert(true);
+        m_networkInter->FeedSecret(apPath, uuid, dialog->textValue(), checkBox->isChecked());
+    });
+
+    dialog->setTitle(tr("Please enter the password of <font color=\"#faca57\">%1</font>").arg(ssid));
+    dialog->open();
+    dialog->raise();
+    dialog->move(qApp->primaryScreen()->geometry().center() - dialog->rect().center());
 }
