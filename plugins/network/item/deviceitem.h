@@ -10,18 +10,18 @@ class DeviceItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit DeviceItem(const NetworkDevice::NetworkType type, const QUuid &deviceUuid);
+    explicit DeviceItem(const QUuid &deviceUuid);
 
     const QUuid uuid() const;
-    NetworkDevice::NetworkType type() const;
 
+    virtual NetworkDevice::NetworkType type() const = 0;
+    virtual NetworkDevice::NetworkState state() const = 0;
     virtual QWidget *itemApplet() = 0;
 
 protected:
     QSize sizeHint() const;
 
 protected:
-    NetworkDevice::NetworkType m_type;
     QUuid m_deviceUuid;
 
     NetworkManager *m_networkManager;

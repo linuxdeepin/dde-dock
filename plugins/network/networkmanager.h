@@ -34,6 +34,7 @@ signals:
     void deviceRemoved(const NetworkDevice &device) const;
     void activeConnectionChanged(const QUuid &uuid) const;
     void networkStateChanged(const NetworkDevice::NetworkTypes &states) const;
+    void deviceTypesChanged(const NetworkDevice::NetworkTypes &types) const;
 
 private:
     explicit NetworkManager(QObject *parent = 0);

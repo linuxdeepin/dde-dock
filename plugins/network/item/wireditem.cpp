@@ -5,7 +5,7 @@
 #include <QPainter>
 
 WiredItem::WiredItem(const QUuid &deviceUuid)
-    : DeviceItem(NetworkDevice::Wired, deviceUuid),
+    : DeviceItem(deviceUuid),
 
       m_connected(false),
       m_itemTips(new QLabel(this))
@@ -18,6 +18,16 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
 
     connect(m_networkManager, &NetworkManager::networkStateChanged, this, &WiredItem::reloadIcon);
     connect(m_networkManager, &NetworkManager::activeConnectionChanged, this, &WiredItem::activeConnectionChanged);
+}
+
+NetworkDevice::NetworkType WiredItem::type() const
+{
+    return NetworkDevice::Wired;
+}
+
+NetworkDevice::NetworkState WiredItem::state() const
+{
+    return m_connected ? NetworkDevice::Activated : NetworkDevice::Disconnected;
 }
 
 QWidget *WiredItem::itemApplet()

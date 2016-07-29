@@ -23,6 +23,8 @@ private slots:
     void deviceAdded(const NetworkDevice &device);
     void deviceRemoved(const NetworkDevice &device);
     void networkStateChanged(const NetworkDevice::NetworkTypes &states);
+    void deviceTypesChanged(const NetworkDevice::NetworkTypes &types);
+    void refershDeviceItemVisible();
 
 private:
     NetworkManager *m_networkManager;

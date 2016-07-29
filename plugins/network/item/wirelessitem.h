@@ -15,6 +15,8 @@ class WirelessItem : public DeviceItem
 public:
     explicit WirelessItem(const QUuid &uuid);
 
+    NetworkDevice::NetworkType type() const;
+    NetworkDevice::NetworkState state() const;
     QWidget *itemApplet();
 
 protected:

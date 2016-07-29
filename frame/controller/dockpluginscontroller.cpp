@@ -20,13 +20,12 @@ DockPluginsController::~DockPluginsController()
 
 void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    PluginsItem *item = new PluginsItem(itemInter, itemKey);
-
     // check if same item added
     if (m_pluginList.contains(itemInter))
         if (m_pluginList[itemInter].contains(itemKey))
             return;
 
+    PluginsItem *item = new PluginsItem(itemInter, itemKey);
     m_pluginList[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);

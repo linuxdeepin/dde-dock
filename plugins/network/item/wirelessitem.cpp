@@ -5,10 +5,20 @@
 #include <QPainter>
 
 WirelessItem::WirelessItem(const QUuid &uuid)
-    : DeviceItem(NetworkDevice::Wireless, uuid),
+    : DeviceItem(uuid),
       m_applet(nullptr)
 {
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+}
+
+NetworkDevice::NetworkType WirelessItem::type() const
+{
+    return NetworkDevice::Wireless;
+}
+
+NetworkDevice::NetworkState WirelessItem::state() const
+{
+    return m_applet->wirelessState();
 }
 
 QWidget *WirelessItem::itemApplet()

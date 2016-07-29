@@ -32,7 +32,9 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
         if (deviceItem->uuid() == itemKey)
+        {
             return deviceItem;
+        }
 
     return nullptr;
 }
@@ -60,7 +62,7 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
         return;
 
     m_deviceItemList.append(item);
-    m_proxyInter->itemAdded(this, device.uuid().toString());
+    refershDeviceItemVisible();
 }
 
 void NetworkPlugin::deviceRemoved(const NetworkDevice &device)
@@ -80,23 +82,37 @@ void NetworkPlugin::networkStateChanged(const NetworkDevice::NetworkTypes &state
 {
     Q_UNUSED(states)
 
-    qDebug() << states;
+    refershDeviceItemVisible();
+}
 
-//    for (auto item : m_deviceItemList)
-//        if (item->ty)
-//    const QList<NetworkDevice> deviceList = m_networkManager->deviceList();
-//    const auto items = states.testFlag(NetworkDevice::Wireless)
-//                        ? std::find_if(m_deviceList.cbegin(), m_deviceList.cend(),
-//                                    [] (const NetworkDevice &dev) {return dev.type() == NetworkDevice::Wireless;})
-//                        : std::find_if(m_deviceList.cbegin(), m_deviceList.cend(),
-//                                      [] (const NetworkDevice &dev) {return dev.type() == NetworkDevice::Wired;});
+void NetworkPlugin::deviceTypesChanged(const NetworkDevice::NetworkTypes &types)
+{
+    Q_UNUSED(types)
 
-//    for (auto dev : deviceList)
-//        qDebug() << dev.uuid() << dev.type();
+    refershDeviceItemVisible();
+}
 
-//    // has wired connection
-//    if (states.testFlag(NetworkDevice::Wired))
-//        m_proxyInter->itemAdded(this, WIRED_ITEM);
-//    else
-//        m_proxyInter->itemRemoved(this, WIRED_ITEM);
+void NetworkPlugin::refershDeviceItemVisible()
+{
+    const NetworkDevice::NetworkTypes types = m_networkManager->types();
+    const bool hasWirelessDevice = types.testFlag(NetworkDevice::Wireless);
+
+    for (auto item : m_deviceItemList)
+    {
+        switch (item->type())
+        {
+        case NetworkDevice::Wireless:
+            m_proxyInter->itemAdded(this, item->uuid().toString());
+            break;
+
+        case NetworkDevice::Wired:
+            if (item->state() == NetworkDevice::Activated || !hasWirelessDevice)
+                m_proxyInter->itemAdded(this, item->uuid().toString());
+            else
+                m_proxyInter->itemRemoved(this, item->uuid().toString());
+            break;
+
+        default:;
+        }
+    }
 }

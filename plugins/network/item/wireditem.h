@@ -13,6 +13,8 @@ class WiredItem : public DeviceItem
 public:
     explicit WiredItem(const QUuid &deviceUuid);
 
+    NetworkDevice::NetworkType type() const;
+    NetworkDevice::NetworkState state() const;
     QWidget *itemApplet();
 
 protected:
