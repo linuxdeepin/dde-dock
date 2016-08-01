@@ -56,6 +56,7 @@ protected:
     virtual QWidget *popupTips();
 
 private:
+    void updatePopupPosition();
     void showPopupWindow(QWidget * const content, const bool model = false);
 
 protected:

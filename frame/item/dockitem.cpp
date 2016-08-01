@@ -54,9 +54,20 @@ DockItem::ItemType DockItem::itemType() const
     return m_type;
 }
 
+void DockItem::updatePopupPosition()
+{
+    if (!m_popupShown)
+        return;
+
+    const QPoint p = popupMarkPoint();
+    PopupWindow->show(p, PopupWindow->model());
+}
+
 void DockItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
+
+    updatePopupPosition();
 }
 
 void DockItem::mouseMoveEvent(QMouseEvent *e)

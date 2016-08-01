@@ -71,7 +71,7 @@ void DockPopupWindow::mousePressEvent(QMouseEvent *e)
     DArrowRectangle::mousePressEvent(e);
 
 //    if (e->button() == Qt::LeftButton)
-//            m_acceptDelayTimer->start();
+//        m_acceptDelayTimer->start();
 }
 
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
