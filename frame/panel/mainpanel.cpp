@@ -22,6 +22,7 @@ MainPanel::MainPanel(QWidget *parent)
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
     setAcceptDrops(true);
+    setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
                   "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"

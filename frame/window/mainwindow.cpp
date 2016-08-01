@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_xcbMisc(XcbMisc::instance())
 {
+    setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
