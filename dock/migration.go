@@ -13,52 +13,40 @@ package dock
 
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
 //#include <stdlib.h>
-// char* guess_app_id(long s_pid, const char* instance_name, const char* wmname, const char* wmclass, const char* icon_name);
-// char* get_exec(int pid);
-// char* get_exe(int pid);
-// char* icon_name_to_path(const char* name, int size);
+// char* get_icon_file_path(const char* name);
 // void init_deepin();
 // char* get_data_uri_by_path(const char* path);
 import "C"
-import "strings"
-import "unsafe"
+import (
+	"path/filepath"
+	"strings"
+	"unsafe"
+)
 
-func find_app_id(pid uint, instanceName, wmName, wmClass, iconName string) string {
-	iName := C.CString(instanceName)
-	wName := C.CString(wmName)
-	wClass := C.CString(wmClass)
-	icon := C.CString(iconName)
-	id := C.guess_app_id(C.long(pid), iName, wName, wClass, icon)
-	defer func() {
-		C.free(unsafe.Pointer(iName))
-		C.free(unsafe.Pointer(wName))
-		C.free(unsafe.Pointer(wClass))
-		C.free(unsafe.Pointer(icon))
-		C.free(unsafe.Pointer(id))
-	}()
-	return strings.ToLower(C.GoString(id))
-}
-
-func find_exec_by_pid(pid uint) string {
-	cExec := C.get_exec(C.int(pid))
-	defer C.free(unsafe.Pointer(cExec))
-	e := C.GoString(cExec)
-	if e != "" {
-		return e
+func getIconFilePath(name string) string {
+	if filepath.IsAbs(name) {
+		return name
 	}
-	cExe := C.get_exe(C.int(pid))
-	defer C.free(unsafe.Pointer(cExe))
-	return C.GoString(cExe)
+	dotIndex := strings.LastIndex(name, ".")
+	if dotIndex != -1 {
+		ext := name[dotIndex+1:]
+		logger.Debugf("getIconFilePath ext: %q", ext)
+		switch ext {
+		case "jpg", "png", "svg", "xpm":
+			// remove ext
+			name = name[:dotIndex]
+		}
+	}
+	return _getIconFilePath(name)
 }
 
-func get_theme_icon(name string, size int) string {
-	iconName := C.CString(name)
-	defer func() {
-		C.free(unsafe.Pointer(iconName))
-	}()
-	cPath := C.icon_name_to_path(iconName, C.int(size))
-	defer C.free(unsafe.Pointer(cPath))
+func _getIconFilePath(name string) string {
+	logger.Debugf("_getIconFilePath name: %q", name)
+	cName := C.CString(name)
+	cPath := C.get_icon_file_path(cName)
 	path := C.GoString(cPath)
+	C.free(unsafe.Pointer(cPath))
+	C.free(unsafe.Pointer(cName))
 	return path
 }
 

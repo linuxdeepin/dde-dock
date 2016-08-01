@@ -10,19 +10,15 @@
 package dock
 
 import (
-	"encoding/json"
-	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
+	"sync"
 )
 
 const (
-	entryDBusObjPathPrefix = "/dde/dock/entry/"
-	entryDBusDestPrefix    = "dde.dock.entry."
-	entryDBusInterface     = "dde.dock.Entry"
+	entryDBusObjPathPrefix = dockManagerDBusObjPath + "/entries/"
+	entryDBusInterface     = dockManagerDBusInterface + ".Entry"
 
 	FieldTitle   = "title"
 	FieldIcon    = "icon"
@@ -41,86 +37,77 @@ type XidInfo struct {
 }
 
 type AppEntry struct {
-	entryManager *EntryManager
-	// hashId string
+	dockManager *DockManager
 
 	Id      string
 	innerId string
 
-	Type string
-	Data map[string]string
-	// Data Fields
-	// Menu
-	// Icon
-	// Title
+	IsActive bool
+	Name     string
+	Icon     string
+	Menu     string
 
-	// Signal
-	DataChanged func(string, string)
+	WindowTitles windowTitlesType
+	windows      map[xproto.Window]*WindowInfo
 
-	windows map[xproto.Window]*WindowInfo
-	current *WindowInfo
+	current       *WindowInfo
+	CurrentWindow xproto.Window
+	windowMutex   sync.Mutex
 
-	coreMenu *Menu
-	exec     string
-	path     string
-	appInfo  *AppInfo
-	isDocked bool
+	coreMenu  *Menu
+	appInfo   *AppInfo
+	IsDocked  bool
+	dockMutex sync.Mutex
 }
 
-func newAppEntry(entryManager *EntryManager, id string, appInfo *AppInfo) *AppEntry {
+func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
 	entry := &AppEntry{
-		entryManager: entryManager,
-		Id:           entryManager.allocEntryId(),
+		dockManager:  dockManager,
+		Id:           dockManager.allocEntryId(),
 		innerId:      id,
-		Type:         "App",
-		Data:         make(map[string]string),
+		WindowTitles: newWindowTitles(),
 		windows:      make(map[xproto.Window]*WindowInfo),
 		appInfo:      appInfo,
 	}
 	return entry
 }
 
-func newAppEntryWithWindow(entryManager *EntryManager, id string, winInfo *WindowInfo, appInfo *AppInfo) *AppEntry {
-	if appInfo != nil {
-		appId := appInfo.GetId()
-		recordFrequency(appId)
-		markAsLaunched(appId)
-	}
-
-	entry := newAppEntry(entryManager, id, appInfo)
-	entry.initExec(winInfo)
-
-	entry.current = winInfo
-	entry.attachWindow(winInfo)
-	winInfo.updateWmName()
-	winInfo.updateIcon()
-	return entry
-}
-
 func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
-	if newAppInfo == nil {
-		logger.Debug("setAppInfo failed: newAppInfo is nil")
+	if entry.appInfo == newAppInfo {
+		logger.Debug("setAppInfo failed: old == new")
 		return
 	}
-	entry.appInfo.Destroy()
+	if entry.appInfo != nil {
+		entry.appInfo.Destroy()
+	}
 	entry.appInfo = newAppInfo
 }
 
-func (entry *AppEntry) isActive() bool {
+func (entry *AppEntry) hasWindow() bool {
 	return len(entry.windows) != 0
 }
 
-func (entry *AppEntry) initExec(winInfo *WindowInfo) {
-	ai := entry.appInfo
-	if ai != nil && ai.DesktopAppInfo != nil {
-		entry.exec = ai.DesktopAppInfo.GetCommandline()
+func (entry *AppEntry) getWindowIds() []uint32 {
+	list := make([]uint32, 0, len(entry.windows))
+	for _, winInfo := range entry.windows {
+		list = append(list, uint32(winInfo.window))
 	}
+	return list
+}
 
-	if winInfo.process != nil {
-		entry.exec = winInfo.process.GetShellScript()
+func (entry *AppEntry) getExec(oneLine bool) string {
+	if entry.current == nil {
+		return ""
 	}
-
-	logger.Debug("initExec:", entry.exec)
+	winProcess := entry.current.process
+	if winProcess != nil {
+		if oneLine {
+			return winProcess.GetOneCommandLine()
+		} else {
+			return winProcess.GetShellScriptLines()
+		}
+	}
+	return ""
 }
 
 func (entry *AppEntry) getDisplayName() string {
@@ -133,55 +120,20 @@ func (entry *AppEntry) getDisplayName() string {
 	return ""
 }
 
-func (entry *AppEntry) Activate(x, y int32, timestamp uint32) (bool, error) {
-	// x,y  useless
-	logger.Debug("Activate timestamp:", timestamp)
-	if !entry.isActive() {
-		entry.launchApp(timestamp)
-		return true, nil
+func (e *AppEntry) setCurrentWindow(win xproto.Window) {
+	if e.CurrentWindow != win {
+		e.CurrentWindow = win
+		logger.Debug("setCurrentWindow", win)
+		dbus.NotifyChange(e, "CurrentWindow")
 	}
-
-	if entry.current == nil {
-		logger.Warning("entry.current is nil")
-		return false, nil
-	}
-	win := entry.current.window
-	state, err := ewmh.WmStateGet(XU, win)
-	if err != nil {
-		logger.Warning("Get ewmh wmState failed win:", win)
-		return false, err
-	}
-
-	if contains(state, "_NET_WM_STATE_FOCUSED") {
-		s, err := icccm.WmStateGet(XU, win)
-		if err != nil {
-			logger.Warning("Get icccm WmState failed win:", win)
-			return false, err
-		}
-		switch s.State {
-		case icccm.StateIconic:
-			s.State = icccm.StateNormal
-			logger.Debugf("set window %v state Iconic to Normal", win)
-			icccm.WmStateSet(XU, win, s)
-		case icccm.StateNormal:
-			if len(entry.windows) == 1 {
-				iconifyWindow(win)
-			} else {
-				if dockManager.activeWindow == win {
-					nextWin := entry.findNextLeader()
-					activateWindow(nextWin)
-				}
-			}
-		}
-	} else {
-		activateWindow(win)
-	}
-	return true, nil
 }
 
-func (entry *AppEntry) setLeader(leader xproto.Window) {
-	if info, ok := entry.windows[leader]; ok {
-		entry.current = info
+func (entry *AppEntry) setCurrentWindowInfo(winInfo *WindowInfo) {
+	entry.current = winInfo
+	if winInfo == nil {
+		entry.setCurrentWindow(0)
+	} else {
+		entry.setCurrentWindow(winInfo.window)
 	}
 }
 
@@ -218,81 +170,96 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
 	logger.Debugf("attach win %v to entry", win)
 
+	winInfo.entry = entry
 	if _, ok := entry.windows[win]; ok {
 		logger.Debugf("win %v is already attach to entry", win)
 		return
 	}
 
 	entry.windows[win] = winInfo
-	entry.updateStatus()
-	entry.updateAppXids()
-	entry.updateMenu()
+	entry.updateWindowTitles()
+	entry.updateIsActive()
 
-	winInfo.entry = entry
-
-	if (entry.entryManager != nil && win == entry.entryManager.activeWindow) ||
+	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
 		entry.current == nil {
-		entry.current = winInfo
+		entry.setCurrentWindowInfo(winInfo)
 		winInfo.updateWmName()
 		winInfo.updateIcon()
 	}
 }
 
-func (entry *AppEntry) detachWindow(winInfo *WindowInfo) {
+// return is detached
+func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 	win := winInfo.window
+	logger.Debug("detach window ", win)
 	if _, ok := entry.windows[win]; ok {
-		if len(entry.windows) > 1 {
-			// switch current to next window
-			entry.setLeader(entry.findNextLeader())
-		}
 		delete(entry.windows, win)
+		if len(entry.windows) == 0 {
+			return true
+		}
+		for _, winInfo := range entry.windows {
+			// select first
+			entry.setCurrentWindowInfo(winInfo)
+			break
+		}
+		return true
 	}
+	logger.Debug("detachWindow failed: window not attach with entry")
+	return false
 }
 
 func (entry *AppEntry) destroy() {
-	entry.entryManager = nil
+	entry.dockManager = nil
 	if entry.appInfo != nil {
 		entry.appInfo.Destroy()
 		entry.appInfo = nil
 	}
 }
 
-func (e *AppEntry) setData(key, value string) {
-	if e.Data[key] != value {
-		logger.Debugf("setData %q : %v", key, value)
-		e.Data[key] = value
-		dbus.Emit(e, "DataChanged", key, value)
+func (e *AppEntry) setName(name string) {
+	if e.Name != name {
+		e.Name = name
+		dbus.NotifyChange(e, "Name")
 	}
-}
-
-func (e *AppEntry) getData(key string) string {
-	return e.Data[key]
-}
-
-func (e *AppEntry) setTitle(title string) {
-	e.setData(FieldTitle, title)
 }
 
 func (e *AppEntry) setIcon(icon string) {
-	e.setData(FieldIcon, icon)
+	if e.Icon != icon {
+		e.Icon = icon
+		dbus.NotifyChange(e, "Icon")
+	}
 }
 
-func (entry *AppEntry) updateTitle() {
-	var title string
-	if entry.isActive() {
-		title = entry.current.getTitle()
-	} else if entry.appInfo != nil {
-		title = entry.appInfo.GetDisplayName()
+func (e *AppEntry) setIsActive(isActive bool) {
+	if e.IsActive != isActive {
+		e.IsActive = isActive
+		dbus.NotifyChange(e, "IsActive")
+	}
+}
+
+func (e *AppEntry) setIsDocked(isDocked bool) {
+	if e.IsDocked != isDocked {
+		e.IsDocked = isDocked
+		dbus.NotifyChange(e, "IsDocked")
+	}
+}
+
+func (entry *AppEntry) updateName() {
+	var name string
+	if entry.appInfo != nil {
+		name = entry.appInfo.GetDisplayName()
+	} else if entry.current != nil {
+		name = entry.current.getDisplayName()
 	} else {
-		logger.Debug("updateTitle failed, entry is not active and entry.appInfo is nil")
+		logger.Debug("updateName failed")
 		return
 	}
-	entry.setTitle(title)
+	entry.setName(name)
 }
 
 func (entry *AppEntry) updateIcon() {
 	var icon string
-	if entry.isActive() {
+	if entry.hasWindow() {
 		icon = entry.current.getIcon()
 	} else {
 		icon = entry.appInfo.GetIcon()
@@ -300,53 +267,21 @@ func (entry *AppEntry) updateIcon() {
 	entry.setIcon(icon)
 }
 
-func (entry *AppEntry) updateStatus() {
-	var status string
-	if entry.isActive() {
-		status = ActiveStatus
-	} else {
-		status = NormalStatus
+func (e *AppEntry) updateWindowTitles() {
+	windowTitles := newWindowTitles()
+	for win, winInfo := range e.windows {
+		windowTitles[win] = winInfo.Title
 	}
-	entry.setData(FieldStatus, status)
-}
-
-func (entry *AppEntry) updateAppXids() {
-	xids := make([]XidInfo, 0)
-	for win, winInfo := range entry.windows {
-		xids = append(xids, XidInfo{uint32(win), winInfo.Title})
-	}
-	bytes, _ := json.Marshal(xids)
-	entry.setData(FieldAppXids, string(bytes))
-}
-
-func (e *AppEntry) HandleMenuItem(id string, timestamp uint32) {
-	logger.Debugf("HandleMenuItem id: %q timestamp: %v", id, timestamp)
-	if e.coreMenu != nil {
-		e.coreMenu.HandleAction(id, timestamp)
-	} else {
-		logger.Warning("HandleMenuItem failed: entry.coreMenu is nil")
+	if !e.WindowTitles.Equal(windowTitles) {
+		e.WindowTitles = windowTitles
+		dbus.NotifyChange(e, "WindowTitles")
 	}
 }
 
-func (entry *AppEntry) HandleDragDrop(path string, timestamp uint32) {
-	logger.Debugf("handle drag drop path: %q", path)
-	ai := entry.appInfo
-	appLaunchContext := gio.GetGdkAppLaunchContext().SetTimestamp(timestamp)
-	if ai.DesktopAppInfo != nil {
-		paths := []string{path}
-		_, err := ai.LaunchUris(paths, appLaunchContext)
-		if err != nil {
-			logger.Warningf("LaunchUris failed path: %q", path)
-		}
-	} else {
-		logger.Warningf("no support!")
+func (e *AppEntry) updateIsActive() {
+	if e.dockManager == nil {
+		return
 	}
+	_, ok := e.windows[e.dockManager.activeWindow]
+	e.setIsActive(ok)
 }
-
-// 暂时无用或废弃
-func (e *AppEntry) ContextMenu(x, y int32)                                    {}
-func (e *AppEntry) SecondaryActivate(x, y int32, timestamp uint32)            {}
-func (e *AppEntry) HandleDragEnter(x, y int32, data string, timestamp uint32) {}
-func (e *AppEntry) HandleDragLeave(x, y int32, data string, timestamp uint32) {}
-func (e *AppEntry) HandleDragOver(x, y int32, data string, timestamp uint32)  {}
-func (e *AppEntry) HandleMouseWheel(x, y, delta int32, timestamp uint32)      {}

@@ -12,23 +12,18 @@ package dock
 type HideStateType int32
 
 const (
-	HideStateShowing HideStateType = iota
-	HideStateShown
-	HideStateHidding
-	HideStateHidden
+	HideStateUnknown HideStateType = iota
+	HideStateShow
+	HideStateHide
 )
 
 func (s HideStateType) String() string {
 	switch s {
-	case HideStateShowing:
-		return "HideStateShowing"
-	case HideStateShown:
-		return "HideStateShown"
-	case HideStateHidding:
-		return "HideStateHidding"
-	case HideStateHidden:
-		return "HideStateHidden"
+	case HideStateShow:
+		return "Show"
+	case HideStateHide:
+		return "Hide"
 	default:
-		return "Unknown state"
+		return "Unknown"
 	}
 }

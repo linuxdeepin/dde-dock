@@ -10,41 +10,18 @@
 package dock
 
 import (
-	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"regexp"
 	"strings"
 
-	"bytes"
+	"encoding/base64"
 	"gir/gio-2.0"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/icccm"
-	"github.com/BurntSushi/xgbutil/xgraphics"
-	"github.com/BurntSushi/xgbutil/xprop"
 	"io"
 	"os"
-	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
-	dutils "pkg.deepin.io/lib/utils"
-	"text/template"
+	"time"
 )
-
-func iconifyWindow(win xproto.Window) {
-	logger.Debug("iconifyWindow", win)
-	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
-}
-
-func contains(haystack []string, needle string) bool {
-	for _, s := range haystack {
-		if s == needle {
-			return true
-		}
-	}
-	return false
-}
 
 func trimDesktop(desktopID string) string {
 	desktopIDLen := len(desktopID)
@@ -131,135 +108,6 @@ func dataUriToFile(dataUri, path string) (string, error) {
 	return path, ioutil.WriteFile(path, img, 0744)
 }
 
-func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {
-	// get _NET_WM_NAME
-	name, err := ewmh.WmNameGet(xu, win)
-	if err != nil || name == "" {
-		// get WM_NAME
-		name, _ = icccm.WmNameGet(xu, win)
-	}
-	return name
-}
-
-func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
-	pid, _ := ewmh.WmPidGet(xu, win)
-	return pid
-}
-
-func getWmCommand(xu *xgbutil.XUtil, win xproto.Window) ([]string, error) {
-	command, err := xprop.PropValStrs(xprop.GetProperty(xu, win, "WM_COMMAND"))
-	return command, err
-}
-
-func getWindowGtkApplicationId(xu *xgbutil.XUtil, win xproto.Window) string {
-	gtkAppId, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "_GTK_APPLICATION_ID"))
-	return gtkAppId
-}
-
-func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
-	role, _ := xprop.PropValStr(xprop.GetProperty(xu, win, "WM_WINDOW_ROLE"))
-	return role
-}
-
-func getProcessCmdline(pid uint) ([]string, error) {
-	cmdlinePath := fmt.Sprintf("/proc/%d/cmdline", pid)
-	bytes, err := ioutil.ReadFile(cmdlinePath)
-	if err != nil {
-		return nil, err
-	}
-	content := string(bytes)
-	parts := strings.Split(content, "\x00")
-	length := len(parts)
-	if length >= 2 && parts[length-1] == "" {
-		return parts[:length-1], nil
-	}
-	return parts, nil
-}
-
-func getProcessCwd(pid uint) (string, error) {
-	cwdPath := fmt.Sprintf("/proc/%d/cwd", pid)
-	cwd, err := os.Readlink(cwdPath)
-	return cwd, err
-}
-
-func getProcessExe(pid uint) (string, error) {
-	exePath := fmt.Sprintf("/proc/%d/exe", pid)
-	exe, err := filepath.EvalSymlinks(exePath)
-	return exe, err
-}
-
-func getProcessEnvVars(pid uint) (map[string]string, error) {
-	envPath := fmt.Sprintf("/proc/%d/environ", pid)
-	bytes, err := ioutil.ReadFile(envPath)
-	if err != nil {
-		return nil, err
-	}
-	content := string(bytes)
-	lines := strings.Split(content, "\x00")
-	vars := make(map[string]string, len(lines))
-	for _, line := range lines {
-		parts := strings.SplitN(line, "=", 2)
-		if len(parts) == 2 {
-			vars[parts[0]] = parts[1]
-		}
-	}
-	return vars, nil
-}
-
-func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
-	icon, err := xgraphics.FindIcon(xu, win, 48, 48)
-	// FIXME: gets empty icon for minecraft
-	if err == nil {
-		buf := bytes.NewBuffer(nil)
-		icon.WritePng(buf)
-		return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
-	}
-
-	logger.Debug("get icon from X failed:", err)
-	logger.Debug("get icon name from _NET_WM_ICON_NAME")
-	name, _ := ewmh.WmIconNameGet(XU, win)
-	return name
-}
-
-func createScratchDesktopFile(id, title, icon, cmd string) error {
-	logger.Debugf("create scratch file for %q", id)
-	err := os.MkdirAll(scratchDir, 0775)
-	if err != nil {
-		logger.Warning("create scratch directory failed:", err)
-		return err
-	}
-	f, err := os.OpenFile(filepath.Join(scratchDir, id+".desktop"),
-		os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0744)
-	if err != nil {
-		logger.Warning("Open file for write failed:", err)
-		return err
-	}
-
-	defer f.Close()
-	temp := template.Must(template.New("docked_item_temp").Parse(dockedItemTemplate))
-	dockedItem := dockedItemInfo{title, icon, cmd}
-	logger.Debugf("dockedItem: %#v", dockedItem)
-	err = temp.Execute(f, dockedItem)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func removeScratchFiles(id string) {
-	extList := []string{"desktop", "sh", "png"}
-	for _, ext := range extList {
-		file := filepath.Join(scratchDir, id+"."+ext)
-		if dutils.IsFileExist(file) {
-			logger.Debugf("remove scratch file %q", file)
-			err := os.Remove(file)
-			if err != nil {
-				logger.Warning("remove scratch file %q failed:", file, err)
-			}
-		}
-	}
-}
-
 func strSliceEqual(sa, sb []string) bool {
 	if len(sa) != len(sb) {
 		return false
@@ -276,14 +124,14 @@ func strSliceEqual(sa, sb []string) bool {
 func uniqStrSlice(slice []string) []string {
 	newSlice := make([]string, 0)
 	for _, e := range slice {
-		if !isStrInSlice(e, newSlice) {
+		if !strSliceContains(newSlice, e) {
 			newSlice = append(newSlice, e)
 		}
 	}
 	return newSlice
 }
 
-func isStrInSlice(v string, slice []string) bool {
+func strSliceContains(slice []string, v string) bool {
 	for _, e := range slice {
 		if e == v {
 			return true
@@ -313,4 +161,8 @@ func copyFileContents(src, dst string) (err error) {
 	}
 	err = out.Sync()
 	return
+}
+
+func getCurrentTimestamp() uint32 {
+	return uint32(time.Now().Unix())
 }

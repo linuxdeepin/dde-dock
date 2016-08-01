@@ -12,8 +12,19 @@ package dock
 import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
+
+func (e *AppEntry) setMenu(menu *Menu) {
+	e.coreMenu = menu
+	menuJSON := menu.GenerateJSON()
+	// set menu JSON
+	if e.Menu != menuJSON {
+		e.Menu = menuJSON
+		dbus.NotifyChange(e, "Menu")
+	}
+}
 
 func (entry *AppEntry) updateMenu() {
 	logger.Debug("Update menu")
@@ -23,21 +34,19 @@ func (entry *AppEntry) updateMenu() {
 	desktopActionMenuItems := entry.getMenuItemDesktopActions()
 	menu.AppendItem(desktopActionMenuItems...)
 
-	if entry.isActive() {
+	if entry.hasWindow() {
 		menu.AppendItem(entry.getMenuItemCloseAll())
 	}
 
 	// menu item dock or undock
-	logger.Info(entry.Id, "Item docked?", entry.isDocked)
-	if entry.isDocked {
+	logger.Info(entry.Id, "Item docked?", entry.IsDocked)
+	if entry.IsDocked {
 		menu.AppendItem(entry.getMenuItemUndock())
 	} else {
 		menu.AppendItem(entry.getMenuItemDock())
 	}
 
-	entry.coreMenu = menu
-	menuJSON := menu.GenerateJSON()
-	entry.setData(FieldMenu, menuJSON)
+	entry.setMenu(menu)
 }
 
 func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
@@ -63,15 +72,18 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 }
 
 func (entry *AppEntry) launchApp(timestamp uint32) {
+	logger.Debug("launchApp timestamp:", timestamp)
 	var appInfo *gio.AppInfo
-	if entry.appInfo.DesktopAppInfo != nil {
+
+	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
 		appInfo = (*gio.AppInfo)(entry.appInfo.DesktopAppInfo)
 	} else {
-		logger.Debug("No AppInfo", entry.exec)
-		var err error = nil
+		exec := entry.getExec(true)
+		logger.Debugf("No AppInfo, exec [%s]", exec)
+		var err error
 		appInfo, err = gio.AppInfoCreateFromCommandline(
-			entry.exec,
+			exec,
 			"",
 			gio.AppInfoCreateFlagsNone,
 		)
@@ -97,7 +109,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 
 func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 	var itemName string
-	if entry.isActive() {
+	if entry.hasWindow() {
 		itemName = entry.getDisplayName()
 	} else {
 		itemName = Tr("_Run")
@@ -118,13 +130,13 @@ func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 func (entry *AppEntry) getMenuItemDock() *MenuItem {
 	return NewMenuItem(Tr("_Dock"), func(uint32) {
 		logger.Debug("menu action dock entry")
-		entry.entryManager.dockEntry(entry)
+		entry.RequestDock()
 	}, true)
 }
 
 func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 	return NewMenuItem(Tr("_Undock"), func(uint32) {
 		logger.Debug("menu action undock entry")
-		entry.entryManager.undockEntry(entry)
+		entry.RequestUndock()
 	}, true)
 }

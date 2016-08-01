@@ -87,7 +87,7 @@ func (winInfo *WindowInfo) updateWmAllowedActions() {
 }
 func (winInfo *WindowInfo) isActionMinimizeAllowed() bool {
 	logger.Debugf("wmAllowedActions: %#v", winInfo.wmAllowedActions)
-	return contains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
+	return strSliceContains(winInfo.wmAllowedActions, "_NET_WM_ACTION_MINIMIZE")
 }
 
 // wm state
@@ -100,11 +100,11 @@ func (winInfo *WindowInfo) updateWmState() {
 }
 
 func (winInfo *WindowInfo) hasWmStateSkipTaskbar() bool {
-	return contains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_SKIP_TASKBAR")
 }
 
 func (winInfo *WindowInfo) hasWmStateModal() bool {
-	return contains(winInfo.wmState, "_NET_WM_STATE_MODAL")
+	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
 }
 
 // map state
@@ -158,10 +158,7 @@ func (winInfo *WindowInfo) updateWmName() {
 	winInfo.Title = winInfo.getTitle()
 	entry := winInfo.entry
 	if entry != nil {
-		entry.updateAppXids()
-		if winInfo == entry.current {
-			entry.setTitle(winInfo.Title)
-		}
+		entry.updateWindowTitles()
 	}
 }
 
@@ -305,7 +302,7 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 		if winType == "_NET_WM_WINDOW_TYPE_DIALOG" &&
 			!winInfo.isActionMinimizeAllowed() {
 			return false
-		} else if contains(skipTaskbarWindowTypes, winType) {
+		} else if strSliceContains(skipTaskbarWindowTypes, winType) {
 			return false
 		}
 	}
@@ -439,7 +436,7 @@ func (winInfo *WindowInfo) genInnerId() {
 	logger.Debugf("genInnerId win: %v str: %s, md5sum: %s", win, str, winInfo.innerId)
 }
 
-func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryManager) {
+func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManager) {
 	if winInfo.propertyNotifyTimer != nil {
 		return
 	}
@@ -463,8 +460,7 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(entryManager *EntryMan
 		logger.Debugf("propertyNotifyAtomTable win %v atom: %v", winInfo.window, atomNames)
 
 		if needUpdate {
-			// entryManager.attachOrDetachRuntimeAppWindow(winInfo)
-			entryManager.attachOrDetachWindow(winInfo)
+			dockManager.attachOrDetachWindow(winInfo)
 		}
 
 		// end

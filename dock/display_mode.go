@@ -12,21 +12,14 @@ package dock
 type DisplayModeType int32
 
 const (
-	DisplayModeModernMode DisplayModeType = iota
+	DisplayModeFashionMode DisplayModeType = iota
 	DisplayModeEfficientMode
 	DisplayModeClassicMode
 )
 
-func validDisplayModeNum(mode int32) bool {
-	if 0 <= mode && mode <= 2 {
-		return true
-	}
-	return false
-}
-
 func (t DisplayModeType) String() string {
 	switch t {
-	case DisplayModeModernMode:
+	case DisplayModeFashionMode:
 		return "Fashion mode"
 	case DisplayModeEfficientMode:
 		return "Efficient mode"

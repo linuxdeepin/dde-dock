@@ -103,12 +103,21 @@ func verifyExe(exe, cwd, firstArg string) bool {
 	return exe == firstArgPath
 }
 
-func (p *ProcessInfo) GetShellScript() string {
+func (p *ProcessInfo) getJoinedExeArgs() string {
 	var cmdline string
 	cmdline = strconv.Quote(p.exe)
 	for _, arg := range p.args {
 		cmdline += (" " + strconv.Quote(arg))
 	}
-	cmdline += " $@"
-	return fmt.Sprintf("cd %q\nexec %s\n", p.cwd, cmdline)
+	return cmdline + " $@"
+}
+
+func (p *ProcessInfo) GetShellScriptLines() string {
+	cmdline := p.getJoinedExeArgs()
+	return fmt.Sprintf("#!/bin/sh\ncd %q\nexec %s\n", p.cwd, cmdline)
+}
+
+func (p *ProcessInfo) GetOneCommandLine() string {
+	cmdline := p.getJoinedExeArgs()
+	return fmt.Sprintf("sh -c 'cd %q;exec %s;'", p.cwd, cmdline)
 }

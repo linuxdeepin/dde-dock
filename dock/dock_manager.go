@@ -10,32 +10,58 @@
 package dock
 
 import (
-	"dbus/com/deepin/daemon/display"
+	"dbus/com/deepin/wm"
 	"errors"
+	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/xrect"
+	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
+	"sync"
+	"time"
 )
 
 type DockManager struct {
-	hideStateManager *HideStateManager
-	setting          *Setting
-	dockProperty     *DockProperty
-	entryManager     *EntryManager
-	clientManager    *ClientManager
+	clientList                     windowSlice
+	appIdFilterGroup               *AppIdFilterGroup
+	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
+	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
 
-	// 共用部分
-	hideMode    HideModeType
-	displayMode DisplayModeType
+	Entries AppEntries
 
-	activeWindow       xproto.Window
-	dpy                *display.Display
-	displayPrimaryRect *xrect.XRect
-	dockRect           *xrect.XRect
+	settings    *gio.Settings
+	HideMode    *property.GSettingsEnumProperty `access:"readwrite"`
+	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
+	Position    *property.GSettingsEnumProperty `access:"readwrite"`
+	IconSize    *property.GSettingsUintProperty `access:"readwrite"`
+	DockedApps  *property.GSettingsStrvProperty
 
-	dockHeight int
-	dockWidth  int
+	activeWindow xproto.Window
+
+	HideState HideStateType
+
+	smartHideModeTimer *time.Timer
+	smartHideModeMutex sync.Mutex
+
+	entryCount         uint
+	FrontendWindowRect *Rect
+
+	wm *wm.Wm
+
+	// Signals
+	ServiceRestarted func()
+	EntryAdded       func(dbus.ObjectPath, int32)
+	EntryRemoved     func(string)
 }
+
+const (
+	dockSchema            = "com.deepin.dde.dock"
+	settingKeyHideMode    = "hide-mode"
+	settingKeyDisplayMode = "display-mode"
+	settingKeyPosition    = "position"
+	settingKeyIconSize    = "icon-size"
+	settingKeyDockedApps  = "docked-apps"
+)
 
 func NewDockManager() (*DockManager, error) {
 	m := new(DockManager)
@@ -46,175 +72,122 @@ func NewDockManager() (*DockManager, error) {
 	return m, nil
 }
 
-func (m *DockManager) initEntryManager() error {
-	em, err := NewEntryManager()
-	if err != nil {
-		return err
-	}
-	m.entryManager = em
-
-	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(false)
-	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(false)
-
-	em.initDockedApps()
-	em.initClientList()
-
-	em.desktopWindowsMapCacheManager.SetAutoSaveEnabled(true)
-	em.desktopWindowsMapCacheManager.AutoSave()
-	em.desktopHashFileMapCacheManager.SetAutoSaveEnabled(true)
-	em.desktopHashFileMapCacheManager.AutoSave()
-
-	err = dbus.InstallOnSession(em.dockedAppManager)
-	if err != nil {
-		return err
+func (m *DockManager) destroy() {
+	if m.smartHideModeTimer != nil {
+		m.smartHideModeTimer.Stop()
+		m.smartHideModeTimer = nil
 	}
 
-	err = dbus.InstallOnSession(em)
-	return err
+	if m.settings != nil {
+		m.settings.Unref()
+		m.settings = nil
+	}
+
+	dbus.UnInstallObject(m)
 }
 
-func (m *DockManager) initHideStateManager() error {
-	m.hideStateManager = NewHideStateManager()
-	m.hideStateManager.dockRect = m.dockRect
-	logger.Debug("initHideStateManager dockRect", m.hideStateManager.dockRect)
-	m.hideStateManager.mode = m.hideMode
-	m.hideStateManager.initHideState()
-	err := dbus.InstallOnSession(m.hideStateManager)
-	return err
-}
-
-func (m *DockManager) initDockProperty() error {
-	m.dockProperty = NewDockProperty(m)
-	err := dbus.InstallOnSession(m.dockProperty)
-	return err
-}
-
-func (m *DockManager) initSetting() error {
-	m.setting = NewSetting(m)
-	if m.setting == nil {
-		return errors.New("create setting failed")
-	}
-	err := dbus.InstallOnSession(m.setting)
-
-	logger.Debug("init display and hide mode")
-	m.displayMode = DisplayModeType(m.setting.core.GetEnum(DisplayModeKey))
-	m.hideMode = HideModeType(m.setting.core.GetEnum(HideModeKey))
-	m.dockHeight = getDockHeightByDisplayMode(m.displayMode)
-	return err
-}
-
-func (m *DockManager) init() error {
-	var err error
-
-	err = m.initSetting()
+// ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。
+func (m *DockManager) ActivateWindow(win uint32) error {
+	err := activateWindow(xproto.Window(win))
 	if err != nil {
+		logger.Warning("Activate window failed:", err)
 		return err
 	}
-	logger.Info("initialize setting done")
-
-	// ensure init display after init setting
-	err = m.initDisplay()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize display done")
-
-	err = m.initEntryManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize entry proxyer manager done")
-
-	err = m.initHideStateManager()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize hide state manager done")
-
-	err = m.initDockProperty()
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize dock property done")
-
-	m.setting.listenSettingsChanged()
-	logger.Info("initialize settings done")
-
-	// init client manager
-	m.clientManager = NewClientManager()
-	err = dbus.InstallOnSession(m.clientManager)
-	if err != nil {
-		return err
-	}
-	logger.Info("initialize client manager done")
 	return nil
 }
 
-func (m *DockManager) destroy() {
-	if m.dockProperty != nil {
-		m.dockProperty.destroy()
-		m.dockProperty = nil
+// CloseWindow会将传入id的窗口关闭。
+func (m *DockManager) CloseWindow(win uint32) error {
+	err := ewmh.CloseWindow(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("Close window failed:", err)
+		return err
 	}
-
-	if m.setting != nil {
-		m.setting.destroy()
-		m.setting = nil
-	}
-
-	if m.hideStateManager != nil {
-		m.hideStateManager.destroy()
-		m.hideStateManager = nil
-	}
-
-	if m.dpy != nil {
-		display.DestroyDisplay(m.dpy)
-		m.dpy = nil
-	}
-
+	return nil
 }
 
-func getDockHeightByDisplayMode(mode DisplayModeType) int {
-	switch mode {
-	case DisplayModeModernMode:
-		return 68
-	case DisplayModeEfficientMode:
-		return 48
-	case DisplayModeClassicMode:
-		return 32
-	default:
-		return 0
+// for debug
+func (m *DockManager) GetEntryIDs() []string {
+	list := make([]string, 0, len(m.Entries))
+	for _, entry := range m.Entries {
+		var appId string
+		if entry.appInfo != nil {
+			appId = entry.appInfo.GetId()
+		} else {
+			appId = entry.innerId
+		}
+		list = append(list, appId)
 	}
+	return list
 }
 
-func (m *DockManager) updateDockRect() {
-	// calc dock rect
-	primaryX, primaryY, primaryW, primaryH := m.displayPrimaryRect.Pieces()
-	dockX := primaryX + (primaryW-m.dockWidth)/2
-	dockY := primaryY + primaryH - m.dockHeight
-
-	if m.dockRect == nil {
-		m.dockRect = xrect.New(dockX, dockY, m.dockWidth, m.dockHeight)
-	} else {
-		m.dockRect.XSet(dockX)
-		m.dockRect.YSet(dockY)
-		m.dockRect.WidthSet(m.dockWidth)
-		m.dockRect.HeightSet(m.dockHeight)
+func (m *DockManager) SetFrontendWindowRect(x, y int32, width, height uint32) {
+	if m.FrontendWindowRect.X == x &&
+		m.FrontendWindowRect.Y == y &&
+		m.FrontendWindowRect.Width == width &&
+		m.FrontendWindowRect.Height == height {
+		logger.Debug("SetFrontendWindowRect no changed")
+		return
 	}
+	m.FrontendWindowRect.X = x
+	m.FrontendWindowRect.Y = y
+	m.FrontendWindowRect.Width = width
+	m.FrontendWindowRect.Height = height
+	dbus.NotifyChange(m, "FrontendWindowRect")
+	m.updateHideStateWithoutDelay()
+}
 
-	logger.Debug("primary rect:", m.displayPrimaryRect)
-	logger.Debug("dock width:", m.dockWidth)
-	logger.Debug("dock height:", m.dockHeight)
-	logger.Debug("updateDockRect dock rect:", m.dockRect)
-
-	if m.hideStateManager != nil {
-		m.hideStateManager.updateStateWithoutDelay()
-	} else {
-		logger.Debug("m.hideStateManager is nil")
+func (m *DockManager) IsDocked(desktopFilePath string) (bool, error) {
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
 	}
+	return entry != nil, nil
+}
 
-	if m.dockProperty != nil {
-		m.dockProperty.updateDockRect()
-	} else {
-		logger.Debug("m.dockProperty is nil")
+func (m *DockManager) RequestDock(desktopFilePath string, index int32) (bool, error) {
+	appInfo := NewAppInfoFromFile(desktopFilePath)
+	if appInfo == nil {
+		return false, errors.New("Invalid desktopFilePath")
 	}
+	entry, isNewAdded := m.addAppEntry(appInfo.innerId, appInfo, int(index))
+	dockResult := m.dockEntry(entry)
+	if isNewAdded {
+		entry.updateName()
+		entry.updateIcon()
+		m.installAppEntry(entry)
+	}
+	return dockResult, nil
+}
+
+func (m *DockManager) RequestUndock(desktopFilePath string) (bool, error) {
+	entry, err := m.getDockedAppEntryByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
+	}
+	if entry == nil {
+		return false, nil
+	}
+	m.undockEntry(entry)
+	return true, nil
+}
+
+func (m *DockManager) MoveEntry(index, newIndex int32) error {
+	entries, err := m.Entries.Move(int(index), int(newIndex))
+	if err != nil {
+		logger.Warning("MoveEntry failed:", err)
+		return err
+	}
+	logger.Debug("MoveEntry ok")
+	m.Entries = entries
+	m.saveDockedApps()
+	return nil
+}
+
+func (m *DockManager) IsOnDock(desktopFilePath string) (bool, error) {
+	entry, err := m.Entries.GetByDesktopFilePath(desktopFilePath)
+	if err != nil {
+		return false, err
+	}
+	return entry != nil, nil
 }

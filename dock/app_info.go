@@ -214,23 +214,23 @@ func (dai *AppInfo) GetIcon() string {
 		return ""
 	}
 
-	iconPath := get_theme_icon(icon, 48)
+	iconPath := getIconFilePath(icon)
+	logger.Debugf("icon file path %q", iconPath)
 	if iconPath == "" {
-		logger.Warning("get icon from theme failed")
+		logger.Warningf("get icon %q file path failed", icon)
 		// return a empty string might be a better idea here.
 		// However, gtk will get theme icon failed sometimes for unknown reason.
 		// frontend must make a validity check for icon.
 		iconPath = icon
 	}
 
-	logger.Debug("get_theme_icon:", icon)
 	ext := filepath.Ext(iconPath)
+	logger.Debug("ext:", ext)
 	if ext == "" {
 		logger.Info("get app icon:", icon)
 		return icon
 	}
 
-	logger.Debug("ext:", ext)
 	if strings.EqualFold(ext, ".xpm") {
 		logger.Info("transform xpm to data uri")
 		return xpm_to_dataurl(iconPath)
