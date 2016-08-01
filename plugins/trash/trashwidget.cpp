@@ -4,9 +4,18 @@
 #include <QIcon>
 
 TrashWidget::TrashWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+
+      m_popupApplet(new PopupControlWidget(this))
 {
     QIcon::setThemeName("deepin");
+
+    m_popupApplet->setVisible(false);
+}
+
+QWidget *TrashWidget::popupApplet()
+{
+    return m_popupApplet;
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)

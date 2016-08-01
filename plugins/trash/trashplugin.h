@@ -3,7 +3,6 @@
 
 #include "pluginsiteminterface.h"
 #include "trashwidget.h"
-#include "popupcontrolwidget.h"
 
 class TrashPlugin : public QObject, PluginsItemInterface
 {
@@ -23,7 +22,6 @@ public:
 
 private:
     TrashWidget *m_trashWidget;
-    PopupControlWidget *m_popupApplet;
 };
 
 #endif // TRASHPLUGIN_H
