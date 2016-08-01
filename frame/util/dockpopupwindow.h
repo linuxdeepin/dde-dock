@@ -32,6 +32,9 @@ private slots:
     void globalMouseRelease(int button, int x, int y, const QString &id);
 
 private:
+    using Dtk::Widget::DArrowRectangle::show;
+
+private:
     bool m_model;
     QPoint m_lastPoint;
     QString m_mouseAreaKey;

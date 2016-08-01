@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
 
+    qDebug() << "\n\ndde-dock startup";
+
 #ifndef QT_DEBUG
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif

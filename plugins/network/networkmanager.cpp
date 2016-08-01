@@ -13,8 +13,8 @@ NetworkManager *NetworkManager::instance(QObject *parent)
 
 void NetworkManager::init()
 {
-    reloadDevices();
-    reloadActiveConnections();
+    QTimer::singleShot(2000, this, &NetworkManager::reloadDevices);
+    QTimer::singleShot(2500, this, &NetworkManager::reloadActiveConnections);
 }
 
 const NetworkDevice::NetworkTypes NetworkManager::states() const

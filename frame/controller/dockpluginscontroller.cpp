@@ -75,6 +75,7 @@ void DockPluginsController::loadPlugins()
 #endif
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
+    int pluginIndex = 0;
     for (const QString file : plugins)
     {
         if (!QLibrary::isLibrary(file))
@@ -94,9 +95,8 @@ void DockPluginsController::loadPlugins()
             continue;
         }
 
-//        interface->init(this);
         // delay load
-        QTimer::singleShot(100, [=] {interface->init(this);});
+        QTimer::singleShot(100 + (++pluginIndex) * 50, [=] {interface->init(this);});
     }
 }
 
