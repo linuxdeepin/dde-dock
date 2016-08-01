@@ -74,6 +74,7 @@ func (m *Manager) listenBgGSettings() {
 			return
 		}
 
+		logger.Debug("wrapBgSetting picture-uri changed")
 		value := m.wrapBgSetting.GetString(key)
 		uri, err := m.doSetBackground(value)
 		if err != nil {

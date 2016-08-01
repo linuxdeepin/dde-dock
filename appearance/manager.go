@@ -11,6 +11,7 @@ package appearance
 
 import (
 	"dbus/com/deepin/daemon/accounts"
+	"dbus/com/deepin/wm"
 	"encoding/json"
 	"fmt"
 	"gir/gio-2.0"
@@ -43,13 +44,14 @@ const (
 	gnomeBgSchema   = "org.gnome.desktop.background"
 	gsKeyBackground = "picture-uri"
 
-	appearanceSchema   = "com.deepin.dde.appearance"
-	gsKeyGtkTheme      = "gtk-theme"
-	gsKeyIconTheme     = "icon-theme"
-	gsKeyCursorTheme   = "cursor-theme"
-	gsKeyFontStandard  = "font-standard"
-	gsKeyFontMonospace = "font-monospace"
-	gsKeyFontSize      = "font-size"
+	appearanceSchema    = "com.deepin.dde.appearance"
+	gsKeyGtkTheme       = "gtk-theme"
+	gsKeyIconTheme      = "icon-theme"
+	gsKeyCursorTheme    = "cursor-theme"
+	gsKeyFontStandard   = "font-standard"
+	gsKeyFontMonospace  = "font-monospace"
+	gsKeyFontSize       = "font-size"
+	gsKeyBackgroundURIs = "background-uris"
 )
 
 const (
@@ -79,6 +81,8 @@ type Manager struct {
 
 	watcher    *fsnotify.Watcher
 	endWatcher chan struct{}
+
+	wm *wm.Wm
 }
 
 func NewManager() *Manager {
@@ -130,6 +134,11 @@ func NewManager() *Manager {
 		}
 	}
 
+	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	if err != nil {
+		logger.Warning("new wm failed:", err)
+	}
+
 	m.init()
 
 	return m
@@ -160,6 +169,11 @@ func (m *Manager) destroy() {
 		close(m.endWatcher)
 		m.watcher.Close()
 		m.watcher = nil
+	}
+
+	if m.wm != nil {
+		wm.DestroyWm(m.wm)
+		m.wm = nil
 	}
 
 	m.endCursorChangedHandler()
@@ -237,6 +251,7 @@ func (m *Manager) doSetCursorTheme(value string) error {
 }
 
 func (m *Manager) doSetBackground(value string) (string, error) {
+	logger.Debugf("call doSetBackground %q", value)
 	if !background.IsBackgroundFile(value) {
 		return "", fmt.Errorf("Invalid background file '%v'", value)
 	}
@@ -245,6 +260,10 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 	if err != nil {
 		logger.Debugf("[doSetBackground] set '%s' failed: %v", value, uri, err)
 		return "", err
+	}
+
+	if m.wm != nil {
+		m.wm.ChangeWorkspaceBackground(uri)
 	}
 
 	if m.userObj != nil {
