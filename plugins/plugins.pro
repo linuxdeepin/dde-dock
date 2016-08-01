@@ -4,4 +4,5 @@ SUBDIRS = \
         shutdown \
         system-tray \
         disk-mount \
-        network
+        network \
+        trash
