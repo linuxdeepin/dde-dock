@@ -7,7 +7,8 @@ SoundApplet::SoundApplet(QWidget *parent)
 
       m_centeralWidget(new QWidget(this)),
 
-      m_audioInter(new DBusAudio(this))
+      m_audioInter(new DBusAudio(this)),
+      m_defSinkInter(nullptr)
 {
     m_centeralLayout = new QVBoxLayout;
     m_centeralWidget->setLayout(m_centeralLayout);
@@ -20,9 +21,15 @@ SoundApplet::SoundApplet(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet("background-color:transparent;");
 
-    for (auto sp : m_audioInter->sinks())
-    {
-        DBusSink *sink = new DBusSink(sp.path(), this);
-        qDebug() << sink->name();
-    }
+    QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
+}
+
+void SoundApplet::defaultSinkChanged()
+{
+    delete m_defSinkInter;
+
+    const QDBusObjectPath defSinkPath = m_audioInter->GetDefaultSink();
+    m_defSinkInter = new DBusSink(defSinkPath.path(), this);
+
+    emit defaultSinkChanged(m_defSinkInter);
 }

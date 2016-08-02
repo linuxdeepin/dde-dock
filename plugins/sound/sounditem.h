@@ -2,6 +2,7 @@
 #define SOUNDITEM_H
 
 #include "soundapplet.h"
+#include "dbus/dbussink.h"
 
 #include <QWidget>
 
@@ -21,9 +22,11 @@ protected:
 
 private slots:
     void refershIcon();
+    void sinkChanged(DBusSink *sink);
 
 private:
     SoundApplet *m_applet;
+    DBusSink *m_sinkInter;
     QPixmap m_iconPixmap;
 };
 

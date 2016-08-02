@@ -14,11 +14,18 @@ class SoundApplet : public QScrollArea
 public:
     explicit SoundApplet(QWidget *parent = 0);
 
+signals:
+    void defaultSinkChanged(DBusSink *sink) const;
+
+private slots:
+    void defaultSinkChanged();
+
 private:
     QWidget *m_centeralWidget;
     QVBoxLayout *m_centeralLayout;
 
     DBusAudio *m_audioInter;
+    DBusSink *m_defSinkInter;
 };
 
 #endif // SOUNDAPPLET_H
