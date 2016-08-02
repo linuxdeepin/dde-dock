@@ -9,7 +9,6 @@ DiskMountPlugin::DiskMountPlugin(QObject *parent)
       m_diskControlApplet(nullptr)
 {
     m_diskPluginItem->setVisible(false);
-    m_diskPluginItem->setDockDisplayMode(displayMode());
 }
 
 const QString DiskMountPlugin::pluginName() const
@@ -22,6 +21,7 @@ void DiskMountPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     initCompoments();
+    m_diskPluginItem->setDockDisplayMode(displayMode());
 }
 
 QWidget *DiskMountPlugin::itemWidget(const QString &itemKey)

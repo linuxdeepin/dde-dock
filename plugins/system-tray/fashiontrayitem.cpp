@@ -40,7 +40,7 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const QRect r = rect();
+    const QRectF r = rect();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
@@ -48,7 +48,7 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     // draw circle
     QPen circlePen(QColor(0, 164, 233));
     circlePen.setWidth(3);
-    const int circleSize = std::min(r.width(), r.height()) * 0.8 / 2 - 3;
+    const double circleSize = (0.8 * std::min(r.width(), r.height()) - 8) / 2;
     painter.setPen(circlePen);
     painter.drawEllipse(r.center(), circleSize, circleSize);
 

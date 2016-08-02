@@ -1,6 +1,7 @@
 #include "dockpluginscontroller.h"
 #include "pluginsiteminterface.h"
 #include "dockitemcontroller.h"
+#include "dockpluginloader.h"
 
 #include <QDebug>
 #include <QDir>
@@ -11,7 +12,7 @@ DockPluginsController::DockPluginsController(DockItemController *itemControllerI
 {
     qApp->installEventFilter(this);
 
-    QMetaObject::invokeMethod(this, "loadPlugins", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "startLoader", Qt::QueuedConnection);
 }
 
 DockPluginsController::~DockPluginsController()
@@ -63,41 +64,14 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
 //    item->showPopupApplet();
 //}
 
-void DockPluginsController::loadPlugins()
+void DockPluginsController::startLoader()
 {
-//    Q_ASSERT(m_pluginLoaderList.isEmpty());
-//    Q_ASSERT(m_pluginsInterfaceList.isEmpty());
+    DockPluginLoader *loader = new DockPluginLoader(this);
 
-#ifdef QT_DEBUG
-    const QDir pluginsDir("plugins");
-#else
-    const QDir pluginsDir("../lib/dde-dock/plugins");
-#endif
-    const QStringList plugins = pluginsDir.entryList(QDir::Files);
+    connect(loader, &DockPluginLoader::finished, loader, &DockPluginLoader::deleteLater, Qt::QueuedConnection);
+    connect(loader, &DockPluginLoader::pluginFounded, this, &DockPluginsController::loadPlugin, Qt::QueuedConnection);
 
-    int pluginIndex = 0;
-    for (const QString file : plugins)
-    {
-        if (!QLibrary::isLibrary(file))
-            continue;
-
-        // TODO: old dock plugins is uncompatible
-        if (file.startsWith("libdde-dock-"))
-            continue;
-
-        const QString pluginFilePath = pluginsDir.absoluteFilePath(file);
-        QPluginLoader *pluginLoader = new QPluginLoader(pluginFilePath, this);
-        PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
-        if (!interface)
-        {
-            pluginLoader->unload();
-            pluginLoader->deleteLater();
-            continue;
-        }
-
-        // delay load
-        QTimer::singleShot(100 + (++pluginIndex) * 50, [=] {interface->init(this);});
-    }
+    loader->start(QThread::LowestPriority);
 }
 
 void DockPluginsController::displayModeChanged()
@@ -112,6 +86,20 @@ void DockPluginsController::positionChanged()
     const Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     for (auto inter : m_pluginList.keys())
         inter->positionChanged(position);
+}
+
+void DockPluginsController::loadPlugin(const QString &pluginFile)
+{
+    QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
+    PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
+    if (!interface)
+    {
+        pluginLoader->unload();
+        pluginLoader->deleteLater();
+        return;
+    }
+
+    interface->init(this);
 }
 
 bool DockPluginsController::eventFilter(QObject *o, QEvent *e)

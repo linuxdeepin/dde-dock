@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     util/dockpopupwindow.cpp \
     dbus/dbusxmousearea.cpp \
     item/stretchitem.cpp \
-    item/placeholderitem.cpp
+    item/placeholderitem.cpp \
+    controller/dockpluginloader.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -56,7 +57,8 @@ HEADERS  += \
     util/dockpopupwindow.h \
     dbus/dbusxmousearea.h \
     item/stretchitem.h \
-    item/placeholderitem.h
+    item/placeholderitem.h \
+    controller/dockpluginloader.h
 
 dbus_service.files += com.deepin.dde.dock.service
 dbus_service.path = /usr/share/dbus-1/services

@@ -28,9 +28,10 @@ signals:
     void pluginItemRemoved(PluginsItem *pluginItem) const;
 
 private slots:
-    void loadPlugins();
+    void startLoader();
     void displayModeChanged();
     void positionChanged();
+    void loadPlugin(const QString &pluginFile);
 
 private:
     bool eventFilter(QObject *o, QEvent *e);
