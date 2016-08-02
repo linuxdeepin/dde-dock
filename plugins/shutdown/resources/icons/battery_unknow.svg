@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>battery_unknow</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M21.009,42.0023 C32.6069797,42.0023 42.009,32.6002797 42.009,21.0023 C42.009,9.40432025 32.6069797,0.0023 21.009,0.0023 C9.41102025,0.0023 0.009,9.40432025 0.009,21.0023 C0.009,32.6002797 9.41102025,42.0023 21.009,42.0023 Z" id="path-1"></path>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="battery_unknow">
+            <g transform="translate(3.000000, 3.000000)">
+                <g id="circle15794">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FF5822" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <circle id="circle15800" fill="#FFFFFF" cx="21.002" cy="21.0033" r="12"></circle>
+                <path d="M17.0396,18.0336 C17.1881,16.5467 18.5333,15.4926 19.8865,15.1149 C21.8118,14.5911 24.0958,15.5134 24.8454,17.4537 C25.595,19.394 24.3121,20.8435 22.876,21.7047 C21.4399,22.566 21.0562,23.7797 21.0434,24.9776" id="path15804" stroke="#FF5822" stroke-width="2"></path>
+                <circle id="circle15806" fill="#FF5822" cx="21.0315" cy="28.5189" r="1.5"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

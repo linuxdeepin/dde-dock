@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>battery_040_plugged</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="battery_040_plugged">
+            <g transform="translate(3.000000, 3.000000)">
+                <g id="g15884" filter="url(#filter-1)" transform="translate(-0.000000, 0.000000)">
+                    <path d="M21,0 C15.4304536,-5.30432999e-07 10.0890211,2.21249295 6.15075701,6.15075701 C2.21249295,10.0890211 -5.30432686e-07,15.4304536 3.12638806e-13,21 C-1.14285663e-06,21.004 -1.14285663e-06,21.008 5.40012481e-13,21.012 L42,21.012 C42.0000011,21.008 42.0000011,21.004 42,21 C42.0000005,15.4304536 39.7875071,10.0890211 35.849243,6.15075701 C31.9109789,2.21249295 26.5695464,-5.30432999e-07 21,0 L21,0 Z" id="path15886" fill="#6D9D1D"></path>
+                    <path d="M0,21.0091 C0.0050231481,32.6035263 9.40557264,42.0000022 21,42 C32.5944274,42.0000022 41.9949769,32.6035263 42,21.0091 L2.27373675e-13,21.0091 L0,21.0091 Z" id="path15888" fill="#9AD82D"></path>
+                </g>
+                <circle id="circle15728" fill="#FFFFFF" cx="21" cy="21" r="12"></circle>
+                <path d="M21.8589,12.041631 L16,22.989431 L21.0355,22.989431 L20.014,30.912731 C20.004,30.994731 20.112,31.029731 20.1487,30.953731 L26.0156,20.016031 L20.9984,20.030031 L21.9936,12.082331 C22.0036,12.000331 21.8946,11.967031 21.8589,12.041331 L21.8589,12.041631 Z" id="path15730" fill="#9AD82D"></path>
+            </g>
+        </g>
+    </g>
+</svg>

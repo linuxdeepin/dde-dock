@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="48px" height="48px" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7 (28169) - http://www.bohemiancoding.com/sketch -->
+    <title>battery_100</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="21" cy="21" r="21"></circle>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.2 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="battery_100">
+            <g transform="translate(3.000000, 3.000000)">
+                <g id="circle15498">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#9AD82D" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <circle id="circle15506" fill="#FFFFFF" cx="21.0071" cy="21.0033" r="12"></circle>
+                <path d="M20.995187,12.0077381 C20.3117688,12.0151231 20.0047143,12.5613919 20.0126415,12.9738443 L20.0213688,19.999568 C20.0133688,20.5001974 20.2905325,20.9938111 21.0020234,20.9985375 C21.7014416,21.0059225 22.0169325,20.5092071 22.0075506,19.999568 C22.0075506,19.6217512 21.9988234,12.9738443 21.9988234,12.9738443 C22.0060961,12.5522345 21.6947506,12.0131292 20.995187,12.0077381 L20.995187,12.0077381 Z" id="path15510" fill="#8FC92B"></path>
+                <path d="M16.9628961,14.2462805 C16.775572,14.2549192 16.5946313,14.3180009 16.441587,14.4280255 C14.3650052,15.8724584 12.9998415,18.2901611 12.9998415,21.0153753 C12.9998415,25.4384758 16.6012234,29.0306895 20.9998416,29.0306895 C25.3984598,29.0306895 28.9998416,25.4385497 28.9998416,21.0153753 C28.9998416,18.2954044 27.639187,15.8805819 25.5694416,14.4352628 C25.2811997,14.2340314 24.9091297,14.2042351 24.5933867,14.3570979 C24.2776438,14.5099607 24.0661968,14.8222592 24.0386958,15.1763534 C24.0111948,15.5304476 24.1718178,15.8725423 24.4600597,16.0737737 C26.0246416,17.166385 27.0424598,18.9663321 27.0424598,21.0153753 C27.0424598,24.3474892 24.3564234,27.0416863 20.9998416,27.0416863 C17.6432597,27.0416863 14.9586052,24.3474153 14.9586052,21.0153753 C14.9586052,18.9623442 15.9784597,17.1598862 17.5481324,16.0680134 C17.9148936,15.8210537 18.0743233,15.3559582 17.9378449,14.9311262 C17.8013665,14.5062942 17.4025192,14.2261268 16.9628961,14.2462805 L16.9628961,14.2462805 Z" id="path15512" fill="#8FC92B"></path>
+            </g>
+        </g>
+    </g>
+</svg>
