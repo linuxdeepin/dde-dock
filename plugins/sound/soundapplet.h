@@ -1,6 +1,9 @@
 #ifndef SOUNDAPPLET_H
 #define SOUNDAPPLET_H
 
+#include "dbus/dbusaudio.h"
+#include "dbus/dbussink.h"
+
 #include <QScrollArea>
 #include <QVBoxLayout>
 
@@ -14,6 +17,8 @@ public:
 private:
     QWidget *m_centeralWidget;
     QVBoxLayout *m_centeralLayout;
+
+    DBusAudio *m_audioInter;
 };
 
 #endif // SOUNDAPPLET_H

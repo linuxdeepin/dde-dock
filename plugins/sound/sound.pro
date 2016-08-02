@@ -13,12 +13,16 @@ DISTFILES       += sound.json
 HEADERS += \
     soundplugin.h \
     sounditem.h \
-    soundapplet.h
+    soundapplet.h \
+    dbus/dbusaudio.h \
+    dbus/dbussink.h
 
 SOURCES += \
     soundplugin.cpp \
     sounditem.cpp \
-    soundapplet.cpp
+    soundapplet.cpp \
+    dbus/dbusaudio.cpp \
+    dbus/dbussink.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
