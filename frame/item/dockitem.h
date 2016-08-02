@@ -39,6 +39,7 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void moveEvent(QMoveEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void enterEvent(QEvent *e);
