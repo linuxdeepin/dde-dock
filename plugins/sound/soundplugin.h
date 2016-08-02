@@ -19,6 +19,7 @@ public:
     void init(PluginProxyInterface *proxyInter);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemPopupApplet(const QString &itemKey);
 
 private:
     SoundItem *m_soundItem;

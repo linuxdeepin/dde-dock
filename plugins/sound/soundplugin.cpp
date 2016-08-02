@@ -17,7 +17,7 @@ void SoundPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     m_soundItem = new SoundItem;
-//    m_proxyInter->itemAdded(this, QString());
+    m_proxyInter->itemAdded(this, QString());
 }
 
 QWidget *SoundPlugin::itemWidget(const QString &itemKey)
@@ -25,4 +25,11 @@ QWidget *SoundPlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return m_soundItem;
+}
+
+QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_soundItem->popupApplet();
 }
