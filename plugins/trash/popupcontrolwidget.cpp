@@ -50,6 +50,9 @@ void PopupControlWidget::clearTrashFloder()
 {
     for (auto item : QDir(TrashDir).entryInfoList())
     {
+        if (item.fileName() == "." || item.fileName() == "..")
+            continue;
+
         if (item.isFile())
             QFile(item.fileName()).remove();
         else if (item.isDir())
