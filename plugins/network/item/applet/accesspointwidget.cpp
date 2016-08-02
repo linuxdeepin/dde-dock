@@ -34,6 +34,8 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     setLayout(centeralLayout);
     setStyleSheet("AccessPointWidget #Ssid {"
                   "color:white;"
+                  "background-color:transparent;"
+                  "border:none;"
                   "text-align:left;"
                   "}"
                   "AccessPointWidget[active=true] #Ssid {"
