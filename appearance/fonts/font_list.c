@@ -50,6 +50,7 @@ list_font_info (int *num)
           FC_FILE,
           FC_LANG,
           FC_SPACING,
+          FC_CHARSET,
           NULL);
      if (!os) {
           fprintf(stderr, "Build FcObjectSet Failed\n");
@@ -69,6 +70,13 @@ list_font_info (int *num)
      int cnt = 0;
      FcInfo *list = NULL;
      for (i = 0; i < fs->nfont; i++) {
+          char *charset = (char*)FcPatternFormat(fs->fonts[i], (FcChar8*)"%{charset}");
+          if (charset == NULL || strlen(charset) == 0) {
+              free(charset);
+              continue;
+          }
+          free(charset);
+
           if (append_font_info(&list, fs->fonts[i], cnt) == -1) {
                continue;
           }
