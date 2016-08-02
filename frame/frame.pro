@@ -61,8 +61,13 @@ HEADERS  += \
 dbus_service.files += com.deepin.dde.dock.service
 dbus_service.path = /usr/share/dbus-1/services
 
+headers.files 	+= ../interfaces/constants.h \
+		../interfaces/pluginproxyinterface.h \
+		../interfaces/pluginsiteminterface.h
+headers.path	= /usr/include/dde-dock
+
 target.path = $${PREFIX}/bin/
-INSTALLS += target dbus_service
+INSTALLS += target dbus_service headers
 
 RESOURCES += \
     item/resources.qrc
