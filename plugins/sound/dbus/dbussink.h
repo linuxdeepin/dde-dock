@@ -126,10 +126,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetPort"), argumentList);
     }
 
-    inline QDBusPendingReply<> SetVolume(double in0, bool in1)
+    inline QDBusPendingReply<> SetVolume(double volume, bool feedBack)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
+        argumentList << QVariant::fromValue(volume) << QVariant::fromValue(feedBack);
         return asyncCallWithArgumentList(QStringLiteral("SetVolume"), argumentList);
     }
 

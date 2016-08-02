@@ -6,6 +6,8 @@
 
 #include <QScrollArea>
 #include <QVBoxLayout>
+#include <QLabel>
+#include <QSlider>
 
 class SoundApplet : public QScrollArea
 {
@@ -19,9 +21,14 @@ signals:
 
 private slots:
     void defaultSinkChanged();
+    void onVolumeChanged();
+    void volumeSliderValueChanged();
 
 private:
     QWidget *m_centeralWidget;
+    QWidget *m_appControlWidget;
+    QLabel *m_volumeIcon;
+    QSlider *m_volumeSlider;
     QVBoxLayout *m_centeralLayout;
 
     DBusAudio *m_audioInter;

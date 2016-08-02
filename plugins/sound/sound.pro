@@ -15,14 +15,16 @@ HEADERS += \
     sounditem.h \
     soundapplet.h \
     dbus/dbusaudio.h \
-    dbus/dbussink.h
+    dbus/dbussink.h \
+    horizontalseparator.h
 
 SOURCES += \
     soundplugin.cpp \
     sounditem.cpp \
     soundapplet.cpp \
     dbus/dbusaudio.cpp \
-    dbus/dbussink.cpp
+    dbus/dbussink.cpp \
+    horizontalseparator.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
