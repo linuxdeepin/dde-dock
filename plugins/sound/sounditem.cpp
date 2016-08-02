@@ -48,16 +48,15 @@ void SoundItem::refershIcon()
         return;
 
     const double volmue = m_sinkInter->volume();
-    const bool mute = m_sinkInter->mute();
+    const bool mute = m_sinkInter->mute() || volmue < 0.001;
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
-
 
     QString iconString;
     if (displayMode == Dock::Fashion)
     {
         QString volumeString;
         if (volmue >= 1.0)
-            volumeString = "010";
+            volumeString = "100";
         else
             volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
 

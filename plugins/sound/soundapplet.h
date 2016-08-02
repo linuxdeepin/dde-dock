@@ -1,6 +1,7 @@
 #ifndef SOUNDAPPLET_H
 #define SOUNDAPPLET_H
 
+#include "componments/volumeslider.h"
 #include "dbus/dbusaudio.h"
 #include "dbus/dbussink.h"
 
@@ -28,7 +29,7 @@ private:
     QWidget *m_centeralWidget;
     QWidget *m_appControlWidget;
     QLabel *m_volumeIcon;
-    QSlider *m_volumeSlider;
+    VolumeSlider *m_volumeSlider;
     QVBoxLayout *m_centeralLayout;
 
     DBusAudio *m_audioInter;

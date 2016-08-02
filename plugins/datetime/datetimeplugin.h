@@ -17,15 +17,15 @@ public:
     explicit DatetimePlugin(QObject *parent = 0);
     ~DatetimePlugin();
 
-    const QString pluginName() const;
-    void init(PluginProxyInterface *proxyInter);
+    const QString pluginName() const override;
+    void init(PluginProxyInterface *proxyInter) override;
 
-    int itemSortKey(const QString &itemKey) const;
+    int itemSortKey(const QString &itemKey) override;
 
-    QWidget *itemWidget(const QString &itemKey);
-    QWidget *itemTipsWidget(const QString &itemKey);
+    QWidget *itemWidget(const QString &itemKey) override;
+    QWidget *itemTipsWidget(const QString &itemKey) override;
 
-    const QString itemCommand(const QString &itemKey);
+    const QString itemCommand(const QString &itemKey) override;
 
 private slots:
     void updateCurrentTimeString();

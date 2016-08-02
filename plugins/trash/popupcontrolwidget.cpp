@@ -56,7 +56,7 @@ void PopupControlWidget::clearTrashFloder()
         if (item.isFile())
             QFile(item.fileName()).remove();
         else if (item.isDir())
-            QDir(item.path()).removeRecursively();
+            QDir(item.absoluteFilePath()).removeRecursively();
     }
 }
 

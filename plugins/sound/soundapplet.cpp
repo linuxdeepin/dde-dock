@@ -1,5 +1,5 @@
 #include "soundapplet.h"
-#include "horizontalseparator.h"
+#include "componments/horizontalseparator.h"
 
 #include <QLabel>
 #include <QIcon>
@@ -13,7 +13,7 @@ SoundApplet::SoundApplet(QWidget *parent)
       m_centeralWidget(new QWidget),
       m_appControlWidget(new QWidget),
       m_volumeIcon(new QLabel),
-      m_volumeSlider(new QSlider(Qt::Horizontal)),
+      m_volumeSlider(new VolumeSlider),
 
       m_audioInter(new DBusAudio(this)),
       m_defSinkInter(nullptr)
@@ -53,7 +53,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_volumeIcon->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
-    m_volumeSlider->setMaximum(100);
+    m_volumeSlider->setMaximum(1000);
 
     m_appControlWidget->setLayout(appLayout);
 
@@ -72,7 +72,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet("background-color:transparent;");
 
-    connect(m_volumeSlider, &QSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
+    connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
     connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
 
     QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
@@ -93,12 +93,10 @@ void SoundApplet::defaultSinkChanged()
 
 void SoundApplet::onVolumeChanged()
 {
-    const bool mute = m_defSinkInter->mute();
     const double volmue = m_defSinkInter->volume();
+    const bool mute = m_defSinkInter->mute() || volmue < 0.001;
 
-    m_volumeSlider->blockSignals(true);
-    m_volumeSlider->setValue(std::min(100.0, volmue * 100));
-    m_volumeSlider->blockSignals(false);
+    m_volumeSlider->setValue(std::min(1000.0, volmue * 1000));
 
     QString volumeString;
     if (mute)
@@ -116,5 +114,5 @@ void SoundApplet::onVolumeChanged()
 
 void SoundApplet::volumeSliderValueChanged()
 {
-    m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 100 + 0.5, false);
+    m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 1000, false);
 }
