@@ -56,7 +56,7 @@ DockItem::ItemType DockItem::itemType() const
 
 void DockItem::updatePopupPosition()
 {
-    if (!m_popupShown)
+    if (!m_popupShown || !PopupWindow->isVisible())
         return;
 
     const QPoint p = popupMarkPoint();
@@ -66,6 +66,11 @@ void DockItem::updatePopupPosition()
 void DockItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
+}
+
+void DockItem::moveEvent(QMoveEvent *e)
+{
+    QWidget::moveEvent(e);
 
     updatePopupPosition();
 }
