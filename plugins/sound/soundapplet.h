@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QSlider>
 
+#include <dimagebutton.h>
+
 class SoundApplet : public QScrollArea
 {
     Q_OBJECT
@@ -24,11 +26,12 @@ private slots:
     void defaultSinkChanged();
     void onVolumeChanged();
     void volumeSliderValueChanged();
+    void toggleMute();
 
 private:
     QWidget *m_centeralWidget;
     QWidget *m_appControlWidget;
-    QLabel *m_volumeIcon;
+    Dtk::Widget::DImageButton *m_volumeBtn;
     VolumeSlider *m_volumeSlider;
     QVBoxLayout *m_centeralLayout;
 
