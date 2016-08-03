@@ -1,4 +1,5 @@
 #include "accesspointwidget.h"
+#include "horizontalseperator.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
@@ -21,12 +22,21 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     else
         m_securityIcon->setPixmap(QPixmap(16, 16));
 
-    QHBoxLayout *centeralLayout = new QHBoxLayout;
-    centeralLayout->addWidget(m_securityIcon);
-    centeralLayout->addSpacing(5);
-    centeralLayout->addWidget(m_strengthIcon);
-    centeralLayout->addSpacing(10);
-    centeralLayout->addWidget(m_ssidBtn);
+    QHBoxLayout *infoLayout = new QHBoxLayout;
+    infoLayout->addWidget(m_securityIcon);
+    infoLayout->addSpacing(5);
+    infoLayout->addWidget(m_strengthIcon);
+    infoLayout->addSpacing(10);
+    infoLayout->addWidget(m_ssidBtn);
+    infoLayout->setSpacing(0);
+    infoLayout->setContentsMargins(15, 0, 0, 0);
+
+    HorizontalSeperator *seperator = new HorizontalSeperator;
+    seperator->setFixedHeight(1);
+
+    QVBoxLayout *centeralLayout = new QVBoxLayout;
+    centeralLayout->addWidget(seperator);
+    centeralLayout->addLayout(infoLayout);
     centeralLayout->setSpacing(0);
     centeralLayout->setMargin(0);
 

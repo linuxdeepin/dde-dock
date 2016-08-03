@@ -179,6 +179,7 @@ void WirelessApplet::updateAPList()
         for (auto ap : m_apList)
         {
             AccessPointWidget *apw = new AccessPointWidget(ap);
+            apw->setFixedHeight(ITEM_HEIGHT);
             if (ap == m_activeAP)
                 apw->setActive(true);
 
@@ -189,6 +190,7 @@ void WirelessApplet::updateAPList()
             ++avaliableAPCount;
         }
     }
+    m_controlPanel->setSeperatorVisible(avaliableAPCount);
 
     const int contentHeight = avaliableAPCount * ITEM_HEIGHT + m_controlPanel->height();
     m_centeralWidget->setFixedHeight(contentHeight);
