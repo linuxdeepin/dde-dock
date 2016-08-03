@@ -8,6 +8,8 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     : QSlider(Qt::Horizontal, parent),
       m_pressed(false)
 {
+    setMinimum(0);
+    setMaximum(1000);
     setTickInterval(50);
     setPageStep(50);
     setTickPosition(QSlider::NoTicks);
@@ -30,7 +32,7 @@ void VolumeSlider::mousePressEvent(QMouseEvent *e)
         if (!rect().contains(e->pos()))
             return;
         m_pressed = true;
-        QSlider::setValue(minimum() + (double((maximum()) - minimum()) * e->x() / rect().width()));
+        QSlider::setValue(1000.0 * e->x() / rect().width());
     }
 }
 

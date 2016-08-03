@@ -26,11 +26,12 @@ private slots:
     void defaultSinkChanged();
     void onVolumeChanged();
     void volumeSliderValueChanged();
+    void sinkInputsChanged();
     void toggleMute();
 
 private:
     QWidget *m_centeralWidget;
-    QWidget *m_appControlWidget;
+    QWidget *m_applicationTitle;
     Dtk::Widget::DImageButton *m_volumeBtn;
     VolumeSlider *m_volumeSlider;
     QVBoxLayout *m_centeralLayout;

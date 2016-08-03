@@ -1,10 +1,12 @@
 #include "soundapplet.h"
+#include "sinkinputwidget.h"
 #include "componments/horizontalseparator.h"
 
 #include <QLabel>
 #include <QIcon>
 
 #define WIDTH       200
+#define MAX_HEIGHT  200
 #define ICON_SIZE   24
 
 DWIDGET_USE_NAMESPACE
@@ -13,7 +15,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent),
 
       m_centeralWidget(new QWidget),
-      m_appControlWidget(new QWidget),
+      m_applicationTitle(new QWidget),
       m_volumeBtn(new DImageButton),
       m_volumeSlider(new VolumeSlider),
 
@@ -33,6 +35,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     deviceLineLayout->setSpacing(10);
 
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
+    volumeCtrlLayout->addSpacing(2);
     volumeCtrlLayout->addWidget(m_volumeBtn);
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->setSpacing(0);
@@ -48,24 +51,20 @@ SoundApplet::SoundApplet(QWidget *parent)
     appLineLayout->setMargin(0);
     appLineLayout->setSpacing(10);
 
-    QVBoxLayout *appLayout = new QVBoxLayout;
-    appLayout->addLayout(appLineLayout);
-    appLayout->setSpacing(0);
-    appLayout->setMargin(0);
+    m_applicationTitle->setLayout(appLineLayout);
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(1000);
 
-    m_appControlWidget->setLayout(appLayout);
-
     m_centeralLayout = new QVBoxLayout;
     m_centeralLayout->addLayout(deviceLineLayout);
     m_centeralLayout->addLayout(volumeCtrlLayout);
-    m_centeralLayout->addWidget(m_appControlWidget);
+    m_centeralLayout->addWidget(m_applicationTitle);
 
     m_centeralWidget->setLayout(m_centeralLayout);
     m_centeralWidget->setFixedWidth(WIDTH);
+    m_centeralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     setFixedWidth(WIDTH);
     setWidget(m_centeralWidget);
@@ -76,9 +75,11 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     connect(m_volumeBtn, &DImageButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
+    connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
     connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
 
     QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
 }
 
 void SoundApplet::defaultSinkChanged()
@@ -118,6 +119,28 @@ void SoundApplet::onVolumeChanged()
 void SoundApplet::volumeSliderValueChanged()
 {
     m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 1000, false);
+}
+
+void SoundApplet::sinkInputsChanged()
+{
+    QVBoxLayout *appLayout = m_centeralLayout;
+    while (QLayoutItem *item = appLayout->takeAt(3))
+    {
+        delete item->widget();
+        delete item;
+    }
+
+    m_applicationTitle->setVisible(false);
+    for (auto input : m_audioInter->sinkInputs())
+    {
+        m_applicationTitle->setVisible(true);
+        SinkInputWidget *si = new SinkInputWidget(input.path());
+        appLayout->addWidget(si);
+    }
+
+    const int contentHeight = m_centeralWidget->sizeHint().height();
+    m_centeralWidget->setFixedHeight(contentHeight);
+    setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 
 void SoundApplet::toggleMute()

@@ -17,7 +17,9 @@ HEADERS += \
     dbus/dbusaudio.h \
     dbus/dbussink.h \
     componments/horizontalseparator.h \
-    componments/volumeslider.h
+    componments/volumeslider.h \
+    dbus/dbussinkinput.h \
+    sinkinputwidget.h
 
 SOURCES += \
     soundplugin.cpp \
@@ -26,7 +28,9 @@ SOURCES += \
     dbus/dbusaudio.cpp \
     dbus/dbussink.cpp \
     componments/horizontalseparator.cpp \
-    componments/volumeslider.cpp
+    componments/volumeslider.cpp \
+    dbus/dbussinkinput.cpp \
+    sinkinputwidget.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
