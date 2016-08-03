@@ -53,7 +53,7 @@ void PluginsItem::detachPluginWidget()
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
-    DockItem::mousePressEvent(e);
+    QWidget::mousePressEvent(e);
 
     if (e->button() == Qt::LeftButton)
         MousePressPoint = e->pos();
