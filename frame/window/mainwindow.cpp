@@ -129,6 +129,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::dataChanged, m_positionUpdateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::resetPanelEnvironment);
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
@@ -326,22 +327,27 @@ void MainWindow::resetPanelEnvironment()
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
 
-    QWidget::setFixedSize(size);
-    m_mainPanel->setFixedSize(size);
     m_mainPanel->move(0, 0);
+    m_mainPanel->setFixedSize(size);
+    QWidget::setFixedSize(size);
+    m_sizeChangeAni->setEndValue(size);
+
+    QPoint position;
     switch (m_settings->position())
     {
     case Top:
-        QWidget::move(primaryRect.topLeft().x() + offsetX, 0);               break;
+        position = QPoint(primaryRect.topLeft().x() + offsetX, 0);               break;
     case Left:
-        QWidget::move(primaryRect.topLeft().x(), offsetY);                   break;
+        position = QPoint(primaryRect.topLeft().x(), offsetY);                   break;
     case Right:
-        QWidget::move(primaryRect.right() - size.width() + 1, offsetY);      break;
+        position = QPoint(primaryRect.right() - size.width() + 1, offsetY);      break;
     case Bottom:
-        QWidget::move(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+        position = QPoint(offsetX, primaryRect.bottom() - size.height() + 1);    break;
     default:
         Q_ASSERT(false);
     }
+    QWidget::move(position);
+    m_posChangeAni->setEndValue(position);
 }
 
 void MainWindow::updatePanelVisible()
