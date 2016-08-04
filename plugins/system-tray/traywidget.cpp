@@ -74,7 +74,9 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 
 void TrayWidget::mousePressEvent(QMouseEvent *e)
 {
-    QWidget::mousePressEvent(e);
+    const QPoint point(e->pos() - rect().center());
+    if (point.manhattanLength() > 24)
+        return QWidget::mousePressEvent(e);
 
     m_pressPoint = e->pos();
 }
@@ -82,6 +84,10 @@ void TrayWidget::mousePressEvent(QMouseEvent *e)
 void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
+
+    const QPoint point(e->pos() - rect().center());
+    if (point.manhattanLength() > 24)
+        return;
 
     const QPoint distance = e->pos() - m_pressPoint;
     if (distance.manhattanLength() > DRAG_THRESHOLD)
