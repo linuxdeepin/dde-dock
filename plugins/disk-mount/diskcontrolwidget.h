@@ -19,6 +19,7 @@ signals:
 private slots:
     void diskListChanged();
     void unmountDisk(const QString &diskId) const;
+    void unmountFinished(const QString &uuid, const QString &info);
 
 private:
     QVBoxLayout *m_centeralLayout;

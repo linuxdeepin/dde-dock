@@ -23,6 +23,7 @@ DiskControlWidget::DiskControlWidget(QWidget *parent)
     setStyleSheet("background-color:transparent;");
 
     connect(m_diskInter, &DBusDiskMount::DiskListChanged, this, &DiskControlWidget::diskListChanged);
+    connect(m_diskInter, &DBusDiskMount::Error, this, &DiskControlWidget::unmountFinished);
 
     QMetaObject::invokeMethod(this, "diskListChanged", Qt::QueuedConnection);
 }
@@ -64,4 +65,9 @@ void DiskControlWidget::diskListChanged()
 void DiskControlWidget::unmountDisk(const QString &diskId) const
 {
     m_diskInter->Unmount(diskId);
+}
+
+void DiskControlWidget::unmountFinished(const QString &uuid, const QString &info)
+{
+    qDebug() << uuid << info;
 }

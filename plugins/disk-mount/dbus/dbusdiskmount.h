@@ -98,7 +98,7 @@ public Q_SLOTS: // METHODS
 
 Q_SIGNALS: // SIGNALS
     void Changed(int in0, const QString &in1);
-    void Error(const QString &in0, const QString &in1);
+    void Error(const QString &uuid, const QString &info);
 // begin property changed signals
 void DiskListChanged();
 };
