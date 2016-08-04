@@ -94,19 +94,19 @@ void DockItem::enterEvent(QEvent *e)
 
 void DockItem::leaveEvent(QEvent *e)
 {
+    QWidget::leaveEvent(e);
+
     m_hover = false;
     m_popupTipsDelayTimer->stop();
 
     // auto hide if popup is not model window
-    if (!PopupWindow->model())
+    if (m_popupShown && !PopupWindow->model())
     {
         m_popupShown = false;
         PopupWindow->hide();
     }
 
     update();
-
-    return QWidget::leaveEvent(e);
 }
 
 const QRect DockItem::perfectIconRect() const
