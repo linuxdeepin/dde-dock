@@ -51,9 +51,9 @@ func correctBackgroundPath(bg string) string {
 	return ""
 }
 
-func checkBlurredBackgroundExists(src string) bool {
-	id, _ := utils.SumStrMd5(src)
-	blurredImagePath := "/var/cache/image-blur/" + id + path.Ext(src)
+func checkBlurredBackgroundExists(srcURI string) bool {
+	id, _ := utils.SumStrMd5(utils.DecodeURI(srcURI))
+	blurredImagePath := "/var/cache/image-blur/" + id + path.Ext(srcURI)
 
 	return utils.IsFileExist(blurredImagePath)
 }
