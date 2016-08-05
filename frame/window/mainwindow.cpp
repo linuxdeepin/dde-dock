@@ -147,6 +147,9 @@ void MainWindow::initConnections()
         QWidget::setFixedSize(size);
         m_mainPanel->setFixedSize(size);
     });
+    connect(m_posChangeAni, &QPropertyAnimation::finished, [this] {
+        QWidget::move(m_posChangeAni->endValue().toPoint());
+    });
 }
 
 void MainWindow::updatePosition()
