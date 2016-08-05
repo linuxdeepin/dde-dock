@@ -117,7 +117,7 @@
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="16"/>
-        <source>Clear</source>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -161,7 +161,7 @@
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="309"/>
-        <source>Please enter the password of &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
+        <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
