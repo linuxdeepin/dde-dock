@@ -306,7 +306,7 @@ void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, con
         m_networkInter->FeedSecret(apPath, uuid, dialog->textValue(), checkBox->isChecked());
     });
 
-    dialog->setTitle(tr("Please enter the password of <font color=\"#faca57\">%1</font>").arg(ssid));
+    dialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
     dialog->open();
     dialog->raise();
     dialog->move(qApp->primaryScreen()->geometry().center() - dialog->rect().center());

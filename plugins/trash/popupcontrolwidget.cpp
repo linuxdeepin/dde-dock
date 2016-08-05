@@ -13,7 +13,7 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
 
       m_openBtn(new DLinkButton(tr("Run"), this)),
-      m_clearBtn(new DLinkButton(tr("Clear"), this)),
+      m_clearBtn(new DLinkButton(tr("Empty"), this)),
 
       m_fsWatcher(new QFileSystemWatcher(this))
 {
