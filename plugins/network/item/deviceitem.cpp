@@ -18,3 +18,18 @@ const QUuid DeviceItem::uuid() const
 {
     return m_deviceUuid;
 }
+
+const QString DeviceItem::itemCommand() const
+{
+    return QString();
+}
+
+QWidget *DeviceItem::itemPopup()
+{
+    return nullptr;
+}
+
+QWidget *DeviceItem::itemApplet()
+{
+    return nullptr;
+}

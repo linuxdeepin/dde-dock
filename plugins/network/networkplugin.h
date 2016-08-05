@@ -16,7 +16,9 @@ public:
 
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
+    const QString itemCommand(const QString &itemKey);
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
 private slots:

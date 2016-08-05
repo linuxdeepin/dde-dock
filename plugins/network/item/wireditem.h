@@ -15,7 +15,8 @@ public:
 
     NetworkDevice::NetworkType type() const;
     NetworkDevice::NetworkState state() const;
-    QWidget *itemApplet();
+    QWidget *itemPopup();
+    const QString itemCommand() const;
 
 protected:
     void paintEvent(QPaintEvent *e);

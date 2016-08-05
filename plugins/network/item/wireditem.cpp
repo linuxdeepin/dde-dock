@@ -30,7 +30,7 @@ NetworkDevice::NetworkState WiredItem::state() const
     return m_connected ? NetworkDevice::Activated : NetworkDevice::Disconnected;
 }
 
-QWidget *WiredItem::itemApplet()
+QWidget *WiredItem::itemPopup()
 {
     m_itemTips->setText(tr("Unknow"));
 
@@ -51,6 +51,11 @@ QWidget *WiredItem::itemApplet()
     } while (false);
 
     return m_itemTips;
+}
+
+const QString WiredItem::itemCommand() const
+{
+    return "dde-control-center -s network";
 }
 
 void WiredItem::paintEvent(QPaintEvent *e)

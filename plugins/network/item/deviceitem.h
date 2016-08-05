@@ -16,7 +16,9 @@ public:
 
     virtual NetworkDevice::NetworkType type() const = 0;
     virtual NetworkDevice::NetworkState state() const = 0;
-    virtual QWidget *itemApplet() = 0;
+    virtual const QString itemCommand() const;
+    virtual QWidget *itemApplet();
+    virtual QWidget *itemPopup();
 
 protected:
     QSize sizeHint() const;

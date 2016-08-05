@@ -28,6 +28,15 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
     m_networkManager->init();
 }
 
+const QString NetworkPlugin::itemCommand(const QString &itemKey)
+{
+    for (auto deviceItem : m_deviceItemList)
+        if (deviceItem->uuid() == itemKey)
+            return deviceItem->itemCommand();
+
+    return QString();
+}
+
 QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
@@ -35,6 +44,15 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
         {
             return deviceItem;
         }
+
+    return nullptr;
+}
+
+QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
+{
+    for (auto deviceItem : m_deviceItemList)
+        if (deviceItem->uuid() == itemKey)
+            return deviceItem->itemPopup();
 
     return nullptr;
 }
