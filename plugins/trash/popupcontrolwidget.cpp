@@ -12,7 +12,7 @@ const QString TrashDir = QDir::homePath() + "/.local/share/Trash/files";
 PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
 
-      m_openBtn(new DLinkButton(tr("Open"), this)),
+      m_openBtn(new DLinkButton(tr("Run"), this)),
       m_clearBtn(new DLinkButton(tr("Clear"), this)),
 
       m_fsWatcher(new QFileSystemWatcher(this))

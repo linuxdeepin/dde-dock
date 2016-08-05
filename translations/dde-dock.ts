@@ -112,7 +112,7 @@
     <name>PopupControlWidget</name>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="15"/>
-        <source>Open</source>
+        <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
