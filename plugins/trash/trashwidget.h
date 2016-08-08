@@ -18,11 +18,14 @@ public:
     QSize sizeHint() const;
 
 protected:
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
 
 private slots:
     void updateIcon();
+    void moveToTrash(const QUrl &url);
 
 private:
     PopupControlWidget *m_popupApplet;

@@ -46,6 +46,11 @@ QSize PopupControlWidget::sizeHint() const
     return QSize(width(), m_empty ? 30 : 60);
 }
 
+const QString PopupControlWidget::trashDir()
+{
+    return TrashDir;
+}
+
 void PopupControlWidget::openTrashFloder()
 {
     QProcess *proc = new QProcess;

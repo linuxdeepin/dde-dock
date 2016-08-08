@@ -15,6 +15,7 @@ public:
 
     bool empty() const;
     QSize sizeHint() const;
+    static const QString trashDir();
 
 signals:
     void emptyChanged(const bool empty) const;

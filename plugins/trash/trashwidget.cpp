@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QApplication>
+#include <QDragEnterEvent>
 
 TrashWidget::TrashWidget(QWidget *parent)
     : QWidget(parent),
@@ -18,6 +19,7 @@ TrashWidget::TrashWidget(QWidget *parent)
     connect(m_popupApplet, &PopupControlWidget::emptyChanged, this, &TrashWidget::updateIcon);
 
     updateIcon();
+    setAcceptDrops(true);
 }
 
 QWidget *TrashWidget::popupApplet()
@@ -28,6 +30,21 @@ QWidget *TrashWidget::popupApplet()
 QSize TrashWidget::sizeHint() const
 {
     return QSize(20, 20);
+}
+
+void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (e->mimeData()->hasFormat("text/uri-list"))
+        return e->accept();
+}
+
+void TrashWidget::dropEvent(QDropEvent *e)
+{
+    Q_ASSERT(e->mimeData()->hasFormat("text/uri-list"));
+
+    const QMimeData *mime = e->mimeData();
+    for (auto url : mime->urls())
+        moveToTrash(url);
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)
@@ -58,4 +75,17 @@ void TrashWidget::updateIcon()
     m_icon = icon.pixmap(size, size);
 
     update();
+}
+
+void TrashWidget::moveToTrash(const QUrl &url)
+{
+    const QFileInfo info = url.toLocalFile();
+
+    QDir trashDir(m_popupApplet->trashDir() + "/files");
+    if (!trashDir.exists())
+        trashDir.mkpath(".");
+
+//    qDebug() << info.absoluteFilePath() << trashDir.absoluteFilePath(info.fileName());
+
+    QDir().rename(info.absoluteFilePath(), trashDir.absoluteFilePath(info.fileName()));
 }
