@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
+    app.loadTranslator();
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
