@@ -56,6 +56,11 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
+void DockPluginsController::requestRefershWindowVisible()
+{
+    emit m_pluginList.first().first()->requestRefershWindowVisible();
+}
+
 //void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)
 //{
 //    PluginsItem *item = pluginItemAt(itemInter, itemKey);

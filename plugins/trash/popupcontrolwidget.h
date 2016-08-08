@@ -17,12 +17,14 @@ public:
     QSize sizeHint() const;
     static const QString trashDir();
 
+public slots:
+    void openTrashFloder();
+    void clearTrashFloder();
+
 signals:
     void emptyChanged(const bool empty) const;
 
 private slots:
-    void openTrashFloder();
-    void clearTrashFloder();
     void trashStatusChanged();
 
 private:

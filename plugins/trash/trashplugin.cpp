@@ -4,6 +4,9 @@ TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent),
       m_trashWidget(new TrashWidget)
 {
+    connect(m_trashWidget, &TrashWidget::requestRefershWindowVisible, [this] {
+        m_proxyInter->requestRefershWindowVisible();
+    });
 }
 
 const QString TrashPlugin::pluginName() const
@@ -29,13 +32,14 @@ QWidget *TrashPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_trashWidget->popupApplet();
+    return nullptr;
+//    return m_trashWidget->popupApplet();
 }
 
 const QString TrashPlugin::itemCommand(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return QString();
-//    return "gvfs-open trash://";
+//    return QString();
+    return "gvfs-open trash://";
 }

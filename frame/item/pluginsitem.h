@@ -16,6 +16,8 @@ public:
     void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
+    using DockItem::showContextMenu;
+
     inline ItemType itemType() const {return Plugins;}
 
 private:
