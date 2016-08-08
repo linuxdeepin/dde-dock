@@ -13,6 +13,7 @@ public:
     ~PluginsItem();
 
     int itemSortKey() const;
+    void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
     inline ItemType itemType() const {return Plugins;}

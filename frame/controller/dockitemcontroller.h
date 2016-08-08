@@ -29,6 +29,7 @@ signals:
     void itemMoved(DockItem *item, const int index) const;
 
 public slots:
+    void updatePluginsItemOrderKey();
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
     void placeholderItemAdded(PlaceholderItem *item, DockItem *position);
     void placeholderItemDocked(const QString &appDesktop, DockItem *position);
@@ -45,6 +46,8 @@ private:
 
 private:
     QList<DockItem *> m_itemList;
+
+    QTimer *m_updatePluginsOrderTimer;
 
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;

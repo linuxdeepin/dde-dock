@@ -45,6 +45,11 @@ int PluginsItem::itemSortKey() const
     return m_pluginInter->itemSortKey(m_itemKey);
 }
 
+void PluginsItem::setItemSortKey(const int order) const
+{
+    m_pluginInter->setSortKey(m_itemKey, order);
+}
+
 void PluginsItem::detachPluginWidget()
 {
     QWidget *widget = m_pluginInter->itemWidget(m_itemKey);
