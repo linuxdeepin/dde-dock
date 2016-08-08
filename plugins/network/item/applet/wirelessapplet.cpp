@@ -142,7 +142,7 @@ void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &
         return;
 
     *it = ap;
-    if (m_activeAP == ap)
+    if (m_activeAP.path() == ap.path())
     {
         m_activeAP = ap;
         emit activeAPChanged();

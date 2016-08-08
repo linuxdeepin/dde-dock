@@ -20,7 +20,11 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     if (ap.secured())
         m_securityIcon->setPixmap(QPixmap(":/wireless/resources/wireless/security.svg"));
     else
-        m_securityIcon->setPixmap(QPixmap(16, 16));
+    {
+        QPixmap pixmap(16, 16);
+        pixmap.fill(Qt::transparent);
+        m_securityIcon->setPixmap(pixmap);
+    }
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_securityIcon);
