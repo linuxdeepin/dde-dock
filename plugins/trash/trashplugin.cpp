@@ -15,7 +15,7 @@ void TrashPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-//    m_proxyInter->itemAdded(this, QString());
+    m_proxyInter->itemAdded(this, QString());
 }
 
 QWidget *TrashPlugin::itemWidget(const QString &itemKey)
