@@ -32,6 +32,19 @@ bool DockItemController::appIsOnDock(const QString &appDesktop) const
     return m_appInter->IsOnDock(appDesktop);
 }
 
+void DockItemController::updatePluginsItemOrderKey()
+{
+    Q_ASSERT(sender() == m_updatePluginsOrderTimer);
+
+    int index = 0;
+    for (auto item : m_itemList)
+    {
+        if (item->itemType() != DockItem::Plugins)
+            continue;
+        static_cast<PluginsItem *>(item)->setItemSortKey(++index);
+    }
+}
+
 void DockItemController::itemMove(DockItem * const moveItem, DockItem * const replaceItem)
 {
     Q_ASSERT(moveItem != replaceItem);
@@ -50,7 +63,7 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
             return;
 
     const int moveIndex = m_itemList.indexOf(moveItem);
-    const int replaceIndex = replaceItem->itemType() == DockItem::Stretch ?
+    const int replaceIndex = replaceType == DockItem::Stretch ?
                                 // disable insert after placeholder item
                                 m_itemList.indexOf(replaceItem) - 1 :
                                 m_itemList.indexOf(replaceItem);
@@ -59,8 +72,12 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
     m_itemList.insert(replaceIndex, moveItem);
     emit itemMoved(moveItem, replaceIndex);
 
+    // update plugins sort key if order changed
+    if (moveType == DockItem::Plugins || replaceType == DockItem::Plugins)
+        m_updatePluginsOrderTimer->start();
+
     // for app move, index 0 is launcher item, need to pass it.
-    if (moveItem->itemType() == DockItem::App && replaceItem->itemType() == DockItem::App)
+    if (moveType == DockItem::App && replaceType == DockItem::App)
         m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
 }
 
@@ -87,6 +104,9 @@ void DockItemController::placeholderItemRemoved(PlaceholderItem *item)
 
 DockItemController::DockItemController(QObject *parent)
     : QObject(parent),
+
+      m_updatePluginsOrderTimer(new QTimer(this)),
+
       m_appInter(new DBusDock(this)),
       m_pluginsInter(new DockPluginsController(this)),
       m_placeholderItem(new StretchItem),
@@ -94,11 +114,16 @@ DockItemController::DockItemController(QObject *parent)
 {
 //    m_placeholderItem->hide();
 
+    m_updatePluginsOrderTimer->setSingleShot(true);
+    m_updatePluginsOrderTimer->setInterval(1000);
+
     m_itemList.append(new LauncherItem);
     for (auto entry : m_appInter->entries())
         m_itemList.append(new AppItem(entry));
     m_itemList.append(m_placeholderItem);
     m_itemList.append(m_containerItem);
+
+    connect(m_updatePluginsOrderTimer, &QTimer::timeout, this, &DockItemController::updatePluginsItemOrderKey);
 
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
     connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemController::*)(const QString &)>(&DockItemController::appItemRemoved));
@@ -170,7 +195,7 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
     // find insert position
     int insertIndex = 0;
     const int itemSortKey = item->itemSortKey();
-    if (itemSortKey == -1)
+    if (itemSortKey == -1 || firstPluginPosition == -1)
     {
         insertIndex = m_itemList.size();
     }
@@ -180,8 +205,17 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
     }
     else
     {
-        // TODO: compare other plugins to find insert position
-        Q_ASSERT(false);
+        insertIndex = m_itemList.size();
+        for (int i(firstPluginPosition); i != m_itemList.size(); ++i)
+        {
+            PluginsItem *pItem = static_cast<PluginsItem *>(m_itemList[i]);
+            Q_ASSERT(pItem);
+
+            if (itemSortKey <= pItem->itemSortKey())
+                continue;
+            insertIndex = i;
+            break;
+        }
     }
 
 //    qDebug() << insertIndex << item;
