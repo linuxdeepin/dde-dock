@@ -24,7 +24,7 @@ QWidget *SoundItem::popupApplet()
 
 QSize SoundItem::sizeHint() const
 {
-    return QSize(24, 24);
+    return QSize(20, 20);
 }
 
 void SoundItem::resizeEvent(QResizeEvent *e)

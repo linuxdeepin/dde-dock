@@ -7,10 +7,12 @@
 
 DWIDGET_USE_NAMESPACE
 
-const QString TrashDir = QDir::homePath() + "/.local/share/Trash/files";
+const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
 
 PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
+
+      m_empty(false),
 
       m_openBtn(new DLinkButton(tr("Run"), this)),
       m_clearBtn(new DLinkButton(tr("Empty"), this)),
@@ -30,12 +32,18 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
     setLayout(centeralLayout);
     setObjectName("trash");
     setFixedWidth(80);
-    setFixedHeight(60);
+
+    trashStatusChanged();
 }
 
 bool PopupControlWidget::empty() const
 {
     return m_empty;
+}
+
+QSize PopupControlWidget::sizeHint() const
+{
+    return QSize(width(), m_empty ? 30 : 60);
 }
 
 void PopupControlWidget::openTrashFloder()
@@ -68,6 +76,10 @@ void PopupControlWidget::trashStatusChanged()
     if (m_empty == empty)
         return;
 
+    m_clearBtn->setVisible(!empty);
     m_empty = empty;
+
+    setFixedHeight(sizeHint().height());
+
     emit emptyChanged(m_empty);
 }

@@ -14,6 +14,7 @@ public:
     explicit PopupControlWidget(QWidget *parent = 0);
 
     bool empty() const;
+    QSize sizeHint() const;
 
 signals:
     void emptyChanged(const bool empty) const;

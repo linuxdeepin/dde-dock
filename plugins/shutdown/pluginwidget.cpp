@@ -15,7 +15,7 @@ PluginWidget::PluginWidget(QWidget *parent)
 
 QSize PluginWidget::sizeHint() const
 {
-    return QSize(24, 24);
+    return QSize(20, 20);
 }
 
 void PluginWidget::paintEvent(QPaintEvent *e)

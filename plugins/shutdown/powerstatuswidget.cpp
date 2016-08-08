@@ -13,7 +13,7 @@ PowerStatusWidget::PowerStatusWidget(QWidget *parent)
 
 QSize PowerStatusWidget::sizeHint() const
 {
-    return QSize(24, 24);
+    return QSize(20, 20);
 }
 
 void PowerStatusWidget::paintEvent(QPaintEvent *e)

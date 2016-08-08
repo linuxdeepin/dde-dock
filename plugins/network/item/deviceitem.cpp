@@ -11,7 +11,7 @@ DeviceItem::DeviceItem(const QUuid &deviceUuid)
 
 QSize DeviceItem::sizeHint() const
 {
-    return QSize(24, 24);
+    return QSize(20, 20);
 }
 
 const QUuid DeviceItem::uuid() const

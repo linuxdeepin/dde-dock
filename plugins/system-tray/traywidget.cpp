@@ -44,7 +44,7 @@ const QImage TrayWidget::trayImage() const
 
 QSize TrayWidget::sizeHint() const
 {
-    return QSize(24, 24);
+    return QSize(20, 20);
 }
 
 void TrayWidget::paintEvent(QPaintEvent *e)
