@@ -19,6 +19,8 @@ public:
     static int itemBaseHeight();
     static int itemBaseWidth();
 
+    inline ItemType itemType() const {return App;}
+
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);

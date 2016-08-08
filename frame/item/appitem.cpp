@@ -14,7 +14,7 @@ int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
 
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
-    : DockItem(App, parent),
+    : DockItem(parent),
       m_appNameTips(new QLabel(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
       m_draging(false),

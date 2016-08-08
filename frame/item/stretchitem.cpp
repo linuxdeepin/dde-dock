@@ -3,7 +3,7 @@
 #include <QPaintEvent>
 
 StretchItem::StretchItem(QWidget *parent)
-    : DockItem(Stretch, parent)
+    : DockItem(parent)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }

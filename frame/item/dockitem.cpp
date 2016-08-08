@@ -10,9 +10,8 @@ Position DockItem::DockPosition = Position::Top;
 DisplayMode DockItem::DockDisplayMode = DisplayMode::Efficient;
 std::unique_ptr<DockPopupWindow> DockItem::PopupWindow(nullptr);
 
-DockItem::DockItem(const ItemType type, QWidget *parent)
+DockItem::DockItem(QWidget *parent)
     : QWidget(parent),
-      m_type(type),
       m_hover(false),
       m_popupShown(false),
 
@@ -47,11 +46,6 @@ void DockItem::setDockPosition(const Position side)
 void DockItem::setDockDisplayMode(const DisplayMode mode)
 {
     DockDisplayMode = mode;
-}
-
-DockItem::ItemType DockItem::itemType() const
-{
-    return m_type;
 }
 
 void DockItem::updatePopupPosition()

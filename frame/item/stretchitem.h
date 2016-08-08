@@ -10,6 +10,8 @@ class StretchItem : public DockItem
 public:
     explicit StretchItem(QWidget *parent = 0);
 
+    inline ItemType itemType() const {return Stretch;}
+
 private:
     void mousePressEvent(QMouseEvent *e);
 };

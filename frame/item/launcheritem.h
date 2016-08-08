@@ -10,6 +10,8 @@ class LauncherItem : public DockItem
 public:
     explicit LauncherItem(QWidget *parent = 0);
 
+    inline ItemType itemType() const {return Launcher;}
+
 private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);

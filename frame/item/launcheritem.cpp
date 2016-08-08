@@ -7,7 +7,7 @@
 #include <QMouseEvent>
 
 LauncherItem::LauncherItem(QWidget *parent)
-    : DockItem(DockItem::Launcher, parent),
+    : DockItem(parent),
 
       m_tips(new QLabel(this))
 {

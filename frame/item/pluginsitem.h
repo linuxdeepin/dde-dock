@@ -15,6 +15,8 @@ public:
     int itemSortKey() const;
     void detachPluginWidget();
 
+    inline ItemType itemType() const {return Plugins;}
+
 private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);

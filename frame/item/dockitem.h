@@ -21,16 +21,17 @@ public:
         App,
         Stretch,
         Plugins,
+        Container,
     };
 
 public:
-    explicit DockItem(const ItemType type, QWidget *parent = nullptr);
+    explicit DockItem(QWidget *parent = nullptr);
     ~DockItem();
 
     static void setDockPosition(const Position side);
     static void setDockDisplayMode(const DisplayMode mode);
 
-    ItemType itemType() const;
+    inline virtual ItemType itemType() const = 0;
 
 signals:
     void dragStarted() const;
@@ -61,7 +62,6 @@ private:
     void showPopupWindow(QWidget * const content, const bool model = false);
 
 protected:
-    ItemType m_type;
     bool m_hover;
     bool m_popupShown;
 

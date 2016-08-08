@@ -14,7 +14,7 @@
 QPoint PluginsItem::MousePressPoint = QPoint();
 
 PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
-    : DockItem(Plugins, parent),
+    : DockItem(parent),
       m_pluginInter(pluginInter),
       m_centeralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
