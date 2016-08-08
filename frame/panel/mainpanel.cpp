@@ -105,7 +105,7 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 //    const QList<DockItem *> itemList = m_itemController->itemList();
 //    for (auto item : itemList)
 //    {
-//        if (item->itemType() == DockItem::Stretch)
+//        if (item->itemType() == DockItem::Container)
 //            item->setVisible(displayMode == Dock::Efficient);
 //    }
 
@@ -353,9 +353,10 @@ void MainPanel::adjustItemSize()
 
     for (auto item : itemList)
     {
-        if (item->itemType() == DockItem::Stretch)
+        const DockItem::ItemType itemType = item->itemType();
+        if (itemType == DockItem::Stretch || itemType == DockItem::Container)
             continue;
-        if (item->itemType() == DockItem::Plugins)
+        if (itemType == DockItem::Plugins)
             if (m_displayMode != Dock::Fashion)
                 continue;
 

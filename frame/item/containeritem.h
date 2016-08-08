@@ -2,6 +2,9 @@
 #define CONTAINERITEM_H
 
 #include "dockitem.h"
+#include "components/containerwidget.h"
+
+#include <QPixmap>
 
 class ContainerItem : public DockItem
 {
@@ -11,6 +14,18 @@ public:
     explicit ContainerItem(QWidget *parent = 0);
 
     inline ItemType itemType() const {return Container;}
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void paintEvent(QPaintEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e);
+    QSize sizeHint() const;
+
+private:
+    QPixmap m_icon;
+
+    ContainerWidget *m_containerWidget;
 };
 
 #endif // CONTAINERITEM_H

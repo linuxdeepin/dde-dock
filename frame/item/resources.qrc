@@ -4,5 +4,7 @@
         <file>resources/indicator.png</file>
         <file>resources/indicator_ver.png</file>
         <file>resources/indicator_active_ver.png</file>
+        <file>resources/arrow_up_normal.png</file>
+        <file>resources/arrow_down_normal.png</file>
     </qresource>
 </RCC>

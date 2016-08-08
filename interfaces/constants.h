@@ -5,6 +5,8 @@
 
 namespace Dock {
 
+#define DOCK_PLUGIN_MIME    "dock/plugin"
+
 #define PROP_DISPLAY_MODE   "DisplayMode"
 enum DisplayMode
 {
