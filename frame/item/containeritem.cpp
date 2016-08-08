@@ -32,6 +32,9 @@ void ContainerItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
+    if (DockDisplayMode == Dock::Fashion)
+        return;
+
     QPainter painter(this);
     painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
 }

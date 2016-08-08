@@ -274,6 +274,9 @@ void MainPanel::adjustItemSize()
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
+        if (item->itemType() == DockItem::Container)
+            continue;
+
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
 
         switch (item->itemType())
