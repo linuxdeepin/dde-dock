@@ -1,3 +1,4 @@
+#include "constants.h"
 #include "pluginsitem.h"
 #include "pluginsiteminterface.h"
 
@@ -116,10 +117,13 @@ void PluginsItem::startDrag()
     m_draging = true;
     update();
 
+    QMimeData *mime = new QMimeData;
+    mime->setData(DOCK_PLUGIN_MIME, m_itemKey.toStdString().c_str());
+
     QDrag *drag = new QDrag(this);
     drag->setPixmap(pixmap);
     drag->setHotSpot(pixmap.rect().center());
-    drag->setMimeData(new QMimeData);
+    drag->setMimeData(mime);
 
     emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);

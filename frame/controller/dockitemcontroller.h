@@ -8,6 +8,7 @@
 #include "item/stretchitem.h"
 #include "item/appitem.h"
 #include "item/placeholderitem.h"
+#include "item/containeritem.h"
 
 #include <QObject>
 
@@ -48,6 +49,7 @@ private:
     DBusDock *m_appInter;
     DockPluginsController *m_pluginsInter;
     StretchItem *m_placeholderItem;
+    ContainerItem *m_containerItem;
 
     static DockItemController *INSTANCE;
 };
