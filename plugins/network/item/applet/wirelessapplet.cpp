@@ -309,5 +309,8 @@ void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, con
     dialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
     dialog->open();
     dialog->raise();
-    dialog->move(qApp->primaryScreen()->geometry().center() - dialog->rect().center());
+
+    QTimer::singleShot(500, [dialog] {
+        dialog->move(qApp->primaryScreen()->geometry().center() - dialog->rect().center());
+    });
 }
