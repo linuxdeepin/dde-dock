@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QLabel>
 #include <QProgressBar>
+#include <QIcon>
 
 class DiskControlItem : public QWidget
 {
@@ -25,6 +26,7 @@ private slots:
 
 private:
     DiskInfo m_info;
+    QIcon m_unknowIcon;
 
     QLabel *m_diskIcon;
     QLabel *m_diskName;

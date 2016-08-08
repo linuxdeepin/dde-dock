@@ -8,6 +8,8 @@ DWIDGET_USE_NAMESPACE
 DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     : QWidget(parent),
 
+      m_unknowIcon(":/icons/resources/unknow.svg"),
+
       m_diskIcon(new QLabel),
       m_diskName(new QLabel),
       m_diskCapacity(new QLabel),
@@ -39,7 +41,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     infoLayout->addWidget(m_diskName);
     infoLayout->addWidget(m_diskCapacity);
     infoLayout->setSpacing(0);
-    infoLayout->setMargin(0);
+    infoLayout->setContentsMargins(3, 7, 0, 7);
 
     QHBoxLayout *unmountLayout = new QHBoxLayout;
     unmountLayout->addLayout(infoLayout);
@@ -51,7 +53,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     progressLayout->addLayout(unmountLayout);
     progressLayout->addWidget(m_capacityValueBar);
     progressLayout->setSpacing(0);
-    progressLayout->setMargin(0);
+    progressLayout->setContentsMargins(10, 0, 0, 0);
 
     QHBoxLayout *centeralLayout = new QHBoxLayout;
     centeralLayout->addWidget(m_diskIcon);
@@ -70,11 +72,17 @@ void DiskControlItem::updateInfo(const DiskInfo &info)
 {
     m_info = info;
 
-    m_diskIcon->setPixmap(QIcon::fromTheme(info.m_icon).pixmap(32, 32));
-    m_diskName->setText(info.m_name);
-    m_diskCapacity->setText(QString("%1/%2").arg(formatDiskSize(info.m_usedSize)).arg(formatDiskSize(info.m_totalSize)));
+    m_diskIcon->setPixmap(QIcon::fromTheme(info.m_icon, m_unknowIcon).pixmap(32, 32));
+    if (!info.m_name.isEmpty())
+        m_diskName->setText(info.m_name);
+    else
+        m_diskName->setText(tr("Unknown device"));
+    if (info.m_totalSize)
+        m_diskCapacity->setText(QString("%1/%2").arg(formatDiskSize(info.m_usedSize)).arg(formatDiskSize(info.m_totalSize)));
+    else
+        m_diskCapacity->clear();
     m_capacityValueBar->setMinimum(0);
-    m_capacityValueBar->setMaximum(info.m_totalSize);
+    m_capacityValueBar->setMaximum(std::max(1ull, info.m_totalSize));
     m_capacityValueBar->setValue(info.m_usedSize);
 }
 
