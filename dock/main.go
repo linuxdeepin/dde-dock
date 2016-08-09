@@ -39,11 +39,6 @@ func (d *Daemon) Stop() error {
 		XU = nil
 	}
 
-	if TrayXU != nil {
-		TrayXU.Conn().Close()
-		TrayXU = nil
-	}
-
 	logger.EndTracing()
 	return nil
 }
@@ -72,11 +67,6 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	TrayXU, err = xgbutil.NewConn()
-	if err != nil {
-		d.startFailed(err)
-		return err
-	}
 	initAtom()
 	initDir()
 	logger.Info("initialize atoms done")
@@ -87,7 +77,6 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
-	initTrayManager()
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
 

@@ -20,6 +20,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/dock"
 	_ "pkg.deepin.io/dde/daemon/launcher"
 	"pkg.deepin.io/dde/daemon/loader"
+	_ "pkg.deepin.io/dde/daemon/trayicon"
 	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/app"
 	"pkg.deepin.io/lib/dbus"
@@ -92,7 +93,7 @@ func main() {
 	proxy.SetupProxy()
 
 	loader.SetLogLevel(cmd.LogLevel())
-	loader.EnableModules([]string{"dock", "launcher"}, nil, loader.EnableFlagIgnoreMissingModule)
+	loader.EnableModules([]string{"dock", "launcher", "trayicon"}, nil, loader.EnableFlagIgnoreMissingModule)
 
 	runMainLoop()
 }

@@ -29,8 +29,7 @@ var (
 	cacheDir    string
 	dockManager *DockManager
 
-	XU     *xgbutil.XUtil
-	TrayXU *xgbutil.XUtil
+	XU *xgbutil.XUtil
 
 	//There variable must be initialized after the Xu/TrayXU has been
 	//created.
@@ -67,7 +66,5 @@ func initAtom() {
 	ATOM_WINDOW_TYPE, _ = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
 	ATOM_DOCK_APP_ID, _ = xprop.Atm(XU, "_DDE_DOCK_APP_ID")
 
-	_NET_SYSTEM_TRAY_S0, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_S0")
-	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
 	ATOM_XEMBED_INFO, _ = xprop.Atm(XU, "_XEMBED_INFO")
 }
