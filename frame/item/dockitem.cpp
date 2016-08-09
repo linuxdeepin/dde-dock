@@ -101,10 +101,7 @@ void DockItem::leaveEvent(QEvent *e)
 
     // auto hide if popup is not model window
     if (m_popupShown && !PopupWindow->model())
-    {
-        m_popupShown = false;
-        PopupWindow->hide();
-    }
+        hidePopup();
 
     update();
 }
@@ -213,8 +210,7 @@ void DockItem::popupWindowAccept()
 
     disconnect(PopupWindow.get(), &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 
-    m_popupShown = false;
-    PopupWindow->hide();
+    hidePopup();
 
     emit requestWindowAutoHide(true);
 }
@@ -263,4 +259,10 @@ const QPoint DockItem::popupMarkPoint()
     }
 
     return p;
+}
+
+void DockItem::hidePopup()
+{
+    m_popupShown = false;
+    PopupWindow->hide();
 }

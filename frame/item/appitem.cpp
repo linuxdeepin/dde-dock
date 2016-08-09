@@ -231,9 +231,6 @@ void AppItem::paintEvent(QPaintEvent *e)
         painter.drawPixmap(itemRect.center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
 
     // Update the window icon geometry when the icon is changed.
-    if (m_updateIconGeometryTimer->isActive()) {
-        m_updateIconGeometryTimer->stop();
-    }
     m_updateIconGeometryTimer->start();
 }
 
@@ -249,6 +246,9 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
 void AppItem::mousePressEvent(QMouseEvent *e)
 {
+    m_updateIconGeometryTimer->stop();
+    hidePopup();
+
     if (e->button() == Qt::RightButton)
     {
         if (perfectIconRect().contains(e->pos()))

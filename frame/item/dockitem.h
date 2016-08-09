@@ -49,6 +49,7 @@ protected:
     const QRect perfectIconRect() const;
     const QPoint popupMarkPoint();
 
+    void hidePopup();
     void showContextMenu();
     void showHoverTips();
     void popupWindowAccept();
