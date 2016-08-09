@@ -104,6 +104,7 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
         return;
     }
 
+    m_pluginList.insert(interface, QMap<QString, PluginsItem *>());
     interface->init(this);
 }
 
