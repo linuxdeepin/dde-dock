@@ -54,6 +54,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessApplet::deviceStateChanegd);
     connect(m_networkInter, &DBusNetwork::NeedSecrets, this, &WirelessApplet::needSecrets);
+    connect(m_networkInter, &DBusNetwork::DeviceEnabled, this, &WirelessApplet::deviceEnabled);
 
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
 
@@ -254,6 +255,14 @@ void WirelessApplet::onActiveAPChanged()
     }
 
     emit activeAPChanged();
+}
+
+void WirelessApplet::deviceEnabled(const QString &devPath, const bool enable)
+{
+    if (devPath != m_device.path())
+        return;
+
+    m_controlPanel->setDeviceEnabled(enable);
 }
 
 void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ssid)
