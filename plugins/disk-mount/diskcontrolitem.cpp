@@ -41,7 +41,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     infoLayout->addWidget(m_diskName);
     infoLayout->addWidget(m_diskCapacity);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(3, 7, 0, 7);
+    infoLayout->setContentsMargins(3, 4, 0, 8);
 
     QHBoxLayout *unmountLayout = new QHBoxLayout;
     unmountLayout->addLayout(infoLayout);
@@ -53,7 +53,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     progressLayout->addLayout(unmountLayout);
     progressLayout->addWidget(m_capacityValueBar);
     progressLayout->setSpacing(0);
-    progressLayout->setContentsMargins(10, 0, 0, 0);
+    progressLayout->setContentsMargins(10, 0, 0, 5);
 
     QHBoxLayout *centeralLayout = new QHBoxLayout;
     centeralLayout->addWidget(m_diskIcon);
