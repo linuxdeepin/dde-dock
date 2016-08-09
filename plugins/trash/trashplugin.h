@@ -20,6 +20,9 @@ public:
     QWidget *itemPopupApplet(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
 
+    int itemSortKey(const QString &itemKey);
+    void displayModeChanged(const Dock::DisplayMode displayMode);
+
 private:
     TrashWidget *m_trashWidget;
 };

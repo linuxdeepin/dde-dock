@@ -18,7 +18,7 @@ void TrashPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    m_proxyInter->itemAdded(this, QString());
+    displayModeChanged(displayMode());
 }
 
 QWidget *TrashPlugin::itemWidget(const QString &itemKey)
@@ -42,4 +42,20 @@ const QString TrashPlugin::itemCommand(const QString &itemKey)
 
 //    return QString();
     return "gvfs-open trash://";
+}
+
+int TrashPlugin::itemSortKey(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    // always place at last
+    return -1;
+}
+
+void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
+{
+    if (displayMode == Dock::Fashion)
+        m_proxyInter->itemAdded(this, QString());
+    else
+        m_proxyInter->itemRemoved(this, QString());
 }
