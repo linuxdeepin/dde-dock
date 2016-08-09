@@ -10,6 +10,7 @@
 package mounts
 
 import (
+	libnotifications "dbus/org/freedesktop/notifications"
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
@@ -41,6 +42,7 @@ type Manager struct {
 	quit    chan struct{}
 
 	refreshLocker sync.Mutex
+	notifier      *libnotifications.Notifier
 }
 
 func newManager() *Manager {
@@ -67,6 +69,11 @@ func (m *Manager) init() {
 		}
 	}
 	m.refreshDiskList()
+	var err error
+	m.notifier, err = libnotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+	if err != nil {
+		logger.Warning("init notifier failed:", err)
+	}
 }
 
 func (m *Manager) destroy() {
@@ -84,6 +91,11 @@ func (m *Manager) destroy() {
 	if m.monitor != nil {
 		m.monitor.Unref()
 		m.monitor = nil
+	}
+
+	if m.notifier != nil {
+		libnotifications.DestroyNotifier(m.notifier)
+		m.notifier = nil
 	}
 }
 
@@ -106,5 +118,15 @@ func (m *Manager) updateDiskInfo() {
 		case <-m.quit:
 			return
 		}
+	}
+}
+
+func (m *Manager) sendNotify(icon, summary, body string) {
+	notifier := m.notifier
+	if notifier != nil {
+		notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
+		logger.Infof("send notify icon: %q, summary: %q, body: %q", icon, summary, body)
+	} else {
+		logger.Warning("send notify failed: notifier is nil")
 	}
 }

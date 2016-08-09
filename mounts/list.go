@@ -120,6 +120,7 @@ func (m *Manager) getMountById(id string) *gio.Mount {
 			ret = mount
 			continue
 		}
+		mount.Unref()
 	}
 	return ret
 }

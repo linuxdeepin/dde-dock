@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 16:45+0800\n"
+"POT-Creation-Date: 2016-08-09 15:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -573,36 +573,39 @@ msgstr ""
 msgid "Fakaofo"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:103 ../../dock/normal_apps.go:73
-#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
-#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
+#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
+#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
+#: ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:110 ../../dock/runtime_apps.go:261
-#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
-#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
-#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:119 ../../dock/runtime_apps.go:291
-#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
-#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
-#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
-#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
 msgid "_Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:126 ../../dock/normal_apps.go:105
-#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
-#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
-#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
-#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
-#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
-#: ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
+#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
+#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
+#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
+#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
+#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
 msgid "_Undock"
 msgstr ""
 
@@ -967,6 +970,11 @@ msgstr ""
 
 #: ../../mime/default_media.go:94
 msgid "Run Software"
+msgstr ""
+
+#: ../../mounts/ifc.go:144
+#, c-format
+msgid "%s removed successfully"
 msgstr ""
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
@@ -3468,26 +3476,30 @@ msgstr ""
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr ""
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr ""
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
 

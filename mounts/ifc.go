@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"gir/gio-2.0"
 	"gir/gobject-2.0"
+	. "pkg.deepin.io/lib/gettext"
 )
 
 func (m *Manager) ListDisk() DiskInfos {
@@ -70,6 +71,7 @@ func (m *Manager) Unmount(id string) error {
 	mount := m.getMountById(id)
 	if mount != nil {
 		m.unmountMount(id, mount)
+		mount.Unref()
 		return nil
 	}
 
@@ -122,15 +124,23 @@ func (m *Manager) mountVolume(id string, volume *gio.Volume) {
 }
 
 func (m *Manager) unmountMount(id string, mount *gio.Mount) {
-	mount.Unmount(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
+	logger.Debugf("unmountMount id %q, mount: %v", id, mount)
+	mount.UnmountWithOperation(gio.MountUnmountFlagsNone, nil, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			if mount == nil || mount.Object.C == nil {
-				return
-			}
-			_, err := mount.UnmountFinish(ret)
-			mount.Unref()
+			mount := gio.ToMount(o)
+			logger.Debug("UnmountWithOperation AsyncReadyCallback")
+
+			_, err := mount.UnmountWithOperationFinish(ret)
 			if err != nil {
 				m.emitError(id, err.Error())
+				return
 			}
+			name := mount.GetName()
+			gicon := mount.GetIcon()
+			icon := getIconFromGIcon(gicon)
+			gicon.Unref()
+
+			go m.sendNotify(icon, "",
+				fmt.Sprintf(Tr("%s removed successfully"), name))
 		}))
 }
