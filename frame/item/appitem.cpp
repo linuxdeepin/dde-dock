@@ -342,9 +342,11 @@ void AppItem::startDrag()
     m_draging = true;
     update();
 
+    const QPixmap dragPix = DockDisplayMode == Dock::Fashion ? m_largeIcon : m_smallIcon;
+
     QDrag *drag = new QDrag(this);
-    drag->setPixmap(m_smallIcon);
-    drag->setHotSpot(m_smallIcon.rect().center());
+    drag->setPixmap(dragPix);
+    drag->setHotSpot(dragPix.rect().center());
     drag->setMimeData(new QMimeData);
 
     emit dragStarted();
