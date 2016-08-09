@@ -47,13 +47,20 @@ SoundApplet::SoundApplet(QWidget *parent)
     appLabel->setText(tr("Application"));
     appLabel->setStyleSheet("color:white;");
 
-    QHBoxLayout *appLineLayout = new QHBoxLayout;
-    appLineLayout->addWidget(appLabel);
-    appLineLayout->addWidget(new HorizontalSeparator);
-    appLineLayout->setMargin(0);
-    appLineLayout->setSpacing(10);
+    QHBoxLayout *appLineHLayout = new QHBoxLayout;
+    appLineHLayout->addWidget(appLabel);
+    appLineHLayout->addWidget(new HorizontalSeparator);
+    appLineHLayout->setMargin(0);
+    appLineHLayout->setSpacing(10);
 
-    m_applicationTitle->setLayout(appLineLayout);
+    QVBoxLayout *appLineVLayout = new QVBoxLayout;
+    appLineVLayout->addSpacing(10);
+    appLineVLayout->addLayout(appLineHLayout);
+    appLineVLayout->addSpacing(8);
+    appLineVLayout->setSpacing(0);
+    appLineVLayout->setMargin(0);
+
+    m_applicationTitle->setLayout(appLineVLayout);
 
     m_volumeBtn->setFixedSize(ICON_SIZE, ICON_SIZE);
     m_volumeSlider->setMinimum(0);
@@ -63,9 +70,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_centeralLayout->addLayout(deviceLineLayout);
     m_centeralLayout->addSpacing(8);
     m_centeralLayout->addLayout(volumeCtrlLayout);
-    m_centeralLayout->addSpacing(10);
     m_centeralLayout->addWidget(m_applicationTitle);
-    m_centeralLayout->addSpacing(8);
 
     m_centeralWidget->setLayout(m_centeralLayout);
     m_centeralWidget->setFixedWidth(WIDTH);
@@ -129,7 +134,7 @@ void SoundApplet::volumeSliderValueChanged()
 void SoundApplet::sinkInputsChanged()
 {
     QVBoxLayout *appLayout = m_centeralLayout;
-    while (QLayoutItem *item = appLayout->takeAt(6))
+    while (QLayoutItem *item = appLayout->takeAt(4))
     {
         delete item->widget();
         delete item;
