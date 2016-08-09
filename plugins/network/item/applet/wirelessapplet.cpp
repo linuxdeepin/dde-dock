@@ -225,6 +225,8 @@ void WirelessApplet::deviceStateChanegd()
                 const NetworkDevice prevInfo = m_device;
                 m_device = NetworkDevice(NetworkDevice::Wireless, info);
 
+                setDeviceInfo();
+
                 if (prevInfo.state() != m_device.state())
                     emit wirelessStateChanged(m_device.state());
                 if (prevInfo.activeAp() != m_device.activeAp())
