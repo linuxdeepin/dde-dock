@@ -24,8 +24,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
-    connect(m_trayInter, &DBusTrayManager::Added, this, &SystemTrayPlugin::trayAdded);
-    connect(m_trayInter, &DBusTrayManager::Removed, this, &SystemTrayPlugin::trayRemoved);
+    connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &SystemTrayPlugin::trayListChanged);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
     m_trayInter->RetryManager();
@@ -70,6 +69,18 @@ void SystemTrayPlugin::updateTipsContent()
 
     m_tipsWidget->clear();
     m_tipsWidget->addWidgets(trayList);
+}
+
+void SystemTrayPlugin::trayListChanged()
+{
+    QList<quint32> trayList = m_trayInter->trayIcons();
+
+    for (auto tray : m_trayList.keys())
+        if (!trayList.contains(tray))
+            trayRemoved(tray);
+
+    for (auto tray : trayList)
+        trayAdded(tray);
 }
 
 void SystemTrayPlugin::trayAdded(const quint32 winId)
@@ -128,7 +139,10 @@ void SystemTrayPlugin::switchToMode(const Dock::DisplayMode mode)
     {
         for (auto winId : m_trayList.keys())
             m_proxyInter->itemRemoved(this, QString::number(winId));
-        m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
+        if (m_trayList.isEmpty())
+            m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
+        else
+            m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
     }
     else
     {

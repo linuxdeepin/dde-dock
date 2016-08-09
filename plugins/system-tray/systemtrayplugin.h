@@ -27,6 +27,7 @@ private:
     void updateTipsContent();
 
 private slots:
+    void trayListChanged();
     void trayAdded(const quint32 winId);
     void trayRemoved(const quint32 winId);
     void trayChanged(const quint32 winId);
