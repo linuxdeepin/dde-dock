@@ -28,6 +28,9 @@ MainPanel::MainPanel(QWidget *parent)
                   "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
                   "background-color:rgba(10, 10, 10, .6);"
                   "}"
+                  "QWidget #MainPanel[displayMode='1'] {"
+                  "border:none;"
+                  "}"
                   // Top
                   "QWidget #MainPanel[displayMode='0'][position='0'] {"
                   "border-bottom-left-radius:5px;"

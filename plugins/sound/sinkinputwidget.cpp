@@ -18,6 +18,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 
     QHBoxLayout *centeralLayout = new QHBoxLayout;
     centeralLayout->addWidget(m_volumeIcon);
+    centeralLayout->addSpacing(10);
     centeralLayout->addWidget(m_volumeSlider);
     centeralLayout->setSpacing(2);
     centeralLayout->setMargin(0);

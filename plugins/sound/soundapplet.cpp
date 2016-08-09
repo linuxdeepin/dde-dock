@@ -30,6 +30,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     QHBoxLayout *deviceLineLayout = new QHBoxLayout;
     deviceLineLayout->addWidget(deviceLabel);
+//    deviceLineLayout->addSpacing(12);
     deviceLineLayout->addWidget(new HorizontalSeparator);
     deviceLineLayout->setMargin(0);
     deviceLineLayout->setSpacing(10);
@@ -37,6 +38,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     QHBoxLayout *volumeCtrlLayout = new QHBoxLayout;
     volumeCtrlLayout->addSpacing(2);
     volumeCtrlLayout->addWidget(m_volumeBtn);
+    volumeCtrlLayout->addSpacing(10);
     volumeCtrlLayout->addWidget(m_volumeSlider);
     volumeCtrlLayout->setSpacing(0);
     volumeCtrlLayout->setMargin(0);
@@ -59,8 +61,11 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     m_centeralLayout = new QVBoxLayout;
     m_centeralLayout->addLayout(deviceLineLayout);
+    m_centeralLayout->addSpacing(8);
     m_centeralLayout->addLayout(volumeCtrlLayout);
+    m_centeralLayout->addSpacing(10);
     m_centeralLayout->addWidget(m_applicationTitle);
+    m_centeralLayout->addSpacing(8);
 
     m_centeralWidget->setLayout(m_centeralLayout);
     m_centeralWidget->setFixedWidth(WIDTH);
@@ -124,7 +129,7 @@ void SoundApplet::volumeSliderValueChanged()
 void SoundApplet::sinkInputsChanged()
 {
     QVBoxLayout *appLayout = m_centeralLayout;
-    while (QLayoutItem *item = appLayout->takeAt(3))
+    while (QLayoutItem *item = appLayout->takeAt(6))
     {
         delete item->widget();
         delete item;

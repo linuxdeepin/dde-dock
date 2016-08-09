@@ -29,7 +29,7 @@ QWidget *TrashWidget::popupApplet()
 
 QSize TrashWidget::sizeHint() const
 {
-    return QSize(20, 20);
+    return QSize(26, 26);
 }
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
@@ -64,13 +64,15 @@ void TrashWidget::resizeEvent(QResizeEvent *e)
 
 void TrashWidget::updateIcon()
 {
+    const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
+
     QString iconString = "user-trash";
     if (!m_popupApplet->empty())
         iconString.append("-full");
-    if (qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>() == Dock::Efficient)
+    if (displayMode == Dock::Efficient)
         iconString.append("-symbolic");
 
-    const int size = std::min(width(), height()) * 0.8;
+    const int size = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     QIcon icon = QIcon::fromTheme(iconString);
     m_icon = icon.pixmap(size, size);
 

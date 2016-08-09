@@ -24,7 +24,7 @@ QWidget *SoundItem::popupApplet()
 
 QSize SoundItem::sizeHint() const
 {
-    return QSize(20, 20);
+    return QSize(26, 26);
 }
 
 void SoundItem::resizeEvent(QResizeEvent *e)
@@ -75,7 +75,7 @@ void SoundItem::refershIcon()
         iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
     }
 
-    const int iconSize = std::min(width(), height()) * 0.8;
+    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     const QIcon icon = QIcon::fromTheme(iconString);
     m_iconPixmap = icon.pixmap(iconSize, iconSize);
 

@@ -19,29 +19,32 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     QIcon::setThemeName("deepin");
 
     m_diskName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_diskName->setStyleSheet("color:white;");
+    m_diskName->setStyleSheet("color:white;"
+                              "font-size:12px;");
 
-    m_diskCapacity->setStyleSheet("color:white;");
+    m_diskCapacity->setStyleSheet("color:rgba(255, 255, 255, .6);"
+                                  "font-size:10px;");
 
     m_capacityValueBar->setTextVisible(false);
-    m_capacityValueBar->setFixedHeight(3);
+    m_capacityValueBar->setFixedHeight(2);
     m_capacityValueBar->setStyleSheet("QProgressBar {"
                                       "border:none;"
-                                      "background-color:rgba(255, 255, 255, .3);"
+                                      "background-color:rgba(255, 255, 255, .1);"
                                       "}"
                                       "QProgressBar::chunk {"
-                                      "background-color:white;"
+                                      "background-color:rgba(255, 255, 255, .8);"
                                       "}");
 
     m_unmountButton->setNormalPic(":/icons/resources/unmount-normal.png");
     m_unmountButton->setHoverPic(":/icons/resources/unmount-hover.png");
     m_unmountButton->setPressPic(":/icons/resources/unmount-press.png");
+    m_unmountButton->setStyleSheet("margin-top:12px;");
 
     QVBoxLayout *infoLayout = new QVBoxLayout;
     infoLayout->addWidget(m_diskName);
     infoLayout->addWidget(m_diskCapacity);
     infoLayout->setSpacing(0);
-    infoLayout->setContentsMargins(3, 4, 0, 8);
+    infoLayout->setContentsMargins(3, 6, 0, 8);
 
     QHBoxLayout *unmountLayout = new QHBoxLayout;
     unmountLayout->addLayout(infoLayout);
@@ -72,7 +75,7 @@ void DiskControlItem::updateInfo(const DiskInfo &info)
 {
     m_info = info;
 
-    m_diskIcon->setPixmap(QIcon::fromTheme(info.m_icon, m_unknowIcon).pixmap(32, 32));
+    m_diskIcon->setPixmap(QIcon::fromTheme(info.m_icon, m_unknowIcon).pixmap(48, 48));
     if (!info.m_name.isEmpty())
         m_diskName->setText(info.m_name);
     else

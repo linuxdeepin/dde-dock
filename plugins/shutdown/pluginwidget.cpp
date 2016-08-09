@@ -15,7 +15,7 @@ PluginWidget::PluginWidget(QWidget *parent)
 
 QSize PluginWidget::sizeHint() const
 {
-    return QSize(20, 20);
+    return QSize(26, 26);
 }
 
 void PluginWidget::paintEvent(QPaintEvent *e)
@@ -29,7 +29,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
         if (displayMode == Dock::Efficient)
         {
-            pixmap = loadSvg(":/icons/resources/icons/normal.svg", QSize(18, 18));
+            pixmap = loadSvg(":/icons/resources/icons/normal.svg", QSize(16, 16));
             break;
         }
 

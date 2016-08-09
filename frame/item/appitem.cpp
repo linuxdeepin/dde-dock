@@ -117,10 +117,12 @@ void AppItem::paintEvent(QPaintEvent *e)
         {
         case Top:
         case Bottom:
-            backgroundRect = itemRect.marginsRemoved(QMargins(2, 1, 2, 1));
+//            backgroundRect = itemRect;//.marginsRemoved(QMargins(2, 0, 2, 0));
+//            backgroundRect = itemRect.marginsRemoved(QMargins(0, 1, 0, 1));
         case Left:
         case Right:
-            backgroundRect = itemRect.marginsRemoved(QMargins(1, 2, 1, 2));
+            backgroundRect = itemRect.marginsRemoved(QMargins(1, 1, 1, 1));
+//            backgroundRect = itemRect.marginsRemoved(QMargins(1, 0, 1, 0));
         }
     }
 

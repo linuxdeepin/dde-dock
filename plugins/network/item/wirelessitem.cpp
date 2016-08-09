@@ -32,7 +32,7 @@ void WirelessItem::paintEvent(QPaintEvent *e)
 
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
-    const int iconSize = std::min(width(), height()) * 0.8;
+    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     const QPixmap pixmap = iconPix(displayMode, iconSize);
 
     QPainter painter(this);

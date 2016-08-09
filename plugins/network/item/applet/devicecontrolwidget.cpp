@@ -23,6 +23,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     m_seperator = new HorizontalSeperator;
     m_seperator->setFixedHeight(1);
+    m_seperator->setColor(0.1);
 
     QVBoxLayout *centeralLayout = new QVBoxLayout;
     centeralLayout->addStretch();
