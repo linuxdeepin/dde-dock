@@ -113,6 +113,7 @@ void NetworkPlugin::deviceTypesChanged(const NetworkDevice::NetworkTypes &types)
 void NetworkPlugin::refershDeviceItemVisible()
 {
     const NetworkDevice::NetworkTypes types = m_networkManager->types();
+    const bool hasWiredDevice = types.testFlag(NetworkDevice::Wired);
     const bool hasWirelessDevice = types.testFlag(NetworkDevice::Wireless);
 
     for (auto item : m_deviceItemList)
@@ -124,13 +125,14 @@ void NetworkPlugin::refershDeviceItemVisible()
             break;
 
         case NetworkDevice::Wired:
-            if (item->state() == NetworkDevice::Activated || !hasWirelessDevice)
+            if (hasWiredDevice && (item->state() == NetworkDevice::Activated || !hasWirelessDevice))
                 m_proxyInter->itemAdded(this, item->uuid().toString());
             else
                 m_proxyInter->itemRemoved(this, item->uuid().toString());
             break;
 
-        default:;
+        default:
+            Q_UNREACHABLE();
         }
     }
 }
