@@ -28,6 +28,7 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
     m_trayInter->RetryManager();
+    trayListChanged();
 
     switchToMode(displayMode());
 }
