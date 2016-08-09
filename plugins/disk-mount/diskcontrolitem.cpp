@@ -8,7 +8,7 @@ DWIDGET_USE_NAMESPACE
 DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     : QWidget(parent),
 
-      m_unknowIcon(":/icons/resources/unknow.svg"),
+      m_unknowIcon(":/icons/resources/unknown.svg"),
 
       m_diskIcon(new QLabel),
       m_diskName(new QLabel),
@@ -79,8 +79,10 @@ void DiskControlItem::updateInfo(const DiskInfo &info)
         m_diskName->setText(tr("Unknown device"));
     if (info.m_totalSize)
         m_diskCapacity->setText(QString("%1/%2").arg(formatDiskSize(info.m_usedSize)).arg(formatDiskSize(info.m_totalSize)));
-    else
+    else if (info.m_name.isEmpty())
         m_diskCapacity->clear();
+    else
+        m_diskCapacity->setText(tr("Unknown volume"));
     m_capacityValueBar->setMinimum(0);
     m_capacityValueBar->setMaximum(std::max(1ull, info.m_totalSize));
     m_capacityValueBar->setValue(info.m_usedSize);
