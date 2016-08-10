@@ -10,6 +10,7 @@
 package dock
 
 import (
+	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"errors"
 	"gir/gio-2.0"
@@ -35,6 +36,7 @@ type DockManager struct {
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
 	IconSize    *property.GSettingsUintProperty `access:"readwrite"`
 	DockedApps  *property.GSettingsStrvProperty
+	launcher    *launcher.Launcher
 
 	activeWindow xproto.Window
 
@@ -81,6 +83,16 @@ func (m *DockManager) destroy() {
 	if m.settings != nil {
 		m.settings.Unref()
 		m.settings = nil
+	}
+
+	if m.wm != nil {
+		wm.DestroyWm(m.wm)
+		m.wm = nil
+	}
+
+	if m.launcher != nil {
+		launcher.DestroyLauncher(m.launcher)
+		m.launcher = nil
 	}
 
 	dbus.UnInstallObject(m)

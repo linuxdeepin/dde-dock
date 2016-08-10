@@ -10,6 +10,7 @@
 package dock
 
 import (
+	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
 	"path/filepath"
@@ -70,6 +71,23 @@ func (m *DockManager) listenSettingsChanged() {
 	})
 }
 
+func (m *DockManager) listenLauncherSignal() {
+	m.launcher.ConnectItemChanged(func(status string, itemInfo []interface{}, cid int64) {
+		if len(itemInfo) > 2 && status == "deleted" {
+			appId, ok := itemInfo[2].(string)
+			if !ok {
+				logger.Warning("get item app id failed")
+				return
+			}
+			logger.Debugf("item removed %q", appId)
+			entry := m.Entries.FilterDocked().GetByAppId(appId)
+			if entry != nil {
+				m.undockEntry(entry)
+			}
+		}
+	})
+}
+
 func (m *DockManager) init() error {
 	var err error
 
@@ -100,6 +118,12 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
+
+	m.launcher, err = launcher.NewLauncher(launcherDest, launcherObjPath)
+	if err != nil {
+		return err
+	}
+	m.listenLauncherSignal()
 
 	err = dbus.InstallOnSession(m)
 	if err != nil {

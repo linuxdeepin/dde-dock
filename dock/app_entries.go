@@ -12,6 +12,7 @@ package dock
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type AppEntries []*AppEntry
@@ -80,6 +81,19 @@ func (entries AppEntries) FilterDocked() AppEntries {
 		}
 	}
 	return dockedEntries
+}
+
+func (entries AppEntries) GetByAppId(id string) *AppEntry {
+	for _, entry := range entries {
+		if entry.appInfo == nil {
+			continue
+		}
+		eAppId := entry.appInfo.GetId()
+		if strings.EqualFold(id, eAppId) {
+			return entry
+		}
+	}
+	return nil
 }
 
 func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
