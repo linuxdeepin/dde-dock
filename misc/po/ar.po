@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Khodr Abdallah <khodr000@gmail.com>, 2016
+# MUHAAB SHAAM <muhaab.org@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 18:25+0800\n"
-"PO-Revision-Date: 2016-05-13 01:59+0000\n"
+"POT-Creation-Date: 2016-08-09 15:01+0800\n"
+"PO-Revision-Date: 2016-08-10 05:30+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: ../../accounts/checkers/password.go:45
+msgid "Please enter a password not less than 8 characters"
+msgstr "يرجى إدخال كلمة مرور لا تقل عن 8 أحرف"
+
+#: ../../accounts/checkers/password.go:47
+#, c-format
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (%s)"
+msgstr "يجب أن تحتوي كلمة المرور على الحروف الإنكليزية (حساسة حسب الحالة) أو أرقام أو رموز خاصة (%s)"
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -34,24 +46,24 @@ msgstr "يجب أن يحوي اسم المستخدم على الأحرف من a 
 #: ../../accounts/checkers/username.go:65
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr "الحرف الأول يجب أن يكون صغيرا."
+msgstr "الحرف الأول يجب أن يكون صغيراً."
 
 #: ../../accounts/checkers/username.go:55
 #: ../../accounts/checkers/username.go:67
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
-msgstr "اسم المستخدم موجود"
+msgstr "اسم المستخدم موجود."
 
 #: ../../accounts/checkers/username.go:57
 #: ../../accounts/checkers/username.go:69
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr "تم استعمال اسم المستخدم من قبل النظام."
+msgstr "اسم المستخدم مستخدم من قبل النظام."
 
 #: ../../accounts/checkers/username.go:59
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "اسم المستخدم تجاوز طوله الحد الأقصى"
 
 #: ../../bluetooth/bluez_profile.go:19 ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
@@ -63,11 +75,11 @@ msgstr "شبكة الطلب الهاتفي"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "العتاد حر "
+msgstr "جهاز بلا قبضات"
 
 #: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr " بوابة صوت حرة"
+msgstr " بوابة صوتية  بلا قبضات"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
@@ -75,11 +87,11 @@ msgstr "بوابة صوت السماعة"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "اضغط الاداة"
+msgstr "دفع الكائن"
 
 #: ../../bluetooth/bluez_profile.go:25 ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
-msgstr "نقل الملف"
+msgstr "ناقل الملف"
 
 #: ../../bluetooth/bluez_profile.go:26 ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
@@ -87,11 +99,11 @@ msgstr "تزامن"
 
 #: ../../bluetooth/bluez_profile.go:27 ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
-msgstr "الدخول لعناوين الهاتف"
+msgstr "الوصول لعناوين الهاتف"
 
 #: ../../bluetooth/bluez_profile.go:28 ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "طلب الدخول لعناوين الهاتف"
+msgstr "عميل الوصول لعناوين الهاتف"
 
 #: ../../bluetooth/bluez_profile.go:29 ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
@@ -99,7 +111,7 @@ msgstr "الوصول الى الرسالة"
 
 #: ../../bluetooth/bluez_profile.go:30 ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "رسالة إعلام"
+msgstr "إشعار الرسالة"
 
 #: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
 #: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
@@ -139,24 +151,24 @@ msgstr "غير متصل"
 
 #: ../../bluetooth/utils_notify.go:52 ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "تأكد أن %q مشغل و بالمدى نفسه"
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "فشل الاتصال بالبلوتوث"
 
 #: ../../bluetooth/utils_notify.go:56 ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "فشل الاتصال بـ  %q ، تجاهل تلقائياً"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr ""
+msgstr "تأكد أن %q مشغل وفي المدى نفسه"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr ""
+msgstr "تعذر الاتصال بالبلوتوث"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 #: ../../timedate/deepin_list.go:25
@@ -421,7 +433,7 @@ msgstr "كابول"
 #: ../../datetime/timezone/deepin_list.go:224
 #: ../../timedate/deepin_list.go:224 ../../timedate/deepin_list.go:233
 msgid "Karachi"
-msgstr "كراشي"
+msgstr "كراتشي"
 
 #: ../../datetime/timezone/deepin_list.go:228
 #: ../../timedate/deepin_list.go:228 ../../timedate/deepin_list.go:237
@@ -461,7 +473,7 @@ msgstr "جاكارتا"
 #: ../../datetime/timezone/deepin_list.go:256
 #: ../../timedate/deepin_list.go:256 ../../timedate/deepin_list.go:265
 msgid "Beijing"
-msgstr "بايجينغ"
+msgstr "بكين"
 
 #: ../../datetime/timezone/deepin_list.go:260
 #: ../../timedate/deepin_list.go:260 ../../timedate/deepin_list.go:269
@@ -496,7 +508,7 @@ msgstr "طوكيو"
 #: ../../datetime/timezone/deepin_list.go:284
 #: ../../timedate/deepin_list.go:284 ../../timedate/deepin_list.go:293
 msgid "Seoul"
-msgstr "سيول"
+msgstr "سيؤول"
 
 #: ../../datetime/timezone/deepin_list.go:288
 #: ../../timedate/deepin_list.go:288 ../../timedate/deepin_list.go:297
@@ -563,12 +575,32 @@ msgstr "أبيا"
 msgid "Fakaofo"
 msgstr "فكاوفو"
 
+#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
 #: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
 #: ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr "_تشغيل"
 
+#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
+msgid "_Close All"
+msgstr "إغلاق الكل"
+
+#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
+msgid "_Dock"
+msgstr "مقفل"
+
+#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
 #: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
@@ -579,66 +611,50 @@ msgstr "_تشغيل"
 msgid "_Undock"
 msgstr "إلغاء الق_فل"
 
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
-msgid "_Close All"
-msgstr "أغلاق الكل"
-
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
-msgid "_Dock"
-msgstr "مقفل"
-
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:75
-#: ../../network/nm_setting_ip4_config.go:26
+#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
 #: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
-msgstr "ذاتي"
+msgstr "تلقائي"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
-msgstr "النقر يسارا"
+msgstr "الزر الأيسر"
 
 #: ../../inputdevices/libwacom/wacom.go:156
 #: ../../inputdevices/wacom/wacom.go:156
 msgid "Middle Click"
-msgstr "النقر في الوسط"
+msgstr "الزر اﻷوسط"
 
 #: ../../inputdevices/libwacom/wacom.go:160
 #: ../../inputdevices/wacom/wacom.go:160
 msgid "Right Click"
-msgstr "النقر يمينا"
+msgstr "الزر الأيسر"
 
 #: ../../inputdevices/libwacom/wacom.go:164
 #: ../../inputdevices/wacom/wacom.go:164
 msgid "Page Up"
-msgstr "صفحة عليا"
+msgstr "أعلى الصفحة"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 #: ../../inputdevices/wacom/wacom.go:168
 msgid "Page Down"
-msgstr "صفحة سفلى"
+msgstr "أسفل الصفحة"
 
 #: ../../keybinding/id_desc_list.go:47 ../../keybinding/shortcuts/system.go:57
 #: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
-msgstr "مُطلق"
+msgstr "المُطلق"
 
 #: ../../keybinding/id_desc_list.go:48 ../../keybinding/shortcuts/wm.go:79
 #: ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
-msgstr "أظهار سطح المكتب"
+msgstr "إظهار سطح المكتب"
 
 #: ../../keybinding/id_desc_list.go:49 ../../keybinding/shortcuts/system.go:59
 #: ../../keybinding/shortcuts/system.go:71
@@ -656,20 +672,20 @@ msgstr "تبديل التطبيقات"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "التحويل العكسي للتطبيقات"
+msgstr "تبديل التطبيقات عكسياً"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "شغل التطبيقات في وضع ثلاثي الابعاد"
+msgstr "تبديل ثلاثي اﻷبعاد للتطبيقات"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "التحويل العكسي للتطبيقات للوضع الثلاثي الابعاد"
+msgstr "تبديل ثلاثي اﻷبعاد للتطبيقات عكسياً"
 
 #: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
-msgstr "أظهار/ أخفاء الأيكون"
+msgstr "إظهار /إخفاء الشريط"
 
 #: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:63
 #: ../../keybinding/shortcuts/system.go:75
@@ -679,7 +695,7 @@ msgstr "لقطة للشاشة"
 #: ../../keybinding/id_desc_list.go:57 ../../keybinding/shortcuts/system.go:64
 #: ../../keybinding/shortcuts/system.go:76
 msgid "Full screenshot"
-msgstr "أخد لقطة لكامل الشاشة"
+msgstr "لقطة شاشة كاملة"
 
 #: ../../keybinding/id_desc_list.go:58 ../../keybinding/shortcuts/system.go:65
 #: ../../keybinding/shortcuts/system.go:77
@@ -689,12 +705,12 @@ msgstr "لقطة لنافذة من الشاشة "
 #: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:66
 #: ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
-msgstr "تأخير لقطة من الشاشة"
+msgstr "تأخير لقطة الشاشة"
 
 #: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:58
 #: ../../keybinding/shortcuts/system.go:70
 msgid "Terminal"
-msgstr "محطة"
+msgstr "الطرفية"
 
 #: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
@@ -704,12 +720,12 @@ msgstr "نافذة طرفية متحركة"
 #: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
 msgid "Logout"
-msgstr "خروج"
+msgstr "تسجيل خروج"
 
 #: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
-msgstr "ألغاء اللمس"
+msgstr "إلغاء اللمس"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -718,7 +734,7 @@ msgstr "مترجم دييبن"
 #: ../../keybinding/id_desc_list.go:65 ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
-msgstr "ترتيب التشغيل"
+msgstr "تبديل التخطيط"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -770,7 +786,7 @@ msgstr "التالي"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "اخراج"
+msgstr "إخراج"
 
 #: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:92
 #: ../../keybinding/shortcuts/wm.go:104
@@ -803,7 +819,7 @@ msgstr "تغيير حجم النافذة"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "وضع حالة لف"
+msgstr "حالة التبديل الالتفافي"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
@@ -811,7 +827,7 @@ msgstr "تفعيل قائمة النافذة"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "الأنتقال الى ورشة العمل 1"
+msgstr "الانتقال إلى ورشة العمل 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
@@ -819,116 +835,116 @@ msgstr "الأنتقال الى ورشة العمل 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "الأنتقال الى ورشة العمل 3"
+msgstr "الانتقال إلى ورشة العمل 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "الأنتقال الى ورشة العمل 4"
+msgstr "الانتقال إلى ورشة العمل 4"
 
 #: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
 #: ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
-msgstr "الأنتقال الى منطقة عمل اليسرى"
+msgstr "التبديل إلى مساحة العمل اليمنى"
 
 #: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
 #: ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
-msgstr "الأنتقال الى منطقة عمل في جهة اليمين"
+msgstr "التبديل إلى مساحة العمل اليسرى"
 
 #: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
 #: ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
-msgstr "الأنتقال الى منطقة عمل في الأعلى"
+msgstr "التبديل إلى مساحة العمل العليا"
 
 #: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:63
 #: ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
-msgstr "الأنتقال الى منطقة عمل في الأسفل"
+msgstr "التبديل إلى مساحة العمل السفلى"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "نقل النافذة الى منطقة عمل 1"
+msgstr "نقل إلى مساحة العمل 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "نقل النافذة الى منطقة عمل 2"
+msgstr "نقل إلى مساحة العمل 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "نقل النافذة الى منطقة عمل 3"
+msgstr "نقل إلى مساحة العمل 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "نقل النافذة الى منطقة عمل 4"
+msgstr "نقل إلى مساحة العمل 4"
 
 #: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:109
 #: ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
-msgstr "نقل  الى منطقة عمل في جهة اليسار"
+msgstr "نقل إلى يسار منطقة العمل"
 
 #: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:110
 #: ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
-msgstr "نقل الى منطقة عمل في الأسفل"
+msgstr "نقل إلى يمين منطقة العمل"
 
 #: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:111
 #: ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
-msgstr "نقل  الى منطقة عمل في الأعلى"
+msgstr "نقل إلى أعلى منطقة العمل"
 
 #: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:112
 #: ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
-msgstr "نقل الى منطقة عمل في الأسفل"
+msgstr "نقل إلى أسفل منطقة العمل"
 
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 #: ../../keybinding/shortcuts/metacity.go:93
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "عرض النوافذ لكافة مساحات العمل"
 
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 #: ../../keybinding/shortcuts/metacity.go:94
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "عرض نوافذ مساحة العمل الحالية"
 
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 #: ../../keybinding/shortcuts/metacity.go:95
 msgid "Display workspace"
-msgstr ""
+msgstr "عرض مساحة العمل"
 
 #: ../../keybinding/shortcuts/system.go:70
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr ""
+msgstr "تبديل مؤثرات النوافذ"
 
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr ""
+msgstr "تبديل النوافذ مماثلةً"
 
 #: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "تبديل النوافذ مماثلة في الاتجاه المعاكس"
 
 #: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
 msgid "Switch windows"
-msgstr ""
+msgstr "تبديل النوافذ"
 
 #: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "تبديل النوافذ عكسياً"
 
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "فشل تغيير لغة النظام ، يرجى المحاولة لاحقا."
+msgstr "فشل تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:43
 #: ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "تم تغيير لغة النظام، الرجاء تسجيل الدخول مرة أخرى بعد تسجيل الخروج"
+msgstr "تم تغيير لغة النظام، الرجاء تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
 
 #: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
 #: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
@@ -940,7 +956,7 @@ msgstr "يتم تغيير لغة النظام، يرجى الانتظار ..."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr " يجري تعديل لغة النظام بتثبيت حزم اللغة الناقصة  الرجاء الانتظار"
+msgstr " يجري تعديل لغة النظام بتثبيت حزم اللغة الناقصة، الرجاء الانتظار ..."
 
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
@@ -957,7 +973,12 @@ msgstr "فتح مجلد"
 
 #: ../../mime/default_media.go:94
 msgid "Run Software"
-msgstr "شغل البرنامج"
+msgstr "تشغيل برنامج"
+
+#: ../../mounts/ifc.go:144
+#, c-format
+msgid "%s removed successfully"
+msgstr ""
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
@@ -984,7 +1005,7 @@ msgstr "لا شيء"
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit مفتاح"
+msgstr "WEP 40/128-bit Key"
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:323 ../../network/manager_active.go:325
@@ -993,7 +1014,7 @@ msgstr "WEP 40/128-bit مفتاح"
 #: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
-msgstr "شخصي WPA/WPA2"
+msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:333
@@ -1006,7 +1027,7 @@ msgstr "شخصي WPA/WPA2"
 #: ../../network/nm_setting_802_1x.go:167
 #: ../../network/nm_setting_802_1x.go:175
 msgid "TLS"
-msgstr "بروتوكول المنافذ الامنة"
+msgstr "TLS"
 
 #: ../../network/manager_active.go:308 ../../network/manager_active.go:323
 #: ../../network/manager_active.go:333 ../../network/manager_active.go:335
@@ -1060,7 +1081,7 @@ msgstr "نفق TLS"
 #: ../../network/nm_setting_802_1x.go:171
 #: ../../network/nm_setting_802_1x.go:179
 msgid "Protected EAP"
-msgstr "محمي EAP"
+msgstr "EAP محمي"
 
 #: ../../network/manager_connection.go:256
 #: ../../network/manager_connection.go:257
@@ -1070,7 +1091,7 @@ msgstr "محمي EAP"
 #: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:204
 #: ../../network/nm_custom_type.go:212
 msgid "Wired Connection"
-msgstr "الربط بالكيبل"
+msgstr "اتصال سلكي"
 
 #: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:102
 #: ../../network/nm_setting_vpn_l2tp.go:114
@@ -1080,9 +1101,9 @@ msgstr "الربط بالكيبل"
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:130
 #: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
 msgid "Saved"
-msgstr "حفظ"
+msgstr "تم الحفظ"
 
 #: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:103
 #: ../../network/nm_setting_vpn_l2tp.go:115
@@ -1092,9 +1113,9 @@ msgstr "حفظ"
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:189
+#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
 msgid "Always Ask"
-msgstr "أسأل دائماً"
+msgstr "السؤال دائماً"
 
 #: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:104
 #: ../../network/nm_setting_vpn_l2tp.go:116
@@ -1107,7 +1128,7 @@ msgstr "أسأل دائماً"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:190
+#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "لا يتطلب"
 
@@ -1119,12 +1140,12 @@ msgstr "إتصال"
 #: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
 #: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:214
 msgid "Wireless Connection"
-msgstr "الربط اللأسلكي"
+msgstr "اتصال لاسلكي"
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
 #: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:216
 msgid "Wireless Ad-Hoc"
-msgstr "لاسلكي المخصص"
+msgstr "Wireless Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
 #: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:218
@@ -1139,17 +1160,17 @@ msgstr "اتصالات PPPoE "
 #: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
 #: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:222
 msgid "Mobile Connection"
-msgstr "اتصال من محمول"
+msgstr "اتصال هاتف محمول"
 
 #: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
 #: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:224
 msgid "Mobile GSM Connection"
-msgstr "اتصال gsmمحمول"
+msgstr "اتصال من بطاقة \"GSM\""
 
 #: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
 #: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:226
 msgid "Mobile CDMA Connection"
-msgstr "اتصال محمول CDMA "
+msgstr "اتصال من بطاقة \"CDMA\""
 
 #: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
 #: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:228
@@ -1164,12 +1185,12 @@ msgstr "VPN L2TP"
 #: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
 #: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:232
 msgid "VPN OpenConnect"
-msgstr "يفتح اتصالVPN"
+msgstr "VPN OpenConnect"
 
 #: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
 #: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:234
 msgid "VPN OpenVPN"
-msgstr "VPN يفتحVPN"
+msgstr "VPN OpenVPN"
 
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
 #: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:236
@@ -1183,22 +1204,22 @@ msgstr "VPN VPNC"
 
 #: ../../network/nm_custom_type.go:230
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:35
 #: ../../network/nm_setting_802_1x.go:79
 msgid "PAP"
-msgstr "برتوكول مصادقة كلمة المرور"
+msgstr "PAP"
 
 #: ../../network/nm_setting_802_1x.go:24 ../../network/nm_setting_802_1x.go:36
 #: ../../network/nm_setting_802_1x.go:80
 msgid "CHAP"
-msgstr "برتوكول السماح تحدى المصافحة"
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:25 ../../network/nm_setting_802_1x.go:37
 #: ../../network/nm_setting_802_1x.go:81
 msgid "MSCHAP"
-msgstr "بروتوكول مصادقة تعارف الارتياب ميكروسوفت"
+msgstr "MSCHAP "
 
 #: ../../network/nm_setting_802_1x.go:26 ../../network/nm_setting_802_1x.go:38
 #: ../../network/nm_setting_802_1x.go:82
@@ -1224,7 +1245,7 @@ msgstr "OTP"
 #: ../../network/nm_setting_vpn_vpnc.go:246
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
-msgstr "الغاء"
+msgstr "معطل"
 
 #: ../../network/nm_setting_802_1x.go:129
 #: ../../network/nm_setting_802_1x.go:141
@@ -1273,7 +1294,7 @@ msgstr "عام"
 #: ../../network/nm_setting_bean_gen.go:49
 #: ../../network/nm_setting_bean_gen.go:50
 msgid "Name"
-msgstr "أسم"
+msgstr "الاسم"
 
 #: ../../network/nm_setting_bean_gen.go:50
 #: ../../network/nm_setting_bean_gen.go:51
@@ -1312,7 +1333,7 @@ msgstr "عنوان MAC المستنسخ "
 #: ../../network/nm_setting_bean_gen.go:147
 #: ../../network/nm_setting_bean_gen.go:148
 msgid "Customize MTU"
-msgstr "تخصيص وحدة الإرسال الحد الأقصى"
+msgstr "تخصيص MTU"
 
 #: ../../network/nm_setting_bean_gen.go:62
 #: ../../network/nm_setting_bean_gen.go:63
@@ -1324,7 +1345,7 @@ msgstr "تخصيص وحدة الإرسال الحد الأقصى"
 #: ../../network/nm_setting_bean_gen.go:367
 #: ../../network/nm_setting_bean_gen.go:368
 msgid "MTU"
-msgstr "MTU وحدة الإرسال الحد الأقصى"
+msgstr "MTU"
 
 #: ../../network/nm_setting_bean_gen.go:68
 #: ../../network/nm_setting_bean_gen.go:69
@@ -1333,27 +1354,27 @@ msgstr "MTU وحدة الإرسال الحد الأقصى"
 #: ../../network/nm_setting_bean_gen.go:104
 #: ../../network/nm_setting_bean_gen.go:105
 msgid "Mobile"
-msgstr "جوال"
+msgstr "هاتف نقال"
 
 #: ../../network/nm_setting_bean_gen.go:70
 #: ../../network/nm_setting_bean_gen.go:71
 msgid "Country or region"
-msgstr "البلد و القطر"
+msgstr "البلد و المنطقة"
 
 #: ../../network/nm_setting_bean_gen.go:71
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Provider"
-msgstr "مزود"
+msgstr "المزود"
 
 #: ../../network/nm_setting_bean_gen.go:72
 #: ../../network/nm_setting_bean_gen.go:73
 msgid "Plan"
-msgstr ""
+msgstr "المخطط"
 
 #: ../../network/nm_setting_bean_gen.go:73
 #: ../../network/nm_setting_bean_gen.go:74
 msgid "Service Type"
-msgstr "شكل الخدمة"
+msgstr "نوع الخدمة"
 
 #: ../../network/nm_setting_bean_gen.go:74
 #: ../../network/nm_setting_bean_gen.go:75
@@ -1361,7 +1382,7 @@ msgstr "شكل الخدمة"
 #: ../../network/nm_setting_bean_gen.go:92
 #: ../../network/nm_setting_bean_gen.go:93
 msgid "APN"
-msgstr "اسم نقطة دخول (APN)"
+msgstr "اسم نقطة الوصول"
 
 #: ../../network/nm_setting_bean_gen.go:76
 #: ../../network/nm_setting_bean_gen.go:77
@@ -1372,7 +1393,7 @@ msgstr "اسم نقطة دخول (APN)"
 #: ../../network/nm_setting_bean_gen.go:106
 #: ../../network/nm_setting_bean_gen.go:107
 msgid "Number"
-msgstr "رقم"
+msgstr "الرقم"
 
 #: ../../network/nm_setting_bean_gen.go:77
 #: ../../network/nm_setting_bean_gen.go:78
@@ -1475,14 +1496,14 @@ msgstr "كلمة المرور"
 #: ../../network/nm_setting_bean_gen.go:96
 #: ../../network/nm_setting_bean_gen.go:97
 msgid "Network ID"
-msgstr "ID الشبكة "
+msgstr "معرف الشبكة"
 
 #: ../../network/nm_setting_bean_gen.go:80
 #: ../../network/nm_setting_bean_gen.go:81
 #: ../../network/nm_setting_bean_gen.go:97
 #: ../../network/nm_setting_bean_gen.go:98
 msgid "Home Network Only"
-msgstr "شبات المنزل فقط"
+msgstr "شبكة المنزل فقط"
 
 #: ../../network/nm_setting_bean_gen.go:81
 #: ../../network/nm_setting_bean_gen.go:82
@@ -1509,7 +1530,7 @@ msgstr "الأمان"
 #: ../../network/nm_setting_bean_gen.go:116
 #: ../../network/nm_setting_bean_gen.go:117
 msgid "Security Required"
-msgstr "الأمنية مطلوبة  "
+msgstr "الحماية مطلوبة"
 
 #: ../../network/nm_setting_bean_gen.go:118
 #: ../../network/nm_setting_bean_gen.go:119
@@ -1519,17 +1540,17 @@ msgstr "المفتاح"
 #: ../../network/nm_setting_bean_gen.go:120
 #: ../../network/nm_setting_bean_gen.go:121
 msgid "EAP Auth"
-msgstr "بروتوكول المصادقة الموسع"
+msgstr "مصادقة EAP"
 
 #: ../../network/nm_setting_bean_gen.go:121
 #: ../../network/nm_setting_bean_gen.go:122
 msgid "Identity"
-msgstr "التحقق"
+msgstr "الهوية"
 
 #: ../../network/nm_setting_bean_gen.go:122
 #: ../../network/nm_setting_bean_gen.go:123
 msgid "Anonymous ID"
-msgstr "IDمجهول"
+msgstr "هوية مجهولة"
 
 #: ../../network/nm_setting_bean_gen.go:123
 #: ../../network/nm_setting_bean_gen.go:124
@@ -1580,17 +1601,17 @@ msgstr "رخصة المستخدم"
 #: ../../network/nm_setting_bean_gen.go:125
 #: ../../network/nm_setting_bean_gen.go:126
 msgid "Provisioning"
-msgstr "حجز"
+msgstr "تجهيز"
 
 #: ../../network/nm_setting_bean_gen.go:126
 #: ../../network/nm_setting_bean_gen.go:127
 msgid "PAC file"
-msgstr "ملف التكوين الالي"
+msgstr "ملف إعداد الوكيل PAC"
 
 #: ../../network/nm_setting_bean_gen.go:127
 #: ../../network/nm_setting_bean_gen.go:128
 msgid "PEAP Version"
-msgstr "نسخة محمية بمصادقة البروتوكول الموسع"
+msgstr "إصدار PEAP"
 
 #: ../../network/nm_setting_bean_gen.go:128
 #: ../../network/nm_setting_bean_gen.go:129
@@ -1617,6 +1638,7 @@ msgstr "مصادقة داخلية"
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_vpn_strongswan.go:95
 msgid "Private Key"
 msgstr "مفتاح خاص"
 
@@ -1669,7 +1691,7 @@ msgstr "مفتاح خاص"
 #: ../../network/nm_setting_bean_gen.go:431
 #: ../../network/nm_setting_bean_gen.go:432
 msgid "Ask for Pwd"
-msgstr "أسأل باستخدام  الأمر Pwd لعرض المسار "
+msgstr "اسأل عن Pwd"
 
 #: ../../network/nm_setting_bean_gen.go:133
 #: ../../network/nm_setting_bean_gen.go:134
@@ -1681,7 +1703,7 @@ msgstr "أسأل باستخدام  الأمر Pwd لعرض المسار "
 #: ../../network/nm_setting_bean_gen.go:312
 #: ../../network/nm_setting_bean_gen.go:313
 msgid "Private Pwd"
-msgstr "كلمة سر خاصة"
+msgstr "خاص Pwd"
 
 #: ../../network/nm_setting_bean_gen.go:139
 #: ../../network/nm_setting_bean_gen.go:140
@@ -1697,19 +1719,19 @@ msgstr "نمط"
 #: ../../network/nm_setting_bean_gen.go:141
 #: ../../network/nm_setting_bean_gen.go:142
 msgid "SSID"
-msgstr "حماية الشبكة الاسلكية"
+msgstr "SSID "
 
 #: ../../network/nm_setting_bean_gen.go:142
 #: ../../network/nm_setting_bean_gen.go:143
 #: ../../network/nm_setting_bean_gen.go:144
 msgid "Band"
-msgstr "حزمة"
+msgstr "الحزمة"
 
 #: ../../network/nm_setting_bean_gen.go:143
 #: ../../network/nm_setting_bean_gen.go:144
 #: ../../network/nm_setting_bean_gen.go:145
 msgid "Channel"
-msgstr "قناة"
+msgstr "القناة"
 
 #: ../../network/nm_setting_bean_gen.go:153
 #: ../../network/nm_setting_bean_gen.go:154
@@ -1741,7 +1763,7 @@ msgstr "البروتوكول التناظري"
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:392
 msgid "Use MPPE"
-msgstr "MPPEاسخدم"
+msgstr "استخدام MPPE  "
 
 #: ../../network/nm_setting_bean_gen.go:166
 #: ../../network/nm_setting_bean_gen.go:167
@@ -1775,7 +1797,7 @@ msgstr "Stateful MPPE"
 #: ../../network/nm_setting_bean_gen.go:394
 #: ../../network/nm_setting_bean_gen.go:395
 msgid "Refuse EAP Authentication"
-msgstr "رفض مصادقة ال EAP"
+msgstr "رفض مصادقة الـ EAP"
 
 #: ../../network/nm_setting_bean_gen.go:169
 #: ../../network/nm_setting_bean_gen.go:170
@@ -1789,7 +1811,7 @@ msgstr "رفض مصادقة ال EAP"
 #: ../../network/nm_setting_bean_gen.go:395
 #: ../../network/nm_setting_bean_gen.go:396
 msgid "Refuse PAP Authentication"
-msgstr "رفض مصادقة ال PAP"
+msgstr "رفض مصادقة الـ PAP"
 
 #: ../../network/nm_setting_bean_gen.go:170
 #: ../../network/nm_setting_bean_gen.go:171
@@ -1803,7 +1825,7 @@ msgstr "رفض مصادقة ال PAP"
 #: ../../network/nm_setting_bean_gen.go:396
 #: ../../network/nm_setting_bean_gen.go:397
 msgid "Refuse CHAP Authentication"
-msgstr "رفض مصادقة ال CHAP"
+msgstr "رفض مصادقة الـ CHAP"
 
 #: ../../network/nm_setting_bean_gen.go:171
 #: ../../network/nm_setting_bean_gen.go:172
@@ -1817,7 +1839,7 @@ msgstr "رفض مصادقة ال CHAP"
 #: ../../network/nm_setting_bean_gen.go:397
 #: ../../network/nm_setting_bean_gen.go:398
 msgid "Refuse MSCHAP Authentication"
-msgstr "رفض مصادقة ال MSCHAP"
+msgstr "رفض مصادقة الـ MSCHAP"
 
 #: ../../network/nm_setting_bean_gen.go:172
 #: ../../network/nm_setting_bean_gen.go:173
@@ -1831,7 +1853,7 @@ msgstr "رفض مصادقة ال MSCHAP"
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "رفض مصادقة ال MSCHAPv2"
+msgstr "رفض مصادقة الـ MSCHAPv2"
 
 #: ../../network/nm_setting_bean_gen.go:173
 #: ../../network/nm_setting_bean_gen.go:174
@@ -1845,7 +1867,7 @@ msgstr "رفض مصادقة ال MSCHAPv2"
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:400
 msgid "No BSD Data Compression"
-msgstr "لا  ضغط BSD للبيانات "
+msgstr "عدم ضغط بيانات  BSD"
 
 #: ../../network/nm_setting_bean_gen.go:174
 #: ../../network/nm_setting_bean_gen.go:175
@@ -1859,7 +1881,7 @@ msgstr "لا  ضغط BSD للبيانات "
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
 msgid "No Deflate Data Compression"
-msgstr "لا ضغط انكماشي  للبيانات "
+msgstr "عدم ضغط البيانات الضئيلة"
 
 #: ../../network/nm_setting_bean_gen.go:175
 #: ../../network/nm_setting_bean_gen.go:176
@@ -1873,7 +1895,7 @@ msgstr "لا ضغط انكماشي  للبيانات "
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
 msgid "No TCP Header Compression"
-msgstr "لا ضغط TCP Header  للبيانات  "
+msgstr "عدم ضغط بيانات  TCP الرأسية"
 
 #: ../../network/nm_setting_bean_gen.go:176
 #: ../../network/nm_setting_bean_gen.go:177
@@ -1887,7 +1909,7 @@ msgstr "لا ضغط TCP Header  للبيانات  "
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
 msgid "Send PPP Echo Packets"
-msgstr "إرسال حزم صدى ال PPP  "
+msgstr "إرسال حزم صدى PPP  "
 
 #: ../../network/nm_setting_bean_gen.go:182
 #: ../../network/nm_setting_bean_gen.go:183
@@ -1915,13 +1937,13 @@ msgstr "إرسال حزم صدى ال PPP  "
 #: ../../network/nm_setting_bean_gen.go:424
 #: ../../network/nm_setting_bean_gen.go:425
 msgid "VPN"
-msgstr "شبكة إلكترونية خاصة"
+msgstr "VPN"
 
 #: ../../network/nm_setting_bean_gen.go:184
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
 msgid "Need VPN Plugin"
-msgstr "يحتاج مساعد VPN"
+msgstr "بحاجة إلى ملحق VPN"
 
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
@@ -1971,7 +1993,7 @@ msgstr "يحتاج مساعد VPN"
 #: ../../network/nm_setting_bean_gen.go:474
 #: ../../network/nm_setting_bean_gen.go:475
 msgid "Gateway"
-msgstr "بوابة"
+msgstr "البوابة"
 
 #: ../../network/nm_setting_bean_gen.go:189
 #: ../../network/nm_setting_bean_gen.go:190
@@ -2008,7 +2030,7 @@ msgstr "الوكيل"
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr "اسمح لتروجن Cisco الامن  لسطح المكتب "
+msgstr "السماح لـ Cisco Secure Desktop Trojan"
 
 #: ../../network/nm_setting_bean_gen.go:194
 #: ../../network/nm_setting_bean_gen.go:195
@@ -2018,7 +2040,7 @@ msgstr "اسمح لتروجن Cisco الامن  لسطح المكتب "
 #: ../../network/nm_setting_bean_gen.go:292
 #: ../../network/nm_setting_bean_gen.go:293
 msgid "CSD Script"
-msgstr "CSDسيناريو"
+msgstr "CSD Script"
 
 #: ../../network/nm_setting_bean_gen.go:197
 #: ../../network/nm_setting_bean_gen.go:198
@@ -2028,7 +2050,7 @@ msgstr "CSDسيناريو"
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:296
 msgid "Use FSID for Key Passphrase"
-msgstr "FSIDاستخدام مفتاح عبارة المرور "
+msgstr "استخدام \"FSID\" لمفتاح العبور"
 
 #: ../../network/nm_setting_bean_gen.go:199
 #: ../../network/nm_setting_bean_gen.go:200
@@ -2068,7 +2090,7 @@ msgstr "مفتاح ثابت"
 #: ../../network/nm_setting_bean_gen.go:337
 #: ../../network/nm_setting_bean_gen.go:338
 msgid "Customize Key Direction"
-msgstr "تخصيص إدارة المفاتيح"
+msgstr "تخصيص توجيه المفاتيح"
 
 #: ../../network/nm_setting_bean_gen.go:210
 #: ../../network/nm_setting_bean_gen.go:211
@@ -2113,7 +2135,7 @@ msgstr "IP محلي"
 #: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:430
 msgid "User Pwd"
-msgstr "كلمة سر المستخدم"
+msgstr "مستخدم Pwd"
 
 #: ../../network/nm_setting_bean_gen.go:222
 #: ../../network/nm_setting_bean_gen.go:223
@@ -2139,14 +2161,14 @@ msgstr "اسم المجموعة "
 #: ../../network/nm_setting_bean_gen.go:432
 #: ../../network/nm_setting_bean_gen.go:433
 msgid "Group Pwd"
-msgstr "كلمة سر المجموعة"
+msgstr "مجموعة Pwd"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "مطلوب عنوان IP داخلي"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2157,7 +2179,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:433
 #: ../../network/nm_setting_bean_gen.go:434
 msgid "Use Hybrid Authentication"
-msgstr "استخدم مولد الوثوقية"
+msgstr "استخدام المصادقة الهجينة"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
@@ -2175,14 +2197,14 @@ msgstr "CA ملف "
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "فرض تغليف UDP"
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
 msgid "Use IP Compression"
-msgstr ""
+msgstr "استخدام ضغط عناوين  IP "
 
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
@@ -2196,21 +2218,22 @@ msgstr "VPN IPsec"
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:257
 msgid "Enable IPsec"
-msgstr "تفعيل امن البروتوكول"
+msgstr "تمكين أمن البرتوكول "
 
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:259
 msgid "Group ID"
-msgstr "مجموعة ID"
+msgstr "هوية المجموعة"
 
 #: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Pre-Shared Key"
-msgstr "مفتاح مشترك مسبقا"
+msgstr "مفتاح مشترك مسبقاً"
 
 #: ../../network/nm_setting_bean_gen.go:255
 #: ../../network/nm_setting_bean_gen.go:256
@@ -2228,7 +2251,7 @@ msgstr "VPN PPP"
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
 msgid "No Protocol Field Compression"
-msgstr "لا يوجد بروتوكول لضغط الحقل  "
+msgstr "عدم ضغط حقل البروتوكول"
 
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
@@ -2242,14 +2265,14 @@ msgstr "لا يوجد  ضغط عنوا ن\\تحكم     "
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:324
 msgid "VPN Security"
-msgstr "امن الشبكة الافراضية الخاصة vpn"
+msgstr "حماية vpn"
 
 #: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
 msgid "Cipher"
-msgstr "صفر"
+msgstr "الشيفرة"
 
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:317
@@ -2270,28 +2293,28 @@ msgstr " مصادقة VPN  TLS"
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
 msgid "Subject Match"
-msgstr "هذا الموضوع هو"
+msgstr "تطابق التابع"
 
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:336
 msgid "Remote Cert Type"
-msgstr "اكتب نمط الشهادة"
+msgstr "نوع الشهادة البعيدة"
 
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:327
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
 msgid "Key File"
-msgstr "مفتاح ملف"
+msgstr "مفتاح الملف"
 
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:344
 #: ../../network/nm_setting_bean_gen.go:345
 msgid "VPN Proxies"
-msgstr "وكلاء الشبكة الافتراضية الخاصة VPN"
+msgstr "وكلاء شبكة VPN"
 
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
@@ -2305,7 +2328,7 @@ msgstr "نوع الوكيل"
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
 msgid "Server IP"
-msgstr "أي بي السرفر"
+msgstr "Server IP"
 
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:339
@@ -2319,7 +2342,7 @@ msgstr "المنفذ"
 #: ../../network/nm_setting_bean_gen.go:349
 #: ../../network/nm_setting_bean_gen.go:350
 msgid "Retry Indefinitely When Failed"
-msgstr "إعادة الماولة عند الفشل"
+msgstr "إعادة محاولات غير محددة وعند الفشل"
 
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
@@ -2337,21 +2360,21 @@ msgstr "VPN متقدم "
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
 msgid "Customize Gateway Port"
-msgstr "تخصيص منفذ على بوابة"
+msgstr "تخصيص منفذ البوابة"
 
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:361
 msgid "Gateway Port"
-msgstr "منفذ بوابة"
+msgstr "منفذ البوابة"
 
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:362
 msgid "Customize Renegotiation Interval"
-msgstr "تخصيص اعادة التفاوض"
+msgstr "تخصيص إعادة التفاوض"
 
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:353
@@ -2365,7 +2388,7 @@ msgstr "  فاصل  إعادة تفاوض "
 #: ../../network/nm_setting_bean_gen.go:363
 #: ../../network/nm_setting_bean_gen.go:364
 msgid "Use LZO data compression"
-msgstr "استخدام ضغط بيانات ال LZO"
+msgstr "استخدام ضغط بيانات الـ LZO"
 
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:355
@@ -2386,14 +2409,14 @@ msgstr "استخدام جهاز TAP"
 #: ../../network/nm_setting_bean_gen.go:366
 #: ../../network/nm_setting_bean_gen.go:367
 msgid "Customize Tunnel MTU"
-msgstr "تخصيص نفق وحدة الارسال الحد الاقصى"
+msgstr "تخصيص نفق MTU "
 
 #: ../../network/nm_setting_bean_gen.go:358
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:368
 #: ../../network/nm_setting_bean_gen.go:369
 msgid "Customize UDP Fragment Size"
-msgstr "UDPتخصيص حجم الجزء"
+msgstr "تخصيص حجم الجزء UDP"
 
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
@@ -2414,21 +2437,21 @@ msgstr "تقييد نفق TCP MSS"
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:372
 msgid "Randomize Remote Hosts"
-msgstr "المضيفين بطريقة عشوائية"
+msgstr "المضيفون البعيدون عشوائياً"
 
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:442
 #: ../../network/nm_setting_bean_gen.go:443
 msgid "Domain"
-msgstr "المجال"
+msgstr "النطاق"
 
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:443
 #: ../../network/nm_setting_bean_gen.go:444
 msgid "Vendor"
-msgstr "البائع"
+msgstr "المورّد"
 
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
@@ -2449,7 +2472,7 @@ msgstr "التشفير"
 #: ../../network/nm_setting_bean_gen.go:446
 #: ../../network/nm_setting_bean_gen.go:447
 msgid "NAT Traversal"
-msgstr "NATانتقالي"
+msgstr "اجتيار ترجمة عنوان الشبكة"
 
 #: ../../network/nm_setting_bean_gen.go:421
 #: ../../network/nm_setting_bean_gen.go:422
@@ -2463,7 +2486,7 @@ msgstr "IKE DH مجموعة "
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:449
 msgid "Forward Secrecy"
-msgstr "نقل سرا"
+msgstr "التقدم المحمي"
 
 #: ../../network/nm_setting_bean_gen.go:423
 #: ../../network/nm_setting_bean_gen.go:424
@@ -2477,7 +2500,7 @@ msgstr "منفذ محلي"
 #: ../../network/nm_setting_bean_gen.go:450
 #: ../../network/nm_setting_bean_gen.go:451
 msgid "Disable Dead Peer Detection"
-msgstr "تعطيل كشف النظير "
+msgstr "تعطيل كشف النظير المفقود"
 
 #: ../../network/nm_setting_bean_gen.go:430
 #: ../../network/nm_setting_bean_gen.go:431
@@ -2495,7 +2518,7 @@ msgstr "IPv4"
 #: ../../network/nm_setting_bean_gen.go:471
 #: ../../network/nm_setting_bean_gen.go:472
 msgid "Method"
-msgstr "طريقة"
+msgstr "اﻷسلوب"
 
 #: ../../network/nm_setting_bean_gen.go:433
 #: ../../network/nm_setting_bean_gen.go:434
@@ -2534,21 +2557,21 @@ msgstr "IPv6"
 #: ../../network/nm_setting_bean_gen.go:473
 #: ../../network/nm_setting_bean_gen.go:474
 msgid "Prefix"
-msgstr "سابقة"
+msgstr "البادئة"
 
 #: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:463
 #: ../../network/nm_setting_bean_gen.go:475
 #: ../../network/nm_setting_bean_gen.go:476
 msgid "Primary DNS"
-msgstr "الاسم الاساسي لمجال النظام"
+msgstr "DNS رئيسي"
 
 #: ../../network/nm_setting_bean_gen.go:463
 #: ../../network/nm_setting_bean_gen.go:464
 #: ../../network/nm_setting_bean_gen.go:476
 #: ../../network/nm_setting_bean_gen.go:477
 msgid "Secondary DNS"
-msgstr "الاسم الثاني لمجال النظام"
+msgstr "DNS ثانوي"
 
 #: ../../network/nm_setting_gsm.go:144 ../../network/nm_setting_gsm.go:146
 #: ../../network/nm_setting_gsm.go:156 ../../network/nm_setting_gsm.go:158
@@ -2578,11 +2601,11 @@ msgstr "مخصص"
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
 msgid "Default"
-msgstr "الأفتراضي"
+msgstr "الافتراضي"
 
 #: ../../network/nm_setting_gsm.go:182
 msgid "Any"
-msgstr "كل"
+msgstr "أياً كان"
 
 #: ../../network/nm_setting_gsm.go:183
 msgid "3G (UMTS/HSPA)"
@@ -2594,19 +2617,19 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:185
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "اختر 3G (UMTS/HSPA)"
+msgstr "Prefer 3G (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:186
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "اختر2G (GPRS/EDGE)"
+msgstr "Prefer 2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:187
 msgid "Prefer 4G (LTE)"
-msgstr "اختر4G (LTE)"
+msgstr "Prefer 4G (LTE)"
 
 #: ../../network/nm_setting_gsm.go:188
 msgid "Use Only 4G (LTE)"
-msgstr "استعمل فقط4G (LTE)"
+msgstr "استخدام فقط4G (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:27
 #: ../../network/nm_setting_ip4_config.go:39
@@ -2615,7 +2638,7 @@ msgstr "استعمل فقط4G (LTE)"
 #: ../../network/nm_setting_ip6_config.go:41
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
-msgstr "إتصال-محلي فقط"
+msgstr "وصلات محلية فقط"
 
 #: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip4_config.go:40
@@ -2653,7 +2676,7 @@ msgstr "DHCP"
 #: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
-msgstr ""
+msgstr "GSM (GPRS, UMTS)"
 
 #: ../../network/nm_setting_virtual_key.go:149
 #: ../../network/nm_setting_virtual_key.go:161
@@ -2673,29 +2696,29 @@ msgstr "PPTP"
 #: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:170
 msgid "OpenConnect"
-msgstr "اتصال مفتوح"
+msgstr "OpenConnect"
 
 #: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:171
 msgid "OpenVPN"
-msgstr "VPN مفتوح "
+msgstr "OpenVPN "
 
 #: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "VPNC"
-msgstr "اتحاد شبكة خاصة افتراضية "
+msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:176
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 مؤسسة"
+msgstr "WPA/WPA2 Enterprise"
 
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:199
 #: ../../network/nm_setting_virtual_key.go:202
 #: ../../network/nm_setting_virtual_key.go:211
 msgid "All Available (default)"
-msgstr "كل ماهو متاح افتراضي"
+msgstr "كل ماهو متاح  (افتراضي)"
 
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:200
@@ -2714,7 +2737,7 @@ msgstr "40-بت (أقل أمنا)"
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:220
 msgid "Secure (default)"
-msgstr "أمن(افتراضي)"
+msgstr "محمي (افتراضي)"
 
 #: ../../network/nm_setting_virtual_key.go:209
 #: ../../network/nm_setting_virtual_key.go:221
@@ -2913,47 +2936,39 @@ msgstr "HTTP"
 #: ../../network/nm_setting_vpn_openvpn.go:474
 #: ../../network/nm_setting_vpn_openvpn.go:478
 msgid "SOCKS"
-msgstr "وكيل خادم من نوع SOCKS"
-
-#: ../../network/nm_setting_vpn_strongswan.go:95
-msgid "Certificate/private key"
-msgstr ""
+msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_strongswan.go:96
-msgid "Certificate/ssh-agent"
-msgstr ""
+msgid "SSH Agent"
+msgstr "وكيل SSH"
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
 msgid "Smartcard"
-msgstr ""
+msgstr "بطاقة ذكية"
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
 msgid "EAP"
-msgstr ""
-
-#: ../../network/nm_setting_vpn_strongswan.go:99
-msgid "Pre-shared key"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:238
 #: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
-msgstr "سيسكو افراضي"
+msgstr "سيسكو (افتراضي)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:239
 #: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
-msgstr "\"واجهة التصفح\""
+msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:243
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
-msgstr "NAT-T إذا كانت متوفرة (الافتراضي)"
+msgstr "NAT-T عندما تكون متوفرة (افتراضي)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:244
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
-msgstr "NAT-T دائما"
+msgstr "NAT-T دائماً"
 
 #: ../../network/nm_setting_vpn_vpnc.go:245
 #: ../../network/nm_setting_vpn_vpnc.go:257
@@ -2965,29 +2980,29 @@ msgstr "سيسكو UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:262
 #: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
-msgstr "DH مجموعة1"
+msgstr "DH Group 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:251
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
-msgstr "DH مجموعة2 افتراضية"
+msgstr "DH مجموعة2 (افتراضي)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:252
 #: ../../network/nm_setting_vpn_vpnc.go:260
 #: ../../network/nm_setting_vpn_vpnc.go:264
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
-msgstr "DH مجموعة 5"
+msgstr "DH Group 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 #: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
-msgstr "الخادم افتراضي"
+msgstr "الخادم (افتراضي)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:259
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
-msgstr "مجموعة2 DH"
+msgstr "DH Group 2"
 
 #: ../../network/nm_setting_wireless.go:174
 #: ../../network/nm_setting_wireless.go:186
@@ -3029,25 +3044,25 @@ msgstr "WEP"
 #: ../../network/nm_setting_wireless_security.go:67
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
-msgstr "فعالWEP"
+msgstr "Dynamic WEP"
 
 #: ../../network/nm_setting_wireless_security.go:56
 #: ../../network/nm_setting_wireless_security.go:68
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
-msgstr "اعدادمخصص WPA-PSK"
+msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:57
 #: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "بنيةWPA-PSK "
+msgstr "WPA-PSK Infrastructure"
 
 #: ../../network/nm_setting_wireless_security.go:58
 #: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA المؤسسة"
+msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:62
 #: ../../network/nm_setting_wireless_security.go:74
@@ -3087,15 +3102,15 @@ msgstr "تغيرت حالة الجهاز."
 #: ../../network/state_handler.go:23 ../../network/state_handler.go:34
 #: ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason."
-msgstr "تغير وضع الجاهز بسبب غير معروف"
+msgstr "تغيرت حالة الجهاز ،بسبب غير معروف"
 
 #: ../../network/state_handler.go:24 ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "الجهاز الان ممكن"
+msgstr "الجهاز اﻵن مدار."
 
 #: ../../network/state_handler.go:25 ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "الجهاز لم يعد ممكن"
+msgstr "الجهاز لم يعد ممكناً"
 
 #: ../../network/state_handler.go:26 ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
@@ -3104,11 +3119,11 @@ msgstr "الجهاز غير جاهز للتكوين"
 #: ../../network/state_handler.go:27 ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "لا يمكن حفظ إعداد IP (لا عناوين متاحة، مهلة، الخ)."
+msgstr "لم تكن تكوينات IP محفوظة (لا عناوين متاحة، مهلة، الخ)."
 
 #: ../../network/state_handler.go:28 ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
-msgstr "تكوين IP لم يعد صالحا."
+msgstr "تكوين IP لم يعد صالحاً."
 
 #: ../../network/state_handler.go:29 ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
@@ -3118,23 +3133,23 @@ msgstr "كلمات السر مطلوبة لكن لم تقدم"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "الطلب 802.1X قطع من نقطة الوصول أو مصادقة الخادم"
+msgstr "الطلب 802.1X تم قطعه من نقطة الوصول أو خادم المُصادق ."
 
 #: ../../network/state_handler.go:31 ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "تكوين الطلب 802.1X فشل"
+msgstr "فشل تكوين الطلب 802.1X"
 
 #: ../../network/state_handler.go:32 ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "الطلب  802.1X   ترك أو فشل بشكل غير متوقع"
+msgstr "الطلب  802.1X تُرك أو فشل بشكل غير متوقع ."
 
 #: ../../network/state_handler.go:33 ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "استغرق الطلب 802.1X وقتا طويلا لمصادقة"
+msgstr "استغرق الطلب 802.1X وقتاً طويلاً للمصادقة"
 
 #: ../../network/state_handler.go:34 ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "  فشلت خدمة PPP لبدء ضمن الوقت المسموح به"
+msgstr "فشلت بدء خدمة PPP ضمن الوقت المسموح به"
 
 #: ../../network/state_handler.go:35 ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
@@ -3146,67 +3161,67 @@ msgstr "خدمة PPP تركت أو فشلت بشكل غير متوقع"
 
 #: ../../network/state_handler.go:37 ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
-msgstr "فشلت خدمة DHCP لبدء ضمن الوقت المسموح به"
+msgstr "فشلت بدء خدمة DHCP ضمن الوقت المسموح به"
 
 #: ../../network/state_handler.go:38 ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "\"ذكرت خدمة DHCP خطأ غير متوق"
+msgstr "خطأ غير متوقع في خدمة DHCP المذكورة ."
 
 #: ../../network/state_handler.go:39 ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr " \"خدمة dhcpتركت او فشلت بشكل غير متوقع"
+msgstr " \"خدمة DHCP تركت او فشلت بشكل غير متوقع ."
 
 #: ../../network/state_handler.go:40 ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
-msgstr " \"فشل تشغيل خدمة الاتصال المشترك"
+msgstr "تعذر بدء تشغيل خدمة الاتصال المشترك"
 
 #: ../../network/state_handler.go:41 ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "خدمة الاتصال المشترك تركت اوفشلت بشكل غير متوقع"
+msgstr "خدمة الاتصال المشترك تركت أو فشلت بشكل غير متوقع."
 
 #: ../../network/state_handler.go:42 ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
-msgstr "فشل تشغيل خدمة البروتوكول التلقائي"
+msgstr "تعذر تشغيل خدمة عنوان آي بي التلقائي ."
 
 #: ../../network/state_handler.go:43 ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "خدمة البروتوكول التلقائي ذكرت خطأ غير متوقع"
+msgstr "خطأ غير متوقع في عنوان \"آي بي التلقائي\" المذكور ."
 
 #: ../../network/state_handler.go:44 ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "خدمة البروتوكول التلقائي تركت أو فشلت بشكل غير متوقع"
+msgstr "خدمة عنوان آي بي التلقائي تركت أو فشلت بشكل غير متوقع"
 
 #: ../../network/state_handler.go:45 ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "فشل الاتصال بسبب خطوط المزدحمة."
+msgstr "فشل الاتصال الهاتفي بسبب ازدحام الخطوط ."
 
 #: ../../network/state_handler.go:46 ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "فشل الاتصال بسبب عدم الطنين"
+msgstr "فشل الاتصال الهاتفي بسبب عدم الرنين ."
 
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "فشل الاتصال بسبب الناقل"
+msgstr "فشل الاتصال الهاتفي بسبب الناقل."
 
 #: ../../network/state_handler.go:48 ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "انتهى الاتصال"
+msgstr "انتهت مهلة الاتصال الهاتفي ."
 
 #: ../../network/state_handler.go:49 ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "فشل الاتصال"
+msgstr "فشل الاتصال الهاتفي"
 
 #: ../../network/state_handler.go:50 ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "مشكل في تهيئة المودم"
+msgstr "تعذرت تهيئة المودم"
 
 #: ../../network/state_handler.go:51 ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
-msgstr "لا يمكن تحديد GSM محدد APN."
+msgstr "لا يمكن تحديد نقطة الوصول المخصصة لـ GSM "
 
 #: ../../network/state_handler.go:52 ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "لا يوجد بحث عن الشبكات"
+msgstr "لا توجد شبكات في البحث"
 
 #: ../../network/state_handler.go:53 ../../network/state_handler.go:65
 msgid "Network registration was denied."
@@ -3218,11 +3233,11 @@ msgstr "انتهت مدة تسجيل الشبكة"
 
 #: ../../network/state_handler.go:55 ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "فشل التسجيل على الشبكة المطلوبةgsm"
+msgstr "تعذر التسجيل على شبكة GSM  المطلوبة ."
 
 #: ../../network/state_handler.go:56 ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "فشل مراقبة pin"
+msgstr "تعذر التحقق من رمز  PIN"
 
 #: ../../network/state_handler.go:57 ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
@@ -3230,11 +3245,11 @@ msgstr "البرامج الثابتة المطلوبة للجهاز قد تكو�
 
 #: ../../network/state_handler.go:58 ../../network/state_handler.go:70
 msgid "The device was removed."
-msgstr "لقد حذف الجهاز"
+msgstr "لقد حذف الجهاز ."
 
 #: ../../network/state_handler.go:59 ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr "مدير الشبكات في وضع اسبات"
+msgstr "مدير الشبكات في وضع الخمول ."
 
 #: ../../network/state_handler.go:60 ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
@@ -3246,7 +3261,7 @@ msgstr "طلب المستخدم أو العميل قطع الاتصال"
 
 #: ../../network/state_handler.go:62 ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr "تغير دعم وصلة الجهاز"
+msgstr "ناقل الجهاز أو الوصلة قد تغيرت."
 
 #: ../../network/state_handler.go:63 ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
@@ -3262,11 +3277,11 @@ msgstr "تعذر العثور على المودم"
 
 #: ../../network/state_handler.go:66 ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "انتهت مدة اتصال بلوتوث أو فشل."
+msgstr "فشل الاتصال بالبلوتوث أو أنه انتهت المدة ."
 
 #: ../../network/state_handler.go:67 ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "لم تدرج البطاقةsimللمودمgsm "
+msgstr "لم تدرج البطاقة sim للمودم gsm "
 
 #: ../../network/state_handler.go:68 ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
@@ -3278,15 +3293,15 @@ msgstr "مطلوب رمز   PUK للبطاقة SIM للمودم GSM."
 
 #: ../../network/state_handler.go:70 ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "بطاقة simردئية للمودمgsm"
+msgstr "Wrong GSM Modem's SIM "
 
 #: ../../network/state_handler.go:71 ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "جهازInfiniBand لا يدعم وضع متصل"
+msgstr "جهازInfiniBand غير قادر على دعم وضع الاتصال."
 
 #: ../../network/state_handler.go:72 ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr "فشل الاعتماد على الاتصال."
+msgstr "فشل اعتماد الاتصال."
 
 #: ../../network/state_handler.go:73 ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
@@ -3294,7 +3309,7 @@ msgstr "مشكلة مع RFC 2684 إيثرنت عبر جسر ADSL."
 
 #: ../../network/state_handler.go:74 ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "مدير المودم لا يعمل او ترك بشكل غير متوقع"
+msgstr "مدير المودم لا يعمل أو تُرك بشكل غير متوقع."
 
 #: ../../network/state_handler.go:75 ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
@@ -3302,96 +3317,96 @@ msgstr "تعذر العثور على شبكة اللاسلكية802.11."
 
 #: ../../network/state_handler.go:76 ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "فشل الارتباط الثانوي للربط بالقاعدة."
+msgstr "فشل الاتصال الثانوي من الاتصال اﻷساسي ."
 
 #: ../../network/state_handler.go:79 ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr ""
+msgstr "تعذر تثبيت DCB أو FCoE ."
 
 #: ../../network/state_handler.go:80 ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr ""
+msgstr "فشل الانضمام لفريق شبكة التحكم "
 
 #: ../../network/state_handler.go:81 ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "تعذر تشغيل المودم أو أنه غير متاح"
 
 #: ../../network/state_handler.go:82 ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr ""
+msgstr "المودم جاهز الآن ومتاح ."
 
 #: ../../network/state_handler.go:83 ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr ""
+msgstr "SIM PIN غير صحيح "
 
 #: ../../network/state_handler.go:84 ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "تفعيل الاتصال الجديد قيد اﻹدراج"
 
 #: ../../network/state_handler.go:85 ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr ""
+msgstr "حالة الجهاز اﻷصلية قد تغيرت"
 
 #: ../../network/state_handler.go:86 ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr ""
+msgstr " وضع إدارة الجهاز الأصل قد تغيرت."
 
 #: ../../network/state_handler.go:89 ../../network/state_handler.go:91
 #: ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
-msgstr "سلك الشبكة غير موصول"
+msgstr "كبل الشبكة غير موصول"
 
 #: ../../network/state_handler.go:90 ../../network/state_handler.go:92
 #: ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr ""
+msgstr "الرجاء كن متأكداً من إدراج بطاقة SIM ، مع جود إشارة شبكة للمحمول"
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:93
 #: ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr ""
+msgstr "الرجاء كن متأكداً من الطريقة الصحيحة محددة بدون تأخير دفع رصيد بطاقة SIM  "
 
 #: ../../network/state_handler.go:94 ../../network/state_handler.go:96
 #: ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "فشل تفعيل اتصال الشبكة الافتراضية  بسبب غير معروف"
+msgstr "فشل تفعيل اتصال الشبكة الافتراضية VPN  بسبب غير معروف"
 
 #: ../../network/state_handler.go:95 ../../network/state_handler.go:97
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
-msgstr "فشل تفعيل اتصال الشبكة الافتراضية"
+msgstr "فشل تفعيل اتصال الشبكة الافتراضية VPN"
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:98
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "غير وضع اتصال الشبكة الافتراضية بسبب انقطاع من المستخدم"
+msgstr "تغير حالة اتصال الشبكة الافتراضية الخاصة بسبب الانقطاع من المستخدمين"
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:99
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "تغير وضع اتصال الشبكة الافتراضية الخاصة بسبب انقطاع من الأجهزة"
+msgstr "تغير حالة اتصال الشبكة الافتراضية الخاصة بسبب انقطاع من الأجهزة"
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:100
 #: ../../network/state_handler.go:110
 msgid "VPN service stopped."
-msgstr "توقف خدمة الشبكة الافتراضية الخاصة"
+msgstr "توقف خدمة الشبكة الافتراضية الخاصة VPN"
 
 #: ../../network/state_handler.go:99 ../../network/state_handler.go:101
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid."
-msgstr "تكوين IP للاتصال VPN غير صالح"
+msgstr "تكوين IP للاتصال بـ VPN غير صالح"
 
 #: ../../network/state_handler.go:100 ../../network/state_handler.go:102
 #: ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out."
-msgstr "انتهت مدة محاولة الاتصال VPN."
+msgstr "انتهت مدة محاولة الاتصال بخدمة VPN."
 
 #: ../../network/state_handler.go:101 ../../network/state_handler.go:103
 #: ../../network/state_handler.go:113
 msgid "The VPN service start timed out."
-msgstr "بدء تشغيل خدمة VPN قد انتهت صلاحيتها."
+msgstr "بدء تشغيل خدمة VPN قد انتهت ."
 
 #: ../../network/state_handler.go:102 ../../network/state_handler.go:104
 #: ../../network/state_handler.go:114
@@ -3401,26 +3416,26 @@ msgstr "فشلت خدمة VPN للبدء"
 #: ../../network/state_handler.go:103 ../../network/state_handler.go:105
 #: ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "كلمة مرور ضرورية لـ VPN الاتصال غير موفر"
+msgstr "كلمة المرور ضرورية لـلاتصال بـ VPN  ، لم تقدم بعد ."
 
 #: ../../network/state_handler.go:104 ../../network/state_handler.go:106
 #: ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed."
-msgstr "فشل المصادقة على vpn"
+msgstr "فشلت المصادقة على خادم  vpn"
 
 #: ../../network/state_handler.go:105 ../../network/state_handler.go:107
 #: ../../network/state_handler.go:117
 msgid "The connection was deleted from settings."
-msgstr "تم حذف الاتصال من الاعدادات"
+msgstr "تم حذف الاتصال من اﻹعدادات"
 
 #: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:322
+#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "غير معروف"
 
 #: ../../network/utils_notify.go:81 ../../network/utils_notify.go:93
 msgid "You are now offline."
-msgstr "حاليا انت الان متواجد"
+msgstr "أنت اﻵن غير متصل"
 
 #: ../../network/utils_notify.go:86 ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
@@ -3439,7 +3454,7 @@ msgstr "الشبكة"
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:110
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "الجهاز المشغل ببطاقة الشبكة مغلق ، يرجى تفعيلها على حسب الضرورة"
+msgstr "مبدل الجهاز لبطاقة الشبكة \"متوقف\" ، يرجى التبديل على حسب الضرورة ."
 
 #: ../../network/utils_notify.go:102 ../../network/utils_notify.go:114
 msgid "System proxy is set successfully."
@@ -3447,47 +3462,55 @@ msgstr "تم تعيين وكيل النظام بنجاح"
 
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:117
 msgid "System proxy has been cancelled."
-msgstr "تم إلغاء نظام الوكيل"
+msgstr "تم إلغاء وكيل النظام"
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid "Abnormal battery power"
-msgstr "طاقة البطارية غير طبيعية"
+msgstr "طاقة البطارية غير طبيعية "
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "لا يمكن التنبؤ بطاقة البطارية، يرجى حفظ الوثائق المهمة بشكل صحيح ولا تقم بأعمال مهمة  اخرى ."
+msgstr "لا يمكن التنبؤ بطاقة البطارية، يرجى حفظ الوثائق المهمة بشكل صحيح ولا تقم بعمليات مهمة أخرى ."
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
-msgstr "انخفاض حرج في البطارية"
+msgstr "انخفاض حاد في طاقة البطارية"
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "الكمبيوتر في وضع التعليق ، يرجى الولوج"
+msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس الطاقة."
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
-msgstr "البطارية منخفضة"
+msgstr "طاقة البطارية منخفضة"
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "الكمبيوتر سيكون في وضع تعليق، يرجى الولوج الان"
+msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل قابس الطاقة الآن."
 
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "يرجى الولوج ، أو الكمبيوتر سوف يكون في وضع تعليق"
+msgstr "الرجاء وصل قابس الطاقة ، أو أن الحاسوب سيدخل في وضع اﻹسبات"

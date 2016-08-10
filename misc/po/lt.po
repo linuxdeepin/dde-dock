@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 18:25+0800\n"
-"PO-Revision-Date: 2016-05-13 01:59+0000\n"
+"POT-Creation-Date: 2016-08-09 15:01+0800\n"
+"PO-Revision-Date: 2016-08-10 05:30+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -19,6 +19,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../../accounts/checkers/password.go:45
+msgid "Please enter a password not less than 8 characters"
+msgstr "Prašome įrašyti ne trumpesnį, nei 8 simbolių slaptažodį"
+
+#: ../../accounts/checkers/password.go:47
+#, c-format
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (%s)"
+msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių lygį), skaičiai ar ypatingi simboliai (%s)"
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -61,7 +72,7 @@ msgstr "Nuoseklusis prievadas"
 
 #: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "Telefoninio ryšio priemonės"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
@@ -565,12 +576,32 @@ msgstr "Apija"
 msgid "Fakaofo"
 msgstr "Fakaofas"
 
+#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
 #: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
 #: ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr "_Vykdyti"
 
+#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
+msgid "_Close All"
+msgstr "_Užverti visus"
+
+#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
+msgid "_Dock"
+msgstr "_Laikyti doke"
+
+#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
 #: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
@@ -581,31 +612,15 @@ msgstr "_Vykdyti"
 msgid "_Undock"
 msgstr "_Nelaikyti prisegtą"
 
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
-msgid "_Close All"
-msgstr "_Užverti visus"
-
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
-msgid "_Dock"
-msgstr "_Laikyti doke"
-
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:75
-#: ../../network/nm_setting_ip4_config.go:26
+#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
 #: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
-msgstr "Automatiškas būdas"
+msgstr "Automatinis"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
@@ -691,7 +706,7 @@ msgstr "Lango ekrano kopija"
 #: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:66
 #: ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
-msgstr "Atidėti ekrano kopiją"
+msgstr "Uždelsti ekrano kopiją"
 
 #: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:58
 #: ../../keybinding/shortcuts/system.go:70
@@ -701,7 +716,7 @@ msgstr "Terminalas"
 #: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "Quake terminalo langas"
 
 #: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
@@ -961,6 +976,11 @@ msgstr "Atverti aplanką"
 msgid "Run Software"
 msgstr "Paleisti programą"
 
+#: ../../mounts/ifc.go:144
+#, c-format
+msgid "%s removed successfully"
+msgstr ""
+
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:316
@@ -995,7 +1015,7 @@ msgstr "WEP 40/128-bitų raktas"
 #: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 asmeninė"
+msgstr "WPA/WPA2 asmeninis"
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:333
@@ -1082,7 +1102,7 @@ msgstr "Laidinis ryšys"
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:130
 #: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr "Išsaugota"
 
@@ -1094,7 +1114,7 @@ msgstr "Išsaugota"
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:189
+#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr "Visada klausti"
 
@@ -1109,7 +1129,7 @@ msgstr "Visada klausti"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:190
+#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "Nebūtina"
 
@@ -1185,7 +1205,7 @@ msgstr "VPN VPNC"
 
 #: ../../network/nm_custom_type.go:230
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:35
 #: ../../network/nm_setting_802_1x.go:79
@@ -1554,7 +1574,7 @@ msgstr "Anoniminis ID"
 #: ../../network/nm_setting_bean_gen.go:411
 #: ../../network/nm_setting_bean_gen.go:412
 msgid "CA Cert"
-msgstr "CA Certifikatas"
+msgstr "LĮ sertifikatas"
 
 #: ../../network/nm_setting_bean_gen.go:124
 #: ../../network/nm_setting_bean_gen.go:125
@@ -1577,7 +1597,7 @@ msgstr "CA Certifikatas"
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
 msgid "User Cert"
-msgstr "Vartotojo Certifikatas"
+msgstr "Naudotojo sertifikatas"
 
 #: ../../network/nm_setting_bean_gen.go:125
 #: ../../network/nm_setting_bean_gen.go:126
@@ -1619,6 +1639,7 @@ msgstr "Vidinė autentifikacija"
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_vpn_strongswan.go:95
 msgid "Private Key"
 msgstr "Privatusis raktas"
 
@@ -1777,7 +1798,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:394
 #: ../../network/nm_setting_bean_gen.go:395
 msgid "Refuse EAP Authentication"
-msgstr "Atsisakyti EAP autentifikacijos"
+msgstr "Atsisakyti EAP atpažinimo"
 
 #: ../../network/nm_setting_bean_gen.go:169
 #: ../../network/nm_setting_bean_gen.go:170
@@ -1791,7 +1812,7 @@ msgstr "Atsisakyti EAP autentifikacijos"
 #: ../../network/nm_setting_bean_gen.go:395
 #: ../../network/nm_setting_bean_gen.go:396
 msgid "Refuse PAP Authentication"
-msgstr "Atsisakyti PAP autentifikacijos"
+msgstr "Atsisakyti PAP atpažinimo"
 
 #: ../../network/nm_setting_bean_gen.go:170
 #: ../../network/nm_setting_bean_gen.go:171
@@ -1805,7 +1826,7 @@ msgstr "Atsisakyti PAP autentifikacijos"
 #: ../../network/nm_setting_bean_gen.go:396
 #: ../../network/nm_setting_bean_gen.go:397
 msgid "Refuse CHAP Authentication"
-msgstr "Atsisakyti CHAP autentifikacijos"
+msgstr "Atsisakyti CHAP atpažinimo"
 
 #: ../../network/nm_setting_bean_gen.go:171
 #: ../../network/nm_setting_bean_gen.go:172
@@ -1819,7 +1840,7 @@ msgstr "Atsisakyti CHAP autentifikacijos"
 #: ../../network/nm_setting_bean_gen.go:397
 #: ../../network/nm_setting_bean_gen.go:398
 msgid "Refuse MSCHAP Authentication"
-msgstr "Atsisakyti MSCHAP autentifikacijos"
+msgstr "Atsisakyti MSCHAP atpažinimo"
 
 #: ../../network/nm_setting_bean_gen.go:172
 #: ../../network/nm_setting_bean_gen.go:173
@@ -1833,7 +1854,7 @@ msgstr "Atsisakyti MSCHAP autentifikacijos"
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "Atsisakyti MSCHAPv2 autentifikacijos"
+msgstr "Atsisakyti MSCHAPv2 atpažinimo"
 
 #: ../../network/nm_setting_bean_gen.go:173
 #: ../../network/nm_setting_bean_gen.go:174
@@ -2000,7 +2021,7 @@ msgstr "NT domenas"
 #: ../../network/nm_setting_bean_gen.go:290
 #: ../../network/nm_setting_bean_gen.go:291
 msgid "Proxy"
-msgstr ""
+msgstr "Įgaliotasis serveris"
 
 #: ../../network/nm_setting_bean_gen.go:193
 #: ../../network/nm_setting_bean_gen.go:194
@@ -2010,7 +2031,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr ""
+msgstr "Leisti Cisco saugų darbalaukio Trojos arklį"
 
 #: ../../network/nm_setting_bean_gen.go:194
 #: ../../network/nm_setting_bean_gen.go:195
@@ -2148,7 +2169,7 @@ msgstr "Grupės slaptažodis"
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Užklausti vidinį IP adresą"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2177,14 +2198,14 @@ msgstr "CA failas"
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Versti vykdyti UDP sandarinimą"
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Naudoti IP glaudinimą"
 
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
@@ -2211,6 +2232,7 @@ msgstr "Grupės ID"
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Pre-Shared Key"
 msgstr "Iš anksto padalintas raktas"
 
@@ -2265,7 +2287,7 @@ msgstr "HMAC autentifikacija"
 #: ../../network/nm_setting_bean_gen.go:332
 #: ../../network/nm_setting_bean_gen.go:333
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS autentifikacija"
+msgstr "VPN TLS atpažinimas"
 
 #: ../../network/nm_setting_bean_gen.go:324
 #: ../../network/nm_setting_bean_gen.go:325
@@ -2293,7 +2315,7 @@ msgstr "Rakto failas"
 #: ../../network/nm_setting_bean_gen.go:344
 #: ../../network/nm_setting_bean_gen.go:345
 msgid "VPN Proxies"
-msgstr ""
+msgstr "VPN įgaliotieji serveriai"
 
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
@@ -2321,7 +2343,7 @@ msgstr "Prievadas"
 #: ../../network/nm_setting_bean_gen.go:349
 #: ../../network/nm_setting_bean_gen.go:350
 msgid "Retry Indefinitely When Failed"
-msgstr ""
+msgstr "Nepavykus, be perstojo bandyti vėl"
 
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
@@ -2367,7 +2389,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:363
 #: ../../network/nm_setting_bean_gen.go:364
 msgid "Use LZO data compression"
-msgstr ""
+msgstr "Naudoti LZO duomenų glaudinimą"
 
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:355
@@ -2626,7 +2648,7 @@ msgstr ""
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "Manual"
-msgstr "Rankinis būdas"
+msgstr "Rankinis"
 
 #: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip4_config.go:41
@@ -2690,7 +2712,7 @@ msgstr "VPNC"
 #: ../../network/nm_setting_virtual_key.go:176
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Verslo"
+msgstr "WPA/WPA2 verslo"
 
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:199
@@ -2726,12 +2748,12 @@ msgstr "Silpnas"
 #: ../../network/nm_setting_vpn_openvpn.go:236
 #: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
-msgstr "Certifikatai (TLS)"
+msgstr "Sertifikatai (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 #: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
-msgstr "Certifikatai su slaptažodžiu (TLS)"
+msgstr "Sertifikatai su slaptažodžiu (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
 #: ../../network/nm_setting_vpn_openvpn.go:255
@@ -2917,12 +2939,8 @@ msgstr "HTTP"
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../../network/nm_setting_vpn_strongswan.go:95
-msgid "Certificate/private key"
-msgstr ""
-
 #: ../../network/nm_setting_vpn_strongswan.go:96
-msgid "Certificate/ssh-agent"
+msgid "SSH Agent"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
@@ -2931,11 +2949,7 @@ msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
 msgid "EAP"
-msgstr ""
-
-#: ../../network/nm_setting_vpn_strongswan.go:99
-msgid "Pre-shared key"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:238
 #: ../../network/nm_setting_vpn_vpnc.go:250
@@ -3106,7 +3120,7 @@ msgstr "Įrenginys nebuvo pasiruošęs konfigūracijai."
 #: ../../network/state_handler.go:27 ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr ""
+msgstr "Nepavyko užrezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi laiko limitas ir t.t.)"
 
 #: ../../network/state_handler.go:28 ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
@@ -3180,11 +3194,11 @@ msgstr "AutoIP tarnyba baigė darbą arba netikėtai patyrė nesėkmę."
 
 #: ../../network/state_handler.go:45 ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr ""
+msgstr "Numerio rinkimas nepavyko dėl užimtos linijos."
 
 #: ../../network/state_handler.go:46 ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr ""
+msgstr "Numerio rinkimas nepavyko dėl to, kad nėra telefono linijos signalo."
 
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
@@ -3192,11 +3206,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:48 ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr ""
+msgstr "Baigėsi numerio rinkimui skirtas laikas."
 
 #: ../../network/state_handler.go:49 ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr ""
+msgstr "Numerio rinkimas nepavyko."
 
 #: ../../network/state_handler.go:50 ../../network/state_handler.go:62
 msgid "Modem initialization failed."
@@ -3212,15 +3226,15 @@ msgstr ""
 
 #: ../../network/state_handler.go:53 ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr ""
+msgstr "Tinklo registracija buvo atmesta."
 
 #: ../../network/state_handler.go:54 ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr ""
+msgstr "Baigėsi tinklo registracijai skirtas laikas."
 
 #: ../../network/state_handler.go:55 ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr ""
+msgstr "Registravimasis į užklaustą GSM tinklą nepavyko."
 
 #: ../../network/state_handler.go:56 ../../network/state_handler.go:68
 msgid "PIN check failed."
@@ -3228,7 +3242,7 @@ msgstr "PIN patikrinimas nepavyko."
 
 #: ../../network/state_handler.go:57 ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr ""
+msgstr "Gali būti, kad trūksta įrenginiui reikalingos programinės aparatinės įrangos."
 
 #: ../../network/state_handler.go:58 ../../network/state_handler.go:70
 msgid "The device was removed."
@@ -3236,11 +3250,11 @@ msgstr "Įrenginys buvo pašalintas."
 
 #: ../../network/state_handler.go:59 ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
-msgstr ""
+msgstr "NetworkManager užmigo."
 
 #: ../../network/state_handler.go:60 ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr ""
+msgstr "Aktyvus įrenginio ryšys buvo pašalintas arba dingo."
 
 #: ../../network/state_handler.go:61 ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
@@ -3252,7 +3266,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:63 ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
-msgstr ""
+msgstr "Įrenginio esamas ryšys buvo numanomas."
 
 #: ../../network/state_handler.go:64 ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
@@ -3288,7 +3302,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:72 ../../network/state_handler.go:84
 msgid "A connection dependency failed."
-msgstr ""
+msgstr "Ryšio priklausomybė patyrė nesėkmę."
 
 #: ../../network/state_handler.go:73 ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
@@ -3296,11 +3310,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:74 ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr ""
+msgstr "ModemManager nepasileido arba netikėtai baigė darbą."
 
 #: ../../network/state_handler.go:75 ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr ""
+msgstr "Nepavyko rasti 802.11 belaidžio tinklo."
 
 #: ../../network/state_handler.go:76 ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
@@ -3316,7 +3330,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:81 ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr ""
+msgstr "Modemas nepasileido arba yra neprieinamas."
 
 #: ../../network/state_handler.go:82 ../../network/state_handler.go:94
 msgid "Modem now ready and available."
@@ -3328,7 +3342,7 @@ msgstr "SIM PIN yra neteisingas."
 
 #: ../../network/state_handler.go:84 ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr ""
+msgstr "Naujo ryšio aktyvavimas laukia eilėje."
 
 #: ../../network/state_handler.go:85 ../../network/state_handler.go:97
 msgid "Parent device changed."
@@ -3368,12 +3382,12 @@ msgstr "Nepavyko aktyvuoti VPN ryšio."
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:98
 #: ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr ""
+msgstr "VPN ryšys, dėl atsijungimo nuo naudotojų, pakeitė būseną."
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:99
 #: ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr ""
+msgstr "VPN ryšys, dėl atsijungimo nuo įrenginių, pakeitė būseną."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:100
 #: ../../network/state_handler.go:110
@@ -3416,7 +3430,7 @@ msgid "The connection was deleted from settings."
 msgstr "Ryšys buvo ištrintas iš nustatymų."
 
 #: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:322
+#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "Nežinoma"
 
@@ -3441,55 +3455,63 @@ msgstr "Tinklas"
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:110
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr ""
+msgstr "Belaidžio tinklo aparatinės įrangos perjungiklis yra išjungtas, prašome, jei būtina, jį įjungti"
 
 #: ../../network/utils_notify.go:102 ../../network/utils_notify.go:114
 msgid "System proxy is set successfully."
-msgstr ""
+msgstr "Sistemos įgaliotasis serveris yra sėkmingai nustatytas."
 
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:117
 msgid "System proxy has been cancelled."
-msgstr ""
+msgstr "Sistemos įgaliotasis serveris buvo atšauktas."
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid "Abnormal battery power"
 msgstr ""
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
 msgstr ""
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "Kritinis baterijos lygis"
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
-msgstr ""
+msgstr "Kompiuteris buvo pristabdytas, prijunkite maitinimą."
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "Baterija senka"
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr ""
+msgstr "Kompiuteris bus pristabdytas, prijunkite maitinimą dabar."
 
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr ""
+msgstr "Prijunkite maitinimą arba kompiuteris bus pristabdytas."

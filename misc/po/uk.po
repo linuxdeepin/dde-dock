@@ -3,20 +3,31 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# szd_liufei <liufei@linuxdeepin.com>, 2016
+# szd_liufei <liufei@deepin.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 18:25+0800\n"
-"PO-Revision-Date: 2016-05-13 06:23+0000\n"
-"Last-Translator: szd_liufei <liufei@linuxdeepin.com>\n"
+"POT-Creation-Date: 2016-08-09 15:01+0800\n"
+"PO-Revision-Date: 2016-08-10 05:30+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: ../../accounts/checkers/password.go:45
+msgid "Please enter a password not less than 8 characters"
+msgstr ""
+
+#: ../../accounts/checkers/password.go:47
+#, c-format
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (%s)"
+msgstr ""
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -563,12 +574,32 @@ msgstr "Апіа"
 msgid "Fakaofo"
 msgstr "Факаофо"
 
+#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
 #: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
 #: ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr "_Виконати"
 
+#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
+msgid "_Close All"
+msgstr "_Закрити все"
+
+#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
+msgid "_Dock"
+msgstr "_Платформа"
+
+#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
 #: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
@@ -579,24 +610,8 @@ msgstr "_Виконати"
 msgid "_Undock"
 msgstr "_Забрати з панелі"
 
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
-msgid "_Close All"
-msgstr "_Закрити все"
-
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
-msgid "_Dock"
-msgstr "_Платформа"
-
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:75
-#: ../../network/nm_setting_ip4_config.go:26
+#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
@@ -959,6 +974,11 @@ msgstr "Відкрити папку"
 msgid "Run Software"
 msgstr "Запустити програмне забезпечення"
 
+#: ../../mounts/ifc.go:144
+#, c-format
+msgid "%s removed successfully"
+msgstr ""
+
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:316
@@ -1080,7 +1100,7 @@ msgstr "Дротове підключення"
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:130
 #: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr "Збережено"
 
@@ -1092,7 +1112,7 @@ msgstr "Збережено"
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:189
+#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr "Завжди запитувати "
 
@@ -1107,7 +1127,7 @@ msgstr "Завжди запитувати "
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:190
+#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "Не вимагається"
 
@@ -1617,6 +1637,7 @@ msgstr "Внутрішня аутентифікація"
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_vpn_strongswan.go:95
 msgid "Private Key"
 msgstr "Закритий ключ"
 
@@ -2209,6 +2230,7 @@ msgstr "Груповий ID"
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Pre-Shared Key"
 msgstr "Спільний ключ"
 
@@ -2915,12 +2937,8 @@ msgstr "HTTP"
 msgid "SOCKS"
 msgstr "SOCKS-сервер"
 
-#: ../../network/nm_setting_vpn_strongswan.go:95
-msgid "Certificate/private key"
-msgstr ""
-
 #: ../../network/nm_setting_vpn_strongswan.go:96
-msgid "Certificate/ssh-agent"
+msgid "SSH Agent"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
@@ -2929,10 +2947,6 @@ msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
 msgid "EAP"
-msgstr ""
-
-#: ../../network/nm_setting_vpn_strongswan.go:99
-msgid "Pre-shared key"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:238
@@ -3414,7 +3428,7 @@ msgid "The connection was deleted from settings."
 msgstr "З'єднання було видалено з налаштувань."
 
 #: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:322
+#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "Невідомо"
 
@@ -3449,41 +3463,49 @@ msgstr "Системний проксі-сервер успішно настро
 msgid "System proxy has been cancelled."
 msgstr "Системний проксі було відмінено."
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid "Abnormal battery power"
 msgstr "Незвичний заряд аккумулятора"
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
 msgstr "Не можна передбачити поведінку пристрою у разі живлення від акумуляторної батареї, збережіть важливі документи й не виконуйте важливі операції."
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "Батарея критично розряджена"
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "Комп'ютер в режимі очікування, будь ласка, підключіть його до мережі."
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "Низький заряд батареї"
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Комп'ютер перейде у режим очікування, будь ласка, підключіться зараз."
 

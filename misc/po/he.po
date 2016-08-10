@@ -3,12 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-10 18:25+0800\n"
-"PO-Revision-Date: 2016-05-13 01:59+0000\n"
+"POT-Creation-Date: 2016-08-09 15:01+0800\n"
+"PO-Revision-Date: 2016-08-10 05:30+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Hebrew (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/he/)\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../../accounts/checkers/password.go:45
+msgid "Please enter a password not less than 8 characters"
+msgstr ""
+
+#: ../../accounts/checkers/password.go:47
+#, c-format
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (%s)"
+msgstr ""
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -220,7 +232,7 @@ msgstr "Chihuahua"
 #: ../../datetime/timezone/deepin_list.go:64 ../../timedate/deepin_list.go:64
 #: ../../timedate/deepin_list.go:73
 msgid "Arizona"
-msgstr "Arizona"
+msgstr "אריזונה"
 
 #: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
 #: ../../timedate/deepin_list.go:77
@@ -230,12 +242,12 @@ msgstr "BajaSur"
 #: ../../datetime/timezone/deepin_list.go:72 ../../timedate/deepin_list.go:72
 #: ../../timedate/deepin_list.go:81
 msgid "Mexico City"
-msgstr "Mexico City"
+msgstr "מקסיקו סיטי"
 
 #: ../../datetime/timezone/deepin_list.go:76 ../../timedate/deepin_list.go:76
 #: ../../timedate/deepin_list.go:85
 msgid "Chicago"
-msgstr "Chicago"
+msgstr "שיקגו"
 
 #: ../../datetime/timezone/deepin_list.go:80 ../../timedate/deepin_list.go:80
 #: ../../timedate/deepin_list.go:89
@@ -250,17 +262,17 @@ msgstr "Monterrey"
 #: ../../datetime/timezone/deepin_list.go:88 ../../timedate/deepin_list.go:88
 #: ../../timedate/deepin_list.go:97
 msgid "New York"
-msgstr "New York"
+msgstr "ניו יורק"
 
 #: ../../datetime/timezone/deepin_list.go:92 ../../timedate/deepin_list.go:92
 #: ../../timedate/deepin_list.go:101
 msgid "Lima"
-msgstr "Lima"
+msgstr "לימה"
 
 #: ../../datetime/timezone/deepin_list.go:96 ../../timedate/deepin_list.go:96
 #: ../../timedate/deepin_list.go:105
 msgid "Bogota"
-msgstr "Bogota"
+msgstr "בוגוטה"
 
 #: ../../datetime/timezone/deepin_list.go:100
 #: ../../timedate/deepin_list.go:100 ../../timedate/deepin_list.go:109
@@ -275,7 +287,7 @@ msgstr "Cuiaba"
 #: ../../datetime/timezone/deepin_list.go:108
 #: ../../timedate/deepin_list.go:108 ../../timedate/deepin_list.go:117
 msgid "Santiago"
-msgstr "Santiago"
+msgstr "סנטיאגו"
 
 #: ../../datetime/timezone/deepin_list.go:112
 #: ../../timedate/deepin_list.go:112 ../../timedate/deepin_list.go:121
@@ -325,17 +337,17 @@ msgstr "Cape Verde"
 #: ../../datetime/timezone/deepin_list.go:148
 #: ../../timedate/deepin_list.go:148 ../../timedate/deepin_list.go:157
 msgid "London"
-msgstr "London"
+msgstr "לונדון"
 
 #: ../../datetime/timezone/deepin_list.go:152
 #: ../../timedate/deepin_list.go:152 ../../timedate/deepin_list.go:161
 msgid "Dublin"
-msgstr "Dublin"
+msgstr "דבלין"
 
 #: ../../datetime/timezone/deepin_list.go:156
 #: ../../timedate/deepin_list.go:156 ../../timedate/deepin_list.go:165
 msgid "Casablanca"
-msgstr "Casablanca"
+msgstr "קזבלנקה"
 
 #: ../../datetime/timezone/deepin_list.go:160
 #: ../../timedate/deepin_list.go:160 ../../timedate/deepin_list.go:169
@@ -345,42 +357,42 @@ msgstr "Monrovia"
 #: ../../datetime/timezone/deepin_list.go:164
 #: ../../timedate/deepin_list.go:164 ../../timedate/deepin_list.go:173
 msgid "Madrid"
-msgstr "Madrid"
+msgstr "מדריד"
 
 #: ../../datetime/timezone/deepin_list.go:168
 #: ../../timedate/deepin_list.go:168 ../../timedate/deepin_list.go:177
 msgid "Paris"
-msgstr "Paris"
+msgstr "פריז"
 
 #: ../../datetime/timezone/deepin_list.go:172
 #: ../../timedate/deepin_list.go:172 ../../timedate/deepin_list.go:181
 msgid "Rome"
-msgstr "Rome"
+msgstr "רומא"
 
 #: ../../datetime/timezone/deepin_list.go:176
 #: ../../timedate/deepin_list.go:176 ../../timedate/deepin_list.go:185
 msgid "Vienna"
-msgstr "Vienna"
+msgstr "וינה"
 
 #: ../../datetime/timezone/deepin_list.go:180
 #: ../../timedate/deepin_list.go:180 ../../timedate/deepin_list.go:189
 msgid "Algiers"
-msgstr "Algiers"
+msgstr "אלג׳יר"
 
 #: ../../datetime/timezone/deepin_list.go:184
 #: ../../timedate/deepin_list.go:184 ../../timedate/deepin_list.go:193
 msgid "Cairo"
-msgstr "Cairo"
+msgstr "קהיר"
 
 #: ../../datetime/timezone/deepin_list.go:188
 #: ../../timedate/deepin_list.go:188 ../../timedate/deepin_list.go:197
 msgid "Athens"
-msgstr "Athens"
+msgstr "אתונה"
 
 #: ../../datetime/timezone/deepin_list.go:192
 #: ../../timedate/deepin_list.go:192 ../../timedate/deepin_list.go:201
 msgid "Istanbul"
-msgstr "Istanbul"
+msgstr "איסטנבול"
 
 #: ../../datetime/timezone/deepin_list.go:196
 #: ../../timedate/deepin_list.go:196 ../../timedate/deepin_list.go:205
@@ -395,7 +407,7 @@ msgstr "Nairobi"
 #: ../../datetime/timezone/deepin_list.go:204
 #: ../../timedate/deepin_list.go:204 ../../timedate/deepin_list.go:213
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "טהרן"
 
 #: ../../datetime/timezone/deepin_list.go:208
 #: ../../timedate/deepin_list.go:208 ../../timedate/deepin_list.go:217
@@ -410,7 +422,7 @@ msgstr "Baku"
 #: ../../datetime/timezone/deepin_list.go:216
 #: ../../timedate/deepin_list.go:216 ../../timedate/deepin_list.go:225
 msgid "Moscow"
-msgstr "Moscow"
+msgstr "מוסקבה"
 
 #: ../../datetime/timezone/deepin_list.go:220
 #: ../../timedate/deepin_list.go:220 ../../timedate/deepin_list.go:229
@@ -505,7 +517,7 @@ msgstr "Darwin"
 #: ../../datetime/timezone/deepin_list.go:292
 #: ../../timedate/deepin_list.go:292 ../../timedate/deepin_list.go:301
 msgid "Sydney"
-msgstr "Sydney"
+msgstr "סידני"
 
 #: ../../datetime/timezone/deepin_list.go:296
 #: ../../timedate/deepin_list.go:296 ../../timedate/deepin_list.go:305
@@ -515,7 +527,7 @@ msgstr "Guam"
 #: ../../datetime/timezone/deepin_list.go:300
 #: ../../timedate/deepin_list.go:300 ../../timedate/deepin_list.go:309
 msgid "Melbourne"
-msgstr "Melbourne"
+msgstr "מלבורן"
 
 #: ../../datetime/timezone/deepin_list.go:304
 #: ../../timedate/deepin_list.go:304 ../../timedate/deepin_list.go:313
@@ -562,12 +574,32 @@ msgstr "Apia"
 msgid "Fakaofo"
 msgstr "Fakaofo"
 
+#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
 #: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
 #: ../../dock/normal_apps.go:86
 msgid "_Run"
-msgstr "_הפעל"
+msgstr "ה_פעל"
 
+#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
+msgid "_Close All"
+msgstr "ל_סגור הכול"
+
+#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
+msgid "_Dock"
+msgstr "ה_צמדה"
+
+#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
 #: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
 #: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
 #: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
@@ -576,26 +608,10 @@ msgstr "_הפעל"
 #: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
 #: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
 msgid "_Undock"
-msgstr "_חלץ"
+msgstr "_חילוץ"
 
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
-msgid "_Close All"
-msgstr "_סגור הכל"
-
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
-msgid "_Dock"
-msgstr "_נעץ"
-
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:75
-#: ../../network/nm_setting_ip4_config.go:26
+#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
+#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
@@ -632,12 +648,12 @@ msgstr "עמוד למטה"
 #: ../../keybinding/id_desc_list.go:47 ../../keybinding/shortcuts/system.go:57
 #: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
-msgstr "לאנצ'ר"
+msgstr "משגר"
 
 #: ../../keybinding/id_desc_list.go:48 ../../keybinding/shortcuts/wm.go:79
 #: ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
-msgstr "הצג את שולחן העבודה"
+msgstr "הצגת שולחן העבודה"
 
 #: ../../keybinding/id_desc_list.go:49 ../../keybinding/shortcuts/system.go:59
 #: ../../keybinding/shortcuts/system.go:71
@@ -708,7 +724,7 @@ msgstr "התנתקות"
 #: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
-msgstr "השבת משטח מגע"
+msgstr "השבתת משטח מגע"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -725,7 +741,7 @@ msgstr "מחשבון"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "שרת אימייל"
+msgstr "לקוח דוא״ל"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
@@ -737,27 +753,27 @@ msgstr "נגן מדיה"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "נגן/השהה"
+msgstr "נגינה/השהיה"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
-msgstr "השהה"
+msgstr "השהיה"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "עצור"
+msgstr "עצירה"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
-msgstr "השתק"
+msgstr "השתקה"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "החלש"
+msgstr "הנמכה"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "הגבר"
+msgstr "הגברה"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
@@ -769,7 +785,7 @@ msgstr "הבא"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
-msgstr "חלץ"
+msgstr "חילוץ"
 
 #: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:92
 #: ../../keybinding/shortcuts/wm.go:104
@@ -958,6 +974,11 @@ msgstr "פתח תיקייה"
 msgid "Run Software"
 msgstr "הפעל תוכנה"
 
+#: ../../mounts/ifc.go:144
+#, c-format
+msgid "%s removed successfully"
+msgstr ""
+
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:316
@@ -1079,7 +1100,7 @@ msgstr "חיבור קווי"
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:130
 #: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr "שמור"
 
@@ -1091,7 +1112,7 @@ msgstr "שמור"
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:189
+#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr "תמיד תשאל"
 
@@ -1106,7 +1127,7 @@ msgstr "תמיד תשאל"
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:190
+#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "לא נחוץ"
 
@@ -1616,6 +1637,7 @@ msgstr "אימות פנימי"
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_vpn_strongswan.go:95
 msgid "Private Key"
 msgstr "מפתח פרטי"
 
@@ -2208,6 +2230,7 @@ msgstr "מזהה קבוצה"
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Pre-Shared Key"
 msgstr "Pre-Shared Key"
 
@@ -2914,12 +2937,8 @@ msgstr "HTTP"
 msgid "SOCKS"
 msgstr "SOCKS"
 
-#: ../../network/nm_setting_vpn_strongswan.go:95
-msgid "Certificate/private key"
-msgstr ""
-
 #: ../../network/nm_setting_vpn_strongswan.go:96
-msgid "Certificate/ssh-agent"
+msgid "SSH Agent"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
@@ -2928,10 +2947,6 @@ msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
 msgid "EAP"
-msgstr ""
-
-#: ../../network/nm_setting_vpn_strongswan.go:99
-msgid "Pre-shared key"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_vpnc.go:238
@@ -3360,7 +3375,7 @@ msgstr "הפעלת חיבות VPN נכשלה מסיבות לא ידועות"
 #: ../../network/state_handler.go:95 ../../network/state_handler.go:97
 #: ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
-msgstr "הפעלת חיבות VPN נכשלה"
+msgstr "הפעלת חיבור VPN נכשלה"
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:98
 #: ../../network/state_handler.go:108
@@ -3380,7 +3395,7 @@ msgstr "שירות VPN הופסק"
 #: ../../network/state_handler.go:99 ../../network/state_handler.go:101
 #: ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid."
-msgstr "הגדרת ה-IP של חיבור ה-VPN אינו חוקי"
+msgstr "הגדרת ה־IP של חיבור ה‏־VPN אינה חוקית."
 
 #: ../../network/state_handler.go:100 ../../network/state_handler.go:102
 #: ../../network/state_handler.go:112
@@ -3413,7 +3428,7 @@ msgid "The connection was deleted from settings."
 msgstr "החיבור הוסר מההגדרות"
 
 #: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:322
+#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "לא ידוע"
 
@@ -3448,41 +3463,49 @@ msgstr "פרוקסי מערכת הוגדר בהצלחה"
 msgid "System proxy has been cancelled."
 msgstr "פרוקסי מערכת בוטל"
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid "Abnormal battery power"
 msgstr "כוח סוללה לא תקין"
 
-#: ../../power/manager_events.go:129 ../../power/upower.go:81
-#: ../../power/upower.go:89 ../../power/upower.go:90 ../../power/upower.go:99
+#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
+#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
+#: ../../power/upower.go:99
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
 msgstr "לא ניתן לצפות את כוח הסוללה, אנא דאג לשמור מסמכים חשובים ולהמנע מלעשות שינויים משמעותיים"
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "סוללה נמוכה באופן קריטי"
 
-#: ../../power/manager_events.go:133 ../../power/manager_events.go:155
+#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
+#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "המחשב היה במצב השהייה, אנא חבר אותו לחשמל"
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "סוללה נמוכה"
 
-#: ../../power/manager_events.go:161 ../../power/upower.go:114
-#: ../../power/upower.go:126 ../../power/upower.go:130
-#: ../../power/upower.go:139
+#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
+#: ../../power/upower.go:114 ../../power/upower.go:126
+#: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "המחשב נכנס למצב השהייה, אנא חבר אותו לחשמל כעת"
 
