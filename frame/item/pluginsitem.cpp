@@ -133,6 +133,7 @@ void PluginsItem::startDrag()
     emit dragStarted();
     const Qt::DropAction result = drag->exec(Qt::MoveAction);
     Q_UNUSED(result);
+    emit itemDropped(drag->target());
 
     m_draging = false;
     setVisible(true);

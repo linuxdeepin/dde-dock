@@ -2,6 +2,7 @@
 #define CONTAINERWIDGET_H
 
 #include <QWidget>
+#include <QHBoxLayout>
 
 class ContainerWidget : public QWidget
 {
@@ -10,7 +11,12 @@ class ContainerWidget : public QWidget
 public:
     explicit ContainerWidget(QWidget *parent = 0);
 
-    QSize sizeHint() const;
+    void addWidget(QWidget * const w);
+
+private:
+    QHBoxLayout *m_centeralLayout;
+
+    QList<QWidget *> m_itemList;
 };
 
 #endif // CONTAINERWIDGET_H

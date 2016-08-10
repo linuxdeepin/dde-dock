@@ -15,6 +15,8 @@ public:
 
     inline ItemType itemType() const {return Container;}
 
+    void addItem(DockItem * const item);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
