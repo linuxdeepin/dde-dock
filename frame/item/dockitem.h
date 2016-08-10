@@ -50,13 +50,15 @@ protected:
     const QPoint popupMarkPoint();
 
     void hidePopup();
-    void showContextMenu();
     void showHoverTips();
     void popupWindowAccept();
     void showPopupApplet(QWidget * const applet);
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();
+
+protected slots:
+    void showContextMenu();
 
 private:
     void updatePopupPosition();

@@ -254,8 +254,10 @@ void AppItem::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::RightButton)
     {
         if (perfectIconRect().contains(e->pos()))
-            return showContextMenu();
-        else
+        {
+            QMetaObject::invokeMethod(this, "showContextMenu", Qt::QueuedConnection);
+            return;
+        } else
             return QWidget::mousePressEvent(e);
     }
 
