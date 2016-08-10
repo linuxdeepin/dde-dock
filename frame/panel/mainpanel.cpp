@@ -228,6 +228,7 @@ void MainPanel::dropEvent(QDropEvent *e)
 void MainPanel::initItemConnection(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted);
+    connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped);
     connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible);
     connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide);
 }
@@ -428,4 +429,17 @@ void MainPanel::itemDragStarted()
     rect.setSize(size());
 
     DragingItem->setVisible(rect.contains(QCursor::pos()));
+}
+
+void MainPanel::itemDropped(QObject *destnation)
+{
+    DockItem *src = qobject_cast<DockItem *>(sender());
+    DockItem *dst = qobject_cast<DockItem *>(destnation);
+
+    if (!src)
+        return;
+
+    // drop to container
+    if (src->parent() == this && (!dst || dst->itemType() == DockItem::Container))
+        m_itemController->itemDroppedIntoContainer(src);
 }

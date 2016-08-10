@@ -35,6 +35,7 @@ public:
 
 signals:
     void dragStarted() const;
+    void itemDropped(QObject *destination) const;
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
 

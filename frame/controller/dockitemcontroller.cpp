@@ -81,6 +81,17 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
         m_appInter->MoveEntry(moveIndex - 1, replaceIndex - 1);
 }
 
+void DockItemController::itemDroppedIntoContainer(DockItem * const item)
+{
+    // remove from main panel
+    emit itemRemoved(item);
+    m_itemList.removeOne(item);
+
+    // add to container
+    m_containerItem->addItem(item);
+    m_containerList.append(item);
+}
+
 void DockItemController::placeholderItemAdded(PlaceholderItem *item, DockItem *position)
 {
     const int pos = m_itemList.indexOf(position);

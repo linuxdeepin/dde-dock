@@ -47,6 +47,7 @@ private slots:
     void itemRemoved(DockItem *item);
     void itemMoved(DockItem *item, const int index);
     void itemDragStarted();
+    void itemDropped(QObject *destnation);
 
 private:
     Position m_position;

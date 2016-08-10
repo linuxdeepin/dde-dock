@@ -13,6 +13,11 @@ ContainerItem::ContainerItem(QWidget *parent)
     setAcceptDrops(true);
 }
 
+void ContainerItem::addItem(DockItem * const item)
+{
+    m_containerWidget->addWidget(item);
+}
+
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 {
     if (!e->mimeData()->hasFormat(DOCK_PLUGIN_MIME))
@@ -23,6 +28,8 @@ void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 
 void ContainerItem::dragMoveEvent(QDragMoveEvent *e)
 {
+    Q_UNUSED(e);
+
     return;
 }
 
