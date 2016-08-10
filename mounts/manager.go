@@ -106,7 +106,6 @@ func (m *Manager) emitError(id, msg string) {
 func (m *Manager) refreshDiskList() {
 	m.refreshLocker.Lock()
 	defer m.refreshLocker.Unlock()
-	m.DiskList = nil
 	m.setPropDiskList(m.getDiskInfos())
 }
 
