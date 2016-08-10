@@ -23,6 +23,12 @@ DockItem::DockItem(QWidget *parent)
     {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
         arrowRectangle->setShadowBlurRadius(0);
+//        arrowRectangle->setBorderWidth(0);
+        arrowRectangle->setShadowDistance(0);
+        arrowRectangle->setShadowYOffset(0);
+        arrowRectangle->setShadowXOffset(0);
+        arrowRectangle->setArrowWidth(18);
+        arrowRectangle->setArrowHeight(10);
         PopupWindow.reset(arrowRectangle);
     }
 
@@ -250,12 +256,13 @@ const QPoint DockItem::popupMarkPoint()
     } while (w);
 
     const QRect r = rect();
+    const int offset = 2;
     switch (DockPosition)
     {
-    case Top:       p += QPoint(r.width() / 2, r.height());      break;
-    case Bottom:    p += QPoint(r.width() / 2, 0);               break;
-    case Left:      p += QPoint(r.width(), r.height() / 2);      break;
-    case Right:     p += QPoint(0, r.height() / 2);              break;
+    case Top:       p += QPoint(r.width() / 2, r.height() + offset);      break;
+    case Bottom:    p += QPoint(r.width() / 2, 0 - offset);               break;
+    case Left:      p += QPoint(r.width() + offset, r.height() / 2);      break;
+    case Right:     p += QPoint(0 - offset, r.height() / 2);              break;
     }
 
     return p;
