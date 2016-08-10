@@ -10,6 +10,7 @@ ContainerWidget::ContainerWidget(QWidget *parent)
 
       m_centeralLayout(new QHBoxLayout)
 {
+    m_centeralLayout->addStretch();
     m_centeralLayout->setSpacing(0);
     m_centeralLayout->setMargin(0);
 
@@ -20,9 +21,28 @@ ContainerWidget::ContainerWidget(QWidget *parent)
 
 void ContainerWidget::addWidget(QWidget * const w)
 {
+    w->setParent(this);
     w->setFixedSize(ITEM_WIDTH, ITEM_HEIGHT);
     m_centeralLayout->addWidget(w);
     m_itemList.append(w);
 
     setFixedWidth(std::max(ITEM_WIDTH, ITEM_WIDTH * m_itemList.size()));
+}
+
+void ContainerWidget::removeWidget(QWidget * const w)
+{
+    m_centeralLayout->removeWidget(w);
+    m_itemList.removeOne(w);
+
+    setFixedWidth(std::max(ITEM_WIDTH, ITEM_WIDTH * m_itemList.size()));
+}
+
+int ContainerWidget::itemCount() const
+{
+    return m_itemList.count();
+}
+
+const QList<QWidget *> ContainerWidget::itemList() const
+{
+    return m_itemList;
 }

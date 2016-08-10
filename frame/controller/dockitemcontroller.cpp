@@ -32,6 +32,11 @@ bool DockItemController::appIsOnDock(const QString &appDesktop) const
     return m_appInter->IsOnDock(appDesktop);
 }
 
+bool DockItemController::itemIsInContainer(DockItem * const item) const
+{
+    return m_containerItem->contains(item);
+}
+
 void DockItemController::updatePluginsItemOrderKey()
 {
     Q_ASSERT(sender() == m_updatePluginsOrderTimer);
@@ -83,13 +88,32 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
 void DockItemController::itemDroppedIntoContainer(DockItem * const item)
 {
+    if (m_containerItem->contains(item))
+        return;
+
+//    qDebug() << "drag into container" << item;
+
     // remove from main panel
     emit itemRemoved(item);
     m_itemList.removeOne(item);
 
     // add to container
     m_containerItem->addItem(item);
-    m_containerList.append(item);
+}
+
+void DockItemController::itemDragOutFromContainer(DockItem * const item)
+{
+//    qDebug() << "drag out from container" << item;
+
+    // remove from container
+    m_containerItem->removeItem(item);
+
+    // insert to panel
+    switch (item->itemType())
+    {
+    case DockItem::Plugins:   pluginItemInserted(static_cast<PluginsItem *>(item));       break;
+    default:                  Q_UNREACHABLE();
+    }
 }
 
 void DockItemController::placeholderItemAdded(PlaceholderItem *item, DockItem *position)

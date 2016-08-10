@@ -22,6 +22,7 @@ public:
 
     const QList<DockItem *> itemList() const;
     bool appIsOnDock(const QString &appDesktop) const;
+    bool itemIsInContainer(DockItem * const item) const;
 
 signals:
     void itemInserted(const int index, DockItem *item) const;
@@ -32,6 +33,7 @@ public slots:
     void updatePluginsItemOrderKey();
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
     void itemDroppedIntoContainer(DockItem * const item);
+    void itemDragOutFromContainer(DockItem * const item);
     void placeholderItemAdded(PlaceholderItem *item, DockItem *position);
     void placeholderItemDocked(const QString &appDesktop, DockItem *position);
     void placeholderItemRemoved(PlaceholderItem *item);
@@ -47,7 +49,6 @@ private:
 
 private:
     QList<DockItem *> m_itemList;
-    QList<DockItem *> m_containerList;
 
     QTimer *m_updatePluginsOrderTimer;
 

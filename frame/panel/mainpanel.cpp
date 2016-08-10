@@ -227,10 +227,10 @@ void MainPanel::dropEvent(QDropEvent *e)
 
 void MainPanel::initItemConnection(DockItem *item)
 {
-    connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted);
-    connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped);
-    connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible);
-    connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide);
+    connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted, Qt::UniqueConnection);
+    connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped, Qt::UniqueConnection);
+    connect(item, &DockItem::requestRefershWindowVisible, this, &MainPanel::requestRefershWindowVisible, Qt::UniqueConnection);
+    connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide, Qt::UniqueConnection);
 }
 
 DockItem *MainPanel::itemAt(const QPoint &point)
@@ -283,6 +283,8 @@ void MainPanel::adjustItemSize()
     for (auto item : itemList)
     {
         if (item->itemType() == DockItem::Container)
+            continue;
+        if (m_itemController->itemIsInContainer(item))
             continue;
 
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
@@ -370,6 +372,8 @@ void MainPanel::adjustItemSize()
         if (itemType == DockItem::Plugins)
             if (m_displayMode != Dock::Fashion)
                 continue;
+        if (m_itemController->itemIsInContainer(item))
+            continue;
 
         switch (m_position)
         {
@@ -433,13 +437,22 @@ void MainPanel::itemDragStarted()
 
 void MainPanel::itemDropped(QObject *destnation)
 {
+    if (m_displayMode == Dock::Fashion)
+        return;
+
     DockItem *src = qobject_cast<DockItem *>(sender());
     DockItem *dst = qobject_cast<DockItem *>(destnation);
 
     if (!src)
         return;
 
+    const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
+
     // drop to container
-    if (src->parent() == this && (!dst || dst->itemType() == DockItem::Container))
+    if (!itemIsInContainer && (!destnation || (dst && dst->itemType() == DockItem::Container)))
         m_itemController->itemDroppedIntoContainer(src);
+
+    // drag from container
+    if (itemIsInContainer && src->itemType() == DockItem::Plugins && destnation == this)
+        m_itemController->itemDragOutFromContainer(src);
 }

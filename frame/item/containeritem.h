@@ -16,6 +16,8 @@ public:
     inline ItemType itemType() const {return Container;}
 
     void addItem(DockItem * const item);
+    void removeItem(DockItem * const item);
+    bool contains(DockItem * const item);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e);

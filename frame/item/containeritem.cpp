@@ -18,6 +18,16 @@ void ContainerItem::addItem(DockItem * const item)
     m_containerWidget->addWidget(item);
 }
 
+void ContainerItem::removeItem(DockItem * const item)
+{
+    m_containerWidget->removeWidget(item);
+}
+
+bool ContainerItem::contains(DockItem * const item)
+{
+    return m_containerWidget->itemList().contains(item);
+}
+
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 {
     if (!e->mimeData()->hasFormat(DOCK_PLUGIN_MIME))
@@ -46,7 +56,7 @@ void ContainerItem::paintEvent(QPaintEvent *e)
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton && m_containerWidget->itemCount())
         return showPopupApplet(m_containerWidget);
 
     return DockItem::mouseReleaseEvent(e);
