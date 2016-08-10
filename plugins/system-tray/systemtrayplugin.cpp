@@ -97,6 +97,8 @@ void SystemTrayPlugin::trayAdded(const quint32 winId)
 
     if (displayMode() == Dock::Efficient)
         m_proxyInter->itemAdded(this, QString::number(winId));
+    else
+        m_proxyInter->itemAdded(this, FASHION_MODE_ITEM);
 }
 
 void SystemTrayPlugin::trayRemoved(const quint32 winId)
@@ -111,16 +113,18 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
 
     m_fashionItem->setMouseEnable(m_trayList.size() == 1);
 
+    if (m_tipsWidget->isVisible())
+        updateTipsContent();
+
     if (m_fashionItem->activeTray() != widget)
         return;
     // reset active tray
     if (m_trayList.values().isEmpty())
+    {
         m_fashionItem->setActiveTray(nullptr);
-    else
+        m_proxyInter->itemRemoved(this, FASHION_MODE_ITEM);
+    } else
         m_fashionItem->setActiveTray(m_trayList.values().last());
-
-    if (m_tipsWidget->isVisible())
-        updateTipsContent();
 }
 
 void SystemTrayPlugin::trayChanged(const quint32 winId)
