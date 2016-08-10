@@ -23,8 +23,6 @@ void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 
 void ContainerItem::dragMoveEvent(QDragMoveEvent *e)
 {
-    Q_UNUSED(e);
-
     return;
 }
 

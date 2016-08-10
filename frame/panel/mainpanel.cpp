@@ -135,6 +135,10 @@ void MainPanel::resizeEvent(QResizeEvent *e)
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)
 {
+    DockItem *item = itemAt(e->pos());
+    if (item && item->itemType() == DockItem::Container)
+        return;
+
     DockItem *dragSourceItem = qobject_cast<DockItem *>(e->source());
     if (dragSourceItem)
     {
@@ -202,7 +206,7 @@ void MainPanel::dragLeaveEvent(QDragLeaveEvent *e)
         RequestDockItem = nullptr;
     }
 
-    if (DragingItem)
+    if (DragingItem && DragingItem->itemType() != DockItem::Plugins)
         DragingItem->hide();
 }
 
