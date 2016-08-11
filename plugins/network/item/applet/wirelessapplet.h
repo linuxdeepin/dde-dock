@@ -11,12 +11,16 @@
 #include <QList>
 #include <QTimer>
 
+#include <dinputdialog.h>
+#include <dcheckbox.h>
+
 class WirelessApplet : public QScrollArea
 {
     Q_OBJECT
 
 public:
     explicit WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
+    ~WirelessApplet();
 
     NetworkDevice::NetworkState wirelessState() const;
     int activeAPStrgength() const;
@@ -38,6 +42,8 @@ private slots:
     void deviceEnableChanged(const bool enable);
     void deviceStateChanegd();
     void onActiveAPChanged();
+    void pwdDialogAccepted();
+    void pwdDialogCanceled();
     void deviceEnabled(const QString &devPath, const bool enable);
     void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
     void needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect);
@@ -49,6 +55,11 @@ private:
     QList<AccessPoint> m_apList;
 
     QTimer *m_updateAPTimer;
+    Dtk::Widget::DInputDialog *m_pwdDialog;
+    Dtk::Widget::DCheckBox *m_autoConnBox;
+
+    QString m_lastConnAPPath;
+    QString m_lastConnUUID;
 
     QVBoxLayout *m_centeralLayout;
     QWidget *m_centeralWidget;
