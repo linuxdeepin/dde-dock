@@ -261,7 +261,11 @@ void DockItemController::pluginItemInserted(PluginsItem *item)
 
 void DockItemController::pluginItemRemoved(PluginsItem *item)
 {
-    emit itemRemoved(item);
+    if (m_containerItem->contains(item))
+        m_containerItem->removeItem(item);
+    else
+        emit itemRemoved(item);
+
     m_itemList.removeOne(item);
 }
 

@@ -25,7 +25,13 @@ void ContainerItem::removeItem(DockItem * const item)
 
 bool ContainerItem::contains(DockItem * const item)
 {
-    return m_containerWidget->itemList().contains(item);
+    if (m_containerWidget->itemList().contains(item))
+    {
+        item->setParent(m_containerWidget);
+        return true;
+    }
+
+    return false;
 }
 
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)

@@ -159,19 +159,21 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 {
     e->accept();
 
-    DockItem *item = itemAt(e->pos());
-    if (!item)
+    DockItem *dst = itemAt(e->pos());
+    if (!dst)
         return;
 
     // internal drag swap
     if (e->source())
     {
-        if (item == DragingItem)
+        if (dst == DragingItem)
             return;
         if (!DragingItem)
             return;
+        if (m_itemController->itemIsInContainer(DragingItem))
+            return;
 
-        m_itemController->itemMove(DragingItem, item);
+        m_itemController->itemMove(DragingItem, dst);
     } else {
         if (!RequestDockItem)
         {
@@ -181,10 +183,10 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
             RequestDockItem = new PlaceholderItem;
             m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
         } else {
-            if (item == RequestDockItem)
+            if (dst == RequestDockItem)
                 return;
 
-            m_itemController->itemMove(RequestDockItem, item);
+            m_itemController->itemMove(RequestDockItem, dst);
         }
     }
 }
@@ -441,18 +443,20 @@ void MainPanel::itemDropped(QObject *destnation)
         return;
 
     DockItem *src = qobject_cast<DockItem *>(sender());
-    DockItem *dst = qobject_cast<DockItem *>(destnation);
+//    DockItem *dst = qobject_cast<DockItem *>(destnation);
 
     if (!src)
         return;
 
     const bool itemIsInContainer = m_itemController->itemIsInContainer(src);
 
-    // drop to container
-    if (!itemIsInContainer && (!destnation || (dst && dst->itemType() == DockItem::Container)))
-        m_itemController->itemDroppedIntoContainer(src);
-
     // drag from container
     if (itemIsInContainer && src->itemType() == DockItem::Plugins && destnation == this)
         m_itemController->itemDragOutFromContainer(src);
+
+    // drop to container
+    if (!itemIsInContainer && src->parent() == this && destnation != this)
+        m_itemController->itemDroppedIntoContainer(src);
+
+    m_itemAdjustTimer->start();
 }
