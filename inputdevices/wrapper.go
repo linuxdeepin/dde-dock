@@ -65,6 +65,12 @@ func getDeviceInfos(force bool) dxutils.DeviceInfos {
 	return devInfos
 }
 
+func isTrackPoint(info *dxutils.DeviceInfo) bool {
+	name := strings.ToLower(info.Name)
+	return strings.Contains(name, "trackpoint") ||
+		strings.Contains(name, "dualpoint stick")
+}
+
 func getMouseInfos(force bool) dxMouses {
 	if !force && len(mouseInfos) != 0 {
 		return mouseInfos
@@ -74,11 +80,9 @@ func getMouseInfos(force bool) dxMouses {
 	for _, info := range getDeviceInfos(force) {
 		if info.Type == dxutils.DevTypeMouse {
 			mouseInfos = append(mouseInfos, &dxinput.Mouse{
-				Id:   info.Id,
-				Name: info.Name,
-				TrackPoint: strings.Contains(
-					strings.ToLower(info.Name),
-					"trackpoint"),
+				Id:         info.Id,
+				Name:       info.Name,
+				TrackPoint: isTrackPoint(info),
 			})
 		}
 	}
