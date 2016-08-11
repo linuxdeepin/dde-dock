@@ -36,6 +36,7 @@ private:
 private slots:
     void updateIcon();
     void showMenu();
+    void removeApp(const QString &appKey);
     void menuTriggered(Dtk::Widget::DAction *action);
     void moveToTrash(const QUrl &url);
 

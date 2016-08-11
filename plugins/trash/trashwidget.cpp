@@ -39,17 +39,24 @@ QSize TrashWidget::sizeHint() const
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
 {
+    if (e->mimeData()->hasFormat("RequestDock"))
+        return e->accept();
+
     if (e->mimeData()->hasFormat("text/uri-list"))
         return e->accept();
 }
 
 void TrashWidget::dropEvent(QDropEvent *e)
 {
-    Q_ASSERT(e->mimeData()->hasFormat("text/uri-list"));
+    if (e->mimeData()->hasFormat("RequestDock"))
+        return removeApp(e->mimeData()->data("AppKey"));
 
-    const QMimeData *mime = e->mimeData();
-    for (auto url : mime->urls())
-        moveToTrash(url);
+    if (e->mimeData()->hasFormat("text/uri-list"))
+    {
+        const QMimeData *mime = e->mimeData();
+        for (auto url : mime->urls())
+            moveToTrash(url);
+    }
 }
 
 void TrashWidget::paintEvent(QPaintEvent *e)
@@ -144,6 +151,17 @@ void TrashWidget::showMenu()
     menu->deleteLater();
 
     emit requestRefershWindowVisible();
+}
+
+void TrashWidget::removeApp(const QString &appKey)
+{
+    const QString cmd("dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.UninstallApp string:\"" + appKey + "\"");
+
+    QProcess *proc = new QProcess;
+    proc->start(cmd);
+    proc->waitForFinished();
+
+    proc->deleteLater();
 }
 
 void TrashWidget::menuTriggered(DAction *action)
