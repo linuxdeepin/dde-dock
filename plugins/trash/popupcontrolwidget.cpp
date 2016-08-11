@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QDir>
 
+#include <ddialog.h>
+
 DWIDGET_USE_NAMESPACE
 
 const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
@@ -62,6 +64,25 @@ void PopupControlWidget::openTrashFloder()
 
 void PopupControlWidget::clearTrashFloder()
 {
+    // show confrim dialog
+    bool accept = false;
+    const QStringList btns = {tr("Confrim"), tr("Cancel")};
+
+    DDialog *dialog = new DDialog(nullptr);
+    dialog->addButtons(btns);
+    dialog->setIconPixmap(QIcon::fromTheme("user-trash-full").pixmap(48, 48));
+    dialog->setTitle(tr("Are you sure to empty trash ?"));
+    dialog->setMessage(tr("This action cannot be restored"));
+
+    connect(dialog, &DDialog::buttonClicked, [&] (const int index) {
+        accept = !index;
+    });
+    dialog->exec();
+    dialog->deleteLater();
+
+    if (!accept)
+        return;
+
     for (auto item : QDir(TrashDir).entryInfoList())
     {
         if (item.fileName() == "." || item.fileName() == "..")

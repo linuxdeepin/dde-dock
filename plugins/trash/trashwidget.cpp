@@ -180,7 +180,5 @@ void TrashWidget::moveToTrash(const QUrl &url)
     if (!trashDir.exists())
         trashDir.mkpath(".");
 
-//    qDebug() << info.absoluteFilePath() << trashDir.absoluteFilePath(info.fileName());
-
     QDir().rename(info.absoluteFilePath(), trashDir.absoluteFilePath(info.fileName()));
 }
