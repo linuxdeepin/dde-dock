@@ -120,7 +120,7 @@ void TrashWidget::showMenu()
     menu->setDockMenu(true);
 
     menu->addAction(&m_openAct);
-    if (m_popupApplet->empty())
+    if (!m_popupApplet->empty())
         menu->addAction(&m_clearAct);
 
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
