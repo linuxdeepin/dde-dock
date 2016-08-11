@@ -46,6 +46,7 @@ private slots:
     void pwdDialogCanceled();
     void deviceEnabled(const QString &devPath, const bool enable);
     void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
+    void deactiveAP();
     void needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect);
 
 private:

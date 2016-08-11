@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QDBusObjectPath>
 
+#include <dimagebutton.h>
+
 class AccessPointWidget : public QWidget
 {
     Q_OBJECT
@@ -21,18 +23,21 @@ public:
 
 signals:
     void requestActiveAP(const QDBusObjectPath &apPath, const QString &ssid) const;
+    void requestDeactiveAP(const AccessPoint &ap) const;
 
 private:
     void setStrengthIcon(const int strength);
 
 private slots:
     void ssidClicked();
+    void disconnectBtnClicked();
 
 private:
     bool m_active;
 
     AccessPoint m_ap;
     QPushButton *m_ssidBtn;
+    Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityIcon;
     QLabel *m_strengthIcon;
 };

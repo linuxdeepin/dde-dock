@@ -209,6 +209,7 @@ void WirelessApplet::updateAPList()
                 apw->setActive(true);
 
             connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessApplet::activateAP);
+            connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessApplet::deactiveAP);
 
             m_centeralLayout->addWidget(apw);
 
@@ -323,6 +324,12 @@ void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ss
     }
 
     m_networkInter->ActivateAccessPoint(uuid, apPath, m_device.dbusPath()).waitForFinished();
+}
+
+void WirelessApplet::deactiveAP()
+{
+    m_activeAP = AccessPoint();
+    m_networkInter->DisconnectDevice(QDBusObjectPath(m_device.path()));
 }
 
 void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)

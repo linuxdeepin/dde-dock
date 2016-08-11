@@ -4,18 +4,26 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
+DWIDGET_USE_NAMESPACE
+
 AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     : QWidget(nullptr),
 
       m_active(false),
       m_ap(ap),
       m_ssidBtn(new QPushButton(this)),
+      m_disconnectBtn(new DImageButton(this)),
       m_securityIcon(new QLabel),
       m_strengthIcon(new QLabel)
 {
     m_ssidBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_ssidBtn->setText(ap.ssid());
     m_ssidBtn->setObjectName("Ssid");
+
+    m_disconnectBtn->setVisible(false);
+    m_disconnectBtn->setNormalPic(":/wireless/resources/wireless/selected.png");
+    m_disconnectBtn->setHoverPic(":/wireless/resources/wireless/disconnect.png");
+    m_disconnectBtn->setPressPic(":/wireless/resources/wireless/disconnect_pressed.png");
 
     if (ap.secured())
         m_securityIcon->setPixmap(QPixmap(":/wireless/resources/wireless/security.svg"));
@@ -32,6 +40,8 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     infoLayout->addWidget(m_strengthIcon);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_ssidBtn);
+    infoLayout->addWidget(m_disconnectBtn);
+    infoLayout->addSpacing(20);
     infoLayout->setSpacing(0);
     infoLayout->setContentsMargins(15, 0, 0, 0);
 
@@ -53,10 +63,11 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
                   "text-align:left;"
                   "}"
                   "AccessPointWidget[active=true] #Ssid {"
-                  "color:#2ca7f8;"
+//                  "color:#2ca7f8;"
                   "}");
 
     connect(m_ssidBtn, &QPushButton::clicked, this, &AccessPointWidget::ssidClicked);
+    connect(m_disconnectBtn, &DImageButton::clicked, this, &AccessPointWidget::disconnectBtnClicked);
 }
 
 bool AccessPointWidget::active() const
@@ -69,6 +80,7 @@ void AccessPointWidget::setActive(const bool active)
     if (m_active == active)
         return;
 
+    m_disconnectBtn->setVisible(active);
     m_active = active;
     setStyleSheet(styleSheet());
 }
@@ -84,4 +96,11 @@ void AccessPointWidget::setStrengthIcon(const int strength)
 void AccessPointWidget::ssidClicked()
 {
     emit requestActiveAP(QDBusObjectPath(m_ap.path()), m_ap.ssid());
+}
+
+void AccessPointWidget::disconnectBtnClicked()
+{
+    emit requestDeactiveAP(m_ap);
+
+    setActive(false);
 }

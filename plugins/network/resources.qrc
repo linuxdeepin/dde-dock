@@ -20,5 +20,8 @@
         <file>resources/wireless/wireless-8-symbolic.svg</file>
         <file>resources/wireless/wireless-disconnect-symbolic.svg</file>
         <file>resources/wireless/security.svg</file>
+        <file>resources/wireless/disconnect_pressed.png</file>
+        <file>resources/wireless/disconnect.png</file>
+        <file>resources/wireless/selected.png</file>
     </qresource>
 </RCC>
