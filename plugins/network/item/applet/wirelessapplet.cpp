@@ -22,6 +22,8 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
       m_activeAP(),
 
       m_updateAPTimer(new QTimer(this)),
+      m_pwdDialog(new DInputDialog(nullptr)),
+      m_autoConnBox(new DCheckBox),
 
       m_centeralLayout(new QVBoxLayout),
       m_centeralWidget(new QWidget),
@@ -29,6 +31,15 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
       m_networkInter(new DBusNetwork(this))
 {
     setFixedHeight(WIDTH);
+
+    m_autoConnBox->setText(tr("Auto-connect"));
+
+    m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    m_pwdDialog->setTextEchoMode(DLineEdit::Password);
+    m_pwdDialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
+    m_pwdDialog->addSpacing(10);
+    m_pwdDialog->addContent(m_autoConnBox, Qt::AlignLeft);
+    m_pwdDialog->setOkButtonText(tr("Connect"));
 
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
@@ -61,6 +72,15 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
 
     connect(this, &WirelessApplet::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+
+    connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
+    connect(m_pwdDialog, &DInputDialog::textValueChanged, [this] {m_pwdDialog->setTextAlert(false);});
+    connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessApplet::pwdDialogCanceled);
+}
+
+WirelessApplet::~WirelessApplet()
+{
+    m_pwdDialog->deleteLater();
 }
 
 NetworkDevice::NetworkState WirelessApplet::wirelessState() const
@@ -259,6 +279,19 @@ void WirelessApplet::onActiveAPChanged()
     emit activeAPChanged();
 }
 
+void WirelessApplet::pwdDialogAccepted()
+{
+    if (m_pwdDialog->textValue().isEmpty())
+        return m_pwdDialog->setTextAlert(true);
+    m_networkInter->FeedSecret(m_lastConnAPPath, m_lastConnUUID, m_pwdDialog->textValue(), m_autoConnBox->isChecked());
+}
+
+void WirelessApplet::pwdDialogCanceled()
+{
+    m_networkInter->CancelSecret(m_lastConnAPPath, m_lastConnUUID);
+    m_pwdDialog->close();
+}
+
 void WirelessApplet::deviceEnabled(const QString &devPath, const bool enable)
 {
     if (devPath != m_device.path())
@@ -290,38 +323,12 @@ void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ss
 
 void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)
 {
-    qDebug() << apPath << uuid << ssid << defaultAutoConnect;
+    m_lastConnAPPath = apPath;
+    m_lastConnUUID = uuid;
 
-    DInputDialog *dialog = new DInputDialog(this);
-    DCheckBox *checkBox = new DCheckBox(dialog);
+    m_autoConnBox->setChecked(defaultAutoConnect);
+    m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
 
-    checkBox->setChecked(defaultAutoConnect);
-    checkBox->setText(tr("Auto-connect"));
-
-    dialog->setTextEchoMode(DLineEdit::Password);
-    dialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
-    dialog->addSpacing(10);
-    dialog->addContent(checkBox, Qt::AlignLeft);
-    dialog->setOkButtonText(tr("Connect"));
-
-    connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, dialog, &DInputDialog::close);
-    connect(dialog, &DInputDialog::closed, dialog, &DInputDialog::deleteLater, Qt::QueuedConnection);
-    connect(dialog, &DInputDialog::textValueChanged, [=] {dialog->setTextAlert(false);});
-    connect(dialog, &DInputDialog::cancelButtonClicked, [=] {
-        m_networkInter->CancelSecret(apPath, uuid);
-        dialog->close();
-    });
-    connect(dialog, &DInputDialog::okButtonClicked, [=] {
-        if (dialog->textValue().isEmpty())
-            return dialog->setTextAlert(true);
-        m_networkInter->FeedSecret(apPath, uuid, dialog->textValue(), checkBox->isChecked());
-    });
-
-    dialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
-    dialog->open();
-    dialog->raise();
-
-    QTimer::singleShot(500, [dialog] {
-        dialog->move(qApp->primaryScreen()->geometry().center() - dialog->rect().center());
-    });
+    if (!m_pwdDialog->isVisible())
+        m_pwdDialog->show();
 }
