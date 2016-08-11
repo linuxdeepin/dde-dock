@@ -118,7 +118,11 @@ void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
     if (devPath != m_device.path())
         return;
 
-    m_apList.removeOne(AccessPoint(info));
+    AccessPoint ap(info);
+    if (ap.ssid() == m_activeAP.ssid())
+        return;
+
+    m_apList.removeOne(ap);
     m_updateAPTimer->start();
 }
 
