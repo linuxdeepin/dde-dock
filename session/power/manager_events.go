@@ -77,9 +77,6 @@ func (m *Manager) handleBeforeSuspend() {
 func (m *Manager) handleWakeup() {
 	logger.Debug("wakeup")
 	m.isSuspending = false
-	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.doLock()
-	}
 	logger.Debug("Simulate user activity")
 	m.helper.ScreenSaver.SimulateUserActivity()
 
