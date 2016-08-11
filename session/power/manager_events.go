@@ -74,17 +74,17 @@ func (m *Manager) handleBeforeSuspend() {
 	}
 }
 
-func (m *Manager) handleWeakup() {
-	logger.Debug("weakup")
+func (m *Manager) handleWakeup() {
+	logger.Debug("wakeup")
 	m.isSuspending = false
+	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
+		m.doLock()
+	}
 	logger.Debug("Simulate user activity")
 	m.helper.ScreenSaver.SimulateUserActivity()
 
 	m.helper.Power.RefreshBatteries()
 	playSound(soundutils.EventWakeup)
-	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		m.doLock()
-	}
 }
 
 func (m *Manager) initBatteryDisplayUpdateHandler() {

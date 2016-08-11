@@ -92,7 +92,7 @@ func (m *Manager) init() error {
 	// init sleep inhibitor
 	m.inhibitor = newSleepInhibitor(m.helper.Login1Manager)
 	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
-	m.inhibitor.OnWeakup = m.handleWeakup
+	m.inhibitor.OnWakeup = m.handleWakeup
 	m.inhibitor.block()
 
 	m.LinePowerScreenBlackDelay = property.NewGSettingsIntProperty(m, "LinePowerScreenBlackDelay", m.settings, settingKeyLinePowerScreenBlackDelay)

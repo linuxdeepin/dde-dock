@@ -22,7 +22,7 @@ type sleepInhibitor struct {
 	why           string
 	mode          string
 
-	OnWeakup        func()
+	OnWakeup        func()
 	OnBeforeSuspend func()
 }
 
@@ -45,8 +45,8 @@ func newSleepInhibitor(login1Manager *liblogin1.Manager) *sleepInhibitor {
 			}
 			inhibitor.unblock()
 		} else {
-			if inhibitor.OnWeakup != nil {
-				inhibitor.OnWeakup()
+			if inhibitor.OnWakeup != nil {
+				inhibitor.OnWakeup()
 			}
 			inhibitor.block()
 		}
