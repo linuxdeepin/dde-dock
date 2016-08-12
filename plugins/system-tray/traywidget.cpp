@@ -6,6 +6,9 @@
 #include <QDebug>
 #include <QMouseEvent>
 
+#include <X11/extensions/shape.h>
+#include <X11/Xregion.h>
+
 #include <xcb/composite.h>
 #include <xcb/xcb_image.h>
 
@@ -45,6 +48,20 @@ const QImage TrayWidget::trayImage() const
 QSize TrayWidget::sizeHint() const
 {
     return QSize(26, 26);
+}
+
+void TrayWidget::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+
+    setX11PassMouseEvent(false);
+}
+
+void TrayWidget::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+
+    setX11PassMouseEvent(true);
 }
 
 void TrayWidget::paintEvent(QPaintEvent *e)
@@ -152,6 +169,8 @@ void TrayWidget::wrapWindow()
 
     QWindow * win = QWindow::fromWinId(m_containerWid);
     win->setOpacity(0);
+
+    setX11PassMouseEvent(true);
 
     xcb_flush(c);
 
@@ -349,4 +368,22 @@ QImage TrayWidget::getImageNonComposite() const
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
 
     return qimage;
+}
+
+void TrayWidget::setX11PassMouseEvent(const bool pass)
+{
+    if (pass)
+    {
+        XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
+    }
+    else
+    {
+        XRectangle rectangle;
+        rectangle.x = 0;
+        rectangle.y = 0;
+        rectangle.width = iconSize;
+        rectangle.height = iconSize;
+
+        XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, &rectangle, 1, ShapeSet, YXBanded);
+    }
 }

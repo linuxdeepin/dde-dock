@@ -17,6 +17,8 @@ public:
 
 private:
     QSize sizeHint() const;
+    void showEvent(QShowEvent *e);
+    void hideEvent(QHideEvent *e);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
@@ -25,6 +27,9 @@ private:
     void updateIcon();
     void hideIcon();
     QImage getImageNonComposite() const;
+
+private slots:
+    void setX11PassMouseEvent(const bool pass);
 
 private:
     WId m_windowId;
