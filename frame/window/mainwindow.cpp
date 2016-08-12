@@ -170,10 +170,14 @@ void MainWindow::positionChanged(const Position prevPos)
         expand();
     });
 
-    // reset to right environment when animation finished
+    // set strut
     QTimer::singleShot(400, this, [&] {
-        m_updatePanelVisible = true;
         setStrutPartial();
+    });
+
+    // reset to right environment when animation finished
+    QTimer::singleShot(600, this, [&] {
+        m_updatePanelVisible = true;
         updatePanelVisible();
     });
 }
