@@ -17,7 +17,7 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
       m_empty(false),
 
       m_openBtn(new DLinkButton(tr("Run"), this)),
-      m_clearBtn(new DLinkButton(tr("Empty"), this)),
+      m_clearBtn(new DLinkButton(tr("Empty Trash"), this)),
 
       m_fsWatcher(new QFileSystemWatcher(this))
 {
@@ -66,16 +66,20 @@ void PopupControlWidget::clearTrashFloder()
 {
     // show confrim dialog
     bool accept = false;
-    const QStringList btns = {tr("Confrim"), tr("Cancel")};
+    const int itemCount = trashItemCount();
+    const QStringList btns = {tr("Cancel"), tr("Empty")};
 
     DDialog *dialog = new DDialog(nullptr);
     dialog->addButtons(btns);
     dialog->setIconPixmap(QIcon::fromTheme("user-trash-full").pixmap(48, 48));
-    dialog->setTitle(tr("Are you sure to empty trash ?"));
     dialog->setMessage(tr("This action cannot be restored"));
+    if (itemCount == 1)
+        dialog->setTitle(tr("Are you sure to empty 1 item ?"));
+    else
+        dialog->setTitle(tr("Are you sure to empty %1 items ?").arg(itemCount));
 
     connect(dialog, &DDialog::buttonClicked, [&] (const int index) {
-        accept = !index;
+        accept = index;
     });
     dialog->exec();
     dialog->deleteLater();
@@ -93,6 +97,11 @@ void PopupControlWidget::clearTrashFloder()
         else if (item.isDir())
             QDir(item.absoluteFilePath()).removeRecursively();
     }
+}
+
+int PopupControlWidget::trashItemCount() const
+{
+    return QDir(TrashDir + "/files").entryInfoList().count() - 2;
 }
 
 void PopupControlWidget::trashStatusChanged()

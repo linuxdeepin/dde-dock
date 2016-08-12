@@ -24,6 +24,9 @@ public slots:
 signals:
     void emptyChanged(const bool empty) const;
 
+private:
+    int trashItemCount() const;
+
 private slots:
     void trashStatusChanged();
 
