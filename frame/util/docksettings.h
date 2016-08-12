@@ -33,11 +33,13 @@ public:
     bool autoHide() const;
     const QRect primaryRect() const;
     const QSize windowSize() const;
+    const QRect windowRect(const Position position) const;
 
     void showDockSettingsMenu();
 
 signals:
     void dataChanged() const;
+    void positionChanged(const Position prevPosition) const;
     void autoHideChanged(const bool autoHide) const;
     void windowVisibleChanegd() const;
     void windowHideModeChanged() const;
@@ -49,7 +51,7 @@ public slots:
 
 private slots:
     void menuActionClicked(DAction *action);
-    void positionChanged();
+    void onPositionChanged();
     void iconSizeChanged();
     void displayModeChanged();
     void hideModeChanged();

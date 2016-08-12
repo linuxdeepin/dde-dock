@@ -30,17 +30,19 @@ private:
     void initConnections();
 
 private slots:
+    void positionChanged(const Position prevPos);
     void updatePosition();
     void updateGeometry();
     void clearStrutPartial();
     void setStrutPartial();
 
     void expand();
-    void narrow();
-    void resetPanelEnvironment();
+    void narrow(const Position prevPos);
+    void resetPanelEnvironment(const bool visible);
     void updatePanelVisible();
 
 private:
+    bool m_updatePanelVisible;
     MainPanel *m_mainPanel;
 
     QTimer *m_positionUpdateTimer;

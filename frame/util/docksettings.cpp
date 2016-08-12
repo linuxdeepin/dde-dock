@@ -32,7 +32,6 @@ DockSettings::DockSettings(QWidget *parent)
       m_dockInter(new DBusDock(this)),
       m_itemController(DockItemController::instance(this))
 {
-    resetFrontendGeometry();
     m_primaryRect = m_displayInter->primaryRect();
     m_position = Dock::Position(m_dockInter->position());
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
@@ -92,7 +91,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(statusSubMenuAct);
 
     connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
-    connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::positionChanged);
+    connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
@@ -107,6 +106,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
 
     calculateWindowConfig();
+    resetFrontendGeometry();
 }
 
 DisplayMode DockSettings::displayMode() const
@@ -152,6 +152,30 @@ const QRect DockSettings::primaryRect() const
 const QSize DockSettings::windowSize() const
 {
     return m_mainWindowSize;
+}
+
+const QRect DockSettings::windowRect(const Position position) const
+{
+    const QSize size = m_mainWindowSize;
+    const QRect primaryRect = m_primaryRect;
+    const int offsetX = (primaryRect.width() - size.width()) / 2;
+    const int offsetY = (primaryRect.height() - size.height()) / 2;
+
+    QPoint p(0, 0);
+    switch (position)
+    {
+    case Top:
+        p = QPoint(primaryRect.topLeft().x() + offsetX, 0);               break;
+    case Left:
+        p = QPoint(primaryRect.topLeft().x(), offsetY);                   break;
+    case Right:
+        p = QPoint(primaryRect.right() - size.width() + 1, offsetY);      break;
+    case Bottom:
+        p = QPoint(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+    default:Q_UNREACHABLE();
+    }
+
+    return QRect(p, size);
 }
 
 void DockSettings::showDockSettingsMenu()
@@ -223,15 +247,21 @@ void DockSettings::menuActionClicked(DAction *action)
         return m_dockInter->setHideMode(SmartHide);
 }
 
-void DockSettings::positionChanged()
+void DockSettings::onPositionChanged()
 {
-    m_position = Dock::Position(m_dockInter->position());
+    const Position prevPos = m_position;
+    const Position nextPos = Dock::Position(m_dockInter->position());
+
+    if (prevPos == nextPos)
+        return;
+
+    m_position = nextPos;
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
 
     calculateWindowConfig();
 
-    emit dataChanged();
+    emit positionChanged(prevPos);
 }
 
 void DockSettings::iconSizeChanged()
@@ -295,25 +325,9 @@ void DockSettings::primaryScreenChanged()
 
 void DockSettings::resetFrontendGeometry()
 {
-    const QSize size = m_mainWindowSize;
-    const QRect primaryRect = m_primaryRect;
-    const int offsetX = (primaryRect.width() - size.width()) / 2;
-    const int offsetY = (primaryRect.height() - size.height()) / 2;
+    const QRect r = windowRect(m_position);
 
-    QPoint p(0, 0);
-    switch (m_position)
-    {
-    case Top:
-        p = QPoint(primaryRect.topLeft().x() + offsetX, 0);               break;
-    case Left:
-        p = QPoint(primaryRect.topLeft().x(), offsetY);                   break;
-    case Right:
-        p = QPoint(primaryRect.right() - size.width() + 1, offsetY);      break;
-    case Bottom:
-        p = QPoint(offsetX, primaryRect.bottom() - size.height() + 1);    break;
-    }
-
-    m_dockInter->SetFrontendWindowRect(p.x(), p.y(), size.width(), size.height());
+    m_dockInter->SetFrontendWindowRect(r.x(), r.y(), r.width(), r.height());
 }
 
 void DockSettings::calculateWindowConfig()
