@@ -15,10 +15,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"gir/gio-2.0"
-	"gir/glib-2.0"
 	"github.com/howeyc/fsnotify"
 	"os/user"
-	"path"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
@@ -192,8 +190,7 @@ func (m *Manager) init() {
 	m.initBackground()
 	m.correctFontName()
 
-	var file = path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf")
-	if dutils.IsFileExist(file) {
+	if dutils.IsFileExist(fonts.DeepinFontConfig) {
 		return
 	}
 

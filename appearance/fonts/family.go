@@ -34,6 +34,8 @@ const (
 var (
 	locker    sync.Mutex
 	xsSetting = gio.NewSettings(xsettingsSchema)
+
+	DeepinFontConfig = path.Join(glib.GetUserConfigDir(), "fontconfig", "conf.d", "99-deepin.conf")
 )
 
 type Family struct {
@@ -106,8 +108,7 @@ func SetFamily(standard, monospace string, size int32) error {
 		}
 	*/
 
-	err := writeFontConfig(configContent(standard, monospace),
-		path.Join(glib.GetUserConfigDir(), "fontconfig", "fonts.conf"))
+	err := writeFontConfig(configContent(standard, monospace), DeepinFontConfig)
 	if err != nil {
 		return err
 	}
@@ -245,21 +246,6 @@ func configContent(standard, mono string) string {
         <edit name="family" mode="assign" binding="strong">
 	    <string>%s</string>
 	    <string>%s</string>
-	</edit>
-    </match>
-
-    <match target="font">
-	<edit name="antialias" mode="assign">
-	    <bool>true</bool>
-	</edit>
-	<edit name="hinting" mode="assign">
-	    <bool>true</bool>
-	</edit>
-	<edit name="hintstyle" mode="assign">
-	    <const>hintfull</const>
-        </edit>
-	<edit name="rgba" mode="assign">
-	    <const>rgb</const>
 	</edit>
     </match>
 
