@@ -43,13 +43,21 @@ func installI18nDependent(locale string) error {
 }
 
 func getMissingPackages(infos i18n_dependent.DependentInfos, removed bool) []string {
-	var pkgs []string
+	var set = make(map[string]bool)
 	for _, info := range infos {
 		if len(info.Dependent) != 0 && !dstore.IsInstalled(info.Dependent) {
 			continue
 		}
 
-		pkgs = append(pkgs, filterPackages(info.Packages, removed)...)
+		list := filterPackages(info.Packages, removed)
+		for _, v := range list {
+			set[v] = true
+		}
+	}
+
+	var pkgs []string
+	for k, _ := range set {
+		pkgs = append(pkgs, k)
 	}
 	return pkgs
 }
