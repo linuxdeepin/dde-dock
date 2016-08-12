@@ -35,12 +35,14 @@ func (m *Manager) Eject(id string) error {
 	mount := m.getMountById(id)
 	if mount != nil {
 		m.ejectMount(id, mount)
+		mount.Unref()
 		return nil
 	}
 
 	volume := m.getVolumeById(id)
 	if volume != nil {
 		m.ejectVolume(id, volume)
+		volume.Unref()
 		return nil
 	}
 
@@ -56,6 +58,7 @@ func (m *Manager) Mount(id string) error {
 	volume := m.getVolumeById(id)
 	if volume != nil {
 		m.mountVolume(id, volume)
+		volume.Unref()
 		return nil
 	}
 
@@ -81,51 +84,55 @@ func (m *Manager) Unmount(id string) error {
 }
 
 func (m *Manager) ejectVolume(id string, volume *gio.Volume) {
-	volume.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
+	logger.Debugf("ejectVolume id: %q volume: %v", id, volume)
+	op := gio.NewMountOperation()
+	volume.EjectWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			if volume == nil || volume.Object.C == nil {
-				return
-			}
-
+			logger.Debug("volume.EjectWithOperation AsyncReadyCallback")
+			volume := gio.ToVolume(o)
 			_, err := volume.EjectFinish(ret)
-			volume.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
+	op.Unref()
 }
 
 func (m *Manager) ejectMount(id string, mount *gio.Mount) {
-	mount.Eject(gio.MountUnmountFlagsNone, nil, gio.AsyncReadyCallback(
+	logger.Debugf("ejectMount id: %q, mount: %v", id, mount)
+	op := gio.NewMountOperation()
+	mount.EjectWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			if mount == nil || mount.Object.C == nil {
-				return
-			}
-			_, err := mount.EjectFinish(ret)
-			mount.Unref()
+			logger.Debug("mount.EjectWithOperation AsyncReadyCallback")
+			mount := gio.ToMount(o)
+			_, err := mount.EjectWithOperationFinish(ret)
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
+	op.Unref()
 }
 
 func (m *Manager) mountVolume(id string, volume *gio.Volume) {
-	volume.Mount(gio.MountMountFlagsNone, nil, nil, gio.AsyncReadyCallback(
+	logger.Debugf("mountVolume id: %q, volume: %v", id, volume)
+	op := gio.NewMountOperation()
+	volume.Mount(gio.MountMountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			if volume == nil || volume.Object.C == nil {
-				return
-			}
+			volume := gio.ToVolume(o)
+			logger.Debug("Mount AsyncReadyCallback")
+
 			_, err := volume.MountFinish(ret)
-			volume.Unref()
 			if err != nil {
 				m.emitError(id, err.Error())
 			}
 		}))
+	op.Unref()
 }
 
 func (m *Manager) unmountMount(id string, mount *gio.Mount) {
-	logger.Debugf("unmountMount id %q, mount: %v", id, mount)
-	mount.UnmountWithOperation(gio.MountUnmountFlagsNone, nil, nil, gio.AsyncReadyCallback(
+	logger.Debugf("unmountMount id: %q, mount: %v", id, mount)
+	op := gio.NewMountOperation()
+	mount.UnmountWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
 			mount := gio.ToMount(o)
 			logger.Debug("UnmountWithOperation AsyncReadyCallback")
@@ -143,4 +150,5 @@ func (m *Manager) unmountMount(id string, mount *gio.Mount) {
 			go m.sendNotify(icon, "",
 				fmt.Sprintf(Tr("%s removed successfully"), name))
 		}))
+	op.Unref()
 }

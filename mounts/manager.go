@@ -100,6 +100,7 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) emitError(id, msg string) {
+	logger.Warningf("emitError id %q msg: %v", id, msg)
 	dbus.Emit(m, "Error", id, msg)
 }
 
