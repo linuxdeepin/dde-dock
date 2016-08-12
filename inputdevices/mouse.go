@@ -102,8 +102,9 @@ func NewMouse() *Mouse {
 
 func (m *Mouse) init() {
 	if !m.Exist {
-		if getTouchpad().Exist {
-			getTouchpad().enable(true)
+		tpad := getTouchpad()
+		if tpad.Exist && !tpad.TPadEnable.Get() {
+			tpad.TPadEnable.Set(true)
 		}
 		return
 	}
