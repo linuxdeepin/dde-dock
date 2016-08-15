@@ -16,6 +16,11 @@ public:
     int itemCount() const;
     const QList<QWidget *> itemList() const;
 
+    bool allowDragEnter(QDragEnterEvent *e);
+
+protected:
+    void dragEnterEvent(QDragEnterEvent *e);
+
 private:
     QHBoxLayout *m_centeralLayout;
 

@@ -1,6 +1,9 @@
+#include "constants.h"
 #include "containerwidget.h"
+#include "item/pluginsitem.h"
 
 #include <QDebug>
+#include <QDragEnterEvent>
 
 #define ITEM_HEIGHT         30
 #define ITEM_WIDTH          30
@@ -17,6 +20,7 @@ ContainerWidget::ContainerWidget(QWidget *parent)
     setLayout(m_centeralLayout);
     setFixedHeight(ITEM_HEIGHT);
     setFixedWidth(ITEM_WIDTH);
+    setAcceptDrops(true);
 }
 
 void ContainerWidget::addWidget(QWidget * const w)
@@ -45,4 +49,22 @@ int ContainerWidget::itemCount() const
 const QList<QWidget *> ContainerWidget::itemList() const
 {
     return m_itemList;
+}
+
+bool ContainerWidget::allowDragEnter(QDragEnterEvent *e)
+{
+    if (!e->mimeData()->hasFormat(DOCK_PLUGIN_MIME))
+        return false;
+
+    PluginsItem *pi = static_cast<PluginsItem *>(e->source());
+    if (pi && pi->allowContainer())
+        return true;
+
+    return false;
+}
+
+void ContainerWidget::dragEnterEvent(QDragEnterEvent *e)
+{
+    if (allowDragEnter(e))
+        return e->accept();
 }
