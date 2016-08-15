@@ -10,7 +10,7 @@
 extern "C" {
     #include <string.h>
     #include <gtk/gtk.h>
-    #include <gio/gdesktopappinfo.h>
+//    #include <gio/gdesktopappinfo.h>
 }
 #define signals public
 
