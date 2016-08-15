@@ -4,7 +4,7 @@ include(../../interfaces/interfaces.pri)
 QT              += widgets gui core dbus x11extras
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
-PKGCONFIG       += xcb xcb-image xcb-composite
+PKGCONFIG       += xcb xcb-image xcb-icccm xcb-composite
 
 TARGET          = $$qtLibraryTarget(system-tray)
 DESTDIR          = $$_PRO_FILE_PWD_/../

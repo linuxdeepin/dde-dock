@@ -28,6 +28,7 @@ signals:
     void itemInserted(const int index, DockItem *item) const;
     void itemRemoved(DockItem *item) const;
     void itemMoved(DockItem *item, const int index) const;
+    void itemManaged(DockItem *item) const;
 
 public slots:
     void updatePluginsItemOrderKey();

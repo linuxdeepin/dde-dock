@@ -3,13 +3,18 @@
 
 #include <QWindow>
 #include <QWidget>
+#include <QX11Info>
+
+#include "xcb/xcb_icccm.h"
 
 #define FASHION_MODE_ITEM   "fashion-mode-item"
 
 SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
-      m_tipsWidget(new TipsWidget)
+      m_tipsWidget(new TipsWidget),
+
+      m_containerSettings(new QSettings("deepin", "dde-dock-tray"))
 {
     m_tipsWidget->setObjectName("sys-tray");
     m_fashionItem = new FashionTrayItem;
@@ -63,6 +68,29 @@ QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
         return nullptr;
 }
 
+bool SystemTrayPlugin::itemAllowContainer(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return true;
+}
+
+bool SystemTrayPlugin::itemIsInContainer(const QString &itemKey)
+{
+    const QString widKey = getWindowClass(itemKey.toInt());
+    if (widKey.isEmpty())
+        return false;
+
+    return m_containerSettings->value(widKey, false).toBool();
+}
+
+void SystemTrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
+{
+    qDebug() << getWindowClass(itemKey.toInt());
+
+    m_containerSettings->setValue(getWindowClass(itemKey.toInt()), container);
+}
+
 void SystemTrayPlugin::updateTipsContent()
 {
     auto trayList = m_trayList.values();
@@ -70,6 +98,28 @@ void SystemTrayPlugin::updateTipsContent()
 
     m_tipsWidget->clear();
     m_tipsWidget->addWidgets(trayList);
+}
+
+const QString SystemTrayPlugin::getWindowClass(quint32 winId)
+{
+    auto *connection = QX11Info::connection();
+
+    auto *reply = new xcb_icccm_get_wm_class_reply_t;
+    auto *error = new xcb_generic_error_t;
+    auto cookie = xcb_icccm_get_wm_class(connection, winId);
+    auto result = xcb_icccm_get_wm_class_reply(connection, cookie, reply, &error);
+
+    QString ret;
+    if (result == 1)
+    {
+        ret = QString("%1-%2").arg(reply->class_name).arg(reply->instance_name);
+        xcb_icccm_get_wm_class_reply_wipe(reply);
+    }
+
+    delete reply;
+    delete error;
+
+    return std::move(ret);
 }
 
 void SystemTrayPlugin::trayListChanged()
@@ -88,6 +138,8 @@ void SystemTrayPlugin::trayAdded(const quint32 winId)
 {
     if (m_trayList.contains(winId))
         return;
+
+    getWindowClass(winId);
 
     TrayWidget *trayWidget = new TrayWidget(winId);
 

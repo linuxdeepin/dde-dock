@@ -6,6 +6,8 @@
 #include "tipswidget.h"
 #include "dbus/dbustraymanager.h"
 
+#include <QSettings>
+
 class FashionTrayItem;
 class SystemTrayPlugin : public QObject, PluginsItemInterface
 {
@@ -23,8 +25,13 @@ public:
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
+    bool itemAllowContainer(const QString &itemKey);
+    bool itemIsInContainer(const QString &itemKey);
+    void setItemIsInContainer(const QString &itemKey, const bool container);
+
 private:
     void updateTipsContent();
+    const QString getWindowClass(quint32 winId);
 
 private slots:
     void trayListChanged();
@@ -39,6 +46,8 @@ private:
     QMap<quint32, TrayWidget *> m_trayList;
 
     TipsWidget *m_tipsWidget;
+
+    QSettings *m_containerSettings;
 };
 
 #endif // SYSTEMTRAYPLUGIN_H

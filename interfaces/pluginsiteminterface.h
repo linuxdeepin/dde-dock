@@ -27,6 +27,13 @@ public:
     // reset sort key when plugins order changed
     virtual void setSortKey(const QString &itemKey, const int order) {Q_UNUSED(itemKey); Q_UNUSED(order);}
 
+    // item allow to move to container
+    virtual bool itemAllowContainer(const QString &itemKey) {Q_UNUSED(itemKey); return false;}
+    // item is in container
+    virtual bool itemIsInContainer(const QString &itemKey) {Q_UNUSED(itemKey); return false;}
+    // set item status
+    virtual void setItemIsInContainer(const QString &itemKey, const bool container) {Q_UNUSED(itemKey); Q_UNUSED(container);}
+
     // dock display mode changed
     virtual void displayModeChanged(const Dock::DisplayMode displayMode) {Q_UNUSED(displayMode);}
     // dock position changed
@@ -34,12 +41,12 @@ public:
 
 
 protected:
-    Dock::DisplayMode displayMode() const
+    inline Dock::DisplayMode displayMode() const
     {
         return qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     }
 
-    Dock::Position position() const
+    inline Dock::Position position() const
     {
         return qApp->property(PROP_POSITION).value<Dock::Position>();
     }

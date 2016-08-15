@@ -71,6 +71,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemInserted, this, &MainPanel::itemInserted, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
+    connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
 
     m_itemAdjustTimer->setSingleShot(true);
@@ -79,7 +80,7 @@ MainPanel::MainPanel(QWidget *parent)
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
-        initItemConnection(item);
+        manageItem(item);
         m_itemLayout->addWidget(item);
     }
 
@@ -143,7 +144,8 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
     if (dragSourceItem)
     {
         e->accept();
-        DragingItem->show();
+        if (DragingItem)
+            DragingItem->show();
         return;
     }
 
@@ -227,7 +229,7 @@ void MainPanel::dropEvent(QDropEvent *e)
     }
 }
 
-void MainPanel::initItemConnection(DockItem *item)
+void MainPanel::manageItem(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted, Qt::UniqueConnection);
     connect(item, &DockItem::itemDropped, this, &MainPanel::itemDropped, Qt::UniqueConnection);
@@ -405,7 +407,7 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     // hide new item, display it after size adjust finished
     item->hide();
 
-    initItemConnection(item);
+    manageItem(item);
     m_itemLayout->insertWidget(index, item);
 
     m_itemAdjustTimer->start();

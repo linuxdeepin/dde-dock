@@ -16,6 +16,10 @@ public:
     void setItemSortKey(const int order) const;
     void detachPluginWidget();
 
+    bool allowContainer() const;
+    bool isInContainer() const;
+    void setInContainer(const bool container);
+
     using DockItem::showContextMenu;
 
     inline ItemType itemType() const {return Plugins;}

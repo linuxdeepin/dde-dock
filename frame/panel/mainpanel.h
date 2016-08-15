@@ -38,7 +38,7 @@ private:
     void dragLeaveEvent(QDragLeaveEvent *e);
     void dropEvent(QDropEvent *e);
 
-    void initItemConnection(DockItem *item);
+    void manageItem(DockItem *item);
     DockItem *itemAt(const QPoint &point);
 
 private slots:

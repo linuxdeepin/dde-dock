@@ -88,6 +88,12 @@ void DockItemController::itemMove(DockItem * const moveItem, DockItem * const re
 
 void DockItemController::itemDroppedIntoContainer(DockItem * const item)
 {
+    Q_ASSERT(item->itemType() == DockItem::Plugins);
+
+    PluginsItem *pi = static_cast<PluginsItem *>(item);
+
+    if (!pi->allowContainer())
+        return;
     if (m_containerItem->contains(item))
         return;
 
@@ -98,6 +104,7 @@ void DockItemController::itemDroppedIntoContainer(DockItem * const item)
     m_itemList.removeOne(item);
 
     // add to container
+    pi->setInContainer(true);
     m_containerItem->addItem(item);
 }
 
@@ -111,7 +118,10 @@ void DockItemController::itemDragOutFromContainer(DockItem * const item)
     // insert to panel
     switch (item->itemType())
     {
-    case DockItem::Plugins:   pluginItemInserted(static_cast<PluginsItem *>(item));       break;
+    case DockItem::Plugins:
+        static_cast<PluginsItem *>(item)->setInContainer(false);
+        pluginItemInserted(static_cast<PluginsItem *>(item));
+        break;
     default:                  Q_UNREACHABLE();
     }
 }
@@ -214,6 +224,13 @@ void DockItemController::appItemRemoved(AppItem *appItem)
 
 void DockItemController::pluginItemInserted(PluginsItem *item)
 {
+    // check item is in container
+    if (item->allowContainer() && item->isInContainer())
+    {
+        emit itemManaged(item);
+        return itemDroppedIntoContainer(item);
+    }
+
     // find first plugins item position
     int firstPluginPosition = -1;
     for (int i(0); i != m_itemList.size(); ++i)

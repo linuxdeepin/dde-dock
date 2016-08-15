@@ -57,6 +57,27 @@ void PluginsItem::detachPluginWidget()
         widget->setParent(nullptr);
 }
 
+bool PluginsItem::allowContainer() const
+{
+    if (DockDisplayMode == Dock::Fashion)
+        return false;
+
+    return m_pluginInter->itemAllowContainer(m_itemKey);
+}
+
+bool PluginsItem::isInContainer() const
+{
+    if (DockDisplayMode == Dock::Fashion)
+        return false;
+
+    return m_pluginInter->itemIsInContainer(m_itemKey);
+}
+
+void PluginsItem::setInContainer(const bool container)
+{
+    m_pluginInter->setItemIsInContainer(m_itemKey, container);
+}
+
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);
