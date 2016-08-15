@@ -147,6 +147,8 @@ void MainPanel::dragEnterEvent(QDragEnterEvent *e)
         if (DragingItem)
             DragingItem->show();
         return;
+    } else {
+        DragingItem = nullptr;
     }
 
     if (!e->mimeData()->formats().contains(RequestDockKey))
@@ -177,6 +179,8 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
 
         m_itemController->itemMove(DragingItem, dst);
     } else {
+        DragingItem = nullptr;
+
         if (!RequestDockItem)
         {
             DockItem *insertPositionItem = itemAt(e->pos());
