@@ -5,9 +5,10 @@
 #include <QDebug>
 #include <QX11Info>
 
-#define ICON_SIZE_LARGE     48
-#define ICON_SIZE_MEDIUM    36
-#define ICON_SIZE_SMALL     30
+#define ICON_SIZE_LARGE         48
+#define ICON_SIZE_MEDIUM        36
+#define ICON_SIZE_SMALL         30
+#define FASHION_MODE_PADDING    30
 
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),
@@ -390,8 +391,8 @@ void DockSettings::calculateWindowConfig()
 
         const int perfectWidth = visibleItemCount * defaultWidth + PANEL_BORDER * 2 + PANEL_PADDING * 2;
         const int perfectHeight = visibleItemCount * defaultHeight + PANEL_BORDER * 2 + PANEL_PADDING * 2;
-        const int calcWidth = qMin(m_primaryRect.width(), perfectWidth);
-        const int calcHeight = qMin(m_primaryRect.height(), perfectHeight);
+        const int calcWidth = qMin(m_primaryRect.width() - FASHION_MODE_PADDING * 2, perfectWidth);
+        const int calcHeight = qMin(m_primaryRect.height() - FASHION_MODE_PADDING * 2, perfectHeight);
         switch (m_position)
         {
         case Top:
