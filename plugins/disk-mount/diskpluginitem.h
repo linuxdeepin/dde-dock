@@ -19,6 +19,7 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void mousePressEvent(QMouseEvent *e);
     QSize sizeHint() const;
 
 private:

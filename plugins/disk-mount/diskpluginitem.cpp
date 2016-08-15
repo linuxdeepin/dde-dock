@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QMouseEvent>
 
 DiskPluginItem::DiskPluginItem(QWidget *parent)
     : QWidget(parent),
@@ -30,6 +31,15 @@ void DiskPluginItem::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     updateIcon();
+}
+
+void DiskPluginItem::mousePressEvent(QMouseEvent *e)
+{
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    QWidget::mousePressEvent(e);
 }
 
 QSize DiskPluginItem::sizeHint() const

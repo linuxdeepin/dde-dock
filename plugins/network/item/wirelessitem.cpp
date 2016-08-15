@@ -3,6 +3,7 @@
 #include "util/imageutil.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 
 WirelessItem::WirelessItem(const QUuid &uuid)
     : DeviceItem(uuid),
@@ -49,6 +50,18 @@ void WirelessItem::resizeEvent(QResizeEvent *e)
     DeviceItem::resizeEvent(e);
 
     m_icons.clear();
+}
+
+void WirelessItem::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        return QWidget::mousePressEvent(e);
+
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    return QWidget::mousePressEvent(e);
 }
 
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)

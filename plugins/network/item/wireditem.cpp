@@ -3,6 +3,7 @@
 #include "util/imageutil.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 
 WiredItem::WiredItem(const QUuid &deviceUuid)
     : DeviceItem(deviceUuid),
@@ -71,6 +72,18 @@ void WiredItem::resizeEvent(QResizeEvent *e)
     DeviceItem::resizeEvent(e);
 
     reloadIcon();
+}
+
+void WiredItem::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        return QWidget::mousePressEvent(e);
+
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    return QWidget::mousePressEvent(e);
 }
 
 void WiredItem::reloadIcon()

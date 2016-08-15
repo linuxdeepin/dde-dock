@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QIcon>
+#include <QMouseEvent>
 
 PowerStatusWidget::PowerStatusWidget(QWidget *parent)
     : QWidget(parent),
@@ -24,6 +25,18 @@ void PowerStatusWidget::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.drawPixmap(rect().center() - icon.rect().center(), icon);
+}
+
+void PowerStatusWidget::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        return QWidget::mousePressEvent(e);
+
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    return QWidget::mousePressEvent(e);
 }
 
 QPixmap PowerStatusWidget::getBatteryIcon()

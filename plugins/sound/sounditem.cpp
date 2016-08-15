@@ -3,6 +3,7 @@
 
 #include <QPainter>
 #include <QIcon>
+#include <QMouseEvent>
 
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
@@ -32,6 +33,18 @@ void SoundItem::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     refershIcon();
+}
+
+void SoundItem::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        return QWidget::mousePressEvent(e);
+
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    return QWidget::mousePressEvent(e);
 }
 
 void SoundItem::paintEvent(QPaintEvent *e)

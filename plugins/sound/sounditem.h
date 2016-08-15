@@ -18,6 +18,7 @@ public:
 protected:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
+    void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
 
 private slots:

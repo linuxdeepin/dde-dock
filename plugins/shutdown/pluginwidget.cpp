@@ -2,6 +2,7 @@
 
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QMouseEvent>
 
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent),
@@ -70,6 +71,18 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
     painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+}
+
+void PluginWidget::mousePressEvent(QMouseEvent *e)
+{
+    if (e->button() == Qt::LeftButton)
+        return QWidget::mousePressEvent(e);
+
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    return QWidget::mousePressEvent(e);
 }
 
 void PluginWidget::enterEvent(QEvent *)

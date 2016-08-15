@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QSvgRenderer>
+#include <QMouseEvent>
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
     : QWidget(parent)
@@ -73,6 +74,15 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     const QPixmap smallNum2 = loadSvg(smallNum2Path, QSize(smallNumWidth, smallNumHeight));
     const QPoint smallNum2Offset = smallNum1Offset + QPoint(smallNumWidth + 1, 0);
     painter.drawPixmap(smallNum2Offset, smallNum2);
+}
+
+void DatetimeWidget::mousePressEvent(QMouseEvent *e)
+{
+    const QPoint p(e->pos() - rect().center());
+    if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+        return;
+
+    QWidget::mousePressEvent(e);
 }
 
 const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
