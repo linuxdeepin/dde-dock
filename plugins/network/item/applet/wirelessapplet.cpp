@@ -58,8 +58,6 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet("background-color:transparent;");
 
-    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
-
     connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessApplet::APAdded);
     connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessApplet::APRemoved);
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
@@ -76,6 +74,8 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
     connect(m_pwdDialog, &DInputDialog::textValueChanged, [this] {m_pwdDialog->setTextAlert(false);});
     connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessApplet::pwdDialogCanceled);
+
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
 WirelessApplet::~WirelessApplet()
@@ -95,9 +95,9 @@ int WirelessApplet::activeAPStrgength() const
 
 void WirelessApplet::init()
 {
-    setDeviceInfo();
     loadAPList();
     onActiveAPChanged();
+    deviceStateChanegd();
 }
 
 void WirelessApplet::APAdded(const QString &devPath, const QString &info)
@@ -126,11 +126,16 @@ void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
     m_updateAPTimer->start();
 }
 
-void WirelessApplet::setDeviceInfo()
+void WirelessApplet::setDeviceInfo(const int index)
 {
     // set device enable state
     m_controlPanel->setDeviceEnabled(m_networkInter->IsDeviceEnabled(m_device.dbusPath()));
-    m_controlPanel->setDeviceName(m_device.vendor());
+
+    // set device name
+    if (index == -1)
+        m_controlPanel->setDeviceName(tr("Wireless Network"));
+    else
+        m_controlPanel->setDeviceName(tr("Wireless Network %1").arg(index));
 }
 
 void WirelessApplet::loadAPList()
@@ -243,15 +248,16 @@ void WirelessApplet::deviceStateChanegd()
         if (infoList.key() != "wireless")
             continue;
 
-        for (auto wireless : infoList.value().toArray())
+        const auto list = infoList.value().toArray();
+        for (auto i(0); i != list.size(); ++i)
         {
-            const QJsonObject info = wireless.toObject();
+            const QJsonObject info = list[i].toObject();
             if (info.value("Path") == m_device.path())
             {
                 const NetworkDevice prevInfo = m_device;
                 m_device = NetworkDevice(NetworkDevice::Wireless, info);
 
-                setDeviceInfo();
+                setDeviceInfo(list.size() == 1 ? -1 : i + 1);
 
                 if (prevInfo.state() != m_device.state())
                     emit wirelessStateChanged(m_device.state());
@@ -261,6 +267,25 @@ void WirelessApplet::deviceStateChanegd()
                 break;
             }
         }
+
+//        for (auto wireless : infoList.value().toArray())
+//        {
+//            const QJsonObject info = wireless.toObject();
+//            if (info.value("Path") == m_device.path())
+//            {
+//                const NetworkDevice prevInfo = m_device;
+//                m_device = NetworkDevice(NetworkDevice::Wireless, info);
+
+//                setDeviceInfo();
+
+//                if (prevInfo.state() != m_device.state())
+//                    emit wirelessStateChanged(m_device.state());
+//                if (prevInfo.activeAp() != m_device.activeAp())
+//                    onActiveAPChanged();
+
+//                break;
+//            }
+//        }
     }
 
 }

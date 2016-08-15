@@ -30,7 +30,7 @@ signals:
     void activeAPChanged() const;
 
 private:
-    void setDeviceInfo();
+    void setDeviceInfo(const int index);
     void loadAPList();
 
 private slots:
