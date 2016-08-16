@@ -27,8 +27,6 @@ protected:
     QSize sizeHint() const;
 
 private:
-    QPixmap m_icon;
-
     ContainerWidget *m_containerWidget;
 };
 
