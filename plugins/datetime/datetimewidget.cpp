@@ -78,6 +78,9 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
 void DatetimeWidget::mousePressEvent(QMouseEvent *e)
 {
+    if (e->button() != Qt::RightButton)
+        return QWidget::mousePressEvent(e);
+
     const QPoint p(e->pos() - rect().center());
     if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
         return;

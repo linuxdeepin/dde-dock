@@ -75,7 +75,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
 void PluginWidget::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() != Qt::RightButton)
         return QWidget::mousePressEvent(e);
 
     const QPoint p(e->pos() - rect().center());
