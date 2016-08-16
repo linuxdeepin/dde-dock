@@ -13,6 +13,23 @@ VolumeSlider::VolumeSlider(QWidget *parent)
     setTickInterval(50);
     setPageStep(50);
     setTickPosition(QSlider::NoTicks);
+    setFixedHeight(22);
+    setStyleSheet("QSlider::groove {"
+                  "margin-left:11px;"
+                  "margin-right:11px;"
+                  "border-width:0 2px 0 2px;"
+                  "height:2px;"
+                  "background:url(:/image/image/slider_bg.png) 0 2 0 2 stretch;"
+                  "}"
+                  "QSlider::handle{"
+                  "background:url(:/image/image/slider_round.png) no-repeat;"
+                  "width:22px;"
+                  "height:22px;"
+                  "margin:-9px -11px -11px -14px;"
+                  "}"
+                  "QSlider::sub-page {"
+                  "background-color:white;"
+                  "}");
 }
 
 void VolumeSlider::setValue(const int value)
