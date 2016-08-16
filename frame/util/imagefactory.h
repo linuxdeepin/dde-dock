@@ -12,7 +12,7 @@ class ImageFactory : public QObject
 public:
     explicit ImageFactory(QObject *parent = 0);
 
-    static QPixmap lighterEffect(const QPixmap pixmap, const int delta = 50);
+    static QPixmap lighterEffect(const QPixmap pixmap, const int delta = 120);
 };
 
 #endif // IMAGEFACTORY_H
