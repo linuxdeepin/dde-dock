@@ -200,12 +200,13 @@ void WirelessApplet::updateAPList()
     {
         // sort ap list by strength
         std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
+        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
 
         for (auto ap : m_apList)
         {
             AccessPointWidget *apw = new AccessPointWidget(ap);
             apw->setFixedHeight(ITEM_HEIGHT);
-            if (ap == m_activeAP)
+            if (wirelessActived && ap == m_activeAP)
                 apw->setActive(true);
 
             connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessApplet::activateAP);
@@ -339,6 +340,10 @@ void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, con
 
     m_autoConnBox->setChecked(defaultAutoConnect);
     m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
+
+    // clear old config
+    m_pwdDialog->setTextEchoMode(QLineEdit::Password);
+    m_pwdDialog->setTextValue(QString());
 
     if (!m_pwdDialog->isVisible())
         m_pwdDialog->show();
