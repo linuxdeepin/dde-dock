@@ -86,6 +86,7 @@ func getMatchReuslt(info *dataInfo, matchers map[*regexp.Regexp]uint32,
 		}
 
 		if matcher.MatchString(info.Key) {
+			logger.Debugf("score %d, target str: %q", score, info.Key)
 			if score > curScore {
 				curScore = score
 			}

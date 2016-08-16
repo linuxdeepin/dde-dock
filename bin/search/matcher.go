@@ -29,8 +29,11 @@ const (
 
 func addMatcher(template, key string,
 	score uint32, m map[*regexp.Regexp]uint32) error {
-	reg, err := regexp.Compile(fmt.Sprintf(template, key))
+	regStr := fmt.Sprintf(template, key)
+	logger.Debugf("addMatcher score: %d, regexp: %s", score, regStr)
+	reg, err := regexp.Compile(regStr)
 	if err != nil {
+		logger.Warningf("bad regex %s : %v", regStr, err)
 		return err
 	}
 
@@ -38,8 +41,28 @@ func addMatcher(template, key string,
 	return nil
 }
 
+func splitKey(key string) []string {
+	var chars []string
+	var isPrevCharEscape bool
+	for _, r := range key {
+		if isPrevCharEscape {
+			chars = append(chars, "\\"+string(r))
+			isPrevCharEscape = false
+		} else {
+			if r == '\\' {
+				isPrevCharEscape = true
+			} else {
+				chars = append(chars, string(r))
+				isPrevCharEscape = false
+			}
+		}
+	}
+	return chars
+}
+
 // learn from synapse
 func getMatchers(key string) map[*regexp.Regexp]uint32 {
+	logger.Debugf("getMatchers key %s", key)
 	// * create a couple of regexes and try to help with matching
 	// * match with these regular expressions (with descending score):
 	// * 1) ^query$
@@ -51,31 +74,27 @@ func getMatchers(key string) map[*regexp.Regexp]uint32 {
 	// * 7) split to characters and search \bq.*u.*e.*r.*y
 	m := make(map[*regexp.Regexp]uint32)
 
-	addMatcher(`(?i)^(%s)$`, key, HIGHEST, m)
-	addMatcher(`(?i)^(%s)`, key, EXCELLENT, m)
-	addMatcher(`(?i)\b(%s)`, key, VERY_GOOD, m)
+	addMatcher(`(?i)^%s$`, key, HIGHEST, m)
+	addMatcher(`(?i)^%s`, key, EXCELLENT, m)
+	addMatcher(`(?i)\b%s`, key, VERY_GOOD, m)
 
 	words := strings.Fields(key)
 	if len(words) > 1 {
-		addMatcher(`(?i)\b(%s)`, strings.Join(words, `).+\b(`),
+		addMatcher(`(?i)\b%s`, strings.Join(words, `.+\b`),
 			GOOD, m)
 	}
 
-	addMatcher(`(?i)(%s)`, key, BELOW_AVERAGE, m)
+	addMatcher(`(?i)%s`, key, BELOW_AVERAGE, m)
 
-	charSpliter, err := regexp.Compile(`\s*`)
-	if err != nil {
-		logger.Warning("Get char spliter failed:", err)
-		return m
-	}
-
-	chars := charSpliter.Split(key, -1)
+	chars := splitKey(key)
+	logger.Debugf("chars %#v", chars)
 	if len(words) == 1 && len(chars) <= 5 {
-		addMatcher(`(?i)\b(%s)`, strings.Join(chars, `).+\b(`),
+		addMatcher(`(?i)\b%s`, strings.Join(chars, `.+\b`),
 			ABOVE_AVERAGE, m)
 	}
 
-	addMatcher(`(?i)\b(%s)`, strings.Join(chars, `).*(`), POOR, m)
+	addMatcher(`(?i)\b%s`, strings.Join(chars, `.*`), BELOW_AVERAGE, m)
+	addMatcher(`(?i)%s`, strings.Join(chars, `.*`), POOR, m)
 
 	return m
 }
