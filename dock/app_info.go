@@ -16,6 +16,7 @@ import (
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"path/filepath"
+	"pkg.deepin.io/dde/daemon/appinfo"
 	"regexp"
 	"strings"
 )
@@ -43,6 +44,15 @@ func (dai *AppInfo) init() *AppInfo {
 		return nil
 	}
 
+	file := dai.DesktopAppInfo.GetFilename()
+	dai.desktopId = getDesktopIdByFilePath(file)
+	if dai.desktopId != "" {
+		dai.id = dai.desktopId
+	} else {
+		dai.id = filepath.Base(file)
+	}
+	dai.id = appinfo.NormalizeAppID(trimDesktopExt(dai.id))
+
 	dai.genInnerId()
 
 	if len(dai.DesktopAppInfo.ListActions()) != 0 {
@@ -58,53 +68,54 @@ func (dai *AppInfo) init() *AppInfo {
 	return dai
 }
 
+func getDockedDesktopAppInfo(app string) *gio.DesktopAppInfo {
+	if app[0] != '/' || len(app) <= 3 {
+		return gio.NewDesktopAppInfo(addDesktopExt(app))
+	}
+
+	absPath := unzipDesktopPath(app)
+	return gio.NewDesktopAppInfoFromFilename(absPath)
+}
+
+func NewDockedAppInfo(app string) *AppInfo {
+	if app == "" {
+		return nil
+	}
+	dai := &AppInfo{}
+	desktopAppInfo := getDockedDesktopAppInfo(app)
+	if desktopAppInfo == nil {
+		return nil
+	}
+	dai.DesktopAppInfo = desktopAppInfo
+	return dai.init()
+}
+
 func NewAppInfo(id string) *AppInfo {
 	if id == "" {
 		return nil
 	}
 	dai := &AppInfo{}
-	desktopId := id + ".desktop"
-	desktopAppInfo := gio.NewDesktopAppInfo(desktopId)
+	desktopAppInfo := gio.NewDesktopAppInfo(addDesktopExt(id))
 	if desktopAppInfo == nil {
-		// try guess_desktop_id
 		logger.Debug("NewAppInfo add .desktop failed")
-		desktopId = guess_desktop_id(id)
-		desktopAppInfo = gio.NewDesktopAppInfo(desktopId)
+		// try scratch dir
+		desktopFile := filepath.Join(scratchDir, addDesktopExt(id))
+		logger.Debugf("scratch dir desktopFile : %q", desktopFile)
+		desktopAppInfo = gio.NewDesktopAppInfoFromFilename(desktopFile)
 		if desktopAppInfo == nil {
-			logger.Debug("NewAppInfo guess_desktop_id failed")
-			// try scratch dir
-			desktopFile := filepath.Join(scratchDir, id+".desktop")
-			logger.Debugf("scratch dir desktopFile : %q", desktopFile)
-			desktopAppInfo = gio.NewDesktopAppInfoFromFilename(desktopFile)
-			if desktopAppInfo == nil {
-				logger.Debug("NewAppInfo scratchDir failed")
-				logger.Warningf("NewAppInfo failed: id %q", id)
-				return nil
-			} else {
-				desktopId = desktopAppInfo.GetId()
-			}
+			logger.Debug("NewAppInfo scratchDir failed")
+			logger.Warningf("NewAppInfo failed: id %q", id)
+			return nil
 		}
 	}
 
 	dai.DesktopAppInfo = desktopAppInfo
-	dai.desktopId = desktopId
-	dai.id = trimDesktop(normalizeAppID(desktopId))
 	return dai.init()
 }
 
 func NewAppInfoFromFile(file string) *AppInfo {
 	ai := &AppInfo{}
 	ai.DesktopAppInfo = gio.NewDesktopAppInfoFromFilename(file)
-	id := filepath.Base(file)
-
-	// in kde4 dir
-	dir := filepath.Dir(file)
-	basedir := filepath.Base(dir)
-	if basedir == "kde4" {
-		id = "kde4-" + id
-	}
-	ai.desktopId = id
-	ai.id = trimDesktop(normalizeAppID(id))
 	return ai.init()
 }
 

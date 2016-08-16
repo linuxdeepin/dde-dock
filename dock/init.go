@@ -25,6 +25,7 @@ func init() {
 
 var (
 	logger      = log.NewLogger("daemon/dock")
+	homeDir     string
 	scratchDir  string
 	cacheDir    string
 	dockManager *DockManager
@@ -47,7 +48,7 @@ var (
 )
 
 func initDir() {
-	homeDir := os.Getenv("HOME")
+	homeDir = os.Getenv("HOME")
 	scratchDir = filepath.Join(homeDir, ".config/dock/scratch")
 	cacheDir = filepath.Join(homeDir, ".cache/deepin/dde-daemon/dock/")
 	logger.Debugf("scratch dir: %q", scratchDir)

@@ -68,8 +68,9 @@ func (d *Daemon) Start() error {
 	}
 
 	initAtom()
-	initDir()
 	logger.Info("initialize atoms done")
+	initDir()
+	initPathDirCodeMap()
 
 	dockManager, err = NewDockManager()
 	if err != nil {

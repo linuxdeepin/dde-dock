@@ -122,8 +122,6 @@ func (m *DockManager) init() error {
 	m.ShowTimeout = property.NewGSettingsUintProperty(m, "ShowTimeout", m.settings, settingKeyShowTimeout)
 	m.HideTimeout = property.NewGSettingsUintProperty(m, "HideTimeout", m.settings, settingKeyHideTimeout)
 	m.DockedApps = property.NewGSettingsStrvProperty(m, "DockedApps", m.settings, settingKeyDockedApps)
-	// uniq docked apps
-	m.DockedApps.Set(uniqStrSlice(m.DockedApps.Get()))
 
 	m.FrontendWindowRect = NewRect()
 	m.smartHideModeTimer = time.AfterFunc(10*time.Second, m.smartHideModeTimerExpired)

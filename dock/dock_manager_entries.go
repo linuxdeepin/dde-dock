@@ -82,9 +82,11 @@ func (m *DockManager) initClientList() {
 }
 
 func (m *DockManager) initDockedApps() {
-	for _, app := range m.DockedApps.Get() {
+	dockedApps := uniqStrSlice(m.DockedApps.Get())
+	for _, app := range dockedApps {
 		m.appendDockedApp(app)
 	}
+	m.saveDockedApps()
 }
 
 func (m *DockManager) installAppEntry(e *AppEntry) {
@@ -129,9 +131,9 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 	return entry, isNewAdded
 }
 
-func (m *DockManager) appendDockedApp(appId string) {
-	logger.Infof("appendDockedApp %q", appId)
-	appInfo := NewAppInfo(appId)
+func (m *DockManager) appendDockedApp(app string) {
+	logger.Infof("appendDockedApp %q", app)
+	appInfo := NewDockedAppInfo(app)
 	if appInfo == nil {
 		logger.Warning("appendDockedApp failed: appInfo is nil")
 		return

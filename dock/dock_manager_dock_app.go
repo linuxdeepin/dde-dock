@@ -118,7 +118,8 @@ func (m *DockManager) getDockedAppEntryByDesktopFilePath(desktopFilePath string)
 func (m *DockManager) saveDockedApps() {
 	var list []string
 	for _, entry := range m.Entries.FilterDocked() {
-		list = append(list, entry.appInfo.GetId())
+		path := entry.appInfo.GetFilePath()
+		list = append(list, zipDesktopPath(path))
 	}
 	m.DockedApps.Set(list)
 }
