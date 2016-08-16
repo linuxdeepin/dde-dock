@@ -48,5 +48,10 @@ void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton)
         m_pressed = false;
-//        QTimer::singleShot(100, [this] {m_pressed = false;});
+    //        QTimer::singleShot(100, [this] {m_pressed = false;});
+}
+
+void VolumeSlider::wheelEvent(QWheelEvent *e)
+{
+    QSlider::setValue(value() + e->delta() / 5);
 }
