@@ -22,4 +22,5 @@ type Search interface {
 type PinYin interface {
 	Search(string) ([]string, error)
 	IsValid() bool
+	Update([]string) error
 }

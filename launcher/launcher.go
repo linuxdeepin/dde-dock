@@ -297,6 +297,24 @@ func (self *Launcher) emitItemChanged(name, status string, info map[string]ItemC
 	}
 
 	Log.Info("emit ItemChanged signal", status, dbus.Emit(self, "ItemChanged", status, itemInfo, cid))
+
+	self.updatePinYinObject()
+}
+
+func (self *Launcher) updatePinYinObject() {
+	if self.pinyinObj == nil {
+		return
+	}
+	Log.Info("updatePinYinObject")
+
+	names := []string{}
+	for _, item := range self.itemManager.GetAllItems() {
+		names = append(names, item.LocaleName())
+	}
+	err := self.pinyinObj.Update(names)
+	if err != nil {
+		Log.Warning("update pinyinObj failed:", err)
+	}
 }
 
 func (self *Launcher) itemChangedHandler(ev *fsnotify.FileEvent, name string, info map[string]ItemChangedStatus) {

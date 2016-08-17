@@ -18,6 +18,10 @@ func (self *PinYin) Search(key string) ([]string, error) {
 	return self.data[key], nil
 }
 
+func (self *PinYin) Update(data []string) error {
+	return nil
+}
+
 func (self *PinYin) IsValid() bool {
 	return self.valid
 }

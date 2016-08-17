@@ -43,6 +43,10 @@ func (p *PinYinSearchAdapter) Init(data []string) error {
 	return err
 }
 
+func (p *PinYinSearchAdapter) Update(data []string) error {
+	return p.Init(data)
+}
+
 // Search executes transaction and returns found objects.
 func (p *PinYinSearchAdapter) Search(key string) ([]string, error) {
 	return p.searchObj.SearchString(key, string(p.searchID))
