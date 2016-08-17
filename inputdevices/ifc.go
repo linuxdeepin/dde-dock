@@ -15,6 +15,12 @@ func (m *Mouse) Reset() {
 	}
 }
 
+func (tp *TrackPoint) Reset() {
+	for _, key := range tp.setting.ListKeys() {
+		tp.setting.Reset(key)
+	}
+}
+
 func (tpad *Touchpad) Reset() {
 	for _, key := range tpad.setting.ListKeys() {
 		tpad.setting.Reset(key)
