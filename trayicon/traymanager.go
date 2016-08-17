@@ -203,42 +203,47 @@ func (m *TrayManager) startListener() {
 	isListened = true
 
 	for {
-		if e, err := TrayXU.Conn().WaitForEvent(); err == nil && e != nil {
-			switch ev := e.(type) {
-			case xproto.ClientMessageEvent:
-				// logger.Info("ClientMessageEvent")
-				if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
-					// timeStamp = ev.Data.Data32[0]
-					opCode := ev.Data.Data32[1]
-					// logger.Info("TRAY_OPCODE")
+		e, err := TrayXU.Conn().WaitForEvent()
+		if err != nil || e == nil {
+			logger.Warning("WaitForEvent error:", err)
+			m.checkValid()
+			continue
+		}
 
-					switch opCode {
-					case OpCodeSystemTrayRequestDock:
-						logger.Debug("System tray request dock")
-						xid := xproto.Window(ev.Data.Data32[2])
-						m.addIcon(xid)
-					case OpCodeSystemTrayBeginMessage:
-					case OpCodeSystemTrayCancelMessage:
-					}
+		switch ev := e.(type) {
+		case xproto.ClientMessageEvent:
+			// logger.Info("ClientMessageEvent")
+			if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
+				// timeStamp = ev.Data.Data32[0]
+				opCode := ev.Data.Data32[1]
+				// logger.Info("TRAY_OPCODE")
+
+				switch opCode {
+				case OpCodeSystemTrayRequestDock:
+					logger.Debug("System tray request dock")
+					xid := xproto.Window(ev.Data.Data32[2])
+					m.addIcon(xid)
+				case OpCodeSystemTrayBeginMessage:
+				case OpCodeSystemTrayCancelMessage:
 				}
-			case damage.NotifyEvent:
-				m.handleTrayDamage(xproto.Window(ev.Drawable))
-			case xproto.DestroyNotifyEvent:
-				logger.Debug("DestroyNotifyEvent", ev.Window)
-				m.removeIcon(ev.Window)
-			case xproto.SelectionClearEvent:
-				logger.Debug("SelectionClearEvent")
-				m.Unmanage()
-			case xfixes.SelectionNotifyEvent:
-				logger.Debug("SelectionNotifyEvent")
-				m.Manage()
-			case xproto.UnmapNotifyEvent:
-				logger.Debug("UnmapNotifyEvent", ev.Window)
-				m.removeIcon(ev.Window)
-			case xproto.MapNotifyEvent:
-				logger.Debug("MapNotifyEvent", ev.Window)
-				m.addIcon(ev.Window)
 			}
+		case damage.NotifyEvent:
+			m.handleTrayDamage(xproto.Window(ev.Drawable))
+		case xproto.DestroyNotifyEvent:
+			logger.Debug("DestroyNotifyEvent", ev.Window)
+			m.removeIcon(ev.Window)
+		case xproto.SelectionClearEvent:
+			logger.Debug("SelectionClearEvent")
+			m.Unmanage()
+		case xfixes.SelectionNotifyEvent:
+			logger.Debug("SelectionNotifyEvent")
+			m.Manage()
+		case xproto.UnmapNotifyEvent:
+			logger.Debug("UnmapNotifyEvent", ev.Window)
+			m.removeIcon(ev.Window)
+		case xproto.MapNotifyEvent:
+			logger.Debug("MapNotifyEvent", ev.Window)
+			m.addIcon(ev.Window)
 		}
 	}
 }
