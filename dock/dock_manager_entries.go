@@ -23,17 +23,44 @@ func (m *DockManager) allocEntryId() string {
 	return fmt.Sprintf("e%dT%x", num, getCurrentTimestamp())
 }
 
+func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
+	if appInfo == nil {
+		return
+	}
+	id := appInfo.GetId()
+	if id == "" {
+		logger.Warning("markAppLaunched failed, appInfo %v no id", appInfo)
+		return
+	}
+	go func() {
+		if m.launcher == nil {
+			return
+		}
+		logger.Infof("mark app %q launched", id)
+		m.launcher.MarkLaunched(id)
+		recordFrequency(id)
+	}()
+}
+
 func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
-	canShowOnDock := winInfo.canShowOnDock()
-	logger.Debugf("win %v canShowOnDock? %v", win, canShowOnDock)
+	showOnDock := winInfo.canShowOnDock() && m.clientList.Contains(win)
+	logger.Debugf("win %v showOnDock? %v", win, showOnDock)
 	entry := winInfo.entry
 	if entry != nil {
-		if !canShowOnDock {
+		if !showOnDock {
 			m.detachWindow(winInfo)
 		}
 	} else {
-		if canShowOnDock && m.clientList.Contains(win) {
+
+		if winInfo.entryInnerId == "" {
+			winInfo.entryInnerId, winInfo.appInfo = m.identifyWindow(winInfo)
+			m.markAppLaunched(winInfo.appInfo)
+		} else {
+			logger.Debugf("win %v identified", win)
+		}
+
+		if showOnDock {
 			m.attachWindow(winInfo)
 		}
 	}
@@ -49,9 +76,7 @@ func (m *DockManager) initClientList() {
 	sort.Sort(winSlice)
 	m.clientList = winSlice
 	for _, win := range winSlice {
-		winInfo := NewWindowInfo(win)
-		m.listenWindowXEvent(winInfo)
-		m.attachOrDetachWindow(winInfo)
+		m.registerWindow(win)
 	}
 }
 
@@ -138,6 +163,10 @@ func (m *DockManager) removeAppEntry(e *AppEntry) {
 
 func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	logger.Debugf("identifyWindow: window id: %v, window hash %v", winInfo.window, winInfo.innerId)
+	if winInfo.innerId == "" {
+		logger.Debug("identifyWindow failed winInfo no innerId")
+		return "", nil
+	}
 	desktopHash := m.desktopWindowsMapCacheManager.GetKeyByValue(winInfo.innerId)
 	logger.Debug("identifyWindow: get desktop hash:", desktopHash)
 	var appInfo *AppInfo
@@ -178,8 +207,11 @@ func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 }
 
 func (m *DockManager) attachWindow(winInfo *WindowInfo) {
-	entryInnerId, appInfo := m.identifyWindow(winInfo)
-	entry, isNewAdded := m.addAppEntry(entryInnerId, appInfo, -1)
+	var appInfoCopy *AppInfo
+	if winInfo.appInfo != nil {
+		appInfoCopy = NewAppInfoFromFile(winInfo.appInfo.GetFilePath())
+	}
+	entry, isNewAdded := m.addAppEntry(winInfo.entryInnerId, appInfoCopy, -1)
 	entry.windowMutex.Lock()
 	defer entry.windowMutex.Unlock()
 
@@ -197,6 +229,7 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	if entry == nil {
 		return
 	}
+	winInfo.entry = nil
 	entry.windowMutex.Lock()
 	defer entry.windowMutex.Unlock()
 

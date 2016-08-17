@@ -116,6 +116,9 @@ func (ai *AppInfo) genInnerId() {
 }
 
 func (ai *AppInfo) String() string {
+	if ai == nil {
+		return "<nil>"
+	}
 	desktopFile := ai.GetFilePath()
 	gioIcon := ai.DesktopAppInfo.GetIcon()
 	var icon string
@@ -137,6 +140,9 @@ func (ai *AppInfo) GetDesktopId() string {
 }
 
 func (ai *AppInfo) GetFilePath() string {
+	if ai.DesktopAppInfo == nil {
+		return ""
+	}
 	return ai.DesktopAppInfo.GetFilename()
 }
 

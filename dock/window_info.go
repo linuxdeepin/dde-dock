@@ -58,6 +58,9 @@ type WindowInfo struct {
 	entry    *AppEntry
 
 	firstUpdate bool
+
+	entryInnerId string
+	appInfo      *AppInfo
 }
 
 func NewWindowInfo(win xproto.Window) *WindowInfo {
@@ -66,6 +69,13 @@ func NewWindowInfo(win xproto.Window) *WindowInfo {
 		mapState: xproto.MapStateUnmapped,
 	}
 	return winInfo
+}
+
+func (winInfo *WindowInfo) Destroy() {
+	if winInfo.appInfo != nil {
+		winInfo.appInfo.Destroy()
+		winInfo.appInfo = nil
+	}
 }
 
 // window type

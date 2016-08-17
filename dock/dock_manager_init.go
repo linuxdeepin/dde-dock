@@ -13,10 +13,16 @@ import (
 	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
+	"github.com/BurntSushi/xgb/xproto"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"time"
+)
+
+const (
+	launcherDest    = "com.deepin.dde.daemon.Launcher"
+	launcherObjPath = "/com/deepin/dde/daemon/Launcher"
 )
 
 func (m *DockManager) loadCache() error {
@@ -112,6 +118,7 @@ func (m *DockManager) init() error {
 	if err != nil {
 		return err
 	}
+	m.windowInfoMap = make(map[xproto.Window]*WindowInfo)
 	m.initEntries()
 
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")

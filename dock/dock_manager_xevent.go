@@ -19,6 +19,21 @@ import (
 	"time"
 )
 
+func (m *DockManager) registerWindow(win xproto.Window) {
+	m.windowInfoMapMutex.Lock()
+	defer m.windowInfoMapMutex.Unlock()
+
+	logger.Debug("register window", win)
+	if _, ok := m.windowInfoMap[win]; ok {
+		logger.Debugf("register window %v failed, window existed", win)
+		return
+	}
+
+	winInfo := NewWindowInfo(win)
+	m.listenWindowXEvent(winInfo)
+	m.windowInfoMap[win] = winInfo
+}
+
 func (m *DockManager) handleClientListChanged() {
 	clientList, err := ewmh.ClientListGet(XU)
 	if err != nil {
@@ -32,8 +47,7 @@ func (m *DockManager) handleClientListChanged() {
 	if len(add) > 0 {
 		logger.Debug("client list add:", add)
 		for _, win := range add {
-			winInfo := NewWindowInfo(win)
-			m.listenWindowXEvent(winInfo)
+			m.registerWindow(win)
 		}
 	}
 
@@ -74,7 +88,7 @@ func (m *DockManager) handleActiveWindowChanged() {
 
 func (m *DockManager) listenRootWindowPropertyChange() {
 	rootWin := XU.RootWin()
-	xwindow.New(XU, rootWin).Listen(xproto.EventMaskPropertyChange)
+	xwindow.New(XU, rootWin).Listen(xproto.EventMaskPropertyChange | xproto.EventMaskSubstructureNotify)
 	xevent.PropertyNotifyFun(func(XU *xgbutil.XUtil, ev xevent.PropertyNotifyEvent) {
 		switch ev.Atom {
 		case _NET_CLIENT_LIST:
@@ -84,6 +98,13 @@ func (m *DockManager) listenRootWindowPropertyChange() {
 		case _NET_SHOWING_DESKTOP:
 			m.updateHideStateWithoutDelay()
 		}
+	}).Connect(XU, rootWin)
+
+	xevent.MapNotifyFun(func(XU *xgbutil.XUtil, ev xevent.MapNotifyEvent) {
+		win := ev.Window
+		logger.Debugf("rootWin MapNotifyEvent window: %v", win)
+
+		m.registerWindow(win)
 	}).Connect(XU, rootWin)
 
 	m.handleActiveWindowChanged()
@@ -175,7 +196,14 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 func (m *DockManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
 	logger.Debug(ev)
 	xevent.Detach(XU, winInfo.window)
+
+	logger.Debugf("delete %v from windowInfoMap", winInfo.window)
+	m.windowInfoMapMutex.Lock()
+	delete(m.windowInfoMap, winInfo.window)
+	m.windowInfoMapMutex.Unlock()
+
 	m.detachWindow(winInfo)
+	winInfo.Destroy()
 }
 
 func (m *DockManager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
