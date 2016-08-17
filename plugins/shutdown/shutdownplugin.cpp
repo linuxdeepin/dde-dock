@@ -65,12 +65,12 @@ void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
 {
-    const Dock::DisplayMode mode = displayMode();
+    if (itemKey == SHUTDOWN_KEY)
+        return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    if (itemKey == POWER_KEY)
+        return QString("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:power\"");
 
-    if (mode == Dock::Efficient && itemKey != SHUTDOWN_KEY)
-        return QString();
-
-    return QString("dbus-send --print-reply --dest=com.deepin.dde.shutdownFront /com/deepin/dde/shutdownFront com.deepin.dde.shutdownFront.Show");
+    return QString();
 }
 
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
