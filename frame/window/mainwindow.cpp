@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_mainPanel(new MainPanel(this)),
       m_positionUpdateTimer(new QTimer(this)),
+      m_expandDelayTimer(new QTimer(this)),
       m_sizeChangeAni(new QPropertyAnimation(this, "size")),
       m_posChangeAni(new QPropertyAnimation(this, "pos")),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
@@ -68,13 +69,14 @@ void MainWindow::enterEvent(QEvent *e)
     QWidget::enterEvent(e);
 
     if (m_settings->hideState() != Show)
-        expand();
+        m_expandDelayTimer->start();
 }
 
 void MainWindow::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
+    m_expandDelayTimer->stop();
     updatePanelVisible();
 }
 
@@ -114,6 +116,9 @@ void MainWindow::initComponents()
     m_positionUpdateTimer->setInterval(20);
     m_positionUpdateTimer->start();
 
+    m_expandDelayTimer->setSingleShot(true);
+    m_expandDelayTimer->setInterval(100);
+
     m_sizeChangeAni->setDuration(200);
     m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
 
@@ -141,6 +146,7 @@ void MainWindow::initConnections()
     connect(m_mainPanel, &MainPanel::requestWindowAutoHide, m_settings, &DockSettings::setAutoHide);
 
     connect(m_positionUpdateTimer, &QTimer::timeout, this, &MainWindow::updatePosition, Qt::QueuedConnection);
+    connect(m_expandDelayTimer, &QTimer::timeout, this, &MainWindow::expand, Qt::QueuedConnection);
 
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::updateGeometry, Qt::QueuedConnection);
 

@@ -46,6 +46,7 @@ private:
     MainPanel *m_mainPanel;
 
     QTimer *m_positionUpdateTimer;
+    QTimer *m_expandDelayTimer;
     QPropertyAnimation *m_sizeChangeAni;
     QPropertyAnimation *m_posChangeAni;
     QPropertyAnimation *m_panelShowAni;
