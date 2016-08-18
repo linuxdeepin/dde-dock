@@ -106,12 +106,12 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
 
-//    const QList<DockItem *> itemList = m_itemController->itemList();
-//    for (auto item : itemList)
-//    {
-//        if (item->itemType() == DockItem::Container)
-//            item->setVisible(displayMode == Dock::Efficient);
-//    }
+    const QList<DockItem *> itemList = m_itemController->itemList();
+    for (auto item : itemList)
+    {
+        if (item->itemType() == DockItem::Container)
+            item->setVisible(displayMode == Dock::Efficient);
+    }
 
     // reload qss
     setStyleSheet(styleSheet());
@@ -286,9 +286,9 @@ void MainPanel::adjustItemSize()
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
-        if (item->itemType() == DockItem::Container)
-            continue;
         if (m_itemController->itemIsInContainer(item))
+            continue;
+        if (m_displayMode == Fashion && item->itemType() == DockItem::Container)
             continue;
 
         QMetaObject::invokeMethod(item, "setVisible", Qt::QueuedConnection, Q_ARG(bool, true));
@@ -322,7 +322,22 @@ void MainPanel::adjustItemSize()
                 totalHeight += size.height();
             }
             break;
-        default:;
+        case DockItem::Container:
+            {
+                const QSize size = item->sizeHint();
+                item->setFixedSize(size);
+                if (m_position == Dock::Top || m_position == Dock::Bottom)
+                    item->setFixedHeight(itemSize.height());
+                else
+                    item->setFixedWidth(itemSize.width());
+                totalWidth += size.width();
+                totalHeight += size.height();
+            }
+            break;
+        case DockItem::Stretch:
+            break;
+        default:
+            Q_UNREACHABLE();
         }
     }
 
@@ -374,10 +389,12 @@ void MainPanel::adjustItemSize()
         if (itemType == DockItem::Stretch || itemType == DockItem::Container)
             continue;
         if (itemType == DockItem::Plugins)
+        {
             if (m_displayMode != Dock::Fashion)
                 continue;
-        if (m_itemController->itemIsInContainer(item))
-            continue;
+            if (m_itemController->itemIsInContainer(item))
+                continue;
+        }
 
         switch (m_position)
         {
