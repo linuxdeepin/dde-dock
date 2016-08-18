@@ -31,6 +31,7 @@ signals:
     void itemManaged(DockItem *item) const;
 
 public slots:
+    void refershItemsIcon();
     void updatePluginsItemOrderKey();
     void itemMove(DockItem * const moveItem, DockItem * const replaceItem);
     void itemDroppedIntoContainer(DockItem * const item);

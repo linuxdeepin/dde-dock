@@ -37,6 +37,12 @@ bool DockItemController::itemIsInContainer(DockItem * const item) const
     return m_containerItem->contains(item);
 }
 
+void DockItemController::refershItemsIcon()
+{
+    for (auto item : m_itemList)
+        item->refershIcon();
+}
+
 void DockItemController::updatePluginsItemOrderKey()
 {
     Q_ASSERT(sender() == m_updatePluginsOrderTimer);

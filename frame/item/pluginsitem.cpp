@@ -78,6 +78,12 @@ void PluginsItem::setInContainer(const bool container)
     m_pluginInter->setItemIsInContainer(m_itemKey, container);
 }
 
+void PluginsItem::refershIcon()
+{
+    // TODO: update theme icon
+    update();
+}
+
 void PluginsItem::mousePressEvent(QMouseEvent *e)
 {
     QWidget::mousePressEvent(e);

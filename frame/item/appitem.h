@@ -21,6 +21,9 @@ public:
 
     inline ItemType itemType() const {return App;}
 
+public slots:
+    void refershIcon();
+
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
