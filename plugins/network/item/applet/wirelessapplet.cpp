@@ -370,6 +370,13 @@ void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, con
     m_pwdDialog->setTextEchoMode(QLineEdit::Password);
     m_pwdDialog->setTextValue(QString());
 
+    // check if controlcenter handle this request
+    QDBusInterface iface("com.deepin.dde.ControlCenter",
+                         "/com/deepin/dde/ControlCenter/Network",
+                         "com.deepin.dde.ControlCenter.Network");
+    if (iface.isValid() && iface.call("active").arguments().first().toBool())
+        return m_pwdDialog->hide();
+
     if (!m_pwdDialog->isVisible())
         m_pwdDialog->show();
 }
