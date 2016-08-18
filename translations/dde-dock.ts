@@ -12,70 +12,83 @@
 <context>
     <name>DatetimeWidget</name>
     <message>
-        <location filename="../plugins/datetime/datetimewidget.cpp" line="34"/>
+        <location filename="../plugins/datetime/datetimewidget.cpp" line="35"/>
         <source>HH:mm</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DiskControlItem</name>
+    <message>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
+        <source>Unknown device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
+        <source>Unknown volume</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="18"/>
+        <location filename="../frame/util/docksettings.cpp" line="19"/>
         <source>Fashion Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="19"/>
+        <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Efficient Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="20"/>
+        <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="21"/>
+        <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="22"/>
+        <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Keep Shown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Hidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Smart Hide</source>
         <translation type="unfinished"></translation>
     </message>
@@ -111,13 +124,28 @@
 <context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="15"/>
-        <source>Run</source>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="16"/>
-        <source>Empty</source>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
+        <source>This action cannot be restored</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
+        <source>Are you sure to empty 1 item ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
+        <source>Are you sure to empty %1 items ?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -129,20 +157,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="45"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="47"/>
         <source>Application</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TrashWidget</name>
+    <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="17"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="18"/>
+        <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="35"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="36"/>
         <source>Unknow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="40"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="41"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -150,17 +191,27 @@
 <context>
     <name>WirelessApplet</name>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="288"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
         <source>Auto-connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="294"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="309"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="136"/>
+        <source>Wireless Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
+        <source>Wireless Network %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>
