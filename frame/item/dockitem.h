@@ -33,6 +33,9 @@ public:
 
     inline virtual ItemType itemType() const = 0;
 
+public slots:
+    virtual void refershIcon() {}
+
 signals:
     void dragStarted() const;
     void itemDropped(QObject *destination) const;

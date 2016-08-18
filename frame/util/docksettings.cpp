@@ -9,6 +9,7 @@
 #define ICON_SIZE_MEDIUM        36
 #define ICON_SIZE_SMALL         30
 #define FASHION_MODE_PADDING    30
+#define PROP_GTK_ICON_THEME_NAME     "gtk-icon-theme-name"
 
 DockSettings::DockSettings(QWidget *parent)
     : QObject(parent),
@@ -105,6 +106,10 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_displayInter, &DBusDisplay::PrimaryRectChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenHeightChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
     connect(m_displayInter, &DBusDisplay::ScreenWidthChanged, this, &DockSettings::primaryScreenChanged, Qt::QueuedConnection);
+
+    // monitor gtk icon theme changed
+    GtkSettings *gs = gtk_settings_get_default();
+    g_signal_connect(gs, "notify::" PROP_GTK_ICON_THEME_NAME, G_CALLBACK(gtkIconThemeChanged), m_itemController);
 
     calculateWindowConfig();
     resetFrontendGeometry();
@@ -415,4 +420,15 @@ void DockSettings::calculateWindowConfig()
     }
 
     resetFrontendGeometry();
+}
+
+void DockSettings::gtkIconThemeChanged(GtkSettings *gs, GParamSpec *pspec, gpointer udata)
+{
+    Q_UNUSED(gs)
+    Q_ASSERT(udata);
+    Q_ASSERT(!strcmp(g_param_spec_get_name(pspec), PROP_GTK_ICON_THEME_NAME));
+
+    DockItemController *itemController = static_cast<DockItemController *>(udata);
+
+    itemController->refershItemsIcon();
 }

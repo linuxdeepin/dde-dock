@@ -24,6 +24,9 @@ public:
 
     inline ItemType itemType() const {return Plugins;}
 
+public slots:
+    void refershIcon();
+
 private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);

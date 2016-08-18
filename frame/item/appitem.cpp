@@ -88,6 +88,12 @@ int AppItem::itemBaseWidth()
         return itemBaseHeight() * 1.4;
 }
 
+void AppItem::refershIcon()
+{
+    updateIcon();
+    update();
+}
+
 int AppItem::itemBaseHeight()
 {
     if (DockDisplayMode == Efficient)

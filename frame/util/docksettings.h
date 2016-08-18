@@ -13,6 +13,17 @@
 #include <QObject>
 #include <QSize>
 
+extern "C"
+{
+#ifdef signals
+#undef signals
+#endif
+
+#include <gtk/gtk.h>
+#undef signals
+#define signals public
+}
+
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
@@ -58,11 +69,11 @@ private slots:
     void hideStateChanegd();
     void dockItemCountChanged();
     void primaryScreenChanged();
-
     void resetFrontendGeometry();
 
 private:
     void calculateWindowConfig();
+    static void gtkIconThemeChanged(GtkSettings *gs, GParamSpec *pspec, gpointer udata);
 
 private:
     int m_iconSize;
