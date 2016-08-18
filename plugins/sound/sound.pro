@@ -36,3 +36,4 @@ target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
 
 RESOURCES += \
+    resources/resources.qrc

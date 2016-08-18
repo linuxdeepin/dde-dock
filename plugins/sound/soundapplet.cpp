@@ -133,6 +133,7 @@ void SoundApplet::volumeSliderValueChanged()
 
 void SoundApplet::sinkInputsChanged()
 {
+    m_centeralWidget->setVisible(false);
     QVBoxLayout *appLayout = m_centeralLayout;
     while (QLayoutItem *item = appLayout->takeAt(4))
     {
@@ -150,6 +151,7 @@ void SoundApplet::sinkInputsChanged()
 
     const int contentHeight = m_centeralWidget->sizeHint().height();
     m_centeralWidget->setFixedHeight(contentHeight);
+    m_centeralWidget->setVisible(true);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 
