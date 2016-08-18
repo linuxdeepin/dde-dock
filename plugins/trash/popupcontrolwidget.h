@@ -33,8 +33,8 @@ private slots:
 private:
     bool m_empty;
 
-    Dtk::Widget::DLinkButton *m_openBtn;
-    Dtk::Widget::DLinkButton *m_clearBtn;
+//    Dtk::Widget::DLinkButton *m_openBtn;
+//    Dtk::Widget::DLinkButton *m_clearBtn;
 
     QFileSystemWatcher *m_fsWatcher;
 };
