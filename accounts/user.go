@@ -368,14 +368,22 @@ var (
 func genGaussianBlur(file string) {
 	gaussianLocker.Lock()
 	file = dutils.DecodeURI(file)
+	logger.Debug("[genGaussianBlur] task manager:", gaussianTasks)
 	_, ok := gaussianTasks[file]
 	if ok {
+		logger.Debug("[genGaussianBlur] tash exists:", file)
 		gaussianLocker.Unlock()
 		return
 	}
 	gaussianTasks[file] = true
 	gaussianLocker.Unlock()
 
-	go exec.Command("/usr/lib/deepin-api/image-blur-helper",
-		file).CombinedOutput()
+	go func() {
+		logger.Debug("[genGaussianBlur] will blur image:", file)
+		exec.Command("/usr/lib/deepin-api/image-blur-helper",
+			file).CombinedOutput()
+		gaussianLocker.Lock()
+		delete(gaussianTasks, file)
+		gaussianLocker.Unlock()
+	}()
 }
