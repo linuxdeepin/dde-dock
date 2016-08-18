@@ -1,4 +1,3 @@
-#include "constants.h"
 #include "containeritem.h"
 
 #include <QPainter>
@@ -36,10 +35,8 @@ bool ContainerItem::contains(DockItem * const item)
 
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 {
-    if (!e->mimeData()->hasFormat(DOCK_PLUGIN_MIME))
-        return;
-
-    e->accept();
+    if (m_containerWidget->allowDragEnter(e))
+        return e->accept();
 }
 
 void ContainerItem::dragMoveEvent(QDragMoveEvent *e)
