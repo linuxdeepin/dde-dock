@@ -19,6 +19,9 @@ public:
     void removeItem(DockItem * const item);
     bool contains(DockItem * const item);
 
+public slots:
+    void refershIcon();
+
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
@@ -28,6 +31,7 @@ protected:
 
 private:
     ContainerWidget *m_containerWidget;
+    QPixmap m_icon;
 };
 
 #endif // CONTAINERITEM_H

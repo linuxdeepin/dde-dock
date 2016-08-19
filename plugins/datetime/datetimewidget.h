@@ -12,10 +12,15 @@ public:
 
 private:
     QSize sizeHint() const;
+    void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
     const QPixmap loadSvg(const QString &fileName, const QSize size);
+
+private:
+    QPixmap m_cachedIcon;
+    QString m_cachedTime;
 };
 
 #endif // DATETIMEWIDGET_H

@@ -25,7 +25,7 @@ private:
 
     void wrapWindow();
     void updateIcon();
-    void hideIcon();
+//    void hideIcon();
     QImage getImageNonComposite() const;
 
 private slots:
