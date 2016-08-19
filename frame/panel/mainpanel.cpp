@@ -25,31 +25,31 @@ MainPanel::MainPanel(QWidget *parent)
     setAccessibleName("dock-mainpanel");
     setObjectName("MainPanel");
     setStyleSheet("QWidget #MainPanel {"
-                  "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
-                  "background-color:rgba(10, 10, 10, .6);"
+//                  "border:" xstr(PANEL_BORDER) "px solid rgba(162, 162, 162, .2);"
+//                  "background-color:rgba(10, 10, 10, .6);"
                   "}"
                   "QWidget #MainPanel[displayMode='1'] {"
                   "border:none;"
                   "}"
                   // Top
                   "QWidget #MainPanel[displayMode='0'][position='0'] {"
-                  "border-bottom-left-radius:5px;"
-                  "border-bottom-right-radius:5px;"
+//                  "border-bottom-left-radius:5px;"
+//                  "border-bottom-right-radius:5px;"
                   "}"
                   // Right
                   "QWidget #MainPanel[displayMode='0'][position='1'] {"
-                  "border-top-left-radius:5px;"
-                  "border-bottom-left-radius:5px;"
+//                  "border-top-left-radius:5px;"
+//                  "border-bottom-left-radius:5px;"
                   "}"
                   // Bottom
                   "QWidget #MainPanel[displayMode='0'][position='2'] {"
-                  "border-top-left-radius:6px;"
-                  "border-top-right-radius:6px;"
+//                  "border-top-left-radius:6px;"
+//                  "border-top-right-radius:6px;"
                   "}"
                   // Left
                   "QWidget #MainPanel[displayMode='0'][position='3'] {"
-                  "border-top-right-radius:5px;"
-                  "border-bottom-right-radius:5px;"
+//                  "border-top-right-radius:5px;"
+//                  "border-bottom-right-radius:5px;"
                   "}"
                   "QWidget #MainPanel[position='0'] {"
                   "padding:0 " xstr(PANEL_PADDING) "px;"
@@ -125,6 +125,53 @@ int MainPanel::displayMode()
 int MainPanel::position()
 {
     return int(m_position);
+}
+
+void MainPanel::paintEvent(QPaintEvent *e)
+{
+    QWidget::paintEvent(e);
+
+    QPainter p(this);
+    if (m_displayMode == Dock::Efficient)
+    {
+        p.fillRect(rect(), QColor(10, 10, 10, 255 * 0.6));
+        return;
+    } else {
+        QPen pen;
+        pen.setWidth(1);
+        pen.setColor(QColor(162, 162, 162, 255 * 0.2));
+
+        QBrush brush(QColor(10, 10, 10, 255 * 0.6));
+
+        p.setRenderHint(QPainter::Antialiasing);
+
+        const QRect r = rect();
+
+        // draw border
+        QRect borderRect = r;
+        switch (m_position)
+        {
+        case Top:       borderRect.setTop(-5);                  break;
+        case Bottom:    borderRect.setBottom(r.bottom() + 5);   break;
+        case Left:      borderRect.setLeft(-5);                 break;
+        case Right:     borderRect.setRight(r.right() + 5);     break;
+        }
+
+        p.setPen(pen);
+        p.setBrush(Qt::transparent);
+        p.drawRoundedRect(borderRect, 5, 5);
+
+        // draw rounded content
+        p.setPen(Qt::transparent);
+        p.setBrush(brush);
+        switch (m_position)
+        {
+        case Top:       p.drawRoundedRect(r.marginsRemoved(QMargins(1, -5, 1, 1)), 5, 5);   break;
+        case Bottom:    p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, 1, -5)), 5, 5);   break;
+        case Left:      p.drawRoundedRect(r.marginsRemoved(QMargins(-5, 1, 1, 1)), 5, 5);   break;
+        case Right:     p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, -5, 1)), 5, 5);   break;
+        }
+    }
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)

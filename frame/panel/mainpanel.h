@@ -10,7 +10,7 @@
 
 #define xstr(s) str(s)
 #define str(s) #s
-#define PANEL_BORDER    1
+#define PANEL_BORDER    0
 #define PANEL_PADDING   6
 
 class MainPanel : public QFrame
@@ -32,6 +32,7 @@ signals:
     void requestRefershWindowVisible() const;
 
 private:
+    void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
