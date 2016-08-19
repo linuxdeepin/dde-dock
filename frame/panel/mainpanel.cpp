@@ -146,30 +146,34 @@ void MainPanel::paintEvent(QPaintEvent *e)
         p.setRenderHint(QPainter::Antialiasing);
 
         const QRect r = rect();
+        // border radius
+        const int br = 8;
+        // background radius
+        const int bgr = 7;
 
         // draw border
         QRect borderRect = r;
         switch (m_position)
         {
-        case Top:       borderRect.setTop(-5);                  break;
-        case Bottom:    borderRect.setBottom(r.bottom() + 5);   break;
-        case Left:      borderRect.setLeft(-5);                 break;
-        case Right:     borderRect.setRight(r.right() + 5);     break;
+        case Top:       borderRect.setTop(-br);                  break;
+        case Bottom:    borderRect.setBottom(r.bottom() + br);   break;
+        case Left:      borderRect.setLeft(-br);                 break;
+        case Right:     borderRect.setRight(r.right() + br);     break;
         }
 
         p.setPen(pen);
         p.setBrush(Qt::transparent);
-        p.drawRoundedRect(borderRect, 5, 5);
+        p.drawRoundedRect(borderRect, br, br);
 
         // draw rounded content
         p.setPen(Qt::transparent);
         p.setBrush(brush);
         switch (m_position)
         {
-        case Top:       p.drawRoundedRect(r.marginsRemoved(QMargins(1, -5, 1, 1)), 5, 5);   break;
-        case Bottom:    p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, 1, -5)), 5, 5);   break;
-        case Left:      p.drawRoundedRect(r.marginsRemoved(QMargins(-5, 1, 1, 1)), 5, 5);   break;
-        case Right:     p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, -5, 1)), 5, 5);   break;
+        case Top:       p.drawRoundedRect(r.marginsRemoved(QMargins(1, -bgr, 1, 1)), bgr, bgr);   break;
+        case Bottom:    p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, 1, -bgr)), bgr, bgr);   break;
+        case Left:      p.drawRoundedRect(r.marginsRemoved(QMargins(-bgr, 1, 1, 1)), bgr, bgr);   break;
+        case Right:     p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, -bgr, 1)), bgr, bgr);   break;
         }
     }
 }
