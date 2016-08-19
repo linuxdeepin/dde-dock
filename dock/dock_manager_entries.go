@@ -256,7 +256,7 @@ func (m *DockManager) getAppInfoFromWindow(winInfo *WindowInfo) (*AppInfo, bool)
 		ai = NewAppInfoFromFile(desktop)
 		if ai != nil {
 			logger.Debugf("Get AppInfo success bamf desktop: %q", desktop)
-			return ai, true
+			return ai, false
 		}
 	}
 
@@ -267,7 +267,30 @@ func (m *DockManager) getAppInfoFromWindow(winInfo *WindowInfo) (*AppInfo, bool)
 		ai = NewAppInfo(winGuessAppId)
 		if ai != nil {
 			logger.Debugf("Get AppInfo success winGuessAppId: %q", winGuessAppId)
-			return ai, true
+			return ai, false
+		}
+	}
+
+	// wmclass
+	if winInfo.wmClass != nil {
+		logger.Debug("Try wmclass instance")
+		instance := winInfo.wmClass.Instance
+		if instance != "" {
+			ai = NewAppInfo(instance)
+			if ai != nil {
+				logger.Debugf("Get AppInfo success wmClass instance %q", instance)
+				return ai, true
+			}
+		}
+
+		logger.Debug("Try wmclass class")
+		class := winInfo.wmClass.Class
+		if class != "" {
+			ai = NewAppInfo(class)
+			if ai != nil {
+				logger.Debugf("Get AppInfo success wmClass class %q", class)
+				return ai, true
+			}
 		}
 	}
 
