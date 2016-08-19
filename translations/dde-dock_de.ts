@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
 <context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="73"/>
         <source>MM/dd/yyyy ddd HH:mm:ss</source>
-        <translation>ММ/дд/гггг ддд ЧЧ:мм:сс</translation>
+        <translation>MM/tt/jjjj ddd HH:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -12,7 +12,7 @@
     <message>
         <location filename="../plugins/datetime/datetimewidget.cpp" line="35"/>
         <source>HH:mm</source>
-        <translation>ЧЧ:мм</translation>
+        <translation>HH:mm</translation>
     </message>
 </context>
 <context>
@@ -20,12 +20,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
         <source>Unknown device</source>
-        <translation>Неизвестное устройство</translation>
+        <translation>Unbekanntes Gerät</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
         <source>Unknown volume</source>
-        <translation>Неизвестный объем</translation>
+        <translation> Unbekanntes Volume</translation>
     </message>
 </context>
 <context>
@@ -33,82 +33,82 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="19"/>
         <source>Fashion Mode</source>
-        <translation>Современный режим</translation>
+        <translation>Mode-Modus</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Efficient Mode</source>
-        <translation>Эффективный режим</translation>
+        <translation>Effizienter Modus</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Top</source>
-        <translation>Сверху</translation>
+        <translation>Oben</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Bottom</source>
-        <translation>Снизу</translation>
+        <translation>Unten</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Left</source>
-        <translation>Слева</translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Right</source>
-        <translation>Справа</translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Large</source>
-        <translation>Большой</translation>
+        <translation>Groß</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Medium</source>
-        <translation>Средний</translation>
+        <translation>Mittel</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Small</source>
-        <translation>Маленький</translation>
+        <translation>Klein</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Keep Shown</source>
-        <translation>Отображать</translation>
+        <translation>Angezeigt lassen</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Hidden</source>
-        <translation>Скрывать</translation>
+        <translation>Ausgeblendet lassen</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Smart Hide</source>
-        <translation>Умное скрытие</translation>
+        <translation>Intelligentes Ausblenden</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="64"/>
         <source>Mode</source>
-        <translation>Режим</translation>
+        <translation>modus</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="72"/>
         <source>Location</source>
-        <translation>Местонахождение</translation>
+        <translation>Ort</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="79"/>
         <source>Size</source>
-        <translation>Размер</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="86"/>
         <source>Status</source>
-        <translation>Статус</translation>
+        <translation>Status</translation>
     </message>
 </context>
 <context>
@@ -116,7 +116,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="17"/>
         <source>Launcher</source>
-        <translation> Лаунчер</translation>
+        <translation>Starter</translation>
     </message>
 </context>
 <context>
@@ -124,27 +124,27 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Empty</source>
-        <translation>Очистить</translation>
+        <translation>Leer</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
         <source>This action cannot be restored</source>
-        <translation>Это действие необратимо</translation>
+        <translation>Diese Aktion kann nicht wiederhergestellt werden</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Вы уверены, что хотите очистить 1 объект?</translation>
+        <translation>Sind Sie sicher, dass Sie 1 Element löschen möchten?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Вы уверены, что хотите очистить %1 объектов?</translation>
+        <translation>Sind Sie sicher, dass Sie %1 Elemente löschen möchten?</translation>
     </message>
 </context>
 <context>
@@ -152,12 +152,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="28"/>
         <source>Device</source>
-        <translation>Устройство</translation>
+        <translation>Gerät</translation>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="47"/>
         <source>Application</source>
-        <translation>Приложение</translation>
+        <translation>Anwendung</translation>
     </message>
 </context>
 <context>
@@ -165,12 +165,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="17"/>
         <source>Run</source>
-        <translation>Выполнить</translation>
+        <translation>Ausführen</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="18"/>
         <source>Empty</source>
-        <translation>Очистить</translation>
+        <translation>Leer</translation>
     </message>
 </context>
 <context>
@@ -178,12 +178,12 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="36"/>
         <source>Unknow</source>
-        <translation>Неизвестный</translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="41"/>
         <source>Disconnect</source>
-        <translation>Отключить</translation>
+        <translation>Trennen</translation>
     </message>
 </context>
 <context>
@@ -191,27 +191,27 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
         <source>Auto-connect</source>
-        <translation>Авто-подключение</translation>
+        <translation>Automatisch verbinden</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
         <source>Connect</source>
-        <translation>Подключение</translation>
+        <translation>Verbinden</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="136"/>
         <source>Wireless Network</source>
-        <translation>Беспроводная сеть</translation>
+        <translation>Drahtlosnetzwerk</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
         <source>Wireless Network %1</source>
-        <translation>Беспроводная сеть %1</translation>
+        <translation>Drahtlosnetzwerk %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Требуется пароль для подключения к &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation>Passwort zum Verbinden mit &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; erforderlich</translation>
     </message>
 </context>
 </TS>
