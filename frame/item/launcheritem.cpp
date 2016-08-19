@@ -29,10 +29,11 @@ void LauncherItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
 
     const QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
-    painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
 
     if (m_hover)
         painter.drawPixmap(rect().center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
+    else
+        painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)

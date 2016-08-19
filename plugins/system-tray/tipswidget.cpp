@@ -5,8 +5,11 @@ TipsWidget::TipsWidget(QWidget *parent)
     : QWidget(parent),
       m_mainLayout(new QHBoxLayout)
 {
+    m_mainLayout->setMargin(0);
+    m_mainLayout->setSpacing(0);
+
     setLayout(m_mainLayout);
-    setFixedHeight(32);
+    setFixedHeight(26);
 }
 
 void TipsWidget::clear()
@@ -27,5 +30,5 @@ void TipsWidget::addWidgets(QList<TrayWidget *> widgets)
         w->setVisible(true);
         m_mainLayout->addWidget(w);
     }
-    setFixedWidth(widgets.size() * 20 + 20);
+    setFixedWidth(widgets.size() * 26);
 }

@@ -34,6 +34,8 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     m_updateTimer->start();
 
     connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::updateIcon);
+
+    setFixedSize(26, 26);
 }
 
 TrayWidget::~TrayWidget()
@@ -52,9 +54,18 @@ QSize TrayWidget::sizeHint() const
 
 void TrayWidget::showEvent(QShowEvent *e)
 {
+    m_image = getImageNonComposite();
+
     QWidget::showEvent(e);
 
     setX11PassMouseEvent(false);
+
+//    auto c = QX11Info::connection();
+//    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+//    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
+//    xcb_configure_window(c, m_containerWid,
+//                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
+//                         windowMoveConfigVals);
 }
 
 void TrayWidget::hideEvent(QHideEvent *e)
@@ -74,17 +85,18 @@ void TrayWidget::paintEvent(QPaintEvent *e)
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    m_image = getImageNonComposite();
-    if (!m_image.isNull()) {
-        if (true) {
-            QPainterPath path;
-            path.addRoundedRect(p.x(), p.y(), iconSize, iconSize, iconSize / 2, iconSize / 2);
+//    m_image = getImageNonComposite();
+//    if (!m_image.isNull()) {
+//        if (true) {
+//            QPainterPath path;
+//            path.addRoundedRect(p.x(), p.y(), iconSize, iconSize, iconSize / 2, iconSize / 2);
 
-            painter.setClipPath(path);
-        }
+//            painter.setClipPath(path);
+//        }
 
-        painter.drawImage(p.x(), p.y(), m_image.scaled(iconSize, iconSize));
-    }
+//        painter.drawImage(p.x(), p.y(), m_image.scaled(iconSize, iconSize));
+//    }
+    painter.drawImage(rect().center() - m_image.rect().center(), m_image);
 
     painter.end();
 }
@@ -226,39 +238,40 @@ void TrayWidget::updateIcon()
 {
     if (!isVisible()) return;
 
-    auto c = QX11Info::connection();
+//    auto c = QX11Info::connection();
 
-    const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
-    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
+//    const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
+//    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
 
-    QPoint globalPos = mapToGlobal(QPoint(0, 0));
-    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
-    xcb_configure_window(c, m_containerWid,
-                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-                         windowMoveConfigVals);
+//    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+//    const uint32_t windowMoveConfigVals[2] = { uint32_t(globalPos.x()), uint32_t(globalPos.y()) };
+//    xcb_configure_window(c, m_containerWid,
+//                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
+//                         windowMoveConfigVals);
 
-    const uint32_t windowResizeConfigVals[2] = { iconSize, iconSize };
-    xcb_configure_window(c, m_windowId,
-                         XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
-                         windowResizeConfigVals);
+//    const uint32_t windowResizeConfigVals[2] = { iconSize, iconSize };
+//    xcb_configure_window(c, m_windowId,
+//                         XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+//                         windowResizeConfigVals);
 
+    m_image = getImageNonComposite();
     update();
 }
 
-void TrayWidget::hideIcon()
-{
-    auto c = QX11Info::connection();
+//void TrayWidget::hideIcon()
+//{
+//    auto c = QX11Info::connection();
 
-    const uint32_t stackAboveData[] = {XCB_STACK_MODE_BELOW};
-    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
+//    const uint32_t stackAboveData[] = {XCB_STACK_MODE_BELOW};
+//    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
 
-    const uint32_t windowMoveConfigVals[2] = {0, 0};
-    xcb_configure_window(c, m_containerWid,
-                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
-                         windowMoveConfigVals);
+//    const uint32_t windowMoveConfigVals[2] = {0, 0};
+//    xcb_configure_window(c, m_containerWid,
+//                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y,
+//                         windowMoveConfigVals);
 
-    hide();
-}
+//    hide();
+//}
 
 void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
@@ -372,9 +385,14 @@ QImage TrayWidget::getImageNonComposite() const
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
 {
+    auto c = QX11Info::connection();
+
     if (pass)
     {
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
+
+        const uint32_t stackAboveData[] = {XCB_STACK_MODE_BELOW};
+        xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     }
     else
     {
@@ -385,5 +403,8 @@ void TrayWidget::setX11PassMouseEvent(const bool pass)
         rectangle.height = iconSize;
 
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, &rectangle, 1, ShapeSet, YXBanded);
+
+        const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
+        xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     }
 }

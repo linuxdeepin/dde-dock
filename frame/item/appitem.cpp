@@ -194,49 +194,16 @@ void AppItem::paintEvent(QPaintEvent *e)
                 painter.drawPixmap(p, activePixmap);
             else
                 painter.drawPixmap(p, pixmap);
-
-//            const int activeLineWidth = 2;
-//            const int activeLineLength = 20;
-//            QRect activeRect = itemRect;
-//            switch (DockPosition)
-//            {
-//            case Top:
-//                activeRect.setBottom(activeRect.top() + activeLineWidth);
-//                activeRect.moveBottom(activeRect.bottom() + 1);
-//                activeRect.setWidth(activeLineLength);
-//                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
-//                break;
-//            case Bottom:
-//                activeRect.setTop(activeRect.bottom() - activeLineWidth);
-//                activeRect.moveTop(activeRect.top() - 1);
-//                activeRect.setWidth(activeLineLength);
-//                activeRect.moveLeft((itemRect.width() - activeRect.width()) / 2);
-//                break;
-//            case Left:
-//                activeRect.setRight(activeRect.left() + activeLineWidth);
-//                activeRect.moveRight(activeRect.right() + 1);
-//                activeRect.setHeight(activeLineLength);
-//                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
-//                break;
-//            case Right:
-//                activeRect.setLeft(activeRect.right() - activeLineWidth);
-//                activeRect.moveLeft(activeRect.left() - 1);
-//                activeRect.setHeight(activeLineLength);
-//                activeRect.moveTop((itemRect.height() - activeRect.height()) / 2);
-//                break;
-//            }
-
-//            painter.fillRect(activeRect, QColor(163, 167, 166));
         }
     }
 
     // icon
     const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
-    // draw icon
-    painter.drawPixmap(itemRect.center() - pixmap.rect().center(), pixmap);
-    // draw ligher
+    // draw ligher/normal icon
     if (m_hover)
         painter.drawPixmap(itemRect.center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
+    else
+        painter.drawPixmap(itemRect.center() - pixmap.rect().center(), pixmap);
 
     // Update the window icon geometry when the icon is changed.
     m_updateIconGeometryTimer->start();

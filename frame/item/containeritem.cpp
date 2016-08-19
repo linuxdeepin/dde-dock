@@ -32,6 +32,21 @@ bool ContainerItem::contains(DockItem * const item)
     return false;
 }
 
+void ContainerItem::refershIcon()
+{
+    QPixmap icon;
+    switch (DockPosition)
+    {
+    case Top:       icon = QPixmap(":/icons/resources/arrow-down.svg");     break;
+    case Left:      icon = QPixmap(":/icons/resources/arrow-right.svg");    break;
+    case Bottom:    icon = QPixmap(":/icons/resources/arrow-up.svg");       break;
+    case Right:     icon = QPixmap(":/icons/resources/arrow-left.svg");     break;
+    default:        Q_UNREACHABLE();
+    }
+
+    m_icon = icon;
+}
+
 void ContainerItem::dragEnterEvent(QDragEnterEvent *e)
 {
     if (m_containerWidget->allowDragEnter(e))
@@ -52,18 +67,8 @@ void ContainerItem::paintEvent(QPaintEvent *e)
     if (DockDisplayMode == Dock::Fashion)
         return;
 
-    QPixmap icon;
-    switch (DockPosition)
-    {
-    case Top:       icon = QPixmap(":/icons/resources/arrow-down.svg");     break;
-    case Left:      icon = QPixmap(":/icons/resources/arrow-right.svg");    break;
-    case Bottom:    icon = QPixmap(":/icons/resources/arrow-up.svg");       break;
-    case Right:     icon = QPixmap(":/icons/resources/arrow-left.svg");     break;
-    default:        Q_UNREACHABLE();
-    }
-
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - icon.rect().center(), icon);
+    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
 }
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
