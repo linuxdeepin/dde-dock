@@ -4,7 +4,6 @@
 
 ContainerItem::ContainerItem(QWidget *parent)
     : DockItem(parent),
-      m_icon(":/indicator/resources/arrow_up_normal.png"),
       m_containerWidget(new ContainerWidget(this))
 {
     m_containerWidget->setVisible(false);
@@ -53,8 +52,18 @@ void ContainerItem::paintEvent(QPaintEvent *e)
     if (DockDisplayMode == Dock::Fashion)
         return;
 
+    QPixmap icon;
+    switch (DockPosition)
+    {
+    case Top:       icon = QPixmap(":/icons/resources/arrow-down.svg");     break;
+    case Left:      icon = QPixmap(":/icons/resources/arrow-right.svg");    break;
+    case Bottom:    icon = QPixmap(":/icons/resources/arrow-up.svg");       break;
+    case Right:     icon = QPixmap(":/icons/resources/arrow-left.svg");     break;
+    default:        Q_UNREACHABLE();
+    }
+
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    painter.drawPixmap(rect().center() - icon.rect().center(), icon);
 }
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)

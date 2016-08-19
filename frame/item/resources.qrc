@@ -4,7 +4,11 @@
         <file>resources/indicator.png</file>
         <file>resources/indicator_ver.png</file>
         <file>resources/indicator_active_ver.png</file>
-        <file>resources/arrow_up_normal.png</file>
-        <file>resources/arrow_down_normal.png</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>resources/arrow-up.svg</file>
+        <file>resources/arrow-right.svg</file>
+        <file>resources/arrow-left.svg</file>
+        <file>resources/arrow-down.svg</file>
     </qresource>
 </RCC>

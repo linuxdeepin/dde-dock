@@ -4,11 +4,13 @@
 #include <QPainter>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QIcon>
 
 DiskPluginItem::DiskPluginItem(QWidget *parent)
     : QWidget(parent),
       m_displayMode(Dock::Efficient)
 {
+    QIcon::setThemeName("deepin");
 }
 
 void DiskPluginItem::setDockDisplayMode(const Dock::DisplayMode mode)
@@ -53,9 +55,11 @@ QSize DiskPluginItem::sizeHint() const
 void DiskPluginItem::updateIcon()
 {
     if (m_displayMode == Dock::Efficient)
-        m_icon = ImageUtil::loadSvg(":/icons/resources/icon-small.svg", 16);
+//        m_icon = ImageUtil::loadSvg(":/icons/resources/icon-small.svg", 16);
+        m_icon = QIcon::fromTheme("drive-removable-dock-symbolic").pixmap(16, 16);
     else
-        m_icon = ImageUtil::loadSvg(":/icons/resources/icon.svg", std::min(width(), height()) * 0.8);
+//        m_icon = ImageUtil::loadSvg(":/icons/resources/icon.svg", std::min(width(), height()) * 0.8);
+        m_icon = QIcon::fromTheme("drive-removable-dock").pixmap(std::min(width(), height()) * 0.8, std::min(width(), height()) * 0.8);
 
     update();
 }
