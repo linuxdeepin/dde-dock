@@ -79,14 +79,30 @@ func (m *DockManager) listenSettingsChanged() {
 
 func (m *DockManager) listenLauncherSignal() {
 	m.launcher.ConnectItemChanged(func(status string, itemInfo []interface{}, cid int64) {
+		logger.Debugf("launcher item deleted %#v", itemInfo)
 		if len(itemInfo) > 2 && status == "deleted" {
+			// try desktop file path
+			desktopFile, ok := itemInfo[0].(string)
+			if !ok {
+				logger.Warning("get item desktop file failed")
+				return
+			}
+			dockedEntries := m.Entries.FilterDocked()
+			for _, entry := range dockedEntries {
+				file := entry.appInfo.GetFilePath()
+				if file == desktopFile {
+					m.undockEntry(entry)
+					return
+				}
+			}
+
+			// try app id
 			appId, ok := itemInfo[2].(string)
 			if !ok {
 				logger.Warning("get item app id failed")
 				return
 			}
-			logger.Debugf("item removed %q", appId)
-			entry := m.Entries.FilterDocked().GetByAppId(appId)
+			entry := dockedEntries.GetByAppId(appId)
 			if entry != nil {
 				m.undockEntry(entry)
 			}
