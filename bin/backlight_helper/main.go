@@ -9,19 +9,14 @@
 
 package main
 
-//#cgo pkg-config: glib-2.0 libudev
-//#include "backlight.h"
-//#include <stdlib.h>
-import "C"
-
 import (
 	"fmt"
 	"os"
+	"pkg.deepin.io/dde/daemon/backlight"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"sync"
 	"time"
-	"unsafe"
 )
 
 const (
@@ -33,145 +28,90 @@ const (
 var logger = log.NewLogger("backlight_helper")
 
 type Manager struct {
-	initFailed bool
-	locker     sync.Mutex
-	kbdLocker  sync.Mutex
+	lcdInfos  backlight.SyspathInfos
+	kbdInfos  backlight.SyspathInfos
+	lcdLocker sync.Mutex
+	kbdLocker sync.Mutex
 }
 
 // ListSysPath return all the backlight device syspath
 func (m *Manager) ListSysPath() []string {
-	if m.initFailed {
-		return nil
-	}
-
-	var cNum = C.int(0)
-	cList := C.get_syspath_list(&cNum)
-	num := int(cNum)
-	if num == 0 {
-		return nil
-	}
-	cSlice := (*[1 << 5]*C.char)(unsafe.Pointer(cList))[:num:num]
-
 	var list []string
-	for _, cItem := range cSlice {
-		list = append(list, C.GoString(cItem))
+	for _, info := range m.lcdInfos {
+		list = append(list, info.Path)
 	}
-	C.free_syspath_list(cList, cNum)
 	return list
 }
 
 // GetSysPathByType return the special type's syspath
 // The type range: raw, platform, firmware
 func (m *Manager) GetSysPathByType(ty string) (string, error) {
-	if m.initFailed {
-		return "", fmt.Errorf("Init udev backlight failed")
+	for _, info := range m.lcdInfos {
+		if info.Type == ty {
+			return info.Path, nil
+		}
 	}
-
-	switch ty {
-	case "raw", "platform", "firmware":
-		break
-	default:
-		return "", fmt.Errorf("Invalid backlight type: %s", ty)
-	}
-
-	cTy := C.CString(ty)
-	cSysPath := C.get_syspath_by_type(cTy)
-	C.free(unsafe.Pointer(cTy))
-	sysPath := C.GoString(cSysPath)
-	C.free(unsafe.Pointer(cSysPath))
-	return sysPath, nil
+	return "", fmt.Errorf("Invalid backlight type: %s", ty)
 }
 
 // GetBrightness return the special syspath's brightness
 func (m *Manager) GetBrightness(sysPath string) (int32, error) {
-	if m.initFailed {
-		return 1, fmt.Errorf("Init udev backlight failed")
-	}
+	m.lcdLocker.Lock()
+	defer m.lcdLocker.Unlock()
 
-	m.locker.Lock()
-	defer m.locker.Unlock()
-	cSysPath := C.CString(sysPath)
-	ret := C.get_brightness(cSysPath)
-	C.free(unsafe.Pointer(cSysPath))
-	if int(ret) == -1 {
-		return 1, fmt.Errorf("Get brightness failed for: %s", sysPath)
+	info, err := m.lcdInfos.Get(sysPath)
+	if err != nil {
+		return 0, err
 	}
-	return int32(ret), nil
+	return info.GetBrightness()
 }
 
 func (m *Manager) GetKbdBrightness() (int32, error) {
-	if m.initFailed {
-		return 1, fmt.Errorf("Init udev backlight failed")
-	}
-
 	m.kbdLocker.Lock()
 	defer m.kbdLocker.Unlock()
-	ret := C.get_kbd_brightness()
-	if int(ret) == -1 {
-		return 1, fmt.Errorf("Get keyboard brightness failed")
+
+	if len(m.kbdInfos) == 0 {
+		return 0, fmt.Errorf("Unsupported keyboard backlight")
 	}
-	return int32(ret), nil
+	return m.kbdInfos[0].GetBrightness()
 }
 
 // GetBrightness return the special syspath's max brightness
 func (m *Manager) GetMaxBrightness(sysPath string) (int32, error) {
-	if m.initFailed {
-		return 1, fmt.Errorf("Init udev backlight failed")
+	info, err := m.lcdInfos.Get(sysPath)
+	if err != nil {
+		return 0, err
 	}
-
-	cSysPath := C.CString(sysPath)
-	ret := C.get_max_brightness(cSysPath)
-	C.free(unsafe.Pointer(cSysPath))
-	if int(ret) == -1 {
-		return 1, fmt.Errorf("Get max brightness failed for: %s",
-			sysPath)
-	}
-	return int32(ret), nil
+	return info.MaxBrightness, nil
 }
 
 func (m *Manager) GetKbdMaxBrightness() (int32, error) {
-	if m.initFailed {
-		return 1, fmt.Errorf("Init udev backlight failed")
+	if len(m.kbdInfos) == 0 {
+		return 0, fmt.Errorf("Unsupported keyboard backlight")
 	}
-
-	ret := C.get_kbd_max_brightness()
-	if int(ret) == -1 {
-		return 1, fmt.Errorf("Get keyboard brightness failed")
-	}
-	return int32(ret), nil
+	return m.kbdInfos[0].MaxBrightness, nil
 }
 
 // SetBrightness set the special syspath's brightness
 func (m *Manager) SetBrightness(sysPath string, value int32) error {
-	if m.initFailed {
-		return fmt.Errorf("Init udev backlight failed")
-	}
+	m.lcdLocker.Lock()
+	defer m.lcdLocker.Unlock()
 
-	m.locker.Lock()
-	defer m.locker.Unlock()
-	cSysPath := C.CString(sysPath)
-	ret := C.set_brightness(cSysPath, C.int(value))
-	C.free(unsafe.Pointer(cSysPath))
-	if int(ret) != 0 {
-		return fmt.Errorf("Set brightness for %s to %d failed",
-			sysPath, value)
+	info, err := m.lcdInfos.Get(sysPath)
+	if err != nil {
+		return err
 	}
-	return nil
+	return info.SetBrightness(value)
 }
 
 func (m *Manager) SetKbdBrightness(value int32) error {
-	if m.initFailed {
-		return fmt.Errorf("Init udev backlight failed")
-	}
-
 	m.kbdLocker.Lock()
 	defer m.kbdLocker.Unlock()
-	ret := C.set_kbd_brightness(C.int(value))
-	if int(ret) != 0 {
-		return fmt.Errorf("Set keyboard brightness to %d failed",
-			value)
+
+	if len(m.kbdInfos) == 0 {
+		return fmt.Errorf("Unsupported keyboard backlight")
 	}
-	return nil
+	return m.kbdInfos[0].SetBrightness(value)
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
@@ -184,12 +124,9 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 
 func main() {
 	m := &Manager{
-		initFailed: false,
+		lcdInfos: backlight.ListLCDBacklight(),
+		kbdInfos: backlight.ListKbdBacklight(),
 	}
-
-	cRet := C.init_udev()
-	m.initFailed = (int(cRet) != 0)
-	defer C.finalize_udev()
 
 	err := dbus.InstallOnSystem(m)
 	if err != nil {

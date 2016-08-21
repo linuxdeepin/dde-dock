@@ -19,7 +19,7 @@ import (
 	"dbus/org/freedesktop/login1"
 	"fmt"
 	"pkg.deepin.io/lib/log"
-	"time"
+	//"time"
 )
 
 var logger = log.NewLogger("daemon/mpris")
@@ -100,15 +100,28 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		step = -0.05
 	}
 
-	if driverSupportedHotkey() {
-		logger.Debug("[changeBrightness] driver supported, wait 200ms...")
-		time.Sleep(time.Microsecond * 200)
-		m.disp.RefreshBrightness()
-		goto OSD
+	var backlightValid bool = true
+	cur, max, err := m.getBacklightInfo()
+	if err != nil {
+		backlightValid = false
 	}
-
 	for output, v := range values {
 		var discrete float64
+		ret, _ := m.disp.QueryOutputFeature(output)
+		if backlightValid && (ret == 1) {
+			//if driverSupportedHotkey() {
+			//	logger.Debug("[changeBrightness] driver supported, wait 200ms...")
+			//	time.Sleep(time.Microsecond * 200)
+			//	tmp, _, err := m.getBacklightInfo()
+			//	if err != nil {
+			//		logger.Warning("Get backlight info failed:", output, err)
+			//		continue
+			//	}
+			//	logger.Debug("[changeBrightness] after driver:", cur, tmp, max)
+			//	cur = tmp
+			//}
+			v = float64(cur) / float64(max)
+		}
 		discrete = v + step
 		if discrete > 1.0 {
 			discrete = 1
@@ -123,7 +136,6 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 		}
 	}
 
-OSD:
 	// Show osd
 	var signal = "BrightnessUp"
 	if !raised {
@@ -264,4 +276,26 @@ func (m *Manager) changeKbdBrightness(raised, pressed bool) {
 	if err != nil {
 		logger.Warning("Set keyboard brightness failed:", value, err)
 	}
+}
+
+func (m *Manager) getBacklightInfo() (int32, int32, error) {
+	if m.blDaemon == nil {
+		return 0, 0, fmt.Errorf("No backlight helper found")
+	}
+
+	list, _ := m.blDaemon.ListSysPath()
+	if len(list) == 0 {
+		return 0, 0, fmt.Errorf("No backlight helper found")
+	}
+
+	cur, err := m.blDaemon.GetBrightness(list[0])
+	if err != nil {
+		return 0, 0, err
+	}
+
+	max, err := m.blDaemon.GetMaxBrightness(list[0])
+	if err != nil {
+		return 0, 0, err
+	}
+	return cur, max, nil
 }
