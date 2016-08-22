@@ -34,7 +34,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
 
     m_autoConnBox->setText(tr("Auto-connect"));
 
-    m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Dialog);
     m_pwdDialog->setTextEchoMode(DLineEdit::Password);
     m_pwdDialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
     m_pwdDialog->addSpacing(10);
@@ -74,6 +74,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
     connect(m_pwdDialog, &DInputDialog::textValueChanged, [this] {m_pwdDialog->setTextAlert(false);});
     connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessApplet::pwdDialogCanceled);
+    connect(m_pwdDialog, &DInputDialog::accepted, this, &WirelessApplet::pwdDialogAccepted);
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
