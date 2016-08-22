@@ -78,7 +78,7 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     if (m_activeTray)
     {
         const QImage image = m_activeTray->trayImage();
-        painter.drawImage(r.center().x() - image.width() / 2, r.center().y() - image.height() / 2, image);
+        painter.drawImage(r.center() - image.rect().center(), image);
     }
 }
 
