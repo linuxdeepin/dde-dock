@@ -101,12 +101,20 @@ void PopupControlWidget::clearTrashFloder()
 
 int PopupControlWidget::trashItemCount() const
 {
-    return QDir(TrashDir + "/files").entryInfoList().count() - 2;
+    return QDir(TrashDir + "/info").entryInfoList().count() - 2;
 }
 
 void PopupControlWidget::trashStatusChanged()
 {
-    const bool empty = QDir(TrashDir).entryList().count() == 2;
+    const bool files = QDir(TrashDir + "/files").exists();
+    const bool info = QDir(TrashDir + "/info").exists();
+
+    bool empty;
+    if ((!info || QDir(TrashDir + "/info").entryList().count() == 2) &&
+        (!files || QDir(TrashDir + "/files").entryList().count() == 2))
+        empty = true;
+    else
+        empty = false;
 
     if (m_empty == empty)
         return;

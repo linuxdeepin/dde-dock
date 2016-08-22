@@ -139,7 +139,7 @@ void NetworkManager::reloadDevices()
     m_types = types;
     emit deviceTypesChanged(m_types);
 
-    qDebug() << "device type: " << m_types;
+//    qDebug() << "device type: " << m_types;
 }
 
 void NetworkManager::reloadActiveConnections()
@@ -182,5 +182,5 @@ void NetworkManager::reloadActiveConnections()
     m_states = states;
     emit networkStateChanged(m_states);
 
-    qDebug() << "network states: " << m_states;
+//    qDebug() << "network states: " << m_states;
 }
