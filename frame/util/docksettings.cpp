@@ -268,6 +268,8 @@ void DockSettings::onPositionChanged()
     calculateWindowConfig();
 
     emit positionChanged(prevPos);
+
+    m_itemController->refershItemsIcon();
 }
 
 void DockSettings::iconSizeChanged()
