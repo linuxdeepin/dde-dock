@@ -179,8 +179,8 @@ void TrayWidget::wrapWindow()
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
 //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 
-    QWindow * win = QWindow::fromWinId(m_containerWid);
-    win->setOpacity(0);
+//    QWindow * win = QWindow::fromWinId(m_containerWid);
+//    win->setOpacity(0);
 
     setX11PassMouseEvent(true);
 
@@ -218,7 +218,7 @@ void TrayWidget::wrapWindow()
     //this is needed as chormium and such when resized just fill the icon with transparent space and only draw in the middle
     //however spotify does need this as by default the window size is 900px wide.
     //use an artbitrary heuristic to make sure icons are always sensible
-    if (clientGeom->width > iconSize || clientGeom->height > iconSize )
+//    if (clientGeom->width > iconSize || clientGeom->height > iconSize )
     {
         const uint32_t windowMoveConfigVals[2] = { iconSize, iconSize };
         xcb_configure_window(c, m_windowId,
@@ -370,17 +370,19 @@ QImage TrayWidget::getImageNonComposite() const
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    Q_ASSERT(!geom.isNull());
     if (geom.isNull())
         return QImage();
 
     xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
 
+    Q_ASSERT(image);
     if (image == NULL)
         return QImage();
 
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
 
-    return qimage;
+    return qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
 }
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
