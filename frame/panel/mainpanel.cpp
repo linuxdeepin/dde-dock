@@ -298,6 +298,9 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
     for (auto item : itemList)
     {
+        if (!item->isVisible())
+            continue;
+
         QRect rect;
         rect.setTopLeft(item->pos());
         rect.setSize(item->size());
