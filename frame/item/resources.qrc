@@ -10,5 +10,6 @@
         <file>resources/arrow-right.svg</file>
         <file>resources/arrow-left.svg</file>
         <file>resources/arrow-down.svg</file>
+        <file>resources/application-x-desktop.svg</file>
     </qresource>
 </RCC>

@@ -147,7 +147,7 @@ QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
         pixmap = QPixmap(fileName);
 
     if (pixmap.isNull())
-        return pixmap;
+        pixmap = loadSvg(":/icons/resources/application-x-desktop.svg", size);
 
     return pixmap.scaled(size, size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 }
