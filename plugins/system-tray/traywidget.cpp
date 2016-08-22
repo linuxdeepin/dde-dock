@@ -179,8 +179,8 @@ void TrayWidget::wrapWindow()
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
 //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 
-//    QWindow * win = QWindow::fromWinId(m_containerWid);
-//    win->setOpacity(0);
+    QWindow * win = QWindow::fromWinId(m_containerWid);
+    win->setOpacity(0);
 
     setX11PassMouseEvent(true);
 
