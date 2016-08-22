@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 39.1 (31720) - http://www.bohemiancoding.com/sketch -->
+    <title>audio-volume-medium-24px</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="audio-volume-medium-24px">
+            <g id="sound-hover-24px">
+                <polygon id="Fill-110" opacity="0" points="0 24 24 24 24 0 0 0"></polygon>
+                <polygon id="Stroke-208" stroke="#FFFFFF" stroke-linejoin="round" fill="#FFFFFF" points="2.5 7.50000002 2.5 16.5 7 16.5 11.5 21.4999991 11.5 2.5 7 7.50000002"></polygon>
+                <path d="M14.5,8.5 L14.5,15.5" id="Path-2" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M17.5,6.5 L17.5,17.5" id="Path-2" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>

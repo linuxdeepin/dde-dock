@@ -74,6 +74,9 @@ void SoundItem::refershIcon()
             volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
 
         iconString = "audio-volume-" + volumeString + (mute ? "-muted" : "");
+        const QIcon icon = QIcon::fromTheme(iconString);
+        const int iconSize = std::min(width(), height()) * 0.8;
+        m_iconPixmap = icon.pixmap(iconSize, iconSize);
     } else {
         QString volumeString;
         if (mute)
@@ -85,12 +88,9 @@ void SoundItem::refershIcon()
         else
             volumeString = "low";
 
-        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+        iconString = QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString);
+        m_iconPixmap = QPixmap(iconString);
     }
-
-    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-    const QIcon icon = QIcon::fromTheme(iconString);
-    m_iconPixmap = icon.pixmap(iconSize, iconSize);
 
     update();
 }
