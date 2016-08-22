@@ -1,7 +1,7 @@
 
 include(../../interfaces/interfaces.pri)
 
-QT              += widgets gui core dbus x11extras
+QT              += widgets gui core dbus x11extras svg
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
 PKGCONFIG       += xcb xcb-image xcb-icccm xcb-composite
@@ -26,3 +26,6 @@ SOURCES += \
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

@@ -3,6 +3,8 @@
 #include <QPainter>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QPixmap>
+#include <QSvgRenderer>
 
 #include <cmath>
 
@@ -36,6 +38,15 @@ void FashionTrayItem::setActiveTray(TrayWidget *tray)
     update();
 }
 
+void FashionTrayItem::resizeEvent(QResizeEvent *e)
+{
+    // update icon size
+    const QSize s = e->size();
+    m_backgroundPixmap = loadSvg(":/icons/resources/trayicon.svg", 0.8 * std::min(s.width(), s.height()));
+
+    QWidget::resizeEvent(e);
+}
+
 void FashionTrayItem::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
@@ -45,18 +56,23 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-    // draw circle
-    QPen circlePen(QColor(0, 164, 233));
-    circlePen.setWidth(3);
-    const double circleSize = (0.8 * std::min(r.width(), r.height()) - 8) / 2;
-    painter.setPen(circlePen);
-    painter.drawEllipse(r.center(), circleSize, circleSize);
+//    // draw circle
+//    QPen circlePen(QColor(0, 164, 233));
+//    circlePen.setWidth(3);
+//    const double circleSize = (0.8 * std::min(r.width(), r.height()) - 8) / 2;
+//    painter.setPen(circlePen);
+//    painter.drawEllipse(r.center(), circleSize, circleSize);
 
-    // draw red dot
-    const int offset = std::sin(pi / 4) * circleSize;
-    painter.setPen(Qt::transparent);
-    painter.setBrush(QColor(250, 64, 151));
-    painter.drawEllipse(r.center() + QPoint(offset, -offset), 5, 5);
+//    // draw red dot
+//    const int offset = std::sin(pi / 4) * circleSize;
+//    QPen p(Qt::transparent);
+//    p.setWidth(3);
+//    painter.setPen(p);
+//    painter.setBrush(QColor(250, 64, 151));
+//    painter.drawEllipse(r.center() + QPoint(offset, -offset), 5, 5);
+
+    // draw blue circle
+    painter.drawPixmap(r.center() - m_backgroundPixmap.rect().center(), m_backgroundPixmap);
 
     // draw active icon
     if (m_activeTray)
@@ -108,4 +124,18 @@ void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
     }
 
     m_activeTray->sendClick(buttonIndex, globalPos.x(), globalPos.y());
+}
+
+const QPixmap FashionTrayItem::loadSvg(const QString &fileName, const int size) const
+{
+    QPixmap pixmap(size, size);
+    QSvgRenderer renderer(fileName);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter;
+    painter.begin(&pixmap);
+    renderer.render(&painter);
+    painter.end();
+
+    return pixmap;
 }

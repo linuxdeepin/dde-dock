@@ -20,15 +20,19 @@ public slots:
     void setActiveTray(TrayWidget *tray);
 
 private:
+    void resizeEvent(QResizeEvent *e);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+
+    const QPixmap loadSvg(const QString &fileName, const int size) const;
 
 private:
     bool m_enableMouseEvent;
 
     TrayWidget *m_activeTray;
 
+    QPixmap m_backgroundPixmap;
     QPoint m_pressPoint;
 };
 
