@@ -66,33 +66,33 @@ void SoundItem::refershIcon()
 
     QString iconString;
     if (displayMode == Dock::Fashion)
-    {
-        QString volumeString;
-        if (volmue >= 1.0)
-            volumeString = "100";
-        else
-            volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
+     {
+         QString volumeString;
+         if (volmue >= 1.0)
+             volumeString = "100";
+         else
+             volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
 
-        iconString = "audio-volume-" + volumeString + (mute ? "-muted" : "");
-        const QIcon icon = QIcon::fromTheme(iconString);
-        const int iconSize = std::min(width(), height()) * 0.8;
-        m_iconPixmap = icon.pixmap(iconSize, iconSize);
-    } else {
-        QString volumeString;
-        if (mute)
-            volumeString = "muted";
-        else if (volmue >= double(2)/3)
-            volumeString = "high";
-        else if (volmue >= double(1)/3)
-            volumeString = "medium";
-        else
-            volumeString = "low";
+         iconString = "audio-volume-" + volumeString + (mute ? "-muted" : "");
+     } else {
+         QString volumeString;
+         if (mute)
+             volumeString = "muted";
+         else if (volmue >= double(2)/3)
+             volumeString = "high";
+         else if (volmue >= double(1)/3)
+             volumeString = "medium";
+         else
+             volumeString = "low";
 
-        iconString = QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString);
-        m_iconPixmap = QPixmap(iconString);
-    }
+         iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+     }
 
-    update();
+     const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
+     const QIcon icon = QIcon::fromTheme(iconString);
+     m_iconPixmap = icon.pixmap(iconSize, iconSize);
+
+     update();
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
