@@ -441,10 +441,9 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 	return nmConn.Delete()
 }
 
-// TODO looks ActivateConnection should return apath instead cpath
-
 // ActivateConnection try to activate target connection, if not
 // special a valid devPath just left it as "/".
+// TODO: return apath instead of cpath
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
 	cpath = "/"

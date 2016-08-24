@@ -857,6 +857,21 @@ func nmGetVpnConnectionState(apath dbus.ObjectPath) (state uint32) {
 	return
 }
 
+func nmRequestWirelessScan(devPath dbus.ObjectPath) {
+	devWireless, err := nmNewDeviceWireless(devPath)
+	if err != nil {
+		return
+	}
+	defer nmdbus.DestroyDeviceWireless(devWireless)
+
+	options := make(map[string]dbus.Variant)
+	err = devWireless.RequestScan(options)
+	if err != nil {
+		logger.Error(err)
+	}
+	return
+}
+
 func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 	devWireless, err := nmNewDeviceWireless(devPath)
 	if err != nil {

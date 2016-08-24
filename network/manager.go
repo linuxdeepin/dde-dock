@@ -144,6 +144,8 @@ func (m *Manager) initManager() {
 			// restore
 			m.switchHandler.init()
 			enableNotify()
+
+			m.RequestWirelessScan()
 		}
 	})
 }
