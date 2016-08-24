@@ -23,14 +23,44 @@ const agentTimeout = 120 // 120s
 var invalidSecretsData = make(map[string]map[string]dbus.Variant)
 
 type mapKey struct {
-	path dbus.ObjectPath
-	name string
+	connPath    dbus.ObjectPath
+	settingName string
 }
 type agent struct {
 	pendingKeys      map[mapKey]chan interface{}
 	savedKeys        map[mapKey]map[string]map[string]dbus.Variant // TODO: remove
 	vpnProcesses     map[dbus.ObjectPath]*os.Process
 	vpnProcessesLock sync.Mutex
+
+	secretReceivers *secretProxyType
+	receiversLocker sync.Mutex
+}
+
+// secretsInfo provide more detailed information for front-end to
+// pop-up the password authentication dialog.
+type secretsInfo struct {
+	ConnectionPath dbus.ObjectPath
+	SettingName    string
+
+	// ConnectionId is just the connection name which ask user to fill
+	// the secrets.
+	ConnectionId string
+
+	// AutoConnect tells whether the connection is auto-connect
+	// enabled.
+	AutoConnect bool
+
+	// KeyType will be used by IsPasswordValid() so the front-end
+	// could check the input value on the time.
+	KeyType string
+
+	// DevicePath tells which device are sending the signal to ask for
+	// secrets. Note that DevicePath will be empty in some cases.
+	DevicePath dbus.ObjectPath
+
+	// Receiver tells which client process to ask for secrets.
+	// If 0, no clent process was selected.
+	Receiver uint32
 }
 
 func newAgent() (a *agent) {
@@ -38,6 +68,7 @@ func newAgent() (a *agent) {
 	a.pendingKeys = make(map[mapKey]chan interface{})
 	a.vpnProcesses = make(map[dbus.ObjectPath]*os.Process)
 	a.savedKeys = make(map[mapKey]map[string]map[string]dbus.Variant)
+	a.secretReceivers = new(secretProxyType)
 
 	err := dbus.InstallOnSystem(a)
 	if err != nil {
@@ -215,7 +246,7 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 
 	logger.Info("askForSecrets:", connectionPath, settingName)
 
-	keyId := mapKey{path: connectionPath, name: settingName}
+	keyId := mapKey{connPath: connectionPath, settingName: settingName}
 	if _, ok := a.pendingKeys[keyId]; ok {
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
 		a.CancelGetSecrets(connectionPath, settingName, false)
@@ -238,7 +269,7 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 	return
 }
 func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Variant, keyId mapKey, hints []string, flags uint32) chan interface{} {
-	autoConnect := nmGeneralGetConnectionAutoconnect(keyId.path)
+	autoConnect := nmGeneralGetConnectionAutoconnect(keyId.connPath)
 	connectionId := getSettingConnectionId(connectionData)
 	logger.Debug("createPendingKey:", keyId, connectionId, autoConnect)
 
@@ -270,7 +301,7 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 			stdoutReader := bufio.NewReader(stdout)
 
 			a.vpnProcessesLock.Lock()
-			a.vpnProcesses[keyId.path] = process
+			a.vpnProcesses[keyId.connPath] = process
 			a.vpnProcessesLock.Unlock()
 
 			// try to get vpn secrets data from keyring or network manager dbus interface
@@ -278,7 +309,7 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 			var vpnSecretData map[string]string
 			vpnSecretData, ok := secretGetAll(getSettingConnectionUuid(connectionData), nm.NM_SETTING_VPN_SETTING_NAME)
 			if !ok {
-				if secretsData, err := nmGetConnectionSecrets(keyId.path, nm.NM_SETTING_VPN_SETTING_NAME); err == nil {
+				if secretsData, err := nmGetConnectionSecrets(keyId.connPath, nm.NM_SETTING_VPN_SETTING_NAME); err == nil {
 					vpnSecretData = getSettingVpnSecrets(secretsData)
 				}
 			}
@@ -326,20 +357,75 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 			stdinWriter.WriteString("QUIT\n\n")
 			err = stdinWriter.Flush()
 			if err == nil {
-				a.feedSecret(keyId.path, keyId.name, stdoutData, autoConnect)
+				a.feedSecret(keyId.connPath, keyId.settingName, stdoutData, autoConnect)
 			} else {
 				// mostly, if error occurred for input/output
 				// operation, the vpn auth dialog should be killed by
 				// cancelVpnAuthDialog() which is triggered for user
 				// disconnected the vpn connection
-				a.CancelGetSecrets(keyId.path, keyId.name, false)
+				a.CancelGetSecrets(keyId.connPath, keyId.settingName, false)
 			}
 		}()
 	} else {
 		// for none vpn connections, ask password for front-end
-		dbus.Emit(manager, "NeedSecrets", string(keyId.path), keyId.name, connectionId, autoConnect)
+		settingName := keyId.settingName
+		if isWirelessConnection(connectionData) {
+			settingName = string(getSettingWirelessSsid(connectionData))
+		}
+		secretsInfo := secretsInfo{
+			ConnectionPath: keyId.connPath,
+			SettingName:    settingName,
+			ConnectionId:   connectionId,
+			AutoConnect:    autoConnect,
+			KeyType:        getSettingPassKeyType(connectionData, keyId.settingName),
+			DevicePath:     a.guessDevice(connectionData),
+		}
+		a.receiversLocker.Lock()
+		secretsInfo.Receiver = a.secretReceivers.Last()
+		a.receiversLocker.Unlock()
+		secretsInfoJSON, _ := marshalJSON(secretsInfo)
+		dbus.Emit(manager, "NeedSecrets", secretsInfoJSON)
 	}
 	return a.pendingKeys[keyId]
+}
+func (a *agent) guessDevice(connectionData map[string]map[string]dbus.Variant) (devicePath dbus.ObjectPath) {
+	switch getSettingConnectionType(connectionData) {
+	case nm.NM_SETTING_WIRED_SETTING_NAME:
+		return a.doGuessDevice(connectionData, deviceEthernet)
+	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
+		return a.doGuessDevice(connectionData, deviceWifi)
+	}
+	return
+}
+func (a *agent) doGuessDevice(connectionData map[string]map[string]dbus.Variant, deviceType string) (devicePath dbus.ObjectPath) {
+	manager.devicesLock.Lock()
+	defer manager.devicesLock.Unlock()
+
+	devicesType := manager.devices[deviceEthernet]
+
+	// check for the hardware address
+	hwAddress := string(getSettingWiredMacAddress(connectionData))
+	if len(hwAddress) != 0 {
+		for _, device := range devicesType {
+			if hwAddress == device.HwAddress {
+				return device.Path
+			}
+		}
+	}
+
+	// check for the device state
+	for _, device := range devicesType {
+		if isDeviceStateInActivating(device.State) {
+			return device.Path
+		}
+	}
+
+	// if all failed, and there is only one device now, just return it
+	if len(devicesType) == 1 {
+		return devicesType[0].Path
+	}
+
+	return
 }
 
 func (a *agent) cancelVpnAuthDialog(connPath dbus.ObjectPath) {
@@ -357,7 +443,7 @@ func (a *agent) cancelVpnAuthDialog(connPath dbus.ObjectPath) {
 
 func (a *agent) CancelGetSecrets(connectionPath dbus.ObjectPath, settingName string, notifyFinished bool) {
 	logger.Info("CancelGetSecrets:", connectionPath, settingName)
-	keyId := mapKey{path: connectionPath, name: settingName}
+	keyId := mapKey{connPath: connectionPath, settingName: settingName}
 
 	if notifyFinished {
 		dbus.Emit(manager, "NeedSecretsFinished", string(connectionPath), settingName)
@@ -379,13 +465,13 @@ func (a *agent) DeleteSecrets(connection map[string]map[string]dbus.Variant, con
 	// TODO delete secrets from keyring
 	logger.Info("DeleteSecrets:", connectionPath)
 	if _, ok := connection["802-11-wireless-security"]; ok {
-		keyId := mapKey{path: connectionPath, name: "802-11-wireless-security"}
+		keyId := mapKey{connPath: connectionPath, settingName: "802-11-wireless-security"}
 		delete(a.savedKeys, keyId)
 	}
 }
 
 func (a *agent) feedSecret(path dbus.ObjectPath, settingName string, keyValue interface{}, autoConnect bool) {
-	keyId := mapKey{path: path, name: settingName}
+	keyId := mapKey{connPath: path, settingName: settingName}
 	if ch, ok := a.pendingKeys[keyId]; ok {
 		ch <- keyValue
 		delete(a.pendingKeys, keyId)
@@ -411,4 +497,13 @@ func (m *Manager) FeedSecret(path string, settingName, keyValue string, autoConn
 func (m *Manager) CancelSecret(path string, settingName string) {
 	logger.Info("CancelSecret:", path, settingName)
 	m.agent.CancelGetSecrets(dbus.ObjectPath(path), settingName, true)
+}
+func (m *Manager) RegisterSecretReceiver(dmsg dbus.DMessage) {
+	if m.agent == nil {
+		logger.Info("Agent object no created")
+		return
+	}
+	m.agent.receiversLocker.Lock()
+	m.agent.secretReceivers.Add(dmsg.GetSenderPID())
+	m.agent.receiversLocker.Unlock()
 }

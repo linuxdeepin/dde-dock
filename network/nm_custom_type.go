@@ -332,3 +332,73 @@ func ensureFileExists(errs sectionErrors, section, key, file string) {
 		rememberError(errs, section, key, nmKeyErrorInvalidValue)
 	}
 }
+
+// Custom device types, use sting instead of number, used by front-end
+const (
+	passTypeGeneral           = "general"
+	passTypeWifiWepKey        = "wifi-wep-key"
+	passTypeWifiWepPassphrase = "wifi-wep-passphrase"
+	passTypeWifiWpaPsk        = "wifi-wpa-psk"
+)
+
+func getSettingPassKeyType(data connectionData, settingName string) (passType string) {
+	switch settingName {
+	case nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+		switch getSettingVkWirelessSecurityKeyMgmt(data) {
+		case "wep":
+			wepKeyType := getSettingWirelessSecurityWepKeyType(data)
+			if wepKeyType == nm.NM_WEP_KEY_TYPE_KEY {
+				passType = passTypeWifiWepKey
+			} else if wepKeyType == nm.NM_WEP_KEY_TYPE_PASSPHRASE {
+				passType = passTypeWifiWepPassphrase
+			}
+		case "wpa-psk":
+			passType = passTypeWifiWpaPsk
+		}
+	default:
+		passType = passTypeGeneral
+	}
+	if len(passType) == 0 {
+		logger.Errorf("Unknown password key type for data[%s]", settingName)
+	}
+	return
+}
+
+func isPasswordValid(passType, value string) (ok bool) {
+	switch passType {
+	case passTypeWifiWepKey:
+		// If wep key type set to 1 and the keys are hexadecimal, they
+		// must be either 10 or 26 characters in length. If set to 1
+		// and the keys are ASCII keys, they must be either 5 or 13
+		// characters in length.
+		if len(value) != 10 && len(value) != 26 && len(value) != 5 && len(value) != 13 {
+			ok = false
+		} else {
+			ok = true
+		}
+	case passTypeWifiWepPassphrase:
+		// If wep key type set to 2, the passphrase is hashed using
+		// the de-facto MD5 method to derive the actual WEP key.
+		if len(value) == 0 {
+			ok = false
+		} else {
+			ok = true
+		}
+	case passTypeWifiWpaPsk:
+		// If the wpa-psk key is 64-characters long, it must contain
+		// only hexadecimal characters and is interpreted as a
+		// hexadecimal WPA key. Otherwise, the key must be between 8
+		// and 63 ASCII characters (as specified in the 802.11i
+		// standard) and is interpreted as a WPA passphrase
+		if len(value) < 8 || len(value) > 64 {
+			ok = false
+		} else {
+			ok = true
+		}
+	case passTypeGeneral:
+		ok = true
+	default:
+		ok = true
+	}
+	return
+}

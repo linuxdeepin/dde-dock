@@ -60,7 +60,10 @@ type Manager struct {
 	ActiveConnections     string // array of connections that activated and marshaled by json
 
 	// signals
-	NeedSecrets                  func(connPath, settingName, connectionId string, autoConnect bool)
+
+	// NeedSecrets send signal to front-end to pop-up password input
+	// dialog to fill the secrets.
+	NeedSecrets                  func(secretsInfoJSON string)
 	NeedSecretsFinished          func(connPath, settingName string)
 	AccessPointAdded             func(devPath, apJSON string)
 	AccessPointRemoved           func(devPath, apJSON string)

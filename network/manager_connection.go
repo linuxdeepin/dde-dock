@@ -495,3 +495,9 @@ func (m *Manager) doDisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	}
 	return
 }
+
+// IsPasswordValid check if password value for target connection types
+// is valid. This will be used by the front-end password input dialog.
+func (m *Manager) IsPasswordValid(passType, value string) (ok bool, err error) {
+	return isPasswordValid(passType, value), nil
+}

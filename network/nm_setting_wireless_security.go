@@ -117,7 +117,7 @@ func checkSettingWirelessSecurityWepKeyType(data connectionData, errs sectionErr
 		return
 	}
 	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
-	if wepKeyType != 1 && wepKeyType != 2 {
+	if wepKeyType != nm.NM_WEP_KEY_TYPE_KEY && wepKeyType != nm.NM_WEP_KEY_TYPE_PASSPHRASE {
 		rememberError(errs, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nm.NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE, nmKeyErrorInvalidValue)
 	}
 }
@@ -127,18 +127,12 @@ func checkSettingWirelessSecurityWepKey0(data connectionData, errs sectionErrors
 	}
 	wepKey0 := getSettingWirelessSecurityWepKey0(data)
 	wepKeyType := getSettingWirelessSecurityWepKeyType(data)
-	if wepKeyType == 1 {
-		// If set to 1 and the keys are hexadecimal, they must be
-		// either 10 or 26 characters in length. If set to 1 and the
-		// keys are ASCII keys, they must be either 5 or 13 characters
-		// in length.
-		if len(wepKey0) != 10 && len(wepKey0) != 26 && len(wepKey0) != 5 && len(wepKey0) != 13 {
+	if wepKeyType == nm.NM_WEP_KEY_TYPE_KEY {
+		if !isPasswordValid(passTypeWifiWepKey, wepKey0) {
 			rememberError(errs, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nm.NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, nmKeyErrorInvalidValue)
 		}
-	} else if wepKeyType == 2 {
-		// If set to 2, the passphrase is hashed using the de-facto
-		// MD5 method to derive the actual WEP key.
-		if len(wepKey0) == 0 {
+	} else if wepKeyType == nm.NM_WEP_KEY_TYPE_PASSPHRASE {
+		if !isPasswordValid(passTypeWifiWepPassphrase, wepKey0) {
 			rememberError(errs, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nm.NM_SETTING_WIRELESS_SECURITY_WEP_KEY0, nmKeyErrorInvalidValue)
 		}
 	}
@@ -148,12 +142,7 @@ func checkSettingWirelessSecurityPsk(data connectionData, errs sectionErrors) {
 		return
 	}
 	psk := getSettingWirelessSecurityPsk(data)
-	// If the key is 64-characters long, it must contain only
-	// hexadecimal characters and is interpreted as a hexadecimal WPA
-	// key. Otherwise, the key must be between 8 and 63 ASCII
-	// characters (as specified in the 802.11i standard) and is
-	// interpreted as a WPA passphrase
-	if len(psk) < 8 || len(psk) > 64 {
+	if !isPasswordValid(passTypeWifiWpaPsk, psk) {
 		rememberError(errs, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nm.NM_SETTING_WIRELESS_SECURITY_PSK, nmKeyErrorInvalidValue)
 	}
 }
@@ -197,7 +186,7 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityKeyMgmt(data, "none")
 		setSettingWirelessSecurityAuthAlg(data, "open")
 		setSettingWirelessSecurityWepKeyFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
-		setSettingWirelessSecurityWepKeyType(data, 1)
+		setSettingWirelessSecurityWepKeyType(data, nm.NM_WEP_KEY_TYPE_KEY)
 	case "wpa-psk":
 		addSetting(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		removeSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
