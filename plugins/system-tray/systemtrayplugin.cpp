@@ -184,6 +184,7 @@ void SystemTrayPlugin::trayChanged(const quint32 winId)
     if (!m_trayList.contains(winId))
         return;
 
+    m_trayList[winId]->updateIcon();
     m_fashionItem->setActiveTray(m_trayList[winId]);
 
     if (m_tipsWidget->isVisible())

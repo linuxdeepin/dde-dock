@@ -12,6 +12,7 @@ public:
     explicit TrayWidget(quint32 winId, QWidget *parent = 0);
     ~TrayWidget();
 
+    void updateIcon();
     const QImage trayImage() const;
     void sendClick(uint8_t mouseButton, int x, int y);
 
@@ -24,9 +25,8 @@ private:
     void mouseReleaseEvent(QMouseEvent *e);
 
     void wrapWindow();
-    void updateIcon();
 //    void hideIcon();
-    QImage getImageNonComposite() const;
+    void refershIconImage();
 
 private slots:
     void setX11PassMouseEvent(const bool pass);

@@ -29,13 +29,13 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     updateIcon();
 
     m_updateTimer = new QTimer(this);
-    m_updateTimer->setInterval(500);
-    m_updateTimer->setSingleShot(false);
-    m_updateTimer->start();
+    m_updateTimer->setInterval(100);
+    m_updateTimer->setSingleShot(true);
 
-    connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::updateIcon);
+    connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::refershIconImage);
 
     setFixedSize(26, 26);
+    m_updateTimer->start();
 }
 
 TrayWidget::~TrayWidget()
@@ -44,7 +44,7 @@ TrayWidget::~TrayWidget()
 
 const QImage TrayWidget::trayImage() const
 {
-    return getImageNonComposite();
+    return m_image;
 }
 
 QSize TrayWidget::sizeHint() const
@@ -54,11 +54,10 @@ QSize TrayWidget::sizeHint() const
 
 void TrayWidget::showEvent(QShowEvent *e)
 {
-    m_image = getImageNonComposite();
-
     QWidget::showEvent(e);
 
-    setX11PassMouseEvent(false);
+    m_updateTimer->start();
+//    setX11PassMouseEvent(false);
 
 //    auto c = QX11Info::connection();
 //    QPoint globalPos = mapToGlobal(QPoint(0, 0));
@@ -72,7 +71,7 @@ void TrayWidget::hideEvent(QHideEvent *e)
 {
     QWidget::hideEvent(e);
 
-    setX11PassMouseEvent(true);
+//    setX11PassMouseEvent(true);
 }
 
 void TrayWidget::paintEvent(QPaintEvent *e)
@@ -254,8 +253,7 @@ void TrayWidget::updateIcon()
 //                         XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
 //                         windowResizeConfigVals);
 
-    m_image = getImageNonComposite();
-    update();
+    m_updateTimer->start();
 }
 
 //void TrayWidget::hideIcon()
@@ -317,6 +315,7 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 
 //    system(QString("xdotool click --window %1 %2").arg(m_windowId).arg(mouseButton).toLatin1());
 
+    setX11PassMouseEvent(false);
     //mouse down
     {
         xcb_button_press_event_t* event = new xcb_button_press_event_t;
@@ -360,29 +359,32 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 //        free(event);
         delete event;
     }
+    setX11PassMouseEvent(true);
 
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
 //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
 }
 
-QImage TrayWidget::getImageNonComposite() const
+void TrayWidget::refershIconImage()
 {
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-    Q_ASSERT(!geom.isNull());
+//    Q_ASSERT(!geom.isNull());
     if (geom.isNull())
-        return QImage();
+        return;
 
     xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
 
-    Q_ASSERT(image);
+//    Q_ASSERT(image);
     if (image == NULL)
-        return QImage();
+        return;
 
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
 
-    return qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
+    m_image = qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
+
+    update();
 }
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
