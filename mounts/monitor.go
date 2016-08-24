@@ -25,11 +25,9 @@ func (m *Manager) handleEvent() {
 		info := newDiskInfoFromVolume(volume)
 		logger.Debug("[Event] volume added:", info.Name, info.Type, info.Id)
 		if volume.ShouldAutomount() && m.isAutoMount() {
-			m.mountVolume(info.Id, volume)
-			volume.Unref()
+			m.mountVolume(info)
 			return
 		}
-		volume.Unref()
 		m.refreshDiskList()
 		dbus.Emit(m, "Changed", EventTypeVolumeAdded, info.Id)
 	})
@@ -37,7 +35,6 @@ func (m *Manager) handleEvent() {
 	m.monitor.Connect("volume-removed", func(monitor *gio.VolumeMonitor,
 		volume *gio.Volume) {
 		logger.Debug("[Event] volume removed:", getVolumeId(volume))
-		volume.Unref()
 		soundutils.PlaySystemSound(soundutils.EventDeviceUnplug,
 			"", false)
 		oldInfos := m.DiskList.duplicate()
@@ -51,7 +48,6 @@ func (m *Manager) handleEvent() {
 		volume *gio.Volume) {
 		id := getVolumeId(volume)
 		logger.Debug("[Event] volume changed:", id)
-		volume.Unref()
 		oldInfos := m.DiskList.duplicate()
 		m.refreshDiskList()
 		added, removed := compareDiskList(oldInfos, m.DiskList)
@@ -67,19 +63,16 @@ func (m *Manager) handleEvent() {
 		mount *gio.Mount) {
 		info := newDiskInfoFromMount(mount)
 		if info == nil {
-			mount.Unref()
 			return
 		}
 		logger.Debug("[Event] mount added:", info.Name, info.Id, info.CanEject)
 
 		volume := mount.GetVolume()
-		mount.Unref()
 		var autoOpen bool = false
 		if volume != nil && volume.Object.C != nil {
 			if volume.ShouldAutomount() && m.isAutoOpen() {
 				autoOpen = true
 			}
-			volume.Unref()
 		}
 
 		m.refreshDiskList()
@@ -108,11 +101,9 @@ func (m *Manager) handleEvent() {
 			// fixed phone device
 			m.refreshDiskList()
 			dbus.Emit(m, "Changed", EventTypeMountRemoved, getMountId(mount))
-			mount.Unref()
 			logger.Warning(err)
 			return
 		}
-		mount.Unref()
 		oldLen := len(m.DiskList)
 		m.refreshDiskList()
 		if oldLen != len(m.DiskList) {
