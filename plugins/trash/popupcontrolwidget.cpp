@@ -21,8 +21,6 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
 
       m_fsWatcher(new QFileSystemWatcher(this))
 {
-    m_fsWatcher->addPath(TrashDir);
-
 //    QVBoxLayout *centeralLayout = new QVBoxLayout;
 //    centeralLayout->addWidget(m_openBtn);
 //    centeralLayout->addWidget(m_clearBtn);
@@ -109,6 +107,14 @@ void PopupControlWidget::trashStatusChanged()
     const bool files = QDir(TrashDir + "/files").exists();
     const bool info = QDir(TrashDir + "/info").exists();
 
+    // add monitor paths
+    m_fsWatcher->addPath(TrashDir);
+    if (files)
+        m_fsWatcher->addPath(TrashDir + "/files");
+    if (info)
+        m_fsWatcher->addPath(TrashDir + "/info");
+
+    // check empty
     bool empty;
     if ((!info || QDir(TrashDir + "/info").entryList().count() == 2) &&
         (!files || QDir(TrashDir + "/files").entryList().count() == 2))
