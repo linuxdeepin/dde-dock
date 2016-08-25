@@ -5,6 +5,7 @@
 #include <QX11Info>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QProcess>
 
 #include <X11/extensions/shape.h>
 #include <X11/Xregion.h>
@@ -58,6 +59,7 @@ void TrayWidget::showEvent(QShowEvent *e)
     QWidget::showEvent(e);
 
     m_updateTimer->start();
+    configContainerPosition();
 //    setX11PassMouseEvent(false);
 
 //    auto c = QX11Info::connection();
@@ -139,6 +141,38 @@ void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
     sendClick(buttonIndex, globalPos.x(), globalPos.y());
 }
 
+void TrayWidget::moveEvent(QMoveEvent *e)
+{
+    QWidget::moveEvent(e);
+
+    configContainerPosition();
+}
+
+void TrayWidget::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    configContainerPosition();
+}
+
+void TrayWidget::configContainerPosition()
+{
+    auto c = QX11Info::connection();
+
+    QPoint p(rect().center() - QPoint(8, 8));
+    QWidget *w = this;
+    while (w)
+    {
+        p += w->pos();
+        w = static_cast<QWidget *>(w->parent());
+    }
+
+    const uint32_t containerVals[4] = {uint32_t(p.x()), uint32_t(p.y()), 16, 16};
+    xcb_configure_window(c, m_containerWid,
+                         XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
+                         containerVals);
+}
+
 void TrayWidget::wrapWindow()
 {
     auto c = QX11Info::connection();
@@ -153,7 +187,7 @@ void TrayWidget::wrapWindow()
     m_containerWid = xcb_generate_id(c);
     uint32_t values[2];
     auto mask = XCB_CW_BACK_PIXEL | XCB_CW_OVERRIDE_REDIRECT;
-    values[0] = screen->black_pixel; //draw a solid background so the embeded icon doesn't get garbage in it
+    values[0] = ParentRelative; //draw a solid background so the embeded icon doesn't get garbage in it
     values[1] = true; //bypass wM
     xcb_create_window (c,                          /* connection    */
                        XCB_COPY_FROM_PARENT,          /* depth         */
@@ -182,7 +216,7 @@ void TrayWidget::wrapWindow()
     QWindow * win = QWindow::fromWinId(m_containerWid);
     win->setOpacity(0);
 
-    setX11PassMouseEvent(true);
+//    setX11PassMouseEvent(true);
 
     xcb_flush(c);
 
@@ -229,9 +263,11 @@ void TrayWidget::wrapWindow()
     //show the embedded window otherwise nothing happens
     xcb_map_window(c, m_windowId);
 
-    xcb_clear_area(c, 0, m_windowId, 0, 0, qMin(clientGeom->width, iconSize), qMin(clientGeom->height, iconSize));
+//    xcb_clear_area(c, 0, m_windowId, 0, 0, qMin(clientGeom->width, iconSize), qMin(clientGeom->height, iconSize));
 
     xcb_flush(c);
+    setWindowOnTop(false);
+    setX11PassMouseEvent(true);
 }
 
 void TrayWidget::updateIcon()
@@ -274,6 +310,16 @@ void TrayWidget::updateIcon()
 
 void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
+    setX11PassMouseEvent(false);
+    setWindowOnTop(true);
+    QProcess *process = new QProcess;
+    process->start("xdotool click " + QString::number(mouseButton));
+    process->waitForFinished();
+    process->deleteLater();
+    setX11PassMouseEvent(true);
+    setWindowOnTop(false);
+
+    return;
     //it's best not to look at this code
     //GTK doesn't like send_events and double checks the mouse position matches where the window is and is top level
     //in order to solve this we move the embed container over to where the mouse is then replay the event using send_event
@@ -390,14 +436,9 @@ void TrayWidget::refershIconImage()
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
 {
-    auto c = QX11Info::connection();
-
     if (pass)
     {
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
-
-        const uint32_t stackAboveData[] = {XCB_STACK_MODE_BELOW};
-        xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     }
     else
     {
@@ -408,8 +449,13 @@ void TrayWidget::setX11PassMouseEvent(const bool pass)
         rectangle.height = iconSize;
 
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, &rectangle, 1, ShapeSet, YXBanded);
-
-        const uint32_t stackAboveData[] = {XCB_STACK_MODE_ABOVE};
-        xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     }
+}
+
+void TrayWidget::setWindowOnTop(const bool top)
+{
+    auto c = QX11Info::connection();
+    const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
+    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
+    xcb_flush(c);
 }
