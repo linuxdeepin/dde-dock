@@ -139,7 +139,10 @@ func (kbd *Keyboard) init() {
 	}
 
 	kbd.setLayout()
-	kbd.setOptions()
+	err := kbd.setOptions()
+	if err != nil {
+		logger.Debugf("Init keymap options failed: %v", err)
+	}
 }
 
 func (kbd *Keyboard) correctLayout() {
@@ -169,17 +172,21 @@ func (kbd *Keyboard) setLayout() {
 	kbd.addUserLayout(kbd.CurrentLayout.Get())
 }
 
-func (kbd *Keyboard) setOptions() {
-	// clear old options
-	var cmd = fmt.Sprintf("%s -option \"\"", cmdSetKbd)
-	doAction(cmd)
+func (kbd *Keyboard) setOptions() error {
+	options := kbd.UserOptionList.Get()
 
-	for _, option := range kbd.UserOptionList.Get() {
-		err := doSetOption(option)
-		if err != nil {
-			logger.Debugf("Set option '%s' failed: %v", option, err)
-		}
+	if len(options) == 0 {
+		return nil
 	}
+
+	// the old value wouldn't be cleared, so we will force clear it.
+	doAction(cmdSetKbd + " -option")
+
+	cmd := cmdSetKbd
+	for _, opt := range options {
+		cmd += fmt.Sprintf(" -option %q", opt)
+	}
+	return doAction(cmd)
 }
 
 func (kbd *Keyboard) addUserLayout(layout string) {
@@ -298,11 +305,6 @@ func doSetLayout(value string) error {
 
 	var cmd = fmt.Sprintf("%s -layout \"%s\" -variant \"%s\"",
 		cmdSetKbd, array[0], array[1])
-	return doAction(cmd)
-}
-
-func doSetOption(option string) error {
-	var cmd = fmt.Sprintf("%s -option \"%s\"", cmdSetKbd, option)
 	return doAction(cmd)
 }
 
