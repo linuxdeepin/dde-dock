@@ -19,7 +19,10 @@ class SoundApplet : public QScrollArea
 public:
     explicit SoundApplet(QWidget *parent = 0);
 
+    int volumeValue() const;
+
 signals:
+    void volumeChanegd(const int value) const;
     void defaultSinkChanged(DBusSink *sink) const;
 
 private slots:

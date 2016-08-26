@@ -27,6 +27,13 @@ QWidget *SoundPlugin::itemWidget(const QString &itemKey)
     return m_soundItem;
 }
 
+QWidget *SoundPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_soundItem->tipsWidget();
+}
+
 QWidget *SoundPlugin::itemPopupApplet(const QString &itemKey)
 {
     Q_UNUSED(itemKey);

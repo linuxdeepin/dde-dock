@@ -93,6 +93,11 @@ SoundApplet::SoundApplet(QWidget *parent)
     QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
 }
 
+int SoundApplet::volumeValue() const
+{
+    return m_volumeSlider->value();
+}
+
 void SoundApplet::defaultSinkChanged()
 {
     delete m_defSinkInter;
@@ -109,9 +114,10 @@ void SoundApplet::defaultSinkChanged()
 void SoundApplet::onVolumeChanged()
 {
     const double volmue = m_defSinkInter->volume();
-    const bool mute = m_defSinkInter->mute() || volmue < 0.001;
+    const bool mute = m_defSinkInter->mute();
 
     m_volumeSlider->setValue(std::min(1000.0, volmue * 1000));
+    emit volumeChanegd(m_volumeSlider->value());
 
     QString volumeString;
     if (mute)
@@ -128,6 +134,7 @@ void SoundApplet::onVolumeChanged()
 
 void SoundApplet::volumeSliderValueChanged()
 {
+    m_defSinkInter->SetMute(false);
     m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 1000, false);
 }
 

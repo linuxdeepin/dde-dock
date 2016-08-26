@@ -8,14 +8,29 @@
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
 
+      m_tipsLabel(new QLabel(this)),
       m_applet(new SoundApplet(this)),
       m_sinkInter(nullptr)
 {
     QIcon::setThemeName("deepin");
 
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setFixedWidth(60);
+    m_tipsLabel->setAlignment(Qt::AlignCenter);
+    m_tipsLabel->setStyleSheet("color:white;"
+                               "padding:5px 10px;");
+
     m_applet->setVisible(false);
 
     connect(m_applet, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundItem::sinkChanged);
+    connect(m_applet, &SoundApplet::volumeChanegd, this, &SoundItem::refershTips);
+}
+
+QWidget *SoundItem::tipsWidget()
+{
+    refershTips(true);
+
+    return m_tipsLabel;
 }
 
 QWidget *SoundItem::popupApplet()
@@ -61,7 +76,7 @@ void SoundItem::refershIcon()
         return;
 
     const double volmue = m_sinkInter->volume();
-    const bool mute = m_sinkInter->mute() || volmue < 0.001;
+    const bool mute = m_sinkInter->mute();
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
     QString iconString;
@@ -93,6 +108,14 @@ void SoundItem::refershIcon()
      m_iconPixmap = icon.pixmap(iconSize, iconSize);
 
      update();
+}
+
+void SoundItem::refershTips(const bool force)
+{
+    if (!force && !m_tipsLabel->isVisible())
+        return;
+
+    m_tipsLabel->setText(QString::number(m_applet->volumeValue() / 10) + '%');
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)

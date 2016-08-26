@@ -13,6 +13,7 @@ class SoundItem : public QWidget
 public:
     explicit SoundItem(QWidget *parent = 0);
 
+    QWidget *tipsWidget();
     QWidget *popupApplet();
 
 protected:
@@ -23,9 +24,11 @@ protected:
 
 private slots:
     void refershIcon();
+    void refershTips(const bool force = false);
     void sinkChanged(DBusSink *sink);
 
 private:
+    QLabel *m_tipsLabel;
     SoundApplet *m_applet;
     DBusSink *m_sinkInter;
     QPixmap m_iconPixmap;
