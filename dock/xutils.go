@@ -18,9 +18,42 @@ func iconifyWindow(win xproto.Window) {
 	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
 }
 
-func getWindowDecorGeometry(xu *xgbutil.XUtil, win xproto.Window) (xrect.Rect, error) {
+type windowFrameExtents struct {
+	Left, Right, Top, Bottom uint
+}
+
+func getWindowFrameExtents(xu *xgbutil.XUtil, win xproto.Window) (*windowFrameExtents, error) {
+	reply, err := xprop.GetProperty(xu, win, "_NET_FRAME_EXTENTS")
+	if err != nil {
+		// try _GTK_FRAME_EXTENTS
+		reply, err = xprop.GetProperty(xu, win, "_GTK_FRAME_EXTENTS")
+		if err != nil {
+			return nil, err
+		}
+	}
+	nums, err := xprop.PropValNums(reply, err)
+	if err != nil {
+		return nil, err
+	}
+	extents := &windowFrameExtents{nums[0], nums[1], nums[2], nums[3]}
+	return extents, err
+}
+
+func getWindowGeometry(xu *xgbutil.XUtil, win xproto.Window) (xrect.Rect, error) {
 	window := xwindow.New(xu, win)
-	return window.DecorGeometry()
+	winRect, err := window.DecorGeometry()
+	if err != nil {
+		return nil, err
+	}
+	frameExtents, _ := getWindowFrameExtents(xu, win)
+	if frameExtents != nil {
+		x := winRect.X() + int(frameExtents.Left)
+		y := winRect.Y() + int(frameExtents.Top)
+		w := winRect.Width() - int(frameExtents.Left+frameExtents.Right)
+		h := winRect.Height() - int(frameExtents.Top+frameExtents.Bottom)
+		return xrect.New(x, y, w, h), nil
+	}
+	return winRect, nil
 }
 
 func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {

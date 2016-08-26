@@ -65,7 +65,7 @@ func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 		return false, nil
 	}
 
-	winRect, err := getWindowDecorGeometry(XU, win)
+	winRect, err := getWindowGeometry(XU, win)
 	if err != nil {
 		logger.Warning("Get target window geometry failed", err)
 		return false, err
