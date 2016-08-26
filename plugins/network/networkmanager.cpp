@@ -13,8 +13,21 @@ NetworkManager *NetworkManager::instance(QObject *parent)
 
 void NetworkManager::init()
 {
-    QTimer::singleShot(100, this, &NetworkManager::reloadDevices);
-    QTimer::singleShot(150, this, &NetworkManager::reloadActiveConnections);
+    QTimer *dbusCheckTimer = new QTimer;
+    dbusCheckTimer->setInterval(100);
+    dbusCheckTimer->setSingleShot(false);
+
+    auto checkFunc = [=] {
+        if (!m_networkInter->isValid())
+            return;
+
+        QTimer::singleShot(100, this, &NetworkManager::reloadDevices);
+        QTimer::singleShot(150, this, &NetworkManager::reloadActiveConnections);
+        dbusCheckTimer->deleteLater();
+    };
+
+    connect(dbusCheckTimer, &QTimer::timeout, checkFunc);
+    dbusCheckTimer->start();
 }
 
 const NetworkDevice::NetworkTypes NetworkManager::states() const
