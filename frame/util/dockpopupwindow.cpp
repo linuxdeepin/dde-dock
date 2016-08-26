@@ -16,7 +16,6 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     setWindowFlags(Qt::X11BypassWindowManagerHint);
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
-    connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -48,22 +47,16 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
     DArrowRectangle::show(pos.x(), pos.y());
 
     if (!model && !m_mouseAreaKey.isEmpty())
-    {
-        m_mouseInter->UnregisterArea(m_mouseAreaKey);
-        m_mouseAreaKey.clear();
-    }
+        unRegisterMouseEvent();
 
     if (model && m_mouseAreaKey.isEmpty())
-        m_mouseAreaKey = m_mouseInter->RegisterFullScreen();
+        registerMouseEvent();
 }
 
 void DockPopupWindow::hide()
 {
     if (!m_mouseAreaKey.isEmpty())
-    {
-        m_mouseInter->UnregisterArea(m_mouseAreaKey);
-        m_mouseAreaKey.clear();
-    }
+        unRegisterMouseEvent();
 
     DArrowRectangle::hide();
 }
@@ -103,6 +96,22 @@ void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString
         return;
 
     emit accept();
+
+    unRegisterMouseEvent();
+}
+
+void DockPopupWindow::registerMouseEvent()
+{
+    m_mouseAreaKey = m_mouseInter->RegisterFullScreen();
+    connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease, Qt::UniqueConnection);
+}
+
+void DockPopupWindow::unRegisterMouseEvent()
+{
+    if (m_mouseAreaKey.isEmpty())
+        return;
+
+    disconnect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease);
 
     m_mouseInter->UnregisterArea(m_mouseAreaKey);
     m_mouseAreaKey.clear();
