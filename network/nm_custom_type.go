@@ -12,6 +12,7 @@ package network
 import (
 	. "pkg.deepin.io/lib/gettext"
 	"strconv"
+	"strings"
 )
 
 // Custom device types, use sting instead of number, used by front-end
@@ -236,6 +237,27 @@ func genConnectionId(connType string) (id string) {
 		id = idPrefix + " " + strconv.Itoa(i)
 		if !isStringInArray(id, allIds) {
 			break
+		}
+	}
+	return
+}
+
+func isConnectionAlwaysAsk(data connectionData, settingName string) (ask bool) {
+	sectionData, ok := data[settingName]
+	if !ok {
+		ask = false
+		return
+	}
+	// query all secret key flags that should be suffixed with
+	// "-flags" and check if is marked as ask user always
+	for key, variant := range sectionData {
+		if strings.HasSuffix(key, "-flags") {
+			value := variant.Value()
+			if flag, ok := value.(uint32); ok {
+				if flag == NM_SETTING_SECRET_FLAG_NONE {
+					ask = true
+				}
+			}
 		}
 	}
 	return

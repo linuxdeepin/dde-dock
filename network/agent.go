@@ -185,22 +185,38 @@ func fillKeyringSecret(secretsData map[string]map[string]dbus.Variant, settingNa
 
 func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, connectionPath dbus.ObjectPath, settingName string, hints []string, flags uint32) (secretsData map[string]map[string]dbus.Variant) {
 	logger.Info("GetSecrets:", connectionPath, settingName, hints, flags)
-	keyId := mapKey{connectionPath, settingName}
 
-	// TODO: get secrets from keyring for agent
-	// // try to get secrets from keyring
-	// if values, ok := secretGetAll(getSettingConnectionUuid(connectionData), settingName); ok {
-	// 	secretsData = buildKeyringSecret(connectionData, settingName, values)
-	// 	return
-	// }
+	// TODO: VPN passwords should be handled by the VPN plugin's auth dialog themselves
 
-	if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION == 0 &&
-		flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED == 0 {
-		logger.Info("GetSecrets, invalid key flag", flags)
-		secretsData = invalidSecretsData
+	var ask = false
+
+	// try to get secrets from keyring firstly
+	values, ok := secretGetAll(getSettingConnectionUuid(connectionData), settingName)
+
+	// if queried keyring failed will ask for user if we're allowed to
+	if !ok && flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
+		ask = true
+	}
+
+	secretsData = buildKeyringSecret(connectionData, settingName, values)
+
+	// besides, the following cases will ask for user, too
+	if flags != NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE {
+		if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
+			// the previous secrets are wrong, so ask for user is necessary
+			ask = true
+		} else if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 && isConnectionAlwaysAsk(connectionData, settingName) {
+			ask = true
+		}
+	}
+
+	if !ask {
 		return
 	}
 
+	logger.Info("askForSecrets:", connectionPath, settingName)
+
+	keyId := mapKey{connectionPath, settingName}
 	if _, ok := a.pendingKeys[keyId]; ok {
 		logger.Info("GetSecrets repeatly, cancel last one", keyId)
 		a.CancelGetSecrets(connectionPath, settingName, false)
