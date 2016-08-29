@@ -13,7 +13,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
 
-    setWindowFlags(Qt::X11BypassWindowManagerHint);
+    setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
 }
