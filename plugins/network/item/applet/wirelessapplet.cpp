@@ -40,6 +40,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     m_pwdDialog->addSpacing(10);
     m_pwdDialog->addContent(m_autoConnBox, Qt::AlignLeft);
     m_pwdDialog->setOkButtonText(tr("Connect"));
+    m_pwdDialog->setCancelButtonText(tr("Cancel"));
 
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);

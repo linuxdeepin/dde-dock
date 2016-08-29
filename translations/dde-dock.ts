@@ -5,14 +5,14 @@
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="73"/>
-        <source>MM/dd/yyyy ddd HH:mm:ss</source>
+        <source> HH:mm:ss</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DatetimeWidget</name>
     <message>
-        <location filename="../plugins/datetime/datetimewidget.cpp" line="35"/>
+        <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
         <source>HH:mm</source>
         <translation type="unfinished"></translation>
     </message>
@@ -33,82 +33,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="19"/>
+        <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="20"/>
+        <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Efficient Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="21"/>
+        <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Top</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="22"/>
+        <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Bottom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Small</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Shown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Smart Hide</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="64"/>
+        <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="72"/>
+        <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="79"/>
+        <location filename="../frame/util/docksettings.cpp" line="80"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="86"/>
+        <location filename="../frame/util/docksettings.cpp" line="87"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -124,27 +124,27 @@
 <context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
         <source>Empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="73"/>
         <source>This action cannot be restored</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
         <source>Are you sure to empty 1 item ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
         <source>Are you sure to empty %1 items ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,17 +201,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="136"/>
-        <source>Wireless Network</source>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
+        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
+        <source>Wireless Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="140"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="369"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>
