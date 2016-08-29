@@ -21,15 +21,15 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     infoLayout->setSpacing(0);
     infoLayout->setContentsMargins(15, 0, 5, 0);
 
-    m_seperator = new HorizontalSeperator;
-    m_seperator->setFixedHeight(1);
-    m_seperator->setColor(Qt::black);
+//    m_seperator = new HorizontalSeperator;
+//    m_seperator->setFixedHeight(1);
+//    m_seperator->setColor(Qt::black);
 
     QVBoxLayout *centeralLayout = new QVBoxLayout;
     centeralLayout->addStretch();
     centeralLayout->addLayout(infoLayout);
     centeralLayout->addStretch();
-    centeralLayout->addWidget(m_seperator);
+//    centeralLayout->addWidget(m_seperator);
     centeralLayout->setMargin(0);
     centeralLayout->setSpacing(0);
 
@@ -49,7 +49,7 @@ void DeviceControlWidget::setDeviceEnabled(const bool enable)
     m_switchBtn->setChecked(enable);
 }
 
-void DeviceControlWidget::setSeperatorVisible(const bool visible)
-{
-    m_seperator->setVisible(visible);
-}
+//void DeviceControlWidget::setSeperatorVisible(const bool visible)
+//{
+//    m_seperator->setVisible(visible);
+//}

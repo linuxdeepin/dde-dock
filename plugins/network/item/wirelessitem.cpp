@@ -7,9 +7,15 @@
 
 WirelessItem::WirelessItem(const QUuid &uuid)
     : DeviceItem(uuid),
+
+      m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
       m_APList(nullptr)
 {
+    m_refershTimer->setSingleShot(false);
+    m_refershTimer->setInterval(100);
+
+    connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
@@ -82,11 +88,28 @@ void WirelessItem::mousePressEvent(QMouseEvent *e)
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
 {
     QString type;
-    if (m_APList->wirelessState() != NetworkDevice::Activated)
+
+    const auto state = m_APList->wirelessState();
+    if (state <= NetworkDevice::Disconnected)
+    {
         type = "disconnect";
+        m_refershTimer->stop();
+    }
     else
     {
-        const int strength = m_APList->activeAPStrgength();
+        int strength = 0;
+        if (state == NetworkDevice::Activated)
+        {
+            strength = m_APList->activeAPStrgength();
+            m_refershTimer->stop();
+        }
+        else
+        {
+            strength = QTime::currentTime().msec() / 10 % 100;
+            if (!m_refershTimer->isActive())
+                m_refershTimer->start();
+        }
+
         if (strength == 100)
             type = "8";
         else

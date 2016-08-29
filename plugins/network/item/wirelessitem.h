@@ -38,6 +38,7 @@ private slots:
 private:
     QHash<QString, QPixmap> m_icons;
 
+    QTimer *m_refershTimer;
     QWidget *m_wirelessApplet;
     WirelessList *m_APList;
 };

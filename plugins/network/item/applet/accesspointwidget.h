@@ -2,6 +2,7 @@
 #define ACCESSPOINTWIDGET_H
 
 #include "accesspoint.h"
+#include "networkdevice.h"
 
 #include <QWidget>
 #include <QLabel>
@@ -9,23 +10,26 @@
 #include <QDBusObjectPath>
 
 #include <dimagebutton.h>
+#include <dpicturesequenceview.h>
 
-class AccessPointWidget : public QWidget
+class AccessPointWidget : public QFrame
 {
     Q_OBJECT
-    Q_PROPERTY(bool active READ active WRITE setActive DESIGNABLE true)
+    Q_PROPERTY(bool active READ active DESIGNABLE true)
 
 public:
     explicit AccessPointWidget(const AccessPoint &ap);
 
     bool active() const;
-    void setActive(const bool active);
+    void setActiveState(const NetworkDevice::NetworkState state);
 
 signals:
     void requestActiveAP(const QDBusObjectPath &apPath, const QString &ssid) const;
     void requestDeactiveAP(const AccessPoint &ap) const;
 
 private:
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
     void setStrengthIcon(const int strength);
 
 private slots:
@@ -33,10 +37,11 @@ private slots:
     void disconnectBtnClicked();
 
 private:
-    bool m_active;
+    NetworkDevice::NetworkState m_activeState;
 
     AccessPoint m_ap;
     QPushButton *m_ssidBtn;
+    Dtk::Widget::DPictureSequenceView *m_indicator;
     Dtk::Widget::DImageButton *m_disconnectBtn;
     QLabel *m_securityIcon;
     QLabel *m_strengthIcon;
