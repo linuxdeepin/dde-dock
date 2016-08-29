@@ -98,6 +98,11 @@ int SoundApplet::volumeValue() const
     return m_volumeSlider->value();
 }
 
+VolumeSlider *SoundApplet::mainSlider()
+{
+    return m_volumeSlider;
+}
+
 void SoundApplet::defaultSinkChanged()
 {
     delete m_defSinkInter;
