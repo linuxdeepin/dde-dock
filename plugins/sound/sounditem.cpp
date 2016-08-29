@@ -62,6 +62,14 @@ void SoundItem::mousePressEvent(QMouseEvent *e)
     return QWidget::mousePressEvent(e);
 }
 
+void SoundItem::wheelEvent(QWheelEvent *e)
+{
+    QWheelEvent *event = new QWheelEvent(e->pos(), e->delta(), e->buttons(), e->modifiers());
+    qApp->postEvent(m_applet->mainSlider(), event);
+
+    e->accept();
+}
+
 void SoundItem::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);

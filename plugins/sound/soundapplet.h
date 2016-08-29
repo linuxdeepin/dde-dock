@@ -20,6 +20,7 @@ public:
     explicit SoundApplet(QWidget *parent = 0);
 
     int volumeValue() const;
+    VolumeSlider *mainSlider();
 
 signals:
     void volumeChanegd(const int value) const;

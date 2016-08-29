@@ -20,6 +20,7 @@ protected:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
+    void wheelEvent(QWheelEvent *e);
     void paintEvent(QPaintEvent *e);
 
 private slots:
