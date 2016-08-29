@@ -86,25 +86,13 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
 		logger.Debug("[Event] sink added:", (eType == pulse.EventTypeNew), idx)
-		a.update()
-
 	case pulse.EventTypeChange:
 		logger.Debug("[Event] sink changed:", idx)
-		for _, s := range a.Sinks {
-			if s.index == idx {
-				info, err := a.core.GetSink(idx)
-				if err != nil {
-					logger.Error(err)
-					break
-				}
-
-				s.core = info
-				s.update()
-				break
-			}
-		}
-		a.setPropActiveSinkPort(a.getActiveSinkPort())
+	default:
+		logger.Debug("[Event] unknown type")
+		return
 	}
+	a.setPropActiveSinkPort(a.getActiveSinkPort())
 }
 
 func (a *Audio) sinkInputPoller() {
@@ -156,25 +144,13 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
 		logger.Debug("[Event] source added:", (eType == pulse.EventTypeNew), idx)
-		a.update()
-
 	case pulse.EventTypeChange:
 		logger.Debug("[Event] source changed:", idx)
-		for _, s := range a.Sources {
-			if s.index == idx {
-				info, err := a.core.GetSource(idx)
-				if err != nil {
-					logger.Error(err)
-					break
-				}
-
-				s.core = info
-				s.update()
-				break
-			}
-		}
-		a.setPropActiveSourcePort(a.getActiveSourcePort())
+	default:
+		logger.Debug("[Event] unknown type")
+		return
 	}
+	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
 
 func (a *Audio) handleServerEvent() {

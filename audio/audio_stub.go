@@ -145,42 +145,18 @@ func (a *Audio) removeSinkInput(idx uint32) {
 	}
 }
 
-func (a *Audio) rebuildSinkList() {
-	var sinks []*Sink
-	for _, s := range a.core.GetSinkList() {
-		if s == nil {
-			continue
-		}
-		sinks = append(sinks, NewSink(s))
-	}
-	a.setPropSinks(sinks)
-}
-
-func (a *Audio) rebuildSourceList() {
-	var sources []*Source
-	for _, s := range a.core.GetSourceList() {
-		if s == nil {
-			continue
-		}
-		obj := NewSource(s)
-		if len(obj.Ports) > 0 {
-			sources = append(sources, obj)
-		}
-	}
-	a.setPropSources(sources)
-}
 func (a *Audio) update() {
-	a.rebuildSinkList()
-	a.rebuildSourceList()
-	a.rebuildSinkInputList()
-	a.cards = newCardInfos(a.core.GetCardList())
-	a.setPropCards(a.cards.string())
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
 		a.setPropDefaultSink(sinfo.DefaultSinkName)
 		a.setPropDefaultSource(sinfo.DefaultSourceName)
 	}
 
+	a.defaultSink = a.GetDefaultSink()
+	a.defaultSource = a.GetDefaultSource()
+	a.rebuildSinkInputList()
+	a.cards = newCardInfos(a.core.GetCardList())
+	a.setPropCards(a.cards.string())
 	a.setPropActiveSinkPort(a.getActiveSinkPort())
 	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
@@ -210,26 +186,6 @@ func (a *Audio) setPropActiveSourcePort(port string) {
 	}
 	a.ActiveSourcePort = port
 	dbus.NotifyChange(a, "ActiveSourcePort")
-}
-func (s *Audio) setPropSinks(v []*Sink) {
-	for _, o := range s.Sinks {
-		dbus.UnInstallObject(o)
-	}
-	for _, o := range v {
-		dbus.InstallOnSession(o)
-	}
-	s.Sinks = v
-	dbus.NotifyChange(s, "Sinks")
-}
-func (s *Audio) setPropSources(v []*Source) {
-	for _, o := range s.Sources {
-		dbus.UnInstallObject(o)
-	}
-	for _, o := range v {
-		dbus.InstallOnSession(o)
-	}
-	s.Sources = v
-	dbus.NotifyChange(s, "Sources")
 }
 func (s *Audio) setPropSinkInputs(v []*SinkInput) {
 	for _, o := range s.SinkInputs {

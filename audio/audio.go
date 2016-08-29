@@ -25,10 +25,6 @@ type Audio struct {
 	init bool
 	core *pulse.Context
 
-	// 输出设备 ObjectPath 列表
-	Sinks []*Sink
-	// 输入设备ObjectPath 列表
-	Sources []*Source
 	// 正常输出声音的程序列表
 	SinkInputs []*SinkInput
 
@@ -41,6 +37,9 @@ type Audio struct {
 	DefaultSink string
 	// 默认的输入设备名称
 	DefaultSource string
+
+	defaultSink   *Sink
+	defaultSource *Source
 
 	// 最大音量
 	MaxUIVolume float64
@@ -73,17 +72,17 @@ var (
 )
 
 func (a *Audio) Reset() {
-	for _, s := range a.Sinks {
+	for _, s := range a.core.GetSinkList() {
 		s.SetMute(false)
-		s.SetVolume(defaultOutputVolume, false)
-		s.SetBalance(0, false)
-		s.SetFade(0)
+		s.SetVolume(s.Volume.SetAvg(defaultOutputVolume))
+		s.SetVolume(s.Volume.SetBalance(s.ChannelMap, 0))
+		s.SetVolume(s.Volume.SetFade(s.ChannelMap, 0))
 	}
-	for _, s := range a.Sources {
+	for _, s := range a.core.GetSourceList() {
 		s.SetMute(false)
-		s.SetVolume(defaultInputVolume, false)
-		s.SetBalance(0, false)
-		s.SetFade(0)
+		s.SetVolume(s.Volume.SetAvg(defaultInputVolume))
+		s.SetVolume(s.Volume.SetBalance(s.ChannelMap, 0))
+		s.SetVolume(s.Volume.SetFade(s.ChannelMap, 0))
 	}
 
 	settings, err := dutils.CheckAndNewGSettings(soundEffectSchema)
@@ -94,21 +93,32 @@ func (a *Audio) Reset() {
 	settings.Unref()
 }
 
-func (s *Audio) GetDefaultSink() *Sink {
-	for _, o := range s.Sinks {
-		if o.Name == s.DefaultSink {
-			return o
-		}
+func (a *Audio) GetDefaultSink() *Sink {
+	if a.defaultSink != nil && a.defaultSink.Name == a.DefaultSink {
+		return a.defaultSink
 	}
-	return nil
+	for _, o := range a.core.GetSinkList() {
+		if o.Name != a.DefaultSink {
+			continue
+		}
+		// TODO: Free old sink info
+		a.defaultSink = NewSink(o)
+		break
+	}
+	return a.defaultSink
 }
-func (s *Audio) GetDefaultSource() *Source {
-	for _, o := range s.Sources {
-		if o.Name == s.DefaultSource {
-			return o
-		}
+func (a *Audio) GetDefaultSource() *Source {
+	if a.defaultSource != nil && a.defaultSource.Name == a.DefaultSource {
+		return a.defaultSource
 	}
-	return nil
+	for _, o := range a.core.GetSourceList() {
+		if o.Name != a.DefaultSource {
+			continue
+		}
+		a.defaultSource = NewSource(o)
+		break
+	}
+	return a.defaultSource
 }
 
 // SetPort activate the port for the special card.
@@ -548,13 +558,7 @@ func initDefaultVolume(audio *Audio) {
 	}
 
 	setting.SetBoolean(gsKeyFirstRun, false)
-	for _, s := range audio.Sinks {
-		s.SetVolume(defaultOutputVolume, false)
-	}
-
-	for _, s := range audio.Sources {
-		s.SetVolume(defaultInputVolume, false)
-	}
+	audio.Reset()
 }
 
 func (a *Audio) trySetSinkByPort(portName string) error {
@@ -590,7 +594,7 @@ func (a *Audio) trySetSourceByPort(portName string) error {
 }
 
 func (a *Audio) getActiveSinkPort() string {
-	for _, sink := range a.Sinks {
+	for _, sink := range a.core.GetSinkList() {
 		if sink.Name == a.DefaultSink {
 			return sink.ActivePort.Name
 		}
@@ -599,7 +603,7 @@ func (a *Audio) getActiveSinkPort() string {
 }
 
 func (a *Audio) getActiveSourcePort() string {
-	for _, source := range a.Sources {
+	for _, source := range a.core.GetSourceList() {
 		if source.Name == a.DefaultSource {
 			return source.ActivePort.Name
 		}
