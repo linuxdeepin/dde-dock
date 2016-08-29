@@ -7,9 +7,16 @@
 
 WirelessItem::WirelessItem(const QUuid &uuid)
     : DeviceItem(uuid),
-      m_applet(nullptr)
+      m_wirelessApplet(new QWidget),
+      m_APList(nullptr)
 {
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+}
+
+WirelessItem::~WirelessItem()
+{
+    m_APList->deleteLater();
+    m_APList->controlPanel()->deleteLater();
 }
 
 NetworkDevice::NetworkType WirelessItem::type() const
@@ -19,12 +26,20 @@ NetworkDevice::NetworkType WirelessItem::type() const
 
 NetworkDevice::NetworkState WirelessItem::state() const
 {
-    return m_applet->wirelessState();
+    return m_APList->wirelessState();
 }
 
 QWidget *WirelessItem::itemApplet()
 {
-    return m_applet;
+    return m_wirelessApplet;
+}
+
+bool WirelessItem::eventFilter(QObject *o, QEvent *e)
+{
+    if (o == m_APList && e->type() == QEvent::Resize)
+        QMetaObject::invokeMethod(this, "adjustHeight", Qt::QueuedConnection);
+
+    return false;
 }
 
 void WirelessItem::paintEvent(QPaintEvent *e)
@@ -67,11 +82,11 @@ void WirelessItem::mousePressEvent(QMouseEvent *e)
 const QPixmap WirelessItem::iconPix(const Dock::DisplayMode displayMode, const int size)
 {
     QString type;
-    if (m_applet->wirelessState() != NetworkDevice::Activated)
+    if (m_APList->wirelessState() != NetworkDevice::Activated)
         type = "disconnect";
     else
     {
-        const int strength = m_applet->activeAPStrgength();
+        const int strength = m_APList->activeAPStrgength();
         if (strength == 100)
             type = "8";
         else
@@ -102,10 +117,23 @@ void WirelessItem::init()
 {
     const auto devInfo = m_networkManager->device(m_deviceUuid);
 
-    m_applet = new WirelessApplet(devInfo, this);
-    m_applet->setObjectName("wireless-" + m_deviceUuid.toString());
-    m_applet->setVisible(false);
+    m_APList = new WirelessList(devInfo);
+    m_APList->installEventFilter(this);
+    m_APList->setObjectName("wireless-" + m_deviceUuid.toString());
 
-    connect(m_applet, &WirelessApplet::activeAPChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
-    connect(m_applet, &WirelessApplet::wirelessStateChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addWidget(m_APList->controlPanel());
+    vLayout->addWidget(m_APList);
+    vLayout->setMargin(0);
+    vLayout->setSpacing(0);
+    m_wirelessApplet->setLayout(vLayout);
+
+    connect(m_APList, &WirelessList::activeAPChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
+    connect(m_APList, &WirelessList::wirelessStateChanged, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
 }
+
+void WirelessItem::adjustHeight()
+{
+    m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
+}
+

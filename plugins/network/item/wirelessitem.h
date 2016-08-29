@@ -14,12 +14,14 @@ class WirelessItem : public DeviceItem
 
 public:
     explicit WirelessItem(const QUuid &uuid);
+    ~WirelessItem();
 
     NetworkDevice::NetworkType type() const;
     NetworkDevice::NetworkState state() const;
     QWidget *itemApplet();
 
 protected:
+    bool eventFilter(QObject *o, QEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
@@ -31,11 +33,13 @@ private:
 
 private slots:
     void init();
+    void adjustHeight();
 
 private:
     QHash<QString, QPixmap> m_icons;
 
-    WirelessApplet *m_applet;
+    QWidget *m_wirelessApplet;
+    WirelessList *m_APList;
 };
 
 #endif // WIRELESSITEM_H

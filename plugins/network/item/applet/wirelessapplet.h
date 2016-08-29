@@ -14,16 +14,17 @@
 #include <dinputdialog.h>
 #include <dcheckbox.h>
 
-class WirelessApplet : public QScrollArea
+class WirelessList : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    explicit WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
-    ~WirelessApplet();
+    explicit WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent = 0);
+    ~WirelessList();
 
     NetworkDevice::NetworkState wirelessState() const;
     int activeAPStrgength() const;
+    QWidget *controlPanel();
 
 signals:
     void wirelessStateChanged(const NetworkDevice::NetworkState state) const;

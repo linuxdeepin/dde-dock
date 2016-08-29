@@ -15,7 +15,7 @@ DWIDGET_USE_NAMESPACE
 #define MAX_HEIGHT      300
 #define ITEM_HEIGHT     30
 
-WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent)
+WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter, QWidget *parent)
     : QScrollArea(parent),
 
       m_device(*deviceIter),
@@ -27,7 +27,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
 
       m_centeralLayout(new QVBoxLayout),
       m_centeralWidget(new QWidget),
-      m_controlPanel(new DeviceControlWidget(this)),
+      m_controlPanel(new DeviceControlWidget),
       m_networkInter(new DBusNetwork(this))
 {
     setFixedHeight(WIDTH);
@@ -48,7 +48,7 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     m_centeralWidget->setFixedWidth(WIDTH);
     m_centeralWidget->setLayout(m_centeralLayout);
 
-    m_centeralLayout->addWidget(m_controlPanel);
+//    m_centeralLayout->addWidget(m_controlPanel);
     m_centeralLayout->setSpacing(0);
     m_centeralLayout->setMargin(0);
 
@@ -59,50 +59,55 @@ WirelessApplet::WirelessApplet(const QSet<NetworkDevice>::const_iterator &device
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setStyleSheet("background-color:transparent;");
 
-    connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessApplet::APAdded);
-    connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessApplet::APRemoved);
-    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessApplet::APPropertiesChanged);
-    connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessApplet::deviceStateChanegd);
-    connect(m_networkInter, &DBusNetwork::NeedSecrets, this, &WirelessApplet::needSecrets);
-    connect(m_networkInter, &DBusNetwork::DeviceEnabled, this, &WirelessApplet::deviceEnabled);
+    connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessList::APAdded);
+    connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessList::APRemoved);
+    connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessList::APPropertiesChanged);
+    connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessList::deviceStateChanegd);
+    connect(m_networkInter, &DBusNetwork::NeedSecrets, this, &WirelessList::needSecrets);
+    connect(m_networkInter, &DBusNetwork::DeviceEnabled, this, &WirelessList::deviceEnabled);
 
-    connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessApplet::deviceEnableChanged);
+    connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessList::deviceEnableChanged);
 
-    connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessApplet::updateAPList);
+    connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
-    connect(this, &WirelessApplet::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(this, &WirelessList::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
     connect(m_pwdDialog, &DInputDialog::textValueChanged, [this] {m_pwdDialog->setTextAlert(false);});
-    connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessApplet::pwdDialogCanceled);
-    connect(m_pwdDialog, &DInputDialog::accepted, this, &WirelessApplet::pwdDialogAccepted);
+    connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessList::pwdDialogCanceled);
+    connect(m_pwdDialog, &DInputDialog::accepted, this, &WirelessList::pwdDialogAccepted);
 
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
-WirelessApplet::~WirelessApplet()
+WirelessList::~WirelessList()
 {
     m_pwdDialog->deleteLater();
 }
 
-NetworkDevice::NetworkState WirelessApplet::wirelessState() const
+NetworkDevice::NetworkState WirelessList::wirelessState() const
 {
     return m_device.state();
 }
 
-int WirelessApplet::activeAPStrgength() const
+int WirelessList::activeAPStrgength() const
 {
     return m_activeAP.strength();
 }
 
-void WirelessApplet::init()
+QWidget *WirelessList::controlPanel()
+{
+    return m_controlPanel;
+}
+
+void WirelessList::init()
 {
     loadAPList();
     onActiveAPChanged();
     deviceStateChanegd();
 }
 
-void WirelessApplet::APAdded(const QString &devPath, const QString &info)
+void WirelessList::APAdded(const QString &devPath, const QString &info)
 {
     if (devPath != m_device.path())
         return;
@@ -115,7 +120,7 @@ void WirelessApplet::APAdded(const QString &devPath, const QString &info)
     m_updateAPTimer->start();
 }
 
-void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
+void WirelessList::APRemoved(const QString &devPath, const QString &info)
 {
     if (devPath != m_device.path())
         return;
@@ -128,7 +133,7 @@ void WirelessApplet::APRemoved(const QString &devPath, const QString &info)
     m_updateAPTimer->start();
 }
 
-void WirelessApplet::setDeviceInfo(const int index)
+void WirelessList::setDeviceInfo(const int index)
 {
     // set device enable state
     m_controlPanel->setDeviceEnabled(m_networkInter->IsDeviceEnabled(m_device.dbusPath()));
@@ -140,7 +145,7 @@ void WirelessApplet::setDeviceInfo(const int index)
         m_controlPanel->setDeviceName(tr("Wireless Network %1").arg(index));
 }
 
-void WirelessApplet::loadAPList()
+void WirelessList::loadAPList()
 {
     const QString data = m_networkInter->GetAccessPoints(m_device.dbusPath());
     const QJsonDocument doc = QJsonDocument::fromJson(data.toUtf8());
@@ -158,7 +163,7 @@ void WirelessApplet::loadAPList()
     m_updateAPTimer->start();
 }
 
-void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &info)
+void WirelessList::APPropertiesChanged(const QString &devPath, const QString &info)
 {
     if (devPath != m_device.path())
         return;
@@ -190,12 +195,12 @@ void WirelessApplet::APPropertiesChanged(const QString &devPath, const QString &
 //    }
 }
 
-void WirelessApplet::updateAPList()
+void WirelessList::updateAPList()
 {
     Q_ASSERT(sender() == m_updateAPTimer);
 
     // remove old items
-    while (QLayoutItem *item = m_centeralLayout->takeAt(1))
+    while (QLayoutItem *item = m_centeralLayout->takeAt(0))
     {
         delete item->widget();
         delete item;
@@ -216,8 +221,8 @@ void WirelessApplet::updateAPList()
             if (wirelessActived && ap == m_activeAP)
                 apw->setActive(true);
 
-            connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessApplet::activateAP);
-            connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessApplet::deactiveAP);
+            connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
+            connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
 
             m_centeralLayout->addWidget(apw);
 
@@ -226,18 +231,18 @@ void WirelessApplet::updateAPList()
     }
     m_controlPanel->setSeperatorVisible(avaliableAPCount);
 
-    const int contentHeight = avaliableAPCount * ITEM_HEIGHT + m_controlPanel->height();
+    const int contentHeight = avaliableAPCount * ITEM_HEIGHT;
     m_centeralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 
-void WirelessApplet::deviceEnableChanged(const bool enable)
+void WirelessList::deviceEnableChanged(const bool enable)
 {
     m_networkInter->EnableDevice(m_device.dbusPath(), enable);
     m_updateAPTimer->start();
 }
 
-void WirelessApplet::deviceStateChanegd()
+void WirelessList::deviceStateChanegd()
 {
     const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->devices().toUtf8());
     Q_ASSERT(doc.isObject());
@@ -292,7 +297,7 @@ void WirelessApplet::deviceStateChanegd()
 
 }
 
-void WirelessApplet::onActiveAPChanged()
+void WirelessList::onActiveAPChanged()
 {
     const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->GetAccessPoints(m_device.dbusPath()).value().toUtf8());
     Q_ASSERT(doc.isArray());
@@ -312,20 +317,20 @@ void WirelessApplet::onActiveAPChanged()
     emit activeAPChanged();
 }
 
-void WirelessApplet::pwdDialogAccepted()
+void WirelessList::pwdDialogAccepted()
 {
     if (m_pwdDialog->textValue().isEmpty())
         return m_pwdDialog->setTextAlert(true);
     m_networkInter->FeedSecret(m_lastConnAPPath, m_lastConnUUID, m_pwdDialog->textValue(), m_autoConnBox->isChecked());
 }
 
-void WirelessApplet::pwdDialogCanceled()
+void WirelessList::pwdDialogCanceled()
 {
     m_networkInter->CancelSecret(m_lastConnAPPath, m_lastConnUUID);
     m_pwdDialog->close();
 }
 
-void WirelessApplet::deviceEnabled(const QString &devPath, const bool enable)
+void WirelessList::deviceEnabled(const QString &devPath, const bool enable)
 {
     if (devPath != m_device.path())
         return;
@@ -333,7 +338,7 @@ void WirelessApplet::deviceEnabled(const QString &devPath, const bool enable)
     m_controlPanel->setDeviceEnabled(enable);
 }
 
-void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ssid)
+void WirelessList::activateAP(const QDBusObjectPath &apPath, const QString &ssid)
 {
     QString uuid;
 
@@ -354,13 +359,13 @@ void WirelessApplet::activateAP(const QDBusObjectPath &apPath, const QString &ss
     m_networkInter->ActivateAccessPoint(uuid, apPath, m_device.dbusPath()).waitForFinished();
 }
 
-void WirelessApplet::deactiveAP()
+void WirelessList::deactiveAP()
 {
     m_activeAP = AccessPoint();
     m_networkInter->DisconnectDevice(QDBusObjectPath(m_device.path()));
 }
 
-void WirelessApplet::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)
+void WirelessList::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)
 {
     m_lastConnAPPath = apPath;
     m_lastConnUUID = uuid;
