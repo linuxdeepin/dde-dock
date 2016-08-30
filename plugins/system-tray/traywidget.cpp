@@ -42,8 +42,9 @@ TrayWidget::~TrayWidget()
 {
 }
 
-const QImage TrayWidget::trayImage() const
+const QImage TrayWidget::trayImage()
 {
+    m_updateTimer->start();
     return m_image;
 }
 

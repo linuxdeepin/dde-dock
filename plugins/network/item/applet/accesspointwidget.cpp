@@ -31,7 +31,6 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
         indicatorList << QString(":/wireless/indicator/resources/wireless/spinner14/Spinner%1.png").arg(i, 2, 10, QChar('0'));
     m_indicator->setPictureSequence(indicatorList);
     m_indicator->setFixedSize(14, 14);
-    m_indicator->play();
     m_indicator->setVisible(false);
 
     if (ap.secured())
@@ -98,7 +97,14 @@ void AccessPointWidget::setActiveState(const NetworkDevice::NetworkState state)
 
     const bool isActive = active();
     m_disconnectBtn->setVisible(isActive);
-    m_indicator->setVisible(!isActive && state > NetworkDevice::Disconnected);
+
+    if (!isActive && state > NetworkDevice::Disconnected)
+    {
+        m_indicator->play();
+        m_indicator->setVisible(true);
+    } else {
+        m_indicator->setVisible(false);
+    }
 }
 
 void AccessPointWidget::enterEvent(QEvent *e)

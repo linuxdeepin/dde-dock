@@ -13,7 +13,7 @@ public:
     ~TrayWidget();
 
     void updateIcon();
-    const QImage trayImage() const;
+    const QImage trayImage();
     void sendClick(uint8_t mouseButton, int x, int y);
 
 private:
