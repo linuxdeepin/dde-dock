@@ -20,12 +20,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Neznana naprava</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Neznan prostor</translation>
     </message>
 </context>
 <context>
@@ -134,17 +134,17 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
         <source>This action cannot be restored</source>
-        <translation>Tega dejanja se ne da preklicati</translation>
+        <translation>Tega dejanja se ne da razveljaviti</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Se prepričani, da želite izprazniti 1 datoteko?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Se prepričani, da želite izprazniti %1 datotek?</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Brezžično omrežje %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>

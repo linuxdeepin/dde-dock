@@ -20,12 +20,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Ismeretlen eszköz</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
         <source>Unknown volume</source>
-        <translation type="unfinished"/>
+        <translation>Ismeretlen kötet</translation>
     </message>
 </context>
 <context>
@@ -139,12 +139,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Biztos benne hogy ürít 1 elemet?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Biztos benne hogy ürít %1 elemet?</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Vezeték nélküli Hálózat %1 </translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>
