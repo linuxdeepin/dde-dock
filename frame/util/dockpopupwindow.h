@@ -2,6 +2,7 @@
 #define DOCKPOPUPWINDOW_H
 
 #include "dbus/dbusxmousearea.h"
+#include "dbus/dbusdisplay.h"
 
 #include <darrowrectangle.h>
 
@@ -45,6 +46,7 @@ private:
     QTimer *m_acceptDelayTimer;
 
     DBusXMouseArea *m_mouseInter;
+    DBusDisplay *m_displayInter;
 };
 
 #endif // DOCKPOPUPWINDOW_H

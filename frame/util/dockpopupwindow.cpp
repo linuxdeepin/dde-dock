@@ -1,6 +1,12 @@
 #include "dockpopupwindow.h"
 
+#include <QScreen>
+#include <QApplication>
+#include <QDesktopWidget>
+
 DWIDGET_USE_NAMESPACE
+
+#define MOUSE_BUTTON    1 << 1
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DArrowRectangle(ArrowBottom, parent),
@@ -8,7 +14,8 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
       m_acceptDelayTimer(new QTimer(this)),
 
-      m_mouseInter(new DBusXMouseArea(this))
+      m_mouseInter(new DBusXMouseArea(this)),
+      m_displayInter(new DBusDisplay(this))
 {
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
@@ -110,7 +117,10 @@ void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString
 
 void DockPopupWindow::registerMouseEvent()
 {
-    m_mouseAreaKey = m_mouseInter->RegisterFullScreen();
+    // only regist mouse button event
+    m_mouseAreaKey = m_mouseInter->RegisterArea(0, 0, m_displayInter->screenWidth(), m_displayInter->screenHeight(), MOUSE_BUTTON);
+//    m_mouseAreaKey = m_mouseInter->RegisterFullScreen();
+
     connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease, Qt::UniqueConnection);
 }
 
