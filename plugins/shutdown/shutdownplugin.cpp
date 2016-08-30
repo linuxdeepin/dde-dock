@@ -40,18 +40,15 @@ QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 {
-    const Dock::DisplayMode mode = displayMode();
-
-    if (mode == Dock::Efficient && itemKey == SHUTDOWN_KEY)
-        return nullptr;
-
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
 
-    if (data.isEmpty())
-        return nullptr;
+    if (itemKey == SHUTDOWN_KEY || data.isEmpty())
+    {
+        m_tipsLabel->setText(tr("Shut down"));
+        return m_tipsLabel;
+    }
 
     m_tipsLabel->setText(QString("%1%").arg(data.value("Display"), 1, 'f', 1));
-
     return m_tipsLabel;
 }
 

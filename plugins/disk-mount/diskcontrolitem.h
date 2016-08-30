@@ -10,7 +10,7 @@
 #include <QProgressBar>
 #include <QIcon>
 
-class DiskControlItem : public QWidget
+class DiskControlItem : public QFrame
 {
     Q_OBJECT
 

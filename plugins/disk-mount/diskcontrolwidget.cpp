@@ -1,7 +1,6 @@
 #include "diskcontrolwidget.h"
 #include "diskcontrolitem.h"
 
-#define MAX_HEIGHT      300
 #define WIDTH           300
 
 DiskControlWidget::DiskControlWidget(QWidget *parent)
@@ -56,7 +55,7 @@ void DiskControlWidget::diskListChanged()
     emit diskCountChanged(mountedCount);
 
     const int contentHeight = mountedCount * 70;
-    const int maxHeight = std::min(contentHeight, MAX_HEIGHT);
+    const int maxHeight = std::min(contentHeight, 70 * 6);
 
     m_centeralWidget->setFixedHeight(contentHeight);
     setFixedHeight(maxHeight);

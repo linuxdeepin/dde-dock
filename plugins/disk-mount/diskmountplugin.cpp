@@ -5,10 +5,15 @@ DiskMountPlugin::DiskMountPlugin(QObject *parent)
 
       m_pluginAdded(false),
 
+      m_tipsLabel(new QLabel),
       m_diskPluginItem(new DiskPluginItem),
       m_diskControlApplet(nullptr)
 {
     m_diskPluginItem->setVisible(false);
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setText(tr("Disk"));
+    m_tipsLabel->setStyleSheet("color:white;"
+                               "padding:5px 10px;");
 }
 
 const QString DiskMountPlugin::pluginName() const
@@ -29,6 +34,13 @@ QWidget *DiskMountPlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return m_diskPluginItem;
+}
+
+QWidget *DiskMountPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_tipsLabel;
 }
 
 QWidget *DiskMountPlugin::itemPopupApplet(const QString &itemKey)

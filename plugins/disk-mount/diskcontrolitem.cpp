@@ -6,7 +6,7 @@
 DWIDGET_USE_NAMESPACE
 
 DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
-    : QWidget(parent),
+    : QFrame(parent),
 
       m_unknowIcon(":/icons/resources/unknown.svg"),
 
@@ -62,9 +62,13 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     centeralLayout->addWidget(m_diskIcon);
     centeralLayout->addLayout(progressLayout);
     centeralLayout->setSpacing(0);
-    centeralLayout->setMargin(0);
+    centeralLayout->setContentsMargins(0, 0, 5, 0);
 
     setLayout(centeralLayout);
+    setObjectName("DiskItem");
+    setStyleSheet("QFrame #DiskItem:hover {"
+                  "background-color:rgba(255, 255, 255, .1);"
+                  "}");
 
     connect(m_unmountButton, &DImageButton::clicked, [this] {emit requestUnmount(m_info.m_id);});
 

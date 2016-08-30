@@ -1,6 +1,8 @@
 #ifndef DISKMOUNTPLUGIN_H
 #define DISKMOUNTPLUGIN_H
 
+#include <QLabel>
+
 #include "pluginsiteminterface.h"
 #include "diskcontrolwidget.h"
 #include "diskpluginitem.h"
@@ -18,6 +20,7 @@ public:
     void init(PluginProxyInterface *proxyInter);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
 private:
@@ -31,6 +34,7 @@ private slots:
 private:
     bool m_pluginAdded;
 
+    QLabel *m_tipsLabel;
     DiskPluginItem *m_diskPluginItem;
     DiskControlWidget *m_diskControlApplet;
 };
