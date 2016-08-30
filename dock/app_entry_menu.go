@@ -36,6 +36,7 @@ func (entry *AppEntry) updateMenu() {
 
 	if entry.hasWindow() {
 		menu.AppendItem(entry.getMenuItemCloseAll())
+		menu.AppendItem(entry.getMenuItemAllWindows())
 	}
 
 	// menu item dock or undock
@@ -138,5 +139,12 @@ func (entry *AppEntry) getMenuItemUndock() *MenuItem {
 	return NewMenuItem(Tr("_Undock"), func(uint32) {
 		logger.Debug("menu action undock entry")
 		entry.RequestUndock()
+	}, true)
+}
+
+func (entry *AppEntry) getMenuItemAllWindows() *MenuItem {
+	return NewMenuItem(Tr("_All windows"), func(uint32) {
+		logger.Debug("menu action all windows")
+		entry.PresentWindows()
 	}, true)
 }

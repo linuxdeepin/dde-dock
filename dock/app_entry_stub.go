@@ -27,16 +27,11 @@ func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 
 func (entry *AppEntry) Activate(timestamp uint32) error {
 	logger.Debug("Activate timestamp:", timestamp)
-	windowCount := len(entry.windows)
-	if windowCount == 0 {
+	if !entry.hasWindow() {
 		entry.launchApp(timestamp)
-		return nil
-	} else if windowCount > 1 {
-		entry.dockManager.wm.PresentWindows(entry.getWindowIds())
 		return nil
 	}
 
-	// windowCount == 1
 	if entry.current == nil {
 		err := errors.New("entry.current is nil")
 		logger.Warning(err)
@@ -59,7 +54,12 @@ func (entry *AppEntry) Activate(timestamp uint32) error {
 		case icccm.StateIconic:
 			activateWindow(win)
 		case icccm.StateNormal:
-			iconifyWindow(win)
+			if len(entry.windows) == 1 {
+				iconifyWindow(win)
+			} else if entry.dockManager.activeWindow == win {
+				nextWin := entry.findNextLeader()
+				activateWindow(nextWin)
+			}
 		}
 	} else {
 		activateWindow(win)
@@ -101,5 +101,15 @@ func (entry *AppEntry) RequestDock() {
 func (entry *AppEntry) RequestUndock() {
 	if entry.dockManager != nil {
 		entry.dockManager.undockEntry(entry)
+	}
+}
+
+func (entry *AppEntry) PresentWindows() {
+	if entry.dockManager != nil {
+		windowIds := entry.getWindowIds()
+		if len(windowIds) == 0 {
+			return
+		}
+		entry.dockManager.wm.PresentWindows(windowIds)
 	}
 }
