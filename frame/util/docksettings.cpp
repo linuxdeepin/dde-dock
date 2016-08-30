@@ -171,17 +171,17 @@ const QRect DockSettings::windowRect(const Position position) const
     switch (position)
     {
     case Top:
-        p = QPoint(primaryRect.topLeft().x() + offsetX, 0);               break;
+        p = QPoint(offsetX, 0);                                       break;
     case Left:
-        p = QPoint(primaryRect.topLeft().x(), offsetY);                   break;
+        p = QPoint(0, offsetY);                                       break;
     case Right:
-        p = QPoint(primaryRect.right() - size.width() + 1, offsetY);      break;
+        p = QPoint(primaryRect.width() - size.width(), offsetY);      break;
     case Bottom:
-        p = QPoint(offsetX, primaryRect.bottom() - size.height() + 1);    break;
+        p = QPoint(offsetX, primaryRect.height() - size.height());    break;
     default:Q_UNREACHABLE();
     }
 
-    return QRect(p, size);
+    return QRect(primaryRect.topLeft() + p, size);
 }
 
 void DockSettings::showDockSettingsMenu()
