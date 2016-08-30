@@ -17,7 +17,7 @@ public:
 
     void setDeviceName(const QString &name);
     void setDeviceEnabled(const bool enable);
-    void setSeperatorVisible(const bool visible);
+//    void setSeperatorVisible(const bool visible);
 
 signals:
     void deviceEnableChanged(const bool enable) const;
@@ -25,7 +25,7 @@ signals:
 private:
     QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
-    HorizontalSeperator *m_seperator;
+//    HorizontalSeperator *m_seperator;
 };
 
 #endif // DEVICECONTROLWIDGET_H

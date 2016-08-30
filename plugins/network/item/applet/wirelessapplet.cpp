@@ -212,14 +212,14 @@ void WirelessList::updateAPList()
     {
         // sort ap list by strength
         std::sort(m_apList.begin(), m_apList.end(), std::greater<AccessPoint>());
-        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
+//        const bool wirelessActived = m_device.state() == NetworkDevice::Activated;
 
         for (auto ap : m_apList)
         {
             AccessPointWidget *apw = new AccessPointWidget(ap);
             apw->setFixedHeight(ITEM_HEIGHT);
-            if (wirelessActived && ap == m_activeAP)
-                apw->setActive(true);
+            if (ap == m_activeAP)
+                apw->setActiveState(m_device.state());
 
             connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
             connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
@@ -229,7 +229,7 @@ void WirelessList::updateAPList()
             ++avaliableAPCount;
         }
     }
-    m_controlPanel->setSeperatorVisible(avaliableAPCount);
+//    m_controlPanel->setSeperatorVisible(avaliableAPCount);
 
     const int contentHeight = avaliableAPCount * ITEM_HEIGHT;
     m_centeralWidget->setFixedHeight(contentHeight);
@@ -274,25 +274,7 @@ void WirelessList::deviceStateChanegd()
                 break;
             }
         }
-
-//        for (auto wireless : infoList.value().toArray())
-//        {
-//            const QJsonObject info = wireless.toObject();
-//            if (info.value("Path") == m_device.path())
-//            {
-//                const NetworkDevice prevInfo = m_device;
-//                m_device = NetworkDevice(NetworkDevice::Wireless, info);
-
-//                setDeviceInfo();
-
-//                if (prevInfo.state() != m_device.state())
-//                    emit wirelessStateChanged(m_device.state());
-//                if (prevInfo.activeAp() != m_device.activeAp())
-//                    onActiveAPChanged();
-
-//                break;
-//            }
-//        }
+        break;
     }
 
 }
