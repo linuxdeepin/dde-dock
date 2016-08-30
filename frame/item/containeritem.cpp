@@ -73,7 +73,7 @@ void ContainerItem::paintEvent(QPaintEvent *e)
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton && m_containerWidget->itemCount())
+    if (e->button() == Qt::LeftButton)
         return showPopupApplet(m_containerWidget);
 
     return DockItem::mouseReleaseEvent(e);

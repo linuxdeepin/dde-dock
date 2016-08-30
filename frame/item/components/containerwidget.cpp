@@ -30,7 +30,7 @@ void ContainerWidget::addWidget(QWidget * const w)
     m_centeralLayout->addWidget(w);
     m_itemList.append(w);
 
-    setFixedWidth(std::max(ITEM_WIDTH, ITEM_WIDTH * m_itemList.size()));
+    setFixedWidth(ITEM_WIDTH * std::max(1, m_itemList.size()));
 }
 
 void ContainerWidget::removeWidget(QWidget * const w)
@@ -38,7 +38,7 @@ void ContainerWidget::removeWidget(QWidget * const w)
     m_centeralLayout->removeWidget(w);
     m_itemList.removeOne(w);
 
-    setFixedWidth(std::max(ITEM_WIDTH, ITEM_WIDTH * m_itemList.size()));
+    setFixedWidth(ITEM_WIDTH * std::max(1, m_itemList.size()));
 }
 
 int ContainerWidget::itemCount() const
