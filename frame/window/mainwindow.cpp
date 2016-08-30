@@ -225,23 +225,25 @@ void MainWindow::updateGeometry()
         setFixedSize(size);
     }
 
-    const QRect primaryRect = m_settings->primaryRect();
-    const int offsetX = (primaryRect.width() - size.width()) / 2;
-    const int offsetY = (primaryRect.height() - size.height()) / 2;
+//    const QRect primaryRect = m_settings->primaryRect();
+//    const int offsetX = (primaryRect.width() - size.width()) / 2;
+//    const int offsetY = (primaryRect.height() - size.height()) / 2;
 
-    switch (position)
-    {
-    case Top:
-        move(primaryRect.topLeft().x() + offsetX, primaryRect.y());                   break;
-    case Left:
-        move(primaryRect.topLeft().x(), primaryRect.y() + offsetY);                   break;
-    case Right:
-        move(primaryRect.right() - size.width() + 1, primaryRect.y() + offsetY);      break;
-    case Bottom:
-        move(primaryRect.x() + offsetX, primaryRect.bottom() - size.height() + 1);    break;
-    default:
-        Q_ASSERT(false);
-    }
+//    switch (position)
+//    {
+//    case Top:
+//        move(primaryRect.topLeft().x() + offsetX, primaryRect.y());                   break;
+//    case Left:
+//        move(primaryRect.topLeft().x(), primaryRect.y() + offsetY);                   break;
+//    case Right:
+//        move(primaryRect.right() - size.width() + 1, primaryRect.y() + offsetY);      break;
+//    case Bottom:
+//        move(primaryRect.x() + offsetX, primaryRect.bottom() - size.height() + 1);    break;
+//    default:
+//        Q_ASSERT(false);
+//    }
+    const QRect windowRect = m_settings->windowRect(position);
+    move(windowRect.x(), windowRect.y());
 
     m_mainPanel->update();
 }
