@@ -20,7 +20,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
         <source>Unknown device</source>
-        <translation type="unfinished"/>
+        <translation>Périphérique inconnu</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
@@ -139,12 +139,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation type="unfinished"/>
+        <translation>Êtes-vous sûr de vider 1 élément ?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="79"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation type="unfinished"/>
+        <translation>Êtes-vous sûr de vider %1 éléments ?</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
         <source>Wireless Network %1</source>
-        <translation type="unfinished"/>
+        <translation>Réseau sans fil %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="367"/>

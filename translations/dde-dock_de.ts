@@ -170,7 +170,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="18"/>
         <source>Empty</source>
-        <translation>Leer</translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>

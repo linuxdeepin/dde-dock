@@ -73,7 +73,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Small</source>
-        <translation>Маленький</translation>
+        <translation>Небольшой</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="28"/>
