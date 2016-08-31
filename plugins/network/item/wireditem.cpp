@@ -48,7 +48,7 @@ QWidget *WiredItem::itemPopup()
         const QJsonObject ipv4 = info.value("Ip4").toObject();
         if (!ipv4.contains("Address"))
             break;
-        m_itemTips->setText(ipv4.value("Address").toString());
+        m_itemTips->setText(tr("Wired connection %1").arg(ipv4.value("Address").toString()));
     } while (false);
 
     return m_itemTips;
