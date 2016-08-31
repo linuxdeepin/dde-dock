@@ -312,6 +312,9 @@ void TrayWidget::updateIcon()
 
 void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
+    if (isBadWindow())
+        return;
+
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
     configContainerPosition();
@@ -461,4 +464,13 @@ void TrayWidget::setWindowOnTop(const bool top)
     const uint32_t stackAboveData[] = {top ? XCB_STACK_MODE_ABOVE : XCB_STACK_MODE_BELOW};
     xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackAboveData);
     xcb_flush(c);
+}
+
+bool TrayWidget::isBadWindow()
+{
+    auto c = QX11Info::connection();
+
+    auto cookie = xcb_get_geometry(c, m_windowId);
+    QScopedPointer<xcb_get_geometry_reply_t> clientGeom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
+    return clientGeom.isNull();
 }

@@ -34,6 +34,7 @@ private:
 private slots:
     void setX11PassMouseEvent(const bool pass);
     void setWindowOnTop(const bool top);
+    bool isBadWindow();
 
 private:
     WId m_windowId;
