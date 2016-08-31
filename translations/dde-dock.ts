@@ -187,9 +187,14 @@
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
+        <source>Wired connection %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
-    <name>WirelessApplet</name>
+    <name>WirelessList</name>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
         <source>Auto-connect</source>
@@ -206,17 +211,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="138"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
         <source>Wireless Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="140"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="369"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="356"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>
