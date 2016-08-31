@@ -41,6 +41,8 @@ func (icon *TrayIcon) getName() string {
 }
 
 func (m *TrayManager) addIcon(xid xproto.Window) {
+	m.checkValid()
+
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
