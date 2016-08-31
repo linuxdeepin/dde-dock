@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 15:01+0800\n"
-"PO-Revision-Date: 2016-08-10 05:30+0000\n"
+"POT-Creation-Date: 2016-08-31 09:08+0800\n"
+"PO-Revision-Date: 2016-08-31 08:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "Benutzername muss a~z, 0~9, - oder _ beinhalten."
 #: ../../accounts/checkers/username.go:65
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr "Das erste Zeichen muss in Kleinbuchstaben geschrieben werden."
+msgstr "Das erste Zeichen muss in Kleinbuchstaben geschrieben sein."
 
 #: ../../accounts/checkers/username.go:55
 #: ../../accounts/checkers/username.go:67
@@ -62,15 +62,15 @@ msgstr "Der Benutzername ist vom System verwendet worden."
 #: ../../accounts/checkers/username.go:59
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr "Länge des Benutzernames überschreitet den Grenzwert"
+msgstr "Die Länge des Benutzernames überschreitet die Begrenzung"
 
 #: ../../bluetooth/bluez_profile.go:19 ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Serielanschluss"
+msgstr "Serieller Port"
 
 #: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Dial-Up Networking"
+msgstr "DFÜ-Netzwerk"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
@@ -82,7 +82,7 @@ msgstr "Freisprecheinrichtung"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Sprachgateway per Kopfhöhrer"
+msgstr "Sprachgateway per Kopfhörer"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
@@ -212,7 +212,7 @@ msgstr "Gambier"
 #: ../../datetime/timezone/deepin_list.go:48 ../../timedate/deepin_list.go:48
 #: ../../timedate/deepin_list.go:57
 msgid "BajaNorte"
-msgstr "Baja California"
+msgstr "Niederkalifornien"
 
 #: ../../datetime/timezone/deepin_list.go:52 ../../timedate/deepin_list.go:52
 #: ../../timedate/deepin_list.go:61
@@ -237,7 +237,7 @@ msgstr "Arizona"
 #: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
 #: ../../timedate/deepin_list.go:77
 msgid "BajaSur"
-msgstr "Baja California Sur"
+msgstr "Süd-Niederkalifornien"
 
 #: ../../datetime/timezone/deepin_list.go:72 ../../timedate/deepin_list.go:72
 #: ../../timedate/deepin_list.go:81
@@ -332,7 +332,7 @@ msgstr "Azoren"
 #: ../../datetime/timezone/deepin_list.go:144
 #: ../../timedate/deepin_list.go:144 ../../timedate/deepin_list.go:153
 msgid "Cape Verde"
-msgstr "Cape Verde"
+msgstr "Kap Verde"
 
 #: ../../datetime/timezone/deepin_list.go:148
 #: ../../timedate/deepin_list.go:148 ../../timedate/deepin_list.go:157
@@ -372,7 +372,7 @@ msgstr "Rom"
 #: ../../datetime/timezone/deepin_list.go:176
 #: ../../timedate/deepin_list.go:176 ../../timedate/deepin_list.go:185
 msgid "Vienna"
-msgstr "Vienna"
+msgstr "Wien"
 
 #: ../../datetime/timezone/deepin_list.go:180
 #: ../../timedate/deepin_list.go:180 ../../timedate/deepin_list.go:189
@@ -407,7 +407,7 @@ msgstr "Nairobi"
 #: ../../datetime/timezone/deepin_list.go:204
 #: ../../timedate/deepin_list.go:204 ../../timedate/deepin_list.go:213
 msgid "Tehran"
-msgstr "Tehran"
+msgstr "Teheran"
 
 #: ../../datetime/timezone/deepin_list.go:208
 #: ../../timedate/deepin_list.go:208 ../../timedate/deepin_list.go:217
@@ -472,12 +472,12 @@ msgstr "Jakarta"
 #: ../../datetime/timezone/deepin_list.go:256
 #: ../../timedate/deepin_list.go:256 ../../timedate/deepin_list.go:265
 msgid "Beijing"
-msgstr "Beijing"
+msgstr "Peking"
 
 #: ../../datetime/timezone/deepin_list.go:260
 #: ../../timedate/deepin_list.go:260 ../../timedate/deepin_list.go:269
 msgid "Hong Kong"
-msgstr "Hong Kong"
+msgstr "Hongkong"
 
 #: ../../datetime/timezone/deepin_list.go:264
 #: ../../timedate/deepin_list.go:264 ../../timedate/deepin_list.go:273
@@ -575,40 +575,45 @@ msgid "Fakaofo"
 msgstr "Fakaofo"
 
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
-#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
-#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
-#: ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
+#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
 msgid "_Run"
-msgstr "_Ausführen"
+msgstr "Ausfüh_ren"
 
 #: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:123 ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
+#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
-msgstr "_Alle schließen"
+msgstr "Alle s_chließen"
 
 #: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:132 ../../dock/runtime_apps.go:291
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
+#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
 msgid "_Dock"
 msgstr "_Dock"
 
 #: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:139 ../../dock/normal_apps.go:105
+#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
+#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
+#: ../../dock/runtime_apps.go:312
 msgid "_Undock"
 msgstr "_Undocken"
+
+#: ../../dock/app_entry_menu.go:146
+msgid "_All windows"
+msgstr ""
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
@@ -667,24 +672,24 @@ msgstr "Dateiverwaltung"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Programme wechseln"
+msgstr "Anwendungen wechseln"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Programme umgekehrt wechseln"
+msgstr "Anwendungen umgekehrt wechseln"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "Programme in 3D umschalten"
+msgstr "Anwendungen in 3D umschalten"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Programme in 3D rückwärts umschalten"
+msgstr "Anwendungen in 3D umgekehrt umschalten"
 
 #: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
-msgstr "Dock anzeigen/verbergen"
+msgstr "Dock anzeigen/ausblenden"
 
 #: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:63
 #: ../../keybinding/shortcuts/system.go:75
@@ -741,7 +746,7 @@ msgstr "Taschenrechner"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "Email Programm"
+msgstr "E-Mail-Client"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
@@ -749,7 +754,7 @@ msgstr "Webbrowser"
 
 #: ../../keybinding/id_desc_list.go:76
 msgid "Media player"
-msgstr "Mediaplayer"
+msgstr "Medienspieler"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
@@ -761,7 +766,7 @@ msgstr "Pausieren"
 
 #: ../../keybinding/id_desc_list.go:79
 msgid "Stop"
-msgstr "Stop"
+msgstr "Stopp"
 
 #: ../../keybinding/id_desc_list.go:80
 msgid "Mute"
@@ -781,7 +786,7 @@ msgstr "Vorherige"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
-msgstr "Weiter"
+msgstr "Nächste"
 
 #: ../../keybinding/id_desc_list.go:85
 msgid "Eject"
@@ -809,7 +814,7 @@ msgstr "Fenster minimieren"
 #: ../../keybinding/id_desc_list.go:97 ../../keybinding/shortcuts/wm.go:93
 #: ../../keybinding/shortcuts/wm.go:105
 msgid "Move window"
-msgstr "Fenster bewegen"
+msgstr "Fenster verschieben"
 
 #: ../../keybinding/id_desc_list.go:98 ../../keybinding/shortcuts/wm.go:94
 #: ../../keybinding/shortcuts/wm.go:106
@@ -826,29 +831,29 @@ msgstr "Fenstermenü aktivieren"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Zu Arbeitsplatz 1 wechseln"
+msgstr "Zu Arbeitfläche 1 wechseln"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Zu Arbeitsplatz 2 wechseln"
+msgstr "Zu Arbeitfläche 2 wechseln"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Zu Arbeitsplatz 3 wechseln"
+msgstr "Zu Arbeitfläche 3 wechseln"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Zu Arbeitsplatz 4 wechseln"
+msgstr "Zu Arbeitfläche 4 wechseln"
 
 #: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
 #: ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
-msgstr "Zu linker Arbeitfläche wechseln"
+msgstr "Zur linken Arbeitfläche wechseln"
 
 #: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
 #: ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
-msgstr "Zu rechter Arbeitsfläche wechseln"
+msgstr "Zur rechten Arbeitsfläche wechseln"
 
 #: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
 #: ../../keybinding/shortcuts/wm.go:74
@@ -862,39 +867,39 @@ msgstr "Zur unteren Arbeitsfläche wechseln"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Verschieben auf Arbeitsfläche 1"
+msgstr "Auf Arbeitsfläche 1 verschieben"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Verschieben auf Arbeitsfläche 2"
+msgstr "Auf Arbeitsfläche 2 verschieben"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Verschieben auf Arbeitsfläche 3"
+msgstr "Auf Arbeitsfläche 3 verschieben"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Verschieben auf Arbeitsfläche 4"
+msgstr "Auf Arbeitsfläche 4 verschieben"
 
 #: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:109
 #: ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
-msgstr "Verschieben auf linke Arbeitsfläche"
+msgstr "Auf linke Arbeitsfläche verschieben"
 
 #: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:110
 #: ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
-msgstr "Verschieben auf rechte Arbeitsfläche"
+msgstr "Auf rechte Arbeitsfläche verschieben"
 
 #: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:111
 #: ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
-msgstr "Verschieben auf obere Arbeitsfläche"
+msgstr "Auf obere Arbeitsfläche verschieben"
 
 #: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:112
 #: ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
-msgstr "Verschieben auf untere Arbeitsfläche"
+msgstr "Auf untere Arbeitsfläche verschieben"
 
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
@@ -960,7 +965,7 @@ msgstr "Systemsprache wird mit einer Installation von fehlenden Sprachpaketen ge
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 msgid "%q removed successfully."
-msgstr "%q erfolgreich entfernt"
+msgstr "%q erfolgreich entfernt."
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 msgid "Nothing"
@@ -974,10 +979,10 @@ msgstr "Ordner öffnen"
 msgid "Run Software"
 msgstr "Software ausführen"
 
-#: ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
 #, c-format
 msgid "%s removed successfully"
-msgstr ""
+msgstr "%s erfolgreich entfernt"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
@@ -1004,7 +1009,7 @@ msgstr "Keine"
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit Schlüssel"
+msgstr "WEP 40/128-Bit-Schlüssel"
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:323 ../../network/manager_active.go:325
@@ -1069,7 +1074,7 @@ msgstr "FAST"
 #: ../../network/nm_setting_802_1x.go:170
 #: ../../network/nm_setting_802_1x.go:178
 msgid "Tunneled TLS"
-msgstr "TTLS"
+msgstr "Getunneltes TLS"
 
 #: ../../network/manager_active.go:316 ../../network/manager_active.go:331
 #: ../../network/manager_active.go:341 ../../network/manager_active.go:343
@@ -1114,7 +1119,7 @@ msgstr "Gespeichert"
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
 #: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
 msgid "Always Ask"
-msgstr "Immer fragen"
+msgstr "Immer nachfragen"
 
 #: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:104
 #: ../../network/nm_setting_vpn_l2tp.go:116
@@ -1139,22 +1144,22 @@ msgstr "Verbindung"
 #: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
 #: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:214
 msgid "Wireless Connection"
-msgstr "Wireless-Verbindung"
+msgstr "Drahtlosverbindung"
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
 #: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:216
 msgid "Wireless Ad-Hoc"
-msgstr "Wireless Ad-Hoc"
+msgstr "Drahtloses Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
 #: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:218
 msgid "Wireless Ap-Hotspot"
-msgstr "WLAN Hotspot"
+msgstr "Drahtloser Ap-Hotspot"
 
 #: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
 #: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:220
 msgid "PPPoE Connection"
-msgstr "PPPoE Verbindung"
+msgstr "PPPoE-Verbindung"
 
 #: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
 #: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:222
@@ -1164,17 +1169,17 @@ msgstr "Mobile Verbindung"
 #: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
 #: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:224
 msgid "Mobile GSM Connection"
-msgstr "Mobile GSM Verbindung"
+msgstr "Mobile GSM-Verbindung"
 
 #: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
 #: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:226
 msgid "Mobile CDMA Connection"
-msgstr "Mobile CDMA Verbindung"
+msgstr "Mobile CDMA-Verbindung"
 
 #: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
 #: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:228
 msgid "VPN Connection"
-msgstr "VPN Verbindung"
+msgstr "VPN-Verbindung"
 
 #: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
 #: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:230
@@ -1244,7 +1249,7 @@ msgstr "OTP"
 #: ../../network/nm_setting_vpn_vpnc.go:246
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
-msgstr "Ausgeschaltet"
+msgstr "Deaktiviert"
 
 #: ../../network/nm_setting_802_1x.go:129
 #: ../../network/nm_setting_802_1x.go:141
@@ -1256,7 +1261,7 @@ msgstr "Anonym"
 #: ../../network/nm_setting_802_1x.go:142
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
-msgstr "authentifiziert"
+msgstr "Authentifiziert"
 
 #: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:143
@@ -1316,7 +1321,7 @@ msgstr "Ethernet"
 #: ../../network/nm_setting_bean_gen.go:145
 #: ../../network/nm_setting_bean_gen.go:146
 msgid "Device MAC Addr"
-msgstr "Geräte MAC Addr"
+msgstr "Geräte MAC-Adre"
 
 #: ../../network/nm_setting_bean_gen.go:60
 #: ../../network/nm_setting_bean_gen.go:61
@@ -1324,7 +1329,7 @@ msgstr "Geräte MAC Addr"
 #: ../../network/nm_setting_bean_gen.go:146
 #: ../../network/nm_setting_bean_gen.go:147
 msgid "Cloned MAC Addr"
-msgstr "Geklonte MAC Addr"
+msgstr "Geklonte MAC-Adre"
 
 #: ../../network/nm_setting_bean_gen.go:61
 #: ../../network/nm_setting_bean_gen.go:62
@@ -1495,7 +1500,7 @@ msgstr "Passwort"
 #: ../../network/nm_setting_bean_gen.go:96
 #: ../../network/nm_setting_bean_gen.go:97
 msgid "Network ID"
-msgstr "Netzwerk ID"
+msgstr "Netzwerkkennung"
 
 #: ../../network/nm_setting_bean_gen.go:80
 #: ../../network/nm_setting_bean_gen.go:81
@@ -1529,7 +1534,7 @@ msgstr "Sicherheit"
 #: ../../network/nm_setting_bean_gen.go:116
 #: ../../network/nm_setting_bean_gen.go:117
 msgid "Security Required"
-msgstr "Erfordert Sicherheit"
+msgstr "Sicherheit erforderlich"
 
 #: ../../network/nm_setting_bean_gen.go:118
 #: ../../network/nm_setting_bean_gen.go:119
@@ -1539,7 +1544,7 @@ msgstr "Schlüssel"
 #: ../../network/nm_setting_bean_gen.go:120
 #: ../../network/nm_setting_bean_gen.go:121
 msgid "EAP Auth"
-msgstr "Schlüssel"
+msgstr "EAP Auth"
 
 #: ../../network/nm_setting_bean_gen.go:121
 #: ../../network/nm_setting_bean_gen.go:122
@@ -1549,7 +1554,7 @@ msgstr "Identität"
 #: ../../network/nm_setting_bean_gen.go:122
 #: ../../network/nm_setting_bean_gen.go:123
 msgid "Anonymous ID"
-msgstr "Anonyme ID"
+msgstr "Anonyme Kennung"
 
 #: ../../network/nm_setting_bean_gen.go:123
 #: ../../network/nm_setting_bean_gen.go:124
@@ -1595,7 +1600,7 @@ msgstr "CA Cert"
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
 msgid "User Cert"
-msgstr "User Cert"
+msgstr "Benutzer Cert"
 
 #: ../../network/nm_setting_bean_gen.go:125
 #: ../../network/nm_setting_bean_gen.go:126
@@ -1605,12 +1610,12 @@ msgstr "Bereitstellung"
 #: ../../network/nm_setting_bean_gen.go:126
 #: ../../network/nm_setting_bean_gen.go:127
 msgid "PAC file"
-msgstr "PAC Datei"
+msgstr "PAC-Datei"
 
 #: ../../network/nm_setting_bean_gen.go:127
 #: ../../network/nm_setting_bean_gen.go:128
 msgid "PEAP Version"
-msgstr "PEAP Version"
+msgstr "PEAP-Version"
 
 #: ../../network/nm_setting_bean_gen.go:128
 #: ../../network/nm_setting_bean_gen.go:129
@@ -1713,7 +1718,7 @@ msgstr "Wi-Fi"
 #: ../../network/nm_setting_bean_gen.go:142
 #: ../../network/nm_setting_bean_gen.go:143
 msgid "Mode"
-msgstr "modus"
+msgstr "Modus"
 
 #: ../../network/nm_setting_bean_gen.go:141
 #: ../../network/nm_setting_bean_gen.go:142
@@ -1768,7 +1773,7 @@ msgstr "MPPE verwenden"
 #: ../../network/nm_setting_bean_gen.go:167
 #: ../../network/nm_setting_bean_gen.go:168
 msgid "128-bit MPPE"
-msgstr "128-bit MPPE"
+msgstr "128-Bit-MPPE"
 
 #: ../../network/nm_setting_bean_gen.go:167
 #: ../../network/nm_setting_bean_gen.go:168
@@ -1796,7 +1801,7 @@ msgstr "MPPE mit Zuständen"
 #: ../../network/nm_setting_bean_gen.go:394
 #: ../../network/nm_setting_bean_gen.go:395
 msgid "Refuse EAP Authentication"
-msgstr "EAP Authentikation ablehnen"
+msgstr "EAP-Authentifizierung ablehnen"
 
 #: ../../network/nm_setting_bean_gen.go:169
 #: ../../network/nm_setting_bean_gen.go:170
@@ -1810,7 +1815,7 @@ msgstr "EAP Authentikation ablehnen"
 #: ../../network/nm_setting_bean_gen.go:395
 #: ../../network/nm_setting_bean_gen.go:396
 msgid "Refuse PAP Authentication"
-msgstr "PAP Authentikation ablehnen"
+msgstr "PAP-Authentifizierung ablehnen"
 
 #: ../../network/nm_setting_bean_gen.go:170
 #: ../../network/nm_setting_bean_gen.go:171
@@ -1824,7 +1829,7 @@ msgstr "PAP Authentikation ablehnen"
 #: ../../network/nm_setting_bean_gen.go:396
 #: ../../network/nm_setting_bean_gen.go:397
 msgid "Refuse CHAP Authentication"
-msgstr "CHAP Authentikation ablehnen"
+msgstr "CHAP-Authentifizierung ablehnen"
 
 #: ../../network/nm_setting_bean_gen.go:171
 #: ../../network/nm_setting_bean_gen.go:172
@@ -1838,7 +1843,7 @@ msgstr "CHAP Authentikation ablehnen"
 #: ../../network/nm_setting_bean_gen.go:397
 #: ../../network/nm_setting_bean_gen.go:398
 msgid "Refuse MSCHAP Authentication"
-msgstr "MSCHAP Authentikation ablehnen"
+msgstr "MSCHAP-Authentifizierung ablehnen"
 
 #: ../../network/nm_setting_bean_gen.go:172
 #: ../../network/nm_setting_bean_gen.go:173
@@ -1852,7 +1857,7 @@ msgstr "MSCHAP Authentikation ablehnen"
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "MSCHAPv2 Authentikation ablehnen"
+msgstr "MSCHAPv2-Authentifizierung ablehnen"
 
 #: ../../network/nm_setting_bean_gen.go:173
 #: ../../network/nm_setting_bean_gen.go:174
@@ -1866,7 +1871,7 @@ msgstr "MSCHAPv2 Authentikation ablehnen"
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:400
 msgid "No BSD Data Compression"
-msgstr "Keine BSD Daten Kompression"
+msgstr "Keine BSD-Datenkomprimierung"
 
 #: ../../network/nm_setting_bean_gen.go:174
 #: ../../network/nm_setting_bean_gen.go:175
@@ -1880,7 +1885,7 @@ msgstr "Keine BSD Daten Kompression"
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
 msgid "No Deflate Data Compression"
-msgstr "Keine Deflate Daten Kompression"
+msgstr "Keine Deflate-Datenkomprimierung"
 
 #: ../../network/nm_setting_bean_gen.go:175
 #: ../../network/nm_setting_bean_gen.go:176
@@ -1894,7 +1899,7 @@ msgstr "Keine Deflate Daten Kompression"
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
 msgid "No TCP Header Compression"
-msgstr "Keine TCP Header Kompression"
+msgstr "Keine TCP-Kopfdatenkomprimierung"
 
 #: ../../network/nm_setting_bean_gen.go:176
 #: ../../network/nm_setting_bean_gen.go:177
@@ -1908,7 +1913,7 @@ msgstr "Keine TCP Header Kompression"
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
 msgid "Send PPP Echo Packets"
-msgstr "PPP Echo Pakete senden"
+msgstr "PPP-Echopakete senden"
 
 #: ../../network/nm_setting_bean_gen.go:182
 #: ../../network/nm_setting_bean_gen.go:183
@@ -1942,7 +1947,7 @@ msgstr "VPN"
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
 msgid "Need VPN Plugin"
-msgstr "VPN Plugin benötigt"
+msgstr "VPN-Plugin erforderlich"
 
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
@@ -2009,7 +2014,7 @@ msgstr "Gateway"
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:384
 msgid "NT Domain"
-msgstr "NT Domäne"
+msgstr "NT-Domäne"
 
 #: ../../network/nm_setting_bean_gen.go:192
 #: ../../network/nm_setting_bean_gen.go:193
@@ -2103,7 +2108,7 @@ msgstr "Schlüsselrichtung anpassen"
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:339
 msgid "Key Direction"
-msgstr "Schlüssel Richtung"
+msgstr "Schlüsselrichtung"
 
 #: ../../network/nm_setting_bean_gen.go:211
 #: ../../network/nm_setting_bean_gen.go:212
@@ -2113,7 +2118,7 @@ msgstr "Schlüssel Richtung"
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:317
 msgid "Remote IP"
-msgstr "Online IP"
+msgstr "Entfernte IP"
 
 #: ../../network/nm_setting_bean_gen.go:212
 #: ../../network/nm_setting_bean_gen.go:213
@@ -2189,21 +2194,21 @@ msgstr "Hybride Authentifizierung verwenden"
 #: ../../network/nm_setting_bean_gen.go:434
 #: ../../network/nm_setting_bean_gen.go:435
 msgid "CA File"
-msgstr "CA Datei"
+msgstr "CA-Datei"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
 msgid "Enforce UDP Encapsulation"
-msgstr "Erzwinge UDP Verkapselung"
+msgstr "UDP-Verkapselung erzwingen"
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
 msgid "Use IP Compression"
-msgstr "IP Kompression nutzen"
+msgstr "IP-Komprimierung verwenden"
 
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
@@ -2224,7 +2229,7 @@ msgstr "IPsec erlauben"
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:259
 msgid "Group ID"
-msgstr "Gruppen ID"
+msgstr "Gruppenkennung"
 
 #: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:250
@@ -2232,7 +2237,7 @@ msgstr "Gruppen ID"
 #: ../../network/nm_setting_bean_gen.go:260
 #: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Pre-Shared Key"
-msgstr "vorher vereinbarter Schlüssel"
+msgstr "Vorher vereinbarter Schlüssel"
 
 #: ../../network/nm_setting_bean_gen.go:255
 #: ../../network/nm_setting_bean_gen.go:256
@@ -2250,28 +2255,28 @@ msgstr "VPN PPP"
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
 msgid "No Protocol Field Compression"
-msgstr "Keine Kontrollfeld Kompression"
+msgstr "Keine Protokollfeldkomprimierung"
 
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:280
 msgid "No Address/Control Compression"
-msgstr "Keine Adressen/Kontrollen Kompression"
+msgstr "Keine Adressen/Kontrollkomprimierung"
 
 #: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:314
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:324
 msgid "VPN Security"
-msgstr "VPN Sicherheit"
+msgstr "VPN-Sicherheit"
 
 #: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
 msgid "Cipher"
-msgstr "Cipher"
+msgstr "Verschlüsselungsverfahren"
 
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:317
@@ -2285,7 +2290,7 @@ msgstr "HMAC Auth"
 #: ../../network/nm_setting_bean_gen.go:332
 #: ../../network/nm_setting_bean_gen.go:333
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS Authentikation"
+msgstr "VPN TLS-Authentifizierung"
 
 #: ../../network/nm_setting_bean_gen.go:324
 #: ../../network/nm_setting_bean_gen.go:325
@@ -2313,7 +2318,7 @@ msgstr "Schlüsseldatei"
 #: ../../network/nm_setting_bean_gen.go:344
 #: ../../network/nm_setting_bean_gen.go:345
 msgid "VPN Proxies"
-msgstr "VPN Proxies"
+msgstr "VPN-Proxies"
 
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
@@ -2327,7 +2332,7 @@ msgstr "Proxytyp"
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
 msgid "Server IP"
-msgstr "Server IP"
+msgstr "Server-IP"
 
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:339
@@ -2380,28 +2385,28 @@ msgstr "Neuverhandlungsintervall anpassen"
 #: ../../network/nm_setting_bean_gen.go:362
 #: ../../network/nm_setting_bean_gen.go:363
 msgid "Renegotiation Interval"
-msgstr "Intervall zur Neuverhandlung"
+msgstr "Neuverhandlungsintervall"
 
 #: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:363
 #: ../../network/nm_setting_bean_gen.go:364
 msgid "Use LZO data compression"
-msgstr "LZO Daten Kompression nutzen"
+msgstr "LZO-Datenkomprimierung verwenden"
 
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:355
 #: ../../network/nm_setting_bean_gen.go:364
 #: ../../network/nm_setting_bean_gen.go:365
 msgid "Use TCP connection"
-msgstr "TCP Verbindung nutzen"
+msgstr "TCP-Verbindung verwenden"
 
 #: ../../network/nm_setting_bean_gen.go:355
 #: ../../network/nm_setting_bean_gen.go:356
 #: ../../network/nm_setting_bean_gen.go:365
 #: ../../network/nm_setting_bean_gen.go:366
 msgid "Use TAP device"
-msgstr "TAP Gerät nutzen"
+msgstr "TAP-Gerät verwenden"
 
 #: ../../network/nm_setting_bean_gen.go:356
 #: ../../network/nm_setting_bean_gen.go:357
@@ -2422,7 +2427,7 @@ msgstr "UDP-Fragmentgröße anpassen"
 #: ../../network/nm_setting_bean_gen.go:369
 #: ../../network/nm_setting_bean_gen.go:370
 msgid "UDP Fragment Size"
-msgstr "UDP Fragment Größe"
+msgstr "UDP-Fragmentgröße"
 
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:361
@@ -2478,7 +2483,7 @@ msgstr "NAT Überquerung"
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:448
 msgid "IKE DH Group"
-msgstr "IKE DH Gruppe"
+msgstr "IKE DH-Gruppe"
 
 #: ../../network/nm_setting_bean_gen.go:422
 #: ../../network/nm_setting_bean_gen.go:423
@@ -2528,21 +2533,21 @@ msgstr "Methode"
 #: ../../network/nm_setting_bean_gen.go:472
 #: ../../network/nm_setting_bean_gen.go:473
 msgid "IP Address"
-msgstr "IP Addresse"
+msgstr "IP-Adresse"
 
 #: ../../network/nm_setting_bean_gen.go:434
 #: ../../network/nm_setting_bean_gen.go:435
 #: ../../network/nm_setting_bean_gen.go:460
 #: ../../network/nm_setting_bean_gen.go:461
 msgid "Netmask"
-msgstr "Netzwerkmaske"
+msgstr "Netzmaske"
 
 #: ../../network/nm_setting_bean_gen.go:436
 #: ../../network/nm_setting_bean_gen.go:437
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:449
 msgid "DNS Server"
-msgstr "DNS Server"
+msgstr "DNS-Server"
 
 #: ../../network/nm_setting_bean_gen.go:442
 #: ../../network/nm_setting_bean_gen.go:443
@@ -2556,7 +2561,7 @@ msgstr "IPv6"
 #: ../../network/nm_setting_bean_gen.go:473
 #: ../../network/nm_setting_bean_gen.go:474
 msgid "Prefix"
-msgstr "Prefix"
+msgstr "Präfix"
 
 #: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:463
@@ -2578,7 +2583,7 @@ msgstr "Sekundärer DNS"
 #: ../../network/nm_setting_virtual_key.go:134
 #: ../../network/nm_setting_virtual_key.go:146
 msgid "Custom"
-msgstr "Benutzerdefiniert"
+msgstr "Angepasst"
 
 #: ../../network/nm_setting_gsm.go:154 ../../network/nm_setting_gsm.go:166
 #: ../../network/nm_setting_gsm.go:221
@@ -2616,19 +2621,19 @@ msgstr "2G (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:185
 msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Bevorzuge 3G (UMTS/HSPA)"
+msgstr "3G bevorzugen (UMTS/HSPA)"
 
 #: ../../network/nm_setting_gsm.go:186
 msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Bevorzuge 2G (GPRS/EDGE)"
+msgstr "2G bevorzugen (GPRS/EDGE)"
 
 #: ../../network/nm_setting_gsm.go:187
 msgid "Prefer 4G (LTE)"
-msgstr "Bevorzuge 4G (LTE)"
+msgstr "4G bevorzugen (LTE)"
 
 #: ../../network/nm_setting_gsm.go:188
 msgid "Use Only 4G (LTE)"
-msgstr "Verwende ausschließlich 4G (LTE)"
+msgstr "Nur 4G verwenden (LTE)"
 
 #: ../../network/nm_setting_ip4_config.go:27
 #: ../../network/nm_setting_ip4_config.go:39
@@ -2724,14 +2729,14 @@ msgstr "Alle verfügbar (Standard)"
 #: ../../network/nm_setting_virtual_key.go:203
 #: ../../network/nm_setting_virtual_key.go:212
 msgid "128-bit (most secure)"
-msgstr "128-bit (am sichersten)"
+msgstr "128-Bit (am sichersten)"
 
 #: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:201
 #: ../../network/nm_setting_virtual_key.go:204
 #: ../../network/nm_setting_virtual_key.go:213
 msgid "40-bit (less secure)"
-msgstr "40-bit (weniger sicher)"
+msgstr "40-Bit (weniger sicher)"
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:220
@@ -2746,7 +2751,7 @@ msgstr "Schwach"
 #: ../../network/nm_setting_vpn_openvpn.go:236
 #: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
-msgstr "Zertifikat (TLS)"
+msgstr "Zertifikate (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:238
 #: ../../network/nm_setting_vpn_openvpn.go:250
@@ -2979,19 +2984,19 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:262
 #: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
-msgstr "DH Gruppe 1"
+msgstr "DH-Gruppe 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:251
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
-msgstr "DH Gruppe 2 (Standard)"
+msgstr "DH-Gruppe 2 (Standard)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:252
 #: ../../network/nm_setting_vpn_vpnc.go:260
 #: ../../network/nm_setting_vpn_vpnc.go:264
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
-msgstr "DH Gruppe 5"
+msgstr "DH-Gruppe 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:256
 #: ../../network/nm_setting_vpn_vpnc.go:268
@@ -3001,7 +3006,7 @@ msgstr "Server (Standard)"
 #: ../../network/nm_setting_vpn_vpnc.go:259
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
-msgstr "DH Gruppe 2"
+msgstr "DH-Gruppe 2"
 
 #: ../../network/nm_setting_wireless.go:174
 #: ../../network/nm_setting_wireless.go:186
@@ -3055,7 +3060,7 @@ msgstr "Ad-Hoc WPA-PSK"
 #: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastructure"
+msgstr "WPA-PSK Infrastruktur"
 
 #: ../../network/nm_setting_wireless_security.go:58
 #: ../../network/nm_setting_wireless_security.go:70
@@ -3109,7 +3114,7 @@ msgstr "Das Gerät wird nun verwaltet."
 
 #: ../../network/state_handler.go:25 ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Das Gerät wird nicht mehr verwaltet."
+msgstr "Das Gerät wird nicht länger verwaltet."
 
 #: ../../network/state_handler.go:26 ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
@@ -3118,7 +3123,7 @@ msgstr "Das Gerät war für die Konfiguration noch nicht bereit."
 #: ../../network/state_handler.go:27 ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "Die IP-Konfiguration konnte nicht belegt werden (keine verfügbaren Adressen, Zeitüberschreitung, etc. )."
+msgstr "IP-Konfiguration konnte nicht belegt werden (keine verfügbaren Adressen, Zeitüberschreitung, usw.)."
 
 #: ../../network/state_handler.go:28 ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
@@ -3126,7 +3131,7 @@ msgstr "Die IP-Konfiguration ist nicht mehr gültig."
 
 #: ../../network/state_handler.go:29 ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
-msgstr "Passwörter waren erforderlich, aber nicht vorgesehen."
+msgstr "Passwörter waren erforderlich, aber nicht vorausgesetzt."
 
 #: ../../network/state_handler.go:30 ../../network/state_handler.go:42
 msgid ""
@@ -3136,7 +3141,7 @@ msgstr "Die 802.1X-Verbindung hat sich vom Zugangspunkt oder dem Authentifizieru
 
 #: ../../network/state_handler.go:31 ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Die Konfiguration der 802.1X-Verbindung ist fehlgeschlagen."
+msgstr "Konfiguration der 802.1X-Verbindung ist fehlgeschlagen."
 
 #: ../../network/state_handler.go:32 ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
@@ -3212,7 +3217,7 @@ msgstr "Anruf fehlgeschlagen."
 
 #: ../../network/state_handler.go:50 ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Modem Initialisierung fehlgeschlagen."
+msgstr "Modem-Initialisierung fehlgeschlagen."
 
 #: ../../network/state_handler.go:51 ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
@@ -3220,15 +3225,15 @@ msgstr "Der angegebene GSM APN konnte nicht ausgewählt werden."
 
 #: ../../network/state_handler.go:52 ../../network/state_handler.go:64
 msgid "No networks searched."
-msgstr "Es wurden keine Netzwerke gesucht."
+msgstr "Keine Netzwerke gesucht."
 
 #: ../../network/state_handler.go:53 ../../network/state_handler.go:65
 msgid "Network registration was denied."
-msgstr "Die Netzwerkregistrierung wurde verweigert."
+msgstr "Netzwerkregistrierung wurde verweigert."
 
 #: ../../network/state_handler.go:54 ../../network/state_handler.go:66
 msgid "Network registration timed out."
-msgstr "Die Netzwerkregistrierung ist abgelaufen."
+msgstr "Zeitüberschreitung der Netzwerkregistrierung."
 
 #: ../../network/state_handler.go:55 ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
@@ -3272,7 +3277,7 @@ msgstr "Die 802.1X-Verbindung ist jetzt verfügbar."
 
 #: ../../network/state_handler.go:65 ../../network/state_handler.go:77
 msgid "The modem could not be found."
-msgstr "Das Modem konnte nicht gefunden werden"
+msgstr "Das Modem konnte nicht gefunden werden."
 
 #: ../../network/state_handler.go:66 ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
@@ -3336,7 +3341,7 @@ msgstr "Modem ist jetzt bereit und verfügbar."
 
 #: ../../network/state_handler.go:83 ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
-msgstr "SIM PIN ist falsch."
+msgstr "SIM-PIN ist falsch."
 
 #: ../../network/state_handler.go:84 ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
@@ -3457,7 +3462,7 @@ msgstr "Der Hardware-Schalter der WLAN-Karte ist aus, bitte anschalten, wenn ben
 
 #: ../../network/utils_notify.go:102 ../../network/utils_notify.go:114
 msgid "System proxy is set successfully."
-msgstr "System-Proxy wurde erfolgreich eingestellt."
+msgstr "System-Proxy erfolgreich festgelegt."
 
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:117
 msgid "System proxy has been cancelled."
@@ -3482,15 +3487,19 @@ msgstr "Akkuladestand kann nicht vorhergesagt werden, bitte wichtige Dokumente s
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
-msgstr "Der Akku Ladestatus ist Kritisch Niedrig"
+msgstr "Akkuladestatus kritisch niedrig"
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "Computer war im Ruhezustand, bitte Netzteil anschließen."
@@ -3498,13 +3507,15 @@ msgstr "Computer war im Ruhezustand, bitte Netzteil anschließen."
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
-msgstr "Akku Ladestatus Niedrig"
+msgstr "Akkuladestatus niedrig"
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Computer wird in den Ruhezustand versetzt, bitte Netzteil jetzt anschließen."

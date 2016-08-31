@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Duarte Campos <dcduartejrcampos@gmail.com>, 2016
 # Raphael Miquelis <raphaelmiquelis@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 15:01+0800\n"
-"PO-Revision-Date: 2016-08-10 05:30+0000\n"
+"POT-Creation-Date: 2016-08-31 09:08+0800\n"
+"PO-Revision-Date: 2016-08-31 08:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -20,14 +21,14 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "Por favor digite uma palavra passe não inferior a 8 caracteres"
 
 #: ../../accounts/checkers/password.go:47
 #, c-format
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (%s)"
-msgstr ""
+msgstr "A palavra passe têm de conter letras Inglesas (sensitivo a maiúsculas), números ou símbolos especiais (%s)  "
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
@@ -575,40 +576,45 @@ msgid "Fakaofo"
 msgstr "Fakaofo"
 
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
-#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
-#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
-#: ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
+#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr "_Executar"
 
 #: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:123 ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
+#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr "_Fechar todos"
 
 #: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:132 ../../dock/runtime_apps.go:291
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
+#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
 msgid "_Dock"
 msgstr "_Adicionar à barra"
 
 #: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:139 ../../dock/normal_apps.go:105
+#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
+#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
+#: ../../dock/runtime_apps.go:312
 msgid "_Undock"
 msgstr "_Remover da Barra"
+
+#: ../../dock/app_entry_menu.go:146
+msgid "_All windows"
+msgstr ""
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
@@ -974,10 +980,10 @@ msgstr "Abrir pasta "
 msgid "Run Software"
 msgstr "Executar Software"
 
-#: ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
 #, c-format
 msgid "%s removed successfully"
-msgstr ""
+msgstr "%s removido com sucesso."
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
@@ -3482,7 +3488,9 @@ msgstr "Energia da bateria não pode ser previsto, por favor salvar documentos i
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "Bateria Fraca"
@@ -3490,7 +3498,9 @@ msgstr "Bateria Fraca"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "O computador estava em suspensão, por favor, conecte-o à energia."
@@ -3498,6 +3508,7 @@ msgstr "O computador estava em suspensão, por favor, conecte-o à energia."
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "Bateria Fraca"
@@ -3505,6 +3516,7 @@ msgstr "Bateria Fraca"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "O computador irá entrar em suspensão, por favor, conecte-o à energia."

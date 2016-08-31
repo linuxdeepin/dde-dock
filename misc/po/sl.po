@@ -3,13 +3,15 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Eva Černi <mini.muca000@gmail.com>, 2016
+# Gorzy Gorup <gorupgorazd@gmail.com>, 2016
 # worm <thewormhole@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 15:01+0800\n"
-"PO-Revision-Date: 2016-08-10 05:30+0000\n"
+"POT-Creation-Date: 2016-08-31 09:08+0800\n"
+"PO-Revision-Date: 2016-08-31 08:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Slovenian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -20,26 +22,26 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "Prosim, vnesite geslo z več kot 8 znaki."
 
 #: ../../accounts/checkers/password.go:47
 #, c-format
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (%s)"
-msgstr ""
+msgstr "Geslo mora vsebovati angleške črke (male in velike), številke ali posebne simbole (%s)"
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr "Uporabniško ime ne sme biti prazno."
+msgstr "Uporabniško ime ne sme ostati prazno."
 
 #: ../../accounts/checkers/username.go:51
 #: ../../accounts/checkers/username.go:63
 #: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr "Uporabniško ime sestavljajo znaki a~z, 0~9, - ali _."
+msgstr "Uporabniško ime morajo sestavljati znaki a~z, 0~9, - ali _."
 
 #: ../../accounts/checkers/username.go:53
 #: ../../accounts/checkers/username.go:65
@@ -57,32 +59,32 @@ msgstr "Uporabniško ime že obstaja."
 #: ../../accounts/checkers/username.go:69
 #: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
-msgstr "Uporabniško ime je bilo uporabljeno."
+msgstr "Uporabniško ime je bilo uporabljeno v sistemu."
 
 #: ../../accounts/checkers/username.go:59
 #: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
-msgstr "Uporabniško ime je daljše, kot pa je dovoljeno."
+msgstr "Uporabniško ime je daljše, kot je dovoljeno"
 
 #: ../../bluetooth/bluez_profile.go:19 ../../bluetooth/bluez_profile.go:31
 msgid "Serial port"
-msgstr "Zaporedna vrata"
+msgstr "Serijska vrata"
 
 #: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Klicna povezava"
+msgstr "Klicno povezovanje"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Prostoročne naprave"
+msgstr "Prostoročna naprava"
 
 #: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Prosto-ročna glasovna vstopna točka"
+msgstr "Prostoročna glasovna vstopna točka"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Vstopna glasovna točka s slušalkami"
+msgstr "Glasovna vstopna točka s slušalkami"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
@@ -110,7 +112,7 @@ msgstr "Prejeto sporočilo"
 
 #: ../../bluetooth/bluez_profile.go:30 ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Obvestilo sporočila"
+msgstr "Obvestilo o sporočilu"
 
 #: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
 #: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
@@ -122,7 +124,7 @@ msgstr "Obvestilo sporočila"
 #: ../../network/state_handler.go:214 ../../network/utils_notify.go:109
 #: ../../network/utils_notify.go:121
 msgid "Connected"
-msgstr "Priključen"
+msgstr "Povezava vzpostavljena"
 
 #: ../../bluetooth/utils_notify.go:49 ../../bluetooth/utils_notify.go:58
 #: ../../bluetooth/utils_notify.go:61 ../../bluetooth/utils_notify.go:62
@@ -150,20 +152,20 @@ msgstr "Povezava prekinjena"
 
 #: ../../bluetooth/utils_notify.go:52 ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr "Preveri da %q je vklopen in v dosegu."
+msgstr "Preveri, da %q je vklopen in v dosegu."
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr "Bluetooth povezava ni mogoča. "
+msgstr "Bluetooth povezava ni uspela "
 
 #: ../../bluetooth/utils_notify.go:56 ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr "Ne morem se povezati z %q, samodejno prezri."
+msgstr "Povezava z/s %q ni uspela, samodejno prezrto"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr "Preveri da %q vklopljen in v dosegu."
+msgstr "Preveri ali je %q vklopljen in v dosegu."
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
@@ -237,17 +239,17 @@ msgstr "Arizona"
 #: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
 #: ../../timedate/deepin_list.go:77
 msgid "BajaSur"
-msgstr "BajaSur"
+msgstr "Baja California Sur"
 
 #: ../../datetime/timezone/deepin_list.go:72 ../../timedate/deepin_list.go:72
 #: ../../timedate/deepin_list.go:81
 msgid "Mexico City"
-msgstr "ZDA Central"
+msgstr "Ciudad de México"
 
 #: ../../datetime/timezone/deepin_list.go:76 ../../timedate/deepin_list.go:76
 #: ../../timedate/deepin_list.go:85
 msgid "Chicago"
-msgstr "Chicago"
+msgstr "Čikago"
 
 #: ../../datetime/timezone/deepin_list.go:80 ../../timedate/deepin_list.go:80
 #: ../../timedate/deepin_list.go:89
@@ -262,7 +264,7 @@ msgstr "Monterrey"
 #: ../../datetime/timezone/deepin_list.go:88 ../../timedate/deepin_list.go:88
 #: ../../timedate/deepin_list.go:97
 msgid "New York"
-msgstr "Baterija Kritično nizka"
+msgstr "New York"
 
 #: ../../datetime/timezone/deepin_list.go:92 ../../timedate/deepin_list.go:92
 #: ../../timedate/deepin_list.go:101
@@ -282,12 +284,12 @@ msgstr "Caracas"
 #: ../../datetime/timezone/deepin_list.go:104
 #: ../../timedate/deepin_list.go:104 ../../timedate/deepin_list.go:113
 msgid "Cuiaba"
-msgstr "Cuiaba"
+msgstr "Cuiabá"
 
 #: ../../datetime/timezone/deepin_list.go:108
 #: ../../timedate/deepin_list.go:108 ../../timedate/deepin_list.go:117
 msgid "Santiago"
-msgstr "Santiago"
+msgstr "Santiago de Chile"
 
 #: ../../datetime/timezone/deepin_list.go:112
 #: ../../timedate/deepin_list.go:112 ../../timedate/deepin_list.go:121
@@ -297,7 +299,7 @@ msgstr "La Paz"
 #: ../../datetime/timezone/deepin_list.go:116
 #: ../../timedate/deepin_list.go:116 ../../timedate/deepin_list.go:125
 msgid "Asuncion"
-msgstr "Asuncion"
+msgstr "Asunción"
 
 #: ../../datetime/timezone/deepin_list.go:120
 #: ../../timedate/deepin_list.go:120 ../../timedate/deepin_list.go:129
@@ -322,12 +324,12 @@ msgstr "Cayenne"
 #: ../../datetime/timezone/deepin_list.go:136
 #: ../../timedate/deepin_list.go:136 ../../timedate/deepin_list.go:145
 msgid "DeNoronha"
-msgstr "DeNoronha"
+msgstr "Fernando de Noronha"
 
 #: ../../datetime/timezone/deepin_list.go:140
 #: ../../timedate/deepin_list.go:140 ../../timedate/deepin_list.go:149
 msgid "Azores"
-msgstr "Azores"
+msgstr "Azori"
 
 #: ../../datetime/timezone/deepin_list.go:144
 #: ../../timedate/deepin_list.go:144 ../../timedate/deepin_list.go:153
@@ -352,7 +354,7 @@ msgstr "Casablanca"
 #: ../../datetime/timezone/deepin_list.go:160
 #: ../../timedate/deepin_list.go:160 ../../timedate/deepin_list.go:169
 msgid "Monrovia"
-msgstr "Monrovia"
+msgstr "Monrovija"
 
 #: ../../datetime/timezone/deepin_list.go:164
 #: ../../timedate/deepin_list.go:164 ../../timedate/deepin_list.go:173
@@ -362,7 +364,7 @@ msgstr "Madrid"
 #: ../../datetime/timezone/deepin_list.go:168
 #: ../../timedate/deepin_list.go:168 ../../timedate/deepin_list.go:177
 msgid "Paris"
-msgstr "Paris"
+msgstr "Pariz"
 
 #: ../../datetime/timezone/deepin_list.go:172
 #: ../../timedate/deepin_list.go:172 ../../timedate/deepin_list.go:181
@@ -392,7 +394,7 @@ msgstr "Atene"
 #: ../../datetime/timezone/deepin_list.go:192
 #: ../../timedate/deepin_list.go:192 ../../timedate/deepin_list.go:201
 msgid "Istanbul"
-msgstr "Istanbul"
+msgstr "Carigrad"
 
 #: ../../datetime/timezone/deepin_list.go:196
 #: ../../timedate/deepin_list.go:196 ../../timedate/deepin_list.go:205
@@ -412,7 +414,7 @@ msgstr "Teheran"
 #: ../../datetime/timezone/deepin_list.go:208
 #: ../../timedate/deepin_list.go:208 ../../timedate/deepin_list.go:217
 msgid "Muscat"
-msgstr "Muscat"
+msgstr "Muškat"
 
 #: ../../datetime/timezone/deepin_list.go:212
 #: ../../timedate/deepin_list.go:212 ../../timedate/deepin_list.go:221
@@ -437,7 +439,7 @@ msgstr "Karači"
 #: ../../datetime/timezone/deepin_list.go:228
 #: ../../timedate/deepin_list.go:228 ../../timedate/deepin_list.go:237
 msgid "Calcutta"
-msgstr "Calcutta"
+msgstr "Kolkata"
 
 #: ../../datetime/timezone/deepin_list.go:232
 #: ../../timedate/deepin_list.go:232 ../../timedate/deepin_list.go:241
@@ -447,7 +449,7 @@ msgstr "Kathmandu"
 #: ../../datetime/timezone/deepin_list.go:236
 #: ../../timedate/deepin_list.go:236 ../../timedate/deepin_list.go:245
 msgid "Dhaka"
-msgstr "Dhaka"
+msgstr "Daka"
 
 #: ../../datetime/timezone/deepin_list.go:240
 #: ../../timedate/deepin_list.go:240 ../../timedate/deepin_list.go:249
@@ -457,7 +459,7 @@ msgstr "Jekaterinburg"
 #: ../../datetime/timezone/deepin_list.go:244
 #: ../../timedate/deepin_list.go:244 ../../timedate/deepin_list.go:253
 msgid "Rangoon"
-msgstr "Rangoon"
+msgstr "Jangon"
 
 #: ../../datetime/timezone/deepin_list.go:248
 #: ../../timedate/deepin_list.go:248 ../../timedate/deepin_list.go:257
@@ -467,7 +469,7 @@ msgstr "Bangkok"
 #: ../../datetime/timezone/deepin_list.go:252
 #: ../../timedate/deepin_list.go:252 ../../timedate/deepin_list.go:261
 msgid "Jakarta"
-msgstr "Jakarta"
+msgstr "Džakarta"
 
 #: ../../datetime/timezone/deepin_list.go:256
 #: ../../timedate/deepin_list.go:256 ../../timedate/deepin_list.go:265
@@ -482,7 +484,7 @@ msgstr "Hong Kong"
 #: ../../datetime/timezone/deepin_list.go:264
 #: ../../timedate/deepin_list.go:264 ../../timedate/deepin_list.go:273
 msgid "Taipei"
-msgstr "Taipei"
+msgstr "Tajpej"
 
 #: ../../datetime/timezone/deepin_list.go:268
 #: ../../timedate/deepin_list.go:268 ../../timedate/deepin_list.go:277
@@ -507,7 +509,7 @@ msgstr "Tokio"
 #: ../../datetime/timezone/deepin_list.go:284
 #: ../../timedate/deepin_list.go:284 ../../timedate/deepin_list.go:293
 msgid "Seoul"
-msgstr "Seoul"
+msgstr "Seul"
 
 #: ../../datetime/timezone/deepin_list.go:288
 #: ../../timedate/deepin_list.go:288 ../../timedate/deepin_list.go:297
@@ -522,7 +524,7 @@ msgstr "Sydney"
 #: ../../datetime/timezone/deepin_list.go:296
 #: ../../timedate/deepin_list.go:296 ../../timedate/deepin_list.go:305
 msgid "Guam"
-msgstr "Guam"
+msgstr "Gvam"
 
 #: ../../datetime/timezone/deepin_list.go:300
 #: ../../timedate/deepin_list.go:300 ../../timedate/deepin_list.go:309
@@ -557,7 +559,7 @@ msgstr "Auckland"
 #: ../../datetime/timezone/deepin_list.go:324
 #: ../../timedate/deepin_list.go:324 ../../timedate/deepin_list.go:333
 msgid "Anadyr"
-msgstr "Anadyr"
+msgstr "Anadir"
 
 #: ../../datetime/timezone/deepin_list.go:328
 #: ../../timedate/deepin_list.go:328 ../../timedate/deepin_list.go:337
@@ -575,40 +577,45 @@ msgid "Fakaofo"
 msgstr "Fakaofo"
 
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
-#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
-#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
-#: ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
+#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
 msgid "_Run"
 msgstr "_Zaženi"
 
 #: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:123 ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
+#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr "_Zapri vse"
 
 #: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:132 ../../dock/runtime_apps.go:291
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
+#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
 msgid "_Dock"
-msgstr "_Dock"
+msgstr "_Zasidraj"
 
 #: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:139 ../../dock/normal_apps.go:105
+#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
+#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
+#: ../../dock/runtime_apps.go:312
 msgid "_Undock"
 msgstr "_Odpni iz pulta"
+
+#: ../../dock/app_entry_menu.go:146
+msgid "_All windows"
+msgstr ""
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
@@ -618,7 +625,7 @@ msgstr "_Odpni iz pulta"
 #: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
-msgstr "Avtomatsko "
+msgstr "Samodejno"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
@@ -663,48 +670,48 @@ msgstr "Zakleni zaslon"
 #: ../../keybinding/id_desc_list.go:50 ../../keybinding/shortcuts/system.go:67
 #: ../../keybinding/shortcuts/system.go:79
 msgid "File manager"
-msgstr "Upravljalnik datotek"
+msgstr "Upravitelj datotek"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
-msgstr "Preklopi med aplikacijami"
+msgstr "Preklopi med programi"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Obratno preklopi med aplikacijami"
+msgstr "Obratno preklopi med programi"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "3D aplikacije-stikalo"
+msgstr "3D preklopi med programi"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Obrni 3D-stikalo aplikacij"
+msgstr "Obratno 3D preklopi med programi"
 
 #: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
-msgstr "Prikaži/skrij dock"
+msgstr "Prikaži/skrij pristan"
 
 #: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:63
 #: ../../keybinding/shortcuts/system.go:75
 msgid "Screenshot"
-msgstr "Zajem zaslona"
+msgstr "Slika zaslona"
 
 #: ../../keybinding/id_desc_list.go:57 ../../keybinding/shortcuts/system.go:64
 #: ../../keybinding/shortcuts/system.go:76
 msgid "Full screenshot"
-msgstr "Polni screenshot"
+msgstr "Slika celega zaslona"
 
 #: ../../keybinding/id_desc_list.go:58 ../../keybinding/shortcuts/system.go:65
 #: ../../keybinding/shortcuts/system.go:77
 msgid "Window screenshot"
-msgstr "Screenshot okna"
+msgstr "Slika okna"
 
 #: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:66
 #: ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
-msgstr "zakasnitveni zaslonski posnetek"
+msgstr "Zamakni zajem zaslona"
 
 #: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:58
 #: ../../keybinding/shortcuts/system.go:70
@@ -714,7 +721,7 @@ msgstr "Terminal"
 #: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake okno"
+msgstr "Okno terminala Quake"
 
 #: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
@@ -724,7 +731,7 @@ msgstr "Odjava"
 #: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
-msgstr "Onemogoči Sledilno ploščico"
+msgstr "Onemogoči drsno ploščico"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -737,7 +744,7 @@ msgstr "Zamenjaj postavitev"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
-msgstr "Kakulator"
+msgstr "Računalo"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
@@ -753,7 +760,7 @@ msgstr "Medijski predvajalnik"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Predvajaj/Premor"
+msgstr "Predvajaj/premor"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
@@ -777,7 +784,7 @@ msgstr "Glasneje"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
-msgstr "Predhodnja"
+msgstr "Predhodni"
 
 #: ../../keybinding/id_desc_list.go:84
 msgid "Next"
@@ -843,58 +850,58 @@ msgstr "Preklopi na delovno površino 4"
 #: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
 #: ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
-msgstr "Preklopite na levi delovni prostor"
+msgstr "Preklopi na levo delovno površino"
 
 #: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
 #: ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
-msgstr "Preklopite na delovni prostor na desni"
+msgstr "Preklopi na desno delovno površino"
 
 #: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
 #: ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
-msgstr "Preklopi na zgornji delovni prostor"
+msgstr "Preklopi na zgornjo delovno površino"
 
 #: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:63
 #: ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
-msgstr "Preklopi na spodnji delovni prostor"
+msgstr "Preklopi na spodnjo delovno površino"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
-msgstr "Premakni  se na delovni prostor 1"
+msgstr "Premakni se na delovno površino 1"
 
 #: ../../keybinding/id_desc_list.go:117
 msgid "Move to workspace 2"
-msgstr "Premakni v delovnem prostoru 2"
+msgstr "Premakni se na delovno površino 2"
 
 #: ../../keybinding/id_desc_list.go:118
 msgid "Move to workspace 3"
-msgstr "Premakni se na delovni prostor 3"
+msgstr "Premakni se na delovno površino 3"
 
 #: ../../keybinding/id_desc_list.go:119
 msgid "Move to workspace 4"
-msgstr "Premakni se na delovni prostor 4"
+msgstr "Premakni se na delovno površino 4"
 
 #: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:109
 #: ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
-msgstr "Premaknite na levo delovni prostor"
+msgstr "Premakni se na levo delovno površino"
 
 #: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:110
 #: ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
-msgstr "Premakni se v delovni prostor na desni"
+msgstr "Premakni se na desno delovno površino"
 
 #: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:111
 #: ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
-msgstr "Premakni v zgornji delovni prostor"
+msgstr "Premakni se na zgornjo delovno površino"
 
 #: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:112
 #: ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
-msgstr "Premaknete v nižji delovni prostor"
+msgstr "Premakni se na spodnjo delovno površino"
 
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
@@ -937,18 +944,18 @@ msgstr "Preklopi okna v obratnem redu."
 
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "Sprememba jezika spodletela, poskusite znova kasneje"
+msgstr "Sprememba jezika je spodletela, prosimo da poskusite kasneje"
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:43
 #: ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "Jezik nastavljen. Prijavite se znova."
+msgstr "Jezik nastavljen, prosimo da se ponovno prijavite."
 
 #: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
 #: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
-msgstr "Spreminjanje sistemskega jezika ..."
+msgstr "Spreminjanje sistemskega jezika, prosimo počakajte..."
 
 #: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
 #: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
@@ -960,7 +967,7 @@ msgstr "Spreminjanje sistemskega jezika z namestitvijo manjkajočega jezikovnega
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 msgid "%q removed successfully."
-msgstr ""
+msgstr "%q je uspešno odstranjen."
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 msgid "Nothing"
@@ -974,10 +981,10 @@ msgstr "Odpri mapo"
 msgid "Run Software"
 msgstr "Zaženi programsko opremo"
 
-#: ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
 #, c-format
 msgid "%s removed successfully"
-msgstr ""
+msgstr "%s uspešno odstranjen"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
@@ -1090,7 +1097,7 @@ msgstr "Zaščiten EAP"
 #: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:204
 #: ../../network/nm_custom_type.go:212
 msgid "Wired Connection"
-msgstr "Wired povezava"
+msgstr "Žična povezava"
 
 #: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:102
 #: ../../network/nm_setting_vpn_l2tp.go:114
@@ -1129,7 +1136,7 @@ msgstr "Vedno vprašaj"
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
 #: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
-msgstr "Ni potrebna"
+msgstr "Ni potrebe"
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:210
@@ -1203,7 +1210,7 @@ msgstr "VPN VPNC"
 
 #: ../../network/nm_custom_type.go:230
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN strongSwan"
 
 #: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:35
 #: ../../network/nm_setting_802_1x.go:79
@@ -1298,7 +1305,7 @@ msgstr "Ime"
 #: ../../network/nm_setting_bean_gen.go:50
 #: ../../network/nm_setting_bean_gen.go:51
 msgid "Automatically connect"
-msgstr "Samodejna povezava"
+msgstr "Samodejno poveži"
 
 #: ../../network/nm_setting_bean_gen.go:51
 #: ../../network/nm_setting_bean_gen.go:52
@@ -1308,7 +1315,7 @@ msgstr "Za vse uporabnike"
 #: ../../network/nm_setting_bean_gen.go:57
 #: ../../network/nm_setting_bean_gen.go:58
 msgid "Ethernet"
-msgstr "Internet"
+msgstr "Ethernet"
 
 #: ../../network/nm_setting_bean_gen.go:59
 #: ../../network/nm_setting_bean_gen.go:60
@@ -1544,7 +1551,7 @@ msgstr "EAP Auth"
 #: ../../network/nm_setting_bean_gen.go:121
 #: ../../network/nm_setting_bean_gen.go:122
 msgid "Identity"
-msgstr "Indediteta "
+msgstr "Identiteta"
 
 #: ../../network/nm_setting_bean_gen.go:122
 #: ../../network/nm_setting_bean_gen.go:123
@@ -2167,7 +2174,7 @@ msgstr "Skupinski Pwd"
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "Zahtevaj notranji IP naslov"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2196,14 +2203,14 @@ msgstr "CA datoteka"
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
 msgid "Enforce UDP Encapsulation"
-msgstr ""
+msgstr "Vsili UDP enkapsulacijo"
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
 msgid "Use IP Compression"
-msgstr ""
+msgstr "Uporabi IP kompresijo"
 
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
@@ -2939,15 +2946,15 @@ msgstr "NOGAVICE"
 
 #: ../../network/nm_setting_vpn_strongswan.go:96
 msgid "SSH Agent"
-msgstr ""
+msgstr "SSH agent"
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
 msgid "Smartcard"
-msgstr ""
+msgstr "Pametna kartica"
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
 msgid "EAP"
-msgstr ""
+msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:238
 #: ../../network/nm_setting_vpn_vpnc.go:250
@@ -3482,7 +3489,9 @@ msgstr "Stanje baterije ni predvidljivo, prosimo shranite pomembne dokumente in 
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "Baterija Kritično nizko"
@@ -3490,7 +3499,9 @@ msgstr "Baterija Kritično nizko"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "Računalnik je bil v načinu spanja, prosimo priključite napajanje."
@@ -3498,6 +3509,7 @@ msgstr "Računalnik je bil v načinu spanja, prosimo priključite napajanje."
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "Prazna baterija"
@@ -3505,6 +3517,7 @@ msgstr "Prazna baterija"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "Računalnik bo v načinu spanja, prosim takoj priključite napajanje."

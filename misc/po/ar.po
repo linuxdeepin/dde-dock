@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-09 15:01+0800\n"
-"PO-Revision-Date: 2016-08-10 05:30+0000\n"
+"POT-Creation-Date: 2016-08-31 09:08+0800\n"
+"PO-Revision-Date: 2016-08-31 08:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -75,11 +75,11 @@ msgstr "شبكة الطلب الهاتفي"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "جهاز بلا قبضات"
+msgstr "جهاز لاسكلي"
 
 #: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr " بوابة صوتية  بلا قبضات"
+msgstr " بوابة صوتية لاسكلية"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
@@ -87,7 +87,7 @@ msgstr "بوابة صوت السماعة"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "دفع الكائن"
+msgstr "نقل الكائن"
 
 #: ../../bluetooth/bluez_profile.go:25 ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
@@ -95,7 +95,7 @@ msgstr "ناقل الملف"
 
 #: ../../bluetooth/bluez_profile.go:26 ../../bluetooth/bluez_profile.go:38
 msgid "Synchronization"
-msgstr "تزامن"
+msgstr "مزامنة"
 
 #: ../../bluetooth/bluez_profile.go:27 ../../bluetooth/bluez_profile.go:39
 msgid "Phone book access"
@@ -107,11 +107,11 @@ msgstr "عميل الوصول لعناوين الهاتف"
 
 #: ../../bluetooth/bluez_profile.go:29 ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
-msgstr "الوصول الى الرسالة"
+msgstr "الوصول الى الرسائل"
 
 #: ../../bluetooth/bluez_profile.go:30 ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "إشعار الرسالة"
+msgstr "إشعار الرسائل"
 
 #: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
 #: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
@@ -233,7 +233,7 @@ msgstr "تشيهواهوا"
 #: ../../datetime/timezone/deepin_list.go:64 ../../timedate/deepin_list.go:64
 #: ../../timedate/deepin_list.go:73
 msgid "Arizona"
-msgstr "اريزونا"
+msgstr "أريزونا"
 
 #: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
 #: ../../timedate/deepin_list.go:77
@@ -576,40 +576,45 @@ msgid "Fakaofo"
 msgstr "فكاوفو"
 
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
-#: ../../dock/normal_apps.go:73 ../../dock/normal_apps.go:76
-#: ../../dock/normal_apps.go:77 ../../dock/normal_apps.go:78
-#: ../../dock/normal_apps.go:86
+#: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
+#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
+#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
 msgid "_Run"
-msgstr "_تشغيل"
+msgstr "تشغيل"
 
 #: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:123 ../../dock/runtime_apps.go:261
+#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
+#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
+#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr "إغلاق الكل"
 
 #: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:132 ../../dock/runtime_apps.go:291
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
+#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
+#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
+#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
 msgid "_Dock"
-msgstr "مقفل"
+msgstr "إرساء"
 
 #: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:139 ../../dock/normal_apps.go:105
+#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
+#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
+#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
+#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
+#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
+#: ../../dock/runtime_apps.go:312
 msgid "_Undock"
-msgstr "إلغاء الق_فل"
+msgstr "إلغاء الإرساء"
+
+#: ../../dock/app_entry_menu.go:146
+msgid "_All windows"
+msgstr ""
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
@@ -715,7 +720,7 @@ msgstr "الطرفية"
 #: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr "نافذة طرفية متحركة"
+msgstr "نافذة طرفية ملائمة"
 
 #: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
@@ -729,7 +734,7 @@ msgstr "إلغاء اللمس"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "مترجم دييبن"
+msgstr "مترجم ديبين"
 
 #: ../../keybinding/id_desc_list.go:65 ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
@@ -791,7 +796,7 @@ msgstr "إخراج"
 #: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:92
 #: ../../keybinding/shortcuts/wm.go:104
 msgid "Close window"
-msgstr "اغلاق النافذة"
+msgstr "إغلاق النافذة"
 
 #: ../../keybinding/id_desc_list.go:94 ../../keybinding/shortcuts/wm.go:88
 #: ../../keybinding/shortcuts/wm.go:100
@@ -827,39 +832,39 @@ msgstr "تفعيل قائمة النافذة"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "الانتقال إلى ورشة العمل 1"
+msgstr "تبديل إلى مساحة العمل 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "الأنتقال الى ورشة العمل 2"
+msgstr "تبديل إلى مساحة العمل 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "الانتقال إلى ورشة العمل 3"
+msgstr "تبديل إلى مساحة العمل 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "الانتقال إلى ورشة العمل 4"
+msgstr "تبديل إلى مساحة العمل 4"
 
 #: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
 #: ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
-msgstr "التبديل إلى مساحة العمل اليمنى"
+msgstr "تبديل إلى مساحة العمل اليمنى"
 
 #: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
 #: ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
-msgstr "التبديل إلى مساحة العمل اليسرى"
+msgstr "تبديل إلى مساحة العمل اليسرى "
 
 #: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
 #: ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
-msgstr "التبديل إلى مساحة العمل العليا"
+msgstr "تبديل إلى مساحة العمل العليا "
 
 #: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:63
 #: ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
-msgstr "التبديل إلى مساحة العمل السفلى"
+msgstr "تبديل إلى مساحة العمل السفلى"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
@@ -938,13 +943,13 @@ msgstr "تبديل النوافذ عكسياً"
 
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "فشل تغيير لغة النظام ، يرجى المحاولة لاحقاً."
+msgstr "تعذر تغيير لغة النظام ، يرجى المحاولة لاحقاً."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:43
 #: ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "تم تغيير لغة النظام، الرجاء تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
+msgstr "تم تغيير لغة النظام، يرجى تسجيل الدخول مرة أخرى بعد تسجيل الخروج."
 
 #: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
 #: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
@@ -975,10 +980,10 @@ msgstr "فتح مجلد"
 msgid "Run Software"
 msgstr "تشغيل برنامج"
 
-#: ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
 #, c-format
 msgid "%s removed successfully"
-msgstr ""
+msgstr "تمت إزالة %s بنجاح"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:309
@@ -1037,7 +1042,7 @@ msgstr "TLS"
 #: ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
-msgstr "خوارزمية تشفير md5"
+msgstr "MD5 "
 
 #: ../../network/manager_active.go:310 ../../network/manager_active.go:325
 #: ../../network/manager_active.go:335 ../../network/manager_active.go:337
@@ -1130,7 +1135,7 @@ msgstr "السؤال دائماً"
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
 #: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
 msgid "Not Required"
-msgstr "لا يتطلب"
+msgstr "غير مطلوب"
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:210
@@ -1354,17 +1359,17 @@ msgstr "MTU"
 #: ../../network/nm_setting_bean_gen.go:104
 #: ../../network/nm_setting_bean_gen.go:105
 msgid "Mobile"
-msgstr "هاتف نقال"
+msgstr "هاتف جوال"
 
 #: ../../network/nm_setting_bean_gen.go:70
 #: ../../network/nm_setting_bean_gen.go:71
 msgid "Country or region"
-msgstr "البلد و المنطقة"
+msgstr "البلد أو المنطقة"
 
 #: ../../network/nm_setting_bean_gen.go:71
 #: ../../network/nm_setting_bean_gen.go:72
 msgid "Provider"
-msgstr "المزود"
+msgstr "مزود الخدمة"
 
 #: ../../network/nm_setting_bean_gen.go:72
 #: ../../network/nm_setting_bean_gen.go:73
@@ -2218,7 +2223,7 @@ msgstr "VPN IPsec"
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:257
 msgid "Enable IPsec"
-msgstr "تمكين أمن البرتوكول "
+msgstr "تمكين IPsec "
 
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:249
@@ -2293,7 +2298,7 @@ msgstr " مصادقة VPN  TLS"
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
 msgid "Subject Match"
-msgstr "تطابق التابع"
+msgstr "مطابقة الموضوع"
 
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
@@ -3106,11 +3111,11 @@ msgstr "تغيرت حالة الجهاز ،بسبب غير معروف"
 
 #: ../../network/state_handler.go:24 ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "الجهاز اﻵن مدار."
+msgstr "الجهاز قيد الإدارة الآن."
 
 #: ../../network/state_handler.go:25 ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "الجهاز لم يعد ممكناً"
+msgstr "الجهاز لم يعد قيد الإدارة ."
 
 #: ../../network/state_handler.go:26 ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
@@ -3133,19 +3138,19 @@ msgstr "كلمات السر مطلوبة لكن لم تقدم"
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "الطلب 802.1X تم قطعه من نقطة الوصول أو خادم المُصادق ."
+msgstr "طلب الشبكة 802.1X تم قطعه من نقطة الوصول أو خادم المُصادق ."
 
 #: ../../network/state_handler.go:31 ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "فشل تكوين الطلب 802.1X"
+msgstr "فشل تكوين طلب الشبكة  802.1X"
 
 #: ../../network/state_handler.go:32 ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "الطلب  802.1X تُرك أو فشل بشكل غير متوقع ."
+msgstr "طلب الشبكة  802.1X تُرك أو أنه فشل فجأةً ."
 
 #: ../../network/state_handler.go:33 ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "استغرق الطلب 802.1X وقتاً طويلاً للمصادقة"
+msgstr "استغرق طلب الشبكة 802.1X وقتاً طويلاً للمصادقة ."
 
 #: ../../network/state_handler.go:34 ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
@@ -3293,11 +3298,11 @@ msgstr "مطلوب رمز   PUK للبطاقة SIM للمودم GSM."
 
 #: ../../network/state_handler.go:70 ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "Wrong GSM Modem's SIM "
+msgstr "خطأ في بطاقة \"SIM\" الخاصة بمودم الاتصال GSM"
 
 #: ../../network/state_handler.go:71 ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "جهازInfiniBand غير قادر على دعم وضع الاتصال."
+msgstr "جهاز InfiniBand لا يدعم وضع الاتصال."
 
 #: ../../network/state_handler.go:72 ../../network/state_handler.go:84
 msgid "A connection dependency failed."
@@ -3305,7 +3310,7 @@ msgstr "فشل اعتماد الاتصال."
 
 #: ../../network/state_handler.go:73 ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "مشكلة مع RFC 2684 إيثرنت عبر جسر ADSL."
+msgstr "توجد مشكلة بالإيثرنت RFC 2684 عبر جسر الـ ADSL."
 
 #: ../../network/state_handler.go:74 ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
@@ -3483,7 +3488,9 @@ msgstr "لا يمكن التنبؤ بطاقة البطارية، يرجى حفظ
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "انخفاض حاد في طاقة البطارية"
@@ -3491,7 +3498,9 @@ msgstr "انخفاض حاد في طاقة البطارية"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:145
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس الطاقة."
@@ -3499,6 +3508,7 @@ msgstr "الحاسوب في وضع اﻹسبات ، يرجى وصل قابس ا�
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "طاقة البطارية منخفضة"
@@ -3506,6 +3516,7 @@ msgstr "طاقة البطارية منخفضة"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr "الحاسوب سيكون في وضع اﻹسبات، يرجى وصل قابس الطاقة الآن."
