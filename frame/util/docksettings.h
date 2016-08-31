@@ -44,7 +44,7 @@ public:
     bool autoHide() const;
     const QRect primaryRect() const;
     const QSize windowSize() const;
-    const QRect windowRect(const Position position) const;
+    const QRect windowRect(const Position position, const bool hide = false) const;
 
     void showDockSettingsMenu();
 

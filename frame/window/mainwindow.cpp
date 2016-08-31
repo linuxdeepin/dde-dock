@@ -242,7 +242,7 @@ void MainWindow::updateGeometry()
 //    default:
 //        Q_ASSERT(false);
 //    }
-    const QRect windowRect = m_settings->windowRect(position);
+    const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
     move(windowRect.x(), windowRect.y());
 
     m_mainPanel->update();

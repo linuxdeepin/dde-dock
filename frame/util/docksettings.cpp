@@ -160,9 +160,20 @@ const QSize DockSettings::windowSize() const
     return m_mainWindowSize;
 }
 
-const QRect DockSettings::windowRect(const Position position) const
+const QRect DockSettings::windowRect(const Position position, const bool hide) const
 {
-    const QSize size = m_mainWindowSize;
+    QSize size = m_mainWindowSize;
+    if (hide)
+    {
+        switch (position)
+        {
+        case Top:
+        case Bottom:    size.setHeight(1);
+        case Left:
+        case Right:     size.setWidth(1);
+        }
+    }
+
     const QRect primaryRect = m_primaryRect;
     const int offsetX = (primaryRect.width() - size.width()) / 2;
     const int offsetY = (primaryRect.height() - size.height()) / 2;
@@ -171,13 +182,13 @@ const QRect DockSettings::windowRect(const Position position) const
     switch (position)
     {
     case Top:
-        p = QPoint(offsetX, 0);                                       break;
+        p = QPoint(offsetX, 0);                                     break;
     case Left:
-        p = QPoint(0, offsetY);                                       break;
+        p = QPoint(0, offsetY);                                     break;
     case Right:
-        p = QPoint(primaryRect.width() - size.width(), offsetY);      break;
+        p = QPoint(primaryRect.width() - size.width(), offsetY);    break;
     case Bottom:
-        p = QPoint(offsetX, primaryRect.height() - size.height());    break;
+        p = QPoint(offsetX, primaryRect.height() - size.height());  break;
     default:Q_UNREACHABLE();
     }
 
