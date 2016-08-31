@@ -109,7 +109,7 @@ void FashionTrayItem::mouseReleaseEvent(QMouseEvent *e)
     if (!m_enableMouseEvent)
         return;
 
-    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    QPoint globalPos = QCursor::pos();
     uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
 
     switch (e->button()) {

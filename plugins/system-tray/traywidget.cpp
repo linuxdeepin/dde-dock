@@ -125,7 +125,7 @@ void TrayWidget::mouseReleaseEvent(QMouseEvent *e)
     if (distance.manhattanLength() > DRAG_THRESHOLD)
         return;
 
-    QPoint globalPos = mapToGlobal(QPoint(0, 0));
+    QPoint globalPos = QCursor::pos();
     uint8_t buttonIndex = XCB_BUTTON_INDEX_1;
 
     switch (e->button()) {
@@ -315,13 +315,12 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     if (isBadWindow())
         return;
 
+    configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    configContainerPosition();
-    Display *dsp = XOpenDisplay(nullptr);
-    XTestFakeButtonEvent(dsp, mouseButton, true, CurrentTime);
-    XTestFakeButtonEvent(dsp, mouseButton, false, CurrentTime);
-    XCloseDisplay(dsp);
+    XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
+    XTestFakeButtonEvent(QX11Info::display(), mouseButton, true, CurrentTime);
+    XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
     setX11PassMouseEvent(true);
     setWindowOnTop(false);
 
