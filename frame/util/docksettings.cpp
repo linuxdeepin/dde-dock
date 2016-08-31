@@ -168,9 +168,9 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
         switch (position)
         {
         case Top:
-        case Bottom:    size.setHeight(1);
+        case Bottom:    size.setHeight(1);      break;
         case Left:
-        case Right:     size.setWidth(1);
+        case Right:     size.setWidth(1);       break;
         }
     }
 
