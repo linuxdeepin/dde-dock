@@ -8,6 +8,7 @@
 #include <QProcess>
 
 #include <X11/extensions/shape.h>
+#include <X11/extensions/XTest.h>
 #include <X11/Xregion.h>
 
 #include <xcb/composite.h>
@@ -59,7 +60,7 @@ void TrayWidget::showEvent(QShowEvent *e)
     QWidget::showEvent(e);
 
     m_updateTimer->start();
-    configContainerPosition();
+//    configContainerPosition();
 //    setX11PassMouseEvent(false);
 
 //    auto c = QX11Info::connection();
@@ -145,29 +146,30 @@ void TrayWidget::moveEvent(QMoveEvent *e)
 {
     QWidget::moveEvent(e);
 
-    configContainerPosition();
+//    configContainerPosition();
 }
 
 void TrayWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    configContainerPosition();
+//    configContainerPosition();
 }
 
 void TrayWidget::configContainerPosition()
 {
     auto c = QX11Info::connection();
 
-    QPoint p(rect().center() - QPoint(8, 8));
-    QWidget *w = this;
-    while (w)
-    {
-        p += w->pos();
-        w = static_cast<QWidget *>(w->parent());
-    }
+    QPoint p(QCursor::pos());
+//    QPoint p(rect().center() - QPoint(8, 8));
+//    QWidget *w = this;
+//    while (w)
+//    {
+//        p += w->pos();
+//        w = static_cast<QWidget *>(w->parent());
+//    }
 
-    const uint32_t containerVals[4] = {uint32_t(p.x()), uint32_t(p.y()), 16, 16};
+    const uint32_t containerVals[4] = {uint32_t(p.x() - 8), uint32_t(p.y() - 8), 16, 16};
     xcb_configure_window(c, m_containerWid,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          containerVals);
@@ -312,10 +314,11 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 {
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    QProcess *process = new QProcess;
-    process->start("xdotool click " + QString::number(mouseButton));
-    process->waitForFinished();
-    process->deleteLater();
+    configContainerPosition();
+    Display *dsp = XOpenDisplay(nullptr);
+    XTestFakeButtonEvent(dsp, mouseButton, true, CurrentTime);
+    XTestFakeButtonEvent(dsp, mouseButton, false, CurrentTime);
+    XCloseDisplay(dsp);
     setX11PassMouseEvent(true);
     setWindowOnTop(false);
 
