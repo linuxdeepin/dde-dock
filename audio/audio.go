@@ -17,6 +17,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/pulse"
+	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
 
@@ -61,6 +62,9 @@ const (
 	gsKeyFirstRun     = "first-run"
 	gsKeyInputVolume  = "input-volume"
 	gsKeyOutputVolume = "output-volume"
+
+	soundEffectSchema     = "com.deepin.dde.sound-effect"
+	soundEffectKeyEnabled = "enabled"
 )
 
 var (
@@ -70,15 +74,24 @@ var (
 
 func (a *Audio) Reset() {
 	for _, s := range a.Sinks {
+		s.SetMute(false)
 		s.SetVolume(defaultOutputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
 	for _, s := range a.Sources {
+		s.SetMute(false)
 		s.SetVolume(defaultInputVolume, false)
 		s.SetBalance(0, false)
 		s.SetFade(0)
 	}
+
+	settings, err := dutils.CheckAndNewGSettings(soundEffectSchema)
+	if err != nil {
+		return
+	}
+	settings.SetBoolean(soundEffectKeyEnabled, true)
+	settings.Unref()
 }
 
 func (s *Audio) GetDefaultSink() *Sink {
