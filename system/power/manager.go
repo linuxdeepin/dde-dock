@@ -104,6 +104,7 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 			logger.Debug("online:", online)
 			m.setPropOnBattery(!online)
 
+			time.AfterFunc(1*time.Second, m.RefreshBatteries)
 			time.AfterFunc(3*time.Second, m.RefreshBatteries)
 		} else if powersupply.IsSystemBattery(device) {
 			m.addBattery(device)

@@ -86,7 +86,8 @@ func (m *Manager) handleWakeup() {
 
 func (m *Manager) initBatteryDisplayUpdateHandler() {
 	power := m.helper.Power
-	power.ConnectBatteryDisplayUpdate(func(int64) {
+	power.ConnectBatteryDisplayUpdate(func(timestamp int64) {
+		logger.Debug("BatteryDisplayUpdate", timestamp)
 		m.handleBatteryDisplayUpdate()
 	})
 
