@@ -303,12 +303,12 @@ void WirelessList::pwdDialogAccepted()
 {
     if (m_pwdDialog->textValue().isEmpty())
         return m_pwdDialog->setTextAlert(true);
-    m_networkInter->FeedSecret(m_lastConnAPPath, m_lastConnUUID, m_pwdDialog->textValue(), m_autoConnBox->isChecked());
+    m_networkInter->FeedSecret(m_lastConnPath, m_lastConnSecurity, m_pwdDialog->textValue(), m_autoConnBox->isChecked());
 }
 
 void WirelessList::pwdDialogCanceled()
 {
-    m_networkInter->CancelSecret(m_lastConnAPPath, m_lastConnUUID);
+    m_networkInter->CancelSecret(m_lastConnPath, m_lastConnSecurity);
     m_pwdDialog->close();
 }
 
@@ -347,10 +347,24 @@ void WirelessList::deactiveAP()
     m_networkInter->DisconnectDevice(QDBusObjectPath(m_device.path()));
 }
 
-void WirelessList::needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect)
+void WirelessList::needSecrets(const QString &connPath, const QString &security, const QString &ssid, const bool defaultAutoConnect)
 {
-    m_lastConnAPPath = apPath;
-    m_lastConnUUID = uuid;
+    // check is our device' ap
+    QString connHwAddr;
+    QJsonDocument conns = QJsonDocument::fromJson(m_networkInter->connections().toUtf8());
+    for (auto item : conns.object()["wireless"].toArray())
+    {
+        auto info = item.toObject();
+        if (info["Path"].toString() != connPath)
+            continue;
+        connHwAddr = info["HwAddress"].toString();
+        break;
+    }
+    if (connHwAddr != m_device.hwAddress())
+        return;
+
+    m_lastConnPath = connPath;
+    m_lastConnSecurity = security;
 
     m_autoConnBox->setChecked(defaultAutoConnect);
     m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));

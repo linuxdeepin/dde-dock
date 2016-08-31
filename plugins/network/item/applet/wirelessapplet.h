@@ -48,7 +48,7 @@ private slots:
     void deviceEnabled(const QString &devPath, const bool enable);
     void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
     void deactiveAP();
-    void needSecrets(const QString &apPath, const QString &uuid, const QString &ssid, const bool defaultAutoConnect);
+    void needSecrets(const QString &connPath, const QString &security, const QString &ssid, const bool defaultAutoConnect);
 
 private:
     NetworkDevice m_device;
@@ -60,8 +60,8 @@ private:
     Dtk::Widget::DInputDialog *m_pwdDialog;
     Dtk::Widget::DCheckBox *m_autoConnBox;
 
-    QString m_lastConnAPPath;
-    QString m_lastConnUUID;
+    QString m_lastConnPath;
+    QString m_lastConnSecurity;
 
     QVBoxLayout *m_centeralLayout;
     QWidget *m_centeralWidget;
