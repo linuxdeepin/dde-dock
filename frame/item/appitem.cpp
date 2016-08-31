@@ -253,6 +253,13 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     startDrag();
 }
 
+void AppItem::wheelEvent(QWheelEvent *e)
+{
+    QWidget::wheelEvent(e);
+
+    m_itemEntry->PresentWindows();
+}
+
 void AppItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);

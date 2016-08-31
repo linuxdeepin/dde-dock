@@ -117,6 +117,11 @@ public Q_SLOTS: // METHODS
         return asyncCall(QStringLiteral("RequestUndock"));
     }
 
+    inline QDBusPendingReply<> PresentWindows()
+    {
+        return asyncCall(QStringLiteral("PresentWindows"));
+    }
+
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
 void ActiveChanged();
