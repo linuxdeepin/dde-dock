@@ -68,6 +68,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     setObjectName("DiskItem");
     setStyleSheet("QFrame #DiskItem:hover {"
                   "background-color:rgba(255, 255, 255, .1);"
+                  "border-radius:4px;"
                   "}");
 
     connect(m_unmountButton, &DImageButton::clicked, [this] {emit requestUnmount(m_info.m_id);});
