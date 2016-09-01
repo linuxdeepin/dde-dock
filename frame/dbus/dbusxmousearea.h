@@ -76,6 +76,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("RegisterFullScreen"), argumentList);
     }
 
+    inline QDBusPendingReply<QString> RegisterArea(const qint32 x1, const qint32 y1, const qint32 x2, const qint32 y2, const qint32 flag)
+    {
+        QList<QVariant> argumentList;
+        argumentList << x1 << y1 << x2 << y2 << flag;
+        return asyncCallWithArgumentList(QStringLiteral("RegisterArea"), argumentList);
+    }
+
     inline QDBusPendingReply<> UnregisterArea(const QString &in0)
     {
         QList<QVariant> argumentList;
