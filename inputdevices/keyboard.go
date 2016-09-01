@@ -143,6 +143,7 @@ func (kbd *Keyboard) init() {
 	if err != nil {
 		logger.Debugf("Init keymap options failed: %v", err)
 	}
+	kbd.setRepeat()
 }
 
 func (kbd *Keyboard) correctLayout() {
