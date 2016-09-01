@@ -25,6 +25,7 @@ signals:
     void accept() const;
 
 protected:
+    void enterEvent(QEvent *e);
     void mousePressEvent(QMouseEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 

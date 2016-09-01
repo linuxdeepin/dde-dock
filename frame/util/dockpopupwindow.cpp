@@ -61,6 +61,14 @@ void DockPopupWindow::hide()
     DArrowRectangle::hide();
 }
 
+void DockPopupWindow::enterEvent(QEvent *e)
+{
+    DArrowRectangle::enterEvent(e);
+
+    raise();
+    setFocus(Qt::ActiveWindowFocusReason);
+}
+
 void DockPopupWindow::mousePressEvent(QMouseEvent *e)
 {
     DArrowRectangle::mousePressEvent(e);
