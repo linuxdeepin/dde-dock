@@ -20,13 +20,21 @@
 <context>
     <name>DiskControlItem</name>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="82"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="86"/>
         <source>Unknown device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="88"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="92"/>
         <source>Unknown volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DiskMountPlugin</name>
+    <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="14"/>
+        <source>Disk</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -150,6 +158,14 @@
     </message>
 </context>
 <context>
+    <name>ShutdownPlugin</name>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
+        <source>Shut down</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SoundApplet</name>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="28"/>
@@ -221,7 +237,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="356"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>
