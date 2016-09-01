@@ -170,17 +170,17 @@ func (a *Audio) rebuildSourceList() {
 	a.setPropSources(sources)
 }
 func (a *Audio) update() {
+	a.rebuildSinkList()
+	a.rebuildSourceList()
+	a.rebuildSinkInputList()
+	a.cards = newCardInfos(a.core.GetCardList())
+	a.setPropCards(a.cards.string())
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
 		a.setPropDefaultSink(sinfo.DefaultSinkName)
 		a.setPropDefaultSource(sinfo.DefaultSourceName)
 	}
 
-	a.rebuildSinkList()
-	a.rebuildSourceList()
-	a.rebuildSinkInputList()
-	a.cards = newCardInfos(a.core.GetCardList())
-	a.setPropCards(a.cards.string())
 	a.setPropActiveSinkPort(a.getActiveSinkPort())
 	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
