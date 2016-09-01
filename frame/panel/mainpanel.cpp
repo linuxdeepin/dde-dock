@@ -235,7 +235,10 @@ void MainPanel::dragMoveEvent(QDragMoveEvent *e)
         if (!RequestDockItem)
         {
             DockItem *insertPositionItem = itemAt(e->pos());
-            if (!insertPositionItem || insertPositionItem->itemType() != DockItem::App)
+            if (!insertPositionItem)
+                return;
+            const auto type = insertPositionItem->itemType();
+            if (type != DockItem::App && type != DockItem::Stretch)
                 return;
             RequestDockItem = new PlaceholderItem;
             m_itemController->placeholderItemAdded(RequestDockItem, insertPositionItem);
