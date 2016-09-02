@@ -20,6 +20,9 @@ char * getDesktopFromWindowByBamf(guint32 win) {
 	if (matcher == NULL ) {
 		matcher = bamf_matcher_get_default();
 	}
+	if (matcher == NULL) {
+		return NULL;
+	}
 	BamfApplication* app = bamf_matcher_get_application_for_xid(matcher, win);
 	if (app == NULL) {
 		return NULL;
@@ -32,9 +35,16 @@ import "C"
 import "unsafe"
 import (
 	"github.com/BurntSushi/xgb/xproto"
+	"sync"
 )
 
+var _bamfMutex sync.Mutex
+
 func getDesktopFromWindowByBamf(win xproto.Window) string {
+	// NOTE: Concurrent call bamf method may cause the program to crash
+	_bamfMutex.Lock()
+	defer _bamfMutex.Unlock()
+
 	cDesktop := C.getDesktopFromWindowByBamf(C.guint32(uint32(win)))
 	if cDesktop == nil {
 		return ""
