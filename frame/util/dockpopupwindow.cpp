@@ -6,7 +6,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-#define MOUSE_BUTTON    1 << 1
+const int MOUSE_BUTTON(1 << 1);
 
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DArrowRectangle(ArrowBottom, parent),
@@ -133,6 +133,6 @@ void DockPopupWindow::unRegisterMouseEvent()
 
     disconnect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease);
 
-    m_mouseInter->UnregisterArea(m_mouseAreaKey);
+    m_mouseInter->UnregisterArea(m_mouseAreaKey).waitForFinished();
     m_mouseAreaKey.clear();
 }
