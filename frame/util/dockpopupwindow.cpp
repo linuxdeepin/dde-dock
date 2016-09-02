@@ -22,6 +22,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, false);
+    setFocusPolicy(Qt::StrongFocus);
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
 }
