@@ -5,6 +5,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QTimer>
 
 class WiredItem : public DeviceItem
 {
@@ -23,15 +24,17 @@ protected:
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
-private:
+private slots:
     void reloadIcon();
     void activeConnectionChanged(const QUuid &uuid);
+    void deviceStateChanged(const NetworkDevice &device);
 
 private:
     bool m_connected;
     QPixmap m_icon;
 
     QLabel *m_itemTips;
+    QTimer *m_delayTimer;
 };
 
 #endif // WIREDITEM_H

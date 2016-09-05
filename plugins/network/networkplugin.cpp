@@ -22,6 +22,7 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
     m_proxyInter = proxyInter;
 
     connect(m_networkManager, &NetworkManager::networkStateChanged, this, &NetworkPlugin::networkStateChanged);
+    connect(m_networkManager, &NetworkManager::deviceTypesChanged, this, &NetworkPlugin::deviceTypesChanged);
     connect(m_networkManager, &NetworkManager::deviceAdded, this, &NetworkPlugin::deviceAdded);
     connect(m_networkManager, &NetworkManager::deviceRemoved, this, &NetworkPlugin::deviceRemoved);
 

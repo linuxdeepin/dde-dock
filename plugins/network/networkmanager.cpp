@@ -30,6 +30,11 @@ void NetworkManager::init()
     dbusCheckTimer->start();
 }
 
+NetworkManager::GlobalNetworkState NetworkManager::globalNetworkState() const
+{
+    return GlobalNetworkState(m_networkInter->state());
+}
+
 const NetworkDevice::NetworkTypes NetworkManager::states() const
 {
     return m_states;
@@ -105,6 +110,7 @@ NetworkManager::NetworkManager(QObject *parent)
 
       m_networkInter(new DBusNetwork(this))
 {
+    connect(m_networkInter, &DBusNetwork::StateChanged, this, &NetworkManager::globalNetworkStateChanged);
     connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &NetworkManager::reloadDevices);
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
 }
@@ -128,9 +134,13 @@ void NetworkManager::reloadDevices()
         Q_ASSERT(infoList.value().isArray());
         const NetworkDevice::NetworkType deviceType = NetworkDevice::deviceType(infoList.key());
 
+        const auto list = infoList.value().toArray();
+        if (list.isEmpty())
+            continue;
+
         types |= deviceType;
 
-        for (auto device : infoList.value().toArray())
+        for (auto device : list)
             deviceSet.insert(NetworkDevice(deviceType, device.toObject()));
     }
 

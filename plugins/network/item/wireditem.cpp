@@ -4,20 +4,31 @@
 
 #include <QPainter>
 #include <QMouseEvent>
+#include <QIcon>
 
 WiredItem::WiredItem(const QUuid &deviceUuid)
     : DeviceItem(deviceUuid),
 
       m_connected(false),
-      m_itemTips(new QLabel(this))
+      m_itemTips(new QLabel(this)),
+      m_delayTimer(new QTimer(this))
 {
+
+    QIcon::setThemeName("deepin");
+
+    m_delayTimer->setSingleShot(true);
+    m_delayTimer->setInterval(200);
 
     m_itemTips->setObjectName("wired-" + deviceUuid.toString());
     m_itemTips->setVisible(false);
     m_itemTips->setStyleSheet("color:white;"
                               "padding:5px 10px;");
 
-    connect(m_networkManager, &NetworkManager::networkStateChanged, this, &WiredItem::reloadIcon);
+    connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
+
+    connect(m_networkManager, &NetworkManager::globalNetworkStateChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(m_networkManager, &NetworkManager::deviceChanged, this, &WiredItem::deviceStateChanged);
+    connect(m_networkManager, &NetworkManager::networkStateChanged, m_delayTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_networkManager, &NetworkManager::activeConnectionChanged, this, &WiredItem::activeConnectionChanged);
 }
 
@@ -71,7 +82,7 @@ void WiredItem::resizeEvent(QResizeEvent *e)
 {
     DeviceItem::resizeEvent(e);
 
-    reloadIcon();
+    m_delayTimer->start();
 }
 
 void WiredItem::mousePressEvent(QMouseEvent *e)
@@ -88,22 +99,34 @@ void WiredItem::mousePressEvent(QMouseEvent *e)
 
 void WiredItem::reloadIcon()
 {
+    Q_ASSERT(sender() == m_delayTimer);
+
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
-    if (displayMode == Dock::Fashion)
+    QString iconName = "network-";
+    if (!m_connected)
     {
-        const int size = std::min(width(), height()) * 0.8;
+        NetworkDevice::NetworkState devState = m_networkManager->deviceState(m_deviceUuid);
 
-        if (m_connected)
-            m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-connected.svg", size);
+        if (devState < NetworkDevice::Disconnected)
+            iconName.append("error");
         else
-            m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-disconnected.svg", size);
+            iconName.append("offline");
     } else {
-        if (m_connected)
-            m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-connected-small.svg", 16);
+        NetworkManager::GlobalNetworkState gState = m_networkManager->globalNetworkState();
+
+        if (gState == NetworkManager::ConnectedGlobal)
+            iconName.append("online");
         else
-            m_icon = ImageUtil::loadSvg(":/wired/resources/wired/wired-disconnected-small.svg", 16);
+            iconName.append("idle");
     }
+
+    if (displayMode == Dock::Efficient)
+        iconName.append("-symbolic");
+
+    const int size = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
+    m_icon = QIcon::fromTheme(iconName).pixmap(size, size);
+    update();
 }
 
 void WiredItem::activeConnectionChanged(const QUuid &uuid)
@@ -112,5 +135,12 @@ void WiredItem::activeConnectionChanged(const QUuid &uuid)
         return;
 
     m_connected = m_networkManager->activeConnSet().contains(m_deviceUuid);
-    update();
+    m_delayTimer->start();
+}
+
+void WiredItem::deviceStateChanged(const NetworkDevice &device)
+{
+    if (device.uuid() != m_deviceUuid)
+        return;
+    m_delayTimer->start();
 }
