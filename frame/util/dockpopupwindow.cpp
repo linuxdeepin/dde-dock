@@ -70,11 +70,23 @@ void DockPopupWindow::hide()
     DArrowRectangle::hide();
 }
 
+void DockPopupWindow::showEvent(QShowEvent *e)
+{
+    DArrowRectangle::showEvent(e);
+
+    QTimer::singleShot(1, this, [&] {
+        raise();
+        activateWindow();
+        setFocus(Qt::ActiveWindowFocusReason);
+    });
+}
+
 void DockPopupWindow::enterEvent(QEvent *e)
 {
     DArrowRectangle::enterEvent(e);
 
     raise();
+    activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
 }
 
