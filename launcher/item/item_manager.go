@@ -32,15 +32,17 @@ type Manager struct {
 	itemTable                   map[ItemID]ItemInfo
 	dstoreDesktopPackageMapFile string
 	dstoreInstalledTimeFile     string
+	nameMap                     map[string]string
 }
 
 // NewManager creates a new item manager.
-func NewManager(store DStore, dstoreDesktopPackageMapFile, dstoreInstalledTimeFile string) *Manager {
+func NewManager(store DStore, dstoreDesktopPackageMapFile, dstoreInstalledTimeFile string, nameMap map[string]string) *Manager {
 	return &Manager{
 		store:                       store,
 		itemTable:                   map[ItemID]ItemInfo{},
 		dstoreDesktopPackageMapFile: dstoreDesktopPackageMapFile,
 		dstoreInstalledTimeFile:     dstoreInstalledTimeFile,
+		nameMap:                     nameMap,
 	}
 }
 
@@ -48,6 +50,16 @@ func NewManager(store DStore, dstoreDesktopPackageMapFile, dstoreInstalledTimeFi
 func (m *Manager) AddItem(item ItemInfo) {
 	m.lock.Lock()
 	defer m.lock.Unlock()
+
+	// hack
+	if m.nameMap != nil {
+		iInfo := item.(*Info)
+		id := string(iInfo.ID())
+		if newName, ok := m.nameMap[id]; ok {
+			iInfo.name = newName
+		}
+	}
+
 	m.itemTable[item.ID()] = item
 }
 

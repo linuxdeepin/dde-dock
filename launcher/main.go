@@ -130,7 +130,8 @@ func (d *Daemon) Start() error {
 	}).InitOnSessionBus(func(store interface{}) (interface{}, error) {
 		d.launcher = NewLauncher()
 
-		im := item.NewManager(store.(DStore), DStoreDesktopPkgMapFile, DStoreInstalledTimeFile)
+		nameMap := loadNameMap()
+		im := item.NewManager(store.(DStore), DStoreDesktopPkgMapFile, DStoreInstalledTimeFile, nameMap)
 		cm := category.NewManager(store.(DStore), category.GetAllInfos(DStoreAllCategoryInfoFile))
 
 		d.launcher.setItemManager(im)
