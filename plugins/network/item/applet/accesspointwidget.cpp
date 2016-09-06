@@ -132,6 +132,9 @@ void AccessPointWidget::setStrengthIcon(const int strength)
 
 void AccessPointWidget::ssidClicked()
 {
+    if (m_activeState == NetworkDevice::Activated)
+        return;
+
     setActiveState(NetworkDevice::Prepare);
     emit requestActiveAP(QDBusObjectPath(m_ap.path()), m_ap.ssid());
 }
