@@ -13,10 +13,23 @@ class NetworkManager : public QObject
     Q_OBJECT
 
 public:
+    enum GlobalNetworkState {
+        Unknown = 0,
+        Asleep = 10,
+        Disconnected = 20,
+        Disconnecting = 30,
+        Connecting = 40,
+        ConnectedLocal = 50,
+        ConnectedSite = 60,
+        ConnectedGlobal = 70,
+    };
+
+public:
     static NetworkManager *instance(QObject *parent = nullptr);
 
     void init();
 
+    GlobalNetworkState globalNetworkState() const;
     const NetworkDevice::NetworkTypes states() const;
     const NetworkDevice::NetworkTypes types() const;
     const QSet<NetworkDevice> deviceList() const;
@@ -29,6 +42,7 @@ public:
     const QSet<NetworkDevice>::const_iterator device(const QUuid &uuid) const;
 
 signals:
+    void globalNetworkStateChanged() const;
     void deviceAdded(const NetworkDevice &device) const;
     void deviceChanged(const NetworkDevice &device) const;
     void deviceRemoved(const NetworkDevice &device) const;
