@@ -37,6 +37,8 @@ type DockManager struct {
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Position    *property.GSettingsEnumProperty `access:"readwrite"`
 	IconSize    *property.GSettingsUintProperty `access:"readwrite"`
+	ShowTimeout *property.GSettingsUintProperty `access:"readwrite"`
+	HideTimeout *property.GSettingsUintProperty `access:"readwrite"`
 	DockedApps  *property.GSettingsStrvProperty
 	launcher    *launcher.Launcher
 
@@ -65,6 +67,8 @@ const (
 	settingKeyPosition    = "position"
 	settingKeyIconSize    = "icon-size"
 	settingKeyDockedApps  = "docked-apps"
+	settingKeyShowTimeout = "show-timeout"
+	settingKeyHideTimeout = "hide-timeout"
 )
 
 func NewDockManager() (*DockManager, error) {
