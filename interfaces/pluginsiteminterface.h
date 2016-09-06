@@ -23,7 +23,7 @@ public:
     virtual const QString itemCommand(const QString &itemKey) {Q_UNUSED(itemKey); return QString();}
 
     // item sort key
-    virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return 0;}
+    virtual int itemSortKey(const QString &itemKey) {Q_UNUSED(itemKey); return 1;}
     // reset sort key when plugins order changed
     virtual void setSortKey(const QString &itemKey, const int order) {Q_UNUSED(itemKey); Q_UNUSED(order);}
 

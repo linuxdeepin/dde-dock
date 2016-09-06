@@ -27,6 +27,7 @@ public:
 
     bool itemAllowContainer(const QString &itemKey);
     bool itemIsInContainer(const QString &itemKey);
+    int itemSortKey(const QString &itemKey);
     void setItemIsInContainer(const QString &itemKey, const bool container);
 
 private:

@@ -84,10 +84,16 @@ bool SystemTrayPlugin::itemIsInContainer(const QString &itemKey)
     return m_containerSettings->value(widKey, false).toBool();
 }
 
+int SystemTrayPlugin::itemSortKey(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return 0;
+}
+
 void SystemTrayPlugin::setItemIsInContainer(const QString &itemKey, const bool container)
 {
-    qDebug() << getWindowClass(itemKey.toInt());
-
+//    qDebug() << getWindowClass(itemKey.toInt());
     m_containerSettings->setValue(getWindowClass(itemKey.toInt()), container);
 }
 
