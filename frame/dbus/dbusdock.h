@@ -91,6 +91,10 @@ public:
     inline void setIconSize(quint32 value)
     { setProperty("IconSize", QVariant::fromValue(value)); }
 
+    Q_PROPERTY(quint32 ShowTimeout READ showTimeout NOTIFY ShowTimeoutChanged)
+    inline quint32 showTimeout() const
+    { return qvariant_cast< quint32 >(property("ShowTimeout")); }
+
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ActivateWindow(uint in0)
     {
@@ -171,6 +175,7 @@ void HideModeChanged();
 void HideStateChanged();
 void PositionChanged();
 void IconSizeChanged();
+void ShowTimeoutChanged();
 };
 
 namespace com {

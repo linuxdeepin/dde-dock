@@ -41,6 +41,9 @@ public:
     Position position() const;
     int screenHeight() const;
     int screenWidth() const;
+    int expandTimeout() const;
+    int narrowTimeout() const;
+
     bool autoHide() const;
     const QRect primaryRect() const;
     const QSize windowSize() const;

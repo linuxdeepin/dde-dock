@@ -140,6 +140,16 @@ int DockSettings::screenWidth() const
     return m_displayInter->screenWidth();
 }
 
+int DockSettings::expandTimeout() const
+{
+    return m_dockInter->showTimeout();
+}
+
+int DockSettings::narrowTimeout() const
+{
+    return 0;
+}
+
 bool DockSettings::autoHide() const
 {
     return m_autoHide;

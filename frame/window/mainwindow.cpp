@@ -117,7 +117,7 @@ void MainWindow::initComponents()
     m_positionUpdateTimer->start();
 
     m_expandDelayTimer->setSingleShot(true);
-    m_expandDelayTimer->setInterval(100);
+    m_expandDelayTimer->setInterval(m_settings->expandTimeout());
 
     m_sizeChangeAni->setDuration(200);
     m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
