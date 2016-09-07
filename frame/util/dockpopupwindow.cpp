@@ -76,6 +76,8 @@ void DockPopupWindow::showEvent(QShowEvent *e)
 
     QTimer::singleShot(1, this, [&] {
         raise();
+        if (!m_model)
+            return;
         activateWindow();
         setFocus(Qt::ActiveWindowFocusReason);
     });
@@ -86,6 +88,8 @@ void DockPopupWindow::enterEvent(QEvent *e)
     DArrowRectangle::enterEvent(e);
 
     raise();
+    if (!m_model)
+        return;
     activateWindow();
     setFocus(Qt::ActiveWindowFocusReason);
 }
