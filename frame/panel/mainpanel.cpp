@@ -87,6 +87,10 @@ MainPanel::MainPanel(QWidget *parent)
     setLayout(m_itemLayout);
 }
 
+///
+/// \brief MainPanel::updateDockPosition change panel layout with spec position.
+/// \param dockPosition
+///
 void MainPanel::updateDockPosition(const Position dockPosition)
 {
     m_position = dockPosition;
@@ -102,6 +106,10 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     m_itemAdjustTimer->start();
 }
 
+///
+/// \brief MainPanel::updateDockDisplayMode change panel style with spec mode.
+/// \param displayMode
+///
 void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 {
     m_displayMode = displayMode;
@@ -109,6 +117,7 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
     {
+        // we need to hide container item at fashion mode.
         if (item->itemType() == DockItem::Container)
             item->setVisible(displayMode == Dock::Efficient);
     }
@@ -117,11 +126,19 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
     setStyleSheet(styleSheet());
 }
 
+///
+/// \brief MainPanel::displayMode interface for Q_PROPERTY, never use this func.
+/// \return
+///
 int MainPanel::displayMode()
 {
     return int(m_displayMode);
 }
 
+///
+/// \brief MainPanel::position interface for Q_PROPERTY, never use this func.
+/// \return
+///
 int MainPanel::position()
 {
     return int(m_position);
@@ -287,6 +304,10 @@ void MainPanel::dropEvent(QDropEvent *e)
     }
 }
 
+///
+/// \brief MainPanel::manageItem manage a dock item, all dock item should be managed after construct.
+/// \param item
+///
 void MainPanel::manageItem(DockItem *item)
 {
     connect(item, &DockItem::dragStarted, this, &MainPanel::itemDragStarted, Qt::UniqueConnection);
@@ -295,6 +316,11 @@ void MainPanel::manageItem(DockItem *item)
     connect(item, &DockItem::requestWindowAutoHide, this, &MainPanel::requestWindowAutoHide, Qt::UniqueConnection);
 }
 
+///
+/// \brief MainPanel::itemAt get a dock item which placed at spec point,
+/// \param point
+/// \return if no item at spec point, return nullptr
+///
 DockItem *MainPanel::itemAt(const QPoint &point)
 {
     const QList<DockItem *> itemList = m_itemController->itemList();
@@ -315,6 +341,11 @@ DockItem *MainPanel::itemAt(const QPoint &point)
     return nullptr;
 }
 
+///
+/// \brief MainPanel::adjustItemSize adjust all dock item size to fit panel size,
+/// for optimize cpu usage, DO NOT call this func immediately, you should use m_itemAdjustTimer
+/// to delay do this operate.
+///
 void MainPanel::adjustItemSize()
 {
     Q_ASSERT(sender() == m_itemAdjustTimer);
@@ -480,6 +511,13 @@ void MainPanel::adjustItemSize()
     update();
 }
 
+///
+/// \brief MainPanel::itemInserted insert dock item into index position.
+/// the new inserted item will be hideen first, and then shown after size
+/// adjust finished.
+/// \param index
+/// \param item
+///
 void MainPanel::itemInserted(const int index, DockItem *item)
 {
     // hide new item, display it after size adjust finished
@@ -491,6 +529,11 @@ void MainPanel::itemInserted(const int index, DockItem *item)
     m_itemAdjustTimer->start();
 }
 
+///
+/// \brief MainPanel::itemRemoved take out spec item from panel, this function
+/// will NOT delete item, and NOT disconnect any signals between item and panel.
+/// \param item
+///
 void MainPanel::itemRemoved(DockItem *item)
 {
     m_itemLayout->removeWidget(item);
@@ -498,6 +541,12 @@ void MainPanel::itemRemoved(DockItem *item)
     m_itemAdjustTimer->start();
 }
 
+///
+/// \brief MainPanel::itemMoved move item to spec index.
+/// the index is start from 0 and counted before remove spec item.
+/// \param item
+/// \param index
+///
 void MainPanel::itemMoved(DockItem *item, const int index)
 {
     // remove old item
@@ -506,6 +555,9 @@ void MainPanel::itemMoved(DockItem *item, const int index)
     m_itemLayout->insertWidget(index, item);
 }
 
+///
+/// \brief MainPanel::itemDragStarted handle managed item draging
+///
 void MainPanel::itemDragStarted()
 {
     DragingItem = qobject_cast<DockItem *>(sender());
@@ -517,6 +569,10 @@ void MainPanel::itemDragStarted()
     DragingItem->setVisible(rect.contains(QCursor::pos()));
 }
 
+///
+/// \brief MainPanel::itemDropped handle managed item dropped.
+/// \param destnation
+///
 void MainPanel::itemDropped(QObject *destnation)
 {
     if (m_displayMode == Dock::Fashion)
