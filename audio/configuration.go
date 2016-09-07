@@ -11,6 +11,7 @@ package audio
 
 import (
 	"encoding/json"
+	"pkg.deepin.io/lib/pulse"
 	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 	"time"
@@ -67,9 +68,12 @@ func (a *Audio) applyConfig() {
 
 	for _, s := range a.core.GetSinkList() {
 		if s.Name == info.Sink {
-			if len(info.SinkPort) != 0 &&
-				s.ActivePort.Name != info.SinkPort {
-				s.SetPort(info.SinkPort)
+			if len(info.SinkPort) != 0 {
+				port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
+				if port != nil && port.Available != pulse.AvailableTypeNo &&
+					s.ActivePort.Name != info.SinkPort {
+					s.SetPort(info.SinkPort)
+				}
 			}
 			s.SetVolume(s.Volume.SetAvg(info.SinkVolume))
 			break
@@ -78,9 +82,12 @@ func (a *Audio) applyConfig() {
 
 	for _, s := range a.core.GetSourceList() {
 		if s.Name == info.Source {
-			if len(info.SourcePort) != 0 &&
-				s.ActivePort.Name != info.SourcePort {
-				s.SetPort(info.SourcePort)
+			if len(info.SourcePort) != 0 {
+				port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
+				if port != nil && port.Available != pulse.AvailableTypeNo &&
+					s.ActivePort.Name != info.SourcePort {
+					s.SetPort(info.SourcePort)
+				}
 			}
 			s.SetVolume(s.Volume.SetAvg(info.SourceVolume))
 			break
