@@ -10,7 +10,6 @@
 package mounts
 
 import (
-	"fmt"
 	"gir/gio-2.0"
 	"os/exec"
 	"pkg.deepin.io/dde/api/soundutils"
@@ -89,8 +88,7 @@ func (m *Manager) handleEvent() {
 
 		if autoOpen {
 			go exec.Command("/bin/sh", "-c",
-				fmt.Sprintf("gvfs-open %s",
-					info.MountPoint)).Run()
+				"gvfs-open computer:///").Run()
 		}
 	})
 
