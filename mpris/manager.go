@@ -241,6 +241,8 @@ func (m *Manager) eject(pressed bool) {
 	doAction("eject -r")
 }
 
+var kbdBacklightStep int32 = 0
+
 func (m *Manager) changeKbdBrightness(raised, pressed bool) {
 	if m.blDaemon == nil {
 		return
@@ -258,11 +260,24 @@ func (m *Manager) changeKbdBrightness(raised, pressed bool) {
 		return
 	}
 
-	logger.Debug("[changeKbdBrightness] pld kbd backlight info:", value, maxValue)
+	// step: (max < 10?1:max/10)
+	if kbdBacklightStep == 0 {
+		tmp := maxValue / 10
+		if tmp == 0 {
+			tmp = 1
+		}
+		// 4舍5入
+		if float64(maxValue)/10 < float64(tmp)+0.5 {
+			kbdBacklightStep = tmp
+		} else {
+			kbdBacklightStep = tmp + 1
+		}
+	}
+	logger.Debug("[changeKbdBrightness] pld kbd backlight info:", value, maxValue, kbdBacklightStep)
 	if raised {
-		value += 1
+		value += kbdBacklightStep
 	} else {
-		value -= 1
+		value -= kbdBacklightStep
 	}
 
 	if value < 0 {
