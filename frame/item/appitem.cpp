@@ -4,6 +4,8 @@
 #include "util/imagefactory.h"
 #include "xcb/xcb_misc.h"
 
+#include <dapplication.h>
+
 #include <QPainter>
 #include <QDrag>
 #include <QMouseEvent>
@@ -18,11 +20,13 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_appNameTips(new QLabel(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
       m_draging(false),
+      m_launchingEffects(0.0),
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
       m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
       m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
-      m_updateIconGeometryTimer(new QTimer(this))
+      m_updateIconGeometryTimer(new QTimer(this)),
+      m_launchingEffectsTimer(new QTimer(this))
 {
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
@@ -37,6 +41,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
+
+    m_launchingEffectsTimer->setInterval(3000);
+    m_launchingEffectsTimer->setSingleShot(true);
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
@@ -112,6 +119,8 @@ void AppItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     if (!painter.isActive())
         return;
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     const QRect itemRect = rect();
 
@@ -199,14 +208,39 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     // icon
     const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
-    // draw ligher/normal icon
-    if (m_hover)
-        painter.drawPixmap(itemRect.center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
-    else
-        painter.drawPixmap(itemRect.center() - pixmap.rect().center(), pixmap);
+    // icon pos
+    QPointF iconPos = itemRect.center() - pixmap.rect().center();
+    const bool launching = m_launchingEffectsTimer->isActive();
 
-    // Update the window icon geometry when the icon is changed.
-    m_updateIconGeometryTimer->start();
+    // add launching effects
+    if (launching)
+    {
+        const double power = 3.0;
+        const double multiple = 1.05;
+        const double offset = std::pow(std::sin(m_launchingEffects) * multiple, power);
+        m_launchingEffects += 0.0006;
+
+        switch (DockPosition)
+        {
+        case Left:
+        case Right:     iconPos.setX(iconPos.x() + offset);     break;
+        case Top:
+        case Bottom:    iconPos.setY(iconPos.y() + offset);     break;
+        default:;
+        }
+    }
+
+    // draw ligher/normal icon
+    if (launching || !m_hover)
+        painter.drawPixmap(iconPos, pixmap);
+    else
+        painter.drawPixmap(iconPos, ImageFactory::lighterEffect(pixmap));
+
+    if (launching)
+        update();
+    else
+        // Update the window icon geometry when the icon is changed.
+        m_updateIconGeometryTimer->start();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -215,8 +249,18 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     const QPoint distance = MousePressPos - e->pos();
-    if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
-        m_itemEntry->Activate();
+    if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
+        return;
+
+    m_itemEntry->Activate();
+
+    if (!m_titles.isEmpty())
+        return;
+
+    // start launching effects
+    m_launchingEffects = 0.0;
+    m_launchingEffectsTimer->start();
+    update();
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)

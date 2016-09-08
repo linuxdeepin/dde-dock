@@ -50,6 +50,7 @@ private:
     DBusDockEntry *m_itemEntry;
 
     bool m_draging;
+    double m_launchingEffects;
 
     bool m_active;
     WindowDict m_titles;
@@ -62,7 +63,8 @@ private:
     QPixmap m_activeVerticalIndicator;
 
     QRect m_lastGlobalGeometry;
-    QTimer * m_updateIconGeometryTimer;
+    QTimer *m_updateIconGeometryTimer;
+    QTimer *m_launchingEffectsTimer;
 
     static int IconBaseSize;
     static QPoint MousePressPos;
