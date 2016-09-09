@@ -138,6 +138,10 @@ func isSettingVpnPluginSecretKey(section, key string) (isSecret bool) {
 			isSecret = true
 		}
 	case sectionVpnStrongswan:
+		switch key {
+		case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+			isSecret = true
+		}
 	case sectionVpnVpnc:
 		switch key {
 		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, NM_SETTING_VPN_VPNC_KEY_SECRET:

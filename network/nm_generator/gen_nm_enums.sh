@@ -11,7 +11,7 @@ GEN_NM_ENUMS_TPL=nm_enums_gen.go.tpl
 GEN_NM_ENUMS_FILE=../nm_enums_gen.go
 
 if [ ! -d /usr/include/libnm ]; then
-    echo "please install libnm-dev and retry"
+    echo "=> Error: Please install libnm-dev and retry"
     exit 1
 fi
 

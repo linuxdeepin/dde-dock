@@ -1,4 +1,5 @@
 all: gen-back-end-go
+GO15VENDOREXPERIMENT=0
 
 gen-back-end-go: gen-back-end-go-nm-setting-bean gen-back-end-go-nm-enums gen-back-end-go-nm-setting-const
 

@@ -190,6 +190,11 @@ func (s *ConnectionSession) fixValues() {
 		if !isSettingVpnSecretsExists(s.data) {
 			setSettingVpnSecrets(s.data, make(map[string]string))
 		}
+		switch getCustomConnectionType(s.data) {
+		case connectionVpnStrongswan:
+			// fix vpn strongswan password flags
+			setSettingVpnStrongswanKeyPasswordFlags(s.data, NM_SETTING_SECRET_FLAG_NONE)
+		}
 	}
 
 	// do not use s.Type here for that it may be not initialized

@@ -37,10 +37,11 @@ const (
 	NM_SETTING_VPN_STRONGSWAN_KEY_USER           = "user"
 	NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT       = "usercert"
 	NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY        = "userkey"
+	NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD       = "password"
+	NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS = "password-flags"
 	NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL        = "virtual"
 	NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP          = "encap"
 	NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP         = "ipcomp"
-	NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS = "password-flags"
 )
 
 const (
@@ -62,6 +63,7 @@ func initSettingSectionVpnStrongswan(data connectionData) {
 	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_STRONGSWAN)
 	setSettingVpnStrongswanKeyMethod(data, NM_STRONGSWAN_METHOD_KEY)
 	setSettingVpnStrongswanKeyPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	setSettingVpnStrongswanKeyVirtual(data, true)
 }
 
 // strongswan
@@ -79,8 +81,10 @@ func getSettingVpnStrongswanAvailableKeys(data connectionData) (keys []string) {
 	case NM_STRONGSWAN_METHOD_SMARTCARD:
 	case NM_STRONGSWAN_METHOD_EAP:
 		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
 	case NM_STRONGSWAN_METHOD_PSK:
 		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
 	}
 
 	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)

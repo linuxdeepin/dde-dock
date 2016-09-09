@@ -223,6 +223,7 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "usercert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "userkey", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "virtual", Name: Tr("Request an Inner IP Address"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "encap", Name: Tr("Enforce UDP Encapsulation"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "ipcomp", Name: Tr("Use IP Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -414,6 +415,7 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "user", Name: Tr("Username"), WidgetType: "EditLineTextInput", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "usercert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "userkey", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "virtual", Name: Tr("Request an Inner IP Address"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "encap", Name: Tr("Enforce UDP Encapsulation"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "alias-vpn-strongswan", Key: "ipcomp", Name: Tr("Use IP Compression"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
@@ -11394,14 +11396,16 @@ func getSettingVpnStrongswanKeyType(key string) (t ktype) {
 		t = ktypeString
 	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
 		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		t = ktypeString
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		t = ktypeUint32
 	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
 		t = ktypeBoolean
 	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
 		t = ktypeBoolean
 	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
 		t = ktypeBoolean
-	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
-		t = ktypeUint32
 	}
 	return
 }
@@ -11421,13 +11425,15 @@ func isKeyInSettingVpnStrongswan(key string) bool {
 		return true
 	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
 		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		return true
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		return true
 	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
 		return true
 	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
 		return true
 	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
-		return true
-	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
 		return true
 	}
 	return false
@@ -11450,14 +11456,16 @@ func getSettingVpnStrongswanDefaultValue(key string) (value interface{}) {
 		value = ""
 	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
 		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		value = ""
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		value = uint32(0)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
 		value = false
 	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
 		value = false
 	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
 		value = false
-	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
-		value = uint32(0)
 	}
 	return
 }
@@ -11479,14 +11487,16 @@ func generalGetSettingVpnStrongswanKeyJSON(data connectionData, key string) (val
 		value = getSettingVpnStrongswanKeyUsercertJSON(data)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
 		value = getSettingVpnStrongswanKeyUserkeyJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		value = getSettingVpnStrongswanKeyPasswordJSON(data)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		value = getSettingVpnStrongswanKeyPasswordFlagsJSON(data)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
 		value = getSettingVpnStrongswanKeyVirtualJSON(data)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
 		value = getSettingVpnStrongswanKeyEncapJSON(data)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
 		value = getSettingVpnStrongswanKeyIpcompJSON(data)
-	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
-		value = getSettingVpnStrongswanKeyPasswordFlagsJSON(data)
 	}
 	return
 }
@@ -11508,14 +11518,16 @@ func generalSetSettingVpnStrongswanKeyJSON(data connectionData, key, valueJSON s
 		err = logicSetSettingVpnStrongswanKeyUsercertJSON(data, valueJSON)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY:
 		err = logicSetSettingVpnStrongswanKeyUserkeyJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		err = setSettingVpnStrongswanKeyPasswordJSON(data, valueJSON)
+	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
+		err = setSettingVpnStrongswanKeyPasswordFlagsJSON(data, valueJSON)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL:
 		err = setSettingVpnStrongswanKeyVirtualJSON(data, valueJSON)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP:
 		err = setSettingVpnStrongswanKeyEncapJSON(data, valueJSON)
 	case NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP:
 		err = setSettingVpnStrongswanKeyIpcompJSON(data, valueJSON)
-	case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS:
-		err = setSettingVpnStrongswanKeyPasswordFlagsJSON(data, valueJSON)
 	}
 	return
 }
@@ -11539,6 +11551,12 @@ func isSettingVpnStrongswanKeyUsercertExists(data connectionData) bool {
 func isSettingVpnStrongswanKeyUserkeyExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
 }
+func isSettingVpnStrongswanKeyPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
+}
+func isSettingVpnStrongswanKeyPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
+}
 func isSettingVpnStrongswanKeyVirtualExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
 }
@@ -11547,9 +11565,6 @@ func isSettingVpnStrongswanKeyEncapExists(data connectionData) bool {
 }
 func isSettingVpnStrongswanKeyIpcompExists(data connectionData) bool {
 	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
-}
-func isSettingVpnStrongswanKeyPasswordFlagsExists(data connectionData) bool {
-	return isSettingKeyExists(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
 }
 
 // Ensure section and key exists and not empty
@@ -11616,6 +11631,20 @@ func ensureSettingVpnStrongswanKeyUserkeyNoEmpty(data connectionData, errs secti
 		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, NM_KEY_ERROR_EMPTY_VALUE)
 	}
 }
+func ensureSettingVpnStrongswanKeyPasswordNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyPasswordExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD, NM_KEY_ERROR_MISSING_VALUE)
+	}
+	value := getSettingVpnStrongswanKeyPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD, NM_KEY_ERROR_EMPTY_VALUE)
+	}
+}
+func ensureSettingVpnStrongswanKeyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingVpnStrongswanKeyPasswordFlagsExists(data) {
+		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
+	}
+}
 func ensureSettingVpnStrongswanKeyVirtualNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnStrongswanKeyVirtualExists(data) {
 		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, NM_KEY_ERROR_MISSING_VALUE)
@@ -11629,11 +11658,6 @@ func ensureSettingVpnStrongswanKeyEncapNoEmpty(data connectionData, errs section
 func ensureSettingVpnStrongswanKeyIpcompNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingVpnStrongswanKeyIpcompExists(data) {
 		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, NM_KEY_ERROR_MISSING_VALUE)
-	}
-}
-func ensureSettingVpnStrongswanKeyPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
-	if !isSettingVpnStrongswanKeyPasswordFlagsExists(data) {
-		rememberError(errs, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, NM_KEY_ERROR_MISSING_VALUE)
 	}
 }
 
@@ -11668,6 +11692,16 @@ func getSettingVpnStrongswanKeyUserkey(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSettingVpnStrongswanKeyPassword(data connectionData) (value string) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingVpnStrongswanKeyPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSettingVpnStrongswanKeyVirtual(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
 	value = interfaceToBoolean(ivalue)
@@ -11681,11 +11715,6 @@ func getSettingVpnStrongswanKeyEncap(data connectionData) (value bool) {
 func getSettingVpnStrongswanKeyIpcomp(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
 	value = interfaceToBoolean(ivalue)
-	return
-}
-func getSettingVpnStrongswanKeyPasswordFlags(data connectionData) (value uint32) {
-	ivalue := getSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
-	value = interfaceToUint32(ivalue)
 	return
 }
 
@@ -11708,6 +11737,12 @@ func setSettingVpnStrongswanKeyUsercert(data connectionData, value string) {
 func setSettingVpnStrongswanKeyUserkey(data connectionData, value string) {
 	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value)
 }
+func setSettingVpnStrongswanKeyPassword(data connectionData, value string) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD, value)
+}
+func setSettingVpnStrongswanKeyPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, value)
+}
 func setSettingVpnStrongswanKeyVirtual(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, value)
 }
@@ -11716,9 +11751,6 @@ func setSettingVpnStrongswanKeyEncap(data connectionData, value bool) {
 }
 func setSettingVpnStrongswanKeyIpcomp(data connectionData, value bool) {
 	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, value)
-}
-func setSettingVpnStrongswanKeyPasswordFlags(data connectionData, value uint32) {
-	setSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, value)
 }
 
 // JSON Getter
@@ -11746,6 +11778,14 @@ func getSettingVpnStrongswanKeyUserkeyJSON(data connectionData) (valueJSON strin
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY))
 	return
 }
+func getSettingVpnStrongswanKeyPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD))
+	return
+}
+func getSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
+	return
+}
 func getSettingVpnStrongswanKeyVirtualJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL))
 	return
@@ -11756,10 +11796,6 @@ func getSettingVpnStrongswanKeyEncapJSON(data connectionData) (valueJSON string)
 }
 func getSettingVpnStrongswanKeyIpcompJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP))
-	return
-}
-func getSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData) (valueJSON string) {
-	valueJSON = getSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
 	return
 }
 
@@ -11782,6 +11818,12 @@ func setSettingVpnStrongswanKeyUsercertJSON(data connectionData, valueJSON strin
 func setSettingVpnStrongswanKeyUserkeyJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY))
 }
+func setSettingVpnStrongswanKeyPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD))
+}
+func setSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
+}
 func setSettingVpnStrongswanKeyVirtualJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL))
 }
@@ -11790,9 +11832,6 @@ func setSettingVpnStrongswanKeyEncapJSON(data connectionData, valueJSON string) 
 }
 func setSettingVpnStrongswanKeyIpcompJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP))
-}
-func setSettingVpnStrongswanKeyPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
-	return setSettingKeyJSON(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS, valueJSON, getSettingVpnStrongswanKeyType(NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS))
 }
 
 // Logic JSON Setter
@@ -11860,6 +11899,12 @@ func removeSettingVpnStrongswanKeyUsercert(data connectionData) {
 func removeSettingVpnStrongswanKeyUserkey(data connectionData) {
 	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
 }
+func removeSettingVpnStrongswanKeyPassword(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
+}
+func removeSettingVpnStrongswanKeyPasswordFlags(data connectionData) {
+	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
+}
 func removeSettingVpnStrongswanKeyVirtual(data connectionData) {
 	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
 }
@@ -11868,9 +11913,6 @@ func removeSettingVpnStrongswanKeyEncap(data connectionData) {
 }
 func removeSettingVpnStrongswanKeyIpcomp(data connectionData) {
 	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
-}
-func removeSettingVpnStrongswanKeyPasswordFlags(data connectionData) {
-	removeSettingKey(data, NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS)
 }
 
 // Origin file name ../nm_setting_vpn_vpnc_gen.go

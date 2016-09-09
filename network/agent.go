@@ -131,6 +131,8 @@ func fillSecretData(connectionData, secretsData map[string]map[string]dbus.Varia
 			// setSettingVpnOpenvpnKeyHttpProxyPassword
 		case connectionVpnPptp:
 			setSettingVpnPptpKeyPassword(secretsData, value)
+		case connectionVpnStrongswan:
+			setSettingVpnStrongswanKeyPassword(secretsData, value)
 		case connectionVpnVpnc:
 			setSettingVpnVpncKeySecret(secretsData, value)
 			// setSettingVpnVpncKeyXauthPassword(secretsData, value)
