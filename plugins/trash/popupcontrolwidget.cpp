@@ -105,18 +105,18 @@ int PopupControlWidget::trashItemCount() const
 void PopupControlWidget::trashStatusChanged()
 {
     const bool files = QDir(TrashDir + "/files").exists();
-    const bool info = QDir(TrashDir + "/info").exists();
+//    const bool info = QDir(TrashDir + "/info").exists();
 
     // add monitor paths
     m_fsWatcher->addPath(TrashDir);
     if (files)
         m_fsWatcher->addPath(TrashDir + "/files");
-    if (info)
-        m_fsWatcher->addPath(TrashDir + "/info");
+//    if (info)
+//        m_fsWatcher->addPath(TrashDir + "/info");
 
     // check empty
     bool empty;
-    if ((!info || QDir(TrashDir + "/info").entryList().count() == 2) &&
+    if (/*(!info || QDir(TrashDir + "/info").entryList().count() == 2) &&*/
         (!files || QDir(TrashDir + "/files").entryList().count() == 2))
         empty = true;
     else
