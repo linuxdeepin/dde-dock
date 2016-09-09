@@ -263,8 +263,6 @@ func (sh *switchHandler) setPropVpnEnabled(enabled bool) {
 	sh.enableVpn(enabled)
 }
 func (sh *switchHandler) enableVpn(enabled bool) {
-	sh.doEnableVpn(enabled)
-
 	// setup vpn connections
 	for _, uuid := range nmGetConnectionUuidsByType(NM_SETTING_VPN_SETTING_NAME) {
 		if enabled {
@@ -273,11 +271,18 @@ func (sh *switchHandler) enableVpn(enabled bool) {
 			sh.deactivateVpnConnection(uuid)
 		}
 	}
+
+	// setup VpnEnabled state after vpn connections dispatched to
+	// avoid such issue that if there are activating vpn connections
+	// and user toggle off VpnEnabled manually then the code in
+	// Manager.doHandleVpnNotification will fix the VpnEnabled state
+	// back to true.
+	sh.doEnableVpn(enabled)
 }
 func (sh *switchHandler) doEnableVpn(enabled bool) {
 	sh.VpnEnabled = enabled
 	sh.config.setVpnEnabled(enabled)
-	manager.setPropVpnEnabled(sh.VpnEnabled)
+	manager.setPropVpnEnabled(enabled)
 }
 
 func (sh *switchHandler) initDeviceState(devPath dbus.ObjectPath) (err error) {
