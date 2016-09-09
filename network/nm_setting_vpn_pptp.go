@@ -184,20 +184,11 @@ func getSettingVkVpnPptpRequireMppe(data connectionData) (value bool) {
 	return
 }
 func logicSetSettingVkVpnPptpRequireMppe(data connectionData, value bool) (err error) {
-	if value {
-		// if require mppe, refuse some authentications
-		setSettingVpnPptpKeyRefuseChap(data, true)
-		setSettingVpnPptpKeyRefuseEap(data, true)
-		setSettingVpnPptpKeyRefusePap(data, true)
-	} else {
+	if !value {
 		// if disable mppe, remove related keys
 		removeSettingVpnPptpKeyRequireMppe40(data)
 		removeSettingVpnPptpKeyRequireMppe128(data)
 		removeSettingVpnPptpKeyMppeStateful(data)
-
-		removeSettingVpnPptpKeyRefuseChap(data)
-		removeSettingVpnPptpKeyRefuseEap(data)
-		removeSettingVpnPptpKeyRefusePap(data)
 	}
 	setSettingVpnPptpKeyRequireMppe(data, value)
 	return
