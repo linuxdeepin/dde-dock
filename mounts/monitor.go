@@ -24,7 +24,8 @@ func (m *Manager) handleEvent() {
 			"", false)
 		info := newDiskInfoFromVolume(volume)
 		logger.Debug("[Event] volume added:", info.Name, info.Type, info.Id)
-		if volume.ShouldAutomount() && m.isAutoMount() {
+		if (volume.ShouldAutomount() || (info.CanEject && !info.CanUnmount)) &&
+			m.isAutoMount() {
 			m.mountVolume(info.Id, volume)
 			volume.Unref()
 			return
@@ -76,7 +77,8 @@ func (m *Manager) handleEvent() {
 		mount.Unref()
 		var autoOpen bool = false
 		if volume != nil && volume.Object.C != nil {
-			if volume.ShouldAutomount() && m.isAutoOpen() {
+			if (volume.ShouldAutomount() || (info.CanEject && info.CanUnmount)) &&
+				m.isAutoOpen() {
 				autoOpen = true
 			}
 			volume.Unref()
