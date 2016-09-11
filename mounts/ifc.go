@@ -88,11 +88,17 @@ func (m *Manager) ejectVolume(id string, volume *gio.Volume) {
 	op := gio.NewMountOperation()
 	volume.EjectWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			logger.Debug("volume.EjectWithOperation AsyncReadyCallback")
+			if o == nil || o.C == nil {
+				logger.Debug("Invalid volume")
+				return
+			}
 			volume := gio.ToVolume(o)
 			_, err := volume.EjectFinish(ret)
+			logger.Debug("volume.EjectWithOperation AsyncReadyCallback Finish:", err)
 			if err != nil {
-				m.emitError(id, err.Error())
+				// Don't pass the arg 'id', it will break cgo pointer check rules.
+				// TODO: restructure
+				_manager.emitError(getVolumeId(volume), err.Error())
 			}
 		}))
 	op.Unref()
@@ -103,11 +109,15 @@ func (m *Manager) ejectMount(id string, mount *gio.Mount) {
 	op := gio.NewMountOperation()
 	mount.EjectWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
-			logger.Debug("mount.EjectWithOperation AsyncReadyCallback")
+			if o == nil || o.C == nil {
+				logger.Debug("Invalid mount")
+				return
+			}
 			mount := gio.ToMount(o)
 			_, err := mount.EjectWithOperationFinish(ret)
+			logger.Debug("mount.EjectWithOperation AsyncReadyCallback Finish:", err)
 			if err != nil {
-				m.emitError(id, err.Error())
+				_manager.emitError(getMountId(mount), err.Error())
 			}
 		}))
 	op.Unref()
@@ -118,12 +128,15 @@ func (m *Manager) mountVolume(id string, volume *gio.Volume) {
 	op := gio.NewMountOperation()
 	volume.Mount(gio.MountMountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
+			if o == nil || o.C == nil {
+				logger.Debug("Invalid volume")
+				return
+			}
 			volume := gio.ToVolume(o)
-			logger.Debug("Mount AsyncReadyCallback")
-
 			_, err := volume.MountFinish(ret)
+			logger.Debug("Mount AsyncReadyCallback Finish:", err)
 			if err != nil {
-				m.emitError(id, err.Error())
+				_manager.emitError(getVolumeId(volume), err.Error())
 			}
 		}))
 	op.Unref()
@@ -134,12 +147,16 @@ func (m *Manager) unmountMount(id string, mount *gio.Mount) {
 	op := gio.NewMountOperation()
 	mount.UnmountWithOperation(gio.MountUnmountFlagsNone, op, nil, gio.AsyncReadyCallback(
 		func(o *gobject.Object, ret *gio.AsyncResult) {
+			if o == nil || o.C == nil {
+				logger.Debug("Invalid mount")
+				return
+			}
 			mount := gio.ToMount(o)
-			logger.Debug("UnmountWithOperation AsyncReadyCallback")
 
 			_, err := mount.UnmountWithOperationFinish(ret)
+			logger.Debug("UnmountWithOperation AsyncReadyCallback Finish:", err)
 			if err != nil {
-				m.emitError(id, err.Error())
+				_manager.emitError(getMountId(mount), err.Error())
 				return
 			}
 			name := mount.GetName()
@@ -147,7 +164,7 @@ func (m *Manager) unmountMount(id string, mount *gio.Mount) {
 			icon := getIconFromGIcon(gicon)
 			gicon.Unref()
 
-			go m.sendNotify(icon, "",
+			go _manager.sendNotify(icon, "",
 				fmt.Sprintf(Tr("%s removed successfully"), name))
 		}))
 	op.Unref()
