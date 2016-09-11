@@ -684,7 +684,7 @@ auth-dialog=/usr/lib/NetworkManager/nm-l2tp-auth-dialog
 properties=/usr/lib/libnm-l2tp-properties
 supports-external-ui-mode=true
 `
-	service, program, authdialog, properties := doParseVncNameFile(fileContent)
+	service, program, authdialog, properties := doParseVpnNameFile(fileContent)
 	c.Check(service, C.Equals, "org.freedesktop.NetworkManager.l2tp")
 	c.Check(program, C.Equals, "/usr/lib/NetworkManager/nm-l2tp-service")
 	c.Check(authdialog, C.Equals, "/usr/lib/NetworkManager/nm-l2tp-auth-dialog")

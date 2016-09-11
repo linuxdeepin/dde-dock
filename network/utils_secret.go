@@ -137,7 +137,7 @@ func secretGet(uuid, settingName, settingKey string) (value string, ok bool) {
 }
 
 // secretGetAll get all secret values from keyring for network-manager configuration
-func secretGetAll(uuid, settingName string) (values map[string]string, ok bool) {
+func secretGetAll(uuid, settingName string) (keyValues map[string]string, ok bool) {
 	sessionPath := secretGetSessionInstance()
 
 	service, err := secretNewService()
@@ -147,7 +147,7 @@ func secretGetAll(uuid, settingName string) (values map[string]string, ok bool) 
 	}
 	defer secret.DestroyService(service)
 
-	values = make(map[string]string)
+	keyValues = make(map[string]string)
 
 	attributes := map[string]string{
 		keyringTagUUID: uuid,
@@ -160,9 +160,9 @@ func secretGetAll(uuid, settingName string) (values map[string]string, ok bool) 
 	}
 	reUnlockedPaths, _, _ := service.Unlock(lockedPaths)
 
-	doSecretGetAll(service, sessionPath, unlockedPaths, values)
-	doSecretGetAll(service, sessionPath, reUnlockedPaths, values)
-	if len(values) > 0 {
+	doSecretGetAll(service, sessionPath, unlockedPaths, keyValues)
+	doSecretGetAll(service, sessionPath, reUnlockedPaths, keyValues)
+	if len(keyValues) > 0 {
 		ok = true
 	}
 	return

@@ -133,6 +133,10 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 	if isVpnConnectionStateInActivating(state) {
 		m.switchHandler.doEnableVpn(true)
 	} else {
+		// if vpn authentication dialog pop-up, notify to kill them
+		connPath, _ := nmGetConnectionByUuid(aconn.Uuid)
+		m.agent.cancelVpnAuthDialog(connPath)
+
 		delete(m.activeConnections, apath)
 	}
 }

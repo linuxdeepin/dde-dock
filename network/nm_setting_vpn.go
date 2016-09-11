@@ -46,19 +46,19 @@ func getLocalSupportedVpnTypes() (vpnTypes []string) {
 		connectionVpnStrongswan,
 		connectionVpnVpnc,
 	} {
-		_, program, _, _ := parseVncNameFile(getVpnNameFile(vpnType))
+		_, program, _, _ := parseVpnNameFile(getVpnNameFile(vpnType))
 		if utils.IsFileExist(program) {
 			vpnTypes = append(vpnTypes, vpnType)
 		}
 	}
 	return
 }
-func getVpnProgramFile(vpnType string) (program string) {
-	_, program, _, _ = parseVncNameFile(getVpnNameFile(vpnType))
-	return
+func getVpnAuthDialogBin(data connectionData) (authdialog string) {
+	vpnType := getCustomConnectionType(data)
+	return doGetVpnAuthDialogBin(vpnType)
 }
-func getVpnAuthDialogFile(vpnType string) (authdialog string) {
-	_, _, authdialog, _ = parseVncNameFile(getVpnNameFile(vpnType))
+func doGetVpnAuthDialogBin(vpnType string) (authdialog string) {
+	_, _, authdialog, _ = parseVpnNameFile(getVpnNameFile(vpnType))
 	return
 }
 func getVpnNameFile(vpnType string) (nameFile string) {
@@ -78,15 +78,15 @@ func getVpnNameFile(vpnType string) (nameFile string) {
 	}
 	return
 }
-func parseVncNameFile(nameFile string) (service, program, authdialog, properties string) {
+func parseVpnNameFile(nameFile string) (service, program, authdialog, properties string) {
 	fileContent, err := ioutil.ReadFile(nameFile)
 	if err != nil {
 		// service file not exists
 		return
 	}
-	return doParseVncNameFile(string(fileContent))
+	return doParseVpnNameFile(string(fileContent))
 }
-func doParseVncNameFile(fileContent string) (service, program, authdialog, properties string) {
+func doParseVpnNameFile(fileContent string) (service, program, authdialog, properties string) {
 	serviceReg := regexp.MustCompile("\nservice=(.*)\n")
 	programReg := regexp.MustCompile("\nprogram=(.*)\n")
 	authdialogReg := regexp.MustCompile("\nauth-dialog=(.*)\n")

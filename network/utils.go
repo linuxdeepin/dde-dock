@@ -12,6 +12,9 @@ package network
 import (
 	"encoding/json"
 	"fmt"
+	"io"
+	"os"
+	"os/exec"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 	"strings"
@@ -170,5 +173,22 @@ func doStrToUuid(str string) (uuid string) {
 		uuid = strings.Repeat("0", misslen) + uuid
 	}
 	uuid = fmt.Sprintf("%s-%s-%s-%s-%s", uuid[0:8], uuid[8:12], uuid[12:16], uuid[16:20], uuid[20:32])
+	return
+}
+
+// execute program and read or write to it stdin/stdout pipe
+func execWithIO(name string, arg ...string) (process *os.Process, stdin io.WriteCloser, stdout, stderr io.ReadCloser, err error) {
+	cmd := exec.Command(name, arg...)
+	stdin, _ = cmd.StdinPipe()
+	stdout, _ = cmd.StdoutPipe()
+	stderr, _ = cmd.StderrPipe()
+
+	err = cmd.Start()
+	if err != nil {
+		return
+	}
+	go cmd.Wait()
+
+	process = cmd.Process
 	return
 }
