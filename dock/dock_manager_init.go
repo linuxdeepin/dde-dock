@@ -131,6 +131,7 @@ func (m *DockManager) init() error {
 
 	m.listenSettingsChanged()
 
+	m.winIconPreferredAppIds = []string{"apps.com.qq.im", "apps.com.qq.im.light"}
 	m.appIdFilterGroup = NewAppIdFilterGroup()
 	err = m.loadCache()
 	if err != nil {

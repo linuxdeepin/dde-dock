@@ -247,33 +247,12 @@ func (winInfo *WindowInfo) getTitle() string {
 	}
 }
 
-func (winInfo *WindowInfo) updateIcon() {
-	winInfo.Icon = winInfo.getIcon()
-	entry := winInfo.entry
-	if entry != nil {
-		if winInfo == entry.current {
-			entry.setIcon(winInfo.Icon)
-		}
-	}
-}
-
 func (winInfo *WindowInfo) getIcon() string {
-	entry := winInfo.entry
-	var icon string
-	if entry != nil && entry.appInfo != nil {
-		icon = entry.appInfo.GetIcon()
-		if icon != "" {
-			return icon
-		}
-		logger.Warning("get icon form entry.appInfo failed")
+	if winInfo.Icon == "" {
+		logger.Debug("get icon from window", winInfo.window)
+		winInfo.Icon = getIconFromWindow(XU, winInfo.window)
 	}
-
-	logger.Debug("using icon from X")
-	icon = getIconFromWindow(XU, winInfo.window)
-	if icon != "" {
-		return icon
-	}
-	return "application-default-icon"
+	return winInfo.Icon
 }
 
 var skipTaskbarWindowTypes []string = []string{
@@ -506,7 +485,12 @@ func (winInfo *WindowInfo) handlePropertyNotifyAtom(atom xproto.Atom) bool {
 		return false
 
 	case ATOM_WINDOW_ICON:
-		winInfo.updateIcon()
+		//  update icon cache
+		winInfo.Icon = getIconFromWindow(XU, winInfo.window)
+		entry := winInfo.entry
+		if entry != nil && entry.current == winInfo {
+			entry.updateIcon()
+		}
 		return false
 		// case ATOM_DOCK_APP_ID:
 		// 	// TODO DOCK_APP_ID?

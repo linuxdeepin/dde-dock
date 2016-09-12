@@ -77,7 +77,7 @@ func (m *DockManager) handleActiveWindowChanged() {
 			entry.setIsActive(true)
 			entry.setCurrentWindowInfo(winInfo)
 			entry.current.updateWmName()
-			entry.current.updateIcon()
+			entry.updateIcon()
 		} else {
 			entry.setIsActive(false)
 		}

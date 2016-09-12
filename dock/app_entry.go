@@ -54,10 +54,11 @@ type AppEntry struct {
 	CurrentWindow xproto.Window
 	windowMutex   sync.Mutex
 
-	coreMenu  *Menu
-	appInfo   *AppInfo
-	IsDocked  bool
-	dockMutex sync.Mutex
+	coreMenu         *Menu
+	appInfo          *AppInfo
+	IsDocked         bool
+	dockMutex        sync.Mutex
+	winIconPreferred bool
 }
 
 func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntry {
@@ -67,8 +68,8 @@ func newAppEntry(dockManager *DockManager, id string, appInfo *AppInfo) *AppEntr
 		innerId:      id,
 		WindowTitles: newWindowTitles(),
 		windows:      make(map[xproto.Window]*WindowInfo),
-		appInfo:      appInfo,
 	}
+	entry.setAppInfo(appInfo)
 	return entry
 }
 
@@ -81,6 +82,24 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 		entry.appInfo.Destroy()
 	}
 	entry.appInfo = newAppInfo
+
+	// set entry.winIconPreferred
+	if newAppInfo == nil {
+		entry.winIconPreferred = true
+	} else {
+		if entry.dockManager != nil {
+			id := newAppInfo.GetId()
+			if strSliceContains(entry.dockManager.winIconPreferredAppIds, id) {
+				entry.winIconPreferred = true
+				return
+			}
+		}
+
+		icon := newAppInfo.GetIcon()
+		if icon == "" {
+			entry.winIconPreferred = true
+		}
+	}
 }
 
 func (entry *AppEntry) hasWindow() bool {
@@ -183,8 +202,8 @@ func (entry *AppEntry) attachWindow(winInfo *WindowInfo) {
 	if (entry.dockManager != nil && win == entry.dockManager.activeWindow) ||
 		entry.current == nil {
 		entry.setCurrentWindowInfo(winInfo)
+		entry.updateIcon()
 		winInfo.updateWmName()
-		winInfo.updateIcon()
 	}
 }
 
@@ -258,13 +277,24 @@ func (entry *AppEntry) updateName() {
 }
 
 func (entry *AppEntry) updateIcon() {
+	icon := entry.getIcon()
+	entry.setIcon(icon)
+}
+
+func (entry *AppEntry) getIcon() string {
 	var icon string
-	if entry.hasWindow() {
+	if entry.winIconPreferred && entry.current != nil {
+		// get icon from current window
 		icon = entry.current.getIcon()
-	} else {
+	}
+	// try get icon from appInfo
+	if icon == "" && entry.appInfo != nil {
 		icon = entry.appInfo.GetIcon()
 	}
-	entry.setIcon(icon)
+	if icon == "" && !entry.winIconPreferred && entry.current != nil {
+		icon = entry.current.getIcon()
+	}
+	return icon
 }
 
 func (e *AppEntry) updateWindowTitles() {

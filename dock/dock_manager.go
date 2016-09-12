@@ -29,6 +29,7 @@ type DockManager struct {
 	appIdFilterGroup               *AppIdFilterGroup
 	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
 	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
+	winIconPreferredAppIds         []string
 
 	Entries AppEntries
 

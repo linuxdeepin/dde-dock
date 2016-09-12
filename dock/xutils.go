@@ -87,18 +87,17 @@ func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
 }
 
 func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
-	icon, err := xgraphics.FindIcon(xu, win, 48, 48)
+	// find largest icon
+	icon, err := xgraphics.FindIcon(xu, win, 0, 0)
 	// FIXME: gets empty icon for minecraft
 	if err == nil {
 		buf := bytes.NewBuffer(nil)
 		icon.WritePng(buf)
 		return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 	}
-
-	logger.Debug("get icon from X failed:", err)
-	logger.Debug("get icon name from _NET_WM_ICON_NAME")
-	name, _ := ewmh.WmIconNameGet(XU, win)
-	return name
+	// NOTE: Do not get icon from property _NET_WM_ICON_NAME
+	logger.Debugf("getIconFromWindow failed win %v, err: %v", win, err)
+	return ""
 }
 
 func getWindowUserTime(win xproto.Window) (uint, error) {
