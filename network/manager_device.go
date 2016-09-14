@@ -14,6 +14,7 @@ import (
 	nm "dbus/org/freedesktop/networkmanager"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
+	"strings"
 	"time"
 )
 
@@ -29,6 +30,7 @@ type device struct {
 	State     uint32
 	Interface string
 	HwAddress string
+	Driver    string
 	Managed   bool
 
 	// Vendor is the device vendor ID and product ID, if failed, use
@@ -76,6 +78,25 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		return
 	}
 
+	// ignore virtual network interfaces
+	isVirtualIfc := false
+	devDriver := nmGetDeviceDriver(devPath)
+	switch devDriver {
+	case "dummy", "veth", "vboxnet", "vmnet", "vmxnet", "vmxnet2", "vmxnet3":
+		isVirtualIfc = true
+	case "unknown":
+		// sometimes we could not get vmnet dirver name, so check the
+		// udi sys path if is prefix with /sys/devices/virtual/net
+		if strings.HasPrefix(nmDev.Udi.Get(), "/sys/devices/virtual/net") {
+			isVirtualIfc = true
+		}
+	}
+	if isVirtualIfc {
+		err = fmt.Errorf("ignore virtual network interface which driver is %s %s", devDriver, devPath)
+		logger.Info(err)
+		return
+	}
+
 	dev = &device{
 		nmDev:     nmDev,
 		nmDevType: nmDev.DeviceType.Get(),
@@ -83,6 +104,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),
 		Interface: nmDev.Interface.Get(),
+		Driver:    devDriver,
 	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 	dev.Vendor = nmGeneralGetDeviceDesc(devPath)
@@ -248,7 +270,6 @@ func (m *Manager) addDevice(devPath dbus.ObjectPath) {
 
 func (m *Manager) removeDevice(devPath dbus.ObjectPath) {
 	if !m.isDeviceExists(devPath) {
-		logger.Warning("device not found", devPath)
 		return
 	}
 	devType, i := m.getDeviceIndex(devPath)
@@ -270,7 +291,6 @@ func (m *Manager) doRemoveDevice(devs []*device, i int) []*device {
 func (m *Manager) getDevice(devPath dbus.ObjectPath) (dev *device) {
 	devType, i := m.getDeviceIndex(devPath)
 	if i < 0 {
-		logger.Warning("device not found", devPath)
 		return
 	}
 

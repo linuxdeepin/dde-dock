@@ -728,6 +728,17 @@ func nmGetDevicesByType(devType uint32) (specDevPaths []dbus.ObjectPath) {
 	return
 }
 
+func nmGetDeviceDriver(devPath dbus.ObjectPath) (devDriver string) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	defer nm.DestroyDevice(dev)
+
+	devDriver = dev.Driver.Get()
+	return
+}
+
 func nmGetDeviceInterface(devPath dbus.ObjectPath) (devInterface string) {
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
