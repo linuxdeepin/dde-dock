@@ -47,6 +47,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
+    connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::updateIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries);
