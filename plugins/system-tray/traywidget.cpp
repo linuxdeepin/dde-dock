@@ -152,6 +152,15 @@ void TrayWidget::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
+    // fake enter event
+    const QPoint p(QCursor::pos());
+    configContainerPosition();
+    setX11PassMouseEvent(false);
+    setWindowOnTop(true);
+    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
+    setX11PassMouseEvent(true);
+    setWindowOnTop(false);
+
 //    configContainerPosition();
 }
 
