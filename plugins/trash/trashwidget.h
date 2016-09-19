@@ -19,10 +19,11 @@ public:
     QWidget *popupApplet();
 
     QSize sizeHint() const;
+    const QString contextMenu() const;
+    void invokeMenuItem(const QString &menuId, const bool checked);
 
 signals:
     void requestContextMenu() const;
-    void requestRefershWindowVisible() const;
 
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
@@ -31,23 +32,15 @@ protected:
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
-private:
-    const QPoint popupMarkPoint();
-
 private slots:
     void updateIcon();
-    void showMenu();
     void removeApp(const QString &appKey);
-    void menuTriggered(Dtk::Widget::DAction *action);
     void moveToTrash(const QUrl &url);
 
 private:
     PopupControlWidget *m_popupApplet;
 
     QPixmap m_icon;
-
-    Dtk::Widget::DAction m_openAct;
-    Dtk::Widget::DAction m_clearAct;
 };
 
 #endif // TRASHWIDGET_H

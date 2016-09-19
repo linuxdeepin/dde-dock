@@ -6,16 +6,14 @@
 #include <QIcon>
 #include <QApplication>
 #include <QDragEnterEvent>
+#include <QJsonDocument>
 
 DWIDGET_USE_NAMESPACE
 
 TrashWidget::TrashWidget(QWidget *parent)
     : QWidget(parent),
 
-      m_popupApplet(new PopupControlWidget(this)),
-
-      m_openAct(tr("Run"), this),
-      m_clearAct(tr("Empty"), this)
+      m_popupApplet(new PopupControlWidget(this))
 {
     QIcon::setThemeName("deepin");
 
@@ -35,6 +33,44 @@ QWidget *TrashWidget::popupApplet()
 QSize TrashWidget::sizeHint() const
 {
     return QSize(26, 26);
+}
+
+const QString TrashWidget::contextMenu() const
+{
+    QList<QVariant> items;
+    items.reserve(2);
+
+    QMap<QString, QVariant> open;
+    open["itemId"] = "open";
+    open["itemText"] = tr("Open");
+    open["isActive"] = true;
+    items.push_back(open);
+
+    if (!m_popupApplet->empty())
+    {
+        QMap<QString, QVariant> empty;
+        empty["itemId"] = "empty";
+        empty["itemText"] = tr("Empty");
+        empty["isActive"] = true;
+        items.push_back(empty);
+    }
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
+{
+    Q_UNUSED(checked);
+
+    if (menuId == "open")
+        m_popupApplet->openTrashFloder();
+    else if (menuId == "empty")
+        m_popupApplet->clearTrashFloder();
 }
 
 void TrashWidget::dragEnterEvent(QDragEnterEvent *e)
@@ -80,29 +116,7 @@ void TrashWidget::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::RightButton || dis.manhattanLength() > std::min(width(), height()) * 0.8 * 0.5)
         return QWidget::mousePressEvent(e);
 
-//    showMenu();
     emit requestContextMenu();
-}
-
-const QPoint TrashWidget::popupMarkPoint()
-{
-    QPoint p;
-    QWidget *w = this;
-    do {
-        p += w->pos();
-        w = qobject_cast<QWidget *>(w->parent());
-    } while (w);
-
-    const QRect r = rect();
-    switch (qApp->property(PROP_POSITION).value<Dock::Position>())
-    {
-    case Dock::Top:       p += QPoint(r.width() / 2, r.height());      break;
-    case Dock::Bottom:    p += QPoint(r.width() / 2, 0);               break;
-    case Dock::Left:      p += QPoint(r.width(), r.height() / 2);      break;
-    case Dock::Right:     p += QPoint(0, r.height() / 2);              break;
-    }
-
-    return p;
 }
 
 void TrashWidget::updateIcon()
@@ -122,38 +136,6 @@ void TrashWidget::updateIcon()
     update();
 }
 
-void TrashWidget::showMenu()
-{
-    DMenu *menu = new DMenu(this);
-    menu->setDockMenu(true);
-
-    menu->addAction(&m_openAct);
-    if (!m_popupApplet->empty())
-        menu->addAction(&m_clearAct);
-
-    const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
-    switch (position)
-    {
-    case Dock::Top:     menu->setDirection(DMenu::Top);         break;
-    case Dock::Left:    menu->setDirection(DMenu::Left);        break;
-    case Dock::Bottom:  menu->setDirection(DMenu::Bottom);      break;
-    case Dock::Right:   menu->setDirection(DMenu::Right);       break;
-    default:            Q_UNREACHABLE();
-    }
-
-    const QPoint p = popupMarkPoint();
-
-    connect(menu, &DMenu::triggered, this, &TrashWidget::menuTriggered);
-
-    menu->exec(p);
-
-    m_clearAct.setParent(this);
-    m_openAct.setParent(this);
-    menu->deleteLater();
-
-    emit requestRefershWindowVisible();
-}
-
 void TrashWidget::removeApp(const QString &appKey)
 {
     const QString cmd("dbus-send --print-reply --dest=com.deepin.dde.Launcher /com/deepin/dde/Launcher com.deepin.dde.Launcher.UninstallApp string:\"" + appKey + "\"");
@@ -163,14 +145,6 @@ void TrashWidget::removeApp(const QString &appKey)
     proc->waitForFinished();
 
     proc->deleteLater();
-}
-
-void TrashWidget::menuTriggered(DAction *action)
-{
-    if (action == &m_clearAct)
-        m_popupApplet->clearTrashFloder();
-    else if (action == &m_openAct)
-        m_popupApplet->openTrashFloder();
 }
 
 void TrashWidget::moveToTrash(const QUrl &url)

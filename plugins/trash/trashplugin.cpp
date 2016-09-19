@@ -46,7 +46,14 @@ const QString TrashPlugin::itemContextMenu(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return QString();
+    return m_trashWidget->contextMenu();
+}
+
+void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey);
+
+    m_trashWidget->invokeMenuItem(menuId, checked);
 }
 
 int TrashPlugin::itemSortKey(const QString &itemKey)

@@ -16,20 +16,10 @@ PopupControlWidget::PopupControlWidget(QWidget *parent)
 
       m_empty(false),
 
-//      m_openBtn(new DLinkButton(tr("Run"), this)),
-//      m_clearBtn(new DLinkButton(tr("Empty Trash"), this)),
-
       m_fsWatcher(new QFileSystemWatcher(this))
 {
-//    QVBoxLayout *centeralLayout = new QVBoxLayout;
-//    centeralLayout->addWidget(m_openBtn);
-//    centeralLayout->addWidget(m_clearBtn);
-
-//    connect(m_openBtn, &DLinkButton::clicked, this, &PopupControlWidget::openTrashFloder);
-//    connect(m_clearBtn, &DLinkButton::clicked, this, &PopupControlWidget::clearTrashFloder);
     connect(m_fsWatcher, &QFileSystemWatcher::directoryChanged, this, &PopupControlWidget::trashStatusChanged, Qt::QueuedConnection);
 
-//    setLayout(centeralLayout);
     setObjectName("trash");
     setFixedWidth(80);
 
