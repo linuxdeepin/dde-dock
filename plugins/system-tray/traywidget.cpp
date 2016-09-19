@@ -46,7 +46,6 @@ TrayWidget::~TrayWidget()
 
 const QImage TrayWidget::trayImage()
 {
-    m_updateTimer->start();
     return m_image;
 }
 
@@ -274,7 +273,7 @@ void TrayWidget::wrapWindow()
 
 void TrayWidget::updateIcon()
 {
-    if (!isVisible()) return;
+    if (!isVisible() && !m_active) return;
 
 //    auto c = QX11Info::connection();
 
@@ -414,7 +413,13 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     setX11PassMouseEvent(true);
 
 //    const uint32_t stackBelowData[] = {XCB_STACK_MODE_BELOW};
-//    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
+    //    xcb_configure_window(c, m_containerWid, XCB_CONFIG_WINDOW_STACK_MODE, stackBelowData);
+}
+
+void TrayWidget::setActive(const bool active)
+{
+    m_active = active;
+    m_updateTimer->start();
 }
 
 void TrayWidget::refershIconImage()
@@ -437,6 +442,7 @@ void TrayWidget::refershIconImage()
     m_image = qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
 
     update();
+    emit iconChanged();
 }
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)

@@ -15,6 +15,10 @@ public:
     void updateIcon();
     const QImage trayImage();
     void sendClick(uint8_t mouseButton, int x, int y);
+    void setActive(const bool active);
+
+signals:
+    void iconChanged();
 
 private:
     QSize sizeHint() const;
@@ -37,6 +41,7 @@ private slots:
     bool isBadWindow();
 
 private:
+    bool m_active = false;
     WId m_windowId;
     WId m_containerWid;
     QImage m_image;

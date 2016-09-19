@@ -34,6 +34,14 @@ void FashionTrayItem::setMouseEnable(const bool enable)
 
 void FashionTrayItem::setActiveTray(TrayWidget *tray)
 {
+    if (m_activeTray)
+    {
+        m_activeTray->setActive(false);
+        disconnect(m_activeTray, &TrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
+    }
+    tray->setActive(true);
+    connect(tray, &TrayWidget::iconChanged, this, static_cast<void (FashionTrayItem::*)()>(&FashionTrayItem::update));
+
     m_activeTray = tray;
     update();
 }
