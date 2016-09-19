@@ -34,6 +34,8 @@ private:
     void paintEvent(QPaintEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 
+    void invokedMenuItem(const QString &itemId, const bool checked);
+    const QString contextMenu() const;
     QWidget *popupTips();
 
 private:

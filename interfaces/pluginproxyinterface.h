@@ -37,11 +37,10 @@ public:
     ///
     virtual void itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
     ///
-    /// \brief requestRefershWindowVisible
-    /// tell dock refersh window visible state,
-    /// its useful because sometimes you could force disable auto-hide.
+    /// \brief requestContextMenu
+    /// request show context menu
     ///
-    virtual void requestRefershWindowVisible() = 0;
+    virtual void requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey) = 0;
 };
 
 #endif // PLUGINPROXYINTERFACE_H

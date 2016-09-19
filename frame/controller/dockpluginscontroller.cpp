@@ -56,16 +56,25 @@ void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, 
     item->deleteLater();
 }
 
-void DockPluginsController::requestRefershWindowVisible()
+//void DockPluginsController::requestRefershWindowVisible()
+//{
+//    for (auto list : m_pluginList.values())
+//    {
+//        for (auto item : list.values())
+//        {
+//            Q_ASSERT(item);
+//            emit item->requestRefershWindowVisible();
+//            return;
+//        }
+//    }
+//}
+
+void DockPluginsController::requestContextMenu(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
-    for (auto list : m_pluginList.values())
-    {
-        for (auto item : list.values())
-        {
-            emit item->requestRefershWindowVisible();
-            return;
-        }
-    }
+    PluginsItem *item = pluginItemAt(itemInter, itemKey);
+    Q_ASSERT(item);
+
+    item->showContextMenu();
 }
 
 //void DockPluginsController::requestPopupApplet(PluginsItemInterface * const itemInter, const QString &itemKey)

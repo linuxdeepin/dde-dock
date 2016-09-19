@@ -4,9 +4,7 @@ TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent),
       m_trashWidget(new TrashWidget)
 {
-    connect(m_trashWidget, &TrashWidget::requestRefershWindowVisible, [this] {
-        m_proxyInter->requestRefershWindowVisible();
-    });
+    connect(m_trashWidget, &TrashWidget::requestContextMenu, this, &TrashPlugin::showContextMenu);
 }
 
 const QString TrashPlugin::pluginName() const
@@ -44,6 +42,13 @@ const QString TrashPlugin::itemCommand(const QString &itemKey)
     return "gvfs-open trash://";
 }
 
+const QString TrashPlugin::itemContextMenu(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return QString();
+}
+
 int TrashPlugin::itemSortKey(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
@@ -58,4 +63,9 @@ void TrashPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
         m_proxyInter->itemAdded(this, QString());
     else
         m_proxyInter->itemRemoved(this, QString());
+}
+
+void TrashPlugin::showContextMenu()
+{
+    m_proxyInter->requestContextMenu(this, QString());
 }

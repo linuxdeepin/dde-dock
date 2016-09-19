@@ -21,6 +21,7 @@ public:
     QSize sizeHint() const;
 
 signals:
+    void requestContextMenu() const;
     void requestRefershWindowVisible() const;
 
 protected:

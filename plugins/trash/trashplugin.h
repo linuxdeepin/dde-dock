@@ -19,9 +19,13 @@ public:
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
+    const QString itemContextMenu(const QString &itemKey);
 
     int itemSortKey(const QString &itemKey);
     void displayModeChanged(const Dock::DisplayMode displayMode);
+
+private:
+    void showContextMenu();
 
 private:
     TrashWidget *m_trashWidget;

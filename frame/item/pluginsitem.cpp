@@ -137,6 +137,16 @@ bool PluginsItem::eventFilter(QObject *o, QEvent *e)
     return DockItem::eventFilter(o, e);
 }
 
+void PluginsItem::invokedMenuItem(const QString &itemId, const bool checked)
+{
+    m_pluginInter->invokedMenuItem(m_itemKey, itemId, checked);
+}
+
+const QString PluginsItem::contextMenu() const
+{
+    return m_pluginInter->itemContextMenu(m_itemKey);
+}
+
 QWidget *PluginsItem::popupTips()
 {
     return m_pluginInter->itemTipsWidget(m_itemKey);

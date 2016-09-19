@@ -80,7 +80,8 @@ void TrashWidget::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::RightButton || dis.manhattanLength() > std::min(width(), height()) * 0.8 * 0.5)
         return QWidget::mousePressEvent(e);
 
-    showMenu();
+//    showMenu();
+    emit requestContextMenu();
 }
 
 const QPoint TrashWidget::popupMarkPoint()
