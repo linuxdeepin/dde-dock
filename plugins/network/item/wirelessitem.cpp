@@ -10,10 +10,17 @@ WirelessItem::WirelessItem(const QUuid &uuid)
 
       m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
+      m_wirelessPopup(new QLabel),
       m_APList(nullptr)
 {
     m_refershTimer->setSingleShot(false);
     m_refershTimer->setInterval(100);
+
+    m_wirelessApplet->setVisible(false);
+    m_wirelessPopup->setVisible(false);
+
+    m_wirelessPopup->setStyleSheet("color:white;"
+                                   "padding:5px 10px;");
 
     connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
@@ -38,6 +45,28 @@ NetworkDevice::NetworkState WirelessItem::state() const
 QWidget *WirelessItem::itemApplet()
 {
     return m_wirelessApplet;
+}
+
+QWidget *WirelessItem::itemPopup()
+{
+    const NetworkDevice::NetworkState stat = state();
+
+    m_wirelessPopup->setText(tr("No Network"));
+
+    if (stat == NetworkDevice::Activated)
+    {
+        const QJsonObject obj = m_networkManager->deviceConnInfo(m_deviceUuid);
+        if (obj.contains("Ip4"))
+        {
+            const QJsonObject ip4 = obj["Ip4"].toObject();
+            if (ip4.contains("Address"))
+            {
+                m_wirelessPopup->setText(tr("Wireless Connection: %1").arg(ip4["Address"].toString()));
+            }
+        }
+    }
+
+    return m_wirelessPopup;
 }
 
 bool WirelessItem::eventFilter(QObject *o, QEvent *e)

@@ -19,6 +19,7 @@ public:
     NetworkDevice::NetworkType type() const;
     NetworkDevice::NetworkState state() const;
     QWidget *itemApplet();
+    QWidget *itemPopup();
 
 protected:
     bool eventFilter(QObject *o, QEvent *e);
@@ -40,6 +41,7 @@ private:
 
     QTimer *m_refershTimer;
     QWidget *m_wirelessApplet;
+    QLabel *m_wirelessPopup;
     WirelessList *m_APList;
 };
 
