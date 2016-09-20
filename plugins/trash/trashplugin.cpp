@@ -2,8 +2,12 @@
 
 TrashPlugin::TrashPlugin(QObject *parent)
     : QObject(parent),
-      m_trashWidget(new TrashWidget)
+      m_trashWidget(new TrashWidget),
+      m_tipsLabel(new QLabel)
 {
+    m_tipsLabel->setStyleSheet("color:white;"
+                               "padding:5px 10px;");
+
     connect(m_trashWidget, &TrashWidget::requestContextMenu, this, &TrashPlugin::showContextMenu);
 }
 
@@ -24,6 +28,19 @@ QWidget *TrashPlugin::itemWidget(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return m_trashWidget;
+}
+
+QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    const int count = m_trashWidget->trashItemCount();
+    if (count < 2)
+        m_tipsLabel->setText(tr("Trash-%1 file").arg(count));
+    else
+        m_tipsLabel->setText(tr("Trash-%1 files").arg(count));
+
+    return m_tipsLabel;
 }
 
 QWidget *TrashPlugin::itemPopupApplet(const QString &itemKey)

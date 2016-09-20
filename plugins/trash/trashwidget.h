@@ -20,6 +20,7 @@ public:
 
     QSize sizeHint() const;
     const QString contextMenu() const;
+    int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
 
 signals:
