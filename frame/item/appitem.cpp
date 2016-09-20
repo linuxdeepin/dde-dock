@@ -217,9 +217,9 @@ void AppItem::paintEvent(QPaintEvent *e)
     if (launching)
     {
         const double power = 3.0;
-        const double multiple = 1.05;
+        const double multiple = 1.25;
         const double offset = std::pow(std::sin(m_launchingEffects) * multiple, power);
-        m_launchingEffects += 0.0006;
+        m_launchingEffects += 0.0008;
 
         switch (DockPosition)
         {
