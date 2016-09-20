@@ -48,7 +48,18 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
         return m_tipsLabel;
     }
 
-    m_tipsLabel->setText(QString("%1%").arg(data.value("Display"), 1, 'f', 1));
+    const QString value = QString("%1%").arg(data.value("Display"), 1, 'f', 1);
+    const bool charging = !m_powerInter->onBattery();
+    if (!charging)
+        m_tipsLabel->setText(tr("Remaining Capacity %1").arg(value));
+    else
+    {
+        if (m_powerInter->batteryState()["Display"] == 4)
+            m_tipsLabel->setText(tr("Charged %1").arg(value));
+        else
+            m_tipsLabel->setText(tr("Charging %1").arg(value));
+    }
+
     return m_tipsLabel;
 }
 
