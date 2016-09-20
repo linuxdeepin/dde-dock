@@ -1,7 +1,7 @@
 #include "tipswidget.h"
 #include "traywidget.h"
 
-TipsWidget::TipsWidget(QWidget *parent)
+TrayApplet::TrayApplet(QWidget *parent)
     : QWidget(parent),
       m_mainLayout(new QHBoxLayout)
 {
@@ -12,7 +12,7 @@ TipsWidget::TipsWidget(QWidget *parent)
     setFixedHeight(26);
 }
 
-void TipsWidget::clear()
+void TrayApplet::clear()
 {
     QLayoutItem *item = nullptr;
     while ((item = m_mainLayout->takeAt(0)) != nullptr)
@@ -23,7 +23,7 @@ void TipsWidget::clear()
     }
 }
 
-void TipsWidget::addWidgets(QList<TrayWidget *> widgets)
+void TrayApplet::addWidgets(QList<TrayWidget *> widgets)
 {
     for (auto w : widgets)
     {

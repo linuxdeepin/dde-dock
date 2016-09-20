@@ -12,12 +12,18 @@
 SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     : QObject(parent),
       m_trayInter(new DBusTrayManager(this)),
-      m_tipsWidget(new TipsWidget),
+      m_trayApplet(new TrayApplet),
+      m_tipsLabel(new QLabel),
 
       m_containerSettings(new QSettings("deepin", "dde-dock-tray"))
 {
-    m_tipsWidget->setObjectName("sys-tray");
+    m_trayApplet->setObjectName("sys-tray");
     m_fashionItem = new FashionTrayItem;
+
+    m_tipsLabel->setText(tr("System Tray"));
+    m_tipsLabel->setVisible(false);
+    m_tipsLabel->setStyleSheet("color:white;"
+                               "padding:5px 10px;");
 }
 
 const QString SystemTrayPlugin::pluginName() const
@@ -53,6 +59,13 @@ QWidget *SystemTrayPlugin::itemWidget(const QString &itemKey)
     return m_trayList[trayWinId];
 }
 
+QWidget *SystemTrayPlugin::itemTipsWidget(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    return m_tipsLabel;
+}
+
 QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
 {
     if (itemKey != FASHION_MODE_ITEM)
@@ -63,7 +76,7 @@ QWidget *SystemTrayPlugin::itemPopupApplet(const QString &itemKey)
     updateTipsContent();
 
     if (m_trayList.size() > 1)
-        return m_tipsWidget;
+        return m_trayApplet;
     else
         return nullptr;
 }
@@ -102,8 +115,8 @@ void SystemTrayPlugin::updateTipsContent()
     auto trayList = m_trayList.values();
 //    trayList.removeOne(m_fashionItem->activeTray());
 
-    m_tipsWidget->clear();
-    m_tipsWidget->addWidgets(trayList);
+    m_trayApplet->clear();
+    m_trayApplet->addWidgets(trayList);
 }
 
 const QString SystemTrayPlugin::getWindowClass(quint32 winId)
@@ -171,7 +184,7 @@ void SystemTrayPlugin::trayRemoved(const quint32 winId)
 
     m_fashionItem->setMouseEnable(m_trayList.size() == 1);
 
-    if (m_tipsWidget->isVisible())
+    if (m_trayApplet->isVisible())
         updateTipsContent();
 
     if (m_fashionItem->activeTray() != widget)
@@ -193,7 +206,7 @@ void SystemTrayPlugin::trayChanged(const quint32 winId)
     m_trayList[winId]->updateIcon();
     m_fashionItem->setActiveTray(m_trayList[winId]);
 
-    if (m_tipsWidget->isVisible())
+    if (m_trayApplet->isVisible())
         updateTipsContent();
 }
 

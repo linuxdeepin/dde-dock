@@ -7,6 +7,7 @@
 #include "dbus/dbustraymanager.h"
 
 #include <QSettings>
+#include <QLabel>
 
 class FashionTrayItem;
 class SystemTrayPlugin : public QObject, PluginsItemInterface
@@ -23,6 +24,7 @@ public:
     void displayModeChanged(const Dock::DisplayMode mode);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
     bool itemAllowContainer(const QString &itemKey);
@@ -46,7 +48,8 @@ private:
     FashionTrayItem *m_fashionItem;
     QMap<quint32, TrayWidget *> m_trayList;
 
-    TipsWidget *m_tipsWidget;
+    TrayApplet *m_trayApplet;
+    QLabel *m_tipsLabel;
 
     QSettings *m_containerSettings;
 };
