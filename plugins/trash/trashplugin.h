@@ -4,6 +4,8 @@
 #include "pluginsiteminterface.h"
 #include "trashwidget.h"
 
+#include <QLabel>
+
 class TrashPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
@@ -17,6 +19,7 @@ public:
     void init(PluginProxyInterface *proxyInter);
 
     QWidget *itemWidget(const QString &itemKey);
+    QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
     const QString itemContextMenu(const QString &itemKey);
@@ -30,6 +33,7 @@ private:
 
 private:
     TrashWidget *m_trashWidget;
+    QLabel *m_tipsLabel;
 };
 
 #endif // TRASHPLUGIN_H

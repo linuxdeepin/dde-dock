@@ -63,6 +63,11 @@ const QString TrashWidget::contextMenu() const
     return QJsonDocument::fromVariant(menu).toJson();
 }
 
+int TrashWidget::trashItemCount() const
+{
+    return m_popupApplet->trashItems();
+}
+
 void TrashWidget::invokeMenuItem(const QString &menuId, const bool checked)
 {
     Q_UNUSED(checked);

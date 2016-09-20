@@ -31,6 +31,11 @@ bool PopupControlWidget::empty() const
     return m_empty;
 }
 
+int PopupControlWidget::trashItems() const
+{
+    return m_trashItemsCount;
+}
+
 QSize PopupControlWidget::sizeHint() const
 {
     return QSize(width(), m_empty ? 30 : 60);
@@ -105,13 +110,12 @@ void PopupControlWidget::trashStatusChanged()
 //        m_fsWatcher->addPath(TrashDir + "/info");
 
     // check empty
-    bool empty;
-    if (/*(!info || QDir(TrashDir + "/info").entryList().count() == 2) &&*/
-        (!files || QDir(TrashDir + "/files").entryList().count() == 2))
-        empty = true;
+    if (!files)
+        m_trashItemsCount = 0;
     else
-        empty = false;
+        m_trashItemsCount = QDir(TrashDir + "/files").entryList().count() - 2;
 
+    const bool empty = m_trashItemsCount == 0;
     if (m_empty == empty)
         return;
 

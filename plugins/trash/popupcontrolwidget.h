@@ -14,6 +14,7 @@ public:
     explicit PopupControlWidget(QWidget *parent = 0);
 
     bool empty() const;
+    int trashItems() const;
     QSize sizeHint() const;
     static const QString trashDir();
 
@@ -32,6 +33,7 @@ private slots:
 
 private:
     bool m_empty;
+    int m_trashItemsCount;
 
 //    Dtk::Widget::DLinkButton *m_openBtn;
 //    Dtk::Widget::DLinkButton *m_clearBtn;
