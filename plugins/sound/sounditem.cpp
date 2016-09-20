@@ -123,7 +123,8 @@ void SoundItem::refershTips(const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    m_tipsLabel->setText(QString::number(m_applet->volumeValue() / 10) + '%');
+    const QString value = QString::number(m_applet->volumeValue() / 10) + '%';
+    m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
 }
 
 void SoundItem::sinkChanged(DBusSink *sink)
