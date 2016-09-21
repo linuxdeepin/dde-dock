@@ -16,6 +16,12 @@ public:
     QWidget *tipsWidget();
     QWidget *popupApplet();
 
+    const QString contextMenu() const;
+    void invokeMenuItem(const QString menuId, const bool checked);
+
+signals:
+    void requestContextMenu() const;
+
 protected:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
