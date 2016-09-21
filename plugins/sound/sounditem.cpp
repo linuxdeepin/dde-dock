@@ -15,7 +15,7 @@ SoundItem::SoundItem(QWidget *parent)
     QIcon::setThemeName("deepin");
 
     m_tipsLabel->setVisible(false);
-    m_tipsLabel->setFixedWidth(60);
+    m_tipsLabel->setFixedWidth(145);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding:5px 10px;");
