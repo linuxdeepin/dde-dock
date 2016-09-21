@@ -5,6 +5,10 @@
 #include <QIcon>
 #include <QMouseEvent>
 
+// menu actions
+#define MUTE    "mute"
+#define SETTINS "settings"
+
 SoundItem::SoundItem(QWidget *parent)
     : QWidget(parent),
 
@@ -38,6 +42,44 @@ QWidget *SoundItem::popupApplet()
     return m_applet;
 }
 
+const QString SoundItem::contextMenu() const
+{
+    QList<QVariant> items;
+    items.reserve(2);
+
+    QMap<QString, QVariant> open;
+    open["itemId"] = MUTE;
+    if (m_sinkInter->mute())
+        open["itemText"] = tr("Unmute");
+    else
+        open["itemText"] = tr("Mute");
+    open["isActive"] = true;
+    items.push_back(open);
+
+    QMap<QString, QVariant> settings;
+    settings["itemId"] = SETTINS;
+    settings["itemText"] = tr("Audio Settings");
+    settings["isActive"] = true;
+    items.push_back(settings);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void SoundItem::invokeMenuItem(const QString menuId, const bool checked)
+{
+    Q_UNUSED(checked);
+
+    if (menuId == MUTE)
+        m_sinkInter->SetMute(!m_sinkInter->mute());
+    else if (menuId == SETTINS)
+        QProcess::startDetached("dde-control-center", QStringList() << "sound");
+}
+
 QSize SoundItem::sizeHint() const
 {
     return QSize(26, 26);
@@ -57,7 +99,10 @@ void SoundItem::mousePressEvent(QMouseEvent *e)
 
     const QPoint p(e->pos() - rect().center());
     if (p.manhattanLength() < std::min(width(), height()) * 0.8 * 0.5)
+    {
+        emit requestContextMenu();
         return;
+    }
 
     return QWidget::mousePressEvent(e);
 }

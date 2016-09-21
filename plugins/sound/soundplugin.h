@@ -22,6 +22,9 @@ public:
     QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
 
+    const QString itemContextMenu(const QString &itemKey);
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
+
 private:
     SoundItem *m_soundItem;
 };
