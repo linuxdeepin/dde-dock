@@ -1,9 +1,7 @@
 #include "shutdownplugin.h"
+#include "dbus/dbusaccount.h"
 
 #include <QIcon>
-
-#define POWER_KEY       "power"
-#define SHUTDOWN_KEY    "shutdown"
 
 ShutdownPlugin::ShutdownPlugin(QObject *parent)
     : QObject(parent),
@@ -21,6 +19,8 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
                                "padding:5px 10px;");
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
+    connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
+    connect(m_powerStatusWidget, &PowerStatusWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);
 }
 
 const QString ShutdownPlugin::pluginName() const
@@ -81,6 +81,68 @@ const QString ShutdownPlugin::itemCommand(const QString &itemKey)
     return QString();
 }
 
+const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
+{
+    QList<QVariant> items;
+    items.reserve(6);
+
+    const Dock::DisplayMode mode = displayMode();
+
+    if (mode == Dock::Fashion || itemKey == SHUTDOWN_KEY)
+    {
+        QMap<QString, QVariant> shutdown;
+        shutdown["itemId"] = "shutdown";
+        shutdown["itemText"] = tr("Shut down");
+        shutdown["isActive"] = true;
+        items.push_back(shutdown);
+
+        QMap<QString, QVariant> reboot;
+        reboot["itemId"] = "reboot";
+        reboot["itemText"] = tr("Restart");
+        reboot["isActive"] = true;
+        items.push_back(reboot);
+
+        QMap<QString, QVariant> logout;
+        logout["itemId"] = "logout";
+        logout["itemText"] = tr("Log out");
+        logout["isActive"] = true;
+        items.push_back(logout);
+
+        QMap<QString, QVariant> suspend;
+        suspend["itemId"] = "suspend";
+        suspend["itemText"] = tr("Suspend");
+        suspend["isActive"] = true;
+        items.push_back(suspend);
+
+        DBusAccount *accountInter = new DBusAccount(this);
+        if (accountInter->userList().count() > 1)
+        {
+            QMap<QString, QVariant> switchUser;
+            switchUser["itemId"] = "switchUser";
+            switchUser["itemText"] = tr("Switch account");
+            switchUser["isActive"] = true;
+            items.push_back(switchUser);
+        }
+        accountInter->deleteLater();
+    }
+
+    if (mode == Dock::Fashion || itemKey == POWER_KEY)
+    {
+        QMap<QString, QVariant> power;
+        power["itemId"] = "power";
+        power["itemText"] = tr("Power settings");
+        power["isActive"] = true;
+        items.push_back(power);
+    }
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
 {
     Q_UNUSED(displayMode);
@@ -98,4 +160,9 @@ void ShutdownPlugin::updateBatteryVisible()
         m_proxyInter->itemRemoved(this, POWER_KEY);
     else if (exist)
         m_proxyInter->itemAdded(this, POWER_KEY);
+}
+
+void ShutdownPlugin::requestContextMenu(const QString &itemKey)
+{
+    m_proxyInter->requestContextMenu(this, itemKey);
 }

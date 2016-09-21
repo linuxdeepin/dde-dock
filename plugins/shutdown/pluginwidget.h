@@ -7,12 +7,17 @@
 #include <QWidget>
 #include <QTimer>
 
+#define SHUTDOWN_KEY    "shutdown"
+
 class PluginWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     explicit PluginWidget(QWidget *parent = 0);
+
+signals:
+    void requestContextMenu(const QString &itemKey) const;
 
 protected:
     QSize sizeHint() const;

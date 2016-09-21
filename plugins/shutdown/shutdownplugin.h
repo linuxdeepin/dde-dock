@@ -23,10 +23,12 @@ public:
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
+    const QString itemContextMenu(const QString &itemKey);
     void displayModeChanged(const Dock::DisplayMode displayMode);
 
 private:
     void updateBatteryVisible();
+    void requestContextMenu(const QString &itemKey);
 
 private:
     PluginWidget *m_shutdownWidget;
