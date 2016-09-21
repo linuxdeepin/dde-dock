@@ -14,13 +14,15 @@ HEADERS += \
     shutdownplugin.h \
     dbus/dbuspower.h \
     pluginwidget.h \
-    powerstatuswidget.h
+    powerstatuswidget.h \
+    dbus/dbusaccount.h
 
 SOURCES += \
     shutdownplugin.cpp \
     dbus/dbuspower.cpp \
     pluginwidget.cpp \
-    powerstatuswidget.cpp
+    powerstatuswidget.cpp \
+    dbus/dbusaccount.cpp
 
 target.path = $${PREFIX}/lib/dde-dock/plugins/
 INSTALLS += target
