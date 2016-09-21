@@ -22,48 +22,52 @@ func getDiskCap() (uint64, error) {
 		return 0, err
 	}
 
-	driList := getDriverList(udisk)
-	if len(driList) == 0 {
-		return 0, nil
-	}
-
-	var diskCap uint64
+	var (
+		diskCap   uint64
+		driveList []dbus.ObjectPath
+	)
 	managers, _ := udisk.GetManagedObjects()
-	for _, driver := range driList {
-		_, driExist := managers[driver]
-		rm, _ := managers[driver]["org.freedesktop.UDisks2.Drive"]["Removable"]
-		if driExist && !(rm.Value().(bool)) {
-			size := managers[driver]["org.freedesktop.UDisks2.Drive"]["Size"]
-			diskCap += size.Value().(uint64)
+	for _, manager := range managers {
+		block, ok := manager["org.freedesktop.UDisks2.Block"]
+		if !ok {
+			continue
 		}
+
+		// filter removable disk
+		driveValue, _ := block["Drive"]
+		drivePath := driveValue.Value().(dbus.ObjectPath)
+		if len(drivePath) != 0 && drivePath != "/" {
+			if isPathExists(drivePath, driveList) {
+				continue
+			}
+			driveList = append(driveList, drivePath)
+			drive := managers[drivePath]["org.freedesktop.UDisks2.Drive"]
+			removable := drive["Removable"]
+			if !removable.Value().(bool) {
+				diskCap += drive["Size"].Value().(uint64)
+			}
+			continue
+		}
+
+		// if no drive exists, such as NVMe port, check whether has PartitionTable
+		// TODO: parse NVMe port but no parted. If no parted, will no PartitionTable
+		_, ok = manager["org.freedesktop.UDisks2.PartitionTable"]
+		if !ok {
+			continue
+		}
+
+		diskCap += block["Size"].Value().(uint64)
 	}
 
 	udisks2.DestroyObjectManager(udisk)
 	return diskCap, nil
 }
 
-func getDriverList(udisk *udisks2.ObjectManager) []dbus.ObjectPath {
-	var driList []dbus.ObjectPath
-
-	managers, _ := udisk.GetManagedObjects()
-	for _, value := range managers {
-		if _, ok := value["org.freedesktop.UDisks2.Block"]; ok {
-			v := value["org.freedesktop.UDisks2.Block"]["Drive"]
-			path := v.Value().(dbus.ObjectPath)
-			if path != dbus.ObjectPath("/") {
-				flag := false
-				l := len(driList)
-				for i := 0; i < l; i++ {
-					if driList[i] == path {
-						flag = true
-						break
-					}
-				}
-				if !flag {
-					driList = append(driList, path)
-				}
-			}
+func isPathExists(item dbus.ObjectPath, list []dbus.ObjectPath) bool {
+	for _, v := range list {
+		if v == item {
+			return true
 		}
 	}
-	return driList
+	return false
 }
