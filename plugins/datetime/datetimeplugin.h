@@ -26,6 +26,9 @@ public:
     QWidget *itemTipsWidget(const QString &itemKey) override;
 
     const QString itemCommand(const QString &itemKey) override;
+    const QString itemContextMenu(const QString &itemKey) override;
+
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
 
 private slots:
     void updateCurrentTimeString();

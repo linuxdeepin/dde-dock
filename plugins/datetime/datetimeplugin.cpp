@@ -18,6 +18,8 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
     m_centeralWidget = new DatetimeWidget;
 
+    connect(m_centeralWidget, &DatetimeWidget::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
+
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
@@ -64,6 +66,36 @@ const QString DatetimePlugin::itemCommand(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return "dde-calendar";
+}
+
+const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    QList<QVariant> items;
+    items.reserve(1);
+
+    QMap<QString, QVariant> open;
+    open["itemId"] = "open";
+    open["itemText"] = tr("Time Settings");
+    open["isActive"] = true;
+    items.push_back(open);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey)
+    Q_UNUSED(menuId)
+    Q_UNUSED(checked)
+
+    QProcess::startDetached("dde-control-center", QStringList() << "datetime");
 }
 
 void DatetimePlugin::updateCurrentTimeString()

@@ -10,6 +10,9 @@ class DatetimeWidget : public QWidget
 public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
+signals:
+    void requestContextMenu() const;
+
 private:
     QSize sizeHint() const;
     void resizeEvent(QResizeEvent *e);
