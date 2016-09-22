@@ -392,6 +392,11 @@ NMSettings:
       CapcaseName: SettingConnectionSlaveType
       Type: ktypeString
       DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_STABLE_ID
+      Value: stable-id
+      CapcaseName: SettingConnectionStableId
+      Type: ktypeString
+      DefaultValue: "''"
     - KeyName: NM_SETTING_CONNECTION_TIMESTAMP
       Value: timestamp
       CapcaseName: SettingConnectionTimestamp
@@ -786,6 +791,11 @@ NMSettings:
       CapcaseName: SettingIP6ConfigRoutes
       Type: ktypeIpv6Routes
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP6_CONFIG_TOKEN
+      Value: token
+      CapcaseName: SettingIP6ConfigToken
+      Type: ktypeString
+      DefaultValue: "''"
   - SettingClass: SettingIPTunnel
     Name: NM_SETTING_IP_TUNNEL_SETTING_NAME
     Value: ip-tunnel
@@ -1272,6 +1282,11 @@ NMSettings:
       CapcaseName: SettingWiredDuplex
       Type: ktypeString
       DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRED_GENERATE_MAC_ADDRESS_MASK
+      Value: generate-mac-address-mask
+      CapcaseName: SettingWiredGenerateMacAddressMask
+      Type: ktypeString
+      DefaultValue: "''"
     - KeyName: NM_SETTING_WIRED_MAC_ADDRESS
       Value: mac-address
       CapcaseName: SettingWiredMacAddress
@@ -1346,6 +1361,11 @@ NMSettings:
       CapcaseName: SettingWirelessClonedMacAddress
       Type: ktypeArrayByte
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_GENERATE_MAC_ADDRESS_MASK
+      Value: generate-mac-address-mask
+      CapcaseName: SettingWirelessGenerateMacAddressMask
+      Type: ktypeString
+      DefaultValue: "''"
     - KeyName: NM_SETTING_WIRELESS_HIDDEN
       Value: hidden
       CapcaseName: SettingWirelessHidden
@@ -1528,6 +1548,12 @@ NMEnums:
       Value: 4
     - Name: NM_AGENT_MANAGER_ERROR_USER_CANCELED
       Value: 5
+  - EnumClass: CheckpointCreateFlags
+    Members:
+    - Name: NM_CHECKPOINT_CREATE_FLAG_NONE
+      Value: 0
+    - Name: NM_CHECKPOINT_CREATE_FLAG_DESTROY_ALL
+      Value: 1
   - EnumClass: ClientError
     Members:
     - Name: NM_CLIENT_ERROR_FAILED
@@ -1566,8 +1592,12 @@ NMEnums:
       Value: 12
     - Name: NM_CLIENT_PERMISSION_RELOAD
       Value: 13
+    - Name: NM_CLIENT_PERMISSION_CHECKPOINT_ROLLBACK
+      Value: 14
+    - Name: NM_CLIENT_PERMISSION_ENABLE_DISABLE_STATISTICS
+      Value: 15
     - Name: NM_CLIENT_PERMISSION_LAST
-      Value: 13
+      Value: 15
   - EnumClass: ClientPermissionResult
     Members:
     - Name: NM_CLIENT_PERMISSION_RESULT_UNKNOWN
@@ -1904,6 +1934,16 @@ NMEnums:
       Value: 3
     - Name: NM_METERED_GUESS_NO
       Value: 4
+  - EnumClass: RollbackResult
+    Members:
+    - Name: NM_ROLLBACK_RESULT_OK
+      Value: 0
+    - Name: NM_ROLLBACK_RESULT_ERR_NO_DEVICE
+      Value: 1
+    - Name: NM_ROLLBACK_RESULT_ERR_DEVICE_UNMANAGED
+      Value: 2
+    - Name: NM_ROLLBACK_RESULT_ERR_FAILED
+      Value: 3
   - EnumClass: SecretAgentError
     Members:
     - Name: NM_SECRET_AGENT_ERROR_FAILED
@@ -2450,6 +2490,10 @@ NMEnums:
       Value: activating-connection
     - Name: NM_CLIENT_ACTIVE_CONNECTIONS
       Value: active-connections
+    - Name: NM_CLIENT_ACTIVE_CONNECTION_ADDED
+      Value: active-connection-added
+    - Name: NM_CLIENT_ACTIVE_CONNECTION_REMOVED
+      Value: active-connection-removed
     - Name: NM_CLIENT_ALL_DEVICES
       Value: all-devices
     - Name: NM_CLIENT_ANY_DEVICE_ADDED
@@ -2708,6 +2752,8 @@ NMEnums:
       Value: state-reason
     - Name: NM_DEVICE_TEAM_CARRIER
       Value: carrier
+    - Name: NM_DEVICE_TEAM_CONFIG
+      Value: config
     - Name: NM_DEVICE_TEAM_HW_ADDRESS
       Value: hw-address
     - Name: NM_DEVICE_TEAM_SLAVES
@@ -3096,6 +3142,8 @@ NMEnums:
       Value: never-default
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_PREFIX
       Value: prefix
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES
+      Value: preserve-routes
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_PTP
       Value: ptp
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_ROUTES
@@ -3116,6 +3164,8 @@ NMEnums:
       Value: never-default
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_PREFIX
       Value: prefix
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES
+      Value: preserve-routes
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_PTP
       Value: ptp
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_ROUTES

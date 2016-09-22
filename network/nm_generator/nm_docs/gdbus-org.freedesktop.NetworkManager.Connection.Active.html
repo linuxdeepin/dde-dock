@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager.Connection.Active: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html" title="org.freedesktop.NetworkManager.VPN.Connection">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.Device.html" title="org.freedesktop.NetworkManager.Device">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Connection.Active.description" class="shortcut">Description</a></span><span id="nav_properties">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Connection.Active.properties" class="shortcut">Properties</a></span><span id="nav_signals">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Connection.Active.signals" class="shortcut">Signals</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gdbus-org.freedesktop.NetworkManager.VPN.Connection.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.Device.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager.Connection.Active"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager-Connection-Active.top_of_page"></a>org.freedesktop.NetworkManager.Connection.Active</span></h2>
+<p>org.freedesktop.NetworkManager.Connection.Active</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="id-1.3.3.9.3"></a><h2>Signals</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-signal-org-freedesktop-NetworkManager-Connection-Active.PropertiesChanged" title='The "PropertiesChanged" signal'>PropertiesChanged</a> (a{sv} properties);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.9.4"></a><h2>Properties</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Connection" title='The "Connection" property'>Connection</a>      readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.SpecificObject" title='The "SpecificObject" property'>SpecificObject</a>  readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Id" title='The "Id" property'>Id</a>              readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Uuid" title='The "Uuid" property'>Uuid</a>            readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Type" title='The "Type" property'>Type</a>            readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Devices" title='The "Devices" property'>Devices</a>         readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.State" title='The "State" property'>State</a>           readable   u
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default" title='The "Default" property'>Default</a>         readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip4Config" title='The "Ip4Config" property'>Ip4Config</a>       readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp4Config" title='The "Dhcp4Config" property'>Dhcp4Config</a>     readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default6" title='The "Default6" property'>Default6</a>        readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip6Config" title='The "Ip6Config" property'>Ip6Config</a>       readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp6Config" title='The "Dhcp6Config" property'>Dhcp6Config</a>     readable   o
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Vpn" title='The "Vpn" property'>Vpn</a>             readable   b
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Connection.Active.html#gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Master" title='The "Master" property'>Master</a>          readable   o
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager-Connection-Active"></a><h2>Description</h2>
+<p>      Objects that implement the Connection.Active interface represent an
+      attempt to connect to a network using the details provided by a Connection
+      object. The Connection.Active object tracks the life-cycle of the
+      connection attempt and if successful indicates whether the connected
+      network is the "default" or preferred network for access. NetworkManager
+      has the concept of connections, which can be thought of as settings, a
+      profile or a configuration that can be applied on a networking device.
+      Such settings-connections are exposed as D-Bus object and the
+      active-connection expresses this relationship between device and
+      settings-connection. At any time a settings-connection can only be
+      activated on one device and vice versa. However, during activation and
+      deactivation multiple active-connections can reference the same device or
+      settings-connection as they are waiting to be activated or to be
+      deactivated.
+</p>
+</div>
+<div class="refsect1">
+<a name="gdbus-signals-org.freedesktop.NetworkManager.Connection.Active"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager-Connection-Active.PropertiesChanged"></a><h3>The "PropertiesChanged" signal</h3>
+<pre class="programlisting">
+PropertiesChanged (a{sv} properties);
+</pre>
+<p>        DEPRECATED. Use the standard "PropertiesChanged" signal from "org.freedesktop.DBus.Properties" instead which exists since version NetworkManager 1.2.0.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">a{sv} <em class="parameter"><code>properties</code></em></code>:</span></p></td>
+<td><p>A dictionary mapping property names to variant boxed values</p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-properties-org.freedesktop.NetworkManager.Connection.Active"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Connection"></a><h3>The "Connection" property</h3>
+<pre class="programlisting">
+Connection  readable   o
+</pre>
+<p>        The path of the connection.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.SpecificObject"></a><h3>The "SpecificObject" property</h3>
+<pre class="programlisting">
+SpecificObject  readable   o
+</pre>
+<p>        A specific object associated with the active connection. This property
+        reflects the specific object used during connection activation, and will
+        not change over the lifetime of the ActiveConnection once set.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Id"></a><h3>The "Id" property</h3>
+<pre class="programlisting">
+Id  readable   s
+</pre>
+<p>        The ID of the connection, provided as a convenience so that clients do not
+        have to retrieve all connection details.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Uuid"></a><h3>The "Uuid" property</h3>
+<pre class="programlisting">
+Uuid  readable   s
+</pre>
+<p>        The UUID of the connection, provided as a convenience so that clients do
+        not have to retrieve all connection details.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Type"></a><h3>The "Type" property</h3>
+<pre class="programlisting">
+Type  readable   s
+</pre>
+<p>        The type of the connection, provided as a convenience so that clients do
+        not have to retrieve all connection details.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Devices"></a><h3>The "Devices" property</h3>
+<pre class="programlisting">
+Devices  readable   ao
+</pre>
+<p>        Array of object paths representing devices which are part of this active
+        connection.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.State"></a><h3>The "State" property</h3>
+<pre class="programlisting">
+State  readable   u
+</pre>
+<p>        The state of this active connection.
+</p>
+<p>        Returns: <a class="link" href="nm-dbus-types.html#NMActiveConnectionState" title="enum NMActiveConnectionState">NMActiveConnectionState</a>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default"></a><h3>The "Default" property</h3>
+<pre class="programlisting">
+Default  readable   b
+</pre>
+<p>        Whether this active connection is the default IPv4 connection, i.e.
+        whether it currently owns the default IPv4 route.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip4Config"></a><h3>The "Ip4Config" property</h3>
+<pre class="programlisting">
+Ip4Config  readable   o
+</pre>
+<p>        Object path of the Ip4Config object describing the configuration of the
+        connection. Only valid when the connection is in the
+        NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp4Config"></a><h3>The "Dhcp4Config" property</h3>
+<pre class="programlisting">
+Dhcp4Config  readable   o
+</pre>
+<p>        Object path of the Dhcp4Config object describing the DHCP options returned
+        by the DHCP server (assuming the connection used DHCP). Only valid when
+        the connection is in the NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Default6"></a><h3>The "Default6" property</h3>
+<pre class="programlisting">
+Default6  readable   b
+</pre>
+<p>        Whether this active connection is the default IPv6 connection, i.e.
+        whether it currently owns the default IPv6 route.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Ip6Config"></a><h3>The "Ip6Config" property</h3>
+<pre class="programlisting">
+Ip6Config  readable   o
+</pre>
+<p>        Object path of the Ip6Config object describing the configuration of the
+        connection. Only valid when the connection is in the
+        NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Dhcp6Config"></a><h3>The "Dhcp6Config" property</h3>
+<pre class="programlisting">
+Dhcp6Config  readable   o
+</pre>
+<p>        Object path of the Dhcp6Config object describing the DHCP options returned
+        by the DHCP server (assuming the connection used DHCP). Only valid when
+        the connection is in the NM_ACTIVE_CONNECTION_STATE_ACTIVATED state.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Vpn"></a><h3>The "Vpn" property</h3>
+<pre class="programlisting">
+Vpn  readable   b
+</pre>
+<p>        Whether this active connection is also a VPN connection.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Connection-Active.Master"></a><h3>The "Master" property</h3>
+<pre class="programlisting">
+Master  readable   o
+</pre>
+<p>        The path to the master device if the connection is a slave.
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

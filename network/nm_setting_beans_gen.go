@@ -1505,6 +1505,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "slave-type":
 			return true
+		case "stable-id":
+			return true
 		case "timestamp":
 			return true
 		case "type":
@@ -1670,6 +1672,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "route-metric":
 			return true
 		case "routes":
+			return true
+		case "token":
 			return true
 		}
 	case "ip-tunnel":
@@ -1885,6 +1889,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "duplex":
 			return true
+		case "generate-mac-address-mask":
+			return true
 		case "mac-address":
 			return true
 		case "mac-address-blacklist":
@@ -1915,6 +1921,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "channel":
 			return true
 		case "cloned-mac-address":
+			return true
+		case "generate-mac-address-mask":
 			return true
 		case "hidden":
 			return true
@@ -2468,6 +2476,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeArrayString
 		case "slave-type":
 			t = ktypeString
+		case "stable-id":
+			t = ktypeString
 		case "timestamp":
 			t = ktypeUint64
 		case "type":
@@ -2646,6 +2656,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeInt64
 		case "routes":
 			t = ktypeWrapperIpv6Routes
+		case "token":
+			t = ktypeString
 		}
 	case "ip-tunnel":
 		switch key {
@@ -2888,6 +2900,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeWrapperMacAddress
 		case "duplex":
 			t = ktypeString
+		case "generate-mac-address-mask":
+			t = ktypeString
 		case "mac-address":
 			t = ktypeWrapperMacAddress
 		case "mac-address-blacklist":
@@ -2921,6 +2935,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeUint32
 		case "cloned-mac-address":
 			t = ktypeWrapperMacAddress
+		case "generate-mac-address-mask":
+			t = ktypeString
 		case "hidden":
 			t = ktypeBoolean
 		case "mac-address":
@@ -3795,6 +3811,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = []string{}
 		case "slave-type":
 			defvalue = ""
+		case "stable-id":
+			defvalue = ""
 		case "timestamp":
 			defvalue = uint64(0x0)
 		case "type":
@@ -3973,6 +3991,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = int64(-1)
 		case "routes":
 			defvalue = make(ipv6Routes, 0)
+		case "token":
+			defvalue = ""
 		}
 	case "ip-tunnel":
 		switch key {
@@ -4215,6 +4235,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = []byte{}
 		case "duplex":
 			defvalue = ""
+		case "generate-mac-address-mask":
+			defvalue = ""
 		case "mac-address":
 			defvalue = []byte{}
 		case "mac-address-blacklist":
@@ -4248,6 +4270,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = uint32(0x0)
 		case "cloned-mac-address":
 			defvalue = []byte{}
+		case "generate-mac-address-mask":
+			defvalue = ""
 		case "hidden":
 			defvalue = false
 		case "mac-address":
@@ -4830,6 +4854,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingConnectionSecondariesJSON(data)
 		case "slave-type":
 			valueJSON = getSettingConnectionSlaveTypeJSON(data)
+		case "stable-id":
+			valueJSON = getSettingConnectionStableIdJSON(data)
 		case "timestamp":
 			valueJSON = getSettingConnectionTimestampJSON(data)
 		case "type":
@@ -5008,6 +5034,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingIP6ConfigRouteMetricJSON(data)
 		case "routes":
 			valueJSON = getSettingIP6ConfigRoutesJSON(data)
+		case "token":
+			valueJSON = getSettingIP6ConfigTokenJSON(data)
 		}
 	case "ip-tunnel":
 		switch key {
@@ -5250,6 +5278,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingWiredClonedMacAddressJSON(data)
 		case "duplex":
 			valueJSON = getSettingWiredDuplexJSON(data)
+		case "generate-mac-address-mask":
+			valueJSON = getSettingWiredGenerateMacAddressMaskJSON(data)
 		case "mac-address":
 			valueJSON = getSettingWiredMacAddressJSON(data)
 		case "mac-address-blacklist":
@@ -5283,6 +5313,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingWirelessChannelJSON(data)
 		case "cloned-mac-address":
 			valueJSON = getSettingWirelessClonedMacAddressJSON(data)
+		case "generate-mac-address-mask":
+			valueJSON = getSettingWirelessGenerateMacAddressMaskJSON(data)
 		case "hidden":
 			valueJSON = getSettingWirelessHiddenJSON(data)
 		case "mac-address":
@@ -5874,6 +5906,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingConnectionSecondariesJSON(data, valueJSON)
 		case "slave-type":
 			err = setSettingConnectionSlaveTypeJSON(data, valueJSON)
+		case "stable-id":
+			err = setSettingConnectionStableIdJSON(data, valueJSON)
 		case "timestamp":
 			err = setSettingConnectionTimestampJSON(data, valueJSON)
 		case "type":
@@ -6058,6 +6092,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingIP6ConfigRouteMetricJSON(data, valueJSON)
 		case "routes":
 			err = setSettingIP6ConfigRoutesJSON(data, valueJSON)
+		case "token":
+			err = setSettingIP6ConfigTokenJSON(data, valueJSON)
 		}
 	case "ip-tunnel":
 		switch key {
@@ -6314,6 +6350,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWiredClonedMacAddressJSON(data, valueJSON)
 		case "duplex":
 			err = setSettingWiredDuplexJSON(data, valueJSON)
+		case "generate-mac-address-mask":
+			err = setSettingWiredGenerateMacAddressMaskJSON(data, valueJSON)
 		case "mac-address":
 			err = setSettingWiredMacAddressJSON(data, valueJSON)
 		case "mac-address-blacklist":
@@ -6348,6 +6386,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessChannelJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWirelessClonedMacAddressJSON(data, valueJSON)
+		case "generate-mac-address-mask":
+			err = setSettingWirelessGenerateMacAddressMaskJSON(data, valueJSON)
 		case "hidden":
 			err = setSettingWirelessHiddenJSON(data, valueJSON)
 		case "mac-address":
@@ -7366,6 +7406,15 @@ func ensureSettingConnectionSlaveTypeNoEmpty(data connectionData, errs sectionEr
 		rememberError(errs, "connection", "slave-type", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSettingConnectionStableIdNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingConnectionStableIdExists(data) {
+		rememberError(errs, "connection", "stable-id", nmKeyErrorMissingValue)
+	}
+	value := getSettingConnectionStableId(data)
+	if len(value) == 0 {
+		rememberError(errs, "connection", "stable-id", nmKeyErrorEmptyValue)
+	}
+}
 func ensureSettingConnectionTimestampNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionTimestampExists(data) {
 		rememberError(errs, "connection", "timestamp", nmKeyErrorMissingValue)
@@ -7948,6 +7997,15 @@ func ensureSettingIP6ConfigRoutesNoEmpty(data connectionData, errs sectionErrors
 	value := getSettingIP6ConfigRoutes(data)
 	if len(value) == 0 {
 		rememberError(errs, "ipv6", "routes", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingIP6ConfigTokenNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingIP6ConfigTokenExists(data) {
+		rememberError(errs, "ipv6", "token", nmKeyErrorMissingValue)
+	}
+	value := getSettingIP6ConfigToken(data)
+	if len(value) == 0 {
+		rememberError(errs, "ipv6", "token", nmKeyErrorEmptyValue)
 	}
 }
 func ensureSectionSettingIPTunnelExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -8622,6 +8680,15 @@ func ensureSettingWiredDuplexNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, "802-3-ethernet", "duplex", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSettingWiredGenerateMacAddressMaskNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWiredGenerateMacAddressMaskExists(data) {
+		rememberError(errs, "802-3-ethernet", "generate-mac-address-mask", nmKeyErrorMissingValue)
+	}
+	value := getSettingWiredGenerateMacAddressMask(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-3-ethernet", "generate-mac-address-mask", nmKeyErrorEmptyValue)
+	}
+}
 func ensureSettingWiredMacAddressNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingWiredMacAddressExists(data) {
 		rememberError(errs, "802-3-ethernet", "mac-address", nmKeyErrorMissingValue)
@@ -8739,6 +8806,15 @@ func ensureSettingWirelessClonedMacAddressNoEmpty(data connectionData, errs sect
 	value := getSettingWirelessClonedMacAddress(data)
 	if len(value) == 0 {
 		rememberError(errs, "802-11-wireless", "cloned-mac-address", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingWirelessGenerateMacAddressMaskNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingWirelessGenerateMacAddressMaskExists(data) {
+		rememberError(errs, "802-11-wireless", "generate-mac-address-mask", nmKeyErrorMissingValue)
+	}
+	value := getSettingWirelessGenerateMacAddressMask(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-11-wireless", "generate-mac-address-mask", nmKeyErrorEmptyValue)
 	}
 }
 func ensureSettingWirelessHiddenNoEmpty(data connectionData, errs sectionErrors) {
@@ -10197,6 +10273,9 @@ func isSettingConnectionSecondariesExists(data connectionData) bool {
 func isSettingConnectionSlaveTypeExists(data connectionData) bool {
 	return isSettingKeyExists(data, "connection", "slave-type")
 }
+func isSettingConnectionStableIdExists(data connectionData) bool {
+	return isSettingKeyExists(data, "connection", "stable-id")
+}
 func isSettingConnectionTimestampExists(data connectionData) bool {
 	return isSettingKeyExists(data, "connection", "timestamp")
 }
@@ -10418,6 +10497,9 @@ func isSettingIP6ConfigRouteMetricExists(data connectionData) bool {
 }
 func isSettingIP6ConfigRoutesExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ipv6", "routes")
+}
+func isSettingIP6ConfigTokenExists(data connectionData) bool {
+	return isSettingKeyExists(data, "ipv6", "token")
 }
 func isSettingIPTunnelEncapsulationLimitExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ip-tunnel", "encapsulation-limit")
@@ -10677,6 +10759,9 @@ func isSettingWiredClonedMacAddressExists(data connectionData) bool {
 func isSettingWiredDuplexExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-3-ethernet", "duplex")
 }
+func isSettingWiredGenerateMacAddressMaskExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-3-ethernet", "generate-mac-address-mask")
+}
 func isSettingWiredMacAddressExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-3-ethernet", "mac-address")
 }
@@ -10718,6 +10803,9 @@ func isSettingWirelessChannelExists(data connectionData) bool {
 }
 func isSettingWirelessClonedMacAddressExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-wireless", "cloned-mac-address")
+}
+func isSettingWirelessGenerateMacAddressMaskExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-11-wireless", "generate-mac-address-mask")
 }
 func isSettingWirelessHiddenExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-11-wireless", "hidden")
@@ -11546,6 +11634,11 @@ func getSettingConnectionSlaveType(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSettingConnectionStableId(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "connection", "stable-id")
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingConnectionTimestamp(data connectionData) (value uint64) {
 	ivalue := getSettingKey(data, "connection", "timestamp")
 	value = interfaceToUint64(ivalue)
@@ -11914,6 +12007,11 @@ func getSettingIP6ConfigRouteMetric(data connectionData) (value int64) {
 func getSettingIP6ConfigRoutes(data connectionData) (value ipv6Routes) {
 	ivalue := getSettingKey(data, "ipv6", "routes")
 	value = interfaceToIpv6Routes(ivalue)
+	return
+}
+func getSettingIP6ConfigToken(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "ipv6", "token")
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingIPTunnelEncapsulationLimit(data connectionData) (value uint32) {
@@ -12346,6 +12444,11 @@ func getSettingWiredDuplex(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSettingWiredGenerateMacAddressMask(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-3-ethernet", "generate-mac-address-mask")
+	value = interfaceToString(ivalue)
+	return
+}
 func getSettingWiredMacAddress(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, "802-3-ethernet", "mac-address")
 	value = interfaceToArrayByte(ivalue)
@@ -12414,6 +12517,11 @@ func getSettingWirelessChannel(data connectionData) (value uint32) {
 func getSettingWirelessClonedMacAddress(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, "802-11-wireless", "cloned-mac-address")
 	value = interfaceToArrayByte(ivalue)
+	return
+}
+func getSettingWirelessGenerateMacAddressMask(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-11-wireless", "generate-mac-address-mask")
+	value = interfaceToString(ivalue)
 	return
 }
 func getSettingWirelessHidden(data connectionData) (value bool) {
@@ -13409,6 +13517,9 @@ func setSettingConnectionSecondaries(data connectionData, value []string) {
 func setSettingConnectionSlaveType(data connectionData, value string) {
 	setSettingKey(data, "connection", "slave-type", value)
 }
+func setSettingConnectionStableId(data connectionData, value string) {
+	setSettingKey(data, "connection", "stable-id", value)
+}
 func setSettingConnectionTimestamp(data connectionData, value uint64) {
 	setSettingKey(data, "connection", "timestamp", value)
 }
@@ -13630,6 +13741,9 @@ func setSettingIP6ConfigRouteMetric(data connectionData, value int64) {
 }
 func setSettingIP6ConfigRoutes(data connectionData, value ipv6Routes) {
 	setSettingKey(data, "ipv6", "routes", value)
+}
+func setSettingIP6ConfigToken(data connectionData, value string) {
+	setSettingKey(data, "ipv6", "token", value)
 }
 func setSettingIPTunnelEncapsulationLimit(data connectionData, value uint32) {
 	setSettingKey(data, "ip-tunnel", "encapsulation-limit", value)
@@ -13889,6 +14003,9 @@ func setSettingWiredClonedMacAddress(data connectionData, value []byte) {
 func setSettingWiredDuplex(data connectionData, value string) {
 	setSettingKey(data, "802-3-ethernet", "duplex", value)
 }
+func setSettingWiredGenerateMacAddressMask(data connectionData, value string) {
+	setSettingKey(data, "802-3-ethernet", "generate-mac-address-mask", value)
+}
 func setSettingWiredMacAddress(data connectionData, value []byte) {
 	setSettingKey(data, "802-3-ethernet", "mac-address", value)
 }
@@ -13930,6 +14047,9 @@ func setSettingWirelessChannel(data connectionData, value uint32) {
 }
 func setSettingWirelessClonedMacAddress(data connectionData, value []byte) {
 	setSettingKey(data, "802-11-wireless", "cloned-mac-address", value)
+}
+func setSettingWirelessGenerateMacAddressMask(data connectionData, value string) {
+	setSettingKey(data, "802-11-wireless", "generate-mac-address-mask", value)
 }
 func setSettingWirelessHidden(data connectionData, value bool) {
 	setSettingKey(data, "802-11-wireless", "hidden", value)
@@ -14686,6 +14806,10 @@ func getSettingConnectionSlaveTypeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "connection", "slave-type", ktypeString)
 	return
 }
+func getSettingConnectionStableIdJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "connection", "stable-id", ktypeString)
+	return
+}
 func getSettingConnectionTimestampJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "connection", "timestamp", ktypeUint64)
 	return
@@ -14980,6 +15104,10 @@ func getSettingIP6ConfigRouteMetricJSON(data connectionData) (valueJSON string) 
 }
 func getSettingIP6ConfigRoutesJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ipv6", "routes", ktypeWrapperIpv6Routes)
+	return
+}
+func getSettingIP6ConfigTokenJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "ipv6", "token", ktypeString)
 	return
 }
 func getSettingIPTunnelEncapsulationLimitJSON(data connectionData) (valueJSON string) {
@@ -15326,6 +15454,10 @@ func getSettingWiredDuplexJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-3-ethernet", "duplex", ktypeString)
 	return
 }
+func getSettingWiredGenerateMacAddressMaskJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-3-ethernet", "generate-mac-address-mask", ktypeString)
+	return
+}
 func getSettingWiredMacAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-3-ethernet", "mac-address", ktypeWrapperMacAddress)
 	return
@@ -15380,6 +15512,10 @@ func getSettingWirelessChannelJSON(data connectionData) (valueJSON string) {
 }
 func getSettingWirelessClonedMacAddressJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-11-wireless", "cloned-mac-address", ktypeWrapperMacAddress)
+	return
+}
+func getSettingWirelessGenerateMacAddressMaskJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-11-wireless", "generate-mac-address-mask", ktypeString)
 	return
 }
 func getSettingWirelessHiddenJSON(data connectionData) (valueJSON string) {
@@ -16220,6 +16356,9 @@ func setSettingConnectionSecondariesJSON(data connectionData, valueJSON string) 
 func setSettingConnectionSlaveTypeJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "connection", "slave-type", valueJSON, ktypeString)
 }
+func setSettingConnectionStableIdJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "connection", "stable-id", valueJSON, ktypeString)
+}
 func setSettingConnectionTimestampJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "connection", "timestamp", valueJSON, ktypeUint64)
 }
@@ -16441,6 +16580,9 @@ func setSettingIP6ConfigRouteMetricJSON(data connectionData, valueJSON string) (
 }
 func setSettingIP6ConfigRoutesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ipv6", "routes", valueJSON, ktypeWrapperIpv6Routes)
+}
+func setSettingIP6ConfigTokenJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "ipv6", "token", valueJSON, ktypeString)
 }
 func setSettingIPTunnelEncapsulationLimitJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ip-tunnel", "encapsulation-limit", valueJSON, ktypeUint32)
@@ -16700,6 +16842,9 @@ func setSettingWiredClonedMacAddressJSON(data connectionData, valueJSON string) 
 func setSettingWiredDuplexJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "duplex", valueJSON, ktypeString)
 }
+func setSettingWiredGenerateMacAddressMaskJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-3-ethernet", "generate-mac-address-mask", valueJSON, ktypeString)
+}
 func setSettingWiredMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "mac-address", valueJSON, ktypeWrapperMacAddress)
 }
@@ -16741,6 +16886,9 @@ func setSettingWirelessChannelJSON(data connectionData, valueJSON string) (err e
 }
 func setSettingWirelessClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "cloned-mac-address", valueJSON, ktypeWrapperMacAddress)
+}
+func setSettingWirelessGenerateMacAddressMaskJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-11-wireless", "generate-mac-address-mask", valueJSON, ktypeString)
 }
 func setSettingWirelessHiddenJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "hidden", valueJSON, ktypeBoolean)
@@ -17636,6 +17784,9 @@ func removeSettingConnectionSecondaries(data connectionData) {
 func removeSettingConnectionSlaveType(data connectionData) {
 	removeSettingKey(data, "connection", "slave-type")
 }
+func removeSettingConnectionStableId(data connectionData) {
+	removeSettingKey(data, "connection", "stable-id")
+}
 func removeSettingConnectionTimestamp(data connectionData) {
 	removeSettingKey(data, "connection", "timestamp")
 }
@@ -17857,6 +18008,9 @@ func removeSettingIP6ConfigRouteMetric(data connectionData) {
 }
 func removeSettingIP6ConfigRoutes(data connectionData) {
 	removeSettingKey(data, "ipv6", "routes")
+}
+func removeSettingIP6ConfigToken(data connectionData) {
+	removeSettingKey(data, "ipv6", "token")
 }
 func removeSettingIPTunnelEncapsulationLimit(data connectionData) {
 	removeSettingKey(data, "ip-tunnel", "encapsulation-limit")
@@ -18116,6 +18270,9 @@ func removeSettingWiredClonedMacAddress(data connectionData) {
 func removeSettingWiredDuplex(data connectionData) {
 	removeSettingKey(data, "802-3-ethernet", "duplex")
 }
+func removeSettingWiredGenerateMacAddressMask(data connectionData) {
+	removeSettingKey(data, "802-3-ethernet", "generate-mac-address-mask")
+}
 func removeSettingWiredMacAddress(data connectionData) {
 	removeSettingKey(data, "802-3-ethernet", "mac-address")
 }
@@ -18157,6 +18314,9 @@ func removeSettingWirelessChannel(data connectionData) {
 }
 func removeSettingWirelessClonedMacAddress(data connectionData) {
 	removeSettingKey(data, "802-11-wireless", "cloned-mac-address")
+}
+func removeSettingWirelessGenerateMacAddressMask(data connectionData) {
+	removeSettingKey(data, "802-11-wireless", "generate-mac-address-mask")
 }
 func removeSettingWirelessHidden(data connectionData) {
 	removeSettingKey(data, "802-11-wireless", "hidden")

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>nm-online: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="manpages.html" title="Manual Pages">
+<link rel="prev" href="nmtui.html" title="nmtui">
+<link rel="next" href="NetworkManager.conf.html" title="NetworkManager.conf">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts"></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="manpages.html"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="nmtui.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="NetworkManager.conf.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="nm-online"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle">nm-online</span></h2>
+<p>nm-online — ask NetworkManager whether the network is connected</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="synopsis"></a><h2>Synopsis</h2>
+<div class="cmdsynopsis"><p><code class="command">nm-online</code>  [<em class="replaceable"><code>OPTIONS</code></em>...]</p></div>
+</div>
+<div class="refsect1">
+<a name="description"></a><h2>Description</h2>
+<p><span class="command"><strong>nm-online</strong></span> is a utility to find out whether we are
+    online. It is done by asking NetworkManager about its status. When run,
+    <span class="command"><strong>nm-online</strong></span> waits until NetworkManager reports an active
+    connection, or specified timeout expires. On exit, the returned status code
+    should be checked (see the return codes below).</p>
+<p>By default NetworkManager waits for IPv4 dynamic addressing to complete
+    but does not wait for the <code class="literal">auto</code> IPv6 dynamic addressing. To
+    wait for IPv6 addressing to complete, either (1) change the network
+    connection's IPv6 <code class="literal">may-fail</code> setting to <code class="literal">no</code>,
+    and/or (2) change the IPv6 addressing method to <code class="literal">manual</code> or
+    <code class="literal">dhcp</code>, to indicate that IPv6 connectivity is expected.</p>
+</div>
+<div class="refsect1">
+<a name="options"></a><h2>Options</h2>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term">
+            <code class="option">-t</code>  |   <code class="option">--timeout</code>  
+            <em class="replaceable"><code>seconds</code></em> 
+        </span></p></td>
+<td><p>Time to wait for a connection, in seconds. If the option is not provided,
+          the default timeout is 30 seconds.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-x</code>  |   <code class="option">--exit</code>  </span></p></td>
+<td><p>Exit immediately if NetworkManager is not running or connecting.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-q</code>  |   <code class="option">--quiet</code>  </span></p></td>
+<td><p>Don't print anything.</p></td>
+</tr>
+<tr>
+<td><p><span class="term">  <code class="option">-s</code>  |   <code class="option">--wait-for-startup</code>  </span></p></td>
+<td><p>Wait for NetworkManager startup to complete, rather than waiting for
+          network connectivity specifically. Startup is considered complete once
+          NetworkManager has activated (or attempted to activate) every auto-activate
+          connection which is available given the current network state. (This is
+          generally only useful at boot time; after startup has completed,
+          <span class="command"><strong>nm-online -s</strong></span> will just return immediately, regardless of the
+          current network state.)</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="exit_status"></a><h2>Exit Status</h2>
+<p><span class="command"><strong>nm-online</strong></span> exits with status 0 if it succeeds, a value
+    greater than 0 is returned if an error occurs.</p>
+<div class="variablelist"><table border="0" class="variablelist compact">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><span class="errorcode">0</span></span></p></td>
+<td><p>Success – already online or connection established within given timeout.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">1</span></span></p></td>
+<td><p>Offline or not online within given timeout.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="errorcode">2</span></span></p></td>
+<td><p>Unknown or unspecified error.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="refsect1">
+<a name="see_also"></a><h2>See Also</h2>
+<p><a class="link" href="nmcli.html" title="nmcli"><span class="citerefentry"><span class="refentrytitle">nmcli</span>(1)</span></a>,
+    <a class="link" href="NetworkManager.html" title="NetworkManager"><span class="citerefentry"><span class="refentrytitle">NetworkManager</span>(8)</span></a>.</p>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

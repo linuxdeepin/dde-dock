@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>org.freedesktop.NetworkManager.Settings: NetworkManager Reference Manual</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.79.1">
+<link rel="home" href="index.html" title="NetworkManager Reference Manual">
+<link rel="up" href="spec.html#dbus-interfaces" title="Interfaces">
+<link rel="prev" href="gdbus-org.freedesktop.NetworkManager.html" title="org.freedesktop.NetworkManager">
+<link rel="next" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html" title="org.freedesktop.NetworkManager.AgentManager">
+<meta name="generator" content="GTK-Doc V1.25 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="5"><tr valign="middle">
+<td width="100%" align="left" class="shortcuts">
+<a href="#" class="shortcut">Top</a><span id="nav_description">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Settings.description" class="shortcut">Description</a></span><span id="nav_properties">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Settings.properties" class="shortcut">Properties</a></span><span id="nav_signals">  <span class="dim">|</span> 
+                  <a href="#gdbus-org.freedesktop.NetworkManager.Settings.signals" class="shortcut">Signals</a></span>
+</td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="16" height="16" border="0" alt="Home"></a></td>
+<td><a accesskey="u" href="spec.html#dbus-interfaces"><img src="up.png" width="16" height="16" border="0" alt="Up"></a></td>
+<td><a accesskey="p" href="gdbus-org.freedesktop.NetworkManager.html"><img src="left.png" width="16" height="16" border="0" alt="Prev"></a></td>
+<td><a accesskey="n" href="gdbus-org.freedesktop.NetworkManager.AgentManager.html"><img src="right.png" width="16" height="16" border="0" alt="Next"></a></td>
+</tr></table>
+<div class="refentry">
+<a name="gdbus-org.freedesktop.NetworkManager.Settings"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="gdbus-interface-org-freedesktop-NetworkManager-Settings.top_of_page"></a>org.freedesktop.NetworkManager.Settings</span></h2>
+<p>org.freedesktop.NetworkManager.Settings</p>
+</td>
+<td class="gallery_image" valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<h2>Methods</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ListConnections" title="The ListConnections() method">ListConnections</a>      (OUT ao        connections);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.GetConnectionByUuid" title="The GetConnectionByUuid() method">GetConnectionByUuid</a>  (IN  s         uuid,
+                      OUT o         connection);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnection" title="The AddConnection() method">AddConnection</a>        (IN  a{sa{sv}} connection,
+                      OUT o         path);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnectionUnsaved" title="The AddConnectionUnsaved() method">AddConnectionUnsaved</a> (IN  a{sa{sv}} connection,
+                      OUT o         path);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.LoadConnections" title="The LoadConnections() method">LoadConnections</a>      (IN  as        filenames,
+                      OUT b         status,
+                      OUT as        failures);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.ReloadConnections" title="The ReloadConnections() method">ReloadConnections</a>    (OUT b         status);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-method-org-freedesktop-NetworkManager-Settings.SaveHostname" title="The SaveHostname() method">SaveHostname</a>         (IN  s         hostname);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.3.4"></a><h2>Signals</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.PropertiesChanged" title='The "PropertiesChanged" signal'>PropertiesChanged</a> (a{sv} properties);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.NewConnection" title='The "NewConnection" signal'>NewConnection</a>     (o     connection);
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-signal-org-freedesktop-NetworkManager-Settings.ConnectionRemoved" title='The "ConnectionRemoved" signal'>ConnectionRemoved</a> (o     connection);
+</pre>
+</div>
+<div class="refsect1">
+<a name="id-1.3.3.3.5"></a><h2>Properties</h2>
+<pre class="synopsis">
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Connections" title='The "Connections" property'>Connections</a>  readable   ao
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.Hostname" title='The "Hostname" property'>Hostname</a>     readable   s
+<a class="link" href="gdbus-org.freedesktop.NetworkManager.Settings.html#gdbus-property-org-freedesktop-NetworkManager-Settings.CanModify" title='The "CanModify" property'>CanModify</a>    readable   b
+</pre>
+</div>
+<div class="refsect1">
+<a name="gdbus-interface-org-freedesktop-NetworkManager-Settings"></a><h2>Description</h2>
+<p>      The Settings interface allows clients to view and administrate the
+      connections stored and used by NetworkManager.
+</p>
+</div>
+<div class="refsect1">
+<a name="gdbus-methods-org.freedesktop.NetworkManager.Settings"></a><h2>Method Details</h2>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.ListConnections"></a><h3>The ListConnections() method</h3>
+<pre class="programlisting">
+ListConnections (OUT ao connections);
+</pre>
+<p>        List the saved network connections known to NetworkManager.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT ao <em class="parameter"><code>connections</code></em></code>:</span></p></td>
+<td><p>List of connections.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.GetConnectionByUuid"></a><h3>The GetConnectionByUuid() method</h3>
+<pre class="programlisting">
+GetConnectionByUuid (IN  s uuid,
+                     OUT o connection);
+</pre>
+<p>        Retrieve the object path of a connection, given that connection's UUID.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>uuid</code></em></code>:</span></p></td>
+<td><p>The UUID to find the connection object path for.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>The connection's object path.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnection"></a><h3>The AddConnection() method</h3>
+<pre class="programlisting">
+AddConnection (IN  a{sa{sv}} connection,
+               OUT o         path);
+</pre>
+<p>        Add new connection and save it to disk. This operation does not start the
+        network connection unless (1) device is idle and able to connect to the
+        network described by the new connection, and (2) the connection is allowed
+        to be started automatically.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN a{sa{sv}} <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>Connection settings and properties.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>path</code></em></code>:</span></p></td>
+<td><p>Object path of the new connection that was just added.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.AddConnectionUnsaved"></a><h3>The AddConnectionUnsaved() method</h3>
+<pre class="programlisting">
+AddConnectionUnsaved (IN  a{sa{sv}} connection,
+                      OUT o         path);
+</pre>
+<p>        Add new connection but do not save it to disk immediately. This operation
+        does not start the network connection unless (1) device is idle and able
+        to connect to the network described by the new connection, and (2) the
+        connection is allowed to be started automatically. Use the 'Save' method
+        on the connection to save these changes to disk. Note that unsaved changes
+        will be lost if the connection is reloaded from disk (either automatically
+        on file change or due to an explicit ReloadConnections call).
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN a{sa{sv}} <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>Connection settings and properties.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT o <em class="parameter"><code>path</code></em></code>:</span></p></td>
+<td><p>Object path of the new connection that was just added.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.LoadConnections"></a><h3>The LoadConnections() method</h3>
+<pre class="programlisting">
+LoadConnections (IN  as filenames,
+                 OUT b  status,
+                 OUT as failures);
+</pre>
+<p>        Loads or reloads the indicated connections from disk. You should call this
+        after making changes directly to an on-disk connection file to make sure
+        that NetworkManager sees the changes. (If "monitor-connection-files" in
+        NetworkManager.conf is "true", then this will have no real effect, but is
+        harmless.) As with AddConnection(), this operation does not necessarily
+        start the network connection.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td><p><span class="term"><code class="literal">IN as <em class="parameter"><code>filenames</code></em></code>:</span></p></td>
+<td><p>Array of paths to on-disk connection profiles in directories monitored by NetworkManager.</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT b <em class="parameter"><code>status</code></em></code>:</span></p></td>
+<td><p>Success or failure of the operation as a whole. True if NetworkManager at least tried to load the indicated connections, even if it did not succeed. False if an error occurred before trying to load the connections (eg, permission denied).</p></td>
+</tr>
+<tr>
+<td><p><span class="term"><code class="literal">OUT as <em class="parameter"><code>failures</code></em></code>:</span></p></td>
+<td><p>Paths of connection files that could not be loaded.</p></td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.ReloadConnections"></a><h3>The ReloadConnections() method</h3>
+<pre class="programlisting">
+ReloadConnections (OUT b status);
+</pre>
+<p>        Tells NetworkManager to reload all connection files from disk, including
+        noticing any added or deleted connection files. By default, connections
+        are re-read automatically any time they change, so you only need to use
+        this command if you have set "monitor-connection-files=false" in
+        NetworkManager.conf.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">OUT b <em class="parameter"><code>status</code></em></code>:</span></p></td>
+<td><p>Success or failure.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-method-org-freedesktop-NetworkManager-Settings.SaveHostname"></a><h3>The SaveHostname() method</h3>
+<pre class="programlisting">
+SaveHostname (IN  s hostname);
+</pre>
+<p>        Save the hostname to persistent configuration.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">IN s <em class="parameter"><code>hostname</code></em></code>:</span></p></td>
+<td><p>The hostname to save to persistent configuration. If blank, the persistent hostname is cleared.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-signals-org.freedesktop.NetworkManager.Settings"></a><h2>Signal Details</h2>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager-Settings.PropertiesChanged"></a><h3>The "PropertiesChanged" signal</h3>
+<pre class="programlisting">
+PropertiesChanged (a{sv} properties);
+</pre>
+<p>        DEPRECATED. Use the standard "PropertiesChanged" signal from "org.freedesktop.DBus.Properties" instead which exists since version NetworkManager 1.2.0.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">a{sv} <em class="parameter"><code>properties</code></em></code>:</span></p></td>
+<td><p>A dictionary mapping property names to variant boxed values</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager-Settings.NewConnection"></a><h3>The "NewConnection" signal</h3>
+<pre class="programlisting">
+NewConnection (o connection);
+</pre>
+<p>        Emitted when a new connection has been added after NetworkManager has
+        started up and initialized. This signal is not emitted for connections
+        read while starting up, because NetworkManager's D-Bus service is only
+        available after all connections have been read, and to prevent spamming
+        listeners with too many signals at one time. To retrieve the initial
+        connection list, call the ListConnections() method once, and then listen
+        for individual Settings.NewConnection and Settings.Connection.Deleted
+        signals for further updates.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">o <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>Object path of the new connection.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-signal-org-freedesktop-NetworkManager-Settings.ConnectionRemoved"></a><h3>The "ConnectionRemoved" signal</h3>
+<pre class="programlisting">
+ConnectionRemoved (o connection);
+</pre>
+<p>        Emitted when a connection is no longer available. This happens when the
+        connection is deleted or if it is no longer accessible by any of the
+        system's logged-in users. After receipt of this signal, the connection no
+        longer exists and cannot be used. Also see the Settings.Connection.Removed
+        signal.
+</p>
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
+<col align="left" valign="top">
+<col>
+</colgroup>
+<tbody><tr>
+<td><p><span class="term"><code class="literal">o <em class="parameter"><code>connection</code></em></code>:</span></p></td>
+<td><p>Object path of the removed connection.</p></td>
+</tr></tbody>
+</table></div>
+</div>
+</div>
+<div class="refsect1">
+<a name="gdbus-properties-org.freedesktop.NetworkManager.Settings"></a><h2>Property Details</h2>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Settings.Connections"></a><h3>The "Connections" property</h3>
+<pre class="programlisting">
+Connections  readable   ao
+</pre>
+<p>        List of object paths of available network connection profiles.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Settings.Hostname"></a><h3>The "Hostname" property</h3>
+<pre class="programlisting">
+Hostname  readable   s
+</pre>
+<p>        The machine hostname stored in persistent configuration.
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="gdbus-property-org-freedesktop-NetworkManager-Settings.CanModify"></a><h3>The "CanModify" property</h3>
+<pre class="programlisting">
+CanModify  readable   b
+</pre>
+<p>        If true, adding and modifying connections is supported.
+</p>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>Generated by GTK-Doc V1.25</div>
+</body>
+</html>

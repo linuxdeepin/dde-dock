@@ -106,6 +106,12 @@ const (
 	NM_AGENT_MANAGER_ERROR_USER_CANCELED      = 5
 )
 
+// Enum CheckpointCreateFlags
+const (
+	NM_CHECKPOINT_CREATE_FLAG_NONE        = 0
+	NM_CHECKPOINT_CREATE_FLAG_DESTROY_ALL = 1
+)
+
 // Enum ClientError
 const (
 	NM_CLIENT_ERROR_FAILED                 = 0
@@ -129,7 +135,9 @@ const (
 	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_HOSTNAME   = 11
 	NM_CLIENT_PERMISSION_SETTINGS_MODIFY_GLOBAL_DNS = 12
 	NM_CLIENT_PERMISSION_RELOAD                     = 13
-	NM_CLIENT_PERMISSION_LAST                       = 13
+	NM_CLIENT_PERMISSION_CHECKPOINT_ROLLBACK        = 14
+	NM_CLIENT_PERMISSION_ENABLE_DISABLE_STATISTICS  = 15
+	NM_CLIENT_PERMISSION_LAST                       = 15
 )
 
 // Enum ClientPermissionResult
@@ -331,6 +339,14 @@ const (
 	NM_METERED_NO        = 2
 	NM_METERED_GUESS_YES = 3
 	NM_METERED_GUESS_NO  = 4
+)
+
+// Enum RollbackResult
+const (
+	NM_ROLLBACK_RESULT_OK                   = 0
+	NM_ROLLBACK_RESULT_ERR_NO_DEVICE        = 1
+	NM_ROLLBACK_RESULT_ERR_DEVICE_UNMANAGED = 2
+	NM_ROLLBACK_RESULT_ERR_FAILED           = 3
 )
 
 // Enum SecretAgentError
@@ -724,6 +740,8 @@ const (
 	NM_ACTIVE_CONNECTION_VPN                        = "vpn"
 	NM_CLIENT_ACTIVATING_CONNECTION                 = "activating-connection"
 	NM_CLIENT_ACTIVE_CONNECTIONS                    = "active-connections"
+	NM_CLIENT_ACTIVE_CONNECTION_ADDED               = "active-connection-added"
+	NM_CLIENT_ACTIVE_CONNECTION_REMOVED             = "active-connection-removed"
 	NM_CLIENT_ALL_DEVICES                           = "all-devices"
 	NM_CLIENT_ANY_DEVICE_ADDED                      = "any-device-added"
 	NM_CLIENT_ANY_DEVICE_REMOVED                    = "any-device-removed"
@@ -853,6 +871,7 @@ const (
 	NM_DEVICE_STATE                                 = "state"
 	NM_DEVICE_STATE_REASON                          = "state-reason"
 	NM_DEVICE_TEAM_CARRIER                          = "carrier"
+	NM_DEVICE_TEAM_CONFIG                           = "config"
 	NM_DEVICE_TEAM_HW_ADDRESS                       = "hw-address"
 	NM_DEVICE_TEAM_SLAVES                           = "slaves"
 	NM_DEVICE_TUN_GROUP                             = "group"
@@ -1047,6 +1066,7 @@ const (
 	NM_VPN_PLUGIN_IP4_CONFIG_NBNS                   = "nbns"
 	NM_VPN_PLUGIN_IP4_CONFIG_NEVER_DEFAULT          = "never-default"
 	NM_VPN_PLUGIN_IP4_CONFIG_PREFIX                 = "prefix"
+	NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES        = "preserve-routes"
 	NM_VPN_PLUGIN_IP4_CONFIG_PTP                    = "ptp"
 	NM_VPN_PLUGIN_IP4_CONFIG_ROUTES                 = "routes"
 	NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS                = "address"
@@ -1057,6 +1077,7 @@ const (
 	NM_VPN_PLUGIN_IP6_CONFIG_MSS                    = "mss"
 	NM_VPN_PLUGIN_IP6_CONFIG_NEVER_DEFAULT          = "never-default"
 	NM_VPN_PLUGIN_IP6_CONFIG_PREFIX                 = "prefix"
+	NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES        = "preserve-routes"
 	NM_VPN_PLUGIN_IP6_CONFIG_PTP                    = "ptp"
 	NM_VPN_PLUGIN_IP6_CONFIG_ROUTES                 = "routes"
 	NM_WIMAX_NSP_NAME                               = "name"
@@ -1174,6 +1195,7 @@ const (
 	NM_SETTING_CONNECTION_READ_ONLY            = "read-only"
 	NM_SETTING_CONNECTION_SECONDARIES          = "secondaries"
 	NM_SETTING_CONNECTION_SLAVE_TYPE           = "slave-type"
+	NM_SETTING_CONNECTION_STABLE_ID            = "stable-id"
 	NM_SETTING_CONNECTION_TIMESTAMP            = "timestamp"
 	NM_SETTING_CONNECTION_TYPE                 = "type"
 	NM_SETTING_CONNECTION_UUID                 = "uuid"
@@ -1277,6 +1299,7 @@ const (
 	NM_SETTING_IP6_CONFIG_NEVER_DEFAULT      = "never-default"
 	NM_SETTING_IP6_CONFIG_ROUTE_METRIC       = "route-metric"
 	NM_SETTING_IP6_CONFIG_ROUTES             = "routes"
+	NM_SETTING_IP6_CONFIG_TOKEN              = "token"
 )
 
 // Setting SettingIPTunnel
@@ -1430,19 +1453,20 @@ const (
 // Setting SettingWired
 const NM_SETTING_WIRED_SETTING_NAME = "802-3-ethernet"
 const (
-	NM_SETTING_WIRED_AUTO_NEGOTIATE        = "auto-negotiate"
-	NM_SETTING_WIRED_CLONED_MAC_ADDRESS    = "cloned-mac-address"
-	NM_SETTING_WIRED_DUPLEX                = "duplex"
-	NM_SETTING_WIRED_MAC_ADDRESS           = "mac-address"
-	NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST = "mac-address-blacklist"
-	NM_SETTING_WIRED_MTU                   = "mtu"
-	NM_SETTING_WIRED_PORT                  = "port"
-	NM_SETTING_WIRED_S390_NETTYPE          = "s390-nettype"
-	NM_SETTING_WIRED_S390_OPTIONS          = "s390-options"
-	NM_SETTING_WIRED_S390_SUBCHANNELS      = "s390-subchannels"
-	NM_SETTING_WIRED_SPEED                 = "speed"
-	NM_SETTING_WIRED_WAKE_ON_LAN           = "wake-on-lan"
-	NM_SETTING_WIRED_WAKE_ON_LAN_PASSWORD  = "wake-on-lan-password"
+	NM_SETTING_WIRED_AUTO_NEGOTIATE            = "auto-negotiate"
+	NM_SETTING_WIRED_CLONED_MAC_ADDRESS        = "cloned-mac-address"
+	NM_SETTING_WIRED_DUPLEX                    = "duplex"
+	NM_SETTING_WIRED_GENERATE_MAC_ADDRESS_MASK = "generate-mac-address-mask"
+	NM_SETTING_WIRED_MAC_ADDRESS               = "mac-address"
+	NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST     = "mac-address-blacklist"
+	NM_SETTING_WIRED_MTU                       = "mtu"
+	NM_SETTING_WIRED_PORT                      = "port"
+	NM_SETTING_WIRED_S390_NETTYPE              = "s390-nettype"
+	NM_SETTING_WIRED_S390_OPTIONS              = "s390-options"
+	NM_SETTING_WIRED_S390_SUBCHANNELS          = "s390-subchannels"
+	NM_SETTING_WIRED_SPEED                     = "speed"
+	NM_SETTING_WIRED_WAKE_ON_LAN               = "wake-on-lan"
+	NM_SETTING_WIRED_WAKE_ON_LAN_PASSWORD      = "wake-on-lan-password"
 )
 
 // Setting SettingWireless
@@ -1452,6 +1476,7 @@ const (
 	NM_SETTING_WIRELESS_BSSID                     = "bssid"
 	NM_SETTING_WIRELESS_CHANNEL                   = "channel"
 	NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS        = "cloned-mac-address"
+	NM_SETTING_WIRELESS_GENERATE_MAC_ADDRESS_MASK = "generate-mac-address-mask"
 	NM_SETTING_WIRELESS_HIDDEN                    = "hidden"
 	NM_SETTING_WIRELESS_MAC_ADDRESS               = "mac-address"
 	NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST     = "mac-address-blacklist"

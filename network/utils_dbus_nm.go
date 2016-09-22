@@ -193,10 +193,17 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		devWired, _ := nmNewDeviceWired(devPath)
 		hwAddr = devWired.PermHwAddress.Get()
+		if len(hwAddr) == 0 {
+			// may get PermHwAddress failed under NetworkManager 1.4.1
+			hwAddr = devWired.HwAddress.Get()
+		}
 		nmdbus.DestroyDeviceWired(devWired)
 	case nm.NM_DEVICE_TYPE_WIFI:
 		devWireless, _ := nmNewDeviceWireless(devPath)
 		hwAddr = devWireless.PermHwAddress.Get()
+		if len(hwAddr) == 0 {
+			hwAddr = devWireless.HwAddress.Get()
+		}
 		nmdbus.DestroyDeviceWireless(devWireless)
 	case nm.NM_DEVICE_TYPE_BT:
 		devBluetooth, _ := nmNewDeviceBluetooth(devPath)
