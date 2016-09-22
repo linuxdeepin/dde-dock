@@ -27,6 +27,12 @@ DiskControlWidget::DiskControlWidget(QWidget *parent)
     QMetaObject::invokeMethod(this, "diskListChanged", Qt::QueuedConnection);
 }
 
+void DiskControlWidget::unmountAll()
+{
+    for (auto disk : m_diskInfoList)
+        unmountDisk(disk.m_id);
+}
+
 void DiskControlWidget::diskListChanged()
 {
     m_diskInfoList = m_diskInter->diskList();

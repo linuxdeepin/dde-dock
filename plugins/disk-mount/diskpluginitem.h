@@ -13,6 +13,9 @@ class DiskPluginItem : public QWidget
 public:
     explicit DiskPluginItem(QWidget *parent = 0);
 
+signals:
+    void requestContextMenu() const;
+
 public slots:
     void setDockDisplayMode(const Dock::DisplayMode mode);
 

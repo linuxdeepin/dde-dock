@@ -13,6 +13,8 @@ class DiskControlWidget : public QScrollArea
 public:
     explicit DiskControlWidget(QWidget *parent = 0);
 
+    void unmountAll();
+
 signals:
     void diskCountChanged(const int count) const;
 

@@ -1,5 +1,8 @@
 #include "diskmountplugin.h"
 
+#define OPEN        "open"
+#define UNMOUNT_ALL "unmount_all"
+
 DiskMountPlugin::DiskMountPlugin(QObject *parent)
     : QObject(parent),
 
@@ -14,6 +17,8 @@ DiskMountPlugin::DiskMountPlugin(QObject *parent)
     m_tipsLabel->setText(tr("Disk"));
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding:5px 10px;");
+
+    connect(m_diskPluginItem, &DiskPluginItem::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
 }
 
 const QString DiskMountPlugin::pluginName() const
@@ -48,6 +53,44 @@ QWidget *DiskMountPlugin::itemPopupApplet(const QString &itemKey)
     Q_UNUSED(itemKey);
 
     return m_diskControlApplet;
+}
+
+const QString DiskMountPlugin::itemContextMenu(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    QList<QVariant> items;
+    items.reserve(2);
+
+    QMap<QString, QVariant> open;
+    open["itemId"] = OPEN;
+    open["itemText"] = tr("Open");
+    open["isActive"] = true;
+    items.push_back(open);
+
+    QMap<QString, QVariant> unmountAll;
+    unmountAll["itemId"] = UNMOUNT_ALL;
+    unmountAll["itemText"] = tr("Unmount all");
+    unmountAll["isActive"] = true;
+    items.push_back(unmountAll);
+
+    QMap<QString, QVariant> menu;
+    menu["items"] = items;
+    menu["checkableMenu"] = false;
+    menu["singleCheck"] = false;
+
+    return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void DiskMountPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey)
+    Q_UNUSED(checked)
+
+    if (menuId == OPEN)
+        QProcess::startDetached("gvfs-open", QStringList() << QDir::homePath());
+    else if (menuId == UNMOUNT_ALL)
+        m_diskControlApplet->unmountAll();
 }
 
 void DiskMountPlugin::initCompoments()
