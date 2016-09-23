@@ -29,12 +29,34 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
     m_networkManager->init();
 }
 
+void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(checked)
+
+    for (auto item : m_deviceItemList)
+        if (item->uuid() == itemKey)
+            return item->invokeMenuItem(menuId);
+
+    Q_UNREACHABLE();
+}
+
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
         if (deviceItem->uuid() == itemKey)
             return deviceItem->itemCommand();
 
+    Q_UNREACHABLE();
+    return QString();
+}
+
+const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
+{
+    for (auto item : m_deviceItemList)
+        if (item->uuid() == itemKey)
+            return item->itemContextMenu();
+
+    Q_UNREACHABLE();
     return QString();
 }
 
@@ -79,6 +101,7 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 
     if (!item)
         return;
+    connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
 
     m_deviceItemList.append(item);
     refershDeviceItemVisible();
@@ -136,4 +159,12 @@ void NetworkPlugin::refershDeviceItemVisible()
             Q_UNREACHABLE();
         }
     }
+}
+
+void NetworkPlugin::contextMenuRequested()
+{
+    DeviceItem *item = qobject_cast<DeviceItem *>(sender());
+    Q_ASSERT(item);
+
+    m_proxyInter->requestContextMenu(this, item->uuid().toString());
 }

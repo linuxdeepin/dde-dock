@@ -36,6 +36,8 @@ public:
     const QSet<QUuid> activeConnSet() const;
 
     NetworkDevice::NetworkState deviceState(const QUuid &uuid) const;
+    bool deviceEnabled(const QUuid &uuid) const;
+    void setDeviceEnabled(const QUuid &uuid, const bool enable);
     const QString deviceHwAddr(const QUuid &uuid) const;
     const QString devicePath(const QUuid &uuid) const;
     const QJsonObject deviceConnInfo(const QUuid &uuid) const;

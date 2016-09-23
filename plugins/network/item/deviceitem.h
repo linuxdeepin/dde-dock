@@ -17,10 +17,17 @@ public:
     virtual NetworkDevice::NetworkType type() const = 0;
     virtual NetworkDevice::NetworkState state() const = 0;
     virtual const QString itemCommand() const;
+    virtual const QString itemContextMenu();
     virtual QWidget *itemApplet();
     virtual QWidget *itemPopup();
+    virtual void invokeMenuItem(const QString &menuId);
+
+signals:
+    void requestContextMenu() const;
 
 protected:
+    bool enabled() const;
+    void setEnabled(const bool enable);
     QSize sizeHint() const;
 
 protected:

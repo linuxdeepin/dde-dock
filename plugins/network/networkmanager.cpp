@@ -64,6 +64,16 @@ NetworkDevice::NetworkState NetworkManager::deviceState(const QUuid &uuid) const
     return item->state();
 }
 
+bool NetworkManager::deviceEnabled(const QUuid &uuid) const
+{
+    return m_networkInter->IsDeviceEnabled(QDBusObjectPath(devicePath(uuid)));
+}
+
+void NetworkManager::setDeviceEnabled(const QUuid &uuid, const bool enable)
+{
+    m_networkInter->EnableDevice(QDBusObjectPath(devicePath(uuid)), enable);
+}
+
 const QString NetworkManager::deviceHwAddr(const QUuid &uuid) const
 {
     const auto item = device(uuid);
