@@ -91,39 +91,37 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     if (mode == Dock::Fashion || itemKey == SHUTDOWN_KEY)
     {
         QMap<QString, QVariant> shutdown;
-        shutdown["itemId"] = "shutdown";
+        shutdown["itemId"] = "Shutdown";
         shutdown["itemText"] = tr("Shut down");
         shutdown["isActive"] = true;
         items.push_back(shutdown);
 
         QMap<QString, QVariant> reboot;
-        reboot["itemId"] = "reboot";
+        reboot["itemId"] = "Restart";
         reboot["itemText"] = tr("Restart");
         reboot["isActive"] = true;
         items.push_back(reboot);
 
         QMap<QString, QVariant> logout;
-        logout["itemId"] = "logout";
+        logout["itemId"] = "Logout";
         logout["itemText"] = tr("Log out");
         logout["isActive"] = true;
         items.push_back(logout);
 
         QMap<QString, QVariant> suspend;
-        suspend["itemId"] = "suspend";
+        suspend["itemId"] = "Suspend";
         suspend["itemText"] = tr("Suspend");
         suspend["isActive"] = true;
         items.push_back(suspend);
 
-        DBusAccount *accountInter = new DBusAccount(this);
-        if (accountInter->userList().count() > 1)
+        if (DBusAccount().userList().count() > 1)
         {
             QMap<QString, QVariant> switchUser;
-            switchUser["itemId"] = "switchUser";
+            switchUser["itemId"] = "SwitchUser";
             switchUser["itemText"] = tr("Switch account");
             switchUser["isActive"] = true;
             items.push_back(switchUser);
         }
-        accountInter->deleteLater();
     }
 
     if (mode == Dock::Fashion || itemKey == POWER_KEY)
@@ -141,6 +139,20 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
     menu["singleCheck"] = false;
 
     return QJsonDocument::fromVariant(menu).toJson();
+}
+
+void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
+{
+    Q_UNUSED(itemKey)
+    Q_UNUSED(checked)
+
+    if (menuId == "power")
+        QProcess::startDetached("dde-control-center", QStringList() << "power");
+    else
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.shutdownFront"
+                                                           << "/com/deepin/dde/shutdownFront"
+                                                           << QString("com.deepin.dde.shutdownFront.%1").arg(menuId));
 }
 
 void ShutdownPlugin::displayModeChanged(const Dock::DisplayMode displayMode)
