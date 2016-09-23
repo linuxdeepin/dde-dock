@@ -16,7 +16,9 @@ public:
 
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
+    void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
     const QString itemCommand(const QString &itemKey);
+    const QString itemContextMenu(const QString &itemKey);
     QWidget *itemWidget(const QString &itemKey);
     QWidget *itemTipsWidget(const QString &itemKey);
     QWidget *itemPopupApplet(const QString &itemKey);
@@ -27,6 +29,7 @@ private slots:
     void networkStateChanged(const NetworkDevice::NetworkTypes &states);
     void deviceTypesChanged(const NetworkDevice::NetworkTypes &types);
     void refershDeviceItemVisible();
+    void contextMenuRequested();
 
 private:
     NetworkManager *m_networkManager;
