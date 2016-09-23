@@ -10,7 +10,7 @@
 package network
 
 import (
-	mm "dbus/org/freedesktop/modemmanager1"
+	mmdbus "dbus/org/freedesktop/modemmanager1"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -64,19 +64,19 @@ const (
 	moblieNetworkTypeUnknown = "Unknown"
 )
 
-func mmNewModem(modemPath dbus.ObjectPath) (modem *mm.Modem, err error) {
-	modem, err = mm.NewModem(dbusMmDest, modemPath)
+func mmNewModem(modemPath dbus.ObjectPath) (modem *mmdbus.Modem, err error) {
+	modem, err = mmdbus.NewModem(dbusMmDest, modemPath)
 	if err != nil {
 		logger.Error(err)
 	}
 	return
 }
-func mmDestroyModem(modem *mm.Modem) {
+func mmDestroyModem(modem *mmdbus.Modem) {
 	if modem == nil {
 		logger.Error("Modem to destroy is nil")
 		return
 	}
-	mm.DestroyModem(modem)
+	mmdbus.DestroyModem(modem)
 }
 
 func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err error) {
@@ -84,7 +84,7 @@ func mmGetModemDeviceIdentifier(modemPath dbus.ObjectPath) (devId string, err er
 	if err != nil {
 		return
 	}
-	defer mm.DestroyModem(modem)
+	defer mmdbus.DestroyModem(modem)
 
 	devId = modem.DeviceIdentifier.Get()
 	return
@@ -95,7 +95,7 @@ func mmGetModemDeviceSysPath(modemPath dbus.ObjectPath) (sysPath string, err err
 	if err != nil {
 		return
 	}
-	defer mm.DestroyModem(modem)
+	defer mmdbus.DestroyModem(modem)
 
 	sysPath = modem.Device.Get()
 	return
@@ -106,7 +106,7 @@ func mmGetModemDeviceSignalQuality(modemPath dbus.ObjectPath) (signalQuality uin
 	if err != nil {
 		return
 	}
-	defer mm.DestroyModem(modem)
+	defer mmdbus.DestroyModem(modem)
 
 	signalQuality = mmDoGetModemDeviceSignalQuality(modem.SignalQuality.Get())
 	return
@@ -123,7 +123,7 @@ func mmGetModemDeviceAccessTechnologies(modemPath dbus.ObjectPath) (accessTechno
 	if err != nil {
 		return
 	}
-	defer mm.DestroyModem(modem)
+	defer mmdbus.DestroyModem(modem)
 
 	accessTechnologies = modem.AccessTechnologies.Get()
 	return

@@ -11,6 +11,7 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 )
@@ -104,13 +105,13 @@ func (c *config) clearSpareConfig() {
 			c.removeDeviceConfig(id)
 		}
 	}
-	vpnUuids := nmGetConnectionUuidsByType(NM_SETTING_VPN_SETTING_NAME)
+	vpnUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_VPN_SETTING_NAME)
 	for uuid, _ := range c.VpnConnections {
 		if !isStringInArray(uuid, vpnUuids) {
 			c.removeVpnConfig(uuid)
 		}
 	}
-	mobileUuids := nmGetConnectionUuidsByType(NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME)
+	mobileUuids := nmGetConnectionUuidsByType(nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME)
 	for uuid, _ := range c.MobileConnections {
 		if !isStringInArray(uuid, mobileUuids) {
 			c.removeMobileConfig(uuid)

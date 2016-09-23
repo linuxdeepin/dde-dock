@@ -9,55 +9,13 @@
 
 package network
 
-const (
-	NM_DBUS_SERVICE_OPENCONNECT   = "org.freedesktop.NetworkManager.openconnect"
-	NM_DBUS_INTERFACE_OPENCONNECT = "org.freedesktop.NetworkManager.openconnect"
-	NM_DBUS_PATH_OPENCONNECT      = "/org/freedesktop/NetworkManager/openconnect"
+import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 )
 
 const (
 	nmVpnOpenconnectNameFile = VPN_NAME_FILES_DIR + "nm-openconnect-service.name"
 )
-
-const (
-	NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY             = "gateway"
-	NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE              = "cookie"
-	NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT              = "gwcert"
-	NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE            = "authtype"
-	NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT            = "usercert"
-	NM_SETTING_VPN_OPENCONNECT_KEY_CACERT              = "cacert"
-	NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY             = "userkey"
-	NM_SETTING_VPN_OPENCONNECT_KEY_MTU                 = "mtu"
-	NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID = "pem_passphrase_fsid"
-	NM_SETTING_VPN_OPENCONNECT_KEY_PROXY               = "proxy"
-	NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE          = "enable_csd_trojan"
-	NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER         = "csd_wrapper"
-	NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE       = "stoken_source"
-	NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING       = "stoken_string"
-)
-
-// vpn key descriptions
-// static ValidProperty valid_properties[] = {
-// 	{ NM_OPENCONNECT_KEY_GATEWAY,     G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_CACERT,      G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_AUTHTYPE,    G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_USERCERT,    G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_PRIVKEY,     G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_MTU,         G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID, G_TYPE_BOOLEAN, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_PROXY,       G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_CSD_ENABLE,  G_TYPE_BOOLEAN, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_CSD_WRAPPER, G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_STOKEN_SOURCE, G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_STOKEN_STRING, G_TYPE_STRING, 0, 0 },
-// 	{ NULL,                           G_TYPE_NONE, 0, 0 }
-// };
-// static ValidProperty valid_secrets[] = {
-// 	{ NM_OPENCONNECT_KEY_COOKIE,  G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_GATEWAY, G_TYPE_STRING, 0, 0 },
-// 	{ NM_OPENCONNECT_KEY_GWCERT,  G_TYPE_STRING, 0, 0 },
-// 	{ NULL,                       G_TYPE_NONE, 0, 0 }
-// };
 
 func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid)
@@ -67,7 +25,7 @@ func newVpnOpenconnectConnectionData(id, uuid string) (data connectionData) {
 }
 
 func initSettingSectionVpnOpenconnect(data connectionData) {
-	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_OPENCONNECT)
+	initBasicSettingSectionVpn(data, nm.NM_DBUS_SERVICE_OPENCONNECT)
 
 	setSettingVpnOpenconnectKeyCsdEnable(data, false)
 	setSettingVpnOpenconnectKeyPemPassphraseFsid(data, false)
@@ -87,14 +45,14 @@ func initSettingSectionVpnOpenconnect(data connectionData) {
 }
 
 func getSettingVpnOpenconnectAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
-	keys = appendAvailableKeys(data, keys, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CACERT)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PROXY)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID)
 	return
 }
 func getSettingVpnOpenconnectAvailableValues(data connectionData, key string) (values []kvalue) {
@@ -113,7 +71,7 @@ func checkSettingVpnOpenconnectKeyCacert(data connectionData, errs sectionErrors
 		return
 	}
 	value := getSettingVpnOpenconnectKeyCacert(data)
-	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
 		".pem", ".crt", ".key")
 }
 func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs sectionErrors) {
@@ -121,7 +79,7 @@ func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs sectionErro
 		return
 	}
 	value := getSettingVpnOpenconnectKeyUsercert(data)
-	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
 		".pem", ".crt", ".key")
 }
 func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs sectionErrors) {
@@ -129,6 +87,6 @@ func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs sectionError
 		return
 	}
 	value := getSettingVpnOpenconnectKeyPrivkey(data)
-	ensureFileExists(errs, sectionVpnOpenconnect, NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
 		".pem", ".crt", ".key")
 }

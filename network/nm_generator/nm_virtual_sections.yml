@@ -1,0 +1,1561 @@
+---
+- VirtaulSectionName: NM_SETTING_VS_GENERAL
+  Value: vs-general
+  DisplayName: General
+  Expanded: false
+  Keys:
+  - KeyValue: id
+    Section: connection
+    DisplayName: DisplayName
+    WidgetType: EditLineTextInput
+    AlwaysUpdate: true
+  - KeyValue: vk-autoconnect
+    Section: connection
+    DisplayName: Automatically connect
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_CONNECTION_AUTOCONNECT
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_CONNECTION_AUTOCONNECT
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-no-permission
+    Section: connection
+    DisplayName: For All Users
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_CONNECTION_NO_PERMISSION
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_CONNECTION_PERMISSIONS
+      ChildKey: false
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_ETHERNET
+  Value: vs-ethernet
+  DisplayName: Ethernet
+  Expanded: false
+  Keys:
+  - KeyValue: mac-address
+    Section: 802-3-ethernet
+    DisplayName: Device MAC Addr
+    WidgetType: EditLineEditComboBox
+  - KeyValue: cloned-mac-address
+    Section: 802-3-ethernet
+    DisplayName: Cloned MAC Addr
+    WidgetType: EditLineTextInput
+  - KeyValue: vk-enable-mtu
+    Section: 802-3-ethernet
+    DisplayName: Customize MTU
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_WIRED_ENABLE_MTU
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_WIRED_MTU
+      ChildKey: false
+      Optional: false
+  - KeyValue: mtu
+    Section: 802-3-ethernet
+    DisplayName: MTU
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 10000
+- VirtaulSectionName: NM_SETTING_VS_MOBILE
+  Value: vs-mobile
+  DisplayName: Mobile
+  Expanded: false
+  Keys:
+  - KeyValue: vk-mobile-country
+    Section: vs-mobile
+    DisplayName: Country or region
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_MOBILE_COUNTRY
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-mobile-provider
+    Section: vs-mobile
+    DisplayName: Provider
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_MOBILE_PROVIDER
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-mobile-plan
+    Section: vs-mobile
+    DisplayName: Plan
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_MOBILE_PLAN
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-mobile-service-type
+    Section: vs-mobile
+    DisplayName: Service Type
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_MOBILE_SERVICE_TYPE
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-gsm-apn-readonly
+    Section: vs-mobile
+    DisplayName: APN
+    WidgetType: EditLineLabel
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_MOBILE_APN_READONLY
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: apn
+    Section: gsm
+    DisplayName: APN
+    WidgetType: EditLineTextInput
+  - KeyValue: number
+    Section: gsm
+    DisplayName: Number
+    WidgetType: EditLineTextInput
+  - KeyValue: username
+    Section: gsm
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password
+    Section: gsm
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: network-id
+    Section: gsm
+    DisplayName: Network ID
+    WidgetType: EditLineTextInput
+  - KeyValue: home-only
+    Section: gsm
+    DisplayName: Home Network Only
+    WidgetType: EditLineSwitchButton
+  - KeyValue: pin
+    Section: gsm
+    DisplayName: PIN
+    WidgetType: EditLinePasswordInput
+  - KeyValue: number
+    Section: cdma
+    DisplayName: Number
+    WidgetType: EditLineTextInput
+  - KeyValue: username
+    Section: cdma
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password
+    Section: cdma
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_MOBILE_GSM
+  Value: vs-mobile-gsm
+  DisplayName: Mobile
+  Expanded: false
+  Keys:
+  - KeyValue: apn
+    Section: gsm
+    DisplayName: APN
+    WidgetType: EditLineTextInput
+  - KeyValue: number
+    Section: gsm
+    DisplayName: Number
+    WidgetType: EditLineTextInput
+  - KeyValue: username
+    Section: gsm
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password
+    Section: gsm
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: network-id
+    Section: gsm
+    DisplayName: Network ID
+    WidgetType: EditLineTextInput
+  - KeyValue: home-only
+    Section: gsm
+    DisplayName: Home Network Only
+    WidgetType: EditLineSwitchButton
+  - KeyValue: pin
+    Section: gsm
+    DisplayName: PIN
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_MOBILE_CDMA
+  Value: vs-mobile-cdma
+  DisplayName: Mobile
+  Expanded: false
+  Keys:
+  - KeyValue: number
+    Section: cdma
+    DisplayName: Number
+    WidgetType: EditLineTextInput
+  - KeyValue: username
+    Section: cdma
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password
+    Section: cdma
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_SECURITY
+  Value: vs-security
+  DisplayName: Security
+  Expanded: false
+  Keys:
+  - KeyValue: vk-enable-8021x
+    Section: vs-security
+    DisplayName: Security Required
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_ENABLE
+      Type: ktypeBoolean
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-key-mgmt
+    Section: 802-11-wireless-security
+    DisplayName: Security
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_WIRELESS_SECURITY_KEY_MGMT
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_WIRELESS_SECURITY_KEY_MGMT
+      Optional: false
+  - KeyValue: wep-key0
+    Section: 802-11-wireless-security
+    DisplayName: KeyValue
+    WidgetType: EditLinePasswordInput
+  - KeyValue: psk
+    Section: 802-11-wireless-security
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: vk-eap
+    Section: 802-1x
+    DisplayName: EAP Auth
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_EAP
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_EAP
+      ChildKey: false
+      Optional: false
+  - KeyValue: identity
+    Section: 802-1x
+    DisplayName: Identity
+    WidgetType: EditLineTextInput
+  - KeyValue: anonymous-identity
+    Section: 802-1x
+    DisplayName: Anonymous ID
+    WidgetType: EditLineTextInput
+  - KeyValue: vk-ca-cert
+    Section: 802-1x
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_CA_CERT
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_CA_CERT
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-client-cert
+    Section: 802-1x
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_CLIENT_CERT
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_CLIENT_CERT
+      ChildKey: false
+      Optional: false
+  - KeyValue: phase1-fast-provisioning
+    Section: 802-1x
+    DisplayName: Provisioning
+    WidgetType: EditLineComboBox
+  - KeyValue: vk-pac-file
+    Section: 802-1x
+    DisplayName: PAC file
+    WidgetType: EditLineFileChooser
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_PAC_FILE
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_PAC_FILE
+      ChildKey: false
+      Optional: false
+  - KeyValue: phase1-peapver
+    Section: 802-1x
+    DisplayName: PEAP Version
+    WidgetType: EditLineComboBox
+  - KeyValue: phase2-auth
+    Section: 802-1x
+    DisplayName: Inner Auth
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+  - KeyValue: vk-private-key
+    Section: 802-1x
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_PRIVATE_KEY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_PRIVATE_KEY
+      ChildKey: false
+      Optional: false
+  - KeyValue: password-flags
+    Section: 802-1x
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+  - KeyValue: password
+    Section: 802-1x
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: private-key-password-flags
+    Section: 802-1x
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: private-key-password
+    Section: 802-1x
+    DisplayName: Private Pwd
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_WIFI
+  Value: vs-wifi
+  DisplayName: Wi-Fi
+  Expanded: false
+  Keys:
+  - KeyValue: ssid
+    Section: 802-11-wireless
+    DisplayName: SSID
+    WidgetType: EditLineTextInput
+  - KeyValue: mode
+    Section: 802-11-wireless
+    DisplayName: Mode
+    WidgetType: EditLineComboBox
+  - KeyValue: band
+    Section: 802-11-wireless
+    DisplayName: Band
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+  - KeyValue: channel
+    Section: 802-11-wireless
+    DisplayName: Channel
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+  - KeyValue: mac-address
+    Section: 802-11-wireless
+    DisplayName: Device MAC Addr
+    WidgetType: EditLineEditComboBox
+  - KeyValue: cloned-mac-address
+    Section: 802-11-wireless
+    DisplayName: Cloned MAC Addr
+    WidgetType: EditLineTextInput
+  - KeyValue: vk-enable-mtu
+    Section: 802-11-wireless
+    DisplayName: Customize MTU
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_WIRELESS_ENABLE_MTU
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_WIRELESS_MTU
+      ChildKey: false
+      Optional: false
+  - KeyValue: mtu
+    Section: 802-11-wireless
+    DisplayName: MTU
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 10000
+- VirtaulSectionName: NM_SETTING_VS_PPPOE
+  Value: vs-pppoe
+  DisplayName: PPPoE
+  Expanded: false
+  Keys:
+  - KeyValue: username
+    Section: pppoe
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: service
+    Section: pppoe
+    DisplayName: Service
+    WidgetType: EditLineTextInput
+  - KeyValue: password
+    Section: pppoe
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_PPP
+  Value: vs-ppp
+  DisplayName: PPP
+  Expanded: false
+  Keys:
+  - KeyValue: require-mppe
+    Section: ppp
+    DisplayName: Use MPPE
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: require-mppe-128
+    Section: ppp
+    DisplayName: 128-bit MPPE
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: mppe-stateful
+    Section: ppp
+    DisplayName: Stateful MPPE
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-eap
+    Section: ppp
+    DisplayName: Refuse EAP Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-pap
+    Section: ppp
+    DisplayName: Refuse PAP Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-chap
+    Section: ppp
+    DisplayName: Refuse CHAP Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-mschap
+    Section: ppp
+    DisplayName: Refuse MSCHAP Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-mschapv2
+    Section: ppp
+    DisplayName: Refuse MSCHAPv2 Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nobsdcomp
+    Section: ppp
+    DisplayName: No BSD Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nodeflate
+    Section: ppp
+    DisplayName: No Deflate Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: no-vj-comp
+    Section: ppp
+    DisplayName: No TCP Header Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: vk-enable-lcp-echo
+    Section: ppp
+    DisplayName: Send PPP Echo Packets
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_PPP_ENABLE_LCP_ECHO
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_PPP_LCP_ECHO_FAILURE
+      - NM_SETTING_PPP_LCP_ECHO_INTERVAL
+      ChildKey: false
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_VPN
+  Value: vs-vpn
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: vk-vpn-type
+    Section: vs-vpn
+    DisplayName: 
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_TYPE
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-vpn-missing-plugin
+    Section: vs-vpn
+    DisplayName: Need VPN Plugin
+    WidgetType: EditLineMissingPackage
+    AlwaysUpdate: true
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_MISSING_PLUGIN
+      Type: ktypeString
+      VkType: vkTypeController
+      RelatedKeys: []
+      ChildKey: false
+      Optional: false
+  - KeyValue: gateway
+    Section: alias-vpn-l2tp
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: user
+    Section: alias-vpn-l2tp
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-l2tp
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-l2tp
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: domain
+    Section: alias-vpn-l2tp
+    DisplayName: NT Domain
+    WidgetType: EditLineTextInput
+  - KeyValue: gateway
+    Section: alias-vpn-openconnect
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: cacert
+    Section: alias-vpn-openconnect
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: proxy
+    Section: alias-vpn-openconnect
+    DisplayName: Proxy
+    WidgetType: EditLineTextInput
+  - KeyValue: enable_csd_trojan
+    Section: alias-vpn-openconnect
+    DisplayName: Allow Cisco Secure Desktop Trojan
+    WidgetType: EditLineSwitchButton
+  - KeyValue: csd_wrapper
+    Section: alias-vpn-openconnect
+    DisplayName: CSD Script
+    WidgetType: EditLineTextInput
+  - KeyValue: usercert
+    Section: alias-vpn-openconnect
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: userkey
+    Section: alias-vpn-openconnect
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: pem_passphrase_fsid
+    Section: alias-vpn-openconnect
+    DisplayName: Use FSID for KeyValue Passphrase
+    WidgetType: EditLineSwitchButton
+  - KeyValue: remote
+    Section: alias-vpn-openvpn
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: connection-type
+    Section: alias-vpn-openvpn
+    DisplayName: Auth Type
+    WidgetType: EditLineComboBox
+  - KeyValue: username
+    Section: alias-vpn-openvpn
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-openvpn
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-openvpn
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: ca
+    Section: alias-vpn-openvpn
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: cert
+    Section: alias-vpn-openvpn
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: key
+    Section: alias-vpn-openvpn
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: cert-pass-flags
+    Section: alias-vpn-openvpn
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: cert-pass
+    Section: alias-vpn-openvpn
+    DisplayName: Private Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: static-key
+    Section: alias-vpn-openvpn
+    DisplayName: Static KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: vk-static-key-direction
+    Section: alias-vpn-openvpn
+    DisplayName: Customize KeyValue Direction
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION
+      ChildKey: false
+      Optional: false
+  - KeyValue: static-key-direction
+    Section: alias-vpn-openvpn
+    DisplayName: KeyValue Direction
+    WidgetType: EditLineComboBox
+  - KeyValue: remote-ip
+    Section: alias-vpn-openvpn
+    DisplayName: Remote IP
+    WidgetType: EditLineTextInput
+  - KeyValue: local-ip
+    Section: alias-vpn-openvpn
+    DisplayName: Local IP
+    WidgetType: EditLineTextInput
+  - KeyValue: gateway
+    Section: alias-vpn-pptp
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: user
+    Section: alias-vpn-pptp
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-pptp
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-pptp
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: domain
+    Section: alias-vpn-pptp
+    DisplayName: NT Domain
+    WidgetType: EditLineTextInput
+  - KeyValue: address
+    Section: alias-vpn-strongswan
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: certificate
+    Section: alias-vpn-strongswan
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: method
+    Section: alias-vpn-strongswan
+    DisplayName: Auth Type
+    WidgetType: EditLineComboBox
+  - KeyValue: user
+    Section: alias-vpn-strongswan
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+    AlwaysUpdate: true
+  - KeyValue: usercert
+    Section: alias-vpn-strongswan
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+    AlwaysUpdate: true
+  - KeyValue: userkey
+    Section: alias-vpn-strongswan
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+    AlwaysUpdate: true
+  - KeyValue: password
+    Section: alias-vpn-strongswan
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: virtual
+    Section: alias-vpn-strongswan
+    DisplayName: Request an Inner IP Address
+    WidgetType: EditLineSwitchButton
+  - KeyValue: encap
+    Section: alias-vpn-strongswan
+    DisplayName: Enforce UDP Encapsulation
+    WidgetType: EditLineSwitchButton
+  - KeyValue: ipcomp
+    Section: alias-vpn-strongswan
+    DisplayName: Use IP Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: IPSec gateway
+    Section: alias-vpn-vpnc
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: Xauth username
+    Section: alias-vpn-vpnc
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: Xauth password-flags
+    Section: alias-vpn-vpnc
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: Xauth password
+    Section: alias-vpn-vpnc
+    DisplayName: User Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: IPSec ID
+    Section: alias-vpn-vpnc
+    DisplayName: Group DisplayName
+    WidgetType: EditLineTextInput
+  - KeyValue: IPSec secret-flags
+    Section: alias-vpn-vpnc
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: IPSec secret
+    Section: alias-vpn-vpnc
+    DisplayName: Group Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: vk-hybrid-authmode
+    Section: alias-vpn-vpnc
+    DisplayName: Use Hybrid Authentication
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_VPNC_KEY_AUTHMODE
+      ChildKey: false
+      Optional: false
+  - KeyValue: CA-File
+    Section: alias-vpn-vpnc
+    DisplayName: CA File
+    WidgetType: EditLineFileChooser
+- VirtaulSectionName: NM_SETTING_VS_VPN_L2TP
+  Value: vs-vpn-l2tp
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: gateway
+    Section: alias-vpn-l2tp
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: user
+    Section: alias-vpn-l2tp
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-l2tp
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-l2tp
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: domain
+    Section: alias-vpn-l2tp
+    DisplayName: NT Domain
+    WidgetType: EditLineTextInput
+- VirtaulSectionName: NM_SETTING_VS_VPN_L2TP_IPSEC
+  Value: vs-vpn-l2tp-ipsec
+  DisplayName: VPN IPsec
+  Expanded: false
+  Keys:
+  - KeyValue: ipsec-enabled
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Enable IPsec
+    WidgetType: EditLineSwitchButton
+  - KeyValue: ipsec-group-name
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Group DisplayName
+    WidgetType: EditLineTextInput
+  - KeyValue: ipsec-gateway-id
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Group ID
+    WidgetType: EditLineTextInput
+  - KeyValue: ipsec-psk
+    Section: alias-vpn-l2tp-ipsec
+    DisplayName: Pre-Shared KeyValue
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_VPN_L2TP_PPP
+  Value: vs-vpn-l2tp-ppp
+  DisplayName: VPN PPP
+  Expanded: false
+  Keys:
+  - KeyValue: vk-require-mppe
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Use MPPE
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_L2TP_REQUIRE_MPPE
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-mppe-security
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Security
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_L2TP_MPPE_SECURITY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40
+      - NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128
+      ChildKey: false
+      Optional: false
+  - KeyValue: mppe-stateful
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Stateful MPPE
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-eap
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Refuse EAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-pap
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Refuse PAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-chap
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Refuse CHAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-mschap
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Refuse MSCHAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-mschapv2
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Refuse MSCHAPv2 Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: nobsdcomp
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: No BSD Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nodeflate
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: No Deflate Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: no-vj-comp
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: No TCP Header Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nopcomp
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: No Protocol Field Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: noaccomp
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: No Address/Control Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: vk-enable-lcp-echo
+    Section: alias-vpn-l2tp-ppp
+    DisplayName: Send PPP Echo Packets
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_L2TP_ENABLE_LCP_ECHO
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE
+      - NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL
+      ChildKey: false
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENCONNECT
+  Value: vs-vpn-openconnect
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: gateway
+    Section: alias-vpn-openconnect
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: cacert
+    Section: alias-vpn-openconnect
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: proxy
+    Section: alias-vpn-openconnect
+    DisplayName: Proxy
+    WidgetType: EditLineTextInput
+  - KeyValue: enable_csd_trojan
+    Section: alias-vpn-openconnect
+    DisplayName: Allow Cisco Secure Desktop Trojan
+    WidgetType: EditLineSwitchButton
+  - KeyValue: csd_wrapper
+    Section: alias-vpn-openconnect
+    DisplayName: CSD Script
+    WidgetType: EditLineTextInput
+  - KeyValue: usercert
+    Section: alias-vpn-openconnect
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: userkey
+    Section: alias-vpn-openconnect
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: pem_passphrase_fsid
+    Section: alias-vpn-openconnect
+    DisplayName: Use FSID for KeyValue Passphrase
+    WidgetType: EditLineSwitchButton
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN
+  Value: vs-vpn-openvpn
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: remote
+    Section: alias-vpn-openvpn
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: connection-type
+    Section: alias-vpn-openvpn
+    DisplayName: Auth Type
+    WidgetType: EditLineComboBox
+  - KeyValue: username
+    Section: alias-vpn-openvpn
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-openvpn
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-openvpn
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: ca
+    Section: alias-vpn-openvpn
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: cert
+    Section: alias-vpn-openvpn
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: key
+    Section: alias-vpn-openvpn
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: cert-pass-flags
+    Section: alias-vpn-openvpn
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: cert-pass
+    Section: alias-vpn-openvpn
+    DisplayName: Private Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: static-key
+    Section: alias-vpn-openvpn
+    DisplayName: Static KeyValue
+    WidgetType: EditLineFileChooser
+  - KeyValue: vk-static-key-direction
+    Section: alias-vpn-openvpn
+    DisplayName: Customize KeyValue Direction
+    WidgetType: EditLineSwitchButton
+    VKeyInfo: # NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION defined in other place
+  - KeyValue: static-key-direction
+    Section: alias-vpn-openvpn
+    DisplayName: KeyValue Direction
+    WidgetType: EditLineComboBox
+  - KeyValue: remote-ip
+    Section: alias-vpn-openvpn
+    DisplayName: Remote IP
+    WidgetType: EditLineTextInput
+  - KeyValue: local-ip
+    Section: alias-vpn-openvpn
+    DisplayName: Local IP
+    WidgetType: EditLineTextInput
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN_SECURITY
+  Value: vs-vpn-openvpn-security
+  DisplayName: VPN Security
+  Expanded: false
+  Keys:
+  - KeyValue: cipher
+    Section: alias-vpn-openvpn-security
+    DisplayName: Cipher
+    WidgetType: EditLineComboBox
+  - KeyValue: auth
+    Section: alias-vpn-openvpn-security
+    DisplayName: HMAC Auth
+    WidgetType: EditLineComboBox
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN_TLSAUTH
+  Value: vs-vpn-openvpn-tlsauth
+  DisplayName: VPN TLS Authentication
+  Expanded: false
+  Keys:
+  - KeyValue: tls-remote
+    Section: alias-vpn-openvpn-tlsauth
+    DisplayName: Subject Match
+    WidgetType: EditLineTextInput
+  - KeyValue: remote-cert-tls
+    Section: alias-vpn-openvpn-tlsauth
+    DisplayName: Remote Cert Type
+    WidgetType: EditLineComboBox
+  - KeyValue: ta
+    Section: alias-vpn-openvpn-tlsauth
+    DisplayName: KeyValue File
+    WidgetType: EditLineFileChooser
+  - KeyValue: vk-ta-dir
+    Section: alias-vpn-openvpn-tlsauth
+    DisplayName: Customize KeyValue Direction
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_TA_DIR
+      ChildKey: false
+      Optional: false
+  - KeyValue: ta-dir
+    Section: alias-vpn-openvpn-tlsauth
+    DisplayName: KeyValue Direction
+    WidgetType: EditLineComboBox
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN_PROXIES
+  Value: vs-vpn-openvpn-proxies
+  DisplayName: VPN Proxies
+  Expanded: false
+  Keys:
+  - KeyValue: proxy-type
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Proxy Type
+    WidgetType: EditLineComboBox
+  - KeyValue: proxy-server
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Server IP
+    WidgetType: EditLineTextInput
+  - KeyValue: proxy-port
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Port
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 65535
+  - KeyValue: proxy-retry
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Retry Indefinitely When Failed
+    WidgetType: EditLineSwitchButton
+  - KeyValue: http-proxy-username
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: http-proxy-password
+    Section: alias-vpn-openvpn-proxies
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+- VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN_ADVANCED
+  Value: vs-vpn-openvpn-advanced
+  DisplayName: VPN Advanced
+  Expanded: false
+  Keys:
+  - KeyValue: vk-enable-port
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Customize Gateway Port
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_PORT
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_PORT
+      ChildKey: false
+      Optional: false
+  - KeyValue: port
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Gateway Port
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 65535
+  - KeyValue: vk-enable-reneg-seconds
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Customize Renegotiation Interval
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_RENEG_SECONDS
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS
+      ChildKey: false
+      Optional: false
+  - KeyValue: reneg-seconds
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Renegotiation Interval
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 604800
+  - KeyValue: comp-lzo
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Use LZO data compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: proto-tcp
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Use TCP connection
+    WidgetType: EditLineSwitchButton
+  - KeyValue: tap-dev
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Use TAP device
+    WidgetType: EditLineSwitchButton
+  - KeyValue: vk-enable-tunnel-mtu
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Customize Tunnel MTU
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TUNNEL_MTU
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU
+      ChildKey: false
+      Optional: false
+  - KeyValue: tunnel-mtu
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: MTU
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 65535
+  - KeyValue: vk-enable-fragment-size
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Customize UDP Fragment Size
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_FRAGMENT_SIZE
+      Type: ktypeBoolean
+      VkType: vkTypeEnableWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE
+      ChildKey: false
+      Optional: false
+  - KeyValue: fragment-size
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: UDP Fragment Size
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 65535
+  - KeyValue: mssfix
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Restrict Tunnel TCP MSS
+    WidgetType: EditLineSwitchButton
+  - KeyValue: remote-random
+    Section: alias-vpn-openvpn-advanced
+    DisplayName: Randomize Remote Hosts
+    WidgetType: EditLineSwitchButton
+- VirtaulSectionName: NM_SETTING_VS_VPN_PPTP
+  Value: vs-vpn-pptp
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: gateway
+    Section: alias-vpn-pptp
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: user
+    Section: alias-vpn-pptp
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: alias-vpn-pptp
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: password
+    Section: alias-vpn-pptp
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: domain
+    Section: alias-vpn-pptp
+    DisplayName: NT Domain
+    WidgetType: EditLineTextInput
+- VirtaulSectionName: NM_SETTING_VS_VPN_PPTP_PPP
+  Value: vs-vpn-pptp-ppp
+  DisplayName: VPN PPP
+  Expanded: false
+  Keys:
+  - KeyValue: vk-require-mppe
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Use MPPE
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_PPTP_REQUIRE_MPPE
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE
+      ChildKey: false
+      Optional: false
+  - KeyValue: vk-mppe-security
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Security
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_PPTP_MPPE_SECURITY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40
+      - NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128
+      ChildKey: false
+      Optional: false
+  - KeyValue: mppe-stateful
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Stateful MPPE
+    WidgetType: EditLineSwitchButton
+  - KeyValue: refuse-eap
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Refuse EAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-pap
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Refuse PAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-chap
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Refuse CHAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-mschap
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Refuse MSCHAP Authentication
+    WidgetType: EditLineSwitchButton
+    AlwaysUpdate: true
+  - KeyValue: refuse-mschapv2
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Refuse MSCHAPv2 Authentication
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nobsdcomp
+    Section: alias-vpn-pptp-ppp
+    DisplayName: No BSD Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: nodeflate
+    Section: alias-vpn-pptp-ppp
+    DisplayName: No Deflate Data Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: no-vj-comp
+    Section: alias-vpn-pptp-ppp
+    DisplayName: No TCP Header Compression
+    WidgetType: EditLineSwitchButton
+  - KeyValue: vk-enable-lcp-echo
+    Section: alias-vpn-pptp-ppp
+    DisplayName: Send PPP Echo Packets
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_PPTP_ENABLE_LCP_ECHO
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE
+      - NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL
+      ChildKey: false
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_VPN_STRONGSWAN
+  Value: vs-vpn-strongswan
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: address
+    Section: alias-vpn-strongswan
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: certificate
+    Section: alias-vpn-strongswan
+    DisplayName: CA Cert
+    WidgetType: EditLineFileChooser
+  - KeyValue: method
+    Section: alias-vpn-strongswan
+    DisplayName: Auth Type
+    WidgetType: EditLineComboBox
+  - KeyValue: user
+    Section: alias-vpn-strongswan
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+    AlwaysUpdate: true
+  - KeyValue: usercert
+    Section: alias-vpn-strongswan
+    DisplayName: User Cert
+    WidgetType: EditLineFileChooser
+    AlwaysUpdate: true
+  - KeyValue: userkey
+    Section: alias-vpn-strongswan
+    DisplayName: Private KeyValue
+    WidgetType: EditLineFileChooser
+    AlwaysUpdate: true
+  - KeyValue: password
+    Section: alias-vpn-strongswan
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
+  - KeyValue: virtual
+    Section: alias-vpn-strongswan
+    DisplayName: Request an Inner IP Address
+    WidgetType: EditLineSwitchButton
+  - KeyValue: encap
+    Section: alias-vpn-strongswan
+    DisplayName: Enforce UDP Encapsulation
+    WidgetType: EditLineSwitchButton
+  - KeyValue: ipcomp
+    Section: alias-vpn-strongswan
+    DisplayName: Use IP Compression
+    WidgetType: EditLineSwitchButton
+- VirtaulSectionName: NM_SETTING_VS_VPN_VPNC
+  Value: vs-vpn-vpnc
+  DisplayName: VPN
+  Expanded: false
+  Keys:
+  - KeyValue: IPSec gateway
+    Section: alias-vpn-vpnc
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+  - KeyValue: Xauth username
+    Section: alias-vpn-vpnc
+    DisplayName: Username
+    WidgetType: EditLineTextInput
+  - KeyValue: Xauth password-flags
+    Section: alias-vpn-vpnc
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: Xauth password
+    Section: alias-vpn-vpnc
+    DisplayName: User Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: IPSec ID
+    Section: alias-vpn-vpnc
+    DisplayName: Group DisplayName
+    WidgetType: EditLineTextInput
+  - KeyValue: IPSec secret-flags
+    Section: alias-vpn-vpnc
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: IPSec secret
+    Section: alias-vpn-vpnc
+    DisplayName: Group Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: vk-hybrid-authmode
+    Section: alias-vpn-vpnc
+    DisplayName: Use Hybrid Authentication
+    WidgetType: EditLineSwitchButton
+    VKeyInfo: # NM_SETTING_VK_VPN_VPNC_KEY_HYBRID_AUTHMODE defined in other place
+  - KeyValue: CA-File
+    Section: alias-vpn-vpnc
+    DisplayName: CA File
+    WidgetType: EditLineFileChooser
+- VirtaulSectionName: NM_SETTING_VS_VPN_VPNC_ADVANCED
+  Value: vs-vpn-vpnc-advanced
+  DisplayName: VPN Advanced
+  Expanded: false
+  Keys:
+  - KeyValue: Domain
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Domain
+    WidgetType: EditLineTextInput
+  - KeyValue: Vendor
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Vendor
+    WidgetType: EditLineComboBox
+  - KeyValue: Application Version
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Version
+    WidgetType: EditLineTextInput
+  - KeyValue: vk-encryption-method
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Encryption
+    WidgetType: EditLineComboBox
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_VPNC_KEY_ENCRYPTION_METHOD
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_VPNC_KEY_SINGLE_DES
+      - NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION
+      ChildKey: false
+      Optional: false
+  - KeyValue: NAT Traversal Mode
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: NAT Traversal
+    WidgetType: EditLineComboBox
+  - KeyValue: IKE DH Group
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: IKE DH Group
+    WidgetType: EditLineComboBox
+  - KeyValue: Perfect Forward Secrecy
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Forward Secrecy
+    WidgetType: EditLineComboBox
+  - KeyValue: Local Port
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Local Port
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 65535
+  - KeyValue: vk-disable-dpd
+    Section: alias-vpn-vpnc-advanced
+    DisplayName: Disable Dead Peer Detection
+    WidgetType: EditLineSwitchButton
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_VPN_VPNC_KEY_DISABLE_DPD
+      Type: ktypeBoolean
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT
+      ChildKey: false
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_IPV4
+  Value: vs-ipv4
+  DisplayName: IPv4
+  Expanded: false
+  Keys:
+  - KeyValue: method
+    Section: ipv4
+    DisplayName: Method
+    WidgetType: EditLineComboBox
+  - KeyValue: vk-addresses-address
+    Section: ipv4
+    DisplayName: IP Address
+    WidgetType: EditLineIpv4Input
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP4_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-addresses-mask
+    Section: ipv4
+    DisplayName: Netmask
+    WidgetType: EditLineIpv4Input
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP4_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-addresses-gateway
+    Section: ipv4
+    DisplayName: Gateway
+    WidgetType: EditLineIpv4Input
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP4_CONFIG_ADDRESSES_GATEWAY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP4_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: true
+  - KeyValue: vk-dns
+    Section: ipv4
+    DisplayName: Primary DNS
+    WidgetType: EditLineIpv4Input
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP4_CONFIG_DNS
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP4_CONFIG_DNS
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-dns2
+    Section: ipv4
+    DisplayName: Secondary DNS
+    WidgetType: EditLineIpv4Input
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP4_CONFIG_DNS2
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP4_CONFIG_DNS
+      ChildKey: true
+      Optional: false
+- VirtaulSectionName: NM_SETTING_VS_IPV6
+  Value: vs-ipv6
+  DisplayName: IPv6
+  Expanded: false
+  Keys:
+  - KeyValue: method
+    Section: ipv6
+    DisplayName: Method
+    WidgetType: EditLineComboBox
+  - KeyValue: vk-addresses-address
+    Section: ipv6
+    DisplayName: IP Address
+    WidgetType: EditLineTextInput
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP6_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-addresses-prefix
+    Section: ipv6
+    DisplayName: Prefix
+    WidgetType: EditLineSpinner
+    UseValueRange: true
+    MinValue: 0
+    MaxValue: 128
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_PREFIX
+      Type: ktypeUint32
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP6_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-addresses-gateway
+    Section: ipv6
+    DisplayName: Gateway
+    WidgetType: EditLineTextInput
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP6_CONFIG_ADDRESSES_GATEWAY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP6_CONFIG_ADDRESSES
+      ChildKey: true
+      Optional: true
+  - KeyValue: vk-dns
+    Section: ipv6
+    DisplayName: Primary DNS
+    WidgetType: EditLineTextInput
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP6_CONFIG_DNS
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP6_CONFIG_DNS
+      ChildKey: true
+      Optional: false
+  - KeyValue: vk-dns2
+    Section: ipv6
+    DisplayName: Secondary DNS
+    WidgetType: EditLineTextInput
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_IP6_CONFIG_DNS2
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_IP6_CONFIG_DNS
+      ChildKey: true
+      Optional: false

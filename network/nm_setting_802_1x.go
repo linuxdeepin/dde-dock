@@ -11,6 +11,7 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/utils"
 )
@@ -32,71 +33,71 @@ func initAvailableValues8021x() {
 
 // Get available keys
 func getSetting8021xAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_EAP)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_EAP)
 	switch getSettingVk8021xEap(data) {
 	case "tls":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_CLIENT_CERT)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PRIVATE_KEY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CLIENT_CERT)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PRIVATE_KEY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
 		if is8021xNeedShowPrivatePassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD)
 		}
 	case "md5":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		if is8021xNeedShowPassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD)
 		}
 	case "leap":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		if is8021xNeedShowPassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD)
 		}
 	case "fast":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PAC_FILE)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PAC_FILE)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		if is8021xNeedShowPassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD)
 		}
 	case "ttls":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		if is8021xNeedShowPassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD)
 		}
 	case "peap":
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_CA_CERT)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PHASE1_PEAPVER)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PHASE2_AUTH)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_IDENTITY)
-		keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD_FLAGS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CA_CERT)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PHASE1_PEAPVER)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PHASE2_AUTH)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_IDENTITY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		if is8021xNeedShowPassword(data) {
-			keys = appendAvailableKeys(data, keys, section8021x, NM_SETTING_802_1X_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD)
 		}
 	}
 	return
 }
 func is8021xNeedShowPrivatePassword(data connectionData) bool {
 	flag := getSetting8021xPrivateKeyPasswordFlags(data)
-	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
+	if flag == nm.NM_SETTING_SECRET_FLAG_NONE || flag == nm.NM_SETTING_SECRET_FLAG_AGENT_OWNED {
 		return true
 	}
 	return false
 }
 func is8021xNeedShowPassword(data connectionData) bool {
 	flag := getSetting8021xPasswordFlags(data)
-	if flag == NM_SETTING_SECRET_FLAG_NONE || flag == NM_SETTING_SECRET_FLAG_AGENT_OWNED {
+	if flag == nm.NM_SETTING_SECRET_FLAG_NONE || flag == nm.NM_SETTING_SECRET_FLAG_AGENT_OWNED {
 		return true
 	}
 	return false
@@ -105,7 +106,7 @@ func is8021xNeedShowPassword(data connectionData) bool {
 // Get available values
 func getSetting8021xAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_802_1X_EAP:
+	case nm.NM_SETTING_802_1X_EAP:
 		if getCustomConnectionType(data) == connectionWired {
 			values = []kvalue{
 				kvalue{"tls", Tr("TLS")},
@@ -123,20 +124,20 @@ func getSetting8021xAvailableValues(data connectionData, key string) (values []k
 				kvalue{"peap", Tr("Protected EAP")},
 			}
 		}
-	case NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
+	case nm.NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING:
 		values = []kvalue{
 			kvalue{"0", Tr("Disabled")},      // Disabled
 			kvalue{"1", Tr("Anonymous")},     // Anonymous, allow unauthenticated provisioning
 			kvalue{"2", Tr("Authenticated")}, // Authenticated, allow authenticated provisioning
 			kvalue{"3", Tr("Both")},          // Both, allow both authenticated and unauthenticated provisioning
 		}
-	case NM_SETTING_802_1X_PHASE1_PEAPVER:
+	case nm.NM_SETTING_802_1X_PHASE1_PEAPVER:
 		values = []kvalue{
 			kvalue{"", Tr("Automatic")}, // auto mode
 			kvalue{"0", Tr("Version 0")},
 			kvalue{"1", Tr("Version 1")},
 		}
-	case NM_SETTING_802_1X_PHASE2_AUTH:
+	case nm.NM_SETTING_802_1X_PHASE2_AUTH:
 		switch getSettingVk8021xEap(data) {
 		case "tls":
 		case "md5":
@@ -160,9 +161,9 @@ func getSetting8021xAvailableValues(data connectionData, key string) (values []k
 				availableValues8021xPhasesAuth["mschapv2"],
 			}
 		}
-	case NM_SETTING_802_1X_PASSWORD_FLAGS:
+	case nm.NM_SETTING_802_1X_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
-	case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
+	case nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
 	}
 	return
@@ -176,7 +177,7 @@ func checkSetting8021xValues(data connectionData) (errs sectionErrors) {
 	ensureSetting8021xEapNoEmpty(data, errs)
 	switch getSettingVk8021xEap(data) {
 	default:
-		rememberError(errs, section8021x, NM_SETTING_802_1X_EAP, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_EAP, nmKeyErrorInvalidValue)
 	case "tls":
 		ensureSetting8021xIdentityNoEmpty(data, errs)
 		ensureSetting8021xClientCertNoEmpty(data, errs)
@@ -235,17 +236,17 @@ func checkSetting8021xPacFile(data connectionData, errs sectionErrors) {
 	}
 	value := getSetting8021xPacFile(data)
 	if utils.IsURI(value) {
-		rememberError(errs, section8021x, NM_SETTING_802_1X_PAC_FILE, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PAC_FILE, nmKeyErrorInvalidValue)
 		return
 	}
-	ensureFileExists(errs, section8021x, NM_SETTING_802_1X_PAC_FILE, value, ".pac")
+	ensureFileExists(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PAC_FILE, value, ".pac")
 }
 func checkSetting8021xClientCert(data connectionData, errs sectionErrors) {
 	if !isSetting8021xClientCertExists(data) {
 		return
 	}
 	value := getSetting8021xClientCert(data)
-	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_CLIENT_CERT, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CLIENT_CERT, value,
 		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xCaCert(data connectionData, errs sectionErrors) {
@@ -253,7 +254,7 @@ func checkSetting8021xCaCert(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xCaCert(data)
-	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_CA_CERT, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CA_CERT, value,
 		".der", ".pem", ".crt", ".cer")
 }
 func checkSetting8021xPrivateKey(data connectionData, errs sectionErrors) {
@@ -261,7 +262,7 @@ func checkSetting8021xPrivateKey(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSetting8021xPrivateKey(data)
-	ensureByteArrayUriPathExistsFor8021x(errs, section8021x, NM_SETTING_802_1X_PRIVATE_KEY, value,
+	ensureByteArrayUriPathExistsFor8021x(errs, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PRIVATE_KEY, value,
 		".der", ".pem", ".p12", ".key")
 }
 
@@ -269,72 +270,72 @@ func checkSetting8021xPrivateKey(data connectionData, errs sectionErrors) {
 func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 	if len(value) == 0 {
 		logger.Error("eap value is empty")
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
 	eap := value[0]
 	switch eap {
 	case "tls":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_CLIENT_CERT,
-			NM_SETTING_802_1X_CA_CERT,
-			NM_SETTING_802_1X_PRIVATE_KEY,
-			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD,
-			NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
-		setSetting8021xPrivateKeyPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_CLIENT_CERT,
+			nm.NM_SETTING_802_1X_CA_CERT,
+			nm.NM_SETTING_802_1X_PRIVATE_KEY,
+			nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD,
+			nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS)
+		setSetting8021xPrivateKeyPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "md5":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS)
-		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_PASSWORD,
+			nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
+		setSetting8021xPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "leap":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS)
-		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_PASSWORD,
+			nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
+		setSetting8021xPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "fast":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
-			NM_SETTING_802_1X_PAC_FILE,
-			NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING,
-			NM_SETTING_802_1X_PHASE2_AUTH,
-			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			nm.NM_SETTING_802_1X_PAC_FILE,
+			nm.NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING,
+			nm.NM_SETTING_802_1X_PHASE2_AUTH,
+			nm.NM_SETTING_802_1X_PASSWORD,
+			nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPhase1FastProvisioning(data, "1")
 		setSetting8021xPhase2Auth(data, "gtc")
-		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		setSetting8021xPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "ttls":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
-			NM_SETTING_802_1X_CA_CERT,
-			NM_SETTING_802_1X_PHASE2_AUTH,
-			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			nm.NM_SETTING_802_1X_CA_CERT,
+			nm.NM_SETTING_802_1X_PHASE2_AUTH,
+			nm.NM_SETTING_802_1X_PASSWORD,
+			nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		setSetting8021xPhase2Auth(data, "pap")
-		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		setSetting8021xPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "peap":
-		removeSettingKeyBut(data, section8021x,
-			NM_SETTING_802_1X_EAP,
-			NM_SETTING_802_1X_IDENTITY,
-			NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
-			NM_SETTING_802_1X_CA_CERT,
-			NM_SETTING_802_1X_PHASE1_PEAPVER,
-			NM_SETTING_802_1X_PHASE2_AUTH,
-			NM_SETTING_802_1X_PASSWORD,
-			NM_SETTING_802_1X_PASSWORD_FLAGS)
+		removeSettingKeyBut(data, nm.NM_SETTING_802_1X_SETTING_NAME,
+			nm.NM_SETTING_802_1X_EAP,
+			nm.NM_SETTING_802_1X_IDENTITY,
+			nm.NM_SETTING_802_1X_ANONYMOUS_IDENTITY,
+			nm.NM_SETTING_802_1X_CA_CERT,
+			nm.NM_SETTING_802_1X_PHASE1_PEAPVER,
+			nm.NM_SETTING_802_1X_PHASE2_AUTH,
+			nm.NM_SETTING_802_1X_PASSWORD,
+			nm.NM_SETTING_802_1X_PASSWORD_FLAGS)
 		removeSetting8021xPhase1Peapver(data)
 		setSetting8021xPhase2Auth(data, "mschapv2")
-		setSetting8021xPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+		setSetting8021xPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	}
 	setSetting8021xEap(data, value)
 	return
@@ -342,7 +343,7 @@ func logicSetSetting8021xEap(data connectionData, value []string) (err error) {
 
 // Virtual key getter
 func getSettingVk8021xEnable(data connectionData) (value bool) {
-	if isSettingSectionExists(data, section8021x) {
+	if isSettingExists(data, nm.NM_SETTING_802_1X_SETTING_NAME) {
 		return true
 	}
 	return false

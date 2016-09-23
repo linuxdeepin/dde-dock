@@ -9,19 +9,23 @@
 
 package network
 
+import (
+	"pkg.deepin.io/dde/daemon/network/nm"
+)
+
 func initSettingSectionCdma(data connectionData) {
-	setSettingConnectionType(data, NM_SETTING_CDMA_SETTING_NAME)
-	addSettingSection(data, sectionCdma)
+	setSettingConnectionType(data, nm.NM_SETTING_CDMA_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_CDMA_SETTING_NAME)
 	setSettingCdmaNumber(data, "#777")
-	setSettingCdmaPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	setSettingCdmaPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 }
 
 // Get available keys
 func getSettingCdmaAvailableKeys(data connectionData) (keys []string) {
 	if getSettingVkMobileProvider(data) == mobileProviderValueCustom {
-		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_NUMBER)
-		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_USERNAME)
-		keys = appendAvailableKeys(data, keys, sectionCdma, NM_SETTING_CDMA_PASSWORD)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_CDMA_NUMBER)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_CDMA_USERNAME)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_CDMA_PASSWORD)
 	}
 	return
 }

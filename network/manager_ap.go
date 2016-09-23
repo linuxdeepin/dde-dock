@@ -10,8 +10,9 @@
 package network
 
 import (
-	nm "dbus/org/freedesktop/networkmanager"
+	nmdbus "dbus/org/freedesktop/networkmanager"
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 )
@@ -26,7 +27,7 @@ const (
 )
 
 type accessPoint struct {
-	nmAp    *nm.AccessPoint
+	nmAp    *nmdbus.AccessPoint
 	devPath dbus.ObjectPath
 
 	Ssid         string
@@ -108,22 +109,22 @@ func (a *accessPoint) updateProps() {
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
 	a.Strength = a.nmAp.Strength.Get()
 }
-func getApSecType(ap *nm.AccessPoint) apSecType {
+func getApSecType(ap *nmdbus.AccessPoint) apSecType {
 	return doParseApSecType(ap.Flags.Get(), ap.WpaFlags.Get(), ap.RsnFlags.Get())
 }
 func doParseApSecType(flags, wpaFlags, rsnFlags uint32) apSecType {
 	r := apSecNone
 
-	if (flags&NM_802_11_AP_FLAGS_PRIVACY != 0) && (wpaFlags == NM_802_11_AP_SEC_NONE) && (rsnFlags == NM_802_11_AP_SEC_NONE) {
+	if (flags&nm.NM_802_11_AP_FLAGS_PRIVACY != 0) && (wpaFlags == nm.NM_802_11_AP_SEC_NONE) && (rsnFlags == nm.NM_802_11_AP_SEC_NONE) {
 		r = apSecWep
 	}
-	if wpaFlags != NM_802_11_AP_SEC_NONE {
+	if wpaFlags != nm.NM_802_11_AP_SEC_NONE {
 		r = apSecPsk
 	}
-	if rsnFlags != NM_802_11_AP_SEC_NONE {
+	if rsnFlags != nm.NM_802_11_AP_SEC_NONE {
 		r = apSecPsk
 	}
-	if (wpaFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) || (rsnFlags&NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) {
+	if (wpaFlags&nm.NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) || (rsnFlags&nm.NM_802_11_AP_SEC_KEY_MGMT_802_1X != 0) {
 		r = apSecEap
 	}
 	return r
@@ -143,7 +144,7 @@ func (a *accessPoint) shouldBeIgnore() bool {
 func (m *Manager) isAccessPointActivated(devPath dbus.ObjectPath, ssid string) bool {
 	for _, path := range nmGetActiveConnections() {
 		aconn := m.newActiveConnection(path)
-		if aconn.typ == NM_SETTING_WIRELESS_SETTING_NAME && isDBusPathInArray(devPath, aconn.Devices) {
+		if aconn.typ == nm.NM_SETTING_WIRELESS_SETTING_NAME && isDBusPathInArray(devPath, aconn.Devices) {
 			if ssid == string(nmGetConnectionSsidByUuid(aconn.Uuid)) {
 				return true
 			}
@@ -255,13 +256,13 @@ func (m *Manager) GetAccessPoints(path dbus.ObjectPath) (apsJSON string, err err
 // ActivateAccessPoint add and activate connection for access point.
 func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateAccessPoint: uuid=%s, apPath=%s, devPath=%s", uuid, apPath, devPath)
-	defer logger.Debugf("ActivateAccessPoint end") // TODO test
+	defer logger.Debugf("ActivateAccessPoint end")
 
 	if len(uuid) > 0 {
 		cpath, err = m.ActivateConnection(uuid, devPath)
 	} else {
 		// if there is no connection for current access point, create one
-		var nmAp *nm.AccessPoint
+		var nmAp *nmdbus.AccessPoint
 		nmAp, err = nmNewAccessPoint(apPath)
 		if err != nil {
 			return

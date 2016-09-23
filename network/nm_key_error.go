@@ -15,17 +15,17 @@ import (
 )
 
 const (
-	NM_KEY_ERROR_MISSING_VALUE        = "missing value"
-	NM_KEY_ERROR_EMPTY_VALUE          = "value is empty"
-	NM_KEY_ERROR_INVALID_VALUE        = "invalid value"
-	NM_KEY_ERROR_IP4_METHOD_CONFLICT  = `%s cannot be used with the 'shared', 'link-local', or 'disabled' methods`
-	NM_KEY_ERROR_IP4_ADDRESSES_STRUCT = "echo IPv4 address structure is composed of 3 32-bit values, address, prefix and gateway"
-	// NM_KEY_ERROR_IP4_ADDRESSES_PREFIX = "IPv4 prefix's value should be 1-32"
-	NM_KEY_ERROR_IP6_METHOD_CONFLICT     = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
-	NM_KEY_ERROR_MISSING_SECTION         = "missing section %s"
-	NM_KEY_ERROR_EMPTY_SECTION           = "section %s is empty"
-	NM_KEY_ERROR_MISSING_DEPENDS_KEY     = "missing depends key %s"
-	NM_KEY_ERROR_MISSING_DEPENDS_PACKAGE = "missing depends package %s"
+	nmKeyErrorMissingValue       = "missing value"
+	nmKeyErrorEmptyValue         = "value is empty"
+	nmKeyErrorInvalidValue       = "invalid value"
+	nmKeyErrorIp4MethodConflict  = `%s cannot be used with the 'shared', 'link-local', or 'disabled' methods`
+	nmKeyErrorIp4AddressesStruct = "echo IPv4 address structure is composed of 3 32-bit values, address, prefix and gateway"
+	// nm.NM_KEY_ERROR_IP4_ADDRESSES_PREFIX = "IPv4 prefix's value should be 1-32"
+	nmKeyErrorIp6MethodConflict     = `%s cannot be used with the 'shared', 'link-local', or 'ignore' methods`
+	nmKeyErrorMissingSection        = "missing section %s"
+	nmKeyErrorEmptySection          = "section %s is empty"
+	nmKeyErrorMissingDependsKey     = "missing depends key %s"
+	nmKeyErrorMissingDependsPackage = "missing depends package %s"
 )
 
 func rememberError(errs sectionErrors, section, key, errMsg string) {
@@ -58,7 +58,7 @@ func doRememberError(errs sectionErrors, key, errMsg string) {
 func ensureByteArrayUriPathExistsFor8021x(errs sectionErrors, section, key string, bytePath []byte, limitedExts ...string) {
 	path := byteArrayToStrPath(bytePath)
 	if !utils.IsURI(path) {
-		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, section, key, nmKeyErrorInvalidValue)
 		return
 	}
 	ensureFileExists(errs, section, key, toLocalPathFor8021x(path), limitedExts...)
@@ -77,10 +77,10 @@ func ensureFileExists(errs sectionErrors, section, key, file string, limitedExts
 		}
 		if !match {
 			// TODO dispatch filter when select files
-			// rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
+			// rememberError(errs, section, key, nmKeyErrorInvalidValue)
 		}
 	}
 	if !utils.IsFileExist(file) {
-		rememberError(errs, section, key, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, section, key, nmKeyErrorInvalidValue)
 	}
 }

@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/iso"
@@ -30,7 +31,7 @@ func newMobileConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, acti
 	}
 
 	data := newMobileConnectionData("mobile", uuid, serviceType)
-	addSettingSection(data, sectionCache)
+	addSetting(data, sectionCache)
 	logicSetSettingVkMobileCountry(data, countryCode)
 	logicSetSettingVkMobileProvider(data, plan.ProviderName)
 	logicSetSettingVkMobilePlan(data, mobileprovider.MarshalPlan(plan))
@@ -56,12 +57,12 @@ func getDefaultPlanForMobileDevice(countryCode, serviceType string) (plan mobile
 }
 func getMobileDeviceServicType(devPath dbus.ObjectPath) (serviceType string) {
 	capabilities := nmGetDeviceModemCapabilities(devPath)
-	if (capabilities & NM_DEVICE_MODEM_CAPABILITY_LTE) == capabilities {
+	if (capabilities & nm.NM_DEVICE_MODEM_CAPABILITY_LTE) == capabilities {
 		// all LTE modems treated as GSM/UMTS
 		serviceType = connectionMobileGsm
-	} else if (capabilities & NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS) == capabilities {
+	} else if (capabilities & nm.NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS) == capabilities {
 		serviceType = connectionMobileGsm
-	} else if (capabilities & NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO) == capabilities {
+	} else if (capabilities & nm.NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO) == capabilities {
 		serviceType = connectionMobileCdma
 	} else {
 		logger.Errorf("Unknown modem capabilities (0x%x)", capabilities)
@@ -72,17 +73,17 @@ func getMobileDeviceServicType(devPath dbus.ObjectPath) (serviceType string) {
 func newMobileConnectionData(id, uuid, serviceType string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
 	setSettingConnectionAutoconnect(data, true)
 
 	logicSetSettingVkMobileServiceType(data, serviceType)
 
-	addSettingSection(data, sectionPpp)
+	addSetting(data, nm.NM_SETTING_PPP_SETTING_NAME)
 	logicSetSettingVkPppEnableLcpEcho(data, true)
 
-	addSettingSection(data, sectionSerial)
+	addSetting(data, nm.NM_SETTING_SERIAL_SETTING_NAME)
 	setSettingSerialBaud(data, 115200)
 
 	initSettingSectionIpv4(data)
@@ -91,25 +92,25 @@ func newMobileConnectionData(id, uuid, serviceType string) (data connectionData)
 }
 
 func initSettingSectionGsm(data connectionData) {
-	setSettingConnectionType(data, NM_SETTING_GSM_SETTING_NAME)
-	addSettingSection(data, sectionGsm)
+	setSettingConnectionType(data, nm.NM_SETTING_GSM_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_GSM_SETTING_NAME)
 	setSettingGsmNumber(data, "*99#")
-	setSettingGsmPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
-	setSettingGsmPinFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	setSettingGsmPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
+	setSettingGsmPinFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 }
 
 // Get available keys
 func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 	if getSettingVkMobileProvider(data) == mobileProviderValueCustom {
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NUMBER)
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_USERNAME)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_NUMBER)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_USERNAME)
 		if isSettingRequireSecret(getSettingGsmPasswordFlags(data)) {
-			keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PASSWORD)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_PASSWORD)
 		}
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_APN)
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_NETWORK_ID)
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_HOME_ONLY)
-		keys = appendAvailableKeys(data, keys, sectionGsm, NM_SETTING_GSM_PIN)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_APN)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_NETWORK_ID)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_HOME_ONLY)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_GSM_PIN)
 	}
 	return
 }
@@ -117,9 +118,9 @@ func getSettingGsmAvailableKeys(data connectionData) (keys []string) {
 // Get available values
 func getSettingGsmAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_GSM_PASSWORD_FLAGS:
+	case nm.NM_SETTING_GSM_PASSWORD_FLAGS:
 		values = availableValuesSettingSecretFlags
-	case NM_SETTING_GSM_APN:
+	case nm.NM_SETTING_GSM_APN:
 	}
 	return
 }
@@ -134,7 +135,7 @@ func checkSettingGsmValues(data connectionData) (errs sectionErrors) {
 
 func syncMoibleConnectionId(data connectionData) {
 	// sync connection name
-	if !isSettingSectionExists(data, sectionCache) {
+	if !isSettingExists(data, sectionCache) {
 		return
 	}
 	providerName := getSettingVkMobileProvider(data)

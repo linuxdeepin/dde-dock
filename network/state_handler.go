@@ -12,78 +12,79 @@ package network
 import "pkg.deepin.io/lib/dbus"
 import "sync"
 import . "pkg.deepin.io/lib/gettext"
-import nm "dbus/org/freedesktop/networkmanager"
+import nmdbus "dbus/org/freedesktop/networkmanager"
+import "pkg.deepin.io/dde/daemon/network/nm"
 
 var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
 
 func initNmStateReasons() {
 	// device error table
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE] = Tr("IP configuration could not be reserved (no available address, timeout, etc).")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED] = Tr("The IP configuration is no longer valid.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS] = Tr("Passwords were required but not provided.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT] = Tr("The 802.1X supplicant disconnected from the access point or authentication server.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED] = Tr("Configuration of the 802.1X supplicant failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED] = Tr("The 802.1X supplicant quitted or failed unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT] = Tr("The 802.1X supplicant took too long time to authenticate.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PPP_START_FAILED] = Tr("The PPP service failed to start within the allowed time.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PPP_DISCONNECT] = Tr("The PPP service disconnected unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PPP_FAILED] = Tr("The PPP service quitted or failed unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_DHCP_START_FAILED] = Tr("The DHCP service failed to start within the allowed time.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_DHCP_ERROR] = Tr("The DHCP service reported an unexpected error.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_DHCP_FAILED] = Tr("The DHCP service quitted or failed unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SHARED_START_FAILED] = Tr("The shared connection service failed to start.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SHARED_FAILED] = Tr("The shared connection service quitted or failed unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED] = Tr("The AutoIP service failed to start.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_AUTOIP_ERROR] = Tr("The AutoIP service reported an unexpected error.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_AUTOIP_FAILED] = Tr("The AutoIP service quitted or failed unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_BUSY] = Tr("Dialing failed due to busy lines.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE] = Tr("Dialing failed due to no dial tone.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER] = Tr("Dialing failed due to the carrier.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT] = Tr("Dialing timed out.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED] = Tr("Dialing failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED] = Tr("Modem initialization failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_APN_FAILED] = Tr("Failed to select the specified GSM APN.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING] = Tr("No networks searched.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED] = Tr("Network registration was denied.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT] = Tr("Network registration timed out.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED] = Tr("Register to the requested GSM network failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED] = Tr("PIN check failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_FIRMWARE_MISSING] = Tr("Necessary firmware for the device may be missed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED] = Tr("The device was removed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
-	deviceErrorTable[NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED] = Tr("The device's existing connection was assumed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE] = Tr("The 802.1x supplicant is now available.") // TODO full stop
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND] = Tr("The modem could not be found.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_BT_FAILED] = Tr("The Bluetooth connection timed out or failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED] = Tr("GSM Modem's SIM Card was not inserted.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED] = Tr("GSM Modem's SIM PIN required.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED] = Tr("GSM Modem's SIM PUK required.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_GSM_SIM_WRONG] = Tr("Wrong GSM Modem's SIM")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_INFINIBAND_MODE] = Tr("InfiniBand device does not support connected mode.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED] = Tr("A connection dependency failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_BR2684_FAILED] = Tr("Problem with the RFC 2684 Ethernet over ADSL bridge.") // TODO
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE] = Tr("ModemManager did not run or quitted unexpectedly.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED] = Tr("A secondary connection of the base connection failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NONE] = Tr("Device state changed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_UNKNOWN] = Tr("Device state changed, unknown reason.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NOW_MANAGED] = Tr("The device is now managed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NOW_UNMANAGED] = Tr("The device is no longer managed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONFIG_FAILED] = Tr("The device has not been ready for configuration.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE] = Tr("IP configuration could not be reserved (no available address, timeout, etc).")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED] = Tr("The IP configuration is no longer valid.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NO_SECRETS] = Tr("Passwords were required but not provided.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT] = Tr("The 802.1X supplicant disconnected from the access point or authentication server.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED] = Tr("Configuration of the 802.1X supplicant failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED] = Tr("The 802.1X supplicant quitted or failed unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT] = Tr("The 802.1X supplicant took too long time to authenticate.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_PPP_START_FAILED] = Tr("The PPP service failed to start within the allowed time.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_PPP_DISCONNECT] = Tr("The PPP service disconnected unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_PPP_FAILED] = Tr("The PPP service quitted or failed unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DHCP_START_FAILED] = Tr("The DHCP service failed to start within the allowed time.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DHCP_ERROR] = Tr("The DHCP service reported an unexpected error.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DHCP_FAILED] = Tr("The DHCP service quitted or failed unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SHARED_START_FAILED] = Tr("The shared connection service failed to start.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SHARED_FAILED] = Tr("The shared connection service quitted or failed unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED] = Tr("The AutoIP service failed to start.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_AUTOIP_ERROR] = Tr("The AutoIP service reported an unexpected error.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_AUTOIP_FAILED] = Tr("The AutoIP service quitted or failed unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_BUSY] = Tr("Dialing failed due to busy lines.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE] = Tr("Dialing failed due to no dial tone.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER] = Tr("Dialing failed due to the carrier.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT] = Tr("Dialing timed out.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED] = Tr("Dialing failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED] = Tr("Modem initialization failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_APN_FAILED] = Tr("Failed to select the specified GSM APN.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING] = Tr("No networks searched.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED] = Tr("Network registration was denied.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT] = Tr("Network registration timed out.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED] = Tr("Register to the requested GSM network failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED] = Tr("PIN check failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_FIRMWARE_MISSING] = Tr("Necessary firmware for the device may be missed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_REMOVED] = Tr("The device was removed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED] = Tr("The device's existing connection was assumed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE] = Tr("The 802.1x supplicant is now available.") // TODO full stop
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND] = Tr("The modem could not be found.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BT_FAILED] = Tr("The Bluetooth connection timed out or failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED] = Tr("GSM Modem's SIM Card was not inserted.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED] = Tr("GSM Modem's SIM PIN required.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED] = Tr("GSM Modem's SIM PUK required.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_WRONG] = Tr("Wrong GSM Modem's SIM")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_INFINIBAND_MODE] = Tr("InfiniBand device does not support connected mode.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED] = Tr("A connection dependency failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BR2684_FAILED] = Tr("Problem with the RFC 2684 Ethernet over ADSL bridge.") // TODO
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE] = Tr("ModemManager did not run or quitted unexpectedly.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED] = Tr("A secondary connection of the base connection failed.")
 
 	// works for nm 1.0+
-	deviceErrorTable[NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED] = Tr("DCB or FCoE setup failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED] = Tr("Network teaming control failed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_FAILED] = Tr("Modem failed to run or not available.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_MODEM_AVAILABLE] = Tr("Modem now ready and available.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT] = Tr("SIM PIN is incorrect.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_NEW_ACTIVATION] = Tr("New connection activation is enqueuing.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_CHANGED] = Tr("Parent device changed.")
-	deviceErrorTable[NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED] = Tr("Management status of parent device changed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED] = Tr("DCB or FCoE setup failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED] = Tr("Network teaming control failed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_FAILED] = Tr("Modem failed to run or not available.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_AVAILABLE] = Tr("Modem now ready and available.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT] = Tr("SIM PIN is incorrect.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NEW_ACTIVATION] = Tr("New connection activation is enqueuing.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_PARENT_CHANGED] = Tr("Parent device changed.")
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED] = Tr("Management status of parent device changed.")
 
 	// device error table for custom state reasons
 	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED] = Tr("Network cable is unplugged.")
@@ -91,18 +92,18 @@ func initNmStateReasons() {
 	deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_MODEM_WRONG_PLAN] = Tr("Please make sure a correct plan was selected without arrearage of SIM card.")
 
 	// vpn error table
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from users.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from devices.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED] = Tr("VPN service stopped.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID] = Tr("The IP config of VPN connection was invalid.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT] = Tr("The connection attempt to VPN service timed out.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT] = Tr("The VPN service start timed out.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED] = Tr("The VPN service failed to start.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS] = Tr("Necessary password for the VPN connection was not provided.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED] = Tr("Authentication to VPN server failed.")
-	vpnErrorTable[NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED] = Tr("The connection was deleted from settings.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_UNKNOWN] = Tr("Activate VPN connection failed, unknown reason.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NONE] = Tr("Activate VPN connection failed.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from users.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED] = Tr("The VPN connection changed state due to disconnection from devices.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED] = Tr("VPN service stopped.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID] = Tr("The IP config of VPN connection was invalid.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT] = Tr("The connection attempt to VPN service timed out.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT] = Tr("The VPN service start timed out.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED] = Tr("The VPN service failed to start.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS] = Tr("Necessary password for the VPN connection was not provided.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED] = Tr("Authentication to VPN server failed.")
+	vpnErrorTable[nm.NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED] = Tr("The connection was deleted from settings.")
 }
 
 type stateHandler struct {
@@ -110,7 +111,7 @@ type stateHandler struct {
 	locker  sync.Mutex
 }
 type deviceStateInfo struct {
-	nmDev   *nm.Device
+	nmDev   *nmdbus.Device
 	devUdi  string
 	devType uint32
 	aconnId string
@@ -192,21 +193,21 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 		}
 
 		switch newState {
-		case NM_DEVICE_STATE_PREPARE:
+		case nm.NM_DEVICE_STATE_PREPARE:
 			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 				dsi.aconnId = getSettingConnectionId(data)
 			}
-		case NM_DEVICE_STATE_ACTIVATED:
+		case nm.NM_DEVICE_STATE_ACTIVATED:
 			icon := generalGetNotifyConnectedIcon(dsi.devType, path)
 			msg := dsi.aconnId
 			notify(icon, Tr("Connected"), msg)
-		case NM_DEVICE_STATE_FAILED, NM_DEVICE_STATE_DISCONNECTED,
-			NM_DEVICE_STATE_UNMANAGED, NM_DEVICE_STATE_UNAVAILABLE:
+		case nm.NM_DEVICE_STATE_FAILED, nm.NM_DEVICE_STATE_DISCONNECTED,
+			nm.NM_DEVICE_STATE_UNMANAGED, nm.NM_DEVICE_STATE_UNAVAILABLE:
 			logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
 
 			// ignore device removed signals for that could not
 			// query related information correct
-			if reason == NM_DEVICE_STATE_REASON_REMOVED {
+			if reason == nm.NM_DEVICE_STATE_REASON_REMOVED {
 				return
 			}
 
@@ -222,11 +223,11 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 
 			// fix reasons
 			switch dsi.devType {
-			case NM_DEVICE_TYPE_ETHERNET:
-				if reason == NM_DEVICE_STATE_REASON_CARRIER {
+			case nm.NM_DEVICE_TYPE_ETHERNET:
+				if reason == nm.NM_DEVICE_STATE_REASON_CARRIER {
 					reason = CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED
 				}
-			case NM_DEVICE_TYPE_MODEM:
+			case nm.NM_DEVICE_TYPE_MODEM:
 				if isDeviceStateReasonInvalid(reason) {
 					// mobile device is specially, fix its reasons here
 					signalQuality, _ := mmGetModemDeviceSignalQuality(dbus.ObjectPath(dsi.devUdi))
@@ -246,7 +247,7 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 			var icon, msg string
 			icon = generalGetNotifyDisconnectedIcon(dsi.devType, path)
 			if len(msg) == 0 {
-				if newState == NM_DEVICE_STATE_DISCONNECTED && reason == NM_DEVICE_STATE_REASON_USER_REQUESTED {
+				if newState == nm.NM_DEVICE_STATE_DISCONNECTED && reason == nm.NM_DEVICE_STATE_REASON_USER_REQUESTED {
 					msg = dsi.aconnId
 				} else {
 					msg = deviceErrorTable[reason]

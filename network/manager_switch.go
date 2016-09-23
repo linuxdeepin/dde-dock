@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -158,7 +159,7 @@ func (sh *switchHandler) doTurnOffGlobalDeviceSwitches() {
 func (sh *switchHandler) initPropWirelessEnabled() {
 	if nmHasSystemSettingsModifyPermission() {
 		sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
-		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_WIFI) {
+		for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_WIFI) {
 			if sh.WirelessEnabled {
 				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
 			} else {
@@ -176,7 +177,7 @@ func (sh *switchHandler) setPropWirelessEnabled() {
 	sh.WirelessEnabled = nmManager.WirelessEnabled.Get()
 	logger.Debug("setPropWirelessEnabled", sh.WirelessEnabled)
 	// setup wireless devices switches
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_WIFI) {
+	for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_WIFI) {
 		if sh.WirelessEnabled {
 			sh.restoreDeviceState(devPath)
 		} else {
@@ -190,7 +191,7 @@ func (sh *switchHandler) setPropWirelessEnabled() {
 func (sh *switchHandler) initPropWwanEnabled() {
 	if nmHasSystemSettingsModifyPermission() {
 		sh.WwanEnabled = nmManager.WwanEnabled.Get()
-		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_MODEM) {
+		for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_MODEM) {
 			if sh.WwanEnabled {
 				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
 			} else {
@@ -207,7 +208,7 @@ func (sh *switchHandler) setPropWwanEnabled() {
 	}
 	sh.WwanEnabled = nmManager.WwanEnabled.Get()
 	// setup modem devices switches
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_MODEM) {
+	for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_MODEM) {
 		if sh.WwanEnabled {
 			sh.restoreDeviceState(devPath)
 		} else {
@@ -221,7 +222,7 @@ func (sh *switchHandler) setPropWwanEnabled() {
 func (sh *switchHandler) initPropWiredEnabled() {
 	sh.WiredEnabled = sh.config.getWiredEnabled()
 	if nmHasSystemSettingsModifyPermission() {
-		for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_ETHERNET) {
+		for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_ETHERNET) {
 			if sh.WiredEnabled {
 				sh.doEnableDevice(devPath, sh.config.getDeviceEnabled(devPath))
 			} else {
@@ -239,7 +240,7 @@ func (sh *switchHandler) setPropWiredEnabled(enabled bool) {
 	sh.WiredEnabled = enabled
 	sh.config.setWiredEnabled(enabled)
 	// setup wired devices switches
-	for _, devPath := range nmGetDevicesByType(NM_DEVICE_TYPE_ETHERNET) {
+	for _, devPath := range nmGetDevicesByType(nm.NM_DEVICE_TYPE_ETHERNET) {
 		if enabled {
 			sh.restoreDeviceState(devPath)
 		} else {
@@ -264,7 +265,7 @@ func (sh *switchHandler) setPropVpnEnabled(enabled bool) {
 }
 func (sh *switchHandler) enableVpn(enabled bool) {
 	// setup vpn connections
-	for _, uuid := range nmGetConnectionUuidsByType(NM_SETTING_VPN_SETTING_NAME) {
+	for _, uuid := range nmGetConnectionUuidsByType(nm.NM_SETTING_VPN_SETTING_NAME) {
 		if enabled {
 			sh.restoreVpnConnectionState(uuid)
 		} else {
@@ -301,7 +302,7 @@ func (sh *switchHandler) saveAndDisconnectDevice(devPath dbus.ObjectPath) (err e
 }
 
 func (sh *switchHandler) enableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
-	if nmGetDeviceType(devPath) == NM_DEVICE_TYPE_WIFI {
+	if nmGetDeviceType(devPath) == nm.NM_DEVICE_TYPE_WIFI {
 		if !nmGetWirelessHardwareEnabled() {
 			notifyWirelessHardSwitchOff()
 			return
@@ -326,7 +327,7 @@ func (sh *switchHandler) doEnableDevice(devPath dbus.ObjectPath, enabled bool) (
 		var uuidToActive string
 
 		switch nmGetDeviceType(devPath) {
-		case NM_DEVICE_TYPE_WIFI:
+		case nm.NM_DEVICE_TYPE_WIFI:
 			ssids := nmGetAccessPointSsids(devPath)
 			logger.Debug("available ssids", ssids)
 			for _, uuid := range uuids {
@@ -408,22 +409,22 @@ func (sh *switchHandler) trunOnGlobalDeviceSwitchIfNeed(devPath dbus.ObjectPath)
 
 func (sh *switchHandler) generalGetGlobalDeviceEnabled(devPath dbus.ObjectPath) (enabled bool) {
 	switch devType := nmGetDeviceType(devPath); devType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		enabled = sh.WiredEnabled
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		enabled = sh.WirelessEnabled
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		enabled = sh.WwanEnabled
 	}
 	return
 }
 func (sh *switchHandler) generalSetGlobalDeviceEnabled(devPath dbus.ObjectPath, enabled bool) {
 	switch devType := nmGetDeviceType(devPath); devType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		sh.setWiredEnabled(enabled)
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		sh.setWirelessEnabled(enabled)
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		sh.setWwanEnabled(enabled)
 	}
 }

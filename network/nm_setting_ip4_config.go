@@ -11,48 +11,49 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 )
 
 func initSettingSectionIpv4(data connectionData) {
-	addSettingSection(data, sectionIpv4)
-	setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_AUTO)
+	addSetting(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME)
+	setSettingIP4ConfigMethod(data, nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO)
 }
 
 // Initialize available values
 var availableValuesIp4ConfigMethod = make(availableValues)
 
 func initAvailableValuesIp4() {
-	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_AUTO, Tr("Auto")}
-	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, Tr("Link-Local Only")}
-	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_MANUAL, Tr("Manual")}
-	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_SHARED] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_SHARED, Tr("Shared")}
-	availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_DISABLED] = kvalue{NM_SETTING_IP4_CONFIG_METHOD_DISABLED, Tr("Disabled")}
+	availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO] = kvalue{nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO, Tr("Auto")}
+	availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL] = kvalue{nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, Tr("Link-Local Only")}
+	availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL] = kvalue{nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL, Tr("Manual")}
+	availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED] = kvalue{nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED, Tr("Shared")}
+	availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED] = kvalue{nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED, Tr("Disabled")}
 }
 
 // Get available keys
-func getSettingIp4ConfigAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP_CONFIG_METHOD)
-	method := getSettingIp4ConfigMethod(data)
+func getSettingIP4ConfigAvailableKeys(data connectionData) (keys []string) {
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_METHOD)
+	method := getSettingIP4ConfigMethod(data)
 	switch method {
 	default:
 		logger.Error("ip4 config method is invalid:", method)
-	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP_CONFIG_DNS)
-	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
-	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP_CONFIG_DNS)
-		keys = appendAvailableKeys(data, keys, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES)
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
-	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED:
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
 	}
 	return
 }
 
 // Get available values
-func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
+func getSettingIP4ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_IP_CONFIG_METHOD:
+	case nm.NM_SETTING_IP_CONFIG_METHOD:
 		// TODO be careful, ipv4 method would be limited for different connection type
 		// switch getCustomConnectionType(data) {
 		// case typeWired:
@@ -60,20 +61,20 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 		// case typePppoe:
 		// }
 		// values = []string{
-		// 	NM_SETTING_IP4_CONFIG_METHOD_AUTO,
-		// 	// NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore
-		// 	NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
-		// 	// NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
-		// 	// NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
+		// 	nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO,
+		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore
+		// 	nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
+		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
+		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
 		// }
-		if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
+		if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
 			values = []kvalue{
-				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
+				availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO],
 			}
 		} else {
 			values = []kvalue{
-				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_AUTO],
-				availableValuesIp4ConfigMethod[NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
+				availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO],
+				availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL],
 			}
 		}
 	}
@@ -81,119 +82,119 @@ func getSettingIp4ConfigAvailableValues(data connectionData, key string) (values
 }
 
 // Check whether the values are correct
-func checkSettingIp4ConfigValues(data connectionData) (errs sectionErrors) {
+func checkSettingIP4ConfigValues(data connectionData) (errs sectionErrors) {
 	errs = make(map[string]string)
 
 	// check method
-	ensureSettingIp4ConfigMethodNoEmpty(data, errs)
-	switch getSettingIp4ConfigMethod(data) {
+	ensureSettingIP4ConfigMethodNoEmpty(data, errs)
+	switch getSettingIP4ConfigMethod(data) {
 	default:
-		rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_METHOD, NM_KEY_ERROR_INVALID_VALUE)
+		rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_METHOD, nmKeyErrorInvalidValue)
 		return
-	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
-		checkSettingIp4MethodConflict(data, errs)
-	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-		ensureSettingIp4ConfigAddressesNoEmpty(data, errs)
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
-		checkSettingIp4MethodConflict(data, errs)
-	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
-		checkSettingIp4MethodConflict(data, errs)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+		checkSettingIP4MethodConflict(data, errs)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+		ensureSettingIP4ConfigAddressesNoEmpty(data, errs)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED:
+		checkSettingIP4MethodConflict(data, errs)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
+		checkSettingIP4MethodConflict(data, errs)
 	}
 
 	// check value of dns
-	checkSettingIp4ConfigDns(data, errs)
+	checkSettingIP4ConfigDns(data, errs)
 
 	// check value of address
-	checkSettingIp4ConfigAddresses(data, errs)
+	checkSettingIP4ConfigAddresses(data, errs)
 
 	// TODO check value of route
 
 	return
 }
-func checkSettingIp4MethodConflict(data connectionData, errs sectionErrors) {
+func checkSettingIP4MethodConflict(data connectionData, errs sectionErrors) {
 	// check dns
-	if isSettingIp4ConfigDnsExists(data) && len(getSettingIp4ConfigDns(data)) > 0 {
-		rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_DNS, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_DNS))
+	if isSettingIP4ConfigDnsExists(data) && len(getSettingIP4ConfigDns(data)) > 0 {
+		rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS, fmt.Sprintf(nmKeyErrorIp4MethodConflict, nm.NM_SETTING_IP_CONFIG_DNS))
 	}
 	// check dns search
-	if isSettingIp4ConfigDnsSearchExists(data) && len(getSettingIp4ConfigDnsSearch(data)) > 0 {
-		rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_DNS_SEARCH, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_DNS_SEARCH))
+	if isSettingIP4ConfigDnsSearchExists(data) && len(getSettingIP4ConfigDnsSearch(data)) > 0 {
+		rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS_SEARCH, fmt.Sprintf(nmKeyErrorIp4MethodConflict, nm.NM_SETTING_IP_CONFIG_DNS_SEARCH))
 	}
 	// check address
-	if isSettingIp4ConfigAddressesExists(data) && len(getSettingIp4ConfigAddresses(data)) > 0 {
-		rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_ADDRESSES))
+	if isSettingIP4ConfigAddressesExists(data) && len(getSettingIP4ConfigAddresses(data)) > 0 {
+		rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES, fmt.Sprintf(nmKeyErrorIp4MethodConflict, nm.NM_SETTING_IP_CONFIG_ADDRESSES))
 	}
 	// check route
-	if isSettingIp4ConfigRoutesExists(data) && len(getSettingIp4ConfigRoutes(data)) > 0 {
-		rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_ROUTES, fmt.Sprintf(NM_KEY_ERROR_IP4_METHOD_CONFLICT, NM_SETTING_IP_CONFIG_ROUTES))
+	if isSettingIP4ConfigRoutesExists(data) && len(getSettingIP4ConfigRoutes(data)) > 0 {
+		rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ROUTES, fmt.Sprintf(nmKeyErrorIp4MethodConflict, nm.NM_SETTING_IP_CONFIG_ROUTES))
 	}
 }
-func checkSettingIp4ConfigDns(data connectionData, errs sectionErrors) {
-	if !isSettingIp4ConfigDnsExists(data) {
+func checkSettingIP4ConfigDns(data connectionData, errs sectionErrors) {
+	if !isSettingIP4ConfigDnsExists(data) {
 		return
 	}
-	dnses := getSettingIp4ConfigDns(data)
+	dnses := getSettingIP4ConfigDns(data)
 	for _, dns := range dnses {
 		if dns == 0 {
-			rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_DNS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS, nmKeyErrorInvalidValue)
 			return
 		}
 	}
 }
-func checkSettingIp4ConfigAddresses(data connectionData, errs sectionErrors) {
-	if !isSettingIp4ConfigAddressesExists(data) {
+func checkSettingIP4ConfigAddresses(data connectionData, errs sectionErrors) {
+	if !isSettingIP4ConfigAddressesExists(data) {
 		return
 	}
-	addresses := getSettingIp4ConfigAddresses(data)
+	addresses := getSettingIP4ConfigAddresses(data)
 	for _, addr := range addresses {
 		// check address struct
 		if len(addr) != 3 {
-			rememberError(errs, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES, NM_KEY_ERROR_IP4_ADDRESSES_STRUCT)
+			rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES, nmKeyErrorIp4AddressesStruct)
 		}
 		// check address
 		if addr[0] == 0 {
-			rememberError(errs, sectionIpv4, NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_ADDRESSES_ADDRESS, nmKeyErrorInvalidValue)
 		}
 		// check prefix
 		if addr[1] < 1 || addr[1] > 32 {
-			rememberError(errs, sectionIpv4, NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_ADDRESSES_MASK, nmKeyErrorInvalidValue)
 		}
 	}
 }
 
 // Logic setter
-func logicSetSettingIp4ConfigMethod(data connectionData, value string) (err error) {
+func logicSetSettingIP4ConfigMethod(data connectionData, value string) (err error) {
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
 	// TODO check logic for different connection types
 	switch value {
-	case NM_SETTING_IP4_CONFIG_METHOD_AUTO:
-		removeSettingIp4ConfigAddresses(data)
-	case NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
-		removeSettingIp4ConfigDns(data)
-		removeSettingIp4ConfigDnsSearch(data)
-		removeSettingIp4ConfigAddresses(data)
-		removeSettingIp4ConfigRoutes(data)
-	case NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
-	case NM_SETTING_IP4_CONFIG_METHOD_SHARED:
-		removeSettingIp4ConfigDns(data)
-		removeSettingIp4ConfigDnsSearch(data)
-		removeSettingIp4ConfigAddresses(data)
-		removeSettingIp4ConfigRoutes(data)
-	case NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
-		removeSettingIp4ConfigDns(data)
-		removeSettingIp4ConfigDnsSearch(data)
-		removeSettingIp4ConfigAddresses(data)
-		removeSettingIp4ConfigRoutes(data)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO:
+		removeSettingIP4ConfigAddresses(data)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
+		removeSettingIP4ConfigDns(data)
+		removeSettingIP4ConfigDnsSearch(data)
+		removeSettingIP4ConfigAddresses(data)
+		removeSettingIP4ConfigRoutes(data)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED:
+		removeSettingIP4ConfigDns(data)
+		removeSettingIP4ConfigDnsSearch(data)
+		removeSettingIP4ConfigAddresses(data)
+		removeSettingIP4ConfigRoutes(data)
+	case nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED: // ignore
+		removeSettingIP4ConfigDns(data)
+		removeSettingIP4ConfigDnsSearch(data)
+		removeSettingIP4ConfigAddresses(data)
+		removeSettingIP4ConfigRoutes(data)
 	}
-	setSettingIp4ConfigMethod(data, value)
+	setSettingIP4ConfigMethod(data, value)
 	return
 }
 
 // Virtual key utility
-func isSettingIp4ConfigAddressesEmpty(data connectionData) bool {
-	addresses := getSettingIp4ConfigAddresses(data)
+func isSettingIP4ConfigAddressesEmpty(data connectionData) bool {
+	addresses := getSettingIP4ConfigAddresses(data)
 	if len(addresses) == 0 {
 		return true
 	}
@@ -202,9 +203,9 @@ func isSettingIp4ConfigAddressesEmpty(data connectionData) bool {
 	}
 	return false
 }
-func getOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint32) {
-	if !isSettingIp4ConfigAddressesEmpty(data) {
-		addresses = getSettingIp4ConfigAddresses(data)
+func getOrNewSettingIP4ConfigAddresses(data connectionData) (addresses [][]uint32) {
+	if !isSettingIP4ConfigAddressesEmpty(data) {
+		addresses = getSettingIP4ConfigAddresses(data)
 	} else {
 		addresses = make([][]uint32, 1)
 		addresses[0] = make([]uint32, 3)
@@ -214,71 +215,71 @@ func getOrNewSettingIp4ConfigAddresses(data connectionData) (addresses [][]uint3
 
 // Virtual key getter
 func getSettingVkIp4ConfigDns(data connectionData) (value string) {
-	return getSettingCacheKeyString(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS)
+	return getSettingCacheKeyString(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_DNS)
 }
 func getSettingVkIp4ConfigDns2(data connectionData) (value string) {
-	return getSettingCacheKeyString(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS2)
+	return getSettingCacheKeyString(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_DNS2)
 }
 func getSettingVkIp4ConfigAddressesAddress(data connectionData) (value string) {
-	if isSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIP4ConfigAddressesEmpty(data) {
 		return
 	}
-	addresses := getSettingIp4ConfigAddresses(data)
+	addresses := getSettingIP4ConfigAddresses(data)
 	value = convertIpv4AddressToString(addresses[0][0])
 	return
 }
 func getSettingVkIp4ConfigAddressesMask(data connectionData) (value string) {
-	if isSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIP4ConfigAddressesEmpty(data) {
 		return
 	}
-	addresses := getSettingIp4ConfigAddresses(data)
+	addresses := getSettingIP4ConfigAddresses(data)
 	value = convertIpv4PrefixToNetMask(addresses[0][1])
 	return
 }
 func getSettingVkIp4ConfigAddressesGateway(data connectionData) (value string) {
-	if isSettingIp4ConfigAddressesEmpty(data) {
+	if isSettingIP4ConfigAddressesEmpty(data) {
 		return
 	}
-	addresses := getSettingIp4ConfigAddresses(data)
+	addresses := getSettingIP4ConfigAddresses(data)
 	value = convertIpv4AddressToStringNoZero(addresses[0][2])
 	return
 }
 func getSettingVkIp4ConfigRoutesAddress(data connectionData) (value string) {
 	// TODO
-	// value := getSettingIp4ConfigRoutesAddress(data)
+	// value := getSettingIP4ConfigRoutesAddress(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMask(data connectionData) (value string) {
 	// TODO
-	// value := getSettingIp4ConfigRoutesMask(data)
+	// value := getSettingIP4ConfigRoutesMask(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesNexthop(data connectionData) (value string) {
 	// TODO
-	// value := getSettingIp4ConfigRoutesNexthop(data)
+	// value := getSettingIP4ConfigRoutesNexthop(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value string) {
 	// TODO
-	// value := getSettingIp4ConfigRoutesMetric(data)
+	// value := getSettingIP4ConfigRoutesMetric(data)
 	return
 }
 
 // Virtual key logic setter
 func logicSetSettingVkIp4ConfigDns(data connectionData, value string) (err error) {
-	setSettingCacheKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS, value)
+	setSettingCacheKey(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_DNS, value)
 	if len(value) > 0 {
 		if _, errWrap := convertIpv4AddressToUint32Check(value); errWrap != nil {
-			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+			err = fmt.Errorf(nmKeyErrorInvalidValue)
 		}
 	}
 	return
 }
 func logicSetSettingVkIp4ConfigDns2(data connectionData, value string) (err error) {
-	setSettingCacheKey(data, NM_SETTING_IP4_CONFIG_SETTING_NAME, NM_SETTING_VK_IP4_CONFIG_DNS2, value)
+	setSettingCacheKey(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP4_CONFIG_DNS2, value)
 	if len(value) > 0 {
 		if _, errWrap := convertIpv4AddressToUint32Check(value); errWrap != nil {
-			err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+			err = fmt.Errorf(nmKeyErrorInvalidValue)
 		}
 	}
 	return
@@ -289,16 +290,16 @@ func logicSetSettingVkIp4ConfigAddressesAddress(data connectionData, value strin
 	}
 	tmpn, err := convertIpv4AddressToUint32Check(value)
 	if err != nil {
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
-	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addresses := getOrNewSettingIP4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[0] = tmpn
 	if !isUint32ArrayEmpty(addr) {
-		setSettingIp4ConfigAddresses(data, addresses)
+		setSettingIP4ConfigAddresses(data, addresses)
 	} else {
-		removeSettingIp4ConfigAddresses(data)
+		removeSettingIP4ConfigAddresses(data)
 	}
 	return
 }
@@ -308,16 +309,16 @@ func logicSetSettingVkIp4ConfigAddressesMask(data connectionData, value string) 
 	}
 	tmpn, err := convertIpv4NetMaskToPrefixCheck(value)
 	if err != nil {
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
-	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addresses := getOrNewSettingIP4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[1] = tmpn
 	if !isUint32ArrayEmpty(addr) {
-		setSettingIp4ConfigAddresses(data, addresses)
+		setSettingIP4ConfigAddresses(data, addresses)
 	} else {
-		removeSettingIp4ConfigAddresses(data)
+		removeSettingIP4ConfigAddresses(data)
 	}
 	return
 }
@@ -327,36 +328,36 @@ func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value strin
 	}
 	tmpn, err := convertIpv4AddressToUint32Check(value)
 	if err != nil {
-		err = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
-	addresses := getOrNewSettingIp4ConfigAddresses(data)
+	addresses := getOrNewSettingIP4ConfigAddresses(data)
 	addr := addresses[0]
 	addr[2] = tmpn
 	if !isUint32ArrayEmpty(addr) {
-		setSettingIp4ConfigAddresses(data, addresses)
+		setSettingIP4ConfigAddresses(data, addresses)
 	} else {
-		removeSettingIp4ConfigAddresses(data)
+		removeSettingIP4ConfigAddresses(data)
 	}
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) (err error) {
 	// TODO
-	// setSettingIp4ConfigRoutesAddressJSON(data)
+	// setSettingIP4ConfigRoutesAddressJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) (err error) {
 	// TODO
-	// setSettingIp4ConfigRoutesMaskJSON(data)
+	// setSettingIP4ConfigRoutesMaskJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) (err error) {
 	// TODO
-	// setSettingIp4ConfigRoutesNexthopJSON(data)
+	// setSettingIP4ConfigRoutesNexthopJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) (err error) {
 	// TODO
-	// setSettingIp4ConfigRoutesMetricJSON(data)
+	// setSettingIP4ConfigRoutesMetricJSON(data)
 	return
 }

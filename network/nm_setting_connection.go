@@ -11,16 +11,17 @@ package network
 
 import (
 	"os/user"
+	"pkg.deepin.io/dde/daemon/network/nm"
 )
 
 // Get available keys
 func getSettingConnectionAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_ID)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_ID)
 
 	// auto-connect only available for target connection types
 	switch getSettingConnectionType(data) {
-	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_WIRELESS_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME, NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME, NM_SETTING_VPN_SETTING_NAME:
-		keys = appendAvailableKeys(data, keys, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT)
+	case nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME, nm.NM_SETTING_VPN_SETTING_NAME:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_AUTOCONNECT)
 	}
 
 	return
@@ -43,7 +44,7 @@ func checkSettingConnectionValues(data connectionData) (errs sectionErrors) {
 		id := getSettingConnectionId(data)
 		uuid := getSettingConnectionUuid(data)
 		if isStringInArray(id, nmGetOtherConnectionIds(uuid)) {
-			rememberError(errs, sectionConnection, NM_SETTING_CONNECTION_ID, NM_KEY_ERROR_INVALID_VALUE)
+			rememberError(errs, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_ID, nmKeyErrorInvalidValue)
 		}
 	}
 

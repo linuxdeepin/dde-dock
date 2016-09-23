@@ -11,6 +11,7 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -74,7 +75,7 @@ func (s *ConnectionSession) setPropErrors() {
 	s.Errors = make(sessionErrors)
 	for _, section := range getAvailableSections(s.data) {
 		s.Errors[section] = make(sectionErrors)
-		if isSettingSectionExists(s.data, section) {
+		if isSettingExists(s.data, section) {
 			// check error only section exists
 			errs := generalCheckSettingValues(s.data, section)
 			for k, v := range errs {
@@ -106,12 +107,12 @@ func (s *ConnectionSession) setPropErrors() {
 	// check if vpn missing plugin
 	switch getCustomConnectionType(s.data) {
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
-		if isKeyAvailable(s.data, vsectionVpn, NM_SETTING_VK_VPN_MISSING_PLUGIN) {
-			if _, ok := s.Errors[vsectionVpn]; ok {
-				s.Errors[vsectionVpn][NM_SETTING_VK_VPN_MISSING_PLUGIN] =
-					fmt.Sprintf(NM_KEY_ERROR_MISSING_DEPENDS_PACKAGE, getSettingVkVpnMissingPlugin(s.data))
+		if isKeyAvailable(s.data, nm.NM_SETTING_VS_VPN, nm.NM_SETTING_VK_VPN_MISSING_PLUGIN) {
+			if _, ok := s.Errors[nm.NM_SETTING_VS_VPN]; ok {
+				s.Errors[nm.NM_SETTING_VS_VPN][nm.NM_SETTING_VK_VPN_MISSING_PLUGIN] =
+					fmt.Sprintf(nmKeyErrorMissingDependsPackage, getSettingVkVpnMissingPlugin(s.data))
 			} else {
-				logger.Errorf("missing section, errors[%s]", vsectionVpn)
+				logger.Errorf("missing section, errors[%s]", nm.NM_SETTING_VS_VPN)
 			}
 		}
 	}

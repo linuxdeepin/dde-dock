@@ -9,11 +9,14 @@
 
 package network
 
-import "pkg.deepin.io/lib/dbus"
-import "time"
-import "bufio"
-import "os"
-import "sync"
+import (
+	"bufio"
+	"os"
+	"pkg.deepin.io/dde/daemon/network/nm"
+	"pkg.deepin.io/lib/dbus"
+	"sync"
+	"time"
+)
 
 const agentTimeout = 120 // 120s
 
@@ -67,33 +70,33 @@ func (a *agent) GetDBusInfo() dbus.DBusInfo {
 // isSecretKey check if target setting key is a secret key which should be stored in keyring
 func isSecretKey(connectionData map[string]map[string]dbus.Variant, settingName, keyName string) (isSecret bool) {
 	switch settingName {
-	case NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
+	case nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		switch keyName {
-		case NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, NM_SETTING_WIRELESS_SECURITY_PSK:
+		case nm.NM_SETTING_WIRELESS_SECURITY_WEP_KEY1, nm.NM_SETTING_WIRELESS_SECURITY_PSK:
 			isSecret = true
 		}
-	case NM_SETTING_802_1X_SETTING_NAME:
+	case nm.NM_SETTING_802_1X_SETTING_NAME:
 		switch keyName {
-		case NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, NM_SETTING_802_1X_PASSWORD:
+		case nm.NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD, nm.NM_SETTING_802_1X_PASSWORD:
 			isSecret = true
 		}
-	case NM_SETTING_PPPOE_SETTING_NAME:
+	case nm.NM_SETTING_PPPOE_SETTING_NAME:
 		switch keyName {
-		case NM_SETTING_PPPOE_PASSWORD:
+		case nm.NM_SETTING_PPPOE_PASSWORD:
 			isSecret = true
 		}
-	case NM_SETTING_GSM_SETTING_NAME:
+	case nm.NM_SETTING_GSM_SETTING_NAME:
 		switch keyName {
-		case NM_SETTING_GSM_PASSWORD, NM_SETTING_GSM_PIN:
+		case nm.NM_SETTING_GSM_PASSWORD, nm.NM_SETTING_GSM_PIN:
 			isSecret = true
 		}
-	case NM_SETTING_CDMA_SETTING_NAME:
+	case nm.NM_SETTING_CDMA_SETTING_NAME:
 		switch keyName {
-		case NM_SETTING_CDMA_PASSWORD:
+		case nm.NM_SETTING_CDMA_PASSWORD:
 			isSecret = true
 		}
-	case NM_SETTING_VPN_SETTING_NAME:
-		if keyName == NM_SETTING_VPN_SECRETS {
+	case nm.NM_SETTING_VPN_SETTING_NAME:
+		if keyName == nm.NM_SETTING_VPN_SECRETS {
 			isSecret = true
 		}
 	}
@@ -109,7 +112,7 @@ func buildSecretData(connectionData map[string]map[string]dbus.Variant, settingN
 func fillSecretData(connectionData, secretsData map[string]map[string]dbus.Variant, settingName string, keyValueIfc interface{}) {
 	// FIXME: some sections support multiple secret keys such as 8021x
 	switch settingName {
-	case sectionWirelessSecurity:
+	case nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME:
 		keyValue, _ := keyValueIfc.(string)
 		switch getSettingVkWirelessSecurityKeyMgmt(connectionData) {
 		case "none": // ignore
@@ -120,17 +123,17 @@ func fillSecretData(connectionData, secretsData map[string]map[string]dbus.Varia
 		case "wpa-eap":
 			// If the user chose an 802.1x-based auth method, return
 			// 802.1x secrets together.
-			secretsData[section8021x] = make(map[string]dbus.Variant)
+			secretsData[nm.NM_SETTING_802_1X_SETTING_NAME] = make(map[string]dbus.Variant)
 			doFillSecret8021x(connectionData, secretsData, keyValue)
 		}
-	case section8021x:
+	case nm.NM_SETTING_802_1X_SETTING_NAME:
 		// wired 8021x
 		keyValue, _ := keyValueIfc.(string)
 		doFillSecret8021x(connectionData, secretsData, keyValue)
-	case sectionPppoe:
+	case nm.NM_SETTING_PPPOE_SETTING_NAME:
 		keyValue, _ := keyValueIfc.(string)
 		setSettingPppoePassword(secretsData, keyValue)
-	case sectionVpn:
+	case nm.NM_SETTING_VPN_SETTING_NAME:
 		keyValue, _ := keyValueIfc.(map[string]string)
 		setSettingVpnSecrets(secretsData, keyValue)
 	default:
@@ -160,10 +163,10 @@ func buildKeyringSecret(connectionData map[string]map[string]dbus.Variant, setti
 	return secretsData
 }
 func fillKeyringSecret(secretsData map[string]map[string]dbus.Variant, settingName string, keyValues map[string]string) {
-	if !isSettingSectionExists(secretsData, settingName) {
-		addSettingSection(secretsData, settingName)
+	if !isSettingExists(secretsData, settingName) {
+		addSetting(secretsData, settingName)
 	}
-	if settingName == NM_SETTING_VPN_SETTING_NAME {
+	if settingName == nm.NM_SETTING_VPN_SETTING_NAME {
 		// FIXME: looks vpn secrets should be ignored here
 		vpnSecretData := make(map[string]string)
 		// if vpnSecretData, ok := doGetSettingVpnPluginData(secretsData, true); ok {
@@ -190,18 +193,18 @@ func (a *agent) GetSecrets(connectionData map[string]map[string]dbus.Variant, co
 	values, ok := secretGetAll(getSettingConnectionUuid(connectionData), settingName)
 
 	// if queried keyring failed will ask for user if we're allowed to
-	if !ok && flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
+	if !ok && flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
 		ask = true
 	}
 
 	secretsData = buildKeyringSecret(connectionData, settingName, values)
 
 	// besides, the following cases will ask for user, too
-	if flags != NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE {
-		if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
+	if flags != nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE {
+		if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
 			// the previous secrets are wrong, so ask for user is necessary
 			ask = true
-		} else if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 && isConnectionAlwaysAsk(connectionData, settingName) {
+		} else if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 && isConnectionAlwaysAsk(connectionData, settingName) {
 			ask = true
 		}
 	}
@@ -249,10 +252,10 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 				"-n", connectionId,
 				"-s", getSettingVpnServiceType(connectionData),
 			}
-			if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
+			if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION != 0 {
 				args = append(args, "-i")
 			}
-			if flags&NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
+			if flags&nm.NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW != 0 {
 				args = append(args, "-r")
 			}
 			// add hints
@@ -273,9 +276,9 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 			// try to get vpn secrets data from keyring or network manager dbus interface
 			vpnData := getSettingVpnData(connectionData)
 			var vpnSecretData map[string]string
-			vpnSecretData, ok := secretGetAll(getSettingConnectionUuid(connectionData), sectionVpn)
+			vpnSecretData, ok := secretGetAll(getSettingConnectionUuid(connectionData), nm.NM_SETTING_VPN_SETTING_NAME)
 			if !ok {
-				if secretsData, err := nmGetConnectionSecrets(keyId.path, sectionVpn); err == nil {
+				if secretsData, err := nmGetConnectionSecrets(keyId.path, nm.NM_SETTING_VPN_SETTING_NAME); err == nil {
 					vpnSecretData = getSettingVpnSecrets(secretsData)
 				}
 			}

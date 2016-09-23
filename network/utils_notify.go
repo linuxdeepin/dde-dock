@@ -11,6 +11,7 @@ package network
 
 import (
 	"dbus/org/freedesktop/notifications"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"time"
@@ -148,11 +149,11 @@ func getMobileDisconnectedNotifyIcon(mobileNetworkType string) (icon string) {
 
 func generalGetNotifyConnectedIcon(devType uint32, devPath dbus.ObjectPath) (icon string) {
 	switch devType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		icon = notifyIconWiredConnected
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		icon = notifyIconWirelessConnected
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		var mobileNetworkType string
 		dev := manager.getDevice(devPath)
 		if dev != nil {
@@ -168,11 +169,11 @@ func generalGetNotifyConnectedIcon(devType uint32, devPath dbus.ObjectPath) (ico
 }
 func generalGetNotifyDisconnectedIcon(devType uint32, devPath dbus.ObjectPath) (icon string) {
 	switch devType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		icon = notifyIconWiredDisconnected
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		icon = notifyIconWirelessDisconnected
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		var mobileNetworkType string
 		dev := manager.getDevice(devPath)
 		if dev != nil {
@@ -200,6 +201,6 @@ func notifyDeviceRemoved(devPath dbus.ObjectPath) {
 		return
 	}
 	icon := generalGetNotifyDisconnectedIcon(devType, devPath)
-	msg := deviceErrorTable[NM_DEVICE_STATE_REASON_REMOVED]
+	msg := deviceErrorTable[nm.NM_DEVICE_STATE_REASON_REMOVED]
 	notify(icon, Tr("Disconnected"), msg)
 }

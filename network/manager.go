@@ -116,7 +116,7 @@ func (m *Manager) initManager() {
 	m.switchHandler = newSwitchHandler(m.config)
 	m.dbusWatcher = newDbusWatcher(true)
 	m.stateHandler = newStateHandler()
-	m.agent = newAgent() // TODO: nm 1.0 agent issues
+	m.agent = newAgent()
 
 	// initialize device and connection handlers
 	m.initDeviceManage()

@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/utils"
 )
@@ -99,16 +100,16 @@ func newWirelessConnection(id string, ssid []byte, secType apSecType) (uuid stri
 func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, NM_SETTING_WIRELESS_SETTING_NAME)
+	setSettingConnectionType(data, nm.NM_SETTING_WIRELESS_SETTING_NAME)
 
-	addSettingSection(data, sectionWireless)
+	addSetting(data, nm.NM_SETTING_WIRELESS_SETTING_NAME)
 	if ssid != nil {
 		setSettingWirelessSsid(data, ssid)
 	}
-	setSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_INFRA)
+	setSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_INFRA)
 
 	switch secType {
 	case apSecNone:
@@ -129,59 +130,59 @@ func newWirelessConnectionData(id, uuid string, ssid []byte, secType apSecType) 
 
 func newWirelessAdhocConnectionData(id, uuid string) (data connectionData) {
 	data = newWirelessConnectionData(id, uuid, nil, apSecNone)
-	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_ADHOC)
+	logicSetSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_ADHOC)
 	setSettingConnectionAutoconnect(data, false)
 	return
 }
 
 func newWirelessHotspotConnectionData(id, uuid string) (data connectionData) {
 	data = newWirelessConnectionData(id, uuid, nil, apSecNone)
-	logicSetSettingWirelessMode(data, NM_SETTING_WIRELESS_MODE_AP)
+	logicSetSettingWirelessMode(data, nm.NM_SETTING_WIRELESS_MODE_AP)
 	setSettingConnectionAutoconnect(data, false)
 	return
 }
 
 // Get available keys
 func getSettingWirelessAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_SSID)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_SSID)
 	switch getSettingWirelessMode(data) {
-	case NM_SETTING_WIRELESS_MODE_INFRA:
-	case NM_SETTING_WIRELESS_MODE_ADHOC:
-		keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_BAND)
+	case nm.NM_SETTING_WIRELESS_MODE_INFRA:
+	case nm.NM_SETTING_WIRELESS_MODE_ADHOC:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_BAND)
 		if isSettingWirelessBandExists(data) {
-			keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_CHANNEL)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CHANNEL)
 		}
-	case NM_SETTING_WIRELESS_MODE_AP:
-		keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_BAND)
+	case nm.NM_SETTING_WIRELESS_MODE_AP:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_BAND)
 		if isSettingWirelessBandExists(data) {
-			keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_CHANNEL)
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CHANNEL)
 		}
 	}
-	keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_MTU)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_MTU)
 
 	// hide some wireless options for better user experience
-	// keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_MODE)
-	// keys = appendAvailableKeys(data, keys, sectionWireless, NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
+	// keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_MODE)
+	// keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS)
 	return
 }
 
 // Get available values
 func getSettingWirelessAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_WIRELESS_MODE:
+	case nm.NM_SETTING_WIRELESS_MODE:
 		values = []kvalue{
-			kvalue{NM_SETTING_WIRELESS_MODE_INFRA, Tr("Infrastructure")},
-			kvalue{NM_SETTING_WIRELESS_MODE_ADHOC, Tr("Ad-Hoc")},
-			kvalue{NM_SETTING_WIRELESS_MODE_AP, Tr("AP-Hotspot")},
+			kvalue{nm.NM_SETTING_WIRELESS_MODE_INFRA, Tr("Infrastructure")},
+			kvalue{nm.NM_SETTING_WIRELESS_MODE_ADHOC, Tr("Ad-Hoc")},
+			kvalue{nm.NM_SETTING_WIRELESS_MODE_AP, Tr("AP-Hotspot")},
 		}
-	case NM_SETTING_WIRELESS_BAND:
+	case nm.NM_SETTING_WIRELESS_BAND:
 		values = []kvalue{
 			kvalue{"", Tr("Automatic")},
 			kvalue{"a", Tr("A (5 GHz)")},
 			kvalue{"bg", Tr("BG (2.4 GHz)")},
 		}
-	case NM_SETTING_WIRELESS_CHANNEL:
+	case nm.NM_SETTING_WIRELESS_CHANNEL:
 		if isSettingWirelessBandExists(data) {
 			switch getSettingWirelessBand(data) {
 			case "a":
@@ -190,9 +191,9 @@ func getSettingWirelessAvailableValues(data connectionData, key string) (values 
 				values = availableValuesWirelessChannelBg
 			}
 		}
-	case NM_SETTING_WIRELESS_MAC_ADDRESS:
+	case nm.NM_SETTING_WIRELESS_MAC_ADDRESS:
 		// get wireless devices mac address
-		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(NM_DEVICE_TYPE_WIFI) {
+		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(nm.NM_DEVICE_TYPE_WIFI) {
 			values = append(values, kvalue{hwAddr, hwAddr + " (" + iface + ")"})
 		}
 	}
@@ -206,12 +207,12 @@ func checkSettingWirelessValues(data connectionData) (errs sectionErrors) {
 	// check ssid
 	ensureSettingWirelessSsidNoEmpty(data, errs)
 
-	// TODO: NM_SETTING_WIRELESS_SEC for nm 1.0+
+	// TODO: nm.NM_SETTING_WIRELESS_SEC for nm 1.0+
 	// check security
 	// if isSettingWirelessSecExists(data) {
 	// 	securitySection := getSettingWirelessSec(data)
-	// 	if !isSettingSectionExists(data, securitySection) {
-	// 		rememberError(errs, sectionWireless, NM_SETTING_WIRELESS_SEC, fmt.Sprintf(NM_KEY_ERROR_MISSING_SECTION, securitySection))
+	// 	if !isSettingExists(data, securitySection) {
+	// 		rememberError(errs, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_SEC, fmt.Sprintf(nmKeyErrorMissingSection, securitySection))
 	// 	}
 	// }
 
@@ -223,11 +224,11 @@ func checkSettingWirelessValues(data connectionData) (errs sectionErrors) {
 func logicSetSettingWirelessMode(data connectionData, value string) (err error) {
 	// for ad-hoc or ap-hotspot mode, wpa-eap security is invalid, and
 	// set ip4 method to "shared"
-	if value != NM_SETTING_WIRELESS_MODE_INFRA {
+	if value != nm.NM_SETTING_WIRELESS_MODE_INFRA {
 		if getSettingVkWirelessSecurityKeyMgmt(data) == "wpa-eap" {
 			logicSetSettingVkWirelessSecurityKeyMgmt(data, "wpa-psk")
 		}
-		setSettingIp4ConfigMethod(data, NM_SETTING_IP4_CONFIG_METHOD_SHARED)
+		setSettingIP4ConfigMethod(data, nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED)
 	}
 	setSettingWirelessMode(data, value)
 	return

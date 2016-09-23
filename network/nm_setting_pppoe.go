@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -25,17 +26,17 @@ func newPppoeConnection(id, username string) (uuid string) {
 func newPppoeConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, NM_SETTING_PPPOE_SETTING_NAME)
+	setSettingConnectionType(data, nm.NM_SETTING_PPPOE_SETTING_NAME)
 	setSettingConnectionAutoconnect(data, true)
 
 	initSettingSectionWired(data)
 
-	addSettingSection(data, sectionPppoe)
+	addSetting(data, nm.NM_SETTING_PPPOE_SETTING_NAME)
 
-	addSettingSection(data, sectionPpp)
+	addSetting(data, nm.NM_SETTING_PPP_SETTING_NAME)
 	logicSetSettingVkPppEnableLcpEcho(data, true)
 
 	initSettingSectionIpv4(data)
@@ -44,10 +45,10 @@ func newPppoeConnectionData(id, uuid string) (data connectionData) {
 
 // Get available keys
 func getSettingPppoeAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_SERVICE)
-	keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_USERNAME)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_PPPOE_SERVICE)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_PPPOE_USERNAME)
 	if isSettingRequireSecret(getSettingPppoePasswordFlags(data)) {
-		keys = appendAvailableKeys(data, keys, sectionPppoe, NM_SETTING_PPPOE_PASSWORD)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_PPPOE_SETTING_NAME, nm.NM_SETTING_PPPOE_PASSWORD)
 	}
 	return
 }

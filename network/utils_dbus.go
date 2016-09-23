@@ -12,7 +12,7 @@ package network
 import (
 	dbusmgr "dbus/org/freedesktop/dbus/system"
 	"dbus/org/freedesktop/login1"
-	nm "dbus/org/freedesktop/networkmanager"
+	nmdbus "dbus/org/freedesktop/networkmanager"
 )
 
 const (
@@ -25,18 +25,18 @@ const (
 )
 
 var (
-	nmManager    *nm.Manager
-	nmSettings   *nm.Settings
+	nmManager    *nmdbus.Manager
+	nmSettings   *nmdbus.Settings
 	loginManager *login1.Manager
 	dbusDaemon   *dbusmgr.DBusDaemon
 )
 
 func initDbusObjects() {
 	var err error
-	if nmManager, err = nm.NewManager(dbusNmDest, dbusNmPath); err != nil {
+	if nmManager, err = nmdbus.NewManager(dbusNmDest, dbusNmPath); err != nil {
 		logger.Error(err)
 	}
-	if nmSettings, err = nm.NewSettings(dbusNmDest, dbusNmSettingPath); err != nil {
+	if nmSettings, err = nmdbus.NewSettings(dbusNmDest, dbusNmSettingPath); err != nil {
 		logger.Error(err)
 	}
 	if loginManager, err = login1.NewManager(dbusLoginDest, dbusLoginPath); err != nil {
@@ -48,8 +48,8 @@ func destroyDbusObjects() {
 	// required for that there are multiple signal connected with
 	// theme which need to be removed
 	login1.DestroyManager(loginManager)
-	nm.DestroyManager(nmManager)
-	nm.DestroySettings(nmSettings)
+	nmdbus.DestroyManager(nmManager)
+	nmdbus.DestroySettings(nmSettings)
 }
 
 func initDbusDaemon() {

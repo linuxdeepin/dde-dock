@@ -11,6 +11,7 @@ package network
 
 import (
 	"io/ioutil"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 	"regexp"
@@ -21,17 +22,17 @@ const VPN_NAME_FILES_DIR = "/etc/NetworkManager/VPN/"
 func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, NM_SETTING_VPN_SETTING_NAME)
+	setSettingConnectionType(data, nm.NM_SETTING_VPN_SETTING_NAME)
 
 	initSettingSectionIpv4(data)
 	return
 }
 
 func initBasicSettingSectionVpn(data connectionData, service string) {
-	addSettingSection(data, sectionVpn)
+	addSetting(data, nm.NM_SETTING_VPN_SETTING_NAME)
 	setSettingVpnServiceType(data, service)
 	setSettingVpnData(data, make(map[string]string))
 	setSettingVpnSecrets(data, make(map[string]string))
@@ -109,42 +110,42 @@ func checkSettingVpnValues(data connectionData) (errs sectionErrors) {
 
 func isSettingVpnPluginKey(section string) bool {
 	// all keys in vpn virtual sections are vpn plugin key
-	realSection := getRealSectionName(section)
-	if realSection == sectionVpn && realSection != section {
+	realSetting := getAliasSettingRealName(section)
+	if realSetting == nm.NM_SETTING_VPN_SETTING_NAME && realSetting != section {
 		return true
 	}
 	return false
 }
 func isSettingVpnPluginSecretKey(section, key string) (isSecret bool) {
 	switch section {
-	case sectionVpnL2tp:
+	case nm.NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_L2TP_KEY_PASSWORD, NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
+		case nm.NM_SETTING_VPN_L2TP_KEY_PASSWORD, nm.NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK:
 			isSecret = true
 		}
-	case sectionVpnOpenvpn:
+	case nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_OPENVPN_KEY_PASSWORD, NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
+		case nm.NM_SETTING_VPN_OPENVPN_KEY_PASSWORD, nm.NM_SETTING_VPN_OPENVPN_KEY_CERTPASS:
 			isSecret = true
 		}
-	case sectionVpnOpenvpnProxies:
+	case nm.NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
+		case nm.NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD:
 			isSecret = true
 		}
-	case sectionVpnPptp:
+	case nm.NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_PPTP_KEY_PASSWORD:
+		case nm.NM_SETTING_VPN_PPTP_KEY_PASSWORD:
 			isSecret = true
 		}
-	case sectionVpnStrongswan:
+	case nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
+		case nm.NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD:
 			isSecret = true
 		}
-	case sectionVpnVpnc:
+	case nm.NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
 		switch key {
-		case NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, NM_SETTING_VPN_VPNC_KEY_SECRET:
+		case nm.NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD, nm.NM_SETTING_VPN_VPNC_KEY_SECRET:
 			isSecret = true
 		}
 	}
@@ -228,18 +229,18 @@ func getSettingVpnPluginData(data connectionData, section, key string) (vpnPlugi
 	return
 }
 func doGetSettingVpnPluginData(data connectionData, isSecretKey bool) (vpnPluginData map[string]string, ok bool) {
-	vpnSectionData, ok := data[sectionVpn]
+	vpnSectionData, ok := data[nm.NM_SETTING_VPN_SETTING_NAME]
 	if !ok {
 		return
 	}
 	var variantValue dbus.Variant
 	if isSecretKey {
-		variantValue, ok = vpnSectionData[NM_SETTING_VPN_SECRETS]
+		variantValue, ok = vpnSectionData[nm.NM_SETTING_VPN_SECRETS]
 		if !ok {
 			return
 		}
 	} else {
-		variantValue, ok = vpnSectionData[NM_SETTING_VPN_DATA]
+		variantValue, ok = vpnSectionData[nm.NM_SETTING_VPN_DATA]
 		if !ok {
 			return
 		}

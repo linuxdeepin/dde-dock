@@ -15,6 +15,7 @@ import (
 	"fmt"
 	C "launchpad.net/gocheck"
 	"os"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gdkpixbuf"
 	. "pkg.deepin.io/lib/gettext"
@@ -112,7 +113,7 @@ func (*testWrapper) TestNotify(c *C.C) {
 	notify(notifyIconWiredLocal, Tr("Disconnected"), "Wired network local only")
 	snapshotNotify("wired_local")
 
-	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_CONFIG_FAILED])
+	notify(notifyIconWiredError, Tr("Disconnected"), deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONFIG_FAILED])
 	snapshotNotify("wired_error")
 
 	notifyWiredCableUnplugged()
@@ -124,7 +125,7 @@ func (*testWrapper) TestNotify(c *C.C) {
 	notify(notifyIconWirelessDisconnected, Tr("Disconnected"), "wireless-ssid")
 	snapshotNotify("wireless_disconnected")
 
-	notify(notifyIconWirelessError, Tr("Disconnected"), deviceErrorTable[NM_DEVICE_STATE_REASON_NO_SECRETS])
+	notify(notifyIconWirelessError, Tr("Disconnected"), deviceErrorTable[nm.NM_DEVICE_STATE_REASON_NO_SECRETS])
 	snapshotNotify("wireless_error")
 
 	notifyApModeNotSupport()
@@ -139,7 +140,7 @@ func (*testWrapper) TestNotify(c *C.C) {
 	notifyVpnDisconnected("vpn-pptp")
 	snapshotNotify("vpn_disconnected")
 
-	notifyVpnFailed("vpn-pptp", NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
+	notifyVpnFailed("vpn-pptp", nm.NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED)
 	snapshotNotify("vpn_error")
 
 	notifyNetworkOffline()

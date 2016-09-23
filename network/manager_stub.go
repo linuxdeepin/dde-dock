@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -96,7 +97,7 @@ func (m *Manager) setPropDevices() {
 		filteredDevices[key] = make([]*device, 0)
 		for _, d := range devices {
 			ignoreIphoneUsbDevice := d.UsbDevice &&
-				d.State <= NM_DEVICE_STATE_UNAVAILABLE &&
+				d.State <= nm.NM_DEVICE_STATE_UNAVAILABLE &&
 				d.Driver == "ipheth"
 			if !ignoreIphoneUsbDevice {
 				filteredDevices[key] = append(filteredDevices[key], d)

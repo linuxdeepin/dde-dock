@@ -1,0 +1,3128 @@
+---
+NMSettings:
+  - SettingClass: Setting8021x
+    Name: NM_SETTING_802_1X_SETTING_NAME
+    Value: 802-1x
+    Keys:
+    - KeyName: NM_SETTING_802_1X_ALTSUBJECT_MATCHES
+      Value: altsubject-matches
+      CapcaseName: Setting8021xAltsubjectMatches
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_ANONYMOUS_IDENTITY
+      Value: anonymous-identity
+      CapcaseName: Setting8021xAnonymousIdentity
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_CA_CERT
+      Value: ca-cert
+      CapcaseName: Setting8021xCaCert
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_CA_PATH
+      Value: ca-path
+      CapcaseName: Setting8021xCaPath
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_CLIENT_CERT
+      Value: client-cert
+      CapcaseName: Setting8021xClientCert
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH
+      Value: domain-suffix-match
+      CapcaseName: Setting8021xDomainSuffixMatch
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_EAP
+      Value: eap
+      CapcaseName: Setting8021xEap
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_IDENTITY
+      Value: identity
+      CapcaseName: Setting8021xIdentity
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PAC_FILE
+      Value: pac-file
+      CapcaseName: Setting8021xPacFile
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PASSWORD
+      Value: password
+      CapcaseName: Setting8021xPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PASSWORD_FLAGS
+      Value: password-flags
+      CapcaseName: Setting8021xPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_PASSWORD_RAW
+      Value: password-raw
+      CapcaseName: Setting8021xPasswordRaw
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PASSWORD_RAW_FLAGS
+      Value: password-raw-flags
+      CapcaseName: Setting8021xPasswordRawFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING
+      Value: phase1-fast-provisioning
+      CapcaseName: Setting8021xPhase1FastProvisioning
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE1_PEAPLABEL
+      Value: phase1-peaplabel
+      CapcaseName: Setting8021xPhase1Peaplabel
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE1_PEAPVER
+      Value: phase1-peapver
+      CapcaseName: Setting8021xPhase1Peapver
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_ALTSUBJECT_MATCHES
+      Value: phase2-altsubject-matches
+      CapcaseName: Setting8021xPhase2AltsubjectMatches
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_AUTH
+      Value: phase2-auth
+      CapcaseName: Setting8021xPhase2Auth
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_AUTHEAP
+      Value: phase2-autheap
+      CapcaseName: Setting8021xPhase2Autheap
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CA_CERT
+      Value: phase2-ca-cert
+      CapcaseName: Setting8021xPhase2CaCert
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CA_PATH
+      Value: phase2-ca-path
+      CapcaseName: Setting8021xPhase2CaPath
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CLIENT_CERT
+      Value: phase2-client-cert
+      CapcaseName: Setting8021xPhase2ClientCert
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH
+      Value: phase2-domain-suffix-match
+      CapcaseName: Setting8021xPhase2DomainSuffixMatch
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_PRIVATE_KEY
+      Value: phase2-private-key
+      CapcaseName: Setting8021xPhase2PrivateKey
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD
+      Value: phase2-private-key-password
+      CapcaseName: Setting8021xPhase2PrivateKeyPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD_FLAGS
+      Value: phase2-private-key-password-flags
+      CapcaseName: Setting8021xPhase2PrivateKeyPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_PHASE2_SUBJECT_MATCH
+      Value: phase2-subject-match
+      CapcaseName: Setting8021xPhase2SubjectMatch
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PIN
+      Value: pin
+      CapcaseName: Setting8021xPin
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PIN_FLAGS
+      Value: pin-flags
+      CapcaseName: Setting8021xPinFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_PRIVATE_KEY
+      Value: private-key
+      CapcaseName: Setting8021xPrivateKey
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD
+      Value: private-key-password
+      CapcaseName: Setting8021xPrivateKeyPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PRIVATE_KEY_PASSWORD_FLAGS
+      Value: private-key-password-flags
+      CapcaseName: Setting8021xPrivateKeyPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_SUBJECT_MATCH
+      Value: subject-match
+      CapcaseName: Setting8021xSubjectMatch
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_SYSTEM_CA_CERTS
+      Value: system-ca-certs
+      CapcaseName: Setting8021xSystemCaCerts
+      Type: ktypeBoolean
+      DefaultValue: "false"
+  - SettingClass: SettingAdsl
+    Name: NM_SETTING_ADSL_SETTING_NAME
+    Value: adsl
+    Keys:
+    - KeyName: NM_SETTING_ADSL_ENCAPSULATION
+      Value: encapsulation
+      CapcaseName: SettingAdslEncapsulation
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_ADSL_PASSWORD
+      Value: password
+      CapcaseName: SettingAdslPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_ADSL_PASSWORD_FLAGS
+      Value: password-flags
+      CapcaseName: SettingAdslPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_ADSL_PROTOCOL
+      Value: protocol
+      CapcaseName: SettingAdslProtocol
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_ADSL_USERNAME
+      Value: username
+      CapcaseName: SettingAdslUsername
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_ADSL_VCI
+      Value: vci
+      CapcaseName: SettingAdslVci
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_ADSL_VPI
+      Value: vpi
+      CapcaseName: SettingAdslVpi
+      Type: ktypeUint32
+      DefaultValue: "0"
+  - SettingClass: SettingBluetooth
+    Name: NM_SETTING_BLUETOOTH_SETTING_NAME
+    Value: bluetooth
+    Keys:
+    - KeyName: NM_SETTING_BLUETOOTH_BDADDR
+      Value: bdaddr
+      CapcaseName: SettingBluetoothBdaddr
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_BLUETOOTH_TYPE
+      Value: type
+      CapcaseName: SettingBluetoothType
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingBond
+    Name: NM_SETTING_BOND_SETTING_NAME
+    Value: bond
+    Keys:
+    - KeyName: NM_SETTING_BOND_OPTIONS
+      Value: options
+      CapcaseName: SettingBondOptions
+      Type: ktypeDictStringString
+      DefaultValue: "{'mode': 'balance-rr'}"
+  - SettingClass: SettingBridge
+    Name: NM_SETTING_BRIDGE_SETTING_NAME
+    Value: bridge
+    Keys:
+    - KeyName: NM_SETTING_BRIDGE_AGEING_TIME
+      Value: ageing-time
+      CapcaseName: SettingBridgeAgeingTime
+      Type: ktypeUint32
+      DefaultValue: "300"
+    - KeyName: NM_SETTING_BRIDGE_FORWARD_DELAY
+      Value: forward-delay
+      CapcaseName: SettingBridgeForwardDelay
+      Type: ktypeUint32
+      DefaultValue: "15"
+    - KeyName: NM_SETTING_BRIDGE_HELLO_TIME
+      Value: hello-time
+      CapcaseName: SettingBridgeHelloTime
+      Type: ktypeUint32
+      DefaultValue: "2"
+    - KeyName: NM_SETTING_BRIDGE_MAC_ADDRESS
+      Value: mac-address
+      CapcaseName: SettingBridgeMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_BRIDGE_MAX_AGE
+      Value: max-age
+      CapcaseName: SettingBridgeMaxAge
+      Type: ktypeUint32
+      DefaultValue: "20"
+    - KeyName: NM_SETTING_BRIDGE_MULTICAST_SNOOPING
+      Value: multicast-snooping
+      CapcaseName: SettingBridgeMulticastSnooping
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_BRIDGE_PRIORITY
+      Value: priority
+      CapcaseName: SettingBridgePriority
+      Type: ktypeUint32
+      DefaultValue: "32768"
+    - KeyName: NM_SETTING_BRIDGE_STP
+      Value: stp
+      CapcaseName: SettingBridgeStp
+      Type: ktypeBoolean
+      DefaultValue: "true"
+  - SettingClass: SettingBridgePort
+    Name: NM_SETTING_BRIDGE_PORT_SETTING_NAME
+    Value: bridge-port
+    Keys:
+    - KeyName: NM_SETTING_BRIDGE_PORT_HAIRPIN_MODE
+      Value: hairpin-mode
+      CapcaseName: SettingBridgePortHairpinMode
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_BRIDGE_PORT_PATH_COST
+      Value: path-cost
+      CapcaseName: SettingBridgePortPathCost
+      Type: ktypeUint32
+      DefaultValue: "100"
+    - KeyName: NM_SETTING_BRIDGE_PORT_PRIORITY
+      Value: priority
+      CapcaseName: SettingBridgePortPriority
+      Type: ktypeUint32
+      DefaultValue: "32"
+  - SettingClass: SettingCdma
+    Name: NM_SETTING_CDMA_SETTING_NAME
+    Value: cdma
+    Keys:
+    - KeyName: NM_SETTING_CDMA_NUMBER
+      Value: number
+      CapcaseName: SettingCdmaNumber
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CDMA_PASSWORD
+      Value: password
+      CapcaseName: SettingCdmaPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CDMA_PASSWORD_FLAGS
+      Value: password-flags
+      CapcaseName: SettingCdmaPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CDMA_USERNAME
+      Value: username
+      CapcaseName: SettingCdmaUsername
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingConnection
+    Name: NM_SETTING_CONNECTION_SETTING_NAME
+    Value: connection
+    Keys:
+    - KeyName: NM_SETTING_CONNECTION_AUTOCONNECT
+      Value: autoconnect
+      CapcaseName: SettingConnectionAutoconnect
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY
+      Value: autoconnect-priority
+      CapcaseName: SettingConnectionAutoconnectPriority
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES
+      Value: autoconnect-slaves
+      CapcaseName: SettingConnectionAutoconnectSlaves
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_GATEWAY_PING_TIMEOUT
+      Value: gateway-ping-timeout
+      CapcaseName: SettingConnectionGatewayPingTimeout
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_ID
+      Value: id
+      CapcaseName: SettingConnectionId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_INTERFACE_NAME
+      Value: interface-name
+      CapcaseName: SettingConnectionInterfaceName
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_LLDP
+      Value: lldp
+      CapcaseName: SettingConnectionLldp
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_CONNECTION_MASTER
+      Value: master
+      CapcaseName: SettingConnectionMaster
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_METERED
+      Value: metered
+      CapcaseName: SettingConnectionMetered
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_PERMISSIONS
+      Value: permissions
+      CapcaseName: SettingConnectionPermissions
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_CONNECTION_READ_ONLY
+      Value: read-only
+      CapcaseName: SettingConnectionReadOnly
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_CONNECTION_SECONDARIES
+      Value: secondaries
+      CapcaseName: SettingConnectionSecondaries
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_CONNECTION_SLAVE_TYPE
+      Value: slave-type
+      CapcaseName: SettingConnectionSlaveType
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_TIMESTAMP
+      Value: timestamp
+      CapcaseName: SettingConnectionTimestamp
+      Type: ktypeUint64
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_TYPE
+      Value: type
+      CapcaseName: SettingConnectionType
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_UUID
+      Value: uuid
+      CapcaseName: SettingConnectionUuid
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_CONNECTION_ZONE
+      Value: zone
+      CapcaseName: SettingConnectionZone
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingDcb
+    Name: NM_SETTING_DCB_SETTING_NAME
+    Value: dcb
+    Keys:
+    - KeyName: NM_SETTING_DCB_APP_FCOE_FLAGS
+      Value: app-fcoe-flags
+      CapcaseName: SettingDcbAppFcoeFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_DCB_APP_FCOE_MODE
+      Value: app-fcoe-mode
+      CapcaseName: SettingDcbAppFcoeMode
+      Type: ktypeString
+      DefaultValue: "'fabric'"
+    - KeyName: NM_SETTING_DCB_APP_FCOE_PRIORITY
+      Value: app-fcoe-priority
+      CapcaseName: SettingDcbAppFcoePriority
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_DCB_APP_FIP_FLAGS
+      Value: app-fip-flags
+      CapcaseName: SettingDcbAppFipFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_DCB_APP_FIP_PRIORITY
+      Value: app-fip-priority
+      CapcaseName: SettingDcbAppFipPriority
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_DCB_APP_ISCSI_FLAGS
+      Value: app-iscsi-flags
+      CapcaseName: SettingDcbAppIscsiFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_DCB_APP_ISCSI_PRIORITY
+      Value: app-iscsi-priority
+      CapcaseName: SettingDcbAppIscsiPriority
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_DCB_PRIORITY_BANDWIDTH
+      Value: priority-bandwidth
+      CapcaseName: SettingDcbPriorityBandwidth
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+    - KeyName: NM_SETTING_DCB_PRIORITY_FLOW_CONTROL
+      Value: priority-flow-control
+      CapcaseName: SettingDcbPriorityFlowControl
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+    - KeyName: NM_SETTING_DCB_PRIORITY_FLOW_CONTROL_FLAGS
+      Value: priority-flow-control-flags
+      CapcaseName: SettingDcbPriorityFlowControlFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_DCB_PRIORITY_GROUP_BANDWIDTH
+      Value: priority-group-bandwidth
+      CapcaseName: SettingDcbPriorityGroupBandwidth
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+    - KeyName: NM_SETTING_DCB_PRIORITY_GROUP_FLAGS
+      Value: priority-group-flags
+      CapcaseName: SettingDcbPriorityGroupFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_DCB_PRIORITY_GROUP_ID
+      Value: priority-group-id
+      CapcaseName: SettingDcbPriorityGroupId
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+    - KeyName: NM_SETTING_DCB_PRIORITY_STRICT_BANDWIDTH
+      Value: priority-strict-bandwidth
+      CapcaseName: SettingDcbPriorityStrictBandwidth
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+    - KeyName: NM_SETTING_DCB_PRIORITY_TRAFFIC_CLASS
+      Value: priority-traffic-class
+      CapcaseName: SettingDcbPriorityTrafficClass
+      Type: ktypeArrayUint32
+      DefaultValue: "[0, 0, 0, 0, 0, 0, 0, 0]"
+  - SettingClass: SettingGeneric
+    Name: NM_SETTING_GENERIC_SETTING_NAME
+    Value: generic
+    Keys:
+  - SettingClass: SettingGsm
+    Name: NM_SETTING_GSM_SETTING_NAME
+    Value: gsm
+    Keys:
+    - KeyName: NM_SETTING_GSM_APN
+      Value: apn
+      CapcaseName: SettingGsmApn
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_DEVICE_ID
+      Value: device-id
+      CapcaseName: SettingGsmDeviceId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_HOME_ONLY
+      Value: home-only
+      CapcaseName: SettingGsmHomeOnly
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_GSM_NETWORK_ID
+      Value: network-id
+      CapcaseName: SettingGsmNetworkId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_NUMBER
+      Value: number
+      CapcaseName: SettingGsmNumber
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_PASSWORD
+      Value: password
+      CapcaseName: SettingGsmPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_PASSWORD_FLAGS
+      Value: password-flags
+      CapcaseName: SettingGsmPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_GSM_PIN
+      Value: pin
+      CapcaseName: SettingGsmPin
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_PIN_FLAGS
+      Value: pin-flags
+      CapcaseName: SettingGsmPinFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_GSM_SIM_ID
+      Value: sim-id
+      CapcaseName: SettingGsmSimId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_SIM_OPERATOR_ID
+      Value: sim-operator-id
+      CapcaseName: SettingGsmSimOperatorId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_GSM_USERNAME
+      Value: username
+      CapcaseName: SettingGsmUsername
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingInfiniband
+    Name: NM_SETTING_INFINIBAND_SETTING_NAME
+    Value: infiniband
+    Keys:
+    - KeyName: NM_SETTING_INFINIBAND_MAC_ADDRESS
+      Value: mac-address
+      CapcaseName: SettingInfinibandMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_INFINIBAND_MTU
+      Value: mtu
+      CapcaseName: SettingInfinibandMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_INFINIBAND_P_KEY
+      Value: p-key
+      CapcaseName: SettingInfinibandPKey
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_INFINIBAND_PARENT
+      Value: parent
+      CapcaseName: SettingInfinibandParent
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_INFINIBAND_TRANSPORT_MODE
+      Value: transport-mode
+      CapcaseName: SettingInfinibandTransportMode
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingIP4Config
+    Name: NM_SETTING_IP4_CONFIG_SETTING_NAME
+    Value: ipv4
+    Keys:
+    - KeyName: NM_SETTING_IP4_CONFIG_ADDRESSES
+      Value: addresses
+      CapcaseName: SettingIP4ConfigAddresses
+      Type: ktypeArrayArrayUint32
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP4_CONFIG_DAD_TIMEOUT
+      Value: dad-timeout
+      CapcaseName: SettingIP4ConfigDadTimeout
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_IP4_CONFIG_DHCP_CLIENT_ID
+      Value: dhcp-client-id
+      CapcaseName: SettingIP4ConfigDhcpClientId
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP4_CONFIG_DHCP_FQDN
+      Value: dhcp-fqdn
+      CapcaseName: SettingIP4ConfigDhcpFqdn
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP4_CONFIG_DHCP_HOSTNAME
+      Value: dhcp-hostname
+      CapcaseName: SettingIP4ConfigDhcpHostname
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP4_CONFIG_DHCP_SEND_HOSTNAME
+      Value: dhcp-send-hostname
+      CapcaseName: SettingIP4ConfigDhcpSendHostname
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_IP4_CONFIG_DHCP_TIMEOUT
+      Value: dhcp-timeout
+      CapcaseName: SettingIP4ConfigDhcpTimeout
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP4_CONFIG_DNS
+      Value: dns
+      CapcaseName: SettingIP4ConfigDns
+      Type: ktypeArrayUint32
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP4_CONFIG_DNS_OPTIONS
+      Value: dns-options
+      CapcaseName: SettingIP4ConfigDnsOptions
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP4_CONFIG_DNS_PRIORITY
+      Value: dns-priority
+      CapcaseName: SettingIP4ConfigDnsPriority
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP4_CONFIG_DNS_SEARCH
+      Value: dns-search
+      CapcaseName: SettingIP4ConfigDnsSearch
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP4_CONFIG_GATEWAY
+      Value: gateway
+      CapcaseName: SettingIP4ConfigGateway
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP4_CONFIG_IGNORE_AUTO_DNS
+      Value: ignore-auto-dns
+      CapcaseName: SettingIP4ConfigIgnoreAutoDns
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP4_CONFIG_IGNORE_AUTO_ROUTES
+      Value: ignore-auto-routes
+      CapcaseName: SettingIP4ConfigIgnoreAutoRoutes
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP4_CONFIG_MAY_FAIL
+      Value: may-fail
+      CapcaseName: SettingIP4ConfigMayFail
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_IP4_CONFIG_METHOD
+      Value: method
+      CapcaseName: SettingIP4ConfigMethod
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP4_CONFIG_NEVER_DEFAULT
+      Value: never-default
+      CapcaseName: SettingIP4ConfigNeverDefault
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP4_CONFIG_ROUTE_METRIC
+      Value: route-metric
+      CapcaseName: SettingIP4ConfigRouteMetric
+      Type: ktypeInt64
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_IP4_CONFIG_ROUTES
+      Value: routes
+      CapcaseName: SettingIP4ConfigRoutes
+      Type: ktypeArrayArrayUint32
+      DefaultValue: "[]"
+  - SettingClass: SettingIP6Config
+    Name: NM_SETTING_IP6_CONFIG_SETTING_NAME
+    Value: ipv6
+    Keys:
+    - KeyName: NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE
+      Value: addr-gen-mode
+      CapcaseName: SettingIP6ConfigAddrGenMode
+      Type: ktypeInt32
+      DefaultValue: "1"
+    - KeyName: NM_SETTING_IP6_CONFIG_ADDRESSES
+      Value: addresses
+      CapcaseName: SettingIP6ConfigAddresses
+      Type: ktypeIpv6Addresses
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP6_CONFIG_DAD_TIMEOUT
+      Value: dad-timeout
+      CapcaseName: SettingIP6ConfigDadTimeout
+      Type: ktypeInt32
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_IP6_CONFIG_DHCP_HOSTNAME
+      Value: dhcp-hostname
+      CapcaseName: SettingIP6ConfigDhcpHostname
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP6_CONFIG_DHCP_SEND_HOSTNAME
+      Value: dhcp-send-hostname
+      CapcaseName: SettingIP6ConfigDhcpSendHostname
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_IP6_CONFIG_DHCP_TIMEOUT
+      Value: dhcp-timeout
+      CapcaseName: SettingIP6ConfigDhcpTimeout
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP6_CONFIG_DNS
+      Value: dns
+      CapcaseName: SettingIP6ConfigDns
+      Type: ktypeArrayArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP6_CONFIG_DNS_OPTIONS
+      Value: dns-options
+      CapcaseName: SettingIP6ConfigDnsOptions
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP6_CONFIG_DNS_PRIORITY
+      Value: dns-priority
+      CapcaseName: SettingIP6ConfigDnsPriority
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP6_CONFIG_DNS_SEARCH
+      Value: dns-search
+      CapcaseName: SettingIP6ConfigDnsSearch
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_IP6_CONFIG_GATEWAY
+      Value: gateway
+      CapcaseName: SettingIP6ConfigGateway
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP6_CONFIG_IGNORE_AUTO_DNS
+      Value: ignore-auto-dns
+      CapcaseName: SettingIP6ConfigIgnoreAutoDns
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP6_CONFIG_IGNORE_AUTO_ROUTES
+      Value: ignore-auto-routes
+      CapcaseName: SettingIP6ConfigIgnoreAutoRoutes
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP6_CONFIG_IP6_PRIVACY
+      Value: ip6-privacy
+      CapcaseName: SettingIP6ConfigIp6Privacy
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP6_CONFIG_MAY_FAIL
+      Value: may-fail
+      CapcaseName: SettingIP6ConfigMayFail
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_IP6_CONFIG_METHOD
+      Value: method
+      CapcaseName: SettingIP6ConfigMethod
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP6_CONFIG_NEVER_DEFAULT
+      Value: never-default
+      CapcaseName: SettingIP6ConfigNeverDefault
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_IP6_CONFIG_ROUTE_METRIC
+      Value: route-metric
+      CapcaseName: SettingIP6ConfigRouteMetric
+      Type: ktypeInt64
+      DefaultValue: "-1"
+    - KeyName: NM_SETTING_IP6_CONFIG_ROUTES
+      Value: routes
+      CapcaseName: SettingIP6ConfigRoutes
+      Type: ktypeIpv6Routes
+      DefaultValue: "[]"
+  - SettingClass: SettingIPTunnel
+    Name: NM_SETTING_IP_TUNNEL_SETTING_NAME
+    Value: ip-tunnel
+    Keys:
+    - KeyName: NM_SETTING_IP_TUNNEL_ENCAPSULATION_LIMIT
+      Value: encapsulation-limit
+      CapcaseName: SettingIPTunnelEncapsulationLimit
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP_TUNNEL_FLOW_LABEL
+      Value: flow-label
+      CapcaseName: SettingIPTunnelFlowLabel
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP_TUNNEL_INPUT_KEY
+      Value: input-key
+      CapcaseName: SettingIPTunnelInputKey
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP_TUNNEL_LOCAL
+      Value: local
+      CapcaseName: SettingIPTunnelLocal
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP_TUNNEL_MODE
+      Value: mode
+      CapcaseName: SettingIPTunnelMode
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP_TUNNEL_MTU
+      Value: mtu
+      CapcaseName: SettingIPTunnelMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP_TUNNEL_OUTPUT_KEY
+      Value: output-key
+      CapcaseName: SettingIPTunnelOutputKey
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP_TUNNEL_PARENT
+      Value: parent
+      CapcaseName: SettingIPTunnelParent
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP_TUNNEL_PATH_MTU_DISCOVERY
+      Value: path-mtu-discovery
+      CapcaseName: SettingIPTunnelPathMtuDiscovery
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_IP_TUNNEL_REMOTE
+      Value: remote
+      CapcaseName: SettingIPTunnelRemote
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_IP_TUNNEL_TOS
+      Value: tos
+      CapcaseName: SettingIPTunnelTos
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_IP_TUNNEL_TTL
+      Value: ttl
+      CapcaseName: SettingIPTunnelTtl
+      Type: ktypeUint32
+      DefaultValue: "0"
+  - SettingClass: SettingMacvlan
+    Name: NM_SETTING_MACVLAN_SETTING_NAME
+    Value: macvlan
+    Keys:
+    - KeyName: NM_SETTING_MACVLAN_MODE
+      Value: mode
+      CapcaseName: SettingMacvlanMode
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_MACVLAN_PARENT
+      Value: parent
+      CapcaseName: SettingMacvlanParent
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_MACVLAN_PROMISCUOUS
+      Value: promiscuous
+      CapcaseName: SettingMacvlanPromiscuous
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_MACVLAN_TAP
+      Value: tap
+      CapcaseName: SettingMacvlanTap
+      Type: ktypeBoolean
+      DefaultValue: "false"
+  - SettingClass: SettingOlpcMesh
+    Name: NM_SETTING_OLPC_MESH_SETTING_NAME
+    Value: 802-11-olpc-mesh
+    Keys:
+    - KeyName: NM_SETTING_OLPC_MESH_CHANNEL
+      Value: channel
+      CapcaseName: SettingOlpcMeshChannel
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_OLPC_MESH_DHCP_ANYCAST_ADDRESS
+      Value: dhcp-anycast-address
+      CapcaseName: SettingOlpcMeshDhcpAnycastAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_OLPC_MESH_SSID
+      Value: ssid
+      CapcaseName: SettingOlpcMeshSsid
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+  - SettingClass: SettingPpp
+    Name: NM_SETTING_PPP_SETTING_NAME
+    Value: ppp
+    Keys:
+    - KeyName: NM_SETTING_PPP_BAUD
+      Value: baud
+      CapcaseName: SettingPppBaud
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPP_CRTSCTS
+      Value: crtscts
+      CapcaseName: SettingPppCrtscts
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_LCP_ECHO_FAILURE
+      Value: lcp-echo-failure
+      CapcaseName: SettingPppLcpEchoFailure
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPP_LCP_ECHO_INTERVAL
+      Value: lcp-echo-interval
+      CapcaseName: SettingPppLcpEchoInterval
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPP_MPPE_STATEFUL
+      Value: mppe-stateful
+      CapcaseName: SettingPppMppeStateful
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_MRU
+      Value: mru
+      CapcaseName: SettingPppMru
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPP_MTU
+      Value: mtu
+      CapcaseName: SettingPppMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPP_NO_VJ_COMP
+      Value: no-vj-comp
+      CapcaseName: SettingPppNoVjComp
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_NOAUTH
+      Value: noauth
+      CapcaseName: SettingPppNoauth
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_PPP_NOBSDCOMP
+      Value: nobsdcomp
+      CapcaseName: SettingPppNobsdcomp
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_NODEFLATE
+      Value: nodeflate
+      CapcaseName: SettingPppNodeflate
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REFUSE_CHAP
+      Value: refuse-chap
+      CapcaseName: SettingPppRefuseChap
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REFUSE_EAP
+      Value: refuse-eap
+      CapcaseName: SettingPppRefuseEap
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REFUSE_MSCHAP
+      Value: refuse-mschap
+      CapcaseName: SettingPppRefuseMschap
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REFUSE_MSCHAPV2
+      Value: refuse-mschapv2
+      CapcaseName: SettingPppRefuseMschapv2
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REFUSE_PAP
+      Value: refuse-pap
+      CapcaseName: SettingPppRefusePap
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REQUIRE_MPPE
+      Value: require-mppe
+      CapcaseName: SettingPppRequireMppe
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PPP_REQUIRE_MPPE_128
+      Value: require-mppe-128
+      CapcaseName: SettingPppRequireMppe128
+      Type: ktypeBoolean
+      DefaultValue: "false"
+  - SettingClass: SettingPppoe
+    Name: NM_SETTING_PPPOE_SETTING_NAME
+    Value: pppoe
+    Keys:
+    - KeyName: NM_SETTING_PPPOE_PASSWORD
+      Value: password
+      CapcaseName: SettingPppoePassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_PPPOE_PASSWORD_FLAGS
+      Value: password-flags
+      CapcaseName: SettingPppoePasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PPPOE_SERVICE
+      Value: service
+      CapcaseName: SettingPppoeService
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_PPPOE_USERNAME
+      Value: username
+      CapcaseName: SettingPppoeUsername
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingSerial
+    Name: NM_SETTING_SERIAL_SETTING_NAME
+    Value: serial
+    Keys:
+    - KeyName: NM_SETTING_SERIAL_BAUD
+      Value: baud
+      CapcaseName: SettingSerialBaud
+      Type: ktypeUint32
+      DefaultValue: "57600"
+    - KeyName: NM_SETTING_SERIAL_BITS
+      Value: bits
+      CapcaseName: SettingSerialBits
+      Type: ktypeUint32
+      DefaultValue: "8"
+    - KeyName: NM_SETTING_SERIAL_PARITY
+      Value: parity
+      CapcaseName: SettingSerialParity
+      Type: ktypeByte
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_SERIAL_SEND_DELAY
+      Value: send-delay
+      CapcaseName: SettingSerialSendDelay
+      Type: ktypeUint64
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_SERIAL_STOPBITS
+      Value: stopbits
+      CapcaseName: SettingSerialStopbits
+      Type: ktypeUint32
+      DefaultValue: "1"
+  - SettingClass: SettingTeam
+    Name: NM_SETTING_TEAM_SETTING_NAME
+    Value: team
+    Keys:
+    - KeyName: NM_SETTING_TEAM_CONFIG
+      Value: config
+      CapcaseName: SettingTeamConfig
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingTeamPort
+    Name: NM_SETTING_TEAM_PORT_SETTING_NAME
+    Value: team-port
+    Keys:
+    - KeyName: NM_SETTING_TEAM_PORT_CONFIG
+      Value: config
+      CapcaseName: SettingTeamPortConfig
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingTun
+    Name: NM_SETTING_TUN_SETTING_NAME
+    Value: tun
+    Keys:
+    - KeyName: NM_SETTING_TUN_GROUP
+      Value: group
+      CapcaseName: SettingTunGroup
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_TUN_MODE
+      Value: mode
+      CapcaseName: SettingTunMode
+      Type: ktypeUint32
+      DefaultValue: "1"
+    - KeyName: NM_SETTING_TUN_MULTI_QUEUE
+      Value: multi-queue
+      CapcaseName: SettingTunMultiQueue
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_TUN_OWNER
+      Value: owner
+      CapcaseName: SettingTunOwner
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_TUN_PI
+      Value: pi
+      CapcaseName: SettingTunPi
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_TUN_VNET_HDR
+      Value: vnet-hdr
+      CapcaseName: SettingTunVnetHdr
+      Type: ktypeBoolean
+      DefaultValue: "false"
+  - SettingClass: SettingVlan
+    Name: NM_SETTING_VLAN_SETTING_NAME
+    Value: vlan
+    Keys:
+    - KeyName: NM_SETTING_VLAN_EGRESS_PRIORITY_MAP
+      Value: egress-priority-map
+      CapcaseName: SettingVlanEgressPriorityMap
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_VLAN_FLAGS
+      Value: flags
+      CapcaseName: SettingVlanFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VLAN_ID
+      Value: id
+      CapcaseName: SettingVlanId
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VLAN_INGRESS_PRIORITY_MAP
+      Value: ingress-priority-map
+      CapcaseName: SettingVlanIngressPriorityMap
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_VLAN_PARENT
+      Value: parent
+      CapcaseName: SettingVlanParent
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingVpn
+    Name: NM_SETTING_VPN_SETTING_NAME
+    Value: vpn
+    Keys:
+    - KeyName: NM_SETTING_VPN_DATA
+      Value: data
+      CapcaseName: SettingVpnData
+      Type: ktypeDictStringString
+      DefaultValue: "{}"
+    - KeyName: NM_SETTING_VPN_PERSISTENT
+      Value: persistent
+      CapcaseName: SettingVpnPersistent
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_VPN_SECRETS
+      Value: secrets
+      CapcaseName: SettingVpnSecrets
+      Type: ktypeDictStringString
+      DefaultValue: "{}"
+    - KeyName: NM_SETTING_VPN_SERVICE_TYPE
+      Value: service-type
+      CapcaseName: SettingVpnServiceType
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_VPN_TIMEOUT
+      Value: timeout
+      CapcaseName: SettingVpnTimeout
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VPN_USER_NAME
+      Value: user-name
+      CapcaseName: SettingVpnUserName
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingVxlan
+    Name: NM_SETTING_VXLAN_SETTING_NAME
+    Value: vxlan
+    Keys:
+    - KeyName: NM_SETTING_VXLAN_AGEING
+      Value: ageing
+      CapcaseName: SettingVxlanAgeing
+      Type: ktypeUint32
+      DefaultValue: "300"
+    - KeyName: NM_SETTING_VXLAN_DESTINATION_PORT
+      Value: destination-port
+      CapcaseName: SettingVxlanDestinationPort
+      Type: ktypeUint32
+      DefaultValue: "8472"
+    - KeyName: NM_SETTING_VXLAN_ID
+      Value: id
+      CapcaseName: SettingVxlanId
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VXLAN_L2_MISS
+      Value: l2-miss
+      CapcaseName: SettingVxlanL2Miss
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_VXLAN_L3_MISS
+      Value: l3-miss
+      CapcaseName: SettingVxlanL3Miss
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_VXLAN_LEARNING
+      Value: learning
+      CapcaseName: SettingVxlanLearning
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_VXLAN_LIMIT
+      Value: limit
+      CapcaseName: SettingVxlanLimit
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VXLAN_LOCAL
+      Value: local
+      CapcaseName: SettingVxlanLocal
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_VXLAN_PARENT
+      Value: parent
+      CapcaseName: SettingVxlanParent
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_VXLAN_PROXY
+      Value: proxy
+      CapcaseName: SettingVxlanProxy
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_VXLAN_REMOTE
+      Value: remote
+      CapcaseName: SettingVxlanRemote
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_VXLAN_RSC
+      Value: rsc
+      CapcaseName: SettingVxlanRsc
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_VXLAN_SOURCE_PORT_MAX
+      Value: source-port-max
+      CapcaseName: SettingVxlanSourcePortMax
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VXLAN_SOURCE_PORT_MIN
+      Value: source-port-min
+      CapcaseName: SettingVxlanSourcePortMin
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VXLAN_TOS
+      Value: tos
+      CapcaseName: SettingVxlanTos
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_VXLAN_TTL
+      Value: ttl
+      CapcaseName: SettingVxlanTtl
+      Type: ktypeUint32
+      DefaultValue: "0"
+  - SettingClass: SettingWimax
+    Name: NM_SETTING_WIMAX_SETTING_NAME
+    Value: wimax
+    Keys:
+    - KeyName: NM_SETTING_WIMAX_MAC_ADDRESS
+      Value: mac-address
+      CapcaseName: SettingWimaxMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIMAX_NETWORK_NAME
+      Value: network-name
+      CapcaseName: SettingWimaxNetworkName
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingWired
+    Name: NM_SETTING_WIRED_SETTING_NAME
+    Value: 802-3-ethernet
+    Keys:
+    - KeyName: NM_SETTING_WIRED_AUTO_NEGOTIATE
+      Value: auto-negotiate
+      CapcaseName: SettingWiredAutoNegotiate
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_WIRED_CLONED_MAC_ADDRESS
+      Value: cloned-mac-address
+      CapcaseName: SettingWiredClonedMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRED_DUPLEX
+      Value: duplex
+      CapcaseName: SettingWiredDuplex
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRED_MAC_ADDRESS
+      Value: mac-address
+      CapcaseName: SettingWiredMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRED_MAC_ADDRESS_BLACKLIST
+      Value: mac-address-blacklist
+      CapcaseName: SettingWiredMacAddressBlacklist
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRED_MTU
+      Value: mtu
+      CapcaseName: SettingWiredMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRED_PORT
+      Value: port
+      CapcaseName: SettingWiredPort
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRED_S390_NETTYPE
+      Value: s390-nettype
+      CapcaseName: SettingWiredS390Nettype
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRED_S390_OPTIONS
+      Value: s390-options
+      CapcaseName: SettingWiredS390Options
+      Type: ktypeDictStringString
+      DefaultValue: "{}"
+    - KeyName: NM_SETTING_WIRED_S390_SUBCHANNELS
+      Value: s390-subchannels
+      CapcaseName: SettingWiredS390Subchannels
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRED_SPEED
+      Value: speed
+      CapcaseName: SettingWiredSpeed
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRED_WAKE_ON_LAN
+      Value: wake-on-lan
+      CapcaseName: SettingWiredWakeOnLan
+      Type: ktypeUint32
+      DefaultValue: "1"
+    - KeyName: NM_SETTING_WIRED_WAKE_ON_LAN_PASSWORD
+      Value: wake-on-lan-password
+      CapcaseName: SettingWiredWakeOnLanPassword
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingWireless
+    Name: NM_SETTING_WIRELESS_SETTING_NAME
+    Value: 802-11-wireless
+    Keys:
+    - KeyName: NM_SETTING_WIRELESS_BAND
+      Value: band
+      CapcaseName: SettingWirelessBand
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_BSSID
+      Value: bssid
+      CapcaseName: SettingWirelessBssid
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_CHANNEL
+      Value: channel
+      CapcaseName: SettingWirelessChannel
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_CLONED_MAC_ADDRESS
+      Value: cloned-mac-address
+      CapcaseName: SettingWirelessClonedMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_HIDDEN
+      Value: hidden
+      CapcaseName: SettingWirelessHidden
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_WIRELESS_MAC_ADDRESS
+      Value: mac-address
+      CapcaseName: SettingWirelessMacAddress
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_MAC_ADDRESS_BLACKLIST
+      Value: mac-address-blacklist
+      CapcaseName: SettingWirelessMacAddressBlacklist
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_MAC_ADDRESS_RANDOMIZATION
+      Value: mac-address-randomization
+      CapcaseName: SettingWirelessMacAddressRandomization
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_MODE
+      Value: mode
+      CapcaseName: SettingWirelessMode
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_MTU
+      Value: mtu
+      CapcaseName: SettingWirelessMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_POWERSAVE
+      Value: powersave
+      CapcaseName: SettingWirelessPowersave
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_RATE
+      Value: rate
+      CapcaseName: SettingWirelessRate
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_SEEN_BSSIDS
+      Value: seen-bssids
+      CapcaseName: SettingWirelessSeenBssids
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_SSID
+      Value: ssid
+      CapcaseName: SettingWirelessSsid
+      Type: ktypeArrayByte
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_TX_POWER
+      Value: tx-power
+      CapcaseName: SettingWirelessTxPower
+      Type: ktypeUint32
+      DefaultValue: "0"
+  - SettingClass: SettingWirelessSecurity
+    Name: NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
+    Value: 802-11-wireless-security
+    Keys:
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_AUTH_ALG
+      Value: auth-alg
+      CapcaseName: SettingWirelessSecurityAuthAlg
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_GROUP
+      Value: group
+      CapcaseName: SettingWirelessSecurityGroup
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_KEY_MGMT
+      Value: key-mgmt
+      CapcaseName: SettingWirelessSecurityKeyMgmt
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD
+      Value: leap-password
+      CapcaseName: SettingWirelessSecurityLeapPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_LEAP_PASSWORD_FLAGS
+      Value: leap-password-flags
+      CapcaseName: SettingWirelessSecurityLeapPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_LEAP_USERNAME
+      Value: leap-username
+      CapcaseName: SettingWirelessSecurityLeapUsername
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_PAIRWISE
+      Value: pairwise
+      CapcaseName: SettingWirelessSecurityPairwise
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_PROTO
+      Value: proto
+      CapcaseName: SettingWirelessSecurityProto
+      Type: ktypeArrayString
+      DefaultValue: "[]"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_PSK
+      Value: psk
+      CapcaseName: SettingWirelessSecurityPsk
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_PSK_FLAGS
+      Value: psk-flags
+      CapcaseName: SettingWirelessSecurityPskFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY_FLAGS
+      Value: wep-key-flags
+      CapcaseName: SettingWirelessSecurityWepKeyFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY_TYPE
+      Value: wep-key-type
+      CapcaseName: SettingWirelessSecurityWepKeyType
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY0
+      Value: wep-key0
+      CapcaseName: SettingWirelessSecurityWepKey0
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY1
+      Value: wep-key1
+      CapcaseName: SettingWirelessSecurityWepKey1
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY2
+      Value: wep-key2
+      CapcaseName: SettingWirelessSecurityWepKey2
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_KEY3
+      Value: wep-key3
+      CapcaseName: SettingWirelessSecurityWepKey3
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_WIRELESS_SECURITY_WEP_TX_KEYIDX
+      Value: wep-tx-keyidx
+      CapcaseName: SettingWirelessSecurityWepTxKeyidx
+      Type: ktypeUint32
+      DefaultValue: "0"
+
+NMEnums:
+  - EnumClass: 80211Mode
+    Members:
+    - Name: NM_802_11_MODE_UNKNOWN
+      Value: 0
+    - Name: NM_802_11_MODE_ADHOC
+      Value: 1
+    - Name: NM_802_11_MODE_INFRA
+      Value: 2
+    - Name: NM_802_11_MODE_AP
+      Value: 3
+  - EnumClass: ActiveConnectionState
+    Members:
+    - Name: NM_ACTIVE_CONNECTION_STATE_UNKNOWN
+      Value: 0
+    - Name: NM_ACTIVE_CONNECTION_STATE_ACTIVATING
+      Value: 1
+    - Name: NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+      Value: 2
+    - Name: NM_ACTIVE_CONNECTION_STATE_DEACTIVATING
+      Value: 3
+    - Name: NM_ACTIVE_CONNECTION_STATE_DEACTIVATED
+      Value: 4
+  - EnumClass: AgentManagerError
+    Members:
+    - Name: NM_AGENT_MANAGER_ERROR_FAILED
+      Value: 0
+    - Name: NM_AGENT_MANAGER_ERROR_PERMISSION_DENIED
+      Value: 1
+    - Name: NM_AGENT_MANAGER_ERROR_INVALID_IDENTIFIER
+      Value: 2
+    - Name: NM_AGENT_MANAGER_ERROR_NOT_REGISTERED
+      Value: 3
+    - Name: NM_AGENT_MANAGER_ERROR_NO_SECRETS
+      Value: 4
+    - Name: NM_AGENT_MANAGER_ERROR_USER_CANCELED
+      Value: 5
+  - EnumClass: ClientError
+    Members:
+    - Name: NM_CLIENT_ERROR_FAILED
+      Value: 0
+    - Name: NM_CLIENT_ERROR_MANAGER_NOT_RUNNING
+      Value: 1
+    - Name: NM_CLIENT_ERROR_OBJECT_CREATION_FAILED
+      Value: 2
+  - EnumClass: ClientPermission
+    Members:
+    - Name: NM_CLIENT_PERMISSION_NONE
+      Value: 0
+    - Name: NM_CLIENT_PERMISSION_ENABLE_DISABLE_NETWORK
+      Value: 1
+    - Name: NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIFI
+      Value: 2
+    - Name: NM_CLIENT_PERMISSION_ENABLE_DISABLE_WWAN
+      Value: 3
+    - Name: NM_CLIENT_PERMISSION_ENABLE_DISABLE_WIMAX
+      Value: 4
+    - Name: NM_CLIENT_PERMISSION_SLEEP_WAKE
+      Value: 5
+    - Name: NM_CLIENT_PERMISSION_NETWORK_CONTROL
+      Value: 6
+    - Name: NM_CLIENT_PERMISSION_WIFI_SHARE_PROTECTED
+      Value: 7
+    - Name: NM_CLIENT_PERMISSION_WIFI_SHARE_OPEN
+      Value: 8
+    - Name: NM_CLIENT_PERMISSION_SETTINGS_MODIFY_SYSTEM
+      Value: 9
+    - Name: NM_CLIENT_PERMISSION_SETTINGS_MODIFY_OWN
+      Value: 10
+    - Name: NM_CLIENT_PERMISSION_SETTINGS_MODIFY_HOSTNAME
+      Value: 11
+    - Name: NM_CLIENT_PERMISSION_SETTINGS_MODIFY_GLOBAL_DNS
+      Value: 12
+    - Name: NM_CLIENT_PERMISSION_RELOAD
+      Value: 13
+    - Name: NM_CLIENT_PERMISSION_LAST
+      Value: 13
+  - EnumClass: ClientPermissionResult
+    Members:
+    - Name: NM_CLIENT_PERMISSION_RESULT_UNKNOWN
+      Value: 0
+    - Name: NM_CLIENT_PERMISSION_RESULT_YES
+      Value: 1
+    - Name: NM_CLIENT_PERMISSION_RESULT_AUTH
+      Value: 2
+    - Name: NM_CLIENT_PERMISSION_RESULT_NO
+      Value: 3
+  - EnumClass: ConnectionError
+    Members:
+    - Name: NM_CONNECTION_ERROR_FAILED
+      Value: 0
+    - Name: NM_CONNECTION_ERROR_SETTING_NOT_FOUND
+      Value: 1
+    - Name: NM_CONNECTION_ERROR_PROPERTY_NOT_FOUND
+      Value: 2
+    - Name: NM_CONNECTION_ERROR_PROPERTY_NOT_SECRET
+      Value: 3
+    - Name: NM_CONNECTION_ERROR_MISSING_SETTING
+      Value: 4
+    - Name: NM_CONNECTION_ERROR_INVALID_SETTING
+      Value: 5
+    - Name: NM_CONNECTION_ERROR_MISSING_PROPERTY
+      Value: 6
+    - Name: NM_CONNECTION_ERROR_INVALID_PROPERTY
+      Value: 7
+  - EnumClass: ConnectivityState
+    Members:
+    - Name: NM_CONNECTIVITY_UNKNOWN
+      Value: 0
+    - Name: NM_CONNECTIVITY_NONE
+      Value: 1
+    - Name: NM_CONNECTIVITY_PORTAL
+      Value: 2
+    - Name: NM_CONNECTIVITY_LIMITED
+      Value: 3
+    - Name: NM_CONNECTIVITY_FULL
+      Value: 4
+  - EnumClass: CryptoError
+    Members:
+    - Name: NM_CRYPTO_ERROR_FAILED
+      Value: 0
+    - Name: NM_CRYPTO_ERROR_INVALID_DATA
+      Value: 1
+    - Name: NM_CRYPTO_ERROR_INVALID_PASSWORD
+      Value: 2
+    - Name: NM_CRYPTO_ERROR_UNKNOWN_CIPHER
+      Value: 3
+    - Name: NM_CRYPTO_ERROR_DECRYPTION_FAILED
+      Value: 4
+    - Name: NM_CRYPTO_ERROR_ENCRYPTION_FAILED
+      Value: 5
+  - EnumClass: DeviceError
+    Members:
+    - Name: NM_DEVICE_ERROR_FAILED
+      Value: 0
+    - Name: NM_DEVICE_ERROR_CREATION_FAILED
+      Value: 1
+    - Name: NM_DEVICE_ERROR_INVALID_CONNECTION
+      Value: 2
+    - Name: NM_DEVICE_ERROR_INCOMPATIBLE_CONNECTION
+      Value: 3
+    - Name: NM_DEVICE_ERROR_NOT_ACTIVE
+      Value: 4
+    - Name: NM_DEVICE_ERROR_NOT_SOFTWARE
+      Value: 5
+    - Name: NM_DEVICE_ERROR_NOT_ALLOWED
+      Value: 6
+    - Name: NM_DEVICE_ERROR_SPECIFIC_OBJECT_NOT_FOUND
+      Value: 7
+    - Name: NM_DEVICE_ERROR_VERSION_ID_MISMATCH
+      Value: 8
+  - EnumClass: DeviceState
+    Members:
+    - Name: NM_DEVICE_STATE_UNKNOWN
+      Value: 0
+    - Name: NM_DEVICE_STATE_UNMANAGED
+      Value: 10
+    - Name: NM_DEVICE_STATE_UNAVAILABLE
+      Value: 20
+    - Name: NM_DEVICE_STATE_DISCONNECTED
+      Value: 30
+    - Name: NM_DEVICE_STATE_PREPARE
+      Value: 40
+    - Name: NM_DEVICE_STATE_CONFIG
+      Value: 50
+    - Name: NM_DEVICE_STATE_NEED_AUTH
+      Value: 60
+    - Name: NM_DEVICE_STATE_IP_CONFIG
+      Value: 70
+    - Name: NM_DEVICE_STATE_IP_CHECK
+      Value: 80
+    - Name: NM_DEVICE_STATE_SECONDARIES
+      Value: 90
+    - Name: NM_DEVICE_STATE_ACTIVATED
+      Value: 100
+    - Name: NM_DEVICE_STATE_DEACTIVATING
+      Value: 110
+    - Name: NM_DEVICE_STATE_FAILED
+      Value: 120
+  - EnumClass: DeviceStateReason
+    Members:
+    - Name: NM_DEVICE_STATE_REASON_NONE
+      Value: 0
+    - Name: NM_DEVICE_STATE_REASON_UNKNOWN
+      Value: 1
+    - Name: NM_DEVICE_STATE_REASON_NOW_MANAGED
+      Value: 2
+    - Name: NM_DEVICE_STATE_REASON_NOW_UNMANAGED
+      Value: 3
+    - Name: NM_DEVICE_STATE_REASON_CONFIG_FAILED
+      Value: 4
+    - Name: NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE
+      Value: 5
+    - Name: NM_DEVICE_STATE_REASON_IP_CONFIG_EXPIRED
+      Value: 6
+    - Name: NM_DEVICE_STATE_REASON_NO_SECRETS
+      Value: 7
+    - Name: NM_DEVICE_STATE_REASON_SUPPLICANT_DISCONNECT
+      Value: 8
+    - Name: NM_DEVICE_STATE_REASON_SUPPLICANT_CONFIG_FAILED
+      Value: 9
+    - Name: NM_DEVICE_STATE_REASON_SUPPLICANT_FAILED
+      Value: 10
+    - Name: NM_DEVICE_STATE_REASON_SUPPLICANT_TIMEOUT
+      Value: 11
+    - Name: NM_DEVICE_STATE_REASON_PPP_START_FAILED
+      Value: 12
+    - Name: NM_DEVICE_STATE_REASON_PPP_DISCONNECT
+      Value: 13
+    - Name: NM_DEVICE_STATE_REASON_PPP_FAILED
+      Value: 14
+    - Name: NM_DEVICE_STATE_REASON_DHCP_START_FAILED
+      Value: 15
+    - Name: NM_DEVICE_STATE_REASON_DHCP_ERROR
+      Value: 16
+    - Name: NM_DEVICE_STATE_REASON_DHCP_FAILED
+      Value: 17
+    - Name: NM_DEVICE_STATE_REASON_SHARED_START_FAILED
+      Value: 18
+    - Name: NM_DEVICE_STATE_REASON_SHARED_FAILED
+      Value: 19
+    - Name: NM_DEVICE_STATE_REASON_AUTOIP_START_FAILED
+      Value: 20
+    - Name: NM_DEVICE_STATE_REASON_AUTOIP_ERROR
+      Value: 21
+    - Name: NM_DEVICE_STATE_REASON_AUTOIP_FAILED
+      Value: 22
+    - Name: NM_DEVICE_STATE_REASON_MODEM_BUSY
+      Value: 23
+    - Name: NM_DEVICE_STATE_REASON_MODEM_NO_DIAL_TONE
+      Value: 24
+    - Name: NM_DEVICE_STATE_REASON_MODEM_NO_CARRIER
+      Value: 25
+    - Name: NM_DEVICE_STATE_REASON_MODEM_DIAL_TIMEOUT
+      Value: 26
+    - Name: NM_DEVICE_STATE_REASON_MODEM_DIAL_FAILED
+      Value: 27
+    - Name: NM_DEVICE_STATE_REASON_MODEM_INIT_FAILED
+      Value: 28
+    - Name: NM_DEVICE_STATE_REASON_GSM_APN_FAILED
+      Value: 29
+    - Name: NM_DEVICE_STATE_REASON_GSM_REGISTRATION_NOT_SEARCHING
+      Value: 30
+    - Name: NM_DEVICE_STATE_REASON_GSM_REGISTRATION_DENIED
+      Value: 31
+    - Name: NM_DEVICE_STATE_REASON_GSM_REGISTRATION_TIMEOUT
+      Value: 32
+    - Name: NM_DEVICE_STATE_REASON_GSM_REGISTRATION_FAILED
+      Value: 33
+    - Name: NM_DEVICE_STATE_REASON_GSM_PIN_CHECK_FAILED
+      Value: 34
+    - Name: NM_DEVICE_STATE_REASON_FIRMWARE_MISSING
+      Value: 35
+    - Name: NM_DEVICE_STATE_REASON_REMOVED
+      Value: 36
+    - Name: NM_DEVICE_STATE_REASON_SLEEPING
+      Value: 37
+    - Name: NM_DEVICE_STATE_REASON_CONNECTION_REMOVED
+      Value: 38
+    - Name: NM_DEVICE_STATE_REASON_USER_REQUESTED
+      Value: 39
+    - Name: NM_DEVICE_STATE_REASON_CARRIER
+      Value: 40
+    - Name: NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED
+      Value: 41
+    - Name: NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE
+      Value: 42
+    - Name: NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND
+      Value: 43
+    - Name: NM_DEVICE_STATE_REASON_BT_FAILED
+      Value: 44
+    - Name: NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED
+      Value: 45
+    - Name: NM_DEVICE_STATE_REASON_GSM_SIM_PIN_REQUIRED
+      Value: 46
+    - Name: NM_DEVICE_STATE_REASON_GSM_SIM_PUK_REQUIRED
+      Value: 47
+    - Name: NM_DEVICE_STATE_REASON_GSM_SIM_WRONG
+      Value: 48
+    - Name: NM_DEVICE_STATE_REASON_INFINIBAND_MODE
+      Value: 49
+    - Name: NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED
+      Value: 50
+    - Name: NM_DEVICE_STATE_REASON_BR2684_FAILED
+      Value: 51
+    - Name: NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE
+      Value: 52
+    - Name: NM_DEVICE_STATE_REASON_SSID_NOT_FOUND
+      Value: 53
+    - Name: NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED
+      Value: 54
+    - Name: NM_DEVICE_STATE_REASON_DCB_FCOE_FAILED
+      Value: 55
+    - Name: NM_DEVICE_STATE_REASON_TEAMD_CONTROL_FAILED
+      Value: 56
+    - Name: NM_DEVICE_STATE_REASON_MODEM_FAILED
+      Value: 57
+    - Name: NM_DEVICE_STATE_REASON_MODEM_AVAILABLE
+      Value: 58
+    - Name: NM_DEVICE_STATE_REASON_SIM_PIN_INCORRECT
+      Value: 59
+    - Name: NM_DEVICE_STATE_REASON_NEW_ACTIVATION
+      Value: 60
+    - Name: NM_DEVICE_STATE_REASON_PARENT_CHANGED
+      Value: 61
+    - Name: NM_DEVICE_STATE_REASON_PARENT_MANAGED_CHANGED
+      Value: 62
+  - EnumClass: DeviceType
+    Members:
+    - Name: NM_DEVICE_TYPE_UNKNOWN
+      Value: 0
+    - Name: NM_DEVICE_TYPE_ETHERNET
+      Value: 1
+    - Name: NM_DEVICE_TYPE_WIFI
+      Value: 2
+    - Name: NM_DEVICE_TYPE_UNUSED1
+      Value: 3
+    - Name: NM_DEVICE_TYPE_UNUSED2
+      Value: 4
+    - Name: NM_DEVICE_TYPE_BT
+      Value: 5
+    - Name: NM_DEVICE_TYPE_OLPC_MESH
+      Value: 6
+    - Name: NM_DEVICE_TYPE_WIMAX
+      Value: 7
+    - Name: NM_DEVICE_TYPE_MODEM
+      Value: 8
+    - Name: NM_DEVICE_TYPE_INFINIBAND
+      Value: 9
+    - Name: NM_DEVICE_TYPE_BOND
+      Value: 10
+    - Name: NM_DEVICE_TYPE_VLAN
+      Value: 11
+    - Name: NM_DEVICE_TYPE_ADSL
+      Value: 12
+    - Name: NM_DEVICE_TYPE_BRIDGE
+      Value: 13
+    - Name: NM_DEVICE_TYPE_GENERIC
+      Value: 14
+    - Name: NM_DEVICE_TYPE_TEAM
+      Value: 15
+    - Name: NM_DEVICE_TYPE_TUN
+      Value: 16
+    - Name: NM_DEVICE_TYPE_IP_TUNNEL
+      Value: 17
+    - Name: NM_DEVICE_TYPE_MACVLAN
+      Value: 18
+    - Name: NM_DEVICE_TYPE_VXLAN
+      Value: 19
+    - Name: NM_DEVICE_TYPE_VETH
+      Value: 20
+  - EnumClass: IPTunnelMode
+    Members:
+    - Name: NM_IP_TUNNEL_MODE_UNKNOWN
+      Value: 0
+    - Name: NM_IP_TUNNEL_MODE_IPIP
+      Value: 1
+    - Name: NM_IP_TUNNEL_MODE_GRE
+      Value: 2
+    - Name: NM_IP_TUNNEL_MODE_SIT
+      Value: 3
+    - Name: NM_IP_TUNNEL_MODE_ISATAP
+      Value: 4
+    - Name: NM_IP_TUNNEL_MODE_VTI
+      Value: 5
+    - Name: NM_IP_TUNNEL_MODE_IP6IP6
+      Value: 6
+    - Name: NM_IP_TUNNEL_MODE_IPIP6
+      Value: 7
+    - Name: NM_IP_TUNNEL_MODE_IP6GRE
+      Value: 8
+    - Name: NM_IP_TUNNEL_MODE_VTI6
+      Value: 9
+  - EnumClass: ManagerError
+    Members:
+    - Name: NM_MANAGER_ERROR_FAILED
+      Value: 0
+    - Name: NM_MANAGER_ERROR_PERMISSION_DENIED
+      Value: 1
+    - Name: NM_MANAGER_ERROR_UNKNOWN_CONNECTION
+      Value: 2
+    - Name: NM_MANAGER_ERROR_UNKNOWN_DEVICE
+      Value: 3
+    - Name: NM_MANAGER_ERROR_CONNECTION_NOT_AVAILABLE
+      Value: 4
+    - Name: NM_MANAGER_ERROR_CONNECTION_NOT_ACTIVE
+      Value: 5
+    - Name: NM_MANAGER_ERROR_CONNECTION_ALREADY_ACTIVE
+      Value: 6
+    - Name: NM_MANAGER_ERROR_DEPENDENCY_FAILED
+      Value: 7
+    - Name: NM_MANAGER_ERROR_ALREADY_ASLEEP_OR_AWAKE
+      Value: 8
+    - Name: NM_MANAGER_ERROR_ALREADY_ENABLED_OR_DISABLED
+      Value: 9
+    - Name: NM_MANAGER_ERROR_UNKNOWN_LOG_LEVEL
+      Value: 10
+    - Name: NM_MANAGER_ERROR_UNKNOWN_LOG_DOMAIN
+      Value: 11
+    - Name: NM_MANAGER_ERROR_INVALID_ARGUMENTS
+      Value: 12
+  - EnumClass: Metered
+    Members:
+    - Name: NM_METERED_UNKNOWN
+      Value: 0
+    - Name: NM_METERED_YES
+      Value: 1
+    - Name: NM_METERED_NO
+      Value: 2
+    - Name: NM_METERED_GUESS_YES
+      Value: 3
+    - Name: NM_METERED_GUESS_NO
+      Value: 4
+  - EnumClass: SecretAgentError
+    Members:
+    - Name: NM_SECRET_AGENT_ERROR_FAILED
+      Value: 0
+    - Name: NM_SECRET_AGENT_ERROR_PERMISSION_DENIED
+      Value: 1
+    - Name: NM_SECRET_AGENT_ERROR_INVALID_CONNECTION
+      Value: 2
+    - Name: NM_SECRET_AGENT_ERROR_USER_CANCELED
+      Value: 3
+    - Name: NM_SECRET_AGENT_ERROR_AGENT_CANCELED
+      Value: 4
+    - Name: NM_SECRET_AGENT_ERROR_NO_SECRETS
+      Value: 5
+  - EnumClass: Setting8021xCKFormat
+    Members:
+    - Name: NM_SETTING_802_1X_CK_FORMAT_UNKNOWN
+      Value: 0
+    - Name: NM_SETTING_802_1X_CK_FORMAT_X509
+      Value: 1
+    - Name: NM_SETTING_802_1X_CK_FORMAT_RAW_KEY
+      Value: 2
+    - Name: NM_SETTING_802_1X_CK_FORMAT_PKCS12
+      Value: 3
+  - EnumClass: Setting8021xCKScheme
+    Members:
+    - Name: NM_SETTING_802_1X_CK_SCHEME_UNKNOWN
+      Value: 0
+    - Name: NM_SETTING_802_1X_CK_SCHEME_BLOB
+      Value: 1
+    - Name: NM_SETTING_802_1X_CK_SCHEME_PATH
+      Value: 2
+  - EnumClass: SettingCompareFlags
+    Members:
+    - Name: NM_SETTING_COMPARE_FLAG_EXACT
+      Value: 0
+    - Name: NM_SETTING_COMPARE_FLAG_FUZZY
+      Value: 1
+    - Name: NM_SETTING_COMPARE_FLAG_IGNORE_ID
+      Value: 2
+    - Name: NM_SETTING_COMPARE_FLAG_IGNORE_SECRETS
+      Value: 4
+    - Name: NM_SETTING_COMPARE_FLAG_IGNORE_AGENT_OWNED_SECRETS
+      Value: 8
+    - Name: NM_SETTING_COMPARE_FLAG_IGNORE_NOT_SAVED_SECRETS
+      Value: 16
+    - Name: NM_SETTING_COMPARE_FLAG_DIFF_RESULT_WITH_DEFAULT
+      Value: 32
+    - Name: NM_SETTING_COMPARE_FLAG_DIFF_RESULT_NO_DEFAULT
+      Value: 64
+    - Name: NM_SETTING_COMPARE_FLAG_IGNORE_TIMESTAMP
+      Value: 128
+  - EnumClass: SettingConnectionAutoconnectSlaves
+    Members:
+    - Name: NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES_DEFAULT
+      Value: -1
+    - Name: NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES_NO
+      Value: 0
+    - Name: NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES_YES
+      Value: 1
+  - EnumClass: SettingConnectionLldp
+    Members:
+    - Name: NM_SETTING_CONNECTION_LLDP_DEFAULT
+      Value: -1
+    - Name: NM_SETTING_CONNECTION_LLDP_DISABLE
+      Value: 0
+    - Name: NM_SETTING_CONNECTION_LLDP_ENABLE_RX
+      Value: 1
+  - EnumClass: SettingDiffResult
+    Members:
+    - Name: NM_SETTING_DIFF_RESULT_UNKNOWN
+      Value: 0
+    - Name: NM_SETTING_DIFF_RESULT_IN_A
+      Value: 1
+    - Name: NM_SETTING_DIFF_RESULT_IN_B
+      Value: 2
+    - Name: NM_SETTING_DIFF_RESULT_IN_A_DEFAULT
+      Value: 4
+    - Name: NM_SETTING_DIFF_RESULT_IN_B_DEFAULT
+      Value: 4
+  - EnumClass: SettingIP6ConfigAddrGenMode
+    Members:
+    - Name: NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE_EUI64
+      Value: 0
+    - Name: NM_SETTING_IP6_CONFIG_ADDR_GEN_MODE_STABLE_PRIVACY
+      Value: 1
+  - EnumClass: SettingIP6ConfigPrivacy
+    Members:
+    - Name: NM_SETTING_IP6_CONFIG_PRIVACY_UNKNOWN
+      Value: -1
+    - Name: NM_SETTING_IP6_CONFIG_PRIVACY_DISABLED
+      Value: 0
+    - Name: NM_SETTING_IP6_CONFIG_PRIVACY_PREFER_PUBLIC_ADDR
+      Value: 1
+    - Name: NM_SETTING_IP6_CONFIG_PRIVACY_PREFER_TEMP_ADDR
+      Value: 2
+  - EnumClass: SettingMacRandomization
+    Members:
+    - Name: NM_SETTING_MAC_RANDOMIZATION_DEFAULT
+      Value: 0
+    - Name: NM_SETTING_MAC_RANDOMIZATION_NEVER
+      Value: 1
+    - Name: NM_SETTING_MAC_RANDOMIZATION_ALWAYS
+      Value: 2
+  - EnumClass: SettingMacvlanMode
+    Members:
+    - Name: NM_SETTING_MACVLAN_MODE_UNKNOWN
+      Value: 0
+    - Name: NM_SETTING_MACVLAN_MODE_VEPA
+      Value: 1
+    - Name: NM_SETTING_MACVLAN_MODE_BRIDGE
+      Value: 2
+    - Name: NM_SETTING_MACVLAN_MODE_PRIVATE
+      Value: 3
+    - Name: NM_SETTING_MACVLAN_MODE_PASSTHRU
+      Value: 4
+    - Name: NM_SETTING_MACVLAN_MODE_SOURCE
+      Value: 5
+  - EnumClass: SettingSerialParity
+    Members:
+    - Name: NM_SETTING_SERIAL_PARITY_NONE
+      Value: 0
+    - Name: NM_SETTING_SERIAL_PARITY_EVEN
+      Value: 1
+    - Name: NM_SETTING_SERIAL_PARITY_ODD
+      Value: 2
+  - EnumClass: SettingTunMode
+    Members:
+    - Name: NM_SETTING_TUN_MODE_UNKNOWN
+      Value: 0
+    - Name: NM_SETTING_TUN_MODE_TUN
+      Value: 1
+    - Name: NM_SETTING_TUN_MODE_TAP
+      Value: 2
+  - EnumClass: SettingWirelessPowersave
+    Members:
+    - Name: NM_SETTING_WIRELESS_POWERSAVE_DEFAULT
+      Value: 0
+    - Name: NM_SETTING_WIRELESS_POWERSAVE_IGNORE
+      Value: 1
+    - Name: NM_SETTING_WIRELESS_POWERSAVE_DISABLE
+      Value: 2
+    - Name: NM_SETTING_WIRELESS_POWERSAVE_ENABLE
+      Value: 3
+  - EnumClass: SettingsError
+    Members:
+    - Name: NM_SETTINGS_ERROR_FAILED
+      Value: 0
+    - Name: NM_SETTINGS_ERROR_PERMISSION_DENIED
+      Value: 1
+    - Name: NM_SETTINGS_ERROR_NOT_SUPPORTED
+      Value: 2
+    - Name: NM_SETTINGS_ERROR_INVALID_CONNECTION
+      Value: 3
+    - Name: NM_SETTINGS_ERROR_READ_ONLY_CONNECTION
+      Value: 4
+    - Name: NM_SETTINGS_ERROR_UUID_EXISTS
+      Value: 5
+    - Name: NM_SETTINGS_ERROR_INVALID_HOSTNAME
+      Value: 6
+  - EnumClass: State
+    Members:
+    - Name: NM_STATE_UNKNOWN
+      Value: 0
+    - Name: NM_STATE_ASLEEP
+      Value: 10
+    - Name: NM_STATE_DISCONNECTED
+      Value: 20
+    - Name: NM_STATE_DISCONNECTING
+      Value: 30
+    - Name: NM_STATE_CONNECTING
+      Value: 40
+    - Name: NM_STATE_CONNECTED_LOCAL
+      Value: 50
+    - Name: NM_STATE_CONNECTED_SITE
+      Value: 60
+    - Name: NM_STATE_CONNECTED_GLOBAL
+      Value: 70
+  - EnumClass: UtilsSecurityType
+    Members:
+    - Name: NMU_SEC_INVALID
+      Value: 0
+    - Name: NMU_SEC_NONE
+      Value: 1
+    - Name: NMU_SEC_STATIC_WEP
+      Value: 2
+    - Name: NMU_SEC_LEAP
+      Value: 3
+    - Name: NMU_SEC_DYNAMIC_WEP
+      Value: 4
+    - Name: NMU_SEC_WPA_PSK
+      Value: 5
+    - Name: NMU_SEC_WPA_ENTERPRISE
+      Value: 6
+    - Name: NMU_SEC_WPA2_PSK
+      Value: 7
+    - Name: NMU_SEC_WPA2_ENTERPRISE
+      Value: 8
+  - EnumClass: VlanPriorityMap
+    Members:
+    - Name: NM_VLAN_INGRESS_MAP
+      Value: 0
+    - Name: NM_VLAN_EGRESS_MAP
+      Value: 1
+  - EnumClass: VpnConnectionState
+    Members:
+    - Name: NM_VPN_CONNECTION_STATE_UNKNOWN
+      Value: 0
+    - Name: NM_VPN_CONNECTION_STATE_PREPARE
+      Value: 1
+    - Name: NM_VPN_CONNECTION_STATE_NEED_AUTH
+      Value: 2
+    - Name: NM_VPN_CONNECTION_STATE_CONNECT
+      Value: 3
+    - Name: NM_VPN_CONNECTION_STATE_IP_CONFIG_GET
+      Value: 4
+    - Name: NM_VPN_CONNECTION_STATE_ACTIVATED
+      Value: 5
+    - Name: NM_VPN_CONNECTION_STATE_FAILED
+      Value: 6
+    - Name: NM_VPN_CONNECTION_STATE_DISCONNECTED
+      Value: 7
+  - EnumClass: VpnConnectionStateReason
+    Members:
+    - Name: NM_VPN_CONNECTION_STATE_REASON_UNKNOWN
+      Value: 0
+    - Name: NM_VPN_CONNECTION_STATE_REASON_NONE
+      Value: 1
+    - Name: NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED
+      Value: 2
+    - Name: NM_VPN_CONNECTION_STATE_REASON_DEVICE_DISCONNECTED
+      Value: 3
+    - Name: NM_VPN_CONNECTION_STATE_REASON_SERVICE_STOPPED
+      Value: 4
+    - Name: NM_VPN_CONNECTION_STATE_REASON_IP_CONFIG_INVALID
+      Value: 5
+    - Name: NM_VPN_CONNECTION_STATE_REASON_CONNECT_TIMEOUT
+      Value: 6
+    - Name: NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_TIMEOUT
+      Value: 7
+    - Name: NM_VPN_CONNECTION_STATE_REASON_SERVICE_START_FAILED
+      Value: 8
+    - Name: NM_VPN_CONNECTION_STATE_REASON_NO_SECRETS
+      Value: 9
+    - Name: NM_VPN_CONNECTION_STATE_REASON_LOGIN_FAILED
+      Value: 10
+    - Name: NM_VPN_CONNECTION_STATE_REASON_CONNECTION_REMOVED
+      Value: 11
+  - EnumClass: VpnPluginError
+    Members:
+    - Name: NM_VPN_PLUGIN_ERROR_FAILED
+      Value: 0
+    - Name: NM_VPN_PLUGIN_ERROR_STARTING_IN_PROGRESS
+      Value: 1
+    - Name: NM_VPN_PLUGIN_ERROR_ALREADY_STARTED
+      Value: 2
+    - Name: NM_VPN_PLUGIN_ERROR_STOPPING_IN_PROGRESS
+      Value: 3
+    - Name: NM_VPN_PLUGIN_ERROR_ALREADY_STOPPED
+      Value: 4
+    - Name: NM_VPN_PLUGIN_ERROR_WRONG_STATE
+      Value: 5
+    - Name: NM_VPN_PLUGIN_ERROR_BAD_ARGUMENTS
+      Value: 6
+    - Name: NM_VPN_PLUGIN_ERROR_LAUNCH_FAILED
+      Value: 7
+    - Name: NM_VPN_PLUGIN_ERROR_INVALID_CONNECTION
+      Value: 8
+    - Name: NM_VPN_PLUGIN_ERROR_INTERACTIVE_NOT_SUPPORTED
+      Value: 9
+  - EnumClass: VpnPluginFailure
+    Members:
+    - Name: NM_VPN_PLUGIN_FAILURE_LOGIN_FAILED
+      Value: 0
+    - Name: NM_VPN_PLUGIN_FAILURE_CONNECT_FAILED
+      Value: 1
+    - Name: NM_VPN_PLUGIN_FAILURE_BAD_IP_CONFIG
+      Value: 2
+  - EnumClass: VpnServiceState
+    Members:
+    - Name: NM_VPN_SERVICE_STATE_UNKNOWN
+      Value: 0
+    - Name: NM_VPN_SERVICE_STATE_INIT
+      Value: 1
+    - Name: NM_VPN_SERVICE_STATE_SHUTDOWN
+      Value: 2
+    - Name: NM_VPN_SERVICE_STATE_STARTING
+      Value: 3
+    - Name: NM_VPN_SERVICE_STATE_STARTED
+      Value: 4
+    - Name: NM_VPN_SERVICE_STATE_STOPPING
+      Value: 5
+    - Name: NM_VPN_SERVICE_STATE_STOPPED
+      Value: 6
+  - EnumClass: WepKeyType
+    Members:
+    - Name: NM_WEP_KEY_TYPE_UNKNOWN
+      Value: 0
+    - Name: NM_WEP_KEY_TYPE_KEY
+      Value: 1
+    - Name: NM_WEP_KEY_TYPE_PASSPHRASE
+      Value: 2
+    - Name: NM_WEP_KEY_TYPE_LAST
+      Value: 2
+  - EnumClass: WimaxNspNetworkType
+    Members:
+    - Name: NM_WIMAX_NSP_NETWORK_TYPE_UNKNOWN
+      Value: 0
+    - Name: NM_WIMAX_NSP_NETWORK_TYPE_HOME
+      Value: 1
+    - Name: NM_WIMAX_NSP_NETWORK_TYPE_PARTNER
+      Value: 2
+    - Name: NM_WIMAX_NSP_NETWORK_TYPE_ROAMING_PARTNER
+      Value: 3
+  - EnumClass: 80211ApFlags
+    Members:
+    - Name: NM_802_11_AP_FLAGS_NONE
+      Value: 0x0
+    - Name: NM_802_11_AP_FLAGS_PRIVACY
+      Value: 0x1
+  - EnumClass: 80211ApSecurityFlags
+    Members:
+    - Name: NM_802_11_AP_SEC_NONE
+      Value: 0x0
+    - Name: NM_802_11_AP_SEC_PAIR_WEP40
+      Value: 0x1
+    - Name: NM_802_11_AP_SEC_PAIR_WEP104
+      Value: 0x2
+    - Name: NM_802_11_AP_SEC_PAIR_TKIP
+      Value: 0x4
+    - Name: NM_802_11_AP_SEC_PAIR_CCMP
+      Value: 0x8
+    - Name: NM_802_11_AP_SEC_GROUP_WEP40
+      Value: 0x10
+    - Name: NM_802_11_AP_SEC_GROUP_WEP104
+      Value: 0x20
+    - Name: NM_802_11_AP_SEC_GROUP_TKIP
+      Value: 0x40
+    - Name: NM_802_11_AP_SEC_GROUP_CCMP
+      Value: 0x80
+    - Name: NM_802_11_AP_SEC_KEY_MGMT_PSK
+      Value: 0x100
+    - Name: NM_802_11_AP_SEC_KEY_MGMT_802_1X
+      Value: 0x200
+  - EnumClass: BluetoothCapabilities
+    Members:
+    - Name: NM_BT_CAPABILITY_NONE
+      Value: 0x0
+    - Name: NM_BT_CAPABILITY_DUN
+      Value: 0x1
+    - Name: NM_BT_CAPABILITY_NAP
+      Value: 0x2
+  - EnumClass: ConnectionSerializationFlags
+    Members:
+    - Name: NM_CONNECTION_SERIALIZE_ALL
+      Value: 0x0
+    - Name: NM_CONNECTION_SERIALIZE_NO_SECRETS
+      Value: 0x1
+    - Name: NM_CONNECTION_SERIALIZE_ONLY_SECRETS
+      Value: 0x2
+  - EnumClass: DeviceCapabilities
+    Members:
+    - Name: NM_DEVICE_CAP_NONE
+      Value: 0x0
+    - Name: NM_DEVICE_CAP_NM_SUPPORTED
+      Value: 0x1
+    - Name: NM_DEVICE_CAP_CARRIER_DETECT
+      Value: 0x2
+    - Name: NM_DEVICE_CAP_IS_SOFTWARE
+      Value: 0x4
+  - EnumClass: DeviceModemCapabilities
+    Members:
+    - Name: NM_DEVICE_MODEM_CAPABILITY_NONE
+      Value: 0x0
+    - Name: NM_DEVICE_MODEM_CAPABILITY_POTS
+      Value: 0x1
+    - Name: NM_DEVICE_MODEM_CAPABILITY_CDMA_EVDO
+      Value: 0x2
+    - Name: NM_DEVICE_MODEM_CAPABILITY_GSM_UMTS
+      Value: 0x4
+    - Name: NM_DEVICE_MODEM_CAPABILITY_LTE
+      Value: 0x8
+  - EnumClass: DeviceWifiCapabilities
+    Members:
+    - Name: NM_WIFI_DEVICE_CAP_NONE
+      Value: 0x0
+    - Name: NM_WIFI_DEVICE_CAP_CIPHER_WEP40
+      Value: 0x1
+    - Name: NM_WIFI_DEVICE_CAP_CIPHER_WEP104
+      Value: 0x2
+    - Name: NM_WIFI_DEVICE_CAP_CIPHER_TKIP
+      Value: 0x4
+    - Name: NM_WIFI_DEVICE_CAP_CIPHER_CCMP
+      Value: 0x8
+    - Name: NM_WIFI_DEVICE_CAP_WPA
+      Value: 0x10
+    - Name: NM_WIFI_DEVICE_CAP_RSN
+      Value: 0x20
+    - Name: NM_WIFI_DEVICE_CAP_AP
+      Value: 0x40
+    - Name: NM_WIFI_DEVICE_CAP_ADHOC
+      Value: 0x80
+    - Name: NM_WIFI_DEVICE_CAP_FREQ_VALID
+      Value: 0x100
+    - Name: NM_WIFI_DEVICE_CAP_FREQ_2GHZ
+      Value: 0x200
+    - Name: NM_WIFI_DEVICE_CAP_FREQ_5GHZ
+      Value: 0x400
+  - EnumClass: SecretAgentCapabilities
+    Members:
+    - Name: NM_SECRET_AGENT_CAPABILITY_NONE
+      Value: 0x0
+    - Name: NM_SECRET_AGENT_CAPABILITY_VPN_HINTS
+      Value: 0x1
+    - Name: NM_SECRET_AGENT_CAPABILITY_LAST
+      Value: 0x1
+  - EnumClass: SecretAgentGetSecretsFlags
+    Members:
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_NONE
+      Value: 0x0
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_ALLOW_INTERACTION
+      Value: 0x1
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_REQUEST_NEW
+      Value: 0x2
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_USER_REQUESTED
+      Value: 0x4
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_ONLY_SYSTEM
+      Value: 0x80000000
+    - Name: NM_SECRET_AGENT_GET_SECRETS_FLAG_NO_ERRORS
+      Value: 0x40000000
+  - EnumClass: SettingDcbFlags
+    Members:
+    - Name: NM_SETTING_DCB_FLAG_NONE
+      Value: 0x0
+    - Name: NM_SETTING_DCB_FLAG_ENABLE
+      Value: 0x1
+    - Name: NM_SETTING_DCB_FLAG_ADVERTISE
+      Value: 0x2
+    - Name: NM_SETTING_DCB_FLAG_WILLING
+      Value: 0x4
+  - EnumClass: SettingSecretFlags
+    Members:
+    - Name: NM_SETTING_SECRET_FLAG_NONE
+      Value: 0x0
+    - Name: NM_SETTING_SECRET_FLAG_AGENT_OWNED
+      Value: 0x1
+    - Name: NM_SETTING_SECRET_FLAG_NOT_SAVED
+      Value: 0x2
+    - Name: NM_SETTING_SECRET_FLAG_NOT_REQUIRED
+      Value: 0x4
+  - EnumClass: SettingWiredWakeOnLan
+    Members:
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_PHY
+      Value: 0x2
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_UNICAST
+      Value: 0x4
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_MULTICAST
+      Value: 0x8
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_BROADCAST
+      Value: 0x10
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_ARP
+      Value: 0x20
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_MAGIC
+      Value: 0x40
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_DEFAULT
+      Value: 0x1
+    - Name: NM_SETTING_WIRED_WAKE_ON_LAN_IGNORE
+      Value: 0x8000
+  - EnumClass: VlanFlags
+    Members:
+    - Name: NM_VLAN_FLAG_REORDER_HEADERS
+      Value: 0x1
+    - Name: NM_VLAN_FLAG_GVRP
+      Value: 0x2
+    - Name: NM_VLAN_FLAG_LOOSE_BINDING
+      Value: 0x4
+    - Name: NM_VLAN_FLAG_MVRP
+      Value: 0x8
+  - EnumClass: VpnEditorPluginCapability
+    Members:
+    - Name: NM_VPN_EDITOR_PLUGIN_CAPABILITY_NONE
+      Value: 0x0
+    - Name: NM_VPN_EDITOR_PLUGIN_CAPABILITY_IMPORT
+      Value: 0x1
+    - Name: NM_VPN_EDITOR_PLUGIN_CAPABILITY_EXPORT
+      Value: 0x2
+    - Name: NM_VPN_EDITOR_PLUGIN_CAPABILITY_IPV6
+      Value: 0x4
+  - EnumClass: StringConstants
+    Members:
+    - Name: NM_ACCESS_POINT_BSSID
+      Value: bssid
+    - Name: NM_ACCESS_POINT_FLAGS
+      Value: flags
+    - Name: NM_ACCESS_POINT_FREQUENCY
+      Value: frequency
+    - Name: NM_ACCESS_POINT_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_ACCESS_POINT_LAST_SEEN
+      Value: last-seen
+    - Name: NM_ACCESS_POINT_MAX_BITRATE
+      Value: max-bitrate
+    - Name: NM_ACCESS_POINT_MODE
+      Value: mode
+    - Name: NM_ACCESS_POINT_RSN_FLAGS
+      Value: rsn-flags
+    - Name: NM_ACCESS_POINT_SSID
+      Value: ssid
+    - Name: NM_ACCESS_POINT_STRENGTH
+      Value: strength
+    - Name: NM_ACCESS_POINT_WPA_FLAGS
+      Value: wpa-flags
+    - Name: NM_ACTIVE_CONNECTION_CONNECTION
+      Value: connection
+    - Name: NM_ACTIVE_CONNECTION_DEFAULT
+      Value: default
+    - Name: NM_ACTIVE_CONNECTION_DEFAULT6
+      Value: default6
+    - Name: NM_ACTIVE_CONNECTION_DEVICES
+      Value: devices
+    - Name: NM_ACTIVE_CONNECTION_DHCP4_CONFIG
+      Value: dhcp4-config
+    - Name: NM_ACTIVE_CONNECTION_DHCP6_CONFIG
+      Value: dhcp6-config
+    - Name: NM_ACTIVE_CONNECTION_ID
+      Value: id
+    - Name: NM_ACTIVE_CONNECTION_IP4_CONFIG
+      Value: ip4-config
+    - Name: NM_ACTIVE_CONNECTION_IP6_CONFIG
+      Value: ip6-config
+    - Name: NM_ACTIVE_CONNECTION_MASTER
+      Value: master
+    - Name: NM_ACTIVE_CONNECTION_SPECIFIC_OBJECT_PATH
+      Value: specific-object-path
+    - Name: NM_ACTIVE_CONNECTION_STATE
+      Value: state
+    - Name: NM_ACTIVE_CONNECTION_TYPE
+      Value: type
+    - Name: NM_ACTIVE_CONNECTION_UUID
+      Value: uuid
+    - Name: NM_ACTIVE_CONNECTION_VPN
+      Value: vpn
+    - Name: NM_CLIENT_ACTIVATING_CONNECTION
+      Value: activating-connection
+    - Name: NM_CLIENT_ACTIVE_CONNECTIONS
+      Value: active-connections
+    - Name: NM_CLIENT_ALL_DEVICES
+      Value: all-devices
+    - Name: NM_CLIENT_ANY_DEVICE_ADDED
+      Value: any-device-added
+    - Name: NM_CLIENT_ANY_DEVICE_REMOVED
+      Value: any-device-removed
+    - Name: NM_CLIENT_CAN_MODIFY
+      Value: can-modify
+    - Name: NM_CLIENT_CONNECTIONS
+      Value: connections
+    - Name: NM_CLIENT_CONNECTION_ADDED
+      Value: connection-added
+    - Name: NM_CLIENT_CONNECTION_REMOVED
+      Value: connection-removed
+    - Name: NM_CLIENT_CONNECTIVITY
+      Value: connectivity
+    - Name: NM_CLIENT_DEVICES
+      Value: devices
+    - Name: NM_CLIENT_DEVICE_ADDED
+      Value: device-added
+    - Name: NM_CLIENT_DEVICE_REMOVED
+      Value: device-removed
+    - Name: NM_CLIENT_HOSTNAME
+      Value: hostname
+    - Name: NM_CLIENT_METERED
+      Value: metered
+    - Name: NM_CLIENT_NETWORKING_ENABLED
+      Value: networking-enabled
+    - Name: NM_CLIENT_NM_RUNNING
+      Value: nm-running
+    - Name: NM_CLIENT_PERMISSION_CHANGED
+      Value: permission-changed
+    - Name: NM_CLIENT_PRIMARY_CONNECTION
+      Value: primary-connection
+    - Name: NM_CLIENT_STARTUP
+      Value: startup
+    - Name: NM_CLIENT_STATE
+      Value: state
+    - Name: NM_CLIENT_VERSION
+      Value: version
+    - Name: NM_CLIENT_WIMAX_ENABLED
+      Value: wimax-enabled
+    - Name: NM_CLIENT_WIMAX_HARDWARE_ENABLED
+      Value: wimax-hardware-enabled
+    - Name: NM_CLIENT_WIRELESS_ENABLED
+      Value: wireless-enabled
+    - Name: NM_CLIENT_WIRELESS_HARDWARE_ENABLED
+      Value: wireless-hardware-enabled
+    - Name: NM_CLIENT_WWAN_ENABLED
+      Value: wwan-enabled
+    - Name: NM_CLIENT_WWAN_HARDWARE_ENABLED
+      Value: wwan-hardware-enabled
+    - Name: NM_CONNECTION_CHANGED
+      Value: changed
+    - Name: NM_CONNECTION_NORMALIZE_PARAM_IP6_CONFIG_METHOD
+      Value: ip6-config-method
+    - Name: NM_CONNECTION_SECRETS_CLEARED
+      Value: secrets-cleared
+    - Name: NM_CONNECTION_SECRETS_UPDATED
+      Value: secrets-updated
+    - Name: NM_DBUS_INTERFACE
+      Value: org.freedesktop.NetworkManager
+    - Name: NM_DBUS_INTERFACE_SETTINGS
+      Value: org.freedesktop.NetworkManager.Settings
+    - Name: NM_DBUS_INTERFACE_SETTINGS_CONNECTION
+      Value: org.freedesktop.NetworkManager.Settings.Connection
+    - Name: NM_DBUS_INTERFACE_SETTINGS_CONNECTION_SECRETS
+      Value: org.freedesktop.NetworkManager.Settings.Connection.Secrets
+    - Name: NM_DBUS_INTERFACE_VPN
+      Value: org.freedesktop.NetworkManager.VPN.Manager
+    - Name: NM_DBUS_INTERFACE_VPN_CONNECTION
+      Value: org.freedesktop.NetworkManager.VPN.Connection
+    - Name: NM_DBUS_INVALID_VPN_CONNECTION
+      Value: org.freedesktop.NetworkManager.VPNConnections.InvalidVPNConnection
+    - Name: NM_DBUS_NO_ACTIVE_VPN_CONNECTION
+      Value: org.freedesktop.NetworkManager.VPNConnections.NoActiveVPNConnection
+    - Name: NM_DBUS_NO_VPN_CONNECTIONS
+      Value: org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections
+    - Name: NM_DBUS_PATH
+      Value: /org/freedesktop/NetworkManager
+    - Name: NM_DBUS_PATH_AGENT_MANAGER
+      Value: /org/freedesktop/NetworkManager/AgentManager
+    - Name: NM_DBUS_PATH_SECRET_AGENT
+      Value: /org/freedesktop/NetworkManager/SecretAgent
+    - Name: NM_DBUS_PATH_SETTINGS
+      Value: /org/freedesktop/NetworkManager/Settings
+    - Name: NM_DBUS_PATH_SETTINGS_CONNECTION
+      Value: /org/freedesktop/NetworkManager/Settings/Connection
+    - Name: NM_DBUS_PATH_VPN
+      Value: /org/freedesktop/NetworkManager/VPN/Manager
+    - Name: NM_DBUS_PATH_VPN_CONNECTION
+      Value: /org/freedesktop/NetworkManager/VPN/Connection
+    - Name: NM_DBUS_SERVICE
+      Value: org.freedesktop.NetworkManager
+    - Name: NM_DBUS_VPN_ALREADY_STARTED
+      Value: AlreadyStarted
+    - Name: NM_DBUS_VPN_ALREADY_STOPPED
+      Value: AlreadyStopped
+    - Name: NM_DBUS_VPN_BAD_ARGUMENTS
+      Value: BadArguments
+    - Name: NM_DBUS_VPN_ERROR_PREFIX
+      Value: org.freedesktop.NetworkManager.VPN.Error
+    - Name: NM_DBUS_VPN_INTERACTIVE_NOT_SUPPORTED
+      Value: InteractiveNotSupported
+    - Name: NM_DBUS_VPN_SIGNAL_CONNECT_FAILED
+      Value: ConnectFailed
+    - Name: NM_DBUS_VPN_SIGNAL_IP4_CONFIG
+      Value: IP4Config
+    - Name: NM_DBUS_VPN_SIGNAL_IP_CONFIG_BAD
+      Value: IPConfigBad
+    - Name: NM_DBUS_VPN_SIGNAL_LAUNCH_FAILED
+      Value: LaunchFailed
+    - Name: NM_DBUS_VPN_SIGNAL_LOGIN_BANNER
+      Value: LoginBanner
+    - Name: NM_DBUS_VPN_SIGNAL_LOGIN_FAILED
+      Value: LoginFailed
+    - Name: NM_DBUS_VPN_SIGNAL_STATE_CHANGE
+      Value: StateChange
+    - Name: NM_DBUS_VPN_SIGNAL_VPN_CONFIG_BAD
+      Value: VPNConfigBad
+    - Name: NM_DBUS_VPN_STARTING_IN_PROGRESS
+      Value: StartingInProgress
+    - Name: NM_DBUS_VPN_STOPPING_IN_PROGRESS
+      Value: StoppingInProgress
+    - Name: NM_DBUS_VPN_WRONG_STATE
+      Value: WrongState
+    - Name: NM_DEVICE_ACTIVE_CONNECTION
+      Value: active-connection
+    - Name: NM_DEVICE_ADSL_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_AUTOCONNECT
+      Value: autoconnect
+    - Name: NM_DEVICE_AVAILABLE_CONNECTIONS
+      Value: available-connections
+    - Name: NM_DEVICE_BOND_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_BOND_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_BOND_SLAVES
+      Value: slaves
+    - Name: NM_DEVICE_BRIDGE_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_BRIDGE_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_BRIDGE_SLAVES
+      Value: slaves
+    - Name: NM_DEVICE_BT_CAPABILITIES
+      Value: bt-capabilities
+    - Name: NM_DEVICE_BT_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_BT_NAME
+      Value: name
+    - Name: NM_DEVICE_CAPABILITIES
+      Value: capabilities
+    - Name: NM_DEVICE_DEVICE_TYPE
+      Value: device-type
+    - Name: NM_DEVICE_DHCP4_CONFIG
+      Value: dhcp4-config
+    - Name: NM_DEVICE_DHCP6_CONFIG
+      Value: dhcp6-config
+    - Name: NM_DEVICE_DRIVER
+      Value: driver
+    - Name: NM_DEVICE_DRIVER_VERSION
+      Value: driver-version
+    - Name: NM_DEVICE_ETHERNET_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_ETHERNET_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_ETHERNET_PERMANENT_HW_ADDRESS
+      Value: perm-hw-address
+    - Name: NM_DEVICE_ETHERNET_S390_SUBCHANNELS
+      Value: s390-subchannels
+    - Name: NM_DEVICE_ETHERNET_SPEED
+      Value: speed
+    - Name: NM_DEVICE_FIRMWARE_MISSING
+      Value: firmware-missing
+    - Name: NM_DEVICE_FIRMWARE_VERSION
+      Value: firmware-version
+    - Name: NM_DEVICE_GENERIC_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_GENERIC_TYPE_DESCRIPTION
+      Value: type-description
+    - Name: NM_DEVICE_INFINIBAND_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_INFINIBAND_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_INTERFACE
+      Value: interface
+    - Name: NM_DEVICE_IP4_CONFIG
+      Value: ip4-config
+    - Name: NM_DEVICE_IP6_CONFIG
+      Value: ip6-config
+    - Name: NM_DEVICE_IP_INTERFACE
+      Value: ip-interface
+    - Name: NM_DEVICE_IP_TUNNEL_ENCAPSULATION_LIMIT
+      Value: encapsulation-limit
+    - Name: NM_DEVICE_IP_TUNNEL_FLOW_LABEL
+      Value: flow-label
+    - Name: NM_DEVICE_IP_TUNNEL_INPUT_KEY
+      Value: input-key
+    - Name: NM_DEVICE_IP_TUNNEL_LOCAL
+      Value: local
+    - Name: NM_DEVICE_IP_TUNNEL_MODE
+      Value: mode
+    - Name: NM_DEVICE_IP_TUNNEL_OUTPUT_KEY
+      Value: output-key
+    - Name: NM_DEVICE_IP_TUNNEL_PARENT
+      Value: parent
+    - Name: NM_DEVICE_IP_TUNNEL_PATH_MTU_DISCOVERY
+      Value: path-mtu-discovery
+    - Name: NM_DEVICE_IP_TUNNEL_REMOTE
+      Value: remote
+    - Name: NM_DEVICE_IP_TUNNEL_TOS
+      Value: tos
+    - Name: NM_DEVICE_IP_TUNNEL_TTL
+      Value: ttl
+    - Name: NM_DEVICE_LLDP_NEIGHBORS
+      Value: lldp-neighbors
+    - Name: NM_DEVICE_MACVLAN_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_MACVLAN_MODE
+      Value: mode
+    - Name: NM_DEVICE_MACVLAN_NO_PROMISC
+      Value: no-promisc
+    - Name: NM_DEVICE_MACVLAN_PARENT
+      Value: parent
+    - Name: NM_DEVICE_MACVLAN_TAP
+      Value: tap
+    - Name: NM_DEVICE_MANAGED
+      Value: managed
+    - Name: NM_DEVICE_METERED
+      Value: metered
+    - Name: NM_DEVICE_MODEM_CURRENT_CAPABILITIES
+      Value: current-capabilities
+    - Name: NM_DEVICE_MODEM_MODEM_CAPABILITIES
+      Value: modem-capabilities
+    - Name: NM_DEVICE_MTU
+      Value: mtu
+    - Name: NM_DEVICE_NM_PLUGIN_MISSING
+      Value: nm-plugin-missing
+    - Name: NM_DEVICE_OLPC_MESH_ACTIVE_CHANNEL
+      Value: active-channel
+    - Name: NM_DEVICE_OLPC_MESH_COMPANION
+      Value: companion
+    - Name: NM_DEVICE_OLPC_MESH_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_PHYSICAL_PORT_ID
+      Value: physical-port-id
+    - Name: NM_DEVICE_PRODUCT
+      Value: product
+    - Name: NM_DEVICE_REAL
+      Value: real
+    - Name: NM_DEVICE_STATE
+      Value: state
+    - Name: NM_DEVICE_STATE_REASON
+      Value: state-reason
+    - Name: NM_DEVICE_TEAM_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_TEAM_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_TEAM_SLAVES
+      Value: slaves
+    - Name: NM_DEVICE_TUN_GROUP
+      Value: group
+    - Name: NM_DEVICE_TUN_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_TUN_MODE
+      Value: mode
+    - Name: NM_DEVICE_TUN_MULTI_QUEUE
+      Value: multi-queue
+    - Name: NM_DEVICE_TUN_NO_PI
+      Value: no-pi
+    - Name: NM_DEVICE_TUN_OWNER
+      Value: owner
+    - Name: NM_DEVICE_TUN_VNET_HDR
+      Value: vnet-hdr
+    - Name: NM_DEVICE_UDI
+      Value: udi
+    - Name: NM_DEVICE_VENDOR
+      Value: vendor
+    - Name: NM_DEVICE_VLAN_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_VLAN_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_VLAN_PARENT
+      Value: parent
+    - Name: NM_DEVICE_VLAN_VLAN_ID
+      Value: vlan-id
+    - Name: NM_DEVICE_VXLAN_AGEING
+      Value: ageing
+    - Name: NM_DEVICE_VXLAN_CARRIER
+      Value: carrier
+    - Name: NM_DEVICE_VXLAN_DST_PORT
+      Value: dst-port
+    - Name: NM_DEVICE_VXLAN_GROUP
+      Value: group
+    - Name: NM_DEVICE_VXLAN_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_VXLAN_ID
+      Value: id
+    - Name: NM_DEVICE_VXLAN_L2MISS
+      Value: l2miss
+    - Name: NM_DEVICE_VXLAN_L3MISS
+      Value: l3miss
+    - Name: NM_DEVICE_VXLAN_LEARNING
+      Value: learning
+    - Name: NM_DEVICE_VXLAN_LIMIT
+      Value: limit
+    - Name: NM_DEVICE_VXLAN_LOCAL
+      Value: local
+    - Name: NM_DEVICE_VXLAN_PARENT
+      Value: parent
+    - Name: NM_DEVICE_VXLAN_PROXY
+      Value: proxy
+    - Name: NM_DEVICE_VXLAN_RSC
+      Value: rsc
+    - Name: NM_DEVICE_VXLAN_SRC_PORT_MAX
+      Value: src-port-max
+    - Name: NM_DEVICE_VXLAN_SRC_PORT_MIN
+      Value: src-port-min
+    - Name: NM_DEVICE_VXLAN_TOS
+      Value: tos
+    - Name: NM_DEVICE_VXLAN_TTL
+      Value: ttl
+    - Name: NM_DEVICE_WIFI_ACCESS_POINTS
+      Value: access-points
+    - Name: NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT
+      Value: active-access-point
+    - Name: NM_DEVICE_WIFI_BITRATE
+      Value: bitrate
+    - Name: NM_DEVICE_WIFI_CAPABILITIES
+      Value: wireless-capabilities
+    - Name: NM_DEVICE_WIFI_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_WIFI_MODE
+      Value: mode
+    - Name: NM_DEVICE_WIFI_PERMANENT_HW_ADDRESS
+      Value: perm-hw-address
+    - Name: NM_DEVICE_WIMAX_ACTIVE_NSP
+      Value: active-nsp
+    - Name: NM_DEVICE_WIMAX_BSID
+      Value: bsid
+    - Name: NM_DEVICE_WIMAX_CENTER_FREQUENCY
+      Value: center-frequency
+    - Name: NM_DEVICE_WIMAX_CINR
+      Value: cinr
+    - Name: NM_DEVICE_WIMAX_HW_ADDRESS
+      Value: hw-address
+    - Name: NM_DEVICE_WIMAX_NSPS
+      Value: nsps
+    - Name: NM_DEVICE_WIMAX_RSSI
+      Value: rssi
+    - Name: NM_DEVICE_WIMAX_TX_POWER
+      Value: tx-power
+    - Name: NM_DHCP_CONFIG_FAMILY
+      Value: family
+    - Name: NM_DHCP_CONFIG_OPTIONS
+      Value: options
+    - Name: NM_IP_CONFIG_ADDRESSES
+      Value: addresses
+    - Name: NM_IP_CONFIG_DOMAINS
+      Value: domains
+    - Name: NM_IP_CONFIG_FAMILY
+      Value: family
+    - Name: NM_IP_CONFIG_GATEWAY
+      Value: gateway
+    - Name: NM_IP_CONFIG_NAMESERVERS
+      Value: nameservers
+    - Name: NM_IP_CONFIG_ROUTES
+      Value: routes
+    - Name: NM_IP_CONFIG_SEARCHES
+      Value: searches
+    - Name: NM_IP_CONFIG_WINS_SERVERS
+      Value: wins-servers
+    - Name: NM_LLDP_ATTR_CHASSIS_ID
+      Value: chassis-id
+    - Name: NM_LLDP_ATTR_CHASSIS_ID_TYPE
+      Value: chassis-id-type
+    - Name: NM_LLDP_ATTR_DESTINATION
+      Value: destination
+    - Name: NM_LLDP_ATTR_IEEE_802_1_PPVID
+      Value: ieee-802-1-ppvid
+    - Name: NM_LLDP_ATTR_IEEE_802_1_PPVID_FLAGS
+      Value: ieee-802-1-ppvid-flags
+    - Name: NM_LLDP_ATTR_IEEE_802_1_PVID
+      Value: ieee-802-1-pvid
+    - Name: NM_LLDP_ATTR_IEEE_802_1_VID
+      Value: ieee-802-1-vid
+    - Name: NM_LLDP_ATTR_IEEE_802_1_VLAN_NAME
+      Value: ieee-802-1-vlan-name
+    - Name: NM_LLDP_ATTR_PORT_DESCRIPTION
+      Value: port-description
+    - Name: NM_LLDP_ATTR_PORT_ID
+      Value: port-id
+    - Name: NM_LLDP_ATTR_PORT_ID_TYPE
+      Value: port-id-type
+    - Name: NM_LLDP_ATTR_SYSTEM_CAPABILITIES
+      Value: system-capabilities
+    - Name: NM_LLDP_ATTR_SYSTEM_DESCRIPTION
+      Value: system-description
+    - Name: NM_LLDP_ATTR_SYSTEM_NAME
+      Value: system-name
+    - Name: NM_LLDP_DEST_NEAREST_BRIDGE
+      Value: nearest-bridge
+    - Name: NM_LLDP_DEST_NEAREST_CUSTOMER_BRIDGE
+      Value: nearest-customer-bridge
+    - Name: NM_LLDP_DEST_NEAREST_NON_TPMR_BRIDGE
+      Value: nearest-non-tpmr-bridge
+    - Name: NM_OBJECT_DBUS_CONNECTION
+      Value: dbus-connection
+    - Name: NM_OBJECT_PATH
+      Value: path
+    - Name: NM_REMOTE_CONNECTION_DBUS_CONNECTION
+      Value: dbus-connection
+    - Name: NM_REMOTE_CONNECTION_PATH
+      Value: path
+    - Name: NM_REMOTE_CONNECTION_UNSAVED
+      Value: unsaved
+    - Name: NM_REMOTE_CONNECTION_VISIBLE
+      Value: visible
+    - Name: NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH
+      Value: file://
+    - Name: NM_SETTING_ADSL_ENCAPSULATION_LLC
+      Value: llc
+    - Name: NM_SETTING_ADSL_ENCAPSULATION_VCMUX
+      Value: vcmux
+    - Name: NM_SETTING_ADSL_PROTOCOL_IPOATM
+      Value: ipoatm
+    - Name: NM_SETTING_ADSL_PROTOCOL_PPPOA
+      Value: pppoa
+    - Name: NM_SETTING_ADSL_PROTOCOL_PPPOE
+      Value: pppoe
+    - Name: NM_SETTING_BLUETOOTH_TYPE_DUN
+      Value: dun
+    - Name: NM_SETTING_BLUETOOTH_TYPE_PANU
+      Value: panu
+    - Name: NM_SETTING_BOND_OPTION_ACTIVE_SLAVE
+      Value: active_slave
+    - Name: NM_SETTING_BOND_OPTION_AD_ACTOR_SYSTEM
+      Value: ad_actor_system
+    - Name: NM_SETTING_BOND_OPTION_AD_ACTOR_SYS_PRIO
+      Value: ad_actor_sys_prio
+    - Name: NM_SETTING_BOND_OPTION_AD_SELECT
+      Value: ad_select
+    - Name: NM_SETTING_BOND_OPTION_AD_USER_PORT_KEY
+      Value: ad_user_port_key
+    - Name: NM_SETTING_BOND_OPTION_ALL_SLAVES_ACTIVE
+      Value: all_slaves_active
+    - Name: NM_SETTING_BOND_OPTION_ARP_ALL_TARGETS
+      Value: arp_all_targets
+    - Name: NM_SETTING_BOND_OPTION_ARP_INTERVAL
+      Value: arp_interval
+    - Name: NM_SETTING_BOND_OPTION_ARP_IP_TARGET
+      Value: arp_ip_target
+    - Name: NM_SETTING_BOND_OPTION_ARP_VALIDATE
+      Value: arp_validate
+    - Name: NM_SETTING_BOND_OPTION_DOWNDELAY
+      Value: downdelay
+    - Name: NM_SETTING_BOND_OPTION_FAIL_OVER_MAC
+      Value: fail_over_mac
+    - Name: NM_SETTING_BOND_OPTION_LACP_RATE
+      Value: lacp_rate
+    - Name: NM_SETTING_BOND_OPTION_LP_INTERVAL
+      Value: lp_interval
+    - Name: NM_SETTING_BOND_OPTION_MIIMON
+      Value: miimon
+    - Name: NM_SETTING_BOND_OPTION_MIN_LINKS
+      Value: min_links
+    - Name: NM_SETTING_BOND_OPTION_MODE
+      Value: mode
+    - Name: NM_SETTING_BOND_OPTION_NUM_GRAT_ARP
+      Value: num_grat_arp
+    - Name: NM_SETTING_BOND_OPTION_NUM_UNSOL_NA
+      Value: num_unsol_na
+    - Name: NM_SETTING_BOND_OPTION_PACKETS_PER_SLAVE
+      Value: packets_per_slave
+    - Name: NM_SETTING_BOND_OPTION_PRIMARY
+      Value: primary
+    - Name: NM_SETTING_BOND_OPTION_PRIMARY_RESELECT
+      Value: primary_reselect
+    - Name: NM_SETTING_BOND_OPTION_RESEND_IGMP
+      Value: resend_igmp
+    - Name: NM_SETTING_BOND_OPTION_TLB_DYNAMIC_LB
+      Value: tlb_dynamic_lb
+    - Name: NM_SETTING_BOND_OPTION_UPDELAY
+      Value: updelay
+    - Name: NM_SETTING_BOND_OPTION_USE_CARRIER
+      Value: use_carrier
+    - Name: NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY
+      Value: xmit_hash_policy
+    - Name: NM_SETTING_DCB_FCOE_MODE_FABRIC
+      Value: fabric
+    - Name: NM_SETTING_DCB_FCOE_MODE_VN2VN
+      Value: vn2vn
+    - Name: NM_SETTING_DNS_OPTION_ATTEMPTS
+      Value: attempts
+    - Name: NM_SETTING_DNS_OPTION_DEBUG
+      Value: debug
+    - Name: NM_SETTING_DNS_OPTION_EDNS0
+      Value: edns0
+    - Name: NM_SETTING_DNS_OPTION_INET6
+      Value: inet6
+    - Name: NM_SETTING_DNS_OPTION_IP6_BYTESTRING
+      Value: ip6-bytestring
+    - Name: NM_SETTING_DNS_OPTION_IP6_DOTINT
+      Value: ip6-dotint
+    - Name: NM_SETTING_DNS_OPTION_NDOTS
+      Value: ndots
+    - Name: NM_SETTING_DNS_OPTION_NO_CHECK_NAMES
+      Value: no-check-names
+    - Name: NM_SETTING_DNS_OPTION_NO_IP6_DOTINT
+      Value: no-ip6-dotint
+    - Name: NM_SETTING_DNS_OPTION_NO_TLD_QUERY
+      Value: no-tld-query
+    - Name: NM_SETTING_DNS_OPTION_ROTATE
+      Value: rotate
+    - Name: NM_SETTING_DNS_OPTION_SINGLE_REQUEST
+      Value: single-request
+    - Name: NM_SETTING_DNS_OPTION_SINGLE_REQUEST_REOPEN
+      Value: single-request-reopen
+    - Name: NM_SETTING_DNS_OPTION_TIMEOUT
+      Value: timeout
+    - Name: NM_SETTING_DNS_OPTION_USE_VC
+      Value: use-vc
+    - Name: NM_SETTING_IP4_CONFIG_METHOD_AUTO
+      Value: auto
+    - Name: NM_SETTING_IP4_CONFIG_METHOD_DISABLED
+      Value: disabled
+    - Name: NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL
+      Value: link-local
+    - Name: NM_SETTING_IP4_CONFIG_METHOD_MANUAL
+      Value: manual
+    - Name: NM_SETTING_IP4_CONFIG_METHOD_SHARED
+      Value: shared
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_AUTO
+      Value: auto
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_DHCP
+      Value: dhcp
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_IGNORE
+      Value: ignore
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL
+      Value: link-local
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_MANUAL
+      Value: manual
+    - Name: NM_SETTING_IP6_CONFIG_METHOD_SHARED
+      Value: shared
+    - Name: NM_SETTING_IP_CONFIG_ADDRESSES
+      Value: addresses
+    - Name: NM_SETTING_IP_CONFIG_DAD_TIMEOUT
+      Value: dad-timeout
+    - Name: NM_SETTING_IP_CONFIG_DHCP_HOSTNAME
+      Value: dhcp-hostname
+    - Name: NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
+      Value: dhcp-send-hostname
+    - Name: NM_SETTING_IP_CONFIG_DHCP_TIMEOUT
+      Value: dhcp-timeout
+    - Name: NM_SETTING_IP_CONFIG_DNS
+      Value: dns
+    - Name: NM_SETTING_IP_CONFIG_DNS_OPTIONS
+      Value: dns-options
+    - Name: NM_SETTING_IP_CONFIG_DNS_PRIORITY
+      Value: dns-priority
+    - Name: NM_SETTING_IP_CONFIG_DNS_SEARCH
+      Value: dns-search
+    - Name: NM_SETTING_IP_CONFIG_GATEWAY
+      Value: gateway
+    - Name: NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS
+      Value: ignore-auto-dns
+    - Name: NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES
+      Value: ignore-auto-routes
+    - Name: NM_SETTING_IP_CONFIG_MAY_FAIL
+      Value: may-fail
+    - Name: NM_SETTING_IP_CONFIG_METHOD
+      Value: method
+    - Name: NM_SETTING_IP_CONFIG_NEVER_DEFAULT
+      Value: never-default
+    - Name: NM_SETTING_IP_CONFIG_ROUTES
+      Value: routes
+    - Name: NM_SETTING_IP_CONFIG_ROUTE_METRIC
+      Value: route-metric
+    - Name: NM_SETTING_NAME
+      Value: name
+    - Name: NM_SETTING_WIRELESS_MODE_ADHOC
+      Value: adhoc
+    - Name: NM_SETTING_WIRELESS_MODE_AP
+      Value: ap
+    - Name: NM_SETTING_WIRELESS_MODE_INFRA
+      Value: infrastructure
+    - Name: NM_VPN_CONNECTION_BANNER
+      Value: banner
+    - Name: NM_VPN_CONNECTION_VPN_STATE
+      Value: vpn-state
+    - Name: NM_VPN_DBUS_PLUGIN_INTERFACE
+      Value: org.freedesktop.NetworkManager.VPN.Plugin
+    - Name: NM_VPN_DBUS_PLUGIN_PATH
+      Value: /org/freedesktop/NetworkManager/VPN/Plugin
+    - Name: NM_VPN_EDITOR_PLUGIN_DESCRIPTION
+      Value: description
+    - Name: NM_VPN_EDITOR_PLUGIN_NAME
+      Value: name
+    - Name: NM_VPN_EDITOR_PLUGIN_SERVICE
+      Value: service
+    - Name: NM_VPN_PLUGIN_CAN_PERSIST
+      Value: can-persist
+    - Name: NM_VPN_PLUGIN_CONFIG_BANNER
+      Value: banner
+    - Name: NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY
+      Value: gateway
+    - Name: NM_VPN_PLUGIN_CONFIG_HAS_IP4
+      Value: has-ip4
+    - Name: NM_VPN_PLUGIN_CONFIG_HAS_IP6
+      Value: has-ip6
+    - Name: NM_VPN_PLUGIN_CONFIG_MTU
+      Value: mtu
+    - Name: NM_VPN_PLUGIN_CONFIG_TUNDEV
+      Value: tundev
+    - Name: NM_VPN_PLUGIN_INFO_FILENAME
+      Value: filename
+    - Name: NM_VPN_PLUGIN_INFO_KEYFILE
+      Value: keyfile
+    - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_CONNECTION
+      Value: VPN Connection
+    - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_GNOME
+      Value: GNOME
+    - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_LIBNM
+      Value: libnm
+    - Name: NM_VPN_PLUGIN_INFO_NAME
+      Value: name
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS
+      Value: address
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_DNS
+      Value: dns
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_DOMAIN
+      Value: domain
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS
+      Value: domains
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY
+      Value: internal-gateway
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_MSS
+      Value: mss
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_NBNS
+      Value: nbns
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_NEVER_DEFAULT
+      Value: never-default
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_PREFIX
+      Value: prefix
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_PTP
+      Value: ptp
+    - Name: NM_VPN_PLUGIN_IP4_CONFIG_ROUTES
+      Value: routes
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS
+      Value: address
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_DNS
+      Value: dns
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_DOMAIN
+      Value: domain
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_DOMAINS
+      Value: domains
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY
+      Value: internal-gateway
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_MSS
+      Value: mss
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_NEVER_DEFAULT
+      Value: never-default
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_PREFIX
+      Value: prefix
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_PTP
+      Value: ptp
+    - Name: NM_VPN_PLUGIN_IP6_CONFIG_ROUTES
+      Value: routes
+    - Name: NM_WIMAX_NSP_NAME
+      Value: name
+    - Name: NM_WIMAX_NSP_NETWORK_TYPE
+      Value: network-type
+    - Name: NM_WIMAX_NSP_SIGNAL_QUALITY
+      Value: signal-quality

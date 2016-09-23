@@ -10,18 +10,19 @@
 package network
 
 import (
-	mm "dbus/org/freedesktop/modemmanager1"
-	nm "dbus/org/freedesktop/networkmanager"
+	mmdbus "dbus/org/freedesktop/modemmanager1"
+	nmdbus "dbus/org/freedesktop/networkmanager"
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
 )
 
 type device struct {
-	nmDev         *nm.Device
-	nmDevWireless *nm.DeviceWireless
-	mmDevModem    *mm.Modem
+	nmDev         *nmdbus.Device
+	nmDevWireless *nmdbus.DeviceWireless
+	mmDevModem    *mmdbus.Modem
 	nmDevType     uint32
 	id            string
 	udi           string
@@ -123,7 +124,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 	// dispatch for different device types
 	switch dev.nmDevType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
 			defer nmDestroyDeviceWired(nmDevWired)
 			dev.HwAddress = nmDevWired.HwAddress.Get()
@@ -131,7 +132,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		if nmHasSystemSettingsModifyPermission() {
 			m.ensureWiredConnectionExists(dev.Path, true)
 		}
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.nmDevWireless = nmDevWireless
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
@@ -159,7 +160,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				m.addAccessPoint(dev.Path, apPath)
 			}
 		}
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		if len(dev.id) == 0 {
 			// some times, modem device will not be identified
 			// successful for battery issue, so check and ignore it
@@ -212,7 +213,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 		m.devicesLock.Lock()
 		defer m.devicesLock.Unlock()
-		if reason == NM_DEVICE_STATE_REASON_REMOVED && !isNmDeviceObjectExists(dev.Path) {
+		if reason == nm.NM_DEVICE_STATE_REASON_REMOVED && !isNmDeviceObjectExists(dev.Path) {
 			// check if device dbus object exists for that if device
 			// was set to unmanaged it will notify device removed, too
 			return

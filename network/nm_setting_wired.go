@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -30,10 +31,10 @@ func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, activ
 func newWiredConnectionData(id, uuid string) (data connectionData) {
 	data = make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, id)
 	setSettingConnectionUuid(data, uuid)
-	setSettingConnectionType(data, NM_SETTING_WIRED_SETTING_NAME)
+	setSettingConnectionType(data, nm.NM_SETTING_WIRED_SETTING_NAME)
 
 	initSettingSectionWired(data)
 
@@ -43,17 +44,17 @@ func newWiredConnectionData(id, uuid string) (data connectionData) {
 }
 
 func initSettingSectionWired(data connectionData) {
-	addSettingSection(data, sectionWired)
+	addSetting(data, nm.NM_SETTING_WIRED_SETTING_NAME)
 	setSettingWiredDuplex(data, "full")
 }
 
 // Get available keys
 func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
-	keys = appendAvailableKeys(data, keys, sectionWired, NM_SETTING_WIRED_MTU)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_CLONED_MAC_ADDRESS)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_MTU)
 	if isSettingWiredMtuExists(data) {
-		keys = append(keys, NM_SETTING_WIRED_MTU)
+		keys = append(keys, nm.NM_SETTING_WIRED_MTU)
 	}
 	return
 }
@@ -61,9 +62,9 @@ func getSettingWiredAvailableKeys(data connectionData) (keys []string) {
 // Get available values
 func getSettingWiredAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_WIRED_MAC_ADDRESS:
+	case nm.NM_SETTING_WIRED_MAC_ADDRESS:
 		// get all wired devices mac address
-		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(NM_DEVICE_TYPE_ETHERNET) {
+		for iface, hwAddr := range nmGeneralGetAllDeviceHwAddr(nm.NM_DEVICE_TYPE_ETHERNET) {
 			values = append(values, kvalue{hwAddr, hwAddr + " (" + iface + ")"})
 		}
 	}

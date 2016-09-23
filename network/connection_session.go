@@ -11,6 +11,7 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
 	"time"
@@ -154,36 +155,36 @@ func newConnectionSessionByOpen(uuid string, devPath dbus.ObjectPath) (s *Connec
 }
 
 func (s *ConnectionSession) fixValues() {
-	// append missing sectionIpv6
-	if !isSettingSectionExists(s.data, sectionIpv6) && isStringInArray(sectionIpv6, getAvailableSections(s.data)) {
+	// append missing nm.NM_SETTING_IP6_CONFIG_SETTING_NAME
+	if !isSettingExists(s.data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME) && isStringInArray(nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, getAvailableSections(s.data)) {
 		initSettingSectionIpv6(s.data)
 	}
 
 	// fix ipv6 addresses and routes data structure, interface{}
-	if isSettingIp6ConfigAddressesExists(s.data) {
-		setSettingIp6ConfigAddresses(s.data, getSettingIp6ConfigAddresses(s.data))
+	if isSettingIP6ConfigAddressesExists(s.data) {
+		setSettingIP6ConfigAddresses(s.data, getSettingIP6ConfigAddresses(s.data))
 	}
-	if isSettingIp6ConfigRoutesExists(s.data) {
-		setSettingIp6ConfigRoutes(s.data, getSettingIp6ConfigRoutes(s.data))
+	if isSettingIP6ConfigRoutesExists(s.data) {
+		setSettingIP6ConfigRoutes(s.data, getSettingIP6ConfigRoutes(s.data))
 	}
 
 	// remove address-data and gateway fields in IP4/IP6 section to keep
 	// compatible with NetworkManager 1.0+
-	if isSettingKeyExists(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data") {
-		removeSettingKey(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data")
+	if isSettingKeyExists(s.data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data") {
+		removeSettingKey(s.data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, "address-data")
 	}
-	if isSettingKeyExists(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data") {
-		removeSettingKey(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data")
+	if isSettingKeyExists(s.data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data") {
+		removeSettingKey(s.data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, "address-data")
 	}
-	if isSettingKeyExists(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway") {
-		removeSettingKey(s.data, NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway")
+	if isSettingKeyExists(s.data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway") {
+		removeSettingKey(s.data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, "gateway")
 	}
-	if isSettingKeyExists(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway") {
-		removeSettingKey(s.data, NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway")
+	if isSettingKeyExists(s.data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway") {
+		removeSettingKey(s.data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, "gateway")
 	}
 
 	// vpn plugin data and secret
-	if getSettingConnectionType(s.data) == NM_SETTING_VPN_SETTING_NAME {
+	if getSettingConnectionType(s.data) == nm.NM_SETTING_VPN_SETTING_NAME {
 		if !isSettingVpnDataExists(s.data) {
 			setSettingVpnData(s.data, make(map[string]string))
 		}
@@ -193,25 +194,25 @@ func (s *ConnectionSession) fixValues() {
 		switch getCustomConnectionType(s.data) {
 		case connectionVpnStrongswan:
 			// fix vpn strongswan password flags
-			setSettingVpnStrongswanKeyPasswordFlags(s.data, NM_SETTING_SECRET_FLAG_NONE)
+			setSettingVpnStrongswanKeyPasswordFlags(s.data, nm.NM_SETTING_SECRET_FLAG_NONE)
 		}
 	}
 
 	// do not use s.Type here for that it may be not initialized
 	switch getCustomConnectionType(s.data) {
 	case connectionPppoe:
-		// append missing sectionWired for pppoe
-		if !isSettingSectionExists(s.data, sectionWired) {
+		// append missing nm.NM_SETTING_WIRED_SETTING_NAME for pppoe
+		if !isSettingExists(s.data, nm.NM_SETTING_WIRED_SETTING_NAME) {
 			initSettingSectionWired(s.data)
 		}
 	case connectionMobileGsm, connectionMobileCdma:
-		addSettingSection(s.data, sectionPpp)
+		addSetting(s.data, nm.NM_SETTING_PPP_SETTING_NAME)
 		logicSetSettingVkPppEnableLcpEcho(s.data, true)
 	}
 
 	// TODO fix secret flags
 	// if isSettingVpnOpenvpnKeyCertpassFlagsExists(s.data) && getSettingVpnOpenvpnKeyCertpassFlags(s.data) == 1 {
-	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, NM_OPENVPN_SECRET_FLAG_SAVE)
+	// setSettingVpnOpenvpnKeyCertpassFlags(s.data, nm.NM_OPENVPN_SECRET_FLAG_SAVE)
 	// }
 }
 
@@ -224,10 +225,10 @@ func (s *ConnectionSession) getSecrets() {
 
 func (s *ConnectionSession) getSecretsFromKeyring() (ok bool) {
 	for _, section := range s.AvailableSections {
-		settingName := getRealSectionName(section)
-		if values, okNest := secretGetAll(s.Uuid, settingName); okNest {
+		realSetting := getAliasSettingRealName(section)
+		if values, okNest := secretGetAll(s.Uuid, realSetting); okNest {
 			ok = true
-			secretsData := buildKeyringSecret(s.data, settingName, values)
+			secretsData := buildKeyringSecret(s.data, realSetting, values)
 			s.doGetSecrets(secretsData)
 		}
 	}
@@ -235,8 +236,8 @@ func (s *ConnectionSession) getSecretsFromKeyring() (ok bool) {
 }
 func (s *ConnectionSession) doGetSecrets(secretsData connectionData) {
 	for section, sectionData := range secretsData {
-		if !isSettingSectionExists(s.data, section) {
-			addSettingSection(s.data, section)
+		if !isSettingExists(s.data, section) {
+			addSetting(s.data, section)
 		}
 		for key, value := range sectionData {
 			s.data[section][key] = value
@@ -249,32 +250,32 @@ func (s *ConnectionSession) getSecretsFromNM() {
 	case connectionWired:
 		if getSettingVk8021xEnable(s.data) {
 			// TODO 8021x secret
-			// s.doGetSecretsFromNM(section8021x)
+			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		if getSettingVk8021xEnable(s.data) {
 			// TODO 8021x secret
-			// s.doGetSecretsFromNM(section8021x)
+			// s.doGetSecretsFromNM(nm.NM_SETTING_802_1X_SETTING_NAME)
 		} else {
-			s.doGetSecretsFromNM(sectionWirelessSecurity)
+			s.doGetSecretsFromNM(nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		}
 	case connectionPppoe:
-		s.doGetSecretsFromNM(sectionPppoe)
+		s.doGetSecretsFromNM(nm.NM_SETTING_PPPOE_SETTING_NAME)
 	case connectionMobileGsm:
 		// FIXME: if the connection owns no secret key, such as "US -> AT&T -> MEdia Net (phones)"
 		// it will popup password dialog when editing the connection.
-		// s.doGetSecretsFromNM(sectionGsm)
+		// s.doGetSecretsFromNM(nm.NM_SETTING_GSM_SETTING_NAME)
 	case connectionMobileCdma:
 		// FIXME: same with connectionMobileGsm
-		// s.doGetSecretsFromNM(sectionCdma)
+		// s.doGetSecretsFromNM(nm.NM_SETTING_CDMA_SETTING_NAME)
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
 		// TODO
 	}
 }
 func (s *ConnectionSession) doGetSecretsFromNM(secretSection string) {
-	if isSettingSectionExists(s.data, secretSection) {
+	if isSettingExists(s.data, secretSection) {
 		if secretsData, err := nmGetConnectionSecrets(s.ConnectionPath, secretSection); err == nil {
-			if isSettingSectionExists(s.data, secretSection) {
+			if isSettingExists(s.data, secretSection) {
 				s.doGetSecrets(secretsData)
 			}
 		}
@@ -285,7 +286,7 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 	for sectionName, sectionData := range s.data {
 		for keyName, variant := range sectionData {
 			if isSecretKey(s.data, sectionName, keyName) {
-				if sectionName == NM_SETTING_VPN_SETTING_NAME && keyName == NM_SETTING_VPN_SECRETS {
+				if sectionName == nm.NM_SETTING_VPN_SETTING_NAME && keyName == nm.NM_SETTING_VPN_SECRETS {
 					// dispatch vpn secret keys specially
 					vpnSecrets := getSettingVpnSecrets(s.data)
 					for k, v := range vpnSecrets {
@@ -450,32 +451,32 @@ func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, err
 	switch s.Type {
 	case connectionWired:
 		switch vsection {
-		case vsectionIpv4:
+		case nm.NM_SETTING_VS_IPV4:
 			return true, nil
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		switch vsection {
-		case vsectionSecurity:
+		case nm.NM_SETTING_VS_SECURITY:
 			return true, nil
 		}
 	case connectionPppoe:
 		switch vsection {
-		case vsectionPppoe:
+		case nm.NM_SETTING_VS_PPPOE:
 			return true, nil
 		}
 	case connectionMobileGsm, connectionMobileCdma:
 		switch vsection {
-		case vsectionMobile:
+		case nm.NM_SETTING_VS_MOBILE:
 			return true, nil
 		}
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			return true, nil
 		}
 	default:
 		switch vsection {
-		case vsectionIpv4:
+		case nm.NM_SETTING_VS_IPV4:
 			return true, nil
 		}
 	}

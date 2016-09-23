@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -120,8 +121,8 @@ func (m *Manager) doHandleVpnNotification(apath dbus.ObjectPath, state, reason u
 	if isVpnConnectionStateActivated(state) {
 		// FIXME: looks like a NetworkManger issue, when user
 		// disconnect a connectiong vpn, the vpn state will changed to
-		// NM_VPN_CONNECTION_STATE_ACTIVATED first
-		if reason != NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED {
+		// nm.NM_VPN_CONNECTION_STATE_ACTIVATED first
+		if reason != nm.NM_VPN_CONNECTION_STATE_REASON_USER_DISCONNECTED {
 			notifyVpnConnected(aconn.Id)
 		}
 	} else if isVpnConnectionStateDeactivate(state) {
@@ -301,13 +302,13 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	// security
 	use8021xSecurity := false
 	switch getSettingConnectionType(cdata) {
-	case NM_SETTING_WIRED_SETTING_NAME:
+	case nm.NM_SETTING_WIRED_SETTING_NAME:
 		if getSettingVk8021xEnable(cdata) {
 			use8021xSecurity = true
 		} else {
 			security = Tr("None")
 		}
-	case NM_SETTING_WIRELESS_SETTING_NAME:
+	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
 		switch getSettingVkWirelessSecurityKeyMgmt(cdata) {
 		case "none":
 			security = Tr("None")

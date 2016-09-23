@@ -21,35 +21,12 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 )
 
-// For the NM <-> VPN plugin service
 const (
-	NM_DBUS_SERVICE_STRONGSWAN = "org.freedesktop.NetworkManager.strongswan"
-	nmVpnStrongswanNameFile    = VPN_NAME_FILES_DIR + "nm-strongswan-service.name"
-)
-
-const (
-	NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS        = "address"
-	NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE    = "certificate"
-	NM_SETTING_VPN_STRONGSWAN_KEY_METHOD         = "method"
-	NM_SETTING_VPN_STRONGSWAN_KEY_USER           = "user"
-	NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT       = "usercert"
-	NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY        = "userkey"
-	NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD       = "password"
-	NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS = "password-flags"
-	NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL        = "virtual"
-	NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP          = "encap"
-	NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP         = "ipcomp"
-)
-
-const (
-	NM_STRONGSWAN_METHOD_KEY       = "key"
-	NM_STRONGSWAN_METHOD_AGENT     = "agent"
-	NM_STRONGSWAN_METHOD_SMARTCARD = "smartcard"
-	NM_STRONGSWAN_METHOD_EAP       = "eap"
-	NM_STRONGSWAN_METHOD_PSK       = "psk"
+	nmVpnStrongswanNameFile = VPN_NAME_FILES_DIR + "nm-strongswan-service.name"
 )
 
 // new connection data
@@ -60,47 +37,47 @@ func newVpnStrongswanConnectionData(id, uuid string) (data connectionData) {
 }
 
 func initSettingSectionVpnStrongswan(data connectionData) {
-	initBasicSettingSectionVpn(data, NM_DBUS_SERVICE_STRONGSWAN)
-	setSettingVpnStrongswanKeyMethod(data, NM_STRONGSWAN_METHOD_KEY)
-	setSettingVpnStrongswanKeyPasswordFlags(data, NM_SETTING_SECRET_FLAG_NONE)
+	initBasicSettingSectionVpn(data, nm.NM_DBUS_SERVICE_STRONGSWAN)
+	setSettingVpnStrongswanKeyMethod(data, nm.NM_STRONGSWAN_METHOD_KEY)
+	setSettingVpnStrongswanKeyPasswordFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	setSettingVpnStrongswanKeyVirtual(data, true)
 }
 
 // strongswan
 func getSettingVpnStrongswanAvailableKeys(data connectionData) (keys []string) {
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS)
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE)
 
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_METHOD)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_METHOD)
 	switch getSettingVpnStrongswanKeyMethod(data) {
-	case NM_STRONGSWAN_METHOD_KEY:
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
-	case NM_STRONGSWAN_METHOD_AGENT:
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
-	case NM_STRONGSWAN_METHOD_SMARTCARD:
-	case NM_STRONGSWAN_METHOD_EAP:
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
-	case NM_STRONGSWAN_METHOD_PSK:
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USER)
-		keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
+	case nm.NM_STRONGSWAN_METHOD_KEY:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY)
+	case nm.NM_STRONGSWAN_METHOD_AGENT:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT)
+	case nm.NM_STRONGSWAN_METHOD_SMARTCARD:
+	case nm.NM_STRONGSWAN_METHOD_EAP:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
+	case nm.NM_STRONGSWAN_METHOD_PSK:
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USER)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD)
 	}
 
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP)
-	keys = appendAvailableKeys(data, keys, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP)
+	keys = appendAvailableKeys(data, keys, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP)
 	return
 }
 func getSettingVpnStrongswanAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
-	case NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
+	case nm.NM_SETTING_VPN_STRONGSWAN_KEY_METHOD:
 		values = []kvalue{
-			kvalue{NM_STRONGSWAN_METHOD_KEY, Tr("Private Key")},
-			kvalue{NM_STRONGSWAN_METHOD_AGENT, Tr("SSH Agent")},
-			kvalue{NM_STRONGSWAN_METHOD_SMARTCARD, Tr("Smartcard")},
-			kvalue{NM_STRONGSWAN_METHOD_EAP, Tr("EAP")},
-			kvalue{NM_STRONGSWAN_METHOD_PSK, Tr("Pre-Shared Key")},
+			kvalue{nm.NM_STRONGSWAN_METHOD_KEY, Tr("Private Key")},
+			kvalue{nm.NM_STRONGSWAN_METHOD_AGENT, Tr("SSH Agent")},
+			kvalue{nm.NM_STRONGSWAN_METHOD_SMARTCARD, Tr("Smartcard")},
+			kvalue{nm.NM_STRONGSWAN_METHOD_EAP, Tr("EAP")},
+			kvalue{nm.NM_STRONGSWAN_METHOD_PSK, Tr("Pre-Shared Key")},
 		}
 	}
 	return
@@ -117,7 +94,7 @@ func checkSettingVpnStrongswanKeyCertificate(data connectionData, errs sectionEr
 		return
 	}
 	value := getSettingVpnStrongswanKeyCertificate(data)
-	ensureFileExists(errs, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, value,
 		".pem", ".crt", ".key", ".cer", ".p12")
 }
 func checkSettingVpnStrongswanKeyUsercert(data connectionData, errs sectionErrors) {
@@ -125,7 +102,7 @@ func checkSettingVpnStrongswanKeyUsercert(data connectionData, errs sectionError
 		return
 	}
 	value := getSettingVpnStrongswanKeyUsercert(data)
-	ensureFileExists(errs, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, value,
 		".pem", ".crt", ".key", ".cer", ".p12")
 }
 func checkSettingVpnStrongswanKeyUserkey(data connectionData, errs sectionErrors) {
@@ -133,26 +110,26 @@ func checkSettingVpnStrongswanKeyUserkey(data connectionData, errs sectionErrors
 		return
 	}
 	value := getSettingVpnStrongswanKeyUserkey(data)
-	ensureFileExists(errs, sectionVpnStrongswan, NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value,
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value,
 		".pem", ".crt", ".key", ".cer", ".p12")
 }
 
 // Logic setter
 func logicSetSettingVpnStrongswanKeyMethod(data connectionData, value string) (err error) {
 	switch value {
-	case NM_STRONGSWAN_METHOD_KEY:
+	case nm.NM_STRONGSWAN_METHOD_KEY:
 		removeSettingVpnStrongswanKeyUser(data)
-	case NM_STRONGSWAN_METHOD_AGENT:
+	case nm.NM_STRONGSWAN_METHOD_AGENT:
 		removeSettingVpnStrongswanKeyUser(data)
 		removeSettingVpnStrongswanKeyUserkey(data)
-	case NM_STRONGSWAN_METHOD_SMARTCARD:
+	case nm.NM_STRONGSWAN_METHOD_SMARTCARD:
 		removeSettingVpnStrongswanKeyUser(data)
 		removeSettingVpnStrongswanKeyUsercert(data)
 		removeSettingVpnStrongswanKeyUserkey(data)
-	case NM_STRONGSWAN_METHOD_EAP:
+	case nm.NM_STRONGSWAN_METHOD_EAP:
 		removeSettingVpnStrongswanKeyUsercert(data)
 		removeSettingVpnStrongswanKeyUserkey(data)
-	case NM_STRONGSWAN_METHOD_PSK:
+	case nm.NM_STRONGSWAN_METHOD_PSK:
 		removeSettingVpnStrongswanKeyUsercert(data)
 		removeSettingVpnStrongswanKeyUserkey(data)
 	}

@@ -11,97 +11,13 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 )
 
-// Sections, correspondence to "NM_SETTING_XXX" in network manager.
-const (
-	// TODO: refactor code, add mappings to virtual sections and merge
-	// sectionVpnL2tp with NM_SETTING_VS_VPN_L2TP
-	section8021x              = NM_SETTING_802_1X_SETTING_NAME
-	sectionConnection         = NM_SETTING_CONNECTION_SETTING_NAME
-	sectionGsm                = NM_SETTING_GSM_SETTING_NAME
-	sectionCdma               = NM_SETTING_CDMA_SETTING_NAME
-	sectionIpv4               = NM_SETTING_IP4_CONFIG_SETTING_NAME
-	sectionIpv6               = NM_SETTING_IP6_CONFIG_SETTING_NAME
-	sectionPppoe              = NM_SETTING_PPPOE_SETTING_NAME
-	sectionPpp                = NM_SETTING_PPP_SETTING_NAME
-	sectionSerial             = NM_SETTING_SERIAL_SETTING_NAME
-	sectionVpn                = NM_SETTING_VPN_SETTING_NAME
-	sectionVpnL2tp            = NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
-	sectionVpnL2tpIpsec       = NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
-	sectionVpnL2tpPpp         = NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
-	sectionVpnStrongswan      = NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME
-	sectionVpnOpenconnect     = NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
-	sectionVpnOpenvpn         = NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME
-	sectionVpnOpenvpnAdvanced = NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME
-	sectionVpnOpenvpnSecurity = NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME
-	sectionVpnOpenvpnTlsauth  = NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME
-	sectionVpnOpenvpnProxies  = NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME
-	sectionVpnPptp            = NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME
-	sectionVpnPptpPpp         = NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME
-	sectionVpnVpnc            = NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME
-	sectionVpnVpncAdvanced    = NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME
-	sectionWired              = NM_SETTING_WIRED_SETTING_NAME
-	sectionWireless           = NM_SETTING_WIRELESS_SETTING_NAME
-	sectionWirelessSecurity   = NM_SETTING_WIRELESS_SECURITY_SETTING_NAME
-)
-
-// Alias sections, used for vpn connection which is a special key in fact
-const (
-	NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME             = "alias-vpn-l2tp"
-	NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME         = "alias-vpn-l2tp-ppp"
-	NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME       = "alias-vpn-l2tp-ipsec"
-	NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME      = "alias-vpn-openconnect"
-	NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME          = "alias-vpn-openvpn"
-	NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME = "alias-vpn-openvpn-advanced"
-	NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME = "alias-vpn-openvpn-security"
-	NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME  = "alias-vpn-openvpn-tlsauth"
-	NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME  = "alias-vpn-openvpn-proxies"
-	NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME             = "alias-vpn-pptp"
-	NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME         = "alias-vpn-pptp-ppp"
-	NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME       = "alias-vpn-strongswan"
-	NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME             = "alias-vpn-vpnc"
-	NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME    = "alias-vpn-vpnc-advanced"
-)
-
-// Cache section, used for connection session when editing some
-// special virtual keys, e.g. NM_SETTING_VK_MOBILE_COUNTRYREGION
+// Virtual cache section, used for connection session when editing
+// some special virtual keys,
+// e.g. nm.NM_SETTING_VK_MOBILE_COUNTRYREGION
 const sectionCache = "cache"
-
-func getRealSectionName(name string) (realName string) {
-	realName = name
-	switch name {
-	case NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME:
-		realName = sectionVpn
-	case NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME:
-		realName = sectionVpn
-	}
-	return
-}
 
 // VsectionInfo defines virtual section, used by front-end to build connection edit page run time.
 type VsectionInfo struct {
@@ -154,35 +70,6 @@ type GeneralKeyInfo struct {
 	MaxValue      int
 }
 
-const (
-	vsectionGeneral            = NM_SETTING_VS_GENERAL              // -> sectionConnection
-	vsectionEthernet           = NM_SETTING_VS_ETHERNET             // -> sectionWired
-	vsectionMobile             = NM_SETTING_VS_MOBILE               // -> sectionGsm, sectionCdma
-	vsectionMobileGsm          = NM_SETTING_VS_MOBILE_GSM           // -> sectionGsm // TODO: remove
-	vsectionMobileCdma         = NM_SETTING_VS_MOBILE_CDMA          // -> sectionCdma
-	vsectionWifi               = NM_SETTING_VS_WIFI                 // -> sectionWireless
-	vsectionIpv4               = NM_SETTING_VS_IPV4                 // -> sectionIpv4
-	vsectionIpv6               = NM_SETTING_VS_IPV6                 // -> sectionIpv6
-	vsectionSecurity           = NM_SETTING_VS_SECURITY             // -> section8021x, sectionWirelessSecurity
-	vsectionPppoe              = NM_SETTING_VS_PPPOE                // -> sectionPppoe
-	vsectionPpp                = NM_SETTING_VS_PPP                  // -> sectionPpp
-	vsectionVpn                = NM_SETTING_VS_VPN                  // -> sectionVpnL2tp, sectionVpnOpenconnect, sectionVpnOpenvpn, sectionVpnPptp, sectionVpnVpnc
-	vsectionVpnL2tp            = NM_SETTING_VS_VPN_L2TP             // -> sectionVpnL2tp
-	vsectionVpnL2tpPpp         = NM_SETTING_VS_VPN_L2TP_PPP         // -> sectionVpnL2tpPpp
-	vsectionVpnL2tpIpsec       = NM_SETTING_VS_VPN_L2TP_IPSEC       // -> sectionVpnL2tpIpsec
-	vsectionVpnOpenconnect     = NM_SETTING_VS_VPN_OPENCONNECT      // -> sectionVpnOpenconnect
-	vsectionVpnOpenvpn         = NM_SETTING_VS_VPN_OPENVPN          // -> sectionVpnOpenvpn
-	vsectionVpnOpenvpnAdvanced = NM_SETTING_VS_VPN_OPENVPN_ADVANCED // -> sectionVpnOpenVpnAdvanced
-	vsectionVpnOpenvpnSecurity = NM_SETTING_VS_VPN_OPENVPN_SECURITY // -> sectionVpnOpenVpnSecurity
-	vsectionVpnOpenvpnTlsauth  = NM_SETTING_VS_VPN_OPENVPN_TLSAUTH  // -> sectionVpnOpenVpnTlsauth
-	vsectionVpnOpenvpnProxies  = NM_SETTING_VS_VPN_OPENVPN_PROXIES  // -> sectionVpnOpenVpnProxies
-	vsectionVpnStrongswan      = NM_SETTING_VS_VPN_STRONGSWAN       // -> sectionVpnStrongswan
-	vsectionVpnPptp            = NM_SETTING_VS_VPN_PPTP             // -> sectionVpnPptp
-	vsectionVpnPptpPpp         = NM_SETTING_VS_VPN_PPTP_PPP         // -> sectionVpnPptpPpp
-	vsectionVpnVpnc            = NM_SETTING_VS_VPN_VPNC             // -> sectionVpnVpnc
-	vsectionVpnVpncAdvanced    = NM_SETTING_VS_VPN_VPNC_ADVANCED    // -> sectionVpnVpncAdvanced
-)
-
 func isVirtualSection(section string) bool {
 	for _, vs := range virtualSections {
 		if vs.VirtualSection == section {
@@ -210,106 +97,106 @@ func doGetRelatedVsections(data connectionData, keepAll bool) (vsections []strin
 	switch connectionType {
 	case connectionWired:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionEthernet,
-			vsectionSecurity,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_ETHERNET,
+			nm.NM_SETTING_VS_SECURITY,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
 	case connectionWireless:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionWifi,
-			vsectionSecurity,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_WIFI,
+			nm.NM_SETTING_VS_SECURITY,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
 	case connectionWirelessAdhoc:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionWifi,
-			vsectionSecurity,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_WIFI,
+			nm.NM_SETTING_VS_SECURITY,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
 	case connectionWirelessHotspot:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionWifi,
-			vsectionSecurity,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_WIFI,
+			nm.NM_SETTING_VS_SECURITY,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
 	case connectionPppoe:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionEthernet,
-			vsectionPppoe,
-			vsectionPpp,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_ETHERNET,
+			nm.NM_SETTING_VS_PPPOE,
+			nm.NM_SETTING_VS_PPP,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionVpnL2tp:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionVpnL2tpPpp,
-			vsectionVpnL2tpIpsec,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_VPN_L2TP_PPP,
+			nm.NM_SETTING_VS_VPN_L2TP_IPSEC,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionVpnOpenconnect:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
 	case connectionVpnOpenvpn:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionVpnOpenvpnAdvanced,
-			vsectionVpnOpenvpnSecurity,
-			vsectionVpnOpenvpnProxies,
-			vsectionIpv4,
-			vsectionIpv6,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_VPN_OPENVPN_ADVANCED,
+			nm.NM_SETTING_VS_VPN_OPENVPN_SECURITY,
+			nm.NM_SETTING_VS_VPN_OPENVPN_PROXIES,
+			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_IPV6,
 		}
-		// when connection connection is static key, vsectionVpnOpenvpnTlsauth is not available
-		if keepAll || getSettingVpnOpenvpnKeyConnectionType(data) != NM_OPENVPN_CONTYPE_STATIC_KEY {
-			vsections = append(vsections, vsectionVpnOpenvpnTlsauth)
+		// when connection connection is static key, nm.NM_SETTING_VS_VPN_OPENVPN_TLSAUTH is not available
+		if keepAll || getSettingVpnOpenvpnKeyConnectionType(data) != nm.NM_OPENVPN_CONTYPE_STATIC_KEY {
+			vsections = append(vsections, nm.NM_SETTING_VS_VPN_OPENVPN_TLSAUTH)
 		}
 	case connectionVpnPptp:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionVpnPptpPpp,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_VPN_PPTP_PPP,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionVpnStrongswan:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionVpnVpnc:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionVpn,
-			vsectionVpnVpncAdvanced,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_VPN,
+			nm.NM_SETTING_VS_VPN_VPNC_ADVANCED,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionMobileGsm:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionMobile,
-			vsectionPpp,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_MOBILE,
+			nm.NM_SETTING_VS_PPP,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	case connectionMobileCdma:
 		vsections = []string{
-			vsectionGeneral,
-			vsectionMobile,
-			vsectionPpp,
-			vsectionIpv4,
+			nm.NM_SETTING_VS_GENERAL,
+			nm.NM_SETTING_VS_MOBILE,
+			nm.NM_SETTING_VS_PPP,
+			nm.NM_SETTING_VS_IPV4,
 		}
 	}
 	return
@@ -326,7 +213,7 @@ func getAllSectionsOfVsection(data connectionData, vsection string) (sections []
 }
 
 // get related sections of virtual section run time. The returned
-// sections may contains virtual sections like vsectionMobile, for
+// sections may contains virtual sections like nm.NM_SETTING_VS_MOBILE, for
 // that some vkTypeController keys will be contained in them. If
 // keepAll is true, will return all may used sections instead of
 // filter some of them through the context.
@@ -335,87 +222,87 @@ func doGetRelatedSectionsOfVsection(data connectionData, vsection string, keepAl
 	switch vsection {
 	default:
 		logger.Error("getRelatedSectionsOfVsection: invalid vsection name", vsection)
-	case vsectionGeneral:
-		sections = []string{sectionConnection}
-	case vsectionMobile:
-		sections = []string{vsectionMobile}
+	case nm.NM_SETTING_VS_GENERAL:
+		sections = []string{nm.NM_SETTING_CONNECTION_SETTING_NAME}
+	case nm.NM_SETTING_VS_MOBILE:
+		sections = []string{nm.NM_SETTING_VS_MOBILE}
 		switch connectionType {
 		case connectionMobileGsm:
-			sections = append(sections, sectionGsm)
+			sections = append(sections, nm.NM_SETTING_GSM_SETTING_NAME)
 		case connectionMobileCdma:
-			sections = append(sections, sectionCdma)
+			sections = append(sections, nm.NM_SETTING_CDMA_SETTING_NAME)
 		}
-	case vsectionMobileGsm:
-		sections = []string{sectionGsm}
-	case vsectionMobileCdma:
-		sections = []string{sectionCdma}
-	case vsectionEthernet:
-		sections = []string{sectionWired}
-	case vsectionWifi:
-		sections = []string{sectionWireless}
-	case vsectionIpv4:
-		sections = []string{sectionIpv4}
-	case vsectionIpv6:
-		sections = []string{sectionIpv6}
-	case vsectionSecurity:
+	case nm.NM_SETTING_VS_MOBILE_GSM:
+		sections = []string{nm.NM_SETTING_GSM_SETTING_NAME}
+	case nm.NM_SETTING_VS_MOBILE_CDMA:
+		sections = []string{nm.NM_SETTING_CDMA_SETTING_NAME}
+	case nm.NM_SETTING_VS_ETHERNET:
+		sections = []string{nm.NM_SETTING_WIRED_SETTING_NAME}
+	case nm.NM_SETTING_VS_WIFI:
+		sections = []string{nm.NM_SETTING_WIRELESS_SETTING_NAME}
+	case nm.NM_SETTING_VS_IPV4:
+		sections = []string{nm.NM_SETTING_IP4_CONFIG_SETTING_NAME}
+	case nm.NM_SETTING_VS_IPV6:
+		sections = []string{nm.NM_SETTING_IP6_CONFIG_SETTING_NAME}
+	case nm.NM_SETTING_VS_SECURITY:
 		switch connectionType {
 		case connectionWired:
-			sections = []string{vsectionSecurity}
-			if keepAll || isSettingSectionExists(data, section8021x) {
-				sections = append(sections, section8021x)
+			sections = []string{nm.NM_SETTING_VS_SECURITY}
+			if keepAll || isSettingExists(data, nm.NM_SETTING_802_1X_SETTING_NAME) {
+				sections = append(sections, nm.NM_SETTING_802_1X_SETTING_NAME)
 			}
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-			sections = []string{sectionWirelessSecurity}
-			if keepAll || isSettingSectionExists(data, section8021x) {
-				sections = append(sections, section8021x)
+			sections = []string{nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME}
+			if keepAll || isSettingExists(data, nm.NM_SETTING_802_1X_SETTING_NAME) {
+				sections = append(sections, nm.NM_SETTING_802_1X_SETTING_NAME)
 			}
 		}
-	case vsectionPppoe:
-		sections = []string{sectionPppoe}
-	case vsectionPpp:
-		sections = []string{sectionPpp}
-	case vsectionVpn:
+	case nm.NM_SETTING_VS_PPPOE:
+		sections = []string{nm.NM_SETTING_PPPOE_SETTING_NAME}
+	case nm.NM_SETTING_VS_PPP:
+		sections = []string{nm.NM_SETTING_PPP_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN:
 		switch connectionType {
 		case connectionVpnL2tp:
-			sections = []string{sectionVpnL2tp}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME}
 		case connectionVpnOpenconnect:
-			sections = []string{sectionVpnOpenconnect}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME}
 		case connectionVpnOpenvpn:
-			sections = []string{sectionVpnOpenvpn}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME}
 		case connectionVpnPptp:
-			sections = []string{sectionVpnPptp}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME}
 		case connectionVpnStrongswan:
-			sections = []string{sectionVpnStrongswan}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME}
 		case connectionVpnVpnc:
-			sections = []string{sectionVpnVpnc}
+			sections = []string{nm.NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME}
 		}
-		sections = append(sections, vsectionVpn)
-	case vsectionVpnL2tp:
-		sections = []string{sectionVpnL2tp}
-	case vsectionVpnL2tpPpp:
-		sections = []string{sectionVpnL2tpPpp}
-	case vsectionVpnL2tpIpsec:
-		sections = []string{sectionVpnL2tpIpsec}
-	case vsectionVpnOpenconnect:
-		sections = []string{sectionVpnOpenconnect}
-	case vsectionVpnOpenvpn:
-		sections = []string{sectionVpnOpenvpn}
-	case vsectionVpnOpenvpnAdvanced:
-		sections = []string{sectionVpnOpenvpnAdvanced}
-	case vsectionVpnOpenvpnSecurity:
-		sections = []string{sectionVpnOpenvpnSecurity}
-	case vsectionVpnOpenvpnTlsauth:
-		sections = []string{sectionVpnOpenvpnTlsauth}
-	case vsectionVpnOpenvpnProxies:
-		sections = []string{sectionVpnOpenvpnProxies}
-	case vsectionVpnPptp:
-		sections = []string{sectionVpnPptp}
-	case vsectionVpnPptpPpp:
-		sections = []string{sectionVpnPptpPpp}
-	case vsectionVpnVpnc:
-		sections = []string{sectionVpnVpnc}
-	case vsectionVpnVpncAdvanced:
-		sections = []string{sectionVpnVpncAdvanced}
+		sections = append(sections, nm.NM_SETTING_VS_VPN)
+	case nm.NM_SETTING_VS_VPN_L2TP:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_L2TP_PPP:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_L2TP_IPSEC:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENCONNECT:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENVPN:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENVPN_ADVANCED:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENVPN_SECURITY:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENVPN_TLSAUTH:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_OPENVPN_PROXIES:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_PPTP:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_PPTP_PPP:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_VPNC:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME}
+	case nm.NM_SETTING_VS_VPN_VPNC_ADVANCED:
+		sections = []string{nm.NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME}
 	}
 	return
 }
@@ -441,7 +328,7 @@ func doGetRelatedSections(data connectionData, keepAll bool) (sections []string)
 func getSectionOfKeyInVsection(data connectionData, vsection, key string) (section string) {
 	sections := doGetRelatedSectionsOfVsection(data, vsection, false)
 	for _, section := range sections {
-		if generalIsKeyInSettingSection(section, key) {
+		if generalIsKeyShouldInSettingSection(section, key) {
 			return section
 		}
 	}
@@ -505,7 +392,7 @@ func (vs *VsectionInfo) fixExpanded(data connectionData) {
 	vs.Expanded = isVsectionExpandedDefault(data, vs.VirtualSection)
 }
 func isVsectionExpandedDefault(data connectionData, vsection string) (expanded bool) {
-	if vsection == vsectionGeneral {
+	if vsection == nm.NM_SETTING_VS_GENERAL {
 		return true
 	}
 
@@ -513,52 +400,52 @@ func isVsectionExpandedDefault(data connectionData, vsection string) (expanded b
 	switch connectionType {
 	case connectionWired:
 		switch vsection {
-		case vsectionIpv4:
+		case nm.NM_SETTING_VS_IPV4:
 			expanded = true
 		}
 	case connectionPppoe:
 		switch vsection {
-		case vsectionPppoe:
+		case nm.NM_SETTING_VS_PPPOE:
 			expanded = true
 		}
 	case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
 		switch vsection {
-		case vsectionIpv4, vsectionSecurity:
+		case nm.NM_SETTING_VS_IPV4, nm.NM_SETTING_VS_SECURITY:
 			expanded = true
 		}
 	case connectionMobileGsm, connectionMobileCdma:
 		switch vsection {
-		case vsectionMobile:
+		case nm.NM_SETTING_VS_MOBILE:
 			expanded = true
 		}
 	case connectionVpnL2tp:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	case connectionVpnOpenconnect:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	case connectionVpnOpenvpn:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	case connectionVpnPptp:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	case connectionVpnStrongswan:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	case connectionVpnVpnc:
 		switch vsection {
-		case vsectionVpn:
+		case nm.NM_SETTING_VS_VPN:
 			expanded = true
 		}
 	default:
@@ -574,7 +461,7 @@ func isGeneralKeyReadonly(data connectionData, section, key string) (readonly bo
 	connectionType := getCustomConnectionType(data)
 	switch connectionType {
 	case connectionWired, connectionMobileGsm, connectionMobileCdma, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-		if section == sectionConnection && key == NM_SETTING_CONNECTION_ID {
+		if section == nm.NM_SETTING_CONNECTION_SETTING_NAME && key == nm.NM_SETTING_CONNECTION_ID {
 			return true
 		}
 	}

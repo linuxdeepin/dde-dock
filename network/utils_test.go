@@ -12,6 +12,7 @@ package network
 import (
 	C "launchpad.net/gocheck"
 	"os"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"testing"
 )
 
@@ -30,7 +31,7 @@ func (*testWrapper) TestGetSetConnectionData(c *C.C) {
 
 	data := make(connectionData)
 
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionId(data, testConnectionId)
 	setSettingConnectionUuid(data, testConnectionUuid)
 	setSettingConnectionType(data, testConnectionType)
@@ -46,7 +47,7 @@ func (*testWrapper) TestGetSetConnectionDataJSON(c *C.C) {
 	testConnectionTypeJSON := `"802-3-ethernet"`
 
 	data := make(connectionData)
-	addSettingSection(data, sectionConnection)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
 	setSettingConnectionIdJSON(data, testConnectionIdJSON)
 	setSettingConnectionUuidJSON(data, testConnectionUuidJSON)
 	setSettingConnectionTypeJSON(data, testConnectionTypeJSON)
@@ -60,87 +61,87 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	data := make(connectionData)
 	var defaultValueJSON string
 	var setValueJSON string
-	addSettingSection(data, sectionConnection)
-	addSettingSection(data, sectionWired)
-	addSettingSection(data, section8021x)
-	addSettingSection(data, sectionIpv4)
-	addSettingSection(data, sectionIpv6)
+	addSetting(data, nm.NM_SETTING_CONNECTION_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_WIRED_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME)
+	addSetting(data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME)
 
 	// ktypeBoolean
 	defaultValueJSON = `true`
 	c.Check(getSettingConnectionAutoconnectJSON(data), C.Equals, defaultValueJSON)
 	setSettingConnectionAutoconnectJSON(data, defaultValueJSON)
-	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_AUTOCONNECT), C.Equals, true)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_AUTOCONNECT), C.Equals, true)
 
 	// ktypeArrayByte
 	defaultValueJSON = `""`
 	setValueJSON = `""`
 	c.Check(getSetting8021xPasswordRawJSON(data), C.Equals, defaultValueJSON)
 	setSetting8021xPasswordRawJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_PASSWORD_RAW), C.Equals, false)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_PASSWORD_RAW), C.Equals, false)
 
 	// ktypeString
 	defaultValueJSON = `""`
 	setValueJSON = `""`
 	c.Check(getSettingConnectionIdJSON(data), C.Equals, defaultValueJSON)
 	setSettingConnectionIdJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionConnection, NM_SETTING_CONNECTION_ID), C.Equals, false)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_CONNECTION_SETTING_NAME, nm.NM_SETTING_CONNECTION_ID), C.Equals, false)
 
 	// ktypeWrapperMacAddress
 	defaultValueJSON = `""`
 	setValueJSON = `""`
 	c.Check(getSettingWiredMacAddressJSON(data), C.Equals, defaultValueJSON)
 	setSettingWiredMacAddressJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionWired, NM_SETTING_WIRED_MAC_ADDRESS), C.Equals, false)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_WIRED_MAC_ADDRESS), C.Equals, false)
 
 	// ktypeWrapperString
 	defaultValueJSON = `""`
 	setValueJSON = `""`
 	c.Check(getSetting8021xCaCertJSON(data), C.Equals, defaultValueJSON)
 	setSetting8021xCaCertJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, section8021x, NM_SETTING_802_1X_CA_CERT), C.Equals, false)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_802_1X_SETTING_NAME, nm.NM_SETTING_802_1X_CA_CERT), C.Equals, false)
 
 	// ktypeWrapperIpv4Dns
 	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
-	c.Check(getSettingIp4ConfigDnsJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp4ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_DNS), C.Equals, false)
+	c.Check(getSettingIP4ConfigDnsJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP4ConfigDnsJSON(data, setValueJSON)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS), C.Equals, false)
 
 	// ktypeWrapperIpv4Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
-	c.Check(getSettingIp4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp4ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ADDRESSES), C.Equals, false)
+	c.Check(getSettingIP4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP4ConfigAddressesJSON(data, setValueJSON)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES), C.Equals, false)
 
 	// ktypeWrapperIpv4Routes
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Mask":"","NextHop":"","Metric":0}]`
-	c.Check(getSettingIp4ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp4ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingKeyExists(data, sectionIpv4, NM_SETTING_IP_CONFIG_ROUTES), C.Equals, false)
+	c.Check(getSettingIP4ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP4ConfigRoutesJSON(data, setValueJSON)
+	c.Check(isSettingKeyExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ROUTES), C.Equals, false)
 
 	// ktypeWrapperIpv6Dns
 	defaultValueJSON = `[]`
 	setValueJSON = `[""]`
-	c.Check(getSettingIp6ConfigDnsJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp6ConfigDnsJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigDnsExists(data), C.Equals, false)
+	c.Check(getSettingIP6ConfigDnsJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP6ConfigDnsJSON(data, setValueJSON)
+	c.Check(isSettingIP6ConfigDnsExists(data), C.Equals, false)
 
 	// ktypeWrapperIpv6Addresses
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"Gateway":""}]`
-	c.Check(getSettingIp6ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp6ConfigAddressesJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigAddressesExists(data), C.Equals, false)
+	c.Check(getSettingIP6ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP6ConfigAddressesJSON(data, setValueJSON)
+	c.Check(isSettingIP6ConfigAddressesExists(data), C.Equals, false)
 
 	// ktypeWrapperIpv6
 	defaultValueJSON = `[]`
 	setValueJSON = `[{"Address":"","Prefix":0,"NextHop":"","Metric":0}]`
-	c.Check(getSettingIp6ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
-	setSettingIp6ConfigRoutesJSON(data, setValueJSON)
-	c.Check(isSettingIp6ConfigRoutesExists(data), C.Equals, false)
+	c.Check(getSettingIP6ConfigRoutesJSON(data), C.Equals, defaultValueJSON)
+	setSettingIP6ConfigRoutesJSON(data, setValueJSON)
+	c.Check(isSettingIP6ConfigRoutesExists(data), C.Equals, false)
 }
 
 func (*testWrapper) TestKeyError(c *C.C) {
@@ -151,7 +152,7 @@ func (*testWrapper) TestKeyError(c *C.C) {
 
 	var errs sectionErrors
 	data := make(connectionData)
-	addSettingSection(data, section8021x)
+	addSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 
 	// check 8021x cert file
 	errs = make(sectionErrors)

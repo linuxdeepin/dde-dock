@@ -10,6 +10,7 @@
 package network
 
 import (
+	"pkg.deepin.io/dde/daemon/network/nm"
 	. "pkg.deepin.io/lib/gettext"
 	"strconv"
 	"strings"
@@ -37,44 +38,42 @@ const (
 
 func getCustomDeviceType(devType uint32) (customDevType string) {
 	switch devType {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		return deviceEthernet
-	case NM_DEVICE_TYPE_WIFI:
+	case nm.NM_DEVICE_TYPE_WIFI:
 		return deviceWifi
-	case NM_DEVICE_TYPE_UNUSED1:
+	case nm.NM_DEVICE_TYPE_UNUSED1:
 		return deviceUnused1
-	case NM_DEVICE_TYPE_UNUSED2:
+	case nm.NM_DEVICE_TYPE_UNUSED2:
 		return deviceUnused2
-	case NM_DEVICE_TYPE_BT:
+	case nm.NM_DEVICE_TYPE_BT:
 		return deviceBt
-	case NM_DEVICE_TYPE_OLPC_MESH:
+	case nm.NM_DEVICE_TYPE_OLPC_MESH:
 		return deviceOlpcMesh
-	case NM_DEVICE_TYPE_WIMAX:
+	case nm.NM_DEVICE_TYPE_WIMAX:
 		return deviceWimax
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_MODEM:
 		return deviceModem
-	case NM_DEVICE_TYPE_INFINIBAND:
+	case nm.NM_DEVICE_TYPE_INFINIBAND:
 		return deviceInfiniband
-	case NM_DEVICE_TYPE_BOND:
+	case nm.NM_DEVICE_TYPE_BOND:
 		return deviceBond
-	case NM_DEVICE_TYPE_VLAN:
+	case nm.NM_DEVICE_TYPE_VLAN:
 		return deviceVlan
-	case NM_DEVICE_TYPE_ADSL:
+	case nm.NM_DEVICE_TYPE_ADSL:
 		return deviceAdsl
-	case NM_DEVICE_TYPE_BRIDGE:
+	case nm.NM_DEVICE_TYPE_BRIDGE:
 		return deviceBridge
-	case NM_DEVICE_TYPE_GENERIC:
+	case nm.NM_DEVICE_TYPE_GENERIC:
 		return deviceGeneric
-	case NM_DEVICE_TYPE_TEAM:
+	case nm.NM_DEVICE_TYPE_TEAM:
 		return deviceTeam
-	case NM_DEVICE_TYPE_UNKNOWN:
+	case nm.NM_DEVICE_TYPE_UNKNOWN:
 	default:
 		logger.Error("unknown device type", devType)
 	}
 	return deviceUnknown
 }
-
-// TODO: support generic/bluetooth connection types for nm 1.0
 
 // Custom connection types
 const (
@@ -127,40 +126,40 @@ var supportedConnectionTypes = []string{
 func getCustomConnectionType(data connectionData) (connType string) {
 	t := getSettingConnectionType(data)
 	switch t {
-	case NM_SETTING_WIRED_SETTING_NAME:
+	case nm.NM_SETTING_WIRED_SETTING_NAME:
 		connType = connectionWired
-	case NM_SETTING_WIRELESS_SETTING_NAME:
+	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
 		if isSettingWirelessModeExists(data) {
 			switch getSettingWirelessMode(data) {
-			case NM_SETTING_WIRELESS_MODE_INFRA:
+			case nm.NM_SETTING_WIRELESS_MODE_INFRA:
 				connType = connectionWireless
-			case NM_SETTING_WIRELESS_MODE_ADHOC:
+			case nm.NM_SETTING_WIRELESS_MODE_ADHOC:
 				connType = connectionWirelessAdhoc
-			case NM_SETTING_WIRELESS_MODE_AP:
+			case nm.NM_SETTING_WIRELESS_MODE_AP:
 				connType = connectionWirelessHotspot
 			}
 		} else {
 			connType = connectionWireless
 		}
-	case NM_SETTING_PPPOE_SETTING_NAME:
+	case nm.NM_SETTING_PPPOE_SETTING_NAME:
 		connType = connectionPppoe
-	case NM_SETTING_GSM_SETTING_NAME:
+	case nm.NM_SETTING_GSM_SETTING_NAME:
 		connType = connectionMobileGsm
-	case NM_SETTING_CDMA_SETTING_NAME:
+	case nm.NM_SETTING_CDMA_SETTING_NAME:
 		connType = connectionMobileCdma
-	case NM_SETTING_VPN_SETTING_NAME:
+	case nm.NM_SETTING_VPN_SETTING_NAME:
 		switch getSettingVpnServiceType(data) {
-		case NM_DBUS_SERVICE_L2TP:
+		case nm.NM_DBUS_SERVICE_L2TP:
 			connType = connectionVpnL2tp
-		case NM_DBUS_SERVICE_OPENCONNECT:
+		case nm.NM_DBUS_SERVICE_OPENCONNECT:
 			connType = connectionVpnOpenconnect
-		case NM_DBUS_SERVICE_OPENVPN:
+		case nm.NM_DBUS_SERVICE_OPENVPN:
 			connType = connectionVpnOpenvpn
-		case NM_DBUS_SERVICE_PPTP:
+		case nm.NM_DBUS_SERVICE_PPTP:
 			connType = connectionVpnPptp
-		case NM_DBUS_SERVICE_STRONGSWAN:
+		case nm.NM_DBUS_SERVICE_STRONGSWAN:
 			connType = connectionVpnStrongswan
-		case NM_DBUS_SERVICE_VPNC:
+		case nm.NM_DBUS_SERVICE_VPNC:
 			connType = connectionVpnVpnc
 		}
 	}
@@ -171,14 +170,14 @@ func getCustomConnectionType(data connectionData) (connType string) {
 }
 
 func isWirelessConnection(data connectionData) (isWireless bool) {
-	if getSettingConnectionType(data) == NM_SETTING_WIRELESS_SETTING_NAME {
+	if getSettingConnectionType(data) == nm.NM_SETTING_WIRELESS_SETTING_NAME {
 		return true
 	}
 	return false
 }
 
 func isVpnConnection(data connectionData) (isVpn bool) {
-	if getSettingConnectionType(data) == NM_SETTING_VPN_SETTING_NAME {
+	if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
 		return true
 	}
 	return false
@@ -254,7 +253,7 @@ func isConnectionAlwaysAsk(data connectionData, settingName string) (ask bool) {
 		if strings.HasSuffix(key, "-flags") {
 			value := variant.Value()
 			if flag, ok := value.(uint32); ok {
-				if flag == NM_SETTING_SECRET_FLAG_NONE {
+				if flag == nm.NM_SETTING_SECRET_FLAG_NONE {
 					ask = true
 				}
 			}

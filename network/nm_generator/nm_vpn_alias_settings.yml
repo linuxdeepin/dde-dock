@@ -1,0 +1,586 @@
+# VPN settings are alias for NM_SETTING_VPN_SETTING_NAME, and the vpn
+# keys are all dumped from the related vpn gnome plugin source which
+# all stored in key NM_SETTING_VPN_DATA or NM_SETTING_VPN_SECRETS.
+---
+- SettingClass: SettingVpnL2tp
+  Name: NM_SETTING_ALIAS_VPN_L2TP_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-l2tp"
+  Keys:
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_GATEWAY
+    Value: gateway
+    CapcaseName: SettingVpnL2tpKeyGateway
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_USER
+    Value: user
+    CapcaseName: SettingVpnL2tpKeyUser
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_PASSWORD_FLAGS
+    Value: "password-flags"
+    CapcaseName: SettingVpnL2tpKeyPasswordFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_PASSWORD
+    Value: password
+    CapcaseName: SettingVpnL2tpKeyPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_DOMAIN
+    Value: domain
+    CapcaseName: SettingVpnL2tpKeyDomain
+    Type: ktypeString
+- SettingClass: SettingVpnL2tpPpp
+  Name: NM_SETTING_ALIAS_VPN_L2TP_PPP_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-l2tp-ppp"
+  Keys:
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE
+    Value: "require-mppe"
+    CapcaseName: SettingVpnL2tpKeyRequireMppe
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_40
+    Value: "require-mppe-40"
+    CapcaseName: SettingVpnL2tpKeyRequireMppe40
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REQUIRE_MPPE_128
+    Value: "require-mppe-128"
+    CapcaseName: SettingVpnL2tpKeyRequireMppe128
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_MPPE_STATEFUL
+    Value: "mppe-stateful"
+    CapcaseName: SettingVpnL2tpKeyMppeStateful
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REFUSE_EAP
+    Value: "refuse-eap"
+    CapcaseName: SettingVpnL2tpKeyRefuseEap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REFUSE_PAP
+    Value: "refuse-pap"
+    CapcaseName: SettingVpnL2tpKeyRefusePap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REFUSE_CHAP
+    Value: "refuse-chap"
+    CapcaseName: SettingVpnL2tpKeyRefuseChap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAP
+    Value: "refuse-mschap"
+    CapcaseName: SettingVpnL2tpKeyRefuseMschap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_REFUSE_MSCHAPV2
+    Value: "refuse-mschapv2"
+    CapcaseName: SettingVpnL2tpKeyRefuseMschapv2
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_NOBSDCOMP
+    Value: nobsdcomp
+    CapcaseName: SettingVpnL2tpKeyNobsdcomp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_NODEFLATE
+    Value: nodeflate
+    CapcaseName: SettingVpnL2tpKeyNodeflate
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_NO_VJ_COMP
+    Value: "no-vj-comp"
+    CapcaseName: SettingVpnL2tpKeyNoVjComp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_NO_PCOMP
+    Value: nopcomp
+    CapcaseName: SettingVpnL2tpKeyNoPcomp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_NO_ACCOMP
+    Value: noaccomp
+    CapcaseName: SettingVpnL2tpKeyNoAccomp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_FAILURE
+    Value: "lcp-echo-failure"
+    CapcaseName: SettingVpnL2tpKeyLcpEchoFailure
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_LCP_ECHO_INTERVAL
+    Value: "lcp-echo-interval"
+    CapcaseName: SettingVpnL2tpKeyLcpEchoInterval
+    Type: ktypeUint32
+- SettingClass: SettingVpnL2tpIpsec
+  Name: NM_SETTING_ALIAS_VPN_L2TP_IPSEC_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-l2tp-ipsec"
+  Keys:
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_ENABLE
+    Value: "ipsec-enabled"
+    CapcaseName: SettingVpnL2tpKeyIpsecEnable
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_GROUP_NAME
+    Value: "ipsec-group-name"
+    CapcaseName: SettingVpnL2tpKeyIpsecGroupName
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_GATEWAY_ID
+    Value: "ipsec-gateway-id"
+    CapcaseName: SettingVpnL2tpKeyIpsecGatewayId
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_L2TP_KEY_IPSEC_PSK
+    Value: "ipsec-psk"
+    CapcaseName: SettingVpnL2tpKeyIpsecPsk
+    Type: ktypeString
+- SettingClass: SettingVpnOpenconnect
+  Name: NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openconnect"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_GATEWAY
+    Value: gateway
+    CapcaseName: SettingVpnOpenconnectKeyGateway
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_CACERT
+    Value: cacert
+    CapcaseName: SettingVpnOpenconnectKeyCacert
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_PROXY
+    Value: proxy
+    CapcaseName: SettingVpnOpenconnectKeyProxy
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_CSD_ENABLE
+    Value: enable_csd_trojan
+    CapcaseName: SettingVpnOpenconnectKeyCsdEnable
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_CSD_WRAPPER
+    Value: csd_wrapper
+    CapcaseName: SettingVpnOpenconnectKeyCsdWrapper
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT
+    Value: usercert
+    CapcaseName: SettingVpnOpenconnectKeyUsercert
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY
+    Value: userkey
+    CapcaseName: SettingVpnOpenconnectKeyPrivkey
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_PEM_PASSPHRASE_FSID
+    Value: pem_passphrase_fsid
+    CapcaseName: SettingVpnOpenconnectKeyPemPassphraseFsid
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_COOKIE
+    Value: cookie
+    CapcaseName: SettingVpnOpenconnectKeyCookie
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_GWCERT
+    Value: gwcert
+    CapcaseName: SettingVpnOpenconnectKeyGwcert
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_AUTHTYPE
+    Value: authtype
+    CapcaseName: SettingVpnOpenconnectKeyAuthtype
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_MTU
+    Value: mtu
+    CapcaseName: SettingVpnOpenconnectKeyMtu
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_SOURCE
+    Value: stoken_source
+    CapcaseName: SettingVpnOpenconnectKeyStokenSource
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENCONNECT_KEY_STOKEN_STRING
+    Value: stoken_string
+    CapcaseName: SettingVpnOpenconnectKeyStokenString
+    Type: ktypeString
+- SettingClass: SettingVpnOpenvpn
+  Name: NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openvpn"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_REMOTE
+    Value: remote
+    CapcaseName: SettingVpnOpenvpnKeyRemote
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CONNECTION_TYPE
+    Value: "connection-type"
+    CapcaseName: SettingVpnOpenvpnKeyConnectionType
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_USERNAME
+    Value: username
+    CapcaseName: SettingVpnOpenvpnKeyUsername
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PASSWORD_FLAGS
+    Value: "password-flags"
+    CapcaseName: SettingVpnOpenvpnKeyPasswordFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PASSWORD
+    Value: password
+    CapcaseName: SettingVpnOpenvpnKeyPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CA
+    Value: ca
+    CapcaseName: SettingVpnOpenvpnKeyCa
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CERT
+    Value: cert
+    CapcaseName: SettingVpnOpenvpnKeyCert
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_KEY
+    Value: key
+    CapcaseName: SettingVpnOpenvpnKeyKey
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CERTPASS_FLAGS
+    Value: "cert-pass-flags"
+    CapcaseName: SettingVpnOpenvpnKeyCertpassFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CERTPASS
+    Value: "cert-pass"
+    CapcaseName: SettingVpnOpenvpnKeyCertpass
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY
+    Value: "static-key"
+    CapcaseName: SettingVpnOpenvpnKeyStaticKey
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY_DIRECTION
+    Value: "static-key-direction"
+    CapcaseName: SettingVpnOpenvpnKeyStaticKeyDirection
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_REMOTE_IP
+    Value: "remote-ip"
+    CapcaseName: SettingVpnOpenvpnKeyRemoteIp
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_LOCAL_IP
+    Value: "local-ip"
+    CapcaseName: SettingVpnOpenvpnKeyLocalIp
+    Type: ktypeString
+- SettingClass: SettingVpnOpenvpnAdvanced
+  Name: NM_SETTING_ALIAS_VPN_OPENVPN_ADVANCED_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openvpn-advanced"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PORT
+    Value: port
+    CapcaseName: SettingVpnOpenvpnKeyPort
+    Type: ktypeUint32
+    DefaultValue: "1194"
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_RENEG_SECONDS
+    Value: "reneg-seconds"
+    CapcaseName: SettingVpnOpenvpnKeyRenegSeconds
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_COMP_LZO
+    Value: "comp-lzo"
+    CapcaseName: SettingVpnOpenvpnKeyCompLzo
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PROTO_TCP
+    Value: "proto-tcp"
+    CapcaseName: SettingVpnOpenvpnKeyProtoTcp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_TAP_DEV
+    Value: "tap-dev"
+    CapcaseName: SettingVpnOpenvpnKeyTapDev
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_TUNNEL_MTU
+    Value: "tunnel-mtu"
+    CapcaseName: SettingVpnOpenvpnKeyTunnelMtu
+    Type: ktypeUint32
+    DefaultValue: "1500"
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_FRAGMENT_SIZE
+    Value: "fragment-size"
+    CapcaseName: SettingVpnOpenvpnKeyFragmentSize
+    Type: ktypeUint32
+    DefaultValue: "1300"
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_MSSFIX
+    Value: mssfix
+    CapcaseName: SettingVpnOpenvpnKeyMssfix
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_REMOTE_RANDOM
+    Value: "remote-random"
+    CapcaseName: SettingVpnOpenvpnKeyRemoteRandom
+    Type: ktypeBoolean
+- SettingClass: SettingVpnOpenvpnSecurity
+  Name: NM_SETTING_ALIAS_VPN_OPENVPN_SECURITY_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openvpn-security"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_CIPHER
+    Value: cipher
+    CapcaseName: SettingVpnOpenvpnKeyCipher
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_AUTH
+    Value: auth
+    CapcaseName: SettingVpnOpenvpnKeyAuth
+    Type: ktypeString
+- SettingClass: SettingVpnOpenvpnTlsauth
+  Name: NM_SETTING_ALIAS_VPN_OPENVPN_TLSAUTH_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openvpn-tlsauth"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_TLS_REMOTE
+    Value: "tls-remote"
+    CapcaseName: SettingVpnOpenvpnKeyTlsRemote
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_REMOTE_CERT_TLS
+    Value: "remote-cert-tls"
+    CapcaseName: SettingVpnOpenvpnKeyRemoteCertTls
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_TA
+    Value: ta
+    CapcaseName: SettingVpnOpenvpnKeyTa
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_TA_DIR
+    Value: "ta-dir"
+    CapcaseName: SettingVpnOpenvpnKeyTaDir
+    Type: ktypeUint32
+- SettingClass: SettingVpnOpenvpnProxies
+  Name: NM_SETTING_ALIAS_VPN_OPENVPN_PROXIES_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-openvpn-proxies"
+  Keys:
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PROXY_TYPE
+    Value: "proxy-type"
+    CapcaseName: SettingVpnOpenvpnKeyProxyType
+    Type: ktypeString
+    DefaultValue: "'none'"
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PROXY_SERVER
+    Value: "proxy-server"
+    CapcaseName: SettingVpnOpenvpnKeyProxyServer
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PROXY_PORT
+    Value: "proxy-port"
+    CapcaseName: SettingVpnOpenvpnKeyProxyPort
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_PROXY_RETRY
+    Value: "proxy-retry"
+    CapcaseName: SettingVpnOpenvpnKeyProxyRetry
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_USERNAME
+    Value: "http-proxy-username"
+    CapcaseName: SettingVpnOpenvpnKeyHttpProxyUsername
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD
+    Value: "http-proxy-password"
+    CapcaseName: SettingVpnOpenvpnKeyHttpProxyPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_OPENVPN_KEY_HTTP_PROXY_PASSWORD_FLAGS
+    Value: "http-proxy-password-flags"
+    CapcaseName: SettingVpnOpenvpnKeyHttpProxyPasswordFlags
+    Type: ktypeUint32
+- SettingClass: SettingVpnPptp
+  Name: NM_SETTING_ALIAS_VPN_PPTP_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-pptp"
+  Keys:
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_GATEWAY
+    Value: gateway
+    CapcaseName: SettingVpnPptpKeyGateway
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_USER
+    Value: user
+    CapcaseName: SettingVpnPptpKeyUser
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_PASSWORD_FLAGS
+    Value: "password-flags"
+    CapcaseName: SettingVpnPptpKeyPasswordFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_PASSWORD
+    Value: password
+    CapcaseName: SettingVpnPptpKeyPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_DOMAIN
+    Value: domain
+    CapcaseName: SettingVpnPptpKeyDomain
+    Type: ktypeString
+- SettingClass: SettingVpnPptpPpp
+  Name: NM_SETTING_ALIAS_VPN_PPTP_PPP_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-pptp-ppp"
+  Keys:
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE
+    Value: "require-mppe"
+    CapcaseName: SettingVpnPptpKeyRequireMppe
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_40
+    Value: "require-mppe-40"
+    CapcaseName: SettingVpnPptpKeyRequireMppe40
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REQUIRE_MPPE_128
+    Value: "require-mppe-128"
+    CapcaseName: SettingVpnPptpKeyRequireMppe128
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_MPPE_STATEFUL
+    Value: "mppe-stateful"
+    CapcaseName: SettingVpnPptpKeyMppeStateful
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REFUSE_EAP
+    Value: "refuse-eap"
+    CapcaseName: SettingVpnPptpKeyRefuseEap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REFUSE_PAP
+    Value: "refuse-pap"
+    CapcaseName: SettingVpnPptpKeyRefusePap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REFUSE_CHAP
+    Value: "refuse-chap"
+    CapcaseName: SettingVpnPptpKeyRefuseChap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAP
+    Value: "refuse-mschap"
+    CapcaseName: SettingVpnPptpKeyRefuseMschap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_REFUSE_MSCHAPV2
+    Value: "refuse-mschapv2"
+    CapcaseName: SettingVpnPptpKeyRefuseMschapv2
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_NOBSDCOMP
+    Value: nobsdcomp
+    CapcaseName: SettingVpnPptpKeyNobsdcomp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_NODEFLATE
+    Value: nodeflate
+    CapcaseName: SettingVpnPptpKeyNodeflate
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_NO_VJ_COMP
+    Value: "no-vj-comp"
+    CapcaseName: SettingVpnPptpKeyNoVjComp
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_FAILURE
+    Value: "lcp-echo-failure"
+    CapcaseName: SettingVpnPptpKeyLcpEchoFailure
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_PPTP_KEY_LCP_ECHO_INTERVAL
+    Value: "lcp-echo-interval"
+    CapcaseName: SettingVpnPptpKeyLcpEchoInterval
+    Type: ktypeUint32
+- SettingClass: SettingVpnStrongswan
+  Name: NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-strongswan"
+  Keys:
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_ADDRESS
+    Value: address
+    CapcaseName: SettingVpnStrongswanKeyAddress
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE
+    Value: certificate
+    CapcaseName: SettingVpnStrongswanKeyCertificate
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_METHOD
+    Value: method
+    CapcaseName: SettingVpnStrongswanKeyMethod
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_USER
+    Value: user
+    CapcaseName: SettingVpnStrongswanKeyUser
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT
+    Value: usercert
+    CapcaseName: SettingVpnStrongswanKeyUsercert
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY
+    Value: userkey
+    CapcaseName: SettingVpnStrongswanKeyUserkey
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD
+    Value: password
+    CapcaseName: SettingVpnStrongswanKeyPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_PASSWORD_FLAGS
+    Value: "password-flags"
+    CapcaseName: SettingVpnStrongswanKeyPasswordFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_VIRTUAL
+    Value: virtual
+    CapcaseName: SettingVpnStrongswanKeyVirtual
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_ENCAP
+    Value: encap
+    CapcaseName: SettingVpnStrongswanKeyEncap
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_STRONGSWAN_KEY_IPCOMP
+    Value: ipcomp
+    CapcaseName: SettingVpnStrongswanKeyIpcomp
+    Type: ktypeBoolean
+- SettingClass: SettingVpnVpnc
+  Name: NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-vpnc"
+  Keys:
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_GATEWAY
+    Value: "IPSec gateway"
+    CapcaseName: SettingVpnVpncKeyGateway
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_XAUTH_USER
+    Value: "Xauth username"
+    CapcaseName: SettingVpnVpncKeyXauthUser
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_TYPE
+    Value: "xauth-password-type"
+    CapcaseName: SettingVpnVpncKeyXauthPasswordType
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD_FLAGS
+    Value: "Xauth password-flags"
+    CapcaseName: SettingVpnVpncKeyXauthPasswordFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_XAUTH_PASSWORD
+    Value: "Xauth password"
+    CapcaseName: SettingVpnVpncKeyXauthPassword
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_ID
+    Value: "IPSec ID"
+    CapcaseName: SettingVpnVpncKeyId
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_SECRET_TYPE
+    Value: "ipsec-secret-type"
+    CapcaseName: SettingVpnVpncKeySecretType
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_SECRET_FLAGS
+    Value: "IPSec secret-flags"
+    CapcaseName: SettingVpnVpncKeySecretFlags
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_SECRET
+    Value: "IPSec secret"
+    CapcaseName: SettingVpnVpncKeySecret
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_AUTHMODE
+    Value: "IKE Authmode"
+    CapcaseName: SettingVpnVpncKeyAuthmode
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_CA_FILE
+    Value: "CA-File"
+    CapcaseName: SettingVpnVpncKeyCaFile
+    Type: ktypeString
+- SettingClass: SettingVpnVpncAdvanced
+  Name: NM_SETTING_ALIAS_VPN_VPNC_ADVANCED_SETTING_NAME
+  RealSettingName: NM_SETTING_VPN_SETTING_NAME
+  Value: "alias-vpn-vpnc-advanced"
+  Keys:
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_DOMAIN
+    Value: Domain
+    CapcaseName: SettingVpnVpncKeyDomain
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_VENDOR
+    Value: Vendor
+    CapcaseName: SettingVpnVpncKeyVendor
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_APP_VERSION
+    Value: "Application Version"
+    CapcaseName: SettingVpnVpncKeyAppVersion
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_SINGLE_DES
+    Value: "Enable Single DES"
+    CapcaseName: SettingVpnVpncKeySingleDes
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_NO_ENCRYPTION
+    Value: "Enable no encryption"
+    CapcaseName: SettingVpnVpncKeyNoEncryption
+    Type: ktypeBoolean
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_NAT_TRAVERSAL_MODE
+    Value: "NAT Traversal Mode"
+    CapcaseName: SettingVpnVpncKeyNatTraversalMode
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_DHGROUP
+    Value: "IKE DH Group"
+    CapcaseName: SettingVpnVpncKeyDhgroup
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_PERFECT_FORWARD
+    Value: "Perfect Forward Secrecy"
+    CapcaseName: SettingVpnVpncKeyPerfectForward
+    Type: ktypeString
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_LOCAL_PORT
+    Value: "Local Port"
+    CapcaseName: SettingVpnVpncKeyLocalPort
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_DPD_IDLE_TIMEOUT
+    Value: "DPD idle timeout (our side)"
+    CapcaseName: SettingVpnVpncKeyDpdIdleTimeout
+    Type: ktypeUint32
+  - KeyName: NM_SETTING_VPN_VPNC_KEY_CISCO_UDP_ENCAPS_PORT
+    Value: "Cisco UDP Encapsulation Port"
+    CapcaseName: SettingVpnVpncKeyCiscoUdpEncapsPort
+    Type: ktypeUint32

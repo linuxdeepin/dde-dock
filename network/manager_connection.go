@@ -10,7 +10,8 @@
 package network
 
 import (
-	nm "dbus/org/freedesktop/networkmanager"
+	nmdbus "dbus/org/freedesktop/networkmanager"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"sort"
@@ -25,7 +26,7 @@ func (c connectionSlice) Swap(i, j int)      { c[i], c[j] = c[j], c[i] }
 // TODO refactor code, different connection structures for different
 // types
 type connection struct {
-	nmConn   *nm.SettingsConnection
+	nmConn   *nmdbus.SettingsConnection
 	connType string
 
 	Path dbus.ObjectPath
@@ -90,20 +91,20 @@ func (conn *connection) updateProps() {
 	conn.Id = getSettingConnectionId(cdata)
 
 	switch getSettingConnectionType(cdata) {
-	case NM_SETTING_GSM_SETTING_NAME, NM_SETTING_CDMA_SETTING_NAME:
+	case nm.NM_SETTING_GSM_SETTING_NAME, nm.NM_SETTING_CDMA_SETTING_NAME:
 		conn.connType = connectionMobile
-	case NM_SETTING_VPN_SETTING_NAME:
+	case nm.NM_SETTING_VPN_SETTING_NAME:
 		conn.connType = connectionVpn
 	default:
 		conn.connType = getCustomConnectionType(cdata)
 	}
 
 	switch getSettingConnectionType(cdata) {
-	case NM_SETTING_WIRED_SETTING_NAME, NM_SETTING_PPPOE_SETTING_NAME:
+	case nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_PPPOE_SETTING_NAME:
 		if isSettingWiredMacAddressExists(cdata) {
 			conn.HwAddress = convertMacAddressToString(getSettingWiredMacAddress(cdata))
 		}
-	case NM_SETTING_WIRELESS_SETTING_NAME:
+	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
 		conn.Ssid = string(getSettingWirelessSsid(cdata))
 		if isSettingWirelessMacAddressExists(cdata) {
 			conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
@@ -238,10 +239,10 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 
 func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
 	switch nmGetDeviceType(devPath) {
-	case NM_DEVICE_TYPE_ETHERNET:
+	case nm.NM_DEVICE_TYPE_ETHERNET:
 		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
-	case NM_DEVICE_TYPE_WIFI: // ignore
-	case NM_DEVICE_TYPE_MODEM:
+	case nm.NM_DEVICE_TYPE_WIFI: // ignore
+	case nm.NM_DEVICE_TYPE_MODEM:
 		cpath, exists, err = m.ensureMobileConnectionExists(devPath, active)
 	}
 	return

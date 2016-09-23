@@ -11,6 +11,7 @@ package network
 
 import (
 	"fmt"
+	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -84,8 +85,8 @@ func getSettingKey(data connectionData, section, key string) (value interface{})
 		return generalGetSettingDefaultValue(section, key)
 	}
 
-	realSection := getRealSectionName(section) // get virtual section's real name
-	return doGetSettingKey(data, realSection, key)
+	realSetting := getAliasSettingRealName(section)
+	return doGetSettingKey(data, realSetting, key)
 }
 func doGetSettingKey(data connectionData, section, key string) (value interface{}) {
 	sectionData, ok := data[section]
@@ -114,7 +115,7 @@ func doGetSettingKey(data connectionData, section, key string) (value interface{
 func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t ktype) (kerr error) {
 	if len(valueJSON) == 0 {
 		logger.Error("setSettingKeyJSON: valueJSON is empty")
-		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		kerr = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
 
@@ -129,7 +130,7 @@ func setSettingKeyJSON(data connectionData, section, key, valueJSON string, t kt
 	if err != nil {
 		logger.Debugf("set connection data failed, valueJSON=%s, ktype=%s, error message:%v",
 			valueJSON, getKtypeDesc(t), err)
-		kerr = fmt.Errorf(NM_KEY_ERROR_INVALID_VALUE)
+		kerr = fmt.Errorf(nmKeyErrorInvalidValue)
 		return
 	}
 	logger.Debugf("setSettingKeyJSON data[%s][%s]=%#v, valueJSON=%s", section, key, value, valueJSON)
@@ -147,8 +148,8 @@ func setSettingKey(data connectionData, section, key string, value interface{}) 
 		setSettingVpnPluginKey(data, section, key, value)
 		return
 	}
-	realSection := getRealSectionName(section) // get virtual section's real name
-	doSetSettingKey(data, realSection, key, value)
+	realSetting := getAliasSettingRealName(section)
+	doSetSettingKey(data, realSetting, key, value)
 }
 func doSetSettingKey(data connectionData, section, key string, value interface{}) {
 	var sectionData map[string]dbus.Variant
@@ -170,8 +171,8 @@ func removeSettingKey(data connectionData, section string, keys ...string) {
 		return
 	}
 
-	realSection := getRealSectionName(section) // get virtual section's real name
-	sectionData, ok := data[realSection]
+	realSetting := getAliasSettingRealName(section)
+	sectionData, ok := data[realSetting]
 	if !ok {
 		return
 	}
@@ -188,8 +189,8 @@ func removeSettingKeyBut(data connectionData, section string, keys ...string) {
 		return
 	}
 
-	realSection := getRealSectionName(section) // get virtual section's real name
-	sectionData, ok := data[realSection]
+	realSetting := getAliasSettingRealName(section)
+	sectionData, ok := data[realSetting]
 	if !ok {
 		return
 	}
@@ -207,8 +208,8 @@ func isSettingKeyExists(data connectionData, section, key string) bool {
 		return isSettingVpnPluginKeyExists(data, section, key)
 	}
 
-	realSection := getRealSectionName(section) // get virtual section's real name
-	sectionData, ok := data[realSection]
+	realSetting := getAliasSettingRealName(section)
+	sectionData, ok := data[realSetting]
 	if !ok {
 		return false
 	}
@@ -221,35 +222,35 @@ func isSettingKeyExists(data connectionData, section, key string) bool {
 	return true
 }
 
-func addSettingSection(data connectionData, section string) {
-	realSection := getRealSectionName(section) // get virtual section's real name
-	var sectionData map[string]dbus.Variant
-	sectionData, ok := data[realSection]
+func addSetting(data connectionData, setting string) {
+	realSetting := getAliasSettingRealName(setting)
+	var settingData map[string]dbus.Variant
+	settingData, ok := data[realSetting]
 	if !ok {
-		// add section if not exists
-		sectionData = make(map[string]dbus.Variant)
-		data[realSection] = sectionData
+		// add setting if not exists
+		settingData = make(map[string]dbus.Variant)
+		data[realSetting] = settingData
 	}
 }
 
-func removeSettingSection(data connectionData, section string) {
-	realSection := getRealSectionName(section) // get virtual section's real name
-	_, ok := data[realSection]
+func removeSetting(data connectionData, setting string) {
+	realSetting := getAliasSettingRealName(setting)
+	_, ok := data[realSetting]
 	if ok {
-		// remove section if exists
-		delete(data, realSection)
+		// remove setting if exists
+		delete(data, realSetting)
 	}
 }
 
-func isSettingSectionExists(data connectionData, section string) bool {
-	realSection := getRealSectionName(section) // get virtual section's real name
-	_, ok := data[realSection]
+func isSettingExists(data connectionData, setting string) bool {
+	realSetting := getAliasSettingRealName(setting)
+	_, ok := data[realSetting]
 	return ok
 }
 
 func generalSetSettingAutoconnect(data connectionData, autoConnect bool) {
 	switch getSettingConnectionType(data) {
-	case NM_SETTING_VPN_SETTING_NAME:
+	case nm.NM_SETTING_VPN_SETTING_NAME:
 		uuid := getSettingConnectionUuid(data)
 		manager.config.setVpnConnectionAutoConnect(uuid, autoConnect)
 	default:
@@ -268,11 +269,11 @@ func setSettingCacheKey(data connectionData, section, key string, value interfac
 	doSetSettingKey(data, sectionCache, section+"/"+key, value)
 }
 func fillSectionCache(data connectionData) {
-	addSettingSection(data, sectionCache)
+	addSetting(data, sectionCache)
 
 	// ip4
-	if isSettingSectionExists(data, sectionIpv4) {
-		dnses := getSettingIp4ConfigDns(data)
+	if isSettingExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME) {
+		dnses := getSettingIP4ConfigDns(data)
 		switch len(dnses) {
 		case 0:
 			logicSetSettingVkIp4ConfigDns(data, "")
@@ -287,8 +288,8 @@ func fillSectionCache(data connectionData) {
 	}
 
 	// ip6
-	if isSettingSectionExists(data, sectionIpv6) {
-		dnses := getSettingIp6ConfigDns(data)
+	if isSettingExists(data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME) {
+		dnses := getSettingIP6ConfigDns(data)
 		switch len(dnses) {
 		case 0:
 			logicSetSettingVkIp6ConfigDns(data, "")
@@ -314,7 +315,7 @@ func fillSectionCache(data connectionData) {
 }
 func refileSectionCache(data connectionData) {
 	// ip4
-	if isSettingSectionExists(data, sectionIpv4) {
+	if isSettingExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME) {
 		dnses := make([]uint32, 0)
 		dns1Str := getSettingVkIp4ConfigDns(data)
 		dns2Str := getSettingVkIp4ConfigDns2(data)
@@ -325,14 +326,14 @@ func refileSectionCache(data connectionData) {
 			dnses = append(dnses, dns)
 		}
 		if len(dnses) == 0 {
-			removeSettingIp4ConfigDns(data)
+			removeSettingIP4ConfigDns(data)
 		} else {
-			setSettingIp4ConfigDns(data, dnses)
+			setSettingIP4ConfigDns(data, dnses)
 		}
 	}
 
 	// ip6
-	if isSettingSectionExists(data, sectionIpv6) {
+	if isSettingExists(data, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME) {
 		dnses := make([][]byte, 0)
 		dns1Str := getSettingVkIp6ConfigDns(data)
 		dns2Str := getSettingVkIp6ConfigDns2(data)
@@ -343,9 +344,9 @@ func refileSectionCache(data connectionData) {
 			dnses = append(dnses, dns)
 		}
 		if len(dnses) == 0 {
-			removeSettingIp6ConfigDns(data)
+			removeSettingIP6ConfigDns(data)
 		} else {
-			setSettingIp6ConfigDns(data, dnses)
+			setSettingIP6ConfigDns(data, dnses)
 		}
 	}
 
@@ -358,5 +359,5 @@ func refileSectionCache(data connectionData) {
 		manager.config.setMobileConnectionProvider(uuid, getSettingVkMobileProvider(data))
 		manager.config.setMobileConnectionPlan(uuid, getSettingVkMobilePlan(data))
 	}
-	removeSettingSection(data, sectionCache)
+	removeSetting(data, sectionCache)
 }

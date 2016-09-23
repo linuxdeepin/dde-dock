@@ -1,19 +1,11 @@
-all: gen-back-end-go
 GO15VENDOREXPERIMENT=0
 
-gen-back-end-go: gen-back-end-go-nm-setting-bean gen-back-end-go-nm-enums gen-back-end-go-nm-setting-const
+.PHONY: nm_consts_gen.yml
+nm_consts_gen.yml:
+	./gen_nm_consts.py --gir /usr/share/gir-1.0/NM-1.0.gir --output ./nm_consts_gen.yml
 
-gen-back-end-go-nm-enums:
-	@./gen_nm_enums.sh
-
-gen-back-end-go-nm-setting-const:
-	@./gen_nm_setting_const.sh
-
-gen-back-end-go-nm-setting-bean:
-	@go run $(shell find -type f -iname "*.go" -not -iname "*test.go") --write --gen-back-end-go --back-end-go-dir ".."
-
-gen-front-end-qt:
-	@go run $(shell find -type f -iname "*.go" -not -iname "*test.go") --write --gen-front-end-qt --front-end-qt-dir "./__out_qt/"
-
-gen-front-end-qml:
-	@go run $(shell find -type f -iname "*.go" -not -iname "*test.go") --write --gen-front-end-qml --front-end-qml-dir "./__out_qml/"
+gen-nm-code: nm_consts_gen.yml
+	mkdir -p ../nm
+	go run $(shell find -type f -iname "*.go" -not -iname "*test.go") --output-consts ../nm/nm_consts_gen.go --output-beans ../nm_setting_beans_gen.go
+	gofmt -w ../nm/nm_consts_gen.go
+	gofmt -w ../nm_setting_beans_gen.go
