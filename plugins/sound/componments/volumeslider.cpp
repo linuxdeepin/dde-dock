@@ -74,5 +74,6 @@ void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 
 void VolumeSlider::wheelEvent(QWheelEvent *e)
 {
+    e->accept();
     QSlider::setValue(value() + e->delta() / 5);
 }
