@@ -4,11 +4,23 @@
 
 ContainerItem::ContainerItem(QWidget *parent)
     : DockItem(parent),
+      m_dropping(false),
       m_containerWidget(new ContainerWidget(this))
 {
     m_containerWidget->setVisible(false);
 
     setAcceptDrops(true);
+}
+
+void ContainerItem::setDropping(const bool dropping)
+{
+    if (dropping)
+        showPopupApplet(m_containerWidget);
+    else
+        hidePopup();
+
+    m_dropping = dropping;
+    update();
 }
 
 void ContainerItem::addItem(DockItem * const item)
@@ -64,7 +76,7 @@ void ContainerItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (DockDisplayMode == Dock::Fashion)
+    if (!m_containerWidget->itemCount() && !m_dropping)
         return;
 
     QPainter painter(this);
@@ -73,7 +85,7 @@ void ContainerItem::paintEvent(QPaintEvent *e)
 
 void ContainerItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton && m_containerWidget->itemCount())
         return showPopupApplet(m_containerWidget);
 
     return DockItem::mouseReleaseEvent(e);

@@ -23,6 +23,7 @@ public:
     const QList<DockItem *> itemList() const;
     bool appIsOnDock(const QString &appDesktop) const;
     bool itemIsInContainer(DockItem * const item) const;
+    void setDropping(const bool dropping);
 
 signals:
     void itemInserted(const int index, DockItem *item) const;

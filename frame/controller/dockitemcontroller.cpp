@@ -37,6 +37,11 @@ bool DockItemController::itemIsInContainer(DockItem * const item) const
     return m_containerItem->contains(item);
 }
 
+void DockItemController::setDropping(const bool dropping)
+{
+    m_containerItem->setDropping(dropping);
+}
+
 void DockItemController::refershItemsIcon()
 {
     for (auto item : m_itemList)

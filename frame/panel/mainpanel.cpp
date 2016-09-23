@@ -562,6 +562,10 @@ void MainPanel::itemDragStarted()
 {
     DragingItem = qobject_cast<DockItem *>(sender());
 
+    if (DragingItem->itemType() == DockItem::Plugins)
+        if (static_cast<PluginsItem *>(DragingItem)->allowContainer())
+            m_itemController->setDropping(true);
+
     QRect rect;
     rect.setTopLeft(mapToGlobal(pos()));
     rect.setSize(size());
@@ -575,6 +579,8 @@ void MainPanel::itemDragStarted()
 ///
 void MainPanel::itemDropped(QObject *destnation)
 {
+    m_itemController->setDropping(false);
+
     if (m_displayMode == Dock::Fashion)
         return;
 

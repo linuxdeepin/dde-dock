@@ -15,6 +15,7 @@ public:
 
     inline ItemType itemType() const {return Container;}
 
+    void setDropping(const bool dropping);
     void addItem(DockItem * const item);
     void removeItem(DockItem * const item);
     bool contains(DockItem * const item);
@@ -30,6 +31,7 @@ protected:
     QSize sizeHint() const;
 
 private:
+    bool m_dropping;
     ContainerWidget *m_containerWidget;
     QPixmap m_icon;
 };
