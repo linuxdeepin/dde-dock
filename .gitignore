@@ -39,3 +39,4 @@ debian
 debian/
 out/
 gopath/
+.vscode/
