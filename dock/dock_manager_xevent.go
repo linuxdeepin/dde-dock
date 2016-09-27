@@ -20,18 +20,35 @@ import (
 )
 
 func (m *DockManager) registerWindow(win xproto.Window) {
-	m.windowInfoMapMutex.Lock()
-	defer m.windowInfoMapMutex.Unlock()
 
 	logger.Debug("register window", win)
-	if _, ok := m.windowInfoMap[win]; ok {
+	registered := m.isWindowRegistered(win)
+	if registered {
 		logger.Debugf("register window %v failed, window existed", win)
 		return
 	}
 
 	winInfo := NewWindowInfo(win)
 	m.listenWindowXEvent(winInfo)
+
+	m.windowInfoMapMutex.Lock()
 	m.windowInfoMap[win] = winInfo
+	m.windowInfoMapMutex.Unlock()
+}
+
+func (m *DockManager) isWindowRegistered(win xproto.Window) bool {
+	m.windowInfoMapMutex.RLock()
+	_, ok := m.windowInfoMap[win]
+	m.windowInfoMapMutex.RUnlock()
+	return ok
+}
+
+func (m *DockManager) unregisterWindow(win xproto.Window) {
+	logger.Debugf("unregister window %v", win)
+	xevent.Detach(XU, win)
+	m.windowInfoMapMutex.Lock()
+	delete(m.windowInfoMap, win)
+	m.windowInfoMapMutex.Unlock()
 }
 
 func (m *DockManager) handleClientListChanged() {
@@ -195,13 +212,7 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 
 func (m *DockManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.DestroyNotifyEvent) {
 	logger.Debug(ev)
-	xevent.Detach(XU, winInfo.window)
-
-	logger.Debugf("delete %v from windowInfoMap", winInfo.window)
-	m.windowInfoMapMutex.Lock()
-	delete(m.windowInfoMap, winInfo.window)
-	m.windowInfoMapMutex.Unlock()
-
+	m.unregisterWindow(winInfo.window)
 	m.detachWindow(winInfo)
 	winInfo.Destroy()
 }
