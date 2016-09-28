@@ -1,15 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bg" version="2.1">
 <context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Zeiteinstellungen</translation>
+        <translation>Настройки на времето</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
         <source> HH:mm:ss</source>
-        <translation> HH:mm:ss</translation>
+        <translation> ЧЧ:мм:сс</translation>
     </message>
 </context>
 <context>
@@ -17,7 +17,7 @@
     <message>
         <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
         <source>HH:mm</source>
-        <translation>HH:mm</translation>
+        <translation>ЧЧ:мм</translation>
     </message>
 </context>
 <context>
@@ -25,17 +25,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
         <source>Enable network</source>
-        <translation>Netzwerk aktivieren</translation>
+        <translation>Включи мрежата</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
         <source>Disable network</source>
-        <translation>Netzwerk deaktivieren</translation>
+        <translation>Изключи мрежата</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
         <source>Network settings</source>
-        <translation>Netzwerkeinstellungen</translation>
+        <translation>Настройки на мрежата</translation>
     </message>
 </context>
 <context>
@@ -43,12 +43,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="87"/>
         <source>Unknown device</source>
-        <translation>Unbekanntes Gerät</translation>
+        <translation>Непознато устройство</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
         <source>Unknown volume</source>
-        <translation> Unbekanntes Volume</translation>
+        <translation>Непознат носител</translation>
     </message>
 </context>
 <context>
@@ -56,17 +56,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="19"/>
         <source>Disk</source>
-        <translation>Festplatte</translation>
+        <translation>Диск</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
         <source>Unmount all</source>
-        <translation>Alle aushängen</translation>
+        <translation>Демонтирай всички</translation>
     </message>
 </context>
 <context>
@@ -74,82 +74,82 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
-        <translation>Mode-Modus</translation>
+        <translation>Модерен режим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Efficient Mode</source>
-        <translation>Effizienter Modus</translation>
+        <translation>Ефективен режим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Top</source>
-        <translation>Oben</translation>
+        <translation>Отгоре</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Bottom</source>
-        <translation>Unten</translation>
+        <translation>Отдолу</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation>Ляво</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Right</source>
-        <translation>Rechts</translation>
+        <translation>Дясно</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Large</source>
-        <translation>Groß</translation>
+        <translation>Голям</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Medium</source>
-        <translation>Mittel</translation>
+        <translation>Среден</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Small</source>
-        <translation>Klein</translation>
+        <translation>Малък</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Shown</source>
-        <translation>Angezeigt lassen</translation>
+        <translation>Показвай</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
-        <translation>Ausgeblendet lassen</translation>
+        <translation>Скрий</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Smart Hide</source>
-        <translation>Intelligentes Ausblenden</translation>
+        <translation>Интелигентно скриване</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Mode</source>
-        <translation>modus</translation>
+        <translation>Режим</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Location</source>
-        <translation>Ort</translation>
+        <translation>Местоположение</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="80"/>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation>Размер</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="87"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Статус</translation>
     </message>
 </context>
 <context>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="17"/>
         <source>Launcher</source>
-        <translation>Starter</translation>
+        <translation>Стартер</translation>
     </message>
 </context>
 <context>
@@ -165,27 +165,27 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Empty</source>
-        <translation>Leer</translation>
+        <translation>Празно</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
         <source>This action cannot be restored</source>
-        <translation>Diese Aktion kann nicht wiederhergestellt werden</translation>
+        <translation>Това действие не може да бъде възстановено</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Sind Sie sicher, dass Sie 1 Element löschen möchten?</translation>
+        <translation>Сигурни ли сте за премахването на 1 обект ?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Sind Sie sicher, dass Sie %1 Elemente löschen möchten?</translation>
+        <translation>Сигурни ли сте за премахването на %1 обекта ?</translation>
     </message>
 </context>
 <context>
@@ -194,47 +194,47 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
         <source>Shut down</source>
-        <translation>Herunterfahren</translation>
+        <translation>Изключване</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
         <source>Remaining Capacity %1</source>
-        <translation>Verbleibende Kapazität %1</translation>
+        <translation>Оставащ капацитет %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
         <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
+        <translation>Заредено %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
         <source>Charging %1</source>
-        <translation>%1 wird aufgeladen</translation>
+        <translation>Зареждане %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
         <source>Restart</source>
-        <translation>Neu starten</translation>
+        <translation>Рестартиране</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Log out</source>
-        <translation>Abmelden</translation>
+        <translation>Излизане</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Приспиване</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Switch account</source>
-        <translation>Konto wechseln</translation>
+        <translation>Смяна на акаунта</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>Energieeinstellungen</translation>
+        <translation>Настройки на захранването</translation>
     </message>
 </context>
 <context>
@@ -242,12 +242,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
         <source>Device</source>
-        <translation>Gerät</translation>
+        <translation>Устройство</translation>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
         <source>Application</source>
-        <translation>Anwendung</translation>
+        <translation>Приложение</translation>
     </message>
 </context>
 <context>
@@ -255,22 +255,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="57"/>
         <source>Unmute</source>
-        <translation>Stummschalten aufheben</translation>
+        <translation>Включване на звука</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="59"/>
         <source>Mute</source>
-        <translation>Stummschalten</translation>
+        <translation>Заглушаване</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="65"/>
         <source>Audio Settings</source>
-        <translation>Audioeinstellungen</translation>
+        <translation>Настройки на звука</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
         <source>Current Volume %1</source>
-        <translation>Aktuelle Lautstärke %1</translation>
+        <translation>Текущо ниво на звука %1 </translation>
     </message>
 </context>
 <context>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
         <source>System Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Зона за уведомяване</translation>
     </message>
 </context>
 <context>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation>Papierkorb - %1 Datei</translation>
+        <translation>Кошче -%1 файл</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>Papierkorb - %1 Dateien</translation>
+        <translation>Кошче - %1 файла</translation>
     </message>
 </context>
 <context>
@@ -299,12 +299,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>Отваряне</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
         <source>Empty</source>
-        <translation>Löschen</translation>
+        <translation>Празно</translation>
     </message>
 </context>
 <context>
@@ -312,17 +312,17 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknow</source>
-        <translation>Unbekannt</translation>
+        <translation>Непознато</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation>Няма мрежа</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
         <source>Wired connection: %1</source>
-        <translation>Kabelgebundene Verbindung: %1</translation>
+        <translation>Кабелна връзка: %1</translation>
     </message>
 </context>
 <context>
@@ -330,12 +330,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation>Няма мрежа</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
         <source>Wireless Connection: %1</source>
-        <translation>Drahtlosverbindung: %1</translation>
+        <translation>Безжична връзка: %1</translation>
     </message>
 </context>
 <context>
@@ -343,32 +343,32 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
         <source>Auto-connect</source>
-        <translation>Automatisch verbinden</translation>
+        <translation>Автоматично свързване</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
         <source>Connect</source>
-        <translation>Verbinden</translation>
+        <translation>Свързване</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Отказ</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
         <source>Wireless Network</source>
-        <translation>Drahtlosnetzwerk</translation>
+        <translation>Безжична мрежа</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
         <source>Wireless Network %1</source>
-        <translation>Drahtlosnetzwerk %1</translation>
+        <translation>Безжична връзка %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Passwort zum Verbinden mit &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; erforderlich</translation>
+        <translation>Необходима е парола за свързване с &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>

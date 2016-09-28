@@ -1,10 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ast" version="2.1">
 <context>
     <name>DatetimePlugin</name>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Zeiteinstellungen</translation>
+        <translation>Axustes d&apos;hora</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
@@ -25,17 +25,17 @@
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
         <source>Enable network</source>
-        <translation>Netzwerk aktivieren</translation>
+        <translation>Habilitar rede</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
         <source>Disable network</source>
-        <translation>Netzwerk deaktivieren</translation>
+        <translation>Deshabilitar rede</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
         <source>Network settings</source>
-        <translation>Netzwerkeinstellungen</translation>
+        <translation>Axustes de rede</translation>
     </message>
 </context>
 <context>
@@ -43,12 +43,12 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="87"/>
         <source>Unknown device</source>
-        <translation>Unbekanntes Gerät</translation>
+        <translation>Preséu desconocíu</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
         <source>Unknown volume</source>
-        <translation> Unbekanntes Volume</translation>
+        <translation>Volume desconocíu</translation>
     </message>
 </context>
 <context>
@@ -56,17 +56,17 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="19"/>
         <source>Disk</source>
-        <translation>Festplatte</translation>
+        <translation>Discu</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>Abrir</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
         <source>Unmount all</source>
-        <translation>Alle aushängen</translation>
+        <translation>Desmontar too</translation>
     </message>
 </context>
 <context>
@@ -74,82 +74,82 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
-        <translation>Mode-Modus</translation>
+        <translation>Mou MacOS</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Efficient Mode</source>
-        <translation>Effizienter Modus</translation>
+        <translation>Mou Windows</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Top</source>
-        <translation>Oben</translation>
+        <translation>Arriba</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Bottom</source>
-        <translation>Unten</translation>
+        <translation>Abaxo</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Left</source>
-        <translation>Links</translation>
+        <translation>Izquierda</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Right</source>
-        <translation>Rechts</translation>
+        <translation>Drecha</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Large</source>
-        <translation>Groß</translation>
+        <translation>Llargu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Medium</source>
-        <translation>Mittel</translation>
+        <translation>Medio</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Small</source>
-        <translation>Klein</translation>
+        <translation>Pequeñu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Shown</source>
-        <translation>Angezeigt lassen</translation>
+        <translation>Caltener amosáu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
-        <translation>Ausgeblendet lassen</translation>
+        <translation>Caltener anubríu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Smart Hide</source>
-        <translation>Intelligentes Ausblenden</translation>
+        <translation>Anubrición intelixente</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="65"/>
         <source>Mode</source>
-        <translation>modus</translation>
+        <translation>Mou</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="73"/>
         <source>Location</source>
-        <translation>Ort</translation>
+        <translation>Allugamientu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="80"/>
         <source>Size</source>
-        <translation>Größe</translation>
+        <translation>Tamañu</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="87"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Estáu</translation>
     </message>
 </context>
 <context>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="17"/>
         <source>Launcher</source>
-        <translation>Starter</translation>
+        <translation>Llanzador</translation>
     </message>
 </context>
 <context>
@@ -165,27 +165,27 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Empty</source>
-        <translation>Leer</translation>
+        <translation>Baleru</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Encaboxar</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
         <source>This action cannot be restored</source>
-        <translation>Diese Aktion kann nicht wiederhergestellt werden</translation>
+        <translation>Esta aición nun pue restaurase</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Sind Sie sicher, dass Sie 1 Element löschen möchten?</translation>
+        <translation>¿De xuru que quies balerar 1 elementu?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Sind Sie sicher, dass Sie %1 Elemente löschen möchten?</translation>
+        <translation>¿De xuru que quies balerar %1 elementos?</translation>
     </message>
 </context>
 <context>
@@ -194,47 +194,47 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
         <source>Shut down</source>
-        <translation>Herunterfahren</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
         <source>Remaining Capacity %1</source>
-        <translation>Verbleibende Kapazität %1</translation>
+        <translation>Capacidá restante %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
         <source>Charged %1</source>
-        <translation>%1 aufgeladen</translation>
+        <translation>Cargóse %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
         <source>Charging %1</source>
-        <translation>%1 wird aufgeladen</translation>
+        <translation>Cargando %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
         <source>Restart</source>
-        <translation>Neu starten</translation>
+        <translation>Reaniciar</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Log out</source>
-        <translation>Abmelden</translation>
+        <translation>Zarrar sesión</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Suspend</source>
-        <translation>Ruhezustand</translation>
+        <translation>Suspender</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Switch account</source>
-        <translation>Konto wechseln</translation>
+        <translation>Camudar cuenta</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>Energieeinstellungen</translation>
+        <translation>Axustes d&apos;enerxía</translation>
     </message>
 </context>
 <context>
@@ -242,12 +242,12 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
         <source>Device</source>
-        <translation>Gerät</translation>
+        <translation>Preséu</translation>
     </message>
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
         <source>Application</source>
-        <translation>Anwendung</translation>
+        <translation>Aplicación</translation>
     </message>
 </context>
 <context>
@@ -255,22 +255,22 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="57"/>
         <source>Unmute</source>
-        <translation>Stummschalten aufheben</translation>
+        <translation>Desilenciar</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="59"/>
         <source>Mute</source>
-        <translation>Stummschalten</translation>
+        <translation>Silenciar</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="65"/>
         <source>Audio Settings</source>
-        <translation>Audioeinstellungen</translation>
+        <translation>Axustes d&apos;audiu</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
         <source>Current Volume %1</source>
-        <translation>Aktuelle Lautstärke %1</translation>
+        <translation>Volume actual %1</translation>
     </message>
 </context>
 <context>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
         <source>System Tray</source>
-        <translation>Benachrichtigungsfeld</translation>
+        <translation>Bandexa del sistema</translation>
     </message>
 </context>
 <context>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation>Papierkorb - %1 Datei</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>Papierkorb - %1 Dateien</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -299,12 +299,12 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
         <source>Open</source>
-        <translation>Öffnen</translation>
+        <translation>Abrir</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
         <source>Empty</source>
-        <translation>Löschen</translation>
+        <translation>Baleru</translation>
     </message>
 </context>
 <context>
@@ -312,17 +312,17 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknow</source>
-        <translation>Unbekannt</translation>
+        <translation>Desconocíu</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation>Ensin rede</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
         <source>Wired connection: %1</source>
-        <translation>Kabelgebundene Verbindung: %1</translation>
+        <translation>Conexón cableada: %1</translation>
     </message>
 </context>
 <context>
@@ -330,12 +330,12 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
         <source>No Network</source>
-        <translation>Kein Netzwerk</translation>
+        <translation>Ensin rede</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
         <source>Wireless Connection: %1</source>
-        <translation>Drahtlosverbindung: %1</translation>
+        <translation>Conexón inalámbrica: %1</translation>
     </message>
 </context>
 <context>
@@ -343,32 +343,32 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="35"/>
         <source>Auto-connect</source>
-        <translation>Automatisch verbinden</translation>
+        <translation>Conexón automática</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
         <source>Connect</source>
-        <translation>Verbinden</translation>
+        <translation>Coneutar</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation>Encaboxar</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
         <source>Wireless Network</source>
-        <translation>Drahtlosnetzwerk</translation>
+        <translation>Rede inalámbrica</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
         <source>Wireless Network %1</source>
-        <translation>Drahtlosnetzwerk %1</translation>
+        <translation>Rede inalámbrica %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Passwort zum Verbinden mit &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt; erforderlich</translation>
+        <translation>Ríquese la contraseña pa coneutase a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>
