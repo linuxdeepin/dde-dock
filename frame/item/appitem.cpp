@@ -259,9 +259,9 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     // start launching effects
-    m_launchingEffects = 0.0;
-    m_launchingEffectsTimer->start();
-    update();
+    //m_launchingEffects = 0.0;
+    //m_launchingEffectsTimer->start();
+    //update();
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)
