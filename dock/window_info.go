@@ -43,13 +43,14 @@ type WindowInfo struct {
 	propertyNotifyAtomTable map[xproto.Atom]bool
 	propertyNotifyEnabled   bool
 
-	wmState          []string
-	wmWindowType     []string
-	wmAllowedActions []string
-	hasXEmbedInfo    bool
-	mapState         byte
-	wmClass          *icccm.WmClass
-	wmName           string
+	wmState           []string
+	wmWindowType      []string
+	wmAllowedActions  []string
+	hasXEmbedInfo     bool
+	hasWmTransientFor bool
+	mapState          byte
+	wmClass           *icccm.WmClass
+	wmName            string
 
 	gtkAppId string
 	wmRole   string
@@ -117,6 +118,10 @@ func (winInfo *WindowInfo) hasWmStateModal() bool {
 	return strSliceContains(winInfo.wmState, "_NET_WM_STATE_MODAL")
 }
 
+func (winInfo *WindowInfo) isValidModal() bool {
+	return winInfo.hasWmTransientFor && winInfo.hasWmStateModal()
+}
+
 // map state
 func (winInfo *WindowInfo) updateMapState() {
 	windowAttributes, err := xproto.GetWindowAttributes(XU.Conn(), winInfo.window).Reply()
@@ -160,6 +165,12 @@ func (winInfo *WindowInfo) isWmClassOk() bool {
 func (winInfo *WindowInfo) updateHasXEmbedInfo() {
 	_, err := xprop.GetProperty(XU, winInfo.window, "_XEMBED_INFO")
 	winInfo.hasXEmbedInfo = (err == nil)
+}
+
+// WM_TRANSIENT_FOR
+func (winInfo *WindowInfo) updateHasWmTransientFor() {
+	_, err := xprop.GetProperty(XU, winInfo.window, "WM_TRANSIENT_FOR")
+	winInfo.hasWmTransientFor = (err == nil)
 }
 
 // wm name
@@ -282,7 +293,7 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	logger.Debugf("wmState: %#v", winInfo.wmState)
 
 	if !winInfo.isMapStateViewable() || !winInfo.isWmClassOk() ||
-		winInfo.hasWmStateSkipTaskbar() || winInfo.hasWmStateModal() ||
+		winInfo.hasWmStateSkipTaskbar() || winInfo.isValidModal() ||
 		winInfo.hasXEmbedInfo {
 		return false
 	}
@@ -325,6 +336,7 @@ func (winInfo *WindowInfo) update() {
 	if len(winInfo.wmWindowType) == 0 {
 		winInfo.updateHasXEmbedInfo()
 	}
+	winInfo.updateHasWmTransientFor()
 	winInfo.initProcessInfo()
 	winInfo.wmRole = getWmWindowRole(XU, win)
 	winInfo.gtkAppId = getWindowGtkApplicationId(XU, win)
