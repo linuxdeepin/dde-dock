@@ -135,7 +135,7 @@ func (m *Manager) removeItem(id string) {
 }
 
 func (m *Manager) queryCategoryID(item *Item) CategoryID {
-	pkg := m.queryPkgName(item)
+	pkg := m.queryPkgName(item, false)
 	logger.Debugf("queryCategoryID desktopPkgMap item %v -> pkg %v", item, pkg)
 	if pkg != "" && m.pkgCategoryMap != nil {
 		if cid, ok := m.pkgCategoryMap[pkg]; ok {
@@ -149,7 +149,7 @@ func (m *Manager) queryCategoryID(item *Item) CategoryID {
 	return categoryGuess
 }
 
-func (m *Manager) queryPkgName(item *Item) string {
+func (m *Manager) queryPkgName(item *Item, exactly bool) string {
 	if m.desktopPkgMap == nil {
 		logger.Warning("queryPkgName failed: Manager.desktopPkgMap is nil")
 		return ""
@@ -160,6 +160,9 @@ func (m *Manager) queryPkgName(item *Item) string {
 		return pkg
 	}
 
+	if exactly {
+		return ""
+	}
 	// try base name
 	base := filepath.Base(item.Path)
 	if pkg, ok := m.desktopPkgMap[base]; ok {

@@ -52,8 +52,7 @@ func (m *Manager) uninstall(id string) error {
 		return errorInvalidID
 	}
 
-	pkg := dpkgSearchPkg(item.Path)
-
+	pkg := m.queryPkgName(item, true)
 	if pkg != "" {
 		return m.uninstallSystemPackage(pkg)
 	} else {

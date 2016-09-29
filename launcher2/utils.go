@@ -10,12 +10,10 @@
 package launcher2
 
 import (
-	"bytes"
 	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"pkg.deepin.io/lib/gettext"
@@ -148,17 +146,4 @@ func appShouldShow(appInfo *gio.DesktopAppInfo) bool {
 		return false
 	}
 	return true
-}
-
-func dpkgSearchPkg(file string) string {
-	// dpkg -S $file
-	output, err := exec.Command("/usr/bin/dpkg", "-S", file).Output()
-	if err != nil {
-		return ""
-	}
-	idx := bytes.IndexByte(output, byte(':'))
-	if idx == -1 {
-		return ""
-	}
-	return string(output[:idx])
 }

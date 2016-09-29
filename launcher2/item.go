@@ -95,6 +95,7 @@ func (item *Item) isWineApp() (bool, error) {
 	if appInfo == nil {
 		return false, errors.New("appInfo is nil")
 	}
+	defer appInfo.Unref()
 	return strings.HasPrefix(appInfo.GetString("X-Created-By"), "cxoffice-") ||
 		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX="), nil
 }
