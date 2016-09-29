@@ -1,8 +1,15 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="73"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
+        <source>Time Settings</source>
+        <translation>设置时间</translation>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
         <source> HH:mm:ss</source>
         <translation>HH:mm:ss</translation>
     </message>
@@ -16,14 +23,32 @@
     </message>
 </context>
 <context>
+    <name>DeviceItem</name>
+    <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="35"/>
+        <source>Enable network</source>
+        <translation>启用网络</translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="37"/>
+        <source>Disable network</source>
+        <translation>关闭网络</translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/deviceitem.cpp" line="43"/>
+        <source>Network settings</source>
+        <translation>设置网络</translation>
+    </message>
+</context>
+<context>
     <name>DiskControlItem</name>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="86"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="87"/>
         <source>Unknown device</source>
         <translation>未知的设备</translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="92"/>
+        <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
         <source>Unknown volume</source>
         <translation>容量未知</translation>
     </message>
@@ -31,9 +56,19 @@
 <context>
     <name>DiskMountPlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="14"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="17"/>
         <source>Disk</source>
         <translation>磁盘</translation>
+    </message>
+    <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="67"/>
+        <source>Open</source>
+        <translation>打开</translation>
+    </message>
+    <message>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="73"/>
+        <source>Unmount all</source>
+        <translation>卸载全部</translation>
     </message>
 </context>
 <context>
@@ -130,27 +165,27 @@
 <context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Empty</source>
         <translation>清空</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="73"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
         <source>This action cannot be restored</source>
         <translation>此操作不可恢复</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="75"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Are you sure to empty 1 item ?</source>
         <translation>您确定要清空回收站里的1项内容吗？</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="77"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>Are you sure to empty %1 items ?</source>
         <translation>您确定要清空回收站里的%1项内容吗？</translation>
     </message>
@@ -159,8 +194,49 @@
     <name>ShutdownPlugin</name>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="95"/>
         <source>Shut down</source>
         <translation>关机</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="54"/>
+        <source>Remaining Capacity %1</source>
+        <translation>剩余电量 %1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
+        <source>Charged %1</source>
+        <translation>已充满 %1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <source>Charging %1</source>
+        <translation>正在充电 %1</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="101"/>
+        <source>Restart</source>
+        <translation>重启</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="107"/>
+        <source>Log out</source>
+        <translation>注销</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="113"/>
+        <source>Suspend</source>
+        <translation>待机</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
+        <source>Switch account</source>
+        <translation>切换账户</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
+        <source>Power settings</source>
+        <translation>设置电源</translation>
     </message>
 </context>
 <context>
@@ -177,14 +253,58 @@
     </message>
 </context>
 <context>
-    <name>TrashWidget</name>
+    <name>SoundItem</name>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="17"/>
-        <source>Run</source>
-        <translation>运行</translation>
+        <location filename="../plugins/sound/sounditem.cpp" line="53"/>
+        <source>Unmute</source>
+        <translation>取消静音</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashwidget.cpp" line="18"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="55"/>
+        <source>Mute</source>
+        <translation>静音</translation>
+    </message>
+    <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="61"/>
+        <source>Audio Settings</source>
+        <translation>设置音频</translation>
+    </message>
+    <message>
+        <location filename="../plugins/sound/sounditem.cpp" line="172"/>
+        <source>Current Volume %1</source>
+        <translation>当前音量 %1</translation>
+    </message>
+</context>
+<context>
+    <name>SystemTrayPlugin</name>
+    <message>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="23"/>
+        <source>System Tray</source>
+        <translation>系统托盘</translation>
+    </message>
+</context>
+<context>
+    <name>TrashPlugin</name>
+    <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="39"/>
+        <source>Trash-%1 file</source>
+        <translation>回收站-%1个文件</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/trashplugin.cpp" line="41"/>
+        <source>Trash-%1 files</source>
+        <translation>回收站-%1个文件</translation>
+    </message>
+</context>
+<context>
+    <name>TrashWidget</name>
+    <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
+        <source>Open</source>
+        <translation>打开</translation>
+    </message>
+    <message>
+        <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
         <source>Empty</source>
         <translation>清空</translation>
     </message>
@@ -192,19 +312,32 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="36"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
         <source>Unknow</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="41"/>
-        <source>Disconnect</source>
-        <translation>断开</translation>
+        <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
+        <source>No Network</source>
+        <translation>无网络访问</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
-        <source>Wired connection %1</source>
-        <translation>有线连接%1</translation>
+        <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
+        <source>Wired connection: %1</source>
+        <translation>有线连接：%1</translation>
+    </message>
+</context>
+<context>
+    <name>WirelessItem</name>
+    <message>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
+        <source>No Network</source>
+        <translation>无网络访问</translation>
+    </message>
+    <message>
+        <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
+        <source>Wireless Connection: %1</source>
+        <translation>无线网络：%1</translation>
     </message>
 </context>
 <context>
@@ -232,7 +365,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
         <source>Wireless Network %1</source>
-        <translation>无线网络%1</translation>
+        <translation>无线网络 %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
