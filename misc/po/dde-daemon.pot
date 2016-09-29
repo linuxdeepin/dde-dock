@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-31 09:08+0800\n"
+"POT-Creation-Date: 2016-10-12 13:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -962,7 +962,13 @@ msgstr ""
 
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
+#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
+msgstr ""
+
+#: ../../launcher/manager_uninstall.go:35
+msgid "Failed to uninstall %q."
 msgstr ""
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
@@ -977,13 +983,14 @@ msgstr ""
 msgid "Run Software"
 msgstr ""
 
-#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144 ../../mounts/ifc.go:168
 #, c-format
 msgid "%s removed successfully"
 msgstr ""
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
-#: ../../network/manager_active.go:304 ../../network/manager_active.go:309
+#: ../../network/manager_active.go:304 ../../network/manager_active.go:308
+#: ../../network/manager_active.go:309 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:316
 #: ../../network/manager_active.go:319 ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:173
@@ -1001,7 +1008,8 @@ msgid "None"
 msgstr ""
 
 #: ../../network/manager_active.go:296 ../../network/manager_active.go:311
-#: ../../network/manager_active.go:321 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:315 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:174
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:186
@@ -1010,7 +1018,8 @@ msgid "WEP 40/128-bit Key"
 msgstr ""
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
-#: ../../network/manager_active.go:323 ../../network/manager_active.go:325
+#: ../../network/manager_active.go:317 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:325
 #: ../../network/nm_setting_virtual_key.go:175
 #: ../../network/nm_setting_virtual_key.go:182
 #: ../../network/nm_setting_virtual_key.go:187
@@ -1019,9 +1028,10 @@ msgid "WPA/WPA2 Personal"
 msgstr ""
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
-#: ../../network/manager_active.go:331 ../../network/manager_active.go:333
-#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:42
-#: ../../network/nm_setting_802_1x.go:86 ../../network/nm_setting_802_1x.go:111
+#: ../../network/manager_active.go:325 ../../network/manager_active.go:331
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
+#: ../../network/nm_setting_802_1x.go:42 ../../network/nm_setting_802_1x.go:86
+#: ../../network/nm_setting_802_1x.go:111
 #: ../../network/nm_setting_802_1x.go:119
 #: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:131
@@ -1031,17 +1041,18 @@ msgid "TLS"
 msgstr ""
 
 #: ../../network/manager_active.go:308 ../../network/manager_active.go:323
-#: ../../network/manager_active.go:333 ../../network/manager_active.go:335
-#: ../../network/nm_setting_802_1x.go:29 ../../network/nm_setting_802_1x.go:41
-#: ../../network/nm_setting_802_1x.go:85 ../../network/nm_setting_802_1x.go:112
+#: ../../network/manager_active.go:327 ../../network/manager_active.go:333
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:29
+#: ../../network/nm_setting_802_1x.go:41 ../../network/nm_setting_802_1x.go:85
+#: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
 msgstr ""
 
 #: ../../network/manager_active.go:310 ../../network/manager_active.go:325
-#: ../../network/manager_active.go:335 ../../network/manager_active.go:337
-#: ../../network/nm_setting_802_1x.go:120
+#: ../../network/manager_active.go:329 ../../network/manager_active.go:335
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:120
 #: ../../network/nm_setting_802_1x.go:132
 #: ../../network/nm_setting_802_1x.go:176
 #: ../../network/nm_setting_wireless_security.go:71
@@ -1051,8 +1062,8 @@ msgid "LEAP"
 msgstr ""
 
 #: ../../network/manager_active.go:312 ../../network/manager_active.go:327
-#: ../../network/manager_active.go:337 ../../network/manager_active.go:339
-#: ../../network/nm_setting_802_1x.go:113
+#: ../../network/manager_active.go:331 ../../network/manager_active.go:337
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
@@ -1062,8 +1073,8 @@ msgid "FAST"
 msgstr ""
 
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:329
-#: ../../network/manager_active.go:339 ../../network/manager_active.go:341
-#: ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:333 ../../network/manager_active.go:339
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
@@ -1073,8 +1084,8 @@ msgid "Tunneled TLS"
 msgstr ""
 
 #: ../../network/manager_active.go:316 ../../network/manager_active.go:331
-#: ../../network/manager_active.go:341 ../../network/manager_active.go:343
-#: ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:335 ../../network/manager_active.go:341
+#: ../../network/manager_active.go:343 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:127
 #: ../../network/nm_setting_802_1x.go:135
@@ -1089,7 +1100,7 @@ msgstr ""
 #: ../../network/manager_connection.go:260
 #: ../../network/manager_connection.go:268 ../../network/nm_custom_type.go:178
 #: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:204
-#: ../../network/nm_custom_type.go:212
+#: ../../network/nm_custom_type.go:205 ../../network/nm_custom_type.go:212
 msgid "Wired Connection"
 msgstr ""
 
@@ -1101,7 +1112,8 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:104
 #: ../../network/nm_setting_vpn_vpnc.go:130
 #: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:185
+#: ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr ""
 
@@ -1113,7 +1125,8 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:105
 #: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
+#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:187
+#: ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr ""
 
@@ -1128,81 +1141,96 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:106
 #: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
+#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:188
+#: ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
-#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:210
+#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:203
+#: ../../network/nm_custom_type.go:210
 msgid "Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
-#: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:214
+#: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:207
+#: ../../network/nm_custom_type.go:214
 msgid "Wireless Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
-#: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:216
+#: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:209
+#: ../../network/nm_custom_type.go:216
 msgid "Wireless Ad-Hoc"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
-#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:218
+#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:211
+#: ../../network/nm_custom_type.go:218
 msgid "Wireless Ap-Hotspot"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
-#: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:220
+#: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:213
+#: ../../network/nm_custom_type.go:220
 msgid "PPPoE Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
-#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:222
+#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:215
+#: ../../network/nm_custom_type.go:222
 msgid "Mobile Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
-#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:224
+#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:217
+#: ../../network/nm_custom_type.go:224
 msgid "Mobile GSM Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
-#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:226
+#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:219
+#: ../../network/nm_custom_type.go:226
 msgid "Mobile CDMA Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
-#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:228
+#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:221
+#: ../../network/nm_custom_type.go:228
 msgid "VPN Connection"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
-#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:230
+#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:223
+#: ../../network/nm_custom_type.go:230
 msgid "VPN L2TP"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
-#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:232
+#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:225
+#: ../../network/nm_custom_type.go:232
 msgid "VPN OpenConnect"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
-#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:234
+#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:227
+#: ../../network/nm_custom_type.go:234
 msgid "VPN OpenVPN"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
-#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:236
+#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:229
+#: ../../network/nm_custom_type.go:236
 msgid "VPN PPTP"
 msgstr ""
 
 #: ../../network/nm_custom_type.go:204 ../../network/nm_custom_type.go:213
-#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:238
+#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:233
+#: ../../network/nm_custom_type.go:238
 msgid "VPN VPNC"
 msgstr ""
 
-#: ../../network/nm_custom_type.go:230
+#: ../../network/nm_custom_type.go:230 ../../network/nm_custom_type.go:231
 msgid "VPN StrongSwan"
 msgstr ""
 
@@ -1344,6 +1372,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:358
 #: ../../network/nm_setting_bean_gen.go:367
 #: ../../network/nm_setting_bean_gen.go:368
+#: ../../network/nm_setting_bean_gen.go:369
 msgid "MTU"
 msgstr ""
 
@@ -1421,28 +1450,35 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:223
 #: ../../network/nm_setting_bean_gen.go:229
 #: ../../network/nm_setting_bean_gen.go:230
+#: ../../network/nm_setting_bean_gen.go:231
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:245
 #: ../../network/nm_setting_bean_gen.go:246
+#: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:306
+#: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:340
 #: ../../network/nm_setting_bean_gen.go:341
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
+#: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:380
 #: ../../network/nm_setting_bean_gen.go:381
+#: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:413
 #: ../../network/nm_setting_bean_gen.go:414
+#: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:427
 #: ../../network/nm_setting_bean_gen.go:428
+#: ../../network/nm_setting_bean_gen.go:430
 msgid "Username"
 msgstr ""
 
@@ -1470,22 +1506,28 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:216
 #: ../../network/nm_setting_bean_gen.go:217
 #: ../../network/nm_setting_bean_gen.go:218
+#: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:238
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:248
+#: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:297
 #: ../../network/nm_setting_bean_gen.go:298
 #: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:308
+#: ../../network/nm_setting_bean_gen.go:309
 #: ../../network/nm_setting_bean_gen.go:341
 #: ../../network/nm_setting_bean_gen.go:342
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:352
+#: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:372
 #: ../../network/nm_setting_bean_gen.go:373
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:383
+#: ../../network/nm_setting_bean_gen.go:384
+#: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_vpn_openvpn.go:237
 #: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password"
@@ -1520,10 +1562,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:268
 #: ../../network/nm_setting_bean_gen.go:269
+#: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:393
+#: ../../network/nm_setting_bean_gen.go:394
 msgid "Security"
 msgstr ""
 
@@ -1566,12 +1610,15 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:280
 #: ../../network/nm_setting_bean_gen.go:289
 #: ../../network/nm_setting_bean_gen.go:290
+#: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:298
 #: ../../network/nm_setting_bean_gen.go:299
 #: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:309
+#: ../../network/nm_setting_bean_gen.go:310
 #: ../../network/nm_setting_bean_gen.go:411
 #: ../../network/nm_setting_bean_gen.go:412
+#: ../../network/nm_setting_bean_gen.go:413
 msgid "CA Cert"
 msgstr ""
 
@@ -1589,12 +1636,15 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:284
 #: ../../network/nm_setting_bean_gen.go:293
 #: ../../network/nm_setting_bean_gen.go:294
+#: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:299
 #: ../../network/nm_setting_bean_gen.go:300
 #: ../../network/nm_setting_bean_gen.go:309
 #: ../../network/nm_setting_bean_gen.go:310
+#: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
+#: ../../network/nm_setting_bean_gen.go:416
 msgid "User Cert"
 msgstr ""
 
@@ -1632,13 +1682,17 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:285
 #: ../../network/nm_setting_bean_gen.go:294
 #: ../../network/nm_setting_bean_gen.go:295
+#: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:300
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:310
 #: ../../network/nm_setting_bean_gen.go:311
+#: ../../network/nm_setting_bean_gen.go:312
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_vpn_strongswan.go:95
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Private Key"
 msgstr ""
 
@@ -1664,24 +1718,30 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:224
 #: ../../network/nm_setting_bean_gen.go:230
 #: ../../network/nm_setting_bean_gen.go:231
+#: ../../network/nm_setting_bean_gen.go:232
 #: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:234
+#: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:246
 #: ../../network/nm_setting_bean_gen.go:247
+#: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:297
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:302
 #: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:307
+#: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:312
+#: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:372
 #: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:382
+#: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
 #: ../../network/nm_setting_bean_gen.go:405
@@ -1690,6 +1750,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:431
 #: ../../network/nm_setting_bean_gen.go:432
+#: ../../network/nm_setting_bean_gen.go:434
 msgid "Ask for Pwd"
 msgstr ""
 
@@ -1702,6 +1763,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:312
 #: ../../network/nm_setting_bean_gen.go:313
+#: ../../network/nm_setting_bean_gen.go:314
 msgid "Private Pwd"
 msgstr ""
 
@@ -1758,10 +1820,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:268
+#: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:392
+#: ../../network/nm_setting_bean_gen.go:393
 msgid "Use MPPE"
 msgstr ""
 
@@ -1778,10 +1842,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:260
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
+#: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:384
 #: ../../network/nm_setting_bean_gen.go:393
 #: ../../network/nm_setting_bean_gen.go:394
+#: ../../network/nm_setting_bean_gen.go:395
 msgid "Stateful MPPE"
 msgstr ""
 
@@ -1792,10 +1858,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:261
 #: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:271
+#: ../../network/nm_setting_bean_gen.go:272
 #: ../../network/nm_setting_bean_gen.go:384
 #: ../../network/nm_setting_bean_gen.go:385
 #: ../../network/nm_setting_bean_gen.go:394
 #: ../../network/nm_setting_bean_gen.go:395
+#: ../../network/nm_setting_bean_gen.go:396
 msgid "Refuse EAP Authentication"
 msgstr ""
 
@@ -1806,10 +1874,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:262
 #: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:272
+#: ../../network/nm_setting_bean_gen.go:273
 #: ../../network/nm_setting_bean_gen.go:385
 #: ../../network/nm_setting_bean_gen.go:386
 #: ../../network/nm_setting_bean_gen.go:395
 #: ../../network/nm_setting_bean_gen.go:396
+#: ../../network/nm_setting_bean_gen.go:397
 msgid "Refuse PAP Authentication"
 msgstr ""
 
@@ -1820,10 +1890,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:263
 #: ../../network/nm_setting_bean_gen.go:272
 #: ../../network/nm_setting_bean_gen.go:273
+#: ../../network/nm_setting_bean_gen.go:274
 #: ../../network/nm_setting_bean_gen.go:386
 #: ../../network/nm_setting_bean_gen.go:387
 #: ../../network/nm_setting_bean_gen.go:396
 #: ../../network/nm_setting_bean_gen.go:397
+#: ../../network/nm_setting_bean_gen.go:398
 msgid "Refuse CHAP Authentication"
 msgstr ""
 
@@ -1834,10 +1906,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:264
 #: ../../network/nm_setting_bean_gen.go:273
 #: ../../network/nm_setting_bean_gen.go:274
+#: ../../network/nm_setting_bean_gen.go:275
 #: ../../network/nm_setting_bean_gen.go:387
 #: ../../network/nm_setting_bean_gen.go:388
 #: ../../network/nm_setting_bean_gen.go:397
 #: ../../network/nm_setting_bean_gen.go:398
+#: ../../network/nm_setting_bean_gen.go:399
 msgid "Refuse MSCHAP Authentication"
 msgstr ""
 
@@ -1848,10 +1922,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:265
 #: ../../network/nm_setting_bean_gen.go:274
 #: ../../network/nm_setting_bean_gen.go:275
+#: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:388
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
+#: ../../network/nm_setting_bean_gen.go:400
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr ""
 
@@ -1862,10 +1938,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:266
 #: ../../network/nm_setting_bean_gen.go:275
 #: ../../network/nm_setting_bean_gen.go:276
+#: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:390
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:400
+#: ../../network/nm_setting_bean_gen.go:401
 msgid "No BSD Data Compression"
 msgstr ""
 
@@ -1876,10 +1954,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:277
+#: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:390
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
+#: ../../network/nm_setting_bean_gen.go:402
 msgid "No Deflate Data Compression"
 msgstr ""
 
@@ -1890,10 +1970,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:268
 #: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:278
+#: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
+#: ../../network/nm_setting_bean_gen.go:403
 msgid "No TCP Header Compression"
 msgstr ""
 
@@ -1904,10 +1986,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:280
 #: ../../network/nm_setting_bean_gen.go:281
+#: ../../network/nm_setting_bean_gen.go:282
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:393
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
+#: ../../network/nm_setting_bean_gen.go:404
 msgid "Send PPP Echo Packets"
 msgstr ""
 
@@ -1918,24 +2002,30 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:242
 #: ../../network/nm_setting_bean_gen.go:243
+#: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:286
 #: ../../network/nm_setting_bean_gen.go:287
+#: ../../network/nm_setting_bean_gen.go:288
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:302
+#: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:367
 #: ../../network/nm_setting_bean_gen.go:368
 #: ../../network/nm_setting_bean_gen.go:377
 #: ../../network/nm_setting_bean_gen.go:378
+#: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:409
+#: ../../network/nm_setting_bean_gen.go:410
 #: ../../network/nm_setting_bean_gen.go:424
 #: ../../network/nm_setting_bean_gen.go:425
+#: ../../network/nm_setting_bean_gen.go:427
 msgid "VPN"
 msgstr ""
 
@@ -1962,36 +2052,45 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:220
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:229
+#: ../../network/nm_setting_bean_gen.go:230
 #: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
+#: ../../network/nm_setting_bean_gen.go:246
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:288
 #: ../../network/nm_setting_bean_gen.go:289
+#: ../../network/nm_setting_bean_gen.go:290
 #: ../../network/nm_setting_bean_gen.go:293
 #: ../../network/nm_setting_bean_gen.go:294
 #: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:304
+#: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:369
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:380
+#: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:410
 #: ../../network/nm_setting_bean_gen.go:411
+#: ../../network/nm_setting_bean_gen.go:412
 #: ../../network/nm_setting_bean_gen.go:426
 #: ../../network/nm_setting_bean_gen.go:427
+#: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:435
 #: ../../network/nm_setting_bean_gen.go:436
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:461
 #: ../../network/nm_setting_bean_gen.go:462
+#: ../../network/nm_setting_bean_gen.go:464
 #: ../../network/nm_setting_bean_gen.go:474
 #: ../../network/nm_setting_bean_gen.go:475
+#: ../../network/nm_setting_bean_gen.go:477
 msgid "Gateway"
 msgstr ""
 
@@ -2005,10 +2104,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:239
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:249
+#: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:373
 #: ../../network/nm_setting_bean_gen.go:374
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:384
+#: ../../network/nm_setting_bean_gen.go:385
 msgid "NT Domain"
 msgstr ""
 
@@ -2019,6 +2120,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:281
 #: ../../network/nm_setting_bean_gen.go:290
 #: ../../network/nm_setting_bean_gen.go:291
+#: ../../network/nm_setting_bean_gen.go:292
 msgid "Proxy"
 msgstr ""
 
@@ -2029,6 +2131,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:282
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
+#: ../../network/nm_setting_bean_gen.go:293
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr ""
 
@@ -2039,6 +2142,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:283
 #: ../../network/nm_setting_bean_gen.go:292
 #: ../../network/nm_setting_bean_gen.go:293
+#: ../../network/nm_setting_bean_gen.go:294
 msgid "CSD Script"
 msgstr ""
 
@@ -2049,6 +2153,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:286
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:296
+#: ../../network/nm_setting_bean_gen.go:297
 msgid "Use FSID for Key Passphrase"
 msgstr ""
 
@@ -2061,8 +2166,10 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:304
 #: ../../network/nm_setting_bean_gen.go:305
+#: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:412
 #: ../../network/nm_setting_bean_gen.go:413
+#: ../../network/nm_setting_bean_gen.go:414
 msgid "Auth Type"
 msgstr ""
 
@@ -2073,6 +2180,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:304
 #: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:314
+#: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
@@ -2085,10 +2193,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:314
 #: ../../network/nm_setting_bean_gen.go:315
+#: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:327
 #: ../../network/nm_setting_bean_gen.go:328
 #: ../../network/nm_setting_bean_gen.go:337
 #: ../../network/nm_setting_bean_gen.go:338
+#: ../../network/nm_setting_bean_gen.go:339
 msgid "Customize Key Direction"
 msgstr ""
 
@@ -2099,10 +2209,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_bean_gen.go:316
+#: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:328
 #: ../../network/nm_setting_bean_gen.go:329
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:339
+#: ../../network/nm_setting_bean_gen.go:340
 msgid "Key Direction"
 msgstr ""
 
@@ -2113,6 +2225,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:317
+#: ../../network/nm_setting_bean_gen.go:318
 msgid "Remote IP"
 msgstr ""
 
@@ -2123,6 +2236,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:318
+#: ../../network/nm_setting_bean_gen.go:319
 msgid "Local IP"
 msgstr ""
 
@@ -2130,10 +2244,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:222
 #: ../../network/nm_setting_bean_gen.go:231
 #: ../../network/nm_setting_bean_gen.go:232
+#: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:403
 #: ../../network/nm_setting_bean_gen.go:404
 #: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:430
+#: ../../network/nm_setting_bean_gen.go:432
 msgid "User Pwd"
 msgstr ""
 
@@ -2141,14 +2257,17 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:223
 #: ../../network/nm_setting_bean_gen.go:232
 #: ../../network/nm_setting_bean_gen.go:233
+#: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:257
 #: ../../network/nm_setting_bean_gen.go:258
+#: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:404
 #: ../../network/nm_setting_bean_gen.go:405
 #: ../../network/nm_setting_bean_gen.go:430
 #: ../../network/nm_setting_bean_gen.go:431
+#: ../../network/nm_setting_bean_gen.go:433
 msgid "Group Name"
 msgstr ""
 
@@ -2156,17 +2275,21 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:235
+#: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:406
 #: ../../network/nm_setting_bean_gen.go:407
 #: ../../network/nm_setting_bean_gen.go:432
 #: ../../network/nm_setting_bean_gen.go:433
+#: ../../network/nm_setting_bean_gen.go:435
 msgid "Group Pwd"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
+#: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
+#: ../../network/nm_setting_bean_gen.go:419
 msgid "Request an Inner IP Address"
 msgstr ""
 
@@ -2174,10 +2297,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
+#: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:407
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:433
 #: ../../network/nm_setting_bean_gen.go:434
+#: ../../network/nm_setting_bean_gen.go:436
 msgid "Use Hybrid Authentication"
 msgstr ""
 
@@ -2185,24 +2310,30 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:237
+#: ../../network/nm_setting_bean_gen.go:238
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:409
 #: ../../network/nm_setting_bean_gen.go:434
 #: ../../network/nm_setting_bean_gen.go:435
+#: ../../network/nm_setting_bean_gen.go:437
 msgid "CA File"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
+#: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
+#: ../../network/nm_setting_bean_gen.go:420
 msgid "Enforce UDP Encapsulation"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
+#: ../../network/nm_setting_bean_gen.go:229
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
+#: ../../network/nm_setting_bean_gen.go:421
 msgid "Use IP Compression"
 msgstr ""
 
@@ -2210,6 +2341,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:245
 #: ../../network/nm_setting_bean_gen.go:254
 #: ../../network/nm_setting_bean_gen.go:255
+#: ../../network/nm_setting_bean_gen.go:256
 msgid "VPN IPsec"
 msgstr ""
 
@@ -2217,6 +2349,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:257
+#: ../../network/nm_setting_bean_gen.go:258
 msgid "Enable IPsec"
 msgstr ""
 
@@ -2224,6 +2357,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:259
+#: ../../network/nm_setting_bean_gen.go:260
 msgid "Group ID"
 msgstr ""
 
@@ -2231,7 +2365,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_bean_gen.go:261
 #: ../../network/nm_setting_vpn_strongswan.go:99
+#: ../../network/nm_setting_vpn_strongswan.go:103
 msgid "Pre-Shared Key"
 msgstr ""
 
@@ -2239,10 +2375,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:265
 #: ../../network/nm_setting_bean_gen.go:266
+#: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:380
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:390
+#: ../../network/nm_setting_bean_gen.go:391
 msgid "VPN PPP"
 msgstr ""
 
@@ -2250,6 +2388,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
+#: ../../network/nm_setting_bean_gen.go:280
 msgid "No Protocol Field Compression"
 msgstr ""
 
@@ -2257,6 +2396,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:280
+#: ../../network/nm_setting_bean_gen.go:281
 msgid "No Address/Control Compression"
 msgstr ""
 
@@ -2264,6 +2404,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:314
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:324
+#: ../../network/nm_setting_bean_gen.go:325
 msgid "VPN Security"
 msgstr ""
 
@@ -2271,6 +2412,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
+#: ../../network/nm_setting_bean_gen.go:327
 msgid "Cipher"
 msgstr ""
 
@@ -2278,6 +2420,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:327
+#: ../../network/nm_setting_bean_gen.go:328
 msgid "HMAC Auth"
 msgstr ""
 
@@ -2285,6 +2428,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:332
 #: ../../network/nm_setting_bean_gen.go:333
+#: ../../network/nm_setting_bean_gen.go:334
 msgid "VPN TLS Authentication"
 msgstr ""
 
@@ -2292,6 +2436,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
+#: ../../network/nm_setting_bean_gen.go:336
 msgid "Subject Match"
 msgstr ""
 
@@ -2299,6 +2444,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:336
+#: ../../network/nm_setting_bean_gen.go:337
 msgid "Remote Cert Type"
 msgstr ""
 
@@ -2306,6 +2452,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:327
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
+#: ../../network/nm_setting_bean_gen.go:338
 msgid "Key File"
 msgstr ""
 
@@ -2313,6 +2460,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:344
 #: ../../network/nm_setting_bean_gen.go:345
+#: ../../network/nm_setting_bean_gen.go:346
 msgid "VPN Proxies"
 msgstr ""
 
@@ -2320,6 +2468,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:337
 #: ../../network/nm_setting_bean_gen.go:346
 #: ../../network/nm_setting_bean_gen.go:347
+#: ../../network/nm_setting_bean_gen.go:348
 msgid "Proxy Type"
 msgstr ""
 
@@ -2327,6 +2476,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
+#: ../../network/nm_setting_bean_gen.go:349
 msgid "Server IP"
 msgstr ""
 
@@ -2334,6 +2484,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:339
 #: ../../network/nm_setting_bean_gen.go:348
 #: ../../network/nm_setting_bean_gen.go:349
+#: ../../network/nm_setting_bean_gen.go:350
 msgid "Port"
 msgstr ""
 
@@ -2341,6 +2492,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:340
 #: ../../network/nm_setting_bean_gen.go:349
 #: ../../network/nm_setting_bean_gen.go:350
+#: ../../network/nm_setting_bean_gen.go:351
 msgid "Retry Indefinitely When Failed"
 msgstr ""
 
@@ -2348,10 +2500,12 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:348
 #: ../../network/nm_setting_bean_gen.go:357
 #: ../../network/nm_setting_bean_gen.go:358
+#: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:440
 #: ../../network/nm_setting_bean_gen.go:441
+#: ../../network/nm_setting_bean_gen.go:443
 msgid "VPN Advanced"
 msgstr ""
 
@@ -2359,6 +2513,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
+#: ../../network/nm_setting_bean_gen.go:361
 msgid "Customize Gateway Port"
 msgstr ""
 
@@ -2366,6 +2521,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:361
+#: ../../network/nm_setting_bean_gen.go:362
 msgid "Gateway Port"
 msgstr ""
 
@@ -2373,6 +2529,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:362
+#: ../../network/nm_setting_bean_gen.go:363
 msgid "Customize Renegotiation Interval"
 msgstr ""
 
@@ -2380,6 +2537,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:362
 #: ../../network/nm_setting_bean_gen.go:363
+#: ../../network/nm_setting_bean_gen.go:364
 msgid "Renegotiation Interval"
 msgstr ""
 
@@ -2387,6 +2545,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:363
 #: ../../network/nm_setting_bean_gen.go:364
+#: ../../network/nm_setting_bean_gen.go:365
 msgid "Use LZO data compression"
 msgstr ""
 
@@ -2394,6 +2553,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:355
 #: ../../network/nm_setting_bean_gen.go:364
 #: ../../network/nm_setting_bean_gen.go:365
+#: ../../network/nm_setting_bean_gen.go:366
 msgid "Use TCP connection"
 msgstr ""
 
@@ -2401,6 +2561,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:356
 #: ../../network/nm_setting_bean_gen.go:365
 #: ../../network/nm_setting_bean_gen.go:366
+#: ../../network/nm_setting_bean_gen.go:367
 msgid "Use TAP device"
 msgstr ""
 
@@ -2408,6 +2569,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:357
 #: ../../network/nm_setting_bean_gen.go:366
 #: ../../network/nm_setting_bean_gen.go:367
+#: ../../network/nm_setting_bean_gen.go:368
 msgid "Customize Tunnel MTU"
 msgstr ""
 
@@ -2415,6 +2577,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:368
 #: ../../network/nm_setting_bean_gen.go:369
+#: ../../network/nm_setting_bean_gen.go:370
 msgid "Customize UDP Fragment Size"
 msgstr ""
 
@@ -2422,6 +2585,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:369
 #: ../../network/nm_setting_bean_gen.go:370
+#: ../../network/nm_setting_bean_gen.go:371
 msgid "UDP Fragment Size"
 msgstr ""
 
@@ -2429,6 +2593,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:371
+#: ../../network/nm_setting_bean_gen.go:372
 msgid "Restrict Tunnel TCP MSS"
 msgstr ""
 
@@ -2436,6 +2601,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:362
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:372
+#: ../../network/nm_setting_bean_gen.go:373
 msgid "Randomize Remote Hosts"
 msgstr ""
 
@@ -2443,6 +2609,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:442
 #: ../../network/nm_setting_bean_gen.go:443
+#: ../../network/nm_setting_bean_gen.go:445
 msgid "Domain"
 msgstr ""
 
@@ -2450,6 +2617,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:443
 #: ../../network/nm_setting_bean_gen.go:444
+#: ../../network/nm_setting_bean_gen.go:446
 msgid "Vendor"
 msgstr ""
 
@@ -2457,6 +2625,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:419
 #: ../../network/nm_setting_bean_gen.go:444
 #: ../../network/nm_setting_bean_gen.go:445
+#: ../../network/nm_setting_bean_gen.go:447
 msgid "Version"
 msgstr ""
 
@@ -2464,6 +2633,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:420
 #: ../../network/nm_setting_bean_gen.go:445
 #: ../../network/nm_setting_bean_gen.go:446
+#: ../../network/nm_setting_bean_gen.go:448
 msgid "Encryption"
 msgstr ""
 
@@ -2471,6 +2641,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:421
 #: ../../network/nm_setting_bean_gen.go:446
 #: ../../network/nm_setting_bean_gen.go:447
+#: ../../network/nm_setting_bean_gen.go:449
 msgid "NAT Traversal"
 msgstr ""
 
@@ -2478,6 +2649,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:422
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:448
+#: ../../network/nm_setting_bean_gen.go:450
 msgid "IKE DH Group"
 msgstr ""
 
@@ -2485,6 +2657,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:423
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:449
+#: ../../network/nm_setting_bean_gen.go:451
 msgid "Forward Secrecy"
 msgstr ""
 
@@ -2492,6 +2665,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:424
 #: ../../network/nm_setting_bean_gen.go:449
 #: ../../network/nm_setting_bean_gen.go:450
+#: ../../network/nm_setting_bean_gen.go:452
 msgid "Local Port"
 msgstr ""
 
@@ -2499,6 +2673,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:425
 #: ../../network/nm_setting_bean_gen.go:450
 #: ../../network/nm_setting_bean_gen.go:451
+#: ../../network/nm_setting_bean_gen.go:453
 msgid "Disable Dead Peer Detection"
 msgstr ""
 
@@ -2506,6 +2681,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:431
 #: ../../network/nm_setting_bean_gen.go:456
 #: ../../network/nm_setting_bean_gen.go:457
+#: ../../network/nm_setting_bean_gen.go:459
 msgid "IPv4"
 msgstr ""
 
@@ -2515,8 +2691,10 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:445
 #: ../../network/nm_setting_bean_gen.go:458
 #: ../../network/nm_setting_bean_gen.go:459
+#: ../../network/nm_setting_bean_gen.go:461
 #: ../../network/nm_setting_bean_gen.go:471
 #: ../../network/nm_setting_bean_gen.go:472
+#: ../../network/nm_setting_bean_gen.go:474
 msgid "Method"
 msgstr ""
 
@@ -2526,8 +2704,10 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:446
 #: ../../network/nm_setting_bean_gen.go:459
 #: ../../network/nm_setting_bean_gen.go:460
+#: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:472
 #: ../../network/nm_setting_bean_gen.go:473
+#: ../../network/nm_setting_bean_gen.go:475
 msgid "IP Address"
 msgstr ""
 
@@ -2535,6 +2715,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:435
 #: ../../network/nm_setting_bean_gen.go:460
 #: ../../network/nm_setting_bean_gen.go:461
+#: ../../network/nm_setting_bean_gen.go:463
 msgid "Netmask"
 msgstr ""
 
@@ -2549,6 +2730,7 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:443
 #: ../../network/nm_setting_bean_gen.go:469
 #: ../../network/nm_setting_bean_gen.go:470
+#: ../../network/nm_setting_bean_gen.go:472
 msgid "IPv6"
 msgstr ""
 
@@ -2556,20 +2738,25 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:473
 #: ../../network/nm_setting_bean_gen.go:474
+#: ../../network/nm_setting_bean_gen.go:476
 msgid "Prefix"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:463
+#: ../../network/nm_setting_bean_gen.go:465
 #: ../../network/nm_setting_bean_gen.go:475
 #: ../../network/nm_setting_bean_gen.go:476
+#: ../../network/nm_setting_bean_gen.go:478
 msgid "Primary DNS"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:463
 #: ../../network/nm_setting_bean_gen.go:464
+#: ../../network/nm_setting_bean_gen.go:466
 #: ../../network/nm_setting_bean_gen.go:476
 #: ../../network/nm_setting_bean_gen.go:477
+#: ../../network/nm_setting_bean_gen.go:479
 msgid "Secondary DNS"
 msgstr ""
 
@@ -2939,14 +3126,17 @@ msgid "SOCKS"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:96
+#: ../../network/nm_setting_vpn_strongswan.go:100
 msgid "SSH Agent"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:97
+#: ../../network/nm_setting_vpn_strongswan.go:101
 msgid "Smartcard"
 msgstr ""
 
 #: ../../network/nm_setting_vpn_strongswan.go:98
+#: ../../network/nm_setting_vpn_strongswan.go:102
 msgid "EAP"
 msgstr ""
 
@@ -3482,8 +3672,10 @@ msgstr ""
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
 #: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
 #: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr ""
@@ -3492,8 +3684,10 @@ msgstr ""
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
 #: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
@@ -3502,6 +3696,7 @@ msgstr ""
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:170
+#: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr ""
@@ -3510,6 +3705,7 @@ msgstr ""
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:170
+#: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""

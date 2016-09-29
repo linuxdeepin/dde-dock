@@ -32,7 +32,7 @@ func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
 	if succeed {
 		msgBody = fmt.Sprintf(Tr("%q removed successfully."), item.Name)
 	} else {
-		msgBody = fmt.Sprintf(Tr("%q failed to remove."), item.Name)
+		msgBody = fmt.Sprintf(Tr("Failed to uninstall %q."), item.Name)
 	}
 	m.notify(icon, "", msgBody)
 }
