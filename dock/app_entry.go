@@ -283,18 +283,36 @@ func (entry *AppEntry) updateIcon() {
 
 func (entry *AppEntry) getIcon() string {
 	var icon string
-	if entry.winIconPreferred && entry.current != nil {
-		// get icon from current window
-		icon = entry.current.getIcon()
+	appInfo := entry.appInfo
+	current := entry.current
+
+	if entry.hasWindow() {
+		if current == nil {
+			logger.Warning("AppEntry.getIcon entry.hasWindow but entry.current is nil")
+			return ""
+		}
+
+		// has window && current not nil
+		if entry.winIconPreferred {
+			// try current window icon first
+			icon = current.getIcon()
+			if icon != "" {
+				return icon
+			}
+		}
+		if appInfo != nil {
+			icon = appInfo.GetIcon()
+			if icon != "" {
+				return icon
+			}
+		}
+		return current.getIcon()
+
+	} else if appInfo != nil {
+		// no window
+		return appInfo.GetIcon()
 	}
-	// try get icon from appInfo
-	if icon == "" && entry.appInfo != nil {
-		icon = entry.appInfo.GetIcon()
-	}
-	if icon == "" && !entry.winIconPreferred && entry.current != nil {
-		icon = entry.current.getIcon()
-	}
-	return icon
+	return ""
 }
 
 func (e *AppEntry) updateWindowTitles() {
