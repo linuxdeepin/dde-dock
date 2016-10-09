@@ -34,6 +34,10 @@ TrayWidget::TrayWidget(quint32 winId, QWidget *parent)
     m_updateTimer->setInterval(100);
     m_updateTimer->setSingleShot(true);
 
+    m_ignoreRepeat = new QTimer(this);
+    m_ignoreRepeat->setInterval(100);
+    m_ignoreRepeat->setSingleShot(true);
+
     connect(m_updateTimer, &QTimer::timeout, this, &TrayWidget::refershIconImage);
 
     setFixedSize(26, 26);
@@ -150,6 +154,10 @@ void TrayWidget::moveEvent(QMoveEvent *e)
 
 void TrayWidget::enterEvent(QEvent *e)
 {
+    if (m_ignoreRepeat->isActive())
+        return;
+    m_ignoreRepeat->start(10);
+
     QWidget::enterEvent(e);
 
     // fake enter event

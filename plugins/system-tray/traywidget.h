@@ -47,6 +47,7 @@ private:
     QImage m_image;
 
     QTimer *m_updateTimer;
+    QTimer *m_ignoreRepeat;
     QPoint m_pressPoint;
 };
 
