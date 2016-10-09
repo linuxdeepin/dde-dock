@@ -52,7 +52,7 @@ func (d *Daemon) Start() error {
 	if dockManager != nil {
 		return nil
 	}
-	initDeepin()
+	initGtk()
 	logger.BeginTracing()
 
 	if logger.GetLogLevel() == log.LevelDebug {

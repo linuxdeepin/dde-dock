@@ -14,7 +14,7 @@ package dock
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
 //#include <stdlib.h>
 // char* get_icon_file_path(const char* name);
-// void init_deepin();
+// void init_gtk();
 // char* get_data_uri_by_path(const char* path);
 import "C"
 import (
@@ -50,8 +50,8 @@ func _getIconFilePath(name string) string {
 	return path
 }
 
-func initDeepin() {
-	C.init_deepin()
+func initGtk() {
+	C.init_gtk()
 }
 
 func xpm_to_dataurl(icon string) string {

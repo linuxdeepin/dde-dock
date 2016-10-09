@@ -27,26 +27,10 @@ char *get_icon_file_path(const char*name)
     return NULL;
 }
 
-static char DE_NAME[100] = "DEEPIN";
-
-void set_desktop_env_name(const char* name)
-{
-    size_t max_len = strlen(name) + 1;
-    memcpy(DE_NAME, name, max_len > 100 ? max_len : 100);
-#if GTK_CHECK_VERSION(2, 42, 0)
-    g_setenv("XDG_CURRENT_DESKTOP", name, TRUE);
-#else
-    g_desktop_app_info_set_desktop_env(name);
-#endif
-}
-
-
-void init_deepin()
+void init_gtk()
 {
     gtk_init(NULL, NULL);
-    set_desktop_env_name("Deepin");
 }
-
 
 char* get_data_uri_by_pixbuf(GdkPixbuf* pixbuf)
 {
