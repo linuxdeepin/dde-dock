@@ -83,6 +83,17 @@ func (entries AppEntries) FilterDocked() AppEntries {
 	return dockedEntries
 }
 
+func (entries AppEntries) GetByWindowPid(pid uint) *AppEntry {
+	for _, entry := range entries {
+		for _, winInfo := range entry.windows {
+			if winInfo.pid == pid {
+				return entry
+			}
+		}
+	}
+	return nil
+}
+
 func (entries AppEntries) GetByAppId(id string) *AppEntry {
 	for _, entry := range entries {
 		if entry.appInfo == nil {

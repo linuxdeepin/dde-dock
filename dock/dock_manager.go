@@ -26,7 +26,6 @@ type DockManager struct {
 	clientList                     windowSlice
 	windowInfoMap                  map[xproto.Window]*WindowInfo
 	windowInfoMapMutex             sync.RWMutex
-	appIdFilterGroup               *AppIdFilterGroup
 	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
 	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
 	winIconPreferredAppIds         []string
@@ -41,7 +40,6 @@ type DockManager struct {
 	ShowTimeout *property.GSettingsUintProperty `access:"readwrite"`
 	HideTimeout *property.GSettingsUintProperty `access:"readwrite"`
 	DockedApps  *property.GSettingsStrvProperty
-	launcher    *launcher.Launcher
 
 	activeWindow xproto.Window
 
@@ -52,8 +50,11 @@ type DockManager struct {
 
 	entryCount         uint
 	FrontendWindowRect *Rect
+	identifyWindowFuns []*IdentifyWindowFunc
+	windowPatterns     WindowPatterns
 
-	wm *wm.Wm
+	launcher *launcher.Launcher
+	wm       *wm.Wm
 
 	// Signals
 	ServiceRestarted func()

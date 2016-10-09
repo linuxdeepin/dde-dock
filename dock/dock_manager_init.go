@@ -21,8 +21,10 @@ import (
 )
 
 const (
-	launcherDest    = "com.deepin.dde.daemon.Launcher"
-	launcherObjPath = "/com/deepin/dde/daemon/Launcher"
+	ddeDataDir         = "/usr/share/dde/data"
+	windowPatternsFile = ddeDataDir + "/window_patterns.json"
+	launcherDest       = "com.deepin.dde.daemon.Launcher"
+	launcherObjPath    = "/com/deepin/dde/daemon/Launcher"
 )
 
 func (m *DockManager) loadCache() error {
@@ -130,12 +132,16 @@ func (m *DockManager) init() error {
 	m.listenSettingsChanged()
 
 	m.winIconPreferredAppIds = []string{"apps.com.qq.im", "apps.com.qq.im.light"}
-	m.appIdFilterGroup = NewAppIdFilterGroup()
 	err = m.loadCache()
 	if err != nil {
 		return err
 	}
 	m.windowInfoMap = make(map[xproto.Window]*WindowInfo)
+	m.windowPatterns, err = loadWindowPatterns(windowPatternsFile)
+	if err != nil {
+		logger.Warning("loadWindowPatterns failed:", err)
+	}
+	m.registerIdentifyWindowFuncs()
 	m.initEntries()
 
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")

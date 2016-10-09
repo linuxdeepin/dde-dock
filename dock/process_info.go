@@ -14,6 +14,7 @@ type ProcessInfo struct {
 	args    []string
 	exe     string
 	cwd     string
+	environ map[string]string
 }
 
 func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
@@ -61,6 +62,8 @@ func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 		return nil, err
 	}
 
+	// environ
+	pInfo.environ, _ = getProcessEnvVars(pid)
 	return pInfo, nil
 }
 
