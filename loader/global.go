@@ -50,6 +50,16 @@ func EnableModules(enablingModules []string, disableModules []string, flag Enabl
 	return getLoader().EnableModules(enablingModules, disableModules, flag)
 }
 
+func ToggleLogDebug(enabled bool) {
+	var priority log.Priority = log.LevelInfo
+	if enabled {
+		priority = log.LevelDebug
+	}
+	for _, m := range getLoader().modules {
+		m.SetLogLevel(priority)
+	}
+}
+
 func StartAll() {
 	allModules := getLoader().List()
 	modules := []string{}
