@@ -116,11 +116,6 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 			appInfo.Destroy()
 		}
 	} else {
-		// cache desktop hash => desktop file path
-		if appInfo != nil {
-			m.desktopHashFileMapCacheManager.SetKeyValue(appInfo.innerId, appInfo.GetFilePath())
-			m.desktopHashFileMapCacheManager.AutoSave()
-		}
 		logger.Debug("entry not existed, newAppEntry")
 		entry = newAppEntry(m, entryInnerId, appInfo)
 		m.Entries = m.Entries.Insert(entry, index)

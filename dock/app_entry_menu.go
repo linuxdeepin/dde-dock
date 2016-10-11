@@ -78,7 +78,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 
 	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
-		appInfo = (*gio.AppInfo)(entry.appInfo.DesktopAppInfo)
+		appInfo = gio.ToAppInfo(entry.appInfo.DesktopAppInfo)
 	} else {
 		exec := entry.getExec(true)
 		logger.Debugf("No AppInfo, exec [%s]", exec)

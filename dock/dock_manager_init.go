@@ -41,17 +41,8 @@ func (m *DockManager) loadCache() error {
 }
 
 func (m *DockManager) initEntries() {
-	// init entries
-	m.desktopWindowsMapCacheManager.SetAutoSaveEnabled(false)
-	m.desktopHashFileMapCacheManager.SetAutoSaveEnabled(false)
-
 	m.initDockedApps()
 	m.initClientList()
-
-	m.desktopWindowsMapCacheManager.SetAutoSaveEnabled(true)
-	m.desktopWindowsMapCacheManager.AutoSave()
-	m.desktopHashFileMapCacheManager.SetAutoSaveEnabled(true)
-	m.desktopHashFileMapCacheManager.AutoSave()
 }
 
 func (m *DockManager) connectSettingKeyChanged(key string, handler func(*gio.Settings, string)) {
