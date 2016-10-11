@@ -52,7 +52,7 @@ func (m *Manager) uninstall(id string) error {
 		return errorInvalidID
 	}
 
-	pkg := m.queryPkgName(item, true)
+	pkg := m.queryPkgName(item)
 	if pkg != "" {
 		return m.uninstallSystemPackage(pkg)
 	} else {

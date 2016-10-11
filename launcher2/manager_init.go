@@ -61,6 +61,7 @@ func (m *Manager) init() error {
 		return err
 	}
 
+	m.appDirs = getAppDirs()
 	err = m.loadDesktopPkgMap()
 	if err != nil {
 		logger.Warning(err)
@@ -84,7 +85,6 @@ func (m *Manager) init() error {
 		logger.Warning(err)
 	}
 
-	m.appDirs = getAppDirs()
 	// load items
 	m.items = make(map[string]*Item)
 

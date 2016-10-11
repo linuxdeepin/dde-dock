@@ -135,7 +135,7 @@ func (m *Manager) removeItem(id string) {
 }
 
 func (m *Manager) queryCategoryID(item *Item) CategoryID {
-	pkg := m.queryPkgName(item, false)
+	pkg := m.queryPkgName(item)
 	logger.Debugf("queryCategoryID desktopPkgMap item %v -> pkg %v", item, pkg)
 	if pkg != "" && m.pkgCategoryMap != nil {
 		if cid, ok := m.pkgCategoryMap[pkg]; ok {
@@ -149,26 +149,15 @@ func (m *Manager) queryCategoryID(item *Item) CategoryID {
 	return categoryGuess
 }
 
-func (m *Manager) queryPkgName(item *Item, exactly bool) string {
+func (m *Manager) queryPkgName(item *Item) string {
 	if m.desktopPkgMap == nil {
 		logger.Warning("queryPkgName failed: Manager.desktopPkgMap is nil")
 		return ""
 	}
 
-	// try full path
-	if pkg, ok := m.desktopPkgMap[item.Path]; ok && pkg != "" {
+	if pkg, ok := m.desktopPkgMap[item.ID]; ok {
 		return pkg
 	}
-
-	if exactly {
-		return ""
-	}
-	// try base name
-	base := filepath.Base(item.Path)
-	if pkg, ok := m.desktopPkgMap[base]; ok {
-		return pkg
-	}
-
 	// fail
 	return ""
 }
@@ -206,9 +195,22 @@ func (m *Manager) loadDesktopPkgMap() error {
 	if err != nil {
 		return err
 	}
-	m.desktopPkgMap = data
-	logger.Debug("loadDesktopPkgMap count:", len(data))
+	m.desktopPkgMap = m.convertDesktopPkgMap(data)
+	logger.Debug("loadDesktopPkgMap count:", len(m.desktopPkgMap))
 	return nil
+}
+
+func (m *Manager) convertDesktopPkgMap(in map[string]string) map[string]string {
+	out := make(map[string]string)
+	for k, v := range in {
+		if !filepath.IsAbs(k) {
+			continue
+		}
+		if appId := m.getAppIdByFilePath(k); appId != "" {
+			out[appId] = v
+		}
+	}
+	return out
 }
 
 func (m *Manager) loadPkgCategoryMap() error {
