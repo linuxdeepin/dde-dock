@@ -10,8 +10,9 @@
 package appinfo
 
 import (
-	. "pkg.deepin.io/dde/daemon/launcher/utils"
 	"gir/glib-2.0"
+	"io/ioutil"
+	"os"
 )
 
 const (
@@ -31,5 +32,24 @@ func GetFrequency(id string, f *glib.KeyFile) uint64 {
 
 func SetFrequency(id string, freq uint64, f *glib.KeyFile) {
 	f.SetUint64(id, _RateRecordKey, freq)
-	SaveKeyFile(f, ConfigFilePath(_RateRecordFile))
+	saveKeyFile(f, ConfigFilePath(_RateRecordFile))
+}
+
+// saveKeyFile saves key file.
+func saveKeyFile(file *glib.KeyFile, path string) error {
+	_, content, err := file.ToData()
+	if err != nil {
+		return err
+	}
+
+	stat, err := os.Lstat(path)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(path, []byte(content), stat.Mode())
+	if err != nil {
+		return err
+	}
+	return nil
 }
