@@ -344,6 +344,18 @@ var zoneWhiteList = []zoneDesc{
 		zone: "Pacific/Fakaofo",
 		desc: Tr("Fakaofo"),
 	},
+	zoneDesc{
+		zone: "Asia/Kolkata",
+		desc: Tr("Kolkata"),
+	},
+	zoneDesc{
+		zone: "Asia/Colombo",
+		desc: Tr("Colombo"),
+	},
+	zoneDesc{
+		zone: "Asia/Pyongyang",
+		desc: Tr("Pyongyang"),
+	},
 }
 
 func getZoneDesc(zone string) string {

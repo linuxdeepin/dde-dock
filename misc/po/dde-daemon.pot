@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-12 13:35+0800\n"
+"POT-Creation-Date: 2016-10-13 15:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3713,4 +3713,16 @@ msgstr ""
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
+msgstr ""
+
+#: ../../timedate/deepin_list.go:349
+msgid "Kolkata"
+msgstr ""
+
+#: ../../timedate/deepin_list.go:353
+msgid "Colombo"
+msgstr ""
+
+#: ../../timedate/deepin_list.go:357
+msgid "Pyongyang"
 msgstr ""

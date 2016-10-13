@@ -45,13 +45,13 @@ type ZoneInfo struct {
 }
 
 var (
-	//_zoneList []string
+	_zoneList []string
 
 	// Error, invalid timezone
 	ErrZoneInvalid = fmt.Errorf("Invalid time zone")
 	errZoneNoDST   = fmt.Errorf("The time zone has no DST info")
 
-	defaultZoneTab = "/usr/share/zoneinfo/zone.tab"
+	defaultZoneTab = "/usr/share/zoneinfo/zone1970.tab"
 	defaultZoneDir = "/usr/share/zoneinfo"
 )
 
@@ -75,7 +75,6 @@ func IsZoneValid(zone string) bool {
 	return dutils.IsFileExist(file)
 }
 
-/*
 func GetAllZones() []string {
 	if _zoneList != nil {
 		return _zoneList
@@ -84,7 +83,6 @@ func GetAllZones() []string {
 	list, _ := getZoneListFromFile(defaultZoneTab)
 	return list
 }
-*/
 
 // Query timezone detail info by timezone
 func GetZoneInfo(zone string) (*ZoneInfo, error) {
