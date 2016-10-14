@@ -7,7 +7,7 @@
 #include <QDir>
 
 #include <unistd.h>
-
+#include "dbus/dbusdockadaptors.h"
 DWIDGET_USE_NAMESPACE
 DUTIL_USE_NAMESPACE
 
@@ -53,8 +53,10 @@ int main(int argc, char *argv[])
     ThemeAppIcon::gtkInit();
 
     MainWindow mw;
-    QDBusConnection::sessionBus().registerService("com.deepin.dde.dock");
-    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/dock", "com.deepin.dde.dock", &mw);
+    DBusDockAdaptors adaptor(&mw);
+    QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");
+    QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Dock", "com.deepin.dde.Dock", &mw);
+
     RegisterDdeSession();
 
     QTimer::singleShot(500, &mw, &MainWindow::show);

@@ -130,7 +130,7 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 /// \brief MainPanel::displayMode interface for Q_PROPERTY, never use this func.
 /// \return
 ///
-int MainPanel::displayMode()
+int MainPanel::displayMode() const
 {
     return int(m_displayMode);
 }
@@ -139,9 +139,16 @@ int MainPanel::displayMode()
 /// \brief MainPanel::position interface for Q_PROPERTY, never use this func.
 /// \return
 ///
-int MainPanel::position()
+int MainPanel::position() const
 {
     return int(m_position);
+}
+
+void MainPanel::moveEvent(QMoveEvent* e)
+{
+    QFrame::moveEvent(e);
+
+    emit geometryChanged();
 }
 
 void MainPanel::paintEvent(QPaintEvent *e)
@@ -200,6 +207,8 @@ void MainPanel::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     m_itemAdjustTimer->start();
+
+    emit geometryChanged();
 }
 
 void MainPanel::dragEnterEvent(QDragEnterEvent *e)

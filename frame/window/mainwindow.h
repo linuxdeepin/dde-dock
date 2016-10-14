@@ -7,8 +7,10 @@
 
 #include <QWidget>
 #include <QTimer>
-
+#include <QRect>
+#include "dbus/dbusdockadaptors.h"
 class MainPanel;
+class DBusDockAdaptors;
 class MainWindow : public QWidget
 {
     Q_OBJECT
@@ -16,8 +18,10 @@ class MainWindow : public QWidget
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    QRect panelGeometry();
 
 private:
+    void moveEvent(QMoveEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
@@ -28,6 +32,9 @@ private:
     void move(int x, int y);
     void initComponents();
     void initConnections();
+
+signals:
+    void panelGeometryChanged();
 
 private slots:
     void positionChanged(const Position prevPos);

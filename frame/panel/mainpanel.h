@@ -24,14 +24,16 @@ public:
 
     void updateDockPosition(const Position dockPosition);
     void updateDockDisplayMode(const Dock::DisplayMode displayMode);
-    int displayMode();
-    int position();
+    int displayMode() const;
+    int position() const;
 
 signals:
     void requestWindowAutoHide(const bool autoHide) const;
     void requestRefershWindowVisible() const;
+    void geometryChanged();
 
 private:
+    void moveEvent(QMoveEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);

@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_xcbMisc(XcbMisc::instance())
+
 {
     setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
@@ -31,13 +32,25 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setFixedSize(m_settings->windowSize());
 
     updatePanelVisible();
-
-//    setStyleSheet("background-color:red;");
+    //    setStyleSheet("background-color:red;");
+    connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
 }
 
 MainWindow::~MainWindow()
 {
     delete m_xcbMisc;
+}
+
+QRect MainWindow::panelGeometry()
+{
+    QRect rect = m_mainPanel->geometry();
+    rect.moveTopLeft(m_mainPanel->mapToGlobal(QPoint(0,0)));
+    return rect;
+}
+
+void MainWindow::moveEvent(QMoveEvent* e)
+{
+    QWidget::moveEvent(e);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -157,9 +170,11 @@ void MainWindow::initConnections()
         QWidget::setFixedSize(size);
         m_mainPanel->setFixedSize(size);
     });
+
     connect(m_posChangeAni, &QPropertyAnimation::finished, [this] {
         QWidget::move(m_posChangeAni->endValue().toPoint());
     });
+
 }
 
 void MainWindow::positionChanged(const Position prevPos)
@@ -225,26 +240,25 @@ void MainWindow::updateGeometry()
         setFixedSize(size);
     }
 
-//    const QRect primaryRect = m_settings->primaryRect();
-//    const int offsetX = (primaryRect.width() - size.width()) / 2;
-//    const int offsetY = (primaryRect.height() - size.height()) / 2;
+    //    const QRect primaryRect = m_settings->primaryRect();
+    //    const int offsetX = (primaryRect.width() - size.width()) / 2;
+    //    const int offsetY = (primaryRect.height() - size.height()) / 2;
 
-//    switch (position)
-//    {
-//    case Top:
-//        move(primaryRect.topLeft().x() + offsetX, primaryRect.y());                   break;
-//    case Left:
-//        move(primaryRect.topLeft().x(), primaryRect.y() + offsetY);                   break;
-//    case Right:
-//        move(primaryRect.right() - size.width() + 1, primaryRect.y() + offsetY);      break;
-//    case Bottom:
-//        move(primaryRect.x() + offsetX, primaryRect.bottom() - size.height() + 1);    break;
-//    default:
-//        Q_ASSERT(false);
-//    }
+    //    switch (position)
+    //    {
+    //    case Top:
+    //        move(primaryRect.topLeft().x() + offsetX, primaryRect.y());                   break;
+    //    case Left:
+    //        move(primaryRect.topLeft().x(), primaryRect.y() + offsetY);                   break;
+    //    case Right:
+    //        move(primaryRect.right() - size.width() + 1, primaryRect.y() + offsetY);      break;
+    //    case Bottom:
+    //        move(primaryRect.x() + offsetX, primaryRect.bottom() - size.height() + 1);    break;
+    //    default:
+    //        Q_ASSERT(false);
+    //    }
     const QRect windowRect = m_settings->windowRect(position, m_settings->hideState() == Hide);
     move(windowRect.x(), windowRect.y());
-
     m_mainPanel->update();
 }
 
@@ -301,13 +315,12 @@ void MainWindow::setStrutPartial()
     default:
         Q_ASSERT(false);
     }
-
     m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }
 
 void MainWindow::expand()
 {
-//    qDebug() << "expand";
+    //    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
     if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size())
@@ -337,8 +350,8 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-//    qDebug() << "narrow";
-//    const QSize size = m_settings->windowSize();
+    //    qDebug() << "narrow";
+    //    const QSize size = m_settings->windowSize();
     const QSize size = m_mainPanel->size();
 
     QPoint finishPos(0, 0);
@@ -399,7 +412,7 @@ void MainWindow::updatePanelVisible()
 
     const Dock::HideState state = m_settings->hideState();
 
-//    qDebug() << state;
+    //    qDebug() << state;
 
     do
     {

@@ -35,7 +35,8 @@ SOURCES += main.cpp \
     item/placeholderitem.cpp \
     controller/dockpluginloader.cpp \
     item/containeritem.cpp \
-    item/components/containerwidget.cpp
+    item/components/containerwidget.cpp \
+    dbus/dbusdockadaptors.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -62,7 +63,8 @@ HEADERS  += \
     item/placeholderitem.h \
     controller/dockpluginloader.h \
     item/containeritem.h \
-    item/components/containerwidget.h
+    item/components/containerwidget.h \
+    dbus/dbusdockadaptors.h
 
 dbus_service.files += com.deepin.dde.dock.service
 dbus_service.path = /usr/share/dbus-1/services
