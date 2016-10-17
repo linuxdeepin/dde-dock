@@ -10,7 +10,6 @@
 package checkers
 
 import (
-	"fmt"
 	. "pkg.deepin.io/lib/gettext"
 	"regexp"
 	"strings"
@@ -44,8 +43,7 @@ func (code passwordErrorCode) Prompt() string {
 	case passwordErrCodeShort:
 		return Tr("Please enter a password not less than 8 characters")
 	case passwordErrCodeSimple:
-		formt := Tr("The password must contain English letters (case-sensitive), numbers or special symbols (%s)")
-		return fmt.Sprintf(formt, passwordSpecialChars)
+		return Tr("The password must contain English letters (case-sensitive), numbers or special symbols (~!@#$%^&*()[]{}\\|/?,.<>)")
 	default:
 		return ""
 	}
