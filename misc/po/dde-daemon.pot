@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-17 14:13+0800\n"
+"POT-Creation-Date: 2016-10-19 10:21+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -594,6 +594,10 @@ msgstr ""
 #: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
 #: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
 msgid "_Close All"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:116
+msgid "_Open"
 msgstr ""
 
 #: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131

@@ -113,7 +113,7 @@ func (entry *AppEntry) getMenuItemLaunch() *MenuItem {
 	if entry.hasWindow() {
 		itemName = entry.getDisplayName()
 	} else {
-		itemName = Tr("_Run")
+		itemName = Tr("_Open")
 	}
 	logger.Debugf("getMenuItemLaunch, itemName: %q", itemName)
 	return NewMenuItem(itemName, entry.launchApp, true)
