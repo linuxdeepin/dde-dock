@@ -1,0 +1,31 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in 
+    configure)
+    if [ -x /usr/lib/deepin-daemon/default-terminal ];then
+        update-alternatives --install /usr/bin/x-terminal-emulator \
+            x-terminal-emulator /usr/lib/deepin-daemon/default-terminal 60
+    fi
+    if [ -f /etc/systemd/logind.conf ];then
+        sed -i 's/^#\?HandlePowerKey=.*$/HandlePowerKey=ignore/g' /etc/systemd/logind.conf || true
+        sed -i 's/^#\?HandleLidSwitch=.*$/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf || true
+    fi
+    if [ -f /usr/share/fcitx/addon/fcitx-xkb.conf ];then
+        sed -i 's/Enabled=.*$/Enabled=False/' /usr/share/fcitx/addon/fcitx-xkb.conf || true
+    fi
+    ;;
+    triggered)
+    if [ -f /etc/systemd/logind.conf ];then
+        sed -i 's/^#\?HandlePowerKey=.*$/HandlePowerKey=ignore/g' /etc/systemd/logind.conf || true
+        sed -i 's/^#\?HandleLidSwitch=.*$/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf || true
+    fi
+    if [ -f /usr/share/fcitx/addon/fcitx-xkb.conf ];then
+        sed -i 's/Enabled=.*$/Enabled=False/' /usr/share/fcitx/addon/fcitx-xkb.conf || true
+    fi
+    ;;
+esac
+
+
+#DEBHELPER#

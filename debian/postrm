@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+if [ "$1" = "purge" ];then
+    rm -f /var/log/deepin.log 
+    rm -f /var/cache/deepin/mark-setup-network-services
+fi
+
+#DEBHELPER#
+
+exit 0

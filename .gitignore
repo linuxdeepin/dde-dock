@@ -35,8 +35,6 @@ bin/dde-dock-daemon/dde-dock-daemon
 bin/dde-session-initializer/dde-session-initializer
 !launcher/testdata/.config/launcher/*
 
-debian
-debian/
 out/
 gopath/
 .vscode/

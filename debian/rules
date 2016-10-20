@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+export GOPATH := /usr/share/gocode
+
+%:
+	dh $@
+
+ifdef USE_GCCGO
+override_dh_strip:
+	true
+override_dh_auto_test:
+	true
+else
+override_dh_strip:
+	dh_strip --dbg-package=dde-daemon-dbg
+endif
