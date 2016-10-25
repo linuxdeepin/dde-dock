@@ -11,8 +11,8 @@ package launcher
 
 import (
 	libPinyin "dbus/com/deepin/api/pinyin"
+	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
-	libStoreApi "dbus/com/deepin/store/api"
 	libNotifications "dbus/org/freedesktop/notifications"
 	"gir/gio-2.0"
 	"github.com/howeyc/fsnotify"
@@ -23,8 +23,8 @@ import (
 
 func (m *Manager) init() error {
 	var err error
-	// init store.Api
-	m.storeApi, err = libStoreApi.NewDStoreDesktop("com.deepin.store.Api", "/com/deepin/store/Api")
+	// init launchedRecorder
+	m.launchedRecorder, err = libApps.NewLaunchedRecorder("com.deepin.daemon.Apps", "/com/deepin/daemon/Apps")
 	if err != nil {
 		return err
 	}
@@ -112,6 +112,14 @@ func (m *Manager) init() error {
 	m.watchApplicationsDirs()
 
 	go m.handleFsWatcherEvents()
+
+	m.launchedRecorder.ConnectLaunched(func(path string) {
+		item := m.getItemByPath(path)
+		if item == nil {
+			return
+		}
+		dbus.Emit(m, "NewAppLaunched", item.ID)
+	})
 	return nil
 }
 

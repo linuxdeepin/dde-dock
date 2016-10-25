@@ -10,7 +10,6 @@
 package launcher
 
 import (
-	"encoding/json"
 	"errors"
 	"gir/glib-2.0"
 	"os"
@@ -55,23 +54,21 @@ func (m *Manager) GetItemInfo(id string) (ItemInfo, error) {
 }
 
 func (m *Manager) GetAllNewInstalledApps() ([]string, error) {
-	jsonStr, err := m.storeApi.GetNewDesktops()
+	newApps, err := m.launchedRecorder.GetNew()
 	if err != nil {
 		return nil, err
 	}
-
-	var data [][]interface{}
-	err = json.Unmarshal([]byte(jsonStr), &data)
-	if err != nil {
-		return nil, err
+	var ids []string
+	// newApps type is map[string][]string
+	for dir, names := range newApps {
+		for _, name := range names {
+			path := filepath.Join(dir, name) + desktopExt
+			if item := m.getItemByPath(path); item != nil {
+				ids = append(ids, item.ID)
+			}
+		}
 	}
-
-	var list []string
-	for _, tuple := range data {
-		id := getAppId(tuple[0].(string))
-		list = append(list, id)
-	}
-	return list, nil
+	return ids, nil
 }
 
 func (m *Manager) IsItemOnDesktop(id string) (bool, error) {
@@ -132,22 +129,8 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 	return true, nil
 }
 
+// MarkLaunched 废弃
 func (m *Manager) MarkLaunched(id string) error {
-	logger.Debugf("MarkLaunched id: %q", id)
-	item := m.getItemById(id)
-	if item == nil {
-		logger.Warningf("MarkLaunched failed %v %q", errorInvalidID, id)
-		return errorInvalidID
-	}
-	base := filepath.Base(item.Path)
-	_, err := m.storeApi.MarkLaunched(base)
-	if err != nil {
-		logger.Warning("storeApi.MarkLaunched error:", err)
-		return err
-	}
-	// NewAppLaunched signal is deprecated, use NewAppMarkedAsLaunched instead.
-	dbus.Emit(m, "NewAppLaunched", id)
-	dbus.Emit(m, "NewAppMarkedAsLaunched", id)
 	return nil
 }
 

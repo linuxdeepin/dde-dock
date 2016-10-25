@@ -18,8 +18,8 @@ import (
 	"time"
 
 	libPinyin "dbus/com/deepin/api/pinyin"
+	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
-	libStoreApi "dbus/com/deepin/store/api"
 	libNotifications "dbus/org/freedesktop/notifications"
 	"github.com/howeyc/fsnotify"
 	"pkg.deepin.io/lib/dbus"
@@ -44,13 +44,13 @@ type Manager struct {
 	items      map[string]*Item
 	itemsMutex sync.Mutex
 
-	storeApi       *libStoreApi.DStoreDesktop
-	notifier       *libNotifications.Notifier
-	lastore        *libLastore.Manager
-	pinyin         *libPinyin.Pinyin
-	desktopPkgMap  map[string]string
-	pkgCategoryMap map[string]CategoryID
-	nameMap        map[string]string
+	launchedRecorder *libApps.LaunchedRecorder
+	notifier         *libNotifications.Notifier
+	lastore          *libLastore.Manager
+	pinyin           *libPinyin.Pinyin
+	desktopPkgMap    map[string]string
+	pkgCategoryMap   map[string]CategoryID
+	nameMap          map[string]string
 
 	searchTaskStack *searchTaskStack
 
@@ -68,10 +68,9 @@ type Manager struct {
 	fsEventTimersMutex sync.Mutex
 	// Signals:
 	// SearchDone 返回搜索结果列表
-	SearchDone             func([]string)
-	ItemChanged            func(status string, itemInfo ItemInfo, categoryID CategoryID)
-	NewAppLaunched         func(string)
-	NewAppMarkedAsLaunched func(string)
+	SearchDone     func([]string)
+	ItemChanged    func(status string, itemInfo ItemInfo, categoryID CategoryID)
+	NewAppLaunched func(string)
 	// UninstallSuccess在卸载程序成功后触发。
 	UninstallSuccess func(string)
 	// UninstallFailed在卸载程序失败后触发。
@@ -96,6 +95,15 @@ func (m *Manager) getItemById(id string) *Item {
 
 func (m *Manager) getAppIdByFilePath(file string) string {
 	return getAppIdByFilePath(file, m.appDirs)
+}
+
+func (m *Manager) getItemByPath(path string) *Item {
+	appId := m.getAppIdByFilePath(path)
+	item := m.getItemById(appId)
+	if item != nil && item.Path == path {
+		return item
+	}
+	return nil
 }
 
 func (m *Manager) addItem(item *Item) {
