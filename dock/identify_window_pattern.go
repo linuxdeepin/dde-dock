@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 )
 
 type WindowPatterns []WindowPattern
@@ -194,8 +195,12 @@ func negativeRule(fn RuleMatchFunc) RuleMatchFunc {
 }
 
 var regexpCache map[string]*regexp.Regexp = make(map[string]*regexp.Regexp)
+var regexpCacheMutex sync.Mutex
 
 func getRegexp(expr string) *regexp.Regexp {
+	regexpCacheMutex.Lock()
+	defer regexpCacheMutex.Unlock()
+
 	reg, ok := regexpCache[expr]
 	if ok {
 		return reg
