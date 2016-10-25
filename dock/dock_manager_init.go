@@ -10,6 +10,7 @@
 package dock
 
 import (
+	libApps "dbus/com/deepin/daemon/apps"
 	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
@@ -136,6 +137,11 @@ func (m *DockManager) init() error {
 	m.initEntries()
 
 	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	if err != nil {
+		return err
+	}
+
+	m.launchedRecorder, err = libApps.NewLaunchedRecorder("com.deepin.daemon.Apps", "/com/deepin/daemon/Apps")
 	if err != nil {
 		return err
 	}

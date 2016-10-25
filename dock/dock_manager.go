@@ -10,6 +10,7 @@
 package dock
 
 import (
+	libApps "dbus/com/deepin/daemon/apps"
 	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"errors"
@@ -53,8 +54,9 @@ type DockManager struct {
 	identifyWindowFuns []*IdentifyWindowFunc
 	windowPatterns     WindowPatterns
 
-	launcher *launcher.Launcher
-	wm       *wm.Wm
+	launcher         *launcher.Launcher
+	wm               *wm.Wm
+	launchedRecorder *libApps.LaunchedRecorder
 
 	// Signals
 	ServiceRestarted func()
@@ -101,6 +103,11 @@ func (m *DockManager) destroy() {
 	if m.launcher != nil {
 		launcher.DestroyLauncher(m.launcher)
 		m.launcher = nil
+	}
+
+	if m.launchedRecorder != nil {
+		libApps.DestroyLaunchedRecorder(m.launchedRecorder)
+		m.launchedRecorder = nil
 	}
 
 	dbus.UnInstallObject(m)

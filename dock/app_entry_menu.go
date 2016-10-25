@@ -66,6 +66,9 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 				logger.Debug("desktop app info launch action:", actionNameCopy)
 				ai.LaunchAction(actionNameCopy,
 					gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
+				if entry.dockManager != nil {
+					entry.dockManager.markAppLaunched(ai)
+				}
 			}, true)
 		menuItems = append(menuItems, menuItem)
 	}
@@ -78,6 +81,9 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 
 	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
+		if entry.dockManager != nil {
+			go entry.dockManager.markAppLaunched(entry.appInfo)
+		}
 		appInfo = gio.ToAppInfo(entry.appInfo.DesktopAppInfo)
 	} else {
 		exec := entry.getExec(true)

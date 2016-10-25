@@ -23,22 +23,11 @@ func (m *DockManager) allocEntryId() string {
 }
 
 func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
-	if appInfo == nil {
+	if appInfo == nil || m.launchedRecorder == nil {
 		return
 	}
-	id := appInfo.GetId()
-	if id == "" {
-		logger.Warning("markAppLaunched failed, appInfo %v no id", appInfo)
-		return
-	}
-	go func() {
-		if m.launcher == nil {
-			return
-		}
-		logger.Infof("mark app %q launched", id)
-		m.launcher.MarkLaunched(id)
-		recordFrequency(id)
-	}()
+	path := appInfo.GetFilePath()
+	m.launchedRecorder.MarkLaunched(path)
 }
 
 func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
@@ -55,7 +44,7 @@ func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
 
 		if winInfo.entryInnerId == "" {
 			winInfo.entryInnerId, winInfo.appInfo = m.identifyWindow(winInfo)
-			m.markAppLaunched(winInfo.appInfo)
+			go m.markAppLaunched(winInfo.appInfo)
 		} else {
 			logger.Debugf("win %v identified", win)
 		}
