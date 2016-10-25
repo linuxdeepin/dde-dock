@@ -50,7 +50,8 @@ Depends: ${shlibs:Depends},
  deepin-desktop-schemas (>= 2.91.2),
  mobile-broadband-provider-info
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
-Conflicts: dde-workspace
+Conflicts: dde-workspace, lastore-daemon-migration
+Provides: lastore-daemon-migration
 Suggests: 
  policykit-1-gnome,
  systemd,
