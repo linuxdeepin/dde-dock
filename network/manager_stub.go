@@ -91,7 +91,19 @@ func (m *Manager) setPropState() {
 }
 
 func (m *Manager) setPropDevices() {
-	m.Devices, _ = marshalJSON(m.devices)
+	filteredDevices := make(map[string][]*device)
+	for key, devices := range m.devices {
+		filteredDevices[key] = make([]*device, 0)
+		for _, d := range devices {
+			ignoreIphoneUsbDevice := d.UsbDevice &&
+				d.State <= NM_DEVICE_STATE_UNAVAILABLE &&
+				d.Driver == "ipheth"
+			if !ignoreIphoneUsbDevice {
+				filteredDevices[key] = append(filteredDevices[key], d)
+			}
+		}
+	}
+	m.Devices, _ = marshalJSON(filteredDevices)
 	dbus.NotifyChange(m, "Devices")
 }
 
