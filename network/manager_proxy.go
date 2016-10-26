@@ -86,6 +86,13 @@ func (m *Manager) SetProxyMethod(proxyMode string) (err error) {
 	if err != nil {
 		return
 	}
+
+	// ignore if proxyModeNone already set
+	currentMethod, _ := m.GetProxyMethod()
+	if proxyMode == proxyModeNone && currentMethod == proxyModeNone {
+		return
+	}
+
 	ok := proxySettings.SetString(gkeyProxyMode, proxyMode)
 	if !ok {
 		err = fmt.Errorf("set proxy method through gsettings failed")
