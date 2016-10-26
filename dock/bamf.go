@@ -9,47 +9,48 @@
 
 package dock
 
-//#cgo pkg-config: libbamf3
-/*
-#include <stdlib.h>
-#include <libbamf/bamf-matcher.h>
-#include <libbamf/bamf-application.h>
-
-char * getDesktopFromWindowByBamf(guint32 win) {
-	static BamfMatcher* matcher = NULL;
-	if (matcher == NULL ) {
-		matcher = bamf_matcher_get_default();
-	}
-	if (matcher == NULL) {
-		return NULL;
-	}
-	BamfApplication* app = bamf_matcher_get_application_for_xid(matcher, win);
-	if (app == NULL) {
-		return NULL;
-	}
-	return g_strdup(bamf_application_get_desktop_file(app));
-}
-
-*/
-import "C"
-import "unsafe"
 import (
 	"github.com/BurntSushi/xgb/xproto"
-	"sync"
+	"pkg.deepin.io/lib/dbus"
 )
 
-var _bamfMutex sync.Mutex
+const (
+	bamfDBusDest          = "org.ayatana.bamf"
+	bamfDBusObjPathPrefix = "/org/ayatana/bamf"
+	bamfMatcherObjPath    = bamfDBusObjPathPrefix + "/matcher"
+	bamfMatcherIfc        = bamfDBusDest + ".matcher"
+	bamfAppIfc            = bamfDBusDest + ".application"
+)
+
+func _getDestkopFromWindowByBamf(xid uint32) (string, error) {
+	bus, err := dbus.SessionBus()
+	if err != nil {
+		return "", err
+	}
+	matcher := bus.Object(bamfDBusDest, bamfMatcherObjPath)
+	var applicationObjPathStr string
+	err = matcher.Call(bamfMatcherIfc+".ApplicationForXid", 0, xid).Store(&applicationObjPathStr)
+	if err != nil {
+		return "", err
+	}
+	applicationObjPath := dbus.ObjectPath(applicationObjPathStr)
+	if !applicationObjPath.IsValid() {
+		return "", nil
+	}
+	application := bus.Object(bamfDBusDest, applicationObjPath)
+	var desktopFile string
+	err = application.Call(bamfAppIfc+".DesktopFile", 0).Store(&desktopFile)
+	if err != nil {
+		return "", err
+	}
+	return desktopFile, nil
+}
 
 func getDesktopFromWindowByBamf(win xproto.Window) string {
-	// NOTE: Concurrent call bamf method may cause the program to crash
-	_bamfMutex.Lock()
-	defer _bamfMutex.Unlock()
-
-	cDesktop := C.getDesktopFromWindowByBamf(C.guint32(uint32(win)))
-	if cDesktop == nil {
+	desktopFile, err := _getDestkopFromWindowByBamf(uint32(win))
+	if err != nil {
+		logger.Warning(err)
 		return ""
 	}
-	desktop := C.GoString(cDesktop)
-	defer C.free(unsafe.Pointer(cDesktop))
-	return desktop
+	return desktopFile
 }
