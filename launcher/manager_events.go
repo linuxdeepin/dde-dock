@@ -27,6 +27,20 @@ func isDesktopFile(path string) bool {
 	return matched
 }
 
+func shouldCheckDesktopFile(filename string) bool {
+	dir, basename := filepath.Split(filename)
+	matched, _ := filepath.Match(desktopFilePattern, basename)
+	if !matched {
+		return false
+	}
+
+	baseDir := filepath.Base(dir)
+	if baseDir == "menu-xdg" {
+		return false
+	}
+	return true
+}
+
 func isDirectory(path string) (bool, error) {
 	fileInfo, err := os.Stat(path)
 	if err != nil {
@@ -39,71 +53,13 @@ func (m *Manager) handleFsWatcherEvents() {
 	watcher := m.fsWatcher
 	for {
 		select {
-		case ev := <-watcher.Event:
+		case ev := <-watcher.Events:
 			logger.Debugf("fsWatcher event: %v", ev)
-			fileName := ev.Name
-			if ev.IsCreate() {
-				isDir, err := isDirectory(fileName)
-				if err != nil {
-					logger.Warning(err)
-					break
-				}
-
-				if !isDir {
-					m.delayHandleFileEvent(fileName)
-					break
-				}
-				// dir created
-				m.addAppDir(fileName, true)
-			} else {
-				m.delayHandleFileEvent(fileName)
-			}
-		case err := <-watcher.Error:
-			logger.Warning("eventHandler error", err)
+			m.delayHandleFileEvent(ev.Name)
+		case err := <-watcher.Errors:
+			logger.Warning("fsWatcher error", err)
 		}
 	}
-}
-
-func shouldIgnoreDir(dir string) bool {
-	basename := filepath.Base(dir)
-	if basename == "menu-xdg" {
-		return true
-	}
-	return false
-}
-
-func (m *Manager) addAppDir(path string, loadExisted bool) {
-	watcher := m.fsWatcher
-	logger.Debugf("add dir %q", path)
-	walkfn := func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			logger.Warning(err)
-			return nil
-		}
-		if info.IsDir() {
-			if shouldIgnoreDir(path) {
-				logger.Debugf("ignore dir %q", path)
-				return nil
-			}
-
-			logger.Debugf("watch dir %q", path)
-			err := watcher.Watch(path)
-			if err != nil {
-				logger.Warning(err)
-			}
-		} else if loadExisted {
-			dir := filepath.Dir(path)
-			if shouldIgnoreDir(dir) {
-				return nil
-			}
-
-			if isDesktopFile(path) {
-				m.delayHandleFileEvent(path)
-			}
-		}
-		return nil
-	}
-	filepath.Walk(path, walkfn)
 }
 
 func (m *Manager) delayHandleFileEvent(name string) {
@@ -117,19 +73,18 @@ func (m *Manager) delayHandleFileEvent(name string) {
 		timer.Reset(delay)
 	} else {
 		m.fsEventTimers[name] = time.AfterFunc(delay, func() {
-			if name == desktopPkgMapFile {
-				err := m.loadDesktopPkgMap()
-				if err != nil {
+			switch {
+			case name == desktopPkgMapFile:
+				if err := m.loadDesktopPkgMap(); err != nil {
 					logger.Warning(err)
 				}
-				return
-			} else if name == applicationsFile {
-				err := m.loadPkgCategoryMap()
-				if err != nil {
+
+			case name == applicationsFile:
+				if err := m.loadPkgCategoryMap(); err != nil {
 					logger.Warning(err)
 				}
-				return
-			} else if isDesktopFile(name) {
+
+			case isDesktopFile(name):
 				m.checkDesktopFile(name)
 			}
 		})

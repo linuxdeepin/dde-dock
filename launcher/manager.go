@@ -21,7 +21,7 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	libNotifications "dbus/org/freedesktop/notifications"
-	"github.com/howeyc/fsnotify"
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gettext"
 )
@@ -44,13 +44,14 @@ type Manager struct {
 	items      map[string]*Item
 	itemsMutex sync.Mutex
 
-	launchedRecorder *libApps.LaunchedRecorder
-	notifier         *libNotifications.Notifier
-	lastore          *libLastore.Manager
-	pinyin           *libPinyin.Pinyin
-	desktopPkgMap    map[string]string
-	pkgCategoryMap   map[string]CategoryID
-	nameMap          map[string]string
+	launchedRecorder   *libApps.LaunchedRecorder
+	desktopFileWatcher *libApps.DesktopFileWatcher
+	notifier           *libNotifications.Notifier
+	lastore            *libLastore.Manager
+	pinyin             *libPinyin.Pinyin
+	desktopPkgMap      map[string]string
+	pkgCategoryMap     map[string]CategoryID
+	nameMap            map[string]string
 
 	searchTaskStack *searchTaskStack
 

@@ -15,16 +15,26 @@ import (
 	libLastore "dbus/com/deepin/lastore"
 	libNotifications "dbus/org/freedesktop/notifications"
 	"gir/gio-2.0"
-	"github.com/howeyc/fsnotify"
-	"os"
+	"github.com/fsnotify/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"time"
+)
+
+const (
+	appsDBusDest       = "com.deepin.daemon.Apps"
+	appsDBusObjectPath = "/com/deepin/daemon/Apps"
 )
 
 func (m *Manager) init() error {
 	var err error
 	// init launchedRecorder
-	m.launchedRecorder, err = libApps.NewLaunchedRecorder("com.deepin.daemon.Apps", "/com/deepin/daemon/Apps")
+	m.launchedRecorder, err = libApps.NewLaunchedRecorder(appsDBusDest, appsDBusObjectPath)
+	if err != nil {
+		return err
+	}
+
+	// init desktopFileWatcher
+	m.desktopFileWatcher, err = libApps.NewDesktopFileWatcher(appsDBusDest, appsDBusObjectPath)
 	if err != nil {
 		return err
 	}
@@ -66,7 +76,7 @@ func (m *Manager) init() error {
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = m.fsWatcher.Watch(desktopPkgMapFile)
+	err = m.fsWatcher.Add(desktopPkgMapFile)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -75,7 +85,7 @@ func (m *Manager) init() error {
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = m.fsWatcher.Watch(applicationsFile)
+	err = m.fsWatcher.Add(applicationsFile)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -108,10 +118,14 @@ func (m *Manager) init() error {
 	// init searchTaskStack
 	m.searchTaskStack = newSearchTaskStack(m)
 
-	// watch item change
-	m.watchApplicationsDirs()
-
+	m.fsEventTimers = make(map[string]*time.Timer)
 	go m.handleFsWatcherEvents()
+	m.desktopFileWatcher.ConnectEvent(func(filename string, _ uint32) {
+		if shouldCheckDesktopFile(filename) {
+			logger.Debug("DFWatcher event", filename)
+			m.delayHandleFileEvent(filename)
+		}
+	})
 
 	m.launchedRecorder.ConnectLaunched(func(path string) {
 		item := m.getItemByPath(path)
@@ -121,21 +135,6 @@ func (m *Manager) init() error {
 		dbus.Emit(m, "NewAppLaunched", item.ID)
 	})
 	return nil
-}
-
-func (m *Manager) watchApplicationsDirs() {
-	m.fsEventTimers = make(map[string]*time.Timer)
-
-	// create userAppsDir if it not exist
-	userAppDir := getUserAppDir()
-	if _, err := os.Stat(userAppDir); os.IsNotExist(err) {
-		// userAppsDir does not exist
-		os.MkdirAll(userAppDir, DirDefaultPerm)
-	}
-
-	for _, dir := range m.appDirs {
-		m.addAppDir(dir, false)
-	}
 }
 
 type popPushOp struct {
