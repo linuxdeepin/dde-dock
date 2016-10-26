@@ -87,7 +87,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	case "unknown":
 		// sometimes we could not get vmnet dirver name, so check the
 		// udi sys path if is prefix with /sys/devices/virtual/net
-		if strings.HasPrefix(nmDev.Udi.Get(), "/sys/devices/virtual/net") {
+		if strings.HasPrefix(nmDev.Udi.Get(), "/sys/devices/virtual/net") ||
+			strings.HasPrefix(nmDev.Udi.Get(), "/virtual/device") ||
+			strings.HasPrefix(nmDev.Interface.Get(), "vmnet") {
 			isVirtualIfc = true
 		}
 	}
