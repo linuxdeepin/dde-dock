@@ -212,7 +212,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 		m.devicesLock.Lock()
 		defer m.devicesLock.Unlock()
-		if reason == NM_DEVICE_STATE_REASON_REMOVED {
+		if reason == NM_DEVICE_STATE_REASON_REMOVED && !isNmDeviceObjectExists(dev.Path) {
+			// check if device dbus object exists for that if device
+			// was set to unmanaged it will notify device removed, too
 			return
 		}
 		dev.State = newState
@@ -334,4 +336,34 @@ func (m *Manager) IsDeviceEnabled(devPath dbus.ObjectPath) (enabled bool, err er
 
 func (m *Manager) EnableDevice(devPath dbus.ObjectPath, enabled bool) (err error) {
 	return m.switchHandler.enableDevice(devPath, enabled)
+}
+
+// SetDeviceManaged set target device managed or unmnaged from
+// NetworkManager, and a little difference with other interface is
+// that devPathOrIfc could be a device DBus path or the device
+// interface name.
+func (m *Manager) SetDeviceManaged(devPathOrIfc string, managed bool) (err error) {
+	var devPath dbus.ObjectPath
+	if strings.HasPrefix(devPathOrIfc, "/org/freedesktop/NetworkManager/Devices") {
+		devPath = dbus.ObjectPath(devPathOrIfc)
+	} else {
+		m.devicesLock.Lock()
+		defer m.devicesLock.Unlock()
+	out:
+		for _, devs := range m.devices {
+			for _, dev := range devs {
+				if dev.Interface == devPathOrIfc {
+					devPath = dev.Path
+					break out
+				}
+			}
+		}
+	}
+	if len(devPath) > 0 {
+		err = nmSetDeviceManaged(devPath, managed)
+	} else {
+		err = fmt.Errorf("invalid device identifier: %s", devPathOrIfc)
+		logger.Error(err)
+	}
+	return
 }

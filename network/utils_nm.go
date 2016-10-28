@@ -81,6 +81,15 @@ func isNmObjectPathValid(p dbus.ObjectPath) bool {
 	return true
 }
 
+func isNmDeviceObjectExists(devPath dbus.ObjectPath) bool {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return false
+	}
+	defer nm.DestroyDevice(dev)
+	return true
+}
+
 func isDeviceTypeValid(devType uint32) bool {
 	switch devType {
 	case NM_DEVICE_TYPE_GENERIC, NM_DEVICE_TYPE_UNKNOWN, NM_DEVICE_TYPE_BT, NM_DEVICE_TYPE_TEAM, NM_DEVICE_TYPE_TUN, NM_DEVICE_TYPE_IP_TUNNEL, NM_DEVICE_TYPE_MACVLAN, NM_DEVICE_TYPE_VXLAN, NM_DEVICE_TYPE_VETH:
@@ -1289,6 +1298,17 @@ func nmSetDeviceAutoconnect(devPath dbus.ObjectPath, autoconnect bool) {
 	defer nm.DestroyDevice(dev)
 
 	dev.Autoconnect.Set(autoconnect)
+	return
+}
+
+func nmSetDeviceManaged(devPath dbus.ObjectPath, managed bool) (err error) {
+	dev, err := nmNewDevice(devPath)
+	if err != nil {
+		return
+	}
+	defer nm.DestroyDevice(dev)
+
+	dev.Managed.Set(managed)
 	return
 }
 
