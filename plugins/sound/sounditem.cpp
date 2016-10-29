@@ -18,6 +18,7 @@ SoundItem::SoundItem(QWidget *parent)
 {
     QIcon::setThemeName("deepin");
 
+    m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setVisible(false);
 //    m_tipsLabel->setFixedWidth(145);
     m_tipsLabel->setAlignment(Qt::AlignCenter);

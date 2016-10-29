@@ -13,7 +13,10 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
       m_volumeIcon(new DImageButton),
       m_volumeSlider(new VolumeSlider)
 {
-    m_volumeIcon->setPixmap(QIcon::fromTheme(m_inputInter->icon()).pixmap(24, 24));
+    const QString iconName = m_inputInter->icon();
+    m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
+    m_volumeIcon->setPixmap(QIcon::fromTheme(iconName).pixmap(24, 24));
+    m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setValue(m_inputInter->volume() * 1000);
 
     QHBoxLayout *centeralLayout = new QHBoxLayout;

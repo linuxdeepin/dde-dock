@@ -24,6 +24,9 @@ SoundApplet::SoundApplet(QWidget *parent)
 {
     QIcon::setThemeName("deepin");
 
+    m_volumeBtn->setAccessibleName("volume-button");
+    m_volumeSlider->setAccessibleName("volume-slider");
+
     QLabel *deviceLabel = new QLabel;
     deviceLabel->setText(tr("Device"));
     deviceLabel->setStyleSheet("color:white;");

@@ -5,6 +5,7 @@ TrashPlugin::TrashPlugin(QObject *parent)
       m_trashWidget(new TrashWidget),
       m_tipsLabel(new QLabel)
 {
+    m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
                                "padding:5px 10px;");
 

@@ -13,6 +13,8 @@ DiskMountPlugin::DiskMountPlugin(QObject *parent)
       m_diskControlApplet(nullptr)
 {
     m_diskPluginItem->setVisible(false);
+
+    m_tipsLabel->setObjectName("diskmount");
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setText(tr("Disk"));
     m_tipsLabel->setStyleSheet("color:white;"

@@ -20,6 +20,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     m_trayApplet->setObjectName("sys-tray");
     m_fashionItem = new FashionTrayItem;
 
+    m_tipsLabel->setObjectName("sys-tray");
     m_tipsLabel->setText(tr("System Tray"));
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setStyleSheet("color:white;"

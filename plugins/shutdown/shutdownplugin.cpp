@@ -41,6 +41,7 @@ QWidget *ShutdownPlugin::itemWidget(const QString &itemKey)
 QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 {
     const BatteryPercentageMap data = m_powerInter->batteryPercentage();
+    m_tipsLabel->setObjectName(itemKey);
 
     if (data.isEmpty() || (itemKey == SHUTDOWN_KEY && displayMode() == Dock::Efficient))
     {

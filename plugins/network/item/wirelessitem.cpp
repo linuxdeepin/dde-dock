@@ -17,8 +17,8 @@ WirelessItem::WirelessItem(const QUuid &uuid)
     m_refershTimer->setInterval(100);
 
     m_wirelessApplet->setVisible(false);
+    m_wirelessPopup->setObjectName("wireless-" + uuid.toString());
     m_wirelessPopup->setVisible(false);
-
     m_wirelessPopup->setStyleSheet("color:white;"
                                    "padding:5px 10px;");
 
