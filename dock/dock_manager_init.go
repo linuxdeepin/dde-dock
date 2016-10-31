@@ -73,8 +73,8 @@ func (m *DockManager) listenSettingsChanged() {
 
 func (m *DockManager) listenLauncherSignal() {
 	m.launcher.ConnectItemChanged(func(status string, itemInfo []interface{}, cid int64) {
-		logger.Debugf("launcher item deleted %#v", itemInfo)
 		if len(itemInfo) > 2 && status == "deleted" {
+			logger.Debugf("launcher item deleted %#v", itemInfo)
 			// try desktop file path
 			desktopFile, ok := itemInfo[0].(string)
 			if !ok {
@@ -83,7 +83,7 @@ func (m *DockManager) listenLauncherSignal() {
 			}
 			dockedEntries := m.Entries.FilterDocked()
 			for _, entry := range dockedEntries {
-				file := entry.appInfo.GetFilePath()
+				file := entry.appInfo.GetFileName()
 				if file == desktopFile {
 					m.undockEntry(entry)
 					return

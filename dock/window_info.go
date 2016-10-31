@@ -72,13 +72,6 @@ func NewWindowInfo(win xproto.Window) *WindowInfo {
 	return winInfo
 }
 
-func (winInfo *WindowInfo) Destroy() {
-	if winInfo.appInfo != nil {
-		winInfo.appInfo.Destroy()
-		winInfo.appInfo = nil
-	}
-}
-
 // window type
 func (winInfo *WindowInfo) updateWmWindowType() {
 	var err error

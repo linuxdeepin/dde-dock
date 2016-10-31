@@ -1,7 +1,6 @@
 package dock
 
 import (
-	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -66,18 +65,14 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
 	appId := "docked:" + entry.innerId
 
 	if entry.appInfo != nil {
-		desktopFile := entry.appInfo.GetFilePath()
-		newPath := filepath.Join(scratchDir, appId+".desktop")
-		// try link
-		err := os.Link(desktopFile, newPath)
-		if err != nil {
-			logger.Warning("link failed try copy file contents")
-			err = copyFileContents(desktopFile, newPath)
-		}
+		desktopFile := entry.appInfo.GetFileName()
+		newDesktopFile := filepath.Join(scratchDir, appId+".desktop")
+		err := copyFileContents(desktopFile, newDesktopFile)
 		if err == nil {
 			return appId
 		} else {
 			logger.Warning(err)
+			return ""
 		}
 	}
 
@@ -118,7 +113,7 @@ func (m *DockManager) getDockedAppEntryByDesktopFilePath(desktopFilePath string)
 func (m *DockManager) saveDockedApps() {
 	var list []string
 	for _, entry := range m.Entries.FilterDocked() {
-		path := entry.appInfo.GetFilePath()
+		path := entry.appInfo.GetFileName()
 		list = append(list, zipDesktopPath(path))
 	}
 	m.DockedApps.Set(list)
@@ -136,16 +131,8 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 	if entry.appInfo == nil {
 		logger.Debug("dockEntry: entry.appInfo is nil")
 		needScratchDesktop = true
-	} else {
-		// try create appInfo by desktopId
-		desktopId := entry.appInfo.GetDesktopId()
-		appInfo := gio.NewDesktopAppInfo(desktopId)
-		if appInfo != nil {
-			appInfo.Unref()
-		} else {
-			logger.Debugf("dockEntry: gio.NewDesktopAppInfo failed: desktop id %q", desktopId)
-			needScratchDesktop = true
-		}
+	} else if !entry.appInfo.IsInstalled() {
+		needScratchDesktop = true
 	}
 
 	logger.Debug("dockEntry: need scratch desktop?", needScratchDesktop)
@@ -164,7 +151,7 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 				m.desktopWindowsMapCacheManager.AutoSave()
 			}
 
-			m.desktopHashFileMapCacheManager.SetKeyValue(entry.innerId, entry.appInfo.GetFilePath())
+			m.desktopHashFileMapCacheManager.SetKeyValue(entry.innerId, entry.appInfo.GetFileName())
 			m.desktopHashFileMapCacheManager.AutoSave()
 		} else {
 			logger.Warning("createScratchDesktopFileWithAppEntry failed")
@@ -196,7 +183,7 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 		logger.Warning("undockEntry failed: entry.appInfo is nil")
 		return
 	}
-	desktop := entry.appInfo.GetFilePath()
+	desktop := entry.appInfo.GetFileName()
 	logger.Debugf("undockEntry desktop: %q", desktop)
 	isDesktopInScratchDir := false
 	if isFileInDir(desktop, scratchDir) {

@@ -10,8 +10,8 @@
 package dock
 
 import (
-	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 )
@@ -56,61 +56,38 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 		return nil
 	}
 
-	var menuItems []*MenuItem
-	for _, actionName := range ai.ListActions() {
-		//NOTE: don't directly use 'actionName' with closure in an forloop
-		actionNameCopy := actionName
-		menuItem := NewMenuItem(
-			ai.GetActionName(actionName),
-			func(timestamp uint32) {
-				logger.Debug("desktop app info launch action:", actionNameCopy)
-				ai.LaunchAction(actionNameCopy,
-					gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-				if entry.dockManager != nil {
-					entry.dockManager.markAppLaunched(ai)
-				}
-			}, true)
-		menuItems = append(menuItems, menuItem)
+	var items []*MenuItem
+	launchAction := func(action desktopappinfo.DesktopAction) func(timestamp uint32) {
+		return func(timestamp uint32) {
+			logger.Debugf("launch action %+v", action)
+			action.Launch(timestamp, nil)
+
+			if entry.dockManager != nil {
+				entry.dockManager.markAppLaunched(ai)
+			}
+		}
 	}
-	return menuItems
+
+	for _, action := range ai.GetActions() {
+		item := NewMenuItem(action.Name, launchAction(action), true)
+		items = append(items, item)
+	}
+	return items
 }
 
 func (entry *AppEntry) launchApp(timestamp uint32) {
 	logger.Debug("launchApp timestamp:", timestamp)
-	var appInfo *gio.AppInfo
 
 	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
+		entry.appInfo.Launch(timestamp, nil)
+
 		if entry.dockManager != nil {
-			go entry.dockManager.markAppLaunched(entry.appInfo)
+			entry.dockManager.markAppLaunched(entry.appInfo)
 		}
-		appInfo = gio.ToAppInfo(entry.appInfo.DesktopAppInfo)
 	} else {
-		exec := entry.getExec(true)
-		logger.Debugf("No AppInfo, exec [%s]", exec)
-		var err error
-		appInfo, err = gio.AppInfoCreateFromCommandline(
-			exec,
-			"",
-			gio.AppInfoCreateFlagsNone,
-		)
-		if err != nil {
-			logger.Warning("Launch App Falied: ", err)
-			return
-		}
-
-		defer appInfo.Unref()
-	}
-
-	if appInfo == nil {
-		logger.Warning("create app info to run program failed")
-		return
-	}
-
-	_, err := appInfo.Launch(
-		make([]*gio.File, 0), gio.GetGdkAppLaunchContext().SetTimestamp(timestamp))
-	if err != nil {
-		logger.Warning("Launch App Failed: ", err)
+		// TODO
+		logger.Debug("not supported")
 	}
 }
 

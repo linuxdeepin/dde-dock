@@ -11,7 +11,6 @@ package dock
 
 import (
 	"errors"
-	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/icccm"
 	"pkg.deepin.io/lib/dbus"
@@ -79,14 +78,13 @@ func (e *AppEntry) HandleMenuItem(timestamp uint32, id string) {
 func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) {
 	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
 	ai := entry.appInfo
-	appLaunchContext := gio.GetGdkAppLaunchContext().SetTimestamp(timestamp)
-	if ai.DesktopAppInfo != nil {
-		_, err := ai.LaunchUris(files, appLaunchContext)
+	if ai != nil {
+		err := ai.Launch(timestamp, files)
 		if err != nil {
-			logger.Warning("LaunchUris failed")
+			logger.Warning(err)
 		}
 	} else {
-		logger.Warningf("no support!")
+		logger.Warning("not supported")
 	}
 }
 

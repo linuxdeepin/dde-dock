@@ -78,9 +78,6 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 		logger.Debug("setAppInfo failed: old == new")
 		return
 	}
-	if entry.appInfo != nil {
-		entry.appInfo.Destroy()
-	}
 	entry.appInfo = newAppInfo
 
 	// set entry.winIconPreferred
@@ -225,14 +222,6 @@ func (entry *AppEntry) detachWindow(winInfo *WindowInfo) bool {
 	}
 	logger.Debug("detachWindow failed: window not attach with entry")
 	return false
-}
-
-func (entry *AppEntry) destroy() {
-	entry.dockManager = nil
-	if entry.appInfo != nil {
-		entry.appInfo.Destroy()
-		entry.appInfo = nil
-	}
 }
 
 func (e *AppEntry) setName(name string) {

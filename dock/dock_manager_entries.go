@@ -26,7 +26,7 @@ func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
 	if appInfo == nil || m.launchedRecorder == nil {
 		return
 	}
-	path := appInfo.GetFilePath()
+	path := appInfo.GetFileName()
 	m.launchedRecorder.MarkLaunched(path)
 }
 
@@ -101,9 +101,6 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 	if e := m.Entries.GetFirstByInnerId(entryInnerId); e != nil {
 		logger.Debug("entry existed")
 		entry = e
-		if appInfo != nil {
-			appInfo.Destroy()
-		}
 	} else {
 		logger.Debug("entry not existed, newAppEntry")
 		entry = newAppEntry(m, entryInnerId, appInfo)
@@ -139,7 +136,6 @@ func (m *DockManager) removeAppEntry(e *AppEntry) {
 			entryId := entry.Id
 			logger.Info("removeAppEntry id:", entryId)
 			m.Entries = m.Entries.Remove(e)
-			e.destroy()
 			dbus.Emit(m, "EntryRemoved", entryId)
 			return
 		}
@@ -148,11 +144,7 @@ func (m *DockManager) removeAppEntry(e *AppEntry) {
 }
 
 func (m *DockManager) attachWindow(winInfo *WindowInfo) {
-	var appInfoCopy *AppInfo
-	if winInfo.appInfo != nil {
-		appInfoCopy = NewAppInfoFromFile(winInfo.appInfo.GetFilePath())
-	}
-	entry, isNewAdded := m.addAppEntry(winInfo.entryInnerId, appInfoCopy, -1)
+	entry, isNewAdded := m.addAppEntry(winInfo.entryInnerId, winInfo.appInfo, -1)
 	entry.windowMutex.Lock()
 	defer entry.windowMutex.Unlock()
 

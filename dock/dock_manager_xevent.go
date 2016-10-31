@@ -214,7 +214,6 @@ func (m *DockManager) handleDestroyNotifyEvent(winInfo *WindowInfo, ev xevent.De
 	logger.Debug(ev)
 	m.unregisterWindow(winInfo.window)
 	m.detachWindow(winInfo)
-	winInfo.Destroy()
 }
 
 func (m *DockManager) handleUnmapNotifyEvent(winInfo *WindowInfo, ev xevent.UnmapNotifyEvent) {
