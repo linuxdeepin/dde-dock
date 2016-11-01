@@ -260,7 +260,7 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 	}
 
 	if m.wm != nil {
-		m.wm.ChangeWorkspaceBackground(uri)
+		m.wm.ChangeCurrentWorkspaceBackground(uri)
 	}
 
 	if m.userObj != nil {
