@@ -32,6 +32,7 @@ public:
         Wired       = 1 << 1,
         Wireless    = 1 << 2,
         Bluetooth   = 1 << 3,
+        Bridge      = 1 << 4,
     };
     Q_DECLARE_FLAGS(NetworkTypes, NetworkType)
 

@@ -71,6 +71,8 @@ NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)
         return NetworkDevice::Wired;
     if (type == "wireless")
         return NetworkDevice::Wireless;
+    if (type == "bridge")
+        return NetworkDevice::Bridge;
 
     Q_ASSERT(false);
 
