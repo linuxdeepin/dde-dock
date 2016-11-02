@@ -10,13 +10,13 @@
 package launcher
 
 import (
-	"gir/gio-2.0"
 	"gir/glib-2.0"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/xdg/basedir"
 	"strings"
 )
 
@@ -36,13 +36,13 @@ func getUserDesktopDir() string {
 
 // return $HOME/.local/share/applications
 func getUserAppDir() string {
-	userDataDir := glib.GetUserDataDir()
+	userDataDir := basedir.GetUserDataDir()
 	return filepath.Join(userDataDir, AppDirName)
 }
 
 func getAppDirs() []string {
-	dataDirs := glib.GetSystemDataDirs()
-	dataDirs = append(dataDirs, glib.GetUserDataDir())
+	dataDirs := basedir.GetSystemDataDirs()
+	dataDirs = append(dataDirs, basedir.GetUserDataDir())
 	var dirs []string
 	for _, dir := range dataDirs {
 		dirs = append(dirs, path.Join(dir, AppDirName))
@@ -56,7 +56,6 @@ func getAppIdByFilePath(file string, appDirs []string) string {
 	for _, dir := range appDirs {
 		if strings.HasPrefix(file, dir) {
 			desktopId, _ = filepath.Rel(dir, file)
-			desktopId = strings.Replace(desktopId, string(filepath.Separator), "-", -1)
 			break
 		}
 	}
@@ -133,17 +132,4 @@ func runeSliceDiff(key, current []rune) (popCount int, runesPush []rune) {
 
 	//logger.Debug("i:", i)
 	return
-}
-
-func appShouldShow(appInfo *gio.DesktopAppInfo) bool {
-	if !appInfo.ShouldShow() {
-		return false
-	}
-	// ignore $HOME/.local/share/applications/menu-xdg/*.desktop
-	path := appInfo.GetFilename()
-	baseDir := filepath.Base(filepath.Dir(path))
-	if baseDir == "menu-xdg" {
-		return false
-	}
-	return true
 }

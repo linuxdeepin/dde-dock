@@ -23,7 +23,7 @@ func Test_getAppIdByFilePath(t *testing.T) {
 		So(id, ShouldEqual, "d-feet")
 
 		id = getAppIdByFilePath("/usr/share/applications/kde4/krita.desktop", appDirs)
-		So(id, ShouldEqual, "kde4-krita")
+		So(id, ShouldEqual, "kde4/krita")
 
 		id = getAppIdByFilePath("/usr/local/share/applications/deepin-screenshot.desktop", appDirs)
 		So(id, ShouldEqual, "deepin-screenshot")

@@ -10,9 +10,9 @@
 package launcher
 
 import (
-	"gir/gio-2.0"
 	"os"
 	"path/filepath"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -25,20 +25,6 @@ func isDesktopFile(path string) bool {
 	basename := filepath.Base(path)
 	matched, _ := filepath.Match(desktopFilePattern, basename)
 	return matched
-}
-
-func shouldCheckDesktopFile(filename string) bool {
-	dir, basename := filepath.Split(filename)
-	matched, _ := filepath.Match(desktopFilePattern, basename)
-	if !matched {
-		return false
-	}
-
-	baseDir := filepath.Base(dir)
-	if baseDir == "menu-xdg" {
-		return false
-	}
-	return true
 }
 
 func isDirectory(path string) (bool, error) {
@@ -101,13 +87,8 @@ func (m *Manager) checkDesktopFile(file string) {
 	}
 
 	item := m.getItemById(appId)
-	appInfo := gio.NewDesktopAppInfo(appId + desktopExt)
 
-	// 如果是新增加的目录里的desktop 用 gio.NewDesktopAppInfo 是找不到的，必须用完整路径
-	if appInfo == nil {
-		appInfo = gio.NewDesktopAppInfoFromFilename(file)
-	}
-
+	appInfo := desktopappinfo.NewDesktopAppInfo(appId)
 	if appInfo == nil {
 		logger.Warningf("appId %q appInfo is nil", appId)
 		if item != nil {
@@ -116,8 +97,7 @@ func (m *Manager) checkDesktopFile(file string) {
 		}
 	} else {
 		// appInfo is not nil
-		shouldShow := appShouldShow(appInfo)
-		defer appInfo.Unref()
+		shouldShow := appInfo.ShouldShow()
 		newItem := NewItemWithDesktopAppInfo(appInfo)
 
 		// add or update item
@@ -133,9 +113,25 @@ func (m *Manager) checkDesktopFile(file string) {
 			}
 		} else {
 			if shouldShow {
-				m.addItemWithLock(newItem)
-				m.emitItemChanged(newItem, AppStatusCreated)
+				if appInfo.IsExecutableOk() {
+					m.addItemWithLock(newItem)
+					m.emitItemChanged(newItem, AppStatusCreated)
+				} else {
+					go m.retryAddItem(appInfo, newItem)
+				}
 			}
+		}
+	}
+}
+
+func (m *Manager) retryAddItem(appInfo *desktopappinfo.DesktopAppInfo, item *Item) {
+	for i := 0; i < 10; i++ {
+		time.Sleep(time.Second)
+		logger.Debug("retry add item", item.Path)
+		if appInfo.IsExecutableOk() {
+			m.addItemWithLock(item)
+			m.emitItemChanged(item, AppStatusCreated)
+			return
 		}
 	}
 }

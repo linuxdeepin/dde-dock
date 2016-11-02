@@ -11,9 +11,8 @@ package launcher
 
 import (
 	"dbus/com/deepin/api/pinyin"
-	"errors"
 	"fmt"
-	"gir/gio-2.0"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"regexp"
 	"strings"
 )
@@ -53,29 +52,27 @@ func getAppId(desktopId string) string {
 	return strings.TrimSuffix(desktopId, desktopExt)
 }
 
-func NewItemWithDesktopAppInfo(app *gio.DesktopAppInfo) *Item {
+func NewItemWithDesktopAppInfo(app *desktopappinfo.DesktopAppInfo) *Item {
 	if app == nil {
 		return nil
 	}
+	enName, _ := app.GetString(desktopappinfo.MainSection, desktopappinfo.KeyName)
+	enComment, _ := app.GetString(desktopappinfo.MainSection, desktopappinfo.KeyComment)
 	item := &Item{
-		Path:          app.GetFilename(),
-		Name:          app.GetDisplayName(),
-		enName:        app.GetString("Name"),
+		Path:          app.GetFileName(),
+		Name:          app.GetName(),
+		enName:        enName,
+		Icon:          app.GetIcon(),
 		exec:          app.GetCommandline(),
-		genericName:   app.GetString("GenericName"),
-		comment:       app.GetString("Comment"),
+		genericName:   app.GetGenericName(),
+		comment:       enComment,
 		searchTargets: make(map[string]SearchScore),
-	}
-	icon := app.GetIcon()
-	if icon != nil {
-		item.Icon = icon.ToString()
 	}
 	for _, kw := range app.GetKeywords() {
 		item.keywords = append(item.keywords, strings.ToLower(kw))
 	}
 
-	strCategories := app.GetCategories()
-	categories := strings.Split(strings.TrimSuffix(strCategories, desktopCategroyDelim), desktopCategroyDelim)
+	categories := app.GetCategories()
 	for _, c := range categories {
 		item.categories = append(item.categories, strings.ToLower(c))
 	}
@@ -91,12 +88,12 @@ func (item *Item) isChromeShortcut() bool {
 }
 
 func (item *Item) isWineApp() (bool, error) {
-	appInfo := gio.NewDesktopAppInfoFromFilename(item.Path)
-	if appInfo == nil {
-		return false, errors.New("appInfo is nil")
+	appInfo, err := desktopappinfo.NewDesktopAppInfoFromFile(item.Path)
+	if err != nil {
+		return false, err
 	}
-	defer appInfo.Unref()
-	return strings.HasPrefix(appInfo.GetString("X-Created-By"), "cxoffice-") ||
+	createdBy, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Created-By")
+	return strings.HasPrefix(createdBy, "cxoffice-") ||
 		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX="), nil
 }
 

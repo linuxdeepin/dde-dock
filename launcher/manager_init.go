@@ -14,8 +14,9 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	libNotifications "dbus/org/freedesktop/notifications"
-	"gir/gio-2.0"
 	"github.com/fsnotify/fsnotify"
+	"path/filepath"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -98,16 +99,17 @@ func (m *Manager) init() error {
 	// load items
 	m.items = make(map[string]*Item)
 
-	allApps := gio.AppInfoGetAll()
-	for _, app := range allApps {
-		dAppInfo := gio.ToDesktopAppInfo(app)
-		if !appShouldShow(dAppInfo) {
+	skipDirs := make(map[string][]string)
+	skipDirs["/usr/share/applications"] = []string{"screensavers"}
+	userAppsDir := getUserAppDir()
+	skipDirs[userAppsDir] = []string{"menu-xdg"}
+	allApps := desktopappinfo.GetAll(skipDirs)
+	for _, ai := range allApps {
+		if !ai.IsExecutableOk() {
 			continue
 		}
-
-		item := NewItemWithDesktopAppInfo(dAppInfo)
+		item := NewItemWithDesktopAppInfo(ai)
 		m.addItem(item)
-		app.Unref()
 	}
 	logger.Debug("load items count:", len(m.items))
 
@@ -135,6 +137,22 @@ func (m *Manager) init() error {
 		dbus.Emit(m, "NewAppLaunched", item.ID)
 	})
 	return nil
+}
+
+func shouldCheckDesktopFile(filename string) bool {
+	dir, basename := filepath.Split(filename)
+	dir = filepath.Clean(dir)
+	matched, _ := filepath.Match(desktopFilePattern, basename)
+	if !matched {
+		return false
+	}
+
+	// ignore $HOME/.local/share/applications/menu-xdg/
+	skipDir := filepath.Join(getUserAppDir(), "menu-xdg")
+	if dir == skipDir {
+		return false
+	}
+	return true
 }
 
 type popPushOp struct {
