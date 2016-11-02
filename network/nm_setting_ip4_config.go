@@ -54,19 +54,6 @@ func getSettingIP4ConfigAvailableKeys(data connectionData) (keys []string) {
 func getSettingIP4ConfigAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case nm.NM_SETTING_IP_CONFIG_METHOD:
-		// TODO be careful, ipv4 method would be limited for different connection type
-		// switch getCustomConnectionType(data) {
-		// case typeWired:
-		// case typeWireless:
-		// case typePppoe:
-		// }
-		// values = []string{
-		// 	nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO,
-		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL, // ignore
-		// 	nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL,
-		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED,   // ignore
-		// 	// nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED, // ignore
-		// }
 		if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
 			values = []kvalue{
 				availableValuesIp4ConfigMethod[nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO],
@@ -107,8 +94,6 @@ func checkSettingIP4ConfigValues(data connectionData) (errs sectionErrors) {
 
 	// check value of address
 	checkSettingIP4ConfigAddresses(data, errs)
-
-	// TODO check value of route
 
 	return
 }
@@ -167,7 +152,6 @@ func checkSettingIP4ConfigAddresses(data connectionData, errs sectionErrors) {
 func logicSetSettingIP4ConfigMethod(data connectionData, value string) (err error) {
 	// just ignore error here and set value directly, error will be
 	// check in checkSettingXXXValues()
-	// TODO check logic for different connection types
 	switch value {
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		removeSettingIP4ConfigAddresses(data)
@@ -245,23 +229,19 @@ func getSettingVkIp4ConfigAddressesGateway(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp4ConfigRoutesAddress(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP4ConfigRoutesAddress(data)
+	// TODO value := getSettingIP4ConfigRoutesAddress(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMask(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP4ConfigRoutesMask(data)
+	// TODO value := getSettingIP4ConfigRoutesMask(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesNexthop(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP4ConfigRoutesNexthop(data)
+	// TODO value := getSettingIP4ConfigRoutesNexthop(data)
 	return
 }
 func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP4ConfigRoutesMetric(data)
+	// TODO value := getSettingIP4ConfigRoutesMetric(data)
 	return
 }
 
@@ -342,22 +322,18 @@ func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value strin
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP4ConfigRoutesAddressJSON(data)
+	// TODO setSettingIP4ConfigRoutesAddressJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP4ConfigRoutesMaskJSON(data)
+	// TODO setSettingIP4ConfigRoutesMaskJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP4ConfigRoutesNexthopJSON(data)
+	// TODO setSettingIP4ConfigRoutesNexthopJSON(data)
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP4ConfigRoutesMetricJSON(data)
+	// TODO setSettingIP4ConfigRoutesMetricJSON(data)
 	return
 }

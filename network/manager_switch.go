@@ -49,10 +49,6 @@ func newSwitchHandler(c *config) (sh *switchHandler) {
 	return
 }
 
-// TODO: remove
-func destroySwitchHandler(sh *switchHandler) {
-}
-
 func (sh *switchHandler) init() {
 	// initialize global switches
 	sh.initPropNetworkingEnabled()

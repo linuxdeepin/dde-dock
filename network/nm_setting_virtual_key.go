@@ -102,7 +102,7 @@ func generalGetSettingVsectionAvailableKeys(data connectionData, vsection string
 			keys = append(keys, nm.NM_SETTING_VK_MOBILE_SERVICE_TYPE)
 		} else {
 			keys = append(keys, nm.NM_SETTING_VK_MOBILE_PLAN)
-			// TODO: is apn-readonly widget necessary?
+			// TODO: is "apn-readonly" widget necessary?
 			// if getSettingVkMobileServiceType(data) == connectionMobileGsm {
 			// keys = append(keys, nm.NM_SETTING_VK_MOBILE_APN_READONLY)
 			// }
@@ -495,20 +495,20 @@ func getSettingVkVpnMissingPlugin(data connectionData) (missingPlugin string) {
 	if !isStringInArray(vpnType, getLocalSupportedVpnTypes()) {
 		switch vpnType {
 		case connectionVpnL2tp:
-			missingPlugin = "network-manager-l2tp"
+			missingPlugin = "network-manager-l2tp-gnome"
 		case connectionVpnOpenconnect:
-			missingPlugin = "network-manager-openconnect"
+			missingPlugin = "network-manager-openconnect-gnome"
 		case connectionVpnOpenvpn:
-			missingPlugin = "network-manager-openvpn"
+			missingPlugin = "network-manager-openvpn-gnome"
 		case connectionVpnPptp:
-			missingPlugin = "network-manager-pptp"
+			missingPlugin = "network-manager-pptp-gnome"
 		case connectionVpnStrongswan:
 			missingPlugin = "network-manager-strongswan"
 		case connectionVpnVpnc:
-			missingPlugin = "network-manager-vpnc"
+			missingPlugin = "network-manager-vpnc-gnome"
 		default:
-			// TODO:
-			// fmt.Errorf("invalid vpn type %s", vpnType)
+			err := fmt.Errorf("invalid vpn type %s", vpnType)
+			logger.Error(err)
 		}
 	}
 	return

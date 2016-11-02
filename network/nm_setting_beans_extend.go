@@ -1,6 +1,6 @@
 package network
 
-// Empty functions
+// Empty functions to make compile success
 func getSettingAdslAvailableKeys(data connectionData) (keys []string) {
 	return
 }

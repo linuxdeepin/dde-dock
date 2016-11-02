@@ -66,15 +66,12 @@ func (m *Manager) setPropNetworkingEnabled(value bool) {
 }
 func (m *Manager) setPropWirelessEnabled(value bool) {
 	m.wirelessEnabled = value
-	// dbus.NotifyChange(m, "WirelessEnabled") // TODO: remove
 }
 func (m *Manager) setPropWwanEnabled(value bool) {
 	m.wwanEnabled = value
-	// dbus.NotifyChange(m, "WwanEnabled") // TODO: remove
 }
 func (m *Manager) setPropWiredEnabled(value bool) {
 	m.wiredEnabled = value
-	// dbus.NotifyChange(m, "WiredEnabled") // TODO: remove
 }
 func (m *Manager) setPropVpnEnabled(value bool) {
 	m.VpnEnabled = value

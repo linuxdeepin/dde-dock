@@ -157,31 +157,28 @@ func checkSettingVpnOpenvpnKeyCert(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSettingVpnOpenvpnKeyCert(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_CERT, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_CERT, value)
 }
 func checkSettingVpnOpenvpnKeyCa(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyCaExists(data) {
 		return
 	}
 	value := getSettingVpnOpenvpnKeyCa(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_CA, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_CA, value)
 }
 func checkSettingVpnOpenvpnKeyKey(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyKeyExists(data) {
 		return
 	}
 	value := getSettingVpnOpenvpnKeyKey(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_KEY, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_KEY, value)
 }
 func checkSettingVpnOpenvpnKeyStaticKey(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenvpnKeyStaticKeyExists(data) {
 		return
 	}
 	value := getSettingVpnOpenvpnKeyStaticKey(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY, value, ".key")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENVPN_SETTING_NAME, nm.NM_SETTING_VPN_OPENVPN_KEY_STATIC_KEY, value)
 }
 
 // openvpn-advanced general
@@ -217,8 +214,7 @@ func getSettingVpnOpenvpnSecurityAvailableKeys(data connectionData) (keys []stri
 func getSettingVpnOpenvpnSecurityAvailableValues(data connectionData, key string) (values []kvalue) {
 	switch key {
 	case nm.NM_SETTING_VPN_OPENVPN_KEY_CIPHER:
-		// TODO get openvpn cipher "/usr/sbin/openvpn" "/sbin/openvpn"
-		// --show-ciphers
+		// TODO get openvpn cipher "/usr/sbin/openvpn" "/sbin/openvpn" --show-ciphers
 		values = []kvalue{
 			kvalue{"", Tr("Default")},
 			kvalue{"DES-CBC", Tr("DES-CBC")},

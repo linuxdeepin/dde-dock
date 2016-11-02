@@ -155,7 +155,7 @@ func byteArrayToStrPath(bytePath []byte) (path string) {
 
 // strToUuid convert any given string to md5, and then to uuid, for
 // example, a device address string "00:12:34:56:ab:cd" will be
-// converted to "1d417dad-8a98-fb90-e9df-016bd616d7dd"
+// converted to "086e214c-1f20-bca4-9816-c0a11c8c0e02"
 func strToUuid(str string) (uuid string) {
 	md5, _ := utils.SumStrMd5(str)
 	return doStrToUuid(md5)

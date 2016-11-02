@@ -269,7 +269,7 @@ func (s *ConnectionSession) getSecretsFromNM() {
 		// FIXME: same with connectionMobileGsm
 		// s.doGetSecretsFromNM(nm.NM_SETTING_CDMA_SETTING_NAME)
 	case connectionVpnL2tp, connectionVpnOpenconnect, connectionVpnPptp, connectionVpnVpnc, connectionVpnOpenvpn:
-		// TODO
+		// ignore vpn secrets
 	}
 }
 func (s *ConnectionSession) doGetSecretsFromNM(secretSection string) {
@@ -302,8 +302,6 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 
 // Save save current connection s.
 func (s *ConnectionSession) Save() (ok bool, err error) {
-	// TODO what about the connection has been deleted?
-
 	logger.Debugf("Save connection: %#v", s.data)
 
 	if s.isErrorOccured() {
@@ -336,7 +334,6 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		manager.ActivateConnection(s.Uuid, s.devPath)
 	} else {
 		// create new connection and activate it
-		// TODO vpn ad-hoc hotspot
 		connectionType := getCustomConnectionType(s.data)
 
 		// keep ID same with SSID for wireless connections
@@ -499,8 +496,6 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 				continue
 			}
 			for _, key := range sectionKeys {
-				// TODO: remove?
-				// section := getSectionOfKeyInVsection(s.data, vsection, key)
 				t := generalGetSettingKeyType(section, key)
 				if values := generalGetSettingAvailableValues(s.data, section, key); len(values) > 0 {
 					valuesJSON, _ := marshalJSON(values)

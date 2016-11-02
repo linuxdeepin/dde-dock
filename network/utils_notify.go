@@ -83,7 +83,6 @@ func notifyNetworkOffline() {
 }
 
 func notifyAirplanModeEnabled() {
-	// TODO: airplane icon missing
 	notify(notifyIconNetworkOffline, Tr("Disconnected"), Tr("Airplane mode enabled."))
 }
 

@@ -129,7 +129,8 @@ func (m *Manager) initManager() {
 	})
 	m.setPropState()
 
-	// TODO: notifications issue when suspending
+	// TODO: notifications issue when resume from suspend
+
 	// connect computer suspend signal
 	loginManager.ConnectPrepareForSleep(func(active bool) {
 		if active {
@@ -149,7 +150,6 @@ func (m *Manager) destroyManager() {
 	destroyAgent(m.agent)
 	destroyStateHandler(m.stateHandler)
 	destroyDbusWatcher(m.dbusWatcher)
-	destroySwitchHandler(m.switchHandler)
 	m.clearDevices()
 	m.clearAccessPoints()
 	m.clearConnections()

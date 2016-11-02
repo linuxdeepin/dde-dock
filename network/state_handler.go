@@ -60,9 +60,9 @@ func initNmStateReasons() {
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SLEEPING] = Tr("NetworkManager went to sleep.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONNECTION_REMOVED] = Tr("The device's active connection was removed or disappeared.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_USER_REQUESTED] = Tr("A user or client requested to disconnect.")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CARRIER] = Tr("The device's carrier/link changed.") // TODO translate
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_CONNECTION_ASSUMED] = Tr("The device's existing connection was assumed.")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE] = Tr("The 802.1x supplicant is now available.") // TODO full stop
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SUPPLICANT_AVAILABLE] = Tr("The 802.1x supplicant is now available.") // TODO translate: full stop
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_NOT_FOUND] = Tr("The modem could not be found.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BT_FAILED] = Tr("The Bluetooth connection timed out or failed.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_NOT_INSERTED] = Tr("GSM Modem's SIM Card was not inserted.")
@@ -71,7 +71,7 @@ func initNmStateReasons() {
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_GSM_SIM_WRONG] = Tr("Wrong GSM Modem's SIM")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_INFINIBAND_MODE] = Tr("InfiniBand device does not support connected mode.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_DEPENDENCY_FAILED] = Tr("A connection dependency failed.")
-	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BR2684_FAILED] = Tr("Problem with the RFC 2684 Ethernet over ADSL bridge.") // TODO
+	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_BR2684_FAILED] = Tr("Problem with the RFC 2684 Ethernet over ADSL bridge.") // TODO translate
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_MODEM_MANAGER_UNAVAILABLE] = Tr("ModemManager did not run or quitted unexpectedly.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SSID_NOT_FOUND] = Tr("The 802.11 Wi-Fi network could not be found.")
 	deviceErrorTable[nm.NM_DEVICE_STATE_REASON_SECONDARY_CONNECTION_FAILED] = Tr("A secondary connection of the base connection failed.")

@@ -109,8 +109,6 @@ func checkSettingIP6ConfigValues(data connectionData) (errs sectionErrors) {
 	// check value of address
 	checkSettingIP6ConfigAddresses(data, errs)
 
-	// TODO check value of route
-
 	return
 }
 
@@ -159,7 +157,6 @@ func checkSettingIP6ConfigAddresses(data connectionData, errs sectionErrors) {
 		// check address
 		if !isIpv6AddressValid(addr.Address) {
 			rememberError(errs, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_VK_IP6_CONFIG_ADDRESSES_ADDRESS, nmKeyErrorInvalidValue)
-			// TODO test
 			logger.Warning(nmKeyErrorInvalidValue, addr.Address)
 		}
 		if isIpv6AddressZero(addr.Address) {
@@ -241,7 +238,6 @@ func getSettingVkIp6ConfigAddressesPrefix(data connectionData) (value uint32) {
 	}
 	addresses := getSettingIP6ConfigAddresses(data)
 	value = addresses[0].Prefix
-	logger.Info(addresses) // TODO test
 	return
 }
 func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
@@ -253,23 +249,19 @@ func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp6ConfigRoutesAddress(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP6ConfigRoutesAddress(data)
+	// TODO value := getSettingIP6ConfigRoutesAddress(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesPrefix(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP6ConfigRoutesPrefix(data)
+	// TODO value := getSettingIP6ConfigRoutesPrefix(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesNexthop(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP6ConfigRoutesNexthop(data)
+	// TODO value := getSettingIP6ConfigRoutesNexthop(data)
 	return
 }
 func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
-	// TODO
-	// value := getSettingIP6ConfigRoutesMetric(data)
+	// TODO value := getSettingIP6ConfigRoutesMetric(data)
 	return
 }
 
@@ -345,22 +337,18 @@ func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value strin
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP6ConfigRoutesAddressJSON(data)
+	// TODO setSettingIP6ConfigRoutesAddressJSON(data)
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesPrefix(data connectionData, value uint32) (err error) {
-	// TODO
-	// setSettingIP6ConfigRoutesPrefixJSON(data)
+	// TODO setSettingIP6ConfigRoutesPrefixJSON(data)
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesNexthop(data connectionData, value string) (err error) {
-	// TODO
-	// setSettingIP6ConfigRoutesNexthopJSON(data)
+	// TODO setSettingIP6ConfigRoutesNexthopJSON(data)
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) (err error) {
-	// TODO
-	// setSettingIP6ConfigRoutesMetricJSON(data)
+	// TODO setSettingIP6ConfigRoutesMetricJSON(data)
 	return
 }

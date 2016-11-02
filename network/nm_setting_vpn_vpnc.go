@@ -108,8 +108,7 @@ func checkSettingVpnVpncCaFile(data connectionData, errs sectionErrors) {
 		return
 	}
 	value := getSettingVpnVpncKeyCaFile(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, nm.NM_SETTING_VPN_VPNC_KEY_CA_FILE, value,
-		".pem", ".crt", ".cer")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_VPNC_SETTING_NAME, nm.NM_SETTING_VPN_VPNC_KEY_CA_FILE, value)
 }
 
 // vpn-vpnc-advanced

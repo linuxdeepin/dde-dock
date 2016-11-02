@@ -94,24 +94,21 @@ func checkSettingVpnStrongswanKeyCertificate(data connectionData, errs sectionEr
 		return
 	}
 	value := getSettingVpnStrongswanKeyCertificate(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_CERTIFICATE, value)
 }
 func checkSettingVpnStrongswanKeyUsercert(data connectionData, errs sectionErrors) {
 	if !isSettingVpnStrongswanKeyUsercertExists(data) {
 		return
 	}
 	value := getSettingVpnStrongswanKeyUsercert(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERCERT, value)
 }
 func checkSettingVpnStrongswanKeyUserkey(data connectionData, errs sectionErrors) {
 	if !isSettingVpnStrongswanKeyUserkeyExists(data) {
 		return
 	}
 	value := getSettingVpnStrongswanKeyUserkey(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value,
-		".pem", ".crt", ".key", ".cer", ".p12")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_STRONGSWAN_SETTING_NAME, nm.NM_SETTING_VPN_STRONGSWAN_KEY_USERKEY, value)
 }
 
 // Logic setter

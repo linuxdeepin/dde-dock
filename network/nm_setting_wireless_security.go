@@ -154,7 +154,6 @@ func checkSettingWirelessSecurityPsk(data connectionData, errs sectionErrors) {
 	// characters (as specified in the 802.11i standard) and is
 	// interpreted as a WPA passphrase
 	if len(psk) < 8 || len(psk) > 64 {
-		// TODO
 		rememberError(errs, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME, nm.NM_SETTING_WIRELESS_SECURITY_PSK, nmKeyErrorInvalidValue)
 	}
 }
@@ -182,11 +181,9 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		logger.Error("invalid value", value)
 		err = fmt.Errorf(nmKeyErrorInvalidValue)
 	case "none":
-		// removeSettingWirelessSec(data) // TODO:
 		removeSetting(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		removeSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 	case "wep":
-		// setSettingWirelessSec(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) // TODO:
 		addSetting(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		removeSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 
@@ -202,7 +199,6 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityWepKeyFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 		setSettingWirelessSecurityWepKeyType(data, 1)
 	case "wpa-psk":
-		// setSettingWirelessSec(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) // TODO:
 		addSetting(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		removeSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 
@@ -214,7 +210,6 @@ func logicSetSettingVkWirelessSecurityKeyMgmt(data connectionData, value string)
 		setSettingWirelessSecurityKeyMgmt(data, "wpa-psk")
 		setSettingWirelessSecurityPskFlags(data, nm.NM_SETTING_SECRET_FLAG_NONE)
 	case "wpa-eap":
-		// setSettingWirelessSec(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME) // TODO:
 		addSetting(data, nm.NM_SETTING_WIRELESS_SECURITY_SETTING_NAME)
 		addSetting(data, nm.NM_SETTING_802_1X_SETTING_NAME)
 

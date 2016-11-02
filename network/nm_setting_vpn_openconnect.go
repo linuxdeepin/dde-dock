@@ -71,22 +71,19 @@ func checkSettingVpnOpenconnectKeyCacert(data connectionData, errs sectionErrors
 		return
 	}
 	value := getSettingVpnOpenconnectKeyCacert(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value,
-		".pem", ".crt", ".key")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_CACERT, value)
 }
 func checkSettingVpnOpenconnectKeyUsercert(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyUsercertExists(data) {
 		return
 	}
 	value := getSettingVpnOpenconnectKeyUsercert(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value,
-		".pem", ".crt", ".key")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_USERCERT, value)
 }
 func checkSettingVpnOpenconnectKeyPrivkey(data connectionData, errs sectionErrors) {
 	if !isSettingVpnOpenconnectKeyPrivkeyExists(data) {
 		return
 	}
 	value := getSettingVpnOpenconnectKeyPrivkey(data)
-	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value,
-		".pem", ".crt", ".key")
+	ensureFileExists(errs, nm.NM_SETTING_ALIAS_VPN_OPENCONNECT_SETTING_NAME, nm.NM_SETTING_VPN_OPENCONNECT_KEY_PRIVKEY, value)
 }

@@ -573,8 +573,6 @@ func nmNewVpnConnection(apath dbus.ObjectPath) (vpnConn *nmdbus.VPNConnection, e
 	return
 }
 
-// TODO: gen code
-
 // Destroy network manager objects
 func nmDestroyManager(m *nmdbus.Manager) {
 	if m == nil {
@@ -1057,7 +1055,6 @@ func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 }
 
 // get wireless connection by ssid, the connection with special hardware address is priority
-// TODO: use available connections instead
 func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, ok bool) {
 	var hwAddr string
 	if len(devPath) != 0 {
@@ -1364,9 +1361,7 @@ func nmManagerEnable(enable bool) (err error) {
 }
 
 func nmGetPrimaryConnection() (cpath dbus.ObjectPath) {
-	// TODO need update dbus-factory
-	// cpath = nmManager.PrimaryConnection.Get()
-	cpath = ""
+	cpath = nmManager.PrimaryConnection.Get()
 	return
 }
 

@@ -207,15 +207,6 @@ func checkSettingWirelessValues(data connectionData) (errs sectionErrors) {
 	// check ssid
 	ensureSettingWirelessSsidNoEmpty(data, errs)
 
-	// TODO: nm.NM_SETTING_WIRELESS_SEC for nm 1.0+
-	// check security
-	// if isSettingWirelessSecExists(data) {
-	// 	securitySection := getSettingWirelessSec(data)
-	// 	if !isSettingExists(data, securitySection) {
-	// 		rememberError(errs, nm.NM_SETTING_WIRELESS_SETTING_NAME, nm.NM_SETTING_WIRELESS_SEC, fmt.Sprintf(nmKeyErrorMissingSection, securitySection))
-	// 	}
-	// }
-
 	// machine address will be checked when setting key
 	return
 }
