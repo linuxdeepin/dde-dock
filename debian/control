@@ -47,12 +47,12 @@ Depends: ${shlibs:Depends},
  deepin-metacity,
  deepin-desktop-schemas (>= 2.91.2),
  mobile-broadband-provider-info,
- bamfdaemon
+ bamfdaemon,
+ dde-polkit-agent
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
 Suggests: 
- policykit-1-gnome,
  systemd,
  network-manager-pptp,
  network-manager-l2tp,
