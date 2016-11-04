@@ -20,10 +20,11 @@ SoundItem::SoundItem(QWidget *parent)
 
     m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setVisible(false);
-//    m_tipsLabel->setFixedWidth(145);
+    //    m_tipsLabel->setFixedWidth(145);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
-                               "padding:5px 10px;");
+                               "padding:5px 10px;"
+                               "margin:0px 10px 0px");
 
     m_applet->setVisible(false);
 
@@ -35,7 +36,7 @@ QWidget *SoundItem::tipsWidget()
 {
     refershTips(true);
 
-    m_tipsLabel->setFixedWidth(m_tipsLabel->sizeHint().width() + 10);
+    m_tipsLabel->setFixedWidth(m_tipsLabel->sizeHint().width());
 
     return m_tipsLabel;
 }
@@ -137,33 +138,33 @@ void SoundItem::refershIcon()
 
     QString iconString;
     if (displayMode == Dock::Fashion)
-     {
-         QString volumeString;
-         if (volmue >= 1.0)
-             volumeString = "100";
-         else
-             volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
+    {
+        QString volumeString;
+        if (volmue >= 1.0)
+            volumeString = "100";
+        else
+            volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
 
-         iconString = "audio-volume-" + volumeString + (mute ? "-muted" : "");
-     } else {
-         QString volumeString;
-         if (mute)
-             volumeString = "muted";
-         else if (volmue >= double(2)/3)
-             volumeString = "high";
-         else if (volmue >= double(1)/3)
-             volumeString = "medium";
-         else
-             volumeString = "low";
+        iconString = "audio-volume-" + volumeString + (mute ? "-muted" : "");
+    } else {
+        QString volumeString;
+        if (mute)
+            volumeString = "muted";
+        else if (volmue >= double(2)/3)
+            volumeString = "high";
+        else if (volmue >= double(1)/3)
+            volumeString = "medium";
+        else
+            volumeString = "low";
 
-         iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
-     }
+        iconString = QString("audio-volume-%1-symbolic").arg(volumeString);
+    }
 
-     const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-     const QIcon icon = QIcon::fromTheme(iconString);
-     m_iconPixmap = icon.pixmap(iconSize, iconSize);
+    const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
+    const QIcon icon = QIcon::fromTheme(iconString);
+    m_iconPixmap = icon.pixmap(iconSize, iconSize);
 
-     update();
+    update();
 }
 
 void SoundItem::refershTips(const bool force)
@@ -171,7 +172,15 @@ void SoundItem::refershTips(const bool force)
     if (!force && !m_tipsLabel->isVisible())
         return;
 
-    const QString value = QString::number(m_applet->volumeValue() / 10) + '%';
+    if(!m_sinkInter)
+        return;
+
+    QString value;
+    if (m_sinkInter->mute()) {
+        value = QString("0") + '%';
+    } else {
+        value = QString::number(m_applet->volumeValue() / 10) + '%';
+    }
     m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
 }
 
