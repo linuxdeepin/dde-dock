@@ -86,7 +86,7 @@ func newDeviceConfig() (d *deviceConfig) {
 
 func newVpnConfig() (v *vpnConfig) {
 	v = &vpnConfig{}
-	v.AutoConnect = true
+	v.AutoConnect = false
 	v.activated = false
 	v.lastActivated = v.activated
 	return
