@@ -1,0 +1,29 @@
+Source: dde-dock
+Section: deepin
+Priority: optional
+Maintainer: Deepin Sysdev <sysdev@deepin.com>
+Build-Depends: debhelper (>= 8.0.0), pkg-config,
+ qt5-qmake, qt5-default,
+ libgtk2.0-dev,
+ libxcb-image0-dev, libxcb-composite0-dev,
+ libxcb-ewmh-dev, libqt5x11extras5-dev,
+ libxcb-damage0-dev, libqt5svg5-dev,
+ libxcb-icccm4-dev, libxtst-dev,
+ libdtkbase-dev, libdtkutil-dev, libdtkwidget-dev, qttools5-dev-tools, libxcb-icccm4-dev
+Standards-Version: 3.9.4
+Homepage: http://www.deepin.org/
+
+Package: dde-dock
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: dde-workspace (<< 2.90.5),
+ dde-dock-applets,
+Replaces: dde-dock-applets
+Description: deepin desktop-environment - dock module
+ Deepin desktop environment 2015 - dock module.
+
+Package: dde-dock-dev
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: deepin desktop-environment - dock module development files
+ Deepin desktop environment 2015 - dock module development files.
