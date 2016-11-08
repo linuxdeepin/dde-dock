@@ -35,7 +35,7 @@ void DiskControlWidget::unmountAll()
 
 void DiskControlWidget::diskListChanged()
 {
-    m_diskInfoList = m_diskInter->diskList();
+    DiskInfoList diskList = m_diskInter->diskList();
 
     while (QLayoutItem *item = m_centeralLayout->takeAt(0))
     {
@@ -44,7 +44,7 @@ void DiskControlWidget::diskListChanged()
     }
 
     int mountedCount = 0;
-    for (auto info : m_diskInfoList)
+    for (auto info : diskList)
     {
         if (info.m_mountPoint.isEmpty())
             continue;
@@ -56,6 +56,7 @@ void DiskControlWidget::diskListChanged()
         connect(item, &DiskControlItem::requestUnmount, this, &DiskControlWidget::unmountDisk);
 
         m_centeralLayout->addWidget(item);
+        m_diskInfoList.append(info);
     }
 
     emit diskCountChanged(mountedCount);
