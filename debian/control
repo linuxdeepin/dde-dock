@@ -67,7 +67,3 @@ Description: daemon handling the DDE session settings
  various parameters of a DDE session and the applications that run
  under it.
 
-Package: dde-daemon-dbg
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, dde-daemon(= ${binary:Version})
-Description: daemon handling the DDE session settings dbg.
