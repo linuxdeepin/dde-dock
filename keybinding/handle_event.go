@@ -87,11 +87,11 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 		return "KbdBrightnessUp"
 	case "kbd-brightness-down":
 		return "KbdBrightnessDown"
-	case "volume-mute":
+	case "audio-mute":
 		return "AudioMute"
-	case "volume-down":
+	case "audio-lower-volume":
 		return "AudioDown"
-	case "volume-up":
+	case "audio-raise-volume":
 		return "AudioUp"
 	case "numlock":
 		// num_lock --> mod2
@@ -120,15 +120,15 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 	case "suspend":
 		return "PowerSuspend"
 	//case "p", "P":
-	case "play":
+	case "audio-play":
 		return "AudioPlay"
-	case "pause":
+	case "audio-pause":
 		return "AudioPause"
-	case "stop":
+	case "audio-stop":
 		return "AudioStop"
-	case "previous":
+	case "audio-prev":
 		return "AudioPrevious"
-	case "next":
+	case "audio-next":
 		return "AudioNext"
 	case "audio-rewind":
 		return "AudioRewind"
@@ -136,9 +136,9 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 		return "AudioForward"
 	case "audio-repeat":
 		return "AudioRepeat"
-	case "www", "home":
+	case "www", "home-page":
 		return "LaunchBrowser"
-	case "email":
+	case "mail":
 		return "LaunchEmail"
 	case "calculator":
 		return "LaunchCalculator"
@@ -150,7 +150,7 @@ func getMediakeySignal(id string, ty int32, modStr string) string {
 		return "SwitchLayout"
 	case "eject":
 		return "Eject"
-	case "media":
+	case "audio-media":
 		return "AudioMedia"
 	}
 

@@ -133,7 +133,7 @@ func (m *Manager) grabShortcuts(list shortcuts.Shortcuts) {
 	for _, s := range list {
 		err := m.grabShortcut(s)
 		if err != nil {
-			logger.Warningf("Grab '%s' %v failed: %v",
+			logger.Debugf("Grab '%s' %v failed: %v",
 				s.Id, s.Accels, err)
 			continue
 		}
