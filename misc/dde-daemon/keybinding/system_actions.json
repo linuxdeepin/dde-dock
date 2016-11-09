@@ -51,6 +51,10 @@
 	{
 		"Key": "wm-switcher",
 		"Action": "dbus-send --type=method_call --dest=com.deepin.wm_switcher /com/deepin/wm_switcher com.deepin.wm_switcher.requestSwitchWM"
+	},
+	{
+		"Key": "turn-off-screen",
+		"Action": "sleep 0.5; xset dpms force off"
 	}
 	]
 }

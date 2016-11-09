@@ -68,6 +68,7 @@ func systemIdNameMap() map[string]string {
 		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
 		"switch-layout":         gettext.Tr("Switch Layout"),
 		"wm-switcher":           gettext.Tr("Switch window effects"),
+		"turn-off-screen":       gettext.Tr("Fast Screen Off"),
 	}
 
 	return idNameMap
