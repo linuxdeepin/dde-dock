@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,17 +10,23 @@
 package keybinding
 
 import (
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
+func init() {
+	loader.Register(NewDaemon(logger))
+	shortcuts.SetLogger(logger)
+}
+
 type Daemon struct {
 	*loader.ModuleBase
+	manager *Manager
 }
 
 var (
-	_m     *Manager
 	logger = log.NewLogger("daemon/keybinding")
 )
 
@@ -30,47 +36,41 @@ func NewDaemon(logger *log.Logger) *Daemon {
 	return d
 }
 
-// Check 'touchpad' whether exist
 func (*Daemon) GetDependencies() []string {
-	return []string{}
+	return []string{"audio", "inputdevices"}
 }
 
-func (*Daemon) Start() error {
-	if _m != nil {
+func (daemon *Daemon) Start() error {
+	if daemon.manager != nil {
 		return nil
 	}
 	logger.BeginTracing()
 	var err error
-	_m, err = NewManager()
+
+	daemon.manager, err = NewManager()
 	if err != nil {
 		logger.EndTracing()
 		return err
 	}
 
-	err = dbus.InstallOnSession(_m)
+	err = dbus.InstallOnSession(daemon.manager)
 	if err != nil {
-		_m.destroy()
-		_m = nil
+		daemon.manager.destroy()
+		daemon.manager = nil
 		logger.EndTracing()
 		return err
 	}
 
-	dbus.InstallOnSession(_m.media)
-
-	_m.initGrabedList()
-	_m.listenGSettingChanged()
-	go _m.startLoop()
 	return nil
 }
 
-func (*Daemon) Stop() error {
-	if _m == nil {
+func (daemon *Daemon) Stop() error {
+	if daemon.manager == nil {
 		return nil
 	}
-
 	logger.EndTracing()
-	_m.destroy()
-	dbus.UnInstallObject(_m)
-	_m = nil
+	daemon.manager.destroy()
+	dbus.UnInstallObject(daemon.manager)
+	daemon.manager = nil
 	return nil
 }

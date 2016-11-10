@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,7 +13,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"path"
-	"pkg.deepin.io/lib/gettext"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -22,56 +21,37 @@ const (
 	systemActionsFile = "dde-daemon/keybinding/system_actions.json"
 )
 
-func ListSystemShortcut() Shortcuts {
-	s := newSystemGSetting()
-	defer s.Unref()
-	return doListShortcut(s, systemIdNameMap(), KeyTypeSystem)
+type SystemShortcut struct {
+	*GSettingsShortcut
+	arg *ActionExecCmdArg
 }
 
-func resetSystemAccels() {
-	s := newSystemGSetting()
-	defer s.Unref()
-	doResetAccels(s)
+func (ss *SystemShortcut) SetName(name string) error {
+	return ErrOpNotSupported
 }
 
-func disableSystemAccels(key string) {
-	s := newSystemGSetting()
-	defer s.Unref()
-	doDisableAccles(s, key)
+func (ss *SystemShortcut) GetAction() *Action {
+	a := &Action{
+		Type: ActionTypeExecCmd,
+		Arg:  ss.arg,
+	}
+	return a
 }
 
-func addSystemAccel(key, accel string) {
-	s := newSystemGSetting()
-	defer s.Unref()
-	doAddAccel(s, key, accel)
-}
-
-func delSystemAccel(key, accel string) {
-	s := newSystemGSetting()
-	defer s.Unref()
-	doDelAccel(s, key, accel)
-}
-
-func systemIdNameMap() map[string]string {
-	var idNameMap = map[string]string{
-		"launcher":              gettext.Tr("Launcher"),
-		"terminal":              gettext.Tr("Terminal"),
-		"lock-screen":           gettext.Tr("Lock screen"),
-		"show-dock":             gettext.Tr("Show/Hide the dock"),
-		"logout":                gettext.Tr("Logout"),
-		"terminal-quake":        gettext.Tr("Terminal Quake Window"),
-		"screenshot":            gettext.Tr("Screenshot"),
-		"screenshot-fullscreen": gettext.Tr("Full screenshot"),
-		"screenshot-window":     gettext.Tr("Window screenshot"),
-		"screenshot-delayed":    gettext.Tr("Delay screenshot"),
-		"file-manager":          gettext.Tr("File manager"),
-		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
-		"switch-layout":         gettext.Tr("Switch Layout"),
-		"wm-switcher":           gettext.Tr("Switch window effects"),
-		"turn-off-screen":       gettext.Tr("Fast Screen Off"),
+func (ss *SystemShortcut) SetAction(newAction *Action) error {
+	if newAction == nil {
+		return ErrNilAction
+	}
+	if newAction.Type != ActionTypeExecCmd {
+		return ErrInvalidActionType
 	}
 
-	return idNameMap
+	arg, ok := newAction.Arg.(*ActionExecCmdArg)
+	if !ok {
+		return ErrTypeAssertionFail
+	}
+	ss.arg = arg
+	return nil
 }
 
 func getSystemAction(id string) string {

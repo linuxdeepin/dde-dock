@@ -14,11 +14,10 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
-	"pkg.deepin.io/dde/daemon/keybinding/core"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/dbus"
 )
-
-var pressedKey string
 
 func (m *Manager) doGrabScreen() error {
 	xu, err := xgbutil.NewConn()
@@ -33,9 +32,9 @@ func (m *Manager) doGrabScreen() error {
 		return err
 	}
 
-	// Disable xrecord key event handler
-	core.XRecordEnable(false)
-	defer core.XRecordEnable(true)
+	// Disable xrecord
+	xrecord.Enable(false)
+	defer xrecord.Enable(true)
 
 	xevent.ButtonPressFun(
 		func(x *xgbutil.XUtil, e xevent.ButtonPressEvent) {
@@ -52,24 +51,35 @@ func (m *Manager) doGrabScreen() error {
 		}).Connect(xu, xu.RootWin())
 
 	xevent.KeyPressFun(
-		func(x *xgbutil.XUtil, e xevent.KeyPressEvent) {
-			pressedKey, _ = core.FormatKeyEvent(e.State,
-				int(e.Detail))
-			if core.IsShortcutValid(pressedKey) {
-				logger.Debug("[Grab Screen] emit press key:", pressedKey)
-				dbus.Emit(m, "KeyEvent", true, pressedKey)
+		func(x *xgbutil.XUtil, ev xevent.KeyPressEvent) {
+			logger.Debug(ev)
+			mods := shortcuts.GetConcernedModifiers(ev.State)
+			logger.Debug("event mods:", shortcuts.Modifiers(ev.State))
+			key := shortcuts.Key{
+				Mods: mods,
+				Code: shortcuts.Keycode(ev.Detail),
+			}
+			logger.Debug("event key:", key)
+			accel := key.ToAccel(x)
+			if accel.IsGood() {
+				logger.Debug("good accel", accel)
+				m.grabScreenPressedAccel = &accel
+			} else {
+				logger.Debug("bad accel", accel)
+				m.grabScreenPressedAccel = nil
 			}
 		}).Connect(xu, xu.RootWin())
 
 	xevent.KeyReleaseFun(
-		func(x *xgbutil.XUtil, e xevent.KeyReleaseEvent) {
-			if core.IsShortcutValid(pressedKey) {
-				logger.Debug("[Grab Screen] emit release key:", pressedKey)
-				dbus.Emit(m, "KeyEvent", false, pressedKey)
+		func(x *xgbutil.XUtil, ev xevent.KeyReleaseEvent) {
+			logger.Debug(ev)
+			if m.grabScreenPressedAccel != nil {
+				dbus.Emit(m, "KeyEvent", false, m.grabScreenPressedAccel.String())
+				m.grabScreenPressedAccel = nil
 			} else {
 				dbus.Emit(m, "KeyEvent", false, "")
 			}
-			pressedKey = ""
+
 			ungrabKbdAndMouse(xu)
 			xevent.Quit(xu)
 		}).Connect(xu, xu.RootWin())

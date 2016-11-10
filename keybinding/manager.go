@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -10,20 +10,33 @@
 package keybinding
 
 import (
-	"encoding/json"
-	"sort"
-	"sync"
-
+	"dbus/com/deepin/daemon/helper/backlight"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgbutil"
-	"pkg.deepin.io/dde/daemon/keybinding/core"
+	"github.com/BurntSushi/xgbutil/keybind"
+	"github.com/BurntSushi/xgbutil/xevent"
+	"path/filepath"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/dbus"
+	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/xdg/basedir"
+	"time"
 )
 
 const (
+	// shortcut signals:
+	shortcutSignalChanged = "Changed"
+	shortcutSignalAdded   = "Added"
+	shortcutSignalDeleted = "Deleted"
+
 	systemSchema   = "com.deepin.dde.keybinding.system"
 	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
+	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
+	metacitySchema = "com.deepin.wrap.gnome.metacity.keybindings"
+	galaSchema     = "com.deepin.wrap.pantheon.desktop.gala.keybindings"
+
+	customConfigFile = "deepin/dde-daemon/keybinding/custom.ini"
 )
 
 type Manager struct {
@@ -36,37 +49,120 @@ type Manager struct {
 
 	xu *xgbutil.XUtil
 
-	sysSetting   *gio.Settings
-	mediaSetting *gio.Settings
+	sysSetting            *gio.Settings
+	mediaSetting          *gio.Settings
+	wmSetting             *gio.Settings
+	metacitySetting       *gio.Settings
+	enableListenGSettings bool
 
-	media *Mediakey
+	customShortcutManager *shortcuts.CustomShortcutManager
 
-	grabLocker sync.Mutex
-	grabedList shortcuts.Shortcuts
+	blDaemon *backlight.Backlight
+	// controllers
+	audioController       *AudioController
+	mediaPlayerController *MediaPlayerController
+	displayController     *DisplayController
+	kbdLightController    *KbdLightController
+	touchpadController    *TouchpadController
+
+	shortcuts *shortcuts.Shortcuts
+	// shortcut action handlers
+	handlers               []shortcuts.KeyEventFunc
+	lastKeyEventTime       int64
+	grabScreenPressedAccel *shortcuts.ParsedAccel
 }
 
 func NewManager() (*Manager, error) {
-	var m = Manager{}
+	var m = Manager{
+		enableListenGSettings: true,
+	}
 
-	xu, err := core.Initialize()
+	xu, err := xgbutil.NewConn()
 	if err != nil {
 		return nil, err
 	}
 	m.xu = xu
+	keybind.Initialize(xu)
 
 	m.sysSetting = gio.NewSettings(systemSchema)
 	m.mediaSetting = gio.NewSettings(mediakeySchema)
+	m.wmSetting = gio.NewSettings(wmSchema)
 
-	m.media = &Mediakey{}
+	m.metacitySetting, _ = dutils.CheckAndNewGSettings(galaSchema)
+	if m.metacitySetting == nil {
+		// try metacitySchema
+		m.metacitySetting, _ = dutils.CheckAndNewGSettings(metacitySchema)
+	}
+
+	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
+	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
+
+	//m.media = &Mediakey{}
+	m.shortcuts = shortcuts.NewShortcuts(xu, m.handleKeyEvent)
+	m.shortcuts.AddSystem(m.sysSetting)
+	m.shortcuts.AddMedia(m.mediaSetting)
+	m.shortcuts.AddCustom(m.customShortcutManager)
+	m.shortcuts.AddWM(m.wmSetting)
+
+	if m.metacitySetting != nil {
+		m.shortcuts.AddMetacity(m.metacitySetting)
+	} else {
+		// TODO
+		logger.Warning("Manager.metacitySetting is nil")
+	}
+
+	m.audioController, err = NewAudioController()
+	if err != nil {
+		logger.Warning("NewAudioController failed:", err)
+	}
+
+	m.mediaPlayerController, err = NewMediaPlayerController()
+	if err != nil {
+		logger.Warning("NewMediaPlayerController failed:", err)
+	}
+
+	m.blDaemon, err = backlight.NewBacklight("com.deepin.daemon.helper.Backlight",
+		"/com/deepin/daemon/helper/Backlight")
+	if err != nil {
+		logger.Warning("NewBacklight failed:", err)
+	}
+
+	m.displayController, err = NewDisplayController(m.blDaemon)
+	if err != nil {
+		logger.Warning("NewDisplayController failed:", err)
+	}
+
+	m.kbdLightController = NewKbdLightController(m.blDaemon)
+
+	m.touchpadController, err = NewTouchpadController()
+	if err != nil {
+		logger.Warning("NewTouchpadController failed:", err)
+	}
+
+	m.initHandlers()
+	m.shortcuts.ListenXEvents()
+
+	// listen gsetting changed event
+	m.listenGSettingsChanged(m.sysSetting, shortcuts.ShortcutTypeSystem)
+	m.listenGSettingsChanged(m.mediaSetting, shortcuts.ShortcutTypeMedia)
+	m.listenGSettingsChanged(m.wmSetting, shortcuts.ShortcutTypeWM)
+	m.listenGSettingsChanged(m.metacitySetting, shortcuts.ShortcutTypeMetacity)
+
+	go xevent.Main(m.xu)
+
+	// init package xrecord
+	xrecord.Initialize()
+	xrecord.SetKeyReleaseCallback(m.shortcuts.HandleXRecordKeyRelease)
 
 	return &m, nil
 }
 
 func (m *Manager) destroy() {
-	m.ungrabShortcuts(m.grabedList)
-	m.grabedList = nil
-	m.stopLoop()
+	// TODO ungrab all shortcuts
+	xrecord.Finalize()
+	xrecord.SetKeyReleaseCallback(nil)
 
+	// destroy settings
 	if m.sysSetting != nil {
 		m.sysSetting.Unref()
 		m.sysSetting = nil
@@ -76,165 +172,82 @@ func (m *Manager) destroy() {
 		m.mediaSetting.Unref()
 		m.mediaSetting = nil
 	}
-}
 
-func (m *Manager) startLoop() {
-	core.StartLoop()
-}
-
-func (m *Manager) stopLoop() {
-	core.Finalize()
-}
-
-func (m *Manager) initGrabedList() {
-	sysList := shortcuts.ListSystemShortcut()
-	customList := shortcuts.ListCustomKey().GetShortcuts()
-	mediaList := shortcuts.ListMediaShortcut()
-
-	m.grabShortcuts(sysList)
-	m.grabShortcuts(customList)
-	m.grabShortcuts(mediaList)
-}
-
-func (m *Manager) listAll() shortcuts.Shortcuts {
-	list := shortcuts.ListWMShortcut()
-	list = append(list, shortcuts.ListMetacityShortcut()...)
-
-	var ssArray = []shortcuts.Shortcuts{
-		shortcuts.ListSystemShortcut(),
-		shortcuts.ListMediaShortcut(),
-		shortcuts.ListCustomKey().GetShortcuts(),
-	}
-	for _, ss := range ssArray {
-		for _, v := range ss {
-			if m.grabedList.GetById(v.Id, v.Type) == nil {
-				v.Accels = nil
-			}
-			list = append(list, v)
-		}
+	if m.wmSetting != nil {
+		m.wmSetting.Unref()
+		m.wmSetting = nil
 	}
 
-	return list
-}
+	if m.metacitySetting != nil {
+		m.metacitySetting.Unref()
+		m.metacitySetting = nil
+	}
 
-func (m *Manager) addToGrabedList(s *shortcuts.Shortcut) {
-	m.grabLocker.Lock()
-	defer m.grabLocker.Unlock()
-	m.grabedList = m.grabedList.Add(s.Id, s.Type)
-}
+	if m.audioController != nil {
+		m.audioController.Destroy()
+		m.audioController = nil
+	}
 
-func (m *Manager) deleteFromGrabedList(s *shortcuts.Shortcut) {
-	m.grabLocker.Lock()
-	defer m.grabLocker.Unlock()
-	m.grabedList = m.grabedList.Delete(s.Id, s.Type)
-}
+	if m.mediaPlayerController != nil {
+		m.mediaPlayerController.Destroy()
+		m.mediaPlayerController = nil
+	}
 
-func (m *Manager) grabShortcuts(list shortcuts.Shortcuts) {
-	for _, s := range list {
-		err := m.grabShortcut(s)
-		if err != nil {
-			logger.Debugf("Grab '%s' %v failed: %v",
-				s.Id, s.Accels, err)
-			continue
-		}
+	if m.displayController != nil {
+		m.displayController.Destroy()
+		m.displayController = nil
+	}
+
+	if m.touchpadController != nil {
+		m.touchpadController.Destroy()
+		m.touchpadController = nil
 	}
 }
 
-func (m *Manager) ungrabShortcuts(list shortcuts.Shortcuts) {
-	for _, s := range list {
-		m.ungrabShortcut(s)
-	}
-}
-
-func (m *Manager) grabShortcut(s *shortcuts.Shortcut) error {
-	err := m.grabAccels(s.Accels, s.Type, m.handleKeyEvent)
-	if err != nil {
-		return err
-	}
-
-	m.addToGrabedList(s)
-	return nil
-}
-
-func (m *Manager) ungrabShortcut(s *shortcuts.Shortcut) {
-	m.ungrabAccels(s.Accels, s.Type)
-	m.deleteFromGrabedList(s)
-}
-
-func (m *Manager) grabAccels(accels []string, ty int32, cb core.HandleType) error {
-	switch ty {
-	case shortcuts.KeyTypeWM, shortcuts.KeyTypeMetacity:
-		return nil
-	}
-
-	return core.GrabAccels(accels, cb)
-}
-
-func (m *Manager) ungrabAccels(accels []string, ty int32) {
-	switch ty {
-	case shortcuts.KeyTypeWM, shortcuts.KeyTypeMetacity:
+func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
+	now := time.Now().UnixNano()
+	// 1ms = 1000000ns
+	if now-m.lastKeyEventTime < 200*1000000 {
+		// ignore this key event
 		return
 	}
+	m.lastKeyEventTime = now
 
-	core.UngrabAccels(accels)
-}
-
-func (m *Manager) updateShortcutById(id string, ty int32) {
-	newInfo := shortcuts.ListAllShortcuts().GetById(id, ty)
-	if newInfo == nil {
+	logger.Debugf("handleKeyEvent ev: %#v", ev)
+	action := ev.Shortcut.GetAction()
+	if action == nil {
+		logger.Warning("action is nil")
 		return
 	}
+	logger.Debugf("shortcut action: %#v", action)
+	if handler := m.handlers[int(action.Type)]; handler != nil {
+		handler(ev)
+	} else {
+		logger.Warning("handler is nil")
+	}
+}
 
-	oldInfo := m.grabedList.GetById(id, ty)
-	if oldInfo != nil {
-		if isListEqual(oldInfo.Accels, newInfo.Accels) {
+func (m *Manager) emitShortcutSignal(signalName string, shortcut shortcuts.Shortcut) {
+	dbus.Emit(m, signalName, shortcut.GetId(), shortcut.GetType())
+}
+
+func (m *Manager) enableListenGSettingsChanged(val bool) {
+	m.enableListenGSettings = val
+}
+
+func (m *Manager) listenGSettingsChanged(gsettings *gio.Settings, type_ int32) {
+	gsettings.Connect("changed", func(s *gio.Settings, key string) {
+		if !m.enableListenGSettings {
 			return
 		}
-		m.ungrabAccels(oldInfo.Accels, oldInfo.Type)
-	}
 
-	err := m.grabAccels(newInfo.Accels, newInfo.Type, m.handleKeyEvent)
-	if err != nil {
-		m.deleteFromGrabedList(newInfo)
-		logger.Debugf("Change '%v - %v' accels: %v failed: %v",
-			id, ty, newInfo.Accels, err)
-	} else {
-		m.updateGrabedList(id, ty)
-	}
-	dbus.Emit(m, "Changed", id, ty)
-}
-
-func (m *Manager) updateGrabedList(id string, ty int32) {
-	m.grabLocker.Lock()
-	defer m.grabLocker.Unlock()
-	switch ty {
-	case shortcuts.KeyTypeSystem,
-		shortcuts.KeyTypeMedia,
-		shortcuts.KeyTypeCustom:
-		m.grabedList = m.grabedList.Add(id, ty)
-	}
-}
-
-func doMarshal(v interface{}) (string, error) {
-	bytes, err := json.Marshal(v)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bytes), nil
-}
-
-func isListEqual(l1, l2 []string) bool {
-	if len(l1) != len(l2) {
-		return false
-	}
-
-	sort.Strings(l1)
-	sort.Strings(l2)
-	for i, v := range l1 {
-		if v != l2[i] {
-			return false
+		shortcut := m.shortcuts.GetByIdType(key, type_)
+		if shortcut == nil {
+			return
 		}
-	}
-	return true
+
+		accelStrv := gsettings.GetStrv(key)
+		m.shortcuts.ModifyShortcutAccels(shortcut, shortcuts.ParseStandardAccels(accelStrv))
+		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
+	})
 }

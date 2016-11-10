@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2014 Deepin Technology Co., Ltd.
+ * Copyright (C) 2013 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -7,12 +7,10 @@
  * (at your option) any later version.
  **/
 
-package keybinding
+#ifndef __GRAB_XRECORD_H__
+#define __GRAB_XRECORD_H__
 
-import (
-	"pkg.deepin.io/dde/daemon/loader"
-)
+void xrecord_grab_init ();
+void xrecord_grab_finalize();
 
-func init() {
-	loader.Register(NewDaemon(logger))
-}
+#endif

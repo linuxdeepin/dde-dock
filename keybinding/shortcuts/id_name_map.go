@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2016 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,37 +13,28 @@ import (
 	"pkg.deepin.io/lib/gettext"
 )
 
-func ListWMShortcut() Shortcuts {
-	s := newWMGSetting()
-	defer s.Unref()
-	return doListShortcut(s, wmIdNameMap(), KeyTypeWM)
+func getSystemIdNameMap() map[string]string {
+	var systemIdNameMap = map[string]string{
+		"launcher":              gettext.Tr("Launcher"),
+		"terminal":              gettext.Tr("Terminal"),
+		"lock-screen":           gettext.Tr("Lock screen"),
+		"show-dock":             gettext.Tr("Show/Hide the dock"),
+		"logout":                gettext.Tr("Logout"),
+		"terminal-quake":        gettext.Tr("Terminal Quake Window"),
+		"screenshot":            gettext.Tr("Screenshot"),
+		"screenshot-fullscreen": gettext.Tr("Full screenshot"),
+		"screenshot-window":     gettext.Tr("Window screenshot"),
+		"screenshot-delayed":    gettext.Tr("Delay screenshot"),
+		"file-manager":          gettext.Tr("File manager"),
+		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
+		"switch-layout":         gettext.Tr("Switch Layout"),
+		"wm-switcher":           gettext.Tr("Switch window effects"),
+		"turn-off-screen":       gettext.Tr("Fast Screen Off"),
+	}
+	return systemIdNameMap
 }
 
-func resetWMAccels() {
-	s := newWMGSetting()
-	defer s.Unref()
-	doResetAccels(s)
-}
-
-func disableWMAccels(key string) {
-	s := newWMGSetting()
-	defer s.Unref()
-	doDisableAccles(s, key)
-}
-
-func addWMAccel(key, accel string) {
-	s := newWMGSetting()
-	defer s.Unref()
-	doAddAccel(s, key, accel)
-}
-
-func delWMAccel(key, accel string) {
-	s := newWMGSetting()
-	defer s.Unref()
-	doDelAccel(s, key, accel)
-}
-
-func wmIdNameMap() map[string]string {
+func getWMIdNameMap() map[string]string {
 	var idNameMap = map[string]string{
 		"switch-to-workspace-1":        "Switch to workspace 1",
 		"switch-to-workspace-2":        "Switch to workspace 2",
@@ -131,6 +122,35 @@ func wmIdNameMap() map[string]string {
 		"switch-input-source":          "Binding to select the next input source",
 		"switch-input-source-backward": "Binding to select the previous input source",
 		"always-on-top":                "Set or unset window to appear always on top",
+	}
+	return idNameMap
+}
+
+func getMetacityIdNameMap() map[string]string {
+	var idNameMap = map[string]string{
+		"expose-all-windows": gettext.Tr("Display windows of all workspaces"),
+		"expose-windows":     gettext.Tr("Display windows of current workspace"),
+		"preview-workspace":  gettext.Tr("Display workspace"),
+	}
+
+	return idNameMap
+}
+
+func getMediaIdNameMap() map[string]string {
+	var idNameMap = map[string]string{
+		"calculator":  "Calculator",
+		"eject":       "Eject",
+		"email":       "Email client",
+		"www":         "Web broswer",
+		"media":       "Media player",
+		"play":        "Play/Pause",
+		"pause":       "Pause",
+		"stop":        "Stop",
+		"previous":    "Previous",
+		"next":        "Next",
+		"volume-mute": "Mute",
+		"volume-down": "Volume down",
+		"volume-up":   "Volume up",
 	}
 	return idNameMap
 }

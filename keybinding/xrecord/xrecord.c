@@ -11,7 +11,7 @@
 #include <X11/extensions/record.h>
 #include <glib.h>
 
-#include "record.h"
+#include "xrecord.h"
 #include "_cgo_export.h"
 
 typedef struct _XRecordGrabInfo {
@@ -133,36 +133,6 @@ xrecord_grab_finalize ()
 		g_free (grab_info);
 		grab_info = NULL;
 	}
-}
-
-/*
- * check keyboard && mouse whether has grabbed
- * if grabed, return 1, otherwise return 0
- */
-int
-is_grabbed ()
-{
-	Display *dpy;
-	Window root;
-	int ret;
-
-	dpy = XOpenDisplay (0);
-	root = DefaultRootWindow (dpy);
-
-	ret = XGrabKeyboard (dpy, root, False,
-	                     GrabModeSync, GrabModeSync, CurrentTime);
-
-	if ( ret == AlreadyGrabbed ) {
-		g_debug ("AlreadyGrabbed!\n");
-		/*XUngrabKeyboard (dpy, CurrentTime);*/
-		XCloseDisplay(dpy);
-		return 1;
-	}
-
-
-	XUngrabKeyboard (dpy, CurrentTime);
-	XCloseDisplay(dpy);
-	return 0;
 }
 
 static gpointer
