@@ -1,0 +1,92 @@
+[
+    {
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 3,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+w"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "up",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+Up"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
+        "Fingers": 3,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+d"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "down",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+Down"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "left",
+        "Fingers": 3,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "alt+shift+Tab"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "left",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+Left"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "right",
+        "Fingers": 3,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "alt+Tab"
+        }
+    },
+    {
+        "Name": "swipe",
+        "Direction": "right",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+Right"
+        }
+    },
+    {
+        "Name": "pinch",
+        "Direction": "in",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+s"
+        }
+    },
+    {
+        "Name": "pinch",
+        "Direction": "out",
+        "Fingers": 4,
+        "Action": {
+            "Type": "shortcut",
+            "Action": "super+s"
+        }
+    }
+]
