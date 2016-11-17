@@ -37,9 +37,9 @@ QWidget *TrashPlugin::itemTipsWidget(const QString &itemKey)
 
     const int count = m_trashWidget->trashItemCount();
     if (count < 2)
-        m_tipsLabel->setText(tr("Trash-%1 file").arg(count));
+        m_tipsLabel->setText(tr("Trash - %1 file").arg(count));
     else
-        m_tipsLabel->setText(tr("Trash-%1 files").arg(count));
+        m_tipsLabel->setText(tr("Trash - %1 files").arg(count));
 
     return m_tipsLabel;
 }
