@@ -7,6 +7,7 @@
 #include <QFrame>
 
 #include <dimagebutton.h>
+#include <QPainter>
 
 class SinkInputWidget : public QWidget
 {
@@ -17,6 +18,8 @@ public:
 
 private slots:
     void setVolume(const int value);
+    void setMute();
+    void setMuteIcon();
 
 private:
     DBusSinkInput *m_inputInter;

@@ -27,13 +27,47 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     centeralLayout->setMargin(0);
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
+    connect(m_volumeIcon, &DImageButton::clicked, this, &SinkInputWidget::setMute);
+    connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
 
     setLayout(centeralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(30);
+
+    setMuteIcon();
 }
 
 void SinkInputWidget::setVolume(const int value)
 {
     m_inputInter->SetVolume(double(value) / 1000.0, false);
+    m_inputInter->SetMute(false);
+}
+
+void SinkInputWidget::setMute()
+{
+    m_inputInter->SetMute(!m_inputInter->mute());
+}
+
+void SinkInputWidget::setMuteIcon()
+{
+    if (m_inputInter->mute()) {
+        QPixmap muteIcon(QString(":/icons/image/audio-volume-muted-symbolic.svg"));
+        QPixmap appIconSource(QIcon::fromTheme(m_inputInter->icon()).pixmap(24, 24));
+
+        QPixmap temp(appIconSource.size());
+        temp.fill(Qt::transparent);
+        QPainter p1(&temp);
+        p1.drawPixmap(0, 0, appIconSource);
+        p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p1.fillRect(temp.rect(), QColor(0, 0, 0, 40));
+        p1.end();
+        appIconSource = temp;
+
+        QPainter p(&appIconSource);
+        p.drawPixmap(0, 0, muteIcon);
+
+        m_volumeIcon->setPixmap(appIconSource);
+    } else {
+        m_volumeIcon->setPixmap(QIcon::fromTheme(m_inputInter->icon()).pixmap(24, 24));
+    }
 }
