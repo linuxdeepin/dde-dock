@@ -56,17 +56,17 @@
 <context>
     <name>DiskMountPlugin</name>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="17"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="19"/>
         <source>Disk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="67"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="73"/>
+        <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
         <source>Unmount all</source>
         <translation type="unfinished"></translation>
     </message>
@@ -193,48 +193,48 @@
 <context>
     <name>ShutdownPlugin</name>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="47"/>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="95"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
         <source>Shut down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="54"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
         <source>Remaining Capacity %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="58"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
         <source>Charged %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
         <source>Charging %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="101"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="107"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
         <source>Log out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="113"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Suspend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="121"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Switch account</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="131"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,12 +242,12 @@
 <context>
     <name>SoundApplet</name>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="28"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="31"/>
         <source>Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/sound/soundapplet.cpp" line="47"/>
+        <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -255,22 +255,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="53"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="57"/>
         <source>Unmute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="55"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="59"/>
         <source>Mute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="61"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="65"/>
         <source>Audio Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="172"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="184"/>
         <source>Current Volume %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -278,7 +278,7 @@
 <context>
     <name>SystemTrayPlugin</name>
     <message>
-        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="23"/>
+        <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
         <source>System Tray</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,13 +286,13 @@
 <context>
     <name>TrashPlugin</name>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="39"/>
-        <source>Trash-%1 file</source>
+        <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
+        <source>Trash - %1 file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/trash/trashplugin.cpp" line="41"/>
-        <source>Trash-%1 files</source>
+        <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
+        <source>Trash - %1 files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
