@@ -23,6 +23,7 @@ const (
 
 type connectionData map[string]map[string]dbus.Variant
 
+// Manager is the main DBus object for network module.
 type Manager struct {
 	config *config
 

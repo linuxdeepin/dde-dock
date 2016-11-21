@@ -1,0 +1,93 @@
+<node>
+     <interface name="org.freedesktop.DBus.Properties">
+          <method name="Get">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="out"></arg>
+          </method>
+          <method name="GetAll">
+               <arg type="s" direction="in"></arg>
+               <arg type="a{sv}" direction="out"></arg>
+          </method>
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Set">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="v" direction="in"></arg>
+          </method>
+          <signal name="PropertiesChanged">
+               <arg type="s"></arg>
+               <arg type="a{sv}"></arg>
+               <arg type="as"></arg>
+          </signal>
+     </interface>
+     <interface name="com.deepin.DBus.LifeManager">
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Ref"></method>
+          <method name="Unref"></method>
+     </interface>
+     <interface name="com.deepin.daemon.ConnectionSession">
+          <method name="Close"></method>
+          <method name="DebugGetConnectionData">
+               <arg type="a{sa{sv}}" direction="out"></arg>
+          </method>
+          <method name="DebugGetErrors">
+               <arg type="a{sa{ss}}" direction="out"></arg>
+          </method>
+          <method name="DebugListKeyDetail">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="GetAllKeys">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="GetAvailableValues">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="GetKey">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="GetKeyName">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="IsDefaultExpandedSection">
+               <arg type="s" direction="in"></arg>
+               <arg type="b" direction="out"></arg>
+          </method>
+          <method name="Save">
+               <arg type="b" direction="out"></arg>
+          </method>
+          <method name="SetKey">
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+               <arg type="s" direction="in"></arg>
+          </method>
+          <signal name="ConnectionDataChanged"></signal>
+          <property name="ConnectionPath" type="o" access="read"></property>
+          <property name="Uuid" type="s" access="read"></property>
+          <property name="Type" type="s" access="read"></property>
+          <property name="AllowDelete" type="b" access="read"></property>
+          <property name="AllowEditConnectionId" type="b" access="read"></property>
+          <property name="AvailableVirtualSections" type="as" access="read"></property>
+          <property name="AvailableSections" type="as" access="read"></property>
+          <property name="AvailableKeys" type="a{sas}" access="read"></property>
+          <property name="Errors" type="a{sa{ss}}" access="read"></property>
+     </interface>
+     <interface name="org.freedesktop.DBus.Introspectable">
+          <method name="InterfaceName">
+               <arg type="s" direction="out"></arg>
+          </method>
+          <method name="Introspect">
+               <arg type="s" direction="out"></arg>
+          </method>
+     </interface>
+</node>

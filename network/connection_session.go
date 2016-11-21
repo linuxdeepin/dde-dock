@@ -20,6 +20,10 @@ import (
 type sectionErrors map[string]string
 type sessionErrors map[string]sectionErrors
 
+// ConnectionSession used to provide DBus session to edit the
+// connections. With the interfaces such as SetKey, GetKey,
+// AvailableKeys and GetAvailableValues, the front-end could show the
+// related widgets automatically.
 type ConnectionSession struct {
 	sessionPath      dbus.ObjectPath
 	devPath          dbus.ObjectPath
@@ -43,6 +47,9 @@ type ConnectionSession struct {
 	settingKeyErrors sessionErrors
 
 	// signal
+
+	// used by font-end to update widget value that with proeprty
+	// "alwaysUpdate", which should only update value when visible
 	ConnectionDataChanged func()
 }
 
@@ -300,7 +307,8 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 	}
 }
 
-// Save save current connection s.
+// Save save current connection session, and will try to activate it
+// if possible.
 func (s *ConnectionSession) Save() (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
 
@@ -396,7 +404,7 @@ func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
 	return
 }
 
-// GetAvailableValues return available values marshaled by json for target key.
+// GetAvailableValues return available values marshaled by JSON for target key.
 func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
 	var values []kvalue
 	values = generalGetSettingAvailableValues(s.data, section, key)
@@ -404,6 +412,7 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 	return
 }
 
+// GetKey get target key value which marshaled by JSON.
 func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
 	valueJSON = generalGetSettingKeyJSON(s.data, section, key)
 	return
@@ -415,6 +424,7 @@ func (s *ConnectionSession) GetKeyName(section, key string) (name string, err er
 	return
 }
 
+// SetKey set target key with new value, the value should be marshaled by JSON.
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON)
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
@@ -444,6 +454,8 @@ func (s *ConnectionSession) updateErrorsWhenSettingKey(section, key string, err 
 	}
 }
 
+// IsDefaultExpandedSection check if target virtual section should be
+// expanded default.
 func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, error) {
 	switch s.Type {
 	case connectionWired:
@@ -481,12 +493,19 @@ func (s *ConnectionSession) IsDefaultExpandedSection(vsection string) (bool, err
 }
 
 // Debug functions
+
+// DebugGetConnectionData get current connection data.
 func (s *ConnectionSession) DebugGetConnectionData() connectionData {
 	return s.data
 }
+
+// DebugGetErrors get current errors.
 func (s *ConnectionSession) DebugGetErrors() sessionErrors {
 	return s.Errors
 }
+
+// DebugListKeyDetail get all key deails, including all the available
+// key values.
 func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	for _, vsection := range s.AvailableVirtualSections {
 		for _, section := range getAvailableSectionsOfVsection(s.data, vsection) {

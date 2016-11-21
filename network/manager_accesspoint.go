@@ -276,6 +276,9 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 	return
 }
 
+// CreateConnectionForAccessPoint will crate connection for target
+// access point, it will set the right SSID and secret method
+// automatically.
 func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath) (session *ConnectionSession, err error) {
 	session, err = newConnectionSessionByCreate(connectionWireless, devPath)
 	if err != nil {

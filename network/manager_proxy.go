@@ -75,6 +75,8 @@ func getProxyChildSettings(proxyType string) (childSettings *gio.Settings, err e
 	return
 }
 
+// GetProxyMethod get current proxy method, it would be "none",
+// "manual" or "auto".
 func (m *Manager) GetProxyMethod() (proxyMode string, err error) {
 	proxyMode = proxySettings.GetString(gkeyProxyMode)
 	logger.Info("GetProxyMethod", proxyMode)
@@ -116,6 +118,8 @@ func checkProxyMethod(proxyMode string) (err error) {
 	return
 }
 
+// GetAutoProxy get proxy PAC file URL for "auto" proxy mode, the
+// value will keep there even the proxy mode is not "auto".
 func (m *Manager) GetAutoProxy() (proxyAuto string, err error) {
 	proxyAuto = proxySettings.GetString(gkeyProxyAuto)
 	return
@@ -130,6 +134,8 @@ func (m *Manager) SetAutoProxy(proxyAuto string) (err error) {
 	return
 }
 
+// GetProxyIgnoreHosts get the ignored hosts for proxy network which
+// is a string separated by ",".
 func (m *Manager) GetProxyIgnoreHosts() (ignoreHosts string, err error) {
 	array := proxySettings.GetStrv(gkeyProxyIgnoreHosts)
 	ignoreHosts = strings.Join(array, ", ")
@@ -147,6 +153,7 @@ func (m *Manager) SetProxyIgnoreHosts(ignoreHosts string) (err error) {
 	return
 }
 
+// GetProxy get the host and port for target proxy type.
 func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
 	childSettings, err := getProxyChildSettings(proxyType)
 	if err != nil {
@@ -157,6 +164,7 @@ func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
 	return
 }
 
+// SetProxy set host and port for target proxy type.
 func (m *Manager) SetProxy(proxyType, host, port string) (err error) {
 	portInt, err := strconv.Atoi(port)
 	if err != nil {

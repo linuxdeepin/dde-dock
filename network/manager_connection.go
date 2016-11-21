@@ -393,6 +393,9 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 }
 
 // TODO looks ActivateConnection should return apath instead cpath
+
+// ActivateConnection try to activate target connection, if not
+// special a valid devPath just left it as "/".
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
 	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
@@ -412,6 +415,7 @@ func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpat
 	return
 }
 
+// DeactivateConnection deactivate a target connection.
 func (m *Manager) DeactivateConnection(uuid string) (err error) {
 	apaths, err := nmGetActiveConnectionByUuid(uuid)
 	if err != nil {
@@ -468,7 +472,12 @@ func (m *Manager) IsWirelessHotspotModeEnabled(devPath dbus.ObjectPath) (enabled
 	return
 }
 
-// DisconnectDevice will disconnect all connection in target device.
+// DisconnectDevice will disconnect all connection in target device,
+// DisconnectDevice is different with DeactivateConnection, for
+// example if user deactivate current connection for a wireless
+// device, NetworkManager will try to activate another access point if
+// available then, but if call DisconnectDevice for the device, the
+// device will keep disconnected later.
 func (m *Manager) DisconnectDevice(devPath dbus.ObjectPath) (err error) {
 	return m.doDisconnectDevice(devPath)
 }
