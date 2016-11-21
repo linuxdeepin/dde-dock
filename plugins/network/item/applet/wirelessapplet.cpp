@@ -129,8 +129,12 @@ void WirelessList::APRemoved(const QString &devPath, const QString &info)
     if (ap.ssid() == m_activeAP.ssid())
         return;
 
-    m_apList.removeOne(ap);
-    m_updateAPTimer->start();
+//    m_apList.removeOne(ap);
+//    m_updateAPTimer->start();
+
+    // NOTE: if one ap removed, prehaps another ap has same ssid, so we need to refersh ap list instead of remove it
+    m_apList.clear();
+    loadAPList();
 }
 
 void WirelessList::setDeviceInfo(const int index)
