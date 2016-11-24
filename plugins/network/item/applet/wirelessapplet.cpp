@@ -228,7 +228,11 @@ void WirelessList::updateAPList()
             connect(apw, &AccessPointWidget::requestActiveAP, this, &WirelessList::activateAP);
             connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
 
-            m_centeralLayout->addWidget(apw);
+            if(apw->active()) {
+                m_centeralLayout->insertWidget(0, apw);
+            } else {
+                m_centeralLayout->addWidget(apw);
+            }
 
             ++avaliableAPCount;
         }
