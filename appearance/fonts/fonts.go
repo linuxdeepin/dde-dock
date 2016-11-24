@@ -9,6 +9,10 @@
 
 package fonts
 
+import (
+	"strings"
+)
+
 type Font struct {
 	Id         string
 	Name       string
@@ -90,8 +94,13 @@ func (infos Fonts) convertToFamilies() Families {
 
 func (info *Font) supportedCurLang() bool {
 	lang := getCurLang()
+	// 由于 FcFontList 返回的结果中 lang 字段与利用 fc-query 方法获取的不同，比如有个字体的 lang 字段就丢失了 zh-cn 。
+	// 这是有可能 FontConfig 的bug，只能暂时这样解决。
+	if lang == "zh-cn" {
+		lang = "zh"
+	}
 	for _, v := range info.Lang {
-		if lang == v {
+		if strings.HasPrefix(v, lang) {
 			return true
 		}
 	}
