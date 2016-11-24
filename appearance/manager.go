@@ -188,6 +188,9 @@ func (m *Manager) init() {
 	})
 
 	m.initBackground()
+	m.doSetGtkTheme(m.GtkTheme.Get())
+	m.doSetIconTheme(m.IconTheme.Get())
+	m.doSetCursorTheme(m.CursorTheme.Get())
 	m.correctFontName()
 
 	if dutils.IsFileExist(fonts.DeepinFontConfig) {
