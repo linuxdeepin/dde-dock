@@ -10,19 +10,19 @@
 package background
 
 import (
+	"golang.org/x/sys/unix"
 	"os"
-	"path"
+	"path/filepath"
 	dutils "pkg.deepin.io/lib/utils"
-	"strings"
-)
-
-const (
-	dthemeDir = "personalization/themes"
 )
 
 var (
-	home      = os.Getenv("HOME")
-	dirsCache []string
+	home               = filepath.Clean(os.Getenv("HOME"))
+	dirsCache          []string
+	systemWallpaperDir = []string{
+		"/usr/share/backgrounds",
+		"/usr/share/wallpapers/deepin",
+	}
 )
 
 // ListDirs list all background dirs
@@ -31,10 +31,10 @@ func ListDirs() []string {
 		return dirsCache
 	}
 
-	var dirs = []string{
-		"/usr/share/backgrounds",
-		"/usr/share/wallpapers/deepin",
-		path.Join(getUserPictureDir(), "Wallpapers"),
+	userWallpapersDir := filepath.Join(getUserPictureDir(), "Wallpapers")
+	var dirs = []string{userWallpapersDir}
+	for _, dir := range systemWallpaperDir {
+		dirs = append(dirs, dir)
 	}
 
 	dirsCache = dirs
@@ -44,19 +44,34 @@ func ListDirs() []string {
 func getBgFiles() []string {
 	var walls []string
 	for _, dir := range ListDirs() {
-		walls = append(walls, scanner(dir)...)
+		walls = append(walls, getBgFilesInDir(dir)...)
 	}
 	return walls
 }
 
 func isDeletable(file string) bool {
-	if strings.Contains(file, home) {
-		return true
+	dir := filepath.Dir(file)
+	if strvContains(systemWallpaperDir, dir) {
+		// directory is system wallpapers directory
+		return false
+	}
+	if err := unix.Access(dir, unix.W_OK); err != nil {
+		// directory is not writable
+		return false
+	}
+	return true
+}
+
+func strvContains(strv []string, str string) bool {
+	for _, v := range strv {
+		if v == str {
+			return true
+		}
 	}
 	return false
 }
 
-func scanner(dir string) []string {
+func getBgFilesInDir(dir string) []string {
 	fr, err := os.Open(dir)
 	if err != nil {
 		return []string{}
@@ -70,54 +85,19 @@ func scanner(dir string) []string {
 
 	var walls []string
 	for _, name := range names {
-		tmp := path.Join(dir, name)
-		if !IsBackgroundFile(tmp) {
+		path := filepath.Join(dir, name)
+		if !IsBackgroundFile(path) {
 			continue
 		}
-		// TODO: 1. if a file link to two files in current dir; 2. link file is relative path
-		if dutils.IsSymlink(tmp) {
-			walls = delBgFromList(readLink(tmp), walls)
-		}
-		walls = addBgToList(tmp, walls)
+		walls = append(walls, path)
 	}
 	return walls
-}
-
-func addBgToList(bg string, list []string) []string {
-	for _, v := range list {
-		if (v == bg) || (dutils.IsSymlink(v) && readLink(v) == bg) {
-			return list
-		}
-	}
-	list = append(list, bg)
-	return list
-}
-
-func delBgFromList(bg string, list []string) []string {
-	var ret []string
-	for _, v := range list {
-		if (v == bg) || (dutils.IsSymlink(v) && readLink(v) == bg) {
-			continue
-		}
-		ret = append(ret, v)
-	}
-	return ret
-}
-
-func readLink(file string) string {
-	for {
-		file, _ = os.Readlink(file)
-		if !dutils.IsSymlink(file) {
-			break
-		}
-	}
-	return file
 }
 
 func isFileInSpecialDir(file string, dirs []string) bool {
 	file = dutils.DecodeURI(file)
 	for _, dir := range dirs {
-		if path.Dir(file) == dir {
+		if filepath.Dir(file) == dir {
 			return true
 		}
 	}
