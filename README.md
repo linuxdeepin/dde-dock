@@ -27,6 +27,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * gnome-keyring
 * deepin-notifications
 * xserver-xorg-input-wacom
+* libinput
 
 ### Optional Dependencies
 
