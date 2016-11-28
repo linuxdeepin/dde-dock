@@ -15,10 +15,10 @@ import (
 	"path"
 
 	"gir/gio-2.0"
-	"gir/glib-2.0"
 	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/xdg/userdir"
 	"sync"
 )
 
@@ -159,10 +159,7 @@ func getBgDest(file string) (string, error) {
 }
 
 func getUserPictureDir() string {
-	dir := glib.GetUserSpecialDir(glib.UserDirectoryDirectoryPictures)
-	if len(dir) == 0 {
-		dir = path.Join(os.Getenv("HOME"), "Pictures")
-	}
+	dir := userdir.Get(userdir.Pictures)
 	// Ensure dir exists
 	os.MkdirAll(dir, 0755)
 	return dir

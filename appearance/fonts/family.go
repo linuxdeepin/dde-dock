@@ -19,7 +19,7 @@ import (
 	"sync"
 
 	"gir/gio-2.0"
-	"gir/glib-2.0"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 const (
@@ -35,7 +35,7 @@ var (
 	locker    sync.Mutex
 	xsSetting = gio.NewSettings(xsettingsSchema)
 
-	DeepinFontConfig = path.Join(glib.GetUserConfigDir(), "fontconfig", "conf.d", "99-deepin.conf")
+	DeepinFontConfig = path.Join(basedir.GetUserConfigDir(), "fontconfig", "conf.d", "99-deepin.conf")
 )
 
 type Family struct {
