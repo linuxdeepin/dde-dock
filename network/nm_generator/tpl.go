@@ -49,7 +49,7 @@ func initVirtualSections() { {{range .}}
 		relatedSections:[]string{ {{range $s := GetVsRelatedSettings .VirtaulSectionName}}"{{$s}}",{{end}} },
 		Name: Tr` + `("{{.DisplayName}}"),
 		Keys: []*GeneralKeyInfo { {{range .Keys}}
-			&GeneralKeyInfo{Section:"{{.Section}}", Key:"{{.KeyValue}}", Name:Tr` + `("{{.DisplayName}}"), WidgetType:"{{.WidgetType}}", AlwaysUpdate:{{.AlwaysUpdate}}, UseValueRange:{{.UseValueRange}}, MinValue:{{.MinValue}}, MaxValue:{{.MaxValue}} }, {{end}}
+			&GeneralKeyInfo{Section:"{{.Section}}", Key:"{{.KeyValue}}", {{if ne .DisplayName ""}}Name:Tr` + `("{{.DisplayName}}"), {{end}}WidgetType:"{{.WidgetType}}", AlwaysUpdate:{{.AlwaysUpdate}}, UseValueRange:{{.UseValueRange}}, MinValue:{{.MinValue}}, MaxValue:{{.MaxValue}} }, {{end}}
 		},
 	}{{end}}
 }

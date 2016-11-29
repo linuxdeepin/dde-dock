@@ -6,7 +6,7 @@
   Keys:
   - KeyValue: id
     Section: connection
-    DisplayName: DisplayName
+    DisplayName: Name
     WidgetType: EditLineTextInput
     AlwaysUpdate: true
   - KeyValue: vk-autoconnect
@@ -249,7 +249,7 @@
       Optional: false
   - KeyValue: wep-key0
     Section: 802-11-wireless-security
-    DisplayName: KeyValue
+    DisplayName: Key
     WidgetType: EditLinePasswordInput
   - KeyValue: psk
     Section: 802-11-wireless-security
@@ -326,7 +326,7 @@
     AlwaysUpdate: true
   - KeyValue: vk-private-key
     Section: 802-1x
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
     VKeyInfo:
       VirtualKeyName: NM_SETTING_VK_802_1X_PRIVATE_KEY
@@ -558,11 +558,11 @@
     WidgetType: EditLineFileChooser
   - KeyValue: userkey
     Section: alias-vpn-openconnect
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
   - KeyValue: pem_passphrase_fsid
     Section: alias-vpn-openconnect
-    DisplayName: Use FSID for KeyValue Passphrase
+    DisplayName: Use FSID for Key Passphrase
     WidgetType: EditLineSwitchButton
   - KeyValue: remote
     Section: alias-vpn-openvpn
@@ -594,7 +594,7 @@
     WidgetType: EditLineFileChooser
   - KeyValue: key
     Section: alias-vpn-openvpn
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
   - KeyValue: cert-pass-flags
     Section: alias-vpn-openvpn
@@ -606,11 +606,11 @@
     WidgetType: EditLinePasswordInput
   - KeyValue: static-key
     Section: alias-vpn-openvpn
-    DisplayName: Static KeyValue
+    DisplayName: Static Key
     WidgetType: EditLineFileChooser
   - KeyValue: vk-static-key-direction
     Section: alias-vpn-openvpn
-    DisplayName: Customize KeyValue Direction
+    DisplayName: Customize Key Direction
     WidgetType: EditLineSwitchButton
     VKeyInfo:
       VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION
@@ -622,7 +622,7 @@
       Optional: false
   - KeyValue: static-key-direction
     Section: alias-vpn-openvpn
-    DisplayName: KeyValue Direction
+    DisplayName: Key Direction
     WidgetType: EditLineComboBox
   - KeyValue: remote-ip
     Section: alias-vpn-openvpn
@@ -676,7 +676,7 @@
     AlwaysUpdate: true
   - KeyValue: userkey
     Section: alias-vpn-strongswan
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
     AlwaysUpdate: true
   - KeyValue: password
@@ -713,7 +713,7 @@
     WidgetType: EditLinePasswordInput
   - KeyValue: IPSec ID
     Section: alias-vpn-vpnc
-    DisplayName: Group DisplayName
+    DisplayName: Group Name
     WidgetType: EditLineTextInput
   - KeyValue: IPSec secret-flags
     Section: alias-vpn-vpnc
@@ -775,7 +775,7 @@
     WidgetType: EditLineSwitchButton
   - KeyValue: ipsec-group-name
     Section: alias-vpn-l2tp-ipsec
-    DisplayName: Group DisplayName
+    DisplayName: Group Name
     WidgetType: EditLineTextInput
   - KeyValue: ipsec-gateway-id
     Section: alias-vpn-l2tp-ipsec
@@ -783,7 +783,7 @@
     WidgetType: EditLineTextInput
   - KeyValue: ipsec-psk
     Section: alias-vpn-l2tp-ipsec
-    DisplayName: Pre-Shared KeyValue
+    DisplayName: Pre-Shared Key
     WidgetType: EditLinePasswordInput
 - VirtaulSectionName: NM_SETTING_VS_VPN_L2TP_PPP
   Value: vs-vpn-l2tp-ppp
@@ -908,11 +908,11 @@
     WidgetType: EditLineFileChooser
   - KeyValue: userkey
     Section: alias-vpn-openconnect
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
   - KeyValue: pem_passphrase_fsid
     Section: alias-vpn-openconnect
-    DisplayName: Use FSID for KeyValue Passphrase
+    DisplayName: Use FSID for Key Passphrase
     WidgetType: EditLineSwitchButton
 - VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN
   Value: vs-vpn-openvpn
@@ -949,7 +949,7 @@
     WidgetType: EditLineFileChooser
   - KeyValue: key
     Section: alias-vpn-openvpn
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
   - KeyValue: cert-pass-flags
     Section: alias-vpn-openvpn
@@ -961,16 +961,16 @@
     WidgetType: EditLinePasswordInput
   - KeyValue: static-key
     Section: alias-vpn-openvpn
-    DisplayName: Static KeyValue
+    DisplayName: Static Key
     WidgetType: EditLineFileChooser
   - KeyValue: vk-static-key-direction
     Section: alias-vpn-openvpn
-    DisplayName: Customize KeyValue Direction
+    DisplayName: Customize Key Direction
     WidgetType: EditLineSwitchButton
     VKeyInfo: # NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_STATIC_KEY_DIRECTION defined in other place
   - KeyValue: static-key-direction
     Section: alias-vpn-openvpn
-    DisplayName: KeyValue Direction
+    DisplayName: Key Direction
     WidgetType: EditLineComboBox
   - KeyValue: remote-ip
     Section: alias-vpn-openvpn
@@ -1008,11 +1008,11 @@
     WidgetType: EditLineComboBox
   - KeyValue: ta
     Section: alias-vpn-openvpn-tlsauth
-    DisplayName: KeyValue File
+    DisplayName: Key File
     WidgetType: EditLineFileChooser
   - KeyValue: vk-ta-dir
     Section: alias-vpn-openvpn-tlsauth
-    DisplayName: Customize KeyValue Direction
+    DisplayName: Customize Key Direction
     WidgetType: EditLineSwitchButton
     VKeyInfo:
       VirtualKeyName: NM_SETTING_VK_VPN_OPENVPN_KEY_ENABLE_TA_DIR
@@ -1024,7 +1024,7 @@
       Optional: false
   - KeyValue: ta-dir
     Section: alias-vpn-openvpn-tlsauth
-    DisplayName: KeyValue Direction
+    DisplayName: Key Direction
     WidgetType: EditLineComboBox
 - VirtaulSectionName: NM_SETTING_VS_VPN_OPENVPN_PROXIES
   Value: vs-vpn-openvpn-proxies
@@ -1296,7 +1296,7 @@
     AlwaysUpdate: true
   - KeyValue: userkey
     Section: alias-vpn-strongswan
-    DisplayName: Private KeyValue
+    DisplayName: Private Key
     WidgetType: EditLineFileChooser
     AlwaysUpdate: true
   - KeyValue: password
@@ -1338,7 +1338,7 @@
     WidgetType: EditLinePasswordInput
   - KeyValue: IPSec ID
     Section: alias-vpn-vpnc
-    DisplayName: Group DisplayName
+    DisplayName: Group Name
     WidgetType: EditLineTextInput
   - KeyValue: IPSec secret-flags
     Section: alias-vpn-vpnc
