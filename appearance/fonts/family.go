@@ -23,8 +23,8 @@ import (
 )
 
 const (
-	fallbackStandard  = "Droid Sans"
-	fallbackMonospace = "Droid Sans Mono"
+	fallbackStandard = "Noto Sans"
+	fallbackMonospace = "Noto Mono"
 	defaultDPI        = 96
 
 	xsettingsSchema = "com.deepin.xsettings"

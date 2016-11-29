@@ -53,8 +53,8 @@ const (
 )
 
 const (
-	defaultStandardFont  = "sans-serif"
-	defaultMonospaceFont = "monospace"
+	defaultStandardFont  = "Noto Sans"
+	defaultMonospaceFont = "Noto Mono"
 )
 
 type Manager struct {
