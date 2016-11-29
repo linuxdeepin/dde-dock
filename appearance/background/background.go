@@ -17,6 +17,7 @@ import (
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/thumbnails/images"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/userdir"
 	"sync"
@@ -64,8 +65,19 @@ func ListBackground() Backgrounds {
 	return cacheBackgrounds
 }
 
+var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
+
 func IsBackgroundFile(file string) bool {
-	return graphic.IsSupportedImage(dutils.DecodeURI(file))
+	file = dutils.DecodeURI(file)
+	format, err := graphic.SniffImageFormat(file)
+	if err != nil {
+		return false
+	}
+
+	if supportedFormats.Contains(format) {
+		return true
+	}
+	return false
 }
 
 func (infos Backgrounds) EnsureExists(uri string) (string, error) {
