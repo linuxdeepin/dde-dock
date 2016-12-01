@@ -164,10 +164,6 @@ func (m *Manager) Thumbnail(ty, name string) (string, error) {
 		return subthemes.GetIconThumbnail(name)
 	case TypeCursorTheme:
 		return subthemes.GetCursorThumbnail(name)
-	case TypeBackground:
-		return background.ListBackground().Thumbnail(name)
-		//case TypeStandardFont:
-		//case TypeMonospaceFont:
 	}
 	return "", fmt.Errorf("Invalid type: %v", ty)
 }

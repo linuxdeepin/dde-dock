@@ -12,25 +12,20 @@ package subthemes
 import (
 	"dbus/com/deepin/api/cursorhelper"
 	"fmt"
-	"io/ioutil"
-	"math/rand"
+	"gir/gio-2.0"
 	"os"
 	"path"
-	"strings"
-	"time"
-
-	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/themes"
 	"pkg.deepin.io/dde/api/thumbnails/cursor"
 	"pkg.deepin.io/dde/api/thumbnails/gtk"
 	"pkg.deepin.io/dde/api/thumbnails/icon"
-	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
+	"strings"
 )
 
 const (
-	thumbWidth  int = 128
-	thumbHeight     = 72
+	thumbWidth  = 320
+	thumbHeight = 70
 
 	thumbDir   = "/usr/share/personalization/thumbnail"
 	thumbBgDir = "/var/cache/appearance/thumbnail/background"
@@ -141,7 +136,7 @@ func GetGtkThumbnail(id string) (string, error) {
 		return thumb, nil
 	}
 
-	return gtk.ThumbnailForTheme(path.Join(info.Path, "index.theme"), getThumbBg(),
+	return gtk.ThumbnailForTheme(path.Join(info.Path, "index.theme"), "",
 		thumbWidth, thumbHeight, false)
 }
 
@@ -155,7 +150,7 @@ func GetIconThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return icon.ThumbnailForTheme(path.Join(info.Path, "index.theme"), getThumbBg(),
+	return icon.ThumbnailForTheme(path.Join(info.Path, "index.theme"), "",
 		thumbWidth, thumbHeight, false)
 }
 
@@ -169,7 +164,7 @@ func GetCursorThumbnail(id string) (string, error) {
 	if dutils.IsFileExist(thumb) {
 		return thumb, nil
 	}
-	return cursor.ThumbnailForTheme(path.Join(info.Path, "cursor.theme"), getThumbBg(),
+	return cursor.ThumbnailForTheme(path.Join(info.Path, "cursor.theme"), "",
 		thumbWidth, thumbHeight, false)
 }
 
@@ -222,34 +217,6 @@ func isDeletable(file string) bool {
 		return true
 	}
 	return false
-}
-
-func getThumbBg() string {
-	var imgs = getImagesInDir()
-	if len(imgs) == 0 {
-		return ""
-	}
-
-	rand.Seed(time.Now().UnixNano())
-	idx := rand.Intn(len(imgs))
-	return imgs[idx]
-}
-
-func getImagesInDir() []string {
-	finfos, err := ioutil.ReadDir(thumbBgDir)
-	if err != nil {
-		return nil
-	}
-
-	var imgs []string
-	for _, finfo := range finfos {
-		tmp := path.Join(thumbBgDir, finfo.Name())
-		if !graphic.IsSupportedImage(tmp) {
-			continue
-		}
-		imgs = append(imgs, tmp)
-	}
-	return imgs
 }
 
 func isItemInList(item string, list []string) bool {
