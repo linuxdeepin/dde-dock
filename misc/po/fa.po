@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-31 09:08+0800\n"
-"PO-Revision-Date: 2016-08-31 08:01+0000\n"
+"POT-Creation-Date: 2016-11-29 18:40+0800\n"
+"PO-Revision-Date: 2016-11-29 12:05+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -18,8 +18,15 @@ msgstr ""
 "Language: fa\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#: ../../accounts/checkers/password.go:44
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
+msgstr ""
+
+#: ../../accounts/checkers/password.go:46
+msgid ""
+"The password must contain English letters (case-sensitive), numbers or "
+"special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr ""
 
 #: ../../accounts/checkers/password.go:47
@@ -115,12 +122,13 @@ msgstr "مدیریت اعلان"
 #: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
 #: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
 #: ../../network/_dev_test.go:42 ../../network/_dev_test.go:58
-#: ../../network/dev_test.go:105 ../../network/dev_test.go:113
-#: ../../network/dev_test.go:117 ../../network/dev_test.go:121
+#: ../../network/dev_test.go:105 ../../network/dev_test.go:106
+#: ../../network/dev_test.go:113 ../../network/dev_test.go:117
+#: ../../network/dev_test.go:121 ../../network/dev_test.go:122
 #: ../../network/dev_test.go:129 ../../network/dev_test.go:133
 #: ../../network/state_handler.go:193 ../../network/state_handler.go:202
-#: ../../network/state_handler.go:214 ../../network/utils_notify.go:109
-#: ../../network/utils_notify.go:121
+#: ../../network/state_handler.go:203 ../../network/state_handler.go:214
+#: ../../network/utils_notify.go:109 ../../network/utils_notify.go:121
 msgid "Connected"
 msgstr "متصل شده"
 
@@ -129,22 +137,25 @@ msgstr "متصل شده"
 #: ../../network/_dev_test.go:46 ../../network/_dev_test.go:49
 #: ../../network/_dev_test.go:52 ../../network/_dev_test.go:61
 #: ../../network/_dev_test.go:64 ../../network/dev_test.go:109
-#: ../../network/dev_test.go:112 ../../network/dev_test.go:115
-#: ../../network/dev_test.go:117 ../../network/dev_test.go:120
-#: ../../network/dev_test.go:121 ../../network/dev_test.go:123
-#: ../../network/dev_test.go:124 ../../network/dev_test.go:127
-#: ../../network/dev_test.go:132 ../../network/dev_test.go:135
-#: ../../network/dev_test.go:136 ../../network/dev_test.go:139
-#: ../../network/state_handler.go:241 ../../network/state_handler.go:255
+#: ../../network/dev_test.go:110 ../../network/dev_test.go:112
+#: ../../network/dev_test.go:113 ../../network/dev_test.go:115
+#: ../../network/dev_test.go:116 ../../network/dev_test.go:117
+#: ../../network/dev_test.go:120 ../../network/dev_test.go:121
+#: ../../network/dev_test.go:123 ../../network/dev_test.go:124
+#: ../../network/dev_test.go:125 ../../network/dev_test.go:127
+#: ../../network/dev_test.go:128 ../../network/dev_test.go:132
+#: ../../network/dev_test.go:135 ../../network/dev_test.go:136
+#: ../../network/dev_test.go:139 ../../network/state_handler.go:241
+#: ../../network/state_handler.go:255 ../../network/state_handler.go:256
 #: ../../network/state_handler.go:262 ../../network/state_handler.go:267
-#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:86
-#: ../../network/utils_notify.go:90 ../../network/utils_notify.go:93
-#: ../../network/utils_notify.go:94 ../../network/utils_notify.go:98
-#: ../../network/utils_notify.go:102 ../../network/utils_notify.go:106
-#: ../../network/utils_notify.go:112 ../../network/utils_notify.go:115
-#: ../../network/utils_notify.go:124 ../../network/utils_notify.go:127
-#: ../../network/utils_notify.go:204 ../../network/utils_notify.go:212
-#: ../../network/utils_notify.go:216
+#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:86 ../../network/utils_notify.go:90
+#: ../../network/utils_notify.go:93 ../../network/utils_notify.go:94
+#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
+#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:124
+#: ../../network/utils_notify.go:127 ../../network/utils_notify.go:204
+#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:216
 msgid "Disconnected"
 msgstr "قطع اتصال"
 
@@ -574,6 +585,10 @@ msgstr "Apia"
 msgid "Fakaofo"
 msgstr "Fakaofo"
 
+#: ../../dock/app_entry_menu.go:99 ../../dock/app_entry_menu.go:116
+msgid "_Open"
+msgstr "_باز کردن"
+
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
 #: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
@@ -581,45 +596,49 @@ msgstr "Fakaofo"
 msgid "_Run"
 msgstr "ـ اجرا"
 
-#: ../../dock/app_entry_menu.go:110 ../../dock/app_entry_menu.go:122
-#: ../../dock/app_entry_menu.go:123 ../../dock/runtime_apps.go:261
-#: ../../dock/runtime_apps.go:263 ../../dock/runtime_apps.go:266
-#: ../../dock/runtime_apps.go:268 ../../dock/runtime_apps.go:269
-#: ../../dock/runtime_apps.go:270 ../../dock/runtime_apps.go:287
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:106 ../../dock/app_entry_menu.go:110
+#: ../../dock/app_entry_menu.go:122 ../../dock/app_entry_menu.go:123
+#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
+#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
+#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
+#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
+#: ../../dock/runtime_apps.go:296
 msgid "_Close All"
 msgstr "ـ بستن همه"
 
-#: ../../dock/app_entry_menu.go:119 ../../dock/app_entry_menu.go:131
-#: ../../dock/app_entry_menu.go:132 ../../dock/runtime_apps.go:291
-#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:298
-#: ../../dock/runtime_apps.go:304 ../../dock/runtime_apps.go:309
-#: ../../dock/runtime_apps.go:311 ../../dock/runtime_apps.go:315
-#: ../../dock/runtime_apps.go:320 ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:115 ../../dock/app_entry_menu.go:119
+#: ../../dock/app_entry_menu.go:131 ../../dock/app_entry_menu.go:132
+#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
+#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
+#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
+#: ../../dock/runtime_apps.go:324
 msgid "_Dock"
 msgstr "ـ چسباندن"
 
-#: ../../dock/app_entry_menu.go:126 ../../dock/app_entry_menu.go:138
-#: ../../dock/app_entry_menu.go:139 ../../dock/normal_apps.go:105
-#: ../../dock/normal_apps.go:108 ../../dock/normal_apps.go:109
-#: ../../dock/normal_apps.go:110 ../../dock/normal_apps.go:118
-#: ../../dock/runtime_apps.go:279 ../../dock/runtime_apps.go:285
-#: ../../dock/runtime_apps.go:286 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:297 ../../dock/runtime_apps.go:299
-#: ../../dock/runtime_apps.go:303 ../../dock/runtime_apps.go:308
-#: ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:122 ../../dock/app_entry_menu.go:126
+#: ../../dock/app_entry_menu.go:138 ../../dock/app_entry_menu.go:139
+#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
+#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
+#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
+#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
+#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
+#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
+#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
 msgid "_Undock"
 msgstr "ـ رهاسازی"
 
-#: ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:129 ../../dock/app_entry_menu.go:146
 msgid "_All windows"
 msgstr ""
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
+#: ../../network/nm_setting_ip4_config.go:27
 #: ../../network/nm_setting_ip4_config.go:38
 #: ../../network/nm_setting_ip4_config.go:174
 #: ../../network/nm_setting_ip6_config.go:27
+#: ../../network/nm_setting_ip6_config.go:28
 #: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
@@ -924,6 +943,10 @@ msgstr "نمایش فضای کار"
 msgid "Switch window effects"
 msgstr "تغییر جلوه های پنجره"
 
+#: ../../keybinding/shortcuts/system.go:71
+msgid "Fast Screen Off"
+msgstr ""
+
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
 msgstr "تغییر پنجره های مشابه"
@@ -964,7 +987,13 @@ msgstr "زبان سیستم در حال تغییر با نصب بسته های �
 
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
+#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
+msgstr ""
+
+#: ../../launcher/manager_uninstall.go:35
+msgid "Failed to uninstall %q."
 msgstr ""
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
@@ -979,53 +1008,68 @@ msgstr "باز کردن پوشه"
 msgid "Run Software"
 msgstr "اجراء نرم افزار"
 
-#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144
+#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144 ../../mounts/ifc.go:168
 #, c-format
 msgid "%s removed successfully"
 msgstr ""
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
-#: ../../network/manager_active.go:304 ../../network/manager_active.go:309
+#: ../../network/manager_active.go:304 ../../network/manager_active.go:308
+#: ../../network/manager_active.go:309 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:316
 #: ../../network/manager_active.go:319 ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:173
+#: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:185
+#: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:210
+#: ../../network/nm_setting_virtual_key.go:216
 #: ../../network/nm_setting_virtual_key.go:222
+#: ../../network/nm_setting_vpn_openvpn.go:240
 #: ../../network/nm_setting_vpn_openvpn.go:377
 #: ../../network/nm_setting_vpn_openvpn.go:391
 #: ../../network/nm_setting_vpn_openvpn.go:395
+#: ../../network/nm_setting_vpn_vpnc.go:151
 #: ../../network/nm_setting_vpn_vpnc.go:257
 #: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
 msgstr "هیچ کدام"
 
 #: ../../network/manager_active.go:296 ../../network/manager_active.go:311
+#: ../../network/manager_active.go:315 ../../network/manager_active.go:316
 #: ../../network/manager_active.go:321 ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:174
+#: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:186
+#: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
+#: ../../network/manager_active.go:317 ../../network/manager_active.go:318
 #: ../../network/manager_active.go:323 ../../network/manager_active.go:325
 #: ../../network/nm_setting_virtual_key.go:175
+#: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:182
 #: ../../network/nm_setting_virtual_key.go:187
+#: ../../network/nm_setting_virtual_key.go:188
 #: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:325 ../../network/manager_active.go:326
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:333
-#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:42
-#: ../../network/nm_setting_802_1x.go:86
+#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:31
+#: ../../network/nm_setting_802_1x.go:42 ../../network/nm_setting_802_1x.go:86
 #: ../../network/nm_setting_802_1x.go:111
+#: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:119
+#: ../../network/nm_setting_802_1x.go:120
 #: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:167
@@ -1034,30 +1078,38 @@ msgid "TLS"
 msgstr "TLS"
 
 #: ../../network/manager_active.go:308 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:327 ../../network/manager_active.go:328
 #: ../../network/manager_active.go:333 ../../network/manager_active.go:335
-#: ../../network/nm_setting_802_1x.go:29 ../../network/nm_setting_802_1x.go:41
-#: ../../network/nm_setting_802_1x.go:85
+#: ../../network/nm_setting_802_1x.go:29 ../../network/nm_setting_802_1x.go:30
+#: ../../network/nm_setting_802_1x.go:41 ../../network/nm_setting_802_1x.go:85
 #: ../../network/nm_setting_802_1x.go:112
+#: ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
 msgstr "MD5"
 
 #: ../../network/manager_active.go:310 ../../network/manager_active.go:325
+#: ../../network/manager_active.go:329 ../../network/manager_active.go:330
 #: ../../network/manager_active.go:335 ../../network/manager_active.go:337
 #: ../../network/nm_setting_802_1x.go:120
+#: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:132
 #: ../../network/nm_setting_802_1x.go:176
 #: ../../network/nm_setting_wireless_security.go:71
+#: ../../network/nm_setting_wireless_security.go:72
 #: ../../network/nm_setting_wireless_security.go:83
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
 #: ../../network/manager_active.go:312 ../../network/manager_active.go:327
+#: ../../network/manager_active.go:331 ../../network/manager_active.go:332
 #: ../../network/manager_active.go:337 ../../network/manager_active.go:339
 #: ../../network/nm_setting_802_1x.go:113
+#: ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:121
+#: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 #: ../../network/nm_setting_802_1x.go:169
@@ -1066,9 +1118,12 @@ msgid "FAST"
 msgstr "FAST"
 
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:329
+#: ../../network/manager_active.go:333 ../../network/manager_active.go:334
 #: ../../network/manager_active.go:339 ../../network/manager_active.go:341
 #: ../../network/nm_setting_802_1x.go:114
+#: ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:122
+#: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 #: ../../network/nm_setting_802_1x.go:170
@@ -1077,9 +1132,12 @@ msgid "Tunneled TLS"
 msgstr "Tunneled TLS"
 
 #: ../../network/manager_active.go:316 ../../network/manager_active.go:331
+#: ../../network/manager_active.go:335 ../../network/manager_active.go:336
 #: ../../network/manager_active.go:341 ../../network/manager_active.go:343
 #: ../../network/nm_setting_802_1x.go:115
+#: ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:123
+#: ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:127
 #: ../../network/nm_setting_802_1x.go:135
 #: ../../network/nm_setting_802_1x.go:171
@@ -1093,198 +1151,241 @@ msgstr "Protected EAP"
 #: ../../network/manager_connection.go:260
 #: ../../network/manager_connection.go:268 ../../network/nm_custom_type.go:178
 #: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:204
-#: ../../network/nm_custom_type.go:212
+#: ../../network/nm_custom_type.go:205 ../../network/nm_custom_type.go:212
+#: ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
 msgstr "اتصال سیمی"
 
-#: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:102
+#: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:26
+#: ../../network/nm_setting_vpn_l2tp.go:102
 #: ../../network/nm_setting_vpn_l2tp.go:114
+#: ../../network/nm_setting_vpn_openvpn.go:23
 #: ../../network/nm_setting_vpn_openvpn.go:156
 #: ../../network/nm_setting_vpn_openvpn.go:168
+#: ../../network/nm_setting_vpn_pptp.go:26
 #: ../../network/nm_setting_vpn_pptp.go:92
 #: ../../network/nm_setting_vpn_pptp.go:104
+#: ../../network/nm_setting_vpn_vpnc.go:25
 #: ../../network/nm_setting_vpn_vpnc.go:130
-#: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_nm.go:175
-#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:187
+#: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_dbus_nm.go:155
+#: ../../network/utils_nm.go:175 ../../network/utils_nm.go:177
+#: ../../network/utils_nm.go:185 ../../network/utils_nm.go:187
 msgid "Saved"
 msgstr "ذخیره شد"
 
-#: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:103
+#: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:27
+#: ../../network/nm_setting_vpn_l2tp.go:103
 #: ../../network/nm_setting_vpn_l2tp.go:115
+#: ../../network/nm_setting_vpn_openvpn.go:24
 #: ../../network/nm_setting_vpn_openvpn.go:157
 #: ../../network/nm_setting_vpn_openvpn.go:169
+#: ../../network/nm_setting_vpn_pptp.go:27
 #: ../../network/nm_setting_vpn_pptp.go:93
 #: ../../network/nm_setting_vpn_pptp.go:105
+#: ../../network/nm_setting_vpn_vpnc.go:27
 #: ../../network/nm_setting_vpn_vpnc.go:132
-#: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:179 ../../network/utils_nm.go:189
+#: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_dbus_nm.go:157
+#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:179
+#: ../../network/utils_nm.go:187 ../../network/utils_nm.go:189
 msgid "Always Ask"
 msgstr "همیشه سوآل شود"
 
-#: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:104
+#: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:28
+#: ../../network/nm_setting_vpn_l2tp.go:104
 #: ../../network/nm_setting_vpn_l2tp.go:116
+#: ../../network/nm_setting_vpn_openvpn.go:25
 #: ../../network/nm_setting_vpn_openvpn.go:158
 #: ../../network/nm_setting_vpn_openvpn.go:170
+#: ../../network/nm_setting_vpn_openvpn.go:321
 #: ../../network/nm_setting_vpn_openvpn.go:458
 #: ../../network/nm_setting_vpn_openvpn.go:472
 #: ../../network/nm_setting_vpn_openvpn.go:476
+#: ../../network/nm_setting_vpn_pptp.go:28
 #: ../../network/nm_setting_vpn_pptp.go:94
 #: ../../network/nm_setting_vpn_pptp.go:106
+#: ../../network/nm_setting_vpn_vpnc.go:28
 #: ../../network/nm_setting_vpn_vpnc.go:133
-#: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_nm.go:178
-#: ../../network/utils_nm.go:180 ../../network/utils_nm.go:190
+#: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_dbus_nm.go:158
+#: ../../network/utils_nm.go:178 ../../network/utils_nm.go:180
+#: ../../network/utils_nm.go:188 ../../network/utils_nm.go:190
 msgid "Not Required"
 msgstr "نیازی نیست"
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
-#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:210
+#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:203
+#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:216
 msgid "Connection"
 msgstr "اتصال"
 
 #: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
-#: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:214
+#: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:207
+#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:220
 msgid "Wireless Connection"
 msgstr "اتصال بیسیم"
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
-#: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:216
+#: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:209
+#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:222
 msgid "Wireless Ad-Hoc"
 msgstr "Ad-Hoc بیسیم"
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
-#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:218
+#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:211
+#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:224
 msgid "Wireless Ap-Hotspot"
 msgstr "Ap-Hotspot بیبسیم"
 
 #: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
-#: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:220
+#: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:213
+#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:226
 msgid "PPPoE Connection"
 msgstr "اتصال PPPoE"
 
 #: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
-#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:222
+#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:215
+#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:228
 msgid "Mobile Connection"
 msgstr "اتصال Mobile"
 
 #: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
-#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:224
+#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:217
+#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:230
 msgid "Mobile GSM Connection"
 msgstr "اتصال شبکه GSM موبایل"
 
 #: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
-#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:226
+#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:219
+#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:232
 msgid "Mobile CDMA Connection"
 msgstr "اتصال شبکه CDMA موبایل"
 
 #: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
-#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:228
+#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:221
+#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:234
 msgid "VPN Connection"
 msgstr "اتصال VPN"
 
 #: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
-#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:230
+#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:223
+#: ../../network/nm_custom_type.go:230 ../../network/nm_custom_type.go:236
 msgid "VPN L2TP"
 msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
-#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:232
+#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:225
+#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:238
 msgid "VPN OpenConnect"
 msgstr "VPN OpenConnect"
 
 #: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
-#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:234
+#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:227
+#: ../../network/nm_custom_type.go:234 ../../network/nm_custom_type.go:240
 msgid "VPN OpenVPN"
 msgstr "VPN OpenVPN"
 
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
-#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:236
+#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:229
+#: ../../network/nm_custom_type.go:236 ../../network/nm_custom_type.go:242
 msgid "VPN PPTP"
 msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:204 ../../network/nm_custom_type.go:213
-#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:238
+#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:233
+#: ../../network/nm_custom_type.go:238 ../../network/nm_custom_type.go:246
 msgid "VPN VPNC"
 msgstr "VPN VPNC"
 
-#: ../../network/nm_custom_type.go:230
+#: ../../network/nm_custom_type.go:230 ../../network/nm_custom_type.go:231
+#: ../../network/nm_custom_type.go:244
 msgid "VPN StrongSwan"
 msgstr ""
 
-#: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:35
-#: ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:24
+#: ../../network/nm_setting_802_1x.go:35 ../../network/nm_setting_802_1x.go:79
 msgid "PAP"
 msgstr "PAP"
 
-#: ../../network/nm_setting_802_1x.go:24 ../../network/nm_setting_802_1x.go:36
-#: ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:24 ../../network/nm_setting_802_1x.go:25
+#: ../../network/nm_setting_802_1x.go:36 ../../network/nm_setting_802_1x.go:80
 msgid "CHAP"
 msgstr "CHAP"
 
-#: ../../network/nm_setting_802_1x.go:25 ../../network/nm_setting_802_1x.go:37
-#: ../../network/nm_setting_802_1x.go:81
+#: ../../network/nm_setting_802_1x.go:25 ../../network/nm_setting_802_1x.go:26
+#: ../../network/nm_setting_802_1x.go:37 ../../network/nm_setting_802_1x.go:81
 msgid "MSCHAP"
 msgstr "MSCHAP"
 
-#: ../../network/nm_setting_802_1x.go:26 ../../network/nm_setting_802_1x.go:38
-#: ../../network/nm_setting_802_1x.go:82
+#: ../../network/nm_setting_802_1x.go:26 ../../network/nm_setting_802_1x.go:27
+#: ../../network/nm_setting_802_1x.go:38 ../../network/nm_setting_802_1x.go:82
 msgid "MSCHAPV2"
 msgstr "MSCHAPV2"
 
-#: ../../network/nm_setting_802_1x.go:27 ../../network/nm_setting_802_1x.go:39
-#: ../../network/nm_setting_802_1x.go:83
+#: ../../network/nm_setting_802_1x.go:27 ../../network/nm_setting_802_1x.go:28
+#: ../../network/nm_setting_802_1x.go:39 ../../network/nm_setting_802_1x.go:83
 msgid "GTC"
 msgstr "GTC"
 
-#: ../../network/nm_setting_802_1x.go:28 ../../network/nm_setting_802_1x.go:40
-#: ../../network/nm_setting_802_1x.go:84
+#: ../../network/nm_setting_802_1x.go:28 ../../network/nm_setting_802_1x.go:29
+#: ../../network/nm_setting_802_1x.go:40 ../../network/nm_setting_802_1x.go:84
 msgid "OTP"
 msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:128
+#: ../../network/nm_setting_802_1x.go:129
 #: ../../network/nm_setting_802_1x.go:140
 #: ../../network/nm_setting_802_1x.go:184
 #: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip4_config.go:42
 #: ../../network/nm_setting_ip4_config.go:178
+#: ../../network/nm_setting_vpn_vpnc.go:140
 #: ../../network/nm_setting_vpn_vpnc.go:246
 #: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
 msgstr "غیر فعال"
 
 #: ../../network/nm_setting_802_1x.go:129
+#: ../../network/nm_setting_802_1x.go:130
 #: ../../network/nm_setting_802_1x.go:141
 #: ../../network/nm_setting_802_1x.go:185
 msgid "Anonymous"
 msgstr "ناشناس"
 
 #: ../../network/nm_setting_802_1x.go:130
+#: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:142
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
 msgstr "احراز حویت شد"
 
 #: ../../network/nm_setting_802_1x.go:131
+#: ../../network/nm_setting_802_1x.go:132
 #: ../../network/nm_setting_802_1x.go:143
 #: ../../network/nm_setting_802_1x.go:187
 msgid "Both"
 msgstr "هردو"
 
 #: ../../network/nm_setting_802_1x.go:135
+#: ../../network/nm_setting_802_1x.go:136
 #: ../../network/nm_setting_802_1x.go:147
 #: ../../network/nm_setting_802_1x.go:191
 #: ../../network/nm_setting_wireless.go:180
+#: ../../network/nm_setting_wireless.go:181
 #: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:196
 #: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
 msgstr "اتوماتیک"
 
 #: ../../network/nm_setting_802_1x.go:136
+#: ../../network/nm_setting_802_1x.go:137
 #: ../../network/nm_setting_802_1x.go:148
 #: ../../network/nm_setting_802_1x.go:192
 msgid "Version 0"
 msgstr "نسخه 0"
 
 #: ../../network/nm_setting_802_1x.go:137
+#: ../../network/nm_setting_802_1x.go:138
 #: ../../network/nm_setting_802_1x.go:149
 #: ../../network/nm_setting_802_1x.go:193
 msgid "Version 1"
@@ -1292,26 +1393,35 @@ msgstr "نسخه 1"
 
 #: ../../network/nm_setting_bean_gen.go:47
 #: ../../network/nm_setting_bean_gen.go:48
+#: ../../network/nm_setting_beans_gen.go:17
+#: ../../network/nm_setting_beans_gen.go:18
 msgid "General"
 msgstr "کلی"
 
 #: ../../network/nm_setting_bean_gen.go:49
 #: ../../network/nm_setting_bean_gen.go:50
+#: ../../network/nm_setting_beans_gen.go:20
 msgid "Name"
 msgstr "نام"
 
 #: ../../network/nm_setting_bean_gen.go:50
 #: ../../network/nm_setting_bean_gen.go:51
+#: ../../network/nm_setting_beans_gen.go:20
+#: ../../network/nm_setting_beans_gen.go:21
 msgid "Automatically connect"
 msgstr "بصورت اتوماتیک متصل شود"
 
 #: ../../network/nm_setting_bean_gen.go:51
 #: ../../network/nm_setting_bean_gen.go:52
+#: ../../network/nm_setting_beans_gen.go:21
+#: ../../network/nm_setting_beans_gen.go:22
 msgid "For All Users"
 msgstr "برای تمام کاربران"
 
 #: ../../network/nm_setting_bean_gen.go:57
 #: ../../network/nm_setting_bean_gen.go:58
+#: ../../network/nm_setting_beans_gen.go:27
+#: ../../network/nm_setting_beans_gen.go:28
 msgid "Ethernet"
 msgstr "اترنت"
 
@@ -1320,6 +1430,10 @@ msgstr "اترنت"
 #: ../../network/nm_setting_bean_gen.go:144
 #: ../../network/nm_setting_bean_gen.go:145
 #: ../../network/nm_setting_bean_gen.go:146
+#: ../../network/nm_setting_beans_gen.go:29
+#: ../../network/nm_setting_beans_gen.go:30
+#: ../../network/nm_setting_beans_gen.go:115
+#: ../../network/nm_setting_beans_gen.go:116
 msgid "Device MAC Addr"
 msgstr "آدرس MAC دستگاه"
 
@@ -1328,6 +1442,10 @@ msgstr "آدرس MAC دستگاه"
 #: ../../network/nm_setting_bean_gen.go:145
 #: ../../network/nm_setting_bean_gen.go:146
 #: ../../network/nm_setting_bean_gen.go:147
+#: ../../network/nm_setting_beans_gen.go:30
+#: ../../network/nm_setting_beans_gen.go:31
+#: ../../network/nm_setting_beans_gen.go:116
+#: ../../network/nm_setting_beans_gen.go:117
 msgid "Cloned MAC Addr"
 msgstr "آدرس MAC کپی شده"
 
@@ -1336,6 +1454,10 @@ msgstr "آدرس MAC کپی شده"
 #: ../../network/nm_setting_bean_gen.go:146
 #: ../../network/nm_setting_bean_gen.go:147
 #: ../../network/nm_setting_bean_gen.go:148
+#: ../../network/nm_setting_beans_gen.go:31
+#: ../../network/nm_setting_beans_gen.go:32
+#: ../../network/nm_setting_beans_gen.go:117
+#: ../../network/nm_setting_beans_gen.go:118
 msgid "Customize MTU"
 msgstr "شخصی سازی MTU"
 
@@ -1348,6 +1470,13 @@ msgstr "شخصی سازی MTU"
 #: ../../network/nm_setting_bean_gen.go:358
 #: ../../network/nm_setting_bean_gen.go:367
 #: ../../network/nm_setting_bean_gen.go:368
+#: ../../network/nm_setting_bean_gen.go:369
+#: ../../network/nm_setting_beans_gen.go:32
+#: ../../network/nm_setting_beans_gen.go:33
+#: ../../network/nm_setting_beans_gen.go:118
+#: ../../network/nm_setting_beans_gen.go:119
+#: ../../network/nm_setting_beans_gen.go:339
+#: ../../network/nm_setting_beans_gen.go:340
 msgid "MTU"
 msgstr "MTU"
 
@@ -1357,26 +1486,40 @@ msgstr "MTU"
 #: ../../network/nm_setting_bean_gen.go:91
 #: ../../network/nm_setting_bean_gen.go:104
 #: ../../network/nm_setting_bean_gen.go:105
+#: ../../network/nm_setting_beans_gen.go:38
+#: ../../network/nm_setting_beans_gen.go:39
+#: ../../network/nm_setting_beans_gen.go:60
+#: ../../network/nm_setting_beans_gen.go:61
+#: ../../network/nm_setting_beans_gen.go:74
+#: ../../network/nm_setting_beans_gen.go:75
 msgid "Mobile"
 msgstr "موبایل"
 
 #: ../../network/nm_setting_bean_gen.go:70
 #: ../../network/nm_setting_bean_gen.go:71
+#: ../../network/nm_setting_beans_gen.go:40
+#: ../../network/nm_setting_beans_gen.go:41
 msgid "Country or region"
 msgstr "کشور یا منطقه"
 
 #: ../../network/nm_setting_bean_gen.go:71
 #: ../../network/nm_setting_bean_gen.go:72
+#: ../../network/nm_setting_beans_gen.go:41
+#: ../../network/nm_setting_beans_gen.go:42
 msgid "Provider"
 msgstr "ارائه دهنده"
 
 #: ../../network/nm_setting_bean_gen.go:72
 #: ../../network/nm_setting_bean_gen.go:73
+#: ../../network/nm_setting_beans_gen.go:42
+#: ../../network/nm_setting_beans_gen.go:43
 msgid "Plan"
 msgstr "طرح"
 
 #: ../../network/nm_setting_bean_gen.go:73
 #: ../../network/nm_setting_bean_gen.go:74
+#: ../../network/nm_setting_beans_gen.go:43
+#: ../../network/nm_setting_beans_gen.go:44
 msgid "Service Type"
 msgstr "نوع خدمات"
 
@@ -1385,6 +1528,11 @@ msgstr "نوع خدمات"
 #: ../../network/nm_setting_bean_gen.go:76
 #: ../../network/nm_setting_bean_gen.go:92
 #: ../../network/nm_setting_bean_gen.go:93
+#: ../../network/nm_setting_beans_gen.go:44
+#: ../../network/nm_setting_beans_gen.go:45
+#: ../../network/nm_setting_beans_gen.go:46
+#: ../../network/nm_setting_beans_gen.go:62
+#: ../../network/nm_setting_beans_gen.go:63
 msgid "APN"
 msgstr "APN"
 
@@ -1396,6 +1544,14 @@ msgstr "APN"
 #: ../../network/nm_setting_bean_gen.go:94
 #: ../../network/nm_setting_bean_gen.go:106
 #: ../../network/nm_setting_bean_gen.go:107
+#: ../../network/nm_setting_beans_gen.go:46
+#: ../../network/nm_setting_beans_gen.go:47
+#: ../../network/nm_setting_beans_gen.go:52
+#: ../../network/nm_setting_beans_gen.go:53
+#: ../../network/nm_setting_beans_gen.go:63
+#: ../../network/nm_setting_beans_gen.go:64
+#: ../../network/nm_setting_beans_gen.go:76
+#: ../../network/nm_setting_beans_gen.go:77
 msgid "Number"
 msgstr "عدد"
 
@@ -1425,28 +1581,67 @@ msgstr "عدد"
 #: ../../network/nm_setting_bean_gen.go:223
 #: ../../network/nm_setting_bean_gen.go:229
 #: ../../network/nm_setting_bean_gen.go:230
+#: ../../network/nm_setting_bean_gen.go:231
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:245
 #: ../../network/nm_setting_bean_gen.go:246
+#: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:306
+#: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:340
 #: ../../network/nm_setting_bean_gen.go:341
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
+#: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:380
 #: ../../network/nm_setting_bean_gen.go:381
+#: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:413
 #: ../../network/nm_setting_bean_gen.go:414
+#: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:427
 #: ../../network/nm_setting_bean_gen.go:428
+#: ../../network/nm_setting_bean_gen.go:430
+#: ../../network/nm_setting_beans_gen.go:47
+#: ../../network/nm_setting_beans_gen.go:48
+#: ../../network/nm_setting_beans_gen.go:53
+#: ../../network/nm_setting_beans_gen.go:54
+#: ../../network/nm_setting_beans_gen.go:64
+#: ../../network/nm_setting_beans_gen.go:65
+#: ../../network/nm_setting_beans_gen.go:77
+#: ../../network/nm_setting_beans_gen.go:78
+#: ../../network/nm_setting_beans_gen.go:126
+#: ../../network/nm_setting_beans_gen.go:127
+#: ../../network/nm_setting_beans_gen.go:158
+#: ../../network/nm_setting_beans_gen.go:159
+#: ../../network/nm_setting_beans_gen.go:172
+#: ../../network/nm_setting_beans_gen.go:173
+#: ../../network/nm_setting_beans_gen.go:186
+#: ../../network/nm_setting_beans_gen.go:187
+#: ../../network/nm_setting_beans_gen.go:193
+#: ../../network/nm_setting_beans_gen.go:194
+#: ../../network/nm_setting_beans_gen.go:201
+#: ../../network/nm_setting_beans_gen.go:202
+#: ../../network/nm_setting_beans_gen.go:217
+#: ../../network/nm_setting_beans_gen.go:218
+#: ../../network/nm_setting_beans_gen.go:277
+#: ../../network/nm_setting_beans_gen.go:278
+#: ../../network/nm_setting_beans_gen.go:322
+#: ../../network/nm_setting_beans_gen.go:323
+#: ../../network/nm_setting_beans_gen.go:352
+#: ../../network/nm_setting_beans_gen.go:353
+#: ../../network/nm_setting_beans_gen.go:385
+#: ../../network/nm_setting_beans_gen.go:386
+#: ../../network/nm_setting_beans_gen.go:400
+#: ../../network/nm_setting_beans_gen.go:401
 msgid "Username"
 msgstr "نام کاربری"
 
@@ -1474,22 +1669,61 @@ msgstr "نام کاربری"
 #: ../../network/nm_setting_bean_gen.go:216
 #: ../../network/nm_setting_bean_gen.go:217
 #: ../../network/nm_setting_bean_gen.go:218
+#: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:238
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:248
+#: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:297
 #: ../../network/nm_setting_bean_gen.go:298
 #: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:308
+#: ../../network/nm_setting_bean_gen.go:309
 #: ../../network/nm_setting_bean_gen.go:341
 #: ../../network/nm_setting_bean_gen.go:342
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:352
+#: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:372
 #: ../../network/nm_setting_bean_gen.go:373
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:383
+#: ../../network/nm_setting_bean_gen.go:384
+#: ../../network/nm_setting_bean_gen.go:418
+#: ../../network/nm_setting_beans_gen.go:48
+#: ../../network/nm_setting_beans_gen.go:49
+#: ../../network/nm_setting_beans_gen.go:54
+#: ../../network/nm_setting_beans_gen.go:55
+#: ../../network/nm_setting_beans_gen.go:65
+#: ../../network/nm_setting_beans_gen.go:66
+#: ../../network/nm_setting_beans_gen.go:78
+#: ../../network/nm_setting_beans_gen.go:79
+#: ../../network/nm_setting_beans_gen.go:89
+#: ../../network/nm_setting_beans_gen.go:90
+#: ../../network/nm_setting_beans_gen.go:101
+#: ../../network/nm_setting_beans_gen.go:102
+#: ../../network/nm_setting_beans_gen.go:128
+#: ../../network/nm_setting_beans_gen.go:129
+#: ../../network/nm_setting_beans_gen.go:160
+#: ../../network/nm_setting_beans_gen.go:161
+#: ../../network/nm_setting_beans_gen.go:174
+#: ../../network/nm_setting_beans_gen.go:175
+#: ../../network/nm_setting_beans_gen.go:188
+#: ../../network/nm_setting_beans_gen.go:189
+#: ../../network/nm_setting_beans_gen.go:196
+#: ../../network/nm_setting_beans_gen.go:197
+#: ../../network/nm_setting_beans_gen.go:219
+#: ../../network/nm_setting_beans_gen.go:220
+#: ../../network/nm_setting_beans_gen.go:279
+#: ../../network/nm_setting_beans_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:323
+#: ../../network/nm_setting_beans_gen.go:324
+#: ../../network/nm_setting_beans_gen.go:354
+#: ../../network/nm_setting_beans_gen.go:355
+#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_beans_gen.go:389
+#: ../../network/nm_setting_vpn_openvpn.go:104
 #: ../../network/nm_setting_vpn_openvpn.go:237
 #: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password"
@@ -1499,6 +1733,10 @@ msgstr "گذرواژه"
 #: ../../network/nm_setting_bean_gen.go:80
 #: ../../network/nm_setting_bean_gen.go:96
 #: ../../network/nm_setting_bean_gen.go:97
+#: ../../network/nm_setting_beans_gen.go:49
+#: ../../network/nm_setting_beans_gen.go:50
+#: ../../network/nm_setting_beans_gen.go:66
+#: ../../network/nm_setting_beans_gen.go:67
 msgid "Network ID"
 msgstr "شناسه شبکه"
 
@@ -1506,6 +1744,10 @@ msgstr "شناسه شبکه"
 #: ../../network/nm_setting_bean_gen.go:81
 #: ../../network/nm_setting_bean_gen.go:97
 #: ../../network/nm_setting_bean_gen.go:98
+#: ../../network/nm_setting_beans_gen.go:50
+#: ../../network/nm_setting_beans_gen.go:51
+#: ../../network/nm_setting_beans_gen.go:67
+#: ../../network/nm_setting_beans_gen.go:68
 msgid "Home Network Only"
 msgstr "شبکه خانگی فقط"
 
@@ -1513,6 +1755,10 @@ msgstr "شبکه خانگی فقط"
 #: ../../network/nm_setting_bean_gen.go:82
 #: ../../network/nm_setting_bean_gen.go:98
 #: ../../network/nm_setting_bean_gen.go:99
+#: ../../network/nm_setting_beans_gen.go:51
+#: ../../network/nm_setting_beans_gen.go:52
+#: ../../network/nm_setting_beans_gen.go:68
+#: ../../network/nm_setting_beans_gen.go:69
 msgid "PIN"
 msgstr "پین"
 
@@ -1524,35 +1770,54 @@ msgstr "پین"
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:268
 #: ../../network/nm_setting_bean_gen.go:269
+#: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:393
+#: ../../network/nm_setting_bean_gen.go:394
+#: ../../network/nm_setting_beans_gen.go:84
+#: ../../network/nm_setting_beans_gen.go:85
+#: ../../network/nm_setting_beans_gen.go:87
+#: ../../network/nm_setting_beans_gen.go:88
+#: ../../network/nm_setting_beans_gen.go:240
+#: ../../network/nm_setting_beans_gen.go:241
+#: ../../network/nm_setting_beans_gen.go:364
+#: ../../network/nm_setting_beans_gen.go:365
 msgid "Security"
 msgstr "امنیتی"
 
 #: ../../network/nm_setting_bean_gen.go:116
 #: ../../network/nm_setting_bean_gen.go:117
+#: ../../network/nm_setting_beans_gen.go:86
+#: ../../network/nm_setting_beans_gen.go:87
 msgid "Security Required"
 msgstr "نیازمند مورد امنیتی"
 
 #: ../../network/nm_setting_bean_gen.go:118
 #: ../../network/nm_setting_bean_gen.go:119
+#: ../../network/nm_setting_beans_gen.go:89
 msgid "Key"
 msgstr "کلید"
 
 #: ../../network/nm_setting_bean_gen.go:120
 #: ../../network/nm_setting_bean_gen.go:121
+#: ../../network/nm_setting_beans_gen.go:90
+#: ../../network/nm_setting_beans_gen.go:91
 msgid "EAP Auth"
 msgstr "احراز حویت EAP"
 
 #: ../../network/nm_setting_bean_gen.go:121
 #: ../../network/nm_setting_bean_gen.go:122
+#: ../../network/nm_setting_beans_gen.go:91
+#: ../../network/nm_setting_beans_gen.go:92
 msgid "Identity"
 msgstr "حویت"
 
 #: ../../network/nm_setting_bean_gen.go:122
 #: ../../network/nm_setting_bean_gen.go:123
+#: ../../network/nm_setting_beans_gen.go:92
+#: ../../network/nm_setting_beans_gen.go:93
 msgid "Anonymous ID"
 msgstr "آی دی ناشناس"
 
@@ -1570,12 +1835,29 @@ msgstr "آی دی ناشناس"
 #: ../../network/nm_setting_bean_gen.go:280
 #: ../../network/nm_setting_bean_gen.go:289
 #: ../../network/nm_setting_bean_gen.go:290
+#: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:298
 #: ../../network/nm_setting_bean_gen.go:299
 #: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:309
+#: ../../network/nm_setting_bean_gen.go:310
 #: ../../network/nm_setting_bean_gen.go:411
 #: ../../network/nm_setting_bean_gen.go:412
+#: ../../network/nm_setting_bean_gen.go:413
+#: ../../network/nm_setting_beans_gen.go:93
+#: ../../network/nm_setting_beans_gen.go:94
+#: ../../network/nm_setting_beans_gen.go:163
+#: ../../network/nm_setting_beans_gen.go:164
+#: ../../network/nm_setting_beans_gen.go:175
+#: ../../network/nm_setting_beans_gen.go:176
+#: ../../network/nm_setting_beans_gen.go:191
+#: ../../network/nm_setting_beans_gen.go:192
+#: ../../network/nm_setting_beans_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:281
+#: ../../network/nm_setting_beans_gen.go:383
+#: ../../network/nm_setting_beans_gen.go:384
 msgid "CA Cert"
 msgstr "مجوز CA"
 
@@ -1593,32 +1875,57 @@ msgstr "مجوز CA"
 #: ../../network/nm_setting_bean_gen.go:284
 #: ../../network/nm_setting_bean_gen.go:293
 #: ../../network/nm_setting_bean_gen.go:294
+#: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:299
 #: ../../network/nm_setting_bean_gen.go:300
 #: ../../network/nm_setting_bean_gen.go:309
 #: ../../network/nm_setting_bean_gen.go:310
+#: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
+#: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_beans_gen.go:94
+#: ../../network/nm_setting_beans_gen.go:95
+#: ../../network/nm_setting_beans_gen.go:167
+#: ../../network/nm_setting_beans_gen.go:168
+#: ../../network/nm_setting_beans_gen.go:176
+#: ../../network/nm_setting_beans_gen.go:177
+#: ../../network/nm_setting_beans_gen.go:194
+#: ../../network/nm_setting_beans_gen.go:195
+#: ../../network/nm_setting_beans_gen.go:265
+#: ../../network/nm_setting_beans_gen.go:266
+#: ../../network/nm_setting_beans_gen.go:281
+#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:386
+#: ../../network/nm_setting_beans_gen.go:387
 msgid "User Cert"
 msgstr "مجوز کاربر"
 
 #: ../../network/nm_setting_bean_gen.go:125
 #: ../../network/nm_setting_bean_gen.go:126
+#: ../../network/nm_setting_beans_gen.go:95
+#: ../../network/nm_setting_beans_gen.go:96
 msgid "Provisioning"
 msgstr "تامین"
 
 #: ../../network/nm_setting_bean_gen.go:126
 #: ../../network/nm_setting_bean_gen.go:127
+#: ../../network/nm_setting_beans_gen.go:96
+#: ../../network/nm_setting_beans_gen.go:97
 msgid "PAC file"
 msgstr "فایل PAC"
 
 #: ../../network/nm_setting_bean_gen.go:127
 #: ../../network/nm_setting_bean_gen.go:128
+#: ../../network/nm_setting_beans_gen.go:97
+#: ../../network/nm_setting_beans_gen.go:98
 msgid "PEAP Version"
 msgstr "نسخه PEAP"
 
 #: ../../network/nm_setting_bean_gen.go:128
 #: ../../network/nm_setting_bean_gen.go:129
+#: ../../network/nm_setting_beans_gen.go:98
+#: ../../network/nm_setting_beans_gen.go:99
 msgid "Inner Auth"
 msgstr "احراز حویت داخلی"
 
@@ -1636,13 +1943,25 @@ msgstr "احراز حویت داخلی"
 #: ../../network/nm_setting_bean_gen.go:285
 #: ../../network/nm_setting_bean_gen.go:294
 #: ../../network/nm_setting_bean_gen.go:295
+#: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:300
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:310
 #: ../../network/nm_setting_bean_gen.go:311
+#: ../../network/nm_setting_bean_gen.go:312
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:416
+#: ../../network/nm_setting_bean_gen.go:417
+#: ../../network/nm_setting_beans_gen.go:100
+#: ../../network/nm_setting_beans_gen.go:169
+#: ../../network/nm_setting_beans_gen.go:178
+#: ../../network/nm_setting_beans_gen.go:196
+#: ../../network/nm_setting_beans_gen.go:267
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_vpn_strongswan.go:76
 #: ../../network/nm_setting_vpn_strongswan.go:95
+#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Private Key"
 msgstr "کلید شخصی"
 
@@ -1668,24 +1987,30 @@ msgstr "کلید شخصی"
 #: ../../network/nm_setting_bean_gen.go:224
 #: ../../network/nm_setting_bean_gen.go:230
 #: ../../network/nm_setting_bean_gen.go:231
+#: ../../network/nm_setting_bean_gen.go:232
 #: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:234
+#: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:246
 #: ../../network/nm_setting_bean_gen.go:247
+#: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:296
 #: ../../network/nm_setting_bean_gen.go:297
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:302
 #: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:307
+#: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:311
 #: ../../network/nm_setting_bean_gen.go:312
+#: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:372
 #: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:382
+#: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
 #: ../../network/nm_setting_bean_gen.go:405
@@ -1694,6 +2019,35 @@ msgstr "کلید شخصی"
 #: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:431
 #: ../../network/nm_setting_bean_gen.go:432
+#: ../../network/nm_setting_bean_gen.go:434
+#: ../../network/nm_setting_beans_gen.go:100
+#: ../../network/nm_setting_beans_gen.go:101
+#: ../../network/nm_setting_beans_gen.go:102
+#: ../../network/nm_setting_beans_gen.go:103
+#: ../../network/nm_setting_beans_gen.go:159
+#: ../../network/nm_setting_beans_gen.go:160
+#: ../../network/nm_setting_beans_gen.go:173
+#: ../../network/nm_setting_beans_gen.go:174
+#: ../../network/nm_setting_beans_gen.go:178
+#: ../../network/nm_setting_beans_gen.go:179
+#: ../../network/nm_setting_beans_gen.go:187
+#: ../../network/nm_setting_beans_gen.go:188
+#: ../../network/nm_setting_beans_gen.go:202
+#: ../../network/nm_setting_beans_gen.go:203
+#: ../../network/nm_setting_beans_gen.go:205
+#: ../../network/nm_setting_beans_gen.go:206
+#: ../../network/nm_setting_beans_gen.go:218
+#: ../../network/nm_setting_beans_gen.go:219
+#: ../../network/nm_setting_beans_gen.go:278
+#: ../../network/nm_setting_beans_gen.go:279
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:284
+#: ../../network/nm_setting_beans_gen.go:353
+#: ../../network/nm_setting_beans_gen.go:354
+#: ../../network/nm_setting_beans_gen.go:401
+#: ../../network/nm_setting_beans_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:405
 msgid "Ask for Pwd"
 msgstr "پرسش برای پسورد"
 
@@ -1706,52 +2060,75 @@ msgstr "پرسش برای پسورد"
 #: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:312
 #: ../../network/nm_setting_bean_gen.go:313
+#: ../../network/nm_setting_bean_gen.go:314
+#: ../../network/nm_setting_beans_gen.go:103
+#: ../../network/nm_setting_beans_gen.go:104
+#: ../../network/nm_setting_beans_gen.go:179
+#: ../../network/nm_setting_beans_gen.go:180
+#: ../../network/nm_setting_beans_gen.go:284
+#: ../../network/nm_setting_beans_gen.go:285
 msgid "Private Pwd"
 msgstr "پسورد شخصی"
 
 #: ../../network/nm_setting_bean_gen.go:139
 #: ../../network/nm_setting_bean_gen.go:140
+#: ../../network/nm_setting_beans_gen.go:109
+#: ../../network/nm_setting_beans_gen.go:110
 msgid "Wi-Fi"
 msgstr "وای فای"
 
 #: ../../network/nm_setting_bean_gen.go:141
 #: ../../network/nm_setting_bean_gen.go:142
 #: ../../network/nm_setting_bean_gen.go:143
+#: ../../network/nm_setting_beans_gen.go:112
+#: ../../network/nm_setting_beans_gen.go:113
 msgid "Mode"
 msgstr "حالت"
 
 #: ../../network/nm_setting_bean_gen.go:141
 #: ../../network/nm_setting_bean_gen.go:142
+#: ../../network/nm_setting_beans_gen.go:111
+#: ../../network/nm_setting_beans_gen.go:112
 msgid "SSID"
 msgstr "شناسه اتصال"
 
 #: ../../network/nm_setting_bean_gen.go:142
 #: ../../network/nm_setting_bean_gen.go:143
 #: ../../network/nm_setting_bean_gen.go:144
+#: ../../network/nm_setting_beans_gen.go:113
+#: ../../network/nm_setting_beans_gen.go:114
 msgid "Band"
 msgstr "باند"
 
 #: ../../network/nm_setting_bean_gen.go:143
 #: ../../network/nm_setting_bean_gen.go:144
 #: ../../network/nm_setting_bean_gen.go:145
+#: ../../network/nm_setting_beans_gen.go:114
+#: ../../network/nm_setting_beans_gen.go:115
 msgid "Channel"
 msgstr "کانال"
 
 #: ../../network/nm_setting_bean_gen.go:153
 #: ../../network/nm_setting_bean_gen.go:154
 #: ../../network/nm_setting_bean_gen.go:155
+#: ../../network/nm_setting_beans_gen.go:124
+#: ../../network/nm_setting_beans_gen.go:125
 msgid "PPPoE"
 msgstr "PPPoE"
 
 #: ../../network/nm_setting_bean_gen.go:156
 #: ../../network/nm_setting_bean_gen.go:157
 #: ../../network/nm_setting_bean_gen.go:158
+#: ../../network/nm_setting_beans_gen.go:127
+#: ../../network/nm_setting_beans_gen.go:128
 msgid "Service"
 msgstr "خدمات"
 
 #: ../../network/nm_setting_bean_gen.go:163
 #: ../../network/nm_setting_bean_gen.go:164
 #: ../../network/nm_setting_bean_gen.go:165
+#: ../../network/nm_setting_beans_gen.go:134
+#: ../../network/nm_setting_beans_gen.go:135
 msgid "PPP"
 msgstr "PPP"
 
@@ -1762,16 +2139,26 @@ msgstr "PPP"
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:268
+#: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:382
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:392
+#: ../../network/nm_setting_bean_gen.go:393
+#: ../../network/nm_setting_beans_gen.go:136
+#: ../../network/nm_setting_beans_gen.go:137
+#: ../../network/nm_setting_beans_gen.go:239
+#: ../../network/nm_setting_beans_gen.go:240
+#: ../../network/nm_setting_beans_gen.go:363
+#: ../../network/nm_setting_beans_gen.go:364
 msgid "Use MPPE"
 msgstr "استفاده از MPPE"
 
 #: ../../network/nm_setting_bean_gen.go:166
 #: ../../network/nm_setting_bean_gen.go:167
 #: ../../network/nm_setting_bean_gen.go:168
+#: ../../network/nm_setting_beans_gen.go:137
+#: ../../network/nm_setting_beans_gen.go:138
 msgid "128-bit MPPE"
 msgstr "128-bit MPPE"
 
@@ -1782,10 +2169,18 @@ msgstr "128-bit MPPE"
 #: ../../network/nm_setting_bean_gen.go:260
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
+#: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:384
 #: ../../network/nm_setting_bean_gen.go:393
 #: ../../network/nm_setting_bean_gen.go:394
+#: ../../network/nm_setting_bean_gen.go:395
+#: ../../network/nm_setting_beans_gen.go:138
+#: ../../network/nm_setting_beans_gen.go:139
+#: ../../network/nm_setting_beans_gen.go:241
+#: ../../network/nm_setting_beans_gen.go:242
+#: ../../network/nm_setting_beans_gen.go:365
+#: ../../network/nm_setting_beans_gen.go:366
 msgid "Stateful MPPE"
 msgstr "Stateful MPPE"
 
@@ -1796,10 +2191,18 @@ msgstr "Stateful MPPE"
 #: ../../network/nm_setting_bean_gen.go:261
 #: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:271
+#: ../../network/nm_setting_bean_gen.go:272
 #: ../../network/nm_setting_bean_gen.go:384
 #: ../../network/nm_setting_bean_gen.go:385
 #: ../../network/nm_setting_bean_gen.go:394
 #: ../../network/nm_setting_bean_gen.go:395
+#: ../../network/nm_setting_bean_gen.go:396
+#: ../../network/nm_setting_beans_gen.go:139
+#: ../../network/nm_setting_beans_gen.go:140
+#: ../../network/nm_setting_beans_gen.go:242
+#: ../../network/nm_setting_beans_gen.go:243
+#: ../../network/nm_setting_beans_gen.go:366
+#: ../../network/nm_setting_beans_gen.go:367
 msgid "Refuse EAP Authentication"
 msgstr ""
 
@@ -1810,10 +2213,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:262
 #: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:272
+#: ../../network/nm_setting_bean_gen.go:273
 #: ../../network/nm_setting_bean_gen.go:385
 #: ../../network/nm_setting_bean_gen.go:386
 #: ../../network/nm_setting_bean_gen.go:395
 #: ../../network/nm_setting_bean_gen.go:396
+#: ../../network/nm_setting_bean_gen.go:397
+#: ../../network/nm_setting_beans_gen.go:140
+#: ../../network/nm_setting_beans_gen.go:141
+#: ../../network/nm_setting_beans_gen.go:243
+#: ../../network/nm_setting_beans_gen.go:244
+#: ../../network/nm_setting_beans_gen.go:367
+#: ../../network/nm_setting_beans_gen.go:368
 msgid "Refuse PAP Authentication"
 msgstr ""
 
@@ -1824,10 +2235,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:263
 #: ../../network/nm_setting_bean_gen.go:272
 #: ../../network/nm_setting_bean_gen.go:273
+#: ../../network/nm_setting_bean_gen.go:274
 #: ../../network/nm_setting_bean_gen.go:386
 #: ../../network/nm_setting_bean_gen.go:387
 #: ../../network/nm_setting_bean_gen.go:396
 #: ../../network/nm_setting_bean_gen.go:397
+#: ../../network/nm_setting_bean_gen.go:398
+#: ../../network/nm_setting_beans_gen.go:141
+#: ../../network/nm_setting_beans_gen.go:142
+#: ../../network/nm_setting_beans_gen.go:244
+#: ../../network/nm_setting_beans_gen.go:245
+#: ../../network/nm_setting_beans_gen.go:368
+#: ../../network/nm_setting_beans_gen.go:369
 msgid "Refuse CHAP Authentication"
 msgstr ""
 
@@ -1838,10 +2257,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:264
 #: ../../network/nm_setting_bean_gen.go:273
 #: ../../network/nm_setting_bean_gen.go:274
+#: ../../network/nm_setting_bean_gen.go:275
 #: ../../network/nm_setting_bean_gen.go:387
 #: ../../network/nm_setting_bean_gen.go:388
 #: ../../network/nm_setting_bean_gen.go:397
 #: ../../network/nm_setting_bean_gen.go:398
+#: ../../network/nm_setting_bean_gen.go:399
+#: ../../network/nm_setting_beans_gen.go:142
+#: ../../network/nm_setting_beans_gen.go:143
+#: ../../network/nm_setting_beans_gen.go:245
+#: ../../network/nm_setting_beans_gen.go:246
+#: ../../network/nm_setting_beans_gen.go:369
+#: ../../network/nm_setting_beans_gen.go:370
 msgid "Refuse MSCHAP Authentication"
 msgstr ""
 
@@ -1852,10 +2279,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:265
 #: ../../network/nm_setting_bean_gen.go:274
 #: ../../network/nm_setting_bean_gen.go:275
+#: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:388
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
+#: ../../network/nm_setting_bean_gen.go:400
+#: ../../network/nm_setting_beans_gen.go:143
+#: ../../network/nm_setting_beans_gen.go:144
+#: ../../network/nm_setting_beans_gen.go:246
+#: ../../network/nm_setting_beans_gen.go:247
+#: ../../network/nm_setting_beans_gen.go:370
+#: ../../network/nm_setting_beans_gen.go:371
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr ""
 
@@ -1866,10 +2301,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:266
 #: ../../network/nm_setting_bean_gen.go:275
 #: ../../network/nm_setting_bean_gen.go:276
+#: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:390
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:400
+#: ../../network/nm_setting_bean_gen.go:401
+#: ../../network/nm_setting_beans_gen.go:144
+#: ../../network/nm_setting_beans_gen.go:145
+#: ../../network/nm_setting_beans_gen.go:247
+#: ../../network/nm_setting_beans_gen.go:248
+#: ../../network/nm_setting_beans_gen.go:371
+#: ../../network/nm_setting_beans_gen.go:372
 msgid "No BSD Data Compression"
 msgstr ""
 
@@ -1880,10 +2323,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:277
+#: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:390
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
+#: ../../network/nm_setting_bean_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:145
+#: ../../network/nm_setting_beans_gen.go:146
+#: ../../network/nm_setting_beans_gen.go:248
+#: ../../network/nm_setting_beans_gen.go:249
+#: ../../network/nm_setting_beans_gen.go:372
+#: ../../network/nm_setting_beans_gen.go:373
 msgid "No Deflate Data Compression"
 msgstr ""
 
@@ -1894,10 +2345,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:268
 #: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:278
+#: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:391
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:402
+#: ../../network/nm_setting_bean_gen.go:403
+#: ../../network/nm_setting_beans_gen.go:146
+#: ../../network/nm_setting_beans_gen.go:147
+#: ../../network/nm_setting_beans_gen.go:249
+#: ../../network/nm_setting_beans_gen.go:250
+#: ../../network/nm_setting_beans_gen.go:373
+#: ../../network/nm_setting_beans_gen.go:374
 msgid "No TCP Header Compression"
 msgstr ""
 
@@ -1908,10 +2367,18 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:271
 #: ../../network/nm_setting_bean_gen.go:280
 #: ../../network/nm_setting_bean_gen.go:281
+#: ../../network/nm_setting_bean_gen.go:282
 #: ../../network/nm_setting_bean_gen.go:392
 #: ../../network/nm_setting_bean_gen.go:393
 #: ../../network/nm_setting_bean_gen.go:402
 #: ../../network/nm_setting_bean_gen.go:403
+#: ../../network/nm_setting_bean_gen.go:404
+#: ../../network/nm_setting_beans_gen.go:147
+#: ../../network/nm_setting_beans_gen.go:148
+#: ../../network/nm_setting_beans_gen.go:252
+#: ../../network/nm_setting_beans_gen.go:253
+#: ../../network/nm_setting_beans_gen.go:374
+#: ../../network/nm_setting_beans_gen.go:375
 msgid "Send PPP Echo Packets"
 msgstr ""
 
@@ -1922,30 +2389,52 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:242
 #: ../../network/nm_setting_bean_gen.go:243
+#: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:276
 #: ../../network/nm_setting_bean_gen.go:277
 #: ../../network/nm_setting_bean_gen.go:286
 #: ../../network/nm_setting_bean_gen.go:287
+#: ../../network/nm_setting_bean_gen.go:288
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
 #: ../../network/nm_setting_bean_gen.go:301
 #: ../../network/nm_setting_bean_gen.go:302
+#: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:367
 #: ../../network/nm_setting_bean_gen.go:368
 #: ../../network/nm_setting_bean_gen.go:377
 #: ../../network/nm_setting_bean_gen.go:378
+#: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:398
 #: ../../network/nm_setting_bean_gen.go:399
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:409
+#: ../../network/nm_setting_bean_gen.go:410
 #: ../../network/nm_setting_bean_gen.go:424
 #: ../../network/nm_setting_bean_gen.go:425
+#: ../../network/nm_setting_bean_gen.go:427
+#: ../../network/nm_setting_beans_gen.go:153
+#: ../../network/nm_setting_beans_gen.go:154
+#: ../../network/nm_setting_beans_gen.go:214
+#: ../../network/nm_setting_beans_gen.go:215
+#: ../../network/nm_setting_beans_gen.go:258
+#: ../../network/nm_setting_beans_gen.go:259
+#: ../../network/nm_setting_beans_gen.go:273
+#: ../../network/nm_setting_beans_gen.go:274
+#: ../../network/nm_setting_beans_gen.go:349
+#: ../../network/nm_setting_beans_gen.go:350
+#: ../../network/nm_setting_beans_gen.go:380
+#: ../../network/nm_setting_beans_gen.go:381
+#: ../../network/nm_setting_beans_gen.go:397
+#: ../../network/nm_setting_beans_gen.go:398
 msgid "VPN"
 msgstr "VPN"
 
 #: ../../network/nm_setting_bean_gen.go:184
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
+#: ../../network/nm_setting_beans_gen.go:156
+#: ../../network/nm_setting_beans_gen.go:157
 msgid "Need VPN Plugin"
 msgstr "نیازمند افزونه VPN"
 
@@ -1966,36 +2455,73 @@ msgstr "نیازمند افزونه VPN"
 #: ../../network/nm_setting_bean_gen.go:220
 #: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:229
+#: ../../network/nm_setting_bean_gen.go:230
 #: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
+#: ../../network/nm_setting_bean_gen.go:246
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:288
 #: ../../network/nm_setting_bean_gen.go:289
+#: ../../network/nm_setting_bean_gen.go:290
 #: ../../network/nm_setting_bean_gen.go:293
 #: ../../network/nm_setting_bean_gen.go:294
 #: ../../network/nm_setting_bean_gen.go:303
 #: ../../network/nm_setting_bean_gen.go:304
+#: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:369
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:380
+#: ../../network/nm_setting_bean_gen.go:381
 #: ../../network/nm_setting_bean_gen.go:400
 #: ../../network/nm_setting_bean_gen.go:401
 #: ../../network/nm_setting_bean_gen.go:410
 #: ../../network/nm_setting_bean_gen.go:411
+#: ../../network/nm_setting_bean_gen.go:412
 #: ../../network/nm_setting_bean_gen.go:426
 #: ../../network/nm_setting_bean_gen.go:427
+#: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:435
 #: ../../network/nm_setting_bean_gen.go:436
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:461
 #: ../../network/nm_setting_bean_gen.go:462
+#: ../../network/nm_setting_bean_gen.go:464
 #: ../../network/nm_setting_bean_gen.go:474
 #: ../../network/nm_setting_bean_gen.go:475
+#: ../../network/nm_setting_bean_gen.go:477
+#: ../../network/nm_setting_beans_gen.go:157
+#: ../../network/nm_setting_beans_gen.go:158
+#: ../../network/nm_setting_beans_gen.go:162
+#: ../../network/nm_setting_beans_gen.go:163
+#: ../../network/nm_setting_beans_gen.go:170
+#: ../../network/nm_setting_beans_gen.go:171
+#: ../../network/nm_setting_beans_gen.go:185
+#: ../../network/nm_setting_beans_gen.go:186
+#: ../../network/nm_setting_beans_gen.go:190
+#: ../../network/nm_setting_beans_gen.go:191
+#: ../../network/nm_setting_beans_gen.go:200
+#: ../../network/nm_setting_beans_gen.go:201
+#: ../../network/nm_setting_beans_gen.go:216
+#: ../../network/nm_setting_beans_gen.go:217
+#: ../../network/nm_setting_beans_gen.go:260
+#: ../../network/nm_setting_beans_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:275
+#: ../../network/nm_setting_beans_gen.go:276
+#: ../../network/nm_setting_beans_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:352
+#: ../../network/nm_setting_beans_gen.go:382
+#: ../../network/nm_setting_beans_gen.go:383
+#: ../../network/nm_setting_beans_gen.go:399
+#: ../../network/nm_setting_beans_gen.go:400
+#: ../../network/nm_setting_beans_gen.go:434
+#: ../../network/nm_setting_beans_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Gateway"
 msgstr "درگاه"
 
@@ -2009,10 +2535,20 @@ msgstr "درگاه"
 #: ../../network/nm_setting_bean_gen.go:239
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:249
+#: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:373
 #: ../../network/nm_setting_bean_gen.go:374
 #: ../../network/nm_setting_bean_gen.go:383
 #: ../../network/nm_setting_bean_gen.go:384
+#: ../../network/nm_setting_bean_gen.go:385
+#: ../../network/nm_setting_beans_gen.go:161
+#: ../../network/nm_setting_beans_gen.go:162
+#: ../../network/nm_setting_beans_gen.go:189
+#: ../../network/nm_setting_beans_gen.go:190
+#: ../../network/nm_setting_beans_gen.go:220
+#: ../../network/nm_setting_beans_gen.go:221
+#: ../../network/nm_setting_beans_gen.go:355
+#: ../../network/nm_setting_beans_gen.go:356
 msgid "NT Domain"
 msgstr "دامین NT"
 
@@ -2023,6 +2559,11 @@ msgstr "دامین NT"
 #: ../../network/nm_setting_bean_gen.go:281
 #: ../../network/nm_setting_bean_gen.go:290
 #: ../../network/nm_setting_bean_gen.go:291
+#: ../../network/nm_setting_bean_gen.go:292
+#: ../../network/nm_setting_beans_gen.go:164
+#: ../../network/nm_setting_beans_gen.go:165
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:263
 msgid "Proxy"
 msgstr "پراکسی"
 
@@ -2033,6 +2574,11 @@ msgstr "پراکسی"
 #: ../../network/nm_setting_bean_gen.go:282
 #: ../../network/nm_setting_bean_gen.go:291
 #: ../../network/nm_setting_bean_gen.go:292
+#: ../../network/nm_setting_bean_gen.go:293
+#: ../../network/nm_setting_beans_gen.go:165
+#: ../../network/nm_setting_beans_gen.go:166
+#: ../../network/nm_setting_beans_gen.go:263
+#: ../../network/nm_setting_beans_gen.go:264
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr "به برنامه محافظت دربرابر تروجان سیسکو اجازه دهید"
 
@@ -2043,6 +2589,11 @@ msgstr "به برنامه محافظت دربرابر تروجان سیسکو ا
 #: ../../network/nm_setting_bean_gen.go:283
 #: ../../network/nm_setting_bean_gen.go:292
 #: ../../network/nm_setting_bean_gen.go:293
+#: ../../network/nm_setting_bean_gen.go:294
+#: ../../network/nm_setting_beans_gen.go:166
+#: ../../network/nm_setting_beans_gen.go:167
+#: ../../network/nm_setting_beans_gen.go:264
+#: ../../network/nm_setting_beans_gen.go:265
 msgid "CSD Script"
 msgstr "اسکریپت CSD"
 
@@ -2053,6 +2604,9 @@ msgstr "اسکریپت CSD"
 #: ../../network/nm_setting_bean_gen.go:286
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:296
+#: ../../network/nm_setting_bean_gen.go:297
+#: ../../network/nm_setting_beans_gen.go:170
+#: ../../network/nm_setting_beans_gen.go:268
 msgid "Use FSID for Key Passphrase"
 msgstr "از FSID برای کلید پسورد استفاده کن"
 
@@ -2065,8 +2619,18 @@ msgstr "از FSID برای کلید پسورد استفاده کن"
 #: ../../network/nm_setting_bean_gen.go:295
 #: ../../network/nm_setting_bean_gen.go:304
 #: ../../network/nm_setting_bean_gen.go:305
+#: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:412
 #: ../../network/nm_setting_bean_gen.go:413
+#: ../../network/nm_setting_bean_gen.go:414
+#: ../../network/nm_setting_beans_gen.go:171
+#: ../../network/nm_setting_beans_gen.go:172
+#: ../../network/nm_setting_beans_gen.go:192
+#: ../../network/nm_setting_beans_gen.go:193
+#: ../../network/nm_setting_beans_gen.go:276
+#: ../../network/nm_setting_beans_gen.go:277
+#: ../../network/nm_setting_beans_gen.go:384
+#: ../../network/nm_setting_beans_gen.go:385
 msgid "Auth Type"
 msgstr "نوع احراز حویت"
 
@@ -2077,6 +2641,10 @@ msgstr "نوع احراز حویت"
 #: ../../network/nm_setting_bean_gen.go:304
 #: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:314
+#: ../../network/nm_setting_bean_gen.go:315
+#: ../../network/nm_setting_beans_gen.go:181
+#: ../../network/nm_setting_beans_gen.go:286
+#: ../../network/nm_setting_vpn_openvpn.go:106
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
@@ -2089,10 +2657,15 @@ msgstr "کلید استاتیک"
 #: ../../network/nm_setting_bean_gen.go:305
 #: ../../network/nm_setting_bean_gen.go:314
 #: ../../network/nm_setting_bean_gen.go:315
+#: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:327
 #: ../../network/nm_setting_bean_gen.go:328
 #: ../../network/nm_setting_bean_gen.go:337
 #: ../../network/nm_setting_bean_gen.go:338
+#: ../../network/nm_setting_bean_gen.go:339
+#: ../../network/nm_setting_beans_gen.go:182
+#: ../../network/nm_setting_beans_gen.go:287
+#: ../../network/nm_setting_beans_gen.go:310
 msgid "Customize Key Direction"
 msgstr "سفارشی سازی جهت کلید"
 
@@ -2103,10 +2676,15 @@ msgstr "سفارشی سازی جهت کلید"
 #: ../../network/nm_setting_bean_gen.go:306
 #: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_bean_gen.go:316
+#: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:328
 #: ../../network/nm_setting_bean_gen.go:329
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:339
+#: ../../network/nm_setting_bean_gen.go:340
+#: ../../network/nm_setting_beans_gen.go:183
+#: ../../network/nm_setting_beans_gen.go:288
+#: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
 msgstr "جهت کلید"
 
@@ -2117,6 +2695,11 @@ msgstr "جهت کلید"
 #: ../../network/nm_setting_bean_gen.go:307
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:317
+#: ../../network/nm_setting_bean_gen.go:318
+#: ../../network/nm_setting_beans_gen.go:183
+#: ../../network/nm_setting_beans_gen.go:184
+#: ../../network/nm_setting_beans_gen.go:288
+#: ../../network/nm_setting_beans_gen.go:289
 msgid "Remote IP"
 msgstr "ریموت آی پی"
 
@@ -2127,6 +2710,11 @@ msgstr "ریموت آی پی"
 #: ../../network/nm_setting_bean_gen.go:308
 #: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:318
+#: ../../network/nm_setting_bean_gen.go:319
+#: ../../network/nm_setting_beans_gen.go:184
+#: ../../network/nm_setting_beans_gen.go:185
+#: ../../network/nm_setting_beans_gen.go:289
+#: ../../network/nm_setting_beans_gen.go:290
 msgid "Local IP"
 msgstr "آی پی محلی"
 
@@ -2134,10 +2722,16 @@ msgstr "آی پی محلی"
 #: ../../network/nm_setting_bean_gen.go:222
 #: ../../network/nm_setting_bean_gen.go:231
 #: ../../network/nm_setting_bean_gen.go:232
+#: ../../network/nm_setting_bean_gen.go:233
 #: ../../network/nm_setting_bean_gen.go:403
 #: ../../network/nm_setting_bean_gen.go:404
 #: ../../network/nm_setting_bean_gen.go:429
 #: ../../network/nm_setting_bean_gen.go:430
+#: ../../network/nm_setting_bean_gen.go:432
+#: ../../network/nm_setting_beans_gen.go:203
+#: ../../network/nm_setting_beans_gen.go:204
+#: ../../network/nm_setting_beans_gen.go:402
+#: ../../network/nm_setting_beans_gen.go:403
 msgid "User Pwd"
 msgstr "پسورد کاربر"
 
@@ -2145,14 +2739,20 @@ msgstr "پسورد کاربر"
 #: ../../network/nm_setting_bean_gen.go:223
 #: ../../network/nm_setting_bean_gen.go:232
 #: ../../network/nm_setting_bean_gen.go:233
+#: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:257
 #: ../../network/nm_setting_bean_gen.go:258
+#: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:404
 #: ../../network/nm_setting_bean_gen.go:405
 #: ../../network/nm_setting_bean_gen.go:430
 #: ../../network/nm_setting_bean_gen.go:431
+#: ../../network/nm_setting_bean_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:205
+#: ../../network/nm_setting_beans_gen.go:230
+#: ../../network/nm_setting_beans_gen.go:404
 msgid "Group Name"
 msgstr "نام گروه"
 
@@ -2160,17 +2760,29 @@ msgstr "نام گروه"
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:234
 #: ../../network/nm_setting_bean_gen.go:235
+#: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:406
 #: ../../network/nm_setting_bean_gen.go:407
 #: ../../network/nm_setting_bean_gen.go:432
 #: ../../network/nm_setting_bean_gen.go:433
+#: ../../network/nm_setting_bean_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:206
+#: ../../network/nm_setting_beans_gen.go:207
+#: ../../network/nm_setting_beans_gen.go:405
+#: ../../network/nm_setting_beans_gen.go:406
 msgid "Group Pwd"
 msgstr "پسورد گروه"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
+#: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
+#: ../../network/nm_setting_bean_gen.go:419
+#: ../../network/nm_setting_beans_gen.go:197
+#: ../../network/nm_setting_beans_gen.go:198
+#: ../../network/nm_setting_beans_gen.go:389
+#: ../../network/nm_setting_beans_gen.go:390
 msgid "Request an Inner IP Address"
 msgstr ""
 
@@ -2178,10 +2790,16 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:235
 #: ../../network/nm_setting_bean_gen.go:236
+#: ../../network/nm_setting_bean_gen.go:237
 #: ../../network/nm_setting_bean_gen.go:407
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:433
 #: ../../network/nm_setting_bean_gen.go:434
+#: ../../network/nm_setting_bean_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:207
+#: ../../network/nm_setting_beans_gen.go:208
+#: ../../network/nm_setting_beans_gen.go:406
+#: ../../network/nm_setting_beans_gen.go:407
 msgid "Use Hybrid Authentication"
 msgstr "از احراز حویت ترکیبی استفده کن"
 
@@ -2189,24 +2807,42 @@ msgstr "از احراز حویت ترکیبی استفده کن"
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:236
 #: ../../network/nm_setting_bean_gen.go:237
+#: ../../network/nm_setting_bean_gen.go:238
 #: ../../network/nm_setting_bean_gen.go:408
 #: ../../network/nm_setting_bean_gen.go:409
 #: ../../network/nm_setting_bean_gen.go:434
 #: ../../network/nm_setting_bean_gen.go:435
+#: ../../network/nm_setting_bean_gen.go:437
+#: ../../network/nm_setting_beans_gen.go:208
+#: ../../network/nm_setting_beans_gen.go:209
+#: ../../network/nm_setting_beans_gen.go:407
+#: ../../network/nm_setting_beans_gen.go:408
 msgid "CA File"
 msgstr "فایل CA"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
+#: ../../network/nm_setting_bean_gen.go:228
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
+#: ../../network/nm_setting_bean_gen.go:420
+#: ../../network/nm_setting_beans_gen.go:198
+#: ../../network/nm_setting_beans_gen.go:199
+#: ../../network/nm_setting_beans_gen.go:390
+#: ../../network/nm_setting_beans_gen.go:391
 msgid "Enforce UDP Encapsulation"
 msgstr ""
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
+#: ../../network/nm_setting_bean_gen.go:229
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:419
+#: ../../network/nm_setting_bean_gen.go:421
+#: ../../network/nm_setting_beans_gen.go:199
+#: ../../network/nm_setting_beans_gen.go:200
+#: ../../network/nm_setting_beans_gen.go:391
+#: ../../network/nm_setting_beans_gen.go:392
 msgid "Use IP Compression"
 msgstr ""
 
@@ -2214,6 +2850,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:245
 #: ../../network/nm_setting_bean_gen.go:254
 #: ../../network/nm_setting_bean_gen.go:255
+#: ../../network/nm_setting_bean_gen.go:256
+#: ../../network/nm_setting_beans_gen.go:226
+#: ../../network/nm_setting_beans_gen.go:227
 msgid "VPN IPsec"
 msgstr "VPN IPsec"
 
@@ -2221,6 +2860,9 @@ msgstr "VPN IPsec"
 #: ../../network/nm_setting_bean_gen.go:247
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:257
+#: ../../network/nm_setting_bean_gen.go:258
+#: ../../network/nm_setting_beans_gen.go:228
+#: ../../network/nm_setting_beans_gen.go:229
 msgid "Enable IPsec"
 msgstr "فعال کردن IPsec"
 
@@ -2228,6 +2870,9 @@ msgstr "فعال کردن IPsec"
 #: ../../network/nm_setting_bean_gen.go:249
 #: ../../network/nm_setting_bean_gen.go:258
 #: ../../network/nm_setting_bean_gen.go:259
+#: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_beans_gen.go:230
+#: ../../network/nm_setting_beans_gen.go:231
 msgid "Group ID"
 msgstr "آی دی گروه"
 
@@ -2235,7 +2880,11 @@ msgstr "آی دی گروه"
 #: ../../network/nm_setting_bean_gen.go:250
 #: ../../network/nm_setting_bean_gen.go:259
 #: ../../network/nm_setting_bean_gen.go:260
+#: ../../network/nm_setting_bean_gen.go:261
+#: ../../network/nm_setting_beans_gen.go:232
+#: ../../network/nm_setting_vpn_strongswan.go:80
 #: ../../network/nm_setting_vpn_strongswan.go:99
+#: ../../network/nm_setting_vpn_strongswan.go:103
 msgid "Pre-Shared Key"
 msgstr "کلید به اشتراک گذاشته شده"
 
@@ -2243,10 +2892,16 @@ msgstr "کلید به اشتراک گذاشته شده"
 #: ../../network/nm_setting_bean_gen.go:256
 #: ../../network/nm_setting_bean_gen.go:265
 #: ../../network/nm_setting_bean_gen.go:266
+#: ../../network/nm_setting_bean_gen.go:267
 #: ../../network/nm_setting_bean_gen.go:379
 #: ../../network/nm_setting_bean_gen.go:380
 #: ../../network/nm_setting_bean_gen.go:389
 #: ../../network/nm_setting_bean_gen.go:390
+#: ../../network/nm_setting_bean_gen.go:391
+#: ../../network/nm_setting_beans_gen.go:237
+#: ../../network/nm_setting_beans_gen.go:238
+#: ../../network/nm_setting_beans_gen.go:361
+#: ../../network/nm_setting_beans_gen.go:362
 msgid "VPN PPP"
 msgstr "VPN PPP"
 
@@ -2254,6 +2909,9 @@ msgstr "VPN PPP"
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:278
 #: ../../network/nm_setting_bean_gen.go:279
+#: ../../network/nm_setting_bean_gen.go:280
+#: ../../network/nm_setting_beans_gen.go:250
+#: ../../network/nm_setting_beans_gen.go:251
 msgid "No Protocol Field Compression"
 msgstr "بدون فیلد پروتوکل فشرده سازی"
 
@@ -2261,6 +2919,9 @@ msgstr "بدون فیلد پروتوکل فشرده سازی"
 #: ../../network/nm_setting_bean_gen.go:270
 #: ../../network/nm_setting_bean_gen.go:279
 #: ../../network/nm_setting_bean_gen.go:280
+#: ../../network/nm_setting_bean_gen.go:281
+#: ../../network/nm_setting_beans_gen.go:251
+#: ../../network/nm_setting_beans_gen.go:252
 msgid "No Address/Control Compression"
 msgstr "بدون آدرس / کنترل فشرده سازی"
 
@@ -2268,6 +2929,9 @@ msgstr "بدون آدرس / کنترل فشرده سازی"
 #: ../../network/nm_setting_bean_gen.go:314
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:324
+#: ../../network/nm_setting_bean_gen.go:325
+#: ../../network/nm_setting_beans_gen.go:295
+#: ../../network/nm_setting_beans_gen.go:296
 msgid "VPN Security"
 msgstr "امنیت VPN"
 
@@ -2275,6 +2939,9 @@ msgstr "امنیت VPN"
 #: ../../network/nm_setting_bean_gen.go:316
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
+#: ../../network/nm_setting_bean_gen.go:327
+#: ../../network/nm_setting_beans_gen.go:297
+#: ../../network/nm_setting_beans_gen.go:298
 msgid "Cipher"
 msgstr "Cipher"
 
@@ -2282,6 +2949,9 @@ msgstr "Cipher"
 #: ../../network/nm_setting_bean_gen.go:317
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:327
+#: ../../network/nm_setting_bean_gen.go:328
+#: ../../network/nm_setting_beans_gen.go:298
+#: ../../network/nm_setting_beans_gen.go:299
 msgid "HMAC Auth"
 msgstr ""
 
@@ -2289,6 +2959,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:323
 #: ../../network/nm_setting_bean_gen.go:332
 #: ../../network/nm_setting_bean_gen.go:333
+#: ../../network/nm_setting_bean_gen.go:334
+#: ../../network/nm_setting_beans_gen.go:304
+#: ../../network/nm_setting_beans_gen.go:305
 msgid "VPN TLS Authentication"
 msgstr ""
 
@@ -2296,6 +2969,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
+#: ../../network/nm_setting_bean_gen.go:336
+#: ../../network/nm_setting_beans_gen.go:306
+#: ../../network/nm_setting_beans_gen.go:307
 msgid "Subject Match"
 msgstr "موضوع متناسب"
 
@@ -2303,6 +2979,9 @@ msgstr "موضوع متناسب"
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:336
+#: ../../network/nm_setting_bean_gen.go:337
+#: ../../network/nm_setting_beans_gen.go:307
+#: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote Cert Type"
 msgstr "نوع مجوز ریموت"
 
@@ -2310,6 +2989,8 @@ msgstr "نوع مجوز ریموت"
 #: ../../network/nm_setting_bean_gen.go:327
 #: ../../network/nm_setting_bean_gen.go:336
 #: ../../network/nm_setting_bean_gen.go:337
+#: ../../network/nm_setting_bean_gen.go:338
+#: ../../network/nm_setting_beans_gen.go:309
 msgid "Key File"
 msgstr "فایل کلید"
 
@@ -2317,6 +2998,9 @@ msgstr "فایل کلید"
 #: ../../network/nm_setting_bean_gen.go:335
 #: ../../network/nm_setting_bean_gen.go:344
 #: ../../network/nm_setting_bean_gen.go:345
+#: ../../network/nm_setting_bean_gen.go:346
+#: ../../network/nm_setting_beans_gen.go:316
+#: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Proxies"
 msgstr "پراکسی های VPN"
 
@@ -2324,6 +3008,9 @@ msgstr "پراکسی های VPN"
 #: ../../network/nm_setting_bean_gen.go:337
 #: ../../network/nm_setting_bean_gen.go:346
 #: ../../network/nm_setting_bean_gen.go:347
+#: ../../network/nm_setting_bean_gen.go:348
+#: ../../network/nm_setting_beans_gen.go:318
+#: ../../network/nm_setting_beans_gen.go:319
 msgid "Proxy Type"
 msgstr "انواع پراکسی"
 
@@ -2331,6 +3018,9 @@ msgstr "انواع پراکسی"
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
+#: ../../network/nm_setting_bean_gen.go:349
+#: ../../network/nm_setting_beans_gen.go:319
+#: ../../network/nm_setting_beans_gen.go:320
 msgid "Server IP"
 msgstr "IP سرور"
 
@@ -2338,6 +3028,9 @@ msgstr "IP سرور"
 #: ../../network/nm_setting_bean_gen.go:339
 #: ../../network/nm_setting_bean_gen.go:348
 #: ../../network/nm_setting_bean_gen.go:349
+#: ../../network/nm_setting_bean_gen.go:350
+#: ../../network/nm_setting_beans_gen.go:320
+#: ../../network/nm_setting_beans_gen.go:321
 msgid "Port"
 msgstr "پورت"
 
@@ -2345,6 +3038,9 @@ msgstr "پورت"
 #: ../../network/nm_setting_bean_gen.go:340
 #: ../../network/nm_setting_bean_gen.go:349
 #: ../../network/nm_setting_bean_gen.go:350
+#: ../../network/nm_setting_bean_gen.go:351
+#: ../../network/nm_setting_beans_gen.go:321
+#: ../../network/nm_setting_beans_gen.go:322
 msgid "Retry Indefinitely When Failed"
 msgstr "هنگام عدم موفقیت شناسایی را مجددا بررسی کنید"
 
@@ -2352,10 +3048,16 @@ msgstr "هنگام عدم موفقیت شناسایی را مجددا بررسی
 #: ../../network/nm_setting_bean_gen.go:348
 #: ../../network/nm_setting_bean_gen.go:357
 #: ../../network/nm_setting_bean_gen.go:358
+#: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:414
 #: ../../network/nm_setting_bean_gen.go:415
 #: ../../network/nm_setting_bean_gen.go:440
 #: ../../network/nm_setting_bean_gen.go:441
+#: ../../network/nm_setting_bean_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:329
+#: ../../network/nm_setting_beans_gen.go:330
+#: ../../network/nm_setting_beans_gen.go:413
+#: ../../network/nm_setting_beans_gen.go:414
 msgid "VPN Advanced"
 msgstr "VPN پیشرفته"
 
@@ -2363,6 +3065,9 @@ msgstr "VPN پیشرفته"
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
+#: ../../network/nm_setting_bean_gen.go:361
+#: ../../network/nm_setting_beans_gen.go:331
+#: ../../network/nm_setting_beans_gen.go:332
 msgid "Customize Gateway Port"
 msgstr "شخصی سازی پورت درگاه"
 
@@ -2370,6 +3075,9 @@ msgstr "شخصی سازی پورت درگاه"
 #: ../../network/nm_setting_bean_gen.go:351
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:361
+#: ../../network/nm_setting_bean_gen.go:362
+#: ../../network/nm_setting_beans_gen.go:332
+#: ../../network/nm_setting_beans_gen.go:333
 msgid "Gateway Port"
 msgstr "پورت درگاه"
 
@@ -2377,6 +3085,9 @@ msgstr "پورت درگاه"
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:362
+#: ../../network/nm_setting_bean_gen.go:363
+#: ../../network/nm_setting_beans_gen.go:333
+#: ../../network/nm_setting_beans_gen.go:334
 msgid "Customize Renegotiation Interval"
 msgstr ""
 
@@ -2384,6 +3095,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:362
 #: ../../network/nm_setting_bean_gen.go:363
+#: ../../network/nm_setting_bean_gen.go:364
+#: ../../network/nm_setting_beans_gen.go:334
+#: ../../network/nm_setting_beans_gen.go:335
 msgid "Renegotiation Interval"
 msgstr ""
 
@@ -2391,6 +3105,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:354
 #: ../../network/nm_setting_bean_gen.go:363
 #: ../../network/nm_setting_bean_gen.go:364
+#: ../../network/nm_setting_bean_gen.go:365
+#: ../../network/nm_setting_beans_gen.go:335
+#: ../../network/nm_setting_beans_gen.go:336
 msgid "Use LZO data compression"
 msgstr "استفاده از نوع فشرده سازی LZO"
 
@@ -2398,6 +3115,9 @@ msgstr "استفاده از نوع فشرده سازی LZO"
 #: ../../network/nm_setting_bean_gen.go:355
 #: ../../network/nm_setting_bean_gen.go:364
 #: ../../network/nm_setting_bean_gen.go:365
+#: ../../network/nm_setting_bean_gen.go:366
+#: ../../network/nm_setting_beans_gen.go:336
+#: ../../network/nm_setting_beans_gen.go:337
 msgid "Use TCP connection"
 msgstr "استفاده از اتصال TCP"
 
@@ -2405,6 +3125,9 @@ msgstr "استفاده از اتصال TCP"
 #: ../../network/nm_setting_bean_gen.go:356
 #: ../../network/nm_setting_bean_gen.go:365
 #: ../../network/nm_setting_bean_gen.go:366
+#: ../../network/nm_setting_bean_gen.go:367
+#: ../../network/nm_setting_beans_gen.go:337
+#: ../../network/nm_setting_beans_gen.go:338
 msgid "Use TAP device"
 msgstr "استفاده از دستگاه TAP"
 
@@ -2412,6 +3135,9 @@ msgstr "استفاده از دستگاه TAP"
 #: ../../network/nm_setting_bean_gen.go:357
 #: ../../network/nm_setting_bean_gen.go:366
 #: ../../network/nm_setting_bean_gen.go:367
+#: ../../network/nm_setting_bean_gen.go:368
+#: ../../network/nm_setting_beans_gen.go:338
+#: ../../network/nm_setting_beans_gen.go:339
 msgid "Customize Tunnel MTU"
 msgstr "شخصی سازی تونل MTU"
 
@@ -2419,6 +3145,9 @@ msgstr "شخصی سازی تونل MTU"
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:368
 #: ../../network/nm_setting_bean_gen.go:369
+#: ../../network/nm_setting_bean_gen.go:370
+#: ../../network/nm_setting_beans_gen.go:340
+#: ../../network/nm_setting_beans_gen.go:341
 msgid "Customize UDP Fragment Size"
 msgstr "سفارشی سازی حجم قطعه UDP"
 
@@ -2426,6 +3155,9 @@ msgstr "سفارشی سازی حجم قطعه UDP"
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:369
 #: ../../network/nm_setting_bean_gen.go:370
+#: ../../network/nm_setting_bean_gen.go:371
+#: ../../network/nm_setting_beans_gen.go:341
+#: ../../network/nm_setting_beans_gen.go:342
 msgid "UDP Fragment Size"
 msgstr "حجم قطعه UDP"
 
@@ -2433,6 +3165,9 @@ msgstr "حجم قطعه UDP"
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:370
 #: ../../network/nm_setting_bean_gen.go:371
+#: ../../network/nm_setting_bean_gen.go:372
+#: ../../network/nm_setting_beans_gen.go:342
+#: ../../network/nm_setting_beans_gen.go:343
 msgid "Restrict Tunnel TCP MSS"
 msgstr ""
 
@@ -2440,6 +3175,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:362
 #: ../../network/nm_setting_bean_gen.go:371
 #: ../../network/nm_setting_bean_gen.go:372
+#: ../../network/nm_setting_bean_gen.go:373
+#: ../../network/nm_setting_beans_gen.go:343
+#: ../../network/nm_setting_beans_gen.go:344
 msgid "Randomize Remote Hosts"
 msgstr "انتخاب تصادفی هاست ریموت"
 
@@ -2447,6 +3185,9 @@ msgstr "انتخاب تصادفی هاست ریموت"
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:442
 #: ../../network/nm_setting_bean_gen.go:443
+#: ../../network/nm_setting_bean_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:415
+#: ../../network/nm_setting_beans_gen.go:416
 msgid "Domain"
 msgstr "دامین"
 
@@ -2454,6 +3195,9 @@ msgstr "دامین"
 #: ../../network/nm_setting_bean_gen.go:418
 #: ../../network/nm_setting_bean_gen.go:443
 #: ../../network/nm_setting_bean_gen.go:444
+#: ../../network/nm_setting_bean_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:416
+#: ../../network/nm_setting_beans_gen.go:417
 msgid "Vendor"
 msgstr "سازنده"
 
@@ -2461,6 +3205,9 @@ msgstr "سازنده"
 #: ../../network/nm_setting_bean_gen.go:419
 #: ../../network/nm_setting_bean_gen.go:444
 #: ../../network/nm_setting_bean_gen.go:445
+#: ../../network/nm_setting_bean_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:417
+#: ../../network/nm_setting_beans_gen.go:418
 msgid "Version"
 msgstr "نسخه"
 
@@ -2468,6 +3215,9 @@ msgstr "نسخه"
 #: ../../network/nm_setting_bean_gen.go:420
 #: ../../network/nm_setting_bean_gen.go:445
 #: ../../network/nm_setting_bean_gen.go:446
+#: ../../network/nm_setting_bean_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:418
+#: ../../network/nm_setting_beans_gen.go:419
 msgid "Encryption"
 msgstr "رمزگذاری"
 
@@ -2475,6 +3225,9 @@ msgstr "رمزگذاری"
 #: ../../network/nm_setting_bean_gen.go:421
 #: ../../network/nm_setting_bean_gen.go:446
 #: ../../network/nm_setting_bean_gen.go:447
+#: ../../network/nm_setting_bean_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:419
+#: ../../network/nm_setting_beans_gen.go:420
 msgid "NAT Traversal"
 msgstr ""
 
@@ -2482,6 +3235,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:422
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:448
+#: ../../network/nm_setting_bean_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:420
+#: ../../network/nm_setting_beans_gen.go:421
 msgid "IKE DH Group"
 msgstr ""
 
@@ -2489,6 +3245,9 @@ msgstr ""
 #: ../../network/nm_setting_bean_gen.go:423
 #: ../../network/nm_setting_bean_gen.go:448
 #: ../../network/nm_setting_bean_gen.go:449
+#: ../../network/nm_setting_bean_gen.go:451
+#: ../../network/nm_setting_beans_gen.go:421
+#: ../../network/nm_setting_beans_gen.go:422
 msgid "Forward Secrecy"
 msgstr "ارسال محرمانه"
 
@@ -2496,6 +3255,9 @@ msgstr "ارسال محرمانه"
 #: ../../network/nm_setting_bean_gen.go:424
 #: ../../network/nm_setting_bean_gen.go:449
 #: ../../network/nm_setting_bean_gen.go:450
+#: ../../network/nm_setting_bean_gen.go:452
+#: ../../network/nm_setting_beans_gen.go:422
+#: ../../network/nm_setting_beans_gen.go:423
 msgid "Local Port"
 msgstr "پورت محلی"
 
@@ -2503,6 +3265,9 @@ msgstr "پورت محلی"
 #: ../../network/nm_setting_bean_gen.go:425
 #: ../../network/nm_setting_bean_gen.go:450
 #: ../../network/nm_setting_bean_gen.go:451
+#: ../../network/nm_setting_bean_gen.go:453
+#: ../../network/nm_setting_beans_gen.go:423
+#: ../../network/nm_setting_beans_gen.go:424
 msgid "Disable Dead Peer Detection"
 msgstr "غیر فعال کردن تشخیص Dead Peer"
 
@@ -2510,6 +3275,9 @@ msgstr "غیر فعال کردن تشخیص Dead Peer"
 #: ../../network/nm_setting_bean_gen.go:431
 #: ../../network/nm_setting_bean_gen.go:456
 #: ../../network/nm_setting_bean_gen.go:457
+#: ../../network/nm_setting_bean_gen.go:459
+#: ../../network/nm_setting_beans_gen.go:429
+#: ../../network/nm_setting_beans_gen.go:430
 msgid "IPv4"
 msgstr "IPv4"
 
@@ -2519,8 +3287,14 @@ msgstr "IPv4"
 #: ../../network/nm_setting_bean_gen.go:445
 #: ../../network/nm_setting_bean_gen.go:458
 #: ../../network/nm_setting_bean_gen.go:459
+#: ../../network/nm_setting_bean_gen.go:461
 #: ../../network/nm_setting_bean_gen.go:471
 #: ../../network/nm_setting_bean_gen.go:472
+#: ../../network/nm_setting_bean_gen.go:474
+#: ../../network/nm_setting_beans_gen.go:431
+#: ../../network/nm_setting_beans_gen.go:432
+#: ../../network/nm_setting_beans_gen.go:444
+#: ../../network/nm_setting_beans_gen.go:445
 msgid "Method"
 msgstr "روش"
 
@@ -2530,8 +3304,14 @@ msgstr "روش"
 #: ../../network/nm_setting_bean_gen.go:446
 #: ../../network/nm_setting_bean_gen.go:459
 #: ../../network/nm_setting_bean_gen.go:460
+#: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:472
 #: ../../network/nm_setting_bean_gen.go:473
+#: ../../network/nm_setting_bean_gen.go:475
+#: ../../network/nm_setting_beans_gen.go:432
+#: ../../network/nm_setting_beans_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "IP Address"
 msgstr "آدرس IP"
 
@@ -2539,6 +3319,9 @@ msgstr "آدرس IP"
 #: ../../network/nm_setting_bean_gen.go:435
 #: ../../network/nm_setting_bean_gen.go:460
 #: ../../network/nm_setting_bean_gen.go:461
+#: ../../network/nm_setting_bean_gen.go:463
+#: ../../network/nm_setting_beans_gen.go:433
+#: ../../network/nm_setting_beans_gen.go:434
 msgid "Netmask"
 msgstr "ماسک زیر شبکه"
 
@@ -2553,6 +3336,9 @@ msgstr "سرور DNS"
 #: ../../network/nm_setting_bean_gen.go:443
 #: ../../network/nm_setting_bean_gen.go:469
 #: ../../network/nm_setting_bean_gen.go:470
+#: ../../network/nm_setting_bean_gen.go:472
+#: ../../network/nm_setting_beans_gen.go:442
+#: ../../network/nm_setting_beans_gen.go:443
 msgid "IPv6"
 msgstr "IPv6"
 
@@ -2560,35 +3346,56 @@ msgstr "IPv6"
 #: ../../network/nm_setting_bean_gen.go:447
 #: ../../network/nm_setting_bean_gen.go:473
 #: ../../network/nm_setting_bean_gen.go:474
+#: ../../network/nm_setting_bean_gen.go:476
+#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "Prefix"
 msgstr "پیشوند"
 
 #: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:463
+#: ../../network/nm_setting_bean_gen.go:465
 #: ../../network/nm_setting_bean_gen.go:475
 #: ../../network/nm_setting_bean_gen.go:476
+#: ../../network/nm_setting_bean_gen.go:478
+#: ../../network/nm_setting_beans_gen.go:435
+#: ../../network/nm_setting_beans_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Primary DNS"
 msgstr "DNS اولیه"
 
 #: ../../network/nm_setting_bean_gen.go:463
 #: ../../network/nm_setting_bean_gen.go:464
+#: ../../network/nm_setting_bean_gen.go:466
 #: ../../network/nm_setting_bean_gen.go:476
 #: ../../network/nm_setting_bean_gen.go:477
+#: ../../network/nm_setting_bean_gen.go:479
+#: ../../network/nm_setting_beans_gen.go:436
+#: ../../network/nm_setting_beans_gen.go:437
+#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Secondary DNS"
 msgstr "DNS ثانویه"
 
-#: ../../network/nm_setting_gsm.go:144 ../../network/nm_setting_gsm.go:146
+#: ../../network/nm_setting_gsm.go:144 ../../network/nm_setting_gsm.go:145
+#: ../../network/nm_setting_gsm.go:146 ../../network/nm_setting_gsm.go:147
 #: ../../network/nm_setting_gsm.go:156 ../../network/nm_setting_gsm.go:158
 #: ../../network/nm_setting_gsm.go:211 ../../network/nm_setting_gsm.go:213
 #: ../../network/nm_setting_virtual_key.go:134
+#: ../../network/nm_setting_virtual_key.go:140
 #: ../../network/nm_setting_virtual_key.go:146
 msgid "Custom"
 msgstr "شخصی"
 
-#: ../../network/nm_setting_gsm.go:154 ../../network/nm_setting_gsm.go:166
-#: ../../network/nm_setting_gsm.go:221
+#: ../../network/nm_setting_gsm.go:154 ../../network/nm_setting_gsm.go:155
+#: ../../network/nm_setting_gsm.go:166 ../../network/nm_setting_gsm.go:221
 #: ../../network/nm_setting_virtual_key.go:143
+#: ../../network/nm_setting_virtual_key.go:149
 #: ../../network/nm_setting_virtual_key.go:155
+#: ../../network/nm_setting_vpn_openvpn.go:219
+#: ../../network/nm_setting_vpn_openvpn.go:239
+#: ../../network/nm_setting_vpn_openvpn.go:270
 #: ../../network/nm_setting_vpn_openvpn.go:356
 #: ../../network/nm_setting_vpn_openvpn.go:370
 #: ../../network/nm_setting_vpn_openvpn.go:374
@@ -2599,8 +3406,12 @@ msgstr "شخصی"
 #: ../../network/nm_setting_vpn_openvpn.go:421
 #: ../../network/nm_setting_vpn_openvpn.go:425
 #: ../../network/nm_setting_wireless.go:23
+#: ../../network/nm_setting_wireless.go:24
+#: ../../network/nm_setting_wireless.go:25
 #: ../../network/nm_setting_wireless.go:35
 #: ../../network/nm_setting_wireless.go:72
+#: ../../network/nm_setting_wireless.go:73
+#: ../../network/nm_setting_wireless.go:74
 #: ../../network/nm_setting_wireless.go:84
 #: ../../network/nm_setting_wireless.go:140
 #: ../../network/nm_setting_wireless.go:189
@@ -2636,349 +3447,421 @@ msgid "Use Only 4G (LTE)"
 msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip4_config.go:39
 #: ../../network/nm_setting_ip4_config.go:175
 #: ../../network/nm_setting_ip6_config.go:29
+#: ../../network/nm_setting_ip6_config.go:30
 #: ../../network/nm_setting_ip6_config.go:41
 #: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
 msgstr ""
 
 #: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip4_config.go:40
 #: ../../network/nm_setting_ip4_config.go:176
 #: ../../network/nm_setting_ip6_config.go:30
+#: ../../network/nm_setting_ip6_config.go:31
 #: ../../network/nm_setting_ip6_config.go:42
 #: ../../network/nm_setting_ip6_config.go:67
 msgid "Manual"
 msgstr "دستی"
 
 #: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip4_config.go:41
 #: ../../network/nm_setting_ip4_config.go:177
 #: ../../network/nm_setting_ip6_config.go:31
+#: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_ip6_config.go:43
 #: ../../network/nm_setting_ip6_config.go:68
 #: ../../network/nm_setting_wireless_security.go:70
+#: ../../network/nm_setting_wireless_security.go:71
 #: ../../network/nm_setting_wireless_security.go:82
 #: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
 msgstr "اشتراکی"
 
 #: ../../network/nm_setting_ip6_config.go:26
+#: ../../network/nm_setting_ip6_config.go:27
 #: ../../network/nm_setting_ip6_config.go:38
 #: ../../network/nm_setting_ip6_config.go:63
 msgid "Ignore"
 msgstr "نادیده گرفتن"
 
 #: ../../network/nm_setting_ip6_config.go:28
+#: ../../network/nm_setting_ip6_config.go:29
 #: ../../network/nm_setting_ip6_config.go:40
 #: ../../network/nm_setting_ip6_config.go:65
 msgid "DHCP"
 msgstr "DHCP"
 
 #: ../../network/nm_setting_virtual_key.go:148
+#: ../../network/nm_setting_virtual_key.go:154
 #: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:149
+#: ../../network/nm_setting_virtual_key.go:155
 #: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:156
+#: ../../network/nm_setting_virtual_key.go:162
 #: ../../network/nm_setting_virtual_key.go:168
 msgid "L2TP"
 msgstr "L2TP"
 
 #: ../../network/nm_setting_virtual_key.go:157
+#: ../../network/nm_setting_virtual_key.go:163
 #: ../../network/nm_setting_virtual_key.go:169
 msgid "PPTP"
 msgstr "PPTP"
 
 #: ../../network/nm_setting_virtual_key.go:158
+#: ../../network/nm_setting_virtual_key.go:164
 #: ../../network/nm_setting_virtual_key.go:170
 msgid "OpenConnect"
 msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:159
+#: ../../network/nm_setting_virtual_key.go:165
 #: ../../network/nm_setting_virtual_key.go:171
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
 #: ../../network/nm_setting_virtual_key.go:160
+#: ../../network/nm_setting_virtual_key.go:166
 #: ../../network/nm_setting_virtual_key.go:172
 msgid "VPNC"
 msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:176
+#: ../../network/nm_setting_virtual_key.go:182
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:190
+#: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:199
 #: ../../network/nm_setting_virtual_key.go:202
+#: ../../network/nm_setting_virtual_key.go:205
 #: ../../network/nm_setting_virtual_key.go:211
 msgid "All Available (default)"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:191
+#: ../../network/nm_setting_virtual_key.go:197
 #: ../../network/nm_setting_virtual_key.go:200
 #: ../../network/nm_setting_virtual_key.go:203
+#: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:212
 msgid "128-bit (most secure)"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:192
+#: ../../network/nm_setting_virtual_key.go:198
 #: ../../network/nm_setting_virtual_key.go:201
 #: ../../network/nm_setting_virtual_key.go:204
+#: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:213
 msgid "40-bit (less secure)"
 msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:208
+#: ../../network/nm_setting_virtual_key.go:214
 #: ../../network/nm_setting_virtual_key.go:220
 msgid "Secure (default)"
 msgstr "امن(پیش فرض)"
 
 #: ../../network/nm_setting_virtual_key.go:209
+#: ../../network/nm_setting_virtual_key.go:215
 #: ../../network/nm_setting_virtual_key.go:221
 msgid "Weak"
 msgstr "ضعیف"
 
+#: ../../network/nm_setting_vpn_openvpn.go:103
 #: ../../network/nm_setting_vpn_openvpn.go:236
 #: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:105
 #: ../../network/nm_setting_vpn_openvpn.go:238
 #: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_openvpn.go:110
 #: ../../network/nm_setting_vpn_openvpn.go:243
 #: ../../network/nm_setting_vpn_openvpn.go:255
+#: ../../network/nm_setting_vpn_openvpn.go:276
 #: ../../network/nm_setting_vpn_openvpn.go:413
 #: ../../network/nm_setting_vpn_openvpn.go:427
 #: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "0"
 msgstr "0"
 
+#: ../../network/nm_setting_vpn_openvpn.go:111
 #: ../../network/nm_setting_vpn_openvpn.go:244
 #: ../../network/nm_setting_vpn_openvpn.go:256
+#: ../../network/nm_setting_vpn_openvpn.go:277
 #: ../../network/nm_setting_vpn_openvpn.go:414
 #: ../../network/nm_setting_vpn_openvpn.go:428
 #: ../../network/nm_setting_vpn_openvpn.go:432
 msgid "1"
 msgstr "1"
 
+#: ../../network/nm_setting_vpn_openvpn.go:220
 #: ../../network/nm_setting_vpn_openvpn.go:357
 #: ../../network/nm_setting_vpn_openvpn.go:371
 #: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
 msgstr "DES-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:221
 #: ../../network/nm_setting_vpn_openvpn.go:358
 #: ../../network/nm_setting_vpn_openvpn.go:372
 #: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "RC2-CBC"
 msgstr "RC2-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:222
 #: ../../network/nm_setting_vpn_openvpn.go:359
 #: ../../network/nm_setting_vpn_openvpn.go:373
 #: ../../network/nm_setting_vpn_openvpn.go:377
 msgid "DES-EDE-CBC"
 msgstr "DES-EDE-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:223
 #: ../../network/nm_setting_vpn_openvpn.go:360
 #: ../../network/nm_setting_vpn_openvpn.go:374
 #: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-EDE3-CBC"
 msgstr "DES-EDE3-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:224
 #: ../../network/nm_setting_vpn_openvpn.go:361
 #: ../../network/nm_setting_vpn_openvpn.go:375
 #: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "DESX-CBC"
 msgstr "DESX-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:225
 #: ../../network/nm_setting_vpn_openvpn.go:362
 #: ../../network/nm_setting_vpn_openvpn.go:376
 #: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "BF-CBC"
 msgstr "BF-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:226
 #: ../../network/nm_setting_vpn_openvpn.go:363
 #: ../../network/nm_setting_vpn_openvpn.go:377
 #: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "RC2-40-CBC"
 msgstr "RC2-40-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:227
 #: ../../network/nm_setting_vpn_openvpn.go:364
 #: ../../network/nm_setting_vpn_openvpn.go:378
 #: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "CAST5-CBC"
 msgstr "CAST5-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:228
 #: ../../network/nm_setting_vpn_openvpn.go:365
 #: ../../network/nm_setting_vpn_openvpn.go:379
 #: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "RC2-64-CBC"
 msgstr "RC2-64-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:229
 #: ../../network/nm_setting_vpn_openvpn.go:366
 #: ../../network/nm_setting_vpn_openvpn.go:380
 #: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "AES-128-CBC"
 msgstr "AES-128-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:230
 #: ../../network/nm_setting_vpn_openvpn.go:367
 #: ../../network/nm_setting_vpn_openvpn.go:381
 #: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "AES-192-CBC"
 msgstr "AES-192-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:231
 #: ../../network/nm_setting_vpn_openvpn.go:368
 #: ../../network/nm_setting_vpn_openvpn.go:382
 #: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "AES-256-CBC"
 msgstr "AES-256-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:232
 #: ../../network/nm_setting_vpn_openvpn.go:369
 #: ../../network/nm_setting_vpn_openvpn.go:383
 #: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-128-CBC"
 msgstr "CAMELLIA-128-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:233
 #: ../../network/nm_setting_vpn_openvpn.go:370
 #: ../../network/nm_setting_vpn_openvpn.go:384
 #: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-192-CBC"
 msgstr "CAMELLIA-192-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:234
 #: ../../network/nm_setting_vpn_openvpn.go:371
 #: ../../network/nm_setting_vpn_openvpn.go:385
 #: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "CAMELLIA-256-CBC"
 msgstr "CAMELLIA-256-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:235
 #: ../../network/nm_setting_vpn_openvpn.go:372
 #: ../../network/nm_setting_vpn_openvpn.go:386
 #: ../../network/nm_setting_vpn_openvpn.go:390
 msgid "SEED-CBC"
 msgstr "SEED-CBC"
 
+#: ../../network/nm_setting_vpn_openvpn.go:241
 #: ../../network/nm_setting_vpn_openvpn.go:378
 #: ../../network/nm_setting_vpn_openvpn.go:392
 #: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
+#: ../../network/nm_setting_vpn_openvpn.go:242
 #: ../../network/nm_setting_vpn_openvpn.go:379
 #: ../../network/nm_setting_vpn_openvpn.go:393
 #: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "MD-5"
 msgstr "MD-5"
 
+#: ../../network/nm_setting_vpn_openvpn.go:243
 #: ../../network/nm_setting_vpn_openvpn.go:380
 #: ../../network/nm_setting_vpn_openvpn.go:394
 #: ../../network/nm_setting_vpn_openvpn.go:398
 msgid "SHA-1"
 msgstr "SHA-1"
 
+#: ../../network/nm_setting_vpn_openvpn.go:244
 #: ../../network/nm_setting_vpn_openvpn.go:381
 #: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "SHA-224"
 msgstr "SHA-224"
 
+#: ../../network/nm_setting_vpn_openvpn.go:245
 #: ../../network/nm_setting_vpn_openvpn.go:382
 #: ../../network/nm_setting_vpn_openvpn.go:396
 #: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "SHA-256"
 msgstr "SHA-256"
 
+#: ../../network/nm_setting_vpn_openvpn.go:246
 #: ../../network/nm_setting_vpn_openvpn.go:383
 #: ../../network/nm_setting_vpn_openvpn.go:397
 #: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-384"
 msgstr "SHA-384"
 
+#: ../../network/nm_setting_vpn_openvpn.go:247
 #: ../../network/nm_setting_vpn_openvpn.go:384
 #: ../../network/nm_setting_vpn_openvpn.go:398
 #: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "SHA-512"
 msgstr "SHA-512"
 
+#: ../../network/nm_setting_vpn_openvpn.go:248
 #: ../../network/nm_setting_vpn_openvpn.go:385
 #: ../../network/nm_setting_vpn_openvpn.go:399
 #: ../../network/nm_setting_vpn_openvpn.go:403
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
+#: ../../network/nm_setting_vpn_openvpn.go:271
 #: ../../network/nm_setting_vpn_openvpn.go:408
 #: ../../network/nm_setting_vpn_openvpn.go:422
 #: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
 msgstr "کلاینت"
 
+#: ../../network/nm_setting_vpn_openvpn.go:272
 #: ../../network/nm_setting_vpn_openvpn.go:409
 #: ../../network/nm_setting_vpn_openvpn.go:423
 #: ../../network/nm_setting_vpn_openvpn.go:427
 msgid "Server"
 msgstr "سرور"
 
+#: ../../network/nm_setting_vpn_openvpn.go:322
 #: ../../network/nm_setting_vpn_openvpn.go:459
 #: ../../network/nm_setting_vpn_openvpn.go:473
 #: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "HTTP"
 msgstr "HTTP"
 
+#: ../../network/nm_setting_vpn_openvpn.go:323
 #: ../../network/nm_setting_vpn_openvpn.go:460
 #: ../../network/nm_setting_vpn_openvpn.go:474
 #: ../../network/nm_setting_vpn_openvpn.go:478
 msgid "SOCKS"
 msgstr "SOCKS"
 
+#: ../../network/nm_setting_vpn_strongswan.go:77
 #: ../../network/nm_setting_vpn_strongswan.go:96
+#: ../../network/nm_setting_vpn_strongswan.go:100
 msgid "SSH Agent"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_strongswan.go:78
 #: ../../network/nm_setting_vpn_strongswan.go:97
+#: ../../network/nm_setting_vpn_strongswan.go:101
 msgid "Smartcard"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_strongswan.go:79
 #: ../../network/nm_setting_vpn_strongswan.go:98
+#: ../../network/nm_setting_vpn_strongswan.go:102
 msgid "EAP"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:132
 #: ../../network/nm_setting_vpn_vpnc.go:238
 #: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
 msgstr "سیسکو (پیش فرض)"
 
+#: ../../network/nm_setting_vpn_vpnc.go:133
 #: ../../network/nm_setting_vpn_vpnc.go:239
 #: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:137
 #: ../../network/nm_setting_vpn_vpnc.go:243
 #: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:138
 #: ../../network/nm_setting_vpn_vpnc.go:244
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:139
 #: ../../network/nm_setting_vpn_vpnc.go:245
 #: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:144
+#: ../../network/nm_setting_vpn_vpnc.go:152
 #: ../../network/nm_setting_vpn_vpnc.go:250
 #: ../../network/nm_setting_vpn_vpnc.go:258
 #: ../../network/nm_setting_vpn_vpnc.go:262
@@ -2986,11 +3869,14 @@ msgstr ""
 msgid "DH Group 1"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:145
 #: ../../network/nm_setting_vpn_vpnc.go:251
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:146
+#: ../../network/nm_setting_vpn_vpnc.go:154
 #: ../../network/nm_setting_vpn_vpnc.go:252
 #: ../../network/nm_setting_vpn_vpnc.go:260
 #: ../../network/nm_setting_vpn_vpnc.go:264
@@ -2998,446 +3884,531 @@ msgstr ""
 msgid "DH Group 5"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:150
 #: ../../network/nm_setting_vpn_vpnc.go:256
 #: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
 msgstr ""
 
+#: ../../network/nm_setting_vpn_vpnc.go:153
 #: ../../network/nm_setting_vpn_vpnc.go:259
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
 msgstr ""
 
 #: ../../network/nm_setting_wireless.go:174
+#: ../../network/nm_setting_wireless.go:175
 #: ../../network/nm_setting_wireless.go:186
+#: ../../network/nm_setting_wireless.go:190
 #: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
 msgstr "زیر ساخت ها"
 
 #: ../../network/nm_setting_wireless.go:175
+#: ../../network/nm_setting_wireless.go:176
 #: ../../network/nm_setting_wireless.go:187
+#: ../../network/nm_setting_wireless.go:191
 #: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
 #: ../../network/nm_setting_wireless.go:176
+#: ../../network/nm_setting_wireless.go:177
 #: ../../network/nm_setting_wireless.go:188
+#: ../../network/nm_setting_wireless.go:192
 #: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
 #: ../../network/nm_setting_wireless.go:181
+#: ../../network/nm_setting_wireless.go:182
 #: ../../network/nm_setting_wireless.go:193
+#: ../../network/nm_setting_wireless.go:197
 #: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
 #: ../../network/nm_setting_wireless.go:182
+#: ../../network/nm_setting_wireless.go:183
 #: ../../network/nm_setting_wireless.go:194
+#: ../../network/nm_setting_wireless.go:198
 #: ../../network/nm_setting_wireless.go:299
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
 #: ../../network/nm_setting_wireless_security.go:54
+#: ../../network/nm_setting_wireless_security.go:55
 #: ../../network/nm_setting_wireless_security.go:66
 #: ../../network/nm_setting_wireless_security.go:189
 msgid "WEP"
 msgstr "WEP"
 
 #: ../../network/nm_setting_wireless_security.go:55
+#: ../../network/nm_setting_wireless_security.go:56
 #: ../../network/nm_setting_wireless_security.go:67
 #: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
 msgstr "Dynamic WEP"
 
 #: ../../network/nm_setting_wireless_security.go:56
+#: ../../network/nm_setting_wireless_security.go:57
 #: ../../network/nm_setting_wireless_security.go:68
 #: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
 msgstr "Ad-Hoc WPA-PSK"
 
 #: ../../network/nm_setting_wireless_security.go:57
+#: ../../network/nm_setting_wireless_security.go:58
 #: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
 msgstr "WPA-PSK Infrastructure"
 
 #: ../../network/nm_setting_wireless_security.go:58
+#: ../../network/nm_setting_wireless_security.go:59
 #: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
 msgstr "WPA Enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:62
+#: ../../network/nm_setting_wireless_security.go:63
 #: ../../network/nm_setting_wireless_security.go:74
 #: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
 msgstr "WEP40"
 
 #: ../../network/nm_setting_wireless_security.go:63
+#: ../../network/nm_setting_wireless_security.go:64
 #: ../../network/nm_setting_wireless_security.go:75
 #: ../../network/nm_setting_wireless_security.go:198
 msgid "WEP104"
 msgstr "WEP104"
 
 #: ../../network/nm_setting_wireless_security.go:64
+#: ../../network/nm_setting_wireless_security.go:65
 #: ../../network/nm_setting_wireless_security.go:76
 #: ../../network/nm_setting_wireless_security.go:199
 msgid "TKIP"
 msgstr "TKIP"
 
 #: ../../network/nm_setting_wireless_security.go:65
+#: ../../network/nm_setting_wireless_security.go:66
 #: ../../network/nm_setting_wireless_security.go:77
 #: ../../network/nm_setting_wireless_security.go:200
 msgid "CCMP"
 msgstr "CCMP"
 
 #: ../../network/nm_setting_wireless_security.go:69
+#: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:81
 #: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
 msgstr "باز کردن"
 
-#: ../../network/state_handler.go:22 ../../network/state_handler.go:34
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:22 ../../network/state_handler.go:23
+#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 msgid "Device state changed."
 msgstr "وضعیت دستگاه تغییر پیدا کرد."
 
-#: ../../network/state_handler.go:23 ../../network/state_handler.go:34
-#: ../../network/state_handler.go:35
+#: ../../network/state_handler.go:23 ../../network/state_handler.go:24
+#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 msgid "Device state changed, unknown reason."
 msgstr "به دلیل ناشناخته وضعیت دستگاه تغییر پیدا کرد."
 
-#: ../../network/state_handler.go:24 ../../network/state_handler.go:36
+#: ../../network/state_handler.go:24 ../../network/state_handler.go:25
+#: ../../network/state_handler.go:36
 msgid "The device is now managed."
 msgstr "دستگاه هم اکنون مدیریت شده."
 
-#: ../../network/state_handler.go:25 ../../network/state_handler.go:37
+#: ../../network/state_handler.go:25 ../../network/state_handler.go:26
+#: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
 msgstr "دستگاه دیگر مدیریت نمی شود."
 
-#: ../../network/state_handler.go:26 ../../network/state_handler.go:38
+#: ../../network/state_handler.go:26 ../../network/state_handler.go:27
+#: ../../network/state_handler.go:38
 msgid "The device has not been ready for configuration."
 msgstr "دستگاه برای پیکر بندی آماده نیست."
 
-#: ../../network/state_handler.go:27 ../../network/state_handler.go:39
+#: ../../network/state_handler.go:27 ../../network/state_handler.go:28
+#: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
 msgstr ""
 
-#: ../../network/state_handler.go:28 ../../network/state_handler.go:40
+#: ../../network/state_handler.go:28 ../../network/state_handler.go:29
+#: ../../network/state_handler.go:40
 msgid "The IP configuration is no longer valid."
 msgstr "پیکربندی IP معتبر نیست."
 
-#: ../../network/state_handler.go:29 ../../network/state_handler.go:41
+#: ../../network/state_handler.go:29 ../../network/state_handler.go:30
+#: ../../network/state_handler.go:41
 msgid "Passwords were required but not provided."
 msgstr "پسورد مورد نیاز است اما فراهم نشده."
 
-#: ../../network/state_handler.go:30 ../../network/state_handler.go:42
+#: ../../network/state_handler.go:30 ../../network/state_handler.go:31
+#: ../../network/state_handler.go:42
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
 msgstr ""
 
-#: ../../network/state_handler.go:31 ../../network/state_handler.go:43
+#: ../../network/state_handler.go:31 ../../network/state_handler.go:32
+#: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
 msgstr ""
 
-#: ../../network/state_handler.go:32 ../../network/state_handler.go:44
+#: ../../network/state_handler.go:32 ../../network/state_handler.go:33
+#: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:33 ../../network/state_handler.go:45
+#: ../../network/state_handler.go:33 ../../network/state_handler.go:34
+#: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
 msgstr ""
 
-#: ../../network/state_handler.go:34 ../../network/state_handler.go:46
+#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
+#: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
 msgstr ""
 
-#: ../../network/state_handler.go:35 ../../network/state_handler.go:47
+#: ../../network/state_handler.go:35 ../../network/state_handler.go:36
+#: ../../network/state_handler.go:47
 msgid "The PPP service disconnected unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:36 ../../network/state_handler.go:48
+#: ../../network/state_handler.go:36 ../../network/state_handler.go:37
+#: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:37 ../../network/state_handler.go:49
+#: ../../network/state_handler.go:37 ../../network/state_handler.go:38
+#: ../../network/state_handler.go:49
 msgid "The DHCP service failed to start within the allowed time."
 msgstr ""
 
-#: ../../network/state_handler.go:38 ../../network/state_handler.go:50
+#: ../../network/state_handler.go:38 ../../network/state_handler.go:39
+#: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
 msgstr ""
 
-#: ../../network/state_handler.go:39 ../../network/state_handler.go:51
+#: ../../network/state_handler.go:39 ../../network/state_handler.go:40
+#: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:40 ../../network/state_handler.go:52
+#: ../../network/state_handler.go:40 ../../network/state_handler.go:41
+#: ../../network/state_handler.go:52
 msgid "The shared connection service failed to start."
 msgstr ""
 
-#: ../../network/state_handler.go:41 ../../network/state_handler.go:53
+#: ../../network/state_handler.go:41 ../../network/state_handler.go:42
+#: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:42 ../../network/state_handler.go:54
+#: ../../network/state_handler.go:42 ../../network/state_handler.go:43
+#: ../../network/state_handler.go:54
 msgid "The AutoIP service failed to start."
 msgstr ""
 
-#: ../../network/state_handler.go:43 ../../network/state_handler.go:55
+#: ../../network/state_handler.go:43 ../../network/state_handler.go:44
+#: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
 msgstr ""
 
-#: ../../network/state_handler.go:44 ../../network/state_handler.go:56
+#: ../../network/state_handler.go:44 ../../network/state_handler.go:45
+#: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
 msgstr ""
 
-#: ../../network/state_handler.go:45 ../../network/state_handler.go:57
+#: ../../network/state_handler.go:45 ../../network/state_handler.go:46
+#: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
 msgstr "شماره گیری به دلیل مشغول بودن خط ناموفق بود."
 
-#: ../../network/state_handler.go:46 ../../network/state_handler.go:58
+#: ../../network/state_handler.go:46 ../../network/state_handler.go:47
+#: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
 msgstr ""
 
-#: ../../network/state_handler.go:47 ../../network/state_handler.go:59
+#: ../../network/state_handler.go:47 ../../network/state_handler.go:48
+#: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
 msgstr ""
 
-#: ../../network/state_handler.go:48 ../../network/state_handler.go:60
+#: ../../network/state_handler.go:48 ../../network/state_handler.go:49
+#: ../../network/state_handler.go:60
 msgid "Dialing timed out."
 msgstr "مدت زمان تماس گرفتن به اتمام رسید."
 
-#: ../../network/state_handler.go:49 ../../network/state_handler.go:61
+#: ../../network/state_handler.go:49 ../../network/state_handler.go:50
+#: ../../network/state_handler.go:61
 msgid "Dialing failed."
 msgstr "شماره گیری ناموفق بود."
 
-#: ../../network/state_handler.go:50 ../../network/state_handler.go:62
+#: ../../network/state_handler.go:50 ../../network/state_handler.go:51
+#: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
 msgstr "راه اندازی مودم ناموفق بود."
 
-#: ../../network/state_handler.go:51 ../../network/state_handler.go:63
+#: ../../network/state_handler.go:51 ../../network/state_handler.go:52
+#: ../../network/state_handler.go:63
 msgid "Failed to select the specified GSM APN."
 msgstr ""
 
-#: ../../network/state_handler.go:52 ../../network/state_handler.go:64
+#: ../../network/state_handler.go:52 ../../network/state_handler.go:53
+#: ../../network/state_handler.go:64
 msgid "No networks searched."
 msgstr "شبکه ای جستجو نشد."
 
-#: ../../network/state_handler.go:53 ../../network/state_handler.go:65
+#: ../../network/state_handler.go:53 ../../network/state_handler.go:54
+#: ../../network/state_handler.go:65
 msgid "Network registration was denied."
 msgstr "دسترسی به ثبت شبکه داده نشد."
 
-#: ../../network/state_handler.go:54 ../../network/state_handler.go:66
+#: ../../network/state_handler.go:54 ../../network/state_handler.go:55
+#: ../../network/state_handler.go:66
 msgid "Network registration timed out."
 msgstr "زمان ثبت شبکه به پایان رسید."
 
-#: ../../network/state_handler.go:55 ../../network/state_handler.go:67
+#: ../../network/state_handler.go:55 ../../network/state_handler.go:56
+#: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
 msgstr ""
 
-#: ../../network/state_handler.go:56 ../../network/state_handler.go:68
+#: ../../network/state_handler.go:56 ../../network/state_handler.go:57
+#: ../../network/state_handler.go:68
 msgid "PIN check failed."
 msgstr "بررسی PIN ناموفق بود."
 
-#: ../../network/state_handler.go:57 ../../network/state_handler.go:69
+#: ../../network/state_handler.go:57 ../../network/state_handler.go:58
+#: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
 msgstr "ممکن است Firmware مورد نیاز دستگاه مشکل داشته باشد."
 
-#: ../../network/state_handler.go:58 ../../network/state_handler.go:70
+#: ../../network/state_handler.go:58 ../../network/state_handler.go:59
+#: ../../network/state_handler.go:70
 msgid "The device was removed."
 msgstr "دستگاه حذف شد."
 
-#: ../../network/state_handler.go:59 ../../network/state_handler.go:71
+#: ../../network/state_handler.go:59 ../../network/state_handler.go:60
+#: ../../network/state_handler.go:71
 msgid "NetworkManager went to sleep."
 msgstr ""
 
-#: ../../network/state_handler.go:60 ../../network/state_handler.go:72
+#: ../../network/state_handler.go:60 ../../network/state_handler.go:61
+#: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
 msgstr "اتصال فعال دستگاه حذف شده یا ناپدید شده."
 
-#: ../../network/state_handler.go:61 ../../network/state_handler.go:73
+#: ../../network/state_handler.go:61 ../../network/state_handler.go:62
+#: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
 msgstr "یک کاربر یا کلاینت درخواست قطع اتصال داده است."
 
-#: ../../network/state_handler.go:62 ../../network/state_handler.go:74
+#: ../../network/state_handler.go:62 ../../network/state_handler.go:63
+#: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
 msgstr ""
 
-#: ../../network/state_handler.go:63 ../../network/state_handler.go:75
+#: ../../network/state_handler.go:63 ../../network/state_handler.go:64
+#: ../../network/state_handler.go:75
 msgid "The device's existing connection was assumed."
 msgstr "اتصال موجود دستگاه در نظر گرفته شده."
 
-#: ../../network/state_handler.go:64 ../../network/state_handler.go:76
+#: ../../network/state_handler.go:64 ../../network/state_handler.go:65
+#: ../../network/state_handler.go:76
 msgid "The 802.1x supplicant is now available."
 msgstr ""
 
-#: ../../network/state_handler.go:65 ../../network/state_handler.go:77
+#: ../../network/state_handler.go:65 ../../network/state_handler.go:66
+#: ../../network/state_handler.go:77
 msgid "The modem could not be found."
 msgstr "مودم پیدا نشد."
 
-#: ../../network/state_handler.go:66 ../../network/state_handler.go:78
+#: ../../network/state_handler.go:66 ../../network/state_handler.go:67
+#: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
 msgstr "زمان اتصال بلوتوث تمام شده و یا اتصال ناموفق بوده."
 
-#: ../../network/state_handler.go:67 ../../network/state_handler.go:79
+#: ../../network/state_handler.go:67 ../../network/state_handler.go:68
+#: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
 msgstr ""
 
-#: ../../network/state_handler.go:68 ../../network/state_handler.go:80
+#: ../../network/state_handler.go:68 ../../network/state_handler.go:69
+#: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
 msgstr ""
 
-#: ../../network/state_handler.go:69 ../../network/state_handler.go:81
+#: ../../network/state_handler.go:69 ../../network/state_handler.go:70
+#: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
 msgstr ""
 
-#: ../../network/state_handler.go:70 ../../network/state_handler.go:82
+#: ../../network/state_handler.go:70 ../../network/state_handler.go:71
+#: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
 msgstr "سیم کارت اشتباه مودم GSM"
 
-#: ../../network/state_handler.go:71 ../../network/state_handler.go:83
+#: ../../network/state_handler.go:71 ../../network/state_handler.go:72
+#: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
 msgstr ""
 
-#: ../../network/state_handler.go:72 ../../network/state_handler.go:84
+#: ../../network/state_handler.go:72 ../../network/state_handler.go:73
+#: ../../network/state_handler.go:84
 msgid "A connection dependency failed."
 msgstr "وابستگی اتصال ناموفق بود."
 
-#: ../../network/state_handler.go:73 ../../network/state_handler.go:85
+#: ../../network/state_handler.go:73 ../../network/state_handler.go:74
+#: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
 msgstr ""
 
-#: ../../network/state_handler.go:74 ../../network/state_handler.go:86
+#: ../../network/state_handler.go:74 ../../network/state_handler.go:75
+#: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
 msgstr "مدیریت کننده مودم اجراء نشده یا بصورت غیر منتظره بسته شده."
 
-#: ../../network/state_handler.go:75 ../../network/state_handler.go:87
+#: ../../network/state_handler.go:75 ../../network/state_handler.go:76
+#: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
 msgstr ""
 
-#: ../../network/state_handler.go:76 ../../network/state_handler.go:88
+#: ../../network/state_handler.go:76 ../../network/state_handler.go:77
+#: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
 msgstr "دومین اتصال از اتصال پایه ناموفق بود."
 
-#: ../../network/state_handler.go:79 ../../network/state_handler.go:91
+#: ../../network/state_handler.go:79 ../../network/state_handler.go:80
+#: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
 msgstr ""
 
-#: ../../network/state_handler.go:80 ../../network/state_handler.go:92
+#: ../../network/state_handler.go:80 ../../network/state_handler.go:81
+#: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
 msgstr "کنترل همکاری شبکه ناموفق بود."
 
-#: ../../network/state_handler.go:81 ../../network/state_handler.go:93
+#: ../../network/state_handler.go:81 ../../network/state_handler.go:82
+#: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
 msgstr "راه اندازی مودم ناموفق بود و یا در دسترس نیست."
 
-#: ../../network/state_handler.go:82 ../../network/state_handler.go:94
+#: ../../network/state_handler.go:82 ../../network/state_handler.go:83
+#: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
 msgstr "مودم هم اکنون آماده و قابل دسترس است."
 
-#: ../../network/state_handler.go:83 ../../network/state_handler.go:95
+#: ../../network/state_handler.go:83 ../../network/state_handler.go:84
+#: ../../network/state_handler.go:95
 msgid "SIM PIN is incorrect."
 msgstr ""
 
-#: ../../network/state_handler.go:84 ../../network/state_handler.go:96
+#: ../../network/state_handler.go:84 ../../network/state_handler.go:85
+#: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
 msgstr "فعال سازی اتصال جدید نوبت بندی شده است."
 
-#: ../../network/state_handler.go:85 ../../network/state_handler.go:97
+#: ../../network/state_handler.go:85 ../../network/state_handler.go:86
+#: ../../network/state_handler.go:97
 msgid "Parent device changed."
 msgstr "دستگاه والد تغییر کرد."
 
-#: ../../network/state_handler.go:86 ../../network/state_handler.go:98
+#: ../../network/state_handler.go:86 ../../network/state_handler.go:87
+#: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
 msgstr "وضعیت مدیریت دستگاه والد تغییر کرد."
 
-#: ../../network/state_handler.go:89 ../../network/state_handler.go:91
-#: ../../network/state_handler.go:101
+#: ../../network/state_handler.go:89 ../../network/state_handler.go:90
+#: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
 msgstr "کابل شبکه جدا شده."
 
-#: ../../network/state_handler.go:90 ../../network/state_handler.go:92
-#: ../../network/state_handler.go:102
+#: ../../network/state_handler.go:90 ../../network/state_handler.go:91
+#: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
 msgstr ""
 
-#: ../../network/state_handler.go:91 ../../network/state_handler.go:93
-#: ../../network/state_handler.go:103
+#: ../../network/state_handler.go:91 ../../network/state_handler.go:92
+#: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
 msgstr ""
 
-#: ../../network/state_handler.go:94 ../../network/state_handler.go:96
-#: ../../network/state_handler.go:106
+#: ../../network/state_handler.go:94 ../../network/state_handler.go:95
+#: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
 msgstr ""
 
-#: ../../network/state_handler.go:95 ../../network/state_handler.go:97
-#: ../../network/state_handler.go:107
+#: ../../network/state_handler.go:95 ../../network/state_handler.go:96
+#: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
 msgstr "فعال سازی اتصال VPN ناموفق بود."
 
-#: ../../network/state_handler.go:96 ../../network/state_handler.go:98
-#: ../../network/state_handler.go:108
+#: ../../network/state_handler.go:96 ../../network/state_handler.go:97
+#: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
 msgstr "وضعیت اتصال VPN بدلیل قطع اتصال از سمت کاربران تغییر کرد."
 
-#: ../../network/state_handler.go:97 ../../network/state_handler.go:99
-#: ../../network/state_handler.go:109
+#: ../../network/state_handler.go:97 ../../network/state_handler.go:98
+#: ../../network/state_handler.go:99 ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices."
 msgstr "وضعیت اتصال VPN بدلیل قطع اتصال از سمت دستگاه ها تغییر کرد."
 
-#: ../../network/state_handler.go:98 ../../network/state_handler.go:100
-#: ../../network/state_handler.go:110
+#: ../../network/state_handler.go:98 ../../network/state_handler.go:99
+#: ../../network/state_handler.go:100 ../../network/state_handler.go:110
 msgid "VPN service stopped."
 msgstr "سرویس VPN متوقف شد."
 
-#: ../../network/state_handler.go:99 ../../network/state_handler.go:101
-#: ../../network/state_handler.go:111
+#: ../../network/state_handler.go:99 ../../network/state_handler.go:100
+#: ../../network/state_handler.go:101 ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid."
 msgstr "IP Config مرتبط با VPN نا معبر بود."
 
-#: ../../network/state_handler.go:100 ../../network/state_handler.go:102
-#: ../../network/state_handler.go:112
+#: ../../network/state_handler.go:100 ../../network/state_handler.go:101
+#: ../../network/state_handler.go:102 ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out."
 msgstr ""
 
-#: ../../network/state_handler.go:101 ../../network/state_handler.go:103
-#: ../../network/state_handler.go:113
+#: ../../network/state_handler.go:101 ../../network/state_handler.go:102
+#: ../../network/state_handler.go:103 ../../network/state_handler.go:113
 msgid "The VPN service start timed out."
 msgstr "مدت زمات شروع سرویس VPN به اتمام رسید."
 
-#: ../../network/state_handler.go:102 ../../network/state_handler.go:104
-#: ../../network/state_handler.go:114
+#: ../../network/state_handler.go:102 ../../network/state_handler.go:103
+#: ../../network/state_handler.go:104 ../../network/state_handler.go:114
 msgid "The VPN service failed to start."
 msgstr "راه اندازی سرویس VPN ناموفق بود."
 
-#: ../../network/state_handler.go:103 ../../network/state_handler.go:105
-#: ../../network/state_handler.go:115
+#: ../../network/state_handler.go:103 ../../network/state_handler.go:104
+#: ../../network/state_handler.go:105 ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided."
 msgstr "پسورد مورد نیاز اتصال VPN فراهم نشد."
 
-#: ../../network/state_handler.go:104 ../../network/state_handler.go:106
-#: ../../network/state_handler.go:116
+#: ../../network/state_handler.go:104 ../../network/state_handler.go:105
+#: ../../network/state_handler.go:106 ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed."
 msgstr "احراز حویت اتصال VPN ناموفق بود."
 
-#: ../../network/state_handler.go:105 ../../network/state_handler.go:107
-#: ../../network/state_handler.go:117
+#: ../../network/state_handler.go:105 ../../network/state_handler.go:106
+#: ../../network/state_handler.go:107 ../../network/state_handler.go:117
 msgid "The connection was deleted from settings."
 msgstr "اتصال از قسمت تنظیمات حذف شد."
 
+#: ../../network/utils_dbus_nm.go:292 ../../network/utils_dbus_nm.go:299
 #: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
 #: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:93
+#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:82
+#: ../../network/utils_notify.go:93
 msgid "You are now offline."
 msgstr "شما هم اکنون آفلاین هستید."
 
@@ -3488,8 +4459,10 @@ msgstr ""
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
 #: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
 #: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "وضعیت بحرانی کمبود باتری"
@@ -3498,8 +4471,10 @@ msgstr "وضعیت بحرانی کمبود باتری"
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
 #: ../../session/power/manager_events.go:164
+#: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
 msgstr ""
@@ -3508,6 +4483,7 @@ msgstr ""
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:170
+#: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "کمبود باتری"
@@ -3516,6 +4492,7 @@ msgstr "کمبود باتری"
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:170
+#: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
 msgstr ""
@@ -3523,4 +4500,16 @@ msgstr ""
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
+msgstr ""
+
+#: ../../timedate/deepin_list.go:349
+msgid "Kolkata"
+msgstr ""
+
+#: ../../timedate/deepin_list.go:353
+msgid "Colombo"
+msgstr ""
+
+#: ../../timedate/deepin_list.go:357
+msgid "Pyongyang"
 msgstr ""
