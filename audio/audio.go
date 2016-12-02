@@ -33,13 +33,8 @@ type Audio struct {
 	ActiveSinkPort   string
 	ActiveSourcePort string
 
-	// 默认的输出设备名称
-	DefaultSink string
-	// 默认的输入设备名称
-	DefaultSource string
-
-	defaultSink   *Sink
-	defaultSource *Source
+	DefaultSink   *Sink
+	DefaultSource *Source
 
 	// 最大音量
 	MaxUIVolume float64
@@ -91,34 +86,6 @@ func (a *Audio) Reset() {
 	}
 	settings.SetBoolean(soundEffectKeyEnabled, true)
 	settings.Unref()
-}
-
-func (a *Audio) GetDefaultSink() *Sink {
-	if a.defaultSink != nil && a.defaultSink.Name == a.DefaultSink {
-		return a.defaultSink
-	}
-	for _, o := range a.core.GetSinkList() {
-		if o.Name != a.DefaultSink {
-			continue
-		}
-		// TODO: Free old sink info
-		a.defaultSink = NewSink(o)
-		break
-	}
-	return a.defaultSink
-}
-func (a *Audio) GetDefaultSource() *Source {
-	if a.defaultSource != nil && a.defaultSource.Name == a.DefaultSource {
-		return a.defaultSource
-	}
-	for _, o := range a.core.GetSourceList() {
-		if o.Name != a.DefaultSource {
-			continue
-		}
-		a.defaultSource = NewSource(o)
-		break
-	}
-	return a.defaultSource
 }
 
 // SetPort activate the port for the special card.
@@ -235,6 +202,10 @@ func (a *Audio) SetDefaultSink(name string) {
 	a.sinkLocker.Lock()
 	defer a.sinkLocker.Unlock()
 
+	if a.DefaultSink != nil && a.DefaultSink.Name == name {
+		return
+	}
+
 	a.core.SetDefaultSink(name)
 	a.update()
 	a.saveConfig()
@@ -249,6 +220,9 @@ func (a *Audio) SetDefaultSink(name string) {
 	a.core.MoveSinkInputsByName(idxList, name)
 }
 func (a *Audio) SetDefaultSource(name string) {
+	if a.DefaultSource != nil && a.DefaultSource.Name == name {
+		return
+	}
 	a.core.SetDefaultSource(name)
 	a.update()
 	a.saveConfig()
@@ -569,7 +543,7 @@ func (a *Audio) trySetSinkByPort(portName string) error {
 		if sink.ActivePort.Name != portName {
 			sink.SetPort(portName)
 		}
-		if a.DefaultSink != sink.Name {
+		if a.DefaultSink == nil || a.DefaultSink.Name != sink.Name {
 			a.SetDefaultSink(sink.Name)
 		}
 		return nil
@@ -585,7 +559,7 @@ func (a *Audio) trySetSourceByPort(portName string) error {
 		if source.ActivePort.Name != portName {
 			source.SetPort(portName)
 		}
-		if a.DefaultSource != source.Name {
+		if a.DefaultSource == nil || a.DefaultSource.Name != source.Name {
 			a.SetDefaultSource(source.Name)
 		}
 		return nil
@@ -594,8 +568,12 @@ func (a *Audio) trySetSourceByPort(portName string) error {
 }
 
 func (a *Audio) getActiveSinkPort() string {
+	if a.DefaultSink == nil {
+		return ""
+	}
+
 	for _, sink := range a.core.GetSinkList() {
-		if sink.Name == a.DefaultSink {
+		if sink.Name == a.DefaultSink.Name {
 			return sink.ActivePort.Name
 		}
 	}
@@ -603,12 +581,44 @@ func (a *Audio) getActiveSinkPort() string {
 }
 
 func (a *Audio) getActiveSourcePort() string {
+	if a.DefaultSource == nil {
+		return ""
+	}
+
 	for _, source := range a.core.GetSourceList() {
-		if source.Name == a.DefaultSource {
+		if source.Name == a.DefaultSource.Name {
 			return source.ActivePort.Name
 		}
 	}
 	return ""
+}
+
+func (a *Audio) getDefaultSink(name string) *Sink {
+	if a.DefaultSink != nil && a.DefaultSink.Name == name {
+		return a.DefaultSink
+	}
+	for _, o := range a.core.GetSinkList() {
+		if o.Name != name {
+			continue
+		}
+		// TODO: Free old sink info
+		a.DefaultSink = NewSink(o)
+		break
+	}
+	return a.DefaultSink
+}
+func (a *Audio) getDefaultSource(name string) *Source {
+	if a.DefaultSource != nil && a.DefaultSource.Name == name {
+		return a.DefaultSource
+	}
+	for _, o := range a.core.GetSourceList() {
+		if o.Name != name {
+			continue
+		}
+		a.DefaultSource = NewSource(o)
+		break
+	}
+	return a.DefaultSource
 }
 
 func isPortExists(name string, ports []pulse.PortInfo) bool {

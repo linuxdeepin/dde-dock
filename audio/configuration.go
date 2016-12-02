@@ -123,7 +123,7 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	for _, s := range a.core.GetSinkList() {
-		if s.Name != a.DefaultSink {
+		if a.DefaultSink == nil || s.Name != a.DefaultSink.Name {
 			continue
 		}
 		info.Sink = s.Name
@@ -133,7 +133,7 @@ func (a *Audio) doSaveConfig() {
 	}
 
 	for _, s := range a.core.GetSourceList() {
-		if s.Name != a.DefaultSource {
+		if a.DefaultSource == nil || s.Name != a.DefaultSource.Name {
 			continue
 		}
 		info.Source = s.Name

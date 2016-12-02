@@ -148,12 +148,10 @@ func (a *Audio) removeSinkInput(idx uint32) {
 func (a *Audio) update() {
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
-		a.setPropDefaultSink(sinfo.DefaultSinkName)
-		a.setPropDefaultSource(sinfo.DefaultSourceName)
+		a.setPropDefaultSink(a.getDefaultSink(sinfo.DefaultSinkName))
+		a.setPropDefaultSource(a.getDefaultSource(sinfo.DefaultSourceName))
 	}
 
-	a.defaultSink = a.GetDefaultSink()
-	a.defaultSource = a.GetDefaultSource()
 	a.rebuildSinkInputList()
 	a.cards = newCardInfos(a.core.GetCardList())
 	a.setPropCards(a.cards.string())
@@ -161,14 +159,14 @@ func (a *Audio) update() {
 	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
 
-func (s *Audio) setPropDefaultSink(v string) {
-	if s.DefaultSink != v {
+func (s *Audio) setPropDefaultSink(v *Sink) {
+	if v == nil || toJSON(s.DefaultSink) != toJSON(v) {
 		s.DefaultSink = v
 		dbus.NotifyChange(s, "DefaultSink")
 	}
 }
-func (s *Audio) setPropDefaultSource(v string) {
-	if s.DefaultSource != v {
+func (s *Audio) setPropDefaultSource(v *Source) {
+	if v == nil || toJSON(s.DefaultSource) != toJSON(v) {
 		s.DefaultSource = v
 		dbus.NotifyChange(s, "DefaultSource")
 	}

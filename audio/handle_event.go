@@ -160,6 +160,6 @@ func (a *Audio) handleServerEvent() {
 		return
 	}
 
-	a.setPropDefaultSink(sinfo.DefaultSinkName)
-	a.setPropDefaultSource(sinfo.DefaultSourceName)
+	a.setPropDefaultSink(a.getDefaultSink(sinfo.DefaultSinkName))
+	a.setPropDefaultSource(a.getDefaultSource(sinfo.DefaultSourceName))
 }
