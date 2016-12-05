@@ -10,13 +10,12 @@
 package launcher
 
 import (
-	"gir/glib-2.0"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/xdg/basedir"
+	"pkg.deepin.io/lib/xdg/userdir"
 	"strings"
 )
 
@@ -31,7 +30,7 @@ func isZH() bool {
 }
 
 func getUserDesktopDir() string {
-	return glib.GetUserSpecialDir(glib.UserDirectoryDirectoryDesktop)
+	return userdir.Get(userdir.Desktop)
 }
 
 // return $HOME/.local/share/applications
@@ -63,25 +62,6 @@ func getAppIdByFilePath(file string, appDirs []string) string {
 		return ""
 	}
 	return strings.TrimSuffix(desktopId, desktopExt)
-}
-
-// SaveKeyFile saves key file.
-func SaveKeyFile(file *glib.KeyFile, path string) error {
-	_, content, err := file.ToData()
-	if err != nil {
-		return err
-	}
-
-	stat, err := os.Lstat(path)
-	if err != nil {
-		return err
-	}
-
-	err = ioutil.WriteFile(path, []byte(content), stat.Mode())
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func runeSliceToStringSlice(runes []rune) []string {

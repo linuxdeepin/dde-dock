@@ -11,19 +11,20 @@ package launcher
 
 import (
 	"errors"
-	"gir/glib-2.0"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/keyfile"
 	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 
 const (
-	dbusDest    = "com.deepin.dde.daemon.Launcher"
-	dbusObjPath = "/com/deepin/dde/daemon/Launcher"
-	dbusIFC     = dbusDest
+	dbusDest           = "com.deepin.dde.daemon.Launcher"
+	dbusObjPath        = "/com/deepin/dde/daemon/Launcher"
+	dbusIFC            = dbusDest
+	desktopMainSection = "Desktop Entry"
 )
 
 var errorInvalidID = errors.New("Invalid ID")
@@ -96,35 +97,29 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 		return false, errorInvalidID
 	}
 	dest := filepath.Join(getUserDesktopDir(), filepath.Base(item.Path))
-	err := CopyFile(item.Path, dest, CopyFileNotKeepSymlink|CopyFileOverWrite)
+	_, err := os.Stat(dest)
 	if err != nil {
-		return false, err
-	}
-
-	stat, err := os.Stat(dest)
-	if err != nil {
-		return false, err
-	}
-	// chmod +x
-	var execPerm os.FileMode = 0100
-	os.Chmod(dest, stat.Mode().Perm()|execPerm)
-
-	// add X-Deepin-CreatedBy and X-Deepin-AppID
-	keyFile := glib.NewKeyFile()
-	defer keyFile.Free()
-	_, err = keyFile.LoadFromFile(dest, glib.KeyFileFlagsKeepComments|glib.KeyFileFlagsKeepTranslations)
-	if err == nil {
-		keyFile.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-CreatedBy", dbusDest)
-		keyFile.SetValue(glib.KeyFileDesktopGroup, "X-Deepin-AppID", id)
-		if err := SaveKeyFile(keyFile, dest); err != nil {
-			logger.Warning(err)
+		if !os.IsNotExist(err) {
 			return false, err
 		}
+		// dest file not exist
 	} else {
+		// dest file exist
+		return false, os.ErrExist
+	}
+
+	kf := keyfile.NewKeyFile()
+	if err := kf.LoadFromFile(item.Path); err != nil {
 		logger.Warning(err)
 		return false, err
 	}
-
+	kf.SetString(desktopMainSection, "X-Deepin-CreatedBy", dbusDest)
+	kf.SetString(desktopMainSection, "X-Deepin-AppID", id)
+	// Desktop files in user desktop direcotry do not require executable permission
+	if err := kf.SaveToFile(dest); err != nil {
+		return false, err
+	}
+	// success
 	soundutils.PlaySystemSound(soundutils.EventIconToDesktop, "", false)
 	return true, nil
 }
