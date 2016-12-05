@@ -102,9 +102,9 @@ func identifyWindowByPidEnv(m *DockManager, winInfo *WindowInfo) (string, *AppIn
 	pid := winInfo.pid
 	process := winInfo.process
 	if process != nil && pid != 0 {
-		launchedDesktopFile := process.environ["GIO_LAUNCHED_DESKTOP_FILE"]
+		launchedDesktopFile := process.environ.Get("GIO_LAUNCHED_DESKTOP_FILE")
 		launchedDesktopFilePid, _ := strconv.ParseUint(
-			process.environ["GIO_LAUNCHED_DESKTOP_FILE_PID"], 10, 32)
+			process.environ.Get("GIO_LAUNCHED_DESKTOP_FILE_PID"), 10, 32)
 
 		logger.Debugf("identifyWindowByPidEnv: launchedDesktopFile: %q, pid: %d",
 			launchedDesktopFile, launchedDesktopFilePid)
@@ -135,7 +135,7 @@ func identifyWindowByRule(m *DockManager, winInfo *WindowInfo) (string, *AppInfo
 	} else if ret == "env" {
 		process := winInfo.process
 		if process != nil {
-			launchedDesktopFile := process.environ["GIO_LAUNCHED_DESKTOP_FILE"]
+			launchedDesktopFile := process.environ.Get("GIO_LAUNCHED_DESKTOP_FILE")
 			if launchedDesktopFile != "" {
 				appInfo = NewAppInfoFromFile(launchedDesktopFile)
 			}

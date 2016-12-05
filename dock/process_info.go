@@ -4,17 +4,18 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"pkg.deepin.io/lib/procfs"
 	"strconv"
 	"strings"
 )
 
 type ProcessInfo struct {
-	pid     uint
+	process procfs.Process
 	cmdline []string
 	args    []string
 	exe     string
 	cwd     string
-	environ map[string]string
+	environ procfs.EnvVars
 }
 
 func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
@@ -33,25 +34,26 @@ func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 		return nil, errors.New("pid is 0")
 	}
 
+	process := procfs.Process(pid)
 	pInfo := &ProcessInfo{
-		pid: pid,
+		process: process,
 	}
 	var err error
 
 	// exe
-	pInfo.exe, err = getProcessExe(pid)
+	pInfo.exe, err = process.Exe()
 	if err != nil {
 		return nil, err
 	}
 
 	// cwd
-	pInfo.cwd, err = getProcessCwd(pid)
+	pInfo.cwd, err = process.Cwd()
 	if err != nil {
 		return nil, err
 	}
 
 	// cmdline
-	pInfo.cmdline, err = getProcessCmdline(pid)
+	pInfo.cmdline, err = process.Cmdline()
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +65,7 @@ func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 	}
 
 	// environ
-	pInfo.environ, _ = getProcessEnvVars(pid)
+	pInfo.environ, _ = process.Environ()
 	return pInfo, nil
 }
 
