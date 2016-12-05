@@ -10,93 +10,14 @@
 package dock
 
 import (
-	//"fmt"
-	"io/ioutil"
-	//"regexp"
-	"strings"
-
 	"encoding/base64"
-	//"gir/gio-2.0"
 	"io"
+	"io/ioutil"
 	"os"
 	"pkg.deepin.io/dde/daemon/appinfo"
+	"strings"
 	"time"
 )
-
-//func trimDesktop(desktopID string) string {
-//desktopIDLen := len(desktopID)
-//if desktopIDLen == 0 {
-//return ""
-//}
-
-//if desktopIDLen > 8 {
-//return strings.TrimSuffix(desktopID, ".desktop")
-//}
-
-//panic(fmt.Sprintf("%q is not a desktop id", desktopID))
-//}
-
-//func normalizeAppID(candidateID string) string {
-//return strings.Replace(appinfo.NormalizeAppID(candidateID), " ", "-", -1)
-//}
-
-//var _DesktopAppIdReg = regexp.MustCompile(`(?:[^.]+\.)*(?P<desktopID>[^.]+)\.desktop`)
-
-//func getAppIDFromDesktopID(candidateID string) string {
-//desktopID := guess_desktop_id(candidateID)
-//logger.Debug(fmt.Sprintf("get desktop id: %q", desktopID))
-//if desktopID == "" {
-//return ""
-//}
-
-//appID := normalizeAppID(trimDesktop(desktopID))
-//return appID
-//}
-
-//// the key is appID
-//// the value is desktopID
-//var _appIDCache map[string]string = make(map[string]string)
-
-//func guess_desktop_id(appId string) string {
-//logger.Debugf("guess_desktop_id %q", appId)
-//if desktopID, ok := _appIDCache[appId]; ok {
-//logger.Debug(appId, "is in cache")
-//return desktopID
-//}
-
-//desktopID := appId + ".desktop"
-//allApp := gio.AppInfoGetAll()
-
-//defer func() {
-//for _, app := range allApp {
-//app.Unref()
-//}
-//}()
-
-//for _, app := range allApp {
-//_appInfo := gio.ToDesktopAppInfo(app)
-
-//if _appInfo == nil {
-//continue
-//}
-
-//_desktopID := _appInfo.GetId()
-//normalizedDesktopID := normalizeAppID(_desktopID)
-//if strings.HasSuffix(normalizedDesktopID, desktopID) {
-//_appIDCache[appId] = _desktopID
-//return _desktopID
-//}
-
-//// TODO: this is not a silver bullet, fix it later.
-//appIDs := _DesktopAppIdReg.FindStringSubmatch(normalizedDesktopID)
-//if len(appIDs) == 2 && appIDs[1] == appId {
-//_appIDCache[appId] = _desktopID
-//return _desktopID
-//}
-//}
-
-//return ""
-//}
 
 func dataUriToFile(dataUri, path string) (string, error) {
 	commaIndex := strings.Index(dataUri, ",")

@@ -13,42 +13,12 @@ package dock
 
 //#cgo pkg-config: glib-2.0 gio-unix-2.0 gtk+-3.0
 //#include <stdlib.h>
-// char* get_icon_file_path(const char* name);
 // void init_gtk();
 // char* get_data_uri_by_path(const char* path);
 import "C"
 import (
-	"path/filepath"
-	"strings"
 	"unsafe"
 )
-
-func getIconFilePath(name string) string {
-	if filepath.IsAbs(name) {
-		return name
-	}
-	dotIndex := strings.LastIndex(name, ".")
-	if dotIndex != -1 {
-		ext := name[dotIndex+1:]
-		logger.Debugf("getIconFilePath ext: %q", ext)
-		switch ext {
-		case "jpg", "png", "svg", "xpm":
-			// remove ext
-			name = name[:dotIndex]
-		}
-	}
-	return _getIconFilePath(name)
-}
-
-func _getIconFilePath(name string) string {
-	logger.Debugf("_getIconFilePath name: %q", name)
-	cName := C.CString(name)
-	cPath := C.get_icon_file_path(cName)
-	path := C.GoString(cPath)
-	C.free(unsafe.Pointer(cPath))
-	C.free(unsafe.Pointer(cName))
-	return path
-}
 
 func initGtk() {
 	C.init_gtk()

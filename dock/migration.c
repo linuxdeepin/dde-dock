@@ -10,64 +10,46 @@
 #include <string.h>
 #include <gtk/gtk.h>
 
-char *get_icon_file_path(const char*name)
-{
-    GtkIconTheme* theme = gtk_icon_theme_get_default();
-    if (theme == NULL) {
-        g_warning("error get default icon theme failed");
-        return NULL;
-    }
-    const int size = 48;
-    GtkIconInfo* info = gtk_icon_theme_lookup_icon(theme, name, size, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-    if (info) {
-        char* path = g_strdup(gtk_icon_info_get_filename(info));
-        g_object_unref(info);
-        return path;
-    }
-    return NULL;
-}
-
 void init_gtk()
 {
-    gtk_init(NULL, NULL);
+	gtk_init(NULL, NULL);
 }
 
-char* get_data_uri_by_pixbuf(GdkPixbuf* pixbuf)
+char *get_data_uri_by_pixbuf(GdkPixbuf * pixbuf)
 {
-    gchar* buf = NULL;
-    gsize size = 0;
-    GError *error = NULL;
+	gchar *buf = NULL;
+	gsize size = 0;
+	GError *error = NULL;
 
-    gdk_pixbuf_save_to_buffer(pixbuf, &buf, &size, "png", &error, NULL);
-    g_assert(buf != NULL);
+	gdk_pixbuf_save_to_buffer(pixbuf, &buf, &size, "png", &error, NULL);
+	g_assert(buf != NULL);
 
-    if (error != NULL) {
-        g_warning("%s\n", error->message);
-        g_error_free(error);
-        g_free(buf);
-        return NULL;
-    }
+	if (error != NULL) {
+		g_warning("%s\n", error->message);
+		g_error_free(error);
+		g_free(buf);
+		return NULL;
+	}
 
-    char* base64 = g_base64_encode((const guchar*)buf, size);
-    g_free(buf);
-    char* data = g_strconcat("data:image/png;base64,", base64, NULL);
-    g_free(base64);
+	char *base64 = g_base64_encode((const guchar *)buf, size);
+	g_free(buf);
+	char *data = g_strconcat("data:image/png;base64,", base64, NULL);
+	g_free(base64);
 
-    return data;
+	return data;
 }
 
-
-char* get_data_uri_by_path(const char* path)
+char *get_data_uri_by_path(const char *path)
 {
-    GError *error = NULL;
-    GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(path, &error);
-    if (error != NULL) {
-        g_warning("%s\n", error->message);
-        g_error_free(error);
-        return NULL;
-    }
-    char* c = get_data_uri_by_pixbuf(pixbuf);
-    g_object_unref(pixbuf);
-    return c;
+	GError *error = NULL;
+	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file(path, &error);
+	if (error != NULL) {
+		g_warning("%s\n", error->message);
+		g_error_free(error);
+		return NULL;
+	}
+	char *c = get_data_uri_by_pixbuf(pixbuf);
+	g_object_unref(pixbuf);
+	return c;
 
 }
