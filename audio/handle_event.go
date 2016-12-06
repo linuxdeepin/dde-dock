@@ -88,6 +88,15 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		logger.Debug("[Event] sink added:", (eType == pulse.EventTypeNew), idx)
 	case pulse.EventTypeChange:
 		logger.Debug("[Event] sink changed:", idx)
+		if a.DefaultSink != nil && a.DefaultSink.index == idx {
+			info, err := a.core.GetSink(idx)
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+			a.DefaultSink.core = info
+			a.DefaultSink.update()
+		}
 	default:
 		logger.Debug("[Event] unknown type")
 		return
@@ -146,6 +155,15 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 		logger.Debug("[Event] source added:", (eType == pulse.EventTypeNew), idx)
 	case pulse.EventTypeChange:
 		logger.Debug("[Event] source changed:", idx)
+		if a.DefaultSource != nil && a.DefaultSource.index == idx {
+			info, err := a.core.GetSource(idx)
+			if err != nil {
+				logger.Warning(err)
+				return
+			}
+			a.DefaultSource.core = info
+			a.DefaultSource.update()
+		}
 	default:
 		logger.Debug("[Event] unknown type")
 		return

@@ -9,9 +9,11 @@
 
 package audio
 
-import "pkg.deepin.io/lib/dbus"
-import "pkg.deepin.io/lib/pulse"
-import "fmt"
+import (
+	"fmt"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/pulse"
+)
 
 const (
 	baseBusName = "com.deepin.daemon.Audio"
@@ -242,9 +244,34 @@ func (s *Sink) setPropActivePort(v Port) {
 	}
 }
 func (s *Sink) setPropPorts(v []Port) {
-	s.Ports = v
-	dbus.NotifyChange(s, "Ports")
+	if !portsEqual(s.Ports, v) {
+		s.Ports = v
+		dbus.NotifyChange(s, "Ports")
+	}
 }
+
+func portsEqual(a, b []Port) bool {
+	if a == nil && b == nil {
+		return true
+	}
+
+	if a == nil || b == nil {
+		return false
+	}
+
+	if len(a) != len(b) {
+		return false
+	}
+
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
 func (s *Sink) setPropVolume(v float64) {
 	if s.Volume != v {
 		s.Volume = v
@@ -252,7 +279,7 @@ func (s *Sink) setPropVolume(v float64) {
 	}
 }
 func (s *Sink) setPropBalance(v float64) {
-	if s.Volume != v {
+	if s.Balance != v {
 		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
 	}
@@ -306,8 +333,10 @@ func (s *Source) update() {
 	s.setPropPorts(ports)
 }
 func (s *Source) setPropPorts(v []Port) {
-	s.Ports = v
-	dbus.NotifyChange(s, "Ports")
+	if !portsEqual(s.Ports, v) {
+		s.Ports = v
+		dbus.NotifyChange(s, "Ports")
+	}
 }
 
 func (s *Source) setPropVolume(v float64) {
@@ -323,7 +352,7 @@ func (s *Source) setPropSupportBalance(v bool) {
 	}
 }
 func (s *Source) setPropBalance(v float64) {
-	if s.Volume != v {
+	if s.Balance != v {
 		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
 	}
