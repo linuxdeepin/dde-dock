@@ -204,11 +204,7 @@ func (m *Manager) getDefaultSink() (*audio.AudioSink, error) {
 		return nil, fmt.Errorf("Can not connect audio daemon")
 	}
 
-	sinkPath, err := m.audioDaemon.GetDefaultSink()
-	if err != nil {
-		return nil, err
-	}
-
+	sinkPath := m.audioDaemon.DefaultSink.Get()
 	sink, err := audio.NewAudioSink("com.deepin.daemon.Audio", sinkPath)
 	if err != nil {
 		return nil, err
