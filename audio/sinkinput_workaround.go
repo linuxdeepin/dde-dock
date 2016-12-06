@@ -10,39 +10,44 @@
 package audio
 
 import (
-	"io/ioutil"
-	"path"
+	"pkg.deepin.io/lib/procfs"
+	"strconv"
 	"strings"
 )
 
-func (s *SinkInput) correctAppName() {
-	pid := s.core.PropList[PropAppPID]
-	filePath := path.Join("/proc", pid, "cmdline")
-	contents, err := ioutil.ReadFile(filePath)
+func (s *SinkInput) correctAppName() error {
+	pidStr := s.core.PropList[PropAppPID]
+	pid, err := strconv.ParseUint(pidStr, 10, 32)
 	if err != nil {
-		logger.Warningf("ReadFile '%s' failed: %v", filePath, err)
-		return
+		return err
 	}
+	process := procfs.Process(pid)
+	cmdline, err := process.Cmdline()
+	if err != nil {
+		return err
+	}
+	logger.Debugf("cmdline: %#v", cmdline)
+	cmd := strings.Join(cmdline, " ")
 
-	ctx := string(contents)
 	switch {
-	case strings.Contains(ctx, "deepin-movie"):
+	case strings.Contains(cmd, "deepin-movie"):
 		s.Name = "Deepin Movie"
 		s.Icon = "deepin-movie"
-	case strings.Contains(ctx, "firefox"):
+	case strings.Contains(cmd, "firefox"):
 		s.Name = "Firefox"
 		s.Icon = "firefox"
-	case strings.Contains(ctx, "maxthon"):
+	case strings.Contains(cmd, "maxthon"):
 		s.Name = "Maxthon"
 		s.Icon = "maxthon-browser"
-	case (strings.Contains(ctx, "chrome") && strings.Contains(ctx, "google")):
+	case (strings.Contains(cmd, "chrome") && strings.Contains(cmd, "google")):
 		s.Name = "Google Chrome"
 		s.Icon = "google-chrome"
-	case strings.Contains(ctx, "deepin-music-player"):
+	case strings.Contains(cmd, "deepin-music-player"):
 		s.Name = "Deepin Music"
 		s.Icon = "deepin-music-player"
-	case strings.Contains(ctx, "smplayer"):
+	case strings.Contains(cmd, "smplayer"):
 		s.Name = "SMPlayer"
 		s.Icon = "smplayer"
 	}
+	return nil
 }

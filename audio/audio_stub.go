@@ -358,7 +358,11 @@ func (s *SinkInput) update() {
 	s.Icon = s.core.PropList[PropAppIconName]
 
 	// Correct app name and icon
-	s.correctAppName()
+	err := s.correctAppName()
+	if err != nil {
+		logger.Warning(err)
+	}
+
 	if len(s.Icon) == 0 {
 		// Using default media player icon
 		s.Icon = "media-player"
