@@ -10,6 +10,7 @@
 package accounts
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 	"pkg.deepin.io/dde/daemon/accounts/checkers"
@@ -30,31 +31,25 @@ import (
 // ty: 用户类型，0 为普通用户，1 为管理员
 func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 	name, fullname string, ty int32) error {
+
 	logger.Debug("[CreateUser] new user:", name, fullname, ty)
 	pid := dbusMsg.GetSenderPID()
-	err := m.polkitAuthManagerUser(pid, "CreateUser")
-	if err != nil {
+	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[CreateUser] access denied:", err)
 		return err
 	}
 
-	// Avoid dde-control-center UI block
-	go func() {
-		err := users.CreateUser(name, fullname, "", ty)
-		if err != nil {
-			logger.Warningf("DoAction: create user '%s' failed: %v\n",
-				name, err)
-			doEmitError(pid, "CreateUser", err.Error())
-			return
-		}
+	if err := users.CreateUser(name, fullname, "", ty); err != nil {
+		logger.Warningf("DoAction: create user '%s' failed: %v\n",
+			name, err)
+		return err
+	}
 
-		err = users.SetUserType(ty, name)
-		if err != nil {
-			logger.Warningf("DoAction: set user type '%s' failed: %v\n",
-				name, err)
-		}
-		doEmitSuccess(pid, "CreateUser")
-	}()
+	if err := users.SetUserType(ty, name); err != nil {
+		logger.Warningf("DoAction: set user type '%s' failed: %v\n",
+			name, err)
+		return err
+	}
 
 	return nil
 }
@@ -65,36 +60,30 @@ func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
 //
 // rmFiles: 是否删除用户数据
 func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
-	name string, rmFiles bool) (bool, error) {
+	name string, rmFiles bool) error {
+
 	logger.Debug("[DeleteUser] user:", name, rmFiles)
 	pid := dbusMsg.GetSenderPID()
-	err := m.polkitAuthManagerUser(pid, "DeleteUser")
-	if err != nil {
+	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[DeleteUser] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		err := users.DeleteUser(rmFiles, name)
-		if err != nil {
-			logger.Warningf("DoAction: delete user '%s' failed: %v\n",
-				name, err)
-			doEmitError(pid, "DeleteUser", err.Error())
-			return
-		}
+	if err := users.DeleteUser(rmFiles, name); err != nil {
+		logger.Warningf("DoAction: delete user '%s' failed: %v\n",
+			name, err)
+		return err
+	}
 
-		if users.IsAutoLoginUser(name) {
-			users.SetAutoLoginUser("")
-		}
+	if users.IsAutoLoginUser(name) {
+		users.SetAutoLoginUser("")
+	}
 
-		//delete user config and icons
-		if rmFiles {
-			clearUserDatas(name)
-		}
-		doEmitSuccess(pid, "DeleteUser")
-	}()
-
-	return true, nil
+	//delete user config and icons
+	if rmFiles {
+		clearUserDatas(name)
+	}
+	return nil
 }
 
 func (m *Manager) FindUserById(uid string) (string, error) {
@@ -120,17 +109,15 @@ func (m *Manager) FindUserByName(name string) (string, error) {
 // 随机得到一个用户头像
 //
 // ret0：头像路径，为空则表示获取失败
-//
-// ret1: 是否获取成功
-func (m *Manager) RandUserIcon() (string, bool, error) {
+func (m *Manager) RandUserIcon() (string, error) {
 	icons := getUserStandardIcons()
 	if len(icons) == 0 {
-		return "", false, fmt.Errorf("Did not find any user icons")
+		return "", errors.New("Did not find any user icons")
 	}
 
 	rand.Seed(time.Now().UnixNano())
 	idx := rand.Intn(len(icons))
-	return icons[idx], true, nil
+	return icons[idx], nil
 }
 
 // 检查用户名是否有效
@@ -165,25 +152,20 @@ func (m *Manager) IsPasswordValid(passwd string) (bool, string, int32) {
 
 func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 	pid := dbusMsg.GetSenderPID()
-	err := m.polkitAuthManagerUser(pid, "AllowGuestAccount")
-	if err != nil {
+	if err := polkitAuthManagerUser(pid); err != nil {
 		return err
 	}
 
 	if allow == isGuestUserEnabled() {
-		doEmitSuccess(pid, "AllowGuestAccount")
 		return nil
 	}
 
 	success := dutils.WriteKeyToKeyFile(actConfigFile,
 		actConfigGroupGroup, actConfigKeyGuest, allow)
 	if !success {
-		reason := "Enable guest user failed"
-		doEmitError(pid, "AllowGuestAccount", reason)
-		return fmt.Errorf(reason)
+		return errors.New("Enable guest user failed")
 	}
 	m.setPropAllowGuest(allow)
-	doEmitSuccess(pid, "AllowGuestAccount")
 
 	return nil
 }

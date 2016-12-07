@@ -288,7 +288,7 @@ func (u *User) updatePropAccountType() {
 	}
 }
 
-func (u *User) accessAuthentication(pid uint32, check bool, action string) error {
+func (u *User) accessAuthentication(pid uint32, check bool) error {
 	var self bool
 	if check {
 		uid, _ := getUidByPid(pid)
@@ -304,7 +304,6 @@ func (u *User) accessAuthentication(pid uint32, check bool, action string) error
 		err = polkitAuthManagerUser(pid)
 	}
 	if err != nil {
-		doEmitError(pid, action, err.Error())
 		return err
 	}
 

@@ -33,17 +33,13 @@ type Manager struct {
 	GuestIcon  string
 	AllowGuest bool
 
-	UserAdded   func(string)
-	UserDeleted func(string)
-	Success     func(uint32, string)
-	// Error(pid, action, reason)
-	//
-	// 操作失败的信号，参数包括调用者的 pid，被调用的接口和错误信息
-	Error func(uint32, string, string)
-
 	watcher   *dutils.WatchProxy
 	usersMap  map[string]*User
 	mapLocker sync.Mutex
+
+	// Signals:
+	UserAdded   func(string)
+	UserDeleted func(string)
 }
 
 func NewManager() *Manager {
@@ -141,16 +137,6 @@ func (m *Manager) uninstallUser(userPath string) {
 
 	delete(m.usersMap, userPath)
 	u.destroy()
-}
-
-func (m *Manager) polkitAuthManagerUser(pid uint32, action string) error {
-	err := polkitAuthManagerUser(pid)
-	if err != nil {
-		doEmitError(pid, action, err.Error())
-		return err
-	}
-
-	return nil
 }
 
 func getUserPaths() []string {

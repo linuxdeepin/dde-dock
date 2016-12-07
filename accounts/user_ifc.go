@@ -10,6 +10,7 @@
 package accounts
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -21,198 +22,146 @@ import (
 	"strings"
 )
 
-func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) error {
 	logger.Debug("[SetUserName] new name:", name)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetUserName")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetUserName] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.ModifyName(name, u.UserName); err != nil {
+		logger.Warning("DoAction: modify username failed:", err)
+		return err
+	}
 
-		err := users.ModifyName(name, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: modify username failed:", err)
-			doEmitError(pid, "SetUserName", err.Error())
-			return
-		}
-
-		u.setPropString(&u.UserName, "UserName", name)
-		doEmitSuccess(pid, "SetUserName")
-	}()
-
-	return true, nil
+	u.setPropString(&u.UserName, "UserName", name)
+	return nil
 }
 
-func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) error {
 	logger.Debug("[SetHomeDir] new home:", home)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetHomeDir")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetHomeDir] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.ModifyHome(home, u.UserName); err != nil {
+		logger.Warning("DoAction: modify home failed:", err)
+		return err
+	}
 
-		err := users.ModifyHome(home, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: modify home failed:", err)
-			doEmitError(pid, "SetHomeDir", err.Error())
-			return
-		}
-
-		u.setPropString(&u.HomeDir, "HomeDir", home)
-		doEmitSuccess(pid, "SetHomeDir")
-	}()
-
-	return true, nil
+	u.setPropString(&u.HomeDir, "HomeDir", home)
+	return nil
 }
 
-func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) error {
 	logger.Debug("[SetShell] new shell:", shell)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetShell")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetShell] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.ModifyShell(shell, u.UserName); err != nil {
+		logger.Warning("DoAction: modify shell failed:", err)
+		return err
+	}
 
-		err := users.ModifyShell(shell, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: modify shell failed:", err)
-			doEmitError(pid, "SetShell", err.Error())
-			return
-		}
-
-		u.setPropString(&u.Shell, "Shell", shell)
-		doEmitSuccess(pid, "SetShell")
-	}()
-
-	return true, nil
+	u.setPropString(&u.Shell, "Shell", shell)
+	return nil
 }
 
-func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetPassword(dbusMsg dbus.DMessage, words string) error {
 	logger.Debug("[SetPassword] start ...")
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetPassword")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetPassword] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.ModifyPasswd(words, u.UserName); err != nil {
+		logger.Warning("DoAction: modify passwd failed:", err)
+		return err
+	}
 
-		err := users.ModifyPasswd(words, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: modify passwd failed:", err)
-			doEmitError(pid, "SetPassword", err.Error())
-			return
-		}
-
-		err = users.LockedUser(false, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: unlock user failed:", err)
-		}
-		u.setPropBool(&u.Locked, "Locked", false)
-		doEmitSuccess(pid, "SetPassword")
-	}()
-
-	return true, nil
+	if err := users.LockedUser(false, u.UserName); err != nil {
+		logger.Warning("DoAction: unlock user failed:", err)
+		return err
+	}
+	u.setPropBool(&u.Locked, "Locked", false)
+	return nil
 }
 
-func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetAccountType(dbusMsg dbus.DMessage, ty int32) error {
 	logger.Debug("[SetAccountType] type:", ty)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetAccountType")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetAccountType] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.SetUserType(ty, u.UserName); err != nil {
+		logger.Warning("DoAction: set user type failed:", err)
+		return err
+	}
 
-		err := users.SetUserType(ty, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: set user type failed:", err)
-			doEmitError(pid, "SetAccountType", err.Error())
-			return
-		}
-
-		u.setPropInt32(&u.AccountType, "AccountType", ty)
-		doEmitSuccess(pid, "SetAccountType")
-	}()
-
-	return true, nil
+	u.setPropInt32(&u.AccountType, "AccountType", ty)
+	return nil
 }
 
-func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) error {
 	logger.Debug("[SetLocked] locaked:", locked)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetLocked")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetLocked] access denied:", err)
-		return false, err
+		return err
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.LockedUser(locked, u.UserName); err != nil {
+		logger.Warning("DoAction: locked user failed:", err)
+		return err
+	}
 
-		err := users.LockedUser(locked, u.UserName)
-		if err != nil {
-			logger.Warning("DoAction: locked user failed:", err)
-			doEmitError(pid, "SetLocked", err.Error())
-			return
-		}
-
-		if locked && u.AutomaticLogin {
-			users.SetAutoLoginUser("")
-		}
-
-		u.setPropBool(&u.Locked, "Locked", locked)
-		doEmitSuccess(pid, "SetLocked")
-	}()
-
-	return true, nil
+	if locked && u.AutomaticLogin {
+		users.SetAutoLoginUser("")
+	}
+	u.setPropBool(&u.Locked, "Locked", locked)
+	return nil
 }
 
-func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error) {
-	u.syncLocker.Lock()
+func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 	logger.Debug("[SetAutomaticLogin] auto", auto)
+	u.syncLocker.Lock()
+	defer u.syncLocker.Unlock()
+
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, false, "SetAutomaticLogin")
-	if err != nil {
-		u.syncLocker.Unlock()
+	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
-		return false, err
+		return err
 	}
 
 	if u.Locked {
-		u.syncLocker.Unlock()
-		var reason = fmt.Sprintf("%s has been locked", u.UserName)
-		doEmitError(pid, "SetAutomaticLogin", reason)
-		return false, fmt.Errorf(reason)
+		return fmt.Errorf("user %s has been locked", u.UserName)
 	}
 
 	var name = u.UserName
@@ -220,271 +169,213 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) (bool, error)
 		name = ""
 	}
 
-	go func() {
-		defer u.syncLocker.Unlock()
+	if err := users.SetAutoLoginUser(name); err != nil {
+		logger.Warning("DoAction: set auto login failed:", err)
+		return err
+	}
 
-		err := users.SetAutoLoginUser(name)
-		if err != nil {
-			logger.Warning("DoAction: set auto login failed:", err)
-			doEmitError(pid, "SetAutomaticLogin", err.Error())
-			return
-		}
-
-		u.setPropBool(&u.AutomaticLogin, "AutomaticLogin", auto)
-		doEmitSuccess(pid, "SetAutomaticLogin")
-	}()
-
-	return true, nil
+	u.setPropBool(&u.AutomaticLogin, "AutomaticLogin", auto)
+	return nil
 }
 
-func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) (bool, error) {
+func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 	logger.Debug("[SetLocale] locale:", locale)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetLocale")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetLocale] access denied:", err)
-		return false, err
+		return err
 	}
 
 	if u.Locale == locale {
-		doEmitSuccess(pid, "SetLocale")
-		return true, nil
+		return nil
 	}
 
 	if !lang_info.IsSupportedLocale(locale) {
-		reason := fmt.Sprintf("Invalid locale: %v", locale)
-		logger.Debug("[SetLocale]", reason)
-		doEmitError(pid, "SetLocale", reason)
-		return false, fmt.Errorf(reason)
+		err := fmt.Errorf("Invalid locale %q", locale)
+		logger.Debug("[SetLocale]", err)
+		return err
+	}
+
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("[SetLocale]", err)
+		return err
 	}
 
 	u.setPropString(&u.Locale, "Locale", locale)
-	err = u.writeUserConfig()
-	if err != nil {
-		logger.Info("[SetLocale]", err)
-		return false, err
-	}
-
-	return true, nil
+	return nil
 }
 
-func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) (bool, error) {
+func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 	logger.Debug("[SetLayout] new layout:", layout)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetLayout")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetLayout] access denied:", err)
-		return false, err
+		return err
 	}
 
 	if u.Layout == layout {
-		doEmitSuccess(pid, "SetLayout")
-		return true, nil
+		return nil
 	}
 
-	go func() {
-		// TODO: check layout validity
-		src := u.Layout
-		u.setPropString(&u.Layout, "Layout", layout)
-		err = u.writeUserConfig()
-		if err != nil {
-			logger.Warning("Write user config failed:", err)
-			doEmitError(pid, "SetLayout", err.Error())
-			u.setPropString(&u.Layout, "Layout", src)
-			return
-		}
-		doEmitSuccess(pid, "SetLayout")
-	}()
-	return true, nil
+	// TODO: check layout validity
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+		return err
+	}
+	u.setPropString(&u.Layout, "Layout", layout)
+	return nil
 }
 
-func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
+func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) error {
 	logger.Debug("[SetIconFile] new icon:", icon)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetIconFile")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetIconFile] access denied:", err)
-		return false, err
+		return err
 	}
 
 	srcIcon := dutils.DecodeURI(icon)
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	if u.IconFile == icon {
-		doEmitSuccess(pid, "SetIconFile")
-		return true, nil
+		return nil
 	}
 
 	if !graphic.IsSupportedImage(srcIcon) {
-		reason := fmt.Sprintf("This icon '%s' not a image", icon)
-		logger.Debug(reason)
-		doEmitError(pid, "SetIconFile", reason)
-		return false, err
+		err := fmt.Errorf("This icon '%s' not a image", icon)
+		logger.Debug(err)
+		return err
 	}
 
-	go func() {
-		target, added, err := u.addIconFile(icon)
-		if err != nil {
-			logger.Warning("Set icon failed:", err)
-			doEmitError(pid, "SetIconFile", err.Error())
-			return
-		}
+	target, added, err := u.addIconFile(icon)
+	if err != nil {
+		logger.Warning("Set icon failed:", err)
+		return err
+	}
 
-		src := u.IconFile
-		u.setPropString(&u.IconFile, "IconFile", target)
-		u.addHistoryIcon(src)
-		err = u.writeUserConfig()
-		if err != nil {
-			logger.Warning("Write user config failed:", err)
-			doEmitError(pid, "SetIconFile", err.Error())
-			u.setPropString(&u.IconFile, "IconFile", src)
-			return
-		}
-		if added {
-			u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
-		}
-		doEmitSuccess(pid, "SetIconFile")
-	}()
-
-	return true, nil
+	u.addHistoryIcon(u.IconFile)
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+		return err
+	}
+	u.setPropString(&u.IconFile, "IconFile", target)
+	if added {
+		u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+	}
+	return nil
 }
 
-func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) (bool, error) {
+func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 	logger.Debug("[DeleteIconFile] icon:", icon)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "DeleteIconFile")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[DeleteIconFile] access denied:", err)
-		return false, err
+		return err
 	}
 
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	if !u.IsIconDeletable(icon) {
-		reason := "This icon is not allowed to be deleted!"
-		logger.Warning(reason)
-		doEmitError(pid, "DeleteIconFile", reason)
-		return false, fmt.Errorf(reason)
+		err := errors.New("This icon is not allowed to be deleted!")
+		logger.Warning(err)
+		return err
 	}
 
-	go func() {
-		iconPath := dutils.DecodeURI(icon)
-		err := os.Remove(iconPath)
-		if err != nil {
-			doEmitError(pid, "DeleteIconFile", err.Error())
-			return
-		}
+	iconPath := dutils.DecodeURI(icon)
+	if err := os.Remove(iconPath); err != nil {
+		return err
+	}
 
-		u.DeleteHistoryIcon(dbusMsg, icon)
-		u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
-		doEmitSuccess(pid, "DeleteIconFile")
-	}()
-
-	return true, nil
+	u.DeleteHistoryIcon(dbusMsg, icon)
+	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+	return nil
 }
 
-func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) (bool, error) {
+func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 	logger.Debug("[SetBackgroundFile] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
+	if err := u.accessAuthentication(pid, true); err != nil {
+		logger.Debug("[SetBackgroundFile] access denied:", err)
+		return err
+	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if bg == u.BackgroundFile {
-		doEmitSuccess(pid, "SetBackgroundFile")
 		genGaussianBlur(bg)
-		return true, nil
+		return nil
 	}
 
-	_, err := u.isBackgroundValid(pid, "SetBackgroundFile", bg)
-	if err != nil {
-		return false, err
+	if err := checkBackgroundValid(bg); err != nil {
+		logger.Debug(err)
+		return err
 	}
 
-	go func() {
-		src := u.BackgroundFile
-		u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
-		err = u.writeUserConfig()
-		if err != nil {
-			logger.Warning("Write user config failed:", err)
-			doEmitError(pid, "SetBackgroundFile", err.Error())
-			u.setPropString(&u.BackgroundFile, "BackgroundFile", src)
-			return
-		}
-		doEmitSuccess(pid, "SetBackgroundFile")
-		genGaussianBlur(bg)
-	}()
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+		return err
+	}
 
-	return true, nil
+	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
+	genGaussianBlur(bg)
+	return nil
 }
 
-func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) (bool, error) {
+func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 	logger.Debug("[SetGreeterBackground] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
+	if err := u.accessAuthentication(pid, true); err != nil {
+		logger.Debug("[SetGreeterBackground] access denied:", err)
+		return err
+	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if u.GreeterBackground == bg {
-		doEmitSuccess(pid, "SetGreeterBackground")
 		genGaussianBlur(bg)
-		return true, nil
-	}
-	_, err := u.isBackgroundValid(pid, "SetGreeterBackground", bg)
-	if err != nil {
-		return false, err
+		return nil
 	}
 
-	go func() {
-		src := u.GreeterBackground
-		u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
-		err = u.writeUserConfig()
-		if err != nil {
-			logger.Warning("Write user config failed:", err)
-			doEmitError(pid, "SetGreeterBackground", err.Error())
-			u.setPropString(&u.GreeterBackground, "GreeterBackground", src)
-			return
-		}
-		doEmitSuccess(pid, "SetGreeterBackground")
-		genGaussianBlur(bg)
-	}()
-	return true, nil
+	if err := checkBackgroundValid(bg); err != nil {
+		logger.Debug(err)
+		return err
+	}
+
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+		return err
+	}
+
+	u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
+	genGaussianBlur(bg)
+	return nil
 }
 
-func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) (bool, error) {
+func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 	logger.Debug("[SetHistoryLayout] new history layout:", list)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "SetHistoryLayout")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetHistoryLayout] access denied:", err)
-		return false, err
+		return err
 	}
 
 	if isStrvEqual(u.HistoryLayout, list) {
-		return true, nil
+		return nil
 	}
 
 	// TODO: check layout list whether validity
-
-	go func() {
-		src := u.HistoryLayout
-		u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
-		err := u.writeUserConfig()
-		if err != nil {
-			logger.Warning("Write user config failed:", err)
-			doEmitError(pid, "SetHistoryLayout", err.Error())
-			u.setPropStrv(&u.HistoryLayout, "HistoryLayout", src)
-		}
-		doEmitSuccess(pid, "SetHistoryLayout")
-	}()
-	return true, nil
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+	}
+	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
+	return nil
 }
 
-func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) (bool, error) {
+func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) error {
 	logger.Debug("[DeleteHistoryIcon] icon:", icon)
 	pid := dbusMsg.GetSenderPID()
-	err := u.accessAuthentication(pid, true, "DeleteHistoryIcon")
-	if err != nil {
+	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[DeleteHistoryIcon] access denied:", err)
-		return false, err
+		return err
 	}
 
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
 	u.deleteHistoryIcon(icon)
-	doEmitSuccess(pid, "DeleteHistoryIcon")
-	return true, nil
+	return nil
 }
 
 func (u *User) IsIconDeletable(icon string) bool {
@@ -512,19 +403,11 @@ func (u *User) GetLargeIcon() string {
 	return dutils.EncodeURI(filename, dutils.SCHEME_FILE)
 }
 
-func (u *User) isBackgroundValid(pid uint32, action, bg string) (bool, error) {
-	err := u.accessAuthentication(pid, true, action)
-	if err != nil {
-		logger.Debugf("[%s] access denied: %v", action, err)
-		return false, err
-	}
-
+func checkBackgroundValid(bg string) error {
 	bg = dutils.DecodeURI(bg)
 	if !graphic.IsSupportedImage(bg) {
-		reason := fmt.Sprintf("This background '%s' not a image", bg)
-		logger.Debug(reason)
-		doEmitError(pid, action, reason)
-		return false, err
+		return errors.New("unsupported image format")
 	}
-	return true, nil
+	// ok
+	return nil
 }
