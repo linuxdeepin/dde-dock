@@ -267,7 +267,7 @@ func (kbd *Keyboard) setGreeterLayout() {
 		return
 	}
 
-	_, err := kbd.userObj.SetLayout(kbd.CurrentLayout.Get())
+	err := kbd.userObj.SetLayout(kbd.CurrentLayout.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout failed: %v", name, err)
 	}
@@ -283,7 +283,7 @@ func (kbd *Keyboard) setGreeterLayoutList() {
 		return
 	}
 
-	_, err := kbd.userObj.SetHistoryLayout(kbd.UserLayoutList.Get())
+	err := kbd.userObj.SetHistoryLayout(kbd.UserLayoutList.Get())
 	if err != nil {
 		logger.Debugf("Set '%s' greeter layout list failed: %v",
 			name, err)

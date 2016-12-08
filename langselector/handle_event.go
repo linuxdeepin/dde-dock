@@ -76,7 +76,7 @@ func syncUserLocale(locale string) error {
 	if err != nil {
 		return err
 	}
-	_, err = u.SetLocale(locale)
+	err = u.SetLocale(locale)
 	ddbus.DestroyUser(u)
 	return err
 }

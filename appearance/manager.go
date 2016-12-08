@@ -277,8 +277,7 @@ func (m *Manager) doSetGreeterBackground(value string) error {
 		return fmt.Errorf("Create user object failed")
 	}
 
-	_, err := m.userObj.SetGreeterBackground(value)
-	return err
+	return m.userObj.SetGreeterBackground(value)
 }
 
 func (m *Manager) doSetStandardFont(value string) error {
