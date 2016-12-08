@@ -195,12 +195,14 @@ func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 		return err
 	}
 
+	oldLocale := u.Locale
+	u.setPropString(&u.Locale, "Locale", locale)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("[SetLocale]", err)
+		u.setPropString(&u.Locale, "Locale", oldLocale)
 		return err
 	}
 
-	u.setPropString(&u.Locale, "Locale", locale)
 	return nil
 }
 
@@ -217,11 +219,13 @@ func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 	}
 
 	// TODO: check layout validity
+	oldLayout := u.Layout
+	u.setPropString(&u.Layout, "Layout", layout)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
+		u.setPropString(&u.Layout, "Layout", oldLayout)
 		return err
 	}
-	u.setPropString(&u.Layout, "Layout", layout)
 	return nil
 }
 
@@ -251,9 +255,11 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
 		return err
 	}
 
+	oldIcon := u.IconFile
 	u.setPropIconFile(newIconURI)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
+		u.setPropIconFile(oldIcon)
 		return err
 	}
 	if added {
@@ -305,12 +311,14 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 		return err
 	}
 
+	oldBackgroundFile := u.BackgroundFile
+	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
+		u.setPropString(&u.BackgroundFile, "BackgroundFile", oldBackgroundFile)
 		return err
 	}
 
-	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
 	genGaussianBlur(bg)
 	return nil
 }
@@ -333,12 +341,14 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 		return err
 	}
 
+	oldGreeterBackground := u.GreeterBackground
+	u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
+		u.setPropString(&u.GreeterBackground, "GreeterBackground", oldGreeterBackground)
 		return err
 	}
 
-	u.setPropString(&u.GreeterBackground, "GreeterBackground", bg)
 	genGaussianBlur(bg)
 	return nil
 }
@@ -356,10 +366,12 @@ func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 	}
 
 	// TODO: check layout list whether validity
+	oldHistoryLayout := u.HistoryLayout
+	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
+		u.setPropStrv(&u.HistoryLayout, "HistoryLayout", oldHistoryLayout)
 	}
-	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", list)
 	return nil
 }
 
