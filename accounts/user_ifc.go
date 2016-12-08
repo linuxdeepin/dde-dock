@@ -19,7 +19,6 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
-	"strings"
 )
 
 func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) error {
@@ -226,39 +225,39 @@ func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 	return nil
 }
 
-func (u *User) SetIconFile(dbusMsg dbus.DMessage, icon string) error {
-	logger.Debug("[SetIconFile] new icon:", icon)
+func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
+	logger.Debug("[SetIconFile] new icon:", iconURI)
 	pid := dbusMsg.GetSenderPID()
 	if err := u.accessAuthentication(pid, true); err != nil {
 		logger.Debug("[SetIconFile] access denied:", err)
 		return err
 	}
 
-	srcIcon := dutils.DecodeURI(icon)
-	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
-	if u.IconFile == icon {
+	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
+	iconFile := dutils.DecodeURI(iconURI)
+	if u.IconFile == iconURI {
 		return nil
 	}
 
-	if !graphic.IsSupportedImage(srcIcon) {
-		err := fmt.Errorf("This icon '%s' not a image", icon)
+	if !graphic.IsSupportedImage(iconFile) {
+		err := fmt.Errorf("This icon '%s' not a image", iconFile)
 		logger.Debug(err)
 		return err
 	}
 
-	target, added, err := u.addIconFile(icon)
+	newIconURI, added, err := u.setIconFile(iconURI)
 	if err != nil {
 		logger.Warning("Set icon failed:", err)
 		return err
 	}
 
-	u.addHistoryIcon(u.IconFile)
+	u.setPropIconFile(newIconURI)
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
 		return err
 	}
-	u.setPropString(&u.IconFile, "IconFile", target)
 	if added {
+		// update property IconList
 		u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
 	}
 	return nil
@@ -284,7 +283,6 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 		return err
 	}
 
-	u.DeleteHistoryIcon(dbusMsg, icon)
 	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
 	return nil
 }
@@ -365,29 +363,19 @@ func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 	return nil
 }
 
-func (u *User) DeleteHistoryIcon(dbusMsg dbus.DMessage, icon string) error {
-	logger.Debug("[DeleteHistoryIcon] icon:", icon)
-	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[DeleteHistoryIcon] access denied:", err)
-		return err
-	}
-
-	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
-	u.deleteHistoryIcon(icon)
-	return nil
-}
-
-func (u *User) IsIconDeletable(icon string) bool {
-	if u.IconFile == icon {
+func (u *User) IsIconDeletable(iconURI string) bool {
+	// is current
+	if u.IconFile == iconURI {
 		return false
 	}
 
-	if !strings.Contains(icon, path.Join(userCustomIconsDir, u.UserName)) {
-		return false
+	iconFile := dutils.DecodeURI(iconURI)
+	// is custom
+	if iconFile == getUserCustomIconFile(u.UserName) {
+		return true
 	}
-
-	return true
+	// other is standard
+	return false
 }
 
 // 获取当前头像的大图标

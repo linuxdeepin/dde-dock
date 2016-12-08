@@ -57,3 +57,9 @@ func (u *User) setPropStrv(handler *[]string, prop string, value []string) {
 	*handler = value
 	dbus.NotifyChange(u, prop)
 }
+
+// always emit change signal
+func (u *User) setPropIconFile(value string) {
+	u.IconFile = value
+	dbus.NotifyChange(u, "IconFile")
+}

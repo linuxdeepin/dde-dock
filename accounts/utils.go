@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 	"pkg.deepin.io/lib/graphic"
 	"pkg.deepin.io/lib/utils"
 	"sort"
@@ -54,17 +54,17 @@ func (code ErrCodeType) String() string {
 	return "Unkown error"
 }
 
-func clearUserDatas(name string) {
-	icons := getUserCustomIcons(name)
-	config := path.Join(userConfigDir, name)
+func clearUserDatas(username string) {
+	// delete user config file
+	config := filepath.Join(userConfigDir, username)
 	os.Remove(config)
 
-	icons = append(icons, config)
-	for _, v := range icons {
-		os.Remove(v)
-	}
+	// delete user custom icon file
+	customIcon := getUserCustomIconFile(username)
+	os.Remove(customIcon)
 }
 
+// return icons uris
 func getUserStandardIcons() []string {
 	imgs, err := graphic.GetImagesInDir(userIconsDir)
 	if err != nil {
@@ -84,26 +84,18 @@ func getUserStandardIcons() []string {
 	return icons
 }
 
-func getUserCustomIcons(name string) []string {
-	return getUserIconsFromDir(userCustomIconsDir, name+"-")
+// return empty string or uri
+func getUserCustomIcon(username string) string {
+	// custom icon file
+	file := getUserCustomIconFile(username)
+	if ok := graphic.IsSupportedImage(file); !ok {
+		return ""
+	}
+	return utils.EncodeURI(file, utils.SCHEME_FILE)
 }
 
-func getUserIconsFromDir(dir, condition string) []string {
-	imgs, err := graphic.GetImagesInDir(dir)
-	if err != nil {
-		return nil
-	}
-
-	var icons []string
-	for _, img := range imgs {
-		if !strings.Contains(img, condition) {
-			continue
-		}
-
-		icons = append(icons, utils.EncodeURI(img, utils.SCHEME_FILE))
-	}
-
-	return icons
+func getUserCustomIconFile(username string) string {
+	return filepath.Join(userCustomIconsDir, username)
 }
 
 func isStrInArray(str string, array []string) bool {

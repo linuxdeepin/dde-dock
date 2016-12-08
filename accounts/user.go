@@ -10,7 +10,6 @@
 package accounts
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -71,7 +70,6 @@ type User struct {
 
 	IconList      []string
 	HistoryLayout []string
-	HistoryIcons  []string
 
 	syncLocker   sync.Mutex
 	configLocker sync.Mutex
@@ -148,8 +146,6 @@ func NewUser(userPath string) (*User, error) {
 
 	_, hisLayout, _ := kFile.GetStringList(confGroupUser, confKeyHistoryLayout)
 	u.setPropStrv(&u.HistoryLayout, "HistoryLayout", hisLayout)
-	_, hisIcons, _ := kFile.GetStringList(confGroupUser, confKeyHistoryIcons)
-	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", hisIcons)
 
 	if isSave {
 		u.writeUserConfig()
@@ -164,33 +160,33 @@ func (u *User) destroy() {
 
 func (u *User) getAllIcons() []string {
 	icons := getUserStandardIcons()
-	cusIcons := getUserCustomIcons(u.UserName)
-
-	icons = append(icons, cusIcons...)
+	customIcon := getUserCustomIcon(u.UserName)
+	if customIcon != "" {
+		icons = append(icons, customIcon)
+	}
 	return icons
 }
 
-func (u *User) addIconFile(icon string) (string, bool, error) {
-	if isStrInArray(icon, u.IconList) {
-		return icon, false, nil
+// ret0: new user icon uri
+// ret1: added
+// ret2: error
+func (u *User) setIconFile(iconURI string) (string, bool, error) {
+	if isStrInArray(iconURI, u.IconList) {
+		return iconURI, false, nil
 	}
 
-	icon = dutils.DecodeURI(icon)
-	md5, ok := dutils.SumFileMd5(icon)
-	if !ok {
-		return "", false, fmt.Errorf("Sum file '%s' md5 failed", icon)
-	}
-
-	tmp, scale, err := scaleUserIcon(icon, md5)
+	iconFile := dutils.DecodeURI(iconURI)
+	tmp, scaled, err := scaleUserIcon(iconFile)
 	if err != nil {
 		return "", false, err
 	}
 
-	if scale {
+	if scaled {
+		logger.Debug("icon scaled", tmp)
 		defer os.Remove(tmp)
 	}
 
-	dest := path.Join(userCustomIconsDir, u.UserName+"-"+md5)
+	dest := getUserCustomIconFile(u.UserName)
 	err = os.MkdirAll(path.Dir(dest), 0755)
 	if err != nil {
 		return "", false, err
@@ -199,48 +195,7 @@ func (u *User) addIconFile(icon string) (string, bool, error) {
 	if err != nil {
 		return "", false, err
 	}
-
 	return dutils.EncodeURI(dest, dutils.SCHEME_FILE), true, nil
-}
-
-func (u *User) addHistoryIcon(icon string) {
-	if len(icon) == 0 || icon == defaultUserIcon {
-		return
-	}
-
-	icons := u.HistoryIcons
-	if isStrInArray(icon, icons) {
-		return
-	}
-
-	var list = []string{icon}
-	for _, v := range icons {
-		if len(list) >= 9 {
-			break
-		}
-
-		list = append(list, v)
-	}
-	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", list)
-}
-
-func (u *User) deleteHistoryIcon(icon string) {
-	if len(icon) == 0 {
-		return
-	}
-
-	icons := u.HistoryIcons
-	var list []string
-	for _, v := range icons {
-		// for compatible reason, old config files may contain icon paths
-		// that are not encoded.
-		v = dutils.EncodeURI(v, dutils.SCHEME_FILE)
-		if v == icon {
-			continue
-		}
-		list = append(list, v)
-	}
-	u.setPropStrv(&u.HistoryIcons, "HistoryIcons", list)
 }
 
 func (u *User) writeUserConfig() error {
@@ -267,7 +222,6 @@ func (u *User) writeUserConfig() error {
 	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
 	kFile.SetString(confGroupUser, confKeyBackground, u.BackgroundFile)
 	kFile.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
-	kFile.SetStringList(confGroupUser, confKeyHistoryIcons, u.HistoryIcons)
 	kFile.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
 	_, err = kFile.SaveToFile(config)
 	if err != nil {
@@ -343,20 +297,38 @@ func getSystemLocale(file string) string {
 	return ""
 }
 
-func scaleUserIcon(file, md5 string) (string, bool, error) {
+// ret0: output file
+// ret1: scaled
+// ret2: error
+func scaleUserIcon(file string) (string, bool, error) {
 	w, h, err := graphic.GetImageSize(file)
 	if err != nil {
 		return "", false, err
 	}
 
-	if w < maxWidth && h < maxHeight {
+	if w <= maxWidth && h <= maxHeight {
 		return file, false, nil
 	}
 
-	dest := path.Join("/tmp", md5)
+	dest, err := getTempFile()
+	if err != nil {
+		return "", false, err
+	}
+
 	defer debug.FreeOSMemory()
 	return dest, true, graphic.ScaleImagePrefer(file, dest,
 		maxWidth, maxHeight, graphic.FormatPng)
+}
+
+// return temp file path and error
+func getTempFile() (string, error) {
+	tmpfile, err := ioutil.TempFile("", "dde-daemon-accounts")
+	if err != nil {
+		return "", err
+	}
+	name := tmpfile.Name()
+	tmpfile.Close()
+	return name, nil
 }
 
 var (
