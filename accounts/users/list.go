@@ -39,11 +39,16 @@ var (
 )
 
 type UserInfo struct {
-	Name  string
-	Uid   string
-	Gid   string
-	Home  string
-	Shell string
+	Name    string
+	Uid     string
+	Gid     string
+	comment string
+	Home    string
+	Shell   string
+}
+
+func (u *UserInfo) Comment() *CommentInfo {
+	return newCommentInfo(u.comment)
 }
 
 type UserInfos []UserInfo
@@ -106,11 +111,12 @@ func getUserInfosFromFile(file string) (UserInfos, error) {
 		}
 
 		info := UserInfo{
-			Name:  items[0],
-			Uid:   items[2],
-			Gid:   items[3],
-			Home:  items[5],
-			Shell: items[6],
+			Name:    items[0],
+			Uid:     items[2],
+			Gid:     items[3],
+			comment: items[4],
+			Home:    items[5],
+			Shell:   items[6],
 		}
 
 		infos = append(infos, info)

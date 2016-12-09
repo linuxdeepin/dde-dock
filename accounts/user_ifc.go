@@ -22,23 +22,22 @@ import (
 	dutils "pkg.deepin.io/lib/utils"
 )
 
-func (u *User) SetUserName(dbusMsg dbus.DMessage, name string) error {
-	logger.Debug("[SetUserName] new name:", name)
+func (u *User) SetFullName(dbusMsg dbus.DMessage, name string) error {
+	logger.Debugf("[SetFullName] new name: %q", name)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
 	if err := u.accessAuthentication(pid, false); err != nil {
-		logger.Debug("[SetUserName] access denied:", err)
+		logger.Debug("[SetFullName] access denied:", err)
 		return err
 	}
 
-	if err := users.ModifyName(name, u.UserName); err != nil {
-		logger.Warning("DoAction: modify username failed:", err)
+	if err := users.ModifyFullName(name, u.UserName); err != nil {
+		logger.Warning("DoAction: modify full name failed:", err)
 		return err
 	}
-
-	u.setPropString(&u.UserName, "UserName", name)
+	u.setPropString(&u.FullName, "FullName", name)
 	return nil
 }
 
@@ -307,7 +306,7 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 		return nil
 	}
 
-	if ok := isBackgroundValid(bg); !ok {
+	if !isBackgroundValid(bg) {
 		err := ErrInvalidBackground{bg}
 		logger.Warning(err)
 		return err
@@ -338,7 +337,7 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 		return nil
 	}
 
-	if ok := isBackgroundValid(bg); !ok {
+	if !isBackgroundValid(bg) {
 		err := ErrInvalidBackground{bg}
 		logger.Warning(err)
 		return err

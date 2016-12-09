@@ -11,6 +11,7 @@ package users
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -22,13 +23,61 @@ var (
 	errInvalidParam = fmt.Errorf("Invalid or empty parameter")
 )
 
-func ModifyName(newname, username string) error {
-	if len(newname) == 0 {
-		return errInvalidParam
+const CommentFieldsLen = 5
+
+// CommentInfo is passwd file user comment info
+type CommentInfo [CommentFieldsLen]string
+
+func newCommentInfo(comment string) *CommentInfo {
+	var ci CommentInfo
+	parts := strings.Split(comment, ",")
+
+	// length is min(CommentFieldsLen, len(parts))
+	length := len(parts)
+	if length > CommentFieldsLen {
+		length = CommentFieldsLen
 	}
 
-	var cmd = fmt.Sprintf("%s -l %s %s", userCmdModify, newname, username)
-	return doAction(cmd)
+	copy(ci[:], parts[:length])
+	return &ci
+}
+
+func (ci *CommentInfo) String() string {
+	return strings.Join(ci[:], ",")
+}
+
+func (ci *CommentInfo) FullName() string {
+	return ci[0]
+}
+
+func (ci *CommentInfo) SetFullName(value string) {
+	ci[0] = value
+}
+
+func isCommentFieldValid(name string) bool {
+	if strings.ContainsAny(name, ",=:") {
+		return false
+	}
+	return true
+}
+
+func ModifyFullName(newname, username string) error {
+	if !isCommentFieldValid(newname) {
+		return errors.New("invalid nickname")
+	}
+
+	user, err := GetUserInfoByName(username)
+	if err != nil {
+		return err
+	}
+	comment := user.Comment()
+	comment.SetFullName(newname)
+	return modifyComment(comment.String(), username)
+}
+
+func modifyComment(comment, username string) error {
+	cmd := exec.Command(userCmdModify, "-c", comment, username)
+	return cmd.Run()
 }
 
 func ModifyHome(dir, username string) error {

@@ -50,6 +50,7 @@ const (
 
 type User struct {
 	UserName          string
+	FullName          string
 	Uid               string
 	Gid               string
 	HomeDir           string
@@ -83,6 +84,10 @@ func NewUser(userPath string) (*User, error) {
 
 	var u = &User{}
 	u.setPropString(&u.UserName, "UserName", info.Name)
+
+	comment := info.Comment()
+	u.setPropString(&u.FullName, "FullName", comment.FullName())
+
 	u.setPropString(&u.Uid, "Uid", info.Uid)
 	u.setPropString(&u.Gid, "Gid", info.Gid)
 	u.setPropString(&u.HomeDir, "HomeDir", info.Home)
