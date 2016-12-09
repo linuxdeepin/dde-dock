@@ -18,6 +18,7 @@ import (
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 )
 
@@ -306,8 +307,9 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 		return nil
 	}
 
-	if err := checkBackgroundValid(bg); err != nil {
-		logger.Debug(err)
+	if ok := isBackgroundValid(bg); !ok {
+		err := ErrInvalidBackground{bg}
+		logger.Warning(err)
 		return err
 	}
 
@@ -336,8 +338,9 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 		return nil
 	}
 
-	if err := checkBackgroundValid(bg); err != nil {
-		logger.Debug(err)
+	if ok := isBackgroundValid(bg); !ok {
+		err := ErrInvalidBackground{bg}
+		logger.Warning(err)
 		return err
 	}
 
@@ -403,11 +406,25 @@ func (u *User) GetLargeIcon() string {
 	return dutils.EncodeURI(filename, dutils.SCHEME_FILE)
 }
 
-func checkBackgroundValid(bg string) error {
-	bg = dutils.DecodeURI(bg)
-	if !graphic.IsSupportedImage(bg) {
-		return errors.New("unsupported image format")
+var supportedFormats = strv.Strv([]string{"jpeg", "png", "bmp", "tiff"})
+
+func isBackgroundValid(file string) bool {
+	file = dutils.DecodeURI(file)
+	format, err := graphic.SniffImageFormat(file)
+	if err != nil {
+		return false
 	}
-	// ok
-	return nil
+
+	if supportedFormats.Contains(format) {
+		return true
+	}
+	return false
+}
+
+type ErrInvalidBackground struct {
+	FileName string
+}
+
+func (err ErrInvalidBackground) Error() string {
+	return fmt.Sprintf("%q is not a valid background file", err.FileName)
 }
