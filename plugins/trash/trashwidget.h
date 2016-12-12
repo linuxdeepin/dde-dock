@@ -5,9 +5,8 @@
 
 #include <QWidget>
 #include <QPixmap>
-
-#include <DMenu>
-#include <DAction>
+#include <QMenu>
+#include <QAction>
 
 class TrashWidget : public QWidget
 {

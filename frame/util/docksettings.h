@@ -7,8 +7,8 @@
 #include "dbus/dbusdisplay.h"
 #include "controller/dockitemcontroller.h"
 
-#include <DAction>
-#include <DMenu>
+#include <QAction>
+#include <QMenu>
 
 #include <QObject>
 #include <QSize>
@@ -64,7 +64,7 @@ public slots:
     void setAutoHide(const bool autoHide);
 
 private slots:
-    void menuActionClicked(DAction *action);
+    void menuActionClicked(QAction *action);
     void onPositionChanged();
     void iconSizeChanged();
     void displayModeChanged();
@@ -88,19 +88,19 @@ private:
     QRect m_primaryRect;
     QSize m_mainWindowSize;
 
-    DMenu m_settingsMenu;
-    DAction m_fashionModeAct;
-    DAction m_efficientModeAct;
-    DAction m_topPosAct;
-    DAction m_bottomPosAct;
-    DAction m_leftPosAct;
-    DAction m_rightPosAct;
-    DAction m_largeSizeAct;
-    DAction m_mediumSizeAct;
-    DAction m_smallSizeAct;
-    DAction m_keepShownAct;
-    DAction m_keepHiddenAct;
-    DAction m_smartHideAct;
+    QMenu m_settingsMenu;
+    QAction m_fashionModeAct;
+    QAction m_efficientModeAct;
+    QAction m_topPosAct;
+    QAction m_bottomPosAct;
+    QAction m_leftPosAct;
+    QAction m_rightPosAct;
+    QAction m_largeSizeAct;
+    QAction m_mediumSizeAct;
+    QAction m_smallSizeAct;
+    QAction m_keepShownAct;
+    QAction m_keepHiddenAct;
+    QAction m_smartHideAct;
 
     DBusDisplay *m_displayInter;
     DBusDock *m_dockInter;

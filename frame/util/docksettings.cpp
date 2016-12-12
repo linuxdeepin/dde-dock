@@ -16,7 +16,7 @@ DockSettings::DockSettings(QWidget *parent)
 
       m_autoHide(true),
 
-      m_settingsMenu(this),
+      m_settingsMenu(parent),
       m_fashionModeAct(tr("Fashion Mode"), this),
       m_efficientModeAct(tr("Efficient Mode"), this),
       m_topPosAct(tr("Top"), this),
@@ -59,32 +59,32 @@ DockSettings::DockSettings(QWidget *parent)
     m_keepHiddenAct.setCheckable(true);
     m_smartHideAct.setCheckable(true);
 
-    DMenu *modeSubMenu = new DMenu(&m_settingsMenu);
+    QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
-    DAction *modeSubMenuAct = new DAction(tr("Mode"), this);
+    QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
-    DMenu *locationSubMenu = new DMenu(&m_settingsMenu);
+    QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
     locationSubMenu->addAction(&m_rightPosAct);
-    DAction *locationSubMenuAct = new DAction(tr("Location"), this);
+    QAction *locationSubMenuAct = new QAction(tr("Location"), this);
     locationSubMenuAct->setMenu(locationSubMenu);
 
-    DMenu *sizeSubMenu = new DMenu(&m_settingsMenu);
+    QMenu *sizeSubMenu = new QMenu(&m_settingsMenu);
     sizeSubMenu->addAction(&m_largeSizeAct);
     sizeSubMenu->addAction(&m_mediumSizeAct);
     sizeSubMenu->addAction(&m_smallSizeAct);
-    DAction *sizeSubMenuAct = new DAction(tr("Size"), this);
+    QAction *sizeSubMenuAct = new QAction(tr("Size"), this);
     sizeSubMenuAct->setMenu(sizeSubMenu);
 
-    DMenu *statusSubMenu = new DMenu(&m_settingsMenu);
+    QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
-    DAction *statusSubMenuAct = new DAction(tr("Status"), this);
+    QAction *statusSubMenuAct = new QAction(tr("Status"), this);
     statusSubMenuAct->setMenu(statusSubMenu);
 
     m_settingsMenu.addAction(modeSubMenuAct);
@@ -92,7 +92,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(sizeSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
 
-    connect(&m_settingsMenu, &DMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
@@ -222,7 +222,7 @@ void DockSettings::showDockSettingsMenu()
     m_keepHiddenAct.setChecked(m_hideMode == KeepHidden);
     m_smartHideAct.setChecked(m_hideMode == SmartHide);
 
-    m_settingsMenu.exec();
+    m_settingsMenu.exec(QCursor::pos());
 
     setAutoHide(true);
 }
@@ -241,7 +241,7 @@ void DockSettings::setAutoHide(const bool autoHide)
     emit autoHideChanged(m_autoHide);
 }
 
-void DockSettings::menuActionClicked(DAction *action)
+void DockSettings::menuActionClicked(QAction *action)
 {
     Q_ASSERT(action);
 
