@@ -102,6 +102,7 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		return
 	}
 	a.setPropActiveSinkPort(a.getActiveSinkPort())
+	a.autoMuteDetect()
 }
 
 func (a *Audio) sinkInputPoller() {
@@ -180,4 +181,5 @@ func (a *Audio) handleServerEvent() {
 
 	a.setPropDefaultSink(a.getDefaultSink(sinfo.DefaultSinkName))
 	a.setPropDefaultSource(a.getDefaultSource(sinfo.DefaultSourceName))
+	a.autoMuteDetect()
 }

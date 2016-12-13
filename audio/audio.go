@@ -49,6 +49,8 @@ type Audio struct {
 
 	sinkLocker sync.Mutex
 	portLocker sync.Mutex
+
+	prevActivePort string
 }
 
 const (
@@ -491,6 +493,9 @@ func (*Daemon) Start() error {
 	}
 
 	initDefaultVolume(_audio)
+	if _audio.DefaultSink != nil {
+		_audio.prevActivePort = _audio.DefaultSink.ActivePort.Name
+	}
 	return nil
 }
 
@@ -546,6 +551,7 @@ func (a *Audio) trySetSinkByPort(portName string) error {
 		if a.DefaultSink == nil || a.DefaultSink.Name != sink.Name {
 			a.SetDefaultSink(sink.Name)
 		}
+		a.autoMuteDetect()
 		return nil
 	}
 	return fmt.Errorf("Cann't find valid sink for port '%s'", portName)
