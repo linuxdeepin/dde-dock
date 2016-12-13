@@ -10,16 +10,12 @@
 package accounts
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"os/exec"
 	"path"
-	"regexp"
-	"strings"
-
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	dutils "pkg.deepin.io/lib/utils"
+	"strings"
 )
 
 const (
@@ -38,7 +34,8 @@ func (m *Manager) copyUserDatas(uPath string) {
 		return
 	}
 
-	lang, _ := getDefaultLocale(defaultLocaleFile)
+	locale := getLocaleFromFile(defaultLocaleFile)
+	lang := strings.Split(locale, ".")[0]
 	if len(lang) == 0 {
 		lang = defaultLang
 	}
@@ -101,28 +98,4 @@ func findDatasPath(config string) (string, error) {
 	}
 
 	return "", fmt.Errorf("Not found user datas '%s'", data)
-}
-
-func getDefaultLocale(config string) (string, error) {
-	fp, err := os.Open(config)
-	if err != nil {
-		return "", err
-	}
-	defer fp.Close()
-
-	var locale string
-	match := regexp.MustCompile(`^LANG=(.*)`)
-	scanner := bufio.NewScanner(fp)
-	for scanner.Scan() {
-		line := scanner.Text()
-		fields := match.FindStringSubmatch(line)
-		if len(fields) < 2 {
-			continue
-		}
-
-		locale = fields[1]
-		break
-	}
-
-	return strings.Split(locale, ".")[0], nil
 }

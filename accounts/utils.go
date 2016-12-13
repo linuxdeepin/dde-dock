@@ -11,12 +11,15 @@ package accounts
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
+	"pkg.deepin.io/lib/encoding/kv"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/procfs"
 	"pkg.deepin.io/lib/utils"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -144,33 +147,45 @@ func polkitAuthentication(action string, pid uint32) error {
 	return nil
 }
 
-const (
-	pidFileStatus = "/proc/%v/status"
-)
-
 func getUidByPid(pid uint32) (string, error) {
-	defer func() {
-		err := recover()
-		if err != nil {
-			fmt.Println("Recover error in getUidByPid:", err)
-		}
-	}()
-
-	var file = fmt.Sprintf(pidFileStatus, pid)
-	datas, err := ioutil.ReadFile(file)
+	process := procfs.Process(pid)
+	status, err := process.Status()
 	if err != nil {
 		return "", err
 	}
 
-	var lines = strings.Split(string(datas), "\n")
-	for _, line := range lines {
-		if !strings.Contains(line, "Uid:") {
-			continue
-		}
-
-		strv := strings.Split(line, "\t")
-		return strv[1], nil
+	uids, err := status.Uids()
+	if err != nil {
+		return "", err
 	}
 
-	return "", fmt.Errorf("Invalid file: %s", file)
+	//effective user id
+	euid := strconv.FormatUint(uint64(uids[1]), 10)
+	return euid, nil
+}
+
+func getLocaleFromFile(file string) string {
+	f, err := os.Open(file)
+	if err != nil {
+		return ""
+	}
+	defer f.Close()
+
+	r := kv.NewReader(f)
+	r.Delim = '='
+	r.Comment = '#'
+	r.TrimSpace = kv.TrimLeadingTailingSpace
+	for {
+		pair, err := r.Read()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return ""
+		}
+
+		if pair.Key == "LANG" {
+			return pair.Value
+		}
+	}
+	return ""
 }

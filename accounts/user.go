@@ -107,7 +107,7 @@ func NewUser(userPath string) (*User, error) {
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
 		u.setPropString(&u.Layout, "Layout", defaultLayout)
-		u.setPropString(&u.Locale, "Locale", getSystemLocale(defaultLocaleFile))
+		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
 		u.setPropString(&u.GreeterBackground, "GreeterBackground", defaultUserBackground)
@@ -120,7 +120,7 @@ func NewUser(userPath string) (*User, error) {
 	locale, _ := kFile.GetString(confGroupUser, confKeyLocale)
 	u.setPropString(&u.Locale, "Locale", locale)
 	if len(locale) == 0 {
-		u.setPropString(&u.Locale, "Locale", getSystemLocale(defaultLocaleFile))
+		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		isSave = true
 	}
 	layout, _ := kFile.GetString(confGroupUser, confKeyLayout)
@@ -274,32 +274,6 @@ func getUidFromUserPath(userPath string) string {
 	items := strings.Split(userPath, userDBusPath)
 
 	return items[1]
-}
-
-func getSystemLocale(file string) string {
-	// If file is big, please using bufio.Scanner
-	content, err := ioutil.ReadFile(file)
-	if err != nil {
-		return ""
-	}
-
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		if len(line) == 0 {
-			continue
-		}
-
-		line = strings.TrimSpace(line)
-		array := strings.Split(line, "=")
-		if len(array) != 2 {
-			continue
-		}
-
-		if array[0] == "LANG" {
-			return array[1]
-		}
-	}
-	return ""
 }
 
 // ret0: output file
