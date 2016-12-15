@@ -9,17 +9,31 @@
 
 package audio
 
-import "pkg.deepin.io/lib/dbus"
-import "pkg.deepin.io/lib/pulse"
-import "fmt"
-import "time"
-import "sync"
+import (
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/pulse"
+	"sync"
+	"time"
+)
+
+var (
+	meterLocker sync.Mutex
+	meters      = make(map[string]*Meter)
+)
 
 type Meter struct {
 	Volume  float64
 	id      string
 	hasTick bool
 	core    *pulse.SourceMeter
+}
+
+//TODO: use pulse.Meter instead of remove pulse.SourceMeter
+func NewMeter(id string, core *pulse.SourceMeter) *Meter {
+	m := &Meter{id: id, core: core}
+	m.Tick()
+	go m.tryQuit()
+	return m
 }
 
 func (m *Meter) quit() {
@@ -41,41 +55,22 @@ func (m *Meter) tryQuit() {
 		}
 	}
 }
+
 func (m *Meter) Tick() {
 	m.hasTick = true
 }
 
-//TODO: use pulse.Meter instead of remove pulse.SourceMeter
-func NewMeter(id string, core *pulse.SourceMeter) *Meter {
-	m := &Meter{id: id, core: core}
-	m.Tick()
-	go m.tryQuit()
-	return m
-}
-
-var (
-	meterLocker sync.Mutex
-	meters      = make(map[string]*Meter)
-)
-
-func (s *Source) GetMeter() *Meter {
-	meterLocker.Lock()
-	defer meterLocker.Unlock()
-	id := fmt.Sprintf("source%d", s.core.Index)
-	m, ok := meters[id]
-	if !ok {
-		core := pulse.NewSourceMeter(pulse.GetContext(), s.core.Index)
-		m = NewMeter(id, core)
-		dbus.InstallOnSession(m)
-		meters[id] = m
-		core.ConnectChanged(func(v float64) {
-			m.setPropVolume(v)
-		})
+func (m *Meter) GetDBusInfo() dbus.DBusInfo {
+	return dbus.DBusInfo{
+		Dest:       baseBusName,
+		ObjectPath: baseBusPath + "/Meter" + m.id,
+		Interface:  baseBusIfc + ".Meter",
 	}
-	return m
 }
 
-func (s *Sink) GetMeter() *Meter {
-	//TODO
-	return nil
+func (m *Meter) setPropVolume(v float64) {
+	if m.Volume != v {
+		m.Volume = v
+		dbus.NotifyChange(m, "Volume")
+	}
 }

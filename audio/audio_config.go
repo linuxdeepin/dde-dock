@@ -10,34 +10,9 @@
 package audio
 
 import (
-	"encoding/json"
 	"pkg.deepin.io/lib/pulse"
-	dutils "pkg.deepin.io/lib/utils"
-	"sync"
 	"time"
 )
-
-type configInfo struct {
-	Profiles   map[string]string // Profiles[cardName] = activeProfile
-	Sink       string
-	Source     string
-	SinkPort   string
-	SourcePort string
-
-	SinkVolume   float64
-	SourceVolume float64
-}
-
-var (
-	fileLocker    sync.Mutex
-	configCache   *configInfo
-	configHandler *dutils.Config
-)
-
-func init() {
-	configHandler = new(dutils.Config)
-	configHandler.SetConfigName("dde-daemon/audio")
-}
 
 func (a *Audio) applyConfig() {
 	info, err := readConfigInfo()
@@ -207,46 +182,4 @@ func (a *Audio) isConfigValid(info *configInfo) bool {
 		}
 	}
 	return sourceValid
-}
-
-func (info *configInfo) string() string {
-	data, _ := json.Marshal(info)
-	return string(data)
-}
-
-func readConfigInfo() (*configInfo, error) {
-	fileLocker.Lock()
-	defer fileLocker.Unlock()
-
-	if configCache != nil {
-		return configCache, nil
-	}
-
-	var info configInfo
-	err := configHandler.Load(&info)
-	if err != nil {
-		return nil, err
-	}
-
-	configCache = &info
-	return configCache, nil
-}
-
-func saveConfigInfo(info *configInfo) error {
-	fileLocker.Lock()
-	defer fileLocker.Unlock()
-
-	logger.Debug("[saveConfigInfo] will save:", info.string())
-	if configCache.string() == info.string() {
-		logger.Debug("[saveConfigInfo] config info not changed")
-		return nil
-	}
-
-	err := configHandler.Save(info)
-	if err != nil {
-		return err
-	}
-
-	configCache = info
-	return nil
 }

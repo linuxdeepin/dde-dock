@@ -150,6 +150,7 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 		}
 	}
 }
+
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew, pulse.EventTypeRemove:
