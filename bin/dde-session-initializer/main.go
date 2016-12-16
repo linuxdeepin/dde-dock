@@ -27,6 +27,7 @@ import (
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/log"
 	"pkg.deepin.io/lib/proxy"
+	"pkg.deepin.io/lib/utils"
 
 	"os"
 	"time"
@@ -92,7 +93,17 @@ func main() {
 	C.init()
 	proxy.SetupProxy()
 
-	loader.SetLogLevel(cmd.LogLevel())
+	logger.SetLogLevel(log.LevelInfo)
+	if cmd.IsLogLevelNone() &&
+		(utils.IsEnvExists(log.DebugLevelEnv) || utils.IsEnvExists(log.DebugMatchEnv)) {
+		logger.Info("Log level is none and debug env exists, so ignore cmd.loglevel")
+	} else {
+		appLogLevel := cmd.LogLevel()
+		logger.Info("App log level:", appLogLevel)
+		// set all modules log level to appLogLevel
+		loader.SetLogLevel(appLogLevel)
+	}
+
 	loader.EnableModules([]string{"dock", "launcher", "trayicon"}, nil, loader.EnableFlagIgnoreMissingModule)
 
 	runMainLoop()
