@@ -123,63 +123,74 @@ func (a *Audio) doSaveConfig() {
 	}
 }
 
-func (a *Audio) isConfigValid(info *configInfo) bool {
-	var (
-		cardNumber  int
-		sinkValid   bool
-		sourceValid bool
-	)
-
+func (a *Audio) isConfigValid(cfg *configInfo) bool {
+	// check cfg.Profiles
+	var validProfileCount int
 	for _, card := range a.core.GetCardList() {
-		v, ok := info.Profiles[card.Name]
+		cardProfile, ok := cfg.Profiles[card.Name]
 		if !ok {
 			continue
 		}
-
+		// find cardProfile in card.Profiles
+		var found bool
 		for _, profile := range card.Profiles {
-			if profile.Name == v {
-				cardNumber += 1
+			if profile.Name == cardProfile {
+				found = true
 				break
 			}
 		}
+
+		if found {
+			validProfileCount++
+		} else {
+			// cardProfile is invalid
+			return false
+		}
 	}
-	if cardNumber != len(info.Profiles) {
+	if validProfileCount != len(cfg.Profiles) {
 		return false
 	}
 
+	// check cfg.Sink and cfg.SinkPort
+	var sinkValid bool
 	for _, sink := range a.core.GetSinkList() {
-		if sink.Name == info.Sink {
-			if len(info.SinkPort) == 0 {
-				sinkValid = true
-				break
-			}
+		if sink.Name != cfg.Sink {
+			continue
+		}
 
-			for _, port := range sink.Ports {
-				if port.Name == info.SinkPort {
-					sinkValid = true
-				}
-			}
+		if len(cfg.SinkPort) == 0 {
+			sinkValid = true
 			break
 		}
+
+		for _, port := range sink.Ports {
+			if port.Name == cfg.SinkPort {
+				sinkValid = true
+			}
+		}
+		break
 	}
 	if !sinkValid {
 		return false
 	}
 
+	// check cfg.Source and cfg.SourcePort
+	var sourceValid bool
 	for _, source := range a.core.GetSourceList() {
-		if source.Name == info.Source {
-			if len(info.SourcePort) == 0 {
-				sourceValid = true
-				break
-			}
-
-			for _, port := range source.Ports {
-				if port.Name == info.SourcePort {
-					sourceValid = true
-				}
-			}
+		if source.Name != cfg.Source {
+			continue
+		}
+		if len(cfg.SourcePort) == 0 {
+			sourceValid = true
 			break
 		}
+
+		for _, port := range source.Ports {
+			if port.Name == cfg.SourcePort {
+				sourceValid = true
+			}
+		}
+		break
 	}
 	return sourceValid
 }
