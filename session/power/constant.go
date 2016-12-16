@@ -20,7 +20,7 @@ const (
 
 	settingKeyScreenBlackLock        = "screen-black-lock"
 	settingKeySleepLock              = "sleep-lock"
-	settingKeyLidClosedExec          = "lid-closed-exec"
+	settingKeyLidClosedSleep         = "lid-closed-sleep"
 	settingKeyPowerButtonPressedExec = "power-button-pressed-exec"
 
 	settingKeyFullscreenWorkaroundEnabled     = "fullscreen-workaround-enabled"

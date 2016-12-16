@@ -42,8 +42,8 @@ type Manager struct {
 
 	// 按下电源按钮后执行的命令
 	PowerButtonAction *property.GSettingsStringProperty `access:"readwrite"`
-	// 笔记本电脑关闭盖子后执行的命令
-	LidClosedAction *property.GSettingsStringProperty `access:"readwrite"`
+	// 笔记本电脑盖上盖子后是否睡眠
+	LidClosedSleep *property.GSettingsBoolProperty `access:"readwrite"`
 
 	// 是否有盖子，一般笔记本电脑才有
 	LidIsPresent bool
@@ -104,7 +104,7 @@ func (m *Manager) init() error {
 	m.SleepLock = property.NewGSettingsBoolProperty(m, "SleepLock", m.settings, settingKeySleepLock)
 
 	m.PowerButtonAction = property.NewGSettingsStringProperty(m, "PowerButtonAction", m.settings, settingKeyPowerButtonPressedExec)
-	m.LidClosedAction = property.NewGSettingsStringProperty(m, "LidClosedAction", m.settings, settingKeyLidClosedExec)
+	m.LidClosedSleep = property.NewGSettingsBoolProperty(m, "LidClosedSleep", m.settings, settingKeyLidClosedSleep)
 
 	power := m.helper.Power
 	m.LidIsPresent = power.HasLidSwitch.Get()
@@ -121,7 +121,6 @@ func (m *Manager) init() error {
 	m.initPowerModule()
 
 	m.initPowerButtonEventHandler()
-	m.initLidSwitchEventHandler()
 	m.initOnBatteryChangedHandler()
 
 	sessionWatcher := m.helper.SessionWatcher

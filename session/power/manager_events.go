@@ -27,25 +27,6 @@ func (m *Manager) initPowerButtonEventHandler() {
 	})
 }
 
-// 处理开启关闭笔记本盖子事件
-func (m *Manager) initLidSwitchEventHandler() {
-	power := m.helper.Power
-	power.ConnectLidClosed(func() {
-		logger.Info("Lid closed")
-		// 为了多显示器时关闭笔记本盖子不待机
-		if m.isMultiScreen() &&
-			m.settings.GetBoolean(settingKeyMultiScreenPreventLidClosedExec) {
-			logger.Info("Multi-Screen not exec")
-			return
-		}
-		cmd := m.LidClosedAction.Get()
-		execCommand(cmd)
-	})
-	power.ConnectLidOpened(func() {
-		logger.Info("Lid opened")
-	})
-}
-
 // 处理有线电源插入拔出事件
 func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power

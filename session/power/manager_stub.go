@@ -38,7 +38,7 @@ func (m *Manager) Reset() {
 		settingKeyBatterySleepDelay,
 		settingKeyScreenBlackLock,
 		settingKeySleepLock,
-		settingKeyLidClosedExec,
+		settingKeyLidClosedSleep,
 		settingKeyPowerButtonPressedExec,
 	}
 	for _, key := range settingKeys {

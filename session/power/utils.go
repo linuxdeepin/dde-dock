@@ -10,7 +10,6 @@
 package power
 
 import (
-	libdisplay "dbus/com/deepin/daemon/display"
 	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/icccm"
@@ -144,28 +143,6 @@ func execCommand(cmd string) {
 func doCloseLowpower() {
 	logger.Info("Close low power")
 	go exec.Command(cmdLowPower, "--quit").Run()
-}
-
-func (m *Manager) isMultiScreen() bool {
-	display := m.helper.Display
-	if display != nil {
-		monitorObjPaths := display.Monitors.Get()
-		if len(monitorObjPaths) > 1 {
-			return true
-		} else if len(monitorObjPaths) == 1 {
-			monitor, err := libdisplay.NewMonitor(dbusDisplayDest, monitorObjPaths[0])
-			if err == nil {
-				// NOTE: 复制屏时只有一个合一的 monitor， IsComposited 属性为 true
-				if monitor.IsComposited.Get() {
-					return true
-				}
-				return false
-			}
-			logger.Warning(err)
-			return false
-		}
-	}
-	return false
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {
