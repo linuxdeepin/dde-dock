@@ -529,3 +529,45 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 	}
 	return
 }
+
+// ListAvailableKeyDetail get all available key details, include vitual sections
+func (s *ConnectionSession) ListAvailableKeyDetail() string {
+	var info string = "["
+	vslen := len(s.AvailableVirtualSections)
+	for i, vsection := range s.AvailableVirtualSections {
+		info += fmt.Sprintf("{\"VirtualSection\": \"%s\", \"Keys\":[", vsection)
+		sections := getAvailableSectionsOfVsection(s.data, vsection)
+		slen := len(sections)
+		for j, section := range sections {
+			sectionKeys, ok := s.AvailableKeys[section]
+			if !ok {
+				continue
+			}
+
+			klen := len(sectionKeys)
+			for k, key := range sectionKeys {
+				info += fmt.Sprintf("{\"Section\": \"%s\", \"Key\": \"%s\",", section, key)
+				info += fmt.Sprintf("\"Value\": %s", s.GetKey(section, key))
+				values := generalGetSettingAvailableValues(s.data, section, key)
+				if len(values) > 0 {
+					valuesJSON, _ := marshalJSON(values)
+					info += fmt.Sprintf(",\"Values\": %s", valuesJSON)
+				}
+
+				info += "}"
+				if k != (klen - 1) {
+					info += ","
+				}
+			}
+			if j != (slen - 1) {
+				info += ","
+			}
+		}
+		info += "]}"
+		if i != (vslen - 1) {
+			info += ","
+		}
+	}
+	info += "]"
+	return info
+}
