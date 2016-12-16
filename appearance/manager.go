@@ -206,23 +206,40 @@ func (m *Manager) init() {
 }
 
 func (m *Manager) correctFontName() {
+	var changed bool = false
 	families := fonts.ListAllFamily()
 	stand := families.Get(m.StandardFont.Get())
 	if stand != nil {
+		// for virtual font
 		if stand.Id != m.StandardFont.Get() {
+			changed = true
 			m.StandardFont.Set(stand.Id)
 		}
 	} else {
+		changed = true
 		m.StandardFont.Set(defaultStandardFont)
 	}
 
 	mono := families.Get(m.MonospaceFont.Get())
 	if mono != nil {
 		if mono.Id != m.MonospaceFont.Get() {
+			changed = true
 			m.MonospaceFont.Set(mono.Id)
 		}
 	} else {
+		changed = true
 		m.MonospaceFont.Set(defaultMonospaceFont)
+	}
+
+	if !changed {
+		return
+	}
+
+	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(),
+		m.FontSize.Get())
+	if err != nil {
+		logger.Debug("[correctFontName]-----------set font failed:", err)
+		return
 	}
 }
 

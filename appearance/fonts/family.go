@@ -23,7 +23,7 @@ import (
 )
 
 const (
-	fallbackStandard = "Noto Sans"
+	fallbackStandard  = "Noto Sans"
 	fallbackMonospace = "Noto Mono"
 	defaultDPI        = 96
 
@@ -89,11 +89,12 @@ func SetFamily(standard, monospace string, size int32) error {
 		monospace = fcFontMatch(monospace)
 	}
 
-	standInfo := ListStandardFamily().Get(standard)
+	families := ListAllFamily()
+	standInfo := families.Get(standard)
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
 	}
-	monoInfo := ListMonospaceFamily().Get(monospace)
+	monoInfo := families.Get(monospace)
 	if monoInfo == nil {
 		return fmt.Errorf("Invalid monospace id '%s'", monospace)
 	}
