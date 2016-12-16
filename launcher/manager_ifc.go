@@ -16,7 +16,6 @@ import (
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/keyfile"
-	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 
@@ -77,8 +76,18 @@ func (m *Manager) IsItemOnDesktop(id string) (bool, error) {
 	if item == nil {
 		return false, errorInvalidID
 	}
-	path := filepath.Join(getUserDesktopDir(), filepath.Base(item.Path))
-	return utils.IsFileExist(path), nil
+	file := appInDesktop(m.getAppIdByFilePath(item.Path))
+	if _, err := os.Stat(file); err != nil {
+		if os.IsNotExist(err) {
+			// not exist
+			return false, nil
+		} else {
+			return false, err
+		}
+	} else {
+		// exist
+		return true, nil
+	}
 }
 
 func (m *Manager) RequestRemoveFromDesktop(id string) (bool, error) {
@@ -86,8 +95,8 @@ func (m *Manager) RequestRemoveFromDesktop(id string) (bool, error) {
 	if item == nil {
 		return false, errorInvalidID
 	}
-	path := filepath.Join(getUserDesktopDir(), filepath.Base(item.Path))
-	err := os.Remove(path)
+	file := appInDesktop(m.getAppIdByFilePath(item.Path))
+	err := os.Remove(file)
 	return err == nil, err
 }
 
@@ -96,7 +105,7 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 	if item == nil {
 		return false, errorInvalidID
 	}
-	dest := filepath.Join(getUserDesktopDir(), filepath.Base(item.Path))
+	dest := appInDesktop(m.getAppIdByFilePath(item.Path))
 	_, err := os.Stat(dest)
 	if err != nil {
 		if !os.IsNotExist(err) {
@@ -117,6 +126,7 @@ func (m *Manager) RequestSendToDesktop(id string) (bool, error) {
 	kf.SetString(desktopMainSection, "X-Deepin-AppID", id)
 	// Desktop files in user desktop direcotry do not require executable permission
 	if err := kf.SaveToFile(dest); err != nil {
+		logger.Warning("save new desktop file failed:", err)
 		return false, err
 	}
 	// success

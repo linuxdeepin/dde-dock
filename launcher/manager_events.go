@@ -94,6 +94,9 @@ func (m *Manager) checkDesktopFile(file string) {
 		if item != nil {
 			m.removeItem(appId)
 			m.emitItemChanged(item, AppStatusDeleted)
+
+			// remove desktop file in user's desktop direcotry
+			os.Remove(appInDesktop(appId))
 		}
 	} else {
 		// appInfo is not nil

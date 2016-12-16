@@ -24,6 +24,13 @@ const (
 	DirDefaultPerm os.FileMode = 0755
 )
 
+// appInDesktop returns the destination when the desktop file is
+// sent to the user's desktop direcotry.
+func appInDesktop(appId string) string {
+	appId = strings.Replace(appId, "/", "-", -1)
+	return filepath.Join(getUserDesktopDir(), appId+desktopExt)
+}
+
 func isZH() bool {
 	lang := gettext.QueryLang()
 	return strings.HasPrefix(lang, "zh")
