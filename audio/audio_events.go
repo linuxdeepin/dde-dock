@@ -180,7 +180,7 @@ func (a *Audio) handleServerEvent() {
 		return
 	}
 
-	a.setPropDefaultSink(a.getDefaultSink(sinfo.DefaultSinkName))
-	a.setPropDefaultSource(a.getDefaultSource(sinfo.DefaultSourceName))
+	a.updateDefaultSink(sinfo.DefaultSinkName)
+	a.updateDefaultSource(sinfo.DefaultSourceName)
 	a.autoMuteDetect()
 }

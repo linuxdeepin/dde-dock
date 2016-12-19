@@ -94,7 +94,6 @@ func initDefaultVolume(audio *Audio) {
 	audio.Reset()
 }
 
-/* Default Sink */
 func (a *Audio) SetDefaultSink(name string) {
 	a.sinkLocker.Lock()
 	defer a.sinkLocker.Unlock()
@@ -103,6 +102,7 @@ func (a *Audio) SetDefaultSink(name string) {
 		return
 	}
 
+	logger.Debugf("audio.core.SetDefaultSink name: %q", name)
 	a.core.SetDefaultSink(name)
 	a.update()
 	a.saveConfig()
@@ -117,22 +117,6 @@ func (a *Audio) SetDefaultSink(name string) {
 	a.core.MoveSinkInputsByName(idxList, name)
 }
 
-func (a *Audio) getDefaultSink(name string) *Sink {
-	if a.DefaultSink != nil && a.DefaultSink.Name == name {
-		return a.DefaultSink
-	}
-	for _, o := range a.core.GetSinkList() {
-		if o.Name != name {
-			continue
-		}
-		// TODO: Free old sink info
-		a.DefaultSink = NewSink(o)
-		break
-	}
-	return a.DefaultSink
-}
-
-/* Default Source */
 func (a *Audio) SetDefaultSource(name string) {
 	if a.DefaultSource != nil && a.DefaultSource.Name == name {
 		return
@@ -142,21 +126,6 @@ func (a *Audio) SetDefaultSource(name string) {
 	a.saveConfig()
 }
 
-func (a *Audio) getDefaultSource(name string) *Source {
-	if a.DefaultSource != nil && a.DefaultSource.Name == name {
-		return a.DefaultSource
-	}
-	for _, o := range a.core.GetSourceList() {
-		if o.Name != name {
-			continue
-		}
-		a.DefaultSource = NewSource(o)
-		break
-	}
-	return a.DefaultSource
-}
-
-/* Sink Port */
 func (a *Audio) getActiveSinkPort() string {
 	if a.DefaultSink == nil {
 		return ""
@@ -187,7 +156,6 @@ func (a *Audio) trySetSinkByPort(portName string) error {
 	return fmt.Errorf("Cann't find valid sink for port '%s'", portName)
 }
 
-/* Source Port */
 func (a *Audio) getActiveSourcePort() string {
 	if a.DefaultSource == nil {
 		return ""

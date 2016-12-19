@@ -45,6 +45,7 @@ func filterSinkInput(c *pulse.SinkInput) bool {
 }
 
 func (a *Audio) rebuildSinkInputList() {
+	logger.Debug("rebuildSinkInputList")
 	var sinkinputs []*SinkInput
 	for _, s := range a.core.GetSinkInputList() {
 		if s == nil || filterSinkInput(s) {
@@ -81,6 +82,7 @@ func (a *Audio) addSinkInput(idx uint32) {
 
 	a.SinkInputs = append(a.SinkInputs, si)
 	dbus.NotifyChange(a, "SinkInputs")
+	logger.Debugf("addSinkInput idx: %d, si: %#v", idx, si)
 }
 
 func (a *Audio) removeSinkInput(idx uint32) {
@@ -95,6 +97,7 @@ func (a *Audio) removeSinkInput(idx uint32) {
 	}
 
 	if tryRemoveSinkInput != nil {
+		logger.Debugf("removeSinkInput idx: %d, si: %#v", idx, tryRemoveSinkInput)
 		dbus.UnInstallObject(tryRemoveSinkInput)
 		a.SinkInputs = newSinkInputList
 		dbus.NotifyChange(a, "SinkInputs")
@@ -104,8 +107,8 @@ func (a *Audio) removeSinkInput(idx uint32) {
 func (a *Audio) update() {
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
-		a.setPropDefaultSink(a.getDefaultSink(sinfo.DefaultSinkName))
-		a.setPropDefaultSource(a.getDefaultSource(sinfo.DefaultSourceName))
+		a.updateDefaultSink(sinfo.DefaultSinkName)
+		a.updateDefaultSource(sinfo.DefaultSourceName)
 	}
 
 	a.rebuildSinkInputList()
@@ -115,17 +118,45 @@ func (a *Audio) update() {
 	a.setPropActiveSourcePort(a.getActiveSourcePort())
 }
 
-func (s *Audio) setPropDefaultSink(v *Sink) {
-	if v == nil || toJSON(s.DefaultSink) != toJSON(v) {
-		s.DefaultSink = v
-		dbus.NotifyChange(s, "DefaultSink")
+func (a *Audio) updateDefaultSink(name string) {
+	if a.DefaultSink != nil && a.DefaultSink.Name == name {
+		// default source no changed
+		return
+	}
+	// default sink changed
+	for _, o := range a.core.GetSinkList() {
+		if o.Name != name {
+			continue
+		}
+
+		if a.DefaultSink != nil {
+			dbus.UnInstallObject(a.DefaultSink)
+		}
+		a.DefaultSink = NewSink(o)
+		dbus.InstallOnSession(a.DefaultSink)
+		dbus.NotifyChange(a, "DefaultSink")
+		return
 	}
 }
 
-func (s *Audio) setPropDefaultSource(v *Source) {
-	if v == nil || toJSON(s.DefaultSource) != toJSON(v) {
-		s.DefaultSource = v
-		dbus.NotifyChange(s, "DefaultSource")
+func (a *Audio) updateDefaultSource(name string) {
+	if a.DefaultSource != nil && a.DefaultSource.Name == name {
+		// default source no changed
+		return
+	}
+	// default source changed
+	for _, o := range a.core.GetSourceList() {
+		if o.Name != name {
+			continue
+		}
+
+		if a.DefaultSource != nil {
+			dbus.UnInstallObject(a.DefaultSource)
+		}
+		a.DefaultSource = NewSource(o)
+		dbus.InstallOnSession(a.DefaultSource)
+		dbus.NotifyChange(a, "DefaultSource")
+		return
 	}
 }
 
