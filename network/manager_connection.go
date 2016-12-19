@@ -142,9 +142,7 @@ func (m *Manager) addConnection(cpath dbus.ObjectPath) {
 	}
 	logger.Infof("add connection %#v", conn)
 	switch conn.connType {
-	case connectionWired, connectionUnknown:
-		// wired connections will be special treatment, do not shown
-		// for front-end here
+	case connectionUnknown:
 	default:
 		m.connections[conn.connType] = append(m.connections[conn.connType], conn)
 		sort.Sort(m.connections[conn.connType])
