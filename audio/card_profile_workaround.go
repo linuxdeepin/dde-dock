@@ -11,6 +11,7 @@ package audio
 
 import (
 	"pkg.deepin.io/lib/pulse"
+	"pkg.deepin.io/lib/strv"
 	"sort"
 )
 
@@ -33,29 +34,31 @@ func cardType(c *pulse.Card) int {
 	return CardUnknow
 }
 
-func profileBlacklist(c *pulse.Card) map[string]string {
+func profileBlacklist(c *pulse.Card) strv.Strv {
+	var blacklist []string
 	switch cardType(c) {
 	case CardBluethooh:
 		// TODO: bluez not full support headset_head_unit, please skip
-		return map[string]string{"off": "true", "headset_head_unit": "true"}
-	case CardBuildin, CardUnknow:
-		fallthrough
+		blacklist = []string{"off", "headset_head_unit"}
 	default:
-		return map[string]string{"off": "true"}
+		// CardBuildin, CardUnknow and other
+		blacklist = []string{"off"}
 	}
+	return strv.Strv(blacklist)
 }
 
 //select New Card Profile By priority, protocl.
 func selectNewCardProfile(c *pulse.Card) {
 	blacklist := profileBlacklist(c)
-	if blacklist[c.ActiveProfile.Name] != "true" {
+	if !blacklist.Contains(c.ActiveProfile.Name) {
 		logger.Debug("use profile:", c.ActiveProfile)
 		return
 	}
 
 	var profiles cProfileInfos2
 	for _, p := range c.Profiles {
-		if "true" == blacklist[p.Name] {
+		// skip the profile in the blacklist
+		if blacklist.Contains(p.Name) {
 			continue
 		}
 		profiles = append(profiles, p)
@@ -71,6 +74,5 @@ func selectNewCardProfile(c *pulse.Card) {
 		if c.ActiveProfile.Name != profiles[0].Name {
 			c.SetProfile(profiles[0].Name)
 		}
-		return
 	}
 }

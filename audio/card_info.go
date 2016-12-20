@@ -58,8 +58,8 @@ func (info *CardInfo) filterProfile(card *pulse.Card) {
 	var profiles ProfileInfos2
 	blacklist := profileBlacklist(card)
 	for _, p := range info.Profiles {
-		_, ok := blacklist[p.Name]
-		if ok || p.Available == 0 {
+		// skip unavailable and blacklisted profiles
+		if p.Available == 0 || blacklist.Contains(p.Name) {
 			continue
 		}
 		profiles = append(profiles, p)
