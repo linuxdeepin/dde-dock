@@ -42,6 +42,16 @@ func (info *configInfo) string() string {
 	return string(data)
 }
 
+func (a *configInfo) equal(b *configInfo) bool {
+	return (a.Sink == b.Sink &&
+		a.Source == b.Source &&
+		a.SinkPort == b.SinkPort &&
+		a.SourcePort == b.SourcePort &&
+		a.SinkVolume == b.SinkVolume &&
+		a.SourceVolume == b.SourceVolume &&
+		mapStrStrEqual(a.Profiles, b.Profiles))
+}
+
 func readConfigInfo() (*configInfo, error) {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
@@ -64,10 +74,11 @@ func saveConfigInfo(info *configInfo) error {
 	fileLocker.Lock()
 	defer fileLocker.Unlock()
 
-	logger.Debug("[saveConfigInfo] will save:", info.string())
-	if configCache.string() == info.string() {
+	if configCache.equal(info) {
 		logger.Debug("[saveConfigInfo] config info not changed")
 		return nil
+	} else {
+		logger.Debug("[saveConfigInfo] will save:", info.string())
 	}
 
 	err := configHandler.Save(info)
@@ -77,4 +88,17 @@ func saveConfigInfo(info *configInfo) error {
 
 	configCache = info
 	return nil
+}
+
+func mapStrStrEqual(a, b map[string]string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for k, v := range a {
+		if w, ok := b[k]; !ok || v != w {
+			return false
+		}
+	}
+	return true
 }
