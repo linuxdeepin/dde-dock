@@ -49,7 +49,7 @@ func (a *Audio) initEventHandlers() {
 func (a *Audio) handleCardEvent(eType int, idx uint32) {
 	switch eType {
 	case pulse.EventTypeNew:
-		logger.Debug("[Event] card added:", idx)
+		logger.Debugf("[Event] card #%d added", idx)
 		card, err := a.core.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
@@ -62,14 +62,14 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 		}
 		selectNewCardProfile(card)
 	case pulse.EventTypeRemove:
-		logger.Debug("[Event] card removed:", idx)
+		logger.Debugf("[Event] card #%d removed", idx)
 		infos, deleted := a.cards.delete(idx)
 		if deleted {
 			a.setPropCards(infos.string())
 			a.cards = infos
 		}
 	case pulse.EventTypeChange:
-		logger.Debug("[Event] card changed:", idx)
+		logger.Debugf("[Event] card #%d changed", idx)
 		card, err := a.core.GetCard(idx)
 		if nil != err {
 			logger.Warning("get card info failed: ", err)
@@ -84,10 +84,20 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 }
 func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 	switch eType {
-	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		logger.Debug("[Event] sink added:", (eType == pulse.EventTypeNew), idx)
+	case pulse.EventTypeNew:
+		logger.Debugf("[Event] sink #%d added", idx)
+		sinfo, _ := a.core.GetServer()
+		if sinfo != nil {
+			a.updateDefaultSink(sinfo.DefaultSinkName)
+		}
+	case pulse.EventTypeRemove:
+		logger.Debugf("[Event] sink #%d removed", idx)
+		sinfo, _ := a.core.GetServer()
+		if sinfo != nil {
+			a.updateDefaultSink(sinfo.DefaultSinkName)
+		}
 	case pulse.EventTypeChange:
-		logger.Debug("[Event] sink changed:", idx)
+		logger.Debugf("[Event] sink #%d changed", idx)
 		if a.DefaultSink != nil && a.DefaultSink.index == idx {
 			info, err := a.core.GetSink(idx)
 			if err != nil {
@@ -98,11 +108,10 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 			a.DefaultSink.update()
 		}
 	default:
-		logger.Debug("[Event] unknown type")
+		logger.Debugf("[Event] sink #%d unknown type %d", eType, idx)
 		return
 	}
 	a.setPropActiveSinkPort(a.getActiveSinkPort())
-	a.autoMuteDetect()
 }
 
 func (a *Audio) sinkInputPoller() {
@@ -153,10 +162,20 @@ func (a *Audio) handleSinkInputEvent(eType int, idx uint32) {
 
 func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 	switch eType {
-	case pulse.EventTypeNew, pulse.EventTypeRemove:
-		logger.Debug("[Event] source added:", (eType == pulse.EventTypeNew), idx)
+	case pulse.EventTypeNew:
+		logger.Debugf("[Event] source #%d added", idx)
+		sinfo, _ := a.core.GetServer()
+		if sinfo != nil {
+			a.updateDefaultSource(sinfo.DefaultSourceName)
+		}
+	case pulse.EventTypeRemove:
+		logger.Debugf("[Event] source #%d removed", idx)
+		sinfo, _ := a.core.GetServer()
+		if sinfo != nil {
+			a.updateDefaultSource(sinfo.DefaultSourceName)
+		}
 	case pulse.EventTypeChange:
-		logger.Debug("[Event] source changed:", idx)
+		logger.Debugf("[Event] source #%d changed", idx)
 		if a.DefaultSource != nil && a.DefaultSource.index == idx {
 			info, err := a.core.GetSource(idx)
 			if err != nil {
@@ -167,7 +186,7 @@ func (a *Audio) handleSourceEvent(eType int, idx uint32) {
 			a.DefaultSource.update()
 		}
 	default:
-		logger.Debug("[Event] unknown type")
+		logger.Debugf("[Event] source #%d unknown type %d", idx, eType)
 		return
 	}
 	a.setPropActiveSourcePort(a.getActiveSourcePort())
@@ -182,5 +201,4 @@ func (a *Audio) handleServerEvent() {
 
 	a.updateDefaultSink(sinfo.DefaultSinkName)
 	a.updateDefaultSource(sinfo.DefaultSourceName)
-	a.autoMuteDetect()
 }

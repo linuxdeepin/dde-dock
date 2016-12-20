@@ -62,9 +62,6 @@ func (*Daemon) Start() error {
 	}
 
 	initDefaultVolume(_audio)
-	if _audio.DefaultSink != nil {
-		_audio.prevActivePort = _audio.DefaultSink.ActivePort.Name
-	}
 	return nil
 }
 

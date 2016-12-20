@@ -105,6 +105,7 @@ func (a *Audio) removeSinkInput(idx uint32) {
 }
 
 func (a *Audio) update() {
+	logger.Debug("Audio.update")
 	sinfo, _ := a.core.GetServer()
 	if sinfo != nil {
 		a.updateDefaultSink(sinfo.DefaultSinkName)
@@ -135,6 +136,7 @@ func (a *Audio) updateDefaultSink(name string) {
 		a.DefaultSink = NewSink(o)
 		dbus.InstallOnSession(a.DefaultSink)
 		dbus.NotifyChange(a, "DefaultSink")
+		logger.Debugf("Audio.DefaultSink change to #%d %s", a.DefaultSink.index, a.DefaultSink.Name)
 		return
 	}
 }
@@ -156,6 +158,7 @@ func (a *Audio) updateDefaultSource(name string) {
 		a.DefaultSource = NewSource(o)
 		dbus.InstallOnSession(a.DefaultSource)
 		dbus.NotifyChange(a, "DefaultSource")
+		logger.Debugf("Audio.DefaultSource change to #%d %s", a.DefaultSource.index, a.DefaultSource.Name)
 		return
 	}
 }
@@ -166,6 +169,7 @@ func (a *Audio) setPropActiveSinkPort(port string) {
 	}
 	a.ActiveSinkPort = port
 	dbus.NotifyChange(a, "ActiveSinkPort")
+	logger.Debug("Audio.ActiveSinkPort change to", port)
 }
 
 func (a *Audio) setPropActiveSourcePort(port string) {
@@ -174,6 +178,7 @@ func (a *Audio) setPropActiveSourcePort(port string) {
 	}
 	a.ActiveSourcePort = port
 	dbus.NotifyChange(a, "ActiveSourcePort")
+	logger.Debug("Audio.ActiveSourcePort change to", port)
 }
 
 func (s *Audio) setPropSinkInputs(v []*SinkInput) {

@@ -10,6 +10,7 @@
 package audio
 
 import (
+	"fmt"
 	"pkg.deepin.io/lib/pulse"
 )
 
@@ -19,12 +20,38 @@ type Port struct {
 	Available   byte // Unknow:0, No:1, Yes:2
 }
 
+func (p Port) String() string {
+	availableStr := "Invalid"
+	switch int(p.Available) {
+	case pulse.AvailableTypeUnknow:
+		availableStr = "Unknow"
+	case pulse.AvailableTypeNo:
+		availableStr = "No"
+	case pulse.AvailableTypeYes:
+		availableStr = "Yes"
+	}
+	return fmt.Sprintf("<Port name=%q desc=%q available=%s>", p.Name, p.Description, availableStr)
+}
+
 func toPort(v pulse.PortInfo) Port {
 	return Port{
 		Name:        v.Name,
 		Description: v.Description,
 		Available:   byte(v.Available),
 	}
+}
+
+// return port and whether found
+func getPortByName(ports []Port, name string) (Port, bool) {
+	if name == "" {
+		return Port{}, false
+	}
+	for _, port := range ports {
+		if port.Name == name {
+			return port, true
+		}
+	}
+	return Port{}, false
 }
 
 func portsEqual(a, b []Port) bool {

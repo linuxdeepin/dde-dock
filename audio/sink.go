@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/pulse"
+	"strings"
 )
 
 type Sink struct {
@@ -106,6 +107,7 @@ func (s *Sink) SetFade(v float64) error {
 
 // 是否静音
 func (s *Sink) SetMute(v bool) {
+	logger.Debugf("Sink #%d SetMute %v", s.index, v)
 	s.core.SetMute(v)
 	if !v {
 		playFeedbackWithDevice(s.Name)
@@ -139,20 +141,54 @@ func (s *Sink) update() {
 	s.setPropSupportBalance(true)
 	s.setPropBalance(s.core.Volume.Balance(s.core.ChannelMap))
 
-	s.setPropActivePort(toPort(s.core.ActivePort))
+	oldActivePort := s.ActivePort
+	activePortChanged := s.setPropActivePort(toPort(s.core.ActivePort))
+
 	var ports []Port
 	for _, p := range s.core.Ports {
 		ports = append(ports, toPort(p))
 	}
 	s.setPropPorts(ports)
+
+	if activePortChanged {
+		logger.Debugf("sink #%d active port changed, old %v, new %v", s.index, oldActivePort, s.ActivePort)
+		// old port but has new available state
+		oldPort, foundOldPort := getPortByName(s.Ports, oldActivePort.Name)
+		var oldPortUnavailable bool
+		if !foundOldPort {
+			logger.Debug("Sink.update not found old port")
+			oldPortUnavailable = true
+		} else {
+			oldPortUnavailable = (int(oldPort.Available) == pulse.AvailableTypeNo)
+		}
+		logger.Debugf("oldPortUnavailable: %v", oldPortUnavailable)
+		if shouldAutoMuteSink(oldActivePort, s.ActivePort, oldPortUnavailable) {
+			s.SetMute(true)
+		}
+	}
 }
 
-func (s *Sink) setPropActivePort(v Port) {
+func shouldAutoMuteSink(oldActivePort, newActivePort Port, oldPortUnavailable bool) bool {
+	return isHeadphonePort(oldActivePort.Name) && // old active port is headphone
+		int(oldActivePort.Available) != pulse.AvailableTypeNo && // old active port is not unavailable
+		!isHeadphonePort(newActivePort.Name) && // new port is not headphone
+		oldPortUnavailable
+}
+
+func isHeadphonePort(portName string) bool {
+	return strings.Contains(strings.ToLower(portName), "headphone")
+}
+
+// return whether changed
+func (s *Sink) setPropActivePort(v Port) bool {
 	if s.ActivePort != v {
 		s.ActivePort = v
 		dbus.NotifyChange(s, "ActivePort")
+		return true
 	}
+	return false
 }
+
 func (s *Sink) setPropPorts(v []Port) {
 	if !portsEqual(s.Ports, v) {
 		s.Ports = v

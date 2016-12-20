@@ -61,8 +61,6 @@ type Audio struct {
 
 	sinkLocker sync.Mutex
 	portLocker sync.Mutex
-
-	prevActivePort string
 }
 
 func NewAudio(core *pulse.Context) *Audio {
@@ -140,6 +138,7 @@ func (a *Audio) getActiveSinkPort() string {
 }
 
 func (a *Audio) trySetSinkByPort(portName string) error {
+	logger.Debug("trySetSinkByPort", portName)
 	for _, sink := range a.core.GetSinkList() {
 		if !isPortExists(portName, sink.Ports) {
 			continue
@@ -150,7 +149,6 @@ func (a *Audio) trySetSinkByPort(portName string) error {
 		if a.DefaultSink == nil || a.DefaultSink.Name != sink.Name {
 			a.SetDefaultSink(sink.Name)
 		}
-		a.autoMuteDetect()
 		return nil
 	}
 	return fmt.Errorf("Cann't find valid sink for port '%s'", portName)
@@ -188,6 +186,7 @@ func (a *Audio) trySetSourceByPort(portName string) error {
 // SetPort activate the port for the special card.
 // The available sinks and sources will also change with the profile changing.
 func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
+	logger.Debugf("Audio.SetPort card idx: %d, port name: %q, direction: %d", cardId, portName, direction)
 	a.portLocker.Lock()
 	defer a.portLocker.Unlock()
 	var (
