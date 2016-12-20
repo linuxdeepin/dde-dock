@@ -25,8 +25,9 @@ const (
 )
 
 type SinkInput struct {
-	core  *pulse.SinkInput
-	index uint32
+	core             *pulse.SinkInput
+	index            uint32
+	correctAppCalled bool
 	// Name process name
 	Name           string
 	Icon           string
@@ -97,7 +98,13 @@ func (s *SinkInput) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func (s *SinkInput) correctAppName() error {
+// correct app's name and icon
+func (s *SinkInput) correctApp() error {
+	if s.correctAppCalled {
+		return nil
+	}
+	s.correctAppCalled = true
+
 	pidStr := s.core.PropList[PropAppPID]
 	pid, err := strconv.ParseUint(pidStr, 10, 32)
 	if err != nil {
@@ -138,8 +145,7 @@ func (s *SinkInput) update() {
 	s.Name = s.core.PropList[PropAppName]
 	s.Icon = s.core.PropList[PropAppIconName]
 
-	// Correct app name and icon
-	err := s.correctAppName()
+	err := s.correctApp()
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -174,7 +180,7 @@ func (s *SinkInput) setPropMute(v bool) {
 }
 
 func (s *SinkInput) setPropBalance(v float64) {
-	if s.Volume != v {
+	if s.Balance != v {
 		s.Balance = v
 		dbus.NotifyChange(s, "Balance")
 	}
