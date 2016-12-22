@@ -110,7 +110,7 @@ void SoundApplet::defaultSinkChanged()
 {
     delete m_defSinkInter;
 
-    const QDBusObjectPath defSinkPath = m_audioInter->GetDefaultSink();
+    const QDBusObjectPath defSinkPath = m_audioInter->defaultSink();
     m_defSinkInter = new DBusSink(defSinkPath.path(), this);
 
     connect(m_defSinkInter, &DBusSink::VolumeChanged, this, &SoundApplet::onVolumeChanged);

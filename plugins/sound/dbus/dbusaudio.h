@@ -41,7 +41,7 @@ class DBusAudio: public QDBusAbstractInterface
             for (int i=self->propertyOffset(); i < self->propertyCount(); ++i) {
                 QMetaProperty p = self->property(i);
                 if (p.name() == prop) {
- 	            Q_EMIT p.notifySignal().invoke(this);
+                    Q_EMIT p.notifySignal().invoke(this);
                 }
             }
         }
@@ -56,46 +56,26 @@ public:
     ~DBusAudio();
 
     Q_PROPERTY(QString Cards READ cards NOTIFY CardsChanged)
-    inline QString cards() const
+    inline QString cards()
     { return qvariant_cast< QString >(property("Cards")); }
 
-    Q_PROPERTY(QString DefaultSink READ defaultSink NOTIFY DefaultSinkChanged)
-    inline QString defaultSink() const
-    { return qvariant_cast< QString >(property("DefaultSink")); }
+    Q_PROPERTY(QDBusObjectPath DefaultSink READ defaultSink NOTIFY DefaultSinkChanged)
+    inline QDBusObjectPath defaultSink()
+    { return qvariant_cast< QDBusObjectPath >(property("DefaultSink")); }
 
-    Q_PROPERTY(QString DefaultSource READ defaultSource NOTIFY DefaultSourceChanged)
-    inline QString defaultSource() const
-    { return qvariant_cast< QString >(property("DefaultSource")); }
+    Q_PROPERTY(QDBusObjectPath DefaultSource READ defaultSource NOTIFY DefaultSourceChanged)
+    inline QDBusObjectPath defaultSource()
+    { return qvariant_cast< QDBusObjectPath >(property("DefaultSource")); }
 
     Q_PROPERTY(double MaxUIVolume READ maxUIVolume NOTIFY MaxUIVolumeChanged)
-    inline double maxUIVolume() const
+    inline double maxUIVolume()
     { return qvariant_cast< double >(property("MaxUIVolume")); }
 
     Q_PROPERTY(QList<QDBusObjectPath> SinkInputs READ sinkInputs NOTIFY SinkInputsChanged)
-    inline QList<QDBusObjectPath> sinkInputs() const
+    inline QList<QDBusObjectPath> sinkInputs()
     { return qvariant_cast< QList<QDBusObjectPath> >(property("SinkInputs")); }
 
-    Q_PROPERTY(QList<QDBusObjectPath> Sinks READ sinks NOTIFY SinksChanged)
-    inline QList<QDBusObjectPath> sinks() const
-    { return qvariant_cast< QList<QDBusObjectPath> >(property("Sinks")); }
-
-    Q_PROPERTY(QList<QDBusObjectPath> Sources READ sources NOTIFY SourcesChanged)
-    inline QList<QDBusObjectPath> sources() const
-    { return qvariant_cast< QList<QDBusObjectPath> >(property("Sources")); }
-
 public Q_SLOTS: // METHODS
-    inline QDBusPendingReply<QDBusObjectPath> GetDefaultSink()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QStringLiteral("GetDefaultSink"), argumentList);
-    }
-
-    inline QDBusPendingReply<QDBusObjectPath> GetDefaultSource()
-    {
-        QList<QVariant> argumentList;
-        return asyncCallWithArgumentList(QStringLiteral("GetDefaultSource"), argumentList);
-    }
-
     inline QDBusPendingReply<> Reset()
     {
         QList<QVariant> argumentList;
@@ -116,22 +96,20 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetDefaultSource"), argumentList);
     }
 
-    inline QDBusPendingReply<> SetProfile(uint in0, const QString &in1)
+    inline QDBusPendingReply<> SetPort(uint in0, const QString &in1, int in2)
     {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1);
-        return asyncCallWithArgumentList(QStringLiteral("SetProfile"), argumentList);
+        argumentList << QVariant::fromValue(in0) << QVariant::fromValue(in1) << QVariant::fromValue(in2);
+        return asyncCallWithArgumentList(QStringLiteral("SetPort"), argumentList);
     }
 
 Q_SIGNALS: // SIGNALS
 // begin property changed signals
-void CardsChanged();
-void DefaultSinkChanged();
-void DefaultSourceChanged();
-void MaxUIVolumeChanged();
-void SinkInputsChanged();
-void SinksChanged();
-void SourcesChanged();
+    void CardsChanged() const;
+    void DefaultSinkChanged() const;
+    void DefaultSourceChanged() const;
+    void MaxUIVolumeChanged() const;
+    void SinkInputsChanged() const;
 };
 
 namespace com {
