@@ -36,22 +36,15 @@ var (
 type Audio struct {
 	init bool
 	core *pulse.Context
-
 	// 正常输出声音的程序列表
-	SinkInputs []*SinkInput
-
-	Cards string
-
-	ActiveSinkPort   string
-	ActiveSourcePort string
-
+	SinkInputs    []*SinkInput
+	Cards         string
 	DefaultSink   *Sink
 	DefaultSource *Source
 
 	// 最大音量
 	MaxUIVolume float64
-
-	cards CardInfos
+	cards       CardInfos
 
 	siEventChan  chan func()
 	siPollerExit chan struct{}
@@ -137,10 +130,11 @@ func (a *Audio) getActiveSinkPort() string {
 	return ""
 }
 
-func (a *Audio) trySetSinkByPort(portName string) error {
-	logger.Debug("trySetSinkByPort", portName)
+// try set default sink and sink active port
+func (a *Audio) trySetDefaultSink(cardId uint32, portName string) error {
+	logger.Debugf("trySetDefaultSink card #%d port %q", cardId, portName)
 	for _, sink := range a.core.GetSinkList() {
-		if !isPortExists(portName, sink.Ports) {
+		if !isPortExists(portName, sink.Ports) || sink.Card != cardId {
 			continue
 		}
 		if sink.ActivePort.Name != portName {
@@ -167,9 +161,11 @@ func (a *Audio) getActiveSourcePort() string {
 	return ""
 }
 
-func (a *Audio) trySetSourceByPort(portName string) error {
+// try set default source and source active port
+func (a *Audio) trySetDefaultSource(cardId uint32, portName string) error {
+	logger.Debugf("trySetDefaultSource card #%d port %q", cardId, portName)
 	for _, source := range a.core.GetSourceList() {
-		if !isPortExists(portName, source.Ports) {
+		if !isPortExists(portName, source.Ports) || source.Card != cardId {
 			continue
 		}
 		if source.ActivePort.Name != portName {
@@ -203,7 +199,14 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
 	} else {
 		return fmt.Errorf("Invalid port direction: %d", direction)
 	}
-	curCard, _ = a.cards.getByPort(oppositePort, oppositeDirection)
+	curCard, _ = a.cards.get(cardId)
+	if curCard != nil {
+		_, err := curCard.Ports.Get(oppositePort, oppositeDirection)
+		// curCard does not have the port
+		if err != nil {
+			curCard = nil
+		}
+	}
 
 	var (
 		destCard     *CardInfo
@@ -213,7 +216,7 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
 		oppositePortInfo pulse.CardPortInfo
 		commonProfiles   pulse.ProfileInfos2
 	)
-	if curCard != nil && curCard.Id == cardId {
+	if curCard != nil {
 		portInfo, err := curCard.Ports.Get(portName, int(direction))
 		if err != nil {
 			return err
@@ -252,9 +255,9 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
 
 setPort:
 	if int(direction) == pulse.DirectionSink {
-		return a.trySetSinkByPort(portName)
+		return a.trySetDefaultSink(cardId, portName)
 	}
-	return a.trySetSourceByPort(portName)
+	return a.trySetDefaultSource(cardId, portName)
 }
 
 func (a *Audio) Reset() {

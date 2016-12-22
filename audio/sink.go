@@ -44,6 +44,8 @@ type Sink struct {
 	Ports []Port
 	// 当前使用的输出端口
 	ActivePort Port
+	// 声卡的索引
+	Card uint32
 }
 
 func NewSink(core *pulse.Sink) *Sink {
@@ -130,7 +132,7 @@ func (s *Sink) GetDBusInfo() dbus.DBusInfo {
 func (s *Sink) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
-
+	s.Card = s.core.Card
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
 	s.setPropMute(s.core.Mute)

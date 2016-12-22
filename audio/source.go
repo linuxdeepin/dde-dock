@@ -30,6 +30,8 @@ type Source struct {
 	SupportFade    bool
 	Ports          []Port
 	ActivePort     Port
+	// 声卡的索引
+	Card uint32
 }
 
 func NewSource(core *pulse.Source) *Source {
@@ -116,7 +118,7 @@ func (s *Source) GetDBusInfo() dbus.DBusInfo {
 func (s *Source) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
-
+	s.Card = s.core.Card
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
 	s.setPropVolume(s.core.Volume.Avg())

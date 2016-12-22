@@ -120,17 +120,3 @@ func (infos CardInfos) delete(id uint32) (CardInfos, bool) {
 	}
 	return ret, deleted
 }
-
-func (infos CardInfos) getByPort(name string, direction int) (*CardInfo, error) {
-	if len(name) == 0 {
-		return nil, fmt.Errorf("Port name is empty")
-	}
-
-	for _, info := range infos {
-		_, err := info.Ports.Get(name, direction)
-		if err == nil {
-			return info, nil
-		}
-	}
-	return nil, fmt.Errorf("Invalid port name: %v", name)
-}
