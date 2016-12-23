@@ -1,118 +1,139 @@
 [
-    {
-        "ret": "id=jftp",
-        "rules": [
-            [
-                "exec",
-                "=:java"
-            ],
-            [
-                "arg",
-                "c:jftp.jar"
-            ]
-        ]
-    },
-    {
-        "ret": "env",
-        "rules": [
-            [
-                "wmi",
-                "=:dman"
-            ],
-            [
-                "wmc",
-                "=:DManual"
-            ]
-        ]
-    },
-    {
-        "ret": "env",
-        "rules": [
-            [
-                "wmi",
-                "r:\\.exe$"
-            ],
-            [
-                "wmi",
-                "=!iesetup.exe"
-            ],
-            [
-                "wmc",
-                "=:Wine"
-            ]
-        ]
-    },
-    {
-        "ret": "id=netbeans",
-        "rules": [
-            [
-                "wmc",
-                "c:netbeans"
-            ],
-            [
-                "exec",
-                "=:java"
-            ],
-            [
-                "arg",
-                "c:netbeans"
-            ]
-        ]
-    },
-    {
-        "ret": "id=jabref",
-        "rules": [
-            [
-                "wmc",
-                "c:jabref"
-            ],
-            [
-                "exec",
-                "=:java"
-            ],
-            [
-                "arg",
-                "c:jabref"
-            ]
-        ]
-    },
-    {
-        "ret": "env",
-        "rules": [
-            [
-                "wmi",
-                "=:player"
-            ],
-            [
-                "wmc",
-                "c:genymotion"
-            ]
-        ]
-    },
-    {
-        "ret": "id=xdemineur",
-        "rules": [
-            [
-                "wmi",
-                "c:xdemineur"
-            ],
-            [
-                "exec",
-                "=:xdemineur"
-            ]
-        ]
-    },
-    {
-        "ret": "id=minecraft",
-        "rules": [
-            [
-                "wmi",
-                "c:minecraft"
-            ],
-            [
-                "wmc",
-                "c:minecraft"
-            ]
-        ]
-    }
+   {
+      "ret" : "id=jftp",
+      "rules" : [
+         [
+            "exec",
+            "=:java"
+         ],
+         [
+            "arg",
+            "c:jftp.jar"
+         ]
+      ]
+   },
+   {
+      "ret" : "env",
+      "rules" : [
+         [
+            "wmi",
+            "=:dman"
+         ],
+         [
+            "wmc",
+            "=:DManual"
+         ]
+      ]
+   },
+   {
+      "ret" : "env",
+      "rules" : [
+         [
+            "wmi",
+            "r:\\.exe$"
+         ],
+         [
+            "wmi",
+            "=!iesetup.exe"
+         ],
+         [
+            "wmc",
+            "=:Wine"
+         ]
+      ]
+   },
+   {
+      "ret" : "id=netbeans",
+      "rules" : [
+         [
+            "wmc",
+            "c:netbeans"
+         ],
+         [
+            "exec",
+            "=:java"
+         ],
+         [
+            "arg",
+            "c:netbeans"
+         ]
+      ]
+   },
+   {
+      "rules" : [
+         [
+            "wmc",
+            "c:jabref"
+         ],
+         [
+            "exec",
+            "=:java"
+         ],
+         [
+            "arg",
+            "c:jabref"
+         ]
+      ],
+      "ret" : "id=jabref"
+   },
+   {
+      "rules" : [
+         [
+            "wmi",
+            "=:player"
+         ],
+         [
+            "wmc",
+            "c:genymotion"
+         ]
+      ],
+      "ret" : "env"
+   },
+   {
+      "rules" : [
+         [
+            "wmi",
+            "c:xdemineur"
+         ],
+         [
+            "exec",
+            "=:xdemineur"
+         ]
+      ],
+      "ret" : "id=xdemineur"
+   },
+   {
+      "rules" : [
+         [
+            "wmi",
+            "c:minecraft"
+         ],
+         [
+            "wmc",
+            "c:minecraft"
+         ]
+      ],
+      "ret" : "id=minecraft"
+   },
+   {
+      "rules" : [
+         [
+            "hasPid",
+            "=:f"
+         ],
+         [
+            "wmi",
+            "=:"
+         ],
+         [
+            "wmc",
+            "=:"
+         ],
+         [
+            "wmn",
+            "e:steam"
+         ]
+      ],
+      "ret" : "id=steam"
+   }
 ]

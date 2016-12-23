@@ -16,6 +16,7 @@ type ProcessInfo struct {
 	exe     string
 	cwd     string
 	environ procfs.EnvVars
+	hasPid  bool
 }
 
 func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
@@ -37,6 +38,7 @@ func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 	process := procfs.Process(pid)
 	pInfo := &ProcessInfo{
 		process: process,
+		hasPid:  true,
 	}
 	var err error
 

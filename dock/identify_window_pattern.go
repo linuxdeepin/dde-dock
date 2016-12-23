@@ -89,6 +89,11 @@ func (patterns WindowPatterns) Match(winInfo *WindowInfo) string {
 
 func parseRuleKey(winInfo *WindowInfo, key string) string {
 	switch key {
+	case "hasPid":
+		if winInfo.process != nil && winInfo.process.hasPid {
+			return "t"
+		}
+		return "f"
 	case "exec":
 		// executable file base name
 		if winInfo.process != nil {
@@ -126,10 +131,6 @@ func parseRuleKey(winInfo *WindowInfo, key string) string {
 
 func (rule *WindowRuleParsed) Match(winInfo *WindowInfo) bool {
 	keyParsed := parseRuleKey(winInfo, rule.Key)
-	if keyParsed == "" {
-		logger.Warningf("WindowRule.Match: badRuleKey %q", rule.Key)
-		return false
-	}
 	fn := rule.ValueParsed.Fn
 	if fn == nil {
 		logger.Warningf("WindowRule.Match: badRuleValue %q", rule.ValueParsed.Original)
@@ -223,7 +224,7 @@ func parseRuleValue(val string) *RuleValueParsed {
 	var ret = &RuleValueParsed{
 		Original: val,
 	}
-	if len(val) < 3 {
+	if len(val) < 2 {
 		return ret
 	}
 	var negative bool
