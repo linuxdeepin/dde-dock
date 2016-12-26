@@ -52,7 +52,7 @@ void PopupControlWidget::openTrashFloder()
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);
 
-    proc->startDetached("gvfs-open trash://");
+    proc->startDetached("gvfs-open trash:///");
 }
 
 void PopupControlWidget::clearTrashFloder()
@@ -80,16 +80,18 @@ void PopupControlWidget::clearTrashFloder()
     if (!accept)
         return;
 
-    for (auto item : QDir(TrashDir).entryInfoList())
-    {
-        if (item.fileName() == "." || item.fileName() == "..")
-            continue;
+    QProcess::startDetached("gvfs-trash", QStringList() << "-f" << "--empty");
 
-        if (item.isFile())
-            QFile(item.fileName()).remove();
-        else if (item.isDir())
-            QDir(item.absoluteFilePath()).removeRecursively();
-    }
+//    for (auto item : QDir(TrashDir).entryInfoList())
+//    {
+//        if (item.fileName() == "." || item.fileName() == "..")
+//            continue;
+
+//        if (item.isFile())
+//            QFile(item.fileName()).remove();
+//        else if (item.isDir())
+//            QDir(item.absoluteFilePath()).removeRecursively();
+//    }
 }
 
 int PopupControlWidget::trashItemCount() const
