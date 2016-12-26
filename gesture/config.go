@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path"
 	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
@@ -25,8 +26,8 @@ const (
 )
 
 var (
-	configSystemPath = "/usr/share/dde-daemon/gesture_config.json"
-	configUserPath   = os.Getenv("HOME") + "/.config/deepin/dde-daemon/gesture_config.json"
+	configSystemPath = "/usr/share/dde-daemon/gesture.json"
+	configUserPath   = os.Getenv("HOME") + "/.config/deepin/dde-daemon/gesture.json"
 )
 
 type ActionInfo struct {
@@ -44,17 +45,14 @@ type gestureInfos []*gestureInfo
 
 type gestureManager struct {
 	locker   sync.RWMutex
-	filename string
+	userFile string
 	Infos    gestureInfos
 }
 
 func newGestureManager() (*gestureManager, error) {
 	var filename = configUserPath
 	if !dutils.IsFileExist(configUserPath) {
-		err := dutils.CopyFile(configSystemPath, configUserPath)
-		if err != nil {
-			filename = configSystemPath
-		}
+		filename = configSystemPath
 	}
 
 	infos, err := newGestureInfosFromFile(filename)
@@ -62,7 +60,7 @@ func newGestureManager() (*gestureManager, error) {
 		return nil, err
 	}
 	return &gestureManager{
-		filename: filename,
+		userFile: configUserPath,
 		Infos:    infos,
 	}, nil
 }
@@ -89,11 +87,15 @@ func (m *gestureManager) Exec(name, direction string, fingers int32) error {
 func (m *gestureManager) Write() error {
 	m.locker.Lock()
 	defer m.locker.Unlock()
+	err := os.MkdirAll(path.Dir(m.userFile), 0755)
+	if err != nil {
+		return err
+	}
 	data, err := json.Marshal(m.Infos)
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(m.filename, data, 0644)
+	return ioutil.WriteFile(m.userFile, data, 0644)
 }
 
 func (infos gestureInfos) Get(name, direction string, fingers int32) *gestureInfo {
