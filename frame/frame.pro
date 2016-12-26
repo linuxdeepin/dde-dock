@@ -66,7 +66,7 @@ HEADERS  += \
     item/components/containerwidget.h \
     dbus/dbusdockadaptors.h
 
-dbus_service.files += com.deepin.dde.dock.service
+dbus_service.files += com.deepin.dde.Dock.service
 dbus_service.path = /usr/share/dbus-1/services
 
 headers.files 	+= ../interfaces/constants.h \
