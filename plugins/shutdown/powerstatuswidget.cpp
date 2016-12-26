@@ -48,7 +48,9 @@ void PowerStatusWidget::mousePressEvent(QMouseEvent *e)
 
 QPixmap PowerStatusWidget::getBatteryIcon()
 {
-    const int percentage = std::round(m_powerInter->batteryPercentage()["Display"]);
+    const BatteryPercentageMap data = m_powerInter->batteryPercentage();
+    const uint value = qMin(100.0, qMax(0.0, data.value("Display")));
+    const int percentage = std::round(value);
     const bool plugged = !m_powerInter->onBattery();
 
     QString percentageStr;
