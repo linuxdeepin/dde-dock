@@ -537,15 +537,20 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 	for i, vsection := range s.AvailableVirtualSections {
 		info += fmt.Sprintf("{\"VirtualSection\": \"%s\", \"Keys\":[", vsection)
 		sections := getAvailableSectionsOfVsection(s.data, vsection)
-		slen := len(sections)
 		for j, section := range sections {
 			sectionKeys, ok := s.AvailableKeys[section]
 			if !ok {
 				continue
 			}
 
-			klen := len(sectionKeys)
+			if j != 0 && len(sectionKeys) != 0 {
+				info += ","
+			}
 			for k, key := range sectionKeys {
+				if k != 0 {
+					info += ","
+				}
+
 				info += fmt.Sprintf("{\"Section\": \"%s\", \"Key\": \"%s\",", section, key)
 				info += fmt.Sprintf("\"Value\": %s", s.GetKey(section, key))
 				values := generalGetSettingAvailableValues(s.data, section, key)
@@ -555,12 +560,6 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 				}
 
 				info += "}"
-				if k != (klen - 1) {
-					info += ","
-				}
-			}
-			if j != (slen - 1) {
-				info += ","
 			}
 		}
 		info += "]}"
