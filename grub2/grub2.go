@@ -253,13 +253,6 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 		needUpdate = true
 	}
 
-	// make GRUB_BACKGROUND same with the theme background
-	if grub.settings["GRUB_BACKGROUND"] != themeBgFile {
-		logger.Info("fix setting GRUB_BACKGROUND")
-		grub.settings["GRUB_BACKGROUND"] = themeBgFile
-		needUpdate = true
-	}
-
 	// setup deepin grub2 theme
 	if grub.config.EnableTheme {
 		if grub.doGetSettingTheme() != themeMainFile {
@@ -267,10 +260,21 @@ func (grub *Grub2) doFixSettings() (needUpdate bool) {
 			grub.doSetSettingTheme(themeMainFile)
 			needUpdate = true
 		}
+		// make GRUB_BACKGROUND same with the theme background
+		if grub.settings["GRUB_BACKGROUND"] != themeBgFile {
+			logger.Info("fix setting GRUB_BACKGROUND")
+			grub.settings["GRUB_BACKGROUND"] = themeBgFile
+			needUpdate = true
+		}
 	} else {
 		if grub.doGetSettingTheme() != "" {
 			logger.Infof("fix setting theme %s->%s", grub.doGetSettingTheme(), "<disabled>")
 			grub.doSetSettingTheme("")
+			needUpdate = true
+		}
+		if grub.settings["GRUB_BACKGROUND"] != "" {
+			logger.Info("fix setting GRUB_BACKGROUND to empty")
+			grub.settings["GRUB_BACKGROUND"] = ""
 			needUpdate = true
 		}
 	}
@@ -536,6 +540,11 @@ func (grub *Grub2) getSettingTheme() string {
 }
 func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.doSetSettingTheme(themeFile)
+	if themeFile == "" {
+		grub.settings["GRUB_BACKGROUND"] = ""
+	} else {
+		grub.settings["GRUB_BACKGROUND"] = themeBgFile
+	}
 	grub.writeSettings()
 }
 func (grub *Grub2) doGetSettingTheme() string {
