@@ -8,19 +8,6 @@
         <source>Time Settings</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
-        <source> HH:mm:ss</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DatetimeWidget</name>
-    <message>
-        <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
-        <source>HH:mm</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>DeviceItem</name>
@@ -358,17 +345,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
         <source>Wireless Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
         <source>Wireless Network %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="378"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation type="unfinished"></translation>
     </message>

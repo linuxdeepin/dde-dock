@@ -39,7 +39,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     if (displayMode == Dock::Efficient)
     {
         painter.setPen(Qt::white);
-        painter.drawText(rect(), Qt::AlignCenter, current.toString(tr("HH:mm")));
+        painter.drawText(rect(), Qt::AlignCenter, current.toString("HH:mm"));
         return;
     }
 
