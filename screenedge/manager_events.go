@@ -29,8 +29,8 @@ func (m *Manager) handleSettingsChanged() {
 func (m *Manager) handleDBusSignal() {
 	logger.Debug("handleDBusSignal")
 
-	m.display.ConnectPrimaryChanged(func(argv []interface{}) {
-		logger.Debug("event PrimaryChanged")
+	m.display.PrimaryRect.ConnectChanged(func() {
+		logger.Debug("event display.PrimaryRect changed")
 		m.unregisterEdgeAreas()
 		m.setEdgeAreas()
 		m.registerEdgeAreas()

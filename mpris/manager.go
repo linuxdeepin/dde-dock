@@ -107,8 +107,8 @@ func (m *Manager) changeBrightness(raised, pressed bool) {
 	}
 	for output, v := range values {
 		var discrete float64
-		ret, _ := m.disp.QueryOutputFeature(output)
-		if backlightValid && (ret == 1) {
+		supported, _ := m.disp.SupportedBacklight(output)
+		if backlightValid && supported {
 			//if driverSupportedHotkey() {
 			//	logger.Debug("[changeBrightness] driver supported, wait 200ms...")
 			//	time.Sleep(time.Microsecond * 200)
