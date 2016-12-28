@@ -51,7 +51,7 @@ func (m *Manager) listenGSettingChanged() {
 			err = m.doSetMonnospaceFont(value)
 		case gsKeyFontSize:
 			ty = TypeFontSize
-			size := m.setting.GetInt(key)
+			size := m.setting.GetDouble(key)
 			value = fmt.Sprint(size)
 			err = m.doSetFontSize(size)
 		default:
@@ -63,7 +63,7 @@ func (m *Manager) listenGSettingChanged() {
 		}
 		dbus.Emit(m, "Changed", ty, value)
 	})
-	m.setting.GetInt(gsKeyFontSize)
+	m.setting.GetDouble(gsKeyFontSize)
 
 	m.listenBgGSettings()
 }

@@ -71,14 +71,14 @@ func IsFontFamily(value string) bool {
 	return false
 }
 
-func IsFontSizeValid(size int32) bool {
-	if size >= 7 && size <= 22 {
+func IsFontSizeValid(size float64) bool {
+	if size >= 7.0 && size <= 22.0 {
 		return true
 	}
 	return false
 }
 
-func SetFamily(standard, monospace string, size int32) error {
+func SetFamily(standard, monospace string, size float64) error {
 	locker.Lock()
 	defer locker.Unlock()
 
@@ -116,7 +116,7 @@ func SetFamily(standard, monospace string, size int32) error {
 	return setFontByXSettings(standard, size)
 }
 
-func GetFontSize() int32 {
+func GetFontSize() float64 {
 	return getFontSize(xsSetting)
 }
 
@@ -153,7 +153,7 @@ func (infos Families) add(info *Family) Families {
 	return infos
 }
 
-func setFontByXSettings(name string, size int32) error {
+func setFontByXSettings(name string, size float64) error {
 	if size == -1 {
 		size = getFontSize(xsSetting)
 	}
@@ -166,15 +166,15 @@ func setFontByXSettings(name string, size int32) error {
 	return nil
 }
 
-func getFontSize(setting *gio.Settings) int32 {
+func getFontSize(setting *gio.Settings) float64 {
 	value := setting.GetString(gsKeyFontName)
 	if len(value) == 0 {
 		return 0
 	}
 
 	array := strings.Split(value, " ")
-	size, _ := strconv.ParseInt(array[len(array)-1], 10, 64)
-	return int32(size)
+	size, _ := strconv.ParseFloat(array[len(array)-1], 64)
+	return size
 }
 
 func isVirtualFont(name string) bool {

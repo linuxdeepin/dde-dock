@@ -117,18 +117,18 @@ func (m *Manager) Set(ty, value string) error {
 			m.MonospaceFont.Set(value)
 		}
 	case TypeFontSize:
-		size, e := strconv.ParseInt(value, 10, 64)
+		size, e := strconv.ParseFloat(value, 64)
 		if e != nil {
 			return e
 		}
 
-		v := int32(size)
-		if m.FontSize.Get() == v {
+		cur := m.FontSize.Get()
+		if cur > size-0.01 && cur < size+0.01 {
 			return nil
 		}
-		err = m.doSetFontSize(v)
+		err = m.doSetFontSize(size)
 		if err == nil {
-			m.FontSize.Set(v)
+			m.FontSize.Set(size)
 		}
 	default:
 		return fmt.Errorf("Invalid type: %v", ty)

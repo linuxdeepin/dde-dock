@@ -36,8 +36,9 @@ func (m *Manager) setPropString(handler *string, prop, value string) {
 	dbus.NotifyChange(m, prop)
 }
 
-func (m *Manager) setPropFontSize(size int32) {
-	if m.FontSize.Get() == size {
+func (m *Manager) setPropFontSize(size float64) {
+	cur := m.FontSize.Get()
+	if cur > size-0.01 && cur < size+0.01 {
 		return
 	}
 

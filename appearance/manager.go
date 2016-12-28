@@ -65,7 +65,7 @@ type Manager struct {
 	StandardFont  *property.GSettingsStringProperty `access:"readwrite"`
 	MonospaceFont *property.GSettingsStringProperty `access:"readwrite"`
 
-	FontSize *property.GSettingsIntProperty `access:"readwrite"`
+	FontSize *property.GSettingsFloatProperty `access:"readwrite"`
 
 	// Theme changed signal
 	// ty, name
@@ -107,7 +107,7 @@ func NewManager() *Manager {
 		m, "Background",
 		m.wrapBgSetting, gsKeyBackground)
 
-	m.FontSize = property.NewGSettingsIntProperty(
+	m.FontSize = property.NewGSettingsFloatProperty(
 		m, "FontSize",
 		m.setting, gsKeyFontSize)
 
@@ -313,7 +313,7 @@ func (m *Manager) doSetMonnospaceFont(value string) error {
 	return fonts.SetFamily(m.StandardFont.Get(), value, m.FontSize.Get())
 }
 
-func (m *Manager) doSetFontSize(size int32) error {
+func (m *Manager) doSetFontSize(size float64) error {
 	if !fonts.IsFontSizeValid(size) {
 		logger.Debug("[doSetFontSize] invalid size:", size)
 		return fmt.Errorf("Invalid font size '%v'", size)
