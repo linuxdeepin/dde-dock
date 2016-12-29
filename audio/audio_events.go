@@ -109,6 +109,9 @@ func (a *Audio) handleSinkEvent(eType int, idx uint32) {
 		logger.Debugf("[Event] sink #%d unknown type %d", eType, idx)
 		return
 	}
+	if a.DefaultSink != nil {
+		a.moveSinkInputsToSink(a.DefaultSink.index)
+	}
 }
 
 func (a *Audio) sinkInputPoller() {

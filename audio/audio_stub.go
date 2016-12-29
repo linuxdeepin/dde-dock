@@ -115,6 +115,9 @@ func (a *Audio) update() {
 	a.rebuildSinkInputList()
 	a.cards = newCardInfos(a.core.GetCardList())
 	a.setPropCards(a.cards.string())
+	if a.DefaultSink != nil {
+		a.moveSinkInputsToSink(a.DefaultSink.index)
+	}
 }
 
 func (a *Audio) updateDefaultSink(name string) {

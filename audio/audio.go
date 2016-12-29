@@ -90,6 +90,7 @@ func (a *Audio) SetDefaultSink(name string) {
 	defer a.sinkLocker.Unlock()
 
 	if a.DefaultSink != nil && a.DefaultSink.Name == name {
+		a.moveSinkInputsToSink(a.DefaultSink.index)
 		return
 	}
 
@@ -97,15 +98,7 @@ func (a *Audio) SetDefaultSink(name string) {
 	a.core.SetDefaultSink(name)
 	a.update()
 	a.saveConfig()
-
-	var idxList []uint32
-	for _, sinkInput := range a.SinkInputs {
-		idxList = append(idxList, sinkInput.index)
-	}
-	if len(idxList) == 0 {
-		return
-	}
-	a.core.MoveSinkInputsByName(idxList, name)
+	a.moveSinkInputsToSink(a.DefaultSink.index)
 }
 
 func (a *Audio) SetDefaultSource(name string) {
@@ -140,9 +133,7 @@ func (a *Audio) trySetDefaultSink(cardId uint32, portName string) error {
 		if sink.ActivePort.Name != portName {
 			sink.SetPort(portName)
 		}
-		if a.DefaultSink == nil || a.DefaultSink.Name != sink.Name {
-			a.SetDefaultSink(sink.Name)
-		}
+		a.SetDefaultSink(sink.Name)
 		return nil
 	}
 	return fmt.Errorf("Cann't find valid sink for port '%s'", portName)
@@ -285,6 +276,21 @@ func (a *Audio) Reset() {
 func (a *Audio) destroy() {
 	close(a.siPollerExit)
 	dbus.UnInstallObject(a)
+}
+
+func (a *Audio) moveSinkInputsToSink(sinkId uint32) {
+	// TODO: locker sinkinputs changed
+	var list []uint32
+	for _, sinkInput := range a.SinkInputs {
+		if sinkInput.core.Sink == sinkId {
+			continue
+		}
+		list = append(list, sinkInput.index)
+	}
+	if len(list) == 0 {
+		return
+	}
+	a.core.MoveSinkInputsByIndex(list, sinkId)
 }
 
 func isPortExists(name string, ports []pulse.PortInfo) bool {
