@@ -59,13 +59,13 @@ DockSettings::DockSettings(QWidget *parent)
     m_keepHiddenAct.setCheckable(true);
     m_smartHideAct.setCheckable(true);
 
-    QMenu *modeSubMenu = new QMenu(&m_settingsMenu);
+    WhiteMenu *modeSubMenu = new WhiteMenu(&m_settingsMenu);
     modeSubMenu->addAction(&m_fashionModeAct);
     modeSubMenu->addAction(&m_efficientModeAct);
     QAction *modeSubMenuAct = new QAction(tr("Mode"), this);
     modeSubMenuAct->setMenu(modeSubMenu);
 
-    QMenu *locationSubMenu = new QMenu(&m_settingsMenu);
+    WhiteMenu *locationSubMenu = new WhiteMenu(&m_settingsMenu);
     locationSubMenu->addAction(&m_topPosAct);
     locationSubMenu->addAction(&m_bottomPosAct);
     locationSubMenu->addAction(&m_leftPosAct);
@@ -73,14 +73,14 @@ DockSettings::DockSettings(QWidget *parent)
     QAction *locationSubMenuAct = new QAction(tr("Location"), this);
     locationSubMenuAct->setMenu(locationSubMenu);
 
-    QMenu *sizeSubMenu = new QMenu(&m_settingsMenu);
+    WhiteMenu *sizeSubMenu = new WhiteMenu(&m_settingsMenu);
     sizeSubMenu->addAction(&m_largeSizeAct);
     sizeSubMenu->addAction(&m_mediumSizeAct);
     sizeSubMenu->addAction(&m_smallSizeAct);
     QAction *sizeSubMenuAct = new QAction(tr("Size"), this);
     sizeSubMenuAct->setMenu(sizeSubMenu);
 
-    QMenu *statusSubMenu = new QMenu(&m_settingsMenu);
+    WhiteMenu *statusSubMenu = new WhiteMenu(&m_settingsMenu);
     statusSubMenu->addAction(&m_keepShownAct);
     statusSubMenu->addAction(&m_keepHiddenAct);
     statusSubMenu->addAction(&m_smartHideAct);
@@ -92,7 +92,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(sizeSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
 
-    connect(&m_settingsMenu, &QMenu::triggered, this, &DockSettings::menuActionClicked);
+    connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);

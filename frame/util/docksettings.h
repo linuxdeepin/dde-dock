@@ -13,6 +13,8 @@
 #include <QObject>
 #include <QSize>
 
+#include <QStyleFactory>
+
 extern "C"
 {
 #ifdef signals
@@ -27,6 +29,18 @@ extern "C"
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
+
+class WhiteMenu : public QMenu
+{
+    Q_OBJECT
+public:
+    WhiteMenu(QWidget * parent = nullptr) : QMenu(parent) {
+        QStyle *style = QStyleFactory::create("dlight");
+        if (style) setStyle(style);
+    }
+
+    virtual ~WhiteMenu() {}
+};
 
 class DockSettings : public QObject
 {
@@ -88,7 +102,7 @@ private:
     QRect m_primaryRect;
     QSize m_mainWindowSize;
 
-    QMenu m_settingsMenu;
+    WhiteMenu m_settingsMenu;
     QAction m_fashionModeAct;
     QAction m_efficientModeAct;
     QAction m_topPosAct;

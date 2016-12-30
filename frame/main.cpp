@@ -30,11 +30,14 @@ void RegisterDdeSession()
 
 int main(int argc, char *argv[])
 {
+    DApplication::loadDXcbPlugin();
+
     DApplication app(argc, argv);
     if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
         qDebug() << "set single instance failed!";
         return -1;
     }
+
     app.setOrganizationName("deepin");
     app.setApplicationName("dde-dock");
     app.setApplicationDisplayName("DDE Dock");
