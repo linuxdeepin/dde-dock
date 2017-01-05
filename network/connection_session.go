@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/utils"
 	"time"
 )
@@ -532,41 +533,62 @@ func (s *ConnectionSession) DebugListKeyDetail() (info string) {
 
 // ListAvailableKeyDetail get all available key details, include vitual sections
 func (s *ConnectionSession) ListAvailableKeyDetail() string {
-	var info string = "["
-	vslen := len(s.AvailableVirtualSections)
-	for i, vsection := range s.AvailableVirtualSections {
+	var (
+		firstKey      bool   = true
+		firstVSection bool   = true
+		info          string = "["
+
+		allVSections = getAllVsections(s.data)
+	)
+	for _, vsection := range allVSections {
+		if !strv.Strv(s.AvailableVirtualSections).Contains(vsection) {
+			continue
+		}
+
+		sectionInfo, ok := virtualSections[vsection]
+		if !ok {
+			continue
+		}
+
+		if !firstVSection {
+			info += ", "
+		}
+		firstKey = true
 		info += fmt.Sprintf("{\"VirtualSection\": \"%s\", \"Keys\":[", vsection)
 		sections := getAvailableSectionsOfVsection(s.data, vsection)
-		for j, section := range sections {
-			sectionKeys, ok := s.AvailableKeys[section]
+		for _, keyInfo := range sectionInfo.Keys {
+			if !strv.Strv(sections).Contains(keyInfo.Section) {
+				continue
+			}
+
+			sectionKeys, ok := s.AvailableKeys[keyInfo.Section]
 			if !ok {
 				continue
 			}
 
-			if j != 0 && len(sectionKeys) != 0 {
+			if len(sectionKeys) == 0 || !strv.Strv(sectionKeys).Contains(keyInfo.Key) {
+				continue
+			}
+
+			if !firstKey {
 				info += ","
 			}
-			for k, key := range sectionKeys {
-				if k != 0 {
-					info += ","
-				}
 
-				info += fmt.Sprintf("{\"Section\": \"%s\", \"Key\": \"%s\",", section, key)
-				info += fmt.Sprintf("\"Value\": %s", s.GetKey(section, key))
-				values := generalGetSettingAvailableValues(s.data, section, key)
-				if len(values) > 0 {
-					valuesJSON, _ := marshalJSON(values)
-					info += fmt.Sprintf(",\"Values\": %s", valuesJSON)
-				}
-
-				info += "}"
+			info += fmt.Sprintf("{\"Section\": \"%s\", \"Key\": \"%s\",", keyInfo.Section, keyInfo.Key)
+			info += fmt.Sprintf("\"Value\": %s", s.GetKey(keyInfo.Section, keyInfo.Key))
+			values := generalGetSettingAvailableValues(s.data, keyInfo.Section, keyInfo.Key)
+			if len(values) > 0 {
+				valuesJSON, _ := marshalJSON(values)
+				info += fmt.Sprintf(",\"Values\": %s", valuesJSON)
 			}
+
+			info += "}"
+			firstKey = false
 		}
 		info += "]}"
-		if i != (vslen - 1) {
-			info += ","
-		}
+		firstVSection = false
 	}
+
 	info += "]"
 	return info
 }
