@@ -15,6 +15,10 @@ import (
 	"pkg.deepin.io/dde/daemon/timedate/zoneinfo"
 )
 
+func (m *Manager) Reset() error {
+	return m.SetNTP(true)
+}
+
 // SetDate Set the system clock to the specified.
 //
 // The time may be specified in the format '2015' '1' '1' '18' '18' '18' '8'.
