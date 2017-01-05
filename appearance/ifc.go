@@ -19,6 +19,26 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 )
 
+func (m *Manager) Reset() {
+	logger.Debug("Reset settings")
+
+	var settingKeys = []string{
+		gsKeyGtkTheme,
+		gsKeyIconTheme,
+		gsKeyCursorTheme,
+		gsKeyFontStandard,
+		gsKeyFontMonospace,
+		gsKeyFontSize,
+	}
+	for _, key := range settingKeys {
+		userVal := m.setting.GetUserValue(key)
+		if userVal != nil {
+			logger.Debug("reset setting", key)
+			m.setting.Reset(key)
+		}
+	}
+}
+
 // List list all available for the special type
 func (m *Manager) List(ty string) (string, error) {
 	logger.Debug("List for type:", ty)
