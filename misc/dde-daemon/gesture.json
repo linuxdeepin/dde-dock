@@ -23,7 +23,7 @@
         "Fingers": 3,
         "Action": {
             "Type": "built-in",
-            "Action": "ReverseSwitchApplication"
+            "Action": "SplitWindowLeft"
         }
     },
     {
@@ -32,7 +32,7 @@
         "Fingers": 3,
         "Action": {
             "Type": "built-in",
-            "Action": "SwitchApplication"
+            "Action": "SplitWindowRight"
         }
     },
     {
@@ -51,6 +51,15 @@
         "Action": {
             "Type": "built-in",
             "Action": "ShowWindow"
+        }
+    },
+    {
+        "Name": "tap",
+        "Direction": "none",
+        "Fingers": 3,
+        "Action": {
+            "Type": "built-in",
+            "Action": "MoveWindow"
         }
     },
     {

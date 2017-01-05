@@ -105,6 +105,8 @@ func (m *gestureManager) Exec(name, direction string, fingers int32) error {
 		return fmt.Errorf("Not found gesture info for: %s, %s, %d", name, direction, fingers)
 	}
 
+	logger.Debug("[Exec] action info:", info.Name, info.Direction, info.Fingers,
+		info.Action.Type, info.Action.Action)
 	var cmd = info.Action.Action
 	switch info.Action.Type {
 	case ActionTypeCommandline:

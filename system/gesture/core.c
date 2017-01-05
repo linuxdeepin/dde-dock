@@ -178,8 +178,8 @@ handle_gesture_events(struct libinput_event *ev, int type)
         }
 
         raw->fingers = libinput_event_gesture_get_finger_count(gesture);
-        /* printf("[Pinch] direction: %s, fingers: %d\n", */
-        /*        raw->scale>= 0?"in":"out", raw->fingers); */
+        printf("[Pinch] direction: %s, fingers: %d\n", 
+                raw->scale>= 0?"in":"out", raw->fingers); 
         handleGestureEvent(GESTURE_TYPE_PINCH,
                            (raw->scale >= 0?GESTURE_DIRECTION_IN:GESTURE_DIRECTION_OUT),
                            raw->fingers);
@@ -196,20 +196,30 @@ handle_gesture_events(struct libinput_event *ev, int type)
         raw->fingers = libinput_event_gesture_get_finger_count(gesture);
         if (fabs(raw->dx_unaccel) > fabs(raw->dy_unaccel)) {
             // right/left movement
-            /* printf("[Swipe] direction: %s, fingers: %d\n", */
-            /*        raw->dx_unaccel < 0?"left":"right", raw->fingers); */
+            printf("[Swipe] direction: %s, fingers: %d\n", 
+                    raw->dx_unaccel < 0?"left":"right", raw->fingers); 
             handleGestureEvent(GESTURE_TYPE_SWIPE,
                                (raw->dx_unaccel < 0?GESTURE_DIRECTION_LEFT:GESTURE_DIRECTION_RIGHT),
                                raw->fingers);
         } else {
             // up/down movement
-            /* printf("[Swipe] direction: %s, fingers: %d\n", */
-            /*        raw->dy_unaccel < 0?"up":"down", raw->fingers); */
+            printf("[Swipe] direction: %s, fingers: %d\n", 
+                    raw->dy_unaccel < 0?"up":"down", raw->fingers); 
             handleGestureEvent(GESTURE_TYPE_SWIPE,
                                (raw->dy_unaccel < 0?GESTURE_DIRECTION_UP:GESTURE_DIRECTION_DOWN),
                                raw->fingers);
         }
         raw_event_reset(raw);
+        break;
+    case LIBINPUT_EVENT_GESTURE_TAP_BEGIN:
+        break;
+    case LIBINPUT_EVENT_GESTURE_TAP_END:
+        if (libinput_event_gesture_get_cancelled(gesture)) {
+                break;
+        }
+        raw->fingers = libinput_event_gesture_get_finger_count(gesture);
+        printf("[Tap] fingers: %d\n", raw->fingers);
+        handleGestureEvent(GESTURE_TYPE_TAP, GESTURE_DIRECTION_NONE, raw->fingers);
         break;
     }
 }
@@ -271,7 +281,10 @@ handle_events(struct libinput *li)
         case LIBINPUT_EVENT_GESTURE_PINCH_END:
         case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
         case LIBINPUT_EVENT_GESTURE_SWIPE_UPDATE:
-        case LIBINPUT_EVENT_GESTURE_SWIPE_END:{
+        case LIBINPUT_EVENT_GESTURE_SWIPE_END:
+        case LIBINPUT_EVENT_GESTURE_TAP_BEGIN:
+        case LIBINPUT_EVENT_GESTURE_TAP_UPDATE:
+        case LIBINPUT_EVENT_GESTURE_TAP_END:{
             handle_gesture_events(ev, type);
             break;
         }

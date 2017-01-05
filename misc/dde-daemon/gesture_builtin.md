@@ -10,3 +10,6 @@
 + ReverseSwitchApplication
 + SwitchWorkspace
 + ReverseSwitchWorkspace
++ SplitWindowLeft
++ SplitWindowRight
++ MoveWindow

@@ -42,7 +42,9 @@ type GestureType int32
 var (
 	GestureTypeSwipe = GestureType(C.GESTURE_TYPE_SWIPE)
 	GestureTypePinch = GestureType(C.GESTURE_TYPE_PINCH)
+	GestureTypeTap   = GestureType(C.GESTURE_TYPE_TAP)
 
+	GestureDirectionNone  = GestureType(C.GESTURE_DIRECTION_NONE)
 	GestureDirectionUp    = GestureType(C.GESTURE_DIRECTION_UP)
 	GestureDirectionDown  = GestureType(C.GESTURE_DIRECTION_DOWN)
 	GestureDirectionLeft  = GestureType(C.GESTURE_DIRECTION_LEFT)
@@ -57,6 +59,10 @@ func (t GestureType) String() string {
 		return "swipe"
 	case GestureTypePinch:
 		return "pinch"
+	case GestureTypeTap:
+		return "tap"
+	case GestureDirectionNone:
+		return "none"
 	case GestureDirectionUp:
 		return "up"
 	case GestureDirectionDown:
@@ -111,6 +117,9 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 
 //export handleGestureEvent
 func handleGestureEvent(ty, direction, fingers C.int) {
+	logger.Debug("Emit gesture event:", GestureType(ty).String(),
+		GestureType(direction).String(),
+		int32(fingers))
 	dbus.Emit(_m, "Event", GestureType(ty).String(),
 		GestureType(direction).String(),
 		int32(fingers))

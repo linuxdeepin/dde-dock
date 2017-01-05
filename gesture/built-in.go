@@ -31,6 +31,11 @@ const (
 	wmActionShowAllWindow = 7
 )
 
+const (
+	wmTileDirectionLeft uint32 = iota + 1
+	wmTileDirectionRight
+)
+
 var builtinSets = map[string]func() error{
 	"ShowWorkspace":            doShowWorkspace,
 	"ToggleMaximize":           doToggleMaximize,
@@ -41,6 +46,9 @@ var builtinSets = map[string]func() error{
 	"ReverseSwitchApplication": doReverseSwitchApplication,
 	"SwitchWorkspace":          doSwitchWorkspace,
 	"ReverseSwitchWorkspace":   doReverseSwitchWorkspace,
+	"SplitWindowLeft":          doTileActiveWindowLeft,
+	"SplitWindowRight":         doTileActiveWindowRight,
+	"MoveWindow":               doMoveActiveWindow,
 }
 
 var _wmHandler *wm.Wm
@@ -87,4 +95,16 @@ func doSwitchWorkspace() error {
 
 func doReverseSwitchWorkspace() error {
 	return getWmHandler().SwitchToWorkspace(true)
+}
+
+func doTileActiveWindowLeft() error {
+	return getWmHandler().TileActiveWindow(wmTileDirectionLeft)
+}
+
+func doTileActiveWindowRight() error {
+	return getWmHandler().TileActiveWindow(wmTileDirectionRight)
+}
+
+func doMoveActiveWindow() error {
+	return getWmHandler().BeginToMoveActiveWindow()
 }
