@@ -103,3 +103,12 @@ func getLocaleInfoList() ([]LocaleInfo, error) {
 
 	return list, nil
 }
+
+// Reset set user desktop environment locale to system default locale
+func (lang *LangSelector) Reset() error {
+	locale, err := getLocaleFromFile(systemLocaleFile)
+	if err != nil {
+		return err
+	}
+	return lang.SetLocale(locale)
+}
