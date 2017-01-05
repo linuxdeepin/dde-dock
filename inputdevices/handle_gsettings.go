@@ -75,6 +75,8 @@ func (tp *TrackPoint) handleGSettings() {
 			tp.wheelEmulationTimeout()
 		case trackPointKeyWheelHorizScroll:
 			tp.enableWheelHorizScroll()
+		case trackPointKeyLeftHanded:
+			tp.enableLeftHanded()
 		case trackPointKeyAcceleration:
 			tp.motionAcceleration()
 		case trackPointKeyThreshold:

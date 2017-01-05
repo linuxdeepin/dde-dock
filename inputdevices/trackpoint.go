@@ -25,6 +25,7 @@ const (
 	trackPointKeyAcceleration     = "motion-acceleration"
 	trackPointKeyThreshold        = "motion-threshold"
 	trackPointKeyScaling          = "motion-scaling"
+	trackPointKeyLeftHanded       = "left-handed"
 )
 
 type TrackPoint struct {
@@ -39,6 +40,8 @@ type TrackPoint struct {
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionScaling      *property.GSettingsFloatProperty `access:"readwrite"`
+
+	LeftHanded *property.GSettingsBoolProperty `access:"readwrite"`
 
 	DeviceList string
 	Exist      bool
@@ -94,6 +97,10 @@ func NewTrackPoint() *TrackPoint {
 		tp, "WheelEmulationTimeout",
 		tp.setting, trackPointKeyWheelTimeout)
 
+	tp.LeftHanded = property.NewGSettingsBoolProperty(
+		tp, "LeftHanded",
+		tp.setting, trackPointKeyLeftHanded)
+
 	tp.updateDXMouses()
 
 	return tp
@@ -107,6 +114,7 @@ func (tp *TrackPoint) init() {
 	tp.enableMiddleButton()
 	tp.enableWheelEmulation()
 	tp.enableWheelHorizScroll()
+	tp.enableLeftHanded()
 	tp.middleButtonTimeout()
 	tp.wheelEmulationButton()
 	tp.wheelEmulationTimeout()
@@ -172,6 +180,17 @@ func (tp *TrackPoint) enableWheelHorizScroll() {
 		err := info.EnableWheelHorizScroll(enabled)
 		if err != nil {
 			logger.Warningf("Enable wheel horiz scroll for '%v %s' failed: %v",
+				info.Id, info.Name, err)
+		}
+	}
+}
+
+func (tp *TrackPoint) enableLeftHanded() {
+	enabled := tp.LeftHanded.Get()
+	for _, info := range tp.devInfos {
+		err := info.EnableLeftHanded(enabled)
+		if err != nil {
+			logger.Warningf("Enable left-handed for '%v %s' failed: %v",
 				info.Id, info.Name, err)
 		}
 	}
