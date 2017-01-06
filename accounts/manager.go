@@ -139,6 +139,18 @@ func (m *Manager) uninstallUser(userPath string) {
 	u.destroy()
 }
 
+func (m *Manager) getUserByName(name string) *User {
+	m.mapLocker.Lock()
+	defer m.mapLocker.Unlock()
+
+	for _, user := range m.usersMap {
+		if user.UserName == name {
+			return user
+		}
+	}
+	return nil
+}
+
 func getUserPaths() []string {
 	infos, err := users.GetHumanUserInfos()
 	if err != nil {

@@ -69,6 +69,13 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 		return err
 	}
 
+	user := m.getUserByName(name)
+	if user == nil {
+		err := fmt.Errorf("user %q not found", name)
+		logger.Warning(err)
+		return err
+	}
+
 	if err := users.DeleteUser(rmFiles, name); err != nil {
 		logger.Warningf("DoAction: delete user '%s' failed: %v\n",
 			name, err)
@@ -81,7 +88,7 @@ func (m *Manager) DeleteUser(dbusMsg dbus.DMessage,
 
 	//delete user config and icons
 	if rmFiles {
-		clearUserDatas(name)
+		user.clearData()
 	}
 	return nil
 }

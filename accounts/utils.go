@@ -21,6 +21,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -57,16 +58,6 @@ func (code ErrCodeType) String() string {
 	return "Unkown error"
 }
 
-func clearUserDatas(username string) {
-	// delete user config file
-	config := filepath.Join(userConfigDir, username)
-	os.Remove(config)
-
-	// delete user custom icon file
-	customIcon := getUserCustomIconFile(username)
-	os.Remove(customIcon)
-}
-
 // return icons uris
 func getUserStandardIcons() []string {
 	imgs, err := graphic.GetImagesInDir(userIconsDir)
@@ -87,18 +78,20 @@ func getUserStandardIcons() []string {
 	return icons
 }
 
-// return empty string or uri
-func getUserCustomIcon(username string) string {
-	// custom icon file
-	file := getUserCustomIconFile(username)
-	if ok := graphic.IsSupportedImage(file); !ok {
-		return ""
-	}
-	return utils.EncodeURI(file, utils.SCHEME_FILE)
+func getNewUserCustomIconDest(username string) string {
+	ns := time.Now().UnixNano()
+	base := username + "-" + strconv.FormatInt(ns, 36)
+	return filepath.Join(userCustomIconsDir, base)
 }
 
-func getUserCustomIconFile(username string) string {
-	return filepath.Join(userCustomIconsDir, username)
+func isUserCustomIconURI(iconURI string, username string) bool {
+	iconFile := utils.DecodeURI(iconURI)
+	iconFilePrefix := filepath.Join(userCustomIconsDir, username+"-")
+	if strings.HasPrefix(iconFile, iconFilePrefix) &&
+		len(iconFile) > len(iconFilePrefix) {
+		return true
+	}
+	return false
 }
 
 func isStrInArray(str string, array []string) bool {

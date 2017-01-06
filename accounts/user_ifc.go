@@ -255,16 +255,41 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
 		return err
 	}
 
-	oldIcon := u.IconFile
+	oldIconURI := u.IconFile
+	oldCustomIcon := u.customIcon
 	u.setPropIconFile(newIconURI)
+
+	// Whether we need to remove the old custom icon
+	var removeOld bool
+
+	if added {
+		// newIconURI should be custom icon if added is true
+		u.customIcon = newIconURI
+		if isUserCustomIconURI(oldIconURI, u.UserName) {
+			// old and new icons are custom icon, we need remove the old custom icon
+			removeOld = true
+		}
+	}
+
 	if err := u.writeUserConfig(); err != nil {
 		logger.Warning("Write user config failed:", err)
-		u.setPropIconFile(oldIcon)
+		// recover
+		u.setPropIconFile(oldIconURI)
+		u.customIcon = oldCustomIcon
+		removeOld = false
 		return err
 	}
+
+	if removeOld {
+		logger.Debugf("remove old custom icon %q", oldIconURI)
+		err := os.Remove(dutils.DecodeURI(oldIconURI))
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+
 	if added {
-		// update property IconList
-		u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+		u.updateIconList()
 	}
 	return nil
 }
@@ -289,7 +314,15 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 		return err
 	}
 
-	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+	oldCustomIcon := u.customIcon
+	u.customIcon = ""
+	if err := u.writeUserConfig(); err != nil {
+		logger.Warning("Write user config failed:", err)
+		// recover
+		u.customIcon = oldCustomIcon
+		return err
+	}
+	u.updateIconList()
 	return nil
 }
 
@@ -378,18 +411,11 @@ func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 }
 
 func (u *User) IsIconDeletable(iconURI string) bool {
-	// is current
-	if u.IconFile == iconURI {
-		return false
-	}
-
-	iconFile := dutils.DecodeURI(iconURI)
-	// is custom
-	if iconFile == getUserCustomIconFile(u.UserName) {
+	if iconURI != u.IconFile && iconURI == u.customIcon {
+		// iconURI is custom icon, and not current icon
 		return true
 	}
-	// other is standard
-	return false
+	return true
 }
 
 // 获取当前头像的大图标

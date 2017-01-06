@@ -40,6 +40,7 @@ const (
 const (
 	confGroupUser            string = "User"
 	confKeyIcon                     = "Icon"
+	confKeyCustomIcon               = "CustomIcon"
 	confKeyLocale                   = "Locale"
 	confKeyLayout                   = "Layout"
 	confKeyBackground               = "Background"
@@ -58,6 +59,7 @@ type User struct {
 	Locale            string
 	Layout            string
 	IconFile          string
+	customIcon        string
 	BackgroundFile    string
 	GreeterBackground string
 
@@ -100,8 +102,7 @@ func NewUser(userPath string) (*User, error) {
 
 	u.updatePropLocked()
 	u.updatePropAccountType()
-
-	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+	u.updateIconList()
 
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
@@ -136,6 +137,19 @@ func NewUser(userPath string) (*User, error) {
 		isSave = true
 	}
 
+	u.customIcon, _ = kFile.GetString(confGroupUser, confKeyCustomIcon)
+
+	// CustomInfo is the newly added field in the configuration file
+	if u.customIcon == "" {
+		if !isStrInArray(u.IconFile, u.IconList) {
+			// u.IconFile is a custom icon, not a standard icon
+			u.customIcon = u.IconFile
+			isSave = true
+		}
+	}
+
+	u.updateIconList()
+
 	bg, _ := kFile.GetString(confGroupUser, confKeyBackground)
 	u.setPropString(&u.BackgroundFile, "BackgroundFile", bg)
 	if len(bg) == 0 {
@@ -163,11 +177,14 @@ func (u *User) destroy() {
 	dbus.UnInstallObject(u)
 }
 
+func (u *User) updateIconList() {
+	u.setPropStrv(&u.IconList, "IconList", u.getAllIcons())
+}
+
 func (u *User) getAllIcons() []string {
 	icons := getUserStandardIcons()
-	customIcon := getUserCustomIcon(u.UserName)
-	if customIcon != "" {
-		icons = append(icons, customIcon)
+	if u.customIcon != "" {
+		icons = append(icons, u.customIcon)
 	}
 	return icons
 }
@@ -191,7 +208,7 @@ func (u *User) setIconFile(iconURI string) (string, bool, error) {
 		defer os.Remove(tmp)
 	}
 
-	dest := getUserCustomIconFile(u.UserName)
+	dest := getNewUserCustomIconDest(u.UserName)
 	err = os.MkdirAll(path.Dir(dest), 0755)
 	if err != nil {
 		return "", false, err
@@ -225,6 +242,7 @@ func (u *User) writeUserConfig() error {
 	kFile.SetString(confGroupUser, confKeyLayout, u.Layout)
 	kFile.SetString(confGroupUser, confKeyLocale, u.Locale)
 	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
+	kFile.SetString(confGroupUser, confKeyCustomIcon, u.customIcon)
 	kFile.SetString(confGroupUser, confKeyBackground, u.BackgroundFile)
 	kFile.SetString(confGroupUser, confKeyGreeterBackground, u.GreeterBackground)
 	kFile.SetStringList(confGroupUser, confKeyHistoryLayout, u.HistoryLayout)
@@ -267,6 +285,24 @@ func (u *User) accessAuthentication(pid uint32, check bool) error {
 	}
 
 	return nil
+}
+
+func (u *User) clearData() {
+	// delete user config file
+	configFile := path.Join(userConfigDir, u.UserName)
+	err := os.Remove(configFile)
+	if err != nil {
+		logger.Warningf("remove user config failed:", err)
+	}
+
+	// delete user custom icon
+	if u.customIcon != "" {
+		customIconFile := dutils.DecodeURI(u.customIcon)
+		err := os.Remove(customIconFile)
+		if err != nil {
+			logger.Warningf("remove user custom icon failed:", err)
+		}
+	}
 }
 
 // userPath must be composed with 'userDBusPath + uid'
