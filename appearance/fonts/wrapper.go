@@ -94,6 +94,7 @@ func fcInfosToFonts() Fonts {
 			infos = append(infos, info)
 		}
 	}
+	cacheFonts = infos
 	return infos
 }
 
