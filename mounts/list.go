@@ -222,23 +222,27 @@ func newDiskInfoFromMount(mount *gio.Mount) *DiskInfo {
 	}
 	root.Unref()
 
-	if info.Total == 0 {
-		info.Total = getTotalSizeByUDisks2(info.Path)
-	}
-
 	gicon := mount.GetIcon()
 	info.Icon = getIconFromGIcon(gicon)
 	gicon.Unref()
 
 	info.correctDiskType()
-	if info.Type != DiskTypeNetwork {
-		volume := mount.GetVolume()
+	volume := mount.GetVolume()
+	if volume == nil || volume.Object.C == nil {
 		// All devices must have Volume objects, in addition to network devices
-		if volume == nil || volume.Object.C == nil {
+		if info.Type != DiskTypeNetwork {
 			logger.Debugf("Invalid disk info: %#v", info)
 			return nil
 		}
+		return info
 	}
+
+	info.Path = volume.GetIdentifier(volumeKindUnix)
+	volume.Unref()
+	if info.Total == 0 && info.Path != "" {
+		info.Total = getTotalSizeByUDisks2(info.Path)
+	}
+
 	return info
 }
 
