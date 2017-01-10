@@ -133,7 +133,9 @@ func (err ErrShortcutNotFound) Error() string {
 	return fmt.Sprintf("shortcut id %q type %v is not found", err.Id, err.Type)
 }
 
-// CheckAvaliable check the accel whether conflict
+// CheckAvaliable 检查快捷键序列是否可用
+// 返回值1 是否可用;
+// 返回值2 与之冲突的快捷键的详细信息，是JSON字符串。如果没有冲突，则为空字符串。
 func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 	pa, err := shortcuts.ParseStandardAccel(accelStr)
 	if err != nil {
@@ -147,7 +149,11 @@ func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 		return false, "", err
 	}
 	if accel != nil {
-		return false, accel.Shortcut.GetId(), nil
+		detail, err := doMarshal(accel.Shortcut)
+		if err != nil {
+			return false, "", err
+		}
+		return false, detail, nil
 	}
 	return true, "", nil
 }
@@ -244,4 +250,42 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 func (m *Manager) GrabScreen() error {
 	logger.Debug("Manager.GrabScreen")
 	return m.doGrabScreen()
+}
+
+var enUSLayoutKeys = []string{
+	"Escape", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "_Power",
+	"grave", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal", "BackSpace",
+	"Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "bracketleft", "bracketright", "backslash",
+	"Caps_Lock", "A", "S", "D", "F", "G", "H", "J", "K", "L", "semicolon", "apostrophe", "Return",
+	"_Shift", "Z", "X", "C", "V", "B", "N", "M", "comma", "period", "slash", "_Shift",
+	"_Fn", "_Ctrl", "_Alt", "_Super", "Space", "_Alt", "Left", "Up", "Right", "Down",
+}
+
+func (m *Manager) isAccelAvailable(pa shortcuts.ParsedAccel) bool {
+	accel, err := m.shortcuts.FindConflictingAccel(pa)
+	if err != nil {
+		// pa.ParseKey error
+		return false
+	}
+	return accel == nil
+}
+
+func (m *Manager) QueryAvailableMap(modKeys []string) ([]byte, error) {
+	mods, err := shortcuts.ModifiersFromStrv(modKeys)
+	if err != nil {
+		return nil, err
+	}
+	ret := make([]byte, len(enUSLayoutKeys))
+	pa := shortcuts.ParsedAccel{Mods: mods}
+	for i, key := range enUSLayoutKeys {
+		// ignore keys that start with an underscore
+		if strings.HasPrefix(key, "_") {
+			continue
+		}
+		pa.Key = key
+		if m.isAccelAvailable(pa) {
+			ret[i] = 1
+		}
+	}
+	return ret, nil
 }

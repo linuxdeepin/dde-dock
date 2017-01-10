@@ -12,11 +12,47 @@ package keybinding
 import (
 	"encoding/json"
 	"gir/gio-2.0"
+	"github.com/BurntSushi/xgb/xproto"
 	"io/ioutil"
 	"os/exec"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 )
+
+func getAccelModKeys(pa shortcuts.ParsedAccel) []string {
+	var keys []string
+	mods := pa.Mods
+	if mods&xproto.ModMaskShift > 0 {
+		keys = append(keys, "Shift")
+	}
+	if mods&xproto.ModMaskControl > 0 {
+		keys = append(keys, "Control")
+	}
+	if mods&xproto.ModMask1 > 0 {
+		keys = append(keys, "Alt")
+	}
+	if mods&xproto.ModMask4 > 0 {
+		keys = append(keys, "Super")
+	}
+
+	keyLower := strings.ToLower(pa.Key)
+	var lastModKey string
+	switch keyLower {
+	case "control_l", "control_r":
+		lastModKey = "Control"
+	case "shift_l", "shift_r":
+		lastModKey = "Shift"
+	case "alt_l", "alt_r":
+		lastModKey = "Alt"
+	case "super_l", "super_r":
+		lastModKey = "Super"
+	}
+	if lastModKey != "" {
+		return append(keys, lastModKey)
+	}
+	return nil
+}
 
 func canShowCapsOSD() bool {
 	s := gio.NewSettings("com.deepin.dde.keyboard")

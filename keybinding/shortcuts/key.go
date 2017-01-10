@@ -20,6 +20,34 @@ import (
 type Keycode xproto.Keycode
 type Modifiers uint16
 
+func ModifiersFromStrv(keys []string) (Modifiers, error) {
+	var mods Modifiers
+
+	for _, key := range keys {
+		switch strings.ToLower(key) {
+		case "shift":
+			mods |= xproto.ModMaskShift
+		case "control":
+			mods |= xproto.ModMaskControl
+		case "alt":
+			mods |= xproto.ModMask1
+		case "super":
+			mods |= xproto.ModMask4
+		default:
+			return 0, InvalidModifierKeyError{key}
+		}
+	}
+	return mods, nil
+}
+
+type InvalidModifierKeyError struct {
+	Key string
+}
+
+func (err InvalidModifierKeyError) Error() string {
+	return fmt.Sprintf("key %q is not a valid modifier key", err.Key)
+}
+
 func (mods Modifiers) String() string {
 	var keys []string
 	if mods&xproto.ModMaskShift > 0 {

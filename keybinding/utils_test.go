@@ -10,13 +10,30 @@
 package keybinding
 
 import (
-	"github.com/smartystreets/goconvey/convey"
+	. "github.com/smartystreets/goconvey/convey"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"testing"
 )
 
+func Test_getAccelModKeys(t *testing.T) {
+	Convey("Test getAccelModKeys", t, func() {
+		pa, err := shortcuts.ParseStandardAccel("<Control>Alt_L")
+		So(err, ShouldBeNil)
+		So(getAccelModKeys(pa), ShouldResemble, []string{"Control", "Alt"})
+
+		pa, err = shortcuts.ParseStandardAccel("<Control><Alt><Super>Shift_L")
+		So(err, ShouldBeNil)
+		So(getAccelModKeys(pa), ShouldResemble, []string{"Control", "Alt", "Super", "Shift"})
+
+		pa, err = shortcuts.ParseStandardAccel("<Control><Alt><Super>X")
+		So(err, ShouldBeNil)
+		So(getAccelModKeys(pa), ShouldBeNil)
+	})
+}
+
 func TestIBMHotkey(t *testing.T) {
-	convey.Convey("Test ibm hotkey checker", t, func() {
-		convey.So(checkIBMHotkey("testdata/hotkey"), convey.ShouldEqual, true)
-		convey.So(checkIBMHotkey("testdata/hotkey_disable"), convey.ShouldEqual, false)
+	Convey("Test ibm hotkey checker", t, func() {
+		So(checkIBMHotkey("testdata/hotkey"), ShouldBeTrue)
+		So(checkIBMHotkey("testdata/hotkey_disable"), ShouldBeFalse)
 	})
 }
