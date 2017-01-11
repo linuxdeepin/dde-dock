@@ -123,6 +123,10 @@ func newGestureInfosFromFile(filename string) (gestureInfos, error) {
 		return nil, err
 	}
 
+	if len(content) == 0 {
+		return nil, fmt.Errorf("File '%s' is empty", filename)
+	}
+
 	var infos gestureInfos
 	err = json.Unmarshal(content, &infos)
 	if err != nil {
