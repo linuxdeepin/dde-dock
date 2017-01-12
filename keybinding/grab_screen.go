@@ -61,6 +61,7 @@ func (m *Manager) doGrabScreen() error {
 			}
 			logger.Debug("event key:", key)
 			accel := key.ToAccel(x)
+			dbus.Emit(m, "KeyEvent", true, accel.String())
 			if accel.IsGood() {
 				logger.Debug("good accel", accel)
 				m.grabScreenPressedAccel = &accel

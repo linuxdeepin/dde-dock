@@ -134,6 +134,9 @@ func (err ErrShortcutNotFound) Error() string {
 }
 
 // CheckAvaliable check the accel whether conflict
+// CheckAvaliable 检查快捷键序列是否可用
+// 返回值1 是否可用;
+// 返回值2 与之冲突的快捷键的详细信息，是JSON字符串。如果没有冲突，则为空字符串。
 func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 	pa, err := shortcuts.ParseStandardAccel(accelStr)
 	if err != nil {
@@ -147,7 +150,11 @@ func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 		return false, "", err
 	}
 	if accel != nil {
-		return false, accel.Shortcut.GetId(), nil
+		detail, err := doMarshal(accel.Shortcut)
+		if err != nil {
+			return false, "", err
+		}
+		return false, detail, nil
 	}
 	return true, "", nil
 }
