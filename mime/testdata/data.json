@@ -1,0 +1,19 @@
+{
+	"DefaultApps":[
+		{
+			"AppId":"org.gnome.Nautilus.desktop",
+			"AppType":"file-manager",
+			"SupportedType":[
+				"inode/directory",
+				"application/x-gnome-saved-search"
+			]
+		},
+		{
+			"AppId":"org.gnome.gedit.desktop",
+			"AppType":"editor",
+			"SupportedType":[
+				"text/plain"
+			]
+		}
+	]
+}

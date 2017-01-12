@@ -21,6 +21,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 	"pkg.deepin.io/dde/daemon/loader"
+	_ "pkg.deepin.io/dde/daemon/mime"
 	_ "pkg.deepin.io/dde/daemon/mounts"
 	_ "pkg.deepin.io/dde/daemon/network"
 	_ "pkg.deepin.io/dde/daemon/screenedge"
