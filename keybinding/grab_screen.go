@@ -19,14 +19,6 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (m *Manager) grabScreenFailed() {
-	dbus.Emit(m, "GrabScreenResult", "")
-}
-
-func (m *Manager) grabScreenSuccess(result string) {
-	dbus.Emit(m, "GrabScreenResult", result)
-}
-
 func (m *Manager) doGrabScreen() error {
 	xu, err := xgbutil.NewConn()
 	if err != nil {
@@ -46,14 +38,14 @@ func (m *Manager) doGrabScreen() error {
 
 	xevent.ButtonPressFun(
 		func(x *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-			m.grabScreenFailed()
+			dbus.Emit(m, "KeyEvent", true, "")
 			ungrabKbdAndMouse(xu)
 			xevent.Quit(xu)
 		}).Connect(xu, xu.RootWin())
 
 	xevent.ButtonReleaseFun(
 		func(x *xgbutil.XUtil, e xevent.ButtonReleaseEvent) {
-			m.grabScreenFailed()
+			dbus.Emit(m, "KeyEvent", false, "")
 			ungrabKbdAndMouse(xu)
 			xevent.Quit(xu)
 		}).Connect(xu, xu.RootWin())
@@ -69,13 +61,6 @@ func (m *Manager) doGrabScreen() error {
 			}
 			logger.Debug("event key:", key)
 			accel := key.ToAccel(x)
-
-			modKeys := getAccelModKeys(accel)
-			logger.Debug("modKeys:", modKeys)
-			if len(modKeys) > 0 {
-				dbus.Emit(m, "GrabScreenModifiers", modKeys)
-			}
-
 			if accel.IsGood() {
 				logger.Debug("good accel", accel)
 				m.grabScreenPressedAccel = &accel
@@ -89,10 +74,10 @@ func (m *Manager) doGrabScreen() error {
 		func(x *xgbutil.XUtil, ev xevent.KeyReleaseEvent) {
 			logger.Debug(ev)
 			if m.grabScreenPressedAccel != nil {
-				m.grabScreenSuccess(m.grabScreenPressedAccel.String())
+				dbus.Emit(m, "KeyEvent", false, m.grabScreenPressedAccel.String())
 				m.grabScreenPressedAccel = nil
 			} else {
-				m.grabScreenFailed()
+				dbus.Emit(m, "KeyEvent", false, "")
 			}
 
 			ungrabKbdAndMouse(xu)

@@ -40,11 +40,12 @@ const (
 )
 
 type Manager struct {
-	Added               func(string, int32)
-	Deleted             func(string, int32)
-	Changed             func(string, int32)
-	GrabScreenResult    func(string)
-	GrabScreenModifiers func([]string)
+	Added   func(string, int32)
+	Deleted func(string, int32)
+	Changed func(string, int32)
+
+	// (pressed, accel)
+	KeyEvent func(bool, string)
 
 	xu *xgbutil.XUtil
 
