@@ -151,7 +151,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::positionChanged, this, &MainWindow::positionChanged);
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
-    connect(m_settings, &DockSettings::windowHideModeChanged, [this] {resetPanelEnvironment(true);});
+    connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
     connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
@@ -320,11 +320,12 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-    //    qDebug() << "expand";
+//    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
-    if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size())
+    if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size() && m_panelHideAni->state() == QPropertyAnimation::Stopped)
         return;
+    m_panelHideAni->stop();
 
     resetPanelEnvironment(true);
 
@@ -342,7 +343,6 @@ void MainWindow::expand()
     case Right:     startPos.setX(size.width());       break;
     }
 
-    m_panelHideAni->stop();
     m_panelShowAni->setStartValue(startPos);
     m_panelShowAni->setEndValue(finishPos);
     m_panelShowAni->start();
@@ -350,7 +350,7 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-    //    qDebug() << "narrow";
+//    qDebug() << "narrow";
     //    const QSize size = m_settings->windowSize();
     const QSize size = m_mainPanel->size();
 
@@ -405,10 +405,12 @@ void MainWindow::resetPanelEnvironment(const bool visible)
 
 void MainWindow::updatePanelVisible()
 {
+//    qDebug() << m_updatePanelVisible;
+
     if (!m_updatePanelVisible)
         return;
     if (m_settings->hideMode() == KeepShowing)
-        return;
+        return expand();
 
     const Dock::HideState state = m_settings->hideState();
 
