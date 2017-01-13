@@ -84,22 +84,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	}
 
 	// ignore virtual network interfaces
-	isVirtualIfc := false
-	devDriver := nmGetDeviceDriver(devPath)
-	switch devDriver {
-	case "dummy", "veth", "vboxnet", "vmnet", "vmxnet", "vmxnet2", "vmxnet3":
-		isVirtualIfc = true
-	case "unknown":
-		// sometimes we could not get vmnet dirver name, so check the
-		// udi sys path if is prefix with /sys/devices/virtual/net
-		if strings.HasPrefix(nmDev.Udi.Get(), "/sys/devices/virtual/net") ||
-			strings.HasPrefix(nmDev.Udi.Get(), "/virtual/device") ||
-			strings.HasPrefix(nmDev.Interface.Get(), "vmnet") {
-			isVirtualIfc = true
-		}
-	}
-	if isVirtualIfc {
-		err = fmt.Errorf("ignore virtual network interface which driver is %s %s", devDriver, devPath)
+	if isVirtualDeviceIfc(nmDev) {
+		err = fmt.Errorf("ignore virtual network interface which driver is %s %s", nmDev.Driver.Get(), devPath)
 		logger.Info(err)
 		return
 	}
@@ -118,7 +104,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		Path:      nmDev.Path,
 		State:     nmDev.State.Get(),
 		Interface: nmDev.Interface.Get(),
-		Driver:    devDriver,
+		Driver:    nmDev.Driver.Get(),
 	}
 	dev.Managed = nmGeneralIsDeviceManaged(devPath)
 	dev.Vendor = nmGeneralGetDeviceDesc(devPath)

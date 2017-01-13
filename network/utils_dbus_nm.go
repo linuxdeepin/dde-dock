@@ -166,13 +166,30 @@ func isSettingRequireSecret(flag uint32) bool {
 	return false
 }
 
+func isVirtualDeviceIfc(dev *nmdbus.Device) bool {
+	switch dev.Driver.Get() {
+	case "dummy", "veth", "vboxnet", "vmnet", "vmxnet", "vmxnet2", "vmxnet3":
+		return true
+	case "unknown":
+		// sometimes we could not get vmnet dirver name, so check the
+		// udi sys path if is prefix with /sys/devices/virtual/net
+		if strings.HasPrefix(dev.Udi.Get(), "/sys/devices/virtual/net") ||
+			strings.HasPrefix(dev.Udi.Get(), "/virtual/device") ||
+			strings.HasPrefix(dev.Interface.Get(), "vmnet") {
+			return true
+		}
+	}
+	return false
+}
+
 // General function wrappers for network manager
 func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	allHwAddr = make(map[string]string)
 	for _, devPath := range nmGetDevices() {
 		if dev, err := nmNewDevice(devPath); err == nil && dev.DeviceType.Get() == devType {
 			hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
-			if err == nil {
+			// filter all virtual devices
+			if err == nil && !isVirtualDeviceIfc(dev) {
 				allHwAddr[dev.Interface.Get()] = hwAddr
 			}
 			nmdbus.DestroyDevice(dev)
