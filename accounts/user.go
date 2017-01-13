@@ -141,7 +141,7 @@ func NewUser(userPath string) (*User, error) {
 
 	// CustomInfo is the newly added field in the configuration file
 	if u.customIcon == "" {
-		if !isStrInArray(u.IconFile, u.IconList) {
+		if u.IconFile != defaultUserIcon && !isStrInArray(u.IconFile, u.IconList) {
 			// u.IconFile is a custom icon, not a standard icon
 			u.customIcon = u.IconFile
 			isSave = true
@@ -300,7 +300,7 @@ func (u *User) clearData() {
 		customIconFile := dutils.DecodeURI(u.customIcon)
 		err := os.Remove(customIconFile)
 		if err != nil {
-			logger.Warningf("remove user custom icon failed:", err)
+			logger.Warning("remove user custom icon failed:", err)
 		}
 	}
 }

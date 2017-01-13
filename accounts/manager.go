@@ -40,12 +40,15 @@ type Manager struct {
 	// Signals:
 	UserAdded   func(string)
 	UserDeleted func(string)
+
+	userAddedChans map[string]chan string // key: user name
 }
 
 func NewManager() *Manager {
 	var m = &Manager{}
 
 	m.usersMap = make(map[string]*User)
+	m.userAddedChans = make(map[string]chan string)
 
 	m.setPropGuestIcon(userIconGuest)
 	m.setPropAllowGuest(isGuestUserEnabled())
@@ -114,14 +117,28 @@ func (m *Manager) installUserByPath(userPath string) error {
 		return err
 	}
 
+	m.mapLocker.Lock()
+	ch := m.userAddedChans[u.UserName]
+	m.mapLocker.Unlock()
+
 	err = dbus.InstallOnSystem(u)
+	logger.Debugf("install user %q err: %v", userPath, err)
+	if ch != nil {
+		if err != nil {
+			ch <- ""
+		} else {
+			ch <- userPath
+		}
+		logger.Debug("after ch <- userPath")
+	}
+
 	if err != nil {
 		return err
 	}
 
 	m.mapLocker.Lock()
-	defer m.mapLocker.Unlock()
 	m.usersMap[userPath] = u
+	m.mapLocker.Unlock()
 
 	return nil
 }

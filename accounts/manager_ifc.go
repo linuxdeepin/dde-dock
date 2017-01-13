@@ -20,6 +20,8 @@ import (
 	"time"
 )
 
+const nilObjPath = dbus.ObjectPath("/")
+
 // Create new user.
 //
 // 如果收到 Error 信号，则创建失败。
@@ -29,29 +31,53 @@ import (
 // fullname: 全名，可以为空
 //
 // ty: 用户类型，0 为普通用户，1 为管理员
+
 func (m *Manager) CreateUser(dbusMsg dbus.DMessage,
-	name, fullname string, ty int32) error {
+	name, fullname string, ty int32) (dbus.ObjectPath, error) {
 
 	logger.Debug("[CreateUser] new user:", name, fullname, ty)
 	pid := dbusMsg.GetSenderPID()
 	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[CreateUser] access denied:", err)
-		return err
+		return nilObjPath, err
 	}
+
+	ch := make(chan string)
+	m.mapLocker.Lock()
+	m.userAddedChans[name] = ch
+	m.mapLocker.Unlock()
+	defer func() {
+		m.mapLocker.Lock()
+		delete(m.userAddedChans, name)
+		m.mapLocker.Unlock()
+		close(ch)
+	}()
 
 	if err := users.CreateUser(name, fullname, "", ty); err != nil {
 		logger.Warningf("DoAction: create user '%s' failed: %v\n",
 			name, err)
-		return err
+		return nilObjPath, err
 	}
 
 	if err := users.SetUserType(ty, name); err != nil {
 		logger.Warningf("DoAction: set user type '%s' failed: %v\n",
 			name, err)
-		return err
+		return nilObjPath, err
 	}
 
-	return nil
+	// create user success
+	select {
+	case userPath := <-ch:
+		logger.Debug("receive user path", userPath)
+		if userPath == "" {
+			return nilObjPath, errors.New("failed to install user on session bus")
+		}
+		return dbus.ObjectPath(userPath), nil
+	case <-time.After(time.Second * 60):
+		err := errors.New("wait timeout exceeded")
+		logger.Warning(err)
+		return nilObjPath, err
+	}
 }
 
 // Delete a exist user.
