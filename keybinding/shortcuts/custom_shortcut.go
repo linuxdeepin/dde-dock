@@ -10,6 +10,8 @@
 package shortcuts
 
 import (
+	"os"
+	"path/filepath"
 	"pkg.deepin.io/lib/keyfile"
 	dutils "pkg.deepin.io/lib/utils"
 )
@@ -111,6 +113,7 @@ func (csm *CustomShortcutManager) List() []Shortcut {
 }
 
 func (csm *CustomShortcutManager) Save() error {
+	os.MkdirAll(filepath.Dir(csm.file), 0755)
 	return csm.kfile.SaveToFile(csm.file)
 }
 
