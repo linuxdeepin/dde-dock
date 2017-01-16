@@ -7,9 +7,13 @@
 
 #include <ddialog.h>
 
+#include <com_deepin_daemon_soundeffect.h>
+
 DWIDGET_USE_NAMESPACE
 
 const QString TrashDir = QDir::homePath() + "/.local/share/Trash";
+
+using SoundEffectInter = com::deepin::daemon::SoundEffect;
 
 PopupControlWidget::PopupControlWidget(QWidget *parent)
     : QWidget(parent),
@@ -81,6 +85,10 @@ void PopupControlWidget::clearTrashFloder()
         return;
 
     QProcess::startDetached("gvfs-trash", QStringList() << "-f" << "--empty");
+
+    // play sound effects
+    SoundEffectInter sei("com.deepin.daemon.SoundEffect", "/com/deepin/daemon/SoundEffect", QDBusConnection::sessionBus());
+    sei.PlaySystemSound("trash-empty");
 
 //    for (auto item : QDir(TrashDir).entryInfoList())
 //    {
