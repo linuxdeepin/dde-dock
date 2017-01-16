@@ -27,7 +27,7 @@ func initVirtualSections() {
 		relatedSections: []string{"802-3-ethernet"},
 		Name:            Tr("Ethernet"),
 		Keys: []*GeneralKeyInfo{
-			&GeneralKeyInfo{Section: "802-3-ethernet", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineEditComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-3-ethernet", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-3-ethernet", Key: "cloned-mac-address", Name: Tr("Cloned MAC Addr"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-3-ethernet", Key: "vk-enable-mtu", Name: Tr("Customize MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-3-ethernet", Key: "mtu", Name: Tr("MTU"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 10000},
@@ -113,7 +113,7 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mode", Name: Tr("Mode"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "band", Name: Tr("Band"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "channel", Name: Tr("Channel"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineEditComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mac-address", Name: Tr("Device MAC Addr"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "cloned-mac-address", Name: Tr("Cloned MAC Addr"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "vk-enable-mtu", Name: Tr("Customize MTU"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-11-wireless", Key: "mtu", Name: Tr("MTU"), WidgetType: "EditLineSpinner", AlwaysUpdate: false, UseValueRange: true, MinValue: 0, MaxValue: 10000},

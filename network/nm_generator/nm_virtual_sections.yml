@@ -41,7 +41,7 @@
   - KeyValue: mac-address
     Section: 802-3-ethernet
     DisplayName: Device MAC Addr
-    WidgetType: EditLineEditComboBox
+    WidgetType: EditLineComboBox
   - KeyValue: cloned-mac-address
     Section: 802-3-ethernet
     DisplayName: Cloned MAC Addr
@@ -379,7 +379,7 @@
   - KeyValue: mac-address
     Section: 802-11-wireless
     DisplayName: Device MAC Addr
-    WidgetType: EditLineEditComboBox
+    WidgetType: EditLineComboBox
   - KeyValue: cloned-mac-address
     Section: 802-11-wireless
     DisplayName: Cloned MAC Addr
