@@ -38,7 +38,13 @@ func newCardInfo(card *pulse.Card) *CardInfo {
 
 func (info *CardInfo) update(card *pulse.Card) {
 	info.Id = card.Index
-	info.Name = card.Name
+	propAlsaCardName := card.PropList["alsa.card_name"]
+	if propAlsaCardName != "" {
+		info.Name = propAlsaCardName
+	} else {
+		info.Name = card.Name
+	}
+
 	info.ActiveProfile = newProfileInfo2(card.ActiveProfile)
 	sort.Sort(cProfileInfos2(card.Profiles))
 	info.Profiles = newProfileInfos2(card.Profiles)
