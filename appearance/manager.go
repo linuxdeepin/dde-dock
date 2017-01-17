@@ -16,6 +16,7 @@ import (
 	"fmt"
 	"gir/gio-2.0"
 	"github.com/howeyc/fsnotify"
+	"io/ioutil"
 	"os/user"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
@@ -50,11 +51,8 @@ const (
 	gsKeyFontMonospace  = "font-monospace"
 	gsKeyFontSize       = "font-size"
 	gsKeyBackgroundURIs = "background-uris"
-)
 
-const (
-	defaultStandardFont  = "Noto Sans"
-	defaultMonospaceFont = "Noto Mono"
+	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
 )
 
 type Manager struct {
@@ -76,6 +74,8 @@ type Manager struct {
 	setting        *gio.Settings
 	wrapBgSetting  *gio.Settings
 	gnomeBgSetting *gio.Settings
+
+	defaultFontConfig DefaultFontConfig
 
 	watcher    *fsnotify.Watcher
 	endWatcher chan struct{}
@@ -137,6 +137,13 @@ func NewManager() *Manager {
 		logger.Warning("new wm failed:", err)
 	}
 
+	err = m.loadDefaultFontConfig(defaultFontConfigFile)
+	if err != nil {
+		logger.Warning("load default font config failed:", err)
+	} else {
+		logger.Debugf("load default font config ok %#v", m.defaultFontConfig)
+	}
+
 	m.init()
 
 	return m
@@ -177,6 +184,27 @@ func (m *Manager) destroy() {
 	m.endCursorChangedHandler()
 }
 
+// resetFonts reset StandardFont and MonospaceFont
+func (m *Manager) resetFonts() {
+	defaultStandardFont, defaultMonospaceFont := m.getDefaultFonts()
+	logger.Debugf("getDefaultFonts standard: %q, mono: %q",
+		defaultStandardFont, defaultMonospaceFont)
+	if defaultStandardFont != m.StandardFont.Get() {
+		m.StandardFont.Set(defaultStandardFont)
+	}
+
+	if defaultMonospaceFont != m.MonospaceFont.Get() {
+		m.MonospaceFont.Set(defaultMonospaceFont)
+	}
+
+	err := fonts.SetFamily(defaultStandardFont, defaultMonospaceFont,
+		m.FontSize.Get())
+	if err != nil {
+		logger.Debug("resetFonts fonts.SetFamily failed", err)
+		return
+	}
+}
+
 func (m *Manager) init() {
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
@@ -191,21 +219,17 @@ func (m *Manager) init() {
 	m.doSetGtkTheme(m.GtkTheme.Get())
 	m.doSetIconTheme(m.IconTheme.Get())
 	m.doSetCursorTheme(m.CursorTheme.Get())
-	m.correctFontName()
 
-	if dutils.IsFileExist(fonts.DeepinFontConfig) {
-		return
-	}
-
-	err := fonts.SetFamily(m.StandardFont.Get(), m.MonospaceFont.Get(),
-		m.FontSize.Get())
-	if err != nil {
-		logger.Debug("[init]----------- font failed:", err)
-		return
+	if !dutils.IsFileExist(fonts.DeepinFontConfig) {
+		m.resetFonts()
+	} else {
+		m.correctFontName()
 	}
 }
 
 func (m *Manager) correctFontName() {
+	defaultStandardFont, defaultMonospaceFont := m.getDefaultFonts()
+
 	var changed bool = false
 	families := fonts.ListAllFamily()
 	stand := families.Get(m.StandardFont.Get())
@@ -328,4 +352,27 @@ func (*Manager) doShow(ifc interface{}) (string, error) {
 	}
 	content, err := json.Marshal(ifc)
 	return string(content), err
+}
+
+func (m *Manager) loadDefaultFontConfig(filename string) error {
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+
+	var defaultFontConfig DefaultFontConfig
+	if err := json.Unmarshal(contents, &defaultFontConfig); err != nil {
+		return err
+	}
+
+	m.defaultFontConfig = defaultFontConfig
+	return nil
+}
+
+func (m *Manager) getDefaultFonts() (standard string, monospace string) {
+	cfg := m.defaultFontConfig
+	if cfg == nil {
+		return "", ""
+	}
+	return cfg.Get()
 }

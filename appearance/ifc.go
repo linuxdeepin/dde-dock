@@ -26,8 +26,6 @@ func (m *Manager) Reset() {
 		gsKeyGtkTheme,
 		gsKeyIconTheme,
 		gsKeyCursorTheme,
-		gsKeyFontStandard,
-		gsKeyFontMonospace,
 		gsKeyFontSize,
 	}
 	for _, key := range settingKeys {
@@ -37,6 +35,8 @@ func (m *Manager) Reset() {
 			m.setting.Reset(key)
 		}
 	}
+
+	m.resetFonts()
 }
 
 // List list all available for the special type
