@@ -68,7 +68,7 @@ type Manager struct {
 	shortcuts *shortcuts.Shortcuts
 	// shortcut action handlers
 	handlers               []shortcuts.KeyEventFunc
-	lastKeyEventTime       int64
+	lastKeyEventTime       time.Time
 	grabScreenPressedAccel *shortcuts.ParsedAccel
 }
 
@@ -205,10 +205,11 @@ func (m *Manager) destroy() {
 }
 
 func (m *Manager) handleKeyEvent(ev *shortcuts.KeyEvent) {
-	now := time.Now().UnixNano()
-	// 1ms = 1000000ns
-	if now-m.lastKeyEventTime < 200*1000000 {
-		// ignore this key event
+	now := time.Now()
+	duration := now.Sub(m.lastKeyEventTime)
+	logger.Debug("duration:", duration)
+	if 0 < duration && duration < 200*time.Millisecond {
+		logger.Debug("handleKeyEvent ignore key event")
 		return
 	}
 	m.lastKeyEventTime = now
