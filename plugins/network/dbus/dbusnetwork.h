@@ -262,7 +262,7 @@ Q_SIGNALS: // SIGNALS
     void AccessPointPropertiesChanged(const QString &in0, const QString &in1);
     void AccessPointRemoved(const QString &in0, const QString &in1);
     void DeviceEnabled(const QString &in0, bool in1);
-    void NeedSecrets(const QString &in0, const QString &in1, const QString &in2, bool in3);
+    void NeedSecrets(const QString &in0);
     void NeedSecretsFinished(const QString &in0, const QString &in1);
 // begin property changed signals
 void ActiveConnectionsChanged();

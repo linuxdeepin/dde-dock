@@ -355,8 +355,15 @@ void WirelessList::deactiveAP()
     m_networkInter->DisconnectDevice(QDBusObjectPath(m_device.path()));
 }
 
-void WirelessList::needSecrets(const QString &connPath, const QString &security, const QString &ssid, const bool defaultAutoConnect)
+void WirelessList::needSecrets(const QString &info)
 {
+    const QJsonObject infoObject = QJsonDocument::fromJson(info.toUtf8()).object();
+
+    const QString connPath = infoObject.value("ConnectionPath").toString();
+    const QString security = infoObject.value("KeyType").toString();
+    const QString ssid = infoObject.value("ConnectionId").toString();
+    const bool defaultAutoConnect = infoObject.value("AutoConnect").toBool();
+
     // check is our device' ap
     QString connHwAddr;
     QJsonDocument conns = QJsonDocument::fromJson(m_networkInter->connections().toUtf8());

@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setFixedSize(m_settings->windowSize());
 
     updatePanelVisible();
-    //    setStyleSheet("background-color:red;");
     connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
 }
 
