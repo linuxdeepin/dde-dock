@@ -79,7 +79,7 @@ func getWMIdNameMap() map[string]string {
 		"maximize":                     gettext.Tr("Maximize window"),
 		"unmaximize":                   gettext.Tr("Restore window"),
 		"toggle-shaded":                "Switch furl state",
-		"minimize":                     "Minimize window",
+		"minimize":                     gettext.Tr("Minimize window"),
 		"close":                        gettext.Tr("Close window"),
 		"begin-move":                   gettext.Tr("Move window"),
 		"begin-resize":                 gettext.Tr("Resize window"),
