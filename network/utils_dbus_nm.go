@@ -929,6 +929,7 @@ func nmUpdateConnectionData(cpath dbus.ObjectPath, data connectionData) (err err
 	}
 	defer nmdbus.DestroySettingsConnection(nmConn)
 
+	correctIPv6DataType(data)
 	err = nmConn.Update(data)
 	if err != nil {
 		logger.Error(err)

@@ -335,6 +335,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		}
 		defer nmDestroySettingsConnection(nmConn)
 
+		correctIPv6DataType(s.data)
 		err = nmConn.Update(s.data)
 		if err != nil {
 			logger.Error(err)
@@ -591,4 +592,24 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 
 	info += "]"
 	return info
+}
+
+func correctIPv6DataType(data connectionData) {
+	for section, value := range data {
+		if section != "ipv6" {
+			continue
+		}
+
+		tmp, ok := value["addresses"]
+		if ok && !isInterfaceEmpty(tmp.Value()) {
+			addrs := interfaceToIpv6Addresses(tmp.Value())
+			value["addresses"] = dbus.MakeVariant(addrs)
+		}
+
+		tmp, ok = value["routes"]
+		if ok && !isInterfaceEmpty(tmp.Value()) {
+			routes := interfaceToIpv6Routes(tmp.Value())
+			value["routes"] = dbus.MakeVariant(routes)
+		}
+	}
 }
