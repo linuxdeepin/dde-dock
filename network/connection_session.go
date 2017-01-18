@@ -15,6 +15,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/utils"
+	"sync"
 	"time"
 )
 
@@ -29,6 +30,7 @@ type ConnectionSession struct {
 	sessionPath      dbus.ObjectPath
 	devPath          dbus.ObjectPath
 	data             connectionData
+	dataLocker       sync.RWMutex
 	connectionExists bool
 
 	ConnectionPath dbus.ObjectPath
@@ -312,6 +314,8 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 // if possible.
 func (s *ConnectionSession) Save() (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
+	s.dataLocker.Lock()
+	defer s.dataLocker.Unlock()
 
 	if s.isErrorOccured() {
 		logger.Info("Save Errors:", s.Errors)
@@ -377,6 +381,8 @@ func (s *ConnectionSession) isErrorOccured() bool {
 
 // Close cancel current connection.
 func (s *ConnectionSession) Close() {
+	s.dataLocker.Lock()
+	defer s.dataLocker.Unlock()
 	// clean up vpn config if abort the new connection
 	if !s.connectionExists {
 		if isVpnConnection(s.data) {
@@ -389,6 +395,8 @@ func (s *ConnectionSession) Close() {
 
 // GetAllKeys return all may used section key information in current session.
 func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
+	s.dataLocker.Lock()
+	defer s.dataLocker.Unlock()
 	allVsectionInfo := make([]VsectionInfo, 0)
 	vsections := getAllVsections(s.data)
 	for _, vsection := range vsections {
@@ -408,6 +416,8 @@ func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
 
 // GetAvailableValues return available values marshaled by JSON for target key.
 func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON string) {
+	s.dataLocker.RLock()
+	defer s.dataLocker.RUnlock()
 	var values []kvalue
 	values = generalGetSettingAvailableValues(s.data, section, key)
 	valuesJSON, _ = marshalJSON(values)
@@ -416,12 +426,16 @@ func (s *ConnectionSession) GetAvailableValues(section, key string) (valuesJSON 
 
 // GetKey get target key value which marshaled by JSON.
 func (s *ConnectionSession) GetKey(section, key string) (valueJSON string) {
+	s.dataLocker.RLock()
+	defer s.dataLocker.RUnlock()
 	valueJSON = generalGetSettingKeyJSON(s.data, section, key)
 	return
 }
 
 // GetKeyName return the display name for special key.
 func (s *ConnectionSession) GetKeyName(section, key string) (name string, err error) {
+	s.dataLocker.RLock()
+	defer s.dataLocker.RUnlock()
 	name, err = getRelatedKeyName(s.data, section, key)
 	return
 }
@@ -429,6 +443,8 @@ func (s *ConnectionSession) GetKeyName(section, key string) (name string, err er
 // SetKey set target key with new value, the value should be marshaled by JSON.
 func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	logger.Debugf("SetKey(), section=%s, key=%s, valueJSON=%s", section, key, valueJSON)
+	s.dataLocker.Lock()
+	defer s.dataLocker.Unlock()
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
 	s.updateErrorsWhenSettingKey(section, key, err)
 	s.setProps()
