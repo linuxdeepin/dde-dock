@@ -242,10 +242,11 @@ func (m *Manager) ListUserApps(ty string) string {
 }
 
 func (m *Manager) AddUserApp(mimes []string, desktopId string) error {
+	logger.Debugf("Manager.AddUserApp mimes %v desktop id: %q", mimes, desktopId)
 	// check app validity
 	_, err := newAppInfoById(desktopId)
 	if err != nil {
-		logger.Error("Invalid desktop id:", desktopId)
+		logger.Warningf("Invalid desktop id %q", desktopId)
 		return err
 	}
 	if !m.userManager.Add(mimes, desktopId) {
@@ -255,9 +256,10 @@ func (m *Manager) AddUserApp(mimes []string, desktopId string) error {
 }
 
 func (m *Manager) DeleteUserApp(desktopId string) error {
+	logger.Debugf("Manager.DeleteUserApp %q", desktopId)
 	err := m.userManager.Delete(desktopId)
 	if err != nil {
-		logger.Errorf("Delete '%s' failed: %v", desktopId, err)
+		logger.Warningf("Delete %q failed: %v", desktopId, err)
 		return err
 	}
 	return m.userManager.Write()

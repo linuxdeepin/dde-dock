@@ -98,6 +98,7 @@ func (m *userAppManager) Write() error {
 	srcInfos, _ := readUserAppFile(m.filename)
 	content := m.appInfos.String()
 	if content == srcInfos.String() {
+		logger.Debug("userAppManager.Write no need to write file")
 		return nil
 	}
 
@@ -105,6 +106,7 @@ func (m *userAppManager) Write() error {
 	if err != nil {
 		return err
 	}
+	logger.Debug("userAppManager.Write write file")
 	return ioutil.WriteFile(m.filename, []byte(content), 0644)
 }
 
