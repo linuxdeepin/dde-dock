@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Deepin Technology Co., Ltd.
+ * Copyright (C) 2017 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -12,10 +12,11 @@ package main
 import (
 	"fmt"
 	"os"
-	"pkg.deepin.io/dde/daemon/backlight"
+	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
-	"sync"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -25,94 +26,14 @@ const (
 	dbusIFC  = "com.deepin.daemon.helper.Backlight"
 )
 
+const (
+	DisplayBacklight byte = iota + 1
+	KeyboardBacklight
+)
+
 var logger = log.NewLogger("backlight_helper")
 
-type Manager struct {
-	lcdInfos  backlight.SyspathInfos
-	kbdInfos  backlight.SyspathInfos
-	lcdLocker sync.Mutex
-	kbdLocker sync.Mutex
-}
-
-// ListSysPath return all the backlight device syspath
-func (m *Manager) ListSysPath() []string {
-	var list []string
-	for _, info := range m.lcdInfos {
-		list = append(list, info.Path)
-	}
-	return list
-}
-
-// GetSysPathByType return the special type's syspath
-// The type range: raw, platform, firmware
-func (m *Manager) GetSysPathByType(ty string) (string, error) {
-	for _, info := range m.lcdInfos {
-		if info.Type == ty {
-			return info.Path, nil
-		}
-	}
-	return "", fmt.Errorf("Invalid backlight type: %s", ty)
-}
-
-// GetBrightness return the special syspath's brightness
-func (m *Manager) GetBrightness(sysPath string) (int32, error) {
-	m.lcdLocker.Lock()
-	defer m.lcdLocker.Unlock()
-
-	info, err := m.lcdInfos.Get(sysPath)
-	if err != nil {
-		return 0, err
-	}
-	return info.GetBrightness()
-}
-
-func (m *Manager) GetKbdBrightness() (int32, error) {
-	m.kbdLocker.Lock()
-	defer m.kbdLocker.Unlock()
-
-	if len(m.kbdInfos) == 0 {
-		return 0, fmt.Errorf("Unsupported keyboard backlight")
-	}
-	return m.kbdInfos[0].GetBrightness()
-}
-
-// GetBrightness return the special syspath's max brightness
-func (m *Manager) GetMaxBrightness(sysPath string) (int32, error) {
-	info, err := m.lcdInfos.Get(sysPath)
-	if err != nil {
-		return 0, err
-	}
-	return info.MaxBrightness, nil
-}
-
-func (m *Manager) GetKbdMaxBrightness() (int32, error) {
-	if len(m.kbdInfos) == 0 {
-		return 0, fmt.Errorf("Unsupported keyboard backlight")
-	}
-	return m.kbdInfos[0].MaxBrightness, nil
-}
-
-// SetBrightness set the special syspath's brightness
-func (m *Manager) SetBrightness(sysPath string, value int32) error {
-	m.lcdLocker.Lock()
-	defer m.lcdLocker.Unlock()
-
-	info, err := m.lcdInfos.Get(sysPath)
-	if err != nil {
-		return err
-	}
-	return info.SetBrightness(value)
-}
-
-func (m *Manager) SetKbdBrightness(value int32) error {
-	m.kbdLocker.Lock()
-	defer m.kbdLocker.Unlock()
-
-	if len(m.kbdInfos) == 0 {
-		return fmt.Errorf("Unsupported keyboard backlight")
-	}
-	return m.kbdInfos[0].SetBrightness(value)
-}
+type Manager struct{}
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
@@ -122,18 +43,55 @@ func (m *Manager) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-func main() {
-	m := &Manager{
-		lcdInfos: backlight.ListLCDBacklight(),
-		kbdInfos: backlight.ListKbdBacklight(),
+func (m *Manager) SetBrightness(type_ byte, name string, value int32) error {
+	filename, err := getBrightnessFilename(type_, name)
+	if err != nil {
+		return err
 	}
 
+	fh, err := os.OpenFile(filename, os.O_WRONLY, 0666)
+	if err != nil {
+		return err
+	}
+	defer fh.Close()
+
+	_, err = fh.WriteString(strconv.Itoa(int(value)))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func getBrightnessFilename(type_ byte, name string) (string, error) {
+	// check type_
+	var subsystem string
+	switch type_ {
+	case DisplayBacklight:
+		subsystem = "backlight"
+	case KeyboardBacklight:
+		subsystem = "leds"
+	default:
+		return "", fmt.Errorf("invalid type %d", type_)
+	}
+
+	// check name
+	if strings.ContainsRune(name, '/') || name == "" ||
+		name == "." || name == ".." {
+		return "", fmt.Errorf("invalid name %q", name)
+	}
+
+	return filepath.Join("/sys/class", subsystem, name, "brightness"), nil
+}
+
+func main() {
+	m := &Manager{}
 	err := dbus.InstallOnSystem(m)
 	if err != nil {
 		logger.Error("Install session bus failed:", err)
 		return
 	}
-	dbus.SetAutoDestroyHandler(time.Second*3, nil)
+	dbus.SetAutoDestroyHandler(time.Second*10, nil)
 	dbus.DealWithUnhandledMessage()
 	err = dbus.Wait()
 	if err != nil {
