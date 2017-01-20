@@ -368,13 +368,9 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 		}()
 	} else {
 		// for none vpn connections, ask password for front-end
-		settingName := keyId.settingName
-		if isWirelessConnection(connectionData) {
-			settingName = string(getSettingWirelessSsid(connectionData))
-		}
 		secretsInfo := secretsInfo{
 			ConnectionPath: keyId.connPath,
-			SettingName:    settingName,
+			SettingName:    keyId.settingName,
 			ConnectionId:   connectionId,
 			AutoConnect:    autoConnect,
 			KeyType:        getSettingPassKeyType(connectionData, keyId.settingName),
