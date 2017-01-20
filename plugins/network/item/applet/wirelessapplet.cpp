@@ -360,7 +360,7 @@ void WirelessList::needSecrets(const QString &info)
     const QJsonObject infoObject = QJsonDocument::fromJson(info.toUtf8()).object();
 
     const QString connPath = infoObject.value("ConnectionPath").toString();
-    const QString security = infoObject.value("KeyType").toString();
+    const QString security = infoObject.value("SettingName").toString();
     const QString ssid = infoObject.value("ConnectionId").toString();
     const bool defaultAutoConnect = infoObject.value("AutoConnect").toBool();
 
