@@ -340,7 +340,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// ipv4
-	if ip4Path := nmDev.Ip4Config.Get(); isNmObjectPathValid(ip4Path) {
+	if ip4Path := nmAConn.Ip4Config.Get(); isNmObjectPathValid(ip4Path) {
 		ip4Address, ip4Mask, ip4Gateways, ip4Dnses = nmGetIp4ConfigInfo(ip4Path)
 	}
 	ip4Info = ip4ConnectionInfo{
@@ -351,7 +351,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// ipv6
-	if ip6Path := nmDev.Ip6Config.Get(); isNmObjectPathValid(ip6Path) {
+	if ip6Path := nmAConn.Ip6Config.Get(); isNmObjectPathValid(ip6Path) {
 		ip6Address, ip6Prefix, ip6Gateways, ip6Dnses = nmGetIp6ConfigInfo(ip6Path)
 	}
 	ip6Info = ip6ConnectionInfo{
