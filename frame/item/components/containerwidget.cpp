@@ -11,13 +11,13 @@
 ContainerWidget::ContainerWidget(QWidget *parent)
     : QWidget(parent),
 
-      m_centeralLayout(new QHBoxLayout)
+      m_centralLayout(new QHBoxLayout)
 {
-    m_centeralLayout->addStretch();
-    m_centeralLayout->setSpacing(0);
-    m_centeralLayout->setMargin(0);
+    m_centralLayout->addStretch();
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setMargin(0);
 
-    setLayout(m_centeralLayout);
+    setLayout(m_centralLayout);
     setFixedHeight(ITEM_HEIGHT);
     setFixedWidth(ITEM_WIDTH);
     setAcceptDrops(true);
@@ -27,7 +27,7 @@ void ContainerWidget::addWidget(QWidget * const w)
 {
     w->setParent(this);
     w->setFixedSize(ITEM_WIDTH, ITEM_HEIGHT);
-    m_centeralLayout->addWidget(w);
+    m_centralLayout->addWidget(w);
     m_itemList.append(w);
 
     setFixedWidth(ITEM_WIDTH * std::max(1, m_itemList.size()));
@@ -35,7 +35,7 @@ void ContainerWidget::addWidget(QWidget * const w)
 
 void ContainerWidget::removeWidget(QWidget * const w)
 {
-    m_centeralLayout->removeWidget(w);
+    m_centralLayout->removeWidget(w);
     m_itemList.removeOne(w);
 
     setFixedWidth(ITEM_WIDTH * std::max(1, m_itemList.size()));

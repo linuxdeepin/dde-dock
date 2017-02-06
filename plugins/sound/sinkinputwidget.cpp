@@ -19,18 +19,18 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setValue(m_inputInter->volume() * 1000);
 
-    QHBoxLayout *centeralLayout = new QHBoxLayout;
-    centeralLayout->addWidget(m_volumeIcon);
-    centeralLayout->addSpacing(10);
-    centeralLayout->addWidget(m_volumeSlider);
-    centeralLayout->setSpacing(2);
-    centeralLayout->setMargin(0);
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_volumeIcon);
+    centralLayout->addSpacing(10);
+    centralLayout->addWidget(m_volumeSlider);
+    centralLayout->setSpacing(2);
+    centralLayout->setMargin(0);
 
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SinkInputWidget::setVolume);
     connect(m_volumeIcon, &DImageButton::clicked, this, &SinkInputWidget::setMute);
     connect(m_inputInter, &DBusSinkInput::MuteChanged, this, &SinkInputWidget::setMuteIcon);
 
-    setLayout(centeralLayout);
+    setLayout(centralLayout);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     setFixedHeight(30);
 

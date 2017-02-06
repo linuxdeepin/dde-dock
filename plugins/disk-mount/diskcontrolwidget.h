@@ -24,8 +24,8 @@ private slots:
     void unmountFinished(const QString &uuid, const QString &info);
 
 private:
-    QVBoxLayout *m_centeralLayout;
-    QWidget *m_centeralWidget;
+    QVBoxLayout *m_centralLayout;
+    QWidget *m_centralWidget;
     DBusDiskMount *m_diskInter;
 
     DiskInfoList m_diskInfoList;

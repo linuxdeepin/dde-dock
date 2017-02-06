@@ -17,19 +17,19 @@ QPoint PluginsItem::MousePressPoint = QPoint();
 PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString &itemKey, QWidget *parent)
     : DockItem(parent),
       m_pluginInter(pluginInter),
-      m_centeralWidget(m_pluginInter->itemWidget(itemKey)),
+      m_centralWidget(m_pluginInter->itemWidget(itemKey)),
       m_itemKey(itemKey),
       m_draging(false)
 {
-    Q_ASSERT(m_centeralWidget);
+    Q_ASSERT(m_centralWidget);
 
     QBoxLayout *hLayout = new QHBoxLayout;
-    hLayout->addWidget(m_centeralWidget);
+    hLayout->addWidget(m_centralWidget);
     hLayout->setSpacing(0);
     hLayout->setMargin(0);
 
-    m_centeralWidget->installEventFilter(this);
-    m_centeralWidget->setVisible(true);
+    m_centralWidget->installEventFilter(this);
+    m_centralWidget->setVisible(true);
 
     setLayout(hLayout);
     setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
@@ -131,7 +131,7 @@ void PluginsItem::paintEvent(QPaintEvent *e)
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)
 {
     if (m_draging)
-        if (o == m_centeralWidget && e->type() == QEvent::Paint)
+        if (o == m_centralWidget && e->type() == QEvent::Paint)
             return true;
 
     return DockItem::eventFilter(o, e);

@@ -22,7 +22,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *e);
 
 private:
-    QHBoxLayout *m_centeralLayout;
+    QHBoxLayout *m_centralLayout;
 
     QList<QWidget *> m_itemList;
 };

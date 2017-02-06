@@ -58,13 +58,13 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
     progressLayout->setSpacing(0);
     progressLayout->setContentsMargins(10, 0, 0, 5);
 
-    QHBoxLayout *centeralLayout = new QHBoxLayout;
-    centeralLayout->addWidget(m_diskIcon);
-    centeralLayout->addLayout(progressLayout);
-    centeralLayout->setSpacing(0);
-    centeralLayout->setContentsMargins(0, 0, 5, 0);
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_diskIcon);
+    centralLayout->addLayout(progressLayout);
+    centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 0, 5, 0);
 
-    setLayout(centeralLayout);
+    setLayout(centralLayout);
     setObjectName("DiskItem");
     setStyleSheet("QFrame #DiskItem:hover {"
                   "background-color:rgba(255, 255, 255, .1);"

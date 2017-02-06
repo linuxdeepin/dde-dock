@@ -44,7 +44,7 @@ private:
 
 private:
     PluginsItemInterface * const m_pluginInter;
-    QWidget *m_centeralWidget;
+    QWidget *m_centralWidget;
     const QString m_itemKey;
     bool m_draging;
 

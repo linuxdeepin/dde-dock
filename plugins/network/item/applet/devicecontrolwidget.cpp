@@ -25,15 +25,15 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 //    m_seperator->setFixedHeight(1);
 //    m_seperator->setColor(Qt::black);
 
-    QVBoxLayout *centeralLayout = new QVBoxLayout;
-    centeralLayout->addStretch();
-    centeralLayout->addLayout(infoLayout);
-    centeralLayout->addStretch();
-//    centeralLayout->addWidget(m_seperator);
-    centeralLayout->setMargin(0);
-    centeralLayout->setSpacing(0);
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addStretch();
+    centralLayout->addLayout(infoLayout);
+    centralLayout->addStretch();
+//    centralLayout->addWidget(m_seperator);
+    centralLayout->setMargin(0);
+    centralLayout->setSpacing(0);
 
-    setLayout(centeralLayout);
+    setLayout(centralLayout);
     setFixedHeight(30);
 
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);

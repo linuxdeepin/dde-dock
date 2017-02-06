@@ -34,11 +34,11 @@ private slots:
     void toggleMute();
 
 private:
-    QWidget *m_centeralWidget;
+    QWidget *m_centralWidget;
     QWidget *m_applicationTitle;
     Dtk::Widget::DImageButton *m_volumeBtn;
     VolumeSlider *m_volumeSlider;
-    QVBoxLayout *m_centeralLayout;
+    QVBoxLayout *m_centralLayout;
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;

@@ -54,13 +54,13 @@ AccessPointWidget::AccessPointWidget(const AccessPoint &ap)
     infoLayout->setSpacing(0);
     infoLayout->setContentsMargins(15, 0, 0, 0);
 
-    QVBoxLayout *centeralLayout = new QVBoxLayout;
-    centeralLayout->addLayout(infoLayout);
-    centeralLayout->setSpacing(0);
-    centeralLayout->setMargin(0);
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(infoLayout);
+    centralLayout->setSpacing(0);
+    centralLayout->setMargin(0);
 
     setStrengthIcon(ap.strength());
-    setLayout(centeralLayout);
+    setLayout(centralLayout);
     setStyleSheet("AccessPointWidget #Ssid {"
                   "color:white;"
                   "background-color:transparent;"

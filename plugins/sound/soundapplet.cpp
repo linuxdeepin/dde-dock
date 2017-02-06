@@ -14,7 +14,7 @@ DWIDGET_USE_NAMESPACE
 SoundApplet::SoundApplet(QWidget *parent)
     : QScrollArea(parent),
 
-      m_centeralWidget(new QWidget),
+      m_centralWidget(new QWidget),
       m_applicationTitle(new QWidget),
       m_volumeBtn(new DImageButton),
       m_volumeSlider(new VolumeSlider),
@@ -69,18 +69,18 @@ SoundApplet::SoundApplet(QWidget *parent)
     m_volumeSlider->setMinimum(0);
     m_volumeSlider->setMaximum(1000);
 
-    m_centeralLayout = new QVBoxLayout;
-    m_centeralLayout->addLayout(deviceLineLayout);
-    m_centeralLayout->addSpacing(8);
-    m_centeralLayout->addLayout(volumeCtrlLayout);
-    m_centeralLayout->addWidget(m_applicationTitle);
+    m_centralLayout = new QVBoxLayout;
+    m_centralLayout->addLayout(deviceLineLayout);
+    m_centralLayout->addSpacing(8);
+    m_centralLayout->addLayout(volumeCtrlLayout);
+    m_centralLayout->addWidget(m_applicationTitle);
 
-    m_centeralWidget->setLayout(m_centeralLayout);
-    m_centeralWidget->setFixedWidth(WIDTH);
-    m_centeralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    m_centralWidget->setLayout(m_centralLayout);
+    m_centralWidget->setFixedWidth(WIDTH);
+    m_centralWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     setFixedWidth(WIDTH);
-    setWidget(m_centeralWidget);
+    setWidget(m_centralWidget);
     setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -148,8 +148,8 @@ void SoundApplet::volumeSliderValueChanged()
 
 void SoundApplet::sinkInputsChanged()
 {
-    m_centeralWidget->setVisible(false);
-    QVBoxLayout *appLayout = m_centeralLayout;
+    m_centralWidget->setVisible(false);
+    QVBoxLayout *appLayout = m_centralLayout;
     while (QLayoutItem *item = appLayout->takeAt(4))
     {
         delete item->widget();
@@ -164,9 +164,9 @@ void SoundApplet::sinkInputsChanged()
         appLayout->addWidget(si);
     }
 
-    const int contentHeight = m_centeralWidget->sizeHint().height();
-    m_centeralWidget->setFixedHeight(contentHeight);
-    m_centeralWidget->setVisible(true);
+    const int contentHeight = m_centralWidget->sizeHint().height();
+    m_centralWidget->setFixedHeight(contentHeight);
+    m_centralWidget->setVisible(true);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 

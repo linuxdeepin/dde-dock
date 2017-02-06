@@ -16,16 +16,16 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();
 
-    m_centeralWidget = new DatetimeWidget;
+    m_centralWidget = new DatetimeWidget;
 
-    connect(m_centeralWidget, &DatetimeWidget::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
+    connect(m_centralWidget, &DatetimeWidget::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }
 
 DatetimePlugin::~DatetimePlugin()
 {
-    delete m_centeralWidget;
+    delete m_centralWidget;
     delete m_dateTipsLabel;
 }
 
@@ -51,7 +51,7 @@ QWidget *DatetimePlugin::itemWidget(const QString &itemKey)
 {
     Q_UNUSED(itemKey);
 
-    return m_centeralWidget;
+    return m_centralWidget;
 }
 
 QWidget *DatetimePlugin::itemTipsWidget(const QString &itemKey)
@@ -110,5 +110,5 @@ void DatetimePlugin::updateCurrentTimeString()
         return;
 
     m_currentTimeString = currentString;
-    m_centeralWidget->update();
+    m_centralWidget->update();
 }

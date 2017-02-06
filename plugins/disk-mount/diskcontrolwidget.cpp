@@ -6,15 +6,15 @@
 DiskControlWidget::DiskControlWidget(QWidget *parent)
     : QScrollArea(parent),
 
-      m_centeralLayout(new QVBoxLayout),
-      m_centeralWidget(new QWidget),
+      m_centralLayout(new QVBoxLayout),
+      m_centralWidget(new QWidget),
 
       m_diskInter(new DBusDiskMount(this))
 {
-    m_centeralWidget->setLayout(m_centeralLayout);
-    m_centeralWidget->setFixedWidth(WIDTH);
+    m_centralWidget->setLayout(m_centralLayout);
+    m_centralWidget->setFixedWidth(WIDTH);
 
-    setWidget(m_centeralWidget);
+    setWidget(m_centralWidget);
     setFixedWidth(WIDTH);
     setFrameStyle(QFrame::NoFrame);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -37,7 +37,7 @@ void DiskControlWidget::diskListChanged()
 {
     DiskInfoList diskList = m_diskInter->diskList();
 
-    while (QLayoutItem *item = m_centeralLayout->takeAt(0))
+    while (QLayoutItem *item = m_centralLayout->takeAt(0))
     {
         delete item->widget();
         delete item;
@@ -55,7 +55,7 @@ void DiskControlWidget::diskListChanged()
 
         connect(item, &DiskControlItem::requestUnmount, this, &DiskControlWidget::unmountDisk);
 
-        m_centeralLayout->addWidget(item);
+        m_centralLayout->addWidget(item);
         m_diskInfoList.append(info);
     }
 
@@ -64,7 +64,7 @@ void DiskControlWidget::diskListChanged()
     const int contentHeight = mountedCount * 70;
     const int maxHeight = std::min(contentHeight, 70 * 6);
 
-    m_centeralWidget->setFixedHeight(contentHeight);
+    m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(maxHeight);
 }
 

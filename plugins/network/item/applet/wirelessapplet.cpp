@@ -25,8 +25,8 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
       m_pwdDialog(new DInputDialog(nullptr)),
       m_autoConnBox(new DCheckBox),
 
-      m_centeralLayout(new QVBoxLayout),
-      m_centeralWidget(new QWidget),
+      m_centralLayout(new QVBoxLayout),
+      m_centralWidget(new QWidget),
       m_controlPanel(new DeviceControlWidget),
       m_networkInter(new DBusNetwork(this))
 {
@@ -45,14 +45,14 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     m_updateAPTimer->setSingleShot(true);
     m_updateAPTimer->setInterval(100);
 
-    m_centeralWidget->setFixedWidth(WIDTH);
-    m_centeralWidget->setLayout(m_centeralLayout);
+    m_centralWidget->setFixedWidth(WIDTH);
+    m_centralWidget->setLayout(m_centralLayout);
 
-//    m_centeralLayout->addWidget(m_controlPanel);
-    m_centeralLayout->setSpacing(0);
-    m_centeralLayout->setMargin(0);
+//    m_centralLayout->addWidget(m_controlPanel);
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setMargin(0);
 
-    setWidget(m_centeralWidget);
+    setWidget(m_centralWidget);
     setFrameStyle(QFrame::NoFrame);
     setFixedWidth(300);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -204,7 +204,7 @@ void WirelessList::updateAPList()
     Q_ASSERT(sender() == m_updateAPTimer);
 
     // remove old items
-    while (QLayoutItem *item = m_centeralLayout->takeAt(0))
+    while (QLayoutItem *item = m_centralLayout->takeAt(0))
     {
         delete item->widget();
         delete item;
@@ -229,9 +229,9 @@ void WirelessList::updateAPList()
             connect(apw, &AccessPointWidget::requestDeactiveAP, this, &WirelessList::deactiveAP);
 
             if(apw->active()) {
-                m_centeralLayout->insertWidget(0, apw);
+                m_centralLayout->insertWidget(0, apw);
             } else {
-                m_centeralLayout->addWidget(apw);
+                m_centralLayout->addWidget(apw);
             }
 
             ++avaliableAPCount;
@@ -240,7 +240,7 @@ void WirelessList::updateAPList()
 //    m_controlPanel->setSeperatorVisible(avaliableAPCount);
 
     const int contentHeight = avaliableAPCount * ITEM_HEIGHT;
-    m_centeralWidget->setFixedHeight(contentHeight);
+    m_centralWidget->setFixedHeight(contentHeight);
     setFixedHeight(std::min(contentHeight, MAX_HEIGHT));
 }
 

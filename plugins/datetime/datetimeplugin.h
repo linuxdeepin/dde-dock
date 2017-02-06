@@ -34,7 +34,7 @@ private slots:
     void updateCurrentTimeString();
 
 private:
-    DatetimeWidget *m_centeralWidget;
+    DatetimeWidget *m_centralWidget;
     QLabel *m_dateTipsLabel;
 
     QTimer *m_refershTimer;

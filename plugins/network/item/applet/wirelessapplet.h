@@ -63,8 +63,8 @@ private:
     QString m_lastConnPath;
     QString m_lastConnSecurity;
 
-    QVBoxLayout *m_centeralLayout;
-    QWidget *m_centeralWidget;
+    QVBoxLayout *m_centralLayout;
+    QWidget *m_centralWidget;
     DeviceControlWidget *m_controlPanel;
     DBusNetwork *m_networkInter;
 };
