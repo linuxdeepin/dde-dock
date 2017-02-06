@@ -151,7 +151,7 @@ void MainWindow::initConnections()
     connect(m_settings, &DockSettings::windowGeometryChanged, this, &MainWindow::updateGeometry, Qt::DirectConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, this, &MainWindow::setStrutPartial, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::windowHideModeChanged, [this] { resetPanelEnvironment(true); });
-    connect(m_settings, &DockSettings::windowVisibleChanegd, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
+    connect(m_settings, &DockSettings::windowVisibleChanged, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);
     connect(m_settings, &DockSettings::autoHideChanged, this, &MainWindow::updatePanelVisible);
 
     connect(m_mainPanel, &MainPanel::requestRefershWindowVisible, this, &MainWindow::updatePanelVisible, Qt::QueuedConnection);

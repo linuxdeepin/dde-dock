@@ -97,7 +97,7 @@ DockSettings::DockSettings(QWidget *parent)
     connect(m_dockInter, &DBusDock::IconSizeChanged, this, &DockSettings::iconSizeChanged);
     connect(m_dockInter, &DBusDock::DisplayModeChanged, this, &DockSettings::displayModeChanged);
     connect(m_dockInter, &DBusDock::HideModeChanged, this, &DockSettings::hideModeChanged, Qt::QueuedConnection);
-    connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanegd);
+    connect(m_dockInter, &DBusDock::HideStateChanged, this, &DockSettings::hideStateChanged);
     connect(m_dockInter, &DBusDock::ServiceRestarted, this, &DockSettings::resetFrontendGeometry);
 
     connect(m_itemController, &DockItemController::itemInserted, this, &DockSettings::dockItemCountChanged, Qt::QueuedConnection);
@@ -321,7 +321,7 @@ void DockSettings::hideModeChanged()
     emit windowHideModeChanged();
 }
 
-void DockSettings::hideStateChanegd()
+void DockSettings::hideStateChanged()
 {
     const Dock::HideState state = Dock::HideState(m_dockInter->hideState());
 
@@ -330,7 +330,7 @@ void DockSettings::hideStateChanegd()
 
     m_hideState = state;
 
-    emit windowVisibleChanegd();
+    emit windowVisibleChanged();
 }
 
 void DockSettings::dockItemCountChanged()

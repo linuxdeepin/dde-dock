@@ -69,7 +69,7 @@ signals:
     void dataChanged() const;
     void positionChanged(const Position prevPosition) const;
     void autoHideChanged(const bool autoHide) const;
-    void windowVisibleChanegd() const;
+    void windowVisibleChanged() const;
     void windowHideModeChanged() const;
     void windowGeometryChanged() const;
 
@@ -83,7 +83,7 @@ private slots:
     void iconSizeChanged();
     void displayModeChanged();
     void hideModeChanged();
-    void hideStateChanegd();
+    void hideStateChanged();
     void dockItemCountChanged();
     void primaryScreenChanged();
     void resetFrontendGeometry();

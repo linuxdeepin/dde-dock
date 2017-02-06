@@ -62,7 +62,7 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     connect(m_networkInter, &DBusNetwork::AccessPointAdded, this, &WirelessList::APAdded);
     connect(m_networkInter, &DBusNetwork::AccessPointRemoved, this, &WirelessList::APRemoved);
     connect(m_networkInter, &DBusNetwork::AccessPointPropertiesChanged, this, &WirelessList::APPropertiesChanged);
-    connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessList::deviceStateChanegd);
+    connect(m_networkInter, &DBusNetwork::DevicesChanged, this, &WirelessList::deviceStateChanged);
     connect(m_networkInter, &DBusNetwork::NeedSecrets, this, &WirelessList::needSecrets);
     connect(m_networkInter, &DBusNetwork::DeviceEnabled, this, &WirelessList::deviceEnabled);
 
@@ -104,7 +104,7 @@ void WirelessList::init()
 {
     loadAPList();
     onActiveAPChanged();
-    deviceStateChanegd();
+    deviceStateChanged();
 }
 
 void WirelessList::APAdded(const QString &devPath, const QString &info)
@@ -250,7 +250,7 @@ void WirelessList::deviceEnableChanged(const bool enable)
     m_updateAPTimer->start();
 }
 
-void WirelessList::deviceStateChanegd()
+void WirelessList::deviceStateChanged()
 {
     const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->devices().toUtf8());
     Q_ASSERT(doc.isObject());

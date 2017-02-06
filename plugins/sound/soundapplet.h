@@ -23,7 +23,7 @@ public:
     VolumeSlider *mainSlider();
 
 signals:
-    void volumeChanegd(const int value) const;
+    void volumeChanged(const int value) const;
     void defaultSinkChanged(DBusSink *sink) const;
 
 private slots:

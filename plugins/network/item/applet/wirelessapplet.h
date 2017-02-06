@@ -41,7 +41,7 @@ private slots:
     void APPropertiesChanged(const QString &devPath, const QString &info);
     void updateAPList();
     void deviceEnableChanged(const bool enable);
-    void deviceStateChanegd();
+    void deviceStateChanged();
     void onActiveAPChanged();
     void pwdDialogAccepted();
     void pwdDialogCanceled();

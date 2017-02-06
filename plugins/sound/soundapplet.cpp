@@ -125,7 +125,7 @@ void SoundApplet::onVolumeChanged()
     const bool mute = m_defSinkInter->mute();
 
     m_volumeSlider->setValue(std::min(1000.0, volmue * 1000));
-    emit volumeChanegd(m_volumeSlider->value());
+    emit volumeChanged(m_volumeSlider->value());
 
     QString volumeString;
     if (mute)
