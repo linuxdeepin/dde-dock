@@ -91,6 +91,16 @@ func checkSettingIPTunnelValues(data connectionData) (err sectionErrors) {
 	return
 }
 
+func getSettingMacsecAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingMacsecAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingMacsecValues(data connectionData) (err sectionErrors) {
+	return
+}
+
 func getSettingMacvlanAvailableKeys(data connectionData) (keys []string) {
 	return
 }
@@ -108,6 +118,16 @@ func getSettingOlpcMeshAvailableValues(data connectionData, key string) (values 
 	return
 }
 func checkSettingOlpcMeshValues(data connectionData) (err sectionErrors) {
+	return
+}
+
+func getSettingProxyAvailableKeys(data connectionData) (keys []string) {
+	return
+}
+func getSettingProxyAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingProxyValues(data connectionData) (err sectionErrors) {
 	return
 }
 
