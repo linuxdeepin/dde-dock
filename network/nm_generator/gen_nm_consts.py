@@ -201,6 +201,6 @@ for const in girxml.findall('./gi:namespace/gi:constant', ns_map):
     cvalue = const.attrib['value']
     if cname not in constants and const.find('./gi:type[@c:type="gchar*"]', ns_map) is not None:
         constants[cname]=cvalue
-        outfile.write("    - Name: %s\n      Value: %s\n" % (cname, cvalue))
+        outfile.write("    - Name: %s\n      Value: \"%s\"\n" % (cname, cvalue))
 
 outfile.close()
