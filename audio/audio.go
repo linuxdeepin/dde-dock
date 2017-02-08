@@ -61,10 +61,12 @@ func NewAudio(core *pulse.Context) *Audio {
 	a.MaxUIVolume = pulse.VolumeUIMax
 	a.siEventChan = make(chan func(), 10)
 	a.siPollerExit = make(chan struct{})
-	a.applyConfig()
 	a.update()
-	a.initEventHandlers()
-	go a.sinkInputPoller()
+	go func() {
+		a.applyConfig()
+		a.initEventHandlers()
+		a.sinkInputPoller()
+	}()
 	return a
 }
 

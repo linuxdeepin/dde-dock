@@ -34,39 +34,63 @@ func (a *Audio) applyConfig() {
 
 		if card.ActiveProfile.Name != v {
 			card.SetProfile(v)
-			time.Sleep(time.Microsecond * 500)
+			time.Sleep(time.Microsecond * 300)
 		}
 	}
 
-	a.core.SetDefaultSink(info.Sink)
-	a.core.SetDefaultSource(info.Source)
-
+	var sinkValidity = true
 	for _, s := range a.core.GetSinkList() {
 		if s.Name == info.Sink {
-			if len(info.SinkPort) != 0 {
-				port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
-				if port != nil && port.Available != pulse.AvailableTypeNo &&
-					s.ActivePort.Name != info.SinkPort {
-					s.SetPort(info.SinkPort)
-				}
+			if len(info.SinkPort) == 0 {
+				sinkValidity = false
+				break
+			}
+			port := pulse.PortInfos(s.Ports).Get(info.SinkPort)
+			// if port invalid, nothing to do.
+			// TODO: some device port can play sound when state is 'NO', how to fix?
+			if port == nil || port.Available == pulse.AvailableTypeNo {
+				sinkValidity = false
+				break
+			}
+
+			if s.ActivePort.Name != info.SinkPort {
+				s.SetPort(info.SinkPort)
+				time.Sleep(time.Microsecond * 50)
 			}
 			s.SetVolume(s.Volume.SetAvg(info.SinkVolume))
+			time.Sleep(time.Microsecond * 50)
 			break
 		}
 	}
+	if sinkValidity {
+		a.core.SetDefaultSink(info.Sink)
+		time.Sleep(time.Microsecond * 50)
+	}
 
+	var sourceValidity = true
 	for _, s := range a.core.GetSourceList() {
 		if s.Name == info.Source {
-			if len(info.SourcePort) != 0 {
-				port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
-				if port != nil && port.Available != pulse.AvailableTypeNo &&
-					s.ActivePort.Name != info.SourcePort {
-					s.SetPort(info.SourcePort)
-				}
+			if len(info.SourcePort) == 0 {
+				sourceValidity = false
+				continue
+			}
+			port := pulse.PortInfos(s.Ports).Get(info.SourcePort)
+			if port == nil || port.Available == pulse.AvailableTypeNo {
+				sourceValidity = false
+				continue
+			}
+			if s.ActivePort.Name != info.SourcePort {
+				s.SetPort(info.SourcePort)
+				time.Sleep(time.Microsecond * 50)
 			}
 			s.SetVolume(s.Volume.SetAvg(info.SourceVolume))
+			time.Sleep(time.Microsecond * 50)
 			break
 		}
+	}
+	if sourceValidity {
+		a.core.SetDefaultSource(info.Source)
+		time.Sleep(time.Microsecond * 50)
 	}
 }
 
