@@ -9,13 +9,24 @@
 
 package screenedge
 
+import (
+	"dbus/com/deepin/wm"
+)
+
 // Enable desktop edge zone detected
 //
 // 是否启用桌面边缘热区功能
 func (m *Manager) EnableZoneDetected(enable bool) {
-	m.unregisterEdgeAreas()
-	if enable {
-		m.registerEdgeAreas()
+	obj, err := wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	if err != nil {
+		logger.Warning("[EnableZoneDetected] Failed to connect wm dbus:", err)
+		return
+	}
+
+	err = obj.EnableZoneDetected(enable)
+	wm.DestroyWm(obj)
+	if err != nil {
+		logger.Warning("[EnableZoneDetected] failed to toggle zone:", err)
 	}
 }
 
