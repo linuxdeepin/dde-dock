@@ -11,16 +11,21 @@ package keybinding
 
 import (
 	"dbus/com/deepin/daemon/helper/backlight"
+	"errors"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	commonbl "pkg.deepin.io/lib/backlight/common"
+	kbdbl "pkg.deepin.io/lib/backlight/keyboard"
 )
 
+const backlightTypeKeyboard = 2
+
 type KbdLightController struct {
-	blDaemon *backlight.Backlight
+	backlightHelper *backlight.Backlight
 }
 
-func NewKbdLightController(blDaemon *backlight.Backlight) *KbdLightController {
+func NewKbdLightController(backlightHelper *backlight.Backlight) *KbdLightController {
 	return &KbdLightController{
-		blDaemon: blDaemon,
+		backlightHelper: backlightHelper,
 	}
 }
 
@@ -41,46 +46,58 @@ func (c *KbdLightController) ExecCmd(cmd ActionCmd) error {
 	}
 }
 
+func getKbdBlController() (*commonbl.Controller, error) {
+	controllers, err := kbdbl.List()
+	if err != nil {
+		return nil, err
+	}
+	if len(controllers) > 0 {
+		return controllers[0], nil
+	}
+	return nil, errors.New("not found keyboard backlight controller")
+}
+
 // Let the keyboard light brightness switch between 0 to max
 func (c *KbdLightController) toggle() error {
-	if c.blDaemon == nil {
-		return ErrIsNil{"KbdLightController.blDaemon"}
+	if c.backlightHelper == nil {
+		return ErrIsNil{"KbdLightController.backlightHelper"}
 	}
 
-	value, err := c.blDaemon.GetKbdBrightness()
+	controller, err := getKbdBlController()
+	if err != nil {
+		return err
+	}
+	value, err := controller.GetBrightness()
 	if err != nil {
 		return err
 	}
 
-	maxValue, err := c.blDaemon.GetKbdMaxBrightness()
-	if err != nil {
-		return err
-	}
 	if value == 0 {
-		value = maxValue
+		value = controller.MaxBrightness
 	} else {
 		value = 0
 	}
-	logger.Debug("[changeKbdBrightness] will set kbd backlight to:", value)
-	return c.blDaemon.SetKbdBrightness(value)
+	logger.Debug("[KbdLightController.toggle] will set kbd backlight to:", value)
+	return c.backlightHelper.SetBrightness(backlightTypeKeyboard, controller.Name, int32(value))
 }
 
-var kbdBacklightStep int32 = 0
+var kbdBacklightStep int = 0
 
 func (c *KbdLightController) changeBrightness(raised bool) error {
-	if c.blDaemon == nil {
-		return ErrIsNil{"KbdLightController.blDaemon"}
+	if c.backlightHelper == nil {
+		return ErrIsNil{"KbdLightController.backlightHelper"}
 	}
 
-	value, err := c.blDaemon.GetKbdBrightness()
+	controller, err := getKbdBlController()
+	if err != nil {
+		return err
+	}
+	value, err := controller.GetBrightness()
 	if err != nil {
 		return err
 	}
 
-	maxValue, err := c.blDaemon.GetKbdMaxBrightness()
-	if err != nil {
-		return err
-	}
+	maxValue := controller.MaxBrightness
 
 	// step: (max < 10?1:max/10)
 	if kbdBacklightStep == 0 {
@@ -95,7 +112,7 @@ func (c *KbdLightController) changeBrightness(raised bool) error {
 			kbdBacklightStep = tmp + 1
 		}
 	}
-	logger.Debug("[changeKbdBrightness] pld kbd backlight info:", value, maxValue, kbdBacklightStep)
+	logger.Debug("[KbdLightController.changeBrightness] kbd backlight info:", value, maxValue, kbdBacklightStep)
 	if raised {
 		value += kbdBacklightStep
 	} else {
@@ -108,6 +125,6 @@ func (c *KbdLightController) changeBrightness(raised bool) error {
 		value = maxValue
 	}
 
-	logger.Debug("[changeKbdBrightness] will set kbd backlight to:", value)
-	return c.blDaemon.SetKbdBrightness(value)
+	logger.Debug("[KbdLightController.changeBrightness] will set kbd backlight to:", value)
+	return c.backlightHelper.SetBrightness(backlightTypeKeyboard, controller.Name, int32(value))
 }

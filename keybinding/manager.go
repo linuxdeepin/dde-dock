@@ -57,7 +57,7 @@ type Manager struct {
 
 	customShortcutManager *shortcuts.CustomShortcutManager
 
-	blDaemon *backlight.Backlight
+	backlightHelper *backlight.Backlight
 	// controllers
 	audioController       *AudioController
 	mediaPlayerController *MediaPlayerController
@@ -121,18 +121,18 @@ func NewManager() (*Manager, error) {
 		logger.Warning("NewMediaPlayerController failed:", err)
 	}
 
-	m.blDaemon, err = backlight.NewBacklight("com.deepin.daemon.helper.Backlight",
+	m.backlightHelper, err = backlight.NewBacklight("com.deepin.daemon.helper.Backlight",
 		"/com/deepin/daemon/helper/Backlight")
 	if err != nil {
 		logger.Warning("NewBacklight failed:", err)
 	}
 
-	m.displayController, err = NewDisplayController(m.blDaemon)
+	m.displayController, err = NewDisplayController(m.backlightHelper)
 	if err != nil {
 		logger.Warning("NewDisplayController failed:", err)
 	}
 
-	m.kbdLightController = NewKbdLightController(m.blDaemon)
+	m.kbdLightController = NewKbdLightController(m.backlightHelper)
 
 	m.touchpadController, err = NewTouchpadController()
 	if err != nil {

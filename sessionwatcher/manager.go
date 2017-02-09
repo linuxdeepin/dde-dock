@@ -172,8 +172,8 @@ func (m *Manager) handleSessionChanged() {
 		suspendPulseSinks(0)
 		suspendPulseSources(0)
 
-		logger.Debug("[handleSessionChanged] Reset Brightness")
-		m.display.ResetChanges()
+		logger.Debug("[handleSessionChanged] Refresh Brightness")
+		m.display.RefreshBrightness()
 	} else {
 		logger.Debug("[handleSessionChanged] Suspend pulse")
 		suspendPulseSinks(1)
