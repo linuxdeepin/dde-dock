@@ -72,6 +72,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemRemoved, this, &MainPanel::itemRemoved, Qt::DirectConnection);
     connect(m_itemController, &DockItemController::itemMoved, this, &MainPanel::itemMoved);
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
+    connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
 
     m_itemAdjustTimer->setSingleShot(true);

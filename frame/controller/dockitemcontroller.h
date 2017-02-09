@@ -30,6 +30,7 @@ signals:
     void itemRemoved(DockItem *item) const;
     void itemMoved(DockItem *item, const int index) const;
     void itemManaged(DockItem *item) const;
+    void itemUpdated(DockItem *item) const;
 
 public slots:
     void refershItemsIcon();

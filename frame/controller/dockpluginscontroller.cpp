@@ -39,6 +39,8 @@ void DockPluginsController::itemUpdate(PluginsItemInterface * const itemInter, c
     Q_ASSERT(item);
 
     item->update();
+
+    emit pluginItemUpdated(item);
 }
 
 void DockPluginsController::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
