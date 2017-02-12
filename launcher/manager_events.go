@@ -39,10 +39,10 @@ func (m *Manager) handleFsWatcherEvents() {
 	watcher := m.fsWatcher
 	for {
 		select {
-		case ev := <-watcher.Events:
+		case ev := <-watcher.Event:
 			logger.Debugf("fsWatcher event: %v", ev)
 			m.delayHandleFileEvent(ev.Name)
-		case err := <-watcher.Errors:
+		case err := <-watcher.Error:
 			logger.Warning("fsWatcher error", err)
 		}
 	}

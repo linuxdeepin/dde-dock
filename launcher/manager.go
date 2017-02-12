@@ -21,7 +21,7 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	libNotifications "dbus/org/freedesktop/notifications"
-	"github.com/fsnotify/fsnotify"
+	"github.com/howeyc/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gettext"
 )

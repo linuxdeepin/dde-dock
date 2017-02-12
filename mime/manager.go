@@ -10,7 +10,7 @@
 package mime
 
 import (
-	"github.com/fsnotify/fsnotify"
+	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
@@ -55,7 +55,7 @@ func NewManager() *Manager {
 		dirs := getDirsNeedWatched()
 		for _, dir := range dirs {
 			logger.Debugf("watch dir %q", dir)
-			if err := m.fsWatcher.Add(dir); err != nil {
+			if err := m.fsWatcher.Watch(dir); err != nil {
 				logger.Warning(err)
 			}
 		}
@@ -96,14 +96,14 @@ func (m *Manager) handleFileEvents() {
 	defer watcher.Close()
 	for {
 		select {
-		case event := <-watcher.Events:
+		case event := <-watcher.Event:
 			logger.Debug("event:", event)
 			base := filepath.Base(event.Name)
 			if base == "mimeinfo.cache" || base == "mimeapps.list" {
 				m.deferEmitChange()
 			}
 
-		case err := <-watcher.Errors:
+		case err := <-watcher.Error:
 			logger.Warning("error:", err)
 
 		case <-m.done:

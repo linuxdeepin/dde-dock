@@ -10,7 +10,7 @@
 package apps
 
 import (
-	"github.com/fsnotify/fsnotify"
+	"github.com/howeyc/fsnotify"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
@@ -53,25 +53,24 @@ func (w *DFWatcher) GetDBusInfo() dbus.DBusInfo {
 func (w *DFWatcher) listenEvents() {
 	for {
 		select {
-		case ev := <-w.fsWatcher.Events:
+		case ev := <-w.fsWatcher.Event:
 			w.sem <- 1
-			go func(event fsnotify.Event) {
+			go func(event *fsnotify.FileEvent) {
 				logger.Debug("event", event)
 				w.handleEvent(event)
 				<-w.sem
 			}(ev)
-		case err := <-w.fsWatcher.Errors:
+		case err := <-w.fsWatcher.Error:
 			logger.Warning("error", err)
 		}
 	}
 }
 
-func (w *DFWatcher) handleEvent(event fsnotify.Event) {
+func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
 	ev := NewFileEvent(event)
 	file := ev.Name
-	if ((ev.Op&fsnotify.Create != 0) || (ev.Op&fsnotify.Rename != 0)) && ev.IsDir {
-		// ev.Op is create or rename
-		// file exist and is Dir
+	if (ev.IsCreate() || ev.IsRename()) && ev.IsDir {
+		// it exist and is dir
 		w.addRecursive(file, true)
 		return
 	}
@@ -79,18 +78,19 @@ func (w *DFWatcher) handleEvent(event fsnotify.Event) {
 }
 
 func (w *DFWatcher) notifyEvent(ev *FileEvent) {
-	dbus.Emit(w, "Event", ev.Name, uint32(ev.Op))
+	logger.Debugf("dbus emit Event %q", ev.Name)
+	dbus.Emit(w, "Event", ev.Name, uint32(0))
 	w.eventChan <- ev
 }
 
 func (w *DFWatcher) add(path string) error {
 	logger.Debug("DFWatcher.add", path)
-	return w.fsWatcher.Add(path)
+	return w.fsWatcher.Watch(path)
 }
 
 func (w *DFWatcher) remove(path string) error {
 	logger.Debug("DFWatcher.remove", path)
-	return w.fsWatcher.Remove(path)
+	return w.fsWatcher.RemoveWatch(path)
 }
 
 func (w *DFWatcher) addRecursive(path string, loadExisted bool) {
@@ -108,7 +108,7 @@ func (w *DFWatcher) addRecursive(path string, loadExisted bool) {
 			}
 		} else if loadExisted {
 			if isDesktopFile(path) {
-				w.notifyEvent(NewFileCreatedEvent(path))
+				w.notifyEvent(NewFileFoundEvent(path))
 			}
 		}
 		return nil

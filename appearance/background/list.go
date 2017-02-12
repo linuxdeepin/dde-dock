@@ -10,10 +10,10 @@
 package background
 
 import (
-	"golang.org/x/sys/unix"
 	"os"
 	"path/filepath"
 	dutils "pkg.deepin.io/lib/utils"
+	"syscall"
 )
 
 var (
@@ -49,13 +49,15 @@ func getBgFiles() []string {
 	return walls
 }
 
+const W_OK = 0x2
+
 func isDeletable(file string) bool {
 	dir := filepath.Dir(file)
 	if strvContains(systemWallpaperDir, dir) {
 		// directory is system wallpapers directory
 		return false
 	}
-	if err := unix.Access(dir, unix.W_OK); err != nil {
+	if err := syscall.Access(dir, W_OK); err != nil {
 		// directory is not writable
 		return false
 	}

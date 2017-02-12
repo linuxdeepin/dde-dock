@@ -188,7 +188,7 @@ func (d *SubRecorder) checkStatus(launchedMap map[string]bool, apps []string) bo
 		if _, ok := launchedMap[app]; !ok {
 			// app added
 			changed = true
-			logger.Debug("SubRecorder.checkStatus added", app)
+			logger.Debugf("SubRecorder.checkStatus added %q", app)
 			launchedMap[app] = false
 		}
 	}
@@ -196,7 +196,7 @@ func (d *SubRecorder) checkStatus(launchedMap map[string]bool, apps []string) bo
 		if _, ok := appsMap[app]; !ok {
 			// app removed
 			changed = true
-			logger.Debug("SubRecorder.checkStatus removed", app)
+			logger.Debugf("SubRecorder.checkStatus removed %q", app)
 			delete(launchedMap, app)
 		}
 	}
@@ -229,9 +229,7 @@ func loadStatusFromFile(dataFile string) (map[string]bool, error) {
 		if record[1] == "t" {
 			launched = true
 		}
-		if app != "" {
-			launchedMap[app] = launched
-		}
+		launchedMap[app] = launched
 	}
 	return launchedMap, nil
 }

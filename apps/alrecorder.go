@@ -11,7 +11,6 @@ package apps
 
 import (
 	"dbus/org/freedesktop/login1"
-	"github.com/fsnotify/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
@@ -111,20 +110,18 @@ func (r *ALRecorder) listenEvents() {
 	for {
 		ev := <-r.eventChan
 		logger.Debugf("ALRecorder ev: %#v", ev)
-
-		op := ev.Op
 		name := ev.Name
 
 		if isDesktopFile(name) {
-			if (op&fsnotify.Create != 0) || (op&fsnotify.Write != 0) {
+			if ev.IsFound || ev.IsCreate() || ev.IsModify() {
 				// added
 				r.handleAdded(name)
 			} else if ev.NotExist {
 				// removed
 				r.handleRemoved(name)
 			}
-		} else if ev.NotExist && (op&fsnotify.Rename != 0) {
-			// may be dir
+		} else if ev.NotExist && ev.IsRename() {
+			// may be dir removed
 			r.handleDirRemoved(name)
 		}
 	}

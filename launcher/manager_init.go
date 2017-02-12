@@ -14,7 +14,7 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	libNotifications "dbus/org/freedesktop/notifications"
-	"github.com/fsnotify/fsnotify"
+	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
@@ -77,7 +77,7 @@ func (m *Manager) init() error {
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = m.fsWatcher.Add(desktopPkgMapFile)
+	err = m.fsWatcher.Watch(desktopPkgMapFile)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -86,7 +86,7 @@ func (m *Manager) init() error {
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = m.fsWatcher.Add(applicationsFile)
+	err = m.fsWatcher.Watch(applicationsFile)
 	if err != nil {
 		logger.Warning(err)
 	}

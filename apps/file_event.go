@@ -10,26 +10,28 @@
 package apps
 
 import (
-	"github.com/fsnotify/fsnotify"
+	"github.com/howeyc/fsnotify"
 	"os"
 )
 
 type FileEvent struct {
-	fsnotify.Event
+	*fsnotify.FileEvent
 	NotExist bool
 	IsDir    bool
+	IsFound  bool
 }
 
-func NewFileCreatedEvent(name string) *FileEvent {
+func NewFileFoundEvent(name string) *FileEvent {
+	ev := &fsnotify.FileEvent{
+		Name: name,
+	}
 	return &FileEvent{
-		Event: fsnotify.Event{
-			Name: name,
-			Op:   fsnotify.Create,
-		},
+		FileEvent: ev,
+		IsFound:   true,
 	}
 }
 
-func NewFileEvent(ev fsnotify.Event) *FileEvent {
+func NewFileEvent(ev *fsnotify.FileEvent) *FileEvent {
 	var notExist bool
 	var isDir bool
 	if stat, err := os.Stat(ev.Name); os.IsNotExist(err) {
@@ -38,8 +40,8 @@ func NewFileEvent(ev fsnotify.Event) *FileEvent {
 		isDir = stat.IsDir()
 	}
 	return &FileEvent{
-		Event:    ev,
-		NotExist: notExist,
-		IsDir:    isDir,
+		FileEvent: ev,
+		NotExist:  notExist,
+		IsDir:     isDir,
 	}
 }
