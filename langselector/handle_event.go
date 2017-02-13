@@ -10,10 +10,13 @@
 package langselector
 
 import (
+	"os"
 	"os/user"
+	"path/filepath"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 func (lang *LangSelector) onLocaleSuccess() {
@@ -55,6 +58,11 @@ func (lang *LangSelector) handleLocaleChanged(ok bool, reason string) error {
 	err := writeUserLocale(lang.CurrentLocale)
 	if err != nil {
 		return err
+	}
+
+	fontCfgFile := filepath.Join(basedir.GetUserConfigDir(), "fontconfig/conf.d/99-deepin.conf")
+	if err := os.Remove(fontCfgFile); err != nil {
+		lang.logger.Warningf("remove font config file %q failed: %v", fontCfgFile, err)
 	}
 
 	err = installI18nDependent(lang.CurrentLocale)
