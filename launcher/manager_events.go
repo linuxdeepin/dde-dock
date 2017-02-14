@@ -100,7 +100,8 @@ func (m *Manager) checkDesktopFile(file string) {
 		}
 	} else {
 		// appInfo is not nil
-		shouldShow := appInfo.ShouldShow()
+		shouldShow := appInfo.ShouldShow() &&
+			!isDeepinCustomDesktopFile(appInfo.GetFileName())
 		newItem := NewItemWithDesktopAppInfo(appInfo)
 
 		// add or update item

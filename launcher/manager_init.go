@@ -105,7 +105,8 @@ func (m *Manager) init() error {
 	skipDirs[userAppsDir] = []string{"menu-xdg"}
 	allApps := desktopappinfo.GetAll(skipDirs)
 	for _, ai := range allApps {
-		if !ai.IsExecutableOk() {
+		if !ai.IsExecutableOk() ||
+			isDeepinCustomDesktopFile(ai.GetFileName()) {
 			continue
 		}
 		item := NewItemWithDesktopAppInfo(ai)
