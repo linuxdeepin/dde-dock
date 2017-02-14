@@ -40,10 +40,16 @@ func (m *Manager) initHandlers() {
 	}
 
 	m.handlers[ActionTypeShowNumLockOSD] = func(ev *KeyEvent) {
+		save := m.keyboardSetting.GetBoolean(gsKeySaveNumLockState)
 		if ev.Mods&xproto.ModMask2 > 0 {
-			// arrow
+			if save {
+				m.NumLockState.Set(int32(NumLockOff))
+			}
 			showOSD("NumLockOff")
 		} else {
+			if save {
+				m.NumLockState.Set(int32(NumLockOn))
+			}
 			showOSD("NumLockOn")
 		}
 

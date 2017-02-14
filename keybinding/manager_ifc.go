@@ -252,3 +252,8 @@ func (m *Manager) GrabScreen() error {
 	logger.Debug("Manager.GrabScreen")
 	return m.doGrabScreen()
 }
+
+func (m *Manager) SetNumLockState(state int32) error {
+	logger.Debug("SetNumLockState", state)
+	return setNumLockState(m.xu, NumLockState(state))
+}

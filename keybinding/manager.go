@@ -12,6 +12,7 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/helper/backlight"
 	"gir/gio-2.0"
+	"github.com/BurntSushi/xgb/xtest"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
@@ -19,6 +20,7 @@ import (
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
 	"time"
@@ -30,6 +32,10 @@ const (
 	shortcutSignalAdded   = "Added"
 	shortcutSignalDeleted = "Deleted"
 
+	keyboardScheam        = "com.deepin.dde.keyboard"
+	gsKeyNumLockState     = "numlock-state"
+	gsKeySaveNumLockState = "save-numlock-state"
+
 	systemSchema   = "com.deepin.dde.keybinding.system"
 	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
 	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
@@ -40,6 +46,9 @@ const (
 )
 
 type Manager struct {
+	NumLockState *property.GSettingsEnumProperty
+
+	// Signals
 	Added   func(string, int32)
 	Deleted func(string, int32)
 	Changed func(string, int32)
@@ -49,6 +58,7 @@ type Manager struct {
 
 	xu *xgbutil.XUtil
 
+	keyboardSetting       *gio.Settings
 	sysSetting            *gio.Settings
 	mediaSetting          *gio.Settings
 	wmSetting             *gio.Settings
@@ -83,6 +93,30 @@ func NewManager() (*Manager, error) {
 	}
 	m.xu = xu
 	keybind.Initialize(xu)
+	err = xtest.Init(xu.Conn())
+	if err != nil {
+		return nil, err
+	}
+
+	m.keyboardSetting = gio.NewSettings(keyboardScheam)
+	// init numlock state
+	m.NumLockState = property.NewGSettingsEnumProperty(&m, "NumLockState", m.keyboardSetting, gsKeyNumLockState)
+	if m.keyboardSetting.GetBoolean(gsKeySaveNumLockState) {
+		nlState := NumLockState(m.NumLockState.Get())
+		if nlState == NumLockUnknown {
+			state, err := queryNumLockState(m.xu)
+			if err != nil {
+				logger.Warning("queryNumLockState failed:", err)
+			} else {
+				m.NumLockState.Set(int32(state))
+			}
+		} else {
+			err := setNumLockState(m.xu, nlState)
+			if err != nil {
+				logger.Warning("setNumLockState failed:", err)
+			}
+		}
+	}
 
 	m.sysSetting = gio.NewSettings(systemSchema)
 	m.mediaSetting = gio.NewSettings(mediakeySchema)
@@ -97,7 +131,6 @@ func NewManager() (*Manager, error) {
 	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
 	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
 
-	//m.media = &Mediakey{}
 	m.shortcuts = shortcuts.NewShortcuts(xu, m.handleKeyEvent)
 	m.shortcuts.AddSystem(m.sysSetting)
 	m.shortcuts.AddMedia(m.mediaSetting)
