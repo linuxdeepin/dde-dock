@@ -97,6 +97,15 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("Activate"), argumentList);
     }
 
+    inline QDBusPendingReply<> NewInstance()
+    {
+        QList<QVariant> argumentList;
+
+        argumentList << QVariant::fromValue(quint32(QX11Info::getTimestamp()));
+
+        return asyncCallWithArgumentList(QStringLiteral("NewInstance"), argumentList);
+    }
+
     inline QDBusPendingReply<> HandleMenuItem(const QString &item)
     {
         return asyncCall(QStringLiteral("HandleMenuItem"), QVariant::fromValue(quint32(QX11Info::getTimestamp())), item);

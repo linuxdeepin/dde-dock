@@ -246,22 +246,23 @@ void AppItem::paintEvent(QPaintEvent *e)
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton)
-        return;
+    if (e->button() == Qt::MiddleButton) {
+        m_itemEntry->NewInstance();
+    } else if (e->button() == Qt::LeftButton) {
+        const QPoint distance = MousePressPos - e->pos();
+        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
+            return;
 
-    const QPoint distance = MousePressPos - e->pos();
-    if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
-        return;
+        m_itemEntry->Activate();
 
-    m_itemEntry->Activate();
+        if (!m_titles.isEmpty())
+            return;
 
-    if (!m_titles.isEmpty())
-        return;
-
-    // start launching effects
-    //m_launchingEffects = 0.0;
-    //m_launchingEffectsTimer->start();
-    //update();
+        // start launching effects
+        //m_launchingEffects = 0.0;
+        //m_launchingEffectsTimer->start();
+        //update();
+    }
 }
 
 void AppItem::mousePressEvent(QMouseEvent *e)
