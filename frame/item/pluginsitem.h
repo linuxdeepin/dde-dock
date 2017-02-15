@@ -21,6 +21,7 @@ public:
     void setInContainer(const bool container);
 
     using DockItem::showContextMenu;
+    using DockItem::hidePopup;
 
     inline ItemType itemType() const {return Plugins;}
 

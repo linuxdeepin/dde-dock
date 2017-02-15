@@ -573,8 +573,13 @@ void MainPanel::itemDragStarted()
     DragingItem = qobject_cast<DockItem *>(sender());
 
     if (DragingItem->itemType() == DockItem::Plugins)
+    {
         if (static_cast<PluginsItem *>(DragingItem)->allowContainer())
+        {
+            qobject_cast<PluginsItem *>(DragingItem)->hidePopup();
             m_itemController->setDropping(true);
+        }
+    }
 
     QRect rect;
     rect.setTopLeft(mapToGlobal(pos()));
