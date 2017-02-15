@@ -53,8 +53,6 @@ int main(int argc, char *argv[])
     QDir::setCurrent(QApplication::applicationDirPath());
 #endif
 
-    ThemeAppIcon::gtkInit();
-
     MainWindow mw;
     DBusDockAdaptors adaptor(&mw);
     QDBusConnection::sessionBus().registerService("com.deepin.dde.Dock");

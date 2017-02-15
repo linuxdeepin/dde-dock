@@ -15,17 +15,6 @@
 
 #include <QStyleFactory>
 
-extern "C"
-{
-#ifdef signals
-#undef signals
-#endif
-
-#include <gtk/gtk.h>
-#undef signals
-#define signals public
-}
-
 DWIDGET_USE_NAMESPACE
 
 using namespace Dock;
@@ -90,7 +79,7 @@ private slots:
 
 private:
     void calculateWindowConfig();
-    static void gtkIconThemeChanged(GtkSettings *gs, GParamSpec *pspec, gpointer udata);
+    void gtkIconThemeChanged();
 
 private:
     int m_iconSize;
