@@ -111,3 +111,7 @@ func (entry *AppEntry) PresentWindows() {
 		entry.dockManager.wm.PresentWindows(windowIds)
 	}
 }
+
+func (entry *AppEntry) NewInstance(timestamp uint32) {
+	entry.launchApp(timestamp)
+}
