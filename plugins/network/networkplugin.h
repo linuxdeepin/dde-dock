@@ -33,6 +33,7 @@ private slots:
 
 private:
     NetworkManager *m_networkManager;
+    QTimer *m_refershTimer;
 
     QList<DeviceItem *> m_deviceItemList;
 };

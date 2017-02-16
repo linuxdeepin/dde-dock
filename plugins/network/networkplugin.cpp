@@ -8,7 +8,8 @@
 NetworkPlugin::NetworkPlugin(QObject *parent)
     : QObject(parent),
 
-      m_networkManager(NetworkManager::instance(this))
+      m_networkManager(NetworkManager::instance(this)),
+      m_refershTimer(new QTimer(this))
 {
 }
 
@@ -21,10 +22,15 @@ void NetworkPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
 
+    m_refershTimer->setInterval(100);
+    m_refershTimer->setSingleShot(true);
+
     connect(m_networkManager, &NetworkManager::networkStateChanged, this, &NetworkPlugin::networkStateChanged);
     connect(m_networkManager, &NetworkManager::deviceTypesChanged, this, &NetworkPlugin::deviceTypesChanged);
     connect(m_networkManager, &NetworkManager::deviceAdded, this, &NetworkPlugin::deviceAdded);
     connect(m_networkManager, &NetworkManager::deviceRemoved, this, &NetworkPlugin::deviceRemoved);
+    connect(m_networkManager, &NetworkManager::deviceChanged, m_refershTimer, static_cast<void (QTimer::*)(void)>(&QTimer::start));
+    connect(m_refershTimer, &QTimer::timeout, this, &NetworkPlugin::refershDeviceItemVisible);
 
     m_networkManager->init();
 }
@@ -104,7 +110,7 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
     connect(item, &DeviceItem::requestContextMenu, this, &NetworkPlugin::contextMenuRequested);
 
     m_deviceItemList.append(item);
-    refershDeviceItemVisible();
+    m_refershTimer->start();
 }
 
 void NetworkPlugin::deviceRemoved(const NetworkDevice &device)
@@ -124,14 +130,14 @@ void NetworkPlugin::networkStateChanged(const NetworkDevice::NetworkTypes &state
 {
     Q_UNUSED(states)
 
-    refershDeviceItemVisible();
+    m_refershTimer->start();
 }
 
 void NetworkPlugin::deviceTypesChanged(const NetworkDevice::NetworkTypes &types)
 {
     Q_UNUSED(types)
 
-    refershDeviceItemVisible();
+    m_refershTimer->start();
 }
 
 void NetworkPlugin::refershDeviceItemVisible()
