@@ -18,7 +18,6 @@ import (
 	"encoding/json"
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
-	"strings"
 )
 
 type dxMouses []*dxinput.Mouse
@@ -65,12 +64,6 @@ func getDeviceInfos(force bool) dxutils.DeviceInfos {
 	return devInfos
 }
 
-func isTrackPoint(info *dxutils.DeviceInfo) bool {
-	name := strings.ToLower(info.Name)
-	return strings.Contains(name, "trackpoint") ||
-		strings.Contains(name, "dualpoint stick")
-}
-
 func getMouseInfos(force bool) dxMouses {
 	if !force && len(mouseInfos) != 0 {
 		return mouseInfos
@@ -79,11 +72,8 @@ func getMouseInfos(force bool) dxMouses {
 	mouseInfos = dxMouses{}
 	for _, info := range getDeviceInfos(force) {
 		if info.Type == dxutils.DevTypeMouse {
-			mouseInfos = append(mouseInfos, &dxinput.Mouse{
-				Id:         info.Id,
-				Name:       info.Name,
-				TrackPoint: isTrackPoint(info),
-			})
+			tmp, _ := dxinput.NewMouseFromDeviceInfo(info)
+			mouseInfos = append(mouseInfos, tmp)
 		}
 	}
 
@@ -98,10 +88,8 @@ func getTPadInfos(force bool) dxTouchpads {
 	tpadInfos = dxTouchpads{}
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeTouchpad {
-			tpadInfos = append(tpadInfos, &dxinput.Touchpad{
-				Id:   info.Id,
-				Name: info.Name,
-			})
+			tmp, _ := dxinput.NewTouchpadFromDevInfo(info)
+			tpadInfos = append(tpadInfos, tmp)
 		}
 	}
 
@@ -116,11 +104,8 @@ func getWacomInfos(force bool) dxWacoms {
 	wacomInfos = dxWacoms{}
 	for _, info := range getDeviceInfos(false) {
 		if info.Type == dxutils.DevTypeWacom {
-			wacomInfo := &dxinput.Wacom{
-				Id:   info.Id,
-				Name: info.Name,
-			}
-			wacomInfos = append(wacomInfos, wacomInfo)
+			tmp, _ := dxinput.NewWacomFromDevInfo(info)
+			wacomInfos = append(wacomInfos, tmp)
 		}
 	}
 
