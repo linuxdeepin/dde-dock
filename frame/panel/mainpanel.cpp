@@ -16,10 +16,17 @@ MainPanel::MainPanel(QWidget *parent)
       m_itemLayout(new QBoxLayout(QBoxLayout::LeftToRight)),
 
       m_itemAdjustTimer(new QTimer(this)),
-      m_itemController(DockItemController::instance(this))
+      m_itemController(DockItemController::instance(this)),
+
+      m_updateEffectTimer(new QTimer(this)),
+      m_effectWidget(new DBlurEffectWidget(this))
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
+
+    m_effectWidget->setMaskColor(QColor(10, 10, 10));
+    m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    m_effectWidget->setDisabled(true);
 
     setAcceptDrops(true);
     setAccessibleName("dock-mainpanel");
@@ -74,9 +81,13 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemManaged, this, &MainPanel::manageItem);
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
+    connect(m_updateEffectTimer, &QTimer::timeout, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
+
+    m_updateEffectTimer->setSingleShot(true);
+    m_updateEffectTimer->setInterval(100);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -105,6 +116,7 @@ void MainPanel::updateDockPosition(const Position dockPosition)
     }
 
     m_itemAdjustTimer->start();
+    m_updateEffectTimer->start();
 }
 
 ///
@@ -125,6 +137,8 @@ void MainPanel::updateDockDisplayMode(const DisplayMode displayMode)
 
     // reload qss
     setStyleSheet(styleSheet());
+
+    m_updateEffectTimer->start();
 }
 
 ///
@@ -149,6 +163,8 @@ void MainPanel::moveEvent(QMoveEvent* e)
 {
     QFrame::moveEvent(e);
 
+    m_updateEffectTimer->start();
+
     emit geometryChanged();
 }
 
@@ -157,24 +173,16 @@ void MainPanel::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter p(this);
-    if (m_displayMode == Dock::Efficient)
-    {
-        p.fillRect(rect(), QColor(10, 10, 10, 255 * 0.6));
-        return;
-    } else {
+    p.setRenderHint(QPainter::Antialiasing);
+
+    if (m_displayMode == Dock::Fashion) {
         QPen pen;
         pen.setWidth(1);
         pen.setColor(QColor(162, 162, 162, 255 * 0.2));
 
-        QBrush brush(QColor(10, 10, 10, 255 * 0.6));
-
-        p.setRenderHint(QPainter::Antialiasing);
-
         const QRect r = rect();
         // border radius
         const int br = 8;
-        // background radius
-        const int bgr = 7;
 
         // draw border
         QRect borderRect = r;
@@ -189,17 +197,6 @@ void MainPanel::paintEvent(QPaintEvent *e)
         p.setPen(pen);
         p.setBrush(Qt::transparent);
         p.drawRoundedRect(borderRect, br, br);
-
-        // draw rounded content
-        p.setPen(Qt::transparent);
-        p.setBrush(brush);
-        switch (m_position)
-        {
-        case Top:       p.drawRoundedRect(r.marginsRemoved(QMargins(1, -bgr, 1, 1)), bgr, bgr);   break;
-        case Bottom:    p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, 1, -bgr)), bgr, bgr);   break;
-        case Left:      p.drawRoundedRect(r.marginsRemoved(QMargins(-bgr, 1, 1, 1)), bgr, bgr);   break;
-        case Right:     p.drawRoundedRect(r.marginsRemoved(QMargins(1, 1, -bgr, 1)), bgr, bgr);   break;
-        }
     }
 }
 
@@ -208,6 +205,7 @@ void MainPanel::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     m_itemAdjustTimer->start();
+    m_updateEffectTimer->start();
 
     emit geometryChanged();
 }
@@ -349,6 +347,54 @@ DockItem *MainPanel::itemAt(const QPoint &point)
     }
 
     return nullptr;
+}
+
+void MainPanel::updateBlurEffect() const
+{
+    qDebug() << m_position;
+    if (m_displayMode == Efficient) {
+        m_effectWidget->setBlurRectXRadius(0);
+        m_effectWidget->setBlurRectYRadius(0);
+        m_effectWidget->move(0, 0);
+        m_effectWidget->resize(size());
+    } else {
+        const int expandSize = 10;
+        int width = this->width();
+        int height = this->height();
+
+        m_effectWidget->setBlurRectXRadius(5);
+        m_effectWidget->setBlurRectYRadius(5);
+
+        switch (m_position)
+        {
+        case Top: {
+            height += expandSize;
+            m_effectWidget->move(0, -expandSize);
+            m_effectWidget->resize(width, height);
+            break;
+        }
+        case Bottom:
+            height += expandSize;
+            m_effectWidget->move(0, 0);
+            m_effectWidget->resize(width, height);
+            break;
+        case Left: {
+            width += expandSize;
+            m_effectWidget->move(-expandSize, 0);
+            m_effectWidget->resize(width, height);
+            break;
+        }
+        case Right: {
+            width += expandSize;
+            m_effectWidget->move(0, 0);
+            m_effectWidget->resize(width, height);
+            break;
+        }
+
+        default:
+            Q_ASSERT(false);
+        }
+    }
 }
 
 ///

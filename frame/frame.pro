@@ -1,7 +1,7 @@
 
 include(../interfaces/interfaces.pri)
 
-QT       += core gui widgets dbus x11extras svg
+QT      += core gui widgets dbus x11extras svg
 
 TARGET          = dde-dock
 DESTDIR         = $$_PRO_FILE_PWD_/../

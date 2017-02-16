@@ -8,10 +8,14 @@
 #include <QTimer>
 #include <QBoxLayout>
 
+#include <DBlurEffectWidget>
+
 #define xstr(s) str(s)
 #define str(s) #s
 #define PANEL_BORDER    0
 #define PANEL_PADDING   6
+
+DWIDGET_USE_NAMESPACE
 
 class MainPanel : public QFrame
 {
@@ -44,6 +48,8 @@ private:
     void manageItem(DockItem *item);
     DockItem *itemAt(const QPoint &point);
 
+    void updateBlurEffect() const;
+
 private slots:
     void adjustItemSize();
     void itemInserted(const int index, DockItem *item);
@@ -59,6 +65,9 @@ private:
 
     QTimer *m_itemAdjustTimer;
     DockItemController *m_itemController;
+
+    QTimer *m_updateEffectTimer;
+    DBlurEffectWidget *m_effectWidget;
 
     static DockItem *DragingItem;
     static PlaceholderItem *RequestDockItem;
