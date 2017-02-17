@@ -91,12 +91,12 @@ func (m *Manager) initUserSessions() {
 			continue
 		}
 
-		m.addSession(id, p)
+		m.addSession(id, p, false)
 	}
 
 	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session added:", id, path)
-		m.addSession(id, path)
+		m.addSession(id, path, true)
 	})
 
 	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
@@ -115,7 +115,7 @@ func (m *Manager) destroySessions() {
 	m.sessionLocker.Unlock()
 }
 
-func (m *Manager) addSession(id string, path dbus.ObjectPath) {
+func (m *Manager) addSession(id string, path dbus.ObjectPath, handled bool) {
 	uid, session := newLoginSession(path)
 	if session == nil {
 		return
@@ -137,7 +137,9 @@ func (m *Manager) addSession(id string, path dbus.ObjectPath) {
 		}
 		m.handleSessionChanged()
 	})
-	m.handleSessionChanged()
+	if handled {
+		m.handleSessionChanged()
+	}
 }
 
 func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
