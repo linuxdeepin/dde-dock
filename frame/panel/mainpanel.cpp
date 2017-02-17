@@ -87,7 +87,7 @@ MainPanel::MainPanel(QWidget *parent)
     m_itemAdjustTimer->setInterval(100);
 
     m_updateEffectTimer->setSingleShot(true);
-    m_updateEffectTimer->setInterval(100);
+    m_updateEffectTimer->setInterval(10);
 
     const QList<DockItem *> itemList = m_itemController->itemList();
     for (auto item : itemList)
@@ -351,16 +351,17 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::updateBlurEffect() const
 {
-    qDebug() << m_position;
     if (m_displayMode == Efficient) {
         m_effectWidget->setBlurRectXRadius(0);
         m_effectWidget->setBlurRectYRadius(0);
-        m_effectWidget->move(0, 0);
+        m_effectWidget->move(pos());
         m_effectWidget->resize(size());
     } else {
         const int expandSize = 10;
         int width = this->width();
         int height = this->height();
+        const int x = pos().x();
+        const int y = pos().y();
 
         m_effectWidget->setBlurRectXRadius(5);
         m_effectWidget->setBlurRectYRadius(5);
@@ -369,24 +370,24 @@ void MainPanel::updateBlurEffect() const
         {
         case Top: {
             height += expandSize;
-            m_effectWidget->move(0, -expandSize);
+            m_effectWidget->move(x, y - expandSize);
             m_effectWidget->resize(width, height);
             break;
         }
         case Bottom:
             height += expandSize;
-            m_effectWidget->move(0, 0);
+            m_effectWidget->move(x, y);
             m_effectWidget->resize(width, height);
             break;
         case Left: {
             width += expandSize;
-            m_effectWidget->move(-expandSize, 0);
+            m_effectWidget->move(x - expandSize, y);
             m_effectWidget->resize(width, height);
             break;
         }
         case Right: {
             width += expandSize;
-            m_effectWidget->move(0, 0);
+            m_effectWidget->move(x, y);
             m_effectWidget->resize(width, height);
             break;
         }
