@@ -18,8 +18,11 @@ QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
     QPixmap pixmap(size, size);
 
-    if (QFile::exists(iconName))
-        return QPixmap(iconName);
+    if (QFile::exists(iconName)) {
+        pixmap = QPixmap(iconName);
+        if (!pixmap.isNull())
+            return pixmap;
+    }
     if (iconName.startsWith("data:image/"))
     {
         const QStringList strs = iconName.split("base64,");
