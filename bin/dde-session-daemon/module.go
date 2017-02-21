@@ -18,6 +18,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/clipboard"
 	_ "pkg.deepin.io/dde/daemon/debug"
 	_ "pkg.deepin.io/dde/daemon/gesture"
+	_ "pkg.deepin.io/dde/daemon/housekeeping"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 	"pkg.deepin.io/dde/daemon/loader"

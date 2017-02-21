@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
+"POT-Creation-Date: 2017-02-23 17:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -641,6 +641,10 @@ msgstr ""
 #: ../../network/nm_setting_ip6_config.go:39
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
+msgstr ""
+
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space of the system, please clean up in time!"
 msgstr ""
 
 #: ../../inputdevices/libwacom/wacom.go:152
