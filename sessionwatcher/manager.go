@@ -48,6 +48,8 @@ func newManager() (*Manager, error) {
 		return nil, err
 	}
 
+	// default as active
+	manager.IsActive = true
 	return manager, nil
 }
 
@@ -91,17 +93,20 @@ func (m *Manager) initUserSessions() {
 			continue
 		}
 
-		m.addSession(id, p, false)
+		m.addSession(id, p)
 	}
+	m.handleSessionChanged()
 
 	m.loginManager.ConnectSessionNew(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session added:", id, path)
-		m.addSession(id, path, true)
+		m.addSession(id, path)
+		m.handleSessionChanged()
 	})
 
 	m.loginManager.ConnectSessionRemoved(func(id string, path dbus.ObjectPath) {
 		logger.Debug("Session removed:", id, path)
 		m.deleteSession(id, path)
+		m.handleSessionChanged()
 	})
 }
 
@@ -115,7 +120,7 @@ func (m *Manager) destroySessions() {
 	m.sessionLocker.Unlock()
 }
 
-func (m *Manager) addSession(id string, path dbus.ObjectPath, handled bool) {
+func (m *Manager) addSession(id string, path dbus.ObjectPath) {
 	uid, session := newLoginSession(path)
 	if session == nil {
 		return
@@ -137,9 +142,6 @@ func (m *Manager) addSession(id string, path dbus.ObjectPath, handled bool) {
 		}
 		m.handleSessionChanged()
 	})
-	if handled {
-		m.handleSessionChanged()
-	}
 }
 
 func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
@@ -155,7 +157,6 @@ func (m *Manager) deleteSession(id string, path dbus.ObjectPath) {
 	session = nil
 	delete(m.sessions, id)
 	m.sessionLocker.Unlock()
-	m.handleSessionChanged()
 }
 
 func (m *Manager) handleSessionChanged() {
@@ -171,15 +172,16 @@ func (m *Manager) handleSessionChanged() {
 
 	if isActive {
 		logger.Debug("[handleSessionChanged] Resume pulse")
-		suspendPulseSinks(0)
-		suspendPulseSources(0)
+		// fixed block when unused pulseaudio
+		go suspendPulseSinks(0)
+		go suspendPulseSources(0)
 
 		logger.Debug("[handleSessionChanged] Refresh Brightness")
-		m.display.RefreshBrightness()
+		go m.display.RefreshBrightness()
 	} else {
 		logger.Debug("[handleSessionChanged] Suspend pulse")
-		suspendPulseSinks(1)
-		suspendPulseSources(1)
+		go suspendPulseSinks(1)
+		go suspendPulseSources(1)
 	}
 }
 
