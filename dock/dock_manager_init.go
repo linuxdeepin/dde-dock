@@ -16,6 +16,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"path/filepath"
+	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"time"
@@ -107,6 +108,7 @@ func (m *DockManager) listenLauncherSignal() {
 func (m *DockManager) init() error {
 	var err error
 
+	m.launchContext = appinfo.NewAppLaunchContext(XU)
 	m.settings = gio.NewSettings(dockSchema)
 
 	m.HideMode = property.NewGSettingsEnumProperty(m, "HideMode", m.settings, settingKeyHideMode)

@@ -79,7 +79,9 @@ func (entry *AppEntry) HandleDragDrop(timestamp uint32, files []string) {
 	logger.Debugf("handle drag drop files: %v, timestamp: %v", files, timestamp)
 	ai := entry.appInfo
 	if ai != nil {
-		err := ai.Launch(timestamp, files)
+		ctx := entry.dockManager.launchContext
+		ctx.SetTimestamp(timestamp)
+		err := ai.Launch(files, ctx)
 		if err != nil {
 			logger.Warning(err)
 		}

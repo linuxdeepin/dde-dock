@@ -17,6 +17,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"sync"
@@ -46,6 +47,7 @@ type DockManager struct {
 
 	HideState HideStateType
 
+	launchContext      *appinfo.AppLaunchContext
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
 
