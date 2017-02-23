@@ -227,3 +227,8 @@ func (*testWrapper) TestGetAdmGroup(c *C.C) {
 	c.Check(isStrInArray("wheel", groups), C.Equals, true)
 	c.Check(isStrInArray("root", users), C.Equals, true)
 }
+
+func (*testWrapper) TestDMFromService(c *C.C) {
+	dm, _ := getDMFromSystemService("testdata/autologin/display-manager.service")
+	c.Check(dm, C.Equals, "lightdm")
+}

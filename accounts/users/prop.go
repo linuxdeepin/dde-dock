@@ -17,10 +17,17 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 )
 
 var (
 	errInvalidParam = fmt.Errorf("Invalid or empty parameter")
+)
+
+var (
+	groupFileTimestamp int64 = 0
+	groupFileInfo            = make(map[string][]string)
+	groupFileLocker    sync.Mutex
 )
 
 const CommentFieldsLen = 5
@@ -147,31 +154,21 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 		return nil, err
 	}
 
-	content, err := ioutil.ReadFile(fileGroup)
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+	infos, err := parseGroupFile(fileGroup)
 	if err != nil {
 		return nil, err
 	}
 
-	var list []string = users
-	lines := strings.Split(string(content), "\n")
-	for _, line := range lines {
-		if len(line) == 0 {
+	for _, group := range groups {
+		v, ok := infos[group]
+		if !ok {
 			continue
 		}
-
-		items := strings.Split(line, ":")
-		if len(items) != itemLenGroup {
-			continue
-		}
-
-		if !isStrInArray(items[0], groups) {
-			continue
-		}
-
-		list = append(list, strings.Split(items[3], ",")...)
+		users = append(users, v...)
 	}
-
-	return list, nil
+	return users, nil
 }
 
 // get adm group and user from '/etc/sudoers'
@@ -216,4 +213,63 @@ func getAdmGroupAndUser(file string) ([]string, []string, error) {
 		}
 	}
 	return groups, users, nil
+}
+
+func isGroupExists(group string) bool {
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+	infos, err := parseGroupFile(userFileGroup)
+	if err != nil {
+		return false
+	}
+	_, ok := infos[group]
+	return ok
+}
+
+func isUserInGroup(user, group string) bool {
+	groupFileLocker.Lock()
+	defer groupFileLocker.Unlock()
+	infos, err := parseGroupFile(userFileGroup)
+	if err != nil {
+		return false
+	}
+	v, ok := infos[group]
+	if !ok {
+		return false
+	}
+	return isStrInArray(user, v)
+}
+
+func parseGroupFile(file string) (map[string][]string, error) {
+	info, err := os.Stat(file)
+	if err != nil {
+		return nil, err
+	}
+	if groupFileTimestamp == info.ModTime().UnixNano() &&
+		len(groupFileInfo) != 0 {
+		return groupFileInfo, nil
+	}
+
+	groupFileTimestamp = info.ModTime().UnixNano()
+	groupFileInfo = make(map[string][]string)
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+
+	lines := strings.Split(string(content), "\n")
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+
+		items := strings.Split(line, ":")
+		if len(items) != itemLenGroup {
+			continue
+		}
+
+		groupFileInfo[items[0]] = strings.Split(items[3], ",")
+	}
+
+	return groupFileInfo, nil
 }

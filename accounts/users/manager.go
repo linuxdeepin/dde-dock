@@ -32,10 +32,11 @@ const (
 
 	defaultConfigShell = "/etc/adduser.conf"
 
-	defaultDMFile = "/etc/X11/default-display-manager"
-	lightdmConfig = "/etc/lightdm/lightdm.conf"
-	kdmConfig     = "/usr/share/config/kdm/kdmrc"
-	gdmConfig     = "/etc/gdm/custom.conf"
+	defaultDMFile         = "/etc/X11/default-display-manager"
+	defaultDisplayService = "/etc/systemd/system/display-manager.service"
+	lightdmConfig         = "/etc/lightdm/lightdm.conf"
+	kdmConfig             = "/usr/share/config/kdm/kdmrc"
+	gdmConfig             = "/etc/gdm/custom.conf"
 )
 
 func CreateUser(username, fullname, shell string, ty int32) error {
@@ -107,12 +108,28 @@ func SetUserType(ty int32, username string) error {
 func SetAutoLoginUser(username string) error {
 	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
-		return err
+		dm, err = getDMFromSystemService(defaultDisplayService)
+		if err != nil {
+			return err
+		}
 	}
 
 	name, _ := GetAutoLoginUser()
 	if name == username {
 		return nil
+	}
+
+	// if user not in group 'autologin', lightdm autologin will no effect
+	// detail see archlinux wiki for lightdm
+	if !isGroupExists("autologin") {
+		doAction("groupadd -r autologin")
+	}
+
+	if !isUserInGroup(username, "autologin") {
+		err := doAction(userCmdGroup + " -a " + username + " autologin")
+		if err != nil {
+			return err
+		}
 	}
 
 	switch dm {
@@ -125,14 +142,15 @@ func SetAutoLoginUser(username string) error {
 	default:
 		return fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
-
-	return nil
 }
 
 func GetAutoLoginUser() (string, error) {
 	dm, err := getDefaultDM(defaultDMFile)
 	if err != nil {
-		return "", err
+		dm, err = getDMFromSystemService(defaultDisplayService)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	switch dm {
@@ -145,8 +163,6 @@ func GetAutoLoginUser() (string, error) {
 	default:
 		return "", fmt.Errorf("Not supported or invalid display manager: %q", dm)
 	}
-
-	return "", nil
 }
 
 func GetDMConfig() (string, error) {
@@ -299,6 +315,27 @@ func getDefaultDM(file string) (string, error) {
 	}
 
 	return path.Base(tmp), nil
+}
+
+// Default service: /etc/systemd/system/display-manager.service
+func getDMFromSystemService(service string) (string, error) {
+	if !dutils.IsFileExist(service) {
+		return "", fmt.Errorf("Not found this file: %s", service)
+	}
+
+	name, err := os.Readlink(service)
+	if err != nil {
+		return "", err
+	}
+
+	base := path.Base(name)
+	switch {
+	case base == "lightdm.service":
+		return "lightdm", nil
+	case base == "gdm.service" || base == "gdm3.service":
+		return "gdm", nil
+	}
+	return "", fmt.Errorf("Unsupported the login manager: %s", base)
 }
 
 // Default config: /etc/adduser.conf
