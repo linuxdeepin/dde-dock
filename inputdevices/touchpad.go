@@ -304,20 +304,7 @@ func (tpad *Touchpad) disableWhileTyping() {
 		return
 	}
 
-	var isLibinputUsed bool = false
-	enabled := tpad.DisableIfTyping.Get()
-	for _, v := range tpad.devInfos {
-		err := v.EnableDisableWhileTyping(enabled)
-		if err != nil {
-			continue
-		}
-		isLibinputUsed = true
-	}
-	if isLibinputUsed {
-		return
-	}
-
-	if enabled {
+	if tpad.DisableIfTyping.Get() {
 		tpad.startSyndaemon()
 	} else {
 		tpad.stopSyndaemon()
