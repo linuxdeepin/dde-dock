@@ -20,6 +20,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 	"unicode/utf8"
 )
@@ -39,9 +40,10 @@ type WindowInfo struct {
 	lastConfigureNotifyEvent *xevent.ConfigureNotifyEvent
 	updateConfigureTimer     *time.Timer
 
-	propertyNotifyTimer     *time.Timer
-	propertyNotifyAtomTable map[xproto.Atom]bool
-	propertyNotifyEnabled   bool
+	propertyNotifyTimer          *time.Timer
+	propertyNotifyAtomTable      map[xproto.Atom]bool
+	propertyNotifyAtomTableMutex sync.Mutex
+	propertyNotifyEnabled        bool
 
 	wmState           []string
 	wmWindowType      []string
@@ -397,6 +399,9 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManag
 	winInfo.propertyNotifyTimer = time.AfterFunc(300*time.Millisecond, func() {
 		var atomNames []string
 		var needUpdate bool
+		winInfo.propertyNotifyAtomTableMutex.Lock()
+		defer winInfo.propertyNotifyAtomTableMutex.Unlock()
+
 		for atom, _ := range winInfo.propertyNotifyAtomTable {
 			atomName, _ := xprop.AtomName(XU, atom)
 			atomNames = append(atomNames, atomName)
@@ -418,7 +423,10 @@ func (winInfo *WindowInfo) initPropertyNotifyEventHandler(dockManager *DockManag
 }
 
 func (winInfo *WindowInfo) handlePropertyNotifyEvent(ev xevent.PropertyNotifyEvent) {
+	winInfo.propertyNotifyAtomTableMutex.Lock()
 	winInfo.propertyNotifyAtomTable[ev.Atom] = true
+	winInfo.propertyNotifyAtomTableMutex.Unlock()
+
 	if winInfo.propertyNotifyEnabled {
 		winInfo.propertyNotifyTimer.Reset(300 * time.Millisecond)
 		winInfo.propertyNotifyEnabled = false
