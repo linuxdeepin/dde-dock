@@ -17,6 +17,7 @@ func getSystemIdNameMap() map[string]string {
 	var systemIdNameMap = map[string]string{
 		"launcher":              gettext.Tr("Launcher"),
 		"terminal":              gettext.Tr("Terminal"),
+		"deepin-screen-recorder":gettext.Tr("Deepin Screen Recorder"),
 		"lock-screen":           gettext.Tr("Lock screen"),
 		"show-dock":             gettext.Tr("Show/Hide the dock"),
 		"logout":                gettext.Tr("Logout"),

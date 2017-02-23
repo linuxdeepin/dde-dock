@@ -88,6 +88,8 @@ func findSysActionInTable(id string) string {
 		return "deepin-screenshot"
 	case "screenshot-fullscreen":
 		return "deepin-screenshot -f"
+	case "deepin-screen-recorder":
+		return "/usr/bin/deepin-screen-recorder"
 	case "screenshot-window":
 		return "deepin-screenshot -w"
 	case "screenshot-delayed":

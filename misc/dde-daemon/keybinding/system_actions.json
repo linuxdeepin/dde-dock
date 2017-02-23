@@ -9,6 +9,10 @@
 		"Action": "/usr/lib/deepin-daemon/default-terminal"
 	},
 	{
+		"Key":"deepin-screen-recorder",
+		"Action":"/usr/bin/deepin-screen-recorder"
+	},
+	{
 		"Key": "lock-screen",
 		"Action": "dbus-send --print-reply --dest=com.deepin.dde.lockFront /com/deepin/dde/lockFront com.deepin.dde.lockFront.Show"
 	},
