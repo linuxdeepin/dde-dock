@@ -16,6 +16,8 @@ ThemeAppIcon::~ThemeAppIcon()
 
 const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
+    const int s = size & ~1;
+
     QPixmap pixmap;
 
     do {
@@ -38,7 +40,7 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
         }
 
         const QIcon icon = QIcon::fromTheme(iconName, QIcon::fromTheme("application-x-desktop"));
-        pixmap = icon.pixmap(QSize(size, size));
+        pixmap = icon.pixmap(QSize(s, s));
         if (!pixmap.isNull())
             break;
 
@@ -50,6 +52,6 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 
     } while (false);
 
-    return pixmap.scaled(size, size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    return pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
