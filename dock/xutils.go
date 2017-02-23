@@ -11,6 +11,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"strings"
 )
 
 func iconifyWindow(win xproto.Window) {
@@ -63,7 +64,7 @@ func getWmName(xu *xgbutil.XUtil, win xproto.Window) string {
 		// get WM_NAME
 		name, _ = icccm.WmNameGet(xu, win)
 	}
-	return name
+	return strings.Replace(name, "\x00", "", -1)
 }
 
 func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {

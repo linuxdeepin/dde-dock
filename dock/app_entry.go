@@ -19,22 +19,7 @@ import (
 const (
 	entryDBusObjPathPrefix = dockManagerDBusObjPath + "/entries/"
 	entryDBusInterface     = dockManagerDBusInterface + ".Entry"
-
-	FieldTitle   = "title"
-	FieldIcon    = "icon"
-	FieldMenu    = "menu"
-	FieldAppXids = "app-xids"
-
-	FieldStatus   = "app-status"
-	ActiveStatus  = "active"
-	NormalStatus  = "normal"
-	InvalidStatus = "invalid"
 )
-
-type XidInfo struct {
-	Xid   uint32
-	Title string
-}
 
 type AppEntry struct {
 	dockManager *DockManager

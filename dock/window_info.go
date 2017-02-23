@@ -248,9 +248,8 @@ func (winInfo *WindowInfo) getTitle() string {
 		}
 		// winInfo.entry is nil
 		return winInfo.getDisplayName()
-	} else {
-		return wmName
 	}
+	return wmName
 }
 
 func (winInfo *WindowInfo) getIcon() string {
