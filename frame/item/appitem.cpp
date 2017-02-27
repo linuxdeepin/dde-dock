@@ -329,10 +329,11 @@ void AppItem::dragEnterEvent(QDragEnterEvent *e)
 void AppItem::dropEvent(QDropEvent *e)
 {
     QStringList uriList;
-    for (auto uri : e->mimeData()->urls())
-        uriList << uri.toString();
+    for (auto uri : e->mimeData()->urls()) {
+        uriList << uri.toEncoded();
+    }
 
-//    qDebug() << uriList;
+    qDebug() << "accept drop event with URIs: " << uriList;
     m_itemEntry->HandleDragDrop(uriList);
 }
 
