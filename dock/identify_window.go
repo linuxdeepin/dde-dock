@@ -1,6 +1,7 @@
 package dock
 
 import (
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -14,6 +15,7 @@ type _IdentifyWindowFunc func(*DockManager, *WindowInfo) (string, *AppInfo)
 
 func (m *DockManager) registerIdentifyWindowFuncs() {
 	m.registerIdentifyWindowFunc("PidEnv", identifyWindowByPidEnv)
+	m.registerIdentifyWindowFunc("Cmdline-XWalk", identifyWindowByCmdlineXWalk)
 	m.registerIdentifyWindowFunc("Rule", identifyWindowByRule)
 	m.registerIdentifyWindowFunc("Bamf", identifyWindowByBamf)
 	m.registerIdentifyWindowFunc("Pid", identifyWindowByPid)
@@ -181,5 +183,31 @@ func identifyWindowByBamf(m *DockManager, winInfo *WindowInfo) (string, *AppInfo
 			return appInfo.innerId, appInfo
 		}
 	}
+	return "", nil
+}
+
+func identifyWindowByCmdlineXWalk(m *DockManager, winInfo *WindowInfo) (string, *AppInfo) {
+	process := winInfo.process
+	if process == nil || winInfo.pid == 0 {
+		return "", nil
+	}
+
+	exeBase := filepath.Base(process.exe)
+	args := process.args
+	if exeBase != "xwalk" || len(args) == 0 {
+		return "", nil
+	}
+	lastArg := args[len(args)-1]
+	logger.Debugf("lastArg: %q", lastArg)
+
+	if filepath.Base(lastArg) == "manifest.json" {
+		appId := filepath.Base(filepath.Dir(lastArg))
+		appInfo := NewAppInfo(appId)
+		if appInfo != nil {
+			// success
+			return appInfo.innerId, appInfo
+		}
+	}
+	// failed
 	return "", nil
 }
