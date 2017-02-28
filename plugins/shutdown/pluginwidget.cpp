@@ -62,7 +62,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
 
         const bool onBattery = m_powerInter->onBattery();
         const uint percentage = qMin(100.0, qMax(0.0, percentageData.value("Display")));
-        const int percent = std::round(percentage);
+        const int percent = std::round(percentage / 10.0) * 10;
         const int imageNumber = (percent / 10) & ~0x1;
         const QString image = QString(":/icons/resources/icons/battery_%1%2.svg").arg(imageNumber)
                                                                                  .arg(m_hover || onBattery ? "" : "_plugged");
