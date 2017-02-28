@@ -3,6 +3,8 @@
 
 #include <QDebug>
 #include <QResizeEvent>
+#include <QScreen>
+#include <QGuiApplication>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
@@ -285,6 +287,8 @@ void MainWindow::setStrutPartial()
 
     const QPoint p = m_posChangeAni->endValue().toPoint();
     const QRect r = QRect(p, m_settings->windowSize());
+    QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
+
     switch (side)
     {
     case Position::Top:
@@ -292,28 +296,51 @@ void MainWindow::setStrutPartial()
         strut = r.bottom() + 1;
         strutStart = r.left();
         strutEnd = r.right();
+        strutArea.setLeft(strutStart);
+        strutArea.setRight(strutEnd);
+        strutArea.setBottom(r.bottom());
         break;
     case Position::Bottom:
         orientation = XcbMisc::OrientationBottom;
         strut = maxScreenHeight - p.y();
         strutStart = r.left();
         strutEnd = r.right();
+        strutArea.setLeft(strutStart);
+        strutArea.setRight(strutEnd);
+        strutArea.setTop(p.y());
         break;
     case Position::Left:
         orientation = XcbMisc::OrientationLeft;
         strut = r.right() + 1;
         strutStart = r.top();
         strutEnd = r.bottom();
+        strutArea.setTop(r.top());
+        strutArea.setBottom(r.bottom());
+        strutArea.setRight(r.right());
         break;
     case Position::Right:
         orientation = XcbMisc::OrientationRight;
         strut = maxScreenWidth - r.left();
         strutStart = r.top();
         strutEnd = r.bottom();
+        strutArea.setTop(r.top());
+        strutArea.setBottom(r.bottom());
+        strutArea.setLeft(r.left());
         break;
     default:
         Q_ASSERT(false);
     }
+
+    // pass if strut area is intersect with other screen
+    int count = 0;
+    for (auto *screen : qApp->screens())
+        if (screen->geometry().intersects(strutArea))
+            ++count;
+    if (count > 1)
+        return;
+    else if (count != 1)
+        qWarning() << strutArea << p << r << count << orientation << strut << strutStart << strutEnd;
+
     m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }
 
