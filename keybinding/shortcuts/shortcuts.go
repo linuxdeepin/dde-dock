@@ -76,13 +76,6 @@ func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
 		}
 	}
 
-	// dummy grab Super_L and Super_R
-	// We use X RECORD extension to receive "Super" key press and release events.
-	keyLower := strings.ToLower(pa.Key)
-	if keyLower == "super_l" || keyLower == "super_r" {
-		dummy = true
-	}
-
 	// no conflict
 	if !dummy {
 		err = keys.Grab(ss.xu)
@@ -119,19 +112,18 @@ func (ss *Shortcuts) ungrabAccel(pa ParsedAccel, dummy bool) {
 }
 
 func (ss *Shortcuts) grabShortcut(shortcut Shortcut) {
-	dummy := dummyGrab(shortcut.GetType())
-
 	logger.Debug("grabShortcut shortcut id:", shortcut.GetId())
 	for _, pa := range shortcut.GetAccels() {
 		logger.Debug("grabAccel accel:", pa)
+		dummy := dummyGrab(shortcut, pa)
 		ss.grabAccel(shortcut, pa, dummy)
 	}
 }
 
 func (ss *Shortcuts) ungrabShortcut(shortcut Shortcut) {
-	dummy := dummyGrab(shortcut.GetType())
 
 	for _, pa := range shortcut.GetAccels() {
+		dummy := dummyGrab(shortcut, pa)
 		ss.ungrabAccel(pa, dummy)
 	}
 }
@@ -150,7 +142,7 @@ func (ss *Shortcuts) AddShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
 	shortcut.setAccels(newAccels)
 
 	// grab accel
-	dummy := dummyGrab(shortcut.GetType())
+	dummy := dummyGrab(shortcut, pa)
 	ss.grabAccel(shortcut, pa, dummy)
 }
 
@@ -167,13 +159,19 @@ func (ss *Shortcuts) RemoveShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
 	logger.Debug("shortcut.setAccels", newAccels)
 
 	// ungrab accel
-	dummy := dummyGrab(shortcut.GetType())
+	dummy := dummyGrab(shortcut, pa)
 	ss.ungrabAccel(pa, dummy)
 }
 
-func dummyGrab(shortcutType int32) bool {
+func dummyGrab(shortcut Shortcut, pa ParsedAccel) bool {
+	shortcutType := shortcut.GetType()
 	if shortcutType == ShortcutTypeWM ||
 		shortcutType == ShortcutTypeMetacity {
+		return true
+	}
+
+	switch strings.ToLower(pa.Key) {
+	case "super_l", "super_r", "caps_lock", "num_lock":
 		return true
 	}
 	return false
@@ -183,7 +181,7 @@ func (ss *Shortcuts) UngrabAll() {
 	// ungrab all grabed keys
 	// Lock ss.grabedKeyAccelMap
 	for grabedKey, accel := range ss.grabedKeyAccelMap {
-		dummy := dummyGrab(accel.Shortcut.GetType())
+		dummy := dummyGrab(accel.Shortcut, accel.Parsed)
 		if !dummy {
 			grabedKey.Ungrab(ss.xu)
 		}
@@ -239,7 +237,7 @@ func GetConcernedModifiers(state uint16) Modifiers {
 	return mods
 }
 
-func (ss *Shortcuts) handleKeyEvent(xu *xgbutil.XUtil, state uint16, detail xproto.Keycode, pressed bool) {
+func (ss *Shortcuts) handleKeyEvent(pressed bool, detail xproto.Keycode, state uint16) {
 	mods := GetConcernedModifiers(state)
 	code := Keycode(detail)
 	logger.Debug("event mods:", Modifiers(state))
@@ -281,27 +279,32 @@ func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 	return true
 }
 
-func (ss *Shortcuts) HandleXRecordKeyRelease(code int) {
+func (ss *Shortcuts) HandleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
 	str := keybind.LookupString(ss.xu, 0, xproto.Keycode(code))
 	switch strings.ToLower(str) {
 	case "super_r", "super_l":
+		if pressed {
+			return
+		}
 		if ok := tryGrabKeyboard(ss.xu); !ok {
 			return
 		}
 
 		ss.emitKeyEvent(0, Key{Code: Keycode(code)})
+	case "caps_lock", "num_lock":
+		ss.handleKeyEvent(pressed, xproto.Keycode(code), state)
 	}
 }
 
 func (ss *Shortcuts) ListenXEvents() {
 	xevent.KeyPressFun(func(xu *xgbutil.XUtil, ev xevent.KeyPressEvent) {
 		logger.Debug(ev)
-		ss.handleKeyEvent(xu, ev.State, ev.Detail, true)
+		ss.handleKeyEvent(true, ev.Detail, ev.State)
 	}).Connect(ss.xu, ss.xu.RootWin())
 
 	xevent.KeyReleaseFun(func(xu *xgbutil.XUtil, ev xevent.KeyReleaseEvent) {
 		logger.Debug(ev)
-		ss.handleKeyEvent(xu, ev.State, ev.Detail, false)
+		ss.handleKeyEvent(false, ev.Detail, ev.State)
 	}).Connect(ss.xu, ss.xu.RootWin())
 
 	xevent.MappingNotifyFun(func(xu *xgbutil.XUtil, ev xevent.MappingNotifyEvent) {

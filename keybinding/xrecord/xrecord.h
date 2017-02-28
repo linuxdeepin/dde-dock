@@ -10,7 +10,9 @@
 #ifndef __GRAB_XRECORD_H__
 #define __GRAB_XRECORD_H__
 
-void xrecord_grab_init ();
+int xrecord_grab_init ();
 void xrecord_grab_finalize();
+void xrecord_grab_event_loop_start();
+
 
 #endif

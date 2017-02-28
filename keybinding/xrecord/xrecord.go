@@ -9,45 +9,47 @@
 
 package xrecord
 
-// #cgo pkg-config: x11 xtst glib-2.0
+// #cgo pkg-config: xcb xcb-record
 // #include "xrecord.h"
 import "C"
 import (
-//"fmt"
+	"fmt"
 )
 
 var enabled = true
-var keyReleaseCb func(code int)
 
-func Initialize() {
-	C.xrecord_grab_init()
+type KeyEventFunc func(pressed bool, keycode uint8, state uint16)
+
+var keyEventCb KeyEventFunc
+
+func Initialize() error {
+	state := C.xrecord_grab_init()
+	if state == 0 {
+		go C.xrecord_grab_event_loop_start()
+		return nil
+	}
+	return fmt.Errorf("xrecord init failed code %d", state)
 }
 
 func Finalize() {
 	C.xrecord_grab_finalize()
 }
 
-func SetKeyReleaseCallback(fn func(code int)) {
-	keyReleaseCb = fn
+func SetKeyEventCallback(fn KeyEventFunc) {
+	keyEventCb = fn
 }
 
 func Enable(val bool) {
 	enabled = val
 }
 
-//export handleSingleKeyEvent
-func handleSingleKeyEvent(keycode, pressed int) {
+//export handleKeyEvent
+func handleKeyEvent(pressed int, keycode uint8, state uint16) {
 	if !enabled {
 		return
 	}
 
-	//Don't anything if pressed
-	if pressed == 1 {
-		return
+	if keyEventCb != nil {
+		keyEventCb(pressed == 1, keycode, state)
 	}
-	//fmt.Println("handleSingleKeyEvent keycode:", keycode)
-	if keyReleaseCb != nil {
-		keyReleaseCb(keycode)
-	}
-
 }

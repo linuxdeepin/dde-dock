@@ -1,194 +1,142 @@
 /**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
+ * Copyright (C) 2017 Deepin Technology Co., Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
  **/
-
-#include <X11/Xlib.h>
-#include <X11/extensions/record.h>
-#include <glib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <xcb/xcb.h>
+#include <xcb/record.h>
+#include <string.h>
 
 #include "xrecord.h"
 #include "_cgo_export.h"
 
-typedef struct _XRecordGrabInfo {
-	Display *ctrl_disp;
-	Display *data_disp;
-	XRecordRange *range;
-	XRecordContext context;
-} XRecordGrabInfo;
+static xcb_connection_t *data_disp = NULL;
+static xcb_connection_t *ctrl_disp = NULL;
+static xcb_record_context_t rc = 0;
 
-static void grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook);
-static gpointer enable_ctx_thread (gpointer user_data);
+// stop flag
+static int stop = 0;
 
-static XRecordGrabInfo *grab_info = NULL;
-static int pressed_cnt = 0;
-static gboolean button_pressed = FALSE;
+void event_callback(uint8_t * data);
 
-void
-xrecord_grab_init ()
+int xrecord_grab_init()
 {
-	if (grab_info != NULL) {
-		g_debug("XRecord grab has been init...\n");
-		return;
+	ctrl_disp = xcb_connect(NULL, NULL);
+	data_disp = xcb_connect(NULL, NULL);
+
+	if (xcb_connection_has_error(ctrl_disp)
+	    || xcb_connection_has_error(data_disp)) {
+		/*fprintf(stderr, "Error to open local display!\n"); */
+		return 1;
+	}
+	const xcb_query_extension_reply_t *query_ext =
+	    xcb_get_extension_data(ctrl_disp,
+				   &xcb_record_id);
+
+	if (!query_ext) {
+		/*fprintf(stderr, "RECORD extension not supported on this X server!\n"); */
+		return 2;
 	}
 
-	grab_info = g_new0 (XRecordGrabInfo, 1);
+	rc = xcb_generate_id(ctrl_disp);
 
-	if ( !grab_info ) {
-		g_warning ("Alloc XRecordGrabInfo memory failed...");
-		return;
+	xcb_record_client_spec_t rcs;
+	rcs = XCB_RECORD_CS_ALL_CLIENTS;
+
+	xcb_record_range_t rr;
+	memset(&rr, 0, sizeof(rr));
+	rr.device_events.first = XCB_KEY_PRESS;
+	rr.device_events.last = XCB_KEY_RELEASE;
+
+	xcb_void_cookie_t create_cookie =
+	    xcb_record_create_context_checked(ctrl_disp, rc, 0, 1, 1, &rcs,
+					      &rr);
+	xcb_generic_error_t *error =
+	    xcb_request_check(ctrl_disp, create_cookie);
+	if (error) {
+		/*fprintf (stderr, "Could not create a record context!\n"); */
+		free(error);
+		return 3;
 	}
 
-	grab_info->ctrl_disp = XOpenDisplay (NULL);
-	grab_info->data_disp = XOpenDisplay (NULL);
-
-	if ( !grab_info->ctrl_disp || !grab_info->data_disp ) {
-		g_warning ("Unable to connect to X server...");
-		xrecord_grab_finalize ();
-		return;
-	}
-
-	gint dummy;
-
-	if ( !XQueryExtension (grab_info->ctrl_disp, "XTEST",
-	                       &dummy, &dummy, &dummy) ) {
-		g_warning ("XTest extension missing...");
-		xrecord_grab_finalize ();
-		return;
-	}
-
-	if ( !XRecordQueryVersion (grab_info->ctrl_disp, &dummy, &dummy) ) {
-		g_warning ("Failed to obtain xrecord version...");
-		xrecord_grab_finalize ();
-		return;
-	}
-
-	grab_info->range = XRecordAllocRange ();
-
-	if ( !grab_info->range ) {
-		g_warning ("Alloc XRecordRange memory failed...");
-		xrecord_grab_finalize ();
-		return;
-	}
-
-	grab_info->range->device_events.first = KeyPress;
-	grab_info->range->device_events.last = ButtonRelease;
-
-	XRecordClientSpec spec = XRecordAllClients;
-	grab_info->context = XRecordCreateContext (
-	                         grab_info->data_disp, 0, &spec, 1, &grab_info->range, 1);
-
-	if ( !grab_info->context ) {
-		g_warning ("Unable to create context...");
-		xrecord_grab_finalize();
-		return;
-	}
-
-	XSynchronize (grab_info->ctrl_disp, TRUE);
-	XFlush (grab_info->ctrl_disp);
-
-	GThread *thrd = g_thread_new ("enable context",
-	                              (GThreadFunc)enable_ctx_thread, NULL);
-
-	if ( !thrd ) {
-		g_warning ("Unable to create thread...");
-		xrecord_grab_finalize ();
-		return;
-	}
-	g_thread_unref(thrd);
+	return 0;
 }
 
-void
-xrecord_grab_finalize ()
+void xrecord_grab_event_loop_start()
 {
-	if (!grab_info) {
-		return;
-	}
+	xcb_record_enable_context_cookie_t cookie =
+	    xcb_record_enable_context(data_disp, rc);
 
-	if (grab_info->context) {
-		XRecordDisableContext(grab_info->data_disp, grab_info->context);
-		XRecordFreeContext(grab_info->data_disp, grab_info->context);
-	}
-
-	if (grab_info->range) {
-		XFree(grab_info->range);
-		grab_info->range = NULL;
-	}
-
-	if (grab_info->ctrl_disp) {
-		XCloseDisplay (grab_info->ctrl_disp);
-		grab_info->ctrl_disp = NULL;
-	}
-
-	if (grab_info->data_disp) {
-		XCloseDisplay (grab_info->data_disp);
-		grab_info->data_disp = NULL;
-	}
-
-	if (grab_info) {
-		g_free (grab_info);
-		grab_info = NULL;
-	}
-}
-
-static gpointer
-enable_ctx_thread (gpointer user_data)
-{
-	if ( !XRecordEnableContext (grab_info->data_disp, grab_info->context,
-	                            grab_key_event_cb, NULL) ) {
-		g_warning ("Unable to enable context...");
-		xrecord_grab_finalize ();
-	}
-
-	g_thread_exit (NULL);
-}
-
-static void
-grab_key_event_cb (XPointer user_data, XRecordInterceptData *hook)
-{
-	if ( hook->category != XRecordFromServer ) {
-		XRecordFreeData(hook);
-		g_warning ("Data not from X server...");
-		return;
-	}
-
-	int event_type = hook->data[0];
-	KeyCode keycode = hook->data[1];
-
-	/*g_debug ("event type: %d, code: %d\n", (int)event_type, (int)keycode);*/
-
-	switch (event_type) {
-	case KeyPress:
-		pressed_cnt++;
-		break;
-
-	case KeyRelease:
-		/*g_debug ("pressed_cnt: %d\n", pressed_cnt);*/
-
-		if ((pressed_cnt == 1) && !button_pressed)  {
-			//handler event
-			handleSingleKeyEvent(keycode, 0);
+	while (!stop && data_disp != NULL) {
+		xcb_record_enable_context_reply_t *reply =
+		    xcb_record_enable_context_reply(data_disp, cookie, NULL);
+		if (!reply)
+			break;
+		if (reply->client_swapped) {
+			/*fprintf (stderr, "I am too lazy to implement byteswapping\n"); */
+			return;
 		}
 
-		pressed_cnt = 0;
-		break;
+		if (reply->category == 0 /* XRecordFromServer */ ) {
+			uint8_t *data = xcb_record_enable_context_data(reply);
+			int data_length =
+			    xcb_record_enable_context_data_length(reply);
+			/*printf("data length is %d\n", data_length); */
 
-	case ButtonPress:
-		button_pressed = TRUE;
-		break;
+			if (data_length == sizeof(xcb_key_press_event_t)) {
+				event_callback(data);
+			}
+		}
+		free(reply);
+	}
+}
 
-	case ButtonRelease:
-		button_pressed = FALSE;
-		break;
+void xrecord_grab_finalize()
+{
+	stop = 1;
+	xcb_record_disable_context(ctrl_disp, rc);
+	xcb_record_free_context(ctrl_disp, rc);
+	xcb_flush(ctrl_disp);
 
+	xcb_disconnect(data_disp);
+	xcb_disconnect(ctrl_disp);
+	data_disp = NULL;
+	ctrl_disp = NULL;
+}
+
+void event_callback(uint8_t * data)
+{
+	uint8_t event_type = data[0];
+
+	int pressed;
+	xcb_keycode_t detail;
+	uint16_t state;
+
+	switch (event_type) {
+	case XCB_KEY_PRESS:{
+			xcb_key_press_event_t *ev =
+			    (xcb_key_press_event_t *) data;
+			pressed = 1;
+			detail = ev->detail;
+			state = ev->state;
+			break;
+		}
+	case XCB_KEY_RELEASE:{
+			xcb_key_release_event_t *ev =
+			    (xcb_key_release_event_t *) data;
+			pressed = 0;
+			detail = ev->detail;
+			state = ev->state;
+			break;
+		}
 	default:
-		pressed_cnt = 0;
-		break;
+		return;
 	}
 
-	XRecordFreeData(hook);
+	handleKeyEvent(pressed, detail, state);
 }

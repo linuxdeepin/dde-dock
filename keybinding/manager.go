@@ -184,16 +184,18 @@ func NewManager() (*Manager, error) {
 	go xevent.Main(m.xu)
 
 	// init package xrecord
-	xrecord.Initialize()
-	xrecord.SetKeyReleaseCallback(m.shortcuts.HandleXRecordKeyRelease)
+	err = xrecord.Initialize()
+	if err != nil {
+		return nil, err
+	}
+	xrecord.SetKeyEventCallback(m.shortcuts.HandleXRecordKeyEvent)
 
 	return &m, nil
 }
 
 func (m *Manager) destroy() {
-	// TODO ungrab all shortcuts
+	xrecord.SetKeyEventCallback(nil)
 	xrecord.Finalize()
-	xrecord.SetKeyReleaseCallback(nil)
 
 	// destroy settings
 	if m.sysSetting != nil {

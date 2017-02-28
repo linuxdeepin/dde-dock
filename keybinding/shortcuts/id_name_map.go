@@ -15,22 +15,22 @@ import (
 
 func getSystemIdNameMap() map[string]string {
 	var systemIdNameMap = map[string]string{
-		"launcher":              gettext.Tr("Launcher"),
-		"terminal":              gettext.Tr("Terminal"),
-		"deepin-screen-recorder":gettext.Tr("Deepin Screen Recorder"),
-		"lock-screen":           gettext.Tr("Lock screen"),
-		"show-dock":             gettext.Tr("Show/Hide the dock"),
-		"logout":                gettext.Tr("Logout"),
-		"terminal-quake":        gettext.Tr("Terminal Quake Window"),
-		"screenshot":            gettext.Tr("Screenshot"),
-		"screenshot-fullscreen": gettext.Tr("Full screenshot"),
-		"screenshot-window":     gettext.Tr("Window screenshot"),
-		"screenshot-delayed":    gettext.Tr("Delay screenshot"),
-		"file-manager":          gettext.Tr("File manager"),
-		"disable-touchpad":      gettext.Tr("Disable Touchpad"),
-		"switch-layout":         gettext.Tr("Switch Layout"),
-		"wm-switcher":           gettext.Tr("Switch window effects"),
-		"turn-off-screen":       gettext.Tr("Fast Screen Off"),
+		"launcher":               gettext.Tr("Launcher"),
+		"terminal":               gettext.Tr("Terminal"),
+		"deepin-screen-recorder": gettext.Tr("Deepin Screen Recorder"),
+		"lock-screen":            gettext.Tr("Lock screen"),
+		"show-dock":              gettext.Tr("Show/Hide the dock"),
+		"logout":                 gettext.Tr("Logout"),
+		"terminal-quake":         gettext.Tr("Terminal Quake Window"),
+		"screenshot":             gettext.Tr("Screenshot"),
+		"screenshot-fullscreen":  gettext.Tr("Full screenshot"),
+		"screenshot-window":      gettext.Tr("Window screenshot"),
+		"screenshot-delayed":     gettext.Tr("Delay screenshot"),
+		"file-manager":           gettext.Tr("File manager"),
+		"disable-touchpad":       gettext.Tr("Disable Touchpad"),
+		"switch-layout":          gettext.Tr("Switch Layout"),
+		"wm-switcher":            gettext.Tr("Switch window effects"),
+		"turn-off-screen":        gettext.Tr("Fast Screen Off"),
 	}
 	return systemIdNameMap
 }

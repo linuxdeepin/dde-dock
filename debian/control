@@ -29,6 +29,7 @@ Build-Depends: debhelper (>= 9), golang-go,
  libfontconfig1-dev,
  libcanberra-dev,
  libinput-dev,
+ libxcb1-dev,libxcb-record0-dev,
  dde-api-dev (>=2.92.2),deepin-desktop-schemas,golang-gir-gudev-1.0-dev,
 Standards-Version: 3.9.5
 Homepage: http://www.deepin.com
@@ -51,7 +52,8 @@ Depends: ${shlibs:Depends},
  mobile-broadband-provider-info,
  bamfdaemon,
  dde-polkit-agent,
- xdotool
+ xdotool,
+ libxcb1,libxcb-record0,
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
