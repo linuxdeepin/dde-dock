@@ -19,11 +19,9 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
 //    QIcon::setThemeName("deepin");
 
     m_diskName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_diskName->setStyleSheet("color:white;"
-                              "font-size:12px;");
+    m_diskName->setStyleSheet("color:white;");
 
-    m_diskCapacity->setStyleSheet("color:rgba(255, 255, 255, .6);"
-                                  "font-size:10px;");
+    m_diskCapacity->setStyleSheet("color:rgba(255, 255, 255, .6);");
 
     m_capacityValueBar->setTextVisible(false);
     m_capacityValueBar->setFixedHeight(2);
