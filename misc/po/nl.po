@@ -4,12 +4,13 @@
 # 
 # Translators:
 # dragnadh <dragnadh@gmail.com>, 2016
+# Lars Acou <lars.acou@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 18:40+0800\n"
-"PO-Revision-Date: 2016-11-29 12:05+0000\n"
+"POT-Creation-Date: 2017-02-23 16:12+0800\n"
+"PO-Revision-Date: 2017-02-24 03:14+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +22,7 @@ msgstr ""
 #: ../../accounts/checkers/password.go:44
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
-msgstr "Vul astublieft een wachtwoord in met niet minder dan 8 tekens"
+msgstr "Vul alstublieft een wachtwoord in met niet minder dan 8 tekens"
 
 #: ../../accounts/checkers/password.go:46
 msgid ""
@@ -81,19 +82,19 @@ msgstr "Netwerk via inbelverbinding"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
-msgstr "Handsfree-apparaat"
+msgstr "Handenvrij apparaat"
 
 #: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Handsfree-stemgateway"
+msgstr "Handenvrije stemgateway"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Hoofdtelefoon-stemgateway"
+msgstr "Hoofdtelefoon stemgateway"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Objectduw"
+msgstr "Object duw"
 
 #: ../../bluetooth/bluez_profile.go:25 ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
@@ -109,7 +110,7 @@ msgstr "Telefoonboektoegang"
 
 #: ../../bluetooth/bluez_profile.go:28 ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Client voor telefoonboektoegang"
+msgstr "Cliënt voor telefoonboektoegang"
 
 #: ../../bluetooth/bluez_profile.go:29 ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
@@ -161,12 +162,12 @@ msgstr "Ontkoppeld"
 
 #: ../../bluetooth/utils_notify.go:52 ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr "Zorg ervoor dat %q is ingeschakeld en binnen bereik is."
+msgstr "Zorg ervoor dat %q ingeschakeld en binnen bereik is."
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr "Bluetooth-verbinding mislukt"
+msgstr "Bluetoothverbinding mislukt"
 
 #: ../../bluetooth/utils_notify.go:56 ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
@@ -174,7 +175,7 @@ msgstr "Verbinden met %q mislukt, automatisch genegeerd"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr "Zorg ervoor dat %q is ingeschakeld en binnen bereik is"
+msgstr "Zorg ervoor dat %q ingeschakeld en binnen bereik is"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
@@ -669,22 +670,29 @@ msgstr "Pagina Omhoog"
 msgid "Page Down"
 msgstr "Pagina Naar Beneden"
 
-#: ../../keybinding/id_desc_list.go:47 ../../keybinding/shortcuts/system.go:57
+#: ../../keybinding/id_desc_list.go:47
+#: ../../keybinding/shortcuts/id_name_map.go:18
+#: ../../keybinding/shortcuts/system.go:57
 #: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
 msgstr "Starter"
 
-#: ../../keybinding/id_desc_list.go:48 ../../keybinding/shortcuts/wm.go:79
-#: ../../keybinding/shortcuts/wm.go:91
+#: ../../keybinding/id_desc_list.go:48
+#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/wm.go:79 ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
 msgstr "Toon bureaublad"
 
-#: ../../keybinding/id_desc_list.go:49 ../../keybinding/shortcuts/system.go:59
+#: ../../keybinding/id_desc_list.go:49
+#: ../../keybinding/shortcuts/id_name_map.go:21
+#: ../../keybinding/shortcuts/system.go:59
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Lock screen"
 msgstr "Scherm vergrendelen"
 
-#: ../../keybinding/id_desc_list.go:50 ../../keybinding/shortcuts/system.go:67
+#: ../../keybinding/id_desc_list.go:50
+#: ../../keybinding/shortcuts/id_name_map.go:29
+#: ../../keybinding/shortcuts/system.go:67
 #: ../../keybinding/shortcuts/system.go:79
 msgid "File manager"
 msgstr "Bestandsbeheerder"
@@ -703,49 +711,67 @@ msgstr "Applicaties van 3D switch"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "Applicaties voor 3D achterwaartse switch"
+msgstr "Applicaties voor 3D omgekeerde switch"
 
-#: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:60
+#: ../../keybinding/id_desc_list.go:55
+#: ../../keybinding/shortcuts/id_name_map.go:22
+#: ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
 msgstr "Dock weergeven/verbergen"
 
-#: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:63
+#: ../../keybinding/id_desc_list.go:56
+#: ../../keybinding/shortcuts/id_name_map.go:25
+#: ../../keybinding/shortcuts/system.go:63
 #: ../../keybinding/shortcuts/system.go:75
 msgid "Screenshot"
 msgstr "Schermopname"
 
-#: ../../keybinding/id_desc_list.go:57 ../../keybinding/shortcuts/system.go:64
+#: ../../keybinding/id_desc_list.go:57
+#: ../../keybinding/shortcuts/id_name_map.go:26
+#: ../../keybinding/shortcuts/system.go:64
 #: ../../keybinding/shortcuts/system.go:76
 msgid "Full screenshot"
-msgstr "Volledig schreenshot"
+msgstr "Volledige schermopname"
 
-#: ../../keybinding/id_desc_list.go:58 ../../keybinding/shortcuts/system.go:65
+#: ../../keybinding/id_desc_list.go:58
+#: ../../keybinding/shortcuts/id_name_map.go:27
+#: ../../keybinding/shortcuts/system.go:65
 #: ../../keybinding/shortcuts/system.go:77
 msgid "Window screenshot"
-msgstr "Screenshot van het venster"
+msgstr "Schermopname venster"
 
-#: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:66
+#: ../../keybinding/id_desc_list.go:59
+#: ../../keybinding/shortcuts/id_name_map.go:28
+#: ../../keybinding/shortcuts/system.go:66
 #: ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
-msgstr "Screenshot uitstellen"
+msgstr "Schermopname vertragen"
 
-#: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:58
+#: ../../keybinding/id_desc_list.go:60
+#: ../../keybinding/shortcuts/id_name_map.go:19
+#: ../../keybinding/shortcuts/system.go:58
 #: ../../keybinding/shortcuts/system.go:70
 msgid "Terminal"
 msgstr "Terminal"
 
-#: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
+#: ../../keybinding/id_desc_list.go:61
+#: ../../keybinding/shortcuts/id_name_map.go:24
+#: ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr "Terminalquakevenster"
+msgstr "Terminal Quake Venster"
 
-#: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
+#: ../../keybinding/id_desc_list.go:62
+#: ../../keybinding/shortcuts/id_name_map.go:23
+#: ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
 msgid "Logout"
 msgstr "Uitloggen"
 
-#: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:68
+#: ../../keybinding/id_desc_list.go:63
+#: ../../keybinding/shortcuts/id_name_map.go:30
+#: ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
 msgstr "Touchpad uitschakelen"
@@ -754,10 +780,12 @@ msgstr "Touchpad uitschakelen"
 msgid "Deepin Translator"
 msgstr "Deepin Vertaler"
 
-#: ../../keybinding/id_desc_list.go:65 ../../keybinding/shortcuts/system.go:69
+#: ../../keybinding/id_desc_list.go:65
+#: ../../keybinding/shortcuts/id_name_map.go:31
+#: ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
-msgstr "Opmaak veranderen"
+msgstr "Wissel Lay-out"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -765,7 +793,7 @@ msgstr "Rekenmachine"
 
 #: ../../keybinding/id_desc_list.go:74
 msgid "Email client"
-msgstr "E-mail klant"
+msgstr "E-mail cliënt"
 
 #: ../../keybinding/id_desc_list.go:75
 msgid "Web browser"
@@ -811,78 +839,88 @@ msgstr "Volgende"
 msgid "Eject"
 msgstr "Uitwerpen"
 
-#: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:92
-#: ../../keybinding/shortcuts/wm.go:104
+#: ../../keybinding/id_desc_list.go:93
+#: ../../keybinding/shortcuts/id_name_map.go:84
+#: ../../keybinding/shortcuts/wm.go:92 ../../keybinding/shortcuts/wm.go:104
 msgid "Close window"
 msgstr "Sluit venster"
 
-#: ../../keybinding/id_desc_list.go:94 ../../keybinding/shortcuts/wm.go:88
-#: ../../keybinding/shortcuts/wm.go:100
+#: ../../keybinding/id_desc_list.go:94
+#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/wm.go:88 ../../keybinding/shortcuts/wm.go:100
 msgid "Maximize window"
 msgstr "Venster maximaliseren"
 
-#: ../../keybinding/id_desc_list.go:95 ../../keybinding/shortcuts/wm.go:89
-#: ../../keybinding/shortcuts/wm.go:101
+#: ../../keybinding/id_desc_list.go:95
+#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/wm.go:89 ../../keybinding/shortcuts/wm.go:101
 msgid "Restore window"
 msgstr "Venster herstellen"
 
 #: ../../keybinding/id_desc_list.go:96
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Minimize window"
 msgstr "Venster minimaliseren"
 
-#: ../../keybinding/id_desc_list.go:97 ../../keybinding/shortcuts/wm.go:93
-#: ../../keybinding/shortcuts/wm.go:105
+#: ../../keybinding/id_desc_list.go:97
+#: ../../keybinding/shortcuts/id_name_map.go:85
+#: ../../keybinding/shortcuts/wm.go:93 ../../keybinding/shortcuts/wm.go:105
 msgid "Move window"
 msgstr "Verplaats venster"
 
-#: ../../keybinding/id_desc_list.go:98 ../../keybinding/shortcuts/wm.go:94
-#: ../../keybinding/shortcuts/wm.go:106
+#: ../../keybinding/id_desc_list.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:86
+#: ../../keybinding/shortcuts/wm.go:94 ../../keybinding/shortcuts/wm.go:106
 msgid "Resize window"
 msgstr "Venstergrootte aanpassen"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Verander furl-instelling"
+msgstr "Wissel furl-instelling"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Venster menu activeren"
+msgstr "Venstermenu activeren"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
-msgstr "Verander naar werkruimte 1"
+msgstr "Ga naar werkruimte 1"
 
 #: ../../keybinding/id_desc_list.go:109
 msgid "Switch to workspace 2"
-msgstr "Verander naar werkruimte 2"
+msgstr "Ga naar werkruimte 2"
 
 #: ../../keybinding/id_desc_list.go:110
 msgid "Switch to workspace 3"
-msgstr "Verander naar werkruimte 3"
+msgstr "Ga naar werkruimte 3"
 
 #: ../../keybinding/id_desc_list.go:111
 msgid "Switch to workspace 4"
-msgstr "Verander naar werkruimte 4"
+msgstr "Ga naar werkruimte 4"
 
-#: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
-#: ../../keybinding/shortcuts/wm.go:72
+#: ../../keybinding/id_desc_list.go:112
+#: ../../keybinding/shortcuts/id_name_map.go:52
+#: ../../keybinding/shortcuts/wm.go:60 ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
-msgstr "Verander naar linkse werkruimte"
+msgstr "Ga naar linker werkruimte"
 
-#: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
-#: ../../keybinding/shortcuts/wm.go:73
+#: ../../keybinding/id_desc_list.go:113
+#: ../../keybinding/shortcuts/id_name_map.go:53
+#: ../../keybinding/shortcuts/wm.go:61 ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
-msgstr "Verander naar rechtse werkruimte"
+msgstr "Ga naar rechter werkruimte"
 
-#: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
-#: ../../keybinding/shortcuts/wm.go:74
+#: ../../keybinding/id_desc_list.go:114
+#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/wm.go:62 ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
-msgstr "Verander naar werkruimte bovenaan"
+msgstr "Ga naar bovenste werkruimte"
 
-#: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:63
-#: ../../keybinding/shortcuts/wm.go:75
+#: ../../keybinding/id_desc_list.go:115
+#: ../../keybinding/shortcuts/id_name_map.go:55
+#: ../../keybinding/shortcuts/wm.go:63 ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
-msgstr "Verander naar werkruimte onderaan"
+msgstr "Ga naar onderste werkruimte"
 
 #: ../../keybinding/id_desc_list.go:116
 msgid "Move to workspace 1"
@@ -900,90 +938,108 @@ msgstr "Verplaats naar werkruimte 3"
 msgid "Move to workspace 4"
 msgstr "Verplaats naar werkruimte 4"
 
-#: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:109
-#: ../../keybinding/shortcuts/wm.go:121
+#: ../../keybinding/id_desc_list.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/wm.go:109 ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
-msgstr "Verplaats naar linkse werkruimte"
+msgstr "Verplaats naar linker werkruimte"
 
-#: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:110
-#: ../../keybinding/shortcuts/wm.go:122
+#: ../../keybinding/id_desc_list.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/wm.go:110 ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
-msgstr "Verplaats naar rechtse werkruimte"
+msgstr "Verplaats naar rechter werkruimte"
 
-#: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:111
-#: ../../keybinding/shortcuts/wm.go:123
+#: ../../keybinding/id_desc_list.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/wm.go:111 ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
-msgstr "Verplaats naar werkruimte bovenaan"
+msgstr "Verplaats naar bovenste werkruimte"
 
-#: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:112
-#: ../../keybinding/shortcuts/wm.go:124
+#: ../../keybinding/id_desc_list.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/wm.go:112 ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
-msgstr "Verplaats naar lagere werkruimte"
+msgstr "Verplaats naar onderste werkruimte"
 
+#: ../../keybinding/shortcuts/id_name_map.go:20
+msgid "Deepin Screen Recorder"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:32
+#: ../../keybinding/shortcuts/system.go:70
+#: ../../keybinding/shortcuts/system.go:82
+msgid "Switch window effects"
+msgstr "Wissel tussen venstereffecten"
+
+#: ../../keybinding/shortcuts/id_name_map.go:33
+#: ../../keybinding/shortcuts/system.go:71
+msgid "Fast Screen Off"
+msgstr "Snel scherm uit"
+
+#: ../../keybinding/shortcuts/id_name_map.go:57
+#: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
+msgid "Switch similar windows"
+msgstr "Verwissel gelijkaardige vensters"
+
+#: ../../keybinding/shortcuts/id_name_map.go:58
+#: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
+msgid "Switch similar windows in reverse"
+msgstr "Verwissel gelijkaardige vensters in omgekeerde volgorde"
+
+#: ../../keybinding/shortcuts/id_name_map.go:59
+#: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
+msgid "Switch windows"
+msgstr "Verwissel vensters"
+
+#: ../../keybinding/shortcuts/id_name_map.go:60
+#: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
+msgid "Switch windows in reverse"
+msgstr "Verwissel vensters in omgekeerde volgorde"
+
+#: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 #: ../../keybinding/shortcuts/metacity.go:93
 msgid "Display windows of all workspaces"
 msgstr "Toon vensters van alle werkruimtes"
 
+#: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 #: ../../keybinding/shortcuts/metacity.go:94
 msgid "Display windows of current workspace"
 msgstr "Toon vensters van de huidige werkruimte"
 
+#: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 #: ../../keybinding/shortcuts/metacity.go:95
 msgid "Display workspace"
 msgstr "Toon werkruimte"
 
-#: ../../keybinding/shortcuts/system.go:70
-#: ../../keybinding/shortcuts/system.go:82
-msgid "Switch window effects"
-msgstr "Wissel tussen venstereffecten"
-
-#: ../../keybinding/shortcuts/system.go:71
-msgid "Fast Screen Off"
-msgstr "Snelscherm uit"
-
-#: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
-msgid "Switch similar windows"
-msgstr "Verwissel gelijkaardige vensters"
-
-#: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
-msgid "Switch similar windows in reverse"
-msgstr "Verwissel gelijkaardige vensters in omgekeerde volgorde"
-
-#: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
-msgid "Switch windows"
-msgstr "Verwissel vensters"
-
-#: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
-msgid "Switch windows in reverse"
-msgstr "Verwissel vensters in omgekeerde volgorde"
-
-#: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
+#: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "Systeemtaal kon niet worden veranderd, gelieve later opnieuw te proberen."
+msgstr "Systeemtaal kon niet worden gewijzigd, gelieve later opnieuw te proberen."
 
-#: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:43
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
+#: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "Systeemtaal werd veranderd, gelieve opnieuw aan te melden na afmelden."
+msgstr "Systeemtaal werd gewijzigd, gelieve af te melden en opnieuw aan te melden."
 
 #: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
 #: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
-msgstr "Systeemtaal wordt veranderd, gelieve te wachten..."
+msgstr "Systeemtaal wordt gewijzigd, gelieve te wachten..."
 
 #: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
 #: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Systeemtaal wordt veranderd door een installatie met ontbrekende taalpakketten, gelieve te wachten... "
+msgstr "Systeemtaal wordt gewijzigd, maar er ontbreken taalpakketten. Gelieve te wachten... "
 
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
@@ -997,14 +1053,17 @@ msgid "Failed to uninstall %q."
 msgstr "Het deïnstalleren van %q is mislukt"
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
+#: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
-msgstr "Niks"
+msgstr "Niets"
 
 #: ../../mime/default_media.go:90 ../../mime/default_media.go:105
+#: ../../mime/media.go:66 ../../mime/media.go:67
 msgid "Open Folder"
 msgstr "Map openen"
 
-#: ../../mime/default_media.go:94
+#: ../../mime/default_media.go:94 ../../mime/media.go:75
+#: ../../mime/media.go:76
 msgid "Run Software"
 msgstr "Software uitvoeren"
 
@@ -1015,9 +1074,10 @@ msgstr "%s succesvol verwijderd"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:308
-#: ../../network/manager_active.go:309 ../../network/manager_active.go:313
-#: ../../network/manager_active.go:314 ../../network/manager_active.go:316
-#: ../../network/manager_active.go:319 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:309 ../../network/manager_active.go:311
+#: ../../network/manager_active.go:313 ../../network/manager_active.go:314
+#: ../../network/manager_active.go:316 ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:173
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:180
@@ -1039,7 +1099,8 @@ msgstr "Geen"
 
 #: ../../network/manager_active.go:296 ../../network/manager_active.go:311
 #: ../../network/manager_active.go:315 ../../network/manager_active.go:316
-#: ../../network/manager_active.go:321 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:318 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:174
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:181
@@ -1051,7 +1112,8 @@ msgstr "WEP 40/128-bitsleutel"
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:317 ../../network/manager_active.go:318
-#: ../../network/manager_active.go:323 ../../network/manager_active.go:325
+#: ../../network/manager_active.go:320 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:325
 #: ../../network/nm_setting_virtual_key.go:175
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:182
@@ -1063,9 +1125,10 @@ msgstr "WPA/WPA2 persoonlijk"
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
 #: ../../network/manager_active.go:325 ../../network/manager_active.go:326
-#: ../../network/manager_active.go:331 ../../network/manager_active.go:333
-#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:31
-#: ../../network/nm_setting_802_1x.go:42 ../../network/nm_setting_802_1x.go:86
+#: ../../network/manager_active.go:328 ../../network/manager_active.go:331
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
+#: ../../network/nm_setting_802_1x.go:31 ../../network/nm_setting_802_1x.go:42
+#: ../../network/nm_setting_802_1x.go:86
 #: ../../network/nm_setting_802_1x.go:111
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:119
@@ -1079,9 +1142,10 @@ msgstr "TLS"
 
 #: ../../network/manager_active.go:308 ../../network/manager_active.go:323
 #: ../../network/manager_active.go:327 ../../network/manager_active.go:328
-#: ../../network/manager_active.go:333 ../../network/manager_active.go:335
-#: ../../network/nm_setting_802_1x.go:29 ../../network/nm_setting_802_1x.go:30
-#: ../../network/nm_setting_802_1x.go:41 ../../network/nm_setting_802_1x.go:85
+#: ../../network/manager_active.go:330 ../../network/manager_active.go:333
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:29
+#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:41
+#: ../../network/nm_setting_802_1x.go:85
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:124
@@ -1091,8 +1155,8 @@ msgstr "MD5"
 
 #: ../../network/manager_active.go:310 ../../network/manager_active.go:325
 #: ../../network/manager_active.go:329 ../../network/manager_active.go:330
-#: ../../network/manager_active.go:335 ../../network/manager_active.go:337
-#: ../../network/nm_setting_802_1x.go:120
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:335
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:120
 #: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:132
 #: ../../network/nm_setting_802_1x.go:176
@@ -1105,8 +1169,8 @@ msgstr "LEAP"
 
 #: ../../network/manager_active.go:312 ../../network/manager_active.go:327
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:332
-#: ../../network/manager_active.go:337 ../../network/manager_active.go:339
-#: ../../network/nm_setting_802_1x.go:113
+#: ../../network/manager_active.go:334 ../../network/manager_active.go:337
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:122
@@ -1115,12 +1179,12 @@ msgstr "LEAP"
 #: ../../network/nm_setting_802_1x.go:169
 #: ../../network/nm_setting_802_1x.go:177
 msgid "FAST"
-msgstr "SNEL"
+msgstr "FAST"
 
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:329
 #: ../../network/manager_active.go:333 ../../network/manager_active.go:334
-#: ../../network/manager_active.go:339 ../../network/manager_active.go:341
-#: ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:336 ../../network/manager_active.go:339
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:123
@@ -1133,8 +1197,8 @@ msgstr "Tunneled TLS"
 
 #: ../../network/manager_active.go:316 ../../network/manager_active.go:331
 #: ../../network/manager_active.go:335 ../../network/manager_active.go:336
-#: ../../network/manager_active.go:341 ../../network/manager_active.go:343
-#: ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:338 ../../network/manager_active.go:341
+#: ../../network/manager_active.go:343 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:124
@@ -1154,7 +1218,7 @@ msgstr "Protected EAP"
 #: ../../network/nm_custom_type.go:205 ../../network/nm_custom_type.go:212
 #: ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
-msgstr "Bedrade verbinding"
+msgstr "Bekabelde verbinding"
 
 #: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:26
 #: ../../network/nm_setting_vpn_l2tp.go:102
@@ -1906,7 +1970,7 @@ msgstr "Gebruikerscertificaat"
 #: ../../network/nm_setting_beans_gen.go:95
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Provisioning"
-msgstr "Proviandering"
+msgstr "Toelevering"
 
 #: ../../network/nm_setting_bean_gen.go:126
 #: ../../network/nm_setting_bean_gen.go:127
@@ -2436,7 +2500,7 @@ msgstr "VPN"
 #: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "Need VPN Plugin"
-msgstr "VPN-plug-in benodigd"
+msgstr "VPN-plug-in nodig"
 
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
@@ -2973,7 +3037,7 @@ msgstr "VPN TLS-Authenticatie"
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:307
 msgid "Subject Match"
-msgstr "Gelijk onderwerp"
+msgstr "Onderwerp Overeenkomst"
 
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
@@ -3089,7 +3153,7 @@ msgstr "Gatewaypoort"
 #: ../../network/nm_setting_beans_gen.go:333
 #: ../../network/nm_setting_beans_gen.go:334
 msgid "Customize Renegotiation Interval"
-msgstr "Gebruik aangepaste heronderhandeling interval"
+msgstr "Gebruik aangepast heronderhandeling interval"
 
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:353
@@ -3561,7 +3625,7 @@ msgstr "Allen beschikbaar (standaard)"
 #: ../../network/nm_setting_virtual_key.go:206
 #: ../../network/nm_setting_virtual_key.go:212
 msgid "128-bit (most secure)"
-msgstr "128-bit (meest beveiligde)"
+msgstr "128-bit (veiligste)"
 
 #: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:198
@@ -3570,7 +3634,7 @@ msgstr "128-bit (meest beveiligde)"
 #: ../../network/nm_setting_virtual_key.go:207
 #: ../../network/nm_setting_virtual_key.go:213
 msgid "40-bit (less secure)"
-msgstr "40-bit (minder beveiligd)"
+msgstr "40-bit (minder veilig)"
 
 #: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:214
@@ -4067,7 +4131,7 @@ msgstr "De 802.1x-verzoeker is onverwacht gestopt of mislukt."
 #: ../../network/state_handler.go:33 ../../network/state_handler.go:34
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "De 802.1x-verzoeker deed er te lang over om zich te authentificeren."
+msgstr "De 802.1x-verzoeker deed er te lang over om zich te authenticeren."
 
 #: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 #: ../../network/state_handler.go:46
@@ -4092,7 +4156,7 @@ msgstr "De DHCP-service kon niet starten binnen de toegestane tijd."
 #: ../../network/state_handler.go:38 ../../network/state_handler.go:39
 #: ../../network/state_handler.go:50
 msgid "The DHCP service reported an unexpected error."
-msgstr "De DHCP-service gaf een onverwachte fout terug."
+msgstr "De DHCP-service meldde een onverwachte fout."
 
 #: ../../network/state_handler.go:39 ../../network/state_handler.go:40
 #: ../../network/state_handler.go:51
@@ -4117,7 +4181,7 @@ msgstr "De AutoIP-service kon niet worden gestart."
 #: ../../network/state_handler.go:43 ../../network/state_handler.go:44
 #: ../../network/state_handler.go:55
 msgid "The AutoIP service reported an unexpected error."
-msgstr "De AutoIP-service gaf een onverwachte fout terug."
+msgstr "De AutoIP-service meldde een onverwachte fout."
 
 #: ../../network/state_handler.go:44 ../../network/state_handler.go:45
 #: ../../network/state_handler.go:56
@@ -4132,7 +4196,7 @@ msgstr "Bellen faalde wegens bezette lijnen."
 #: ../../network/state_handler.go:46 ../../network/state_handler.go:47
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Bellen faalde wegens geen verbindigstoon."
+msgstr "Bellen faalde wegens geen verbindingstoon."
 
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:48
 #: ../../network/state_handler.go:59
@@ -4187,7 +4251,7 @@ msgstr "Controle van PIN mislukt."
 #: ../../network/state_handler.go:57 ../../network/state_handler.go:58
 #: ../../network/state_handler.go:69
 msgid "Necessary firmware for the device may be missed."
-msgstr "De nodige firmware voor het toestel ontbreekt mogelijk."
+msgstr "Mogelijk ontbreekt de nodige firmware voor het toestel."
 
 #: ../../network/state_handler.go:58 ../../network/state_handler.go:59
 #: ../../network/state_handler.go:70
@@ -4282,7 +4346,7 @@ msgstr "Het 802.11-wifinetwerk kon niet worden gevonden."
 #: ../../network/state_handler.go:76 ../../network/state_handler.go:77
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "Een secundaire verbinding van de basis verbinding faalde."
+msgstr "Een secundaire verbinding van de basisverbinding faalde."
 
 #: ../../network/state_handler.go:79 ../../network/state_handler.go:80
 #: ../../network/state_handler.go:91
@@ -4389,7 +4453,7 @@ msgstr "De VPN-service kon niet worden opgestart."
 #: ../../network/state_handler.go:103 ../../network/state_handler.go:104
 #: ../../network/state_handler.go:105 ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "Het wachtwoord nodig voor de VPN-verbinding werd niet ingegeven."
+msgstr "Het vereiste wachtwoord voor de VPN-verbinding werd niet ingegeven."
 
 #: ../../network/state_handler.go:104 ../../network/state_handler.go:105
 #: ../../network/state_handler.go:106 ../../network/state_handler.go:116
@@ -4402,8 +4466,9 @@ msgid "The connection was deleted from settings."
 msgstr "De verbinding werd uit instellingen verwijderd."
 
 #: ../../network/utils_dbus_nm.go:292 ../../network/utils_dbus_nm.go:299
-#: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
+#: ../../network/utils_dbus_nm.go:316 ../../network/utils_nm.go:169
+#: ../../network/utils_nm.go:310 ../../network/utils_nm.go:312
+#: ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "Onbekend"
 
@@ -4418,7 +4483,7 @@ msgstr "Vliegtuigstand ingeschakeld."
 
 #: ../../network/utils_notify.go:94 ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
-msgstr "Access Point mode is niet ondersteund door dit apparaat."
+msgstr "Access Point mode wordt niet ondersteund door dit apparaat."
 
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:110
@@ -4458,30 +4523,35 @@ msgstr "Batterijvermogen kan niet worden voorspeld, gelieve belangrijke document
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:146
 #: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
-msgstr "Batterij is kritisch laag"
+msgstr "Batterij is kritiek laag"
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:146
 #: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Computer was in slaapstand, gelieve in te pluggen"
+msgstr "Computer was in slaapstand, gelieve netstroom te voorzien."
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
@@ -4491,16 +4561,17 @@ msgstr "Batterij is laag"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Computer zal in slaapstand gaan, gelieve nu in te pluggen."
+msgstr "Computer zal in slaapstand gaan, gelieve nu netstroom te voorzien."
 
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Gelieve in het stopcontact te steken, anders gaat de computer in slaapstand."
+msgstr "Gelieve netstroom te voorzien, anders gaat de computer in slaapstand."
 
 #: ../../timedate/deepin_list.go:349
 msgid "Kolkata"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-29 18:40+0800\n"
-"PO-Revision-Date: 2016-11-29 12:05+0000\n"
+"POT-Creation-Date: 2017-02-23 16:12+0800\n"
+"PO-Revision-Date: 2017-02-24 03:14+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -670,22 +670,29 @@ msgstr "O stranu vyššie"
 msgid "Page Down"
 msgstr "O stranu nižšie"
 
-#: ../../keybinding/id_desc_list.go:47 ../../keybinding/shortcuts/system.go:57
+#: ../../keybinding/id_desc_list.go:47
+#: ../../keybinding/shortcuts/id_name_map.go:18
+#: ../../keybinding/shortcuts/system.go:57
 #: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
 msgstr "Spúšťač"
 
-#: ../../keybinding/id_desc_list.go:48 ../../keybinding/shortcuts/wm.go:79
-#: ../../keybinding/shortcuts/wm.go:91
+#: ../../keybinding/id_desc_list.go:48
+#: ../../keybinding/shortcuts/id_name_map.go:71
+#: ../../keybinding/shortcuts/wm.go:79 ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
 msgstr "Ukázať plochu"
 
-#: ../../keybinding/id_desc_list.go:49 ../../keybinding/shortcuts/system.go:59
+#: ../../keybinding/id_desc_list.go:49
+#: ../../keybinding/shortcuts/id_name_map.go:21
+#: ../../keybinding/shortcuts/system.go:59
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Lock screen"
 msgstr "Uzamykacia obrazovka"
 
-#: ../../keybinding/id_desc_list.go:50 ../../keybinding/shortcuts/system.go:67
+#: ../../keybinding/id_desc_list.go:50
+#: ../../keybinding/shortcuts/id_name_map.go:29
+#: ../../keybinding/shortcuts/system.go:67
 #: ../../keybinding/shortcuts/system.go:79
 msgid "File manager"
 msgstr "Správca súborov"
@@ -706,47 +713,65 @@ msgstr "3D prepínač aplikácií"
 msgid "3D reverse switch applications"
 msgstr "3D opačný prepínač aplikácií"
 
-#: ../../keybinding/id_desc_list.go:55 ../../keybinding/shortcuts/system.go:60
+#: ../../keybinding/id_desc_list.go:55
+#: ../../keybinding/shortcuts/id_name_map.go:22
+#: ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
 msgstr "Zobraziť/Skryť dock"
 
-#: ../../keybinding/id_desc_list.go:56 ../../keybinding/shortcuts/system.go:63
+#: ../../keybinding/id_desc_list.go:56
+#: ../../keybinding/shortcuts/id_name_map.go:25
+#: ../../keybinding/shortcuts/system.go:63
 #: ../../keybinding/shortcuts/system.go:75
 msgid "Screenshot"
 msgstr "Snímok obrazovky"
 
-#: ../../keybinding/id_desc_list.go:57 ../../keybinding/shortcuts/system.go:64
+#: ../../keybinding/id_desc_list.go:57
+#: ../../keybinding/shortcuts/id_name_map.go:26
+#: ../../keybinding/shortcuts/system.go:64
 #: ../../keybinding/shortcuts/system.go:76
 msgid "Full screenshot"
 msgstr "Plná snímka obrazovky"
 
-#: ../../keybinding/id_desc_list.go:58 ../../keybinding/shortcuts/system.go:65
+#: ../../keybinding/id_desc_list.go:58
+#: ../../keybinding/shortcuts/id_name_map.go:27
+#: ../../keybinding/shortcuts/system.go:65
 #: ../../keybinding/shortcuts/system.go:77
 msgid "Window screenshot"
 msgstr "Snímka okna"
 
-#: ../../keybinding/id_desc_list.go:59 ../../keybinding/shortcuts/system.go:66
+#: ../../keybinding/id_desc_list.go:59
+#: ../../keybinding/shortcuts/id_name_map.go:28
+#: ../../keybinding/shortcuts/system.go:66
 #: ../../keybinding/shortcuts/system.go:78
 msgid "Delay screenshot"
 msgstr "Oneskoriť snímku obrazovky"
 
-#: ../../keybinding/id_desc_list.go:60 ../../keybinding/shortcuts/system.go:58
+#: ../../keybinding/id_desc_list.go:60
+#: ../../keybinding/shortcuts/id_name_map.go:19
+#: ../../keybinding/shortcuts/system.go:58
 #: ../../keybinding/shortcuts/system.go:70
 msgid "Terminal"
 msgstr "Terminál"
 
-#: ../../keybinding/id_desc_list.go:61 ../../keybinding/shortcuts/system.go:62
+#: ../../keybinding/id_desc_list.go:61
+#: ../../keybinding/shortcuts/id_name_map.go:24
+#: ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
 msgstr "Terminál Quake okno"
 
-#: ../../keybinding/id_desc_list.go:62 ../../keybinding/shortcuts/system.go:61
+#: ../../keybinding/id_desc_list.go:62
+#: ../../keybinding/shortcuts/id_name_map.go:23
+#: ../../keybinding/shortcuts/system.go:61
 #: ../../keybinding/shortcuts/system.go:73
 msgid "Logout"
 msgstr "Odhlásiť"
 
-#: ../../keybinding/id_desc_list.go:63 ../../keybinding/shortcuts/system.go:68
+#: ../../keybinding/id_desc_list.go:63
+#: ../../keybinding/shortcuts/id_name_map.go:30
+#: ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
 msgstr "Vypnúť touchpad"
@@ -755,7 +780,9 @@ msgstr "Vypnúť touchpad"
 msgid "Deepin Translator"
 msgstr "Deepin Prekladač"
 
-#: ../../keybinding/id_desc_list.go:65 ../../keybinding/shortcuts/system.go:69
+#: ../../keybinding/id_desc_list.go:65
+#: ../../keybinding/shortcuts/id_name_map.go:31
+#: ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
 msgstr "Prepnúť rozmiestnenie"
@@ -812,32 +839,38 @@ msgstr "Ďalšie"
 msgid "Eject"
 msgstr "Vysunúť"
 
-#: ../../keybinding/id_desc_list.go:93 ../../keybinding/shortcuts/wm.go:92
-#: ../../keybinding/shortcuts/wm.go:104
+#: ../../keybinding/id_desc_list.go:93
+#: ../../keybinding/shortcuts/id_name_map.go:84
+#: ../../keybinding/shortcuts/wm.go:92 ../../keybinding/shortcuts/wm.go:104
 msgid "Close window"
 msgstr "Zatvoriť okno"
 
-#: ../../keybinding/id_desc_list.go:94 ../../keybinding/shortcuts/wm.go:88
-#: ../../keybinding/shortcuts/wm.go:100
+#: ../../keybinding/id_desc_list.go:94
+#: ../../keybinding/shortcuts/id_name_map.go:80
+#: ../../keybinding/shortcuts/wm.go:88 ../../keybinding/shortcuts/wm.go:100
 msgid "Maximize window"
 msgstr "Maximalizovať okno"
 
-#: ../../keybinding/id_desc_list.go:95 ../../keybinding/shortcuts/wm.go:89
-#: ../../keybinding/shortcuts/wm.go:101
+#: ../../keybinding/id_desc_list.go:95
+#: ../../keybinding/shortcuts/id_name_map.go:81
+#: ../../keybinding/shortcuts/wm.go:89 ../../keybinding/shortcuts/wm.go:101
 msgid "Restore window"
 msgstr "Obnoviť okno"
 
 #: ../../keybinding/id_desc_list.go:96
+#: ../../keybinding/shortcuts/id_name_map.go:83
 msgid "Minimize window"
 msgstr "Minimalizovať okno"
 
-#: ../../keybinding/id_desc_list.go:97 ../../keybinding/shortcuts/wm.go:93
-#: ../../keybinding/shortcuts/wm.go:105
+#: ../../keybinding/id_desc_list.go:97
+#: ../../keybinding/shortcuts/id_name_map.go:85
+#: ../../keybinding/shortcuts/wm.go:93 ../../keybinding/shortcuts/wm.go:105
 msgid "Move window"
 msgstr "Presunúť okno"
 
-#: ../../keybinding/id_desc_list.go:98 ../../keybinding/shortcuts/wm.go:94
-#: ../../keybinding/shortcuts/wm.go:106
+#: ../../keybinding/id_desc_list.go:98
+#: ../../keybinding/shortcuts/id_name_map.go:86
+#: ../../keybinding/shortcuts/wm.go:94 ../../keybinding/shortcuts/wm.go:106
 msgid "Resize window"
 msgstr "Zmeniť veľkosť okna"
 
@@ -865,23 +898,27 @@ msgstr "Prepnúť na pracovnú plochu 3"
 msgid "Switch to workspace 4"
 msgstr "Prepnúť na pracovnú plochu 4"
 
-#: ../../keybinding/id_desc_list.go:112 ../../keybinding/shortcuts/wm.go:60
-#: ../../keybinding/shortcuts/wm.go:72
+#: ../../keybinding/id_desc_list.go:112
+#: ../../keybinding/shortcuts/id_name_map.go:52
+#: ../../keybinding/shortcuts/wm.go:60 ../../keybinding/shortcuts/wm.go:72
 msgid "Switch to left workspace"
 msgstr "Prepnúť na pracovnú plochu vľavo"
 
-#: ../../keybinding/id_desc_list.go:113 ../../keybinding/shortcuts/wm.go:61
-#: ../../keybinding/shortcuts/wm.go:73
+#: ../../keybinding/id_desc_list.go:113
+#: ../../keybinding/shortcuts/id_name_map.go:53
+#: ../../keybinding/shortcuts/wm.go:61 ../../keybinding/shortcuts/wm.go:73
 msgid "Switch to right workspace"
 msgstr "Prepnúť na pracovnú plochu vpravo"
 
-#: ../../keybinding/id_desc_list.go:114 ../../keybinding/shortcuts/wm.go:62
-#: ../../keybinding/shortcuts/wm.go:74
+#: ../../keybinding/id_desc_list.go:114
+#: ../../keybinding/shortcuts/id_name_map.go:54
+#: ../../keybinding/shortcuts/wm.go:62 ../../keybinding/shortcuts/wm.go:74
 msgid "Switch to upper workspace"
 msgstr "Prepnúť na pracovnú plochu hore"
 
-#: ../../keybinding/id_desc_list.go:115 ../../keybinding/shortcuts/wm.go:63
-#: ../../keybinding/shortcuts/wm.go:75
+#: ../../keybinding/id_desc_list.go:115
+#: ../../keybinding/shortcuts/id_name_map.go:55
+#: ../../keybinding/shortcuts/wm.go:63 ../../keybinding/shortcuts/wm.go:75
 msgid "Switch to lower workspace"
 msgstr "Prepnúť na pracovnú plochu dole"
 
@@ -901,75 +938,93 @@ msgstr "Prejsť na plochu 3"
 msgid "Move to workspace 4"
 msgstr "Prejsť na plochu 4"
 
-#: ../../keybinding/id_desc_list.go:120 ../../keybinding/shortcuts/wm.go:109
-#: ../../keybinding/shortcuts/wm.go:121
+#: ../../keybinding/id_desc_list.go:120
+#: ../../keybinding/shortcuts/id_name_map.go:101
+#: ../../keybinding/shortcuts/wm.go:109 ../../keybinding/shortcuts/wm.go:121
 msgid "Move to left workspace"
 msgstr "Prejsť na plochu vľavo"
 
-#: ../../keybinding/id_desc_list.go:121 ../../keybinding/shortcuts/wm.go:110
-#: ../../keybinding/shortcuts/wm.go:122
+#: ../../keybinding/id_desc_list.go:121
+#: ../../keybinding/shortcuts/id_name_map.go:102
+#: ../../keybinding/shortcuts/wm.go:110 ../../keybinding/shortcuts/wm.go:122
 msgid "Move to right workspace"
 msgstr "Prejsť na plochu vpravo"
 
-#: ../../keybinding/id_desc_list.go:122 ../../keybinding/shortcuts/wm.go:111
-#: ../../keybinding/shortcuts/wm.go:123
+#: ../../keybinding/id_desc_list.go:122
+#: ../../keybinding/shortcuts/id_name_map.go:103
+#: ../../keybinding/shortcuts/wm.go:111 ../../keybinding/shortcuts/wm.go:123
 msgid "Move to upper workspace"
 msgstr "Prejsť na plochu hore"
 
-#: ../../keybinding/id_desc_list.go:123 ../../keybinding/shortcuts/wm.go:112
-#: ../../keybinding/shortcuts/wm.go:124
+#: ../../keybinding/id_desc_list.go:123
+#: ../../keybinding/shortcuts/id_name_map.go:104
+#: ../../keybinding/shortcuts/wm.go:112 ../../keybinding/shortcuts/wm.go:124
 msgid "Move to lower workspace"
 msgstr "Prejsť na plochu dole"
 
+#: ../../keybinding/shortcuts/id_name_map.go:20
+msgid "Deepin Screen Recorder"
+msgstr ""
+
+#: ../../keybinding/shortcuts/id_name_map.go:32
+#: ../../keybinding/shortcuts/system.go:70
+#: ../../keybinding/shortcuts/system.go:82
+msgid "Switch window effects"
+msgstr "Prepnúť efekty okna"
+
+#: ../../keybinding/shortcuts/id_name_map.go:33
+#: ../../keybinding/shortcuts/system.go:71
+msgid "Fast Screen Off"
+msgstr "Zrýchlený obraz vypnutý"
+
+#: ../../keybinding/shortcuts/id_name_map.go:57
+#: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
+msgid "Switch similar windows"
+msgstr "Prepnúť podobné okná"
+
+#: ../../keybinding/shortcuts/id_name_map.go:58
+#: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
+msgid "Switch similar windows in reverse"
+msgstr "Prepínanie podobných okien v opačnom smere"
+
+#: ../../keybinding/shortcuts/id_name_map.go:59
+#: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
+msgid "Switch windows"
+msgstr "Prepnúť okná"
+
+#: ../../keybinding/shortcuts/id_name_map.go:60
+#: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
+msgid "Switch windows in reverse"
+msgstr "Prepínanie okien v opačnom smere"
+
+#: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 #: ../../keybinding/shortcuts/metacity.go:93
 msgid "Display windows of all workspaces"
 msgstr "Zobraziť okná zo všetkých pracovných prostredí"
 
+#: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 #: ../../keybinding/shortcuts/metacity.go:94
 msgid "Display windows of current workspace"
 msgstr "Zobraziť okná z aktuálného pracovného prostredia"
 
+#: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
 #: ../../keybinding/shortcuts/metacity.go:95
 msgid "Display workspace"
 msgstr "Pracovné prostredie"
 
-#: ../../keybinding/shortcuts/system.go:70
-#: ../../keybinding/shortcuts/system.go:82
-msgid "Switch window effects"
-msgstr "Prepnúť efekty okna"
-
-#: ../../keybinding/shortcuts/system.go:71
-msgid "Fast Screen Off"
-msgstr "Zrýchlený obraz vypnutý"
-
-#: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
-msgid "Switch similar windows"
-msgstr "Prepnúť podobné okná"
-
-#: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
-msgid "Switch similar windows in reverse"
-msgstr "Prepínanie podobných okien v opačnom smere"
-
-#: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
-msgid "Switch windows"
-msgstr "Prepnúť okná"
-
-#: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
-msgid "Switch windows in reverse"
-msgstr "Prepínanie okien v opačnom smere"
-
-#: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
+#: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Došlo k chybe pri zmene systémového jazyka, prosím skúste neskôr. "
 
-#: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:43
-#: ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
+#: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "Systémový jazyk bol zmenený, prosím odhláste sa a prihláste znovu. "
@@ -998,14 +1053,17 @@ msgid "Failed to uninstall %q."
 msgstr "Nepodarilo sa odinštalovať %q."
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
+#: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
 msgstr "Nič"
 
 #: ../../mime/default_media.go:90 ../../mime/default_media.go:105
+#: ../../mime/media.go:66 ../../mime/media.go:67
 msgid "Open Folder"
 msgstr "Otvoriť adresár"
 
-#: ../../mime/default_media.go:94
+#: ../../mime/default_media.go:94 ../../mime/media.go:75
+#: ../../mime/media.go:76
 msgid "Run Software"
 msgstr "Spustiť softvér"
 
@@ -1016,9 +1074,10 @@ msgstr "%s úspešne odstránený"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:308
-#: ../../network/manager_active.go:309 ../../network/manager_active.go:313
-#: ../../network/manager_active.go:314 ../../network/manager_active.go:316
-#: ../../network/manager_active.go:319 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:309 ../../network/manager_active.go:311
+#: ../../network/manager_active.go:313 ../../network/manager_active.go:314
+#: ../../network/manager_active.go:316 ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:173
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:180
@@ -1040,7 +1099,8 @@ msgstr "Žiadne"
 
 #: ../../network/manager_active.go:296 ../../network/manager_active.go:311
 #: ../../network/manager_active.go:315 ../../network/manager_active.go:316
-#: ../../network/manager_active.go:321 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:318 ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:174
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:181
@@ -1052,7 +1112,8 @@ msgstr "WEP 40/128-bit kľúč"
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:317 ../../network/manager_active.go:318
-#: ../../network/manager_active.go:323 ../../network/manager_active.go:325
+#: ../../network/manager_active.go:320 ../../network/manager_active.go:323
+#: ../../network/manager_active.go:325
 #: ../../network/nm_setting_virtual_key.go:175
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:182
@@ -1064,9 +1125,10 @@ msgstr "WPA/WPA2 Personal"
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
 #: ../../network/manager_active.go:325 ../../network/manager_active.go:326
-#: ../../network/manager_active.go:331 ../../network/manager_active.go:333
-#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:31
-#: ../../network/nm_setting_802_1x.go:42 ../../network/nm_setting_802_1x.go:86
+#: ../../network/manager_active.go:328 ../../network/manager_active.go:331
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
+#: ../../network/nm_setting_802_1x.go:31 ../../network/nm_setting_802_1x.go:42
+#: ../../network/nm_setting_802_1x.go:86
 #: ../../network/nm_setting_802_1x.go:111
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:119
@@ -1080,9 +1142,10 @@ msgstr "TLS"
 
 #: ../../network/manager_active.go:308 ../../network/manager_active.go:323
 #: ../../network/manager_active.go:327 ../../network/manager_active.go:328
-#: ../../network/manager_active.go:333 ../../network/manager_active.go:335
-#: ../../network/nm_setting_802_1x.go:29 ../../network/nm_setting_802_1x.go:30
-#: ../../network/nm_setting_802_1x.go:41 ../../network/nm_setting_802_1x.go:85
+#: ../../network/manager_active.go:330 ../../network/manager_active.go:333
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:29
+#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:41
+#: ../../network/nm_setting_802_1x.go:85
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:124
@@ -1092,8 +1155,8 @@ msgstr "MD5"
 
 #: ../../network/manager_active.go:310 ../../network/manager_active.go:325
 #: ../../network/manager_active.go:329 ../../network/manager_active.go:330
-#: ../../network/manager_active.go:335 ../../network/manager_active.go:337
-#: ../../network/nm_setting_802_1x.go:120
+#: ../../network/manager_active.go:332 ../../network/manager_active.go:335
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:120
 #: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:132
 #: ../../network/nm_setting_802_1x.go:176
@@ -1106,8 +1169,8 @@ msgstr "LEAP"
 
 #: ../../network/manager_active.go:312 ../../network/manager_active.go:327
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:332
-#: ../../network/manager_active.go:337 ../../network/manager_active.go:339
-#: ../../network/nm_setting_802_1x.go:113
+#: ../../network/manager_active.go:334 ../../network/manager_active.go:337
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:113
 #: ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_802_1x.go:122
@@ -1120,8 +1183,8 @@ msgstr "FAST"
 
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:329
 #: ../../network/manager_active.go:333 ../../network/manager_active.go:334
-#: ../../network/manager_active.go:339 ../../network/manager_active.go:341
-#: ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:336 ../../network/manager_active.go:339
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:123
@@ -1134,8 +1197,8 @@ msgstr "Tunelované TLS"
 
 #: ../../network/manager_active.go:316 ../../network/manager_active.go:331
 #: ../../network/manager_active.go:335 ../../network/manager_active.go:336
-#: ../../network/manager_active.go:341 ../../network/manager_active.go:343
-#: ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:338 ../../network/manager_active.go:341
+#: ../../network/manager_active.go:343 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:123
 #: ../../network/nm_setting_802_1x.go:124
@@ -4403,8 +4466,9 @@ msgid "The connection was deleted from settings."
 msgstr "Spojenie bolo odstránené z nastavení. "
 
 #: ../../network/utils_dbus_nm.go:292 ../../network/utils_dbus_nm.go:299
-#: ../../network/utils_nm.go:169 ../../network/utils_nm.go:310
-#: ../../network/utils_nm.go:312 ../../network/utils_nm.go:322
+#: ../../network/utils_dbus_nm.go:316 ../../network/utils_nm.go:169
+#: ../../network/utils_nm.go:310 ../../network/utils_nm.go:312
+#: ../../network/utils_nm.go:322
 msgid "Unknown"
 msgstr "Neznámy"
 
@@ -4459,9 +4523,11 @@ msgstr "Nie je možné predpovedať energiu batérie, prosím uložte dôležit�
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:142
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:146
 #: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
@@ -4471,9 +4537,11 @@ msgstr "Kritická úroveň batérie"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:142
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
+#: ../../session/power/manager_events.go:146
 #: ../../session/power/manager_events.go:164
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
@@ -4483,6 +4551,7 @@ msgstr "Počítač je v úspornom režime, prosím pripojte kábel napájania. "
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
@@ -4492,6 +4561,7 @@ msgstr "Nízka úroveň batérie"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
