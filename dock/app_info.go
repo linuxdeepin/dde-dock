@@ -80,6 +80,17 @@ func NewAppInfoFromFile(file string) *AppInfo {
 	if dai == nil {
 		return nil
 	}
+
+	if !dai.IsInstalled() {
+		createdBy, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-CreatedBy")
+		if createdBy == launcherDest {
+			appId, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-AppID")
+			dai1 := desktopappinfo.NewDesktopAppInfo(appId)
+			if dai1 != nil {
+				dai = dai1
+			}
+		}
+	}
 	return newAppInfo(dai)
 }
 
