@@ -51,7 +51,7 @@ int xrecord_grab_init()
 	xcb_record_range_t rr;
 	memset(&rr, 0, sizeof(rr));
 	rr.device_events.first = XCB_KEY_PRESS;
-	rr.device_events.last = XCB_KEY_RELEASE;
+	rr.device_events.last = XCB_BUTTON_RELEASE;
 
 	xcb_void_cookie_t create_cookie =
 	    xcb_record_create_context_checked(ctrl_disp, rc, 0, 1, 1, &rcs,
@@ -112,31 +112,24 @@ void xrecord_grab_finalize()
 void event_callback(uint8_t * data)
 {
 	uint8_t event_type = data[0];
-
-	int pressed;
-	xcb_keycode_t detail;
-	uint16_t state;
-
 	switch (event_type) {
 	case XCB_KEY_PRESS:{
 			xcb_key_press_event_t *ev =
 			    (xcb_key_press_event_t *) data;
-			pressed = 1;
-			detail = ev->detail;
-			state = ev->state;
+			handleKeyEvent(1, ev->detail, ev->state);
 			break;
 		}
 	case XCB_KEY_RELEASE:{
 			xcb_key_release_event_t *ev =
 			    (xcb_key_release_event_t *) data;
-			pressed = 0;
-			detail = ev->detail;
-			state = ev->state;
+			handleKeyEvent(0, ev->detail, ev->state);
 			break;
 		}
-	default:
-		return;
+	case XCB_BUTTON_PRESS:
+		handleButtonEvent(1);
+		break;
+	case XCB_BUTTON_RELEASE:
+		handleButtonEvent(0);
+		break;
 	}
-
-	handleKeyEvent(pressed, detail, state);
 }

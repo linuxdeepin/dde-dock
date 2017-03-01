@@ -16,6 +16,7 @@ import (
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	//"sync"
+	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/log"
 	"strings"
 )
@@ -33,6 +34,7 @@ type Shortcuts struct {
 	grabedKeyAccelMap map[Key]*Accel
 	eventCb           KeyEventFunc
 	xu                *xgbutil.XUtil
+	pressedKeysCount  int
 }
 
 type KeyEvent struct {
@@ -49,7 +51,21 @@ func NewShortcuts(xu *xgbutil.XUtil, eventCb KeyEventFunc) *Shortcuts {
 		xu:                xu,
 	}
 
+	// init package xrecord
+	err := xrecord.Initialize()
+	if err == nil {
+		xrecord.KeyEventCallback = ss.handleXRecordKeyEvent
+		xrecord.ButtonEventCallback = ss.handleXRecordButtonEvent
+	} else {
+		logger.Warning(err)
+	}
 	return ss
+}
+
+func (ss *Shortcuts) Destroy() {
+	xrecord.KeyEventCallback = nil
+	xrecord.ButtonEventCallback = nil
+	xrecord.Finalize()
 }
 
 func (ss *Shortcuts) List() (list []Shortcut) {
@@ -279,7 +295,15 @@ func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 	return true
 }
 
-func (ss *Shortcuts) HandleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
+func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
+	defer func() {
+		if pressed {
+			ss.pressedKeysCount++
+		} else {
+			ss.pressedKeysCount = 0
+		}
+	}()
+	//logger.Debugf("handleXRecordKeyEvent pressed %v code %d state %d", pressed, code, state)
 	str := keybind.LookupString(ss.xu, 0, xproto.Keycode(code))
 	switch strings.ToLower(str) {
 	case "super_r", "super_l":
@@ -290,10 +314,18 @@ func (ss *Shortcuts) HandleXRecordKeyEvent(pressed bool, code uint8, state uint1
 			return
 		}
 
-		ss.emitKeyEvent(0, Key{Code: Keycode(code)})
+		logger.Debug("pressed key count:", ss.pressedKeysCount)
+		if ss.pressedKeysCount == 1 {
+			// single super key pressed and then released
+			ss.emitKeyEvent(0, Key{Code: Keycode(code)})
+		}
 	case "caps_lock", "num_lock":
 		ss.handleKeyEvent(pressed, xproto.Keycode(code), state)
 	}
+}
+
+func (ss *Shortcuts) handleXRecordButtonEvent(pressed bool) {
+	ss.pressedKeysCount = 0
 }
 
 func (ss *Shortcuts) ListenXEvents() {

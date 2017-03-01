@@ -19,8 +19,10 @@ import (
 var enabled = true
 
 type KeyEventFunc func(pressed bool, keycode uint8, state uint16)
+type ButtonEventFunc func(pressed bool)
 
-var keyEventCb KeyEventFunc
+var KeyEventCallback KeyEventFunc
+var ButtonEventCallback ButtonEventFunc
 
 func Initialize() error {
 	state := C.xrecord_grab_init()
@@ -35,10 +37,6 @@ func Finalize() {
 	C.xrecord_grab_finalize()
 }
 
-func SetKeyEventCallback(fn KeyEventFunc) {
-	keyEventCb = fn
-}
-
 func Enable(val bool) {
 	enabled = val
 }
@@ -49,7 +47,18 @@ func handleKeyEvent(pressed int, keycode uint8, state uint16) {
 		return
 	}
 
-	if keyEventCb != nil {
-		keyEventCb(pressed == 1, keycode, state)
+	if KeyEventCallback != nil {
+		KeyEventCallback(pressed == 1, keycode, state)
+	}
+}
+
+//export handleButtonEvent
+func handleButtonEvent(pressed int) {
+	if !enabled {
+		return
+	}
+
+	if ButtonEventCallback != nil {
+		ButtonEventCallback(pressed == 1)
 	}
 }

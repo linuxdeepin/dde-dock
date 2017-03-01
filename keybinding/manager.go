@@ -18,7 +18,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	dutils "pkg.deepin.io/lib/utils"
@@ -182,20 +181,11 @@ func NewManager() (*Manager, error) {
 	m.listenGSettingsChanged(m.metacitySetting, shortcuts.ShortcutTypeMetacity)
 
 	go xevent.Main(m.xu)
-
-	// init package xrecord
-	err = xrecord.Initialize()
-	if err != nil {
-		return nil, err
-	}
-	xrecord.SetKeyEventCallback(m.shortcuts.HandleXRecordKeyEvent)
-
 	return &m, nil
 }
 
 func (m *Manager) destroy() {
-	xrecord.SetKeyEventCallback(nil)
-	xrecord.Finalize()
+	m.shortcuts.Destroy()
 
 	// destroy settings
 	if m.sysSetting != nil {
