@@ -112,7 +112,7 @@ func (m *DockManager) addAppEntry(entryInnerId string, appInfo *AppInfo, index i
 }
 
 func (m *DockManager) appendDockedApp(app string) {
-	logger.Infof("appendDockedApp %q", app)
+	logger.Debugf("appendDockedApp %q", app)
 	appInfo := NewDockedAppInfo(app)
 	if appInfo == nil {
 		logger.Warning("appendDockedApp failed: appInfo is nil")

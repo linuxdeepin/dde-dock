@@ -68,7 +68,6 @@ func (d *Daemon) Start() error {
 	}
 
 	initAtom()
-	logger.Info("initialize atoms done")
 	initDir()
 	initPathDirCodeMap()
 
@@ -81,7 +80,6 @@ func (d *Daemon) Start() error {
 	dockManager.listenRootWindowPropertyChange()
 	go xevent.Main(XU)
 
-	logger.Info("initialize done")
 	dbus.Emit(dockManager, "ServiceRestarted")
 	return nil
 }

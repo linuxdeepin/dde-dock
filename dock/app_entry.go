@@ -27,10 +27,11 @@ type AppEntry struct {
 	Id      string
 	innerId string
 
-	IsActive bool
-	Name     string
-	Icon     string
-	Menu     string
+	IsActive    bool
+	Name        string
+	Icon        string
+	Menu        string
+	DesktopFile string
 
 	WindowTitles windowTitlesType
 	windows      map[xproto.Window]*WindowInfo
@@ -65,10 +66,10 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 	}
 	entry.appInfo = newAppInfo
 
-	// set entry.winIconPreferred
 	if newAppInfo == nil {
 		entry.winIconPreferred = true
 	} else {
+		entry.setDesktopFile(newAppInfo.GetFileName())
 		if entry.dockManager != nil {
 			id := newAppInfo.GetId()
 			if strSliceContains(entry.dockManager.winIconPreferredAppIds, id) {
@@ -234,6 +235,13 @@ func (e *AppEntry) setIsDocked(isDocked bool) {
 	if e.IsDocked != isDocked {
 		e.IsDocked = isDocked
 		dbus.NotifyChange(e, "IsDocked")
+	}
+}
+
+func (e *AppEntry) setDesktopFile(v string) {
+	if e.DesktopFile != v {
+		e.DesktopFile = v
+		dbus.NotifyChange(e, "DesktopFile")
 	}
 }
 

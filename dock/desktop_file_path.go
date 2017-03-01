@@ -23,7 +23,7 @@ func initPathDirCodeMap() {
 	dir = addDirTrailingSlash(scratchDir)
 	pathDirCodeMap[dir] = "/D@"
 
-	logger.Infof("pathDirCodeMap: %#v", pathDirCodeMap)
+	logger.Debugf("pathDirCodeMap: %#v", pathDirCodeMap)
 
 	pathCodeDirMap = make(map[string]string, len(pathDirCodeMap))
 	for dir, code := range pathDirCodeMap {

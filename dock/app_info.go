@@ -21,7 +21,8 @@ const desktopHashPrefix = "d:"
 
 type AppInfo struct {
 	*desktopappinfo.DesktopAppInfo
-	innerId string
+	identifyMethod string
+	innerId        string
 }
 
 // dai != nil

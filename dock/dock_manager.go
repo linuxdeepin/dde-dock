@@ -14,6 +14,7 @@ import (
 	"dbus/com/deepin/dde/daemon/launcher"
 	"dbus/com/deepin/wm"
 	"errors"
+	"fmt"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -219,4 +220,18 @@ func (m *DockManager) IsOnDock(desktopFilePath string) (bool, error) {
 		return false, err
 	}
 	return entry != nil, nil
+}
+
+func (m *DockManager) QueryWindowIdentifyMethod(wid uint32) (string, error) {
+	for _, entry := range m.Entries {
+		winInfo, ok := entry.windows[xproto.Window(wid)]
+		if ok {
+			if winInfo.appInfo != nil {
+				return winInfo.appInfo.identifyMethod, nil
+			} else {
+				return "Failed", nil
+			}
+		}
+	}
+	return "", fmt.Errorf("window %d not found", wid)
 }
