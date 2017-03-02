@@ -13,8 +13,7 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
       m_itemTips(new QLabel(this)),
       m_delayTimer(new QTimer(this))
 {
-
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 
     m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(200);

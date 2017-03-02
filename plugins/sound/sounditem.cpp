@@ -16,7 +16,7 @@ SoundItem::SoundItem(QWidget *parent)
       m_applet(new SoundApplet(this)),
       m_sinkInter(nullptr)
 {
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 
     m_tipsLabel->setObjectName("sound");
     m_tipsLabel->setVisible(false);

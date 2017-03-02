@@ -22,7 +22,7 @@ SoundApplet::SoundApplet(QWidget *parent)
       m_audioInter(new DBusAudio(this)),
       m_defSinkInter(nullptr)
 {
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeSlider->setAccessibleName("volume-slider");

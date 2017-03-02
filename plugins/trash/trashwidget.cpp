@@ -15,7 +15,7 @@ TrashWidget::TrashWidget(QWidget *parent)
 
       m_popupApplet(new PopupControlWidget(this))
 {
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 
     m_popupApplet->setVisible(false);
 

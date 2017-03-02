@@ -10,7 +10,7 @@ DiskPluginItem::DiskPluginItem(QWidget *parent)
     : QWidget(parent),
       m_displayMode(Dock::Efficient)
 {
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 }
 
 void DiskPluginItem::setDockDisplayMode(const Dock::DisplayMode mode)

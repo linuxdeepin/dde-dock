@@ -16,7 +16,7 @@ DiskControlItem::DiskControlItem(const DiskInfo &info, QWidget *parent)
       m_capacityValueBar(new QProgressBar),
       m_unmountButton(new DImageButton)
 {
-    QIcon::setThemeName("deepin");
+//    QIcon::setThemeName("deepin");
 
     m_diskName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_diskName->setStyleSheet("color:white;"
