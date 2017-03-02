@@ -110,6 +110,9 @@ func (entries AppEntries) GetByAppId(id string) *AppEntry {
 func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
 	// same file
 	for _, entry := range entries {
+		if entry.appInfo == nil {
+			continue
+		}
 		file := entry.appInfo.GetFileName()
 		if file == desktopFilePath {
 			return entry, nil
@@ -123,6 +126,9 @@ func (entries AppEntries) GetByDesktopFilePath(desktopFilePath string) (*AppEntr
 	}
 	hash := appInfo.innerId
 	for _, entry := range entries {
+		if entry.appInfo == nil {
+			continue
+		}
 		if entry.appInfo.innerId == hash {
 			return entry, nil
 		}
