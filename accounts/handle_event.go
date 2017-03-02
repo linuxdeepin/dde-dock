@@ -31,7 +31,7 @@ const (
 )
 
 const (
-	maxDuration   = time.Second*2 + time.Second/2
+	maxDuration   = time.Second * 1
 	deltaDuration = time.Millisecond * 500
 )
 
@@ -81,12 +81,12 @@ func (m *Manager) handleUserFileChanged(ev *fsnotify.FileEvent, handler func()) 
 
 	m.watcher.ResetFileListWatch()
 	<-time.After(time.Millisecond * 500)
-	handler()
+	go handler()
 }
 
 func (m *Manager) handleFilePasswdChanged() {
 	waitDuration := time.Second * 0
-	for waitDuration < maxDuration {
+	for waitDuration <= maxDuration {
 		if m.refreshUserList() {
 			break
 		}
