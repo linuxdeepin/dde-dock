@@ -53,14 +53,6 @@ func (sb *BaseShortcut) GetAction() *Action {
 	return ActionNoOp
 }
 
-func (sb *BaseShortcut) SetAction(newAction *Action) error {
-	return ErrOpNotSupported
-}
-
-func (sb *BaseShortcut) SetName(name string) error {
-	return ErrOpNotSupported
-}
-
 const (
 	ShortcutTypeSystem int32 = iota
 	ShortcutTypeCustom
@@ -75,7 +67,6 @@ type Shortcut interface {
 	GetType() int32
 
 	GetName() string
-	SetName(name string) error
 
 	GetAccels() []ParsedAccel
 	setAccels(newAccels []ParsedAccel)
@@ -83,7 +74,6 @@ type Shortcut interface {
 	ReloadAccels() bool
 
 	GetAction() *Action
-	SetAction(newAction *Action) error
 }
 
 // errors:

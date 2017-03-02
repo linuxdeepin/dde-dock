@@ -133,6 +133,8 @@ func (err ErrShortcutNotFound) Error() string {
 	return fmt.Sprintf("shortcut id %q type %v is not found", err.Id, err.Type)
 }
 
+var errTypeAssertionFail = errors.New("type assertion failed")
+
 // CheckAvaliable check the accel whether conflict
 // CheckAvaliable 检查快捷键序列是否可用
 // 返回值1 是否可用;
@@ -159,19 +161,49 @@ func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 	return true, "", nil
 }
 
-// ModifiedName modify the special id name, only for custom shortcut
-func (m *Manager) ModifiedName(id string, ty int32, name string) error {
-	// TODO
-	return nil
+// ModifyCustomShorcut modify custom shortcut
+//
+// id: shortcut id
+// name: new name
+// cmd: new commandline
+// accelStr: new accel
+func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
+	logger.Debugf("ModifyCustomShorcut id: %q, name: %q, cmd: %q, accel: %q", id, name, cmd, accelStr)
+	const ty = shortcuts.ShortcutTypeCustom
+	// get the shortcut
+	shortcut := m.shortcuts.GetByIdType(id, ty)
+	if shortcut == nil {
+		return ErrShortcutNotFound{id, ty}
+	}
+	cshorcut, ok := shortcut.(*shortcuts.CustomShortcut)
+	if !ok {
+		return errTypeAssertionFail
+	}
+
+	// check conflicting
+	pa, err := shortcuts.ParseStandardAccel(accelStr)
+	confAccel, err := m.shortcuts.FindConflictingAccel(pa)
+	if err != nil {
+		return err
+	}
+	if confAccel != nil {
+		confShortcut := confAccel.Shortcut
+		if confShortcut.GetId() != id || confShortcut.GetType() != ty {
+			return fmt.Errorf("found conflict with other shortcut id: %q, type: %v",
+				confShortcut.GetId(), confShortcut.GetType())
+		}
+		// else shorcut and confShortcut are the same shortcut
+	}
+
+	// modify then save
+	cshorcut.Name = name
+	cshorcut.Cmd = cmd
+	m.shortcuts.ModifyShortcutAccels(shortcut, []shortcuts.ParsedAccel{pa})
+	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
+	return cshorcut.Save()
 }
 
-// ModifiedAction modify the special id action, only for custom shortcut
-func (m *Manager) ModifiedAction(id string, ty int32, action string) error {
-	// TODO
-	return nil
-}
-
-// ModifiedAccel modify the special id action
+// ModifiedAccel modify shortcut accel
 //
 // id: the special id
 // ty: the special type
@@ -244,6 +276,7 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 	if shortcut == nil {
 		return "", ErrShortcutNotFound{id, ty}
 	}
+
 	return doMarshal(shortcut)
 }
 

@@ -25,18 +25,22 @@ const (
 type CustomShortcut struct {
 	BaseShortcut
 	manager *CustomShortcutManager
-	cmd     string
+	Cmd     string `json:"Exec"`
+}
+
+func (cs *CustomShortcut) getAccelStrv() []string {
+	accels := cs.GetAccels()
+	strv := make([]string, len(accels))
+	for i, accel := range accels {
+		strv[i] = accel.String()
+	}
+	return strv
 }
 
 func (cs *CustomShortcut) SaveAccels() error {
 	section := cs.GetId()
-	accels := cs.GetAccels()
 	csm := cs.manager
-	accelStrv := make([]string, 0, len(accels))
-	for _, accel := range accels {
-		accelStrv = append(accelStrv, accel.String())
-	}
-	csm.kfile.SetStringList(section, kfKeyAccels, accelStrv)
+	csm.kfile.SetStringList(section, kfKeyAccels, cs.getAccelStrv())
 	return csm.Save()
 }
 
@@ -51,20 +55,20 @@ func (cs *CustomShortcut) ReloadAccels() bool {
 	return false
 }
 
-func (cs *CustomShortcut) SetAction(newAction *Action) error {
-	// TODO
-	return nil
-}
-
-func (cs *CustomShortcut) SetName(newName string) error {
-	return nil
+func (cs *CustomShortcut) Save() error {
+	section := cs.GetId()
+	kfile := cs.manager.kfile
+	kfile.SetString(section, kfKeyName, cs.Name)
+	kfile.SetString(section, kfKeyAction, cs.Cmd)
+	kfile.SetStringList(section, kfKeyAccels, cs.getAccelStrv())
+	return cs.manager.Save()
 }
 
 func (cs *CustomShortcut) GetAction() *Action {
 	a := &Action{
 		Type: ActionTypeExecCmd,
 		Arg: &ActionExecCmdArg{
-			Cmd: cs.cmd,
+			Cmd: cs.Cmd,
 		},
 	}
 	return a
@@ -104,7 +108,7 @@ func (csm *CustomShortcutManager) List() []Shortcut {
 				Name:   name,
 			},
 			manager: csm,
-			cmd:     cmd,
+			Cmd:     cmd,
 		}
 
 		ret = append(ret, shortcut)
@@ -136,7 +140,7 @@ func (csm *CustomShortcutManager) Add(name, action string, accels []ParsedAccel)
 			Name:   name,
 		},
 		manager: csm,
-		cmd:     action,
+		Cmd:     action,
 	}
 	return shortcut, csm.Save()
 }
