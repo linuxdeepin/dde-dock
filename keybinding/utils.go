@@ -24,6 +24,12 @@ func canShowCapsOSD() bool {
 	return s.GetBoolean("capslock-toggle")
 }
 
+func getPowerButtonPressedExec() string {
+	s := gio.NewSettings("com.deepin.dde.power")
+	defer s.Unref()
+	return s.GetString("power-button-pressed-exec")
+}
+
 func resetGSettings(gs *gio.Settings) {
 	for _, key := range gs.ListKeys() {
 		userVal := gs.GetUserValue(key)
@@ -46,6 +52,7 @@ func doMarshal(v interface{}) (string, error) {
 
 func execCmd(cmd string) error {
 	if len(cmd) == 0 {
+		logger.Debug("cmd is empty")
 		return nil
 	}
 
@@ -61,11 +68,6 @@ func showOSD(signal string) {
 
 const sessionManagerDest = "com.deepin.SessionManager"
 const sessionManagerObjPath = "/com/deepin/SessionManager"
-
-func systemShutdown() {
-	sessionDBus, _ := dbus.SessionBus()
-	go sessionDBus.Object(sessionManagerDest, sessionManagerObjPath).Call(sessionManagerDest+".Shutdown", 0)
-}
 
 func systemSuspend() {
 	sessionDBus, _ := dbus.SessionBus()

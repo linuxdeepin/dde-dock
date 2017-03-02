@@ -91,7 +91,10 @@ func (m *Manager) initHandlers() {
 	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchpadController)
 
 	m.handlers[ActionTypeSystemShutdown] = func(ev *KeyEvent) {
-		systemShutdown()
+		cmd := getPowerButtonPressedExec()
+		if err := execCmd(cmd); err != nil {
+			logger.Warning(err)
+		}
 	}
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {

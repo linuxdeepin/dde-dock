@@ -9,9 +9,7 @@
 
 package shortcuts
 
-import (
-	"fmt"
-)
+import ()
 
 type MediaShortcut struct {
 	*GSettingsShortcut
@@ -88,7 +86,7 @@ var mediaIdActionMap = map[string]*Action{
 }
 
 func (ms *MediaShortcut) GetAction() *Action {
-	fmt.Println("MediaShortcut.GetAction", ms.Id)
+	logger.Debug("MediaShortcut.GetAction", ms.Id)
 	if action, ok := mediaIdActionMap[ms.Id]; ok {
 		return action
 	}
