@@ -333,13 +333,18 @@ void MainWindow::setStrutPartial()
 
     // pass if strut area is intersect with other screen
     int count = 0;
+    const QRect pr = m_settings->primaryRect();
     for (auto *screen : qApp->screens())
-        if (screen->geometry().intersects(strutArea))
+    {
+        const QRect sr = screen->geometry();
+        if (sr == pr)
+            continue;
+
+        if (sr.intersects(strutArea))
             ++count;
-    if (count > 1)
+    }
+    if (count > 0)
         return;
-    else if (count != 1)
-        qWarning() << strutArea << p << r << count << orientation << strut << strutStart << strutEnd;
 
     m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
 }
