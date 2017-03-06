@@ -59,6 +59,9 @@ void LauncherItem::mousePressEvent(QMouseEvent *e)
     if (e->button() != Qt::LeftButton)
         return;
 
+    // hide the tips window, because this window activate event will trigger dde-launcher auto-hide
+    hidePopup();
+
     QProcess *proc = new QProcess;
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), proc, &QProcess::deleteLater);

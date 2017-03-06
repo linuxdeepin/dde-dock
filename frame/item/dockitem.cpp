@@ -75,12 +75,12 @@ void DockItem::moveEvent(QMoveEvent *e)
     updatePopupPosition();
 }
 
-void DockItem::mouseMoveEvent(QMouseEvent *e)
-{
-    QWidget::mouseMoveEvent(e);
+//void DockItem::mouseMoveEvent(QMouseEvent *e)
+//{
+//    QWidget::mouseMoveEvent(e);
 
-    m_popupTipsDelayTimer->start();
-}
+//    m_popupTipsDelayTimer->start();
+//}
 
 void DockItem::mousePressEvent(QMouseEvent *e)
 {
@@ -270,6 +270,7 @@ const QPoint DockItem::popupMarkPoint()
 
 void DockItem::hidePopup()
 {
+    m_popupTipsDelayTimer->stop();
     m_popupShown = false;
     PopupWindow->hide();
 }

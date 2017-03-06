@@ -20,6 +20,7 @@ public:
 
 public slots:
     void show(const QPoint &pos, const bool model = false);
+    void show(const int x, const int y);
     void hide();
 
 signals:
@@ -35,9 +36,6 @@ private slots:
     void globalMouseRelease(int button, int x, int y, const QString &id);
     void registerMouseEvent();
     void unRegisterMouseEvent();
-
-private:
-    using Dtk::Widget::DArrowRectangle::show;
 
 private:
     bool m_model;

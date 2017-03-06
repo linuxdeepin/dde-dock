@@ -53,13 +53,25 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
     m_model = model;
     m_lastPoint = pos;
 
-    DArrowRectangle::show(pos.x(), pos.y());
+    show(pos.x(), pos.y());
 
     if (!model && !m_mouseAreaKey.isEmpty())
         unRegisterMouseEvent();
 
     if (model && m_mouseAreaKey.isEmpty())
         registerMouseEvent();
+}
+
+void DockPopupWindow::show(const int x, const int y)
+{
+    resizeWithContent();
+
+    m_lastPos = QPoint(x, y);
+    move(x, y);
+    if (!isVisible())
+        QWidget::show();
+
+    update();
 }
 
 void DockPopupWindow::hide()
