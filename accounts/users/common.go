@@ -10,6 +10,7 @@
 package users
 
 import (
+	"fmt"
 	"os/exec"
 )
 
@@ -24,5 +25,9 @@ func isStrInArray(str string, array []string) bool {
 }
 
 func doAction(cmd string) error {
-	return exec.Command("/bin/sh", "-c", cmd).Run()
+	out, err := exec.Command("/bin/sh", "-c", cmd).Output()
+	if err != nil {
+		fmt.Printf("[doAction] exec '%s' failed: %s, %v\n", cmd, string(out), err)
+	}
+	return err
 }

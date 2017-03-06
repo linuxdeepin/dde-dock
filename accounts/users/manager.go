@@ -121,14 +121,16 @@ func SetAutoLoginUser(username string) error {
 
 	// if user not in group 'autologin', lightdm autologin will no effect
 	// detail see archlinux wiki for lightdm
-	if !isGroupExists("autologin") {
-		doAction("groupadd -r autologin")
-	}
+	if username != "" {
+		if !isGroupExists("autologin") {
+			doAction("groupadd -r autologin")
+		}
 
-	if !isUserInGroup(username, "autologin") {
-		err := doAction(userCmdGroup + " -a " + username + " autologin")
-		if err != nil {
-			return err
+		if !isUserInGroup(username, "autologin") {
+			err := doAction(userCmdGroup + " -a " + username + " autologin")
+			if err != nil {
+				return err
+			}
 		}
 	}
 
