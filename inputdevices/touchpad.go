@@ -189,6 +189,7 @@ func (tpad *Touchpad) enable(enabled bool) {
 				v.Id, v.Name, err)
 		}
 	}
+	enableGesture(enabled)
 }
 
 func (tpad *Touchpad) enableLeftHanded() {
@@ -377,4 +378,17 @@ func isProcessExist(file, name string) bool {
 	}
 
 	return strings.Contains(string(context), name)
+}
+
+func enableGesture(enabled bool) {
+	s, err := dutils.CheckAndNewGSettings("com.deepin.dde.gesture")
+	if err != nil {
+		return
+	}
+	if s.GetBoolean("enabled") == enabled {
+		return
+	}
+
+	s.SetBoolean("enabled", enabled)
+	s.Unref()
 }

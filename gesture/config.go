@@ -12,6 +12,7 @@ package gesture
 import (
 	"encoding/json"
 	"fmt"
+	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -28,6 +29,9 @@ const (
 var (
 	configSystemPath = "/usr/share/dde-daemon/gesture.json"
 	configUserPath   = os.Getenv("HOME") + "/.config/deepin/dde-daemon/gesture.json"
+
+	gestureSchemaId = "com.deepin.dde.gesture"
+	gsKeyEnabled    = "enabled"
 )
 
 type ActionInfo struct {
@@ -47,6 +51,9 @@ type gestureManager struct {
 	locker   sync.RWMutex
 	userFile string
 	Infos    gestureInfos
+
+	setting *gio.Settings
+	enabled bool
 }
 
 func newGestureManager() (*gestureManager, error) {
@@ -59,15 +66,29 @@ func newGestureManager() (*gestureManager, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	setting, err := dutils.CheckAndNewGSettings(gestureSchemaId)
+	if err != nil {
+		return nil, err
+	}
+
 	return &gestureManager{
 		userFile: configUserPath,
 		Infos:    infos,
+		setting:  setting,
+		enabled:  setting.GetBoolean(gsKeyEnabled),
 	}, nil
 }
 
 func (m *gestureManager) Exec(name, direction string, fingers int32) error {
 	m.locker.RLock()
 	defer m.locker.RUnlock()
+
+	if !m.enabled {
+		logger.Debug("Gesture had been disabled")
+		return nil
+	}
+
 	info := m.Infos.Get(name, direction, fingers)
 	if info == nil {
 		return fmt.Errorf("Not found gesture info for: %s, %s, %d", name, direction, fingers)
@@ -96,6 +117,15 @@ func (m *gestureManager) Write() error {
 		return err
 	}
 	return ioutil.WriteFile(m.userFile, data, 0644)
+}
+
+func (m *gestureManager) handleGSettingsChanged() {
+	m.setting.Connect("changed", func(s *gio.Settings, key string) {
+		switch key {
+		case gsKeyEnabled:
+			m.enabled = m.setting.GetBoolean(key)
+		}
+	})
 }
 
 func (infos gestureInfos) Get(name, direction string, fingers int32) *gestureInfo {

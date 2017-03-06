@@ -47,18 +47,19 @@ func (*Daemon) Start() error {
 	var err error
 	_manager, err = newGestureManager()
 	if err != nil {
-		logger.Fatal("Failed to initialize gesture manager:", err)
+		logger.Error("Failed to initialize gesture manager:", err)
 		return err
 	}
 
 	gs, err = gesture.NewGesture("com.deepin.daemon.Gesture",
 		"/com/deepin/daemon/Gesture")
 	if err != nil {
-		logger.Fatal("Failed to initialize gesture object:", err)
+		logger.Error("Failed to initialize gesture object:", err)
 		_manager = nil
 		return err
 	}
 
+	_manager.handleGSettingsChanged()
 	gs.ConnectEvent(func(name, direction string, fingers int32) {
 		err := _manager.Exec(name, direction, fingers)
 		if err != nil {
