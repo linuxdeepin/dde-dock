@@ -180,25 +180,29 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
 		return errTypeAssertionFail
 	}
 
-	// check conflicting
-	pa, err := shortcuts.ParseStandardAccel(accelStr)
-	confAccel, err := m.shortcuts.FindConflictingAccel(pa)
-	if err != nil {
-		return err
-	}
-	if confAccel != nil {
-		confShortcut := confAccel.Shortcut
-		if confShortcut.GetId() != id || confShortcut.GetType() != ty {
-			return fmt.Errorf("found conflict with other shortcut id: %q, type: %v",
-				confShortcut.GetId(), confShortcut.GetType())
+	var accels []shortcuts.ParsedAccel
+	if accelStr != "" {
+		// check conflicting
+		pa, err := shortcuts.ParseStandardAccel(accelStr)
+		confAccel, err := m.shortcuts.FindConflictingAccel(pa)
+		if err != nil {
+			return err
 		}
-		// else shorcut and confShortcut are the same shortcut
+		if confAccel != nil {
+			confShortcut := confAccel.Shortcut
+			if confShortcut.GetId() != id || confShortcut.GetType() != ty {
+				return fmt.Errorf("found conflict with other shortcut id: %q, type: %v",
+					confShortcut.GetId(), confShortcut.GetType())
+			}
+			// else shorcut and confShortcut are the same shortcut
+		}
+		accels = []shortcuts.ParsedAccel{pa}
 	}
 
 	// modify then save
 	cshorcut.Name = name
 	cshorcut.Cmd = cmd
-	m.shortcuts.ModifyShortcutAccels(shortcut, []shortcuts.ParsedAccel{pa})
+	m.shortcuts.ModifyShortcutAccels(shortcut, accels)
 	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	return cshorcut.Save()
 }
