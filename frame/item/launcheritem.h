@@ -12,6 +12,8 @@ public:
 
     inline ItemType itemType() const {return Launcher;}
 
+    void refershIcon();
+
 private:
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);

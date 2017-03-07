@@ -19,6 +19,21 @@ LauncherItem::LauncherItem(QWidget *parent)
                           "padding:5px 10px;");
 }
 
+void LauncherItem::refershIcon()
+{
+    const int iconSize = qMin(width(), height());
+    if (DockDisplayMode == Efficient)
+    {
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7);
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9);
+    } else {
+        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
+        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
+    }
+
+    update();
+}
+
 void LauncherItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
@@ -40,15 +55,7 @@ void LauncherItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    const int iconSize = qMin(width(), height());
-    if (DockDisplayMode == Efficient)
-    {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.7);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.9);
-    } else {
-        m_smallIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.6);
-        m_largeIcon = ThemeAppIcon::getIcon("deepin-launcher", iconSize * 0.8);
-    }
+    refershIcon();
 }
 
 void LauncherItem::mousePressEvent(QMouseEvent *e)
