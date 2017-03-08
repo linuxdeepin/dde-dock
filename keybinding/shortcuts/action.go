@@ -29,6 +29,8 @@ const (
 	ActionTypeKbdLightCtrl
 	ActionTypeTouchpadCtrl
 
+	ActionTypeSwitchKbdLayout
+
 	// end
 	actionTypeMax
 )

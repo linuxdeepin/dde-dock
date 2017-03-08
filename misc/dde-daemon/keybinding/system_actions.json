@@ -62,7 +62,7 @@
 	},
 	{
 		"Key": "switch-layout",
-		"Action": "dbus-send --print-reply --dest=com.deepin.dde.osd /  com.deepin.dde.osd.ShowOSD string:'SwitchLayout'"
+		"Action": ""
 	}
 	]
 }

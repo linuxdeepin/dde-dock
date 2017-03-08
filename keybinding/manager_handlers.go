@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
+	"time"
 )
 
 func (m *Manager) initHandlers() {
@@ -99,6 +100,65 @@ func (m *Manager) initHandlers() {
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {
 		systemSuspend()
+	}
+
+	// handle Switch Kbd Layout
+	m.handlers[ActionTypeSwitchKbdLayout] = func(ev *KeyEvent) {
+		logger.Debug("Switch Kbd Layout state", m.switchKbdLayoutState)
+
+		switch m.switchKbdLayoutState {
+		case SKLStateNone:
+			m.switchKbdLayoutState = SKLStateWait
+			go m.sklWait()
+
+		case SKLStateWait:
+			m.switchKbdLayoutState = SKLStateOSDShown
+			m.terminateSKLWait()
+			showOSD("SwitchLayout")
+
+		case SKLStateOSDShown:
+			showOSD("SwitchLayout")
+		}
+	}
+
+	m.shortcuts.SuperReleaseCb = func() {
+		// super key released
+		switch m.switchKbdLayoutState {
+		case SKLStateWait:
+			showOSD("DirectSwitchLayout")
+			m.terminateSKLWait()
+		case SKLStateOSDShown:
+			showOSD("SwitchLayoutDone")
+		case SKLStateNone:
+			return
+		}
+		m.switchKbdLayoutState = SKLStateNone
+	}
+}
+
+func (m *Manager) sklWait() {
+	defer func() {
+		logger.Debug("sklWait end")
+		m.sklWaitQuit = nil
+	}()
+
+	m.sklWaitQuit = make(chan int)
+	timer := time.NewTimer(350 * time.Millisecond)
+	select {
+	case <-m.sklWaitQuit:
+		return
+	case <-timer.C:
+		logger.Debug("timer fired")
+		if m.switchKbdLayoutState == SKLStateWait {
+			m.switchKbdLayoutState = SKLStateOSDShown
+			showOSD("SwitchLayout")
+		}
+	}
+}
+
+func (m *Manager) terminateSKLWait() {
+	if m.sklWaitQuit != nil {
+		close(m.sklWaitQuit)
 	}
 }
 

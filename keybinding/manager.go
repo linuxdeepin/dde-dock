@@ -79,7 +79,20 @@ type Manager struct {
 	handlers               []shortcuts.KeyEventFunc
 	lastKeyEventTime       time.Time
 	grabScreenPressedAccel *shortcuts.ParsedAccel
+
+	// for switch kbd layout
+	switchKbdLayoutState SKLState
+	sklWaitQuit          chan int
 }
+
+// SKLState Switch keyboard Layout state
+type SKLState uint
+
+const (
+	SKLStateNone SKLState = iota
+	SKLStateWait
+	SKLStateOSDShown
+)
 
 func NewManager() (*Manager, error) {
 	var m = Manager{

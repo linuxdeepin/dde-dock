@@ -32,9 +32,12 @@ type KeyEventFunc func(ev *KeyEvent)
 type Shortcuts struct {
 	idShortcutMap     map[string]Shortcut
 	grabedKeyAccelMap map[Key]*Accel
-	eventCb           KeyEventFunc
 	xu                *xgbutil.XUtil
 	pressedKeysCount  int
+
+	// callbacks:
+	SuperReleaseCb func()
+	eventCb        KeyEventFunc
 }
 
 type KeyEvent struct {
@@ -303,12 +306,16 @@ func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint1
 			ss.pressedKeysCount = 0
 		}
 	}()
-	//logger.Debugf("handleXRecordKeyEvent pressed %v code %d state %d", pressed, code, state)
-	str := keybind.LookupString(ss.xu, 0, xproto.Keycode(code))
-	switch strings.ToLower(str) {
-	case "super_r", "super_l":
+	str := strings.ToLower(keybind.LookupString(ss.xu, 0, xproto.Keycode(code)))
+	//logger.Debugf("handleXRecordKeyEvent pressed: %v, code: %d, state: %d, str: %q", pressed, code, state, str)
+	switch str {
+	case "super_l", "super_r":
 		if pressed {
 			return
+		}
+		// super release
+		if ss.SuperReleaseCb != nil {
+			ss.SuperReleaseCb()
 		}
 		if ok := tryGrabKeyboard(ss.xu); !ok {
 			return

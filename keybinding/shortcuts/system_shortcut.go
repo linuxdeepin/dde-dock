@@ -31,11 +31,16 @@ func (ss *SystemShortcut) SetName(name string) error {
 }
 
 func (ss *SystemShortcut) GetAction() *Action {
-	a := &Action{
+	if ss.GetId() == "switch-layout" {
+		return &Action{
+			Type: ActionTypeSwitchKbdLayout,
+		}
+	}
+
+	return &Action{
 		Type: ActionTypeExecCmd,
 		Arg:  ss.arg,
 	}
-	return a
 }
 
 func (ss *SystemShortcut) SetAction(newAction *Action) error {
