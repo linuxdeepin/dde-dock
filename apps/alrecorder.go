@@ -34,8 +34,11 @@ type ALRecorder struct {
 	loginManager      *login1.Manager
 
 	// signal:
-	Launched func(string)
+	Launched    func(string)
+	StatusSaved ALStatusSavedFun
 }
+
+type ALStatusSavedFun func(root, file string, ok bool)
 
 func NewALRecorder(watcher *DFWatcher) *ALRecorder {
 	eventChan := make(chan *FileEvent)
@@ -106,6 +109,10 @@ func (r *ALRecorder) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+func (r *ALRecorder) emitStatusSaved(root, file string, ok bool) {
+	dbus.Emit(r, "StatusSaved", root, file, ok)
+}
+
 func (r *ALRecorder) listenEvents() {
 	for {
 		ev := <-r.eventChan
@@ -136,7 +143,7 @@ func (r *ALRecorder) addAppDir(home, path string, uid int) {
 
 	MkdirAll(path, uid, getDirPerm(uid))
 	dirNames, appNames := getDirsAndApps(path)
-	sr := NewSubRecorder(home, path, uid, appNames)
+	sr := NewSubRecorder(home, path, uid, appNames, r.emitStatusSaved)
 	r.addSubRecorder(sr)
 	for _, dirName := range dirNames {
 		r.watcher.add(filepath.Join(path, dirName))
@@ -237,6 +244,7 @@ func (r *ALRecorder) handleDirRemoved(file string) {
 }
 
 func (r *ALRecorder) MarkLaunched(file string) {
+	logger.Debugf("ALRecorder.MarkLaunched file: %q", file)
 	r.subRecordersMutex.RLock()
 	defer r.subRecordersMutex.RUnlock()
 

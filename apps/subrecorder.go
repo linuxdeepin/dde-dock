@@ -31,6 +31,7 @@ type SubRecorder struct {
 	statusFile       string
 	uid              int
 
+	saveCb    ALStatusSavedFun
 	saveCount int32
 	ticker    *time.Ticker
 }
@@ -38,15 +39,16 @@ type SubRecorder struct {
 func (d *SubRecorder) initSaveTicker() {
 	// checkSave every 2 seconds
 	const interval = 2
+	const tickerTimeout = interval + 5
 	d.ticker = time.NewTicker(time.Second * interval)
 
 	go func() {
-		timer := time.NewTimer(time.Second * (interval + 1))
+		timer := time.NewTimer(time.Second * tickerTimeout)
 		for {
 			select {
 			case <-d.ticker.C:
 				d.checkSave()
-				timer.Reset(time.Second * (interval + 1))
+				timer.Reset(time.Second * tickerTimeout)
 			case <-timer.C:
 				logger.Debug("stop check save")
 				return
@@ -55,11 +57,12 @@ func (d *SubRecorder) initSaveTicker() {
 	}()
 }
 
-func NewSubRecorder(home, root string, uid int, apps []string) *SubRecorder {
+func NewSubRecorder(home, root string, uid int, apps []string, saveCb ALStatusSavedFun) *SubRecorder {
 	d := &SubRecorder{
 		root:       root,
 		uid:        uid,
 		statusFile: getStatusFile(home, root),
+		saveCb:     saveCb,
 	}
 	if d.initAppLaunchedMap(apps) {
 		MkdirAll(filepath.Dir(d.statusFile), d.uid, getDirPerm(d.uid))
@@ -118,6 +121,9 @@ func (d *SubRecorder) checkSave() {
 
 	d.launchedMapMutex.RLock()
 	err := d.save()
+	if d.saveCb != nil {
+		d.saveCb(d.root, d.statusFile, err == nil)
+	}
 	d.launchedMapMutex.RUnlock()
 	if err != nil {
 		logger.Warning("SubRecorder.saveDirContent error:", err)
@@ -147,7 +153,7 @@ func (d *SubRecorder) writeStatus(w io.Writer) error {
 }
 
 func (d *SubRecorder) save() error {
-	logger.Debug("SubRecorder.save", d.root)
+	logger.Debug("SubRecorder.save", d.root, d.statusFile)
 	file := d.statusFile
 	uid := d.uid
 
