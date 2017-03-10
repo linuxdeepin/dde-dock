@@ -14,10 +14,36 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"pkg.deepin.io/dde/daemon/appinfo"
+	"pkg.deepin.io/lib/xdg/basedir"
 	"strings"
 	"time"
 )
+
+var xdgAutostartDirs []string
+
+func init() {
+	configDirs := make([]string, 0, 3)
+	configDirs = append(configDirs, basedir.GetUserConfigDir())
+	sysConfigDirs := basedir.GetSystemConfigDirs()
+	configDirs = append(configDirs, sysConfigDirs...)
+
+	for idx, configDir := range configDirs {
+		configDirs[idx] = filepath.Join(configDir, "autostart")
+	}
+	xdgAutostartDirs = configDirs
+}
+
+func isInAutostartDir(file string) bool {
+	dir := filepath.Dir(file)
+	for _, adir := range xdgAutostartDirs {
+		if adir == dir {
+			return true
+		}
+	}
+	return false
+}
 
 func dataUriToFile(dataUri, path string) (string, error) {
 	commaIndex := strings.Index(dataUri, ",")

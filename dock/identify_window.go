@@ -47,7 +47,14 @@ func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 			logger.Debugf("identifyWindow by %s success, innerId: %q, appInfo: %v", name, innerId, appInfo)
 			// NOTE: if name == "Pid", appInfo may be nil
 			if appInfo != nil {
-				appInfo.identifyMethod = name
+				fixedAppInfo := fixAutostartAppInfo(appInfo)
+				if fixedAppInfo != nil {
+					appInfo = fixedAppInfo
+					appInfo.identifyMethod = name + "+FixAutostart"
+					innerId = fixedAppInfo.innerId
+				} else {
+					appInfo.identifyMethod = name
+				}
 			}
 			return innerId, appInfo
 		}
@@ -55,6 +62,16 @@ func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 	// fail
 	logger.Debugf("identifyWindow: failed")
 	return winInfo.innerId, nil
+}
+
+func fixAutostartAppInfo(appInfo *AppInfo) *AppInfo {
+	file := appInfo.GetFileName()
+	if isInAutostartDir(file) {
+		logger.Debug("file is in autostart dir")
+		base := filepath.Base(file)
+		return NewAppInfo(base)
+	}
+	return nil
 }
 
 func identifyWindowByCache(m *DockManager, winInfo *WindowInfo) (string, *AppInfo) {
