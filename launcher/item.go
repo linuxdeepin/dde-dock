@@ -82,7 +82,7 @@ func NewItemWithDesktopAppInfo(app *desktopappinfo.DesktopAppInfo) *Item {
 var chromeShortcurtExecRegexp = regexp.MustCompile(`google-chrome.*--app-id=`)
 
 func (item *Item) isChromeShortcut() bool {
-	logger.Debugf("isChromeShortcut item %#v", item)
+	logger.Debugf("isChromeShortcut item ID: %q, exec: %q", item.ID, item.exec)
 	return strings.HasPrefix(item.ID, "chrome-") &&
 		chromeShortcurtExecRegexp.MatchString(item.exec)
 }

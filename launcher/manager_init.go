@@ -52,8 +52,8 @@ func (m *Manager) init() error {
 		return err
 	}
 
-	// init lastore
-	m.lastore, err = libLastore.NewManager(lastoreDBusDest, "/com/deepin/lastore")
+	// init lastoreManager
+	m.lastoreManager, err = libLastore.NewManager(lastoreDBusDest, "/com/deepin/lastore")
 	if err != nil {
 		return err
 	}

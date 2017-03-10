@@ -20,6 +20,7 @@ import (
 
 // Simply remove the desktop file
 func (m *Manager) uninstallDesktopFile(item *Item) error {
+	logger.Debugf("remove desktop file %q", item.Path)
 	err := os.Remove(item.Path)
 	go m.notifyUninstallDone(item, err == nil)
 	return err
@@ -52,29 +53,36 @@ func (m *Manager) uninstall(id string) error {
 		return errorInvalidID
 	}
 
-	pkg := m.queryPkgName(item)
-	if pkg != "" {
-		return m.uninstallSystemPackage(pkg)
-	} else {
-		// uninstall chrome shortcut
-		if item.isChromeShortcut() {
-			logger.Debug("item is chrome shortcut")
-			return m.uninstallDesktopFile(item)
-		}
-
-		// uninstall wine app
-		isWineApp, err := item.isWineApp()
+	// uninstall system package
+	if pkg := m.queryPkgName(item); pkg != "" {
+		// is pkg installed?
+		installed, err := m.lastoreManager.PackageExists(pkg)
 		if err != nil {
 			return err
 		}
-
-		if isWineApp {
-			logger.Debug("item is wine app")
-			return m.uninstallDeepinWineApp(item)
+		if installed {
+			return m.uninstallSystemPackage(pkg)
 		}
+	}
 
+	// uninstall chrome shortcut
+	if item.isChromeShortcut() {
+		logger.Debug("item is chrome shortcut")
 		return m.uninstallDesktopFile(item)
 	}
+
+	// uninstall wine app
+	isWineApp, err := item.isWineApp()
+	if err != nil {
+		return err
+	}
+
+	if isWineApp {
+		logger.Debug("item is wine app")
+		return m.uninstallDeepinWineApp(item)
+	}
+
+	return m.uninstallDesktopFile(item)
 }
 
 const (
@@ -84,11 +92,7 @@ const (
 )
 
 func (m *Manager) uninstallSystemPackage(pkg string) error {
-	if m.lastore == nil {
-		return errors.New("Manager.lastore is nil")
-	}
-
-	jobPath, err := m.lastore.RemovePackage("", pkg)
+	jobPath, err := m.lastoreManager.RemovePackage("", pkg)
 	logger.Debugf("uninstallSystemPackage pkg: %q jobPath: %q", pkg, jobPath)
 	if err != nil {
 		return err

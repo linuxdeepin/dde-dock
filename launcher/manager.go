@@ -47,7 +47,7 @@ type Manager struct {
 	launchedRecorder   *libApps.LaunchedRecorder
 	desktopFileWatcher *libApps.DesktopFileWatcher
 	notifier           *libNotifications.Notifier
-	lastore            *libLastore.Manager
+	lastoreManager     *libLastore.Manager
 	pinyin             *libPinyin.Pinyin
 	desktopPkgMap      map[string]string
 	pkgCategoryMap     map[string]CategoryID
