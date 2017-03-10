@@ -45,7 +45,10 @@ func (m *DockManager) identifyWindow(winInfo *WindowInfo) (string, *AppInfo) {
 		if innerId != "" {
 			// success
 			logger.Debugf("identifyWindow by %s success, innerId: %q, appInfo: %v", name, innerId, appInfo)
-			appInfo.identifyMethod = name
+			// NOTE: if name == "Pid", appInfo may be nil
+			if appInfo != nil {
+				appInfo.identifyMethod = name
+			}
 			return innerId, appInfo
 		}
 	}
