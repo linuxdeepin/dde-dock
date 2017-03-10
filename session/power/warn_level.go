@@ -44,7 +44,7 @@ func _getWarnLevel(config *WarnLevelConfig, onBattery bool,
 	logger.Debugf("_getWarnLevel onBattery %v, percentage %v, timeToEmpty %v, usePercentage %v",
 		onBattery, percentage, timeToEmpty, usePercentageForPolicy)
 	if usePercentageForPolicy {
-		if percentage > config.LowPercentage {
+		if percentage > config.LowPercentage || percentage == 0.0 {
 			return WarnLevelNone
 		}
 		if percentage > config.CriticalPercentage {

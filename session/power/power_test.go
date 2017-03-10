@@ -49,7 +49,7 @@ func Test_getWarnLevel(t *testing.T) {
 
 		onBattery = true
 		config.UsePercentageForPolicy = true
-		So(_getWarnLevel(config, onBattery, 0.0, 0), ShouldEqual, WarnLevelAction)
+		So(_getWarnLevel(config, onBattery, 0.0, 0), ShouldEqual, WarnLevelNone)
 		So(_getWarnLevel(config, onBattery, 1.0, 0), ShouldEqual, WarnLevelAction)
 		So(_getWarnLevel(config, onBattery, 5.0, 0), ShouldEqual, WarnLevelAction)
 		So(_getWarnLevel(config, onBattery, 5.1, 0), ShouldEqual, WarnLevelCritical)
