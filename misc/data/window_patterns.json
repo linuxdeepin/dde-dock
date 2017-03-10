@@ -26,7 +26,6 @@
       ]
    },
    {
-      "ret" : "env",
       "rules" : [
          [
             "wmi",
@@ -40,7 +39,8 @@
             "wmc",
             "=:Wine"
          ]
-      ]
+      ],
+      "ret" : "env"
    },
    {
       "ret" : "id=netbeans",
@@ -137,6 +137,7 @@
       "ret" : "id=steam"
    },
    {
+      "ret" : "id=mintdrivers",
       "rules" : [
          [
             "wmi",
@@ -146,7 +147,19 @@
             "wmc",
             "e:mintdrivers.py"
          ]
+      ]
+   },
+   {
+      "rules" : [
+         [
+            "wmi",
+            "c:googleearth"
+         ],
+         [
+            "wmc",
+            "c:googleearth"
+         ]
       ],
-      "ret" : "id=mintdrivers"
+      "ret" : "id=google-earth"
    }
 ]
