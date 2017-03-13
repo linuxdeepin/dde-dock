@@ -47,13 +47,13 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
-    connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::updateIcon);
+    connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries);
 
     updateTitle();
-    updateIcon();
+    refershIcon();
 }
 
 const QString AppItem::appId() const
@@ -94,12 +94,6 @@ int AppItem::itemBaseWidth()
         return itemBaseHeight() * 1.1;
     else
         return itemBaseHeight() * 1.4;
-}
-
-void AppItem::refershIcon()
-{
-    updateIcon();
-    update();
 }
 
 int AppItem::itemBaseHeight()
@@ -310,7 +304,7 @@ void AppItem::resizeEvent(QResizeEvent *e)
 {
     DockItem::resizeEvent(e);
 
-    updateIcon();
+    refershIcon();
 }
 
 void AppItem::dragEnterEvent(QDragEnterEvent *e)
@@ -398,7 +392,7 @@ void AppItem::updateTitle()
     update();
 }
 
-void AppItem::updateIcon()
+void AppItem::refershIcon()
 {
     const QString icon = m_itemEntry->icon();
     const int iconSize = qMin(width(), height());
@@ -411,6 +405,8 @@ void AppItem::updateIcon()
         m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
         m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
     }
+
+    update();
 }
 
 void AppItem::activeChanged()

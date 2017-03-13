@@ -45,7 +45,10 @@ void DockItemController::setDropping(const bool dropping)
 void DockItemController::refershItemsIcon()
 {
     for (auto item : m_itemList)
+    {
         item->refershIcon();
+        item->update();
+    }
 }
 
 void DockItemController::updatePluginsItemOrderKey()
