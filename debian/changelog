@@ -1,0 +1,137 @@
+dde-dock (3.0.12) unstable; urgency=low
+
+  * Autobuild Tag 3.0.12 
+
+ -- TagBuilder <tagbuilder@deepin.com>  Fri, 12 Aug 2016 18:46:29 +0000
+
+dde-dock (3.0.11-1) unstable; urgency=low
+
+  * Autobuild Tag 3.0.11 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Fri, 27 May 2016 05:35:51 +0000
+
+dde-dock (3.0.10-2) unstable; urgency=low
+
+  * Rebuild Version 3.0.10 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Thu, 26 May 2016 19:04:32 +0000
+
+dde-dock (3.0.10-1) unstable; urgency=low
+
+  * Autobuild Tag 3.0.10 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Thu, 26 May 2016 17:25:08 +0000
+
+dde-dock (3.0.9-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.9 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 23 May 2016 12:34:35 +0000
+
+dde-dock (3.0.7-3) stable; urgency=low
+
+  * Rebuild Version 3.0.7 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 25 Apr 2016 11:20:50 +0000
+
+dde-dock (3.0.7-2) stable; urgency=low
+
+  * Rebuild Version 3.0.7 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Thu, 21 Apr 2016 16:18:53 +0000
+
+dde-dock (3.0.7-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.7 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 07 Mar 2016 15:49:07 +0000
+
+dde-dock (3.0.6-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.6 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Thu, 25 Feb 2016 16:03:25 +0000
+
+dde-dock (3.0.5-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.5 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Thu, 25 Feb 2016 10:41:40 +0000
+
+dde-dock (3.0.4-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.4 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 22 Feb 2016 16:40:32 +0000
+
+dde-dock (3.0.3-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.3 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Fri, 22 Jan 2016 20:00:03 +0000
+
+dde-dock (3.0.2-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.2 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Tue, 12 Jan 2016 18:33:03 +0000
+
+dde-dock (3.0.1-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.1 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Tue, 29 Dec 2015 21:27:15 +0000
+
+dde-dock (3.0.0-1) stable; urgency=low
+
+  * Autobuild Tag 3.0.0 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 28 Dec 2015 20:51:24 +0000
+
+dde-dock (2.90.5-2) stable; urgency=low
+
+  * Rebuild Version 2.90.5 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Tue, 22 Dec 2015 13:19:32 +0000
+
+dde-dock (2.90.5-1) stable; urgency=low
+
+  * Autobuild Tag 2.90.5 
+
+ -- TagBuilder <tagbuilder@linuxdeepin.com>  Mon, 21 Dec 2015 22:22:22 +0000
+
+dde-dock (2.90.4-2) stable; urgency=low
+
+  * Rebuild Version 2.90.4 
+
+ -- TagBuilder <tabbuilder@linuxdeepin.com>  Sun, 20 Dec 2015 10:35:54 +0000
+
+dde-dock (2.90.4-1) stable; urgency=low
+
+  * Autobuild Tag 2.90.4 
+
+ -- TagBuilder <tabbuilder@linuxdeepin.com>  Sat, 19 Dec 2015 13:07:01 +0000
+
+dde-dock (2.90.3-1) stable; urgency=low
+
+  * Autobuild Tag 2.90.3 
+
+ -- TagBuilder <tabbuilder@linuxdeepin.com>  Thu, 10 Dec 2015 20:40:49 +0000
+
+dde-dock (2.90.2-1) stable; urgency=low
+
+  * Autobuild Tag 2.90.2 
+
+ -- TagBuilder <tabbuilder@linuxdeepin.com>  Wed, 09 Dec 2015 22:04:43 +0000
+
+dde-dock (2.90.1-1) stable; urgency=low
+
+  * Autobuild Tag 2.90.1 
+
+ -- TagBuilder <tabbuilder@linuxdeepin.com>  Fri, 20 Nov 2015 09:46:31 +0000
+
+dde-dock (0.0~git20150824-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Deepin Packages Builder <packages@linuxdeepin.com>  Mon, 24 Aug 2015 19:03:01 +0800
