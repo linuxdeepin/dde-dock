@@ -54,12 +54,10 @@ Depends: ${shlibs:Depends},
  bamfdaemon,
  dde-polkit-agent,
  xdotool,
- libxcb1,libxcb-record0,
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
 Suggests: 
- systemd,
  network-manager-pptp,
  network-manager-l2tp,
  network-manager-openconnect,
