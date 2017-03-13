@@ -40,8 +40,6 @@ type Manager struct {
 	// 睡眠前是否锁定
 	SleepLock *property.GSettingsBoolProperty `access:"readwrite"`
 
-	// 按下电源按钮后执行的命令
-	PowerButtonAction *property.GSettingsStringProperty `access:"readwrite"`
 	// 笔记本电脑盖上盖子后是否睡眠
 	LidClosedSleep *property.GSettingsBoolProperty `access:"readwrite"`
 
@@ -103,7 +101,6 @@ func (m *Manager) init() error {
 	m.ScreenBlackLock = property.NewGSettingsBoolProperty(m, "ScreenBlackLock", m.settings, settingKeyScreenBlackLock)
 	m.SleepLock = property.NewGSettingsBoolProperty(m, "SleepLock", m.settings, settingKeySleepLock)
 
-	m.PowerButtonAction = property.NewGSettingsStringProperty(m, "PowerButtonAction", m.settings, settingKeyPowerButtonPressedExec)
 	m.LidClosedSleep = property.NewGSettingsBoolProperty(m, "LidClosedSleep", m.settings, settingKeyLidClosedSleep)
 
 	power := m.helper.Power
@@ -120,7 +117,6 @@ func (m *Manager) init() error {
 
 	m.initPowerModule()
 
-	m.initPowerButtonEventHandler()
 	m.initOnBatteryChangedHandler()
 
 	sessionWatcher := m.helper.SessionWatcher

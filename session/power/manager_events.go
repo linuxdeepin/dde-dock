@@ -16,17 +16,6 @@ import (
 	"time"
 )
 
-// 按下电源键
-func (m *Manager) initPowerButtonEventHandler() {
-	m.helper.MediaKey.ConnectPowerOff(func(press bool) {
-		if press {
-			logger.Debug("PowerButton pressed")
-			cmd := m.PowerButtonAction.Get()
-			execCommand(cmd)
-		}
-	})
-}
-
 // 处理有线电源插入拔出事件
 func (m *Manager) initOnBatteryChangedHandler() {
 	power := m.helper.Power
