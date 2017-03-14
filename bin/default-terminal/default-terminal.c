@@ -9,22 +9,58 @@
 
 #include <gio/gio.h>
 
+static char*
+get_terminal_path(const char* preset)
+{
+    if (preset != NULL) {
+        char *path = g_find_program_in_path(preset);
+        if (path) {
+            return path;
+        }
+    }
+
+    char *list[] = {
+        "deepin-terminal",
+        "gnome-terminal",
+        "terminator",
+        "xfce4-terminal",
+        "rxvt",
+        NULL
+    };
+
+    int i = 0;
+    char *tmp = list[i];
+    while (tmp != NULL) {
+        if (g_strcmp0(tmp, preset) != 0) {
+            char *path = g_find_program_in_path(tmp);
+            if (path) {
+                return path;
+            }
+        }
+	tmp = list[++i];
+    }
+    // default
+    return g_strdup("xterm");
+}
+
 int main(int argc, char* *argv)
 {
     GSettings *s = g_settings_new("com.deepin.desktop.default-applications.terminal");
     char* exec = g_settings_get_string(s, "exec");
+    char* exec_arg = g_settings_get_string(s, "exec-arg");
     g_object_unref(s);
-    if (g_strcmp0(exec, argv[0]) == 0)
-        return 0;
+    if (g_strcmp0(exec, argv[0]) == 0) {
+        goto out;
+    }
+
     argv[0] = exec;
-    if (argc > 1 && (g_strcmp0(exec, "gnome-terminal") == 0 ||
-            g_strcmp0(exec, "terminator") == 0)) {
-        argv[1] = g_strdup("-x"); //Need free this?
+    if (argc > 1 && (g_strcmp0(exec, "deepin-terminal") == 0 ||
+                     g_strcmp0(exec, "gnome-terminal") == 0 ||
+                     g_strcmp0(exec, "xfce4-terminal") == 0 ||
+                     g_strcmp0(exec, "terminator") == 0)) {
+        argv[1] = exec_arg;
     }
-    char* app = g_find_program_in_path(exec);
-    if (app == NULL) {
-        app = "x-terminal-emulator";
-    }
+    char* app = get_terminal_path(exec);
     int pid = fork();
     if (pid == 0) {
         execv(app, argv);
@@ -32,6 +68,9 @@ int main(int argc, char* *argv)
         /* wait(NULL); */
     }
     g_free(app);
+
+out:
+    g_free(exec);
+    g_free(exec_arg);
     return 0;
 }
-
