@@ -16,6 +16,7 @@ import "C"
 
 import (
 	"os"
+	"pkg.deepin.io/lib/strv"
 	"regexp"
 	"strings"
 	"unsafe"
@@ -35,6 +36,16 @@ var (
 
 	cacheFonts Fonts
 )
+
+var familyBlacklist = strv.Strv([]string{
+	// font family names of Deepin Open Symbol Fonts:
+	"Symbol",
+	"webdings",
+	"MT Extra",
+	"Wingdings",
+	"Wingdings 2",
+	"Wingdings 3",
+})
 
 // family ex: 'sans', 'serif', 'monospace'
 // cRet: `SourceCodePro-Medium.otf: "Source Code Pro" "Medium"`
@@ -110,14 +121,17 @@ func fcInfoToFont(cInfo *C.FcInfo) *Font {
 	families := strings.Split(familyname, defaultNameDelim)
 	familyLang := strings.Split(C.GoString(cInfo.familylang),
 		defaultNameDelim)
+	family := getItemByIndex(indexOf(defaultLang, familyLang), families)
+	if familyBlacklist.Contains(family) {
+		return nil
+	}
 
 	var info = Font{
 		Id: getItemByIndex(lastIndexOf(defaultLang,
 			nameLang), names),
 		Name: getItemByIndex(lastIndexOf(getCurLang(),
 			nameLang), names),
-		Family: getItemByIndex(indexOf(defaultLang,
-			familyLang), families),
+		Family: family,
 		FamilyName: getItemByIndex(indexOf(getCurLang(),
 			familyLang), families),
 		File: C.GoString(cInfo.filename),

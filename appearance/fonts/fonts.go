@@ -10,7 +10,6 @@
 package fonts
 
 import (
-	"pkg.deepin.io/lib/strv"
 	"strings"
 )
 
@@ -35,16 +34,6 @@ var idWhiteList = []string{
 	"NSimSun-18030",
 }
 
-var monospaceFontBlacklist = strv.Strv([]string{
-	// font family names of Deepin Open Symbol Fonts:
-	"Symbol",
-	"webdings",
-	"MT Extra",
-	"Wingdings",
-	"Wingdings 2",
-	"Wingdings 3",
-})
-
 func ListFont() Fonts {
 	return fcInfosToFonts()
 }
@@ -64,10 +53,6 @@ func (infos Fonts) ListMonospace() Fonts {
 	var ret Fonts
 	for _, info := range infos {
 		if !info.Monospace {
-			continue
-		}
-
-		if monospaceFontBlacklist.Contains(info.FamilyName) {
 			continue
 		}
 
