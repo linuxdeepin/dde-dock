@@ -31,7 +31,6 @@ type DockManager struct {
 	windowInfoMapMutex             sync.RWMutex
 	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
 	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
-	winIconPreferredAppIds         []string
 
 	Entries AppEntries
 
@@ -68,14 +67,15 @@ type DockManager struct {
 }
 
 const (
-	dockSchema            = "com.deepin.dde.dock"
-	settingKeyHideMode    = "hide-mode"
-	settingKeyDisplayMode = "display-mode"
-	settingKeyPosition    = "position"
-	settingKeyIconSize    = "icon-size"
-	settingKeyDockedApps  = "docked-apps"
-	settingKeyShowTimeout = "show-timeout"
-	settingKeyHideTimeout = "hide-timeout"
+	dockSchema                     = "com.deepin.dde.dock"
+	settingKeyHideMode             = "hide-mode"
+	settingKeyDisplayMode          = "display-mode"
+	settingKeyPosition             = "position"
+	settingKeyIconSize             = "icon-size"
+	settingKeyDockedApps           = "docked-apps"
+	settingKeyShowTimeout          = "show-timeout"
+	settingKeyHideTimeout          = "hide-timeout"
+	settingKeyWinIconPreferredApps = "win-icon-preferred-apps"
 )
 
 func NewDockManager() (*DockManager, error) {

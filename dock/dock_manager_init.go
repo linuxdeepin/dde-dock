@@ -105,6 +105,10 @@ func (m *DockManager) listenLauncherSignal() {
 	})
 }
 
+func (m *DockManager) getWinIconPreferredApps() []string {
+	return m.settings.GetStrv(settingKeyWinIconPreferredApps)
+}
+
 func (m *DockManager) init() error {
 	var err error
 
@@ -125,7 +129,6 @@ func (m *DockManager) init() error {
 
 	m.listenSettingsChanged()
 
-	m.winIconPreferredAppIds = []string{"apps.com.qq.im", "apps.com.qq.im.light"}
 	err = m.loadCache()
 	if err != nil {
 		return err

@@ -72,7 +72,7 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 		entry.setDesktopFile(newAppInfo.GetFileName())
 		if entry.dockManager != nil {
 			id := newAppInfo.GetId()
-			if strSliceContains(entry.dockManager.winIconPreferredAppIds, id) {
+			if strSliceContains(entry.dockManager.getWinIconPreferredApps(), id) {
 				entry.winIconPreferred = true
 				return
 			}
