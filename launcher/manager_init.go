@@ -114,12 +114,12 @@ func (m *Manager) init() error {
 	}
 	logger.Debug("load items count:", len(m.items))
 
+	// init searchTaskStack
+	m.searchTaskStack = newSearchTaskStack(m)
+
 	// init popPushOpChan
 	m.popPushOpChan = make(chan *popPushOp, 50)
 	go m.handlePopPushOps()
-
-	// init searchTaskStack
-	m.searchTaskStack = newSearchTaskStack(m)
 
 	m.fsEventTimers = make(map[string]*time.Timer)
 	go m.handleFsWatcherEvents()
@@ -163,10 +163,6 @@ type popPushOp struct {
 
 func (m *Manager) handlePopPushOps() {
 	stack := m.searchTaskStack
-	if stack == nil {
-		logger.Warning("Manager.searchTaskStack is nil")
-		return
-	}
 	for op := range m.popPushOpChan {
 		logger.Debug("op:", op)
 
