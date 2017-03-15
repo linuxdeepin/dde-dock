@@ -31,6 +31,8 @@ type AppInfo struct {
 	Icon string
 	// Commandline
 	Exec string
+
+	fileName string
 }
 
 type AppInfos []*AppInfo
@@ -111,6 +113,7 @@ func newAppInfoById(id string) (*AppInfo, error) {
 		DisplayName: ginfo.GetGenericName(),
 		Description: ginfo.GetDescription(),
 		Exec:        ginfo.GetCommandline(),
+		fileName:    ginfo.GetFilename(),
 	}
 	iconObj := ginfo.GetIcon()
 	if iconObj != nil {

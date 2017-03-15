@@ -15,6 +15,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
+	"strings"
 	"time"
 )
 
@@ -219,8 +220,37 @@ func (m *Manager) ListApps(ty string) string {
 	} else {
 		infos = GetAppInfos(ty)
 	}
-	content, _ := marshal(infos)
+
+	// filter out deepin custom desktop file
+	filteredInfos := make(AppInfos, 0, len(infos))
+	for _, info := range infos {
+		if isDeepinCustomDesktopFile(info.fileName) {
+			continue
+		}
+
+		filteredInfos = append(filteredInfos, info)
+	}
+
+	content, _ := marshal(filteredInfos)
 	return content
+}
+
+var userAppDir string
+
+func init() {
+	userDataDir := basedir.GetUserDataDir()
+	// userAppDir is $HOME/.local/share/applications
+	userAppDir = filepath.Join(userDataDir, "applications")
+}
+
+// The default applications module of the DDE Control Center
+// creates the desktop file with the file name beginning with
+// "deepin-custom" in the applications directory under the XDG
+// user data directory.
+func isDeepinCustomDesktopFile(file string) bool {
+	dir := filepath.Dir(file)
+	base := filepath.Base(file)
+	return dir == userAppDir && strings.HasPrefix(base, "deepin-custom-")
 }
 
 func (m *Manager) ListUserApps(ty string) string {
