@@ -64,14 +64,6 @@ func (m *Manager) initBatteryDisplayUpdateHandler() {
 	m.warnLevelConfig.setChangeCallback(m.handleBatteryDisplayUpdate)
 }
 
-func (m *Manager) initSessionActiveChangedHandler() {
-	sessionWatcher := m.helper.SessionWatcher
-	sessionWatcher.IsActive.ConnectChanged(func() {
-		m.isSessionActive = sessionWatcher.IsActive.Get()
-		logger.Info("session active changed", m.isSessionActive)
-	})
-}
-
 func (m *Manager) handleBatteryDisplayUpdate() {
 	logger.Debug("handleBatteryDisplayUpdate")
 	power := m.helper.Power

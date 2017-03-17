@@ -22,7 +22,6 @@ type Manager struct {
 	warnLevelCountTicker *countTicker
 	warnLevelConfig      *WarnLevelConfig
 	submodules           map[string]submodule
-	isSessionActive      bool
 	inhibitor            *sleepInhibitor
 
 	// 接通电源时，不做任何操作，到关闭屏幕需要的时间
@@ -118,11 +117,6 @@ func (m *Manager) init() error {
 	m.initPowerModule()
 
 	m.initOnBatteryChangedHandler()
-
-	sessionWatcher := m.helper.SessionWatcher
-	m.isSessionActive = sessionWatcher.IsActive.Get()
-	m.initSessionActiveChangedHandler()
-
 	m.initSubmodules()
 	m.startSubmodules()
 
@@ -155,6 +149,10 @@ func (m *Manager) initPowerModule() {
 		}
 		m.settings.SetBoolean(settingKeyPowerModuleInitialized, true)
 	}
+}
+
+func (m *Manager) isX11SessionActive() (bool, error) {
+	return m.helper.SessionWatcher.IsX11SessionActive()
 }
 
 func (m *Manager) destroy() {
