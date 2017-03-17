@@ -24,11 +24,12 @@ const (
 )
 
 type Manager struct {
-	display       *libdisplay.Display
-	loginManager  *login1.Manager
-	sessionLocker sync.Mutex
-	sessions      map[string]*login1.Session
-	IsActive      bool
+	display           *libdisplay.Display
+	loginManager      *login1.Manager
+	sessionLocker     sync.Mutex
+	sessions          map[string]*login1.Session
+	IsActive          bool
+	activeSessionType string
 }
 
 func newManager() (*Manager, error) {
@@ -164,7 +165,14 @@ func (m *Manager) handleSessionChanged() {
 		return
 	}
 
-	isActive := m.checkIsActive()
+	session := m.getActiveSession()
+	var isActive bool
+	var sessionType string
+	if session != nil {
+		isActive = true
+		sessionType = session.Type.Get()
+	}
+	m.activeSessionType = sessionType
 	changed := m.setIsActive(isActive)
 	if !changed {
 		return
@@ -196,19 +204,19 @@ func (m *Manager) setIsActive(val bool) bool {
 	return false
 }
 
-func (m *Manager) checkIsActive() bool {
-	var active bool = false
+func (m *Manager) getActiveSession() *login1.Session {
 	m.sessionLocker.Lock()
+	defer m.sessionLocker.Unlock()
+
 	for _, session := range m.sessions {
-		isSessionActive := session.Active.Get()
-		logger.Debugf("[checkIsActive] session path: %q,isActive: %v", session.Path, isSessionActive)
-		if isSessionActive {
-			active = true
-			break
+		active := session.Active.Get()
+		if active {
+			return session
 		}
 	}
-	m.sessionLocker.Unlock()
+	return nil
+}
 
-	logger.Debugf("[checkIsActive] result user: %v isActive: %v", curUid, active)
-	return active
+func (m *Manager) IsX11SessionActive() bool {
+	return m.activeSessionType == "x11"
 }
