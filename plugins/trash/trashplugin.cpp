@@ -67,6 +67,13 @@ const QString TrashPlugin::itemContextMenu(const QString &itemKey)
     return m_trashWidget->contextMenu();
 }
 
+void TrashPlugin::refershIcon(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    m_trashWidget->updateIcon();
+}
+
 void TrashPlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey);

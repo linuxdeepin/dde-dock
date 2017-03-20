@@ -21,6 +21,7 @@ public:
     const QString contextMenu() const;
     int trashItemCount() const;
     void invokeMenuItem(const QString &menuId, const bool checked);
+    void updateIcon();
 
 signals:
     void requestContextMenu() const;
@@ -33,7 +34,6 @@ protected:
     void mousePressEvent(QMouseEvent *e);
 
 private slots:
-    void updateIcon();
     void removeApp(const QString &appKey);
     void moveToTrash(const QUrl &url);
 

@@ -80,8 +80,7 @@ void PluginsItem::setInContainer(const bool container)
 
 void PluginsItem::refershIcon()
 {
-    // TODO: update theme icon
-    update();
+    m_pluginInter->refershIcon(m_itemKey);
 }
 
 void PluginsItem::mousePressEvent(QMouseEvent *e)

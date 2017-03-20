@@ -157,6 +157,14 @@ public:
     ///
     virtual void positionChanged(const Dock::Position position) {Q_UNUSED(position);}
 
+    ///
+    /// \brief refershIcon
+    /// refersh item icon, its triggered when system icon theme changed.
+    /// \param itemKey
+    /// item key
+    ///
+    virtual void refershIcon(const QString &itemKey) { Q_UNUSED(itemKey); }
+
 
 protected:
     ///
