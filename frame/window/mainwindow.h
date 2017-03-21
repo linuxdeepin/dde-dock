@@ -3,12 +3,15 @@
 
 #include "xcb/xcb_misc.h"
 #include "dbus/dbusdisplay.h"
+#include "dbus/dbusdockadaptors.h"
 #include "util/docksettings.h"
 
 #include <QWidget>
 #include <QTimer>
 #include <QRect>
-#include "dbus/dbusdockadaptors.h"
+
+#include <DPlatformWindowHandle>
+
 class MainPanel;
 class DBusDockAdaptors;
 class MainWindow : public QWidget
@@ -48,9 +51,13 @@ private slots:
     void resetPanelEnvironment(const bool visible);
     void updatePanelVisible();
 
+    void adjustShadowMask();
+
 private:
     bool m_updatePanelVisible;
     MainPanel *m_mainPanel;
+
+//    DPlatformWindowHandle m_platformWindowHandle;
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

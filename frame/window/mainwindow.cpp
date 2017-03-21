@@ -5,6 +5,7 @@
 #include <QResizeEvent>
 #include <QScreen>
 #include <QGuiApplication>
+#include <DPlatformWindowHandle>
 
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
@@ -12,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
       m_updatePanelVisible(true),
 
       m_mainPanel(new MainPanel(this)),
+
+//      m_platformWindowHandle(this),
+
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
       m_sizeChangeAni(new QPropertyAnimation(this, "size")),
@@ -25,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
+//    m_platformWindowHandle.setEnableBlurWindow(true);
+//    m_platformWindowHandle.setTranslucentBackground(true);
+//    m_platformWindowHandle.setWindowRadius(0);
+//    m_platformWindowHandle.setBorderWidth(0);
+
     m_settings = new DockSettings(this);
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
 
@@ -35,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     updatePanelVisible();
     connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
+//    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
 }
 
 MainWindow::~MainWindow()
@@ -57,6 +67,8 @@ void MainWindow::moveEvent(QMoveEvent* e)
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
+
+    adjustShadowMask();
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *e)
@@ -464,4 +476,16 @@ void MainWindow::updatePanelVisible()
     } while (false);
 
     return expand();
+}
+
+void MainWindow::adjustShadowMask()
+{
+//    qDebug() << m_platformWindowHandle.frameMargins();
+
+//    QRect r = rect();
+//    r.moveTop(m_platformWindowHandle.frameMargins().top());
+//    r.moveLeft(-60);
+//    r.setHeight(r.height() + m_platformWindowHandle.frameMargins().bottom());
+//    r.setWidth(r.width() + m_platformWindowHandle.frameMargins().right() + m_platformWindowHandle.frameMargins().left());
+//    m_platformWindowHandle.setFrameMask(QRegion(r));
 }
