@@ -3,6 +3,7 @@ package miracast
 import (
 	"path"
 	"pkg.deepin.io/lib/dbus"
+	"time"
 )
 
 func (m *Miracast) handleLinkManaged(link *LinkInfo) {
@@ -23,6 +24,10 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 		} else {
 			link.core.WfdSubelements.Set("")
 			dbus.Emit(m, "Event", EventLinkUnmanaged, link.Path)
+			err := m.enableWirelessManaged(link.MacAddress, true)
+			if err != nil {
+				logger.Error("Enable nm device failed:", link.MacAddress, err)
+			}
 		}
 
 		logger.Debugf("[handleLinkChanged] link '%s' managed: %v, should be: %v",
@@ -53,6 +58,15 @@ func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint16) {
 
 		dbus.Emit(m, "Event", EventPeerConnected, peer.Path)
 		m.doConnect(peer, x, y, w, h)
+	})
+
+	// timeout
+	time.AfterFunc(time.Second*30, func() {
+		if peer.core == nil || peer.Connected {
+			return
+		}
+		m.Disconnect(peer.Path)
+		dbus.Emit(m, "Event", EventPeerConnectedFailed, peer.Path)
 	})
 }
 

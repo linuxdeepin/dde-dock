@@ -90,6 +90,8 @@ func isSinkObjectPath(dpath dbus.ObjectPath) bool {
 }
 
 func getAudioSink() string {
+	// test
+	return ""
 	obj, err := audio.NewAudio("com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio")
 	if err != nil {

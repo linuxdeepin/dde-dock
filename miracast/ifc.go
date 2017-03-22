@@ -10,6 +10,7 @@ const (
 	EventLinkManaged uint8 = iota + 1
 	EventLinkUnmanaged
 	EventPeerConnected
+	EventPeerConnectedFailed
 )
 
 func (m *Miracast) ListLinks() LinkInfos {
@@ -63,11 +64,13 @@ func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
 	}
 	m.managingLinks[dpath] = enabled
 
-	err := m.enableWirelessManaged(link.MacAddress, !enabled)
-	if err != nil {
-		delete(m.managingLinks, dpath)
-		logger.Error("Failed to manage wireless device:", err)
-		return err
+	if enabled {
+		err := m.enableWirelessManaged(link.MacAddress, false)
+		if err != nil {
+			delete(m.managingLinks, dpath)
+			logger.Error("Failed to disable manage wireless device:", err)
+			return err
+		}
 	}
 
 	m.handleLinkManaged(link)
