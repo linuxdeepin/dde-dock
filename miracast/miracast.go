@@ -58,7 +58,7 @@ type Miracast struct {
 	connectingPeers map[dbus.ObjectPath]bool
 
 	Added   func(dbus.ObjectPath, string)
-	Removed func(dbus.ObjectPath)
+	Removed func(dbus.ObjectPath, string)
 	Event   func(uint8, dbus.ObjectPath)
 }
 
@@ -218,22 +218,37 @@ func (m *Miracast) addSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
 	return sink, nil
 }
 
-func (m *Miracast) removeObject(dpath dbus.ObjectPath) bool {
-	var removed bool = false
+func (m *Miracast) removeObject(dpath dbus.ObjectPath) (bool, string) {
+	var (
+		removed bool = false
+		detail  string
+	)
 	if isLinkObjectPath(dpath) {
 		m.linkLocker.Lock()
 		defer m.linkLocker.Unlock()
-		m.links, removed = m.links.Remove(dpath)
+		tmp := m.links.Get(dpath)
+		if tmp != nil {
+			detail = toJSON(tmp)
+			m.links, removed = m.links.Remove(dpath)
+		}
 	} else if isPeerObjectPath(dpath) {
 		m.peerLocker.Lock()
 		defer m.peerLocker.Unlock()
-		m.peers, removed = m.peers.Remove(dpath)
+		tmp := m.peers.Get(dpath)
+		if tmp != nil {
+			detail = toJSON(tmp)
+			m.peers, removed = m.peers.Remove(dpath)
+		}
 	} else if isSinkObjectPath(dpath) {
 		m.sinkLocker.Lock()
 		defer m.sinkLocker.Unlock()
-		m.sinks, removed = m.sinks.Remove(dpath)
+		tmp := m.sinks.Get(dpath)
+		if tmp != nil {
+			detail = toJSON(tmp)
+			m.sinks, removed = m.sinks.Remove(dpath)
+		}
 	}
-	return removed
+	return removed, detail
 }
 
 func (m *Miracast) handleEvent() {
@@ -266,8 +281,8 @@ func (m *Miracast) handleEvent() {
 	})
 
 	m.wifiObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
-		if m.removeObject(dpath) {
-			dbus.Emit(m, "Removed", dpath)
+		if ok, detail := m.removeObject(dpath); ok {
+			dbus.Emit(m, "Removed", dpath, detail)
 		}
 	})
 
@@ -276,12 +291,11 @@ func (m *Miracast) handleEvent() {
 		if err == nil {
 			dbus.Emit(m, "Added", dpath, toJSON(v))
 		}
-
 	})
 
 	m.wfdObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
-		if m.removeObject(dpath) {
-			dbus.Emit(m, "Removed", dpath)
+		if ok, detail := m.removeObject(dpath); ok {
+			dbus.Emit(m, "Removed", dpath, detail)
 		}
 	})
 }

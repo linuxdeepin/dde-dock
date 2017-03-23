@@ -61,7 +61,7 @@ func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint16) {
 	})
 
 	// timeout
-	time.AfterFunc(time.Second*30, func() {
+	time.AfterFunc(time.Second*60, func() {
 		if peer.core == nil || peer.Connected {
 			return
 		}
