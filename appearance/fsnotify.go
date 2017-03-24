@@ -14,6 +14,7 @@ import (
 	"path"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
+	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"time"
 )
@@ -55,16 +56,22 @@ func (m *Manager) handleThemeChanged() {
 				logger.Debug("[Fsnotify] changed file:", file)
 				switch {
 				case hasEventOccurred(file, bgDirs):
+					logger.Debug("fs event in bgDirs")
 					background.RefreshBackground()
 				case hasEventOccurred(file, gtkDirs):
+					logger.Debug("fs event in gtkDirs")
 					// Wait for theme copy finished
 					<-time.After(time.Millisecond * 700)
 					subthemes.RefreshGtkThemes()
+					m.emitRefreshed(TypeGtkTheme)
 				case hasEventOccurred(file, iconDirs):
 					// Wait for theme copy finished
+					logger.Debug("fs event in iconDirs")
 					<-time.After(time.Millisecond * 700)
 					subthemes.RefreshIconThemes()
 					subthemes.RefreshCursorThemes()
+					m.emitRefreshed(TypeIconTheme)
+					m.emitRefreshed(TypeCursorTheme)
 				}
 			}
 		}
@@ -121,4 +128,8 @@ func hasEventOccurred(ev string, list []string) bool {
 		}
 	}
 	return false
+}
+
+func (m *Manager) emitRefreshed(_type string) {
+	dbus.Emit(m, "Refreshed", _type)
 }

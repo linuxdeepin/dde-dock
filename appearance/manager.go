@@ -65,9 +65,11 @@ type Manager struct {
 
 	FontSize *property.GSettingsFloatProperty `access:"readwrite"`
 
-	// Theme changed signal
-	// ty, name
-	Changed func(string, string)
+	// Signals:
+	// Theme setting changed
+	Changed func(_type string, name string)
+	// Theme list refreshed
+	Refreshed func(_type string)
 
 	userObj *accounts.User
 
