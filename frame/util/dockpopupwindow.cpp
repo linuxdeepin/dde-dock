@@ -66,7 +66,7 @@ void DockPopupWindow::show(const int x, const int y)
 {
     resizeWithContent();
 
-    m_lastPos = QPoint(x, y);
+    m_lastPoint = QPoint(x, y);
     move(x, y);
     if (!isVisible())
         QWidget::show();
