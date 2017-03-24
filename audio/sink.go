@@ -164,13 +164,13 @@ func (s *Sink) update() {
 			oldPortUnavailable = (int(oldPort.Available) == pulse.AvailableTypeNo)
 		}
 		logger.Debugf("oldPortUnavailable: %v", oldPortUnavailable)
-		if shouldAutoMuteSink(oldActivePort, s.ActivePort, oldPortUnavailable) {
-			s.SetMute(true)
+		if isHeadphoneUnplugedEvent(oldActivePort, s.ActivePort, oldPortUnavailable) {
+			pauseAllPlayers()
 		}
 	}
 }
 
-func shouldAutoMuteSink(oldActivePort, newActivePort Port, oldPortUnavailable bool) bool {
+func isHeadphoneUnplugedEvent(oldActivePort, newActivePort Port, oldPortUnavailable bool) bool {
 	return isHeadphonePort(oldActivePort.Name) && // old active port is headphone
 		int(oldActivePort.Available) != pulse.AvailableTypeNo && // old active port is not unavailable
 		!isHeadphonePort(newActivePort.Name) && // new port is not headphone
