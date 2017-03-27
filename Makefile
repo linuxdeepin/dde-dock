@@ -48,6 +48,9 @@ out/bin/%:
 out/bin/default-terminal: bin/default-terminal/default-terminal.c
 	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
 
+out/bin/default-file-manager: bin/default-file-manager/main.c
+	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
+
 out/bin/desktop-toggle: bin/desktop-toggle/main.c
 	gcc -o $@ $(shell pkg-config --cflags --libs x11) $^
 
@@ -60,7 +63,7 @@ translate: $(addsuffix /LC_MESSAGES/dde-daemon.mo, $(addprefix out/locale/, ${LA
 pot:
 	deepin-update-pot misc/po/locale_config.ini
 
-build: prepare out/bin/default-terminal out/bin/desktop-toggle $(addprefix out/bin/, ${BINARIES})
+build: prepare out/bin/default-terminal out/bin/default-file-manager out/bin/desktop-toggle $(addprefix out/bin/, ${BINARIES})
 
 test: prepare
 	env GOPATH="${GOPATH}:${CURDIR}/${GOPATH_DIR}" go test -v ./...

@@ -30,6 +30,8 @@ system-info/system-info
 zone-settings/zone-settings
 bluetooth/bluetooth
 main_network.go
+bin/default-terminal/default-terminal
+bin/default-file-manager/default-file-manager
 bin/dde-session-daemon/dde-session-daemon
 bin/dde-dock-daemon/dde-dock-daemon
 bin/dde-session-initializer/dde-session-initializer
@@ -38,3 +40,5 @@ bin/dde-session-initializer/dde-session-initializer
 out/
 gopath/
 .vscode/
+
+a.out

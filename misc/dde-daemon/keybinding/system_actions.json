@@ -46,7 +46,7 @@
 	},
 	{
 		"Key": "file-manager",
-		"Action": "gvfs-open ~"
+		"Action": "/usr/lib/deepin-daemon/default-file-manager"
 	},
 	{
 		"Key": "disable-touchpad",

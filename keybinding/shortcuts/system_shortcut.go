@@ -100,7 +100,7 @@ func findSysActionInTable(id string) string {
 	case "screenshot-delayed":
 		return "deepin-screenshot -d 5"
 	case "file-manager":
-		return "gvfs-open ~"
+		return "/usr/lib/deepin-daemon/default-file-manager"
 	case "disable-touchpad":
 		return "gsettings set com.deepin.dde.touchpad touchpad-enabled false"
 	case "wm-switcher":
