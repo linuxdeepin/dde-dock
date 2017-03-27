@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_mainPanel(new MainPanel(this)),
 
-//      m_platformWindowHandle(this),
+      m_platformWindowHandle(this),
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
@@ -29,10 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
-//    m_platformWindowHandle.setEnableBlurWindow(true);
-//    m_platformWindowHandle.setTranslucentBackground(true);
-//    m_platformWindowHandle.setWindowRadius(0);
-//    m_platformWindowHandle.setBorderWidth(0);
+    m_platformWindowHandle.setEnableBlurWindow(false);
+    m_platformWindowHandle.setTranslucentBackground(true);
+    m_platformWindowHandle.setWindowRadius(0);
+    m_platformWindowHandle.setBorderWidth(0);
+    m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
 
     m_settings = new DockSettings(this);
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
@@ -44,7 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     updatePanelVisible();
     connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
-//    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
+    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
+    connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
+    connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
 }
 
 MainWindow::~MainWindow()
@@ -413,6 +416,9 @@ void MainWindow::narrow(const Position prevPos)
     m_panelHideAni->setStartValue(m_mainPanel->pos());
     m_panelHideAni->setEndValue(finishPos);
     m_panelHideAni->start();
+
+    // clear shadow
+    adjustShadowMask();
 }
 
 void MainWindow::resetPanelEnvironment(const bool visible)
@@ -480,12 +486,34 @@ void MainWindow::updatePanelVisible()
 
 void MainWindow::adjustShadowMask()
 {
-//    qDebug() << m_platformWindowHandle.frameMargins();
+    if (m_mainPanel->pos() != QPoint(0, 0) || m_panelHideAni->state() == QPropertyAnimation::Running || m_panelShowAni->state() == QPauseAnimation::Running)
+        return m_platformWindowHandle.setShadowRadius(0);
 
-//    QRect r = rect();
-//    r.moveTop(m_platformWindowHandle.frameMargins().top());
-//    r.moveLeft(-60);
-//    r.setHeight(r.height() + m_platformWindowHandle.frameMargins().bottom());
-//    r.setWidth(r.width() + m_platformWindowHandle.frameMargins().right() + m_platformWindowHandle.frameMargins().left());
-//    m_platformWindowHandle.setFrameMask(QRegion(r));
+    const QRect r = rect();
+    const int radius = 5;
+
+    QPainterPath path;
+    if (m_settings->displayMode() == DisplayMode::Fashion)
+    {
+        switch (m_settings->position())
+        {
+        case Top:
+            path.addRoundedRect(0, -radius, r.width(), r.height() + radius, radius, radius);
+            break;
+        case Bottom:
+            path.addRoundedRect(0, 0, r.width(), r.height() + radius, radius, radius);
+            break;
+        case Left:
+            path.addRoundedRect(-radius, 0, r.width() + radius, r.height(), radius, radius);
+            break;
+        case Right:
+            path.addRoundedRect(0, 0, r.width() + radius, r.height(), radius, radius);
+        default:;
+        }
+    } else {
+        path.addRect(rect());
+    }
+
+    m_platformWindowHandle.setShadowRadius(60);
+    m_platformWindowHandle.setClipPath(path);
 }

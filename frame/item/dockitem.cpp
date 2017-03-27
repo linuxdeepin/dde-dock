@@ -24,7 +24,7 @@ DockItem::DockItem(QWidget *parent)
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
 //        arrowRectangle->setShadowBlurRadius(0);
 //        arrowRectangle->setBorderWidth(0);
-//        arrowRectangle->setShadowDistance(0);
+        arrowRectangle->setShadowDistance(0);
         arrowRectangle->setShadowYOffset(0);
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
