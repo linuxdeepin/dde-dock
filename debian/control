@@ -17,7 +17,7 @@ Package: dde-dock
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: dde-workspace (<< 2.90.5),
- dde-dock-applets,
+ dde-dock-applets
 Replaces: dde-dock-applets
 Description: deepin desktop-environment - dock module
  Deepin desktop environment 2015 - dock module.
