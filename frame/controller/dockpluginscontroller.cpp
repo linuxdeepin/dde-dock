@@ -113,6 +113,8 @@ void DockPluginsController::positionChanged()
 
 void DockPluginsController::loadPlugin(const QString &pluginFile)
 {
+    qDebug() << "load plugin: " << pluginFile;
+
     QPluginLoader *pluginLoader = new QPluginLoader(pluginFile, this);
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
     if (!interface)
@@ -123,7 +125,9 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
     }
 
     m_pluginList.insert(interface, QMap<QString, PluginsItem *>());
+    qDebug() << "init plugin: " << interface->pluginName();
     interface->init(this);
+    qDebug() << "init plugin finished: " << interface->pluginName();
 }
 
 bool DockPluginsController::eventFilter(QObject *o, QEvent *e)
