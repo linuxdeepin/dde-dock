@@ -71,7 +71,7 @@ func newDevice(dpath dbus.ObjectPath, data map[string]dbus.Variant) (d *device) 
 	d.notifyStateChanged()
 
 	// optional properties, read from dbus object data in order to
-	// check if property is exists
+	// check if property exists
 	d.Icon = getDBusObjectValueString(data, "Icon")
 	if isDBusObjectKeyExists(data, "RSSI") {
 		d.RSSI = getDBusObjectValueInt16(data, "RSSI")
