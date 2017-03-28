@@ -143,10 +143,14 @@ func (m *Manager) initConfigData() {
 		return
 	}
 
-	err := m.doInitConfigData()
-	if err != nil {
-		logger.Warning("Init mime config file failed", err)
-	}
+	go func() {
+		err := m.doInitConfigData()
+		if err != nil {
+			logger.Warning("Init mime config file failed", err)
+		} else {
+			logger.Info("Init mime config file successfully")
+		}
+	}()
 }
 
 func (m *Manager) doInitConfigData() error {
