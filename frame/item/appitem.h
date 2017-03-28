@@ -2,6 +2,7 @@
 #define APPITEM_H
 
 #include "dockitem.h"
+#include "components/previewcontainer.h"
 #include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
 
@@ -41,9 +42,11 @@ private slots:
     void updateTitle();
     void refershIcon();
     void activeChanged();
+    void showPreview();
 
 private:
     QLabel *m_appNameTips;
+    PreviewContainer *m_appPreviewTips;
     DBusDockEntry *m_itemEntry;
 
     bool m_draging;

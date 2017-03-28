@@ -8,7 +8,7 @@ DESTDIR         = $$_PRO_FILE_PWD_/../
 TEMPLATE        = app
 CONFIG         += c++11 link_pkgconfig
 
-PKGCONFIG += xcb-ewmh dtkwidget dtkbase dtkutil
+PKGCONFIG += xcb-ewmh dtkwidget dtkbase dtkutil x11
 
 SOURCES += main.cpp \
     window/mainwindow.cpp \
@@ -36,7 +36,8 @@ SOURCES += main.cpp \
     controller/dockpluginloader.cpp \
     item/containeritem.cpp \
     item/components/containerwidget.cpp \
-    dbus/dbusdockadaptors.cpp
+    dbus/dbusdockadaptors.cpp \
+    item/components/previewcontainer.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -64,7 +65,8 @@ HEADERS  += \
     controller/dockpluginloader.h \
     item/containeritem.h \
     item/components/containerwidget.h \
-    dbus/dbusdockadaptors.h
+    dbus/dbusdockadaptors.h \
+    item/components/previewcontainer.h
 
 dbus_service.files += com.deepin.dde.Dock.service
 dbus_service.path = /usr/share/dbus-1/services

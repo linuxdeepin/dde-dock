@@ -18,6 +18,7 @@ QPoint AppItem::MousePressPos;
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
       m_appNameTips(new QLabel(this)),
+      m_appPreviewTips(new PreviewContainer(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
       m_draging(false),
       m_launchingEffects(0.0),
@@ -247,10 +248,18 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
             return;
 
+#ifdef QT_DEBUG
+        const int windowCount = m_titles.size();
+        if (windowCount < 2)
+            m_itemEntry->Activate();
+        else
+            showPreview();
+#else
         m_itemEntry->Activate();
+#endif
 
-        if (!m_titles.isEmpty())
-            return;
+//        if (!m_titles.isEmpty())
+//            return;
 
         // start launching effects
         //m_launchingEffects = 0.0;
@@ -412,4 +421,11 @@ void AppItem::refershIcon()
 void AppItem::activeChanged()
 {
     m_active = !m_active;
+}
+
+void AppItem::showPreview()
+{
+    m_appPreviewTips->setWindowInfos(m_titles);
+
+    QTimer::singleShot(100, this, [=] { showPopupApplet(m_appPreviewTips); });
 }
