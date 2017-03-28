@@ -30,6 +30,7 @@ public:
 private:
     void updateBatteryVisible();
     void requestContextMenu(const QString &itemKey);
+    void delayLoader();
 
 private:
     PluginWidget *m_shutdownWidget;

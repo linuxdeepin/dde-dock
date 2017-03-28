@@ -68,9 +68,8 @@ QWidget *ShutdownPlugin::itemTipsWidget(const QString &itemKey)
 void ShutdownPlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
-    m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
 
-    displayModeChanged(displayMode());
+    delayLoader();
 }
 
 const QString ShutdownPlugin::itemCommand(const QString &itemKey)
@@ -179,4 +178,24 @@ void ShutdownPlugin::updateBatteryVisible()
 void ShutdownPlugin::requestContextMenu(const QString &itemKey)
 {
     m_proxyInter->requestContextMenu(this, itemKey);
+}
+
+void ShutdownPlugin::delayLoader()
+{
+    static int retryTimes = 0;
+
+    ++retryTimes;
+
+    if (m_powerInter->isValid() || retryTimes > 10)
+    {
+        qDebug() << "load power item, dbus valid:" << m_powerInter->isValid();
+
+        m_proxyInter->itemAdded(this, SHUTDOWN_KEY);
+        displayModeChanged(displayMode());
+    } else {
+        qDebug() << "load power failed, wait and retry" << retryTimes;
+
+        // wait and retry
+        QTimer::singleShot(1000, this, &ShutdownPlugin::delayLoader);
+    }
 }
