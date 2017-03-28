@@ -486,8 +486,14 @@ void MainWindow::updatePanelVisible()
 
 void MainWindow::adjustShadowMask()
 {
-    if (m_mainPanel->pos() != QPoint(0, 0) || m_panelHideAni->state() == QPropertyAnimation::Running || m_panelShowAni->state() == QPauseAnimation::Running)
-        return m_platformWindowHandle.setShadowRadius(0);
+    if (m_mainPanel->pos() != QPoint(0, 0) ||
+        m_panelHideAni->state() == QPropertyAnimation::Running ||
+        m_panelShowAni->state() == QPauseAnimation::Running)
+    {
+        m_platformWindowHandle.setShadowRadius(0);
+        m_platformWindowHandle.setClipPath(QPainterPath());
+        return;
+    }
 
     const QRect r = rect();
     const int radius = 5;
