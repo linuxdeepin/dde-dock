@@ -14,6 +14,9 @@ class PreviewContainer : public QWidget
 public:
     explicit PreviewContainer(QWidget *parent = 0);
 
+signals:
+    void requestActivateWindow(const WId wid) const;
+
 public:
     void setWindowInfos(const WindowDict &infos);
 

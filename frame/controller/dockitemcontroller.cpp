@@ -178,7 +178,13 @@ DockItemController::DockItemController(QObject *parent)
 
     m_itemList.append(new LauncherItem);
     for (auto entry : m_appInter->entries())
-        m_itemList.append(new AppItem(entry));
+    {
+        AppItem *it = new AppItem(entry);
+
+        connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+
+        m_itemList.append(it);
+    }
     m_itemList.append(m_placeholderItem);
     m_itemList.append(m_containerItem);
 
@@ -211,6 +217,9 @@ void DockItemController::appItemAdded(const QDBusObjectPath &path, const int ind
     }
 
     AppItem *item = new AppItem(path);
+
+    connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+
     m_itemList.insert(insertIndex, item);
     emit itemInserted(insertIndex, item);
 }

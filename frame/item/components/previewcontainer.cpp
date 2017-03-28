@@ -1,12 +1,8 @@
 #include "previewcontainer.h"
+#include "previewwidget.h"
 
 #include <QLabel>
 #include <QWindow>
-#include <QX11Info>
-
-#include <X11/Xlib.h>
-#include <X11/X.h>
-#include <X11/Xutil.h>
 
 PreviewContainer::PreviewContainer(QWidget *parent)
     : QWidget(parent)
@@ -29,16 +25,11 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
 
     for (auto it(infos.cbegin()); it != infos.cend(); ++it)
     {
-        XWindowAttributes attrs;
-        XGetWindowAttributes(QX11Info::display(), it.key(), &attrs);
-        XImage *ximage = XGetImage(QX11Info::display(), it.key(), 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
-        const QImage qimage((uchar*)(ximage->data), attrs.width, attrs.height, QImage::Format_ARGB32);
-        XDestroyImage(ximage);
+        PreviewWidget *w = new PreviewWidget(it.key());
 
-        QLabel *l = new QLabel;
-        l->setFixedSize(250, 200);
-        l->setPixmap(QPixmap::fromImage(qimage).scaled(250, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        m_windowListLayout->addWidget(l);
+        connect(w, &PreviewWidget::requestActivateWindow, this, &PreviewContainer::requestActivateWindow);
+
+        m_windowListLayout->addWidget(w);
     }
 }
 

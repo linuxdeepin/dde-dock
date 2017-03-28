@@ -22,6 +22,9 @@ public:
 
     inline ItemType itemType() const {return App;}
 
+signals:
+    void requestActivateWindow(const WId wid) const;
+
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
@@ -42,7 +45,7 @@ private slots:
     void updateTitle();
     void refershIcon();
     void activeChanged();
-    void showPreview();
+    void togglePreview();
 
 private:
     QLabel *m_appNameTips;

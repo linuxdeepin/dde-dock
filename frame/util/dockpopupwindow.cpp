@@ -129,7 +129,9 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 
 void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString &id)
 {
-    Q_UNUSED(button);
+    // button_left
+    if (button != 1)
+        return;
 
     if (id != m_mouseAreaKey)
         return;
@@ -149,11 +151,13 @@ void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString
 
 void DockPopupWindow::registerMouseEvent()
 {
+    if (!m_mouseAreaKey.isEmpty())
+        return;
+
     // only regist mouse button event
     m_mouseAreaKey = m_mouseInter->RegisterArea(0, 0, m_displayInter->screenWidth(), m_displayInter->screenHeight(), MOUSE_BUTTON);
-//    m_mouseAreaKey = m_mouseInter->RegisterFullScreen();
 
-    connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease, Qt::UniqueConnection);
+    connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease, Qt::QueuedConnection);
 }
 
 void DockPopupWindow::unRegisterMouseEvent()
@@ -163,6 +167,6 @@ void DockPopupWindow::unRegisterMouseEvent()
 
     disconnect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease);
 
-    m_mouseInter->UnregisterArea(m_mouseAreaKey).waitForFinished();
+    m_mouseInter->UnregisterArea(m_mouseAreaKey);
     m_mouseAreaKey.clear();
 }

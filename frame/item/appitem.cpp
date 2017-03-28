@@ -4,11 +4,10 @@
 #include "util/imagefactory.h"
 #include "xcb/xcb_misc.h"
 
-#include <dapplication.h>
-
 #include <QPainter>
 #include <QDrag>
 #include <QMouseEvent>
+#include <QApplication>
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -50,6 +49,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
+
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow);
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries);
 
@@ -244,19 +245,19 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::MiddleButton) {
         m_itemEntry->NewInstance();
     } else if (e->button() == Qt::LeftButton) {
-        const QPoint distance = MousePressPos - e->pos();
-        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
-            return;
+//        const QPoint distance = MousePressPos - e->pos();
+//        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
+//            return;
 
-#ifdef QT_DEBUG
+//#ifdef QT_DEBUG
         const int windowCount = m_titles.size();
         if (windowCount < 2)
             m_itemEntry->Activate();
         else
-            showPreview();
-#else
-        m_itemEntry->Activate();
-#endif
+            togglePreview();
+//#else
+//        m_itemEntry->Activate();
+//#endif
 
 //        if (!m_titles.isEmpty())
 //            return;
@@ -271,7 +272,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 void AppItem::mousePressEvent(QMouseEvent *e)
 {
     m_updateIconGeometryTimer->stop();
-    hidePopup();
+//    hidePopup();
 
     if (e->button() == Qt::RightButton)
     {
@@ -423,9 +424,15 @@ void AppItem::activeChanged()
     m_active = !m_active;
 }
 
-void AppItem::showPreview()
+void AppItem::togglePreview()
 {
+    if (PopupWindow->isVisible())
+        return hidePopup();
+
+    m_appPreviewTips->updateLayoutDirection(DockPosition);
     m_appPreviewTips->setWindowInfos(m_titles);
 
-    QTimer::singleShot(100, this, [=] { showPopupApplet(m_appPreviewTips); });
+    qApp->processEvents();
+
+    showPopupApplet(m_appPreviewTips);
 }
