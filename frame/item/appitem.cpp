@@ -249,15 +249,15 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 //        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
 //            return;
 
-//#ifdef QT_DEBUG
+#ifdef QT_DEBUG
         const int windowCount = m_titles.size();
         if (windowCount < 2)
             m_itemEntry->Activate();
         else
             togglePreview();
-//#else
-//        m_itemEntry->Activate();
-//#endif
+#else
+        m_itemEntry->Activate();
+#endif
 
 //        if (!m_titles.isEmpty())
 //            return;
