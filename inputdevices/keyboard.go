@@ -48,6 +48,13 @@ const (
 	cmdSetKbd = "/usr/bin/setxkbmap"
 )
 
+const (
+	wmRepeatSchemaId    = "com.deepin.wrap.gnome.desktop.peripherals.keyboard"
+	wmRepeatKeyRepeat   = "repeat"
+	wmRepeatKeyDelay    = "delay"
+	wmRepeatKeyInterval = "repeat-interval"
+)
+
 type Keyboard struct {
 	RepeatEnabled  *property.GSettingsBoolProperty `access:"readwrite"`
 	CapslockToggle *property.GSettingsBoolProperty `access:"readwrite"`
@@ -291,11 +298,16 @@ func (kbd *Keyboard) setGreeterLayoutList() {
 }
 
 func (kbd *Keyboard) setRepeat() {
-	err := dxinput.SetKeyboardRepeat(kbd.RepeatEnabled.Get(),
-		kbd.RepeatDelay.Get(), kbd.RepeatInterval.Get())
+	var (
+		repeat   = kbd.RepeatEnabled.Get()
+		delay    = kbd.RepeatDelay.Get()
+		interval = kbd.RepeatInterval.Get()
+	)
+	err := dxinput.SetKeyboardRepeat(repeat, delay, interval)
 	if err != nil {
-		logger.Debug("Set kbd repeat failed:", err)
+		logger.Debug("Set kbd repeat failed:", err, repeat, delay, interval)
 	}
+	setWMKeyboardRepeat(repeat, delay, interval)
 }
 
 func doSetLayout(value string) error {
@@ -379,4 +391,22 @@ func isInvalidUser(name string) bool {
 	}
 
 	return false
+}
+
+func setWMKeyboardRepeat(repeat bool, delay, interval uint32) {
+	setting, err := dutils.CheckAndNewGSettings(wmRepeatSchemaId)
+	if err != nil {
+		logger.Warning("Failed to create wm keyboard repeat schema:", err)
+		return
+	}
+	defer setting.Unref()
+	if setting.GetBoolean(wmRepeatKeyRepeat) != repeat {
+		setting.SetBoolean(wmRepeatKeyRepeat, repeat)
+	}
+	if setting.GetUint(wmRepeatKeyDelay) != delay {
+		setting.SetUint(wmRepeatKeyDelay, delay)
+	}
+	if setting.GetUint(wmRepeatKeyInterval) != interval {
+		setting.SetUint(wmRepeatKeyInterval, interval)
+	}
 }
