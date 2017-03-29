@@ -19,3 +19,13 @@ func TestGetLocaleFromFile(t *testing.T) {
 		So(getLocaleFromFile("testdata/locale"), ShouldEqual, "zh_CN.UTF-8")
 	})
 }
+
+func TestSystemLayout(t *testing.T) {
+	Convey("Get system layout", t, func() {
+		layout, err := getSystemLayout("testdata/keyboard_us")
+		So(err, ShouldBeNil)
+		So(layout, ShouldEqual, "us;")
+		layout, _ = getSystemLayout("testdata/keyboard_us_chr")
+		So(layout, ShouldEqual, "us;chr")
+	})
+}

@@ -10,6 +10,8 @@
 package accounts
 
 import (
+	"bufio"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -18,6 +20,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/graphic"
 	dutils "pkg.deepin.io/lib/utils"
+	"regexp"
 	"runtime/debug"
 	"strings"
 	"sync"
@@ -29,7 +32,9 @@ const (
 )
 
 const (
-	defaultLayout         = "us;"
+	layoutDelim           = ";"
+	defaultLayout         = "us" + layoutDelim
+	defaultLayoutFile     = "/etc/default/keyboard"
 	defaultUserIcon       = "file:///var/lib/AccountsService/icons/default.png"
 	defaultUserBackground = "file:///usr/share/backgrounds/default_background.jpg"
 
@@ -107,7 +112,7 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
-		u.setPropString(&u.Layout, "Layout", defaultLayout)
+		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
 		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
 		u.setPropString(&u.BackgroundFile, "BackgroundFile", defaultUserBackground)
@@ -127,7 +132,7 @@ func NewUser(userPath string) (*User, error) {
 	layout, _ := kFile.GetString(confGroupUser, confKeyLayout)
 	u.setPropString(&u.Layout, "Layout", layout)
 	if len(layout) == 0 {
-		u.setPropString(&u.Layout, "Layout", defaultLayout)
+		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
 		isSave = true
 	}
 	icon, _ := kFile.GetString(confGroupUser, confKeyIcon)
@@ -305,6 +310,15 @@ func (u *User) clearData() {
 	}
 }
 
+func (u *User) getDefaultLayout() string {
+	layout, err := getSystemLayout(defaultLayoutFile)
+	if err != nil {
+		logger.Warning("Failed to get system default layout:", err)
+		return defaultLayout
+	}
+	return layout
+}
+
 // userPath must be composed with 'userDBusPath + uid'
 func getUidFromUserPath(userPath string) string {
 	items := strings.Split(userPath, userDBusPath)
@@ -372,4 +386,55 @@ func genGaussianBlur(file string) {
 		delete(gaussianTasks, file)
 		gaussianLocker.Unlock()
 	}()
+}
+
+func getSystemLayout(file string) (string, error) {
+	fr, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer fr.Close()
+
+	var (
+		found   int
+		layout  string
+		variant string
+
+		regLayout  = regexp.MustCompile(`^XKBLAYOUT=`)
+		regVariant = regexp.MustCompile(`^XKBVARIANT=`)
+
+		scanner = bufio.NewScanner(fr)
+	)
+	for scanner.Scan() {
+		if found == 2 {
+			break
+		}
+
+		var line = scanner.Text()
+		if regLayout.MatchString(line) {
+			layout = strings.Trim(getValueFromLine(line, "="), "\"")
+			found += 1
+			continue
+		}
+
+		if regVariant.MatchString(line) {
+			variant = strings.Trim(getValueFromLine(line, "="), "\"")
+			found += 1
+		}
+	}
+
+	if len(layout) == 0 {
+		return "", fmt.Errorf("Not found default layout")
+	}
+
+	return layout + layoutDelim + variant, nil
+}
+
+func getValueFromLine(line, delim string) string {
+	array := strings.Split(line, delim)
+	if len(array) != 2 {
+		return ""
+	}
+
+	return strings.TrimSpace(array[1])
 }
