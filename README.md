@@ -2,7 +2,7 @@
 
 DDE Daemon is a daemon for handling  the deepin session settings
 
-## Dependencies
+### Dependencies
 
 
 ### Build dependencies
