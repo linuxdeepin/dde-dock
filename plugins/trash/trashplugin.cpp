@@ -7,7 +7,7 @@ TrashPlugin::TrashPlugin(QObject *parent)
 {
     m_tipsLabel->setObjectName("trash");
     m_tipsLabel->setStyleSheet("color:white;"
-                               "padding:5px 10px;");
+                               "padding: 0 3px;");
 
     connect(m_trashWidget, &TrashWidget::requestContextMenu, this, &TrashPlugin::showContextMenu);
 }

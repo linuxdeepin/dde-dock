@@ -23,8 +23,7 @@ SoundItem::SoundItem(QWidget *parent)
     //    m_tipsLabel->setFixedWidth(145);
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
-                               "padding:5px 10px;"
-                               "margin:0px 10px 0px");
+                               "padding: 0 3px;");
 
     m_applet->setVisible(false);
 
@@ -36,7 +35,7 @@ QWidget *SoundItem::tipsWidget()
 {
     refershTips(true);
 
-    m_tipsLabel->setFixedWidth(m_tipsLabel->sizeHint().width());
+    m_tipsLabel->setFixedWidth(m_tipsLabel->sizeHint().width() + 10);
 
     return m_tipsLabel;
 }

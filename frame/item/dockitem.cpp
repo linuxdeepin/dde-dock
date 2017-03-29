@@ -22,10 +22,11 @@ DockItem::DockItem(QWidget *parent)
     if (!PopupWindow.get())
     {
         DockPopupWindow *arrowRectangle = new DockPopupWindow(nullptr);
-        arrowRectangle->setShadowBlurRadius(0);
+        arrowRectangle->setShadowBlurRadius(20);
 //        arrowRectangle->setBorderWidth(0);
+        arrowRectangle->setRadius(6);
         arrowRectangle->setShadowDistance(0);
-        arrowRectangle->setShadowYOffset(0);
+        arrowRectangle->setShadowYOffset(2);
         arrowRectangle->setShadowXOffset(0);
         arrowRectangle->setArrowWidth(18);
         arrowRectangle->setArrowHeight(10);

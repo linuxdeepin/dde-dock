@@ -11,7 +11,7 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 {
     m_dateTipsLabel->setObjectName("datetime");
     m_dateTipsLabel->setStyleSheet("color:white;"
-                                   "padding:6px 10px;");
+                                   "padding:0px 3px;");
 
     m_refershTimer->setInterval(1000);
     m_refershTimer->start();

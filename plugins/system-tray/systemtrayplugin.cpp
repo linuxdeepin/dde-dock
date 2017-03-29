@@ -24,7 +24,7 @@ SystemTrayPlugin::SystemTrayPlugin(QObject *parent)
     m_tipsLabel->setText(tr("System Tray"));
     m_tipsLabel->setVisible(false);
     m_tipsLabel->setStyleSheet("color:white;"
-                               "padding:5px 10px;");
+                               "padding: 0 3px;");
 }
 
 const QString SystemTrayPlugin::pluginName() const

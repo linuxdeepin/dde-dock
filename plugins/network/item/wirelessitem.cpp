@@ -20,7 +20,7 @@ WirelessItem::WirelessItem(const QUuid &uuid)
     m_wirelessPopup->setObjectName("wireless-" + uuid.toString());
     m_wirelessPopup->setVisible(false);
     m_wirelessPopup->setStyleSheet("color:white;"
-                                   "padding:5px 10px;");
+                                   "padding: 0px 3px;");
 
     connect(m_refershTimer, &QTimer::timeout, this, static_cast<void (WirelessItem::*)()>(&WirelessItem::update));
     QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);

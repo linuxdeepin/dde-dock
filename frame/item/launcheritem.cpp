@@ -16,7 +16,7 @@ LauncherItem::LauncherItem(QWidget *parent)
     m_tips->setObjectName("launcher");
     m_tips->setText(tr("Launcher"));
     m_tips->setStyleSheet("color:white;"
-                          "padding:5px 10px;");
+                          "padding:0px 3px;");
 }
 
 void LauncherItem::refershIcon()

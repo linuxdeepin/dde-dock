@@ -21,7 +21,7 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
     m_itemTips->setObjectName("wired-" + deviceUuid.toString());
     m_itemTips->setVisible(false);
     m_itemTips->setStyleSheet("color:white;"
-                              "padding:5px 10px;");
+                              "padding:0px 3px;");
 
     connect(m_delayTimer, &QTimer::timeout, this, &WiredItem::reloadIcon);
 

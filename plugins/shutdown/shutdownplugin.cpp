@@ -16,7 +16,7 @@ ShutdownPlugin::ShutdownPlugin(QObject *parent)
     m_tipsLabel->setObjectName("power");
     m_tipsLabel->setAlignment(Qt::AlignCenter);
     m_tipsLabel->setStyleSheet("color:white;"
-                               "padding:5px 10px;");
+                               "padding: 0px 3px;");
 
     connect(m_powerInter, &DBusPower::BatteryPercentageChanged, this, &ShutdownPlugin::updateBatteryVisible);
     connect(m_shutdownWidget, &PluginWidget::requestContextMenu, this, &ShutdownPlugin::requestContextMenu);

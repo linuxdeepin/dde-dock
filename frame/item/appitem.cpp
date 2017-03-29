@@ -37,7 +37,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_appNameTips->setObjectName(m_itemEntry->name());
     m_appNameTips->setVisible(false);
     m_appNameTips->setStyleSheet("color:white;"
-                                 "padding:5px 10px;");
+                                 "padding:0px 3px;");
 
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
