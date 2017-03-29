@@ -20,6 +20,7 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 
 		if link.Managed {
 			link.core.WfdSubelements.Set("000600111c4400c8")
+			// TODO: wait WfdSubelements changed
 			dbus.Emit(m, "Event", EventLinkManaged, link.Path)
 		} else {
 			link.core.WfdSubelements.Set("")
@@ -38,7 +39,8 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 	})
 }
 
-func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint16) {
+func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint32) {
+	var hasConnected = false
 	peer.core.Connected.ConnectChanged(func() {
 		if peer.core == nil {
 			return
@@ -56,13 +58,14 @@ func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint16) {
 			return
 		}
 
+		hasConnected = true
 		dbus.Emit(m, "Event", EventPeerConnected, peer.Path)
 		m.doConnect(peer, x, y, w, h)
 	})
 
 	// timeout
 	time.AfterFunc(time.Second*60, func() {
-		if peer.core == nil || peer.Connected {
+		if peer.core == nil || hasConnected {
 			return
 		}
 		m.Disconnect(peer.Path)
@@ -70,7 +73,7 @@ func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint16) {
 	})
 }
 
-func (m *Miracast) doConnect(peer *PeerInfo, x, y, w, h uint16) {
+func (m *Miracast) doConnect(peer *PeerInfo, x, y, w, h uint32) {
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
 	sink := m.sinks.Get(sinkPath + dbus.ObjectPath(path.Base(string(peer.Path))))

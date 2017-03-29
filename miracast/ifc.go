@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 	"pkg.deepin.io/lib/dbus"
+	"time"
 )
 
 const (
@@ -71,6 +72,7 @@ func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
 			logger.Error("Failed to disable manage wireless device:", err)
 			return err
 		}
+		time.Sleep(time.Millisecond * 500)
 	}
 
 	m.handleLinkManaged(link)
@@ -91,11 +93,12 @@ func (m *Miracast) Scanning(dpath dbus.ObjectPath, enabled bool) error {
 	}
 
 	link.EnableP2PScanning(enabled)
+	// TODO: wait P2PScanning changed
 	link.update()
 	return nil
 }
 
-func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint16) error {
+func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
 	if !isPeerObjectPath(dpath) {
 		return fmt.Errorf("Invalid peer dpath: %v", dpath)
 	}

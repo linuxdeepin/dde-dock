@@ -27,10 +27,10 @@ func newSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
 	}, nil
 }
 
-func (sink *SinkInfo) StartSession(x, y, w, h uint16) error {
+func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
 	var (
 		// format: 'x://:0.0'
-		dpy       = "x://" + os.Getenv("DISPLAY") + ".0"
+		dpy       = "x://" + os.Getenv("DISPLAY")
 		xauth     = os.Getenv("XAUTHORITY")
 		audioSink = getAudioSink()
 	)
@@ -90,7 +90,6 @@ func isSinkObjectPath(dpath dbus.ObjectPath) bool {
 }
 
 func getAudioSink() string {
-	// test
 	return ""
 	obj, err := audio.NewAudio("com.deepin.daemon.Audio",
 		"/com/deepin/daemon/Audio")

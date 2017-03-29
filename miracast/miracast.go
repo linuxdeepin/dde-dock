@@ -326,6 +326,15 @@ func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error 
 		if dev.Managed.Get() != enabled {
 			dev.Managed.Set(enabled)
 		}
+
+		// wait 'Managed' value changed
+		for {
+			time.Sleep(time.Millisecond * 10)
+			if dev.Managed.Get() == enabled {
+				logger.Info("[enableWirelessManaged] Device managed has changed:", macAddress, enabled)
+				break
+			}
+		}
 		networkmanager.DestroyDevice(dev)
 		break
 	}
