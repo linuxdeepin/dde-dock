@@ -52,6 +52,8 @@ const (
 	gsKeyFontSize       = "font-size"
 	gsKeyBackgroundURIs = "background-uris"
 
+	defaultStandardFont   = "Noto Sans"
+	defaultMonospaceFont  = "Noto Mono"
 	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
 )
 
@@ -374,7 +376,7 @@ func (m *Manager) loadDefaultFontConfig(filename string) error {
 func (m *Manager) getDefaultFonts() (standard string, monospace string) {
 	cfg := m.defaultFontConfig
 	if cfg == nil {
-		return "", ""
+		return defaultStandardFont, defaultMonospaceFont
 	}
 	return cfg.Get()
 }

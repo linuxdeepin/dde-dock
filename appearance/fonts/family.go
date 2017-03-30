@@ -129,6 +129,9 @@ func (infos Families) GetIds() []string {
 }
 
 func (infos Families) Get(id string) *Family {
+	if id == "" {
+		return nil
+	}
 	if isVirtualFont(id) {
 		id = fcFontMatch(id)
 	}
