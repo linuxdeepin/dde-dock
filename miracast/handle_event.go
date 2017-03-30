@@ -37,6 +37,12 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 			delete(m.managingLinks, link.Path)
 		}
 	})
+	link.core.P2PScanning.ConnectChanged(func() {
+		if link.core == nil {
+			return
+		}
+		link.update()
+	})
 }
 
 func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint32) {
