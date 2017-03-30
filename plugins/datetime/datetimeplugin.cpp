@@ -75,6 +75,15 @@ const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
     QList<QVariant> items;
     items.reserve(1);
 
+    QMap<QString, QVariant> settings;
+    settings["itemId"] = "settings";
+    if (m_centralWidget->is24HourFormat())
+        settings["itemText"] = tr("12 Hour Time");
+    else
+        settings["itemText"] = tr("24 Hour Time");
+    settings["isActive"] = true;
+    items.push_back(settings);
+
     QMap<QString, QVariant> open;
     open["itemId"] = "open";
     open["itemText"] = tr("Time Settings");
@@ -92,10 +101,12 @@ const QString DatetimePlugin::itemContextMenu(const QString &itemKey)
 void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked)
 {
     Q_UNUSED(itemKey)
-    Q_UNUSED(menuId)
     Q_UNUSED(checked)
 
-    QProcess::startDetached("dde-control-center", QStringList() << "datetime");
+    if (menuId == "open")
+        QProcess::startDetached("dde-control-center", QStringList() << "datetime");
+    else
+        m_centralWidget->toggleHourFormat();
 }
 
 void DatetimePlugin::updateCurrentTimeString()

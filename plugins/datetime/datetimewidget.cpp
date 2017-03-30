@@ -8,9 +8,23 @@
 #include <QMouseEvent>
 
 DatetimeWidget::DatetimeWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+
+    m_settings("deepin", "dde-dock-datetime"),
+
+    m_24HourFormat(m_settings.value("24HourFormat").toBool())
 {
 
+}
+
+void DatetimeWidget::toggleHourFormat()
+{
+    m_24HourFormat = !m_24HourFormat;
+
+    m_settings.setValue("24HourFormat", m_24HourFormat);
+
+    m_cachedTime.clear();
+    update();
 }
 
 QSize DatetimeWidget::sizeHint() const
@@ -39,11 +53,11 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     if (displayMode == Dock::Efficient)
     {
         painter.setPen(Qt::white);
-        painter.drawText(rect(), Qt::AlignCenter, current.toString("HH:mm"));
+        painter.drawText(rect(), Qt::AlignCenter, current.toString(m_24HourFormat ? "hh:mm" : "hh:mm A"));
         return;
     }
 
-    const QString currentTimeString = current.toString("HHmm");
+    const QString currentTimeString = current.toString(m_24HourFormat ? "hhmm" : "hhmma");
     // check cache valid
     if (m_cachedTime != currentTimeString)
     {

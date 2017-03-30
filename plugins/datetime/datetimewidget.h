@@ -2,6 +2,7 @@
 #define DATETIMEWIDGET_H
 
 #include <QWidget>
+#include <QSettings>
 
 class DatetimeWidget : public QWidget
 {
@@ -10,8 +11,13 @@ class DatetimeWidget : public QWidget
 public:
     explicit DatetimeWidget(QWidget *parent = 0);
 
+    bool is24HourFormat() const { return m_24HourFormat; }
+
 signals:
     void requestContextMenu() const;
+
+public slots:
+    void toggleHourFormat();
 
 private:
     QSize sizeHint() const;
@@ -24,6 +30,8 @@ private:
 private:
     QPixmap m_cachedIcon;
     QString m_cachedTime;
+    QSettings m_settings;
+    bool m_24HourFormat;
 };
 
 #endif // DATETIMEWIDGET_H
