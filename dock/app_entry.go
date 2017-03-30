@@ -68,7 +68,9 @@ func (entry *AppEntry) setAppInfo(newAppInfo *AppInfo) {
 
 	if newAppInfo == nil {
 		entry.winIconPreferred = true
+		entry.setDesktopFile("")
 	} else {
+		entry.winIconPreferred = false
 		entry.setDesktopFile(newAppInfo.GetFileName())
 		if entry.dockManager != nil {
 			id := newAppInfo.GetId()

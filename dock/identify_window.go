@@ -19,7 +19,7 @@ func (m *DockManager) registerIdentifyWindowFuncs() {
 	m.registerIdentifyWindowFunc("Rule", identifyWindowByRule)
 	m.registerIdentifyWindowFunc("Bamf", identifyWindowByBamf)
 	m.registerIdentifyWindowFunc("Pid", identifyWindowByPid)
-	m.registerIdentifyWindowFunc("Cache", identifyWindowByCache)
+	m.registerIdentifyWindowFunc("Scratch", identifyWindowByScratch)
 	m.registerIdentifyWindowFunc("GtkAppId", identifyWindowByGtkAppId)
 	m.registerIdentifyWindowFunc("WmClass", identifyWindowByWmClass)
 }
@@ -74,21 +74,13 @@ func fixAutostartAppInfo(appInfo *AppInfo) *AppInfo {
 	return nil
 }
 
-func identifyWindowByCache(m *DockManager, winInfo *WindowInfo) (string, *AppInfo) {
-	desktopHash := m.desktopWindowsMapCacheManager.GetKeyByValue(winInfo.innerId)
-	logger.Debugf("identifyWindowByCache: desktop hash: %q", desktopHash)
-	var appInfo *AppInfo
-	if desktopHash != "" {
-		appInfo = m.desktopHashFileMapCacheManager.GetAppInfo(desktopHash)
-		if appInfo != nil {
-			// success
-			return appInfo.innerId, appInfo
-		} else {
-			// cache fail
-			logger.Debug("identifyWindowByCache: cache fail")
-			m.desktopHashFileMapCacheManager.DeleteKey(desktopHash)
-			m.desktopWindowsMapCacheManager.DeleteKeyValue(desktopHash, winInfo.innerId)
-		}
+func identifyWindowByScratch(m *DockManager, winInfo *WindowInfo) (string, *AppInfo) {
+	desktopFile := filepath.Join(scratchDir, addDesktopExt(winInfo.innerId))
+	logger.Debugf("try scratch desktop file: %q", desktopFile)
+	appInfo := NewAppInfoFromFile(desktopFile)
+	if appInfo != nil {
+		// success
+		return appInfo.innerId, appInfo
 	}
 	// fail
 	return "", nil

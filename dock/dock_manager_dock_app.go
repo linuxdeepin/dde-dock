@@ -1,6 +1,7 @@
 package dock
 
 import (
+	"errors"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -22,18 +23,13 @@ type dockedItemInfo struct {
 	Name, Icon, Exec string
 }
 
-func createScratchDesktopFile(id, title, icon, cmd string) error {
+func createScratchDesktopFile(id, title, icon, cmd string) (string, error) {
 	logger.Debugf("create scratch file for %q", id)
-	err := os.MkdirAll(scratchDir, 0775)
-	if err != nil {
-		logger.Warning("create scratch directory failed:", err)
-		return err
-	}
-	f, err := os.OpenFile(filepath.Join(scratchDir, id+".desktop"),
-		os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0744)
+	file := filepath.Join(scratchDir, addDesktopExt(id))
+	f, err := os.OpenFile(file, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
 		logger.Warning("Open file for write failed:", err)
-		return err
+		return "", err
 	}
 
 	defer f.Close()
@@ -42,15 +38,17 @@ func createScratchDesktopFile(id, title, icon, cmd string) error {
 	logger.Debugf("dockedItem: %#v", dockedItem)
 	err = temp.Execute(f, dockedItem)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return file, nil
 }
 
-func removeScratchFiles(id string) {
-	extList := []string{"desktop", "sh", "png"}
+func removeScratchFiles(desktopFile string) {
+	fileNoExt := trimDesktopExt(desktopFile)
+	logger.Debug("removeScratchFiles", fileNoExt)
+	extList := []string{".desktop", ".sh", ".png"}
 	for _, ext := range extList {
-		file := filepath.Join(scratchDir, id+"."+ext)
+		file := fileNoExt + ext
 		if dutils.IsFileExist(file) {
 			logger.Debugf("remove scratch file %q", file)
 			err := os.Remove(file)
@@ -61,21 +59,24 @@ func removeScratchFiles(id string) {
 	}
 }
 
-func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
-	appId := "docked:" + entry.innerId
-
+func createScratchDesktopFileWithAppEntry(entry *AppEntry) (string, error) {
 	if entry.appInfo != nil {
 		desktopFile := entry.appInfo.GetFileName()
-		newDesktopFile := filepath.Join(scratchDir, appId+".desktop")
+		newDesktopFile := filepath.Join(scratchDir, entry.appInfo.innerId+".desktop")
 		err := copyFileContents(desktopFile, newDesktopFile)
-		if err == nil {
-			return appId
-		} else {
-			logger.Warning(err)
-			return ""
+		if err != nil {
+			return "", err
 		}
+		return newDesktopFile, nil
 	}
 
+	if entry.current == nil {
+		return "", errors.New("entry.current is nil")
+	}
+	if err := os.MkdirAll(scratchDir, 0755); err != nil {
+		return "", err
+	}
+	appId := entry.current.innerId
 	title := entry.current.getDisplayName()
 	// icon
 	icon := entry.current.getIcon()
@@ -95,15 +96,17 @@ func createScratchDesktopFileWithAppEntry(entry *AppEntry) string {
 	// cmd
 	scriptContent := entry.getExec(false)
 	scriptFile := filepath.Join(scratchDir, appId+".sh")
-	ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
+	err := ioutil.WriteFile(scriptFile, []byte(scriptContent), 0744)
+	if err != nil {
+		return "", err
+	}
 	cmd := scriptFile + " %U"
 
-	err := createScratchDesktopFile(appId, title, icon, cmd)
+	file, err := createScratchDesktopFile(appId, title, icon, cmd)
 	if err != nil {
-		logger.Warning("createScratchDesktopFile failed:", err)
-		return ""
+		return "", err
 	}
-	return appId
+	return file, nil
 }
 
 func (m *DockManager) getDockedAppEntryByDesktopFilePath(desktopFilePath string) (*AppEntry, error) {
@@ -119,6 +122,24 @@ func (m *DockManager) saveDockedApps() {
 	m.DockedApps.Set(list)
 }
 
+func needScratchDesktop(appInfo *AppInfo) bool {
+	if appInfo == nil {
+		logger.Debug("needScratchDesktop: yes, appInfo is nil")
+		return true
+	}
+	if appInfo.IsInstalled() {
+		logger.Debug("needScratchDesktop: no, desktop is installed")
+		return false
+	}
+	file := appInfo.GetFileName()
+	if isFileInDir(file, scratchDir) {
+		logger.Debug("needScratchDesktop: no, desktop in scratchDir")
+		return false
+	}
+	logger.Debug("needScratchDesktop: yes")
+	return true
+}
+
 func (m *DockManager) dockEntry(entry *AppEntry) bool {
 	entry.dockMutex.Lock()
 	defer entry.dockMutex.Unlock()
@@ -127,34 +148,16 @@ func (m *DockManager) dockEntry(entry *AppEntry) bool {
 		logger.Warningf("dockEntry failed: entry %v is docked", entry.Id)
 		return false
 	}
-	needScratchDesktop := false
-	if entry.appInfo == nil {
-		logger.Debug("dockEntry: entry.appInfo is nil")
-		needScratchDesktop = true
-	} else if !entry.appInfo.IsInstalled() {
-		needScratchDesktop = true
-	}
-
-	logger.Debug("dockEntry: need scratch desktop?", needScratchDesktop)
-	if needScratchDesktop {
-		appId := createScratchDesktopFileWithAppEntry(entry)
-		if appId != "" {
-			entry.setAppInfo(NewAppInfo(appId))
+	if needScratchDesktop(entry.appInfo) {
+		file, err := createScratchDesktopFileWithAppEntry(entry)
+		if err == nil {
+			logger.Debug("dockEntry: createScratchDesktopFile successfully", file)
+			appInfo := NewAppInfoFromFile(file)
+			entry.setAppInfo(appInfo)
 			entry.updateIcon()
-			entryOldInnerId := entry.innerId
 			entry.innerId = entry.appInfo.innerId
-			logger.Debug("dockEntry: createScratchDesktopFile successed, entry use new innerId", entry.innerId)
-
-			if strings.HasPrefix(entryOldInnerId, windowHashPrefix) {
-				// entryOldInnerId is window hash
-				m.desktopWindowsMapCacheManager.AddKeyValue(entry.innerId, entryOldInnerId)
-				m.desktopWindowsMapCacheManager.AutoSave()
-			}
-
-			m.desktopHashFileMapCacheManager.SetKeyValue(entry.innerId, entry.appInfo.GetFileName())
-			m.desktopHashFileMapCacheManager.AutoSave()
 		} else {
-			logger.Warning("createScratchDesktopFileWithAppEntry failed")
+			logger.Warning("createScratchDesktopFileWithAppEntry failed", err)
 			return false
 		}
 	}
@@ -188,18 +191,25 @@ func (m *DockManager) undockEntry(entry *AppEntry) {
 	isDesktopInScratchDir := false
 	if isFileInDir(desktop, scratchDir) {
 		isDesktopInScratchDir = true
-		appId := entry.appInfo.GetId()
-		removeScratchFiles(appId)
+		removeScratchFiles(entry.appInfo.GetFileName())
 	}
 
 	if !entry.hasWindow() {
 		m.removeAppEntry(entry)
 	} else {
-		// Re-identify Window
 		if isDesktopInScratchDir && entry.current != nil {
-			var newAppInfo *AppInfo
-			entry.innerId, newAppInfo = m.identifyWindow(entry.current)
-			entry.setAppInfo(newAppInfo)
+			if strings.HasPrefix(filepath.Base(desktop), windowHashPrefix) {
+				// desktop base starts with w:
+				// 由于有 Pid 识别方法在，在这里不能用 m.identifyWindow 再次识别
+				entry.innerId = entry.current.innerId
+				entry.setAppInfo(nil)
+			} else {
+				// desktop base starts with d:
+				var newAppInfo *AppInfo
+				logger.Debug("re-identify window", entry.current.innerId)
+				entry.innerId, newAppInfo = m.identifyWindow(entry.current)
+				entry.setAppInfo(newAppInfo)
+			}
 		}
 		entry.updateIcon()
 		entry.setIsDocked(false)

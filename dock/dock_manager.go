@@ -26,11 +26,9 @@ import (
 )
 
 type DockManager struct {
-	clientList                     windowSlice
-	windowInfoMap                  map[xproto.Window]*WindowInfo
-	windowInfoMapMutex             sync.RWMutex
-	desktopWindowsMapCacheManager  *desktopWindowsMapCacheManager
-	desktopHashFileMapCacheManager *desktopHashFileMapCacheManager
+	clientList         windowSlice
+	windowInfoMap      map[xproto.Window]*WindowInfo
+	windowInfoMapMutex sync.RWMutex
 
 	Entries AppEntries
 

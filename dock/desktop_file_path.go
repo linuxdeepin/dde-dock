@@ -61,7 +61,7 @@ func addDesktopExt(str string) string {
 
 func trimDesktopExt(str string) string {
 	if strings.HasSuffix(str, desktopExt) {
-		return str[:len(str)-8]
+		return str[:len(str)-len(desktopExt)]
 	}
 	return str
 }

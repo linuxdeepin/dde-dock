@@ -15,7 +15,6 @@ import (
 	"dbus/com/deepin/wm"
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
-	"path/filepath"
 	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
@@ -28,19 +27,6 @@ const (
 	launcherDest       = "com.deepin.dde.daemon.Launcher"
 	launcherObjPath    = "/com/deepin/dde/daemon/Launcher"
 )
-
-func (m *DockManager) loadCache() error {
-	var err error
-	m.desktopWindowsMapCacheManager, err = newDesktopWindowsMapCacheManager(filepath.Join(cacheDir, "desktopWindowsMapCache.gob"))
-	if err != nil {
-		return err
-	}
-	m.desktopHashFileMapCacheManager, err = newDesktopHashFileMapCacheManager(filepath.Join(cacheDir, "desktopHashFileMapCache.gob"))
-	if err != nil {
-		return err
-	}
-	return nil
-}
 
 func (m *DockManager) initEntries() {
 	m.initDockedApps()
@@ -129,10 +115,6 @@ func (m *DockManager) init() error {
 
 	m.listenSettingsChanged()
 
-	err = m.loadCache()
-	if err != nil {
-		return err
-	}
 	m.windowInfoMap = make(map[xproto.Window]*WindowInfo)
 	m.windowPatterns, err = loadWindowPatterns(windowPatternsFile)
 	if err != nil {

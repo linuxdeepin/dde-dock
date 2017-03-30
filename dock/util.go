@@ -46,13 +46,14 @@ func isInAutostartDir(file string) bool {
 }
 
 func dataUriToFile(dataUri, path string) (string, error) {
+	// dataUri starts with string "data:image/png;base64,"
 	commaIndex := strings.Index(dataUri, ",")
 	img, err := base64.StdEncoding.DecodeString(dataUri[commaIndex+1:])
 	if err != nil {
 		return path, err
 	}
 
-	return path, ioutil.WriteFile(path, img, 0744)
+	return path, ioutil.WriteFile(path, img, 0644)
 }
 
 func strSliceEqual(sa, sb []string) bool {

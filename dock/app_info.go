@@ -13,7 +13,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"path/filepath"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 )
 
@@ -25,8 +24,10 @@ type AppInfo struct {
 	innerId        string
 }
 
-// dai != nil
 func newAppInfo(dai *desktopappinfo.DesktopAppInfo) *AppInfo {
+	if dai == nil {
+		return nil
+	}
 	ai := &AppInfo{DesktopAppInfo: dai}
 	ai.genInnerId()
 	return ai
@@ -50,33 +51,20 @@ func NewDockedAppInfo(app string) *AppInfo {
 	if app == "" {
 		return nil
 	}
-	dai := getDockedDesktopAppInfo(app)
-	if dai == nil {
-		return nil
-	}
-	return newAppInfo(dai)
+	return newAppInfo(getDockedDesktopAppInfo(app))
 }
 
 func NewAppInfo(id string) *AppInfo {
 	if id == "" {
 		return nil
 	}
-	dai := desktopappinfo.NewDesktopAppInfo(id)
-	if dai == nil {
-		// try scratch dir
-		desktopFile := filepath.Join(scratchDir, addDesktopExt(id))
-		logger.Debugf("scratch dir desktopFile : %q", desktopFile)
-		var err error
-		dai, err = desktopappinfo.NewDesktopAppInfoFromFile(desktopFile)
-		if err != nil {
-			logger.Debug("NewAppInfo scratchDir failed:", err)
-			return nil
-		}
-	}
-	return newAppInfo(dai)
+	return newAppInfo(desktopappinfo.NewDesktopAppInfo(id))
 }
 
 func NewAppInfoFromFile(file string) *AppInfo {
+	if file == "" {
+		return nil
+	}
 	dai, _ := desktopappinfo.NewDesktopAppInfoFromFile(file)
 	if dai == nil {
 		return nil
@@ -84,7 +72,7 @@ func NewAppInfoFromFile(file string) *AppInfo {
 
 	if !dai.IsInstalled() {
 		createdBy, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-CreatedBy")
-		if createdBy == launcherDest {
+		if createdBy != "" {
 			appId, _ := dai.GetString(desktopappinfo.MainSection, "X-Deepin-AppID")
 			dai1 := desktopappinfo.NewDesktopAppInfo(appId)
 			if dai1 != nil {

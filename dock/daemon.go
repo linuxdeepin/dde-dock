@@ -12,7 +12,6 @@ package dock
 import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xevent"
-	"os"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
@@ -52,12 +51,7 @@ func (d *Daemon) Start() error {
 	if dockManager != nil {
 		return nil
 	}
-	initGtk()
 	logger.BeginTracing()
-
-	if logger.GetLogLevel() == log.LevelDebug {
-		os.Setenv("G_MESSAGES_DEBUG", "all")
-	}
 
 	var err error
 	// init x conn

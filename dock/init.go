@@ -13,10 +13,10 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xprop"
-	"os"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
+	"pkg.deepin.io/lib/xdg/basedir"
 )
 
 func init() {
@@ -27,7 +27,6 @@ var (
 	logger      = log.NewLogger("daemon/dock")
 	homeDir     string
 	scratchDir  string
-	cacheDir    string
 	dockManager *DockManager
 
 	XU *xgbutil.XUtil
@@ -48,13 +47,9 @@ var (
 )
 
 func initDir() {
-	homeDir = os.Getenv("HOME")
-	scratchDir = filepath.Join(homeDir, ".config/dock/scratch")
-	cacheDir = filepath.Join(homeDir, ".cache/deepin/dde-daemon/dock/")
+	homeDir = basedir.GetUserHomeDir()
+	scratchDir = filepath.Join(basedir.GetUserConfigDir(), "dock/scratch")
 	logger.Debugf("scratch dir: %q", scratchDir)
-	logger.Debugf("cache dir: %q", cacheDir)
-	os.MkdirAll(cacheDir, 0755)
-	os.MkdirAll(scratchDir, 0755)
 }
 
 func initAtom() {
@@ -65,7 +60,5 @@ func initAtom() {
 	ATOM_WINDOW_NAME, _ = xprop.Atm(XU, "_NET_WM_NAME")
 	ATOM_WINDOW_STATE, _ = xprop.Atm(XU, "_NET_WM_STATE")
 	ATOM_WINDOW_TYPE, _ = xprop.Atm(XU, "_NET_WM_WINDOW_TYPE")
-	ATOM_DOCK_APP_ID, _ = xprop.Atm(XU, "_DDE_DOCK_APP_ID")
-
 	ATOM_XEMBED_INFO, _ = xprop.Atm(XU, "_XEMBED_INFO")
 }
