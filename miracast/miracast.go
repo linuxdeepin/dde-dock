@@ -6,7 +6,6 @@ import (
 	"dbus/org/freedesktop/networkmanager"
 	"encoding/json"
 	"fmt"
-	"path"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
@@ -45,17 +44,15 @@ type Miracast struct {
 	wfdObj  *wfd.ObjectManager
 	network *networkmanager.Manager
 	links   LinkInfos
-	peers   PeerInfos
 	sinks   SinkInfos
 	devices WirelessInfos
 
 	linkLocker   sync.Mutex
-	peerLocker   sync.Mutex
 	sinkLocker   sync.Mutex
 	deviceLocker sync.Mutex
 
 	managingLinks   map[dbus.ObjectPath]bool
-	connectingPeers map[dbus.ObjectPath]bool
+	connectingSinks map[dbus.ObjectPath]bool
 
 	Added   func(dbus.ObjectPath, string)
 	Removed func(dbus.ObjectPath, string)
@@ -92,7 +89,7 @@ func newMiracast() (*Miracast, error) {
 		wifiObj:         wifiObj,
 		wfdObj:          wfdObj,
 		devices:         devices.ListMiracastDevice(),
-		connectingPeers: make(map[dbus.ObjectPath]bool),
+		connectingSinks: make(map[dbus.ObjectPath]bool),
 		managingLinks:   make(map[dbus.ObjectPath]bool),
 	}, nil
 }
@@ -121,7 +118,6 @@ func (m *Miracast) init() {
 	}
 	m.handleEvent()
 	logger.Debug("Links:", m.links)
-	logger.Debug("Peers:", m.peers)
 	logger.Debug("Sinks:", m.sinks)
 }
 
@@ -141,19 +137,17 @@ func (m *Miracast) destroy() {
 	m.links = nil
 	m.linkLocker.Unlock()
 
-	m.peerLocker.Lock()
-	for _, peer := range m.peers {
-		destroyPeerInfo(peer)
+	m.sinkLocker.Lock()
+	for _, sink := range m.sinks {
+		destroySinkInfo(sink)
 	}
-	m.peers = nil
-	m.peerLocker.Unlock()
+	m.sinks = nil
+	m.sinkLocker.Unlock()
 }
 
 func (m *Miracast) addObject(dpath dbus.ObjectPath) (interface{}, error) {
 	if isLinkObjectPath(dpath) {
 		return m.addLinkInfo(dpath)
-	} else if isPeerObjectPath(dpath) {
-		return m.addPeerInfo(dpath)
 	} else if isSinkObjectPath(dpath) {
 		return m.addSinkInfo(dpath)
 	}
@@ -184,29 +178,11 @@ func (m *Miracast) addLinkInfo(dpath dbus.ObjectPath) (*LinkInfo, error) {
 	return link, nil
 }
 
-func (m *Miracast) addPeerInfo(dpath dbus.ObjectPath) (*PeerInfo, error) {
-	m.peerLocker.Lock()
-	defer m.peerLocker.Unlock()
-	if peer := m.peers.Get(dpath); peer != nil {
-		// exists, just update
-		peer.update()
-		return nil, fmt.Errorf("The peer '%v' has exists", dpath)
-	}
-
-	peer, err := newPeerInfo(dpath)
-	if err != nil {
-		logger.Warning("Failed to new peer:", err)
-		return nil, err
-	}
-	m.peers = append(m.peers, peer)
-	return peer, nil
-}
-
 func (m *Miracast) addSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
 	if sink := m.sinks.Get(dpath); sink != nil {
-		// nothing to do
+		sink.update()
 		return nil, fmt.Errorf("The sink '%v' has exists", dpath)
 	}
 	sink, err := newSinkInfo(dpath)
@@ -230,14 +206,6 @@ func (m *Miracast) removeObject(dpath dbus.ObjectPath) (bool, string) {
 		if tmp != nil {
 			detail = toJSON(tmp)
 			m.links, removed = m.links.Remove(dpath)
-		}
-	} else if isPeerObjectPath(dpath) {
-		m.peerLocker.Lock()
-		defer m.peerLocker.Unlock()
-		tmp := m.peers.Get(dpath)
-		if tmp != nil {
-			detail = toJSON(tmp)
-			m.peers, removed = m.peers.Remove(dpath)
 		}
 	} else if isSinkObjectPath(dpath) {
 		m.sinkLocker.Lock()
@@ -341,32 +309,33 @@ func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error 
 	return nil
 }
 
-func (m *Miracast) disconnectPeer(dpath dbus.ObjectPath) error {
-	m.peerLocker.Lock()
-	defer m.peerLocker.Unlock()
-	peer := m.peers.Get(dpath)
-	if peer == nil {
-		logger.Warning("Not found the peer:", dpath)
-		return fmt.Errorf("Not found the peer: %v", dpath)
-	}
-
+func (m *Miracast) disconnectSink(dpath dbus.ObjectPath) error {
 	m.sinkLocker.Lock()
-	sink := m.sinks.Get(sinkPath + dbus.ObjectPath(path.Base(string(peer.Path))))
-	if sink != nil {
-		// Teardown session
-		err := sink.TearDown()
-		if err != nil {
-			logger.Warning("[disconnectPeer] Teardown failed:", err)
-		}
+	defer m.sinkLocker.Unlock()
+	sink := m.sinks.Get(dpath)
+	if sink == nil {
+		logger.Warning("Not found the sink:", dpath)
+		return fmt.Errorf("Not found the sink: %v", dpath)
 	}
-	m.sinkLocker.Unlock()
 
-	err := peer.core.Disconnect()
+	sink.locker.Lock()
+	defer sink.locker.Unlock()
+	err := sink.Teardown()
 	if err != nil {
-		logger.Warning("[DisconnectPeer] Failed to disconnect:", dpath, err)
+		logger.Warning("[disconnectSink] Failed to teardown:", err)
+	}
+
+	if sink.peer == nil {
+		logger.Warning("No peer found in sink:", dpath)
+		return fmt.Errorf("Not found the peer in sink: %v", dpath)
+	}
+
+	err = sink.peer.Disconnect()
+	if err != nil {
+		logger.Warning("[DisconnectSink] Failed to disconnect:", dpath, err)
 		return err
 	}
-	delete(m.connectingPeers, dpath)
+	delete(m.connectingSinks, dpath)
 	return nil
 }
 

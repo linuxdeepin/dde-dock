@@ -5,6 +5,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
+	"time"
 )
 
 type LinkInfo struct {
@@ -73,6 +74,16 @@ func (link *LinkInfo) EnableManaged(enabled bool) error {
 	} else {
 		return link.core.Unmanage()
 	}
+}
+
+// SetName Must be set before scanning
+func (link *LinkInfo) SetName(name string) {
+	if link.core.FriendlyName.Get() == name {
+		return
+	}
+	link.core.FriendlyName.Set(name)
+	time.Sleep(time.Millisecond * 10)
+	link.update()
 }
 
 func (link *LinkInfo) EnableP2PScanning(enabled bool) {

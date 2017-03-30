@@ -1,7 +1,6 @@
 package miracast
 
 import (
-	"path"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -45,50 +44,45 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 	})
 }
 
-func (m *Miracast) handlePeerConnected(peer *PeerInfo, x, y, w, h uint32) {
+func (m *Miracast) handleSinkConnected(sink *SinkInfo, x, y, w, h uint32) {
 	var hasConnected = false
-	peer.core.Connected.ConnectChanged(func() {
-		if peer.core == nil {
+	sink.peer.Connected.ConnectChanged(func() {
+		if sink.peer == nil {
 			return
 		}
-		peer.update()
-		logger.Debugf("Peer '%s' connected changed: %v", peer.Path, peer.Connected)
-		_, ok := m.connectingPeers[peer.Path]
-		if !ok {
-			return
-		}
-
-		defer delete(m.connectingPeers, peer.Path)
-		if !peer.Connected {
-			logger.Debugf("Peer '%s' was disconnect", peer.Path)
+		sink.update()
+		logger.Debugf("Sink(%v)'s peer(%v) connected changed: %v", sink.Path, sink.peer.Path, sink.Connected)
+		defer delete(m.connectingSinks, sink.Path)
+		if !sink.Connected {
+			logger.Debugf("Sink '%s' was disconnect", sink.Path)
+			dbus.Emit(m, "Event", EventSinkDisconnected, sink.Path)
 			return
 		}
 
 		hasConnected = true
-		dbus.Emit(m, "Event", EventPeerConnected, peer.Path)
-		m.doConnect(peer, x, y, w, h)
+		dbus.Emit(m, "Event", EventSinkConnected, sink.Path)
+		m.doConnect(sink, x, y, w, h)
 	})
 
 	// timeout
 	time.AfterFunc(time.Second*60, func() {
-		if peer.core == nil || hasConnected {
+		if sink.core == nil || hasConnected {
 			return
 		}
-		m.Disconnect(peer.Path)
-		dbus.Emit(m, "Event", EventPeerConnectedFailed, peer.Path)
+		m.Disconnect(sink.Path)
+		dbus.Emit(m, "Event", EventSinkConnectedFailed, sink.Path)
 	})
 }
 
-func (m *Miracast) doConnect(peer *PeerInfo, x, y, w, h uint32) {
+func (m *Miracast) doConnect(sink *SinkInfo, x, y, w, h uint32) {
 	m.sinkLocker.Lock()
 	defer m.sinkLocker.Unlock()
-	sink := m.sinks.Get(sinkPath + dbus.ObjectPath(path.Base(string(peer.Path))))
-	if sink == nil {
-		logger.Warning("Invalid peer path:", peer.Path)
+	if sink.core.Session.Get() != "/" {
+		logger.Debug("Sink session had connected:", sink.Path, sink.core.Session.Get())
 		return
 	}
 	err := sink.StartSession(x, y, w, h)
 	if err != nil {
-		logger.Error("Failed to start session:", peer.Path, err)
+		logger.Error("Failed to start session:", sink.Path, err)
 	}
 }

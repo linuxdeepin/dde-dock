@@ -3,16 +3,25 @@ package miracast
 import (
 	"dbus/com/deepin/daemon/audio"
 	"dbus/org/freedesktop/miracle/wfd"
+	"dbus/org/freedesktop/miracle/wifi"
 	"fmt"
 	"os"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
+	"sync"
 )
 
 type SinkInfo struct {
-	Path dbus.ObjectPath
+	Name      string
+	P2PMac    string
+	Interface string
+	Connected bool
+	Path      dbus.ObjectPath
+	LinkPath  dbus.ObjectPath
 
-	core *wfd.Sink
+	core   *wfd.Sink
+	peer   *wifi.Peer
+	locker sync.Mutex
 }
 type SinkInfos []*SinkInfo
 
@@ -21,15 +30,49 @@ func newSinkInfo(dpath dbus.ObjectPath) (*SinkInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &SinkInfo{
+	peer, err := wifi.NewPeer(wifiDest, core.Peer.Get())
+	if err != nil {
+		wfd.DestroySink(core)
+		return nil, err
+	}
+	var sink = &SinkInfo{
 		Path: dpath,
 		core: core,
-	}, nil
+		peer: peer,
+	}
+	sink.update()
+	return sink, nil
+}
+
+func destroySinkInfo(info *SinkInfo) {
+	info.locker.Lock()
+	defer info.locker.Unlock()
+	if info.core != nil {
+		wfd.DestroySink(info.core)
+		info.core = nil
+	}
+	if info.peer != nil {
+		wifi.DestroyPeer(info.peer)
+		info.peer = nil
+	}
+}
+
+func (sink *SinkInfo) update() {
+	sink.locker.Lock()
+	defer sink.locker.Unlock()
+	if sink.core == nil || sink.peer == nil {
+		return
+	}
+	sink.Name = sink.peer.FriendlyName.Get()
+	sink.P2PMac = sink.peer.P2PMac.Get()
+	sink.Interface = sink.peer.Interface.Get()
+	sink.Connected = sink.peer.Connected.Get()
+	sink.LinkPath = sink.peer.Link.Get()
 }
 
 func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
 	var (
-		// format: 'x://:0.0'
+		// format: 'x://:0'
 		dpy       = "x://" + os.Getenv("DISPLAY")
 		xauth     = os.Getenv("XAUTHORITY")
 		audioSink = getAudioSink()
@@ -44,7 +87,7 @@ func (sink *SinkInfo) StartSession(x, y, w, h uint32) error {
 	return nil
 }
 
-func (sink *SinkInfo) TearDown() error {
+func (sink *SinkInfo) Teardown() error {
 	var p = sink.core.Session.Get()
 	if p == "/" {
 		return fmt.Errorf("No session found")
@@ -105,4 +148,8 @@ func getAudioSink() string {
 	}
 	defer audio.DestroyAudioSink(sink)
 	return sink.Name.Get() + ".monitor"
+}
+
+func isPeerObjectPath(dpath dbus.ObjectPath) bool {
+	return strings.Contains(string(dpath), peerPath)
 }

@@ -2,7 +2,6 @@ package miracast
 
 import (
 	"fmt"
-	"path"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -10,8 +9,9 @@ import (
 const (
 	EventLinkManaged uint8 = iota + 1
 	EventLinkUnmanaged
-	EventPeerConnected
-	EventPeerConnectedFailed
+	EventSinkConnected
+	EventSinkConnectedFailed
+	EventSinkDisconnected
 )
 
 func (m *Miracast) ListLinks() LinkInfos {
@@ -20,24 +20,9 @@ func (m *Miracast) ListLinks() LinkInfos {
 	return m.links
 }
 
-func (m *Miracast) ListPeers() PeerInfos {
-	m.peerLocker.Lock()
-	defer m.peerLocker.Unlock()
-	var tmp PeerInfos
-	for _, peer := range m.peers {
-		sink := m.sinks.Get(sinkPath + dbus.ObjectPath(path.Base(string(peer.Path))))
-		if sink == nil {
-			logger.Debugf("No sink found for peer: %#v", peer)
-			continue
-		}
-		tmp = append(tmp, peer)
-	}
-	return tmp
-}
-
 func (m *Miracast) ListSinks() SinkInfos {
-	m.peerLocker.Lock()
-	defer m.peerLocker.Unlock()
+	m.sinkLocker.Lock()
+	defer m.sinkLocker.Unlock()
 	return m.sinks
 }
 
@@ -79,6 +64,23 @@ func (m *Miracast) Enable(dpath dbus.ObjectPath, enabled bool) error {
 	return link.EnableManaged(enabled)
 }
 
+func (m *Miracast) SetLinkName(dpath dbus.ObjectPath, name string) error {
+	if !isLinkObjectPath(dpath) {
+		return fmt.Errorf("Invalid link dpath: %v", dpath)
+	}
+
+	m.linkLocker.Lock()
+	defer m.linkLocker.Unlock()
+	link := m.links.Get(dpath)
+	if link == nil {
+		logger.Warning("Not found the link:", dpath)
+		return fmt.Errorf("Not found the link: %v", dpath)
+	}
+
+	link.SetName(name)
+	return nil
+}
+
 func (m *Miracast) Scanning(dpath dbus.ObjectPath, enabled bool) error {
 	if !isLinkObjectPath(dpath) {
 		return fmt.Errorf("Invalid link dpath: %v", dpath)
@@ -99,35 +101,35 @@ func (m *Miracast) Scanning(dpath dbus.ObjectPath, enabled bool) error {
 }
 
 func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
-	if !isPeerObjectPath(dpath) {
-		return fmt.Errorf("Invalid peer dpath: %v", dpath)
+	if !isSinkObjectPath(dpath) {
+		return fmt.Errorf("Invalid sink dpath: %v", dpath)
 	}
 
-	m.peerLocker.Lock()
-	defer m.peerLocker.Unlock()
-	peer := m.peers.Get(dpath)
-	if peer == nil {
-		logger.Warning("Not found the peer:", dpath)
-		return fmt.Errorf("Not found the peer: %v", dpath)
+	m.sinkLocker.Lock()
+	defer m.sinkLocker.Unlock()
+	sink := m.sinks.Get(dpath)
+	if sink == nil {
+		logger.Warning("Not found the sink:", dpath)
+		return fmt.Errorf("Not found the sink: %v", dpath)
 	}
 
-	if peer.core.Connected.Get() {
+	if sink.peer.Connected.Get() {
 		logger.Debug("Has connected, start session")
-		m.doConnect(peer, x, y, w, h)
+		m.doConnect(sink, x, y, w, h)
 		return nil
 	}
 
-	if v, ok := m.connectingPeers[dpath]; ok && v {
-		logger.Debug("[ConnectPeer] peer has connecting:", dpath)
+	if v, ok := m.connectingSinks[dpath]; ok && v {
+		logger.Debug("[ConnectSink] sink has connecting:", dpath)
 		return nil
 	}
-	m.connectingPeers[dpath] = true
+	m.connectingSinks[dpath] = true
 
-	m.handlePeerConnected(peer, x, y, w, h)
-	err := peer.core.Connect("auto", "")
+	m.handleSinkConnected(sink, x, y, w, h)
+	err := sink.peer.Connect("auto", "")
 	if err != nil {
-		delete(m.connectingPeers, dpath)
-		logger.Error("Failed to connect peer:", err)
+		delete(m.connectingSinks, dpath)
+		logger.Error("Failed to connect sink:", err)
 		return err
 	}
 
@@ -135,8 +137,8 @@ func (m *Miracast) Connect(dpath dbus.ObjectPath, x, y, w, h uint32) error {
 }
 
 func (m *Miracast) Disconnect(dpath dbus.ObjectPath) error {
-	if !isPeerObjectPath(dpath) {
-		return fmt.Errorf("Invalid peer dpath: %v", dpath)
+	if !isSinkObjectPath(dpath) {
+		return fmt.Errorf("Invalid sink dpath: %v", dpath)
 	}
-	return m.disconnectPeer(dpath)
+	return m.disconnectSink(dpath)
 }
