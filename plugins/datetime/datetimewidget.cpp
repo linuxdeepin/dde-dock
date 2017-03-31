@@ -52,8 +52,10 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
     if (displayMode == Dock::Efficient)
     {
+        const QString text = current.toString(m_24HourFormat ? "hh:mm" : "hh:mm A");
+
         painter.setPen(Qt::white);
-        painter.drawText(rect(), Qt::AlignCenter, current.toString(m_24HourFormat ? "hh:mm" : "hh:mm A"));
+        painter.drawText(rect(), Qt::AlignCenter, text.left(5));
         return;
     }
 
