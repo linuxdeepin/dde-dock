@@ -26,6 +26,7 @@ func (u *User) checkLeftSpace() {
 		logger.Warning("Failed to get filesystem info:", err, u.HomeDir)
 		return
 	}
+	logger.Debugf("--------User '%s' left space: %#v", u.UserName, info)
 	if info.AvailSize > filesystemMinFreeSize {
 		return
 	}
@@ -35,7 +36,8 @@ func (u *User) checkLeftSpace() {
 }
 
 func (u *User) removeCache() {
-	var file = u.HomeDir + "/.cache/deepin"
+	var file = u.HomeDir + "/.cache"
+	logger.Debug("-------Will remove:", file)
 	err := os.RemoveAll(file)
 	if err != nil {
 		logger.Warning("Failed to remove cache:", err)

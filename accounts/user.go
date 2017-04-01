@@ -175,6 +175,7 @@ func NewUser(userPath string) (*User, error) {
 		u.writeUserConfig()
 	}
 
+	u.checkLeftSpace()
 	return u, nil
 }
 
