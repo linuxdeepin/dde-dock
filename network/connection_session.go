@@ -317,7 +317,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 
-	if s.isErrorOccured() {
+	if s.isErrorOccurred() {
 		logger.Info("Save Errors:", s.Errors)
 		logger.Info("Save settingKeyErrors:", s.settingKeyErrors)
 		return false, nil
@@ -370,7 +370,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 	return true, nil
 }
 
-func (s *ConnectionSession) isErrorOccured() bool {
+func (s *ConnectionSession) isErrorOccurred() bool {
 	for _, v := range s.Errors {
 		if len(v) > 0 {
 			return true
