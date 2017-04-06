@@ -205,7 +205,7 @@ void TrayWidget::wrapWindow()
     m_containerWid = xcb_generate_id(c);
     uint32_t values[2];
     auto mask = XCB_CW_BACK_PIXEL | XCB_CW_OVERRIDE_REDIRECT;
-    values[0] = ParentRelative; //draw a solid background so the embeded icon doesn't get garbage in it
+    values[0] = ParentRelative; //draw a solid background so the embedded icon doesn't get garbage in it
     values[1] = true; //bypass wM
     xcb_create_window (c,                          /* connection    */
                        XCB_COPY_FROM_PARENT,          /* depth         */
