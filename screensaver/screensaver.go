@@ -15,6 +15,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 	"sync"
@@ -144,11 +145,17 @@ func (ss *ScreenSaver) setTimeout(seconds, interval uint32, blank bool) {
 	logger.Info("SetTimeout to ", seconds, interval, blank)
 }
 
+const (
+	dbusDest = "org.freedesktop.ScreenSaver"
+	dbusPath = "/org/freedesktop/ScreenSaver"
+	dbusIFC  = dbusDest
+)
+
 func (*ScreenSaver) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       "org.freedesktop.ScreenSaver",
-		ObjectPath: "/org/freedesktop/ScreenSaver",
-		Interface:  "org.freedesktop.ScreenSaver",
+		Dest:       dbusDest,
+		ObjectPath: dbusPath,
+		Interface:  dbusIFC,
 	}
 }
 
@@ -185,6 +192,11 @@ func (d *Daemon) GetDependencies() []string {
 }
 
 func (d *Daemon) Start() error {
+	if !lib.UniqueOnSession(dbusDest) {
+		logger.Warning("ScreenSaver has been register, exit...")
+		return nil
+	}
+
 	if _ssaver != nil {
 		return nil
 	}
