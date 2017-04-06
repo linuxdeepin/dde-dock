@@ -62,7 +62,7 @@ type Miracast struct {
 func newMiracast() (*Miracast, error) {
 	devices, err := ListWirelessInfo()
 	if err != nil {
-		return nil, err
+		logger.Error("Failed to list wireless info:", err)
 	}
 
 	logger.Debugf("All devices: %#v", devices)
@@ -96,6 +96,9 @@ func newMiracast() (*Miracast, error) {
 
 func (m *Miracast) init() {
 	logger.Debug("Devices:", m.devices)
+	if len(m.devices) == 0 {
+		return
+	}
 	objs, err := m.wifiObj.GetManagedObjects()
 	if err != nil {
 		logger.Error("Failed to get wifi objects:", err)
@@ -337,6 +340,28 @@ func (m *Miracast) disconnectSink(dpath dbus.ObjectPath) error {
 	}
 	delete(m.connectingSinks, dpath)
 	return nil
+}
+
+// Remove it if miracle-dispd work fine
+func (m *Miracast) ensureMiracleActive() {
+	var failedCount = 0
+	for {
+		if failedCount > 5 {
+			logger.Warning("Miracle failure too many, break")
+			break
+		}
+		time.Sleep(time.Second * 10)
+		if len(m.devices) == 0 {
+			continue
+		}
+
+		_, err := m.wfdObj.GetManagedObjects()
+		_, err = m.wifiObj.GetManagedObjects()
+		if err != nil {
+			logger.Debug("Failed to connect miracle:", err)
+			failedCount += 1
+		}
+	}
 }
 
 func (*Miracast) GetDBusInfo() dbus.DBusInfo {

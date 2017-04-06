@@ -39,7 +39,11 @@ func (d *Daemon) Start() error {
 		logger.Error("Failed to new manager:", err)
 		return err
 	}
-	m.init()
+	// fix dbus timeout
+	go func() {
+		m.init()
+		m.ensureMiracleActive()
+	}()
 	_m = m
 
 	err = dbus.InstallOnSession(m)
