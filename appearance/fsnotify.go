@@ -42,7 +42,7 @@ func (m *Manager) handleThemeChanged() {
 			logger.Debug("[Fsnotify] quit watch")
 			return
 		case err := <-m.watcher.Error:
-			logger.Warning("Recieve file watcher error:", err)
+			logger.Warning("Receive file watcher error:", err)
 			return
 		case ev := <-m.watcher.Event:
 			timestamp := time.Now().UnixNano()
