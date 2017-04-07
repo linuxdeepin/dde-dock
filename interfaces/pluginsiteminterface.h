@@ -16,7 +16,7 @@ class PluginsItemInterface
 public:
     ///
     /// \brief ~PluginsItemInterface
-    /// DONT try to delete m_proxyInter.
+    /// DON'T try to delete m_proxyInter.
     ///
     virtual ~PluginsItemInterface() {}
 
@@ -31,7 +31,7 @@ public:
     /// init your plugins, you need to save proxyInter to m_proxyInter
     /// member variable. but you shouldn't free this pointer.
     /// \param proxyInter
-    /// DONT try to delete this pointer.
+    /// DON'T try to delete this pointer.
     ///
     virtual void init(PluginProxyInterface *proxyInter) = 0;
     ///
