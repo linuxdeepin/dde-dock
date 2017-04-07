@@ -13,9 +13,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"path"
-	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 	"strings"
+
+	dutils "pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -35,7 +36,7 @@ type DSTInfo struct {
 type ZoneInfo struct {
 	// Timezone name, ex: "Asia/Shanghai"
 	Name string
-	// Timezone description, ex: "China Shanghai"
+	// Timezone description, ex: "上海"
 	Desc string
 
 	// Timezone offset

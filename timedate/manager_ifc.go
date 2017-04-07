@@ -127,25 +127,18 @@ func (m *Manager) DeleteUserTimezone(zone string) error {
 	return nil
 }
 
-// Get ZoneInfo of the specified time zone.
+// GetZoneInfo returns the information of the specified time zone.
 func (m *Manager) GetZoneInfo(zone string) (zoneinfo.ZoneInfo, error) {
 	info, err := zoneinfo.GetZoneInfo(zone)
 	if err != nil {
 		logger.Debugf("Get zone info for '%s' failed: %v", zone, err)
 		return zoneinfo.ZoneInfo{}, err
 	}
-	info.Desc = getZoneDesc(zone)
 
 	return *info, nil
 }
 
-// Get all ZoneInfo in the specified list.
+// GetZoneList returns all the valid timezones.
 func (m *Manager) GetZoneList() []string {
-	var list []string
-	for _, zdesc := range zoneWhiteList {
-		// if zone in white list, do not check validity
-		list = append(list, zdesc.zone)
-	}
-
-	return list
+	return zoneinfo.GetAllZones()
 }

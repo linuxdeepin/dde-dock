@@ -17,6 +17,10 @@ import "C"
 import (
 	"time"
 	"unsafe"
+
+	"strings"
+
+	. "pkg.deepin.io/lib/gettext"
 )
 
 func getDSTTime(zone string, year int32) (int64, int64, bool) {
@@ -69,6 +73,13 @@ func newZoneInfo(zone string) *ZoneInfo {
 	var info ZoneInfo
 
 	info.Name = zone
+	info.Desc = DGettext("deepin-installer-timezones", zone)
+
+	tokens := strings.Split(info.Desc, "/")
+	if len(tokens) == 2 {
+		info.Desc = tokens[1]
+	}
+
 	dst := newDSTInfo(zone)
 	if dst == nil {
 		info.Offset = getOffsetByUSec(zone, 0)
