@@ -17,6 +17,7 @@ public:
     const QString pluginName() const;
     void init(PluginProxyInterface *proxyInter);
     void invokedMenuItem(const QString &itemKey, const QString &menuId, const bool checked);
+    void refershIcon(const QString &itemKey);
     const QString itemCommand(const QString &itemKey);
     const QString itemContextMenu(const QString &itemKey);
     QWidget *itemWidget(const QString &itemKey);

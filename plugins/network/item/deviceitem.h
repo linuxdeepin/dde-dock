@@ -16,6 +16,7 @@ public:
 
     virtual NetworkDevice::NetworkType type() const = 0;
     virtual NetworkDevice::NetworkState state() const = 0;
+    virtual void refreshIcon() = 0;
     virtual const QString itemCommand() const;
     virtual const QString itemContextMenu();
     virtual QWidget *itemApplet();

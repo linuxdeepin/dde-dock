@@ -192,3 +192,8 @@ void WirelessItem::adjustHeight()
     m_wirelessApplet->setFixedHeight(m_APList->height() + m_APList->controlPanel()->height());
 }
 
+void WirelessItem::refreshIcon()
+{
+    update();
+}
+

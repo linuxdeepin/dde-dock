@@ -99,6 +99,11 @@ void WiredItem::mousePressEvent(QMouseEvent *e)
     return QWidget::mousePressEvent(e);
 }
 
+void WiredItem::refreshIcon()
+{
+    m_delayTimer->start();
+}
+
 void WiredItem::reloadIcon()
 {
     Q_ASSERT(sender() == m_delayTimer);

@@ -35,6 +35,7 @@ private:
 private slots:
     void init();
     void adjustHeight();
+    void refreshIcon();
 
 private:
     QHash<QString, QPixmap> m_icons;

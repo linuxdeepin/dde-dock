@@ -25,6 +25,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
 
 private slots:
+    void refreshIcon();
     void reloadIcon();
     void activeConnectionChanged(const QUuid &uuid);
     void deviceStateChanged(const NetworkDevice &device);

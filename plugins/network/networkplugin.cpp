@@ -46,6 +46,14 @@ void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNREACHABLE();
 }
 
+void NetworkPlugin::refershIcon(const QString &itemKey)
+{
+    Q_UNUSED(itemKey);
+
+    for (auto *item : m_deviceItemList)
+        item->refreshIcon();
+}
+
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
