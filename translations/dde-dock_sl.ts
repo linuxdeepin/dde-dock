@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Zavrzi - %1 datoteko</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Zavrzi - %1 datoteke</translation>
     </message>
 </context>
 <context>

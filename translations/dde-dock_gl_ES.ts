@@ -89,7 +89,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Bottom</source>
-        <translation>Inferior</translation>
+        <translation>Abaixo</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="24"/>
@@ -165,7 +165,7 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
         <source>Empty</source>
-        <translation>Baleiro</translation>
+        <translation>Baleirar</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
@@ -265,7 +265,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="65"/>
         <source>Audio Settings</source>
-        <translation>Axustes do audio</translation>
+        <translation>Axustes de son</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Lixo - %1 ficheiro</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Lixo - %1 ficheiros</translation>
     </message>
 </context>
 <context>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
         <source>Empty</source>
-        <translation>Baleiro</translation>
+        <translation>Baleirar</translation>
     </message>
 </context>
 <context>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Necesitase contrasinal para conectar a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation>Requírese dun contrasinal para conectar a &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>

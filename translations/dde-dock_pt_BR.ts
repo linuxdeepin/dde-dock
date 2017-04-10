@@ -4,7 +4,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Configurações de tempo</translation>
+        <translation>Alterar data e hora</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
@@ -94,12 +94,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Left</source>
-        <translation>Esquerdo</translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Right</source>
-        <translation>Direito</translation>
+        <translation>Direita</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="26"/>
@@ -119,12 +119,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Shown</source>
-        <translation>Manter exibido</translation>
+        <translation>Continuar exibindo </translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
-        <translation>Manter escondido</translation>
+        <translation>Continuar oculto</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="31"/>
@@ -180,12 +180,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Tem certeza que deseja esvaziar 1 item ?</translation>
+        <translation>Tem certeza que deseja esvaziar 1 item?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Tem certeza que deseja esvaziar %1 itens ?</translation>
+        <translation>Tem certeza que deseja esvaziar %1 itens?</translation>
     </message>
 </context>
 <context>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
         <source>Remaining Capacity %1</source>
-        <translation>Capacidade restante %1</translation>
+        <translation>Bateria restante %1 </translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
@@ -265,7 +265,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="65"/>
         <source>Audio Settings</source>
-        <translation>Configurações de Áudio</translation>
+        <translation>Configurações de áudio</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../plugins/system-tray/systemtrayplugin.cpp" line="24"/>
         <source>System Tray</source>
-        <translation>Bandeja do Sistema</translation>
+        <translation>Bandeja do sistema</translation>
     </message>
 </context>
 <context>
@@ -291,7 +291,7 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>Lixeira - %1 arquivo</translation>
+        <translation>Lixeira - %1 arquivos</translation>
     </message>
 </context>
 <context>
@@ -335,7 +335,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
         <source>Wireless Connection: %1</source>
-        <translation>Conexão sem fio: %1</translation>
+        <translation>Conexão Wi-Fi: %1 </translation>
     </message>
 </context>
 <context>
@@ -358,12 +358,12 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
         <source>Wireless Network</source>
-        <translation>Rede Sem Fio</translation>
+        <translation>Rede Wi-Fi</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
         <source>Wireless Network %1</source>
-        <translation>Internet sem fio %1</translation>
+        <translation>Rede Wi-Fi %1</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>

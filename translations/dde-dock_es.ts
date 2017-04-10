@@ -61,7 +61,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
         <source>Open</source>
-        <translation>Abierta</translation>
+        <translation>Abrir</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
         <source>Current Volume %1</source>
-        <translation>Volúmen actual %1</translation>
+        <translation>Volumen actual %1</translation>
     </message>
 </context>
 <context>
@@ -299,7 +299,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
         <source>Open</source>
-        <translation>Abierta</translation>
+        <translation>Abrir</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>

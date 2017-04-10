@@ -255,7 +255,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="57"/>
         <source>Unmute</source>
-        <translation>Upali zvuk</translation>
+        <translation>Uključi zvuk</translation>
     </message>
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="59"/>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Smeće - %1 datoteka</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Smeće - %1 datoteke</translation>
     </message>
 </context>
 <context>

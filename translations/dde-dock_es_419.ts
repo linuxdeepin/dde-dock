@@ -4,7 +4,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Configuraciones de tiempo</translation>
+        <translation>Ajustes de tiempo</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>Configuraciones de encendido</translation>
+        <translation>Ajustes de encendido</translation>
     </message>
 </context>
 <context>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Papelera - %1 file</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Papelera - %1 files</translation>
     </message>
 </context>
 <context>

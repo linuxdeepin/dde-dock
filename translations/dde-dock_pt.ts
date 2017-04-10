@@ -74,7 +74,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
-        <translation>Modo na Moda</translation>
+        <translation>Modo Elegante</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>

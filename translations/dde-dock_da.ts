@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Tidsindstilling</translation>
+        <translation>Tidsindstillinger</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
         <source> HH:mm:ss</source>
-        <translation>TT:mm:ss</translation>
+        <translation> HH:mm:ss</translation>
     </message>
 </context>
 <context>
@@ -17,7 +17,7 @@
     <message>
         <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
         <source>HH:mm</source>
-        <translation>TT:mm</translation>
+        <translation>HH:mm</translation>
     </message>
 </context>
 <context>
@@ -56,7 +56,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="19"/>
         <source>Disk</source>
-        <translation>Harddisk</translation>
+        <translation>Disk</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
         <source>Unmount all</source>
-        <translation>Unmount alt</translation>
+        <translation>Afmonter alle</translation>
     </message>
 </context>
 <context>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
-        <translation>Fashion tilstand</translation>
+        <translation>Fashion-tilstand</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>
@@ -84,7 +84,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Øverst</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Medium</source>
-        <translation>Middel</translation>
+        <translation>Medium</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="28"/>
@@ -119,17 +119,17 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Keep Shown</source>
-        <translation>Hold Vist</translation>
+        <translation>Bevar vist</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
-        <translation>Hold skjult</translation>
+        <translation>Bevar skjult</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Smart Hide</source>
-        <translation>Smart skjult</translation>
+        <translation>Smart skjul</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="65"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../frame/item/launcheritem.cpp" line="17"/>
         <source>Launcher</source>
-        <translation>Launcher</translation>
+        <translation>Programstarter</translation>
     </message>
 </context>
 <context>
@@ -180,12 +180,12 @@
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
         <source>Are you sure to empty 1 item ?</source>
-        <translation>Er du sikker på at tømme 1 emne?</translation>
+        <translation>Er du sikker på, at du vil tømme 1 emne?</translation>
     </message>
     <message>
         <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>Are you sure to empty %1 items ?</source>
-        <translation>Er du sikker på at du vil  tømme %1 emner?</translation>
+        <translation>Er du sikker på, at du vil tømme %1 emner?</translation>
     </message>
 </context>
 <context>
@@ -209,7 +209,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
         <source>Charging %1</source>
-        <translation>Opladning %1</translation>
+        <translation>Oplader %1</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
         <source>Suspend</source>
-        <translation>Standby</translation>
+        <translation>Hvil</translation>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>Lukke indstillinger</translation>
+        <translation>Strømindstillinger</translation>
     </message>
 </context>
 <context>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../plugins/sound/soundapplet.cpp" line="50"/>
         <source>Application</source>
-        <translation>Anvendelse</translation>
+        <translation>Program</translation>
     </message>
 </context>
 <context>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../plugins/sound/sounditem.cpp" line="184"/>
         <source>Current Volume %1</source>
-        <translation>Aktuel Volume %1</translation>
+        <translation>Aktuel volumen %1</translation>
     </message>
 </context>
 <context>
@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation type="unfinished"/>
+        <translation>Papirkurv - %1 fil</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation type="unfinished"/>
+        <translation>Papirkurv - %1 filer</translation>
     </message>
 </context>
 <context>
@@ -317,7 +317,7 @@
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
         <source>No Network</source>
-        <translation>Intet Netværk</translation>
+        <translation>Intet netværk</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
@@ -330,7 +330,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
         <source>No Network</source>
-        <translation>Intet Netværk</translation>
+        <translation>Intet netværk</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>
@@ -348,7 +348,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="42"/>
         <source>Connect</source>
-        <translation>Forbind</translation>
+        <translation>Opret forbindelse</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="43"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
-        <translation>Kodeord kræves for at oprette forbindelse til &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
+        <translation>Der kræves adgangskode for at kunne oprette forbindelse til &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>
 </context>
 </TS>
