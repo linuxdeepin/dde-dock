@@ -50,7 +50,7 @@ func (d *Daemon) Start() error {
 	go func() {
 		time.Sleep(time.Second * 30)
 		sendNotify("dialog-warning", "",
-			Tr("Insufficient disk space of the system, please clean up in time!"))
+			Tr("Insufficient disk space, please clean up in time!"))
 	}()
 	return nil
 }
