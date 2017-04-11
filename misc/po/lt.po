@@ -5,13 +5,13 @@
 # Translators:
 # Jonas Motiejūnas <exjonas@gmail.com>, 2016
 # Lukas Zemeckis <nekaip3@gmail.com>, 2016
-# Moo, 2016
+# Moo, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
-"PO-Revision-Date: 2017-02-24 03:14+0000\n"
+"POT-Creation-Date: 2017-04-10 14:54+0800\n"
+"PO-Revision-Date: 2017-04-11 03:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Prašome įrašyti ne trumpesnį, nei 8 simbolių slaptažodį"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "Slaptažodyje privalo būti anglų kalbos raidės (skiriant raidžių dydį), skaičiai ar ypatingi simboliai (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/password.go:47
 #, c-format
@@ -646,6 +646,10 @@ msgstr "_Visi langai"
 msgid "Auto"
 msgstr "Automatinis"
 
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space, please clean up in time!"
+msgstr ""
+
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
@@ -965,7 +969,7 @@ msgstr "Perkelti į apatinę darbo sritį"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin ekrano rašytuvas"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 #: ../../keybinding/shortcuts/system.go:70
@@ -976,7 +980,7 @@ msgstr "Perjungti langų efektus"
 #: ../../keybinding/shortcuts/id_name_map.go:33
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Greitai išjungti ekraną"
 
 #: ../../keybinding/shortcuts/id_name_map.go:57
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
@@ -1045,13 +1049,15 @@ msgstr "Sistemos kalba keičiama įdiegiant trūkstamus kalbos paketus, prašome
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:34
 #: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
 msgstr "%q sėkmingai pašalintas."
 
 #: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:36
 msgid "Failed to uninstall %q."
-msgstr ""
+msgstr "Nepavyko pašalinti %q."
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 #: ../../mime/media.go:57 ../../mime/media.go:58
@@ -1421,7 +1427,7 @@ msgstr "Anonimas"
 #: ../../network/nm_setting_802_1x.go:142
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
-msgstr "Autentikuota"
+msgstr "Tapatybė nustatyta"
 
 #: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:132
@@ -2269,7 +2275,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:366
 #: ../../network/nm_setting_beans_gen.go:367
 msgid "Refuse EAP Authentication"
-msgstr "Atsisakyti EAP atpažinimo"
+msgstr "Atsisakyti EAP tapatybės nustatymo"
 
 #: ../../network/nm_setting_bean_gen.go:169
 #: ../../network/nm_setting_bean_gen.go:170
@@ -2291,7 +2297,7 @@ msgstr "Atsisakyti EAP atpažinimo"
 #: ../../network/nm_setting_beans_gen.go:367
 #: ../../network/nm_setting_beans_gen.go:368
 msgid "Refuse PAP Authentication"
-msgstr "Atsisakyti PAP atpažinimo"
+msgstr "Atsisakyti PAP tapatybės nustatymo"
 
 #: ../../network/nm_setting_bean_gen.go:170
 #: ../../network/nm_setting_bean_gen.go:171
@@ -2313,7 +2319,7 @@ msgstr "Atsisakyti PAP atpažinimo"
 #: ../../network/nm_setting_beans_gen.go:368
 #: ../../network/nm_setting_beans_gen.go:369
 msgid "Refuse CHAP Authentication"
-msgstr "Atsisakyti CHAP atpažinimo"
+msgstr "Atsisakyti CHAP tapatybės nustatymo"
 
 #: ../../network/nm_setting_bean_gen.go:171
 #: ../../network/nm_setting_bean_gen.go:172
@@ -2335,7 +2341,7 @@ msgstr "Atsisakyti CHAP atpažinimo"
 #: ../../network/nm_setting_beans_gen.go:369
 #: ../../network/nm_setting_beans_gen.go:370
 msgid "Refuse MSCHAP Authentication"
-msgstr "Atsisakyti MSCHAP atpažinimo"
+msgstr "Atsisakyti MSCHAP tapatybės nustatymo"
 
 #: ../../network/nm_setting_bean_gen.go:172
 #: ../../network/nm_setting_bean_gen.go:173
@@ -2357,7 +2363,7 @@ msgstr "Atsisakyti MSCHAP atpažinimo"
 #: ../../network/nm_setting_beans_gen.go:370
 #: ../../network/nm_setting_beans_gen.go:371
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "Atsisakyti MSCHAPv2 atpažinimo"
+msgstr "Atsisakyti MSCHAPv2 tapatybės nustatymo"
 
 #: ../../network/nm_setting_bean_gen.go:173
 #: ../../network/nm_setting_bean_gen.go:174
@@ -2615,7 +2621,7 @@ msgstr "Tinklų sietuvas"
 #: ../../network/nm_setting_beans_gen.go:355
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "NT Domain"
-msgstr "NT domenas"
+msgstr "NT sritis"
 
 #: ../../network/nm_setting_bean_gen.go:192
 #: ../../network/nm_setting_bean_gen.go:193
@@ -2751,7 +2757,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
-msgstr ""
+msgstr "Rakto kryptis"
 
 #: ../../network/nm_setting_bean_gen.go:211
 #: ../../network/nm_setting_bean_gen.go:212
@@ -2866,7 +2872,7 @@ msgstr "Užklausti vidinį IP adresą"
 #: ../../network/nm_setting_beans_gen.go:406
 #: ../../network/nm_setting_beans_gen.go:407
 msgid "Use Hybrid Authentication"
-msgstr "Naudoti hibridinį atpažinimą"
+msgstr "Naudoti hibridinį tapatybės nustatymą"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
@@ -3028,7 +3034,7 @@ msgstr "HMAC autentifikacija"
 #: ../../network/nm_setting_beans_gen.go:304
 #: ../../network/nm_setting_beans_gen.go:305
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS atpažinimas"
+msgstr "VPN TLS tapatybės nustatymas"
 
 #: ../../network/nm_setting_bean_gen.go:324
 #: ../../network/nm_setting_bean_gen.go:325
@@ -3134,7 +3140,7 @@ msgstr "VPN sudėtingiau"
 #: ../../network/nm_setting_beans_gen.go:331
 #: ../../network/nm_setting_beans_gen.go:332
 msgid "Customize Gateway Port"
-msgstr ""
+msgstr "Tinkinti tinklų sietuvo prievadą"
 
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
@@ -3204,7 +3210,7 @@ msgstr "Naudoti TAP įrenginį"
 #: ../../network/nm_setting_beans_gen.go:338
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Customize Tunnel MTU"
-msgstr ""
+msgstr "Tinkinti tunelio MTU"
 
 #: ../../network/nm_setting_bean_gen.go:358
 #: ../../network/nm_setting_bean_gen.go:359
@@ -3214,7 +3220,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:340
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Customize UDP Fragment Size"
-msgstr ""
+msgstr "Tinkinti UDP fragmento dydį"
 
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
@@ -3254,7 +3260,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:415
 #: ../../network/nm_setting_beans_gen.go:416
 msgid "Domain"
-msgstr "Domenas"
+msgstr "Sritis"
 
 #: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_bean_gen.go:418
@@ -3415,7 +3421,7 @@ msgstr "IPv6"
 #: ../../network/nm_setting_beans_gen.go:446
 #: ../../network/nm_setting_beans_gen.go:447
 msgid "Prefix"
-msgstr ""
+msgstr "Priešdelis"
 
 #: ../../network/nm_setting_bean_gen.go:462
 #: ../../network/nm_setting_bean_gen.go:463
@@ -3451,7 +3457,7 @@ msgstr "Antrinis DNS"
 #: ../../network/nm_setting_virtual_key.go:140
 #: ../../network/nm_setting_virtual_key.go:146
 msgid "Custom"
-msgstr "Asmeninai"
+msgstr "Tinkinti"
 
 #: ../../network/nm_setting_gsm.go:154 ../../network/nm_setting_gsm.go:155
 #: ../../network/nm_setting_gsm.go:166 ../../network/nm_setting_gsm.go:221
@@ -3881,7 +3887,7 @@ msgstr "SOCKS"
 #: ../../network/nm_setting_vpn_strongswan.go:96
 #: ../../network/nm_setting_vpn_strongswan.go:100
 msgid "SSH Agent"
-msgstr ""
+msgstr "SSH agentas"
 
 #: ../../network/nm_setting_vpn_strongswan.go:78
 #: ../../network/nm_setting_vpn_strongswan.go:97
@@ -4100,7 +4106,7 @@ msgstr "Įrenginys nebuvo pasiruošęs konfigūracijai."
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "Nepavyko užrezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi laiko limitas ir t.t.)"
+msgstr "Nepavyko užrezervuoti IP konfigūracijos (nėra prieinamo adreso, baigėsi laiko terminas ir t.t.)"
 
 #: ../../network/state_handler.go:28 ../../network/state_handler.go:29
 #: ../../network/state_handler.go:40
@@ -4509,7 +4515,7 @@ msgstr "Sistemos įgaliotasis serveris buvo atšauktas."
 #: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
 #: ../../power/upower.go:99
 msgid "Abnormal battery power"
-msgstr ""
+msgstr "Nenormali baterijos energija"
 
 #: ../../power/manager_events.go:128 ../../power/manager_events.go:129
 #: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
@@ -4517,14 +4523,16 @@ msgstr ""
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr ""
+msgstr "Baterijos energija negali būti nuspėta, tinkamai įsirašykite visus svarbius dokumentus ir nepradėkite svarbių operacijų."
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4538,7 +4546,9 @@ msgstr "Kritinis baterijos lygis"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4552,6 +4562,7 @@ msgstr "Kompiuteris buvo pristabdytas, prijunkite maitinimą."
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4562,6 +4573,7 @@ msgstr "Baterija senka"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4576,12 +4588,12 @@ msgstr "Prijunkite maitinimą arba kompiuteris bus pristabdytas."
 
 #: ../../timedate/deepin_list.go:349
 msgid "Kolkata"
-msgstr ""
+msgstr "Kolkata"
 
 #: ../../timedate/deepin_list.go:353
 msgid "Colombo"
-msgstr ""
+msgstr "Kolombas"
 
 #: ../../timedate/deepin_list.go:357
 msgid "Pyongyang"
-msgstr ""
+msgstr "Pchenjanas"

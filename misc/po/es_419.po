@@ -4,14 +4,16 @@
 # 
 # Translators:
 # Alejandro Hamann <linkstat@gmail.com>, 2016
-# Benjamin Perez Carrillo <benperezc@gmail.com>, 2016
+# alvarosamudio <alvarosamudio1@gmail.com>, 2017
+# Benjamin Perez Carrillo <benperezc@gmail.com>, 2016-2017
+# Carlos Moreno <carlosmorenoe.cm@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
-"PO-Revision-Date: 2017-02-24 03:14+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"POT-Creation-Date: 2017-04-10 14:54+0800\n"
+"PO-Revision-Date: 2017-04-11 12:06+0000\n"
+"Last-Translator: alvarosamudio <alvarosamudio1@gmail.com>\n"
 "Language-Team: Spanish (Latin America) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es_419/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +30,7 @@ msgstr "Por favor, ingrese una contraseña de al menos 8 caracteres de longitud"
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "La contraseña puede contener letras (mayúsculas y minúsculas), números o símbolos especiales (~! @ # $% ^ & * () [] {} \\ | /?,. <>)"
 
 #: ../../accounts/checkers/password.go:47
 #, c-format
@@ -645,6 +647,10 @@ msgstr "Tod_as las ventanas"
 msgid "Auto"
 msgstr "Automático"
 
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space, please clean up in time!"
+msgstr "Espacio en disco insuficiente, por favor, limpiar a tiempo!"
+
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
@@ -964,7 +970,7 @@ msgstr "Mover al espacio de trabajo inferior"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Grabadora de pantalla Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 #: ../../keybinding/shortcuts/system.go:70
@@ -975,7 +981,7 @@ msgstr "Cambiar efectos de ventana"
 #: ../../keybinding/shortcuts/id_name_map.go:33
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Apagado rápido de pantalla "
 
 #: ../../keybinding/shortcuts/id_name_map.go:57
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
@@ -1044,13 +1050,15 @@ msgstr "El idioma del sistema está siendo cambiado con una instalación de paqu
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:34
 #: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
 msgstr "%q se eliminó correctamente."
 
 #: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:36
 msgid "Failed to uninstall %q."
-msgstr ""
+msgstr "Error al desinstalar% q."
 
 #: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 #: ../../mime/media.go:57 ../../mime/media.go:58
@@ -4523,7 +4531,9 @@ msgstr "La potencia de la batería no puede ser estimada, por favor guarde adecu
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4537,7 +4547,9 @@ msgstr "Nivel de Batería Crítico"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4551,6 +4563,7 @@ msgstr "La computadora se encuentra en modo de suspensión, por favor enchúfela
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4561,6 +4574,7 @@ msgstr "Batería baja"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4575,12 +4589,12 @@ msgstr "Por favor enchufe la computadora o entrará en modo de suspensión."
 
 #: ../../timedate/deepin_list.go:349
 msgid "Kolkata"
-msgstr ""
+msgstr "Kolkata"
 
 #: ../../timedate/deepin_list.go:353
 msgid "Colombo"
-msgstr ""
+msgstr "Colombo"
 
 #: ../../timedate/deepin_list.go:357
 msgid "Pyongyang"
-msgstr ""
+msgstr "Pyongyang"

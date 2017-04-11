@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
-"PO-Revision-Date: 2017-02-24 18:28+0000\n"
+"POT-Creation-Date: 2017-04-10 14:54+0800\n"
+"PO-Revision-Date: 2017-04-11 06:52+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgstr "Последовательный порт"
 
 #: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Коммутируемые сети"
+msgstr "Коммутируемая сеть"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
@@ -646,6 +646,10 @@ msgstr "_Все окна"
 msgid "Auto"
 msgstr "Автоматически"
 
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space, please clean up in time!"
+msgstr "Недостаточно места на диске, пожалуйста, очистите позже!"
+
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
@@ -971,12 +975,12 @@ msgstr "Deepin Screen Recorder"
 #: ../../keybinding/shortcuts/system.go:70
 #: ../../keybinding/shortcuts/system.go:82
 msgid "Switch window effects"
-msgstr "Переключать эффекты окна"
+msgstr "Переключатель эффектов окна"
 
 #: ../../keybinding/shortcuts/id_name_map.go:33
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Fast Screen Off"
-msgstr "Быстрый Экран Выкл."
+msgstr "Погасить Экран"
 
 #: ../../keybinding/shortcuts/id_name_map.go:57
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
@@ -1045,11 +1049,13 @@ msgstr "Изменяется язык системы, с установкой н
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:34
 #: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
 msgstr "%q успешно удалён."
 
 #: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:36
 msgid "Failed to uninstall %q."
 msgstr "Не удалось удалить %q."
 
@@ -4524,7 +4530,9 @@ msgstr "Заряд батареи очень низкий, пожалуйста 
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4538,7 +4546,9 @@ msgstr "Критически низкий заряд батареи"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4547,11 +4557,12 @@ msgstr "Критически низкий заряд батареи"
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Компьютер был в режим ожидания, пожалуйста подключите питание."
+msgstr "Компьютер находится в режиме ожидания, подключите его."
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4562,6 +4573,7 @@ msgstr "Батарея разряжена"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171

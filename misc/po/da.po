@@ -5,13 +5,14 @@
 # Translators:
 # Carl Andersen <carl@freeos.dk>, 2016
 # Morten Juhl-Johansen Zölde-Fejér <morten@writtenandread.net>, 2016
+# scootergrisen, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
-"PO-Revision-Date: 2017-02-24 03:14+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"POT-Creation-Date: 2017-04-10 14:54+0800\n"
+"PO-Revision-Date: 2017-04-11 18:16+0000\n"
+"Last-Translator: scootergrisen\n"
 "Language-Team: Danish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,26 +23,26 @@ msgstr ""
 #: ../../accounts/checkers/password.go:44
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
-msgstr "Indtast et kodeord, ikke mindre end 8 tegn"
+msgstr "Indtast venligt en adgangskode, ikke mindre end 8 tegn"
 
 #: ../../accounts/checkers/password.go:46
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr "Adgangskoden skal indeholde engelske bogstaver (små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
+msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (~!@#$%^&*()[]{}\\|/?,.<>)"
 
 #: ../../accounts/checkers/password.go:47
 #, c-format
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (%s)"
-msgstr "Adgangskoden skal indeholde engelske bogstaver (små bogstaver), tal eller specialtegn (%s)"
+msgstr "Adgangskoden skal indeholde engelske bogstaver (forskel på store og små bogstaver), tal eller specialtegn (%s)"
 
 #: ../../accounts/checkers/username.go:49
 #: ../../accounts/checkers/username.go:61
 #: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
-msgstr "Brugernavn kan ikke være tomt."
+msgstr "Brugernavn må ikke være tomt."
 
 #: ../../accounts/checkers/username.go:51
 #: ../../accounts/checkers/username.go:63
@@ -53,13 +54,13 @@ msgstr "Brugernavn må omfatte a~z, 0~9, - eller _."
 #: ../../accounts/checkers/username.go:65
 #: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
-msgstr "Det første tegn skal være med små bogstaver."
+msgstr "Det første tegn skal være med småt."
 
 #: ../../accounts/checkers/username.go:55
 #: ../../accounts/checkers/username.go:67
 #: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
-msgstr "Brugernavnet eksisterer allerede."
+msgstr "Brugernavnet findes allerede."
 
 #: ../../accounts/checkers/username.go:57
 #: ../../accounts/checkers/username.go:69
@@ -78,7 +79,7 @@ msgstr "Serielport"
 
 #: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
 msgid "Dial-Up networking"
-msgstr "Dial-Up netværk"
+msgstr "Opkaldsnetværk"
 
 #: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
 msgid "Hands-Free device"
@@ -86,15 +87,15 @@ msgstr "Håndfri enhed"
 
 #: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
 msgid "Hands-Free voice gateway"
-msgstr "Håndfri voice gateway"
+msgstr "Håndfri tale-gateway"
 
 #: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
 msgid "Headset voice gateway"
-msgstr "Headset voice gateway"
+msgstr "Headset tale-gateway"
 
 #: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
 msgid "Object push"
-msgstr "Object Push"
+msgstr "Objekt-push"
 
 #: ../../bluetooth/bluez_profile.go:25 ../../bluetooth/bluez_profile.go:37
 msgid "File transfer"
@@ -110,7 +111,7 @@ msgstr "Adgang til telefonbog"
 
 #: ../../bluetooth/bluez_profile.go:28 ../../bluetooth/bluez_profile.go:40
 msgid "Phone book access client"
-msgstr "Telefonbogsklient"
+msgstr "Adgangsklient til telefonbog"
 
 #: ../../bluetooth/bluez_profile.go:29 ../../bluetooth/bluez_profile.go:41
 msgid "Message access"
@@ -118,7 +119,7 @@ msgstr "Adgang til beskeder"
 
 #: ../../bluetooth/bluez_profile.go:30 ../../bluetooth/bluez_profile.go:42
 msgid "Message notification"
-msgstr "Meddelelse ved besked"
+msgstr "Meddelelsesnotifikation"
 
 #: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
 #: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
@@ -131,7 +132,7 @@ msgstr "Meddelelse ved besked"
 #: ../../network/state_handler.go:203 ../../network/state_handler.go:214
 #: ../../network/utils_notify.go:109 ../../network/utils_notify.go:121
 msgid "Connected"
-msgstr "Forbundet"
+msgstr "Tilsluttet"
 
 #: ../../bluetooth/utils_notify.go:49 ../../bluetooth/utils_notify.go:58
 #: ../../bluetooth/utils_notify.go:61 ../../bluetooth/utils_notify.go:62
@@ -162,24 +163,24 @@ msgstr "Afbrudt"
 
 #: ../../bluetooth/utils_notify.go:52 ../../bluetooth/utils_notify.go:64
 msgid "Make sure %q is turned on and in range"
-msgstr "Sørg fo %q er tændt og inden for rækkevidde"
+msgstr "Sørg for at %q er tændt og inden for rækkevidde"
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
 #: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
-msgstr "Bluetooth-forbindelsen timede ud eller mislykkedes."
+msgstr "Bluetooth-forbindelsen fejlede"
 
 #: ../../bluetooth/utils_notify.go:56 ../../bluetooth/utils_notify.go:68
 msgid "Failed to connect %q, automatically ignored"
-msgstr "Kunne ikke forbinde %q, automatisk ignoreret"
+msgstr "Kunne ikke oprette forbindelse til %q, ignoreres automatisk"
 
 #: ../../bluetooth/utils_notify.go:65
 msgid "Make sure %q is turned on  and in range"
-msgstr "Sørg fo %q er tændt og inden for rækkevidde"
+msgstr "Sørg for at %q er tændt og inden for rækkevidde"
 
 #: ../../bluetooth/utils_notify.go:66
 msgid "Failed to connect bluetooth"
-msgstr "Kunne ikke forbinde bluetooth"
+msgstr "Kunne ikke oprette forbindelse til bluetooth"
 
 #: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
 #: ../../timedate/deepin_list.go:25
@@ -605,7 +606,7 @@ msgstr "_Kør"
 #: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
 #: ../../dock/runtime_apps.go:296
 msgid "_Close All"
-msgstr "_Luk alt"
+msgstr "_Luk alle"
 
 #: ../../dock/app_entry_menu.go:115 ../../dock/app_entry_menu.go:119
 #: ../../dock/app_entry_menu.go:131 ../../dock/app_entry_menu.go:132
@@ -615,7 +616,7 @@ msgstr "_Luk alt"
 #: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
 #: ../../dock/runtime_apps.go:324
 msgid "_Dock"
-msgstr "_Dock"
+msgstr "_Dok"
 
 #: ../../dock/app_entry_menu.go:122 ../../dock/app_entry_menu.go:126
 #: ../../dock/app_entry_menu.go:138 ../../dock/app_entry_menu.go:139
@@ -627,11 +628,11 @@ msgstr "_Dock"
 #: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
 #: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
 msgid "_Undock"
-msgstr "_ Fjern fra dock "
+msgstr "_Fjern fra dok"
 
 #: ../../dock/app_entry_menu.go:129 ../../dock/app_entry_menu.go:146
 msgid "_All windows"
-msgstr "_alle vinduer"
+msgstr "_Alle vinduer"
 
 #: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
 #: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
@@ -644,6 +645,10 @@ msgstr "_alle vinduer"
 #: ../../network/nm_setting_ip6_config.go:64
 msgid "Auto"
 msgstr "Automatisk"
+
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space, please clean up in time!"
+msgstr "Utilstrækkelig diskplads, ryd venligt op i tide!"
 
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
@@ -675,7 +680,7 @@ msgstr "Side ned"
 #: ../../keybinding/shortcuts/system.go:57
 #: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
-msgstr "Launcher"
+msgstr "Programstarter"
 
 #: ../../keybinding/id_desc_list.go:48
 #: ../../keybinding/shortcuts/id_name_map.go:71
@@ -695,7 +700,7 @@ msgstr "Lås skærm"
 #: ../../keybinding/shortcuts/system.go:67
 #: ../../keybinding/shortcuts/system.go:79
 msgid "File manager"
-msgstr "Filmanager"
+msgstr "Filhåndtering"
 
 #: ../../keybinding/id_desc_list.go:51
 msgid "Switch applications"
@@ -703,22 +708,22 @@ msgstr "Skift programmer"
 
 #: ../../keybinding/id_desc_list.go:52
 msgid "Reverse switch applications"
-msgstr "Omvendt skiftning af programmer"
+msgstr "Skift programmer baglæns"
 
 #: ../../keybinding/id_desc_list.go:53
 msgid "3D switch applications"
-msgstr "3D-skifte-programmer"
+msgstr "3D skift af programmer"
 
 #: ../../keybinding/id_desc_list.go:54
 msgid "3D reverse switch applications"
-msgstr "3D modsatte skifte programmer"
+msgstr "3D skift programmer baglæns"
 
 #: ../../keybinding/id_desc_list.go:55
 #: ../../keybinding/shortcuts/id_name_map.go:22
 #: ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
-msgstr "Vis/Skjul docken"
+msgstr "Vis/skjul dokken"
 
 #: ../../keybinding/id_desc_list.go:56
 #: ../../keybinding/shortcuts/id_name_map.go:25
@@ -760,7 +765,7 @@ msgstr "Terminal"
 #: ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake Vindue"
+msgstr "Terminal Quake-vindue"
 
 #: ../../keybinding/id_desc_list.go:62
 #: ../../keybinding/shortcuts/id_name_map.go:23
@@ -774,18 +779,18 @@ msgstr "Log ud"
 #: ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
-msgstr "Deaktiver touchpad"
+msgstr "Deaktivér touchpad"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
-msgstr "Deepin Oversætter"
+msgstr "Deepin-oversætter"
 
 #: ../../keybinding/id_desc_list.go:65
 #: ../../keybinding/shortcuts/id_name_map.go:31
 #: ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
-msgstr "Skift udseende"
+msgstr "Skift layout"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -805,7 +810,7 @@ msgstr "Medieafspiller"
 
 #: ../../keybinding/id_desc_list.go:77
 msgid "Play/Pause"
-msgstr "Afspil/Pause"
+msgstr "Afspil/pause"
 
 #: ../../keybinding/id_desc_list.go:78
 msgid "Pause"
@@ -821,11 +826,11 @@ msgstr "Lydløs"
 
 #: ../../keybinding/id_desc_list.go:81
 msgid "Volume down"
-msgstr "Lydstyrke ned"
+msgstr "Lavere"
 
 #: ../../keybinding/id_desc_list.go:82
 msgid "Volume up"
-msgstr "Lydstyrke op"
+msgstr "Højere"
 
 #: ../../keybinding/id_desc_list.go:83
 msgid "Previous"
@@ -876,11 +881,11 @@ msgstr "Juster vindue"
 
 #: ../../keybinding/id_desc_list.go:99
 msgid "Switch furl state"
-msgstr "Skift Furl tilstand"
+msgstr "Skift furl-tilstand"
 
 #: ../../keybinding/id_desc_list.go:100
 msgid "Activate window menu"
-msgstr "Aktiver vinduesmenu"
+msgstr "Aktivér vinduesmenu"
 
 #: ../../keybinding/id_desc_list.go:108
 msgid "Switch to workspace 1"
@@ -964,7 +969,7 @@ msgstr "Flyt til nedre arbejdsområde"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin-skærmoptager"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 #: ../../keybinding/shortcuts/system.go:70
@@ -975,7 +980,7 @@ msgstr "Skift vindueseffekter"
 #: ../../keybinding/shortcuts/id_name_map.go:33
 #: ../../keybinding/shortcuts/system.go:71
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "Hurtig skærm fra"
 
 #: ../../keybinding/shortcuts/id_name_map.go:57
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
@@ -985,7 +990,7 @@ msgstr "Skift lignende vinduer"
 #: ../../keybinding/shortcuts/id_name_map.go:58
 #: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr "Skift lignende vinduer i omvendt rækkefølge"
+msgstr "Skift lignende vinduer baglæns"
 
 #: ../../keybinding/shortcuts/id_name_map.go:59
 #: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
@@ -995,21 +1000,21 @@ msgstr "Skift vinduer"
 #: ../../keybinding/shortcuts/id_name_map.go:60
 #: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
 msgid "Switch windows in reverse"
-msgstr "Skift vinduer omvendt"
+msgstr "Skift vinduer baglæns"
 
 #: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
 #: ../../keybinding/shortcuts/metacity.go:93
 msgid "Display windows of all workspaces"
-msgstr "Vis vinduer i alle arbejdsområder"
+msgstr "Vis vinduer fra alle arbejdsområder"
 
 #: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
 #: ../../keybinding/shortcuts/metacity.go:94
 msgid "Display windows of current workspace"
-msgstr "Vis vinduer af nuværende arbejdsområde"
+msgstr "Vis vinduer på aktuelle arbejdsområde"
 
 #: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
@@ -1021,34 +1026,36 @@ msgstr "Vis arbejdsområde"
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
 #: ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
-msgstr "System sprog blev ikke ændret, prøv venligst senere."
+msgstr "Systemsproget kunne ikke ændres, prøv venligst senere."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
 msgid ""
 "System language has been changed, please log in again after logged out."
-msgstr "System sprog er blevet ændret, du skal logge ud, og ind igen for at det træder i kraft."
+msgstr "Systemsproget er blevet ændret. Log venligst ud og ind igen."
 
 #: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
 #: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
-msgstr "System sprog bliver ændret, vent venligst..."
+msgstr "Systemsproget bliver ændret, vent venligst..."
 
 #: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
 #: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "System sprog bliver ændret, med installation af manglede sprogpakker, vent venligst ..."
+msgstr "Systemsproget bliver ændret, med en installation af manglede sprogpakker, vent venligst..."
 
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:34
 #: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
-msgstr "%q fjernet med succes."
+msgstr "%q fjernet."
 
 #: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:36
 msgid "Failed to uninstall %q."
 msgstr "Kunne ikke afinstallere %q."
 
@@ -1070,7 +1077,7 @@ msgstr "Kør software"
 #: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144 ../../mounts/ifc.go:168
 #, c-format
 msgid "%s removed successfully"
-msgstr "%s fjernet vellykket"
+msgstr "%s fjernet"
 
 #: ../../network/manager_active.go:289 ../../network/manager_active.go:294
 #: ../../network/manager_active.go:304 ../../network/manager_active.go:308
@@ -1108,7 +1115,7 @@ msgstr "Ingen"
 #: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
-msgstr "WEP 40/128-bit nøgle"
+msgstr "WEP 40/128-bit-nøgle"
 
 #: ../../network/manager_active.go:298 ../../network/manager_active.go:313
 #: ../../network/manager_active.go:317 ../../network/manager_active.go:318
@@ -1121,7 +1128,7 @@ msgstr "WEP 40/128-bit nøgle"
 #: ../../network/nm_setting_virtual_key.go:188
 #: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
-msgstr "WPA/WPA2 Personlig"
+msgstr "WPA/WPA2 personlig"
 
 #: ../../network/manager_active.go:306 ../../network/manager_active.go:321
 #: ../../network/manager_active.go:325 ../../network/manager_active.go:326
@@ -1273,7 +1280,7 @@ msgstr "Spørg altid"
 #: ../../network/utils_nm.go:178 ../../network/utils_nm.go:180
 #: ../../network/utils_nm.go:188 ../../network/utils_nm.go:190
 msgid "Not Required"
-msgstr "Kræves ikke"
+msgstr "Ikke påkrævet"
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:203
@@ -1291,7 +1298,7 @@ msgstr "Trådløs forbindelse"
 #: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:209
 #: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:222
 msgid "Wireless Ad-Hoc"
-msgstr "Trådløs  Ad-Hoc"
+msgstr "Trådløs Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
 #: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:211
@@ -1420,7 +1427,7 @@ msgstr "Anonym"
 #: ../../network/nm_setting_802_1x.go:142
 #: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
-msgstr "Verificeret"
+msgstr "Autentificeret"
 
 #: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:132
@@ -1460,7 +1467,7 @@ msgstr "Version 1"
 #: ../../network/nm_setting_beans_gen.go:17
 #: ../../network/nm_setting_beans_gen.go:18
 msgid "General"
-msgstr "General"
+msgstr "Generelt"
 
 #: ../../network/nm_setting_bean_gen.go:49
 #: ../../network/nm_setting_bean_gen.go:50
@@ -1473,7 +1480,7 @@ msgstr "Navn"
 #: ../../network/nm_setting_beans_gen.go:20
 #: ../../network/nm_setting_beans_gen.go:21
 msgid "Automatically connect"
-msgstr "Automatisk forbindelse"
+msgstr "Opret forbindelse automatisk"
 
 #: ../../network/nm_setting_bean_gen.go:51
 #: ../../network/nm_setting_bean_gen.go:52
@@ -1523,7 +1530,7 @@ msgstr "Klonet MAC-adresse"
 #: ../../network/nm_setting_beans_gen.go:117
 #: ../../network/nm_setting_beans_gen.go:118
 msgid "Customize MTU"
-msgstr "Tilpas MTU"
+msgstr "Brugerdefineret MTU"
 
 #: ../../network/nm_setting_bean_gen.go:62
 #: ../../network/nm_setting_bean_gen.go:63
@@ -2186,7 +2193,7 @@ msgstr "PPPoE"
 #: ../../network/nm_setting_beans_gen.go:127
 #: ../../network/nm_setting_beans_gen.go:128
 msgid "Service"
-msgstr "Service"
+msgstr "Tjeneste"
 
 #: ../../network/nm_setting_bean_gen.go:163
 #: ../../network/nm_setting_bean_gen.go:164
@@ -2268,7 +2275,7 @@ msgstr "Stateful MPPE"
 #: ../../network/nm_setting_beans_gen.go:366
 #: ../../network/nm_setting_beans_gen.go:367
 msgid "Refuse EAP Authentication"
-msgstr "Afvis EAP-godkendelse"
+msgstr "Afvis EAP-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:169
 #: ../../network/nm_setting_bean_gen.go:170
@@ -2290,7 +2297,7 @@ msgstr "Afvis EAP-godkendelse"
 #: ../../network/nm_setting_beans_gen.go:367
 #: ../../network/nm_setting_beans_gen.go:368
 msgid "Refuse PAP Authentication"
-msgstr "Afvis PAP-godkendelse"
+msgstr "Afvis PAP-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:170
 #: ../../network/nm_setting_bean_gen.go:171
@@ -2312,7 +2319,7 @@ msgstr "Afvis PAP-godkendelse"
 #: ../../network/nm_setting_beans_gen.go:368
 #: ../../network/nm_setting_beans_gen.go:369
 msgid "Refuse CHAP Authentication"
-msgstr "Afvis CHAP-godkendelse"
+msgstr "Afvis CHAP-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:171
 #: ../../network/nm_setting_bean_gen.go:172
@@ -2334,7 +2341,7 @@ msgstr "Afvis CHAP-godkendelse"
 #: ../../network/nm_setting_beans_gen.go:369
 #: ../../network/nm_setting_beans_gen.go:370
 msgid "Refuse MSCHAP Authentication"
-msgstr "Afvis MSCHAP-godkendelse"
+msgstr "Afvis MSCHAP-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:172
 #: ../../network/nm_setting_bean_gen.go:173
@@ -2356,7 +2363,7 @@ msgstr "Afvis MSCHAP-godkendelse"
 #: ../../network/nm_setting_beans_gen.go:370
 #: ../../network/nm_setting_beans_gen.go:371
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr "Afvis MSCHAPv2-godkendelse"
+msgstr "Afvis MSCHAPv2-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:173
 #: ../../network/nm_setting_bean_gen.go:174
@@ -2400,7 +2407,7 @@ msgstr "Ingen BSD-datakomprimering"
 #: ../../network/nm_setting_beans_gen.go:372
 #: ../../network/nm_setting_beans_gen.go:373
 msgid "No Deflate Data Compression"
-msgstr "Ingen Deflate Data-komprimering"
+msgstr "Ingen deflate-datakomprimering"
 
 #: ../../network/nm_setting_bean_gen.go:175
 #: ../../network/nm_setting_bean_gen.go:176
@@ -2422,7 +2429,7 @@ msgstr "Ingen Deflate Data-komprimering"
 #: ../../network/nm_setting_beans_gen.go:373
 #: ../../network/nm_setting_beans_gen.go:374
 msgid "No TCP Header Compression"
-msgstr "Ingen TCP Header-komprimering"
+msgstr "Ingen TCP-headerkomprimering"
 
 #: ../../network/nm_setting_bean_gen.go:176
 #: ../../network/nm_setting_bean_gen.go:177
@@ -2444,7 +2451,7 @@ msgstr "Ingen TCP Header-komprimering"
 #: ../../network/nm_setting_beans_gen.go:374
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "Send PPP Echo Packets"
-msgstr "Send PPP Echo-pakker"
+msgstr "Send PPP echo-pakker"
 
 #: ../../network/nm_setting_bean_gen.go:182
 #: ../../network/nm_setting_bean_gen.go:183
@@ -2500,7 +2507,7 @@ msgstr "VPN"
 #: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "Need VPN Plugin"
-msgstr "Kræver VPN-plugin"
+msgstr "Behøver VPN-plugin"
 
 #: ../../network/nm_setting_bean_gen.go:185
 #: ../../network/nm_setting_bean_gen.go:186
@@ -2659,7 +2666,7 @@ msgstr "Tillad Cisco Secure Desktop Trojan"
 #: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:265
 msgid "CSD Script"
-msgstr "CSD Script"
+msgstr "CSD-skript"
 
 #: ../../network/nm_setting_bean_gen.go:197
 #: ../../network/nm_setting_bean_gen.go:198
@@ -2672,7 +2679,7 @@ msgstr "CSD Script"
 #: ../../network/nm_setting_beans_gen.go:170
 #: ../../network/nm_setting_beans_gen.go:268
 msgid "Use FSID for Key Passphrase"
-msgstr "Brug FSID til adgangsnøgle"
+msgstr "Brug FSID til nøgleadgangskode"
 
 #: ../../network/nm_setting_bean_gen.go:199
 #: ../../network/nm_setting_bean_gen.go:200
@@ -2731,7 +2738,7 @@ msgstr "Statisk nøgle"
 #: ../../network/nm_setting_beans_gen.go:287
 #: ../../network/nm_setting_beans_gen.go:310
 msgid "Customize Key Direction"
-msgstr "Tilpas nøglested"
+msgstr "Tilpas nøgleretning"
 
 #: ../../network/nm_setting_bean_gen.go:210
 #: ../../network/nm_setting_bean_gen.go:211
@@ -2750,7 +2757,7 @@ msgstr "Tilpas nøglested"
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
-msgstr "Nøglehåndtering"
+msgstr "Nøgleretning"
 
 #: ../../network/nm_setting_bean_gen.go:211
 #: ../../network/nm_setting_bean_gen.go:212
@@ -2765,7 +2772,7 @@ msgstr "Nøglehåndtering"
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:289
 msgid "Remote IP"
-msgstr "Fjern IP"
+msgstr "Fjern-IP"
 
 #: ../../network/nm_setting_bean_gen.go:212
 #: ../../network/nm_setting_bean_gen.go:213
@@ -2797,7 +2804,7 @@ msgstr "Lokal IP"
 #: ../../network/nm_setting_beans_gen.go:402
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "User Pwd"
-msgstr "Brugers adgangskode"
+msgstr "Brugerens adgangskode"
 
 #: ../../network/nm_setting_bean_gen.go:222
 #: ../../network/nm_setting_bean_gen.go:223
@@ -2848,7 +2855,7 @@ msgstr "Gruppens adgangskode"
 #: ../../network/nm_setting_beans_gen.go:389
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Request an Inner IP Address"
-msgstr "Anmod om en Inner IP-adresse"
+msgstr "Anmod om en indre IP-adresse"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2865,7 +2872,7 @@ msgstr "Anmod om en Inner IP-adresse"
 #: ../../network/nm_setting_beans_gen.go:406
 #: ../../network/nm_setting_beans_gen.go:407
 msgid "Use Hybrid Authentication"
-msgstr "Brug Hybrid godkendelse"
+msgstr "Brug hybrid-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
@@ -2895,7 +2902,7 @@ msgstr "CA-fil"
 #: ../../network/nm_setting_beans_gen.go:390
 #: ../../network/nm_setting_beans_gen.go:391
 msgid "Enforce UDP Encapsulation"
-msgstr "Gennemtving UDP Indkapsling"
+msgstr "Gennemtving UDP-Indkapsling"
 
 #: ../../network/nm_setting_bean_gen.go:227
 #: ../../network/nm_setting_bean_gen.go:228
@@ -2908,7 +2915,7 @@ msgstr "Gennemtving UDP Indkapsling"
 #: ../../network/nm_setting_beans_gen.go:391
 #: ../../network/nm_setting_beans_gen.go:392
 msgid "Use IP Compression"
-msgstr "Brug IP Compression"
+msgstr "Brug IP-komprimering"
 
 #: ../../network/nm_setting_bean_gen.go:244
 #: ../../network/nm_setting_bean_gen.go:245
@@ -2928,7 +2935,7 @@ msgstr "VPN IPsec"
 #: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:229
 msgid "Enable IPsec"
-msgstr "Aktiver IPsec"
+msgstr "Aktivér IPsec"
 
 #: ../../network/nm_setting_bean_gen.go:248
 #: ../../network/nm_setting_bean_gen.go:249
@@ -2950,7 +2957,7 @@ msgstr "Gruppe-ID"
 #: ../../network/nm_setting_vpn_strongswan.go:99
 #: ../../network/nm_setting_vpn_strongswan.go:103
 msgid "Pre-Shared Key"
-msgstr "Pre-delt Nøgle"
+msgstr "Prædelt nøgle"
 
 #: ../../network/nm_setting_bean_gen.go:255
 #: ../../network/nm_setting_bean_gen.go:256
@@ -2977,7 +2984,7 @@ msgstr "VPN PPP"
 #: ../../network/nm_setting_beans_gen.go:250
 #: ../../network/nm_setting_beans_gen.go:251
 msgid "No Protocol Field Compression"
-msgstr "Ingen protokol Feltkomprimering"
+msgstr "Ingen protokol-feltkomprimering"
 
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
@@ -2987,7 +2994,7 @@ msgstr "Ingen protokol Feltkomprimering"
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "No Address/Control Compression"
-msgstr "Ingen Adresse/ Kontrolkomprimering"
+msgstr "Ingen adresse-/kontrolkomprimering"
 
 #: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:314
@@ -3027,7 +3034,7 @@ msgstr "HMAC-godkendelse"
 #: ../../network/nm_setting_beans_gen.go:304
 #: ../../network/nm_setting_beans_gen.go:305
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS-godkendelse"
+msgstr "VPN TLS-autentifikation"
 
 #: ../../network/nm_setting_bean_gen.go:324
 #: ../../network/nm_setting_bean_gen.go:325
@@ -3047,7 +3054,7 @@ msgstr "Emnematch"
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote Cert Type"
-msgstr "Type af fjerncertifikat"
+msgstr "Type af fjern-certifikat"
 
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:327
@@ -3106,7 +3113,7 @@ msgstr "Port"
 #: ../../network/nm_setting_beans_gen.go:321
 #: ../../network/nm_setting_beans_gen.go:322
 msgid "Retry Indefinitely When Failed"
-msgstr "Forsøg igen i tilfælde af fejl"
+msgstr "Prøv igen når det fejler"
 
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
@@ -3133,7 +3140,7 @@ msgstr "Avanceret VPN"
 #: ../../network/nm_setting_beans_gen.go:331
 #: ../../network/nm_setting_beans_gen.go:332
 msgid "Customize Gateway Port"
-msgstr "Sæt Gateway-port"
+msgstr "Tilpas gateway-port"
 
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
@@ -3153,7 +3160,7 @@ msgstr "Gateway-port"
 #: ../../network/nm_setting_beans_gen.go:333
 #: ../../network/nm_setting_beans_gen.go:334
 msgid "Customize Renegotiation Interval"
-msgstr "Tilpas Renegotiation Interval"
+msgstr "Tilpas renegotiationsinterval"
 
 #: ../../network/nm_setting_bean_gen.go:352
 #: ../../network/nm_setting_bean_gen.go:353
@@ -3163,7 +3170,7 @@ msgstr "Tilpas Renegotiation Interval"
 #: ../../network/nm_setting_beans_gen.go:334
 #: ../../network/nm_setting_beans_gen.go:335
 msgid "Renegotiation Interval"
-msgstr "Renegotiation Interval"
+msgstr "Renegotiationsinterval"
 
 #: ../../network/nm_setting_bean_gen.go:353
 #: ../../network/nm_setting_bean_gen.go:354
@@ -3203,7 +3210,7 @@ msgstr "Brug TAP-enhed"
 #: ../../network/nm_setting_beans_gen.go:338
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Customize Tunnel MTU"
-msgstr "Opsæt MTU-tunnel"
+msgstr "Tilpas tunnel-MTU"
 
 #: ../../network/nm_setting_bean_gen.go:358
 #: ../../network/nm_setting_bean_gen.go:359
@@ -3213,7 +3220,7 @@ msgstr "Opsæt MTU-tunnel"
 #: ../../network/nm_setting_beans_gen.go:340
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Customize UDP Fragment Size"
-msgstr "Sæt UDP Fragment-størrelse"
+msgstr "Tilpas UDP-fragmentstørrelse"
 
 #: ../../network/nm_setting_bean_gen.go:359
 #: ../../network/nm_setting_bean_gen.go:360
@@ -3223,7 +3230,7 @@ msgstr "Sæt UDP Fragment-størrelse"
 #: ../../network/nm_setting_beans_gen.go:341
 #: ../../network/nm_setting_beans_gen.go:342
 msgid "UDP Fragment Size"
-msgstr "UDP Fragment-størrelse"
+msgstr "UDP-fragmentstørrelse"
 
 #: ../../network/nm_setting_bean_gen.go:360
 #: ../../network/nm_setting_bean_gen.go:361
@@ -3233,7 +3240,7 @@ msgstr "UDP Fragment-størrelse"
 #: ../../network/nm_setting_beans_gen.go:342
 #: ../../network/nm_setting_beans_gen.go:343
 msgid "Restrict Tunnel TCP MSS"
-msgstr "Begræns Tunnel TCP MSS"
+msgstr "Begræns tunnel TCP MSS"
 
 #: ../../network/nm_setting_bean_gen.go:361
 #: ../../network/nm_setting_bean_gen.go:362
@@ -3243,7 +3250,7 @@ msgstr "Begræns Tunnel TCP MSS"
 #: ../../network/nm_setting_beans_gen.go:343
 #: ../../network/nm_setting_beans_gen.go:344
 msgid "Randomize Remote Hosts"
-msgstr "Tilfældige fjernværter"
+msgstr "Tilfældiggør fjern-værter"
 
 #: ../../network/nm_setting_bean_gen.go:416
 #: ../../network/nm_setting_bean_gen.go:417
@@ -3333,7 +3340,7 @@ msgstr "Lokal port"
 #: ../../network/nm_setting_beans_gen.go:423
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Disable Dead Peer Detection"
-msgstr "Deaktiver Dead Peer Detection"
+msgstr "Deaktivér registrering af død peer"
 
 #: ../../network/nm_setting_bean_gen.go:430
 #: ../../network/nm_setting_bean_gen.go:431
@@ -3484,7 +3491,7 @@ msgstr "Standard"
 
 #: ../../network/nm_setting_gsm.go:182
 msgid "Any"
-msgstr "Hvilken som helst"
+msgstr "Enhver"
 
 #: ../../network/nm_setting_gsm.go:183
 msgid "3G (UMTS/HSPA)"
@@ -3607,7 +3614,7 @@ msgstr "VPNC"
 #: ../../network/nm_setting_virtual_key.go:182
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
-msgstr "WPA/WPA2 Enterprise"
+msgstr "WPA/WPA2 enterprise"
 
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:196
@@ -3916,7 +3923,7 @@ msgstr "NAT-T når tilgængelig (standard)"
 #: ../../network/nm_setting_vpn_vpnc.go:244
 #: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
-msgstr "NAT-T Altid"
+msgstr "NAT-T altid"
 
 #: ../../network/nm_setting_vpn_vpnc.go:139
 #: ../../network/nm_setting_vpn_vpnc.go:245
@@ -3931,13 +3938,13 @@ msgstr "Cisco UDP"
 #: ../../network/nm_setting_vpn_vpnc.go:262
 #: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
-msgstr "DH Gruppe 1"
+msgstr "DH gruppe 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:145
 #: ../../network/nm_setting_vpn_vpnc.go:251
 #: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
-msgstr "DH Gruppe 2 (standard)"
+msgstr "DH gruppe 2 (standard)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:146
 #: ../../network/nm_setting_vpn_vpnc.go:154
@@ -3946,7 +3953,7 @@ msgstr "DH Gruppe 2 (standard)"
 #: ../../network/nm_setting_vpn_vpnc.go:264
 #: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
-msgstr "DH Gruppe 5"
+msgstr "DH gruppe 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:150
 #: ../../network/nm_setting_vpn_vpnc.go:256
@@ -3958,7 +3965,7 @@ msgstr "Server (standard)"
 #: ../../network/nm_setting_vpn_vpnc.go:259
 #: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
-msgstr "DH Gruppe 2"
+msgstr "DH gruppe 2"
 
 #: ../../network/nm_setting_wireless.go:174
 #: ../../network/nm_setting_wireless.go:175
@@ -4026,14 +4033,14 @@ msgstr "Ad-Hoc WPA-PSK"
 #: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
-msgstr "WPA-PSK Infrastruktur"
+msgstr "WPA-PSK-infrastruktur"
 
 #: ../../network/nm_setting_wireless_security.go:58
 #: ../../network/nm_setting_wireless_security.go:59
 #: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
-msgstr "WPA Enterprise"
+msgstr "WPA-enterprise"
 
 #: ../../network/nm_setting_wireless_security.go:62
 #: ../../network/nm_setting_wireless_security.go:63
@@ -4083,12 +4090,12 @@ msgstr "Enhedens tilstand ændret, ukendt årsag."
 #: ../../network/state_handler.go:24 ../../network/state_handler.go:25
 #: ../../network/state_handler.go:36
 msgid "The device is now managed."
-msgstr "Enheden fungerer nu."
+msgstr "Enheden håndteres nu."
 
 #: ../../network/state_handler.go:25 ../../network/state_handler.go:26
 #: ../../network/state_handler.go:37
 msgid "The device is no longer managed."
-msgstr "Enheden kan ikke styres længere"
+msgstr "Enheden kan ikke længere håndteres."
 
 #: ../../network/state_handler.go:26 ../../network/state_handler.go:27
 #: ../../network/state_handler.go:38
@@ -4099,7 +4106,7 @@ msgstr "Enheden har ikke været klar til konfiguration."
 #: ../../network/state_handler.go:39
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "IP-konfiguration ikke kunne reserveres (ingen tilgængelig adresse, timeout, osv)."
+msgstr "IP-konfiguration ikke kunne gøres om (ingen tilgængelig adresse, timeout, osv.)."
 
 #: ../../network/state_handler.go:28 ../../network/state_handler.go:29
 #: ../../network/state_handler.go:40
@@ -4116,27 +4123,27 @@ msgstr "Adgangskoder er påkrævet, men ikke givet."
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server."
-msgstr "802.1X har supplicant afbrudt forbindelse fra access point eller godkendelsesserveren."
+msgstr "802.1X-supplicanten afbrød forbindelsen fra adgangspunktet eller autentifikationsserveren."
 
 #: ../../network/state_handler.go:31 ../../network/state_handler.go:32
 #: ../../network/state_handler.go:43
 msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Konfiguration af 802.1X-supplicant mislykkedes."
+msgstr "Konfiguration af 802.1X-supplicant fejlede."
 
 #: ../../network/state_handler.go:32 ../../network/state_handler.go:33
 #: ../../network/state_handler.go:44
 msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "802.1X-supplicant lukkede eller mislykkedes uventet."
+msgstr "802.1X-supplicant lukkede eller fejlede uventet."
 
 #: ../../network/state_handler.go:33 ../../network/state_handler.go:34
 #: ../../network/state_handler.go:45
 msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "802.1X-supplicant tog for lang tid at godkende."
+msgstr "802.1X-supplicant tog for lang tid at autentificere."
 
 #: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 #: ../../network/state_handler.go:46
 msgid "The PPP service failed to start within the allowed time."
-msgstr "PPP-tjeneste kunne ikke starte inden for den tilladte tid."
+msgstr "PPP-tjenesten kunne ikke starte inden for den tilladte tid."
 
 #: ../../network/state_handler.go:35 ../../network/state_handler.go:36
 #: ../../network/state_handler.go:47
@@ -4146,7 +4153,7 @@ msgstr "PPP-tjenesten afbrød forbindelsen uventet."
 #: ../../network/state_handler.go:36 ../../network/state_handler.go:37
 #: ../../network/state_handler.go:48
 msgid "The PPP service quitted or failed unexpectedly."
-msgstr "PPP-tjeneste blev afbrudt eller mislykkedes uventet."
+msgstr "PPP-tjenesten blev lukkede eller fejlede uventet."
 
 #: ../../network/state_handler.go:37 ../../network/state_handler.go:38
 #: ../../network/state_handler.go:49
@@ -4161,7 +4168,7 @@ msgstr "DHCP-tjenesten rapporterede en uventet fejl."
 #: ../../network/state_handler.go:39 ../../network/state_handler.go:40
 #: ../../network/state_handler.go:51
 msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "DHCP-tjenesten blev afbrudt eller mislykkedes uventet."
+msgstr "DHCP-tjenesten blev lukket eller fejlede uventet."
 
 #: ../../network/state_handler.go:40 ../../network/state_handler.go:41
 #: ../../network/state_handler.go:52
@@ -4171,7 +4178,7 @@ msgstr "Den delte forbindelse kunne ikke starte."
 #: ../../network/state_handler.go:41 ../../network/state_handler.go:42
 #: ../../network/state_handler.go:53
 msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "Den delte forbindelse blev afbrudt eller mislykkedes uventet."
+msgstr "Den delte forbindelse blev lukket eller fejlede uventet."
 
 #: ../../network/state_handler.go:42 ../../network/state_handler.go:43
 #: ../../network/state_handler.go:54
@@ -4186,22 +4193,22 @@ msgstr "AutoIP-tjenesten rapporterede en uventet fejl."
 #: ../../network/state_handler.go:44 ../../network/state_handler.go:45
 #: ../../network/state_handler.go:56
 msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "AutoIP-tjenesten blev afbrudt eller mislykkedes uventet."
+msgstr "AutoIP-tjenesten blev lukket eller mislykkedes uventet."
 
 #: ../../network/state_handler.go:45 ../../network/state_handler.go:46
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Opkald mislykkedes på grund af optaget linje."
+msgstr "Opkald fejlede på grund af optagede linjer."
 
 #: ../../network/state_handler.go:46 ../../network/state_handler.go:47
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Opkald mislykkedes på grund af ingen klartone."
+msgstr "Opkald fejlede på grund af manglende klartone."
 
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:48
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Opkald mislykkedes på grund af udbyder."
+msgstr "Opkald fejlede på grund af udbyderen."
 
 #: ../../network/state_handler.go:48 ../../network/state_handler.go:49
 #: ../../network/state_handler.go:60
@@ -4211,12 +4218,12 @@ msgstr "Opkald fik timeout."
 #: ../../network/state_handler.go:49 ../../network/state_handler.go:50
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Opkald mislykkedes."
+msgstr "Opkald fejlede."
 
 #: ../../network/state_handler.go:50 ../../network/state_handler.go:51
 #: ../../network/state_handler.go:62
 msgid "Modem initialization failed."
-msgstr "Modeminitialisering mislykkedes."
+msgstr "Modeminitialisering fejlede."
 
 #: ../../network/state_handler.go:51 ../../network/state_handler.go:52
 #: ../../network/state_handler.go:63
@@ -4241,12 +4248,12 @@ msgstr "Netværkregistrering fik timeout."
 #: ../../network/state_handler.go:55 ../../network/state_handler.go:56
 #: ../../network/state_handler.go:67
 msgid "Register to the requested GSM network failed."
-msgstr "Registrering til det ønskede GSM-netværk mislykkedes."
+msgstr "Registrering til det ønskede GSM-netværk fejlede."
 
 #: ../../network/state_handler.go:56 ../../network/state_handler.go:57
 #: ../../network/state_handler.go:68
 msgid "PIN check failed."
-msgstr "PIN-kontrol mislykkedes."
+msgstr "PIN-kontrol fejlede."
 
 #: ../../network/state_handler.go:57 ../../network/state_handler.go:58
 #: ../../network/state_handler.go:69
@@ -4266,12 +4273,12 @@ msgstr "NetworkManager gik i dvale."
 #: ../../network/state_handler.go:60 ../../network/state_handler.go:61
 #: ../../network/state_handler.go:72
 msgid "The device's active connection was removed or disappeared."
-msgstr "Enhedens aktive forbindelse er blevet fjernet eller forsvundet."
+msgstr "Enhedens aktive forbindelse er blevet fjernet eller forsvandt."
 
 #: ../../network/state_handler.go:61 ../../network/state_handler.go:62
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "En bruger eller klient anmoder om at afbryde."
+msgstr "En bruger eller klient anmoder om at afbryde forbindelsen."
 
 #: ../../network/state_handler.go:62 ../../network/state_handler.go:63
 #: ../../network/state_handler.go:74
@@ -4296,32 +4303,32 @@ msgstr "Modemet kunne ikke findes."
 #: ../../network/state_handler.go:66 ../../network/state_handler.go:67
 #: ../../network/state_handler.go:78
 msgid "The Bluetooth connection timed out or failed."
-msgstr "Bluetooth-forbindelsen timede ud eller mislykkedes."
+msgstr "Bluetooth-forbindelsen fik timeout eller fejlede."
 
 #: ../../network/state_handler.go:67 ../../network/state_handler.go:68
 #: ../../network/state_handler.go:79
 msgid "GSM Modem's SIM Card was not inserted."
-msgstr "GSM-modems SIM-kort blev ikke indsat."
+msgstr "GSM-modemets SIM-kort var ikke sat i."
 
 #: ../../network/state_handler.go:68 ../../network/state_handler.go:69
 #: ../../network/state_handler.go:80
 msgid "GSM Modem's SIM PIN required."
-msgstr "GSM-modems SIM PIN er påkrævet."
+msgstr "GSM-modemets SIM PIN er påkrævet."
 
 #: ../../network/state_handler.go:69 ../../network/state_handler.go:70
 #: ../../network/state_handler.go:81
 msgid "GSM Modem's SIM PUK required."
-msgstr "GSM-modems SIM PUK er påkrævet."
+msgstr "GSM-modemets SIM PUK er påkrævet."
 
 #: ../../network/state_handler.go:70 ../../network/state_handler.go:71
 #: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
-msgstr "Forkert GSM-modems SIM"
+msgstr "Forkert SIM til GSM-modem"
 
 #: ../../network/state_handler.go:71 ../../network/state_handler.go:72
 #: ../../network/state_handler.go:83
 msgid "InfiniBand device does not support connected mode."
-msgstr "InfiniBand-enhed understøtter ikke tilsluttet tilstand."
+msgstr "InfiniBand-enhed understøtter ikke tilsluttettilstand."
 
 #: ../../network/state_handler.go:72 ../../network/state_handler.go:73
 #: ../../network/state_handler.go:84
@@ -4331,42 +4338,42 @@ msgstr "En forbindelsesafhængighed fejlede."
 #: ../../network/state_handler.go:73 ../../network/state_handler.go:74
 #: ../../network/state_handler.go:85
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problem med RFC 2684 Ethernet over ADSL-bro."
+msgstr "Problem med RFC 2684-ethernet over ADSL-bro."
 
 #: ../../network/state_handler.go:74 ../../network/state_handler.go:75
 #: ../../network/state_handler.go:86
 msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager kører ikke eller blev afbrudt uventet."
+msgstr "ModemManager kørte ikke eller lukkede uventet."
 
 #: ../../network/state_handler.go:75 ../../network/state_handler.go:76
 #: ../../network/state_handler.go:87
 msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "802.11 Wi-Fi-netværket kunne ikke findes."
+msgstr "802.11 Wi-Fi-netværket blev ikke fundet."
 
 #: ../../network/state_handler.go:76 ../../network/state_handler.go:77
 #: ../../network/state_handler.go:88
 msgid "A secondary connection of the base connection failed."
-msgstr "En sekundær tilslutning af baseforbindelsen mislykkedes."
+msgstr "En sekundær tilslutning af grundforbindelsen fejlede."
 
 #: ../../network/state_handler.go:79 ../../network/state_handler.go:80
 #: ../../network/state_handler.go:91
 msgid "DCB or FCoE setup failed."
-msgstr "DCB eller FCoE opsætning mislykkedes."
+msgstr "DCB- eller FCoE-opsætning fejlede."
 
 #: ../../network/state_handler.go:80 ../../network/state_handler.go:81
 #: ../../network/state_handler.go:92
 msgid "Network teaming control failed."
-msgstr "Netværk teaming kontrol mislykkedes."
+msgstr "Kontrol af netværksteaming fejlede."
 
 #: ../../network/state_handler.go:81 ../../network/state_handler.go:82
 #: ../../network/state_handler.go:93
 msgid "Modem failed to run or not available."
-msgstr "Modem ville ikke stasrte,  eller er ikke tilgængelig."
+msgstr "Modem kunne ikke køre, eller er utilgængelig."
 
 #: ../../network/state_handler.go:82 ../../network/state_handler.go:83
 #: ../../network/state_handler.go:94
 msgid "Modem now ready and available."
-msgstr "Modem nu klar og tilgængelig."
+msgstr "Modem er nu klar og tilgængelig."
 
 #: ../../network/state_handler.go:83 ../../network/state_handler.go:84
 #: ../../network/state_handler.go:95
@@ -4376,54 +4383,54 @@ msgstr "SIM PIN er forkert."
 #: ../../network/state_handler.go:84 ../../network/state_handler.go:85
 #: ../../network/state_handler.go:96
 msgid "New connection activation is enqueuing."
-msgstr "Ny forbindelse aktivering er enqueuing."
+msgstr "Ny forbindelsesaktivering er sat i kø."
 
 #: ../../network/state_handler.go:85 ../../network/state_handler.go:86
 #: ../../network/state_handler.go:97
 msgid "Parent device changed."
-msgstr "Overordnede enhed ændret."
+msgstr "Forælderenhed ændret."
 
 #: ../../network/state_handler.go:86 ../../network/state_handler.go:87
 #: ../../network/state_handler.go:98
 msgid "Management status of parent device changed."
-msgstr "Overordnet status enhed ændret."
+msgstr "Håndteringsstatus for forælderenhed ændret."
 
 #: ../../network/state_handler.go:89 ../../network/state_handler.go:90
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:101
 msgid "Network cable is unplugged."
-msgstr "Netværkskabel er ikke tilsluttet."
+msgstr "Netværkskabelet er taget ud."
 
 #: ../../network/state_handler.go:90 ../../network/state_handler.go:91
 #: ../../network/state_handler.go:92 ../../network/state_handler.go:102
 msgid ""
 "Please make sure SIM card has been inserted with mobile network signal."
-msgstr "Sørg for at SIM-kort er sat til mobilt netværk signal."
+msgstr "Sørg venligst for at SIM-kort er sat til og der er mobilt netværkssignal."
 
 #: ../../network/state_handler.go:91 ../../network/state_handler.go:92
 #: ../../network/state_handler.go:93 ../../network/state_handler.go:103
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr "Sørgfor at korrekt plan blev valgt uden arrearage af SIM-kortet."
+msgstr "Sørg venligst for at en korrekt plan blev valgt uden gæld på SIM-kort."
 
 #: ../../network/state_handler.go:94 ../../network/state_handler.go:95
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:106
 msgid "Activate VPN connection failed, unknown reason."
-msgstr "Aktiver VPN-forbindelse mislykkedes, ukendt årsag."
+msgstr "Aktivér VPN-forbindelse fejlede, ukendt årsag."
 
 #: ../../network/state_handler.go:95 ../../network/state_handler.go:96
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
-msgstr "Aktiver VPN-forbindelse mislykkedes."
+msgstr "Aktivér VPN-forbindelse fejlede."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:97
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108
 msgid "The VPN connection changed state due to disconnection from users."
-msgstr "VPN-forbindelsen skiftede tilstand på grund af frakobling fra brugerne."
+msgstr "VPN-forbindelsen skiftede tilstand på grund af afbrydelse fra brugere."
 
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:98
 #: ../../network/state_handler.go:99 ../../network/state_handler.go:109
 msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "VPN-forbindelsen skiftede tilstand på grund af frakobling af enheder."
+msgstr "VPN-forbindelsen skiftede tilstand på grund af afbrydelse fra enheder."
 
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:99
 #: ../../network/state_handler.go:100 ../../network/state_handler.go:110
@@ -4433,17 +4440,17 @@ msgstr "VPN-tjeneste stoppet."
 #: ../../network/state_handler.go:99 ../../network/state_handler.go:100
 #: ../../network/state_handler.go:101 ../../network/state_handler.go:111
 msgid "The IP config of VPN connection was invalid."
-msgstr "IP-opsætning af VPN-forbindelse var ugyldig."
+msgstr "IP-konfigurationen af VPN-forbindelse var ugyldig."
 
 #: ../../network/state_handler.go:100 ../../network/state_handler.go:101
 #: ../../network/state_handler.go:102 ../../network/state_handler.go:112
 msgid "The connection attempt to VPN service timed out."
-msgstr "Forsøg på forbindelse til VPN-tjeneste fik timeout."
+msgstr "Forbindelsesforsøg til VPN-tjeneste fik timeout."
 
 #: ../../network/state_handler.go:101 ../../network/state_handler.go:102
 #: ../../network/state_handler.go:103 ../../network/state_handler.go:113
 msgid "The VPN service start timed out."
-msgstr "VPN-opstartstjenesten fik timeout."
+msgstr "Start af VPN-tjenesten fik timeout."
 
 #: ../../network/state_handler.go:102 ../../network/state_handler.go:103
 #: ../../network/state_handler.go:104 ../../network/state_handler.go:114
@@ -4453,12 +4460,12 @@ msgstr "VPN-tjenesten kunne ikke starte."
 #: ../../network/state_handler.go:103 ../../network/state_handler.go:104
 #: ../../network/state_handler.go:105 ../../network/state_handler.go:115
 msgid "Necessary password for the VPN connection was not provided."
-msgstr "Nødvendig adgangskode til VPN-forbindelsen blev ikke leveret."
+msgstr "Nødvendig adgangskode til VPN-forbindelsen blev ikke givet."
 
 #: ../../network/state_handler.go:104 ../../network/state_handler.go:105
 #: ../../network/state_handler.go:106 ../../network/state_handler.go:116
 msgid "Authentication to VPN server failed."
-msgstr "Godkendelse til VPN-server mislykkedes."
+msgstr "Autentifikation til VPN-server fejlede."
 
 #: ../../network/state_handler.go:105 ../../network/state_handler.go:106
 #: ../../network/state_handler.go:107 ../../network/state_handler.go:117
@@ -4479,11 +4486,11 @@ msgstr "Du er nu offline."
 
 #: ../../network/utils_notify.go:86 ../../network/utils_notify.go:98
 msgid "Airplane mode enabled."
-msgstr "Flytilstand er aktiveret."
+msgstr "Flytilstand aktiveret."
 
 #: ../../network/utils_notify.go:94 ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
-msgstr "Access Point-tilstand understøttes ikke af denne enhed."
+msgstr "Adgangspunkttilstand understøttes ikke af denne enhed."
 
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:110
@@ -4494,11 +4501,11 @@ msgstr "Netværk"
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:110
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
-msgstr "Hardwareswitch på WLAN-kortet er slukket, tænd hvis det er nødvendigt."
+msgstr "Hardwarekontakt på WLAN-kortet er slukket, slå venligst til når det er nødvendigt."
 
 #: ../../network/utils_notify.go:102 ../../network/utils_notify.go:114
 msgid "System proxy is set successfully."
-msgstr "Systemproxy indstillet korrekt."
+msgstr "Systemproxy er indstillet."
 
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:117
 msgid "System proxy has been cancelled."
@@ -4508,7 +4515,7 @@ msgstr "Systemproxy er annulleret."
 #: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
 #: ../../power/upower.go:99
 msgid "Abnormal battery power"
-msgstr "Unormalt batteriforbrug"
+msgstr "Unormal batteristrøm"
 
 #: ../../power/manager_events.go:128 ../../power/manager_events.go:129
 #: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
@@ -4516,14 +4523,16 @@ msgstr "Unormalt batteriforbrug"
 msgid ""
 "Battery power can not be predicted, please save important documents properly"
 " and  not do important operations."
-msgstr "Batteristrøm kan ikke forudsiges, gem vigtige dokumenter korrekt og foretag ikke vigtige operationer."
+msgstr "Batteristrøm kan ikke forudsiges, gem venligst vigtige dokumenter ordentligt og foretag ikke vigtige handlinger."
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4532,12 +4541,14 @@ msgstr "Batteristrøm kan ikke forudsiges, gem vigtige dokumenter korrekt og for
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
-msgstr "Batteri kritisk lavt"
+msgstr "Batteriet er kritisk lavt"
 
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4546,32 +4557,34 @@ msgstr "Batteri kritisk lavt"
 #: ../../session/power/manager_events.go:165
 #: ../../session/power/manager_events.go:167
 msgid "Computer has been in suspend mode, please plug in."
-msgstr "Computer har været dvalelstand, tilslut venligst stikket."
+msgstr "Computeren har været i hviletilstand, sæt venligst strømstikket i."
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Battery Low"
-msgstr "Lav batteritilstand"
+msgstr "Batteriet er lavt"
 
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
 #: ../../session/power/manager_events.go:173
 msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Computer vil gå i dvaletilstand, tilslut til strøm nu."
+msgstr "Computeren vil gå i hviletilstand, sæt venligst strømstikket i nu."
 
 #: ../../power/upower.go:101 ../../power/upower.go:113
 #: ../../power/upower.go:116 ../../power/upower.go:125
 msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Medmindre der sættes strøm til, vil computeren gå i dvale."
+msgstr "Sæt venligst strømstikket i, ellers vil computeren gå i hviletilstand."
 
 #: ../../timedate/deepin_list.go:349
 msgid "Kolkata"

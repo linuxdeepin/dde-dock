@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-23 16:12+0800\n"
-"PO-Revision-Date: 2017-02-24 03:14+0000\n"
+"POT-Creation-Date: 2017-04-10 14:54+0800\n"
+"PO-Revision-Date: 2017-04-11 03:01+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -645,6 +645,10 @@ msgstr "_Alle vensters"
 msgid "Auto"
 msgstr "Automatisch"
 
+#: ../../housekeeping/init.go:53
+msgid "Insufficient disk space, please clean up in time!"
+msgstr ""
+
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
@@ -964,7 +968,7 @@ msgstr "Verplaats naar onderste werkruimte"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin Schermopname"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 #: ../../keybinding/shortcuts/system.go:70
@@ -1044,11 +1048,13 @@ msgstr "Systeemtaal wordt gewijzigd, maar er ontbreken taalpakketten. Gelieve te
 #: ../../launcher/item/chrome_shortcuts.go:35
 #: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:34
 #: ../../launcher2/manager_uninstall.go:33
 msgid "%q removed successfully."
 msgstr "%q is succesvol verwijderd."
 
 #: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:36
 msgid "Failed to uninstall %q."
 msgstr "Het deïnstalleren van %q is mislukt"
 
@@ -3853,7 +3859,7 @@ msgstr "RIPEMD-160"
 #: ../../network/nm_setting_vpn_openvpn.go:422
 #: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
-msgstr "Klant"
+msgstr "Client"
 
 #: ../../network/nm_setting_vpn_openvpn.go:272
 #: ../../network/nm_setting_vpn_openvpn.go:409
@@ -4191,27 +4197,27 @@ msgstr "De AutoIP-service is onverwacht gestopt of mislukt."
 #: ../../network/state_handler.go:45 ../../network/state_handler.go:46
 #: ../../network/state_handler.go:57
 msgid "Dialing failed due to busy lines."
-msgstr "Bellen faalde wegens bezette lijnen."
+msgstr "Verbinding faalde wegens bezette lijnen."
 
 #: ../../network/state_handler.go:46 ../../network/state_handler.go:47
 #: ../../network/state_handler.go:58
 msgid "Dialing failed due to no dial tone."
-msgstr "Bellen faalde wegens geen verbindingstoon."
+msgstr "Verbinding faalde wegens geen verbindingstoon."
 
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:48
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr "Bellen faalde ten gevolge van de drager."
+msgstr "Verbinding faalde ten gevolge van de drager."
 
 #: ../../network/state_handler.go:48 ../../network/state_handler.go:49
 #: ../../network/state_handler.go:60
 msgid "Dialing timed out."
-msgstr "Bellen timed out."
+msgstr "Verbinding timed out."
 
 #: ../../network/state_handler.go:49 ../../network/state_handler.go:50
 #: ../../network/state_handler.go:61
 msgid "Dialing failed."
-msgstr "Bellen faalde."
+msgstr "Verbinding faalde."
 
 #: ../../network/state_handler.go:50 ../../network/state_handler.go:51
 #: ../../network/state_handler.go:62
@@ -4271,7 +4277,7 @@ msgstr "De actieve verbinding van het toestel werd verwijderd of is verdwenen."
 #: ../../network/state_handler.go:61 ../../network/state_handler.go:62
 #: ../../network/state_handler.go:73
 msgid "A user or client requested to disconnect."
-msgstr "Een gebruiker of klant vraagt ontkoppeld te worden."
+msgstr "Een gebruiker of client vraagt ontkoppeld te worden."
 
 #: ../../network/state_handler.go:62 ../../network/state_handler.go:63
 #: ../../network/state_handler.go:74
@@ -4483,7 +4489,7 @@ msgstr "Vliegtuigstand ingeschakeld."
 
 #: ../../network/utils_notify.go:94 ../../network/utils_notify.go:106
 msgid "Access Point mode is not supported by this device."
-msgstr "Access Point mode wordt niet ondersteund door dit apparaat."
+msgstr "Access Point modus wordt niet ondersteund door dit apparaat."
 
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
 #: ../../network/utils_notify.go:105 ../../network/utils_notify.go:110
@@ -4523,7 +4529,9 @@ msgstr "Batterijvermogen kan niet worden voorspeld, gelieve belangrijke document
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
 #: ../../power/upower.go:101 ../../power/upower.go:105
 #: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4537,7 +4545,9 @@ msgstr "Batterij is kritiek laag"
 #: ../../power/manager_events.go:132 ../../power/manager_events.go:133
 #: ../../power/manager_events.go:154 ../../power/manager_events.go:155
 #: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:124
+#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
+#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:127
 #: ../../session/power/manager_events.go:142
 #: ../../session/power/manager_events.go:143
 #: ../../session/power/manager_events.go:145
@@ -4551,6 +4561,7 @@ msgstr "Computer was in slaapstand, gelieve netstroom te voorzien."
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
@@ -4561,6 +4572,7 @@ msgstr "Batterij is laag"
 #: ../../power/manager_events.go:160 ../../power/manager_events.go:161
 #: ../../power/upower.go:114 ../../power/upower.go:126
 #: ../../power/upower.go:130 ../../power/upower.go:139
+#: ../../session/power/manager_events.go:133
 #: ../../session/power/manager_events.go:152
 #: ../../session/power/manager_events.go:170
 #: ../../session/power/manager_events.go:171
