@@ -644,10 +644,6 @@ msgid "Auto"
 msgstr ""
 
 #: ../../housekeeping/init.go:53
-msgid "Insufficient disk space of the system, please clean up in time!"
-msgstr ""
-
-#: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
 
