@@ -21,7 +21,7 @@ import (
 	_ "pkg.deepin.io/dde/daemon/audio"
 	_ "pkg.deepin.io/dde/daemon/inputdevices"
 
-	// depends: audio, inputdevices
+	// depends: audio, inputdevices, network
 	_ "pkg.deepin.io/dde/daemon/keybinding"
 
 	_ "pkg.deepin.io/dde/daemon/screensaver"

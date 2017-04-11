@@ -81,8 +81,9 @@ var mediaIdActionMap = map[string]*Action{
 	"suspend":    &Action{Type: ActionTypeSystemSuspend},
 	"sleep":      &Action{Type: ActionTypeSystemSuspend},
 
-	// We do not need to deal with XF86Wlan key
-	//"wlan": nil,
+	// We do not need to deal with XF86Wlan key default,
+	// but can be specially by 'EnableNetworkController'
+	"wlan": &Action{Type: ActionTypeToggleWireless},
 }
 
 func (ms *MediaShortcut) GetAction() *Action {

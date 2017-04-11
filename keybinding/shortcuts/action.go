@@ -31,6 +31,8 @@ const (
 
 	ActionTypeSwitchKbdLayout
 
+	ActionTypeToggleWireless
+
 	// end
 	actionTypeMax
 )

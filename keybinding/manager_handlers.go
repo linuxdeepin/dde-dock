@@ -90,6 +90,15 @@ func (m *Manager) initHandlers() {
 	m.handlers[ActionTypeDisplayCtrl] = buildHandlerFromController(m.displayController)
 	m.handlers[ActionTypeKbdLightCtrl] = buildHandlerFromController(m.kbdLightController)
 	m.handlers[ActionTypeTouchpadCtrl] = buildHandlerFromController(m.touchpadController)
+	logger.Debug("-----------ManageWireless:", ManageWireless)
+	if ManageWireless == "enabled" {
+		m.handlers[ActionTypeToggleWireless] = func(ev *KeyEvent) {
+			err := toggleWireless()
+			if err != nil {
+				logger.Warning("Failed to toggle wireless:", err)
+			}
+		}
+	}
 
 	m.handlers[ActionTypeSystemShutdown] = func(ev *KeyEvent) {
 		cmd := getPowerButtonPressedExec()
