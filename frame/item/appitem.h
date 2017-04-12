@@ -12,6 +12,7 @@ class AppItem : public DockItem
 
 public:
     explicit AppItem(const QDBusObjectPath &entry, QWidget *parent = nullptr);
+    ~AppItem();
 
     const QString appId() const;
     void updateWindowIconGeometries();

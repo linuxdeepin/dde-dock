@@ -58,6 +58,12 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     refershIcon();
 }
 
+AppItem::~AppItem()
+{
+    m_appNameTips->deleteLater();
+    m_appPreviewTips->deleteLater();
+}
+
 const QString AppItem::appId() const
 {
     return m_id;
