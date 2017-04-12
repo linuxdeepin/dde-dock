@@ -4,7 +4,7 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
         <source>Time Settings</source>
-        <translation>Impostazioni Orario</translation>
+        <translation>Impostazioni orarie</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
@@ -74,17 +74,17 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="20"/>
         <source>Fashion Mode</source>
-        <translation>Fashion mode</translation>
+        <translation>Fashion</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="21"/>
         <source>Efficient Mode</source>
-        <translation>Efficient mode</translation>
+        <translation>Efficient</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="22"/>
         <source>Top</source>
-        <translation>Top</translation>
+        <translation>Sopra</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="23"/>
@@ -124,12 +124,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Keep Hidden</source>
-        <translation>Nascondi sempre</translation>
+        <translation>Lascia nascosta</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Smart Hide</source>
-        <translation>Smart hide</translation>
+        <translation>Nascondi automaticamente</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="65"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="87"/>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation>Comportamento</translation>
     </message>
 </context>
 <context>
