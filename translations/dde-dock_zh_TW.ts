@@ -286,12 +286,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation>回收桶—%1 個檔案</translation>
+        <translation>回收桶－%1 個檔案</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>回收桶—%1 個檔案</translation>
+        <translation>回收桶－%1 個檔案</translation>
     </message>
 </context>
 <context>
