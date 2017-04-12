@@ -92,8 +92,7 @@ SoundApplet::SoundApplet(QWidget *parent)
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
 
-    QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
-    QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
+    QTimer::singleShot(1, this, &SoundApplet::delayLoad);
 }
 
 int SoundApplet::volumeValue() const
@@ -173,4 +172,21 @@ void SoundApplet::sinkInputsChanged()
 void SoundApplet::toggleMute()
 {
     m_defSinkInter->SetMute(!m_defSinkInter->mute());
+}
+
+void SoundApplet::delayLoad()
+{
+    static int retry_times = 0;
+    ++retry_times;
+
+    const bool valid = m_audioInter->isValid();
+    qDebug() << "load sound dbus, valid = " << valid << ", retry = " << retry_times;
+
+    if (valid || retry_times > 10)
+    {
+        QMetaObject::invokeMethod(this, "defaultSinkChanged", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, "sinkInputsChanged", Qt::QueuedConnection);
+    } else {
+        QTimer::singleShot(1000, this, &SoundApplet::delayLoad);
+    }
 }

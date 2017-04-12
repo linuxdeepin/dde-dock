@@ -32,6 +32,7 @@ private slots:
     void volumeSliderValueChanged();
     void sinkInputsChanged();
     void toggleMute();
+    void delayLoad();
 
 private:
     QWidget *m_centralWidget;
