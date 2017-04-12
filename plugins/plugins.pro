@@ -5,5 +5,5 @@ SUBDIRS = \
         system-tray \
         #disk-mount \
         network \
-        trash \
+        #trash \
         sound
