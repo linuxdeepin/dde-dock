@@ -42,6 +42,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * iw (check if wireless device support hotspot mode)
 * mobile-broadband-provider-info
 * xserver-xorg-input-synaptics (provide mode features, such as disable touchpad when typing ...)
+* [miraclecast](https://github.com/derekdai/miraclecast) (provide WIFI Direct)
 
 ## Installation
 
