@@ -97,6 +97,7 @@ func newMiracast() (*Miracast, error) {
 func (m *Miracast) init() {
 	logger.Debug("Devices:", m.devices)
 	if len(m.devices) == 0 {
+		m.handleEvent()
 		return
 	}
 	objs, err := m.wifiObj.GetManagedObjects()
@@ -226,6 +227,7 @@ func (m *Miracast) handleEvent() {
 	m.network.ConnectDeviceAdded(func(dpath dbus.ObjectPath) {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
+		logger.Debug("[Device Added]:", dpath)
 		devices, err := ListWirelessInfo()
 		if err != nil {
 			logger.Warning("[DeviceAdded] Failed to list wireless devices:", err)
@@ -236,6 +238,7 @@ func (m *Miracast) handleEvent() {
 	m.network.ConnectDeviceRemoved(func(dpath dbus.ObjectPath) {
 		m.deviceLocker.Lock()
 		defer m.deviceLocker.Unlock()
+		logger.Debug("[Device Removed]:", dpath)
 		devices, err := ListWirelessInfo()
 		if err != nil {
 			logger.Warning("[DeviceRemoved] Failed to list wireless devices:", err)
@@ -245,6 +248,7 @@ func (m *Miracast) handleEvent() {
 	})
 
 	m.wifiObj.ConnectInterfacesAdded(func(dpath dbus.ObjectPath, detail map[string]map[string]dbus.Variant) {
+		logger.Debug("[WIFI Added]:", dpath)
 		v, err := m.addObject(dpath)
 		if err == nil {
 			dbus.Emit(m, "Added", dpath, toJSON(v))
@@ -252,12 +256,14 @@ func (m *Miracast) handleEvent() {
 	})
 
 	m.wifiObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
+		logger.Debug("[WIFI Removed]:", dpath)
 		if ok, detail := m.removeObject(dpath); ok {
 			dbus.Emit(m, "Removed", dpath, detail)
 		}
 	})
 
 	m.wfdObj.ConnectInterfacesAdded(func(dpath dbus.ObjectPath, detail map[string]map[string]dbus.Variant) {
+		logger.Debug("[WFD Added]:", dpath)
 		v, err := m.addObject(dpath)
 		if err == nil {
 			dbus.Emit(m, "Added", dpath, toJSON(v))
@@ -265,6 +271,7 @@ func (m *Miracast) handleEvent() {
 	})
 
 	m.wfdObj.ConnectInterfacesRemoved(func(dpath dbus.ObjectPath, details []string) {
+		logger.Debug("[WFD Added]:", dpath)
 		if ok, detail := m.removeObject(dpath); ok {
 			dbus.Emit(m, "Removed", dpath, detail)
 		}
@@ -346,7 +353,7 @@ func (m *Miracast) disconnectSink(dpath dbus.ObjectPath) error {
 func (m *Miracast) ensureMiracleActive() {
 	var failedCount = 0
 	for {
-		if failedCount > 5 {
+		if failedCount > 10 {
 			logger.Warning("Miracle failure too many, break")
 			break
 		}
