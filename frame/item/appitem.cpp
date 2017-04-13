@@ -35,6 +35,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_active = m_itemEntry->active();
 
     m_appNameTips->setObjectName(m_itemEntry->name());
+    m_appNameTips->setAccessibleName(m_itemEntry->name() + "-tips");
     m_appNameTips->setVisible(false);
     m_appNameTips->setStyleSheet("color:white;"
                                  "padding:0px 3px;");
