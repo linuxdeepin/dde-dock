@@ -15,6 +15,11 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"io/ioutil"
+	"os"
+	"path"
+	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"
 )
@@ -196,4 +201,42 @@ func doParseGfxmode(gfxmode string) (w, h uint16, err error) {
 	w = uint16(tmpw)
 	h = uint16(tmph)
 	return
+}
+
+// write file content to "/var/cache/deepin/grub2.json".
+func doWriteConfig(fileContent []byte) error {
+	// ensure parent directory exists
+	if !utils.IsFileExist(configFile) {
+		err := os.MkdirAll(path.Dir(configFile), 0755)
+		if err != nil {
+			return err
+		}
+	}
+	return ioutil.WriteFile(configFile, fileContent, 0644)
+}
+
+// write file content to "/etc/default/grub".
+func doWriteGrubSettings(fileContent string) error {
+	return ioutil.WriteFile(grubSettingFile, []byte(fileContent), 0664)
+}
+
+func doGenerateThemeBackground(screenWidth, screenHeight uint16) (err error) {
+	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
+	if err != nil {
+		return err
+	}
+	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
+	logger.Infof("background size %dx%d", screenWidth, screenHeight)
+	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
+	if err != nil {
+		return err
+	}
+
+	// generate background thumbnail
+	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

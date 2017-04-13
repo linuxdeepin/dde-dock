@@ -64,6 +64,7 @@ func grub2extDoSetThemeBackgroundSourceFile(imageFile string, screenWidth, scree
 }
 
 func grub2extDoWriteConfig(fileContent string) {
+	logger.Debug("grub2extDoWriteConfig")
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return
@@ -72,6 +73,7 @@ func grub2extDoWriteConfig(fileContent string) {
 }
 
 func grub2extDoWriteGrubSettings(fileContent string) {
+	logger.Debug("grub2extDoWriteGrubSettings")
 	grub2ext, err := newDbusGrub2Ext()
 	if err != nil {
 		return

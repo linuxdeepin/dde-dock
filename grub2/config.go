@@ -30,7 +30,7 @@ type config struct {
 
 func newConfig() (c *config) {
 	c = &config{}
-	c.NeedUpdate = true
+	c.NeedUpdate = false
 	c.FixSettingsAlways = true
 	c.EnableTheme = true
 	c.DefaultEntry = defaultGrubDefaultEntry
@@ -38,6 +38,22 @@ func newConfig() (c *config) {
 	c.Resolution = getDefaultGfxmode()
 	c.core.SetConfigFile(configFile)
 	return
+}
+
+func (c *config) reset() {
+	c.NeedUpdate = false
+	c.FixSettingsAlways = true
+	c.EnableTheme = true
+	c.DefaultEntry = defaultGrubDefaultEntry
+	c.Timeout = defaultGrubTimeout
+	c.Resolution = getDefaultGfxmode()
+	c.save()
+}
+
+func (c *config) Load() {
+	if c.core.IsConfigFileExists() {
+		c.load()
+	}
 }
 
 func (c *config) loadOrSaveConfig() {
@@ -56,6 +72,7 @@ func (c *config) load() {
 		logger.Error(err)
 	}
 }
+
 func (c *config) save() {
 	if runWithoutDbus {
 		c.doSaveWithoutDbus()
@@ -63,6 +80,7 @@ func (c *config) save() {
 		c.doSave()
 	}
 }
+
 func (c *config) doSave() {
 	fileContent, err := c.core.GetFileContentToSave(c)
 	if err != nil {
@@ -70,13 +88,16 @@ func (c *config) doSave() {
 	}
 	grub2extDoWriteConfig(string(fileContent))
 }
+
 func (c *config) doSaveWithoutDbus() {
 	fileContent, err := c.core.GetFileContentToSave(c)
 	if err != nil {
 		logger.Error(err)
 	}
-	ge := NewGrub2Ext()
-	ge.DoWriteConfig(string(fileContent))
+	err = doWriteConfig(fileContent)
+	if err != nil {
+		logger.Error(err)
+	}
 }
 
 func (c *config) setFixSettingsAlways(value bool) {

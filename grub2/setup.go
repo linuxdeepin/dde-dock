@@ -44,15 +44,8 @@ func (grub *Grub2) SetupTheme(gfxmode string) {
 		gfxmode = grub.config.Resolution
 	}
 	w, h := parseGfxmode(gfxmode)
-	doGenerateThemeBackground(w, h)
-}
-
-func doWriteGrubSettings(fileContent string) {
-	ge := NewGrub2Ext()
-	ge.DoWriteGrubSettings(fileContent)
-}
-
-func doGenerateThemeBackground(w, h uint16) {
-	ge := NewGrub2Ext()
-	ge.DoGenerateThemeBackground(w, h)
+	err := doGenerateThemeBackground(w, h)
+	if err != nil {
+		logger.Warning(err)
+	}
 }

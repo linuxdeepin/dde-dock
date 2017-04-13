@@ -15,12 +15,12 @@ package grub2
 
 import (
 	"bytes"
+	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path"
 	"pkg.deepin.io/lib/dbus"
-	graphic "pkg.deepin.io/lib/gdkpixbuf"
+	"pkg.deepin.io/lib/polkit"
 	"pkg.deepin.io/lib/utils"
 )
 
@@ -37,6 +37,7 @@ type Grub2Ext struct{}
 
 // NewGrub2Ext create a Grub2Ext object.
 func NewGrub2Ext() *Grub2Ext {
+	polkit.Init()
 	grub := &Grub2Ext{}
 	return grub
 }
@@ -50,13 +51,45 @@ func (ge *Grub2Ext) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
-// DoWriteConfig write file content to "/var/cache/deepin/grub2.json".
-func (ge *Grub2Ext) DoWriteConfig(fileContent string) (ok bool, err error) {
-	// ensure parent directory exists
-	if !utils.IsFileExist(configFile) {
-		os.MkdirAll(path.Dir(configFile), 0755)
+func checkAuthWithPid(pid uint32) (bool, error) {
+	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
+	subject.SetDetail("pid", pid)
+	subject.SetDetail("start-time", uint64(0))
+	const actionId = DbusGrub2ExtDest
+	details := make(map[string]string)
+	details[""] = ""
+	result, err := polkit.CheckAuthorization(subject, actionId, details,
+		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
+	if err != nil {
+		return false, err
 	}
-	err = ioutil.WriteFile(configFile, []byte(fileContent), 0644)
+
+	return result.IsAuthorized, nil
+}
+
+var errAuthFailed = errors.New("authentication failed")
+
+func checkAuth(dbusMsg dbus.DMessage) error {
+	pid := dbusMsg.GetSenderPID()
+	isAuthorized, err := checkAuthWithPid(pid)
+	if err != nil {
+		return err
+	}
+	if !isAuthorized {
+		return errAuthFailed
+	}
+	return nil
+}
+
+// DoWriteConfig write file content to "/var/cache/deepin/grub2.json".
+func (ge *Grub2Ext) DoWriteConfig(dbusMsg dbus.DMessage, fileContent string) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoWriteConfig")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	err = doWriteConfig([]byte(fileContent))
 	if err != nil {
 		logger.Error(err)
 		return false, err
@@ -65,8 +98,14 @@ func (ge *Grub2Ext) DoWriteConfig(fileContent string) (ok bool, err error) {
 }
 
 // DoWriteGrubSettings write file content to "/etc/default/grub".
-func (ge *Grub2Ext) DoWriteGrubSettings(fileContent string) (ok bool, err error) {
-	err = ioutil.WriteFile(grubSettingFile, []byte(fileContent), 0664)
+func (ge *Grub2Ext) DoWriteGrubSettings(dbusMsg dbus.DMessage, fileContent string) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoWriteGrubSettings")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	err = doWriteGrubSettings(fileContent)
 	if err != nil {
 		logger.Error(err)
 		return false, err
@@ -76,7 +115,12 @@ func (ge *Grub2Ext) DoWriteGrubSettings(fileContent string) (ok bool, err error)
 
 // DoGenerateGrubMenu execute command "/usr/sbin/update-grub" to
 // generate a new grub configuration.
-func (ge *Grub2Ext) DoGenerateGrubMenu() (ok bool, err error) {
+func (ge *Grub2Ext) DoGenerateGrubMenu(dbusMsg dbus.DMessage) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoGenerateGrubMenu")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
 	logger.Info("start to generate a new grub configuration file")
 	// force use LANG=en_US.UTF-8 to make lsb-release/os-probe support
 	// Unicode characters
@@ -98,7 +142,12 @@ func (ge *Grub2Ext) DoGenerateGrubMenu() (ok bool, err error) {
 // DoSetThemeBackgroundSourceFile setup a new background source file
 // for deepin grub2 theme, and then generate the background depends on
 // screen resolution.
-func (ge *Grub2Ext) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (ok bool, err error) {
+func (ge *Grub2Ext) DoSetThemeBackgroundSourceFile(dbusMsg dbus.DMessage, imageFile string, screenWidth, screenHeight uint16) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoSetThemeBackgroundSourceFile")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
 	// if background source file is a symlink, just delete it
 	if utils.IsSymlink(themeBgSrcFile) {
 		os.Remove(themeBgSrcFile)
@@ -111,37 +160,33 @@ func (ge *Grub2Ext) DoSetThemeBackgroundSourceFile(imageFile string, screenWidth
 	}
 
 	// generate a new background
-	return ge.DoGenerateThemeBackground(screenWidth, screenHeight)
+	return ge.DoGenerateThemeBackground(dbusMsg, screenWidth, screenHeight)
 }
 
 // DoGenerateThemeBackground generate the background for deepin grub2
 // theme depends on screen resolution.
-func (ge *Grub2Ext) DoGenerateThemeBackground(screenWidth, screenHeight uint16) (ok bool, err error) {
-	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
+func (ge *Grub2Ext) DoGenerateThemeBackground(dbusMsg dbus.DMessage, screenWidth, screenHeight uint16) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoGenerateThemeBackground")
+	err = checkAuth(dbusMsg)
 	if err != nil {
-		logger.Error(err)
-		return false, err
-	}
-	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
-	logger.Infof("background size %dx%d", screenWidth, screenHeight)
-	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
-	if err != nil {
-		logger.Error(err)
-		return false, err
+		return
 	}
 
-	// generate background thumbnail
-	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
+	err = doGenerateThemeBackground(screenWidth, screenHeight)
 	if err != nil {
 		logger.Error(err)
 		return false, err
 	}
-
 	return true, nil
 }
 
 // DoWriteThemeMainFile write file content to "/boot/grub/themes/deepin/theme.txt".
-func (ge *Grub2Ext) DoWriteThemeMainFile(fileContent string) (ok bool, err error) {
+func (ge *Grub2Ext) DoWriteThemeMainFile(dbusMsg dbus.DMessage, fileContent string) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoWriteThemeMainFile")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
 	err = ioutil.WriteFile(themeMainFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err)
@@ -151,7 +196,12 @@ func (ge *Grub2Ext) DoWriteThemeMainFile(fileContent string) (ok bool, err error
 }
 
 // DoWriteThemeTplFile write file content to "/boot/grub/themes/deepin/theme_tpl.json".
-func (ge *Grub2Ext) DoWriteThemeTplFile(fileContent string) (ok bool, err error) {
+func (ge *Grub2Ext) DoWriteThemeTplFile(dbusMsg dbus.DMessage, fileContent string) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoWriteThemeTplFile")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
 	err = ioutil.WriteFile(themeJSONFile, []byte(fileContent), 0664)
 	if err != nil {
 		logger.Error(err)
@@ -161,7 +211,13 @@ func (ge *Grub2Ext) DoWriteThemeTplFile(fileContent string) (ok bool, err error)
 }
 
 // DoResetThemeBackground link background_origin_source to background_source
-func (ge *Grub2Ext) DoResetThemeBackground() (ok bool, err error) {
+func (ge *Grub2Ext) DoResetThemeBackground(dbusMsg dbus.DMessage) (ok bool, err error) {
+	logger.Debug("Grub2Ext.DoResetThemeBackground")
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
 	os.Remove(themeBgSrcFile)
 	err = os.Symlink(themeBgOrigSrcFile, themeBgSrcFile)
 	if err != nil {

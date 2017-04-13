@@ -91,7 +91,7 @@ func DestroyGrub2(grub *Grub2) {
 }
 
 func (grub *Grub2) initGrub2() {
-	grub.config.loadOrSaveConfig()
+	grub.config.Load()
 	grub.doInitGrub2()
 	grub.theme.initTheme()
 	go grub.theme.regenerateBackgroundIfNeed()
@@ -118,7 +118,7 @@ func (grub *Grub2) doInitGrub2() {
 
 	grub.setPropFixSettingsAlways(grub.config.FixSettingsAlways)
 	grub.setPropEnableTheme(grub.config.EnableTheme)
-	grub.setPropDefaultEntry(grub.getSettingDefaultEntry())
+	grub.DefaultEntry = grub.getSettingDefaultEntry()
 	grub.setPropTimeout(grub.getSettingTimeout())
 	grub.setPropResolution(grub.getSettingGfxmode())
 }
@@ -538,6 +538,15 @@ func (grub *Grub2) doSetSettingGfxmode(value string) {
 func (grub *Grub2) getSettingTheme() string {
 	return grub.doGetSettingTheme()
 }
+
+func (grub *Grub2) setEnableTheme(enable bool) {
+	if enable {
+		grub.setSettingTheme(themeMainFile)
+	} else {
+		grub.setSettingTheme("")
+	}
+}
+
 func (grub *Grub2) setSettingTheme(themeFile string) {
 	grub.doSetSettingTheme(themeFile)
 	if themeFile == "" {

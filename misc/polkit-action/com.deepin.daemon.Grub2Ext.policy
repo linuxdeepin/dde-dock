@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+  <vendor>LinuxDeepin</vendor>
+  <vendor_url>https://www.deepin.com/</vendor_url>
+
+  <action id="com.deepin.daemon.Grub2Ext">
+    <message>Change the grub2 configuration</message>
+    <message xml:lang="zh_CN">修改 Grub2 的配置</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+</policyconfig>

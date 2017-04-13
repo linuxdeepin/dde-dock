@@ -77,12 +77,30 @@ func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
 
 // Reset reset all configuretion.
 func (grub *Grub2) Reset() {
-	defaultEntry := defaultGrubDefaultEntry
+	// reset and save config
+	grub.config.reset()
+
+	// Fix settings always
 	grub.setPropFixSettingsAlways(true)
+	//grub.config.setFixSettingsAlways(true)
+
+	// enable theme
 	grub.setPropEnableTheme(true)
-	grub.setPropResolution(getDefaultGfxmode())
-	grub.setPropDefaultEntry(defaultEntry)
+	grub.setEnableTheme(true)
+
+	// resolution
+	defaultGfxmode := getDefaultGfxmode()
+	grub.setPropResolution(defaultGfxmode)
+	grub.setSettingGfxmode(defaultGfxmode)
+
+	// timeout
 	grub.setPropTimeout(defaultGrubTimeoutInt)
+	grub.setSettingTimeout(defaultGrubTimeoutInt)
+
+	// grub default entry
+	grub.setPropDefaultEntry(defaultGrubDefaultEntry)
+	grub.setSettingDefaultEntry(defaultGrubDefaultEntry)
+
 	grub.theme.reset()
 	grub.notifyUpdate()
 }

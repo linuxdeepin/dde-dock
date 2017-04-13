@@ -24,16 +24,21 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 	switch name {
 	case "FixSettingsAlways":
 		oldvBool, _ := oldv.(bool)
-		if oldvBool == grub.FixSettingsAlways {
+		newv := grub.FixSettingsAlways
+		if oldvBool == newv {
 			return
 		}
-		grub.setPropFixSettingsAlways(grub.FixSettingsAlways)
+		grub.setPropFixSettingsAlways(newv)
+		grub.config.setFixSettingsAlways(newv)
 	case "EnableTheme":
 		oldvBool, _ := oldv.(bool)
-		if oldvBool == grub.EnableTheme {
+		newv := grub.EnableTheme
+		if oldvBool == newv {
 			return
 		}
-		grub.setPropEnableTheme(grub.EnableTheme)
+		grub.setPropEnableTheme(newv)
+		grub.config.setEnableTheme(newv)
+		grub.setEnableTheme(newv)
 		grub.notifyUpdate()
 	case "DefaultEntry":
 		oldvStr, _ := oldv.(string)
@@ -44,35 +49,32 @@ func (grub *Grub2) OnPropertiesChanged(name string, oldv interface{}) {
 		grub.notifyUpdate()
 	case "Timeout":
 		oldvInt, _ := oldv.(int32)
-		if oldvInt == grub.Timeout {
+		newv := grub.Timeout
+		if oldvInt == newv {
 			return
 		}
-		grub.setPropTimeout(grub.Timeout)
+		grub.setPropTimeout(newv)
+		grub.setSettingTimeout(newv)
 		grub.notifyUpdate()
 	case "Resolution":
 		oldvStr, _ := oldv.(string)
-		if oldvStr == grub.Resolution {
+		newv := grub.Resolution
+		if oldvStr == newv {
 			return
 		}
-		grub.setPropResolution(grub.Resolution)
+		grub.setPropResolution(newv)
+		grub.setSettingGfxmode(newv)
 		grub.notifyUpdate()
 	}
 }
 
 func (grub *Grub2) setPropFixSettingsAlways(value bool) {
 	grub.FixSettingsAlways = value
-	grub.config.setFixSettingsAlways(value)
 	dbus.NotifyChange(grub, "FixSettingsAlways")
 }
 
 func (grub *Grub2) setPropEnableTheme(value bool) {
 	grub.EnableTheme = value
-	grub.config.setEnableTheme(value)
-	if value {
-		grub.setSettingTheme(themeMainFile)
-	} else {
-		grub.setSettingTheme("")
-	}
 	dbus.NotifyChange(grub, "EnableTheme")
 }
 
@@ -84,13 +86,11 @@ func (grub *Grub2) setPropDefaultEntry(value string) {
 
 func (grub *Grub2) setPropTimeout(value int32) {
 	grub.Timeout = value
-	grub.setSettingTimeout(value)
 	dbus.NotifyChange(grub, "Timeout")
 }
 
 func (grub *Grub2) setPropResolution(value string) {
 	grub.Resolution = value
-	grub.setSettingGfxmode(value)
 	dbus.NotifyChange(grub, "Resolution")
 }
 
