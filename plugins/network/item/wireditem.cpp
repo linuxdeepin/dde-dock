@@ -16,7 +16,7 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
 //    QIcon::setThemeName("deepin");
 
     m_delayTimer->setSingleShot(true);
-    m_delayTimer->setInterval(200);
+    m_delayTimer->setInterval(20);
 
     m_itemTips->setObjectName("wired-" + deviceUuid.toString());
     m_itemTips->setVisible(false);
