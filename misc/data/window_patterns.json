@@ -1,165 +1,182 @@
 [
-   {
-      "rules" : [
-         [
-            "exec",
-            "=:java"
-         ],
-         [
-            "arg",
-            "c:jftp.jar"
-         ]
-      ],
-      "ret" : "id=jftp"
-   },
-   {
-      "ret" : "env",
-      "rules" : [
-         [
-            "wmi",
-            "=:dman"
-         ],
-         [
-            "wmc",
-            "=:DManual"
-         ]
-      ]
-   },
-   {
-      "rules" : [
-         [
-            "wmi",
-            "r:\\.exe$"
-         ],
-         [
-            "wmi",
-            "=!iesetup.exe"
-         ],
-         [
-            "wmc",
-            "=:Wine"
-         ]
-      ],
-      "ret" : "env"
-   },
-   {
-      "ret" : "id=netbeans",
-      "rules" : [
-         [
-            "wmc",
-            "c:netbeans"
-         ],
-         [
-            "exec",
-            "=:java"
-         ],
-         [
-            "arg",
-            "c:netbeans"
-         ]
-      ]
-   },
-   {
-      "rules" : [
-         [
-            "wmc",
-            "c:jabref"
-         ],
-         [
-            "exec",
-            "=:java"
-         ],
-         [
-            "arg",
-            "c:jabref"
-         ]
-      ],
-      "ret" : "id=jabref"
-   },
-   {
-      "rules" : [
-         [
-            "wmi",
-            "=:player"
-         ],
-         [
-            "wmc",
-            "c:genymotion"
-         ]
-      ],
-      "ret" : "env"
-   },
-   {
-      "ret" : "id=xdemineur",
-      "rules" : [
-         [
-            "wmi",
-            "c:xdemineur"
-         ],
-         [
-            "exec",
-            "=:xdemineur"
-         ]
-      ]
-   },
-   {
-      "ret" : "id=minecraft",
-      "rules" : [
-         [
-            "wmi",
-            "c:minecraft"
-         ],
-         [
-            "wmc",
-            "c:minecraft"
-         ]
-      ]
-   },
-   {
-      "rules" : [
-         [
-            "hasPid",
-            "=:f"
-         ],
-         [
-            "wmi",
-            "=:"
-         ],
-         [
-            "wmc",
-            "=:"
-         ],
-         [
-            "wmn",
-            "e:steam"
-         ]
-      ],
-      "ret" : "id=steam"
-   },
-   {
-      "ret" : "id=mintdrivers",
-      "rules" : [
-         [
-            "wmi",
-            "e:mintdrivers.py"
-         ],
-         [
-            "wmc",
-            "e:mintdrivers.py"
-         ]
-      ]
-   },
-   {
-      "rules" : [
-         [
-            "wmi",
-            "c:googleearth"
-         ],
-         [
-            "wmc",
-            "c:googleearth"
-         ]
-      ],
-      "ret" : "id=google-earth"
-   }
+    {
+        "ret": "id=jftp",
+        "rules": [
+            [
+                "exec",
+                "=:java"
+            ],
+            [
+                "arg",
+                "c:jftp.jar"
+            ]
+        ]
+    },
+    {
+        "ret": "env",
+        "rules": [
+            [
+                "wmi",
+                "=:dman"
+            ],
+            [
+                "wmc",
+                "=:DManual"
+            ]
+        ]
+    },
+    {
+        "ret": "env",
+        "rules": [
+            [
+                "wmi",
+                "r:\\.exe$"
+            ],
+            [
+                "wmi",
+                "=!iesetup.exe"
+            ],
+            [
+                "wmc",
+                "=:Wine"
+            ]
+        ]
+    },
+    {
+        "ret": "id=netbeans",
+        "rules": [
+            [
+                "wmc",
+                "c:netbeans"
+            ],
+            [
+                "exec",
+                "=:java"
+            ],
+            [
+                "arg",
+                "c:netbeans"
+            ]
+        ]
+    },
+    {
+        "ret": "id=jabref",
+        "rules": [
+            [
+                "wmc",
+                "c:jabref"
+            ],
+            [
+                "exec",
+                "=:java"
+            ],
+            [
+                "arg",
+                "c:jabref"
+            ]
+        ]
+    },
+    {
+        "ret": "env",
+        "rules": [
+            [
+                "wmi",
+                "=:player"
+            ],
+            [
+                "wmc",
+                "c:genymotion"
+            ]
+        ]
+    },
+    {
+        "ret": "id=xdemineur",
+        "rules": [
+            [
+                "wmi",
+                "c:xdemineur"
+            ],
+            [
+                "exec",
+                "=:xdemineur"
+            ]
+        ]
+    },
+    {
+        "ret": "id=minecraft",
+        "rules": [
+            [
+                "wmi",
+                "c:minecraft"
+            ],
+            [
+                "wmc",
+                "c:minecraft"
+            ]
+        ]
+    },
+    {
+        "ret": "id=steam",
+        "rules": [
+            [
+                "hasPid",
+                "=:f"
+            ],
+            [
+                "wmi",
+                "=:"
+            ],
+            [
+                "wmc",
+                "=:"
+            ],
+            [
+                "wmn",
+                "e:steam"
+            ]
+        ]
+    },
+    {
+        "ret": "id=mintdrivers",
+        "rules": [
+            [
+                "wmi",
+                "e:mintdrivers.py"
+            ],
+            [
+                "wmc",
+                "e:mintdrivers.py"
+            ]
+        ]
+    },
+    {
+        "ret": "id=google-earth",
+        "rules": [
+            [
+                "wmi",
+                "c:googleearth"
+            ],
+            [
+                "wmc",
+                "c:googleearth"
+            ]
+        ]
+    },
+    {
+        "ret": "id=the-powder-toy",
+        "rules": [
+            [
+                "wmi",
+                "e:powder"
+            ],
+            [
+                "wmc",
+                "e:powder"
+            ],
+            [
+                "hasPid",
+                "=:t"
+            ]
+        ]
+    }
 ]

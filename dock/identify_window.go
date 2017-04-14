@@ -155,6 +155,8 @@ func identifyWindowByRule(m *DockManager, winInfo *WindowInfo) (string, *AppInfo
 				appInfo = NewAppInfoFromFile(launchedDesktopFile)
 			}
 		}
+	} else {
+		logger.Warningf("bad ret: %q", ret)
 	}
 
 	if appInfo != nil {
