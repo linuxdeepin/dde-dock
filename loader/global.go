@@ -21,7 +21,7 @@ var getLoader = func() func() *Loader {
 	return func() *Loader {
 		loaderInitializer.Do(func() {
 			loader = &Loader{
-				modules: map[string]Module{},
+				modules: Modules{},
 				log:     log.NewLogger("daemon/loader"),
 			}
 		})

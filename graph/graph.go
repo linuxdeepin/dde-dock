@@ -63,6 +63,7 @@ type Node struct {
 	// WeightFrom maps its Node to incoming Nodes with its edge weight (incoming edges to its Node).
 	WeightFrom map[*Node]float32
 }
+type Nodes []*Node
 
 // NewNode returns a new Node.
 func NewNode(id string) *Node {
@@ -72,6 +73,15 @@ func NewNode(id string) *Node {
 		WeightTo:   make(map[*Node]float32),
 		WeightFrom: make(map[*Node]float32),
 	}
+}
+
+func (l Nodes) Get(id string) *Node {
+	for _, v := range l {
+		if v.ID == id {
+			return v
+		}
+	}
+	return nil
 }
 
 // AddNode adds a Node to a graph Data.

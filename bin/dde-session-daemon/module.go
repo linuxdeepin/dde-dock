@@ -12,26 +12,41 @@ package main
 import (
 	"fmt"
 	"gir/gio-2.0"
-	_ "pkg.deepin.io/dde/daemon/appearance"
+	"pkg.deepin.io/dde/daemon/loader"
+	"sync"
+
+	// sort modules
+	_ "pkg.deepin.io/dde/daemon/network"
+
 	_ "pkg.deepin.io/dde/daemon/audio"
-	_ "pkg.deepin.io/dde/daemon/bluetooth"
+	_ "pkg.deepin.io/dde/daemon/inputdevices"
+
+	// depends: audio, inputdevices
+	_ "pkg.deepin.io/dde/daemon/keybinding"
+
+	_ "pkg.deepin.io/dde/daemon/screensaver"
+	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
+
+	// depends: screensaver, keybinding, sessionwatcher
+	_ "pkg.deepin.io/dde/daemon/session/power"
+
+	_ "pkg.deepin.io/dde/daemon/appearance"
 	_ "pkg.deepin.io/dde/daemon/clipboard"
-	_ "pkg.deepin.io/dde/daemon/debug"
+
 	_ "pkg.deepin.io/dde/daemon/gesture"
 	_ "pkg.deepin.io/dde/daemon/housekeeping"
-	_ "pkg.deepin.io/dde/daemon/inputdevices"
-	_ "pkg.deepin.io/dde/daemon/keybinding"
-	"pkg.deepin.io/dde/daemon/loader"
-	_ "pkg.deepin.io/dde/daemon/mime"
-	_ "pkg.deepin.io/dde/daemon/miracast"
-	_ "pkg.deepin.io/dde/daemon/network"
-	_ "pkg.deepin.io/dde/daemon/screenedge"
-	_ "pkg.deepin.io/dde/daemon/screensaver"
-	_ "pkg.deepin.io/dde/daemon/session/power"
-	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
-	_ "pkg.deepin.io/dde/daemon/systeminfo"
 	_ "pkg.deepin.io/dde/daemon/timedate"
-	"sync"
+
+	_ "pkg.deepin.io/dde/daemon/bluetooth"
+	_ "pkg.deepin.io/dde/daemon/screenedge"
+
+	// depends: network,audio
+	_ "pkg.deepin.io/dde/daemon/mime"
+
+	_ "pkg.deepin.io/dde/daemon/miracast"
+	_ "pkg.deepin.io/dde/daemon/systeminfo"
+
+	_ "pkg.deepin.io/dde/daemon/debug"
 )
 
 var (

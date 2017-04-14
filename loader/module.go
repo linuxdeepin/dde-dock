@@ -23,6 +23,7 @@ type Module interface {
 	LogLevel() log.Priority
 	ModuleImpl
 }
+type Modules []Module
 
 type ModuleImpl interface {
 	Start() error
@@ -80,4 +81,48 @@ func (d *ModuleBase) SetLogLevel(pri log.Priority) {
 
 func (d *ModuleBase) LogLevel() log.Priority {
 	return d.log.GetLogLevel()
+}
+
+func (l Modules) Get(name string) Module {
+	for _, v := range l {
+		if v.Name() == name {
+			return v
+		}
+	}
+	return nil
+}
+
+func (l Modules) Delete(name string) (Modules, bool) {
+	var (
+		tmp     Modules
+		deleted bool
+	)
+	for _, v := range l {
+		if v.Name() == name {
+			deleted = true
+			continue
+		}
+		tmp = append(tmp, v)
+	}
+	return tmp, deleted
+}
+
+func (l Modules) List() []string {
+	var names []string
+	for _, v := range l {
+		names = append(names, v.Name())
+	}
+	return names
+}
+
+func (l Modules) Len() int {
+	return len(l)
+}
+
+func (l Modules) Swap(i, j int) {
+	l[i], l[j] = l[j], l[i]
+}
+
+func (l Modules) Less(i, j int) bool {
+	return l[i].Name() < l[j].Name()
 }

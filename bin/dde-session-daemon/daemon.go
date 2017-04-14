@@ -62,7 +62,7 @@ type SessionDaemon struct {
 	flags           *Flags
 	log             *log.Logger
 	settings        *gio.Settings
-	enabledModules  map[string]loader.Module
+	enabledModules  loader.Modules
 	disabledModules map[string]loader.Module
 
 	cpuLocker sync.Mutex
@@ -82,7 +82,7 @@ func NewSessionDaemon(flags *Flags, settings *gio.Settings, logger *log.Logger) 
 		flags:           flags,
 		settings:        settings,
 		log:             logger,
-		enabledModules:  map[string]loader.Module{},
+		enabledModules:  loader.Modules{},
 		disabledModules: map[string]loader.Module{},
 	}
 
@@ -128,7 +128,7 @@ func (s *SessionDaemon) initModules() {
 	for _, module := range allModules {
 		name := module.Name()
 		if s.settings.GetBoolean(name) {
-			s.enabledModules[name] = module
+			s.enabledModules = append(s.enabledModules, module)
 		} else {
 			s.disabledModules[name] = module
 		}
@@ -148,7 +148,7 @@ func (s *SessionDaemon) getDisabledModules() []string {
 }
 
 func (s *SessionDaemon) getEnabledModules() []string {
-	return keys(s.enabledModules)
+	return s.enabledModules.List()
 }
 
 func (s *SessionDaemon) EnableModules(enablingModules []string) error {

@@ -12,24 +12,9 @@ package loader
 import (
 	"fmt"
 	"pkg.deepin.io/lib/log"
-	"sort"
 	"sync"
 	"time"
 )
-
-type byName []Module
-
-func (l byName) Len() int {
-	return len(l)
-}
-
-func (l byName) Swap(i, j int) {
-	l[i], l[j] = l[j], l[i]
-}
-
-func (l byName) Less(i, j int) bool {
-	return l[i].Name() < l[j].Name()
-}
 
 type EnableFlag int
 
@@ -75,7 +60,7 @@ func (e *EnableError) Error() string {
 }
 
 type Loader struct {
-	modules map[string]Module
+	modules Modules
 	log     *log.Logger
 	lock    sync.Mutex
 }
@@ -95,24 +80,24 @@ func (l *Loader) AddModule(m Module) {
 	l.lock.Lock()
 	defer l.lock.Unlock()
 
-	_, ok := l.modules[m.Name()]
-	if ok {
+	tmp := l.modules.Get(m.Name())
+	if tmp != nil {
 		l.log.Debug("Register", m.Name(), "is already registered")
 		return
 	}
 
 	l.log.Debug("Register module:", m.Name())
-	l.modules[m.Name()] = m
+	l.modules = append(l.modules, m)
 }
 
 func (l *Loader) DeleteModule(name string) {
 	l.lock.Lock()
 	defer l.lock.Unlock()
-	delete(l.modules, name)
+	l.modules, _ = l.modules.Delete(name)
 }
 
 func (l *Loader) List() []Module {
-	modules := []Module{}
+	var modules Modules
 
 	l.lock.Lock()
 	for _, module := range l.modules {
@@ -120,14 +105,13 @@ func (l *Loader) List() []Module {
 	}
 	l.lock.Unlock()
 
-	sort.Sort(byName(modules))
 	return modules
 }
 
 func (l *Loader) GetModule(name string) Module {
 	l.lock.Lock()
 	defer l.lock.Unlock()
-	return l.modules[name]
+	return l.modules.Get(name)
 }
 
 func (l *Loader) EnableModules(enablingModules []string, disableModules []string, flag EnableFlag) error {
@@ -145,8 +129,12 @@ func (l *Loader) EnableModules(enablingModules []string, disableModules []string
 		return &EnableError{Code: ErrorCircleDependencies}
 	}
 
-	for _, node := range nodes {
-		module := l.modules[node.ID]
+	for _, name := range enablingModules {
+		node := nodes.Get(name)
+		if node == nil {
+			continue
+		}
+		module := l.modules.Get(node.ID)
 		l.log.Info("enable module", node.ID)
 		startTime := time.Now()
 		err := module.Enable(true)

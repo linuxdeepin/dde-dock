@@ -15,7 +15,7 @@ import (
 )
 
 type DAGBuilder struct {
-	modules         map[string]Module
+	modules         Modules
 	enablingModules []string
 	disableModules  map[string]struct{}
 	flag            EnableFlag
@@ -31,7 +31,7 @@ type DAGBuilder struct {
 func NewDAGBuilder(loader *Loader, enablingModules []string, disableModules []string, flag EnableFlag) *DAGBuilder {
 	disableModulesMap := map[string]struct{}{}
 	for _, name := range disableModules {
-		if _, ok := loader.modules[name]; !ok {
+		if m := loader.modules.Get(name); m == nil {
 			loader.log.Warningf("disabled module(%s) is no existed", name)
 			continue
 		}
@@ -70,8 +70,8 @@ func (builder *DAGBuilder) buildDAG(enablingModules []string) error {
 
 		builder.handledModules[name] = struct{}{}
 
-		module, ok := builder.modules[name]
-		if !ok {
+		module := builder.modules.Get(name)
+		if module == nil {
 			if builder.flag.HasFlag(EnableFlagIgnoreMissingModule) {
 				if logLevel == log.LevelDebug {
 					builder.log.Info("no such a module named", name)
@@ -94,7 +94,7 @@ func (builder *DAGBuilder) buildDAG(enablingModules []string) error {
 		dependencies := module.GetDependencies()
 
 		for _, dependency := range dependencies {
-			if _, ok := builder.modules[dependency]; !ok {
+			if tmp := builder.modules.Get(dependency); tmp == nil {
 				// TODO: add a flag: skip modules whose dependencies is not meet.
 				return &EnableError{ModuleName: name, Code: ErrorNoDependencies, detail: dependency}
 			}

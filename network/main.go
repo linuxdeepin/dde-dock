@@ -52,10 +52,12 @@ func (d *Daemon) Start() error {
 	}
 
 	// initialize manager after dbus installed
-	manager.initManager()
+	go func() {
+		manager.initManager()
 
-	initDbusDaemon()
-	watchNetworkManagerRestart(manager)
+		initDbusDaemon()
+		watchNetworkManagerRestart(manager)
+	}()
 	return nil
 }
 
