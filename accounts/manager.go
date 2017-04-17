@@ -29,9 +29,10 @@ const (
 
 type Manager struct {
 	// 用户 ObjectPath 列表
-	UserList   []string
-	GuestIcon  string
-	AllowGuest bool
+	UserList      []string
+	userListMutex sync.Mutex
+	GuestIcon     string
+	AllowGuest    bool
 
 	watcher   *dutils.WatchProxy
 	usersMap  map[string]*User

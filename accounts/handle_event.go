@@ -121,6 +121,9 @@ func (m *Manager) handleDMConfigChanged() {
 }
 
 func (m *Manager) refreshUserList() bool {
+	m.userListMutex.Lock()
+	defer m.userListMutex.Unlock()
+
 	var freshed bool
 	ret, status := compareUserList(m.UserList, getUserPaths())
 	switch status {
