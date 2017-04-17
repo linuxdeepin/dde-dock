@@ -126,7 +126,12 @@ func (ge *Grub2Ext) DoGenerateGrubMenu(dbusMsg dbus.DMessage) (ok bool, err erro
 	// Unicode characters
 	// FIXME: keep same with the current system language settings
 	os.Setenv("LANG", "en_US.UTF-8")
-	cmd := exec.Command(grubUpdateCmd)
+
+	oldPathEnv := os.Getenv("PATH")
+	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+	defer os.Setenv("PATH", oldPathEnv)
+
+	cmd := exec.Command(grubMkconfigCmd, "-o", "/boot/grub/grub.cfg")
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	err = cmd.Run()
