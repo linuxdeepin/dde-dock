@@ -2,22 +2,19 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
+        <source>12 Hour Time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
+        <source>24 Hour Time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
         <source>Time Settings</source>
         <translation>Поставке времена</translation>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
-        <source> HH:mm:ss</source>
-        <translation>ЧЧ.мм.сс</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimeWidget</name>
-    <message>
-        <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
-        <source>HH:mm</source>
-        <translation>ЧЧ.мм</translation>
     </message>
 </context>
 <context>
@@ -72,82 +69,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="20"/>
+        <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Fashion Mode</source>
         <translation>Улицкан режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="21"/>
+        <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Efficient Mode</source>
         <translation>Ефикасан режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="22"/>
+        <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Top</source>
         <translation>Врх</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Bottom</source>
         <translation>Дно</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Left</source>
         <translation>Лево</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Right</source>
         <translation>Десно</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Large</source>
         <translation>Велико</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Medium</source>
         <translation>Средње</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Small</source>
         <translation>Мало</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="32"/>
         <source>Keep Shown</source>
         <translation>Остави приказано</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="33"/>
         <source>Keep Hidden</source>
         <translation>Остави скривено</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="31"/>
+        <location filename="../frame/util/docksettings.cpp" line="34"/>
         <source>Smart Hide</source>
         <translation>Паметно скривање</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="65"/>
+        <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Mode</source>
         <translation>Режим</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="73"/>
+        <location filename="../frame/util/docksettings.cpp" line="76"/>
         <source>Location</source>
         <translation>Позиција</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="80"/>
+        <location filename="../frame/util/docksettings.cpp" line="83"/>
         <source>Size</source>
         <translation>Величина</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="87"/>
+        <location filename="../frame/util/docksettings.cpp" line="90"/>
         <source>Status</source>
         <translation>Стање</translation>
     </message>
@@ -163,27 +160,27 @@
 <context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
         <source>Empty</source>
         <translation>Испразни</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>This action cannot be restored</source>
         <translation>Ова радња се не може повратити</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="74"/>
         <source>Are you sure to empty 1 item ?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="76"/>
         <source>Are you sure to empty %1 items ?</source>
         <translation type="unfinished"/>
     </message>
@@ -197,17 +194,17 @@
         <translation>Угаси</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="56"/>
         <source>Remaining Capacity %1</source>
         <translation>Преостало %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
         <source>Charged %1</source>
         <translation>Напуњено %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charging %1</source>
         <translation>Пуни се %1</translation>
     </message>
@@ -253,22 +250,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="57"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="56"/>
         <source>Unmute</source>
         <translation>Укључи</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="59"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="58"/>
         <source>Mute</source>
         <translation>Ућуткај</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="65"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="64"/>
         <source>Audio Settings</source>
         <translation>Поставке звука</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="184"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="185"/>
         <source>Current Volume %1</source>
         <translation>Тренутна јачина %1</translation>
     </message>
@@ -310,17 +307,17 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="46"/>
         <source>Unknow</source>
         <translation>Непознато</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
         <source>No Network</source>
         <translation>Нема мреже</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="61"/>
         <source>Wired connection: %1</source>
         <translation>Жична веза: %1</translation>
     </message>
@@ -356,17 +353,17 @@
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
         <source>Wireless Network</source>
         <translation>Бежична мрежа</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
         <source>Wireless Network %1</source>
         <translation>Бежична мрежа %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="385"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>Потребна је лозинка за повезивање на &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</translation>
     </message>

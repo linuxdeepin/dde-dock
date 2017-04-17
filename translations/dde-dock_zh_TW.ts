@@ -2,22 +2,19 @@
 <context>
     <name>DatetimePlugin</name>
     <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="80"/>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
+        <source>12 Hour Time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
+        <source>24 Hour Time</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
         <source>Time Settings</source>
         <translation>時間設定</translation>
-    </message>
-    <message>
-        <location filename="../plugins/datetime/datetimeplugin.cpp" line="105"/>
-        <source> HH:mm:ss</source>
-        <translation>HH:mm:ss</translation>
-    </message>
-</context>
-<context>
-    <name>DatetimeWidget</name>
-    <message>
-        <location filename="../plugins/datetime/datetimewidget.cpp" line="42"/>
-        <source>HH:mm</source>
-        <translation>HH:mm</translation>
     </message>
 </context>
 <context>
@@ -72,82 +69,82 @@
 <context>
     <name>DockSettings</name>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="20"/>
+        <location filename="../frame/util/docksettings.cpp" line="23"/>
         <source>Fashion Mode</source>
         <translation>Deepin 樣式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="21"/>
+        <location filename="../frame/util/docksettings.cpp" line="24"/>
         <source>Efficient Mode</source>
         <translation>Windows 樣式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="22"/>
+        <location filename="../frame/util/docksettings.cpp" line="25"/>
         <source>Top</source>
         <translation>頂部</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="23"/>
+        <location filename="../frame/util/docksettings.cpp" line="26"/>
         <source>Bottom</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="24"/>
+        <location filename="../frame/util/docksettings.cpp" line="27"/>
         <source>Left</source>
         <translation>左側</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="25"/>
+        <location filename="../frame/util/docksettings.cpp" line="28"/>
         <source>Right</source>
         <translation>右側</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="26"/>
+        <location filename="../frame/util/docksettings.cpp" line="29"/>
         <source>Large</source>
         <translation>大</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="27"/>
+        <location filename="../frame/util/docksettings.cpp" line="30"/>
         <source>Medium</source>
         <translation>中</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="28"/>
+        <location filename="../frame/util/docksettings.cpp" line="31"/>
         <source>Small</source>
         <translation>小</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="29"/>
+        <location filename="../frame/util/docksettings.cpp" line="32"/>
         <source>Keep Shown</source>
         <translation>永遠顯示</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="30"/>
+        <location filename="../frame/util/docksettings.cpp" line="33"/>
         <source>Keep Hidden</source>
         <translation>永遠隱藏</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="31"/>
+        <location filename="../frame/util/docksettings.cpp" line="34"/>
         <source>Smart Hide</source>
         <translation>智慧隱藏</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="65"/>
+        <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Mode</source>
         <translation>樣式</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="73"/>
+        <location filename="../frame/util/docksettings.cpp" line="76"/>
         <source>Location</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="80"/>
+        <location filename="../frame/util/docksettings.cpp" line="83"/>
         <source>Size</source>
         <translation>圖示大小</translation>
     </message>
     <message>
-        <location filename="../frame/util/docksettings.cpp" line="87"/>
+        <location filename="../frame/util/docksettings.cpp" line="90"/>
         <source>Status</source>
         <translation>顯示狀態</translation>
     </message>
@@ -163,27 +160,27 @@
 <context>
     <name>PopupControlWidget</name>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
         <source>Empty</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="63"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="67"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="68"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
         <source>This action cannot be restored</source>
         <translation>這個動作無法復原</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="70"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="74"/>
         <source>Are you sure to empty 1 item ?</source>
         <translation>確定清除 1 個項目？</translation>
     </message>
     <message>
-        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="72"/>
+        <location filename="../plugins/trash/popupcontrolwidget.cpp" line="76"/>
         <source>Are you sure to empty %1 items ?</source>
         <translation>確定清除 %1 個項目？</translation>
     </message>
@@ -194,20 +191,20 @@
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="48"/>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="96"/>
         <source>Shut down</source>
-        <translation>電源選項</translation>
+        <translation>關機</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="55"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="56"/>
         <source>Remaining Capacity %1</source>
         <translation>剩餘電量 %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="59"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
         <source>Charged %1</source>
         <translation>充電完成 %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="61"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charging %1</source>
         <translation>正在充電 %1</translation>
     </message>
@@ -234,7 +231,7 @@
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
         <source>Power settings</source>
-        <translation>電源選項</translation>
+        <translation>電源管理</translation>
     </message>
 </context>
 <context>
@@ -253,22 +250,22 @@
 <context>
     <name>SoundItem</name>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="57"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="56"/>
         <source>Unmute</source>
         <translation>開啟聲音</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="59"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="58"/>
         <source>Mute</source>
         <translation>靜音</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="65"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="64"/>
         <source>Audio Settings</source>
         <translation>聲音設定</translation>
     </message>
     <message>
-        <location filename="../plugins/sound/sounditem.cpp" line="184"/>
+        <location filename="../plugins/sound/sounditem.cpp" line="185"/>
         <source>Current Volume %1</source>
         <translation>目前音量 %1</translation>
     </message>
@@ -286,12 +283,12 @@
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="40"/>
         <source>Trash - %1 file</source>
-        <translation>回收桶—%1 個檔案</translation>
+        <translation>回收桶－%1 個檔案</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashplugin.cpp" line="42"/>
         <source>Trash - %1 files</source>
-        <translation>回收桶—%1 個檔案</translation>
+        <translation>回收桶－%1 個檔案</translation>
     </message>
 </context>
 <context>
@@ -310,17 +307,17 @@
 <context>
     <name>WiredItem</name>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="47"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="46"/>
         <source>Unknow</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="52"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="51"/>
         <source>No Network</source>
         <translation>無網路</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/wireditem.cpp" line="62"/>
+        <location filename="../plugins/network/item/wireditem.cpp" line="61"/>
         <source>Wired connection: %1</source>
         <translation>有線網路：%1</translation>
     </message>
@@ -356,17 +353,17 @@
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="143"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
         <source>Wireless Network</source>
         <translation>無線網路</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="145"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>
         <source>Wireless Network %1</source>
         <translation>無線網路 %1</translation>
     </message>
     <message>
-        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="370"/>
+        <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="385"/>
         <source>Password required to connect to &lt;font color=&quot;#faca57&quot;&gt;%1&lt;/font&gt;</source>
         <translation>連線到&lt;font color=&quot;#faca57&quot;&gt; %1 &lt;/font&gt;需要密碼</translation>
     </message>
