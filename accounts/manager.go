@@ -12,6 +12,7 @@ package accounts
 import (
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/tasker"
 	dutils "pkg.deepin.io/lib/utils"
 	"sync"
 )
@@ -38,6 +39,8 @@ type Manager struct {
 	usersMap  map[string]*User
 	mapLocker sync.Mutex
 
+	delayTasker *tasker.DelayTaskManager
+
 	// Signals:
 	UserAdded   func(string)
 	UserDeleted func(string)
@@ -57,6 +60,12 @@ func NewManager() *Manager {
 
 	m.watcher = dutils.NewWatchProxy()
 	if m.watcher != nil {
+		m.delayTasker = tasker.NewDelayTaskManager()
+		m.delayTasker.AddTask(taskNamePasswd, fileEventDelay, m.handleFilePasswdChanged)
+		m.delayTasker.AddTask(taskNameGroup, fileEventDelay, m.handleFileGroupChanged)
+		m.delayTasker.AddTask(taskNameShadow, fileEventDelay, m.handleFileShadowChanged)
+		m.delayTasker.AddTask(taskNameDM, fileEventDelay, m.handleDMConfigChanged)
+
 		m.watcher.SetFileList(m.getWatchFiles())
 		m.watcher.SetEventHandler(m.handleFileChanged)
 		go m.watcher.StartWatch()

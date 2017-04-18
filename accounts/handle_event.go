@@ -31,8 +31,14 @@ const (
 )
 
 const (
-	maxDuration   = time.Second * 1
-	deltaDuration = time.Millisecond * 500
+	maxDuration    = time.Second * 1
+	deltaDuration  = time.Millisecond * 500
+	fileEventDelay = time.Millisecond * 500
+
+	taskNamePasswd = "passwd"
+	taskNameGroup  = "group"
+	taskNameShadow = "shadow"
+	taskNameDM     = "dm"
 )
 
 const (
@@ -59,29 +65,34 @@ func (m *Manager) handleFileChanged(ev *fsnotify.FileEvent) {
 	}
 
 	logger.Debug("File changed:", ev)
+	var err error
 	switch {
 	case strings.Contains(ev.Name, userFilePasswd):
-		m.handleUserFileChanged(ev, m.handleFilePasswdChanged)
+		if task, _ := m.delayTasker.GetTask(taskNamePasswd); task != nil {
+			err = task.Start()
+		}
 	case strings.Contains(ev.Name, userFileGroup), strings.Contains(ev.Name, userFileSudoers):
-		m.handleUserFileChanged(ev, m.handleFileGroupChanged)
+		if task, _ := m.delayTasker.GetTask(taskNameGroup); task != nil {
+			err = task.Start()
+		}
 	case strings.Contains(ev.Name, userFileShadow):
-		m.handleUserFileChanged(ev, m.handleFileShadowChanged)
+		if task, _ := m.delayTasker.GetTask(taskNameShadow); task != nil {
+			err = task.Start()
+		}
 	case strings.Contains(ev.Name, lightdmConfig),
 		strings.Contains(ev.Name, kdmConfig),
 		strings.Contains(ev.Name, gdmConfig):
-		m.handleUserFileChanged(ev, m.handleDMConfigChanged)
-	}
-}
-
-func (m *Manager) handleUserFileChanged(ev *fsnotify.FileEvent, handler func()) {
-	// Sometime has no delete event was emit when file changed
-	if handler == nil {
+		if task, _ := m.delayTasker.GetTask(taskNameDM); task != nil {
+			err = task.Start()
+		}
+	default:
+		logger.Debug("Unknow event, ignore")
 		return
 	}
-
+	if err != nil {
+		logger.Warning("Failed to start task:", err, ev)
+	}
 	m.watcher.ResetFileListWatch()
-	<-time.After(time.Millisecond * 500)
-	go handler()
 }
 
 func (m *Manager) handleFilePasswdChanged() {

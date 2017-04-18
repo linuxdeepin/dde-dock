@@ -33,6 +33,7 @@ main_network.go
 bin/default-terminal/default-terminal
 bin/default-file-manager/default-file-manager
 bin/dde-session-daemon/dde-session-daemon
+bin/dde-system-daemon/dde-system-daemon
 bin/dde-dock-daemon/dde-dock-daemon
 bin/dde-session-initializer/dde-session-initializer
 !launcher/testdata/.config/launcher/*
