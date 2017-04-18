@@ -54,9 +54,9 @@ protected:
     const QPoint popupMarkPoint();
 
     void hidePopup();
-    void showHoverTips();
     void popupWindowAccept();
     void showPopupApplet(QWidget * const applet);
+    virtual void showHoverTips();
     virtual void invokedMenuItem(const QString &itemId, const bool checked);
     virtual const QString contextMenu() const;
     virtual QWidget *popupTips();

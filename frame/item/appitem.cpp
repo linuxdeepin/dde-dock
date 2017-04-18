@@ -256,11 +256,12 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 //        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
 //            return;
 
-        const int windowCount = m_titles.size();
-        if (windowCount < 2)
-            m_itemEntry->Activate();
-        else
-            togglePreview();
+//        const int windowCount = m_titles.size();
+//        if (windowCount < 2)
+//            m_itemEntry->Activate();
+//        else
+//            togglePreview();
+        m_itemEntry->Activate();
 
 //        if (!m_titles.isEmpty())
 //            return;
@@ -342,6 +343,25 @@ void AppItem::dropEvent(QDropEvent *e)
 
     qDebug() << "accept drop event with URIs: " << uriList;
     m_itemEntry->HandleDragDrop(uriList);
+}
+
+void AppItem::showHoverTips()
+{
+    // another model popup window is alread exists
+//    if (PopupWindow->isVisible() && PopupWindow->model())
+//        return;
+
+//    QWidget * const content = popupTips();
+//    if (!content)
+//        return;
+
+//    showPopupWindow(content);
+
+    const int count = m_titles.size();
+    if (count <= 1)
+        return DockItem::showHoverTips();
+
+    togglePreview();
 }
 
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)

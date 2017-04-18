@@ -36,6 +36,7 @@ private:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
 
+    void showHoverTips();
     void invokedMenuItem(const QString &itemId, const bool checked);
     const QString contextMenu() const;
     QWidget *popupTips();

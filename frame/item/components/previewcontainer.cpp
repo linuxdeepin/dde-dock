@@ -3,13 +3,14 @@
 
 #include <QLabel>
 #include <QWindow>
+#include <QDebug>
 
 PreviewContainer::PreviewContainer(QWidget *parent)
     : QWidget(parent)
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    m_windowListLayout->setMargin(0);
-    m_windowListLayout->setSpacing(5);
+    m_windowListLayout->setMargin(5);
+    m_windowListLayout->setSpacing(3);
 
     setLayout(m_windowListLayout);
 }
@@ -26,6 +27,7 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
     for (auto it(infos.cbegin()); it != infos.cend(); ++it)
     {
         PreviewWidget *w = new PreviewWidget(it.key());
+        w->setTitle(it.value());
 
         connect(w, &PreviewWidget::requestActivateWindow, this, &PreviewContainer::requestActivateWindow);
 
