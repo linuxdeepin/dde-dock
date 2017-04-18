@@ -171,8 +171,23 @@ func getAdminUserList(fileGroup, fileSudoers string) ([]string, error) {
 	return users, nil
 }
 
+var (
+	_admGroups       []string
+	_admUsers        []string
+	_admTimestampMap = make(map[string]int64)
+)
+
 // get adm group and user from '/etc/sudoers'
 func getAdmGroupAndUser(file string) ([]string, []string, error) {
+	finfo, err := os.Stat(file)
+	if err != nil {
+		return nil, nil, err
+	}
+	timestamp := finfo.ModTime().Unix()
+	if t, ok := _admTimestampMap[file]; ok && t == timestamp {
+		return _admGroups, _admUsers, nil
+	}
+
 	fr, err := os.Open(file)
 	if err != nil {
 		return nil, nil, err
@@ -212,6 +227,8 @@ func getAdmGroupAndUser(file string) ([]string, []string, error) {
 			users = append(users, strings.TrimSpace(tmp))
 		}
 	}
+	_admGroups, _admUsers = groups, users
+	_admTimestampMap[file] = timestamp
 	return groups, users, nil
 }
 

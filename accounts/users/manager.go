@@ -84,6 +84,10 @@ func LockedUser(locked bool, username string) error {
 }
 
 func SetUserType(ty int32, username string) error {
+	groups, _, _ := getAdmGroupAndUser(userFileSudoers)
+	if len(groups) == 0 {
+		return fmt.Errorf("No privilege user group exists")
+	}
 	var cmd string
 	switch ty {
 	case UserTypeStandard:
@@ -91,13 +95,14 @@ func SetUserType(ty int32, username string) error {
 			return nil
 		}
 
-		cmd = fmt.Sprintf("%s -d %s sudo", userCmdGroup, username)
+		// TODO: remove user from all privilege groups
+		cmd = fmt.Sprintf("%s -d %s %s", userCmdGroup, username, groups[0])
 	case UserTypeAdmin:
 		if IsAdminUser(username) {
 			return nil
 		}
 
-		cmd = fmt.Sprintf("%s -a %s sudo", userCmdGroup, username)
+		cmd = fmt.Sprintf("%s -a %s %s", userCmdGroup, username, groups[0])
 	default:
 		return errInvalidParam
 	}
