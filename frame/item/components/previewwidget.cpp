@@ -5,7 +5,6 @@
 #include <X11/Xutil.h>
 
 #include <QX11Info>
-
 #include <QPainter>
 #include <QTimer>
 
@@ -27,12 +26,12 @@ void PreviewWidget::refershImage()
     XWindowAttributes attrs;
     XGetWindowAttributes(QX11Info::display(), m_wid, &attrs);
     XImage *ximage = XGetImage(QX11Info::display(), m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
-    const QImage qimage((uchar*)(ximage->data), attrs.width, attrs.height, QImage::Format_ARGB32);
-    XDestroyImage(ximage);
 
-    m_pixmap = QPixmap::fromImage(qimage).scaled(W, H, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_ARGB32_Premultiplied);
+    m_image = qimage.scaled(W, H, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     update();
+    XDestroyImage(ximage);
 }
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
@@ -40,7 +39,7 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_pixmap.rect().center(), m_pixmap);
+    painter.drawImage(rect().center() - m_image.rect().center(), m_image);
 }
 
 void PreviewWidget::mouseReleaseEvent(QMouseEvent *e)

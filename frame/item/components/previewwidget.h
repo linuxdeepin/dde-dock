@@ -21,7 +21,7 @@ private:
 
 private:
     const WId m_wid;
-    QPixmap m_pixmap;
+    QImage m_image;
 };
 
 #endif // PREVIEWWIDGET_H
