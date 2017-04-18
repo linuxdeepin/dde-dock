@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=com.deepin.daemon.Grub2Ext
-Exec=/usr/lib/deepin-daemon/grub2ext
-User=root

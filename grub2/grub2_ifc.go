@@ -1,34 +1,27 @@
-/**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
-
 package grub2
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"pkg.deepin.io/lib/dbus"
-	. "pkg.deepin.io/lib/gettext"
 	"strings"
 )
 
 const (
-	DbusGrubDest = "com.deepin.daemon.Grub2"
-	DbusGrubPath = "/com/deepin/daemon/Grub2"
-	DbusGrubIfs  = "com.deepin.daemon.Grub2"
+	DBusDest      = "com.deepin.daemon.Grub2"
+	DBusObjPath   = "/com/deepin/daemon/Grub2"
+	DBusInterface = "com.deepin.daemon.Grub2"
+
+	timeoutMax = 10
 )
 
 // GetDBusInfo implements interface of dbus.DBusObject.
-func (grub *Grub2) GetDBusInfo() dbus.DBusInfo {
+func (_ *Grub2) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
-		Dest:       DbusGrubDest,
-		ObjectPath: DbusGrubPath,
-		Interface:  DbusGrubIfs,
+		Dest:       DBusDest,
+		ObjectPath: DBusObjPath,
+		Interface:  DBusInterface,
 	}
 }
 
@@ -45,62 +38,140 @@ func (grub *Grub2) GetSimpleEntryTitles() ([]string, error) {
 		}
 	}
 	if len(entryTitles) == 0 {
-		err := fmt.Errorf("there is no menu entry in %s", grubMenuFile)
+		err := fmt.Errorf("there is no menu entry in %s", grubScriptFile)
 		return entryTitles, err
 	}
 	return entryTitles, nil
 }
 
 func (grub *Grub2) GetAvailableResolutions() (modesJSON string, err error) {
-	type mode struct{ Text, Value string }
-	primaryResolution := getPrimaryScreenBestResolutionStr()
-	appendModeUniq := func(modes []mode, r string) []mode {
-		if r != primaryResolution {
-			modes = append(modes, mode{Text: r, Value: r})
-		}
-		return modes
+	// TODO
+	type mode struct {
+		Text, Value string
 	}
 	var modes []mode
-	modes = append(modes, mode{Text: Tr("Auto"), Value: "auto"})
-	modes = append(modes, mode{Text: primaryResolution, Value: primaryResolution})
-	modes = appendModeUniq(modes, "1440x900")
-	modes = appendModeUniq(modes, "1400x1050")
-	modes = appendModeUniq(modes, "1280x800")
-	modes = appendModeUniq(modes, "1280x720")
-	modes = appendModeUniq(modes, "1366x768")
-	modes = appendModeUniq(modes, "1024x768")
-	modes = appendModeUniq(modes, "800x600")
-	tmpByteArray, err := json.Marshal(modes)
-	modesJSON = string(tmpByteArray)
+	modes = append(modes, mode{Text: "Auto", Value: "auto"})
+	modes = append(modes, mode{Text: "1024x768", Value: "1024x768"})
+	modes = append(modes, mode{Text: "800x600", Value: "800x600"})
+	data, err := json.Marshal(modes)
+	modesJSON = string(data)
+	return
+}
+
+func (g *Grub2) SetDefaultEntry(dbusMsg dbus.DMessage, v string) (err error) {
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	var titles []string
+	titles, err = g.GetSimpleEntryTitles()
+	if err != nil {
+		return
+	}
+
+	if !isStringInArray(v, titles) {
+		return fmt.Errorf("invalid entry %q", v)
+	}
+
+	if g.DefaultEntry == v {
+		return
+	}
+	g.DefaultEntry = v
+	dbus.NotifyChange(g, "DefaultEntry")
+	g.saveConfig()
+	return
+}
+
+func (g *Grub2) SetEnableTheme(dbusMsg dbus.DMessage, v bool) (err error) {
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	if g.EnableTheme == v {
+		return
+	}
+	g.EnableTheme = v
+	dbus.NotifyChange(g, "EnableTheme")
+	g.saveConfig()
+	return
+}
+
+func (g *Grub2) SetResolution(dbusMsg dbus.DMessage, v string) (err error) {
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	err = checkResolution(v)
+	if err != nil {
+		return
+	}
+
+	if g.Resolution == v {
+		return
+	}
+	g.Resolution = v
+	dbus.NotifyChange(g, "Resolution")
+	g.saveConfig()
+	return
+}
+
+func (g *Grub2) SetTimeout(dbusMsg dbus.DMessage, v uint32) (err error) {
+	err = checkAuth(dbusMsg)
+	if err != nil {
+		return
+	}
+
+	if v > timeoutMax {
+		return errors.New("exceeded the maximum value 10")
+	}
+
+	if g.Timeout == v {
+		return
+	}
+	g.Timeout = v
+	dbus.NotifyChange(g, "Timeout")
+	g.saveConfig()
 	return
 }
 
 // Reset reset all configuretion.
-func (grub *Grub2) Reset() {
-	// reset and save config
-	grub.config.reset()
+func (g *Grub2) Reset() {
+	g.theme.reset()
 
-	// Fix settings always
-	grub.setPropFixSettingsAlways(true)
-	//grub.config.setFixSettingsAlways(true)
+	config := NewConfig()
+	config.UseDefault()
 
-	// enable theme
-	grub.setPropEnableTheme(true)
-	grub.setEnableTheme(true)
+	var changed bool
+	if g.Timeout != config.Timeout {
+		changed = true
+		g.Timeout = config.Timeout
+		dbus.NotifyChange(g, "Timeout")
+	}
 
-	// resolution
-	defaultGfxmode := getDefaultGfxmode()
-	grub.setPropResolution(defaultGfxmode)
-	grub.setSettingGfxmode(defaultGfxmode)
+	if g.EnableTheme != config.EnableTheme {
+		changed = true
+		g.EnableTheme = config.EnableTheme
+		dbus.NotifyChange(g, "EnableTheme")
+	}
 
-	// timeout
-	grub.setPropTimeout(defaultGrubTimeoutInt)
-	grub.setSettingTimeout(defaultGrubTimeoutInt)
+	if g.Resolution != config.Resolution {
+		changed = true
+		g.Resolution = config.Resolution
+		dbus.NotifyChange(g, "Resolution")
+	}
 
-	// grub default entry
-	grub.setPropDefaultEntry(defaultGrubDefaultEntry)
-	grub.setSettingDefaultEntry(defaultGrubDefaultEntry)
+	cfgDefaultEntry, _ := g.defaultEntryIdx2Str(config.DefaultEntry)
+	if g.DefaultEntry != cfgDefaultEntry {
+		changed = true
+		g.DefaultEntry = cfgDefaultEntry
+		dbus.NotifyChange(g, "DefaultEntry")
+	}
 
-	grub.theme.reset()
-	grub.notifyUpdate()
+	if changed {
+		g.saveConfig()
+	}
+
 }

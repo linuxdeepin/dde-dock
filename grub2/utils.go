@@ -1,50 +1,98 @@
-/**
- * Copyright (C) 2013 Deepin Technology Co., Ltd.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
-
 package grub2
 
 import (
+	"crypto/md5"
+	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/BurntSushi/xgb/randr"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/xwindow"
+	"io"
 	"io/ioutil"
 	"os"
-	"path"
-	graphic "pkg.deepin.io/lib/gdkpixbuf"
-	"pkg.deepin.io/lib/utils"
+	"path/filepath"
+	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/polkit"
 	"strconv"
 	"strings"
 )
+
+func loadJSON(file string, v interface{}) error {
+	content, err := ioutil.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(content, v)
+}
+
+func saveJSON(file string, v interface{}) error {
+	const dirMode = 0755
+	const fileMode = 0644
+	err := os.MkdirAll(filepath.Dir(file), dirMode)
+	if err != nil {
+		return err
+	}
+
+	content, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(file, content, fileMode)
+}
 
 func quoteString(str string) string {
 	return strconv.Quote(str)
 }
 
-func unquoteString(str string) string {
-	if strings.HasPrefix(str, `"`) && strings.HasSuffix(str, `"`) {
-		s, _ := strconv.Unquote(str)
-		return s
-	} else if strings.HasPrefix(str, `'`) && strings.HasSuffix(str, `'`) {
-		return str[1 : len(str)-1]
-	}
-	return str
+type InvalidResoultionError struct {
+	Resolution string
 }
 
-func isStringInArray(a string, list []string) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
+func (err InvalidResoultionError) Error() string {
+	return fmt.Sprintf("invalid resolution %q", err.Resolution)
+}
+
+func parseResolution(v string) (w, h uint16, err error) {
+	if v == "auto" {
+		err = errors.New("unknown auto")
+		return
 	}
-	return false
+
+	arr := strings.Split(v, "x")
+	if len(arr) != 2 {
+		err = InvalidResoultionError{v}
+		return
+	}
+	// parse width
+	tmpw, err := strconv.ParseUint(arr[0], 10, 16)
+	if err != nil {
+		err = InvalidResoultionError{v}
+		return
+	}
+
+	// parse height
+	tmph, err := strconv.ParseUint(arr[1], 10, 16)
+	if err != nil {
+		err = InvalidResoultionError{v}
+		return
+	}
+
+	w = uint16(tmpw)
+	h = uint16(tmph)
+
+	if w == 0 || h == 0 {
+		err = InvalidResoultionError{v}
+		return
+	}
+
+	return
+}
+
+func checkResolution(v string) error {
+	if v == "auto" {
+		return nil
+	}
+
+	_, _, err := parseResolution(v)
+	return err
 }
 
 func getStringIndexInArray(a string, list []string) int {
@@ -56,187 +104,74 @@ func getStringIndexInArray(a string, list []string) int {
 	return -1
 }
 
-func appendStrArrayUnique(a1 []string, a2 ...string) (a []string) {
-	a = a1
-	for _, s := range a2 {
-		if !isStringInArray(s, a) {
-			a = append(a, s)
+func isStringInArray(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
 		}
 	}
-	return
+	return false
 }
 
-func getDefaultGfxmode() (gfxmode string) {
-	return getPrimaryScreenBestResolutionStr()
+var noCheckAuth bool
+
+func init() {
+	if os.Getenv("NO_CHECK_AUTH") == "1" {
+		noCheckAuth = true
+		return
+	}
+
+	polkit.Init()
 }
 
-// Get all screen's best resolution and choose a smaller one for there
-// is no screen is primary.
-func getPrimaryScreenBestResolutionStr() (r string) {
-	w, h := getPrimaryScreenBestResolution()
-	r = fmt.Sprintf("%dx%d", w, h)
-	return
-}
-func getPrimaryScreenBestResolution() (w uint16, h uint16) {
-	// if connect to x failed, just return 1024x768
-	w, h = 1024, 768
-
-	XU, err := xgbutil.NewConn()
+func checkAuthWithPid(pid uint32) (bool, error) {
+	subject := polkit.NewSubject(polkit.SubjectKindUnixProcess)
+	subject.SetDetail("pid", pid)
+	subject.SetDetail("start-time", uint64(0))
+	const actionId = DBusDest
+	details := make(map[string]string)
+	details[""] = ""
+	result, err := polkit.CheckAuthorization(subject, actionId, details,
+		polkit.CheckAuthorizationFlagsAllowUserInteraction, "")
 	if err != nil {
-		return
-	}
-	err = randr.Init(XU.Conn())
-	if err != nil {
-		return
-	}
-	_, err = randr.QueryVersion(XU.Conn(), 1, 4).Reply()
-	if err != nil {
-		return
-	}
-	Root := xproto.Setup(XU.Conn()).DefaultScreen(XU.Conn()).Root
-	resources, err := randr.GetScreenResources(XU.Conn(), Root).Reply()
-	if err != nil {
-		return
+		return false, err
 	}
 
-	bestModes := make([]uint32, 0)
-	for _, output := range resources.Outputs {
-		reply, err := randr.GetOutputInfo(XU.Conn(), output, 0).Reply()
-		if err == nil && reply.NumModes > 1 {
-			bestModes = append(bestModes, uint32(reply.Modes[0]))
-		}
-	}
-
-	w, h = 0, 0
-	for _, m := range resources.Modes {
-		for _, id := range bestModes {
-			if id == m.Id {
-				bw, bh := m.Width, m.Height
-				if w == 0 || h == 0 {
-					w, h = bw, bh
-				} else if uint32(bw)*uint32(bh) < uint32(w)*uint32(h) {
-					w, h = bw, bh
-				}
-			}
-		}
-	}
-
-	if w == 0 || h == 0 {
-		// get resource failed, use root window's geometry
-		rootRect := xwindow.RootGeometry(XU)
-		w, h = uint16(rootRect.Width()), uint16(rootRect.Height())
-	}
-
-	if w == 0 || h == 0 {
-		w, h = 1024, 768 // default value
-	}
-
-	logger.Debugf("primary screen's best resolution is %dx%d", w, h)
-	return
+	return result.IsAuthorized, nil
 }
 
-func delta(v1, v2 float64) float64 {
-	if v1 > v2 {
-		return v1 - v2
-	}
-	return v2 - v1
-}
+var errAuthFailed = errors.New("authentication failed")
 
-// "0" -> "0", "1->2" -> "1", "Parent Tiltle>Child Title" -> "Parent Title"
-func convertToSimpleEntry(entry string) (simpleEntry string) {
-	i := strings.Index(entry, ">")
-	if i >= 0 {
-		simpleEntry = entry[0:i]
-	} else {
-		simpleEntry = entry
-	}
-	return
-}
-
-func parseCurrentGfxmode() (w, h uint16) {
-	return parseGfxmode(grub.config.Resolution)
-}
-
-func parseGfxmode(gfxmode string) (w, h uint16) {
-	w, h, err := doParseGfxmode(gfxmode)
-	if err != nil {
-		logger.Error(err)
-		w, h = getPrimaryScreenBestResolution() // default value
-	}
-	return
-}
-
-func doParseGfxmode(gfxmode string) (w, h uint16, err error) {
-	// check if contains ',' or ';', if so, just split first field as gfxmode
-	if strings.Contains(gfxmode, ",") {
-		gfxmode = strings.Split(gfxmode, ",")[0]
-	} else if strings.Contains(gfxmode, ";") {
-		gfxmode = strings.Split(gfxmode, ";")[0]
+func checkAuth(dbusMsg dbus.DMessage) error {
+	if noCheckAuth {
+		logger.Warning("check auth disabled")
+		return nil
 	}
 
-	if gfxmode == "auto" {
-		// just return screen resolution if gfxmode is "auto"
-		w, h = getPrimaryScreenBestResolution()
-		return
-	}
-
-	a := strings.Split(gfxmode, "x")
-	if len(a) < 2 {
-		err = fmt.Errorf("gfxmode format error, %s", gfxmode)
-		return
-	}
-
-	// parse width
-	tmpw, err := strconv.ParseUint(a[0], 10, 16)
-	if err != nil {
-		return
-	}
-
-	// parse height
-	tmph, err := strconv.ParseUint(a[1], 10, 16)
-	if err != nil {
-		return
-	}
-
-	w = uint16(tmpw)
-	h = uint16(tmph)
-	return
-}
-
-// write file content to "/var/cache/deepin/grub2.json".
-func doWriteConfig(fileContent []byte) error {
-	// ensure parent directory exists
-	if !utils.IsFileExist(configFile) {
-		err := os.MkdirAll(path.Dir(configFile), 0755)
-		if err != nil {
-			return err
-		}
-	}
-	return ioutil.WriteFile(configFile, fileContent, 0644)
-}
-
-// write file content to "/etc/default/grub".
-func doWriteGrubSettings(fileContent string) error {
-	return ioutil.WriteFile(grubSettingFile, []byte(fileContent), 0664)
-}
-
-func doGenerateThemeBackground(screenWidth, screenHeight uint16) (err error) {
-	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
+	pid := dbusMsg.GetSenderPID()
+	isAuthorized, err := checkAuthWithPid(pid)
 	if err != nil {
 		return err
 	}
-	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
-	logger.Infof("background size %dx%d", screenWidth, screenHeight)
-	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
-	if err != nil {
-		return err
+	if !isAuthorized {
+		return errAuthFailed
 	}
-
-	// generate background thumbnail
-	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
-	if err != nil {
-		return err
-	}
-
 	return nil
+}
+
+func getFileMD5sum(file string) (string, error) {
+	f, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	h := md5.New()
+	_, err = io.Copy(h, f)
+	if err != nil {
+		return "", err
+	}
+
+	sum := fmt.Sprintf("%x", h.Sum(nil))
+	return sum, nil
 }

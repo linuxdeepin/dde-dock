@@ -13,6 +13,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	graphic "pkg.deepin.io/lib/gdkpixbuf"
 	"pkg.deepin.io/lib/utils"
 	"sync"
@@ -58,6 +59,7 @@ type ThemeScheme struct {
 // Theme is a dbus object which provide properties and methods to
 // setup deepin grub2 theme.
 type Theme struct {
+	grub2       *Grub2
 	themeDir    string
 	mainFile    string
 	tplFile     string
@@ -71,13 +73,14 @@ type Theme struct {
 	updateLock sync.Mutex
 
 	Background        string // background thumbnail, always equal with bgThumbFile, used by front-end
-	ItemColor         string `access:"readwrite"`
-	SelectedItemColor string `access:"readwrite"`
+	ItemColor         string
+	SelectedItemColor string
 }
 
 // NewTheme create Theme object.
-func NewTheme() *Theme {
+func NewTheme(grub2 *Grub2) *Theme {
 	theme := &Theme{}
+	theme.grub2 = grub2
 	theme.themeDir = themeDir
 	theme.mainFile = themeMainFile
 	theme.tplFile = themeTplFile
@@ -91,6 +94,15 @@ func NewTheme() *Theme {
 
 func newTplJSONData() (d *TplJSONData) {
 	d = &TplJSONData{}
+	return
+}
+
+func (theme *Theme) getScreenWidthHeight() (w, h uint16) {
+	var err error
+	w, h, err = theme.grub2.getScreenWidthHeight()
+	if err != nil {
+		return 1024, 768
+	}
 	return
 }
 
@@ -113,16 +125,16 @@ func (theme *Theme) reset() {
 	theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
 	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
 	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
-	theme.customTheme()
+	theme.setCustomTheme()
 
 	// reset theme background
 	go func() {
 		theme.updateLock.Lock()
 		defer theme.updateLock.Unlock()
 		theme.setPropUpdating(true)
-		grub2extDoResetThemeBackground()
-		screenWidth, screenHeight := parseCurrentGfxmode()
-		grub2extDoGenerateThemeBackground(screenWidth, screenHeight)
+		resetThemeBackground()
+		screenWidth, screenHeight := theme.getScreenWidthHeight()
+		generateThemeBackground(screenWidth, screenHeight)
 		theme.setPropBackground(theme.bgThumbFile)
 		theme.setPropUpdating(false)
 	}()
@@ -132,7 +144,7 @@ func (theme *Theme) reset() {
 // 1024x768 if updating grub-themes-deepin package lonely
 func (theme *Theme) regenerateBackgroundIfNeed() {
 	logger.Debug("check if need regenerate theme background")
-	wantWidth, wantHeight := parseCurrentGfxmode()
+	wantWidth, wantHeight := theme.getScreenWidthHeight()
 	bgw, bgh, _ := graphic.GetImageSize(theme.bgFile)
 	srcbgw, srcbgh, _ := graphic.GetImageSize(theme.bgSrcFile)
 	needGenerate := false
@@ -161,7 +173,7 @@ func (theme *Theme) regenerateBackgroundIfNeed() {
 	}
 
 	if needGenerate {
-		grub2extDoGenerateThemeBackground(wantWidth, wantHeight)
+		generateThemeBackground(wantWidth, wantHeight)
 		theme.setPropBackground(theme.bgThumbFile)
 		logger.Info("update theme background success")
 	}
@@ -192,8 +204,8 @@ func (theme *Theme) getTplJSONData(fileContent []byte) (*TplJSONData, error) {
 	return tplJSONData, nil
 }
 
-func (theme *Theme) customTheme() {
-	logger.Debugf("custom theme: %v", theme.tplJSONData.CurrentScheme)
+func (theme *Theme) setCustomTheme() {
+	logger.Debugf("set custom theme: %v", theme.tplJSONData.CurrentScheme)
 
 	// generate a new theme.txt from template
 	tplFileContent, err := ioutil.ReadFile(theme.tplFile)
@@ -210,7 +222,11 @@ func (theme *Theme) customTheme() {
 		logger.Error("theme content is empty")
 	}
 
-	grub2extDoWriteThemeMainFile(string(themeFileContent))
+	err = writeThemeMainFile(themeFileContent)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
 
 	// store the customized key-values to json file
 	jsonContent, err := json.Marshal(theme.tplJSONData)
@@ -218,7 +234,7 @@ func (theme *Theme) customTheme() {
 		return
 	}
 
-	grub2extDoWriteThemeTplFile(string(jsonContent))
+	writeThemeTplFile(jsonContent)
 }
 
 func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interface{}) ([]byte, error) {
@@ -234,4 +250,97 @@ func (theme *Theme) getCustomizedThemeContent(fileContent []byte, tplData interf
 		return []byte(""), err
 	}
 	return buf.Bytes(), nil
+}
+
+func delta(v1, v2 float64) float64 {
+	if v1 > v2 {
+		return v1 - v2
+	}
+	return v2 - v1
+}
+
+// write file content to "/boot/grub/themes/deepin/theme.txt".
+func writeThemeMainFile(data []byte) error {
+	return ioutil.WriteFile(themeMainFile, data, 0664)
+}
+
+// write file content to "/boot/grub/themes/deepin/theme_tpl.json".
+func writeThemeTplFile(data []byte) error {
+	return ioutil.WriteFile(themeJSONFile, data, 0664)
+}
+
+// link background_origin_source to background_source
+func resetThemeBackground() error {
+	os.Remove(themeBgSrcFile)
+	return os.Symlink(themeBgOrigSrcFile, themeBgSrcFile)
+}
+
+// generate the background for deepin grub2
+// theme depends on screen resolution.
+func generateThemeBackground(screenWidth, screenHeight uint16) (err error) {
+	imgWidth, imgHeight, err := graphic.GetImageSize(themeBgSrcFile)
+	if err != nil {
+		return err
+	}
+	logger.Infof("source background size %dx%d", imgWidth, imgHeight)
+	logger.Infof("background size %dx%d", screenWidth, screenHeight)
+	err = graphic.ScaleImagePrefer(themeBgSrcFile, themeBgFile, int(screenWidth), int(screenHeight), graphic.GDK_INTERP_HYPER, graphic.FormatPng)
+	if err != nil {
+		return err
+	}
+
+	// generate background thumbnail
+	err = graphic.ThumbnailImage(themeBgFile, themeBgThumbFile, 300, 300, graphic.GDK_INTERP_BILINEAR, graphic.FormatPng)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (theme *Theme) doSetBackgroundSourceFile(imageFile string) bool {
+	theme.updateLock.Lock()
+	defer theme.updateLock.Unlock()
+	theme.setPropUpdating(true)
+	screenWidth, screenHeight := theme.getScreenWidthHeight()
+	setThemeBackgroundSourceFile(imageFile, screenWidth, screenHeight)
+	theme.setPropBackground(theme.bgThumbFile)
+	theme.setPropUpdating(false)
+
+	// set item color through background's dominant color
+	_, _, v, _ := graphic.GetDominantColorOfImage(theme.bgSrcFile)
+	if v < 0.5 {
+		// background is dark
+		theme.tplJSONData.CurrentScheme = theme.tplJSONData.DarkScheme
+		logger.Info("background is dark, use the dark theme scheme")
+	} else {
+		// background is bright
+		theme.tplJSONData.CurrentScheme = theme.tplJSONData.BrightScheme
+		logger.Info("background is bright, so use the bright theme scheme")
+	}
+	theme.setPropItemColor(theme.tplJSONData.CurrentScheme.ItemColor)
+	theme.setPropSelectedItemColor(theme.tplJSONData.CurrentScheme.SelectedItemColor)
+	theme.setCustomTheme()
+
+	logger.Info("update background sucess")
+	return true
+}
+
+// setup a new background source file
+// for deepin grub2 theme, and then generate the background depends on
+// screen resolution.
+func setThemeBackgroundSourceFile(imageFile string, screenWidth, screenHeight uint16) (err error) {
+	// if background source file is a symlink, just delete it
+	if utils.IsSymlink(themeBgSrcFile) {
+		os.Remove(themeBgSrcFile)
+	}
+
+	// backup background source file
+	err = utils.CopyFile(imageFile, themeBgSrcFile)
+	if err != nil {
+		return err
+	}
+
+	// generate a new background
+	return generateThemeBackground(screenWidth, screenHeight)
 }

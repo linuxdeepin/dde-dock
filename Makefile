@@ -24,7 +24,6 @@ BINARIES =  \
 	    dde-session-daemon \
 	    dde-system-daemon \
 	    grub2 \
-	    grub2ext \
 	    search \
 	    theme-thumb-tool \
 	    backlight_helper \

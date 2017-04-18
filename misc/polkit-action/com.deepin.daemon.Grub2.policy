@@ -6,7 +6,7 @@
   <vendor>LinuxDeepin</vendor>
   <vendor_url>https://www.deepin.com/</vendor_url>
 
-  <action id="com.deepin.daemon.Grub2Ext">
+  <action id="com.deepin.daemon.Grub2">
     <message>Change the grub2 configuration</message>
     <message xml:lang="zh_CN">修改 Grub2 的配置</message>
     <defaults>
