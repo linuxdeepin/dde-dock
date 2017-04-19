@@ -49,11 +49,12 @@ void PreviewWidget::refershImage()
     XGetWindowAttributes(QX11Info::display(), m_wid, &attrs);
     XImage *ximage = XGetImage(QX11Info::display(), m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
 
-    const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_ARGB32);
-    m_image = qimage.scaled(W, H, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
+    m_image = qimage.scaled(W, H, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    m_image = m_image.copy((m_image.width() - W) / 2, (m_image.height() - H) / 2, W, H);
+    XDestroyImage(ximage);
 
     update();
-    XDestroyImage(ximage);
 }
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
@@ -61,9 +62,6 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
     const QRect r = rect().marginsRemoved(QMargins(M, M, M, M));
 
     QPainter painter(this);
-#ifdef QT_DEBUG
-    painter.fillRect(r, Qt::red);
-#endif
 
     // draw image
     const QRect ir = m_image.rect();
@@ -71,6 +69,25 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
 
     painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
     painter.drawImage(offset.x(), offset.y(), m_image);
+
+    // bottom black background
+    QRect bgr = r;
+    bgr.setTop(bgr.bottom() - 30);
+    painter.fillRect(bgr, QColor(0, 0, 0, 255 * 0.3));
+    // bottom title
+    painter.drawText(bgr, Qt::AlignCenter, m_title);
+
+    // draw border
+    if (m_hovered)
+    {
+        const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
+        QPen p;
+        p.setBrush(Qt::white);
+        p.setWidth(4);
+        painter.setBrush(Qt::transparent);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.drawRoundedRect(br, 3, 3);
+    }
 
     QWidget::paintEvent(e);
 }
