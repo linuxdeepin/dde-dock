@@ -1,6 +1,7 @@
 package miracast
 
 import (
+	"os"
 	"pkg.deepin.io/lib/dbus"
 	"time"
 )
@@ -19,6 +20,8 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 
 		if link.Managed {
 			link.core.WfdSubelements.Set("000600111c4400c8")
+			// default using 'USER' as link name
+			link.SetName(os.Getenv("USER"))
 			// TODO: wait WfdSubelements changed
 			dbus.Emit(m, "Event", EventLinkManaged, link.Path)
 		} else {
