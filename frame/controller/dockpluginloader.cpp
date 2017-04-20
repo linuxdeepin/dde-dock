@@ -27,8 +27,9 @@ void DockPluginLoader::run()
         if (file.startsWith("libdde-dock-"))
             continue;
 
-        msleep(150);
         emit pluginFounded(pluginsDir.absoluteFilePath(file));
+
+        msleep(500);
     }
 
     emit finished();

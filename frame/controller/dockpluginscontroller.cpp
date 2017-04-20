@@ -12,7 +12,7 @@ DockPluginsController::DockPluginsController(DockItemController *itemControllerI
 {
     qApp->installEventFilter(this);
 
-    QMetaObject::invokeMethod(this, "startLoader", Qt::QueuedConnection);
+    QTimer::singleShot(1, this, &DockPluginsController::startLoader);
 }
 
 DockPluginsController::~DockPluginsController()
@@ -94,7 +94,7 @@ void DockPluginsController::startLoader()
     connect(loader, &DockPluginLoader::finished, loader, &DockPluginLoader::deleteLater, Qt::QueuedConnection);
     connect(loader, &DockPluginLoader::pluginFounded, this, &DockPluginsController::loadPlugin, Qt::QueuedConnection);
 
-    loader->start(QThread::LowestPriority);
+    QTimer::singleShot(1, loader, [=] { loader->start(QThread::LowestPriority); });
 }
 
 void DockPluginsController::displayModeChanged()

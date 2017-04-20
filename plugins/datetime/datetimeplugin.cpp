@@ -37,6 +37,7 @@ const QString DatetimePlugin::pluginName() const
 void DatetimePlugin::init(PluginProxyInterface *proxyInter)
 {
     m_proxyInter = proxyInter;
+
     m_proxyInter->itemAdded(this, QString());
 }
 
