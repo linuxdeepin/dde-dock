@@ -156,6 +156,8 @@ func (m *Manager) isX11SessionActive() (bool, error) {
 }
 
 func (m *Manager) destroy() {
+	m.destroySubmodules()
+
 	if m.helper != nil {
 		m.helper.Destroy()
 		m.helper = nil
@@ -169,6 +171,5 @@ func (m *Manager) destroy() {
 		m.inhibitor.unblock()
 		m.inhibitor = nil
 	}
-	m.destroySubmodules()
 	dbus.UnInstallObject(m)
 }

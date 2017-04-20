@@ -2,7 +2,6 @@ package power
 
 import (
 	libdisplay "dbus/com/deepin/daemon/display"
-	libkeybinding "dbus/com/deepin/daemon/keybinding"
 	libsessionwatcher "dbus/com/deepin/daemon/sessionwatcher"
 	liblockfront "dbus/com/deepin/dde/lockfront"
 	libsessionmanager "dbus/com/deepin/sessionmanager"
@@ -17,7 +16,6 @@ import (
 
 type Helper struct {
 	Power          *libpower.Power
-	MediaKey       *libkeybinding.Mediakey
 	Notifier       *libnotifications.Notifier
 	SessionManager *libsessionmanager.SessionManager
 	SessionWatcher *libsessionwatcher.SessionWatcher
@@ -43,12 +41,6 @@ func (h *Helper) init() error {
 	h.Power, err = libpower.NewPower("com.deepin.system.Power", "/com/deepin/system/Power")
 	if err != nil {
 		logger.Warning("init Power failed:", err)
-		return err
-	}
-
-	h.MediaKey, err = libkeybinding.NewMediakey("com.deepin.daemon.Keybinding", "/com/deepin/daemon/Keybinding/Mediakey")
-	if err != nil {
-		logger.Warning("init MediaKey failed:", err)
 		return err
 	}
 
@@ -104,9 +96,9 @@ func (h *Helper) init() error {
 }
 
 func (h *Helper) Destroy() {
-	if h.MediaKey != nil {
-		libkeybinding.DestroyMediakey(h.MediaKey)
-		h.MediaKey = nil
+	if h.Power != nil {
+		libpower.DestroyPower(h.Power)
+		h.Power = nil
 	}
 
 	if h.Notifier != nil {
@@ -143,8 +135,10 @@ func (h *Helper) Destroy() {
 		h.Login1Manager = nil
 	}
 
+	// NOTE: Don't close x conn, because the bug of lib xgbutil.
+	// [xgbutil] eventloop.go:27: BUG: Could not read an event or an error.
 	if h.xu != nil {
-		h.xu.Conn().Close()
+		//h.xu.Conn().Close()
 		h.xu = nil
 	}
 }

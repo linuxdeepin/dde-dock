@@ -183,6 +183,7 @@ func (wa *fullScreenWorkaround) Start() error {
 				wa.detect()
 			case <-wa.exit:
 				wa.exit = nil
+				logger.Debug("exit loop detect")
 				return
 			}
 		}
