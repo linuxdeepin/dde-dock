@@ -18,6 +18,7 @@ signals:
 
 private slots:
     void refershImage();
+    void closeWindow();
 
 private:
     void paintEvent(QPaintEvent *e);

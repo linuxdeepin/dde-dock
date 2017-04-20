@@ -33,6 +33,8 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     setFixedSize(W + M * 2, H + M * 2);
     setLayout(centralLayout);
 
+    connect(m_closeButton, &QPushButton::clicked, this, &PreviewWidget::closeWindow);
+
     QTimer::singleShot(1, this, &PreviewWidget::refershImage);
 }
 
@@ -45,9 +47,11 @@ void PreviewWidget::setTitle(const QString &title)
 
 void PreviewWidget::refershImage()
 {
+    const auto display = QX11Info::display();
+
     XWindowAttributes attrs;
-    XGetWindowAttributes(QX11Info::display(), m_wid, &attrs);
-    XImage *ximage = XGetImage(QX11Info::display(), m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
+    XGetWindowAttributes(display, m_wid, &attrs);
+    XImage *ximage = XGetImage(display, m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
 
     const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
     m_image = qimage.scaled(W, H, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
@@ -55,6 +59,14 @@ void PreviewWidget::refershImage()
     XDestroyImage(ximage);
 
     update();
+}
+
+void PreviewWidget::closeWindow()
+{
+    const auto display = QX11Info::display();
+
+    XDestroyWindow(display, m_wid);
+    XFlush(display);
 }
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
