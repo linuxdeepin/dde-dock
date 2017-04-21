@@ -19,7 +19,6 @@ DockSettings::DockSettings(QWidget *parent)
 
       m_autoHide(true),
 
-      m_settingsMenu(parent),
       m_fashionModeAct(tr("Fashion Mode"), this),
       m_efficientModeAct(tr("Efficient Mode"), this),
       m_topPosAct(tr("Top"), this),
@@ -94,6 +93,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_settingsMenu.addAction(locationSubMenuAct);
     m_settingsMenu.addAction(sizeSubMenuAct);
     m_settingsMenu.addAction(statusSubMenuAct);
+    m_settingsMenu.setTitle("Settings Menu");
 
     connect(&m_settingsMenu, &WhiteMenu::triggered, this, &DockSettings::menuActionClicked);
     connect(m_dockInter, &DBusDock::PositionChanged, this, &DockSettings::onPositionChanged);
