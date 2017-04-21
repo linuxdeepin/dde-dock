@@ -44,7 +44,7 @@ func (t *TestWrapper) TestGetLocale(c *C.C) {
 	c.Check(err, C.Not(C.NotNil))
 	c.Check(l, C.Equals, "zh_CN.UTF-8")
 
-	l = getLocale()
+	l = getCurrentUserLocale()
 	c.Check(len(l), C.Not(C.Equals), 0)
 }
 

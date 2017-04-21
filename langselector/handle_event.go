@@ -24,7 +24,7 @@ func (lang *LangSelector) onLocaleSuccess() {
 		err := lang.handleLocaleChanged(ok, reason)
 		if err != nil {
 			lang.logger.Warning(err)
-			lang.setPropCurrentLocale(getLocale())
+			lang.setPropCurrentLocale(getCurrentUserLocale())
 			e := sendNotify(localeIconFailed, "",
 				Tr("System language failed to change, please try later."))
 			if e != nil {

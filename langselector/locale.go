@@ -66,8 +66,9 @@ type LangSelector struct {
 	// Store locale changed state
 	LocaleState int32
 
-	logger  *log.Logger
-	lhelper *localehelper.LocaleHelper
+	logger       *log.Logger
+	lhelper      *localehelper.LocaleHelper
+	localesCache LocaleInfos
 }
 
 type envInfo struct {
@@ -75,6 +76,24 @@ type envInfo struct {
 	value string
 }
 type envInfos []envInfo
+
+type LocaleInfo struct {
+	// Locale name
+	Locale string
+	// Locale description
+	Desc string
+}
+
+type LocaleInfos []LocaleInfo
+
+func (infos LocaleInfos) Get(locale string) (LocaleInfo, error) {
+	for _, info := range infos {
+		if info.Locale == locale {
+			return info, nil
+		}
+	}
+	return LocaleInfo{}, fmt.Errorf("invalid locale %q", locale)
+}
 
 func newLangSelector(l *log.Logger) *LangSelector {
 	lang := LangSelector{LocaleState: LocaleStateChanged}
@@ -94,9 +113,47 @@ func newLangSelector(l *log.Logger) *LangSelector {
 		return nil
 	}
 
-	lang.setPropCurrentLocale(getLocale())
+	locale := getCurrentUserLocale()
+	if !lang.isSupportedLocale(locale) {
+		logger.Warningf("newLangSelector: get invalid locale %q", locale)
+		locale = defaultLocale
+	}
+	lang.setPropCurrentLocale(locale)
 
 	return &lang
+}
+
+func getLocaleInfos() (LocaleInfos, error) {
+	infos, err := lang_info.GetSupportedLangInfos()
+	if err != nil {
+		return nil, err
+	}
+
+	list := make(LocaleInfos, len(infos))
+	for i, info := range infos {
+		list[i] = LocaleInfo{
+			Locale: info.Locale,
+			Desc:   info.Description,
+		}
+	}
+	return list, nil
+}
+
+func (ls *LangSelector) getCachedLocales() LocaleInfos {
+	if ls.localesCache == nil {
+		var err error
+		ls.localesCache, err = getLocaleInfos()
+		if err != nil {
+			logger.Warning("getLocaleInfos failed:", err)
+		}
+	}
+	return ls.localesCache
+}
+
+func (ls *LangSelector) isSupportedLocale(locale string) bool {
+	infos := ls.getCachedLocales()
+	_, err := infos.Get(locale)
+	return err == nil
 }
 
 func (lang *LangSelector) Destroy() {
@@ -140,25 +197,24 @@ func isNetworkEnable() (bool, error) {
 	return true, nil
 }
 
-func getLocale() string {
-	filename := path.Join(os.Getenv("HOME"), userLocaleFilePAM)
-	locale, err := getLocaleFromFile(filename)
-	if err != nil || len(locale) == 0 {
-		locale, err = getLocaleFromFile(systemLocaleFile)
-		if err != nil || len(locale) == 0 {
-			/* This file is used by systemd to store system-wide locale settings */
-			locale, err = getLocaleFromFile(systemdLocaleFile)
-			if err != nil || len(locale) == 0 {
-				locale = defaultLocale
-			}
+func getCurrentUserLocale() (locale string) {
+	files := [3]string{
+		path.Join(os.Getenv("HOME"), userLocaleFilePAM),
+		systemLocaleFile,
+		systemdLocaleFile, // It is used by systemd to store system-wide locale settings
+	}
+
+	var err error
+	for _, file := range files {
+		locale, err = getLocaleFromFile(file)
+		if err == nil && locale != "" {
+			// get locale success
+			break
 		}
 	}
-
-	locale = strings.Trim(locale, "\"")
-	if !lang_info.IsSupportedLocale(locale) {
-		locale = defaultLocale
+	if locale == "" {
+		return defaultLocale
 	}
-
 	return locale
 }
 
@@ -231,6 +287,7 @@ func getLocaleFromFile(filename string) (string, error) {
 		locale = info.value
 	}
 
+	locale = strings.Trim(locale, " '\"")
 	return locale, nil
 }
 

@@ -26,7 +26,7 @@ func main() {
 
 	dbus.DealWithUnhandledMessage()
 
-	dbus.SetAutoDestroyHandler(time.Second*5, func() bool {
+	dbus.SetAutoDestroyHandler(time.Minute*5, func() bool {
 		if lang.LocaleState == LocaleStateChanging {
 			return false
 		} else {

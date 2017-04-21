@@ -11,7 +11,6 @@ package langselector
 
 import (
 	"fmt"
-	"pkg.deepin.io/dde/api/lang_info"
 	. "pkg.deepin.io/lib/gettext"
 )
 
@@ -20,13 +19,6 @@ const (
 	localeIconFailed   = "notification-change-language-failed"
 	localeIconFinished = "notification-change-language-finished"
 )
-
-type LocaleInfo struct {
-	// Locale name
-	Locale string
-	// Locale description
-	Desc string
-}
 
 // Set user desktop environment locale, the new locale will work after relogin.
 // (Notice: this locale is only for the current user.)
@@ -39,7 +31,7 @@ func (lang *LangSelector) SetLocale(locale string) error {
 		return nil
 	}
 
-	if len(locale) == 0 || !lang_info.IsSupportedLocale(locale) {
+	if len(locale) == 0 || !lang.isSupportedLocale(locale) {
 		return fmt.Errorf("Invalid locale: %v", locale)
 	}
 	if lang.lhelper == nil {
@@ -80,28 +72,16 @@ func (lang *LangSelector) SetLocale(locale string) error {
 //
 // 得到系统支持的 locale 信息列表
 func (lang *LangSelector) GetLocaleList() []LocaleInfo {
-	list, err := getLocaleInfoList()
-	if err != nil {
-		lang.logger.Warning(err)
-		return nil
-	}
-
-	return list
+	return lang.getCachedLocales()
 }
 
-func getLocaleInfoList() ([]LocaleInfo, error) {
-	infos, err := lang_info.GetSupportedLangInfos()
+func (lang *LangSelector) GetLocaleDescription(locale string) (string, error) {
+	infos := lang.getCachedLocales()
+	info, err := infos.Get(locale)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-
-	var list []LocaleInfo
-	for _, info := range infos {
-		tmp := LocaleInfo{info.Locale, info.Description}
-		list = append(list, tmp)
-	}
-
-	return list, nil
+	return info.Desc, nil
 }
 
 // Reset set user desktop environment locale to system default locale
