@@ -578,7 +578,8 @@ void MainPanel::adjustItemSize()
 void MainPanel::itemInserted(const int index, DockItem *item)
 {
     // hide new item, display it after size adjust finished
-    item->hide();
+    item->setVisible(false);
+    item->setParent(this);
 
     manageItem(item);
     m_itemLayout->insertWidget(index, item);

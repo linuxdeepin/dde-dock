@@ -27,6 +27,8 @@ void DockPluginsController::itemAdded(PluginsItemInterface * const itemInter, co
             return;
 
     PluginsItem *item = new PluginsItem(itemInter, itemKey);
+    item->setVisible(false);
+
     m_pluginList[itemInter][itemKey] = item;
 
     emit pluginItemInserted(item);

@@ -21,15 +21,16 @@ PluginsItem::PluginsItem(PluginsItemInterface* const pluginInter, const QString 
       m_itemKey(itemKey),
       m_draging(false)
 {
-    Q_ASSERT(m_centralWidget);
+    qDebug() << "load plugins item: " << pluginInter->pluginName() << itemKey << m_centralWidget;
+
+    m_centralWidget->setParent(this);
+    m_centralWidget->setVisible(true);
+    m_centralWidget->installEventFilter(this);
 
     QBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(m_centralWidget);
     hLayout->setSpacing(0);
     hLayout->setMargin(0);
-
-    m_centralWidget->installEventFilter(this);
-    m_centralWidget->setVisible(true);
 
     setLayout(hLayout);
     setAccessibleName(pluginInter->pluginName() + "-" + m_itemKey);
