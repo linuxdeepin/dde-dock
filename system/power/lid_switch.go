@@ -10,129 +10,25 @@
 package power
 
 import (
-	"bytes"
-	"encoding/binary"
-	"fmt"
-	"os"
+	"pkg.deepin.io/lib/arch"
 	"pkg.deepin.io/lib/dbus"
-	"strings"
-	"syscall"
-	"unsafe"
 )
 
-type InputEvent struct {
-	Time  syscall.Timeval // time in seconds since epoch at which event occurred
-	Type  uint16          // event type - one of ecodes.EV_*
-	Code  uint16          // event code related to the event type
-	Value int32           // event value related to the event type
-}
-
-// Get a useful description for an input event. Example:
-//   event at 1347905437.435795, code 01, type 02, val 02
-func (ev *InputEvent) String() string {
-	return fmt.Sprintf("event at %d.%d, code %02d, type %02d, val %02d",
-		ev.Time.Sec, ev.Time.Usec, ev.Code, ev.Type, ev.Value)
-}
-
-var eventSize = int(unsafe.Sizeof(InputEvent{}))
-
-func (m *Manager) findLidSwitch() string {
-	devices := m.gudevClient.QueryBySubsystem("input")
-	var deviceFile string
-	for _, device := range devices {
-		name := device.GetName()
-		if !strings.HasPrefix(name, "event") {
-			continue
-		}
-		logger.Debug("name:", name)
-		logger.Debug("sysfsPath:", device.GetSysfsPath())
-		devName := device.GetSysfsAttr("device/name")
-		logger.Debugf("dev name: %q", devName)
-		if strings.Contains(strings.ToLower(devName), "lid switch") {
-			deviceFile = device.GetDeviceFile()
-			if deviceFile != "" {
-				return deviceFile
-			}
-		}
-	}
-	return ""
-}
-
 func (m *Manager) initLidSwitch() {
-	devFile := m.findLidSwitch()
-	if devFile == "" {
-		logger.Info("Not found lid switch")
-		return
+	if arch.Get() == arch.Sunway {
+		m.initLidSwitchSW()
+	} else {
+		m.initLidSwitchCommon()
 	}
-	logger.Debugf("find dev file %q", devFile)
-	// open
-	f, err := os.Open(devFile)
-	if err != nil {
-		logger.Debug("err:", err)
-		return
-	}
-	m.HasLidSwitch = true
-
-	go func() {
-		for {
-			events, err := readLidSwitchEvent(f)
-			if err != nil {
-				logger.Warning(err)
-				continue
-			}
-			for _, ev := range events {
-				logger.Debugf("%v", &ev)
-				if ev.Type == EV_SW && ev.Code == SW_LID {
-					m.handleLidSwitchEvent(&ev)
-				}
-			}
-		}
-	}()
+	logger.Debug("hasLidSwitch:", m.HasLidSwitch)
 }
 
-func (m *Manager) handleLidSwitchEvent(ev *InputEvent) {
-	logger.Debugf("lid switch event value: %v", ev.Value)
-	if ev.Value == 1 {
+func (m *Manager) handleLidSwitchEvent(closed bool) {
+	if closed {
 		logger.Info("Lid Closed")
 		dbus.Emit(m, "LidClosed")
-	} else if ev.Value == 0 {
+	} else {
 		logger.Info("Lid Opened")
 		dbus.Emit(m, "LidOpened")
 	}
-}
-
-const (
-	EV_SW  = 0x05
-	SW_LID = 0x00
-)
-
-func readLidSwitchEvent(f *os.File) ([]InputEvent, error) {
-	// read
-	count := 16
-
-	events := make([]InputEvent, count)
-	buffer := make([]byte, eventSize*count)
-
-	_, err := f.Read(buffer)
-	if err != nil {
-		logger.Debug("f read err:", err)
-		return nil, err
-	}
-
-	b := bytes.NewBuffer(buffer)
-	err = binary.Read(b, binary.LittleEndian, &events)
-	if err != nil {
-		logger.Debug("binary read err:", err)
-		return nil, err
-	}
-
-	// remove trailing structures
-	for i := range events {
-		logger.Debug("i", i)
-		if events[i].Time.Sec == 0 {
-			events = append(events[:i])
-			break
-		}
-	}
-	return events, nil
 }
