@@ -15,7 +15,7 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
-	//"sync"
+	"sync"
 	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/log"
 	"strings"
@@ -38,6 +38,7 @@ type Shortcuts struct {
 	// callbacks:
 	SuperReleaseCb func()
 	eventCb        KeyEventFunc
+	eventCbMu sync.Mutex
 }
 
 type KeyEvent struct {
@@ -256,14 +257,24 @@ func GetConcernedModifiers(state uint16) Modifiers {
 	return mods
 }
 
-func (ss *Shortcuts) handleKeyEvent(pressed bool, detail xproto.Keycode, state uint16) {
+func combineStateCode2Key(state uint16, code uint8) Key {
 	mods := GetConcernedModifiers(state)
-	code := Keycode(detail)
-	logger.Debug("event mods:", Modifiers(state))
+	_code := Keycode(code)
 	key := Key{
 		Mods: mods,
-		Code: code,
+		Code: _code,
 	}
+	return key
+}
+
+func (ss *Shortcuts) callEventCallback(ev *KeyEvent) {
+	ss.eventCbMu.Lock()
+	ss.eventCb(ev)
+	ss.eventCbMu.Unlock()
+}
+
+func (ss *Shortcuts) handleKeyEvent(pressed bool, detail xproto.Keycode, state uint16) {
+	key := combineStateCode2Key(state, uint8(detail))
 	logger.Debug("event key:", key)
 
 	if pressed {
@@ -283,7 +294,7 @@ func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
 			Shortcut: accel.Shortcut,
 		}
 
-		ss.eventCb(keyEvent)
+		ss.callEventCallback(keyEvent)
 	} else {
 		logger.Debug("accel not found")
 	}
@@ -299,15 +310,45 @@ func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 }
 
 func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
-	defer func() {
+	str := strings.ToLower(keybind.LookupString(ss.xu, 0, xproto.Keycode(code)))
+	//logger.Debugf("handleXRecordKeyEvent pressed: %v, code: %d, state: %d, str: %q", pressed, code, state, str)
+	if str == "super_l" || str == "super_r" ||
+		str == "caps_lock" || str == "num_lock" {
+		ss.handleXRecordSingleKeyEvent(pressed, str, code, state)
+		return
+	}
+
+	// Special handling screenshot* shortcuts
+	key := combineStateCode2Key(state, code)
+	accel, ok := ss.grabedKeyAccelMap[key]
+	if !ok {
+		return
+	}
+
+	shortcut := accel.Shortcut
+	if pressed && shortcut != nil &&
+		shortcut.GetType() == ShortcutTypeSystem &&
+		strings.HasPrefix(shortcut.GetId(), "screenshot") {
+		keyEvent := &KeyEvent{
+			Mods: key.Mods,
+			Code: key.Code,
+			Shortcut: shortcut,
+		}
+		logger.Debug("handleXRecordKeyEvent: emit key event for screenshot* shortcuts")
+		ss.callEventCallback(keyEvent)
+	}
+}
+
+func (ss *Shortcuts) handleXRecordSingleKeyEvent(pressed bool, str string, code uint8, state uint16) {
+	// handle super, caps_lock, num_lock key event
+	defer func(){
 		if pressed {
 			ss.pressedKeysCount++
 		} else {
 			ss.pressedKeysCount = 0
 		}
-	}()
-	str := strings.ToLower(keybind.LookupString(ss.xu, 0, xproto.Keycode(code)))
-	//logger.Debugf("handleXRecordKeyEvent pressed: %v, code: %d, state: %d, str: %q", pressed, code, state, str)
+	} ()
+
 	switch str {
 	case "super_l", "super_r":
 		if pressed {
