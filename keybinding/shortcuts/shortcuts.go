@@ -15,10 +15,10 @@ import (
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
-	"sync"
 	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/log"
 	"strings"
+	"sync"
 )
 
 var logger *log.Logger
@@ -38,7 +38,7 @@ type Shortcuts struct {
 	// callbacks:
 	SuperReleaseCb func()
 	eventCb        KeyEventFunc
-	eventCbMu sync.Mutex
+	eventCbMu      sync.Mutex
 }
 
 type KeyEvent struct {
@@ -310,6 +310,14 @@ func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 }
 
 func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
+	defer func() {
+		if pressed {
+			ss.pressedKeysCount++
+		} else {
+			ss.pressedKeysCount = 0
+		}
+	}()
+
 	str := strings.ToLower(keybind.LookupString(ss.xu, 0, xproto.Keycode(code)))
 	//logger.Debugf("handleXRecordKeyEvent pressed: %v, code: %d, state: %d, str: %q", pressed, code, state, str)
 	if str == "super_l" || str == "super_r" ||
@@ -330,8 +338,8 @@ func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint1
 		shortcut.GetType() == ShortcutTypeSystem &&
 		strings.HasPrefix(shortcut.GetId(), "screenshot") {
 		keyEvent := &KeyEvent{
-			Mods: key.Mods,
-			Code: key.Code,
+			Mods:     key.Mods,
+			Code:     key.Code,
 			Shortcut: shortcut,
 		}
 		logger.Debug("handleXRecordKeyEvent: emit key event for screenshot* shortcuts")
@@ -341,14 +349,6 @@ func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint1
 
 func (ss *Shortcuts) handleXRecordSingleKeyEvent(pressed bool, str string, code uint8, state uint16) {
 	// handle super, caps_lock, num_lock key event
-	defer func(){
-		if pressed {
-			ss.pressedKeysCount++
-		} else {
-			ss.pressedKeysCount = 0
-		}
-	} ()
-
 	switch str {
 	case "super_l", "super_r":
 		if pressed {
