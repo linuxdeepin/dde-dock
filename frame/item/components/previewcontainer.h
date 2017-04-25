@@ -16,12 +16,20 @@ public:
 
 signals:
     void requestActivateWindow(const WId wid) const;
+    void requestPreviewWindow(const WId wid) const;
+    void requestCancelPreview() const;
 
 public:
     void setWindowInfos(const WindowDict &infos);
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
+
+protected:
+    void leaveEvent(QEvent *e);
+
+private slots:
+    void onMouseLeave();
 
 private:
     QBoxLayout *m_windowListLayout;

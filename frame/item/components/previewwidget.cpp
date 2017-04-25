@@ -32,10 +32,9 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
 
     setFixedSize(W + M * 2, H + M * 2);
     setLayout(centralLayout);
+    setAcceptDrops(true);
 
     connect(m_closeButton, &QPushButton::clicked, this, &PreviewWidget::closeWindow);
-
-    QTimer::singleShot(1, this, &PreviewWidget::refershImage);
 }
 
 void PreviewWidget::setTitle(const QString &title)
@@ -67,6 +66,14 @@ void PreviewWidget::closeWindow()
 
     XDestroyWindow(display, m_wid);
     XFlush(display);
+}
+
+void PreviewWidget::setVisible(const bool visible)
+{
+    QWidget::setVisible(visible);
+
+    if (visible)
+        QTimer::singleShot(1, this, &PreviewWidget::refershImage);
 }
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
@@ -112,6 +119,8 @@ void PreviewWidget::enterEvent(QEvent *e)
     update();
 
     QWidget::enterEvent(e);
+
+    emit requestPreviewWindow(m_wid);
 }
 
 void PreviewWidget::leaveEvent(QEvent *e)
@@ -127,6 +136,15 @@ void PreviewWidget::leaveEvent(QEvent *e)
 void PreviewWidget::mouseReleaseEvent(QMouseEvent *e)
 {
     QWidget::mouseReleaseEvent(e);
+
+    emit requestHidePopup();
+    emit requestCancelPreview();
+    emit requestActivateWindow(m_wid);
+}
+
+void PreviewWidget::dragEnterEvent(QDragEnterEvent *e)
+{
+    QWidget::dragEnterEvent(e);
 
     emit requestActivateWindow(m_wid);
 }

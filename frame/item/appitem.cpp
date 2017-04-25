@@ -64,12 +64,16 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
+    m_appPreviewTips->setVisible(false);
+
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow);
+    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
 
     updateTitle();
     refershIcon();
@@ -349,6 +353,17 @@ void AppItem::dragEnterEvent(QDragEnterEvent *e)
     e->accept();
 }
 
+void AppItem::dragMoveEvent(QDragMoveEvent *e)
+{
+    DockItem::dragMoveEvent(e);
+
+    if (m_titles.isEmpty())
+        return;
+
+    if (!PopupWindow->isVisible() || PopupWindow->getContent() != m_appPreviewTips)
+        showPreview();
+}
+
 void AppItem::dropEvent(QDropEvent *e)
 {
     QStringList uriList;
@@ -436,6 +451,8 @@ void AppItem::updateTitle()
 {
     m_titles = m_itemEntry->titles();
 
+    m_appPreviewTips->setWindowInfos(m_titles);
+
     update();
 }
 
@@ -467,7 +484,7 @@ void AppItem::showPreview()
 //        return hidePopup();
 
     m_appPreviewTips->updateLayoutDirection(DockPosition);
-    m_appPreviewTips->setWindowInfos(m_titles);
+//    m_appPreviewTips->setWindowInfos(m_titles);
 
     qApp->processEvents();
 

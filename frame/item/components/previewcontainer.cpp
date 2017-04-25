@@ -13,6 +13,7 @@ PreviewContainer::PreviewContainer(QWidget *parent)
     m_windowListLayout->setSpacing(3);
 
     setLayout(m_windowListLayout);
+    setMouseTracking(true);
 }
 
 void PreviewContainer::setWindowInfos(const WindowDict &infos)
@@ -30,6 +31,8 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
         w->setTitle(it.value());
 
         connect(w, &PreviewWidget::requestActivateWindow, this, &PreviewContainer::requestActivateWindow);
+        connect(w, &PreviewWidget::requestPreviewWindow, this, &PreviewContainer::requestPreviewWindow);
+        connect(w, &PreviewWidget::requestCancelPreview, this, &PreviewContainer::requestCancelPreview);
 
         m_windowListLayout->addWidget(w);
     }
@@ -49,4 +52,19 @@ void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
         m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
         break;
     }
+}
+
+void PreviewContainer::leaveEvent(QEvent *e)
+{
+    QWidget::leaveEvent(e);
+
+    QTimer::singleShot(1, this, &PreviewContainer::onMouseLeave);
+}
+
+void PreviewContainer::onMouseLeave()
+{
+    if (rect().contains(mapFromGlobal(QCursor::pos())))
+        return;
+
+    emit requestCancelPreview();
 }

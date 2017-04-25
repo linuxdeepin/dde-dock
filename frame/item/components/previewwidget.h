@@ -15,16 +15,21 @@ public:
 
 signals:
     void requestActivateWindow(const WId wid) const;
+    void requestPreviewWindow(const WId wid) const;
+    void requestCancelPreview() const;
+    void requestHidePopup() const;
 
 private slots:
     void refershImage();
     void closeWindow();
+    void setVisible(const bool visible);
 
 private:
     void paintEvent(QPaintEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
 
 private:
     const WId m_wid;

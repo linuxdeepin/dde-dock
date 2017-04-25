@@ -28,6 +28,8 @@ public:
 
 signals:
     void requestActivateWindow(const WId wid) const;
+    void requestPreviewWindow(const WId wid) const;
+    void requestCancelPreview() const;
 
 private:
     void paintEvent(QPaintEvent *e);
@@ -37,6 +39,7 @@ private:
     void wheelEvent(QWheelEvent *e);
     void resizeEvent(QResizeEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
 
     void showHoverTips();

@@ -110,10 +110,23 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("CloseWindow"), argumentList);
     }
 
+    inline QDBusPendingReply<> PreviewWindow(uint in0)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(in0);
+        return asyncCallWithArgumentList(QStringLiteral("PreviewWindow"), argumentList);
+    }
+
     inline QDBusPendingReply<QStringList> GetEntryIDs()
     {
         QList<QVariant> argumentList;
         return asyncCallWithArgumentList(QStringLiteral("GetEntryIDs"), argumentList);
+    }
+
+    inline QDBusPendingReply<QStringList> CancelPreviewWindow()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("CancelPreviewWindow"), argumentList);
     }
 
     inline QDBusPendingReply<> MoveEntry(const int oldIndex, const int newIndex)

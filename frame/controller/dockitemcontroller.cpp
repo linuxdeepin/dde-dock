@@ -182,6 +182,8 @@ DockItemController::DockItemController(QObject *parent)
         AppItem *it = new AppItem(entry);
 
         connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+        connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
+        connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
         m_itemList.append(it);
     }
