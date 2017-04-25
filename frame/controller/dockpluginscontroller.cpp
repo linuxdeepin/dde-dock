@@ -121,6 +121,7 @@ void DockPluginsController::loadPlugin(const QString &pluginFile)
     PluginsItemInterface *interface = qobject_cast<PluginsItemInterface *>(pluginLoader->instance());
     if (!interface)
     {
+        qWarning() << "load plugin failed!!!" << pluginLoader->errorString() << pluginFile;
         pluginLoader->unload();
         pluginLoader->deleteLater();
         return;
