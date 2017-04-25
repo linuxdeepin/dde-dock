@@ -766,6 +766,11 @@ func nmGetDeviceModemCapabilities(devPath dbus.ObjectPath) (capabilities uint32)
 func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (cpath, apath dbus.ObjectPath, err error) {
 	if len(devPath) == 0 {
 		devPath = "/"
+	} else {
+		if !nmGetWiredCarrier(devPath) {
+			err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+			return
+		}
 	}
 	spath := dbus.ObjectPath("/")
 	cpath, apath, err = nmManager.AddAndActivateConnection(data, devPath, spath)
@@ -778,6 +783,10 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (c
 }
 
 func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
+	if !nmGetWiredCarrier(devPath) {
+		err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
+		return
+	}
 	spath := dbus.ObjectPath("/")
 	apath, err = nmManager.ActivateConnection(cpath, devPath, spath)
 	if err != nil {
@@ -1077,6 +1086,17 @@ func nmGetConnectionById(id string) (cpath dbus.ObjectPath, err error) {
 func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmSettings.GetConnectionByUuid(uuid)
 	return
+}
+
+func nmGetWiredCarrier(devPath dbus.ObjectPath) bool {
+	wired, err := nmNewDeviceWired(devPath)
+	if err != nil {
+		return true
+	}
+	defer nmDestroyDeviceWired(wired)
+
+	logger.Debug("--------Check wired available:", wired.HwAddress.Get(), wired.Carrier.Get())
+	return wired.Carrier.Get()
 }
 
 // get wireless connection by ssid, the connection with special hardware address is priority
