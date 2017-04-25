@@ -134,6 +134,14 @@ func (m *DockManager) CloseWindow(win uint32) error {
 	return nil
 }
 
+func (m *DockManager) PreviewWindow(win uint32) error {
+	return m.wm.PreviewWindow(win)
+}
+
+func (m *DockManager) CancelPreviewWindow() error {
+	return m.wm.CancelPreviewWindow()
+}
+
 // for debug
 func (m *DockManager) GetEntryIDs() []string {
 	list := make([]string, 0, len(m.Entries))
