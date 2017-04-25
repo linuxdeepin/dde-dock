@@ -154,3 +154,10 @@ func (bat *Battery) setPropVoltageMinDesign(val uint64) {
 		bat.notifyChange("VoltageMinDesign")
 	}
 }
+
+func (bat *Battery) setPropIsPresent(val bool) {
+	if bat.IsPresent != val {
+		bat.IsPresent = val
+		bat.notifyChange("IsPresent")
+	}
+}

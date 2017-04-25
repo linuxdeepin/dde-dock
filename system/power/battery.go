@@ -95,6 +95,7 @@ func (bat *Battery) notifyChange(propNames ...string) {
 
 func (bat *Battery) resetValues() {
 	logger.Debug("resetValues")
+	bat.setPropIsPresent(false)
 	bat.setPropUpdateTime(0)
 
 	bat.setPropName("")
@@ -137,6 +138,7 @@ func (bat *Battery) _refresh(info *battery.BatteryInfo) {
 		bat.resetValues()
 		return
 	}
+	bat.setPropIsPresent(true)
 	now := time.Now()
 	updateTime := now.Unix()
 	logger.Debugf("now %v updateTime %v", now, updateTime)
