@@ -57,4 +57,3 @@ int stop_clip_manager();
 G_END_DECLS
 
 #endif /* __GSD_CLIPBOARD_MANAGER_H */
-
