@@ -135,6 +135,9 @@ func isBuiltinOuput(name string) bool {
 		fallthrough
 	case strings.Contains(name, "dsi"):
 		return true
+	case name == "default":
+		// now sunway notebook has only one output named default
+		return true
 	}
 	return false
 }
