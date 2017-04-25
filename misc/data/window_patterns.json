@@ -178,5 +178,18 @@
                 "=:t"
             ]
         ]
+    },
+    {
+        "ret": "id=google-chrome",
+        "rules": [
+            [
+                "wmi",
+                "e:chrome.ex"
+            ],
+            [
+                "wmc",
+                "e.chrome.ex"
+            ]
+        ]
     }
 ]
