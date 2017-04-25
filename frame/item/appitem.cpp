@@ -357,11 +357,10 @@ void AppItem::showHoverTips()
 
 //    showPopupWindow(content);
 
-    const int count = m_titles.size();
-    if (count <= 1)
+    if (m_titles.isEmpty())
         return DockItem::showHoverTips();
 
-    togglePreview();
+    showPreview();
 }
 
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
@@ -447,15 +446,15 @@ void AppItem::activeChanged()
     m_active = !m_active;
 }
 
-void AppItem::togglePreview()
+void AppItem::showPreview()
 {
-    if (PopupWindow->isVisible())
-        return hidePopup();
+//    if (PopupWindow->isVisible())
+//        return hidePopup();
 
     m_appPreviewTips->updateLayoutDirection(DockPosition);
     m_appPreviewTips->setWindowInfos(m_titles);
 
     qApp->processEvents();
 
-    showPopupApplet(m_appPreviewTips);
+    showPopupWindow(m_appPreviewTips, true);
 }
