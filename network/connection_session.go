@@ -339,7 +339,7 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 		}
 		defer nmDestroySettingsConnection(nmConn)
 
-		correctIPv6DataType(s.data)
+		correctConnectionData(s.data)
 		err = nmConn.Update(s.data)
 		if err != nil {
 			logger.Error(err)
@@ -610,6 +610,11 @@ func (s *ConnectionSession) ListAvailableKeyDetail() string {
 	return info
 }
 
+func correctConnectionData(data connectionData) {
+	correctIPv6DataType(data)
+	correctIgnoreAutoDNS(data)
+}
+
 func correctIPv6DataType(data connectionData) {
 	for section, value := range data {
 		if section != "ipv6" {
@@ -626,6 +631,39 @@ func correctIPv6DataType(data connectionData) {
 		if ok && !isInterfaceEmpty(tmp.Value()) {
 			routes := interfaceToIpv6Routes(tmp.Value())
 			value["routes"] = dbus.MakeVariant(routes)
+		}
+	}
+}
+
+func correctIgnoreAutoDNS(data connectionData) {
+	for section, value := range data {
+		if section != "ipv4" && section != "ipv6" {
+			continue
+		}
+
+		// if dns specialed, and method is 'auto', set ignore-auto-dns to true
+		method, ok := value["method"]
+		logger.Debug("[correctIgnoreAutoDNS] method:", method.String())
+		if !ok || method.Value().(string) != "auto" {
+			continue
+		}
+
+		if section == "ipv4" {
+			dns := getSettingIP4ConfigDns(data)
+			logger.Debug("[correctIgnoreAutoDNS] ipv4 dns:", dns)
+			if len(dns) == 0 {
+				removeSettingIP4ConfigIgnoreAutoDns(data)
+				continue
+			}
+			setSettingIP4ConfigIgnoreAutoDns(data, true)
+		} else if section == "ipv6" {
+			dns := getSettingIP6ConfigDns(data)
+			logger.Debug("[correctIgnoreAutoDNS] ipv6 dns:", dns)
+			if len(dns) == 0 {
+				removeSettingIP6ConfigIgnoreAutoDns(data)
+				continue
+			}
+			setSettingIP6ConfigIgnoreAutoDns(data, true)
 		}
 	}
 }

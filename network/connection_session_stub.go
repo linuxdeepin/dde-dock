@@ -24,7 +24,7 @@ func (s *ConnectionSession) GetDBusInfo() dbus.DBusInfo {
 }
 
 func (s *ConnectionSession) setProps() {
-	correctIPv6DataType(s.data)
+	correctConnectionData(s.data)
 	s.setPropType()
 	s.setPropAllowDelete()
 	s.setPropAvailableVirtualSections()
