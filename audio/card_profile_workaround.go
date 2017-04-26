@@ -69,8 +69,10 @@ func selectNewCardProfile(c *pulse.Card) {
 	sort.Sort(profiles)
 	logger.Debug("[selectNewCardProfile] after sort:", profiles)
 
+	// if card is bluetooth device, switch to profile a2dp_sink
+	// only 'a2dp_sink' in bluetooth profiles because of blacklist
 	if len(profiles) > 0 {
-		logger.Debug("re-select card profile:", profiles[0])
+		logger.Debug("re-select card profile:", profiles[0], c.ActiveProfile.Name)
 		if c.ActiveProfile.Name != profiles[0].Name {
 			c.SetProfile(profiles[0].Name)
 		}

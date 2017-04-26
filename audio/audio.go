@@ -244,6 +244,10 @@ func (a *Audio) SetPort(cardId uint32, portName string, direction int32) error {
 		}
 		destProfile = name
 	}
+	// workaround for bluetooth, set profile to 'a2dp_sink' when port direction is output
+	if int(direction) == pulse.DirectionSink && destPortInfo.Profiles.Exists("a2dp_sink") {
+		destProfile = "a2dp_sink"
+	}
 	destCard.core.SetProfile(destProfile)
 
 setPort:

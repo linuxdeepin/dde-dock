@@ -10,6 +10,7 @@
 package audio
 
 import "pkg.deepin.io/lib/pulse"
+import "time"
 
 func (a *Audio) initEventHandlers() {
 	if !a.init {
@@ -58,7 +59,11 @@ func (a *Audio) handleCardEvent(eType int, idx uint32) {
 			a.setPropCards(infos.string())
 			a.cards = infos
 		}
-		selectNewCardProfile(card)
+		// fix change profile not work
+		time.AfterFunc(time.Millisecond*500, func() {
+			selectNewCardProfile(card)
+			logger.Debug("After select profile:", card.ActiveProfile.Name)
+		})
 	case pulse.EventTypeRemove:
 		logger.Debugf("[Event] card #%d removed", idx)
 		infos, deleted := a.cards.delete(idx)
