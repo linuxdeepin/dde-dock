@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 小時制</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 小時制</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
@@ -40,7 +40,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="87"/>
         <source>Unknown device</source>
-        <translation>未知設備</translation>
+        <translation>未知裝置</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
@@ -141,12 +141,12 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="83"/>
         <source>Size</source>
-        <translation>圖示大小</translation>
+        <translation>圖示</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="90"/>
         <source>Status</source>
-        <translation>顯示狀態</translation>
+        <translation>狀態</translation>
     </message>
 </context>
 <context>
@@ -327,7 +327,7 @@
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="54"/>
         <source>No Network</source>
-        <translation>無網路</translation>
+        <translation>無網路連線</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/wirelessitem.cpp" line="64"/>

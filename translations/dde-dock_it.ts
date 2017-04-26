@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12 ore</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24 ore</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>

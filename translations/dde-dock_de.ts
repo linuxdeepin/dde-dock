@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>12-Stunden-Zeit</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>24-Stunden-Zeit</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
@@ -45,7 +45,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskcontrolitem.cpp" line="93"/>
         <source>Unknown volume</source>
-        <translation> Unbekanntes Volume</translation>
+        <translation>Unbekannter Datenträger</translation>
     </message>
 </context>
 <context>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="68"/>
         <source>Mode</source>
-        <translation>modus</translation>
+        <translation>Modus</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="76"/>

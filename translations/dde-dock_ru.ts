@@ -126,7 +126,7 @@
     <message>
         <location filename="../frame/util/docksettings.cpp" line="34"/>
         <source>Smart Hide</source>
-        <translation>Умное скрытие</translation>
+        <translation>Умное Скрытие</translation>
     </message>
     <message>
         <location filename="../frame/util/docksettings.cpp" line="68"/>
