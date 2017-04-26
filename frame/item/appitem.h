@@ -6,6 +6,9 @@
 #include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
 
+#include <QGraphicsView>
+#include <QGraphicsItem>
+
 class AppItem : public DockItem
 {
     Q_OBJECT
@@ -54,9 +57,10 @@ private:
     PreviewContainer *m_appPreviewTips;
     DBusDockEntry *m_itemEntry;
 
-    bool m_draging;
-    double m_launchingEffects;
+    QGraphicsView *m_itemView;
+    QGraphicsScene *m_itemScene;
 
+    bool m_draging;
     bool m_active;
     WindowDict m_titles;
     QString m_id;
@@ -69,7 +73,6 @@ private:
 
     QRect m_lastGlobalGeometry;
     QTimer *m_updateIconGeometryTimer;
-    QTimer *m_launchingEffectsTimer;
 
     static int IconBaseSize;
     static QPoint MousePressPos;

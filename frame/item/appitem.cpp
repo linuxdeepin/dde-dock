@@ -8,8 +8,14 @@
 #include <QDrag>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QHBoxLayout>
+#include <QGraphicsScene>
+#include <QGraphicsItemAnimation>
+#include <QTimeLine>
 
 #define APP_DRAG_THRESHOLD      20
+
+const static qreal Frames[] = { 0, 0.327013, 0.987033, 1.77584, 2.61157, 3.45043, 4.26461, 5.03411, 5.74306, 6.37782, 6.92583, 7.37484, 7.71245, 7.92557, 8, 7.86164, 7.43184, 6.69344, 5.64142, 4.2916, 2.68986, 0.91694, -0.91694, -2.68986, -4.2916, -5.64142, -6.69344, -7.43184, -7.86164, -8, -7.86164, -7.43184, -6.69344, -5.64142, -4.2916, -2.68986, -0.91694, 0.91694, 2.68986, 4.2916, 5.64142, 6.69344, 7.43184, 7.86164, 8, 7.93082, 7.71592, 7.34672, 6.82071, 6.1458, 5.34493, 4.45847, 3.54153, 2.65507, 1.8542, 1.17929, 0.653279, 0.28408, 0.0691776, 0 };
 
 int AppItem::IconBaseSize;
 QPoint AppItem::MousePressPos;
@@ -19,17 +25,29 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_appNameTips(new QLabel(this)),
       m_appPreviewTips(new PreviewContainer(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
+
+      m_itemView(new QGraphicsView(this)),
+      m_itemScene(new QGraphicsScene(this)),
+
       m_draging(false),
-      m_launchingEffects(0.0),
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
       m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
       m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
-      m_updateIconGeometryTimer(new QTimer(this)),
-      m_launchingEffectsTimer(new QTimer(this))
+      m_updateIconGeometryTimer(new QTimer(this))
 {
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_itemView);
+    centralLayout->setMargin(0);
+
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
+    setLayout(centralLayout);
+
+    m_itemView->setScene(m_itemScene);
+    m_itemView->setVisible(false);
+    m_itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_itemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     m_id = m_itemEntry->id();
     m_active = m_itemEntry->active();
@@ -43,17 +61,12 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
-    m_launchingEffectsTimer->setInterval(3000);
-    m_launchingEffectsTimer->setSingleShot(true);
-
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
     connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
     connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow);
-
-    connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries);
 
     updateTitle();
     refershIcon();
@@ -117,7 +130,7 @@ void AppItem::paintEvent(QPaintEvent *e)
 {
     DockItem::paintEvent(e);
 
-    if (m_draging)
+    if (m_draging || m_itemView->isVisible())
         return;
 
     QPainter painter(this);
@@ -214,37 +227,15 @@ void AppItem::paintEvent(QPaintEvent *e)
     const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
     // icon pos
     QPointF iconPos = itemRect.center() - pixmap.rect().center();
-    const bool launching = m_launchingEffectsTimer->isActive();
-
-    // add launching effects
-    if (launching)
-    {
-        const double power = 3.0;
-        const double multiple = 1.25;
-        const double offset = std::pow(std::sin(m_launchingEffects) * multiple, power);
-        m_launchingEffects += 0.0008;
-
-        switch (DockPosition)
-        {
-        case Left:
-        case Right:     iconPos.setX(iconPos.x() + offset);     break;
-        case Top:
-        case Bottom:    iconPos.setY(iconPos.y() + offset);     break;
-        default:;
-        }
-    }
 
     // draw ligher/normal icon
-    if (launching || !m_hover)
+    if (!m_hover)
         painter.drawPixmap(iconPos, pixmap);
     else
         painter.drawPixmap(iconPos, ImageFactory::lighterEffect(pixmap));
 
-    if (launching)
-        update();
-    else
-        // Update the window icon geometry when the icon is changed.
-        m_updateIconGeometryTimer->start();
+    // Update the window icon geometry when the icon is changed.
+//    m_updateIconGeometryTimer->start();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -252,24 +243,47 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
     if (e->button() == Qt::MiddleButton) {
         m_itemEntry->NewInstance();
     } else if (e->button() == Qt::LeftButton) {
-//        const QPoint distance = MousePressPos - e->pos();
-//        if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
-//            return;
 
-//        const int windowCount = m_titles.size();
-//        if (windowCount < 2)
-//            m_itemEntry->Activate();
-//        else
-//            togglePreview();
         m_itemEntry->Activate();
 
-//        if (!m_titles.isEmpty())
-//            return;
+        if (!m_titles.isEmpty())
+            return;
 
         // start launching effects
-        //m_launchingEffects = 0.0;
-        //m_launchingEffectsTimer->start();
-        //update();
+        const QRect r = rect();
+        QGraphicsPixmapItem *item = m_itemScene->addPixmap(m_largeIcon);
+        item->setPos(r.center() + QPoint(0, 18));
+        item->setTransformationMode(Qt::SmoothTransformation);
+        m_itemView->setSceneRect(r);
+        m_itemView->setFrameStyle(QFrame::NoFrame);
+        m_itemView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+
+        QTimeLine *tl = new QTimeLine;
+        tl->setDuration(600);
+        tl->setFrameRange(0, 60);
+        tl->setLoopCount(1);
+        tl->setEasingCurve(QEasingCurve::Linear);
+        tl->setStartFrame(0);
+        tl->start();
+
+        QGraphicsItemAnimation *ani = new QGraphicsItemAnimation;
+        ani->setItem(item);
+        ani->setTimeLine(tl);
+
+        const int px = -m_largeIcon.rect().center().x();
+        const int py = -m_largeIcon.rect().center().y() - 18;
+        for (int i(0); i != 60; ++i)
+        {
+            ani->setTranslationAt(i / 60.0, px, py);
+            ani->setRotationAt(i / 60.0, Frames[i]);
+        }
+
+        connect(tl, &QTimeLine::finished, tl, &QTimeLine::deleteLater);
+        connect(tl, &QTimeLine::finished, ani, &QGraphicsItemAnimation::deleteLater);
+        connect(tl, &QTimeLine::finished, m_itemScene, &QGraphicsScene::clear);
+        connect(tl, &QTimeLine::finished, m_itemView, &QGraphicsView::hide);
+
+        m_itemView->setVisible(true);
     }
 }
 
