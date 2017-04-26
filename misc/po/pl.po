@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-10 14:54+0800\n"
-"PO-Revision-Date: 2017-04-11 06:48+0000\n"
+"POT-Creation-Date: 2017-04-28 17:10+0800\n"
+"PO-Revision-Date: 2017-05-08 11:17+0000\n"
 "Last-Translator: Piotr Strębski <strebski@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -645,6 +645,10 @@ msgstr "_Wszystkie okna"
 msgid "Auto"
 msgstr "Automatycznie"
 
+#: ../../grub2/utils.go:138
+msgid "Authentication is required to change the grub2 configuration"
+msgstr "Wymagane jest uwierzytelnienie, aby móc zmienić konfigurację grub2"
+
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Brak wystarczającego miejsca na dysku: Prosimy go niezwłocznie uprzątnąć!"
@@ -685,7 +689,7 @@ msgstr "Aktywator"
 #: ../../keybinding/shortcuts/id_name_map.go:71
 #: ../../keybinding/shortcuts/wm.go:79 ../../keybinding/shortcuts/wm.go:91
 msgid "Show desktop"
-msgstr "Pokaż pulpit"
+msgstr "Wyświetl pulpit"
 
 #: ../../keybinding/id_desc_list.go:49
 #: ../../keybinding/shortcuts/id_name_map.go:21
@@ -722,7 +726,7 @@ msgstr "3-wymiarowe odwrotne przełączanie programów"
 #: ../../keybinding/shortcuts/system.go:60
 #: ../../keybinding/shortcuts/system.go:72
 msgid "Show/Hide the dock"
-msgstr "Pokaż/Ukryj dok"
+msgstr "Wyświetl/Ukryj dok"
 
 #: ../../keybinding/id_desc_list.go:56
 #: ../../keybinding/shortcuts/id_name_map.go:25
@@ -1001,6 +1005,7 @@ msgstr "Przełącz okna"
 msgid "Switch windows in reverse"
 msgstr "Przełącz okna w odwrotnej kolejności"
 
+#: ../../keybinding/shortcuts/id_name_map.go:126
 #: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
@@ -1008,6 +1013,7 @@ msgstr "Przełącz okna w odwrotnej kolejności"
 msgid "Display windows of all workspaces"
 msgstr "Wyświetl okna ze wszystkich przestrzeni roboczych"
 
+#: ../../keybinding/shortcuts/id_name_map.go:127
 #: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
@@ -1015,6 +1021,7 @@ msgstr "Wyświetl okna ze wszystkich przestrzeni roboczych"
 msgid "Display windows of current workspace"
 msgstr "Wyświetl okna z bieżącej przestrzeni roboczej"
 
+#: ../../keybinding/shortcuts/id_name_map.go:128
 #: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
@@ -1033,13 +1040,15 @@ msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "Zmiana języka systemu zakończyła się pomyślnie, zmiany będą widoczne po ponownym zalogowaniu się."
 
-#: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
-#: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
+#: ../../langselector/locale_ifc.go:50 ../../langselector/locale_ifc.go:52
+#: ../../langselector/locale_ifc.go:58 ../../langselector/locale_ifc.go:65
+#: ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
 msgstr "Następuje zmiana języka systemu, prosimy czekać..."
 
-#: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
-#: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
+#: ../../langselector/locale_ifc.go:56 ../../langselector/locale_ifc.go:57
+#: ../../langselector/locale_ifc.go:64 ../../langselector/locale_ifc.go:71
+#: ../../langselector/locale_ifc.go:76
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."

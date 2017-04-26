@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-10 14:54+0800\n"
-"PO-Revision-Date: 2017-04-11 03:01+0000\n"
+"POT-Creation-Date: 2017-04-28 17:10+0800\n"
+"PO-Revision-Date: 2017-05-02 06:19+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Persian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/fa/)\n"
 "MIME-Version: 1.0\n"
@@ -644,6 +644,10 @@ msgstr ""
 msgid "Auto"
 msgstr "خودکار"
 
+#: ../../grub2/utils.go:138
+msgid "Authentication is required to change the grub2 configuration"
+msgstr ""
+
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
@@ -1000,6 +1004,7 @@ msgstr "تغییر پنجره ها"
 msgid "Switch windows in reverse"
 msgstr "تغییر پنجره ها بصورت معکوس"
 
+#: ../../keybinding/shortcuts/id_name_map.go:126
 #: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
@@ -1007,6 +1012,7 @@ msgstr "تغییر پنجره ها بصورت معکوس"
 msgid "Display windows of all workspaces"
 msgstr "نمایش پنجره های تمام فضاهای کار"
 
+#: ../../keybinding/shortcuts/id_name_map.go:127
 #: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
@@ -1014,6 +1020,7 @@ msgstr "نمایش پنجره های تمام فضاهای کار"
 msgid "Display windows of current workspace"
 msgstr "نمایش پنجره های فضای کار جاری"
 
+#: ../../keybinding/shortcuts/id_name_map.go:128
 #: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
@@ -1032,13 +1039,15 @@ msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "زبان سیستم تغییر پیدا کرد لطفا پس از خارج شدن مجددا وارد شوید"
 
-#: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
-#: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
+#: ../../langselector/locale_ifc.go:50 ../../langselector/locale_ifc.go:52
+#: ../../langselector/locale_ifc.go:58 ../../langselector/locale_ifc.go:65
+#: ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
 msgstr "زبان سیستم در حال تغییر است لطفا صبر کنید..."
 
-#: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
-#: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
+#: ../../langselector/locale_ifc.go:56 ../../langselector/locale_ifc.go:57
+#: ../../langselector/locale_ifc.go:64 ../../langselector/locale_ifc.go:71
+#: ../../langselector/locale_ifc.go:76
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."

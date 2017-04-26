@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-10 14:54+0800\n"
-"PO-Revision-Date: 2017-04-11 06:52+0000\n"
+"POT-Creation-Date: 2017-04-28 17:10+0800\n"
+"PO-Revision-Date: 2017-05-05 10:46+0000\n"
 "Last-Translator: Валерий Владимирович\n"
 "Language-Team: Russian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: ../../accounts/checkers/password.go:44
 #: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
-msgstr "Введите пароль, не менее 8 символов"
+msgstr "Введите пароль не менее 8 символов"
 
 #: ../../accounts/checkers/password.go:46
 msgid ""
@@ -646,6 +646,10 @@ msgstr "_Все окна"
 msgid "Auto"
 msgstr "Автоматически"
 
+#: ../../grub2/utils.go:138
+msgid "Authentication is required to change the grub2 configuration"
+msgstr "Для изменения конфигурации grub2 требуется аутентификация"
+
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Недостаточно места на диске, пожалуйста, очистите позже!"
@@ -653,27 +657,27 @@ msgstr "Недостаточно места на диске, пожалуйст�
 #: ../../inputdevices/libwacom/wacom.go:152
 #: ../../inputdevices/wacom/wacom.go:152
 msgid "Left Click"
-msgstr "Левый клик"
+msgstr "Левый Клик"
 
 #: ../../inputdevices/libwacom/wacom.go:156
 #: ../../inputdevices/wacom/wacom.go:156
 msgid "Middle Click"
-msgstr "Средний клик"
+msgstr "Средний Клик"
 
 #: ../../inputdevices/libwacom/wacom.go:160
 #: ../../inputdevices/wacom/wacom.go:160
 msgid "Right Click"
-msgstr "Правый клик"
+msgstr "Правый Клик"
 
 #: ../../inputdevices/libwacom/wacom.go:164
 #: ../../inputdevices/wacom/wacom.go:164
 msgid "Page Up"
-msgstr "Страница вверх"
+msgstr "Страница Вверх"
 
 #: ../../inputdevices/libwacom/wacom.go:168
 #: ../../inputdevices/wacom/wacom.go:168
 msgid "Page Down"
-msgstr "Страница вниз"
+msgstr "Страница Вниз"
 
 #: ../../keybinding/id_desc_list.go:47
 #: ../../keybinding/shortcuts/id_name_map.go:18
@@ -744,7 +748,7 @@ msgstr "Скриншот полного экрана"
 #: ../../keybinding/shortcuts/system.go:65
 #: ../../keybinding/shortcuts/system.go:77
 msgid "Window screenshot"
-msgstr "Сделать скриншот окна"
+msgstr "Скриншот окна"
 
 #: ../../keybinding/id_desc_list.go:59
 #: ../../keybinding/shortcuts/id_name_map.go:28
@@ -779,7 +783,7 @@ msgstr "Выйти из системы"
 #: ../../keybinding/shortcuts/system.go:68
 #: ../../keybinding/shortcuts/system.go:80
 msgid "Disable Touchpad"
-msgstr "Отключить сенсорную панель"
+msgstr "Отключить Сенсорную панель"
 
 #: ../../keybinding/id_desc_list.go:64
 msgid "Deepin Translator"
@@ -790,7 +794,7 @@ msgstr "Переводчик Deepin"
 #: ../../keybinding/shortcuts/system.go:69
 #: ../../keybinding/shortcuts/system.go:81
 msgid "Switch Layout"
-msgstr "Переключить раскладку"
+msgstr "Переключить Раскладку"
 
 #: ../../keybinding/id_desc_list.go:73
 msgid "Calculator"
@@ -969,7 +973,7 @@ msgstr "Переместить на нижний рабочий стол"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr "Deepin Screen Recorder"
+msgstr "Запись с Экрана Deepin"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 #: ../../keybinding/shortcuts/system.go:70
@@ -985,12 +989,12 @@ msgstr "Погасить Экран"
 #: ../../keybinding/shortcuts/id_name_map.go:57
 #: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
 msgid "Switch similar windows"
-msgstr "Переключать подобные окна"
+msgstr "Переключить похожие окна"
 
 #: ../../keybinding/shortcuts/id_name_map.go:58
 #: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
 msgid "Switch similar windows in reverse"
-msgstr "Переключать подобные окна в обратном порядке"
+msgstr "Переключить похожие окна в обратном порядке"
 
 #: ../../keybinding/shortcuts/id_name_map.go:59
 #: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
@@ -1002,6 +1006,7 @@ msgstr "Переключить окна"
 msgid "Switch windows in reverse"
 msgstr "Переключить окна в обратном порядке"
 
+#: ../../keybinding/shortcuts/id_name_map.go:126
 #: ../../keybinding/shortcuts/id_name_map.go:132
 #: ../../keybinding/shortcuts/metacity.go:55
 #: ../../keybinding/shortcuts/metacity.go:84
@@ -1009,6 +1014,7 @@ msgstr "Переключить окна в обратном порядке"
 msgid "Display windows of all workspaces"
 msgstr "Показать окна всех рабочих столов"
 
+#: ../../keybinding/shortcuts/id_name_map.go:127
 #: ../../keybinding/shortcuts/id_name_map.go:133
 #: ../../keybinding/shortcuts/metacity.go:56
 #: ../../keybinding/shortcuts/metacity.go:85
@@ -1016,6 +1022,7 @@ msgstr "Показать окна всех рабочих столов"
 msgid "Display windows of current workspace"
 msgstr "Показать окна текущего рабочего стола"
 
+#: ../../keybinding/shortcuts/id_name_map.go:128
 #: ../../keybinding/shortcuts/id_name_map.go:134
 #: ../../keybinding/shortcuts/metacity.go:57
 #: ../../keybinding/shortcuts/metacity.go:86
@@ -1034,13 +1041,15 @@ msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr " Язык системы был изменен, пожалуйста выйдите из системы и войдите вновь…"
 
-#: ../../langselector/locale_ifc.go:52 ../../langselector/locale_ifc.go:58
-#: ../../langselector/locale_ifc.go:65 ../../langselector/locale_ifc.go:70
+#: ../../langselector/locale_ifc.go:50 ../../langselector/locale_ifc.go:52
+#: ../../langselector/locale_ifc.go:58 ../../langselector/locale_ifc.go:65
+#: ../../langselector/locale_ifc.go:70
 msgid "System language is being changed, please wait..."
 msgstr "Изменяется язык системы, пожалуйста подождите..."
 
-#: ../../langselector/locale_ifc.go:57 ../../langselector/locale_ifc.go:64
-#: ../../langselector/locale_ifc.go:71 ../../langselector/locale_ifc.go:76
+#: ../../langselector/locale_ifc.go:56 ../../langselector/locale_ifc.go:57
+#: ../../langselector/locale_ifc.go:64 ../../langselector/locale_ifc.go:71
+#: ../../langselector/locale_ifc.go:76
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
@@ -1225,7 +1234,7 @@ msgstr "Защищенный EAP"
 #: ../../network/nm_custom_type.go:205 ../../network/nm_custom_type.go:212
 #: ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
-msgstr "Проводное соединение"
+msgstr "Проводное Соединение"
 
 #: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:26
 #: ../../network/nm_setting_vpn_l2tp.go:102
@@ -1259,7 +1268,7 @@ msgstr "Сохранено"
 #: ../../network/utils_nm.go:177 ../../network/utils_nm.go:179
 #: ../../network/utils_nm.go:187 ../../network/utils_nm.go:189
 msgid "Always Ask"
-msgstr "Всегда спрашивать"
+msgstr "Всегда Спрашивать"
 
 #: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:28
 #: ../../network/nm_setting_vpn_l2tp.go:104
@@ -1280,7 +1289,7 @@ msgstr "Всегда спрашивать"
 #: ../../network/utils_nm.go:178 ../../network/utils_nm.go:180
 #: ../../network/utils_nm.go:188 ../../network/utils_nm.go:190
 msgid "Not Required"
-msgstr "Не требуется"
+msgstr "Не Требуется"
 
 #: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
 #: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:203
@@ -1292,7 +1301,7 @@ msgstr "Соединение"
 #: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:207
 #: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:220
 msgid "Wireless Connection"
-msgstr "Беспроводное подключение"
+msgstr "Беспроводное Соединение"
 
 #: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
 #: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:209
@@ -1506,7 +1515,7 @@ msgstr "Ethernet"
 #: ../../network/nm_setting_beans_gen.go:115
 #: ../../network/nm_setting_beans_gen.go:116
 msgid "Device MAC Addr"
-msgstr "MAC-адрес устройства"
+msgstr "MAC-адрес Устройства"
 
 #: ../../network/nm_setting_bean_gen.go:60
 #: ../../network/nm_setting_bean_gen.go:61
@@ -1592,7 +1601,7 @@ msgstr "План"
 #: ../../network/nm_setting_beans_gen.go:43
 #: ../../network/nm_setting_beans_gen.go:44
 msgid "Service Type"
-msgstr "Тип службы"
+msgstr "Тип Службы"
 
 #: ../../network/nm_setting_bean_gen.go:74
 #: ../../network/nm_setting_bean_gen.go:75
@@ -1820,7 +1829,7 @@ msgstr "ID сети"
 #: ../../network/nm_setting_beans_gen.go:67
 #: ../../network/nm_setting_beans_gen.go:68
 msgid "Home Network Only"
-msgstr "Только домашняя сеть"
+msgstr "Только Домашняя Сеть"
 
 #: ../../network/nm_setting_bean_gen.go:81
 #: ../../network/nm_setting_bean_gen.go:82
@@ -1863,7 +1872,7 @@ msgstr "Безопасность"
 #: ../../network/nm_setting_beans_gen.go:86
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Security Required"
-msgstr "Требования безопасности"
+msgstr "Требования Безопасности"
 
 #: ../../network/nm_setting_bean_gen.go:118
 #: ../../network/nm_setting_bean_gen.go:119
@@ -1970,7 +1979,7 @@ msgstr "CA-сертификат"
 #: ../../network/nm_setting_beans_gen.go:386
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "User Cert"
-msgstr "Сертификат пользователя"
+msgstr "Сертификат Пользователя"
 
 #: ../../network/nm_setting_bean_gen.go:125
 #: ../../network/nm_setting_bean_gen.go:126
@@ -1998,7 +2007,7 @@ msgstr "Версия PEAP"
 #: ../../network/nm_setting_beans_gen.go:98
 #: ../../network/nm_setting_beans_gen.go:99
 msgid "Inner Auth"
-msgstr "Внутренняя аутентификация"
+msgstr "Внутренняя Аутентификация"
 
 #: ../../network/nm_setting_bean_gen.go:129
 #: ../../network/nm_setting_bean_gen.go:130
@@ -2034,7 +2043,7 @@ msgstr "Внутренняя аутентификация"
 #: ../../network/nm_setting_vpn_strongswan.go:95
 #: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Private Key"
-msgstr "Личный ключ"
+msgstr "Личный Ключ"
 
 #: ../../network/nm_setting_bean_gen.go:130
 #: ../../network/nm_setting_bean_gen.go:131
@@ -2120,7 +2129,7 @@ msgstr "Личный ключ"
 #: ../../network/nm_setting_beans_gen.go:404
 #: ../../network/nm_setting_beans_gen.go:405
 msgid "Ask for Pwd"
-msgstr "Запрос пароля"
+msgstr "Запрос Пароля"
 
 #: ../../network/nm_setting_bean_gen.go:133
 #: ../../network/nm_setting_bean_gen.go:134
@@ -2139,7 +2148,7 @@ msgstr "Запрос пароля"
 #: ../../network/nm_setting_beans_gen.go:284
 #: ../../network/nm_setting_beans_gen.go:285
 msgid "Private Pwd"
-msgstr "Личный пароль"
+msgstr "Личный Пароль"
 
 #: ../../network/nm_setting_bean_gen.go:139
 #: ../../network/nm_setting_bean_gen.go:140
@@ -2385,7 +2394,7 @@ msgstr "Отказ MSCHAPv2-аутентификации"
 #: ../../network/nm_setting_beans_gen.go:371
 #: ../../network/nm_setting_beans_gen.go:372
 msgid "No BSD Data Compression"
-msgstr "Без сжатия BSD-данных"
+msgstr "Без Сжатия BSD-данных"
 
 #: ../../network/nm_setting_bean_gen.go:174
 #: ../../network/nm_setting_bean_gen.go:175
@@ -2407,7 +2416,7 @@ msgstr "Без сжатия BSD-данных"
 #: ../../network/nm_setting_beans_gen.go:372
 #: ../../network/nm_setting_beans_gen.go:373
 msgid "No Deflate Data Compression"
-msgstr "Без сжатия данных Deflate"
+msgstr "Без Сжатия Данных Deflate"
 
 #: ../../network/nm_setting_bean_gen.go:175
 #: ../../network/nm_setting_bean_gen.go:176
@@ -2429,7 +2438,7 @@ msgstr "Без сжатия данных Deflate"
 #: ../../network/nm_setting_beans_gen.go:373
 #: ../../network/nm_setting_beans_gen.go:374
 msgid "No TCP Header Compression"
-msgstr "Без сжатия TCP-заголовков"
+msgstr "Без Сжатия TCP-заголовков"
 
 #: ../../network/nm_setting_bean_gen.go:176
 #: ../../network/nm_setting_bean_gen.go:177
@@ -2451,7 +2460,7 @@ msgstr "Без сжатия TCP-заголовков"
 #: ../../network/nm_setting_beans_gen.go:374
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "Send PPP Echo Packets"
-msgstr "Отправка эхо-пакетов PPP"
+msgstr "Отправка Эхо-пакетов PPP"
 
 #: ../../network/nm_setting_bean_gen.go:182
 #: ../../network/nm_setting_bean_gen.go:183
@@ -2651,7 +2660,7 @@ msgstr "Прокси"
 #: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:264
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr "Разрешить троян Cisco Secure Desktop"
+msgstr "Разрешить Троян Cisco Secure Desktop"
 
 #: ../../network/nm_setting_bean_gen.go:194
 #: ../../network/nm_setting_bean_gen.go:195
@@ -2679,7 +2688,7 @@ msgstr "CSD-скрипт"
 #: ../../network/nm_setting_beans_gen.go:170
 #: ../../network/nm_setting_beans_gen.go:268
 msgid "Use FSID for Key Passphrase"
-msgstr "Использовать FSID для ключевой фразы"
+msgstr "Использовать FSID для Ключевой Фразы"
 
 #: ../../network/nm_setting_bean_gen.go:199
 #: ../../network/nm_setting_bean_gen.go:200
@@ -2703,7 +2712,7 @@ msgstr "Использовать FSID для ключевой фразы"
 #: ../../network/nm_setting_beans_gen.go:384
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Auth Type"
-msgstr "Тип аутентификации"
+msgstr "Тип Аутентификации"
 
 #: ../../network/nm_setting_bean_gen.go:208
 #: ../../network/nm_setting_bean_gen.go:209
@@ -2719,7 +2728,7 @@ msgstr "Тип аутентификации"
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
-msgstr "Статический ключ"
+msgstr "Статический Ключ"
 
 #: ../../network/nm_setting_bean_gen.go:209
 #: ../../network/nm_setting_bean_gen.go:210
@@ -2738,7 +2747,7 @@ msgstr "Статический ключ"
 #: ../../network/nm_setting_beans_gen.go:287
 #: ../../network/nm_setting_beans_gen.go:310
 msgid "Customize Key Direction"
-msgstr "Настроить ключевое направление"
+msgstr "Настроить Ключевое Направление"
 
 #: ../../network/nm_setting_bean_gen.go:210
 #: ../../network/nm_setting_bean_gen.go:211
@@ -2757,7 +2766,7 @@ msgstr "Настроить ключевое направление"
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
-msgstr "Ключевое направление"
+msgstr "Ключевое Направление"
 
 #: ../../network/nm_setting_bean_gen.go:211
 #: ../../network/nm_setting_bean_gen.go:212
@@ -2804,7 +2813,7 @@ msgstr "Локальный IP"
 #: ../../network/nm_setting_beans_gen.go:402
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "User Pwd"
-msgstr "Пароль пользователя"
+msgstr "Пароль Пользователя"
 
 #: ../../network/nm_setting_bean_gen.go:222
 #: ../../network/nm_setting_bean_gen.go:223
@@ -2825,7 +2834,7 @@ msgstr "Пароль пользователя"
 #: ../../network/nm_setting_beans_gen.go:230
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Group Name"
-msgstr "Имя группы"
+msgstr "Имя Группы"
 
 #: ../../network/nm_setting_bean_gen.go:224
 #: ../../network/nm_setting_bean_gen.go:225
@@ -2842,7 +2851,7 @@ msgstr "Имя группы"
 #: ../../network/nm_setting_beans_gen.go:405
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "Group Pwd"
-msgstr "Пароль группы"
+msgstr "Пароль Группы"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2855,7 +2864,7 @@ msgstr "Пароль группы"
 #: ../../network/nm_setting_beans_gen.go:389
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Request an Inner IP Address"
-msgstr "Запрос внутреннего IP-ареса"
+msgstr "Запрос Внутреннего IP-ареса"
 
 #: ../../network/nm_setting_bean_gen.go:225
 #: ../../network/nm_setting_bean_gen.go:226
@@ -2872,7 +2881,7 @@ msgstr "Запрос внутреннего IP-ареса"
 #: ../../network/nm_setting_beans_gen.go:406
 #: ../../network/nm_setting_beans_gen.go:407
 msgid "Use Hybrid Authentication"
-msgstr "Использовать гибридную аутентификацию"
+msgstr "Использовать Гибридную Аутентификацию"
 
 #: ../../network/nm_setting_bean_gen.go:226
 #: ../../network/nm_setting_bean_gen.go:227
@@ -2957,7 +2966,7 @@ msgstr "ID группы"
 #: ../../network/nm_setting_vpn_strongswan.go:99
 #: ../../network/nm_setting_vpn_strongswan.go:103
 msgid "Pre-Shared Key"
-msgstr "Совместно используемый ключ"
+msgstr "Совместно Используемый Ключ"
 
 #: ../../network/nm_setting_bean_gen.go:255
 #: ../../network/nm_setting_bean_gen.go:256
@@ -2984,7 +2993,7 @@ msgstr "VPN PPP"
 #: ../../network/nm_setting_beans_gen.go:250
 #: ../../network/nm_setting_beans_gen.go:251
 msgid "No Protocol Field Compression"
-msgstr "Без сжатия полевого протокола"
+msgstr "Без Сжатия Полевого Протокола"
 
 #: ../../network/nm_setting_bean_gen.go:269
 #: ../../network/nm_setting_bean_gen.go:270
@@ -2994,7 +3003,7 @@ msgstr "Без сжатия полевого протокола"
 #: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "No Address/Control Compression"
-msgstr "Без адреса/Управление сжатием"
+msgstr "Без Адреса/Управление Сжатием"
 
 #: ../../network/nm_setting_bean_gen.go:313
 #: ../../network/nm_setting_bean_gen.go:314
@@ -3024,7 +3033,7 @@ msgstr "Шифр"
 #: ../../network/nm_setting_beans_gen.go:298
 #: ../../network/nm_setting_beans_gen.go:299
 msgid "HMAC Auth"
-msgstr "HMAC аутентификация"
+msgstr "HMAC Аутентификация"
 
 #: ../../network/nm_setting_bean_gen.go:322
 #: ../../network/nm_setting_bean_gen.go:323
@@ -3034,7 +3043,7 @@ msgstr "HMAC аутентификация"
 #: ../../network/nm_setting_beans_gen.go:304
 #: ../../network/nm_setting_beans_gen.go:305
 msgid "VPN TLS Authentication"
-msgstr "VPN TLS аутентификация"
+msgstr "VPN TLS Аутентификация"
 
 #: ../../network/nm_setting_bean_gen.go:324
 #: ../../network/nm_setting_bean_gen.go:325
@@ -3044,7 +3053,7 @@ msgstr "VPN TLS аутентификация"
 #: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:307
 msgid "Subject Match"
-msgstr "Тема беседы"
+msgstr "Тематическое Совпадение"
 
 #: ../../network/nm_setting_bean_gen.go:325
 #: ../../network/nm_setting_bean_gen.go:326
@@ -3054,7 +3063,7 @@ msgstr "Тема беседы"
 #: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote Cert Type"
-msgstr "Удаленный тип сертификата"
+msgstr "Удаленный Тип Сертификата"
 
 #: ../../network/nm_setting_bean_gen.go:326
 #: ../../network/nm_setting_bean_gen.go:327
@@ -3063,7 +3072,7 @@ msgstr "Удаленный тип сертификата"
 #: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_beans_gen.go:309
 msgid "Key File"
-msgstr "Файл ключа"
+msgstr "Файл Ключа"
 
 #: ../../network/nm_setting_bean_gen.go:334
 #: ../../network/nm_setting_bean_gen.go:335
@@ -3113,7 +3122,7 @@ msgstr "Порт"
 #: ../../network/nm_setting_beans_gen.go:321
 #: ../../network/nm_setting_beans_gen.go:322
 msgid "Retry Indefinitely When Failed"
-msgstr "Повторять бесконечно при неудаче"
+msgstr "Повторять Бесконечно при Неудаче"
 
 #: ../../network/nm_setting_bean_gen.go:347
 #: ../../network/nm_setting_bean_gen.go:348
@@ -3140,7 +3149,7 @@ msgstr "Расширенный VPN"
 #: ../../network/nm_setting_beans_gen.go:331
 #: ../../network/nm_setting_beans_gen.go:332
 msgid "Customize Gateway Port"
-msgstr "Настройка порта шлюза"
+msgstr "Настройка Порта Шлюза"
 
 #: ../../network/nm_setting_bean_gen.go:350
 #: ../../network/nm_setting_bean_gen.go:351
