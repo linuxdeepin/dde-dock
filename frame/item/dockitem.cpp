@@ -165,6 +165,7 @@ void DockItem::showContextMenu()
     connect(menuInter, &DBusMenu::MenuUnregistered, menuInter, &DBusMenu::deleteLater, Qt::QueuedConnection);
 
     menuInter->ShowMenu(QString(QJsonDocument(menuObject).toJson()));
+    hidePopup();
 }
 
 void DockItem::showHoverTips()

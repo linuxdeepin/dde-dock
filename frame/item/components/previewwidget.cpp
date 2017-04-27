@@ -24,6 +24,10 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     m_closeButton->setText("x");
     m_closeButton->setVisible(false);
 
+    m_droppedDelay = new QTimer(this);
+    m_droppedDelay->setSingleShot(true);
+    m_droppedDelay->setInterval(100);
+
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->setSpacing(0);
     centralLayout->setMargin(0);
@@ -113,6 +117,9 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
 
 void PreviewWidget::enterEvent(QEvent *e)
 {
+    if (m_droppedDelay->isActive())
+        return e->ignore();
+
     m_hovered = true;
     m_closeButton->setVisible(true);
 
@@ -135,16 +142,40 @@ void PreviewWidget::leaveEvent(QEvent *e)
 
 void PreviewWidget::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (m_droppedDelay->isActive())
+        return e->ignore();
+
     QWidget::mouseReleaseEvent(e);
 
-    emit requestHidePopup();
     emit requestCancelPreview();
     emit requestActivateWindow(m_wid);
 }
 
 void PreviewWidget::dragEnterEvent(QDragEnterEvent *e)
 {
-    QWidget::dragEnterEvent(e);
+    e->accept();
+
+    m_hovered = true;
+
+    update();
 
     emit requestActivateWindow(m_wid);
+}
+
+void PreviewWidget::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    QWidget::dragLeaveEvent(e);
+
+    m_hovered = false;
+
+    update();
+}
+
+void PreviewWidget::dropEvent(QDropEvent *e)
+{
+    m_droppedDelay->start();
+
+    QWidget::dropEvent(e);
+
+    emit requestCancelPreview();
 }

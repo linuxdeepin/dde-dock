@@ -74,6 +74,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::hidePopup);
 
     updateTitle();
     refershIcon();
@@ -319,7 +320,11 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     if (e->buttons() != Qt::LeftButton)
         return;
 
-    const QPoint distance = e->pos() - MousePressPos;
+    const QPoint pos = e->pos();
+    if (!rect().contains(pos))
+        return;
+
+    const QPoint distance = pos - MousePressPos;
     if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
         return;
 

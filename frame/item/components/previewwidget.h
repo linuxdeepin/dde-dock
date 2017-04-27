@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QDebug>
 #include <QPushButton>
+#include <QDragEnterEvent>
+#include <QTimer>
 
 class PreviewWidget : public QWidget
 {
@@ -17,7 +19,6 @@ signals:
     void requestActivateWindow(const WId wid) const;
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
-    void requestHidePopup() const;
 
 private slots:
     void refershImage();
@@ -30,6 +31,8 @@ private:
     void leaveEvent(QEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void dragEnterEvent(QDragEnterEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dropEvent(QDropEvent *e);
 
 private:
     const WId m_wid;
@@ -37,6 +40,8 @@ private:
     QString m_title;
 
     QPushButton *m_closeButton;
+
+    QTimer *m_droppedDelay;
 
     bool m_hovered;
 };
