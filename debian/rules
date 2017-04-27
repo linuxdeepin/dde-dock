@@ -10,4 +10,8 @@ override_dh_strip:
 	true
 override_dh_auto_test:
 	true
+override_dh_auto_install:
+	dh_auto_install
+	install -d debian/dde-daemon/etc/sysctl.d/
+	echo "vm.overcommit_memory=1" > debian/dde-daemon/etc/sysctl.d/90-deepin.conf
 endif
