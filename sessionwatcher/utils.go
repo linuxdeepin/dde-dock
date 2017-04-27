@@ -42,6 +42,10 @@ func newLoginSession(path dbus.ObjectPath) (uint32, *login1.Session) {
 
 func suspendPulseSinks(suspend int) {
 	var ctx = pulse.GetContext()
+	if ctx == nil {
+		logger.Error("Failed to connect pulseaudio server")
+		return
+	}
 	for _, sink := range ctx.GetSinkList() {
 		ctx.SuspendSinkById(sink.Index, suspend)
 	}
@@ -49,6 +53,10 @@ func suspendPulseSinks(suspend int) {
 
 func suspendPulseSources(suspend int) {
 	var ctx = pulse.GetContext()
+	if ctx == nil {
+		logger.Error("Failed to connect pulseaudio server")
+		return
+	}
 	for _, source := range ctx.GetSourceList() {
 		ctx.SuspendSourceById(source.Index, suspend)
 	}

@@ -53,6 +53,12 @@ func (*Daemon) Start() error {
 	logger.BeginTracing()
 
 	ctx := pulse.GetContext()
+	if ctx == nil {
+		logger.Error("Failed to connect pulseaudio server")
+		logger.EndTracing()
+		return nil
+	}
+
 	_audio = NewAudio(ctx)
 
 	if err := dbus.InstallOnSession(_audio); err != nil {
