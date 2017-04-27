@@ -188,7 +188,7 @@
             ],
             [
                 "wmc",
-                "e.chrome.ex"
+                "e:chrome.ex"
             ]
         ]
     }
