@@ -40,7 +40,6 @@ func (m *Manager) Reset() {
 	resetGSettings(m.sysSetting)
 	resetGSettings(m.mediaSetting)
 	resetGSettings(m.wmSetting)
-	resetGSettings(m.metacitySetting)
 
 	// disable all custom shortcuts
 	m.customShortcutManager.DisableAll()
@@ -241,8 +240,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 		return false, "", err
 	}
 
-	if (ty == shortcuts.ShortcutTypeWM || ty == shortcuts.ShortcutTypeMetacity) &&
-		pa.Mods == 0 {
+	if ty == shortcuts.ShortcutTypeWM && pa.Mods == 0 {
 		keyLower := strings.ToLower(pa.Key)
 		if keyLower == "super_l" || keyLower == "super_r" {
 			return false, "", errors.New("accel of shortcut which type is wm or metacity can not be set to the Super key")

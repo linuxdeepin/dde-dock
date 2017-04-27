@@ -123,17 +123,10 @@ func getWMIdNameMap() map[string]string {
 		"switch-input-source":          "Binding to select the next input source",
 		"switch-input-source-backward": "Binding to select the previous input source",
 		"always-on-top":                "Set or unset window to appear always on top",
+		"expose-all-windows":           gettext.Tr("Display windows of all workspaces"),
+		"expose-windows":               gettext.Tr("Display windows of current workspace"),
+		"preview-workspace":            gettext.Tr("Display workspace"),
 	}
-	return idNameMap
-}
-
-func getMetacityIdNameMap() map[string]string {
-	var idNameMap = map[string]string{
-		"expose-all-windows": gettext.Tr("Display windows of all workspaces"),
-		"expose-windows":     gettext.Tr("Display windows of current workspace"),
-		"preview-workspace":  gettext.Tr("Display workspace"),
-	}
-
 	return idNameMap
 }
 

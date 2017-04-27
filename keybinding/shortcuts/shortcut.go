@@ -58,7 +58,6 @@ const (
 	ShortcutTypeCustom
 	ShortcutTypeMedia
 	ShortcutTypeWM
-	ShortcutTypeMetacity
 )
 
 type Shortcut interface {

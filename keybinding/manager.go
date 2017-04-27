@@ -20,7 +20,6 @@ import (
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
-	dutils "pkg.deepin.io/lib/utils"
 	"pkg.deepin.io/lib/xdg/basedir"
 	"time"
 )
@@ -38,8 +37,6 @@ const (
 	systemSchema   = "com.deepin.dde.keybinding.system"
 	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
 	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
-	metacitySchema = "com.deepin.wrap.gnome.metacity.keybindings"
-	galaSchema     = "com.deepin.wrap.pantheon.desktop.gala.keybindings"
 
 	customConfigFile = "deepin/dde-daemon/keybinding/custom.ini"
 )
@@ -57,11 +54,11 @@ type Manager struct {
 
 	xu *xgbutil.XUtil
 
-	keyboardSetting       *gio.Settings
-	sysSetting            *gio.Settings
-	mediaSetting          *gio.Settings
-	wmSetting             *gio.Settings
-	metacitySetting       *gio.Settings
+	keyboardSetting *gio.Settings
+	sysSetting      *gio.Settings
+	mediaSetting    *gio.Settings
+	wmSetting       *gio.Settings
+
 	enableListenGSettings bool
 
 	customShortcutManager *shortcuts.CustomShortcutManager
@@ -130,31 +127,19 @@ func NewManager() (*Manager, error) {
 		}
 	}
 
+	// init settings
 	m.sysSetting = gio.NewSettings(systemSchema)
 	m.mediaSetting = gio.NewSettings(mediakeySchema)
 	m.wmSetting = gio.NewSettings(wmSchema)
 
-	m.metacitySetting, _ = dutils.CheckAndNewGSettings(galaSchema)
-	if m.metacitySetting == nil {
-		// try metacitySchema
-		m.metacitySetting, _ = dutils.CheckAndNewGSettings(metacitySchema)
-	}
-
-	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
-	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
-
 	m.shortcuts = shortcuts.NewShortcuts(xu, m.handleKeyEvent)
 	m.shortcuts.AddSystem(m.sysSetting)
 	m.shortcuts.AddMedia(m.mediaSetting)
-	m.shortcuts.AddCustom(m.customShortcutManager)
 	m.shortcuts.AddWM(m.wmSetting)
 
-	if m.metacitySetting != nil {
-		m.shortcuts.AddMetacity(m.metacitySetting)
-	} else {
-		// TODO
-		logger.Warning("Manager.metacitySetting is nil")
-	}
+	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
+	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
+	m.shortcuts.AddCustom(m.customShortcutManager)
 
 	m.audioController, err = NewAudioController()
 	if err != nil {
@@ -191,7 +176,6 @@ func NewManager() (*Manager, error) {
 	m.listenGSettingsChanged(m.sysSetting, shortcuts.ShortcutTypeSystem)
 	m.listenGSettingsChanged(m.mediaSetting, shortcuts.ShortcutTypeMedia)
 	m.listenGSettingsChanged(m.wmSetting, shortcuts.ShortcutTypeWM)
-	m.listenGSettingsChanged(m.metacitySetting, shortcuts.ShortcutTypeMetacity)
 
 	go xevent.Main(m.xu)
 	return &m, nil
@@ -214,11 +198,6 @@ func (m *Manager) destroy() {
 	if m.wmSetting != nil {
 		m.wmSetting.Unref()
 		m.wmSetting = nil
-	}
-
-	if m.metacitySetting != nil {
-		m.metacitySetting.Unref()
-		m.metacitySetting = nil
 	}
 
 	if m.audioController != nil {

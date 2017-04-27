@@ -184,9 +184,7 @@ func (ss *Shortcuts) RemoveShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
 }
 
 func dummyGrab(shortcut Shortcut, pa ParsedAccel) bool {
-	shortcutType := shortcut.GetType()
-	if shortcutType == ShortcutTypeWM ||
-		shortcutType == ShortcutTypeMetacity {
+	if shortcut.GetType() == ShortcutTypeWM {
 		return true
 	}
 
@@ -475,20 +473,6 @@ func (ss *Shortcuts) AddWM(gsettings *gio.Settings) {
 		}
 		accels := gsettings.GetStrv(id)
 		gs := NewGSettingsShortcut(gsettings, id, ShortcutTypeWM, accels, name)
-		ss.AddWithoutLock(gs)
-	}
-}
-
-func (ss *Shortcuts) AddMetacity(gsettings *gio.Settings) {
-	logger.Debug("AddMetacity")
-	idNameMap := getMetacityIdNameMap()
-	for _, id := range gsettings.ListKeys() {
-		name := idNameMap[id]
-		if name == "" {
-			name = id
-		}
-		accels := gsettings.GetStrv(id)
-		gs := NewGSettingsShortcut(gsettings, id, ShortcutTypeMetacity, accels, name)
 		ss.AddWithoutLock(gs)
 	}
 }
