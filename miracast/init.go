@@ -21,7 +21,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (*Daemon) GetDependencies() []string {
-	return []string{"network", "audio"}
+	return []string{"network"}
 }
 
 var (

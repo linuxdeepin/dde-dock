@@ -19,19 +19,18 @@ import (
 	_ "pkg.deepin.io/dde/daemon/network"
 
 	_ "pkg.deepin.io/dde/daemon/audio"
-	_ "pkg.deepin.io/dde/daemon/inputdevices"
-
-	// depends: audio, inputdevices, network
-	_ "pkg.deepin.io/dde/daemon/keybinding"
 
 	_ "pkg.deepin.io/dde/daemon/screensaver"
 	_ "pkg.deepin.io/dde/daemon/sessionwatcher"
 
-	// depends: screensaver, keybinding, sessionwatcher
+	// depends: screensaver, sessionwatcher
 	_ "pkg.deepin.io/dde/daemon/session/power"
 
-	_ "pkg.deepin.io/dde/daemon/appearance"
 	_ "pkg.deepin.io/dde/daemon/clipboard"
+	_ "pkg.deepin.io/dde/daemon/keybinding"
+
+	_ "pkg.deepin.io/dde/daemon/appearance"
+	_ "pkg.deepin.io/dde/daemon/inputdevices"
 
 	_ "pkg.deepin.io/dde/daemon/gesture"
 	_ "pkg.deepin.io/dde/daemon/housekeeping"
@@ -40,9 +39,9 @@ import (
 	_ "pkg.deepin.io/dde/daemon/bluetooth"
 	_ "pkg.deepin.io/dde/daemon/screenedge"
 
-	// depends: network,audio
 	_ "pkg.deepin.io/dde/daemon/mime"
 
+	// depends: network
 	_ "pkg.deepin.io/dde/daemon/miracast"
 	_ "pkg.deepin.io/dde/daemon/systeminfo"
 

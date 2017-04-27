@@ -11,6 +11,7 @@ package keybinding
 
 import (
 	"dbus/com/deepin/daemon/inputdevices"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
@@ -54,11 +55,14 @@ func (c *TouchpadController) ExecCmd(cmd ActionCmd) error {
 	return nil
 }
 
-func (c *TouchpadController) enable(val bool) {
+func (c *TouchpadController) enable(val bool) error {
+	if c.touchpad == nil || !ddbus.IsSessionBusActivated(c.touchpad.DestName) {
+		return ErrIsNil{"TouchpadController.touchpad"}
+	}
 	// check touchpad exist?
 	exist := c.touchpad.Exist.Get()
 	if !exist {
-		return
+		return nil
 	}
 
 	c.touchpad.TPadEnable.Set(val)
@@ -68,16 +72,21 @@ func (c *TouchpadController) enable(val bool) {
 		osd = "TouchpadOff"
 	}
 	showOSD(osd)
+	return nil
 }
 
-func (c *TouchpadController) toggle() {
+func (c *TouchpadController) toggle() error {
+	if c.touchpad == nil || !ddbus.IsSessionBusActivated(c.touchpad.DestName) {
+		return ErrIsNil{"TouchpadController.touchpad"}
+	}
 	// check touchpad exist?
 	exist := c.touchpad.Exist.Get()
 	if !exist {
-		return
+		return nil
 	}
 
 	c.touchpad.TPadEnable.Set(!c.touchpad.TPadEnable.Get())
 
 	showOSD("TouchpadToggle")
+	return nil
 }

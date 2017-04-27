@@ -11,6 +11,7 @@ package keybinding
 
 import (
 	"dbus/com/deepin/daemon/audio"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
@@ -116,7 +117,7 @@ func (c *AudioController) changeSinkVolume(raised bool) error {
 }
 
 func (c *AudioController) getDefaultSink() (*audio.AudioSink, error) {
-	if c.audioDaemon == nil {
+	if c.audioDaemon == nil || !ddbus.IsSessionBusActivated(c.audioDaemon.DestName) {
 		return nil, ErrIsNil{"AudioController.audioDaemon"}
 	}
 	sinkPath := c.audioDaemon.DefaultSink.Get()
@@ -129,7 +130,7 @@ func (c *AudioController) getDefaultSink() (*audio.AudioSink, error) {
 }
 
 func (c *AudioController) getDefaultSource() (*audio.AudioSource, error) {
-	if c.audioDaemon == nil {
+	if c.audioDaemon == nil || !ddbus.IsSessionBusActivated(c.audioDaemon.DestName) {
 		return nil, ErrIsNil{"AudioController.audioDaemon"}
 	}
 	sourcePath := c.audioDaemon.DefaultSource.Get()

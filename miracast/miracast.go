@@ -6,6 +6,7 @@ import (
 	"dbus/org/freedesktop/networkmanager"
 	"encoding/json"
 	"fmt"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
@@ -224,29 +225,6 @@ func (m *Miracast) removeObject(dpath dbus.ObjectPath) (bool, string) {
 }
 
 func (m *Miracast) handleEvent() {
-	m.network.ConnectDeviceAdded(func(dpath dbus.ObjectPath) {
-		m.deviceLocker.Lock()
-		defer m.deviceLocker.Unlock()
-		logger.Debug("[Device Added]:", dpath)
-		devices, err := ListWirelessInfo()
-		if err != nil {
-			logger.Warning("[DeviceAdded] Failed to list wireless devices:", err)
-			return
-		}
-		m.devices = devices.ListMiracastDevice()
-	})
-	m.network.ConnectDeviceRemoved(func(dpath dbus.ObjectPath) {
-		m.deviceLocker.Lock()
-		defer m.deviceLocker.Unlock()
-		logger.Debug("[Device Removed]:", dpath)
-		devices, err := ListWirelessInfo()
-		if err != nil {
-			logger.Warning("[DeviceRemoved] Failed to list wireless devices:", err)
-			return
-		}
-		m.devices = devices.ListMiracastDevice()
-	})
-
 	m.wifiObj.ConnectInterfacesAdded(func(dpath dbus.ObjectPath, detail map[string]map[string]dbus.Variant) {
 		logger.Debug("[WIFI Added]:", dpath)
 		v, err := m.addObject(dpath)
@@ -276,9 +254,40 @@ func (m *Miracast) handleEvent() {
 			dbus.Emit(m, "Removed", dpath, detail)
 		}
 	})
+
+	if !ddbus.IsSessionBusActivated(m.network.DestName) {
+		logger.Warning("Network service no activation")
+		return
+	}
+	m.network.ConnectDeviceAdded(func(dpath dbus.ObjectPath) {
+		m.deviceLocker.Lock()
+		defer m.deviceLocker.Unlock()
+		logger.Debug("[Device Added]:", dpath)
+		devices, err := ListWirelessInfo()
+		if err != nil {
+			logger.Warning("[DeviceAdded] Failed to list wireless devices:", err)
+			return
+		}
+		m.devices = devices.ListMiracastDevice()
+	})
+	m.network.ConnectDeviceRemoved(func(dpath dbus.ObjectPath) {
+		m.deviceLocker.Lock()
+		defer m.deviceLocker.Unlock()
+		logger.Debug("[Device Removed]:", dpath)
+		devices, err := ListWirelessInfo()
+		if err != nil {
+			logger.Warning("[DeviceRemoved] Failed to list wireless devices:", err)
+			return
+		}
+		m.devices = devices.ListMiracastDevice()
+	})
 }
 
 func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error {
+	if !ddbus.IsSessionBusActivated(m.network.DestName) {
+		return fmt.Errorf("Network service no activation")
+	}
+
 	devPaths, err := m.network.GetAllDevices()
 	if err != nil {
 		return err

@@ -6,6 +6,7 @@ import (
 	"dbus/org/freedesktop/miracle/wifi"
 	"fmt"
 	"os"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
@@ -140,6 +141,10 @@ func getAudioSink() string {
 		return ""
 	}
 	defer audio.DestroyAudio(obj)
+
+	if !ddbus.IsSessionBusActivated(obj.DestName) {
+		return ""
+	}
 
 	sink, err := audio.NewAudioSink("com.deepin.daemon.Audio",
 		obj.DefaultSink.Get())

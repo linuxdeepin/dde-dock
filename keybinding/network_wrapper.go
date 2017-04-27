@@ -12,6 +12,8 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/network"
 	"encoding/json"
+	"fmt"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 )
 
@@ -27,6 +29,10 @@ func toggleWireless() error {
 		return err
 	}
 	defer Network.DestroyNetworkManager(net)
+
+	if !ddbus.IsSessionBusActivated(net.DestName) {
+		return fmt.Errorf("Network service no activation")
+	}
 
 	list := getWirelessDevice(net.Devices.Get())
 	enabled := false

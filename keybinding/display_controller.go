@@ -12,6 +12,7 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/display"
 	"dbus/com/deepin/daemon/helper/backlight"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
@@ -54,7 +55,7 @@ func (c *DisplayController) ExecCmd(cmd ActionCmd) error {
 }
 
 func (c *DisplayController) changeBrightness(raised bool) error {
-	if c.disp == nil {
+	if c.disp == nil || !ddbus.IsSessionBusActivated(c.disp.DestName) {
 		return ErrIsNil{"DisplayController.disp"}
 	}
 

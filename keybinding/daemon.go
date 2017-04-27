@@ -37,7 +37,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (*Daemon) GetDependencies() []string {
-	return []string{"audio", "inputdevices", "network"}
+	return []string{}
 }
 
 func (daemon *Daemon) Start() error {
