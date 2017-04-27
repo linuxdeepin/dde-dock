@@ -46,6 +46,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     m_itemView->setScene(m_itemScene);
     m_itemView->setVisible(false);
+    m_itemView->setFrameStyle(QFrame::NoFrame);
+    m_itemView->setRenderHints(QPainter::SmoothPixmapTransform);
+    m_itemView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     m_itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_itemView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -255,11 +258,9 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         item->setPos(r.center() + QPoint(0, 18));
         item->setTransformationMode(Qt::SmoothTransformation);
         m_itemView->setSceneRect(r);
-        m_itemView->setFrameStyle(QFrame::NoFrame);
-        m_itemView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
         QTimeLine *tl = new QTimeLine;
-        tl->setDuration(600);
+        tl->setDuration(1200);
         tl->setFrameRange(0, 60);
         tl->setLoopCount(1);
         tl->setEasingCurve(QEasingCurve::Linear);
