@@ -221,7 +221,9 @@ primary_clipboard_store (GsdClipboardManager *manager)
         GdkDevice *device = gdk_device_manager_get_client_pointer (device_manager);
 #endif
 
-        gdk_window_get_device_position (NULL, device, NULL, NULL, &state);
+        // fixed critical: 'GDK_IS_WINDOW (window)' failed
+        GdkWindow *win = gdk_screen_get_root_window(gdk_screen_get_default());
+        gdk_window_get_device_position (win, device, NULL, NULL, &state);
         if (state & (GDK_BUTTON1_MASK|GDK_SHIFT_MASK)) {
                 return TRUE;
         }
