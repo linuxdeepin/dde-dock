@@ -7,8 +7,8 @@ import (
 	libsessionmanager "dbus/com/deepin/sessionmanager"
 	libpower "dbus/com/deepin/system/power"
 	liblogin1 "dbus/org/freedesktop/login1"
-	libnotifications "dbus/org/freedesktop/notifications"
 	libscreensaver "dbus/org/freedesktop/screensaver"
+	"pkg.deepin.io/lib/notify"
 
 	"github.com/BurntSushi/xgb/dpms"
 	"github.com/BurntSushi/xgbutil"
@@ -16,7 +16,7 @@ import (
 
 type Helper struct {
 	Power          *libpower.Power
-	Notifier       *libnotifications.Notifier
+	Notification   *notify.Notification
 	SessionManager *libsessionmanager.SessionManager
 	SessionWatcher *libsessionwatcher.SessionWatcher
 	ScreenSaver    *libscreensaver.ScreenSaver
@@ -44,11 +44,8 @@ func (h *Helper) init() error {
 		return err
 	}
 
-	h.Notifier, err = libnotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-	if err != nil {
-		logger.Warning("init Notifier failed:", err)
-		return err
-	}
+	notify.Init(dbusDest)
+	h.Notification = notify.NewNotification("", "", "")
 
 	h.SessionManager, err = libsessionmanager.NewSessionManager("com.deepin.SessionManager", "/com/deepin/SessionManager")
 	if err != nil {
@@ -101,9 +98,10 @@ func (h *Helper) Destroy() {
 		h.Power = nil
 	}
 
-	if h.Notifier != nil {
-		libnotifications.DestroyNotifier(h.Notifier)
-		h.Notifier = nil
+	if h.Notification != nil {
+		h.Notification.Destroy()
+		h.Notification = nil
+		notify.Destroy()
 	}
 
 	if h.SessionManager != nil {

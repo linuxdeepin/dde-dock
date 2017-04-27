@@ -146,11 +146,14 @@ func doCloseLowpower() {
 }
 
 func (m *Manager) sendNotify(icon, summary, body string) {
+	n := m.helper.Notification
+	n.Update(summary, body, icon)
+
 	go func() {
-		notifier := m.helper.Notifier
-		if notifier != nil {
-			notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
-			logger.Debugf("send notify icon: %q, summary: %q, body: %q", icon, summary, body)
+		err := n.Show()
+		logger.Debugf("sendNotify icon: %q, summary: %q, body: %q", icon, summary, body)
+		if err != nil {
+			logger.Warning("sendNotify failed:", err)
 		}
 	}()
 }
