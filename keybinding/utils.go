@@ -13,6 +13,7 @@ import (
 	"encoding/json"
 	"gir/gio-2.0"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
@@ -56,7 +57,7 @@ func execCmd(cmd string) error {
 		return nil
 	}
 
-	logger.Debug("exec cmd:", cmd)
+	logger.Debugf("len environ: %d, exec cmd: %q", len(os.Environ()), cmd)
 	return exec.Command("/bin/sh", "-c", cmd).Run()
 }
 
