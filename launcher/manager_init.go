@@ -13,11 +13,11 @@ import (
 	libPinyin "dbus/com/deepin/api/pinyin"
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
-	libNotifications "dbus/org/freedesktop/notifications"
 	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/notify"
 	"time"
 )
 
@@ -40,11 +40,9 @@ func (m *Manager) init() error {
 		return err
 	}
 
-	// init notifications
-	m.notifier, err = libNotifications.NewNotifier("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-	if err != nil {
-		return err
-	}
+	// init notification
+	notify.Init(dbusDest)
+	m.notification = notify.NewNotification("", "", "")
 
 	// init system dbus conn
 	m.systemDBusConn, err = dbus.SystemBus()

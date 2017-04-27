@@ -20,10 +20,10 @@ import (
 	libPinyin "dbus/com/deepin/api/pinyin"
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
-	libNotifications "dbus/org/freedesktop/notifications"
 	"github.com/howeyc/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/notify"
 )
 
 const (
@@ -46,7 +46,7 @@ type Manager struct {
 
 	launchedRecorder   *libApps.LaunchedRecorder
 	desktopFileWatcher *libApps.DesktopFileWatcher
-	notifier           *libNotifications.Notifier
+	notification       *notify.Notification
 	lastoreManager     *libLastore.Manager
 	pinyin             *libPinyin.Pinyin
 	desktopPkgMap      map[string]string
@@ -246,12 +246,16 @@ func (m *Manager) loadPkgCategoryMap() error {
 	return nil
 }
 
-func (m *Manager) notify(icon, summary, body string) {
-	if m.notifier == nil {
-		return
-	}
-
-	m.notifier.Notify(dbusDest, 0, icon, summary, body, nil, nil, 0)
+func (m *Manager) sendNotification(summary, body, icon string) {
+	n := m.notification
+	n.Update(summary, body, icon)
+	go func() {
+		err := n.Show()
+		logger.Infof("sendNotification summary: %q, body: %q, icon: %q", summary, body, icon)
+		if err != nil {
+			logger.Warning("sendNotification failed:", err)
+		}
+	}()
 }
 
 func (m *Manager) emitSearchDone(result MatchResults) {

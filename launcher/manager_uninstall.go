@@ -27,15 +27,14 @@ func (m *Manager) uninstallDesktopFile(item *Item) error {
 }
 
 func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
-	//icon := item.Icon
-	icon := "deepin-appstore"
-	var msgBody string
+	const icon = "deepin-appstore"
+	var msg string
 	if succeed {
-		msgBody = fmt.Sprintf(Tr("%q removed successfully."), item.Name)
+		msg = fmt.Sprintf(Tr("%q removed successfully."), item.Name)
 	} else {
-		msgBody = fmt.Sprintf(Tr("Failed to uninstall %q."), item.Name)
+		msg = fmt.Sprintf(Tr("Failed to uninstall %q."), item.Name)
 	}
-	m.notify(icon, "", msgBody)
+	m.sendNotification(msg, "", icon)
 }
 
 func (m *Manager) uninstallDeepinWineApp(item *Item) error {
