@@ -20,7 +20,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
 
-    setBackgroundColor(QColor(16, 16, 16, 217));
+    setBackgroundColor(DBlurEffectWidget::DarkColor);
     setBorderColor(QColor(255, 255, 255, 255 * 0.05));
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, false);
