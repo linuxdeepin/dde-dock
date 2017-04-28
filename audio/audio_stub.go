@@ -52,6 +52,9 @@ func (a *Audio) rebuildSinkInputList() {
 			continue
 		}
 		si := NewSinkInput(s)
+		if si == nil {
+			continue
+		}
 		sinkinputs = append(sinkinputs, si)
 	}
 	a.setPropSinkInputs(sinkinputs)
@@ -74,6 +77,9 @@ func (a *Audio) addSinkInput(idx uint32) {
 	}
 
 	si := NewSinkInput(core)
+	if si == nil {
+		return
+	}
 	err = dbus.InstallOnSession(si)
 	if err != nil {
 		logger.Error(err)

@@ -40,6 +40,9 @@ type SinkInput struct {
 }
 
 func NewSinkInput(core *pulse.SinkInput) *SinkInput {
+	if core == nil {
+		return nil
+	}
 	s := &SinkInput{core: core}
 	s.index = s.core.Index
 	s.update()

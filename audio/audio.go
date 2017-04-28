@@ -282,9 +282,14 @@ func (a *Audio) destroy() {
 
 func (a *Audio) moveSinkInputsToSink(sinkId uint32) {
 	// TODO: locker sinkinputs changed
+	if len(a.SinkInputs) == 0 {
+		return
+	}
 	var list []uint32
 	for _, sinkInput := range a.SinkInputs {
-		if sinkInput.core.Sink == sinkId {
+		logger.Debugf("-----------[moveSinkInputsToSink] si info: %#v", sinkInput)
+		if sinkInput == nil || sinkInput.core == nil ||
+			sinkInput.core.Sink == sinkId {
 			continue
 		}
 		list = append(list, sinkInput.index)
