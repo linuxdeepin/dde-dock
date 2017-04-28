@@ -24,7 +24,7 @@ MainPanel::MainPanel(QWidget *parent)
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_effectWidget->setMaskColor(QColor(10, 10, 10));
+    m_effectWidget->setMaskColor(DBlurEffectWidget::DarkColor);
     m_effectWidget->setBlendMode(DBlurEffectWidget::BehindWindowBlend);
     m_effectWidget->setDisabled(true);
 
