@@ -57,9 +57,7 @@ private:
     bool m_updatePanelVisible;
     MainPanel *m_mainPanel;
 
-#ifdef QT_DEBUG
     DPlatformWindowHandle m_platformWindowHandle;
-#endif
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

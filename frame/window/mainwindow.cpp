@@ -14,9 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_mainPanel(new MainPanel(this)),
 
-#ifdef QT_DEBUG
       m_platformWindowHandle(this),
-#endif
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
@@ -31,13 +29,11 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
 
-#ifdef QT_DEBUG
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
     m_platformWindowHandle.setWindowRadius(0);
     m_platformWindowHandle.setBorderWidth(0);
     m_platformWindowHandle.setShadowOffset(QPoint(0, 0));
-#endif
 
     m_settings = new DockSettings(this);
     m_xcbMisc->set_window_type(winId(), XcbMisc::Dock);
@@ -49,11 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     updatePanelVisible();
     connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
+    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
-#ifdef QT_DEBUG
-    connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
-#endif
 }
 
 MainWindow::~MainWindow()
@@ -492,7 +486,6 @@ void MainWindow::updatePanelVisible()
 
 void MainWindow::adjustShadowMask()
 {
-#ifdef QT_DEBUG
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running)
@@ -529,5 +522,4 @@ void MainWindow::adjustShadowMask()
 
     m_platformWindowHandle.setShadowRadius(60);
     m_platformWindowHandle.setClipPath(path);
-#endif
 }
