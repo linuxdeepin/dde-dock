@@ -11,7 +11,7 @@ package systeminfo
 
 import (
 	"fmt"
-	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/keyfile"
 )
 
 const (
@@ -44,11 +44,10 @@ func getVersion() (string, error) {
 }
 
 func getVersionFromDeepin(file string) (string, error) {
-	kfile, err := dutils.NewKeyFileFromFile(file)
-	if err != nil {
+	kfile := keyfile.NewKeyFile()
+	if err := kfile.LoadFromFile(file); err != nil {
 		return "", err
 	}
-	defer kfile.Free()
 
 	version, err := kfile.GetString(versionGroupRelease,
 		versionKeyVersion)
@@ -57,7 +56,7 @@ func getVersionFromDeepin(file string) (string, error) {
 	}
 
 	ty, _ := kfile.GetLocaleString(versionGroupRelease,
-		versionKeyType, "\x00")
+		versionKeyType, "")
 	if len(ty) != 0 {
 		version = version + " " + ty
 	}
