@@ -28,12 +28,13 @@ type Item struct {
 	CategoryID    CategoryID
 	TimeInstalled int64
 
-	keywords      []string
-	categories    []string
-	exec          string
-	genericName   string
-	comment       string
-	searchTargets map[string]SearchScore
+	keywords        []string
+	categories      []string
+	xDeepinCategory string
+	exec            string
+	genericName     string
+	comment         string
+	searchTargets   map[string]SearchScore
 }
 
 func (item *Item) String() string {
@@ -52,27 +53,29 @@ func getAppId(desktopId string) string {
 	return strings.TrimSuffix(desktopId, desktopExt)
 }
 
-func NewItemWithDesktopAppInfo(app *desktopappinfo.DesktopAppInfo) *Item {
-	if app == nil {
+func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
+	if appInfo == nil {
 		return nil
 	}
-	enName, _ := app.GetString(desktopappinfo.MainSection, desktopappinfo.KeyName)
-	enComment, _ := app.GetString(desktopappinfo.MainSection, desktopappinfo.KeyComment)
+	enName, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyName)
+	enComment, _ := appInfo.GetString(desktopappinfo.MainSection, desktopappinfo.KeyComment)
+	xDeepinCategory, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Deepin-Category")
 	item := &Item{
-		Path:          app.GetFileName(),
-		Name:          app.GetName(),
-		enName:        enName,
-		Icon:          app.GetIcon(),
-		exec:          app.GetCommandline(),
-		genericName:   app.GetGenericName(),
-		comment:       enComment,
-		searchTargets: make(map[string]SearchScore),
+		Path:            appInfo.GetFileName(),
+		Name:            appInfo.GetName(),
+		enName:          enName,
+		Icon:            appInfo.GetIcon(),
+		exec:            appInfo.GetCommandline(),
+		genericName:     appInfo.GetGenericName(),
+		comment:         enComment,
+		searchTargets:   make(map[string]SearchScore),
+		xDeepinCategory: strings.ToLower(xDeepinCategory),
 	}
-	for _, kw := range app.GetKeywords() {
+	for _, kw := range appInfo.GetKeywords() {
 		item.keywords = append(item.keywords, strings.ToLower(kw))
 	}
 
-	categories := app.GetCategories()
+	categories := appInfo.GetCategories()
 	for _, c := range categories {
 		item.categories = append(item.categories, strings.ToLower(c))
 	}

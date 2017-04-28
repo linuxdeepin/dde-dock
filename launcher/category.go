@@ -104,13 +104,16 @@ var categoryNameTable = map[string]CategoryID{
 	"others":      CategoryOthers,
 }
 
-func parseCategoryString(name string) CategoryID {
-	name = strings.ToLower(name)
-	if id, ok := categoryNameTable[name]; ok {
-		return id
+func parseCategoryString(str string) (CategoryID, bool) {
+	if str == "" {
+		return CategoryOthers, false
 	}
-	logger.Warningf("parseCategoryString unknown category %q", name)
-	return CategoryOthers
+
+	cid, ok := categoryNameTable[str]
+	if !ok {
+		return CategoryOthers, false
+	}
+	return cid, true
 }
 
 var xCategories = map[string]CategoryID{

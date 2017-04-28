@@ -145,16 +145,21 @@ func (m *Manager) removeItem(id string) {
 
 func (m *Manager) queryCategoryID(item *Item) CategoryID {
 	pkg := m.queryPkgName(item)
-	logger.Debugf("queryCategoryID desktopPkgMap item %v -> pkg %v", item, pkg)
+	logger.Debugf("queryCategoryID desktopPkgMap %v -> pkg %v", item, pkg)
 	if pkg != "" && m.pkgCategoryMap != nil {
 		if cid, ok := m.pkgCategoryMap[pkg]; ok {
-			logger.Debugf("queryCategoryID pkgCategoryMap item %v -> category %v", item, cid)
+			logger.Debugf("queryCategoryID pkgCategoryMap %v -> %v", item, cid)
 			return cid
 		}
 	}
 
+	if cid, ok := parseCategoryString(item.xDeepinCategory); ok {
+		logger.Debugf("queryCategoryID X-Deepin %v -> %v", item, cid)
+		return cid
+	}
+
 	categoryGuess := item.getXCategory()
-	logger.Debugf("queryCategoryID categoryGuess item %v -> category %v", item, categoryGuess)
+	logger.Debugf("queryCategoryID guess %v -> %v", item, categoryGuess)
 	return categoryGuess
 }
 
@@ -236,7 +241,11 @@ func (m *Manager) loadPkgCategoryMap() error {
 
 	infos := make(map[string]CategoryID)
 	for pkg, v := range jsonData {
-		infos[pkg] = parseCategoryString(v.Category)
+		cid, ok := parseCategoryString(v.Category)
+		if !ok {
+			logger.Warning("loadPkgCategoryMap: parse category %q failed", v.Category)
+		}
+		infos[pkg] = cid
 	}
 	//logger.Debugf("loadPkgCategoryMap jsonData %#v", jsonData)
 	//logger.Debugf("loadPkgCategoryMap infos %#v", infos)
