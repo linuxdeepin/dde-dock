@@ -260,9 +260,10 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
             return;
 
         // start launching effects
+        const QPixmap icon = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
         const QRect r = rect();
-        QGraphicsPixmapItem *item = m_itemScene->addPixmap(m_largeIcon);
-        item->setPos(r.center() + QPoint(0, 18));
+        QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
+        item->setPos(r.center() - QPoint(18, 18));
         item->setTransformationMode(Qt::SmoothTransformation);
         m_itemView->setSceneRect(r);
 
@@ -278,10 +279,12 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         ani->setItem(item);
         ani->setTimeLine(tl);
 
-        const int px = -m_largeIcon.rect().center().x();
-        const int py = -m_largeIcon.rect().center().y() - 18;
+        const int px = -icon.rect().center().x();
+        const int py = -icon.rect().center().y() - 18;
+        const QPoint pos = r.center() + QPoint(0, 18);
         for (int i(0); i != 60; ++i)
         {
+            ani->setPosAt(i / 60.0, pos);
             ani->setTranslationAt(i / 60.0, px, py);
             ani->setRotationAt(i / 60.0, Frames[i]);
         }
