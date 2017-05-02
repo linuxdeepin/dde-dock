@@ -451,6 +451,7 @@ void AppItem::updateTitle()
 {
     m_titles = m_itemEntry->titles();
 
+    // TODO: optimize
     m_appPreviewTips->setWindowInfos(m_titles);
 
     update();
@@ -496,7 +497,8 @@ void AppItem::showPreview()
     }
 
     m_appPreviewTips->updateLayoutDirection(DockPosition);
-//    m_appPreviewTips->setWindowInfos(m_titles);
+
+    qApp->processEvents();
 
     showPopupWindow(m_appPreviewTips, true);
 }

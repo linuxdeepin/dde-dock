@@ -29,6 +29,9 @@ public slots:
 protected:
     void leaveEvent(QEvent *e);
 
+private slots:
+    void updateContainerSize();
+
 private:
     QBoxLayout *m_windowListLayout;
 };

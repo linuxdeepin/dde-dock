@@ -37,6 +37,12 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
 
         m_windowListLayout->addWidget(w);
     }
+
+    if (!isVisible())
+        return;
+
+    // update geometry
+    QMetaObject::invokeMethod(this, "updateContainerSize", Qt::QueuedConnection);
 }
 
 void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
@@ -63,4 +69,9 @@ void PreviewContainer::leaveEvent(QEvent *e)
 
     if (!rect().contains(p))
         emit requestCancelPreview();
+}
+
+void PreviewContainer::updateContainerSize()
+{
+    resize(sizeHint());
 }

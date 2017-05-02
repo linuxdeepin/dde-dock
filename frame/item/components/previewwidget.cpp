@@ -9,9 +9,9 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-#define W 200
-#define H 130
-#define M 8
+#define PREVIEW_W 200
+#define PREVIEW_H 130
+#define PREVIEW_M 8
 
 PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     : QWidget(parent),
@@ -34,7 +34,7 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     centralLayout->addWidget(m_closeButton);
     centralLayout->setAlignment(m_closeButton, Qt::AlignTop | Qt::AlignRight);
 
-    setFixedSize(W + M * 2, H + M * 2);
+    setFixedSize(PREVIEW_W + PREVIEW_M * 2, PREVIEW_H + PREVIEW_M * 2);
     setLayout(centralLayout);
     setAcceptDrops(true);
 
@@ -57,8 +57,8 @@ void PreviewWidget::refershImage()
     XImage *ximage = XGetImage(display, m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
 
     const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
-    m_image = qimage.scaled(W, H, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-    m_image = m_image.copy((m_image.width() - W) / 2, (m_image.height() - H) / 2, W, H);
+    m_image = qimage.scaled(PREVIEW_W, PREVIEW_H, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    m_image = m_image.copy((m_image.width() - PREVIEW_W) / 2, (m_image.height() - PREVIEW_H) / 2, PREVIEW_W, PREVIEW_H);
     XDestroyImage(ximage);
 
     update();
@@ -93,7 +93,7 @@ void PreviewWidget::setVisible(const bool visible)
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
 {
-    const QRect r = rect().marginsRemoved(QMargins(M, M, M, M));
+    const QRect r = rect().marginsRemoved(QMargins(PREVIEW_M, PREVIEW_M, PREVIEW_M, PREVIEW_M));
 
     QPainter painter(this);
 
