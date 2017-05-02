@@ -39,14 +39,17 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_itemView);
     centralLayout->setMargin(0);
+    centralLayout->setSpacing(0);
 
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
     setLayout(centralLayout);
 
     m_itemView->setScene(m_itemScene);
+    m_itemView->setAlignment(Qt::AlignCenter);
     m_itemView->setVisible(false);
     m_itemView->setFrameStyle(QFrame::NoFrame);
+    m_itemView->setContentsMargins(0, 0, 0, 0);
     m_itemView->setRenderHints(QPainter::SmoothPixmapTransform);
     m_itemView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     m_itemView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -149,10 +152,10 @@ void AppItem::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-    const QRect itemRect = rect();
+    const QRectF itemRect = rect();
 
     // draw background
-    QRect backgroundRect = itemRect;
+    QRectF backgroundRect = itemRect;
     if (DockDisplayMode == Efficient)
     {
         switch (DockPosition)
@@ -175,7 +178,7 @@ void AppItem::paintEvent(QPaintEvent *e)
             painter.fillRect(backgroundRect, QColor(44, 167, 248, 255 * 0.3));
 
             const int activeLineWidth = itemRect.height() > 50 ? 4 : 2;
-            QRect activeRect = backgroundRect;
+            QRectF activeRect = backgroundRect;
             switch (DockPosition)
             {
             case Top:       activeRect.setBottom(activeRect.top() + activeLineWidth);   break;
@@ -236,7 +239,7 @@ void AppItem::paintEvent(QPaintEvent *e)
     // icon
     const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
     // icon pos
-    QPointF iconPos = itemRect.center() - pixmap.rect().center();
+    QPointF iconPos = itemRect.center() - QRectF(pixmap.rect()).center();
 
     // draw ligher/normal icon
     if (!m_hover)
@@ -260,12 +263,14 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
             return;
 
         // start launching effects
-        const QPixmap icon = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
+        m_itemScene->clear();
         const QRect r = rect();
+        const QPixmap icon = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
         QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
-        item->setPos(r.center() - QPoint(18, 18));
         item->setTransformationMode(Qt::SmoothTransformation);
+        item->setPos(r.center() - icon.rect().center());
         m_itemView->setSceneRect(r);
+//        m_itemView->setSceneRect((r.width() - icon.width()) / 2, (r.height() - icon.height()) / 2, r.width(), r.height());
 
         QTimeLine *tl = new QTimeLine;
         tl->setDuration(1200);
