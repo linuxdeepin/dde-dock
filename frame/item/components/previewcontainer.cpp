@@ -58,13 +58,8 @@ void PreviewContainer::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
-    QTimer::singleShot(1, this, &PreviewContainer::onMouseLeave);
-}
+    const QPoint p = mapFromGlobal(QCursor::pos()) + pos();
 
-void PreviewContainer::onMouseLeave()
-{
-    if (rect().contains(mapFromGlobal(QCursor::pos())))
-        return;
-
-    emit requestCancelPreview();
+    if (!rect().contains(p))
+        emit requestCancelPreview();
 }

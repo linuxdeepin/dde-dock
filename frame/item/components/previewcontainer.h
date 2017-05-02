@@ -28,9 +28,6 @@ public slots:
 protected:
     void leaveEvent(QEvent *e);
 
-private slots:
-    void onMouseLeave();
-
 private:
     QBoxLayout *m_windowListLayout;
 };
