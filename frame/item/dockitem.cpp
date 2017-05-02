@@ -201,12 +201,14 @@ void DockItem::showPopupWindow(QWidget * const content, const bool model)
     case Right: popup->setArrowDirection(DockPopupWindow::ArrowRight);   break;
     }
     popup->setContent(content);
-    popup->setMargin(5);
     popup->setWidth(content->sizeHint().width());
     popup->setHeight(content->sizeHint().height());
 
     const QPoint p = popupMarkPoint();
-    QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+    if (!popup->isVisible())
+        QMetaObject::invokeMethod(popup, "show", Qt::QueuedConnection, Q_ARG(QPoint, p), Q_ARG(bool, model));
+    else
+        popup->show(p, model);
 
     connect(popup, &DockPopupWindow::accept, this, &DockItem::popupWindowAccept);
 }

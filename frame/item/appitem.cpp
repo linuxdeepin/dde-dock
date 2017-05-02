@@ -43,6 +43,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
+    setMouseTracking(true);
     setLayout(centralLayout);
 
     m_itemView->setScene(m_itemScene);
@@ -326,6 +327,10 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
 {
     e->accept();
 
+    // handle preview
+    if (e->buttons() == Qt::NoButton)
+        return showPreview();
+
     // handle drag
     if (e->buttons() != Qt::LeftButton)
         return;
@@ -335,10 +340,8 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
         return;
 
     const QPoint distance = pos - MousePressPos;
-    if (distance.manhattanLength() < APP_DRAG_THRESHOLD)
-        return;
-
-    startDrag();
+    if (distance.manhattanLength() > APP_DRAG_THRESHOLD)
+        return startDrag();
 }
 
 void AppItem::wheelEvent(QWheelEvent *e)
@@ -388,24 +391,6 @@ void AppItem::dropEvent(QDropEvent *e)
 
     qDebug() << "accept drop event with URIs: " << uriList;
     m_itemEntry->HandleDragDrop(uriList);
-}
-
-void AppItem::showHoverTips()
-{
-    // another model popup window is alread exists
-//    if (PopupWindow->isVisible() && PopupWindow->model())
-//        return;
-
-//    QWidget * const content = popupTips();
-//    if (!content)
-//        return;
-
-//    showPopupWindow(content);
-
-    if (m_titles.isEmpty())
-        return DockItem::showHoverTips();
-
-    showPreview();
 }
 
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
@@ -495,13 +480,23 @@ void AppItem::activeChanged()
 
 void AppItem::showPreview()
 {
-//    if (PopupWindow->isVisible())
-//        return hidePopup();
+    if (m_titles.isEmpty())
+        return;
+
+    // test cursor position
+    const QRect r = rect();
+    const QPoint p = mapFromGlobal(QCursor::pos());
+
+    switch (DockPosition)
+    {
+    case Top:       if (p.y() != r.top())       return;
+    case Left:      if (p.x() != r.left())      return;
+    case Right:     if (p.x() != r.right())     return;
+    case Bottom:    if (p.y() != r.bottom())    return;
+    }
 
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 //    m_appPreviewTips->setWindowInfos(m_titles);
-
-    qApp->processEvents();
 
     showPopupWindow(m_appPreviewTips, true);
 }
