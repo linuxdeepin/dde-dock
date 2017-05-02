@@ -68,7 +68,18 @@ void PreviewWidget::closeWindow()
 {
     const auto display = QX11Info::display();
 
-    XDestroyWindow(display, m_wid);
+    XEvent e;
+
+    memset(&e, 0, sizeof(e));
+    e.xclient.type = ClientMessage;
+    e.xclient.window = m_wid;
+    e.xclient.message_type = XInternAtom(display, "WM_PROTOCOLS", true);
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = XInternAtom(display, "WM_DELETE_WINDOW", false);
+    e.xclient.data.l[1] = CurrentTime;
+
+    XSendEvent(display, m_wid, false, NoEventMask, &e);
+//    XDestroyWindow(display, m_wid);
     XFlush(display);
 }
 
