@@ -158,6 +158,7 @@ void PreviewWidget::mouseReleaseEvent(QMouseEvent *e)
 
     QWidget::mouseReleaseEvent(e);
 
+    emit requestHidePreview();
     emit requestCancelPreview();
     emit requestActivateWindow(m_wid);
 }

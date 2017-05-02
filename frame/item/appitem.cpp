@@ -76,7 +76,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::hidePopup);
+    connect(m_appPreviewTips, &PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
 
     updateTitle();
     refershIcon();

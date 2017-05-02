@@ -33,6 +33,7 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
         connect(w, &PreviewWidget::requestActivateWindow, this, &PreviewContainer::requestActivateWindow);
         connect(w, &PreviewWidget::requestPreviewWindow, this, &PreviewContainer::requestPreviewWindow);
         connect(w, &PreviewWidget::requestCancelPreview, this, &PreviewContainer::requestCancelPreview);
+        connect(w, &PreviewWidget::requestHidePreview, this, &PreviewContainer::requestHidePreview);
 
         m_windowListLayout->addWidget(w);
     }
