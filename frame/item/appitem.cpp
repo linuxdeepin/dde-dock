@@ -71,6 +71,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
+    connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
+
     connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
@@ -243,7 +245,7 @@ void AppItem::paintEvent(QPaintEvent *e)
         painter.drawPixmap(iconPos, ImageFactory::lighterEffect(pixmap));
 
     // Update the window icon geometry when the icon is changed.
-//    m_updateIconGeometryTimer->start();
+    m_updateIconGeometryTimer->start();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
