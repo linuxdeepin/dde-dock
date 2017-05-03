@@ -490,10 +490,11 @@ void AppItem::showPreview()
 
     switch (DockPosition)
     {
-    case Top:       if (p.y() != r.top())       return;
-    case Left:      if (p.x() != r.left())      return;
-    case Right:     if (p.x() != r.right())     return;
-    case Bottom:    if (p.y() != r.bottom())    return;
+    case Top:       if (p.y() != r.top())       return;     break;
+    case Left:      if (p.x() != r.left())      return;     break;
+    case Right:     if (p.x() != r.right())     return;     break;
+    case Bottom:    if (p.y() != r.bottom())    return;     break;
+    default:        return;
     }
 
     m_appPreviewTips->updateLayoutDirection(DockPosition);
