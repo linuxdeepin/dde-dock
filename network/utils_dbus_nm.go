@@ -767,7 +767,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (c
 	if len(devPath) == 0 {
 		devPath = "/"
 	} else {
-		if !nmGetWiredCarrier(devPath) {
+		if isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
 			err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
 			return
 		}
@@ -783,7 +783,7 @@ func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (c
 }
 
 func nmActivateConnection(cpath, devPath dbus.ObjectPath) (apath dbus.ObjectPath, err error) {
-	if !nmGetWiredCarrier(devPath) {
+	if isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
 		err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
 		return
 	}
@@ -1086,6 +1086,16 @@ func nmGetConnectionById(id string) (cpath dbus.ObjectPath, err error) {
 func nmGetConnectionByUuid(uuid string) (cpath dbus.ObjectPath, err error) {
 	cpath, err = nmSettings.GetConnectionByUuid(uuid)
 	return
+}
+
+func isWiredDevice(devPath dbus.ObjectPath) bool {
+	device, err := nmNewDevice(devPath)
+	if err != nil {
+		return false
+	}
+	defer nmDestroyDevice(device)
+
+	return device.DeviceType.Get() == nm.NM_DEVICE_TYPE_ETHERNET
 }
 
 func nmGetWiredCarrier(devPath dbus.ObjectPath) bool {
