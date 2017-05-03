@@ -25,6 +25,14 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
         delete item;
     }
 
+    if (infos.isEmpty())
+    {
+        emit requestCancelPreview();
+        emit requestHidePreview();
+
+        return;
+    }
+
     for (auto it(infos.cbegin()); it != infos.cend(); ++it)
     {
         PreviewWidget *w = new PreviewWidget(it.key());
