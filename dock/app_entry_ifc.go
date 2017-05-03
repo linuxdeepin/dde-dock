@@ -26,6 +26,12 @@ func (e *AppEntry) GetDBusInfo() dbus.DBusInfo {
 
 func (entry *AppEntry) Activate(timestamp uint32) error {
 	logger.Debug("Activate timestamp:", timestamp)
+	m := entry.dockManager
+	if HideModeType(m.HideMode.Get()) == HideModeSmartHide {
+		m.setPropHideState(HideStateShow)
+		m.updateHideStateWithDelay()
+	}
+
 	if !entry.hasWindow() {
 		entry.launchApp(timestamp)
 		return nil

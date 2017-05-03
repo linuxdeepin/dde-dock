@@ -74,6 +74,8 @@ const (
 	settingKeyShowTimeout          = "show-timeout"
 	settingKeyHideTimeout          = "hide-timeout"
 	settingKeyWinIconPreferredApps = "win-icon-preferred-apps"
+
+	frontendWindowWmClass = "dde-dock"
 )
 
 func NewDockManager() (*DockManager, error) {

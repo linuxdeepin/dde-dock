@@ -170,14 +170,19 @@ func (m *DockManager) handleConfigureNotifyEvent(winInfo *WindowInfo, ev xevent.
 	if HideModeType(m.HideMode.Get()) != HideModeSmartHide {
 		return
 	}
+	if winInfo.wmClass != nil && winInfo.wmClass.Class == frontendWindowWmClass {
+		// ignore frontend window ConfigureNotify event
+		return
+	}
 
 	winInfo.lastConfigureNotifyEvent = &ev
-	const configureNotifyDelay = 100 // ms
+	const configureNotifyDelay = 100 * time.Millisecond
 	if winInfo.updateConfigureTimer != nil {
-		winInfo.updateConfigureTimer.Reset(time.Millisecond * configureNotifyDelay)
+		winInfo.updateConfigureTimer.Reset(configureNotifyDelay)
 	} else {
-		winInfo.updateConfigureTimer = time.AfterFunc(time.Millisecond*configureNotifyDelay, func() {
+		winInfo.updateConfigureTimer = time.AfterFunc(configureNotifyDelay, func() {
 			logger.Debug("ConfigureNotify: updateConfigureTimer expired")
+
 			ev := winInfo.lastConfigureNotifyEvent
 			logger.Debugf("in closure: configure notify ev %s", ev)
 			isXYWHChange := false

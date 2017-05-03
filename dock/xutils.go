@@ -72,6 +72,21 @@ func getWmPid(xu *xgbutil.XUtil, win xproto.Window) uint {
 	return pid
 }
 
+// WM_CLIENT_LEADER
+func getWmClientLeader(xu *xgbutil.XUtil, win xproto.Window) (xproto.Window, error) {
+	return xprop.PropValWindow(xprop.GetProperty(xu, win, "WM_CLIENT_LEADER"))
+}
+
+// WM_TRANSIENT_FOR
+func getWmTransientFor(xu *xgbutil.XUtil, win xproto.Window) (xproto.Window, error) {
+	return xprop.PropValWindow(xprop.GetProperty(xu, win, "WM_TRANSIENT_FOR"))
+}
+
+// _NET_WM_WINDOW_OPACITY
+func getWmWindowOpacity(xu *xgbutil.XUtil, win xproto.Window) (uint, error) {
+	return xprop.PropValNum(xprop.GetProperty(xu, win, "_NET_WM_WINDOW_OPACITY"))
+}
+
 func getWmCommand(xu *xgbutil.XUtil, win xproto.Window) ([]string, error) {
 	command, err := xprop.PropValStrs(xprop.GetProperty(xu, win, "WM_COMMAND"))
 	return command, err

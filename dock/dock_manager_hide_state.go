@@ -47,16 +47,87 @@ func hasIntersection(rectA, rectB xrect.Rect) bool {
 	return ax < bx && ay < by
 }
 
+func (m *DockManager) getActiveWinGroup() (ret []xproto.Window) {
+	ret = []xproto.Window{m.activeWindow}
+	list, err := ewmh.ClientListStackingGet(XU)
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	idx := -1
+	for i, win := range list {
+		if win == m.activeWindow {
+			idx = i
+			break
+		}
+	}
+	if idx == -1 {
+		logger.Warning("getActiveWinGroup: not found active window in clientListStacking")
+		return
+	} else if idx == 0 {
+		return
+	}
+
+	aPid := getWmPid(XU, m.activeWindow)
+	aWmClass, _ := icccm.WmClassGet(XU, m.activeWindow)
+	aLeaderWin, _ := getWmClientLeader(XU, m.activeWindow)
+
+	for i := idx - 1; i >= 0; i-- {
+		win := list[i]
+		pid := getWmPid(XU, win)
+		if aPid != 0 && pid == aPid {
+			// ok
+			ret = append(ret, win)
+			continue
+		}
+
+		wmClass, _ := icccm.WmClassGet(XU, win)
+		if wmClass != nil && wmClass.Class == frontendWindowWmClass {
+			// skip over frontend window
+			continue
+		}
+
+		if wmClass != nil && aWmClass != nil &&
+			wmClass.Class == aWmClass.Class {
+			// ok
+			ret = append(ret, win)
+			continue
+		}
+
+		leaderWin, _ := getWmClientLeader(XU, win)
+		if aLeaderWin != 0 && leaderWin == aLeaderWin {
+			// ok
+			ret = append(ret, win)
+			continue
+		}
+
+		aboveWin := list[i+1]
+		aboveWinTransientFor, _ := getWmTransientFor(XU, aboveWin)
+		if aboveWinTransientFor != 0 && aboveWinTransientFor == win {
+			// ok
+			ret = append(ret, win)
+			continue
+		}
+
+		break
+	}
+	return
+}
+
 func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 	// overlap condition:
 	// window type is not desktop
+	// window opacity is not zero
 	// window showing and  on current workspace,
 	// window dock rect has intersection
 	windowType, err := ewmh.WmWindowTypeGet(XU, win)
-	if err != nil {
-		logger.Debug(err)
+	if err == nil && strSliceContains(windowType, "_NET_WM_WINDOW_TYPE_DESKTOP") {
+		return false, nil
 	}
-	if strSliceContains(windowType, "_NET_WM_WINDOW_TYPE_DESKTOP") {
+
+	opacity, err := getWmWindowOpacity(XU, win)
+	if err == nil && opacity == 0 {
 		return false, nil
 	}
 
@@ -73,9 +144,7 @@ func (m *DockManager) isWindowDockOverlap(win xproto.Window) (bool, error) {
 
 	logger.Debug("window rect:", winRect)
 	logger.Debug("dock rect:", m.FrontendWindowRect)
-	result := hasIntersection(winRect, m.FrontendWindowRect.ToXRect())
-	logger.Debug("window dock overlap:", result)
-	return result, nil
+	return hasIntersection(winRect, m.FrontendWindowRect.ToXRect()), nil
 }
 
 const (
@@ -100,13 +169,26 @@ func (m *DockManager) shouldHideOnSmartHideMode() (bool, error) {
 		logger.Debug("launcher is shown")
 		return false, nil
 	}
-	return m.isWindowDockOverlap(m.activeWindow)
+	list := m.getActiveWinGroup()
+	logger.Debug("activeWinGroup:", list)
+	for _, win := range list {
+		over, err := m.isWindowDockOverlap(win)
+		if err != nil {
+			return false, err
+		}
+		logger.Debugf("win %d dock overlap %v", win, over)
+		if over {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func (m *DockManager) smartHideModeTimerExpired() {
 	logger.Debug("smartHideModeTimer expired!")
 	shouldHide, err := m.shouldHideOnSmartHideMode()
 	if err != nil {
+		logger.Warning(err)
 		m.setPropHideState(HideStateUnknown)
 		return
 	}
@@ -134,36 +216,6 @@ func (m *DockManager) cancelSmartHideModeTimer() {
 	logger.Debug("cancel smart hide mode timer ")
 }
 
-func (m *DockManager) smartHideModeDelayHandle() {
-	shouldHide, err := m.shouldHideOnSmartHideMode()
-	if err != nil {
-		m.cancelSmartHideModeTimer()
-		m.setPropHideState(HideStateUnknown)
-		return
-	}
-
-	switch m.HideState {
-	case HideStateShow:
-		if shouldHide {
-			logger.Debug("smartHideModeDelayHandle: show -> hide")
-			m.resetSmartHideModeTimer(time.Millisecond * 500)
-		} else {
-			logger.Debug("smartHideModeDelayHandle: show -> show")
-			m.cancelSmartHideModeTimer()
-		}
-	case HideStateHide:
-		if shouldHide {
-			logger.Debug("smartHideModeDelayHandle: hide -> hide")
-			m.cancelSmartHideModeTimer()
-		} else {
-			logger.Debug("smartHideModeDelayHandle: hide -> show")
-			m.resetSmartHideModeTimer(time.Millisecond * 500)
-		}
-	default:
-		m.resetSmartHideModeTimer(0)
-	}
-}
-
 func (m *DockManager) updateHideState(delay bool) {
 	if m.isDeepinLauncherShown() {
 		logger.Debug("updateHideState: launcher is shown, show dock")
@@ -182,9 +234,9 @@ func (m *DockManager) updateHideState(delay bool) {
 
 	case HideModeSmartHide:
 		if delay {
-			m.smartHideModeDelayHandle()
+			m.resetSmartHideModeTimer(time.Millisecond * 500)
 		} else {
-			m.smartHideModeTimer.Reset(0)
+			m.resetSmartHideModeTimer(0)
 		}
 	}
 }
@@ -199,6 +251,11 @@ func (m *DockManager) updateHideStateWithoutDelay() {
 
 func (m *DockManager) setPropHideState(hideState HideStateType) {
 	logger.Debug("setPropHideState", hideState)
+	if hideState == HideStateUnknown {
+		logger.Warning("try setPropHideState to Unknown")
+		return
+	}
+
 	if m.HideState != hideState {
 		logger.Debugf("HideState %v => %v", m.HideState, hideState)
 		m.HideState = hideState
