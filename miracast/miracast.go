@@ -255,7 +255,7 @@ func (m *Miracast) handleEvent() {
 		}
 	})
 
-	if !ddbus.IsSessionBusActivated(m.network.DestName) {
+	if !ddbus.IsSystemBusActivated(m.network.DestName) {
 		logger.Warning("Network service no activation")
 		return
 	}
@@ -284,7 +284,7 @@ func (m *Miracast) handleEvent() {
 }
 
 func (m *Miracast) enableWirelessManaged(macAddress string, enabled bool) error {
-	if !ddbus.IsSessionBusActivated(m.network.DestName) {
+	if !ddbus.IsSystemBusActivated(m.network.DestName) {
 		return fmt.Errorf("Network service no activation")
 	}
 

@@ -30,7 +30,7 @@ func toggleWireless() error {
 	}
 	defer Network.DestroyNetworkManager(net)
 
-	if !ddbus.IsSessionBusActivated(net.DestName) {
+	if !ddbus.IsSystemBusActivated(net.DestName) {
 		return fmt.Errorf("Network service no activation")
 	}
 
