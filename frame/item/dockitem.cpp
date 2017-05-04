@@ -191,7 +191,7 @@ void DockItem::showPopupWindow(QWidget * const content, const bool model)
     DockPopupWindow *popup = PopupWindow.get();
     QWidget *lastContent = popup->getContent();
     if (lastContent)
-        lastContent->hide();
+        lastContent->setVisible(false);
 
     switch (DockPosition)
     {

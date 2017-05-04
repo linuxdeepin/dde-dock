@@ -193,7 +193,7 @@ DockItemController::DockItemController(QObject *parent)
     connect(m_updatePluginsOrderTimer, &QTimer::timeout, this, &DockItemController::updatePluginsItemOrderKey);
 
     connect(m_appInter, &DBusDock::EntryAdded, this, &DockItemController::appItemAdded);
-    connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemController::*)(const QString &)>(&DockItemController::appItemRemoved));
+    connect(m_appInter, &DBusDock::EntryRemoved, this, static_cast<void (DockItemController::*)(const QString &)>(&DockItemController::appItemRemoved), Qt::QueuedConnection);
     connect(m_appInter, &DBusDock::ServiceRestarted, this, &DockItemController::reloadAppItems);
 
     connect(m_pluginsInter, &DockPluginsController::pluginItemInserted, this, &DockItemController::pluginItemInserted, Qt::QueuedConnection);
