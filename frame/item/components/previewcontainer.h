@@ -28,12 +28,18 @@ public slots:
 
 protected:
     void leaveEvent(QEvent *e);
+    void enterEvent(QEvent *e);
 
 private slots:
     void updateContainerSize();
+    void checkMouseLeave();
 
 private:
     QBoxLayout *m_windowListLayout;
+
+    QTimer *m_mouseLeaveTimer;
+
+    QMap<WId, QWidget *> m_windows;
 };
 
 #endif // PREVIEWCONTAINER_H

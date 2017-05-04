@@ -22,9 +22,9 @@ signals:
     void requestHidePreview() const;
 
 private slots:
-    void refershImage();
+    void refreshImage();
     void closeWindow();
-    void setVisible(const bool visible);
+    void showPreview();
 
 private:
     void paintEvent(QPaintEvent *e);
@@ -43,6 +43,7 @@ private:
     QPushButton *m_closeButton;
 
     QTimer *m_droppedDelay;
+    QTimer *m_mouseEnterTimer;
 
     bool m_hovered;
 };

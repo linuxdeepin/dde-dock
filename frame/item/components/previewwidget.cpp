@@ -17,6 +17,8 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     : QWidget(parent),
 
       m_wid(wid),
+      m_mouseEnterTimer(new QTimer(this)),
+
       m_hovered(false)
 {
     m_closeButton = new QPushButton;
@@ -27,6 +29,9 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     m_droppedDelay = new QTimer(this);
     m_droppedDelay->setSingleShot(true);
     m_droppedDelay->setInterval(100);
+
+    m_mouseEnterTimer->setInterval(200);
+    m_mouseEnterTimer->setSingleShot(true);
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->setSpacing(0);
@@ -39,6 +44,9 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     setAcceptDrops(true);
 
     connect(m_closeButton, &QPushButton::clicked, this, &PreviewWidget::closeWindow);
+    connect(m_mouseEnterTimer, &QTimer::timeout, this, &PreviewWidget::showPreview, Qt::QueuedConnection);
+
+    QTimer::singleShot(1, this, &PreviewWidget::refreshImage);
 }
 
 void PreviewWidget::setTitle(const QString &title)
@@ -48,7 +56,7 @@ void PreviewWidget::setTitle(const QString &title)
     update();
 }
 
-void PreviewWidget::refershImage()
+void PreviewWidget::refreshImage()
 {
     const auto display = QX11Info::display();
 
@@ -83,12 +91,9 @@ void PreviewWidget::closeWindow()
     XFlush(display);
 }
 
-void PreviewWidget::setVisible(const bool visible)
+void PreviewWidget::showPreview()
 {
-    QWidget::setVisible(visible);
-
-    if (visible)
-        QTimer::singleShot(1, this, &PreviewWidget::refershImage);
+    emit requestPreviewWindow(m_wid);
 }
 
 void PreviewWidget::paintEvent(QPaintEvent *e)
@@ -133,18 +138,18 @@ void PreviewWidget::enterEvent(QEvent *e)
 
     m_hovered = true;
     m_closeButton->setVisible(true);
+    m_mouseEnterTimer->start();
 
     update();
 
     QWidget::enterEvent(e);
-
-    emit requestPreviewWindow(m_wid);
 }
 
 void PreviewWidget::leaveEvent(QEvent *e)
 {
     m_hovered = false;
     m_closeButton->setVisible(false);
+    m_mouseEnterTimer->stop();
 
     update();
 

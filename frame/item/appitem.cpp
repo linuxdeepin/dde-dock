@@ -43,7 +43,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     setAccessibleName(m_itemEntry->name());
     setAcceptDrops(true);
-    setMouseTracking(true);
+//    setMouseTracking(true);
     setLayout(centralLayout);
 
     m_itemView->setScene(m_itemScene);
@@ -71,7 +71,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_appPreviewTips->setVisible(false);
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
-    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle);
+    connect(m_itemEntry, &DBusDockEntry::TitlesChanged, this, &AppItem::updateTitle, Qt::QueuedConnection);
     connect(m_itemEntry, &DBusDockEntry::IconChanged, this, &AppItem::refershIcon);
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
@@ -328,8 +328,8 @@ void AppItem::mouseMoveEvent(QMouseEvent *e)
     e->accept();
 
     // handle preview
-    if (e->buttons() == Qt::NoButton)
-        return showPreview();
+//    if (e->buttons() == Qt::NoButton)
+//        return showPreview();
 
     // handle drag
     if (e->buttons() != Qt::LeftButton)
@@ -393,6 +393,14 @@ void AppItem::dropEvent(QDropEvent *e)
     m_itemEntry->HandleDragDrop(uriList);
 }
 
+void AppItem::showHoverTips()
+{
+    if (!m_titles.isEmpty())
+        return showPreview();
+
+    DockItem::showHoverTips();
+}
+
 void AppItem::invokedMenuItem(const QString &itemId, const bool checked)
 {
     Q_UNUSED(checked);
@@ -450,8 +458,6 @@ void AppItem::startDrag()
 void AppItem::updateTitle()
 {
     m_titles = m_itemEntry->titles();
-
-    // TODO: optimize
     m_appPreviewTips->setWindowInfos(m_titles);
 
     update();
@@ -485,18 +491,19 @@ void AppItem::showPreview()
         return;
 
     // test cursor position
-    const QRect r = rect();
-    const QPoint p = mapFromGlobal(QCursor::pos());
+//    const QRect r = rect();
+//    const QPoint p = mapFromGlobal(QCursor::pos());
 
-    switch (DockPosition)
-    {
-    case Top:       if (p.y() != r.top())       return;     break;
-    case Left:      if (p.x() != r.left())      return;     break;
-    case Right:     if (p.x() != r.right())     return;     break;
-    case Bottom:    if (p.y() != r.bottom())    return;     break;
-    default:        return;
-    }
+//    switch (DockPosition)
+//    {
+//    case Top:       if (p.y() != r.top())       return;     break;
+//    case Left:      if (p.x() != r.left())      return;     break;
+//    case Right:     if (p.x() != r.right())     return;     break;
+//    case Bottom:    if (p.y() != r.bottom())    return;     break;
+//    default:        return;
+//    }
 
+    m_appPreviewTips->setWindowInfos(m_titles);
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
     qApp->processEvents();

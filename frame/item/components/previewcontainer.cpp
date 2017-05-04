@@ -6,25 +6,24 @@
 #include <QDebug>
 
 PreviewContainer::PreviewContainer(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+
+      m_mouseLeaveTimer(new QTimer(this))
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     m_windowListLayout->setMargin(5);
     m_windowListLayout->setSpacing(3);
 
+    m_mouseLeaveTimer->setSingleShot(true);
+    m_mouseLeaveTimer->setInterval(100);
+
     setLayout(m_windowListLayout);
-    setMouseTracking(true);
+
+    connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
 }
 
 void PreviewContainer::setWindowInfos(const WindowDict &infos)
 {
-    // TODO: optimize
-    while (QLayoutItem *item = m_windowListLayout->takeAt(0))
-    {
-        item->widget()->deleteLater();
-        delete item;
-    }
-
     if (infos.isEmpty())
     {
         emit requestCancelPreview();
@@ -33,8 +32,26 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
         return;
     }
 
+    QList<WId> removedWindows;
+
+    // remove desroyed window
+    for (auto it(m_windows.cbegin()); it != m_windows.cend(); ++it)
+    {
+        if (infos.contains(it.key()))
+            continue;
+
+        removedWindows << it.key();
+        m_windowListLayout->removeWidget(it.value());
+        it.value()->deleteLater();
+    }
+    for (auto id : removedWindows)
+        m_windows.remove(id);
+
     for (auto it(infos.cbegin()); it != infos.cend(); ++it)
     {
+        if (m_windows.contains(it.key()))
+            continue;
+
         PreviewWidget *w = new PreviewWidget(it.key());
         w->setTitle(it.value());
 
@@ -44,10 +61,8 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
         connect(w, &PreviewWidget::requestHidePreview, this, &PreviewContainer::requestHidePreview);
 
         m_windowListLayout->addWidget(w);
+        m_windows.insert(it.key(), w);
     }
-
-    if (!isVisible())
-        return;
 
     // update geometry
     QMetaObject::invokeMethod(this, "updateContainerSize", Qt::QueuedConnection);
@@ -73,13 +88,25 @@ void PreviewContainer::leaveEvent(QEvent *e)
 {
     QWidget::leaveEvent(e);
 
-    const QPoint p = mapFromGlobal(QCursor::pos()) + pos();
+    m_mouseLeaveTimer->start();
+}
 
-    if (!rect().contains(p))
-        emit requestCancelPreview();
+void PreviewContainer::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    m_mouseLeaveTimer->stop();
 }
 
 void PreviewContainer::updateContainerSize()
 {
     resize(sizeHint());
+}
+
+void PreviewContainer::checkMouseLeave()
+{
+    const QPoint p = mapFromGlobal(QCursor::pos());
+
+    if (!rect().contains(p))
+        emit requestCancelPreview();
 }
