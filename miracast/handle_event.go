@@ -19,7 +19,7 @@ func (m *Miracast) handleLinkManaged(link *LinkInfo) {
 		}
 
 		if link.Managed {
-			link.core.WfdSubelements.Set("000600111c4400c8")
+			link.core.WfdSubelements.Set("000600001c440036")
 			// default using 'USER' as link name
 			link.SetName(os.Getenv("USER"))
 			// TODO: wait WfdSubelements changed
