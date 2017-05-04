@@ -11,5 +11,8 @@
         <file>resources/arrow-left.svg</file>
         <file>resources/arrow-down.svg</file>
         <file>resources/application-x-desktop.svg</file>
+        <file>resources/close_round_press.png</file>
+        <file>resources/close_round_normal.png</file>
+        <file>resources/close_round_hover.png</file>
     </qresource>
 </RCC>

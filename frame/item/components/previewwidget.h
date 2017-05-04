@@ -3,9 +3,12 @@
 
 #include <QWidget>
 #include <QDebug>
-#include <QPushButton>
 #include <QDragEnterEvent>
 #include <QTimer>
+
+#include <dimagebutton.h>
+
+DWIDGET_USE_NAMESPACE
 
 class PreviewWidget : public QWidget
 {
@@ -40,7 +43,7 @@ private:
     QImage m_image;
     QString m_title;
 
-    QPushButton *m_closeButton;
+    DImageButton *m_closeButton;
 
     QTimer *m_droppedDelay;
     QTimer *m_mouseEnterTimer;

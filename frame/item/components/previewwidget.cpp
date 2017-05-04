@@ -11,7 +11,7 @@
 
 #define PREVIEW_W 200
 #define PREVIEW_H 130
-#define PREVIEW_M 8
+#define PREVIEW_M 12
 
 PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     : QWidget(parent),
@@ -21,10 +21,12 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
 
       m_hovered(false)
 {
-    m_closeButton = new QPushButton;
-    m_closeButton->setFixedSize(16, 16);
-    m_closeButton->setText("x");
+    m_closeButton = new DImageButton;
+    m_closeButton->setFixedSize(24, 24);
     m_closeButton->setVisible(false);
+    m_closeButton->setNormalPic(":/icons/resources/close_round_normal.png");
+    m_closeButton->setHoverPic(":/icons/resources/close_round_hover.png");
+    m_closeButton->setPressPic(":/icons/resources/close_round_press.png");
 
     m_droppedDelay = new QTimer(this);
     m_droppedDelay->setSingleShot(true);
@@ -43,7 +45,7 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     setLayout(centralLayout);
     setAcceptDrops(true);
 
-    connect(m_closeButton, &QPushButton::clicked, this, &PreviewWidget::closeWindow);
+    connect(m_closeButton, &DImageButton::clicked, this, &PreviewWidget::closeWindow);
     connect(m_mouseEnterTimer, &QTimer::timeout, this, &PreviewWidget::showPreview, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &PreviewWidget::refreshImage);
