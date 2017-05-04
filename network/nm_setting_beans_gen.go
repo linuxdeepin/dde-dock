@@ -3912,7 +3912,7 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		default:
 			logger.Error("invalid key:", setting, key)
 		case "addresses":
-			defvalue = [][]uint32{}
+			defvalue = [][]uint32{[]uint32{0x0, 0x18, 0x0}}
 		case "dad-timeout":
 			defvalue = int32(-1)
 		case "dhcp-client-id":

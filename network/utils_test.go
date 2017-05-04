@@ -109,7 +109,7 @@ func (*testWrapper) TestConnectionDataDefaultValue(c *C.C) {
 	c.Check(isSettingKeyExists(data, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS), C.Equals, false)
 
 	// ktypeWrapperIpv4Addresses
-	defaultValueJSON = `[]`
+	defaultValueJSON = `[[0,24,0]]`
 	setValueJSON = `[{"Address":"","Mask":"","Gateway":""}]`
 	c.Check(getSettingIP4ConfigAddressesJSON(data), C.Equals, defaultValueJSON)
 	setSettingIP4ConfigAddressesJSON(data, setValueJSON)

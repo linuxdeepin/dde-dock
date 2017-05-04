@@ -446,6 +446,14 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
 	err := generalSetSettingKeyJSON(s.data, section, key, valueJSON)
+	if err == nil {
+		// set addresses mask when method in manual
+		if section == "ipv4" && key == "method" && valueJSON == "\"manual\"" {
+			addresses := interfaceToArrayArrayUint32(generalGetSettingDefaultValue(section, "addresses"))
+			logicSetSettingVkIp4ConfigAddressesMask(s.data, convertIpv4PrefixToNetMask(addresses[0][1]))
+			logicSetSettingVkIp4ConfigAddressesAddress(s.data, "")
+		}
+	}
 	s.updateErrorsWhenSettingKey(section, key, err)
 	s.setProps()
 	return
