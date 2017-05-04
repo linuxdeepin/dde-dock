@@ -23,6 +23,7 @@ import (
 type Manager struct {
 	OnBattery   bool
 	batteries   map[string]*Battery
+	ac          *AC
 	gudevClient *gudev.Client
 	mutex       sync.Mutex
 
@@ -53,17 +54,40 @@ func NewManager() (*Manager, error) {
 	return m, nil
 }
 
-func (m *Manager) initOnBattery(devices []*gudev.Device) {
+type AC struct {
+	gudevClient *gudev.Client
+	sysfsPath   string
+}
+
+func NewAC(manager *Manager, device *gudev.Device) *AC {
+	sysfsPath := device.GetSysfsPath()
+	return &AC{
+		gudevClient: manager.gudevClient,
+		sysfsPath:   sysfsPath,
+	}
+}
+
+func (ac *AC) newDevice() *gudev.Device {
+	return ac.gudevClient.QueryBySysfsPath(ac.sysfsPath)
+}
+
+func (m *Manager) refreshAC(ac *gudev.Device) {
+	online := ac.GetPropertyAsBoolean("POWER_SUPPLY_ONLINE")
+	logger.Debug("ac online:", online)
+	m.setPropOnBattery(!online)
+}
+
+func (m *Manager) initAC(devices []*gudev.Device) {
 	var ac *gudev.Device
 	for _, dev := range devices {
 		if powersupply.IsMains(dev) {
 			ac = dev
+			break
 		}
 	}
 	if ac != nil {
-		online := ac.GetPropertyAsBoolean("POWER_SUPPLY_ONLINE")
-		logger.Debug("ac online:", online)
-		m.setPropOnBattery(!online)
+		m.refreshAC(ac)
+		m.ac = NewAC(m, ac)
 	}
 }
 
@@ -76,7 +100,7 @@ func (m *Manager) init() error {
 
 	m.initLidSwitch()
 	devices := powersupply.GetDevices(m.gudevClient)
-	m.initOnBattery(devices)
+	m.initAC(devices)
 	m.initBatteries(devices)
 	for _, dev := range devices {
 		dev.Unref()
@@ -100,10 +124,15 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 	switch action {
 	case "change":
 		if powersupply.IsMains(device) {
-			online := device.GetPropertyAsBoolean("POWER_SUPPLY_ONLINE")
-			logger.Debug("online:", online)
-			m.setPropOnBattery(!online)
+			if m.ac == nil {
+				m.ac = NewAC(m, device)
+			} else if m.ac.sysfsPath != device.GetSysfsPath() {
+				logger.Warning("found another AC", device.GetSysfsPath())
+				return
+			}
 
+			// now m.ac != nil, and sysfsPath equal
+			m.refreshAC(device)
 			time.AfterFunc(1*time.Second, m.RefreshBatteries)
 			time.AfterFunc(3*time.Second, m.RefreshBatteries)
 		} else if powersupply.IsSystemBattery(device) {
@@ -113,6 +142,7 @@ func (m *Manager) handleUEvent(client *gudev.Client, action string, device *gude
 		if powersupply.IsSystemBattery(device) {
 			m.addBattery(device)
 		}
+		// ignore add mains
 
 	case "remove":
 		m.removeBattery(device)

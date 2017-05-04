@@ -14,32 +14,11 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-const (
-	dbusDest = "com.deepin.system.Power"
-	dbusPath = "/com/deepin/system/Power"
-	dbusIFC  = dbusDest
-)
-
 func (*Manager) GetDBusInfo() dbus.DBusInfo {
 	return dbus.DBusInfo{
 		Dest:       dbusDest,
 		ObjectPath: dbusPath,
 		Interface:  dbusIFC,
-	}
-}
-
-func (m *Manager) GetBatteries() []*Battery {
-	ret := make([]*Battery, 0, len(m.batteries))
-	for _, bat := range m.batteries {
-		ret = append(ret, bat)
-	}
-	return ret
-}
-
-func (m *Manager) RefreshBatteries() {
-	logger.Debug("RefreshBatteries")
-	for _, bat := range m.batteries {
-		bat.Refresh()
 	}
 }
 
