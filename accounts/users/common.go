@@ -24,8 +24,8 @@ func isStrInArray(str string, array []string) bool {
 	return false
 }
 
-func doAction(cmd string) error {
-	out, err := exec.Command("/bin/sh", "-c", cmd).Output()
+func doAction(cmd string, args []string) error {
+	out, err := exec.Command(cmd, args...).Output()
 	if err != nil {
 		fmt.Printf("[doAction] exec '%s' failed: %s, %v\n", cmd, string(out), err)
 	}

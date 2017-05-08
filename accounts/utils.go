@@ -12,6 +12,7 @@ package accounts
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"pkg.deepin.io/lib/encoding/kv"
@@ -181,4 +182,21 @@ func getLocaleFromFile(file string) string {
 		}
 	}
 	return ""
+}
+
+// Get available shells from '/etc/shells'
+func getAvailableShells(file string) []string {
+	contents, err := ioutil.ReadFile(file)
+	if err != nil || len(contents) == 0 {
+		return nil
+	}
+	var shells []string
+	lines := strings.Split(string(contents), "\n")
+	for _, line := range lines {
+		if line == "" || line[0] == '#' {
+			continue
+		}
+		shells = append(shells, line)
+	}
+	return shells
 }

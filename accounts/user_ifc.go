@@ -46,6 +46,11 @@ func (u *User) SetHomeDir(dbusMsg dbus.DMessage, home string) error {
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
 
+	if !dutils.IsFileExist(home) {
+		err := fmt.Errorf("Not found the home path: %s", home)
+		return err
+	}
+
 	pid := dbusMsg.GetSenderPID()
 	if err := u.accessAuthentication(pid, false); err != nil {
 		logger.Debug("[SetHomeDir] access denied:", err)
@@ -65,6 +70,19 @@ func (u *User) SetShell(dbusMsg dbus.DMessage, shell string) error {
 	logger.Debug("[SetShell] new shell:", shell)
 	u.syncLocker.Lock()
 	defer u.syncLocker.Unlock()
+
+	shells := getAvailableShells("/etc/shells")
+	if len(shells) == 0 {
+		err := fmt.Errorf("No available shell found")
+		logger.Error("[SetShell] failed:", err)
+		return err
+	}
+
+	if !strv.Strv(shells).Contains(shell) {
+		err := fmt.Errorf("Not found the shell: %s", shell)
+		logger.Warning("[SetShell] failed:", err)
+		return err
+	}
 
 	pid := dbusMsg.GetSenderPID()
 	if err := u.accessAuthentication(pid, true); err != nil {
@@ -154,7 +172,7 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 	defer u.syncLocker.Unlock()
 
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, false); err != nil {
+	if err := polkitAuthManagerUser(pid); err != nil {
 		logger.Debug("[SetAutomaticLogin] access denied:", err)
 		return err
 	}

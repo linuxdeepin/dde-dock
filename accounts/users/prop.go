@@ -92,8 +92,7 @@ func ModifyHome(dir, username string) error {
 		return errInvalidParam
 	}
 
-	var cmd = fmt.Sprintf("%s -m -d %s %s", userCmdModify, dir, username)
-	return doAction(cmd)
+	return doAction(userCmdModify, []string{"-m", "-d", dir, username})
 }
 
 func ModifyShell(shell, username string) error {
@@ -101,8 +100,7 @@ func ModifyShell(shell, username string) error {
 		return errInvalidParam
 	}
 
-	var cmd = fmt.Sprintf("%s -s %s %s", userCmdModify, shell, username)
-	return doAction(cmd)
+	return doAction(userCmdModify, []string{"-s", shell, username})
 }
 
 func ModifyPasswd(words, username string) error {
@@ -115,9 +113,7 @@ func ModifyPasswd(words, username string) error {
 
 // passwd -S username
 func IsUserLocked(username string) bool {
-	var cmd = fmt.Sprintf("passwd -S %s", username)
-
-	output, err := exec.Command("/bin/sh", "-c", cmd).Output()
+	output, err := exec.Command("passwd", []string{"-S", username}...).Output()
 	if err != nil {
 		return true
 	}

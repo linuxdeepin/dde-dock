@@ -203,7 +203,12 @@ func (m *Manager) AllowGuestAccount(dbusMsg dbus.DMessage, allow bool) error {
 	return nil
 }
 
-func (m *Manager) CreateGuestAccount() (string, error) {
+func (m *Manager) CreateGuestAccount(dbusMsg dbus.DMessage) (string, error) {
+	pid := dbusMsg.GetSenderPID()
+	if err := polkitAuthManagerUser(pid); err != nil {
+		return "", err
+	}
+
 	name, err := users.CreateGuestUser()
 	if err != nil {
 		return "", err

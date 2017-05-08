@@ -29,3 +29,14 @@ func TestSystemLayout(t *testing.T) {
 		So(layout, ShouldEqual, "us;chr")
 	})
 }
+
+func TestAvailableShells(t *testing.T) {
+	Convey("Get available shells", t, func() {
+		var ret = []string{"/bin/sh", "/bin/bash",
+			"/bin/zsh", "/usr/bin/zsh",
+			"/usr/bin/fish",
+		}
+		shells := getAvailableShells("testdata/shells")
+		So(shells, ShouldResemble, ret)
+	})
+}

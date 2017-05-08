@@ -48,39 +48,37 @@ func CreateUser(username, fullname, shell string, ty int32) error {
 		shell, _ = getDefaultShell(defaultConfigShell)
 	}
 
-	var cmd = fmt.Sprintf("%s -m ", userCmdAdd)
+	var args = []string{"-m"}
 	if len(shell) != 0 {
-		cmd = fmt.Sprintf("%s -s %s", cmd, shell)
+		args = append(args, "-s", shell)
 	}
 
 	if len(fullname) != 0 {
-		cmd = fmt.Sprintf("%s -c %s", cmd, fullname)
+		args = append(args, "-c", fullname)
 	}
 
-	cmd = fmt.Sprintf("%s %s", cmd, username)
-	return doAction(cmd)
+	args = append(args, username)
+	return doAction(userCmdAdd, args)
 }
 
 func DeleteUser(rmFiles bool, username string) error {
-	var cmd string
+	var args = []string{"-f"}
 	if rmFiles {
-		cmd = fmt.Sprintf("%s -rf %s", userCmdDelete, username)
-	} else {
-		cmd = fmt.Sprintf("%s -f %s", userCmdDelete, username)
+		args = append(args, "-r")
 	}
+	args = append(args, username)
 
-	return doAction(cmd)
+	return doAction(userCmdDelete, args)
 }
 
 func LockedUser(locked bool, username string) error {
-	var cmd string
+	var arg string
 	if locked {
-		cmd = fmt.Sprintf("%s -L %s", userCmdModify, username)
+		arg = "-L"
 	} else {
-		cmd = fmt.Sprintf("%s -U %s", userCmdModify, username)
+		arg = "-U"
 	}
-
-	return doAction(cmd)
+	return doAction(userCmdModify, []string{arg, username})
 }
 
 func SetUserType(ty int32, username string) error {
@@ -88,7 +86,7 @@ func SetUserType(ty int32, username string) error {
 	if len(groups) == 0 {
 		return fmt.Errorf("No privilege user group exists")
 	}
-	var cmd string
+	var args []string
 	switch ty {
 	case UserTypeStandard:
 		if !IsAdminUser(username) {
@@ -96,18 +94,18 @@ func SetUserType(ty int32, username string) error {
 		}
 
 		// TODO: remove user from all privilege groups
-		cmd = fmt.Sprintf("%s -d %s %s", userCmdGroup, username, groups[0])
+		args = []string{"-d", username, groups[0]}
 	case UserTypeAdmin:
 		if IsAdminUser(username) {
 			return nil
 		}
 
-		cmd = fmt.Sprintf("%s -a %s %s", userCmdGroup, username, groups[0])
+		args = []string{"-a", username, groups[0]}
 	default:
 		return errInvalidParam
 	}
 
-	return doAction(cmd)
+	return doAction(userCmdGroup, args)
 }
 
 func SetAutoLoginUser(username string) error {
@@ -128,11 +126,11 @@ func SetAutoLoginUser(username string) error {
 	// detail see archlinux wiki for lightdm
 	if username != "" {
 		if !isGroupExists("autologin") {
-			doAction("groupadd -r autologin")
+			doAction("groupadd", []string{"-r", "autologin"})
 		}
 
 		if !isUserInGroup(username, "autologin") {
-			err := doAction(userCmdGroup + " -a " + username + " autologin")
+			err := doAction(userCmdGroup, []string{"-a", username, "autologin"})
 			if err != nil {
 				return err
 			}

@@ -10,7 +10,6 @@
 package users
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -22,9 +21,10 @@ func CreateGuestUser() (string, error) {
 	}
 
 	username := getGuestUserName()
-	var cmd = fmt.Sprintf("%s -m -d /tmp/%s -s %s -l -p %s %s",
-		userCmdAdd, username, shell, EncodePasswd(""), username)
-	err := doAction(cmd)
+	var args = []string{"-m", "-d", "/tmp/" + username,
+		"-s", shell,
+		"-l", "-p", EncodePasswd(""), username}
+	err := doAction(userCmdAdd, args)
 	if err != nil {
 		return "", err
 	}
