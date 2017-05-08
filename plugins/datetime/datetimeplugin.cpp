@@ -105,7 +105,7 @@ void DatetimePlugin::invokedMenuItem(const QString &itemKey, const QString &menu
     Q_UNUSED(checked)
 
     if (menuId == "open")
-        QProcess::startDetached("dde-control-center", QStringList() << "datetime");
+        QProcess::startDetached("dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:datetime\"");
     else
         m_centralWidget->toggleHourFormat();
 }

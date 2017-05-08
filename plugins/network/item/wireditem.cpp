@@ -66,7 +66,7 @@ QWidget *WiredItem::itemPopup()
 
 const QString WiredItem::itemCommand() const
 {
-    return "dde-control-center -s network";
+    return "dbus-send --print-reply --dest=com.deepin.dde.ControlCenter /com/deepin/dde/ControlCenter com.deepin.dde.ControlCenter.ShowModule \"string:network\"";
 }
 
 void WiredItem::paintEvent(QPaintEvent *e)
