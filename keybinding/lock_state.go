@@ -16,6 +16,14 @@ const (
 	NumLockUnknown
 )
 
+type CapsLockState uint
+
+const (
+	CapsLockOff CapsLockState = iota
+	CapsLockOn
+	CapsLockUnknown
+)
+
 func queryNumLockState(xu *xgbutil.XUtil) (NumLockState, error) {
 	queryPointerReply, err := xproto.QueryPointer(xu.Conn(), xu.RootWin()).Reply()
 	if err != nil {
@@ -27,6 +35,20 @@ func queryNumLockState(xu *xgbutil.XUtil) (NumLockState, error) {
 		return NumLockOn, nil
 	} else {
 		return NumLockOff, nil
+	}
+}
+
+func queryCapsLockState(xu *xgbutil.XUtil) (CapsLockState, error) {
+	queryPointerReply, err := xproto.QueryPointer(xu.Conn(), xu.RootWin()).Reply()
+	if err != nil {
+		return CapsLockUnknown, err
+	}
+	logger.Debugf("query pointer reply %#v", queryPointerReply)
+	on := queryPointerReply.Mask&xproto.ModMaskLock != 0
+	if on {
+		return CapsLockOn, nil
+	} else {
+		return CapsLockOff, nil
 	}
 }
 

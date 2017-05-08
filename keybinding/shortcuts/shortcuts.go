@@ -23,6 +23,12 @@ import (
 
 var logger *log.Logger
 
+const (
+	SKLCtrlShift uint32 = 1 << iota
+	SKLAltShift
+	SKLSuperSpace
+)
+
 func SetLogger(l *log.Logger) {
 	logger = l
 }
@@ -30,15 +36,12 @@ func SetLogger(l *log.Logger) {
 type KeyEventFunc func(ev *KeyEvent)
 
 type Shortcuts struct {
-	idShortcutMap     map[string]Shortcut
-	grabedKeyAccelMap map[Key]*Accel
-	xu                *xgbutil.XUtil
-	pressedKeysCount  int
-
-	// callbacks:
-	SuperReleaseCb func()
-	eventCb        KeyEventFunc
-	eventCbMu      sync.Mutex
+	idShortcutMap       map[string]Shortcut
+	grabedKeyAccelMap   map[Key]*Accel
+	xu                  *xgbutil.XUtil
+	xRecordEventHandler *XRecordEventHandler
+	eventCb             KeyEventFunc
+	eventCbMu           sync.Mutex
 }
 
 type KeyEvent struct {
@@ -55,6 +58,26 @@ func NewShortcuts(xu *xgbutil.XUtil, eventCb KeyEventFunc) *Shortcuts {
 		xu:                xu,
 	}
 
+	ss.xRecordEventHandler = NewXRecordEventHandler(xu)
+	ss.xRecordEventHandler.modKeyReleasedCb = func(code uint8, mods uint16) {
+		if !tryGrabKeyboard(ss.xu) {
+			return
+		}
+
+		switch mods {
+		case xproto.ModMaskLock, xproto.ModMask2, xproto.ModMask4:
+			// caps_lock, num_lock, super
+			ss.emitKeyEvent(0, Key{Code: Keycode(code)})
+
+		case xproto.ModMaskControl | xproto.ModMaskShift:
+			// ctrl-shift
+			ss.emitFakeKeyEvent(&Action{Type: ActionTypeSwitchKbdLayout, Arg: SKLCtrlShift})
+
+		case xproto.ModMask1 | xproto.ModMaskShift:
+			// alt-shift
+			ss.emitFakeKeyEvent(&Action{Type: ActionTypeSwitchKbdLayout, Arg: SKLAltShift})
+		}
+	}
 	// init package xrecord
 	err := xrecord.Initialize()
 	if err == nil {
@@ -238,8 +261,8 @@ func (ss *Shortcuts) ReloadAllShortcutAccels() []Shortcut {
 }
 
 // shift, control, alt(mod1), super(mod4)
-func GetConcernedModifiers(state uint16) Modifiers {
-	var mods Modifiers
+func getConcernedMods(state uint16) uint16 {
+	var mods uint16
 	if state&xproto.ModMaskShift > 0 {
 		mods |= xproto.ModMaskShift
 	}
@@ -253,6 +276,10 @@ func GetConcernedModifiers(state uint16) Modifiers {
 		mods |= xproto.ModMask4
 	}
 	return mods
+}
+
+func GetConcernedModifiers(state uint16) Modifiers {
+	return Modifiers(getConcernedMods(state))
 }
 
 func combineStateCode2Key(state uint16, code uint8) Key {
@@ -281,6 +308,13 @@ func (ss *Shortcuts) handleKeyEvent(pressed bool, detail xproto.Keycode, state u
 	}
 }
 
+func (ss *Shortcuts) emitFakeKeyEvent(action *Action) {
+	keyEvent := &KeyEvent{
+		Shortcut: NewFakeShortcut(action),
+	}
+	ss.callEventCallback(keyEvent)
+}
+
 func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
 	// RLock ss.grabedKeyAccelMap
 	accel, ok := ss.grabedKeyAccelMap[key]
@@ -307,71 +341,34 @@ func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 	return true
 }
 
-func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
-	defer func() {
-		if pressed {
-			ss.pressedKeysCount++
-		} else {
-			ss.pressedKeysCount = 0
-		}
-	}()
-
-	str := strings.ToLower(keybind.LookupString(ss.xu, 0, xproto.Keycode(code)))
-	//logger.Debugf("handleXRecordKeyEvent pressed: %v, code: %d, state: %d, str: %q", pressed, code, state, str)
-	if str == "super_l" || str == "super_r" ||
-		str == "caps_lock" || str == "num_lock" {
-		ss.handleXRecordSingleKeyEvent(pressed, str, code, state)
-		return
-	}
-
-	// Special handling screenshot* shortcuts
-	key := combineStateCode2Key(state, code)
-	accel, ok := ss.grabedKeyAccelMap[key]
-	if !ok {
-		return
-	}
-
-	shortcut := accel.Shortcut
-	if pressed && shortcut != nil &&
-		shortcut.GetType() == ShortcutTypeSystem &&
-		strings.HasPrefix(shortcut.GetId(), "screenshot") {
-		keyEvent := &KeyEvent{
-			Mods:     key.Mods,
-			Code:     key.Code,
-			Shortcut: shortcut,
-		}
-		logger.Debug("handleXRecordKeyEvent: emit key event for screenshot* shortcuts")
-		ss.callEventCallback(keyEvent)
-	}
+func (ss *Shortcuts) SetAllModKeysReleasedCallback(cb func()) {
+	ss.xRecordEventHandler.allModKeysReleasedCb = cb
 }
 
-func (ss *Shortcuts) handleXRecordSingleKeyEvent(pressed bool, str string, code uint8, state uint16) {
-	// handle super, caps_lock, num_lock key event
-	switch str {
-	case "super_l", "super_r":
-		if pressed {
-			return
+func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
+	ss.xRecordEventHandler.handleKeyEvent(pressed, code, state)
+	if pressed {
+		// Special handling screenshot* shortcuts
+		key := combineStateCode2Key(state, code)
+		accel, ok := ss.grabedKeyAccelMap[key]
+		if ok {
+			shortcut := accel.Shortcut
+			if shortcut != nil && shortcut.GetType() == ShortcutTypeSystem &&
+				strings.HasPrefix(shortcut.GetId(), "screenshot") {
+				keyEvent := &KeyEvent{
+					Mods:     key.Mods,
+					Code:     key.Code,
+					Shortcut: shortcut,
+				}
+				logger.Debug("handleXRecordKeyEvent: emit key event for screenshot* shortcuts")
+				ss.callEventCallback(keyEvent)
+			}
 		}
-		// super release
-		if ss.SuperReleaseCb != nil {
-			ss.SuperReleaseCb()
-		}
-		if ok := tryGrabKeyboard(ss.xu); !ok {
-			return
-		}
-
-		logger.Debug("pressed key count:", ss.pressedKeysCount)
-		if ss.pressedKeysCount == 1 {
-			// single super key pressed and then released
-			ss.emitKeyEvent(0, Key{Code: Keycode(code)})
-		}
-	case "caps_lock", "num_lock":
-		ss.handleKeyEvent(pressed, xproto.Keycode(code), state)
 	}
 }
 
 func (ss *Shortcuts) handleXRecordButtonEvent(pressed bool) {
-	ss.pressedKeysCount = 0
+	ss.xRecordEventHandler.handleButtonEvent(pressed)
 }
 
 func (ss *Shortcuts) ListenXEvents() {
@@ -499,4 +496,19 @@ func (ss *Shortcuts) AddCustom(csm *CustomShortcutManager) {
 	for _, shortcut := range csm.List() {
 		ss.AddWithoutLock(shortcut)
 	}
+}
+
+func (ss *Shortcuts) AddSpecial() {
+	idNameMap := getSpecialIdNameMap()
+
+	// add SwitchKbdLayout <Super>Space
+	s0 := NewFakeShortcut(&Action{Type: ActionTypeSwitchKbdLayout, Arg: SKLSuperSpace})
+	pa, err := ParseStandardAccel("<Super>Space")
+	if err != nil {
+		panic(err)
+	}
+	s0.Id = "switch-kbd-layout"
+	s0.Name = idNameMap[s0.Id]
+	s0.Accels = []ParsedAccel{pa}
+	ss.AddWithoutLock(s0)
 }

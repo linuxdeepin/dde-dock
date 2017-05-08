@@ -206,17 +206,25 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
 	return cshorcut.Save()
 }
 
+var errShorcutAccelsUnmodifiable = errors.New("accels of this shortcut is unmodifiable")
+
 // ModifiedAccel modify shortcut accel
 //
 // id: the special id
 // ty: the special type
 // accelStr: new accel
 // grabed: if true, add accel for the special id; else delete it
+// ret0: always equal false
+// ret1: always equal ""
+// ret2: error
 func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed bool) (bool, string, error) {
 	logger.Debug("Manager.ModifiedAccel", id, ty, accelStr, grabed)
 	shortcut := m.shortcuts.GetByIdType(id, ty)
 	if shortcut == nil {
 		return false, "", ErrShortcutNotFound{id, ty}
+	}
+	if !shortcut.GetAccelsModifiable() {
+		return false, "", errShorcutAccelsUnmodifiable
 	}
 
 	pa, err := shortcuts.ParseStandardAccel(accelStr)

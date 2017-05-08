@@ -14,7 +14,7 @@ import (
 )
 
 func getSystemIdNameMap() map[string]string {
-	var systemIdNameMap = map[string]string{
+	var idNameMap = map[string]string{
 		"launcher":               gettext.Tr("Launcher"),
 		"terminal":               gettext.Tr("Terminal"),
 		"deepin-screen-recorder": gettext.Tr("Deepin Screen Recorder"),
@@ -28,11 +28,17 @@ func getSystemIdNameMap() map[string]string {
 		"screenshot-delayed":     gettext.Tr("Delay screenshot"),
 		"file-manager":           gettext.Tr("File manager"),
 		"disable-touchpad":       gettext.Tr("Disable Touchpad"),
-		"switch-layout":          gettext.Tr("Switch Layout"),
 		"wm-switcher":            gettext.Tr("Switch window effects"),
 		"turn-off-screen":        gettext.Tr("Fast Screen Off"),
 	}
-	return systemIdNameMap
+	return idNameMap
+}
+
+func getSpecialIdNameMap() map[string]string {
+	var idNameMap = map[string]string{
+		"switch-kbd-layout": gettext.Tr("Switch Layout"),
+	}
+	return idNameMap
 }
 
 func getWMIdNameMap() map[string]string {

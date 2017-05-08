@@ -53,11 +53,16 @@ func (sb *BaseShortcut) GetAction() *Action {
 	return ActionNoOp
 }
 
+func (sb *BaseShortcut) GetAccelsModifiable() bool {
+	return sb.Type != ShortcutTypeFake
+}
+
 const (
 	ShortcutTypeSystem int32 = iota
 	ShortcutTypeCustom
 	ShortcutTypeMedia
 	ShortcutTypeWM
+	ShortcutTypeFake
 )
 
 type Shortcut interface {
@@ -67,6 +72,7 @@ type Shortcut interface {
 
 	GetName() string
 
+	GetAccelsModifiable() bool
 	GetAccels() []ParsedAccel
 	setAccels(newAccels []ParsedAccel)
 	SaveAccels() error
@@ -80,3 +86,29 @@ var ErrOpNotSupported = errors.New("operation is not supported")
 var ErrTypeAssertionFail = errors.New("type assertion failed")
 var ErrNilAction = errors.New("action is nil")
 var ErrInvalidActionType = errors.New("invalid action type")
+
+type FakeShortcut struct {
+	BaseShortcut
+	action *Action
+}
+
+func NewFakeShortcut(action *Action) *FakeShortcut {
+	return &FakeShortcut{
+		BaseShortcut: BaseShortcut{
+			Type: ShortcutTypeFake,
+		},
+		action: action,
+	}
+}
+
+func (s *FakeShortcut) GetAction() *Action {
+	return s.action
+}
+
+func (s *FakeShortcut) SaveAccels() error {
+	return ErrOpNotSupported
+}
+
+func (s *FakeShortcut) ReloadAccels() bool {
+	return false
+}

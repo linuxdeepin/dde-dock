@@ -11,7 +11,6 @@ package keybinding
 
 import (
 	"fmt"
-	"github.com/BurntSushi/xgb/xproto"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"time"
 )
@@ -41,30 +40,41 @@ func (m *Manager) initHandlers() {
 	}
 
 	m.handlers[ActionTypeShowNumLockOSD] = func(ev *KeyEvent) {
+		state, err := queryNumLockState(m.xu)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
 		save := m.keyboardSetting.GetBoolean(gsKeySaveNumLockState)
-		if ev.Mods&xproto.ModMask2 > 0 {
-			if save {
-				m.NumLockState.Set(int32(NumLockOff))
-			}
-			showOSD("NumLockOff")
-		} else {
+		switch state {
+		case NumLockOn:
 			if save {
 				m.NumLockState.Set(int32(NumLockOn))
 			}
 			showOSD("NumLockOn")
+		case NumLockOff:
+			if save {
+				m.NumLockState.Set(int32(NumLockOff))
+			}
+			showOSD("NumLockOff")
 		}
-
 	}
 
 	m.handlers[ActionTypeShowCapsLockOSD] = func(ev *KeyEvent) {
 		if !canShowCapsOSD() {
 			return
 		}
-		if ev.Mods&xproto.ModMaskLock > 0 {
-			// lowercase alphabet
+
+		state, err := queryCapsLockState(m.xu)
+		if err != nil {
+			logger.Warning(err)
+			return
+		}
+
+		switch state {
+		case CapsLockOff:
 			showOSD("CapsLockOff")
-		} else {
-			// uppercase alphabet
+		case CapsLockOn:
 			showOSD("CapsLockOn")
 		}
 	}
@@ -114,6 +124,17 @@ func (m *Manager) initHandlers() {
 	// handle Switch Kbd Layout
 	m.handlers[ActionTypeSwitchKbdLayout] = func(ev *KeyEvent) {
 		logger.Debug("Switch Kbd Layout state", m.switchKbdLayoutState)
+		flags := m.ShortcutSwitchLayout.Get()
+		action := ev.Shortcut.GetAction()
+		arg, ok := action.Arg.(uint32)
+		if !ok {
+			logger.Warning(ErrTypeAssertionFail)
+			return
+		}
+
+		if arg&flags == 0 {
+			return
+		}
 
 		switch m.switchKbdLayoutState {
 		case SKLStateNone:
@@ -130,8 +151,7 @@ func (m *Manager) initHandlers() {
 		}
 	}
 
-	m.shortcuts.SuperReleaseCb = func() {
-		// super key released
+	m.shortcuts.SetAllModKeysReleasedCallback(func() {
 		switch m.switchKbdLayoutState {
 		case SKLStateWait:
 			showOSD("DirectSwitchLayout")
@@ -142,7 +162,7 @@ func (m *Manager) initHandlers() {
 			return
 		}
 		m.switchKbdLayoutState = SKLStateNone
-	}
+	})
 }
 
 func (m *Manager) sklWait() {

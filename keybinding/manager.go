@@ -29,9 +29,10 @@ const (
 	shortcutSignalAdded   = "Added"
 	shortcutSignalDeleted = "Deleted"
 
-	keyboardScheam        = "com.deepin.dde.keyboard"
-	gsKeyNumLockState     = "numlock-state"
-	gsKeySaveNumLockState = "save-numlock-state"
+	keyboardSchema            = "com.deepin.dde.keyboard"
+	gsKeyNumLockState         = "numlock-state"
+	gsKeySaveNumLockState     = "save-numlock-state"
+	gsKeyShortcutSwitchLayout = "shortcut-switch-layout"
 
 	systemSchema   = "com.deepin.dde.keybinding.system"
 	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
@@ -41,7 +42,9 @@ const (
 )
 
 type Manager struct {
-	NumLockState *property.GSettingsEnumProperty
+	// properties
+	NumLockState         *property.GSettingsEnumProperty
+	ShortcutSwitchLayout *property.GSettingsUintProperty `access:"readwrite"`
 
 	// Signals
 	Added   func(string, int32)
@@ -110,7 +113,7 @@ func NewManager() (*Manager, error) {
 }
 
 func (m *Manager) init() {
-	m.keyboardSetting = gio.NewSettings(keyboardScheam)
+	m.keyboardSetting = gio.NewSettings(keyboardSchema)
 	// init numlock state
 	m.NumLockState = property.NewGSettingsEnumProperty(m, "NumLockState", m.keyboardSetting, gsKeyNumLockState)
 	if m.keyboardSetting.GetBoolean(gsKeySaveNumLockState) {
@@ -129,6 +132,8 @@ func (m *Manager) init() {
 			}
 		}
 	}
+	m.ShortcutSwitchLayout = property.NewGSettingsUintProperty(m, "ShortcutSwitchLayout",
+		m.keyboardSetting, gsKeyShortcutSwitchLayout)
 
 	// init settings
 	m.sysSetting = gio.NewSettings(systemSchema)
@@ -136,6 +141,7 @@ func (m *Manager) init() {
 	m.wmSetting = gio.NewSettings(wmSchema)
 
 	m.shortcuts = shortcuts.NewShortcuts(m.xu, m.handleKeyEvent)
+	m.shortcuts.AddSpecial()
 	m.shortcuts.AddSystem(m.sysSetting)
 	m.shortcuts.AddMedia(m.mediaSetting)
 	m.shortcuts.AddWM(m.wmSetting)
