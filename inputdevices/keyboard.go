@@ -79,9 +79,6 @@ var _kbd *Keyboard
 func getKeyboard() *Keyboard {
 	if _kbd == nil {
 		_kbd = NewKeyboard()
-
-		_kbd.init()
-		_kbd.handleGSettings()
 	}
 
 	return _kbd

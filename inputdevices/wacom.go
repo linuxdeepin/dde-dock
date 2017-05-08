@@ -83,9 +83,6 @@ var _wacom *Wacom
 func getWacom() *Wacom {
 	if _wacom == nil {
 		_wacom = NewWacom()
-
-		_wacom.init()
-		_wacom.handleGSettings()
 	}
 
 	return _wacom

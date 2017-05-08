@@ -13,6 +13,7 @@ import (
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
+	"time"
 )
 
 type SystemInfo struct {
@@ -82,11 +83,24 @@ func (d *Daemon) Stop() error {
 }
 
 func NewSystemInfo() *SystemInfo {
-	var (
-		info SystemInfo
-		err  error
-	)
+	var info SystemInfo
+	tmp, _ := doReadCache(cacheFile)
+	if tmp != nil && tmp.isValidity() {
+		info = *tmp
+		time.AfterFunc(time.Second*10, func() {
+			info.init()
+			doSaveCache(&info, cacheFile)
+		})
+		return &info
+	}
 
+	info.init()
+	go doSaveCache(&info, cacheFile)
+	return &info
+}
+
+func (info *SystemInfo) init() {
+	var err error
 	info.Processor, err = GetCPUInfo("/proc/cpuinfo")
 	if err != nil {
 		logger.Warning("Get cpu info failed:", err)
@@ -117,8 +131,13 @@ func NewSystemInfo() *SystemInfo {
 	if err != nil {
 		logger.Warning("Get disk capacity failed:", err)
 	}
+}
 
-	return &info
+func (info *SystemInfo) isValidity() bool {
+	if info.Processor == "" || info.DiskCap == 0 || info.MemoryCap == 0 {
+		return false
+	}
+	return true
 }
 
 func (*SystemInfo) GetDBusInfo() dbus.DBusInfo {

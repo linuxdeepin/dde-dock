@@ -55,3 +55,16 @@ func NewManager() *Manager {
 
 	return m
 }
+
+func (m *Manager) init() {
+	m.kbd.init()
+	m.kbd.handleGSettings()
+	m.wacom.init()
+	m.wacom.handleGSettings()
+	m.tpad.init()
+	m.tpad.handleGSettings()
+	m.mouse.init()
+	m.mouse.handleGSettings()
+	m.trackPoint.init()
+	m.trackPoint.handleGSettings()
+}

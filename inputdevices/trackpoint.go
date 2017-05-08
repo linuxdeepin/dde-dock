@@ -55,9 +55,6 @@ var _trackpoint *TrackPoint
 func getTrackPoint() *TrackPoint {
 	if _trackpoint == nil {
 		_trackpoint = NewTrackPoint()
-
-		_trackpoint.init()
-		_trackpoint.handleGSettings()
 	}
 
 	return _trackpoint

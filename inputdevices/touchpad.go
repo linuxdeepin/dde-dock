@@ -74,9 +74,6 @@ var _tpad *Touchpad
 func getTouchpad() *Touchpad {
 	if _tpad == nil {
 		_tpad = NewTouchpad()
-
-		_tpad.init()
-		_tpad.handleGSettings()
 	}
 
 	return _tpad

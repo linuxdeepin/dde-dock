@@ -53,9 +53,6 @@ var _mouse *Mouse
 func getMouse() *Mouse {
 	if _mouse == nil {
 		_mouse = NewMouse()
-
-		_mouse.init()
-		_mouse.handleGSettings()
 	}
 
 	return _mouse

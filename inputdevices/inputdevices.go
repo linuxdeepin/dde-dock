@@ -74,7 +74,10 @@ func (*Daemon) Start() error {
 		return err
 	}
 
-	go startDeviceListener()
+	go func() {
+		_manager.init()
+		startDeviceListener()
+	}()
 	return nil
 }
 

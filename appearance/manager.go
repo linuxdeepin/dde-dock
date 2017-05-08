@@ -125,31 +125,6 @@ func NewManager() *Manager {
 		m.endWatcher = make(chan struct{})
 	}
 
-	cur, err := user.Current()
-	if err != nil {
-		logger.Warning("Get current user info failed:", err)
-	} else {
-		m.userObj, err = ddbus.NewUserByUid(cur.Uid)
-		if err != nil {
-			logger.Warning("New user object failed:", cur.Name, err)
-			m.userObj = nil
-		}
-	}
-
-	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
-	if err != nil {
-		logger.Warning("new wm failed:", err)
-	}
-
-	err = m.loadDefaultFontConfig(defaultFontConfigFile)
-	if err != nil {
-		logger.Warning("load default font config failed:", err)
-	} else {
-		logger.Debugf("load default font config ok %#v", m.defaultFontConfig)
-	}
-
-	m.init()
-
 	return m
 }
 
@@ -212,6 +187,12 @@ func (m *Manager) resetFonts() {
 func (m *Manager) init() {
 	// Init theme list
 	time.AfterFunc(time.Second*10, func() {
+		if !dutils.IsFileExist(fonts.DeepinFontConfig) {
+			m.resetFonts()
+		} else {
+			m.correctFontName()
+		}
+
 		subthemes.ListGtkTheme()
 		subthemes.ListIconTheme()
 		subthemes.ListCursorTheme()
@@ -219,16 +200,33 @@ func (m *Manager) init() {
 		fonts.ListStandardFamily()
 	})
 
+	cur, err := user.Current()
+	if err != nil {
+		logger.Warning("Get current user info failed:", err)
+	} else {
+		m.userObj, err = ddbus.NewUserByUid(cur.Uid)
+		if err != nil {
+			logger.Warning("New user object failed:", cur.Name, err)
+			m.userObj = nil
+		}
+	}
+
+	m.wm, err = wm.NewWm("com.deepin.wm", "/com/deepin/wm")
+	if err != nil {
+		logger.Warning("new wm failed:", err)
+	}
+
+	err = m.loadDefaultFontConfig(defaultFontConfigFile)
+	if err != nil {
+		logger.Warning("load default font config failed:", err)
+	} else {
+		logger.Debugf("load default font config ok %#v", m.defaultFontConfig)
+	}
+
 	m.initBackground()
 	m.doSetGtkTheme(m.GtkTheme.Get())
 	m.doSetIconTheme(m.IconTheme.Get())
 	m.doSetCursorTheme(m.CursorTheme.Get())
-
-	if !dutils.IsFileExist(fonts.DeepinFontConfig) {
-		m.resetFonts()
-	} else {
-		m.correctFontName()
-	}
 }
 
 func (m *Manager) correctFontName() {

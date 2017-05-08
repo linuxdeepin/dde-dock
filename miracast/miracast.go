@@ -61,12 +61,6 @@ type Miracast struct {
 }
 
 func newMiracast() (*Miracast, error) {
-	devices, err := ListWirelessInfo()
-	if err != nil {
-		logger.Error("Failed to list wireless info:", err)
-	}
-
-	logger.Debugf("All devices: %#v", devices)
 	network, err := networkmanager.NewManager(nmDest, nmPath)
 	if err != nil {
 		return nil, err
@@ -89,14 +83,19 @@ func newMiracast() (*Miracast, error) {
 		network:         network,
 		wifiObj:         wifiObj,
 		wfdObj:          wfdObj,
-		devices:         devices.ListMiracastDevice(),
 		connectingSinks: make(map[dbus.ObjectPath]bool),
 		managingLinks:   make(map[dbus.ObjectPath]bool),
 	}, nil
 }
 
 func (m *Miracast) init() {
-	logger.Debug("Devices:", m.devices)
+	devices, err := ListWirelessInfo()
+	if err != nil {
+		logger.Error("Failed to list wireless info:", err)
+	}
+	logger.Debugf("All devices: %#v", devices)
+
+	m.devices = devices.ListMiracastDevice()
 	if len(m.devices) == 0 {
 		m.handleEvent()
 		return
