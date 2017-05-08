@@ -9,6 +9,7 @@ TEMPLATE        = app
 CONFIG         += c++11 link_pkgconfig
 
 PKGCONFIG += xcb-ewmh dtkwidget dtkbase dtkutil x11
+LIBS += -lgomp
 
 SOURCES += main.cpp \
     window/mainwindow.cpp \
