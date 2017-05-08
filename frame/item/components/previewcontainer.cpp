@@ -108,5 +108,8 @@ void PreviewContainer::checkMouseLeave()
     const QPoint p = mapFromGlobal(QCursor::pos());
 
     if (!rect().contains(p))
+    {
         emit requestCancelPreview();
+        emit requestHidePreview();
+    }
 }
