@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QProcess>
+#include <QThread>
 
 #include <X11/extensions/shape.h>
 #include <X11/extensions/XTest.h>
@@ -154,11 +155,13 @@ void TrayWidget::moveEvent(QMoveEvent *e)
 
 void TrayWidget::enterEvent(QEvent *e)
 {
+    QWidget::enterEvent(e);
+
     if (m_ignoreRepeat->isActive())
         return;
-    m_ignoreRepeat->start(10);
+    m_ignoreRepeat->start();
 
-    QWidget::enterEvent(e);
+//    qDebug() << Q_FUNC_INFO;
 
     // fake enter event
     const QPoint p(QCursor::pos());
@@ -167,7 +170,7 @@ void TrayWidget::enterEvent(QEvent *e)
     setWindowOnTop(true);
     XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
     setX11PassMouseEvent(true);
-    setWindowOnTop(false);
+//    setWindowOnTop(false);
 
 //    configContainerPosition();
 }
@@ -185,10 +188,11 @@ void TrayWidget::configContainerPosition()
 //        w = static_cast<QWidget *>(w->parent());
 //    }
 
-    const uint32_t containerVals[4] = {uint32_t(p.x() - 8), uint32_t(p.y() - 8), 16, 16};
+    const uint32_t containerVals[4] = {uint32_t(p.x()), uint32_t(p.y()), 1, 1};
     xcb_configure_window(c, m_containerWid,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          containerVals);
+    xcb_flush(c);
 }
 
 void TrayWidget::wrapWindow()
@@ -284,7 +288,8 @@ void TrayWidget::wrapWindow()
 //    xcb_clear_area(c, 0, m_windowId, 0, 0, qMin(clientGeom->width, iconSize), qMin(clientGeom->height, iconSize));
 
     xcb_flush(c);
-    setWindowOnTop(false);
+//    setWindowOnTop(false);
+    setWindowOnTop(true);
     setX11PassMouseEvent(true);
 }
 
@@ -331,14 +336,20 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     if (isBadWindow())
         return;
 
+//    qDebug() << Q_FUNC_INFO;
+    m_ignoreRepeat->start();
+
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
     XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, true, CurrentTime);
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
-    setX11PassMouseEvent(true);
-    setWindowOnTop(false);
+    XFlush(QX11Info::display());
+//    XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
+//    setX11PassMouseEvent(true);
+    QTimer::singleShot(100, this, [=] { setX11PassMouseEvent(true); });
+//    setWindowOnTop(false);
 
     return;
     //it's best not to look at this code
@@ -464,8 +475,11 @@ void TrayWidget::refershIconImage()
 
 void TrayWidget::setX11PassMouseEvent(const bool pass)
 {
+//    qDebug() << Q_FUNC_INFO << pass;
+
     if (pass)
     {
+        XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeBounding, 0, 0, nullptr, 0, ShapeSet, YXBanded);
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, nullptr, 0, ShapeSet, YXBanded);
     }
     else
@@ -473,11 +487,14 @@ void TrayWidget::setX11PassMouseEvent(const bool pass)
         XRectangle rectangle;
         rectangle.x = 0;
         rectangle.y = 0;
-        rectangle.width = iconSize;
-        rectangle.height = iconSize;
+        rectangle.width = 1;
+        rectangle.height = 1;
 
+        XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeBounding, 0, 0, &rectangle, 1, ShapeSet, YXBanded);
         XShapeCombineRectangles(QX11Info::display(), m_containerWid, ShapeInput, 0, 0, &rectangle, 1, ShapeSet, YXBanded);
     }
+
+    XFlush(QX11Info::display());
 }
 
 void TrayWidget::setWindowOnTop(const bool top)
