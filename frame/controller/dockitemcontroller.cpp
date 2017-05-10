@@ -221,6 +221,8 @@ void DockItemController::appItemAdded(const QDBusObjectPath &path, const int ind
     AppItem *item = new AppItem(path);
 
     connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+    connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
+    connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
     m_itemList.insert(insertIndex, item);
     emit itemInserted(insertIndex, item);
