@@ -9,9 +9,10 @@
 #include <QTimer>
 #include <QVBoxLayout>
 
-#define PREVIEW_W 200
-#define PREVIEW_H 130
-#define PREVIEW_M 12
+#define PREVIEW_W       200
+#define PREVIEW_H       130
+#define PREVIEW_M       12
+#define PREVIEW_MINI_H  30
 
 PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     : QWidget(parent),
@@ -19,7 +20,9 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
       m_wid(wid),
       m_mouseEnterTimer(new QTimer(this)),
 
-      m_hovered(false)
+      m_hovered(false),
+
+      m_wmHelper(DWindowManagerHelper::instance())
 {
     m_closeButton = new DImageButton;
     m_closeButton->setFixedSize(24, 24);
@@ -35,20 +38,22 @@ PreviewWidget::PreviewWidget(const WId wid, QWidget *parent)
     m_mouseEnterTimer->setInterval(200);
     m_mouseEnterTimer->setSingleShot(true);
 
-    QVBoxLayout *centralLayout = new QVBoxLayout;
-    centralLayout->setSpacing(0);
-    centralLayout->setMargin(0);
-    centralLayout->addWidget(m_closeButton);
-    centralLayout->setAlignment(m_closeButton, Qt::AlignTop | Qt::AlignRight);
+    m_centralLayout = new QVBoxLayout;
+    m_centralLayout->setSpacing(0);
+    m_centralLayout->setMargin(0);
+    m_centralLayout->addWidget(m_closeButton);
+    m_centralLayout->setAlignment(m_closeButton, Qt::AlignTop | Qt::AlignRight);
 
     setFixedSize(PREVIEW_W + PREVIEW_M * 2, PREVIEW_H + PREVIEW_M * 2);
-    setLayout(centralLayout);
+    setLayout(m_centralLayout);
     setAcceptDrops(true);
 
     connect(m_closeButton, &DImageButton::clicked, this, &PreviewWidget::closeWindow);
     connect(m_mouseEnterTimer, &QTimer::timeout, this, &PreviewWidget::showPreview, Qt::QueuedConnection);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &PreviewWidget::updatePreviewSize, Qt::QueuedConnection);
 
     QTimer::singleShot(1, this, &PreviewWidget::refreshImage);
+    QTimer::singleShot(1, this, &PreviewWidget::updatePreviewSize);
 }
 
 void PreviewWidget::setTitle(const QString &title)
@@ -60,6 +65,9 @@ void PreviewWidget::setTitle(const QString &title)
 
 void PreviewWidget::refreshImage()
 {
+    if (!m_wmHelper->hasComposite())
+        return;
+
     const auto display = QX11Info::display();
 
     XWindowAttributes attrs;
@@ -98,36 +106,60 @@ void PreviewWidget::showPreview()
     emit requestPreviewWindow(m_wid);
 }
 
+void PreviewWidget::updatePreviewSize()
+{
+    if (m_wmHelper->hasComposite())
+    {
+        setFixedHeight(PREVIEW_H + PREVIEW_M * 2);
+        m_centralLayout->setAlignment(m_closeButton, Qt::AlignTop | Qt::AlignRight);
+    } else {
+        setFixedHeight(PREVIEW_MINI_H);
+        m_centralLayout->setAlignment(m_closeButton, Qt::AlignVCenter | Qt::AlignRight);
+    }
+
+    refreshImage();
+}
+
 void PreviewWidget::paintEvent(QPaintEvent *e)
 {
-    const QRect r = rect().marginsRemoved(QMargins(PREVIEW_M, PREVIEW_M, PREVIEW_M, PREVIEW_M));
-
     QPainter painter(this);
 
-    // draw image
-    const QRect ir = m_image.rect();
-    const QPoint offset = r.center() - ir.center();
-
-    painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
-    painter.drawImage(offset.x(), offset.y(), m_image);
-
-    // bottom black background
-    QRect bgr = r;
-    bgr.setTop(bgr.bottom() - 30);
-    painter.fillRect(bgr, QColor(0, 0, 0, 255 * 0.3));
-    // bottom title
-    painter.drawText(bgr, Qt::AlignCenter, m_title);
-
-    // draw border
-    if (m_hovered)
+    if (m_wmHelper->hasComposite())
     {
-        const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
-        QPen p;
-        p.setBrush(Qt::white);
-        p.setWidth(4);
-        painter.setBrush(Qt::transparent);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.drawRoundedRect(br, 3, 3);
+        const QRect r = rect().marginsRemoved(QMargins(PREVIEW_M, PREVIEW_M, PREVIEW_M, PREVIEW_M));
+
+        // draw image
+        const QRect ir = m_image.rect();
+        const QPoint offset = r.center() - ir.center();
+
+        painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
+        painter.drawImage(offset.x(), offset.y(), m_image);
+
+        // bottom black background
+        QRect bgr = r;
+        bgr.setTop(bgr.bottom() - 30);
+        painter.fillRect(bgr, QColor(0, 0, 0, 255 * 0.3));
+        // bottom title
+        painter.drawText(bgr, Qt::AlignCenter, m_title);
+
+        // draw border
+        if (m_hovered)
+        {
+            const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
+            QPen p;
+            p.setBrush(Qt::white);
+            p.setWidth(4);
+            painter.setBrush(Qt::transparent);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.drawRoundedRect(br, 3, 3);
+        }
+    } else {
+        const QRect r = rect();
+
+        if (m_hovered)
+            painter.fillRect(r, QColor(255, 255, 255, .3 * 255));
+
+        painter.drawText(r.marginsRemoved(QMargins(10, 0, 25, 0)), Qt::AlignLeft | Qt::AlignVCenter, m_title);
     }
 
     QWidget::paintEvent(e);

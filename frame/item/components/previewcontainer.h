@@ -7,6 +7,10 @@
 #include "dbus/dbusdockentry.h"
 #include "constants.h"
 
+#include <DWindowManagerHelper>
+
+DWIDGET_USE_NAMESPACE
+
 class PreviewContainer : public QWidget
 {
     Q_OBJECT
@@ -36,6 +40,8 @@ private slots:
 
 private:
     QBoxLayout *m_windowListLayout;
+
+    DWindowManagerHelper *m_wmHelper;
 
     QTimer *m_mouseLeaveTimer;
 

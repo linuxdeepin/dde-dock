@@ -5,8 +5,10 @@
 #include <QDebug>
 #include <QDragEnterEvent>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include <dimagebutton.h>
+#include <dwindowmanagerhelper.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -29,6 +31,8 @@ private slots:
     void closeWindow();
     void showPreview();
 
+    void updatePreviewSize();
+
 private:
     void paintEvent(QPaintEvent *e);
     void enterEvent(QEvent *e);
@@ -44,11 +48,14 @@ private:
     QString m_title;
 
     DImageButton *m_closeButton;
+    QVBoxLayout *m_centralLayout;
 
     QTimer *m_droppedDelay;
     QTimer *m_mouseEnterTimer;
 
     bool m_hovered;
+
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // PREVIEWWIDGET_H

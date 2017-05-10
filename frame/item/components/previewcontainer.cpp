@@ -8,6 +8,8 @@
 PreviewContainer::PreviewContainer(QWidget *parent)
     : QWidget(parent),
 
+      m_wmHelper(DWindowManagerHelper::instance()),
+
       m_mouseLeaveTimer(new QTimer(this))
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
@@ -70,18 +72,23 @@ void PreviewContainer::setWindowInfos(const WindowDict &infos)
 
 void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
 {
-    switch (dockPos)
-    {
-    case Dock::Top:
-    case Dock::Bottom:
+    if (m_wmHelper->hasComposite() && (dockPos == Dock::Top || dockPos == Dock::Bottom))
         m_windowListLayout->setDirection(QBoxLayout::LeftToRight);
-        break;
-
-    case Dock::Left:
-    case Dock::Right:
+    else
         m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
-        break;
-    }
+
+//    switch (dockPos)
+//    {
+//    case Dock::Top:
+//    case Dock::Bottom:
+//        m_windowListLayout->setDirection(QBoxLayout::LeftToRight);
+//        break;
+
+//    case Dock::Left:
+//    case Dock::Right:
+//        m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
+//        break;
+//    }
 }
 
 void PreviewContainer::leaveEvent(QEvent *e)
