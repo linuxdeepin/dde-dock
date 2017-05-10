@@ -7,6 +7,7 @@ import (
 var _g *Grub2
 
 func Start() error {
+	initPolkit()
 	_g = New()
 	err := dbus.InstallOnSystem(_g)
 	if err != nil {

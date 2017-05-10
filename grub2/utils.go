@@ -115,7 +115,7 @@ func isStringInArray(a string, list []string) bool {
 
 var noCheckAuth bool
 
-func init() {
+func initPolkit() {
 	if os.Getenv("NO_CHECK_AUTH") == "1" {
 		noCheckAuth = true
 		return
