@@ -11,6 +11,7 @@
 #include <QRect>
 
 #include <DPlatformWindowHandle>
+#include <DWindowManagerHelper>
 
 class MainPanel;
 class DBusDockAdaptors;
@@ -58,6 +59,7 @@ private:
     MainPanel *m_mainPanel;
 
     DPlatformWindowHandle m_platformWindowHandle;
+    DWindowManagerHelper *m_wmHelper;
 
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;

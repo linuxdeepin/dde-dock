@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_mainPanel(new MainPanel(this)),
 
       m_platformWindowHandle(this),
+      m_wmHelper(DWindowManagerHelper::instance()),
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
@@ -488,7 +489,8 @@ void MainWindow::adjustShadowMask()
 {
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
-        m_panelShowAni->state() == QPauseAnimation::Running)
+        m_panelShowAni->state() == QPauseAnimation::Running ||
+        !m_wmHelper->hasComposite())
     {
         m_platformWindowHandle.setShadowRadius(0);
         m_platformWindowHandle.setClipPath(QPainterPath());

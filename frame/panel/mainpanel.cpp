@@ -19,7 +19,8 @@ MainPanel::MainPanel(QWidget *parent)
       m_itemController(DockItemController::instance(this)),
 
       m_updateEffectTimer(new QTimer(this)),
-      m_effectWidget(new DBlurEffectWidget(this))
+      m_effectWidget(new DBlurEffectWidget(this)),
+      m_wmHelper(DWindowManagerHelper::instance())
 {
     m_itemLayout->setSpacing(0);
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
@@ -82,6 +83,7 @@ MainPanel::MainPanel(QWidget *parent)
     connect(m_itemController, &DockItemController::itemUpdated, m_itemAdjustTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
     connect(m_itemAdjustTimer, &QTimer::timeout, this, &MainPanel::adjustItemSize, Qt::QueuedConnection);
     connect(m_updateEffectTimer, &QTimer::timeout, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainPanel::updateBlurEffect, Qt::QueuedConnection);
 
     m_itemAdjustTimer->setSingleShot(true);
     m_itemAdjustTimer->setInterval(100);
@@ -172,32 +174,32 @@ void MainPanel::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
-    QPainter p(this);
-    p.setRenderHint(QPainter::Antialiasing);
+//    QPainter p(this);
+//    p.setRenderHint(QPainter::Antialiasing);
 
-    if (m_displayMode == Dock::Fashion) {
-        QPen pen;
-        pen.setWidth(1);
-        pen.setColor(QColor(162, 162, 162, 255 * 0.2));
+//    if (m_displayMode == Dock::Fashion && m_wmHelper->hasComposite()) {
+//        QPen pen;
+//        pen.setWidth(1);
+//        pen.setColor(QColor(162, 162, 162, 255 * 0.2));
 
-        const QRect r = rect();
-        // border radius
-        const int br = 8;
+//        const QRect r = rect();
+//        // border radius
+//        const int br = 8;
 
-        // draw border
-        QRect borderRect = r;
-        switch (m_position)
-        {
-        case Top:       borderRect.setTop(-br);                  break;
-        case Bottom:    borderRect.setBottom(r.bottom() + br);   break;
-        case Left:      borderRect.setLeft(-br);                 break;
-        case Right:     borderRect.setRight(r.right() + br);     break;
-        }
+//        // draw border
+//        QRect borderRect = r;
+//        switch (m_position)
+//        {
+//        case Top:       borderRect.setTop(-br);                  break;
+//        case Bottom:    borderRect.setBottom(r.bottom() + br);   break;
+//        case Left:      borderRect.setLeft(-br);                 break;
+//        case Right:     borderRect.setRight(r.right() + br);     break;
+//        }
 
-        p.setPen(pen);
-        p.setBrush(Qt::transparent);
-        p.drawRoundedRect(borderRect, br, br);
-    }
+//        p.setPen(pen);
+//        p.setBrush(Qt::transparent);
+//        p.drawRoundedRect(borderRect, br, br);
+//    }
 }
 
 void MainPanel::resizeEvent(QResizeEvent *e)
@@ -351,7 +353,7 @@ DockItem *MainPanel::itemAt(const QPoint &point)
 
 void MainPanel::updateBlurEffect() const
 {
-    if (m_displayMode == Efficient) {
+    if (m_displayMode == Efficient || !m_wmHelper->hasComposite()) {
         m_effectWidget->setBlurRectXRadius(0);
         m_effectWidget->setBlurRectYRadius(0);
         m_effectWidget->move(pos());

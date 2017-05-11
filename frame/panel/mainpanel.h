@@ -9,6 +9,7 @@
 #include <QBoxLayout>
 
 #include <DBlurEffectWidget>
+#include <DWindowManagerHelper>
 
 #define xstr(s) str(s)
 #define str(s) #s
@@ -68,6 +69,7 @@ private:
 
     QTimer *m_updateEffectTimer;
     DBlurEffectWidget *m_effectWidget;
+    DWindowManagerHelper *m_wmHelper;
 
     static DockItem *DragingItem;
     static PlaceholderItem *RequestDockItem;
