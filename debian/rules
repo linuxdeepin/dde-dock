@@ -6,3 +6,14 @@
 
 %:
 	dh $@ --parallel
+
+ifeq ($(DEB_BUILD_ARCH), mips64el)
+override_dh_auto_configure:
+        dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ 
+endif
+
+ifeq ($(DEB_BUILD_ARCH), mipsel)
+override_dh_auto_configure:
+        dh_auto_configure -- QMAKE_CC=clang QMAKE_CXX=clang++ 
+endif
+
