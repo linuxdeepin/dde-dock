@@ -103,7 +103,8 @@ void PreviewWidget::closeWindow()
 
 void PreviewWidget::showPreview()
 {
-    emit requestPreviewWindow(m_wid);
+    if (m_wmHelper->hasComposite())
+        emit requestPreviewWindow(m_wid);
 }
 
 void PreviewWidget::updatePreviewSize()
@@ -199,8 +200,8 @@ void PreviewWidget::mouseReleaseEvent(QMouseEvent *e)
 
     m_mouseEnterTimer->stop();
     emit requestHidePreview();
-    emit requestCancelPreview();
     emit requestActivateWindow(m_wid);
+    emit requestCancelPreview();
 }
 
 void PreviewWidget::dragEnterEvent(QDragEnterEvent *e)
