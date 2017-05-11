@@ -13,10 +13,12 @@ import (
 	libPinyin "dbus/com/deepin/api/pinyin"
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
+	"gir/gio-2.0"
 	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/notify"
 	"time"
 )
@@ -27,6 +29,9 @@ const (
 )
 
 func (m *Manager) init() error {
+	m.settings = gio.NewSettings(gsSchemaLauncher)
+	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
+
 	var err error
 	// init launchedRecorder
 	m.launchedRecorder, err = libApps.NewLaunchedRecorder(appsDBusDest, appsDBusObjectPath)

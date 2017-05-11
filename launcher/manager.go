@@ -20,8 +20,10 @@ import (
 	libPinyin "dbus/com/deepin/api/pinyin"
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
+	"gir/gio-2.0"
 	"github.com/howeyc/fsnotify"
 	"pkg.deepin.io/lib/dbus"
+	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/notify"
 )
@@ -38,6 +40,9 @@ const (
 	AppStatusModified = "updated"
 	AppStatusDeleted  = "deleted"
 	lastoreDBusDest   = "com.deepin.lastore"
+
+	gsSchemaLauncher = "com.deepin.dde.launcher"
+	gsKeyDisplayMode = "display-mode"
 )
 
 type Manager struct {
@@ -67,6 +72,10 @@ type Manager struct {
 	fsWatcher          *fsnotify.Watcher
 	fsEventTimers      map[string]*time.Timer
 	fsEventTimersMutex sync.Mutex
+	settings           *gio.Settings
+	// Properties:
+	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
+
 	// Signals:
 	// SearchDone 返回搜索结果列表
 	SearchDone     func([]string)
