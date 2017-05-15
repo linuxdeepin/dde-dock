@@ -147,9 +147,6 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
         if (m_hovered)
         {
             const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
-            QPen p;
-            p.setBrush(Qt::white);
-            p.setWidth(4);
             painter.setBrush(Qt::transparent);
             painter.setRenderHint(QPainter::Antialiasing);
             painter.drawRoundedRect(br, 3, 3);

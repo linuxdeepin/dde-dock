@@ -5,6 +5,9 @@
 #include "dbus/dbusdisplay.h"
 
 #include <darrowrectangle.h>
+#include <DWindowManagerHelper>
+
+DWIDGET_USE_NAMESPACE
 
 class DockPopupWindow : public Dtk::Widget::DArrowRectangle
 {
@@ -36,6 +39,7 @@ private slots:
     void globalMouseRelease(int button, int x, int y, const QString &id);
     void registerMouseEvent();
     void unRegisterMouseEvent();
+    void compositeChanged();
 
 private:
     bool m_model;
@@ -46,6 +50,7 @@ private:
 
     DBusXMouseArea *m_mouseInter;
     DBusDisplay *m_displayInter;
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // DOCKPOPUPWINDOW_H

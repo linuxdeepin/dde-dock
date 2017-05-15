@@ -20,13 +20,17 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
     m_acceptDelayTimer->setSingleShot(true);
     m_acceptDelayTimer->setInterval(100);
 
+    m_wmHelper = DWindowManagerHelper::instance();
+
+    compositeChanged();
+
     setBackgroundColor(DBlurEffectWidget::DarkColor);
-    setBorderColor(QColor(255, 255, 255, 255 * 0.05));
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_InputMethodEnabled, false);
     setFocusPolicy(Qt::StrongFocus);
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -169,4 +173,12 @@ void DockPopupWindow::unRegisterMouseEvent()
 
     m_mouseInter->UnregisterArea(m_mouseAreaKey);
     m_mouseAreaKey.clear();
+}
+
+void DockPopupWindow::compositeChanged()
+{
+    if (m_wmHelper->hasComposite())
+        setBorderColor(QColor(255, 255, 255, 255 * 0.05));
+    else
+        setBorderColor(QColor("#2C3238"));
 }
