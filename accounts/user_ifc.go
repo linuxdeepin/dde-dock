@@ -198,9 +198,12 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 	logger.Debug("[SetLocale] locale:", locale)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetLocale] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetLocale] access denied:", err)
+			return err
+		}
 	}
 
 	if u.Locale == locale {
@@ -227,9 +230,12 @@ func (u *User) SetLocale(dbusMsg dbus.DMessage, locale string) error {
 func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 	logger.Debug("[SetLayout] new layout:", layout)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetLayout] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetLayout] access denied:", err)
+			return err
+		}
 	}
 
 	if u.Layout == layout {
@@ -250,9 +256,12 @@ func (u *User) SetLayout(dbusMsg dbus.DMessage, layout string) error {
 func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
 	logger.Debug("[SetIconFile] new icon:", iconURI)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetIconFile] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetIconFile] access denied:", err)
+			return err
+		}
 	}
 
 	iconURI = dutils.EncodeURI(iconURI, dutils.SCHEME_FILE)
@@ -315,9 +324,12 @@ func (u *User) SetIconFile(dbusMsg dbus.DMessage, iconURI string) error {
 func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 	logger.Debug("[DeleteIconFile] icon:", icon)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[DeleteIconFile] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[DeleteIconFile] access denied:", err)
+			return err
+		}
 	}
 
 	icon = dutils.EncodeURI(icon, dutils.SCHEME_FILE)
@@ -347,9 +359,12 @@ func (u *User) DeleteIconFile(dbusMsg dbus.DMessage, icon string) error {
 func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 	logger.Debug("[SetBackgroundFile] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetBackgroundFile] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetBackgroundFile] access denied:", err)
+			return err
+		}
 	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if bg == u.BackgroundFile {
@@ -378,9 +393,12 @@ func (u *User) SetBackgroundFile(dbusMsg dbus.DMessage, bg string) error {
 func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 	logger.Debug("[SetGreeterBackground] new background:", bg)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetGreeterBackground] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetGreeterBackground] access denied:", err)
+			return err
+		}
 	}
 	bg = dutils.EncodeURI(bg, dutils.SCHEME_FILE)
 	if u.GreeterBackground == bg {
@@ -409,9 +427,12 @@ func (u *User) SetGreeterBackground(dbusMsg dbus.DMessage, bg string) error {
 func (u *User) SetHistoryLayout(dbusMsg dbus.DMessage, list []string) error {
 	logger.Debug("[SetHistoryLayout] new history layout:", list)
 	pid := dbusMsg.GetSenderPID()
-	if err := u.accessAuthentication(pid, true); err != nil {
-		logger.Debug("[SetHistoryLayout] access denied:", err)
-		return err
+	if !u.isSelf(pid) {
+		err := polkitAuthManagerUser(pid)
+		if err != nil {
+			logger.Debug("[SetHistoryLayout] access denied:", err)
+			return err
+		}
 	}
 
 	if isStrvEqual(u.HistoryLayout, list) {

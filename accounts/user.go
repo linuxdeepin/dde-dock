@@ -272,16 +272,8 @@ func (u *User) updatePropAccountType() {
 }
 
 func (u *User) accessAuthentication(pid uint32, check bool) error {
-	var self bool
-	if check {
-		uid, _ := getUidByPid(pid)
-		if u.Uid == uid {
-			self = true
-		}
-	}
-
 	var err error
-	if self {
+	if check && u.isSelf(pid) {
 		err = polkitAuthChangeOwnData(pid)
 	} else {
 		err = polkitAuthManagerUser(pid)
@@ -291,6 +283,11 @@ func (u *User) accessAuthentication(pid uint32, check bool) error {
 	}
 
 	return nil
+}
+
+func (u *User) isSelf(pid uint32) bool {
+	uid, _ := getUidByPid(pid)
+	return u.Uid == uid
 }
 
 func (u *User) clearData() {
