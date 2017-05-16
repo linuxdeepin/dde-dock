@@ -31,6 +31,7 @@ const (
 func (m *Manager) init() error {
 	m.settings = gio.NewSettings(gsSchemaLauncher)
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
+	m.Fullscreen = property.NewGSettingsBoolProperty(m, "Fullscreen", m.settings, gsKeyFullscreen)
 
 	var err error
 	// init launchedRecorder

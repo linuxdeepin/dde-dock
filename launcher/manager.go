@@ -43,6 +43,7 @@ const (
 
 	gsSchemaLauncher = "com.deepin.dde.launcher"
 	gsKeyDisplayMode = "display-mode"
+	gsKeyFullscreen  = "fullscreen"
 )
 
 type Manager struct {
@@ -75,6 +76,7 @@ type Manager struct {
 	settings           *gio.Settings
 	// Properties:
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
+	Fullscreen  *property.GSettingsBoolProperty `access:"readwrite"`
 
 	// Signals:
 	// SearchDone 返回搜索结果列表
