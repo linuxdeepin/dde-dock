@@ -113,9 +113,11 @@ void PreviewWidget::updatePreviewSize()
     {
         setFixedHeight(PREVIEW_H + PREVIEW_M * 2);
         m_centralLayout->setAlignment(m_closeButton, Qt::AlignTop | Qt::AlignRight);
+        m_centralLayout->setMargin(0);
     } else {
         setFixedHeight(PREVIEW_MINI_H);
         m_centralLayout->setAlignment(m_closeButton, Qt::AlignVCenter | Qt::AlignRight);
+        m_centralLayout->setContentsMargins(0, 0, 10, 0);
     }
 
     refreshImage();
@@ -157,7 +159,7 @@ void PreviewWidget::paintEvent(QPaintEvent *e)
         if (m_hovered)
             painter.fillRect(r, QColor(255, 255, 255, .3 * 255));
 
-        painter.drawText(r.marginsRemoved(QMargins(10, 0, 25, 0)), Qt::AlignLeft | Qt::AlignVCenter, m_title);
+        painter.drawText(r.marginsRemoved(QMargins(10, 0, 35, 0)), Qt::AlignLeft | Qt::AlignVCenter, m_title);
     }
 
     QWidget::paintEvent(e);
