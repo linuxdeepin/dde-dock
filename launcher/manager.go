@@ -91,11 +91,51 @@ type Manager struct {
 
 func NewManager() (*Manager, error) {
 	m := &Manager{}
-	err := m.init()
+
+	var err error
+	// init launchedRecorder
+	m.launchedRecorder, err = libApps.NewLaunchedRecorder(appsDBusDest, appsDBusObjectPath)
+	if err != nil {
+		return nil, err
+	}
+
+	// init desktopFileWatcher
+	m.desktopFileWatcher, err = libApps.NewDesktopFileWatcher(appsDBusDest, appsDBusObjectPath)
 	if err != nil {
 		m.destroy()
 		return nil, err
 	}
+
+	// init system dbus conn
+	m.systemDBusConn, err = dbus.SystemBus()
+	if err != nil {
+		m.destroy()
+		return nil, err
+	}
+
+	// init lastoreManager
+	m.lastoreManager, err = libLastore.NewManager(lastoreDBusDest, "/com/deepin/lastore")
+	if err != nil {
+		m.destroy()
+		return nil, err
+	}
+
+	// init pinyin if lang is zh*
+	if isZH() {
+		m.pinyin, err = libPinyin.NewPinyin("com.deepin.api.Pinyin", "/com/deepin/api/Pinyin")
+		if err != nil {
+			m.destroy()
+			return nil, err
+		}
+	}
+
+	// init fsWatcher
+	m.fsWatcher, err = fsnotify.NewWatcher()
+	if err != nil {
+		m.destroy()
+		return nil, err
+	}
+
 	return m, nil
 }
 

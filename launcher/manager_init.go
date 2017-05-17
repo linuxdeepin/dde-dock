@@ -10,11 +10,7 @@
 package launcher
 
 import (
-	libPinyin "dbus/com/deepin/api/pinyin"
-	libApps "dbus/com/deepin/daemon/apps"
-	libLastore "dbus/com/deepin/lastore"
 	"gir/gio-2.0"
-	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
@@ -28,56 +24,17 @@ const (
 	appsDBusObjectPath = "/com/deepin/daemon/Apps"
 )
 
-func (m *Manager) init() error {
+func (m *Manager) init() {
 	m.settings = gio.NewSettings(gsSchemaLauncher)
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
 	m.Fullscreen = property.NewGSettingsBoolProperty(m, "Fullscreen", m.settings, gsKeyFullscreen)
-
-	var err error
-	// init launchedRecorder
-	m.launchedRecorder, err = libApps.NewLaunchedRecorder(appsDBusDest, appsDBusObjectPath)
-	if err != nil {
-		return err
-	}
-
-	// init desktopFileWatcher
-	m.desktopFileWatcher, err = libApps.NewDesktopFileWatcher(appsDBusDest, appsDBusObjectPath)
-	if err != nil {
-		return err
-	}
 
 	// init notification
 	notify.Init(dbusDest)
 	m.notification = notify.NewNotification("", "", "")
 
-	// init system dbus conn
-	m.systemDBusConn, err = dbus.SystemBus()
-	if err != nil {
-		return err
-	}
-
-	// init lastoreManager
-	m.lastoreManager, err = libLastore.NewManager(lastoreDBusDest, "/com/deepin/lastore")
-	if err != nil {
-		return err
-	}
-
-	// init pinyin if lang is zh*
-	if isZH() {
-		m.pinyin, err = libPinyin.NewPinyin("com.deepin.api.Pinyin", "/com/deepin/api/Pinyin")
-		if err != nil {
-			return err
-		}
-	}
-
-	// init fsWatcher
-	m.fsWatcher, err = fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-
 	m.appDirs = getAppDirs()
-	err = m.loadDesktopPkgMap()
+	err := m.loadDesktopPkgMap()
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -141,7 +98,6 @@ func (m *Manager) init() error {
 		}
 		dbus.Emit(m, "NewAppLaunched", item.ID)
 	})
-	return nil
 }
 
 func shouldCheckDesktopFile(filename string) bool {

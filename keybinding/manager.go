@@ -15,7 +15,6 @@ import (
 	"github.com/BurntSushi/xgb/xtest"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/keybind"
-	"github.com/BurntSushi/xgbutil/xevent"
 	"path/filepath"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
@@ -107,9 +106,13 @@ func NewManager() (*Manager, error) {
 		return nil, err
 	}
 
+	return &m, nil
+}
+
+func (m *Manager) init() {
 	m.keyboardSetting = gio.NewSettings(keyboardScheam)
 	// init numlock state
-	m.NumLockState = property.NewGSettingsEnumProperty(&m, "NumLockState", m.keyboardSetting, gsKeyNumLockState)
+	m.NumLockState = property.NewGSettingsEnumProperty(m, "NumLockState", m.keyboardSetting, gsKeyNumLockState)
 	if m.keyboardSetting.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
 		if nlState == NumLockUnknown {
@@ -132,7 +135,7 @@ func NewManager() (*Manager, error) {
 	m.mediaSetting = gio.NewSettings(mediakeySchema)
 	m.wmSetting = gio.NewSettings(wmSchema)
 
-	m.shortcuts = shortcuts.NewShortcuts(xu, m.handleKeyEvent)
+	m.shortcuts = shortcuts.NewShortcuts(m.xu, m.handleKeyEvent)
 	m.shortcuts.AddSystem(m.sysSetting)
 	m.shortcuts.AddMedia(m.mediaSetting)
 	m.shortcuts.AddWM(m.wmSetting)
@@ -141,6 +144,7 @@ func NewManager() (*Manager, error) {
 	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
 	m.shortcuts.AddCustom(m.customShortcutManager)
 
+	var err error
 	m.audioController, err = NewAudioController()
 	if err != nil {
 		logger.Warning("NewAudioController failed:", err)
@@ -168,17 +172,6 @@ func NewManager() (*Manager, error) {
 	if err != nil {
 		logger.Warning("NewTouchpadController failed:", err)
 	}
-
-	m.initHandlers()
-	m.shortcuts.ListenXEvents()
-
-	// listen gsetting changed event
-	m.listenGSettingsChanged(m.sysSetting, shortcuts.ShortcutTypeSystem)
-	m.listenGSettingsChanged(m.mediaSetting, shortcuts.ShortcutTypeMedia)
-	m.listenGSettingsChanged(m.wmSetting, shortcuts.ShortcutTypeWM)
-
-	go xevent.Main(m.xu)
-	return &m, nil
 }
 
 func (m *Manager) destroy() {

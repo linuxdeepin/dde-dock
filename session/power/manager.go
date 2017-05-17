@@ -60,19 +60,9 @@ type Manager struct {
 
 func NewManager() (*Manager, error) {
 	m := &Manager{}
-	err := m.init()
-	if err != nil {
-		m.destroy()
-		return nil, err
-	}
-	logger.Info("NewManager done")
-	return m, nil
-}
-
-func (m *Manager) init() error {
 	helper, err := NewHelper()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	m.helper = helper
 
@@ -83,9 +73,15 @@ func (m *Manager) init() error {
 	m.warnLevelConfig.connectSettings(m.settings)
 	err = dbus.InstallOnSession(m.warnLevelConfig)
 	if err != nil {
-		return err
+		m.destroy()
+		return nil, err
 	}
 
+	logger.Info("NewManager done")
+	return m, nil
+}
+
+func (m *Manager) init() {
 	// init sleep inhibitor
 	m.inhibitor = newSleepInhibitor(m.helper.Login1Manager)
 	m.inhibitor.OnBeforeSuspend = m.handleBeforeSuspend
@@ -120,13 +116,7 @@ func (m *Manager) init() error {
 	m.initSubmodules()
 	m.startSubmodules()
 
-	err = dbus.InstallOnSession(m)
-	if err != nil {
-		return err
-	}
-	logger.Info("InstallOnSession done")
 	m.StartupNotify()
-	return nil
 }
 
 func (m *Manager) StartupNotify() {

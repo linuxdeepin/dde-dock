@@ -11,9 +11,9 @@ package timedate
 
 import (
 	"dbus/org/freedesktop/timedate1"
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
-	"gir/gio-2.0"
 )
 
 const (
@@ -56,6 +56,11 @@ func NewManager() (*Manager, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	return m, nil
+}
+
+func (m *Manager) init() {
 	m.setPropBool(&m.CanNTP, "CanNTP", m.td1.CanNTP.Get())
 	m.setPropBool(&m.NTP, "NTP", m.td1.NTP.Get())
 	m.setPropBool(&m.LocalRTC, "LocalRTC", m.td1.LocalRTC.Get())
@@ -77,8 +82,6 @@ func NewManager() (*Manager, error) {
 		m.UserTimezones.Set(newList)
 	}
 	m.AddUserTimezone(m.Timezone)
-
-	return m, nil
 }
 
 func (m *Manager) destroy() {

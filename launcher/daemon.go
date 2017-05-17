@@ -40,10 +40,18 @@ func (d *Daemon) Start() (err error) {
 	logger.BeginTracing()
 	d.manager, err = NewManager()
 	if err != nil {
+		logger.Error("Failed to new manager:", err)
 		logger.EndTracing()
 		return
 	}
 	err = dbus.InstallOnSession(d.manager)
+	if err != nil {
+		logger.Error("Failed to install dbus:", err)
+		logger.EndTracing()
+		d.manager.destroy()
+		return
+	}
+	go d.manager.init()
 	return
 }
 

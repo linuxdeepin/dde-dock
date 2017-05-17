@@ -10,6 +10,7 @@
 package keybinding
 
 import (
+	"github.com/BurntSushi/xgbutil/xevent"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/dbus"
@@ -60,6 +61,20 @@ func (daemon *Daemon) Start() error {
 		logger.EndTracing()
 		return err
 	}
+
+	go func() {
+		daemon.manager.init()
+
+		daemon.manager.initHandlers()
+		daemon.manager.shortcuts.ListenXEvents()
+
+		// listen gsetting changed event
+		daemon.manager.listenGSettingsChanged(daemon.manager.sysSetting, shortcuts.ShortcutTypeSystem)
+		daemon.manager.listenGSettingsChanged(daemon.manager.mediaSetting, shortcuts.ShortcutTypeMedia)
+		daemon.manager.listenGSettingsChanged(daemon.manager.wmSetting, shortcuts.ShortcutTypeWM)
+
+		xevent.Main(daemon.manager.xu)
+	}()
 
 	return nil
 }

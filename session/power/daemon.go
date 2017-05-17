@@ -11,6 +11,7 @@ package power
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
 
@@ -43,6 +44,15 @@ func (d *Daemon) Start() (err error) {
 		logger.EndTracing()
 		return
 	}
+	err = dbus.InstallOnSession(d.manager)
+	if err != nil {
+		d.manager.destroy()
+		logger.Error("Failed to install dbus:", err)
+		logger.EndTracing()
+		return err
+	}
+	logger.Info("InstallOnSession done")
+	go d.manager.init()
 	return
 }
 

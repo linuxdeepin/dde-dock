@@ -59,7 +59,10 @@ func (d *Daemon) Start() error {
 		logger.EndTracing()
 		return err
 	}
-	_manager.handlePropChanged()
+	go func() {
+		_manager.init()
+		_manager.handlePropChanged()
+	}()
 	return nil
 }
 
