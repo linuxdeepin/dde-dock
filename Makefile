@@ -90,12 +90,6 @@ install: build translate install-dde-data
 	mkdir -pv ${DESTDIR}/var/cache/appearance
 	cp -r misc/thumbnail ${DESTDIR}/var/cache/appearance/
 
-#	mkdir -pv ${DESTDIR}${PREFIX}/share/applications
-#	cp -r misc/applications/* ${DESTDIR}${PREFIX}/share/applications/
-
-	mkdir -pv ${DESTDIR}${PREFIX}/share/icons/hicolor
-	cp -r misc/icons/* ${DESTDIR}${PREFIX}/share/icons/hicolor/
-
 install-dde-data:
 	mkdir -pv ${DESTDIR}${PREFIX}/share/dde/
 	cp -r misc/data ${DESTDIR}${PREFIX}/share/dde/
