@@ -307,7 +307,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 void AppItem::mousePressEvent(QMouseEvent *e)
 {
     m_updateIconGeometryTimer->stop();
-//    hidePopup();
+    hidePopup();
 
     if (e->button() == Qt::RightButton)
     {
@@ -315,8 +315,9 @@ void AppItem::mousePressEvent(QMouseEvent *e)
         {
             QMetaObject::invokeMethod(this, "showContextMenu", Qt::QueuedConnection);
             return;
-        } else
+        } else {
             return QWidget::mousePressEvent(e);
+        }
     }
 
     if (e->button() == Qt::LeftButton)
