@@ -277,4 +277,6 @@ void DockItem::hidePopup()
     m_popupTipsDelayTimer->stop();
     m_popupShown = false;
     PopupWindow->hide();
+
+    emit requestWindowAutoHide(true);
 }
