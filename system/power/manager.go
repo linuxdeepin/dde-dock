@@ -14,10 +14,19 @@ import (
 	"gir/gudev-1.0"
 	"pkg.deepin.io/dde/api/powersupply"
 	"pkg.deepin.io/dde/api/powersupply/battery"
+	"pkg.deepin.io/lib/arch"
 	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
 )
+
+var no_uevent bool
+
+func init() {
+	if arch.Get() == arch.Sunway {
+		no_uevent = true
+	}
+}
 
 // https://www.kernel.org/doc/Documentation/power/power_supply_class.txt
 type Manager struct {
@@ -88,6 +97,18 @@ func (m *Manager) initAC(devices []*gudev.Device) {
 	if ac != nil {
 		m.refreshAC(ac)
 		m.ac = NewAC(m, ac)
+
+		if no_uevent {
+			go func() {
+				c := time.Tick(2 * time.Second)
+				for {
+					select {
+					case <-c:
+						m.RefreshMains()
+					}
+				}
+			}()
+		}
 	}
 }
 
