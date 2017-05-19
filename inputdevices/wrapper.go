@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"pkg.deepin.io/dde/api/dxinput"
 	dxutils "pkg.deepin.io/dde/api/dxinput/utils"
+	"strings"
 )
 
 type dxMouses []*dxinput.Mouse
@@ -54,6 +55,7 @@ func handleDeviceChanged() {
 	getTouchpad().handleDeviceChanged()
 	getMouse().handleDeviceChanged()
 	getWacom().handleDeviceChanged()
+	getKeyboard().handleDeviceChanged()
 }
 
 func getDeviceInfos(force bool) dxutils.DeviceInfos {
@@ -62,6 +64,17 @@ func getDeviceInfos(force bool) dxutils.DeviceInfos {
 	}
 
 	return devInfos
+}
+
+func getKeyboardNumber() int {
+	var number = 0
+	for _, info := range getDeviceInfos(false) {
+		// TODO: Improve keyboard device detected by udev property 'ID_INPUT_KEYBOARD'
+		if strings.Contains(strings.ToLower(info.Name), "keyboard") {
+			number += 1
+		}
+	}
+	return number
 }
 
 func getMouseInfos(force bool) dxMouses {

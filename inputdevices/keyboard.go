@@ -72,6 +72,8 @@ type Keyboard struct {
 	setting       *gio.Settings
 	userObj       *accounts.User
 	layoutDescMap map[string]string
+
+	devNumber int
 }
 
 var _kbd *Keyboard
@@ -131,6 +133,7 @@ func NewKeyboard() *Keyboard {
 		}
 	}
 
+	kbd.devNumber = getKeyboardNumber()
 	return kbd
 }
 
@@ -148,6 +151,15 @@ func (kbd *Keyboard) init() {
 		logger.Debugf("Init keymap options failed: %v", err)
 	}
 	kbd.setRepeat()
+}
+
+func (kbd *Keyboard) handleDeviceChanged() {
+	num := getKeyboardNumber()
+	logger.Debug("Keyboard changed:", num, kbd.devNumber)
+	if num > kbd.devNumber {
+		kbd.init()
+	}
+	kbd.devNumber = num
 }
 
 func (kbd *Keyboard) correctLayout() {
