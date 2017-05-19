@@ -19,6 +19,11 @@ import (
 	"pkg.deepin.io/lib/xdg/basedir"
 )
 
+var (
+	// for locale-helper
+	_ = Tr("Authentication is required to switch language")
+)
+
 func (lang *LangSelector) onLocaleSuccess() {
 	lang.lhelper.ConnectSuccess(func(ok bool, reason string) {
 		err := lang.handleLocaleChanged(ok, reason)
