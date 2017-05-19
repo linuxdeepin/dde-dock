@@ -33,6 +33,12 @@ func main() {
 		return
 	}
 
+	// fix no PATH when was launched by dbus
+	if os.Getenv("PATH") == "" {
+		logger.Warning("No PATH found, manual special")
+		os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+	}
+
 	InitI18n()
 	Textdomain("dde-daemon")
 
