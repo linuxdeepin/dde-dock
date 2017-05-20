@@ -3,7 +3,7 @@
 export GOPATH := /usr/share/gocode
 
 %:
-	dh $@ --with systemd
+	dh $@
 
 ifdef USE_GCCGO
 override_dh_strip:
@@ -11,9 +11,6 @@ override_dh_strip:
 override_dh_auto_test:
 	true
 endif
-
-override_dh_systemd_enable:
-	dh_systemd_enable --name=deepin-accounts-daemon
 
 ifeq ($(DEB_BUILD_ARCH), sw_64)
 override_dh_auto_configure:
