@@ -55,10 +55,10 @@ func (*Daemon) Start() error {
 	}
 	go func() {
 		_m.init()
-		_m.listenCursorChanged()
-		_m.handleThemeChanged()
+		go _m.listenCursorChanged()
+		go _m.handleThemeChanged()
+		_m.listenGSettingChanged()
 	}()
-	_m.listenGSettingChanged()
 
 	return nil
 }
