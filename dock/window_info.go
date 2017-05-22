@@ -286,9 +286,8 @@ func (winInfo *WindowInfo) canShowOnDock() bool {
 	logger.Debugf("wmWindowType: %#v", winInfo.wmWindowType)
 	logger.Debugf("wmState: %#v", winInfo.wmState)
 
-	if !winInfo.isMapStateViewable() || !winInfo.isWmClassOk() ||
-		winInfo.hasWmStateSkipTaskbar() || winInfo.isValidModal() ||
-		winInfo.hasXEmbedInfo {
+	if winInfo.hasWmStateSkipTaskbar() || winInfo.isValidModal() ||
+		winInfo.hasXEmbedInfo || !winInfo.isWmClassOk() {
 		return false
 	}
 
