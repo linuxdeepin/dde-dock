@@ -518,7 +518,5 @@ void AppItem::showPreview()
     m_appPreviewTips->setWindowInfos(m_titles);
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
-    qApp->processEvents();
-
     showPopupWindow(m_appPreviewTips, true);
 }

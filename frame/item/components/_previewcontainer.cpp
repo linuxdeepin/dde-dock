@@ -2,6 +2,7 @@
 
 #define FIXED_WIDTH       200
 #define FIXED_HEIGHT      130
+#define SPACING           5
 
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
@@ -9,7 +10,7 @@ _PreviewContainer::_PreviewContainer(QWidget *parent)
       m_wmHelper(DWindowManagerHelper::instance())
 {
     m_windowListLayout = new QVBoxLayout;
-    m_windowListLayout->setSpacing(0);
+    m_windowListLayout->setSpacing(SPACING);
     m_windowListLayout->setMargin(0);
 
     setLayout(m_windowListLayout);
@@ -53,19 +54,22 @@ void _PreviewContainer::adjustSize()
     const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
     const int count = m_snapshots.size();
 
+    if (!count)
+        return;
+
     if (horizontal)
     {
         setFixedHeight(FIXED_HEIGHT);
-        setFixedWidth(FIXED_WIDTH * count);
+        setFixedWidth(FIXED_WIDTH * count + SPACING * (count - 1));
     } else {
         setFixedWidth(FIXED_WIDTH);
-        setFixedHeight(FIXED_HEIGHT * count);
+        setFixedHeight(FIXED_HEIGHT * count + SPACING * (count - 1));
     }
 }
 
 void _PreviewContainer::appendSnapWidget(const WId wid)
 {
-    AppSnapshot *snap = new AppSnapshot;
+    AppSnapshot *snap = new AppSnapshot(wid);
 
     m_windowListLayout->addWidget(snap);
 
