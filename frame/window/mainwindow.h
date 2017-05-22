@@ -46,6 +46,7 @@ private slots:
     void updateGeometry();
     void clearStrutPartial();
     void setStrutPartial();
+    void compositeChanged();
 
     void expand();
     void narrow(const Position prevPos);

@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_mainPanel->setFixedSize(m_settings->windowSize());
 
     updatePanelVisible();
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &MainWindow::compositeChanged, Qt::QueuedConnection);
     connect(m_mainPanel, &MainPanel::geometryChanged, this, &MainWindow::panelGeometryChanged);
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
@@ -149,17 +150,22 @@ void MainWindow::initComponents()
     m_expandDelayTimer->setSingleShot(true);
     m_expandDelayTimer->setInterval(m_settings->expandTimeout());
 
-    m_sizeChangeAni->setDuration(200);
     m_sizeChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
-
-    m_posChangeAni->setDuration(200);
     m_posChangeAni->setEasingCurve(QEasingCurve::InOutCubic);
-
-    m_panelShowAni->setDuration(200);
     m_panelShowAni->setEasingCurve(QEasingCurve::InOutCubic);
-
-    m_panelHideAni->setDuration(200);
     m_panelHideAni->setEasingCurve(QEasingCurve::InOutCubic);
+
+    QTimer::singleShot(1, this, &MainWindow::compositeChanged);
+}
+
+void MainWindow::compositeChanged()
+{
+    const int duration = m_wmHelper->hasComposite() ? 200 : 0;
+
+    m_sizeChangeAni->setDuration(duration);
+    m_posChangeAni->setDuration(duration);
+    m_panelShowAni->setDuration(duration);
+    m_panelHideAni->setDuration(duration);
 }
 
 void MainWindow::initConnections()
