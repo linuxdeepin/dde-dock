@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     item/components/containerwidget.cpp \
     dbus/dbusdockadaptors.cpp \
     item/components/previewcontainer.cpp \
-    item/components/previewwidget.cpp
+    item/components/previewwidget.cpp \
+    item/components/_previewcontainer.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -69,7 +70,8 @@ HEADERS  += \
     item/components/containerwidget.h \
     dbus/dbusdockadaptors.h \
     item/components/previewcontainer.h \
-    item/components/previewwidget.h
+    item/components/previewwidget.h \
+    item/components/_previewcontainer.h
 
 dbus_service.files += com.deepin.dde.Dock.service
 dbus_service.path = /usr/share/dbus-1/services
