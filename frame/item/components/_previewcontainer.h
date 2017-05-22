@@ -3,9 +3,11 @@
 
 #include <QWidget>
 #include <QBoxLayout>
+#include <QTimer>
 
 #include "dbus/dbusdockentry.h"
 #include "constants.h"
+#include "appsnapshot.h"
 
 #include <DWindowManagerHelper>
 
@@ -31,12 +33,15 @@ public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
 
 private:
-    QMap<WId, QWidget *> m_windows;
+    void adjustSize();
+    void appendSnapWidget(const WId wid);
 
-    DWindowManagerHelper *m_wmHelper;
+private:
+    QMap<WId, AppSnapshot *> m_snapshots;
 
     QBoxLayout *m_windowListLayout;
 
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // _PREVIEWCONTAINER_H
