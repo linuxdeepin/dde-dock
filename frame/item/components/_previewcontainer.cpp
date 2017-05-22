@@ -74,6 +74,11 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
 {
     AppSnapshot *snap = new AppSnapshot(wid);
 
+    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview);
+    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview);
+    connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::requestPreviewWindow);
+
     m_windowListLayout->addWidget(snap);
 
     m_snapshots.insert(wid, snap);

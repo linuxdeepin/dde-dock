@@ -69,6 +69,13 @@ void AppSnapshot::fetchSnapshot()
     update();
 }
 
+void AppSnapshot::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    emit entered(m_wid);
+}
+
 void AppSnapshot::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
@@ -95,4 +102,11 @@ void AppSnapshot::resizeEvent(QResizeEvent *e)
     QWidget::resizeEvent(e);
 
     m_fetchSnapshotTimer->start();
+}
+
+void AppSnapshot::mousePressEvent(QMouseEvent *e)
+{
+    QWidget::mousePressEvent(e);
+
+    emit clicked(m_wid);
 }

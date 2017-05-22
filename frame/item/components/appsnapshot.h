@@ -12,12 +12,18 @@ class AppSnapshot : public QWidget
 public:
     explicit AppSnapshot(const WId wid, QWidget *parent = 0);
 
+signals:
+    void entered(const WId wid) const;
+    void clicked(const WId wid) const;
+
 private slots:
     void fetchSnapshot();
 
 private:
+    void enterEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
     void resizeEvent(QResizeEvent *e);
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     const WId m_wid;
