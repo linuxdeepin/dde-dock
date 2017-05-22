@@ -19,6 +19,8 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     m_fetchSnapshotTimer->setInterval(10);
 
     connect(m_fetchSnapshotTimer, &QTimer::timeout, this, &AppSnapshot::fetchSnapshot, Qt::QueuedConnection);
+
+    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
 void AppSnapshot::fetchSnapshot()

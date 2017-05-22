@@ -3,17 +3,19 @@
 #define FIXED_WIDTH       200
 #define FIXED_HEIGHT      130
 #define SPACING           5
+#define MARGIN            5
 
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
 
       m_wmHelper(DWindowManagerHelper::instance())
 {
-    m_windowListLayout = new QVBoxLayout;
+    m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     m_windowListLayout->setSpacing(SPACING);
-    m_windowListLayout->setMargin(0);
+    m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
     setLayout(m_windowListLayout);
+    setFixedSize(FIXED_WIDTH, FIXED_HEIGHT);
 }
 
 void _PreviewContainer::setWindowInfos(const WindowDict &infos)
@@ -23,6 +25,7 @@ void _PreviewContainer::setWindowInfos(const WindowDict &infos)
     {
         if (!infos.contains(it.key()))
         {
+            m_windowListLayout->removeWidget(it.value());
             it.value()->deleteLater();
             it = m_snapshots.erase(it);
         } else {
@@ -59,11 +62,11 @@ void _PreviewContainer::adjustSize()
 
     if (horizontal)
     {
-        setFixedHeight(FIXED_HEIGHT);
-        setFixedWidth(FIXED_WIDTH * count + SPACING * (count - 1));
+        setFixedHeight(FIXED_HEIGHT + MARGIN * 2);
+        setFixedWidth(FIXED_WIDTH * count + MARGIN * 2 + SPACING * (count - 1));
     } else {
-        setFixedWidth(FIXED_WIDTH);
-        setFixedHeight(FIXED_HEIGHT * count + SPACING * (count - 1));
+        setFixedWidth(FIXED_WIDTH + MARGIN * 2);
+        setFixedHeight(FIXED_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1));
     }
 }
 
