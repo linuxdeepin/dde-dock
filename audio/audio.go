@@ -271,7 +271,7 @@ func (a *Audio) Reset() {
 	if err != nil {
 		return
 	}
-	settings.SetBoolean(soundEffectKeyEnabled, true)
+	settings.Reset(soundEffectKeyEnabled)
 	settings.Unref()
 }
 
