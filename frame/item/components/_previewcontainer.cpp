@@ -111,7 +111,7 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview);
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview);
-    connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::previewEntered);
+    connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::previewEntered, Qt::QueuedConnection);
 
     m_windowListLayout->addWidget(snap);
 
@@ -145,12 +145,23 @@ void _PreviewContainer::previewEntered(const WId wid)
 
 void _PreviewContainer::moveFloatingPreview(const QPoint &p)
 {
+    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
     const QRect r = rect();
 
-    if (p.x() < r.left())
-        m_floatingPreview->move(MARGIN, p.y());
-    else if (p.x() + m_floatingPreview->width() > r.right())
-        m_floatingPreview->move(r.right() - m_floatingPreview->width() - MARGIN + 1, p.y());
-    else
-        m_floatingPreview->move(p);
+    if (horizontal)
+    {
+        if (p.x() < r.left())
+            m_floatingPreview->move(MARGIN, p.y());
+        else if (p.x() + m_floatingPreview->width() > r.right())
+            m_floatingPreview->move(r.right() - m_floatingPreview->width() - MARGIN + 1, p.y());
+        else
+            m_floatingPreview->move(p);
+    } else {
+        if (p.y() < r.top())
+            m_floatingPreview->move(p.x(), MARGIN);
+        else if (p.y() + m_floatingPreview->height() > r.bottom())
+            m_floatingPreview->move(p.x(), r.bottom() - m_floatingPreview->height() - MARGIN + 1);
+        else
+            m_floatingPreview->move(p);
+    }
 }
