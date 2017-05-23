@@ -1,7 +1,9 @@
 #include "_previewcontainer.h"
 
-#define FIXED_WIDTH       200
-#define FIXED_HEIGHT      130
+#include <QDesktopWidget>
+#include <QScreen>
+#include <QApplication>
+
 #define SPACING           5
 #define MARGIN            5
 
@@ -15,7 +17,7 @@ _PreviewContainer::_PreviewContainer(QWidget *parent)
     m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
     setLayout(m_windowListLayout);
-    setFixedSize(FIXED_WIDTH, FIXED_HEIGHT);
+    setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 }
 
 void _PreviewContainer::setWindowInfos(const WindowDict &infos)
@@ -60,13 +62,22 @@ void _PreviewContainer::adjustSize()
     if (!count)
         return;
 
+    const QRect r = qApp->primaryScreen()->geometry();
+    const int padding = 20;
+
     if (horizontal)
     {
-        setFixedHeight(FIXED_HEIGHT + MARGIN * 2);
-        setFixedWidth(FIXED_WIDTH * count + MARGIN * 2 + SPACING * (count - 1));
+        const int h = SNAP_HEIGHT + MARGIN * 2;
+        const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
+
+        setFixedHeight(h);
+        setFixedWidth(std::min(w, r.width() - padding));
     } else {
-        setFixedWidth(FIXED_WIDTH + MARGIN * 2);
-        setFixedHeight(FIXED_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1));
+        const int w = SNAP_WIDTH + MARGIN * 2;
+        const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);
+
+        setFixedWidth(w);
+        setFixedHeight(std::min(h, r.height() - padding));
     }
 }
 

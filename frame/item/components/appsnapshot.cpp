@@ -1,4 +1,5 @@
 #include "appsnapshot.h"
+#include "_previewcontainer.h"
 
 #include <X11/Xlib.h>
 #include <X11/X.h>
@@ -57,12 +58,13 @@ void AppSnapshot::fetchSnapshot()
 
         m_snapshot = qimage.copy(left, top, width - left - right, height - top - bottom);
     } else {
-        m_snapshot = qimage;
+        m_snapshot = qimage.copy();
     }
 
-    const QSize s = size();
-    m_snapshot = m_snapshot.scaled(s.width(), s.height(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-    m_snapshot = m_snapshot.copy((m_snapshot.width() - s.width()) / 2, (m_snapshot.height() - s.height()) / 2, s.width(), s.height());
+//    const int w = width();
+//    const int h = height();
+//    m_snapshot = m_snapshot.scaled(w, h, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+//    m_snapshot = m_snapshot.copy((m_snapshot.width() - w) / 2, (m_snapshot.height() - h) / 2, w, h);
     XDestroyImage(ximage);
     XFree(prop_to_return);
 
@@ -88,13 +90,16 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const QRect r = rect();
 
     // draw image
-//    const QRect ir = m_snapshot.rect();
 //    const QPoint offset = r.center() - ir.center();
 
 //    painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
 //    painter.drawImage(offset.x(), offset.y(), m_snapshot);
-    painter.fillRect(r, Qt::white);
-    painter.drawImage(r, m_snapshot);
+//    painter.fillRect(r, Qt::white);
+    const QSize s = size();
+    const QImage im = m_snapshot.scaled(s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QRect ir = im.rect();
+    const QPoint offset = r.center() - ir.center();
+    painter.drawImage(offset.x(), offset.y(), im);
 }
 
 void AppSnapshot::resizeEvent(QResizeEvent *e)
