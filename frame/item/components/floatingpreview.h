@@ -25,6 +25,9 @@ public slots:
 private:
     void paintEvent(QPaintEvent *e);
 
+private slots:
+    void onCloseBtnClicked();
+
 private:
     QPointer<AppSnapshot> m_tracked;
 

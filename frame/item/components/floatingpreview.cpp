@@ -23,6 +23,8 @@ FloatingPreview::FloatingPreview(QWidget *parent)
 
     setLayout(centralLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
+
+    connect(m_closeBtn, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
 }
 
 void FloatingPreview::trackWindow(AppSnapshot * const snap)
@@ -43,4 +45,11 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     QPainter painter(this);
 
     painter.fillRect(rect(), Qt::red);
+}
+
+void FloatingPreview::onCloseBtnClicked()
+{
+    Q_ASSERT(!m_tracked.isNull());
+
+    m_tracked->closeWindow();
 }

@@ -12,9 +12,14 @@ class AppSnapshot : public QWidget
 public:
     explicit AppSnapshot(const WId wid, QWidget *parent = 0);
 
+    WId wid() const { return m_wid; }
+
 signals:
     void entered(const WId wid) const;
     void clicked(const WId wid) const;
+
+public slots:
+    void closeWindow() const;
 
 private slots:
     void fetchSnapshot();
