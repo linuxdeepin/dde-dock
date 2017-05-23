@@ -41,7 +41,8 @@ SOURCES += main.cpp \
     item/components/previewcontainer.cpp \
     item/components/previewwidget.cpp \
     item/components/_previewcontainer.cpp \
-    item/components/appsnapshot.cpp
+    item/components/appsnapshot.cpp \
+    item/components/floatingpreview.cpp
 
 HEADERS  += \
     window/mainwindow.h \
@@ -73,7 +74,8 @@ HEADERS  += \
     item/components/previewcontainer.h \
     item/components/previewwidget.h \
     item/components/_previewcontainer.h \
-    item/components/appsnapshot.h
+    item/components/appsnapshot.h \
+    item/components/floatingpreview.h
 
 dbus_service.files += com.deepin.dde.Dock.service
 dbus_service.path = /usr/share/dbus-1/services

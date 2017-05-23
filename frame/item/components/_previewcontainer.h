@@ -8,6 +8,7 @@
 #include "dbus/dbusdockentry.h"
 #include "constants.h"
 #include "appsnapshot.h"
+#include "floatingpreview.h"
 
 #include <DWindowManagerHelper>
 
@@ -43,9 +44,14 @@ private:
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
 
+private slots:
+    void previewEntered(const WId wid);
+    void moveFloatingPreview(const QPoint &p);
+
 private:
     QMap<WId, AppSnapshot *> m_snapshots;
 
+    FloatingPreview *m_floatingPreview;
     QBoxLayout *m_windowListLayout;
 
     QTimer *m_mouseLeaveTimer;

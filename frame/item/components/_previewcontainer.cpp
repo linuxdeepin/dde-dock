@@ -10,6 +10,7 @@
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
 
+      m_floatingPreview(new FloatingPreview(this)),
       m_mouseLeaveTimer(new QTimer(this)),
       m_wmHelper(DWindowManagerHelper::instance())
 {
@@ -20,10 +21,13 @@ _PreviewContainer::_PreviewContainer(QWidget *parent)
     m_mouseLeaveTimer->setSingleShot(true);
     m_mouseLeaveTimer->setInterval(10);
 
+    m_floatingPreview->setVisible(false);
+
     setLayout(m_windowListLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &_PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
+    connect(m_floatingPreview, &FloatingPreview::requestMove, this, &_PreviewContainer::moveFloatingPreview);
 }
 
 void _PreviewContainer::setWindowInfos(const WindowDict &infos)
@@ -62,8 +66,12 @@ void _PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
 
 void _PreviewContainer::checkMouseLeave()
 {
-    if (!underMouse())
+    const bool hover = underMouse();
+
+    if (!hover)
     {
+        m_floatingPreview->setVisible(false);
+
         emit requestCancelPreview();
         emit requestHidePreview();
     }
@@ -103,7 +111,7 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview);
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview);
-    connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::requestPreviewWindow);
+    connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::previewEntered);
 
     m_windowListLayout->addWidget(snap);
 
@@ -122,4 +130,27 @@ void _PreviewContainer::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_mouseLeaveTimer->start();
+}
+
+void _PreviewContainer::previewEntered(const WId wid)
+{
+    AppSnapshot *snap = static_cast<AppSnapshot *>(sender());
+
+    m_floatingPreview->trackWindow(snap);
+    m_floatingPreview->setVisible(true);
+    m_floatingPreview->raise();
+
+    emit requestPreviewWindow(wid);
+}
+
+void _PreviewContainer::moveFloatingPreview(const QPoint &p)
+{
+    const QRect r = rect();
+
+    if (p.x() < r.left())
+        m_floatingPreview->move(MARGIN, p.y());
+    else if (p.x() + m_floatingPreview->width() > r.right())
+        m_floatingPreview->move(r.right() - m_floatingPreview->width() - MARGIN + 1, p.y());
+    else
+        m_floatingPreview->move(p);
 }
