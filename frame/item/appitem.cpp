@@ -23,11 +23,7 @@ QPoint AppItem::MousePressPos;
 AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     : DockItem(parent),
       m_appNameTips(new QLabel(this)),
-#ifdef QT_DEBUG
       m_appPreviewTips(new _PreviewContainer(this)),
-#else
-      m_appPreviewTips(new PreviewContainer(this)),
-#endif
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
 
       m_itemView(new QGraphicsView(this)),
@@ -81,17 +77,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
 
-#ifdef QT_DEBUG
     connect(m_appPreviewTips, &_PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
-#else
-    connect(m_appPreviewTips, &PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
-    connect(m_appPreviewTips, &PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
-#endif
 
     updateTitle();
     refershIcon();

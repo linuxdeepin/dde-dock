@@ -10,14 +10,20 @@
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
 
+      m_mouseLeaveTimer(new QTimer(this)),
       m_wmHelper(DWindowManagerHelper::instance())
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     m_windowListLayout->setSpacing(SPACING);
     m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
+    m_mouseLeaveTimer->setSingleShot(true);
+    m_mouseLeaveTimer->setInterval(10);
+
     setLayout(m_windowListLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
+
+    connect(m_mouseLeaveTimer, &QTimer::timeout, this, &_PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
 }
 
 void _PreviewContainer::setWindowInfos(const WindowDict &infos)
@@ -52,6 +58,15 @@ void _PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
         m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
 
     adjustSize();
+}
+
+void _PreviewContainer::checkMouseLeave()
+{
+    if (!underMouse())
+    {
+        emit requestCancelPreview();
+        emit requestHidePreview();
+    }
 }
 
 void _PreviewContainer::adjustSize()
@@ -93,4 +108,18 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
     m_windowListLayout->addWidget(snap);
 
     m_snapshots.insert(wid, snap);
+}
+
+void _PreviewContainer::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    m_mouseLeaveTimer->start();
+}
+
+void _PreviewContainer::leaveEvent(QEvent *e)
+{
+    QWidget::leaveEvent(e);
+
+    m_mouseLeaveTimer->start();
 }

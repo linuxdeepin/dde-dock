@@ -34,16 +34,21 @@ public:
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
+    void checkMouseLeave();
 
 private:
     void adjustSize();
     void appendSnapWidget(const WId wid);
+
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
 
 private:
     QMap<WId, AppSnapshot *> m_snapshots;
 
     QBoxLayout *m_windowListLayout;
 
+    QTimer *m_mouseLeaveTimer;
     DWindowManagerHelper *m_wmHelper;
 };
 
