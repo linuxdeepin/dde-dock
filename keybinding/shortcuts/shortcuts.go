@@ -13,6 +13,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
+	"github.com/BurntSushi/xgbutil/ewmh"
 	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
@@ -63,7 +64,6 @@ func NewShortcuts(xu *xgbutil.XUtil, eventCb KeyEventFunc) *Shortcuts {
 		if !tryGrabKeyboard(ss.xu) {
 			return
 		}
-
 		switch mods {
 		case xproto.ModMaskLock, xproto.ModMask2, xproto.ModMask4:
 			// caps_lock, num_lock, super
@@ -334,7 +334,14 @@ func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
 
 // Returns whether the operation was successful
 func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
-	if err := keybind.GrabKeyboard(xu, xu.RootWin()); err != nil {
+	var win xproto.Window
+	if activeWin, err := ewmh.ActiveWindowGet(xu); err != nil {
+		win = xu.RootWin()
+	} else {
+		win = activeWin
+	}
+
+	if err := keybind.GrabKeyboard(xu, win); err != nil {
 		return false
 	}
 	keybind.UngrabKeyboard(xu)
