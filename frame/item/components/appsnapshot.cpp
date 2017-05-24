@@ -12,16 +12,9 @@
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent),
 
-      m_wid(wid),
-
-      m_fetchSnapshotTimer(new QTimer(this))
+      m_wid(wid)
 {
-    m_fetchSnapshotTimer->setSingleShot(true);
-    m_fetchSnapshotTimer->setInterval(10);
-
-    connect(m_fetchSnapshotTimer, &QTimer::timeout, this, &AppSnapshot::fetchSnapshot, Qt::QueuedConnection);
-
-    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
+//    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
 void AppSnapshot::closeWindow() const
@@ -49,9 +42,6 @@ void AppSnapshot::setWindowTitle(const QString &title)
 
 void AppSnapshot::fetchSnapshot()
 {
-    if (!isVisible())
-        return;
-
     const auto display = QX11Info::display();
 
     XWindowAttributes attrs;
@@ -113,13 +103,6 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const QRect ir = im.rect();
     const QPoint offset = r.center() - ir.center();
     painter.drawImage(offset.x(), offset.y(), im);
-}
-
-void AppSnapshot::resizeEvent(QResizeEvent *e)
-{
-    QWidget::resizeEvent(e);
-
-    m_fetchSnapshotTimer->start();
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)

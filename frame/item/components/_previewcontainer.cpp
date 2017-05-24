@@ -61,6 +61,12 @@ void _PreviewContainer::setWindowInfos(const WindowDict &infos)
     }
 }
 
+void _PreviewContainer::updateSnapshots()
+{
+    for (AppSnapshot *snap : m_snapshots)
+        snap->fetchSnapshot();
+}
+
 void _PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
 {
     if (m_wmHelper->hasComposite() && (dockPos == Dock::Top || dockPos == Dock::Bottom))

@@ -21,16 +21,13 @@ signals:
     void clicked(const WId wid) const;
 
 public slots:
+    void fetchSnapshot();
     void closeWindow() const;
     void setWindowTitle(const QString &title);
-
-private slots:
-    void fetchSnapshot();
 
 private:
     void enterEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 private:
@@ -38,8 +35,6 @@ private:
 
     QString m_title;
     QImage m_snapshot;
-
-    QTimer *m_fetchSnapshotTimer;
 };
 
 #endif // APPSNAPSHOT_H

@@ -505,6 +505,7 @@ void AppItem::showPreview()
 //    }
 
     m_appPreviewTips->setWindowInfos(m_titles);
+    m_appPreviewTips->updateSnapshots();
     m_appPreviewTips->updateLayoutDirection(DockPosition);
 
     showPopupWindow(m_appPreviewTips, true);

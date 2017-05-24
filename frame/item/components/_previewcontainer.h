@@ -32,6 +32,7 @@ signals:
 
 public:
     void setWindowInfos(const WindowDict &infos);
+    void updateSnapshots();
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
