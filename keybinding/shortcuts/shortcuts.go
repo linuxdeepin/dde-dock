@@ -335,13 +335,14 @@ func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
 // Returns whether the operation was successful
 func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
 	var win xproto.Window
-	if activeWin, err := ewmh.ActiveWindowGet(xu); err != nil {
+	if activeWin, _ := ewmh.ActiveWindowGet(xu); activeWin == 0 {
 		win = xu.RootWin()
 	} else {
 		win = activeWin
 	}
 
 	if err := keybind.GrabKeyboard(xu, win); err != nil {
+		logger.Debugf("GrabKeyboard win %d failed: %v", win, err)
 		return false
 	}
 	keybind.UngrabKeyboard(xu)
