@@ -14,6 +14,7 @@ import (
 	"github.com/BurntSushi/xgbutil/ewmh"
 	"pkg.deepin.io/lib/dbus"
 	"sort"
+	"time"
 )
 
 func (m *DockManager) allocEntryId() string {
@@ -131,12 +132,16 @@ func (m *DockManager) appendDockedApp(app string) {
 func (m *DockManager) removeAppEntry(e *AppEntry) {
 	for _, entry := range m.Entries {
 		if entry == e {
-			dbus.UnInstallObject(e)
 
 			entryId := entry.Id
 			logger.Info("removeAppEntry id:", entryId)
 			m.Entries = m.Entries.Remove(e)
 			dbus.Emit(m, "EntryRemoved", entryId)
+
+			go func() {
+				time.Sleep(time.Second)
+				dbus.UnInstallObject(e)
+			}()
 			return
 		}
 	}
