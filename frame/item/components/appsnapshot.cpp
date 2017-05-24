@@ -42,6 +42,11 @@ void AppSnapshot::closeWindow() const
     XFlush(display);
 }
 
+void AppSnapshot::setWindowTitle(const QString &title)
+{
+    m_title = title;
+}
+
 void AppSnapshot::fetchSnapshot()
 {
     if (!isVisible())
@@ -105,7 +110,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     if (m_snapshot.isNull())
         return;
 
-    const QRect r = rect();
+    const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
 
     // draw image
 //    const QPoint offset = r.center() - ir.center();
@@ -113,8 +118,7 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
 //    painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
 //    painter.drawImage(offset.x(), offset.y(), m_snapshot);
 //    painter.fillRect(r, Qt::white);
-    const QSize s = size();
-    const QImage im = m_snapshot.scaled(s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QImage im = m_snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     const QRect ir = im.rect();
     const QPoint offset = r.center() - ir.center();
     painter.drawImage(offset.x(), offset.y(), im);

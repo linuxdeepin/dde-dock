@@ -4,8 +4,8 @@
 #include <QScreen>
 #include <QApplication>
 
-#define SPACING           5
-#define MARGIN            5
+#define SPACING           0
+#define MARGIN            0
 
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
@@ -49,6 +49,7 @@ void _PreviewContainer::setWindowInfos(const WindowDict &infos)
     {
         if (!m_snapshots.contains(it.key()))
             appendSnapWidget(it.key());
+        m_snapshots[it.key()]->setWindowTitle(it.value());
     }
 
     adjustSize();

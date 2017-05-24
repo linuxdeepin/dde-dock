@@ -42,9 +42,32 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
 
+    if (m_tracked.isNull())
+        return;
+
     QPainter painter(this);
 
-    painter.fillRect(rect(), Qt::red);
+    const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
+    const QImage snapshot = m_tracked->snapshot();
+    const QImage im = snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const QRect ir = im.rect();
+    const QPoint offset = r.center() - ir.center();
+    painter.fillRect(r, Qt::black);
+    painter.drawImage(offset.x(), offset.y(), im);
+
+    // bottom black background
+    QRect bgr = r;
+    bgr.setTop(bgr.bottom() - 25);
+    painter.fillRect(bgr, QColor(0, 0, 0, 255 * 0.3));
+
+    // bottom title
+    painter.drawText(bgr, Qt::AlignCenter, m_tracked->title());
+
+    // draw border
+    const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
+    painter.setBrush(Qt::transparent);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.drawRoundedRect(br, 3, 3);
 }
 
 void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
