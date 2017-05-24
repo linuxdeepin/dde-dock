@@ -25,6 +25,7 @@ public slots:
 private:
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
+    bool eventFilter(QObject *watched, QEvent *event);
 
 private slots:
     void onCloseBtnClicked();

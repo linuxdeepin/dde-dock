@@ -29,6 +29,9 @@ FloatingPreview::FloatingPreview(QWidget *parent)
 
 void FloatingPreview::trackWindow(AppSnapshot * const snap)
 {
+    if (!m_tracked.isNull())
+        m_tracked->removeEventFilter(this);
+    snap->installEventFilter(this);
     m_tracked = snap;
 
     const QRect r = rect();
@@ -75,6 +78,14 @@ void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
     QWidget::mouseReleaseEvent(e);
 
     emit m_tracked->clicked(m_tracked->wid());
+}
+
+bool FloatingPreview::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_tracked && event->type() == QEvent::Destroy)
+        hide();
+
+    return QWidget::eventFilter(watched, event);
 }
 
 void FloatingPreview::onCloseBtnClicked()
