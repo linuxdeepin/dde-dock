@@ -47,6 +47,13 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.fillRect(rect(), Qt::red);
 }
 
+void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
+{
+    QWidget::mouseReleaseEvent(e);
+
+    emit m_tracked->clicked(m_tracked->wid());
+}
+
 void FloatingPreview::onCloseBtnClicked()
 {
     Q_ASSERT(!m_tracked.isNull());
