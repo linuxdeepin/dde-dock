@@ -52,7 +52,13 @@ void _PreviewContainer::setWindowInfos(const WindowDict &infos)
         m_snapshots[it.key()]->setWindowTitle(it.value());
     }
 
-    adjustSize();
+    if (m_snapshots.isEmpty())
+    {
+        emit requestCancelPreview();
+        emit requestHidePreview();
+    } else {
+        adjustSize();
+    }
 }
 
 void _PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)

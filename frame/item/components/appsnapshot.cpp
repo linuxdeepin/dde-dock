@@ -84,10 +84,6 @@ void AppSnapshot::fetchSnapshot()
         m_snapshot = qimage.copy();
     }
 
-//    const int w = width();
-//    const int h = height();
-//    m_snapshot = m_snapshot.scaled(w, h, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-//    m_snapshot = m_snapshot.copy((m_snapshot.width() - w) / 2, (m_snapshot.height() - h) / 2, w, h);
     XDestroyImage(ximage);
     XFree(prop_to_return);
 
@@ -113,11 +109,6 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
 
     // draw image
-//    const QPoint offset = r.center() - ir.center();
-
-//    painter.fillRect(offset.x(), offset.y(), ir.width(), ir.height(), Qt::white);
-//    painter.drawImage(offset.x(), offset.y(), m_snapshot);
-//    painter.fillRect(r, Qt::white);
     const QImage im = m_snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     const QRect ir = im.rect();
     const QPoint offset = r.center() - ir.center();
