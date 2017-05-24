@@ -20,7 +20,7 @@ _PreviewContainer::_PreviewContainer(QWidget *parent)
     m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
     m_mouseLeaveTimer->setSingleShot(true);
-    m_mouseLeaveTimer->setInterval(10);
+    m_mouseLeaveTimer->setInterval(300);
 
     m_floatingPreview->setVisible(false);
 
@@ -140,7 +140,7 @@ void _PreviewContainer::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    m_mouseLeaveTimer->start();
+    m_mouseLeaveTimer->stop();
 }
 
 void _PreviewContainer::leaveEvent(QEvent *e)
