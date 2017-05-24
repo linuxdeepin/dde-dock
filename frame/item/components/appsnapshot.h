@@ -4,6 +4,12 @@
 #include <QWidget>
 #include <QDebug>
 #include <QTimer>
+#include <QLabel>
+
+#include <dimagebutton.h>
+#include <DWindowManagerHelper>
+
+DWIDGET_USE_NAMESPACE
 
 class AppSnapshot : public QWidget
 {
@@ -14,7 +20,7 @@ public:
 
     WId wid() const { return m_wid; }
     const QImage snapshot() const { return m_snapshot; }
-    const QString title() const { return m_title; }
+    const QString title() const { return m_title->text(); }
 
 signals:
     void entered(const WId wid) const;
@@ -23,18 +29,23 @@ signals:
 public slots:
     void fetchSnapshot();
     void closeWindow() const;
+    void compositeChanged() const;
     void setWindowTitle(const QString &title);
 
 private:
     void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);
     void mousePressEvent(QMouseEvent *e);
 
 private:
     const WId m_wid;
 
-    QString m_title;
     QImage m_snapshot;
+    QLabel *m_title;
+    DImageButton *m_closeBtn;
+
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // APPSNAPSHOT_H

@@ -6,6 +6,7 @@
 
 #define SPACING           0
 #define MARGIN            0
+#define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
 
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
@@ -92,15 +93,19 @@ void _PreviewContainer::checkMouseLeave()
 
 void _PreviewContainer::adjustSize()
 {
-    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
     const int count = m_snapshots.size();
-
-    if (!count)
+    const bool composite = m_wmHelper->hasComposite();
+    if (!composite)
+    {
+        const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
+        setFixedSize(SNAP_WIDTH, h);
         return;
+    }
 
     const QRect r = qApp->primaryScreen()->geometry();
     const int padding = 20;
 
+    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
     if (horizontal)
     {
         const int h = SNAP_HEIGHT + MARGIN * 2;
@@ -147,6 +152,9 @@ void _PreviewContainer::leaveEvent(QEvent *e)
 
 void _PreviewContainer::previewEntered(const WId wid)
 {
+    if (!m_wmHelper->hasComposite())
+        return;
+
     AppSnapshot *snap = static_cast<AppSnapshot *>(sender());
 
     m_floatingPreview->trackWindow(snap);

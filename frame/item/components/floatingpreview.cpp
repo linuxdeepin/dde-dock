@@ -49,6 +49,7 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
         return;
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
     const QImage snapshot = m_tracked->snapshot();
@@ -69,7 +70,6 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     // draw border
     const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
     painter.setBrush(Qt::transparent);
-    painter.setRenderHint(QPainter::Antialiasing);
     painter.drawRoundedRect(br, 3, 3);
 }
 

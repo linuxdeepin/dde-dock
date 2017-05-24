@@ -8,12 +8,36 @@
 
 #include <QX11Info>
 #include <QPainter>
+#include <QVBoxLayout>
 
 AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     : QWidget(parent),
 
-      m_wid(wid)
+      m_wid(wid),
+
+      m_title(new QLabel),
+      m_closeBtn(new DImageButton),
+
+      m_wmHelper(DWindowManagerHelper::instance())
 {
+    m_closeBtn->setFixedSize(24, 24);
+    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.png");
+    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.png");
+    m_closeBtn->setPressPic(":/icons/resources/close_round_press.png");
+    m_closeBtn->setVisible(false);
+
+    QHBoxLayout *centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_title);
+    centralLayout->addWidget(m_closeBtn);
+    centralLayout->setSpacing(5);
+    centralLayout->setMargin(0);
+
+    setLayout(centralLayout);
+
+    connect(m_closeBtn, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
+    connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
+
+    QTimer::singleShot(1, this, &AppSnapshot::compositeChanged);
 //    QTimer::singleShot(1, this, &AppSnapshot::fetchSnapshot);
 }
 
@@ -35,13 +59,24 @@ void AppSnapshot::closeWindow() const
     XFlush(display);
 }
 
+void AppSnapshot::compositeChanged() const
+{
+    const bool composite = m_wmHelper->hasComposite();
+
+    m_title->setVisible(!composite);
+//    m_closeBtn->setVisible(!composite);
+}
+
 void AppSnapshot::setWindowTitle(const QString &title)
 {
-    m_title = title;
+    m_title->setText(title);
 }
 
 void AppSnapshot::fetchSnapshot()
 {
+    if (!m_wmHelper->hasComposite())
+        return;
+
     const auto display = QX11Info::display();
 
     XWindowAttributes attrs;
@@ -84,7 +119,17 @@ void AppSnapshot::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
-    emit entered(m_wid);
+    if (!m_wmHelper->hasComposite())
+        m_closeBtn->setVisible(true);
+    else
+        emit entered(m_wid);
+}
+
+void AppSnapshot::leaveEvent(QEvent *e)
+{
+    QWidget::leaveEvent(e);
+
+    m_closeBtn->setVisible(false);
 }
 
 void AppSnapshot::paintEvent(QPaintEvent *e)
@@ -92,6 +137,12 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
+
+    if (!m_wmHelper->hasComposite() && underMouse())
+    {
+        painter.fillRect(rect(), QColor(255, 255, 255, 255 * .2));
+        return;
+    }
 
     if (m_snapshot.isNull())
         return;
