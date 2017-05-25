@@ -56,21 +56,33 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     const QImage im = snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     const QRect ir = im.rect();
     const QPoint offset = r.center() - ir.center();
-    painter.fillRect(r, Qt::black);
+    const int radius = 4;
+
+    // draw background
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(255, 255, 255, 255 * 0.3));
+    painter.drawRoundedRect(r, radius, radius);
+
+    // draw preview image
     painter.drawImage(offset.x(), offset.y(), im);
 
     // bottom black background
     QRect bgr = r;
     bgr.setTop(bgr.bottom() - 25);
-    painter.fillRect(bgr, QColor(0, 0, 0, 255 * 0.3));
+
+    QRect bgre = bgr;
+    bgre.setTop(bgr.top() - radius);
+
+    painter.save();
+    painter.setClipRect(bgr);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QColor(0, 0, 0, 255 * 0.3));
+    painter.drawRoundedRect(bgre, radius, radius);
+    painter.restore();
 
     // bottom title
+    painter.setPen(Qt::white);
     painter.drawText(bgr, Qt::AlignCenter, m_tracked->title());
-
-    // draw border
-    const QRect br = r.marginsAdded(QMargins(1, 1, 1, 1));
-    painter.setBrush(Qt::transparent);
-    painter.drawRoundedRect(br, 3, 3);
 }
 
 void FloatingPreview::mouseReleaseEvent(QMouseEvent *e)
