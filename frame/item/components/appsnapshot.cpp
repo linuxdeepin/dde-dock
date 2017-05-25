@@ -138,9 +138,10 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
 
     QPainter painter(this);
 
-    if (!m_wmHelper->hasComposite() && underMouse())
+    if (!m_wmHelper->hasComposite())
     {
-        painter.fillRect(rect(), QColor(255, 255, 255, 255 * .2));
+        if (underMouse())
+            painter.fillRect(rect(), QColor(255, 255, 255, 255 * .2));
         return;
     }
 
