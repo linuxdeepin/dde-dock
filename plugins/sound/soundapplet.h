@@ -33,6 +33,7 @@ private slots:
     void sinkInputsChanged();
     void toggleMute();
     void delayLoad();
+    void onPlaySoundEffect();
 
 private:
     QWidget *m_centralWidget;

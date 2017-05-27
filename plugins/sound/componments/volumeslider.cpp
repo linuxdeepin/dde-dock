@@ -6,7 +6,8 @@
 
 VolumeSlider::VolumeSlider(QWidget *parent)
     : QSlider(Qt::Horizontal, parent),
-      m_pressed(false)
+      m_pressed(false),
+      m_timer(new QTimer(this))
 {
     setMinimum(0);
     setMaximum(1000);
@@ -34,6 +35,10 @@ VolumeSlider::VolumeSlider(QWidget *parent)
                   "QSlider::sub-page {"
                   "background-color:rgba(255, 255, 255, .8);"
                   "}");
+
+    m_timer->setInterval(100);
+
+    connect(m_timer, &QTimer::timeout, this, &VolumeSlider::onTimeout);
 }
 
 void VolumeSlider::setValue(const int value)
@@ -67,8 +72,10 @@ void VolumeSlider::mouseMoveEvent(QMouseEvent *e)
 
 void VolumeSlider::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton) {
         m_pressed = false;
+        emit requestPlaySoundEffect();
+    }
     //        QTimer::singleShot(100, [this] {m_pressed = false;});
 }
 
@@ -76,5 +83,13 @@ void VolumeSlider::wheelEvent(QWheelEvent *e)
 {
     e->accept();
 
+    m_timer->start();
+
     QSlider::setValue(value() + (e->delta() > 0 ? 10 : -10));
+}
+
+void VolumeSlider::onTimeout()
+{
+    m_timer->stop();
+    emit requestPlaySoundEffect();
 }

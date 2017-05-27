@@ -88,6 +88,7 @@ SoundApplet::SoundApplet(QWidget *parent)
 
     connect(m_volumeBtn, &DImageButton::clicked, this, &SoundApplet::toggleMute);
     connect(m_volumeSlider, &VolumeSlider::valueChanged, this, &SoundApplet::volumeSliderValueChanged);
+    connect(m_volumeSlider, &VolumeSlider::requestPlaySoundEffect, this, &SoundApplet::onPlaySoundEffect);
     connect(m_audioInter, &DBusAudio::SinkInputsChanged, this, &SoundApplet::sinkInputsChanged);
     connect(m_audioInter, &DBusAudio::DefaultSinkChanged, this, static_cast<void (SoundApplet::*)()>(&SoundApplet::defaultSinkChanged));
     connect(this, static_cast<void (SoundApplet::*)(DBusSink*) const>(&SoundApplet::defaultSinkChanged), this, &SoundApplet::onVolumeChanged);
@@ -141,7 +142,6 @@ void SoundApplet::onVolumeChanged()
 
 void SoundApplet::volumeSliderValueChanged()
 {
-    m_defSinkInter->SetMute(false);
     m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 1000, false);
 }
 
@@ -189,4 +189,10 @@ void SoundApplet::delayLoad()
     } else {
         QTimer::singleShot(1000, this, &SoundApplet::delayLoad);
     }
+}
+
+void SoundApplet::onPlaySoundEffect()
+{
+    // set the mute property to false to play sound effects.
+    m_defSinkInter->SetMute(false);
 }

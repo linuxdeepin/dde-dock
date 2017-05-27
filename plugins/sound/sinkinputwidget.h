@@ -20,6 +20,7 @@ private slots:
     void setVolume(const int value);
     void setMute();
     void setMuteIcon();
+    void onPlaySoundEffect();
 
 private:
     DBusSinkInput *m_inputInter;
