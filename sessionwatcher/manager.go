@@ -130,6 +130,13 @@ func (m *Manager) addSession(id string, path dbus.ObjectPath) {
 	logger.Debug("Add session:", id, path, uid)
 	if !isCurrentUser(uid) {
 		logger.Debug("Not the current user session:", id, path, uid)
+		login1.DestroySession(session)
+		return
+	}
+
+	if session.Remote.Get() {
+		logger.Debugf("session %v is remote", id)
+		login1.DestroySession(session)
 		return
 	}
 
@@ -219,4 +226,16 @@ func (m *Manager) getActiveSession() *login1.Session {
 
 func (m *Manager) IsX11SessionActive() bool {
 	return m.activeSessionType == "x11"
+}
+
+func (m *Manager) GetSessions() (ret []dbus.ObjectPath) {
+	m.sessionLocker.Lock()
+	ret = make([]dbus.ObjectPath, len(m.sessions))
+	i := 0
+	for _, session := range m.sessions {
+		ret[i] = session.Path
+		i++
+	}
+	m.sessionLocker.Unlock()
+	return
 }
