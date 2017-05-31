@@ -47,7 +47,7 @@ func isVpnVpncNeedShowXauthPassword(data connectionData) bool {
 // new connection data
 func newVpnVpncConnectionData(id, uuid string) (data connectionData) {
 	data = newBasicVpnConnectionData(id, uuid)
-	initSettingSectionVpnPptp(data)
+	initSettingSectionVpnVpnc(data)
 	return
 }
 
