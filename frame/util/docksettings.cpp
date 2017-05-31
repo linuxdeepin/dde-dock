@@ -451,5 +451,6 @@ void DockSettings::calculateWindowConfig()
 
 void DockSettings::gtkIconThemeChanged()
 {
+    qDebug() << Q_FUNC_INFO;
     m_itemController->refershItemsIcon();
 }
