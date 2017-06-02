@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# enolp <enolp@softastur.org>, 2016
+# enolp <enolp@softastur.org>, 2016-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 17:10+0800\n"
-"PO-Revision-Date: 2017-05-02 06:19+0000\n"
+"POT-Creation-Date: 2017-05-19 15:33+0800\n"
+"PO-Revision-Date: 2017-06-02 06:49+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Asturian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ast/)\n"
 "MIME-Version: 1.0\n"
@@ -1028,13 +1028,18 @@ msgstr "Amosar ventanes de la estaya de trabayu actual"
 msgid "Display workspace"
 msgstr "Amosar estaya de trabayu"
 
+#: ../../langselector/handle_event.go:24
+msgid "Authentication is required to switch language"
+msgstr ""
+
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Fallu al camudar la llingua'l sistema. Téntalo más sero, por favor."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:46
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "Camudóse la llingua'l sistema. Volvi aniciar sesión, por favor."
@@ -4215,7 +4220,7 @@ msgstr "Falló'l marcáu pola mor de nun haber tonu de marcáu."
 #: ../../network/state_handler.go:47 ../../network/state_handler.go:48
 #: ../../network/state_handler.go:59
 msgid "Dialing failed due to the carrier."
-msgstr ""
+msgstr "Falló'l marcáu pola mor de la operadora."
 
 #: ../../network/state_handler.go:48 ../../network/state_handler.go:49
 #: ../../network/state_handler.go:60
@@ -4290,7 +4295,7 @@ msgstr "Un usuariu o veceru solicita desconeutase."
 #: ../../network/state_handler.go:62 ../../network/state_handler.go:63
 #: ../../network/state_handler.go:74
 msgid "The device's carrier/link changed."
-msgstr ""
+msgstr "Camudó l'enllaz/operadora del preséu."
 
 #: ../../network/state_handler.go:63 ../../network/state_handler.go:64
 #: ../../network/state_handler.go:75
@@ -4427,7 +4432,7 @@ msgstr ""
 #: ../../network/state_handler.go:95 ../../network/state_handler.go:96
 #: ../../network/state_handler.go:97 ../../network/state_handler.go:107
 msgid "Activate VPN connection failed."
-msgstr ""
+msgstr "Falló l'activación de la conexón VPN."
 
 #: ../../network/state_handler.go:96 ../../network/state_handler.go:97
 #: ../../network/state_handler.go:98 ../../network/state_handler.go:108

@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 17:10+0800\n"
-"PO-Revision-Date: 2017-05-03 14:28+0000\n"
-"Last-Translator: Adem Çalışkan <ademcal@yahoo.com>\n"
+"POT-Creation-Date: 2017-05-19 15:33+0800\n"
+"PO-Revision-Date: 2017-06-02 06:49+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -590,7 +590,7 @@ msgstr "Fakaofo"
 
 #: ../../dock/app_entry_menu.go:99 ../../dock/app_entry_menu.go:116
 msgid "_Open"
-msgstr "_Aç"
+msgstr "_Open"
 
 #: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
 #: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
@@ -770,7 +770,7 @@ msgstr "Uçbirim"
 #: ../../keybinding/shortcuts/system.go:62
 #: ../../keybinding/shortcuts/system.go:74
 msgid "Terminal Quake Window"
-msgstr "Uç Birim Quake Pencere"
+msgstr "Uçbirim Quake Pencere"
 
 #: ../../keybinding/id_desc_list.go:62
 #: ../../keybinding/shortcuts/id_name_map.go:23
@@ -1031,13 +1031,18 @@ msgstr "Geçerli çalışma alanının pencerelerini görüntüleme"
 msgid "Display workspace"
 msgstr "Çalışma alanını göster"
 
+#: ../../langselector/handle_event.go:24
+msgid "Authentication is required to switch language"
+msgstr ""
+
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Sistem dil değişimi başarısız oldu, lütfen daha sonra tekrar deneyin."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:46
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "Sistem dili değiştirildi, lütfen çıkış yaptıktan sonra tekrar giriş yapın."
@@ -1182,7 +1187,7 @@ msgstr "MD5"
 #: ../../network/nm_setting_wireless_security.go:83
 #: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
-msgstr "LEAP"
+msgstr "SIÇRAMA"
 
 #: ../../network/manager_active.go:312 ../../network/manager_active.go:327
 #: ../../network/manager_active.go:331 ../../network/manager_active.go:332
@@ -1196,7 +1201,7 @@ msgstr "LEAP"
 #: ../../network/nm_setting_802_1x.go:169
 #: ../../network/nm_setting_802_1x.go:177
 msgid "FAST"
-msgstr "FAST"
+msgstr "HIZLI"
 
 #: ../../network/manager_active.go:314 ../../network/manager_active.go:329
 #: ../../network/manager_active.go:333 ../../network/manager_active.go:334

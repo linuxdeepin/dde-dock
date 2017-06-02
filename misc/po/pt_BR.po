@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 17:10+0800\n"
-"PO-Revision-Date: 2017-05-03 18:13+0000\n"
-"Last-Translator: Rafael Ramos <rbr.ramos@gmail.com>\n"
+"POT-Creation-Date: 2017-05-19 15:33+0800\n"
+"PO-Revision-Date: 2017-06-02 06:49+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1034,13 +1034,18 @@ msgstr "Exibir janelas da área de trabalho atual"
 msgid "Display workspace"
 msgstr "Exibir área de trabalho"
 
+#: ../../langselector/handle_event.go:24
+msgid "Authentication is required to switch language"
+msgstr ""
+
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Falha ao alterar o idioma do sistema, por favor tente mais tarde."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:46
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "O idioma do sistema foi alterada, por favor, logue novamente após encerrar a sessão."

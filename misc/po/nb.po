@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 17:10+0800\n"
-"PO-Revision-Date: 2017-05-02 06:19+0000\n"
+"POT-Creation-Date: 2017-05-19 15:33+0800\n"
+"PO-Revision-Date: 2017-06-02 06:49+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/nb/)\n"
 "MIME-Version: 1.0\n"
@@ -1031,13 +1031,18 @@ msgstr "Vis vinduer på gjeldende arbeidsplass"
 msgid "Display workspace"
 msgstr "Vis arbeidsplass"
 
+#: ../../langselector/handle_event.go:24
+msgid "Authentication is required to switch language"
+msgstr ""
+
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Feilet med å bytte systemspråk. Vennligst prøv igjen senere"
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:46
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "Systemspråk ble byttet. Vennligst logg inn igjen etter at at du har logget ut"

@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Alejandro Hamann <linkstat@gmail.com>, 2016
-# alvarosamudio <alvarosamudio1@gmail.com>, 2017
+# Alvaro Samudio <alvarosamudio1@gmail.com>, 2017
 # Diego Cornejo <diegof.cornejo@gmail.com>, 2016
 # Luis Lazaro <luis_laz_zgz@hotmail.com>, 2016
 # roberto lopez <riscogordo@gmail.com>, 2016-2017
@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 17:10+0800\n"
-"PO-Revision-Date: 2017-05-02 06:19+0000\n"
+"POT-Creation-Date: 2017-05-19 15:33+0800\n"
+"PO-Revision-Date: 2017-06-02 06:49+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -1033,13 +1033,18 @@ msgstr "Mostrar ventanas del espacio de trabajo actual"
 msgid "Display workspace"
 msgstr "Visualización del espacio de trabajo"
 
+#: ../../langselector/handle_event.go:24
+msgid "Authentication is required to switch language"
+msgstr ""
+
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:36
+#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
 msgid "System language failed to change, please try later."
 msgstr "Fallo al cambiar el idioma del sistema. Intente nuevamente más tarde."
 
 #: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
 #: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
+#: ../../langselector/handle_event.go:46
 msgid ""
 "System language has been changed, please log in again after logged out."
 msgstr "El idioma del sistema ha sido cambiado, por favor reinicie su sesión de usuario."
