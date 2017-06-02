@@ -203,6 +203,11 @@ func isWirelessDeviceSuportHotspot(ifc string) (support bool) {
 	var phynum, modes string
 	var submatches []string
 
+	// fixed 'iw' not in PATH
+	pathEnv := os.Getenv("PATH")
+	defer os.Setenv("PATH", pathEnv)
+	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
+
 	// get phy number for the device
 	stdout, stderr, err = utils.ExecAndWait(5, iwBin, "dev", ifc, "info")
 	if len(stderr) > 0 || err != nil {
