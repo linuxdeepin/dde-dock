@@ -102,16 +102,12 @@ const QString AppItem::appId() const
 // window behaviors like minimization.
 void AppItem::updateWindowIconGeometries()
 {
-    QRect rect(mapToGlobal(QPoint(0, 0)),
-               mapToGlobal(QPoint(width(),height())));
+    const QRect r(mapToGlobal(QPoint(0, 0)),
+                  mapToGlobal(QPoint(width(),height())));
+    auto *xcb_misc = XcbMisc::instance();
 
-    if (rect != m_lastGlobalGeometry) {
-        QList<quint32> winIds = m_titles.keys();
-        for (quint32 winId : winIds) {
-            XcbMisc::instance()->set_window_icon_geometry(winId, rect);
-        }
-        m_lastGlobalGeometry = rect;
-    }
+    for (auto it(m_titles.cbegin()); it != m_titles.cend(); ++it)
+        xcb_misc->set_window_icon_geometry(it.key(), r);
 }
 
 void AppItem::setIconBaseSize(const int size)
@@ -247,9 +243,6 @@ void AppItem::paintEvent(QPaintEvent *e)
         painter.drawPixmap(iconPos, pixmap);
     else
         painter.drawPixmap(iconPos, ImageFactory::lighterEffect(pixmap));
-
-    // Update the window icon geometry when the icon is changed.
-    m_updateIconGeometryTimer->start();
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
@@ -460,6 +453,7 @@ void AppItem::updateTitle()
 {
     m_titles = m_itemEntry->titles();
     m_appPreviewTips->setWindowInfos(m_titles);
+    m_updateIconGeometryTimer->start();
 
     update();
 }
@@ -479,6 +473,8 @@ void AppItem::refershIcon()
     }
 
     update();
+
+    m_updateIconGeometryTimer->start();
 }
 
 void AppItem::activeChanged()

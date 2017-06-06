@@ -74,7 +74,6 @@ private:
     QPixmap m_activeHorizontalIndicator;
     QPixmap m_activeVerticalIndicator;
 
-    QRect m_lastGlobalGeometry;
     QTimer *m_updateIconGeometryTimer;
 
     static int IconBaseSize;
