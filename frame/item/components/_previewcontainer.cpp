@@ -86,6 +86,9 @@ void _PreviewContainer::checkMouseLeave()
     {
         m_floatingPreview->setVisible(false);
 
+        if (!isVisible())
+            return;
+
         emit requestCancelPreview();
         emit requestHidePreview();
     }
@@ -127,8 +130,8 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
     AppSnapshot *snap = new AppSnapshot(wid);
 
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
-    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview);
-    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview);
+    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::previewEntered, Qt::QueuedConnection);
 
     m_windowListLayout->addWidget(snap);

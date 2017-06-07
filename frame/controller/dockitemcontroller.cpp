@@ -181,7 +181,7 @@ DockItemController::DockItemController(QObject *parent)
     {
         AppItem *it = new AppItem(entry);
 
-        connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+        connect(it, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
         connect(it, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
         connect(it, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
@@ -220,7 +220,7 @@ void DockItemController::appItemAdded(const QDBusObjectPath &path, const int ind
 
     AppItem *item = new AppItem(path);
 
-    connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow);
+    connect(item, &AppItem::requestActivateWindow, m_appInter, &DBusDock::ActivateWindow, Qt::QueuedConnection);
     connect(item, &AppItem::requestPreviewWindow, m_appInter, &DBusDock::PreviewWindow);
     connect(item, &AppItem::requestCancelPreview, m_appInter, &DBusDock::CancelPreviewWindow);
 
