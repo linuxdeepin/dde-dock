@@ -25,7 +25,6 @@ public:
     QRect panelGeometry();
 
 private:
-    void moveEvent(QMoveEvent *e);
     void resizeEvent(QResizeEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
@@ -36,6 +35,10 @@ private:
     void move(int x, int y);
     void initComponents();
     void initConnections();
+
+    const QPoint x11GetWindowPos();
+    void x11MoveWindow(const int x, const int y);
+    void x11MoveResizeWindow(const int x, const int y, const int w, const int h);
 
 signals:
     void panelGeometryChanged();
@@ -65,7 +68,7 @@ private:
     QTimer *m_positionUpdateTimer;
     QTimer *m_expandDelayTimer;
     QPropertyAnimation *m_sizeChangeAni;
-    QPropertyAnimation *m_posChangeAni;
+    QVariantAnimation *m_posChangeAni;
     QPropertyAnimation *m_panelShowAni;
     QPropertyAnimation *m_panelHideAni;
 

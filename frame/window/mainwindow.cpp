@@ -7,6 +7,9 @@
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
 
+#include <X11/X.h>
+#include <X11/Xutil.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QWidget(parent),
 
@@ -20,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
       m_sizeChangeAni(new QPropertyAnimation(this, "size")),
-      m_posChangeAni(new QPropertyAnimation(this, "pos")),
+      m_posChangeAni(new QVariantAnimation(this)),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_xcbMisc(XcbMisc::instance())
@@ -50,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
+    connect(m_posChangeAni, &QPropertyAnimation::valueChanged,
+            this, [=](const QVariant &v) { const QPoint p = v.toPoint(); x11MoveWindow(p.x(), p.y()); });
 }
 
 MainWindow::~MainWindow()
@@ -62,11 +67,6 @@ QRect MainWindow::panelGeometry()
     QRect rect = m_mainPanel->geometry();
     rect.moveTopLeft(m_mainPanel->mapToGlobal(QPoint(0,0)));
     return rect;
-}
-
-void MainWindow::moveEvent(QMoveEvent* e)
-{
-    QWidget::moveEvent(e);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
@@ -129,15 +129,17 @@ void MainWindow::setFixedSize(const QSize &size)
 void MainWindow::move(int x, int y)
 {
     const QPropertyAnimation::State state = m_posChangeAni->state();
+    const QPoint p = x11GetWindowPos();
+    const QPoint tp = QPoint(x, y);
 
-    if (state == QPropertyAnimation::Stopped && this->pos() == QPoint(x, y))
+    if (state == QPropertyAnimation::Stopped && p == tp)
         return;
 
-    if (state == QPropertyAnimation::Running)
+    if (state == QPropertyAnimation::Running && m_posChangeAni->endValue() != tp)
         return m_posChangeAni->setEndValue(QPoint(x, y));
 
-    m_posChangeAni->setStartValue(pos());
-    m_posChangeAni->setEndValue(QPoint(x, y));
+    m_posChangeAni->setStartValue(p);
+    m_posChangeAni->setEndValue(tp);
     m_posChangeAni->start();
 }
 
@@ -194,10 +196,41 @@ void MainWindow::initConnections()
         m_mainPanel->setFixedSize(size);
     });
 
-    connect(m_posChangeAni, &QPropertyAnimation::finished, [this] {
-        QWidget::move(m_posChangeAni->endValue().toPoint());
-    });
+//    connect(m_posChangeAni, &QPropertyAnimation::finished, [this] {
+//        QWidget::move(m_posChangeAni->endValue().toPoint());
+//    });
 
+}
+
+const QPoint MainWindow::x11GetWindowPos()
+{
+    const auto disp = QX11Info::display();
+
+    unsigned int unused;
+    int x;
+    int y;
+    Window unused_window;
+
+    XGetGeometry(disp, winId(), &unused_window, &x, &y, &unused, &unused, &unused, &unused);
+    XFlush(disp);
+
+    return QPoint(x, y);
+}
+
+void MainWindow::x11MoveWindow(const int x, const int y)
+{
+    const auto disp = QX11Info::display();
+
+    XMoveWindow(disp, winId(), x, y);
+    XFlush(disp);
+}
+
+void MainWindow::x11MoveResizeWindow(const int x, const int y, const int w, const int h)
+{
+    const auto disp = QX11Info::display();
+
+    XMoveResizeWindow(disp, winId(), x, y, w, h);
+    XFlush(disp);
 }
 
 void MainWindow::positionChanged(const Position prevPos)
@@ -440,7 +473,8 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     m_sizeChangeAni->setEndValue(r.size());
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
-    QWidget::move(r.topLeft());
+//    QWidget::move(r.topLeft());
+    x11MoveWindow(r.topLeft().x(), r.topLeft().y());
 
     m_mainPanel->setFixedSize(r.size());
 
@@ -480,7 +514,7 @@ void MainWindow::updatePanelVisible()
         if (!m_settings->autoHide())
             break;
 
-        QRect r(pos(), size());
+        QRect r(x11GetWindowPos(), size());
         if (r.contains(QCursor::pos()))
             break;
 
