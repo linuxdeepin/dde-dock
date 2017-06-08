@@ -34,7 +34,7 @@ func (m *DockManager) markAppLaunched(appInfo *AppInfo) {
 func (m *DockManager) attachOrDetachWindow(winInfo *WindowInfo) {
 	win := winInfo.window
 	showOnDock := m.isWindowRegistered(win) && m.clientList.Contains(win) &&
-		winInfo.canShowOnDock()
+		isGoodWindow(win) && winInfo.canShowOnDock()
 	logger.Debugf("win %v showOnDock? %v", win, showOnDock)
 	entry := winInfo.entry
 	if entry != nil {

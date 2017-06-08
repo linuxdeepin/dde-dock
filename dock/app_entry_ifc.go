@@ -123,3 +123,9 @@ func (entry *AppEntry) PresentWindows() {
 func (entry *AppEntry) NewInstance(timestamp uint32) {
 	entry.launchApp(timestamp)
 }
+
+func (entry *AppEntry) Check() {
+	for _, winInfo := range entry.windows {
+		entry.dockManager.attachOrDetachWindow(winInfo)
+	}
+}
