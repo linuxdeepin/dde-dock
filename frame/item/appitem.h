@@ -32,6 +32,7 @@ signals:
     void requestCancelPreview() const;
 
 private:
+    void moveEvent(QMoveEvent *e);
     void paintEvent(QPaintEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);

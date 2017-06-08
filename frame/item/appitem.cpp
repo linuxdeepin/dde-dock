@@ -128,6 +128,13 @@ int AppItem::itemBaseWidth()
         return itemBaseHeight() * 1.4;
 }
 
+void AppItem::moveEvent(QMoveEvent *e)
+{
+    DockItem::moveEvent(e);
+
+    m_updateIconGeometryTimer->start();
+}
+
 int AppItem::itemBaseHeight()
 {
     if (DockDisplayMode == Efficient)
