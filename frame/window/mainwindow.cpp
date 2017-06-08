@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
       m_sizeChangeAni(new QPropertyAnimation(this, "size")),
-      m_posChangeAni(new QVariantAnimation(this)),
+      m_posChangeAni(new QPropertyAnimation(this, "pos")),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_xcbMisc(XcbMisc::instance())
@@ -53,8 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&m_platformWindowHandle, &DPlatformWindowHandle::frameMarginsChanged, this, &MainWindow::adjustShadowMask);
     connect(m_panelHideAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
     connect(m_panelShowAni, &QPropertyAnimation::finished, this, &MainWindow::adjustShadowMask);
-    connect(m_posChangeAni, &QPropertyAnimation::valueChanged,
-            this, [=](const QVariant &v) { const QPoint p = v.toPoint(); x11MoveWindow(p.x(), p.y()); });
+//    connect(m_posChangeAni, &QPropertyAnimation::valueChanged,
+//            this, [=](const QVariant &v) { const QPoint p = v.toPoint(); x11MoveWindow(p.x(), p.y()); });
 }
 
 MainWindow::~MainWindow()
@@ -129,7 +129,7 @@ void MainWindow::setFixedSize(const QSize &size)
 void MainWindow::move(int x, int y)
 {
     const QPropertyAnimation::State state = m_posChangeAni->state();
-    const QPoint p = x11GetWindowPos();
+    const QPoint p = pos();
     const QPoint tp = QPoint(x, y);
 
     if (state == QPropertyAnimation::Stopped && p == tp)
@@ -514,7 +514,7 @@ void MainWindow::updatePanelVisible()
         if (!m_settings->autoHide())
             break;
 
-        QRect r(x11GetWindowPos(), size());
+        QRect r(pos(), size());
         if (r.contains(QCursor::pos()))
             break;
 
