@@ -473,8 +473,8 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     m_sizeChangeAni->setEndValue(r.size());
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
-//    QWidget::move(r.topLeft());
-    x11MoveWindow(r.topLeft().x(), r.topLeft().y());
+    QWidget::move(r.topLeft());
+//    x11MoveWindow(r.topLeft().x(), r.topLeft().y());
 
     m_mainPanel->setFixedSize(r.size());
 
