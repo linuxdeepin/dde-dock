@@ -310,9 +310,8 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 	}
 }
 
-// Save save current connection session, and will try to activate it
-// if possible.
-func (s *ConnectionSession) Save() (ok bool, err error) {
+// Save save current connection session, and the 'activated' will special whether activate it.
+func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
 	s.dataLocker.Lock()
 	defer s.dataLocker.Unlock()
@@ -345,7 +344,15 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 			logger.Error(err)
 			return false, err
 		}
-		manager.ActivateConnection(s.Uuid, s.devPath)
+		if !activated {
+			err = nmConn.Save()
+		} else {
+			_, err = manager.ActivateConnection(s.Uuid, s.devPath)
+		}
+		if err != nil {
+			logger.Error("Failed to save exists connection:", err)
+			return false, err
+		}
 	} else {
 		// create new connection and activate it
 		connectionType := getCustomConnectionType(s.data)
@@ -356,12 +363,21 @@ func (s *ConnectionSession) Save() (ok bool, err error) {
 			setSettingConnectionId(s.data, string(getSettingWirelessSsid(s.data)))
 		}
 
-		switch connectionType {
-		case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		if !activated {
+			_, err = nmAddConnection(s.data)
+		} else {
 			nmAddAndActivateConnection(s.data, s.devPath)
-		default:
-			nmAddConnection(s.data)
 		}
+		if err != nil {
+			logger.Error("Failed to save non-exists connection:", err)
+			return false, err
+		}
+		// switch connectionType {
+		// case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+		// 	nmAddAndActivateConnection(s.data, s.devPath)
+		// default:
+		// 	nmAddConnection(s.data)
+		// }
 	}
 
 	s.updateSecretsToKeyring()
