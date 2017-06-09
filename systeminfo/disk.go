@@ -11,63 +11,127 @@ package systeminfo
 
 import (
 	"dbus/org/freedesktop/udisks2"
+	"fmt"
 	"pkg.deepin.io/lib/dbus"
 )
 
+type diskInfo struct {
+	Drive       dbus.ObjectPath // org.freedesktop.UDisks2.Block Drive
+	MountPoints []string        // org.freedesktop.UDisks2.Filesystem MountPoints
+	Size        uint64          // org.freedesktop.UDisks2.Partition Size
+	Table       dbus.ObjectPath // org.freedesktop.UDisks2.Partition Table
+}
+
+type diskInfoMap map[dbus.ObjectPath]diskInfo
+
+func (set diskInfoMap) GetRootDrive() dbus.ObjectPath {
+	for _, v := range set {
+		if v.Drive == "" {
+			continue
+		}
+		for _, mp := range v.MountPoints {
+			if mp == "/" {
+				return v.Drive
+			}
+		}
+	}
+	return ""
+}
+
+func (set diskInfoMap) GetRootTable() dbus.ObjectPath {
+	for _, v := range set {
+		if v.Table == "" {
+			continue
+		}
+		for _, mp := range v.MountPoints {
+			if mp == "/" {
+				return v.Table
+			}
+		}
+	}
+	return ""
+}
+
+func (set diskInfoMap) Get(key dbus.ObjectPath) *diskInfo {
+	if key == "" {
+		return nil
+	}
+	v, ok := set[key]
+	if !ok {
+		return nil
+	}
+	return &v
+}
+
 func getDiskCap() (uint64, error) {
-	udisk, err := udisks2.NewObjectManager(
-		"org.freedesktop.UDisks2",
-		"/org/freedesktop/UDisks2")
+	set, err := parseUDisksManagers()
 	if err != nil {
 		return 0, err
 	}
 
-	var (
-		diskCap   uint64
-		driveList []dbus.ObjectPath
-	)
-	managers, _ := udisk.GetManagedObjects()
-	for _, manager := range managers {
-		block, ok := manager["org.freedesktop.UDisks2.Block"]
-		if !ok {
-			continue
-		}
-
-		// filter removable disk
-		driveValue, _ := block["Drive"]
-		drivePath := driveValue.Value().(dbus.ObjectPath)
-		if len(drivePath) != 0 && drivePath != "/" {
-			if isPathExists(drivePath, driveList) {
-				continue
-			}
-			driveList = append(driveList, drivePath)
-			drive := managers[drivePath]["org.freedesktop.UDisks2.Drive"]
-			removable := drive["Removable"]
-			if !removable.Value().(bool) {
-				diskCap += drive["Size"].Value().(uint64)
-			}
-			continue
-		}
-
-		// if no drive exists, such as NVMe port, check whether has PartitionTable
-		// TODO: parse NVMe port but no parted. If no parted, will no PartitionTable
-		_, ok = manager["org.freedesktop.UDisks2.PartitionTable"]
-		if !ok {
-			continue
-		}
-
-		diskCap += block["Size"].Value().(uint64)
+	key := set.GetRootDrive()
+	info := set.Get(key)
+	if info != nil {
+		return info.Size, nil
 	}
 
-	udisks2.DestroyObjectManager(udisk)
-	return diskCap, nil
+	key = set.GetRootTable()
+	info = set.Get(key)
+	if info != nil {
+		return info.Size, nil
+	}
+	return 0, fmt.Errorf("Failed to get disk capacity")
 }
 
-func isPathExists(item dbus.ObjectPath, list []dbus.ObjectPath) bool {
-	for _, v := range list {
-		if v == item {
-			return true
+func parseUDisksManagers() (diskInfoMap, error) {
+	udisk, err := udisks2.NewObjectManager(
+		"org.freedesktop.UDisks2",
+		"/org/freedesktop/UDisks2")
+	if err != nil {
+		return nil, err
+	}
+
+	var set = make(diskInfoMap)
+	managers, _ := udisk.GetManagedObjects()
+	for k, manager := range managers {
+		var info diskInfo
+		block, ok := manager["org.freedesktop.UDisks2.Block"]
+		if ok {
+			info.Drive = block["Drive"].Value().(dbus.ObjectPath)
+		}
+
+		fs, ok := manager["org.freedesktop.UDisks2.Filesystem"]
+		if ok {
+			values := fs["MountPoints"].Value().([][]byte)
+			for _, v := range values {
+				// filter the end char '\x00'
+				info.MountPoints = append(info.MountPoints, string(v[:len(v)-1]))
+			}
+		}
+
+		// the manager maybe a partition, or partition table, or drive
+		partition, ok := manager["org.freedesktop.UDisks2.Partition"]
+		if ok {
+			info.Size = partition["Size"].Value().(uint64)
+			info.Table = partition["Table"].Value().(dbus.ObjectPath)
+			set[k] = info
+			continue
+		}
+
+		_, ok = manager["org.freedesktop.UDisks2.PartitionTable"]
+		if ok {
+			info.Size = block["Size"].Value().(uint64)
+			set[k] = info
+			continue
+		}
+
+		drive, ok := manager["org.freedesktop.UDisks2.Drive"]
+		if ok {
+			info.Size = drive["Size"].Value().(uint64)
+			set[k] = info
+			continue
 		}
 	}
-	return false
+
+	return set, nil
 }
