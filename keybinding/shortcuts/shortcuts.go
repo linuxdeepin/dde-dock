@@ -14,8 +14,8 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
-	"github.com/BurntSushi/xgbutil/keybind"
 	"github.com/BurntSushi/xgbutil/xevent"
+	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/log"
 	"strings"
@@ -104,60 +104,53 @@ func (ss *Shortcuts) List() (list []Shortcut) {
 }
 
 func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
-	keys, err := pa.QueryKeys(ss.xu)
+	key, err := pa.QueryKey(ss.xu)
 	if err != nil {
+		logger.Warningf("getAccel failed shortcut: %v, pa: %v, err: %v", shortcut.GetId(), pa, err)
 		return
 	}
+	logger.Debugf("grabAccel shortcut: %s, pa: %s, key: %s, dummy: %v", shortcut.GetId(), pa, key, dummy)
 
 	// RLock ss.grabedKeyAccelMap
-	for _, key := range keys {
-		accel, ok := ss.grabedKeyAccelMap[key]
-		if ok {
-			// conflict
-			logger.Debugf("key %v is grabed by %v", key, accel.Shortcut.GetId())
-			return
-		}
+	if confAccel, ok := ss.grabedKeyAccelMap[key]; ok {
+		// conflict
+		logger.Debugf("key %v is grabed by %v", key, confAccel.Shortcut.GetId())
+		return
 	}
 
 	// no conflict
 	if !dummy {
-		err = keys.Grab(ss.xu)
+		err = key.Grab(ss.xu)
 		if err != nil {
 			logger.Debug(err)
 			return
 		}
 	}
 	accel := &Accel{
-		Parsed:     pa,
-		Shortcut:   shortcut,
-		GrabedKeys: keys,
+		Parsed:    pa,
+		Shortcut:  shortcut,
+		GrabedKey: key,
 	}
 	// Lock ss.grabedKeyAccelMap
 	// attach key <-> accel
-	for _, key := range keys {
-		ss.grabedKeyAccelMap[key] = accel
-	}
+	ss.grabedKeyAccelMap[key] = accel
 }
 
 func (ss *Shortcuts) ungrabAccel(pa ParsedAccel, dummy bool) {
-	keys, err := pa.QueryKeys(ss.xu)
+	key, err := pa.QueryKey(ss.xu)
 	if err != nil {
 		logger.Debug(err)
 		return
 	}
 
 	// Lock ss.grabedKeyAccelMap
-	for _, key := range keys {
-		delete(ss.grabedKeyAccelMap, key)
-	}
-
-	keys.Ungrab(ss.xu)
+	delete(ss.grabedKeyAccelMap, key)
+	key.Ungrab(ss.xu)
 }
 
 func (ss *Shortcuts) grabShortcut(shortcut Shortcut) {
 	logger.Debug("grabShortcut shortcut id:", shortcut.GetId())
 	for _, pa := range shortcut.GetAccels() {
-		logger.Debug("grabAccel accel:", pa)
 		dummy := dummyGrab(shortcut, pa)
 		ss.grabAccel(shortcut, pa, dummy)
 	}
@@ -239,12 +232,7 @@ func (ss *Shortcuts) GrabAll() {
 	}
 }
 
-func (ss *Shortcuts) updateKeymap() {
-	// update map before re-bind
-	keyMap, modMap := keybind.MapsGet(ss.xu)
-	keybind.KeyMapSet(ss.xu, keyMap)
-	keybind.ModMapSet(ss.xu, modMap)
-
+func (ss *Shortcuts) regrabAll() {
 	ss.UngrabAll()
 	ss.GrabAll()
 }
@@ -390,14 +378,7 @@ func (ss *Shortcuts) ListenXEvents() {
 		ss.handleKeyEvent(false, ev.Detail, ev.State)
 	}).Connect(ss.xu, ss.xu.RootWin())
 
-	xevent.MappingNotifyFun(func(xu *xgbutil.XUtil, ev xevent.MappingNotifyEvent) {
-		logger.Debug("MappingNotifyEvent")
-
-		if ev.Request == xproto.MappingKeyboard {
-			logger.Debug("Shortcuts.updateKeymap")
-			ss.updateKeymap()
-		}
-	}).Connect(ss.xu, xevent.NoWindow)
+	keybind.KbdMappingNotifyCallback = ss.regrabAll
 }
 
 func (ss *Shortcuts) Add(shortcut Shortcut) {
@@ -430,20 +411,18 @@ func (ss *Shortcuts) GetByIdType(id string, _type int32) Shortcut {
 // ret0: Conflicting Accel
 // ret1: pa parse key error
 func (ss *Shortcuts) FindConflictingAccel(pa ParsedAccel) (*Accel, error) {
-	keys, err := pa.QueryKeys(ss.xu)
+	key, err := pa.QueryKey(ss.xu)
 	if err != nil {
 		return nil, err
 	}
 
 	logger.Debug("Shortcuts.FindConflictingAccel pa:", pa)
-	logger.Debug("keys:", keys)
+	logger.Debug("key:", key)
 
 	// RLock ss.grabedKeyAccelMap
-	for _, key := range keys {
-		accel, ok := ss.grabedKeyAccelMap[key]
-		if ok {
-			return accel, nil
-		}
+	accel, ok := ss.grabedKeyAccelMap[key]
+	if ok {
+		return accel, nil
 	}
 	return nil, nil
 }

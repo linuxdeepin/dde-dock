@@ -5,7 +5,7 @@ import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgb/xtest"
 	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
+	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
 type NumLockState uint
@@ -70,11 +70,11 @@ func setNumLockState(xu *xgbutil.XUtil, state NumLockState) error {
 
 func changeNumLockState(xu *xgbutil.XUtil) (err error) {
 	// get Num_Lock keycode
-	_, codes, _ := keybind.ParseString(xu, "Num_Lock")
-	if len(codes) == 0 {
-		return errors.New("get Num_Lock keycode failed")
+	code, err := shortcuts.GetKeyFirstCode(xu, "Num_Lock")
+	if err != nil {
+		return err
 	}
-	numLockKeycode := byte(codes[0])
+	numLockKeycode := byte(code)
 	logger.Debug("numLockKeycode is", numLockKeycode)
 
 	x := xu.Conn()

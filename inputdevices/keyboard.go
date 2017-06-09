@@ -330,8 +330,13 @@ func doSetLayout(value string) error {
 		return fmt.Errorf("Invalid layout: %s", value)
 	}
 
+	layout, variant := array[0], array[1]
+	if layout != "us" {
+		layout += ",us"
+	}
+
 	var cmd = fmt.Sprintf("%s -layout \"%s\" -variant \"%s\"",
-		cmdSetKbd, array[0], array[1])
+		cmdSetKbd, layout, variant)
 	return doAction(cmd)
 }
 

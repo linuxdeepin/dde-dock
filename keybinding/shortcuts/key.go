@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
+	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strings"
 )
 
@@ -52,6 +52,10 @@ func (mods Modifiers) String() string {
 type Key struct {
 	Mods Modifiers
 	Code Keycode
+}
+
+func (k Key) String() string {
+	return fmt.Sprintf("Key<Mods=%s Code=%d>", k.Mods, k.Code)
 }
 
 func keysymToWeird(sym string) string {
@@ -140,31 +144,6 @@ func (k Key) Ungrab(xu *xgbutil.XUtil) {
 	keybind.Ungrab(xu, xu.RootWin(), uint16(k.Mods), xproto.Keycode(k.Code))
 }
 
-type Keys []Key
-
-func (keys Keys) Grab(xu *xgbutil.XUtil) error {
-	rootWin := xu.RootWin()
-	grabedKeys := make([]Key, len(keys))
-	for _, key := range keys {
-		// grab a key
-		code := xproto.Keycode(key.Code)
-		mods := uint16(key.Mods)
-
-		err := keybind.GrabChecked(xu, rootWin, mods, code)
-		logger.Debug("keybind.GrabChecked", key.Mods, code)
-		if err != nil {
-			for _, gk := range grabedKeys {
-				keybind.Ungrab(xu, rootWin, uint16(gk.Mods), xproto.Keycode(gk.Code))
-			}
-			return err
-		}
-		grabedKeys = append(grabedKeys, key)
-	}
-	return nil
-}
-
-func (keys Keys) Ungrab(xu *xgbutil.XUtil) {
-	for _, key := range keys {
-		key.Ungrab(xu)
-	}
+func (k Key) Grab(xu *xgbutil.XUtil) error {
+	return keybind.GrabChecked(xu, xu.RootWin(), uint16(k.Mods), xproto.Keycode(k.Code))
 }

@@ -14,15 +14,15 @@ import (
 	"errors"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
+	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strconv"
 	"strings"
 )
 
 type Accel struct {
-	Parsed     ParsedAccel
-	GrabedKeys Keys
-	Shortcut   Shortcut
+	Parsed    ParsedAccel
+	GrabedKey Key
+	Shortcut  Shortcut
 }
 
 // ParsedAccel
@@ -45,11 +45,11 @@ func (ap1 ParsedAccel) Equal(xu *xgbutil.XUtil, ap2 ParsedAccel) bool {
 	}
 
 	// ap1.Key != ap2.Key
-	_, codes1, err := keybind.ParseString(xu, ap1.Key)
+	codes1, err := keybind.StrToKeycodes(xu, ap1.Key)
 	if err != nil {
 		return false
 	}
-	_, codes2, err := keybind.ParseString(xu, ap2.Key)
+	codes2, err := keybind.StrToKeycodes(xu, ap2.Key)
 	if err != nil {
 		return false
 	}
@@ -82,20 +82,34 @@ func (pa ParsedAccel) MarshalJSON() ([]byte, error) {
 	return []byte(quoted), nil
 }
 
-func (pa ParsedAccel) QueryKeys(xu *xgbutil.XUtil) (Keys, error) {
-	_, codes, err := keybind.ParseString(xu, pa.Key)
+func GetKeyFirstCode(xu *xgbutil.XUtil, str string) (xproto.Keycode, error) {
+	codes, err := keybind.StrToKeycodes(xu, str)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
+	var code xproto.Keycode
+	for _, kc := range codes {
+		if kc != 0 {
+			code = kc
+			break
+		}
+	}
+	if code == 0 {
+		return 0, errors.New("not found keycode")
+	}
+	logger.Debugf("GetKeyFirstCode str %q codes: %v code: %d", str, codes, code)
+	return code, nil
+}
 
-	keys := make([]Key, 0, len(codes))
-	for _, code := range codes {
-		keys = append(keys, Key{
-			Mods: pa.Mods,
-			Code: Keycode(code),
-		})
+func (pa ParsedAccel) QueryKey(xu *xgbutil.XUtil) (Key, error) {
+	code, err := GetKeyFirstCode(xu, pa.Key)
+	if err != nil {
+		return Key{}, err
 	}
-	return Keys(keys), nil
+	return Key{
+		Mods: pa.Mods,
+		Code: Keycode(code),
+	}, nil
 }
 
 func splitStandardAccel(accel string) ([]string, error) {

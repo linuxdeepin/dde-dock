@@ -3,7 +3,7 @@ package shortcuts
 import (
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/keybind"
+	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strings"
 )
 

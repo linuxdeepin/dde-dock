@@ -243,7 +243,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 	}
 
 	// check pa.Key valid
-	_, err = pa.QueryKeys(m.xu)
+	_, err = pa.QueryKey(m.xu)
 	if err != nil {
 		return false, "", err
 	}
