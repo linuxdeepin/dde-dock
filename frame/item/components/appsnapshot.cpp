@@ -79,9 +79,17 @@ void AppSnapshot::fetchSnapshot()
 
     const auto display = QX11Info::display();
 
-    XWindowAttributes attrs;
-    XGetWindowAttributes(display, m_wid, &attrs);
-    XImage *ximage = XGetImage(display, m_wid, 0, 0, attrs.width, attrs.height, AllPlanes, ZPixmap);
+    Window unused_window;
+    int unused_int;
+    unsigned unused_uint, w, h;
+    XGetGeometry(display, m_wid, &unused_window, &unused_int, &unused_int, &w, &h, &unused_uint, &unused_uint);
+    XImage *ximage = XGetImage(display, m_wid, 0, 0, w, h, AllPlanes, ZPixmap);
+    if (!ximage)
+    {
+        emit requestCheckWindow();
+        return;
+    }
+
     const QImage qimage((const uchar*)(ximage->data), ximage->width, ximage->height, ximage->bytes_per_line, QImage::Format_RGB32);
     Q_ASSERT(!qimage.isNull());
 

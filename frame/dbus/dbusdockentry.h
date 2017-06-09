@@ -121,6 +121,11 @@ public Q_SLOTS: // METHODS
         return asyncCall(QStringLiteral("RequestDock"));
     }
 
+    inline QDBusPendingReply<> Check()
+    {
+        return asyncCall(QStringLiteral("Check"));
+    }
+
     inline QDBusPendingReply<> RequestUndock()
     {
         return asyncCall(QStringLiteral("RequestUndock"));

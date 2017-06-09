@@ -48,11 +48,14 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     if (m_tracked.isNull())
         return;
 
+    const QImage snapshot = m_tracked->snapshot();
+    if (snapshot.isNull())
+        return;
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
-    const QImage snapshot = m_tracked->snapshot();
     const QImage im = snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     const QRect ir = im.rect();
     const QPoint offset = r.center() - ir.center();

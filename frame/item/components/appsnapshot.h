@@ -25,6 +25,7 @@ public:
 signals:
     void entered(const WId wid) const;
     void clicked(const WId wid) const;
+    void requestCheckWindow() const;
 
 public slots:
     void fetchSnapshot();

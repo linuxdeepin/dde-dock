@@ -133,6 +133,7 @@ void _PreviewContainer::appendSnapWidget(const WId wid)
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestCancelPreview, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::clicked, this, &_PreviewContainer::requestHidePreview, Qt::QueuedConnection);
     connect(snap, &AppSnapshot::entered, this, &_PreviewContainer::previewEntered, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::requestCheckWindow, this, &_PreviewContainer::requestCheckWindows);
 
     m_windowListLayout->addWidget(snap);
 

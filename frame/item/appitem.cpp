@@ -4,6 +4,9 @@
 #include "util/imagefactory.h"
 #include "xcb/xcb_misc.h"
 
+#include <X11/X.h>
+#include <X11/Xlib.h>
+
 #include <QPainter>
 #include <QDrag>
 #include <QMouseEvent>
@@ -81,6 +84,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &_PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
+    connect(m_appPreviewTips, &_PreviewContainer::requestCheckWindows, m_itemEntry, &DBusDockEntry::Check);
 
     updateTitle();
     refershIcon();

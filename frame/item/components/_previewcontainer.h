@@ -29,6 +29,7 @@ signals:
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
     void requestHidePreview() const;
+    void requestCheckWindows() const;
 
 public:
     void setWindowInfos(const WindowDict &infos);
