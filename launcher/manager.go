@@ -69,6 +69,7 @@ type Manager struct {
 
 	systemDBusConn *dbus.Conn
 
+	noPkgItemIDs       map[string]int
 	appDirs            []string
 	fsWatcher          *fsnotify.Watcher
 	fsEventTimers      map[string]*time.Timer
@@ -195,15 +196,21 @@ func (m *Manager) removeItem(id string) {
 }
 
 func (m *Manager) queryCategoryID(item *Item) CategoryID {
-	pkg := m.queryPkgName(item)
-	logger.Debugf("queryCategoryID desktopPkgMap %v -> pkg %v", item, pkg)
-	if pkg != "" && m.pkgCategoryMap != nil {
+	pkg := m.queryPkgName(item.ID)
+	if pkg == "" {
+		m.noPkgItemIDs[item.ID] = 1
+	}
+	return m._queryCategoryID(item, pkg)
+}
+
+func (m *Manager) _queryCategoryID(item *Item, pkg string) CategoryID {
+	logger.Debugf("queryCategoryID desktopPkgMap %v -> pkg %q", item, pkg)
+	if pkg != "" {
 		if cid, ok := m.pkgCategoryMap[pkg]; ok {
 			logger.Debugf("queryCategoryID pkgCategoryMap %v -> %v", item, cid)
 			return cid
 		}
 	}
-
 	if cid, ok := parseCategoryString(item.xDeepinCategory); ok {
 		logger.Debugf("queryCategoryID X-Deepin %v -> %v", item, cid)
 		return cid
@@ -214,17 +221,12 @@ func (m *Manager) queryCategoryID(item *Item) CategoryID {
 	return categoryGuess
 }
 
-func (m *Manager) queryPkgName(item *Item) string {
+func (m *Manager) queryPkgName(itemID string) string {
 	if m.desktopPkgMap == nil {
 		logger.Warning("queryPkgName failed: Manager.desktopPkgMap is nil")
 		return ""
 	}
-
-	if pkg, ok := m.desktopPkgMap[item.ID]; ok {
-		return pkg
-	}
-	// fail
-	return ""
+	return m.desktopPkgMap[itemID]
 }
 
 func (m *Manager) loadNameMap() error {

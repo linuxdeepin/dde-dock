@@ -63,6 +63,25 @@ func (m *Manager) delayHandleFileEvent(name string) {
 			case name == desktopPkgMapFile:
 				if err := m.loadDesktopPkgMap(); err != nil {
 					logger.Warning(err)
+					return
+				}
+				// retry queryPkgName for m.noPkgItemIDs
+				logger.Debugf("m.noPkgItemIDs: %v", m.noPkgItemIDs)
+				for id := range m.noPkgItemIDs {
+					pkg := m.queryPkgName(id)
+					logger.Debugf("item id %q pkg %q", id, pkg)
+
+					if pkg != "" {
+						item := m.getItemById(id)
+						cid := m._queryCategoryID(item, pkg)
+
+						if cid != item.CategoryID {
+							// item.CategoryID changed
+							item.CategoryID = cid
+							m.emitItemChanged(item, AppStatusModified)
+						}
+						delete(m.noPkgItemIDs, id)
+					}
 				}
 
 			case name == applicationsFile:

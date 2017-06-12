@@ -25,6 +25,7 @@ const (
 )
 
 func (m *Manager) init() {
+	m.noPkgItemIDs = make(map[string]int)
 	m.settings = gio.NewSettings(gsSchemaLauncher)
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
 	m.Fullscreen = property.NewGSettingsBoolProperty(m, "Fullscreen", m.settings, gsKeyFullscreen)

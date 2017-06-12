@@ -53,7 +53,7 @@ func (m *Manager) uninstall(id string) error {
 	}
 
 	// uninstall system package
-	if pkg := m.queryPkgName(item); pkg != "" {
+	if pkg := m.queryPkgName(item.ID); pkg != "" {
 		// is pkg installed?
 		installed, err := m.lastoreManager.PackageExists(pkg)
 		if err != nil {
