@@ -90,6 +90,11 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	switch connectionType {
 	case connectionWired:
 		s.data = newWiredConnectionData(id, s.Uuid)
+		// set mac address
+		macAddress, err := nmGeneralGetDeviceHwAddr(devPath)
+		if err == nil && macAddress != "" {
+			setSettingWiredMacAddress(s.data, convertMacAddressToArrayByte(macAddress))
+		}
 	case connectionWireless:
 		s.data = newWirelessConnectionData(id, s.Uuid, nil, apSecNone)
 	case connectionWirelessAdhoc:
