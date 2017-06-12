@@ -29,9 +29,9 @@ import (
 )
 
 const (
-	lastoreDataDir    = "/var/lib/lastore/"
-	desktopPkgMapFile = lastoreDataDir + "desktop_package.json"
-	applicationsFile  = lastoreDataDir + "applications.json"
+	lastoreDataDir    = "/var/lib/lastore"
+	desktopPkgMapFile = lastoreDataDir + "/desktop_package.json"
+	applicationsFile  = lastoreDataDir + "/applications.json"
 
 	ddeDataDir              = "/usr/share/dde/data/"
 	appNameTranslationsFile = ddeDataDir + "app_name_translations.json"
@@ -278,6 +278,7 @@ func (m *Manager) convertDesktopPkgMap(in map[string]string) map[string]string {
 	return out
 }
 
+// get pkg->category map from applicationsFile
 func (m *Manager) loadPkgCategoryMap() error {
 	f, err := os.Open(applicationsFile)
 	if err != nil {

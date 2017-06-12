@@ -38,16 +38,8 @@ func (m *Manager) init() {
 	if err != nil {
 		logger.Warning(err)
 	}
-	err = m.fsWatcher.Watch(desktopPkgMapFile)
-	if err != nil {
-		logger.Warning(err)
-	}
 
 	err = m.loadPkgCategoryMap()
-	if err != nil {
-		logger.Warning(err)
-	}
-	err = m.fsWatcher.Watch(applicationsFile)
 	if err != nil {
 		logger.Warning(err)
 	}
@@ -83,6 +75,11 @@ func (m *Manager) init() {
 	go m.handlePopPushOps()
 
 	m.fsEventTimers = make(map[string]*time.Timer)
+
+	err = m.fsWatcher.Watch(lastoreDataDir)
+	if err != nil {
+		logger.Warning(err)
+	}
 	go m.handleFsWatcherEvents()
 	m.desktopFileWatcher.ConnectEvent(func(filename string, _ uint32) {
 		if shouldCheckDesktopFile(filename) {
