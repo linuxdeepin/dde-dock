@@ -26,6 +26,7 @@ void ContainerItem::setDropping(const bool dropping)
 void ContainerItem::addItem(DockItem * const item)
 {
     m_containerWidget->addWidget(item);
+    item->setVisible(true);
 }
 
 void ContainerItem::removeItem(DockItem * const item)

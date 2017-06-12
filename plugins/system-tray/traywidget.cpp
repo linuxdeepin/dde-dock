@@ -86,11 +86,14 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
-    const QPoint p(width() / 2 - iconSize / 2, height() / 2 - iconSize / 2);
+//    const QPoint p(width() / 2 - iconSize / 2, height() / 2 - iconSize / 2);
 
     QPainter painter;
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
+#ifdef QT_DEBUG
+    painter.fillRect(rect(), Qt::red);
+#endif
 
 //    m_image = getImageNonComposite();
 //    if (!m_image.isNull()) {
@@ -344,6 +347,7 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
     setWindowOnTop(true);
     XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, true, CurrentTime);
+    XFlush(QX11Info::display());
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);
     XFlush(QX11Info::display());
 //    XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
