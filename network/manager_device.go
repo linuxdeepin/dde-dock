@@ -359,3 +359,28 @@ func (m *Manager) SetDeviceManaged(devPathOrIfc string, managed bool) (err error
 	}
 	return
 }
+
+// ListDeviceConnections return the available connections for the device
+func (m *Manager) ListDeviceConnections(devPath dbus.ObjectPath) ([]dbus.ObjectPath, error) {
+	nmDev, err := nmNewDevice(devPath)
+	if err != nil {
+		return nil, err
+	}
+	defer nmDestroyDevice(nmDev)
+
+	// ignore virtual network interfaces
+	if isVirtualDeviceIfc(nmDev) {
+		err = fmt.Errorf("ignore virtual network interface which driver is %s %s", nmDev.Driver.Get(), devPath)
+		logger.Info(err)
+		return nil, err
+	}
+
+	devType := nmDev.DeviceType.Get()
+	if !isDeviceTypeValid(devType) {
+		err = fmt.Errorf("ignore invalid device type %d", devType)
+		logger.Info(err)
+		return nil, err
+	}
+
+	return nmDev.AvailableConnections.Get(), nil
+}
