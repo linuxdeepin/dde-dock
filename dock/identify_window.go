@@ -2,6 +2,7 @@ package dock
 
 import (
 	"path/filepath"
+	"pkg.deepin.io/lib/procfs"
 	"strconv"
 	"strings"
 )
@@ -124,7 +125,23 @@ func identifyWindowByPidEnv(m *DockManager, winInfo *WindowInfo) (string, *AppIn
 		logger.Debugf("identifyWindowByPidEnv: launchedDesktopFile: %q, pid: %d",
 			launchedDesktopFile, launchedDesktopFilePid)
 
+		var try bool
 		if uint(launchedDesktopFilePid) == pid {
+			try = true
+		} else if uint(launchedDesktopFilePid) == process.ppid && process.ppid != 0 {
+			logger.Debug("ppid equal")
+			parentProcess := procfs.Process(process.ppid)
+			cmdline, err := parentProcess.Cmdline()
+			if err == nil && len(cmdline) > 0 {
+				logger.Debugf("parent process cmdline: %#v", cmdline)
+				base := filepath.Base(cmdline[0])
+				if base == "sh" || base == "bash" {
+					try = true
+				}
+			}
+		}
+
+		if try {
 			appInfo := NewAppInfoFromFile(launchedDesktopFile)
 			if appInfo != nil {
 				// success

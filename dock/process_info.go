@@ -17,6 +17,7 @@ type ProcessInfo struct {
 	cwd     string
 	environ procfs.EnvVars
 	hasPid  bool
+	ppid    uint
 }
 
 func NewProcessInfoWithCmdline(cmd []string) *ProcessInfo {
@@ -68,6 +69,12 @@ func NewProcessInfo(pid uint) (*ProcessInfo, error) {
 
 	// environ
 	pInfo.environ, _ = process.Environ()
+
+	// ppid
+	if status, err := process.Status(); err == nil {
+		pInfo.ppid, _ = status.PPid()
+	}
+
 	return pInfo, nil
 }
 
