@@ -121,7 +121,7 @@ func (s *Source) update() {
 	s.Card = s.core.Card
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
-	s.setPropVolume(s.core.Volume.Avg())
+	s.setPropVolume(floatPrecision(s.core.Volume.Avg()))
 	s.setPropMute(s.core.Mute)
 
 	//TODO: handle this

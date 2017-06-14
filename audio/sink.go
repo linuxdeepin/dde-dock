@@ -136,7 +136,7 @@ func (s *Sink) update() {
 	s.BaseVolume = s.core.BaseVolume.ToPercent()
 
 	s.setPropMute(s.core.Mute)
-	s.setPropVolume(s.core.Volume.Avg())
+	s.setPropVolume(floatPrecision(s.core.Volume.Avg()))
 
 	s.setPropSupportFade(false)
 	s.setPropFade(s.core.Volume.Fade(s.core.ChannelMap))

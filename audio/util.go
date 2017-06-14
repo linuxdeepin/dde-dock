@@ -13,6 +13,7 @@ import (
 	libdbus "dbus/org/freedesktop/dbus"
 	mpris2 "dbus/org/mpris/mediaplayer2"
 	"encoding/json"
+	"math"
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/pulse"
 	"strings"
@@ -83,4 +84,12 @@ func pauseAllPlayers() {
 		defer mpris2.DestroyPlayer(player)
 		player.Pause()
 	}
+}
+
+// 四舍五入
+func floatPrecision(f float64) float64 {
+	// 精确到小数点后2位
+	pow10N := math.Pow10(2)
+	return math.Trunc((f+0.5/pow10N)*pow10N) / pow10N
+	// return math.Trunc((f)*pow10N) / pow10N
 }
