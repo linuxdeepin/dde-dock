@@ -116,6 +116,16 @@ func (w *Wacom) setPropExist(exist bool) {
 	dbus.NotifyChange(w, "Exist")
 }
 
+func (w *Wacom) setPropMapOutput(output string) bool {
+	if output == w.MapOutput {
+		return false
+	}
+
+	w.MapOutput = output
+	dbus.NotifyChange(w, "MapOutput")
+	return true
+}
+
 func setPropString(obj dbus.DBusObject, handler *string, prop, v string) {
 	if *handler == v {
 		return

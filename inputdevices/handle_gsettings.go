@@ -127,8 +127,6 @@ func (w *Wacom) handleGSettings() {
 			w.enableCursorMode()
 		case wacomKeySuppress:
 			w.setSuppress()
-		case wacomKeyMapOutput:
-			w.mapToOutput()
 		}
 	})
 

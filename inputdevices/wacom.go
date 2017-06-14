@@ -10,11 +10,18 @@
 package inputdevices
 
 import (
+	"errors"
 	"fmt"
+	"time"
+
 	"gir/gio-2.0"
 	"pkg.deepin.io/dde/api/dxinput"
 	"pkg.deepin.io/lib/dbus/property"
-	"strings"
+
+	"github.com/BurntSushi/xgb"
+	"github.com/BurntSushi/xgb/randr"
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil"
 )
 
 const (
@@ -28,7 +35,6 @@ const (
 	wacomKeyDownAction        = "keydown-action"
 	wacomKeySuppress          = "suppress"
 	wacomKeyPressureSensitive = "pressure-sensitive"
-	wacomKeyMapOutput         = "map-output"
 	wacomKeyRawSample         = "raw-sample"
 	wacomKeyThreshold         = "threshold"
 )
@@ -52,13 +58,53 @@ type ActionInfo struct {
 }
 type ActionInfos []*ActionInfo
 
+type OutputInfo struct {
+	Name string
+	X    int16
+	Y    int16
+	W    uint16
+	H    uint16
+}
+
+func (i *OutputInfo) String() string {
+	return fmt.Sprintf("OutputInfo %s, crtc (%d,%d) %dx%d",
+		i.Name, i.X, i.Y, i.W, i.H)
+}
+
+func (i *OutputInfo) Contains(x, y int16) bool {
+	return i.X <= x && x < i.X+int16(i.W) &&
+		i.Y <= y && y < i.Y+int16(i.H)
+}
+
+func getOutputInfo(conn *xgb.Conn, output randr.Output, ts xproto.Timestamp) (*OutputInfo, error) {
+	reply, err := randr.GetOutputInfo(conn, output, ts).Reply()
+	if err != nil {
+		return nil, err
+	}
+
+	if reply.Crtc != 0 {
+		crtcReply, err := randr.GetCrtcInfo(conn, reply.Crtc, ts).Reply()
+		if err != nil {
+			return nil, err
+		}
+		return &OutputInfo{
+			Name: string(reply.Name),
+			X:    crtcReply.X,
+			Y:    crtcReply.Y,
+			W:    crtcReply.Width,
+			H:    crtcReply.Height,
+		}, nil
+	}
+	return nil, errors.New("BadCrtc")
+}
+
 type Wacom struct {
 	LeftHanded *property.GSettingsBoolProperty `access:"readwrite"`
 	CursorMode *property.GSettingsBoolProperty `access:"readwrite"`
 
 	KeyUpAction   *property.GSettingsStringProperty `access:"readwrite"`
 	KeyDownAction *property.GSettingsStringProperty `access:"readwrite"`
-	MapOutput     *property.GSettingsStringProperty `access:"readwrite"`
+	MapOutput     string
 
 	Suppress                *property.GSettingsUintProperty `access:"readwrite"`
 	StylusPressureSensitive *property.GSettingsUintProperty `access:"readwrite"`
@@ -76,6 +122,12 @@ type Wacom struct {
 	setting       *gio.Settings
 	stylusSetting *gio.Settings
 	eraserSetting *gio.Settings
+
+	pointerX    int16
+	pointerY    int16
+	outputInfos []*OutputInfo
+	xu          *xgbutil.XUtil
+	exit        chan int
 }
 
 var _wacom *Wacom
@@ -109,10 +161,6 @@ func NewWacom() *Wacom {
 		w, "KeyDownAction",
 		w.stylusSetting, wacomKeyDownAction)
 
-	w.MapOutput = property.NewGSettingsStringProperty(
-		w, "MapOutput",
-		w.setting, wacomKeyMapOutput)
-
 	w.Suppress = property.NewGSettingsUintProperty(
 		w, "Suppress",
 		w.setting, wacomKeySuppress)
@@ -143,6 +191,11 @@ func NewWacom() *Wacom {
 
 	w.updateDXWacoms()
 
+	w.initX()
+	w.handleScreenChanged()
+	go w.listenXRandrEvents()
+	go w.checkLoop()
+	w.exit = make(chan int)
 	return w
 }
 
@@ -157,9 +210,125 @@ func (w *Wacom) init() {
 	w.setStylusButtonAction(btnNumDownKey, w.KeyDownAction.Get())
 	w.setPressureSensitive()
 	w.setSuppress()
-	w.mapToOutput()
+	w.setMapToOutput()
 	w.setRawSample()
 	w.setThreshold()
+}
+
+func (w *Wacom) initX() error {
+	xu, err := xgbutil.NewConn()
+	if err != nil {
+		return err
+	}
+	w.xu = xu
+
+	if err := randr.Init(xu.Conn()); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (w *Wacom) listenXRandrEvents() {
+	conn := w.xu.Conn()
+	randr.SelectInputChecked(conn, w.xu.RootWin(), randr.NotifyMaskScreenChange)
+	for {
+		ev, err := conn.WaitForEvent()
+		if ev == nil && err == nil {
+			logger.Debug("listenXRandrEvents return")
+			return
+		}
+		if err != nil {
+			logger.Warning(err)
+			continue
+		}
+
+		switch event := ev.(type) {
+		case randr.ScreenChangeNotifyEvent:
+			logger.Debug(event)
+			w.handleScreenChanged()
+		}
+	}
+}
+
+func (w *Wacom) handleScreenChanged() {
+	conn := w.xu.Conn()
+	resources, err := randr.GetScreenResources(conn, w.xu.RootWin()).Reply()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+
+	cfgTs := resources.ConfigTimestamp
+
+	var outputInfos []*OutputInfo
+	for _, output := range resources.Outputs {
+		outputInfo, err := getOutputInfo(conn, output, cfgTs)
+		if err == nil {
+			outputInfos = append(outputInfos, outputInfo)
+		}
+	}
+	w.outputInfos = outputInfos
+}
+
+func (w *Wacom) updatePointerPos() {
+	conn := w.xu.Conn()
+	reply, err := xproto.QueryPointer(conn, w.xu.RootWin()).Reply()
+	if err != nil {
+		logger.Debug(err)
+		return
+	}
+	x := reply.RootX
+	y := reply.RootY
+
+	if x != w.pointerX || y != w.pointerY {
+		// pointer pos changed
+		w.pointerX = x
+		w.pointerY = y
+		// logger.Debugf("x: %d, y: %d", x, y)
+	}
+}
+
+func (w *Wacom) checkLoop() {
+	ticker := time.NewTicker(time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			if !w.Exist {
+				// logger.Debug("tick no wacom device")
+				continue
+			}
+			// logger.Debug("tick")
+			w.updateMapToOutput()
+		case <-w.exit:
+			ticker.Stop()
+			logger.Debug("checkLoop return")
+			return
+		}
+	}
+}
+
+func (w *Wacom) updateMapToOutput() {
+	if len(w.outputInfos) <= 1 {
+		if w.setPropMapOutput("") {
+			w.setMapToOutput()
+		}
+		return
+	}
+	w.updatePointerPos()
+	if w.setPropMapOutput(w.pointerInOutput()) {
+		w.setMapToOutput()
+	}
+}
+
+func (w *Wacom) pointerInOutput() string {
+	// len(w.outputInfos) > 1
+	for _, outputInfo := range w.outputInfos {
+		if outputInfo.Contains(w.pointerX, w.pointerY) {
+			return outputInfo.Name
+		}
+	}
+	return ""
 }
 
 func (w *Wacom) handleDeviceChanged() {
@@ -313,12 +482,13 @@ func (w *Wacom) setSuppress() {
 	}
 }
 
-func (w *Wacom) mapToOutput() {
-	output := strings.Trim(w.MapOutput.Get(), " ")
+func (w *Wacom) setMapToOutput() {
+	output := w.MapOutput
 	if output == "" {
 		output = "desktop"
 	}
 
+	logger.Debugf("setMapToOutput %q", output)
 	for _, v := range w.devInfos {
 		err := v.MapToOutput(output)
 		if err != nil {
@@ -396,4 +566,9 @@ func (w *Wacom) setThresholdForType(devType int) {
 func (w *Wacom) setThreshold() {
 	w.setThresholdForType(dxinput.WacomTypeStylus)
 	w.setThresholdForType(dxinput.WacomTypeEraser)
+}
+
+func (w *Wacom) destroy() {
+	w.xu.Conn().Close()
+	close(w.exit)
 }

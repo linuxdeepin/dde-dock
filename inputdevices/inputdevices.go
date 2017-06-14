@@ -85,8 +85,11 @@ func (*Daemon) Stop() error {
 	if _manager == nil {
 		return nil
 	}
+	_manager = nil
 
 	logger.EndTracing()
+	getWacom().destroy()
+	// TODO endDeviceListener will be stuck
 	endDeviceListener()
 	return nil
 }
