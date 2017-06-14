@@ -29,6 +29,7 @@ type activeConnection struct {
 type activeConnectionInfo struct {
 	IsPrimaryConnection bool
 	Device              dbus.ObjectPath
+	SettingPath         dbus.ObjectPath
 	ConnectionType      string
 	ConnectionName      string
 	ConnectionUuid      string
@@ -364,6 +365,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	acinfo = activeConnectionInfo{
 		IsPrimaryConnection: nmGetPrimaryConnection() == apath,
 		Device:              devPath,
+		SettingPath:         nmConn.Path,
 		ConnectionType:      connType,
 		ConnectionName:      connName,
 		ConnectionUuid:      nmAConn.Uuid.Get(),

@@ -315,7 +315,8 @@ func (s *ConnectionSession) updateSecretsToKeyring() {
 	}
 }
 
-// Save save current connection session, and the 'activated' will special whether activate it.
+// Save save current connection session, and the 'activated' will special whether activate it,
+// but if the connection non-exists, the 'activated' no effect
 func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 	logger.Debugf("Save connection: %#v", s.data)
 	s.dataLocker.Lock()
@@ -356,7 +357,6 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 		}
 		if err != nil {
 			logger.Error("Failed to save exists connection:", err)
-			return false, err
 		}
 	} else {
 		// create new connection and activate it
@@ -368,21 +368,15 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 			setSettingConnectionId(s.data, string(getSettingWirelessSsid(s.data)))
 		}
 
-		if !activated {
+		switch connectionType {
+		case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
+			_, _, err = nmAddAndActivateConnection(s.data, s.devPath, true)
+		default:
 			_, err = nmAddConnection(s.data)
-		} else {
-			nmAddAndActivateConnection(s.data, s.devPath)
 		}
 		if err != nil {
 			logger.Error("Failed to save non-exists connection:", err)
-			return false, err
 		}
-		// switch connectionType {
-		// case connectionWired, connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-		// 	nmAddAndActivateConnection(s.data, s.devPath)
-		// default:
-		// 	nmAddConnection(s.data)
-		// }
 	}
 
 	s.updateSecretsToKeyring()

@@ -21,7 +21,7 @@ func newWiredConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, activ
 	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
 	setSettingConnectionAutoconnect(data, true)
 	if active {
-		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+		cpath, _, err = nmAddAndActivateConnection(data, devPath, false)
 	} else {
 		cpath, err = nmAddConnection(data)
 	}

@@ -763,11 +763,11 @@ func nmGetDeviceModemCapabilities(devPath dbus.ObjectPath) (capabilities uint32)
 	return
 }
 
-func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath) (cpath, apath dbus.ObjectPath, err error) {
+func nmAddAndActivateConnection(data connectionData, devPath dbus.ObjectPath, forced bool) (cpath, apath dbus.ObjectPath, err error) {
 	if len(devPath) == 0 {
 		devPath = "/"
 	} else {
-		if isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
+		if !forced && isWiredDevice(devPath) && !nmGetWiredCarrier(devPath) {
 			err = fmt.Errorf("%s", deviceErrorTable[CUSTOM_NM_DEVICE_STATE_REASON_CABLE_UNPLUGGED])
 			return
 		}

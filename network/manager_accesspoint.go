@@ -271,7 +271,7 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 
 		uuid = utils.GenUuid()
 		data := newWirelessConnectionData(string(nmAp.Ssid.Get()), uuid, []byte(nmAp.Ssid.Get()), getApSecType(nmAp))
-		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 	}
 	return
 }

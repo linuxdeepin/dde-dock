@@ -38,7 +38,7 @@ func newMobileConnectionForDevice(id, uuid string, devPath dbus.ObjectPath, acti
 	refileSectionCache(data)
 
 	if active {
-		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 	} else {
 		cpath, err = nmAddConnection(data)
 	}

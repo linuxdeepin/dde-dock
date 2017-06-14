@@ -96,7 +96,7 @@ func newWirelessHotspotConnectionForDevice(id, uuid string, devPath dbus.ObjectP
 	setSettingWiredMacAddress(data, convertMacAddressToArrayByte(hwAddr))
 	setSettingConnectionAutoconnect(data, false)
 	if active {
-		cpath, _, err = nmAddAndActivateConnection(data, devPath)
+		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 	} else {
 		cpath, err = nmAddConnection(data)
 	}
