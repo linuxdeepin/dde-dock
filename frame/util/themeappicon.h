@@ -10,7 +10,7 @@ public:
     explicit ThemeAppIcon(QObject *parent = 0);
     ~ThemeAppIcon();
 
-    static const QPixmap getIcon(const QString iconName, const int size);
+    static QPixmap getIcon(const QString iconName, const int size);
 };
 
 #endif // THEMEAPPICON_H

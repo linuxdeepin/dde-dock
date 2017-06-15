@@ -8,6 +8,7 @@
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
+#include <QFuture>
 
 class AppItem : public DockItem
 {
@@ -55,6 +56,9 @@ private slots:
     void refershIcon();
     void activeChanged();
     void showPreview();
+
+    void gotSmallIcon();
+    void gotLargeIcon();
 
 private:
     QLabel *m_appNameTips;
