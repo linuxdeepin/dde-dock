@@ -113,7 +113,7 @@ void MainWindow::leaveEvent(QEvent *e)
 
 void MainWindow::setFixedSize(const QSize &size)
 {
-    const QPropertyAnimation::State state = m_posChangeAni->state();
+    const QPropertyAnimation::State state = m_sizeChangeAni->state();
 
     if (state == QPropertyAnimation::Stopped && this->size() == size)
         return;
@@ -266,7 +266,10 @@ void MainWindow::updatePosition()
 
     clearStrutPartial();
     updateGeometry();
-    setStrutPartial();
+
+    // make sure strut partial is set after the size/position animation;
+    const int inter = qMax(m_sizeChangeAni->duration(), m_posChangeAni->duration());
+    QTimer::singleShot(inter + 100, this, &MainWindow::setStrutPartial);
 }
 
 void MainWindow::updateGeometry()
