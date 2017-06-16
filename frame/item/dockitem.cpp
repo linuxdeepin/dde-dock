@@ -16,6 +16,7 @@ DockItem::DockItem(QWidget *parent)
       m_popupShown(false),
 
       m_popupTipsDelayTimer(new QTimer(this)),
+      m_popupAdjustDelayTimer(new QTimer(this)),
 
       m_menuManagerInter(new DBusMenuManager(this))
 {
@@ -36,7 +37,11 @@ DockItem::DockItem(QWidget *parent)
     m_popupTipsDelayTimer->setInterval(500);
     m_popupTipsDelayTimer->setSingleShot(true);
 
+    m_popupAdjustDelayTimer->setInterval(100);
+    m_popupAdjustDelayTimer->setSingleShot(true);
+
     connect(m_popupTipsDelayTimer, &QTimer::timeout, this, &DockItem::showHoverTips);
+    connect(m_popupAdjustDelayTimer, &QTimer::timeout, this, &DockItem::updatePopupPosition);
 }
 
 DockItem::~DockItem()
@@ -57,6 +62,8 @@ void DockItem::setDockDisplayMode(const DisplayMode mode)
 
 void DockItem::updatePopupPosition()
 {
+    Q_ASSERT(sender() == m_popupAdjustDelayTimer);
+
     if (!m_popupShown || !PopupWindow->isVisible())
         return;
 
@@ -73,7 +80,7 @@ void DockItem::moveEvent(QMoveEvent *e)
 {
     QWidget::moveEvent(e);
 
-    updatePopupPosition();
+    m_popupAdjustDelayTimer->start();
 }
 
 //void DockItem::mouseMoveEvent(QMouseEvent *e)

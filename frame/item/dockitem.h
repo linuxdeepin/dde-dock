@@ -73,6 +73,7 @@ protected:
     bool m_popupShown;
 
     QTimer *m_popupTipsDelayTimer;
+    QTimer *m_popupAdjustDelayTimer;
 
     DBusMenuManager *m_menuManagerInter;
 
