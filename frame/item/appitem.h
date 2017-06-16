@@ -81,6 +81,9 @@ private:
 
     QTimer *m_updateIconGeometryTimer;
 
+    QFutureWatcher<QPixmap> *m_smallWatcher;
+    QFutureWatcher<QPixmap> *m_largeWatcher;
+
     static int IconBaseSize;
     static QPoint MousePressPos;
 };

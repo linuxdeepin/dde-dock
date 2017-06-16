@@ -44,7 +44,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
       m_activeVerticalIndicator(QPixmap(":/indicator/resources/indicator_active_ver.png")),
-      m_updateIconGeometryTimer(new QTimer(this))
+      m_updateIconGeometryTimer(new QTimer(this)),
+
+      m_smallWatcher(new QFutureWatcher<QPixmap>(this)),
+      m_largeWatcher(new QFutureWatcher<QPixmap>(this))
 {
     QHBoxLayout *centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_itemView);
@@ -92,6 +95,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &_PreviewContainer::requestCancelPreview, this, &AppItem::requestCancelPreview, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestCheckWindows, m_itemEntry, &DBusDockEntry::Check);
+
+    connect(m_smallWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotSmallIcon);
+    connect(m_largeWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotLargeIcon);
 
     QTimer::singleShot(1, this, [=] {
         updateTitle();
@@ -486,24 +492,21 @@ void AppItem::refershIcon()
     const QString icon = m_itemEntry->icon();
     const int iconSize = qMin(width(), height());
 
-    QFutureWatcher<QPixmap> *smallWatcher = new QFutureWatcher<QPixmap>(this);
-    QFutureWatcher<QPixmap> *largeWatcher = new QFutureWatcher<QPixmap>(this);
+    m_smallWatcher->cancel();
+    m_largeWatcher->cancel();
 
     if (DockDisplayMode == Efficient)
     {
 //        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
 //        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.9);
-        smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.7));
-        largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.9));
+        m_smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.7));
+        m_largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.9));
     } else {
 //        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
 //        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
-        smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.6));
-        largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.8));
+        m_smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.6));
+        m_largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.8));
     }
-
-    connect(smallWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotSmallIcon);
-    connect(largeWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotLargeIcon);
 
     m_updateIconGeometryTimer->start();
 }
@@ -540,24 +543,14 @@ void AppItem::showPreview()
 
 void AppItem::gotSmallIcon()
 {
-    QFutureWatcher<QPixmap> *fw = dynamic_cast<QFutureWatcher<QPixmap> *>(sender());
-    Q_ASSERT(fw);
-
-    m_smallIcon = fw->result();
-
-    fw->deleteLater();
+    m_smallIcon = m_smallWatcher->result();
 
     update();
 }
 
 void AppItem::gotLargeIcon()
 {
-    QFutureWatcher<QPixmap> *fw = dynamic_cast<QFutureWatcher<QPixmap> *>(sender());
-    Q_ASSERT(fw);
-
-    m_largeIcon = fw->result();
-
-    fw->deleteLater();
+    m_largeIcon = m_largeWatcher->result();
 
     update();
 }
