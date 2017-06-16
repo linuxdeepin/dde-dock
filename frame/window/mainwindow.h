@@ -33,7 +33,7 @@ private:
     void dragEnterEvent(QDragEnterEvent *e);
 
     void setFixedSize(const QSize &size);
-    void move(int x, int y);
+    void internalMove(int x, int y);
     void initComponents();
     void initConnections();
 
