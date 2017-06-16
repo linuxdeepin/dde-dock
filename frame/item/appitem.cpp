@@ -36,6 +36,10 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_itemScene(new QGraphicsScene(this)),
 
       m_draging(false),
+
+      m_smallIcon(QPixmap()),
+      m_largeIcon(QPixmap()),
+
       m_horizontalIndicator(QPixmap(":/indicator/resources/indicator.png")),
       m_verticalIndicator(QPixmap(":/indicator/resources/indicator_ver.png")),
       m_activeHorizontalIndicator(QPixmap(":/indicator/resources/indicator_active.png")),
@@ -251,8 +255,11 @@ void AppItem::paintEvent(QPaintEvent *e)
 
     // icon
     const QPixmap pixmap = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
+    if (pixmap.isNull())
+        return;
+
     // icon pos
-    QPointF iconPos = itemRect.center() - QRectF(pixmap.rect()).center();
+    const QPointF iconPos = itemRect.center() - QRectF(pixmap.rect()).center();
 
     // draw ligher/normal icon
     if (!m_hover)

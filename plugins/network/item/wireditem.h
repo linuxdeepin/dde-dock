@@ -14,18 +14,18 @@ class WiredItem : public DeviceItem
 public:
     explicit WiredItem(const QUuid &deviceUuid);
 
-    NetworkDevice::NetworkType type() const;
-    NetworkDevice::NetworkState state() const;
-    QWidget *itemPopup();
+    NetworkDevice::NetworkType type() const override;
+    NetworkDevice::NetworkState state() const override;
+    QWidget *itemPopup() override;
     const QString itemCommand() const override;
 
 protected:
-    void paintEvent(QPaintEvent *e);
-    void resizeEvent(QResizeEvent *e);
-    void mousePressEvent(QMouseEvent *e);
+    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
 
 private slots:
-    void refreshIcon();
+    void refreshIcon() override;
     void reloadIcon();
     void activeConnectionChanged(const QUuid &uuid);
     void deviceStateChanged(const NetworkDevice &device);
