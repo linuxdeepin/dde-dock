@@ -365,7 +365,7 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 		// keep ID same with SSID for wireless connections
 		switch connectionType {
 		case connectionWireless, connectionWirelessAdhoc, connectionWirelessHotspot:
-			setSettingConnectionId(s.data, string(getSettingWirelessSsid(s.data)))
+			setSettingConnectionId(s.data, decodeSsid(getSettingWirelessSsid(s.data)))
 		}
 
 		switch connectionType {

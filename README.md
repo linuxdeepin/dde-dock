@@ -46,6 +46,13 @@ DDE Daemon is a daemon for handling  the deepin session settings
 
 ## Installation
 
+
+Install prerequisites
+
+```shell
+$ go get github.com/axgle/mahonia
+```
+
 Build:
 ```
 $ make GOPATH=/usr/share/gocode

@@ -16,6 +16,7 @@ Build-Depends: debhelper (>= 9), golang-go,
  golang-gocheck-dev,
  golang-gopkg-yaml.v2-dev,
  golang-golang-x-sys-dev,
+ golang-github-axgle-mahonia-dev,
  libudev-dev,
  libglib2.0-dev,
  libgtk-3-dev,
@@ -58,7 +59,7 @@ Depends: ${shlibs:Depends},
 Breaks: dde-daemon(<< 2.92.2), dde-workspace
 Conflicts: dde-workspace, lastore-daemon-migration
 Provides: lastore-daemon-migration
-Suggests: 
+Suggests:
  network-manager-pptp,
  network-manager-l2tp,
  network-manager-openconnect,
@@ -72,4 +73,3 @@ Description: daemon handling the DDE session settings
  This package contains the daemon which is responsible for setting the
  various parameters of a DDE session and the applications that run
  under it.
-

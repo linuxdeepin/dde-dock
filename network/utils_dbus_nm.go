@@ -868,7 +868,7 @@ func nmGetAccessPoints(devPath dbus.ObjectPath) (apPaths []dbus.ObjectPath) {
 func nmGetAccessPointSsids(devPath dbus.ObjectPath) (ssids []string) {
 	for _, apPath := range nmGetAccessPoints(devPath) {
 		if ap, err := nmNewAccessPoint(apPath); err == nil {
-			ssids = append(ssids, string(ap.Ssid.Get()))
+			ssids = append(ssids, decodeSsid(ap.Ssid.Get()))
 			nmdbus.DestroyAccessPoint(ap)
 		}
 	}

@@ -757,3 +757,26 @@ func (*testWrapper) TestFixupDeviceDesc(c *C.C) {
 		c.Check(fixupDeviceDesc(d.desc), C.Equals, d.fixedDesc)
 	}
 }
+
+// no font or locale in jenkins
+// func (*testWrapper) TestDecodeSsid(c *C.C) {
+// 	var ssidList = []struct {
+// 		ssid []byte
+// 		name string
+// 	}{
+// 		{
+// 			// gbk
+// 			ssid: []byte{178, 226, 202, 212, 45, 119, 105, 102, 105},
+// 			name: "测试-wifi",
+// 		},
+// 		{
+// 			// utf8
+// 			ssid: []byte{231, 159, 179, 231, 154, 132, 119, 105, 102, 105},
+// 			name: "石的wifi",
+// 		},
+// 	}
+
+// 	for _, info := range ssidList {
+// 		c.Check(decodeSsid(info.ssid), C.Equals, info.name)
+// 	}
+// }

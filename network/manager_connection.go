@@ -104,7 +104,7 @@ func (conn *connection) updateProps() {
 			conn.HwAddress = convertMacAddressToString(getSettingWiredMacAddress(cdata))
 		}
 	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
-		conn.Ssid = string(getSettingWirelessSsid(cdata))
+		conn.Ssid = decodeSsid(getSettingWirelessSsid(cdata))
 		if isSettingWirelessMacAddressExists(cdata) {
 			conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
 		}

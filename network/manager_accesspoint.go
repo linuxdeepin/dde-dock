@@ -104,7 +104,7 @@ func (m *Manager) destroyAccessPoint(ap *accessPoint) {
 	nmDestroyAccessPoint(ap.nmAp)
 }
 func (a *accessPoint) updateProps() {
-	a.Ssid = string(a.nmAp.Ssid.Get())
+	a.Ssid = decodeSsid(a.nmAp.Ssid.Get())
 	a.Secured = getApSecType(a.nmAp) != apSecNone
 	a.SecuredInEap = getApSecType(a.nmAp) == apSecEap
 	a.Strength = a.nmAp.Strength.Get()
@@ -270,7 +270,7 @@ func (m *Manager) ActivateAccessPoint(uuid string, apPath, devPath dbus.ObjectPa
 		defer nmDestroyAccessPoint(nmAp)
 
 		uuid = utils.GenUuid()
-		data := newWirelessConnectionData(string(nmAp.Ssid.Get()), uuid, []byte(nmAp.Ssid.Get()), getApSecType(nmAp))
+		data := newWirelessConnectionData(decodeSsid(nmAp.Ssid.Get()), uuid, []byte(nmAp.Ssid.Get()), getApSecType(nmAp))
 		cpath, _, err = nmAddAndActivateConnection(data, devPath, true)
 	}
 	return
@@ -293,7 +293,7 @@ func (m *Manager) CreateConnectionForAccessPoint(apPath, devPath dbus.ObjectPath
 	}
 	defer nmDestroyAccessPoint(nmAp)
 
-	setSettingConnectionId(session.data, string(nmAp.Ssid.Get()))
+	setSettingConnectionId(session.data, decodeSsid(nmAp.Ssid.Get()))
 	setSettingWirelessSsid(session.data, []byte(nmAp.Ssid.Get()))
 	secType := getApSecType(nmAp)
 	switch secType {
