@@ -13,7 +13,7 @@ class WirelessItem : public DeviceItem
     Q_OBJECT
 
 public:
-    explicit WirelessItem(const QUuid &uuid);
+    explicit WirelessItem(const QString &path);
     ~WirelessItem();
 
     NetworkDevice::NetworkType type() const;

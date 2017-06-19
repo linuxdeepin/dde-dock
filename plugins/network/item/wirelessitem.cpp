@@ -5,8 +5,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-WirelessItem::WirelessItem(const QUuid &uuid)
-    : DeviceItem(uuid),
+WirelessItem::WirelessItem(const QString &path)
+    : DeviceItem(path),
 
       m_refershTimer(new QTimer(this)),
       m_wirelessApplet(new QWidget),
@@ -17,7 +17,7 @@ WirelessItem::WirelessItem(const QUuid &uuid)
     m_refershTimer->setInterval(100);
 
     m_wirelessApplet->setVisible(false);
-    m_wirelessPopup->setObjectName("wireless-" + uuid.toString());
+    m_wirelessPopup->setObjectName("wireless-" + m_devicePath);
     m_wirelessPopup->setVisible(false);
     m_wirelessPopup->setStyleSheet("color:white;"
                                    "padding: 0px 3px;");
@@ -55,7 +55,7 @@ QWidget *WirelessItem::itemPopup()
 
     if (stat == NetworkDevice::Activated)
     {
-        const QJsonObject obj = m_networkManager->deviceConnInfo(m_deviceUuid);
+        const QJsonObject obj = m_networkManager->deviceConnInfo(m_devicePath);
         if (obj.contains("Ip4"))
         {
             const QJsonObject ip4 = obj["Ip4"].toObject();
@@ -170,11 +170,11 @@ const QPixmap WirelessItem::cachedPix(const QString &key, const int size)
 
 void WirelessItem::init()
 {
-    const auto devInfo = m_networkManager->device(m_deviceUuid);
+    const auto devInfo = m_networkManager->device(m_devicePath);
 
     m_APList = new WirelessList(devInfo);
     m_APList->installEventFilter(this);
-    m_APList->setObjectName("wireless-" + m_deviceUuid.toString());
+    m_APList->setObjectName("wireless-" + m_devicePath);
 
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(m_APList->controlPanel());

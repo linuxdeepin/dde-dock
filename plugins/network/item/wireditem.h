@@ -12,7 +12,7 @@ class WiredItem : public DeviceItem
     Q_OBJECT
 
 public:
-    explicit WiredItem(const QUuid &deviceUuid);
+    explicit WiredItem(const QString &path);
 
     NetworkDevice::NetworkType type() const override;
     NetworkDevice::NetworkState state() const override;
@@ -27,7 +27,7 @@ protected:
 private slots:
     void refreshIcon() override;
     void reloadIcon();
-    void activeConnectionChanged(const QUuid &uuid);
+    void activeConnectionChanged();
     void deviceStateChanged(const NetworkDevice &device);
 
 private:

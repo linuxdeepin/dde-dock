@@ -7,18 +7,17 @@ NetworkDevice::NetworkDevice(const NetworkType type, const QJsonObject &info)
     : m_type(type),
       m_infoObj(info)
 {
-    m_uuid = info.value("UniqueUuid").toString();
-    m_objectPath = info.value("Path").toString();
+    m_devicePath = info.value("Path").toString();
 }
 
-bool NetworkDevice::operator==(const QUuid &uuid) const
+bool NetworkDevice::operator==(const QString &path) const
 {
-    return m_uuid == uuid;
+    return m_devicePath == path;
 }
 
 bool NetworkDevice::operator==(const NetworkDevice &device) const
 {
-    return m_uuid == device.m_uuid;
+    return m_devicePath == device.m_devicePath;
 }
 
 NetworkDevice::NetworkState NetworkDevice::state() const
@@ -31,34 +30,29 @@ NetworkDevice::NetworkType NetworkDevice::type() const
     return m_type;
 }
 
-const QUuid NetworkDevice::uuid() const
-{
-    return m_uuid;
-}
-
 const QString NetworkDevice::path() const
 {
-    return m_objectPath;
+    return m_devicePath;
 }
 
 const QDBusObjectPath NetworkDevice::dbusPath() const
 {
-    return QDBusObjectPath(m_objectPath);
+    return QDBusObjectPath(m_devicePath);
 }
 
 const QString NetworkDevice::hwAddress() const
 {
-    return std::move(m_infoObj.value("HwAddress").toString());
+    return m_infoObj.value("HwAddress").toString();
 }
 
 const QString NetworkDevice::vendor() const
 {
-    return std::move(m_infoObj.value("Vendor").toString());
+    return m_infoObj.value("Vendor").toString();
 }
 
 const QString NetworkDevice::activeAp() const
 {
-    return std::move(m_infoObj.value("ActiveAp").toString());
+    return m_infoObj.value("ActiveAp").toString();
 }
 
 NetworkDevice::NetworkType NetworkDevice::deviceType(const QString &type)

@@ -1,8 +1,8 @@
 #include "deviceitem.h"
 
-DeviceItem::DeviceItem(const QUuid &deviceUuid)
+DeviceItem::DeviceItem(const QString &path)
     : QWidget(nullptr),
-      m_deviceUuid(deviceUuid),
+      m_devicePath(path),
 
       m_networkManager(NetworkManager::instance(this))
 {
@@ -12,11 +12,6 @@ DeviceItem::DeviceItem(const QUuid &deviceUuid)
 QSize DeviceItem::sizeHint() const
 {
     return QSize(26, 26);
-}
-
-const QUuid DeviceItem::uuid() const
-{
-    return m_deviceUuid;
 }
 
 const QString DeviceItem::itemCommand() const
@@ -67,12 +62,12 @@ void DeviceItem::invokeMenuItem(const QString &menuId)
 
 bool DeviceItem::enabled() const
 {
-    return m_networkManager->deviceEnabled(m_deviceUuid);
+    return m_networkManager->deviceEnabled(m_devicePath);
 }
 
 void DeviceItem::setEnabled(const bool enable)
 {
-    m_networkManager->setDeviceEnabled(m_deviceUuid, enable);
+    m_networkManager->setDeviceEnabled(m_devicePath, enable);
 }
 
 QWidget *DeviceItem::itemApplet()

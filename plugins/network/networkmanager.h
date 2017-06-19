@@ -34,14 +34,15 @@ public:
     const NetworkDevice::NetworkTypes types() const;
     const QSet<NetworkDevice> deviceList() const;
     const QSet<QUuid> activeConnSet() const;
+    const QSet<QString> activeDeviceSet() const { return m_activeDeviceSet; }
 
-    NetworkDevice::NetworkState deviceState(const QUuid &uuid) const;
-    bool deviceEnabled(const QUuid &uuid) const;
-    void setDeviceEnabled(const QUuid &uuid, const bool enable);
-    const QString deviceHwAddr(const QUuid &uuid) const;
-    const QString devicePath(const QUuid &uuid) const;
-    const QJsonObject deviceConnInfo(const QUuid &uuid) const;
-    const QSet<NetworkDevice>::const_iterator device(const QUuid &uuid) const;
+    NetworkDevice::NetworkState deviceState(const QString &path) const;
+    bool deviceEnabled(const QString &path) const;
+    void setDeviceEnabled(const QString path, const bool enable);
+    const QString deviceHwAddr(const QString &path) const;
+    const QString devicePath(const QString &path) const;
+    const QJsonObject deviceConnInfo(const QString &path) const;
+    const QSet<NetworkDevice>::const_iterator device(const QString &path) const;
 
 signals:
     void globalNetworkStateChanged() const;
@@ -59,6 +60,7 @@ private:
 private slots:
     void reloadDevices();
     void reloadActiveConnections();
+    void reloadNetworkState();
 
 private:
     NetworkDevice::NetworkTypes m_states;
@@ -67,6 +69,7 @@ private:
 
     QSet<NetworkDevice> m_deviceSet;
     QSet<QUuid> m_activeConnSet;
+    QSet<QString> m_activeDeviceSet;
 
     static NetworkManager *INSTANCE;
 };

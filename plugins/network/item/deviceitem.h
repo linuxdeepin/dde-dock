@@ -10,9 +10,9 @@ class DeviceItem : public QWidget
     Q_OBJECT
 
 public:
-    explicit DeviceItem(const QUuid &deviceUuid);
+    explicit DeviceItem(const QString &path);
 
-    const QUuid uuid() const;
+    const QString path() const { return m_devicePath; }
 
     virtual NetworkDevice::NetworkType type() const = 0;
     virtual NetworkDevice::NetworkState state() const = 0;
@@ -32,7 +32,7 @@ protected:
     QSize sizeHint() const;
 
 protected:
-    QUuid m_deviceUuid;
+    const QString m_devicePath;
 
     NetworkManager *m_networkManager;
 };

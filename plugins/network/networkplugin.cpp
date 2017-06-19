@@ -40,7 +40,7 @@ void NetworkPlugin::invokedMenuItem(const QString &itemKey, const QString &menuI
     Q_UNUSED(checked)
 
     for (auto item : m_deviceItemList)
-        if (item->uuid() == itemKey)
+        if (item->path() == itemKey)
             return item->invokeMenuItem(menuId);
 
     Q_UNREACHABLE();
@@ -57,7 +57,7 @@ void NetworkPlugin::refershIcon(const QString &itemKey)
 const QString NetworkPlugin::itemCommand(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
-        if (deviceItem->uuid() == itemKey)
+        if (deviceItem->path() == itemKey)
             return deviceItem->itemCommand();
 
     Q_UNREACHABLE();
@@ -67,7 +67,7 @@ const QString NetworkPlugin::itemCommand(const QString &itemKey)
 const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
 {
     for (auto item : m_deviceItemList)
-        if (item->uuid() == itemKey)
+        if (item->path() == itemKey)
             return item->itemContextMenu();
 
     Q_UNREACHABLE();
@@ -77,7 +77,7 @@ const QString NetworkPlugin::itemContextMenu(const QString &itemKey)
 QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
-        if (deviceItem->uuid() == itemKey)
+        if (deviceItem->path() == itemKey)
         {
             return deviceItem;
         }
@@ -88,7 +88,7 @@ QWidget *NetworkPlugin::itemWidget(const QString &itemKey)
 QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
-        if (deviceItem->uuid() == itemKey)
+        if (deviceItem->path() == itemKey)
             return deviceItem->itemPopup();
 
     return nullptr;
@@ -97,7 +97,7 @@ QWidget *NetworkPlugin::itemTipsWidget(const QString &itemKey)
 QWidget *NetworkPlugin::itemPopupApplet(const QString &itemKey)
 {
     for (auto deviceItem : m_deviceItemList)
-        if (deviceItem->uuid() == itemKey)
+        if (deviceItem->path() == itemKey)
             return deviceItem->itemApplet();
 
     return nullptr;
@@ -108,8 +108,8 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
     DeviceItem *item = nullptr;
     switch (device.type())
     {
-    case NetworkDevice::Wired:      item = new WiredItem(device.uuid());        break;
-    case NetworkDevice::Wireless:   item = new WirelessItem(device.uuid());     break;
+    case NetworkDevice::Wired:      item = new WiredItem(device.path());        break;
+    case NetworkDevice::Wireless:   item = new WirelessItem(device.path());     break;
     default:;
     }
 
@@ -124,12 +124,12 @@ void NetworkPlugin::deviceAdded(const NetworkDevice &device)
 void NetworkPlugin::deviceRemoved(const NetworkDevice &device)
 {
     const auto item = std::find_if(m_deviceItemList.begin(), m_deviceItemList.end(),
-                                   [&] (DeviceItem *dev) {return device == dev->uuid();});
+                                   [&] (DeviceItem *dev) {return device == dev->path();});
 
     if (item == m_deviceItemList.cend())
         return;
 
-    m_proxyInter->itemRemoved(this, (*item)->uuid().toString());
+    m_proxyInter->itemRemoved(this, (*item)->path());
     (*item)->deleteLater();
     m_deviceItemList.erase(item);
 }
@@ -154,19 +154,21 @@ void NetworkPlugin::refershDeviceItemVisible()
     const bool hasWiredDevice = types.testFlag(NetworkDevice::Wired);
     const bool hasWirelessDevice = types.testFlag(NetworkDevice::Wireless);
 
+//    qDebug() << hasWiredDevice << hasWirelessDevice;
+
     for (auto item : m_deviceItemList)
     {
         switch (item->type())
         {
         case NetworkDevice::Wireless:
-            m_proxyInter->itemAdded(this, item->uuid().toString());
+            m_proxyInter->itemAdded(this, item->path());
             break;
 
         case NetworkDevice::Wired:
             if (hasWiredDevice && (item->state() == NetworkDevice::Activated || !hasWirelessDevice))
-                m_proxyInter->itemAdded(this, item->uuid().toString());
+                m_proxyInter->itemAdded(this, item->path());
             else
-                m_proxyInter->itemRemoved(this, item->uuid().toString());
+                m_proxyInter->itemRemoved(this, item->path());
             break;
 
         default:
@@ -180,5 +182,5 @@ void NetworkPlugin::contextMenuRequested()
     DeviceItem *item = qobject_cast<DeviceItem *>(sender());
     Q_ASSERT(item);
 
-    m_proxyInter->requestContextMenu(this, item->uuid().toString());
+    m_proxyInter->requestContextMenu(this, item->path());
 }

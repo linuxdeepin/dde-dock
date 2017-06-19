@@ -40,12 +40,11 @@ public:
     static NetworkType deviceType(const QString &type);
 
     explicit NetworkDevice(const NetworkType type, const QJsonObject &info);
-    bool operator==(const QUuid &uuid) const;
+    bool operator==(const QString &path) const;
     bool operator==(const NetworkDevice &device) const;
 
     NetworkState state() const;
     NetworkType type() const;
-    const QUuid uuid() const;
     const QString path() const;
     const QDBusObjectPath dbusPath() const;
     const QString hwAddress() const;
@@ -55,14 +54,13 @@ public:
 private:
     NetworkType m_type;
 
-    QUuid m_uuid;
-    QString m_objectPath;
+    QString m_devicePath;
     QJsonObject m_infoObj;
 };
 
 inline uint qHash(const NetworkDevice &device)
 {
-    return qHash(device.uuid());
+    return qHash(device.path());
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(NetworkDevice::NetworkTypes)

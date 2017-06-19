@@ -6,8 +6,8 @@
 #include <QMouseEvent>
 #include <QIcon>
 
-WiredItem::WiredItem(const QUuid &deviceUuid)
-    : DeviceItem(deviceUuid),
+WiredItem::WiredItem(const QString &path)
+    : DeviceItem(path),
 
       m_connected(false),
       m_itemTips(new QLabel(this)),
@@ -18,7 +18,7 @@ WiredItem::WiredItem(const QUuid &deviceUuid)
     m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(20);
 
-    m_itemTips->setObjectName("wired-" + deviceUuid.toString());
+    m_itemTips->setObjectName("wired-" + path);
     m_itemTips->setVisible(false);
     m_itemTips->setStyleSheet("color:white;"
                               "padding:0px 3px;");
@@ -52,7 +52,7 @@ QWidget *WiredItem::itemPopup()
             break;
         }
 
-        const QJsonObject info = m_networkManager->deviceConnInfo(m_deviceUuid);
+        const QJsonObject info = m_networkManager->deviceConnInfo(m_devicePath);
         if (!info.contains("Ip4"))
             break;
         const QJsonObject ipv4 = info.value("Ip4").toObject();
@@ -113,7 +113,7 @@ void WiredItem::reloadIcon()
     QString iconName = "network-";
     if (!m_connected)
     {
-        NetworkDevice::NetworkState devState = m_networkManager->deviceState(m_deviceUuid);
+        NetworkDevice::NetworkState devState = m_networkManager->deviceState(m_devicePath);
 
         if (devState < NetworkDevice::Disconnected)
             iconName.append("error");
@@ -136,18 +136,18 @@ void WiredItem::reloadIcon()
     update();
 }
 
-void WiredItem::activeConnectionChanged(const QUuid &uuid)
+void WiredItem::activeConnectionChanged()
 {
-    if (uuid != m_deviceUuid)
-        return;
+//    if (path != m_devicePath)
+//        return;
 
-    m_connected = m_networkManager->activeConnSet().contains(m_deviceUuid);
+    m_connected = m_networkManager->activeDeviceSet().contains(m_devicePath);
     m_delayTimer->start();
 }
 
 void WiredItem::deviceStateChanged(const NetworkDevice &device)
 {
-    if (device.uuid() != m_deviceUuid)
+    if (device.path() != m_devicePath)
         return;
     m_delayTimer->start();
 }

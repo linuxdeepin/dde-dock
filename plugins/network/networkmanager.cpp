@@ -55,46 +55,46 @@ const QSet<QUuid> NetworkManager::activeConnSet() const
     return m_activeConnSet;
 }
 
-NetworkDevice::NetworkState NetworkManager::deviceState(const QUuid &uuid) const
+NetworkDevice::NetworkState NetworkManager::deviceState(const QString &path) const
 {
-    const auto item = device(uuid);
+    const auto item = device(path);
     if (item == m_deviceSet.cend())
         return NetworkDevice::Unknow;
 
     return item->state();
 }
 
-bool NetworkManager::deviceEnabled(const QUuid &uuid) const
+bool NetworkManager::deviceEnabled(const QString &path) const
 {
-    return m_networkInter->IsDeviceEnabled(QDBusObjectPath(devicePath(uuid)));
+    return m_networkInter->IsDeviceEnabled(QDBusObjectPath(path));
 }
 
-void NetworkManager::setDeviceEnabled(const QUuid &uuid, const bool enable)
+void NetworkManager::setDeviceEnabled(const QString path, const bool enable)
 {
-    m_networkInter->EnableDevice(QDBusObjectPath(devicePath(uuid)), enable);
+    m_networkInter->EnableDevice(QDBusObjectPath(path), enable);
 }
 
-const QString NetworkManager::deviceHwAddr(const QUuid &uuid) const
+const QString NetworkManager::deviceHwAddr(const QString &path) const
 {
-    const auto item = device(uuid);
+    const auto item = device(path);
     if (item == m_deviceSet.cend())
         return QString();
 
     return item->hwAddress();
 }
 
-const QString NetworkManager::devicePath(const QUuid &uuid) const
+const QString NetworkManager::devicePath(const QString &path) const
 {
-    const auto item = device(uuid);
+    const auto item = device(path);
     if (item == m_deviceSet.cend())
         return QString();
 
     return item->path();
 }
 
-const QJsonObject NetworkManager::deviceConnInfo(const QUuid &uuid) const
+const QJsonObject NetworkManager::deviceConnInfo(const QString &path) const
 {
-    const QString addr = deviceHwAddr(uuid);
+    const QString addr = deviceHwAddr(path);
     if (addr.isEmpty())
         return QJsonObject();
 
@@ -125,10 +125,10 @@ NetworkManager::NetworkManager(QObject *parent)
     connect(m_networkInter, &DBusNetwork::ActiveConnectionsChanged, this, &NetworkManager::reloadActiveConnections);
 }
 
-const QSet<NetworkDevice>::const_iterator NetworkManager::device(const QUuid &uuid) const
+const QSet<NetworkDevice>::const_iterator NetworkManager::device(const QString &path) const
 {
     return std::find_if(m_deviceSet.cbegin(), m_deviceSet.cend(),
-                        [&] (const NetworkDevice &dev) {return dev == uuid;});
+                        [&] (const NetworkDevice &dev) {return dev.path() == path;});
 }
 
 void NetworkManager::reloadDevices()
@@ -181,21 +181,12 @@ void NetworkManager::reloadActiveConnections()
     Q_ASSERT(doc.isObject());
     const QJsonObject obj = doc.object();
 
-    NetworkDevice::NetworkTypes states = NetworkDevice::None;
     QSet<QUuid> activeConnList;
     for (auto info(obj.constBegin()); info != obj.constEnd(); ++info)
     {
         Q_ASSERT(info.value().isObject());
         const QJsonObject infoObj = info.value().toObject();
-
         const QUuid uuid = infoObj.value("Uuid").toString();
-        // if uuid not in device list, its a wireless connection
-        const bool isWireless = std::find(m_deviceSet.cbegin(), m_deviceSet.cend(), uuid) == m_deviceSet.cend();
-
-        if (isWireless)
-            states |= NetworkDevice::Wireless;
-        else
-            states |= NetworkDevice::Wired;
 
         activeConnList.insert(uuid);
     }
@@ -203,11 +194,36 @@ void NetworkManager::reloadActiveConnections()
     const QSet<QUuid> removedConnList = m_activeConnSet - activeConnList;
     m_activeConnSet = std::move(activeConnList);
 
+    reloadNetworkState();
+
     for (auto uuid : removedConnList)
         emit activeConnectionChanged(uuid);
 
     for (auto uuid : m_activeConnSet)
         emit activeConnectionChanged(uuid);
+}
+
+void NetworkManager::reloadNetworkState()
+{
+    NetworkDevice::NetworkTypes states = NetworkDevice::None;
+    QSet<QString> activedDevices;
+
+    const QJsonDocument doc = QJsonDocument::fromJson(m_networkInter->GetActiveConnectionInfo().value().toUtf8());
+    for (const auto info : doc.array())
+    {
+        const auto detail = info.toObject();
+        const QString type = detail.value("ConnectionType").toString();
+        const QString device = detail.value("Device").toString();
+
+        activedDevices.insert(device);
+
+        if (type == "wired")
+            states |= NetworkDevice::Wired;
+        else if (type == "wireless")
+            states |= NetworkDevice::Wireless;
+    }
+
+    m_activeDeviceSet = std::move(activedDevices);
 
     if (m_states == states)
         return;

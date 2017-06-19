@@ -139,7 +139,7 @@ const QString SystemTrayPlugin::getWindowClass(quint32 winId)
     delete reply;
     delete error;
 
-    return std::move(ret);
+    return ret;
 }
 
 void SystemTrayPlugin::trayListChanged()
