@@ -26,18 +26,18 @@ type Battery struct {
 	SysfsPath         string
 	IsPresent         bool
 
-	Name             string
-	Technology       string
-	Manufacturer     string
-	ModelName        string
-	SerialNumber     string
-	EnergyFullDesign uint64
-	VoltageMinDesign uint64
+	Manufacturer string
+	ModelName    string
+	SerialNumber string
+	Name         string
+	Technology   string
 
-	EnergyFull  uint64
-	EnergyNow   uint64
-	PowerNow    uint64
-	VoltageNow  uint64
+	Energy           float64
+	EnergyFull       float64
+	EnergyFullDesign float64
+	EnergyRate       float64
+
+	Voltage     float64
 	Percentage  float64
 	Capacity    float64
 	Status      battery.Status
@@ -98,18 +98,18 @@ func (bat *Battery) resetValues() {
 	bat.setPropIsPresent(false)
 	bat.setPropUpdateTime(0)
 
-	bat.setPropName("")
-	bat.setPropTechnology("")
 	bat.setPropManufacturer("")
 	bat.setPropModelName("")
 	bat.setPropSerialNumber("")
-	bat.setPropEnergyFullDesign(0)
-	bat.setPropVoltageMinDesign(0)
+	bat.setPropName("")
+	bat.setPropTechnology("")
 
-	bat.setPropEnergyNow(0)
+	bat.setPropEnergy(0)
 	bat.setPropEnergyFull(0)
-	bat.setPropVoltageNow(0)
-	bat.setPropPowerNow(0)
+	bat.setPropEnergyFullDesign(0)
+	bat.setPropEnergyRate(0)
+
+	bat.setPropVoltage(0)
 	bat.setPropPercentage(0)
 	bat.setPropCapacity(0)
 	bat.setPropStatus(battery.StatusUnknown)
@@ -159,32 +159,25 @@ func (bat *Battery) _refresh(info *battery.BatteryInfo) {
 	logger.Debug("SerialNumber", info.SerialNumber)
 	bat.setPropSerialNumber(info.SerialNumber)
 
-	logger.Debugf("EnergyFullDesign %vµAh", info.EnergyFullDesign)
-	bat.setPropEnergyFullDesign(info.EnergyFullDesign)
+	logger.Debugf("energy %v", info.Energy)
+	bat.setPropEnergy(info.Energy)
 
-	logger.Debugf("VoltageMinDesign %vµV", info.VoltageMinDesign)
-	bat.setPropVoltageMinDesign(info.VoltageMinDesign)
-
-	logger.Debugf("energyNow %vµAh", info.EnergyNow)
-	bat.setPropEnergyNow(info.EnergyNow)
-
-	logger.Debugf("energyFull %vµAh", info.EnergyFull)
-	if info.EnergyFull > info.EnergyFullDesign {
-		logger.Warningf("EnergyFull (%v) is greater then EnergyFullDesign (%v)",
-			info.EnergyFull, info.EnergyFullDesign)
-	}
+	logger.Debugf("energyFull %v", info.EnergyFull)
 	bat.setPropEnergyFull(info.EnergyFull)
 
-	logger.Debugf("powerNow %vµA", info.PowerNow)
-	bat.setPropPowerNow(info.PowerNow)
+	logger.Debugf("EnergyFullDesign %v", info.EnergyFullDesign)
+	bat.setPropEnergyFullDesign(info.EnergyFullDesign)
 
-	logger.Debugf("voltageNow %vµV", info.VoltageNow)
-	bat.setPropVoltageNow(info.VoltageNow)
+	logger.Debugf("EnergyRate %v", info.EnergyRate)
+	bat.setPropEnergyRate(info.EnergyRate)
 
-	logger.Debugf("percentage %.1f%%", info.Percentage)
+	logger.Debugf("voltage %v", info.Voltage)
+	bat.setPropVoltage(info.Voltage)
+
+	logger.Debugf("percentage %.4f%%", info.Percentage)
 	bat.setPropPercentage(info.Percentage)
 
-	logger.Debugf("capacity %.1f%%", info.Capacity)
+	logger.Debugf("capacity %.4f%%", info.Capacity)
 	bat.setPropCapacity(info.Capacity)
 
 	logger.Debug("status", info.Status)

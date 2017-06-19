@@ -43,31 +43,38 @@ func (bat *Battery) setPropUpdateTime(updateTime int64) {
 	}
 }
 
-func (bat *Battery) setPropEnergyNow(energyNow uint64) {
-	if bat.EnergyNow != energyNow {
-		bat.EnergyNow = energyNow
-		bat.notifyChange("EnergyNow")
+func (bat *Battery) setPropEnergy(energy float64) {
+	if bat.Energy != energy {
+		bat.Energy = energy
+		bat.notifyChange("Energy")
 	}
 }
 
-func (bat *Battery) setPropEnergyFull(energyFull uint64) {
+func (bat *Battery) setPropEnergyFull(energyFull float64) {
 	if bat.EnergyFull != energyFull {
 		bat.EnergyFull = energyFull
 		bat.notifyChange("EnergyFull")
 	}
 }
 
-func (bat *Battery) setPropPowerNow(powerNow uint64) {
-	if bat.PowerNow != powerNow {
-		bat.PowerNow = powerNow
-		bat.notifyChange("PowerNow")
+func (bat *Battery) setPropEnergyFullDesign(val float64) {
+	if bat.EnergyFullDesign != val {
+		bat.EnergyFullDesign = val
+		bat.notifyChange("EnergyFullDesign")
 	}
 }
 
-func (bat *Battery) setPropVoltageNow(voltageNow uint64) {
-	if bat.VoltageNow != voltageNow {
-		bat.VoltageNow = voltageNow
-		bat.notifyChange("VoltageNow")
+func (bat *Battery) setPropEnergyRate(energyRate float64) {
+	if bat.EnergyRate != energyRate {
+		bat.EnergyRate = energyRate
+		bat.notifyChange("EnergyRate")
+	}
+}
+
+func (bat *Battery) setPropVoltage(voltage float64) {
+	if bat.Voltage != voltage {
+		bat.Voltage = voltage
+		bat.notifyChange("Voltage")
 	}
 }
 
@@ -138,20 +145,6 @@ func (bat *Battery) setPropSerialNumber(val string) {
 	if bat.SerialNumber != val {
 		bat.SerialNumber = val
 		bat.notifyChange("SerialNumber")
-	}
-}
-
-func (bat *Battery) setPropEnergyFullDesign(val uint64) {
-	if bat.EnergyFullDesign != val {
-		bat.EnergyFullDesign = val
-		bat.notifyChange("EnergyFullDesign")
-	}
-}
-
-func (bat *Battery) setPropVoltageMinDesign(val uint64) {
-	if bat.VoltageMinDesign != val {
-		bat.VoltageMinDesign = val
-		bat.notifyChange("VoltageMinDesign")
 	}
 }
 

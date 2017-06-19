@@ -18,28 +18,58 @@ import (
 func (m *Manager) refreshBatteryDisplay() {
 	logger.Debug("refreshBatteryDisplay")
 	defer dbus.Emit(m, "BatteryDisplayUpdate", time.Now().Unix())
+
+	var percentage float64
+	var status battery.Status
+	var timeToEmpty, timeToFull uint64
+
 	batteryCount := len(m.batteries)
 	if batteryCount == 0 {
 		m.resetBatteryDisplay()
 		return
+	} else if batteryCount == 1 {
+		var bat0 *Battery
+		for _, bat := range m.batteries {
+			bat0 = bat
+			break
+		}
+
+		// copy from bat0
+		percentage = bat0.Percentage
+		status = bat0.Status
+		timeToEmpty = bat0.TimeToEmpty
+		timeToFull = bat0.TimeToFull
+	} else {
+		var energyTotal, energyFullTotal, energyRateTotal float64
+		for _, bat := range m.batteries {
+			energyTotal += bat.Energy
+			energyFullTotal += bat.EnergyFull
+			energyRateTotal += bat.EnergyRate
+		}
+		logger.Debugf("energyTotal: %v", energyTotal)
+		logger.Debugf("energyFullTotal: %v", energyFullTotal)
+		logger.Debugf("energyRateTotal: %v", energyRateTotal)
+
+		percentage = rightPercentage(energyTotal / energyFullTotal * 100.0)
+		status = m.getBatteryDisplayStatus()
+
+		if energyRateTotal > 0 {
+			if status == battery.StatusDischarging {
+				timeToEmpty = uint64(3600 * (energyTotal / energyRateTotal))
+			} else if status == battery.StatusCharging {
+				timeToFull = uint64(3600 * ((energyFullTotal - energyTotal) / energyRateTotal))
+			}
+		}
+
+		/* check the remaining thime is under a set limit, to deal with broken
+		primary batteries rate */
+		if timeToEmpty > 240*60*60 { /* ten days for discharging */
+			timeToEmpty = 0
+		}
+		if timeToFull > 20*60*60 { /* 20 hours for charging */
+			timeToFull = 0
+		}
 	}
-
-	var energyNowTotal, energyFullTotal, powerNowTotal uint64
-	for _, bat := range m.batteries {
-		energyNowTotal += bat.EnergyNow
-		energyFullTotal += bat.EnergyFull
-		powerNowTotal += bat.PowerNow
-	}
-
-	percentage := rightPercentage(
-		float64(energyNowTotal) / float64(energyFullTotal) * 100.0)
-
-	status := m.getBatteryDisplayStatus()
-
-	var timeToEmpty, timeToFull uint64
-
-	timeToEmpty = uint64(float64(energyNowTotal) / float64(powerNowTotal) * 3600)
-	timeToFull = uint64(float64(energyFullTotal-energyNowTotal) / float64(powerNowTotal) * 3600)
 
 	// report
 	m.setPropHasBattery(true)
@@ -48,9 +78,6 @@ func (m *Manager) refreshBatteryDisplay() {
 	m.setPropBatteryTimeToEmpty(timeToEmpty)
 	m.setPropBatteryTimeToFull(timeToFull)
 
-	logger.Debugf("energyNowTotal: %vµAh", energyNowTotal)
-	logger.Debugf("energyFullTotal: %vµAh", energyFullTotal)
-	logger.Debugf("powerNowTotal: %vµA", powerNowTotal)
 	logger.Debugf("percentage: %.1f%%", percentage)
 	logger.Debug("status:", status, uint32(status))
 	logger.Debugf("timeToEmpty %v (%vs), timeToFull %v (%vs)",
