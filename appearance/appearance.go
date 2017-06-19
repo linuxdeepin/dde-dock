@@ -53,12 +53,9 @@ func (*Daemon) Start() error {
 		logger.EndTracing()
 		return err
 	}
-	go func() {
-		_m.init()
-		go _m.listenCursorChanged()
-		go _m.handleThemeChanged()
-		_m.listenGSettingChanged()
-	}()
+
+	_m.init()
+	go _m.listenCursorChanged()
 
 	return nil
 }

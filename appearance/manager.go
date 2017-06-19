@@ -198,6 +198,10 @@ func (m *Manager) init() {
 		subthemes.ListCursorTheme()
 		background.ListBackground()
 		fonts.ListStandardFamily()
+
+		// must be called after init finished
+		go m.handleThemeChanged()
+		m.listenGSettingChanged()
 	})
 
 	cur, err := user.Current()
