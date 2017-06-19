@@ -187,6 +187,11 @@ func (kbd *Keyboard) setLayout() {
 
 	kbd.setGreeterLayout()
 	kbd.addUserLayout(kbd.CurrentLayout.Get())
+
+	err = applyXmodmapConfig()
+	if err != nil {
+		logger.Warning("Failed to apply xmodmap:", err)
+	}
 }
 
 func (kbd *Keyboard) setOptions() error {
@@ -418,4 +423,12 @@ func setWMKeyboardRepeat(repeat bool, delay, interval uint32) {
 	if setting.GetUint(wmRepeatKeyInterval) != interval {
 		setting.SetUint(wmRepeatKeyInterval, interval)
 	}
+}
+
+func applyXmodmapConfig() error {
+	config := os.Getenv("HOME") + "/.Xmodmap"
+	if !dutils.IsFileExist(config) {
+		return nil
+	}
+	return doAction("xmodmap " + config)
 }
