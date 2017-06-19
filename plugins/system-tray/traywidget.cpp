@@ -85,6 +85,8 @@ void TrayWidget::hideEvent(QHideEvent *e)
 void TrayWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
+    if (m_image.isNull())
+        return m_updateTimer->start();
 
 //    const QPoint p(width() / 2 - iconSize / 2, height() / 2 - iconSize / 2);
 
@@ -92,7 +94,7 @@ void TrayWidget::paintEvent(QPaintEvent *e)
     painter.begin(this);
     painter.setRenderHint(QPainter::Antialiasing);
 #ifdef QT_DEBUG
-    painter.fillRect(rect(), Qt::red);
+//    painter.fillRect(rect(), Qt::red);
 #endif
 
 //    m_image = getImageNonComposite();
@@ -459,19 +461,27 @@ void TrayWidget::refershIconImage()
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
-//    Q_ASSERT(!geom.isNull());
     if (geom.isNull())
         return;
 
-    xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
+    xcb_expose_event_t expose;
+    expose.response_type = XCB_EXPOSE;
+    expose.window = m_containerWid;
+    expose.x = 0;
+    expose.y = 0;
+    expose.width = 16;
+    expose.height = 16;
+    xcb_send_event_checked(c, false, m_containerWid, XCB_EVENT_MASK_VISIBILITY_CHANGE, reinterpret_cast<char *>(&expose));
+    xcb_flush(c);
 
-//    Q_ASSERT(image);
-    if (image == NULL)
-        return;
+    xcb_image_t *image = xcb_image_get(c, m_windowId, 0, 0, geom->width, geom->height, ~0, XCB_IMAGE_FORMAT_Z_PIXMAP);
+    Q_ASSERT_X(image, Q_FUNC_INFO, "image is null");
 
     QImage qimage(image->data, image->width, image->height, image->stride, QImage::Format_ARGB32, sni_cleanup_xcb_image, image);
+    if (qimage.isNull())
+        return;
 
-    m_image = qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio);
+    m_image = qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation).copy();
 
     update();
     emit iconChanged();
