@@ -132,7 +132,7 @@ void SoundItem::refershIcon()
     if (!m_sinkInter)
         return;
 
-    const double volmue = m_sinkInter->volume();
+    const double volmue = m_applet->volumeValue();
     const bool mute = m_sinkInter->mute();
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
@@ -140,12 +140,13 @@ void SoundItem::refershIcon()
     if (displayMode == Dock::Fashion)
     {
         QString volumeString;
-        if (volmue >= 1.0)
+        if (volmue >= 1000)
             volumeString = "100";
         else
-            volumeString = QString("0") + ('0' + int(volmue * 10)) + "0";
+            volumeString = QString("0") + ('0' + int(volmue / 100)) + "0";
 
         iconString = ":/icons/image/audio-volume-" + volumeString;
+
         if (mute)
             iconString += "-muted";
     } else {
@@ -181,7 +182,10 @@ void SoundItem::refershTips(const bool force)
     if (m_sinkInter->mute()) {
         value = QString("0") + '%';
     } else {
-        value = QString::number(m_applet->volumeValue() / 10) + '%';
+        if (m_sinkInter->volume() * 1000 < m_applet->volumeValue())
+            value = QString::number(m_applet->volumeValue() / 10) + '%';
+        else
+            value = QString::number(m_sinkInter->volume() * 100) + '%';
     }
     m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
 }

@@ -24,6 +24,8 @@ SoundApplet::SoundApplet(QWidget *parent)
 {
 //    QIcon::setThemeName("deepin");
 
+    m_gsetting = new QGSettings("com.deepin.dde.audio", "", this);
+
     m_volumeBtn->setAccessibleName("volume-button");
     m_volumeSlider->setAccessibleName("volume-slider");
 
@@ -121,10 +123,14 @@ void SoundApplet::defaultSinkChanged()
 
 void SoundApplet::onVolumeChanged()
 {
-    const double volmue = m_defSinkInter->volume();
+    const float volmue = m_defSinkInter->volume();
     const bool mute = m_defSinkInter->mute();
 
-    m_volumeSlider->setValue(std::min(1000.0, volmue * 1000));
+    //Keep the same units. slider is 1000.0f, maxVolue need multiplication 10.
+    float m_maxVolume = std::min(1000, m_gsetting->get("output-volume-max").toInt() * 10);
+
+    m_volumeSlider->setValue(std::min(1000.0f, volmue * 1000.0f / (m_maxVolume / 1000.0f)));
+
     emit volumeChanged(m_volumeSlider->value());
 
     QString volumeString;
@@ -142,7 +148,10 @@ void SoundApplet::onVolumeChanged()
 
 void SoundApplet::volumeSliderValueChanged()
 {
-    m_defSinkInter->SetVolume(double(m_volumeSlider->value()) / 1000, false);
+    //Keep the same units. slider is 1000.0f, maxVolue need multiplication 10.
+    float m_maxVolume = std::min(1000, m_gsetting->get("output-volume-max").toInt() * 10);
+
+    m_defSinkInter->SetVolume(m_volumeSlider->value() / 1000.0f * (m_maxVolume / 1000.0f), false);
 }
 
 void SoundApplet::sinkInputsChanged()

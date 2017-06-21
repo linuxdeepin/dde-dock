@@ -10,6 +10,7 @@ Build-Depends: debhelper (>= 8.0.0), pkg-config,
  libxcb-icccm4-dev, libxtst-dev,
  libdtkbase-dev, libdtkutil-dev, libdtkwidget-dev, qttools5-dev-tools, libxcb-icccm4-dev,
  libdframeworkdbus-dev,
+ libgsettings-qt-dev,
  clang [mipsel mips64el]
 Standards-Version: 3.9.4
 Homepage: http://www.deepin.org/

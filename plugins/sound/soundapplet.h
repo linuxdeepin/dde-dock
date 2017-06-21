@@ -9,7 +9,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
-
+#include <QGSettings>
 #include <dimagebutton.h>
 
 class SoundApplet : public QScrollArea
@@ -44,6 +44,7 @@ private:
 
     DBusAudio *m_audioInter;
     DBusSink *m_defSinkInter;
+    QGSettings *m_gsetting;
 };
 
 #endif // SOUNDAPPLET_H
