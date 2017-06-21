@@ -32,7 +32,6 @@ private:
     void mousePressEvent(QMouseEvent *e);
     void mouseMoveEvent(QMouseEvent *e);
     void mouseReleaseEvent(QMouseEvent *e);
-    void paintEvent(QPaintEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 
     void invokedMenuItem(const QString &itemId, const bool checked);

@@ -118,16 +118,6 @@ void PluginsItem::mouseReleaseEvent(QMouseEvent *e)
         mouseClicked();
 }
 
-void PluginsItem::paintEvent(QPaintEvent *e)
-{
-    if (m_draging)
-        return;
-
-    DockItem::paintEvent(e);
-
-    // TODO: hover effect
-}
-
 bool PluginsItem::eventFilter(QObject *o, QEvent *e)
 {
     if (m_draging)
