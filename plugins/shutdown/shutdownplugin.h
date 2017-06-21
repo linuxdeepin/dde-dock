@@ -8,6 +8,9 @@
 
 #include <QLabel>
 
+#define BATTERY_DISCHARED   2
+#define BATTERY_FULL        4
+
 class ShutdownPlugin : public QObject, PluginsItemInterface
 {
     Q_OBJECT
