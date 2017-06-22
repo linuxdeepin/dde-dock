@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-19 15:33+0800\n"
-"PO-Revision-Date: 2017-06-02 06:49+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-06-02 13:46+0000\n"
+"Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1031,7 +1031,7 @@ msgstr "Pracovné prostredie"
 
 #: ../../langselector/handle_event.go:24
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Na prepínanie jazyka je potrebná autentifikácia"
 
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
 #: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36

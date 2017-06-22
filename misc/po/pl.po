@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-19 15:33+0800\n"
-"PO-Revision-Date: 2017-06-02 06:49+0000\n"
-"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
+"PO-Revision-Date: 2017-06-19 13:50+0000\n"
+"Last-Translator: Piotr Strębski <strebski@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>=14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: ../../accounts/checkers/password.go:44
 #: ../../accounts/checkers/password.go:45
@@ -1031,7 +1031,7 @@ msgstr "Wyświetl przestrzeń roboczą"
 
 #: ../../langselector/handle_event.go:24
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Wymagane jest uwierzytelnienie, aby móc przełączyć język"
 
 #: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
 #: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
