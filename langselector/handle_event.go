@@ -31,7 +31,7 @@ func (lang *LangSelector) onLocaleSuccess() {
 			lang.logger.Warning(err)
 			lang.setPropCurrentLocale(getCurrentUserLocale())
 			e := sendNotify(localeIconFailed, "",
-				Tr("System language failed to change, please try later."))
+				Tr("System language failed to change, please try later"))
 			if e != nil {
 				lang.logger.Warning("sendNotify failed:", e)
 			}
@@ -43,7 +43,7 @@ func (lang *LangSelector) onLocaleSuccess() {
 			return
 		}
 		e := sendNotify(localeIconFinished, "",
-			Tr("System language has been changed, please log in again after logged out."))
+			Tr("System language has been changed, please log in again after logged out"))
 		if e != nil {
 			lang.logger.Warning("sendNotify failed:", e)
 		}

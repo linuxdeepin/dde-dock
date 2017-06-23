@@ -30,9 +30,9 @@ func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
 	const icon = "deepin-appstore"
 	var msg string
 	if succeed {
-		msg = fmt.Sprintf(Tr("%q removed successfully."), item.Name)
+		msg = fmt.Sprintf(Tr("%q removed successfully"), item.Name)
 	} else {
-		msg = fmt.Sprintf(Tr("Failed to uninstall %q."), item.Name)
+		msg = fmt.Sprintf(Tr("Failed to uninstall %q"), item.Name)
 	}
 	m.sendNotification(msg, "", icon)
 }
