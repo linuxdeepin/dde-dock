@@ -304,10 +304,10 @@ func fillSectionCache(data connectionData) {
 	}
 
 	// mobile
-	uuid := getSettingConnectionUuid(data)
-	manager.config.ensureMobileConfigExists(uuid)
 	switch getCustomConnectionType(data) {
 	case connectionMobileGsm, connectionMobileCdma:
+		uuid := getSettingConnectionUuid(data)
+		manager.config.ensureMobileConfigExists(uuid)
 		doLogicSetSettingVkMobileCountry(data, manager.config.getMobileConnectionCountry(uuid))
 		doLogicSetSettingVkMobileProvider(data, manager.config.getMobileConnectionProvider(uuid))
 		doLogicSetSettingVkMobilePlan(data, manager.config.getMobileConnectionPlan(uuid))
@@ -351,10 +351,10 @@ func refileSectionCache(data connectionData) {
 	}
 
 	// mobile
-	uuid := getSettingConnectionUuid(data)
-	manager.config.ensureMobileConfigExists(uuid)
 	switch getCustomConnectionType(data) {
 	case connectionMobileGsm, connectionMobileCdma:
+		uuid := getSettingConnectionUuid(data)
+		manager.config.ensureMobileConfigExists(uuid)
 		manager.config.setMobileConnectionCountry(uuid, getSettingVkMobileCountry(data))
 		manager.config.setMobileConnectionProvider(uuid, getSettingVkMobileProvider(data))
 		manager.config.setMobileConnectionPlan(uuid, getSettingVkMobilePlan(data))

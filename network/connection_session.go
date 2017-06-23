@@ -377,6 +377,7 @@ func (s *ConnectionSession) Save(activated bool) (ok bool, err error) {
 		if err != nil {
 			logger.Error("Failed to save non-exists connection:", err)
 		}
+		s.connectionExists = true
 	}
 
 	s.updateSecretsToKeyring()
