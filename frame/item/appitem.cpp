@@ -15,9 +15,6 @@
 #include <QGraphicsScene>
 #include <QGraphicsItemAnimation>
 #include <QTimeLine>
-#include <QFuture>
-#include <QFutureWatcher>
-#include <QtConcurrent>
 
 #define APP_DRAG_THRESHOLD      20
 
@@ -96,13 +93,8 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_appPreviewTips, &_PreviewContainer::requestHidePreview, this, &AppItem::hidePopup, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestCheckWindows, m_itemEntry, &DBusDockEntry::Check);
 
-    connect(m_smallWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotSmallIcon);
-    connect(m_largeWatcher, &QFutureWatcher<QPixmap>::finished, this, &AppItem::gotLargeIcon);
-
-    QTimer::singleShot(1, this, [=] {
-        updateTitle();
-        refershIcon();
-    });
+    updateTitle();
+    refershIcon();
 }
 
 AppItem::~AppItem()
@@ -492,21 +484,16 @@ void AppItem::refershIcon()
     const QString icon = m_itemEntry->icon();
     const int iconSize = qMin(width(), height());
 
-    m_smallWatcher->cancel();
-    m_largeWatcher->cancel();
-
     if (DockDisplayMode == Efficient)
     {
-//        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
-//        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.9);
-        m_smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.7));
-        m_largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.9));
+        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.7);
+        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.9);
     } else {
-//        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
-//        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
-        m_smallWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.6));
-        m_largeWatcher->setFuture(QtConcurrent::run(ThemeAppIcon::getIcon, icon, iconSize * 0.8));
+        m_smallIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.6);
+        m_largeIcon = ThemeAppIcon::getIcon(icon, iconSize * 0.8);
     }
+
+    update();
 
     m_updateIconGeometryTimer->start();
 }
@@ -541,16 +528,3 @@ void AppItem::showPreview()
     showPopupWindow(m_appPreviewTips, true);
 }
 
-void AppItem::gotSmallIcon()
-{
-    m_smallIcon = m_smallWatcher->result();
-
-    update();
-}
-
-void AppItem::gotLargeIcon()
-{
-    m_largeIcon = m_largeWatcher->result();
-
-    update();
-}

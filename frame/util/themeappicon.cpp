@@ -14,7 +14,7 @@ ThemeAppIcon::~ThemeAppIcon()
 
 }
 
-QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
+const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
     const int s = size & ~1;
 
