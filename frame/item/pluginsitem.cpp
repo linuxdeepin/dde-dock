@@ -79,6 +79,11 @@ void PluginsItem::setInContainer(const bool container)
     m_pluginInter->setItemIsInContainer(m_itemKey, container);
 }
 
+QSize PluginsItem::sizeHint() const
+{
+    return m_centralWidget->sizeHint();
+}
+
 void PluginsItem::refershIcon()
 {
     m_pluginInter->refershIcon(m_itemKey);

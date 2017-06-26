@@ -23,20 +23,21 @@ public:
     using DockItem::showContextMenu;
     using DockItem::hidePopup;
 
-    inline ItemType itemType() const {return Plugins;}
+    inline ItemType itemType() const override {return Plugins;}
+    QSize sizeHint() const override;
 
 public slots:
-    void refershIcon();
+    void refershIcon() override;
 
 private:
-    void mousePressEvent(QMouseEvent *e);
-    void mouseMoveEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
-    bool eventFilter(QObject *o, QEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override;
 
-    void invokedMenuItem(const QString &itemId, const bool checked);
-    const QString contextMenu() const;
-    QWidget *popupTips();
+    void invokedMenuItem(const QString &itemId, const bool checked) override;
+    const QString contextMenu() const override;
+    QWidget *popupTips() override;
 
 private:
     void startDrag();

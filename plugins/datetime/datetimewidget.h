@@ -14,6 +14,7 @@ public:
     bool is24HourFormat() const { return m_24HourFormat; }
 
 signals:
+    void requestUpdateGeometry() const;
     void requestContextMenu() const;
 
 public slots:

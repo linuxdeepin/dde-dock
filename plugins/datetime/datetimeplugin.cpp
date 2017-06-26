@@ -18,7 +18,8 @@ DatetimePlugin::DatetimePlugin(QObject *parent)
 
     m_centralWidget = new DatetimeWidget;
 
-    connect(m_centralWidget, &DatetimeWidget::requestContextMenu, [this] {m_proxyInter->requestContextMenu(this, QString());});
+    connect(m_centralWidget, &DatetimeWidget::requestContextMenu, [this] { m_proxyInter->requestContextMenu(this, QString()); });
+    connect(m_centralWidget, &DatetimeWidget::requestUpdateGeometry, [this] { m_proxyInter->itemUpdate(this, QString()); });
 
     connect(m_refershTimer, &QTimer::timeout, this, &DatetimePlugin::updateCurrentTimeString);
 }

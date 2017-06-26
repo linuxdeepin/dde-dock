@@ -21,5 +21,7 @@
         <file>resources/icons/small7.svg</file>
         <file>resources/icons/small8.svg</file>
         <file>resources/icons/small9.svg</file>
+        <file>resources/icons/tips-am.svg</file>
+        <file>resources/icons/tips-pm.svg</file>
     </qresource>
 </RCC>
