@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-19 15:33+0800\n"
-"PO-Revision-Date: 2017-06-02 13:46+0000\n"
+"POT-Creation-Date: 2017-06-23 11:04+0800\n"
+"PO-Revision-Date: 2017-06-23 20:08+0000\n"
 "Last-Translator: Marek Bujko <marek.bujko@gmail.com>\n"
 "Language-Team: Slovak (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/sk/)\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,6 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: ../../accounts/checkers/password.go:44
-#: ../../accounts/checkers/password.go:45
 msgid "Please enter a password not less than 8 characters"
 msgstr "Prosím, zadajte heslo s viac ako 8 znakmi"
 
@@ -30,620 +29,125 @@ msgid ""
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
 msgstr "Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), číslice alebo špeciálne znaky (~!@#$%^&*()[]{}\\|/?,.<>)"
 
-#: ../../accounts/checkers/password.go:47
-#, c-format
-msgid ""
-"The password must contain English letters (case-sensitive), numbers or "
-"special symbols (%s)"
-msgstr "Heslo musí obsahovať písmená anglickej abecedy (veľké a malé písmená), číslice alebo špeciálne znaky (%s)"
-
 #: ../../accounts/checkers/username.go:49
-#: ../../accounts/checkers/username.go:61
-#: ../../accounts/username_checker/username.go:65
 msgid "Username can not be empty."
 msgstr "Meno používateľa nesmie byť prázdne. "
 
 #: ../../accounts/checkers/username.go:51
-#: ../../accounts/checkers/username.go:63
-#: ../../accounts/username_checker/username.go:66
 msgid "Username must comprise a~z, 0~9, - or _."
 msgstr "Meno používateľa môže obsahovať znaky a~z, 0~9, - a _."
 
 #: ../../accounts/checkers/username.go:53
-#: ../../accounts/checkers/username.go:65
-#: ../../accounts/username_checker/username.go:67
 msgid "The first character must be in lower case."
 msgstr "Prvý znak musí byť malé písmeno. "
 
 #: ../../accounts/checkers/username.go:55
-#: ../../accounts/checkers/username.go:67
-#: ../../accounts/username_checker/username.go:68
 msgid "The username exists."
 msgstr "Meno používateľa už existuje. "
 
 #: ../../accounts/checkers/username.go:57
-#: ../../accounts/checkers/username.go:69
-#: ../../accounts/username_checker/username.go:69
 msgid "The username has been used by system."
 msgstr "Meno používateľa už je používané v systéme. "
 
 #: ../../accounts/checkers/username.go:59
-#: ../../accounts/checkers/username.go:71
 msgid "The username's length exceeds the limit"
 msgstr "Dĺžka mena používateľa presahuje limit"
 
-#: ../../bluetooth/bluez_profile.go:19 ../../bluetooth/bluez_profile.go:31
+#: ../../bluetooth/bluez_profile.go:19
 msgid "Serial port"
 msgstr "Sériový port"
 
-#: ../../bluetooth/bluez_profile.go:20 ../../bluetooth/bluez_profile.go:32
+#: ../../bluetooth/bluez_profile.go:20
 msgid "Dial-Up networking"
 msgstr "Dial-Up pripojenie"
 
-#: ../../bluetooth/bluez_profile.go:21 ../../bluetooth/bluez_profile.go:33
+#: ../../bluetooth/bluez_profile.go:21
 msgid "Hands-Free device"
 msgstr "Hands-free zariadenie"
 
-#: ../../bluetooth/bluez_profile.go:22 ../../bluetooth/bluez_profile.go:34
+#: ../../bluetooth/bluez_profile.go:22
 msgid "Hands-Free voice gateway"
 msgstr "Hands-free voice brána"
 
-#: ../../bluetooth/bluez_profile.go:23 ../../bluetooth/bluez_profile.go:35
+#: ../../bluetooth/bluez_profile.go:23
 msgid "Headset voice gateway"
 msgstr "Headset voice brána"
 
-#: ../../bluetooth/bluez_profile.go:24 ../../bluetooth/bluez_profile.go:36
+#: ../../bluetooth/bluez_profile.go:24
 msgid "Object push"
 msgstr "Object push"
 
-#: ../../bluetooth/bluez_profile.go:25 ../../bluetooth/bluez_profile.go:37
+#: ../../bluetooth/bluez_profile.go:25
 msgid "File transfer"
 msgstr "Prenos súborov"
 
-#: ../../bluetooth/bluez_profile.go:26 ../../bluetooth/bluez_profile.go:38
+#: ../../bluetooth/bluez_profile.go:26
 msgid "Synchronization"
 msgstr "Synchronizácia"
 
-#: ../../bluetooth/bluez_profile.go:27 ../../bluetooth/bluez_profile.go:39
+#: ../../bluetooth/bluez_profile.go:27
 msgid "Phone book access"
 msgstr "Prístup k adresáru"
 
-#: ../../bluetooth/bluez_profile.go:28 ../../bluetooth/bluez_profile.go:40
+#: ../../bluetooth/bluez_profile.go:28
 msgid "Phone book access client"
 msgstr "Prístup klienta k adresáru"
 
-#: ../../bluetooth/bluez_profile.go:29 ../../bluetooth/bluez_profile.go:41
+#: ../../bluetooth/bluez_profile.go:29
 msgid "Message access"
 msgstr "Prístup k správam"
 
-#: ../../bluetooth/bluez_profile.go:30 ../../bluetooth/bluez_profile.go:42
+#: ../../bluetooth/bluez_profile.go:30
 msgid "Message notification"
 msgstr "Upozornenie na správy"
 
-#: ../../bluetooth/utils_notify.go:46 ../../bluetooth/utils_notify.go:55
-#: ../../bluetooth/utils_notify.go:58 ../../bluetooth/utils_notify.go:59
-#: ../../network/_dev_test.go:42 ../../network/_dev_test.go:58
-#: ../../network/dev_test.go:105 ../../network/dev_test.go:106
-#: ../../network/dev_test.go:113 ../../network/dev_test.go:117
-#: ../../network/dev_test.go:121 ../../network/dev_test.go:122
-#: ../../network/dev_test.go:129 ../../network/dev_test.go:133
-#: ../../network/state_handler.go:193 ../../network/state_handler.go:202
-#: ../../network/state_handler.go:203 ../../network/state_handler.go:214
-#: ../../network/utils_notify.go:109 ../../network/utils_notify.go:121
+#: ../../bluetooth/utils_notify.go:46 ../../network/dev_test.go:106
+#: ../../network/dev_test.go:122 ../../network/state_handler.go:203
+#: ../../network/utils_notify.go:109
 msgid "Connected"
 msgstr "Pripojené"
 
-#: ../../bluetooth/utils_notify.go:49 ../../bluetooth/utils_notify.go:58
-#: ../../bluetooth/utils_notify.go:61 ../../bluetooth/utils_notify.go:62
-#: ../../network/_dev_test.go:46 ../../network/_dev_test.go:49
-#: ../../network/_dev_test.go:52 ../../network/_dev_test.go:61
-#: ../../network/_dev_test.go:64 ../../network/dev_test.go:109
-#: ../../network/dev_test.go:110 ../../network/dev_test.go:112
-#: ../../network/dev_test.go:113 ../../network/dev_test.go:115
-#: ../../network/dev_test.go:116 ../../network/dev_test.go:117
-#: ../../network/dev_test.go:120 ../../network/dev_test.go:121
-#: ../../network/dev_test.go:123 ../../network/dev_test.go:124
-#: ../../network/dev_test.go:125 ../../network/dev_test.go:127
-#: ../../network/dev_test.go:128 ../../network/dev_test.go:132
-#: ../../network/dev_test.go:135 ../../network/dev_test.go:136
-#: ../../network/dev_test.go:139 ../../network/state_handler.go:241
-#: ../../network/state_handler.go:255 ../../network/state_handler.go:256
-#: ../../network/state_handler.go:262 ../../network/state_handler.go:267
-#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:82
+#: ../../bluetooth/utils_notify.go:49 ../../network/dev_test.go:110
+#: ../../network/dev_test.go:113 ../../network/dev_test.go:116
+#: ../../network/dev_test.go:125 ../../network/dev_test.go:128
+#: ../../network/state_handler.go:256 ../../network/utils_notify.go:82
 #: ../../network/utils_notify.go:86 ../../network/utils_notify.go:90
-#: ../../network/utils_notify.go:93 ../../network/utils_notify.go:94
-#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
-#: ../../network/utils_notify.go:106 ../../network/utils_notify.go:112
-#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:124
-#: ../../network/utils_notify.go:127 ../../network/utils_notify.go:204
-#: ../../network/utils_notify.go:212 ../../network/utils_notify.go:216
+#: ../../network/utils_notify.go:94 ../../network/utils_notify.go:112
+#: ../../network/utils_notify.go:115 ../../network/utils_notify.go:204
 msgid "Disconnected"
 msgstr "Odpojené"
 
-#: ../../bluetooth/utils_notify.go:52 ../../bluetooth/utils_notify.go:64
+#: ../../bluetooth/utils_notify.go:52
 msgid "Make sure %q is turned on and in range"
 msgstr "Uistite sa, že %q je zapnutý a v dosahu"
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
-#: ../../bluetooth/utils_notify.go:65 ../../bluetooth/utils_notify.go:69
 msgid "Bluetooth connection failed"
 msgstr "Pripojenie bluetooth zlyhalo"
 
-#: ../../bluetooth/utils_notify.go:56 ../../bluetooth/utils_notify.go:68
+#: ../../bluetooth/utils_notify.go:56
 msgid "Failed to connect %q, automatically ignored"
 msgstr "Nedá sa pripojiť %q, automaticky ignorované"
 
-#: ../../bluetooth/utils_notify.go:65
-msgid "Make sure %q is turned on  and in range"
-msgstr "Uistite sa, že %q je zapnutý a v dosahu"
-
-#: ../../bluetooth/utils_notify.go:66
-msgid "Failed to connect bluetooth"
-msgstr "Nepodarilo sa pripojiť bluetooth"
-
-#: ../../datetime/timezone/deepin_list.go:16 ../../timedate/deepin_list.go:16
-#: ../../timedate/deepin_list.go:25
-msgid "Niue"
-msgstr "Niue"
-
-#: ../../datetime/timezone/deepin_list.go:20 ../../timedate/deepin_list.go:20
-#: ../../timedate/deepin_list.go:29
-msgid "Hawaii"
-msgstr "Hawaii"
-
-#: ../../datetime/timezone/deepin_list.go:24 ../../timedate/deepin_list.go:24
-#: ../../timedate/deepin_list.go:33
-msgid "Tahiti"
-msgstr "Tahiti"
-
-#: ../../datetime/timezone/deepin_list.go:28 ../../timedate/deepin_list.go:28
-#: ../../timedate/deepin_list.go:37
-msgid "Honolulu"
-msgstr "Honolulu"
-
-#: ../../datetime/timezone/deepin_list.go:32 ../../timedate/deepin_list.go:32
-#: ../../timedate/deepin_list.go:41
-msgid "Marquesas"
-msgstr "Marquesas"
-
-#: ../../datetime/timezone/deepin_list.go:36 ../../timedate/deepin_list.go:36
-#: ../../timedate/deepin_list.go:45
-msgid "Alaska"
-msgstr "Alaska"
-
-#: ../../datetime/timezone/deepin_list.go:40 ../../timedate/deepin_list.go:40
-#: ../../timedate/deepin_list.go:49
-msgid "Juneau"
-msgstr "Juneau"
-
-#: ../../datetime/timezone/deepin_list.go:44 ../../timedate/deepin_list.go:44
-#: ../../timedate/deepin_list.go:53
-msgid "Gambier"
-msgstr "Gambier"
-
-#: ../../datetime/timezone/deepin_list.go:48 ../../timedate/deepin_list.go:48
-#: ../../timedate/deepin_list.go:57
-msgid "BajaNorte"
-msgstr "BajaNorte"
-
-#: ../../datetime/timezone/deepin_list.go:52 ../../timedate/deepin_list.go:52
-#: ../../timedate/deepin_list.go:61
-msgid "Vancouver"
-msgstr "Vancouver"
-
-#: ../../datetime/timezone/deepin_list.go:56 ../../timedate/deepin_list.go:56
-#: ../../timedate/deepin_list.go:65
-msgid "Metlakatla"
-msgstr "Metlakatla"
-
-#: ../../datetime/timezone/deepin_list.go:60 ../../timedate/deepin_list.go:60
-#: ../../timedate/deepin_list.go:69
-msgid "Chihuahua"
-msgstr "Chihuahua"
-
-#: ../../datetime/timezone/deepin_list.go:64 ../../timedate/deepin_list.go:64
-#: ../../timedate/deepin_list.go:73
-msgid "Arizona"
-msgstr "Arizona"
-
-#: ../../datetime/timezone/deepin_list.go:68 ../../timedate/deepin_list.go:68
-#: ../../timedate/deepin_list.go:77
-msgid "BajaSur"
-msgstr "BajaSur"
-
-#: ../../datetime/timezone/deepin_list.go:72 ../../timedate/deepin_list.go:72
-#: ../../timedate/deepin_list.go:81
-msgid "Mexico City"
-msgstr "Mexico City"
-
-#: ../../datetime/timezone/deepin_list.go:76 ../../timedate/deepin_list.go:76
-#: ../../timedate/deepin_list.go:85
-msgid "Chicago"
-msgstr "Chicago"
-
-#: ../../datetime/timezone/deepin_list.go:80 ../../timedate/deepin_list.go:80
-#: ../../timedate/deepin_list.go:89
-msgid "Managua"
-msgstr "Managua"
-
-#: ../../datetime/timezone/deepin_list.go:84 ../../timedate/deepin_list.go:84
-#: ../../timedate/deepin_list.go:93
-msgid "Monterrey"
-msgstr "Monterrey"
-
-#: ../../datetime/timezone/deepin_list.go:88 ../../timedate/deepin_list.go:88
-#: ../../timedate/deepin_list.go:97
-msgid "New York"
-msgstr "New York"
-
-#: ../../datetime/timezone/deepin_list.go:92 ../../timedate/deepin_list.go:92
-#: ../../timedate/deepin_list.go:101
-msgid "Lima"
-msgstr "Lima"
-
-#: ../../datetime/timezone/deepin_list.go:96 ../../timedate/deepin_list.go:96
-#: ../../timedate/deepin_list.go:105
-msgid "Bogota"
-msgstr "Bogota"
-
-#: ../../datetime/timezone/deepin_list.go:100
-#: ../../timedate/deepin_list.go:100 ../../timedate/deepin_list.go:109
-msgid "Caracas"
-msgstr "Caracas"
-
-#: ../../datetime/timezone/deepin_list.go:104
-#: ../../timedate/deepin_list.go:104 ../../timedate/deepin_list.go:113
-msgid "Cuiaba"
-msgstr "Cuiaba"
-
-#: ../../datetime/timezone/deepin_list.go:108
-#: ../../timedate/deepin_list.go:108 ../../timedate/deepin_list.go:117
-msgid "Santiago"
-msgstr "Santiago"
-
-#: ../../datetime/timezone/deepin_list.go:112
-#: ../../timedate/deepin_list.go:112 ../../timedate/deepin_list.go:121
-msgid "La Paz"
-msgstr "La Paz"
-
-#: ../../datetime/timezone/deepin_list.go:116
-#: ../../timedate/deepin_list.go:116 ../../timedate/deepin_list.go:125
-msgid "Asuncion"
-msgstr "Asuncion"
-
-#: ../../datetime/timezone/deepin_list.go:120
-#: ../../timedate/deepin_list.go:120 ../../timedate/deepin_list.go:129
-msgid "Newfoundland"
-msgstr "Newfoundland"
-
-#: ../../datetime/timezone/deepin_list.go:124
-#: ../../timedate/deepin_list.go:124 ../../timedate/deepin_list.go:133
-msgid "St Johns"
-msgstr "St Johns"
-
-#: ../../datetime/timezone/deepin_list.go:128
-#: ../../timedate/deepin_list.go:128 ../../timedate/deepin_list.go:137
-msgid "Buenos Aires"
-msgstr "Buenos Aires"
-
-#: ../../datetime/timezone/deepin_list.go:132
-#: ../../timedate/deepin_list.go:132 ../../timedate/deepin_list.go:141
-msgid "Cayenne"
-msgstr "Cayenne"
-
-#: ../../datetime/timezone/deepin_list.go:136
-#: ../../timedate/deepin_list.go:136 ../../timedate/deepin_list.go:145
-msgid "DeNoronha"
-msgstr "DeNoronha"
-
-#: ../../datetime/timezone/deepin_list.go:140
-#: ../../timedate/deepin_list.go:140 ../../timedate/deepin_list.go:149
-msgid "Azores"
-msgstr "Azores"
-
-#: ../../datetime/timezone/deepin_list.go:144
-#: ../../timedate/deepin_list.go:144 ../../timedate/deepin_list.go:153
-msgid "Cape Verde"
-msgstr "Cape Verde"
-
-#: ../../datetime/timezone/deepin_list.go:148
-#: ../../timedate/deepin_list.go:148 ../../timedate/deepin_list.go:157
-msgid "London"
-msgstr "Londýn"
-
-#: ../../datetime/timezone/deepin_list.go:152
-#: ../../timedate/deepin_list.go:152 ../../timedate/deepin_list.go:161
-msgid "Dublin"
-msgstr "Dublin"
-
-#: ../../datetime/timezone/deepin_list.go:156
-#: ../../timedate/deepin_list.go:156 ../../timedate/deepin_list.go:165
-msgid "Casablanca"
-msgstr "Casablanca"
-
-#: ../../datetime/timezone/deepin_list.go:160
-#: ../../timedate/deepin_list.go:160 ../../timedate/deepin_list.go:169
-msgid "Monrovia"
-msgstr "Monrovia"
-
-#: ../../datetime/timezone/deepin_list.go:164
-#: ../../timedate/deepin_list.go:164 ../../timedate/deepin_list.go:173
-msgid "Madrid"
-msgstr "Madrid"
-
-#: ../../datetime/timezone/deepin_list.go:168
-#: ../../timedate/deepin_list.go:168 ../../timedate/deepin_list.go:177
-msgid "Paris"
-msgstr "Paris"
-
-#: ../../datetime/timezone/deepin_list.go:172
-#: ../../timedate/deepin_list.go:172 ../../timedate/deepin_list.go:181
-msgid "Rome"
-msgstr "Rome"
-
-#: ../../datetime/timezone/deepin_list.go:176
-#: ../../timedate/deepin_list.go:176 ../../timedate/deepin_list.go:185
-msgid "Vienna"
-msgstr "Vienna"
-
-#: ../../datetime/timezone/deepin_list.go:180
-#: ../../timedate/deepin_list.go:180 ../../timedate/deepin_list.go:189
-msgid "Algiers"
-msgstr "Algiers"
-
-#: ../../datetime/timezone/deepin_list.go:184
-#: ../../timedate/deepin_list.go:184 ../../timedate/deepin_list.go:193
-msgid "Cairo"
-msgstr "Cairo"
-
-#: ../../datetime/timezone/deepin_list.go:188
-#: ../../timedate/deepin_list.go:188 ../../timedate/deepin_list.go:197
-msgid "Athens"
-msgstr "Athens"
-
-#: ../../datetime/timezone/deepin_list.go:192
-#: ../../timedate/deepin_list.go:192 ../../timedate/deepin_list.go:201
-msgid "Istanbul"
-msgstr "Istanbul"
-
-#: ../../datetime/timezone/deepin_list.go:196
-#: ../../timedate/deepin_list.go:196 ../../timedate/deepin_list.go:205
-msgid "Blantyre"
-msgstr "Blantyre"
-
-#: ../../datetime/timezone/deepin_list.go:200
-#: ../../timedate/deepin_list.go:200 ../../timedate/deepin_list.go:209
-msgid "Nairobi"
-msgstr "Nairobi"
-
-#: ../../datetime/timezone/deepin_list.go:204
-#: ../../timedate/deepin_list.go:204 ../../timedate/deepin_list.go:213
-msgid "Tehran"
-msgstr "Tehran"
-
-#: ../../datetime/timezone/deepin_list.go:208
-#: ../../timedate/deepin_list.go:208 ../../timedate/deepin_list.go:217
-msgid "Muscat"
-msgstr "Muscat"
-
-#: ../../datetime/timezone/deepin_list.go:212
-#: ../../timedate/deepin_list.go:212 ../../timedate/deepin_list.go:221
-msgid "Baku"
-msgstr "Baku"
-
-#: ../../datetime/timezone/deepin_list.go:216
-#: ../../timedate/deepin_list.go:216 ../../timedate/deepin_list.go:225
-msgid "Moscow"
-msgstr "Moscow"
-
-#: ../../datetime/timezone/deepin_list.go:220
-#: ../../timedate/deepin_list.go:220 ../../timedate/deepin_list.go:229
-msgid "Kabul"
-msgstr "Kabul"
-
-#: ../../datetime/timezone/deepin_list.go:224
-#: ../../timedate/deepin_list.go:224 ../../timedate/deepin_list.go:233
-msgid "Karachi"
-msgstr "Karachi"
-
-#: ../../datetime/timezone/deepin_list.go:228
-#: ../../timedate/deepin_list.go:228 ../../timedate/deepin_list.go:237
-msgid "Calcutta"
-msgstr "Calcutta"
-
-#: ../../datetime/timezone/deepin_list.go:232
-#: ../../timedate/deepin_list.go:232 ../../timedate/deepin_list.go:241
-msgid "Kathmandu"
-msgstr "Kathmandu"
-
-#: ../../datetime/timezone/deepin_list.go:236
-#: ../../timedate/deepin_list.go:236 ../../timedate/deepin_list.go:245
-msgid "Dhaka"
-msgstr "Dhaka"
-
-#: ../../datetime/timezone/deepin_list.go:240
-#: ../../timedate/deepin_list.go:240 ../../timedate/deepin_list.go:249
-msgid "Yekaterinburg"
-msgstr "Yekaterinburg"
-
-#: ../../datetime/timezone/deepin_list.go:244
-#: ../../timedate/deepin_list.go:244 ../../timedate/deepin_list.go:253
-msgid "Rangoon"
-msgstr "Rangoon"
-
-#: ../../datetime/timezone/deepin_list.go:248
-#: ../../timedate/deepin_list.go:248 ../../timedate/deepin_list.go:257
-msgid "Bangkok"
-msgstr "Bangkok"
-
-#: ../../datetime/timezone/deepin_list.go:252
-#: ../../timedate/deepin_list.go:252 ../../timedate/deepin_list.go:261
-msgid "Jakarta"
-msgstr "Jakarta"
-
-#: ../../datetime/timezone/deepin_list.go:256
-#: ../../timedate/deepin_list.go:256 ../../timedate/deepin_list.go:265
-msgid "Beijing"
-msgstr "Beijing"
-
-#: ../../datetime/timezone/deepin_list.go:260
-#: ../../timedate/deepin_list.go:260 ../../timedate/deepin_list.go:269
-msgid "Hong Kong"
-msgstr "Hong Kong"
-
-#: ../../datetime/timezone/deepin_list.go:264
-#: ../../timedate/deepin_list.go:264 ../../timedate/deepin_list.go:273
-msgid "Taipei"
-msgstr "Taipei"
-
-#: ../../datetime/timezone/deepin_list.go:268
-#: ../../timedate/deepin_list.go:268 ../../timedate/deepin_list.go:277
-msgid "Kuala Lumpur"
-msgstr "Kuala Lumpur"
-
-#: ../../datetime/timezone/deepin_list.go:272
-#: ../../timedate/deepin_list.go:272 ../../timedate/deepin_list.go:281
-msgid "Perth"
-msgstr "Perth"
-
-#: ../../datetime/timezone/deepin_list.go:276
-#: ../../timedate/deepin_list.go:276 ../../timedate/deepin_list.go:285
-msgid "Eucla"
-msgstr "Eucla"
-
-#: ../../datetime/timezone/deepin_list.go:280
-#: ../../timedate/deepin_list.go:280 ../../timedate/deepin_list.go:289
-msgid "Tokyo"
-msgstr "Tokyo"
-
-#: ../../datetime/timezone/deepin_list.go:284
-#: ../../timedate/deepin_list.go:284 ../../timedate/deepin_list.go:293
-msgid "Seoul"
-msgstr "Seoul"
-
-#: ../../datetime/timezone/deepin_list.go:288
-#: ../../timedate/deepin_list.go:288 ../../timedate/deepin_list.go:297
-msgid "Darwin"
-msgstr "Darwin"
-
-#: ../../datetime/timezone/deepin_list.go:292
-#: ../../timedate/deepin_list.go:292 ../../timedate/deepin_list.go:301
-msgid "Sydney"
-msgstr "Sydney"
-
-#: ../../datetime/timezone/deepin_list.go:296
-#: ../../timedate/deepin_list.go:296 ../../timedate/deepin_list.go:305
-msgid "Guam"
-msgstr "Guam"
-
-#: ../../datetime/timezone/deepin_list.go:300
-#: ../../timedate/deepin_list.go:300 ../../timedate/deepin_list.go:309
-msgid "Melbourne"
-msgstr "Melbourne"
-
-#: ../../datetime/timezone/deepin_list.go:304
-#: ../../timedate/deepin_list.go:304 ../../timedate/deepin_list.go:313
-msgid "Hobart"
-msgstr "Hobart"
-
-#: ../../datetime/timezone/deepin_list.go:308
-#: ../../timedate/deepin_list.go:308 ../../timedate/deepin_list.go:317
-msgid "Lord Howe"
-msgstr "Lord Howe"
-
-#: ../../datetime/timezone/deepin_list.go:312
-#: ../../timedate/deepin_list.go:312 ../../timedate/deepin_list.go:321
-msgid "Pohnpei"
-msgstr "Pohnpei"
-
-#: ../../datetime/timezone/deepin_list.go:316
-#: ../../timedate/deepin_list.go:316 ../../timedate/deepin_list.go:325
-msgid "Norfolk"
-msgstr "Norfolk"
-
-#: ../../datetime/timezone/deepin_list.go:320
-#: ../../timedate/deepin_list.go:320 ../../timedate/deepin_list.go:329
-msgid "Auckland"
-msgstr "Auckland"
-
-#: ../../datetime/timezone/deepin_list.go:324
-#: ../../timedate/deepin_list.go:324 ../../timedate/deepin_list.go:333
-msgid "Anadyr"
-msgstr "Anadyr"
-
-#: ../../datetime/timezone/deepin_list.go:328
-#: ../../timedate/deepin_list.go:328 ../../timedate/deepin_list.go:337
-msgid "Chatham"
-msgstr "Chatham"
-
-#: ../../datetime/timezone/deepin_list.go:332
-#: ../../timedate/deepin_list.go:332 ../../timedate/deepin_list.go:341
-msgid "Apia"
-msgstr "Apia"
-
-#: ../../datetime/timezone/deepin_list.go:336
-#: ../../timedate/deepin_list.go:336 ../../timedate/deepin_list.go:345
-msgid "Fakaofo"
-msgstr "Fakaofo"
-
-#: ../../dock/app_entry_menu.go:99 ../../dock/app_entry_menu.go:116
+#: ../../dock/app_entry_menu.go:99
 msgid "_Open"
 msgstr "_Otvoriť"
 
-#: ../../dock/app_entry_menu.go:103 ../../dock/app_entry_menu.go:115
-#: ../../dock/app_entry_menu.go:116 ../../dock/normal_apps.go:73
-#: ../../dock/normal_apps.go:76 ../../dock/normal_apps.go:77
-#: ../../dock/normal_apps.go:78 ../../dock/normal_apps.go:86
-msgid "_Run"
-msgstr "_Spustiť"
-
-#: ../../dock/app_entry_menu.go:106 ../../dock/app_entry_menu.go:110
-#: ../../dock/app_entry_menu.go:122 ../../dock/app_entry_menu.go:123
-#: ../../dock/runtime_apps.go:261 ../../dock/runtime_apps.go:263
-#: ../../dock/runtime_apps.go:266 ../../dock/runtime_apps.go:268
-#: ../../dock/runtime_apps.go:269 ../../dock/runtime_apps.go:270
-#: ../../dock/runtime_apps.go:287 ../../dock/runtime_apps.go:292
-#: ../../dock/runtime_apps.go:296
+#: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
 msgstr "_Zatvoriť všetko"
 
-#: ../../dock/app_entry_menu.go:115 ../../dock/app_entry_menu.go:119
-#: ../../dock/app_entry_menu.go:131 ../../dock/app_entry_menu.go:132
-#: ../../dock/runtime_apps.go:291 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:298 ../../dock/runtime_apps.go:304
-#: ../../dock/runtime_apps.go:309 ../../dock/runtime_apps.go:311
-#: ../../dock/runtime_apps.go:315 ../../dock/runtime_apps.go:320
-#: ../../dock/runtime_apps.go:324
+#: ../../dock/app_entry_menu.go:115
 msgid "_Dock"
 msgstr "_Dock"
 
-#: ../../dock/app_entry_menu.go:122 ../../dock/app_entry_menu.go:126
-#: ../../dock/app_entry_menu.go:138 ../../dock/app_entry_menu.go:139
-#: ../../dock/normal_apps.go:105 ../../dock/normal_apps.go:108
-#: ../../dock/normal_apps.go:109 ../../dock/normal_apps.go:110
-#: ../../dock/normal_apps.go:118 ../../dock/runtime_apps.go:279
-#: ../../dock/runtime_apps.go:285 ../../dock/runtime_apps.go:286
-#: ../../dock/runtime_apps.go:292 ../../dock/runtime_apps.go:297
-#: ../../dock/runtime_apps.go:299 ../../dock/runtime_apps.go:303
-#: ../../dock/runtime_apps.go:308 ../../dock/runtime_apps.go:312
+#: ../../dock/app_entry_menu.go:122
 msgid "_Undock"
 msgstr "_Odstrániť z docku"
 
-#: ../../dock/app_entry_menu.go:129 ../../dock/app_entry_menu.go:146
+#: ../../dock/app_entry_menu.go:129
 msgid "_All windows"
 msgstr "_Všetky okná"
-
-#: ../../grub2/grub2_ifc.go:63 ../../grub2/grub2_ifc.go:64
-#: ../../grub2/grub2_ifc.go:75 ../../network/nm_setting_ip4_config.go:26
-#: ../../network/nm_setting_ip4_config.go:27
-#: ../../network/nm_setting_ip4_config.go:38
-#: ../../network/nm_setting_ip4_config.go:174
-#: ../../network/nm_setting_ip6_config.go:27
-#: ../../network/nm_setting_ip6_config.go:28
-#: ../../network/nm_setting_ip6_config.go:39
-#: ../../network/nm_setting_ip6_config.go:64
-msgid "Auto"
-msgstr "Automatické"
 
 #: ../../grub2/utils.go:138
 msgid "Authentication is required to change the grub2 configuration"
@@ -653,379 +157,155 @@ msgstr "Autentifikácia je potrebná na zmenu konfigurácie grub2"
 msgid "Insufficient disk space, please clean up in time!"
 msgstr "Nedostatok miesta na disku, prosím uvoľníte viac miesta!"
 
-#: ../../inputdevices/libwacom/wacom.go:152
-#: ../../inputdevices/wacom/wacom.go:152
-msgid "Left Click"
-msgstr "Ľavý klik"
-
-#: ../../inputdevices/libwacom/wacom.go:156
-#: ../../inputdevices/wacom/wacom.go:156
-msgid "Middle Click"
-msgstr "Stredný klik"
-
-#: ../../inputdevices/libwacom/wacom.go:160
-#: ../../inputdevices/wacom/wacom.go:160
-msgid "Right Click"
-msgstr "Pravý klik"
-
-#: ../../inputdevices/libwacom/wacom.go:164
-#: ../../inputdevices/wacom/wacom.go:164
-msgid "Page Up"
-msgstr "O stranu vyššie"
-
-#: ../../inputdevices/libwacom/wacom.go:168
-#: ../../inputdevices/wacom/wacom.go:168
-msgid "Page Down"
-msgstr "O stranu nižšie"
-
-#: ../../keybinding/id_desc_list.go:47
 #: ../../keybinding/shortcuts/id_name_map.go:18
-#: ../../keybinding/shortcuts/system.go:57
-#: ../../keybinding/shortcuts/system.go:69
 msgid "Launcher"
 msgstr "Spúšťač"
 
-#: ../../keybinding/id_desc_list.go:48
-#: ../../keybinding/shortcuts/id_name_map.go:71
-#: ../../keybinding/shortcuts/wm.go:79 ../../keybinding/shortcuts/wm.go:91
-msgid "Show desktop"
-msgstr "Ukázať plochu"
-
-#: ../../keybinding/id_desc_list.go:49
-#: ../../keybinding/shortcuts/id_name_map.go:21
-#: ../../keybinding/shortcuts/system.go:59
-#: ../../keybinding/shortcuts/system.go:71
-msgid "Lock screen"
-msgstr "Uzamykacia obrazovka"
-
-#: ../../keybinding/id_desc_list.go:50
-#: ../../keybinding/shortcuts/id_name_map.go:29
-#: ../../keybinding/shortcuts/system.go:67
-#: ../../keybinding/shortcuts/system.go:79
-msgid "File manager"
-msgstr "Správca súborov"
-
-#: ../../keybinding/id_desc_list.go:51
-msgid "Switch applications"
-msgstr "Prepnúť programy"
-
-#: ../../keybinding/id_desc_list.go:52
-msgid "Reverse switch applications"
-msgstr "Obrátiť prepnutie programov"
-
-#: ../../keybinding/id_desc_list.go:53
-msgid "3D switch applications"
-msgstr "3D prepínač aplikácií"
-
-#: ../../keybinding/id_desc_list.go:54
-msgid "3D reverse switch applications"
-msgstr "3D opačný prepínač aplikácií"
-
-#: ../../keybinding/id_desc_list.go:55
-#: ../../keybinding/shortcuts/id_name_map.go:22
-#: ../../keybinding/shortcuts/system.go:60
-#: ../../keybinding/shortcuts/system.go:72
-msgid "Show/Hide the dock"
-msgstr "Zobraziť/Skryť dock"
-
-#: ../../keybinding/id_desc_list.go:56
-#: ../../keybinding/shortcuts/id_name_map.go:25
-#: ../../keybinding/shortcuts/system.go:63
-#: ../../keybinding/shortcuts/system.go:75
-msgid "Screenshot"
-msgstr "Snímok obrazovky"
-
-#: ../../keybinding/id_desc_list.go:57
-#: ../../keybinding/shortcuts/id_name_map.go:26
-#: ../../keybinding/shortcuts/system.go:64
-#: ../../keybinding/shortcuts/system.go:76
-msgid "Full screenshot"
-msgstr "Plná snímka obrazovky"
-
-#: ../../keybinding/id_desc_list.go:58
-#: ../../keybinding/shortcuts/id_name_map.go:27
-#: ../../keybinding/shortcuts/system.go:65
-#: ../../keybinding/shortcuts/system.go:77
-msgid "Window screenshot"
-msgstr "Snímka okna"
-
-#: ../../keybinding/id_desc_list.go:59
-#: ../../keybinding/shortcuts/id_name_map.go:28
-#: ../../keybinding/shortcuts/system.go:66
-#: ../../keybinding/shortcuts/system.go:78
-msgid "Delay screenshot"
-msgstr "Oneskoriť snímku obrazovky"
-
-#: ../../keybinding/id_desc_list.go:60
 #: ../../keybinding/shortcuts/id_name_map.go:19
-#: ../../keybinding/shortcuts/system.go:58
-#: ../../keybinding/shortcuts/system.go:70
 msgid "Terminal"
 msgstr "Terminál"
-
-#: ../../keybinding/id_desc_list.go:61
-#: ../../keybinding/shortcuts/id_name_map.go:24
-#: ../../keybinding/shortcuts/system.go:62
-#: ../../keybinding/shortcuts/system.go:74
-msgid "Terminal Quake Window"
-msgstr "Terminál Quake okno"
-
-#: ../../keybinding/id_desc_list.go:62
-#: ../../keybinding/shortcuts/id_name_map.go:23
-#: ../../keybinding/shortcuts/system.go:61
-#: ../../keybinding/shortcuts/system.go:73
-msgid "Logout"
-msgstr "Odhlásiť"
-
-#: ../../keybinding/id_desc_list.go:63
-#: ../../keybinding/shortcuts/id_name_map.go:30
-#: ../../keybinding/shortcuts/system.go:68
-#: ../../keybinding/shortcuts/system.go:80
-msgid "Disable Touchpad"
-msgstr "Vypnúť touchpad"
-
-#: ../../keybinding/id_desc_list.go:64
-msgid "Deepin Translator"
-msgstr "Deepin Prekladač"
-
-#: ../../keybinding/id_desc_list.go:65
-#: ../../keybinding/shortcuts/id_name_map.go:31
-#: ../../keybinding/shortcuts/system.go:69
-#: ../../keybinding/shortcuts/system.go:81
-msgid "Switch Layout"
-msgstr "Prepnúť rozmiestnenie"
-
-#: ../../keybinding/id_desc_list.go:73
-msgid "Calculator"
-msgstr "Kalkulačka"
-
-#: ../../keybinding/id_desc_list.go:74
-msgid "Email client"
-msgstr "Emailový klient"
-
-#: ../../keybinding/id_desc_list.go:75
-msgid "Web browser"
-msgstr "Webový prehliadač"
-
-#: ../../keybinding/id_desc_list.go:76
-msgid "Media player"
-msgstr "Prehrávač medií"
-
-#: ../../keybinding/id_desc_list.go:77
-msgid "Play/Pause"
-msgstr "Prehrať/pozastaviť"
-
-#: ../../keybinding/id_desc_list.go:78
-msgid "Pause"
-msgstr "Pozastaviť"
-
-#: ../../keybinding/id_desc_list.go:79
-msgid "Stop"
-msgstr "Zastaviť"
-
-#: ../../keybinding/id_desc_list.go:80
-msgid "Mute"
-msgstr "Stlmiť"
-
-#: ../../keybinding/id_desc_list.go:81
-msgid "Volume down"
-msgstr "Tichšie"
-
-#: ../../keybinding/id_desc_list.go:82
-msgid "Volume up"
-msgstr "Hlasnejšie"
-
-#: ../../keybinding/id_desc_list.go:83
-msgid "Previous"
-msgstr "Predchádzajúce"
-
-#: ../../keybinding/id_desc_list.go:84
-msgid "Next"
-msgstr "Ďalšie"
-
-#: ../../keybinding/id_desc_list.go:85
-msgid "Eject"
-msgstr "Vysunúť"
-
-#: ../../keybinding/id_desc_list.go:93
-#: ../../keybinding/shortcuts/id_name_map.go:84
-#: ../../keybinding/shortcuts/wm.go:92 ../../keybinding/shortcuts/wm.go:104
-msgid "Close window"
-msgstr "Zatvoriť okno"
-
-#: ../../keybinding/id_desc_list.go:94
-#: ../../keybinding/shortcuts/id_name_map.go:80
-#: ../../keybinding/shortcuts/wm.go:88 ../../keybinding/shortcuts/wm.go:100
-msgid "Maximize window"
-msgstr "Maximalizovať okno"
-
-#: ../../keybinding/id_desc_list.go:95
-#: ../../keybinding/shortcuts/id_name_map.go:81
-#: ../../keybinding/shortcuts/wm.go:89 ../../keybinding/shortcuts/wm.go:101
-msgid "Restore window"
-msgstr "Obnoviť okno"
-
-#: ../../keybinding/id_desc_list.go:96
-#: ../../keybinding/shortcuts/id_name_map.go:83
-msgid "Minimize window"
-msgstr "Minimalizovať okno"
-
-#: ../../keybinding/id_desc_list.go:97
-#: ../../keybinding/shortcuts/id_name_map.go:85
-#: ../../keybinding/shortcuts/wm.go:93 ../../keybinding/shortcuts/wm.go:105
-msgid "Move window"
-msgstr "Presunúť okno"
-
-#: ../../keybinding/id_desc_list.go:98
-#: ../../keybinding/shortcuts/id_name_map.go:86
-#: ../../keybinding/shortcuts/wm.go:94 ../../keybinding/shortcuts/wm.go:106
-msgid "Resize window"
-msgstr "Zmeniť veľkosť okna"
-
-#: ../../keybinding/id_desc_list.go:99
-msgid "Switch furl state"
-msgstr "Prepnúť furl state"
-
-#: ../../keybinding/id_desc_list.go:100
-msgid "Activate window menu"
-msgstr "Aktivovať menu okna"
-
-#: ../../keybinding/id_desc_list.go:108
-msgid "Switch to workspace 1"
-msgstr "Prepnúť na pracovnú plochu 1"
-
-#: ../../keybinding/id_desc_list.go:109
-msgid "Switch to workspace 2"
-msgstr "Prepnúť na pracovnú plochu 2"
-
-#: ../../keybinding/id_desc_list.go:110
-msgid "Switch to workspace 3"
-msgstr "Prepnúť na pracovnú plochu 3"
-
-#: ../../keybinding/id_desc_list.go:111
-msgid "Switch to workspace 4"
-msgstr "Prepnúť na pracovnú plochu 4"
-
-#: ../../keybinding/id_desc_list.go:112
-#: ../../keybinding/shortcuts/id_name_map.go:52
-#: ../../keybinding/shortcuts/wm.go:60 ../../keybinding/shortcuts/wm.go:72
-msgid "Switch to left workspace"
-msgstr "Prepnúť na pracovnú plochu vľavo"
-
-#: ../../keybinding/id_desc_list.go:113
-#: ../../keybinding/shortcuts/id_name_map.go:53
-#: ../../keybinding/shortcuts/wm.go:61 ../../keybinding/shortcuts/wm.go:73
-msgid "Switch to right workspace"
-msgstr "Prepnúť na pracovnú plochu vpravo"
-
-#: ../../keybinding/id_desc_list.go:114
-#: ../../keybinding/shortcuts/id_name_map.go:54
-#: ../../keybinding/shortcuts/wm.go:62 ../../keybinding/shortcuts/wm.go:74
-msgid "Switch to upper workspace"
-msgstr "Prepnúť na pracovnú plochu hore"
-
-#: ../../keybinding/id_desc_list.go:115
-#: ../../keybinding/shortcuts/id_name_map.go:55
-#: ../../keybinding/shortcuts/wm.go:63 ../../keybinding/shortcuts/wm.go:75
-msgid "Switch to lower workspace"
-msgstr "Prepnúť na pracovnú plochu dole"
-
-#: ../../keybinding/id_desc_list.go:116
-msgid "Move to workspace 1"
-msgstr "Prejsť na plochu 1"
-
-#: ../../keybinding/id_desc_list.go:117
-msgid "Move to workspace 2"
-msgstr "Prejsť na plochu 2"
-
-#: ../../keybinding/id_desc_list.go:118
-msgid "Move to workspace 3"
-msgstr "Prejsť na plochu 3"
-
-#: ../../keybinding/id_desc_list.go:119
-msgid "Move to workspace 4"
-msgstr "Prejsť na plochu 4"
-
-#: ../../keybinding/id_desc_list.go:120
-#: ../../keybinding/shortcuts/id_name_map.go:101
-#: ../../keybinding/shortcuts/wm.go:109 ../../keybinding/shortcuts/wm.go:121
-msgid "Move to left workspace"
-msgstr "Prejsť na plochu vľavo"
-
-#: ../../keybinding/id_desc_list.go:121
-#: ../../keybinding/shortcuts/id_name_map.go:102
-#: ../../keybinding/shortcuts/wm.go:110 ../../keybinding/shortcuts/wm.go:122
-msgid "Move to right workspace"
-msgstr "Prejsť na plochu vpravo"
-
-#: ../../keybinding/id_desc_list.go:122
-#: ../../keybinding/shortcuts/id_name_map.go:103
-#: ../../keybinding/shortcuts/wm.go:111 ../../keybinding/shortcuts/wm.go:123
-msgid "Move to upper workspace"
-msgstr "Prejsť na plochu hore"
-
-#: ../../keybinding/id_desc_list.go:123
-#: ../../keybinding/shortcuts/id_name_map.go:104
-#: ../../keybinding/shortcuts/wm.go:112 ../../keybinding/shortcuts/wm.go:124
-msgid "Move to lower workspace"
-msgstr "Prejsť na plochu dole"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
 msgstr "Deepin Nahrávanie obrazovky"
 
-#: ../../keybinding/shortcuts/id_name_map.go:32
-#: ../../keybinding/shortcuts/system.go:70
-#: ../../keybinding/shortcuts/system.go:82
+#: ../../keybinding/shortcuts/id_name_map.go:21
+msgid "Lock screen"
+msgstr "Uzamykacia obrazovka"
+
+#: ../../keybinding/shortcuts/id_name_map.go:22
+msgid "Show/Hide the dock"
+msgstr "Zobraziť/Skryť dock"
+
+#: ../../keybinding/shortcuts/id_name_map.go:23
+msgid "Logout"
+msgstr "Odhlásiť"
+
+#: ../../keybinding/shortcuts/id_name_map.go:24
+msgid "Terminal Quake Window"
+msgstr "Terminál Quake okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:25
+msgid "Screenshot"
+msgstr "Snímok obrazovky"
+
+#: ../../keybinding/shortcuts/id_name_map.go:26
+msgid "Full screenshot"
+msgstr "Plná snímka obrazovky"
+
+#: ../../keybinding/shortcuts/id_name_map.go:27
+msgid "Window screenshot"
+msgstr "Snímka okna"
+
+#: ../../keybinding/shortcuts/id_name_map.go:28
+msgid "Delay screenshot"
+msgstr "Oneskoriť snímku obrazovky"
+
+#: ../../keybinding/shortcuts/id_name_map.go:29
+msgid "File manager"
+msgstr "Správca súborov"
+
+#: ../../keybinding/shortcuts/id_name_map.go:30
+msgid "Disable Touchpad"
+msgstr "Vypnúť touchpad"
+
+#: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Switch window effects"
 msgstr "Prepnúť efekty okna"
 
-#: ../../keybinding/shortcuts/id_name_map.go:33
-#: ../../keybinding/shortcuts/system.go:71
+#: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Fast Screen Off"
 msgstr "Zrýchlený obraz vypnutý"
 
-#: ../../keybinding/shortcuts/id_name_map.go:57
-#: ../../keybinding/shortcuts/wm.go:65 ../../keybinding/shortcuts/wm.go:77
+#: ../../keybinding/shortcuts/id_name_map.go:39
+msgid "Switch Layout"
+msgstr "Prepnúť rozmiestnenie"
+
+#: ../../keybinding/shortcuts/id_name_map.go:58
+msgid "Switch to left workspace"
+msgstr "Prepnúť na pracovnú plochu vľavo"
+
+#: ../../keybinding/shortcuts/id_name_map.go:59
+msgid "Switch to right workspace"
+msgstr "Prepnúť na pracovnú plochu vpravo"
+
+#: ../../keybinding/shortcuts/id_name_map.go:60
+msgid "Switch to upper workspace"
+msgstr "Prepnúť na pracovnú plochu hore"
+
+#: ../../keybinding/shortcuts/id_name_map.go:61
+msgid "Switch to lower workspace"
+msgstr "Prepnúť na pracovnú plochu dole"
+
+#: ../../keybinding/shortcuts/id_name_map.go:63
 msgid "Switch similar windows"
 msgstr "Prepnúť podobné okná"
 
-#: ../../keybinding/shortcuts/id_name_map.go:58
-#: ../../keybinding/shortcuts/wm.go:66 ../../keybinding/shortcuts/wm.go:78
+#: ../../keybinding/shortcuts/id_name_map.go:64
 msgid "Switch similar windows in reverse"
 msgstr "Prepínanie podobných okien v opačnom smere"
 
-#: ../../keybinding/shortcuts/id_name_map.go:59
-#: ../../keybinding/shortcuts/wm.go:67 ../../keybinding/shortcuts/wm.go:79
+#: ../../keybinding/shortcuts/id_name_map.go:65
 msgid "Switch windows"
 msgstr "Prepnúť okná"
 
-#: ../../keybinding/shortcuts/id_name_map.go:60
-#: ../../keybinding/shortcuts/wm.go:68 ../../keybinding/shortcuts/wm.go:80
+#: ../../keybinding/shortcuts/id_name_map.go:66
 msgid "Switch windows in reverse"
 msgstr "Prepínanie okien v opačnom smere"
 
-#: ../../keybinding/shortcuts/id_name_map.go:126
+#: ../../keybinding/shortcuts/id_name_map.go:77
+msgid "Show desktop"
+msgstr "Ukázať plochu"
+
+#: ../../keybinding/shortcuts/id_name_map.go:86
+msgid "Maximize window"
+msgstr "Maximalizovať okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:87
+msgid "Restore window"
+msgstr "Obnoviť okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:89
+msgid "Minimize window"
+msgstr "Minimalizovať okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:90
+msgid "Close window"
+msgstr "Zatvoriť okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:91
+msgid "Move window"
+msgstr "Presunúť okno"
+
+#: ../../keybinding/shortcuts/id_name_map.go:92
+msgid "Resize window"
+msgstr "Zmeniť veľkosť okna"
+
+#: ../../keybinding/shortcuts/id_name_map.go:107
+msgid "Move to left workspace"
+msgstr "Prejsť na plochu vľavo"
+
+#: ../../keybinding/shortcuts/id_name_map.go:108
+msgid "Move to right workspace"
+msgstr "Prejsť na plochu vpravo"
+
+#: ../../keybinding/shortcuts/id_name_map.go:109
+msgid "Move to upper workspace"
+msgstr "Prejsť na plochu hore"
+
+#: ../../keybinding/shortcuts/id_name_map.go:110
+msgid "Move to lower workspace"
+msgstr "Prejsť na plochu dole"
+
 #: ../../keybinding/shortcuts/id_name_map.go:132
-#: ../../keybinding/shortcuts/metacity.go:55
-#: ../../keybinding/shortcuts/metacity.go:84
-#: ../../keybinding/shortcuts/metacity.go:93
 msgid "Display windows of all workspaces"
 msgstr "Zobraziť okná zo všetkých pracovných prostredí"
 
-#: ../../keybinding/shortcuts/id_name_map.go:127
 #: ../../keybinding/shortcuts/id_name_map.go:133
-#: ../../keybinding/shortcuts/metacity.go:56
-#: ../../keybinding/shortcuts/metacity.go:85
-#: ../../keybinding/shortcuts/metacity.go:94
 msgid "Display windows of current workspace"
 msgstr "Zobraziť okná z aktuálného pracovného prostredia"
 
-#: ../../keybinding/shortcuts/id_name_map.go:128
 #: ../../keybinding/shortcuts/id_name_map.go:134
-#: ../../keybinding/shortcuts/metacity.go:57
-#: ../../keybinding/shortcuts/metacity.go:86
-#: ../../keybinding/shortcuts/metacity.go:95
 msgid "Display workspace"
 msgstr "Pracovné prostredie"
 
@@ -1033,1009 +313,408 @@ msgstr "Pracovné prostredie"
 msgid "Authentication is required to switch language"
 msgstr "Na prepínanie jazyka je potrebná autentifikácia"
 
-#: ../../langselector/handle_event.go:26 ../../langselector/handle_event.go:29
-#: ../../langselector/handle_event.go:34 ../../langselector/handle_event.go:36
-msgid "System language failed to change, please try later."
-msgstr "Došlo k chybe pri zmene systémového jazyka, prosím skúste neskôr. "
+#: ../../langselector/handle_event.go:34
+msgid "System language failed to change, please try later"
+msgstr "Jazyk systému sa nezmenil, skúste to prosím neskôr"
 
-#: ../../langselector/handle_event.go:38 ../../langselector/handle_event.go:41
-#: ../../langselector/handle_event.go:43 ../../langselector/handle_event.go:44
 #: ../../langselector/handle_event.go:46
-msgid ""
-"System language has been changed, please log in again after logged out."
-msgstr "Systémový jazyk bol zmenený, prosím odhláste sa a prihláste znovu. "
+msgid "System language has been changed, please log in again after logged out"
+msgstr "Systémový jazyk bol zmenený, po odhlásení sa znovu prihláste"
 
-#: ../../langselector/locale_ifc.go:50 ../../langselector/locale_ifc.go:52
-#: ../../langselector/locale_ifc.go:58 ../../langselector/locale_ifc.go:65
-#: ../../langselector/locale_ifc.go:70
+#: ../../langselector/locale_ifc.go:50
 msgid "System language is being changed, please wait..."
 msgstr "Dochádza k zmene systémového jazyka, prosím čakajte..."
 
-#: ../../langselector/locale_ifc.go:56 ../../langselector/locale_ifc.go:57
-#: ../../langselector/locale_ifc.go:64 ../../langselector/locale_ifc.go:71
-#: ../../langselector/locale_ifc.go:76
+#: ../../langselector/locale_ifc.go:56
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
 msgstr "Systémový jazyk sa zmení inštaláciou potrebných jazykových balíkov, prosím čakajte..."
 
-#: ../../launcher/item/chrome_shortcuts.go:35
-#: ../../launcher/item/chrome_shortcuts.go:39
 #: ../../launcher/manager_uninstall.go:33
-#: ../../launcher/manager_uninstall.go:34
-#: ../../launcher2/manager_uninstall.go:33
-msgid "%q removed successfully."
-msgstr "%q úspešne odstránený."
+msgid "%q removed successfully"
+msgstr "%q úspešne odstránené"
 
 #: ../../launcher/manager_uninstall.go:35
-#: ../../launcher/manager_uninstall.go:36
-msgid "Failed to uninstall %q."
-msgstr "Nepodarilo sa odinštalovať %q."
+msgid "Failed to uninstall %q"
+msgstr "Nepodarilo sa odinštalovať %q"
 
-#: ../../mime/default_media.go:87 ../../mime/default_media.go:104
 #: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
 msgstr "Nič"
 
-#: ../../mime/default_media.go:90 ../../mime/default_media.go:105
 #: ../../mime/media.go:66 ../../mime/media.go:67
 msgid "Open Folder"
 msgstr "Otvoriť adresár"
 
-#: ../../mime/default_media.go:94 ../../mime/media.go:75
-#: ../../mime/media.go:76
+#: ../../mime/media.go:75 ../../mime/media.go:76
 msgid "Run Software"
 msgstr "Spustiť softvér"
 
-#: ../../mounts/ifc.go:135 ../../mounts/ifc.go:144 ../../mounts/ifc.go:168
-#, c-format
-msgid "%s removed successfully"
-msgstr "%s úspešne odstránený"
-
-#: ../../network/manager_active.go:289 ../../network/manager_active.go:294
-#: ../../network/manager_active.go:304 ../../network/manager_active.go:308
-#: ../../network/manager_active.go:309 ../../network/manager_active.go:311
-#: ../../network/manager_active.go:313 ../../network/manager_active.go:314
-#: ../../network/manager_active.go:316 ../../network/manager_active.go:319
-#: ../../network/manager_active.go:321
-#: ../../network/nm_setting_virtual_key.go:173
+#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
 #: ../../network/nm_setting_virtual_key.go:179
-#: ../../network/nm_setting_virtual_key.go:180
-#: ../../network/nm_setting_virtual_key.go:185
 #: ../../network/nm_setting_virtual_key.go:186
-#: ../../network/nm_setting_virtual_key.go:192
-#: ../../network/nm_setting_virtual_key.go:210
 #: ../../network/nm_setting_virtual_key.go:216
-#: ../../network/nm_setting_virtual_key.go:222
 #: ../../network/nm_setting_vpn_openvpn.go:240
-#: ../../network/nm_setting_vpn_openvpn.go:377
-#: ../../network/nm_setting_vpn_openvpn.go:391
-#: ../../network/nm_setting_vpn_openvpn.go:395
 #: ../../network/nm_setting_vpn_vpnc.go:151
-#: ../../network/nm_setting_vpn_vpnc.go:257
-#: ../../network/nm_setting_vpn_vpnc.go:269
 msgid "None"
 msgstr "Žiadne"
 
-#: ../../network/manager_active.go:296 ../../network/manager_active.go:311
-#: ../../network/manager_active.go:315 ../../network/manager_active.go:316
-#: ../../network/manager_active.go:318 ../../network/manager_active.go:321
-#: ../../network/manager_active.go:323
-#: ../../network/nm_setting_virtual_key.go:174
+#: ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:180
-#: ../../network/nm_setting_virtual_key.go:181
-#: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:187
-#: ../../network/nm_setting_virtual_key.go:193
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit kľúč"
 
-#: ../../network/manager_active.go:298 ../../network/manager_active.go:313
-#: ../../network/manager_active.go:317 ../../network/manager_active.go:318
-#: ../../network/manager_active.go:320 ../../network/manager_active.go:323
-#: ../../network/manager_active.go:325
-#: ../../network/nm_setting_virtual_key.go:175
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:181
-#: ../../network/nm_setting_virtual_key.go:182
-#: ../../network/nm_setting_virtual_key.go:187
 #: ../../network/nm_setting_virtual_key.go:188
-#: ../../network/nm_setting_virtual_key.go:194
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:306 ../../network/manager_active.go:321
-#: ../../network/manager_active.go:325 ../../network/manager_active.go:326
-#: ../../network/manager_active.go:328 ../../network/manager_active.go:331
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
-#: ../../network/nm_setting_802_1x.go:31 ../../network/nm_setting_802_1x.go:42
-#: ../../network/nm_setting_802_1x.go:86
-#: ../../network/nm_setting_802_1x.go:111
+#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
-#: ../../network/nm_setting_802_1x.go:119
 #: ../../network/nm_setting_802_1x.go:120
-#: ../../network/nm_setting_802_1x.go:123
-#: ../../network/nm_setting_802_1x.go:131
-#: ../../network/nm_setting_802_1x.go:167
-#: ../../network/nm_setting_802_1x.go:175
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:308 ../../network/manager_active.go:323
-#: ../../network/manager_active.go:327 ../../network/manager_active.go:328
-#: ../../network/manager_active.go:330 ../../network/manager_active.go:333
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:29
-#: ../../network/nm_setting_802_1x.go:30 ../../network/nm_setting_802_1x.go:41
-#: ../../network/nm_setting_802_1x.go:85
-#: ../../network/nm_setting_802_1x.go:112
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
-#: ../../network/nm_setting_802_1x.go:124
-#: ../../network/nm_setting_802_1x.go:168
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:310 ../../network/manager_active.go:325
-#: ../../network/manager_active.go:329 ../../network/manager_active.go:330
-#: ../../network/manager_active.go:332 ../../network/manager_active.go:335
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:120
-#: ../../network/nm_setting_802_1x.go:121
-#: ../../network/nm_setting_802_1x.go:132
-#: ../../network/nm_setting_802_1x.go:176
-#: ../../network/nm_setting_wireless_security.go:71
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
-#: ../../network/nm_setting_wireless_security.go:83
-#: ../../network/nm_setting_wireless_security.go:206
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:327
-#: ../../network/manager_active.go:331 ../../network/manager_active.go:332
-#: ../../network/manager_active.go:334 ../../network/manager_active.go:337
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:113
-#: ../../network/nm_setting_802_1x.go:114
-#: ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
-#: ../../network/nm_setting_802_1x.go:125
-#: ../../network/nm_setting_802_1x.go:133
-#: ../../network/nm_setting_802_1x.go:169
-#: ../../network/nm_setting_802_1x.go:177
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:314 ../../network/manager_active.go:329
-#: ../../network/manager_active.go:333 ../../network/manager_active.go:334
-#: ../../network/manager_active.go:336 ../../network/manager_active.go:339
-#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:114
-#: ../../network/nm_setting_802_1x.go:115
-#: ../../network/nm_setting_802_1x.go:122
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
-#: ../../network/nm_setting_802_1x.go:126
-#: ../../network/nm_setting_802_1x.go:134
-#: ../../network/nm_setting_802_1x.go:170
-#: ../../network/nm_setting_802_1x.go:178
 msgid "Tunneled TLS"
 msgstr "Tunelované TLS"
 
-#: ../../network/manager_active.go:316 ../../network/manager_active.go:331
-#: ../../network/manager_active.go:335 ../../network/manager_active.go:336
-#: ../../network/manager_active.go:338 ../../network/manager_active.go:341
-#: ../../network/manager_active.go:343 ../../network/nm_setting_802_1x.go:115
-#: ../../network/nm_setting_802_1x.go:116
-#: ../../network/nm_setting_802_1x.go:123
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
-#: ../../network/nm_setting_802_1x.go:127
-#: ../../network/nm_setting_802_1x.go:135
-#: ../../network/nm_setting_802_1x.go:171
-#: ../../network/nm_setting_802_1x.go:179
 msgid "Protected EAP"
 msgstr "Chránené EAP"
 
-#: ../../network/manager_connection.go:256
-#: ../../network/manager_connection.go:257
-#: ../../network/manager_connection.go:258
-#: ../../network/manager_connection.go:260
-#: ../../network/manager_connection.go:268 ../../network/nm_custom_type.go:178
-#: ../../network/nm_custom_type.go:187 ../../network/nm_custom_type.go:204
-#: ../../network/nm_custom_type.go:205 ../../network/nm_custom_type.go:212
-#: ../../network/nm_custom_type.go:218
+#: ../../network/manager_connection.go:256 ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
 msgstr "Káblové pripojenie"
 
-#: ../../network/nm_constant.go:332 ../../network/nm_setting_vpn_l2tp.go:26
-#: ../../network/nm_setting_vpn_l2tp.go:102
-#: ../../network/nm_setting_vpn_l2tp.go:114
-#: ../../network/nm_setting_vpn_openvpn.go:23
-#: ../../network/nm_setting_vpn_openvpn.go:156
-#: ../../network/nm_setting_vpn_openvpn.go:168
-#: ../../network/nm_setting_vpn_pptp.go:26
-#: ../../network/nm_setting_vpn_pptp.go:92
-#: ../../network/nm_setting_vpn_pptp.go:104
-#: ../../network/nm_setting_vpn_vpnc.go:25
-#: ../../network/nm_setting_vpn_vpnc.go:130
-#: ../../network/nm_setting_vpn_vpnc.go:142 ../../network/utils_dbus_nm.go:155
-#: ../../network/utils_nm.go:175 ../../network/utils_nm.go:177
-#: ../../network/utils_nm.go:185 ../../network/utils_nm.go:187
-msgid "Saved"
-msgstr "Uložené"
-
-#: ../../network/nm_constant.go:334 ../../network/nm_setting_vpn_l2tp.go:27
-#: ../../network/nm_setting_vpn_l2tp.go:103
-#: ../../network/nm_setting_vpn_l2tp.go:115
-#: ../../network/nm_setting_vpn_openvpn.go:24
-#: ../../network/nm_setting_vpn_openvpn.go:157
-#: ../../network/nm_setting_vpn_openvpn.go:169
-#: ../../network/nm_setting_vpn_pptp.go:27
-#: ../../network/nm_setting_vpn_pptp.go:93
-#: ../../network/nm_setting_vpn_pptp.go:105
-#: ../../network/nm_setting_vpn_vpnc.go:27
-#: ../../network/nm_setting_vpn_vpnc.go:132
-#: ../../network/nm_setting_vpn_vpnc.go:144 ../../network/utils_dbus_nm.go:157
-#: ../../network/utils_nm.go:177 ../../network/utils_nm.go:179
-#: ../../network/utils_nm.go:187 ../../network/utils_nm.go:189
-msgid "Always Ask"
-msgstr "Vždy sa pýtať"
-
-#: ../../network/nm_constant.go:335 ../../network/nm_setting_vpn_l2tp.go:28
-#: ../../network/nm_setting_vpn_l2tp.go:104
-#: ../../network/nm_setting_vpn_l2tp.go:116
-#: ../../network/nm_setting_vpn_openvpn.go:25
-#: ../../network/nm_setting_vpn_openvpn.go:158
-#: ../../network/nm_setting_vpn_openvpn.go:170
-#: ../../network/nm_setting_vpn_openvpn.go:321
-#: ../../network/nm_setting_vpn_openvpn.go:458
-#: ../../network/nm_setting_vpn_openvpn.go:472
-#: ../../network/nm_setting_vpn_openvpn.go:476
-#: ../../network/nm_setting_vpn_pptp.go:28
-#: ../../network/nm_setting_vpn_pptp.go:94
-#: ../../network/nm_setting_vpn_pptp.go:106
-#: ../../network/nm_setting_vpn_vpnc.go:28
-#: ../../network/nm_setting_vpn_vpnc.go:133
-#: ../../network/nm_setting_vpn_vpnc.go:145 ../../network/utils_dbus_nm.go:158
-#: ../../network/utils_nm.go:178 ../../network/utils_nm.go:180
-#: ../../network/utils_nm.go:188 ../../network/utils_nm.go:190
-msgid "Not Required"
-msgstr "Nie je požadované"
-
-#: ../../network/nm_custom_type.go:176 ../../network/nm_custom_type.go:185
-#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:203
-#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:216
+#: ../../network/nm_custom_type.go:216
 msgid "Connection"
 msgstr "Spojenie"
 
-#: ../../network/nm_custom_type.go:180 ../../network/nm_custom_type.go:189
-#: ../../network/nm_custom_type.go:206 ../../network/nm_custom_type.go:207
-#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:220
+#: ../../network/nm_custom_type.go:220
 msgid "Wireless Connection"
 msgstr "Bezdrôtové spojenie"
 
-#: ../../network/nm_custom_type.go:182 ../../network/nm_custom_type.go:191
-#: ../../network/nm_custom_type.go:208 ../../network/nm_custom_type.go:209
-#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:222
+#: ../../network/nm_custom_type.go:222
 msgid "Wireless Ad-Hoc"
 msgstr "Bezdrôtové Ad-Hoc"
 
-#: ../../network/nm_custom_type.go:184 ../../network/nm_custom_type.go:193
-#: ../../network/nm_custom_type.go:210 ../../network/nm_custom_type.go:211
-#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:224
+#: ../../network/nm_custom_type.go:224
 msgid "Wireless Ap-Hotspot"
 msgstr "Bezdrôtový Ap-Hotspot"
 
-#: ../../network/nm_custom_type.go:186 ../../network/nm_custom_type.go:195
-#: ../../network/nm_custom_type.go:212 ../../network/nm_custom_type.go:213
-#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:226
+#: ../../network/nm_custom_type.go:226
 msgid "PPPoE Connection"
 msgstr "PPPoE pripojenie"
 
-#: ../../network/nm_custom_type.go:188 ../../network/nm_custom_type.go:197
-#: ../../network/nm_custom_type.go:214 ../../network/nm_custom_type.go:215
-#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:228
+#: ../../network/nm_custom_type.go:228
 msgid "Mobile Connection"
 msgstr "Mobilné pripojenie"
 
-#: ../../network/nm_custom_type.go:190 ../../network/nm_custom_type.go:199
-#: ../../network/nm_custom_type.go:216 ../../network/nm_custom_type.go:217
-#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:230
+#: ../../network/nm_custom_type.go:230
 msgid "Mobile GSM Connection"
 msgstr "Mobilné GSM pripojenie"
 
-#: ../../network/nm_custom_type.go:192 ../../network/nm_custom_type.go:201
-#: ../../network/nm_custom_type.go:218 ../../network/nm_custom_type.go:219
-#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:232
+#: ../../network/nm_custom_type.go:232
 msgid "Mobile CDMA Connection"
 msgstr "Mobilné CDMA pripojenie"
 
-#: ../../network/nm_custom_type.go:194 ../../network/nm_custom_type.go:203
-#: ../../network/nm_custom_type.go:220 ../../network/nm_custom_type.go:221
-#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:234
+#: ../../network/nm_custom_type.go:234
 msgid "VPN Connection"
 msgstr "VPN pripojenie"
 
-#: ../../network/nm_custom_type.go:196 ../../network/nm_custom_type.go:205
-#: ../../network/nm_custom_type.go:222 ../../network/nm_custom_type.go:223
-#: ../../network/nm_custom_type.go:230 ../../network/nm_custom_type.go:236
+#: ../../network/nm_custom_type.go:236
 msgid "VPN L2TP"
 msgstr "VPN L2TP"
 
-#: ../../network/nm_custom_type.go:198 ../../network/nm_custom_type.go:207
-#: ../../network/nm_custom_type.go:224 ../../network/nm_custom_type.go:225
-#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:238
+#: ../../network/nm_custom_type.go:238
 msgid "VPN OpenConnect"
 msgstr "VPN OpenConnect"
 
-#: ../../network/nm_custom_type.go:200 ../../network/nm_custom_type.go:209
-#: ../../network/nm_custom_type.go:226 ../../network/nm_custom_type.go:227
-#: ../../network/nm_custom_type.go:234 ../../network/nm_custom_type.go:240
+#: ../../network/nm_custom_type.go:240
 msgid "VPN OpenVPN"
 msgstr "VPN OpenVPN"
 
-#: ../../network/nm_custom_type.go:202 ../../network/nm_custom_type.go:211
-#: ../../network/nm_custom_type.go:228 ../../network/nm_custom_type.go:229
-#: ../../network/nm_custom_type.go:236 ../../network/nm_custom_type.go:242
+#: ../../network/nm_custom_type.go:242
 msgid "VPN PPTP"
 msgstr "VPN PPTP"
 
-#: ../../network/nm_custom_type.go:204 ../../network/nm_custom_type.go:213
-#: ../../network/nm_custom_type.go:232 ../../network/nm_custom_type.go:233
-#: ../../network/nm_custom_type.go:238 ../../network/nm_custom_type.go:246
-msgid "VPN VPNC"
-msgstr "VPN VPNC"
-
-#: ../../network/nm_custom_type.go:230 ../../network/nm_custom_type.go:231
 #: ../../network/nm_custom_type.go:244
 msgid "VPN StrongSwan"
 msgstr "VPN StrongSwan"
 
-#: ../../network/nm_setting_802_1x.go:23 ../../network/nm_setting_802_1x.go:24
-#: ../../network/nm_setting_802_1x.go:35 ../../network/nm_setting_802_1x.go:79
+#: ../../network/nm_custom_type.go:246
+msgid "VPN VPNC"
+msgstr "VPN VPNC"
+
+#: ../../network/nm_setting_802_1x.go:24
 msgid "PAP"
 msgstr "PAP"
 
-#: ../../network/nm_setting_802_1x.go:24 ../../network/nm_setting_802_1x.go:25
-#: ../../network/nm_setting_802_1x.go:36 ../../network/nm_setting_802_1x.go:80
+#: ../../network/nm_setting_802_1x.go:25
 msgid "CHAP"
 msgstr "CHAP"
 
-#: ../../network/nm_setting_802_1x.go:25 ../../network/nm_setting_802_1x.go:26
-#: ../../network/nm_setting_802_1x.go:37 ../../network/nm_setting_802_1x.go:81
+#: ../../network/nm_setting_802_1x.go:26
 msgid "MSCHAP"
 msgstr "MSCHAP"
 
-#: ../../network/nm_setting_802_1x.go:26 ../../network/nm_setting_802_1x.go:27
-#: ../../network/nm_setting_802_1x.go:38 ../../network/nm_setting_802_1x.go:82
+#: ../../network/nm_setting_802_1x.go:27
 msgid "MSCHAPV2"
 msgstr "MSCHAPV2"
 
-#: ../../network/nm_setting_802_1x.go:27 ../../network/nm_setting_802_1x.go:28
-#: ../../network/nm_setting_802_1x.go:39 ../../network/nm_setting_802_1x.go:83
+#: ../../network/nm_setting_802_1x.go:28
 msgid "GTC"
 msgstr "GTC"
 
-#: ../../network/nm_setting_802_1x.go:28 ../../network/nm_setting_802_1x.go:29
-#: ../../network/nm_setting_802_1x.go:40 ../../network/nm_setting_802_1x.go:84
+#: ../../network/nm_setting_802_1x.go:29
 msgid "OTP"
 msgstr "OTP"
 
-#: ../../network/nm_setting_802_1x.go:128
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_802_1x.go:140
-#: ../../network/nm_setting_802_1x.go:184
-#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip4_config.go:31
-#: ../../network/nm_setting_ip4_config.go:42
-#: ../../network/nm_setting_ip4_config.go:178
 #: ../../network/nm_setting_vpn_vpnc.go:140
-#: ../../network/nm_setting_vpn_vpnc.go:246
-#: ../../network/nm_setting_vpn_vpnc.go:258
 msgid "Disabled"
 msgstr "Zakázané"
 
-#: ../../network/nm_setting_802_1x.go:129
 #: ../../network/nm_setting_802_1x.go:130
-#: ../../network/nm_setting_802_1x.go:141
-#: ../../network/nm_setting_802_1x.go:185
 msgid "Anonymous"
 msgstr "Anonymné"
 
-#: ../../network/nm_setting_802_1x.go:130
 #: ../../network/nm_setting_802_1x.go:131
-#: ../../network/nm_setting_802_1x.go:142
-#: ../../network/nm_setting_802_1x.go:186
 msgid "Authenticated"
 msgstr "Overené"
 
-#: ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_802_1x.go:132
-#: ../../network/nm_setting_802_1x.go:143
-#: ../../network/nm_setting_802_1x.go:187
 msgid "Both"
 msgstr "Obe"
 
-#: ../../network/nm_setting_802_1x.go:135
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_802_1x.go:147
-#: ../../network/nm_setting_802_1x.go:191
-#: ../../network/nm_setting_wireless.go:180
-#: ../../network/nm_setting_wireless.go:181
-#: ../../network/nm_setting_wireless.go:192
 #: ../../network/nm_setting_wireless.go:196
-#: ../../network/nm_setting_wireless.go:297
 msgid "Automatic"
 msgstr "Automaticky"
 
-#: ../../network/nm_setting_802_1x.go:136
 #: ../../network/nm_setting_802_1x.go:137
-#: ../../network/nm_setting_802_1x.go:148
-#: ../../network/nm_setting_802_1x.go:192
 msgid "Version 0"
 msgstr "Verzia 0"
 
-#: ../../network/nm_setting_802_1x.go:137
 #: ../../network/nm_setting_802_1x.go:138
-#: ../../network/nm_setting_802_1x.go:149
-#: ../../network/nm_setting_802_1x.go:193
 msgid "Version 1"
 msgstr "Verzia 1"
 
-#: ../../network/nm_setting_bean_gen.go:47
-#: ../../network/nm_setting_bean_gen.go:48
-#: ../../network/nm_setting_beans_gen.go:17
 #: ../../network/nm_setting_beans_gen.go:18
 msgid "General"
 msgstr "Hlavné"
 
-#: ../../network/nm_setting_bean_gen.go:49
-#: ../../network/nm_setting_bean_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:20
 msgid "Name"
 msgstr "Názov"
 
-#: ../../network/nm_setting_bean_gen.go:50
-#: ../../network/nm_setting_bean_gen.go:51
-#: ../../network/nm_setting_beans_gen.go:20
 #: ../../network/nm_setting_beans_gen.go:21
 msgid "Automatically connect"
 msgstr "Automaticky pripojiť"
 
-#: ../../network/nm_setting_bean_gen.go:51
-#: ../../network/nm_setting_bean_gen.go:52
-#: ../../network/nm_setting_beans_gen.go:21
 #: ../../network/nm_setting_beans_gen.go:22
 msgid "For All Users"
 msgstr "Pre všetkých užívateľov"
 
-#: ../../network/nm_setting_bean_gen.go:57
-#: ../../network/nm_setting_bean_gen.go:58
-#: ../../network/nm_setting_beans_gen.go:27
 #: ../../network/nm_setting_beans_gen.go:28
 msgid "Ethernet"
 msgstr "Ethernet"
 
-#: ../../network/nm_setting_bean_gen.go:59
-#: ../../network/nm_setting_bean_gen.go:60
-#: ../../network/nm_setting_bean_gen.go:144
-#: ../../network/nm_setting_bean_gen.go:145
-#: ../../network/nm_setting_bean_gen.go:146
-#: ../../network/nm_setting_beans_gen.go:29
 #: ../../network/nm_setting_beans_gen.go:30
-#: ../../network/nm_setting_beans_gen.go:115
 #: ../../network/nm_setting_beans_gen.go:116
 msgid "Device MAC Addr"
 msgstr "Device MAC Addr"
 
-#: ../../network/nm_setting_bean_gen.go:60
-#: ../../network/nm_setting_bean_gen.go:61
-#: ../../network/nm_setting_bean_gen.go:145
-#: ../../network/nm_setting_bean_gen.go:146
-#: ../../network/nm_setting_bean_gen.go:147
-#: ../../network/nm_setting_beans_gen.go:30
 #: ../../network/nm_setting_beans_gen.go:31
-#: ../../network/nm_setting_beans_gen.go:116
 #: ../../network/nm_setting_beans_gen.go:117
 msgid "Cloned MAC Addr"
 msgstr "Cloned MAC Addr"
 
-#: ../../network/nm_setting_bean_gen.go:61
-#: ../../network/nm_setting_bean_gen.go:62
-#: ../../network/nm_setting_bean_gen.go:146
-#: ../../network/nm_setting_bean_gen.go:147
-#: ../../network/nm_setting_bean_gen.go:148
-#: ../../network/nm_setting_beans_gen.go:31
 #: ../../network/nm_setting_beans_gen.go:32
-#: ../../network/nm_setting_beans_gen.go:117
 #: ../../network/nm_setting_beans_gen.go:118
 msgid "Customize MTU"
 msgstr "Vlastné MTU"
 
-#: ../../network/nm_setting_bean_gen.go:62
-#: ../../network/nm_setting_bean_gen.go:63
-#: ../../network/nm_setting_bean_gen.go:147
-#: ../../network/nm_setting_bean_gen.go:148
-#: ../../network/nm_setting_bean_gen.go:149
-#: ../../network/nm_setting_bean_gen.go:357
-#: ../../network/nm_setting_bean_gen.go:358
-#: ../../network/nm_setting_bean_gen.go:367
-#: ../../network/nm_setting_bean_gen.go:368
-#: ../../network/nm_setting_bean_gen.go:369
-#: ../../network/nm_setting_beans_gen.go:32
 #: ../../network/nm_setting_beans_gen.go:33
-#: ../../network/nm_setting_beans_gen.go:118
 #: ../../network/nm_setting_beans_gen.go:119
-#: ../../network/nm_setting_beans_gen.go:339
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "MTU"
 msgstr "MTU"
 
-#: ../../network/nm_setting_bean_gen.go:68
-#: ../../network/nm_setting_bean_gen.go:69
-#: ../../network/nm_setting_bean_gen.go:90
-#: ../../network/nm_setting_bean_gen.go:91
-#: ../../network/nm_setting_bean_gen.go:104
-#: ../../network/nm_setting_bean_gen.go:105
-#: ../../network/nm_setting_beans_gen.go:38
 #: ../../network/nm_setting_beans_gen.go:39
-#: ../../network/nm_setting_beans_gen.go:60
 #: ../../network/nm_setting_beans_gen.go:61
-#: ../../network/nm_setting_beans_gen.go:74
 #: ../../network/nm_setting_beans_gen.go:75
 msgid "Mobile"
 msgstr "Mobilná"
 
-#: ../../network/nm_setting_bean_gen.go:70
-#: ../../network/nm_setting_bean_gen.go:71
-#: ../../network/nm_setting_beans_gen.go:40
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "Country or region"
 msgstr "Krajina alebo región"
 
-#: ../../network/nm_setting_bean_gen.go:71
-#: ../../network/nm_setting_bean_gen.go:72
-#: ../../network/nm_setting_beans_gen.go:41
 #: ../../network/nm_setting_beans_gen.go:42
 msgid "Provider"
 msgstr "Poskytovateľ"
 
-#: ../../network/nm_setting_bean_gen.go:72
-#: ../../network/nm_setting_bean_gen.go:73
-#: ../../network/nm_setting_beans_gen.go:42
 #: ../../network/nm_setting_beans_gen.go:43
 msgid "Plan"
 msgstr "Plán"
 
-#: ../../network/nm_setting_bean_gen.go:73
-#: ../../network/nm_setting_bean_gen.go:74
-#: ../../network/nm_setting_beans_gen.go:43
 #: ../../network/nm_setting_beans_gen.go:44
 msgid "Service Type"
 msgstr "Typ služby"
 
-#: ../../network/nm_setting_bean_gen.go:74
-#: ../../network/nm_setting_bean_gen.go:75
-#: ../../network/nm_setting_bean_gen.go:76
-#: ../../network/nm_setting_bean_gen.go:92
-#: ../../network/nm_setting_bean_gen.go:93
-#: ../../network/nm_setting_beans_gen.go:44
 #: ../../network/nm_setting_beans_gen.go:45
 #: ../../network/nm_setting_beans_gen.go:46
-#: ../../network/nm_setting_beans_gen.go:62
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "APN"
 msgstr "APN"
 
-#: ../../network/nm_setting_bean_gen.go:76
-#: ../../network/nm_setting_bean_gen.go:77
-#: ../../network/nm_setting_bean_gen.go:82
-#: ../../network/nm_setting_bean_gen.go:83
-#: ../../network/nm_setting_bean_gen.go:93
-#: ../../network/nm_setting_bean_gen.go:94
-#: ../../network/nm_setting_bean_gen.go:106
-#: ../../network/nm_setting_bean_gen.go:107
-#: ../../network/nm_setting_beans_gen.go:46
 #: ../../network/nm_setting_beans_gen.go:47
-#: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:53
-#: ../../network/nm_setting_beans_gen.go:63
 #: ../../network/nm_setting_beans_gen.go:64
-#: ../../network/nm_setting_beans_gen.go:76
 #: ../../network/nm_setting_beans_gen.go:77
 msgid "Number"
 msgstr "Číslo"
 
-#: ../../network/nm_setting_bean_gen.go:77
-#: ../../network/nm_setting_bean_gen.go:78
-#: ../../network/nm_setting_bean_gen.go:83
-#: ../../network/nm_setting_bean_gen.go:84
-#: ../../network/nm_setting_bean_gen.go:94
-#: ../../network/nm_setting_bean_gen.go:95
-#: ../../network/nm_setting_bean_gen.go:107
-#: ../../network/nm_setting_bean_gen.go:108
-#: ../../network/nm_setting_bean_gen.go:155
-#: ../../network/nm_setting_bean_gen.go:156
-#: ../../network/nm_setting_bean_gen.go:157
-#: ../../network/nm_setting_bean_gen.go:186
-#: ../../network/nm_setting_bean_gen.go:187
-#: ../../network/nm_setting_bean_gen.go:188
-#: ../../network/nm_setting_bean_gen.go:200
-#: ../../network/nm_setting_bean_gen.go:201
-#: ../../network/nm_setting_bean_gen.go:202
-#: ../../network/nm_setting_bean_gen.go:214
-#: ../../network/nm_setting_bean_gen.go:215
-#: ../../network/nm_setting_bean_gen.go:216
-#: ../../network/nm_setting_bean_gen.go:219
-#: ../../network/nm_setting_bean_gen.go:220
-#: ../../network/nm_setting_bean_gen.go:222
-#: ../../network/nm_setting_bean_gen.go:223
-#: ../../network/nm_setting_bean_gen.go:229
-#: ../../network/nm_setting_bean_gen.go:230
-#: ../../network/nm_setting_bean_gen.go:231
-#: ../../network/nm_setting_bean_gen.go:235
-#: ../../network/nm_setting_bean_gen.go:236
-#: ../../network/nm_setting_bean_gen.go:245
-#: ../../network/nm_setting_bean_gen.go:246
-#: ../../network/nm_setting_bean_gen.go:247
-#: ../../network/nm_setting_bean_gen.go:295
-#: ../../network/nm_setting_bean_gen.go:296
-#: ../../network/nm_setting_bean_gen.go:305
-#: ../../network/nm_setting_bean_gen.go:306
-#: ../../network/nm_setting_bean_gen.go:307
-#: ../../network/nm_setting_bean_gen.go:340
-#: ../../network/nm_setting_bean_gen.go:341
-#: ../../network/nm_setting_bean_gen.go:350
-#: ../../network/nm_setting_bean_gen.go:351
-#: ../../network/nm_setting_bean_gen.go:352
-#: ../../network/nm_setting_bean_gen.go:370
-#: ../../network/nm_setting_bean_gen.go:371
-#: ../../network/nm_setting_bean_gen.go:380
-#: ../../network/nm_setting_bean_gen.go:381
-#: ../../network/nm_setting_bean_gen.go:382
-#: ../../network/nm_setting_bean_gen.go:401
-#: ../../network/nm_setting_bean_gen.go:402
-#: ../../network/nm_setting_bean_gen.go:413
-#: ../../network/nm_setting_bean_gen.go:414
-#: ../../network/nm_setting_bean_gen.go:415
-#: ../../network/nm_setting_bean_gen.go:427
-#: ../../network/nm_setting_bean_gen.go:428
-#: ../../network/nm_setting_bean_gen.go:430
-#: ../../network/nm_setting_beans_gen.go:47
 #: ../../network/nm_setting_beans_gen.go:48
-#: ../../network/nm_setting_beans_gen.go:53
 #: ../../network/nm_setting_beans_gen.go:54
-#: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:65
-#: ../../network/nm_setting_beans_gen.go:77
 #: ../../network/nm_setting_beans_gen.go:78
-#: ../../network/nm_setting_beans_gen.go:126
 #: ../../network/nm_setting_beans_gen.go:127
-#: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:159
-#: ../../network/nm_setting_beans_gen.go:172
 #: ../../network/nm_setting_beans_gen.go:173
-#: ../../network/nm_setting_beans_gen.go:186
 #: ../../network/nm_setting_beans_gen.go:187
-#: ../../network/nm_setting_beans_gen.go:193
 #: ../../network/nm_setting_beans_gen.go:194
-#: ../../network/nm_setting_beans_gen.go:201
 #: ../../network/nm_setting_beans_gen.go:202
-#: ../../network/nm_setting_beans_gen.go:217
 #: ../../network/nm_setting_beans_gen.go:218
-#: ../../network/nm_setting_beans_gen.go:277
 #: ../../network/nm_setting_beans_gen.go:278
-#: ../../network/nm_setting_beans_gen.go:322
 #: ../../network/nm_setting_beans_gen.go:323
-#: ../../network/nm_setting_beans_gen.go:352
 #: ../../network/nm_setting_beans_gen.go:353
-#: ../../network/nm_setting_beans_gen.go:385
 #: ../../network/nm_setting_beans_gen.go:386
-#: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:401
 msgid "Username"
 msgstr "Meno používateľa"
 
-#: ../../network/nm_setting_bean_gen.go:78
-#: ../../network/nm_setting_bean_gen.go:79
-#: ../../network/nm_setting_bean_gen.go:84
-#: ../../network/nm_setting_bean_gen.go:85
-#: ../../network/nm_setting_bean_gen.go:95
-#: ../../network/nm_setting_bean_gen.go:96
-#: ../../network/nm_setting_bean_gen.go:108
-#: ../../network/nm_setting_bean_gen.go:109
-#: ../../network/nm_setting_bean_gen.go:119
-#: ../../network/nm_setting_bean_gen.go:120
-#: ../../network/nm_setting_bean_gen.go:131
-#: ../../network/nm_setting_bean_gen.go:132
-#: ../../network/nm_setting_bean_gen.go:157
-#: ../../network/nm_setting_bean_gen.go:158
-#: ../../network/nm_setting_bean_gen.go:159
-#: ../../network/nm_setting_bean_gen.go:188
-#: ../../network/nm_setting_bean_gen.go:189
-#: ../../network/nm_setting_bean_gen.go:190
-#: ../../network/nm_setting_bean_gen.go:202
-#: ../../network/nm_setting_bean_gen.go:203
-#: ../../network/nm_setting_bean_gen.go:204
-#: ../../network/nm_setting_bean_gen.go:216
-#: ../../network/nm_setting_bean_gen.go:217
-#: ../../network/nm_setting_bean_gen.go:218
-#: ../../network/nm_setting_bean_gen.go:226
-#: ../../network/nm_setting_bean_gen.go:237
-#: ../../network/nm_setting_bean_gen.go:238
-#: ../../network/nm_setting_bean_gen.go:247
-#: ../../network/nm_setting_bean_gen.go:248
-#: ../../network/nm_setting_bean_gen.go:249
-#: ../../network/nm_setting_bean_gen.go:297
-#: ../../network/nm_setting_bean_gen.go:298
-#: ../../network/nm_setting_bean_gen.go:307
-#: ../../network/nm_setting_bean_gen.go:308
-#: ../../network/nm_setting_bean_gen.go:309
-#: ../../network/nm_setting_bean_gen.go:341
-#: ../../network/nm_setting_bean_gen.go:342
-#: ../../network/nm_setting_bean_gen.go:351
-#: ../../network/nm_setting_bean_gen.go:352
-#: ../../network/nm_setting_bean_gen.go:353
-#: ../../network/nm_setting_bean_gen.go:372
-#: ../../network/nm_setting_bean_gen.go:373
-#: ../../network/nm_setting_bean_gen.go:382
-#: ../../network/nm_setting_bean_gen.go:383
-#: ../../network/nm_setting_bean_gen.go:384
-#: ../../network/nm_setting_bean_gen.go:418
-#: ../../network/nm_setting_beans_gen.go:48
 #: ../../network/nm_setting_beans_gen.go:49
-#: ../../network/nm_setting_beans_gen.go:54
 #: ../../network/nm_setting_beans_gen.go:55
-#: ../../network/nm_setting_beans_gen.go:65
 #: ../../network/nm_setting_beans_gen.go:66
-#: ../../network/nm_setting_beans_gen.go:78
 #: ../../network/nm_setting_beans_gen.go:79
-#: ../../network/nm_setting_beans_gen.go:89
 #: ../../network/nm_setting_beans_gen.go:90
-#: ../../network/nm_setting_beans_gen.go:101
 #: ../../network/nm_setting_beans_gen.go:102
-#: ../../network/nm_setting_beans_gen.go:128
 #: ../../network/nm_setting_beans_gen.go:129
-#: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:161
-#: ../../network/nm_setting_beans_gen.go:174
 #: ../../network/nm_setting_beans_gen.go:175
-#: ../../network/nm_setting_beans_gen.go:188
 #: ../../network/nm_setting_beans_gen.go:189
-#: ../../network/nm_setting_beans_gen.go:196
 #: ../../network/nm_setting_beans_gen.go:197
-#: ../../network/nm_setting_beans_gen.go:219
 #: ../../network/nm_setting_beans_gen.go:220
-#: ../../network/nm_setting_beans_gen.go:279
 #: ../../network/nm_setting_beans_gen.go:280
-#: ../../network/nm_setting_beans_gen.go:323
 #: ../../network/nm_setting_beans_gen.go:324
-#: ../../network/nm_setting_beans_gen.go:354
 #: ../../network/nm_setting_beans_gen.go:355
-#: ../../network/nm_setting_beans_gen.go:388
 #: ../../network/nm_setting_beans_gen.go:389
 #: ../../network/nm_setting_vpn_openvpn.go:104
-#: ../../network/nm_setting_vpn_openvpn.go:237
-#: ../../network/nm_setting_vpn_openvpn.go:249
 msgid "Password"
 msgstr "Heslo"
 
-#: ../../network/nm_setting_bean_gen.go:79
-#: ../../network/nm_setting_bean_gen.go:80
-#: ../../network/nm_setting_bean_gen.go:96
-#: ../../network/nm_setting_bean_gen.go:97
-#: ../../network/nm_setting_beans_gen.go:49
 #: ../../network/nm_setting_beans_gen.go:50
-#: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:67
 msgid "Network ID"
 msgstr "Network ID"
 
-#: ../../network/nm_setting_bean_gen.go:80
-#: ../../network/nm_setting_bean_gen.go:81
-#: ../../network/nm_setting_bean_gen.go:97
-#: ../../network/nm_setting_bean_gen.go:98
-#: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:51
-#: ../../network/nm_setting_beans_gen.go:67
 #: ../../network/nm_setting_beans_gen.go:68
 msgid "Home Network Only"
 msgstr "Iba domáca sieť"
 
-#: ../../network/nm_setting_bean_gen.go:81
-#: ../../network/nm_setting_bean_gen.go:82
-#: ../../network/nm_setting_bean_gen.go:98
-#: ../../network/nm_setting_bean_gen.go:99
-#: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:52
-#: ../../network/nm_setting_beans_gen.go:68
 #: ../../network/nm_setting_beans_gen.go:69
 msgid "PIN"
 msgstr "PIN"
 
-#: ../../network/nm_setting_bean_gen.go:114
-#: ../../network/nm_setting_bean_gen.go:115
-#: ../../network/nm_setting_bean_gen.go:117
-#: ../../network/nm_setting_bean_gen.go:118
-#: ../../network/nm_setting_bean_gen.go:258
-#: ../../network/nm_setting_bean_gen.go:259
-#: ../../network/nm_setting_bean_gen.go:268
-#: ../../network/nm_setting_bean_gen.go:269
-#: ../../network/nm_setting_bean_gen.go:270
-#: ../../network/nm_setting_bean_gen.go:382
-#: ../../network/nm_setting_bean_gen.go:383
-#: ../../network/nm_setting_bean_gen.go:392
-#: ../../network/nm_setting_bean_gen.go:393
-#: ../../network/nm_setting_bean_gen.go:394
-#: ../../network/nm_setting_beans_gen.go:84
 #: ../../network/nm_setting_beans_gen.go:85
-#: ../../network/nm_setting_beans_gen.go:87
 #: ../../network/nm_setting_beans_gen.go:88
-#: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:241
-#: ../../network/nm_setting_beans_gen.go:364
 #: ../../network/nm_setting_beans_gen.go:365
 msgid "Security"
 msgstr "Bezpečnosť"
 
-#: ../../network/nm_setting_bean_gen.go:116
-#: ../../network/nm_setting_bean_gen.go:117
-#: ../../network/nm_setting_beans_gen.go:86
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Security Required"
 msgstr "Požadovaná bezpečnosť"
 
-#: ../../network/nm_setting_bean_gen.go:118
-#: ../../network/nm_setting_bean_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:89
 msgid "Key"
 msgstr "Kľúč"
 
-#: ../../network/nm_setting_bean_gen.go:120
-#: ../../network/nm_setting_bean_gen.go:121
-#: ../../network/nm_setting_beans_gen.go:90
 #: ../../network/nm_setting_beans_gen.go:91
 msgid "EAP Auth"
 msgstr "EAP autentizácia"
 
-#: ../../network/nm_setting_bean_gen.go:121
-#: ../../network/nm_setting_bean_gen.go:122
-#: ../../network/nm_setting_beans_gen.go:91
 #: ../../network/nm_setting_beans_gen.go:92
 msgid "Identity"
 msgstr "Identita"
 
-#: ../../network/nm_setting_bean_gen.go:122
-#: ../../network/nm_setting_bean_gen.go:123
-#: ../../network/nm_setting_beans_gen.go:92
 #: ../../network/nm_setting_beans_gen.go:93
 msgid "Anonymous ID"
 msgstr "Anonymné ID"
 
-#: ../../network/nm_setting_bean_gen.go:123
-#: ../../network/nm_setting_bean_gen.go:124
-#: ../../network/nm_setting_bean_gen.go:191
-#: ../../network/nm_setting_bean_gen.go:192
-#: ../../network/nm_setting_bean_gen.go:193
-#: ../../network/nm_setting_bean_gen.go:203
-#: ../../network/nm_setting_bean_gen.go:204
-#: ../../network/nm_setting_bean_gen.go:205
-#: ../../network/nm_setting_bean_gen.go:220
-#: ../../network/nm_setting_bean_gen.go:221
-#: ../../network/nm_setting_bean_gen.go:279
-#: ../../network/nm_setting_bean_gen.go:280
-#: ../../network/nm_setting_bean_gen.go:289
-#: ../../network/nm_setting_bean_gen.go:290
-#: ../../network/nm_setting_bean_gen.go:291
-#: ../../network/nm_setting_bean_gen.go:298
-#: ../../network/nm_setting_bean_gen.go:299
-#: ../../network/nm_setting_bean_gen.go:308
-#: ../../network/nm_setting_bean_gen.go:309
-#: ../../network/nm_setting_bean_gen.go:310
-#: ../../network/nm_setting_bean_gen.go:411
-#: ../../network/nm_setting_bean_gen.go:412
-#: ../../network/nm_setting_bean_gen.go:413
-#: ../../network/nm_setting_beans_gen.go:93
 #: ../../network/nm_setting_beans_gen.go:94
-#: ../../network/nm_setting_beans_gen.go:163
 #: ../../network/nm_setting_beans_gen.go:164
-#: ../../network/nm_setting_beans_gen.go:175
 #: ../../network/nm_setting_beans_gen.go:176
-#: ../../network/nm_setting_beans_gen.go:191
 #: ../../network/nm_setting_beans_gen.go:192
-#: ../../network/nm_setting_beans_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:262
-#: ../../network/nm_setting_beans_gen.go:280
 #: ../../network/nm_setting_beans_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:384
 msgid "CA Cert"
 msgstr "CA certifikát"
 
-#: ../../network/nm_setting_bean_gen.go:124
-#: ../../network/nm_setting_bean_gen.go:125
-#: ../../network/nm_setting_bean_gen.go:195
-#: ../../network/nm_setting_bean_gen.go:196
-#: ../../network/nm_setting_bean_gen.go:197
-#: ../../network/nm_setting_bean_gen.go:204
-#: ../../network/nm_setting_bean_gen.go:205
-#: ../../network/nm_setting_bean_gen.go:206
-#: ../../network/nm_setting_bean_gen.go:223
-#: ../../network/nm_setting_bean_gen.go:224
-#: ../../network/nm_setting_bean_gen.go:283
-#: ../../network/nm_setting_bean_gen.go:284
-#: ../../network/nm_setting_bean_gen.go:293
-#: ../../network/nm_setting_bean_gen.go:294
-#: ../../network/nm_setting_bean_gen.go:295
-#: ../../network/nm_setting_bean_gen.go:299
-#: ../../network/nm_setting_bean_gen.go:300
-#: ../../network/nm_setting_bean_gen.go:309
-#: ../../network/nm_setting_bean_gen.go:310
-#: ../../network/nm_setting_bean_gen.go:311
-#: ../../network/nm_setting_bean_gen.go:414
-#: ../../network/nm_setting_bean_gen.go:415
-#: ../../network/nm_setting_bean_gen.go:416
-#: ../../network/nm_setting_beans_gen.go:94
 #: ../../network/nm_setting_beans_gen.go:95
-#: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:168
-#: ../../network/nm_setting_beans_gen.go:176
 #: ../../network/nm_setting_beans_gen.go:177
-#: ../../network/nm_setting_beans_gen.go:194
 #: ../../network/nm_setting_beans_gen.go:195
-#: ../../network/nm_setting_beans_gen.go:265
 #: ../../network/nm_setting_beans_gen.go:266
-#: ../../network/nm_setting_beans_gen.go:281
 #: ../../network/nm_setting_beans_gen.go:282
-#: ../../network/nm_setting_beans_gen.go:386
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "User Cert"
 msgstr "Užívateľský certifikát"
 
-#: ../../network/nm_setting_bean_gen.go:125
-#: ../../network/nm_setting_bean_gen.go:126
-#: ../../network/nm_setting_beans_gen.go:95
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Provisioning"
 msgstr "Provisioning"
 
-#: ../../network/nm_setting_bean_gen.go:126
-#: ../../network/nm_setting_bean_gen.go:127
-#: ../../network/nm_setting_beans_gen.go:96
 #: ../../network/nm_setting_beans_gen.go:97
 msgid "PAC file"
 msgstr "PAC súbor"
 
-#: ../../network/nm_setting_bean_gen.go:127
-#: ../../network/nm_setting_bean_gen.go:128
-#: ../../network/nm_setting_beans_gen.go:97
 #: ../../network/nm_setting_beans_gen.go:98
 msgid "PEAP Version"
 msgstr "PEAP verzia"
 
-#: ../../network/nm_setting_bean_gen.go:128
-#: ../../network/nm_setting_bean_gen.go:129
-#: ../../network/nm_setting_beans_gen.go:98
 #: ../../network/nm_setting_beans_gen.go:99
 msgid "Inner Auth"
 msgstr "Inner autentizácia"
 
-#: ../../network/nm_setting_bean_gen.go:129
-#: ../../network/nm_setting_bean_gen.go:130
-#: ../../network/nm_setting_bean_gen.go:196
-#: ../../network/nm_setting_bean_gen.go:197
-#: ../../network/nm_setting_bean_gen.go:198
-#: ../../network/nm_setting_bean_gen.go:205
-#: ../../network/nm_setting_bean_gen.go:206
-#: ../../network/nm_setting_bean_gen.go:207
-#: ../../network/nm_setting_bean_gen.go:224
-#: ../../network/nm_setting_bean_gen.go:225
-#: ../../network/nm_setting_bean_gen.go:284
-#: ../../network/nm_setting_bean_gen.go:285
-#: ../../network/nm_setting_bean_gen.go:294
-#: ../../network/nm_setting_bean_gen.go:295
-#: ../../network/nm_setting_bean_gen.go:296
-#: ../../network/nm_setting_bean_gen.go:300
-#: ../../network/nm_setting_bean_gen.go:301
-#: ../../network/nm_setting_bean_gen.go:310
-#: ../../network/nm_setting_bean_gen.go:311
-#: ../../network/nm_setting_bean_gen.go:312
-#: ../../network/nm_setting_bean_gen.go:415
-#: ../../network/nm_setting_bean_gen.go:416
-#: ../../network/nm_setting_bean_gen.go:417
 #: ../../network/nm_setting_beans_gen.go:100
 #: ../../network/nm_setting_beans_gen.go:169
 #: ../../network/nm_setting_beans_gen.go:178
@@ -2044,2569 +723,1200 @@ msgstr "Inner autentizácia"
 #: ../../network/nm_setting_beans_gen.go:283
 #: ../../network/nm_setting_beans_gen.go:388
 #: ../../network/nm_setting_vpn_strongswan.go:76
-#: ../../network/nm_setting_vpn_strongswan.go:95
-#: ../../network/nm_setting_vpn_strongswan.go:99
 msgid "Private Key"
 msgstr "Privátny kľúč"
 
-#: ../../network/nm_setting_bean_gen.go:130
-#: ../../network/nm_setting_bean_gen.go:131
-#: ../../network/nm_setting_bean_gen.go:132
-#: ../../network/nm_setting_bean_gen.go:133
-#: ../../network/nm_setting_bean_gen.go:187
-#: ../../network/nm_setting_bean_gen.go:188
-#: ../../network/nm_setting_bean_gen.go:189
-#: ../../network/nm_setting_bean_gen.go:201
-#: ../../network/nm_setting_bean_gen.go:202
-#: ../../network/nm_setting_bean_gen.go:203
-#: ../../network/nm_setting_bean_gen.go:206
-#: ../../network/nm_setting_bean_gen.go:207
-#: ../../network/nm_setting_bean_gen.go:208
-#: ../../network/nm_setting_bean_gen.go:215
-#: ../../network/nm_setting_bean_gen.go:216
-#: ../../network/nm_setting_bean_gen.go:217
-#: ../../network/nm_setting_bean_gen.go:220
-#: ../../network/nm_setting_bean_gen.go:221
-#: ../../network/nm_setting_bean_gen.go:223
-#: ../../network/nm_setting_bean_gen.go:224
-#: ../../network/nm_setting_bean_gen.go:230
-#: ../../network/nm_setting_bean_gen.go:231
-#: ../../network/nm_setting_bean_gen.go:232
-#: ../../network/nm_setting_bean_gen.go:233
-#: ../../network/nm_setting_bean_gen.go:234
-#: ../../network/nm_setting_bean_gen.go:235
-#: ../../network/nm_setting_bean_gen.go:236
-#: ../../network/nm_setting_bean_gen.go:237
-#: ../../network/nm_setting_bean_gen.go:246
-#: ../../network/nm_setting_bean_gen.go:247
-#: ../../network/nm_setting_bean_gen.go:248
-#: ../../network/nm_setting_bean_gen.go:296
-#: ../../network/nm_setting_bean_gen.go:297
-#: ../../network/nm_setting_bean_gen.go:301
-#: ../../network/nm_setting_bean_gen.go:302
-#: ../../network/nm_setting_bean_gen.go:306
-#: ../../network/nm_setting_bean_gen.go:307
-#: ../../network/nm_setting_bean_gen.go:308
-#: ../../network/nm_setting_bean_gen.go:311
-#: ../../network/nm_setting_bean_gen.go:312
-#: ../../network/nm_setting_bean_gen.go:313
-#: ../../network/nm_setting_bean_gen.go:371
-#: ../../network/nm_setting_bean_gen.go:372
-#: ../../network/nm_setting_bean_gen.go:381
-#: ../../network/nm_setting_bean_gen.go:382
-#: ../../network/nm_setting_bean_gen.go:383
-#: ../../network/nm_setting_bean_gen.go:402
-#: ../../network/nm_setting_bean_gen.go:403
-#: ../../network/nm_setting_bean_gen.go:405
-#: ../../network/nm_setting_bean_gen.go:406
-#: ../../network/nm_setting_bean_gen.go:428
-#: ../../network/nm_setting_bean_gen.go:429
-#: ../../network/nm_setting_bean_gen.go:431
-#: ../../network/nm_setting_bean_gen.go:432
-#: ../../network/nm_setting_bean_gen.go:434
-#: ../../network/nm_setting_beans_gen.go:100
 #: ../../network/nm_setting_beans_gen.go:101
-#: ../../network/nm_setting_beans_gen.go:102
 #: ../../network/nm_setting_beans_gen.go:103
-#: ../../network/nm_setting_beans_gen.go:159
 #: ../../network/nm_setting_beans_gen.go:160
-#: ../../network/nm_setting_beans_gen.go:173
 #: ../../network/nm_setting_beans_gen.go:174
-#: ../../network/nm_setting_beans_gen.go:178
 #: ../../network/nm_setting_beans_gen.go:179
-#: ../../network/nm_setting_beans_gen.go:187
 #: ../../network/nm_setting_beans_gen.go:188
-#: ../../network/nm_setting_beans_gen.go:202
 #: ../../network/nm_setting_beans_gen.go:203
-#: ../../network/nm_setting_beans_gen.go:205
 #: ../../network/nm_setting_beans_gen.go:206
-#: ../../network/nm_setting_beans_gen.go:218
 #: ../../network/nm_setting_beans_gen.go:219
-#: ../../network/nm_setting_beans_gen.go:278
 #: ../../network/nm_setting_beans_gen.go:279
-#: ../../network/nm_setting_beans_gen.go:283
 #: ../../network/nm_setting_beans_gen.go:284
-#: ../../network/nm_setting_beans_gen.go:353
 #: ../../network/nm_setting_beans_gen.go:354
-#: ../../network/nm_setting_beans_gen.go:401
 #: ../../network/nm_setting_beans_gen.go:402
-#: ../../network/nm_setting_beans_gen.go:404
 #: ../../network/nm_setting_beans_gen.go:405
 msgid "Ask for Pwd"
 msgstr "Žiadať heslo"
 
-#: ../../network/nm_setting_bean_gen.go:133
-#: ../../network/nm_setting_bean_gen.go:134
-#: ../../network/nm_setting_bean_gen.go:207
-#: ../../network/nm_setting_bean_gen.go:208
-#: ../../network/nm_setting_bean_gen.go:209
-#: ../../network/nm_setting_bean_gen.go:302
-#: ../../network/nm_setting_bean_gen.go:303
-#: ../../network/nm_setting_bean_gen.go:312
-#: ../../network/nm_setting_bean_gen.go:313
-#: ../../network/nm_setting_bean_gen.go:314
-#: ../../network/nm_setting_beans_gen.go:103
 #: ../../network/nm_setting_beans_gen.go:104
-#: ../../network/nm_setting_beans_gen.go:179
 #: ../../network/nm_setting_beans_gen.go:180
-#: ../../network/nm_setting_beans_gen.go:284
 #: ../../network/nm_setting_beans_gen.go:285
 msgid "Private Pwd"
 msgstr "Private PWD"
 
-#: ../../network/nm_setting_bean_gen.go:139
-#: ../../network/nm_setting_bean_gen.go:140
-#: ../../network/nm_setting_beans_gen.go:109
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "Wi-Fi"
 msgstr "Wi-Fi"
 
-#: ../../network/nm_setting_bean_gen.go:141
-#: ../../network/nm_setting_bean_gen.go:142
-#: ../../network/nm_setting_bean_gen.go:143
-#: ../../network/nm_setting_beans_gen.go:112
-#: ../../network/nm_setting_beans_gen.go:113
-msgid "Mode"
-msgstr "Režim"
-
-#: ../../network/nm_setting_bean_gen.go:141
-#: ../../network/nm_setting_bean_gen.go:142
-#: ../../network/nm_setting_beans_gen.go:111
 #: ../../network/nm_setting_beans_gen.go:112
 msgid "SSID"
 msgstr "SSID"
 
-#: ../../network/nm_setting_bean_gen.go:142
-#: ../../network/nm_setting_bean_gen.go:143
-#: ../../network/nm_setting_bean_gen.go:144
 #: ../../network/nm_setting_beans_gen.go:113
+msgid "Mode"
+msgstr "Režim"
+
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Band"
 msgstr "Pásmo"
 
-#: ../../network/nm_setting_bean_gen.go:143
-#: ../../network/nm_setting_bean_gen.go:144
-#: ../../network/nm_setting_bean_gen.go:145
-#: ../../network/nm_setting_beans_gen.go:114
 #: ../../network/nm_setting_beans_gen.go:115
 msgid "Channel"
 msgstr "Kanál"
 
-#: ../../network/nm_setting_bean_gen.go:153
-#: ../../network/nm_setting_bean_gen.go:154
-#: ../../network/nm_setting_bean_gen.go:155
-#: ../../network/nm_setting_beans_gen.go:124
 #: ../../network/nm_setting_beans_gen.go:125
 msgid "PPPoE"
 msgstr "PPPoE"
 
-#: ../../network/nm_setting_bean_gen.go:156
-#: ../../network/nm_setting_bean_gen.go:157
-#: ../../network/nm_setting_bean_gen.go:158
-#: ../../network/nm_setting_beans_gen.go:127
 #: ../../network/nm_setting_beans_gen.go:128
 msgid "Service"
 msgstr "Služba"
 
-#: ../../network/nm_setting_bean_gen.go:163
-#: ../../network/nm_setting_bean_gen.go:164
-#: ../../network/nm_setting_bean_gen.go:165
-#: ../../network/nm_setting_beans_gen.go:134
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "PPP"
 msgstr "PPP"
 
-#: ../../network/nm_setting_bean_gen.go:165
-#: ../../network/nm_setting_bean_gen.go:166
-#: ../../network/nm_setting_bean_gen.go:167
-#: ../../network/nm_setting_bean_gen.go:257
-#: ../../network/nm_setting_bean_gen.go:258
-#: ../../network/nm_setting_bean_gen.go:267
-#: ../../network/nm_setting_bean_gen.go:268
-#: ../../network/nm_setting_bean_gen.go:269
-#: ../../network/nm_setting_bean_gen.go:381
-#: ../../network/nm_setting_bean_gen.go:382
-#: ../../network/nm_setting_bean_gen.go:391
-#: ../../network/nm_setting_bean_gen.go:392
-#: ../../network/nm_setting_bean_gen.go:393
-#: ../../network/nm_setting_beans_gen.go:136
 #: ../../network/nm_setting_beans_gen.go:137
-#: ../../network/nm_setting_beans_gen.go:239
 #: ../../network/nm_setting_beans_gen.go:240
-#: ../../network/nm_setting_beans_gen.go:363
 #: ../../network/nm_setting_beans_gen.go:364
 msgid "Use MPPE"
 msgstr "Použiť MPPE"
 
-#: ../../network/nm_setting_bean_gen.go:166
-#: ../../network/nm_setting_bean_gen.go:167
-#: ../../network/nm_setting_bean_gen.go:168
-#: ../../network/nm_setting_beans_gen.go:137
 #: ../../network/nm_setting_beans_gen.go:138
 msgid "128-bit MPPE"
 msgstr "128-bit MPPE"
 
-#: ../../network/nm_setting_bean_gen.go:167
-#: ../../network/nm_setting_bean_gen.go:168
-#: ../../network/nm_setting_bean_gen.go:169
-#: ../../network/nm_setting_bean_gen.go:259
-#: ../../network/nm_setting_bean_gen.go:260
-#: ../../network/nm_setting_bean_gen.go:269
-#: ../../network/nm_setting_bean_gen.go:270
-#: ../../network/nm_setting_bean_gen.go:271
-#: ../../network/nm_setting_bean_gen.go:383
-#: ../../network/nm_setting_bean_gen.go:384
-#: ../../network/nm_setting_bean_gen.go:393
-#: ../../network/nm_setting_bean_gen.go:394
-#: ../../network/nm_setting_bean_gen.go:395
-#: ../../network/nm_setting_beans_gen.go:138
 #: ../../network/nm_setting_beans_gen.go:139
-#: ../../network/nm_setting_beans_gen.go:241
 #: ../../network/nm_setting_beans_gen.go:242
-#: ../../network/nm_setting_beans_gen.go:365
 #: ../../network/nm_setting_beans_gen.go:366
 msgid "Stateful MPPE"
 msgstr "Stateful MPPE"
 
-#: ../../network/nm_setting_bean_gen.go:168
-#: ../../network/nm_setting_bean_gen.go:169
-#: ../../network/nm_setting_bean_gen.go:170
-#: ../../network/nm_setting_bean_gen.go:260
-#: ../../network/nm_setting_bean_gen.go:261
-#: ../../network/nm_setting_bean_gen.go:270
-#: ../../network/nm_setting_bean_gen.go:271
-#: ../../network/nm_setting_bean_gen.go:272
-#: ../../network/nm_setting_bean_gen.go:384
-#: ../../network/nm_setting_bean_gen.go:385
-#: ../../network/nm_setting_bean_gen.go:394
-#: ../../network/nm_setting_bean_gen.go:395
-#: ../../network/nm_setting_bean_gen.go:396
-#: ../../network/nm_setting_beans_gen.go:139
 #: ../../network/nm_setting_beans_gen.go:140
-#: ../../network/nm_setting_beans_gen.go:242
 #: ../../network/nm_setting_beans_gen.go:243
-#: ../../network/nm_setting_beans_gen.go:366
 #: ../../network/nm_setting_beans_gen.go:367
 msgid "Refuse EAP Authentication"
 msgstr "Odmietnuť EAP Autentizáciu"
 
-#: ../../network/nm_setting_bean_gen.go:169
-#: ../../network/nm_setting_bean_gen.go:170
-#: ../../network/nm_setting_bean_gen.go:171
-#: ../../network/nm_setting_bean_gen.go:261
-#: ../../network/nm_setting_bean_gen.go:262
-#: ../../network/nm_setting_bean_gen.go:271
-#: ../../network/nm_setting_bean_gen.go:272
-#: ../../network/nm_setting_bean_gen.go:273
-#: ../../network/nm_setting_bean_gen.go:385
-#: ../../network/nm_setting_bean_gen.go:386
-#: ../../network/nm_setting_bean_gen.go:395
-#: ../../network/nm_setting_bean_gen.go:396
-#: ../../network/nm_setting_bean_gen.go:397
-#: ../../network/nm_setting_beans_gen.go:140
 #: ../../network/nm_setting_beans_gen.go:141
-#: ../../network/nm_setting_beans_gen.go:243
 #: ../../network/nm_setting_beans_gen.go:244
-#: ../../network/nm_setting_beans_gen.go:367
 #: ../../network/nm_setting_beans_gen.go:368
 msgid "Refuse PAP Authentication"
 msgstr "Odmietnuť PAP Autentizáciu"
 
-#: ../../network/nm_setting_bean_gen.go:170
-#: ../../network/nm_setting_bean_gen.go:171
-#: ../../network/nm_setting_bean_gen.go:172
-#: ../../network/nm_setting_bean_gen.go:262
-#: ../../network/nm_setting_bean_gen.go:263
-#: ../../network/nm_setting_bean_gen.go:272
-#: ../../network/nm_setting_bean_gen.go:273
-#: ../../network/nm_setting_bean_gen.go:274
-#: ../../network/nm_setting_bean_gen.go:386
-#: ../../network/nm_setting_bean_gen.go:387
-#: ../../network/nm_setting_bean_gen.go:396
-#: ../../network/nm_setting_bean_gen.go:397
-#: ../../network/nm_setting_bean_gen.go:398
-#: ../../network/nm_setting_beans_gen.go:141
 #: ../../network/nm_setting_beans_gen.go:142
-#: ../../network/nm_setting_beans_gen.go:244
 #: ../../network/nm_setting_beans_gen.go:245
-#: ../../network/nm_setting_beans_gen.go:368
 #: ../../network/nm_setting_beans_gen.go:369
 msgid "Refuse CHAP Authentication"
 msgstr "Odmietnuť CHAP Autentizáciu"
 
-#: ../../network/nm_setting_bean_gen.go:171
-#: ../../network/nm_setting_bean_gen.go:172
-#: ../../network/nm_setting_bean_gen.go:173
-#: ../../network/nm_setting_bean_gen.go:263
-#: ../../network/nm_setting_bean_gen.go:264
-#: ../../network/nm_setting_bean_gen.go:273
-#: ../../network/nm_setting_bean_gen.go:274
-#: ../../network/nm_setting_bean_gen.go:275
-#: ../../network/nm_setting_bean_gen.go:387
-#: ../../network/nm_setting_bean_gen.go:388
-#: ../../network/nm_setting_bean_gen.go:397
-#: ../../network/nm_setting_bean_gen.go:398
-#: ../../network/nm_setting_bean_gen.go:399
-#: ../../network/nm_setting_beans_gen.go:142
 #: ../../network/nm_setting_beans_gen.go:143
-#: ../../network/nm_setting_beans_gen.go:245
 #: ../../network/nm_setting_beans_gen.go:246
-#: ../../network/nm_setting_beans_gen.go:369
 #: ../../network/nm_setting_beans_gen.go:370
 msgid "Refuse MSCHAP Authentication"
 msgstr "Odmietnuť MSCHAP Autentizáciu"
 
-#: ../../network/nm_setting_bean_gen.go:172
-#: ../../network/nm_setting_bean_gen.go:173
-#: ../../network/nm_setting_bean_gen.go:174
-#: ../../network/nm_setting_bean_gen.go:264
-#: ../../network/nm_setting_bean_gen.go:265
-#: ../../network/nm_setting_bean_gen.go:274
-#: ../../network/nm_setting_bean_gen.go:275
-#: ../../network/nm_setting_bean_gen.go:276
-#: ../../network/nm_setting_bean_gen.go:388
-#: ../../network/nm_setting_bean_gen.go:389
-#: ../../network/nm_setting_bean_gen.go:398
-#: ../../network/nm_setting_bean_gen.go:399
-#: ../../network/nm_setting_bean_gen.go:400
-#: ../../network/nm_setting_beans_gen.go:143
 #: ../../network/nm_setting_beans_gen.go:144
-#: ../../network/nm_setting_beans_gen.go:246
 #: ../../network/nm_setting_beans_gen.go:247
-#: ../../network/nm_setting_beans_gen.go:370
 #: ../../network/nm_setting_beans_gen.go:371
 msgid "Refuse MSCHAPv2 Authentication"
 msgstr "Odmietnuť MSCHAPv2 Autentizáciu"
 
-#: ../../network/nm_setting_bean_gen.go:173
-#: ../../network/nm_setting_bean_gen.go:174
-#: ../../network/nm_setting_bean_gen.go:175
-#: ../../network/nm_setting_bean_gen.go:265
-#: ../../network/nm_setting_bean_gen.go:266
-#: ../../network/nm_setting_bean_gen.go:275
-#: ../../network/nm_setting_bean_gen.go:276
-#: ../../network/nm_setting_bean_gen.go:277
-#: ../../network/nm_setting_bean_gen.go:389
-#: ../../network/nm_setting_bean_gen.go:390
-#: ../../network/nm_setting_bean_gen.go:399
-#: ../../network/nm_setting_bean_gen.go:400
-#: ../../network/nm_setting_bean_gen.go:401
-#: ../../network/nm_setting_beans_gen.go:144
 #: ../../network/nm_setting_beans_gen.go:145
-#: ../../network/nm_setting_beans_gen.go:247
 #: ../../network/nm_setting_beans_gen.go:248
-#: ../../network/nm_setting_beans_gen.go:371
 #: ../../network/nm_setting_beans_gen.go:372
 msgid "No BSD Data Compression"
 msgstr "Žiadna BSD Data kompresia"
 
-#: ../../network/nm_setting_bean_gen.go:174
-#: ../../network/nm_setting_bean_gen.go:175
-#: ../../network/nm_setting_bean_gen.go:176
-#: ../../network/nm_setting_bean_gen.go:266
-#: ../../network/nm_setting_bean_gen.go:267
-#: ../../network/nm_setting_bean_gen.go:276
-#: ../../network/nm_setting_bean_gen.go:277
-#: ../../network/nm_setting_bean_gen.go:278
-#: ../../network/nm_setting_bean_gen.go:390
-#: ../../network/nm_setting_bean_gen.go:391
-#: ../../network/nm_setting_bean_gen.go:400
-#: ../../network/nm_setting_bean_gen.go:401
-#: ../../network/nm_setting_bean_gen.go:402
-#: ../../network/nm_setting_beans_gen.go:145
 #: ../../network/nm_setting_beans_gen.go:146
-#: ../../network/nm_setting_beans_gen.go:248
 #: ../../network/nm_setting_beans_gen.go:249
-#: ../../network/nm_setting_beans_gen.go:372
 #: ../../network/nm_setting_beans_gen.go:373
 msgid "No Deflate Data Compression"
 msgstr "Žiadna Deflate Data kompresia"
 
-#: ../../network/nm_setting_bean_gen.go:175
-#: ../../network/nm_setting_bean_gen.go:176
-#: ../../network/nm_setting_bean_gen.go:177
-#: ../../network/nm_setting_bean_gen.go:267
-#: ../../network/nm_setting_bean_gen.go:268
-#: ../../network/nm_setting_bean_gen.go:277
-#: ../../network/nm_setting_bean_gen.go:278
-#: ../../network/nm_setting_bean_gen.go:279
-#: ../../network/nm_setting_bean_gen.go:391
-#: ../../network/nm_setting_bean_gen.go:392
-#: ../../network/nm_setting_bean_gen.go:401
-#: ../../network/nm_setting_bean_gen.go:402
-#: ../../network/nm_setting_bean_gen.go:403
-#: ../../network/nm_setting_beans_gen.go:146
 #: ../../network/nm_setting_beans_gen.go:147
-#: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:250
-#: ../../network/nm_setting_beans_gen.go:373
 #: ../../network/nm_setting_beans_gen.go:374
 msgid "No TCP Header Compression"
 msgstr "Žiadna TCP Header kompresia"
 
-#: ../../network/nm_setting_bean_gen.go:176
-#: ../../network/nm_setting_bean_gen.go:177
-#: ../../network/nm_setting_bean_gen.go:178
-#: ../../network/nm_setting_bean_gen.go:270
-#: ../../network/nm_setting_bean_gen.go:271
-#: ../../network/nm_setting_bean_gen.go:280
-#: ../../network/nm_setting_bean_gen.go:281
-#: ../../network/nm_setting_bean_gen.go:282
-#: ../../network/nm_setting_bean_gen.go:392
-#: ../../network/nm_setting_bean_gen.go:393
-#: ../../network/nm_setting_bean_gen.go:402
-#: ../../network/nm_setting_bean_gen.go:403
-#: ../../network/nm_setting_bean_gen.go:404
-#: ../../network/nm_setting_beans_gen.go:147
 #: ../../network/nm_setting_beans_gen.go:148
-#: ../../network/nm_setting_beans_gen.go:252
 #: ../../network/nm_setting_beans_gen.go:253
-#: ../../network/nm_setting_beans_gen.go:374
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "Send PPP Echo Packets"
 msgstr "Odoslať PPP Echo pakety"
 
-#: ../../network/nm_setting_bean_gen.go:182
-#: ../../network/nm_setting_bean_gen.go:183
-#: ../../network/nm_setting_bean_gen.go:184
-#: ../../network/nm_setting_bean_gen.go:232
-#: ../../network/nm_setting_bean_gen.go:233
-#: ../../network/nm_setting_bean_gen.go:242
-#: ../../network/nm_setting_bean_gen.go:243
-#: ../../network/nm_setting_bean_gen.go:244
-#: ../../network/nm_setting_bean_gen.go:276
-#: ../../network/nm_setting_bean_gen.go:277
-#: ../../network/nm_setting_bean_gen.go:286
-#: ../../network/nm_setting_bean_gen.go:287
-#: ../../network/nm_setting_bean_gen.go:288
-#: ../../network/nm_setting_bean_gen.go:291
-#: ../../network/nm_setting_bean_gen.go:292
-#: ../../network/nm_setting_bean_gen.go:301
-#: ../../network/nm_setting_bean_gen.go:302
-#: ../../network/nm_setting_bean_gen.go:303
-#: ../../network/nm_setting_bean_gen.go:367
-#: ../../network/nm_setting_bean_gen.go:368
-#: ../../network/nm_setting_bean_gen.go:377
-#: ../../network/nm_setting_bean_gen.go:378
-#: ../../network/nm_setting_bean_gen.go:379
-#: ../../network/nm_setting_bean_gen.go:398
-#: ../../network/nm_setting_bean_gen.go:399
-#: ../../network/nm_setting_bean_gen.go:408
-#: ../../network/nm_setting_bean_gen.go:409
-#: ../../network/nm_setting_bean_gen.go:410
-#: ../../network/nm_setting_bean_gen.go:424
-#: ../../network/nm_setting_bean_gen.go:425
-#: ../../network/nm_setting_bean_gen.go:427
-#: ../../network/nm_setting_beans_gen.go:153
 #: ../../network/nm_setting_beans_gen.go:154
-#: ../../network/nm_setting_beans_gen.go:214
 #: ../../network/nm_setting_beans_gen.go:215
-#: ../../network/nm_setting_beans_gen.go:258
 #: ../../network/nm_setting_beans_gen.go:259
-#: ../../network/nm_setting_beans_gen.go:273
 #: ../../network/nm_setting_beans_gen.go:274
-#: ../../network/nm_setting_beans_gen.go:349
 #: ../../network/nm_setting_beans_gen.go:350
-#: ../../network/nm_setting_beans_gen.go:380
 #: ../../network/nm_setting_beans_gen.go:381
-#: ../../network/nm_setting_beans_gen.go:397
 #: ../../network/nm_setting_beans_gen.go:398
 msgid "VPN"
 msgstr "VPN"
 
-#: ../../network/nm_setting_bean_gen.go:184
-#: ../../network/nm_setting_bean_gen.go:185
-#: ../../network/nm_setting_bean_gen.go:186
-#: ../../network/nm_setting_beans_gen.go:156
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "Need VPN Plugin"
 msgstr "Potrebný VPN plugin"
 
-#: ../../network/nm_setting_bean_gen.go:185
-#: ../../network/nm_setting_bean_gen.go:186
-#: ../../network/nm_setting_bean_gen.go:187
-#: ../../network/nm_setting_bean_gen.go:190
-#: ../../network/nm_setting_bean_gen.go:191
-#: ../../network/nm_setting_bean_gen.go:192
-#: ../../network/nm_setting_bean_gen.go:198
-#: ../../network/nm_setting_bean_gen.go:199
-#: ../../network/nm_setting_bean_gen.go:200
-#: ../../network/nm_setting_bean_gen.go:213
-#: ../../network/nm_setting_bean_gen.go:214
-#: ../../network/nm_setting_bean_gen.go:215
-#: ../../network/nm_setting_bean_gen.go:218
-#: ../../network/nm_setting_bean_gen.go:219
-#: ../../network/nm_setting_bean_gen.go:220
-#: ../../network/nm_setting_bean_gen.go:228
-#: ../../network/nm_setting_bean_gen.go:229
-#: ../../network/nm_setting_bean_gen.go:230
-#: ../../network/nm_setting_bean_gen.go:234
-#: ../../network/nm_setting_bean_gen.go:235
-#: ../../network/nm_setting_bean_gen.go:244
-#: ../../network/nm_setting_bean_gen.go:245
-#: ../../network/nm_setting_bean_gen.go:246
-#: ../../network/nm_setting_bean_gen.go:278
-#: ../../network/nm_setting_bean_gen.go:279
-#: ../../network/nm_setting_bean_gen.go:288
-#: ../../network/nm_setting_bean_gen.go:289
-#: ../../network/nm_setting_bean_gen.go:290
-#: ../../network/nm_setting_bean_gen.go:293
-#: ../../network/nm_setting_bean_gen.go:294
-#: ../../network/nm_setting_bean_gen.go:303
-#: ../../network/nm_setting_bean_gen.go:304
-#: ../../network/nm_setting_bean_gen.go:305
-#: ../../network/nm_setting_bean_gen.go:369
-#: ../../network/nm_setting_bean_gen.go:370
-#: ../../network/nm_setting_bean_gen.go:379
-#: ../../network/nm_setting_bean_gen.go:380
-#: ../../network/nm_setting_bean_gen.go:381
-#: ../../network/nm_setting_bean_gen.go:400
-#: ../../network/nm_setting_bean_gen.go:401
-#: ../../network/nm_setting_bean_gen.go:410
-#: ../../network/nm_setting_bean_gen.go:411
-#: ../../network/nm_setting_bean_gen.go:412
-#: ../../network/nm_setting_bean_gen.go:426
-#: ../../network/nm_setting_bean_gen.go:427
-#: ../../network/nm_setting_bean_gen.go:429
-#: ../../network/nm_setting_bean_gen.go:435
-#: ../../network/nm_setting_bean_gen.go:436
-#: ../../network/nm_setting_bean_gen.go:447
-#: ../../network/nm_setting_bean_gen.go:448
-#: ../../network/nm_setting_bean_gen.go:461
-#: ../../network/nm_setting_bean_gen.go:462
-#: ../../network/nm_setting_bean_gen.go:464
-#: ../../network/nm_setting_bean_gen.go:474
-#: ../../network/nm_setting_bean_gen.go:475
-#: ../../network/nm_setting_bean_gen.go:477
-#: ../../network/nm_setting_beans_gen.go:157
 #: ../../network/nm_setting_beans_gen.go:158
-#: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:163
-#: ../../network/nm_setting_beans_gen.go:170
 #: ../../network/nm_setting_beans_gen.go:171
-#: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:186
-#: ../../network/nm_setting_beans_gen.go:190
 #: ../../network/nm_setting_beans_gen.go:191
-#: ../../network/nm_setting_beans_gen.go:200
 #: ../../network/nm_setting_beans_gen.go:201
-#: ../../network/nm_setting_beans_gen.go:216
 #: ../../network/nm_setting_beans_gen.go:217
-#: ../../network/nm_setting_beans_gen.go:260
 #: ../../network/nm_setting_beans_gen.go:261
-#: ../../network/nm_setting_beans_gen.go:275
 #: ../../network/nm_setting_beans_gen.go:276
-#: ../../network/nm_setting_beans_gen.go:351
 #: ../../network/nm_setting_beans_gen.go:352
-#: ../../network/nm_setting_beans_gen.go:382
 #: ../../network/nm_setting_beans_gen.go:383
-#: ../../network/nm_setting_beans_gen.go:399
 #: ../../network/nm_setting_beans_gen.go:400
-#: ../../network/nm_setting_beans_gen.go:434
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:447
 #: ../../network/nm_setting_beans_gen.go:448
 msgid "Gateway"
 msgstr "Brána"
 
-#: ../../network/nm_setting_bean_gen.go:189
-#: ../../network/nm_setting_bean_gen.go:190
-#: ../../network/nm_setting_bean_gen.go:191
-#: ../../network/nm_setting_bean_gen.go:217
-#: ../../network/nm_setting_bean_gen.go:218
-#: ../../network/nm_setting_bean_gen.go:219
-#: ../../network/nm_setting_bean_gen.go:238
-#: ../../network/nm_setting_bean_gen.go:239
-#: ../../network/nm_setting_bean_gen.go:248
-#: ../../network/nm_setting_bean_gen.go:249
-#: ../../network/nm_setting_bean_gen.go:250
-#: ../../network/nm_setting_bean_gen.go:373
-#: ../../network/nm_setting_bean_gen.go:374
-#: ../../network/nm_setting_bean_gen.go:383
-#: ../../network/nm_setting_bean_gen.go:384
-#: ../../network/nm_setting_bean_gen.go:385
-#: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:162
-#: ../../network/nm_setting_beans_gen.go:189
 #: ../../network/nm_setting_beans_gen.go:190
-#: ../../network/nm_setting_beans_gen.go:220
 #: ../../network/nm_setting_beans_gen.go:221
-#: ../../network/nm_setting_beans_gen.go:355
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "NT Domain"
 msgstr "NT doména"
 
-#: ../../network/nm_setting_bean_gen.go:192
-#: ../../network/nm_setting_bean_gen.go:193
-#: ../../network/nm_setting_bean_gen.go:194
-#: ../../network/nm_setting_bean_gen.go:280
-#: ../../network/nm_setting_bean_gen.go:281
-#: ../../network/nm_setting_bean_gen.go:290
-#: ../../network/nm_setting_bean_gen.go:291
-#: ../../network/nm_setting_bean_gen.go:292
-#: ../../network/nm_setting_beans_gen.go:164
 #: ../../network/nm_setting_beans_gen.go:165
-#: ../../network/nm_setting_beans_gen.go:262
 #: ../../network/nm_setting_beans_gen.go:263
 msgid "Proxy"
 msgstr "Proxy"
 
-#: ../../network/nm_setting_bean_gen.go:193
-#: ../../network/nm_setting_bean_gen.go:194
-#: ../../network/nm_setting_bean_gen.go:195
-#: ../../network/nm_setting_bean_gen.go:281
-#: ../../network/nm_setting_bean_gen.go:282
-#: ../../network/nm_setting_bean_gen.go:291
-#: ../../network/nm_setting_bean_gen.go:292
-#: ../../network/nm_setting_bean_gen.go:293
-#: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:166
-#: ../../network/nm_setting_beans_gen.go:263
 #: ../../network/nm_setting_beans_gen.go:264
 msgid "Allow Cisco Secure Desktop Trojan"
 msgstr "Povoliť Cisco Secure Desktop Trojan"
 
-#: ../../network/nm_setting_bean_gen.go:194
-#: ../../network/nm_setting_bean_gen.go:195
-#: ../../network/nm_setting_bean_gen.go:196
-#: ../../network/nm_setting_bean_gen.go:282
-#: ../../network/nm_setting_bean_gen.go:283
-#: ../../network/nm_setting_bean_gen.go:292
-#: ../../network/nm_setting_bean_gen.go:293
-#: ../../network/nm_setting_bean_gen.go:294
-#: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:167
-#: ../../network/nm_setting_beans_gen.go:264
 #: ../../network/nm_setting_beans_gen.go:265
 msgid "CSD Script"
 msgstr "CSD Skript"
 
-#: ../../network/nm_setting_bean_gen.go:197
-#: ../../network/nm_setting_bean_gen.go:198
-#: ../../network/nm_setting_bean_gen.go:199
-#: ../../network/nm_setting_bean_gen.go:285
-#: ../../network/nm_setting_bean_gen.go:286
-#: ../../network/nm_setting_bean_gen.go:295
-#: ../../network/nm_setting_bean_gen.go:296
-#: ../../network/nm_setting_bean_gen.go:297
 #: ../../network/nm_setting_beans_gen.go:170
 #: ../../network/nm_setting_beans_gen.go:268
 msgid "Use FSID for Key Passphrase"
 msgstr "Použiť FSID pre Key Passphrase"
 
-#: ../../network/nm_setting_bean_gen.go:199
-#: ../../network/nm_setting_bean_gen.go:200
-#: ../../network/nm_setting_bean_gen.go:201
-#: ../../network/nm_setting_bean_gen.go:221
-#: ../../network/nm_setting_bean_gen.go:222
-#: ../../network/nm_setting_bean_gen.go:294
-#: ../../network/nm_setting_bean_gen.go:295
-#: ../../network/nm_setting_bean_gen.go:304
-#: ../../network/nm_setting_bean_gen.go:305
-#: ../../network/nm_setting_bean_gen.go:306
-#: ../../network/nm_setting_bean_gen.go:412
-#: ../../network/nm_setting_bean_gen.go:413
-#: ../../network/nm_setting_bean_gen.go:414
-#: ../../network/nm_setting_beans_gen.go:171
 #: ../../network/nm_setting_beans_gen.go:172
-#: ../../network/nm_setting_beans_gen.go:192
 #: ../../network/nm_setting_beans_gen.go:193
-#: ../../network/nm_setting_beans_gen.go:276
 #: ../../network/nm_setting_beans_gen.go:277
-#: ../../network/nm_setting_beans_gen.go:384
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Auth Type"
 msgstr "Typ autentizácie"
 
-#: ../../network/nm_setting_bean_gen.go:208
-#: ../../network/nm_setting_bean_gen.go:209
-#: ../../network/nm_setting_bean_gen.go:210
-#: ../../network/nm_setting_bean_gen.go:303
-#: ../../network/nm_setting_bean_gen.go:304
-#: ../../network/nm_setting_bean_gen.go:313
-#: ../../network/nm_setting_bean_gen.go:314
-#: ../../network/nm_setting_bean_gen.go:315
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:286
 #: ../../network/nm_setting_vpn_openvpn.go:106
-#: ../../network/nm_setting_vpn_openvpn.go:239
-#: ../../network/nm_setting_vpn_openvpn.go:251
 msgid "Static Key"
 msgstr "Statický kľúč"
 
-#: ../../network/nm_setting_bean_gen.go:209
-#: ../../network/nm_setting_bean_gen.go:210
-#: ../../network/nm_setting_bean_gen.go:211
-#: ../../network/nm_setting_bean_gen.go:304
-#: ../../network/nm_setting_bean_gen.go:305
-#: ../../network/nm_setting_bean_gen.go:314
-#: ../../network/nm_setting_bean_gen.go:315
-#: ../../network/nm_setting_bean_gen.go:316
-#: ../../network/nm_setting_bean_gen.go:327
-#: ../../network/nm_setting_bean_gen.go:328
-#: ../../network/nm_setting_bean_gen.go:337
-#: ../../network/nm_setting_bean_gen.go:338
-#: ../../network/nm_setting_bean_gen.go:339
 #: ../../network/nm_setting_beans_gen.go:182
 #: ../../network/nm_setting_beans_gen.go:287
 #: ../../network/nm_setting_beans_gen.go:310
 msgid "Customize Key Direction"
 msgstr "Upraviť Key Direction"
 
-#: ../../network/nm_setting_bean_gen.go:210
-#: ../../network/nm_setting_bean_gen.go:211
-#: ../../network/nm_setting_bean_gen.go:212
-#: ../../network/nm_setting_bean_gen.go:305
-#: ../../network/nm_setting_bean_gen.go:306
-#: ../../network/nm_setting_bean_gen.go:315
-#: ../../network/nm_setting_bean_gen.go:316
-#: ../../network/nm_setting_bean_gen.go:317
-#: ../../network/nm_setting_bean_gen.go:328
-#: ../../network/nm_setting_bean_gen.go:329
-#: ../../network/nm_setting_bean_gen.go:338
-#: ../../network/nm_setting_bean_gen.go:339
-#: ../../network/nm_setting_bean_gen.go:340
 #: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
 msgstr "Key Direction"
 
-#: ../../network/nm_setting_bean_gen.go:211
-#: ../../network/nm_setting_bean_gen.go:212
-#: ../../network/nm_setting_bean_gen.go:213
-#: ../../network/nm_setting_bean_gen.go:306
-#: ../../network/nm_setting_bean_gen.go:307
-#: ../../network/nm_setting_bean_gen.go:316
-#: ../../network/nm_setting_bean_gen.go:317
-#: ../../network/nm_setting_bean_gen.go:318
-#: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:184
-#: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:289
 msgid "Remote IP"
 msgstr "Vzdialená IP"
 
-#: ../../network/nm_setting_bean_gen.go:212
-#: ../../network/nm_setting_bean_gen.go:213
-#: ../../network/nm_setting_bean_gen.go:214
-#: ../../network/nm_setting_bean_gen.go:307
-#: ../../network/nm_setting_bean_gen.go:308
-#: ../../network/nm_setting_bean_gen.go:317
-#: ../../network/nm_setting_bean_gen.go:318
-#: ../../network/nm_setting_bean_gen.go:319
-#: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:185
-#: ../../network/nm_setting_beans_gen.go:289
 #: ../../network/nm_setting_beans_gen.go:290
 msgid "Local IP"
 msgstr "Lokálna IP"
 
-#: ../../network/nm_setting_bean_gen.go:221
-#: ../../network/nm_setting_bean_gen.go:222
-#: ../../network/nm_setting_bean_gen.go:231
-#: ../../network/nm_setting_bean_gen.go:232
-#: ../../network/nm_setting_bean_gen.go:233
-#: ../../network/nm_setting_bean_gen.go:403
-#: ../../network/nm_setting_bean_gen.go:404
-#: ../../network/nm_setting_bean_gen.go:429
-#: ../../network/nm_setting_bean_gen.go:430
-#: ../../network/nm_setting_bean_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:203
+#: ../../network/nm_setting_beans_gen.go:198
+#: ../../network/nm_setting_beans_gen.go:390
+msgid "Request an Inner IP Address"
+msgstr "Požiadať o vnútornú IP adresu"
+
+#: ../../network/nm_setting_beans_gen.go:199
+#: ../../network/nm_setting_beans_gen.go:391
+msgid "Enforce UDP Encapsulation"
+msgstr "Vynútiť UDP zapúzdrenie"
+
+#: ../../network/nm_setting_beans_gen.go:200
+#: ../../network/nm_setting_beans_gen.go:392
+msgid "Use IP Compression"
+msgstr "Použiť IP kompresiu"
+
 #: ../../network/nm_setting_beans_gen.go:204
-#: ../../network/nm_setting_beans_gen.go:402
 #: ../../network/nm_setting_beans_gen.go:403
 msgid "User Pwd"
 msgstr "User Pwd"
 
-#: ../../network/nm_setting_bean_gen.go:222
-#: ../../network/nm_setting_bean_gen.go:223
-#: ../../network/nm_setting_bean_gen.go:232
-#: ../../network/nm_setting_bean_gen.go:233
-#: ../../network/nm_setting_bean_gen.go:234
-#: ../../network/nm_setting_bean_gen.go:247
-#: ../../network/nm_setting_bean_gen.go:248
-#: ../../network/nm_setting_bean_gen.go:257
-#: ../../network/nm_setting_bean_gen.go:258
-#: ../../network/nm_setting_bean_gen.go:259
-#: ../../network/nm_setting_bean_gen.go:404
-#: ../../network/nm_setting_bean_gen.go:405
-#: ../../network/nm_setting_bean_gen.go:430
-#: ../../network/nm_setting_bean_gen.go:431
-#: ../../network/nm_setting_bean_gen.go:433
 #: ../../network/nm_setting_beans_gen.go:205
 #: ../../network/nm_setting_beans_gen.go:230
 #: ../../network/nm_setting_beans_gen.go:404
 msgid "Group Name"
 msgstr "Group Name"
 
-#: ../../network/nm_setting_bean_gen.go:224
-#: ../../network/nm_setting_bean_gen.go:225
-#: ../../network/nm_setting_bean_gen.go:234
-#: ../../network/nm_setting_bean_gen.go:235
-#: ../../network/nm_setting_bean_gen.go:236
-#: ../../network/nm_setting_bean_gen.go:406
-#: ../../network/nm_setting_bean_gen.go:407
-#: ../../network/nm_setting_bean_gen.go:432
-#: ../../network/nm_setting_bean_gen.go:433
-#: ../../network/nm_setting_bean_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:206
 #: ../../network/nm_setting_beans_gen.go:207
-#: ../../network/nm_setting_beans_gen.go:405
 #: ../../network/nm_setting_beans_gen.go:406
 msgid "Group Pwd"
 msgstr "Group Pwd"
 
-#: ../../network/nm_setting_bean_gen.go:225
-#: ../../network/nm_setting_bean_gen.go:226
-#: ../../network/nm_setting_bean_gen.go:227
-#: ../../network/nm_setting_bean_gen.go:416
-#: ../../network/nm_setting_bean_gen.go:417
-#: ../../network/nm_setting_bean_gen.go:419
-#: ../../network/nm_setting_beans_gen.go:197
-#: ../../network/nm_setting_beans_gen.go:198
-#: ../../network/nm_setting_beans_gen.go:389
-#: ../../network/nm_setting_beans_gen.go:390
-msgid "Request an Inner IP Address"
-msgstr "Požiadať o vnútornú IP adresu"
-
-#: ../../network/nm_setting_bean_gen.go:225
-#: ../../network/nm_setting_bean_gen.go:226
-#: ../../network/nm_setting_bean_gen.go:235
-#: ../../network/nm_setting_bean_gen.go:236
-#: ../../network/nm_setting_bean_gen.go:237
-#: ../../network/nm_setting_bean_gen.go:407
-#: ../../network/nm_setting_bean_gen.go:408
-#: ../../network/nm_setting_bean_gen.go:433
-#: ../../network/nm_setting_bean_gen.go:434
-#: ../../network/nm_setting_bean_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:207
 #: ../../network/nm_setting_beans_gen.go:208
-#: ../../network/nm_setting_beans_gen.go:406
 #: ../../network/nm_setting_beans_gen.go:407
 msgid "Use Hybrid Authentication"
 msgstr "Použiť Hybrid Authentication"
 
-#: ../../network/nm_setting_bean_gen.go:226
-#: ../../network/nm_setting_bean_gen.go:227
-#: ../../network/nm_setting_bean_gen.go:236
-#: ../../network/nm_setting_bean_gen.go:237
-#: ../../network/nm_setting_bean_gen.go:238
-#: ../../network/nm_setting_bean_gen.go:408
-#: ../../network/nm_setting_bean_gen.go:409
-#: ../../network/nm_setting_bean_gen.go:434
-#: ../../network/nm_setting_bean_gen.go:435
-#: ../../network/nm_setting_bean_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:208
 #: ../../network/nm_setting_beans_gen.go:209
-#: ../../network/nm_setting_beans_gen.go:407
 #: ../../network/nm_setting_beans_gen.go:408
 msgid "CA File"
 msgstr "CA súbor"
 
-#: ../../network/nm_setting_bean_gen.go:226
-#: ../../network/nm_setting_bean_gen.go:227
-#: ../../network/nm_setting_bean_gen.go:228
-#: ../../network/nm_setting_bean_gen.go:417
-#: ../../network/nm_setting_bean_gen.go:418
-#: ../../network/nm_setting_bean_gen.go:420
-#: ../../network/nm_setting_beans_gen.go:198
-#: ../../network/nm_setting_beans_gen.go:199
-#: ../../network/nm_setting_beans_gen.go:390
-#: ../../network/nm_setting_beans_gen.go:391
-msgid "Enforce UDP Encapsulation"
-msgstr "Vynútiť UDP zapúzdrenie"
-
-#: ../../network/nm_setting_bean_gen.go:227
-#: ../../network/nm_setting_bean_gen.go:228
-#: ../../network/nm_setting_bean_gen.go:229
-#: ../../network/nm_setting_bean_gen.go:418
-#: ../../network/nm_setting_bean_gen.go:419
-#: ../../network/nm_setting_bean_gen.go:421
-#: ../../network/nm_setting_beans_gen.go:199
-#: ../../network/nm_setting_beans_gen.go:200
-#: ../../network/nm_setting_beans_gen.go:391
-#: ../../network/nm_setting_beans_gen.go:392
-msgid "Use IP Compression"
-msgstr "Použiť IP kompresiu"
-
-#: ../../network/nm_setting_bean_gen.go:244
-#: ../../network/nm_setting_bean_gen.go:245
-#: ../../network/nm_setting_bean_gen.go:254
-#: ../../network/nm_setting_bean_gen.go:255
-#: ../../network/nm_setting_bean_gen.go:256
-#: ../../network/nm_setting_beans_gen.go:226
 #: ../../network/nm_setting_beans_gen.go:227
 msgid "VPN IPsec"
 msgstr "VPN IPsec"
 
-#: ../../network/nm_setting_bean_gen.go:246
-#: ../../network/nm_setting_bean_gen.go:247
-#: ../../network/nm_setting_bean_gen.go:256
-#: ../../network/nm_setting_bean_gen.go:257
-#: ../../network/nm_setting_bean_gen.go:258
-#: ../../network/nm_setting_beans_gen.go:228
 #: ../../network/nm_setting_beans_gen.go:229
 msgid "Enable IPsec"
 msgstr "Povoliť IPsec"
 
-#: ../../network/nm_setting_bean_gen.go:248
-#: ../../network/nm_setting_bean_gen.go:249
-#: ../../network/nm_setting_bean_gen.go:258
-#: ../../network/nm_setting_bean_gen.go:259
-#: ../../network/nm_setting_bean_gen.go:260
-#: ../../network/nm_setting_beans_gen.go:230
 #: ../../network/nm_setting_beans_gen.go:231
 msgid "Group ID"
 msgstr "Group ID"
 
-#: ../../network/nm_setting_bean_gen.go:249
-#: ../../network/nm_setting_bean_gen.go:250
-#: ../../network/nm_setting_bean_gen.go:259
-#: ../../network/nm_setting_bean_gen.go:260
-#: ../../network/nm_setting_bean_gen.go:261
 #: ../../network/nm_setting_beans_gen.go:232
 #: ../../network/nm_setting_vpn_strongswan.go:80
-#: ../../network/nm_setting_vpn_strongswan.go:99
-#: ../../network/nm_setting_vpn_strongswan.go:103
 msgid "Pre-Shared Key"
 msgstr "Pre-Shared Key"
 
-#: ../../network/nm_setting_bean_gen.go:255
-#: ../../network/nm_setting_bean_gen.go:256
-#: ../../network/nm_setting_bean_gen.go:265
-#: ../../network/nm_setting_bean_gen.go:266
-#: ../../network/nm_setting_bean_gen.go:267
-#: ../../network/nm_setting_bean_gen.go:379
-#: ../../network/nm_setting_bean_gen.go:380
-#: ../../network/nm_setting_bean_gen.go:389
-#: ../../network/nm_setting_bean_gen.go:390
-#: ../../network/nm_setting_bean_gen.go:391
-#: ../../network/nm_setting_beans_gen.go:237
 #: ../../network/nm_setting_beans_gen.go:238
-#: ../../network/nm_setting_beans_gen.go:361
 #: ../../network/nm_setting_beans_gen.go:362
 msgid "VPN PPP"
 msgstr "VPN PPP"
 
-#: ../../network/nm_setting_bean_gen.go:268
-#: ../../network/nm_setting_bean_gen.go:269
-#: ../../network/nm_setting_bean_gen.go:278
-#: ../../network/nm_setting_bean_gen.go:279
-#: ../../network/nm_setting_bean_gen.go:280
-#: ../../network/nm_setting_beans_gen.go:250
 #: ../../network/nm_setting_beans_gen.go:251
 msgid "No Protocol Field Compression"
 msgstr "Žiadna Protocol Field kompresia"
 
-#: ../../network/nm_setting_bean_gen.go:269
-#: ../../network/nm_setting_bean_gen.go:270
-#: ../../network/nm_setting_bean_gen.go:279
-#: ../../network/nm_setting_bean_gen.go:280
-#: ../../network/nm_setting_bean_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:251
 #: ../../network/nm_setting_beans_gen.go:252
 msgid "No Address/Control Compression"
 msgstr "Žiadna Addres/Control kompresia"
 
-#: ../../network/nm_setting_bean_gen.go:313
-#: ../../network/nm_setting_bean_gen.go:314
-#: ../../network/nm_setting_bean_gen.go:323
-#: ../../network/nm_setting_bean_gen.go:324
-#: ../../network/nm_setting_bean_gen.go:325
-#: ../../network/nm_setting_beans_gen.go:295
 #: ../../network/nm_setting_beans_gen.go:296
 msgid "VPN Security"
 msgstr "VPN bezpečnosť"
 
-#: ../../network/nm_setting_bean_gen.go:315
-#: ../../network/nm_setting_bean_gen.go:316
-#: ../../network/nm_setting_bean_gen.go:325
-#: ../../network/nm_setting_bean_gen.go:326
-#: ../../network/nm_setting_bean_gen.go:327
-#: ../../network/nm_setting_beans_gen.go:297
 #: ../../network/nm_setting_beans_gen.go:298
 msgid "Cipher"
 msgstr "Šifra"
 
-#: ../../network/nm_setting_bean_gen.go:316
-#: ../../network/nm_setting_bean_gen.go:317
-#: ../../network/nm_setting_bean_gen.go:326
-#: ../../network/nm_setting_bean_gen.go:327
-#: ../../network/nm_setting_bean_gen.go:328
-#: ../../network/nm_setting_beans_gen.go:298
 #: ../../network/nm_setting_beans_gen.go:299
 msgid "HMAC Auth"
 msgstr "HMAC autentizácia"
 
-#: ../../network/nm_setting_bean_gen.go:322
-#: ../../network/nm_setting_bean_gen.go:323
-#: ../../network/nm_setting_bean_gen.go:332
-#: ../../network/nm_setting_bean_gen.go:333
-#: ../../network/nm_setting_bean_gen.go:334
-#: ../../network/nm_setting_beans_gen.go:304
 #: ../../network/nm_setting_beans_gen.go:305
 msgid "VPN TLS Authentication"
 msgstr "VPN TLS autentizácia"
 
-#: ../../network/nm_setting_bean_gen.go:324
-#: ../../network/nm_setting_bean_gen.go:325
-#: ../../network/nm_setting_bean_gen.go:334
-#: ../../network/nm_setting_bean_gen.go:335
-#: ../../network/nm_setting_bean_gen.go:336
-#: ../../network/nm_setting_beans_gen.go:306
 #: ../../network/nm_setting_beans_gen.go:307
 msgid "Subject Match"
 msgstr "Subject Match"
 
-#: ../../network/nm_setting_bean_gen.go:325
-#: ../../network/nm_setting_bean_gen.go:326
-#: ../../network/nm_setting_bean_gen.go:335
-#: ../../network/nm_setting_bean_gen.go:336
-#: ../../network/nm_setting_bean_gen.go:337
-#: ../../network/nm_setting_beans_gen.go:307
 #: ../../network/nm_setting_beans_gen.go:308
 msgid "Remote Cert Type"
 msgstr "Typ vzdialeného certifikátu"
 
-#: ../../network/nm_setting_bean_gen.go:326
-#: ../../network/nm_setting_bean_gen.go:327
-#: ../../network/nm_setting_bean_gen.go:336
-#: ../../network/nm_setting_bean_gen.go:337
-#: ../../network/nm_setting_bean_gen.go:338
 #: ../../network/nm_setting_beans_gen.go:309
 msgid "Key File"
 msgstr "Súbor s kľúčom"
 
-#: ../../network/nm_setting_bean_gen.go:334
-#: ../../network/nm_setting_bean_gen.go:335
-#: ../../network/nm_setting_bean_gen.go:344
-#: ../../network/nm_setting_bean_gen.go:345
-#: ../../network/nm_setting_bean_gen.go:346
-#: ../../network/nm_setting_beans_gen.go:316
 #: ../../network/nm_setting_beans_gen.go:317
 msgid "VPN Proxies"
 msgstr "VPN proxy"
 
-#: ../../network/nm_setting_bean_gen.go:336
-#: ../../network/nm_setting_bean_gen.go:337
-#: ../../network/nm_setting_bean_gen.go:346
-#: ../../network/nm_setting_bean_gen.go:347
-#: ../../network/nm_setting_bean_gen.go:348
-#: ../../network/nm_setting_beans_gen.go:318
 #: ../../network/nm_setting_beans_gen.go:319
 msgid "Proxy Type"
 msgstr "Typ proxy"
 
-#: ../../network/nm_setting_bean_gen.go:337
-#: ../../network/nm_setting_bean_gen.go:338
-#: ../../network/nm_setting_bean_gen.go:347
-#: ../../network/nm_setting_bean_gen.go:348
-#: ../../network/nm_setting_bean_gen.go:349
-#: ../../network/nm_setting_beans_gen.go:319
 #: ../../network/nm_setting_beans_gen.go:320
 msgid "Server IP"
 msgstr "Server IP"
 
-#: ../../network/nm_setting_bean_gen.go:338
-#: ../../network/nm_setting_bean_gen.go:339
-#: ../../network/nm_setting_bean_gen.go:348
-#: ../../network/nm_setting_bean_gen.go:349
-#: ../../network/nm_setting_bean_gen.go:350
-#: ../../network/nm_setting_beans_gen.go:320
 #: ../../network/nm_setting_beans_gen.go:321
 msgid "Port"
 msgstr "Port"
 
-#: ../../network/nm_setting_bean_gen.go:339
-#: ../../network/nm_setting_bean_gen.go:340
-#: ../../network/nm_setting_bean_gen.go:349
-#: ../../network/nm_setting_bean_gen.go:350
-#: ../../network/nm_setting_bean_gen.go:351
-#: ../../network/nm_setting_beans_gen.go:321
 #: ../../network/nm_setting_beans_gen.go:322
 msgid "Retry Indefinitely When Failed"
 msgstr "Skúsiť znovu, ak dôjde k zlyhaniu"
 
-#: ../../network/nm_setting_bean_gen.go:347
-#: ../../network/nm_setting_bean_gen.go:348
-#: ../../network/nm_setting_bean_gen.go:357
-#: ../../network/nm_setting_bean_gen.go:358
-#: ../../network/nm_setting_bean_gen.go:359
-#: ../../network/nm_setting_bean_gen.go:414
-#: ../../network/nm_setting_bean_gen.go:415
-#: ../../network/nm_setting_bean_gen.go:440
-#: ../../network/nm_setting_bean_gen.go:441
-#: ../../network/nm_setting_bean_gen.go:443
-#: ../../network/nm_setting_beans_gen.go:329
 #: ../../network/nm_setting_beans_gen.go:330
-#: ../../network/nm_setting_beans_gen.go:413
 #: ../../network/nm_setting_beans_gen.go:414
 msgid "VPN Advanced"
 msgstr "Pokročilé VPN"
 
-#: ../../network/nm_setting_bean_gen.go:349
-#: ../../network/nm_setting_bean_gen.go:350
-#: ../../network/nm_setting_bean_gen.go:359
-#: ../../network/nm_setting_bean_gen.go:360
-#: ../../network/nm_setting_bean_gen.go:361
-#: ../../network/nm_setting_beans_gen.go:331
 #: ../../network/nm_setting_beans_gen.go:332
 msgid "Customize Gateway Port"
 msgstr "Vlastný port brány"
 
-#: ../../network/nm_setting_bean_gen.go:350
-#: ../../network/nm_setting_bean_gen.go:351
-#: ../../network/nm_setting_bean_gen.go:360
-#: ../../network/nm_setting_bean_gen.go:361
-#: ../../network/nm_setting_bean_gen.go:362
-#: ../../network/nm_setting_beans_gen.go:332
 #: ../../network/nm_setting_beans_gen.go:333
 msgid "Gateway Port"
 msgstr "Port brány"
 
-#: ../../network/nm_setting_bean_gen.go:351
-#: ../../network/nm_setting_bean_gen.go:352
-#: ../../network/nm_setting_bean_gen.go:361
-#: ../../network/nm_setting_bean_gen.go:362
-#: ../../network/nm_setting_bean_gen.go:363
-#: ../../network/nm_setting_beans_gen.go:333
 #: ../../network/nm_setting_beans_gen.go:334
 msgid "Customize Renegotiation Interval"
 msgstr "Vlastný Renegotiation interval"
 
-#: ../../network/nm_setting_bean_gen.go:352
-#: ../../network/nm_setting_bean_gen.go:353
-#: ../../network/nm_setting_bean_gen.go:362
-#: ../../network/nm_setting_bean_gen.go:363
-#: ../../network/nm_setting_bean_gen.go:364
-#: ../../network/nm_setting_beans_gen.go:334
 #: ../../network/nm_setting_beans_gen.go:335
 msgid "Renegotiation Interval"
 msgstr "Renegotiation interval"
 
-#: ../../network/nm_setting_bean_gen.go:353
-#: ../../network/nm_setting_bean_gen.go:354
-#: ../../network/nm_setting_bean_gen.go:363
-#: ../../network/nm_setting_bean_gen.go:364
-#: ../../network/nm_setting_bean_gen.go:365
-#: ../../network/nm_setting_beans_gen.go:335
 #: ../../network/nm_setting_beans_gen.go:336
 msgid "Use LZO data compression"
 msgstr "Použiť LZO data kompresiu"
 
-#: ../../network/nm_setting_bean_gen.go:354
-#: ../../network/nm_setting_bean_gen.go:355
-#: ../../network/nm_setting_bean_gen.go:364
-#: ../../network/nm_setting_bean_gen.go:365
-#: ../../network/nm_setting_bean_gen.go:366
-#: ../../network/nm_setting_beans_gen.go:336
 #: ../../network/nm_setting_beans_gen.go:337
 msgid "Use TCP connection"
 msgstr "Použiť TCP spojenie"
 
-#: ../../network/nm_setting_bean_gen.go:355
-#: ../../network/nm_setting_bean_gen.go:356
-#: ../../network/nm_setting_bean_gen.go:365
-#: ../../network/nm_setting_bean_gen.go:366
-#: ../../network/nm_setting_bean_gen.go:367
-#: ../../network/nm_setting_beans_gen.go:337
 #: ../../network/nm_setting_beans_gen.go:338
 msgid "Use TAP device"
 msgstr "Použiť TAP zariadenie"
 
-#: ../../network/nm_setting_bean_gen.go:356
-#: ../../network/nm_setting_bean_gen.go:357
-#: ../../network/nm_setting_bean_gen.go:366
-#: ../../network/nm_setting_bean_gen.go:367
-#: ../../network/nm_setting_bean_gen.go:368
-#: ../../network/nm_setting_beans_gen.go:338
 #: ../../network/nm_setting_beans_gen.go:339
 msgid "Customize Tunnel MTU"
 msgstr "Vlastné Tunnel MTU"
 
-#: ../../network/nm_setting_bean_gen.go:358
-#: ../../network/nm_setting_bean_gen.go:359
-#: ../../network/nm_setting_bean_gen.go:368
-#: ../../network/nm_setting_bean_gen.go:369
-#: ../../network/nm_setting_bean_gen.go:370
-#: ../../network/nm_setting_beans_gen.go:340
 #: ../../network/nm_setting_beans_gen.go:341
 msgid "Customize UDP Fragment Size"
 msgstr "Vlastná UDP veľkosť fragmentu"
 
-#: ../../network/nm_setting_bean_gen.go:359
-#: ../../network/nm_setting_bean_gen.go:360
-#: ../../network/nm_setting_bean_gen.go:369
-#: ../../network/nm_setting_bean_gen.go:370
-#: ../../network/nm_setting_bean_gen.go:371
-#: ../../network/nm_setting_beans_gen.go:341
 #: ../../network/nm_setting_beans_gen.go:342
 msgid "UDP Fragment Size"
 msgstr "UDP Veľkosť fragmentu"
 
-#: ../../network/nm_setting_bean_gen.go:360
-#: ../../network/nm_setting_bean_gen.go:361
-#: ../../network/nm_setting_bean_gen.go:370
-#: ../../network/nm_setting_bean_gen.go:371
-#: ../../network/nm_setting_bean_gen.go:372
-#: ../../network/nm_setting_beans_gen.go:342
 #: ../../network/nm_setting_beans_gen.go:343
 msgid "Restrict Tunnel TCP MSS"
 msgstr "Restrict Tunnel TCP MSS"
 
-#: ../../network/nm_setting_bean_gen.go:361
-#: ../../network/nm_setting_bean_gen.go:362
-#: ../../network/nm_setting_bean_gen.go:371
-#: ../../network/nm_setting_bean_gen.go:372
-#: ../../network/nm_setting_bean_gen.go:373
-#: ../../network/nm_setting_beans_gen.go:343
 #: ../../network/nm_setting_beans_gen.go:344
 msgid "Randomize Remote Hosts"
 msgstr "Náhodné vzdialené hosty"
 
-#: ../../network/nm_setting_bean_gen.go:416
-#: ../../network/nm_setting_bean_gen.go:417
-#: ../../network/nm_setting_bean_gen.go:442
-#: ../../network/nm_setting_bean_gen.go:443
-#: ../../network/nm_setting_bean_gen.go:445
-#: ../../network/nm_setting_beans_gen.go:415
 #: ../../network/nm_setting_beans_gen.go:416
 msgid "Domain"
 msgstr "Doména"
 
-#: ../../network/nm_setting_bean_gen.go:417
-#: ../../network/nm_setting_bean_gen.go:418
-#: ../../network/nm_setting_bean_gen.go:443
-#: ../../network/nm_setting_bean_gen.go:444
-#: ../../network/nm_setting_bean_gen.go:446
-#: ../../network/nm_setting_beans_gen.go:416
 #: ../../network/nm_setting_beans_gen.go:417
 msgid "Vendor"
 msgstr "Vendor"
 
-#: ../../network/nm_setting_bean_gen.go:418
-#: ../../network/nm_setting_bean_gen.go:419
-#: ../../network/nm_setting_bean_gen.go:444
-#: ../../network/nm_setting_bean_gen.go:445
-#: ../../network/nm_setting_bean_gen.go:447
-#: ../../network/nm_setting_beans_gen.go:417
 #: ../../network/nm_setting_beans_gen.go:418
 msgid "Version"
 msgstr "Verzia"
 
-#: ../../network/nm_setting_bean_gen.go:419
-#: ../../network/nm_setting_bean_gen.go:420
-#: ../../network/nm_setting_bean_gen.go:445
-#: ../../network/nm_setting_bean_gen.go:446
-#: ../../network/nm_setting_bean_gen.go:448
-#: ../../network/nm_setting_beans_gen.go:418
 #: ../../network/nm_setting_beans_gen.go:419
 msgid "Encryption"
 msgstr "Kódovanie"
 
-#: ../../network/nm_setting_bean_gen.go:420
-#: ../../network/nm_setting_bean_gen.go:421
-#: ../../network/nm_setting_bean_gen.go:446
-#: ../../network/nm_setting_bean_gen.go:447
-#: ../../network/nm_setting_bean_gen.go:449
-#: ../../network/nm_setting_beans_gen.go:419
 #: ../../network/nm_setting_beans_gen.go:420
 msgid "NAT Traversal"
 msgstr "NAT Traversal"
 
-#: ../../network/nm_setting_bean_gen.go:421
-#: ../../network/nm_setting_bean_gen.go:422
-#: ../../network/nm_setting_bean_gen.go:447
-#: ../../network/nm_setting_bean_gen.go:448
-#: ../../network/nm_setting_bean_gen.go:450
-#: ../../network/nm_setting_beans_gen.go:420
 #: ../../network/nm_setting_beans_gen.go:421
 msgid "IKE DH Group"
 msgstr "IKE DH Group"
 
-#: ../../network/nm_setting_bean_gen.go:422
-#: ../../network/nm_setting_bean_gen.go:423
-#: ../../network/nm_setting_bean_gen.go:448
-#: ../../network/nm_setting_bean_gen.go:449
-#: ../../network/nm_setting_bean_gen.go:451
-#: ../../network/nm_setting_beans_gen.go:421
 #: ../../network/nm_setting_beans_gen.go:422
 msgid "Forward Secrecy"
 msgstr "Forward Secrecy"
 
-#: ../../network/nm_setting_bean_gen.go:423
-#: ../../network/nm_setting_bean_gen.go:424
-#: ../../network/nm_setting_bean_gen.go:449
-#: ../../network/nm_setting_bean_gen.go:450
-#: ../../network/nm_setting_bean_gen.go:452
-#: ../../network/nm_setting_beans_gen.go:422
 #: ../../network/nm_setting_beans_gen.go:423
 msgid "Local Port"
 msgstr "Lokálny port"
 
-#: ../../network/nm_setting_bean_gen.go:424
-#: ../../network/nm_setting_bean_gen.go:425
-#: ../../network/nm_setting_bean_gen.go:450
-#: ../../network/nm_setting_bean_gen.go:451
-#: ../../network/nm_setting_bean_gen.go:453
-#: ../../network/nm_setting_beans_gen.go:423
 #: ../../network/nm_setting_beans_gen.go:424
 msgid "Disable Dead Peer Detection"
 msgstr "Zakázať Dead Peer detekciu"
 
-#: ../../network/nm_setting_bean_gen.go:430
-#: ../../network/nm_setting_bean_gen.go:431
-#: ../../network/nm_setting_bean_gen.go:456
-#: ../../network/nm_setting_bean_gen.go:457
-#: ../../network/nm_setting_bean_gen.go:459
-#: ../../network/nm_setting_beans_gen.go:429
 #: ../../network/nm_setting_beans_gen.go:430
 msgid "IPv4"
 msgstr "IPv4"
 
-#: ../../network/nm_setting_bean_gen.go:432
-#: ../../network/nm_setting_bean_gen.go:433
-#: ../../network/nm_setting_bean_gen.go:444
-#: ../../network/nm_setting_bean_gen.go:445
-#: ../../network/nm_setting_bean_gen.go:458
-#: ../../network/nm_setting_bean_gen.go:459
-#: ../../network/nm_setting_bean_gen.go:461
-#: ../../network/nm_setting_bean_gen.go:471
-#: ../../network/nm_setting_bean_gen.go:472
-#: ../../network/nm_setting_bean_gen.go:474
-#: ../../network/nm_setting_beans_gen.go:431
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:444
 #: ../../network/nm_setting_beans_gen.go:445
 msgid "Method"
 msgstr "Metóda"
 
-#: ../../network/nm_setting_bean_gen.go:433
-#: ../../network/nm_setting_bean_gen.go:434
-#: ../../network/nm_setting_bean_gen.go:445
-#: ../../network/nm_setting_bean_gen.go:446
-#: ../../network/nm_setting_bean_gen.go:459
-#: ../../network/nm_setting_bean_gen.go:460
-#: ../../network/nm_setting_bean_gen.go:462
-#: ../../network/nm_setting_bean_gen.go:472
-#: ../../network/nm_setting_bean_gen.go:473
-#: ../../network/nm_setting_bean_gen.go:475
-#: ../../network/nm_setting_beans_gen.go:432
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:445
 #: ../../network/nm_setting_beans_gen.go:446
 msgid "IP Address"
 msgstr "IP adresa"
 
-#: ../../network/nm_setting_bean_gen.go:434
-#: ../../network/nm_setting_bean_gen.go:435
-#: ../../network/nm_setting_bean_gen.go:460
-#: ../../network/nm_setting_bean_gen.go:461
-#: ../../network/nm_setting_bean_gen.go:463
-#: ../../network/nm_setting_beans_gen.go:433
 #: ../../network/nm_setting_beans_gen.go:434
 msgid "Netmask"
 msgstr "Maska"
 
-#: ../../network/nm_setting_bean_gen.go:436
-#: ../../network/nm_setting_bean_gen.go:437
-#: ../../network/nm_setting_bean_gen.go:448
-#: ../../network/nm_setting_bean_gen.go:449
-msgid "DNS Server"
-msgstr "DNS server"
-
-#: ../../network/nm_setting_bean_gen.go:442
-#: ../../network/nm_setting_bean_gen.go:443
-#: ../../network/nm_setting_bean_gen.go:469
-#: ../../network/nm_setting_bean_gen.go:470
-#: ../../network/nm_setting_bean_gen.go:472
-#: ../../network/nm_setting_beans_gen.go:442
-#: ../../network/nm_setting_beans_gen.go:443
-msgid "IPv6"
-msgstr "IPv6"
-
-#: ../../network/nm_setting_bean_gen.go:446
-#: ../../network/nm_setting_bean_gen.go:447
-#: ../../network/nm_setting_bean_gen.go:473
-#: ../../network/nm_setting_bean_gen.go:474
-#: ../../network/nm_setting_bean_gen.go:476
-#: ../../network/nm_setting_beans_gen.go:446
-#: ../../network/nm_setting_beans_gen.go:447
-msgid "Prefix"
-msgstr "Prefix"
-
-#: ../../network/nm_setting_bean_gen.go:462
-#: ../../network/nm_setting_bean_gen.go:463
-#: ../../network/nm_setting_bean_gen.go:465
-#: ../../network/nm_setting_bean_gen.go:475
-#: ../../network/nm_setting_bean_gen.go:476
-#: ../../network/nm_setting_bean_gen.go:478
-#: ../../network/nm_setting_beans_gen.go:435
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:448
 #: ../../network/nm_setting_beans_gen.go:449
 msgid "Primary DNS"
 msgstr "Primárny DNS"
 
-#: ../../network/nm_setting_bean_gen.go:463
-#: ../../network/nm_setting_bean_gen.go:464
-#: ../../network/nm_setting_bean_gen.go:466
-#: ../../network/nm_setting_bean_gen.go:476
-#: ../../network/nm_setting_bean_gen.go:477
-#: ../../network/nm_setting_bean_gen.go:479
-#: ../../network/nm_setting_beans_gen.go:436
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:449
 #: ../../network/nm_setting_beans_gen.go:450
 msgid "Secondary DNS"
 msgstr "Sekundárny DNS"
 
-#: ../../network/nm_setting_gsm.go:144 ../../network/nm_setting_gsm.go:145
-#: ../../network/nm_setting_gsm.go:146 ../../network/nm_setting_gsm.go:147
-#: ../../network/nm_setting_gsm.go:156 ../../network/nm_setting_gsm.go:158
-#: ../../network/nm_setting_gsm.go:211 ../../network/nm_setting_gsm.go:213
-#: ../../network/nm_setting_virtual_key.go:134
+#: ../../network/nm_setting_beans_gen.go:443
+msgid "IPv6"
+msgstr "IPv6"
+
+#: ../../network/nm_setting_beans_gen.go:447
+msgid "Prefix"
+msgstr "Prefix"
+
+#: ../../network/nm_setting_gsm.go:145 ../../network/nm_setting_gsm.go:147
 #: ../../network/nm_setting_virtual_key.go:140
-#: ../../network/nm_setting_virtual_key.go:146
 msgid "Custom"
 msgstr "Vlastný"
 
-#: ../../network/nm_setting_gsm.go:154 ../../network/nm_setting_gsm.go:155
-#: ../../network/nm_setting_gsm.go:166 ../../network/nm_setting_gsm.go:221
-#: ../../network/nm_setting_virtual_key.go:143
+#: ../../network/nm_setting_gsm.go:155
 #: ../../network/nm_setting_virtual_key.go:149
-#: ../../network/nm_setting_virtual_key.go:155
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_vpn_openvpn.go:356
-#: ../../network/nm_setting_vpn_openvpn.go:370
-#: ../../network/nm_setting_vpn_openvpn.go:374
-#: ../../network/nm_setting_vpn_openvpn.go:376
-#: ../../network/nm_setting_vpn_openvpn.go:390
-#: ../../network/nm_setting_vpn_openvpn.go:394
-#: ../../network/nm_setting_vpn_openvpn.go:407
-#: ../../network/nm_setting_vpn_openvpn.go:421
-#: ../../network/nm_setting_vpn_openvpn.go:425
-#: ../../network/nm_setting_wireless.go:23
-#: ../../network/nm_setting_wireless.go:24
 #: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:35
-#: ../../network/nm_setting_wireless.go:72
-#: ../../network/nm_setting_wireless.go:73
 #: ../../network/nm_setting_wireless.go:74
-#: ../../network/nm_setting_wireless.go:84
-#: ../../network/nm_setting_wireless.go:140
-#: ../../network/nm_setting_wireless.go:189
 msgid "Default"
 msgstr "Predvolené"
 
-#: ../../network/nm_setting_gsm.go:182
-msgid "Any"
-msgstr "Akékoľvek"
-
-#: ../../network/nm_setting_gsm.go:183
-msgid "3G (UMTS/HSPA)"
-msgstr "3G (UMTS/HSPA)"
-
-#: ../../network/nm_setting_gsm.go:184
-msgid "2G (GPRS/EDGE)"
-msgstr "2G (GPRS/EDGE)"
-
-#: ../../network/nm_setting_gsm.go:185
-msgid "Prefer 3G (UMTS/HSPA)"
-msgstr "Preferovať 3G (UMTS/HSPA)"
-
-#: ../../network/nm_setting_gsm.go:186
-msgid "Prefer 2G (GPRS/EDGE)"
-msgstr "Preferovať 2G (GPRS/EDGE)"
-
-#: ../../network/nm_setting_gsm.go:187
-msgid "Prefer 4G (LTE)"
-msgstr "Preferovať 4G (LTE)"
-
-#: ../../network/nm_setting_gsm.go:188
-msgid "Use Only 4G (LTE)"
-msgstr "Použiť iba 4G (LTE)"
-
 #: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip6_config.go:28
+msgid "Auto"
+msgstr "Automatické"
+
 #: ../../network/nm_setting_ip4_config.go:28
-#: ../../network/nm_setting_ip4_config.go:39
-#: ../../network/nm_setting_ip4_config.go:175
-#: ../../network/nm_setting_ip6_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
-#: ../../network/nm_setting_ip6_config.go:41
-#: ../../network/nm_setting_ip6_config.go:66
 msgid "Link-Local Only"
 msgstr "Iba Link-Local"
 
-#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip4_config.go:29
-#: ../../network/nm_setting_ip4_config.go:40
-#: ../../network/nm_setting_ip4_config.go:176
-#: ../../network/nm_setting_ip6_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
-#: ../../network/nm_setting_ip6_config.go:42
-#: ../../network/nm_setting_ip6_config.go:67
 msgid "Manual"
 msgstr "Ručné"
 
-#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip4_config.go:30
-#: ../../network/nm_setting_ip4_config.go:41
-#: ../../network/nm_setting_ip4_config.go:177
-#: ../../network/nm_setting_ip6_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
-#: ../../network/nm_setting_ip6_config.go:43
-#: ../../network/nm_setting_ip6_config.go:68
-#: ../../network/nm_setting_wireless_security.go:70
 #: ../../network/nm_setting_wireless_security.go:71
-#: ../../network/nm_setting_wireless_security.go:82
-#: ../../network/nm_setting_wireless_security.go:205
 msgid "Shared"
 msgstr "Zdieľané"
 
-#: ../../network/nm_setting_ip6_config.go:26
 #: ../../network/nm_setting_ip6_config.go:27
-#: ../../network/nm_setting_ip6_config.go:38
-#: ../../network/nm_setting_ip6_config.go:63
 msgid "Ignore"
 msgstr "Ignorovať"
 
-#: ../../network/nm_setting_ip6_config.go:28
 #: ../../network/nm_setting_ip6_config.go:29
-#: ../../network/nm_setting_ip6_config.go:40
-#: ../../network/nm_setting_ip6_config.go:65
 msgid "DHCP"
 msgstr "DHCP"
 
-#: ../../network/nm_setting_virtual_key.go:148
 #: ../../network/nm_setting_virtual_key.go:154
-#: ../../network/nm_setting_virtual_key.go:160
 msgid "GSM (GPRS, UMTS)"
 msgstr "GSM (GPRS, UMTS)"
 
-#: ../../network/nm_setting_virtual_key.go:149
 #: ../../network/nm_setting_virtual_key.go:155
-#: ../../network/nm_setting_virtual_key.go:161
 msgid "CDMA (1xRTT, EVDO)"
 msgstr "CDMA (1xRTT, EVDO)"
 
-#: ../../network/nm_setting_virtual_key.go:156
 #: ../../network/nm_setting_virtual_key.go:162
-#: ../../network/nm_setting_virtual_key.go:168
 msgid "L2TP"
 msgstr "L2TP"
 
-#: ../../network/nm_setting_virtual_key.go:157
 #: ../../network/nm_setting_virtual_key.go:163
-#: ../../network/nm_setting_virtual_key.go:169
 msgid "PPTP"
 msgstr "PPTP"
 
-#: ../../network/nm_setting_virtual_key.go:158
 #: ../../network/nm_setting_virtual_key.go:164
-#: ../../network/nm_setting_virtual_key.go:170
 msgid "OpenConnect"
 msgstr "OpenConnect"
 
-#: ../../network/nm_setting_virtual_key.go:159
 #: ../../network/nm_setting_virtual_key.go:165
-#: ../../network/nm_setting_virtual_key.go:171
 msgid "OpenVPN"
 msgstr "OpenVPN"
 
-#: ../../network/nm_setting_virtual_key.go:160
 #: ../../network/nm_setting_virtual_key.go:166
-#: ../../network/nm_setting_virtual_key.go:172
 msgid "VPNC"
 msgstr "VPNC"
 
-#: ../../network/nm_setting_virtual_key.go:176
 #: ../../network/nm_setting_virtual_key.go:182
-#: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Enterprise"
 msgstr "WPA/WPA2 Enterprise"
 
-#: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:196
-#: ../../network/nm_setting_virtual_key.go:199
-#: ../../network/nm_setting_virtual_key.go:202
 #: ../../network/nm_setting_virtual_key.go:205
-#: ../../network/nm_setting_virtual_key.go:211
 msgid "All Available (default)"
 msgstr "Všetky dostupné (predvolené)"
 
-#: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:197
-#: ../../network/nm_setting_virtual_key.go:200
-#: ../../network/nm_setting_virtual_key.go:203
 #: ../../network/nm_setting_virtual_key.go:206
-#: ../../network/nm_setting_virtual_key.go:212
 msgid "128-bit (most secure)"
 msgstr "128-bit (najbezpečnejšie)"
 
-#: ../../network/nm_setting_virtual_key.go:192
 #: ../../network/nm_setting_virtual_key.go:198
-#: ../../network/nm_setting_virtual_key.go:201
-#: ../../network/nm_setting_virtual_key.go:204
 #: ../../network/nm_setting_virtual_key.go:207
-#: ../../network/nm_setting_virtual_key.go:213
 msgid "40-bit (less secure)"
 msgstr "40-bit (menej bezpečné)"
 
-#: ../../network/nm_setting_virtual_key.go:208
 #: ../../network/nm_setting_virtual_key.go:214
-#: ../../network/nm_setting_virtual_key.go:220
 msgid "Secure (default)"
 msgstr "Bezpečné (predvolené)"
 
-#: ../../network/nm_setting_virtual_key.go:209
 #: ../../network/nm_setting_virtual_key.go:215
-#: ../../network/nm_setting_virtual_key.go:221
 msgid "Weak"
 msgstr "Slabé"
 
+#: ../../network/nm_setting_vpn_l2tp.go:26
+#: ../../network/nm_setting_vpn_openvpn.go:23
+#: ../../network/nm_setting_vpn_pptp.go:26
+#: ../../network/nm_setting_vpn_vpnc.go:25 ../../network/utils_dbus_nm.go:155
+msgid "Saved"
+msgstr "Uložené"
+
+#: ../../network/nm_setting_vpn_l2tp.go:27
+#: ../../network/nm_setting_vpn_openvpn.go:24
+#: ../../network/nm_setting_vpn_pptp.go:27
+#: ../../network/nm_setting_vpn_vpnc.go:27 ../../network/utils_dbus_nm.go:157
+msgid "Always Ask"
+msgstr "Vždy sa pýtať"
+
+#: ../../network/nm_setting_vpn_l2tp.go:28
+#: ../../network/nm_setting_vpn_openvpn.go:25
+#: ../../network/nm_setting_vpn_openvpn.go:321
+#: ../../network/nm_setting_vpn_pptp.go:28
+#: ../../network/nm_setting_vpn_vpnc.go:28 ../../network/utils_dbus_nm.go:158
+msgid "Not Required"
+msgstr "Nie je požadované"
+
 #: ../../network/nm_setting_vpn_openvpn.go:103
-#: ../../network/nm_setting_vpn_openvpn.go:236
-#: ../../network/nm_setting_vpn_openvpn.go:248
 msgid "Certificates (TLS)"
 msgstr "Certifikáty (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:105
-#: ../../network/nm_setting_vpn_openvpn.go:238
-#: ../../network/nm_setting_vpn_openvpn.go:250
 msgid "Certificates with Password (TLS)"
 msgstr "Certifikáty s heslom (TLS)"
 
 #: ../../network/nm_setting_vpn_openvpn.go:110
-#: ../../network/nm_setting_vpn_openvpn.go:243
-#: ../../network/nm_setting_vpn_openvpn.go:255
 #: ../../network/nm_setting_vpn_openvpn.go:276
-#: ../../network/nm_setting_vpn_openvpn.go:413
-#: ../../network/nm_setting_vpn_openvpn.go:427
-#: ../../network/nm_setting_vpn_openvpn.go:431
 msgid "0"
 msgstr "0"
 
 #: ../../network/nm_setting_vpn_openvpn.go:111
-#: ../../network/nm_setting_vpn_openvpn.go:244
-#: ../../network/nm_setting_vpn_openvpn.go:256
 #: ../../network/nm_setting_vpn_openvpn.go:277
-#: ../../network/nm_setting_vpn_openvpn.go:414
-#: ../../network/nm_setting_vpn_openvpn.go:428
-#: ../../network/nm_setting_vpn_openvpn.go:432
 msgid "1"
 msgstr "1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:220
-#: ../../network/nm_setting_vpn_openvpn.go:357
-#: ../../network/nm_setting_vpn_openvpn.go:371
-#: ../../network/nm_setting_vpn_openvpn.go:375
 msgid "DES-CBC"
 msgstr "DES-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:221
-#: ../../network/nm_setting_vpn_openvpn.go:358
-#: ../../network/nm_setting_vpn_openvpn.go:372
-#: ../../network/nm_setting_vpn_openvpn.go:376
 msgid "RC2-CBC"
 msgstr "RC2-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:222
-#: ../../network/nm_setting_vpn_openvpn.go:359
-#: ../../network/nm_setting_vpn_openvpn.go:373
-#: ../../network/nm_setting_vpn_openvpn.go:377
 msgid "DES-EDE-CBC"
 msgstr "DES-EDE-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:223
-#: ../../network/nm_setting_vpn_openvpn.go:360
-#: ../../network/nm_setting_vpn_openvpn.go:374
-#: ../../network/nm_setting_vpn_openvpn.go:378
 msgid "DES-EDE3-CBC"
 msgstr "DES-EDE3-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:224
-#: ../../network/nm_setting_vpn_openvpn.go:361
-#: ../../network/nm_setting_vpn_openvpn.go:375
-#: ../../network/nm_setting_vpn_openvpn.go:379
 msgid "DESX-CBC"
 msgstr "DESX-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:225
-#: ../../network/nm_setting_vpn_openvpn.go:362
-#: ../../network/nm_setting_vpn_openvpn.go:376
-#: ../../network/nm_setting_vpn_openvpn.go:380
 msgid "BF-CBC"
 msgstr "BF-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:226
-#: ../../network/nm_setting_vpn_openvpn.go:363
-#: ../../network/nm_setting_vpn_openvpn.go:377
-#: ../../network/nm_setting_vpn_openvpn.go:381
 msgid "RC2-40-CBC"
 msgstr "RC2-40-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:227
-#: ../../network/nm_setting_vpn_openvpn.go:364
-#: ../../network/nm_setting_vpn_openvpn.go:378
-#: ../../network/nm_setting_vpn_openvpn.go:382
 msgid "CAST5-CBC"
 msgstr "CAST5-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:228
-#: ../../network/nm_setting_vpn_openvpn.go:365
-#: ../../network/nm_setting_vpn_openvpn.go:379
-#: ../../network/nm_setting_vpn_openvpn.go:383
 msgid "RC2-64-CBC"
 msgstr "RC2-64-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:229
-#: ../../network/nm_setting_vpn_openvpn.go:366
-#: ../../network/nm_setting_vpn_openvpn.go:380
-#: ../../network/nm_setting_vpn_openvpn.go:384
 msgid "AES-128-CBC"
 msgstr "AES-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:230
-#: ../../network/nm_setting_vpn_openvpn.go:367
-#: ../../network/nm_setting_vpn_openvpn.go:381
-#: ../../network/nm_setting_vpn_openvpn.go:385
 msgid "AES-192-CBC"
 msgstr "AES-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:231
-#: ../../network/nm_setting_vpn_openvpn.go:368
-#: ../../network/nm_setting_vpn_openvpn.go:382
-#: ../../network/nm_setting_vpn_openvpn.go:386
 msgid "AES-256-CBC"
 msgstr "AES-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:232
-#: ../../network/nm_setting_vpn_openvpn.go:369
-#: ../../network/nm_setting_vpn_openvpn.go:383
-#: ../../network/nm_setting_vpn_openvpn.go:387
 msgid "CAMELLIA-128-CBC"
 msgstr "CAMELLIA-128-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:233
-#: ../../network/nm_setting_vpn_openvpn.go:370
-#: ../../network/nm_setting_vpn_openvpn.go:384
-#: ../../network/nm_setting_vpn_openvpn.go:388
 msgid "CAMELLIA-192-CBC"
 msgstr "CAMELLIA-192-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:234
-#: ../../network/nm_setting_vpn_openvpn.go:371
-#: ../../network/nm_setting_vpn_openvpn.go:385
-#: ../../network/nm_setting_vpn_openvpn.go:389
 msgid "CAMELLIA-256-CBC"
 msgstr "CAMELLIA-256-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:235
-#: ../../network/nm_setting_vpn_openvpn.go:372
-#: ../../network/nm_setting_vpn_openvpn.go:386
-#: ../../network/nm_setting_vpn_openvpn.go:390
 msgid "SEED-CBC"
 msgstr "SEED-CBC"
 
 #: ../../network/nm_setting_vpn_openvpn.go:241
-#: ../../network/nm_setting_vpn_openvpn.go:378
-#: ../../network/nm_setting_vpn_openvpn.go:392
-#: ../../network/nm_setting_vpn_openvpn.go:396
 msgid "RSA MD-4"
 msgstr "RSA MD-4"
 
 #: ../../network/nm_setting_vpn_openvpn.go:242
-#: ../../network/nm_setting_vpn_openvpn.go:379
-#: ../../network/nm_setting_vpn_openvpn.go:393
-#: ../../network/nm_setting_vpn_openvpn.go:397
 msgid "MD-5"
 msgstr "MD-5"
 
 #: ../../network/nm_setting_vpn_openvpn.go:243
-#: ../../network/nm_setting_vpn_openvpn.go:380
-#: ../../network/nm_setting_vpn_openvpn.go:394
-#: ../../network/nm_setting_vpn_openvpn.go:398
 msgid "SHA-1"
 msgstr "SHA-1"
 
 #: ../../network/nm_setting_vpn_openvpn.go:244
-#: ../../network/nm_setting_vpn_openvpn.go:381
-#: ../../network/nm_setting_vpn_openvpn.go:395
-#: ../../network/nm_setting_vpn_openvpn.go:399
 msgid "SHA-224"
 msgstr "SHA-224"
 
 #: ../../network/nm_setting_vpn_openvpn.go:245
-#: ../../network/nm_setting_vpn_openvpn.go:382
-#: ../../network/nm_setting_vpn_openvpn.go:396
-#: ../../network/nm_setting_vpn_openvpn.go:400
 msgid "SHA-256"
 msgstr "SHA-256"
 
 #: ../../network/nm_setting_vpn_openvpn.go:246
-#: ../../network/nm_setting_vpn_openvpn.go:383
-#: ../../network/nm_setting_vpn_openvpn.go:397
-#: ../../network/nm_setting_vpn_openvpn.go:401
 msgid "SHA-384"
 msgstr "SHA-384"
 
 #: ../../network/nm_setting_vpn_openvpn.go:247
-#: ../../network/nm_setting_vpn_openvpn.go:384
-#: ../../network/nm_setting_vpn_openvpn.go:398
-#: ../../network/nm_setting_vpn_openvpn.go:402
 msgid "SHA-512"
 msgstr "SHA-512"
 
 #: ../../network/nm_setting_vpn_openvpn.go:248
-#: ../../network/nm_setting_vpn_openvpn.go:385
-#: ../../network/nm_setting_vpn_openvpn.go:399
-#: ../../network/nm_setting_vpn_openvpn.go:403
 msgid "RIPEMD-160"
 msgstr "RIPEMD-160"
 
 #: ../../network/nm_setting_vpn_openvpn.go:271
-#: ../../network/nm_setting_vpn_openvpn.go:408
-#: ../../network/nm_setting_vpn_openvpn.go:422
-#: ../../network/nm_setting_vpn_openvpn.go:426
 msgid "Client"
 msgstr "Klient"
 
 #: ../../network/nm_setting_vpn_openvpn.go:272
-#: ../../network/nm_setting_vpn_openvpn.go:409
-#: ../../network/nm_setting_vpn_openvpn.go:423
-#: ../../network/nm_setting_vpn_openvpn.go:427
 msgid "Server"
 msgstr "Server"
 
 #: ../../network/nm_setting_vpn_openvpn.go:322
-#: ../../network/nm_setting_vpn_openvpn.go:459
-#: ../../network/nm_setting_vpn_openvpn.go:473
-#: ../../network/nm_setting_vpn_openvpn.go:477
 msgid "HTTP"
 msgstr "HTTP"
 
 #: ../../network/nm_setting_vpn_openvpn.go:323
-#: ../../network/nm_setting_vpn_openvpn.go:460
-#: ../../network/nm_setting_vpn_openvpn.go:474
-#: ../../network/nm_setting_vpn_openvpn.go:478
 msgid "SOCKS"
 msgstr "SOCKS"
 
 #: ../../network/nm_setting_vpn_strongswan.go:77
-#: ../../network/nm_setting_vpn_strongswan.go:96
-#: ../../network/nm_setting_vpn_strongswan.go:100
 msgid "SSH Agent"
 msgstr "SSH agent"
 
 #: ../../network/nm_setting_vpn_strongswan.go:78
-#: ../../network/nm_setting_vpn_strongswan.go:97
-#: ../../network/nm_setting_vpn_strongswan.go:101
 msgid "Smartcard"
 msgstr "Smartcard"
 
 #: ../../network/nm_setting_vpn_strongswan.go:79
-#: ../../network/nm_setting_vpn_strongswan.go:98
-#: ../../network/nm_setting_vpn_strongswan.go:102
 msgid "EAP"
 msgstr "EAP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:132
-#: ../../network/nm_setting_vpn_vpnc.go:238
-#: ../../network/nm_setting_vpn_vpnc.go:250
 msgid "Cisco (default)"
 msgstr "Cisco (predvolené)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:133
-#: ../../network/nm_setting_vpn_vpnc.go:239
-#: ../../network/nm_setting_vpn_vpnc.go:251
 msgid "Netscreen"
 msgstr "Netscreen"
 
 #: ../../network/nm_setting_vpn_vpnc.go:137
-#: ../../network/nm_setting_vpn_vpnc.go:243
-#: ../../network/nm_setting_vpn_vpnc.go:255
 msgid "NAT-T When Available (default)"
 msgstr "NAT-T Keď je dostupné (predvolené)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:138
-#: ../../network/nm_setting_vpn_vpnc.go:244
-#: ../../network/nm_setting_vpn_vpnc.go:256
 msgid "NAT-T Always"
 msgstr "NAT-T vždy"
 
 #: ../../network/nm_setting_vpn_vpnc.go:139
-#: ../../network/nm_setting_vpn_vpnc.go:245
-#: ../../network/nm_setting_vpn_vpnc.go:257
 msgid "Cisco UDP"
 msgstr "Cisco UDP"
 
 #: ../../network/nm_setting_vpn_vpnc.go:144
 #: ../../network/nm_setting_vpn_vpnc.go:152
-#: ../../network/nm_setting_vpn_vpnc.go:250
-#: ../../network/nm_setting_vpn_vpnc.go:258
-#: ../../network/nm_setting_vpn_vpnc.go:262
-#: ../../network/nm_setting_vpn_vpnc.go:270
 msgid "DH Group 1"
 msgstr "DH Group 1"
 
 #: ../../network/nm_setting_vpn_vpnc.go:145
-#: ../../network/nm_setting_vpn_vpnc.go:251
-#: ../../network/nm_setting_vpn_vpnc.go:263
 msgid "DH Group 2 (default)"
 msgstr "DH Group 2 (predvolené)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:146
 #: ../../network/nm_setting_vpn_vpnc.go:154
-#: ../../network/nm_setting_vpn_vpnc.go:252
-#: ../../network/nm_setting_vpn_vpnc.go:260
-#: ../../network/nm_setting_vpn_vpnc.go:264
-#: ../../network/nm_setting_vpn_vpnc.go:272
 msgid "DH Group 5"
 msgstr "DH Group 5"
 
 #: ../../network/nm_setting_vpn_vpnc.go:150
-#: ../../network/nm_setting_vpn_vpnc.go:256
-#: ../../network/nm_setting_vpn_vpnc.go:268
 msgid "Server (default)"
 msgstr "Server (predvolené)"
 
 #: ../../network/nm_setting_vpn_vpnc.go:153
-#: ../../network/nm_setting_vpn_vpnc.go:259
-#: ../../network/nm_setting_vpn_vpnc.go:271
 msgid "DH Group 2"
 msgstr "DH Group 2"
 
-#: ../../network/nm_setting_wireless.go:174
-#: ../../network/nm_setting_wireless.go:175
-#: ../../network/nm_setting_wireless.go:186
 #: ../../network/nm_setting_wireless.go:190
-#: ../../network/nm_setting_wireless.go:291
 msgid "Infrastructure"
 msgstr "Infraštruktúra"
 
-#: ../../network/nm_setting_wireless.go:175
-#: ../../network/nm_setting_wireless.go:176
-#: ../../network/nm_setting_wireless.go:187
 #: ../../network/nm_setting_wireless.go:191
-#: ../../network/nm_setting_wireless.go:292
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:176
-#: ../../network/nm_setting_wireless.go:177
-#: ../../network/nm_setting_wireless.go:188
 #: ../../network/nm_setting_wireless.go:192
-#: ../../network/nm_setting_wireless.go:293
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:181
-#: ../../network/nm_setting_wireless.go:182
-#: ../../network/nm_setting_wireless.go:193
 #: ../../network/nm_setting_wireless.go:197
-#: ../../network/nm_setting_wireless.go:298
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:182
-#: ../../network/nm_setting_wireless.go:183
-#: ../../network/nm_setting_wireless.go:194
 #: ../../network/nm_setting_wireless.go:198
-#: ../../network/nm_setting_wireless.go:299
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
-#: ../../network/nm_setting_wireless_security.go:54
 #: ../../network/nm_setting_wireless_security.go:55
-#: ../../network/nm_setting_wireless_security.go:66
-#: ../../network/nm_setting_wireless_security.go:189
 msgid "WEP"
 msgstr "WEP"
 
-#: ../../network/nm_setting_wireless_security.go:55
 #: ../../network/nm_setting_wireless_security.go:56
-#: ../../network/nm_setting_wireless_security.go:67
-#: ../../network/nm_setting_wireless_security.go:190
 msgid "Dynamic WEP"
 msgstr "Dynamic WEP"
 
-#: ../../network/nm_setting_wireless_security.go:56
 #: ../../network/nm_setting_wireless_security.go:57
-#: ../../network/nm_setting_wireless_security.go:68
-#: ../../network/nm_setting_wireless_security.go:191
 msgid "Ad-Hoc WPA-PSK"
 msgstr "Ad-Hoc WPA-PSK"
 
-#: ../../network/nm_setting_wireless_security.go:57
 #: ../../network/nm_setting_wireless_security.go:58
-#: ../../network/nm_setting_wireless_security.go:69
-#: ../../network/nm_setting_wireless_security.go:192
 msgid "WPA-PSK Infrastructure"
 msgstr "WPA-PSK Infrastructure"
 
-#: ../../network/nm_setting_wireless_security.go:58
 #: ../../network/nm_setting_wireless_security.go:59
-#: ../../network/nm_setting_wireless_security.go:70
-#: ../../network/nm_setting_wireless_security.go:193
 msgid "WPA Enterprise"
 msgstr "WPA Enterprise"
 
-#: ../../network/nm_setting_wireless_security.go:62
 #: ../../network/nm_setting_wireless_security.go:63
-#: ../../network/nm_setting_wireless_security.go:74
-#: ../../network/nm_setting_wireless_security.go:197
 msgid "WEP40"
 msgstr "WEP40"
 
-#: ../../network/nm_setting_wireless_security.go:63
 #: ../../network/nm_setting_wireless_security.go:64
-#: ../../network/nm_setting_wireless_security.go:75
-#: ../../network/nm_setting_wireless_security.go:198
 msgid "WEP104"
 msgstr "WEP104"
 
-#: ../../network/nm_setting_wireless_security.go:64
 #: ../../network/nm_setting_wireless_security.go:65
-#: ../../network/nm_setting_wireless_security.go:76
-#: ../../network/nm_setting_wireless_security.go:199
 msgid "TKIP"
 msgstr "TKIP"
 
-#: ../../network/nm_setting_wireless_security.go:65
 #: ../../network/nm_setting_wireless_security.go:66
-#: ../../network/nm_setting_wireless_security.go:77
-#: ../../network/nm_setting_wireless_security.go:200
 msgid "CCMP"
 msgstr "CCMP"
 
-#: ../../network/nm_setting_wireless_security.go:69
 #: ../../network/nm_setting_wireless_security.go:70
-#: ../../network/nm_setting_wireless_security.go:81
-#: ../../network/nm_setting_wireless_security.go:204
 msgid "Open"
 msgstr "Otvoriť"
 
-#: ../../network/state_handler.go:22 ../../network/state_handler.go:23
-#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
-msgid "Device state changed."
-msgstr "Stav zariadenia sa zmenil."
+#: ../../network/state_handler.go:23
+msgid "Device state changed"
+msgstr "Stav zariadenia sa zmenil"
 
-#: ../../network/state_handler.go:23 ../../network/state_handler.go:24
-#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
-msgid "Device state changed, unknown reason."
-msgstr "Stav zariadenia sa zmenil z neznámeho dôvodu."
+#: ../../network/state_handler.go:24
+msgid "Device state changed, unknown reason"
+msgstr "Stav zariadenia zmenený, neznámy dôvod"
 
-#: ../../network/state_handler.go:24 ../../network/state_handler.go:25
-#: ../../network/state_handler.go:36
-msgid "The device is now managed."
-msgstr "Zariadenie je teraz spravované. "
+#: ../../network/state_handler.go:25
+msgid "The device is now managed"
+msgstr "Zariadenie je teraz spravované"
 
-#: ../../network/state_handler.go:25 ../../network/state_handler.go:26
-#: ../../network/state_handler.go:37
-msgid "The device is no longer managed."
-msgstr "Zariadenie už viac nie je spravované. "
+#: ../../network/state_handler.go:26
+msgid "The device is no longer managed"
+msgstr "Zariadenie už nie je spravované"
 
-#: ../../network/state_handler.go:26 ../../network/state_handler.go:27
-#: ../../network/state_handler.go:38
-msgid "The device has not been ready for configuration."
-msgstr "Zariadenie nie je pripravenée na konfiguráciu. "
+#: ../../network/state_handler.go:27
+msgid "The device has not been ready for configuration"
+msgstr "Zariadenie nie je pripravené na konfiguráciu"
 
-#: ../../network/state_handler.go:27 ../../network/state_handler.go:28
-#: ../../network/state_handler.go:39
+#: ../../network/state_handler.go:28
 msgid ""
-"IP configuration could not be reserved (no available address, timeout, etc)."
-msgstr "IP konfigurácia nemohla byť rezervovaná (žiadna dostupná adresa, timeout, atď)."
+"IP configuration could not be reserved (no available address, timeout, etc)"
+msgstr "Konfigurácia IP nemôže byť vyhradená (nie je dostupná adresa, časový limit atď.)"
 
-#: ../../network/state_handler.go:28 ../../network/state_handler.go:29
-#: ../../network/state_handler.go:40
-msgid "The IP configuration is no longer valid."
-msgstr "IP konfigurácia nie je viac platná. "
+#: ../../network/state_handler.go:29
+msgid "The IP configuration is no longer valid"
+msgstr "Konfigurácia IP už nie je platná"
 
-#: ../../network/state_handler.go:29 ../../network/state_handler.go:30
-#: ../../network/state_handler.go:41
-msgid "Passwords were required but not provided."
-msgstr "Heslá boli požadované ale neposkytnuté. "
+#: ../../network/state_handler.go:30
+msgid "Passwords were required but not provided"
+msgstr "Boli požadované heslá, ale neboli poskytnuté"
 
-#: ../../network/state_handler.go:30 ../../network/state_handler.go:31
-#: ../../network/state_handler.go:42
+#: ../../network/state_handler.go:31
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
-"server."
-msgstr "802.1X žiadosť bola odoprená prístupovým bodom alebo autentizačným serverom. "
+"server"
+msgstr "Žiadateľ 802.1X sa odpojil od prístupového bodu alebo autentifikačného servera"
 
-#: ../../network/state_handler.go:31 ../../network/state_handler.go:32
+#: ../../network/state_handler.go:32
+msgid "Configuration of the 802.1X supplicant failed"
+msgstr "Konfigurácia žiadateľa 802.1X zlyhala"
+
+#: ../../network/state_handler.go:33
+msgid "The 802.1X supplicant quitted or failed unexpectedly"
+msgstr "Žiadateľ 802.1X opustil alebo neočakávane zlyhal"
+
+#: ../../network/state_handler.go:34
+msgid "The 802.1X supplicant took too long time to authenticate"
+msgstr "Žiadateľ 802.1X potreboval príliš veľa času na autentifikáciu"
+
+#: ../../network/state_handler.go:35
+msgid "The PPP service failed to start within the allowed time"
+msgstr "Službu PPP sa nepodarilo spustiť v rámci povoleného času"
+
+#: ../../network/state_handler.go:36
+msgid "The PPP service disconnected unexpectedly"
+msgstr "Služba PPP sa neočakávane odpojila"
+
+#: ../../network/state_handler.go:37
+msgid "The PPP service quitted or failed unexpectedly"
+msgstr "Služba PPP bola neočakávane ukončená alebo zlyhala"
+
+#: ../../network/state_handler.go:38
+msgid "The DHCP service failed to start within the allowed time"
+msgstr "Službu DHCP sa nepodarilo spustiť v rámci povoleného času"
+
+#: ../../network/state_handler.go:39
+msgid "The DHCP service reported an unexpected error"
+msgstr "Služba DHCP ohlásila neočakávanú chybu"
+
+#: ../../network/state_handler.go:40
+msgid "The DHCP service quitted or failed unexpectedly"
+msgstr "Služba DHCP bola neočakávane ukončená alebo zlyhala"
+
+#: ../../network/state_handler.go:41
+msgid "The shared connection service failed to start"
+msgstr "Zdieľanú službu pripojenia sa nepodarilo spustiť"
+
+#: ../../network/state_handler.go:42
+msgid "The shared connection service quitted or failed unexpectedly"
+msgstr "Služba zdieľaného pripojenia bola neočakávane ukončená alebo zlyhala"
+
 #: ../../network/state_handler.go:43
-msgid "Configuration of the 802.1X supplicant failed."
-msgstr "Konfigurácia 802.1X zlyhala. "
+msgid "The AutoIP service failed to start"
+msgstr "Službu AutoIP sa nepodarilo spustiť"
 
-#: ../../network/state_handler.go:32 ../../network/state_handler.go:33
 #: ../../network/state_handler.go:44
-msgid "The 802.1X supplicant quitted or failed unexpectedly."
-msgstr "802.1X žiadosť neočakávane skončila alebo zlyhala. "
+msgid "The AutoIP service reported an unexpected error"
+msgstr "Služba AutoIP ohlásila neočakávanú chybu"
 
-#: ../../network/state_handler.go:33 ../../network/state_handler.go:34
 #: ../../network/state_handler.go:45
-msgid "The 802.1X supplicant took too long time to authenticate."
-msgstr "802.1X autentizácia trvala príliš dlho."
+msgid "The AutoIP service quitted or failed unexpectedly"
+msgstr "Služba AutoIP bola neočakávane ukončená alebo zlyhala"
 
-#: ../../network/state_handler.go:34 ../../network/state_handler.go:35
 #: ../../network/state_handler.go:46
-msgid "The PPP service failed to start within the allowed time."
-msgstr "PPP služba zlyhala pri štarte v rámci povoleného času. "
+msgid "Dialing failed due to busy lines"
+msgstr "Vytáčanie zlyhalo z dôvodu obsadených liniek"
 
-#: ../../network/state_handler.go:35 ../../network/state_handler.go:36
 #: ../../network/state_handler.go:47
-msgid "The PPP service disconnected unexpectedly."
-msgstr "PPP služba bola neočakávane odpojená. "
+msgid "Dialing failed due to no dial tone"
+msgstr "Vytáčanie zlyhalo z dôvodu žiadneho oznamovacieho tónu"
 
-#: ../../network/state_handler.go:36 ../../network/state_handler.go:37
 #: ../../network/state_handler.go:48
-msgid "The PPP service quitted or failed unexpectedly."
-msgstr "PPP služba neočakávane skončila alebo zlyhala. "
+msgid "Dialing failed due to the carrier"
+msgstr "Vytáčanie zlyhalo kvôli operátorovi"
 
-#: ../../network/state_handler.go:37 ../../network/state_handler.go:38
 #: ../../network/state_handler.go:49
-msgid "The DHCP service failed to start within the allowed time."
-msgstr "DHCP služba zlyhala pri štarte v rámci povoleného času."
+msgid "Dialing timed out"
+msgstr "Čas vytáčania vypršal"
 
-#: ../../network/state_handler.go:38 ../../network/state_handler.go:39
 #: ../../network/state_handler.go:50
-msgid "The DHCP service reported an unexpected error."
-msgstr "DHCP služba ohlásila neočakávanú chybu. "
+msgid "Dialing failed"
+msgstr "Vytáčanie zlyhalo"
 
-#: ../../network/state_handler.go:39 ../../network/state_handler.go:40
 #: ../../network/state_handler.go:51
-msgid "The DHCP service quitted or failed unexpectedly."
-msgstr "DHCP služba neočakávane skončila alebo zlyhala. "
+msgid "Modem initialization failed"
+msgstr "Inicializácia modemu zlyhala"
 
-#: ../../network/state_handler.go:40 ../../network/state_handler.go:41
 #: ../../network/state_handler.go:52
-msgid "The shared connection service failed to start."
-msgstr "Služba zdieľaného spojenia zlyhala pri štarte. "
+msgid "Failed to select the specified GSM APN"
+msgstr "Nepodarilo sa vybrať zadaný GSM APN"
 
-#: ../../network/state_handler.go:41 ../../network/state_handler.go:42
 #: ../../network/state_handler.go:53
-msgid "The shared connection service quitted or failed unexpectedly."
-msgstr "Služba zdieľaného spojenia neočakávane skončila alebo zlyhala. "
+msgid "No networks searched"
+msgstr "Nie sú vyhľadávané žiadne siete"
 
-#: ../../network/state_handler.go:42 ../../network/state_handler.go:43
 #: ../../network/state_handler.go:54
-msgid "The AutoIP service failed to start."
-msgstr "AutoIP služba zlyhala pri štarte. "
+msgid "Network registration was denied"
+msgstr "Registrácia siete bola zamietnutá"
 
-#: ../../network/state_handler.go:43 ../../network/state_handler.go:44
 #: ../../network/state_handler.go:55
-msgid "The AutoIP service reported an unexpected error."
-msgstr "AutoIP služba ohlásila neočakávanú chybu. "
+msgid "Network registration timed out"
+msgstr "Registrácia siete vypršala"
 
-#: ../../network/state_handler.go:44 ../../network/state_handler.go:45
 #: ../../network/state_handler.go:56
-msgid "The AutoIP service quitted or failed unexpectedly."
-msgstr "AutoIP služba neočakávane skončila alebo zlyhala. "
+msgid "Register to the requested GSM network failed"
+msgstr "Registrácia do požadovanej GSM siete zlyhala"
 
-#: ../../network/state_handler.go:45 ../../network/state_handler.go:46
 #: ../../network/state_handler.go:57
-msgid "Dialing failed due to busy lines."
-msgstr "Spojenie zlyhalo kvôli zaneprázdnenosti liniek. "
+msgid "PIN check failed"
+msgstr "Kontrola kódu PIN zlyhala"
 
-#: ../../network/state_handler.go:46 ../../network/state_handler.go:47
 #: ../../network/state_handler.go:58
-msgid "Dialing failed due to no dial tone."
-msgstr "Spojenie zlyhalo kvôli nedostupnému spojovaciemu tónu. "
+msgid "Necessary firmware for the device may be missed"
+msgstr "Potrebný firmvér pre zariadenie sa môže vynechať"
 
-#: ../../network/state_handler.go:47 ../../network/state_handler.go:48
 #: ../../network/state_handler.go:59
-msgid "Dialing failed due to the carrier."
-msgstr "Spojenie zlyhalo kvôli poskytovateľovi. "
+msgid "The device was removed"
+msgstr "Zariadenie bolo odstránené"
 
-#: ../../network/state_handler.go:48 ../../network/state_handler.go:49
 #: ../../network/state_handler.go:60
-msgid "Dialing timed out."
-msgstr "Spojenie vypršalo. "
+msgid "NetworkManager went to sleep"
+msgstr "NetworkManager sa uspal"
 
-#: ../../network/state_handler.go:49 ../../network/state_handler.go:50
 #: ../../network/state_handler.go:61
-msgid "Dialing failed."
-msgstr "Spojenie zlyhalo."
+msgid "The device's active connection was removed or disappeared"
+msgstr "Aktívne pripojenie zariadenia bolo odstránené alebo zmizlo"
 
-#: ../../network/state_handler.go:50 ../../network/state_handler.go:51
 #: ../../network/state_handler.go:62
-msgid "Modem initialization failed."
-msgstr "Inicializácia modemu zlyhala. "
+msgid "A user or client requested to disconnect"
+msgstr "Používateľ alebo klient požiadali o odpojenie"
 
-#: ../../network/state_handler.go:51 ../../network/state_handler.go:52
 #: ../../network/state_handler.go:63
-msgid "Failed to select the specified GSM APN."
-msgstr "Zlyhala voľba špecifikovaného GSM APN."
+msgid "The device's carrier/link changed"
+msgstr "Operátor / spojenie zariadenia bolo zmenené"
 
-#: ../../network/state_handler.go:52 ../../network/state_handler.go:53
 #: ../../network/state_handler.go:64
-msgid "No networks searched."
-msgstr "Nevyhľadané žiadne siete. "
+msgid "The device's existing connection was assumed"
+msgstr "Existujúce pripojenie zariadenia bolo predpokladané"
 
-#: ../../network/state_handler.go:53 ../../network/state_handler.go:54
 #: ../../network/state_handler.go:65
-msgid "Network registration was denied."
-msgstr "Registrácia siete bola odmietnutá. "
+msgid "The 802.1x supplicant is now available"
+msgstr "Žiadateľ 802.1x je teraz k dispozícii"
 
-#: ../../network/state_handler.go:54 ../../network/state_handler.go:55
 #: ../../network/state_handler.go:66
-msgid "Network registration timed out."
-msgstr "Registrácia siete vypršala. "
+msgid "The modem could not be found"
+msgstr "Modem sa nepodarilo nájsť"
 
-#: ../../network/state_handler.go:55 ../../network/state_handler.go:56
 #: ../../network/state_handler.go:67
-msgid "Register to the requested GSM network failed."
-msgstr "Registrácia do požadovanej GSM siete zlyhala. "
+msgid "The Bluetooth connection timed out or failed"
+msgstr "Spojenie s rozhraním Bluetooth vypršalo alebo zlyhalo"
 
-#: ../../network/state_handler.go:56 ../../network/state_handler.go:57
 #: ../../network/state_handler.go:68
-msgid "PIN check failed."
-msgstr "PIN kontrola zlyhala. "
+msgid "GSM Modem's SIM Card was not inserted"
+msgstr "SIM karta GSM modemu nebola vložená"
 
-#: ../../network/state_handler.go:57 ../../network/state_handler.go:58
 #: ../../network/state_handler.go:69
-msgid "Necessary firmware for the device may be missed."
-msgstr "Potrebný firmware pre zariadenie asi chýba. "
+msgid "GSM Modem's SIM PIN required"
+msgstr "PIN SIM karty GSM modemu je potrebný"
 
-#: ../../network/state_handler.go:58 ../../network/state_handler.go:59
 #: ../../network/state_handler.go:70
-msgid "The device was removed."
-msgstr "Zariadenie bolo odstránené. "
+msgid "GSM Modem's SIM PUK required"
+msgstr "GSM SIM modem vyžaduje PUK"
 
-#: ../../network/state_handler.go:59 ../../network/state_handler.go:60
 #: ../../network/state_handler.go:71
-msgid "NetworkManager went to sleep."
-msgstr "NetworkManager je v režime spánku. "
-
-#: ../../network/state_handler.go:60 ../../network/state_handler.go:61
-#: ../../network/state_handler.go:72
-msgid "The device's active connection was removed or disappeared."
-msgstr "Aktívne spojenia zariadenia zmizli alebo boli odstránené. "
-
-#: ../../network/state_handler.go:61 ../../network/state_handler.go:62
-#: ../../network/state_handler.go:73
-msgid "A user or client requested to disconnect."
-msgstr "Užívateľ alebo klient žiadal o odpojenie. "
-
-#: ../../network/state_handler.go:62 ../../network/state_handler.go:63
-#: ../../network/state_handler.go:74
-msgid "The device's carrier/link changed."
-msgstr "Linka/Prenášač zariadania bol zmenený."
-
-#: ../../network/state_handler.go:63 ../../network/state_handler.go:64
-#: ../../network/state_handler.go:75
-msgid "The device's existing connection was assumed."
-msgstr "Existujúce spojenie zariadenia bolo predpokladané. "
-
-#: ../../network/state_handler.go:64 ../../network/state_handler.go:65
-#: ../../network/state_handler.go:76
-msgid "The 802.1x supplicant is now available."
-msgstr "802.1X je teraz dostupné. "
-
-#: ../../network/state_handler.go:65 ../../network/state_handler.go:66
-#: ../../network/state_handler.go:77
-msgid "The modem could not be found."
-msgstr "Modem nebol nájdený"
-
-#: ../../network/state_handler.go:66 ../../network/state_handler.go:67
-#: ../../network/state_handler.go:78
-msgid "The Bluetooth connection timed out or failed."
-msgstr "Bluetooth spojenie vypršalo alebo zlyhalo."
-
-#: ../../network/state_handler.go:67 ../../network/state_handler.go:68
-#: ../../network/state_handler.go:79
-msgid "GSM Modem's SIM Card was not inserted."
-msgstr "SIM karta GSM modemu nebola vložená. "
-
-#: ../../network/state_handler.go:68 ../../network/state_handler.go:69
-#: ../../network/state_handler.go:80
-msgid "GSM Modem's SIM PIN required."
-msgstr "Je požadovaný PIN pre SIM."
-
-#: ../../network/state_handler.go:69 ../../network/state_handler.go:70
-#: ../../network/state_handler.go:81
-msgid "GSM Modem's SIM PUK required."
-msgstr "Je požadovaný PUK pre SIM. "
-
-#: ../../network/state_handler.go:70 ../../network/state_handler.go:71
-#: ../../network/state_handler.go:82
 msgid "Wrong GSM Modem's SIM"
 msgstr "Chybná SIM GSM modemu"
 
-#: ../../network/state_handler.go:71 ../../network/state_handler.go:72
+#: ../../network/state_handler.go:72
+msgid "InfiniBand device does not support connected mode"
+msgstr "Zariadenie InfiniBand nepodporuje režim pripojenia"
+
+#: ../../network/state_handler.go:73
+msgid "A connection dependency failed"
+msgstr "Závislosť na pripojení zlyhala"
+
+#: ../../network/state_handler.go:74
+msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
+msgstr "Problém s RFC 2684 Ethernet cez ADSL most"
+
+#: ../../network/state_handler.go:75
+msgid "ModemManager did not run or quitted unexpectedly"
+msgstr "ModemManager sa nespustil alebo sa neočakávane ukončil"
+
+#: ../../network/state_handler.go:76
+msgid "The 802.11 Wi-Fi network could not be found"
+msgstr "Nepodarilo sa nájsť sieť 802.11 Wi-Fi"
+
+#: ../../network/state_handler.go:77
+msgid "A secondary connection of the base connection failed"
+msgstr "Zlyhalo sekundárne pripojenie základného pripojenia"
+
+#: ../../network/state_handler.go:80
+msgid "DCB or FCoE setup failed"
+msgstr "DCB alebo FCoE nastavenie zlyhalo"
+
+#: ../../network/state_handler.go:81
+msgid "Network teaming control failed"
+msgstr "Riadenie sieťového teamingu zlyhalo"
+
+#: ../../network/state_handler.go:82
+msgid "Modem failed to run or not available"
+msgstr "Modem sa nepodarilo spustiť alebo nie je k dispozícii"
+
 #: ../../network/state_handler.go:83
-msgid "InfiniBand device does not support connected mode."
-msgstr "InfiniBand zariadenie nepodporuje spojený režim. "
+msgid "Modem now ready and available"
+msgstr "Modem je teraz pripravený a dostupný"
 
-#: ../../network/state_handler.go:72 ../../network/state_handler.go:73
 #: ../../network/state_handler.go:84
-msgid "A connection dependency failed."
-msgstr "Závislosť spojenia zlyhala. "
+msgid "SIM PIN is incorrect"
+msgstr "Kód PIN karty SIM je nesprávny"
 
-#: ../../network/state_handler.go:73 ../../network/state_handler.go:74
 #: ../../network/state_handler.go:85
-msgid "Problem with the RFC 2684 Ethernet over ADSL bridge."
-msgstr "Problém s RFC 2684 Ethernet over ADSL bridge."
+msgid "New connection activation is enqueuing"
+msgstr "Aktivácia nového spojenia sa prekrýva"
 
-#: ../../network/state_handler.go:74 ../../network/state_handler.go:75
 #: ../../network/state_handler.go:86
-msgid "ModemManager did not run or quitted unexpectedly."
-msgstr "ModemManager nie je spustený alebo neočakávane skončil. "
+msgid "Parent device changed"
+msgstr "Nadradené zariadenie bolo zmenené"
 
-#: ../../network/state_handler.go:75 ../../network/state_handler.go:76
 #: ../../network/state_handler.go:87
-msgid "The 802.11 Wi-Fi network could not be found."
-msgstr "802.11 Wi-Fi sieť nebola nájdená. "
+msgid "Management status of parent device changed"
+msgstr "Stav riadenia nadradeného zariadenia sa zmenil"
 
-#: ../../network/state_handler.go:76 ../../network/state_handler.go:77
-#: ../../network/state_handler.go:88
-msgid "A secondary connection of the base connection failed."
-msgstr "Sekundárne spojenie základného spojenia zlyhalo. "
+#: ../../network/state_handler.go:90
+msgid "Network cable is unplugged"
+msgstr "Sieťový kábel je odpojený"
 
-#: ../../network/state_handler.go:79 ../../network/state_handler.go:80
 #: ../../network/state_handler.go:91
-msgid "DCB or FCoE setup failed."
-msgstr "DCB alebo FCoE nastavenie zlyhalo."
+msgid "Please make sure SIM card has been inserted with mobile network signal"
+msgstr "Ubezpečte sa, že ste vložili SIM kartu so signálom mobilnej siete"
 
-#: ../../network/state_handler.go:80 ../../network/state_handler.go:81
 #: ../../network/state_handler.go:92
-msgid "Network teaming control failed."
-msgstr "Nastavenie sieťového teamingu zlyhalo."
+msgid ""
+"Please make sure a correct plan was selected without arrearage of SIM card"
+msgstr "Uistite sa, že ste vybrali správny plán bez toho, aby ste mali na SIM karte nedoplatky"
 
-#: ../../network/state_handler.go:81 ../../network/state_handler.go:82
-#: ../../network/state_handler.go:93
-msgid "Modem failed to run or not available."
-msgstr "Modem sa nepodarilo spustiť alebo nie je k dispozícii."
-
-#: ../../network/state_handler.go:82 ../../network/state_handler.go:83
-#: ../../network/state_handler.go:94
-msgid "Modem now ready and available."
-msgstr "Modem je pripravený a prístupný."
-
-#: ../../network/state_handler.go:83 ../../network/state_handler.go:84
 #: ../../network/state_handler.go:95
-msgid "SIM PIN is incorrect."
-msgstr "PIN kód SIM karty je nesprávny."
+msgid "Activate VPN connection failed, unknown reason"
+msgstr "Aktivácia pripojenia VPN zlyhala, neznámy dôvod"
 
-#: ../../network/state_handler.go:84 ../../network/state_handler.go:85
 #: ../../network/state_handler.go:96
-msgid "New connection activation is enqueuing."
-msgstr "Aktivácia nového pripojenia je zaradená do radu."
+msgid "Activate VPN connection failed"
+msgstr "Aktivácia pripojenia VPN zlyhala"
 
-#: ../../network/state_handler.go:85 ../../network/state_handler.go:86
 #: ../../network/state_handler.go:97
-msgid "Parent device changed."
-msgstr "Hlavné zariadenie zmenené."
+msgid "The VPN connection changed state due to disconnection from users"
+msgstr "Pripojenie VPN sa zmenilo v dôsledku odpojenia od používateľov"
 
-#: ../../network/state_handler.go:86 ../../network/state_handler.go:87
 #: ../../network/state_handler.go:98
-msgid "Management status of parent device changed."
-msgstr "Manažment status hlavného zariadenia zmenený."
+msgid "The VPN connection changed state due to disconnection from devices"
+msgstr "Pripojenie VPN sa zmenilo v dôsledku odpojenia od zariadení"
 
-#: ../../network/state_handler.go:89 ../../network/state_handler.go:90
-#: ../../network/state_handler.go:91 ../../network/state_handler.go:101
-msgid "Network cable is unplugged."
-msgstr "Sieťový kábel je odpojený. "
+#: ../../network/state_handler.go:99
+msgid "VPN service stopped"
+msgstr "Služba VPN bola zastavená"
 
-#: ../../network/state_handler.go:90 ../../network/state_handler.go:91
-#: ../../network/state_handler.go:92 ../../network/state_handler.go:102
-msgid ""
-"Please make sure SIM card has been inserted with mobile network signal."
-msgstr "Uistite sa, či má SIM karta signál mobilnej siete."
+#: ../../network/state_handler.go:100
+msgid "The IP config of VPN connection was invalid"
+msgstr "IP konfigurácia pripojenia VPN bola neplatná"
 
-#: ../../network/state_handler.go:91 ../../network/state_handler.go:92
-#: ../../network/state_handler.go:93 ../../network/state_handler.go:103
-msgid ""
-"Please make sure a correct plan was selected without arrearage of SIM card."
-msgstr "Uistite sa, či má SIM karta správny plán a či nemá nejaké podlžnosti."
+#: ../../network/state_handler.go:101
+msgid "The connection attempt to VPN service timed out"
+msgstr "Pokus o pripojenie k službe VPN vypršal"
 
-#: ../../network/state_handler.go:94 ../../network/state_handler.go:95
-#: ../../network/state_handler.go:96 ../../network/state_handler.go:106
-msgid "Activate VPN connection failed, unknown reason."
-msgstr "Aktivácia VPN spojenia zlyhala z neznámych dôvodov. "
+#: ../../network/state_handler.go:102
+msgid "The VPN service start timed out"
+msgstr "Službe VPN začal čas vypršania"
 
-#: ../../network/state_handler.go:95 ../../network/state_handler.go:96
-#: ../../network/state_handler.go:97 ../../network/state_handler.go:107
-msgid "Activate VPN connection failed."
-msgstr "Aktivácia VPN spojenia zlyhala. "
+#: ../../network/state_handler.go:103
+msgid "The VPN service failed to start"
+msgstr "Službu VPN sa nepodarilo spustiť"
 
-#: ../../network/state_handler.go:96 ../../network/state_handler.go:97
-#: ../../network/state_handler.go:98 ../../network/state_handler.go:108
-msgid "The VPN connection changed state due to disconnection from users."
-msgstr "VPN spojenie zmenilo stav kvôli odpojeniu sa od užívateľov. "
+#: ../../network/state_handler.go:104
+msgid "Necessary password for the VPN connection was not provided"
+msgstr "Nevyžadovalo sa potrebné heslo pre pripojenie VPN"
 
-#: ../../network/state_handler.go:97 ../../network/state_handler.go:98
-#: ../../network/state_handler.go:99 ../../network/state_handler.go:109
-msgid "The VPN connection changed state due to disconnection from devices."
-msgstr "VPN spojenie zmenilo stav kvôli odpojeniu sa od zariadení. "
+#: ../../network/state_handler.go:105
+msgid "Authentication to VPN server failed"
+msgstr "Overenie na serveri VPN zlyhalo"
 
-#: ../../network/state_handler.go:98 ../../network/state_handler.go:99
-#: ../../network/state_handler.go:100 ../../network/state_handler.go:110
-msgid "VPN service stopped."
-msgstr "VPN služba zastavená. "
+#: ../../network/state_handler.go:106
+msgid "The connection was deleted from settings"
+msgstr "Pripojenie bolo odstránené z nastavení"
 
-#: ../../network/state_handler.go:99 ../../network/state_handler.go:100
-#: ../../network/state_handler.go:101 ../../network/state_handler.go:111
-msgid "The IP config of VPN connection was invalid."
-msgstr "IP konfigurácia VPN spojenia bola neplatná. "
-
-#: ../../network/state_handler.go:100 ../../network/state_handler.go:101
-#: ../../network/state_handler.go:102 ../../network/state_handler.go:112
-msgid "The connection attempt to VPN service timed out."
-msgstr "Pokus o spojenie k VPN službe vypršal. "
-
-#: ../../network/state_handler.go:101 ../../network/state_handler.go:102
-#: ../../network/state_handler.go:103 ../../network/state_handler.go:113
-msgid "The VPN service start timed out."
-msgstr "Vypršal čas na štart VPN služby. "
-
-#: ../../network/state_handler.go:102 ../../network/state_handler.go:103
-#: ../../network/state_handler.go:104 ../../network/state_handler.go:114
-msgid "The VPN service failed to start."
-msgstr "VPN služba zlyhala pri štarte. "
-
-#: ../../network/state_handler.go:103 ../../network/state_handler.go:104
-#: ../../network/state_handler.go:105 ../../network/state_handler.go:115
-msgid "Necessary password for the VPN connection was not provided."
-msgstr "Potrebné heslo pre VPN spojenie nebolo poskytnuté. "
-
-#: ../../network/state_handler.go:104 ../../network/state_handler.go:105
-#: ../../network/state_handler.go:106 ../../network/state_handler.go:116
-msgid "Authentication to VPN server failed."
-msgstr "Autentizácia k VPN serveru zlyhala. "
-
-#: ../../network/state_handler.go:105 ../../network/state_handler.go:106
-#: ../../network/state_handler.go:107 ../../network/state_handler.go:117
-msgid "The connection was deleted from settings."
-msgstr "Spojenie bolo odstránené z nastavení. "
-
-#: ../../network/utils_dbus_nm.go:292 ../../network/utils_dbus_nm.go:299
-#: ../../network/utils_dbus_nm.go:316 ../../network/utils_nm.go:169
-#: ../../network/utils_nm.go:310 ../../network/utils_nm.go:312
-#: ../../network/utils_nm.go:322
+#: ../../network/utils_dbus_nm.go:316
 msgid "Unknown"
 msgstr "Neznámy"
 
-#: ../../network/utils_notify.go:81 ../../network/utils_notify.go:82
-#: ../../network/utils_notify.go:93
+#: ../../network/utils_notify.go:82
 msgid "You are now offline."
 msgstr "Teraz ste offline. "
 
-#: ../../network/utils_notify.go:86 ../../network/utils_notify.go:98
+#: ../../network/utils_notify.go:86
 msgid "Airplane mode enabled."
 msgstr "Režim lietadla povolený."
 
-#: ../../network/utils_notify.go:94 ../../network/utils_notify.go:106
+#: ../../network/utils_notify.go:94
 msgid "Access Point mode is not supported by this device."
 msgstr "Prístupový bod nie je podporovaný týmto zariadením. "
 
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
-#: ../../network/utils_notify.go:105 ../../network/utils_notify.go:110
-#: ../../network/utils_notify.go:114 ../../network/utils_notify.go:117
+#: ../../network/utils_notify.go:105
 msgid "Network"
 msgstr "Sieť"
 
-#: ../../network/utils_notify.go:98 ../../network/utils_notify.go:110
+#: ../../network/utils_notify.go:98
 msgid ""
 "The hardware switch of WLAN Card is off, please switch on as necessary."
 msgstr "Hardvérový vypínač WLAN karty je vypnutý, prosím zapnite ho. "
 
-#: ../../network/utils_notify.go:102 ../../network/utils_notify.go:114
+#: ../../network/utils_notify.go:102
 msgid "System proxy is set successfully."
 msgstr "System proxy úspešne nastavené. "
 
-#: ../../network/utils_notify.go:105 ../../network/utils_notify.go:117
+#: ../../network/utils_notify.go:105
 msgid "System proxy has been cancelled."
 msgstr "System proxy bolo zrušené. "
 
-#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
-#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
-#: ../../power/upower.go:99
-msgid "Abnormal battery power"
-msgstr "Neobvyklá energia batérie"
-
-#: ../../power/manager_events.go:128 ../../power/manager_events.go:129
-#: ../../power/upower.go:81 ../../power/upower.go:89 ../../power/upower.go:90
-#: ../../power/upower.go:99
-msgid ""
-"Battery power can not be predicted, please save important documents properly"
-" and  not do important operations."
-msgstr "Nie je možné predpovedať energiu batérie, prosím uložte dôležité dokumenty a nevykonávajte dôležité operácie. "
-
-#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
-#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
-#: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:101 ../../power/upower.go:105
-#: ../../power/upower.go:113 ../../power/upower.go:116
-#: ../../power/upower.go:125 ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:105
 #: ../../session/power/manager_events.go:127
-#: ../../session/power/manager_events.go:142
-#: ../../session/power/manager_events.go:143
-#: ../../session/power/manager_events.go:145
-#: ../../session/power/manager_events.go:146
-#: ../../session/power/manager_events.go:164
-#: ../../session/power/manager_events.go:165
-#: ../../session/power/manager_events.go:167
 msgid "Battery Critical Low"
 msgstr "Kritická úroveň batérie"
 
-#: ../../power/manager_events.go:132 ../../power/manager_events.go:133
-#: ../../power/manager_events.go:154 ../../power/manager_events.go:155
-#: ../../power/upower.go:86 ../../power/upower.go:94 ../../power/upower.go:96
-#: ../../power/upower.go:105 ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:124
+#: ../../session/power/manager_events.go:105
 #: ../../session/power/manager_events.go:127
-#: ../../session/power/manager_events.go:142
-#: ../../session/power/manager_events.go:143
-#: ../../session/power/manager_events.go:145
-#: ../../session/power/manager_events.go:146
-#: ../../session/power/manager_events.go:164
-#: ../../session/power/manager_events.go:165
-#: ../../session/power/manager_events.go:167
-msgid "Computer has been in suspend mode, please plug in."
-msgstr "Počítač je v úspornom režime, prosím pripojte kábel napájania. "
+msgid "Computer has been in suspend mode, please plug in"
+msgstr "Počítač bol v režime pozastavenia, prosím pripojte sa"
 
-#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
-#: ../../power/upower.go:114 ../../power/upower.go:126
-#: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:133
-#: ../../session/power/manager_events.go:152
-#: ../../session/power/manager_events.go:170
-#: ../../session/power/manager_events.go:171
-#: ../../session/power/manager_events.go:173
 msgid "Battery Low"
 msgstr "Nízka úroveň batérie"
 
-#: ../../power/manager_events.go:160 ../../power/manager_events.go:161
-#: ../../power/upower.go:114 ../../power/upower.go:126
-#: ../../power/upower.go:130 ../../power/upower.go:139
 #: ../../session/power/manager_events.go:133
-#: ../../session/power/manager_events.go:152
-#: ../../session/power/manager_events.go:170
-#: ../../session/power/manager_events.go:171
-#: ../../session/power/manager_events.go:173
-msgid "Computer will be in suspend mode, please plug in now."
-msgstr "Počítač prejde do úsporného režimu, prosím ihneď pripojte kábel napájania. "
-
-#: ../../power/upower.go:101 ../../power/upower.go:113
-#: ../../power/upower.go:116 ../../power/upower.go:125
-msgid "Please plug in, or computer will be in suspend mode."
-msgstr "Prosím pripojte kábel napájania, lebo počítač prejde do úsporného režimu. "
-
-#: ../../timedate/deepin_list.go:349
-msgid "Kolkata"
-msgstr "Kalkata"
-
-#: ../../timedate/deepin_list.go:353
-msgid "Colombo"
-msgstr "Kolombo"
-
-#: ../../timedate/deepin_list.go:357
-msgid "Pyongyang"
-msgstr "Pchjongjang"
+msgid "Computer will be in suspend mode, please plug in now"
+msgstr "Počítač sa ocitne v pozastavenom režime, prihláste sa teraz prosím"
