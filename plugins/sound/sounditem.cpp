@@ -185,7 +185,7 @@ void SoundItem::refershTips(const bool force)
         if (m_sinkInter->volume() * 1000 < m_applet->volumeValue())
             value = QString::number(m_applet->volumeValue() / 10) + '%';
         else
-            value = QString::number(m_sinkInter->volume() * 100) + '%';
+            value = QString::number(int(m_sinkInter->volume() * 100)) + '%';
     }
     m_tipsLabel->setText(QString(tr("Current Volume %1").arg(value)));
 }
