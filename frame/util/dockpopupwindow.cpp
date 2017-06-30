@@ -70,14 +70,9 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
 void DockPopupWindow::show(const int x, const int y)
 {
-    resizeWithContent();
-
     m_lastPoint = QPoint(x, y);
-    move(x, y);
-    if (!isVisible())
-        QWidget::show();
 
-    update();
+    DArrowRectangle::show(x, y);
 }
 
 void DockPopupWindow::hide()
