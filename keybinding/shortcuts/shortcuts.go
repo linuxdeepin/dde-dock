@@ -109,7 +109,7 @@ func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
 		logger.Warningf("getAccel failed shortcut: %v, pa: %v, err: %v", shortcut.GetId(), pa, err)
 		return
 	}
-	logger.Debugf("grabAccel shortcut: %s, pa: %s, key: %s, dummy: %v", shortcut.GetId(), pa, key, dummy)
+	//logger.Debugf("grabAccel shortcut: %s, pa: %s, key: %s, dummy: %v", shortcut.GetId(), pa, key, dummy)
 
 	// RLock ss.grabedKeyAccelMap
 	if confAccel, ok := ss.grabedKeyAccelMap[key]; ok {
@@ -149,7 +149,7 @@ func (ss *Shortcuts) ungrabAccel(pa ParsedAccel, dummy bool) {
 }
 
 func (ss *Shortcuts) grabShortcut(shortcut Shortcut) {
-	logger.Debug("grabShortcut shortcut id:", shortcut.GetId())
+	//logger.Debug("grabShortcut shortcut id:", shortcut.GetId())
 	for _, pa := range shortcut.GetAccels() {
 		dummy := dummyGrab(shortcut, pa)
 		ss.grabAccel(shortcut, pa, dummy)
@@ -233,6 +233,7 @@ func (ss *Shortcuts) GrabAll() {
 }
 
 func (ss *Shortcuts) regrabAll() {
+	logger.Debug("regrabAll")
 	ss.UngrabAll()
 	ss.GrabAll()
 }

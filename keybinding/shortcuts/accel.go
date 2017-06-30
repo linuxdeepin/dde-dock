@@ -97,7 +97,7 @@ func GetKeyFirstCode(xu *xgbutil.XUtil, str string) (xproto.Keycode, error) {
 	if code == 0 {
 		return 0, errors.New("not found keycode")
 	}
-	logger.Debugf("GetKeyFirstCode str %q codes: %v code: %d", str, codes, code)
+	//logger.Debugf("GetKeyFirstCode str %q codes: %v code: %d", str, codes, code)
 	return code, nil
 }
 
