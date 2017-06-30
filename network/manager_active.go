@@ -168,6 +168,8 @@ func (m *Manager) doUpdateActiveConnection(apath dbus.ObjectPath, props map[stri
 			if cpath, err := nmGetConnectionByUuid(aconn.Uuid); err == nil {
 				aconn.Id = nmGetConnectionId(cpath)
 			}
+		} else if k == "Id" {
+			aconn.Id = vv.Value().(string)
 		} else if k == "Vpn" {
 			aconn.Vpn, _ = vv.Value().(bool)
 		} else if k == "Connection" { // ignore
