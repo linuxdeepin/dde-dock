@@ -51,6 +51,7 @@ Install prerequisites
 
 ```shell
 $ go get github.com/axgle/mahonia
+$ go get github.com/msteinert/pam
 ```
 
 Build:

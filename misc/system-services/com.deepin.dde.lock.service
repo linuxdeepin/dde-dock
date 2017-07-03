@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=com.deepin.dde.lock
+Exec=/usr/lib/deepin-daemon/dde-lockservice
+User=root

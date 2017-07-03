@@ -16,6 +16,7 @@ ifndef USE_GCCGO
 	GOBUILD = go build ${GOLDFLAGS}
 else
 	GOLDFLAGS += $(shell pkg-config --libs gio-2.0  x11 xi xtst xcursor xfixes xkbfile libpulse libudev gdk-pixbuf-xlib-2.0 gtk+-3.0 fontconfig librsvg-2.0 libcanberra gudev-1.0 libinput xcb xcb-record)
+	GOLDFLAGS += -lcrypt -lpam
 	GOBUILD = go build -compiler gccgo -gccgoflags "${GOLDFLAGS}"
 endif
 
@@ -28,7 +29,8 @@ BINARIES =  \
 	    theme-thumb-tool \
 	    backlight_helper \
 	    langselector \
-	    soundeffect
+	    soundeffect \
+	    dde-lockservice
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
