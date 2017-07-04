@@ -33,6 +33,7 @@ AppSnapshot::AppSnapshot(const WId wid, QWidget *parent)
     centralLayout->setMargin(0);
 
     setLayout(centralLayout);
+    setAcceptDrops(true);
 
     connect(m_closeBtn, &DImageButton::clicked, this, &AppSnapshot::closeWindow, Qt::QueuedConnection);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &AppSnapshot::compositeChanged, Qt::QueuedConnection);
@@ -70,6 +71,14 @@ void AppSnapshot::compositeChanged() const
 void AppSnapshot::setWindowTitle(const QString &title)
 {
     m_title->setText(title);
+}
+
+void AppSnapshot::dragEnterEvent(QDragEnterEvent *e)
+{
+    QWidget::dragEnterEvent(e);
+
+    if (m_wmHelper->hasComposite())
+        emit entered(m_wid);
 }
 
 void AppSnapshot::fetchSnapshot()

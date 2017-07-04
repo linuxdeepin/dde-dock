@@ -34,6 +34,7 @@ public slots:
     void setWindowTitle(const QString &title);
 
 private:
+    void dragEnterEvent(QDragEnterEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
     void paintEvent(QPaintEvent *e);

@@ -30,6 +30,7 @@ private:
     void keyPressEvent(QKeyEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
 
     void setFixedSize(const QSize &size);
     void move(int x, int y);

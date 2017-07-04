@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     setAccessibleName("dock-mainwindow");
     setWindowFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
     setAttribute(Qt::WA_TranslucentBackground);
+    setAcceptDrops(true);
 
     m_platformWindowHandle.setEnableBlurWindow(false);
     m_platformWindowHandle.setTranslucentBackground(true);
@@ -109,6 +110,14 @@ void MainWindow::leaveEvent(QEvent *e)
 
     m_expandDelayTimer->stop();
     updatePanelVisible();
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *e)
+{
+    QWidget::dragEnterEvent(e);
+
+    if (m_settings->hideState() != Show)
+        m_expandDelayTimer->start();
 }
 
 void MainWindow::setFixedSize(const QSize &size)
