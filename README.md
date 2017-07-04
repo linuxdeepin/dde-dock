@@ -12,6 +12,7 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * libudev
 * fontconfig
 * libbamf3
+* pam
 
 ### Runtime dependencies
 
@@ -29,6 +30,8 @@ DDE Daemon is a daemon for handling  the deepin session settings
 * xserver-xorg-input-wacom
 * libinput
 * xdotool
+* fontconfig
+* pam
 
 ### Optional Dependencies
 
