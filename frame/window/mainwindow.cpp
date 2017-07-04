@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
       m_positionUpdateTimer(new QTimer(this)),
       m_expandDelayTimer(new QTimer(this)),
-      m_sizeChangeAni(new QPropertyAnimation(this, "size")),
+      m_sizeChangeAni(new QVariantAnimation(this)),
       m_posChangeAni(new QPropertyAnimation(this, "pos")),
       m_panelShowAni(new QPropertyAnimation(m_mainPanel, "pos")),
       m_panelHideAni(new QPropertyAnimation(m_mainPanel, "pos")),
@@ -483,12 +483,11 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     const QRect r(m_settings->windowRect(position));
 
     m_sizeChangeAni->setEndValue(r.size());
+    m_mainPanel->setFixedSize(r.size());
     QWidget::setFixedSize(r.size());
     m_posChangeAni->setEndValue(r.topLeft());
     QWidget::move(r.topLeft());
 //    x11MoveWindow(r.topLeft().x(), r.topLeft().y());
-
-    m_mainPanel->setFixedSize(r.size());
 
     QPoint finishPos(0, 0);
     if (!visible)
