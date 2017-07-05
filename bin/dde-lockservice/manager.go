@@ -38,9 +38,9 @@ type Manager struct {
 }
 
 const (
-	dbusDest = "com.deepin.dde.lock"
-	dbusPath = "/com/deepin/dde/lock"
-	dbusIFC  = "com.deepin.dde.lock"
+	dbusDest = "com.deepin.dde.LockService"
+	dbusPath = "/com/deepin/dde/LockService"
+	dbusIFC  = "com.deepin.dde.LockService"
 )
 
 var _m *Manager
