@@ -39,10 +39,11 @@ void SystemTrayPlugin::init(PluginProxyInterface *proxyInter)
     connect(m_trayInter, &DBusTrayManager::TrayIconsChanged, this, &SystemTrayPlugin::trayListChanged);
     connect(m_trayInter, &DBusTrayManager::Changed, this, &SystemTrayPlugin::trayChanged);
 
-    m_trayInter->RetryManager();
-    trayListChanged();
+    m_trayInter->Manage();
 
     switchToMode(displayMode());
+
+    QTimer::singleShot(1, this, &SystemTrayPlugin::trayListChanged);
 }
 
 void SystemTrayPlugin::displayModeChanged(const Dock::DisplayMode mode)
