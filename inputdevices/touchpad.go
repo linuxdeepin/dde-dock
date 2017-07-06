@@ -24,18 +24,19 @@ import (
 const (
 	tpadSchema = "com.deepin.dde.touchpad"
 
-	tpadKeyEnabled       = "touchpad-enabled"
-	tpadKeyLeftHanded    = "left-handed"
-	tpadKeyWhileTyping   = "disable-while-typing"
-	tpadKeyNaturalScroll = "natural-scroll"
-	tpadKeyEdgeScroll    = "edge-scroll-enabled"
-	tpadKeyHorizScroll   = "horiz-scroll-enabled"
-	tpadKeyVertScroll    = "vert-scroll-enabled"
-	tpadKeyAcceleration  = "motion-acceleration"
-	tpadKeyThreshold     = "motion-threshold"
-	tpadKeyScaling       = "motion-scaling"
-	tpadKeyTapClick      = "tap-to-click"
-	tpadKeyScrollDelta   = "delta-scroll"
+	tpadKeyEnabled        = "touchpad-enabled"
+	tpadKeyLeftHanded     = "left-handed"
+	tpadKeyWhileTyping    = "disable-while-typing"
+	tpadKeyNaturalScroll  = "natural-scroll"
+	tpadKeyEdgeScroll     = "edge-scroll-enabled"
+	tpadKeyHorizScroll    = "horiz-scroll-enabled"
+	tpadKeyVertScroll     = "vert-scroll-enabled"
+	tpadKeyAcceleration   = "motion-acceleration"
+	tpadKeyThreshold      = "motion-threshold"
+	tpadKeyScaling        = "motion-scaling"
+	tpadKeyTapClick       = "tap-to-click"
+	tpadKeyScrollDelta    = "delta-scroll"
+	tpadKeyWhileTypingCmd = "disable-while-typing-cmd"
 )
 
 const (
@@ -328,7 +329,13 @@ func (tpad *Touchpad) startSyndaemon() {
 		return
 	}
 
-	var cmd = exec.Command("/bin/sh", "-c", "syndaemon -i 1 -K -t")
+	syncmd := tpad.setting.GetString(tpadKeyWhileTypingCmd)
+	if syncmd == "" {
+		logger.Warning("Failed to start syndaemon, because no cmd is specified")
+		return
+	}
+	logger.Debug("[startSyndaemon] will exec:", syncmd)
+	var cmd = exec.Command("/bin/sh", "-c", syncmd)
 	err := cmd.Start()
 	if err != nil {
 		os.Remove(syndaemonPidFile)
