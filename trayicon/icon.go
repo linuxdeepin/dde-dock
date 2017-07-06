@@ -12,26 +12,26 @@ import (
 )
 
 type TrayIcon struct {
-	xid    xproto.Window
+	win    xproto.Window
 	notify bool
 	md5    []byte
 	damage damage.Damage
 }
 
-func NewTrayIcon(xid xproto.Window) *TrayIcon {
+func NewTrayIcon(win xproto.Window) *TrayIcon {
 	return &TrayIcon{
-		xid:    xid,
+		win:    win,
 		notify: true,
 	}
 }
 
 func (icon *TrayIcon) getName() string {
-	name, err := ewmh.WmNameGet(TrayXU, icon.xid)
+	name, err := ewmh.WmNameGet(XU, icon.win)
 	if err != nil || name == "" {
-		name, err = icccm.WmNameGet(TrayXU, icon.xid)
+		name, err = icccm.WmNameGet(XU, icon.win)
 
 		if err != nil || name == "" {
-			wmclass, _ := icccm.WmClassGet(TrayXU, icon.xid)
+			wmclass, _ := icccm.WmClassGet(XU, icon.win)
 			if wmclass != nil {
 				name = fmt.Sprintf("[%s|%s]", wmclass.Class, wmclass.Instance)
 			}
@@ -40,63 +40,63 @@ func (icon *TrayIcon) getName() string {
 	return name
 }
 
-func (m *TrayManager) addIcon(xid xproto.Window) {
+func (m *TrayManager) addIcon(win xproto.Window) {
 	m.checkValid()
 
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
-	_, ok := m.icons[xid]
+	_, ok := m.icons[win]
 	if ok {
-		logger.Debugf("addIcon failed: %v existed", xid)
+		logger.Debugf("addIcon failed: %v existed", win)
 		return
 	}
-	xConn := TrayXU.Conn()
+	xConn := XU.Conn()
 	d, err := damage.NewDamageId(xConn)
 	if err != nil {
 		logger.Debug("addIcon failed, new damage id failed:", err)
 		return
 	}
-	icon := NewTrayIcon(xid)
+	icon := NewTrayIcon(win)
 	icon.damage = d
 
-	err = damage.CreateChecked(xConn, d, xproto.Drawable(xid), damage.ReportLevelRawRectangles).Check()
+	err = damage.CreateChecked(xConn, d, xproto.Drawable(win), damage.ReportLevelRawRectangles).Check()
 	if err != nil {
 		logger.Debug("addIcon failed, damage create failed:", err)
 		return
 	}
 
-	composite.RedirectWindow(xConn, xid, composite.RedirectAutomatic)
+	composite.RedirectWindow(xConn, win, composite.RedirectAutomatic)
 
-	iconWin := xwindow.New(TrayXU, xid)
+	iconWin := xwindow.New(XU, win)
 	iconWin.Listen(xproto.EventMaskVisibilityChange | damage.Notify | xproto.EventMaskStructureNotify)
 	iconWin.Change(xproto.CwBackPixel, 0)
 
-	dbus.Emit(m, "Added", uint32(xid))
-	logger.Infof("Add tray icon %v name: %q", xid, icon.getName())
-	m.icons[xid] = icon
+	dbus.Emit(m, "Added", uint32(win))
+	logger.Infof("Add tray icon %v name: %q", win, icon.getName())
+	m.icons[win] = icon
 	m.updateTrayIcons()
 }
 
-func (m *TrayManager) removeIcon(xid xproto.Window) {
+func (m *TrayManager) removeIcon(win xproto.Window) {
 	m.mutex.Lock()
 	defer m.mutex.Unlock()
 
-	_, ok := m.icons[xid]
+	_, ok := m.icons[win]
 	if !ok {
-		logger.Debugf("removeIcon failed: %v not exist", xid)
+		logger.Debugf("removeIcon failed: %v not exist", win)
 		return
 	}
-	delete(m.icons, xid)
-	dbus.Emit(m, "Removed", uint32(xid))
-	logger.Debugf("remove tray icon %v", xid)
+	delete(m.icons, win)
+	dbus.Emit(m, "Removed", uint32(win))
+	logger.Debugf("remove tray icon %v", win)
 	m.updateTrayIcons()
 }
 
 func (m *TrayManager) updateTrayIcons() {
 	var icons []uint32
 	for _, icon := range m.icons {
-		icons = append(icons, uint32(icon.xid))
+		icons = append(icons, uint32(icon.win))
 	}
 	m.TrayIcons = icons
 	dbus.NotifyChange(m, "TrayIcons")

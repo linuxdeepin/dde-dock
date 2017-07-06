@@ -8,30 +8,30 @@ import (
 	"github.com/BurntSushi/xgbutil/xgraphics"
 )
 
-func isValidWindow(xid xproto.Window) bool {
-	r, err := xproto.GetWindowAttributes(TrayXU.Conn(), xid).Reply()
+func isValidWindow(win xproto.Window) bool {
+	r, err := xproto.GetWindowAttributes(XU.Conn(), win).Reply()
 	return r != nil && err == nil
 }
 
 func findRGBAVisualID() xproto.Visualid {
-	for _, dinfo := range TrayXU.Screen().AllowedDepths {
+	for _, dinfo := range XU.Screen().AllowedDepths {
 		if dinfo.Depth == 32 {
 			for _, vinfo := range dinfo.Visuals {
 				return vinfo.VisualId
 			}
 		}
 	}
-	return TrayXU.Screen().RootVisual
+	return XU.Screen().RootVisual
 }
 
-func icon2md5(xid xproto.Window) []byte {
-	pixmap, _ := xproto.NewPixmapId(TrayXU.Conn())
-	defer xproto.FreePixmap(TrayXU.Conn(), pixmap)
-	if err := composite.NameWindowPixmapChecked(TrayXU.Conn(), xid, pixmap).Check(); err != nil {
-		logger.Warning("NameWindowPixmap failed:", err, xid)
+func icon2md5(win xproto.Window) []byte {
+	pixmap, _ := xproto.NewPixmapId(XU.Conn())
+	defer xproto.FreePixmap(XU.Conn(), pixmap)
+	if err := composite.NameWindowPixmapChecked(XU.Conn(), win, pixmap).Check(); err != nil {
+		logger.Warning("NameWindowPixmap failed:", err, win)
 		return nil
 	}
-	im, err := xgraphics.NewDrawable(TrayXU, xproto.Drawable(pixmap))
+	im, err := xgraphics.NewDrawable(XU, xproto.Drawable(pixmap))
 	if err != nil {
 		logger.Warning("Create xgraphics.Image failed:", err, pixmap)
 		return nil

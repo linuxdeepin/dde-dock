@@ -39,7 +39,7 @@ func (d *Daemon) Start() error {
 
 	var err error
 	// init x conn
-	TrayXU, err = xgbutil.NewConn()
+	XU, err = xgbutil.NewConn()
 	if err != nil {
 		d.startFailed(err)
 		return err
@@ -52,9 +52,9 @@ func (d *Daemon) Start() error {
 }
 
 func (d *Daemon) Stop() error {
-	if TrayXU != nil {
-		TrayXU.Conn().Close()
-		TrayXU = nil
+	if XU != nil {
+		XU.Conn().Close()
+		XU = nil
 	}
 
 	if d.manager != nil {

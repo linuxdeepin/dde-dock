@@ -16,20 +16,22 @@ func init() {
 }
 
 var (
-	TrayXU                  *xgbutil.XUtil
+	XU                      *xgbutil.XUtil
 	logger                  = log.NewLogger("daemon/trayicon")
 	_NET_SYSTEM_TRAY_S0     xproto.Atom
 	_NET_SYSTEM_TRAY_OPCODE xproto.Atom
+	ATOM_MANAGER            xproto.Atom
 )
 
 func initX() {
-	composite.Init(TrayXU.Conn())
-	composite.QueryVersion(TrayXU.Conn(), 0, 4)
-	damage.Init(TrayXU.Conn())
-	damage.QueryVersion(TrayXU.Conn(), 1, 1)
-	xfixes.Init(TrayXU.Conn())
-	xfixes.QueryVersion(TrayXU.Conn(), 5, 0)
+	composite.Init(XU.Conn())
+	composite.QueryVersion(XU.Conn(), 0, 4)
+	damage.Init(XU.Conn())
+	damage.QueryVersion(XU.Conn(), 1, 1)
+	xfixes.Init(XU.Conn())
+	xfixes.QueryVersion(XU.Conn(), 5, 0)
 
-	_NET_SYSTEM_TRAY_S0, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_S0")
-	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(TrayXU, "_NET_SYSTEM_TRAY_OPCODE")
+	_NET_SYSTEM_TRAY_S0, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_S0")
+	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_OPCODE")
+	ATOM_MANAGER, _ = xprop.Atm(XU, "MANAGER")
 }
