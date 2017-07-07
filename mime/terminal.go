@@ -18,13 +18,19 @@ import (
 const (
 	terminalSchema = "com.deepin.desktop.default-applications.terminal"
 	gsKeyExec      = "exec"
+	gsKeyExecArg   = "exec-arg"
 
 	cateKeyTerminal  = "TerminalEmulator"
 	execKeyXTerminal = "x-terminal-emulator"
 )
 
+// ignore quake-style terminal emulator
 var termBlackList = []string{
 	"guake.desktop",
+	"tilda.desktop",
+	"org.kde.yakuake.desktop",
+	"qterminal_drop.desktop",
+	"Terminal.desktop",
 }
 
 func resetTerminal() {
@@ -34,13 +40,48 @@ func resetTerminal() {
 	s.Reset(gsKeyExec)
 }
 
+// readonly
+var execArgMap = map[string]string{
+	"gnome-terminal": "-x",
+	"mate-terminal":  "-x",
+	"terminator":     "-x",
+	"xfce4-terminal": "-x",
+
+	//"deepin-terminal": "-e",
+	//"xterm":  "-e",
+	//"pterm":  "-e",
+	//"uxterm": "-e",
+	//"rxvt": "-e",
+	//"urxvt": "-e",
+	//"rxvt-unicode": "-e",
+	//"konsole": "-e",
+	//"roxterm": "-e",
+	//"lxterminal": "-e",
+	//"terminology": "-e",
+	//"sakura": "-e",
+	//"evilvte": "-e",
+	//"qterminal": "-e",
+	//"termit": "-e",
+	//"vala-terminal": "-e",
+}
+
+func getExecArg(exec string) string {
+	execArg := execArgMap[exec]
+	if execArg != "" {
+		return execArg
+	}
+	return "-e"
+}
+
 func setDefaultTerminal(id string) error {
 	s := gio.NewSettings(terminalSchema)
 	defer s.Unref()
 
 	for _, info := range getTerminalInfos() {
 		if info.Id == id {
-			s.SetString(gsKeyExec, strings.Split(info.Exec, " ")[0])
+			exec := strings.Split(info.Exec, " ")[0]
+			s.SetString(gsKeyExec, exec)
+			s.SetString(gsKeyExecArg, getExecArg(exec))
 			return nil
 		}
 	}
@@ -89,6 +130,10 @@ func getTerminalInfos() AppInfos {
 }
 
 func isTerminalApp(id string) bool {
+	if isStrInList(id, termBlackList) {
+		return false
+	}
+
 	ginfo := gio.NewDesktopAppInfo(id)
 	defer ginfo.Unref()
 	cates := ginfo.GetCategories()
@@ -101,7 +146,7 @@ func isTerminalApp(id string) bool {
 		return false
 	}
 
-	return (isStrInList(id, termBlackList) == false)
+	return true
 }
 
 func isStrInList(s string, list []string) bool {
