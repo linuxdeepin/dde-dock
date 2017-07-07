@@ -177,6 +177,8 @@ void MainWindow::compositeChanged()
     m_posChangeAni->setDuration(duration);
     m_panelShowAni->setDuration(duration);
     m_panelHideAni->setDuration(duration);
+
+    m_positionUpdateTimer->start();
 }
 
 void MainWindow::initConnections()
