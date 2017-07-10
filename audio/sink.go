@@ -129,6 +129,10 @@ func (s *Sink) GetDBusInfo() dbus.DBusInfo {
 	}
 }
 
+// if prev active port is 'headset-output',
+// after unpluged, will lost the port info
+var _prevSinkActivePort Port
+
 func (s *Sink) update() {
 	s.Name = s.core.Name
 	s.Description = s.core.Description
@@ -164,21 +168,27 @@ func (s *Sink) update() {
 			oldPortUnavailable = (int(oldPort.Available) == pulse.AvailableTypeNo)
 		}
 		logger.Debugf("oldPortUnavailable: %v", oldPortUnavailable)
-		if isHeadphoneUnplugedEvent(oldActivePort, s.ActivePort, oldPortUnavailable) {
-			pauseAllPlayers()
-		}
+		handleUnplugedEvent(_prevSinkActivePort, s.ActivePort, oldPortUnavailable)
+		_prevSinkActivePort = s.ActivePort
 	}
 }
 
-func isHeadphoneUnplugedEvent(oldActivePort, newActivePort Port, oldPortUnavailable bool) bool {
-	return isHeadphonePort(oldActivePort.Name) && // old active port is headphone
-		int(oldActivePort.Available) != pulse.AvailableTypeNo && // old active port is not unavailable
-		!isHeadphonePort(newActivePort.Name) && // new port is not headphone
-		oldPortUnavailable
+func handleUnplugedEvent(oldActivePort, newActivePort Port, oldPortUnavailable bool) {
+	logger.Debug("[handleUnplugedEvent] Old port:", oldActivePort.String(), oldPortUnavailable)
+	logger.Debug("[handleUnplugedEvent] New port:", newActivePort.String())
+	// old active port is headphone or bluetooth
+	if isHeadphoneOrHeadsetPort(oldActivePort.Name) &&
+		// old active port is not unavailable
+		int(oldActivePort.Available) != pulse.AvailableTypeNo &&
+		// new port is not headphone and bluetooth
+		!isHeadphoneOrHeadsetPort(newActivePort.Name) && oldPortUnavailable {
+		pauseAllPlayers()
+	}
 }
 
-func isHeadphonePort(portName string) bool {
-	return strings.Contains(strings.ToLower(portName), "headphone")
+func isHeadphoneOrHeadsetPort(portName string) bool {
+	name := strings.ToLower(portName)
+	return strings.Contains(name, "headphone") || strings.Contains(name, "headset-output")
 }
 
 // return whether changed
