@@ -175,11 +175,11 @@ func (m *DockManager) detachWindow(winInfo *WindowInfo) {
 	if !detached {
 		return
 	}
+	entry.updateWindowTitles()
 	if !entry.hasWindow() && !entry.IsDocked {
 		m.removeAppEntry(entry)
 		return
 	}
-	entry.updateWindowTitles()
 	entry.updateIcon()
 	entry.updateMenu()
 	entry.updateIsActive()
