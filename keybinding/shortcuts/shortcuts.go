@@ -106,7 +106,7 @@ func (ss *Shortcuts) List() (list []Shortcut) {
 func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
 	key, err := pa.QueryKey(ss.xu)
 	if err != nil {
-		logger.Warningf("getAccel failed shortcut: %v, pa: %v, err: %v", shortcut.GetId(), pa, err)
+		logger.Debugf("getAccel failed shortcut: %v, pa: %v, err: %v", shortcut.GetId(), pa, err)
 		return
 	}
 	//logger.Debugf("grabAccel shortcut: %s, pa: %s, key: %s, dummy: %v", shortcut.GetId(), pa, key, dummy)
