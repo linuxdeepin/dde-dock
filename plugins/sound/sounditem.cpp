@@ -153,9 +153,9 @@ void SoundItem::refershIcon()
         QString volumeString;
         if (mute)
             volumeString = "muted";
-        else if (volmue >= double(2)/3)
+        else if (volmue / 1000.0f >= double(2)/3)
             volumeString = "high";
-        else if (volmue >= double(1)/3)
+        else if (volmue / 1000.0f >= double(1)/3)
             volumeString = "medium";
         else
             volumeString = "low";
