@@ -61,7 +61,7 @@ func NewShortcuts(xu *xgbutil.XUtil, eventCb KeyEventFunc) *Shortcuts {
 
 	ss.xRecordEventHandler = NewXRecordEventHandler(xu)
 	ss.xRecordEventHandler.modKeyReleasedCb = func(code uint8, mods uint16) {
-		if !tryGrabKeyboard(ss.xu) {
+		if isKbdAlreadyGrabbed(ss.xu) {
 			return
 		}
 		switch mods {
@@ -321,21 +321,39 @@ func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
 	}
 }
 
-// Returns whether the operation was successful
-func tryGrabKeyboard(xu *xgbutil.XUtil) bool {
-	var win xproto.Window
+func isKbdAlreadyGrabbed(xu *xgbutil.XUtil) bool {
+	var grabWin xproto.Window
+
 	if activeWin, _ := ewmh.ActiveWindowGet(xu); activeWin == 0 {
-		win = xu.RootWin()
+		grabWin = xu.RootWin()
 	} else {
-		win = activeWin
+		// check viewable
+		attrs, err := xproto.GetWindowAttributes(xu.Conn(), activeWin).Reply()
+		if err != nil {
+			grabWin = xu.RootWin()
+		} else if attrs.MapState != xproto.MapStateViewable {
+			// err is nil and activeWin is not viewable
+			grabWin = xu.RootWin()
+		} else {
+			// err is nil, activeWin is viewable
+			grabWin = activeWin
+		}
 	}
 
-	if err := keybind.GrabKeyboard(xu, win); err != nil {
-		logger.Debugf("GrabKeyboard win %d failed: %v", win, err)
+	err := keybind.GrabKeyboard(xu, grabWin)
+	if err == nil {
+		// grab keyboard successful
+		keybind.UngrabKeyboard(xu)
 		return false
 	}
-	keybind.UngrabKeyboard(xu)
-	return true
+
+	logger.Warningf("GrabKeyboard win %d failed: %v", grabWin, err)
+
+	gkErr, ok := err.(keybind.GrabKeyboardError)
+	if ok && gkErr.Status == xproto.GrabStatusAlreadyGrabbed {
+		return true
+	}
+	return false
 }
 
 func (ss *Shortcuts) SetAllModKeysReleasedCallback(cb func()) {

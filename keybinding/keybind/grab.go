@@ -1,7 +1,7 @@
 package keybind
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/xevent"
@@ -45,27 +45,35 @@ func GrabKeyboard(xu *xgbutil.XUtil, win xproto.Window) error {
 	reply, err := xproto.GrabKeyboard(xu.Conn(), false, win, 0,
 		xproto.GrabModeAsync, xproto.GrabModeAsync).Reply()
 	if err != nil {
-		return fmt.Errorf("GrabKeyboard: Error grabbing keyboard on "+
-			"window '%x': %s", win, err)
+		return err
 	}
 
-	switch reply.Status {
-	case xproto.GrabStatusSuccess:
-		// all is well
-	case xproto.GrabStatusAlreadyGrabbed:
-		return fmt.Errorf("GrabKeyboard: Could not grab keyboard. " +
-			"Status: AlreadyGrabbed.")
-	case xproto.GrabStatusInvalidTime:
-		return fmt.Errorf("GrabKeyboard: Could not grab keyboard. " +
-			"Status: InvalidTime.")
-	case xproto.GrabStatusNotViewable:
-		return fmt.Errorf("GrabKeyboard: Could not grab keyboard. " +
-			"Status: NotViewable.")
-	case xproto.GrabStatusFrozen:
-		return fmt.Errorf("GrabKeyboard: Could not grab keyboard. " +
-			"Status: Frozen.")
+	if reply.Status == xproto.GrabStatusSuccess {
+		// successful
+		return nil
 	}
-	return nil
+	return GrabKeyboardError{reply.Status}
+}
+
+type GrabKeyboardError struct {
+	Status byte
+}
+
+func (err GrabKeyboardError) Error() string {
+	const errMsgPrefix = "GrabKeyboard Failed status: "
+
+	switch err.Status {
+	case xproto.GrabStatusAlreadyGrabbed:
+		return errMsgPrefix + "AlreadyGrabbed"
+	case xproto.GrabStatusInvalidTime:
+		return errMsgPrefix + "InvalidTime"
+	case xproto.GrabStatusNotViewable:
+		return errMsgPrefix + "NotViewable"
+	case xproto.GrabStatusFrozen:
+		return errMsgPrefix + "Frozen"
+	default:
+		return errMsgPrefix + "Unknown"
+	}
 }
 
 // UngrabKeyboard undoes GrabKeyboard.
