@@ -130,38 +130,97 @@ func (*testWrapper) TestAdminUser(c *C.C) {
 }
 
 func (*testWrapper) TestGetAutoLoginUser(c *C.C) {
-	name, err := getLightdmAutoLoginUser("testdata/autologin/lightdm_autologin.conf")
+	// lightdm
+	name, err := getIniKeys("testdata/autologin/lightdm_autologin.conf",
+		kfGroupLightdmSeat,
+		[]string{kfKeyLightdmAutoLoginUser}, []string{""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "wen")
-	name, err = getLightdmAutoLoginUser("testdata/autologin/lightdm.conf")
+	name, err = getIniKeys("testdata/autologin/lightdm.conf",
+		kfGroupLightdmSeat,
+		[]string{kfKeyLightdmAutoLoginUser}, []string{""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "")
-	_, err = getLightdmAutoLoginUser("testdata/autologin/xxxxx.conf")
+	_, err = getIniKeys("testdata/autologin/xxxxx.conf", "", nil, nil)
 	c.Check(err, C.Not(C.Equals), nil)
 
-	name, err = getGDMAutoLoginUser("testdata/autologin/custom_autologin.conf")
+	// gdm
+	name, err = getIniKeys("testdata/autologin/custom_autologin.conf",
+		kfGroupGDM3Daemon, []string{kfKeyGDM3AutomaticEnable,
+			kfKeyGDM3AutomaticLogin}, []string{"True", ""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "wen")
-	name, err = getGDMAutoLoginUser("testdata/autologin/custom.conf")
+	name, err = getIniKeys("testdata/autologin/custom.conf",
+		kfGroupGDM3Daemon, []string{kfKeyGDM3AutomaticEnable,
+			kfKeyGDM3AutomaticLogin}, []string{"True", ""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "")
-	_, err = getGDMAutoLoginUser("testdata/autologin/xxxx.conf")
-	c.Check(err, C.Not(C.Equals), nil)
 
-	name, err = getKDMAutoLoginUser("testdata/autologin/kdmrc_autologin")
+	// kdm
+	name, err = getIniKeys("testdata/autologin/kdmrc_autologin",
+		kfGroupKDMXCore, []string{kfKeyKDMAutoLoginEnable,
+			kfKeyKDMAutoLoginUser}, []string{"true", ""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "wen")
-	name, err = getKDMAutoLoginUser("testdata/autologin/kdmrc")
+	name, err = getIniKeys("testdata/autologin/kdmrc",
+		kfGroupKDMXCore, []string{kfKeyKDMAutoLoginEnable,
+			kfKeyKDMAutoLoginUser}, []string{"true", ""})
 	c.Check(err, C.Equals, nil)
 	c.Check(name, C.Equals, "")
-	_, err = getKDMAutoLoginUser("testdata/autologin/xxxxx")
-	c.Check(err, C.Not(C.Equals), nil)
+
+	// sddm
+	name, err = getIniKeys("testdata/autologin/sddm_autologin.conf",
+		kfGroupSDDMAutologin,
+		[]string{kfKeySDDMUser}, []string{""})
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "wen")
+	name, err = getIniKeys("testdata/autologin/sddm.conf",
+		kfGroupSDDMAutologin,
+		[]string{kfKeySDDMUser}, []string{""})
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "")
+
+	// lxdm
+	name, err = getIniKeys("testdata/autologin/lxdm_autologin.conf",
+		kfGroupLXDMBase,
+		[]string{kfKeyLXDMAutologin}, []string{""})
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "wen")
+	name, err = getIniKeys("testdata/autologin/lxdm.conf",
+		kfGroupLXDMBase,
+		[]string{kfKeyLXDMAutologin}, []string{""})
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "")
+
+	// slim
+	name, err = parseSlimConfig("testdata/autologin/slim_autologin.conf",
+		"", false)
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "wen")
+	name, err = parseSlimConfig("testdata/autologin/slim.conf", "", false)
+	c.Check(err, C.Equals, nil)
+	c.Check(name, C.Equals, "")
+	// cp 'testdata/autologin/slim.conf' to '/tmp/slim_tmp.conf'
+	// _, err = parseSlimConfig("/tmp/slim_tmp.conf", "wen", true)
+	// c.Check(err, C.Equals, nil)
+	// name, err = parseSlimConfig("/tmp/slim_tmp.conf", "", false)
+	// c.Check(err, C.Equals, nil)
+	// c.Check(name, C.Equals, "wen")
 
 	m, err := getDefaultDM("testdata/autologin/default-display-manager")
 	c.Check(err, C.Equals, nil)
 	c.Check(m, C.Equals, "lightdm")
 	_, err = getDefaultDM("testdata/autologin/xxxxx")
 	c.Check(err, C.Not(C.Equals), nil)
+}
+
+func (*testWrapper) TestXSession(c *C.C) {
+	session, _ := getIniKeys("testdata/autologin/lightdm.conf", kfGroupLightdmSeat,
+		[]string{"user-session"}, []string{""})
+	c.Check(session, C.Equals, "deepin")
+	session, _ = getIniKeys("testdata/autologin/sddm.conf", kfGroupSDDMAutologin,
+		[]string{kfKeySDDMSession}, []string{""})
+	c.Check(session, C.Equals, "kde-plasma.desktop")
 }
 
 func (*testWrapper) TestWriteStrvData(c *C.C) {

@@ -19,6 +19,7 @@ import (
 	"pkg.deepin.io/dde/daemon/accounts/users"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/graphic"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"regexp"
 	"runtime/debug"
@@ -44,6 +45,8 @@ const (
 
 const (
 	confGroupUser            string = "User"
+	confKeyXSession                 = "XSession"
+	confKeySystemAccount            = "SystemAccount"
 	confKeyIcon                     = "Icon"
 	confKeyCustomIcon               = "CustomIcon"
 	confKeyLocale                   = "Locale"
@@ -67,11 +70,13 @@ type User struct {
 	customIcon        string
 	BackgroundFile    string
 	GreeterBackground string
+	XSession          string
 
 	// 用户是否被禁用
 	Locked bool
 	// 是否允许此用户自动登录
 	AutomaticLogin bool
+	SystemAccount  bool
 
 	AccountType int32
 	LoginTime   uint64
@@ -112,6 +117,9 @@ func NewUser(userPath string) (*User, error) {
 	kFile, err := dutils.NewKeyFileFromFile(
 		path.Join(userConfigDir, info.Name))
 	if err != nil {
+		xsession, _ := users.GetDefaultXSession()
+		u.setPropString(&u.XSession, "XSession", xsession)
+		u.setPropBool(&u.SystemAccount, "SystemAccount", false)
 		u.setPropString(&u.Layout, "Layout", u.getDefaultLayout())
 		u.setPropString(&u.Locale, "Locale", getLocaleFromFile(defaultLocaleFile))
 		u.setPropString(&u.IconFile, "IconFile", defaultUserIcon)
@@ -123,6 +131,19 @@ func NewUser(userPath string) (*User, error) {
 	defer kFile.Free()
 
 	var isSave bool = false
+	xsession, _ := kFile.GetString(confGroupUser, confKeyXSession)
+	u.setPropString(&u.XSession, "XSession", xsession)
+	if u.XSession == "" {
+		xsession, _ = users.GetDefaultXSession()
+		u.setPropString(&u.XSession, "XSession", xsession)
+		isSave = true
+	}
+	_, err = kFile.GetBoolean(confGroupUser, confKeySystemAccount)
+	// only show non system account
+	u.setPropBool(&u.SystemAccount, "SystemAccount", false)
+	if err != nil {
+		isSave = true
+	}
 	locale, _ := kFile.GetString(confGroupUser, confKeyLocale)
 	u.setPropString(&u.Locale, "Locale", locale)
 	if len(locale) == 0 {
@@ -245,6 +266,8 @@ func (u *User) writeUserConfig() error {
 	}
 	defer kFile.Free()
 
+	kFile.SetString(confGroupUser, confKeyXSession, u.XSession)
+	kFile.SetBoolean(confGroupUser, confKeySystemAccount, u.SystemAccount)
 	kFile.SetString(confGroupUser, confKeyLayout, u.Layout)
 	kFile.SetString(confGroupUser, confKeyLocale, u.Locale)
 	kFile.SetString(confGroupUser, confKeyIcon, u.IconFile)
@@ -435,4 +458,42 @@ func getValueFromLine(line, delim string) string {
 	}
 
 	return strings.TrimSpace(array[1])
+}
+
+func getUserSession(homeDir string) string {
+	session, ok := dutils.ReadKeyFromKeyFile(homeDir+"/.dmrc", "Desktop", "Session", "")
+	if !ok {
+		v := ""
+		list := getSessionList()
+		switch len(list) {
+		case 0:
+			v = ""
+		case 1:
+			v = list[0]
+		default:
+			if strv.Strv(list).Contains("deepin.desktop") {
+				v = "deepin.desktop"
+			} else {
+				v = list[0]
+			}
+		}
+		return v
+	}
+	return session.(string)
+}
+
+func getSessionList() []string {
+	finfos, err := ioutil.ReadDir("/usr/share/xsessions")
+	if err != nil {
+		return nil
+	}
+
+	var sessions []string
+	for _, finfo := range finfos {
+		if finfo.IsDir() || !strings.Contains(finfo.Name(), ".desktop") {
+			continue
+		}
+		sessions = append(sessions, finfo.Name())
+	}
+	return sessions
 }

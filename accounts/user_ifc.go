@@ -160,7 +160,7 @@ func (u *User) SetLocked(dbusMsg dbus.DMessage, locked bool) error {
 	}
 
 	if locked && u.AutomaticLogin {
-		users.SetAutoLoginUser("")
+		users.SetAutoLoginUser("", "")
 	}
 	u.setPropBool(&u.Locked, "Locked", locked)
 	return nil
@@ -186,7 +186,11 @@ func (u *User) SetAutomaticLogin(dbusMsg dbus.DMessage, auto bool) error {
 		name = ""
 	}
 
-	if err := users.SetAutoLoginUser(name); err != nil {
+	session := u.XSession
+	if session == "" {
+		session = getUserSession(u.HomeDir)
+	}
+	if err := users.SetAutoLoginUser(name, session); err != nil {
 		logger.Warning("DoAction: set auto login failed:", err)
 		return err
 	}

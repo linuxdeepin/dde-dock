@@ -1,0 +1,42 @@
+* Display Manager
+
+** Lightdm
+
+**Config**: =/etc/lightdm/lightdm.conf=
+**Autologin**: =Seat:*/autologin-user=
+**XSession**: =Seat:*/user-session=
+
+
+** KDM
+
+**Config**: =/usr/share/config/kdm/kdmrc=
+**Autologin**: =X-:0-Core/AutoLoginEnable= && =X-:0-Core/AutoLoginUser=
+**XSession**: =Desktop/Session= in file =~/.dmrc=
+
+
+** GDM3
+
+**Config**: =/etc/gdm3/custom.conf=
+**Autologin**: =daemon/AutomaticLoginEnable= && =daemon/AutomaticLogin=
+**XSession**: =Desktop/Session= in file =~/.dmrc=
+
+
+** SDDM
+
+**Config**: =/etc/sddm.conf=
+**Autologin**: =Autologin/User=
+**XSession**: =Autologin/Session=
+
+
+** Slim
+
+**Config**: =/etc/slim.conf=
+**Autologin**: =auto_login= to =yes=, set user in =default_user= (regular file, need to decode)
+**XSession**: no record, ignore
+
+
+** LXDM
+
+**Config**: =/etc/lxdm/lxdm.conf=
+**Autologin**: =base/autologin=
+**XSession**: =base/session=, the value is the binary file path
