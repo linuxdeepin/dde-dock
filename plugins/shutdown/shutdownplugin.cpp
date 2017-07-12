@@ -105,17 +105,23 @@ const QString ShutdownPlugin::itemContextMenu(const QString &itemKey)
         reboot["isActive"] = true;
         items.push_back(reboot);
 
-        QMap<QString, QVariant> logout;
-        logout["itemId"] = "Logout";
-        logout["itemText"] = tr("Log out");
-        logout["isActive"] = true;
-        items.push_back(logout);
-
         QMap<QString, QVariant> suspend;
         suspend["itemId"] = "Suspend";
         suspend["itemText"] = tr("Suspend");
         suspend["isActive"] = true;
         items.push_back(suspend);
+
+        QMap<QString, QVariant> lock;
+        lock["itemId"] = "Lock";
+        lock["itemText"] = tr("Lock");
+        lock["isActive"] = true;
+        items.push_back(lock);
+
+        QMap<QString, QVariant> logout;
+        logout["itemId"] = "Logout";
+        logout["itemText"] = tr("Log out");
+        logout["isActive"] = true;
+        items.push_back(logout);
 
         if (DBusAccount().userList().count() > 1)
         {
@@ -151,6 +157,11 @@ void ShutdownPlugin::invokedMenuItem(const QString &itemKey, const QString &menu
 
     if (menuId == "power")
         QProcess::startDetached("dde-control-center", QStringList() << "power");
+    else if (menuId == "Lock")
+        QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
+                                                           << "--dest=com.deepin.dde.lockFront"
+                                                           << "/com/deepin/dde/lockFront"
+                                                           << QString("com.deepin.dde.lockFront.Show"));
     else
         QProcess::startDetached("dbus-send", QStringList() << "--print-reply"
                                                            << "--dest=com.deepin.dde.shutdownFront"
