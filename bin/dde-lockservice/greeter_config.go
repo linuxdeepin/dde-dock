@@ -10,7 +10,10 @@
 package main
 
 import (
+	"os"
+	"path"
 	"pkg.deepin.io/lib/keyfile"
+	"pkg.deepin.io/lib/utils"
 )
 
 const (
@@ -20,6 +23,16 @@ const (
 )
 
 func setGreeterUser(file, username string) error {
+	if !utils.IsFileExist(file) {
+		err := os.MkdirAll(path.Dir(file), 0755)
+		if err != nil {
+			return err
+		}
+		err = utils.CreateFile(file)
+		if err != nil {
+			return err
+		}
+	}
 	kf, err := loadKeyFile(file)
 	if err != nil {
 		kf = nil
