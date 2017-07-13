@@ -199,6 +199,7 @@ func (tpad *Touchpad) enableLeftHanded() {
 				v.Id, v.Name, err)
 		}
 	}
+	setWMTPadBoolKey(wmTPadKeyLeftHanded, enabled)
 }
 
 func (tpad *Touchpad) enableNaturalScroll() {
@@ -210,6 +211,7 @@ func (tpad *Touchpad) enableNaturalScroll() {
 				v.Id, v.Name, err)
 		}
 	}
+	setWMTPadBoolKey(wmTPadKeyNaturalScroll, enabled)
 }
 
 func (tpad *Touchpad) setScrollDistance() {
@@ -232,6 +234,7 @@ func (tpad *Touchpad) enableEdgeScroll() {
 				v.Id, v.Name, err)
 		}
 	}
+	setWMTPadBoolKey(wmTPadKeyEdgeScroll, enabled)
 }
 
 func (tpad *Touchpad) enableTwoFingerScroll() {
@@ -255,6 +258,7 @@ func (tpad *Touchpad) enableTapToClick() {
 				v.Id, v.Name, err)
 		}
 	}
+	setWMTPadBoolKey(wmTPadKeyTapClick, enabled)
 }
 
 func (tpad *Touchpad) motionAcceleration() {
