@@ -3,6 +3,7 @@
 #include <QDesktopWidget>
 #include <QScreen>
 #include <QApplication>
+#include <QDragEnterEvent>
 
 #define SPACING           0
 #define MARGIN            0
@@ -10,6 +11,7 @@
 
 _PreviewContainer::_PreviewContainer(QWidget *parent)
     : QWidget(parent),
+      m_needActivate(false),
 
       m_floatingPreview(new FloatingPreview(this)),
       m_mouseLeaveTimer(new QTimer(this)),
@@ -24,6 +26,7 @@ _PreviewContainer::_PreviewContainer(QWidget *parent)
 
     m_floatingPreview->setVisible(false);
 
+    setAcceptDrops(true);
     setLayout(m_windowListLayout);
     setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
@@ -91,6 +94,12 @@ void _PreviewContainer::checkMouseLeave()
 
         emit requestCancelPreview();
         emit requestHidePreview();
+
+        if (m_needActivate)
+        {
+            m_needActivate = false;
+            emit requestActivateWindow(m_floatingPreview->trackedWid());
+        }
     }
 }
 
@@ -144,6 +153,7 @@ void _PreviewContainer::enterEvent(QEvent *e)
 {
     QWidget::enterEvent(e);
 
+    m_needActivate = false;
     m_mouseLeaveTimer->stop();
 }
 
@@ -152,6 +162,22 @@ void _PreviewContainer::leaveEvent(QEvent *e)
     QWidget::leaveEvent(e);
 
     m_mouseLeaveTimer->start();
+}
+
+void _PreviewContainer::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+
+    m_needActivate = false;
+    m_mouseLeaveTimer->stop();
+}
+
+void _PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    e->ignore();
+
+    m_needActivate = true;
+    m_mouseLeaveTimer->start(10);
 }
 
 void _PreviewContainer::previewEntered(const WId wid)

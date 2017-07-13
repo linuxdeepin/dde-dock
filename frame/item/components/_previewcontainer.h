@@ -45,12 +45,15 @@ private:
 
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
 
 private slots:
     void previewEntered(const WId wid);
     void moveFloatingPreview(const QPoint &p);
 
 private:
+    bool m_needActivate;
     QMap<WId, AppSnapshot *> m_snapshots;
 
     FloatingPreview *m_floatingPreview;

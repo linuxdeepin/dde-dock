@@ -27,6 +27,13 @@ FloatingPreview::FloatingPreview(QWidget *parent)
     connect(m_closeBtn, &DImageButton::clicked, this, &FloatingPreview::onCloseBtnClicked);
 }
 
+WId FloatingPreview::trackedWid() const
+{
+    Q_ASSERT(!m_tracked.isNull());
+
+    return m_tracked->wid();
+}
+
 void FloatingPreview::trackWindow(AppSnapshot * const snap)
 {
     if (!m_tracked.isNull())

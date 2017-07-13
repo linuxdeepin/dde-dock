@@ -16,6 +16,8 @@ class FloatingPreview : public QWidget
 public:
     explicit FloatingPreview(QWidget *parent = 0);
 
+    WId trackedWid() const;
+
 signals:
     void requestMove(const QPoint &p) const;
 
