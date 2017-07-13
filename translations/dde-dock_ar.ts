@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
         <source>12 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>توقيت الـ 12 ساعة</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
         <source>24 Hour Time</source>
-        <translation type="unfinished"/>
+        <translation>توقيت الـ 24 ساعة</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
@@ -199,37 +199,42 @@
         <translation>القدرة المتبقية %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charged %1</source>
         <translation>مشحون %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Charging %1</source>
         <translation>قيد الشحن %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
         <source>Restart</source>
         <translation>إعادة التشغيل</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <source>Lock</source>
+        <translation>قفل</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Log out</source>
         <translation>تسجيل الخروج</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
         <source>Suspend</source>
         <translation>إسبات</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Switch account</source>
         <translation>تبديل الحساب</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Power settings</source>
         <translation>إعدادت الطاقة</translation>
     </message>

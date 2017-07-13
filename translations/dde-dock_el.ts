@@ -199,37 +199,42 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charged %1</source>
         <translation>Φορτισμένη %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Charging %1</source>
         <translation>Φορτίζεται %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
         <source>Restart</source>
         <translation>Επανεκκίνηση</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <source>Lock</source>
+        <translation>Κλείδωμα</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Log out</source>
         <translation>Αποσύνδεση</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
         <source>Suspend</source>
         <translation>Αναστολή</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Switch account</source>
         <translation>Αποσύνδεση λογαριασμού</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Power settings</source>
         <translation>Ρυθμίσεις ενέργειας</translation>
     </message>

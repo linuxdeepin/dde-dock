@@ -58,7 +58,7 @@
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="69"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../plugins/disk-mount/diskmountplugin.cpp" line="75"/>
@@ -199,37 +199,42 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charged %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Charging %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
         <source>Restart</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
-        <source>Log out</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
-        <source>Suspend</source>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <source>Lock</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <source>Log out</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
+        <source>Suspend</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Switch account</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Power settings</source>
         <translation type="unfinished"/>
     </message>
@@ -296,7 +301,7 @@
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="45"/>
         <source>Open</source>
-        <translation type="unfinished"/>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../plugins/trash/trashwidget.cpp" line="53"/>
@@ -355,7 +360,7 @@
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="147"/>
         <source>Wireless Network</source>
-        <translation type="unfinished"/>
+        <translation>سىمسىز تور</translation>
     </message>
     <message>
         <location filename="../plugins/network/item/applet/wirelessapplet.cpp" line="149"/>

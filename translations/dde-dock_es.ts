@@ -4,12 +4,12 @@
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="81"/>
         <source>12 Hour Time</source>
-        <translation>Tiempo en 12 horas</translation>
+        <translation>Horario de 12 horas</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="83"/>
         <source>24 Hour Time</source>
-        <translation>Tiempo en 24 horas</translation>
+        <translation>Horario de 24 horas</translation>
     </message>
     <message>
         <location filename="../plugins/datetime/datetimeplugin.cpp" line="89"/>
@@ -199,37 +199,42 @@
         <translation>Capacidad restante %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charged %1</source>
         <translation>Cargado %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Charging %1</source>
         <translation>Cargando %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
         <source>Restart</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <source>Lock</source>
+        <translation>Bloquear</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Log out</source>
         <translation>Cerrar sesión</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
         <source>Suspend</source>
         <translation>Suspender</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Switch account</source>
         <translation>Cambiar cuenta</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Power settings</source>
         <translation>Ajustes energía</translation>
     </message>

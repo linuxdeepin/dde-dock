@@ -199,37 +199,42 @@
         <translation>Bateria restante %1 </translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="60"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
         <source>Charged %1</source>
         <translation>Carregado %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="62"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="64"/>
         <source>Charging %1</source>
         <translation>Carregando %1</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="102"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="104"/>
         <source>Restart</source>
         <translation>Reiniciar</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="108"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="116"/>
+        <source>Lock</source>
+        <translation>Bloquear</translation>
+    </message>
+    <message>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
         <source>Log out</source>
         <translation>Sair</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="114"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="110"/>
         <source>Suspend</source>
         <translation>Suspender</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="122"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="130"/>
         <source>Switch account</source>
         <translation>Trocar de conta</translation>
     </message>
     <message>
-        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="132"/>
+        <location filename="../plugins/shutdown/shutdownplugin.cpp" line="140"/>
         <source>Power settings</source>
         <translation>Configurações de energia</translation>
     </message>
