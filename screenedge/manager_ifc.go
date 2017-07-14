@@ -11,12 +11,18 @@ package screenedge
 
 import (
 	"dbus/com/deepin/wm"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 )
 
 // Enable desktop edge zone detected
 //
 // 是否启用桌面边缘热区功能
 func (m *Manager) EnableZoneDetected(enable bool) {
+	if !ddbus.IsSessionBusActivated("com.deepin.wm") {
+		logger.Warning("Deepin window manager not running")
+		return
+	}
+
 	obj, err := wm.NewWm("com.deepin.wm", "/com/deepin/wm")
 	if err != nil {
 		logger.Warning("[EnableZoneDetected] Failed to connect wm dbus:", err)

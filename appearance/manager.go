@@ -309,7 +309,7 @@ func (m *Manager) doSetBackground(value string) (string, error) {
 		return "", err
 	}
 
-	if m.wm != nil {
+	if m.wm != nil && ddbus.IsSessionBusActivated(m.wm.DestName) {
 		m.wm.ChangeCurrentWorkspaceBackground(uri)
 	}
 

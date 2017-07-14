@@ -18,6 +18,7 @@ import (
 	"gir/gio-2.0"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil/ewmh"
+	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
@@ -137,10 +138,18 @@ func (m *DockManager) CloseWindow(win uint32) error {
 }
 
 func (m *DockManager) PreviewWindow(win uint32) error {
+	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
+		logger.Warning("Deepin window manager not running, unsupported this operation")
+		return nil
+	}
 	return m.wm.PreviewWindow(win)
 }
 
 func (m *DockManager) CancelPreviewWindow() error {
+	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
+		logger.Warning("Deepin window manager not running, unsupported this operation")
+		return nil
+	}
 	return m.wm.CancelPreviewWindow()
 }
 
