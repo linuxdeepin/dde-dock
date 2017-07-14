@@ -52,6 +52,20 @@ func (set diskInfoMap) GetRootTable() dbus.ObjectPath {
 	return ""
 }
 
+func (set diskInfoMap) GetRootSize() uint64 {
+	for _, v := range set {
+		if len(v.MountPoints) == 0 {
+			continue
+		}
+		for _, mp := range v.MountPoints {
+			if mp == "/" {
+				return v.Size
+			}
+		}
+	}
+	return 0
+}
+
 func (set diskInfoMap) Get(key dbus.ObjectPath) *diskInfo {
 	if key == "" {
 		return nil
@@ -80,7 +94,14 @@ func getDiskCap() (uint64, error) {
 	if info != nil {
 		return info.Size, nil
 	}
-	return 0, fmt.Errorf("Failed to get disk capacity")
+
+	// not found drive and table, try root mount point
+	size := set.GetRootSize()
+	err = nil
+	if size == 0 {
+		err = fmt.Errorf("Failed to get disk capacity: not found root mount point")
+	}
+	return size, err
 }
 
 func parseUDisksManagers() (diskInfoMap, error) {
@@ -109,7 +130,7 @@ func parseUDisksManagers() (diskInfoMap, error) {
 			}
 		}
 
-		// the manager maybe a partition, or partition table, or drive
+		// the manager maybe a partition, or partition table, or drive, or loop(wubi)
 		partition, ok := manager["org.freedesktop.UDisks2.Partition"]
 		if ok {
 			info.Size = partition["Size"].Value().(uint64)
@@ -128,6 +149,13 @@ func parseUDisksManagers() (diskInfoMap, error) {
 		drive, ok := manager["org.freedesktop.UDisks2.Drive"]
 		if ok {
 			info.Size = drive["Size"].Value().(uint64)
+			set[k] = info
+			continue
+		}
+
+		_, ok = manager["org.freedesktop.UDisks2.Loop"]
+		if ok {
+			info.Size = block["Size"].Value().(uint64)
 			set[k] = info
 			continue
 		}
