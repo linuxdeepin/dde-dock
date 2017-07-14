@@ -124,7 +124,7 @@ void MainWindow::setFixedSize(const QSize &size)
 {
     const QPropertyAnimation::State state = m_sizeChangeAni->state();
 
-    qDebug() << state;
+//    qDebug() << state;
     if (state == QPropertyAnimation::Stopped && this->size() == size)
         return;
 
@@ -132,7 +132,7 @@ void MainWindow::setFixedSize(const QSize &size)
         return m_sizeChangeAni->setEndValue(size);
 
 
-    qDebug() << Q_FUNC_INFO << size;
+//    qDebug() << Q_FUNC_INFO << size;
 
     m_sizeChangeAni->setStartValue(this->size());
     m_sizeChangeAni->setEndValue(size);
@@ -142,7 +142,7 @@ void MainWindow::setFixedSize(const QSize &size)
 void MainWindow::internalMove(int x, int y)
 {
     const QPropertyAnimation::State state = m_posChangeAni->state();
-    const QPoint p = pos();
+    const QPoint p = m_posChangeAni->endValue().toPoint();
     const QPoint tp = QPoint(x, y);
 
     if (state == QPropertyAnimation::Stopped && p == tp)
@@ -151,7 +151,7 @@ void MainWindow::internalMove(int x, int y)
 //    if (state == QPropertyAnimation::Running && m_posChangeAni->endValue() != tp)
 //        return m_posChangeAni->setEndValue(QPoint(x, y));
 
-    m_posChangeAni->setStartValue(p);
+    m_posChangeAni->setStartValue(pos());
     m_posChangeAni->setEndValue(tp);
     m_posChangeAni->start();
 }
@@ -175,7 +175,7 @@ void MainWindow::initComponents()
 
 void MainWindow::compositeChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     const int duration = m_wmHelper->hasComposite() ? 200 : 0;
 
@@ -278,7 +278,7 @@ void MainWindow::positionChanged(const Position prevPos)
 
 void MainWindow::updatePosition()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     // all update operation need pass by timer
     Q_ASSERT(sender() == m_positionUpdateTimer);
 
@@ -295,7 +295,7 @@ void MainWindow::updateGeometry()
     const Position position = m_settings->position();
     QSize size = m_settings->windowSize();
 
-    qDebug() << Q_FUNC_INFO << position << size;
+//    qDebug() << Q_FUNC_INFO << position << size;
 
     m_mainPanel->setFixedSize(size);
     m_mainPanel->updateDockPosition(position);
@@ -348,9 +348,12 @@ void MainWindow::clearStrutPartial()
 
 void MainWindow::setStrutPartial()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     // first, clear old strut partial
     clearStrutPartial();
+
+    // reset env
+    resetPanelEnvironment(true);
 
     if (m_settings->hideMode() != Dock::KeepShowing)
         return;
@@ -367,6 +370,8 @@ void MainWindow::setStrutPartial()
     const QPoint p = m_posChangeAni->endValue().toPoint();
     const QRect r = QRect(p, m_settings->windowSize());
     QRect strutArea(0, 0, maxScreenWidth, maxScreenHeight);
+
+    qDebug() << "screen info: " << r << p << strutArea;
 
     switch (side)
     {
@@ -430,7 +435,7 @@ void MainWindow::setStrutPartial()
 
 void MainWindow::expand()
 {
-    qDebug() << "expand";
+//    qDebug() << "expand";
     const QPoint finishPos(0, 0);
 
     if (m_mainPanel->pos() == finishPos && m_mainPanel->size() == this->size() && m_panelHideAni->state() == QPropertyAnimation::Stopped)
@@ -460,7 +465,7 @@ void MainWindow::expand()
 
 void MainWindow::narrow(const Position prevPos)
 {
-    qDebug() << "narrow" << prevPos;
+//    qDebug() << "narrow" << prevPos;
     //    const QSize size = m_settings->windowSize();
     const QSize size = m_mainPanel->size();
 
@@ -494,7 +499,7 @@ void MainWindow::resetPanelEnvironment(const bool visible)
     const Position position = m_settings->position();
     const QRect r(m_settings->windowRect(position));
 
-    qDebug() << Q_FUNC_INFO << r;
+//    qDebug() << Q_FUNC_INFO << r;
     m_sizeChangeAni->setEndValue(r.size());
     m_mainPanel->setFixedSize(r.size());
     QWidget::setFixedSize(r.size());
@@ -519,7 +524,7 @@ void MainWindow::resetPanelEnvironment(const bool visible)
 
 void MainWindow::updatePanelVisible()
 {
-    qDebug() << m_updatePanelVisible;
+//    qDebug() << m_updatePanelVisible;
 
     if (!m_updatePanelVisible)
         return;
@@ -528,7 +533,7 @@ void MainWindow::updatePanelVisible()
 
     const Dock::HideState state = m_settings->hideState();
 
-    qDebug() << state;
+//    qDebug() << state;
 
     do
     {
@@ -551,7 +556,7 @@ void MainWindow::updatePanelVisible()
 
 void MainWindow::adjustShadowMask()
 {
-    qDebug() << Q_FUNC_INFO << m_mainPanel->pos() << m_panelHideAni->state() << m_panelShowAni->state() << m_wmHelper->hasComposite();
+//    qDebug() << Q_FUNC_INFO << m_mainPanel->pos() << m_panelHideAni->state() << m_panelShowAni->state() << m_wmHelper->hasComposite();
     if (m_mainPanel->pos() != QPoint(0, 0) ||
         m_panelHideAni->state() == QPropertyAnimation::Running ||
         m_panelShowAni->state() == QPauseAnimation::Running ||

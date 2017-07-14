@@ -206,7 +206,7 @@ const QRect DockSettings::windowRect(const Position position, const bool hide) c
     default:Q_UNREACHABLE();
     }
 
-    qDebug() << Q_FUNC_INFO << m_mainWindowSize << primaryRect << p << size;
+//    qDebug() << Q_FUNC_INFO << m_mainWindowSize << primaryRect << p << size;
 
     return QRect(primaryRect.topLeft() + p, size);
 }
@@ -282,7 +282,7 @@ void DockSettings::menuActionClicked(QAction *action)
 
 void DockSettings::onPositionChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     const Position prevPos = m_position;
     const Position nextPos = Dock::Position(m_dockInter->position());
 
@@ -302,7 +302,7 @@ void DockSettings::onPositionChanged()
 
 void DockSettings::iconSizeChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     m_iconSize = m_dockInter->iconSize();
     AppItem::setIconBaseSize(m_iconSize);
 
@@ -313,7 +313,7 @@ void DockSettings::iconSizeChanged()
 
 void DockSettings::displayModeChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     m_displayMode = Dock::DisplayMode(m_dockInter->displayMode());
     DockItem::setDockDisplayMode(m_displayMode);
     qApp->setProperty(PROP_DISPLAY_MODE, QVariant::fromValue(m_displayMode));
@@ -325,7 +325,7 @@ void DockSettings::displayModeChanged()
 
 void DockSettings::hideModeChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
 
     emit windowHideModeChanged();
@@ -333,7 +333,7 @@ void DockSettings::hideModeChanged()
 
 void DockSettings::hideStateChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     const Dock::HideState state = Dock::HideState(m_dockInter->hideState());
 
     if (state == Dock::Unknown)
@@ -346,7 +346,7 @@ void DockSettings::hideStateChanged()
 
 void DockSettings::dockItemCountChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     if (m_displayMode == Dock::Efficient)
         return;
 
@@ -357,7 +357,7 @@ void DockSettings::dockItemCountChanged()
 
 void DockSettings::primaryScreenChanged()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     m_primaryRect = m_displayInter->primaryRect();
 
     calculateWindowConfig();
@@ -368,14 +368,14 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-    qDebug() << Q_FUNC_INFO << r;
+//    qDebug() << Q_FUNC_INFO << r;
 
     m_dockInter->SetFrontendWindowRect(r.x(), r.y(), r.width(), r.height());
 }
 
 void DockSettings::calculateWindowConfig()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     const int defaultHeight = AppItem::itemBaseHeight();
     const int defaultWidth = AppItem::itemBaseWidth();
 
