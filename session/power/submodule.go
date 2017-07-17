@@ -34,14 +34,6 @@ func (m *Manager) initSubmodules() {
 	}
 }
 
-func (m *Manager) getSubmodule(name string) (submodule, error) {
-	module, ok := m.submodules[name]
-	if !ok {
-		return nil, fmt.Errorf("no submodule: %v", name)
-	}
-	return module, nil
-}
-
 func (m *Manager) _startSubmodule(name string) error {
 	submodule, ok := m.submodules[name]
 	if !ok {

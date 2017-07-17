@@ -33,23 +33,14 @@ func (m *Manager) initOnBatteryChangedHandler() {
 
 func (m *Manager) handleBeforeSuspend() {
 	logger.Debug("before sleep")
-	m.isSuspending = true
-
 	if m.SleepLock.Get() || m.ScreenBlackLock.Get() {
-		logger.Debug("* lock screen: DPMS on")
 		m.setDPMSModeOn()
-		// 此时执行 setDPMSModeOn() 将触发 HandleIdleOff
-		// 如果 DPMS 是 off 状态，lock screen 将无法完成
 		m.lockWaitShow(4 * time.Second)
 	}
 }
 
 func (m *Manager) handleWakeup() {
 	logger.Debug("wakeup")
-	m.isSuspending = false
-	logger.Debug("Simulate user activity")
-	m.helper.ScreenSaver.SimulateUserActivity()
-
 	m.helper.Power.RefreshBatteries()
 	playSound(soundutils.EventWakeup)
 }

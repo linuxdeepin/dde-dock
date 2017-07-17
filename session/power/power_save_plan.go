@@ -15,6 +15,8 @@ import (
 	"time"
 )
 
+const submodulePSP = "PowerSavePlan"
+
 func init() {
 	submoduleList = append(submoduleList, newPowerSavePlan)
 }
@@ -27,12 +29,13 @@ type powerSavePlan struct {
 	// key output name, value old brightness
 	oldBrightnessTable map[string]float64
 	mu                 sync.Mutex
+	idleOn             bool
 }
 
 func newPowerSavePlan(manager *Manager) (string, submodule, error) {
 	p := new(powerSavePlan)
 	p.manager = manager
-	return "PowerSavePlan", p, nil
+	return submodulePSP, p, nil
 }
 
 // 监听 GSettings 值改变, 更新节电计划
@@ -179,7 +182,6 @@ func (psp *powerSavePlan) saveCurrentBrightness() {
 
 func (psp *powerSavePlan) resetBrightness() {
 	if psp.oldBrightnessTable != nil {
-		psp.manager.setDPMSModeOn()
 		logger.Debug("Reset all outputs brightness")
 		psp.manager.setDisplayBrightness(psp.oldBrightnessTable)
 		psp.oldBrightnessTable = nil
@@ -228,10 +230,10 @@ func (psp *powerSavePlan) HandleIdleOn() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if psp.manager.isSuspending {
-		logger.Info("Suspending NOT HandleIdleOn")
+	if psp.idleOn {
 		return
 	}
+	psp.idleOn = true
 
 	if isActive, err := psp.manager.isX11SessionActive(); err != nil {
 		logger.Warning(err)
@@ -250,6 +252,8 @@ func (psp *powerSavePlan) HandleIdleOn() {
 		logger.Infof("sleep after %v", psp.sleepTimeout)
 		taskS := NewTimeAfterTask(psp.sleepTimeout, func() {
 			logger.Infof("sleep")
+			psp.manager.setDPMSModeOn()
+			psp.resetBrightness()
 			psp.manager.doSuspend()
 		})
 		psp.tasks = append(psp.tasks, taskS)
@@ -261,11 +265,13 @@ func (psp *powerSavePlan) HandleIdleOff() {
 	psp.mu.Lock()
 	defer psp.mu.Unlock()
 
-	if psp.manager.isSuspending {
-		logger.Info("Suspending NOT HandleIdleOff")
+	if !psp.idleOn {
 		return
 	}
+	psp.idleOn = false
+
 	logger.Info("HandleIdleOff")
 	psp.interruptTasks()
+	psp.manager.setDPMSModeOn()
 	psp.resetBrightness()
 }

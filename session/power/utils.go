@@ -96,7 +96,7 @@ func (m *Manager) setDPMSModeOff() {
 }
 
 func (m *Manager) doLock() {
-	logger.Debug("Lock Screen")
+	logger.Info("Lock Screen")
 	sessionManager := m.helper.SessionManager
 	if sessionManager != nil {
 		err := sessionManager.RequestLock()
