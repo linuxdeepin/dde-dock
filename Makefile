@@ -47,13 +47,13 @@ out/bin/%:
 	env GOPATH="${CURDIR}/${GOPATH_DIR}:${GOPATH}" ${GOBUILD} -o $@  ${GOPKG_PREFIX}/bin/${@F}
 
 out/bin/default-terminal: bin/default-terminal/default-terminal.c
-	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
+	gcc $^ $(shell pkg-config --cflags --libs gio-unix-2.0) -o $@
 
 out/bin/default-file-manager: bin/default-file-manager/main.c
-	gcc -o $@ $(shell pkg-config --cflags --libs gio-unix-2.0) $^
+	gcc $^ $(shell pkg-config --cflags --libs gio-unix-2.0) -o $@
 
 out/bin/desktop-toggle: bin/desktop-toggle/main.c
-	gcc -o $@ $(shell pkg-config --cflags --libs x11) $^
+	gcc $^ $(shell pkg-config --cflags --libs x11) -o $@
 
 out/locale/%/LC_MESSAGES/dde-daemon.mo:misc/po/%.po
 	mkdir -p $(@D)
