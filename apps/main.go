@@ -34,7 +34,7 @@ func NewDaemon(logger *log.Logger) *Daemon {
 }
 
 func (d *Daemon) Start() error {
-	logger.Debug("daemon start")
+	logger.Debug("apps daemon start")
 	if watcher, err := NewDFWachter(); err != nil {
 		return err
 	} else {
@@ -50,6 +50,8 @@ func (d *Daemon) Start() error {
 	if err := dbus.InstallOnSystem(d.watcher); err != nil {
 		return err
 	}
+
+	d.recorder.emitServiceRestarted()
 
 	return nil
 }

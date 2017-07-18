@@ -11,10 +11,13 @@ package apps
 
 import (
 	"dbus/org/freedesktop/login1"
+	"errors"
+	"fmt"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
+	"time"
 )
 
 const (
@@ -30,21 +33,17 @@ type ALRecorder struct {
 	// key is SubRecorder.root
 	subRecorders      map[string]*SubRecorder
 	subRecordersMutex sync.RWMutex
-	eventChan         chan *FileEvent
 	loginManager      *login1.Manager
 
 	// signal:
-	Launched    func(string)
-	StatusSaved ALStatusSavedFun
+	Launched         func(string)
+	StatusSaved      func(root, file string, ok bool)
+	ServiceRestarted func()
 }
 
-type ALStatusSavedFun func(root, file string, ok bool)
-
 func NewALRecorder(watcher *DFWatcher) *ALRecorder {
-	eventChan := make(chan *FileEvent)
 	r := &ALRecorder{
 		watcher:      watcher,
-		eventChan:    eventChan,
 		subRecorders: make(map[string]*SubRecorder),
 	}
 	var err error
@@ -54,51 +53,34 @@ func NewALRecorder(watcher *DFWatcher) *ALRecorder {
 	}
 
 	go r.listenEvents()
-	watcher.eventChan = eventChan
 
-	appDirs := getSystemAppDirs()
-	for _, appDir := range appDirs {
-		r.addSystemAppDir(appDir)
+	sysDataDirs := getSystemDataDirs()
+	for _, dataDir := range sysDataDirs {
+		r.watchAppsDir(0, "", filepath.Join(dataDir, "applications"))
 	}
 
-	r.loginManager.ConnectUserNew(func(uid uint32, _ dbus.ObjectPath) {
-		if uid < minUid {
-			return
-		}
-		r.addUserAppDir(int(uid))
-	})
 	r.loginManager.ConnectUserRemoved(func(uid uint32, _ dbus.ObjectPath) {
 		if uid < minUid {
 			return
 		}
-		r.removeUserAppDir(int(uid))
+		r.handleUserRemoved(int(uid))
 	})
 
-	for _, uid := range r.listUsers() {
-		r.addUserAppDir(uid)
-	}
+	go r.checkLoop()
 	return r
 }
 
-func (r *ALRecorder) listUsers() (uids []int) {
-	users, err := r.loginManager.ListUsers()
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-
-	for _, user := range users {
-		// user struct {uid, name, object_path}
-		if len(user) > 0 {
-			uid := int(user[0].(uint32))
-
-			if uid < minUid {
-				continue
-			}
-			uids = append(uids, uid)
+func (r *ALRecorder) checkLoop() {
+	// There is no need to consider stop the loop
+	for {
+		r.subRecordersMutex.RLock()
+		for _, sr := range r.subRecorders {
+			sr.doCheck()
 		}
+		r.subRecordersMutex.RUnlock()
+
+		time.Sleep(time.Second * 2)
 	}
-	return
 }
 
 func (r *ALRecorder) GetDBusInfo() dbus.DBusInfo {
@@ -113,9 +95,14 @@ func (r *ALRecorder) emitStatusSaved(root, file string, ok bool) {
 	dbus.Emit(r, "StatusSaved", root, file, ok)
 }
 
+func (r *ALRecorder) emitServiceRestarted() {
+	dbus.Emit(r, "ServiceRestarted")
+}
+
 func (r *ALRecorder) listenEvents() {
+	eventChan := r.watcher.eventChan
 	for {
-		ev := <-r.eventChan
+		ev := <-eventChan
 		logger.Debugf("ALRecorder ev: %#v", ev)
 		name := ev.Name
 
@@ -131,74 +118,6 @@ func (r *ALRecorder) listenEvents() {
 			// may be dir removed
 			r.handleDirRemoved(name)
 		}
-	}
-}
-
-func (r *ALRecorder) addAppDir(home, path string, uid int) {
-	logger.Debugf("ALRecorder.addAppDir %q %q %d", home, path, uid)
-	if r.subRecorderExists(path) {
-		logger.Debug("ALRecorder.addAppDir faield, subRecorder exists")
-		return
-	}
-
-	MkdirAll(path, uid, getDirPerm(uid))
-	dirNames, appNames := getDirsAndApps(path)
-	sr := NewSubRecorder(home, path, uid, appNames, r.emitStatusSaved)
-	r.addSubRecorder(sr)
-	for _, dirName := range dirNames {
-		r.watcher.add(filepath.Join(path, dirName))
-	}
-}
-
-func (r *ALRecorder) addSystemAppDir(path string) {
-	r.addAppDir("", path, 0)
-}
-
-func (r *ALRecorder) addUserAppDir(uid int) {
-	home, appDir, err := getUserDir(uid)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	r.addAppDir(home, appDir, uid)
-}
-
-func (r *ALRecorder) removeAppDir(path string) {
-	r.removeSubRecorder(path)
-	r.watcher.removeRecursive(path)
-}
-
-func (r *ALRecorder) removeUserAppDir(uid int) {
-	_, appDir, err := getUserDir(uid)
-	if err != nil {
-		logger.Warning(err)
-		return
-	}
-	r.removeAppDir(appDir)
-}
-
-func (r *ALRecorder) addSubRecorder(sr *SubRecorder) {
-	r.subRecordersMutex.Lock()
-	defer r.subRecordersMutex.Unlock()
-
-	r.subRecorders[sr.root] = sr
-}
-
-func (r *ALRecorder) subRecorderExists(root string) bool {
-	r.subRecordersMutex.RLock()
-	defer r.subRecordersMutex.RUnlock()
-
-	_, ok := r.subRecorders[root]
-	return ok
-}
-
-func (r *ALRecorder) removeSubRecorder(root string) {
-	r.subRecordersMutex.Lock()
-	defer r.subRecordersMutex.Unlock()
-
-	if sr, ok := r.subRecorders[root]; ok {
-		delete(r.subRecorders, root)
-		sr.Destroy()
 	}
 }
 
@@ -260,22 +179,82 @@ func (r *ALRecorder) MarkLaunched(file string) {
 	logger.Debug("MarkLaunched failed")
 }
 
-func (r *ALRecorder) GetNew(dMsg dbus.DMessage) (map[string][]string, error) {
-	_, appDir, err := getUserDir(int(dMsg.GetSenderUID()))
-	if err != nil {
-		return nil, err
-	}
+func (r *ALRecorder) GetNew(dMsg dbus.DMessage) map[string][]string {
+	uid := int(dMsg.GetSenderUID())
 	ret := make(map[string][]string)
 	r.subRecordersMutex.RLock()
 	defer r.subRecordersMutex.RUnlock()
 
 	for _, sr := range r.subRecorders {
-		if sr.root == appDir || isSystemAppDir(sr.root) {
+		if intSliceContains(sr.uids, uid) {
 			newApps := sr.GetNew()
 			if len(newApps) > 0 {
 				ret[sr.root] = newApps
 			}
 		}
 	}
-	return ret, nil
+	return ret
+}
+
+func (r *ALRecorder) watchAppsDir(uid int, home, appsDir string) {
+	r.subRecordersMutex.Lock()
+	defer r.subRecordersMutex.Unlock()
+
+	sr := r.subRecorders[appsDir]
+	if sr != nil {
+		// subRecorder exists
+		logger.Debugf("subRecorder for %q exists", appsDir)
+		if !intSliceContains(sr.uids, uid) {
+			sr.uids = append(sr.uids, uid)
+			logger.Debug("append uid", uid)
+		}
+		return
+	}
+
+	sr = NewSubRecorder(uid, home, appsDir, r)
+	r.subRecorders[appsDir] = sr
+}
+
+func (r *ALRecorder) WatchDirs(dMsg dbus.DMessage, dataDirs []string) error {
+	uid := int(dMsg.GetSenderUID())
+	logger.Debugf("WatchDirs uid: %d, data dirs: %#v", uid, dataDirs)
+	// check uid
+	if uid < minUid {
+		return errors.New("invalid uid")
+	}
+
+	// check dataDirs
+	for _, dataDir := range dataDirs {
+		if !filepath.IsAbs(dataDir) {
+			return fmt.Errorf("%q is not absolute path", dataDir)
+		}
+	}
+
+	// get home dir
+	home, err := getHomeByUid(uid)
+	if err != nil {
+		return err
+	}
+
+	for _, dataDir := range dataDirs {
+		appsDir := filepath.Join(dataDir, "applications")
+		r.watchAppsDir(uid, home, appsDir)
+	}
+	return nil
+}
+
+func (r *ALRecorder) handleUserRemoved(uid int) {
+	logger.Debug("handleUserRemoved uid:", uid)
+	r.subRecordersMutex.Lock()
+	defer r.subRecordersMutex.Unlock()
+
+	for _, sr := range r.subRecorders {
+		logger.Debug(sr.root, sr.uids)
+		sr.uids = intSliceRemove(sr.uids, uid)
+		if len(sr.uids) == 0 {
+			sr.Destroy()
+			delete(r.subRecorders, sr.root)
+		}
+	}
+	logger.Debug("r.subRecorders:", r.subRecorders)
 }

@@ -13,7 +13,6 @@ import (
 	"dbus/com/deepin/api/pinyin"
 	"fmt"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
-	"regexp"
 	"strings"
 )
 
@@ -80,34 +79,6 @@ func NewItemWithDesktopAppInfo(appInfo *desktopappinfo.DesktopAppInfo) *Item {
 		item.categories = append(item.categories, strings.ToLower(c))
 	}
 	return item
-}
-
-var chromeShortcurtExecRegexp = regexp.MustCompile(`google-chrome.*--app-id=`)
-
-func (item *Item) isChromeShortcut() bool {
-	logger.Debugf("isChromeShortcut item ID: %q, exec: %q", item.ID, item.exec)
-	return strings.HasPrefix(item.ID, "chrome-") &&
-		chromeShortcurtExecRegexp.MatchString(item.exec)
-}
-
-func (item *Item) isWineApp() (bool, error) {
-	appInfo, err := desktopappinfo.NewDesktopAppInfoFromFile(item.Path)
-	if err != nil {
-		return false, err
-	}
-	createdBy, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Created-By")
-	return strings.HasPrefix(createdBy, "cxoffice-") ||
-		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX="), nil
-}
-
-func (item *Item) isFlatpakApp() (bool, error) {
-	appInfo, err := desktopappinfo.NewDesktopAppInfoFromFile(item.Path)
-	if err != nil {
-		return false, err
-	}
-
-	isFlatpak, _ := appInfo.GetBool(desktopappinfo.MainSection, "X-Flatpak")
-	return isFlatpak, nil
 }
 
 func (item *Item) getXCategory() CategoryID {

@@ -46,6 +46,12 @@ func getUserAppDir() string {
 	return filepath.Join(userDataDir, AppDirName)
 }
 
+func getDataDirsForWatch() []string {
+	userDataDir := basedir.GetUserDataDir()
+	sysDataDirs := basedir.GetSystemDataDirs()
+	return append(sysDataDirs, userDataDir)
+}
+
 // The default applications module of the DDE Control Center
 // creates the desktop file with the file name beginning with
 // "deepin-custom" in the applications directory under the XDG

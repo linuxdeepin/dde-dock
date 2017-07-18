@@ -14,11 +14,21 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/xdg/basedir"
+	"regexp"
 	"strings"
 )
+
+var chromeShortcurtExecRegexp = regexp.MustCompile(`google-chrome.*--app-id=`)
+
+func isChromeShortcut(item *Item) bool {
+	logger.Debugf("isChromeShortcut item ID: %q, exec: %q", item.ID, item.exec)
+	return strings.HasPrefix(item.ID, "chrome-") &&
+		chromeShortcurtExecRegexp.MatchString(item.exec)
+}
 
 // Simply remove the desktop file
 func (m *Manager) uninstallDesktopFile(item *Item) error {
@@ -39,6 +49,12 @@ func (m *Manager) notifyUninstallDone(item *Item, succeed bool) {
 	m.sendNotification(msg, "", icon)
 }
 
+func isWineApp(appInfo *desktopappinfo.DesktopAppInfo) bool {
+	createdBy, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Created-By")
+	return strings.HasPrefix(createdBy, "cxoffice-") ||
+		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX=")
+}
+
 func (m *Manager) uninstallDeepinWineApp(item *Item) error {
 	logger.Debug("uninstallDeepinWineApp", item.Path)
 	cmd := exec.Command("/opt/deepinwine/tools/uninstall.sh", item.Path)
@@ -47,9 +63,22 @@ func (m *Manager) uninstallDeepinWineApp(item *Item) error {
 	return err
 }
 
-func (m *Manager) uninstallFlatpakApp(item *Item) error {
-	logger.Debug("uninstallFlatpakApp", item.Path, item.ID)
-	wideOption := "--system"
+func isFlatpakApp(appInfo *desktopappinfo.DesktopAppInfo) (bool, string) {
+	// X-Flatpak maybe store true or flatapk app id
+	xFlatpak, _ := appInfo.GetString(desktopappinfo.MainSection, "X-Flatpak")
+	switch xFlatpak {
+	case "":
+		return false, ""
+	case "true":
+		return true, ""
+	default:
+		return true, xFlatpak
+	}
+}
+
+func (m *Manager) uninstallFlatpakApp(item *Item, flatpakAppId string) error {
+	logger.Debug("uninstallFlatpakApp", item.Path, flatpakAppId)
+	sysOrUser := "--system"
 
 	homeDir := basedir.GetUserHomeDir()
 	if homeDir == "" {
@@ -57,10 +86,10 @@ func (m *Manager) uninstallFlatpakApp(item *Item) error {
 	}
 
 	if strings.HasPrefix(item.Path, homeDir) {
-		wideOption = "--user"
+		sysOrUser = "--user"
 	}
 
-	cmd := exec.Command("flatpak", wideOption, "uninstall", item.ID)
+	cmd := exec.Command("flatpak", sysOrUser, "uninstall", flatpakAppId)
 	err := cmd.Run()
 	go m.notifyUninstallDone(item, err == nil)
 	return err
@@ -73,15 +102,20 @@ func (m *Manager) uninstall(id string) error {
 		return errorInvalidID
 	}
 
-	// uninstall flatpak app
-	isFlatpakApp, err := item.isFlatpakApp()
+	appInfo, err := desktopappinfo.NewDesktopAppInfoFromFile(item.Path)
 	if err != nil {
 		return err
 	}
 
+	// uninstall flatpak app
+	isFlatpakApp, flatpakAppId := isFlatpakApp(appInfo)
 	if isFlatpakApp {
-		logger.Debug("item is flatpak user app")
-		return m.uninstallFlatpakApp(item)
+		logger.Debugf("item is flatpak app")
+
+		if flatpakAppId == "" {
+			flatpakAppId = item.ID
+		}
+		return m.uninstallFlatpakApp(item, flatpakAppId)
 	}
 
 	// uninstall system package
@@ -97,18 +131,12 @@ func (m *Manager) uninstall(id string) error {
 	}
 
 	// uninstall chrome shortcut
-	if item.isChromeShortcut() {
+	if isChromeShortcut(item) {
 		logger.Debug("item is chrome shortcut")
 		return m.uninstallDesktopFile(item)
 	}
 
-	// uninstall wine app
-	isWineApp, err := item.isWineApp()
-	if err != nil {
-		return err
-	}
-
-	if isWineApp {
+	if isWineApp(appInfo) {
 		logger.Debug("item is wine app")
 		return m.uninstallDeepinWineApp(item)
 	}

@@ -38,6 +38,7 @@ func NewDFWachter() (*DFWatcher, error) {
 	}
 
 	w.sem = make(chan int, 4)
+	w.eventChan = make(chan *FileEvent, 10)
 	go w.listenEvents()
 	return w, nil
 }
@@ -78,7 +79,7 @@ func (w *DFWatcher) handleEvent(event *fsnotify.FileEvent) {
 }
 
 func (w *DFWatcher) notifyEvent(ev *FileEvent) {
-	logger.Debugf("dbus emit Event %q", ev.Name)
+	logger.Debugf("notifyEvent %q", ev.Name)
 	dbus.Emit(w, "Event", ev.Name, uint32(0))
 	w.eventChan <- ev
 }

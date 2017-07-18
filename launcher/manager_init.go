@@ -89,6 +89,13 @@ func (m *Manager) init() {
 		}
 	})
 
+	m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+
+	m.launchedRecorder.ConnectServiceRestarted(func() {
+		if m.launchedRecorder != nil {
+			m.launchedRecorder.WatchDirs(getDataDirsForWatch())
+		}
+	})
 	m.launchedRecorder.ConnectLaunched(func(path string) {
 		item := m.getItemByPath(path)
 		if item == nil {

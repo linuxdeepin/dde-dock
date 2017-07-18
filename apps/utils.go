@@ -18,6 +18,24 @@ import (
 	"syscall"
 )
 
+func intSliceContains(slice []int, a int) bool {
+	for _, elem := range slice {
+		if elem == a {
+			return true
+		}
+	}
+	return false
+}
+
+func intSliceRemove(slice []int, a int) (ret []int) {
+	for _, elem := range slice {
+		if elem != a {
+			ret = append(ret, elem)
+		}
+	}
+	return
+}
+
 func readDirNames(dirname string) ([]string, error) {
 	f, err := os.Open(dirname)
 	if err != nil {
@@ -91,30 +109,7 @@ func removeDesktopExt(name string) string {
 }
 
 func getSystemDataDirs() []string {
-	dirs := os.Getenv("XDG_DATA_DIRS")
-	if dirs == "" {
-		dirs = "/usr/local/share:/usr/share"
-	}
-	systemDirs := strings.Split(dirs, ":")
-	return systemDirs
-}
-
-func getSystemAppDirs() []string {
-	dirs := getSystemDataDirs()
-	for i := range dirs {
-		dirs[i] = filepath.Join(dirs[i], "applications")
-	}
-	return dirs
-}
-
-func isSystemAppDir(path string) bool {
-	appDirs := getSystemAppDirs()
-	for _, dir := range appDirs {
-		if path == dir {
-			return true
-		}
-	}
-	return false
+	return []string{"/usr/share", "/usr/local/share"}
 }
 
 // get user home
@@ -124,14 +119,6 @@ func getHomeByUid(uid int) (string, error) {
 		return "", err
 	}
 	return user.HomeDir, nil
-}
-
-func getUserDir(uid int) (string, string, error) {
-	home, err := getHomeByUid(uid)
-	if err != nil {
-		return "", "", err
-	}
-	return home, filepath.Join(home, ".local/share/applications"), nil
 }
 
 func getDirPerm(uid int) os.FileMode {

@@ -24,117 +24,148 @@ import (
 )
 
 type SubRecorder struct {
-	root string
+	root   string
+	rootOk bool
 	// key: app, value: launched
 	launchedMap      map[string]bool
 	launchedMapMutex sync.RWMutex
-	statusFile       string
-	uid              int
 
-	saveCb    ALStatusSavedFun
-	saveCount int32
-	ticker    *time.Ticker
+	statusFile      string
+	statusFileOwner int
+
+	uids     []int
+	parent   *ALRecorder
+	needSave int32 // if value == 1, need save status file
 }
 
-func (d *SubRecorder) initSaveTicker() {
-	// checkSave every 2 seconds
-	const interval = 2
-	const tickerTimeout = interval + 5
-	d.ticker = time.NewTicker(time.Second * interval)
+func NewSubRecorder(uid int, home, root string, parent *ALRecorder) *SubRecorder {
+	sr := &SubRecorder{
+		root:   root,
+		rootOk: false,
+		uids:   []int{uid}, // first uid
+		parent: parent,
+	}
 
-	go func() {
-		timer := time.NewTimer(time.Second * tickerTimeout)
-		for {
-			select {
-			case <-d.ticker.C:
-				d.checkSave()
-				timer.Reset(time.Second * tickerTimeout)
-			case <-timer.C:
-				logger.Debug("stop check save")
-				return
+	sr.statusFile, sr.statusFileOwner = getStatusFileAndOwner(uid, home, root)
+	logger.Debugf("NewSubRecorder status file: %q, owner: %d", sr.statusFile, sr.statusFileOwner)
+	return sr
+}
+
+func (sr *SubRecorder) doCheck() {
+	rootOkChanged := sr.checkRoot()
+	if rootOkChanged {
+		if sr.rootOk {
+			logger.Debug("sr rootOk false => true")
+			// rootOk false => true
+			// do init
+			subDirNames, apps := getDirsAndApps(sr.root)
+			for _, dirName := range subDirNames {
+				sr.parent.watcher.add(filepath.Join(sr.root, dirName))
 			}
+
+			if sr.initAppLaunchedMap(apps) {
+				MkdirAll(filepath.Dir(sr.statusFile), sr.statusFileOwner, getDirPerm(sr.statusFileOwner))
+				sr.RequestSave()
+			}
+		} else {
+			// rootOk true => false
+			logger.Debug("sr rootOk true => false")
 		}
-	}()
-}
-
-func NewSubRecorder(home, root string, uid int, apps []string, saveCb ALStatusSavedFun) *SubRecorder {
-	d := &SubRecorder{
-		root:       root,
-		uid:        uid,
-		statusFile: getStatusFile(home, root),
-		saveCb:     saveCb,
 	}
-	if d.initAppLaunchedMap(apps) {
-		MkdirAll(filepath.Dir(d.statusFile), d.uid, getDirPerm(d.uid))
-		d.RequestSave()
+
+	sr.checkSave()
+}
+
+// return true if sr.rootOk changed
+func (sr *SubRecorder) checkRoot() bool {
+	oldRootOk := sr.rootOk
+	// rootOk: root exist and is dir
+	fileInfo, err := os.Stat(sr.root)
+	if err != nil {
+		sr.rootOk = false
+	} else {
+		if fileInfo.IsDir() {
+			sr.rootOk = true
+		} else {
+			logger.Warning(sr.root, "is not a direcotry")
+			sr.rootOk = false
+		}
 	}
-	d.initSaveTicker()
-	logger.Debug("NewSubRecorder status file:", d.statusFile)
-	logger.Debug("launchedMap len:", len(d.launchedMap))
-	return d
+	return oldRootOk != sr.rootOk
 }
 
-func (d *SubRecorder) Destroy() {
-	d.ticker.Stop()
+func (sr *SubRecorder) Destroy() {
+	sr.parent.watcher.removeRecursive(sr.root)
 }
 
-func getStatusFile(home, path string) string {
-	var dir string
+const sysAppsCfgDir = "/var/lib/dde-daemon/apps"
+const userAppsCfgDir = ".config/deepin/dde-daemon/apps"
+
+// appsDir ex. $HOME/.local/share/applications
+func getStatusFileAndOwner(uid int, home, appsDir string) (string, int) {
+	var cfgDir string
+	statusFileOwner := uid
 	if home == "" {
 		// system
-		dir = "/var/lib/dde-daemon/apps"
+		cfgDir = sysAppsCfgDir
+		statusFileOwner = 0
 	} else {
-		// user
-		rel, err := filepath.Rel(home, path)
-		if err == nil {
-			path = rel
+		if strings.HasPrefix(appsDir, home) {
+			// user
+			rel, err := filepath.Rel(home, appsDir)
+			if err != nil {
+				// home and appsDir all are abs path, so err should be nil
+				panic(err)
+			}
+			appsDir = rel
+			cfgDir = filepath.Join(home, userAppsCfgDir)
+		} else {
+			// system
+			cfgDir = sysAppsCfgDir
+			statusFileOwner = 0
 		}
-		dir = filepath.Join(home, ".config/deepin/dde-daemon/apps")
 	}
-	//logger.Debug("getStatusFile path", path)
-	pathMd5 := md5.Sum([]byte(path))
+	pathMd5 := md5.Sum([]byte(appsDir))
 	base := fmt.Sprintf("launched-%x.csv", pathMd5)
-	return filepath.Join(dir, base)
+	return filepath.Join(cfgDir, base), statusFileOwner
 }
 
-func (d *SubRecorder) initAppLaunchedMap(apps []string) bool {
+func (sr *SubRecorder) initAppLaunchedMap(apps []string) bool {
 	var changed bool
-	if launchedMap, err := loadStatusFromFile(d.statusFile); err != nil {
+	if launchedMap, err := loadStatusFromFile(sr.statusFile); err != nil {
 		logger.Warning("SubRecorder.loadStatusFromFile failed", err)
-		d.resetStatus(apps)
+		sr.resetStatus(apps)
 		changed = true
 	} else {
-		d.launchedMap = launchedMap
-		changed = d.checkStatus(launchedMap, apps)
+		sr.launchedMap = launchedMap
+		changed = sr.checkStatus(launchedMap, apps)
 	}
 	return changed
 }
 
-func (d *SubRecorder) RequestSave() {
-	atomic.AddInt32(&d.saveCount, 1)
+func (sr *SubRecorder) RequestSave() {
+	atomic.StoreInt32(&sr.needSave, 1)
 }
 
-func (d *SubRecorder) checkSave() {
-	if atomic.SwapInt32(&d.saveCount, 0) == 0 {
+func (sr *SubRecorder) checkSave() {
+	if atomic.SwapInt32(&sr.needSave, 0) == 0 {
 		return
 	}
 
-	d.launchedMapMutex.RLock()
-	err := d.save()
-	if d.saveCb != nil {
-		d.saveCb(d.root, d.statusFile, err == nil)
-	}
-	d.launchedMapMutex.RUnlock()
+	sr.launchedMapMutex.RLock()
+	err := sr.save()
+	sr.launchedMapMutex.RUnlock()
 	if err != nil {
 		logger.Warning("SubRecorder.saveDirContent error:", err)
 	}
+	sr.parent.emitStatusSaved(sr.root, sr.statusFile, err == nil)
 }
 
-func (d *SubRecorder) writeStatus(w io.Writer) error {
+func (sr *SubRecorder) writeStatus(w io.Writer) error {
 	writer := csv.NewWriter(w)
-	d.launchedMapMutex.RLock()
-	writer.Write([]string{"# " + d.root})
-	for app, launched := range d.launchedMap {
+	sr.launchedMapMutex.RLock()
+	writer.Write([]string{"# " + sr.root})
+	for app, launched := range sr.launchedMap {
 		record := make([]string, 2)
 		record[0] = app
 		if launched {
@@ -146,23 +177,21 @@ func (d *SubRecorder) writeStatus(w io.Writer) error {
 			return err
 		}
 	}
-	d.launchedMapMutex.RUnlock()
+	sr.launchedMapMutex.RUnlock()
 
 	writer.Flush()
 	return writer.Error()
 }
 
-func (d *SubRecorder) save() error {
-	logger.Debug("SubRecorder.save", d.root, d.statusFile)
-	file := d.statusFile
-	uid := d.uid
-
+func (sr *SubRecorder) save() error {
+	logger.Debug("SubRecorder.save", sr.root, sr.statusFile)
+	file := sr.statusFile
 	tmpFile := fmt.Sprintf("%s.new%x", file, time.Now().UnixNano())
 	f, err := os.Create(tmpFile)
 	if err != nil {
 		return err
 	}
-	if err := d.writeStatus(bufio.NewWriter(f)); err != nil {
+	if err := sr.writeStatus(bufio.NewWriter(f)); err != nil {
 		return err
 	}
 	if err := f.Sync(); err != nil {
@@ -172,7 +201,7 @@ func (d *SubRecorder) save() error {
 		return err
 	}
 
-	if err := os.Chown(tmpFile, uid, uid); err != nil {
+	if err := os.Chown(tmpFile, sr.statusFileOwner, sr.statusFileOwner); err != nil {
 		return err
 	}
 
@@ -182,8 +211,8 @@ func (d *SubRecorder) save() error {
 	return nil
 }
 
-func (d *SubRecorder) checkStatus(launchedMap map[string]bool, apps []string) bool {
-	logger.Debug("SubRecorder.checkStatus", d.root)
+func (sr *SubRecorder) checkStatus(launchedMap map[string]bool, apps []string) bool {
+	logger.Debug("SubRecorder.checkStatus", sr.root)
 	var changed bool
 	// apps -> to map appsMap
 	appsMap := make(map[string]byte)
@@ -240,88 +269,89 @@ func loadStatusFromFile(dataFile string) (map[string]bool, error) {
 	return launchedMap, nil
 }
 
-func (d *SubRecorder) resetStatus(apps []string) {
+func (sr *SubRecorder) resetStatus(apps []string) {
 	launchedMap := make(map[string]bool)
 	for _, app := range apps {
 		launchedMap[app] = true
 	}
-	d.launchedMap = launchedMap
+	sr.launchedMap = launchedMap
 }
 
-func (d *SubRecorder) handleAdded(name string) {
-	logger.Debug("SubRecorder.handleAdded", d.root, name)
-	d.launchedMapMutex.Lock()
-	defer d.launchedMapMutex.Unlock()
-	launchedMap := d.launchedMap
-	if _, ok := launchedMap[name]; !ok {
-		launchedMap[name] = false
-		d.RequestSave()
+func (sr *SubRecorder) handleAdded(name string) {
+	logger.Debug("SubRecorder.handleAdded", sr.root, name)
+	sr.launchedMapMutex.Lock()
+
+	if _, ok := sr.launchedMap[name]; !ok {
+		sr.launchedMap[name] = false
+		sr.RequestSave()
 	}
+
+	sr.launchedMapMutex.Unlock()
 }
 
-func (d *SubRecorder) handleRemoved(name string) {
-	logger.Debug("SubRecorder.handleRemoved", d.root, name)
-	launchedMap := d.launchedMap
-	d.launchedMapMutex.Lock()
-	defer d.launchedMapMutex.Unlock()
-	if _, ok := launchedMap[name]; ok {
-		delete(launchedMap, name)
-		d.RequestSave()
+func (sr *SubRecorder) handleRemoved(name string) {
+	logger.Debug("SubRecorder.handleRemoved", sr.root, name)
+	sr.launchedMapMutex.Lock()
+
+	if _, ok := sr.launchedMap[name]; ok {
+		delete(sr.launchedMap, name)
+		sr.RequestSave()
 	}
+
+	sr.launchedMapMutex.Unlock()
 }
 
-func (d *SubRecorder) handleDirRemoved(name string) {
-	logger.Debug("SubRecorder.handleDirRemoved", d.root, name)
-	d.launchedMapMutex.Lock()
-	defer d.launchedMapMutex.Unlock()
-
+func (sr *SubRecorder) handleDirRemoved(name string) {
+	logger.Debug("SubRecorder.handleDirRemoved", sr.root, name)
 	changed := false
+
+	sr.launchedMapMutex.Lock()
 	if name == "." {
 		// applications dir removed
-		if len(d.launchedMap) > 0 {
+		if len(sr.launchedMap) > 0 {
 			logger.Debug("SubRecorder.handleDirRemoved clear launchedMap")
-			d.launchedMap = make(map[string]bool)
+			sr.launchedMap = make(map[string]bool)
 			changed = true
 		}
 	} else {
 		name = name + "/"
 		// remove desktop entries under dir $name
-		launchedMap := d.launchedMap
-		for app := range launchedMap {
+		for app := range sr.launchedMap {
 			if strings.HasPrefix(app, name) {
-				delete(launchedMap, app)
 				logger.Debug("SubRecorder.handleDirRemoved remove", app)
+				delete(sr.launchedMap, app)
 				changed = true
 			}
 		}
 	}
+	sr.launchedMapMutex.Unlock()
 
 	if changed {
-		d.RequestSave()
+		sr.RequestSave()
 	}
 }
 
-func (d *SubRecorder) MarkLaunched(name string) bool {
-	logger.Debug("SubRecorder.MarkLaunched", d.root, name)
-	d.launchedMapMutex.Lock()
-	defer d.launchedMapMutex.Unlock()
-	if launched, ok := d.launchedMap[name]; ok {
+func (sr *SubRecorder) MarkLaunched(name string) bool {
+	logger.Debug("SubRecorder.MarkLaunched", sr.root, name)
+	sr.launchedMapMutex.Lock()
+	defer sr.launchedMapMutex.Unlock()
+	if launched, ok := sr.launchedMap[name]; ok {
 		if !launched {
-			d.launchedMap[name] = true
-			d.RequestSave()
+			sr.launchedMap[name] = true
+			sr.RequestSave()
 			return true
 		}
 	}
 	return false
 }
 
-func (r *SubRecorder) GetNew() (newApps []string) {
-	r.launchedMapMutex.RLock()
-	for app, launched := range r.launchedMap {
+func (sr *SubRecorder) GetNew() (newApps []string) {
+	sr.launchedMapMutex.RLock()
+	for app, launched := range sr.launchedMap {
 		if !launched {
 			newApps = append(newApps, app)
 		}
 	}
-	r.launchedMapMutex.RUnlock()
+	sr.launchedMapMutex.RUnlock()
 	return
 }
