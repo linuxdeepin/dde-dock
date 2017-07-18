@@ -16,6 +16,8 @@ import (
 	"os/exec"
 	"pkg.deepin.io/lib/dbus"
 	. "pkg.deepin.io/lib/gettext"
+	"pkg.deepin.io/lib/xdg/basedir"
+	"strings"
 )
 
 // Simply remove the desktop file
@@ -45,11 +47,41 @@ func (m *Manager) uninstallDeepinWineApp(item *Item) error {
 	return err
 }
 
+func (m *Manager) uninstallFlatpakApp(item *Item) error {
+	logger.Debug("uninstallFlatpakApp", item.Path, item.ID)
+	wideOption := "--system"
+
+	homeDir := basedir.GetUserHomeDir()
+	if homeDir == "" {
+		return errors.New("get home dir failed")
+	}
+
+	if strings.HasPrefix(item.Path, homeDir) {
+		wideOption = "--user"
+	}
+
+	cmd := exec.Command("flatpak", wideOption, "uninstall", item.ID)
+	err := cmd.Run()
+	go m.notifyUninstallDone(item, err == nil)
+	return err
+}
+
 func (m *Manager) uninstall(id string) error {
 	item := m.getItemById(id)
 	if item == nil {
 		logger.Warning("RequestUninstall failed", errorInvalidID)
 		return errorInvalidID
+	}
+
+	// uninstall flatpak app
+	isFlatpakApp, err := item.isFlatpakApp()
+	if err != nil {
+		return err
+	}
+
+	if isFlatpakApp {
+		logger.Debug("item is flatpak user app")
+		return m.uninstallFlatpakApp(item)
 	}
 
 	// uninstall system package

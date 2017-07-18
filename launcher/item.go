@@ -100,6 +100,16 @@ func (item *Item) isWineApp() (bool, error) {
 		strings.Contains(appInfo.GetCommandline(), "env WINEPREFIX="), nil
 }
 
+func (item *Item) isFlatpakApp() (bool, error) {
+	appInfo, err := desktopappinfo.NewDesktopAppInfoFromFile(item.Path)
+	if err != nil {
+		return false, err
+	}
+
+	isFlatpak, _ := appInfo.GetBool(desktopappinfo.MainSection, "X-Flatpak")
+	return isFlatpak, nil
+}
+
 func (item *Item) getXCategory() CategoryID {
 	logger.Debug("getXCategory item.categories:", item.categories)
 	categoriesCountMap := make(map[CategoryID]int)
