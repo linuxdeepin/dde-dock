@@ -339,7 +339,14 @@ func (tpad *Touchpad) startSyndaemon() {
 		return
 	}
 	logger.Debug("[startSyndaemon] will exec:", syncmd)
-	var cmd = exec.Command("/bin/sh", "-c", syncmd)
+	args := strings.Split(syncmd, " ")
+	argsLen := len(args)
+	var cmd *exec.Cmd
+	if argsLen == 1 {
+		cmd = exec.Command(args[0])
+	} else {
+		cmd = exec.Command(args[0], args[1:argsLen]...)
+	}
 	err := cmd.Start()
 	if err != nil {
 		os.Remove(syndaemonPidFile)
