@@ -258,6 +258,15 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
+		// try get uuid from active or available connection
+		logger.Info("-----------Try get uuid, src:", uuid)
+		uuid = getWiredDeviceConnectionUuid(wiredDevPath)
+		logger.Info("-----------Try get uuid, result:", uuid)
+		if uuid != "" {
+			cpath, err = nmGetConnectionByUuid(uuid)
+		}
+	}
+	if err != nil {
 		// connection not exists, create one
 		exists = false
 		cpath, err = newWiredConnectionForDevice(id, uuid, wiredDevPath, active)
@@ -268,6 +277,32 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 		nmSetConnectionId(cpath, id)
 	}
 	return
+}
+
+func getWiredDeviceConnectionUuid(wiredDevPath dbus.ObjectPath) string {
+	wired, _ := nmNewDevice(wiredDevPath)
+	if wired == nil {
+		return ""
+	}
+	defer nmDestroyDevice(wired)
+
+	apath := wired.ActiveConnection.Get()
+	if apath != "" && apath != "/" {
+		aconn, _ := nmNewActiveConnection(apath)
+		defer nmDestroyActiveConnection(aconn)
+		if aconn != nil {
+			return aconn.Uuid.Get()
+		}
+	}
+
+	list := wired.AvailableConnections.Get()
+	if len(list) != 0 && list[0] != "/" {
+		sconn, _ := nmNewSettingsConnection(list[0])
+		defer nmDestroySettingsConnection(sconn)
+		settings, _ := sconn.GetSettings()
+		return settings["connection"]["uuid"].Value().(string)
+	}
+	return ""
 }
 
 // ensureMobileConnectionExists will check if mobile connection for
