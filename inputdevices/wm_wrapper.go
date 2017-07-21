@@ -62,20 +62,21 @@ func setWMTPadBoolKey(key string, value bool) {
 			return
 		}
 		setting.SetBoolean(key, value)
-	case wmTPadKeyLeftHanded:
-		v := setting.GetString(key)
-		var tmp = "right"
-		if value {
-			tmp = "left"
-		}
-		if v == tmp {
-			return
-		}
-		setting.SetString(key, tmp)
+		//case wmTPadKeyLeftHanded:
+		//v := setting.GetString(key)
+		//var tmp = "right"
+		//if value {
+		//tmp = "left"
+		//}
+		//if v == tmp {
+		//return
+		//}
+		//setting.SetString(key, tmp)
 	}
 }
 
 func setWMMouseBoolKey(key string, value bool) {
+	return
 	setting, err := dutils.CheckAndNewGSettings(wmMouseSchemaID)
 	if err != nil {
 		logger.Warning("Failed to new wm mouse settings")
