@@ -11,6 +11,8 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"image"
+	"image/png"
 	"strings"
 )
 
@@ -103,17 +105,50 @@ func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
 }
 
 func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
-	// find largest icon
-	icon, err := xgraphics.FindIcon(xu, win, 0, 0)
-	// FIXME: gets empty icon for minecraft
-	if err == nil {
-		buf := bytes.NewBuffer(nil)
-		icon.WritePng(buf)
-		return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+	icon, err := getBestEwmhIcon(xu, win)
+	if err != nil {
+		logger.Warning(err)
+		return ""
 	}
-	// NOTE: Do not get icon from property _NET_WM_ICON_NAME
-	logger.Debugf("getIconFromWindow failed win %v, err: %v", win, err)
-	return ""
+	if icon == nil {
+		return ""
+	}
+
+	// encode ewmh icon to png, then to base64 string
+	img := NewNRGBAImageFromEwmhIcon(icon)
+	var buf bytes.Buffer
+	if err := png.Encode(&buf, img); err != nil {
+		logger.Warning(err)
+		return ""
+	}
+	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
+}
+
+func getBestEwmhIcon(xu *xgbutil.XUtil, win xproto.Window) (*ewmh.WmIcon, error) {
+	icons, err := ewmh.WmIconGet(xu, win)
+	if err != nil {
+		return nil, err
+	}
+
+	return xgraphics.FindBestEwmhIcon(60, 60, icons), nil
+}
+
+func NewNRGBAImageFromEwmhIcon(icon *ewmh.WmIcon) *image.NRGBA {
+	img := image.NewNRGBA(image.Rect(0, 0, int(icon.Width), int(icon.Height)))
+	// icon.Data uint32[] ARGB
+	// NRGBA Pix []uint8 RGBA
+	// i is icon.Data index
+	// p is img.Pix index
+	p := 0
+	for i := 0; i < len(icon.Data); i++ {
+		argb := icon.Data[i]
+		img.Pix[p] = uint8(argb >> 16)   // R
+		img.Pix[p+1] = uint8(argb >> 8)  // G
+		img.Pix[p+2] = uint8(argb)       // B
+		img.Pix[p+3] = uint8(argb >> 24) // A
+		p += 4
+	}
+	return img
 }
 
 func getWindowUserTime(win xproto.Window) (uint, error) {
