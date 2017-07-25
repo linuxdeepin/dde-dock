@@ -326,6 +326,10 @@ func doSetLayout(value string) error {
 	layout, variant := array[0], array[1]
 	if layout != "us" {
 		layout += ",us"
+
+		if variant != "" {
+			variant += ","
+		}
 	}
 
 	var cmd = fmt.Sprintf("%s -layout \"%s\" -variant \"%s\"",
