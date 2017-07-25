@@ -150,7 +150,7 @@ func getWorkingOutputNames(helper *Helper) ([]string, error) {
 		return nil, err
 	}
 
-	outputs := screenInfo.Outputs.ListConnectionOutputs().ListValidOutputs()
+	outputs := screenInfo.Outputs.ListConnectionOutputs()
 	workingOutputs := make(drandr.OutputInfos, 0, len(outputs))
 	for _, output := range outputs {
 		crtc := &output.Crtc
