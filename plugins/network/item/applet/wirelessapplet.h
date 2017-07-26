@@ -10,9 +10,9 @@
 #include <QVBoxLayout>
 #include <QList>
 #include <QTimer>
+#include <QCheckBox>
 
 #include <dinputdialog.h>
-#include <dcheckbox.h>
 
 class WirelessList : public QScrollArea
 {
@@ -58,7 +58,7 @@ private:
 
     QTimer *m_updateAPTimer;
     Dtk::Widget::DInputDialog *m_pwdDialog;
-    Dtk::Widget::DCheckBox *m_autoConnBox;
+    QCheckBox *m_autoConnBox;
 
     QString m_lastConnPath;
     QString m_lastConnSecurity;

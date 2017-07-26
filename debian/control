@@ -8,7 +8,7 @@ Build-Depends: debhelper (>= 8.0.0), pkg-config,
  libxcb-ewmh-dev, libqt5x11extras5-dev,
  libxcb-damage0-dev, libqt5svg5-dev,
  libxcb-icccm4-dev, libxtst-dev,
- libdtkbase-dev, libdtkutil-dev, libdtkwidget-dev, qttools5-dev-tools, libxcb-icccm4-dev,
+ libdtkwidget-dev, qttools5-dev-tools, libxcb-icccm4-dev,
  libdframeworkdbus-dev,
  libgsettings-qt-dev,
  clang [mipsel mips64el]

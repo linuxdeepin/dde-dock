@@ -4,7 +4,7 @@ include(../../interfaces/interfaces.pri)
 QT              += widgets svg dbus
 TEMPLATE         = lib
 CONFIG          += plugin c++11 link_pkgconfig
-PKGCONFIG       += dtkwidget dtkbase
+PKGCONFIG       += dtkwidget
 
 TARGET          = $$qtLibraryTarget(disk-mount)
 DESTDIR          = $$_PRO_FILE_PWD_/../

@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include "dbus/dbusdockadaptors.h"
 DWIDGET_USE_NAMESPACE
-DUTIL_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 
 // let startdde know that we've already started.
 void RegisterDdeSession()

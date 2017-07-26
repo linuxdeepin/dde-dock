@@ -8,7 +8,7 @@ DESTDIR         = $$_PRO_FILE_PWD_/../
 TEMPLATE        = app
 CONFIG         += c++11 link_pkgconfig
 
-PKGCONFIG += xcb-ewmh dtkwidget dtkbase dtkutil x11
+PKGCONFIG += xcb-ewmh dtkwidget x11
 LIBS += -lgomp
 
 SOURCES += main.cpp \
