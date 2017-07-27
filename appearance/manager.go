@@ -27,6 +27,7 @@ import (
 	"time"
 )
 
+// The supported types
 const (
 	TypeGtkTheme          = "gtk"
 	TypeIconTheme         = "icon"
@@ -57,15 +58,17 @@ const (
 	defaultFontConfigFile = "/usr/share/deepin-default-settings/fontconfig.json"
 )
 
+// Manager shows current themes and fonts settings, emit 'Changed' signal if modified
+// if themes list changed will emit 'Refreshed' signal
 type Manager struct {
-	GtkTheme      *property.GSettingsStringProperty `access:"readwrite"`
-	IconTheme     *property.GSettingsStringProperty `access:"readwrite"`
-	CursorTheme   *property.GSettingsStringProperty `access:"readwrite"`
-	Background    *property.GSettingsStringProperty `access:"readwrite"`
-	StandardFont  *property.GSettingsStringProperty `access:"readwrite"`
-	MonospaceFont *property.GSettingsStringProperty `access:"readwrite"`
+	GtkTheme      *property.GSettingsStringProperty
+	IconTheme     *property.GSettingsStringProperty
+	CursorTheme   *property.GSettingsStringProperty
+	Background    *property.GSettingsStringProperty
+	StandardFont  *property.GSettingsStringProperty
+	MonospaceFont *property.GSettingsStringProperty
 
-	FontSize *property.GSettingsFloatProperty `access:"readwrite"`
+	FontSize *property.GSettingsFloatProperty
 
 	// Signals:
 	// Theme setting changed
@@ -87,6 +90,7 @@ type Manager struct {
 	wm *wm.Wm
 }
 
+// NewManager will create a 'Manager' object
 func NewManager() *Manager {
 	var m = new(Manager)
 	m.setting = gio.NewSettings(appearanceSchema)

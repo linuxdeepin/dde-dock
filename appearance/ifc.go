@@ -19,6 +19,7 @@ import (
 	"pkg.deepin.io/dde/daemon/appearance/subthemes"
 )
 
+// Reset reset all themes and fonts settings to default values
 func (m *Manager) Reset() {
 	logger.Debug("Reset settings")
 
@@ -39,7 +40,7 @@ func (m *Manager) Reset() {
 	m.resetFonts()
 }
 
-// List list all available for the special type
+// List list all available for the special type, return a json format list
 func (m *Manager) List(ty string) (string, error) {
 	logger.Debug("List for type:", ty)
 	switch strings.ToLower(ty) {
