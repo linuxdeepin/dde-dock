@@ -3,6 +3,7 @@ package dock
 import (
 	"bytes"
 	"encoding/base64"
+	"errors"
 	"github.com/BurntSushi/xgb/xproto"
 	"github.com/BurntSushi/xgbutil"
 	"github.com/BurntSushi/xgbutil/ewmh"
@@ -11,6 +12,7 @@ import (
 	"github.com/BurntSushi/xgbutil/xprop"
 	"github.com/BurntSushi/xgbutil/xrect"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"github.com/nfnt/resize"
 	"image"
 	"image/png"
 	"strings"
@@ -104,18 +106,24 @@ func getWmWindowRole(xu *xgbutil.XUtil, win xproto.Window) string {
 	return role
 }
 
+const bestIconSize = 48
+
 func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
-	icon, err := getBestEwmhIcon(xu, win)
+	img, err := findIconEwmh(xu, win)
 	if err != nil {
 		logger.Warning(err)
-		return ""
-	}
-	if icon == nil {
-		return ""
+		// try icccm
+		img, err = findIconIcccm(xu, win)
+		if err != nil {
+			logger.Warning(err)
+			// get icon failed
+			return ""
+		}
 	}
 
-	// encode ewmh icon to png, then to base64 string
-	img := NewNRGBAImageFromEwmhIcon(icon)
+	img = resize.Thumbnail(bestIconSize, bestIconSize, img, resize.NearestNeighbor)
+
+	// encode image to png, then to base64 string
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, img); err != nil {
 		logger.Warning(err)
@@ -124,13 +132,39 @@ func getIconFromWindow(xu *xgbutil.XUtil, win xproto.Window) string {
 	return "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes())
 }
 
+func findIconEwmh(xu *xgbutil.XUtil, win xproto.Window) (image.Image, error) {
+	icon, err := getBestEwmhIcon(xu, win)
+	if err != nil {
+		return nil, err
+	}
+	return NewNRGBAImageFromEwmhIcon(icon), nil
+}
+
+// findIconIcccm helps FindIcon by trying to return an icccm-style icon.
+func findIconIcccm(X *xgbutil.XUtil, wid xproto.Window) (image.Image, error) {
+	hints, err := icccm.WmHintsGet(X, wid)
+	if err != nil {
+		return nil, err
+	}
+
+	// Only continue if the WM_HINTS flags say an icon is specified and
+	// if at least one of icon pixmap or icon mask is non-zero.
+	if hints.Flags&icccm.HintIconPixmap == 0 ||
+		(hints.IconPixmap == 0 && hints.IconMask == 0) {
+
+		return nil, errors.New("No icon found in WM_HINTS.")
+	}
+
+	return xgraphics.NewIcccmIcon(X, hints.IconPixmap, hints.IconMask)
+}
+
 func getBestEwmhIcon(xu *xgbutil.XUtil, win xproto.Window) (*ewmh.WmIcon, error) {
 	icons, err := ewmh.WmIconGet(xu, win)
 	if err != nil {
 		return nil, err
 	}
 
-	return xgraphics.FindBestEwmhIcon(60, 60, icons), nil
+	return xgraphics.FindBestEwmhIcon(bestIconSize, bestIconSize, icons), nil
 }
 
 func NewNRGBAImageFromEwmhIcon(icon *ewmh.WmIcon) *image.NRGBA {
