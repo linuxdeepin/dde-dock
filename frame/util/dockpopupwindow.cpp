@@ -128,9 +128,10 @@ bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 
 void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString &id)
 {
+    Q_UNUSED(button);
     // button_left
-    if (button != 1)
-        return;
+//    if (button != 1)
+//        return;
 
     if (id != m_mouseAreaKey)
         return;
