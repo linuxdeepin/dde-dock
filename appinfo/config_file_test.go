@@ -12,7 +12,7 @@ package appinfo
 import (
 	"os"
 
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 )
 
 type ConfigFileTestSuite struct {

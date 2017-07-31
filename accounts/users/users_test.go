@@ -10,7 +10,7 @@
 package users
 
 import (
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 	dutils "pkg.deepin.io/lib/utils"
 	"testing"
 )

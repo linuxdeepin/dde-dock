@@ -10,7 +10,7 @@
 package network
 
 import (
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 	"os"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"testing"

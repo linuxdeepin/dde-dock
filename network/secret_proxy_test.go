@@ -10,7 +10,7 @@
 package network
 
 import (
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 )
 
 func (*testWrapper) TestSecretProxyType(c *C.C) {

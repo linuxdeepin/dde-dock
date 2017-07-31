@@ -10,7 +10,7 @@
 package langselector
 
 import (
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 	"os"
 	"testing"
 )

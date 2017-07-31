@@ -13,7 +13,7 @@ package network
 
 import (
 	"fmt"
-	C "launchpad.net/gocheck"
+	C "gopkg.in/check.v1"
 	"os"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
