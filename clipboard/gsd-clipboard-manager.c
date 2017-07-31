@@ -174,9 +174,27 @@ default_clipboard_restore (GsdClipboardManager *manager)
 }
 
 static void
+debug_gdk_event_owner_changed(GdkEventOwnerChange *event)
+{
+        g_debug("Owner changed event:\n");
+        g_debug("\tType: %d\n", event->type);
+        g_debug("\tWindow: %p\n", (event->window));
+        g_debug("\tSend event: %d\n", event->send_event);
+        g_debug("\tOwner window: %p\n", (event->owner));
+        // new owner, destroy, client close
+        g_debug("\tChanged reason: %d, (%d, %d, %d)\n", event->reason,
+                GDK_OWNER_CHANGE_NEW_OWNER, GDK_OWNER_CHANGE_DESTROY, GDK_OWNER_CHANGE_CLOSE);
+        /* g_debug("\tSelection: %d\n", event->selection); */
+        g_debug("\tTime: %u\n", event->time);
+        g_debug("\tSelection time: %u\n", event->selection_time);
+}
+
+static void
 default_clipboard_owner_change (GsdClipboardManager *manager,
                                 GdkEventOwnerChange *event)
 {
+        g_debug("CLIPBOARD changed\n");
+        debug_gdk_event_owner_changed(event);
         if (event->send_event == TRUE) {
                 return;
         }
@@ -189,6 +207,7 @@ default_clipboard_owner_change (GsdClipboardManager *manager,
                 default_clipboard_store (manager);
         }
         else {
+                g_debug("CLIPBOARD owner is nil: %p, internal change: %d\n", event->owner, manager->priv->default_internal_change);
                 /* This 'bug' happens with Mozilla applications, it means that
                  * we restored the clipboard (we own it now) but somehow we are
                  * being noticed twice about that fact where first the owner is
@@ -198,7 +217,7 @@ default_clipboard_owner_change (GsdClipboardManager *manager,
                  * e.g. owner is not 0). By the second time we would store
                  * ourself back with an empty clipboard... solution is to jump
                  * over the first time and don't try to restore empty data. */
-                if (manager->priv->default_internal_change) {
+                if (event->reason == GDK_OWNER_CHANGE_NEW_OWNER || manager->priv->default_internal_change) {
                         return;
                 }
 
@@ -256,6 +275,8 @@ static void
 primary_clipboard_owner_change (GsdClipboardManager *manager,
                                 GdkEventOwnerChange *event)
 {
+        g_debug("PRIMARY changed\n");
+        debug_gdk_event_owner_changed(event);
         if (event->send_event == TRUE) {
                 return;
         }
@@ -271,8 +292,15 @@ primary_clipboard_owner_change (GsdClipboardManager *manager,
                 }
                 manager->priv->primary_timeout = g_timeout_add (250, (GSourceFunc)primary_clipboard_store, manager);
         }
-        else if (gtk_clipboard_wait_is_text_available (manager->priv->primary_clipboard) == FALSE) {
-                manager->priv->primary_timeout = g_timeout_add (250, (GSourceFunc)primary_clipboard_restore, manager);
+        else {
+                if (event->reason == GDK_OWNER_CHANGE_NEW_OWNER || manager->priv->default_internal_change) {
+                        return;
+                }
+
+                g_debug("PRIMARY owner is nil, check text available\n");
+                if (gtk_clipboard_wait_is_text_available (manager->priv->primary_clipboard) == FALSE) {
+                        manager->priv->primary_timeout = g_timeout_add (250, (GSourceFunc)primary_clipboard_restore, manager);
+                }
         }
 }
 
