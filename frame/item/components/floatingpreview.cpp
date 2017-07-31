@@ -1,6 +1,6 @@
 #include "floatingpreview.h"
 #include "appsnapshot.h"
-#include "_previewcontainer.h"
+#include "previewcontainer.h"
 
 #include <QPainter>
 #include <QVBoxLayout>

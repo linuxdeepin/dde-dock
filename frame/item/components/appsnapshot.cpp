@@ -1,5 +1,5 @@
 #include "appsnapshot.h"
-#include "_previewcontainer.h"
+#include "previewcontainer.h"
 
 #include <X11/Xlib.h>
 #include <X11/X.h>

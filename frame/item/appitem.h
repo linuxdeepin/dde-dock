@@ -2,7 +2,7 @@
 #define APPITEM_H
 
 #include "dockitem.h"
-#include "components/_previewcontainer.h"
+#include "components/previewcontainer.h"
 #include "dbus/dbusdockentry.h"
 #include "dbus/dbusclientmanager.h"
 
@@ -58,7 +58,7 @@ private slots:
 
 private:
     QLabel *m_appNameTips;
-    _PreviewContainer *m_appPreviewTips;
+    PreviewContainer *m_appPreviewTips;
     DBusDockEntry *m_itemEntry;
 
     QGraphicsView *m_itemView;

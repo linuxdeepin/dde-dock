@@ -2,12 +2,18 @@
 #define PREVIEWCONTAINER_H
 
 #include <QWidget>
-#include <QHBoxLayout>
+#include <QBoxLayout>
+#include <QTimer>
 
 #include "dbus/dbusdockentry.h"
 #include "constants.h"
+#include "appsnapshot.h"
+#include "floatingpreview.h"
 
 #include <DWindowManagerHelper>
+
+#define SNAP_WIDTH       200
+#define SNAP_HEIGHT      130
 
 DWIDGET_USE_NAMESPACE
 
@@ -23,29 +29,38 @@ signals:
     void requestPreviewWindow(const WId wid) const;
     void requestCancelPreview() const;
     void requestHidePreview() const;
+    void requestCheckWindows() const;
 
 public:
     void setWindowInfos(const WindowDict &infos);
+    void updateSnapshots();
 
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
-
-protected:
-    void leaveEvent(QEvent *e);
-    void enterEvent(QEvent *e);
-
-private slots:
-    void updateContainerSize();
     void checkMouseLeave();
 
 private:
+    void adjustSize();
+    void appendSnapWidget(const WId wid);
+
+    void enterEvent(QEvent *e);
+    void leaveEvent(QEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
+
+private slots:
+    void previewEntered(const WId wid);
+    void moveFloatingPreview(const QPoint &p);
+
+private:
+    bool m_needActivate;
+    QMap<WId, AppSnapshot *> m_snapshots;
+
+    FloatingPreview *m_floatingPreview;
     QBoxLayout *m_windowListLayout;
 
-    DWindowManagerHelper *m_wmHelper;
-
     QTimer *m_mouseLeaveTimer;
-
-    QMap<WId, QWidget *> m_windows;
+    DWindowManagerHelper *m_wmHelper;
 };
 
 #endif // PREVIEWCONTAINER_H

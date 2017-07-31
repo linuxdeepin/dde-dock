@@ -1,73 +1,74 @@
 #include "previewcontainer.h"
-#include "previewwidget.h"
 
-#include <QLabel>
-#include <QWindow>
-#include <QDebug>
+#include <QDesktopWidget>
+#include <QScreen>
+#include <QApplication>
+#include <QDragEnterEvent>
+
+#define SPACING           0
+#define MARGIN            0
+#define SNAP_HEIGHT_WITHOUT_COMPOSITE       30
 
 PreviewContainer::PreviewContainer(QWidget *parent)
     : QWidget(parent),
+      m_needActivate(false),
 
-      m_wmHelper(DWindowManagerHelper::instance()),
-
-      m_mouseLeaveTimer(new QTimer(this))
+      m_floatingPreview(new FloatingPreview(this)),
+      m_mouseLeaveTimer(new QTimer(this)),
+      m_wmHelper(DWindowManagerHelper::instance())
 {
     m_windowListLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    m_windowListLayout->setMargin(5);
-    m_windowListLayout->setSpacing(3);
+    m_windowListLayout->setSpacing(SPACING);
+    m_windowListLayout->setContentsMargins(MARGIN, MARGIN, MARGIN, MARGIN);
 
     m_mouseLeaveTimer->setSingleShot(true);
-    m_mouseLeaveTimer->setInterval(100);
+    m_mouseLeaveTimer->setInterval(300);
 
+    m_floatingPreview->setVisible(false);
+
+    setAcceptDrops(true);
     setLayout(m_windowListLayout);
+    setFixedSize(SNAP_WIDTH, SNAP_HEIGHT);
 
     connect(m_mouseLeaveTimer, &QTimer::timeout, this, &PreviewContainer::checkMouseLeave, Qt::QueuedConnection);
+    connect(m_floatingPreview, &FloatingPreview::requestMove, this, &PreviewContainer::moveFloatingPreview);
 }
 
 void PreviewContainer::setWindowInfos(const WindowDict &infos)
 {
-    if (infos.isEmpty())
+    // check removed window
+    for (auto it(m_snapshots.begin()); it != m_snapshots.end();)
     {
-        emit requestCancelPreview();
-        emit requestHidePreview();
-
-        return;
+        if (!infos.contains(it.key()))
+        {
+            m_windowListLayout->removeWidget(it.value());
+            it.value()->deleteLater();
+            it = m_snapshots.erase(it);
+        } else {
+            ++it;
+        }
     }
-
-    QList<WId> removedWindows;
-
-    // remove desroyed window
-    for (auto it(m_windows.cbegin()); it != m_windows.cend(); ++it)
-    {
-        if (infos.contains(it.key()))
-            continue;
-
-        removedWindows << it.key();
-        m_windowListLayout->removeWidget(it.value());
-        it.value()->deleteLater();
-    }
-    for (auto id : removedWindows)
-        m_windows.remove(id);
 
     for (auto it(infos.cbegin()); it != infos.cend(); ++it)
     {
-        if (m_windows.contains(it.key()))
-            continue;
-
-        PreviewWidget *w = new PreviewWidget(it.key());
-        w->setTitle(it.value());
-
-        connect(w, &PreviewWidget::requestActivateWindow, this, &PreviewContainer::requestActivateWindow);
-        connect(w, &PreviewWidget::requestPreviewWindow, this, &PreviewContainer::requestPreviewWindow);
-        connect(w, &PreviewWidget::requestCancelPreview, this, &PreviewContainer::requestCancelPreview);
-        connect(w, &PreviewWidget::requestHidePreview, this, &PreviewContainer::requestHidePreview);
-
-        m_windowListLayout->addWidget(w);
-        m_windows.insert(it.key(), w);
+        if (!m_snapshots.contains(it.key()))
+            appendSnapWidget(it.key());
+        m_snapshots[it.key()]->setWindowTitle(it.value());
     }
 
-    // update geometry
-    QMetaObject::invokeMethod(this, "updateContainerSize", Qt::QueuedConnection);
+    if (m_snapshots.isEmpty())
+    {
+        emit requestCancelPreview();
+        emit requestHidePreview();
+    } else {
+        adjustSize();
+    }
+}
+
+void PreviewContainer::updateSnapshots()
+{
+    for (AppSnapshot *snap : m_snapshots)
+        snap->fetchSnapshot();
 }
 
 void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
@@ -77,18 +78,83 @@ void PreviewContainer::updateLayoutDirection(const Dock::Position dockPos)
     else
         m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
 
-//    switch (dockPos)
-//    {
-//    case Dock::Top:
-//    case Dock::Bottom:
-//        m_windowListLayout->setDirection(QBoxLayout::LeftToRight);
-//        break;
+    adjustSize();
+}
 
-//    case Dock::Left:
-//    case Dock::Right:
-//        m_windowListLayout->setDirection(QBoxLayout::TopToBottom);
-//        break;
-//    }
+void PreviewContainer::checkMouseLeave()
+{
+    const bool hover = underMouse();
+
+    if (!hover)
+    {
+        m_floatingPreview->setVisible(false);
+
+        if (!isVisible())
+            return;
+
+        emit requestCancelPreview();
+        emit requestHidePreview();
+
+        if (m_needActivate)
+        {
+            m_needActivate = false;
+            emit requestActivateWindow(m_floatingPreview->trackedWid());
+        }
+    }
+}
+
+void PreviewContainer::adjustSize()
+{
+    const int count = m_snapshots.size();
+    const bool composite = m_wmHelper->hasComposite();
+    if (!composite)
+    {
+        const int h = SNAP_HEIGHT_WITHOUT_COMPOSITE * count + MARGIN * 2 + SPACING * (count - 1);
+        setFixedSize(SNAP_WIDTH, h);
+        return;
+    }
+
+    const QRect r = qApp->primaryScreen()->geometry();
+    const int padding = 20;
+
+    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
+    if (horizontal)
+    {
+        const int h = SNAP_HEIGHT + MARGIN * 2;
+        const int w = SNAP_WIDTH * count + MARGIN * 2 + SPACING * (count - 1);
+
+        setFixedHeight(h);
+        setFixedWidth(std::min(w, r.width() - padding));
+    } else {
+        const int w = SNAP_WIDTH + MARGIN * 2;
+        const int h = SNAP_HEIGHT * count + MARGIN * 2 + SPACING * (count - 1);
+
+        setFixedWidth(w);
+        setFixedHeight(std::min(h, r.height() - padding));
+    }
+}
+
+void PreviewContainer::appendSnapWidget(const WId wid)
+{
+    AppSnapshot *snap = new AppSnapshot(wid);
+
+    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestActivateWindow, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestCancelPreview, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::clicked, this, &PreviewContainer::requestHidePreview, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::entered, this, &PreviewContainer::previewEntered, Qt::QueuedConnection);
+    connect(snap, &AppSnapshot::requestCheckWindow, this, &PreviewContainer::requestCheckWindows);
+
+    m_windowListLayout->addWidget(snap);
+
+    m_snapshots.insert(wid, snap);
+}
+
+void PreviewContainer::enterEvent(QEvent *e)
+{
+    QWidget::enterEvent(e);
+
+    m_needActivate = false;
+    m_mouseLeaveTimer->stop();
 }
 
 void PreviewContainer::leaveEvent(QEvent *e)
@@ -98,25 +164,55 @@ void PreviewContainer::leaveEvent(QEvent *e)
     m_mouseLeaveTimer->start();
 }
 
-void PreviewContainer::enterEvent(QEvent *e)
+void PreviewContainer::dragEnterEvent(QDragEnterEvent *e)
 {
-    QWidget::enterEvent(e);
+    e->accept();
 
+    m_needActivate = false;
     m_mouseLeaveTimer->stop();
 }
 
-void PreviewContainer::updateContainerSize()
+void PreviewContainer::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    resize(sizeHint());
+    e->ignore();
+
+    m_needActivate = true;
+    m_mouseLeaveTimer->start(10);
 }
 
-void PreviewContainer::checkMouseLeave()
+void PreviewContainer::previewEntered(const WId wid)
 {
-    const QPoint p = mapFromGlobal(QCursor::pos());
+    if (!m_wmHelper->hasComposite())
+        return;
 
-    if (!rect().contains(p))
+    AppSnapshot *snap = static_cast<AppSnapshot *>(sender());
+
+    m_floatingPreview->trackWindow(snap);
+    m_floatingPreview->setVisible(true);
+    m_floatingPreview->raise();
+
+    emit requestPreviewWindow(wid);
+}
+
+void PreviewContainer::moveFloatingPreview(const QPoint &p)
+{
+    const bool horizontal = m_windowListLayout->direction() == QBoxLayout::LeftToRight;
+    const QRect r = rect();
+
+    if (horizontal)
     {
-        emit requestCancelPreview();
-        emit requestHidePreview();
+        if (p.x() < r.left())
+            m_floatingPreview->move(MARGIN, p.y());
+        else if (p.x() + m_floatingPreview->width() > r.right())
+            m_floatingPreview->move(r.right() - m_floatingPreview->width() - MARGIN + 1, p.y());
+        else
+            m_floatingPreview->move(p);
+    } else {
+        if (p.y() < r.top())
+            m_floatingPreview->move(p.x(), MARGIN);
+        else if (p.y() + m_floatingPreview->height() > r.bottom())
+            m_floatingPreview->move(p.x(), r.bottom() - m_floatingPreview->height() - MARGIN + 1);
+        else
+            m_floatingPreview->move(p);
     }
 }
