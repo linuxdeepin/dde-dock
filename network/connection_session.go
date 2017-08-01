@@ -101,6 +101,9 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 		s.data = newWirelessAdhocConnectionData(id, s.Uuid)
 	case connectionWirelessHotspot:
 		s.data = newWirelessHotspotConnectionData(id, s.Uuid)
+		if devPath != "" && devPath != "/" {
+			setSettingConnectionInterfaceName(s.data, nmGetDeviceInterface(devPath))
+		}
 	case connectionPppoe:
 		s.data = newPppoeConnectionData(id, s.Uuid)
 	case connectionMobileGsm:
