@@ -18,9 +18,26 @@ import (
 	"strings"
 )
 
+// no use
 func iconifyWindow(win xproto.Window) {
 	logger.Debug("iconifyWindow", win)
 	ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+}
+
+func maximizeWindow(xu *xgbutil.XUtil, win xproto.Window) error {
+	return ewmh.WmStateReqExtra(xu, win, ewmh.StateAdd, "_NET_WM_STATE_MAXIMIZED_VERT", "_NET_WM_STATE_MAXIMIZED_HORZ", 2)
+}
+
+func minimizeWindow(xu *xgbutil.XUtil, win xproto.Window) error {
+	return ewmh.ClientEvent(XU, win, "WM_CHANGE_STATE", icccm.StateIconic)
+}
+
+func makeWindowAbove(xu *xgbutil.XUtil, win xproto.Window) error {
+	return ewmh.WmStateReq(xu, win, ewmh.StateAdd, "_NET_WM_STATE_ABOVE")
+}
+
+func moveWindow(xu *xgbutil.XUtil, win xproto.Window) error {
+	return ewmh.WmMoveresize(xu, win, ewmh.MoveKeyboard)
 }
 
 type windowFrameExtents struct {

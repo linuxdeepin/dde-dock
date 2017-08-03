@@ -137,6 +137,56 @@ func (m *DockManager) CloseWindow(win uint32) error {
 	return nil
 }
 
+func (m *DockManager) MaximizeWindow(win uint32) error {
+	err := m.ActivateWindow(win)
+	if err != nil {
+		return err
+	}
+	err = maximizeWindow(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("maximize window failed:", err)
+		return err
+	}
+	return nil
+}
+
+func (m *DockManager) MinimizeWindow(win uint32) error {
+	err := minimizeWindow(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("minimize window failed:", err)
+		return err
+	}
+	return nil
+}
+
+func (m *DockManager) MakeWindowAbove(win uint32) error {
+	err := m.ActivateWindow(win)
+	if err != nil {
+		return err
+	}
+
+	err = makeWindowAbove(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("make window above failed:", err)
+		return err
+	}
+	return nil
+}
+
+func (m *DockManager) MoveWindow(win uint32) error {
+	err := m.ActivateWindow(win)
+	if err != nil {
+		return err
+	}
+
+	err = moveWindow(XU, xproto.Window(win))
+	if err != nil {
+		logger.Warning("move window failed:", err)
+		return err
+	}
+	return nil
+}
+
 func (m *DockManager) PreviewWindow(win uint32) error {
 	if !ddbus.IsSessionBusActivated(m.wm.DestName) {
 		logger.Warning("Deepin window manager not running, unsupported this operation")
