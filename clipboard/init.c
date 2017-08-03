@@ -18,7 +18,7 @@
  */
 
 #include <gtk/gtk.h>
-// copy frome xfce4-clipman
+// copy frome gnome-settings-daemon
 #include "gsd-clipboard-manager.h"
 
 static GsdClipboardManager* clip_manager = NULL;
