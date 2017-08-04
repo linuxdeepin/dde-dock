@@ -481,7 +481,7 @@ func (m *Manager) EnableWirelessHotspotMode(devPath dbus.ObjectPath) (err error)
 		// if the connection not exists, it will be activated when
 		// creating, but if already exists, we should activate it
 		// manually
-		_, err = nmActivateConnection(devPath, cpath)
+		_, err = nmActivateConnection(cpath, devPath)
 	}
 	return
 }
