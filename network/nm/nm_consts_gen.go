@@ -107,10 +107,17 @@ const (
 	NM_AGENT_MANAGER_ERROR_USER_CANCELED      = 5
 )
 
+// Enum Capability
+const (
+	NM_CAPABILITY_TEAM = 1
+)
+
 // Enum CheckpointCreateFlags
 const (
-	NM_CHECKPOINT_CREATE_FLAG_NONE        = 0
-	NM_CHECKPOINT_CREATE_FLAG_DESTROY_ALL = 1
+	NM_CHECKPOINT_CREATE_FLAG_NONE                   = 0
+	NM_CHECKPOINT_CREATE_FLAG_DESTROY_ALL            = 1
+	NM_CHECKPOINT_CREATE_FLAG_DELETE_NEW_CONNECTIONS = 2
+	NM_CHECKPOINT_CREATE_FLAG_DISCONNECT_NEW_DEVICES = 4
 )
 
 // Enum ClientError
@@ -300,6 +307,7 @@ const (
 	NM_DEVICE_TYPE_MACVLAN    = 18
 	NM_DEVICE_TYPE_VXLAN      = 19
 	NM_DEVICE_TYPE_VETH       = 20
+	NM_DEVICE_TYPE_MACSEC     = 21
 )
 
 // Enum IPTunnelMode
@@ -331,6 +339,7 @@ const (
 	NM_MANAGER_ERROR_UNKNOWN_LOG_LEVEL           = 10
 	NM_MANAGER_ERROR_UNKNOWN_LOG_DOMAIN          = 11
 	NM_MANAGER_ERROR_INVALID_ARGUMENTS           = 12
+	NM_MANAGER_ERROR_MISSING_PLUGIN              = 13
 )
 
 // Enum Metered
@@ -373,6 +382,7 @@ const (
 	NM_SETTING_802_1X_CK_SCHEME_UNKNOWN = 0
 	NM_SETTING_802_1X_CK_SCHEME_BLOB    = 1
 	NM_SETTING_802_1X_CK_SCHEME_PATH    = 2
+	NM_SETTING_802_1X_CK_SCHEME_PKCS11  = 3
 )
 
 // Enum SettingCompareFlags
@@ -432,6 +442,19 @@ const (
 	NM_SETTING_MAC_RANDOMIZATION_ALWAYS  = 2
 )
 
+// Enum SettingMacsecMode
+const (
+	NM_SETTING_MACSEC_MODE_PSK = 0
+	NM_SETTING_MACSEC_MODE_EAP = 1
+)
+
+// Enum SettingMacsecValidation
+const (
+	NM_SETTING_MACSEC_VALIDATION_DISABLE = 0
+	NM_SETTING_MACSEC_VALIDATION_CHECK   = 1
+	NM_SETTING_MACSEC_VALIDATION_STRICT  = 2
+)
+
 // Enum SettingMacvlanMode
 const (
 	NM_SETTING_MACVLAN_MODE_UNKNOWN  = 0
@@ -440,6 +463,12 @@ const (
 	NM_SETTING_MACVLAN_MODE_PRIVATE  = 3
 	NM_SETTING_MACVLAN_MODE_PASSTHRU = 4
 	NM_SETTING_MACVLAN_MODE_SOURCE   = 5
+)
+
+// Enum SettingProxyMethod
+const (
+	NM_SETTING_PROXY_METHOD_NONE = 0
+	NM_SETTING_PROXY_METHOD_AUTO = 1
 )
 
 // Enum SettingSerialParity
@@ -754,6 +783,9 @@ const (
 	NM_CLIENT_DEVICES                               = "devices"
 	NM_CLIENT_DEVICE_ADDED                          = "device-added"
 	NM_CLIENT_DEVICE_REMOVED                        = "device-removed"
+	NM_CLIENT_DNS_CONFIGURATION                     = "dns-configuration"
+	NM_CLIENT_DNS_MODE                              = "dns-mode"
+	NM_CLIENT_DNS_RC_MANAGER                        = "dns-rc-manager"
 	NM_CLIENT_HOSTNAME                              = "hostname"
 	NM_CLIENT_METERED                               = "metered"
 	NM_CLIENT_NETWORKING_ENABLED                    = "networking-enabled"
@@ -774,6 +806,7 @@ const (
 	NM_CONNECTION_SECRETS_CLEARED                   = "secrets-cleared"
 	NM_CONNECTION_SECRETS_UPDATED                   = "secrets-updated"
 	NM_DBUS_INTERFACE                               = "org.freedesktop.NetworkManager"
+	NM_DBUS_INTERFACE_DNS_MANAGER                   = "org.freedesktop.NetworkManager.DnsManager"
 	NM_DBUS_INTERFACE_SETTINGS                      = "org.freedesktop.NetworkManager.Settings"
 	NM_DBUS_INTERFACE_SETTINGS_CONNECTION           = "org.freedesktop.NetworkManager.Settings.Connection"
 	NM_DBUS_INTERFACE_SETTINGS_CONNECTION_SECRETS   = "org.freedesktop.NetworkManager.Settings.Connection.Secrets"
@@ -784,6 +817,7 @@ const (
 	NM_DBUS_NO_VPN_CONNECTIONS                      = "org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections"
 	NM_DBUS_PATH                                    = "/org/freedesktop/NetworkManager"
 	NM_DBUS_PATH_AGENT_MANAGER                      = "/org/freedesktop/NetworkManager/AgentManager"
+	NM_DBUS_PATH_DNS_MANAGER                        = "/org/freedesktop/NetworkManager/DnsManager"
 	NM_DBUS_PATH_SECRET_AGENT                       = "/org/freedesktop/NetworkManager/SecretAgent"
 	NM_DBUS_PATH_SETTINGS                           = "/org/freedesktop/NetworkManager/Settings"
 	NM_DBUS_PATH_SETTINGS_CONNECTION                = "/org/freedesktop/NetworkManager/Settings/Connection"
@@ -852,6 +886,20 @@ const (
 	NM_DEVICE_IP_TUNNEL_TOS                         = "tos"
 	NM_DEVICE_IP_TUNNEL_TTL                         = "ttl"
 	NM_DEVICE_LLDP_NEIGHBORS                        = "lldp-neighbors"
+	NM_DEVICE_MACSEC_CIPHER_SUITE                   = "cipher-suite"
+	NM_DEVICE_MACSEC_ENCODING_SA                    = "encoding-sa"
+	NM_DEVICE_MACSEC_ENCRYPT                        = "encrypt"
+	NM_DEVICE_MACSEC_ES                             = "es"
+	NM_DEVICE_MACSEC_HW_ADDRESS                     = "hw-address"
+	NM_DEVICE_MACSEC_ICV_LENGTH                     = "icv-length"
+	NM_DEVICE_MACSEC_INCLUDE_SCI                    = "include-sci"
+	NM_DEVICE_MACSEC_PARENT                         = "parent"
+	NM_DEVICE_MACSEC_PROTECT                        = "protect"
+	NM_DEVICE_MACSEC_REPLAY_PROTECT                 = "replay-protect"
+	NM_DEVICE_MACSEC_SCB                            = "scb"
+	NM_DEVICE_MACSEC_SCI                            = "sci"
+	NM_DEVICE_MACSEC_VALIDATION                     = "validation"
+	NM_DEVICE_MACSEC_WINDOW                         = "window"
 	NM_DEVICE_MACVLAN_HW_ADDRESS                    = "hw-address"
 	NM_DEVICE_MACVLAN_MODE                          = "mode"
 	NM_DEVICE_MACVLAN_NO_PROMISC                    = "no-promisc"
@@ -949,12 +997,19 @@ const (
 	NM_LLDP_DEST_NEAREST_CUSTOMER_BRIDGE            = "nearest-customer-bridge"
 	NM_LLDP_DEST_NEAREST_NON_TPMR_BRIDGE            = "nearest-non-tpmr-bridge"
 	NM_OBJECT_DBUS_CONNECTION                       = "dbus-connection"
+	NM_OBJECT_DBUS_OBJECT                           = "dbus-object"
+	NM_OBJECT_DBUS_OBJECT_MANAGER                   = "dbus-object-manager"
 	NM_OBJECT_PATH                                  = "path"
 	NM_REMOTE_CONNECTION_DBUS_CONNECTION            = "dbus-connection"
 	NM_REMOTE_CONNECTION_PATH                       = "path"
 	NM_REMOTE_CONNECTION_UNSAVED                    = "unsaved"
 	NM_REMOTE_CONNECTION_VISIBLE                    = "visible"
+	NM_SECRET_AGENT_OLD_AUTO_REGISTER               = "auto-register"
+	NM_SECRET_AGENT_OLD_CAPABILITIES                = "capabilities"
+	NM_SECRET_AGENT_OLD_IDENTIFIER                  = "identifier"
+	NM_SECRET_AGENT_OLD_REGISTERED                  = "registered"
 	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH       = "file://"
+	NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PKCS11     = "pkcs11:"
 	NM_SETTING_ADSL_ENCAPSULATION_LLC               = "llc"
 	NM_SETTING_ADSL_ENCAPSULATION_VCMUX             = "vcmux"
 	NM_SETTING_ADSL_PROTOCOL_IPOATM                 = "ipoatm"
@@ -1051,6 +1106,7 @@ const (
 	NM_VPN_PLUGIN_CONFIG_HAS_IP4                    = "has-ip4"
 	NM_VPN_PLUGIN_CONFIG_HAS_IP6                    = "has-ip6"
 	NM_VPN_PLUGIN_CONFIG_MTU                        = "mtu"
+	NM_VPN_PLUGIN_CONFIG_PROXY_PAC                  = "pac"
 	NM_VPN_PLUGIN_CONFIG_TUNDEV                     = "tundev"
 	NM_VPN_PLUGIN_INFO_FILENAME                     = "filename"
 	NM_VPN_PLUGIN_INFO_KEYFILE                      = "keyfile"
@@ -1081,6 +1137,11 @@ const (
 	NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES        = "preserve-routes"
 	NM_VPN_PLUGIN_IP6_CONFIG_PTP                    = "ptp"
 	NM_VPN_PLUGIN_IP6_CONFIG_ROUTES                 = "routes"
+	NM_VPN_PLUGIN_OLD_DBUS_SERVICE_NAME             = "service-name"
+	NM_VPN_PLUGIN_OLD_STATE                         = "state"
+	NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME         = "service-name"
+	NM_VPN_SERVICE_PLUGIN_DBUS_WATCH_PEER           = "watch-peer"
+	NM_VPN_SERVICE_PLUGIN_STATE                     = "state"
 	NM_WIMAX_NSP_NAME                               = "name"
 	NM_WIMAX_NSP_NETWORK_TYPE                       = "network-type"
 	NM_WIMAX_NSP_SIGNAL_QUALITY                     = "signal-quality"
@@ -1091,9 +1152,14 @@ const NM_SETTING_802_1X_SETTING_NAME = "802-1x"
 const (
 	NM_SETTING_802_1X_ALTSUBJECT_MATCHES                = "altsubject-matches"
 	NM_SETTING_802_1X_ANONYMOUS_IDENTITY                = "anonymous-identity"
+	NM_SETTING_802_1X_AUTH_TIMEOUT                      = "auth-timeout"
 	NM_SETTING_802_1X_CA_CERT                           = "ca-cert"
+	NM_SETTING_802_1X_CA_CERT_PASSWORD                  = "ca-cert-password"
+	NM_SETTING_802_1X_CA_CERT_PASSWORD_FLAGS            = "ca-cert-password-flags"
 	NM_SETTING_802_1X_CA_PATH                           = "ca-path"
 	NM_SETTING_802_1X_CLIENT_CERT                       = "client-cert"
+	NM_SETTING_802_1X_CLIENT_CERT_PASSWORD              = "client-cert-password"
+	NM_SETTING_802_1X_CLIENT_CERT_PASSWORD_FLAGS        = "client-cert-password-flags"
 	NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH               = "domain-suffix-match"
 	NM_SETTING_802_1X_EAP                               = "eap"
 	NM_SETTING_802_1X_IDENTITY                          = "identity"
@@ -1102,6 +1168,7 @@ const (
 	NM_SETTING_802_1X_PASSWORD_FLAGS                    = "password-flags"
 	NM_SETTING_802_1X_PASSWORD_RAW                      = "password-raw"
 	NM_SETTING_802_1X_PASSWORD_RAW_FLAGS                = "password-raw-flags"
+	NM_SETTING_802_1X_PHASE1_AUTH_FLAGS                 = "phase1-auth-flags"
 	NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING          = "phase1-fast-provisioning"
 	NM_SETTING_802_1X_PHASE1_PEAPLABEL                  = "phase1-peaplabel"
 	NM_SETTING_802_1X_PHASE1_PEAPVER                    = "phase1-peapver"
@@ -1109,8 +1176,12 @@ const (
 	NM_SETTING_802_1X_PHASE2_AUTH                       = "phase2-auth"
 	NM_SETTING_802_1X_PHASE2_AUTHEAP                    = "phase2-autheap"
 	NM_SETTING_802_1X_PHASE2_CA_CERT                    = "phase2-ca-cert"
+	NM_SETTING_802_1X_PHASE2_CA_CERT_PASSWORD           = "phase2-ca-cert-password"
+	NM_SETTING_802_1X_PHASE2_CA_CERT_PASSWORD_FLAGS     = "phase2-ca-cert-password-flags"
 	NM_SETTING_802_1X_PHASE2_CA_PATH                    = "phase2-ca-path"
 	NM_SETTING_802_1X_PHASE2_CLIENT_CERT                = "phase2-client-cert"
+	NM_SETTING_802_1X_PHASE2_CLIENT_CERT_PASSWORD       = "phase2-client-cert-password"
+	NM_SETTING_802_1X_PHASE2_CLIENT_CERT_PASSWORD_FLAGS = "phase2-client-cert-password-flags"
 	NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH        = "phase2-domain-suffix-match"
 	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY                = "phase2-private-key"
 	NM_SETTING_802_1X_PHASE2_PRIVATE_KEY_PASSWORD       = "phase2-private-key-password"
@@ -1174,6 +1245,7 @@ const (
 // Setting SettingCdma
 const NM_SETTING_CDMA_SETTING_NAME = "cdma"
 const (
+	NM_SETTING_CDMA_MTU            = "mtu"
 	NM_SETTING_CDMA_NUMBER         = "number"
 	NM_SETTING_CDMA_PASSWORD       = "password"
 	NM_SETTING_CDMA_PASSWORD_FLAGS = "password-flags"
@@ -1185,6 +1257,7 @@ const NM_SETTING_CONNECTION_SETTING_NAME = "connection"
 const (
 	NM_SETTING_CONNECTION_AUTOCONNECT          = "autoconnect"
 	NM_SETTING_CONNECTION_AUTOCONNECT_PRIORITY = "autoconnect-priority"
+	NM_SETTING_CONNECTION_AUTOCONNECT_RETRIES  = "autoconnect-retries"
 	NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES   = "autoconnect-slaves"
 	NM_SETTING_CONNECTION_GATEWAY_PING_TIMEOUT = "gateway-ping-timeout"
 	NM_SETTING_CONNECTION_ID                   = "id"
@@ -1233,6 +1306,7 @@ const (
 	NM_SETTING_GSM_APN             = "apn"
 	NM_SETTING_GSM_DEVICE_ID       = "device-id"
 	NM_SETTING_GSM_HOME_ONLY       = "home-only"
+	NM_SETTING_GSM_MTU             = "mtu"
 	NM_SETTING_GSM_NETWORK_ID      = "network-id"
 	NM_SETTING_GSM_NUMBER          = "number"
 	NM_SETTING_GSM_PASSWORD        = "password"
@@ -1320,6 +1394,19 @@ const (
 	NM_SETTING_IP_TUNNEL_TTL                 = "ttl"
 )
 
+// Setting SettingMacsec
+const NM_SETTING_MACSEC_SETTING_NAME = "macsec"
+const (
+	NM_SETTING_MACSEC_ENCRYPT       = "encrypt"
+	NM_SETTING_MACSEC_MKA_CAK       = "mka-cak"
+	NM_SETTING_MACSEC_MKA_CAK_FLAGS = "mka-cak-flags"
+	NM_SETTING_MACSEC_MKA_CKN       = "mka-ckn"
+	NM_SETTING_MACSEC_MODE          = "mode"
+	NM_SETTING_MACSEC_PARENT        = "parent"
+	NM_SETTING_MACSEC_PORT          = "port"
+	NM_SETTING_MACSEC_VALIDATION    = "validation"
+)
+
 // Setting SettingMacvlan
 const NM_SETTING_MACVLAN_SETTING_NAME = "macvlan"
 const (
@@ -1367,6 +1454,15 @@ const (
 	NM_SETTING_PPPOE_PASSWORD_FLAGS = "password-flags"
 	NM_SETTING_PPPOE_SERVICE        = "service"
 	NM_SETTING_PPPOE_USERNAME       = "username"
+)
+
+// Setting SettingProxy
+const NM_SETTING_PROXY_SETTING_NAME = "proxy"
+const (
+	NM_SETTING_PROXY_BROWSER_ONLY = "browser-only"
+	NM_SETTING_PROXY_METHOD       = "method"
+	NM_SETTING_PROXY_PAC_SCRIPT   = "pac-script"
+	NM_SETTING_PROXY_PAC_URL      = "pac-url"
 )
 
 // Setting SettingSerial

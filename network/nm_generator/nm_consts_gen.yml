@@ -14,11 +14,26 @@ NMSettings:
       CapcaseName: Setting8021xAnonymousIdentity
       Type: ktypeString
       DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_AUTH_TIMEOUT
+      Value: auth-timeout
+      CapcaseName: Setting8021xAuthTimeout
+      Type: ktypeInt32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_CA_CERT
       Value: ca-cert
       CapcaseName: Setting8021xCaCert
       Type: ktypeArrayByte
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_CA_CERT_PASSWORD
+      Value: ca-cert-password
+      CapcaseName: Setting8021xCaCertPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_CA_CERT_PASSWORD_FLAGS
+      Value: ca-cert-password-flags
+      CapcaseName: Setting8021xCaCertPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_CA_PATH
       Value: ca-path
       CapcaseName: Setting8021xCaPath
@@ -29,6 +44,16 @@ NMSettings:
       CapcaseName: Setting8021xClientCert
       Type: ktypeArrayByte
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_CLIENT_CERT_PASSWORD
+      Value: client-cert-password
+      CapcaseName: Setting8021xClientCertPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_CLIENT_CERT_PASSWORD_FLAGS
+      Value: client-cert-password-flags
+      CapcaseName: Setting8021xClientCertPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH
       Value: domain-suffix-match
       CapcaseName: Setting8021xDomainSuffixMatch
@@ -69,6 +94,11 @@ NMSettings:
       CapcaseName: Setting8021xPasswordRawFlags
       Type: ktypeUint32
       DefaultValue: "0"
+    - KeyName: NM_SETTING_802_1X_PHASE1_AUTH_FLAGS
+      Value: phase1-auth-flags
+      CapcaseName: Setting8021xPhase1AuthFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_PHASE1_FAST_PROVISIONING
       Value: phase1-fast-provisioning
       CapcaseName: Setting8021xPhase1FastProvisioning
@@ -104,6 +134,16 @@ NMSettings:
       CapcaseName: Setting8021xPhase2CaCert
       Type: ktypeArrayByte
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CA_CERT_PASSWORD
+      Value: phase2-ca-cert-password
+      CapcaseName: Setting8021xPhase2CaCertPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CA_CERT_PASSWORD_FLAGS
+      Value: phase2-ca-cert-password-flags
+      CapcaseName: Setting8021xPhase2CaCertPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_PHASE2_CA_PATH
       Value: phase2-ca-path
       CapcaseName: Setting8021xPhase2CaPath
@@ -114,6 +154,16 @@ NMSettings:
       CapcaseName: Setting8021xPhase2ClientCert
       Type: ktypeArrayByte
       DefaultValue: "[]"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CLIENT_CERT_PASSWORD
+      Value: phase2-client-cert-password
+      CapcaseName: Setting8021xPhase2ClientCertPassword
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_802_1X_PHASE2_CLIENT_CERT_PASSWORD_FLAGS
+      Value: phase2-client-cert-password-flags
+      CapcaseName: Setting8021xPhase2ClientCertPasswordFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH
       Value: phase2-domain-suffix-match
       CapcaseName: Setting8021xPhase2DomainSuffixMatch
@@ -303,6 +353,11 @@ NMSettings:
     Name: NM_SETTING_CDMA_SETTING_NAME
     Value: cdma
     Keys:
+    - KeyName: NM_SETTING_CDMA_MTU
+      Value: mtu
+      CapcaseName: SettingCdmaMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_CDMA_NUMBER
       Value: number
       CapcaseName: SettingCdmaNumber
@@ -337,6 +392,11 @@ NMSettings:
       CapcaseName: SettingConnectionAutoconnectPriority
       Type: ktypeInt32
       DefaultValue: "0"
+    - KeyName: NM_SETTING_CONNECTION_AUTOCONNECT_RETRIES
+      Value: autoconnect-retries
+      CapcaseName: SettingConnectionAutoconnectRetries
+      Type: ktypeInt32
+      DefaultValue: "-1"
     - KeyName: NM_SETTING_CONNECTION_AUTOCONNECT_SLAVES
       Value: autoconnect-slaves
       CapcaseName: SettingConnectionAutoconnectSlaves
@@ -519,6 +579,11 @@ NMSettings:
       CapcaseName: SettingGsmHomeOnly
       Type: ktypeBoolean
       DefaultValue: "false"
+    - KeyName: NM_SETTING_GSM_MTU
+      Value: mtu
+      CapcaseName: SettingGsmMtu
+      Type: ktypeUint32
+      DefaultValue: "0"
     - KeyName: NM_SETTING_GSM_NETWORK_ID
       Value: network-id
       CapcaseName: SettingGsmNetworkId
@@ -860,6 +925,50 @@ NMSettings:
       CapcaseName: SettingIPTunnelTtl
       Type: ktypeUint32
       DefaultValue: "0"
+  - SettingClass: SettingMacsec
+    Name: NM_SETTING_MACSEC_SETTING_NAME
+    Value: macsec
+    Keys:
+    - KeyName: NM_SETTING_MACSEC_ENCRYPT
+      Value: encrypt
+      CapcaseName: SettingMacsecEncrypt
+      Type: ktypeBoolean
+      DefaultValue: "true"
+    - KeyName: NM_SETTING_MACSEC_MKA_CAK
+      Value: mka-cak
+      CapcaseName: SettingMacsecMkaCak
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_MACSEC_MKA_CAK_FLAGS
+      Value: mka-cak-flags
+      CapcaseName: SettingMacsecMkaCakFlags
+      Type: ktypeUint32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_MACSEC_MKA_CKN
+      Value: mka-ckn
+      CapcaseName: SettingMacsecMkaCkn
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_MACSEC_MODE
+      Value: mode
+      CapcaseName: SettingMacsecMode
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_MACSEC_PARENT
+      Value: parent
+      CapcaseName: SettingMacsecParent
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_MACSEC_PORT
+      Value: port
+      CapcaseName: SettingMacsecPort
+      Type: ktypeInt32
+      DefaultValue: "1"
+    - KeyName: NM_SETTING_MACSEC_VALIDATION
+      Value: validation
+      CapcaseName: SettingMacsecValidation
+      Type: ktypeInt32
+      DefaultValue: "2"
   - SettingClass: SettingMacvlan
     Name: NM_SETTING_MACVLAN_SETTING_NAME
     Value: macvlan
@@ -1019,6 +1128,30 @@ NMSettings:
     - KeyName: NM_SETTING_PPPOE_USERNAME
       Value: username
       CapcaseName: SettingPppoeUsername
+      Type: ktypeString
+      DefaultValue: "''"
+  - SettingClass: SettingProxy
+    Name: NM_SETTING_PROXY_SETTING_NAME
+    Value: proxy
+    Keys:
+    - KeyName: NM_SETTING_PROXY_BROWSER_ONLY
+      Value: browser-only
+      CapcaseName: SettingProxyBrowserOnly
+      Type: ktypeBoolean
+      DefaultValue: "false"
+    - KeyName: NM_SETTING_PROXY_METHOD
+      Value: method
+      CapcaseName: SettingProxyMethod
+      Type: ktypeInt32
+      DefaultValue: "0"
+    - KeyName: NM_SETTING_PROXY_PAC_SCRIPT
+      Value: pac-script
+      CapcaseName: SettingProxyPacScript
+      Type: ktypeString
+      DefaultValue: "''"
+    - KeyName: NM_SETTING_PROXY_PAC_URL
+      Value: pac-url
+      CapcaseName: SettingProxyPacUrl
       Type: ktypeString
       DefaultValue: "''"
   - SettingClass: SettingSerial
@@ -1271,7 +1404,7 @@ NMSettings:
       Value: auto-negotiate
       CapcaseName: SettingWiredAutoNegotiate
       Type: ktypeBoolean
-      DefaultValue: "true"
+      DefaultValue: "false"
     - KeyName: NM_SETTING_WIRED_CLONED_MAC_ADDRESS
       Value: cloned-mac-address
       CapcaseName: SettingWiredClonedMacAddress
@@ -1548,12 +1681,20 @@ NMEnums:
       Value: 4
     - Name: NM_AGENT_MANAGER_ERROR_USER_CANCELED
       Value: 5
+  - EnumClass: Capability
+    Members:
+    - Name: NM_CAPABILITY_TEAM
+      Value: 1
   - EnumClass: CheckpointCreateFlags
     Members:
     - Name: NM_CHECKPOINT_CREATE_FLAG_NONE
       Value: 0
     - Name: NM_CHECKPOINT_CREATE_FLAG_DESTROY_ALL
       Value: 1
+    - Name: NM_CHECKPOINT_CREATE_FLAG_DELETE_NEW_CONNECTIONS
+      Value: 2
+    - Name: NM_CHECKPOINT_CREATE_FLAG_DISCONNECT_NEW_DEVICES
+      Value: 4
   - EnumClass: ClientError
     Members:
     - Name: NM_CLIENT_ERROR_FAILED
@@ -1872,6 +2013,8 @@ NMEnums:
       Value: 19
     - Name: NM_DEVICE_TYPE_VETH
       Value: 20
+    - Name: NM_DEVICE_TYPE_MACSEC
+      Value: 21
   - EnumClass: IPTunnelMode
     Members:
     - Name: NM_IP_TUNNEL_MODE_UNKNOWN
@@ -1922,6 +2065,8 @@ NMEnums:
       Value: 11
     - Name: NM_MANAGER_ERROR_INVALID_ARGUMENTS
       Value: 12
+    - Name: NM_MANAGER_ERROR_MISSING_PLUGIN
+      Value: 13
   - EnumClass: Metered
     Members:
     - Name: NM_METERED_UNKNOWN
@@ -1976,6 +2121,8 @@ NMEnums:
       Value: 1
     - Name: NM_SETTING_802_1X_CK_SCHEME_PATH
       Value: 2
+    - Name: NM_SETTING_802_1X_CK_SCHEME_PKCS11
+      Value: 3
   - EnumClass: SettingCompareFlags
     Members:
     - Name: NM_SETTING_COMPARE_FLAG_EXACT
@@ -2048,6 +2195,20 @@ NMEnums:
       Value: 1
     - Name: NM_SETTING_MAC_RANDOMIZATION_ALWAYS
       Value: 2
+  - EnumClass: SettingMacsecMode
+    Members:
+    - Name: NM_SETTING_MACSEC_MODE_PSK
+      Value: 0
+    - Name: NM_SETTING_MACSEC_MODE_EAP
+      Value: 1
+  - EnumClass: SettingMacsecValidation
+    Members:
+    - Name: NM_SETTING_MACSEC_VALIDATION_DISABLE
+      Value: 0
+    - Name: NM_SETTING_MACSEC_VALIDATION_CHECK
+      Value: 1
+    - Name: NM_SETTING_MACSEC_VALIDATION_STRICT
+      Value: 2
   - EnumClass: SettingMacvlanMode
     Members:
     - Name: NM_SETTING_MACVLAN_MODE_UNKNOWN
@@ -2062,6 +2223,12 @@ NMEnums:
       Value: 4
     - Name: NM_SETTING_MACVLAN_MODE_SOURCE
       Value: 5
+  - EnumClass: SettingProxyMethod
+    Members:
+    - Name: NM_SETTING_PROXY_METHOD_NONE
+      Value: 0
+    - Name: NM_SETTING_PROXY_METHOD_AUTO
+      Value: 1
   - EnumClass: SettingSerialParity
     Members:
     - Name: NM_SETTING_SERIAL_PARITY_NONE
@@ -2435,744 +2602,808 @@ NMEnums:
   - EnumClass: StringConstants
     Members:
     - Name: NM_ACCESS_POINT_BSSID
-      Value: bssid
+      Value: "bssid"
     - Name: NM_ACCESS_POINT_FLAGS
-      Value: flags
+      Value: "flags"
     - Name: NM_ACCESS_POINT_FREQUENCY
-      Value: frequency
+      Value: "frequency"
     - Name: NM_ACCESS_POINT_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_ACCESS_POINT_LAST_SEEN
-      Value: last-seen
+      Value: "last-seen"
     - Name: NM_ACCESS_POINT_MAX_BITRATE
-      Value: max-bitrate
+      Value: "max-bitrate"
     - Name: NM_ACCESS_POINT_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_ACCESS_POINT_RSN_FLAGS
-      Value: rsn-flags
+      Value: "rsn-flags"
     - Name: NM_ACCESS_POINT_SSID
-      Value: ssid
+      Value: "ssid"
     - Name: NM_ACCESS_POINT_STRENGTH
-      Value: strength
+      Value: "strength"
     - Name: NM_ACCESS_POINT_WPA_FLAGS
-      Value: wpa-flags
+      Value: "wpa-flags"
     - Name: NM_ACTIVE_CONNECTION_CONNECTION
-      Value: connection
+      Value: "connection"
     - Name: NM_ACTIVE_CONNECTION_DEFAULT
-      Value: default
+      Value: "default"
     - Name: NM_ACTIVE_CONNECTION_DEFAULT6
-      Value: default6
+      Value: "default6"
     - Name: NM_ACTIVE_CONNECTION_DEVICES
-      Value: devices
+      Value: "devices"
     - Name: NM_ACTIVE_CONNECTION_DHCP4_CONFIG
-      Value: dhcp4-config
+      Value: "dhcp4-config"
     - Name: NM_ACTIVE_CONNECTION_DHCP6_CONFIG
-      Value: dhcp6-config
+      Value: "dhcp6-config"
     - Name: NM_ACTIVE_CONNECTION_ID
-      Value: id
+      Value: "id"
     - Name: NM_ACTIVE_CONNECTION_IP4_CONFIG
-      Value: ip4-config
+      Value: "ip4-config"
     - Name: NM_ACTIVE_CONNECTION_IP6_CONFIG
-      Value: ip6-config
+      Value: "ip6-config"
     - Name: NM_ACTIVE_CONNECTION_MASTER
-      Value: master
+      Value: "master"
     - Name: NM_ACTIVE_CONNECTION_SPECIFIC_OBJECT_PATH
-      Value: specific-object-path
+      Value: "specific-object-path"
     - Name: NM_ACTIVE_CONNECTION_STATE
-      Value: state
+      Value: "state"
     - Name: NM_ACTIVE_CONNECTION_TYPE
-      Value: type
+      Value: "type"
     - Name: NM_ACTIVE_CONNECTION_UUID
-      Value: uuid
+      Value: "uuid"
     - Name: NM_ACTIVE_CONNECTION_VPN
-      Value: vpn
+      Value: "vpn"
     - Name: NM_CLIENT_ACTIVATING_CONNECTION
-      Value: activating-connection
+      Value: "activating-connection"
     - Name: NM_CLIENT_ACTIVE_CONNECTIONS
-      Value: active-connections
+      Value: "active-connections"
     - Name: NM_CLIENT_ACTIVE_CONNECTION_ADDED
-      Value: active-connection-added
+      Value: "active-connection-added"
     - Name: NM_CLIENT_ACTIVE_CONNECTION_REMOVED
-      Value: active-connection-removed
+      Value: "active-connection-removed"
     - Name: NM_CLIENT_ALL_DEVICES
-      Value: all-devices
+      Value: "all-devices"
     - Name: NM_CLIENT_ANY_DEVICE_ADDED
-      Value: any-device-added
+      Value: "any-device-added"
     - Name: NM_CLIENT_ANY_DEVICE_REMOVED
-      Value: any-device-removed
+      Value: "any-device-removed"
     - Name: NM_CLIENT_CAN_MODIFY
-      Value: can-modify
+      Value: "can-modify"
     - Name: NM_CLIENT_CONNECTIONS
-      Value: connections
+      Value: "connections"
     - Name: NM_CLIENT_CONNECTION_ADDED
-      Value: connection-added
+      Value: "connection-added"
     - Name: NM_CLIENT_CONNECTION_REMOVED
-      Value: connection-removed
+      Value: "connection-removed"
     - Name: NM_CLIENT_CONNECTIVITY
-      Value: connectivity
+      Value: "connectivity"
     - Name: NM_CLIENT_DEVICES
-      Value: devices
+      Value: "devices"
     - Name: NM_CLIENT_DEVICE_ADDED
-      Value: device-added
+      Value: "device-added"
     - Name: NM_CLIENT_DEVICE_REMOVED
-      Value: device-removed
+      Value: "device-removed"
+    - Name: NM_CLIENT_DNS_CONFIGURATION
+      Value: "dns-configuration"
+    - Name: NM_CLIENT_DNS_MODE
+      Value: "dns-mode"
+    - Name: NM_CLIENT_DNS_RC_MANAGER
+      Value: "dns-rc-manager"
     - Name: NM_CLIENT_HOSTNAME
-      Value: hostname
+      Value: "hostname"
     - Name: NM_CLIENT_METERED
-      Value: metered
+      Value: "metered"
     - Name: NM_CLIENT_NETWORKING_ENABLED
-      Value: networking-enabled
+      Value: "networking-enabled"
     - Name: NM_CLIENT_NM_RUNNING
-      Value: nm-running
+      Value: "nm-running"
     - Name: NM_CLIENT_PERMISSION_CHANGED
-      Value: permission-changed
+      Value: "permission-changed"
     - Name: NM_CLIENT_PRIMARY_CONNECTION
-      Value: primary-connection
+      Value: "primary-connection"
     - Name: NM_CLIENT_STARTUP
-      Value: startup
+      Value: "startup"
     - Name: NM_CLIENT_STATE
-      Value: state
+      Value: "state"
     - Name: NM_CLIENT_VERSION
-      Value: version
+      Value: "version"
     - Name: NM_CLIENT_WIMAX_ENABLED
-      Value: wimax-enabled
+      Value: "wimax-enabled"
     - Name: NM_CLIENT_WIMAX_HARDWARE_ENABLED
-      Value: wimax-hardware-enabled
+      Value: "wimax-hardware-enabled"
     - Name: NM_CLIENT_WIRELESS_ENABLED
-      Value: wireless-enabled
+      Value: "wireless-enabled"
     - Name: NM_CLIENT_WIRELESS_HARDWARE_ENABLED
-      Value: wireless-hardware-enabled
+      Value: "wireless-hardware-enabled"
     - Name: NM_CLIENT_WWAN_ENABLED
-      Value: wwan-enabled
+      Value: "wwan-enabled"
     - Name: NM_CLIENT_WWAN_HARDWARE_ENABLED
-      Value: wwan-hardware-enabled
+      Value: "wwan-hardware-enabled"
     - Name: NM_CONNECTION_CHANGED
-      Value: changed
+      Value: "changed"
     - Name: NM_CONNECTION_NORMALIZE_PARAM_IP6_CONFIG_METHOD
-      Value: ip6-config-method
+      Value: "ip6-config-method"
     - Name: NM_CONNECTION_SECRETS_CLEARED
-      Value: secrets-cleared
+      Value: "secrets-cleared"
     - Name: NM_CONNECTION_SECRETS_UPDATED
-      Value: secrets-updated
+      Value: "secrets-updated"
     - Name: NM_DBUS_INTERFACE
-      Value: org.freedesktop.NetworkManager
+      Value: "org.freedesktop.NetworkManager"
+    - Name: NM_DBUS_INTERFACE_DNS_MANAGER
+      Value: "org.freedesktop.NetworkManager.DnsManager"
     - Name: NM_DBUS_INTERFACE_SETTINGS
-      Value: org.freedesktop.NetworkManager.Settings
+      Value: "org.freedesktop.NetworkManager.Settings"
     - Name: NM_DBUS_INTERFACE_SETTINGS_CONNECTION
-      Value: org.freedesktop.NetworkManager.Settings.Connection
+      Value: "org.freedesktop.NetworkManager.Settings.Connection"
     - Name: NM_DBUS_INTERFACE_SETTINGS_CONNECTION_SECRETS
-      Value: org.freedesktop.NetworkManager.Settings.Connection.Secrets
+      Value: "org.freedesktop.NetworkManager.Settings.Connection.Secrets"
     - Name: NM_DBUS_INTERFACE_VPN
-      Value: org.freedesktop.NetworkManager.VPN.Manager
+      Value: "org.freedesktop.NetworkManager.VPN.Manager"
     - Name: NM_DBUS_INTERFACE_VPN_CONNECTION
-      Value: org.freedesktop.NetworkManager.VPN.Connection
+      Value: "org.freedesktop.NetworkManager.VPN.Connection"
     - Name: NM_DBUS_INVALID_VPN_CONNECTION
-      Value: org.freedesktop.NetworkManager.VPNConnections.InvalidVPNConnection
+      Value: "org.freedesktop.NetworkManager.VPNConnections.InvalidVPNConnection"
     - Name: NM_DBUS_NO_ACTIVE_VPN_CONNECTION
-      Value: org.freedesktop.NetworkManager.VPNConnections.NoActiveVPNConnection
+      Value: "org.freedesktop.NetworkManager.VPNConnections.NoActiveVPNConnection"
     - Name: NM_DBUS_NO_VPN_CONNECTIONS
-      Value: org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections
+      Value: "org.freedesktop.NetworkManager.VPNConnections.NoVPNConnections"
     - Name: NM_DBUS_PATH
-      Value: /org/freedesktop/NetworkManager
+      Value: "/org/freedesktop/NetworkManager"
     - Name: NM_DBUS_PATH_AGENT_MANAGER
-      Value: /org/freedesktop/NetworkManager/AgentManager
+      Value: "/org/freedesktop/NetworkManager/AgentManager"
+    - Name: NM_DBUS_PATH_DNS_MANAGER
+      Value: "/org/freedesktop/NetworkManager/DnsManager"
     - Name: NM_DBUS_PATH_SECRET_AGENT
-      Value: /org/freedesktop/NetworkManager/SecretAgent
+      Value: "/org/freedesktop/NetworkManager/SecretAgent"
     - Name: NM_DBUS_PATH_SETTINGS
-      Value: /org/freedesktop/NetworkManager/Settings
+      Value: "/org/freedesktop/NetworkManager/Settings"
     - Name: NM_DBUS_PATH_SETTINGS_CONNECTION
-      Value: /org/freedesktop/NetworkManager/Settings/Connection
+      Value: "/org/freedesktop/NetworkManager/Settings/Connection"
     - Name: NM_DBUS_PATH_VPN
-      Value: /org/freedesktop/NetworkManager/VPN/Manager
+      Value: "/org/freedesktop/NetworkManager/VPN/Manager"
     - Name: NM_DBUS_PATH_VPN_CONNECTION
-      Value: /org/freedesktop/NetworkManager/VPN/Connection
+      Value: "/org/freedesktop/NetworkManager/VPN/Connection"
     - Name: NM_DBUS_SERVICE
-      Value: org.freedesktop.NetworkManager
+      Value: "org.freedesktop.NetworkManager"
     - Name: NM_DBUS_VPN_ALREADY_STARTED
-      Value: AlreadyStarted
+      Value: "AlreadyStarted"
     - Name: NM_DBUS_VPN_ALREADY_STOPPED
-      Value: AlreadyStopped
+      Value: "AlreadyStopped"
     - Name: NM_DBUS_VPN_BAD_ARGUMENTS
-      Value: BadArguments
+      Value: "BadArguments"
     - Name: NM_DBUS_VPN_ERROR_PREFIX
-      Value: org.freedesktop.NetworkManager.VPN.Error
+      Value: "org.freedesktop.NetworkManager.VPN.Error"
     - Name: NM_DBUS_VPN_INTERACTIVE_NOT_SUPPORTED
-      Value: InteractiveNotSupported
+      Value: "InteractiveNotSupported"
     - Name: NM_DBUS_VPN_SIGNAL_CONNECT_FAILED
-      Value: ConnectFailed
+      Value: "ConnectFailed"
     - Name: NM_DBUS_VPN_SIGNAL_IP4_CONFIG
-      Value: IP4Config
+      Value: "IP4Config"
     - Name: NM_DBUS_VPN_SIGNAL_IP_CONFIG_BAD
-      Value: IPConfigBad
+      Value: "IPConfigBad"
     - Name: NM_DBUS_VPN_SIGNAL_LAUNCH_FAILED
-      Value: LaunchFailed
+      Value: "LaunchFailed"
     - Name: NM_DBUS_VPN_SIGNAL_LOGIN_BANNER
-      Value: LoginBanner
+      Value: "LoginBanner"
     - Name: NM_DBUS_VPN_SIGNAL_LOGIN_FAILED
-      Value: LoginFailed
+      Value: "LoginFailed"
     - Name: NM_DBUS_VPN_SIGNAL_STATE_CHANGE
-      Value: StateChange
+      Value: "StateChange"
     - Name: NM_DBUS_VPN_SIGNAL_VPN_CONFIG_BAD
-      Value: VPNConfigBad
+      Value: "VPNConfigBad"
     - Name: NM_DBUS_VPN_STARTING_IN_PROGRESS
-      Value: StartingInProgress
+      Value: "StartingInProgress"
     - Name: NM_DBUS_VPN_STOPPING_IN_PROGRESS
-      Value: StoppingInProgress
+      Value: "StoppingInProgress"
     - Name: NM_DBUS_VPN_WRONG_STATE
-      Value: WrongState
+      Value: "WrongState"
     - Name: NM_DEVICE_ACTIVE_CONNECTION
-      Value: active-connection
+      Value: "active-connection"
     - Name: NM_DEVICE_ADSL_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_AUTOCONNECT
-      Value: autoconnect
+      Value: "autoconnect"
     - Name: NM_DEVICE_AVAILABLE_CONNECTIONS
-      Value: available-connections
+      Value: "available-connections"
     - Name: NM_DEVICE_BOND_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_BOND_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_BOND_SLAVES
-      Value: slaves
+      Value: "slaves"
     - Name: NM_DEVICE_BRIDGE_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_BRIDGE_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_BRIDGE_SLAVES
-      Value: slaves
+      Value: "slaves"
     - Name: NM_DEVICE_BT_CAPABILITIES
-      Value: bt-capabilities
+      Value: "bt-capabilities"
     - Name: NM_DEVICE_BT_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_BT_NAME
-      Value: name
+      Value: "name"
     - Name: NM_DEVICE_CAPABILITIES
-      Value: capabilities
+      Value: "capabilities"
     - Name: NM_DEVICE_DEVICE_TYPE
-      Value: device-type
+      Value: "device-type"
     - Name: NM_DEVICE_DHCP4_CONFIG
-      Value: dhcp4-config
+      Value: "dhcp4-config"
     - Name: NM_DEVICE_DHCP6_CONFIG
-      Value: dhcp6-config
+      Value: "dhcp6-config"
     - Name: NM_DEVICE_DRIVER
-      Value: driver
+      Value: "driver"
     - Name: NM_DEVICE_DRIVER_VERSION
-      Value: driver-version
+      Value: "driver-version"
     - Name: NM_DEVICE_ETHERNET_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_ETHERNET_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_ETHERNET_PERMANENT_HW_ADDRESS
-      Value: perm-hw-address
+      Value: "perm-hw-address"
     - Name: NM_DEVICE_ETHERNET_S390_SUBCHANNELS
-      Value: s390-subchannels
+      Value: "s390-subchannels"
     - Name: NM_DEVICE_ETHERNET_SPEED
-      Value: speed
+      Value: "speed"
     - Name: NM_DEVICE_FIRMWARE_MISSING
-      Value: firmware-missing
+      Value: "firmware-missing"
     - Name: NM_DEVICE_FIRMWARE_VERSION
-      Value: firmware-version
+      Value: "firmware-version"
     - Name: NM_DEVICE_GENERIC_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_GENERIC_TYPE_DESCRIPTION
-      Value: type-description
+      Value: "type-description"
     - Name: NM_DEVICE_INFINIBAND_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_INFINIBAND_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_INTERFACE
-      Value: interface
+      Value: "interface"
     - Name: NM_DEVICE_IP4_CONFIG
-      Value: ip4-config
+      Value: "ip4-config"
     - Name: NM_DEVICE_IP6_CONFIG
-      Value: ip6-config
+      Value: "ip6-config"
     - Name: NM_DEVICE_IP_INTERFACE
-      Value: ip-interface
+      Value: "ip-interface"
     - Name: NM_DEVICE_IP_TUNNEL_ENCAPSULATION_LIMIT
-      Value: encapsulation-limit
+      Value: "encapsulation-limit"
     - Name: NM_DEVICE_IP_TUNNEL_FLOW_LABEL
-      Value: flow-label
+      Value: "flow-label"
     - Name: NM_DEVICE_IP_TUNNEL_INPUT_KEY
-      Value: input-key
+      Value: "input-key"
     - Name: NM_DEVICE_IP_TUNNEL_LOCAL
-      Value: local
+      Value: "local"
     - Name: NM_DEVICE_IP_TUNNEL_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_DEVICE_IP_TUNNEL_OUTPUT_KEY
-      Value: output-key
+      Value: "output-key"
     - Name: NM_DEVICE_IP_TUNNEL_PARENT
-      Value: parent
+      Value: "parent"
     - Name: NM_DEVICE_IP_TUNNEL_PATH_MTU_DISCOVERY
-      Value: path-mtu-discovery
+      Value: "path-mtu-discovery"
     - Name: NM_DEVICE_IP_TUNNEL_REMOTE
-      Value: remote
+      Value: "remote"
     - Name: NM_DEVICE_IP_TUNNEL_TOS
-      Value: tos
+      Value: "tos"
     - Name: NM_DEVICE_IP_TUNNEL_TTL
-      Value: ttl
+      Value: "ttl"
     - Name: NM_DEVICE_LLDP_NEIGHBORS
-      Value: lldp-neighbors
+      Value: "lldp-neighbors"
+    - Name: NM_DEVICE_MACSEC_CIPHER_SUITE
+      Value: "cipher-suite"
+    - Name: NM_DEVICE_MACSEC_ENCODING_SA
+      Value: "encoding-sa"
+    - Name: NM_DEVICE_MACSEC_ENCRYPT
+      Value: "encrypt"
+    - Name: NM_DEVICE_MACSEC_ES
+      Value: "es"
+    - Name: NM_DEVICE_MACSEC_HW_ADDRESS
+      Value: "hw-address"
+    - Name: NM_DEVICE_MACSEC_ICV_LENGTH
+      Value: "icv-length"
+    - Name: NM_DEVICE_MACSEC_INCLUDE_SCI
+      Value: "include-sci"
+    - Name: NM_DEVICE_MACSEC_PARENT
+      Value: "parent"
+    - Name: NM_DEVICE_MACSEC_PROTECT
+      Value: "protect"
+    - Name: NM_DEVICE_MACSEC_REPLAY_PROTECT
+      Value: "replay-protect"
+    - Name: NM_DEVICE_MACSEC_SCB
+      Value: "scb"
+    - Name: NM_DEVICE_MACSEC_SCI
+      Value: "sci"
+    - Name: NM_DEVICE_MACSEC_VALIDATION
+      Value: "validation"
+    - Name: NM_DEVICE_MACSEC_WINDOW
+      Value: "window"
     - Name: NM_DEVICE_MACVLAN_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_MACVLAN_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_DEVICE_MACVLAN_NO_PROMISC
-      Value: no-promisc
+      Value: "no-promisc"
     - Name: NM_DEVICE_MACVLAN_PARENT
-      Value: parent
+      Value: "parent"
     - Name: NM_DEVICE_MACVLAN_TAP
-      Value: tap
+      Value: "tap"
     - Name: NM_DEVICE_MANAGED
-      Value: managed
+      Value: "managed"
     - Name: NM_DEVICE_METERED
-      Value: metered
+      Value: "metered"
     - Name: NM_DEVICE_MODEM_CURRENT_CAPABILITIES
-      Value: current-capabilities
+      Value: "current-capabilities"
     - Name: NM_DEVICE_MODEM_MODEM_CAPABILITIES
-      Value: modem-capabilities
+      Value: "modem-capabilities"
     - Name: NM_DEVICE_MTU
-      Value: mtu
+      Value: "mtu"
     - Name: NM_DEVICE_NM_PLUGIN_MISSING
-      Value: nm-plugin-missing
+      Value: "nm-plugin-missing"
     - Name: NM_DEVICE_OLPC_MESH_ACTIVE_CHANNEL
-      Value: active-channel
+      Value: "active-channel"
     - Name: NM_DEVICE_OLPC_MESH_COMPANION
-      Value: companion
+      Value: "companion"
     - Name: NM_DEVICE_OLPC_MESH_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_PHYSICAL_PORT_ID
-      Value: physical-port-id
+      Value: "physical-port-id"
     - Name: NM_DEVICE_PRODUCT
-      Value: product
+      Value: "product"
     - Name: NM_DEVICE_REAL
-      Value: real
+      Value: "real"
     - Name: NM_DEVICE_STATE
-      Value: state
+      Value: "state"
     - Name: NM_DEVICE_STATE_REASON
-      Value: state-reason
+      Value: "state-reason"
     - Name: NM_DEVICE_TEAM_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_TEAM_CONFIG
-      Value: config
+      Value: "config"
     - Name: NM_DEVICE_TEAM_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_TEAM_SLAVES
-      Value: slaves
+      Value: "slaves"
     - Name: NM_DEVICE_TUN_GROUP
-      Value: group
+      Value: "group"
     - Name: NM_DEVICE_TUN_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_TUN_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_DEVICE_TUN_MULTI_QUEUE
-      Value: multi-queue
+      Value: "multi-queue"
     - Name: NM_DEVICE_TUN_NO_PI
-      Value: no-pi
+      Value: "no-pi"
     - Name: NM_DEVICE_TUN_OWNER
-      Value: owner
+      Value: "owner"
     - Name: NM_DEVICE_TUN_VNET_HDR
-      Value: vnet-hdr
+      Value: "vnet-hdr"
     - Name: NM_DEVICE_UDI
-      Value: udi
+      Value: "udi"
     - Name: NM_DEVICE_VENDOR
-      Value: vendor
+      Value: "vendor"
     - Name: NM_DEVICE_VLAN_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_VLAN_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_VLAN_PARENT
-      Value: parent
+      Value: "parent"
     - Name: NM_DEVICE_VLAN_VLAN_ID
-      Value: vlan-id
+      Value: "vlan-id"
     - Name: NM_DEVICE_VXLAN_AGEING
-      Value: ageing
+      Value: "ageing"
     - Name: NM_DEVICE_VXLAN_CARRIER
-      Value: carrier
+      Value: "carrier"
     - Name: NM_DEVICE_VXLAN_DST_PORT
-      Value: dst-port
+      Value: "dst-port"
     - Name: NM_DEVICE_VXLAN_GROUP
-      Value: group
+      Value: "group"
     - Name: NM_DEVICE_VXLAN_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_VXLAN_ID
-      Value: id
+      Value: "id"
     - Name: NM_DEVICE_VXLAN_L2MISS
-      Value: l2miss
+      Value: "l2miss"
     - Name: NM_DEVICE_VXLAN_L3MISS
-      Value: l3miss
+      Value: "l3miss"
     - Name: NM_DEVICE_VXLAN_LEARNING
-      Value: learning
+      Value: "learning"
     - Name: NM_DEVICE_VXLAN_LIMIT
-      Value: limit
+      Value: "limit"
     - Name: NM_DEVICE_VXLAN_LOCAL
-      Value: local
+      Value: "local"
     - Name: NM_DEVICE_VXLAN_PARENT
-      Value: parent
+      Value: "parent"
     - Name: NM_DEVICE_VXLAN_PROXY
-      Value: proxy
+      Value: "proxy"
     - Name: NM_DEVICE_VXLAN_RSC
-      Value: rsc
+      Value: "rsc"
     - Name: NM_DEVICE_VXLAN_SRC_PORT_MAX
-      Value: src-port-max
+      Value: "src-port-max"
     - Name: NM_DEVICE_VXLAN_SRC_PORT_MIN
-      Value: src-port-min
+      Value: "src-port-min"
     - Name: NM_DEVICE_VXLAN_TOS
-      Value: tos
+      Value: "tos"
     - Name: NM_DEVICE_VXLAN_TTL
-      Value: ttl
+      Value: "ttl"
     - Name: NM_DEVICE_WIFI_ACCESS_POINTS
-      Value: access-points
+      Value: "access-points"
     - Name: NM_DEVICE_WIFI_ACTIVE_ACCESS_POINT
-      Value: active-access-point
+      Value: "active-access-point"
     - Name: NM_DEVICE_WIFI_BITRATE
-      Value: bitrate
+      Value: "bitrate"
     - Name: NM_DEVICE_WIFI_CAPABILITIES
-      Value: wireless-capabilities
+      Value: "wireless-capabilities"
     - Name: NM_DEVICE_WIFI_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_WIFI_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_DEVICE_WIFI_PERMANENT_HW_ADDRESS
-      Value: perm-hw-address
+      Value: "perm-hw-address"
     - Name: NM_DEVICE_WIMAX_ACTIVE_NSP
-      Value: active-nsp
+      Value: "active-nsp"
     - Name: NM_DEVICE_WIMAX_BSID
-      Value: bsid
+      Value: "bsid"
     - Name: NM_DEVICE_WIMAX_CENTER_FREQUENCY
-      Value: center-frequency
+      Value: "center-frequency"
     - Name: NM_DEVICE_WIMAX_CINR
-      Value: cinr
+      Value: "cinr"
     - Name: NM_DEVICE_WIMAX_HW_ADDRESS
-      Value: hw-address
+      Value: "hw-address"
     - Name: NM_DEVICE_WIMAX_NSPS
-      Value: nsps
+      Value: "nsps"
     - Name: NM_DEVICE_WIMAX_RSSI
-      Value: rssi
+      Value: "rssi"
     - Name: NM_DEVICE_WIMAX_TX_POWER
-      Value: tx-power
+      Value: "tx-power"
     - Name: NM_DHCP_CONFIG_FAMILY
-      Value: family
+      Value: "family"
     - Name: NM_DHCP_CONFIG_OPTIONS
-      Value: options
+      Value: "options"
     - Name: NM_IP_CONFIG_ADDRESSES
-      Value: addresses
+      Value: "addresses"
     - Name: NM_IP_CONFIG_DOMAINS
-      Value: domains
+      Value: "domains"
     - Name: NM_IP_CONFIG_FAMILY
-      Value: family
+      Value: "family"
     - Name: NM_IP_CONFIG_GATEWAY
-      Value: gateway
+      Value: "gateway"
     - Name: NM_IP_CONFIG_NAMESERVERS
-      Value: nameservers
+      Value: "nameservers"
     - Name: NM_IP_CONFIG_ROUTES
-      Value: routes
+      Value: "routes"
     - Name: NM_IP_CONFIG_SEARCHES
-      Value: searches
+      Value: "searches"
     - Name: NM_IP_CONFIG_WINS_SERVERS
-      Value: wins-servers
+      Value: "wins-servers"
     - Name: NM_LLDP_ATTR_CHASSIS_ID
-      Value: chassis-id
+      Value: "chassis-id"
     - Name: NM_LLDP_ATTR_CHASSIS_ID_TYPE
-      Value: chassis-id-type
+      Value: "chassis-id-type"
     - Name: NM_LLDP_ATTR_DESTINATION
-      Value: destination
+      Value: "destination"
     - Name: NM_LLDP_ATTR_IEEE_802_1_PPVID
-      Value: ieee-802-1-ppvid
+      Value: "ieee-802-1-ppvid"
     - Name: NM_LLDP_ATTR_IEEE_802_1_PPVID_FLAGS
-      Value: ieee-802-1-ppvid-flags
+      Value: "ieee-802-1-ppvid-flags"
     - Name: NM_LLDP_ATTR_IEEE_802_1_PVID
-      Value: ieee-802-1-pvid
+      Value: "ieee-802-1-pvid"
     - Name: NM_LLDP_ATTR_IEEE_802_1_VID
-      Value: ieee-802-1-vid
+      Value: "ieee-802-1-vid"
     - Name: NM_LLDP_ATTR_IEEE_802_1_VLAN_NAME
-      Value: ieee-802-1-vlan-name
+      Value: "ieee-802-1-vlan-name"
     - Name: NM_LLDP_ATTR_PORT_DESCRIPTION
-      Value: port-description
+      Value: "port-description"
     - Name: NM_LLDP_ATTR_PORT_ID
-      Value: port-id
+      Value: "port-id"
     - Name: NM_LLDP_ATTR_PORT_ID_TYPE
-      Value: port-id-type
+      Value: "port-id-type"
     - Name: NM_LLDP_ATTR_SYSTEM_CAPABILITIES
-      Value: system-capabilities
+      Value: "system-capabilities"
     - Name: NM_LLDP_ATTR_SYSTEM_DESCRIPTION
-      Value: system-description
+      Value: "system-description"
     - Name: NM_LLDP_ATTR_SYSTEM_NAME
-      Value: system-name
+      Value: "system-name"
     - Name: NM_LLDP_DEST_NEAREST_BRIDGE
-      Value: nearest-bridge
+      Value: "nearest-bridge"
     - Name: NM_LLDP_DEST_NEAREST_CUSTOMER_BRIDGE
-      Value: nearest-customer-bridge
+      Value: "nearest-customer-bridge"
     - Name: NM_LLDP_DEST_NEAREST_NON_TPMR_BRIDGE
-      Value: nearest-non-tpmr-bridge
+      Value: "nearest-non-tpmr-bridge"
     - Name: NM_OBJECT_DBUS_CONNECTION
-      Value: dbus-connection
+      Value: "dbus-connection"
+    - Name: NM_OBJECT_DBUS_OBJECT
+      Value: "dbus-object"
+    - Name: NM_OBJECT_DBUS_OBJECT_MANAGER
+      Value: "dbus-object-manager"
     - Name: NM_OBJECT_PATH
-      Value: path
+      Value: "path"
     - Name: NM_REMOTE_CONNECTION_DBUS_CONNECTION
-      Value: dbus-connection
+      Value: "dbus-connection"
     - Name: NM_REMOTE_CONNECTION_PATH
-      Value: path
+      Value: "path"
     - Name: NM_REMOTE_CONNECTION_UNSAVED
-      Value: unsaved
+      Value: "unsaved"
     - Name: NM_REMOTE_CONNECTION_VISIBLE
-      Value: visible
+      Value: "visible"
+    - Name: NM_SECRET_AGENT_OLD_AUTO_REGISTER
+      Value: "auto-register"
+    - Name: NM_SECRET_AGENT_OLD_CAPABILITIES
+      Value: "capabilities"
+    - Name: NM_SECRET_AGENT_OLD_IDENTIFIER
+      Value: "identifier"
+    - Name: NM_SECRET_AGENT_OLD_REGISTERED
+      Value: "registered"
     - Name: NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PATH
-      Value: file://
+      Value: "file://"
+    - Name: NM_SETTING_802_1X_CERT_SCHEME_PREFIX_PKCS11
+      Value: "pkcs11:"
     - Name: NM_SETTING_ADSL_ENCAPSULATION_LLC
-      Value: llc
+      Value: "llc"
     - Name: NM_SETTING_ADSL_ENCAPSULATION_VCMUX
-      Value: vcmux
+      Value: "vcmux"
     - Name: NM_SETTING_ADSL_PROTOCOL_IPOATM
-      Value: ipoatm
+      Value: "ipoatm"
     - Name: NM_SETTING_ADSL_PROTOCOL_PPPOA
-      Value: pppoa
+      Value: "pppoa"
     - Name: NM_SETTING_ADSL_PROTOCOL_PPPOE
-      Value: pppoe
+      Value: "pppoe"
     - Name: NM_SETTING_BLUETOOTH_TYPE_DUN
-      Value: dun
+      Value: "dun"
     - Name: NM_SETTING_BLUETOOTH_TYPE_PANU
-      Value: panu
+      Value: "panu"
     - Name: NM_SETTING_BOND_OPTION_ACTIVE_SLAVE
-      Value: active_slave
+      Value: "active_slave"
     - Name: NM_SETTING_BOND_OPTION_AD_ACTOR_SYSTEM
-      Value: ad_actor_system
+      Value: "ad_actor_system"
     - Name: NM_SETTING_BOND_OPTION_AD_ACTOR_SYS_PRIO
-      Value: ad_actor_sys_prio
+      Value: "ad_actor_sys_prio"
     - Name: NM_SETTING_BOND_OPTION_AD_SELECT
-      Value: ad_select
+      Value: "ad_select"
     - Name: NM_SETTING_BOND_OPTION_AD_USER_PORT_KEY
-      Value: ad_user_port_key
+      Value: "ad_user_port_key"
     - Name: NM_SETTING_BOND_OPTION_ALL_SLAVES_ACTIVE
-      Value: all_slaves_active
+      Value: "all_slaves_active"
     - Name: NM_SETTING_BOND_OPTION_ARP_ALL_TARGETS
-      Value: arp_all_targets
+      Value: "arp_all_targets"
     - Name: NM_SETTING_BOND_OPTION_ARP_INTERVAL
-      Value: arp_interval
+      Value: "arp_interval"
     - Name: NM_SETTING_BOND_OPTION_ARP_IP_TARGET
-      Value: arp_ip_target
+      Value: "arp_ip_target"
     - Name: NM_SETTING_BOND_OPTION_ARP_VALIDATE
-      Value: arp_validate
+      Value: "arp_validate"
     - Name: NM_SETTING_BOND_OPTION_DOWNDELAY
-      Value: downdelay
+      Value: "downdelay"
     - Name: NM_SETTING_BOND_OPTION_FAIL_OVER_MAC
-      Value: fail_over_mac
+      Value: "fail_over_mac"
     - Name: NM_SETTING_BOND_OPTION_LACP_RATE
-      Value: lacp_rate
+      Value: "lacp_rate"
     - Name: NM_SETTING_BOND_OPTION_LP_INTERVAL
-      Value: lp_interval
+      Value: "lp_interval"
     - Name: NM_SETTING_BOND_OPTION_MIIMON
-      Value: miimon
+      Value: "miimon"
     - Name: NM_SETTING_BOND_OPTION_MIN_LINKS
-      Value: min_links
+      Value: "min_links"
     - Name: NM_SETTING_BOND_OPTION_MODE
-      Value: mode
+      Value: "mode"
     - Name: NM_SETTING_BOND_OPTION_NUM_GRAT_ARP
-      Value: num_grat_arp
+      Value: "num_grat_arp"
     - Name: NM_SETTING_BOND_OPTION_NUM_UNSOL_NA
-      Value: num_unsol_na
+      Value: "num_unsol_na"
     - Name: NM_SETTING_BOND_OPTION_PACKETS_PER_SLAVE
-      Value: packets_per_slave
+      Value: "packets_per_slave"
     - Name: NM_SETTING_BOND_OPTION_PRIMARY
-      Value: primary
+      Value: "primary"
     - Name: NM_SETTING_BOND_OPTION_PRIMARY_RESELECT
-      Value: primary_reselect
+      Value: "primary_reselect"
     - Name: NM_SETTING_BOND_OPTION_RESEND_IGMP
-      Value: resend_igmp
+      Value: "resend_igmp"
     - Name: NM_SETTING_BOND_OPTION_TLB_DYNAMIC_LB
-      Value: tlb_dynamic_lb
+      Value: "tlb_dynamic_lb"
     - Name: NM_SETTING_BOND_OPTION_UPDELAY
-      Value: updelay
+      Value: "updelay"
     - Name: NM_SETTING_BOND_OPTION_USE_CARRIER
-      Value: use_carrier
+      Value: "use_carrier"
     - Name: NM_SETTING_BOND_OPTION_XMIT_HASH_POLICY
-      Value: xmit_hash_policy
+      Value: "xmit_hash_policy"
     - Name: NM_SETTING_DCB_FCOE_MODE_FABRIC
-      Value: fabric
+      Value: "fabric"
     - Name: NM_SETTING_DCB_FCOE_MODE_VN2VN
-      Value: vn2vn
+      Value: "vn2vn"
     - Name: NM_SETTING_DNS_OPTION_ATTEMPTS
-      Value: attempts
+      Value: "attempts"
     - Name: NM_SETTING_DNS_OPTION_DEBUG
-      Value: debug
+      Value: "debug"
     - Name: NM_SETTING_DNS_OPTION_EDNS0
-      Value: edns0
+      Value: "edns0"
     - Name: NM_SETTING_DNS_OPTION_INET6
-      Value: inet6
+      Value: "inet6"
     - Name: NM_SETTING_DNS_OPTION_IP6_BYTESTRING
-      Value: ip6-bytestring
+      Value: "ip6-bytestring"
     - Name: NM_SETTING_DNS_OPTION_IP6_DOTINT
-      Value: ip6-dotint
+      Value: "ip6-dotint"
     - Name: NM_SETTING_DNS_OPTION_NDOTS
-      Value: ndots
+      Value: "ndots"
     - Name: NM_SETTING_DNS_OPTION_NO_CHECK_NAMES
-      Value: no-check-names
+      Value: "no-check-names"
     - Name: NM_SETTING_DNS_OPTION_NO_IP6_DOTINT
-      Value: no-ip6-dotint
+      Value: "no-ip6-dotint"
     - Name: NM_SETTING_DNS_OPTION_NO_TLD_QUERY
-      Value: no-tld-query
+      Value: "no-tld-query"
     - Name: NM_SETTING_DNS_OPTION_ROTATE
-      Value: rotate
+      Value: "rotate"
     - Name: NM_SETTING_DNS_OPTION_SINGLE_REQUEST
-      Value: single-request
+      Value: "single-request"
     - Name: NM_SETTING_DNS_OPTION_SINGLE_REQUEST_REOPEN
-      Value: single-request-reopen
+      Value: "single-request-reopen"
     - Name: NM_SETTING_DNS_OPTION_TIMEOUT
-      Value: timeout
+      Value: "timeout"
     - Name: NM_SETTING_DNS_OPTION_USE_VC
-      Value: use-vc
+      Value: "use-vc"
     - Name: NM_SETTING_IP4_CONFIG_METHOD_AUTO
-      Value: auto
+      Value: "auto"
     - Name: NM_SETTING_IP4_CONFIG_METHOD_DISABLED
-      Value: disabled
+      Value: "disabled"
     - Name: NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL
-      Value: link-local
+      Value: "link-local"
     - Name: NM_SETTING_IP4_CONFIG_METHOD_MANUAL
-      Value: manual
+      Value: "manual"
     - Name: NM_SETTING_IP4_CONFIG_METHOD_SHARED
-      Value: shared
+      Value: "shared"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_AUTO
-      Value: auto
+      Value: "auto"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_DHCP
-      Value: dhcp
+      Value: "dhcp"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_IGNORE
-      Value: ignore
+      Value: "ignore"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL
-      Value: link-local
+      Value: "link-local"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_MANUAL
-      Value: manual
+      Value: "manual"
     - Name: NM_SETTING_IP6_CONFIG_METHOD_SHARED
-      Value: shared
+      Value: "shared"
     - Name: NM_SETTING_IP_CONFIG_ADDRESSES
-      Value: addresses
+      Value: "addresses"
     - Name: NM_SETTING_IP_CONFIG_DAD_TIMEOUT
-      Value: dad-timeout
+      Value: "dad-timeout"
     - Name: NM_SETTING_IP_CONFIG_DHCP_HOSTNAME
-      Value: dhcp-hostname
+      Value: "dhcp-hostname"
     - Name: NM_SETTING_IP_CONFIG_DHCP_SEND_HOSTNAME
-      Value: dhcp-send-hostname
+      Value: "dhcp-send-hostname"
     - Name: NM_SETTING_IP_CONFIG_DHCP_TIMEOUT
-      Value: dhcp-timeout
+      Value: "dhcp-timeout"
     - Name: NM_SETTING_IP_CONFIG_DNS
-      Value: dns
+      Value: "dns"
     - Name: NM_SETTING_IP_CONFIG_DNS_OPTIONS
-      Value: dns-options
+      Value: "dns-options"
     - Name: NM_SETTING_IP_CONFIG_DNS_PRIORITY
-      Value: dns-priority
+      Value: "dns-priority"
     - Name: NM_SETTING_IP_CONFIG_DNS_SEARCH
-      Value: dns-search
+      Value: "dns-search"
     - Name: NM_SETTING_IP_CONFIG_GATEWAY
-      Value: gateway
+      Value: "gateway"
     - Name: NM_SETTING_IP_CONFIG_IGNORE_AUTO_DNS
-      Value: ignore-auto-dns
+      Value: "ignore-auto-dns"
     - Name: NM_SETTING_IP_CONFIG_IGNORE_AUTO_ROUTES
-      Value: ignore-auto-routes
+      Value: "ignore-auto-routes"
     - Name: NM_SETTING_IP_CONFIG_MAY_FAIL
-      Value: may-fail
+      Value: "may-fail"
     - Name: NM_SETTING_IP_CONFIG_METHOD
-      Value: method
+      Value: "method"
     - Name: NM_SETTING_IP_CONFIG_NEVER_DEFAULT
-      Value: never-default
+      Value: "never-default"
     - Name: NM_SETTING_IP_CONFIG_ROUTES
-      Value: routes
+      Value: "routes"
     - Name: NM_SETTING_IP_CONFIG_ROUTE_METRIC
-      Value: route-metric
+      Value: "route-metric"
     - Name: NM_SETTING_NAME
-      Value: name
+      Value: "name"
     - Name: NM_SETTING_WIRELESS_MODE_ADHOC
-      Value: adhoc
+      Value: "adhoc"
     - Name: NM_SETTING_WIRELESS_MODE_AP
-      Value: ap
+      Value: "ap"
     - Name: NM_SETTING_WIRELESS_MODE_INFRA
-      Value: infrastructure
+      Value: "infrastructure"
     - Name: NM_VPN_CONNECTION_BANNER
-      Value: banner
+      Value: "banner"
     - Name: NM_VPN_CONNECTION_VPN_STATE
-      Value: vpn-state
+      Value: "vpn-state"
     - Name: NM_VPN_DBUS_PLUGIN_INTERFACE
-      Value: org.freedesktop.NetworkManager.VPN.Plugin
+      Value: "org.freedesktop.NetworkManager.VPN.Plugin"
     - Name: NM_VPN_DBUS_PLUGIN_PATH
-      Value: /org/freedesktop/NetworkManager/VPN/Plugin
+      Value: "/org/freedesktop/NetworkManager/VPN/Plugin"
     - Name: NM_VPN_EDITOR_PLUGIN_DESCRIPTION
-      Value: description
+      Value: "description"
     - Name: NM_VPN_EDITOR_PLUGIN_NAME
-      Value: name
+      Value: "name"
     - Name: NM_VPN_EDITOR_PLUGIN_SERVICE
-      Value: service
+      Value: "service"
     - Name: NM_VPN_PLUGIN_CAN_PERSIST
-      Value: can-persist
+      Value: "can-persist"
     - Name: NM_VPN_PLUGIN_CONFIG_BANNER
-      Value: banner
+      Value: "banner"
     - Name: NM_VPN_PLUGIN_CONFIG_EXT_GATEWAY
-      Value: gateway
+      Value: "gateway"
     - Name: NM_VPN_PLUGIN_CONFIG_HAS_IP4
-      Value: has-ip4
+      Value: "has-ip4"
     - Name: NM_VPN_PLUGIN_CONFIG_HAS_IP6
-      Value: has-ip6
+      Value: "has-ip6"
     - Name: NM_VPN_PLUGIN_CONFIG_MTU
-      Value: mtu
+      Value: "mtu"
+    - Name: NM_VPN_PLUGIN_CONFIG_PROXY_PAC
+      Value: "pac"
     - Name: NM_VPN_PLUGIN_CONFIG_TUNDEV
-      Value: tundev
+      Value: "tundev"
     - Name: NM_VPN_PLUGIN_INFO_FILENAME
-      Value: filename
+      Value: "filename"
     - Name: NM_VPN_PLUGIN_INFO_KEYFILE
-      Value: keyfile
+      Value: "keyfile"
     - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_CONNECTION
-      Value: VPN Connection
+      Value: "VPN Connection"
     - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_GNOME
-      Value: GNOME
+      Value: "GNOME"
     - Name: NM_VPN_PLUGIN_INFO_KF_GROUP_LIBNM
-      Value: libnm
+      Value: "libnm"
     - Name: NM_VPN_PLUGIN_INFO_NAME
-      Value: name
+      Value: "name"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_ADDRESS
-      Value: address
+      Value: "address"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_DNS
-      Value: dns
+      Value: "dns"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_DOMAIN
-      Value: domain
+      Value: "domain"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_DOMAINS
-      Value: domains
+      Value: "domains"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_INT_GATEWAY
-      Value: internal-gateway
+      Value: "internal-gateway"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_MSS
-      Value: mss
+      Value: "mss"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_NBNS
-      Value: nbns
+      Value: "nbns"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_NEVER_DEFAULT
-      Value: never-default
+      Value: "never-default"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_PREFIX
-      Value: prefix
+      Value: "prefix"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_PRESERVE_ROUTES
-      Value: preserve-routes
+      Value: "preserve-routes"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_PTP
-      Value: ptp
+      Value: "ptp"
     - Name: NM_VPN_PLUGIN_IP4_CONFIG_ROUTES
-      Value: routes
+      Value: "routes"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_ADDRESS
-      Value: address
+      Value: "address"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_DNS
-      Value: dns
+      Value: "dns"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_DOMAIN
-      Value: domain
+      Value: "domain"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_DOMAINS
-      Value: domains
+      Value: "domains"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_INT_GATEWAY
-      Value: internal-gateway
+      Value: "internal-gateway"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_MSS
-      Value: mss
+      Value: "mss"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_NEVER_DEFAULT
-      Value: never-default
+      Value: "never-default"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_PREFIX
-      Value: prefix
+      Value: "prefix"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_PRESERVE_ROUTES
-      Value: preserve-routes
+      Value: "preserve-routes"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_PTP
-      Value: ptp
+      Value: "ptp"
     - Name: NM_VPN_PLUGIN_IP6_CONFIG_ROUTES
-      Value: routes
+      Value: "routes"
+    - Name: NM_VPN_PLUGIN_OLD_DBUS_SERVICE_NAME
+      Value: "service-name"
+    - Name: NM_VPN_PLUGIN_OLD_STATE
+      Value: "state"
+    - Name: NM_VPN_SERVICE_PLUGIN_DBUS_SERVICE_NAME
+      Value: "service-name"
+    - Name: NM_VPN_SERVICE_PLUGIN_DBUS_WATCH_PEER
+      Value: "watch-peer"
+    - Name: NM_VPN_SERVICE_PLUGIN_STATE
+      Value: "state"
     - Name: NM_WIMAX_NSP_NAME
-      Value: name
+      Value: "name"
     - Name: NM_WIMAX_NSP_NETWORK_TYPE
-      Value: network-type
+      Value: "network-type"
     - Name: NM_WIMAX_NSP_SIGNAL_QUALITY
-      Value: signal-quality
+      Value: "signal-quality"

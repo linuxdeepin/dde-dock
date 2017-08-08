@@ -42,12 +42,14 @@ func getSettingIP6ConfigAvailableKeys(data connectionData) (keys []string) {
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_IGNORE:
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_AUTO:
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_DHCP: // ignore
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_MANUAL:
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES)
+		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP6_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
 	case nm.NM_SETTING_IP6_CONFIG_METHOD_SHARED:
 	}
 	return

@@ -28,6 +28,7 @@ func newBasicVpnConnectionData(id, uuid string) (data connectionData) {
 	setSettingConnectionType(data, nm.NM_SETTING_VPN_SETTING_NAME)
 
 	initSettingSectionIpv4(data)
+	setSettingIP4ConfigNeverDefault(data, false)
 	return
 }
 

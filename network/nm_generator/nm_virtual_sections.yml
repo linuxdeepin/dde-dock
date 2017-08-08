@@ -1487,6 +1487,10 @@
       - NM_SETTING_IP4_CONFIG_DNS
       ChildKey: true
       Optional: false
+  - KeyValue: never-default
+    Section: ipv4
+    DisplayName: Only applied in corresponding resources
+    WidgetType: EditLineSwitchButton
 - VirtaulSectionName: NM_SETTING_VS_IPV6
   Value: vs-ipv6
   DisplayName: IPv6
@@ -1559,3 +1563,7 @@
       - NM_SETTING_IP6_CONFIG_DNS
       ChildKey: true
       Optional: false
+  - KeyValue: never-default
+    Section: ipv6
+    DisplayName: Only applied in corresponding resources
+    WidgetType: EditLineSwitchButton

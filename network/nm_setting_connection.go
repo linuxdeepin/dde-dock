@@ -90,3 +90,21 @@ func logicSetSettingVkConnectionAutoconnect(data connectionData, value bool) (er
 	}
 	return
 }
+func getSettingDummyAvailableKeys(data connectionData) (keys []string) {
+	return nil
+}
+func getSettingDummyAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingDummyValues(data connectionData) (errs sectionErrors) {
+	return
+}
+func getSettingUserAvailableKeys(data connectionData) (keys []string) {
+	return nil
+}
+func getSettingUserAvailableValues(data connectionData, key string) (values []kvalue) {
+	return
+}
+func checkSettingUserValues(data connectionData) (errs sectionErrors) {
+	return
+}

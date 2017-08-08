@@ -435,6 +435,7 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "ipv4", Key: "vk-addresses-gateway", Name: Tr("Gateway"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "ipv4", Key: "vk-dns", Name: Tr("Primary DNS"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "ipv4", Key: "vk-dns2", Name: Tr("Secondary DNS"), WidgetType: "EditLineIpv4Input", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "ipv4", Key: "never-default", Name: Tr("Only applied in corresponding resources"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
 	virtualSections["vs-ipv6"] = VsectionInfo{
@@ -448,6 +449,7 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "ipv6", Key: "vk-addresses-gateway", Name: Tr("Gateway"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "ipv6", Key: "vk-dns", Name: Tr("Primary DNS"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "ipv6", Key: "vk-dns2", Name: Tr("Secondary DNS"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "ipv6", Key: "never-default", Name: Tr("Only applied in corresponding resources"), WidgetType: "EditLineSwitchButton", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
 }
@@ -1345,11 +1347,21 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "anonymous-identity":
 			return true
+		case "auth-timeout":
+			return true
 		case "ca-cert":
+			return true
+		case "ca-cert-password":
+			return true
+		case "ca-cert-password-flags":
 			return true
 		case "ca-path":
 			return true
 		case "client-cert":
+			return true
+		case "client-cert-password":
+			return true
+		case "client-cert-password-flags":
 			return true
 		case "domain-suffix-match":
 			return true
@@ -1367,6 +1379,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "password-raw-flags":
 			return true
+		case "phase1-auth-flags":
+			return true
 		case "phase1-fast-provisioning":
 			return true
 		case "phase1-peaplabel":
@@ -1381,9 +1395,17 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 			return true
 		case "phase2-ca-cert":
 			return true
+		case "phase2-ca-cert-password":
+			return true
+		case "phase2-ca-cert-password-flags":
+			return true
 		case "phase2-ca-path":
 			return true
 		case "phase2-client-cert":
+			return true
+		case "phase2-client-cert-password":
+			return true
+		case "phase2-client-cert-password-flags":
 			return true
 		case "phase2-domain-suffix-match":
 			return true
@@ -1469,6 +1491,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		}
 	case "cdma":
 		switch key {
+		case "mtu":
+			return true
 		case "number":
 			return true
 		case "password":
@@ -1483,6 +1507,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "autoconnect":
 			return true
 		case "autoconnect-priority":
+			return true
+		case "autoconnect-retries":
 			return true
 		case "autoconnect-slaves":
 			return true
@@ -1560,6 +1586,8 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "device-id":
 			return true
 		case "home-only":
+			return true
+		case "mtu":
 			return true
 		case "network-id":
 			return true
@@ -1704,6 +1732,25 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "ttl":
 			return true
 		}
+	case "macsec":
+		switch key {
+		case "encrypt":
+			return true
+		case "mka-cak":
+			return true
+		case "mka-cak-flags":
+			return true
+		case "mka-ckn":
+			return true
+		case "mode":
+			return true
+		case "parent":
+			return true
+		case "port":
+			return true
+		case "validation":
+			return true
+		}
 	case "macvlan":
 		switch key {
 		case "mode":
@@ -1772,6 +1819,17 @@ func generalIsKeyShouldInSettingSection(section, key string) bool {
 		case "service":
 			return true
 		case "username":
+			return true
+		}
+	case "proxy":
+		switch key {
+		case "browser-only":
+			return true
+		case "method":
+			return true
+		case "pac-script":
+			return true
+		case "pac-url":
 			return true
 		}
 	case "serial":
@@ -2302,12 +2360,22 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeArrayString
 		case "anonymous-identity":
 			t = ktypeString
+		case "auth-timeout":
+			t = ktypeInt32
 		case "ca-cert":
 			t = ktypeWrapperString
+		case "ca-cert-password":
+			t = ktypeString
+		case "ca-cert-password-flags":
+			t = ktypeUint32
 		case "ca-path":
 			t = ktypeString
 		case "client-cert":
 			t = ktypeWrapperString
+		case "client-cert-password":
+			t = ktypeString
+		case "client-cert-password-flags":
+			t = ktypeUint32
 		case "domain-suffix-match":
 			t = ktypeString
 		case "eap":
@@ -2324,6 +2392,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeArrayByte
 		case "password-raw-flags":
 			t = ktypeUint32
+		case "phase1-auth-flags":
+			t = ktypeUint32
 		case "phase1-fast-provisioning":
 			t = ktypeString
 		case "phase1-peaplabel":
@@ -2338,10 +2408,18 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeString
 		case "phase2-ca-cert":
 			t = ktypeWrapperString
+		case "phase2-ca-cert-password":
+			t = ktypeString
+		case "phase2-ca-cert-password-flags":
+			t = ktypeUint32
 		case "phase2-ca-path":
 			t = ktypeString
 		case "phase2-client-cert":
 			t = ktypeWrapperString
+		case "phase2-client-cert-password":
+			t = ktypeString
+		case "phase2-client-cert-password-flags":
+			t = ktypeUint32
 		case "phase2-domain-suffix-match":
 			t = ktypeString
 		case "phase2-private-key":
@@ -2438,6 +2516,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		switch key {
 		default:
 			t = ktypeUnknown
+		case "mtu":
+			t = ktypeUint32
 		case "number":
 			t = ktypeString
 		case "password":
@@ -2454,6 +2534,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "autoconnect":
 			t = ktypeBoolean
 		case "autoconnect-priority":
+			t = ktypeInt32
+		case "autoconnect-retries":
 			t = ktypeInt32
 		case "autoconnect-slaves":
 			t = ktypeInt32
@@ -2538,6 +2620,8 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 			t = ktypeString
 		case "home-only":
 			t = ktypeBoolean
+		case "mtu":
+			t = ktypeUint32
 		case "network-id":
 			t = ktypeString
 		case "number":
@@ -2689,6 +2773,27 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "ttl":
 			t = ktypeUint32
 		}
+	case "macsec":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "encrypt":
+			t = ktypeBoolean
+		case "mka-cak":
+			t = ktypeString
+		case "mka-cak-flags":
+			t = ktypeUint32
+		case "mka-ckn":
+			t = ktypeString
+		case "mode":
+			t = ktypeInt32
+		case "parent":
+			t = ktypeString
+		case "port":
+			t = ktypeInt32
+		case "validation":
+			t = ktypeInt32
+		}
 	case "macvlan":
 		switch key {
 		default:
@@ -2765,6 +2870,19 @@ func generalGetSettingKeyType(section, key string) (t ktype) {
 		case "service":
 			t = ktypeString
 		case "username":
+			t = ktypeString
+		}
+	case "proxy":
+		switch key {
+		default:
+			t = ktypeUnknown
+		case "browser-only":
+			t = ktypeBoolean
+		case "method":
+			t = ktypeInt32
+		case "pac-script":
+			t = ktypeString
+		case "pac-url":
 			t = ktypeString
 		}
 	case "serial":
@@ -3365,6 +3483,8 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingIP6ConfigAvailableKeys(data)
 	case "ip-tunnel":
 		keys = getSettingIPTunnelAvailableKeys(data)
+	case "macsec":
+		keys = getSettingMacsecAvailableKeys(data)
 	case "macvlan":
 		keys = getSettingMacvlanAvailableKeys(data)
 	case "802-11-olpc-mesh":
@@ -3373,6 +3493,8 @@ func generalGetSettingAvailableKeys(data connectionData, section string) (keys [
 		keys = getSettingPppAvailableKeys(data)
 	case "pppoe":
 		keys = getSettingPppoeAvailableKeys(data)
+	case "proxy":
+		keys = getSettingProxyAvailableKeys(data)
 	case "serial":
 		keys = getSettingSerialAvailableKeys(data)
 	case "team":
@@ -3464,6 +3586,8 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingIP6ConfigAvailableValues(data, key)
 	case "ip-tunnel":
 		values = getSettingIPTunnelAvailableValues(data, key)
+	case "macsec":
+		values = getSettingMacsecAvailableValues(data, key)
 	case "macvlan":
 		values = getSettingMacvlanAvailableValues(data, key)
 	case "802-11-olpc-mesh":
@@ -3472,6 +3596,8 @@ func generalGetSettingAvailableValues(data connectionData, section, key string) 
 		values = getSettingPppAvailableValues(data, key)
 	case "pppoe":
 		values = getSettingPppoeAvailableValues(data, key)
+	case "proxy":
+		values = getSettingProxyAvailableValues(data, key)
 	case "serial":
 		values = getSettingSerialAvailableValues(data, key)
 	case "team":
@@ -3562,6 +3688,8 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingIP6ConfigValues(data)
 	case "ip-tunnel":
 		errs = checkSettingIPTunnelValues(data)
+	case "macsec":
+		errs = checkSettingMacsecValues(data)
 	case "macvlan":
 		errs = checkSettingMacvlanValues(data)
 	case "802-11-olpc-mesh":
@@ -3570,6 +3698,8 @@ func generalCheckSettingValues(data connectionData, section string) (errs sectio
 		errs = checkSettingPppValues(data)
 	case "pppoe":
 		errs = checkSettingPppoeValues(data)
+	case "proxy":
+		errs = checkSettingProxyValues(data)
 	case "serial":
 		errs = checkSettingSerialValues(data)
 	case "team":
@@ -3637,12 +3767,22 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = []string{}
 		case "anonymous-identity":
 			defvalue = ""
+		case "auth-timeout":
+			defvalue = int32(0)
 		case "ca-cert":
 			defvalue = []byte{}
+		case "ca-cert-password":
+			defvalue = ""
+		case "ca-cert-password-flags":
+			defvalue = uint32(0x0)
 		case "ca-path":
 			defvalue = ""
 		case "client-cert":
 			defvalue = []byte{}
+		case "client-cert-password":
+			defvalue = ""
+		case "client-cert-password-flags":
+			defvalue = uint32(0x0)
 		case "domain-suffix-match":
 			defvalue = ""
 		case "eap":
@@ -3659,6 +3799,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = []byte{}
 		case "password-raw-flags":
 			defvalue = uint32(0x0)
+		case "phase1-auth-flags":
+			defvalue = uint32(0x0)
 		case "phase1-fast-provisioning":
 			defvalue = ""
 		case "phase1-peaplabel":
@@ -3673,10 +3815,18 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = ""
 		case "phase2-ca-cert":
 			defvalue = []byte{}
+		case "phase2-ca-cert-password":
+			defvalue = ""
+		case "phase2-ca-cert-password-flags":
+			defvalue = uint32(0x0)
 		case "phase2-ca-path":
 			defvalue = ""
 		case "phase2-client-cert":
 			defvalue = []byte{}
+		case "phase2-client-cert-password":
+			defvalue = ""
+		case "phase2-client-cert-password-flags":
+			defvalue = uint32(0x0)
 		case "phase2-domain-suffix-match":
 			defvalue = ""
 		case "phase2-private-key":
@@ -3773,6 +3923,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		switch key {
 		default:
 			logger.Error("invalid key:", setting, key)
+		case "mtu":
+			defvalue = uint32(0x0)
 		case "number":
 			defvalue = ""
 		case "password":
@@ -3790,6 +3942,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = true
 		case "autoconnect-priority":
 			defvalue = int32(0)
+		case "autoconnect-retries":
+			defvalue = int32(-1)
 		case "autoconnect-slaves":
 			defvalue = int32(0)
 		case "gateway-ping-timeout":
@@ -3873,6 +4027,8 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 			defvalue = ""
 		case "home-only":
 			defvalue = false
+		case "mtu":
+			defvalue = uint32(0x0)
 		case "network-id":
 			defvalue = ""
 		case "number":
@@ -4024,6 +4180,27 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "ttl":
 			defvalue = uint32(0x0)
 		}
+	case "macsec":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "encrypt":
+			defvalue = true
+		case "mka-cak":
+			defvalue = ""
+		case "mka-cak-flags":
+			defvalue = uint32(0x0)
+		case "mka-ckn":
+			defvalue = ""
+		case "mode":
+			defvalue = int32(0)
+		case "parent":
+			defvalue = ""
+		case "port":
+			defvalue = int32(1)
+		case "validation":
+			defvalue = int32(2)
+		}
 	case "macvlan":
 		switch key {
 		default:
@@ -4100,6 +4277,19 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		case "service":
 			defvalue = ""
 		case "username":
+			defvalue = ""
+		}
+	case "proxy":
+		switch key {
+		default:
+			logger.Error("invalid key:", setting, key)
+		case "browser-only":
+			defvalue = false
+		case "method":
+			defvalue = int32(0)
+		case "pac-script":
+			defvalue = ""
+		case "pac-url":
 			defvalue = ""
 		}
 	case "serial":
@@ -4231,7 +4421,7 @@ func generalGetSettingDefaultValue(setting, key string) (defvalue interface{}) {
 		default:
 			logger.Error("invalid key:", setting, key)
 		case "auto-negotiate":
-			defvalue = true
+			defvalue = false
 		case "cloned-mac-address":
 			defvalue = []byte{}
 		case "duplex":
@@ -4680,12 +4870,22 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSetting8021xAltsubjectMatchesJSON(data)
 		case "anonymous-identity":
 			valueJSON = getSetting8021xAnonymousIdentityJSON(data)
+		case "auth-timeout":
+			valueJSON = getSetting8021xAuthTimeoutJSON(data)
 		case "ca-cert":
 			valueJSON = getSetting8021xCaCertJSON(data)
+		case "ca-cert-password":
+			valueJSON = getSetting8021xCaCertPasswordJSON(data)
+		case "ca-cert-password-flags":
+			valueJSON = getSetting8021xCaCertPasswordFlagsJSON(data)
 		case "ca-path":
 			valueJSON = getSetting8021xCaPathJSON(data)
 		case "client-cert":
 			valueJSON = getSetting8021xClientCertJSON(data)
+		case "client-cert-password":
+			valueJSON = getSetting8021xClientCertPasswordJSON(data)
+		case "client-cert-password-flags":
+			valueJSON = getSetting8021xClientCertPasswordFlagsJSON(data)
 		case "domain-suffix-match":
 			valueJSON = getSetting8021xDomainSuffixMatchJSON(data)
 		case "eap":
@@ -4702,6 +4902,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSetting8021xPasswordRawJSON(data)
 		case "password-raw-flags":
 			valueJSON = getSetting8021xPasswordRawFlagsJSON(data)
+		case "phase1-auth-flags":
+			valueJSON = getSetting8021xPhase1AuthFlagsJSON(data)
 		case "phase1-fast-provisioning":
 			valueJSON = getSetting8021xPhase1FastProvisioningJSON(data)
 		case "phase1-peaplabel":
@@ -4716,10 +4918,18 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSetting8021xPhase2AutheapJSON(data)
 		case "phase2-ca-cert":
 			valueJSON = getSetting8021xPhase2CaCertJSON(data)
+		case "phase2-ca-cert-password":
+			valueJSON = getSetting8021xPhase2CaCertPasswordJSON(data)
+		case "phase2-ca-cert-password-flags":
+			valueJSON = getSetting8021xPhase2CaCertPasswordFlagsJSON(data)
 		case "phase2-ca-path":
 			valueJSON = getSetting8021xPhase2CaPathJSON(data)
 		case "phase2-client-cert":
 			valueJSON = getSetting8021xPhase2ClientCertJSON(data)
+		case "phase2-client-cert-password":
+			valueJSON = getSetting8021xPhase2ClientCertPasswordJSON(data)
+		case "phase2-client-cert-password-flags":
+			valueJSON = getSetting8021xPhase2ClientCertPasswordFlagsJSON(data)
 		case "phase2-domain-suffix-match":
 			valueJSON = getSetting8021xPhase2DomainSuffixMatchJSON(data)
 		case "phase2-private-key":
@@ -4816,6 +5026,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		switch key {
 		default:
 			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "mtu":
+			valueJSON = getSettingCdmaMtuJSON(data)
 		case "number":
 			valueJSON = getSettingCdmaNumberJSON(data)
 		case "password":
@@ -4833,6 +5045,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingConnectionAutoconnectJSON(data)
 		case "autoconnect-priority":
 			valueJSON = getSettingConnectionAutoconnectPriorityJSON(data)
+		case "autoconnect-retries":
+			valueJSON = getSettingConnectionAutoconnectRetriesJSON(data)
 		case "autoconnect-slaves":
 			valueJSON = getSettingConnectionAutoconnectSlavesJSON(data)
 		case "gateway-ping-timeout":
@@ -4916,6 +5130,8 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingGsmDeviceIdJSON(data)
 		case "home-only":
 			valueJSON = getSettingGsmHomeOnlyJSON(data)
+		case "mtu":
+			valueJSON = getSettingGsmMtuJSON(data)
 		case "network-id":
 			valueJSON = getSettingGsmNetworkIdJSON(data)
 		case "number":
@@ -5067,6 +5283,27 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 		case "ttl":
 			valueJSON = getSettingIPTunnelTtlJSON(data)
 		}
+	case "macsec":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "encrypt":
+			valueJSON = getSettingMacsecEncryptJSON(data)
+		case "mka-cak":
+			valueJSON = getSettingMacsecMkaCakJSON(data)
+		case "mka-cak-flags":
+			valueJSON = getSettingMacsecMkaCakFlagsJSON(data)
+		case "mka-ckn":
+			valueJSON = getSettingMacsecMkaCknJSON(data)
+		case "mode":
+			valueJSON = getSettingMacsecModeJSON(data)
+		case "parent":
+			valueJSON = getSettingMacsecParentJSON(data)
+		case "port":
+			valueJSON = getSettingMacsecPortJSON(data)
+		case "validation":
+			valueJSON = getSettingMacsecValidationJSON(data)
+		}
 	case "macvlan":
 		switch key {
 		default:
@@ -5144,6 +5381,19 @@ func generalGetSettingKeyJSON(data connectionData, section, key string) (valueJS
 			valueJSON = getSettingPppoeServiceJSON(data)
 		case "username":
 			valueJSON = getSettingPppoeUsernameJSON(data)
+		}
+	case "proxy":
+		switch key {
+		default:
+			logger.Error("getSettingKeyJSON: invalide key", section, key)
+		case "browser-only":
+			valueJSON = getSettingProxyBrowserOnlyJSON(data)
+		case "method":
+			valueJSON = getSettingProxyMethodJSON(data)
+		case "pac-script":
+			valueJSON = getSettingProxyPacScriptJSON(data)
+		case "pac-url":
+			valueJSON = getSettingProxyPacUrlJSON(data)
 		}
 	case "serial":
 		switch key {
@@ -5725,12 +5975,22 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSetting8021xAltsubjectMatchesJSON(data, valueJSON)
 		case "anonymous-identity":
 			err = setSetting8021xAnonymousIdentityJSON(data, valueJSON)
+		case "auth-timeout":
+			err = setSetting8021xAuthTimeoutJSON(data, valueJSON)
 		case "ca-cert":
 			err = setSetting8021xCaCertJSON(data, valueJSON)
+		case "ca-cert-password":
+			err = setSetting8021xCaCertPasswordJSON(data, valueJSON)
+		case "ca-cert-password-flags":
+			err = setSetting8021xCaCertPasswordFlagsJSON(data, valueJSON)
 		case "ca-path":
 			err = setSetting8021xCaPathJSON(data, valueJSON)
 		case "client-cert":
 			err = setSetting8021xClientCertJSON(data, valueJSON)
+		case "client-cert-password":
+			err = setSetting8021xClientCertPasswordJSON(data, valueJSON)
+		case "client-cert-password-flags":
+			err = setSetting8021xClientCertPasswordFlagsJSON(data, valueJSON)
 		case "domain-suffix-match":
 			err = setSetting8021xDomainSuffixMatchJSON(data, valueJSON)
 		case "eap":
@@ -5747,6 +6007,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSetting8021xPasswordRawJSON(data, valueJSON)
 		case "password-raw-flags":
 			err = setSetting8021xPasswordRawFlagsJSON(data, valueJSON)
+		case "phase1-auth-flags":
+			err = setSetting8021xPhase1AuthFlagsJSON(data, valueJSON)
 		case "phase1-fast-provisioning":
 			err = setSetting8021xPhase1FastProvisioningJSON(data, valueJSON)
 		case "phase1-peaplabel":
@@ -5761,10 +6023,18 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSetting8021xPhase2AutheapJSON(data, valueJSON)
 		case "phase2-ca-cert":
 			err = setSetting8021xPhase2CaCertJSON(data, valueJSON)
+		case "phase2-ca-cert-password":
+			err = setSetting8021xPhase2CaCertPasswordJSON(data, valueJSON)
+		case "phase2-ca-cert-password-flags":
+			err = setSetting8021xPhase2CaCertPasswordFlagsJSON(data, valueJSON)
 		case "phase2-ca-path":
 			err = setSetting8021xPhase2CaPathJSON(data, valueJSON)
 		case "phase2-client-cert":
 			err = setSetting8021xPhase2ClientCertJSON(data, valueJSON)
+		case "phase2-client-cert-password":
+			err = setSetting8021xPhase2ClientCertPasswordJSON(data, valueJSON)
+		case "phase2-client-cert-password-flags":
+			err = setSetting8021xPhase2ClientCertPasswordFlagsJSON(data, valueJSON)
 		case "phase2-domain-suffix-match":
 			err = setSetting8021xPhase2DomainSuffixMatchJSON(data, valueJSON)
 		case "phase2-private-key":
@@ -5867,6 +6137,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		default:
 			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
 			logger.Error(err)
+		case "mtu":
+			err = setSettingCdmaMtuJSON(data, valueJSON)
 		case "number":
 			err = setSettingCdmaNumberJSON(data, valueJSON)
 		case "password":
@@ -5885,6 +6157,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingConnectionAutoconnectJSON(data, valueJSON)
 		case "autoconnect-priority":
 			err = setSettingConnectionAutoconnectPriorityJSON(data, valueJSON)
+		case "autoconnect-retries":
+			err = setSettingConnectionAutoconnectRetriesJSON(data, valueJSON)
 		case "autoconnect-slaves":
 			err = setSettingConnectionAutoconnectSlavesJSON(data, valueJSON)
 		case "gateway-ping-timeout":
@@ -5971,6 +6245,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingGsmDeviceIdJSON(data, valueJSON)
 		case "home-only":
 			err = setSettingGsmHomeOnlyJSON(data, valueJSON)
+		case "mtu":
+			err = setSettingGsmMtuJSON(data, valueJSON)
 		case "network-id":
 			err = setSettingGsmNetworkIdJSON(data, valueJSON)
 		case "number":
@@ -6126,6 +6402,28 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 		case "ttl":
 			err = setSettingIPTunnelTtlJSON(data, valueJSON)
 		}
+	case "macsec":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "encrypt":
+			err = setSettingMacsecEncryptJSON(data, valueJSON)
+		case "mka-cak":
+			err = setSettingMacsecMkaCakJSON(data, valueJSON)
+		case "mka-cak-flags":
+			err = setSettingMacsecMkaCakFlagsJSON(data, valueJSON)
+		case "mka-ckn":
+			err = setSettingMacsecMkaCknJSON(data, valueJSON)
+		case "mode":
+			err = setSettingMacsecModeJSON(data, valueJSON)
+		case "parent":
+			err = setSettingMacsecParentJSON(data, valueJSON)
+		case "port":
+			err = setSettingMacsecPortJSON(data, valueJSON)
+		case "validation":
+			err = setSettingMacsecValidationJSON(data, valueJSON)
+		}
 	case "macvlan":
 		switch key {
 		default:
@@ -6207,6 +6505,20 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingPppoeServiceJSON(data, valueJSON)
 		case "username":
 			err = setSettingPppoeUsernameJSON(data, valueJSON)
+		}
+	case "proxy":
+		switch key {
+		default:
+			err = fmt.Errorf("setSettingKeyJSON: invalide key %s %s", section, key)
+			logger.Error(err)
+		case "browser-only":
+			err = setSettingProxyBrowserOnlyJSON(data, valueJSON)
+		case "method":
+			err = setSettingProxyMethodJSON(data, valueJSON)
+		case "pac-script":
+			err = setSettingProxyPacScriptJSON(data, valueJSON)
+		case "pac-url":
+			err = setSettingProxyPacUrlJSON(data, valueJSON)
 		}
 	case "serial":
 		switch key {
@@ -6822,6 +7134,11 @@ func ensureSetting8021xAnonymousIdentityNoEmpty(data connectionData, errs sectio
 		rememberError(errs, "802-1x", "anonymous-identity", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSetting8021xAuthTimeoutNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xAuthTimeoutExists(data) {
+		rememberError(errs, "802-1x", "auth-timeout", nmKeyErrorMissingValue)
+	}
+}
 func ensureSetting8021xCaCertNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSetting8021xCaCertExists(data) {
 		rememberError(errs, "802-1x", "ca-cert", nmKeyErrorMissingValue)
@@ -6829,6 +7146,20 @@ func ensureSetting8021xCaCertNoEmpty(data connectionData, errs sectionErrors) {
 	value := getSetting8021xCaCert(data)
 	if len(value) == 0 {
 		rememberError(errs, "802-1x", "ca-cert", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xCaCertPasswordNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xCaCertPasswordExists(data) {
+		rememberError(errs, "802-1x", "ca-cert-password", nmKeyErrorMissingValue)
+	}
+	value := getSetting8021xCaCertPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-1x", "ca-cert-password", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xCaCertPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xCaCertPasswordFlagsExists(data) {
+		rememberError(errs, "802-1x", "ca-cert-password-flags", nmKeyErrorMissingValue)
 	}
 }
 func ensureSetting8021xCaPathNoEmpty(data connectionData, errs sectionErrors) {
@@ -6847,6 +7178,20 @@ func ensureSetting8021xClientCertNoEmpty(data connectionData, errs sectionErrors
 	value := getSetting8021xClientCert(data)
 	if len(value) == 0 {
 		rememberError(errs, "802-1x", "client-cert", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xClientCertPasswordNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xClientCertPasswordExists(data) {
+		rememberError(errs, "802-1x", "client-cert-password", nmKeyErrorMissingValue)
+	}
+	value := getSetting8021xClientCertPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-1x", "client-cert-password", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xClientCertPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xClientCertPasswordFlagsExists(data) {
+		rememberError(errs, "802-1x", "client-cert-password-flags", nmKeyErrorMissingValue)
 	}
 }
 func ensureSetting8021xDomainSuffixMatchNoEmpty(data connectionData, errs sectionErrors) {
@@ -6913,6 +7258,11 @@ func ensureSetting8021xPasswordRawFlagsNoEmpty(data connectionData, errs section
 		rememberError(errs, "802-1x", "password-raw-flags", nmKeyErrorMissingValue)
 	}
 }
+func ensureSetting8021xPhase1AuthFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase1AuthFlagsExists(data) {
+		rememberError(errs, "802-1x", "phase1-auth-flags", nmKeyErrorMissingValue)
+	}
+}
 func ensureSetting8021xPhase1FastProvisioningNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSetting8021xPhase1FastProvisioningExists(data) {
 		rememberError(errs, "802-1x", "phase1-fast-provisioning", nmKeyErrorMissingValue)
@@ -6976,6 +7326,20 @@ func ensureSetting8021xPhase2CaCertNoEmpty(data connectionData, errs sectionErro
 		rememberError(errs, "802-1x", "phase2-ca-cert", nmKeyErrorEmptyValue)
 	}
 }
+func ensureSetting8021xPhase2CaCertPasswordNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase2CaCertPasswordExists(data) {
+		rememberError(errs, "802-1x", "phase2-ca-cert-password", nmKeyErrorMissingValue)
+	}
+	value := getSetting8021xPhase2CaCertPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-1x", "phase2-ca-cert-password", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xPhase2CaCertPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase2CaCertPasswordFlagsExists(data) {
+		rememberError(errs, "802-1x", "phase2-ca-cert-password-flags", nmKeyErrorMissingValue)
+	}
+}
 func ensureSetting8021xPhase2CaPathNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSetting8021xPhase2CaPathExists(data) {
 		rememberError(errs, "802-1x", "phase2-ca-path", nmKeyErrorMissingValue)
@@ -6992,6 +7356,20 @@ func ensureSetting8021xPhase2ClientCertNoEmpty(data connectionData, errs section
 	value := getSetting8021xPhase2ClientCert(data)
 	if len(value) == 0 {
 		rememberError(errs, "802-1x", "phase2-client-cert", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xPhase2ClientCertPasswordNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase2ClientCertPasswordExists(data) {
+		rememberError(errs, "802-1x", "phase2-client-cert-password", nmKeyErrorMissingValue)
+	}
+	value := getSetting8021xPhase2ClientCertPassword(data)
+	if len(value) == 0 {
+		rememberError(errs, "802-1x", "phase2-client-cert-password", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSetting8021xPhase2ClientCertPasswordFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSetting8021xPhase2ClientCertPasswordFlagsExists(data) {
+		rememberError(errs, "802-1x", "phase2-client-cert-password-flags", nmKeyErrorMissingValue)
 	}
 }
 func ensureSetting8021xPhase2DomainSuffixMatchNoEmpty(data connectionData, errs sectionErrors) {
@@ -7277,6 +7655,11 @@ func ensureSectionSettingCdmaExists(data connectionData, errs sectionErrors, rel
 		rememberError(errs, relatedKey, "cdma", fmt.Sprintf(nmKeyErrorEmptySection, "cdma"))
 	}
 }
+func ensureSettingCdmaMtuNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingCdmaMtuExists(data) {
+		rememberError(errs, "cdma", "mtu", nmKeyErrorMissingValue)
+	}
+}
 func ensureSettingCdmaNumberNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingCdmaNumberExists(data) {
 		rememberError(errs, "cdma", "number", nmKeyErrorMissingValue)
@@ -7326,6 +7709,11 @@ func ensureSettingConnectionAutoconnectNoEmpty(data connectionData, errs section
 func ensureSettingConnectionAutoconnectPriorityNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingConnectionAutoconnectPriorityExists(data) {
 		rememberError(errs, "connection", "autoconnect-priority", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingConnectionAutoconnectRetriesNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingConnectionAutoconnectRetriesExists(data) {
+		rememberError(errs, "connection", "autoconnect-retries", nmKeyErrorMissingValue)
 	}
 }
 func ensureSettingConnectionAutoconnectSlavesNoEmpty(data connectionData, errs sectionErrors) {
@@ -7599,6 +7987,11 @@ func ensureSettingGsmDeviceIdNoEmpty(data connectionData, errs sectionErrors) {
 func ensureSettingGsmHomeOnlyNoEmpty(data connectionData, errs sectionErrors) {
 	if !isSettingGsmHomeOnlyExists(data) {
 		rememberError(errs, "gsm", "home-only", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingGsmMtuNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingGsmMtuExists(data) {
+		rememberError(errs, "gsm", "mtu", nmKeyErrorMissingValue)
 	}
 }
 func ensureSettingGsmNetworkIdNoEmpty(data connectionData, errs sectionErrors) {
@@ -8098,6 +8491,67 @@ func ensureSettingIPTunnelTtlNoEmpty(data connectionData, errs sectionErrors) {
 		rememberError(errs, "ip-tunnel", "ttl", nmKeyErrorMissingValue)
 	}
 }
+func ensureSectionSettingMacsecExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "macsec") {
+		rememberError(errs, relatedKey, "macsec", fmt.Sprintf(nmKeyErrorMissingSection, "macsec"))
+	}
+	sectionData, _ := data["macsec"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "macsec", fmt.Sprintf(nmKeyErrorEmptySection, "macsec"))
+	}
+}
+func ensureSettingMacsecEncryptNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecEncryptExists(data) {
+		rememberError(errs, "macsec", "encrypt", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingMacsecMkaCakNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecMkaCakExists(data) {
+		rememberError(errs, "macsec", "mka-cak", nmKeyErrorMissingValue)
+	}
+	value := getSettingMacsecMkaCak(data)
+	if len(value) == 0 {
+		rememberError(errs, "macsec", "mka-cak", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingMacsecMkaCakFlagsNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecMkaCakFlagsExists(data) {
+		rememberError(errs, "macsec", "mka-cak-flags", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingMacsecMkaCknNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecMkaCknExists(data) {
+		rememberError(errs, "macsec", "mka-ckn", nmKeyErrorMissingValue)
+	}
+	value := getSettingMacsecMkaCkn(data)
+	if len(value) == 0 {
+		rememberError(errs, "macsec", "mka-ckn", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingMacsecModeNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecModeExists(data) {
+		rememberError(errs, "macsec", "mode", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingMacsecParentNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecParentExists(data) {
+		rememberError(errs, "macsec", "parent", nmKeyErrorMissingValue)
+	}
+	value := getSettingMacsecParent(data)
+	if len(value) == 0 {
+		rememberError(errs, "macsec", "parent", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingMacsecPortNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecPortExists(data) {
+		rememberError(errs, "macsec", "port", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingMacsecValidationNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingMacsecValidationExists(data) {
+		rememberError(errs, "macsec", "validation", nmKeyErrorMissingValue)
+	}
+}
 func ensureSectionSettingMacvlanExists(data connectionData, errs sectionErrors, relatedKey string) {
 	if !isSettingExists(data, "macvlan") {
 		rememberError(errs, relatedKey, "macvlan", fmt.Sprintf(nmKeyErrorMissingSection, "macvlan"))
@@ -8301,6 +8755,43 @@ func ensureSettingPppoeUsernameNoEmpty(data connectionData, errs sectionErrors) 
 	value := getSettingPppoeUsername(data)
 	if len(value) == 0 {
 		rememberError(errs, "pppoe", "username", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSectionSettingProxyExists(data connectionData, errs sectionErrors, relatedKey string) {
+	if !isSettingExists(data, "proxy") {
+		rememberError(errs, relatedKey, "proxy", fmt.Sprintf(nmKeyErrorMissingSection, "proxy"))
+	}
+	sectionData, _ := data["proxy"]
+	if len(sectionData) == 0 {
+		rememberError(errs, relatedKey, "proxy", fmt.Sprintf(nmKeyErrorEmptySection, "proxy"))
+	}
+}
+func ensureSettingProxyBrowserOnlyNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingProxyBrowserOnlyExists(data) {
+		rememberError(errs, "proxy", "browser-only", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingProxyMethodNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingProxyMethodExists(data) {
+		rememberError(errs, "proxy", "method", nmKeyErrorMissingValue)
+	}
+}
+func ensureSettingProxyPacScriptNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingProxyPacScriptExists(data) {
+		rememberError(errs, "proxy", "pac-script", nmKeyErrorMissingValue)
+	}
+	value := getSettingProxyPacScript(data)
+	if len(value) == 0 {
+		rememberError(errs, "proxy", "pac-script", nmKeyErrorEmptyValue)
+	}
+}
+func ensureSettingProxyPacUrlNoEmpty(data connectionData, errs sectionErrors) {
+	if !isSettingProxyPacUrlExists(data) {
+		rememberError(errs, "proxy", "pac-url", nmKeyErrorMissingValue)
+	}
+	value := getSettingProxyPacUrl(data)
+	if len(value) == 0 {
+		rememberError(errs, "proxy", "pac-url", nmKeyErrorEmptyValue)
 	}
 }
 func ensureSectionSettingSerialExists(data connectionData, errs sectionErrors, relatedKey string) {
@@ -10064,14 +10555,29 @@ func isSetting8021xAltsubjectMatchesExists(data connectionData) bool {
 func isSetting8021xAnonymousIdentityExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "anonymous-identity")
 }
+func isSetting8021xAuthTimeoutExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "auth-timeout")
+}
 func isSetting8021xCaCertExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "ca-cert")
+}
+func isSetting8021xCaCertPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "ca-cert-password")
+}
+func isSetting8021xCaCertPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "ca-cert-password-flags")
 }
 func isSetting8021xCaPathExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "ca-path")
 }
 func isSetting8021xClientCertExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "client-cert")
+}
+func isSetting8021xClientCertPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "client-cert-password")
+}
+func isSetting8021xClientCertPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "client-cert-password-flags")
 }
 func isSetting8021xDomainSuffixMatchExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "domain-suffix-match")
@@ -10097,6 +10603,9 @@ func isSetting8021xPasswordRawExists(data connectionData) bool {
 func isSetting8021xPasswordRawFlagsExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "password-raw-flags")
 }
+func isSetting8021xPhase1AuthFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "phase1-auth-flags")
+}
 func isSetting8021xPhase1FastProvisioningExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "phase1-fast-provisioning")
 }
@@ -10118,11 +10627,23 @@ func isSetting8021xPhase2AutheapExists(data connectionData) bool {
 func isSetting8021xPhase2CaCertExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "phase2-ca-cert")
 }
+func isSetting8021xPhase2CaCertPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "phase2-ca-cert-password")
+}
+func isSetting8021xPhase2CaCertPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "phase2-ca-cert-password-flags")
+}
 func isSetting8021xPhase2CaPathExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "phase2-ca-path")
 }
 func isSetting8021xPhase2ClientCertExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "phase2-client-cert")
+}
+func isSetting8021xPhase2ClientCertPasswordExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "phase2-client-cert-password")
+}
+func isSetting8021xPhase2ClientCertPasswordFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "802-1x", "phase2-client-cert-password-flags")
 }
 func isSetting8021xPhase2DomainSuffixMatchExists(data connectionData) bool {
 	return isSettingKeyExists(data, "802-1x", "phase2-domain-suffix-match")
@@ -10223,6 +10744,9 @@ func isSettingBridgePortPathCostExists(data connectionData) bool {
 func isSettingBridgePortPriorityExists(data connectionData) bool {
 	return isSettingKeyExists(data, "bridge-port", "priority")
 }
+func isSettingCdmaMtuExists(data connectionData) bool {
+	return isSettingKeyExists(data, "cdma", "mtu")
+}
 func isSettingCdmaNumberExists(data connectionData) bool {
 	return isSettingKeyExists(data, "cdma", "number")
 }
@@ -10240,6 +10764,9 @@ func isSettingConnectionAutoconnectExists(data connectionData) bool {
 }
 func isSettingConnectionAutoconnectPriorityExists(data connectionData) bool {
 	return isSettingKeyExists(data, "connection", "autoconnect-priority")
+}
+func isSettingConnectionAutoconnectRetriesExists(data connectionData) bool {
+	return isSettingKeyExists(data, "connection", "autoconnect-retries")
 }
 func isSettingConnectionAutoconnectSlavesExists(data connectionData) bool {
 	return isSettingKeyExists(data, "connection", "autoconnect-slaves")
@@ -10342,6 +10869,9 @@ func isSettingGsmDeviceIdExists(data connectionData) bool {
 }
 func isSettingGsmHomeOnlyExists(data connectionData) bool {
 	return isSettingKeyExists(data, "gsm", "home-only")
+}
+func isSettingGsmMtuExists(data connectionData) bool {
+	return isSettingKeyExists(data, "gsm", "mtu")
 }
 func isSettingGsmNetworkIdExists(data connectionData) bool {
 	return isSettingKeyExists(data, "gsm", "network-id")
@@ -10538,6 +11068,30 @@ func isSettingIPTunnelTosExists(data connectionData) bool {
 func isSettingIPTunnelTtlExists(data connectionData) bool {
 	return isSettingKeyExists(data, "ip-tunnel", "ttl")
 }
+func isSettingMacsecEncryptExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "encrypt")
+}
+func isSettingMacsecMkaCakExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "mka-cak")
+}
+func isSettingMacsecMkaCakFlagsExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "mka-cak-flags")
+}
+func isSettingMacsecMkaCknExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "mka-ckn")
+}
+func isSettingMacsecModeExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "mode")
+}
+func isSettingMacsecParentExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "parent")
+}
+func isSettingMacsecPortExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "port")
+}
+func isSettingMacsecValidationExists(data connectionData) bool {
+	return isSettingKeyExists(data, "macsec", "validation")
+}
 func isSettingMacvlanModeExists(data connectionData) bool {
 	return isSettingKeyExists(data, "macvlan", "mode")
 }
@@ -10624,6 +11178,18 @@ func isSettingPppoeServiceExists(data connectionData) bool {
 }
 func isSettingPppoeUsernameExists(data connectionData) bool {
 	return isSettingKeyExists(data, "pppoe", "username")
+}
+func isSettingProxyBrowserOnlyExists(data connectionData) bool {
+	return isSettingKeyExists(data, "proxy", "browser-only")
+}
+func isSettingProxyMethodExists(data connectionData) bool {
+	return isSettingKeyExists(data, "proxy", "method")
+}
+func isSettingProxyPacScriptExists(data connectionData) bool {
+	return isSettingKeyExists(data, "proxy", "pac-script")
+}
+func isSettingProxyPacUrlExists(data connectionData) bool {
+	return isSettingKeyExists(data, "proxy", "pac-url")
 }
 func isSettingSerialBaudExists(data connectionData) bool {
 	return isSettingKeyExists(data, "serial", "baud")
@@ -11285,9 +11851,24 @@ func getSetting8021xAnonymousIdentity(data connectionData) (value string) {
 	value = interfaceToString(ivalue)
 	return
 }
+func getSetting8021xAuthTimeout(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "802-1x", "auth-timeout")
+	value = interfaceToInt32(ivalue)
+	return
+}
 func getSetting8021xCaCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, "802-1x", "ca-cert")
 	value = interfaceToArrayByte(ivalue)
+	return
+}
+func getSetting8021xCaCertPassword(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-1x", "ca-cert-password")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSetting8021xCaCertPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-1x", "ca-cert-password-flags")
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xCaPath(data connectionData) (value string) {
@@ -11298,6 +11879,16 @@ func getSetting8021xCaPath(data connectionData) (value string) {
 func getSetting8021xClientCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, "802-1x", "client-cert")
 	value = interfaceToArrayByte(ivalue)
+	return
+}
+func getSetting8021xClientCertPassword(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-1x", "client-cert-password")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSetting8021xClientCertPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-1x", "client-cert-password-flags")
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xDomainSuffixMatch(data connectionData) (value string) {
@@ -11340,6 +11931,11 @@ func getSetting8021xPasswordRawFlags(data connectionData) (value uint32) {
 	value = interfaceToUint32(ivalue)
 	return
 }
+func getSetting8021xPhase1AuthFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-1x", "phase1-auth-flags")
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSetting8021xPhase1FastProvisioning(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "802-1x", "phase1-fast-provisioning")
 	value = interfaceToString(ivalue)
@@ -11375,6 +11971,16 @@ func getSetting8021xPhase2CaCert(data connectionData) (value []byte) {
 	value = interfaceToArrayByte(ivalue)
 	return
 }
+func getSetting8021xPhase2CaCertPassword(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-1x", "phase2-ca-cert-password")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSetting8021xPhase2CaCertPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-1x", "phase2-ca-cert-password-flags")
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSetting8021xPhase2CaPath(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "802-1x", "phase2-ca-path")
 	value = interfaceToString(ivalue)
@@ -11383,6 +11989,16 @@ func getSetting8021xPhase2CaPath(data connectionData) (value string) {
 func getSetting8021xPhase2ClientCert(data connectionData) (value []byte) {
 	ivalue := getSettingKey(data, "802-1x", "phase2-client-cert")
 	value = interfaceToArrayByte(ivalue)
+	return
+}
+func getSetting8021xPhase2ClientCertPassword(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "802-1x", "phase2-client-cert-password")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSetting8021xPhase2ClientCertPasswordFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "802-1x", "phase2-client-cert-password-flags")
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSetting8021xPhase2DomainSuffixMatch(data connectionData) (value string) {
@@ -11550,6 +12166,11 @@ func getSettingBridgePortPriority(data connectionData) (value uint32) {
 	value = interfaceToUint32(ivalue)
 	return
 }
+func getSettingCdmaMtu(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "cdma", "mtu")
+	value = interfaceToUint32(ivalue)
+	return
+}
 func getSettingCdmaNumber(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "cdma", "number")
 	value = interfaceToString(ivalue)
@@ -11577,6 +12198,11 @@ func getSettingConnectionAutoconnect(data connectionData) (value bool) {
 }
 func getSettingConnectionAutoconnectPriority(data connectionData) (value int32) {
 	ivalue := getSettingKey(data, "connection", "autoconnect-priority")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingConnectionAutoconnectRetries(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "connection", "autoconnect-retries")
 	value = interfaceToInt32(ivalue)
 	return
 }
@@ -11748,6 +12374,11 @@ func getSettingGsmDeviceId(data connectionData) (value string) {
 func getSettingGsmHomeOnly(data connectionData) (value bool) {
 	ivalue := getSettingKey(data, "gsm", "home-only")
 	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingGsmMtu(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "gsm", "mtu")
+	value = interfaceToUint32(ivalue)
 	return
 }
 func getSettingGsmNetworkId(data connectionData) (value string) {
@@ -12075,6 +12706,46 @@ func getSettingIPTunnelTtl(data connectionData) (value uint32) {
 	value = interfaceToUint32(ivalue)
 	return
 }
+func getSettingMacsecEncrypt(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "macsec", "encrypt")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingMacsecMkaCak(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "macsec", "mka-cak")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingMacsecMkaCakFlags(data connectionData) (value uint32) {
+	ivalue := getSettingKey(data, "macsec", "mka-cak-flags")
+	value = interfaceToUint32(ivalue)
+	return
+}
+func getSettingMacsecMkaCkn(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "macsec", "mka-ckn")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingMacsecMode(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "macsec", "mode")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingMacsecParent(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "macsec", "parent")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingMacsecPort(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "macsec", "port")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingMacsecValidation(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "macsec", "validation")
+	value = interfaceToInt32(ivalue)
+	return
+}
 func getSettingMacvlanMode(data connectionData) (value uint32) {
 	ivalue := getSettingKey(data, "macvlan", "mode")
 	value = interfaceToUint32(ivalue)
@@ -12217,6 +12888,26 @@ func getSettingPppoeService(data connectionData) (value string) {
 }
 func getSettingPppoeUsername(data connectionData) (value string) {
 	ivalue := getSettingKey(data, "pppoe", "username")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingProxyBrowserOnly(data connectionData) (value bool) {
+	ivalue := getSettingKey(data, "proxy", "browser-only")
+	value = interfaceToBoolean(ivalue)
+	return
+}
+func getSettingProxyMethod(data connectionData) (value int32) {
+	ivalue := getSettingKey(data, "proxy", "method")
+	value = interfaceToInt32(ivalue)
+	return
+}
+func getSettingProxyPacScript(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "proxy", "pac-script")
+	value = interfaceToString(ivalue)
+	return
+}
+func getSettingProxyPacUrl(data connectionData) (value string) {
+	ivalue := getSettingKey(data, "proxy", "pac-url")
 	value = interfaceToString(ivalue)
 	return
 }
@@ -13308,14 +13999,29 @@ func setSetting8021xAltsubjectMatches(data connectionData, value []string) {
 func setSetting8021xAnonymousIdentity(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "anonymous-identity", value)
 }
+func setSetting8021xAuthTimeout(data connectionData, value int32) {
+	setSettingKey(data, "802-1x", "auth-timeout", value)
+}
 func setSetting8021xCaCert(data connectionData, value []byte) {
 	setSettingKey(data, "802-1x", "ca-cert", value)
+}
+func setSetting8021xCaCertPassword(data connectionData, value string) {
+	setSettingKey(data, "802-1x", "ca-cert-password", value)
+}
+func setSetting8021xCaCertPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, "802-1x", "ca-cert-password-flags", value)
 }
 func setSetting8021xCaPath(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "ca-path", value)
 }
 func setSetting8021xClientCert(data connectionData, value []byte) {
 	setSettingKey(data, "802-1x", "client-cert", value)
+}
+func setSetting8021xClientCertPassword(data connectionData, value string) {
+	setSettingKey(data, "802-1x", "client-cert-password", value)
+}
+func setSetting8021xClientCertPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, "802-1x", "client-cert-password-flags", value)
 }
 func setSetting8021xDomainSuffixMatch(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "domain-suffix-match", value)
@@ -13341,6 +14047,9 @@ func setSetting8021xPasswordRaw(data connectionData, value []byte) {
 func setSetting8021xPasswordRawFlags(data connectionData, value uint32) {
 	setSettingKey(data, "802-1x", "password-raw-flags", value)
 }
+func setSetting8021xPhase1AuthFlags(data connectionData, value uint32) {
+	setSettingKey(data, "802-1x", "phase1-auth-flags", value)
+}
 func setSetting8021xPhase1FastProvisioning(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "phase1-fast-provisioning", value)
 }
@@ -13362,11 +14071,23 @@ func setSetting8021xPhase2Autheap(data connectionData, value string) {
 func setSetting8021xPhase2CaCert(data connectionData, value []byte) {
 	setSettingKey(data, "802-1x", "phase2-ca-cert", value)
 }
+func setSetting8021xPhase2CaCertPassword(data connectionData, value string) {
+	setSettingKey(data, "802-1x", "phase2-ca-cert-password", value)
+}
+func setSetting8021xPhase2CaCertPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, "802-1x", "phase2-ca-cert-password-flags", value)
+}
 func setSetting8021xPhase2CaPath(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "phase2-ca-path", value)
 }
 func setSetting8021xPhase2ClientCert(data connectionData, value []byte) {
 	setSettingKey(data, "802-1x", "phase2-client-cert", value)
+}
+func setSetting8021xPhase2ClientCertPassword(data connectionData, value string) {
+	setSettingKey(data, "802-1x", "phase2-client-cert-password", value)
+}
+func setSetting8021xPhase2ClientCertPasswordFlags(data connectionData, value uint32) {
+	setSettingKey(data, "802-1x", "phase2-client-cert-password-flags", value)
 }
 func setSetting8021xPhase2DomainSuffixMatch(data connectionData, value string) {
 	setSettingKey(data, "802-1x", "phase2-domain-suffix-match", value)
@@ -13467,6 +14188,9 @@ func setSettingBridgePortPathCost(data connectionData, value uint32) {
 func setSettingBridgePortPriority(data connectionData, value uint32) {
 	setSettingKey(data, "bridge-port", "priority", value)
 }
+func setSettingCdmaMtu(data connectionData, value uint32) {
+	setSettingKey(data, "cdma", "mtu", value)
+}
 func setSettingCdmaNumber(data connectionData, value string) {
 	setSettingKey(data, "cdma", "number", value)
 }
@@ -13484,6 +14208,9 @@ func setSettingConnectionAutoconnect(data connectionData, value bool) {
 }
 func setSettingConnectionAutoconnectPriority(data connectionData, value int32) {
 	setSettingKey(data, "connection", "autoconnect-priority", value)
+}
+func setSettingConnectionAutoconnectRetries(data connectionData, value int32) {
+	setSettingKey(data, "connection", "autoconnect-retries", value)
 }
 func setSettingConnectionAutoconnectSlaves(data connectionData, value int32) {
 	setSettingKey(data, "connection", "autoconnect-slaves", value)
@@ -13586,6 +14313,9 @@ func setSettingGsmDeviceId(data connectionData, value string) {
 }
 func setSettingGsmHomeOnly(data connectionData, value bool) {
 	setSettingKey(data, "gsm", "home-only", value)
+}
+func setSettingGsmMtu(data connectionData, value uint32) {
+	setSettingKey(data, "gsm", "mtu", value)
 }
 func setSettingGsmNetworkId(data connectionData, value string) {
 	setSettingKey(data, "gsm", "network-id", value)
@@ -13782,6 +14512,30 @@ func setSettingIPTunnelTos(data connectionData, value uint32) {
 func setSettingIPTunnelTtl(data connectionData, value uint32) {
 	setSettingKey(data, "ip-tunnel", "ttl", value)
 }
+func setSettingMacsecEncrypt(data connectionData, value bool) {
+	setSettingKey(data, "macsec", "encrypt", value)
+}
+func setSettingMacsecMkaCak(data connectionData, value string) {
+	setSettingKey(data, "macsec", "mka-cak", value)
+}
+func setSettingMacsecMkaCakFlags(data connectionData, value uint32) {
+	setSettingKey(data, "macsec", "mka-cak-flags", value)
+}
+func setSettingMacsecMkaCkn(data connectionData, value string) {
+	setSettingKey(data, "macsec", "mka-ckn", value)
+}
+func setSettingMacsecMode(data connectionData, value int32) {
+	setSettingKey(data, "macsec", "mode", value)
+}
+func setSettingMacsecParent(data connectionData, value string) {
+	setSettingKey(data, "macsec", "parent", value)
+}
+func setSettingMacsecPort(data connectionData, value int32) {
+	setSettingKey(data, "macsec", "port", value)
+}
+func setSettingMacsecValidation(data connectionData, value int32) {
+	setSettingKey(data, "macsec", "validation", value)
+}
 func setSettingMacvlanMode(data connectionData, value uint32) {
 	setSettingKey(data, "macvlan", "mode", value)
 }
@@ -13868,6 +14622,18 @@ func setSettingPppoeService(data connectionData, value string) {
 }
 func setSettingPppoeUsername(data connectionData, value string) {
 	setSettingKey(data, "pppoe", "username", value)
+}
+func setSettingProxyBrowserOnly(data connectionData, value bool) {
+	setSettingKey(data, "proxy", "browser-only", value)
+}
+func setSettingProxyMethod(data connectionData, value int32) {
+	setSettingKey(data, "proxy", "method", value)
+}
+func setSettingProxyPacScript(data connectionData, value string) {
+	setSettingKey(data, "proxy", "pac-script", value)
+}
+func setSettingProxyPacUrl(data connectionData, value string) {
+	setSettingKey(data, "proxy", "pac-url", value)
 }
 func setSettingSerialBaud(data connectionData, value uint32) {
 	setSettingKey(data, "serial", "baud", value)
@@ -14527,8 +15293,20 @@ func getSetting8021xAnonymousIdentityJSON(data connectionData) (valueJSON string
 	valueJSON = getSettingKeyJSON(data, "802-1x", "anonymous-identity", ktypeString)
 	return
 }
+func getSetting8021xAuthTimeoutJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "auth-timeout", ktypeInt32)
+	return
+}
 func getSetting8021xCaCertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "ca-cert", ktypeWrapperString)
+	return
+}
+func getSetting8021xCaCertPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "ca-cert-password", ktypeString)
+	return
+}
+func getSetting8021xCaCertPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "ca-cert-password-flags", ktypeUint32)
 	return
 }
 func getSetting8021xCaPathJSON(data connectionData) (valueJSON string) {
@@ -14537,6 +15315,14 @@ func getSetting8021xCaPathJSON(data connectionData) (valueJSON string) {
 }
 func getSetting8021xClientCertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "client-cert", ktypeWrapperString)
+	return
+}
+func getSetting8021xClientCertPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "client-cert-password", ktypeString)
+	return
+}
+func getSetting8021xClientCertPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "client-cert-password-flags", ktypeUint32)
 	return
 }
 func getSetting8021xDomainSuffixMatchJSON(data connectionData) (valueJSON string) {
@@ -14571,6 +15357,10 @@ func getSetting8021xPasswordRawFlagsJSON(data connectionData) (valueJSON string)
 	valueJSON = getSettingKeyJSON(data, "802-1x", "password-raw-flags", ktypeUint32)
 	return
 }
+func getSetting8021xPhase1AuthFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "phase1-auth-flags", ktypeUint32)
+	return
+}
 func getSetting8021xPhase1FastProvisioningJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "phase1-fast-provisioning", ktypeString)
 	return
@@ -14599,12 +15389,28 @@ func getSetting8021xPhase2CaCertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-ca-cert", ktypeWrapperString)
 	return
 }
+func getSetting8021xPhase2CaCertPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-ca-cert-password", ktypeString)
+	return
+}
+func getSetting8021xPhase2CaCertPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-ca-cert-password-flags", ktypeUint32)
+	return
+}
 func getSetting8021xPhase2CaPathJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-ca-path", ktypeString)
 	return
 }
 func getSetting8021xPhase2ClientCertJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-client-cert", ktypeWrapperString)
+	return
+}
+func getSetting8021xPhase2ClientCertPasswordJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-client-cert-password", ktypeString)
+	return
+}
+func getSetting8021xPhase2ClientCertPasswordFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "802-1x", "phase2-client-cert-password-flags", ktypeUint32)
 	return
 }
 func getSetting8021xPhase2DomainSuffixMatchJSON(data connectionData) (valueJSON string) {
@@ -14739,6 +15545,10 @@ func getSettingBridgePortPriorityJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "bridge-port", "priority", ktypeUint32)
 	return
 }
+func getSettingCdmaMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "cdma", "mtu", ktypeUint32)
+	return
+}
 func getSettingCdmaNumberJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "cdma", "number", ktypeString)
 	return
@@ -14761,6 +15571,10 @@ func getSettingConnectionAutoconnectJSON(data connectionData) (valueJSON string)
 }
 func getSettingConnectionAutoconnectPriorityJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "connection", "autoconnect-priority", ktypeInt32)
+	return
+}
+func getSettingConnectionAutoconnectRetriesJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "connection", "autoconnect-retries", ktypeInt32)
 	return
 }
 func getSettingConnectionAutoconnectSlavesJSON(data connectionData) (valueJSON string) {
@@ -14897,6 +15711,10 @@ func getSettingGsmDeviceIdJSON(data connectionData) (valueJSON string) {
 }
 func getSettingGsmHomeOnlyJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "gsm", "home-only", ktypeBoolean)
+	return
+}
+func getSettingGsmMtuJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "gsm", "mtu", ktypeUint32)
 	return
 }
 func getSettingGsmNetworkIdJSON(data connectionData) (valueJSON string) {
@@ -15159,6 +15977,38 @@ func getSettingIPTunnelTtlJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "ip-tunnel", "ttl", ktypeUint32)
 	return
 }
+func getSettingMacsecEncryptJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "encrypt", ktypeBoolean)
+	return
+}
+func getSettingMacsecMkaCakJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "mka-cak", ktypeString)
+	return
+}
+func getSettingMacsecMkaCakFlagsJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "mka-cak-flags", ktypeUint32)
+	return
+}
+func getSettingMacsecMkaCknJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "mka-ckn", ktypeString)
+	return
+}
+func getSettingMacsecModeJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "mode", ktypeInt32)
+	return
+}
+func getSettingMacsecParentJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "parent", ktypeString)
+	return
+}
+func getSettingMacsecPortJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "port", ktypeInt32)
+	return
+}
+func getSettingMacsecValidationJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "macsec", "validation", ktypeInt32)
+	return
+}
 func getSettingMacvlanModeJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "macvlan", "mode", ktypeUint32)
 	return
@@ -15273,6 +16123,22 @@ func getSettingPppoeServiceJSON(data connectionData) (valueJSON string) {
 }
 func getSettingPppoeUsernameJSON(data connectionData) (valueJSON string) {
 	valueJSON = getSettingKeyJSON(data, "pppoe", "username", ktypeString)
+	return
+}
+func getSettingProxyBrowserOnlyJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "proxy", "browser-only", ktypeBoolean)
+	return
+}
+func getSettingProxyMethodJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "proxy", "method", ktypeInt32)
+	return
+}
+func getSettingProxyPacScriptJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "proxy", "pac-script", ktypeString)
+	return
+}
+func getSettingProxyPacUrlJSON(data connectionData) (valueJSON string) {
+	valueJSON = getSettingKeyJSON(data, "proxy", "pac-url", ktypeString)
 	return
 }
 func getSettingSerialBaudJSON(data connectionData) (valueJSON string) {
@@ -16147,14 +17013,29 @@ func setSetting8021xAltsubjectMatchesJSON(data connectionData, valueJSON string)
 func setSetting8021xAnonymousIdentityJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "anonymous-identity", valueJSON, ktypeString)
 }
+func setSetting8021xAuthTimeoutJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "auth-timeout", valueJSON, ktypeInt32)
+}
 func setSetting8021xCaCertJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "ca-cert", valueJSON, ktypeWrapperString)
+}
+func setSetting8021xCaCertPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "ca-cert-password", valueJSON, ktypeString)
+}
+func setSetting8021xCaCertPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "ca-cert-password-flags", valueJSON, ktypeUint32)
 }
 func setSetting8021xCaPathJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "ca-path", valueJSON, ktypeString)
 }
 func setSetting8021xClientCertJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "client-cert", valueJSON, ktypeWrapperString)
+}
+func setSetting8021xClientCertPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "client-cert-password", valueJSON, ktypeString)
+}
+func setSetting8021xClientCertPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "client-cert-password-flags", valueJSON, ktypeUint32)
 }
 func setSetting8021xDomainSuffixMatchJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "domain-suffix-match", valueJSON, ktypeString)
@@ -16180,6 +17061,9 @@ func setSetting8021xPasswordRawJSON(data connectionData, valueJSON string) (err 
 func setSetting8021xPasswordRawFlagsJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "password-raw-flags", valueJSON, ktypeUint32)
 }
+func setSetting8021xPhase1AuthFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "phase1-auth-flags", valueJSON, ktypeUint32)
+}
 func setSetting8021xPhase1FastProvisioningJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "phase1-fast-provisioning", valueJSON, ktypeString)
 }
@@ -16201,11 +17085,23 @@ func setSetting8021xPhase2AutheapJSON(data connectionData, valueJSON string) (er
 func setSetting8021xPhase2CaCertJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "phase2-ca-cert", valueJSON, ktypeWrapperString)
 }
+func setSetting8021xPhase2CaCertPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "phase2-ca-cert-password", valueJSON, ktypeString)
+}
+func setSetting8021xPhase2CaCertPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "phase2-ca-cert-password-flags", valueJSON, ktypeUint32)
+}
 func setSetting8021xPhase2CaPathJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "phase2-ca-path", valueJSON, ktypeString)
 }
 func setSetting8021xPhase2ClientCertJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "phase2-client-cert", valueJSON, ktypeWrapperString)
+}
+func setSetting8021xPhase2ClientCertPasswordJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "phase2-client-cert-password", valueJSON, ktypeString)
+}
+func setSetting8021xPhase2ClientCertPasswordFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-1x", "phase2-client-cert-password-flags", valueJSON, ktypeUint32)
 }
 func setSetting8021xPhase2DomainSuffixMatchJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-1x", "phase2-domain-suffix-match", valueJSON, ktypeString)
@@ -16306,6 +17202,9 @@ func setSettingBridgePortPathCostJSON(data connectionData, valueJSON string) (er
 func setSettingBridgePortPriorityJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "bridge-port", "priority", valueJSON, ktypeUint32)
 }
+func setSettingCdmaMtuJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "cdma", "mtu", valueJSON, ktypeUint32)
+}
 func setSettingCdmaNumberJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "cdma", "number", valueJSON, ktypeString)
 }
@@ -16323,6 +17222,9 @@ func setSettingConnectionAutoconnectJSON(data connectionData, valueJSON string) 
 }
 func setSettingConnectionAutoconnectPriorityJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "connection", "autoconnect-priority", valueJSON, ktypeInt32)
+}
+func setSettingConnectionAutoconnectRetriesJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "connection", "autoconnect-retries", valueJSON, ktypeInt32)
 }
 func setSettingConnectionAutoconnectSlavesJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "connection", "autoconnect-slaves", valueJSON, ktypeInt32)
@@ -16425,6 +17327,9 @@ func setSettingGsmDeviceIdJSON(data connectionData, valueJSON string) (err error
 }
 func setSettingGsmHomeOnlyJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "gsm", "home-only", valueJSON, ktypeBoolean)
+}
+func setSettingGsmMtuJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "gsm", "mtu", valueJSON, ktypeUint32)
 }
 func setSettingGsmNetworkIdJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "gsm", "network-id", valueJSON, ktypeString)
@@ -16621,6 +17526,30 @@ func setSettingIPTunnelTosJSON(data connectionData, valueJSON string) (err error
 func setSettingIPTunnelTtlJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "ip-tunnel", "ttl", valueJSON, ktypeUint32)
 }
+func setSettingMacsecEncryptJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "encrypt", valueJSON, ktypeBoolean)
+}
+func setSettingMacsecMkaCakJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "mka-cak", valueJSON, ktypeString)
+}
+func setSettingMacsecMkaCakFlagsJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "mka-cak-flags", valueJSON, ktypeUint32)
+}
+func setSettingMacsecMkaCknJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "mka-ckn", valueJSON, ktypeString)
+}
+func setSettingMacsecModeJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "mode", valueJSON, ktypeInt32)
+}
+func setSettingMacsecParentJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "parent", valueJSON, ktypeString)
+}
+func setSettingMacsecPortJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "port", valueJSON, ktypeInt32)
+}
+func setSettingMacsecValidationJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "macsec", "validation", valueJSON, ktypeInt32)
+}
 func setSettingMacvlanModeJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "macvlan", "mode", valueJSON, ktypeUint32)
 }
@@ -16707,6 +17636,18 @@ func setSettingPppoeServiceJSON(data connectionData, valueJSON string) (err erro
 }
 func setSettingPppoeUsernameJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "pppoe", "username", valueJSON, ktypeString)
+}
+func setSettingProxyBrowserOnlyJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "proxy", "browser-only", valueJSON, ktypeBoolean)
+}
+func setSettingProxyMethodJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "proxy", "method", valueJSON, ktypeInt32)
+}
+func setSettingProxyPacScriptJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "proxy", "pac-script", valueJSON, ktypeString)
+}
+func setSettingProxyPacUrlJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "proxy", "pac-url", valueJSON, ktypeString)
 }
 func setSettingSerialBaudJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "serial", "baud", valueJSON, ktypeUint32)
@@ -17575,14 +18516,29 @@ func removeSetting8021xAltsubjectMatches(data connectionData) {
 func removeSetting8021xAnonymousIdentity(data connectionData) {
 	removeSettingKey(data, "802-1x", "anonymous-identity")
 }
+func removeSetting8021xAuthTimeout(data connectionData) {
+	removeSettingKey(data, "802-1x", "auth-timeout")
+}
 func removeSetting8021xCaCert(data connectionData) {
 	removeSettingKey(data, "802-1x", "ca-cert")
+}
+func removeSetting8021xCaCertPassword(data connectionData) {
+	removeSettingKey(data, "802-1x", "ca-cert-password")
+}
+func removeSetting8021xCaCertPasswordFlags(data connectionData) {
+	removeSettingKey(data, "802-1x", "ca-cert-password-flags")
 }
 func removeSetting8021xCaPath(data connectionData) {
 	removeSettingKey(data, "802-1x", "ca-path")
 }
 func removeSetting8021xClientCert(data connectionData) {
 	removeSettingKey(data, "802-1x", "client-cert")
+}
+func removeSetting8021xClientCertPassword(data connectionData) {
+	removeSettingKey(data, "802-1x", "client-cert-password")
+}
+func removeSetting8021xClientCertPasswordFlags(data connectionData) {
+	removeSettingKey(data, "802-1x", "client-cert-password-flags")
 }
 func removeSetting8021xDomainSuffixMatch(data connectionData) {
 	removeSettingKey(data, "802-1x", "domain-suffix-match")
@@ -17608,6 +18564,9 @@ func removeSetting8021xPasswordRaw(data connectionData) {
 func removeSetting8021xPasswordRawFlags(data connectionData) {
 	removeSettingKey(data, "802-1x", "password-raw-flags")
 }
+func removeSetting8021xPhase1AuthFlags(data connectionData) {
+	removeSettingKey(data, "802-1x", "phase1-auth-flags")
+}
 func removeSetting8021xPhase1FastProvisioning(data connectionData) {
 	removeSettingKey(data, "802-1x", "phase1-fast-provisioning")
 }
@@ -17629,11 +18588,23 @@ func removeSetting8021xPhase2Autheap(data connectionData) {
 func removeSetting8021xPhase2CaCert(data connectionData) {
 	removeSettingKey(data, "802-1x", "phase2-ca-cert")
 }
+func removeSetting8021xPhase2CaCertPassword(data connectionData) {
+	removeSettingKey(data, "802-1x", "phase2-ca-cert-password")
+}
+func removeSetting8021xPhase2CaCertPasswordFlags(data connectionData) {
+	removeSettingKey(data, "802-1x", "phase2-ca-cert-password-flags")
+}
 func removeSetting8021xPhase2CaPath(data connectionData) {
 	removeSettingKey(data, "802-1x", "phase2-ca-path")
 }
 func removeSetting8021xPhase2ClientCert(data connectionData) {
 	removeSettingKey(data, "802-1x", "phase2-client-cert")
+}
+func removeSetting8021xPhase2ClientCertPassword(data connectionData) {
+	removeSettingKey(data, "802-1x", "phase2-client-cert-password")
+}
+func removeSetting8021xPhase2ClientCertPasswordFlags(data connectionData) {
+	removeSettingKey(data, "802-1x", "phase2-client-cert-password-flags")
 }
 func removeSetting8021xPhase2DomainSuffixMatch(data connectionData) {
 	removeSettingKey(data, "802-1x", "phase2-domain-suffix-match")
@@ -17734,6 +18705,9 @@ func removeSettingBridgePortPathCost(data connectionData) {
 func removeSettingBridgePortPriority(data connectionData) {
 	removeSettingKey(data, "bridge-port", "priority")
 }
+func removeSettingCdmaMtu(data connectionData) {
+	removeSettingKey(data, "cdma", "mtu")
+}
 func removeSettingCdmaNumber(data connectionData) {
 	removeSettingKey(data, "cdma", "number")
 }
@@ -17751,6 +18725,9 @@ func removeSettingConnectionAutoconnect(data connectionData) {
 }
 func removeSettingConnectionAutoconnectPriority(data connectionData) {
 	removeSettingKey(data, "connection", "autoconnect-priority")
+}
+func removeSettingConnectionAutoconnectRetries(data connectionData) {
+	removeSettingKey(data, "connection", "autoconnect-retries")
 }
 func removeSettingConnectionAutoconnectSlaves(data connectionData) {
 	removeSettingKey(data, "connection", "autoconnect-slaves")
@@ -17853,6 +18830,9 @@ func removeSettingGsmDeviceId(data connectionData) {
 }
 func removeSettingGsmHomeOnly(data connectionData) {
 	removeSettingKey(data, "gsm", "home-only")
+}
+func removeSettingGsmMtu(data connectionData) {
+	removeSettingKey(data, "gsm", "mtu")
 }
 func removeSettingGsmNetworkId(data connectionData) {
 	removeSettingKey(data, "gsm", "network-id")
@@ -18049,6 +19029,30 @@ func removeSettingIPTunnelTos(data connectionData) {
 func removeSettingIPTunnelTtl(data connectionData) {
 	removeSettingKey(data, "ip-tunnel", "ttl")
 }
+func removeSettingMacsecEncrypt(data connectionData) {
+	removeSettingKey(data, "macsec", "encrypt")
+}
+func removeSettingMacsecMkaCak(data connectionData) {
+	removeSettingKey(data, "macsec", "mka-cak")
+}
+func removeSettingMacsecMkaCakFlags(data connectionData) {
+	removeSettingKey(data, "macsec", "mka-cak-flags")
+}
+func removeSettingMacsecMkaCkn(data connectionData) {
+	removeSettingKey(data, "macsec", "mka-ckn")
+}
+func removeSettingMacsecMode(data connectionData) {
+	removeSettingKey(data, "macsec", "mode")
+}
+func removeSettingMacsecParent(data connectionData) {
+	removeSettingKey(data, "macsec", "parent")
+}
+func removeSettingMacsecPort(data connectionData) {
+	removeSettingKey(data, "macsec", "port")
+}
+func removeSettingMacsecValidation(data connectionData) {
+	removeSettingKey(data, "macsec", "validation")
+}
 func removeSettingMacvlanMode(data connectionData) {
 	removeSettingKey(data, "macvlan", "mode")
 }
@@ -18135,6 +19139,18 @@ func removeSettingPppoeService(data connectionData) {
 }
 func removeSettingPppoeUsername(data connectionData) {
 	removeSettingKey(data, "pppoe", "username")
+}
+func removeSettingProxyBrowserOnly(data connectionData) {
+	removeSettingKey(data, "proxy", "browser-only")
+}
+func removeSettingProxyMethod(data connectionData) {
+	removeSettingKey(data, "proxy", "method")
+}
+func removeSettingProxyPacScript(data connectionData) {
+	removeSettingKey(data, "proxy", "pac-script")
+}
+func removeSettingProxyPacUrl(data connectionData) {
+	removeSettingKey(data, "proxy", "pac-url")
 }
 func removeSettingSerialBaud(data connectionData) {
 	removeSettingKey(data, "serial", "baud")
