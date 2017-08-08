@@ -17,7 +17,7 @@ Homepage: http://www.deepin.org/
 
 Package: dde-dock
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, deepin-menu
 Recommends: dde-disk-mount-plugin, 
  dde-trash-plugin
 Conflicts: dde-workspace (<< 2.90.5),
