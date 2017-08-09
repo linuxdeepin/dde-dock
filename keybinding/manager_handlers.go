@@ -112,9 +112,13 @@ func (m *Manager) initHandlers() {
 
 	m.handlers[ActionTypeSystemShutdown] = func(ev *KeyEvent) {
 		cmd := getPowerButtonPressedExec()
-		if err := execCmd(cmd); err != nil {
-			logger.Warning(err)
-		}
+
+		go func() {
+			err := execCmd(cmd)
+			if err != nil {
+				logger.Warning("execCmd error:", err)
+			}
+		} ()
 	}
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {
