@@ -19,6 +19,7 @@ import (
 	"sync"
 
 	"gir/gio-2.0"
+	"pkg.deepin.io/lib/strv"
 	"pkg.deepin.io/lib/xdg/basedir"
 )
 
@@ -37,6 +38,21 @@ var (
 
 	DeepinFontConfig = path.Join(basedir.GetUserConfigDir(), "fontconfig", "conf.d", "99-deepin.conf")
 )
+
+var stylePriorityList = []string{
+	"Regular",
+	"normal",
+	"Standard",
+	"Normale",
+	"Medium",
+	"Italic",
+	"Black",
+	"Light",
+	"Bold",
+	"BoldItalic",
+	"DemiLight",
+	"Thin",
+}
 
 type Family struct {
 	Id   string
@@ -94,10 +110,12 @@ func SetFamily(standard, monospace string, size float64) error {
 	if standInfo == nil {
 		return fmt.Errorf("Invalid standard id '%s'", standard)
 	}
+	standard += " " + standInfo.preferredStyle()
 	monoInfo := families.Get(monospace)
 	if monoInfo == nil {
 		return fmt.Errorf("Invalid monospace id '%s'", monospace)
 	}
+	monospace += " " + monoInfo.preferredStyle()
 
 	// fc-match can not real time update
 	/*
@@ -154,6 +172,16 @@ func (infos Families) add(info *Family) Families {
 	v.Styles = compositeList(v.Styles, info.Styles)
 	//v.Files = compositeList(v.Files, info.Files)
 	return infos
+}
+
+func (info Family) preferredStyle() string {
+	styles := strv.Strv(info.Styles)
+	for _, v := range stylePriorityList {
+		if styles.Contains(v) {
+			return v
+		}
+	}
+	return ""
 }
 
 func setFontByXSettings(name string, size float64) error {
@@ -228,9 +256,9 @@ func configContent(standard, mono string) string {
             <string>serif</string>
         </test>
         <edit name="family" mode="assign" binding="strong">
-	    <string>%s</string>
-	    <string>%s</string>
-	</edit>
+            <string>%s</string>
+            <string>%s</string>
+        </edit>
     </match>
 
     <match target="pattern">
@@ -238,9 +266,9 @@ func configContent(standard, mono string) string {
             <string>sans-serif</string>
         </test>
         <edit name="family" mode="assign" binding="strong">
-	    <string>%s</string>
-	    <string>%s</string>
-	</edit>
+            <string>%s</string>
+            <string>%s</string>
+        </edit>
     </match>
 
     <match target="pattern">
@@ -248,9 +276,19 @@ func configContent(standard, mono string) string {
             <string>monospace</string>
         </test>
         <edit name="family" mode="assign" binding="strong">
-	    <string>%s</string>
-	    <string>%s</string>
-	</edit>
+            <string>%s</string>
+            <string>%s</string>
+        </edit>
+    </match>
+
+    <match target="font">
+        <edit name="hinting"><bool>true</bool></edit>
+        <edit name="autohint"><bool>false</bool></edit>
+        <edit name="hintstyle"><const>hintfull</const></edit>
+        <edit name="rgba"><const>rgb</const></edit>
+        <edit name="lcdfilter"><const>lcddefault</const></edit>
+        <edit name="embeddedbitmap"><bool>false</bool></edit>
+        <edit name="embolden"><bool>false</bool></edit>
     </match>
 
 </fontconfig>`, standard, fallbackStandard,

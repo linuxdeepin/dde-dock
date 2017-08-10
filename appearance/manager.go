@@ -186,6 +186,7 @@ func (m *Manager) resetFonts() {
 		logger.Debug("resetFonts fonts.SetFamily failed", err)
 		return
 	}
+	m.checkFontConfVersion()
 }
 
 func (m *Manager) init() {
@@ -265,7 +266,7 @@ func (m *Manager) correctFontName() {
 		m.MonospaceFont.Set(defaultMonospaceFont)
 	}
 
-	if !changed {
+	if !changed && m.checkFontConfVersion() {
 		return
 	}
 
