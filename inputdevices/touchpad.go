@@ -16,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/strv"
 	dutils "pkg.deepin.io/lib/utils"
 	"strconv"
 	"strings"
@@ -343,8 +344,12 @@ func (tpad *Touchpad) startSyndaemon() {
 	argsLen := len(args)
 	var cmd *exec.Cmd
 	if argsLen == 1 {
-		cmd = exec.Command(args[0])
+		cmd = exec.Command(args[0], "-p", syndaemonPidFile)
 	} else {
+		if !strv.Strv(args).Contains("-p") {
+			args = append(args, "-p", syndaemonPidFile)
+		}
+		argsLen = len(args)
 		cmd = exec.Command(args[0], args[1:argsLen]...)
 	}
 	err := cmd.Start()
@@ -353,9 +358,8 @@ func (tpad *Touchpad) startSyndaemon() {
 		logger.Debug("[disableWhileTyping] start syndaemon failed:", err)
 		return
 	}
-	tpad.synProcess = cmd.Process
-	content := fmt.Sprintf("%v", tpad.synProcess.Pid)
-	ioutil.WriteFile(syndaemonPidFile, []byte(content), 0777)
+
+	go cmd.Wait()
 }
 
 func (tpad *Touchpad) stopSyndaemon() {
