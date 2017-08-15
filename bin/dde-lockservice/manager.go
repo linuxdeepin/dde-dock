@@ -100,7 +100,9 @@ func (m *Manager) SwitchToUser(username string) error {
 	if err != nil {
 		return err
 	}
-	dbus.Emit(m, "UserChanged", username)
+	if current != "" {
+		dbus.Emit(m, "UserChanged", username)
+	}
 	return nil
 }
 
