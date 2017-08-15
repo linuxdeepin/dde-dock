@@ -219,12 +219,11 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32, wait bool)
 	if err != nil {
 		fmt.Println("Failed to authenticate:", err)
 		m.sendEvent(Failure, pid, username, err.Error())
-		debug.FreeOSMemory()
-		return
+	} else {
+		fmt.Println("-------Authenticate successed")
+		m.sendEvent(Successed, pid, username, "Authenticated")
 	}
-
-	fmt.Println("-------Authenticate successed")
-	m.sendEvent(Successed, pid, username, "Authenticated")
+	handler = nil
 	debug.FreeOSMemory()
 }
 
