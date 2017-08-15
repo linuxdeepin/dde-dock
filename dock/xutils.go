@@ -181,7 +181,11 @@ func getBestEwmhIcon(xu *xgbutil.XUtil, win xproto.Window) (*ewmh.WmIcon, error)
 		return nil, err
 	}
 
-	return xgraphics.FindBestEwmhIcon(bestIconSize, bestIconSize, icons), nil
+	best := xgraphics.FindBestEwmhIcon(bestIconSize, bestIconSize, icons)
+	if best == nil {
+		return nil, errors.New("ewmh icon not found")
+	}
+	return best, nil
 }
 
 func NewNRGBAImageFromEwmhIcon(icon *ewmh.WmIcon) *image.NRGBA {
