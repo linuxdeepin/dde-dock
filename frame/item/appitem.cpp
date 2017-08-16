@@ -28,6 +28,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
       m_appNameTips(new QLabel(this)),
       m_appPreviewTips(new _PreviewContainer(this)),
       m_itemEntry(new DBusDockEntry(entry.path(), this)),
+      m_refreshIconTimer(new QTimer(this)),
 
       m_itemView(new QGraphicsView(this)),
       m_itemScene(new QGraphicsScene(this)),
@@ -78,6 +79,9 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     m_updateIconGeometryTimer->setInterval(500);
     m_updateIconGeometryTimer->setSingleShot(true);
 
+    m_refreshIconTimer->setInterval(200);
+    m_refreshIconTimer->setSingleShot(true);
+
     m_appPreviewTips->setVisible(false);
 
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, &AppItem::activeChanged);
@@ -86,6 +90,7 @@ AppItem::AppItem(const QDBusObjectPath &entry, QWidget *parent)
     connect(m_itemEntry, &DBusDockEntry::ActiveChanged, this, static_cast<void (AppItem::*)()>(&AppItem::update));
 
     connect(m_updateIconGeometryTimer, &QTimer::timeout, this, &AppItem::updateWindowIconGeometries, Qt::QueuedConnection);
+    connect(m_refreshIconTimer, &QTimer::timeout, this, &AppItem::refreshIconInteral, Qt::QueuedConnection);
 
     connect(m_appPreviewTips, &_PreviewContainer::requestActivateWindow, this, &AppItem::requestActivateWindow, Qt::QueuedConnection);
     connect(m_appPreviewTips, &_PreviewContainer::requestPreviewWindow, this, &AppItem::requestPreviewWindow, Qt::QueuedConnection);
@@ -481,6 +486,13 @@ void AppItem::updateTitle()
 
 void AppItem::refershIcon()
 {
+    m_refreshIconTimer->start();
+}
+
+void AppItem::refreshIconInteral()
+{
+    Q_ASSERT(sender() == m_refreshIconTimer);
+
     const QString icon = m_itemEntry->icon();
     const int iconSize = qMin(width(), height());
 

@@ -18,6 +18,8 @@ void DockPluginLoader::run()
 #endif
     const QStringList plugins = pluginsDir.entryList(QDir::Files);
 
+    msleep(5000);
+
     for (const QString file : plugins)
     {
         if (!QLibrary::isLibrary(file))
@@ -29,7 +31,7 @@ void DockPluginLoader::run()
 
         emit pluginFounded(pluginsDir.absoluteFilePath(file));
 
-        msleep(500);
+        msleep(1000);
     }
 
     emit finished();
