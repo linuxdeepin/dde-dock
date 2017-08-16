@@ -202,6 +202,9 @@ func (info UserInfo) isHumanViaShadow(config string) bool {
 		}
 
 		pw := items[1]
+		if pw == "" {
+			break
+		}
 
 		// user was locked
 		if pw[0] == '!' {
