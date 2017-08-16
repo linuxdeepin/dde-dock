@@ -274,7 +274,7 @@ func (m *Manager) ensureWiredConnectionExists(wiredDevPath dbus.ObjectPath, acti
 		// connection already exists, reset its name to keep
 		// consistent with current system's language
 		exists = true
-		nmSetConnectionId(cpath, id)
+		//nmSetConnectionId(cpath, id)
 	}
 	return
 }
