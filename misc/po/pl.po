@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:04+0800\n"
-"PO-Revision-Date: 2017-06-23 05:34+0000\n"
+"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"PO-Revision-Date: 2017-08-16 09:57+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Polish (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -315,11 +315,11 @@ msgstr "Wymagane jest uwierzytelnienie, aby móc przełączyć język"
 
 #: ../../langselector/handle_event.go:34
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Błąd zmiany języka systemu, prosimy spróbować później"
 
 #: ../../langselector/handle_event.go:46
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "Zmiana języka systemu zakończyła się pomyślnie, zmiany będą widoczne po ponownym zalogowaniu się"
 
 #: ../../langselector/locale_ifc.go:50
 msgid "System language is being changed, please wait..."
@@ -331,13 +331,13 @@ msgid ""
 "packages, please wait..."
 msgstr "Następuje zmiana języka systemu wraz z instalacją brakujących pakietów językowych, prosimy czekać..."
 
-#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:45
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q pomyślnie usunięte"
 
-#: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:47
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Błąd odinstalowania %q"
 
 #: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
@@ -351,7 +351,7 @@ msgstr "Otwórz katalog"
 msgid "Run Software"
 msgstr "Uruchom program"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:216
@@ -360,45 +360,45 @@ msgstr "Uruchom program"
 msgid "None"
 msgstr "Brak"
 
-#: ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:187
 msgid "WEP 40/128-bit Key"
 msgstr "WEP klucz 40/128-bitowy"
 
-#: ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:120
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 msgid "Tunneled TLS"
 msgstr "Tunelowany TLS"
 
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
 msgid "Protected EAP"
 msgstr "Zabezpieczony EAP"
@@ -492,7 +492,7 @@ msgid "OTP"
 msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_ip4_config.go:31
+#: ../../network/nm_setting_ip4_config.go:32
 #: ../../network/nm_setting_vpn_vpnc.go:140
 msgid "Disabled"
 msgstr "Wyłączone"
@@ -510,7 +510,7 @@ msgid "Both"
 msgstr "Oba"
 
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_wireless.go:196
+#: ../../network/nm_setting_wireless.go:199
 msgid "Automatic"
 msgstr "Automatycznie"
 
@@ -878,7 +878,7 @@ msgstr "Konieczna wtyczka VPN"
 #: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Gateway"
 msgstr "Brama"
 
@@ -1157,12 +1157,12 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "Method"
 msgstr "Metoda"
 
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "IP Address"
 msgstr "Adres IP"
 
@@ -1171,20 +1171,25 @@ msgid "Netmask"
 msgstr "Maska sieci"
 
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Primary DNS"
 msgstr "Podstawowy DNS"
 
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "Secondary DNS"
 msgstr "Drugi DNS"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:452
+msgid "Only applied in corresponding resources"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Prefix"
 msgstr "Prefiks"
 
@@ -1198,27 +1203,27 @@ msgstr "Własne"
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:74
+#: ../../network/nm_setting_wireless.go:26
+#: ../../network/nm_setting_wireless.go:75
 msgid "Default"
 msgstr "Domyślny"
 
-#: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip6_config.go:28
 msgid "Auto"
 msgstr "Automatycznie"
 
-#: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
 msgid "Link-Local Only"
 msgstr "Tylko Link-Local"
 
-#: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
 msgid "Manual"
 msgstr "Ręcznie"
 
-#: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_wireless_security.go:71
 msgid "Shared"
@@ -1493,23 +1498,23 @@ msgstr "Serwer (domyślny)"
 msgid "DH Group 2"
 msgstr "DH Group 2"
 
-#: ../../network/nm_setting_wireless.go:190
+#: ../../network/nm_setting_wireless.go:193
 msgid "Infrastructure"
 msgstr "Infrastruktura"
 
-#: ../../network/nm_setting_wireless.go:191
+#: ../../network/nm_setting_wireless.go:194
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:195
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:197
+#: ../../network/nm_setting_wireless.go:200
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:198
+#: ../../network/nm_setting_wireless.go:201
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1555,198 +1560,198 @@ msgstr "Otwórz"
 
 #: ../../network/state_handler.go:23
 msgid "Device state changed"
-msgstr ""
+msgstr "Zmieniony stan urządzenia"
 
 #: ../../network/state_handler.go:24
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "Zmieniony stan urządzenia, powód nieznany"
 
 #: ../../network/state_handler.go:25
 msgid "The device is now managed"
-msgstr ""
+msgstr "Urządzenie jest już zarządzane"
 
 #: ../../network/state_handler.go:26
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "Urządzenie nie jest już zarządzane"
 
 #: ../../network/state_handler.go:27
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "Urządzenie nie jest gotowe do skonfigurowania"
 
 #: ../../network/state_handler.go:28
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "Nie można zarezerwować konfiguracji IP (brak adresu, przekroczony limit czasu, itp.)"
 
 #: ../../network/state_handler.go:29
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "Konfiguracja IP nie jest już poprawna"
 
 #: ../../network/state_handler.go:30
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Wymagane jest hasło, ale nie zostało wprowadzone"
 
 #: ../../network/state_handler.go:31
 msgid ""
 "The 802.1X supplicant disconnected from the access point or authentication "
 "server"
-msgstr ""
+msgstr "Suplikant 802.1X rozłączył się od punktu dostępowego lub serwera uwierzytelniania"
 
 #: ../../network/state_handler.go:32
 msgid "Configuration of the 802.1X supplicant failed"
-msgstr ""
+msgstr "Konfiguracja suplikanta 802.1X nie powiodła się"
 
 #: ../../network/state_handler.go:33
 msgid "The 802.1X supplicant quitted or failed unexpectedly"
-msgstr ""
+msgstr "Suplikant 802.1X niespodziewanie zakończył pracę lub uległ awarii"
 
 #: ../../network/state_handler.go:34
 msgid "The 802.1X supplicant took too long time to authenticate"
-msgstr ""
+msgstr "Suplikant 802.1X zabiera za dużo czasu na uwierzytelnienie"
 
 #: ../../network/state_handler.go:35
 msgid "The PPP service failed to start within the allowed time"
-msgstr ""
+msgstr "Usługa PPP nie była w stanie się uruchomić w wyznaczonym czasie"
 
 #: ../../network/state_handler.go:36
 msgid "The PPP service disconnected unexpectedly"
-msgstr ""
+msgstr "Usługa PPP niespodziewanie się rozłączyła"
 
 #: ../../network/state_handler.go:37
 msgid "The PPP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Usługa PPP niespodziewanie zakończyła pracę lub uległa awarii"
 
 #: ../../network/state_handler.go:38
 msgid "The DHCP service failed to start within the allowed time"
-msgstr ""
+msgstr "Usługa DHCP nie była w stanie się uruchomić w wyznaczonym czasie"
 
 #: ../../network/state_handler.go:39
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "Usługa DHCP zanotowała niespodziewany błąd"
 
 #: ../../network/state_handler.go:40
 msgid "The DHCP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Usługa DHCP niespodziewanie zakończyła pracę lub uległa awarii"
 
 #: ../../network/state_handler.go:41
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Wystąpił błąd przy uruchomieniu usługi współdzielonego połączenia"
 
 #: ../../network/state_handler.go:42
 msgid "The shared connection service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Usługa współdzielonego połączenia niespodziewanie zakończyła pracę lub uległa awarii"
 
 #: ../../network/state_handler.go:43
 msgid "The AutoIP service failed to start"
-msgstr ""
+msgstr "Wystąpił błąd uruchamiania usługi AutoIP"
 
 #: ../../network/state_handler.go:44
 msgid "The AutoIP service reported an unexpected error"
-msgstr ""
+msgstr "Usługa AutoIP zanotowała niespodziewany błąd"
 
 #: ../../network/state_handler.go:45
 msgid "The AutoIP service quitted or failed unexpectedly"
-msgstr ""
+msgstr "Usługa AutoIP niespodziewanie zakończyła pracę lub uległa awarii"
 
 #: ../../network/state_handler.go:46
 msgid "Dialing failed due to busy lines"
-msgstr ""
+msgstr "Dodzwonienie nie powiodło się z powodu zajętych linii"
 
 #: ../../network/state_handler.go:47
 msgid "Dialing failed due to no dial tone"
-msgstr ""
+msgstr "Dodzwonienie nie powiodło się z powodu braku sygnału"
 
 #: ../../network/state_handler.go:48
 msgid "Dialing failed due to the carrier"
-msgstr ""
+msgstr "Dodzwonienie nie powiodło się z powodu dostawcy"
 
 #: ../../network/state_handler.go:49
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Przekroczono czas dodzwaniania"
 
 #: ../../network/state_handler.go:50
 msgid "Dialing failed"
-msgstr ""
+msgstr "Dodzwaniania zakończone błędem"
 
 #: ../../network/state_handler.go:51
 msgid "Modem initialization failed"
-msgstr ""
+msgstr "Wystąpił błąd inicjalizacji modemu"
 
 #: ../../network/state_handler.go:52
 msgid "Failed to select the specified GSM APN"
-msgstr ""
+msgstr "Wystąpił błąd przy wyborze określonego APN GSM"
 
 #: ../../network/state_handler.go:53
 msgid "No networks searched"
-msgstr ""
+msgstr "Nie odnaleziono sieci"
 
 #: ../../network/state_handler.go:54
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Odrzucono rejestrację sieci"
 
 #: ../../network/state_handler.go:55
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Przekroczono czas rejestracji sieci"
 
 #: ../../network/state_handler.go:56
 msgid "Register to the requested GSM network failed"
-msgstr ""
+msgstr "Wystąpił błąd rejestracji do określonej sieci GSM"
 
 #: ../../network/state_handler.go:57
 msgid "PIN check failed"
-msgstr ""
+msgstr "Wystąpił błąd przy sprawdzaniu PIN"
 
 #: ../../network/state_handler.go:58
 msgid "Necessary firmware for the device may be missed"
-msgstr ""
+msgstr "Może brakować wymaganych sterowników do tego urządzenia"
 
 #: ../../network/state_handler.go:59
 msgid "The device was removed"
-msgstr ""
+msgstr "Urządzenie zostało usunięte"
 
 #: ../../network/state_handler.go:60
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "Menedżer sieci przeszedł w stan uśpienia"
 
 #: ../../network/state_handler.go:61
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Aktywne połączenie urządzenia zostało usunięte lub zniknęło"
 
 #: ../../network/state_handler.go:62
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Użytkownik lub klient wyraził prośbę o rozłączenie"
 
 #: ../../network/state_handler.go:63
 msgid "The device's carrier/link changed"
-msgstr ""
+msgstr "Dostawca/odnośnik urządzenia został zmieniony"
 
 #: ../../network/state_handler.go:64
 msgid "The device's existing connection was assumed"
-msgstr ""
+msgstr "Aktywne połączenie urządzenia zostało założone"
 
 #: ../../network/state_handler.go:65
 msgid "The 802.1x supplicant is now available"
-msgstr ""
+msgstr "Suplikant 802.1x jest teraz dostępny"
 
 #: ../../network/state_handler.go:66
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Nie można odnaleźć modemu"
 
 #: ../../network/state_handler.go:67
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Upłynął czas połączenia lub wystąpił błąd Bluetooth"
 
 #: ../../network/state_handler.go:68
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "Karta SIM modemu GSM nie została włożona"
 
 #: ../../network/state_handler.go:69
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Wymagany kod PIN karty SIM modemu GSM"
 
 #: ../../network/state_handler.go:70
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Wymagany kod PUK karty SIM modemu GSM"
 
 #: ../../network/state_handler.go:71
 msgid "Wrong GSM Modem's SIM"
@@ -1754,120 +1759,120 @@ msgstr "Błędna karta SIM modemu GSM"
 
 #: ../../network/state_handler.go:72
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "Urządzenie InfiniBand nie obsługuje trybu połączenia"
 
 #: ../../network/state_handler.go:73
 msgid "A connection dependency failed"
-msgstr ""
+msgstr "Wystąpił błąd zależności połączenia"
 
 #: ../../network/state_handler.go:74
 msgid "Problem with the RFC 2684 Ethernet over ADSL bridge"
-msgstr ""
+msgstr "Problem z protokołem RFC 2684 sieci przewodowej przez most ADSL"
 
 #: ../../network/state_handler.go:75
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "Menedżer modemu nie uruchomił się lub niespodziewanie zakończył pracę"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.11 Wi-Fi network could not be found"
-msgstr ""
+msgstr "Nie można odnaleźć sieci Wi-Fi 802.11"
 
 #: ../../network/state_handler.go:77
 msgid "A secondary connection of the base connection failed"
-msgstr ""
+msgstr "Wystąpił błąd drugorzędnego połączenia połączenia bazowego"
 
 #: ../../network/state_handler.go:80
 msgid "DCB or FCoE setup failed"
-msgstr ""
+msgstr "Błąd ustawienia DCB lub FCoE"
 
 #: ../../network/state_handler.go:81
 msgid "Network teaming control failed"
-msgstr ""
+msgstr "Błąd kontroli sieci zespołowej"
 
 #: ../../network/state_handler.go:82
 msgid "Modem failed to run or not available"
-msgstr ""
+msgstr "Błąd uruchomienia modemu lub nie jest dostępny"
 
 #: ../../network/state_handler.go:83
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Modem jest już gotowy i dostępny"
 
 #: ../../network/state_handler.go:84
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "PIN karty SIM jest nieprawidłowy"
 
 #: ../../network/state_handler.go:85
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "Aktywacja nowego połączenia dodana do kolejki"
 
 #: ../../network/state_handler.go:86
 msgid "Parent device changed"
-msgstr ""
+msgstr "Zmieniono nadrzędne urządzenie"
 
 #: ../../network/state_handler.go:87
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Zmieniono stan zarządzania urządzenia nadrzędnego"
 
 #: ../../network/state_handler.go:90
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Kabel sieciowy jest odłączony"
 
 #: ../../network/state_handler.go:91
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Upewnij się, że włożono kartę SIM z sygnałem sieci komórkowej"
 
 #: ../../network/state_handler.go:92
 msgid ""
 "Please make sure a correct plan was selected without arrearage of SIM card"
-msgstr ""
+msgstr "Upewnij się, że wybrano poprawny plan bez przekładania karty SIM"
 
 #: ../../network/state_handler.go:95
 msgid "Activate VPN connection failed, unknown reason"
-msgstr ""
+msgstr "Wystąpił błąd aktywacji połączenia VPN, powód nieznany"
 
 #: ../../network/state_handler.go:96
 msgid "Activate VPN connection failed"
-msgstr ""
+msgstr "Wystąpił błąd aktywacji połączenia VPN"
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "Połączenie VPN zmieniło stan z uwagi na rozłączenie dokonane przez użytkowników"
 
 #: ../../network/state_handler.go:98
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "Połączenie VPN zmieniło stan z uwagi na rozłączenie od urządzenia"
 
 #: ../../network/state_handler.go:99
 msgid "VPN service stopped"
-msgstr ""
+msgstr "Zatrzymano usługę VPN"
 
 #: ../../network/state_handler.go:100
 msgid "The IP config of VPN connection was invalid"
-msgstr ""
+msgstr "Konfiguracja IP połączenia VPN jest nieprawidłowa"
 
 #: ../../network/state_handler.go:101
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Przekroczono czas próby podłączenia do usługi VPN"
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Przekroczono limit czasu uruchamiania usługi VPN"
 
 #: ../../network/state_handler.go:103
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "Wystąpił błąd uruchamiania usługi VPN"
 
 #: ../../network/state_handler.go:104
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "Wymagane hasło do połączenia VPN nie zostało wprowadzone"
 
 #: ../../network/state_handler.go:105
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Uwierzytelnienie do serwera VPN nie powiodło się"
 
 #: ../../network/state_handler.go:106
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Połączenie zostało usunięte z ustawień"
 
 #: ../../network/utils_dbus_nm.go:316
 msgid "Unknown"
@@ -1903,20 +1908,20 @@ msgstr "Pośrednik systemu został pomyślnie ustawiony."
 msgid "System proxy has been cancelled."
 msgstr "Pośrednik systemu został anulowany."
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Battery Critical Low"
 msgstr "Krytycznie niski stan baterii"
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Computer has been in suspend mode, please plug in"
-msgstr ""
+msgstr "Komputer przeszedł w tryb wstrzymania, prosimy podłączyć zasilanie"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Battery Low"
 msgstr "Niski stan baterii"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
-msgstr ""
+msgstr "Komputer przejdzie w tryb wstrzymania, prosimy teraz podłączyć zasilanie"

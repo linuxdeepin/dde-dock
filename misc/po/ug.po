@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# مۇختەر مەخمۇت <yeganaaa@163.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:04+0800\n"
-"PO-Revision-Date: 2016-01-15 01:56+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"PO-Revision-Date: 2017-08-16 09:57+0000\n"
+"Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Uighur (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ug/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,85 +20,85 @@ msgstr ""
 
 #: ../../accounts/checkers/password.go:44
 msgid "Please enter a password not less than 8 characters"
-msgstr ""
+msgstr "پارول 8 خانىگە يەتمىسە يېڭى بىر پارول كىرگۈزۈڭ"
 
 #: ../../accounts/checkers/password.go:46
 msgid ""
 "The password must contain English letters (case-sensitive), numbers or "
 "special symbols (~!@#$%^&*()[]{}\\|/?,.<>)"
-msgstr ""
+msgstr "پارول چوقۇم ئىنگلىزچە ھەرىپ-بەلگە(چوڭ كىچىك يېزىشنى ئايرىيدۇ) رەقەم ياكى بوشلۇق ئالاھىدە ھەرپ بەلگىلەر(~!@#$%^&*()[]{}\\|/?,.<>) نى ئۆز ئىچىگە ئېلىشى كېرەك"
 
 #: ../../accounts/checkers/username.go:49
 msgid "Username can not be empty."
-msgstr ""
+msgstr "ئەزا نامى قۇرۇق قالسا بولمايدۇ"
 
 #: ../../accounts/checkers/username.go:51
 msgid "Username must comprise a~z, 0~9, - or _."
-msgstr ""
+msgstr "ئەزا نامى چوقۇم a~z, 0~9 ياكى _ بولۇشى كېرەك"
 
 #: ../../accounts/checkers/username.go:53
 msgid "The first character must be in lower case."
-msgstr ""
+msgstr "بىرىنچى ھەرپى چوقۇم كىچىك يېزىلسۇن"
 
 #: ../../accounts/checkers/username.go:55
 msgid "The username exists."
-msgstr ""
+msgstr "بۇ ئەزا نامى ئاللىبۇرۇن مەۋجۇت"
 
 #: ../../accounts/checkers/username.go:57
 msgid "The username has been used by system."
-msgstr ""
+msgstr "بۇ ئەزالىق نامى سىستېما تەرىپىدىن ئىشلىتىلىپ بولغان"
 
 #: ../../accounts/checkers/username.go:59
 msgid "The username's length exceeds the limit"
-msgstr ""
+msgstr "ئەزالىق نامىنىڭ ئۇزۇنلۇقى ئېشىپ كەتتى"
 
 #: ../../bluetooth/bluez_profile.go:19
 msgid "Serial port"
-msgstr ""
+msgstr "ئارقىمۇ-ئارقا ئۇلىنىش ئېغىزى"
 
 #: ../../bluetooth/bluez_profile.go:20
 msgid "Dial-Up networking"
-msgstr ""
+msgstr "نومۇر بۇراپ ئۇلىنىدىغان تور"
 
 #: ../../bluetooth/bluez_profile.go:21
 msgid "Hands-Free device"
-msgstr ""
+msgstr "ياڭراتقۇ ئۈسكۈنىسى"
 
 #: ../../bluetooth/bluez_profile.go:22
 msgid "Hands-Free voice gateway"
-msgstr ""
+msgstr "مىكروفونلۇق ياڭراتقۇ ئۈسكۈنىسى"
 
 #: ../../bluetooth/bluez_profile.go:23
 msgid "Headset voice gateway"
-msgstr ""
+msgstr "تېلېفون سۆزلىشىش ئۈسكۈنىسى"
 
 #: ../../bluetooth/bluez_profile.go:24
 msgid "Object push"
-msgstr ""
+msgstr "ھۆججەت چىقىرىش"
 
 #: ../../bluetooth/bluez_profile.go:25
 msgid "File transfer"
-msgstr ""
+msgstr "ھۆججەت ئەۋەتىش"
 
 #: ../../bluetooth/bluez_profile.go:26
 msgid "Synchronization"
-msgstr ""
+msgstr "ماس قەدەملىك"
 
 #: ../../bluetooth/bluez_profile.go:27
 msgid "Phone book access"
-msgstr ""
+msgstr "تېلېفون خاتىرىسىنى زىيارەت قىلىش"
 
 #: ../../bluetooth/bluez_profile.go:28
 msgid "Phone book access client"
-msgstr ""
+msgstr "تېلېفون خاتىرىسىنى زىيارەت قىلىش تېرمىنالى"
 
 #: ../../bluetooth/bluez_profile.go:29
 msgid "Message access"
-msgstr ""
+msgstr "ئۇچۇرلارنى زىيارەت قىلىش"
 
 #: ../../bluetooth/bluez_profile.go:30
 msgid "Message notification"
-msgstr ""
+msgstr "ئۇچۇر ئەسكەرتىشى"
 
 #: ../../bluetooth/utils_notify.go:46 ../../network/dev_test.go:106
 #: ../../network/dev_test.go:122 ../../network/state_handler.go:203
@@ -113,51 +114,51 @@ msgstr "ئۇلاندى"
 #: ../../network/utils_notify.go:94 ../../network/utils_notify.go:112
 #: ../../network/utils_notify.go:115 ../../network/utils_notify.go:204
 msgid "Disconnected"
-msgstr ""
+msgstr "ئۇلانمىدى"
 
 #: ../../bluetooth/utils_notify.go:52
 msgid "Make sure %q is turned on and in range"
-msgstr ""
+msgstr "%q ئىچىلىپ بولغانلىقىنى جەزملەشتۈرۈڭ"
 
 #: ../../bluetooth/utils_notify.go:53 ../../bluetooth/utils_notify.go:57
 msgid "Bluetooth connection failed"
-msgstr ""
+msgstr "كۆكچىش ئۇلىنىشى مەغلۇپ بولدى"
 
 #: ../../bluetooth/utils_notify.go:56
 msgid "Failed to connect %q, automatically ignored"
-msgstr ""
+msgstr "%q ئۇلىنىش مەغلۇپ بولدى، ئاپتوماتىك نەزەرگە ئىلىنمىدى"
 
 #: ../../dock/app_entry_menu.go:99
 msgid "_Open"
-msgstr ""
+msgstr "_ئېچىش"
 
 #: ../../dock/app_entry_menu.go:106
 msgid "_Close All"
-msgstr ""
+msgstr "_ھەممىنى تاقاش"
 
 #: ../../dock/app_entry_menu.go:115
 msgid "_Dock"
-msgstr ""
+msgstr "_ۋەزىپە بالدىقى"
 
 #: ../../dock/app_entry_menu.go:122
 msgid "_Undock"
-msgstr ""
+msgstr "_ۋەزىپە بالدىقىدىن ئاجرىتىش"
 
 #: ../../dock/app_entry_menu.go:129
 msgid "_All windows"
-msgstr ""
+msgstr "_بارلىق كۆزنەكلەر"
 
 #: ../../grub2/utils.go:138
 msgid "Authentication is required to change the grub2 configuration"
-msgstr ""
+msgstr "دەلىللەش مەشغۇلاتى grub2 نى ئۆزگەرتىشنى تەلەپ قىلىدۇ"
 
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "دىسكا بوشلۇقى يېتەرسىز، دىسكىڭىزنى تازىلاڭ!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:18
 msgid "Launcher"
-msgstr ""
+msgstr "ئۈستەليۈزى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:19
 msgid "Terminal"
@@ -165,191 +166,191 @@ msgstr "تېرمىنال"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Deepin ئېكران سىن ئالغۇ"
 
 #: ../../keybinding/shortcuts/id_name_map.go:21
 msgid "Lock screen"
-msgstr ""
+msgstr "قۇلۇپ ئېكرانى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:22
 msgid "Show/Hide the dock"
-msgstr ""
+msgstr "ۋەزىپە بالدىقىنى كۆرسىتىش ياكى يوشۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:23
 msgid "Logout"
-msgstr ""
+msgstr "ھېساباتتىن چېكىنىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:24
 msgid "Terminal Quake Window"
-msgstr ""
+msgstr "تېرمىنال كۆزنىكى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:25
 msgid "Screenshot"
-msgstr ""
+msgstr "ئېكران رەسىمگە تۇتۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:26
 msgid "Full screenshot"
-msgstr ""
+msgstr "پۈتۈن ئېكران رەسىمگە تۇتۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:27
 msgid "Window screenshot"
-msgstr ""
+msgstr "كۆزنەك رەسىمگە تۇتۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Delay screenshot"
-msgstr ""
+msgstr "ۋاقىت بەلگىلەپ رەسىمگە تۇتۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:29
 msgid "File manager"
-msgstr ""
+msgstr "ھۆججەت باشقۇرغۇچ"
 
 #: ../../keybinding/shortcuts/id_name_map.go:30
 msgid "Disable Touchpad"
-msgstr ""
+msgstr "سېزىمچان تاختىنى توختىتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:31
 msgid "Switch window effects"
-msgstr ""
+msgstr "كۆزنەك ئالمىشىش ئۈنۈمى"
 
 #: ../../keybinding/shortcuts/id_name_map.go:32
 msgid "Fast Screen Off"
-msgstr ""
+msgstr "تىزلا ئېكراننى ئۆچۈرۈش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:39
 msgid "Switch Layout"
-msgstr ""
+msgstr "ئورۇنلاشتۇرۇشنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:58
 msgid "Switch to left workspace"
-msgstr ""
+msgstr "سول تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:59
 msgid "Switch to right workspace"
-msgstr ""
+msgstr "ئوڭ تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:60
 msgid "Switch to upper workspace"
-msgstr ""
+msgstr "ئۈستى تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:61
 msgid "Switch to lower workspace"
-msgstr ""
+msgstr "ئاستى تەرەپتىكى خىزمەت رايونىنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:63
 msgid "Switch similar windows"
-msgstr ""
+msgstr "ئوخشاش كۆزنەكلەرنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:64
 msgid "Switch similar windows in reverse"
-msgstr ""
+msgstr "ئوخشاش كۆزنەكلەرنى تەتۈرسىگە ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:65
 msgid "Switch windows"
-msgstr ""
+msgstr "كۆزنەكلەرنى ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:66
 msgid "Switch windows in reverse"
-msgstr ""
+msgstr "كۆزنەكلەرنى تەتۈرسىگە ئالماشتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:77
 msgid "Show desktop"
-msgstr ""
+msgstr "ئۈستەليۈزىنى كۆرسىتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:86
 msgid "Maximize window"
-msgstr ""
+msgstr "كۆزنەكنى چوڭايتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:87
 msgid "Restore window"
-msgstr ""
+msgstr "كۆزنەكنى ئەسلى چوڭلۇقىغا قايتۇرۇش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:89
 msgid "Minimize window"
-msgstr ""
+msgstr "كۆزنەكنى كىچىكلىتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:90
 msgid "Close window"
-msgstr ""
+msgstr "كۆزنەكنى تاقاش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:91
 msgid "Move window"
-msgstr ""
+msgstr "كۆزنەكنى يۆتكەش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:92
 msgid "Resize window"
-msgstr ""
+msgstr "كۆزنەكنىڭ چوڭلۇقىنى ئۆزگەرتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:107
 msgid "Move to left workspace"
-msgstr ""
+msgstr "سول خىزمەت رايونىغا يۆتكەش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:108
 msgid "Move to right workspace"
-msgstr ""
+msgstr "ئوڭ خىزمەت رايونىغا يۆتكەش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:109
 msgid "Move to upper workspace"
-msgstr ""
+msgstr "ئۈستى خىزمەت رايونىغا يۆتكەش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:110
 msgid "Move to lower workspace"
-msgstr ""
+msgstr "ئاستى خىزمەت رايونىغا يۆتكەش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:132
 msgid "Display windows of all workspaces"
-msgstr ""
+msgstr "كۆزنەكنى بارلىق خىزمەت رايونلىرىدا كۆرسىتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:133
 msgid "Display windows of current workspace"
-msgstr ""
+msgstr "كۆزنەكنى نۆۋەتتىكى خىزمەت رايونلىرىدا كۆرسىتىش"
 
 #: ../../keybinding/shortcuts/id_name_map.go:134
 msgid "Display workspace"
-msgstr ""
+msgstr "خىزمەت رايونىنى كۆرسىتىش"
 
 #: ../../langselector/handle_event.go:24
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "دەلىللەش مەشغۇلاتى سىستېما تىلىنى ئۆزگەرتىشنى تەلەپ قىلىدۇ"
 
 #: ../../langselector/handle_event.go:34
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "سىستېما تىلىنى ئۆزگەرتىش مەغلۇپ بولدى، قايتا سىناپ بېقىڭ."
 
 #: ../../langselector/handle_event.go:46
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "سىستېما تىلى ئۆزگەرتىلدى، چېكىنىپ قايتا كىرىڭ"
 
 #: ../../langselector/locale_ifc.go:50
 msgid "System language is being changed, please wait..."
-msgstr ""
+msgstr "سىستېما تىلى ئۆزگەرتىلىۋاتىدۇ, سەل ساقلاپ تۇرۇڭ..."
 
 #: ../../langselector/locale_ifc.go:56
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr ""
+msgstr "سىستېما مۇناسىۋەتلىك تىل ھۆججەتلىرىنى چۈشۈرىۋاتىدۇ، سەل ساقلاپ تۇرۇڭ..."
 
-#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:45
 msgid "%q removed successfully"
-msgstr ""
+msgstr "%q چىقىرىۋېتىش مۇۋەپپەقىيەتلىك بولدى"
 
-#: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:47
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "%q چىقىرىۋېتىش مەغلۇپ بولدى"
 
 #: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
-msgstr ""
+msgstr "ئەمەس"
 
 #: ../../mime/media.go:66 ../../mime/media.go:67
 msgid "Open Folder"
-msgstr ""
+msgstr "مۇندەرىجە ئىچىش"
 
 #: ../../mime/media.go:75 ../../mime/media.go:76
 msgid "Run Software"
-msgstr ""
+msgstr "پىروگراممىنى يۈرگۈزۈش"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:216
@@ -358,171 +359,171 @@ msgstr ""
 msgid "None"
 msgstr "قۇرۇق"
 
-#: ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:187
 msgid "WEP 40/128-bit Key"
-msgstr ""
+msgstr "WEP 40/128-bit پارول"
 
-#: ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Personal"
-msgstr ""
+msgstr "شەخسىي"
 
-#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:120
 msgid "TLS"
-msgstr ""
+msgstr "TLS"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
 msgid "LEAP"
-msgstr ""
+msgstr "LEAP"
 
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 msgid "FAST"
-msgstr ""
+msgstr "FAST"
 
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 msgid "Tunneled TLS"
-msgstr ""
+msgstr "تونېلللانغان TLS"
 
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
 msgid "Protected EAP"
-msgstr ""
+msgstr "قوغدالغان EAP"
 
 #: ../../network/manager_connection.go:256 ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
-msgstr ""
+msgstr "سىملىق تور ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:216
 msgid "Connection"
-msgstr ""
+msgstr "ئۇلىنىش"
 
 #: ../../network/nm_custom_type.go:220
 msgid "Wireless Connection"
-msgstr ""
+msgstr "سىمسىز تور ئۇلىنىش"
 
 #: ../../network/nm_custom_type.go:222
 msgid "Wireless Ad-Hoc"
-msgstr ""
+msgstr "سىمسىز Ad-Hoc"
 
 #: ../../network/nm_custom_type.go:224
 msgid "Wireless Ap-Hotspot"
-msgstr ""
+msgstr " Ap-Hotspotسىمسىز"
 
 #: ../../network/nm_custom_type.go:226
 msgid "PPPoE Connection"
-msgstr ""
+msgstr "PPPoE ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:228
 msgid "Mobile Connection"
-msgstr ""
+msgstr "كۆچمە تور ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:230
 msgid "Mobile GSM Connection"
-msgstr ""
+msgstr "كۆچمە GSM تور ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:232
 msgid "Mobile CDMA Connection"
-msgstr ""
+msgstr "كۆچمە CDMA تور ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:234
 msgid "VPN Connection"
-msgstr ""
+msgstr "VPN ئۇلىنىشى"
 
 #: ../../network/nm_custom_type.go:236
 msgid "VPN L2TP"
-msgstr ""
+msgstr "VPN L2TP"
 
 #: ../../network/nm_custom_type.go:238
 msgid "VPN OpenConnect"
-msgstr ""
+msgstr "VPN OpenConnect"
 
 #: ../../network/nm_custom_type.go:240
 msgid "VPN OpenVPN"
-msgstr ""
+msgstr "VPN OpenVPN"
 
 #: ../../network/nm_custom_type.go:242
 msgid "VPN PPTP"
-msgstr ""
+msgstr "VPN PPTP"
 
 #: ../../network/nm_custom_type.go:244
 msgid "VPN StrongSwan"
-msgstr ""
+msgstr "VPN StrongSwan"
 
 #: ../../network/nm_custom_type.go:246
 msgid "VPN VPNC"
-msgstr ""
+msgstr "VPN VPNC"
 
 #: ../../network/nm_setting_802_1x.go:24
 msgid "PAP"
-msgstr ""
+msgstr "PAP"
 
 #: ../../network/nm_setting_802_1x.go:25
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: ../../network/nm_setting_802_1x.go:26
 msgid "MSCHAP"
-msgstr ""
+msgstr "MSCHAP"
 
 #: ../../network/nm_setting_802_1x.go:27
 msgid "MSCHAPV2"
-msgstr ""
+msgstr "MSCHAPV2"
 
 #: ../../network/nm_setting_802_1x.go:28
 msgid "GTC"
-msgstr ""
+msgstr "GTC"
 
 #: ../../network/nm_setting_802_1x.go:29
 msgid "OTP"
-msgstr ""
+msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_ip4_config.go:31
+#: ../../network/nm_setting_ip4_config.go:32
 #: ../../network/nm_setting_vpn_vpnc.go:140
 msgid "Disabled"
-msgstr ""
+msgstr "تاقاق"
 
 #: ../../network/nm_setting_802_1x.go:130
 msgid "Anonymous"
-msgstr ""
+msgstr "ئىمزاسىز"
 
 #: ../../network/nm_setting_802_1x.go:131
 msgid "Authenticated"
-msgstr ""
+msgstr "دەلىللەنگەن"
 
 #: ../../network/nm_setting_802_1x.go:132
 msgid "Both"
-msgstr ""
+msgstr "ئىككى تەرەپ"
 
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_wireless.go:196
+#: ../../network/nm_setting_wireless.go:199
 msgid "Automatic"
-msgstr ""
+msgstr "ئاپتوماتىك"
 
 #: ../../network/nm_setting_802_1x.go:137
 msgid "Version 0"
-msgstr ""
+msgstr "نەشر 0"
 
 #: ../../network/nm_setting_802_1x.go:138
 msgid "Version 1"
-msgstr ""
+msgstr "نەشر 1"
 
 #: ../../network/nm_setting_beans_gen.go:18
 msgid "General"
-msgstr ""
+msgstr "ئورتاق"
 
 #: ../../network/nm_setting_beans_gen.go:20
 msgid "Name"
@@ -530,71 +531,71 @@ msgstr "ئىسمى"
 
 #: ../../network/nm_setting_beans_gen.go:21
 msgid "Automatically connect"
-msgstr ""
+msgstr "ئاپتوماتىك ئۇلىنىش"
 
 #: ../../network/nm_setting_beans_gen.go:22
 msgid "For All Users"
-msgstr ""
+msgstr "بارلىق ئەزالار ئۈچۈن"
 
 #: ../../network/nm_setting_beans_gen.go:28
 msgid "Ethernet"
-msgstr ""
+msgstr "تور"
 
 #: ../../network/nm_setting_beans_gen.go:30
 #: ../../network/nm_setting_beans_gen.go:116
 msgid "Device MAC Addr"
-msgstr ""
+msgstr "ئۈسكۈنە MAC ئادرېسى"
 
 #: ../../network/nm_setting_beans_gen.go:31
 #: ../../network/nm_setting_beans_gen.go:117
 msgid "Cloned MAC Addr"
-msgstr ""
+msgstr "كىلونلانغان MAC ئادرېسى"
 
 #: ../../network/nm_setting_beans_gen.go:32
 #: ../../network/nm_setting_beans_gen.go:118
 msgid "Customize MTU"
-msgstr ""
+msgstr "MTU نى ئۆزى بەلگىلەش"
 
 #: ../../network/nm_setting_beans_gen.go:33
 #: ../../network/nm_setting_beans_gen.go:119
 #: ../../network/nm_setting_beans_gen.go:340
 msgid "MTU"
-msgstr ""
+msgstr "MTU"
 
 #: ../../network/nm_setting_beans_gen.go:39
 #: ../../network/nm_setting_beans_gen.go:61
 #: ../../network/nm_setting_beans_gen.go:75
 msgid "Mobile"
-msgstr ""
+msgstr "كۆچمە"
 
 #: ../../network/nm_setting_beans_gen.go:41
 msgid "Country or region"
-msgstr ""
+msgstr "دۆلەت ۋە رايون"
 
 #: ../../network/nm_setting_beans_gen.go:42
 msgid "Provider"
-msgstr ""
+msgstr "تەمىنلىگۈچى"
 
 #: ../../network/nm_setting_beans_gen.go:43
 msgid "Plan"
-msgstr ""
+msgstr "پىلان"
 
 #: ../../network/nm_setting_beans_gen.go:44
 msgid "Service Type"
-msgstr ""
+msgstr "مۇلازىمەت تىپى"
 
 #: ../../network/nm_setting_beans_gen.go:45
 #: ../../network/nm_setting_beans_gen.go:46
 #: ../../network/nm_setting_beans_gen.go:63
 msgid "APN"
-msgstr ""
+msgstr "APN"
 
 #: ../../network/nm_setting_beans_gen.go:47
 #: ../../network/nm_setting_beans_gen.go:53
 #: ../../network/nm_setting_beans_gen.go:64
 #: ../../network/nm_setting_beans_gen.go:77
 msgid "Number"
-msgstr ""
+msgstr "نومۇر"
 
 #: ../../network/nm_setting_beans_gen.go:48
 #: ../../network/nm_setting_beans_gen.go:54
@@ -638,44 +639,44 @@ msgstr "پارول"
 #: ../../network/nm_setting_beans_gen.go:50
 #: ../../network/nm_setting_beans_gen.go:67
 msgid "Network ID"
-msgstr ""
+msgstr "تور تەرتىپ نومۇرى"
 
 #: ../../network/nm_setting_beans_gen.go:51
 #: ../../network/nm_setting_beans_gen.go:68
 msgid "Home Network Only"
-msgstr ""
+msgstr "پەقەت ئائىلە تورىلا"
 
 #: ../../network/nm_setting_beans_gen.go:52
 #: ../../network/nm_setting_beans_gen.go:69
 msgid "PIN"
-msgstr ""
+msgstr "پارول"
 
 #: ../../network/nm_setting_beans_gen.go:85
 #: ../../network/nm_setting_beans_gen.go:88
 #: ../../network/nm_setting_beans_gen.go:241
 #: ../../network/nm_setting_beans_gen.go:365
 msgid "Security"
-msgstr ""
+msgstr "بىخەتەرلىك"
 
 #: ../../network/nm_setting_beans_gen.go:87
 msgid "Security Required"
-msgstr ""
+msgstr "بىخەتەرلىك تەلەپ قىلىنىدۇ"
 
 #: ../../network/nm_setting_beans_gen.go:89
 msgid "Key"
-msgstr ""
+msgstr "پارول"
 
 #: ../../network/nm_setting_beans_gen.go:91
 msgid "EAP Auth"
-msgstr ""
+msgstr "EAP دەلىللەش"
 
 #: ../../network/nm_setting_beans_gen.go:92
 msgid "Identity"
-msgstr ""
+msgstr "سالاھىيەت"
 
 #: ../../network/nm_setting_beans_gen.go:93
 msgid "Anonymous ID"
-msgstr ""
+msgstr "ئىمزاسىز ID"
 
 #: ../../network/nm_setting_beans_gen.go:94
 #: ../../network/nm_setting_beans_gen.go:164
@@ -685,7 +686,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:281
 #: ../../network/nm_setting_beans_gen.go:384
 msgid "CA Cert"
-msgstr ""
+msgstr "CA ئىمزاسى"
 
 #: ../../network/nm_setting_beans_gen.go:95
 #: ../../network/nm_setting_beans_gen.go:168
@@ -695,23 +696,23 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:282
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "User Cert"
-msgstr ""
+msgstr "ئىشلەتكۈچى ئىمزاسى"
 
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Provisioning"
-msgstr ""
+msgstr "تەمىنلەۋاتىدۇ"
 
 #: ../../network/nm_setting_beans_gen.go:97
 msgid "PAC file"
-msgstr ""
+msgstr "PAC ھۆججىتى"
 
 #: ../../network/nm_setting_beans_gen.go:98
 msgid "PEAP Version"
-msgstr ""
+msgstr "PEAP نەشرى"
 
 #: ../../network/nm_setting_beans_gen.go:99
 msgid "Inner Auth"
-msgstr ""
+msgstr "ئىچكى دەلىللەش"
 
 #: ../../network/nm_setting_beans_gen.go:100
 #: ../../network/nm_setting_beans_gen.go:169
@@ -722,7 +723,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:388
 #: ../../network/nm_setting_vpn_strongswan.go:76
 msgid "Private Key"
-msgstr ""
+msgstr "شەخسىي پارول"
 
 #: ../../network/nm_setting_beans_gen.go:101
 #: ../../network/nm_setting_beans_gen.go:103
@@ -739,115 +740,115 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:402
 #: ../../network/nm_setting_beans_gen.go:405
 msgid "Ask for Pwd"
-msgstr ""
+msgstr "دائىم پارول سوراش"
 
 #: ../../network/nm_setting_beans_gen.go:104
 #: ../../network/nm_setting_beans_gen.go:180
 #: ../../network/nm_setting_beans_gen.go:285
 msgid "Private Pwd"
-msgstr ""
+msgstr "شەخسىي پارول"
 
 #: ../../network/nm_setting_beans_gen.go:110
 msgid "Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi"
 
 #: ../../network/nm_setting_beans_gen.go:112
 msgid "SSID"
-msgstr ""
+msgstr "SSID"
 
 #: ../../network/nm_setting_beans_gen.go:113
 msgid "Mode"
-msgstr ""
+msgstr "ھالىتى"
 
 #: ../../network/nm_setting_beans_gen.go:114
 msgid "Band"
-msgstr ""
+msgstr "دولقۇن بۆلىكى"
 
 #: ../../network/nm_setting_beans_gen.go:115
 msgid "Channel"
-msgstr ""
+msgstr "قانال"
 
 #: ../../network/nm_setting_beans_gen.go:125
 msgid "PPPoE"
-msgstr ""
+msgstr "PPPoE"
 
 #: ../../network/nm_setting_beans_gen.go:128
 msgid "Service"
-msgstr ""
+msgstr "مۇلازىمەت"
 
 #: ../../network/nm_setting_beans_gen.go:135
 msgid "PPP"
-msgstr ""
+msgstr "PPP"
 
 #: ../../network/nm_setting_beans_gen.go:137
 #: ../../network/nm_setting_beans_gen.go:240
 #: ../../network/nm_setting_beans_gen.go:364
 msgid "Use MPPE"
-msgstr ""
+msgstr "MPPE نى ئىشلىتىش"
 
 #: ../../network/nm_setting_beans_gen.go:138
 msgid "128-bit MPPE"
-msgstr ""
+msgstr "128-bit MPPE"
 
 #: ../../network/nm_setting_beans_gen.go:139
 #: ../../network/nm_setting_beans_gen.go:242
 #: ../../network/nm_setting_beans_gen.go:366
 msgid "Stateful MPPE"
-msgstr ""
+msgstr "MPPE ھالىتى"
 
 #: ../../network/nm_setting_beans_gen.go:140
 #: ../../network/nm_setting_beans_gen.go:243
 #: ../../network/nm_setting_beans_gen.go:367
 msgid "Refuse EAP Authentication"
-msgstr ""
+msgstr "EAP دەلىللەشنى رەت قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:141
 #: ../../network/nm_setting_beans_gen.go:244
 #: ../../network/nm_setting_beans_gen.go:368
 msgid "Refuse PAP Authentication"
-msgstr ""
+msgstr "PAP دەلىللەشنى رەت قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:142
 #: ../../network/nm_setting_beans_gen.go:245
 #: ../../network/nm_setting_beans_gen.go:369
 msgid "Refuse CHAP Authentication"
-msgstr ""
+msgstr "CHAP دەلىللەشنى رەت قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:143
 #: ../../network/nm_setting_beans_gen.go:246
 #: ../../network/nm_setting_beans_gen.go:370
 msgid "Refuse MSCHAP Authentication"
-msgstr ""
+msgstr "MSCHAP دەلىللەشنى رەت قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:144
 #: ../../network/nm_setting_beans_gen.go:247
 #: ../../network/nm_setting_beans_gen.go:371
 msgid "Refuse MSCHAPv2 Authentication"
-msgstr ""
+msgstr "MSCHAPv2 دەلىللەشنى رەت قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:145
 #: ../../network/nm_setting_beans_gen.go:248
 #: ../../network/nm_setting_beans_gen.go:372
 msgid "No BSD Data Compression"
-msgstr ""
+msgstr "پىرېسلانغان BSD ئۇچۇرى يوق"
 
 #: ../../network/nm_setting_beans_gen.go:146
 #: ../../network/nm_setting_beans_gen.go:249
 #: ../../network/nm_setting_beans_gen.go:373
 msgid "No Deflate Data Compression"
-msgstr ""
+msgstr "پىرېسلانغان ئۇچۇر يوق"
 
 #: ../../network/nm_setting_beans_gen.go:147
 #: ../../network/nm_setting_beans_gen.go:250
 #: ../../network/nm_setting_beans_gen.go:374
 msgid "No TCP Header Compression"
-msgstr ""
+msgstr "پىرېسلانغان TCP بېشى يوق"
 
 #: ../../network/nm_setting_beans_gen.go:148
 #: ../../network/nm_setting_beans_gen.go:253
 #: ../../network/nm_setting_beans_gen.go:375
 msgid "Send PPP Echo Packets"
-msgstr ""
+msgstr "PPP ئۇچۇر بوغچىسى ئەۋەتىش"
 
 #: ../../network/nm_setting_beans_gen.go:154
 #: ../../network/nm_setting_beans_gen.go:215
@@ -857,11 +858,11 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:381
 #: ../../network/nm_setting_beans_gen.go:398
 msgid "VPN"
-msgstr ""
+msgstr "VPN"
 
 #: ../../network/nm_setting_beans_gen.go:157
 msgid "Need VPN Plugin"
-msgstr ""
+msgstr "VPN قىستۇرمىسى كېرەك بولىدۇ"
 
 #: ../../network/nm_setting_beans_gen.go:158
 #: ../../network/nm_setting_beans_gen.go:163
@@ -876,76 +877,76 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Gateway"
-msgstr ""
+msgstr "قېچىپ كېتىش"
 
 #: ../../network/nm_setting_beans_gen.go:162
 #: ../../network/nm_setting_beans_gen.go:190
 #: ../../network/nm_setting_beans_gen.go:221
 #: ../../network/nm_setting_beans_gen.go:356
 msgid "NT Domain"
-msgstr ""
+msgstr "NT دائىرىسى"
 
 #: ../../network/nm_setting_beans_gen.go:165
 #: ../../network/nm_setting_beans_gen.go:263
 msgid "Proxy"
-msgstr ""
+msgstr "ۋاكالەتچىلىك"
 
 #: ../../network/nm_setting_beans_gen.go:166
 #: ../../network/nm_setting_beans_gen.go:264
 msgid "Allow Cisco Secure Desktop Trojan"
-msgstr ""
+msgstr "Allow Cisco Secure Desktop Trojan"
 
 #: ../../network/nm_setting_beans_gen.go:167
 #: ../../network/nm_setting_beans_gen.go:265
 msgid "CSD Script"
-msgstr ""
+msgstr "CSD قوليازما تىلى"
 
 #: ../../network/nm_setting_beans_gen.go:170
 #: ../../network/nm_setting_beans_gen.go:268
 msgid "Use FSID for Key Passphrase"
-msgstr ""
+msgstr "پارولغا FSID نى ئىشلىتىش"
 
 #: ../../network/nm_setting_beans_gen.go:172
 #: ../../network/nm_setting_beans_gen.go:193
 #: ../../network/nm_setting_beans_gen.go:277
 #: ../../network/nm_setting_beans_gen.go:385
 msgid "Auth Type"
-msgstr ""
+msgstr "دەلىللەش تىپى"
 
 #: ../../network/nm_setting_beans_gen.go:181
 #: ../../network/nm_setting_beans_gen.go:286
 #: ../../network/nm_setting_vpn_openvpn.go:106
 msgid "Static Key"
-msgstr ""
+msgstr "تىنىش پارول"
 
 #: ../../network/nm_setting_beans_gen.go:182
 #: ../../network/nm_setting_beans_gen.go:287
 #: ../../network/nm_setting_beans_gen.go:310
 msgid "Customize Key Direction"
-msgstr ""
+msgstr "پارول يۆنىلىشىنى خاسلاشتۇرۇش"
 
 #: ../../network/nm_setting_beans_gen.go:183
 #: ../../network/nm_setting_beans_gen.go:288
 #: ../../network/nm_setting_beans_gen.go:311
 msgid "Key Direction"
-msgstr ""
+msgstr "پارول يۆنىلىشى"
 
 #: ../../network/nm_setting_beans_gen.go:184
 #: ../../network/nm_setting_beans_gen.go:289
 msgid "Remote IP"
-msgstr ""
+msgstr "يىراقتىكى IP"
 
 #: ../../network/nm_setting_beans_gen.go:185
 #: ../../network/nm_setting_beans_gen.go:290
 msgid "Local IP"
-msgstr ""
+msgstr "يەرلىكتىكى IP"
 
 #: ../../network/nm_setting_beans_gen.go:198
 #: ../../network/nm_setting_beans_gen.go:390
 msgid "Request an Inner IP Address"
-msgstr ""
+msgstr "ئىچكى IP ئادرېسى ئىلتىماس قىلىش"
 
 #: ../../network/nm_setting_beans_gen.go:199
 #: ../../network/nm_setting_beans_gen.go:391
@@ -1055,7 +1056,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:321
 msgid "Port"
-msgstr ""
+msgstr "ئېغىز"
 
 #: ../../network/nm_setting_beans_gen.go:322
 msgid "Retry Indefinitely When Failed"
@@ -1155,34 +1156,39 @@ msgid "IPv4"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "Method"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "IP Address"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:434
 msgid "Netmask"
-msgstr ""
+msgstr "تور قەۋىتى"
 
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Primary DNS"
-msgstr ""
+msgstr "شەخسىي DNS"
 
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "Secondary DNS"
 msgstr ""
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:452
+msgid "Only applied in corresponding resources"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "IPv6"
 msgstr ""
 
-#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Prefix"
 msgstr ""
 
@@ -1196,27 +1202,27 @@ msgstr ""
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:74
+#: ../../network/nm_setting_wireless.go:26
+#: ../../network/nm_setting_wireless.go:75
 msgid "Default"
-msgstr ""
-
-#: ../../network/nm_setting_ip4_config.go:27
-#: ../../network/nm_setting_ip6_config.go:28
-msgid "Auto"
-msgstr ""
+msgstr "سۈكۈتتىكى"
 
 #: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip6_config.go:28
+msgid "Auto"
+msgstr "ئاپتوماتىك"
+
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
 msgid "Link-Local Only"
 msgstr ""
 
-#: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
 msgid "Manual"
-msgstr ""
+msgstr "قوللانما"
 
-#: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_wireless_security.go:71
 msgid "Shared"
@@ -1240,23 +1246,23 @@ msgstr ""
 
 #: ../../network/nm_setting_virtual_key.go:162
 msgid "L2TP"
-msgstr ""
+msgstr "L2TP"
 
 #: ../../network/nm_setting_virtual_key.go:163
 msgid "PPTP"
-msgstr ""
+msgstr "PPTP"
 
 #: ../../network/nm_setting_virtual_key.go:164
 msgid "OpenConnect"
-msgstr ""
+msgstr "OpenConnect"
 
 #: ../../network/nm_setting_virtual_key.go:165
 msgid "OpenVPN"
-msgstr ""
+msgstr "OpenVPN"
 
 #: ../../network/nm_setting_virtual_key.go:166
 msgid "VPNC"
-msgstr ""
+msgstr "VPNC"
 
 #: ../../network/nm_setting_virtual_key.go:182
 msgid "WPA/WPA2 Enterprise"
@@ -1290,7 +1296,7 @@ msgstr ""
 #: ../../network/nm_setting_vpn_pptp.go:26
 #: ../../network/nm_setting_vpn_vpnc.go:25 ../../network/utils_dbus_nm.go:155
 msgid "Saved"
-msgstr ""
+msgstr "ساقلاندى"
 
 #: ../../network/nm_setting_vpn_l2tp.go:27
 #: ../../network/nm_setting_vpn_openvpn.go:24
@@ -1491,23 +1497,23 @@ msgstr ""
 msgid "DH Group 2"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:190
+#: ../../network/nm_setting_wireless.go:193
 msgid "Infrastructure"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:191
+#: ../../network/nm_setting_wireless.go:194
 msgid "Ad-Hoc"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:195
 msgid "AP-Hotspot"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:197
+#: ../../network/nm_setting_wireless.go:200
 msgid "A (5 GHz)"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:198
+#: ../../network/nm_setting_wireless.go:201
 msgid "BG (2.4 GHz)"
 msgstr ""
 
@@ -1549,7 +1555,7 @@ msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:70
 msgid "Open"
-msgstr ""
+msgstr "ئېچىش"
 
 #: ../../network/state_handler.go:23
 msgid "Device state changed"
@@ -1886,7 +1892,7 @@ msgstr ""
 #: ../../network/utils_notify.go:98 ../../network/utils_notify.go:102
 #: ../../network/utils_notify.go:105
 msgid "Network"
-msgstr ""
+msgstr "تور"
 
 #: ../../network/utils_notify.go:98
 msgid ""
@@ -1901,20 +1907,20 @@ msgstr ""
 msgid "System proxy has been cancelled."
 msgstr ""
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Battery Critical Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Battery Low"
 msgstr ""
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""

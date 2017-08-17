@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:04+0800\n"
-"PO-Revision-Date: 2017-06-23 05:34+0000\n"
+"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"PO-Revision-Date: 2017-08-16 09:57+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Asturian (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/ast/)\n"
 "MIME-Version: 1.0\n"
@@ -150,11 +150,11 @@ msgstr "_Toles ventanes"
 
 #: ../../grub2/utils.go:138
 msgid "Authentication is required to change the grub2 configuration"
-msgstr ""
+msgstr "Ríquese l'autenticación pa camudar la configuración de grub2"
 
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
-msgstr ""
+msgstr "Nun hai abondu espaciu en discu. ¡Llibera daqué d'espaciu!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:18
 msgid "Launcher"
@@ -166,7 +166,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr ""
+msgstr "Grabadora Deepin de pantalla"
 
 #: ../../keybinding/shortcuts/id_name_map.go:21
 msgid "Lock screen"
@@ -310,15 +310,15 @@ msgstr "Amosar estaya de trabayu"
 
 #: ../../langselector/handle_event.go:24
 msgid "Authentication is required to switch language"
-msgstr ""
+msgstr "Ríquese l'autenticación pa camudar la llingua"
 
 #: ../../langselector/handle_event.go:34
 msgid "System language failed to change, please try later"
-msgstr ""
+msgstr "Falló'l cambéu de la llingua del sistema. Volvi tentalo más sero, por favor"
 
 #: ../../langselector/handle_event.go:46
 msgid "System language has been changed, please log in again after logged out"
-msgstr ""
+msgstr "Camudóse la llingua del sistema. Volvi aniciar sesión, por favor"
 
 #: ../../langselector/locale_ifc.go:50
 msgid "System language is being changed, please wait..."
@@ -330,13 +330,13 @@ msgid ""
 "packages, please wait..."
 msgstr "Ta camudándose la llingua'l sistema con una instalación a la que-y falten paquetes de llingua. Espera, por favor..."
 
-#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:45
 msgid "%q removed successfully"
-msgstr ""
+msgstr "Desanicióse %q con ésitu"
 
-#: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:47
 msgid "Failed to uninstall %q"
-msgstr ""
+msgstr "Fallu al desinstalar %q"
 
 #: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
@@ -350,7 +350,7 @@ msgstr "Abrir carpeta"
 msgid "Run Software"
 msgstr "Executar software"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:216
@@ -359,45 +359,45 @@ msgstr "Executar software"
 msgid "None"
 msgstr "Nada"
 
-#: ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:187
 msgid "WEP 40/128-bit Key"
 msgstr "Clave WEP 40/128-bit"
 
-#: ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:120
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 msgid "Tunneled TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
 msgid "Protected EAP"
 msgstr "EAP protexíu"
@@ -491,7 +491,7 @@ msgid "OTP"
 msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_ip4_config.go:31
+#: ../../network/nm_setting_ip4_config.go:32
 #: ../../network/nm_setting_vpn_vpnc.go:140
 msgid "Disabled"
 msgstr "Deshabilitau"
@@ -509,7 +509,7 @@ msgid "Both"
 msgstr "Dambos"
 
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_wireless.go:196
+#: ../../network/nm_setting_wireless.go:199
 msgid "Automatic"
 msgstr "Automático"
 
@@ -877,7 +877,7 @@ msgstr "Necesítase'l complementu VPN"
 #: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Gateway"
 msgstr "Pasera"
 
@@ -1113,7 +1113,7 @@ msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:344
 msgid "Randomize Remote Hosts"
-msgstr ""
+msgstr "Agospios remotos al debalu"
 
 #: ../../network/nm_setting_beans_gen.go:416
 msgid "Domain"
@@ -1121,7 +1121,7 @@ msgstr "Domíniu"
 
 #: ../../network/nm_setting_beans_gen.go:417
 msgid "Vendor"
-msgstr ""
+msgstr "Vendedor"
 
 #: ../../network/nm_setting_beans_gen.go:418
 msgid "Version"
@@ -1156,12 +1156,12 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "Method"
 msgstr "Métodu"
 
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "IP Address"
 msgstr "Direición IP"
 
@@ -1170,20 +1170,25 @@ msgid "Netmask"
 msgstr "Mázacara de rede"
 
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Primary DNS"
 msgstr "DNS primaria"
 
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "Secondary DNS"
 msgstr "DNS secundaria"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:452
+msgid "Only applied in corresponding resources"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Prefix"
 msgstr "Prefixu"
 
@@ -1197,27 +1202,27 @@ msgstr "Personalizáu"
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:74
+#: ../../network/nm_setting_wireless.go:26
+#: ../../network/nm_setting_wireless.go:75
 msgid "Default"
 msgstr "Por defeutu"
 
-#: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip6_config.go:28
 msgid "Auto"
 msgstr "Auto"
 
-#: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
 msgid "Link-Local Only"
 msgstr "Namái enllaz llocal"
 
-#: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
 msgid "Manual"
 msgstr "Manual"
 
-#: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_wireless_security.go:71
 msgid "Shared"
@@ -1492,23 +1497,23 @@ msgstr "Sirvidor (por defeutu)"
 msgid "DH Group 2"
 msgstr "Grupu DH 2"
 
-#: ../../network/nm_setting_wireless.go:190
+#: ../../network/nm_setting_wireless.go:193
 msgid "Infrastructure"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:191
+#: ../../network/nm_setting_wireless.go:194
 msgid "Ad-Hoc"
-msgstr ""
+msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:195
 msgid "AP-Hotspot"
 msgstr ""
 
-#: ../../network/nm_setting_wireless.go:197
+#: ../../network/nm_setting_wireless.go:200
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:198
+#: ../../network/nm_setting_wireless.go:201
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1554,36 +1559,36 @@ msgstr "Abrir"
 
 #: ../../network/state_handler.go:23
 msgid "Device state changed"
-msgstr ""
+msgstr "Camudó l'estáu'l preséu"
 
 #: ../../network/state_handler.go:24
 msgid "Device state changed, unknown reason"
-msgstr ""
+msgstr "Camudó l'estáu'l preséu, desconozse la razón"
 
 #: ../../network/state_handler.go:25
 msgid "The device is now managed"
-msgstr ""
+msgstr "Agora'l preséu ta xestionáu"
 
 #: ../../network/state_handler.go:26
 msgid "The device is no longer managed"
-msgstr ""
+msgstr "El preséu yá nun ta xestionáu"
 
 #: ../../network/state_handler.go:27
 msgid "The device has not been ready for configuration"
-msgstr ""
+msgstr "El preséu nun se tresnó pa la configuración"
 
 #: ../../network/state_handler.go:28
 msgid ""
 "IP configuration could not be reserved (no available address, timeout, etc)"
-msgstr ""
+msgstr "Nun pudo acutase la configuración d'IP (direición non disponible, escosa de tiempu... etc)"
 
 #: ../../network/state_handler.go:29
 msgid "The IP configuration is no longer valid"
-msgstr ""
+msgstr "La configuración IP yá nun ye válida"
 
 #: ../../network/state_handler.go:30
 msgid "Passwords were required but not provided"
-msgstr ""
+msgstr "Ríquense les contraseñes pero nun s'apurrieron"
 
 #: ../../network/state_handler.go:31
 msgid ""
@@ -1621,7 +1626,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:39
 msgid "The DHCP service reported an unexpected error"
-msgstr ""
+msgstr "El serviciu DHCP informó d'un fallu inesperáu"
 
 #: ../../network/state_handler.go:40
 msgid "The DHCP service quitted or failed unexpectedly"
@@ -1629,7 +1634,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:41
 msgid "The shared connection service failed to start"
-msgstr ""
+msgstr "Falló l'aniciu del serviciu de la conexón compartida"
 
 #: ../../network/state_handler.go:42
 msgid "The shared connection service quitted or failed unexpectedly"
@@ -1661,11 +1666,11 @@ msgstr ""
 
 #: ../../network/state_handler.go:49
 msgid "Dialing timed out"
-msgstr ""
+msgstr "Escosó'l tiempu de marcáu"
 
 #: ../../network/state_handler.go:50
 msgid "Dialing failed"
-msgstr ""
+msgstr "Falló'l marcáu"
 
 #: ../../network/state_handler.go:51
 msgid "Modem initialization failed"
@@ -1677,15 +1682,15 @@ msgstr ""
 
 #: ../../network/state_handler.go:53
 msgid "No networks searched"
-msgstr ""
+msgstr "Nun se guetaron redes"
 
 #: ../../network/state_handler.go:54
 msgid "Network registration was denied"
-msgstr ""
+msgstr "Ñegóse'l rexistru de rede"
 
 #: ../../network/state_handler.go:55
 msgid "Network registration timed out"
-msgstr ""
+msgstr "Escosó'l tiempu de rexistru de rede"
 
 #: ../../network/state_handler.go:56
 msgid "Register to the requested GSM network failed"
@@ -1693,7 +1698,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:57
 msgid "PIN check failed"
-msgstr ""
+msgstr "Falló la comprobación del PIN"
 
 #: ../../network/state_handler.go:58
 msgid "Necessary firmware for the device may be missed"
@@ -1701,19 +1706,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:59
 msgid "The device was removed"
-msgstr ""
+msgstr "Estráxose'l ficheru"
 
 #: ../../network/state_handler.go:60
 msgid "NetworkManager went to sleep"
-msgstr ""
+msgstr "NetworkManager púnxose a dormir"
 
 #: ../../network/state_handler.go:61
 msgid "The device's active connection was removed or disappeared"
-msgstr ""
+msgstr "Desanicióse o desapaeció la conexón activa del preséu"
 
 #: ../../network/state_handler.go:62
 msgid "A user or client requested to disconnect"
-msgstr ""
+msgstr "Un usuariu o veceru solicitó desconeutase"
 
 #: ../../network/state_handler.go:63
 msgid "The device's carrier/link changed"
@@ -1729,23 +1734,23 @@ msgstr ""
 
 #: ../../network/state_handler.go:66
 msgid "The modem could not be found"
-msgstr ""
+msgstr "Nun pudo alcontráse'l módem"
 
 #: ../../network/state_handler.go:67
 msgid "The Bluetooth connection timed out or failed"
-msgstr ""
+msgstr "Falló o escosó'l tiempu de la conexón Bluetooth"
 
 #: ../../network/state_handler.go:68
 msgid "GSM Modem's SIM Card was not inserted"
-msgstr ""
+msgstr "Nun s'inxertó la tarxeta SIM del módem GSM"
 
 #: ../../network/state_handler.go:69
 msgid "GSM Modem's SIM PIN required"
-msgstr ""
+msgstr "Ríquese'l PIN de la SIM del módem GSM"
 
 #: ../../network/state_handler.go:70
 msgid "GSM Modem's SIM PUK required"
-msgstr ""
+msgstr "Ríquese'l PUK de la SIM del módem GSM"
 
 #: ../../network/state_handler.go:71
 msgid "Wrong GSM Modem's SIM"
@@ -1753,7 +1758,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:72
 msgid "InfiniBand device does not support connected mode"
-msgstr ""
+msgstr "El preséu InfiniBand nun sofita'l mou coneutáu"
 
 #: ../../network/state_handler.go:73
 msgid "A connection dependency failed"
@@ -1765,7 +1770,7 @@ msgstr ""
 
 #: ../../network/state_handler.go:75
 msgid "ModemManager did not run or quitted unexpectedly"
-msgstr ""
+msgstr "ModemManager coló de mou inesperáu o nun s'executó"
 
 #: ../../network/state_handler.go:76
 msgid "The 802.11 Wi-Fi network could not be found"
@@ -1789,31 +1794,31 @@ msgstr ""
 
 #: ../../network/state_handler.go:83
 msgid "Modem now ready and available"
-msgstr ""
+msgstr "Agora'l módem ta tresnáu y disponible"
 
 #: ../../network/state_handler.go:84
 msgid "SIM PIN is incorrect"
-msgstr ""
+msgstr "El PIN de SIM ye incorreutu"
 
 #: ../../network/state_handler.go:85
 msgid "New connection activation is enqueuing"
-msgstr ""
+msgstr "L'activación de la conexón nueva ta na cola"
 
 #: ../../network/state_handler.go:86
 msgid "Parent device changed"
-msgstr ""
+msgstr "Camudó'l preséu pá"
 
 #: ../../network/state_handler.go:87
 msgid "Management status of parent device changed"
-msgstr ""
+msgstr "Camudó l'estáu de xestión del preséu pá"
 
 #: ../../network/state_handler.go:90
 msgid "Network cable is unplugged"
-msgstr ""
+msgstr "Desenchufóse'l cable de rede"
 
 #: ../../network/state_handler.go:91
 msgid "Please make sure SIM card has been inserted with mobile network signal"
-msgstr ""
+msgstr "Asegúrate que la tarxeta SIM s'inxertó y hai cobertoria móvil, por favor"
 
 #: ../../network/state_handler.go:92
 msgid ""
@@ -1826,19 +1831,19 @@ msgstr ""
 
 #: ../../network/state_handler.go:96
 msgid "Activate VPN connection failed"
-msgstr ""
+msgstr "Falló l'activación de la conexón VPN"
 
 #: ../../network/state_handler.go:97
 msgid "The VPN connection changed state due to disconnection from users"
-msgstr ""
+msgstr "Camudó l'estáu de la conexón VPN pola mor de la desconexón d'usuarios"
 
 #: ../../network/state_handler.go:98
 msgid "The VPN connection changed state due to disconnection from devices"
-msgstr ""
+msgstr "La conexón VPN camudó d'estáu pola mor de la desconexón de preseos"
 
 #: ../../network/state_handler.go:99
 msgid "VPN service stopped"
-msgstr ""
+msgstr "Paró'l serviciu VPN"
 
 #: ../../network/state_handler.go:100
 msgid "The IP config of VPN connection was invalid"
@@ -1846,27 +1851,27 @@ msgstr ""
 
 #: ../../network/state_handler.go:101
 msgid "The connection attempt to VPN service timed out"
-msgstr ""
+msgstr "Escosó'l tiempu del intentu de conexón de la VPN"
 
 #: ../../network/state_handler.go:102
 msgid "The VPN service start timed out"
-msgstr ""
+msgstr "Escosó'l tiempu d'aniciu del serviciu VPN"
 
 #: ../../network/state_handler.go:103
 msgid "The VPN service failed to start"
-msgstr ""
+msgstr "Falló l'aniciu del serviciu VPN"
 
 #: ../../network/state_handler.go:104
 msgid "Necessary password for the VPN connection was not provided"
-msgstr ""
+msgstr "Nun s'apurrió la contraseña precisa pa la conexón VPN"
 
 #: ../../network/state_handler.go:105
 msgid "Authentication to VPN server failed"
-msgstr ""
+msgstr "Falló l'autenticación del sirvidor VPN"
 
 #: ../../network/state_handler.go:106
 msgid "The connection was deleted from settings"
-msgstr ""
+msgstr "Desanicióse la conexón de los axustes"
 
 #: ../../network/utils_dbus_nm.go:316
 msgid "Unknown"
@@ -1902,20 +1907,20 @@ msgstr "Afitóse con ésitu'l proxy del sistema."
 msgid "System proxy has been cancelled."
 msgstr "Encaboxóse'l proxy del sistema."
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Battery Critical Low"
 msgstr "Batería perbaxa"
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Battery Low"
 msgstr "Batería baxa"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""

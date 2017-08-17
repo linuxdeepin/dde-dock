@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:04+0800\n"
-"PO-Revision-Date: 2017-06-23 05:34+0000\n"
+"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"PO-Revision-Date: 2017-08-16 09:57+0000\n"
 "Last-Translator: deepin_transifex <xiabin@linuxdeepin.com>\n"
 "Language-Team: Greek (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -334,11 +334,11 @@ msgid ""
 "packages, please wait..."
 msgstr "Η γλώσσα συστήματος αλλάζει με εγκατάσταση ελλειπών πακέτων γλώσσαςμ παρακαλώ περιμένετε..."
 
-#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:45
 msgid "%q removed successfully"
 msgstr ""
 
-#: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:47
 msgid "Failed to uninstall %q"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgstr "Άνοιγμα φακέλου"
 msgid "Run Software"
 msgstr "Εκτέλεση Λογισμικού"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:216
@@ -363,45 +363,45 @@ msgstr "Εκτέλεση Λογισμικού"
 msgid "None"
 msgstr "Κανένα"
 
-#: ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:187
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-bit Key"
 
-#: ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Προσωπικό"
 
-#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:120
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
 msgid "LEAP"
 msgstr "LEAP "
 
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 msgid "FAST"
 msgstr "ΓΡΗΓΟΡΑ"
 
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 msgid "Tunneled TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
 msgid "Protected EAP"
 msgstr "Προστατευόμενη EAP"
@@ -495,7 +495,7 @@ msgid "OTP"
 msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_ip4_config.go:31
+#: ../../network/nm_setting_ip4_config.go:32
 #: ../../network/nm_setting_vpn_vpnc.go:140
 msgid "Disabled"
 msgstr "Απενεργοποιημένο"
@@ -513,7 +513,7 @@ msgid "Both"
 msgstr "Και τα δύο"
 
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_wireless.go:196
+#: ../../network/nm_setting_wireless.go:199
 msgid "Automatic"
 msgstr "Αυτόματο"
 
@@ -881,7 +881,7 @@ msgstr "Απαιτείται Πρόσθετο VPN"
 #: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -1160,12 +1160,12 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "Method"
 msgstr "Μέθοδος"
 
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "IP Address"
 msgstr "Διεύθυνση IP"
 
@@ -1174,20 +1174,25 @@ msgid "Netmask"
 msgstr "Μάσκα Δικτύου"
 
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Primary DNS"
 msgstr "Πρωτεύον DNS"
 
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "Secondary DNS"
 msgstr "Δευτερεύον DNS"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:452
+msgid "Only applied in corresponding resources"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Prefix"
 msgstr "Πρόθεμα"
 
@@ -1201,27 +1206,27 @@ msgstr "Προσαρμογή"
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:74
+#: ../../network/nm_setting_wireless.go:26
+#: ../../network/nm_setting_wireless.go:75
 msgid "Default"
 msgstr "Προεπιλογή"
 
-#: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip6_config.go:28
 msgid "Auto"
 msgstr "Αυτόματο"
 
-#: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
 msgid "Link-Local Only"
 msgstr "Τοπική σύνδεση μόνο"
 
-#: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
 msgid "Manual"
 msgstr "Μη αυτόματα"
 
-#: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_wireless_security.go:71
 msgid "Shared"
@@ -1496,23 +1501,23 @@ msgstr "Server (default) "
 msgid "DH Group 2"
 msgstr "DH Ομάδα 2"
 
-#: ../../network/nm_setting_wireless.go:190
+#: ../../network/nm_setting_wireless.go:193
 msgid "Infrastructure"
 msgstr "Υποδομή"
 
-#: ../../network/nm_setting_wireless.go:191
+#: ../../network/nm_setting_wireless.go:194
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:195
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:197
+#: ../../network/nm_setting_wireless.go:200
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:198
+#: ../../network/nm_setting_wireless.go:201
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1906,20 +1911,20 @@ msgstr "Ο μεσολάβησης του συστήματος έχει ορισ�
 msgid "System proxy has been cancelled."
 msgstr "Ο μεσολάβησης του συστήματος έχει ακυρωθεί."
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Battery Critical Low"
 msgstr "Κρίσιμα Χαμηλή Μπαταρία"
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Computer has been in suspend mode, please plug in"
 msgstr ""
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Battery Low"
 msgstr "Χαμηλή Μπαταρία"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr ""

@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Deepin Desktop Environment\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-23 11:04+0800\n"
-"PO-Revision-Date: 2017-06-25 21:58+0000\n"
-"Last-Translator: Timo Kröning\n"
+"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"PO-Revision-Date: 2017-08-16 15:50+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
 "Language-Team: German (http://www.transifex.com/linuxdeepin/deepin-desktop-environment/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -129,7 +129,7 @@ msgstr "Bluetooth-Verbindung fehlgeschlagen"
 
 #: ../../bluetooth/utils_notify.go:56
 msgid "Failed to connect %q, automatically ignored"
-msgstr "Verbindung zu %q fehlgeschlagen, automatisch ignoriert"
+msgstr "Verbindung zu %q nicht möglich. Gerät wird zukünftig ignoriert (ggf. neues Paaring durchführen)"
 
 #: ../../dock/app_entry_menu.go:99
 msgid "_Open"
@@ -157,7 +157,7 @@ msgstr "Authentifizierung ist erforderlich, um die Konfiguration von grub2 zu ä
 
 #: ../../housekeeping/init.go:53
 msgid "Insufficient disk space, please clean up in time!"
-msgstr "Zu wenig freier Speicher, bitte räumen Sie rechtzeitig auf!"
+msgstr "Zu wenig freier Speicherplatz, bitte geben Sie unverzüglich Speicher frei!"
 
 #: ../../keybinding/shortcuts/id_name_map.go:18
 msgid "Launcher"
@@ -169,7 +169,7 @@ msgstr "Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:20
 msgid "Deepin Screen Recorder"
-msgstr "Deepin Bildschirmaufnahme"
+msgstr "Deepin Screen Recorder"
 
 #: ../../keybinding/shortcuts/id_name_map.go:21
 msgid "Lock screen"
@@ -185,7 +185,7 @@ msgstr "Abmelden"
 
 #: ../../keybinding/shortcuts/id_name_map.go:24
 msgid "Terminal Quake Window"
-msgstr "Terminal Quake Fenster"
+msgstr "Quake-Style Terminal"
 
 #: ../../keybinding/shortcuts/id_name_map.go:25
 msgid "Screenshot"
@@ -197,7 +197,7 @@ msgstr "Vollständiges Bildschirmfoto"
 
 #: ../../keybinding/shortcuts/id_name_map.go:27
 msgid "Window screenshot"
-msgstr "Bildschirmfoto von Fenster"
+msgstr "Bildschirmfoto vom Fenster"
 
 #: ../../keybinding/shortcuts/id_name_map.go:28
 msgid "Delay screenshot"
@@ -321,7 +321,7 @@ msgstr "Systemsprache konnte nicht geändert werden. Bitte versuchen Sie es erne
 
 #: ../../langselector/handle_event.go:46
 msgid "System language has been changed, please log in again after logged out"
-msgstr "Systemsprache wurde geändert. Bitte melden Sie sich nach dem Abmelden erneut an."
+msgstr "Systemsprache wurde geändert. Bitte Ab- und wieder Anmelden."
 
 #: ../../langselector/locale_ifc.go:50
 msgid "System language is being changed, please wait..."
@@ -331,15 +331,15 @@ msgstr "Systemsprache wird geändert, bitte warten..."
 msgid ""
 "System language is being changed with an installation of lacked language "
 "packages, please wait..."
-msgstr "Systemsprache wird mit einer Installation von fehlenden Sprachpaketen geändert, bitte warten..."
+msgstr "Systemsprache wird geändert, fehlende Sprachpakete werden installiert, bitte warten..."
 
-#: ../../launcher/manager_uninstall.go:33
+#: ../../launcher/manager_uninstall.go:45
 msgid "%q removed successfully"
-msgstr "%q erfolgreich entfernt."
+msgstr "%q erfolgreich entfernt"
 
-#: ../../launcher/manager_uninstall.go:35
+#: ../../launcher/manager_uninstall.go:47
 msgid "Failed to uninstall %q"
-msgstr "%q konnte nicht deinstalliert werden."
+msgstr "%q konnte nicht deinstalliert werden"
 
 #: ../../mime/media.go:57 ../../mime/media.go:58
 msgid "Nothing"
@@ -353,7 +353,7 @@ msgstr "Ordner öffnen"
 msgid "Run Software"
 msgstr "Software ausführen"
 
-#: ../../network/manager_active.go:312 ../../network/manager_active.go:317
+#: ../../network/manager_active.go:314 ../../network/manager_active.go:319
 #: ../../network/nm_setting_virtual_key.go:179
 #: ../../network/nm_setting_virtual_key.go:186
 #: ../../network/nm_setting_virtual_key.go:216
@@ -362,45 +362,45 @@ msgstr "Software ausführen"
 msgid "None"
 msgstr "Keine"
 
-#: ../../network/manager_active.go:319
+#: ../../network/manager_active.go:321
 #: ../../network/nm_setting_virtual_key.go:180
 #: ../../network/nm_setting_virtual_key.go:187
 msgid "WEP 40/128-bit Key"
 msgstr "WEP 40/128-Bit-Schlüssel"
 
-#: ../../network/manager_active.go:321
+#: ../../network/manager_active.go:323
 #: ../../network/nm_setting_virtual_key.go:181
 #: ../../network/nm_setting_virtual_key.go:188
 msgid "WPA/WPA2 Personal"
 msgstr "WPA/WPA2 Personal"
 
-#: ../../network/manager_active.go:329 ../../network/nm_setting_802_1x.go:31
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:31
 #: ../../network/nm_setting_802_1x.go:112
 #: ../../network/nm_setting_802_1x.go:120
 msgid "TLS"
 msgstr "TLS"
 
-#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:30
+#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:30
 #: ../../network/nm_setting_802_1x.go:113
 msgid "MD5"
 msgstr "MD5"
 
-#: ../../network/manager_active.go:333 ../../network/nm_setting_802_1x.go:121
+#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:121
 #: ../../network/nm_setting_wireless_security.go:72
 msgid "LEAP"
 msgstr "LEAP"
 
-#: ../../network/manager_active.go:335 ../../network/nm_setting_802_1x.go:114
+#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:114
 #: ../../network/nm_setting_802_1x.go:122
 msgid "FAST"
 msgstr "FAST"
 
-#: ../../network/manager_active.go:337 ../../network/nm_setting_802_1x.go:115
+#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:115
 #: ../../network/nm_setting_802_1x.go:123
 msgid "Tunneled TLS"
 msgstr "Getunneltes TLS"
 
-#: ../../network/manager_active.go:339 ../../network/nm_setting_802_1x.go:116
+#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:116
 #: ../../network/nm_setting_802_1x.go:124
 msgid "Protected EAP"
 msgstr "Geschütztes EAP"
@@ -419,11 +419,11 @@ msgstr "Drahtlosverbindung"
 
 #: ../../network/nm_custom_type.go:222
 msgid "Wireless Ad-Hoc"
-msgstr "Drahtloses Ad-Hoc"
+msgstr "Drahtloses Ad-hoc-Netzwerk"
 
 #: ../../network/nm_custom_type.go:224
 msgid "Wireless Ap-Hotspot"
-msgstr "Drahtloser Ap-Hotspot"
+msgstr "WLAN Hotspot"
 
 #: ../../network/nm_custom_type.go:226
 msgid "PPPoE Connection"
@@ -494,7 +494,7 @@ msgid "OTP"
 msgstr "OTP"
 
 #: ../../network/nm_setting_802_1x.go:129
-#: ../../network/nm_setting_ip4_config.go:31
+#: ../../network/nm_setting_ip4_config.go:32
 #: ../../network/nm_setting_vpn_vpnc.go:140
 msgid "Disabled"
 msgstr "Deaktiviert"
@@ -512,7 +512,7 @@ msgid "Both"
 msgstr "Beide"
 
 #: ../../network/nm_setting_802_1x.go:136
-#: ../../network/nm_setting_wireless.go:196
+#: ../../network/nm_setting_wireless.go:199
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -699,7 +699,7 @@ msgstr "CA Cert"
 #: ../../network/nm_setting_beans_gen.go:282
 #: ../../network/nm_setting_beans_gen.go:387
 msgid "User Cert"
-msgstr "Benutzer Cert"
+msgstr "Benutzerzertifikat"
 
 #: ../../network/nm_setting_beans_gen.go:96
 msgid "Provisioning"
@@ -880,7 +880,7 @@ msgstr "VPN-Plugin erforderlich"
 #: ../../network/nm_setting_beans_gen.go:383
 #: ../../network/nm_setting_beans_gen.go:400
 #: ../../network/nm_setting_beans_gen.go:435
-#: ../../network/nm_setting_beans_gen.go:448
+#: ../../network/nm_setting_beans_gen.go:449
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -1159,12 +1159,12 @@ msgid "IPv4"
 msgstr "IPv4"
 
 #: ../../network/nm_setting_beans_gen.go:432
-#: ../../network/nm_setting_beans_gen.go:445
+#: ../../network/nm_setting_beans_gen.go:446
 msgid "Method"
 msgstr "Methode"
 
 #: ../../network/nm_setting_beans_gen.go:433
-#: ../../network/nm_setting_beans_gen.go:446
+#: ../../network/nm_setting_beans_gen.go:447
 msgid "IP Address"
 msgstr "IP-Adresse"
 
@@ -1173,20 +1173,25 @@ msgid "Netmask"
 msgstr "Netzmaske"
 
 #: ../../network/nm_setting_beans_gen.go:436
-#: ../../network/nm_setting_beans_gen.go:449
+#: ../../network/nm_setting_beans_gen.go:450
 msgid "Primary DNS"
 msgstr "Primärer DNS"
 
 #: ../../network/nm_setting_beans_gen.go:437
-#: ../../network/nm_setting_beans_gen.go:450
+#: ../../network/nm_setting_beans_gen.go:451
 msgid "Secondary DNS"
 msgstr "Sekundärer DNS"
 
-#: ../../network/nm_setting_beans_gen.go:443
+#: ../../network/nm_setting_beans_gen.go:438
+#: ../../network/nm_setting_beans_gen.go:452
+msgid "Only applied in corresponding resources"
+msgstr "Wird nur in entsprechenden Ressourcen angewendet"
+
+#: ../../network/nm_setting_beans_gen.go:444
 msgid "IPv6"
 msgstr "IPv6"
 
-#: ../../network/nm_setting_beans_gen.go:447
+#: ../../network/nm_setting_beans_gen.go:448
 msgid "Prefix"
 msgstr "Präfix"
 
@@ -1200,27 +1205,27 @@ msgstr "Angepasst"
 #: ../../network/nm_setting_vpn_openvpn.go:219
 #: ../../network/nm_setting_vpn_openvpn.go:239
 #: ../../network/nm_setting_vpn_openvpn.go:270
-#: ../../network/nm_setting_wireless.go:25
-#: ../../network/nm_setting_wireless.go:74
+#: ../../network/nm_setting_wireless.go:26
+#: ../../network/nm_setting_wireless.go:75
 msgid "Default"
 msgstr "Standard"
 
-#: ../../network/nm_setting_ip4_config.go:27
+#: ../../network/nm_setting_ip4_config.go:28
 #: ../../network/nm_setting_ip6_config.go:28
 msgid "Auto"
 msgstr "Automatisch"
 
-#: ../../network/nm_setting_ip4_config.go:28
+#: ../../network/nm_setting_ip4_config.go:29
 #: ../../network/nm_setting_ip6_config.go:30
 msgid "Link-Local Only"
 msgstr "Nur Link-Lokal"
 
-#: ../../network/nm_setting_ip4_config.go:29
+#: ../../network/nm_setting_ip4_config.go:30
 #: ../../network/nm_setting_ip6_config.go:31
 msgid "Manual"
 msgstr "Manuell"
 
-#: ../../network/nm_setting_ip4_config.go:30
+#: ../../network/nm_setting_ip4_config.go:31
 #: ../../network/nm_setting_ip6_config.go:32
 #: ../../network/nm_setting_wireless_security.go:71
 msgid "Shared"
@@ -1495,23 +1500,23 @@ msgstr "Server (Standard)"
 msgid "DH Group 2"
 msgstr "DH-Gruppe 2"
 
-#: ../../network/nm_setting_wireless.go:190
+#: ../../network/nm_setting_wireless.go:193
 msgid "Infrastructure"
 msgstr "Infrastruktur:"
 
-#: ../../network/nm_setting_wireless.go:191
+#: ../../network/nm_setting_wireless.go:194
 msgid "Ad-Hoc"
 msgstr "Ad-Hoc"
 
-#: ../../network/nm_setting_wireless.go:192
+#: ../../network/nm_setting_wireless.go:195
 msgid "AP-Hotspot"
 msgstr "AP-Hotspot"
 
-#: ../../network/nm_setting_wireless.go:197
+#: ../../network/nm_setting_wireless.go:200
 msgid "A (5 GHz)"
 msgstr "A (5 GHz)"
 
-#: ../../network/nm_setting_wireless.go:198
+#: ../../network/nm_setting_wireless.go:201
 msgid "BG (2.4 GHz)"
 msgstr "BG (2.4 GHz)"
 
@@ -1905,20 +1910,20 @@ msgstr "System-Proxy erfolgreich festgelegt."
 msgid "System proxy has been cancelled."
 msgstr "System-Proxy wurde entfernt."
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Battery Critical Low"
 msgstr "Akkuladestatus kritisch niedrig"
 
-#: ../../session/power/manager_events.go:105
-#: ../../session/power/manager_events.go:127
+#: ../../session/power/manager_events.go:96
+#: ../../session/power/manager_events.go:118
 msgid "Computer has been in suspend mode, please plug in"
 msgstr "Computer war im Ruhezustand, bitte Netzteil anschließen."
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Battery Low"
 msgstr "Akkuladestatus niedrig"
 
-#: ../../session/power/manager_events.go:133
+#: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
 msgstr "Computer wird in den Ruhezustand versetzt, bitte Netzteil jetzt anschließen."
