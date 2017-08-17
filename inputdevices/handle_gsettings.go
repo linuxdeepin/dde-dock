@@ -127,6 +127,8 @@ func (w *Wacom) handleGSettings() {
 			w.enableCursorMode()
 		case wacomKeySuppress:
 			w.setSuppress()
+		case wacomKeyForceProportions:
+			w.setArea()
 		}
 	})
 

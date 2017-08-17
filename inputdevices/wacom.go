@@ -12,6 +12,7 @@ package inputdevices
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"time"
 
 	"gir/gio-2.0"
@@ -31,6 +32,7 @@ const (
 
 	wacomKeyLeftHanded        = "left-handed"
 	wacomKeyCursorMode        = "cursor-mode"
+	wacomKeyForceProportions  = "force-proportions"
 	wacomKeyUpAction          = "keyup-action"
 	wacomKeyDownAction        = "keydown-action"
 	wacomKeySuppress          = "suppress"
@@ -99,8 +101,9 @@ func getOutputInfo(conn *xgb.Conn, output randr.Output, ts xproto.Timestamp) (*O
 }
 
 type Wacom struct {
-	LeftHanded *property.GSettingsBoolProperty `access:"readwrite"`
-	CursorMode *property.GSettingsBoolProperty `access:"readwrite"`
+	LeftHanded       *property.GSettingsBoolProperty `access:"readwrite"`
+	CursorMode       *property.GSettingsBoolProperty `access:"readwrite"`
+	ForceProportions *property.GSettingsBoolProperty `access:"readwrite"`
 
 	KeyUpAction   *property.GSettingsStringProperty `access:"readwrite"`
 	KeyDownAction *property.GSettingsStringProperty `access:"readwrite"`
@@ -123,11 +126,13 @@ type Wacom struct {
 	stylusSetting *gio.Settings
 	eraserSetting *gio.Settings
 
-	pointerX    int16
-	pointerY    int16
-	outputInfos []*OutputInfo
-	xu          *xgbutil.XUtil
-	exit        chan int
+	pointerX     int16
+	pointerY     int16
+	outputInfos  []*OutputInfo
+	mapToOutput  *OutputInfo
+	setAreaMutex sync.Mutex
+	xu           *xgbutil.XUtil
+	exit         chan int
 }
 
 var _wacom *Wacom
@@ -153,6 +158,9 @@ func NewWacom() *Wacom {
 	w.CursorMode = property.NewGSettingsBoolProperty(
 		w, "CursorMode",
 		w.setting, wacomKeyCursorMode)
+	w.ForceProportions = property.NewGSettingsBoolProperty(
+		w, "ForceProportions",
+		w.setting, wacomKeyForceProportions)
 
 	w.KeyUpAction = property.NewGSettingsStringProperty(
 		w, "KeyUpAction",
@@ -210,7 +218,6 @@ func (w *Wacom) init() {
 	w.setStylusButtonAction(btnNumDownKey, w.KeyDownAction.Get())
 	w.setPressureSensitive()
 	w.setSuppress()
-	w.setMapToOutput()
 	w.setRawSample()
 	w.setThreshold()
 }
@@ -298,8 +305,8 @@ func (w *Wacom) checkLoop() {
 				// logger.Debug("tick no wacom device")
 				continue
 			}
-			// logger.Debug("tick")
-			w.updateMapToOutput()
+			//logger.Debug("tick")
+			w.updateAreaAndMapToOutput()
 		case <-w.exit:
 			ticker.Stop()
 			logger.Debug("checkLoop return")
@@ -308,27 +315,39 @@ func (w *Wacom) checkLoop() {
 	}
 }
 
-func (w *Wacom) updateMapToOutput() {
-	if len(w.outputInfos) <= 1 {
-		if w.setPropMapOutput("") {
-			w.setMapToOutput()
-		}
+// update Area and MapToOutput settings
+func (w *Wacom) updateAreaAndMapToOutput() {
+	w.updatePointerPos()
+	inOutput := w.pointerInOutput()
+	if inOutput == nil {
+		// error state
+		logger.Warning("pointerInOutput result is nil")
 		return
 	}
-	w.updatePointerPos()
-	if w.setPropMapOutput(w.pointerInOutput()) {
+
+	if w.mapToOutput == nil || *inOutput != *w.mapToOutput {
+		// first run this function or screen area changed
+		w.mapToOutput = inOutput
+		w.setArea()
+	}
+
+	if w.setPropMapOutput(inOutput.Name) {
+		// map to output changed
 		w.setMapToOutput()
 	}
 }
 
-func (w *Wacom) pointerInOutput() string {
-	// len(w.outputInfos) > 1
+func (w *Wacom) pointerInOutput() *OutputInfo {
+	if len(w.outputInfos) == 1 {
+		return w.outputInfos[0]
+	}
+
 	for _, outputInfo := range w.outputInfos {
 		if outputInfo.Contains(w.pointerX, w.pointerY) {
-			return outputInfo.Name
+			return outputInfo
 		}
 	}
-	return ""
+	return nil
 }
 
 func (w *Wacom) handleDeviceChanged() {
@@ -496,6 +515,64 @@ func (w *Wacom) setMapToOutput() {
 				v.Id, v.Name, output, err)
 		}
 	}
+}
+
+func (w *Wacom) setArea() {
+	w.setAreaMutex.Lock()
+	defer w.setAreaMutex.Unlock()
+
+	if w.mapToOutput == nil {
+		return
+	}
+
+	logger.Debug("setArea")
+	for _, v := range w.devInfos {
+		err := w._setArea(v)
+		if err != nil {
+			logger.Warning(err)
+		}
+	}
+}
+
+func (w *Wacom) _setArea(dw *dxinput.Wacom) error {
+	err := dw.ResetArea()
+	if err != nil {
+		return err
+	}
+
+	if !w.ForceProportions.Get() {
+		logger.Debugf("device %d ResetArea", dw.Id)
+		return nil
+	}
+
+	x1, y1, x2, y2, err := dw.GetArea()
+	if err != nil {
+		return err
+	}
+	if x1 != 0 || y1 != 0 {
+		return fmt.Errorf("wacom device %d top left corner of the area is not at the origin", dw.Id)
+	}
+
+	screenWidth := float64(w.mapToOutput.W)
+	screenHeight := float64(w.mapToOutput.H)
+
+	tabletWidth := float64(x2)
+	tabletHeight := float64(y2)
+
+	screenRatio := screenWidth / screenHeight
+	logger.Debugf("screeRatio %v", screenRatio)
+	tabletRatio := tabletWidth / tabletHeight
+
+	if screenRatio > tabletRatio {
+		// cut off the bottom of the drawing area
+		tabletHeight = tabletWidth / screenWidth * screenHeight
+	} else if screenRatio < tabletRatio {
+		// cut off the right part of the drawing area
+		tabletWidth = tabletHeight / screenHeight * screenWidth
+	}
+
+	logger.Debugf("device %d setArea %d,%d", dw.Id, int(tabletWidth), int(tabletHeight))
+	return dw.SetArea(0, 0, int(tabletWidth), int(tabletHeight))
 }
 
 func (w *Wacom) getRawSample(devType int) (uint32, error) {
