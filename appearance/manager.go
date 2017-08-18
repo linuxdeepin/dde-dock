@@ -15,7 +15,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gir/gio-2.0"
-	"github.com/howeyc/fsnotify"
+	"pkg.deepin.io/lib/fsnotify"
 	"io/ioutil"
 	"os/user"
 	"pkg.deepin.io/dde/daemon/appearance/background"

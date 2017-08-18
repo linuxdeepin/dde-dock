@@ -10,7 +10,7 @@
 package apps
 
 import (
-	"github.com/howeyc/fsnotify"
+	"pkg.deepin.io/lib/fsnotify"
 	"os"
 )
 

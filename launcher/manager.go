@@ -21,7 +21,7 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	"gir/gio-2.0"
-	"github.com/howeyc/fsnotify"
+	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/gettext"
