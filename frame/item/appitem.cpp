@@ -408,6 +408,14 @@ void AppItem::dropEvent(QDropEvent *e)
     m_itemEntry->HandleDragDrop(uriList);
 }
 
+void AppItem::leaveEvent(QEvent *e)
+{
+    DockItem::leaveEvent(e);
+
+    if (m_appPreviewTips->isVisible())
+        m_appPreviewTips->prepareHide();
+}
+
 void AppItem::showHoverTips()
 {
     if (!m_titles.isEmpty())

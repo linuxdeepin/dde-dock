@@ -38,6 +38,7 @@ public:
 public slots:
     void updateLayoutDirection(const Dock::Position dockPos);
     void checkMouseLeave();
+    void prepareHide();
 
 private:
     void adjustSize();

@@ -103,6 +103,11 @@ void PreviewContainer::checkMouseLeave()
     }
 }
 
+void PreviewContainer::prepareHide()
+{
+    m_mouseLeaveTimer->start();
+}
+
 void PreviewContainer::adjustSize()
 {
     const int count = m_snapshots.size();
