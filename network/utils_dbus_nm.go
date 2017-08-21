@@ -187,7 +187,7 @@ func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	allHwAddr = make(map[string]string)
 	for _, devPath := range nmGetDevices() {
 		if dev, err := nmNewDevice(devPath); err == nil && dev.DeviceType.Get() == devType {
-			hwAddr, err := nmGeneralGetDeviceHwAddr(devPath)
+			hwAddr, err := nmGeneralGetDeviceHwAddr(devPath, true)
 			// filter all virtual devices
 			if err == nil && !isVirtualDeviceIfc(dev) {
 				allHwAddr[dev.Interface.Get()] = hwAddr
@@ -197,7 +197,7 @@ func nmGeneralGetAllDeviceHwAddr(devType uint32) (allHwAddr map[string]string) {
 	}
 	return
 }
-func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error) {
+func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath, perm bool) (hwAddr string, err error) {
 	hwAddr = "00:00:00:00:00:00"
 	dev, err := nmNewDevice(devPath)
 	if err != nil {
@@ -209,7 +209,10 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 	switch devType {
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		devWired, _ := nmNewDeviceWired(devPath)
-		hwAddr = devWired.PermHwAddress.Get()
+		hwAddr = ""
+		if perm {
+			hwAddr = devWired.PermHwAddress.Get()
+		}
 		if len(hwAddr) == 0 {
 			// may get PermHwAddress failed under NetworkManager 1.4.1
 			hwAddr = devWired.HwAddress.Get()
@@ -217,7 +220,10 @@ func nmGeneralGetDeviceHwAddr(devPath dbus.ObjectPath) (hwAddr string, err error
 		nmdbus.DestroyDeviceWired(devWired)
 	case nm.NM_DEVICE_TYPE_WIFI:
 		devWireless, _ := nmNewDeviceWireless(devPath)
-		hwAddr = devWireless.PermHwAddress.Get()
+		hwAddr = ""
+		if perm {
+			hwAddr = devWireless.PermHwAddress.Get()
+		}
 		if len(hwAddr) == 0 {
 			hwAddr = devWireless.HwAddress.Get()
 		}
@@ -295,7 +301,7 @@ func nmGeneralGetDeviceIdentifier(devPath dbus.ObjectPath) (devId string, err er
 		err = fmt.Errorf("could not get adsl device identifier now")
 		logger.Error(err)
 	default:
-		devId, err = nmGeneralGetDeviceHwAddr(devPath)
+		devId, err = nmGeneralGetDeviceHwAddr(devPath, true)
 	}
 	return
 }
@@ -1113,7 +1119,7 @@ func nmGetWiredCarrier(devPath dbus.ObjectPath) bool {
 func nmGetWirelessConnection(ssid []byte, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, ok bool) {
 	var hwAddr string
 	if len(devPath) != 0 {
-		hwAddr, _ = nmGeneralGetDeviceHwAddr(devPath)
+		hwAddr, _ = nmGeneralGetDeviceHwAddr(devPath, true)
 	}
 	ok = false
 	for _, p := range nmGetWirelessConnectionListBySsid(ssid) {

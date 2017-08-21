@@ -34,7 +34,8 @@ type connection struct {
 
 	// if not empty, the connection will only apply to special device,
 	// works for wired, wireless, infiniband, wimax devices
-	HwAddress string
+	HwAddress     string
+	ClonedAddress string
 
 	// works for wireless, olpc-mesh connections
 	Ssid string
@@ -102,11 +103,25 @@ func (conn *connection) updateProps() {
 	case nm.NM_SETTING_WIRED_SETTING_NAME, nm.NM_SETTING_PPPOE_SETTING_NAME:
 		if isSettingWiredMacAddressExists(cdata) {
 			conn.HwAddress = convertMacAddressToString(getSettingWiredMacAddress(cdata))
+		} else {
+			conn.HwAddress = ""
+		}
+		if isSettingWiredClonedMacAddressExists(cdata) {
+			conn.ClonedAddress = convertMacAddressToString(getSettingWiredClonedMacAddress(cdata))
+		} else {
+			conn.ClonedAddress = ""
 		}
 	case nm.NM_SETTING_WIRELESS_SETTING_NAME:
 		conn.Ssid = decodeSsid(getSettingWirelessSsid(cdata))
 		if isSettingWirelessMacAddressExists(cdata) {
 			conn.HwAddress = convertMacAddressToString(getSettingWirelessMacAddress(cdata))
+		} else {
+			conn.HwAddress = ""
+		}
+		if isSettingWirelessChannelExists(cdata) {
+			conn.ClonedAddress = convertMacAddressToString(getSettingWirelessClonedMacAddress(cdata))
+		} else {
+			conn.ClonedAddress = ""
 		}
 	}
 }

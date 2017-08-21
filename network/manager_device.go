@@ -21,18 +21,20 @@ import (
 
 type device struct {
 	nmDev         *nmdbus.Device
+	nmDevWired    *nmdbus.DeviceWired
 	nmDevWireless *nmdbus.DeviceWireless
 	mmDevModem    *mmdbus.Modem
 	nmDevType     uint32
 	id            string
 	udi           string
 
-	Path      dbus.ObjectPath
-	State     uint32
-	Interface string
-	HwAddress string
-	Driver    string
-	Managed   bool
+	Path          dbus.ObjectPath
+	State         uint32
+	Interface     string
+	HwAddress     string
+	PermHwAddress string
+	Driver        string
+	Managed       bool
 
 	// Vendor is the device vendor ID and product ID, if failed, use
 	// interface name instead. BTW, we use Vendor instead of
@@ -116,8 +118,18 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	switch dev.nmDevType {
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		if nmDevWired, err := nmNewDeviceWired(dev.Path); err == nil {
-			defer nmDestroyDeviceWired(nmDevWired)
-			dev.HwAddress = nmDevWired.HwAddress.Get()
+			dev.nmDevWired = nmDevWired
+			// for mac address clone
+			dev.nmDevWired.HwAddress.ConnectChanged(func() {
+				v := dev.nmDevWired.HwAddress.Get()
+				if v == dev.HwAddress {
+					return
+				}
+				dev.HwAddress = v
+				m.setPropDevices()
+			})
+			dev.HwAddress = dev.nmDevWired.HwAddress.Get()
+			dev.PermHwAddress = dev.nmDevWired.PermHwAddress.Get()
 		}
 		if nmHasSystemSettingsModifyPermission() {
 			m.ensureWiredConnectionExists(dev.Path, true)
@@ -126,6 +138,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.nmDevWireless = nmDevWireless
 			dev.HwAddress = nmDevWireless.HwAddress.Get()
+			dev.PermHwAddress = nmDevWireless.PermHwAddress.Get()
 
 			// connect property, about wireless active access point
 			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
@@ -140,6 +153,14 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
 			dev.SupportHotspot = isWirelessDeviceSuportHotspot(nmDev.Interface.Get())
 
+			dev.nmDevWireless.HwAddress.ConnectChanged(func() {
+				v := dev.nmDevWireless.HwAddress.Get()
+				if v == dev.HwAddress {
+					return
+				}
+				dev.HwAddress = v
+				m.setPropDevices()
+			})
 			// connect signals AccessPointAdded() and AccessPointRemoved()
 			dev.nmDevWireless.ConnectAccessPointAdded(func(apPath dbus.ObjectPath) {
 				m.addAccessPoint(dev.Path, apPath)
@@ -232,6 +253,9 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 }
 func (m *Manager) destroyDevice(dev *device) {
 	// destroy object to reset all property connects
+	if dev.nmDevWired != nil {
+		nmDestroyDeviceWired(dev.nmDevWired)
+	}
 	if dev.nmDevWireless != nil {
 		nmDestroyDeviceWireless(dev.nmDevWireless)
 	}

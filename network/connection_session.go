@@ -91,7 +91,7 @@ func newConnectionSessionByCreate(connectionType string, devPath dbus.ObjectPath
 	case connectionWired:
 		s.data = newWiredConnectionData(id, s.Uuid)
 		// set mac address
-		macAddress, err := nmGeneralGetDeviceHwAddr(devPath)
+		macAddress, err := nmGeneralGetDeviceHwAddr(devPath, true)
 		if err == nil && macAddress != "" {
 			setSettingWiredMacAddress(s.data, convertMacAddressToArrayByte(macAddress))
 		}
@@ -471,6 +471,11 @@ func (s *ConnectionSession) SetKey(section, key, valueJSON string) {
 			addresses := interfaceToArrayArrayUint32(generalGetSettingDefaultValue(section, "addresses"))
 			logicSetSettingVkIp4ConfigAddressesMask(s.data, convertIpv4PrefixToNetMask(addresses[0][1]))
 			logicSetSettingVkIp4ConfigAddressesAddress(s.data, "")
+		}
+		// fix cloned address deleted not work
+		if key == "cloned-mac-address" && valueJSON == "\"\"" &&
+			(section == "802-3-ethernet" || section == "802-11-wireless") {
+			generalSetSettingKeyJSON(s.data, section, "assigned-mac-address", valueJSON)
 		}
 	}
 	s.updateErrorsWhenSettingKey(section, key, err)

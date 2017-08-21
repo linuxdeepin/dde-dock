@@ -291,7 +291,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 
 	// connection data
-	hwAddress, err = nmGeneralGetDeviceHwAddr(devPath)
+	hwAddress, err = nmGeneralGetDeviceHwAddr(devPath, false)
 	if err != nil {
 		hwAddress = ""
 	}

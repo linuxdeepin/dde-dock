@@ -6661,6 +6661,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWiredAutoNegotiateJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWiredClonedMacAddressJSON(data, valueJSON)
+		case "assigned-mac-address":
+			err = setSettingWiredAssignedMacAddressJSON(data, valueJSON)
 		case "duplex":
 			err = setSettingWiredDuplexJSON(data, valueJSON)
 		case "generate-mac-address-mask":
@@ -6699,6 +6701,8 @@ func generalSetSettingKeyJSON(data connectionData, section, key, valueJSON strin
 			err = setSettingWirelessChannelJSON(data, valueJSON)
 		case "cloned-mac-address":
 			err = setSettingWirelessClonedMacAddressJSON(data, valueJSON)
+		case "assigned-mac-address":
+			err = setSettingWirelessAssignedMacAddressJSON(data, valueJSON)
 		case "generate-mac-address-mask":
 			err = setSettingWirelessGenerateMacAddressMaskJSON(data, valueJSON)
 		case "hidden":
@@ -17781,6 +17785,9 @@ func setSettingWiredAutoNegotiateJSON(data connectionData, valueJSON string) (er
 func setSettingWiredClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "cloned-mac-address", valueJSON, ktypeWrapperMacAddress)
 }
+func setSettingWiredAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-3-ethernet", "assigned-mac-address", valueJSON, ktypeWrapperString)
+}
 func setSettingWiredDuplexJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-3-ethernet", "duplex", valueJSON, ktypeString)
 }
@@ -17828,6 +17835,9 @@ func setSettingWirelessChannelJSON(data connectionData, valueJSON string) (err e
 }
 func setSettingWirelessClonedMacAddressJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "cloned-mac-address", valueJSON, ktypeWrapperMacAddress)
+}
+func setSettingWirelessAssignedMacAddressJSON(data connectionData, valueJSON string) (err error) {
+	return setSettingKeyJSON(data, "802-11-wireless", "assigned-mac-address", valueJSON, ktypeWrapperString)
 }
 func setSettingWirelessGenerateMacAddressMaskJSON(data connectionData, valueJSON string) (err error) {
 	return setSettingKeyJSON(data, "802-11-wireless", "generate-mac-address-mask", valueJSON, ktypeString)
