@@ -10,17 +10,13 @@
 package trayicon
 
 import (
-	"github.com/BurntSushi/xgb"
-	"github.com/BurntSushi/xgb/damage"
-	"github.com/BurntSushi/xgb/xfixes"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"github.com/BurntSushi/xgbutil/xprop"
-
 	"errors"
-	"github.com/BurntSushi/xgbutil/xwindow"
-	"pkg.deepin.io/lib/dbus"
 	"sync"
+
+	"pkg.deepin.io/lib/dbus"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/damage"
 )
 
 const (
@@ -31,9 +27,9 @@ const (
 
 // TrayManager为系统托盘的管理器。
 type TrayManager struct {
-	owner  xproto.Window // the manager selection owner window
-	visual xproto.Visualid
-	icons  map[xproto.Window]*TrayIcon
+	owner  x.Window // the manager selection owner window
+	visual x.VisualID
+	icons  map[x.Window]*TrayIcon
 	mutex  sync.Mutex
 
 	// 目前已有系统托盘窗口的id。
@@ -55,7 +51,7 @@ func NewTrayManager() *TrayManager {
 
 	m := &TrayManager{
 		visual: visualId,
-		icons:  make(map[xproto.Window]*TrayIcon),
+		icons:  make(map[x.Window]*TrayIcon),
 	}
 	err := m.init()
 	// TODO
@@ -79,12 +75,6 @@ func (m *TrayManager) init() error {
 
 	m.sendClientMsgMANAGER()
 
-	xfixes.SelectSelectionInput(
-		XU.Conn(),
-		XU.RootWin(),
-		_NET_SYSTEM_TRAY_S0,
-		xfixes.SelectionEventMaskSelectionClientClose,
-	)
 	go m.eventHandleLoop()
 
 	dbus.InstallOnSession(m)
@@ -98,7 +88,7 @@ func (m *TrayManager) destroy() {
 
 func (m *TrayManager) checkValid() {
 	for _, id := range m.TrayIcons {
-		xid := xproto.Window(id)
+		xid := x.Window(id)
 		if isValidWindow(xid) {
 			continue
 		}
@@ -107,59 +97,72 @@ func (m *TrayManager) checkValid() {
 	}
 }
 
-func (m *TrayManager) handleTrayDamage(xid xproto.Window) {
+func (m *TrayManager) handleTrayDamage(xid x.Window) {
 	icon, ok := m.icons[xid]
 	if !ok {
 		return
 	}
-	md5 := icon2md5(xid)
-	if !md5Equal(icon.md5, md5) {
-		icon.md5 = md5
-		dbus.Emit(m, "Changed", uint32(xid))
-		logger.Debugf("handleTrayDamage %v name: %q changed %v", xid, icon.getName(), md5)
+	dbus.Emit(m, "Changed", uint32(xid))
+	logger.Debugf("handleTrayDamage %v name: %q", xid, icon.getName())
+}
+
+func sendClientMessage(win, dest x.Window, msgType x.Atom, pArray *[5]uint32) error {
+	var data x.ClientMessageData
+	data.SetData32(pArray)
+	event := x.ClientMessageEvent{
+		ResponseType: x.ClientMessageEventCode,
+		Format:       32,
+		Window:       win,
+		Type:         msgType,
+		Data:         data,
 	}
+	w := x.NewWriter()
+	x.ClientMessageEventWrite(w, &event)
+	const evMask = x.EventMaskSubstructureNotify | x.EventMaskSubstructureRedirect
+	return x.SendEventChecked(XConn, x.False, dest, evMask, w.Bytes()).Check(XConn)
 }
 
 // to notify tray icon applications
 func (m *TrayManager) sendClientMsgMANAGER() error {
-	cm, err := xevent.NewClientMessage(
-		32, // Format
-		XU.RootWin(),
-		ATOM_MANAGER,             // message type
-		xproto.TimeCurrentTime,   // data[0]
-		int(_NET_SYSTEM_TRAY_S0), // data[1]
-		int(m.owner),             // data[2]
-	)
-
-	if err != nil {
-		panic(err)
+	screen := XConn.GetDefaultScreen()
+	array := [5]uint32{
+		x.CurrentTime,
+		uint32(XA_NET_SYSTEM_TRAY_S0),
+		uint32(m.owner),
 	}
-
-	logger.Debug("send clientMsg MANAGER")
-	// !!! ewmh.ClientEvent not use EventMaskStructureNotify.
-	return xevent.SendRootEvent(XU, cm,
-		uint32(xproto.EventMaskStructureNotify))
+	return sendClientMessage(screen.Root, screen.Root, XA_MANAGER, &array)
 }
 
-func getSystemTraySelectionOwner() (xproto.Window, error) {
-	reply, err := xproto.GetSelectionOwner(XU.Conn(), _NET_SYSTEM_TRAY_S0).Reply()
+func getSystemTraySelectionOwner() (x.Window, error) {
+	reply, err := x.GetSelectionOwner(XConn, XA_NET_SYSTEM_TRAY_S0).Reply(XConn)
 	if err != nil {
 		return 0, err
 	}
 	return reply.Owner, nil
 }
 
-func createOwnerWindow(visual xproto.Visualid) (xproto.Window, error) {
-	win, _ := xwindow.Generate(XU)
-
-	err := xproto.CreateWindowChecked(XU.Conn(),
-		0, win.Id, XU.RootWin(), 0, 0, 1, 1, 0, xproto.WindowClassInputOnly, visual, 0, nil).Check()
+func createOwnerWindow(visual x.VisualID) (x.Window, error) {
+	winId, err := XConn.GenerateID()
 	if err != nil {
 		return 0, err
 	}
-
-	win.Listen(xproto.EventMaskStructureNotify)
-	return win.Id, nil
+	win := x.Window(winId)
+	screen := XConn.GetDefaultScreen()
+	err = x.CreateWindowChecked(XConn,
+		0,
+		win,         // window
+		screen.Root, // parent
+		0, 0, 1, 1, 0,
+		x.WindowClassInputOnly,
+		visual,
+		x.CWEventMask,
+		&x.CreateWindowValueList{
+			EventMask: x.EventMaskStructureNotify,
+		}).Check(XConn)
+	if err != nil {
+		return 0, err
+	}
+	return win, nil
 }
 
 func (m *TrayManager) acquireSystemTraySelection() error {
@@ -172,85 +175,77 @@ func (m *TrayManager) acquireSystemTraySelection() error {
 		return errors.New("Another System tray application is running")
 	}
 
-	err = xproto.SetSelectionOwnerChecked(
-		XU.Conn(),
+	err = x.SetSelectionOwnerChecked(
+		XConn,
 		m.owner,
-		_NET_SYSTEM_TRAY_S0,
-		xproto.TimeCurrentTime,
-	).Check()
+		XA_NET_SYSTEM_TRAY_S0,
+		x.CurrentTime).Check(XConn)
 	if err != nil {
 		return err
 	}
 
-	xprop.ChangeProp32(
-		XU,
-		m.owner,
-		"_NET_SYSTEM_TRAY_VISUAL",
-		"VISUALID",
-		uint(m.visual),
-	)
-	xprop.ChangeProp32(
-		XU,
-		m.owner,
-		"_NET_SYSTEM_TRAY_ORIENTAION",
-		"CARDINAL",
-		0,
-	)
+	w := x.NewWriter()
+	w.Write4b(uint32(m.visual))
+	x.ChangeProperty(XConn,
+		x.PropModeReplace,
+		m.owner,                   // window
+		XA_NET_SYSTEM_TRAY_VISUAL, // property
+		x.AtomVisualID,            // type
+		32,
+		1,
+		w.Bytes())
+
+	w = x.NewWriter()
+	w.Write4b(0)
+	x.ChangeProperty(XConn,
+		x.PropModeReplace,
+		m.owner, // window
+		XA_NET_SYSTEM_TRAY_ORIENTAION, // property
+		x.AtomCardinal,                // type
+		32,
+		1,
+		w.Bytes())
 
 	logger.Debug("acquire selection successful")
 	return nil
 }
 
 func (m *TrayManager) eventHandleLoop() {
+	damageExtData := XConn.GetExtensionData(damage.Ext())
+	damageFirstEvent := damageExtData.FirstEvent
+
 	for {
-		ev, err := XU.Conn().WaitForEvent()
-		if ev == nil && err == nil {
-			logger.Warning("Both event and error are nil. Exiting...")
-			return
-		}
+		ev := XConn.WaitForEvent()
+		switch ev.GetEventCode() {
+		case x.ClientMessageEventCode:
+			event, _ := x.NewClientMessageEvent(ev)
+			if event.Type == XA_NET_SYSTEM_TRAY_OPCODE {
+				data32 := event.Data.GetData32()
+				opcode := data32[1]
+				logger.Debug("system tray opcode", opcode)
 
-		if err != nil {
-			logger.Warning(err)
-		}
-		if ev != nil {
-			m.handleXEvent(ev)
-		}
-
-	}
-}
-
-func (m *TrayManager) handleXEvent(e xgb.Event) {
-	switch ev := e.(type) {
-	case xproto.ClientMessageEvent:
-		if ev.Type == _NET_SYSTEM_TRAY_OPCODE {
-			opcode := ev.Data.Data32[1]
-			logger.Debug("system tray opcode", opcode)
-
-			if opcode == OpcodeSystemTrayRequestDock {
-				win := xproto.Window(ev.Data.Data32[2])
-				logger.Debug("ClientMessageEvent: System tray request dock", win)
-				m.addIcon(win)
+				if opcode == OpcodeSystemTrayRequestDock {
+					win := x.Window(data32[2])
+					logger.Debug("ClientMessageEvent: system tray request dock", win)
+					m.addIcon(win)
+				}
 			}
+		case damage.NotifyEventCode + damageFirstEvent:
+			event, _ := damage.NewNotifyEvent(ev)
+			m.handleTrayDamage(x.Window(event.Drawable))
+		case x.MapNotifyEventCode:
+			event, _ := x.NewMapNotifyEvent(ev)
+			logger.Debug("MapNotifyEvent", event.Window)
+		case x.UnmapNotifyEventCode:
+			event, _ := x.NewUnmapNotifyEvent(ev)
+			logger.Debug("UnmapNotifyEvent", event.Window)
+		case x.DestroyNotifyEventCode:
+			event, _ := x.NewDestroyNotifyEvent(ev)
+			logger.Debug("DestroyNotifyEvent", event.Window)
+			m.removeIcon(event.Window)
+
+		default:
+			logger.Debug(ev)
 		}
-	//case xproto.SelectionClearEvent:
-	//logger.Debug("SelectionClearEvent")
-	//m.Unmanage()
-	case xfixes.SelectionNotifyEvent:
-		logger.Debug("SelectionNotifyEvent")
-		m.Manage()
-
-		// tray icon events:
-	case damage.NotifyEvent:
-		m.handleTrayDamage(xproto.Window(ev.Drawable))
-
-	case xproto.MapNotifyEvent:
-		logger.Debug("MapNotifyEvent", ev.Window)
-		//m.addIcon(ev.Window)
-	case xproto.UnmapNotifyEvent:
-		logger.Debug("UnmapNotifyEvent", ev.Window)
-		//m.removeIcon(ev.Window)
-	case xproto.DestroyNotifyEvent:
-		logger.Debug("DestroyNotifyEvent", ev.Window)
-		m.removeIcon(ev.Window)
 	}
 }

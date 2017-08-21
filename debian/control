@@ -17,6 +17,9 @@ Build-Depends: debhelper (>= 9), golang-go,
  golang-github-axgle-mahonia-dev,
  golang-github-msteinert-pam-dev,
  golang-github-nfnt-resize-dev,
+ golang-gir-gudev-1.0-dev,
+ golang-github-linuxdeepin-go-x11-client-dev,
+ dde-api-dev (>=2.92.2),
  libudev-dev,
  libglib2.0-dev,
  libgtk-3-dev,
@@ -32,7 +35,7 @@ Build-Depends: debhelper (>= 9), golang-go,
  libinput-dev,
  libxcb1-dev,libxcb-record0-dev,
  libpam-dev,
- dde-api-dev (>=2.92.2),deepin-desktop-schemas,golang-gir-gudev-1.0-dev,
+ deepin-desktop-schemas
 Standards-Version: 3.9.5
 Homepage: http://www.deepin.com
 

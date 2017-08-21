@@ -10,7 +10,9 @@
 package trayicon
 
 import (
-	"github.com/BurntSushi/xgbutil"
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -39,7 +41,19 @@ func (d *Daemon) Start() error {
 
 	var err error
 	// init x conn
-	XU, err = xgbutil.NewConn()
+	XConn, err = x.NewConn()
+	if err != nil {
+		d.startFailed(err)
+		return err
+	}
+
+	ewmhConn, err = ewmh.NewConn(XConn)
+	if err != nil {
+		d.startFailed(err)
+		return err
+	}
+
+	icccmConn, err = icccm.NewConn(XConn)
 	if err != nil {
 		d.startFailed(err)
 		return err
@@ -52,9 +66,9 @@ func (d *Daemon) Start() error {
 }
 
 func (d *Daemon) Stop() error {
-	if XU != nil {
-		XU.Conn().Close()
-		XU = nil
+	if XConn != nil {
+		XConn.Close()
+		XConn = nil
 	}
 
 	if d.manager != nil {

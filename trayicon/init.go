@@ -1,12 +1,12 @@
 package trayicon
 
 import (
-	"github.com/BurntSushi/xgb/composite"
-	"github.com/BurntSushi/xgb/damage"
-	"github.com/BurntSushi/xgb/xfixes"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/xprop"
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/damage"
+	"github.com/linuxdeepin/go-x11-client/util/atom"
+	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
+	"github.com/linuxdeepin/go-x11-client/util/wm/icccm"
+
 	"pkg.deepin.io/dde/daemon/loader"
 	"pkg.deepin.io/lib/log"
 )
@@ -16,22 +16,25 @@ func init() {
 }
 
 var (
-	XU                      *xgbutil.XUtil
-	logger                  = log.NewLogger("daemon/trayicon")
-	_NET_SYSTEM_TRAY_S0     xproto.Atom
-	_NET_SYSTEM_TRAY_OPCODE xproto.Atom
-	ATOM_MANAGER            xproto.Atom
+	logger = log.NewLogger("daemon/trayicon")
+
+	XConn     *x.Conn
+	ewmhConn  *ewmh.Conn
+	icccmConn *icccm.Conn
+
+	XA_NET_SYSTEM_TRAY_S0         x.Atom
+	XA_NET_SYSTEM_TRAY_OPCODE     x.Atom
+	XA_NET_SYSTEM_TRAY_VISUAL     x.Atom
+	XA_NET_SYSTEM_TRAY_ORIENTAION x.Atom
+	XA_MANAGER                    x.Atom
 )
 
 func initX() {
-	composite.Init(XU.Conn())
-	composite.QueryVersion(XU.Conn(), 0, 4)
-	damage.Init(XU.Conn())
-	damage.QueryVersion(XU.Conn(), 1, 1)
-	xfixes.Init(XU.Conn())
-	xfixes.QueryVersion(XU.Conn(), 5, 0)
+	damage.QueryVersion(XConn, damage.MajorVersion, damage.MinorVersion).Reply(XConn)
 
-	_NET_SYSTEM_TRAY_S0, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_S0")
-	_NET_SYSTEM_TRAY_OPCODE, _ = xprop.Atm(XU, "_NET_SYSTEM_TRAY_OPCODE")
-	ATOM_MANAGER, _ = xprop.Atm(XU, "MANAGER")
+	XA_NET_SYSTEM_TRAY_S0, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_S0")
+	XA_NET_SYSTEM_TRAY_OPCODE, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_OPCODE")
+	XA_NET_SYSTEM_TRAY_VISUAL, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_VISUAL")
+	XA_NET_SYSTEM_TRAY_ORIENTAION, _ = atom.GetVal(XConn, "NET_SYSTEM_TRAY_ORIENTAION")
+	XA_MANAGER, _ = atom.GetVal(XConn, "MANAGER")
 }
