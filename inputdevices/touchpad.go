@@ -68,7 +68,6 @@ type Touchpad struct {
 	devInfos     dxTouchpads
 	setting      *gio.Settings
 	mouseSetting *gio.Settings
-	synProcess   *os.Process
 }
 
 var _tpad *Touchpad
@@ -363,18 +362,20 @@ func (tpad *Touchpad) startSyndaemon() {
 }
 
 func (tpad *Touchpad) stopSyndaemon() {
-	if tpad.synProcess == nil {
-		return
+	out, err := exec.Command("killall", "syndaemon").CombinedOutput()
+	if err != nil {
+		logger.Warning("[stopSyndaemon] failed:", string(out), err)
 	}
-
-	tpad.synProcess.Kill()
-	tpad.synProcess = nil
 	os.Remove(syndaemonPidFile)
 }
 
 func isSyndaemonExist(pidFile string) bool {
 	if !dutils.IsFileExist(pidFile) {
-		return false
+		out, err := exec.Command("pgrep", "syndaemon").CombinedOutput()
+		if err != nil || len(out) < 2 {
+			return false
+		}
+		return true
 	}
 
 	context, err := ioutil.ReadFile(pidFile)
