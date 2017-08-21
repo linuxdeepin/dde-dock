@@ -10,10 +10,10 @@
 package mime
 
 import (
-	"github.com/howeyc/fsnotify"
 	"path/filepath"
 	"pkg.deepin.io/lib/dbus"
 	dutils "pkg.deepin.io/lib/utils"
+	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/xdg/basedir"
 	"strings"
 	"time"
