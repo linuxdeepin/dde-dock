@@ -118,7 +118,7 @@ func sendClientMessage(win, dest x.Window, msgType x.Atom, pArray *[5]uint32) er
 	}
 	w := x.NewWriter()
 	x.ClientMessageEventWrite(w, &event)
-	const evMask = x.EventMaskSubstructureNotify | x.EventMaskSubstructureRedirect
+	const evMask = x.EventMaskStructureNotify
 	return x.SendEventChecked(XConn, x.False, dest, evMask, w.Bytes()).Check(XConn)
 }
 
@@ -130,6 +130,7 @@ func (m *TrayManager) sendClientMsgMANAGER() error {
 		uint32(XA_NET_SYSTEM_TRAY_S0),
 		uint32(m.owner),
 	}
+	logger.Debug("send clientMsg MANAGER")
 	return sendClientMessage(screen.Root, screen.Root, XA_MANAGER, &array)
 }
 
