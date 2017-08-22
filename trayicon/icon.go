@@ -2,16 +2,16 @@ package trayicon
 
 import (
 	"fmt"
-	"pkg.deepin.io/lib/dbus"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
 )
 
 type TrayIcon struct {
 	win    x.Window
 	notify bool
-	md5    []byte
+	data   []byte // window pixmap data
 	damage damage.Damage
 }
 
@@ -44,67 +44,27 @@ func (icon *TrayIcon) getName() string {
 	return ""
 }
 
-func (m *TrayManager) addIcon(win x.Window) {
-	m.checkValid()
-
-	m.mutex.Lock()
-	defer m.mutex.Unlock()
-
-	_, ok := m.icons[win]
-	if ok {
-		logger.Debugf("addIcon failed: %v existed", win)
-		return
-	}
-	damageId, err := XConn.GenerateID()
+func (icon *TrayIcon) getPixmapData() ([]byte, error) {
+	pixmapId, err := XConn.GenerateID()
 	if err != nil {
-		logger.Debug("addIcon failed, new damage id failed:", err)
-		return
+		return nil, err
 	}
-	d := damage.Damage(damageId)
-
-	icon := NewTrayIcon(win)
-	icon.damage = d
-
-	err = damage.CreateChecked(XConn, d, x.Drawable(win), damage.ReportLevelRawRectangles).Check(XConn)
+	pixmap := x.Pixmap(pixmapId)
+	err = composite.NameWindowPixmapChecked(XConn, icon.win, pixmap).Check(XConn)
 	if err != nil {
-		logger.Debug("addIcon failed, damage create failed:", err)
-		return
+		return nil, err
+	}
+	defer x.FreePixmap(XConn, pixmap)
+
+	geo, err := x.GetGeometry(XConn, x.Drawable(icon.win)).Reply(XConn)
+	if err != nil {
+		return nil, err
 	}
 
-	const valueMask = x.CWBackPixel | x.CWEventMask
-	valueList := &x.ChangeWindowAttributesValueList{
-		BackgroundPixel: 0,
-		EventMask:       x.EventMaskVisibilityChange | x.EventMaskStructureNotify,
+	img, err := x.GetImage(XConn, x.ImageFormatZPixmap, x.Drawable(pixmap),
+		0, 0, geo.Width, geo.Height, (1<<32)-1).Reply(XConn)
+	if err != nil {
+		return nil, err
 	}
-
-	x.ChangeWindowAttributes(XConn, win, valueMask, valueList)
-
-	dbus.Emit(m, "Added", uint32(win))
-	logger.Infof("Add tray icon %v name: %q", win, icon.getName())
-	m.icons[win] = icon
-	m.updateTrayIcons()
-}
-
-func (m *TrayManager) removeIcon(win x.Window) {
-	m.mutex.Lock()
-	defer m.mutex.Unlock()
-
-	_, ok := m.icons[win]
-	if !ok {
-		logger.Debugf("removeIcon failed: %v not exist", win)
-		return
-	}
-	delete(m.icons, win)
-	dbus.Emit(m, "Removed", uint32(win))
-	logger.Debugf("remove tray icon %v", win)
-	m.updateTrayIcons()
-}
-
-func (m *TrayManager) updateTrayIcons() {
-	var icons []uint32
-	for _, icon := range m.icons {
-		icons = append(icons, uint32(icon.win))
-	}
-	m.TrayIcons = icons
-	dbus.NotifyChange(m, "TrayIcons")
+	return img.Data, nil
 }

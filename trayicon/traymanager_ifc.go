@@ -36,7 +36,9 @@ func (m *TrayManager) Manage() bool {
 
 // GetName返回传入的系统图标的窗口id的窗口名。
 func (m *TrayManager) GetName(win uint32) string {
+	m.mutex.Lock()
 	icon, ok := m.icons[x.Window(win)]
+	m.mutex.Unlock()
 	if !ok {
 		return ""
 	}
@@ -45,7 +47,9 @@ func (m *TrayManager) GetName(win uint32) string {
 
 // EnableNotification设置对应id的窗口是否可以通知。
 func (m *TrayManager) EnableNotification(win uint32, enable bool) {
+	m.mutex.Lock()
 	icon, ok := m.icons[x.Window(win)]
+	m.mutex.Unlock()
 	if !ok {
 		return
 	}

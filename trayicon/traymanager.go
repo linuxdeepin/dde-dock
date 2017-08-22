@@ -10,12 +10,14 @@
 package trayicon
 
 import (
+	"bytes"
 	"errors"
 	"sync"
 
 	"pkg.deepin.io/lib/dbus"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
 )
 
@@ -97,13 +99,31 @@ func (m *TrayManager) checkValid() {
 	}
 }
 
-func (m *TrayManager) handleTrayDamage(xid x.Window) {
+func (m *TrayManager) handleDamageNotifyEvent(xid x.Window) {
+	m.mutex.Lock()
 	icon, ok := m.icons[xid]
+	m.mutex.Unlock()
 	if !ok {
 		return
 	}
-	dbus.Emit(m, "Changed", uint32(xid))
-	logger.Debugf("handleTrayDamage %v name: %q", xid, icon.getName())
+
+	if !icon.notify {
+		// ignore event
+		return
+	}
+
+	newData, err := icon.getPixmapData()
+	if err != nil {
+		logger.Warning(err)
+		return
+	}
+	if !bytes.Equal(icon.data, newData) {
+		icon.data = newData
+		dbus.Emit(m, "Changed", uint32(xid))
+		logger.Debugf("handleDamageNotifyEvent %v changed", xid)
+	} else {
+		logger.Debugf("handleDamageNotifyEvent %v no changed", xid)
+	}
 }
 
 func sendClientMessage(win, dest x.Window, msgType x.Atom, pArray *[5]uint32) error {
@@ -233,7 +253,7 @@ func (m *TrayManager) eventHandleLoop() {
 			}
 		case damage.NotifyEventCode + damageFirstEvent:
 			event, _ := damage.NewNotifyEvent(ev)
-			m.handleTrayDamage(x.Window(event.Drawable))
+			m.handleDamageNotifyEvent(x.Window(event.Drawable))
 		case x.MapNotifyEventCode:
 			event, _ := x.NewMapNotifyEvent(ev)
 			logger.Debug("MapNotifyEvent", event.Window)
@@ -249,4 +269,71 @@ func (m *TrayManager) eventHandleLoop() {
 			logger.Debug(ev)
 		}
 	}
+}
+
+func (m *TrayManager) addIcon(win x.Window) {
+	m.checkValid()
+
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+
+	_, ok := m.icons[win]
+	if ok {
+		logger.Debugf("addIcon failed: %v existed", win)
+		return
+	}
+	damageId, err := XConn.GenerateID()
+	if err != nil {
+		logger.Debug("addIcon failed, new damage id failed:", err)
+		return
+	}
+	d := damage.Damage(damageId)
+
+	icon := NewTrayIcon(win)
+	icon.damage = d
+
+	err = damage.CreateChecked(XConn, d, x.Drawable(win), damage.ReportLevelRawRectangles).Check(XConn)
+	if err != nil {
+		logger.Debug("addIcon failed, damage create failed:", err)
+		return
+	}
+
+	composite.RedirectWindow(XConn, win, composite.RedirectAutomatic)
+
+	const valueMask = x.CWBackPixel | x.CWEventMask
+	valueList := &x.ChangeWindowAttributesValueList{
+		BackgroundPixel: 0,
+		EventMask:       x.EventMaskVisibilityChange | x.EventMaskStructureNotify,
+	}
+
+	x.ChangeWindowAttributes(XConn, win, valueMask, valueList)
+
+	dbus.Emit(m, "Added", uint32(win))
+	logger.Infof("Add tray icon %v name: %q", win, icon.getName())
+	m.icons[win] = icon
+	m.updateTrayIcons()
+}
+
+func (m *TrayManager) removeIcon(win x.Window) {
+	m.mutex.Lock()
+	defer m.mutex.Unlock()
+
+	_, ok := m.icons[win]
+	if !ok {
+		logger.Debugf("removeIcon failed: %v not exist", win)
+		return
+	}
+	delete(m.icons, win)
+	dbus.Emit(m, "Removed", uint32(win))
+	logger.Debugf("remove tray icon %v", win)
+	m.updateTrayIcons()
+}
+
+func (m *TrayManager) updateTrayIcons() {
+	var icons []uint32
+	for _, icon := range m.icons {
+		icons = append(icons, uint32(icon.win))
+	}
+	m.TrayIcons = icons
+	dbus.NotifyChange(m, "TrayIcons")
 }

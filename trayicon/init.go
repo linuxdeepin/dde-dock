@@ -2,6 +2,7 @@ package trayicon
 
 import (
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/composite"
 	"github.com/linuxdeepin/go-x11-client/ext/damage"
 	"github.com/linuxdeepin/go-x11-client/util/atom"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
@@ -31,6 +32,7 @@ var (
 
 func initX() {
 	damage.QueryVersion(XConn, damage.MajorVersion, damage.MinorVersion).Reply(XConn)
+	composite.QueryVersion(XConn, composite.MajorVersion, composite.MinorVersion).Reply(XConn)
 
 	XA_NET_SYSTEM_TRAY_S0, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_S0")
 	XA_NET_SYSTEM_TRAY_OPCODE, _ = atom.GetVal(XConn, "_NET_SYSTEM_TRAY_OPCODE")
