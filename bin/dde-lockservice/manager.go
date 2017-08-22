@@ -122,7 +122,7 @@ func (m *Manager) AuthenticateUser(dmsg dbus.DMessage, username string) error {
 
 	m.authUserTable[id] = make(chan string)
 	m.authLocker.Unlock()
-	go m.doAuthenticate(username, "", pid, true)
+	go m.doAuthenticate(username, "", pid)
 	return nil
 }
 
@@ -139,15 +139,17 @@ func (m *Manager) UnlockCheck(dmsg dbus.DMessage, username, passwd string) error
 	if ok && v != nil {
 		fmt.Println("-------In authenticating:", id)
 		// in authenticate
-		v <- passwd
+		if passwd != "" {
+			v <- passwd
+		}
 		return nil
 	}
 
-	go m.doAuthenticate(username, passwd, pid, false)
+	go m.doAuthenticate(username, passwd, pid)
 	return nil
 }
 
-func (m *Manager) doAuthenticate(username, passwd string, pid uint32, wait bool) {
+func (m *Manager) doAuthenticate(username, passwd string, pid uint32) {
 	handler, err := pam.StartFunc("lightdm", username, func(style pam.Style, msg string) (string, error) {
 		switch style {
 		// case pam.PromptEchoOn:
@@ -168,8 +170,10 @@ func (m *Manager) doAuthenticate(username, passwd string, pid uint32, wait bool)
 				}
 			}
 
-			if !wait {
-				return passwd, nil
+			if passwd != "" {
+				tmp := passwd
+				passwd = ""
+				return tmp, nil
 			}
 
 			m.authLocker.Lock()
