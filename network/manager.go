@@ -13,6 +13,8 @@ import (
 	"pkg.deepin.io/lib/dbus"
 	"sync"
 	"time"
+
+	"pkg.deepin.io/dde/daemon/network/proxychains"
 )
 
 const (
@@ -74,6 +76,8 @@ type Manager struct {
 	stateHandler  *stateHandler
 	dbusWatcher   *dbusWatcher
 	switchHandler *switchHandler
+
+	proxyChainsManager *proxychains.Manager
 }
 
 func (m *Manager) GetDBusInfo() dbus.DBusInfo {

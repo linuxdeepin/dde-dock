@@ -11,6 +11,7 @@ package network
 
 import (
 	"pkg.deepin.io/dde/daemon/loader"
+	"pkg.deepin.io/dde/daemon/network/proxychains"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/log"
 )
@@ -19,6 +20,10 @@ var (
 	logger  = log.NewLogger("daemon/network")
 	manager *Manager
 )
+
+func init() {
+	proxychains.SetLogger(logger)
+}
 
 type Daemon struct {
 	*loader.ModuleBase
@@ -51,10 +56,17 @@ func (d *Daemon) Start() error {
 		return err
 	}
 
+	manager.proxyChainsManager = proxychains.NewManager()
+	err = dbus.InstallOnSession(manager.proxyChainsManager)
+	if err != nil {
+		logger.Warning("register proxychains manager dbus interface failed: ", err)
+		manager.proxyChainsManager = nil
+		return err
+	}
+
 	// initialize manager after dbus installed
 	go func() {
 		manager.initManager()
-
 		initDbusDaemon()
 		watchNetworkManagerRestart(manager)
 	}()
@@ -69,6 +81,12 @@ func (d *Daemon) Stop() error {
 	destroyDbusDaemon()
 	DestroyManager(manager)
 	dbus.UnInstallObject(manager)
+
+	if manager.proxyChainsManager != nil {
+		dbus.UnInstallObject(manager.proxyChainsManager)
+		manager.proxyChainsManager = nil
+	}
+
 	manager = nil
 	logger.EndTracing()
 	return nil

@@ -21,9 +21,9 @@ import (
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
 	"gir/gio-2.0"
-	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
+	"pkg.deepin.io/lib/fsnotify"
 	"pkg.deepin.io/lib/gettext"
 	"pkg.deepin.io/lib/notify"
 )
@@ -41,9 +41,10 @@ const (
 	AppStatusDeleted  = "deleted"
 	lastoreDBusDest   = "com.deepin.lastore"
 
-	gsSchemaLauncher = "com.deepin.dde.launcher"
-	gsKeyDisplayMode = "display-mode"
-	gsKeyFullscreen  = "fullscreen"
+	gsSchemaLauncher  = "com.deepin.dde.launcher"
+	gsKeyDisplayMode  = "display-mode"
+	gsKeyFullscreen   = "fullscreen"
+	gsKeyAppsUseProxy = "apps-use-proxy"
 )
 
 type Manager struct {

@@ -13,10 +13,12 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
+
 	"pkg.deepin.io/dde/api/soundutils"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/keyfile"
-	"strings"
+	"pkg.deepin.io/lib/strv"
 )
 
 const (
@@ -171,4 +173,39 @@ func (m *Manager) Search(key string) {
 
 	m.popPushOpChan <- &popPushOp{popCount, runesPush}
 	m.currentRunes = keyRunes
+}
+
+func (m *Manager) GetUseProxy(id string) (bool, error) {
+	item := m.getItemById(id)
+	if item == nil {
+		return false, errorInvalidID
+	}
+	appsUseProxy := strv.Strv(m.settings.GetStrv(gsKeyAppsUseProxy))
+	return appsUseProxy.Contains(item.Path), nil
+}
+
+func (m *Manager) SetUseProxy(id string, use bool) error {
+	item := m.getItemById(id)
+	if item == nil {
+		return errorInvalidID
+	}
+
+	appsUseProxy := strv.Strv(m.settings.GetStrv(gsKeyAppsUseProxy))
+
+	var changed bool
+	if use {
+		appsUseProxy, changed = appsUseProxy.Add(item.Path)
+	} else {
+		appsUseProxy, changed = appsUseProxy.Delete(item.Path)
+	}
+
+	if !changed {
+		return nil
+	}
+
+	ok := m.settings.SetStrv(gsKeyAppsUseProxy, []string(appsUseProxy))
+	if !ok {
+		return errors.New("gsettings set apps-use-proxy failed")
+	}
+	return nil
 }

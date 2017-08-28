@@ -10,20 +10,25 @@
 package dock
 
 import (
-	libApps "dbus/com/deepin/daemon/apps"
-	"dbus/com/deepin/dde/daemon/launcher"
-	"dbus/com/deepin/wm"
 	"errors"
 	"fmt"
-	"gir/gio-2.0"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil/ewmh"
+	"sync"
+	"time"
+
+	// dbus interfaces:
+	libApps "dbus/com/deepin/daemon/apps"
+	"dbus/com/deepin/dde/daemon/launcher"
+	"dbus/com/deepin/sessionmanager"
+	"dbus/com/deepin/wm"
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
+
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
-	"sync"
-	"time"
+
+	"github.com/BurntSushi/xgb/xproto"
+	"github.com/BurntSushi/xgbutil/ewmh"
 )
 
 type DockManager struct {
@@ -46,6 +51,7 @@ type DockManager struct {
 
 	HideState HideStateType
 
+	// TODO remove launchContext
 	launchContext      *appinfo.AppLaunchContext
 	smartHideModeTimer *time.Timer
 	smartHideModeMutex sync.Mutex
@@ -55,9 +61,11 @@ type DockManager struct {
 	identifyWindowFuns []*IdentifyWindowFunc
 	windowPatterns     WindowPatterns
 
+	// dbus objects:
 	launcher         *launcher.Launcher
 	wm               *wm.Wm
 	launchedRecorder *libApps.LaunchedRecorder
+	startManager     *sessionmanager.StartManager
 
 	// Signals
 	ServiceRestarted func()
@@ -114,7 +122,19 @@ func (m *DockManager) destroy() {
 		m.launchedRecorder = nil
 	}
 
+	if m.startManager != nil {
+		sessionmanager.DestroyStartManager(m.startManager)
+		m.startManager = nil
+	}
+
 	dbus.UnInstallObject(m)
+}
+
+func (m *DockManager) launch(file string, timestamp uint32) {
+	_, err := m.startManager.LaunchWithTimestamp(file, timestamp)
+	if err != nil {
+		logger.Warningf("launch %q failed: %v", file, err)
+	}
 }
 
 // ActivateWindow会激活给定id的窗口，被激活的窗口通常会成为焦点窗口。

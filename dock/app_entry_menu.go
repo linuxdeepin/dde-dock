@@ -60,6 +60,7 @@ func (entry *AppEntry) getMenuItemDesktopActions() []*MenuItem {
 	launchAction := func(action desktopappinfo.DesktopAction) func(timestamp uint32) {
 		return func(timestamp uint32) {
 			logger.Debugf("launch action %+v", action)
+			// TODO use startdde StartManager to launch action
 			ctx := entry.dockManager.launchContext
 			ctx.SetTimestamp(timestamp)
 			action.Launch(nil, ctx)
@@ -79,11 +80,7 @@ func (entry *AppEntry) launchApp(timestamp uint32) {
 	logger.Debug("launchApp timestamp:", timestamp)
 	if entry.appInfo != nil {
 		logger.Debug("Has AppInfo")
-
-		ctx := entry.dockManager.launchContext
-		ctx.SetTimestamp(timestamp)
-		entry.appInfo.Launch(nil, ctx)
-
+		entry.dockManager.launch(entry.appInfo.GetFileName(), timestamp)
 		entry.dockManager.markAppLaunched(entry.appInfo)
 	} else {
 		// TODO
