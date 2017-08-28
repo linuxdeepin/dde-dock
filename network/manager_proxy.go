@@ -166,6 +166,11 @@ func (m *Manager) GetProxy(proxyType string) (host, port string, err error) {
 
 // SetProxy set host and port for target proxy type.
 func (m *Manager) SetProxy(proxyType, host, port string) (err error) {
+	logger.Debugf("Manager.SetProxy proxyType: %q, host: %q, port: %q", proxyType, host, port)
+
+	if port == "" {
+		port = "0"
+	}
 	portInt, err := strconv.Atoi(port)
 	if err != nil {
 		logger.Error(err)
