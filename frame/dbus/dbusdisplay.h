@@ -19,6 +19,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
 #include <QtDBus/QtDBus>
+#include <QtGui/QGuiApplication>
 
 typedef QMap<QString, double> BrightnessMap;
 
@@ -108,15 +109,24 @@ public:
 
     Q_PROPERTY(DisplayRect PrimaryRect READ primaryRect NOTIFY PrimaryRectChanged)
     inline DisplayRect primaryRect() const
-    { return qvariant_cast< DisplayRect >(property("PrimaryRect")); }
+    {
+        const qreal scale = qApp->devicePixelRatio();
+        DisplayRect dr = qvariant_cast< DisplayRect >(property("PrimaryRect"));
+        dr.x = qreal(dr.x) / scale;
+        dr.y = qreal(dr.y) / scale;
+        dr.width = qreal(dr.width) / scale;
+        dr.height = qreal(dr.height) / scale;
+
+        return dr;
+    }
 
     Q_PROPERTY(ushort ScreenHeight READ screenHeight NOTIFY ScreenHeightChanged)
     inline ushort screenHeight() const
-    { return qvariant_cast< ushort >(property("ScreenHeight")); }
+    { return qreal(qvariant_cast< ushort >(property("ScreenHeight"))) / qApp->devicePixelRatio(); }
 
     Q_PROPERTY(ushort ScreenWidth READ screenWidth NOTIFY ScreenWidthChanged)
     inline ushort screenWidth() const
-    { return qvariant_cast< ushort >(property("ScreenWidth")); }
+    { return qreal(qvariant_cast< ushort >(property("ScreenWidth"))) / qApp->devicePixelRatio(); }
 
 public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> Apply()

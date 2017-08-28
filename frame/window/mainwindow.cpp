@@ -430,7 +430,7 @@ void MainWindow::setStrutPartial()
     if (count > 0)
         return;
 
-    m_xcbMisc->set_strut_partial(winId(), orientation, strut, strutStart, strutEnd);
+    m_xcbMisc->set_strut_partial(winId(), orientation, strut * qApp->devicePixelRatio(), strutStart, strutEnd);
 }
 
 void MainWindow::expand()
@@ -567,7 +567,8 @@ void MainWindow::adjustShadowMask()
         return;
     }
 
-    const QRect r = rect();
+    const qreal scale = qApp->devicePixelRatio();
+    const QRect r = QRect(QPoint(), rect().size() * scale);
     const int radius = 5;
 
     QPainterPath path;
@@ -589,7 +590,7 @@ void MainWindow::adjustShadowMask()
         default:;
         }
     } else {
-        path.addRect(rect());
+        path.addRect(r);
     }
 
     m_platformWindowHandle.setShadowRadius(60);

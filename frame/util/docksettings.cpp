@@ -42,7 +42,7 @@ DockSettings::DockSettings(QWidget *parent)
     m_hideMode = Dock::HideMode(m_dockInter->hideMode());
     m_hideState = Dock::HideState(m_dockInter->hideState());
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize);
+    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
     DockItem::setDockPosition(m_position);
     qApp->setProperty(PROP_POSITION, QVariant::fromValue(m_position));
     DockItem::setDockDisplayMode(m_displayMode);
@@ -304,7 +304,7 @@ void DockSettings::iconSizeChanged()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_iconSize = m_dockInter->iconSize();
-    AppItem::setIconBaseSize(m_iconSize);
+    AppItem::setIconBaseSize(m_iconSize * qApp->devicePixelRatio());
 
     calculateWindowConfig();
 

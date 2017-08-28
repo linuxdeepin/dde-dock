@@ -35,7 +35,6 @@ void RegisterDdeSession()
 int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
-
     DApplication app(argc, argv);
     if (!app.setSingleInstance(QString("dde-dock_%1").arg(getuid()))) {
         qDebug() << "set single instance failed!";
@@ -47,6 +46,7 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName("DDE Dock");
     app.setApplicationVersion("2.0");
     app.loadTranslator();
+    app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
 
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
