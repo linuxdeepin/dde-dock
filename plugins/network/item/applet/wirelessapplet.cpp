@@ -33,6 +33,7 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
 
     m_autoConnBox->setText(tr("Auto-connect"));
 
+    m_pwdDialog->setTextEchoMode(QLineEdit::Password);
     m_pwdDialog->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Dialog);
     m_pwdDialog->setTextEchoMode(DLineEdit::Password);
     m_pwdDialog->setIcon(QIcon::fromTheme("notification-network-wireless-full"));
@@ -72,7 +73,7 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     connect(this, &WirelessList::activeAPChanged, m_updateAPTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     connect(m_networkInter, &DBusNetwork::NeedSecretsFinished, m_pwdDialog, &DInputDialog::close);
-    connect(m_pwdDialog, &DInputDialog::textValueChanged, [this] {m_pwdDialog->setTextAlert(false);});
+    connect(m_pwdDialog, &DInputDialog::textValueChanged, this, &WirelessList::onPwdDialogTextChanged);
     connect(m_pwdDialog, &DInputDialog::cancelButtonClicked, this, &WirelessList::pwdDialogCanceled);
     connect(m_pwdDialog, &DInputDialog::accepted, this, &WirelessList::pwdDialogAccepted);
 
@@ -319,6 +320,12 @@ void WirelessList::pwdDialogCanceled()
     m_pwdDialog->close();
 }
 
+void WirelessList::onPwdDialogTextChanged(const QString &text)
+{
+    m_pwdDialog->setTextAlert(false);
+    m_pwdDialog->setOkButtonEnabled(!text.isEmpty());
+}
+
 void WirelessList::deviceEnabled(const QString &devPath, const bool enable)
 {
     if (devPath != m_device.path())
@@ -357,7 +364,6 @@ void WirelessList::deactiveAP()
 void WirelessList::needSecrets(const QString &info)
 {
     const QJsonObject infoObject = QJsonDocument::fromJson(info.toUtf8()).object();
-
     const QString connPath = infoObject.value("ConnectionPath").toString();
     const QString security = infoObject.value("SettingName").toString();
     const QString ssid = infoObject.value("ConnectionId").toString();
@@ -384,8 +390,9 @@ void WirelessList::needSecrets(const QString &info)
     m_pwdDialog->setTitle(tr("Password required to connect to <font color=\"#faca57\">%1</font>").arg(ssid));
 
     // clear old config
-    m_pwdDialog->setTextEchoMode(QLineEdit::Password);
     m_pwdDialog->setTextValue(QString());
+    m_pwdDialog->setTextAlert(true);
+    m_pwdDialog->setOkButtonEnabled(false);
 
     // check if controlcenter handle this request
 //    QDBusInterface iface("com.deepin.dde.ControlCenter",

@@ -45,6 +45,7 @@ private slots:
     void onActiveAPChanged();
     void pwdDialogAccepted();
     void pwdDialogCanceled();
+    void onPwdDialogTextChanged(const QString &text);
     void deviceEnabled(const QString &devPath, const bool enable);
     void activateAP(const QDBusObjectPath &apPath, const QString &ssid);
     void deactiveAP();
