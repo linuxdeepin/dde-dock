@@ -98,42 +98,42 @@ func doGetRelatedVsections(data connectionData, keepAll bool) (vsections []strin
 	case connectionWired:
 		vsections = []string{
 			nm.NM_SETTING_VS_GENERAL,
-			nm.NM_SETTING_VS_ETHERNET,
 			nm.NM_SETTING_VS_SECURITY,
 			nm.NM_SETTING_VS_IPV4,
 			nm.NM_SETTING_VS_IPV6,
+			nm.NM_SETTING_VS_ETHERNET,
 		}
 	case connectionWireless:
 		vsections = []string{
 			nm.NM_SETTING_VS_GENERAL,
-			nm.NM_SETTING_VS_WIFI,
 			nm.NM_SETTING_VS_SECURITY,
 			nm.NM_SETTING_VS_IPV4,
 			nm.NM_SETTING_VS_IPV6,
+			nm.NM_SETTING_VS_WIFI,
 		}
 	case connectionWirelessAdhoc:
 		vsections = []string{
 			nm.NM_SETTING_VS_GENERAL,
-			nm.NM_SETTING_VS_WIFI,
 			nm.NM_SETTING_VS_SECURITY,
 			nm.NM_SETTING_VS_IPV4,
 			nm.NM_SETTING_VS_IPV6,
+			nm.NM_SETTING_VS_WIFI,
 		}
 	case connectionWirelessHotspot:
 		vsections = []string{
 			nm.NM_SETTING_VS_GENERAL,
-			nm.NM_SETTING_VS_WIFI,
 			nm.NM_SETTING_VS_SECURITY,
-			nm.NM_SETTING_VS_IPV4,
-			nm.NM_SETTING_VS_IPV6,
+			// nm.NM_SETTING_VS_IPV4,
+			// nm.NM_SETTING_VS_IPV6,
+			nm.NM_SETTING_VS_WIFI,
 		}
 	case connectionPppoe:
 		vsections = []string{
 			nm.NM_SETTING_VS_GENERAL,
-			nm.NM_SETTING_VS_ETHERNET,
 			nm.NM_SETTING_VS_PPPOE,
-			nm.NM_SETTING_VS_PPP,
 			nm.NM_SETTING_VS_IPV4,
+			nm.NM_SETTING_VS_ETHERNET,
+			nm.NM_SETTING_VS_PPP,
 		}
 	case connectionVpnL2tp:
 		vsections = []string{

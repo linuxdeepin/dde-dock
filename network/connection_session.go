@@ -421,9 +421,9 @@ func (s *ConnectionSession) GetAllKeys() (infoJSON string) {
 	for _, vsection := range vsections {
 		if sectionInfo, ok := virtualSections[vsection]; ok {
 			sectionInfo.fixExpanded(s.data)
-			for _, keyInfo := range sectionInfo.Keys {
-				keyInfo.fixReadonly(s.data)
-			}
+			// for _, keyInfo := range sectionInfo.Keys {
+			// keyInfo.fixReadonly(s.data)
+			// }
 			allVsectionInfo = append(allVsectionInfo, sectionInfo)
 		} else {
 			logger.Errorf("get virtaul section info failed: %s", allVsectionInfo)

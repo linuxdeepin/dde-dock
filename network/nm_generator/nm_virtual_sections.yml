@@ -271,10 +271,39 @@
     Section: 802-1x
     DisplayName: Identity
     WidgetType: EditLineTextInput
+  - KeyValue: password-flags
+    Section: 802-1x
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+    AlwaysUpdate: true
+  - KeyValue: password
+    Section: 802-1x
+    DisplayName: Password
+    WidgetType: EditLinePasswordInput
   - KeyValue: anonymous-identity
     Section: 802-1x
     DisplayName: Anonymous ID
     WidgetType: EditLineTextInput
+  - KeyValue: private-key-password-flags
+    Section: 802-1x
+    DisplayName: Ask for Pwd
+    WidgetType: EditLineComboBox
+  - KeyValue: private-key-password
+    Section: 802-1x
+    DisplayName: Private Pwd
+    WidgetType: EditLinePasswordInput
+  - KeyValue: vk-private-key
+    Section: 802-1x
+    DisplayName: Private Key
+    WidgetType: EditLineFileChooser
+    VKeyInfo:
+      VirtualKeyName: NM_SETTING_VK_802_1X_PRIVATE_KEY
+      Type: ktypeString
+      VkType: vkTypeWrapper
+      RelatedKeys:
+      - NM_SETTING_802_1X_PRIVATE_KEY
+      ChildKey: false
+      Optional: false
   - KeyValue: vk-ca-cert
     Section: 802-1x
     DisplayName: CA Cert
@@ -324,35 +353,6 @@
     DisplayName: Inner Auth
     WidgetType: EditLineComboBox
     AlwaysUpdate: true
-  - KeyValue: vk-private-key
-    Section: 802-1x
-    DisplayName: Private Key
-    WidgetType: EditLineFileChooser
-    VKeyInfo:
-      VirtualKeyName: NM_SETTING_VK_802_1X_PRIVATE_KEY
-      Type: ktypeString
-      VkType: vkTypeWrapper
-      RelatedKeys:
-      - NM_SETTING_802_1X_PRIVATE_KEY
-      ChildKey: false
-      Optional: false
-  - KeyValue: password-flags
-    Section: 802-1x
-    DisplayName: Ask for Pwd
-    WidgetType: EditLineComboBox
-    AlwaysUpdate: true
-  - KeyValue: password
-    Section: 802-1x
-    DisplayName: Password
-    WidgetType: EditLinePasswordInput
-  - KeyValue: private-key-password-flags
-    Section: 802-1x
-    DisplayName: Ask for Pwd
-    WidgetType: EditLineComboBox
-  - KeyValue: private-key-password
-    Section: 802-1x
-    DisplayName: Private Pwd
-    WidgetType: EditLinePasswordInput
 - VirtaulSectionName: NM_SETTING_VS_WIFI
   Value: vs-wifi
   DisplayName: Wi-Fi

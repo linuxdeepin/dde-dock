@@ -90,18 +90,18 @@ func initVirtualSections() {
 			&GeneralKeyInfo{Section: "802-11-wireless-security", Key: "psk", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "vk-eap", Name: Tr("EAP Auth"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "identity", Name: Tr("Identity"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-1x", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-1x", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "anonymous-identity", Name: Tr("Anonymous ID"), WidgetType: "EditLineTextInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-1x", Key: "private-key-password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-1x", Key: "private-key-password", Name: Tr("Private Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
+			&GeneralKeyInfo{Section: "802-1x", Key: "vk-private-key", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "vk-ca-cert", Name: Tr("CA Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "vk-client-cert", Name: Tr("User Cert"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "phase1-fast-provisioning", Name: Tr("Provisioning"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "vk-pac-file", Name: Tr("PAC file"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "phase1-peapver", Name: Tr("PEAP Version"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 			&GeneralKeyInfo{Section: "802-1x", Key: "phase2-auth", Name: Tr("Inner Auth"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-1x", Key: "vk-private-key", Name: Tr("Private Key"), WidgetType: "EditLineFileChooser", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-1x", Key: "password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: true, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-1x", Key: "password", Name: Tr("Password"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-1x", Key: "private-key-password-flags", Name: Tr("Ask for Pwd"), WidgetType: "EditLineComboBox", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
-			&GeneralKeyInfo{Section: "802-1x", Key: "private-key-password", Name: Tr("Private Pwd"), WidgetType: "EditLinePasswordInput", AlwaysUpdate: false, UseValueRange: false, MinValue: 0, MaxValue: 0},
 		},
 	}
 	virtualSections["vs-wifi"] = VsectionInfo{
@@ -467,10 +467,10 @@ var virtualKeys = []vkeyInfo{
 	{value: "vk-enable-8021x", ktype: ktypeBoolean, vkType: vkTypeController, relatedSection: "vs-security", relatedKeys: []string{}, childKey: false, optional: false},
 	{value: "vk-key-mgmt", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-11-wireless-security", relatedKeys: []string{nm.NM_SETTING_WIRELESS_SECURITY_KEY_MGMT}, childKey: false, optional: false},
 	{value: "vk-eap", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_EAP}, childKey: false, optional: false},
+	{value: "vk-private-key", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_PRIVATE_KEY}, childKey: false, optional: false},
 	{value: "vk-ca-cert", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_CA_CERT}, childKey: false, optional: false},
 	{value: "vk-client-cert", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_CLIENT_CERT}, childKey: false, optional: false},
 	{value: "vk-pac-file", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_PAC_FILE}, childKey: false, optional: false},
-	{value: "vk-private-key", ktype: ktypeString, vkType: vkTypeWrapper, relatedSection: "802-1x", relatedKeys: []string{nm.NM_SETTING_802_1X_PRIVATE_KEY}, childKey: false, optional: false},
 	{value: "vk-enable-mtu", ktype: ktypeBoolean, vkType: vkTypeEnableWrapper, relatedSection: "802-11-wireless", relatedKeys: []string{nm.NM_SETTING_WIRELESS_MTU}, childKey: false, optional: false},
 	{value: "vk-enable-lcp-echo", ktype: ktypeBoolean, vkType: vkTypeWrapper, relatedSection: "ppp", relatedKeys: []string{nm.NM_SETTING_PPP_LCP_ECHO_FAILURE, nm.NM_SETTING_PPP_LCP_ECHO_INTERVAL}, childKey: false, optional: false},
 	{value: "vk-vpn-type", ktype: ktypeString, vkType: vkTypeController, relatedSection: "vs-vpn", relatedKeys: []string{}, childKey: false, optional: false},
@@ -537,6 +537,9 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 	if section == "802-1x" && key == "vk-eap" {
 		return getSettingVk8021xEapJSON(data)
 	}
+	if section == "802-1x" && key == "vk-private-key" {
+		return getSettingVk8021xPrivateKeyJSON(data)
+	}
 	if section == "802-1x" && key == "vk-ca-cert" {
 		return getSettingVk8021xCaCertJSON(data)
 	}
@@ -545,9 +548,6 @@ func generalGetVkeyJSON(data connectionData, section, key string) (valueJSON str
 	}
 	if section == "802-1x" && key == "vk-pac-file" {
 		return getSettingVk8021xPacFileJSON(data)
-	}
-	if section == "802-1x" && key == "vk-private-key" {
-		return getSettingVk8021xPrivateKeyJSON(data)
 	}
 	if section == "802-11-wireless" && key == "vk-enable-mtu" {
 		return getSettingVkWirelessEnableMtuJSON(data)
@@ -692,6 +692,10 @@ func generalSetVkeyJSON(data connectionData, section, key string, valueJSON stri
 		err = logicSetSettingVk8021xEapJSON(data, valueJSON)
 		return
 	}
+	if section == "802-1x" && key == "vk-private-key" {
+		err = logicSetSettingVk8021xPrivateKeyJSON(data, valueJSON)
+		return
+	}
 	if section == "802-1x" && key == "vk-ca-cert" {
 		err = logicSetSettingVk8021xCaCertJSON(data, valueJSON)
 		return
@@ -702,10 +706,6 @@ func generalSetVkeyJSON(data connectionData, section, key string, valueJSON stri
 	}
 	if section == "802-1x" && key == "vk-pac-file" {
 		err = logicSetSettingVk8021xPacFileJSON(data, valueJSON)
-		return
-	}
-	if section == "802-1x" && key == "vk-private-key" {
-		err = logicSetSettingVk8021xPrivateKeyJSON(data, valueJSON)
 		return
 	}
 	if section == "802-11-wireless" && key == "vk-enable-mtu" {
@@ -873,6 +873,10 @@ func getSettingVk8021xEapJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xEap(data))
 	return
 }
+func getSettingVk8021xPrivateKeyJSON(data connectionData) (valueJSON string) {
+	valueJSON, _ = marshalJSON(getSettingVk8021xPrivateKey(data))
+	return
+}
 func getSettingVk8021xCaCertJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xCaCert(data))
 	return
@@ -883,10 +887,6 @@ func getSettingVk8021xClientCertJSON(data connectionData) (valueJSON string) {
 }
 func getSettingVk8021xPacFileJSON(data connectionData) (valueJSON string) {
 	valueJSON, _ = marshalJSON(getSettingVk8021xPacFile(data))
-	return
-}
-func getSettingVk8021xPrivateKeyJSON(data connectionData) (valueJSON string) {
-	valueJSON, _ = marshalJSON(getSettingVk8021xPrivateKey(data))
 	return
 }
 func getSettingVkWirelessEnableMtuJSON(data connectionData) (valueJSON string) {
@@ -1051,6 +1051,10 @@ func logicSetSettingVk8021xEapJSON(data connectionData, valueJSON string) (err e
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xEap(data, value)
 }
+func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string) (err error) {
+	value, _ := jsonToKeyValueString(valueJSON)
+	return logicSetSettingVk8021xPrivateKey(data, value)
+}
 func logicSetSettingVk8021xCaCertJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xCaCert(data, value)
@@ -1062,10 +1066,6 @@ func logicSetSettingVk8021xClientCertJSON(data connectionData, valueJSON string)
 func logicSetSettingVk8021xPacFileJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueString(valueJSON)
 	return logicSetSettingVk8021xPacFile(data, value)
-}
-func logicSetSettingVk8021xPrivateKeyJSON(data connectionData, valueJSON string) (err error) {
-	value, _ := jsonToKeyValueString(valueJSON)
-	return logicSetSettingVk8021xPrivateKey(data, value)
 }
 func logicSetSettingVkWirelessEnableMtuJSON(data connectionData, valueJSON string) (err error) {
 	value, _ := jsonToKeyValueBoolean(valueJSON)
