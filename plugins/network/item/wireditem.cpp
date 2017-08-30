@@ -15,8 +15,8 @@ WiredItem::WiredItem(const QString &path)
 {
 //    QIcon::setThemeName("deepin");
 
-    m_delayTimer->setSingleShot(true);
-    m_delayTimer->setInterval(20);
+    m_delayTimer->setSingleShot(false);
+    m_delayTimer->setInterval(200);
 
     m_itemTips->setObjectName("wired-" + path);
     m_itemTips->setVisible(false);
@@ -122,11 +122,22 @@ void WiredItem::reloadIcon()
     } else {
         NetworkManager::GlobalNetworkState gState = m_networkManager->globalNetworkState();
 
+        if (gState == NetworkManager::Connecting) {
+            m_delayTimer->start();
+            const quint64 index = QDateTime::currentMSecsSinceEpoch() / 200;
+            const int num = (index % 5) + 1;
+            m_icon = QPixmap(QString(":/wired/resources/wired/network-wired-symbolic-connecting%1.svg").arg(num));
+            update();
+            return;
+        }
+
         if (gState == NetworkManager::ConnectedGlobal)
             iconName.append("online");
         else
             iconName.append("idle");
     }
+
+    m_delayTimer->stop();
 
     if (displayMode == Dock::Efficient)
         iconName.append("-symbolic");

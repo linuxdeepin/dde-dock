@@ -4,6 +4,13 @@
         <file>resources/wired/wired-connected.svg</file>
         <file>resources/wired/wired-disconnected-small.svg</file>
         <file>resources/wired/wired-disconnected.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting1.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting2.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting3.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting4.svg</file>
+        <file>resources/wired/network-wired-symbolic-connecting5.svg</file>
+        <file>resources/wired/wired-error-small.svg</file>
+        <file>resources/wired/wired-unaccessable-small.svg</file>
     </qresource>
     <qresource prefix="/wireless">
         <file>resources/wireless/wireless-0.svg</file>
