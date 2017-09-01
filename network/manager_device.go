@@ -31,8 +31,8 @@ type device struct {
 	Path          dbus.ObjectPath
 	State         uint32
 	Interface     string
+	ClonedAddress string
 	HwAddress     string
-	PermHwAddress string
 	Driver        string
 	Managed       bool
 
@@ -122,14 +122,14 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 			// for mac address clone
 			dev.nmDevWired.HwAddress.ConnectChanged(func() {
 				v := dev.nmDevWired.HwAddress.Get()
-				if v == dev.HwAddress {
+				if v == dev.ClonedAddress {
 					return
 				}
-				dev.HwAddress = v
+				dev.ClonedAddress = v
 				m.setPropDevices()
 			})
-			dev.HwAddress = dev.nmDevWired.HwAddress.Get()
-			dev.PermHwAddress = dev.nmDevWired.PermHwAddress.Get()
+			dev.ClonedAddress = dev.nmDevWired.HwAddress.Get()
+			dev.HwAddress = dev.nmDevWired.PermHwAddress.Get()
 		}
 		if nmHasSystemSettingsModifyPermission() {
 			m.ensureWiredConnectionExists(dev.Path, true)
@@ -137,8 +137,8 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 	case nm.NM_DEVICE_TYPE_WIFI:
 		if nmDevWireless, err := nmNewDeviceWireless(dev.Path); err == nil {
 			dev.nmDevWireless = nmDevWireless
-			dev.HwAddress = nmDevWireless.HwAddress.Get()
-			dev.PermHwAddress = nmDevWireless.PermHwAddress.Get()
+			dev.ClonedAddress = nmDevWireless.HwAddress.Get()
+			dev.HwAddress = nmDevWireless.PermHwAddress.Get()
 
 			// connect property, about wireless active access point
 			dev.nmDevWireless.ActiveAccessPoint.ConnectChanged(func() {
@@ -155,10 +155,10 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 
 			dev.nmDevWireless.HwAddress.ConnectChanged(func() {
 				v := dev.nmDevWireless.HwAddress.Get()
-				if v == dev.HwAddress {
+				if v == dev.ClonedAddress {
 					return
 				}
-				dev.HwAddress = v
+				dev.ClonedAddress = v
 				m.setPropDevices()
 			})
 			// connect signals AccessPointAdded() and AccessPointRemoved()
