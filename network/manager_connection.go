@@ -250,6 +250,7 @@ func (m *Manager) GetWiredConnectionUuid(wiredDevPath dbus.ObjectPath) (uuid str
 }
 
 func (m *Manager) generalEnsureUniqueConnectionExists(devPath dbus.ObjectPath, active bool) (cpath dbus.ObjectPath, exists bool, err error) {
+	cpath = "/"
 	switch nmGetDeviceType(devPath) {
 	case nm.NM_DEVICE_TYPE_ETHERNET:
 		cpath, exists, err = m.ensureWiredConnectionExists(devPath, active)
@@ -446,17 +447,20 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 // special a valid devPath just left it as "/".
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
-	if isNmObjectPathValid(devPath) && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
-		var exists bool
-		cpath, exists, err = m.generalEnsureUniqueConnectionExists(devPath, true)
-		if !exists {
-			// connection will be activated in
-			// generalEnsureUniqueConnectionExists() if not exists
-			return
-		}
+	cpath = "/"
+	if !isNmObjectPathValid(devPath) {
+		err = fmt.Errorf("Invalid device path: %v", devPath)
+		logger.Warning("ActivateConnection invalid device path:", devPath, uuid)
+		return
 	}
+
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
+		// if not exists, connection will be activated in
+		// generalEnsureUniqueConnectionExists() if not exists
+		if nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
+			cpath, _, err = m.generalEnsureUniqueConnectionExists(devPath, true)
+		}
 		return
 	}
 	_, err = nmActivateConnection(cpath, devPath)

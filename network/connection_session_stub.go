@@ -45,12 +45,14 @@ func (s *ConnectionSession) setPropType() {
 }
 
 func (s *ConnectionSession) setPropAllowDelete() {
-	if !s.connectionExists || (isNmObjectPathValid(s.devPath) &&
-		nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid) {
-		s.AllowDelete = false
-	} else {
-		s.AllowDelete = true
-	}
+	//any connection was allowed to deleted
+	//if !s.connectionExists || (isNmObjectPathValid(s.devPath) &&
+	//	nmGeneralGetDeviceUniqueUuid(s.devPath) == s.Uuid) {
+	//	s.AllowDelete = false
+	//} else {
+	//	s.AllowDelete = true
+	//}
+	s.AllowDelete = true
 	dbus.NotifyChange(s, "AllowDelete")
 }
 

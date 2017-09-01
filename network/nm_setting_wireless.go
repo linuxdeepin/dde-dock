@@ -94,7 +94,7 @@ func newWirelessHotspotConnectionForDevice(id, uuid string, devPath dbus.ObjectP
 	logger.Infof("new wireless hotspot connection, id=%s, uuid=%s, devPath=%s", id, uuid, devPath)
 	data := newWirelessHotspotConnectionData(id, uuid)
 	setSettingConnectionInterfaceName(data, nmGetDeviceInterface(devPath))
-	setSettingWirelessSsid(data, []byte(os.Getenv("USER")+"-hotspot"))
+	setSettingWirelessSsid(data, []byte(os.Getenv("USER")))
 	setSettingWirelessSecurityKeyMgmt(data, "none")
 	hwAddr, _ := nmGeneralGetDeviceHwAddr(devPath, true)
 	setSettingWirelessMacAddress(data, convertMacAddressToArrayByte(hwAddr))
