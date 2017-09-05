@@ -257,6 +257,12 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QStringLiteral("SetProxyMethod"), argumentList);
     }
 
+    inline QDBusPendingReply<> RequestWirelessScan()
+    {
+        QList<QVariant> argumentList;
+        return asyncCallWithArgumentList(QStringLiteral("RequestWirelessScan"), argumentList);
+    }
+
 Q_SIGNALS: // SIGNALS
     void AccessPointAdded(const QString &in0, const QString &in1);
     void AccessPointPropertiesChanged(const QString &in0, const QString &in1);

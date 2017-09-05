@@ -1,5 +1,6 @@
 #include "devicecontrolwidget.h"
 #include "horizontalseperator.h"
+#include "refreshbutton.h"
 
 #include <QHBoxLayout>
 #include <QDebug>
@@ -15,8 +16,13 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     m_switchBtn = new DSwitchButton;
 
+    RefreshButton *refreshBtn = new RefreshButton;
+    refreshBtn->setVisible(m_switchBtn->checked());
+
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
+    infoLayout->addWidget(refreshBtn);
+    infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
     infoLayout->setContentsMargins(15, 0, 5, 0);
@@ -37,6 +43,8 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     setFixedHeight(30);
 
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);
+    connect(m_switchBtn, &DSwitchButton::checkedChanged, refreshBtn, &RefreshButton::setVisible);
+    connect(refreshBtn, &RefreshButton::clicked, this, &DeviceControlWidget::requestRefresh);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)

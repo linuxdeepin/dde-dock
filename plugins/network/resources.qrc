@@ -23,6 +23,9 @@
         <file>resources/wireless/disconnect_pressed.png</file>
         <file>resources/wireless/disconnect.png</file>
         <file>resources/wireless/selected.png</file>
+        <file>resources/wireless/refresh_press.svg</file>
+        <file>resources/wireless/refresh_normal.svg</file>
+        <file>resources/wireless/refresh_hover.svg</file>
     </qresource>
     <qresource prefix="/wireless/indicator">
         <file>resources/wireless/spinner14/Spinner01.png</file>

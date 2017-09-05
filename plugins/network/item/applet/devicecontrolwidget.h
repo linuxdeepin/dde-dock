@@ -21,6 +21,7 @@ public:
 
 signals:
     void deviceEnableChanged(const bool enable) const;
+    void requestRefresh() const;
 
 private:
     QLabel *m_deviceName;

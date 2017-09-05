@@ -67,6 +67,7 @@ WirelessList::WirelessList(const QSet<NetworkDevice>::const_iterator &deviceIter
     connect(m_networkInter, &DBusNetwork::DeviceEnabled, this, &WirelessList::deviceEnabled);
 
     connect(m_controlPanel, &DeviceControlWidget::deviceEnableChanged, this, &WirelessList::deviceEnableChanged);
+    connect(m_controlPanel, &DeviceControlWidget::requestRefresh, m_networkInter, &DBusNetwork::RequestWirelessScan);
 
     connect(m_updateAPTimer, &QTimer::timeout, this, &WirelessList::updateAPList);
 
