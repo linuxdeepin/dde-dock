@@ -21,6 +21,8 @@ func init() {
 
 type Daemon struct {
 	*loader.ModuleBase
+	ticker   *time.Ticker
+	stopChan chan struct{}
 }
 
 func NewDaemon(logger *log.Logger) *Daemon {
@@ -38,24 +40,46 @@ var (
 )
 
 func (d *Daemon) Start() error {
-	fs, err := utils.QueryFilesytemInfo(os.Getenv("HOME"))
-	if err != nil {
-		logger.Error("Failed to get filesystem info:", err)
-		return err
-	}
-	if fs.AvailSize > fsMinLeftSpace {
+	if d.stopChan != nil {
 		return nil
 	}
 
+	d.ticker = time.NewTicker(time.Minute * 1)
+	d.stopChan = make(chan struct{})
 	go func() {
-		time.Sleep(time.Second * 30)
-		sendNotify("dialog-warning", "",
-			Tr("Insufficient disk space, please clean up in time!"))
+		for {
+			select {
+			case <-d.ticker.C:
+				fs, err := utils.QueryFilesytemInfo(os.Getenv("HOME"))
+				if err != nil {
+					logger.Error("Failed to get filesystem info:", err)
+					break
+				}
+				logger.Debug("Home filesystem info(total, free, avail):",
+					fs.TotalSize, fs.FreeSize, fs.AvailSize)
+				if fs.AvailSize > fsMinLeftSpace {
+					break
+				}
+				sendNotify("dialog-warning", "",
+					Tr("Insufficient disk space, please clean up in time!"))
+			case <-d.stopChan:
+				logger.Debug("Stop housekeeping")
+				if d.ticker != nil {
+					d.ticker.Stop()
+					d.ticker = nil
+				}
+				return
+			}
+		}
 	}()
 	return nil
 }
 
-func (*Daemon) Stop() error {
+func (d *Daemon) Stop() error {
+	if d.stopChan != nil {
+		close(d.stopChan)
+		d.stopChan = nil
+	}
 	return nil
 }
 
