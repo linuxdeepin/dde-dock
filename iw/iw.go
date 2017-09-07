@@ -1,4 +1,4 @@
-package miracast
+package iw
 
 import (
 	"fmt"
@@ -9,16 +9,16 @@ import (
 	"strings"
 )
 
-type WirelessInfo struct {
+type DeviceInfo struct {
 	Name       string
 	MacAddress string
 	Ciphers    []string
 	IFCModes   []string
 	Commands   []string
 }
-type WirelessInfos []*WirelessInfo
+type DeviceInfos []*DeviceInfo
 
-func ListWirelessInfo() (WirelessInfos, error) {
+func ListDeviceInfo() (DeviceInfos, error) {
 	var envPath = os.Getenv("PATH")
 	os.Setenv("PATH", "/sbin:"+envPath)
 	defer os.Setenv("PATH", envPath)
@@ -30,8 +30,8 @@ func ListWirelessInfo() (WirelessInfos, error) {
 	return parseIwOutputs(outputs), nil
 }
 
-func (infos WirelessInfos) ListMiracastDevice() WirelessInfos {
-	var ret WirelessInfos
+func (infos DeviceInfos) ListMiracastDevice() DeviceInfos {
+	var ret DeviceInfos
 	for _, info := range infos {
 		if !info.SupportedMiracast() {
 			continue
@@ -41,8 +41,8 @@ func (infos WirelessInfos) ListMiracastDevice() WirelessInfos {
 	return ret
 }
 
-func (infos WirelessInfos) ListHotspotDevice() WirelessInfos {
-	var ret WirelessInfos
+func (infos DeviceInfos) ListHotspotDevice() DeviceInfos {
+	var ret DeviceInfos
 	for _, info := range infos {
 		if !info.SupportedHotspot() {
 			continue
@@ -52,28 +52,28 @@ func (infos WirelessInfos) ListHotspotDevice() WirelessInfos {
 	return ret
 }
 
-func (infos WirelessInfos) Get(macAddress string) *WirelessInfo {
+func (infos DeviceInfos) Get(macAddress string) *DeviceInfo {
 	for _, info := range infos {
-		if info.MacAddress == macAddress {
+		if strings.ToLower(info.MacAddress) == strings.ToLower(macAddress) {
 			return info
 		}
 	}
 	return nil
 }
 
-func (info *WirelessInfo) SupportedHotspot() bool {
+func (info *DeviceInfo) SupportedHotspot() bool {
 	return strv.Strv(info.IFCModes).Contains("AP")
 }
 
-func (info *WirelessInfo) SupportedMiracast() bool {
+func (info *DeviceInfo) SupportedMiracast() bool {
 	list := strv.Strv(info.IFCModes)
 	return list.Contains("P2P-client") &&
 		list.Contains("P2P-GO")
 	// list.Contains("P2P-device")
 }
 
-func debugWirelessInfos() {
-	infos, err := ListWirelessInfo()
+func debugDeviceInfos() {
+	infos, err := ListDeviceInfo()
 	if err != nil {
 		fmt.Println("Failed to list wireless devices:", err)
 		return
@@ -88,10 +88,10 @@ func debugWirelessInfos() {
 	}
 }
 
-func parseIwOutputs(contents []byte) WirelessInfos {
+func parseIwOutputs(contents []byte) DeviceInfos {
 	lines := strings.Split(string(contents), "\n")
 	length := len(lines)
-	var infos WirelessInfos
+	var infos DeviceInfos
 	for i := 0; i < length; {
 		line := lines[i]
 		if len(line) == 0 {
@@ -101,7 +101,7 @@ func parseIwOutputs(contents []byte) WirelessInfos {
 
 		line = strings.TrimSpace(line)
 		if strings.Contains(line, "Wiphy phy") {
-			infos = append(infos, new(WirelessInfo))
+			infos = append(infos, new(DeviceInfo))
 			name := strings.Split(line, "Wiphy ")[1]
 			infos[len(infos)-1].Name = name
 			infos[len(infos)-1].MacAddress = getMacAddressByFile(macAddressFile(name))

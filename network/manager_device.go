@@ -151,7 +151,7 @@ func (m *Manager) newDevice(devPath dbus.ObjectPath) (dev *device, err error) {
 				m.setPropDevices()
 			})
 			dev.ActiveAp = nmDevWireless.ActiveAccessPoint.Get()
-			dev.SupportHotspot = isWirelessDeviceSuportHotspot(nmDev.Interface.Get())
+			dev.SupportHotspot = isWirelessDeviceSuportHotspot(nmDevWireless.PermHwAddress.Get())
 
 			dev.nmDevWireless.HwAddress.ConnectChanged(func() {
 				v := dev.nmDevWireless.HwAddress.Get()

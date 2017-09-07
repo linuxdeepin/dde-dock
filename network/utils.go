@@ -15,9 +15,9 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"pkg.deepin.io/dde/daemon/iw"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/utils"
-	"regexp"
 	"strings"
 )
 
@@ -197,46 +197,16 @@ func execWithIO(name string, arg ...string) (process *os.Process, stdin io.Write
 }
 
 // FIXME: temporary solution, please use libnl instead later
-func isWirelessDeviceSuportHotspot(ifc string) (support bool) {
-	var stdout, stderr string
-	var err error
-	var phynum, modes string
-	var submatches []string
-
-	// fixed 'iw' not in PATH
-	pathEnv := os.Getenv("PATH")
-	defer os.Setenv("PATH", pathEnv)
-	os.Setenv("PATH", "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin")
-
-	// get phy number for the device
-	stdout, stderr, err = utils.ExecAndWait(5, iwBin, "dev", ifc, "info")
-	if len(stderr) > 0 || err != nil {
-		logger.Warningf("looks %s not exists, just let %s support hotspot mode: %s %s", iwBin, ifc, err, stderr)
-		support = true
-		return
+func isWirelessDeviceSuportHotspot(macAddress string) bool {
+	devices, err := iw.ListDeviceInfo()
+	if err != nil {
+		logger.Warning("Failed to detect hotspot:", macAddress, err)
+		return false
 	}
-	regPhyNum := regexp.MustCompile("wiphy *([0-9]+)")
-	submatches = regPhyNum.FindStringSubmatch(stdout)
-	if len(submatches) >= 2 {
-		phynum = submatches[1]
+	dev := devices.Get(macAddress)
+	if dev == nil {
+		logger.Warning("Failed to find device:", macAddress)
+		return false
 	}
-
-	// get all supported modes
-	stdout, stderr, err = utils.ExecAndWait(5, iwBin, "phy", "phy"+phynum, "info")
-	if len(stderr) > 0 || err != nil {
-		logger.Error(iwBin, "phy", "phy"+phynum, "info:", err, stderr)
-		return
-	}
-	regModes := regexp.MustCompile("(?ims)Supported interface modes:(.*)software interface modes")
-	submatches = regModes.FindStringSubmatch(stdout)
-	if len(submatches) >= 2 {
-		modes = submatches[1]
-	}
-
-	// check if support hotspot mode
-	if strings.Contains(modes, "AP") {
-		support = true
-	}
-
-	return
+	return dev.SupportedHotspot()
 }

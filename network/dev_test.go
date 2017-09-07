@@ -192,8 +192,8 @@ func (*testWrapper) TestLocalSupportedVpnTypes(c *C.C) {
 	fmt.Println(getLocalSupportedVpnTypes())
 }
 
-func (*testWrapper) TestIsWirelessDeviceSuportHotspot(c *C.C) {
-	fmt.Println("wlan0 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan0"))
-	fmt.Println("wlan1 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan1"))
-	fmt.Println("wlan3 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan3"))
-}
+//func (*testWrapper) TestIsWirelessDeviceSuportHotspot(c *C.C) {
+//	fmt.Println("wlan0 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan0"))
+//	fmt.Println("wlan1 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan1"))
+//	fmt.Println("wlan3 support hotspot mode:", isWirelessDeviceSuportHotspot("wlan3"))
+//}

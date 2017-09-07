@@ -2,6 +2,7 @@ package miracast
 
 import (
 	"dbus/org/freedesktop/miracle/wifi"
+	"pkg.deepin.io/dde/daemon/iw"
 	"pkg.deepin.io/lib/dbus"
 	"strings"
 	"sync"
@@ -61,7 +62,7 @@ func (link *LinkInfo) update() {
 }
 
 func (link *LinkInfo) hasP2PSupported() bool {
-	infos, err := ListWirelessInfo()
+	infos, err := iw.ListDeviceInfo()
 	if err != nil {
 		return false
 	}
