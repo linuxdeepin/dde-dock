@@ -127,7 +127,7 @@ func SetFamily(standard, monospace string, size float64) error {
 		}
 	*/
 
-	err := writeFontConfig(configContent(standard, monospace), DeepinFontConfig)
+	err := writeFontConfig(configContent(standInfo.Id, monoInfo.Id), DeepinFontConfig)
 	if err != nil {
 		return err
 	}
@@ -259,6 +259,20 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
+        <edit name="style" mode="assign" binding="strong">
+            <string>Regular</string>
+            <string>normal</string>
+            <string>Standard</string>
+            <string>Normale</string>
+            <string>Medium</string>
+            <string>Italic</string>
+            <string>Black</string>
+            <string>Light</string>
+            <string>Bold</string>
+            <string>BoldItalic</string>
+            <string>DemiLight</string>
+            <string>Thin</string>
+       </edit>
     </match>
 
     <match target="pattern">
@@ -269,6 +283,20 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
+        <edit name="style" mode="assign" binding="strong">
+            <string>Regular</string>
+            <string>normal</string>
+            <string>Standard</string>
+            <string>Normale</string>
+            <string>Medium</string>
+            <string>Italic</string>
+            <string>Black</string>
+            <string>Light</string>
+            <string>Bold</string>
+            <string>BoldItalic</string>
+            <string>DemiLight</string>
+            <string>Thin</string>
+       </edit>
     </match>
 
     <match target="pattern">
@@ -279,6 +307,20 @@ func configContent(standard, mono string) string {
             <string>%s</string>
             <string>%s</string>
         </edit>
+        <edit name="style" mode="assign" binding="strong">
+            <string>Regular</string>
+            <string>normal</string>
+            <string>Standard</string>
+            <string>Normale</string>
+            <string>Medium</string>
+            <string>Italic</string>
+            <string>Black</string>
+            <string>Light</string>
+            <string>Bold</string>
+            <string>BoldItalic</string>
+            <string>DemiLight</string>
+            <string>Thin</string>
+       </edit>
     </match>
 
     <match target="font">
