@@ -447,17 +447,16 @@ func (m *Manager) DeleteConnection(uuid string) (err error) {
 func (m *Manager) ActivateConnection(uuid string, devPath dbus.ObjectPath) (cpath dbus.ObjectPath, err error) {
 	logger.Debugf("ActivateConnection: uuid=%s, devPath=%s", uuid, devPath)
 	cpath = "/"
-	if !isNmObjectPathValid(devPath) {
-		err = fmt.Errorf("Invalid device path: %v", devPath)
-		logger.Warning("ActivateConnection invalid device path:", devPath, uuid)
+	if devPath == "" {
+		err = fmt.Errorf("Device path is empty")
+		logger.Warning("ActivateConnection empty device path:", uuid)
 		return
 	}
 
 	cpath, err = nmGetConnectionByUuid(uuid)
 	if err != nil {
-		// if not exists, connection will be activated in
-		// generalEnsureUniqueConnectionExists() if not exists
-		if nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
+		// connection will be activated in generalEnsureUniqueConnectionExists() if not exists
+		if devPath != "/" && nmGeneralGetDeviceUniqueUuid(devPath) == uuid {
 			cpath, _, err = m.generalEnsureUniqueConnectionExists(devPath, true)
 		}
 		return
