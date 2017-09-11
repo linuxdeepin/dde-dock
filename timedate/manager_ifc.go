@@ -39,7 +39,7 @@ func (m *Manager) SetDate(year, month, day, hour, min, sec, nsec int32) error {
 //
 // relative: if true, the passed usec value will be added to the current system time; if false, the current system time will be set to the passed usec value.
 func (m *Manager) SetTime(usec int64, relative bool) error {
-	err := m.td1.SetTime(usec, relative, true)
+	err := m.setter.SetTime(usec, relative)
 	if err != nil {
 		logger.Debug("SetTime failed:", err)
 	}
@@ -51,7 +51,7 @@ func (m *Manager) SetTime(usec int64, relative bool) error {
 //
 // useNTP: if true, enable ntp; else disable
 func (m *Manager) SetNTP(useNTP bool) error {
-	err := m.td1.SetNTP(useNTP, true)
+	err := m.setter.SetNTP(useNTP)
 	if err != nil {
 		logger.Debug("SetNTP failed:", err)
 	}
@@ -70,7 +70,7 @@ func (m *Manager) SetNTP(useNTP bool) error {
 //
 // fixSystem: if true, will use the RTC time to adjust the system clock; if false, the system time is written to the RTC taking the new setting into account.
 func (m *Manager) SetLocalRTC(localRTC, fixSystem bool) error {
-	err := m.td1.SetLocalRTC(localRTC, fixSystem, true)
+	err := m.setter.SetLocalRTC(localRTC, fixSystem)
 	if err != nil {
 		logger.Debug("SetLocalRTC failed:", err)
 	}
@@ -88,7 +88,7 @@ func (m *Manager) SetTimezone(zone string) error {
 		return zoneinfo.ErrZoneInvalid
 	}
 
-	err := m.td1.SetTimezone(zone, true)
+	err := m.setter.SetTimezone(zone)
 	if err != nil {
 		logger.Debug("SetTimezone failed:", err)
 		return err

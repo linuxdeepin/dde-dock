@@ -10,6 +10,7 @@
 package timedate
 
 import (
+	"dbus/com/deepin/daemon/timedated"
 	"dbus/org/freedesktop/timedate1"
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
@@ -44,6 +45,7 @@ type Manager struct {
 
 	settings *gio.Settings
 	td1      *timedate1.Timedate1
+	setter   *timedated.Timedated
 }
 
 // Create Manager, if create freedesktop timedate1 failed return error
@@ -54,6 +56,12 @@ func NewManager() (*Manager, error) {
 	m.td1, err = timedate1.NewTimedate1("org.freedesktop.timedate1",
 		"/org/freedesktop/timedate1")
 	if err != nil {
+		return nil, err
+	}
+	m.setter, err = timedated.NewTimedated("com.deepin.daemon.Timedated",
+		"/com/deepin/daemon/Timedated")
+	if err != nil {
+		timedate1.DestroyTimedate1(m.td1)
 		return nil, err
 	}
 
@@ -93,6 +101,10 @@ func (m *Manager) destroy() {
 	if m.td1 != nil {
 		timedate1.DestroyTimedate1(m.td1)
 		m.td1 = nil
+	}
+
+	if m.setter != nil {
+		m.setter = nil
 	}
 
 	dbus.UnInstallObject(m)

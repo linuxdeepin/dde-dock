@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-08-15 14:20+0800\n"
+"POT-Creation-Date: 2017-09-12 11:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,23 +127,23 @@ msgstr ""
 msgid "Failed to connect %q, automatically ignored"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:99
+#: ../../dock/app_entry_menu.go:96
 msgid "_Open"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:103
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:115
+#: ../../dock/app_entry_menu.go:112
 msgid "_Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:119
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:126
 msgid "_All windows"
 msgstr ""
 
@@ -151,7 +151,7 @@ msgstr ""
 msgid "Authentication is required to change the grub2 configuration"
 msgstr ""
 
-#: ../../housekeeping/init.go:53
+#: ../../housekeeping/init.go:64
 msgid "Insufficient disk space, please clean up in time!"
 msgstr ""
 
@@ -401,7 +401,7 @@ msgstr ""
 msgid "Protected EAP"
 msgstr ""
 
-#: ../../network/manager_connection.go:256 ../../network/nm_custom_type.go:218
+#: ../../network/manager_connection.go:272 ../../network/nm_custom_type.go:218
 msgid "Wired Connection"
 msgstr ""
 
@@ -620,7 +620,7 @@ msgstr ""
 #: ../../network/nm_setting_beans_gen.go:66
 #: ../../network/nm_setting_beans_gen.go:79
 #: ../../network/nm_setting_beans_gen.go:90
-#: ../../network/nm_setting_beans_gen.go:102
+#: ../../network/nm_setting_beans_gen.go:94
 #: ../../network/nm_setting_beans_gen.go:129
 #: ../../network/nm_setting_beans_gen.go:161
 #: ../../network/nm_setting_beans_gen.go:175
@@ -674,58 +674,7 @@ msgid "Identity"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:93
-msgid "Anonymous ID"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:94
-#: ../../network/nm_setting_beans_gen.go:164
-#: ../../network/nm_setting_beans_gen.go:176
-#: ../../network/nm_setting_beans_gen.go:192
-#: ../../network/nm_setting_beans_gen.go:262
-#: ../../network/nm_setting_beans_gen.go:281
-#: ../../network/nm_setting_beans_gen.go:384
-msgid "CA Cert"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:95
-#: ../../network/nm_setting_beans_gen.go:168
-#: ../../network/nm_setting_beans_gen.go:177
-#: ../../network/nm_setting_beans_gen.go:195
-#: ../../network/nm_setting_beans_gen.go:266
-#: ../../network/nm_setting_beans_gen.go:282
-#: ../../network/nm_setting_beans_gen.go:387
-msgid "User Cert"
-msgstr ""
-
 #: ../../network/nm_setting_beans_gen.go:96
-msgid "Provisioning"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:97
-msgid "PAC file"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:98
-msgid "PEAP Version"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:99
-msgid "Inner Auth"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:100
-#: ../../network/nm_setting_beans_gen.go:169
-#: ../../network/nm_setting_beans_gen.go:178
-#: ../../network/nm_setting_beans_gen.go:196
-#: ../../network/nm_setting_beans_gen.go:267
-#: ../../network/nm_setting_beans_gen.go:283
-#: ../../network/nm_setting_beans_gen.go:388
-#: ../../network/nm_setting_vpn_strongswan.go:76
-msgid "Private Key"
-msgstr ""
-
-#: ../../network/nm_setting_beans_gen.go:101
-#: ../../network/nm_setting_beans_gen.go:103
 #: ../../network/nm_setting_beans_gen.go:160
 #: ../../network/nm_setting_beans_gen.go:174
 #: ../../network/nm_setting_beans_gen.go:179
@@ -741,10 +690,61 @@ msgstr ""
 msgid "Ask for Pwd"
 msgstr ""
 
-#: ../../network/nm_setting_beans_gen.go:104
+#: ../../network/nm_setting_beans_gen.go:95
+msgid "Anonymous ID"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:97
 #: ../../network/nm_setting_beans_gen.go:180
 #: ../../network/nm_setting_beans_gen.go:285
 msgid "Private Pwd"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:98
+#: ../../network/nm_setting_beans_gen.go:169
+#: ../../network/nm_setting_beans_gen.go:178
+#: ../../network/nm_setting_beans_gen.go:196
+#: ../../network/nm_setting_beans_gen.go:267
+#: ../../network/nm_setting_beans_gen.go:283
+#: ../../network/nm_setting_beans_gen.go:388
+#: ../../network/nm_setting_vpn_strongswan.go:76
+msgid "Private Key"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:99
+#: ../../network/nm_setting_beans_gen.go:164
+#: ../../network/nm_setting_beans_gen.go:176
+#: ../../network/nm_setting_beans_gen.go:192
+#: ../../network/nm_setting_beans_gen.go:262
+#: ../../network/nm_setting_beans_gen.go:281
+#: ../../network/nm_setting_beans_gen.go:384
+msgid "CA Cert"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:100
+#: ../../network/nm_setting_beans_gen.go:168
+#: ../../network/nm_setting_beans_gen.go:177
+#: ../../network/nm_setting_beans_gen.go:195
+#: ../../network/nm_setting_beans_gen.go:266
+#: ../../network/nm_setting_beans_gen.go:282
+#: ../../network/nm_setting_beans_gen.go:387
+msgid "User Cert"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:101
+msgid "Provisioning"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:102
+msgid "PAC file"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:103
+msgid "PEAP Version"
+msgstr ""
+
+#: ../../network/nm_setting_beans_gen.go:104
+msgid "Inner Auth"
 msgstr ""
 
 #: ../../network/nm_setting_beans_gen.go:110
@@ -1872,7 +1872,7 @@ msgstr ""
 msgid "The connection was deleted from settings"
 msgstr ""
 
-#: ../../network/utils_dbus_nm.go:316
+#: ../../network/utils_dbus_nm.go:322
 msgid "Unknown"
 msgstr ""
 
@@ -1921,4 +1921,24 @@ msgstr ""
 
 #: ../../session/power/manager_events.go:124
 msgid "Computer will be in suspend mode, please plug in now"
+msgstr ""
+
+#: ../../system/timedated/manager_ifc.go:20
+msgid "Authentication is required to set the system time."
+msgstr ""
+
+#: ../../system/timedated/manager_ifc.go:33
+msgid "Authentication is required to set the system timezone."
+msgstr ""
+
+#: ../../system/timedated/manager_ifc.go:49
+msgid ""
+"Authentication is required to control whether the RTC stores the local or "
+"UTC time."
+msgstr ""
+
+#: ../../system/timedated/manager_ifc.go:64
+msgid ""
+"Authentication is required to control whether network time synchronization "
+"shall be enabled."
 msgstr ""
