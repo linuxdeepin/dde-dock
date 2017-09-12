@@ -10,9 +10,10 @@
 package launcher
 
 import (
-	. "github.com/smartystreets/goconvey/convey"
 	"os"
 	"testing"
+
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func Test_getAppIdByFilePath(t *testing.T) {
@@ -84,5 +85,17 @@ func Test_runeSliceDiff(t *testing.T) {
 		So(runesPush[0], ShouldEqual, 'p')
 		So(runesPush[1], ShouldEqual, 'i')
 		So(runesPush[2], ShouldEqual, 'n')
+	})
+}
+
+func Test_parseFlatpakAppCmdline(t *testing.T) {
+	Convey("test parseFlatpakAppCmdline", t, func() {
+		info, err := parseFlatpakAppCmdline(`/usr/bin/flatpak run --branch=master --arch=x86_64 --command=blender --file-forwarding org.blender.Blender @@ %f @@`)
+		So(err, ShouldBeNil)
+		So(info, ShouldResemble, &flatpakAppInfo{
+			name:   "org.blender.Blender",
+			arch:   "x86_64",
+			branch: "master",
+		})
 	})
 }
