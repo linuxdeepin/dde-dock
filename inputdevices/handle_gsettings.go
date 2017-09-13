@@ -113,6 +113,10 @@ func (tpad *Touchpad) handleGSettings() {
 			tpad.motionThreshold()
 		case tpadKeyScaling:
 			tpad.motionScaling()
+		case tpadKeyPalmDetect:
+			tpad.enablePalmDetect()
+		case tpadKeyPalmMinWidth, tpadKeyPalmMinZ:
+			tpad.setPalmDimensions()
 		}
 	})
 }

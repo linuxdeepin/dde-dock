@@ -38,6 +38,9 @@ const (
 	tpadKeyTapClick       = "tap-to-click"
 	tpadKeyScrollDelta    = "delta-scroll"
 	tpadKeyWhileTypingCmd = "disable-while-typing-cmd"
+	tpadKeyPalmDetect     = "palm-detect"
+	tpadKeyPalmMinWidth   = "palm-min-width"
+	tpadKeyPalmMinZ       = "palm-min-pressure"
 )
 
 const (
@@ -53,6 +56,7 @@ type Touchpad struct {
 	HorizScroll     *property.GSettingsBoolProperty `access:"readwrite"`
 	VertScroll      *property.GSettingsBoolProperty `access:"readwrite"`
 	TapClick        *property.GSettingsBoolProperty `access:"readwrite"`
+	PalmDetect      *property.GSettingsBoolProperty `access:"readwrite"`
 
 	MotionAcceleration *property.GSettingsFloatProperty `access:"readwrite"`
 	MotionThreshold    *property.GSettingsFloatProperty `access:"readwrite"`
@@ -61,6 +65,8 @@ type Touchpad struct {
 	DoubleClick   *property.GSettingsIntProperty `access:"readwrite"`
 	DragThreshold *property.GSettingsIntProperty `access:"readwrite"`
 	DeltaScroll   *property.GSettingsIntProperty `access:"readwrite"`
+	PalmMinWidth  *property.GSettingsIntProperty `access:"readwrite"`
+	PalmMinZ      *property.GSettingsIntProperty `access:"readwrite"`
 
 	Exist      bool
 	DeviceList string
@@ -109,6 +115,9 @@ func NewTouchpad() *Touchpad {
 	tpad.TapClick = property.NewGSettingsBoolProperty(
 		tpad, "TapClick",
 		tpad.setting, tpadKeyTapClick)
+	tpad.PalmDetect = property.NewGSettingsBoolProperty(
+		tpad, "PalmDetect",
+		tpad.setting, tpadKeyPalmDetect)
 
 	tpad.MotionAcceleration = property.NewGSettingsFloatProperty(
 		tpad, "MotionAcceleration",
@@ -123,6 +132,12 @@ func NewTouchpad() *Touchpad {
 	tpad.DeltaScroll = property.NewGSettingsIntProperty(
 		tpad, "DeltaScroll",
 		tpad.setting, tpadKeyScrollDelta)
+	tpad.PalmMinWidth = property.NewGSettingsIntProperty(
+		tpad, "PalmMinWidth",
+		tpad.setting, tpadKeyPalmMinWidth)
+	tpad.PalmMinZ = property.NewGSettingsIntProperty(
+		tpad, "PalmMinZ",
+		tpad.setting, tpadKeyPalmMinZ)
 
 	tpad.mouseSetting = gio.NewSettings(mouseSchema)
 	tpad.DoubleClick = property.NewGSettingsIntProperty(
@@ -152,6 +167,8 @@ func (tpad *Touchpad) init() {
 	tpad.motionThreshold()
 	tpad.motionScaling()
 	tpad.disableWhileTyping()
+	tpad.enablePalmDetect()
+	tpad.setPalmDimensions()
 }
 
 func (tpad *Touchpad) handleDeviceChanged() {
@@ -367,6 +384,27 @@ func (tpad *Touchpad) stopSyndaemon() {
 		logger.Warning("[stopSyndaemon] failed:", string(out), err)
 	}
 	os.Remove(syndaemonPidFile)
+}
+
+func (tpad *Touchpad) enablePalmDetect() {
+	enabled := tpad.PalmDetect.Get()
+	for _, dev := range tpad.devInfos {
+		err := dev.EnablePalmDetect(enabled)
+		if err != nil {
+			logger.Warning("[enablePalmDetect] failed to enable:", dev.Id, enabled, err)
+		}
+	}
+}
+
+func (tpad *Touchpad) setPalmDimensions() {
+	width := tpad.PalmMinWidth.Get()
+	z := tpad.PalmMinZ.Get()
+	for _, dev := range tpad.devInfos {
+		err := dev.SetPalmDimensions(width, z)
+		if err != nil {
+			logger.Warning("[setPalmDimensions] failed to set:", dev.Id, width, z, err)
+		}
+	}
 }
 
 func isSyndaemonExist(pidFile string) bool {
