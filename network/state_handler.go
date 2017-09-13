@@ -24,6 +24,7 @@ import "sync"
 import . "pkg.deepin.io/lib/gettext"
 import nmdbus "dbus/org/freedesktop/networkmanager"
 import "pkg.deepin.io/dde/daemon/network/nm"
+import "fmt"
 
 var vpnErrorTable = make(map[uint32]string)
 var deviceErrorTable = make(map[uint32]string)
@@ -121,10 +122,11 @@ type stateHandler struct {
 	locker  sync.Mutex
 }
 type deviceStateInfo struct {
-	nmDev   *nmdbus.Device
-	devUdi  string
-	devType uint32
-	aconnId string
+	nmDev          *nmdbus.Device
+	devUdi         string
+	devType        uint32
+	aconnId        string
+	connectionType string
 }
 
 func newStateHandler() (sh *stateHandler) {
@@ -187,8 +189,9 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 	sh.devices[path].devType = nmDev.DeviceType.Get()
 	sh.devices[path].devUdi = nmDev.Udi.Get()
 	if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
-		// remember active connection id if exists
+		// remember active connection id and type if exists
 		sh.devices[path].aconnId = getSettingConnectionId(data)
+		sh.devices[path].connectionType = getCustomConnectionType(data)
 	}
 
 	// connect signals
@@ -196,6 +199,11 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 		logger.Debugf("device state changed, %d => %d, reason[%d] %s", oldState, newState, reason, deviceErrorTable[reason])
 		sh.locker.Lock()
 		defer sh.locker.Unlock()
+		if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
+			// update active connection id and type if exists
+			sh.devices[path].aconnId = getSettingConnectionId(data)
+			sh.devices[path].connectionType = getCustomConnectionType(data)
+		}
 		dsi, ok := sh.devices[path]
 		if !ok {
 			// the device already been removed
@@ -206,11 +214,23 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 		case nm.NM_DEVICE_STATE_PREPARE:
 			if data, err := nmGetDeviceActiveConnectionData(path); err == nil {
 				dsi.aconnId = getSettingConnectionId(data)
+				icon := generalGetNotifyDisconnectedIcon(dsi.devType, path)
+				logger.Debug("--------[Prepare] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
+				if dsi.connectionType == connectionWirelessHotspot {
+					notify(icon, "", Tr("Try enabling hotspot"))
+				} else {
+					notify(icon, "", fmt.Sprintf(Tr("Try connecting %q"), dsi.aconnId))
+				}
 			}
 		case nm.NM_DEVICE_STATE_ACTIVATED:
 			icon := generalGetNotifyConnectedIcon(dsi.devType, path)
 			msg := dsi.aconnId
-			notify(icon, Tr("Connected"), msg)
+			logger.Debug("--------[Activated] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
+			if dsi.connectionType == connectionWirelessHotspot {
+				notify(icon, "", Tr("Hotspot share enabled"))
+			} else {
+				notify(icon, "", fmt.Sprintf(Tr("%q connected"), msg))
+			}
 		case nm.NM_DEVICE_STATE_FAILED, nm.NM_DEVICE_STATE_DISCONNECTED,
 			nm.NM_DEVICE_STATE_UNMANAGED, nm.NM_DEVICE_STATE_UNAVAILABLE:
 			logger.Infof("device disconnected, type %s, %d => %d, reason[%d] %s", getCustomDeviceType(dsi.devType), oldState, newState, reason, deviceErrorTable[reason])
@@ -254,16 +274,35 @@ func (sh *stateHandler) watch(path dbus.ObjectPath) {
 				return
 			}
 
+			logger.Debug("--------[Disconnect] Active connection info:", dsi.aconnId, dsi.connectionType, dsi.nmDev.Path)
 			var icon, msg string
 			icon = generalGetNotifyDisconnectedIcon(dsi.devType, path)
 			if len(msg) == 0 {
-				if newState == nm.NM_DEVICE_STATE_DISCONNECTED && reason == nm.NM_DEVICE_STATE_REASON_USER_REQUESTED {
-					msg = dsi.aconnId
-				} else {
-					msg = deviceErrorTable[reason]
+				switch reason {
+				case nm.NM_DEVICE_STATE_REASON_USER_REQUESTED:
+					if newState == nm.NM_DEVICE_STATE_DISCONNECTED {
+						if dsi.connectionType == connectionWirelessHotspot {
+							notify(icon, "", Tr("Hotspot share turned off"))
+						} else {
+							msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
+						}
+					}
+				case nm.NM_DEVICE_STATE_REASON_NEW_ACTIVATION:
+				case nm.NM_DEVICE_STATE_REASON_IP_CONFIG_UNAVAILABLE:
+					if dsi.connectionType == connectionWirelessHotspot {
+						msg = Tr("Unable to share hotspot, please check dnsmasq settings")
+					} else {
+						msg = fmt.Sprintf(Tr("Unable to connect %q, please keep closer to the wireless router."), dsi.aconnId)
+					}
+				case nm.NM_DEVICE_STATE_REASON_NO_SECRETS:
+					msg = fmt.Sprintf(Tr("Connection failed, unable to connect %q, wrong password"), dsi.aconnId)
+				default:
+					msg = fmt.Sprintf(Tr("%q disconnected"), dsi.aconnId)
 				}
 			}
-			notify(icon, Tr("Disconnected"), msg)
+			if len(msg) != 0 {
+				notify(icon, "", msg)
+			}
 		}
 	})
 }

@@ -21,9 +21,11 @@ package network
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"pkg.deepin.io/dde/daemon/network/nm"
 	"pkg.deepin.io/lib/dbus"
+	. "pkg.deepin.io/lib/gettext"
 	"sync"
 	"time"
 )
@@ -390,6 +392,7 @@ func (a *agent) createPendingKey(connectionData map[string]map[string]dbus.Varia
 		secretsInfo.Receiver = a.secretReceivers.Last()
 		a.receiversLocker.Unlock()
 		secretsInfoJSON, _ := marshalJSON(secretsInfo)
+		notify(notifyIconWirelessDisconnected, "", fmt.Sprintf(Tr("Password required to connect %q"), connectionId))
 		dbus.Emit(manager, "NeedSecrets", secretsInfoJSON)
 	}
 	return a.pendingKeys[keyId]
