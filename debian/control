@@ -43,7 +43,6 @@ Package: dde-daemon
 Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends},
- acpid,
  upower,
  bluez (>=5.4),
  network-manager,

@@ -18,7 +18,6 @@ DDE Daemon is a daemon for handling  the deepin session settings
 
 * upower
 * udisks2
-* acpid
 * bluez
 * systemd
 * pulseaudio
