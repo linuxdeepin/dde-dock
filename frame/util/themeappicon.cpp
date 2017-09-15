@@ -3,6 +3,7 @@
 #include <QIcon>
 #include <QFile>
 #include <QDebug>
+#include <QApplication>
 
 ThemeAppIcon::ThemeAppIcon(QObject *parent) : QObject(parent)
 {
@@ -16,7 +17,8 @@ ThemeAppIcon::~ThemeAppIcon()
 
 const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 {
-    const int s = size & ~1;
+    const auto ratio = qApp->devicePixelRatio();
+    const int s = int(size * ratio) & ~1;
 
     QPixmap pixmap;
 
@@ -52,6 +54,9 @@ const QPixmap ThemeAppIcon::getIcon(const QString iconName, const int size)
 
     } while (false);
 
-    return pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap = pixmap.scaled(s, s, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    pixmap.setDevicePixelRatio(ratio);
+
+    return pixmap;
 }
 

@@ -7,6 +7,7 @@
 #include <QMouseEvent>
 #include <QProcess>
 #include <QThread>
+#include <QApplication>
 
 #include <X11/extensions/shape.h>
 #include <X11/extensions/XTest.h>
@@ -169,11 +170,12 @@ void TrayWidget::enterEvent(QEvent *e)
 //    qDebug() << Q_FUNC_INFO;
 
     // fake enter event
+    const auto ratio = qApp->devicePixelRatio();
     const QPoint p(QCursor::pos());
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    XTestFakeMotionEvent(QX11Info::display(), 0, p.x(), p.y(), CurrentTime);
+    XTestFakeMotionEvent(QX11Info::display(), 0, p.x() * ratio, p.y() * ratio, CurrentTime);
     setX11PassMouseEvent(true);
 //    setWindowOnTop(false);
 
@@ -182,6 +184,7 @@ void TrayWidget::enterEvent(QEvent *e)
 
 void TrayWidget::configContainerPosition()
 {
+    const auto ratio = qApp->devicePixelRatio();
     auto c = QX11Info::connection();
 
     QPoint p(QCursor::pos());
@@ -193,7 +196,7 @@ void TrayWidget::configContainerPosition()
 //        w = static_cast<QWidget *>(w->parent());
 //    }
 
-    const uint32_t containerVals[4] = {uint32_t(p.x()), uint32_t(p.y()), 1, 1};
+    const uint32_t containerVals[4] = {uint32_t(p.x() * ratio), uint32_t(p.y() * ratio), 1, 1};
     xcb_configure_window(c, m_containerWid,
                          XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y | XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                          containerVals);
@@ -344,10 +347,11 @@ void TrayWidget::sendClick(uint8_t mouseButton, int x, int y)
 //    qDebug() << Q_FUNC_INFO;
     m_ignoreRepeat->start();
 
+    const auto ratio = qApp->devicePixelRatio();
     configContainerPosition();
     setX11PassMouseEvent(false);
     setWindowOnTop(true);
-    XTestFakeMotionEvent(QX11Info::display(), 0, x, y, CurrentTime);
+    XTestFakeMotionEvent(QX11Info::display(), 0, x * ratio, y * ratio, CurrentTime);
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, true, CurrentTime);
     XFlush(QX11Info::display());
     XTestFakeButtonEvent(QX11Info::display(), mouseButton, false, CurrentTime);

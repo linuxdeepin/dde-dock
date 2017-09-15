@@ -45,10 +45,15 @@ void LauncherItem::paintEvent(QPaintEvent *e)
 
     const QPixmap pixmap = DockDisplayMode == Fashion ? m_largeIcon : m_smallIcon;
 
-    if (m_hover)
-        painter.drawPixmap(rect().center() - pixmap.rect().center(), ImageFactory::lighterEffect(pixmap));
+    const auto ratio = qApp->devicePixelRatio();
+    const int iconX = rect().center().x() - pixmap.rect().center().x() / ratio;
+    const int iconY = rect().center().y() - pixmap.rect().center().y() / ratio;
+
+    // draw ligher/normal icon
+    if (!m_hover)
+        painter.drawPixmap(iconX, iconY, pixmap);
     else
-        painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+        painter.drawPixmap(iconX, iconY, ImageFactory::lighterEffect(pixmap));
 }
 
 void LauncherItem::resizeEvent(QResizeEvent *e)

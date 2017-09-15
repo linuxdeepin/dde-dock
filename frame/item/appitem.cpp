@@ -257,13 +257,15 @@ void AppItem::paintEvent(QPaintEvent *e)
         return;
 
     // icon pos
-    const QPointF iconPos = itemRect.center() - QRectF(pixmap.rect()).center();
+    const auto ratio = qApp->devicePixelRatio();
+    const int iconX = itemRect.center().x() - pixmap.rect().center().x() / ratio;
+    const int iconY = itemRect.center().y() - pixmap.rect().center().y() / ratio;
 
     // draw ligher/normal icon
     if (!m_hover)
-        painter.drawPixmap(iconPos, pixmap);
+        painter.drawPixmap(iconX, iconY, pixmap);
     else
-        painter.drawPixmap(iconPos, ImageFactory::lighterEffect(pixmap));
+        painter.drawPixmap(iconX, iconY, ImageFactory::lighterEffect(pixmap));
 }
 
 void AppItem::mouseReleaseEvent(QMouseEvent *e)
