@@ -281,12 +281,15 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
 
         // start launching effects
         m_itemScene->clear();
+        const auto ratio = qApp->devicePixelRatio();
         const QRect r = rect();
         const QPixmap icon = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
         QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
         item->setTransformationMode(Qt::SmoothTransformation);
-        item->setPos((r.center() - icon.rect().center()));
+        item->setPos(QPointF(r.center()) - QPointF(icon.rect().center()) / ratio);
+        m_itemScene->setSceneRect(r);
         m_itemView->setSceneRect(r);
+        m_itemView->setFixedSize(r.size());
 //        m_itemView->setSceneRect((r.width() - icon.width()) / 2, (r.height() - icon.height()) / 2, r.width(), r.height());
 
         QTimeLine *tl = new QTimeLine;
@@ -301,8 +304,8 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         ani->setItem(item);
         ani->setTimeLine(tl);
 
-        const int px = -icon.rect().center().x();
-        const int py = -icon.rect().center().y() - 18;
+        const int px = qreal(-icon.rect().center().x()) / ratio;
+        const int py = qreal(-icon.rect().center().y()) / ratio - 18.;
         const QPoint pos = r.center() + QPoint(0, 18);
         for (int i(0); i != 60; ++i)
         {
