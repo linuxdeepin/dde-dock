@@ -376,8 +376,9 @@ void DockSettings::resetFrontendGeometry()
 void DockSettings::calculateWindowConfig()
 {
 //    qDebug() << Q_FUNC_INFO;
-    const int defaultHeight = AppItem::itemBaseHeight();
-    const int defaultWidth = AppItem::itemBaseWidth();
+    const auto ratio = qApp->devicePixelRatio();
+    const int defaultHeight = AppItem::itemBaseHeight() / ratio;
+    const int defaultWidth = AppItem::itemBaseWidth() / ratio;
 
     if (m_displayMode == Dock::Efficient)
     {
@@ -401,22 +402,6 @@ void DockSettings::calculateWindowConfig()
     }
     else if (m_displayMode == Dock::Fashion)
     {
-//        int perfectWidth = 0;
-//        int perfectHeight = 0;
-//        const QList<DockItem *> itemList = m_itemController->itemList();
-//        for (auto item : itemList)
-//        {
-//            switch (item->itemType())
-//            {
-//            case DockItem::Launcher:
-//            case DockItem::App:         perfectWidth += defaultWidth;
-//                                        perfectHeight += defaultHeight;             break;
-//            case DockItem::Plugins:     perfectWidth += item->sizeHint().width();
-//                                        perfectHeight += item->sizeHint().height(); break;
-//            default:;
-//            }
-//        }
-
         int visibleItemCount = 0;
         const QList<DockItem *> itemList = m_itemController->itemList();
         for (auto item : itemList)
