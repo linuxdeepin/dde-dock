@@ -41,12 +41,16 @@ func getSettingIP4ConfigAvailableKeys(data connectionData) (keys []string) {
 		logger.Error("ip4 config method is invalid:", method)
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_AUTO:
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
-		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
+		if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
+		}
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_LINK_LOCAL: // ignore
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_MANUAL:
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_DNS)
 		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_ADDRESSES)
-		keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
+		if getSettingConnectionType(data) == nm.NM_SETTING_VPN_SETTING_NAME {
+			keys = appendAvailableKeys(data, keys, nm.NM_SETTING_IP4_CONFIG_SETTING_NAME, nm.NM_SETTING_IP_CONFIG_NEVER_DEFAULT)
+		}
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_SHARED:
 	case nm.NM_SETTING_IP4_CONFIG_METHOD_DISABLED:
 	}
