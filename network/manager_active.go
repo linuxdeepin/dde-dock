@@ -51,6 +51,7 @@ type activeConnectionInfo struct {
 	Speed               string
 	Ip4                 ip4ConnectionInfo
 	Ip6                 ip6ConnectionInfo
+	Hotspot             hotspotConnectionInfo
 }
 type ip4ConnectionInfo struct {
 	Address  string
@@ -63,6 +64,10 @@ type ip6ConnectionInfo struct {
 	Prefix   string
 	Gateways []string
 	Dnses    []string
+}
+type hotspotConnectionInfo struct {
+	Ssid string
+	Band string
 }
 
 func (m *Manager) initActiveConnectionManage() {
@@ -273,6 +278,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	var ip6Gateways, ip6Dnses []string
 	var ip4Info ip4ConnectionInfo
 	var ip6Info ip6ConnectionInfo
+	var hotspotInfo hotspotConnectionInfo
 
 	// active connection
 	nmAConn, err := nmNewActiveConnection(apath)
@@ -313,6 +319,18 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 	}
 	connName = getSettingConnectionId(cdata)
 	connType = getCustomConnectionType(cdata)
+	if connType == connectionWirelessHotspot {
+		hotspotInfo.Ssid = decodeSsid(getSettingWirelessSsid(cdata))
+		band := getSettingWirelessBand(cdata)
+		switch band {
+		case "a":
+			hotspotInfo.Band = Tr("A (5 GHz)")
+		case "bg":
+			hotspotInfo.Band = Tr("BG (2.4 GHz)")
+		default:
+			hotspotInfo.Band = Tr("Automatic")
+		}
+	}
 
 	// security
 	use8021xSecurity := false
@@ -389,6 +407,7 @@ func (m *Manager) doGetActiveConnectionInfo(apath, devPath dbus.ObjectPath) (aci
 		Speed:               speed,
 		Ip4:                 ip4Info,
 		Ip6:                 ip6Info,
+		Hotspot:             hotspotInfo,
 	}
 	return
 }
