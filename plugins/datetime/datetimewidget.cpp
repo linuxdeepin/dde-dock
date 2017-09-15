@@ -50,11 +50,13 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);
 
+    const auto ratio = qApp->devicePixelRatio();
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
     const Dock::Position position = qApp->property(PROP_POSITION).value<Dock::Position>();
     const QDateTime current = QDateTime::currentDateTime();
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     if (displayMode == Dock::Efficient)
     {
@@ -82,8 +84,9 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
 
         // draw new pixmap
         m_cachedTime = currentTimeString;
-        m_cachedIcon = QPixmap(size());
+        m_cachedIcon = QPixmap(size() * ratio);
         m_cachedIcon.fill(Qt::transparent);
+        m_cachedIcon.setDevicePixelRatio(ratio);
         QPainter p(&m_cachedIcon);
 
         // draw fashion mode datetime plugin
@@ -91,8 +94,8 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
         const QRect r = rect();
 
         // draw background
-        const QPixmap background = loadSvg(":/icons/resources/icons/background.svg", QSize(perfectIconSize, perfectIconSize));
-        const QPoint backgroundOffset = r.center() - background.rect().center();
+        QPixmap background = loadSvg(":/icons/resources/icons/background.svg", QSize(perfectIconSize, perfectIconSize));
+        const QPoint backgroundOffset = r.center() - background.rect().center() / ratio;
         p.drawPixmap(backgroundOffset, background);
 
         const int bigNumHeight = perfectIconSize / 2.5;
@@ -154,7 +157,7 @@ void DatetimeWidget::paintEvent(QPaintEvent *e)
     }
 
     // draw cached fashion mode time item
-    painter.drawPixmap(rect().center() - m_cachedIcon.rect().center(), m_cachedIcon);
+    painter.drawPixmap(rect().center() - m_cachedIcon.rect().center() / ratio, m_cachedIcon);
 }
 
 void DatetimeWidget::mousePressEvent(QMouseEvent *e)
@@ -174,7 +177,9 @@ void DatetimeWidget::mousePressEvent(QMouseEvent *e)
 
 const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
 {
-    QPixmap pixmap(size);
+    const auto ratio = qApp->devicePixelRatio();
+
+    QPixmap pixmap(size * ratio);
     QSvgRenderer renderer(fileName);
     pixmap.fill(Qt::transparent);
 
@@ -182,6 +187,8 @@ const QPixmap DatetimeWidget::loadSvg(const QString &fileName, const QSize size)
     painter.begin(&pixmap);
     renderer.render(&painter);
     painter.end();
+
+    pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
 }

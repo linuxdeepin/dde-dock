@@ -5,6 +5,7 @@
 #include <QMouseEvent>
 #include <QPixmap>
 #include <QSvgRenderer>
+#include <QApplication>
 
 #include <cmath>
 
@@ -53,8 +54,10 @@ void FashionTrayItem::setActiveTray(TrayWidget *tray)
 void FashionTrayItem::resizeEvent(QResizeEvent *e)
 {
     // update icon size
-    const QSize s = e->size();
+    const auto ratio = qApp->devicePixelRatio();
+    const QSize s = e->size() * ratio;
     m_backgroundPixmap = loadSvg(":/icons/resources/trayicon.svg", 0.8 * std::min(s.width(), s.height()));
+    m_backgroundPixmap.setDevicePixelRatio(ratio);
 
     QWidget::resizeEvent(e);
 }
@@ -68,23 +71,11 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-//    // draw circle
-//    QPen circlePen(QColor(0, 164, 233));
-//    circlePen.setWidth(3);
-//    const double circleSize = (0.8 * std::min(r.width(), r.height()) - 8) / 2;
-//    painter.setPen(circlePen);
-//    painter.drawEllipse(r.center(), circleSize, circleSize);
-
-//    // draw red dot
-//    const int offset = std::sin(pi / 4) * circleSize;
-//    QPen p(Qt::transparent);
-//    p.setWidth(3);
-//    painter.setPen(p);
-//    painter.setBrush(QColor(250, 64, 151));
-//    painter.drawEllipse(r.center() + QPoint(offset, -offset), 5, 5);
-
     // draw blue circle
-    painter.drawPixmap(r.center() - m_backgroundPixmap.rect().center(), m_backgroundPixmap);
+    const auto ratio = qApp->devicePixelRatio();
+    const int x = r.center().x() - m_backgroundPixmap.rect().center().x() / ratio;
+    const int y = r.center().y() - m_backgroundPixmap.rect().center().y() / ratio;
+    painter.drawPixmap(x, y, m_backgroundPixmap);
 
     // draw active icon
     if (m_activeTray)

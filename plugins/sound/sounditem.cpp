@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QIcon>
 #include <QMouseEvent>
+#include <QApplication>
 
 // menu actions
 #define MUTE    "mute"
@@ -124,7 +125,7 @@ void SoundItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_iconPixmap.rect().center(), m_iconPixmap);
+    painter.drawPixmap(rect().center() - m_iconPixmap.rect().center() / qApp->devicePixelRatio(), m_iconPixmap);
 }
 
 void SoundItem::refershIcon()
@@ -163,9 +164,11 @@ void SoundItem::refershIcon()
         iconString = QString(":/icons/image/audio-volume-%1-symbolic").arg(volumeString);
     }
 
+    const auto ratio = qApp->devicePixelRatio();
     const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
     const QIcon icon = QIcon::fromTheme(iconString);
-    m_iconPixmap = icon.pixmap(iconSize, iconSize);
+    m_iconPixmap = icon.pixmap(iconSize * ratio, iconSize * ratio);
+    m_iconPixmap.setDevicePixelRatio(ratio);
 
     update();
 }

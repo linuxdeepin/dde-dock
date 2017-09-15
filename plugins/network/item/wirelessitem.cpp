@@ -4,6 +4,7 @@
 
 #include <QPainter>
 #include <QMouseEvent>
+#include <QApplication>
 
 WirelessItem::WirelessItem(const QString &path)
     : DeviceItem(path),
@@ -83,16 +84,19 @@ void WirelessItem::paintEvent(QPaintEvent *e)
 
     const Dock::DisplayMode displayMode = qApp->property(PROP_DISPLAY_MODE).value<Dock::DisplayMode>();
 
+    const auto ratio = qApp->devicePixelRatio();
     const int iconSize = displayMode == Dock::Fashion ? std::min(width(), height()) * 0.8 : 16;
-    const QPixmap pixmap = iconPix(displayMode, iconSize);
+    QPixmap pixmap = iconPix(displayMode, iconSize * ratio);
+    pixmap.setDevicePixelRatio(ratio);
 
     QPainter painter(this);
     if (displayMode == Dock::Fashion)
     {
-        const QPixmap pixmap = backgroundPix(iconSize);
-        painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+        QPixmap pixmap = backgroundPix(iconSize * ratio);
+        pixmap.setDevicePixelRatio(ratio);
+        painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
     }
-    painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+    painter.drawPixmap(rect().center() - pixmap.rect().center() / ratio, pixmap);
 }
 
 void WirelessItem::resizeEvent(QResizeEvent *e)

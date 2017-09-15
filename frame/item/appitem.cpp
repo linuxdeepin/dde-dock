@@ -285,7 +285,7 @@ void AppItem::mouseReleaseEvent(QMouseEvent *e)
         const QPixmap icon = DockDisplayMode == Efficient ? m_smallIcon : m_largeIcon;
         QGraphicsPixmapItem *item = m_itemScene->addPixmap(icon);
         item->setTransformationMode(Qt::SmoothTransformation);
-        item->setPos(r.center() - icon.rect().center());
+        item->setPos((r.center() - icon.rect().center()));
         m_itemView->setSceneRect(r);
 //        m_itemView->setSceneRect((r.width() - icon.width()) / 2, (r.height() - icon.height()) / 2, r.width(), r.height());
 

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QIcon>
+#include <QApplication>
 
 WiredItem::WiredItem(const QString &path)
     : DeviceItem(path),
@@ -74,7 +75,10 @@ void WiredItem::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - m_icon.rect().center(), m_icon);
+    const auto ratio = qApp->devicePixelRatio();
+    const int x = rect().center().x() - m_icon.rect().center().x() / ratio;
+    const int y = rect().center().y() - m_icon.rect().center().y() / ratio;
+    painter.drawPixmap(x, y, m_icon);
 }
 
 void WiredItem::resizeEvent(QResizeEvent *e)
@@ -142,8 +146,10 @@ void WiredItem::reloadIcon()
     if (displayMode == Dock::Efficient)
         iconName.append("-symbolic");
 
+    const auto ratio = qApp->devicePixelRatio();
     const int size = displayMode == Dock::Efficient ? 16 : std::min(width(), height()) * 0.8;
-    m_icon = QIcon::fromTheme(iconName).pixmap(size, size);
+    m_icon = QIcon::fromTheme(iconName).pixmap(size * ratio, size * ratio);
+    m_icon.setDevicePixelRatio(ratio);
     update();
 }
 

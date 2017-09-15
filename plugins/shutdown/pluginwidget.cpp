@@ -3,6 +3,7 @@
 #include <QSvgRenderer>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QApplication>
 
 PluginWidget::PluginWidget(QWidget *parent)
     : QWidget(parent),
@@ -71,7 +72,7 @@ void PluginWidget::paintEvent(QPaintEvent *e)
     } while (false);
 
     QPainter painter(this);
-    painter.drawPixmap(rect().center() - pixmap.rect().center(), pixmap);
+    painter.drawPixmap(rect().center() - pixmap.rect().center() / qApp->devicePixelRatio(), pixmap);
 }
 
 void PluginWidget::mousePressEvent(QMouseEvent *e)
@@ -101,7 +102,9 @@ void PluginWidget::leaveEvent(QEvent *)
 
 const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) const
 {
-    QPixmap pixmap(size);
+    const auto ratio = qApp->devicePixelRatio();
+
+    QPixmap pixmap(size * ratio);
     QSvgRenderer renderer(fileName);
     pixmap.fill(Qt::transparent);
 
@@ -109,6 +112,8 @@ const QPixmap PluginWidget::loadSvg(const QString &fileName, const QSize &size) 
     painter.begin(&pixmap);
     renderer.render(&painter);
     painter.end();
+
+    pixmap.setDevicePixelRatio(ratio);
 
     return pixmap;
 }
