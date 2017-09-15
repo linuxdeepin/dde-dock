@@ -567,8 +567,7 @@ void MainWindow::adjustShadowMask()
         return;
     }
 
-    const qreal scale = qApp->devicePixelRatio();
-    const QRect r = QRect(QPoint(), rect().size() * scale);
+    const QRect r = QRect(QPoint(), rect().size());
     const int radius = 5;
 
     QPainterPath path;
