@@ -20,6 +20,7 @@ import (
 	libPinyin "dbus/com/deepin/api/pinyin"
 	libApps "dbus/com/deepin/daemon/apps"
 	libLastore "dbus/com/deepin/lastore"
+
 	"gir/gio-2.0"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
@@ -45,6 +46,7 @@ const (
 	gsKeyDisplayMode  = "display-mode"
 	gsKeyFullscreen   = "fullscreen"
 	gsKeyAppsUseProxy = "apps-use-proxy"
+	gsKeyAppsHidden   = "apps-hidden"
 )
 
 type Manager struct {
@@ -76,6 +78,8 @@ type Manager struct {
 	fsEventTimers      map[string]*time.Timer
 	fsEventTimersMutex sync.Mutex
 	settings           *gio.Settings
+	appsHidden         []string
+	appsHiddenMu       sync.Mutex
 	// Properties:
 	DisplayMode *property.GSettingsEnumProperty `access:"readwrite"`
 	Fullscreen  *property.GSettingsBoolProperty `access:"readwrite"`
@@ -160,14 +164,30 @@ func (m *Manager) getItemByPath(path string) *Item {
 	return nil
 }
 
+func (m *Manager) setItemID(item *Item) {
+	item.ID = m.getAppIdByFilePath(item.Path)
+}
+
+func (m *Manager) hiddenByGSettings(id string) bool {
+	for _, appID := range m.appsHidden {
+		if id == appID {
+			return true
+		}
+	}
+	return false
+}
+
+func (m *Manager) hiddenByGSettingsWithLock(id string) bool {
+	m.appsHiddenMu.Lock()
+	defer m.appsHiddenMu.Unlock()
+	return m.hiddenByGSettings(id)
+}
+
 func (m *Manager) addItem(item *Item) {
 	if item == nil {
 		return
 	}
-	logger.Debugf("addItem path: %q", item.Path)
-
-	item.ID = m.getAppIdByFilePath(item.Path)
-	logger.Debugf("addItem id: %q", item.ID)
+	logger.Debugf("addItem path: %q, id: %q", item.Path, item.ID)
 
 	// NOTE: change name before call item.setSearchTargets
 	if m.nameMap != nil {

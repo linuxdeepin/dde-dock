@@ -12,9 +12,11 @@ package launcher
 import (
 	"os"
 	"path/filepath"
+	"time"
+
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
-	"time"
 )
 
 const (
@@ -33,6 +35,94 @@ func isDirectory(path string) (bool, error) {
 		return false, err
 	}
 	return fileInfo.IsDir(), nil
+}
+
+func (m *Manager) listenSettingsChanged() {
+	m.settings.Connect("changed::"+gsKeyAppsHidden, func(g *gio.Settings, key string) {
+		m.appsHiddenMu.Lock()
+		defer m.appsHiddenMu.Unlock()
+
+		newVal := m.settings.GetStrv(gsKeyAppsHidden)
+		logger.Debug(gsKeyAppsHidden+" changed", newVal)
+
+		added, removed := diffAppsHidden(m.appsHidden, newVal)
+		logger.Debugf(gsKeyAppsHidden+" added: %v, removed: %v", added, removed)
+		for _, appID := range added {
+			// apps need to be hidden
+			item := m.getItemById(appID)
+			if item == nil {
+				continue
+			}
+
+			m.removeItem(appID)
+			m.emitItemChanged(item, AppStatusDeleted)
+		}
+
+		for _, appID := range removed {
+			// apps need to be displayed
+			item := m.getItemById(appID)
+			if item != nil {
+				continue
+			}
+
+			appInfo := desktopappinfo.NewDesktopAppInfo(appID)
+			if appInfo == nil {
+				continue
+			}
+
+			item = NewItemWithDesktopAppInfo(appInfo)
+			m.setItemID(item)
+			shouldShow := appInfo.ShouldShow() &&
+				!isDeepinCustomDesktopFile(appInfo.GetFileName())
+
+			if !shouldShow {
+				continue
+			}
+
+			m.addItemWithLock(item)
+			m.emitItemChanged(item, AppStatusCreated)
+		}
+		m.appsHidden = newVal
+	})
+}
+
+func diffAppsHidden(old, new []string) (added, removed []string) {
+	if len(old) == 0 {
+		return new, nil
+	}
+	if len(new) == 0 {
+		return nil, old
+	}
+
+	oldMap := strSliceToMap(old)
+	newMap := strSliceToMap(new)
+	return diffMapKeys(oldMap, newMap)
+}
+
+func strSliceToMap(slice []string) map[string]struct{} {
+	result := make(map[string]struct{}, len(slice))
+	for _, value := range slice {
+		result[value] = struct{}{}
+	}
+	return result
+}
+
+func diffMapKeys(oldMap, newMap map[string]struct{}) (added, removed []string) {
+	for oldKey := range oldMap {
+		if _, ok := newMap[oldKey]; !ok {
+			// key found in oldMap, but not in newMap => removed
+			removed = append(removed, oldKey)
+		}
+	}
+
+	for newKey := range newMap {
+		if _, ok := oldMap[newKey]; !ok {
+			// key found in newMap, but not in oldMap => added
+			added = append(added, newKey)
+		}
+	}
+
+	return
 }
 
 func (m *Manager) handleFsWatcherEvents() {
@@ -119,9 +209,11 @@ func (m *Manager) checkDesktopFile(file string) {
 		}
 	} else {
 		// appInfo is not nil
-		shouldShow := appInfo.ShouldShow() &&
-			!isDeepinCustomDesktopFile(appInfo.GetFileName())
 		newItem := NewItemWithDesktopAppInfo(appInfo)
+		m.setItemID(newItem)
+		shouldShow := appInfo.ShouldShow() &&
+			!isDeepinCustomDesktopFile(appInfo.GetFileName()) &&
+			!m.hiddenByGSettingsWithLock(newItem.ID)
 
 		// add or update item
 		if item != nil {

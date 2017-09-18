@@ -10,13 +10,14 @@
 package launcher
 
 import (
-	"gir/gio-2.0"
 	"path/filepath"
+	"time"
+
+	"gir/gio-2.0"
 	"pkg.deepin.io/lib/appinfo/desktopappinfo"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/notify"
-	"time"
 )
 
 const (
@@ -27,6 +28,11 @@ const (
 func (m *Manager) init() {
 	m.noPkgItemIDs = make(map[string]int)
 	m.settings = gio.NewSettings(gsSchemaLauncher)
+
+	m.appsHidden = m.settings.GetStrv(gsKeyAppsHidden)
+	logger.Debug("appsHidden: ", m.appsHidden)
+	m.listenSettingsChanged()
+
 	m.DisplayMode = property.NewGSettingsEnumProperty(m, "DisplayMode", m.settings, gsKeyDisplayMode)
 	m.Fullscreen = property.NewGSettingsBoolProperty(m, "Fullscreen", m.settings, gsKeyFullscreen)
 
@@ -64,6 +70,11 @@ func (m *Manager) init() {
 			continue
 		}
 		item := NewItemWithDesktopAppInfo(ai)
+		m.setItemID(item)
+
+		if m.hiddenByGSettings(item.ID) {
+			continue
+		}
 		m.addItem(item)
 	}
 	logger.Debug("load items count:", len(m.items))
