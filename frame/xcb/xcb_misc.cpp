@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QX11Info>
+#include <QApplication>
 
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
@@ -118,5 +119,7 @@ void XcbMisc::set_window_icon_geometry(xcb_window_t winId, QRect geo)
 {
 //    qDebug() << Q_FUNC_INFO << winId << geo;
 
-    xcb_ewmh_set_wm_icon_geometry(&m_ewmh_connection, winId, geo.x(), geo.y(), geo.width(), geo.height());
+    const auto ratio = qApp->devicePixelRatio();
+
+    xcb_ewmh_set_wm_icon_geometry(&m_ewmh_connection, winId, geo.x() * ratio, geo.y() * ratio, geo.width() * ratio, geo.height() * ratio);
 }
