@@ -23,6 +23,8 @@ struct raw_multitouch_event {
     int fingers;
 };
 
+static void raw_event_reset(struct raw_multitouch_event *event);
+
 static int is_touchpad(struct libinput_device *dev);
 static const char* get_multitouch_device_node(struct libinput_event *ev);
 
@@ -70,6 +72,19 @@ void
 quit_loop()
 {
     quit = 1;
+}
+
+static void
+raw_event_reset(struct raw_multitouch_event *event)
+{
+    if (!event) {
+        return ;
+    }
+
+    event->dx_unaccel = 0.0;
+    event->dy_unaccel = 0.0;
+    event->scale = 0.0;
+    event->fingers = 0;
 }
 
 static const char*
@@ -130,10 +145,7 @@ handle_gesture_events(struct libinput_event *ev, int type)
     case LIBINPUT_EVENT_GESTURE_PINCH_BEGIN:
     case LIBINPUT_EVENT_GESTURE_SWIPE_BEGIN:
         // reset
-        raw->dx_unaccel = 0.0;
-        raw->dy_unaccel = 0.0;
-        raw->scale = 0.0;
-        raw->fingers = 0;
+        raw_event_reset(raw);
         break;
     case LIBINPUT_EVENT_GESTURE_PINCH_UPDATE:{
         double scale = libinput_event_gesture_get_scale(gesture);
@@ -149,8 +161,9 @@ handle_gesture_events(struct libinput_event *ev, int type)
         break;
     }
     case LIBINPUT_EVENT_GESTURE_PINCH_END:{
-        // do action
-        if (raw->scale == 0) {
+        // filter small scale threshold
+        if (fabs(raw->scale) < 1) {
+            raw_event_reset(raw);
             break;
         }
 
@@ -160,11 +173,13 @@ handle_gesture_events(struct libinput_event *ev, int type)
         handleGestureEvent(GESTURE_TYPE_PINCH,
                            (raw->scale >= 0?GESTURE_DIRECTION_IN:GESTURE_DIRECTION_OUT),
                            raw->fingers);
+        raw_event_reset(raw);
         break;
     }
     case LIBINPUT_EVENT_GESTURE_SWIPE_END:
         // filter small movement threshold
         if (fabs(raw->dx_unaccel - raw->dy_unaccel) < 70) {
+            raw_event_reset(raw);
             break;
         }
 
@@ -184,6 +199,7 @@ handle_gesture_events(struct libinput_event *ev, int type)
                                (raw->dy_unaccel < 0?GESTURE_DIRECTION_UP:GESTURE_DIRECTION_DOWN),
                                raw->fingers);
         }
+        raw_event_reset(raw);
         break;
     }
 }
