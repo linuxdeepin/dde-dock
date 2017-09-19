@@ -75,7 +75,9 @@ void DeviceControlWidget::setDeviceName(const QString &name)
 
 void DeviceControlWidget::setDeviceEnabled(const bool enable)
 {
+    m_switchBtn->blockSignals(true);
     m_switchBtn->setChecked(enable);
+    m_switchBtn->blockSignals(false);
 }
 
 //void DeviceControlWidget::setSeperatorVisible(const bool visible)
