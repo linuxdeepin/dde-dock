@@ -198,3 +198,15 @@ func (m *Manager) Thumbnail(ty, name string) (string, error) {
 	}
 	return "", fmt.Errorf("Invalid type: %v", ty)
 }
+
+func (m *Manager) GetScaleFactor() float64 {
+	return doGetScaleFactor()
+}
+
+func (m *Manager) SetScaleFactor(scale float64) error {
+	if scale < 0 {
+		return fmt.Errorf("Invalid scale value: %v", scale)
+	}
+	doSetScaleFactor(scale)
+	return nil
+}
