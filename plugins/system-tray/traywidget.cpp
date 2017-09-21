@@ -37,7 +37,7 @@
 #include <xcb/composite.h>
 #include <xcb/xcb_image.h>
 
-static const quint16 iconSize = 48;
+static const qreal iconSize = 16;
 
 #define DRAG_THRESHOLD  20
 
@@ -237,6 +237,7 @@ void TrayWidget::wrapWindow()
         return;
 
     //create a container window
+    const auto ratio = devicePixelRatioF();
     auto screen = xcb_setup_roots_iterator (xcb_get_setup (c)).data;
     m_containerWid = xcb_generate_id(c);
     uint32_t values[2];
@@ -248,7 +249,7 @@ void TrayWidget::wrapWindow()
                        m_containerWid,               /* window Id     */
                        screen->root,                 /* parent window */
                        0, 0,                         /* x, y          */
-                       iconSize, iconSize,     /* width, height */
+                       iconSize * ratio, iconSize * ratio,     /* width, height */
                        0,                            /* border_width  */
                        XCB_WINDOW_CLASS_INPUT_OUTPUT,/* class         */
                        screen->root_visual,          /* visual        */
@@ -308,7 +309,7 @@ void TrayWidget::wrapWindow()
     //use an artbitrary heuristic to make sure icons are always sensible
 //    if (clientGeom->width > iconSize || clientGeom->height > iconSize )
     {
-        const uint32_t windowMoveConfigVals[2] = { iconSize, iconSize };
+        const uint32_t windowMoveConfigVals[2] = { uint32_t(iconSize * ratio), uint32_t(iconSize * ratio) };
         xcb_configure_window(c, m_windowId,
                              XCB_CONFIG_WINDOW_WIDTH | XCB_CONFIG_WINDOW_HEIGHT,
                              windowMoveConfigVals);
@@ -486,6 +487,7 @@ void TrayWidget::setActive(const bool active)
 
 void TrayWidget::refershIconImage()
 {
+    const auto ratio = devicePixelRatioF();
     auto c = QX11Info::connection();
     auto cookie = xcb_get_geometry(c, m_windowId);
     QScopedPointer<xcb_get_geometry_reply_t> geom(xcb_get_geometry_reply(c, cookie, Q_NULLPTR));
@@ -497,8 +499,8 @@ void TrayWidget::refershIconImage()
     expose.window = m_containerWid;
     expose.x = 0;
     expose.y = 0;
-    expose.width = iconSize;
-    expose.height = iconSize;
+    expose.width = iconSize * ratio;
+    expose.height = iconSize * ratio;
     xcb_send_event_checked(c, false, m_containerWid, XCB_EVENT_MASK_VISIBILITY_CHANGE, reinterpret_cast<char *>(&expose));
     xcb_flush(c);
 
@@ -509,7 +511,6 @@ void TrayWidget::refershIconImage()
     if (qimage.isNull())
         return;
 
-    const auto ratio = devicePixelRatioF();
     m_image = qimage.scaled(16 * ratio, 16 * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_image.setDevicePixelRatio(ratio);
 

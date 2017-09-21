@@ -430,18 +430,20 @@ void MainPanel::adjustItemSize()
 {
     Q_ASSERT(sender() == m_itemAdjustTimer);
 
+    const auto ratio = devicePixelRatioF();
+
     QSize itemSize;
     switch (m_position)
     {
     case Top:
     case Bottom:
         itemSize.setHeight(height() - PANEL_BORDER);
-        itemSize.setWidth(AppItem::itemBaseWidth());
+        itemSize.setWidth(AppItem::itemBaseWidth() / ratio);
         break;
 
     case Left:
     case Right:
-        itemSize.setHeight(AppItem::itemBaseHeight());
+        itemSize.setHeight(AppItem::itemBaseHeight() / ratio);
         itemSize.setWidth(width() - PANEL_BORDER);
         break;
 

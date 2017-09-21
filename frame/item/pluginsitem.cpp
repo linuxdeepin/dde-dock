@@ -180,7 +180,7 @@ void PluginsItem::startDrag()
 
     QDrag *drag = new QDrag(this);
     drag->setPixmap(pixmap);
-    drag->setHotSpot(pixmap.rect().center());
+    drag->setHotSpot(pixmap.rect().center() / pixmap.devicePixelRatioF());
     drag->setMimeData(mime);
 
     emit dragStarted();

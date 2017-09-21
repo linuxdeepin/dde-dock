@@ -488,7 +488,7 @@ void AppItem::startDrag()
 
     QDrag *drag = new QDrag(this);
     drag->setPixmap(dragPix);
-    drag->setHotSpot(dragPix.rect().center());
+    drag->setHotSpot(dragPix.rect().center() / dragPix.devicePixelRatioF());
     drag->setMimeData(new QMimeData);
 
     emit dragStarted();
