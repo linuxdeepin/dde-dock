@@ -37,7 +37,7 @@
 #include <xcb/composite.h>
 #include <xcb/xcb_image.h>
 
-static const quint16 iconSize = 16;
+static const quint16 iconSize = 48;
 
 #define DRAG_THRESHOLD  20
 
@@ -130,7 +130,10 @@ void TrayWidget::paintEvent(QPaintEvent *e)
 
 //        painter.drawImage(p.x(), p.y(), m_image.scaled(iconSize, iconSize));
 //    }
-    painter.drawImage(rect().center() - m_image.rect().center(), m_image);
+    const auto ratio = devicePixelRatioF();
+    const int x = rect().center().x() - m_image.width() / 2 / ratio;
+    const int y = rect().center().y() - m_image.height() / 2 / ratio;
+    painter.drawImage(x, y, m_image);
 
     painter.end();
 }
@@ -494,8 +497,8 @@ void TrayWidget::refershIconImage()
     expose.window = m_containerWid;
     expose.x = 0;
     expose.y = 0;
-    expose.width = 16;
-    expose.height = 16;
+    expose.width = iconSize;
+    expose.height = iconSize;
     xcb_send_event_checked(c, false, m_containerWid, XCB_EVENT_MASK_VISIBILITY_CHANGE, reinterpret_cast<char *>(&expose));
     xcb_flush(c);
 
@@ -506,7 +509,9 @@ void TrayWidget::refershIconImage()
     if (qimage.isNull())
         return;
 
-    m_image = qimage.scaled(iconSize, iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation).copy();
+    const auto ratio = devicePixelRatioF();
+    m_image = qimage.scaled(16 * ratio, 16 * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_image.setDevicePixelRatio(ratio);
 
     update();
     emit iconChanged();

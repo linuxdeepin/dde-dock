@@ -101,8 +101,12 @@ void FashionTrayItem::paintEvent(QPaintEvent *e)
     // draw active icon
     if (m_activeTray)
     {
-        const QImage image = m_activeTray->trayImage();
-        painter.drawImage(r.center() - image.rect().center(), image);
+        const QImage &image = m_activeTray->trayImage();
+        const auto ratio = image.devicePixelRatioF();
+
+        const double x = double(r.center().x()) - double(image.rect().width()) / ratio / 2.0;
+        const double y = double(r.center().y()) - double(image.rect().height()) / ratio / 2.0;
+        painter.drawImage(std::round(x), std::round(y), image);
     }
 }
 
