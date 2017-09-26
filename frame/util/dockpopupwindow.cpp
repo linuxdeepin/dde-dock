@@ -159,8 +159,9 @@ void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString
 
     Q_ASSERT(m_model);
 
+    const auto ratio = devicePixelRatioF();
     const QRect rect = QRect(pos(), size());
-    const QPoint pos = QPoint(x, y);
+    const QPoint pos = QPoint(x / ratio, y / ratio);
 
     if (rect.contains(pos))
         return;
