@@ -37,12 +37,11 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
 
     m_switchBtn = new DSwitchButton;
 
-    RefreshButton *refreshBtn = new RefreshButton;
-    refreshBtn->setVisible(m_switchBtn->checked());
+    m_refreshBtn = new RefreshButton;
 
     QHBoxLayout *infoLayout = new QHBoxLayout;
     infoLayout->addWidget(m_deviceName);
-    infoLayout->addWidget(refreshBtn);
+    infoLayout->addWidget(m_refreshBtn);
     infoLayout->addSpacing(10);
     infoLayout->addWidget(m_switchBtn);
     infoLayout->setSpacing(0);
@@ -64,8 +63,7 @@ DeviceControlWidget::DeviceControlWidget(QWidget *parent)
     setFixedHeight(30);
 
     connect(m_switchBtn, &DSwitchButton::checkedChanged, this, &DeviceControlWidget::deviceEnableChanged);
-    connect(m_switchBtn, &DSwitchButton::checkedChanged, refreshBtn, &RefreshButton::setVisible);
-    connect(refreshBtn, &RefreshButton::clicked, this, &DeviceControlWidget::requestRefresh);
+    connect(m_refreshBtn, &RefreshButton::clicked, this, &DeviceControlWidget::requestRefresh);
 }
 
 void DeviceControlWidget::setDeviceName(const QString &name)
@@ -78,6 +76,8 @@ void DeviceControlWidget::setDeviceEnabled(const bool enable)
     m_switchBtn->blockSignals(true);
     m_switchBtn->setChecked(enable);
     m_switchBtn->blockSignals(false);
+
+    m_refreshBtn->setVisible(enable);
 }
 
 //void DeviceControlWidget::setSeperatorVisible(const bool visible)

@@ -29,6 +29,7 @@
 
 #include <dswitchbutton.h>
 
+class RefreshButton;
 class DeviceControlWidget : public QWidget
 {
     Q_OBJECT
@@ -48,6 +49,7 @@ private:
     QLabel *m_deviceName;
     Dtk::Widget::DSwitchButton *m_switchBtn;
 //    HorizontalSeperator *m_seperator;
+    RefreshButton *m_refreshBtn;
 };
 
 #endif // DEVICECONTROLWIDGET_H
