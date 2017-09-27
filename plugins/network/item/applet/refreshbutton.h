@@ -39,6 +39,14 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
+private:
+    QPixmap loadPixmap(const QString &file);
+
+private:
+    QPixmap m_normalPixmap;
+    QPixmap m_hoverPixmap;
+    QPixmap m_pressPixmap;
+
 };
 
 #endif // REFRESHBUTTON_H

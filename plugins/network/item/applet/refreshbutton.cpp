@@ -23,32 +23,37 @@
 
 #include <QMouseEvent>
 #include <QEvent>
+#include <QImageReader>
 
 RefreshButton::RefreshButton(QWidget *parent) : QLabel(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
-    setPixmap(QPixmap(":/wireless/resources/wireless/refresh_normal.svg"));
+    m_normalPixmap = loadPixmap(":/wireless/resources/wireless/refresh_normal.svg");
+    m_hoverPixmap = loadPixmap(":/wireless/resources/wireless/refresh_hover.svg");
+    m_pressPixmap = loadPixmap(":/wireless/resources/wireless/refresh_press.svg");
+
+    setPixmap(m_normalPixmap);
 }
 
 void RefreshButton::enterEvent(QEvent *event)
 {
     QLabel::enterEvent(event);
 
-    setPixmap(QPixmap(":/wireless/resources/wireless/refresh_hover.svg"));
+    setPixmap(m_hoverPixmap);
 }
 
 void RefreshButton::leaveEvent(QEvent *event)
 {
     QLabel::leaveEvent(event);
 
-    setPixmap(QPixmap(":/wireless/resources/wireless/refresh_normal.svg"));
+    setPixmap(m_normalPixmap);
 }
 
 void RefreshButton::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
-        setPixmap(QPixmap(":/wireless/resources/wireless/refresh_press.svg"));
+        setPixmap(m_pressPixmap);
 }
 
 void RefreshButton::mouseReleaseEvent(QMouseEvent *event)
@@ -56,5 +61,22 @@ void RefreshButton::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
         emit clicked();
 
-    setPixmap(QPixmap(":/wireless/resources/wireless/refresh_normal.svg"));
+    setPixmap(m_normalPixmap);
+}
+
+QPixmap RefreshButton::loadPixmap(const QString &file)
+{
+    QPixmap pixmap;
+
+    const qreal ratio = devicePixelRatioF();
+
+    QImageReader reader;
+    reader.setFileName(file);
+    if (reader.canRead()) {
+        reader.setScaledSize(reader.size() * ratio);
+        pixmap = QPixmap::fromImage(reader.read());
+        pixmap.setDevicePixelRatio(ratio);
+    }
+
+    return pixmap;
 }
