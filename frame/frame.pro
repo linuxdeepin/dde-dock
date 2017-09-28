@@ -31,7 +31,6 @@ SOURCES += main.cpp \
     controller/dockpluginscontroller.cpp \
     util/imagefactory.cpp \
     util/dockpopupwindow.cpp \
-    dbus/dbusxmousearea.cpp \
     item/stretchitem.cpp \
     item/placeholderitem.cpp \
     controller/dockpluginloader.cpp \
@@ -63,7 +62,6 @@ HEADERS  += \
     controller/dockpluginscontroller.h \
     util/imagefactory.h \
     util/dockpopupwindow.h \
-    dbus/dbusxmousearea.h \
     item/stretchitem.h \
     item/placeholderitem.h \
     controller/dockpluginloader.h \

@@ -22,10 +22,10 @@
 #ifndef DOCKPOPUPWINDOW_H
 #define DOCKPOPUPWINDOW_H
 
-#include "dbus/dbusxmousearea.h"
 #include "dbus/dbusdisplay.h"
 
 #include <darrowrectangle.h>
+#include <dregionmonitor.h>
 #include <DWindowManagerHelper>
 
 DWIDGET_USE_NAMESPACE
@@ -53,23 +53,19 @@ signals:
 protected:
     void showEvent(QShowEvent *e);
     void enterEvent(QEvent *e);
-    void mousePressEvent(QMouseEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
 
 private slots:
-    void globalMouseRelease(int button, int x, int y, const QString &id);
-    void registerMouseEvent();
-    void unRegisterMouseEvent();
+    void onGlobMouseRelease(const QPoint &mousePos, const int flag);
     void compositeChanged();
 
 private:
     bool m_model;
     QPoint m_lastPoint;
-    QString m_mouseAreaKey;
 
     QTimer *m_acceptDelayTimer;
 
-    DBusXMouseArea *m_mouseInter;
+    DRegionMonitor *m_regionInter;
     DBusDisplay *m_displayInter;
     DWindowManagerHelper *m_wmHelper;
 };

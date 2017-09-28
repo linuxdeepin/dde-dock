@@ -27,15 +27,13 @@
 
 DWIDGET_USE_NAMESPACE
 
-const int MOUSE_BUTTON(1 << 1);
-
 DockPopupWindow::DockPopupWindow(QWidget *parent)
     : DArrowRectangle(ArrowBottom, parent),
       m_model(false),
 
       m_acceptDelayTimer(new QTimer(this)),
 
-      m_mouseInter(new DBusXMouseArea(this)),
+      m_regionInter(new DRegionMonitor(this)),
       m_displayInter(new DBusDisplay(this))
 {
     m_acceptDelayTimer->setSingleShot(true);
@@ -52,6 +50,7 @@ DockPopupWindow::DockPopupWindow(QWidget *parent)
 
     connect(m_acceptDelayTimer, &QTimer::timeout, this, &DockPopupWindow::accept);
     connect(m_wmHelper, &DWindowManagerHelper::hasCompositeChanged, this, &DockPopupWindow::compositeChanged);
+    connect(m_regionInter, &DRegionMonitor::buttonPress, this, &DockPopupWindow::onGlobMouseRelease);
 }
 
 DockPopupWindow::~DockPopupWindow()
@@ -82,11 +81,11 @@ void DockPopupWindow::show(const QPoint &pos, const bool model)
 
     show(pos.x(), pos.y());
 
-    if (!model && !m_mouseAreaKey.isEmpty())
-        unRegisterMouseEvent();
-
-    if (model && m_mouseAreaKey.isEmpty())
-        registerMouseEvent();
+    const bool regionRegistered = m_regionInter->registered();
+    if (!m_model && regionRegistered)
+        m_regionInter->unregisterRegion();
+    else if (m_model && !regionRegistered)
+        m_regionInter->registerRegion();
 }
 
 void DockPopupWindow::show(const int x, const int y)
@@ -98,8 +97,8 @@ void DockPopupWindow::show(const int x, const int y)
 
 void DockPopupWindow::hide()
 {
-    if (!m_mouseAreaKey.isEmpty())
-        unRegisterMouseEvent();
+    if (m_regionInter->registered())
+        m_regionInter->unregisterRegion();
 
     DArrowRectangle::hide();
 }
@@ -128,69 +127,29 @@ void DockPopupWindow::enterEvent(QEvent *e)
     setFocus(Qt::ActiveWindowFocusReason);
 }
 
-void DockPopupWindow::mousePressEvent(QMouseEvent *e)
-{
-    DArrowRectangle::mousePressEvent(e);
-
-//    if (e->button() == Qt::LeftButton)
-//        m_acceptDelayTimer->start();
-}
-
 bool DockPopupWindow::eventFilter(QObject *o, QEvent *e)
 {
     if (o != getContent() || e->type() != QEvent::Resize)
         return false;
 
     // FIXME: ensure position move after global mouse release event
-    QTimer::singleShot(100, this, [this] {if (isVisible()) show(m_lastPoint, m_model);});
+    QTimer::singleShot(100, this, [this] { if (isVisible()) show(m_lastPoint, m_model); });
 
     return false;
 }
 
-void DockPopupWindow::globalMouseRelease(int button, int x, int y, const QString &id)
+void DockPopupWindow::onGlobMouseRelease(const QPoint &mousePos, const int flag)
 {
-    Q_UNUSED(button);
-    // button_left
-//    if (button != 1)
-//        return;
-
-    if (id != m_mouseAreaKey)
-        return;
-
+    Q_UNUSED(flag);
     Q_ASSERT(m_model);
 
-    const auto ratio = devicePixelRatioF();
     const QRect rect = QRect(pos(), size());
-    const QPoint pos = QPoint(x / ratio, y / ratio);
-
-    if (rect.contains(pos))
+    if (rect.contains(mousePos))
         return;
 
     emit accept();
 
-    unRegisterMouseEvent();
-}
-
-void DockPopupWindow::registerMouseEvent()
-{
-    if (!m_mouseAreaKey.isEmpty())
-        return;
-
-    // only regist mouse button event
-    m_mouseAreaKey = m_mouseInter->RegisterArea(0, 0, m_displayInter->screenWidth(), m_displayInter->screenHeight(), MOUSE_BUTTON);
-
-    connect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease, Qt::QueuedConnection);
-}
-
-void DockPopupWindow::unRegisterMouseEvent()
-{
-    if (m_mouseAreaKey.isEmpty())
-        return;
-
-    disconnect(m_mouseInter, &DBusXMouseArea::ButtonRelease, this, &DockPopupWindow::globalMouseRelease);
-
-    m_mouseInter->UnregisterArea(m_mouseAreaKey);
-    m_mouseAreaKey.clear();
+    m_regionInter->unregisterRegion();
 }
 
 void DockPopupWindow::compositeChanged()
