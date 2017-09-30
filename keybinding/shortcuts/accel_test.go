@@ -20,9 +20,10 @@
 package shortcuts
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
-	. "github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestSplitStandardAccel(t *testing.T) {
@@ -81,19 +82,19 @@ func TestParseStandardAccel(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(parsed, ShouldResemble, ParsedAccel{
 			Key:  "T",
-			Mods: xproto.ModMask4 | xproto.ModMaskControl,
+			Mods: x.ModMask4 | x.ModMaskControl,
 		})
 
 		parsed, err = ParseStandardAccel("<Control><Alt><Shift><Super>T")
 		So(err, ShouldBeNil)
 		So(parsed, ShouldResemble, ParsedAccel{
 			Key:  "T",
-			Mods: xproto.ModMaskShift | xproto.ModMask4 | xproto.ModMask1 | xproto.ModMaskControl,
+			Mods: x.ModMaskShift | x.ModMask4 | x.ModMask1 | x.ModMaskControl,
 		})
 
 		parsed, err = ParseStandardAccel("<Shift>XXXXX")
 		So(err, ShouldBeNil)
-		So(parsed, ShouldResemble, ParsedAccel{Key: "XXXXX", Mods: xproto.ModMaskShift})
+		So(parsed, ShouldResemble, ParsedAccel{Key: "XXXXX", Mods: x.ModMaskShift})
 
 		// abnormal situation:
 		parsed, err = ParseStandardAccel("")
@@ -109,13 +110,13 @@ func TestParsedAccelMethodString(t *testing.T) {
 		var parsed ParsedAccel
 		parsed = ParsedAccel{
 			Key:  "percent",
-			Mods: xproto.ModMaskControl | xproto.ModMaskShift,
+			Mods: x.ModMaskControl | x.ModMaskShift,
 		}
 		So(parsed.String(), ShouldEqual, "<Shift><Control>percent")
 
 		parsed = ParsedAccel{
 			Key:  "T",
-			Mods: xproto.ModMaskShift | xproto.ModMask4 | xproto.ModMask1 | xproto.ModMaskControl,
+			Mods: x.ModMaskShift | x.ModMask4 | x.ModMask1 | x.ModMaskControl,
 		}
 		So(parsed.String(), ShouldEqual, "<Shift><Control><Alt><Super>T")
 	})

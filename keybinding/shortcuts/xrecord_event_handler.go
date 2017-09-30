@@ -20,14 +20,14 @@
 package shortcuts
 
 import (
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strings"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
 type XRecordEventHandler struct {
-	xu                   *xgbutil.XUtil
+	keySymbols           *keysyms.KeySymbols
 	pressedMods          uint16
 	historyPressedMods   uint16
 	nonModKeyPressed     bool
@@ -35,9 +35,9 @@ type XRecordEventHandler struct {
 	allModKeysReleasedCb func()
 }
 
-func NewXRecordEventHandler(xu *xgbutil.XUtil) *XRecordEventHandler {
+func NewXRecordEventHandler(keySymbols *keysyms.KeySymbols) *XRecordEventHandler {
 	return &XRecordEventHandler{
-		xu: xu,
+		keySymbols: keySymbols,
 	}
 }
 
@@ -52,12 +52,12 @@ func (h *XRecordEventHandler) handleButtonEvent(pressed bool) {
 }
 
 func (h *XRecordEventHandler) handleKeyEvent(pressed bool, keycode uint8, state uint16) {
-	keystr := keybind.LookupString(h.xu, state, xproto.Keycode(keycode))
+	keystr := h.keySymbols.LookupString(x.Keycode(keycode), state)
 	//var pr string
 	//if pressed {
-	//pr = "∨"
+	//	pr = "PRESS"
 	//} else {
-	//pr = "∧"
+	//	pr = "RELEASE"
 	//}
 	//logger.Debugf("%s keycode: [%d|%s], state: %v\n", pr, keycode, keystr, Modifiers(state))
 
@@ -118,9 +118,9 @@ func key2Mod(key string) (uint16, bool) {
 	key = strings.ToLower(key)
 	// caps_lock and num_lock
 	if key == "caps_lock" {
-		return xproto.ModMaskLock, true
+		return x.ModMaskLock, true
 	} else if key == "num_lock" {
-		return xproto.ModMask2, true
+		return x.ModMask2, true
 	}
 
 	// control/alt/meta/shift/super _ l/r
@@ -135,13 +135,13 @@ func key2Mod(key string) (uint16, bool) {
 
 	switch parts[0] {
 	case "shift":
-		return xproto.ModMaskShift, true
+		return x.ModMaskShift, true
 	case "control":
-		return xproto.ModMaskControl, true
+		return x.ModMaskControl, true
 	case "super":
-		return xproto.ModMask4, true
+		return x.ModMask4, true
 	case "alt", "meta":
-		return xproto.ModMask1, true
+		return x.ModMask1, true
 	}
 	return 0, false
 }

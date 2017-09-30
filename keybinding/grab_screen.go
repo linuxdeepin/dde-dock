@@ -20,57 +20,41 @@
 package keybinding
 
 import (
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/mousebind"
-	"github.com/BurntSushi/xgbutil/xevent"
-	"pkg.deepin.io/dde/daemon/keybinding/keybind"
+	x "github.com/linuxdeepin/go-x11-client"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"pkg.deepin.io/dde/daemon/keybinding/xrecord"
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (m *Manager) doGrabScreen() error {
-	xu, err := xgbutil.NewConn()
-	if err != nil {
-		return err
-	}
-	keybind.Initialize(xu)
-	mousebind.Initialize(xu)
-
-	err = grabKbdAndMouse(xu)
+func (m *Manager) doGrabScreen(ss *shortcuts.Shortcuts) error {
+	conn, err := x.NewConn()
 	if err != nil {
 		return err
 	}
 
-	// Disable xrecord
-	xrecord.Enable(false)
-	defer xrecord.Enable(true)
+	err = grabKbdAndMouse(conn)
+	if err != nil {
+		return err
+	}
 
-	xevent.ButtonPressFun(
-		func(x *xgbutil.XUtil, e xevent.ButtonPressEvent) {
-			dbus.Emit(m, "KeyEvent", true, "")
-			ungrabKbdAndMouse(xu)
-			xevent.Quit(xu)
-		}).Connect(xu, xu.RootWin())
+	// Temporarily disable record
+	ss.EnableRecord(false)
+	defer ss.EnableRecord(true)
 
-	xevent.ButtonReleaseFun(
-		func(x *xgbutil.XUtil, e xevent.ButtonReleaseEvent) {
-			dbus.Emit(m, "KeyEvent", false, "")
-			ungrabKbdAndMouse(xu)
-			xevent.Quit(xu)
-		}).Connect(xu, xu.RootWin())
-
-	xevent.KeyPressFun(
-		func(x *xgbutil.XUtil, ev xevent.KeyPressEvent) {
-			logger.Debug(ev)
-			mods := shortcuts.GetConcernedModifiers(ev.State)
-			logger.Debug("event mods:", shortcuts.Modifiers(ev.State))
+loop:
+	for {
+		event := conn.WaitForEvent()
+		switch event.GetEventCode() {
+		case x.KeyPressEventCode:
+			event, _ := x.NewKeyPressEvent(event)
+			logger.Debug(event)
+			mods := shortcuts.GetConcernedModifiers(event.State)
+			logger.Debug("event mods:", shortcuts.Modifiers(event.State))
 			key := shortcuts.Key{
 				Mods: mods,
-				Code: shortcuts.Keycode(ev.Detail),
+				Code: shortcuts.Keycode(event.Detail),
 			}
 			logger.Debug("event key:", key)
-			accel := key.ToAccel(x)
+			accel := key.ToAccel(m.keySymbols)
 			dbus.Emit(m, "KeyEvent", true, accel.String())
 			if accel.IsGood() {
 				logger.Debug("good accel", accel)
@@ -79,11 +63,9 @@ func (m *Manager) doGrabScreen() error {
 				logger.Debug("bad accel", accel)
 				m.grabScreenPressedAccel = nil
 			}
-		}).Connect(xu, xu.RootWin())
-
-	xevent.KeyReleaseFun(
-		func(x *xgbutil.XUtil, ev xevent.KeyReleaseEvent) {
-			logger.Debug(ev)
+		case x.KeyReleaseEventCode:
+			event, _ := x.NewKeyReleaseEvent(event)
+			logger.Debug(event)
 			if m.grabScreenPressedAccel != nil {
 				dbus.Emit(m, "KeyEvent", false, m.grabScreenPressedAccel.String())
 				m.grabScreenPressedAccel = nil
@@ -91,30 +73,61 @@ func (m *Manager) doGrabScreen() error {
 				dbus.Emit(m, "KeyEvent", false, "")
 			}
 
-			ungrabKbdAndMouse(xu)
-			xevent.Quit(xu)
-		}).Connect(xu, xu.RootWin())
+			ungrabKbdAndMouse(conn)
+			break loop
+		case x.ButtonPressEventCode:
+			dbus.Emit(m, "KeyEvent", true, "")
+			ungrabKbdAndMouse(conn)
+			break loop
+		case x.ButtonReleaseEventCode:
+			dbus.Emit(m, "KeyEvent", false, "")
+			ungrabKbdAndMouse(conn)
+			break loop
+		}
+	}
 
-	xevent.Main(xu)
+	conn.Close()
 	return nil
 }
 
-func grabKbdAndMouse(xu *xgbutil.XUtil) error {
-	err := keybind.GrabKeyboard(xu, xu.RootWin())
+func grabKbdAndMouse(conn *x.Conn) error {
+	rootWin := conn.GetDefaultScreen().Root
+	err := shortcuts.GrabKeyboard(conn, rootWin)
 	if err != nil {
 		return err
 	}
 
 	// Ignore mouse grab error
-	mousebind.GrabChecked(xu, xu.RootWin(), 0, 1, false)
-	mousebind.GrabChecked(xu, xu.RootWin(), 0, 2, false)
-	mousebind.GrabChecked(xu, xu.RootWin(), 0, 3, false)
+	for _, button := range [...]byte{1, 2, 3} {
+		grabMouse(conn, button, rootWin)
+	}
 	return nil
 }
 
-func ungrabKbdAndMouse(xu *xgbutil.XUtil) {
-	keybind.UngrabKeyboard(xu)
-	mousebind.Ungrab(xu, xu.RootWin(), 0, 1)
-	mousebind.Ungrab(xu, xu.RootWin(), 0, 2)
-	mousebind.Ungrab(xu, xu.RootWin(), 0, 3)
+func ungrabKbdAndMouse(conn *x.Conn) {
+	shortcuts.UngrabKeyboard(conn)
+	rootWin := conn.GetDefaultScreen().Root
+	for _, button := range [...]byte{1, 2, 3} {
+		ungrabMouse(conn, button, rootWin)
+	}
+}
+
+const pointerMasks = x.EventMaskButtonRelease | x.EventMaskButtonPress
+
+func grabMouse(conn *x.Conn, button uint8, win x.Window) error {
+	var err error
+	for _, m := range shortcuts.IgnoreMods {
+		err = x.GrabButtonChecked(conn, x.True, win, pointerMasks,
+			x.GrabModeAsync, x.GrabModeAsync, 0, 0, button, m).Check(conn)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func ungrabMouse(conn *x.Conn, button uint8, win x.Window) {
+	for _, m := range shortcuts.IgnoreMods {
+		x.UngrabButtonChecked(conn, button, win, m).Check(conn)
+	}
 }

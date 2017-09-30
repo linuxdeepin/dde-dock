@@ -253,7 +253,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 	}
 
 	// check pa.Key valid
-	_, err = pa.QueryKey(m.xu)
+	_, err = pa.QueryKey(m.keySymbols)
 	if err != nil {
 		return false, "", err
 	}
@@ -303,10 +303,10 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 // GrabScreen grab screen for getting the key pressed
 func (m *Manager) GrabScreen() error {
 	logger.Debug("Manager.GrabScreen")
-	return m.doGrabScreen()
+	return m.doGrabScreen(m.shortcuts)
 }
 
 func (m *Manager) SetNumLockState(state int32) error {
 	logger.Debug("SetNumLockState", state)
-	return setNumLockState(m.xu, NumLockState(state))
+	return setNumLockState(m.conn, m.keySymbols, NumLockState(state))
 }

@@ -21,8 +21,9 @@ package keybinding
 
 import (
 	"fmt"
-	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"time"
+
+	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
 func (m *Manager) initHandlers() {
@@ -50,7 +51,7 @@ func (m *Manager) initHandlers() {
 	}
 
 	m.handlers[ActionTypeShowNumLockOSD] = func(ev *KeyEvent) {
-		state, err := queryNumLockState(m.xu)
+		state, err := queryNumLockState(m.conn)
 		if err != nil {
 			logger.Warning(err)
 			return
@@ -75,7 +76,7 @@ func (m *Manager) initHandlers() {
 			return
 		}
 
-		state, err := queryCapsLockState(m.xu)
+		state, err := queryCapsLockState(m.conn)
 		if err != nil {
 			logger.Warning(err)
 			return
@@ -128,7 +129,7 @@ func (m *Manager) initHandlers() {
 			if err != nil {
 				logger.Warning("execCmd error:", err)
 			}
-		} ()
+		}()
 	}
 
 	m.handlers[ActionTypeSystemSuspend] = func(ev *KeyEvent) {

@@ -21,39 +21,39 @@ package shortcuts
 
 import (
 	"fmt"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strings"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
-type Keycode xproto.Keycode
+type Keycode x.Keycode
 type Modifiers uint16
 
 func (mods Modifiers) String() string {
 	var keys []string
-	if mods&xproto.ModMaskShift > 0 {
+	if mods&x.ModMaskShift > 0 {
 		keys = append(keys, "Shift")
 	}
-	if mods&xproto.ModMaskLock > 0 {
+	if mods&x.ModMaskLock > 0 {
 		keys = append(keys, "CapsLock")
 	}
-	if mods&xproto.ModMaskControl > 0 {
+	if mods&x.ModMaskControl > 0 {
 		keys = append(keys, "Control")
 	}
-	if mods&xproto.ModMask1 > 0 {
+	if mods&x.ModMask1 > 0 {
 		keys = append(keys, "Alt")
 	}
-	if mods&xproto.ModMask2 > 0 {
+	if mods&x.ModMask2 > 0 {
 		keys = append(keys, "NumLock")
 	}
-	if mods&xproto.ModMask3 > 0 {
+	if mods&x.ModMask3 > 0 {
 		keys = append(keys, "Mod3")
 	}
-	if mods&xproto.ModMask4 > 0 {
+	if mods&x.ModMask4 > 0 {
 		keys = append(keys, "Super")
 	}
-	if mods&xproto.ModMask5 > 0 {
+	if mods&x.ModMask5 > 0 {
 		keys = append(keys, "Mod5")
 	}
 	return fmt.Sprintf("[%d|%s]", uint16(mods), strings.Join(keys, "-"))
@@ -141,8 +141,8 @@ func keysymToWeird(sym string) string {
 	return sym
 }
 
-func (k Key) ToAccel(xu *xgbutil.XUtil) ParsedAccel {
-	str := keybind.LookupString(xu, uint16(k.Mods), xproto.Keycode(k.Code))
+func (k Key) ToAccel(keySymbols *keysyms.KeySymbols) ParsedAccel {
+	str := keySymbols.LookupString(x.Keycode(k.Code), uint16(k.Mods))
 	pa := ParsedAccel{
 		Mods: k.Mods,
 		Key:  str,
@@ -150,10 +150,30 @@ func (k Key) ToAccel(xu *xgbutil.XUtil) ParsedAccel {
 	return pa.fix()
 }
 
-func (k Key) Ungrab(xu *xgbutil.XUtil) {
-	keybind.Ungrab(xu, xu.RootWin(), uint16(k.Mods), xproto.Keycode(k.Code))
+var IgnoreMods []uint16 = []uint16{
+	0,
+	x.ModMaskLock,              // Caps lock
+	x.ModMask2,                 // Num lock
+	x.ModMaskLock | x.ModMask2, // Caps and Num lock
 }
 
-func (k Key) Grab(xu *xgbutil.XUtil) error {
-	return keybind.GrabChecked(xu, xu.RootWin(), uint16(k.Mods), xproto.Keycode(k.Code))
+func (k Key) Ungrab(conn *x.Conn) {
+	rootWin := conn.GetDefaultScreen().Root
+	for _, m := range IgnoreMods {
+		x.UngrabKeyChecked(conn, x.Keycode(k.Code), rootWin, uint16(k.Mods)|m).Check(conn)
+	}
+}
+
+func (k Key) Grab(conn *x.Conn) error {
+	rootWin := conn.GetDefaultScreen().Root
+
+	var err error
+	for _, m := range IgnoreMods {
+		err = x.GrabKeyChecked(conn, x.True, rootWin, uint16(k.Mods)|m, x.Keycode(k.Code),
+			x.GrabModeAsync, x.GrabModeAsync).Check(conn)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

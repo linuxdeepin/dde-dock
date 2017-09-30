@@ -20,17 +20,19 @@
 package keybinding
 
 import (
-	"dbus/com/deepin/daemon/helper/backlight"
-	"gir/gio-2.0"
-	"github.com/BurntSushi/xgb/xtest"
-	"github.com/BurntSushi/xgbutil"
 	"path/filepath"
-	"pkg.deepin.io/dde/daemon/keybinding/keybind"
+	"time"
+
+	"dbus/com/deepin/daemon/helper/backlight"
+
+	"gir/gio-2.0"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 	"pkg.deepin.io/lib/dbus/property"
 	"pkg.deepin.io/lib/xdg/basedir"
-	"time"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
 const (
@@ -64,7 +66,8 @@ type Manager struct {
 	// (pressed, accel)
 	KeyEvent func(bool, string)
 
-	xu *xgbutil.XUtil
+	conn       *x.Conn
+	keySymbols *keysyms.KeySymbols
 
 	keyboardSetting *gio.Settings
 	sysSetting      *gio.Settings
@@ -108,17 +111,12 @@ func NewManager() (*Manager, error) {
 		enableListenGSettings: true,
 	}
 
-	xu, err := xgbutil.NewConn()
+	conn, err := x.NewConn()
 	if err != nil {
 		return nil, err
 	}
-	m.xu = xu
-	keybind.Initialize(xu)
-	err = xtest.Init(xu.Conn())
-	if err != nil {
-		return nil, err
-	}
-
+	m.conn = conn
+	m.keySymbols = keysyms.NewKeySymbols(conn)
 	return &m, nil
 }
 
@@ -129,14 +127,14 @@ func (m *Manager) init() {
 	if m.keyboardSetting.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
 		if nlState == NumLockUnknown {
-			state, err := queryNumLockState(m.xu)
+			state, err := queryNumLockState(m.conn)
 			if err != nil {
 				logger.Warning("queryNumLockState failed:", err)
 			} else {
 				m.NumLockState.Set(int32(state))
 			}
 		} else {
-			err := setNumLockState(m.xu, nlState)
+			err := setNumLockState(m.conn, m.keySymbols, nlState)
 			if err != nil {
 				logger.Warning("setNumLockState failed:", err)
 			}
@@ -150,7 +148,7 @@ func (m *Manager) init() {
 	m.mediaSetting = gio.NewSettings(mediakeySchema)
 	m.wmSetting = gio.NewSettings(wmSchema)
 
-	m.shortcuts = shortcuts.NewShortcuts(m.xu, m.handleKeyEvent)
+	m.shortcuts = shortcuts.NewShortcuts(m.conn, m.keySymbols, m.handleKeyEvent)
 	m.shortcuts.AddSpecial()
 	m.shortcuts.AddSystem(m.sysSetting)
 	m.shortcuts.AddMedia(m.mediaSetting)

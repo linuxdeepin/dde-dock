@@ -22,6 +22,7 @@ package shortcuts
 import (
 	"os"
 	"path/filepath"
+
 	"pkg.deepin.io/lib/keyfile"
 	dutils "pkg.deepin.io/lib/utils"
 )

@@ -21,9 +21,10 @@ package keybinding
 
 import (
 	"errors"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgb/xtest"
-	"github.com/BurntSushi/xgbutil"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/ext/test"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
@@ -43,13 +44,14 @@ const (
 	CapsLockUnknown
 )
 
-func queryNumLockState(xu *xgbutil.XUtil) (NumLockState, error) {
-	queryPointerReply, err := xproto.QueryPointer(xu.Conn(), xu.RootWin()).Reply()
+func queryNumLockState(conn *x.Conn) (NumLockState, error) {
+	rootWin := conn.GetDefaultScreen().Root
+	queryPointerReply, err := x.QueryPointer(conn, rootWin).Reply(conn)
 	if err != nil {
 		return NumLockUnknown, err
 	}
 	logger.Debugf("query pointer reply %#v", queryPointerReply)
-	on := queryPointerReply.Mask&xproto.ModMask2 != 0
+	on := queryPointerReply.Mask&x.ModMask2 != 0
 	if on {
 		return NumLockOn, nil
 	} else {
@@ -57,13 +59,14 @@ func queryNumLockState(xu *xgbutil.XUtil) (NumLockState, error) {
 	}
 }
 
-func queryCapsLockState(xu *xgbutil.XUtil) (CapsLockState, error) {
-	queryPointerReply, err := xproto.QueryPointer(xu.Conn(), xu.RootWin()).Reply()
+func queryCapsLockState(conn *x.Conn) (CapsLockState, error) {
+	rootWin := conn.GetDefaultScreen().Root
+	queryPointerReply, err := x.QueryPointer(conn, rootWin).Reply(conn)
 	if err != nil {
 		return CapsLockUnknown, err
 	}
 	logger.Debugf("query pointer reply %#v", queryPointerReply)
-	on := queryPointerReply.Mask&xproto.ModMaskLock != 0
+	on := queryPointerReply.Mask&x.ModMaskLock != 0
 	if on {
 		return CapsLockOn, nil
 	} else {
@@ -71,41 +74,40 @@ func queryCapsLockState(xu *xgbutil.XUtil) (CapsLockState, error) {
 	}
 }
 
-func setNumLockState(xu *xgbutil.XUtil, state NumLockState) error {
+func setNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols, state NumLockState) error {
 	if !(state == NumLockOff || state == NumLockOn) {
 		return errors.New("invalid numlock state")
 	}
 
-	state0, err := queryNumLockState(xu)
+	state0, err := queryNumLockState(conn)
 	if err != nil {
 		return err
 	}
 
 	if state0 != state {
-		return changeNumLockState(xu)
+		return changeNumLockState(conn, keySymbols)
 	}
 	return nil
 }
 
-func changeNumLockState(xu *xgbutil.XUtil) (err error) {
+func changeNumLockState(conn *x.Conn, keySymbols *keysyms.KeySymbols) (err error) {
 	// get Num_Lock keycode
-	code, err := shortcuts.GetKeyFirstCode(xu, "Num_Lock")
+	code, err := shortcuts.GetKeyFirstCode(keySymbols, "Num_Lock")
 	if err != nil {
 		return err
 	}
 	numLockKeycode := byte(code)
 	logger.Debug("numLockKeycode is", numLockKeycode)
 
-	x := xu.Conn()
-	root := xu.RootWin()
+	rootWin := conn.GetDefaultScreen().Root
 
 	// fake key press
-	err = xtest.FakeInputChecked(x, xproto.KeyPress, numLockKeycode, xproto.TimeCurrentTime, root, 0, 0, 0).Check()
+	err = test.FakeInputChecked(conn, x.KeyPressEventCode, numLockKeycode, x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
 	if err != nil {
 		return err
 	}
 	// fake key release
-	err = xtest.FakeInputChecked(x, xproto.KeyRelease, numLockKeycode, xproto.TimeCurrentTime, root, 0, 0, 0).Check()
+	err = test.FakeInputChecked(conn, x.KeyReleaseEventCode, numLockKeycode, x.TimeCurrentTime, rootWin, 0, 0, 0).Check(conn)
 	if err != nil {
 		return err
 	}

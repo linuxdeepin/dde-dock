@@ -22,11 +22,11 @@ package shortcuts
 import (
 	"bytes"
 	"errors"
-	"github.com/BurntSushi/xgb/xproto"
-	"github.com/BurntSushi/xgbutil"
-	"pkg.deepin.io/dde/daemon/keybinding/keybind"
 	"strconv"
 	"strings"
+
+	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
 type Accel struct {
@@ -42,7 +42,7 @@ type ParsedAccel struct {
 	Key  string
 }
 
-func (ap1 ParsedAccel) Equal(xu *xgbutil.XUtil, ap2 ParsedAccel) bool {
+func (ap1 ParsedAccel) Equal(keySymbols *keysyms.KeySymbols, ap2 ParsedAccel) bool {
 	logger.Debug(ap1, " equal? ", ap2)
 	if ap1.Mods != ap2.Mods {
 		logger.Debug("Mods no equal, return false")
@@ -55,11 +55,11 @@ func (ap1 ParsedAccel) Equal(xu *xgbutil.XUtil, ap2 ParsedAccel) bool {
 	}
 
 	// ap1.Key != ap2.Key
-	codes1, err := keybind.StrToKeycodes(xu, ap1.Key)
+	codes1, err := keySymbols.StringToKeycodes(ap1.Key)
 	if err != nil {
 		return false
 	}
-	codes2, err := keybind.StrToKeycodes(xu, ap2.Key)
+	codes2, err := keySymbols.StringToKeycodes(ap2.Key)
 	if err != nil {
 		return false
 	}
@@ -69,7 +69,7 @@ func (ap1 ParsedAccel) Equal(xu *xgbutil.XUtil, ap2 ParsedAccel) bool {
 	return keycodesEq
 }
 
-func isKeycodesEqual(list1, list2 []xproto.Keycode) bool {
+func isKeycodesEqual(list1, list2 []x.Keycode) bool {
 	logger.Debug("isKeycodesEqual:", list1, list2)
 	l1 := len(list1)
 	l2 := len(list2)
@@ -92,12 +92,12 @@ func (pa ParsedAccel) MarshalJSON() ([]byte, error) {
 	return []byte(quoted), nil
 }
 
-func GetKeyFirstCode(xu *xgbutil.XUtil, str string) (xproto.Keycode, error) {
-	codes, err := keybind.StrToKeycodes(xu, str)
+func GetKeyFirstCode(keySymbols *keysyms.KeySymbols, str string) (x.Keycode, error) {
+	codes, err := keySymbols.StringToKeycodes(str)
 	if err != nil {
 		return 0, err
 	}
-	var code xproto.Keycode
+	var code x.Keycode
 	for _, kc := range codes {
 		if kc != 0 {
 			code = kc
@@ -111,8 +111,8 @@ func GetKeyFirstCode(xu *xgbutil.XUtil, str string) (xproto.Keycode, error) {
 	return code, nil
 }
 
-func (pa ParsedAccel) QueryKey(xu *xgbutil.XUtil) (Key, error) {
-	code, err := GetKeyFirstCode(xu, pa.Key)
+func (pa ParsedAccel) QueryKey(keySymbols *keysyms.KeySymbols) (Key, error) {
+	code, err := GetKeyFirstCode(keySymbols, pa.Key)
 	if err != nil {
 		return Key{}, err
 	}
@@ -214,13 +214,13 @@ func ParseStandardAccel(accel string) (ParsedAccel, error) {
 	for _, part := range parts[:len(parts)-1] {
 		switch strings.ToLower(part) {
 		case "shift":
-			mods |= xproto.ModMaskShift
+			mods |= x.ModMaskShift
 		case "control":
-			mods |= xproto.ModMaskControl
+			mods |= x.ModMaskControl
 		case "alt":
-			mods |= xproto.ModMask1
+			mods |= x.ModMask1
 		case "super":
-			mods |= xproto.ModMask4
+			mods |= x.ModMask4
 		default:
 			return ParsedAccel{}, errors.New("unexpect mod " + part)
 		}
@@ -248,16 +248,16 @@ func ParseStandardAccels(accelStrv []string) []ParsedAccel {
 func (pa ParsedAccel) String() string {
 	var keys []string
 	mods := pa.Mods
-	if mods&xproto.ModMaskShift > 0 {
+	if mods&x.ModMaskShift > 0 {
 		keys = append(keys, "<Shift>")
 	}
-	if mods&xproto.ModMaskControl > 0 {
+	if mods&x.ModMaskControl > 0 {
 		keys = append(keys, "<Control>")
 	}
-	if mods&xproto.ModMask1 > 0 {
+	if mods&x.ModMask1 > 0 {
 		keys = append(keys, "<Alt>")
 	}
-	if mods&xproto.ModMask4 > 0 {
+	if mods&x.ModMask4 > 0 {
 		keys = append(keys, "<Super>")
 	}
 
@@ -287,7 +287,7 @@ func (pa ParsedAccel) IsGood() bool {
 	}
 
 	// pa.Mod > 0
-	if pa.Mods&^xproto.ModMaskShift == 0 {
+	if pa.Mods&^x.ModMaskShift == 0 {
 		// mods is <Shift>
 		// TODO
 		return isGoodSingleKey(keyLower)
@@ -333,7 +333,7 @@ func (pa ParsedAccel) fix() ParsedAccel {
 		key = strings.ToUpper(key)
 	}
 
-	if pa.Mods > 0 && pa.Mods&^xproto.ModMask4 == 0 {
+	if pa.Mods > 0 && pa.Mods&^x.ModMask4 == 0 {
 		// pa is <Super>Super_L or <Super>Super_R
 		if keyLower == "super_l" || keyLower == "super_r" {
 			pa.Mods = 0
