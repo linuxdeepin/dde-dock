@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
@@ -32,29 +33,29 @@ type Modifiers uint16
 
 func (mods Modifiers) String() string {
 	var keys []string
-	if mods&x.ModMaskShift > 0 {
+	if mods&keysyms.ModMaskShift > 0 {
 		keys = append(keys, "Shift")
 	}
-	if mods&x.ModMaskLock > 0 {
+	if mods&keysyms.ModMaskCapsLock > 0 {
 		keys = append(keys, "CapsLock")
 	}
-	if mods&x.ModMaskControl > 0 {
+	if mods&keysyms.ModMaskControl > 0 {
 		keys = append(keys, "Control")
 	}
-	if mods&x.ModMask1 > 0 {
+	if mods&keysyms.ModMaskAlt > 0 {
 		keys = append(keys, "Alt")
 	}
-	if mods&x.ModMask2 > 0 {
+	if mods&keysyms.ModMaskNumLock > 0 {
 		keys = append(keys, "NumLock")
 	}
 	if mods&x.ModMask3 > 0 {
 		keys = append(keys, "Mod3")
 	}
-	if mods&x.ModMask4 > 0 {
+	if mods&keysyms.ModMaskSuper > 0 {
 		keys = append(keys, "Super")
 	}
-	if mods&x.ModMask5 > 0 {
-		keys = append(keys, "Mod5")
+	if mods&keysyms.ModMaskModeSwitch > 0 {
+		keys = append(keys, "ModeSwitch")
 	}
 	return fmt.Sprintf("[%d|%s]", uint16(mods), strings.Join(keys, "-"))
 }
@@ -150,30 +151,12 @@ func (k Key) ToAccel(keySymbols *keysyms.KeySymbols) ParsedAccel {
 	return pa.fix()
 }
 
-var IgnoreMods []uint16 = []uint16{
-	0,
-	x.ModMaskLock,              // Caps lock
-	x.ModMask2,                 // Num lock
-	x.ModMaskLock | x.ModMask2, // Caps and Num lock
-}
-
 func (k Key) Ungrab(conn *x.Conn) {
 	rootWin := conn.GetDefaultScreen().Root
-	for _, m := range IgnoreMods {
-		x.UngrabKeyChecked(conn, x.Keycode(k.Code), rootWin, uint16(k.Mods)|m).Check(conn)
-	}
+	keybind.Ungrab(conn, rootWin, uint16(k.Mods), x.Keycode(k.Code))
 }
 
 func (k Key) Grab(conn *x.Conn) error {
 	rootWin := conn.GetDefaultScreen().Root
-
-	var err error
-	for _, m := range IgnoreMods {
-		err = x.GrabKeyChecked(conn, x.True, rootWin, uint16(k.Mods)|m, x.Keycode(k.Code),
-			x.GrabModeAsync, x.GrabModeAsync).Check(conn)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	return keybind.GrabChecked(conn, rootWin, uint16(k.Mods), x.Keycode(k.Code))
 }

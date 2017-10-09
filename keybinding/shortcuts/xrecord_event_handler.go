@@ -118,9 +118,9 @@ func key2Mod(key string) (uint16, bool) {
 	key = strings.ToLower(key)
 	// caps_lock and num_lock
 	if key == "caps_lock" {
-		return x.ModMaskLock, true
+		return keysyms.ModMaskCapsLock, true
 	} else if key == "num_lock" {
-		return x.ModMask2, true
+		return keysyms.ModMaskNumLock, true
 	}
 
 	// control/alt/meta/shift/super _ l/r
@@ -135,13 +135,13 @@ func key2Mod(key string) (uint16, bool) {
 
 	switch parts[0] {
 	case "shift":
-		return x.ModMaskShift, true
+		return keysyms.ModMaskShift, true
 	case "control":
-		return x.ModMaskControl, true
+		return keysyms.ModMaskControl, true
 	case "super":
-		return x.ModMask4, true
+		return keysyms.ModMaskSuper, true
 	case "alt", "meta":
-		return x.ModMask1, true
+		return keysyms.ModMaskAlt, true
 	}
 	return 0, false
 }

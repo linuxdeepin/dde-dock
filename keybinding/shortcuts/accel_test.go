@@ -22,7 +22,7 @@ package shortcuts
 import (
 	"testing"
 
-	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -82,19 +82,19 @@ func TestParseStandardAccel(t *testing.T) {
 		So(err, ShouldBeNil)
 		So(parsed, ShouldResemble, ParsedAccel{
 			Key:  "T",
-			Mods: x.ModMask4 | x.ModMaskControl,
+			Mods: keysyms.ModMaskSuper | keysyms.ModMaskControl,
 		})
 
 		parsed, err = ParseStandardAccel("<Control><Alt><Shift><Super>T")
 		So(err, ShouldBeNil)
 		So(parsed, ShouldResemble, ParsedAccel{
 			Key:  "T",
-			Mods: x.ModMaskShift | x.ModMask4 | x.ModMask1 | x.ModMaskControl,
+			Mods: keysyms.ModMaskShift | keysyms.ModMaskSuper | keysyms.ModMaskAlt | keysyms.ModMaskControl,
 		})
 
 		parsed, err = ParseStandardAccel("<Shift>XXXXX")
 		So(err, ShouldBeNil)
-		So(parsed, ShouldResemble, ParsedAccel{Key: "XXXXX", Mods: x.ModMaskShift})
+		So(parsed, ShouldResemble, ParsedAccel{Key: "XXXXX", Mods: keysyms.ModMaskShift})
 
 		// abnormal situation:
 		parsed, err = ParseStandardAccel("")
@@ -110,13 +110,13 @@ func TestParsedAccelMethodString(t *testing.T) {
 		var parsed ParsedAccel
 		parsed = ParsedAccel{
 			Key:  "percent",
-			Mods: x.ModMaskControl | x.ModMaskShift,
+			Mods: keysyms.ModMaskControl | keysyms.ModMaskShift,
 		}
 		So(parsed.String(), ShouldEqual, "<Shift><Control>percent")
 
 		parsed = ParsedAccel{
 			Key:  "T",
-			Mods: x.ModMaskShift | x.ModMask4 | x.ModMask1 | x.ModMaskControl,
+			Mods: keysyms.ModMaskShift | keysyms.ModMaskSuper | keysyms.ModMaskAlt | keysyms.ModMaskControl,
 		}
 		So(parsed.String(), ShouldEqual, "<Shift><Control><Alt><Super>T")
 	})

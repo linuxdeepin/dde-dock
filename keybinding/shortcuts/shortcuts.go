@@ -28,6 +28,7 @@ import (
 
 	x "github.com/linuxdeepin/go-x11-client"
 	"github.com/linuxdeepin/go-x11-client/ext/record"
+	"github.com/linuxdeepin/go-x11-client/util/keybind"
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 	"github.com/linuxdeepin/go-x11-client/util/wm/ewmh"
 )
@@ -86,15 +87,15 @@ func NewShortcutManager(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb Ke
 			return
 		}
 		switch mods {
-		case x.ModMaskLock, x.ModMask2, x.ModMask4:
+		case keysyms.ModMaskCapsLock, keysyms.ModMaskNumLock, keysyms.ModMaskSuper:
 			// caps_lock, num_lock, super
 			ss.emitKeyEvent(0, Key{Code: Keycode(code)})
 
-		case x.ModMaskControl | x.ModMaskShift:
+		case keysyms.ModMaskControl | keysyms.ModMaskShift:
 			// ctrl-shift
 			ss.emitFakeKeyEvent(&Action{Type: ActionTypeSwitchKbdLayout, Arg: SKLCtrlShift})
 
-		case x.ModMask1 | x.ModMaskShift:
+		case keysyms.ModMaskAlt | keysyms.ModMaskShift:
 			// alt-shift
 			ss.emitFakeKeyEvent(&Action{Type: ActionTypeSwitchKbdLayout, Arg: SKLAltShift})
 		}
@@ -371,17 +372,17 @@ func (ss *ShortcutManager) ReloadAllShortcutAccels() []Shortcut {
 // shift, control, alt(mod1), super(mod4)
 func getConcernedMods(state uint16) uint16 {
 	var mods uint16
-	if state&x.ModMaskShift > 0 {
-		mods |= x.ModMaskShift
+	if state&keysyms.ModMaskShift > 0 {
+		mods |= keysyms.ModMaskShift
 	}
-	if state&x.ModMaskControl > 0 {
-		mods |= x.ModMaskControl
+	if state&keysyms.ModMaskControl > 0 {
+		mods |= keysyms.ModMaskControl
 	}
-	if state&x.ModMask1 > 0 {
-		mods |= x.ModMask1
+	if state&keysyms.ModMaskAlt > 0 {
+		mods |= keysyms.ModMaskAlt
 	}
-	if state&x.ModMask4 > 0 {
-		mods |= x.ModMask4
+	if state&keysyms.ModMaskSuper > 0 {
+		mods |= keysyms.ModMaskSuper
 	}
 	return mods
 }
@@ -460,65 +461,20 @@ func isKbdAlreadyGrabbed(conn *x.Conn, ewmhConn *ewmh.Conn) bool {
 		}
 	}
 
-	err := GrabKeyboard(conn, grabWin)
+	err := keybind.GrabKeyboard(conn, grabWin)
 	if err == nil {
 		// grab keyboard successful
-		UngrabKeyboard(conn)
+		keybind.UngrabKeyboard(conn)
 		return false
 	}
 
 	logger.Warningf("GrabKeyboard win %d failed: %v", grabWin, err)
 
-	gkErr, ok := err.(GrabKeyboardError)
+	gkErr, ok := err.(keybind.GrabKeyboardError)
 	if ok && gkErr.Status == x.GrabStatusAlreadyGrabbed {
 		return true
 	}
 	return false
-}
-
-// GrabKeyboard grabs the entire keyboard.
-// Returns whether GrabStatus is successful and an error if one is reported by
-// XGB. It is possible to not get an error and the grab to be unsuccessful.
-// The purpose of 'win' is that after a grab is successful, ALL Key*Events will
-// be sent to that window. Make sure you have a callback attached :-)
-func GrabKeyboard(conn *x.Conn, win x.Window) error {
-	reply, err := x.GrabKeyboard(conn, x.False, win, 0,
-		x.GrabModeAsync, x.GrabModeAsync).Reply(conn)
-	if err != nil {
-		return err
-	}
-
-	if reply.Status == x.GrabStatusSuccess {
-		// successful
-		return nil
-	}
-	return GrabKeyboardError{reply.Status}
-}
-
-// UngrabKeyboard undoes GrabKeyboard.
-func UngrabKeyboard(conn *x.Conn) {
-	x.UngrabKeyboardChecked(conn, 0).Check(conn)
-}
-
-type GrabKeyboardError struct {
-	Status byte
-}
-
-func (err GrabKeyboardError) Error() string {
-	const errMsgPrefix = "GrabKeyboard Failed status: "
-
-	switch err.Status {
-	case x.GrabStatusAlreadyGrabbed:
-		return errMsgPrefix + "AlreadyGrabbed"
-	case x.GrabStatusInvalidTime:
-		return errMsgPrefix + "InvalidTime"
-	case x.GrabStatusNotViewable:
-		return errMsgPrefix + "NotViewable"
-	case x.GrabStatusFrozen:
-		return errMsgPrefix + "Frozen"
-	default:
-		return errMsgPrefix + "Unknown"
-	}
 }
 
 func (ss *ShortcutManager) SetAllModKeysReleasedCallback(cb func()) {

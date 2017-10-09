@@ -21,6 +21,8 @@ package keybinding
 
 import (
 	x "github.com/linuxdeepin/go-x11-client"
+	"github.com/linuxdeepin/go-x11-client/util/keybind"
+	"github.com/linuxdeepin/go-x11-client/util/mousebind"
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
 )
@@ -73,61 +75,35 @@ loop:
 				dbus.Emit(m, "KeyEvent", false, "")
 			}
 
-			ungrabKbdAndMouse(conn)
 			break loop
 		case x.ButtonPressEventCode:
 			dbus.Emit(m, "KeyEvent", true, "")
-			ungrabKbdAndMouse(conn)
 			break loop
 		case x.ButtonReleaseEventCode:
 			dbus.Emit(m, "KeyEvent", false, "")
-			ungrabKbdAndMouse(conn)
 			break loop
 		}
 	}
 
+	ungrabKbdAndMouse(conn)
 	conn.Close()
 	return nil
 }
 
 func grabKbdAndMouse(conn *x.Conn) error {
 	rootWin := conn.GetDefaultScreen().Root
-	err := shortcuts.GrabKeyboard(conn, rootWin)
+	err := keybind.GrabKeyboard(conn, rootWin)
 	if err != nil {
 		return err
 	}
 
 	// Ignore mouse grab error
-	for _, button := range [...]byte{1, 2, 3} {
-		grabMouse(conn, button, rootWin)
-	}
+	const pointerEventMask = x.EventMaskButtonRelease | x.EventMaskButtonPress
+	mousebind.GrabPointer(conn, rootWin, pointerEventMask, x.None, x.None)
 	return nil
 }
 
 func ungrabKbdAndMouse(conn *x.Conn) {
-	shortcuts.UngrabKeyboard(conn)
-	rootWin := conn.GetDefaultScreen().Root
-	for _, button := range [...]byte{1, 2, 3} {
-		ungrabMouse(conn, button, rootWin)
-	}
-}
-
-const pointerMasks = x.EventMaskButtonRelease | x.EventMaskButtonPress
-
-func grabMouse(conn *x.Conn, button uint8, win x.Window) error {
-	var err error
-	for _, m := range shortcuts.IgnoreMods {
-		err = x.GrabButtonChecked(conn, x.True, win, pointerMasks,
-			x.GrabModeAsync, x.GrabModeAsync, 0, 0, button, m).Check(conn)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func ungrabMouse(conn *x.Conn, button uint8, win x.Window) {
-	for _, m := range shortcuts.IgnoreMods {
-		x.UngrabButtonChecked(conn, button, win, m).Check(conn)
-	}
+	keybind.UngrabKeyboard(conn)
+	mousebind.UngrabPointer(conn)
 }

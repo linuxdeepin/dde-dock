@@ -214,13 +214,13 @@ func ParseStandardAccel(accel string) (ParsedAccel, error) {
 	for _, part := range parts[:len(parts)-1] {
 		switch strings.ToLower(part) {
 		case "shift":
-			mods |= x.ModMaskShift
+			mods |= keysyms.ModMaskShift
 		case "control":
-			mods |= x.ModMaskControl
+			mods |= keysyms.ModMaskControl
 		case "alt":
-			mods |= x.ModMask1
+			mods |= keysyms.ModMaskAlt
 		case "super":
-			mods |= x.ModMask4
+			mods |= keysyms.ModMaskSuper
 		default:
 			return ParsedAccel{}, errors.New("unexpect mod " + part)
 		}
@@ -248,16 +248,16 @@ func ParseStandardAccels(accelStrv []string) []ParsedAccel {
 func (pa ParsedAccel) String() string {
 	var keys []string
 	mods := pa.Mods
-	if mods&x.ModMaskShift > 0 {
+	if mods&keysyms.ModMaskShift > 0 {
 		keys = append(keys, "<Shift>")
 	}
-	if mods&x.ModMaskControl > 0 {
+	if mods&keysyms.ModMaskControl > 0 {
 		keys = append(keys, "<Control>")
 	}
-	if mods&x.ModMask1 > 0 {
+	if mods&keysyms.ModMaskAlt > 0 {
 		keys = append(keys, "<Alt>")
 	}
-	if mods&x.ModMask4 > 0 {
+	if mods&keysyms.ModMaskSuper > 0 {
 		keys = append(keys, "<Super>")
 	}
 
@@ -287,7 +287,7 @@ func (pa ParsedAccel) IsGood() bool {
 	}
 
 	// pa.Mod > 0
-	if pa.Mods&^x.ModMaskShift == 0 {
+	if pa.Mods&^keysyms.ModMaskShift == 0 {
 		// mods is <Shift>
 		// TODO
 		return isGoodSingleKey(keyLower)
@@ -333,7 +333,7 @@ func (pa ParsedAccel) fix() ParsedAccel {
 		key = strings.ToUpper(key)
 	}
 
-	if pa.Mods > 0 && pa.Mods&^x.ModMask4 == 0 {
+	if pa.Mods > 0 && pa.Mods&^keysyms.ModMaskSuper == 0 {
 		// pa is <Super>Super_L or <Super>Super_R
 		if keyLower == "super_l" || keyLower == "super_r" {
 			pa.Mods = 0
