@@ -20,8 +20,10 @@
 package keybinding
 
 import (
-	"dbus/com/deepin/daemon/helper/backlight"
 	"errors"
+
+	"dbus/com/deepin/daemon/helper/backlight"
+
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	commonbl "pkg.deepin.io/lib/backlight/common"
 	kbdbl "pkg.deepin.io/lib/backlight/keyboard"

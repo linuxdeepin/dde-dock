@@ -20,8 +20,9 @@
 package keybinding
 
 import (
-	"github.com/smartystreets/goconvey/convey"
 	"testing"
+
+	"github.com/smartystreets/goconvey/convey"
 )
 
 func TestIBMHotkey(t *testing.T) {

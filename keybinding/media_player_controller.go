@@ -20,12 +20,14 @@
 package keybinding
 
 import (
+	"errors"
+	"strings"
+
 	"dbus/org/freedesktop/dbus"
 	"dbus/org/freedesktop/login1"
 	mpris2 "dbus/org/mpris/mediaplayer2"
-	"errors"
+
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
-	"strings"
 )
 
 const (

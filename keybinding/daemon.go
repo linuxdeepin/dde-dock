@@ -77,11 +77,11 @@ func (daemon *Daemon) Start() error {
 		daemon.manager.initHandlers()
 
 		// listen gsetting changed event
-		daemon.manager.listenGSettingsChanged(daemon.manager.sysSetting, shortcuts.ShortcutTypeSystem)
-		daemon.manager.listenGSettingsChanged(daemon.manager.mediaSetting, shortcuts.ShortcutTypeMedia)
-		daemon.manager.listenGSettingsChanged(daemon.manager.wmSetting, shortcuts.ShortcutTypeWM)
+		daemon.manager.listenGSettingsChanged(daemon.manager.gsSystem, shortcuts.ShortcutTypeSystem)
+		daemon.manager.listenGSettingsChanged(daemon.manager.gsMediaKey, shortcuts.ShortcutTypeMedia)
+		daemon.manager.listenGSettingsChanged(daemon.manager.gsGnomeWM, shortcuts.ShortcutTypeWM)
 
-		daemon.manager.shortcuts.EventLoop()
+		daemon.manager.shortcutManager.EventLoop()
 	}()
 
 	return nil

@@ -22,6 +22,7 @@ package keybinding
 import (
 	"dbus/com/deepin/daemon/display"
 	"dbus/com/deepin/daemon/helper/backlight"
+
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )

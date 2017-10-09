@@ -46,7 +46,7 @@ func SetLogger(l *log.Logger) {
 
 type KeyEventFunc func(ev *KeyEvent)
 
-type Shortcuts struct {
+type ShortcutManager struct {
 	conn     *x.Conn
 	dataConn *x.Conn // conn for receive record event
 
@@ -68,8 +68,8 @@ type KeyEvent struct {
 	Shortcut Shortcut
 }
 
-func NewShortcuts(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb KeyEventFunc) *Shortcuts {
-	ss := &Shortcuts{
+func NewShortcutManager(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb KeyEventFunc) *ShortcutManager {
+	ss := &ShortcutManager{
 		idShortcutMap:     make(map[string]Shortcut),
 		grabedKeyAccelMap: make(map[Key]*Accel),
 		eventCb:           eventCb,
@@ -111,7 +111,7 @@ func NewShortcuts(conn *x.Conn, keySymbols *keysyms.KeySymbols, eventCb KeyEvent
 	return ss
 }
 
-func (ss *Shortcuts) recordEventLoop() {
+func (ss *ShortcutManager) recordEventLoop() {
 	// enable context
 	cookie := record.EnableContext(ss.dataConn, ss.recordContext)
 
@@ -162,7 +162,7 @@ func (ss *Shortcuts) recordEventLoop() {
 	}
 }
 
-func (ss *Shortcuts) initRecord() error {
+func (ss *ShortcutManager) initRecord() error {
 	ctrlConn := ss.conn
 	dataConn, err := x.NewConn()
 	if err != nil {
@@ -206,15 +206,15 @@ func (ss *Shortcuts) initRecord() error {
 	return nil
 }
 
-func (ss *Shortcuts) EnableRecord(val bool) {
+func (ss *ShortcutManager) EnableRecord(val bool) {
 	ss.recordEnable = val
 }
 
-func (ss *Shortcuts) Destroy() {
+func (ss *ShortcutManager) Destroy() {
 	// TODO
 }
 
-func (ss *Shortcuts) List() (list []Shortcut) {
+func (ss *ShortcutManager) List() (list []Shortcut) {
 	// RLock ss.idShortcutMap
 	for _, shortcut := range ss.idShortcutMap {
 		list = append(list, shortcut)
@@ -222,7 +222,7 @@ func (ss *Shortcuts) List() (list []Shortcut) {
 	return
 }
 
-func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
+func (ss *ShortcutManager) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
 	key, err := pa.QueryKey(ss.keySymbols)
 	if err != nil {
 		logger.Debugf("getAccel failed shortcut: %v, pa: %v, err: %v", shortcut.GetId(), pa, err)
@@ -255,7 +255,7 @@ func (ss *Shortcuts) grabAccel(shortcut Shortcut, pa ParsedAccel, dummy bool) {
 	ss.grabedKeyAccelMap[key] = accel
 }
 
-func (ss *Shortcuts) ungrabAccel(pa ParsedAccel, dummy bool) {
+func (ss *ShortcutManager) ungrabAccel(pa ParsedAccel, dummy bool) {
 	key, err := pa.QueryKey(ss.keySymbols)
 	if err != nil {
 		logger.Debug(err)
@@ -267,7 +267,7 @@ func (ss *Shortcuts) ungrabAccel(pa ParsedAccel, dummy bool) {
 	key.Ungrab(ss.conn)
 }
 
-func (ss *Shortcuts) grabShortcut(shortcut Shortcut) {
+func (ss *ShortcutManager) grabShortcut(shortcut Shortcut) {
 	//logger.Debug("grabShortcut shortcut id:", shortcut.GetId())
 	for _, pa := range shortcut.GetAccels() {
 		dummy := dummyGrab(shortcut, pa)
@@ -275,7 +275,7 @@ func (ss *Shortcuts) grabShortcut(shortcut Shortcut) {
 	}
 }
 
-func (ss *Shortcuts) ungrabShortcut(shortcut Shortcut) {
+func (ss *ShortcutManager) ungrabShortcut(shortcut Shortcut) {
 
 	for _, pa := range shortcut.GetAccels() {
 		dummy := dummyGrab(shortcut, pa)
@@ -283,15 +283,15 @@ func (ss *Shortcuts) ungrabShortcut(shortcut Shortcut) {
 	}
 }
 
-func (ss *Shortcuts) ModifyShortcutAccels(shortcut Shortcut, newAccels []ParsedAccel) {
-	logger.Debug("Shortcuts.ModifyShortcutAccels", shortcut, newAccels)
+func (ss *ShortcutManager) ModifyShortcutAccels(shortcut Shortcut, newAccels []ParsedAccel) {
+	logger.Debug("ShortcutManager.ModifyShortcutAccels", shortcut, newAccels)
 	ss.ungrabShortcut(shortcut)
 	shortcut.setAccels(newAccels)
 	ss.grabShortcut(shortcut)
 }
 
-func (ss *Shortcuts) AddShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
-	logger.Debug("Shortcuts.AddShortcutAccel", shortcut, pa)
+func (ss *ShortcutManager) AddShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
+	logger.Debug("ShortcutManager.AddShortcutAccel", shortcut, pa)
 	newAccels := shortcut.GetAccels()
 	newAccels = append(newAccels, pa)
 	shortcut.setAccels(newAccels)
@@ -301,8 +301,8 @@ func (ss *Shortcuts) AddShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
 	ss.grabAccel(shortcut, pa, dummy)
 }
 
-func (ss *Shortcuts) RemoveShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
-	logger.Debug("Shortcuts.RemoveShortcutAccel", shortcut, pa)
+func (ss *ShortcutManager) RemoveShortcutAccel(shortcut Shortcut, pa ParsedAccel) {
+	logger.Debug("ShortcutManager.RemoveShortcutAccel", shortcut, pa)
 	logger.Debug("shortcut.GetAccel", shortcut.GetAccels())
 	var newAccels []ParsedAccel
 	for _, accel := range shortcut.GetAccels() {
@@ -330,7 +330,7 @@ func dummyGrab(shortcut Shortcut, pa ParsedAccel) bool {
 	return false
 }
 
-func (ss *Shortcuts) UngrabAll() {
+func (ss *ShortcutManager) UngrabAll() {
 	// ungrab all grabed keys
 	// Lock ss.grabedKeyAccelMap
 	for grabedKey, accel := range ss.grabedKeyAccelMap {
@@ -344,20 +344,20 @@ func (ss *Shortcuts) UngrabAll() {
 	ss.grabedKeyAccelMap = make(map[Key]*Accel, count)
 }
 
-func (ss *Shortcuts) GrabAll() {
+func (ss *ShortcutManager) GrabAll() {
 	// re-grab all shortcuts
 	for _, shortcut := range ss.idShortcutMap {
 		ss.grabShortcut(shortcut)
 	}
 }
 
-func (ss *Shortcuts) regrabAll() {
+func (ss *ShortcutManager) regrabAll() {
 	logger.Debug("regrabAll")
 	ss.UngrabAll()
 	ss.GrabAll()
 }
 
-func (ss *Shortcuts) ReloadAllShortcutAccels() []Shortcut {
+func (ss *ShortcutManager) ReloadAllShortcutAccels() []Shortcut {
 	var changes []Shortcut
 	for _, shortcut := range ss.idShortcutMap {
 		changed := shortcut.ReloadAccels()
@@ -400,13 +400,13 @@ func combineStateCode2Key(state uint16, code uint8) Key {
 	return key
 }
 
-func (ss *Shortcuts) callEventCallback(ev *KeyEvent) {
+func (ss *ShortcutManager) callEventCallback(ev *KeyEvent) {
 	ss.eventCbMu.Lock()
 	ss.eventCb(ev)
 	ss.eventCbMu.Unlock()
 }
 
-func (ss *Shortcuts) handleKeyEvent(pressed bool, detail x.Keycode, state uint16) {
+func (ss *ShortcutManager) handleKeyEvent(pressed bool, detail x.Keycode, state uint16) {
 	key := combineStateCode2Key(state, uint8(detail))
 	logger.Debug("event key:", key)
 
@@ -416,14 +416,14 @@ func (ss *Shortcuts) handleKeyEvent(pressed bool, detail x.Keycode, state uint16
 	}
 }
 
-func (ss *Shortcuts) emitFakeKeyEvent(action *Action) {
+func (ss *ShortcutManager) emitFakeKeyEvent(action *Action) {
 	keyEvent := &KeyEvent{
 		Shortcut: NewFakeShortcut(action),
 	}
 	ss.callEventCallback(keyEvent)
 }
 
-func (ss *Shortcuts) emitKeyEvent(mods Modifiers, key Key) {
+func (ss *ShortcutManager) emitKeyEvent(mods Modifiers, key Key) {
 	// RLock ss.grabedKeyAccelMap
 	accel, ok := ss.grabedKeyAccelMap[key]
 	if ok {
@@ -521,11 +521,11 @@ func (err GrabKeyboardError) Error() string {
 	}
 }
 
-func (ss *Shortcuts) SetAllModKeysReleasedCallback(cb func()) {
+func (ss *ShortcutManager) SetAllModKeysReleasedCallback(cb func()) {
 	ss.xRecordEventHandler.allModKeysReleasedCb = cb
 }
 
-func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
+func (ss *ShortcutManager) handleXRecordKeyEvent(pressed bool, code uint8, state uint16) {
 	ss.xRecordEventHandler.handleKeyEvent(pressed, code, state)
 	if pressed {
 		// Special handling screenshot* shortcuts
@@ -547,11 +547,11 @@ func (ss *Shortcuts) handleXRecordKeyEvent(pressed bool, code uint8, state uint1
 	}
 }
 
-func (ss *Shortcuts) handleXRecordButtonEvent(pressed bool) {
+func (ss *ShortcutManager) handleXRecordButtonEvent(pressed bool) {
 	ss.xRecordEventHandler.handleButtonEvent(pressed)
 }
 
-func (ss *Shortcuts) EventLoop() {
+func (ss *ShortcutManager) EventLoop() {
 	for {
 		ev := ss.conn.WaitForEvent()
 		switch ev.GetEventCode() {
@@ -573,12 +573,12 @@ func (ss *Shortcuts) EventLoop() {
 	}
 }
 
-func (ss *Shortcuts) Add(shortcut Shortcut) {
+func (ss *ShortcutManager) Add(shortcut Shortcut) {
 	ss.AddWithoutLock(shortcut)
 }
 
 // TODO private
-func (ss *Shortcuts) AddWithoutLock(shortcut Shortcut) {
+func (ss *ShortcutManager) AddWithoutLock(shortcut Shortcut) {
 	logger.Debug("AddWithoutLock", shortcut)
 	uid := shortcut.GetUid()
 	// Lock ss.idShortcutMap
@@ -586,14 +586,14 @@ func (ss *Shortcuts) AddWithoutLock(shortcut Shortcut) {
 	ss.grabShortcut(shortcut)
 }
 
-func (ss *Shortcuts) Delete(shortcut Shortcut) {
+func (ss *ShortcutManager) Delete(shortcut Shortcut) {
 	uid := shortcut.GetUid()
 	// Lock ss.idShortcutMap
 	delete(ss.idShortcutMap, uid)
 	ss.ungrabShortcut(shortcut)
 }
 
-func (ss *Shortcuts) GetByIdType(id string, _type int32) Shortcut {
+func (ss *ShortcutManager) GetByIdType(id string, _type int32) Shortcut {
 	uid := idType2Uid(id, _type)
 	// Lock ss.idShortcutMap
 	shortcut := ss.idShortcutMap[uid]
@@ -602,13 +602,13 @@ func (ss *Shortcuts) GetByIdType(id string, _type int32) Shortcut {
 
 // ret0: Conflicting Accel
 // ret1: pa parse key error
-func (ss *Shortcuts) FindConflictingAccel(pa ParsedAccel) (*Accel, error) {
+func (ss *ShortcutManager) FindConflictingAccel(pa ParsedAccel) (*Accel, error) {
 	key, err := pa.QueryKey(ss.keySymbols)
 	if err != nil {
 		return nil, err
 	}
 
-	logger.Debug("Shortcuts.FindConflictingAccel pa:", pa)
+	logger.Debug("ShortcutManager.FindConflictingAccel pa:", pa)
 	logger.Debug("key:", key)
 
 	// RLock ss.grabedKeyAccelMap
@@ -619,7 +619,7 @@ func (ss *Shortcuts) FindConflictingAccel(pa ParsedAccel) (*Accel, error) {
 	return nil, nil
 }
 
-func (ss *Shortcuts) AddSystem(gsettings *gio.Settings) {
+func (ss *ShortcutManager) AddSystem(gsettings *gio.Settings) {
 	logger.Debug("AddSystem")
 	idNameMap := getSystemIdNameMap()
 	for _, id := range gsettings.ListKeys() {
@@ -639,7 +639,7 @@ func (ss *Shortcuts) AddSystem(gsettings *gio.Settings) {
 	}
 }
 
-func (ss *Shortcuts) AddWM(gsettings *gio.Settings) {
+func (ss *ShortcutManager) AddWM(gsettings *gio.Settings) {
 	logger.Debug("AddWM")
 	idNameMap := getWMIdNameMap()
 	for _, id := range gsettings.ListKeys() {
@@ -653,7 +653,7 @@ func (ss *Shortcuts) AddWM(gsettings *gio.Settings) {
 	}
 }
 
-func (ss *Shortcuts) AddMedia(gsettings *gio.Settings) {
+func (ss *ShortcutManager) AddMedia(gsettings *gio.Settings) {
 	logger.Debug("AddMedia")
 	idNameMap := getMediaIdNameMap()
 	for _, id := range gsettings.ListKeys() {
@@ -670,14 +670,14 @@ func (ss *Shortcuts) AddMedia(gsettings *gio.Settings) {
 	}
 }
 
-func (ss *Shortcuts) AddCustom(csm *CustomShortcutManager) {
+func (ss *ShortcutManager) AddCustom(csm *CustomShortcutManager) {
 	logger.Debug("AddCustom")
 	for _, shortcut := range csm.List() {
 		ss.AddWithoutLock(shortcut)
 	}
 }
 
-func (ss *Shortcuts) AddSpecial() {
+func (ss *ShortcutManager) AddSpecial() {
 	idNameMap := getSpecialIdNameMap()
 
 	// add SwitchKbdLayout <Super>space

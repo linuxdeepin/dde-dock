@@ -21,6 +21,7 @@ package keybinding
 
 import (
 	"dbus/com/deepin/daemon/inputdevices"
+
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )

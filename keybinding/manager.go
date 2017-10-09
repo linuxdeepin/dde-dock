@@ -41,14 +41,15 @@ const (
 	shortcutSignalAdded   = "Added"
 	shortcutSignalDeleted = "Deleted"
 
-	keyboardSchema            = "com.deepin.dde.keyboard"
+	gsSchemaKeyboard          = "com.deepin.dde.keyboard"
 	gsKeyNumLockState         = "numlock-state"
 	gsKeySaveNumLockState     = "save-numlock-state"
 	gsKeyShortcutSwitchLayout = "shortcut-switch-layout"
+	gsKeyShowCapsLockOSD      = "capslock-toggle"
 
-	systemSchema   = "com.deepin.dde.keybinding.system"
-	mediakeySchema = "com.deepin.dde.keybinding.mediakey"
-	wmSchema       = "com.deepin.wrap.gnome.desktop.wm.keybindings"
+	gsSchemaSystem   = "com.deepin.dde.keybinding.system"
+	gsSchemaMediaKey = "com.deepin.dde.keybinding.mediakey"
+	gsSchemaGnomeWM  = "com.deepin.wrap.gnome.desktop.wm.keybindings"
 
 	customConfigFile = "deepin/dde-daemon/keybinding/custom.ini"
 )
@@ -69,10 +70,10 @@ type Manager struct {
 	conn       *x.Conn
 	keySymbols *keysyms.KeySymbols
 
-	keyboardSetting *gio.Settings
-	sysSetting      *gio.Settings
-	mediaSetting    *gio.Settings
-	wmSetting       *gio.Settings
+	gsKeyboard *gio.Settings
+	gsSystem   *gio.Settings
+	gsMediaKey *gio.Settings
+	gsGnomeWM  *gio.Settings
 
 	enableListenGSettings bool
 
@@ -86,7 +87,7 @@ type Manager struct {
 	kbdLightController    *KbdLightController
 	touchpadController    *TouchpadController
 
-	shortcuts *shortcuts.Shortcuts
+	shortcutManager *shortcuts.ShortcutManager
 	// shortcut action handlers
 	handlers               []shortcuts.KeyEventFunc
 	lastKeyEventTime       time.Time
@@ -107,24 +108,24 @@ const (
 )
 
 func NewManager() (*Manager, error) {
-	var m = Manager{
-		enableListenGSettings: true,
-	}
-
 	conn, err := x.NewConn()
 	if err != nil {
 		return nil, err
 	}
-	m.conn = conn
-	m.keySymbols = keysyms.NewKeySymbols(conn)
+
+	var m = Manager{
+		enableListenGSettings: true,
+		conn:       conn,
+		keySymbols: keysyms.NewKeySymbols(conn),
+	}
 	return &m, nil
 }
 
 func (m *Manager) init() {
-	m.keyboardSetting = gio.NewSettings(keyboardSchema)
+	m.gsKeyboard = gio.NewSettings(gsSchemaKeyboard)
 	// init numlock state
-	m.NumLockState = property.NewGSettingsEnumProperty(m, "NumLockState", m.keyboardSetting, gsKeyNumLockState)
-	if m.keyboardSetting.GetBoolean(gsKeySaveNumLockState) {
+	m.NumLockState = property.NewGSettingsEnumProperty(m, "NumLockState", m.gsKeyboard, gsKeyNumLockState)
+	if m.gsKeyboard.GetBoolean(gsKeySaveNumLockState) {
 		nlState := NumLockState(m.NumLockState.Get())
 		if nlState == NumLockUnknown {
 			state, err := queryNumLockState(m.conn)
@@ -141,22 +142,22 @@ func (m *Manager) init() {
 		}
 	}
 	m.ShortcutSwitchLayout = property.NewGSettingsUintProperty(m, "ShortcutSwitchLayout",
-		m.keyboardSetting, gsKeyShortcutSwitchLayout)
+		m.gsKeyboard, gsKeyShortcutSwitchLayout)
 
 	// init settings
-	m.sysSetting = gio.NewSettings(systemSchema)
-	m.mediaSetting = gio.NewSettings(mediakeySchema)
-	m.wmSetting = gio.NewSettings(wmSchema)
+	m.gsSystem = gio.NewSettings(gsSchemaSystem)
+	m.gsMediaKey = gio.NewSettings(gsSchemaMediaKey)
+	m.gsGnomeWM = gio.NewSettings(gsSchemaGnomeWM)
 
-	m.shortcuts = shortcuts.NewShortcuts(m.conn, m.keySymbols, m.handleKeyEvent)
-	m.shortcuts.AddSpecial()
-	m.shortcuts.AddSystem(m.sysSetting)
-	m.shortcuts.AddMedia(m.mediaSetting)
-	m.shortcuts.AddWM(m.wmSetting)
+	m.shortcutManager = shortcuts.NewShortcutManager(m.conn, m.keySymbols, m.handleKeyEvent)
+	m.shortcutManager.AddSpecial()
+	m.shortcutManager.AddSystem(m.gsSystem)
+	m.shortcutManager.AddMedia(m.gsMediaKey)
+	m.shortcutManager.AddWM(m.gsGnomeWM)
 
 	customConfigFilePath := filepath.Join(basedir.GetUserConfigDir(), customConfigFile)
 	m.customShortcutManager = shortcuts.NewCustomShortcutManager(customConfigFilePath)
-	m.shortcuts.AddCustom(m.customShortcutManager)
+	m.shortcutManager.AddCustom(m.customShortcutManager)
 
 	var err error
 	m.audioController, err = NewAudioController()
@@ -189,22 +190,22 @@ func (m *Manager) init() {
 }
 
 func (m *Manager) destroy() {
-	m.shortcuts.Destroy()
+	m.shortcutManager.Destroy()
 
 	// destroy settings
-	if m.sysSetting != nil {
-		m.sysSetting.Unref()
-		m.sysSetting = nil
+	if m.gsSystem != nil {
+		m.gsSystem.Unref()
+		m.gsSystem = nil
 	}
 
-	if m.mediaSetting != nil {
-		m.mediaSetting.Unref()
-		m.mediaSetting = nil
+	if m.gsMediaKey != nil {
+		m.gsMediaKey.Unref()
+		m.gsMediaKey = nil
 	}
 
-	if m.wmSetting != nil {
-		m.wmSetting.Unref()
-		m.wmSetting = nil
+	if m.gsGnomeWM != nil {
+		m.gsGnomeWM.Unref()
+		m.gsGnomeWM = nil
 	}
 
 	if m.audioController != nil {
@@ -266,13 +267,13 @@ func (m *Manager) listenGSettingsChanged(gsettings *gio.Settings, type_ int32) {
 			return
 		}
 
-		shortcut := m.shortcuts.GetByIdType(key, type_)
+		shortcut := m.shortcutManager.GetByIdType(key, type_)
 		if shortcut == nil {
 			return
 		}
 
 		accelStrv := gsettings.GetStrv(key)
-		m.shortcuts.ModifyShortcutAccels(shortcut, shortcuts.ParseStandardAccels(accelStrv))
+		m.shortcutManager.ModifyShortcutAccels(shortcut, shortcuts.ParseStandardAccels(accelStrv))
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	})
 }

@@ -22,9 +22,10 @@ package keybinding
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 	"pkg.deepin.io/lib/dbus"
-	"strings"
 )
 
 const (
@@ -43,20 +44,20 @@ func (*Manager) GetDBusInfo() dbus.DBusInfo {
 
 // Reset reset all shortcut
 func (m *Manager) Reset() {
-	m.shortcuts.UngrabAll()
+	m.shortcutManager.UngrabAll()
 
 	m.enableListenGSettingsChanged(false)
 	// reset all gsettings
-	resetGSettings(m.sysSetting)
-	resetGSettings(m.mediaSetting)
-	resetGSettings(m.wmSetting)
+	resetGSettings(m.gsSystem)
+	resetGSettings(m.gsMediaKey)
+	resetGSettings(m.gsGnomeWM)
 
 	// disable all custom shortcuts
 	m.customShortcutManager.DisableAll()
 
-	changes := m.shortcuts.ReloadAllShortcutAccels()
+	changes := m.shortcutManager.ReloadAllShortcutAccels()
 	m.enableListenGSettingsChanged(true)
-	m.shortcuts.GrabAll()
+	m.shortcutManager.GrabAll()
 	for _, shortcut := range changes {
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	}
@@ -64,7 +65,7 @@ func (m *Manager) Reset() {
 
 // List list all shortcut
 func (m *Manager) List() string {
-	list := m.shortcuts.List()
+	list := m.shortcutManager.List()
 	ret, err := doMarshal(list)
 	if err != nil {
 		logger.Warning(err)
@@ -91,7 +92,7 @@ func (m *Manager) Add(name, action, accel string) (string, bool, error) {
 	if err != nil {
 		return "", false, err
 	}
-	m.shortcuts.Add(shortcut)
+	m.shortcutManager.Add(shortcut)
 	m.emitShortcutSignal(shortcutSignalAdded, shortcut)
 	return "", false, nil
 }
@@ -106,22 +107,22 @@ func (m *Manager) Delete(id string, ty int32) error {
 		return ErrInvalidShortcutType{ty}
 	}
 
-	shortcut := m.shortcuts.GetByIdType(id, ty)
+	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if err := m.customShortcutManager.Delete(shortcut.GetId()); err != nil {
 		return err
 	}
-	m.shortcuts.Delete(shortcut)
+	m.shortcutManager.Delete(shortcut)
 	m.emitShortcutSignal(shortcutSignalDeleted, shortcut)
 	return nil
 }
 
 // Disable cancel the special id accels
 func (m *Manager) Disable(id string, ty int32) error {
-	shortcut := m.shortcuts.GetByIdType(id, ty)
+	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if shortcut == nil {
 		return ErrShortcutNotFound{id, ty}
 	}
-	m.shortcuts.ModifyShortcutAccels(shortcut, nil)
+	m.shortcutManager.ModifyShortcutAccels(shortcut, nil)
 	return shortcut.SaveAccels()
 }
 
@@ -155,7 +156,7 @@ func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 		return false, "", err
 	}
 
-	accel, err := m.shortcuts.FindConflictingAccel(pa)
+	accel, err := m.shortcutManager.FindConflictingAccel(pa)
 	if err != nil {
 		// pa.ParseKey error
 		return false, "", err
@@ -170,7 +171,7 @@ func (m *Manager) CheckAvaliable(accelStr string) (bool, string, error) {
 	return true, "", nil
 }
 
-// ModifyCustomShorcut modify custom shortcut
+// ModifyCustomShortcut modify custom shortcut
 //
 // id: shortcut id
 // name: new name
@@ -180,7 +181,7 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
 	logger.Debugf("ModifyCustomShorcut id: %q, name: %q, cmd: %q, accel: %q", id, name, cmd, accelStr)
 	const ty = shortcuts.ShortcutTypeCustom
 	// get the shortcut
-	shortcut := m.shortcuts.GetByIdType(id, ty)
+	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if shortcut == nil {
 		return ErrShortcutNotFound{id, ty}
 	}
@@ -193,7 +194,7 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
 	if accelStr != "" {
 		// check conflicting
 		pa, err := shortcuts.ParseStandardAccel(accelStr)
-		confAccel, err := m.shortcuts.FindConflictingAccel(pa)
+		confAccel, err := m.shortcutManager.FindConflictingAccel(pa)
 		if err != nil {
 			return err
 		}
@@ -211,12 +212,12 @@ func (m *Manager) ModifyCustomShortcut(id, name, cmd, accelStr string) error {
 	// modify then save
 	cshorcut.Name = name
 	cshorcut.Cmd = cmd
-	m.shortcuts.ModifyShortcutAccels(shortcut, accels)
+	m.shortcutManager.ModifyShortcutAccels(shortcut, accels)
 	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	return cshorcut.Save()
 }
 
-var errShorcutAccelsUnmodifiable = errors.New("accels of this shortcut is unmodifiable")
+var errShortcutAccelsUnmodifiable = errors.New("accels of this shortcut is unmodifiable")
 
 // ModifiedAccel modify shortcut accel
 //
@@ -229,12 +230,12 @@ var errShorcutAccelsUnmodifiable = errors.New("accels of this shortcut is unmodi
 // ret2: error
 func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed bool) (bool, string, error) {
 	logger.Debug("Manager.ModifiedAccel", id, ty, accelStr, grabed)
-	shortcut := m.shortcuts.GetByIdType(id, ty)
+	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if shortcut == nil {
 		return false, "", ErrShortcutNotFound{id, ty}
 	}
 	if !shortcut.GetAccelsModifiable() {
-		return false, "", errShorcutAccelsUnmodifiable
+		return false, "", errShortcutAccelsUnmodifiable
 	}
 
 	pa, err := shortcuts.ParseStandardAccel(accelStr)
@@ -246,7 +247,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 	logger.Debugf("pa: %#v", pa)
 
 	if !grabed {
-		m.shortcuts.RemoveShortcutAccel(shortcut, pa)
+		m.shortcutManager.RemoveShortcutAccel(shortcut, pa)
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 		shortcut.SaveAccels()
 		return false, "", nil
@@ -267,7 +268,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 
 	var confShortcuts []shortcuts.Shortcut
 	for {
-		confAccel, _ := m.shortcuts.FindConflictingAccel(pa)
+		confAccel, _ := m.shortcutManager.FindConflictingAccel(pa)
 		if confAccel == nil {
 			logger.Debug("confAccel is nil")
 			break
@@ -275,10 +276,10 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 		logger.Debug("conflicting accel:", confAccel)
 		confShortcut := confAccel.Shortcut
 		confShortcuts = append(confShortcuts, confShortcut)
-		m.shortcuts.RemoveShortcutAccel(confShortcut, pa)
+		m.shortcutManager.RemoveShortcutAccel(confShortcut, pa)
 		m.emitShortcutSignal(shortcutSignalChanged, confShortcut)
 	}
-	m.shortcuts.AddShortcutAccel(shortcut, pa)
+	m.shortcutManager.AddShortcutAccel(shortcut, pa)
 	m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 
 	// save accels
@@ -292,7 +293,7 @@ func (m *Manager) ModifiedAccel(id string, ty int32, accelStr string, grabed boo
 
 // Query query shortcut detail info by id and type
 func (m *Manager) Query(id string, ty int32) (string, error) {
-	shortcut := m.shortcuts.GetByIdType(id, ty)
+	shortcut := m.shortcutManager.GetByIdType(id, ty)
 	if shortcut == nil {
 		return "", ErrShortcutNotFound{id, ty}
 	}
@@ -303,7 +304,7 @@ func (m *Manager) Query(id string, ty int32) (string, error) {
 // GrabScreen grab screen for getting the key pressed
 func (m *Manager) GrabScreen() error {
 	logger.Debug("Manager.GrabScreen")
-	return m.doGrabScreen(m.shortcuts)
+	return m.doGrabScreen(m.shortcutManager)
 }
 
 func (m *Manager) SetNumLockState(state int32) error {

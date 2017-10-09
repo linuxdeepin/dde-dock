@@ -21,19 +21,14 @@ package keybinding
 
 import (
 	"encoding/json"
-	"gir/gio-2.0"
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"pkg.deepin.io/lib/dbus"
 	"strings"
-)
 
-func canShowCapsOSD() bool {
-	s := gio.NewSettings("com.deepin.dde.keyboard")
-	defer s.Unref()
-	return s.GetBoolean("capslock-toggle")
-}
+	"gir/gio-2.0"
+	"pkg.deepin.io/lib/dbus"
+)
 
 func getPowerButtonPressedExec() string {
 	s := gio.NewSettings("com.deepin.dde.power")

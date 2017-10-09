@@ -20,9 +20,11 @@
 package keybinding
 
 import (
-	"dbus/com/deepin/daemon/network"
 	"encoding/json"
 	"fmt"
+
+	"dbus/com/deepin/daemon/network"
+
 	ddbus "pkg.deepin.io/dde/daemon/dbus"
 	"pkg.deepin.io/lib/dbus"
 )

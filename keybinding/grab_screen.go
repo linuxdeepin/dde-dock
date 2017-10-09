@@ -25,7 +25,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (m *Manager) doGrabScreen(ss *shortcuts.Shortcuts) error {
+func (m *Manager) doGrabScreen(ss *shortcuts.ShortcutManager) error {
 	conn, err := x.NewConn()
 	if err != nil {
 		return err

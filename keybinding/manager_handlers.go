@@ -26,6 +26,10 @@ import (
 	. "pkg.deepin.io/dde/daemon/keybinding/shortcuts"
 )
 
+func (m *Manager) shouldShowCapsLockOSD() bool {
+	return m.gsKeyboard.GetBoolean(gsKeyShowCapsLockOSD)
+}
+
 func (m *Manager) initHandlers() {
 	m.handlers = make([]KeyEventFunc, ActionTypeCount)
 	logger.Debug("initHandlers", len(m.handlers))
@@ -56,7 +60,7 @@ func (m *Manager) initHandlers() {
 			logger.Warning(err)
 			return
 		}
-		save := m.keyboardSetting.GetBoolean(gsKeySaveNumLockState)
+		save := m.gsKeyboard.GetBoolean(gsKeySaveNumLockState)
 		switch state {
 		case NumLockOn:
 			if save {
@@ -72,7 +76,7 @@ func (m *Manager) initHandlers() {
 	}
 
 	m.handlers[ActionTypeShowCapsLockOSD] = func(ev *KeyEvent) {
-		if !canShowCapsOSD() {
+		if !m.shouldShowCapsLockOSD() {
 			return
 		}
 
@@ -166,7 +170,7 @@ func (m *Manager) initHandlers() {
 		}
 	}
 
-	m.shortcuts.SetAllModKeysReleasedCallback(func() {
+	m.shortcutManager.SetAllModKeysReleasedCallback(func() {
 		switch m.switchKbdLayoutState {
 		case SKLStateWait:
 			showOSD("DirectSwitchLayout")
