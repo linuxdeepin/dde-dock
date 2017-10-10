@@ -23,8 +23,18 @@
 
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QApplication>
 
 DWIDGET_USE_NAMESPACE
+
+const QPixmap getIconFromTheme(const QString &name, const QSize &size)
+{
+    const auto ratio = qApp->devicePixelRatio();
+    QPixmap ret = QIcon::fromTheme(name).pixmap(size * ratio);
+    ret.setDevicePixelRatio(ratio);
+
+    return ret;
+}
 
 SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
     : QWidget(parent),
@@ -36,7 +46,7 @@ SinkInputWidget::SinkInputWidget(const QString &inputPath, QWidget *parent)
 {
     const QString iconName = m_inputInter->icon();
     m_volumeIcon->setAccessibleName("app-" + iconName + "-icon");
-    m_volumeIcon->setPixmap(QIcon::fromTheme(iconName).pixmap(24, 24));
+    m_volumeIcon->setPixmap(getIconFromTheme(iconName, QSize(24, 24)));
     m_volumeSlider->setAccessibleName("app-" + iconName + "-slider");
     m_volumeSlider->setValue(m_inputInter->volume() * 1000);
 
@@ -72,11 +82,13 @@ void SinkInputWidget::setMute()
 void SinkInputWidget::setMuteIcon()
 {
     if (m_inputInter->mute()) {
+        const auto ratio = devicePixelRatioF();
         QPixmap muteIcon(QString(":/icons/image/audio-volume-muted-symbolic.svg"));
-        QPixmap appIconSource(QIcon::fromTheme(m_inputInter->icon()).pixmap(24, 24));
+        QPixmap appIconSource(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
 
         QPixmap temp(appIconSource.size());
         temp.fill(Qt::transparent);
+        temp.setDevicePixelRatio(ratio);
         QPainter p1(&temp);
         p1.drawPixmap(0, 0, appIconSource);
         p1.setCompositionMode(QPainter::CompositionMode_DestinationIn);
@@ -87,9 +99,10 @@ void SinkInputWidget::setMuteIcon()
         QPainter p(&appIconSource);
         p.drawPixmap(0, 0, muteIcon);
 
+        appIconSource.setDevicePixelRatio(ratio);
         m_volumeIcon->setPixmap(appIconSource);
     } else {
-        m_volumeIcon->setPixmap(QIcon::fromTheme(m_inputInter->icon()).pixmap(24, 24));
+        m_volumeIcon->setPixmap(getIconFromTheme(m_inputInter->icon(), QSize(24, 24)));
     }
 }
 
