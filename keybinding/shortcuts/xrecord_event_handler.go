@@ -52,7 +52,7 @@ func (h *XRecordEventHandler) handleButtonEvent(pressed bool) {
 }
 
 func (h *XRecordEventHandler) handleKeyEvent(pressed bool, keycode uint8, state uint16) {
-	keystr := h.keySymbols.LookupString(x.Keycode(keycode), state)
+	keystr, _ := h.keySymbols.LookupString(x.Keycode(keycode), state)
 	//var pr string
 	//if pressed {
 	//	pr = "PRESS"

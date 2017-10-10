@@ -21,34 +21,39 @@ package shortcuts
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 )
 
 type BaseShortcut struct {
-	Id     string
-	Type   int32
-	Accels []ParsedAccel
-	Name   string
+	Id         string
+	Type       int32
+	Keystrokes []*Keystroke `json:"Accels"`
+	Name       string
+}
+
+func (sb *BaseShortcut) String() string {
+	return fmt.Sprintf("Shortcut{id=%s type=%d name=%q keystrokes=%v}", sb.Id, sb.Type, sb.Name, sb.Keystrokes)
 }
 
 func (sb *BaseShortcut) GetId() string {
 	return sb.Id
 }
 
-func idType2Uid(id string, _type int32) string {
-	return strconv.Itoa(int(_type)) + id
+func idType2Uid(id string, type0 int32) string {
+	return strconv.Itoa(int(type0)) + id
 }
 
 func (sb *BaseShortcut) GetUid() string {
 	return idType2Uid(sb.Id, sb.Type)
 }
 
-func (sb *BaseShortcut) GetAccels() []ParsedAccel {
-	return sb.Accels
+func (sb *BaseShortcut) GetKeystrokes() []*Keystroke {
+	return sb.Keystrokes
 }
 
-func (sb *BaseShortcut) setAccels(newAccels []ParsedAccel) {
-	sb.Accels = newAccels
+func (sb *BaseShortcut) setKeystrokes(val []*Keystroke) {
+	sb.Keystrokes = val
 }
 
 func (sb *BaseShortcut) GetType() int32 {
@@ -63,7 +68,7 @@ func (sb *BaseShortcut) GetAction() *Action {
 	return ActionNoOp
 }
 
-func (sb *BaseShortcut) GetAccelsModifiable() bool {
+func (sb *BaseShortcut) GetKeystrokesModifiable() bool {
 	return sb.Type != ShortcutTypeFake
 }
 
@@ -82,11 +87,11 @@ type Shortcut interface {
 
 	GetName() string
 
-	GetAccelsModifiable() bool
-	GetAccels() []ParsedAccel
-	setAccels(newAccels []ParsedAccel)
-	SaveAccels() error
-	ReloadAccels() bool
+	GetKeystrokesModifiable() bool
+	GetKeystrokes() []*Keystroke
+	setKeystrokes([]*Keystroke)
+	SaveKeystrokes() error
+	ReloadKeystrokes() bool
 
 	GetAction() *Action
 }
@@ -115,10 +120,10 @@ func (s *FakeShortcut) GetAction() *Action {
 	return s.action
 }
 
-func (s *FakeShortcut) SaveAccels() error {
+func (s *FakeShortcut) SaveKeystrokes() error {
 	return ErrOpNotSupported
 }
 
-func (s *FakeShortcut) ReloadAccels() bool {
+func (s *FakeShortcut) ReloadKeystrokes() bool {
 	return false
 }

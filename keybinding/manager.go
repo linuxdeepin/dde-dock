@@ -64,7 +64,7 @@ type Manager struct {
 	Deleted func(string, int32)
 	Changed func(string, int32)
 
-	// (pressed, accel)
+	// (pressed, keystroke)
 	KeyEvent func(bool, string)
 
 	conn       *x.Conn
@@ -89,9 +89,9 @@ type Manager struct {
 
 	shortcutManager *shortcuts.ShortcutManager
 	// shortcut action handlers
-	handlers               []shortcuts.KeyEventFunc
-	lastKeyEventTime       time.Time
-	grabScreenPressedAccel *shortcuts.ParsedAccel
+	handlers            []shortcuts.KeyEventFunc
+	lastKeyEventTime    time.Time
+	grabScreenKeystroke *shortcuts.Keystroke
 
 	// for switch kbd layout
 	switchKbdLayoutState SKLState
@@ -272,8 +272,8 @@ func (m *Manager) listenGSettingsChanged(gsettings *gio.Settings, type_ int32) {
 			return
 		}
 
-		accelStrv := gsettings.GetStrv(key)
-		m.shortcutManager.ModifyShortcutAccels(shortcut, shortcuts.ParseStandardAccels(accelStrv))
+		keystrokes := gsettings.GetStrv(key)
+		m.shortcutManager.ModifyShortcutKeystrokes(shortcut, shortcuts.ParseKeystrokes(keystrokes))
 		m.emitShortcutSignal(shortcutSignalChanged, shortcut)
 	})
 }

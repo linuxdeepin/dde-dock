@@ -29,37 +29,42 @@ import (
 	"github.com/linuxdeepin/go-x11-client/util/keysyms"
 )
 
-type Accel struct {
-	Parsed    ParsedAccel
-	GrabedKey Key
-	Shortcut  Shortcut
-}
-
-// ParsedAccel
+// Keystroke
 // field Mods ignore mod2(Num_Lock) and lock(Caps_Lock)
-type ParsedAccel struct {
-	Mods Modifiers
-	Key  string
+type Keystroke struct {
+	Mods     Modifiers
+	Keystr   string
+	Keysym   x.Keysym
+	Shortcut Shortcut
 }
 
-func (ap1 ParsedAccel) Equal(keySymbols *keysyms.KeySymbols, ap2 ParsedAccel) bool {
-	logger.Debug(ap1, " equal? ", ap2)
-	if ap1.Mods != ap2.Mods {
+func (ks *Keystroke) DebugString() string {
+	str := ks.String()
+	if ks.Shortcut == nil {
+		return "Keystroke{" + str + "}"
+	} else {
+		return "Keystroke{" + str + " own by " + ks.Shortcut.GetUid() + "}"
+	}
+}
+
+func (a *Keystroke) Equal(keySymbols *keysyms.KeySymbols, b *Keystroke) bool {
+	logger.Debug(a, " equal? ", b)
+	if a.Mods != b.Mods {
 		logger.Debug("Mods no equal, return false")
 		return false
 	}
 	// ap1.Mods == ap2.Mods
-	if ap1.Key == ap2.Key {
+	if a.Keystr == b.Keystr {
 		logger.Debug("Key equal, return true")
 		return true
 	}
 
 	// ap1.Key != ap2.Key
-	codes1, err := keySymbols.StringToKeycodes(ap1.Key)
+	codes1, err := keySymbols.StringToKeycodes(a.Keystr)
 	if err != nil {
 		return false
 	}
-	codes2, err := keySymbols.StringToKeycodes(ap2.Key)
+	codes2, err := keySymbols.StringToKeycodes(b.Keystr)
 	if err != nil {
 		return false
 	}
@@ -86,8 +91,8 @@ func isKeycodesEqual(list1, list2 []x.Keycode) bool {
 	return true
 }
 
-func (pa ParsedAccel) MarshalJSON() ([]byte, error) {
-	str := pa.String()
+func (ks *Keystroke) MarshalJSON() ([]byte, error) {
+	str := ks.String()
 	quoted := strconv.Quote(str)
 	return []byte(quoted), nil
 }
@@ -111,24 +116,24 @@ func GetKeyFirstCode(keySymbols *keysyms.KeySymbols, str string) (x.Keycode, err
 	return code, nil
 }
 
-func (pa ParsedAccel) QueryKey(keySymbols *keysyms.KeySymbols) (Key, error) {
-	code, err := GetKeyFirstCode(keySymbols, pa.Key)
+func (ks *Keystroke) ToKey(keySymbols *keysyms.KeySymbols) (Key, error) {
+	code, err := GetKeyFirstCode(keySymbols, ks.Keystr)
 	if err != nil {
 		return Key{}, err
 	}
 	return Key{
-		Mods: pa.Mods,
+		Mods: ks.Mods,
 		Code: Keycode(code),
 	}, nil
 }
 
-func splitStandardAccel(accel string) ([]string, error) {
-	if accel == "" {
+func splitKeystroke(str string) ([]string, error) {
+	if str == "" {
 		return nil, nil
 	}
 
 	var keys []string
-	reader := strings.NewReader(accel)
+	reader := strings.NewReader(str)
 	for {
 		ch, err := reader.ReadByte()
 		if err != nil {
@@ -194,21 +199,22 @@ func splitStandardAccel(accel string) ([]string, error) {
 // <Super> mods() key Super
 // Print mods() key Print
 // <Control>Print mods(Control) key Print
-// check ParsedAccel.Key valid later
-func ParseStandardAccel(accel string) (ParsedAccel, error) {
-	parts, err := splitStandardAccel(accel)
+// check Keystroke.Keystr valid later
+func ParseKeystroke(keystroke string) (*Keystroke, error) {
+	parts, err := splitKeystroke(keystroke)
 	if err != nil {
-		return ParsedAccel{}, err
+		return nil, err
 	}
-	switch len(parts) {
-	case 0:
-		return ParsedAccel{}, errors.New("empty parts")
-	case 1:
-		return ParsedAccel{Key: parts[0]}, nil
+	if len(parts) == 0 {
+		return nil, errors.New("keystroke is empty")
 	}
 
-	key := parts[len(parts)-1]
+	str := parts[len(parts)-1]
 	// check key valid
+	sym, ok := keysyms.StringToKeysym(str)
+	if !ok {
+		return nil, errors.New("bad key " + str)
+	}
 
 	var mods Modifiers
 	for _, part := range parts[:len(parts)-1] {
@@ -222,32 +228,32 @@ func ParseStandardAccel(accel string) (ParsedAccel, error) {
 		case "super":
 			mods |= keysyms.ModMaskSuper
 		default:
-			return ParsedAccel{}, errors.New("unexpect mod " + part)
+			return nil, errors.New("unknown mod " + part)
 		}
 	}
 
-	return ParsedAccel{
-		Mods: mods,
-		Key:  key,
+	return &Keystroke{
+		Mods:   mods,
+		Keystr: str,
+		Keysym: sym,
 	}, nil
 }
 
-func ParseStandardAccels(accelStrv []string) []ParsedAccel {
-	parsedAccels := make([]ParsedAccel, 0, len(accelStrv))
-	for _, accel := range accelStrv {
-		parsed, err := ParseStandardAccel(accel)
+func ParseKeystrokes(keystrokes []string) []*Keystroke {
+	result := make([]*Keystroke, 0, len(keystrokes))
+	for _, keystroke := range keystrokes {
+		parsed, err := ParseKeystroke(keystroke)
 		if err == nil {
-			parsedAccels = append(parsedAccels, parsed)
+			result = append(result, parsed)
 		}
 		// TODO else warning
 	}
-	return parsedAccels
+	return result
 }
 
-// get standard key sequece
-func (pa ParsedAccel) String() string {
+func (ks *Keystroke) String() string {
 	var keys []string
-	mods := pa.Mods
+	mods := ks.Mods
 	if mods&keysyms.ModMaskShift > 0 {
 		keys = append(keys, "<Shift>")
 	}
@@ -261,85 +267,94 @@ func (pa ParsedAccel) String() string {
 		keys = append(keys, "<Super>")
 	}
 
-	keys = append(keys, pa.Key)
+	keys = append(keys, ks.Keystr)
 	return strings.Join(keys, "")
 }
 
-func isGoodSingleKey(key string) bool {
+func isGoodNoMods(str string, sym x.Keysym) bool {
 	// single key
-	switch key {
-	case "f1", "f2", "f3", "f4", "f5", "f6",
-		"f7", "f8", "f9", "f10", "f11", "f12",
-		"print", "backspace", "delete", "super_l", "super_r":
+	if keysyms.IsFunctionKey(sym) || keysyms.IsMiscFunctionKey(sym) {
 		return true
-	default:
-		if strings.HasPrefix(key, "xf86") {
-			return true
-		}
-		return false
-	}
-}
-
-func (pa ParsedAccel) IsGood() bool {
-	keyLower := strings.ToLower(pa.Key)
-	if pa.Mods == 0 {
-		return isGoodSingleKey(keyLower)
 	}
 
-	// pa.Mod > 0
-	if pa.Mods&^keysyms.ModMaskShift == 0 {
-		// mods is <Shift>
-		// TODO
-		return isGoodSingleKey(keyLower)
+	switch sym {
+	case keysyms.XK_BackSpace,
+		keysyms.XK_Super_L, keysyms.XK_Super_R:
+		return true
 	}
 
-	switch keyLower {
-	case "shift_r", "shift_l",
-		"alt_r", "alt_l",
-		"meta_r", "meta_l",
-		"super_r", "super_l",
-		"hyper_r", "hyper_l",
-		"control_r", "control_l":
-		return false
-	}
-
-	return true
-}
-
-// char is a-z
-func isLowerAlpha(char byte) bool {
-	if 'a' <= char && char <= 'z' {
+	if strings.HasPrefix(str, "XF86") {
 		return true
 	}
 	return false
 }
 
-func (pa ParsedAccel) fix() ParsedAccel {
-	logger.Debug("before fix", pa)
-	var keyLower = strings.ToLower(pa.Key)
+func isGoodModShift(str string, sym x.Keysym) bool {
+	// shift + ?
+	if keysyms.IsFunctionKey(sym) || keysyms.IsMiscFunctionKey(sym) || keysyms.IsCursorKey(sym) {
+		return true
+	}
+
+	switch sym {
+	case keysyms.XK_BackSpace, keysyms.XK_space,
+		keysyms.XK_Super_L, keysyms.XK_Super_R:
+		return true
+	}
+
+	if strings.HasPrefix(str, "XF86") {
+		return true
+	}
+	return false
+}
+
+func (ks *Keystroke) IsGood() bool {
+	if ks.Mods == 0 {
+		return isGoodNoMods(ks.Keystr, ks.Keysym)
+	}
+	// else ks.Mod > 0
+	if keysyms.IsModifierKey(ks.Keysym) {
+		return false
+	}
+	if ks.Mods == keysyms.ModMaskShift {
+		return isGoodModShift(ks.Keystr, ks.Keysym)
+	}
+
+	return true
+}
+
+func (ks *Keystroke) fix() *Keystroke {
+	logger.Debug("before fix", ks)
 	var key string
-	switch keyLower {
-	case "l1":
-		key = "F11"
-	case "l2":
-		key = "F12"
-	case "kb_tab", "iso_left_tab":
+	switch ks.Keystr {
+	case "KP_Prior":
+		key = "KP_Page_Up"
+	case "KP_Next":
+		key = "KP_Page_Down"
+	case "Prior":
+		key = "Page_Up"
+	case "Next":
+		key = "Page_Down"
+	case "ISO_Left_Tab":
 		key = "Tab"
 	default:
-		key = keysymToWeird(pa.Key)
+		key = ks.Keystr
 	}
 
-	if len(key) == 1 && isLowerAlpha(key[0]) {
-		key = strings.ToUpper(key)
+	sym, _ := keysyms.StringToKeysym(key)
+	_, upperSym := keysyms.ConvertCase(sym)
+	if sym != upperSym {
+		key, _ = keysyms.KeysymToString(upperSym)
 	}
 
-	if pa.Mods > 0 && pa.Mods&^keysyms.ModMaskSuper == 0 {
-		// pa is <Super>Super_L or <Super>Super_R
-		if keyLower == "super_l" || keyLower == "super_r" {
-			pa.Mods = 0
+	if ks.Mods > 0 && ks.Mods&^keysyms.ModMaskSuper == 0 {
+		// ks is <Super>Super_L or <Super>Super_R
+		if ks.Keysym == keysyms.XK_Super_L || ks.Keysym == keysyms.XK_Super_R {
+			// clear modifiers
+			ks.Mods = 0
 		}
 	}
-	pa.Key = key
-	logger.Debug("after fix", pa)
-	return pa
+	ks.Keystr = key
+	ks.Keysym = upperSym
+	logger.Debug("after fix", ks)
+	return ks
 }

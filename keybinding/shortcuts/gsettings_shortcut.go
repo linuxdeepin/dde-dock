@@ -28,14 +28,14 @@ type GSettingsShortcut struct {
 	gsettings *gio.Settings
 }
 
-func NewGSettingsShortcut(gsettings *gio.Settings, id string, _type int32,
-	accels []string, name string) *GSettingsShortcut {
+func NewGSettingsShortcut(gsettings *gio.Settings, id string, type0 int32,
+	keystrokes []string, name string) *GSettingsShortcut {
 	gs := &GSettingsShortcut{
 		BaseShortcut: BaseShortcut{
-			Id:     id,
-			Type:   _type,
-			Accels: ParseStandardAccels(accels),
-			Name:   name,
+			Id:         id,
+			Type:       type0,
+			Keystrokes: ParseKeystrokes(keystrokes),
+			Name:       name,
 		},
 		gsettings: gsettings,
 	}
@@ -43,17 +43,17 @@ func NewGSettingsShortcut(gsettings *gio.Settings, id string, _type int32,
 	return gs
 }
 
-func (gs *GSettingsShortcut) SaveAccels() error {
-	accelStrv := make([]string, 0, len(gs.Accels))
-	for _, pa := range gs.Accels {
-		accelStrv = append(accelStrv, pa.String())
+func (gs *GSettingsShortcut) SaveKeystrokes() error {
+	keystrokesStrv := make([]string, 0, len(gs.Keystrokes))
+	for _, ks := range gs.Keystrokes {
+		keystrokesStrv = append(keystrokesStrv, ks.String())
 	}
-	gs.gsettings.SetStrv(gs.Id, accelStrv)
-	logger.Debugf("GSettingsShortcut.SaveAccels id: %v, accels: %v", gs.Id, accelStrv)
+	gs.gsettings.SetStrv(gs.Id, keystrokesStrv)
+	logger.Debugf("GSettingsShortcut.SaveKeystrokes id: %v, keystrokes: %v", gs.Id, keystrokesStrv)
 	return nil
 }
 
-func parsedAccelsEqual(s1 []ParsedAccel, s2 []ParsedAccel) bool {
+func keystrokesEqual(s1 []*Keystroke, s2 []*Keystroke) bool {
 	l1 := len(s1)
 	l2 := len(s2)
 
@@ -62,21 +62,20 @@ func parsedAccelsEqual(s1 []ParsedAccel, s2 []ParsedAccel) bool {
 	}
 
 	for i := 0; i < l1; i++ {
-		pa1 := s1[i]
-		pa2 := s2[i]
+		ks1 := s1[i]
+		ks2 := s2[i]
 
-		if pa1 != pa2 {
+		if ks1.String() != ks2.String() {
 			return false
 		}
 	}
 	return true
 }
 
-func (gs *GSettingsShortcut) ReloadAccels() bool {
-	oldAccels := gs.GetAccels()
+func (gs *GSettingsShortcut) ReloadKeystrokes() bool {
+	oldVal := gs.GetKeystrokes()
 	id := gs.GetId()
-	accelStrv := gs.gsettings.GetStrv(id)
-	newAccels := ParseStandardAccels(accelStrv)
-	gs.setAccels(newAccels)
-	return !parsedAccelsEqual(oldAccels, newAccels)
+	newVal := ParseKeystrokes(gs.gsettings.GetStrv(id))
+	gs.setKeystrokes(newVal)
+	return !keystrokesEqual(oldVal, newVal)
 }

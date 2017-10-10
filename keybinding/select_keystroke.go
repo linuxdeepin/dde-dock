@@ -27,7 +27,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (m *Manager) doGrabScreen(ss *shortcuts.ShortcutManager) error {
+func (m *Manager) selectKeystroke(ss *shortcuts.ShortcutManager) error {
 	conn, err := x.NewConn()
 	if err != nil {
 		return err
@@ -56,21 +56,21 @@ loop:
 				Code: shortcuts.Keycode(event.Detail),
 			}
 			logger.Debug("event key:", key)
-			accel := key.ToAccel(m.keySymbols)
-			dbus.Emit(m, "KeyEvent", true, accel.String())
-			if accel.IsGood() {
-				logger.Debug("good accel", accel)
-				m.grabScreenPressedAccel = &accel
+			ks := key.ToKeystroke(m.keySymbols)
+			dbus.Emit(m, "KeyEvent", true, ks.String())
+			if ks.IsGood() {
+				logger.Debug("good keystroke", ks)
+				m.grabScreenKeystroke = ks
 			} else {
-				logger.Debug("bad accel", accel)
-				m.grabScreenPressedAccel = nil
+				logger.Debug("bad keystroke", ks)
+				m.grabScreenKeystroke = nil
 			}
 		case x.KeyReleaseEventCode:
 			event, _ := x.NewKeyReleaseEvent(event)
 			logger.Debug(event)
-			if m.grabScreenPressedAccel != nil {
-				dbus.Emit(m, "KeyEvent", false, m.grabScreenPressedAccel.String())
-				m.grabScreenPressedAccel = nil
+			if m.grabScreenKeystroke != nil {
+				dbus.Emit(m, "KeyEvent", false, m.grabScreenKeystroke.String())
+				m.grabScreenKeystroke = nil
 			} else {
 				dbus.Emit(m, "KeyEvent", false, "")
 			}

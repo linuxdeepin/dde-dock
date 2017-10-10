@@ -28,9 +28,9 @@ import (
 )
 
 const (
-	kfKeyName   = "Name"
-	kfKeyAccels = "Accels"
-	kfKeyAction = "Action"
+	kfKeyName       = "Name"
+	kfKeyKeystrokes = "Accels"
+	kfKeyAction     = "Action"
 )
 
 type CustomShortcut struct {
@@ -39,28 +39,28 @@ type CustomShortcut struct {
 	Cmd     string `json:"Exec"`
 }
 
-func (cs *CustomShortcut) getAccelStrv() []string {
-	accels := cs.GetAccels()
-	strv := make([]string, len(accels))
-	for i, accel := range accels {
-		strv[i] = accel.String()
+func (cs *CustomShortcut) getKeystrokesStrv() []string {
+	keystrokes := cs.GetKeystrokes()
+	strv := make([]string, len(keystrokes))
+	for i, ks := range keystrokes {
+		strv[i] = ks.String()
 	}
 	return strv
 }
 
-func (cs *CustomShortcut) SaveAccels() error {
+func (cs *CustomShortcut) SaveKeystrokes() error {
 	section := cs.GetId()
 	csm := cs.manager
-	csm.kfile.SetStringList(section, kfKeyAccels, cs.getAccelStrv())
+	csm.kfile.SetStringList(section, kfKeyKeystrokes, cs.getKeystrokesStrv())
 	return csm.Save()
 }
 
-// after Reset, custom shortcut accels should be empty
-func (cs *CustomShortcut) ReloadAccels() bool {
-	oldAccels := cs.GetAccels()
-	cs.setAccels(nil)
+// after Reset, keystrokes of custom shortcut should be empty
+func (cs *CustomShortcut) ReloadKeystrokes() bool {
+	keystrokes := cs.GetKeystrokes()
+	cs.setKeystrokes(nil)
 
-	if len(oldAccels) > 0 {
+	if len(keystrokes) > 0 {
 		return true
 	}
 	return false
@@ -71,7 +71,7 @@ func (cs *CustomShortcut) Save() error {
 	kfile := cs.manager.kfile
 	kfile.SetString(section, kfKeyName, cs.Name)
 	kfile.SetString(section, kfKeyAction, cs.Cmd)
-	kfile.SetStringList(section, kfKeyAccels, cs.getAccelStrv())
+	kfile.SetStringList(section, kfKeyKeystrokes, cs.getKeystrokesStrv())
 	return cs.manager.Save()
 }
 
@@ -109,14 +109,14 @@ func (csm *CustomShortcutManager) List() []Shortcut {
 		id := section
 		name, _ := kfile.GetString(section, kfKeyName)
 		cmd, _ := kfile.GetString(section, kfKeyAction)
-		accels, _ := kfile.GetStringList(section, kfKeyAccels)
+		keystrokes, _ := kfile.GetStringList(section, kfKeyKeystrokes)
 
 		shortcut := &CustomShortcut{
 			BaseShortcut: BaseShortcut{
-				Id:     id,
-				Type:   ShortcutTypeCustom,
-				Accels: ParseStandardAccels(accels),
-				Name:   name,
+				Id:         id,
+				Type:       ShortcutTypeCustom,
+				Keystrokes: ParseKeystrokes(keystrokes),
+				Name:       name,
 			},
 			manager: csm,
 			Cmd:     cmd,
@@ -132,23 +132,23 @@ func (csm *CustomShortcutManager) Save() error {
 	return csm.kfile.SaveToFile(csm.file)
 }
 
-func (csm *CustomShortcutManager) Add(name, action string, accels []ParsedAccel) (Shortcut, error) {
+func (csm *CustomShortcutManager) Add(name, action string, keystrokes []*Keystroke) (Shortcut, error) {
 	id := dutils.GenUuid()
 	csm.kfile.SetString(id, kfKeyName, name)
 	csm.kfile.SetString(id, kfKeyAction, action)
-	// accels
-	accelStrv := make([]string, 0, len(accels))
-	for _, accel := range accels {
-		accelStrv = append(accelStrv, accel.String())
+
+	keystrokesStrv := make([]string, 0, len(keystrokes))
+	for _, ks := range keystrokes {
+		keystrokesStrv = append(keystrokesStrv, ks.String())
 	}
-	csm.kfile.SetStringList(id, kfKeyAccels, accelStrv)
+	csm.kfile.SetStringList(id, kfKeyKeystrokes, keystrokesStrv)
 
 	shortcut := &CustomShortcut{
 		BaseShortcut: BaseShortcut{
-			Id:     id,
-			Type:   ShortcutTypeCustom,
-			Accels: accels,
-			Name:   name,
+			Id:         id,
+			Type:       ShortcutTypeCustom,
+			Keystrokes: keystrokes,
+			Name:       name,
 		},
 		manager: csm,
 		Cmd:     action,
@@ -169,7 +169,7 @@ func (csm *CustomShortcutManager) DisableAll() error {
 	kfile := csm.kfile
 	sections := kfile.GetSections()
 	for _, section := range sections {
-		kfile.SetValue(section, kfKeyAccels, "")
+		kfile.SetValue(section, kfKeyKeystrokes, "")
 	}
 	return csm.Save()
 }

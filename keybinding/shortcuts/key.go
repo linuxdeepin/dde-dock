@@ -142,13 +142,19 @@ func keysymToWeird(sym string) string {
 	return sym
 }
 
-func (k Key) ToAccel(keySymbols *keysyms.KeySymbols) ParsedAccel {
-	str := keySymbols.LookupString(x.Keycode(k.Code), uint16(k.Mods))
-	pa := ParsedAccel{
-		Mods: k.Mods,
-		Key:  str,
+func (k Key) ToKeystroke(keySymbols *keysyms.KeySymbols) *Keystroke {
+	str, ok := keySymbols.LookupString(x.Keycode(k.Code), uint16(k.Mods))
+	if !ok {
+		return nil
 	}
-	return pa.fix()
+	// if LookupString success, StringToKeysym must be success
+	sym, _ := keysyms.StringToKeysym(str)
+	ks := Keystroke{
+		Mods:   k.Mods,
+		Keystr: str,
+		Keysym: sym,
+	}
+	return ks.fix()
 }
 
 func (k Key) Ungrab(conn *x.Conn) {
