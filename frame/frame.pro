@@ -37,7 +37,6 @@ SOURCES += main.cpp \
     item/containeritem.cpp \
     item/components/containerwidget.cpp \
     dbus/dbusdockadaptors.cpp \
-    item/components/previewwidget.cpp \
     item/components/appsnapshot.cpp \
     item/components/floatingpreview.cpp \
     item/components/previewcontainer.cpp
@@ -68,7 +67,6 @@ HEADERS  += \
     item/containeritem.h \
     item/components/containerwidget.h \
     dbus/dbusdockadaptors.h \
-    item/components/previewwidget.h \
     item/components/appsnapshot.h \
     item/components/floatingpreview.h \
     item/components/previewcontainer.h

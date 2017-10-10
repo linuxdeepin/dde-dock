@@ -187,12 +187,16 @@ void AppSnapshot::paintEvent(QPaintEvent *e)
         return;
 
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
+    const auto ratio = devicePixelRatioF();
 
     // draw image
-    const QImage im = m_snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage im = m_snapshot.scaled(r.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    im.setDevicePixelRatio(ratio);
+
     const QRect ir = im.rect();
-    const QPoint offset = r.center() - ir.center();
-    painter.drawImage(offset.x(), offset.y(), im);
+    const int offset_x = r.x() + r.width() / 2 - ir.width() / ratio / 2;
+    const int offset_y = r.y() + r.height() / 2 - ir.height() / ratio / 2;
+    painter.drawImage(offset_x, offset_y, im);
 }
 
 void AppSnapshot::mousePressEvent(QMouseEvent *e)

@@ -84,9 +84,14 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.setRenderHint(QPainter::Antialiasing);
 
     const QRect r = rect().marginsRemoved(QMargins(8, 8, 8, 8));
-    const QImage im = snapshot.scaled(r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    const auto ratio = devicePixelRatioF();
+
+    QImage im = snapshot.scaled(r.size() * ratio, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    im.setDevicePixelRatio(ratio);
+
     const QRect ir = im.rect();
-    const QPoint offset = r.center() - ir.center();
+    const int offset_x = r.x() + r.width() / 2 - ir.width() / ratio / 2;
+    const int offset_y = r.y() + r.height() / 2 - ir.height() / ratio / 2;
     const int radius = 4;
 
     // draw background
@@ -95,7 +100,7 @@ void FloatingPreview::paintEvent(QPaintEvent *e)
     painter.drawRoundedRect(r, radius, radius);
 
     // draw preview image
-    painter.drawImage(offset.x(), offset.y(), im);
+    painter.drawImage(offset_x, offset_y, im);
 
     // bottom black background
     QRect bgr = r;
