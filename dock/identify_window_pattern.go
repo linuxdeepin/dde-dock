@@ -144,6 +144,14 @@ func parseRuleKey(winInfo *WindowInfo, key string) string {
 		// WM_ROLE
 		return winInfo.wmRole
 
+	default:
+		const envPrefix = "env."
+		if strings.HasPrefix(key, envPrefix) {
+			envName := key[len(envPrefix):]
+			if winInfo.process != nil {
+				return winInfo.process.environ.Get(envName)
+			}
+		}
 	}
 	return ""
 }
@@ -193,7 +201,7 @@ func (p *RuleValueParsed) String() string {
 		typeDesc = "equal"
 	case 'c', 'C':
 		typeDesc = "contains"
-	case 'r':
+	case 'r', 'R':
 		typeDesc = "match regexp "
 	default:
 		typeDesc = "<unknown type>"
@@ -233,12 +241,17 @@ func getRegexp(expr string) *regexp.Regexp {
 	return reg
 }
 
-// "=:equal"
-// "=!not equal"
-// "c:contains"
-// "c!not contains"
-// "r:match regexp"
-// "r!not match regexp"
+// "=:XXX" equal XXX
+// "=!XXX" not equal XXX
+
+// "c:XXX" contains XXX
+// "c!XXX" not contains XXX
+
+// "r:XXX" match regexp XXX
+// "r!XXX" not match regexp XXX
+
+// e c r ignore case
+// = E C R not ignore case
 func parseRuleValue(val string) *RuleValueParsed {
 	var ret = &RuleValueParsed{
 		Original: val,

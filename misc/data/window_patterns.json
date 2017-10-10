@@ -191,5 +191,26 @@
                 "e:chrome.ex"
             ]
         ]
+    },
+    {
+        "ret": "id=ganttproject",
+        "rules": [
+            [
+                "wmi",
+                "R:^sun-awt-X11"
+            ],
+            [
+                "exec",
+                "=:java"
+            ],
+            [
+                "env.CLASSPATH",
+                "c:ganttproject"
+            ],
+            [
+                "arg",
+                "c:ganttproject"
+            ]
+        ]
     }
 ]
