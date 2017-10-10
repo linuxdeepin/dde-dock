@@ -32,9 +32,9 @@ FloatingPreview::FloatingPreview(QWidget *parent)
       m_closeBtn(new DImageButton)
 {
     m_closeBtn->setFixedSize(24, 24);
-    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.png");
-    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.png");
-    m_closeBtn->setPressPic(":/icons/resources/close_round_press.png");
+    m_closeBtn->setNormalPic(":/icons/resources/close_round_normal.svg");
+    m_closeBtn->setHoverPic(":/icons/resources/close_round_hover.svg");
+    m_closeBtn->setPressPic(":/icons/resources/close_round_press.svg");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addWidget(m_closeBtn);
