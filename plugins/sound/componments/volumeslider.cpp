@@ -45,7 +45,7 @@ VolumeSlider::VolumeSlider(QWidget *parent)
 //                  "background:url(:/image/image/slider_bg.png) 0 2 0 2 stretch;"
                   "}"
                   "QSlider::handle{"
-                  "background:url(:/image/image/slider_round.png) no-repeat;"
+                  "background:url(:/image/image/slider_handle.svg) no-repeat;"
                   "width:22px;"
                   "height:22px;"
                   "margin:-9px -14px -11px -14px;"
