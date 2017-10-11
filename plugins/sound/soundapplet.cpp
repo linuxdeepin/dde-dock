@@ -26,6 +26,8 @@
 #include <QLabel>
 #include <QIcon>
 
+#include <DSvgRenderer>
+
 #define WIDTH       200
 #define MAX_HEIGHT  200
 #define ICON_SIZE   24
@@ -164,7 +166,12 @@ void SoundApplet::onVolumeChanged()
     else
         volumeString = "low";
 
-    m_volumeBtn->setPixmap(QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString));
+    const QString &iconName = QString(":/icons/image/audio-volume-%1-symbolic.svg").arg(volumeString);
+    const auto ratio = devicePixelRatioF();
+    QPixmap pix = DSvgRenderer::render(iconName, QSize(24, 24) * ratio);
+    pix.setDevicePixelRatio(ratio);
+
+    m_volumeBtn->setPixmap(pix);
 }
 
 void SoundApplet::volumeSliderValueChanged()
