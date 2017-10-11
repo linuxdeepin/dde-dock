@@ -389,9 +389,12 @@ void DockSettings::primaryScreenChanged()
 void DockSettings::resetFrontendGeometry()
 {
     const QRect r = windowRect(m_position);
-//    qDebug() << Q_FUNC_INFO << r;
+    qDebug() << Q_FUNC_INFO << r;
 
-    m_dockInter->SetFrontendWindowRect(r.x(), r.y(), r.width(), r.height());
+    const qreal ratio = qApp->devicePixelRatio();
+
+    m_dockInter->SetFrontendWindowRect(r.x() * ratio, r.y() * ratio,
+                                       r.width() * ratio, r.height() * ratio);
 }
 
 void DockSettings::calculateWindowConfig()
