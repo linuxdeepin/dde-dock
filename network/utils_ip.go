@@ -316,3 +316,8 @@ func isIpv6AddressStructZero(addr ipv6Address) bool {
 	}
 	return false
 }
+
+func isIpv6RouteStructZero(route ipv6Route) bool {
+	return isIpv6AddressZero(route.Address) && isIpv6AddressZero(route.NextHop) &&
+		(route.Prefix == 0) && (route.Metric == 0)
+}

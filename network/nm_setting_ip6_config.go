@@ -230,6 +230,22 @@ func getOrNewSettingIP6ConfigAddresses(data connectionData) (addresses ipv6Addre
 	}
 	return
 }
+func isSettingIP6ConfigRoutesEmpty(data connectionData) bool {
+	routes := getSettingIP6ConfigRoutes(data)
+	if len(routes) == 0 {
+		return true
+	}
+	return false
+}
+func getOrNewSettingIP6ConfigRoutes(data connectionData) (routes ipv6Routes) {
+	if !isSettingIP6ConfigRoutesEmpty(data) {
+		routes = getSettingIP6ConfigRoutes(data)
+	} else {
+		routes = make(ipv6Routes, 1)
+		routes[0].NextHop = make([]byte, 16)
+	}
+	return
+}
 
 // Virtual key getter
 func getSettingVkIp6ConfigDns(data connectionData) (value string) {
@@ -265,19 +281,39 @@ func getSettingVkIp6ConfigAddressesGateway(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp6ConfigRoutesAddress(data connectionData) (value string) {
-	// TODO value := getSettingIP6ConfigRoutesAddress(data)
+	if isSettingIP6ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP6ConfigRoutes(data)
+	if isIpv6AddressValid(routes[0].Address) {
+		value = convertIpv6AddressToString(routes[0].Address)
+	}
 	return
 }
-func getSettingVkIp6ConfigRoutesPrefix(data connectionData) (value string) {
-	// TODO value := getSettingIP6ConfigRoutesPrefix(data)
+func getSettingVkIp6ConfigRoutesPrefix(data connectionData) (value uint32) {
+	if isSettingIP6ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP6ConfigRoutes(data)
+	value = routes[0].Prefix
 	return
 }
 func getSettingVkIp6ConfigRoutesNexthop(data connectionData) (value string) {
-	// TODO value := getSettingIP6ConfigRoutesNexthop(data)
+	if isSettingIP6ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP6ConfigRoutes(data)
+	if isIpv6AddressValid(routes[0].NextHop) {
+		value = convertIpv6AddressToString(routes[0].NextHop)
+	}
 	return
 }
-func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value string) {
-	// TODO value := getSettingIP6ConfigRoutesMetric(data)
+func getSettingVkIp6ConfigRoutesMetric(data connectionData) (value uint32) {
+	if isSettingIP6ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP6ConfigRoutes(data)
+	value = routes[0].Metric
 	return
 }
 
@@ -353,18 +389,66 @@ func logicSetSettingVkIp6ConfigAddressesGateway(data connectionData, value strin
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesAddress(data connectionData, value string) (err error) {
-	// TODO setSettingIP6ConfigRoutesAddressJSON(data)
+	if len(value) == 0 {
+		value = ipv6AddrZero
+	}
+	tmp, err := convertIpv6AddressToArrayByteCheck(value)
+	if err != nil {
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
+		return
+	}
+	routes := getOrNewSettingIP6ConfigRoutes(data)
+	route := routes[0]
+	route.Address = tmp
+	routes[0] = route
+	if !isIpv6RouteStructZero(route) {
+		setSettingIP6ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP6ConfigRoutes(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesPrefix(data connectionData, value uint32) (err error) {
-	// TODO setSettingIP6ConfigRoutesPrefixJSON(data)
+	routes := getOrNewSettingIP6ConfigRoutes(data)
+	route := routes[0]
+	route.Prefix = value
+	routes[0] = route
+	if !isIpv6RouteStructZero(route) {
+		setSettingIP6ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP6ConfigRoutes(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesNexthop(data connectionData, value string) (err error) {
-	// TODO setSettingIP6ConfigRoutesNexthopJSON(data)
+	if len(value) == 0 {
+		value = ipv6AddrZero
+	}
+	tmp, err := convertIpv6AddressToArrayByteCheck(value)
+	if err != nil {
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
+		return
+	}
+	routes := getOrNewSettingIP6ConfigRoutes(data)
+	route := routes[0]
+	route.NextHop = tmp
+	routes[0] = route
+	if !isIpv6RouteStructZero(route) {
+		setSettingIP6ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP6ConfigRoutes(data)
+	}
 	return
 }
 func logicSetSettingVkIp6ConfigRoutesMetric(data connectionData, value uint32) (err error) {
-	// TODO setSettingIP6ConfigRoutesMetricJSON(data)
+	routes := getOrNewSettingIP6ConfigRoutes(data)
+	route := routes[0]
+	route.Metric = value
+	routes[0] = route
+	if !isIpv6RouteStructZero(route) {
+		setSettingIP6ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP6ConfigRoutes(data)
+	}
 	return
 }

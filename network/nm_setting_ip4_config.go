@@ -213,6 +213,25 @@ func getOrNewSettingIP4ConfigAddresses(data connectionData) (addresses [][]uint3
 	}
 	return
 }
+func isSettingIP4ConfigRoutesEmpty(data connectionData) bool {
+	routes := getSettingIP4ConfigRoutes(data)
+	if len(routes) == 0 {
+		return true
+	}
+	if len(routes[0]) != 4 {
+		return true
+	}
+	return false
+}
+func getOrNewSettingIP4ConfigRoutes(data connectionData) (routes [][]uint32) {
+	if !isSettingIP4ConfigRoutesEmpty(data) {
+		routes = getSettingIP4ConfigRoutes(data)
+	} else {
+		routes = make([][]uint32, 1)
+		routes[0] = make([]uint32, 4)
+	}
+	return
+}
 
 // Virtual key getter
 func getSettingVkIp4ConfigDns(data connectionData) (value string) {
@@ -246,19 +265,35 @@ func getSettingVkIp4ConfigAddressesGateway(data connectionData) (value string) {
 	return
 }
 func getSettingVkIp4ConfigRoutesAddress(data connectionData) (value string) {
-	// TODO value := getSettingIP4ConfigRoutesAddress(data)
+	if isSettingIP4ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP4ConfigRoutes(data)
+	value = convertIpv4AddressToStringNoZero(routes[0][0])
 	return
 }
 func getSettingVkIp4ConfigRoutesMask(data connectionData) (value string) {
-	// TODO value := getSettingIP4ConfigRoutesMask(data)
+	if isSettingIP4ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP4ConfigRoutes(data)
+	value = convertIpv4PrefixToNetMask(routes[0][1])
 	return
 }
 func getSettingVkIp4ConfigRoutesNexthop(data connectionData) (value string) {
-	// TODO value := getSettingIP4ConfigRoutesNexthop(data)
+	if isSettingIP4ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP4ConfigRoutes(data)
+	value = convertIpv4AddressToStringNoZero(routes[0][2])
 	return
 }
-func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value string) {
-	// TODO value := getSettingIP4ConfigRoutesMetric(data)
+func getSettingVkIp4ConfigRoutesMetric(data connectionData) (value uint32) {
+	if isSettingIP4ConfigRoutesEmpty(data) {
+		return
+	}
+	routes := getSettingIP4ConfigRoutes(data)
+	value = routes[0][3]
 	return
 }
 
@@ -339,18 +374,70 @@ func logicSetSettingVkIp4ConfigAddressesGateway(data connectionData, value strin
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesAddress(data connectionData, value string) (err error) {
-	// TODO setSettingIP4ConfigRoutesAddressJSON(data)
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	if err != nil {
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
+		return
+	}
+	routes := getOrNewSettingIP4ConfigRoutes(data)
+	route := routes[0]
+	route[0] = tmpn
+	if !isUint32ArrayEmpty(route) {
+		setSettingIP4ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP4ConfigRoutes(data)
+	}
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesMask(data connectionData, value string) (err error) {
-	// TODO setSettingIP4ConfigRoutesMaskJSON(data)
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	tmpn, err := convertIpv4NetMaskToPrefixCheck(value)
+	if err != nil {
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
+		return
+	}
+	routes := getOrNewSettingIP4ConfigRoutes(data)
+	route := routes[0]
+	route[1] = tmpn
+	if !isUint32ArrayEmpty(route) {
+		setSettingIP4ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP4ConfigRoutes(data)
+	}
 	return
 }
 func logicSetSettingVkIp4ConfigRoutesNexthop(data connectionData, value string) (err error) {
-	// TODO setSettingIP4ConfigRoutesNexthopJSON(data)
+	if len(value) == 0 {
+		value = ipv4Zero
+	}
+	tmpn, err := convertIpv4AddressToUint32Check(value)
+	if err != nil {
+		err = fmt.Errorf(nmKeyErrorInvalidValue)
+		return
+	}
+	routes := getOrNewSettingIP4ConfigRoutes(data)
+	route := routes[0]
+	route[2] = tmpn
+	if !isUint32ArrayEmpty(route) {
+		setSettingIP4ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP4ConfigRoutes(data)
+	}
 	return
 }
-func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value string) (err error) {
-	// TODO setSettingIP4ConfigRoutesMetricJSON(data)
+func logicSetSettingVkIp4ConfigRoutesMetric(data connectionData, value uint32) (err error) {
+	routes := getOrNewSettingIP4ConfigRoutes(data)
+	route := routes[0]
+	route[3] = value
+	if !isUint32ArrayEmpty(route) {
+		setSettingIP4ConfigRoutes(data, routes)
+	} else {
+		removeSettingIP4ConfigRoutes(data)
+	}
 	return
 }
