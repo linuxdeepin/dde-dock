@@ -30,7 +30,8 @@ BINARIES =  \
 	    backlight_helper \
 	    langselector \
 	    soundeffect \
-	    dde-lockservice
+	    dde-lockservice \
+	    dde-greeter-setter
 
 LANGUAGES = $(basename $(notdir $(wildcard misc/po/*.po)))
 
