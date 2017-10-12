@@ -282,7 +282,7 @@ func (m *Manager) GetShortcut(id string, type0 int32) (string, error) {
 
 func (m *Manager) SelectKeystroke() error {
 	logger.Debug("SelectKeystroke")
-	return m.selectKeystroke(m.shortcutManager)
+	return m.selectKeystroke()
 }
 
 func (m *Manager) SetNumLockState(state int32) error {

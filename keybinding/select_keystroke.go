@@ -27,7 +27,7 @@ import (
 	"pkg.deepin.io/lib/dbus"
 )
 
-func (m *Manager) selectKeystroke(ss *shortcuts.ShortcutManager) error {
+func (m *Manager) selectKeystroke() error {
 	conn, err := x.NewConn()
 	if err != nil {
 		return err
@@ -39,8 +39,8 @@ func (m *Manager) selectKeystroke(ss *shortcuts.ShortcutManager) error {
 	}
 
 	// Temporarily disable record
-	ss.EnableRecord(false)
-	defer ss.EnableRecord(true)
+	m.shortcutManager.EnableRecord(false)
+	defer m.shortcutManager.EnableRecord(true)
 
 loop:
 	for {

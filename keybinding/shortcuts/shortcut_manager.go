@@ -123,7 +123,7 @@ func (sm *ShortcutManager) recordEventLoop() {
 			return
 		}
 		if !sm.recordEnable {
-			logger.Warning("record disabled!")
+			logger.Debug("record disabled!")
 			continue
 		}
 

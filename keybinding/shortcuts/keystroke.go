@@ -279,7 +279,10 @@ func isGoodNoMods(str string, sym x.Keysym) bool {
 
 	switch sym {
 	case keysyms.XK_BackSpace,
-		keysyms.XK_Super_L, keysyms.XK_Super_R:
+		keysyms.XK_Delete,
+		keysyms.XK_Super_L,
+		keysyms.XK_Super_R,
+		keysyms.XK_Pause:
 		return true
 	}
 
@@ -296,8 +299,12 @@ func isGoodModShift(str string, sym x.Keysym) bool {
 	}
 
 	switch sym {
-	case keysyms.XK_BackSpace, keysyms.XK_space,
-		keysyms.XK_Super_L, keysyms.XK_Super_R:
+	case keysyms.XK_BackSpace,
+		keysyms.XK_space,
+		keysyms.XK_Delete,
+		keysyms.XK_Sys_Req,
+		keysyms.XK_Escape,
+		keysyms.XK_Tab:
 		return true
 	}
 
