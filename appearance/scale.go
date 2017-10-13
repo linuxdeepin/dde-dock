@@ -20,12 +20,64 @@
 package appearance
 
 import (
+	"dbus/com/deepin/daemon/greeter"
+	"fmt"
+	"gir/gio-2.0"
 	"io/ioutil"
+	"math"
 	"os"
 	"strings"
 )
 
 var pamEnvFile = os.Getenv("HOME") + "/.pam_environment"
+
+func doGetScaleFactor() float64 {
+	var s = gio.NewSettings("com.deepin.xsettings")
+	scale := s.GetDouble("scale-factor")
+	s.Unref()
+	return scale
+}
+
+func doSetScaleFactor(scale float64) {
+	var s = gio.NewSettings("com.deepin.xsettings")
+	defer s.Unref()
+	v := s.GetDouble("scale-factor")
+	if scale != v {
+		s.SetDouble("scale-factor", scale)
+	}
+
+	// for qt
+	err := writeKeyToEnvFile("QT_SCALE_FACTOR", fmt.Sprintf("%v", scale), pamEnvFile)
+	if err != nil {
+		logger.Warning("Failed to set qt scale factor:", err)
+	}
+
+	// if 1.7 < scale < 2, window scale = 2
+	tmp := int32(math.Trunc((scale+0.3)*10) / 10)
+	if tmp < 1 {
+		tmp = 1
+	}
+	window := s.GetInt("window-scale")
+	if window != tmp {
+		s.SetInt("window-scale", tmp)
+	}
+
+	doSetGreeterScale(scale)
+}
+
+func doSetGreeterScale(scale float64) {
+	setter, err := greeter.NewGreeter("com.deepin.daemon.Greeter", "/com/deepin/daemon/Greeter")
+	if err != nil {
+		logger.Warning("Failed to create greeter setter connection:", err)
+		return
+	}
+
+	err = setter.SetScaleFactor(scale)
+	if err != nil {
+		logger.Warning("Failed to set greeter scale:", err)
+	}
+	setter = nil
+}
 
 func writeKeyToEnvFile(key, value, filename string) error {
 	content, err := ioutil.ReadFile(filename)

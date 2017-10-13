@@ -26,7 +26,6 @@ import (
 	"fmt"
 	"gir/gio-2.0"
 	"io/ioutil"
-	"math"
 	"os/user"
 	"pkg.deepin.io/dde/daemon/appearance/background"
 	"pkg.deepin.io/dde/daemon/appearance/fonts"
@@ -397,36 +396,4 @@ func (m *Manager) getDefaultFonts() (standard string, monospace string) {
 		return defaultStandardFont, defaultMonospaceFont
 	}
 	return cfg.Get()
-}
-
-func doGetScaleFactor() float64 {
-	var s = gio.NewSettings("com.deepin.xsettings")
-	scale := s.GetDouble("scale-factor")
-	s.Unref()
-	return scale
-}
-
-func doSetScaleFactor(scale float64) {
-	var s = gio.NewSettings("com.deepin.xsettings")
-	defer s.Unref()
-	v := s.GetDouble("scale-factor")
-	if scale != v {
-		s.SetDouble("scale-factor", scale)
-	}
-
-	// for qt
-	err := writeKeyToEnvFile("QT_SCALE_FACTOR", fmt.Sprintf("%v", scale), pamEnvFile)
-	if err != nil {
-		logger.Warning("Failed to set qt scale factor:", err)
-	}
-
-	// if 1.7 < scale < 2, window scale = 2
-	tmp := int32(math.Trunc((scale+0.3)*10) / 10)
-	if tmp < 1 {
-		tmp = 1
-	}
-	window := s.GetInt("window-scale")
-	if window != tmp {
-		s.SetInt("window-scale", tmp)
-	}
 }
