@@ -313,3 +313,7 @@ func isGoodWindow(win xproto.Window) bool {
 	_, err := xproto.GetGeometry(XU.Conn(), xproto.Drawable(win)).Reply()
 	return err == nil
 }
+
+func killClient(win xproto.Window) {
+	xproto.KillClient(XU.Conn(), uint32(win))
+}

@@ -46,6 +46,7 @@ func (entry *AppEntry) updateMenu() {
 
 	if entry.hasWindow() {
 		menu.AppendItem(entry.getMenuItemCloseAll())
+		menu.AppendItem(entry.getMenuItemForceQuit())
 		menu.AppendItem(entry.getMenuItemAllWindows())
 	}
 
@@ -115,6 +116,13 @@ func (entry *AppEntry) getMenuItemCloseAll() *MenuItem {
 		for win, _ := range entry.windows {
 			ewmh.CloseWindow(XU, win)
 		}
+	}, true)
+}
+
+func (entry *AppEntry) getMenuItemForceQuit() *MenuItem {
+	return NewMenuItem(Tr("_Force Quit"), func(timestamp uint32) {
+		logger.Debug("Force Quit")
+		entry.ForceQuit()
 	}, true)
 }
 

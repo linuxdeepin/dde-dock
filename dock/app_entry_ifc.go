@@ -134,3 +134,9 @@ func (entry *AppEntry) Check() {
 		entry.dockManager.attachOrDetachWindow(winInfo)
 	}
 }
+
+func (entry *AppEntry) ForceQuit() {
+	for _, winInfo := range entry.windows {
+		killClient(winInfo.window)
+	}
+}

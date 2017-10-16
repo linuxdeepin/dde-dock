@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-29 15:35+0800\n"
+"POT-Creation-Date: 2017-10-16 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,23 +126,27 @@ msgstr ""
 msgid "Failed to connect %q, automatically ignored"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:106
+#: ../../dock/app_entry_menu.go:107
 msgid "_Open"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:113
+#: ../../dock/app_entry_menu.go:114
 msgid "_Close All"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:122
+#: ../../dock/app_entry_menu.go:123
+msgid "_Force Quit"
+msgstr ""
+
+#: ../../dock/app_entry_menu.go:130
 msgid "_Dock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:129
+#: ../../dock/app_entry_menu.go:137
 msgid "_Undock"
 msgstr ""
 
-#: ../../dock/app_entry_menu.go:136
+#: ../../dock/app_entry_menu.go:144
 msgid "_All windows"
 msgstr ""
 
@@ -352,7 +356,20 @@ msgstr ""
 msgid "Password required to connect %q"
 msgstr ""
 
-#: ../../network/manager_active.go:324 ../../network/manager_active.go:329
+#: ../../network/manager_active.go:327 ../../network/nm_setting_wireless.go:210
+msgid "A (5 GHz)"
+msgstr ""
+
+#: ../../network/manager_active.go:329 ../../network/nm_setting_wireless.go:211
+msgid "BG (2.4 GHz)"
+msgstr ""
+
+#: ../../network/manager_active.go:331 ../../network/nm_setting_802_1x.go:146
+#: ../../network/nm_setting_wireless.go:209
+msgid "Automatic"
+msgstr ""
+
+#: ../../network/manager_active.go:342 ../../network/manager_active.go:347
 #: ../../network/nm_setting_virtual_key.go:189
 #: ../../network/nm_setting_virtual_key.go:196
 #: ../../network/nm_setting_virtual_key.go:226
@@ -361,45 +378,45 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: ../../network/manager_active.go:331
+#: ../../network/manager_active.go:349
 #: ../../network/nm_setting_virtual_key.go:190
 #: ../../network/nm_setting_virtual_key.go:197
 msgid "WEP 40/128-bit Key"
 msgstr ""
 
-#: ../../network/manager_active.go:333
+#: ../../network/manager_active.go:351
 #: ../../network/nm_setting_virtual_key.go:191
 #: ../../network/nm_setting_virtual_key.go:198
 msgid "WPA/WPA2 Personal"
 msgstr ""
 
-#: ../../network/manager_active.go:341 ../../network/nm_setting_802_1x.go:41
+#: ../../network/manager_active.go:359 ../../network/nm_setting_802_1x.go:41
 #: ../../network/nm_setting_802_1x.go:122
 #: ../../network/nm_setting_802_1x.go:130
 msgid "TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:343 ../../network/nm_setting_802_1x.go:40
+#: ../../network/manager_active.go:361 ../../network/nm_setting_802_1x.go:40
 #: ../../network/nm_setting_802_1x.go:123
 msgid "MD5"
 msgstr ""
 
-#: ../../network/manager_active.go:345 ../../network/nm_setting_802_1x.go:131
+#: ../../network/manager_active.go:363 ../../network/nm_setting_802_1x.go:131
 #: ../../network/nm_setting_wireless_security.go:82
 msgid "LEAP"
 msgstr ""
 
-#: ../../network/manager_active.go:347 ../../network/nm_setting_802_1x.go:124
+#: ../../network/manager_active.go:365 ../../network/nm_setting_802_1x.go:124
 #: ../../network/nm_setting_802_1x.go:132
 msgid "FAST"
 msgstr ""
 
-#: ../../network/manager_active.go:349 ../../network/nm_setting_802_1x.go:125
+#: ../../network/manager_active.go:367 ../../network/nm_setting_802_1x.go:125
 #: ../../network/nm_setting_802_1x.go:133
 msgid "Tunneled TLS"
 msgstr ""
 
-#: ../../network/manager_active.go:351 ../../network/nm_setting_802_1x.go:126
+#: ../../network/manager_active.go:369 ../../network/nm_setting_802_1x.go:126
 #: ../../network/nm_setting_802_1x.go:134
 msgid "Protected EAP"
 msgstr ""
@@ -508,11 +525,6 @@ msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:142
 msgid "Both"
-msgstr ""
-
-#: ../../network/nm_setting_802_1x.go:146
-#: ../../network/nm_setting_wireless.go:209
-msgid "Automatic"
 msgstr ""
 
 #: ../../network/nm_setting_802_1x.go:147
@@ -1509,14 +1521,6 @@ msgstr ""
 
 #: ../../network/nm_setting_wireless.go:205
 msgid "AP-Hotspot"
-msgstr ""
-
-#: ../../network/nm_setting_wireless.go:210
-msgid "A (5 GHz)"
-msgstr ""
-
-#: ../../network/nm_setting_wireless.go:211
-msgid "BG (2.4 GHz)"
 msgstr ""
 
 #: ../../network/nm_setting_wireless_security.go:65
