@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"math"
 	"os"
+	"pkg.deepin.io/lib/utils"
 	"strings"
 )
 
@@ -80,6 +81,10 @@ func doSetGreeterScale(scale float64) {
 }
 
 func writeKeyToEnvFile(key, value, filename string) error {
+	if !utils.IsFileExist(filename) {
+		return ioutil.WriteFile(filename, []byte(key+"="+value), 0644)
+	}
+
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return err
